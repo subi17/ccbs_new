@@ -1,0 +1,103 @@
+ADD TABLE "AuthUser"
+  AREA "Sta_Data_64"
+  LABEL "AuthUser"
+  DESCRIPTION "3rd party user authentication"
+  DUMP-NAME "authuser"
+
+ADD FIELD "Username" OF "AuthUser" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Username"
+  COLUMN-LABEL "Username"
+  DESCRIPTION "the login name"
+  ORDER 10
+
+ADD FIELD "PWHash" OF "AuthUser" AS raw 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "PWHash"
+  COLUMN-LABEL "PWHash"
+  DESCRIPTION "the hash (SHA-1) of of the user's password"
+  ORDER 20
+
+ADD FIELD "PWSalt" OF "AuthUser" AS raw 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "PWSalt"
+  COLUMN-LABEL "PWSalt"
+  COLUMN-LABEL "the hashing salt"
+  ORDER 30
+
+ADD INDEX "Username" ON "AuthUser" 
+  AREA "Sta_Index_2"
+  PRIMARY UNIQUE
+  INDEX-FIELD "Username" ASCENDING 
+
+ADD TABLE "AuthLog"
+  AREA "Sta_Data_128"
+  LABEL "AuthLog"
+  DESCRIPTION "3rd party user authentication log" 
+  DUMP-NAME "authlog"
+
+ADD FIELD "Username" OF "AuthLog" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Username"
+  COLUMN-LABEL "Username"
+  ORDER 10
+
+ADD FIELD "IP" OF "AuthLog" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "IP Address"
+  COLUMN-LABEL "IP Address"
+  ORDER 20
+
+ADD FIELD "EndUserID" OF "AuthLog" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "EndUserID"
+  COLUMN-LABEL "EndUserID"
+  ORDER 30
+
+ADD FIELD "UserAgent" OF "AuthLog" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "UserAgent"
+  COLUMN-LABEL "UserAgent"
+  ORDER 40
+
+ADD FIELD "MethodName" OF "AuthLog" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "MethodName"
+  COLUMN-LABEL "MethodName"
+  ORDER 50
+
+ADD FIELD "ErrorMsg" OF "AuthLog" AS character 
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "ErrorMsg"
+  COLUMN-LABEL "ErrorMsg"
+  ORDER 60
+
+ADD FIELD "TimeStamp" OF "AuthLog" AS datetime 
+  FORMAT "99-99-9999 HH:MM:SS"
+  INITIAL ?
+  LABEL "TimeStamp"
+  MAX-WIDTH 8
+  COLUMN-LABEL "TimeStamp"
+  ORDER 70
+
+ADD INDEX "Username" ON "AuthLog" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "username" ASCENDING 
+
+ADD INDEX "TimeStamp" ON "AuthLog" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "TimeStamp" DESCENDING 
+
+.
+PSC
+cpstream=1252

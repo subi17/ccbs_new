@@ -1,0 +1,3 @@
+echo "ICC SCREENS"
+sleep 2
+screen 1 xfear -screen icc_sender_cls

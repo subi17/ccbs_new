@@ -1,0 +1,13 @@
+#!/bin/sh
+
+#DLC=/home/dlc
+
+PROPATH=/home/protop					# override whatever the local default is
+PROTERMCAP=/home/protop/etc/protermcap.protop		# override whatever the local default is
+DB=${1-sports2000}
+
+export DLC PROPATH PROTERMCAP DB
+
+
+
+$DLC/bin/mpro $DB -p protop.p

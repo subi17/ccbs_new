@@ -1,0 +1,3 @@
+echo "ORDER HANDLER SCREENS"
+sleep 2
+screen 1 xfear -screen orderrun -db /db1/mcdr15q1/mcdr15q1 -ld mcdr

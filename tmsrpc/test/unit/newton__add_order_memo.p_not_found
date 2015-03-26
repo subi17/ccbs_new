@@ -1,0 +1,146 @@
+{test_xmlrpc_includes.i}
+{unit/checkutils.i}
+{timestamp.i}
+
+gcFixtures = "order,memo".
+
+
+/* Paramneter variables */
+DEFINE VARIABLE liOrderId   AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE liCustNum   AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE lcCreator   AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcTitle     AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcContent   AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE liImportant AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE lcType      AS CHARACTER NO-UNDO. 
+
+
+DEFINE VARIABLE gcParamArray AS CHARACTER NO-UNDO. 
+gcParamArray = "".
+
+DEFINE VARIABLE lLogOn AS LOGICAL NO-UNDO. 
+
+
+FUNCTION fLog RETURN LOGICAL (INPUT pcMsg AS CHARACTER):
+   IF lLogOn THEN MESSAGE pcMsg.
+   RETURN TRUE.
+END.
+
+
+/** 
+ * This function calls the RPC method and checks the call succeeds.
+ */
+FUNCTION call_add_order_memo RETURN LOGICAL:
+    fLog("before call...").
+    run_rpc_method("newton.add_order_memo").
+    fLog("end call... ").
+    RETURN TRUE.
+END FUNCTION.
+
+
+
+
+FUNCTION fCheckTimeStamp RETURN LOGICAL (
+   INPUT pcDbTableField AS CHARACTER,
+   INPUT pdeVal1 AS DECIMAL, INPUT pdeVal2 AS DECIMAL):
+   fLog("checkTimeStamp").
+
+   DEFINE VARIABLE iVal1 AS INTEGER NO-UNDO. 
+   DEFINE VARIABLE iVal2 AS INTEGER NO-UNDO. 
+   DEFINE VARIABLE deDiff AS DECIMAL NO-UNDO. 
+   iVal1 = INTEGER(TRUNCATE(pdeVal1,0)).
+   iVal2 = INTEGER(TRUNCATE(pdeVal2,0)).
+   deDiff = pdeVal1 - pdeVal2.
+
+   /* The gap between first second in the following day and the last second
+      in the previous day is taken off before comparison */
+   IF iVal1 ne iVal2 THEN deDiff = deDiff - 13600.    
+
+   /* Difference of minute is allowed so that time stamps wont differ between 
+      the time when call returns and the time when RPC was called. */
+   IF deDiff <= 60 THEN RETURN TRUE. ELSE 
+   DO:
+      assert(FALSE, "Error comparing time stamp field " + pcDbTableField).
+
+      RETURN FALSE.
+   END.
+END.
+
+
+FUNCTION fCheckMemo RETURN LOGICAL
+   (INPUT plExpectedCreation AS LOGICAL):
+
+   DEFINE VARIABLE iMemoSeq AS INTEGER NO-UNDO. 
+   iMemoSeq = CURRENT-VALUE(MemoSeq).
+
+   FIND Memo WHERE MemoSeq = iMemoSeq - 1 NO-LOCK NO-ERROR.
+   IF AVAILABLE Memo THEN
+   DO:
+      IF plExpectedCreation THEN
+      DO:
+         checkChar("Memo.Brand", Memo.Brand, "1").
+         checkInt("Memo.CustNum", Memo.CustNum, liCustNum).
+         checkChar("Memo.CreUser", Memo.CreUser, lcCreator).
+         checkChar("Memo.MemoTitle", Memo.MemoTitle, lcTitle).
+         checkChar("Memo.MemoText", Memo.MemoText, lcContent).
+         checkChar("Memo.HostTable", Memo.HostTable, lcType).
+         checkInt("Memo.Priority", Memo.Priority, liImportant).
+         checkChar("Memo.KeyValue", Memo.KeyValue, STRING(liOrderId)).
+         fCheckTimeStamp("Memo.CreStamp", Memo.CreStamp, fMakeTs()).
+      END.
+      ELSE
+         assert(TRUE, "Memo was created, although it should not have been.").
+
+   END.
+   ELSE
+      assert(TRUE, "Memo was not created, although it should have been.").
+END.
+
+
+
+FUNCTION fAddParams RETURN LOGICAL:
+   add_int(gcParamArray, "", liOrderId).
+   add_int(gcParamArray, "", liCustNum).
+   add_string(gcParamArray, "", lcCreator).
+   add_string(gcParamArray, "", lcTitle).
+   add_string(gcParamArray, "", lcContent).
+   add_int(gcParamArray, "", liImportant).
+   add_string(gcParamArray, "", lcType).
+END.   
+
+
+PROCEDURE test_add_order_memo_with_non_existing_order:
+   ASSIGN liOrderId = 999999 
+          liCustNum = 230
+          lcCreator = "creator"
+          lcTitle   = "title"
+          lcContent = "content"
+          liImportant = 1
+          lcType      = "order".
+
+   fAddParams().
+   call_add_order_memo().
+   assert_fault({&APPLICATION_ERROR}, SUBST("Order &1 not found", liOrderId)).
+   fCheckMemo(FALSE).
+END.
+
+
+
+PROCEDURE test_add_order_memo_with_existing_order:
+   ASSIGN liOrderId = 9 
+          liCustNum = 400
+          lcCreator = "creator2"
+          lcTitle   = "title2"
+          lcContent = "content  222"
+          liImportant = 1
+          lcType      = "order".
+
+   fAddParams().
+   call_add_order_memo().
+   assert_success().
+   fCheckMemo(TRUE).
+
+   checkLogical("Memo created", get_bool("", "0"), TRUE,
+      "Return value was not TRUE").
+
+END.

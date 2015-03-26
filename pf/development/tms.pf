@@ -1,0 +1,24 @@
+-h 11
+-db /data/xfera/common/common
+-db /data/xfera/ordercanal/ordercanal
+-db /data/xfera/mobile/mobile
+-db /data/xfera/mcdr/mcdr
+-db /data/xfera/mcdrdtl/mcdrdtl
+-db /data/xfera/star/star
+-db /data/xfera/prepcdr/prepcdr
+-db /data/xfera/roamcdr/roamcdr
+-db /data/xfera/fraudcdr/fraudcdr
+-T /tmp
+-TB 31
+-TM 32
+-s 1024
+-d dmy
+-e 100
+-l 1000
+-yy 1980
+-rand 2
+-tmpbsize 8
+-Bt 1024
+-numsep 44
+-numdec 46
+-yr4def

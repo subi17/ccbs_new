@@ -1,0 +1,5 @@
+echo "-- CDF REPLOG HANDLER SCREENS --"
+sleep 2
+screen 1 xfear -screen replog_reader_common tms.pf
+screen 2 xfear -screen replog_reader_ordercanal tms.pf
+screen 3 xfear -screen replog_reader_mobile tms.pf

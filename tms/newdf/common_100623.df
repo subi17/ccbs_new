@@ -1,0 +1,37 @@
+ADD FIELD "FromDate" OF "VATCode" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid From"
+  COLUMN-LABEL "From"
+  HELP "Date when VAT becomes effective"
+  ORDER 70
+
+ADD FIELD "ToDate" OF "VATCode" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid To"
+  COLUMN-LABEL "To"
+  HELP "Date when VAT expires"
+  ORDER 80
+
+DELETE INDEX "TaxClass" ON "VATCode" 
+DELETE INDEX "TaxZone" ON "VATCode" 
+DELETE INDEX "VatPerc" ON "VATCode" 
+
+ADD INDEX "TaxClass" ON "VATCode" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "TaxClass" ASCENDING 
+  INDEX-FIELD "TaxZone" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING
+
+ADD INDEX "TaxZone" ON "VATCode" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "TaxZone" ASCENDING 
+  INDEX-FIELD "TaxClass" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING
+
+ADD INDEX "VatPerc" ON "VATCode" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "VATPerc" ASCENDING 
+  INDEX-FIELD "VATCode" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING

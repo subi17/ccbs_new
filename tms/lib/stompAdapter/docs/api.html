@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <title>OpenEdge Adapter for Fuse Message Broker API</title>
+  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/" />
+  <link href="style/oss.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<h1>OpenEdge Adapter for Fuse Message Broker API</h1>
+
+<p>The API supported by the adapter is a subset of the JMS API. Full
+documentation of all details is <a
+href="http://java.sun.com/products/jms/docs.html">available online</a>. The
+diagrams below only describe the part of the API that is implemented by the
+OpenEdge Adapter for Fuse Message Broker.</p>
+
+<p>Notes:</p>
+<ul>
+  <li>Getters and setters are actually implemented as ABL PROPERTY members.</li>
+  <li>The actual interface definitions contain operations not specified in the
+    JMS API or the diagrams. Those operations are workarounds for OpenEdge™
+    limitations. When those limitations are resolved, the additional operations
+    might be removed.</li>
+  <li>The actual interface definitions might contain additional JMS 1.1
+    operations that are not currently supported by adapter implementation
+    classes.</li>
+</ul>
+
+<p class="imageBlock"><img alt="JMS foundation" src="image/foundation.png"
+/></p>
+
+<p class="imageBlock"><img alt="connection" src="image/connection.png" /></p>
+
+<p class="imageBlock"><img alt="session" src="image/session.png" /></p>
+
+<p class="imageBlock"><img alt="producer" src="image/producer.png" /></p>
+
+<p class="imageBlock"><img alt="consumer" src="image/consumer.png" /></p>
+</body>
+</html>

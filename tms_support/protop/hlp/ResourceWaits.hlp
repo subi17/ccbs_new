@@ -1,0 +1,28 @@
+Resource Requests and Waits Help
+================================
+
+Resources are internal locks.  Resource lock duration can range from
+milliseconds to minutes, hours or days (think record locks).  Resources,
+like latches, do not directly correspond to 4gl code although some are
+more directly related than others (again, think record locks).
+
+Id:
+
+The numeric id of this resource.
+
+Resource:
+
+The name of the resource.  The secret decoder ring is only available at 4gl
+fan club meetings.  (It is, however, bulkier than that latch decoder ring...)
+
+Requests:
+
+The number of times this resource was requested.
+
+Waits:
+
+The number of times someone had to wait for the resource.
+
+Lock%
+
+The percentage of successful requests.

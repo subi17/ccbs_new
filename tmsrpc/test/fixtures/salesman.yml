@@ -1,0 +1,6 @@
+ExistSalesman:
+   Brand: "1"
+   Salesman: "ExistSalesman"
+   Reseller: "OldReseller"
+   Active: FALSE
+   Email: "salesman@google.com"

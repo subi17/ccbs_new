@@ -1,0 +1,31 @@
+/* pwd.i00
+
+   changed:         11.09.03/aam brand 
+*/
+
+form
+    skip(1) " Password:" passwd skip(1)
+WITH
+   OVERLAY centered ROW 4 NO-LABELS COLOR value(cfc) TITLE COLOR value(ctc)
+   " Give password for deleting " FRAME xpwd.
+
+PAUSE 0.
+
+passwd = "".
+/* check password FOR deleting */
+UPDATE passwd blank WITH FRAME xpwd.
+
+hide frame Passwd no-pause.
+find first TMSParam where
+           TMSParam.Brand      = gcBrand  AND
+           TMSParam.ParamGroup = "system" and
+           TMSParam.ParamCode  = "PwordDel"
+no-lock no-error.
+if not avail TMSParam or
+   TMSParam.CharVal ne Passwd 
+then do:
+   message "You typed '" Passwd "', check spelling and try again !". 
+   pause 4 no-message.
+   return.
+end.
+

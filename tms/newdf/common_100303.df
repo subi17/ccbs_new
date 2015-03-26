@@ -1,0 +1,3 @@
+ADD INDEX "CreatedTS" ON "MNPOperation" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CreatedTS" DESCENDING 

@@ -1,0 +1,21 @@
+ADD FIELD FileName OF Simbatch AS CHARACTER
+   FORMAT "X(20)"
+   INITIAL ? 
+   LABEL "FileName"
+   POSITION 9
+   MAX-WIDTH 80
+   COLUMN-LABEL "FileName"
+   HELP "Name of the read sim file"
+   ORDER 80 
+
+ADD INDEX "filename" ON "SimBatch" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "ManCode" ASCENDING 
+  INDEX-FIELD "FileName" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000002117

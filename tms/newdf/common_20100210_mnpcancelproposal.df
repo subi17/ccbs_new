@@ -1,0 +1,64 @@
+ADD TABLE "MNPCancelProposal"
+  AREA "Sta_Data_128"
+  DUMP-NAME "mnpcancel"
+
+ADD FIELD "ReferenceCode" OF "MNPCancelProposal" AS character 
+  FORMAT "x(5)"
+  INITIAL ""
+  LABEL "ReferenceCode"
+  POSITION 2
+  MAX-WIDTH 10
+  COLUMN-LABEL "ReferenceCode"
+  ORDER 10
+
+ADD FIELD "StatusCode" OF "MNPCancelProposal" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "StatusCode"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "StatusCode"
+  ORDER 20
+
+ADD FIELD "CreatedTS" OF "MNPCancelProposal" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "CreatedTS"
+  POSITION 4
+  MAX-WIDTH 20
+  COLUMN-LABEL "CreatedTS"
+  DECIMALS 5
+  ORDER 30
+
+ADD FIELD "MNPSeq" OF "MNPCancelProposal" AS integer 
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  LABEL "MNPSeq"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "MNPSeq"
+  ORDER 40
+
+ADD FIELD "AttachmentFile" OF "MNPCancelProposal" AS character 
+  FORMAT "x(45)"
+  INITIAL ""
+  LABEL "AttachmentFile"
+  POSITION 6
+  MAX-WIDTH 90
+  COLUMN-LABEL "AttachmentFile"
+  ORDER 50
+
+ADD FIELD "Pdf" OF "MNPCancelProposal" AS blob 
+  FORMAT "x(8)"
+  INITIAL ?
+  POSITION 7
+  LOB-AREA "LOB_DATA"
+  LOB-BYTES 1048576
+  LOB-SIZE 1M
+  ORDER 60
+
+ADD INDEX "MNPSeq" ON "MNPCancelProposal" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "MNPSeq" ASCENDING 
+  INDEX-FIELD "CreatedTS" DESCENDING 

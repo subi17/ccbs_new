@@ -1,0 +1,48 @@
+Server IO Requests Help
+=======================
+
+Srv:
+
+Server Id.
+
+Type:
+
+What type of server is this?  Possible values include:
+
+        Login     The Broker
+        Inactive  Servers that are allocated but not yet spawned by the broker.
+        Auto      Started automatically (by default or via the -m1 parameter).
+        Manual    Started manually (via the -m2 parameter).
+
+Port:
+
+TCP/IP Port number.  The broker uses the port specified by -S.  Other servers
+get an automatically assigned port number.
+
+Con:
+
+Current number of connections to this server.
+
+Max:
+
+The maximum number of connections that this server will permit (-Ma).
+
+DB Access:
+
+The number of database block accesses that all users of this server have
+requested.
+
+OS Reads:
+
+The number of times that database block accesses that users of this server
+have requested resulted in an OS read() operation.
+
+OS Writes:
+
+The number of OS write() operations that users of this server have caused.
+
+Hit%
+
+The percentage of times that db blocks were found for the users connected
+to this server in the buffer cache instead of being read from disk.
+

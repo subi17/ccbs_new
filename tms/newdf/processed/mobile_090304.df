@@ -1,0 +1,52 @@
+ADD TABLE "IMEIRegister"
+  AREA "Sta_Data_256"
+  LABEL "IMEI Register"
+  DESCRIPTION "IMEI register"
+  DUMP-NAME "imeiregister"
+
+ADD FIELD "Brand" OF "IMEIRegister" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Brand"
+  ORDER 10
+
+ADD FIELD "IMEI" OF "IMEIRegister" AS character 
+  FORMAT "x(17)"
+  INITIAL ""
+  LABEL "IMEI"
+  POSITION 3
+  MAX-WIDTH 34
+  HELP "IMEI code"
+  ORDER 20
+
+ADD FIELD "BillCode" OF "IMEIRegister" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Billing Item"
+  POSITION 4
+  MAX-WIDTH 32
+  COLUMN-LABEL "BillItem"
+  HELP "Billing item code"
+  ORDER 30
+  MANDATORY
+
+ADD INDEX "IMEI" ON "IMEIRegister" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "IMEI" ASCENDING 
+
+ADD INDEX "BillCode" ON "IMEIRegister" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "BillCode" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000000918

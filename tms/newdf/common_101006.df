@@ -1,0 +1,7 @@
+ADD FIELD "FraudGroup" OF "Country" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Fraud Group"
+  COLUMN-LABEL "FraudGrp"
+  HELP "Roaming Fraud Group"
+  ORDER 30

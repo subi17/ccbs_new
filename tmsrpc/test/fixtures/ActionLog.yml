@@ -1,0 +1,33 @@
+# newton__get_mobsub_details
+MobsubDetails1:
+   ActionStatus:4
+   Brand:"1"
+   TableName:"MobSub"
+   KeyValue:"25"
+   ActionId:"DENYBILL"
+   FromDate:1/1/1970
+   ToDate:24/2/2040
+
+# newton__get_mobsub_details
+MobsubWithRenoveOrder:
+   ActionStatus:3
+   Brand:"1"
+   TableName:"MobSub"
+   KeyValue:"26"
+   ActionId:"DENYBILL"
+   FromDate:1/1/1970
+   ToDate:24/2/2040
+
+# newton__get_mobsub_details
+MobsubWithMnpNumberBasedMnpStatus:
+   ActionStatus:1
+   Brand:"1"
+   TableName:"MobSub"
+   KeyValue:"27"
+   ActionId:"DENYBILL"
+   FromDate:1/1/1970
+   ToDate:24/2/2040
+
+
+
+

@@ -1,0 +1,109 @@
+ADD FIELD "PayType" OF "TMQueue" AS integer
+  DESCRIPTION ""
+  FORMAT "9"
+  FORMAT-SA ?
+  POSITION 18
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Payment type"
+  HELP-SA ""
+  LABEL "Payment Type"
+  LABEL-SA ?
+  COLUMN-LABEL "PayType"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 170
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "PPBalance" OF "TMQueue" AS decimal
+  DESCRIPTION ""
+  FORMAT "->>>>>>>9.99"
+  FORMAT-SA ?
+  POSITION 19
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Prepaid balance after this ticket"
+  HELP-SA ""
+  LABEL "Prepaid Balance"
+  LABEL-SA ?
+  COLUMN-LABEL "PP Balance"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS 2
+  ORDER 180
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 17
+
+ADD FIELD "PayType" OF "TMRule" AS integer
+  DESCRIPTION ""
+  FORMAT "9"
+  FORMAT-SA ?
+  POSITION 14
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Payment type"
+  HELP-SA ""
+  LABEL "Payment Type"
+  LABEL-SA ?
+  COLUMN-LABEL "PayType"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 130
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "LimitCompare" OF "TMRule" AS integer
+  DESCRIPTION ""
+  FORMAT "9"
+  FORMAT-SA ?
+  POSITION 15
+  INITIAL "1"
+  INITIAL-SA ?
+  HELP "Limit comparison method"
+  HELP-SA ""
+  LABEL "Limit Comparison"
+  LABEL-SA ?
+  COLUMN-LABEL "Compare"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 140
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+.
+PSC
+cpstream=1252
+.
+0000002580

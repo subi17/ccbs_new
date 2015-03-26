@@ -1,0 +1,22 @@
+ADD FIELD "UsageType" OF "Order" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Usage Type"
+  COLUMN-LABEL "UsageType"
+  ORDER 1100
+
+ADD FIELD "StatusCode" OF "CLIType" AS integer
+  FORMAT "9"
+  INITIAL 1
+  LABEL "Status"
+  COLUMN-LABEL "Status"
+  ORDER 230
+
+ADD FIELD "ItemParam" OF "OrderAction" AS character
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "ItemParam"
+  COLUMN-LABEL "ItemParam"
+  HELP "Extra parameters for Item"
+  ORDER 50
+

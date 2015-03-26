@@ -1,0 +1,8 @@
+DEFINE VARIABLE ttCustIDType AS CHAR LABEL "ID type" NO-UNDO.
+DEFINE VARIABLE ttCreDate AS DATE FORMAT "99.99.99" LABEL "Since" NO-UNDO.
+
+UPDATE ttCustIDType ttCreDate.
+
+FOR EACH CUSTOMER NO-LOCK WHERE CustIDType = ttCustIDType AND CreDate >= ttCreDate.
+   DISPLAY CustNum CustIDType CreDate.
+END.

@@ -1,0 +1,76 @@
+ADD TABLE "PrepRowCounter"
+  AREA "Dyn_Data_64"
+  LABEL "Prepaid Row Counter"
+  DESCRIPTION "Prepaid row counter"
+  DUMP-NAME "preprowcounter"
+
+ADD FIELD "MsSeq" OF "PrepRowCounter" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  COLUMN-LABEL "Subscr.ID"
+  HELP "Subscription ID"
+  ORDER 10
+
+ADD FIELD "CLI" OF "PrepRowCounter" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "MSISDN"
+  HELP "MSISDN"
+  ORDER 20
+
+ADD FIELD "BillCode" OF "PrepRowCounter" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Billing Item"
+  COLUMN-LABEL "Bill.Item"
+  HELP "Billing item ID"
+  ORDER 30
+
+ADD FIELD "InvCust" OF "PrepRowCounter" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Invoice Customer"
+  COLUMN-LABEL "Inv.Cust"
+  HELP "Invoice customer"
+  ORDER 40
+
+ADD FIELD "FromDate" OF "PrepRowCounter" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Events From"
+  COLUMN-LABEL "From"
+  HELP "Beginning of event period"
+  ORDER 50
+
+ADD FIELD "ToDate" OF "PrepRowCounter" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Events To"
+  COLUMN-LABEL "To"
+  HELP "Events to date"
+  ORDER 60
+
+ADD FIELD "Quantity" OF "PrepRowCounter" AS integer 
+  FORMAT "->>>>>>>>9"
+  INITIAL "0"
+  LABEL "Quantity"
+  COLUMN-LABEL "Qty"
+  HELP "Quantity"
+  ORDER 70
+
+ADD FIELD "Amount" OF "PrepRowCounter" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Amount"
+  COLUMN-LABEL "Amt"
+  HELP "Amount"
+  DECIMALS 6
+  ORDER 80
+
+ADD INDEX "MsSeq" ON "PrepRowCounter" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+

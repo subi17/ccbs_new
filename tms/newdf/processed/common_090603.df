@@ -1,0 +1,84 @@
+ADD TABLE "UserLimit"
+  AREA "Sta_Data_64"
+  LABEL "UserLimit"
+  DESCRIPTION "User or usergroup limits"
+  DUMP-NAME "userlimit"
+
+ADD FIELD "Brand" OF "UserLimit" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brands"
+  ORDER 10
+
+ADD FIELD "LimitType" OF "UserLimit" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "LimitType"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "LimitType"
+  HELP "Limit type"
+  ORDER 20
+
+ADD FIELD "LimitTarget" OF "UserLimit" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "LimitTarget"
+  POSITION 4
+  MAX-WIDTH 24
+  COLUMN-LABEL "LimitTarget"
+  HELP "Limit target type"
+  ORDER 30
+
+ADD FIELD "LimitTargetID" OF "UserLimit" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "LimitTargetID"
+  POSITION 5
+  MAX-WIDTH 24
+  COLUMN-LABEL "LimitTargetID"
+  HELP "Limit target ID"
+  ORDER 40
+
+ADD FIELD "LimitAmt" OF "UserLimit" AS decimal 
+  FORMAT ">>>>>>>>>9.99"
+  INITIAL "0"
+  LABEL "LimitAmt"
+  POSITION 6
+  MAX-WIDTH 17
+  COLUMN-LABEL "LimitAmt"
+  HELP "Limit amount"
+  DECIMALS 2
+  ORDER 50
+
+ADD INDEX "Limit" ON "UserLimit" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "LimitType" ASCENDING 
+  INDEX-FIELD "LimitTarget" ASCENDING 
+  INDEX-FIELD "LimitTargetID" ASCENDING 
+
+ADD FIELD "FMGroup" OF "FeeModel" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Group"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Group"
+  HELP "FeeModel Group"
+  ORDER 50
+
+ADD INDEX "FeeGroup" ON "FeeModel" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "FMGroup" ASCENDING 
+
+.
+PSC
+cpstream=1252

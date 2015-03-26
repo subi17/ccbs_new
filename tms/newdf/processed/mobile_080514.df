@@ -1,0 +1,70 @@
+ADD FIELD "MaxValue" OF "TMRLimit" AS decimal
+  FORMAT "->>>>>>9.99"
+  INITIAL "0"
+  LABEL "Limit Max"
+  POSITION 11
+  MAX-WIDTH 17
+  COLUMN-LABEL "Max"
+  HELP "Limit maximum value"
+  DECIMALS 2
+  ORDER 120
+
+ADD FIELD "MinValue" OF "TMRLimit" AS decimal
+  FORMAT "->>>>>>9.99"
+  INITIAL "0"
+  LABEL "Limit Min"
+  POSITION 12
+  MAX-WIDTH 17
+  COLUMN-LABEL "Min"
+  HELP "Limit minimum value"
+  DECIMALS 2
+  ORDER 130
+
+ADD FIELD "ActionParam" OF "TMRLimit" AS character
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Action Parameters"
+  POSITION 13
+  MAX-WIDTH 60
+  COLUMN-LABEL "Parameters"
+  HELP "Parameters for the chosen action"
+  ORDER 140
+
+ADD INDEX "ToDate" ON "TMRLimit"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "TMRuleSeq" ASCENDING
+  INDEX-FIELD "ToDate" DESCENDING
+  INDEX-FIELD "LimitID" ASCENDING
+
+ADD FIELD "RuleActive" OF "TMRule" AS integer
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Active"
+  POSITION 12
+  MAX-WIDTH 4
+  HELP "Active status"
+  ORDER 110
+
+RENAME INDEX "CounterType" TO "temp-30828" ON "TMRule"
+
+ADD INDEX "CounterType" ON "TMRule"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "CounterType" ASCENDING
+  INDEX-FIELD "TMRuleSeq" ASCENDING
+
+ADD INDEX "Name" ON "TMRule"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "Name" ASCENDING
+
+ADD INDEX "ToDate" ON "TMRule"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "ToDate" DESCENDING
+
+DROP INDEX "Brand" ON "TMRule"
+DROP INDEX "temp-30828" ON "TMRule"
+.
+PSC
+cpstream=1252

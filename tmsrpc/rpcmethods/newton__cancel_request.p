@@ -1,0 +1,386 @@
+/**
+ * Cancel acc, icc, request type change or dupliacte invoice request
+ *
+ * @input   seqval;int;mandatory;Msseq
+            salesman;string;mandatory;login id
+            reqtype;string;mandatory;For options see below
+            bundle_id;string;optional;if type=bundle_terminationss
+            confirm_icc;boolean;optional;confirm icc status change
+ * @output requests;int;number of canceled requests
+ *
+ * @RequestType subscription_type;Subscription type change
+                acc;Agreement customer change
+                icc;ICC change
+                duplicate_invoice;Duplicate invoice
+                bundle_type_change;Bundle Type Change
+                bundle_termination;Bundle/Contract Termination
+ */
+
+{xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
+{tmsconst.i}
+
+/* Input parameters */
+DEF VAR piReference AS INT NO-UNDO.
+DEF VAR pcMemo AS CHAR NO-UNDO.
+DEF VAR pcReqType AS CHAR NO-UNDO.
+DEF VAR pcBundleName AS CHAR NO-UNDO.
+DEF VAR plConfirm AS LOG NO-UNDO.
+DEF VAR top_array AS CHAR NO-UNDO. 
+/* Local variables */
+DEF VAR liReqType AS INT NO-UNDO.
+DEF VAR lii AS INT NO-UNDO.
+DEF VAR lcc AS CHAR NO-UNDO.
+DEF VAR ldeActStamp AS DEC NO-UNDO.
+DEF VAR liQuarTime         AS INT   NO-UNDO.
+DEF VAR liSimStat          AS INT   NO-UNDO.
+DEF VAR liMSISDNStat       AS INT   NO-UNDO.
+DEF VAR liRequest          AS INT   NO-UNDO.
+DEF VAR lcError            AS CHAR  NO-UNDO.
+DEF VAR ldaSecSIMTermDate  AS DATE  NO-UNDO.
+DEF VAR liSecSIMTermTime   AS INT   NO-UNDO.
+DEF VAR ldeSecSIMTermStamp AS DEC   NO-UNDO.
+DEF VAR lcBONOContracts    AS CHAR  NO-UNDO.
+DEF VAR lcIPLContracts     AS CHAR  NO-UNDO.
+
+DEF BUFFER lbMobSub        FOR Mobsub.
+DEF BUFFER bMsRequest      FOR MsRequest.
+
+DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
+    FIELD MsSeq    AS INT
+    FIELD CustNum  AS INT
+    FIELD CLI      AS CHAR.
+
+/* Output parameters */
+DEF VAR liReqCount AS INT INITIAL 0 NO-UNDO.
+
+top_array = validate_request(param_toplevel_id, "int,string,string,[string],[boolean]").
+IF top_array EQ ? THEN RETURN.
+piReference = get_int(param_toplevel_id, "0").
+pcMemo = "Newton user " + get_string(param_toplevel_id, "1") + " canceled".
+pcReqType = get_string(param_toplevel_id, "2").
+IF pcReqType EQ "bundle_termination" THEN
+    pcBundleName = get_string(param_toplevel_id, "3").
+IF NUM-ENTRIES(top_array) >= 5 THEN
+   plConfirm = get_bool(param_toplevel_id, "4").
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+CASE pcReqType:
+   WHEN  "subscription_type" THEN liReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}.
+   WHEN  "icc" THEN liReqType = {&REQTYPE_ICC_CHANGE}.
+   WHEN  "acc" THEN liReqType = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}.
+   WHEN  "stc" THEN liReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}.
+   WHEN  "duplicate_invoice" THEN liReqType = {&REQTYPE_DUPLICATE_INVOICE}.
+   WHEN  "bundle_type_change" THEN liReqType = {&REQTYPE_BUNDLE_CHANGE}.
+   WHEN  "bundle_termination" THEN liReqType = {&REQTYPE_CONTRACT_TERMINATION}.
+   WHEN  "address" THEN liReqtype = {&REQTYPE_ADDRESS_CHANGE}.
+   OTHERWISE RETURN appl_err("Unknown request type " + pcReqType).
+END.
+
+{commpaa.i}
+katun   = "VISTA_" + get_string(param_toplevel_id, "1").
+gcBrand = "1".
+{cparam2.i}
+{msreqfunc.i}
+{eventval.i}
+{fsendsms.i}
+{fsubstermreq.i}
+{main_add_lines.i}
+
+IF llDoEvent THEN DO:
+   &GLOBAL-DEFINE STAR_EVENT_USER katun
+
+   {lib/eventlog.i}
+
+   DEFINE VARIABLE lhMsRequest AS HANDLE NO-UNDO.
+   lhMsRequest = BUFFER MsRequest:HANDLE.
+   RUN StarEventInitialize(lhMsRequest).
+
+END.
+
+IF liReqType = {&REQTYPE_ICC_CHANGE} THEN DO:
+    FOR EACH MsRequest NO-LOCK
+    WHERE MsRequest.Brand     = gcBrand 
+      AND MsRequest.ReqType   = liReqType
+      AND MsRequest.msseq     = piReference
+      AND (MsRequest.ReqStatus = 0 OR MsRequest.ReqStatus = 19) USE-INDEX MsSeq:
+         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsRequest).
+         fReqStatus(4, pcMemo).
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsRequest).
+         liReqCount = liReqCount + 1.
+         FIND FIRST SIM EXCLUSIVE-LOCK WHERE
+                    SIM.icc = Msrequest.ReqCParam2 NO-ERROR.
+         IF AVAIL SIM THEN DO:
+            FIND FIRST Order NO-LOCK USE-INDEX MsSeq WHERE
+                       Order.MsSeq = MsRequest.MsSeq AND
+                       Order.ICC = SIM.ICC AND
+                       Order.OrderType = 2 AND
+                       INDEX(Order.OrderChannel,"pos") = 0 NO-ERROR.
+            IF AVAIL Order THEN sim.simstat = 7.
+            ELSE SIM.simstat = (IF plConfirm THEN 1 ELSE 9).
+            RELEASE SIM.
+         END.
+    END.
+END.
+ELSE FOR EACH MsRequest NO-LOCK WHERE 
+         MsRequest.Brand = gcBrand AND
+         MsRequest.MsSeq = piReference AND
+         MsRequest.ReqType = liReqType USE-INDEX MsSeq:
+ 
+   IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsRequest).
+   CASE pcReqType:
+      WHEN "subscription_type" THEN
+         IF fChkReqStatusChange(4) EQ TRUE THEN DO:
+            /* cancel possible renewal pos stc order */
+            FIND FIRST Order WHERE
+               Order.MsSeq = MsRequest.MsSeq AND
+               LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 AND
+               LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES} + ",12") = 0
+               NO-LOCK NO-ERROR.
+            IF AVAIL Order THEN DO TRANS ON ERROR UNDO:
+               RUN closeorder.p(Order.OrderId,TRUE).
+               IF RETURN-VALUE NE "" THEN NEXT.
+               IF fReqStatus(4, pcMemo) = False THEN UNDO.
+               ELSE liReqCount = liReqCount + 1.
+            END.
+            ELSE DO:
+               fReqStatus(4, pcMemo).
+               liReqCount = liReqCount + 1.
+            END.
+
+            FIND Customer WHERE
+                 Customer.Custnum = MsRequest.Custnum NO-LOCK NO-ERROR.
+
+            lcSMSText = fGetSMSTxt("STC_Cancelled",
+                                   TODAY,
+                                   (IF AVAIL Customer THEN Customer.Language
+                                    ELSE 1),
+                                   OUTPUT ldeActStamp).
+
+            IF lcSMSText > "" THEN
+               fMakeSchedSMS2(MsRequest.CustNum,
+                             MsRequest.CLI,
+                             {&SMSTYPE_STC},
+                             lcSMSText,
+                             ldeActStamp,
+                             {&STC_SMS_SENDER},
+                             "").
+
+            /* YDR-819 - Create CONTM termination request - MultiSIM */
+            FIND FIRST MobSub WHERE
+                       MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
+            IF AVAIL MobSub AND MobSub.MultiSIMId > 0 AND
+               MobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO:
+               FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
+                          lbMobSub.Brand  = gcBrand AND
+                          lbMobSub.MultiSimID = MobSub.MultiSimID AND
+                          lbMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
+                          lbMobSub.Custnum = MobSub.Custnum NO-ERROR.
+               IF NOT AVAIL lbMobSub THEN DO:
+                  FIND FIRST TermMobSub NO-LOCK USE-INDEX MultiSIM WHERE
+                             TermMobSub.Brand  = gcBrand AND
+                             TermMobSub.MultiSimID = MobSub.MultiSimID AND
+                             TermMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
+                             TermMobSub.Custnum = MobSub.Custnum NO-ERROR.
+                  IF NOT AVAIL TermMobSub THEN
+                     ldaSecSIMTermDate = TODAY.
+                  ELSE DO:
+                     FIND FIRST Msowner WHERE
+                                Msowner.MsSeq = TermMobsub.MsSeq
+                          NO-LOCK NO-ERROR.
+                     IF AVAIL Msowner THEN
+                        fSplitTS(Msowner.TSEnd,OUTPUT ldaSecSIMTermDate,
+                                 OUTPUT liSecSIMTermTime).
+                     ELSE ldaSecSIMTermDate = TODAY.
+                  END. /* ELSE DO: */
+
+                  fTermAdditionalSim(MobSub.MsSeq,
+                                     MobSub.CLI,
+                                     MobSub.CustNum,
+                                     {&SUBSCRIPTION_TERM_REASON_MULTISIM},
+                                     ldaSecSIMTermDate,
+                                     {&REQUEST_SOURCE_MANUAL_TMS},
+                                     0,
+                                     lcError).
+
+               END. /* IF NOT AVAIL lbMobSub THEN DO: */
+            END. /* IF AVAIL MobSub THEN DO: */
+            /* Additional SIM Termination logic */
+            ELSE IF AVAIL MobSub THEN DO:
+               EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
+
+               IF CAN-FIND(
+                  FIRST CLIType NO-LOCK WHERE
+                        CLIType.Brand = gcBrand AND
+                        CLIType.CLIType =
+                           (IF MobSub.TariffBundle > ""
+                            THEN MobSub.TariffBundle
+                            ELSE MobSub.CLIType) AND
+                        CLIType.LineType = {&CLITYPE_LINETYPE_ADDITIONAL})
+                  THEN DO:
+                  FOR EACH lbMobSub NO-LOCK WHERE
+                           lbMobSub.Brand   = gcBrand AND
+                           lbMobSub.InvCust = Mobsub.CustNum AND
+                           lbMobSub.PayType = FALSE,
+                     FIRST CLIType NO-LOCK WHERE
+                           CLIType.Brand = gcBrand AND
+                           CLIType.CLIType = (IF lbMobSub.TariffBundle > ""
+                                              THEN lbMobSub.TariffBundle
+                                              ELSE lbMobSub.CLIType) AND
+                           CLIType.LIneType > 0:
+                     
+                     IF CLIType.LineType = {&CLITYPE_LINETYPE_MAIN} OR
+                        fHasPendingSTCToMainLine
+                        (lbMobSub.MsSeq) THEN DO:
+                        EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
+                        LEAVE.
+                     END.
+
+                     CREATE ttAdditionalSIM.
+                     ASSIGN ttAdditionalSIM.MsSeq   = lbMobSub.MsSeq
+                            ttAdditionalSIM.CustNum = lbMobSub.CustNum
+                            ttAdditionalSIM.CLI     = lbMobSub.CLI.
+                  END.
+
+                  FOR EACH ttAdditionalSIM NO-LOCK:
+                     /* If there is no ongoing STC/termination request for secondary line */
+                     IF fHasPendingRequests
+                        (ttAdditionalSIM.MsSeq,
+                         ttAdditionalSIM.CLI,
+                         {&CLITYPE_LINETYPE_ADDITIONAL}) THEN NEXT.
+                     fTermAdditionalSim(ttAdditionalSIM.MsSeq,
+                                        ttAdditionalSIM.CLI,
+                                        ttAdditionalSIM.CustNum,
+                                        {&SUBSCRIPTION_TERM_REASON_ADDITIONALSIM},
+                                        TODAY,
+                                        {&REQUEST_SOURCE_MANUAL_TMS},
+                                        0,
+                                        OUTPUT lcError).
+
+                  END. /* FOR EACH ttAdditionalSIM NO-LOCK: */
+               END. /* IF LOOKUP(MonSub.CLITYpe,lcAllowedDSS2SubsType) > 0 */
+            END. /* ELSE IF AVAIL MobSub THEN DO: */
+         END.
+      WHEN "acc" THEN
+         IF MsRequest.ReqStatus = 0 OR 
+            MsRequest.ReqStatus = 8 THEN DO:
+            fReqStatus(4, pcMemo).
+            RUN acc_sendsms.p(MsRequest.MsRequest,
+                            MsRequest.CustNum,
+                            "Cancelled",
+                            "").
+            liReqCount = liReqCount + 1.
+         END.
+      WHEN "duplicate_invoice" OR WHEN "address" THEN
+         IF MsRequest.ReqStatus = 0 THEN DO:
+            fReqStatus(4, pcMemo).
+            liReqCount = liReqCount + 1.
+         END.
+      WHEN "bundle_type_change" THEN
+         IF LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0
+         THEN DO:
+            ASSIGN lcIPLContracts  = fCParamC("IPL_CONTRACTS")
+                   lcBONOContracts = fCParamC("BONO_CONTRACTS").
+
+            /* BTC with Upgrade Upsell cancellation is not allowed */
+            IF MsRequest.ReqCparam5 > "" THEN DO:
+               IF LOOKUP(MsRequest.ReqCParam1,lcBONOContracts) > 0 THEN
+                  RETURN appl_err("BONO Upgrade BTC Cancellation is not allowed").
+               ELSE IF LOOKUP(MsRequest.ReqCParam1,lcIPLContracts) > 0 THEN
+                  RETURN appl_err("IPL Upgrade BTC Cancellation is not allowed").
+            END. /* IF MsRequest.ReqCparam5 > "" THEN DO: */
+
+            fReqStatus(4,pcMemo).
+            liReqCount = liReqCount + 1.
+            /* Send a SMS only for Voice BTC Cancellation */
+            IF LOOKUP(MsRequest.ReqCParam1,lcBONOContracts) > 0 AND
+               LOOKUP(MsRequest.ReqCParam2,lcBONOContracts) > 0 THEN
+               RUN pSendSMS(INPUT MsRequest.MsSeq, INPUT MsRequest.MsRequest,
+                            INPUT "BTCDeAct", INPUT 10,
+                            INPUT {&UPSELL_SMS_SENDER}, INPUT "").
+
+            /* Additional SIM Termination logic */
+            IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                              CLIType.Brand = gcBrand AND
+                              CLIType.CLIType = MsRequest.ReqCparam1 AND
+                              CLIType.LineType = {&CLITYPE_LINETYPE_ADDITIONAL}) AND
+               CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                              CLIType.Brand = gcBrand AND
+                              CLIType.CLIType = MsRequest.ReqCparam1 AND
+                              CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
+               FIND FIRST MobSub WHERE
+                          MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
+               IF AVAIL MobSub THEN DO:
+
+                  EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
+
+                  IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                                    CLIType.Brand = gcBrand AND
+                                    CLIType.CLIType = (IF MobSub.TariffBundle > ""
+                                                       THEN MobSub.TariffBundle
+                                                       ELSE MobSub.CLIType) AND
+                                    CLIType.LineType =
+                                    {&CLITYPE_LINETYPE_ADDITIONAL}) THEN DO:
+
+                     FOR EACH lbMobSub NO-LOCK WHERE
+                              lbMobSub.Brand   = gcBrand AND
+                              lbMobSub.InvCust = Mobsub.CustNum AND
+                              lbMobSub.PayTypE = FALSE,
+                        FIRST CLIType NO-LOCK WHERE
+                              CLIType.Brand = gcBrand AND
+                              CLIType.CLIType = (IF lbMobSub.TariffBundle > ""
+                                                 THEN lbMobSub.TariffBundle 
+                                                 ELSE lbMobSub.CLIType) AND
+                              CLIType.LineType > 0:
+
+                        IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+                           fHasPendingSTCToMainLine
+                           (lbMobSub.MsSeq) THEN DO:
+                           EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
+                           LEAVE.
+                        END.
+                        
+                        CREATE ttAdditionalSIM.
+                        ASSIGN ttAdditionalSIM.MsSeq   = lbMobSub.MsSeq
+                               ttAdditionalSIM.CustNum = lbMobSub.CustNum
+                               ttAdditionalSIM.CLI     = lbMobSub.CLI.
+                     END.
+
+                     FOR EACH ttAdditionalSIM NO-LOCK:
+                        
+                        IF fHasPendingRequests
+                           (ttAdditionalSIM.MsSeq,
+                            ttAdditionalSIM.CLI,
+                            {&CLITYPE_LINETYPE_ADDITIONAL}) THEN NEXT.
+
+                        /* If there is no ongoing STC/termination request for secondary line */
+
+                        fTermAdditionalSim(ttAdditionalSIM.MsSeq,
+                                           ttAdditionalSIM.CLI,
+                                           ttAdditionalSIM.CustNum,
+                                           {&SUBSCRIPTION_TERM_REASON_ADDITIONALSIM},
+                                           TODAY,
+                                           {&REQUEST_SOURCE_MANUAL_TMS},
+                                           0,
+                                           OUTPUT lcError).
+
+                     END. /* FOR EACH ttAdditionalSIM NO-LOCK: */
+                  END. /* IF LOOKUP(MonSub.CLITYpe,lcAllowedDSS2SubsType) > 0 */
+               END. /* IF AVAIL MobSub THEN DO: */
+            END. /* IF MsRequest.ReqCparam1 = "CONTS15" DO: */
+         END. /* IF LOOKUP(STRING(MsRequest.ReqStatus) */
+      WHEN "bundle_termination" THEN
+         IF MsRequest.ReqStatus = 0 AND
+            MsRequest.ReqCparam3 = pcBundleName THEN DO:
+            fReqStatus(4, pcMemo).
+            liReqCount = liReqCount + 1.
+         END. /* IF MsRequest.ReqStatus = 0 */
+   END. 
+   IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsRequest).
+END.
+
+add_int(response_toplevel_id, "", liReqCount).
+
+FINALLY:
+   IF llDoEvent THEN fCleanEventObjects().
+   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
+END.

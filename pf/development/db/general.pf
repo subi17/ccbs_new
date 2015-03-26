@@ -1,0 +1,11 @@
+-L 10000
+-B 10000
+-TB 31
+-TM 32
+-cpcoll Finnish
+-cpstream iso8859-1
+-n 50
+-Mn 10 
+-Ma 5
+-Mi 4
+-spin 20000

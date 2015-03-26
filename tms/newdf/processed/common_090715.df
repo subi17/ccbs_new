@@ -1,0 +1,25 @@
+ADD FIELD "ValidPeriods" OF "FATGroup" AS integer
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Valid Periods"
+  POSITION 18
+  MAX-WIDTH 4
+  COLUMN-LABEL "Valid"
+  HELP "How many periods is FATime valid for"
+  ORDER 170
+
+ADD FIELD "LastPeriod" OF "FATime" AS integer
+  FORMAT "999999"
+  INITIAL "0"
+  LABEL "Last Period"
+  POSITION 34
+  MAX-WIDTH 4
+  COLUMN-LABEL "Last"
+  HELP "Last period which FAtime can be applied to"
+  ORDER 350
+
+.
+PSC
+cpstream=1252
+.
+0000012608

@@ -1,0 +1,79 @@
+ADD TABLE "CDRStreamCounter"
+  AREA "Dyn_Data_128"
+  LABEL "CDR Stream Counter"
+  DESCRIPTION "CDR Stream Counter"
+  DUMP-NAME "cdrstreamcounter"
+
+ADD FIELD "Brand" OF "CDRStreamCounter" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 10
+
+ADD FIELD "ImportDate" OF "CDRStreamCounter" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Import Date"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Import"
+  HELP "Import date"
+  ORDER 20
+
+ADD FIELD "MSCID" OF "CDRStreamCounter" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "MSCID"
+  POSITION 4
+  MAX-WIDTH 16
+  HELP "Mobile switching center"
+  ORDER 30
+
+ADD FIELD "OnlineStream" OF "CDRStreamCounter" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Online Stream"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Stream"
+  HELP "Stream from which CDR was read"
+  ORDER 40
+
+ADD FIELD "CounterType" OF "CDRStreamCounter" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Counter Type"
+  POSITION 6
+  MAX-WIDTH 16
+  COLUMN-LABEL "Type"
+  HELP "Counter type"
+  ORDER 50
+
+ADD FIELD "CDRQty" OF "CDRStreamCounter" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Quantity"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Qty"
+  HELP "CDR quantity"
+  ORDER 60
+
+ADD INDEX "ImportDate" ON "CDRStreamCounter" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "ImportDate" ASCENDING 
+  INDEX-FIELD "CounterType" ASCENDING 
+  INDEX-FIELD "MSCID" ASCENDING 
+  INDEX-FIELD "OnlineStream" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000001546

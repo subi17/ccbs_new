@@ -1,0 +1,26 @@
+ADD FIELD "MSID" OF "ServiceLCounter" AS integer 
+  DESCRIPTION "MServicelimit ID"
+  FORMAT ">>>>>>>>9"
+  INITIAL 0
+  LABEL "MSID"
+  COLUMN-LABEL "MSID"
+  ORDER 110
+
+ADD FIELD "MSID" OF "MServiceLimit" AS integer 
+  DESCRIPTION "MServicelimit ID"
+  FORMAT ">>>>>>>>9"
+  INITIAL 0
+  LABEL "MSID"
+  COLUMN-LABEL "MSID"
+  ORDER 90
+
+ADD SEQUENCE "MServiceLimit"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+.
+PSC
+cpstream=1252
+.

@@ -1,0 +1,25 @@
+# namespace/schema configuration file for MNP
+#
+# file format:
+# namespace xsd
+# 
+# http://www.example.org/ will be added to the namespace and
+# xsd-directory and .xsd extension to xsd filename
+#
+altaPortabilidad outPortabilityRequest
+altaPortabilidad portabilityRequest
+bajaNumeracionPortada returnPortedNumbering
+cancelacionPortabilidad portabilityCancel
+changeWindowDate changeWindowDate
+confirmACK confirmACK
+confirmACK confirmIncidentACK
+feasibilityStudy feasibilityStudy 
+incidenceForm createIncident
+incidenceForm reportIncident
+incidenceForm updateIncident
+nrnModChangeRequest nrnModChangeRequest
+nrnModification nrnModRequest
+nrnModification stateChangednrnMod
+stateChanged stateChanged
+stateChanged stateReturnedNumbering
+

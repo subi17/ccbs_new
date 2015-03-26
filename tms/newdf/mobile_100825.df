@@ -1,0 +1,10 @@
+ADD INDEX "DCType" ON "DayCampaign" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "DCType" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000005052

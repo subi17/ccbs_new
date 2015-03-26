@@ -1,0 +1,31 @@
+Table IO Statistics Help
+========================
+
+Tables that do not have _TableStat data available are indicated with a
+leading"*".  (This may be because -tablebase or -tablerangesize need
+adjustment.)
+
+Tbl#:
+
+The table id#.
+
+Table Name:
+
+The table name.
+
+Create:
+
+The number of record CREATE operations for this table.
+
+Read:
+
+The number of record READ operations for this table.
+
+Update:
+
+The number of record UPDATE operations for this table.
+
+Delete:
+
+The number of record DELETE operations for this table.
+

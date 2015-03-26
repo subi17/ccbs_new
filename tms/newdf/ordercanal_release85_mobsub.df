@@ -1,0 +1,14 @@
+ADD FIELD "BarrCode" OF "MobSub" AS character
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "BarrCode"
+  COLUMN-LABEL "BarrCode"
+  ORDER 860
+
+ADD FIELD "TariffBundle" OF "MobSub" AS character
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Tariff Bundle"
+  COLUMN-LABEL "TariffBundle"
+  ORDER 870
+

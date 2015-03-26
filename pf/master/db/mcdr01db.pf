@@ -1,0 +1,9 @@
+-db /db1/mcdr01/mcdr01
+-L 100000
+-B 2000000
+#-H propus
+-S mcdr01
+-aiarcdir /aiarchive/mcdr01
+-DBService replserv
+-pica 8192
+-pf /apps/tms/pf/db/general.pf

@@ -1,0 +1,5 @@
+ADD INDEX "UserCode" ON "MSRequest" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "UserCode" ASCENDING 
+  INDEX-FIELD "ActStamp" DESCENDING 

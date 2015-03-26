@@ -1,0 +1,10 @@
+ADD INDEX "BDestID" ON "BDest" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "BdestID" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000004505

@@ -1,0 +1,51 @@
+ADD TABLE "PremiumNumber"
+  AREA "Sta_Data_128"
+  LABEL "Premium Numbers"
+  DESCRIPTION "Premium number descriptions"
+  DUMP-NAME "premiumnumber"
+
+ADD FIELD "Brand" OF "PremiumNumber" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  HELP "Code of brand"
+  ORDER 10
+
+ADD FIELD "BNumberPrefix" OF "PremiumNumber" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "B Number Prefix"
+  COLUMN-LABEL "BNumberPrefix"
+  ORDER 20
+
+ADD FIELD "OperatorName" OF "PremiumNumber" AS character
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Operator Name"
+  COLUMN-LABEL "OperName"
+  HELP "Premium service operator name"
+  ORDER 30
+
+ADD FIELD "ValidFrom" OF "PremiumNumber" AS date
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid From"
+  COLUMN-LABEL "ValidFrom"
+  HELP "Date when configuration becomes active"
+  ORDER 40
+
+ADD FIELD "ValidTo" OF "PremiumNumber" AS date
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid To"
+  COLUMN-LABEL "ValidTo"
+  HELP "Date after configuration becomes inactive"
+  ORDER 50
+
+ADD INDEX "BNumberPrefix" ON "PremiumNumber"
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "BNumberPrefix" ASCENDING
+  INDEX-FIELD "ValidTo" DESCENDING

@@ -1,0 +1,1 @@
+Do not remove this file. This makes possible to locate test data directories for EDR and CDR test data generators.

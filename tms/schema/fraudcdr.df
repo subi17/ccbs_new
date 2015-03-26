@@ -1,0 +1,805 @@
+ADD TABLE "FraudCDR"
+  AREA "Dyn_Data_64"
+  LABEL "Fraud CDR"
+  DUMP-NAME "frcdr"
+
+ADD FIELD "CLI" OF "FraudCDR" AS character 
+  FORMAT "x(18)"
+  INITIAL ""
+  LABEL "GSMANR"
+  POSITION 3
+  MAX-WIDTH 36
+  COLUMN-LABEL "GSMANR"
+  HELP "Calling Party Number"
+  ORDER 20
+
+ADD FIELD "GsmBnr" OF "FraudCDR" AS character 
+  FORMAT "x(18)"
+  INITIAL ""
+  LABEL "GSMBNR"
+  POSITION 8
+  MAX-WIDTH 36
+  COLUMN-LABEL "GSMBNR"
+  HELP "Called Party Number"
+  ORDER 71
+
+ADD FIELD "MpmRid" OF "FraudCDR" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Reporting ID"
+  POSITION 23
+  MAX-WIDTH 12
+  COLUMN-LABEL "MpmRid"
+  HELP "Reporting ID"
+  ORDER 220
+
+ADD FIELD "ServRid" OF "FraudCDR" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Service ID"
+  POSITION 24
+  MAX-WIDTH 12
+  COLUMN-LABEL "ServRid"
+  HELP "Service reporting ID"
+  ORDER 230
+
+ADD FIELD "CustNum" OF "FraudCDR" AS integer 
+  FORMAT "zzzzzz9"
+  INITIAL "0"
+  LABEL "CustNum"
+  POSITION 42
+  MAX-WIDTH 4
+  COLUMN-LABEL "CustNum"
+  HELP " Customer No ."
+  ORDER 400
+
+ADD FIELD "InvCust" OF "FraudCDR" AS integer 
+  FORMAT "zzzzzz9"
+  INITIAL "0"
+  LABEL "CustInv"
+  POSITION 43
+  MAX-WIDTH 4
+  COLUMN-LABEL "CustInv"
+  HELP "Customer who is being invoiced"
+  ORDER 410
+
+ADD FIELD "BillTarget" OF "FraudCDR" AS integer 
+  FORMAT "z9"
+  INITIAL "0"
+  LABEL "No"
+  POSITION 45
+  MAX-WIDTH 4
+  COLUMN-LABEL "No"
+  HELP "Consecutive No. for Customer's Invoicing Target"
+  ORDER 430
+
+ADD FIELD "TimeStart" OF "FraudCDR" AS integer 
+  FORMAT "zzzzz9"
+  INITIAL "0"
+  LABEL "TimeSt"
+  POSITION 46
+  MAX-WIDTH 4
+  COLUMN-LABEL "TimeSt"
+  HELP "Time when call  started (in terms of seconds from midnight)"
+  ORDER 440
+
+ADD FIELD "BillDur" OF "FraudCDR" AS integer 
+  FORMAT "zzzzz9"
+  INITIAL "0"
+  LABEL "BillDur"
+  POSITION 48
+  MAX-WIDTH 4
+  COLUMN-LABEL "BillDur"
+  HELP "Billable Duration of call, seconds"
+  ORDER 460
+
+ADD FIELD "DateSt" OF "FraudCDR" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "CallDate"
+  POSITION 49
+  MAX-WIDTH 4
+  COLUMN-LABEL "CallDate"
+  HELP "Date When call started"
+  ORDER 470
+
+ADD FIELD "CCN" OF "FraudCDR" AS integer 
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "CCN"
+  POSITION 50
+  MAX-WIDTH 4
+  COLUMN-LABEL "CCN"
+  HELP "Consecutive country/service number of call's  destination"
+  ORDER 480
+  MANDATORY
+
+ADD FIELD "BDest" OF "FraudCDR" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Destin"
+  POSITION 51
+  MAX-WIDTH 24
+  COLUMN-LABEL "Destin"
+  HELP "Call's destination, recognised from B-sub. number"
+  ORDER 490
+
+ADD FIELD "TotDisc" OF "FraudCDR" AS decimal 
+  FORMAT "zzz,zz9.99"
+  INITIAL "0"
+  LABEL "TotDisc"
+  POSITION 53
+  MAX-WIDTH 17
+  COLUMN-LABEL "TotDisc"
+  HELP "Total discount, subtracted from Total Price"
+  DECIMALS 5
+  ORDER 510
+
+ADD FIELD "Amount" OF "FraudCDR" AS decimal 
+  FORMAT "zzz,zz9.99"
+  INITIAL "0"
+  LABEL "NetPrice"
+  POSITION 54
+  MAX-WIDTH 17
+  COLUMN-LABEL "NetPrice"
+  HELP "Net (billed) Price of Call"
+  DECIMALS 5
+  ORDER 520
+
+ADD FIELD "DiscType" OF "FraudCDR" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Discount Type"
+  POSITION 56
+  MAX-WIDTH 4
+  COLUMN-LABEL "DiscType"
+  HELP "Discount type"
+  ORDER 530
+
+ADD FIELD "MPMAmt" OF "FraudCDR" AS decimal 
+  FORMAT "zzz,zz9.999"
+  INITIAL "0"
+  LABEL "MPM Amount"
+  POSITION 57
+  MAX-WIDTH 18
+  COLUMN-LABEL "MPM"
+  HELP "MPM Amount"
+  DECIMALS 5
+  ORDER 2310
+
+ADD FIELD "IMEI" OF "FraudCDR" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "x(15)"
+  POSITION 58
+  MAX-WIDTH 30
+  COLUMN-LABEL "IMEI"
+  ORDER 2320
+
+ADD FIELD "MSCID" OF "FraudCDR" AS character 
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "MSCID"
+  POSITION 60
+  MAX-WIDTH 8
+  COLUMN-LABEL "MSCID"
+  ORDER 2340
+
+ADD FIELD "StartCharge" OF "FraudCDR" AS decimal 
+  FORMAT "zz9.999"
+  INITIAL "0"
+  LABEL "StFee"
+  POSITION 61
+  MAX-WIDTH 17
+  COLUMN-LABEL "StFee"
+  HELP "Start Fee"
+  DECIMALS 5
+  ORDER 580
+
+ADD FIELD "BillCode" OF "FraudCDR" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "ProdCode"
+  POSITION 62
+  MAX-WIDTH 32
+  COLUMN-LABEL "ProdCode"
+  HELP "Product code, (call is billed with this product code)"
+  ORDER 590
+
+ADD FIELD "ErrorCode" OF "FraudCDR" AS integer 
+  FORMAT "zzz9"
+  INITIAL "0"
+  LABEL "ErrC"
+  POSITION 63
+  MAX-WIDTH 4
+  COLUMN-LABEL "ErrC"
+  HELP "Rating Error Code 1 ... 9999"
+  ORDER 600
+
+ADD FIELD "EventSubType" OF "FraudCDR" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "EventSubType"
+  POSITION 64
+  MAX-WIDTH 16
+  COLUMN-LABEL "EventSubType"
+  ORDER 2380
+
+ADD FIELD "CLIType" OF "FraudCDR" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "CLIType"
+  POSITION 65
+  MAX-WIDTH 24
+  COLUMN-LABEL "CLIType"
+  HELP "Code of Subscription Type"
+  ORDER 630
+
+ADD FIELD "IMSI" OF "FraudCDR" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "IMSI"
+  POSITION 66
+  MAX-WIDTH 30
+  COLUMN-LABEL "IMSI"
+  HELP "IMSI"
+  ORDER 2400
+
+ADD FIELD "Currency" OF "FraudCDR" AS character 
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "CUR"
+  POSITION 67
+  MAX-WIDTH 8
+  COLUMN-LABEL "CUR"
+  ORDER 2410
+
+ADD FIELD "Disc%" OF "FraudCDR" AS decimal 
+  FORMAT "z9.99"
+  INITIAL "0"
+  LABEL "Discount%"
+  POSITION 68
+  MAX-WIDTH 17
+  COLUMN-LABEL "Disc%"
+  HELP "Discount percent"
+  DECIMALS 2
+  ORDER 650
+
+ADD FIELD "DiscFP" OF "FraudCDR" AS decimal 
+  FORMAT "z9.99"
+  INITIAL "0"
+  LABEL "Fix%"
+  POSITION 69
+  MAX-WIDTH 17
+  COLUMN-LABEL "Fix%"
+  HELP "Amount of Destination-based Fixed Discount (%%)"
+  DECIMALS 5
+  ORDER 660
+
+ADD FIELD "Fdisc" OF "FraudCDR" AS decimal 
+  FORMAT "zz,zzz,zz9.99"
+  INITIAL "0"
+  LABEL "FixedDiscount"
+  POSITION 70
+  MAX-WIDTH 17
+  COLUMN-LABEL "FixedDiscount"
+  HELP "Amount  of Fixed Discount"
+  DECIMALS 5
+  ORDER 670
+
+ADD FIELD "DiscValue" OF "FraudCDR" AS decimal 
+  FORMAT "zz,zz9.99"
+  INITIAL "0"
+  LABEL "Discount"
+  POSITION 71
+  MAX-WIDTH 17
+  COLUMN-LABEL "Disc"
+  HELP "Value of discount"
+  DECIMALS 5
+  ORDER 665
+
+ADD FIELD "GrossAmt" OF "FraudCDR" AS decimal 
+  FORMAT ">>,>>9.999"
+  INITIAL "0"
+  LABEL "GrossAmt"
+  POSITION 72
+  MAX-WIDTH 17
+  COLUMN-LABEL "GrossAmt"
+  HELP "GrossAmoun"
+  DECIMALS 5
+  ORDER 2460
+
+ADD FIELD "RefPrice" OF "FraudCDR" AS decimal 
+  FORMAT "zzz,zz9.99"
+  INITIAL "0"
+  LABEL "RefPrice"
+  POSITION 73
+  MAX-WIDTH 17
+  COLUMN-LABEL "RefPrice"
+  HELP "Reference Price (gen. rate without any discounts)"
+  DECIMALS 5
+  ORDER 690
+
+ADD FIELD "SubsType" OF "FraudCDR" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "SubsType"
+  POSITION 74
+  MAX-WIDTH 2
+  COLUMN-LABEL "SubsType"
+  HELP "Subscription type"
+  ORDER 2480
+
+ADD FIELD "TariffNum" OF "FraudCDR" AS integer 
+  DESCRIPTION "ID of nnhinta record"
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "rateid"
+  POSITION 76
+  MAX-WIDTH 4
+  COLUMN-LABEL "rateid"
+  HELP "ID of rate  record being used"
+  ORDER 720
+
+ADD FIELD "MsSeq" OF "FraudCDR" AS integer 
+  DESCRIPTION "Id of a mobsub record. Note that mobsub can have been deleted"
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "SubSeq"
+  POSITION 77
+  MAX-WIDTH 4
+  COLUMN-LABEL "SubSeq"
+  HELP "Sequence for a Subscription"
+  ORDER 730
+  MANDATORY
+
+ADD FIELD "Charge" OF "FraudCDR" AS decimal 
+  FORMAT ">>>,>>9.999"
+  INITIAL "0"
+  LABEL "Charge"
+  POSITION 94
+  MAX-WIDTH 18
+  COLUMN-LABEL "Charge"
+  HELP "Charge"
+  DECIMALS 5
+  ORDER 911
+
+ADD FIELD "BNET" OF "FraudCDR" AS character 
+  FORMAT "x(5)"
+  INITIAL ?
+  LABEL "Bnet"
+  POSITION 101
+  MAX-WIDTH 10
+  COLUMN-LABEL "Bnet"
+  HELP "Mobile Operator/Service Provider"
+  ORDER 980
+
+ADD FIELD "InvSeq" OF "FraudCDR" AS integer 
+  FORMAT ">>>>>>>>>>9"
+  INITIAL "0"
+  POSITION 102
+  MAX-WIDTH 4
+  HELP "Invoice sequence"
+  ORDER 990
+
+ADD FIELD "VatIncl" OF "FraudCDR" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "VAT Included"
+  POSITION 103
+  MAX-WIDTH 1
+  COLUMN-LABEL "VAT"
+  HELP "Is VAT included in call's price"
+  ORDER 1000
+
+ADD FIELD "DialType" OF "FraudCDR" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Dialling Type"
+  POSITION 104
+  MAX-WIDTH 4
+  COLUMN-LABEL "DialType"
+  HELP "Dialling Type"
+  ORDER 1010
+
+ADD FIELD "CurrUnit" OF "FraudCDR" AS logical 
+  FORMAT "Full/Sub"
+  INITIAL "?"
+  LABEL "CurrUnit"
+  POSITION 105
+  MAX-WIDTH 1
+  COLUMN-LABEL "CurrUnit"
+  HELP "Currency FULL (1) or SUB (1/100)"
+  ORDER 70
+
+ADD FIELD "DataIn" OF "FraudCDR" AS decimal 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "DataIn"
+  POSITION 108
+  MAX-WIDTH 15
+  COLUMN-LABEL "DataIn"
+  HELP "Data Amount Incoming"
+  DECIMALS 0
+  ORDER 1050
+
+ADD FIELD "DataOut" OF "FraudCDR" AS decimal 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "DataOut"
+  POSITION 109
+  MAX-WIDTH 17
+  COLUMN-LABEL "DataOut"
+  HELP "Data Amount Outgoing"
+  DECIMALS 2
+  ORDER 1060
+
+ADD FIELD "tariffClass" OF "FraudCDR" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "TaC"
+  POSITION 112
+  MAX-WIDTH 4
+  COLUMN-LABEL "Tac"
+  HELP "Tariff Class"
+  ORDER 1100
+
+ADD FIELD "Pulses" OF "FraudCDR" AS integer 
+  DESCRIPTION "
+
+"
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "Pulses"
+  POSITION 114
+  MAX-WIDTH 4
+  COLUMN-LABEL "Pulses"
+  HELP "Pulses"
+  ORDER 1120
+
+ADD FIELD "ServiceName" OF "FraudCDR" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "ServiceName"
+  POSITION 123
+  MAX-WIDTH 40
+  COLUMN-LABEL "ServiceName"
+  HELP "Service Name"
+  ORDER 1210
+
+ADD FIELD "ServiceAddress" OF "FraudCDR" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "ServiceAddress"
+  POSITION 124
+  MAX-WIDTH 30
+  COLUMN-LABEL "ServiceAddress"
+  HELP "Service Address"
+  ORDER 1220
+
+ADD FIELD "AType" OF "FraudCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "AType"
+  POSITION 127
+  MAX-WIDTH 4
+  COLUMN-LABEL "AType"
+  HELP "A-Type"
+  ORDER 1250
+
+ADD FIELD "BType" OF "FraudCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "BType"
+  POSITION 128
+  MAX-WIDTH 4
+  COLUMN-LABEL "BType"
+  HELP "B-Type"
+  ORDER 1260
+
+ADD FIELD "BPref" OF "FraudCDR" AS character 
+  FORMAT "x(5)"
+  INITIAL ""
+  LABEL "BPref"
+  POSITION 131
+  MAX-WIDTH 10
+  COLUMN-LABEL "BPref"
+  HELP "B-Prefix"
+  ORDER 1290
+
+ADD FIELD "RateCCN" OF "FraudCDR" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "RateCCN"
+  POSITION 139
+  MAX-WIDTH 4
+  COLUMN-LABEL "RateCCN"
+  HELP "Rating CCN"
+  ORDER 1380
+
+ADD FIELD "RoutingNumber" OF "FraudCDR" AS character 
+  FORMAT "x(15)"
+  INITIAL ?
+  LABEL "RoutingNumber"
+  POSITION 146
+  MAX-WIDTH 30
+  COLUMN-LABEL "RoutingNumber"
+  HELP "Routing Number"
+  ORDER 1430
+
+ADD FIELD "SPOcmt" OF "FraudCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Scmt"
+  POSITION 170
+  MAX-WIDTH 4
+  COLUMN-LABEL "Scmt"
+  HELP "SPO Call Module type"
+  ORDER 880
+
+ADD FIELD "OrigRecordType" OF "FraudCDR" AS integer 
+  FORMAT ">9"
+  INITIAL ?
+  LABEL "OrigRecordType"
+  POSITION 180
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrigRecordType"
+  HELP "Original Record Type"
+  ORDER 2230
+
+ADD FIELD "DtlSeq" OF "FraudCDR" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  POSITION 188
+  MAX-WIDTH 4
+  ORDER 2300
+
+ADD FIELD "Ccharge" OF "FraudCDR" AS decimal 
+  FORMAT ">>,>>9.999"
+  INITIAL "0"
+  LABEL "CCharge"
+  POSITION 189
+  MAX-WIDTH 18
+  COLUMN-LABEL "CCharge"
+  HELP "Call Charge"
+  DECIMALS 5
+  ORDER 881
+
+ADD FIELD "IMEI2" OF "FraudCDR" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "IMEI2"
+  POSITION 190
+  MAX-WIDTH 30
+  COLUMN-LABEL "IMEI2"
+  ORDER 2330
+
+ADD FIELD "AddBPref" OF "FraudCDR" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "AddBPref"
+  POSITION 191
+  MAX-WIDTH 16
+  COLUMN-LABEL "AddBPref"
+  ORDER 2350
+
+ADD FIELD "RoamingInd" OF "FraudCDR" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "RoamingIND"
+  POSITION 192
+  MAX-WIDTH 4
+  COLUMN-LABEL "RoamingInd"
+  ORDER 2360
+
+ADD FIELD "ForwardingType" OF "FraudCDR" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "ForwardingType"
+  POSITION 193
+  MAX-WIDTH 4
+  COLUMN-LABEL "ForwardingType"
+  ORDER 2370
+
+ADD FIELD "IMSI2" OF "FraudCDR" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "IMSI2"
+  POSITION 194
+  MAX-WIDTH 30
+  COLUMN-LABEL "IMSI2"
+  ORDER 2390
+
+ADD FIELD "PPFlag" OF "FraudCDR" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "PrePaid"
+  POSITION 195
+  MAX-WIDTH 4
+  COLUMN-LABEL "PrePAid"
+  HELP "Prepaid"
+  ORDER 2420
+
+ADD FIELD "xSub" OF "FraudCDR" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Xsub"
+  POSITION 196
+  MAX-WIDTH 24
+  COLUMN-LABEL "Xsub"
+  ORDER 2430
+
+ADD FIELD "ReadinTS" OF "FraudCDR" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "ReadinTS"
+  POSITION 197
+  MAX-WIDTH 20
+  COLUMN-LABEL "ReadinTS"
+  DECIMALS 5
+  ORDER 2440
+
+ADD FIELD "CaseType" OF "FraudCDR" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "CaseType"
+  POSITION 198
+  MAX-WIDTH 4
+  COLUMN-LABEL "CT"
+  HELP "CaseType"
+  ORDER 2450
+
+ADD FIELD "EventType" OF "FraudCDR" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  POSITION 199
+  MAX-WIDTH 16
+  ORDER 2470
+
+ADD FIELD "DCType" OF "FraudCDR" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Contract Type"
+  POSITION 200
+  MAX-WIDTH 16
+  COLUMN-LABEL "CType"
+  HELP "Contract type"
+  ORDER 2490
+
+ADD FIELD "DCEvent" OF "FraudCDR" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Periodical Contract"
+  POSITION 201
+  MAX-WIDTH 24
+  COLUMN-LABEL "P.Contract"
+  HELP "Periodical contract"
+  ORDER 2500
+
+ADD FIELD "RerateID" OF "FraudCDR" AS integer 
+  DESCRIPTION "Rerating run ID"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "RerateID"
+  POSITION 202
+  MAX-WIDTH 4
+  COLUMN-LABEL "RerateID"
+  ORDER 2510
+
+ADD FIELD "RerateTS" OF "FraudCDR" AS decimal 
+  DESCRIPTION "Date and time when rerating was done"
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "RerateTS"
+  POSITION 203
+  MAX-WIDTH 20
+  COLUMN-LABEL "RerateTS"
+  DECIMALS 5
+  ORDER 2520
+
+ADD FIELD "ReadDate" OF "FraudCDR" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Read In Date"
+  POSITION 204
+  MAX-WIDTH 4
+  COLUMN-LABEL "Read"
+  HELP "Read in date"
+  ORDER 2530
+
+ADD INDEX "Date" ON "FraudCDR" 
+  AREA "Dyn_Index1"
+  PRIMARY
+  INDEX-FIELD "DateSt" ASCENDING 
+  INDEX-FIELD "TimeStart" ASCENDING 
+
+ADD INDEX "CLI" ON "FraudCDR" 
+  AREA "Dyn_Index2"
+  INDEX-FIELD "CLI" ASCENDING 
+  INDEX-FIELD "DateSt" ASCENDING 
+  INDEX-FIELD "TimeStart" ASCENDING 
+
+ADD INDEX "CustNum" ON "FraudCDR" 
+  AREA "Dyn_Index3"
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "DateSt" ASCENDING 
+  INDEX-FIELD "TimeStart" ASCENDING 
+
+ADD INDEX "ErrorCode" ON "FraudCDR" 
+  AREA "Dyn_Index1"
+  INDEX-FIELD "ErrorCode" ASCENDING 
+
+ADD INDEX "gsmbnr" ON "FraudCDR" 
+  AREA "Dyn_Index4"
+  INDEX-FIELD "DateSt" ASCENDING 
+  INDEX-FIELD "GsmBnr" ASCENDING 
+
+ADD INDEX "InvCust" ON "FraudCDR" 
+  AREA "Dyn_Index5"
+  INDEX-FIELD "InvCust" ASCENDING 
+  INDEX-FIELD "DateSt" ASCENDING 
+  INDEX-FIELD "TimeStart" ASCENDING 
+
+ADD INDEX "invseq" ON "FraudCDR" 
+  AREA "Dyn_Index6"
+  INDEX-FIELD "InvCust" ASCENDING 
+  INDEX-FIELD "InvSeq" ASCENDING 
+
+ADD INDEX "ReadDate" ON "FraudCDR" 
+  AREA "Dyn_Index1"
+  INDEX-FIELD "ReadDate" DESCENDING 
+
+ADD INDEX "spocmt" ON "FraudCDR" 
+  AREA "Dyn_Index4"
+  INDEX-FIELD "SPOcmt" ASCENDING 
+
+ADD TABLE "FraudDtl"
+  AREA "Dtl_Data_64"
+  DUMP-NAME "FraudDtl"
+
+ADD FIELD "DateSt" OF "FraudDtl" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "CallDate"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "CallDate"
+  HELP "Date When call started"
+  ORDER 10
+
+ADD FIELD "DtlSeq" OF "FraudDtl" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  POSITION 3
+  MAX-WIDTH 4
+  ORDER 20
+
+ADD FIELD "Version" OF "FraudDtl" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "Version"
+  POSITION 4
+  MAX-WIDTH 12
+  COLUMN-LABEL "Version"
+  ORDER 30
+
+ADD FIELD "Detail" OF "FraudDtl" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  LABEL "Detail"
+  POSITION 5
+  MAX-WIDTH 100
+  COLUMN-LABEL "Detail"
+  ORDER 40
+
+ADD INDEX "DtlSeq" ON "FraudDtl" 
+  AREA "Dtl_Index2"
+  PRIMARY
+  INDEX-FIELD "DateSt" DESCENDING 
+  INDEX-FIELD "DtlSeq" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000015622

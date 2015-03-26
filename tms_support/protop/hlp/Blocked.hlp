@@ -1,0 +1,45 @@
+Blocked Clients Help
+====================
+
+Sessions which are waiting for a resource.  Generally this is a record lock
+although other resources may be unavailable in some circumstances.  The
+"Blocked" module provides details regarding which session is waiting for
+what and, in the case of record locks, who currently has the record and who
+else is in line for it.
+
+If other resource waits appear on the "Blocked" screen the "Resource Waits"
+module may have additional information.  The code shown under "Notes" on the
+"Blocked" screen is a hyper abbreviated version of the resource name shown
+by the "Resource Waits" module.  Seeing anything other than a record lock
+wait on the "Blocked" screen is highly unusual and should be pursued.
+
+Usr:
+
+The Usr# for the blocked connection.
+
+Name:
+
+The User Name associated with the connection.
+
+Note:
+
+The reasons that the session is blocked. The most frequent reason is a
+record lock. This will be displayed as "REC" followed by flags, the RECID
+of the record, the table name of the record and a list of users queued
+for that record (the list may be longer than can be shown on the screen.)
+
+Possible values of the flags are:
+
+        S  Share Lock
+        X  Exclsuive Lock
+        U  Upgraded Share Lock
+        L  Limbo Lock
+        Q  Queued Lock
+        H  Hold Flag
+
+Other blocked states (such as BKSH and RGET) may be shown but are relatively
+rare.
+
+The "Resource Waits" screen has additional data about these waits and the
+frequency of requests and waits.
+

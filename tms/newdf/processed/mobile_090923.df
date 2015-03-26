@@ -1,0 +1,54 @@
+ADD FIELD "PerContractID" OF "DCCli" AS integer 
+  DESCRIPTION "unique sequence ID"
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Periodical Contract ID"
+  POSITION 14
+  MAX-WIDTH 4
+  COLUMN-LABEL "Per.Contr."
+  HELP "Periodical contract ID"
+  ORDER 130
+
+ADD FIELD "PayType" OF "TermMobSub" AS logical
+  FORMAT "PrePaid/PostPaid"
+  INITIAL "no"
+  LABEL "PayType"
+  MAX-WIDTH 1
+  COLUMN-LABEL "PayType"
+  HELP "PayType"
+  ORDER 800
+
+ADD FIELD "IDCode" OF "TermMobSub" AS character
+  DESCRIPTION "4 digit code used to identify subscription"
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "ID Code"
+  MAX-WIDTH 8
+  COLUMN-LABEL "ID Code"
+  HELP "Identification Code"
+  ORDER 810
+
+ADD FIELD "SegmentCode" OF "TermMobSub" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Segmentation Code"
+  MAX-WIDTH 16
+  COLUMN-LABEL "SegmentCode"
+  HELP "Segmentation code"
+  ORDER 820
+
+ADD FIELD "SegmentDate" OF "TermMobSub" AS date
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Segmentation Date"
+  POSITION 28
+  MAX-WIDTH 4
+  COLUMN-LABEL "SegmentDate"
+  HELP "Date when segmentation code was changed"
+  ORDER 830
+
+.
+PSC
+cpstream=1252
+.
+0000003097

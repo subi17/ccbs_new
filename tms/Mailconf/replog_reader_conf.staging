@@ -1,0 +1,11 @@
+-H:172.20.48.17
+-P:61613
+-T:10
+#USER:tms
+#PASS:HdTkFa8-O2mMljJW!aBSEu
+#DUMP_SPOOL:/store/riftp/pupu_dumps/spool
+#DUMP_OUTGOING:/store/riftp/pupu_dumps/outgoing
+#DUMP_FREQ:180
+#LOG_MANAGER_FILE:/store/riftp/pupu_dumps/logs/replog_reader_logging
+#LOG_LEVEL:4
+#LOG_STAT:/store/riftp/pupu_dumps/logs/replog_reader_statistics

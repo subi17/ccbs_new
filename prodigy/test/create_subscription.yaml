@@ -1,0 +1,82 @@
+{Custom/request_defines.i}
+{Custom/order_defines.i}
+
+MsRequest: sequence
+    NEXT-VALUE(MsRequest)
+
+CliType: CliType
+  CliType: "myCliType"
+
+
+TheOrder: Order
+  Brand:        1
+  OrderId:      56
+  Salesman:     "Salesman"
+  OrderChannel: "Channel"
+  CrStamp:      20010101,0
+  InvCustRole:  1
+  UserRole:     1
+  StatusCode:   {&ORDERSTATUS_NEW_NUMBER}
+  OrderType:    {&ORDERTYPE_NEW_NUMBER}
+  CLI:          "099293487"
+  CLIType:      "myCliType"
+  ICC:          "F2347394875345"
+  MsSeq:        83
+
+OrderCustomerOwner: OrderCustomer
+  Brand: 1
+  OrderId: 56
+  CustNum: 10001
+  ExternalId: "ocs1_cust"
+  rowType: 1
+
+OrderCustomerPayer: OrderCustomer
+  Brand: 1
+  OrderId: 56
+  CustNum: 10001
+  ExternalId: "ocs1_cust"
+  rowType: 2
+
+OrderCustomerUser: OrderCustomer
+  Brand: 1
+  OrderId: 56
+  CustNum: 10001
+  ExternalId: "ocs1_cust"
+  rowType: 3
+
+OrderForCreation: OrderSubscription
+  Brand: 1
+  ExternalId: "ocs1"
+  OrderId: 56
+  ActivationStamp: 20000101,0
+
+ExtIdForOrder: ExternalId
+  Type: "Order"
+  ExternalId: "ocs1"
+  InternalID: 56
+
+ExtIdForSub: ExternalId
+  Type: "Subscription"
+  ExternalId: "ocs1_sub"
+  InternalID: 83
+
+ExtIdForCust: ExternalId
+  Type: "Customer"
+  ExternalId: "ocs1_cust"
+  InternalId: 10001
+
+CreateSubscription: MsRequest
+  MsRequest: next(MsRequest)
+  Brand: 1
+  UserCode:
+  ReqStatus: 0
+  CreateFees: False
+  SendSMS: 0
+  CreStamp: 20000101,1
+  ActStamp: 20000101,2
+  ReqType: {&REQUEST_TYPE_CREATE_SUBSCRIPTION}
+  MsSeq: 83
+  CustNum: 10001
+  ReqCParam1: "CREATE"
+  ReqCParam2: ""
+  ReqIParam1: 1

@@ -1,0 +1,86 @@
+ADD TABLE "ShaperConf"
+  AREA "Sta_Data_64"
+  LABEL "ShaperConf"
+  DESCRIPTION "SHAPER command parameters"
+  DUMP-NAME "shaperconf"
+
+ADD FIELD "Brand" OF "ShaperConf" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 10
+
+ADD FIELD "ShaperConfID" OF "ShaperConf" AS character
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "ShaperConfID"
+  POSITION 3
+  MAX-WIDTH 40
+  HELP "Shaper configuration ID"
+  ORDER 20
+
+ADD FIELD "Template" OF "ShaperConf" AS character
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Template"
+  POSITION 4
+  MAX-WIDTH 40
+  ORDER 30
+
+ADD FIELD "TariffType" OF "ShaperConf" AS character
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "TariffType"
+  POSITION 5
+  MAX-WIDTH 40
+  ORDER 40
+
+ADD FIELD "Tariff" OF "ShaperConf" AS character
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "Tariff"
+  POSITION 6
+  MAX-WIDTH 50
+  ORDER 50
+
+ADD FIELD "LimitUnshaped" OF "ShaperConf" AS decimal
+  FORMAT ">>>>>>>>>>>>9"
+  INITIAL "0"
+  LABEL "LimitUnshaped"
+  POSITION 7
+  MAX-WIDTH 15
+  DECIMALS 0
+  ORDER 60
+
+ADD FIELD "LimitShaped" OF "ShaperConf" AS decimal
+  FORMAT ">>>>>>>>>>>>9"
+  INITIAL "0"
+  LABEL "LimitShaped"
+  POSITION 8
+  MAX-WIDTH 15
+  DECIMALS 0
+  ORDER 70
+
+ADD FIELD "Active" OF "ShaperConf" AS logical
+  FORMAT "yes/no"
+  INITIAL "yes"
+  LABEL "Active"
+  POSITION 9
+  MAX-WIDTH 1
+  HELP "Is configuration active"
+  ORDER 80
+
+ADD INDEX "ShaperConfID" ON "ShaperConf"
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "ShaperConfID" ASCENDING
+
+.
+PSC
+cpstream=1252

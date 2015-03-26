@@ -1,0 +1,14 @@
+ADD FIELD "ValidToOrig" OF "DCCli" AS date
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid To Original"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "ValidToOrig"
+  HELP "Original Valid To"
+  ORDER 120
+
+.
+PSC
+cpstream=1252
+

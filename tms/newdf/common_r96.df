@@ -1,0 +1,301 @@
+ADD TABLE "FusionInvoice"
+  AREA "Dyn_Data_32"
+  LABEL "FusionInvoice"
+  DESCRIPTION "FusionInvoice"
+  DUMP-NAME "fusioninvoice"
+
+ADD FIELD "FuInvNum" OF "FusionInvoice" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "FuInvNo"
+  COLUMN-LABEL "FuInvNo"
+  HELP "Consecutive Fusion Invoice Number, 1 ... 99999999"
+  ORDER 10
+
+ADD FIELD "InvDate" OF "FusionInvoice" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "InvDate"
+  COLUMN-LABEL "InvDate"
+  HELP "Invoice date"
+  ORDER 20
+
+ADD FIELD "CustNum" OF "FusionInvoice" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  COLUMN-LABEL "Customer"
+  HELP "Mobile customer number"
+  ORDER 30
+
+ADD FIELD "MsSeq" OF "FusionInvoice" AS integer 
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  LABEL "MsSeq"
+  COLUMN-LABEL "MsSeq"
+  HELP "Link to mobsub-table"
+  ORDER 40
+
+ADD FIELD "InvNum" OF "FusionInvoice" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "InvNo"
+  COLUMN-LABEL "InvNo"
+  HELP "Mobile Invoice Number"
+  ORDER 50
+
+ADD FIELD "Mapping" OF "FusionInvoice" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Mapping"
+  COLUMN-LABEL "Mapping"
+  HELP "1=Mobile+Fixed, 2=Mobile, 3=Fixed"
+  ORDER 60
+
+ADD FIELD "DeliveryState" OF "FusionInvoice" AS int 
+  FORMAT ">9"
+  INITIAL ""
+  LABEL "Delivery State"
+  COLUMN-LABEL "DeliveryState"
+  ORDER 70 
+
+ADD FIELD "MTariffMF" OF "FusionInvoice" AS decimal 
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "MTariffMF"
+  COLUMN-LABEL "MTariffMF"
+  HELP "Mobile tariff monthly fee"
+  DECIMALS 3
+  ORDER 80
+
+ADD FIELD "MOtherMF" OF "FusionInvoice" AS decimal 
+  DESCRIPTION "Total, details in VatAmount"
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "MOtherMF"
+  COLUMN-LABEL "MOtherMF"
+  HELP "Other mobile monthly fee as Spotify, Data bundles, etc..."
+  DECIMALS 3
+  ORDER 90
+
+ADD FIELD "MTraffic" OF "FusionInvoice" AS decimal 
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "MTraffic"
+  COLUMN-LABEL "MTraffic"
+  HELP "Mobile traffic amount"
+  DECIMALS 3
+  ORDER 100
+
+ADD FIELD "MTaxableIncome" OF "FusionInvoice" AS decimal 
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "MTaxableIncome"
+  COLUMN-LABEL "MTaxableIncome"
+  HELP "Mobile taxable income"
+  DECIMALS 3
+  ORDER 110
+
+ADD FIELD "MVatAmt" OF "FusionInvoice" AS decimal 
+  DESCRIPTION "Total, details in VatAmount"
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "VAT"
+  COLUMN-LABEL "VAT"
+  HELP "Amount of VAT"
+  DECIMALS 3
+  ORDER 120
+
+ADD FIELD "MTotalInvoice" OF "FusionInvoice" AS decimal 
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "To pay"
+  COLUMN-LABEL "To pay"
+  HELP "Total payable"
+  DECIMALS 3
+  ORDER 130
+
+ADD FIELD "MTermFinancing" OF "FusionInvoice" AS decimal 
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "To pay"
+  COLUMN-LABEL "To pay"
+  HELP "Total payable"
+  DECIMALS 3
+  ORDER 140
+
+ADD FIELD "MInvAmt" OF "FusionInvoice" AS decimal 
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "To pay"
+  COLUMN-LABEL "To pay"
+  HELP "Total payable"
+  DECIMALS 3
+  ORDER 150
+
+ADD FIELD "CustomerId" OF "FusionInvoice" AS character 
+  FORMAT "x(11)"
+  INITIAL ""
+  LABEL "CustomerId"
+  COLUMN-LABEL "CustomerId"
+  HELP "Fixed line customer id"
+  ORDER 160
+
+ADD FIELD "InvoiceNum" OF "FusionInvoice" AS character 
+  FORMAT "x(14)"
+  INITIAL ""
+  LABEL "InvoiceNum"
+  COLUMN-LABEL "InvoiceNum"
+  HELP "Fixed line invoice number"
+  ORDER 170
+
+ADD FIELD "FixedNumber" OF "FusionInvoice" AS character 
+  FORMAT "x(14)"
+  INITIAL ""
+  LABEL "Fixed Number"
+  COLUMN-LABEL "FixedNumber"
+  HELP "Fixed line number"
+  ORDER 180
+
+ADD FIELD "Language" OF "FusionInvoice" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "Language"
+  COLUMN-LABEL "Language"
+  ORDER 190
+
+ADD FIELD "Email" OF "FusionInvoice" AS character 
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "Email"
+  COLUMN-LABEL "Email"
+  HELP "Customer's Email Address"
+  ORDER 200
+
+ADD FIELD "ProductCode" OF "FusionInvoice" AS character 
+  FORMAT "x(14)"
+  INITIAL ""
+  LABEL "Product Code"
+  COLUMN-LABEL "ProductCode"
+  HELP "Base offer product code"
+  ORDER 210
+
+ADD FIELD "ProductText" OF "FusionInvoice" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Product Text"
+  COLUMN-LABEL "ProductText"
+  HELP "Base offer product text"
+  ORDER 220
+
+ADD FIELD "MSubsType" OF "FusionInvoice" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "MSubsType"
+  COLUMN-LABEL "MSubsType"
+  HELP "Mobile subscription tariff"
+  ORDER 230 
+
+ADD FIELD "BaseServiceMF" OF "FusionInvoice" AS decimal 
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "Base Service MF"
+  COLUMN-LABEL "BaseServiceMF"
+  HELP "Monthly fee base service"
+  DECIMALS 4
+  ORDER 240
+
+ADD FIELD "OtherMF" OF "FusionInvoice" AS decimal 
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "Other MF"
+  COLUMN-LABEL "OtherMF"
+  HELP "Other monthly fee"
+  DECIMALS 4
+  ORDER 250
+
+ADD FIELD "TrafficAmt" OF "FusionInvoice" AS decimal 
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "Traffic amount"
+  COLUMN-LABEL "TrafficAmt"
+  HELP "Traffic amount"
+  DECIMALS 4
+  ORDER 260
+
+ADD FIELD "OtherItems" OF "FusionInvoice" AS decimal 
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "Other items"
+  COLUMN-LABEL "OtherItems"
+  HELP "Other items"
+  DECIMALS 4
+  ORDER 270
+
+ADD FIELD "TaxIncome" OF "FusionInvoice" AS decimal 
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "Taxable income"
+  COLUMN-LABEL "TaxIncome"
+  HELP "Taxable income"
+  DECIMALS 4
+  ORDER 280
+
+ADD FIELD "TaxAmt" OF "FusionInvoice" AS decimal 
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "Tax Amount"
+  COLUMN-LABEL "TaxAmt"
+  HELP "Tax Amount"
+  DECIMALS 4
+  ORDER 290
+
+ADD FIELD "TotalAmt" OF "FusionInvoice" AS decimal 
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "Total Amount"
+  COLUMN-LABEL "TotalAmt"
+  HELP "Total invoice amount"
+  DECIMALS 3
+  ORDER 300
+
+ADD FIELD "AddItems" OF "FusionInvoice" AS decimal 
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "Additional items"
+  COLUMN-LABEL "AddItems"
+  HELP "Amounts outside the invoice but to be charged with the invoice"
+  DECIMALS 4
+  ORDER 310
+
+ADD FIELD "TotalToPay" OF "FusionInvoice" AS decimal 
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "Total to pay"
+  COLUMN-LABEL "TotalToPay"
+  DECIMALS 3
+  ORDER 320
+
+ADD INDEX "FuInvNum" ON "FusionInvoice" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "FuInvNum" ASCENDING 
+
+ADD INDEX "CustNum" ON "FusionInvoice" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "InvDate" DESCENDING 
+
+ADD INDEX "CustomerID" ON "FusionInvoice" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "CustomerId" ASCENDING 
+  INDEX-FIELD "InvDate" DESCENDING 
+
+ADD INDEX "InvDate" ON "FusionInvoice" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "InvDate" DESCENDING 
+
+ADD INDEX "InvNum" ON "FusionInvoice" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "InvNum" ASCENDING 

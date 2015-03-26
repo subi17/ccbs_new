@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/changeWindowDate" xmlns:tns="http://www.example.org/changeWindowDate">
+
+
+
+    <element name="ChangeWindowdate" type="tns:changeWindowDate"></element>
+
+    <complexType name="changeWindowDate">
+    	<sequence>
+    		<element name="formRequestCode">
+    			<simpleType>
+    				<restriction base="string">
+    					<pattern value=""></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
+            <element name="portabilityRequestCode">
+    			<simpleType>
+    				<restriction base="string">
+    					<pattern value=""></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
+            <element name="newChangeWindowDate" type="dateTime"></element>
+    		<element name="reasonCodeChangeWindow">
+    			<simpleType>
+    				<restriction base="string">
+    					<enumeration value="FIND"></enumeration>
+    					<enumeration value="LLCV"></enumeration>
+    					<enumeration value="MANT"></enumeration>
+    					<enumeration value="PTEC"></enumeration>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    	</sequence></complexType>
+</schema>

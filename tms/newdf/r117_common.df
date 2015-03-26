@@ -1,0 +1,31 @@
+ADD FIELD "AveDurFull" OF "DumpFile" AS integer
+  FORMAT ">>>>>9"
+  INITIAL 0
+  LABEL "AveDurFull"
+  COLUMN-LABEL "FullDur"
+  HELP "Average Duration Full"
+  ORDER 290
+
+ADD FIELD "AveDurMod" OF "DumpFile" AS integer
+  FORMAT ">>>>>9"
+  INITIAL 0
+  LABEL "AveDurMod"
+  COLUMN-LABEL "ModDur"
+  HELP "Average Duration Modified"
+  ORDER 300 
+
+ADD FIELD "AllowReplica" OF "DumpFile" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "AllowReplica"
+  COLUMN-LABEL "AllowReplica"
+  HELP "Restriction Boolean value"
+  ORDER 310
+              
+ADD FIELD "UseReplica" OF "DFTimeTable" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "UseReplica"
+  COLUMN-LABEL "UseReplica"
+  HELP "To find Production/Replication"
+  ORDER 120

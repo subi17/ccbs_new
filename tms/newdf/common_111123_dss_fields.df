@@ -1,0 +1,19 @@
+ADD FIELD "custnum" OF "MServiceLimit" AS integer
+  DESCRIPTION "CustNum"
+  FORMAT "->>>>>>>>9"
+  INITIAL 0
+  LABEL "CustNum"
+  COLUMN-LABEL "CustNum"
+  ORDER 80
+
+ADD FIELD "custnum" OF "MServiceLPool" AS integer
+  DESCRIPTION "CustNum"
+  FORMAT "->>>>>>>>9"
+  INITIAL 0
+  LABEL "CustNum"
+  COLUMN-LABEL "CustNum"
+  ORDER 60
+
+.
+PSC
+cpstream=ISO8859-1

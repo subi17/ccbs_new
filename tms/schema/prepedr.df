@@ -1,0 +1,239 @@
+ADD TABLE "EDRDtl"
+  AREA "Dtl_Data_64"
+  DUMP-NAME "EDRDtl"
+
+ADD FIELD "DateSt" OF "EDRDtl" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "CallDate"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "CallDate"
+  HELP "Date When call started"
+  ORDER 10
+
+ADD FIELD "DtlSeq" OF "EDRDtl" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  POSITION 3
+  MAX-WIDTH 4
+  ORDER 20
+
+ADD FIELD "Version" OF "EDRDtl" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "Version"
+  POSITION 4
+  MAX-WIDTH 12
+  COLUMN-LABEL "Version"
+  ORDER 30
+
+ADD FIELD "Detail" OF "EDRDtl" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  LABEL "Detail"
+  POSITION 5
+  MAX-WIDTH 100
+  COLUMN-LABEL "Detail"
+  ORDER 40
+
+ADD INDEX "DtlSeq" ON "EDRDtl" 
+  AREA "Dtl_Index1"
+  PRIMARY
+  INDEX-FIELD "DateSt" DESCENDING 
+  INDEX-FIELD "DtlSeq" ASCENDING 
+
+ADD TABLE "PrepEDR"
+  AREA "Dyn_Data_64"
+  LABEL "PrePaid EDR"
+  DUMP-NAME "prepedr"
+
+ADD FIELD "CLI" OF "PrepEDR" AS character 
+  FORMAT "x(18)"
+  INITIAL ""
+  LABEL "MSISDN"
+  POSITION 2
+  MAX-WIDTH 36
+  COLUMN-LABEL "MSISDN"
+  HELP "Contains the subscriber identity"
+  ORDER 10
+
+ADD FIELD "TimeStart" OF "PrepEDR" AS integer 
+  FORMAT "zzzzz9"
+  INITIAL "0"
+  LABEL "TimeSt"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "TimeSt"
+  HELP "Time when the data record was generated (seconds from midnight)"
+  ORDER 20
+
+ADD FIELD "DateSt" OF "PrepEDR" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "CallDate"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "CallDate"
+  HELP "Date when the data record was generated"
+  ORDER 30
+
+ADD FIELD "ErrorCode" OF "PrepEDR" AS integer 
+  FORMAT "zzz9"
+  INITIAL "0"
+  LABEL "Error Code"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "ErrC"
+  HELP "Rating Error Code 1 ... 9999"
+  ORDER 40
+
+ADD FIELD "MsSeq" OF "PrepEDR" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscr.ID"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "MsSeq"
+  HELP "Sequence for a Subscription"
+  ORDER 50
+  MANDATORY
+
+ADD FIELD "DtlSeq" OF "PrepEDR" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  POSITION 7
+  MAX-WIDTH 4
+  ORDER 60
+
+ADD FIELD "ReadinTS" OF "PrepEDR" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Read In Timestamp"
+  POSITION 8
+  MAX-WIDTH 20
+  COLUMN-LABEL "ReadInTS"
+  DECIMALS 5
+  ORDER 70
+
+ADD FIELD "ReadDate" OF "PrepEDR" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Read In Date"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "ReadDate"
+  HELP "Read in date"
+  ORDER 80
+
+ADD FIELD "ServFeeExpDateBefore" OF "PrepEDR" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "ServFeeExpDateBefore"
+  POSITION 10
+  MAX-WIDTH 20
+  COLUMN-LABEL "ServFeeExpDateBefore"
+  HELP "Service fee exp date before"
+  ORDER 90
+
+ADD FIELD "NewSC" OF "PrepEDR" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "New Service Class"
+  POSITION 11
+  MAX-WIDTH 4
+  COLUMN-LABEL "NewSC"
+  ORDER 100
+
+ADD FIELD "SuccessCode" OF "PrepEDR" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "Success Code"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "SuccessCode"
+  ORDER 110
+
+ADD FIELD "CustNum" OF "PrepEDR" AS integer 
+  FORMAT "zzzzzz9"
+  INITIAL "0"
+  LABEL "CustNum"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "CustNum"
+  HELP " Customer No ."
+  ORDER 120
+
+ADD FIELD "SubscriberFee" OF "PrepEDR" AS decimal 
+  FORMAT ">>>,>>9.999"
+  INITIAL "0"
+  LABEL "SubscriberFee"
+  POSITION 14
+  MAX-WIDTH 20
+  COLUMN-LABEL "SubscrFee"
+  HELP "Subscriber fee amount"
+  DECIMALS 5
+  ORDER 130
+
+ADD FIELD "BalanceAfter" OF "PrepEDR" AS decimal 
+  FORMAT ">>>,>>9.999"
+  INITIAL "0"
+  LABEL "BalanceAfter"
+  POSITION 15
+  MAX-WIDTH 20
+  COLUMN-LABEL "BalanceAfter"
+  HELP "Account balance after deduction"
+  DECIMALS 5
+  ORDER 140
+
+ADD FIELD "CLIType" OF "PrepEDR" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "CLIType"
+  POSITION 16
+  MAX-WIDTH 24
+  COLUMN-LABEL "CLIType"
+  ORDER 150
+
+ADD FIELD "ReadTime" OF "PrepEDR" AS integer 
+  DESCRIPTION "Time while collecting CDR's"
+  FORMAT "zzzzz9"
+  INITIAL "0"
+  LABEL "ReadTime"
+  POSITION 17
+  MAX-WIDTH 4
+  COLUMN-LABEL "ReadTime"
+  ORDER 160
+
+ADD INDEX "Date" ON "PrepEDR" 
+  AREA "Dyn_Index1"
+  PRIMARY
+  INDEX-FIELD "DateSt" ASCENDING 
+  INDEX-FIELD "TimeStart" ASCENDING 
+
+ADD INDEX "CLI" ON "PrepEDR" 
+  AREA "Dyn_Index2"
+  INDEX-FIELD "CLI" ASCENDING 
+  INDEX-FIELD "DateSt" ASCENDING 
+  INDEX-FIELD "TimeStart" ASCENDING 
+
+ADD INDEX "ErrorCode" ON "PrepEDR" 
+  AREA "Dyn_Index4"
+  INDEX-FIELD "ErrorCode" ASCENDING 
+
+ADD INDEX "MsSeq" ON "PrepEDR" 
+  AREA "Dyn_Index3"
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "DateSt" ASCENDING 
+  INDEX-FIELD "TimeStart" ASCENDING 
+
+ADD INDEX "ReadDate" ON "PrepEDR" 
+  AREA "Dyn_Index1"
+  INDEX-FIELD "ReadDate" DESCENDING 
+  INDEX-FIELD "ReadTime" DESCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000004694

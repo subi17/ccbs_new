@@ -1,0 +1,66 @@
+ADD FIELD "CountryPrefix" OF "PLMN" AS character
+  DESCRIPTION ""
+  FORMAT "x(6)"
+  FORMAT-SA ?
+  POSITION 8
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "Country prefix"
+  HELP-SA ""
+  LABEL "Country Prefix"
+  LABEL-SA ?
+  COLUMN-LABEL "Prefix"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 70
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 12
+
+ADD INDEX "Country" ON "PLMN"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Country" ASCENDING
+
+ADD INDEX "CountryPrefix" ON "PLMN"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CountryPrefix" ASCENDING
+
+ADD FIELD "EventLogFields" OF "DumpFile" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "EventLog Fields"
+  POSITION 29
+  MAX-WIDTH 60
+  COLUMN-LABEL "Mod.Fields"
+  HELP "Modified fields that will be checked from EventLog"
+  ORDER 280
+
+ADD FIELD "ConfigParam" OF "DumpFile" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Configuration Parameters"
+  POSITION 30
+  MAX-WIDTH 40
+  COLUMN-LABEL "Parameter"
+  HELP "Configuration parameters for the external procedures"
+  ORDER 270
+
+ADD SEQUENCE "PerContractID"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+  MAX-VAL ?
+
+.
+PSC
+cpstream=1252
+.
+0000002667

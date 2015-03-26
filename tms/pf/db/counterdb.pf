@@ -1,0 +1,9 @@
+-db /db1/counter/counter
+-L 100000
+-B  400000
+-B2 500000 
+-S counter
+-aiarcdir /aiarchive/counter
+-DBService replserv
+-pica 8192 
+-pf /apps/tms/pf/db/general.pf

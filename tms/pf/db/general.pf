@@ -1,0 +1,21 @@
+-indexrangesize 711
+-tablerangesize 288
+-TB 31
+-TM 32
+-cpcoll Finnish
+-cpstream iso8859-1
+-n 480
+-Mn 48
+-Ma 10
+-Mi 1
+-aiarcdircreate 
+-pica 8192 
+-aiarcinterval 3600 
+-Mm 8192
+-spin 100000
+-aibufs 1500
+-bibufs 1000
+-semsets 20
+-napmax 250
+-lruskips 100
+-Nmsgwait 1

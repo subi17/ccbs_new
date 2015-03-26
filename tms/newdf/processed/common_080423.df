@@ -1,0 +1,274 @@
+ADD TABLE "PrintHouseConf"
+  AREA "Sta_Data_256"
+  LABEL "Printhouse Configuration"
+  DESCRIPTION "Printhouse configuration"
+  DUMP-NAME "printhouseconf"
+
+ADD FIELD "Brand" OF "PrintHouseConf" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 10
+
+ADD FIELD "TableName" OF "PrintHouseConf" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Table Name"
+  POSITION 3
+  MAX-WIDTH 32
+  COLUMN-LABEL "Table"
+  HELP "Table name"
+  ORDER 20
+
+ADD FIELD "KeyValue" OF "PrintHouseConf" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Key Value"
+  POSITION 4
+  MAX-WIDTH 40
+  COLUMN-LABEL "Key"
+  HELP "Key value"
+  ORDER 30
+
+ADD FIELD "FromDate" OF "PrintHouseConf" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Effective Date"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Eff.Date"
+  HELP "Date when rule becomes effective"
+  ORDER 40
+
+ADD FIELD "ToDate" OF "PrintHouseConf" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "End Date"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Date when rule expires"
+  ORDER 50
+
+ADD FIELD "PrintHouse" OF "PrintHouseConf" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Printing House"
+  POSITION 7
+  MAX-WIDTH 24
+  COLUMN-LABEL "PrintHouse"
+  HELP "Printing house"
+  ORDER 60
+
+ADD FIELD "Report" OF "PrintHouseConf" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Report"
+  POSITION 8
+  MAX-WIDTH 16
+  HELP "Report"
+  ORDER 70
+
+ADD INDEX "Report" ON "PrintHouseConf" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "Report" ASCENDING 
+  INDEX-FIELD "TableName" ASCENDING 
+  INDEX-FIELD "KeyValue" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "PrintHouse" ON "PrintHouseConf" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "PrintHouse" ASCENDING 
+  INDEX-FIELD "Report" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD TABLE "Limit"
+  AREA "Sta_Data_256"
+  LABEL "Limit"
+  DESCRIPTION "Limits for customer and subscription"
+  DUMP-NAME "limit"
+
+ADD FIELD "CustNum" OF "Limit" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Cust"
+  HELP "Customer number"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "MsSeq" OF "Limit" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "MobSub"
+  HELP "Mobile subscription ID"
+  ORDER 20
+
+ADD FIELD "FromDate" OF "Limit" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "From"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Date when rule becomes effective"
+  ORDER 50
+
+ADD FIELD "LimitAmt" OF "Limit" AS decimal 
+  FORMAT "->>>>>>9.99"
+  INITIAL "0"
+  LABEL "Limit Amount"
+  POSITION 5
+  MAX-WIDTH 17
+  COLUMN-LABEL "Amount"
+  HELP "Limit amount"
+  DECIMALS 2
+  ORDER 70
+
+ADD FIELD "LimitID" OF "Limit" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Limit ID"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Limit ID"
+  ORDER 40
+
+ADD FIELD "LimitPerc" OF "Limit" AS decimal 
+  FORMAT ">>9.99"
+  INITIAL "0"
+  LABEL "Limit Percent"
+  POSITION 7
+  MAX-WIDTH 17
+  COLUMN-LABEL "Percent"
+  HELP "Limit percent"
+  DECIMALS 2
+  ORDER 80
+
+ADD FIELD "TMRuleSeq" OF "Limit" AS integer 
+  DESCRIPTION "
+"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Rule Sequence"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Seq"
+  HELP "Rule ID"
+  ORDER 30
+
+ADD FIELD "ToDate" OF "Limit" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 9
+  MAX-WIDTH 4
+  HELP "Date when rule expires"
+  ORDER 60
+
+ADD FIELD "LimitType" OF "Limit" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Limit Type"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "Type"
+  HELP "Type of limit"
+  ORDER 90
+
+ADD FIELD "ValueType" OF "Limit" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Value Type"
+  POSITION 11
+  MAX-WIDTH 4
+  COLUMN-LABEL "Type"
+  HELP "Type of limit value"
+  ORDER 100
+
+ADD INDEX "CustNum" ON "Limit" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "LimitType" ASCENDING 
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+  INDEX-FIELD "LimitID" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "MsSeq" ON "Limit" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "LimitType" ASCENDING 
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "TMRuleSeq" ON "Limit" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+  INDEX-FIELD "LimitID" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD FIELD "AddressCodC" OF "Customer" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Address CodC"
+  POSITION 116
+  MAX-WIDTH 16
+  COLUMN-LABEL "CodC"
+  HELP "CodC in address validation"
+  ORDER 1500
+
+ADD FIELD "AddressCodP" OF "Customer" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Address CodP"
+  POSITION 117
+  MAX-WIDTH 16
+  COLUMN-LABEL "CodP"
+  HELP "CodP in address validation"
+  ORDER 1510
+
+ADD FIELD "FoundationDate" OF "Customer" AS date
+   FORMAT "99-99-99"
+   INITIAL ?
+   LABEL "Foundation Date"
+   POSITION 118
+   MAX-WIDTH 4
+   COLUMN-LABEL "Found.Date"
+   ORDER 1520
+              
+ADD FIELD "SelfEmployed" OF "CustCat" AS logical
+   FORMAT "yes/no"
+   INITIAL "no"
+   LABEL "Selfemployed"
+   POSITION 12
+   MAX-WIDTH 1
+   COLUMN-LABEL "Selfempl."
+   ORDER 110
+
+ADD FIELD "MobSubLimit" OF "CustCat" AS integer
+   FORMAT ">>>>9"
+   INITIAL "0"
+   LABEL "Subscription Max Limit"
+   POSITION 13
+   MAX-WIDTH 4
+   COLUMN-LABEL "MSLimit"
+   ORDER 120
+
+
+.
+PSC
+cpstream=1252
+.
+0000001908

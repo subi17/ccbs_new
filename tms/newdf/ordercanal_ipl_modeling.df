@@ -1,0 +1,13 @@
+RENAME FIELD "WatchDogLimit" OF "CLIType" TO "CompareFee"
+
+UPDATE FIELD "CompareFee" OF "CLIType"
+  FORMAT ">>>>9.99"
+  HELP "Comparison fee for penalty fee determination in STC/BTC"
+  LABEL "Comparison Fee"
+  COLUMN-LABEL "Comp.Fee"
+
+.
+PSC
+cpstream=1252
+.
+0000001477

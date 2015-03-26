@@ -1,0 +1,10 @@
+RENAME TABLE "DtlSeq" TO "xxDtlSeq"
+
+UPDATE TABLE "xxDtlSeq"
+  DUMP-NAME "xxdtlseq"
+
+.
+PSC
+cpstream=1252
+.
+0000000087

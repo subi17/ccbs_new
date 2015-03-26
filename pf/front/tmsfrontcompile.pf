@@ -1,0 +1,48 @@
+-db common
+-H rigel.int.asp.starnet.fi
+-S common
+
+-db ordercanal
+-H rigel.int.asp.starnet.fi
+-S ordercanal
+
+-db mobile
+-H rigel.int.asp.starnet.fi
+-S mobile
+
+-db mcdr01
+-H rigel.int.asp.starnet.fi
+-S mcdr
+-ld mcdr
+
+-db star
+-H rigel.int.asp.starnet.fi
+-S star
+
+-db mcdrdtl01
+-H rigel.int.asp.starnet.fi
+-S mcdrdtl
+-ld mcdrdtl
+
+-db roamcdr
+-H rigel.int.asp.starnet.fi
+-S roamcdr
+
+-db prepcdr
+-H rigel.int.asp.starnet.fi
+-S prepcdr
+
+-h 13
+-d dmy
+-e 100
+-l 10000
+-yy 1980
+#-T /scratch/protmp
+-T /tmp
+-TB 31
+-TM 32
+-rand 2
+-tmpbsize 8
+-Bt 512
+-s 160
+-Mm 8192

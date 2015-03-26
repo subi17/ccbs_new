@@ -1,0 +1,9 @@
+-db /db1/ordercanal/ordercanal
+-L 100000
+-B 1000000
+#-H propus
+-S ordercanal
+-aiarcdir /aiarchive/ordercanal
+-DBService replserv
+-pica 8192 
+-pf /apps/tms/pf/db/general.pf

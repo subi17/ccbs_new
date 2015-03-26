@@ -1,0 +1,212 @@
+ADD TABLE "MinConsumption"
+  AREA "Sta_Data_128"
+  LABEL "Minimum Consumption"
+  DESCRIPTION "Minimum consumption for a period"
+  DUMP-NAME "minconsumption"
+
+ADD FIELD "MSSeq" OF "MinConsumption" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Subs.ID"
+  HELP "Sequence for a subscription"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "FromDate" OF "MinConsumption" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "From"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Period begin"
+  ORDER 20
+
+ADD FIELD "ToDate" OF "MinConsumption" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Period end"
+  ORDER 30
+
+ADD FIELD "InvNum" OF "MinConsumption" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Invoice"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "Invoice on which minimum consumption was handled"
+  ORDER 40
+
+ADD FIELD "Amount" OF "MinConsumption" AS decimal 
+  DESCRIPTION ""
+  FORMAT "->>>>>>9.99999"
+  INITIAL "0"
+  LABEL "Amount"
+  POSITION 6
+  MAX-WIDTH 20
+  COLUMN-LABEL "Amt"
+  HELP "Minimum consumption amount"
+  DECIMALS 5
+  ORDER 50
+
+ADD INDEX "MsSeq" ON "MinConsumption" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "MSSeq" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "InvNum" ON "MinConsumption" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "InvNum" ASCENDING 
+
+ADD TABLE "TriggerConf"
+  AREA "Sta_Data_64"
+  DUMP-NAME "triggerconf"
+
+ADD FIELD "TriggerConfID" OF "TriggerConf" AS character 
+  DESCRIPTION ""
+  FORMAT "x(14)"
+  INITIAL ""
+  LABEL "TriggerConf"
+  POSITION 2
+  MAX-WIDTH 28
+  COLUMN-LABEL "TriggerConf"
+  HELP "Trigger Configuration code"
+  ORDER 10
+
+ADD FIELD "TCName" OF "TriggerConf" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "TriggerConf Name"
+  POSITION 3
+  MAX-WIDTH 40
+  COLUMN-LABEL "TriggerConf Name"
+  ORDER 20
+
+ADD FIELD "Prior" OF "TriggerConf" AS integer 
+  DESCRIPTION ""
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Priority"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Priority"
+  HELP "Priority order of Trigger Configuration"
+  ORDER 30
+
+ADD FIELD "ValidFrom" OF "TriggerConf" AS date 
+  DESCRIPTION ""
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "ValidFrom"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "ValidFrom"
+  HELP "The date FROM which this TriggerConf will be used"
+  ORDER 40
+
+ADD FIELD "ValidTo" OF "TriggerConf" AS date 
+  DESCRIPTION ""
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "ValidTo"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "ValidTo"
+  HELP "The date TO which this Trigger Configuration will be used"
+  ORDER 50
+
+ADD FIELD "EventRule" OF "TriggerConf" AS integer 
+  DESCRIPTION ""
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Event rule"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "EventRule"
+  HELP "TriggerEvent rule"
+  ORDER 60
+
+ADD INDEX "Prior" ON "TriggerConf" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Prior" ASCENDING 
+  INDEX-FIELD "ValidTo" DESCENDING 
+
+ADD INDEX "TCName" ON "TriggerConf" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "TCName" ASCENDING 
+  INDEX-FIELD "ValidFrom" ASCENDING 
+
+ADD INDEX "TriggerConfID" ON "TriggerConf" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "TriggerConfID" ASCENDING ABBREVIATED 
+
+
+ADD FIELD "Latest" OF "DCCounter" AS decimal 
+  FORMAT "99999999.999999"
+  INITIAL "0"
+  LABEL "Latest"
+  POSITION 16
+  MAX-WIDTH 20
+  COLUMN-LABEL "Latest"
+  HELP "Latest packet EDR"
+  DECIMALS 5
+  ORDER 250
+
+
+ADD TABLE "TriggerField"
+  AREA "Sta_Data_64"
+  DUMP-NAME "triggerField"
+
+ADD FIELD "TriggerConfID" OF "TriggerField" AS character 
+  DESCRIPTION ""
+  FORMAT "x(14)"
+  INITIAL ""
+  LABEL "TriggerConf"
+  POSITION 2
+  MAX-WIDTH 28
+  COLUMN-LABEL "TriggerConf"
+  HELP "Trigger Configuration code"
+  ORDER 10
+  
+ADD FIELD "TableName" OF "TriggerField" AS character 
+  DESCRIPTION ""
+  FORMAT "x(14)"
+  INITIAL ""
+  LABEL "TriggerConf"
+  POSITION 2
+  MAX-WIDTH 28
+  COLUMN-LABEL "TriggerConf"
+  HELP "Trigger Configuration code"
+  ORDER 13
+
+ADD FIELD "FieldName" OF "TriggerField" AS character 
+  DESCRIPTION ""
+  FORMAT "x(14)"
+  INITIAL ""
+  LABEL "TriggerConf"
+  POSITION 2
+  MAX-WIDTH 28
+  COLUMN-LABEL "TriggerConf"
+  HELP "Trigger Configuration code"
+  ORDER 16
+
+ADD INDEX "TriggerConfID" ON "TriggerField" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "TriggerConfID" ASCENDING 
+
+
+.
+PSC
+cpstream=ISO8859-1
+.
+0000005889
+

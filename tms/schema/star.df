@@ -1,0 +1,8138 @@
+ADD SEQUENCE "r-codeseq"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+ADD SEQUENCE "progjob"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+ADD SEQUENCE "JobId"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT yes
+  MIN-VAL 0
+  MAX-VAL 2000000000
+
+ADD SEQUENCE "sessionId"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+ADD SEQUENCE "CLISeries"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+ADD TABLE "application"
+  AREA "Sta_Data_256"
+  LABEL "Application"
+  DESCRIPTION "Applications on the system"
+  DUMP-NAME "appllica"
+
+ADD FIELD "applcode" OF "application" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Application"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Application code. Internal use only"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "name" OF "application" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 3
+  MAX-WIDTH 80
+  HELP "Application name"
+  ORDER 20
+
+ADD INDEX "application" ON "application" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "applcode" ASCENDING 
+
+ADD TABLE "AreaCode"
+  AREA "Sta_Data_256"
+  LABEL "AreaCode"
+  DESCRIPTION "Numbering areas"
+  DUMP-NAME "areacode"
+
+ADD FIELD "TrafficArea" OF "AreaCode" AS integer 
+  FORMAT "z9"
+  INITIAL "0"
+  LABEL "No "
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Nro"
+  HELP "Consecutive Number of a Traffic Area"
+  ORDER 10
+
+ADD FIELD "AreaCode" OF "AreaCode" AS character 
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "AreaCode"
+  POSITION 3
+  MAX-WIDTH 8
+  COLUMN-LABEL "AreaCode"
+  HELP "Area Code"
+  ORDER 20
+
+ADD FIELD "POI" OF "AreaCode" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "AP"
+  POSITION 4
+  MAX-WIDTH 1
+  COLUMN-LABEL "AP"
+  HELP "Is there an point of interconnection in this area"
+  ORDER 30
+
+ADD FIELD "AreaName" OF "AreaCode" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Place/City"
+  POSITION 5
+  MAX-WIDTH 60
+  COLUMN-LABEL "Place/City"
+  HELP "Name of place/city"
+  ORDER 40
+
+ADD FIELD "Local" OF "AreaCode" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Local Segment"
+  POSITION 6
+  MAX-WIDTH 1
+  COLUMN-LABEL "Local Segment"
+  HELP """Shall calls from/to this area treated as """"local segment"""" Y/N"""
+  ORDER 50
+
+ADD FIELD "TrunkCode" OF "AreaCode" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "CGR"
+  POSITION 7
+  MAX-WIDTH 16
+  COLUMN-LABEL "CGR"
+  HELP "Circuit Group Code for this ICP (point of interconnection)"
+  ORDER 60
+
+ADD INDEX "AreaCode" ON "AreaCode" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "AreaCode" ASCENDING 
+
+ADD INDEX "AreaName" ON "AreaCode" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "AreaName" ASCENDING 
+  INDEX-FIELD "AreaCode" ASCENDING 
+
+ADD INDEX "POI" ON "AreaCode" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "TrafficArea" ASCENDING 
+  INDEX-FIELD "POI" ASCENDING 
+
+ADD INDEX "TrafficArea" ON "AreaCode" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "TrafficArea" ASCENDING 
+  INDEX-FIELD "AreaCode" ASCENDING 
+
+ADD TABLE "AreaPair"
+  AREA "Sta_Data_256"
+  LABEL "AreaPair"
+  DESCRIPTION "List of ""neighbour"" areas of a certain area"
+  DUMP-NAME "areapair"
+
+ADD FIELD "AreaCode" OF "AreaPair" AS character 
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "AreaCode"
+  POSITION 2
+  MAX-WIDTH 8
+  COLUMN-LABEL "AreaCode"
+  HELP "A-subscriber's areanumber"
+  ORDER 20
+
+ADD FIELD "NeigArea" OF "AreaPair" AS character 
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "X-!areaNo"
+  POSITION 3
+  MAX-WIDTH 8
+  COLUMN-LABEL "X-!areaNo"
+  HELP "Surrounding area"
+  ORDER 30
+
+ADD INDEX "AreaCode" ON "AreaPair" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "AreaCode" ASCENDING 
+  INDEX-FIELD "NeigArea" ASCENDING 
+
+ADD INDEX "NeigArea" ON "AreaPair" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "NeigArea" ASCENDING 
+  INDEX-FIELD "AreaCode" ASCENDING 
+
+ADD TABLE "AreaPlan"
+  AREA "Sta_Data_256"
+  LABEL "AreaPlan"
+  DESCRIPTION "Traffic area plan"
+  DUMP-NAME "areaplan"
+
+ADD FIELD "TrafficArea" OF "AreaPlan" AS integer 
+  FORMAT "z9"
+  INITIAL "0"
+  LABEL "No."
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "No."
+  HELP "Number of a Traffic Area"
+  ORDER 10
+
+ADD FIELD "AreaName" OF "AreaPlan" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 3
+  MAX-WIDTH 60
+  COLUMN-LABEL "Name"
+  HELP "Name of a Traffic Area"
+  ORDER 20
+
+ADD FIELD "GroupCode" OF "AreaPlan" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Group"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Group"
+  HELP "Group number, calls within one group are local"
+  ORDER 30
+
+ADD INDEX "TrafficArea" ON "AreaPlan" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TrafficArea" ASCENDING 
+
+ADD INDEX "AreaName" ON "AreaPlan" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "AreaName" ASCENDING 
+
+ADD TABLE "AuthLog"
+  AREA "Sta_Data_128"
+  LABEL "AuthLog"
+  DESCRIPTION "3rd party user authentication log"
+  DUMP-NAME "authlog"
+
+ADD FIELD "Username" OF "AuthLog" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Username"
+  POSITION 2
+  MAX-WIDTH 40
+  COLUMN-LABEL "Username"
+  ORDER 10
+
+ADD FIELD "IP" OF "AuthLog" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "IP Address"
+  POSITION 3
+  MAX-WIDTH 32
+  COLUMN-LABEL "IP Address"
+  ORDER 20
+
+ADD FIELD "EndUserID" OF "AuthLog" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "EndUserID"
+  POSITION 4
+  MAX-WIDTH 80
+  COLUMN-LABEL "EndUserID"
+  ORDER 30
+
+ADD FIELD "UserAgent" OF "AuthLog" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "UserAgent"
+  POSITION 5
+  MAX-WIDTH 80
+  COLUMN-LABEL "UserAgent"
+  ORDER 40
+
+ADD FIELD "MethodName" OF "AuthLog" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "MethodName"
+  POSITION 6
+  MAX-WIDTH 80
+  COLUMN-LABEL "MethodName"
+  ORDER 50
+
+ADD FIELD "ErrorMsg" OF "AuthLog" AS character 
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "ErrorMsg"
+  POSITION 7
+  MAX-WIDTH 120
+  COLUMN-LABEL "ErrorMsg"
+  ORDER 60
+
+ADD FIELD "TimeStamp" OF "AuthLog" AS datetime 
+  FORMAT "99-99-9999 HH:MM:SS"
+  INITIAL ?
+  LABEL "TimeStamp"
+  POSITION 8
+  MAX-WIDTH 8
+  COLUMN-LABEL "TimeStamp"
+  ORDER 70
+
+ADD FIELD "ResponseTS" OF "AuthLog" AS datetime 
+  FORMAT "99-99-9999 HH:MM:SS"
+  INITIAL ?
+  LABEL "ResponseTS"
+  POSITION 9
+  MAX-WIDTH 8
+  COLUMN-LABEL "ResponseTS"
+  ORDER 80
+
+ADD FIELD "ErrorCode" OF "AuthLog" AS integer 
+  FORMAT "->>>>9"
+  INITIAL "0"
+  LABEL "ErrorCode"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "ErrorCode"
+  HELP "XML-RPC framework error code"
+  ORDER 90
+
+ADD FIELD "TransactionID" OF "AuthLog" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "TransactionID"
+  POSITION 11
+  MAX-WIDTH 30
+  HELP "Transaction ID"
+  ORDER 100
+
+ADD INDEX "TimeStamp" ON "AuthLog" 
+  AREA "Sta_Index_3"
+  PRIMARY
+  INDEX-FIELD "TimeStamp" DESCENDING 
+
+ADD INDEX "Username" ON "AuthLog" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "Username" ASCENDING 
+
+ADD TABLE "CDRAmt"
+  AREA "Sta_Data_256"
+  LABEL "CDRAmt"
+  DESCRIPTION "Summary of read CDRs for OnLine displaying"
+  DUMP-NAME "cdramt"
+
+ADD FIELD "Date" OF "CDRAmt" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Date"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Date"
+  HELP "Date of the counter"
+  ORDER 10
+
+ADD FIELD "ExCode" OF "CDRAmt" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Switch"
+  POSITION 3
+  MAX-WIDTH 16
+  COLUMN-LABEL "Switch"
+  HELP "Calls from switch"
+  ORDER 20
+
+ADD FIELD "QtyTot" OF "CDRAmt" AS integer 
+  FORMAT ">,>>>,>>9"
+  INITIAL "0"
+  LABEL "Amt"
+  POSITION 4
+  MAX-WIDTH 480
+  COLUMN-LABEL "Amt"
+  HELP "Amount of calls per hour"
+  EXTENT 24
+  ORDER 50
+
+ADD FIELD "QtyDB" OF "CDRAmt" AS integer 
+  FORMAT ">,>>>,>>9"
+  INITIAL "0"
+  LABEL "#DB"
+  POSITION 5
+  MAX-WIDTH 480
+  COLUMN-LABEL "#DB"
+  HELP "Amount of calls per hour saved in the database"
+  EXTENT 24
+  ORDER 60
+
+ADD FIELD "QtyJunk" OF "CDRAmt" AS integer 
+  FORMAT ">,>>>,>>9"
+  INITIAL "0"
+  LABEL "#Junk"
+  POSITION 6
+  MAX-WIDTH 480
+  COLUMN-LABEL "#Junk"
+  HELP "Amount of calls per hour dumped into junk"
+  EXTENT 24
+  ORDER 70
+
+ADD INDEX "ExCode" ON "CDRAmt" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "ExCode" ASCENDING 
+  INDEX-FIELD "Date" ASCENDING 
+
+ADD TABLE "CDRStreamCounter"
+  AREA "Dyn_Data_128"
+  LABEL "CDR Stream Counter"
+  DESCRIPTION "CDR Stream Counter"
+  DUMP-NAME "cdrstreamcounter"
+
+ADD FIELD "Brand" OF "CDRStreamCounter" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 10
+
+ADD FIELD "ImportDate" OF "CDRStreamCounter" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Import Date"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Import"
+  HELP "Import date"
+  ORDER 20
+
+ADD FIELD "MSCID" OF "CDRStreamCounter" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "MSCID"
+  POSITION 4
+  MAX-WIDTH 16
+  HELP "Mobile switching center"
+  ORDER 30
+
+ADD FIELD "OnlineStream" OF "CDRStreamCounter" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Online Stream"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Stream"
+  HELP "Stream from which CDR was read"
+  ORDER 40
+
+ADD FIELD "CounterType" OF "CDRStreamCounter" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Counter Type"
+  POSITION 6
+  MAX-WIDTH 16
+  COLUMN-LABEL "Type"
+  HELP "Counter type"
+  ORDER 50
+
+ADD FIELD "CDRQty" OF "CDRStreamCounter" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Quantity"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Qty"
+  HELP "CDR quantity"
+  ORDER 60
+
+ADD INDEX "ImportDate" ON "CDRStreamCounter" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "ImportDate" ASCENDING 
+  INDEX-FIELD "CounterType" ASCENDING 
+  INDEX-FIELD "MSCID" ASCENDING 
+  INDEX-FIELD "OnlineStream" ASCENDING 
+
+ADD TABLE "CLI"
+  AREA "Sta_Data_256"
+  LABEL "CLI"
+  DESCRIPTION "CLI numbers"
+  DUMP-NAME "cli"
+
+ADD FIELD "CustNum" OF "CLI" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Customer"
+  HELP "Customer number"
+  ORDER 10
+
+ADD FIELD "CLI" OF "CLI" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "A-Sub No."
+  POSITION 3
+  MAX-WIDTH 32
+  COLUMN-LABEL "A-Sub.No"
+  HELP "Customer's A-subscriber Number with Area Code"
+  ORDER 20
+
+ADD FIELD "Date" OF "CLI" AS date 
+  FORMAT "99-99-99"
+  INITIAL "today"
+  LABEL "Created"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Created"
+  HELP "Date when a-number was created / updated"
+  ORDER 30
+
+ADD FIELD "OwnerName" OF "CLI" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Owner"
+  POSITION 5
+  MAX-WIDTH 60
+  COLUMN-LABEL "Owner's name"
+  HELP "Name of A-subscriber number's owner"
+  ORDER 40
+
+ADD FIELD "ValueLimit" OF "CLI" AS integer 
+  FORMAT ">,>>>,>>9"
+  INITIAL "0"
+  LABEL "ASub. limit"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "ASub. limit"
+  HELP "A-Subscribers monthly limit"
+  ORDER 141
+
+ADD FIELD "Ref" OF "CLI" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "RefNum"
+  POSITION 7
+  MAX-WIDTH 24
+  COLUMN-LABEL "RefNum"
+  HELP "Reference number for additional usage"
+  ORDER 150
+
+ADD FIELD "Active" OF "CLI" AS logical 
+  FORMAT "Y/N"
+  INITIAL "no"
+  LABEL "Open"
+  POSITION 8
+  MAX-WIDTH 1
+  COLUMN-LABEL "Open"
+  HELP "Is this a-number open (ie. can this number call) ?"
+  ORDER 160
+
+ADD FIELD "Pwd" OF "CLI" AS integer 
+  FORMAT "9999"
+  INITIAL "0"
+  LABEL "Password"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "Password"
+  HELP "ASUB password"
+  ORDER 170
+
+ADD FIELD "CrStamp" OF "CLI" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Created"
+  POSITION 10
+  MAX-WIDTH 17
+  COLUMN-LABEL "Created"
+  HELP "Time stamp of connection"
+  DECIMALS 5
+  ORDER 180
+
+ADD FIELD "ClStamp" OF "CLI" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Closed"
+  POSITION 11
+  MAX-WIDTH 17
+  COLUMN-LABEL "Closed"
+  HELP "Time stamp of disconnection"
+  DECIMALS 5
+  ORDER 190
+
+ADD FIELD "CallLimit" OF "CLI" AS integer 
+  FORMAT ">,>>>,>>9"
+  INITIAL "0"
+  LABEL "ASub. call limit"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "ASub. call limit"
+  HELP "A-Subscribers call limit"
+  ORDER 200
+
+ADD FIELD "MthLimit" OF "CLI" AS integer 
+  FORMAT ">,>>>,>>9"
+  INITIAL "0"
+  LABEL "ASub. mth limit"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "ASub. mth limit"
+  HELP "A-Subscribers monthly limit"
+  ORDER 140
+
+ADD FIELD "BillTarget" OF "CLI" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Billing Target"
+  POSITION 14
+  MAX-WIDTH 4
+  COLUMN-LABEL "Bill.Targ"
+  HELP "Customer's billing target"
+  ORDER 210
+
+ADD FIELD "SerNum" OF "CLI" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "SerNum"
+  POSITION 15
+  MAX-WIDTH 4
+  COLUMN-LABEL "SerNum"
+  HELP "Consecutive number (sequence) of series"
+  ORDER 220
+  MANDATORY
+
+ADD FIELD "Contract" OF "CLI" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Contract ID"
+  POSITION 16
+  MAX-WIDTH 16
+  COLUMN-LABEL "ContrID"
+  HELP "Contract ID"
+  ORDER 230
+
+ADD INDEX "CLI" ON "CLI" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "CLI" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+
+ADD INDEX "Contract" ON "CLI" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Contract" ASCENDING 
+
+ADD INDEX "CustNum" ON "CLI" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "BillTarget" ASCENDING 
+  INDEX-FIELD "CLI" ASCENDING 
+
+ADD INDEX "SerNum" ON "CLI" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "SerNum" ASCENDING 
+  INDEX-FIELD "CLI" ASCENDING 
+
+ADD INDEX "Valid" ON "CLI" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CLI" ASCENDING 
+  INDEX-FIELD "CrStamp" DESCENDING 
+  INDEX-FIELD "ClStamp" DESCENDING 
+
+ADD TABLE "CLIErrorCode"
+  AREA "Schema Area"
+  LABEL "CLIErrorCode"
+  DESCRIPTION "Contains the errorcodes"
+  DUMP-NAME "clierror"
+
+ADD FIELD "ErrCode" OF "CLIErrorCode" AS integer 
+  DESCRIPTION "Errorcodes for the responsefile"
+  FORMAT "999"
+  INITIAL "0"
+  LABEL "Errorcode"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Errorcode"
+  HELP "Error code"
+  ORDER 10
+
+ADD FIELD "ErrMsg" OF "CLIErrorCode" AS character 
+  DESCRIPTION "Explains the errorcode"
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Errormessage"
+  POSITION 3
+  MAX-WIDTH 100
+  COLUMN-LABEL "Errormessage"
+  HELP "Error message"
+  ORDER 20
+
+ADD FIELD "Action" OF "CLIErrorCode" AS character 
+  DESCRIPTION "Action to be taken if error occurs"
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Action"
+  POSITION 4
+  MAX-WIDTH 80
+  COLUMN-LABEL "Action"
+  HELP "Action"
+  ORDER 30
+
+ADD INDEX "ErrCode" ON "CLIErrorCode" 
+  AREA "Schema Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "ErrCode" ASCENDING 
+
+ADD TABLE "CLIFile"
+  AREA "Schema Area"
+  LABEL "CLIFile"
+  DESCRIPTION "A headertable for the cliqueue"
+  DUMP-NAME "clifile"
+
+ADD FIELD "FileName" OF "CLIFile" AS character 
+  DESCRIPTION "The name of the requestfile"
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Filename"
+  POSITION 2
+  MAX-WIDTH 40
+  COLUMN-LABEL "Filename"
+  HELP "File name"
+  ORDER 30
+
+ADD FIELD "OrderId" OF "CLIFile" AS character 
+  DESCRIPTION "The OrderId of the requestfile"
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "OrderId"
+  POSITION 3
+  MAX-WIDTH 16
+  COLUMN-LABEL "OrderId"
+  HELP "Order id"
+  ORDER 10
+
+ADD FIELD "RsId" OF "CLIFile" AS character 
+  DESCRIPTION "ResellerId"
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "ResellerId"
+  POSITION 4
+  MAX-WIDTH 16
+  COLUMN-LABEL "ResellerId"
+  HELP "Reseller"
+  ORDER 20
+
+ADD FIELD "InStamp" OF "CLIFile" AS character 
+  DESCRIPTION "The date and time the requestfile was created by the customer"
+  FORMAT "X(14)"
+  INITIAL ""
+  LABEL "Increatedate_time"
+  POSITION 5
+  MAX-WIDTH 28
+  COLUMN-LABEL "Increatedate_time"
+  HELP "Creation date and time"
+  ORDER 50
+
+ADD FIELD "DtlCount" OF "CLIFile" AS integer 
+  DESCRIPTION "The total numbers of detailrecords"
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  LABEL "Detailcount"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Detailcount"
+  HELP "Detail count"
+  ORDER 40
+
+ADD FIELD "OutStamp" OF "CLIFile" AS character 
+  DESCRIPTION "The date and time the responsefile was created by Tele1"
+  FORMAT "X(14)"
+  INITIAL ""
+  LABEL "Outcreatedate_time"
+  POSITION 7
+  MAX-WIDTH 28
+  COLUMN-LABEL "Outcreatedate_time"
+  HELP "Export date and time"
+  ORDER 60
+
+ADD INDEX "orderid" ON "CLIFile" 
+  AREA "Schema Area"
+  PRIMARY
+  INDEX-FIELD "OrderId" ASCENDING 
+
+ADD INDEX "filename" ON "CLIFile" 
+  AREA "Schema Area"
+  INDEX-FIELD "FileName" ASCENDING 
+  INDEX-FIELD "OrderId" ASCENDING 
+
+ADD TABLE "CLIPref"
+  AREA "Schema Area"
+  LABEL "CLIPref"
+  DESCRIPTION "Partners CLIs
+"
+  DUMP-NAME "clipref"
+
+ADD FIELD "Pref" OF "CLIPref" AS character 
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "CLI Prefix"
+  POSITION 2
+  MAX-WIDTH 8
+  COLUMN-LABEL "CLI Prefix"
+  HELP "Partners prefix"
+  ORDER 10
+
+ADD FIELD "CLI" OF "CLIPref" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "CLI"
+  POSITION 3
+  MAX-WIDTH 24
+  COLUMN-LABEL "CLI"
+  HELP "CLI"
+  ORDER 20
+
+ADD FIELD "CLIId" OF "CLIPref" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "CLI ID"
+  POSITION 4
+  MAX-WIDTH 40
+  COLUMN-LABEL "CLI ID"
+  HELP "CLI id"
+  ORDER 30
+
+ADD FIELD "State" OF "CLIPref" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "State"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "State"
+  HELP "State"
+  ORDER 40
+
+ADD INDEX "Pref" ON "CLIPref" 
+  AREA "Schema Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Pref" ASCENDING 
+  INDEX-FIELD "CLI" ASCENDING 
+
+ADD INDEX "CLI" ON "CLIPref" 
+  AREA "Schema Area"
+  UNIQUE
+  INDEX-FIELD "CLI" ASCENDING 
+  INDEX-FIELD "Pref" ASCENDING 
+
+ADD TABLE "CLIQueue"
+  AREA "Schema Area"
+  LABEL "CLIQueue"
+  DESCRIPTION "Contains all detailrows from the requestfile"
+  DUMP-NAME "cliqueue"
+
+ADD FIELD "RsId" OF "CLIQueue" AS character 
+  DESCRIPTION "ResellerId"
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "ResellerId"
+  POSITION 2
+  MAX-WIDTH 16
+  COLUMN-LABEL "ResellerId"
+  HELP "Reseller"
+  ORDER 20
+
+ADD FIELD "OrderId" OF "CLIQueue" AS character 
+  DESCRIPTION "The OrderId of the requestfile"
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "OrderId"
+  POSITION 3
+  MAX-WIDTH 16
+  COLUMN-LABEL "OrderId"
+  HELP "Order id"
+  ORDER 10
+
+ADD FIELD "CreditLimit" OF "CLIQueue" AS integer 
+  DESCRIPTION "Creditlimit"
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  LABEL "Creditlimit"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Creditlimit"
+  HELP "Credit limit"
+  ORDER 40
+
+ADD FIELD "CLI" OF "CLIQueue" AS character 
+  DESCRIPTION "The cli number (A-number)"
+  FORMAT "X(16)"
+  INITIAL ""
+  LABEL "Cli"
+  POSITION 5
+  MAX-WIDTH 32
+  COLUMN-LABEL "Cli"
+  HELP "CLI"
+  ORDER 30
+
+ADD FIELD "Date" OF "CLIQueue" AS character 
+  DESCRIPTION "A customerfield that is used for internal purposes"
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Date"
+  POSITION 6
+  MAX-WIDTH 16
+  COLUMN-LABEL "Date"
+  HELP "Date"
+  ORDER 90
+
+ADD FIELD "ErrCode" OF "CLIQueue" AS integer 
+  DESCRIPTION "Errorcodes for the responsefile"
+  FORMAT "999"
+  INITIAL "0"
+  LABEL "Errorcode"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Errorcode"
+  HELP "Error code"
+  ORDER 70
+
+ADD FIELD "Command" OF "CLIQueue" AS character 
+  DESCRIPTION "Add or Delete"
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Command"
+  POSITION 8
+  MAX-WIDTH 16
+  COLUMN-LABEL "Command"
+  HELP "Command"
+  ORDER 60
+
+ADD FIELD "Result" OF "CLIQueue" AS character 
+  DESCRIPTION "The result of the cli-update. Ok or Error"
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Result"
+  POSITION 9
+  MAX-WIDTH 16
+  COLUMN-LABEL "Result"
+  HELP "Result"
+  ORDER 50
+
+ADD FIELD "ErrMsg" OF "CLIQueue" AS character 
+  DESCRIPTION "Explains the errorcode "
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Errormessage"
+  POSITION 10
+  MAX-WIDTH 100
+  COLUMN-LABEL "Errormessage"
+  HELP "Error messate"
+  ORDER 80
+
+ADD FIELD "ExCode" OF "CLIQueue" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "Switch"
+  POSITION 11
+  MAX-WIDTH 12
+  COLUMN-LABEL "Switch"
+  HELP "Name of the switch this queue belongs to"
+  ORDER 100
+
+ADD INDEX "orderid" ON "CLIQueue" 
+  AREA "Schema Area"
+  PRIMARY
+  INDEX-FIELD "OrderId" ASCENDING 
+  INDEX-FIELD "CLI" ASCENDING 
+  INDEX-FIELD "ExCode" ASCENDING 
+
+ADD TABLE "CLISer"
+  AREA "Sta_Data_256"
+  LABEL "CLISer"
+  DESCRIPTION "CLI series records, from - to"
+  DUMP-NAME "cliser"
+
+ADD FIELD "CLIFrom" OF "CLISer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "A-subFrom"
+  POSITION 2
+  MAX-WIDTH 24
+  COLUMN-LABEL "FirstASub"
+  HELP "First A-sub no in a series"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "CustNum" OF "CLISer" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Customer"
+  HELP "Customer no. (owner) of an A-sub no."
+  ORDER 30
+
+ADD FIELD "CLITo" OF "CLISer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "A-subTill"
+  POSITION 4
+  MAX-WIDTH 24
+  COLUMN-LABEL "LastAsub"
+  HELP "Last A-sub. no in a number series"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "Memo" OF "CLISer" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Memo"
+  POSITION 5
+  MAX-WIDTH 60
+  COLUMN-LABEL "Memo"
+  HELP "Text that will be printed on calls / a-number report"
+  ORDER 40
+
+ADD FIELD "Secr" OF "CLISer" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Secret"
+  POSITION 6
+  MAX-WIDTH 1
+  COLUMN-LABEL "Secret"
+  HELP "Is this a SECRET number series (Y/N)"
+  ORDER 50
+
+ADD FIELD "SerNum" OF "CLISer" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "SerNum"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "SerNum"
+  HELP "Consecutive number (sequence) of series"
+  ORDER 60
+  MANDATORY
+
+ADD FIELD "BillTarget" OF "CLISer" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Billing Target"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Bill.Targ"
+  HELP "Customer's billing target"
+  ORDER 210
+
+ADD INDEX "CLISer" ON "CLISer" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "CLIFrom" ASCENDING 
+  INDEX-FIELD "CLITo" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+
+ADD INDEX "BillTarget" ON "CLISer" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "BillTarget" ASCENDING 
+
+ADD INDEX "CustNum" ON "CLISer" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "CLIFrom" ASCENDING 
+
+ADD INDEX "SerNum" ON "CLISer" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "SerNum" ASCENDING 
+
+ADD TABLE "CLISeries"
+  AREA "Sta_Data_256"
+  DUMP-NAME "cliserie"
+
+ADD FIELD "CustNum" OF "CLISeries" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "CustNumber"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "CustNumber"
+  HELP "Customer who owns CLI Series"
+  ORDER 10
+
+ADD FIELD "Series" OF "CLISeries" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Series"
+  POSITION 3
+  MAX-WIDTH 20
+  COLUMN-LABEL "Series"
+  HELP "Number Series first digits"
+  ORDER 20
+
+ADD FIELD "Name" OF "CLISeries" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 4
+  MAX-WIDTH 40
+  COLUMN-LABEL "Name"
+  HELP "Name of number Series"
+  ORDER 30
+
+ADD INDEX "Series" ON "CLISeries" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "Series" ASCENDING 
+
+ADD INDEX "CustNum" ON "CLISeries" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "Series" ASCENDING 
+
+ADD TABLE "CLIWL"
+  AREA "Schema Area"
+  LABEL "CLIWL"
+  DESCRIPTION "Used to store the filename of the list that the switch will read."
+  DUMP-NAME "cliwl"
+
+ADD FIELD "FileName" OF "CLIWL" AS character 
+  DESCRIPTION "Name of the generated file that the switch will read"
+  FORMAT "X(14)"
+  INITIAL ""
+  LABEL "Filename"
+  POSITION 2
+  MAX-WIDTH 28
+  COLUMN-LABEL "Filename"
+  HELP "File name"
+  ORDER 10
+
+ADD FIELD "OrderId" OF "CLIWL" AS character 
+  DESCRIPTION "The OrderId of the requestfile"
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "OrderId"
+  POSITION 3
+  MAX-WIDTH 16
+  COLUMN-LABEL "OrderId"
+  HELP "Order id"
+  ORDER 20
+
+ADD FIELD "Processed" OF "CLIWL" AS logical 
+  DESCRIPTION "Indicates whether the logfile from the switch, has been processed, or not."
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Processed"
+  POSITION 4
+  MAX-WIDTH 1
+  COLUMN-LABEL "Processed"
+  HELP "Processed"
+  ORDER 30
+
+ADD FIELD "ExCode" OF "CLIWL" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "Switch"
+  POSITION 5
+  MAX-WIDTH 12
+  COLUMN-LABEL "Switch"
+  HELP "Name of the switch this queue belongs to"
+  ORDER 100
+
+ADD INDEX "filename" ON "CLIWL" 
+  AREA "Schema Area"
+  PRIMARY
+  INDEX-FIELD "FileName" ASCENDING 
+  INDEX-FIELD "ExCode" ASCENDING 
+  INDEX-FIELD "Processed" ASCENDING 
+
+ADD TABLE "ClosedCust"
+  AREA "Sta_Data_256"
+  LABEL "ClosedCust"
+  DESCRIPTION "Closed customers"
+  DUMP-NAME "closedcu"
+
+ADD FIELD "CustNum" OF "ClosedCust" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Customer"
+  HELP "Customer number, 1 - 999999"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "Date" OF "ClosedCust" AS date 
+  DESCRIPTION "Closing date"
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "ClDate"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "ClDate"
+  HELP "Closing date"
+  ORDER 20
+
+ADD FIELD "DateOpen" OF "ClosedCust" AS date 
+  DESCRIPTION "Opening date"
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "OpDate"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "OpDate"
+  HELP "Opening date"
+  ORDER 150
+
+ADD FIELD "State" OF "ClosedCust" AS logical 
+  DESCRIPTION "Can this customer be opened ?"
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "St."
+  POSITION 5
+  MAX-WIDTH 1
+  COLUMN-LABEL "St."
+  HELP "Deny opening (Y/N)"
+  ORDER 160
+
+ADD FIELD "Printed" OF "ClosedCust" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Pr."
+  POSITION 6
+  MAX-WIDTH 1
+  COLUMN-LABEL "Pr."
+  HELP "Is this record printed"
+  ORDER 170
+
+ADD FIELD "Called" OF "ClosedCust" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Value"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Value"
+  HELP "Closing value, 1 = Limit, 2 = Invoice, 3 = Both"
+  ORDER 180
+
+ADD INDEX "CustNum" ON "ClosedCust" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "CustNum" ASCENDING 
+
+ADD INDEX "Date" ON "ClosedCust" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Date" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+
+ADD TABLE "CronLog"
+  AREA "Sta_Data_256"
+  LABEL "CronLog"
+  DESCRIPTION "Log file for cron based processes
+"
+  DUMP-NAME "cronlog"
+
+ADD FIELD "Date" OF "CronLog" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Date"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "Date when the run started"
+  ORDER 10
+
+ADD FIELD "LogTime" OF "CronLog" AS integer 
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "Time"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Time"
+  HELP "Time of day when run started"
+  ORDER 20
+
+ADD FIELD "DateFrom" OF "CronLog" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "From"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "From which date erasing started"
+  ORDER 30
+
+ADD FIELD "DateTo" OF "CronLog" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "To what date erasing was run"
+  ORDER 40
+
+ADD FIELD "Amt" OF "CronLog" AS integer 
+  FORMAT ">,>>>,>>9"
+  INITIAL "0"
+  LABEL "Amount"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Amount"
+  HELP "Amount of erased calls"
+  ORDER 50
+
+ADD FIELD "State" OF "CronLog" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "State"
+  POSITION 7
+  MAX-WIDTH 24
+  COLUMN-LABEL "State"
+  HELP "Status of the run: RUNNING - ENDED"
+  ORDER 60
+
+ADD INDEX "Date" ON "CronLog" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Date" DESCENDING 
+  INDEX-FIELD "LogTime" DESCENDING 
+
+ADD INDEX "DateFrom" ON "CronLog" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "DateFrom" ASCENDING 
+  INDEX-FIELD "DateTo" ASCENDING 
+
+ADD TABLE "eventlog"
+  AREA "Sta_Data_64"
+  DUMP-NAME "eventlog"
+
+ADD FIELD "eventdate" OF "eventlog" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "Date"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "Event date"
+  ORDER 10
+
+ADD FIELD "eventtime" OF "eventlog" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Time"
+  POSITION 3
+  MAX-WIDTH 16
+  HELP "Event time"
+  ORDER 20
+
+ADD FIELD "usercode" OF "eventlog" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "User"
+  POSITION 4
+  MAX-WIDTH 16
+  HELP "User code"
+  ORDER 30
+
+ADD FIELD "tablename" OF "eventlog" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Table"
+  POSITION 5
+  MAX-WIDTH 30
+  HELP "Source table name"
+  ORDER 40
+
+ADD FIELD "key" OF "eventlog" AS character 
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Key"
+  POSITION 6
+  MAX-WIDTH 60
+  HELP "Key to source record"
+  ORDER 50
+
+ADD FIELD "action" OF "eventlog" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Action"
+  POSITION 7
+  MAX-WIDTH 16
+  HELP "Action type.. Create,Modity,Delete"
+  ORDER 60
+
+ADD FIELD "datavalues" OF "eventlog" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Values"
+  POSITION 8
+  MAX-WIDTH 100
+  HELP "Changed values of record"
+  ORDER 70
+
+ADD FIELD "modifiedfields" OF "eventlog" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Modified fields"
+  POSITION 9
+  MAX-WIDTH 100
+  HELP "Fieldnames from BUFFER-COMPARE"
+  ORDER 80
+
+ADD FIELD "fieldformats" OF "eventlog" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Field formats"
+  POSITION 10
+  MAX-WIDTH 100
+  HELP "Field formats of modified fields"
+  ORDER 90
+
+ADD FIELD "EventLogStatus" OF "eventlog" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "EventLogStatus"
+  POSITION 11
+  MAX-WIDTH 4
+  COLUMN-LABEL "EventLogStatus"
+  HELP "Status of eventlog"
+  ORDER 100
+
+ADD FIELD "TimingTS" OF "eventlog" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "TimingTS"
+  POSITION 12
+  MAX-WIDTH 20
+  COLUMN-LABEL "TimingTS"
+  HELP "Timing Timestamp"
+  DECIMALS 5
+  ORDER 110
+
+ADD FIELD "TimingDate" OF "eventlog" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "TimingDate"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "TimingDate"
+  HELP "Timing Date (schedule date)"
+  ORDER 120
+
+ADD FIELD "TimingTime" OF "eventlog" AS decimal 
+  FORMAT "99.99"
+  INITIAL "0"
+  LABEL "TimingTime"
+  POSITION 14
+  MAX-WIDTH 17
+  COLUMN-LABEL "TimingTime"
+  HELP "Timing Time (Scheluded time)"
+  DECIMALS 2
+  ORDER 130
+
+ADD FIELD "Memo" OF "eventlog" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Memo"
+  POSITION 15
+  MAX-WIDTH 80
+  COLUMN-LABEL "Memo"
+  ORDER 140
+
+ADD INDEX "TableName" ON "eventlog" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "tablename" ASCENDING 
+  INDEX-FIELD "key" ASCENDING 
+  INDEX-FIELD "eventdate" DESCENDING 
+  INDEX-FIELD "eventtime" DESCENDING 
+
+ADD INDEX "EventDate" ON "eventlog" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "eventdate" DESCENDING 
+  INDEX-FIELD "eventtime" DESCENDING 
+  INDEX-FIELD "tablename" ASCENDING 
+  INDEX-FIELD "key" ASCENDING 
+
+ADD INDEX "EventLogStatus" ON "eventlog" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "EventLogStatus" ASCENDING 
+  INDEX-FIELD "TimingTS" DESCENDING 
+
+ADD INDEX "UserName" ON "eventlog" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "usercode" ASCENDING 
+  INDEX-FIELD "eventdate" DESCENDING 
+  INDEX-FIELD "eventtime" DESCENDING 
+
+ADD INDEX "UserTable" ON "eventlog" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "usercode" ASCENDING 
+  INDEX-FIELD "tablename" ASCENDING 
+  INDEX-FIELD "key" ASCENDING 
+  INDEX-FIELD "eventdate" DESCENDING 
+  INDEX-FIELD "eventtime" DESCENDING 
+
+ADD TABLE "filegroup"
+  AREA "Sta_Data_256"
+  DUMP-NAME "filegrp"
+
+ADD FIELD "filegroup" OF "filegroup" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "File Group"
+  POSITION 2
+  MAX-WIDTH 24
+  HELP "File group"
+  ORDER 10
+
+ADD FIELD "filetimestamp" OF "filegroup" AS character 
+  FORMAT "X(14)"
+  INITIAL ""
+  LABEL "TimeStamp"
+  POSITION 3
+  MAX-WIDTH 28
+  HELP "File TimeStamp YYYYMMDDhhmmss"
+  ORDER 20
+
+ADD TABLE "files"
+  AREA "Sta_Data_256"
+  LABEL "File Storage"
+  DESCRIPTION "Name and status"
+  DUMP-NAME "files"
+
+ADD FIELD "filename" OF "files" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Filename"
+  POSITION 2
+  MAX-WIDTH 100
+  HELP "Filename with directoryname"
+  ORDER 10
+
+ADD FIELD "filetimestamp" OF "files" AS character 
+  FORMAT "X(14)"
+  INITIAL ""
+  LABEL "TimeStamp"
+  POSITION 3
+  MAX-WIDTH 28
+  HELP "File TimeStamp YYYYMMDDhhmmss"
+  ORDER 30
+
+ADD FIELD "filecrc" OF "files" AS character 
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "CRC"
+  POSITION 5
+  MAX-WIDTH 60
+  HELP "File crc"
+  ORDER 40
+
+ADD FIELD "filegroup" OF "files" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "File Group"
+  POSITION 6
+  MAX-WIDTH 40
+  HELP "Normaly first directory"
+  ORDER 20
+
+ADD INDEX "filename" ON "files" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "filename" ASCENDING 
+
+ADD INDEX "filetimestamp" ON "files" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "filegroup" ASCENDING 
+  INDEX-FIELD "filetimestamp" ASCENDING 
+
+ADD TABLE "FixCDR"
+  AREA "Sta_Data_256"
+  LABEL "FixCDR"
+  DESCRIPTION "Call Detail Records"
+  DUMP-NAME "fixcdr"
+
+ADD FIELD "Date" OF "FixCDR" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "CallDate"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "CallDate"
+  HELP "Call's date"
+  ORDER 10
+
+ADD FIELD "TimeStart" OF "FixCDR" AS integer 
+  FORMAT "zzzz9"
+  INITIAL "0"
+  LABEL "Begin"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Begin"
+  HELP "Call started at"
+  ORDER 20
+
+ADD FIELD "TimeEnd" OF "FixCDR" AS integer 
+  FORMAT "zzzz9"
+  INITIAL "0"
+  LABEL "End"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "End"
+  HELP "Call ended"
+  ORDER 30
+
+ADD FIELD "Duration" OF "FixCDR" AS integer 
+  FORMAT "zzzz9"
+  INITIAL "0"
+  LABEL "Durat"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Durat"
+  HELP "Calls duration (sec)"
+  ORDER 40
+
+ADD FIELD "CLI" OF "FixCDR" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "A-number"
+  POSITION 6
+  MAX-WIDTH 24
+  COLUMN-LABEL "A-number"
+  HELP "A-sub. number"
+  ORDER 50
+
+ADD FIELD "BSub" OF "FixCDR" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "B-sub "
+  POSITION 7
+  MAX-WIDTH 50
+  COLUMN-LABEL "B-sub "
+  HELP "B-number"
+  ORDER 60
+
+ADD FIELD "CustNum" OF "FixCDR" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Caller"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Caller"
+  HELP "Customer number of the A-subscriber"
+  ORDER 71
+
+ADD FIELD "InvCust" OF "FixCDR" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Payer"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "Payer"
+  HELP "No. of customer who is being billed"
+  ORDER 80
+
+ADD FIELD "RepCust" OF "FixCDR" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Report Customer"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "Report Customer"
+  HELP "Customer who receives call report(s)"
+  ORDER 90
+
+ADD FIELD "BillCode" OF "FixCDR" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Product"
+  POSITION 11
+  MAX-WIDTH 32
+  COLUMN-LABEL "Product"
+  HELP "Product code"
+  ORDER 100
+  MANDATORY
+
+ADD FIELD "SpecialDuration" OF "FixCDR" AS integer 
+  FORMAT "zzzzz9"
+  INITIAL "0"
+  LABEL "L.Eta"
+  POSITION 12
+  MAX-WIDTH 70
+  COLUMN-LABEL "L.Eta"
+  HELP "Recycled field"
+  EXTENT 5
+  ORDER 109
+
+ADD FIELD "SpecialPrice" OF "FixCDR" AS decimal 
+  FORMAT "z9.999"
+  INITIAL "0"
+  LABEL "Price p/s"
+  POSITION 13
+  MAX-WIDTH 70
+  COLUMN-LABEL "Price p/s"
+  HELP "Recycled field"
+  EXTENT 5
+  DECIMALS 3
+  ORDER 119
+
+ADD FIELD "GrossPrice" OF "FixCDR" AS decimal 
+  FORMAT "zz,zz9.99"
+  INITIAL "0"
+  LABEL "GrossRate"
+  POSITION 14
+  MAX-WIDTH 21
+  COLUMN-LABEL "GrossRate"
+  HELP "Call's gross price"
+  DECIMALS 6
+  ORDER 130
+
+ADD FIELD "Disc%" OF "FixCDR" AS decimal 
+  FORMAT "z9.99"
+  INITIAL "0"
+  LABEL "Disc%"
+  POSITION 15
+  MAX-WIDTH 17
+  COLUMN-LABEL "Disc%"
+  HELP "Applicable volume discount %"
+  DECIMALS 2
+  ORDER 140
+
+ADD FIELD "Priced" OF "FixCDR" AS logical 
+  FORMAT "K/E"
+  INITIAL "no"
+  LABEL "Price"
+  POSITION 16
+  MAX-WIDTH 1
+  COLUMN-LABEL "Price"
+  HELP "Is the call rated"
+  ORDER 150
+
+ADD FIELD "CCN" OF "FixCDR" AS integer 
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "Country"
+  POSITION 18
+  MAX-WIDTH 4
+  COLUMN-LABEL "Country"
+  HELP "Land's number"
+  ORDER 170
+
+ADD FIELD "RateCust" OF "FixCDR" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "RatingCustomer"
+  POSITION 19
+  MAX-WIDTH 4
+  COLUMN-LABEL "RatingCustomer"
+  HELP "Customer No. whose price plan is used"
+  ORDER 95
+
+ADD FIELD "BDest" OF "FixCDR" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "B-subNo"
+  POSITION 20
+  MAX-WIDTH 50
+  COLUMN-LABEL "B-subNo"
+  HELP "B-number's 'priced' share "
+  ORDER 180
+
+ADD FIELD "TrunkOut" OF "FixCDR" AS character 
+  FORMAT "x(7)"
+  INITIAL ""
+  LABEL "Trunk"
+  POSITION 21
+  MAX-WIDTH 14
+  COLUMN-LABEL "Trunk"
+  HELP "Outgoing trunk"
+  ORDER 190
+
+ADD FIELD "TBPrice" OF "FixCDR" AS decimal 
+  FORMAT "zz9.99999"
+  INITIAL "0"
+  LABEL "Rate /sec"
+  POSITION 22
+  MAX-WIDTH 120
+  COLUMN-LABEL "Rate /sec"
+  HELP "Call's price ex discounts / sec"
+  EXTENT 6
+  DECIMALS 5
+  ORDER 120
+
+ADD FIELD "TBDuration" OF "FixCDR" AS integer 
+  FORMAT "zzzzz9"
+  INITIAL "0"
+  LABEL "Duration"
+  POSITION 23
+  MAX-WIDTH 84
+  COLUMN-LABEL "Duration"
+  HELP "Call's duration (sec) within each timeband"
+  EXTENT 6
+  ORDER 110
+
+ADD FIELD "DiscValue" OF "FixCDR" AS decimal 
+  FORMAT "z,zz9.99"
+  INITIAL "0"
+  LABEL "Discount"
+  POSITION 24
+  MAX-WIDTH 21
+  COLUMN-LABEL "Discount"
+  HELP "Total amount of discount"
+  DECIMALS 6
+  ORDER 210
+
+ADD FIELD "StartFee" OF "FixCDR" AS decimal 
+  FORMAT "zzz9.99"
+  INITIAL "0"
+  LABEL "Startcharge"
+  POSITION 29
+  MAX-WIDTH 17
+  COLUMN-LABEL "Startcharge"
+  HELP "Start Charge"
+  DECIMALS 2
+  ORDER 250
+
+ADD FIELD "VatIncl" OF "FixCDR" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "yes"
+  LABEL "VAT Included"
+  POSITION 30
+  MAX-WIDTH 1
+  COLUMN-LABEL "VAT Incl"
+  HELP "Is VAT included in price"
+  ORDER 260
+
+ADD FIELD "DiscType" OF "FixCDR" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Discount"
+  POSITION 31
+  MAX-WIDTH 4
+  COLUMN-LABEL "Discount"
+  HELP "Rab. based to: 0) No 1)Land / B-sub 2) Product 3) Volum / prod."
+  ORDER 270
+
+ADD FIELD "Prefix" OF "FixCDR" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "CH-filname"
+  POSITION 32
+  MAX-WIDTH 24
+  COLUMN-LABEL "CH-filname"
+  HELP "Name of CDR File where this record was read"
+  ORDER 280
+
+ADD FIELD "TrunkIn" OF "FixCDR" AS character 
+  FORMAT "x(7)"
+  INITIAL ""
+  LABEL "Trunk in"
+  POSITION 33
+  MAX-WIDTH 14
+  COLUMN-LABEL "Trunk in"
+  HELP "CGR In"
+  ORDER 290
+
+ADD FIELD "PKDuration" OF "FixCDR" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "Peak secs."
+  POSITION 34
+  MAX-WIDTH 4
+  COLUMN-LABEL "PeakSecs"
+  HELP "Seconds under the peak-period"
+  ORDER 300
+
+ADD FIELD "OPDuration" OF "FixCDR" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "OffPk Secs"
+  POSITION 35
+  MAX-WIDTH 4
+  COLUMN-LABEL "OffPkSecs"
+  HELP "Seconds under the off-peak period"
+  ORDER 310
+
+ADD FIELD "OperIn" OF "FixCDR" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "ExchIn"
+  POSITION 38
+  MAX-WIDTH 16
+  COLUMN-LABEL "ExchIn"
+  HELP "Call Received from Exchange"
+  ORDER 340
+
+ADD FIELD "OperOut" OF "FixCDR" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "ExchOut"
+  POSITION 39
+  MAX-WIDTH 16
+  COLUMN-LABEL "ExchOut"
+  HELP "Call Sent to Exchange"
+  ORDER 350
+
+ADD FIELD "NetPrice" OF "FixCDR" AS decimal 
+  FORMAT "zz,zz9.99"
+  INITIAL "0"
+  LABEL "NetRate"
+  POSITION 41
+  MAX-WIDTH 21
+  COLUMN-LABEL "NetRate"
+  HELP "Call's Net rate"
+  DECIMALS 6
+  ORDER 370
+
+ADD FIELD "CSub" OF "FixCDR" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "C-sub"
+  POSITION 46
+  MAX-WIDTH 50
+  COLUMN-LABEL "C-sub"
+  HELP "C-number"
+  ORDER 420
+
+ADD FIELD "ExCode" OF "FixCDR" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "Switch"
+  POSITION 47
+  MAX-WIDTH 4
+  COLUMN-LABEL "Switch"
+  HELP "Switch that created CDR for this call"
+  ORDER 430
+
+ADD FIELD "DialType" OF "FixCDR" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Dialling Type"
+  POSITION 49
+  MAX-WIDTH 4
+  COLUMN-LABEL "DialType"
+  HELP "Dialling type"
+  ORDER 630
+
+ADD FIELD "Connection" OF "FixCDR" AS logical 
+  FORMAT "I/D"
+  INITIAL "no"
+  LABEL "A-sub type"
+  POSITION 53
+  MAX-WIDTH 1
+  COLUMN-LABEL "A-sub type"
+  HELP "Is this a call with a-sub prefix (Indirect) or not (Direct)"
+  ORDER 490
+
+ADD FIELD "TariffId" OF "FixCDR" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "RateRowid"
+  POSITION 54
+  MAX-WIDTH 4
+  COLUMN-LABEL "RateRowid"
+  HELP "Consecutive row identification number"
+  ORDER 500
+
+ADD FIELD "BSubType" OF "FixCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "B-Type"
+  POSITION 56
+  MAX-WIDTH 4
+  COLUMN-LABEL "B-Type"
+  HELP "B-subscriber type, used with FTAM server."
+  ORDER 520
+
+ADD FIELD "CLIType" OF "FixCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "A-Type"
+  POSITION 57
+  MAX-WIDTH 4
+  COLUMN-LABEL "A-Type"
+  HELP "A-subscriber type, used with FTAM server."
+  ORDER 530
+
+ADD FIELD "PeakType" OF "FixCDR" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Peak type"
+  POSITION 58
+  MAX-WIDTH 4
+  COLUMN-LABEL "Peak type"
+  HELP "Calls peak type for calculating amounts (1=Peak,2=OffPeak)"
+  ORDER 540
+
+ADD FIELD "PCMIn" OF "FixCDR" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "PCB In"
+  POSITION 59
+  MAX-WIDTH 4
+  COLUMN-LABEL "PCB In"
+  HELP "PCB In"
+  ORDER 550
+
+ADD FIELD "TSIn" OF "FixCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "TS In"
+  POSITION 60
+  MAX-WIDTH 4
+  COLUMN-LABEL "TS In"
+  HELP "TS in"
+  ORDER 560
+
+ADD FIELD "PCMOut" OF "FixCDR" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "PCB Out"
+  POSITION 61
+  MAX-WIDTH 4
+  COLUMN-LABEL "PCB Out"
+  HELP "PCB out"
+  ORDER 570
+
+ADD FIELD "TSOut" OF "FixCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "TS Out"
+  POSITION 62
+  MAX-WIDTH 4
+  COLUMN-LABEL "TS Out"
+  HELP "TS out"
+  ORDER 580
+
+ADD FIELD "OperSent" OF "FixCDR" AS logical 
+  FORMAT "Yes/No"
+  INITIAL ?
+  POSITION 63
+  MAX-WIDTH 1
+  HELP "Is this call sent to invoicing operator ?"
+  ORDER 590
+
+ADD FIELD "CSubType" OF "FixCDR" AS integer 
+  FORMAT ">9"
+  INITIAL ?
+  LABEL "C-Type"
+  POSITION 64
+  MAX-WIDTH 4
+  COLUMN-LABEL "C-Type"
+  HELP "C-subscriber type"
+  ORDER 600
+
+ADD FIELD "InvSeq" OF "FixCDR" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "InvSeq"
+  POSITION 65
+  MAX-WIDTH 4
+  COLUMN-LABEL "InvSeq"
+  HELP "Invoice sequence"
+  ORDER 610
+
+ADD FIELD "BillTarget" OF "FixCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Billing Target"
+  POSITION 66
+  MAX-WIDTH 4
+  COLUMN-LABEL "Bill.Targ"
+  HELP "Customer's billing target"
+  ORDER 620
+
+ADD FIELD "CurrUnit" OF "FixCDR" AS logical 
+  FORMAT "Full/Sub"
+  INITIAL "?"
+  LABEL "CurrUnit"
+  POSITION 67
+  MAX-WIDTH 1
+  COLUMN-LABEL "CurrUnit"
+  HELP "Currency FULL (1) or SUB (1/100)"
+  ORDER 70
+
+ADD INDEX "Date" ON "FixCDR" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "Date" ASCENDING 
+  INDEX-FIELD "TimeStart" ASCENDING 
+
+ADD INDEX "BSub" ON "FixCDR" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "BSub" ASCENDING 
+  INDEX-FIELD "Date" DESCENDING 
+  INDEX-FIELD "TimeStart" DESCENDING 
+
+ADD INDEX "CLI" ON "FixCDR" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CLI" ASCENDING 
+  INDEX-FIELD "Date" ASCENDING 
+  INDEX-FIELD "TimeEnd" ASCENDING 
+
+ADD INDEX "InvCust" ON "FixCDR" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "InvCust" ASCENDING 
+  INDEX-FIELD "Date" ASCENDING 
+  INDEX-FIELD "TimeStart" ASCENDING 
+
+ADD INDEX "invseq" ON "FixCDR" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "InvSeq" ASCENDING 
+
+ADD INDEX "RepCust" ON "FixCDR" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "RepCust" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "Date" ASCENDING 
+  INDEX-FIELD "TimeStart" ASCENDING 
+
+ADD TABLE "FixErrCDR"
+  AREA "Sta_Data_256"
+  LABEL "FixErrCDR"
+  DESCRIPTION "Call Detail Records"
+  DUMP-NAME "FixErrCD"
+
+ADD FIELD "Date" OF "FixErrCDR" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "CallDate"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "CallDate"
+  HELP "Call's date"
+  ORDER 10
+
+ADD FIELD "TimeStart" OF "FixErrCDR" AS integer 
+  FORMAT "zzzz9"
+  INITIAL "0"
+  LABEL "Begin"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Begin"
+  HELP "Call started at"
+  ORDER 20
+
+ADD FIELD "TimeEnd" OF "FixErrCDR" AS integer 
+  FORMAT "zzzz9"
+  INITIAL "0"
+  LABEL "End"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "End"
+  HELP "Call ended"
+  ORDER 30
+
+ADD FIELD "Duration" OF "FixErrCDR" AS integer 
+  FORMAT "zzzz9"
+  INITIAL "0"
+  LABEL "Durat"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Durat"
+  HELP "Calls duration (sec)"
+  ORDER 40
+
+ADD FIELD "CLI" OF "FixErrCDR" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "A-number"
+  POSITION 6
+  MAX-WIDTH 24
+  COLUMN-LABEL "A-number"
+  HELP "A-sub. number"
+  ORDER 50
+
+ADD FIELD "BSub" OF "FixErrCDR" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "B-sub "
+  POSITION 7
+  MAX-WIDTH 50
+  COLUMN-LABEL "B-sub "
+  HELP "B-number"
+  ORDER 60
+
+ADD FIELD "CustNum" OF "FixErrCDR" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Caller"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Caller"
+  HELP "Customer number of the A-subscriber"
+  ORDER 71
+
+ADD FIELD "InvCust" OF "FixErrCDR" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Payer"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "Payer"
+  HELP "No. of customer who is being billed"
+  ORDER 80
+
+ADD FIELD "RepCust" OF "FixErrCDR" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Report Customer"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "Report Customer"
+  HELP "Customer who receives call report(s)"
+  ORDER 90
+
+ADD FIELD "BillCode" OF "FixErrCDR" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Product"
+  POSITION 11
+  MAX-WIDTH 32
+  COLUMN-LABEL "Product"
+  HELP "Product code"
+  ORDER 100
+  MANDATORY
+
+ADD FIELD "SpecialDuration" OF "FixErrCDR" AS integer 
+  FORMAT "zzzzz9"
+  INITIAL "0"
+  LABEL "L.Eta"
+  POSITION 12
+  MAX-WIDTH 70
+  COLUMN-LABEL "L.Eta"
+  HELP "Recycled field"
+  EXTENT 5
+  ORDER 109
+
+ADD FIELD "SpecialPrice" OF "FixErrCDR" AS decimal 
+  FORMAT "z9.999"
+  INITIAL "0"
+  LABEL "Price p/s"
+  POSITION 13
+  MAX-WIDTH 70
+  COLUMN-LABEL "Price p/s"
+  HELP "Recycled field"
+  EXTENT 5
+  DECIMALS 3
+  ORDER 119
+
+ADD FIELD "GrossPrice" OF "FixErrCDR" AS decimal 
+  FORMAT "zz,zz9.99"
+  INITIAL "0"
+  LABEL "GrossRate"
+  POSITION 14
+  MAX-WIDTH 21
+  COLUMN-LABEL "GrossRate"
+  HELP "Call's gross price"
+  DECIMALS 6
+  ORDER 130
+
+ADD FIELD "Disc%" OF "FixErrCDR" AS decimal 
+  FORMAT "z9.99"
+  INITIAL "0"
+  LABEL "Disc%"
+  POSITION 15
+  MAX-WIDTH 17
+  COLUMN-LABEL "Disc%"
+  HELP "Applicable volume discount %"
+  DECIMALS 2
+  ORDER 140
+
+ADD FIELD "Priced" OF "FixErrCDR" AS logical 
+  FORMAT "K/E"
+  INITIAL "no"
+  LABEL "Price"
+  POSITION 16
+  MAX-WIDTH 1
+  COLUMN-LABEL "Price"
+  HELP "Is the call rated"
+  ORDER 150
+
+ADD FIELD "CCN" OF "FixErrCDR" AS integer 
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "Country"
+  POSITION 18
+  MAX-WIDTH 4
+  COLUMN-LABEL "Country"
+  HELP "Land's number"
+  ORDER 170
+
+ADD FIELD "RateCust" OF "FixErrCDR" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "RatingCustomer"
+  POSITION 19
+  MAX-WIDTH 4
+  COLUMN-LABEL "RatingCustomer"
+  HELP "Customer No. whose price plan is used"
+  ORDER 95
+
+ADD FIELD "BDest" OF "FixErrCDR" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "B-subNo"
+  POSITION 20
+  MAX-WIDTH 50
+  COLUMN-LABEL "B-subNo"
+  HELP "B-number's 'priced' share "
+  ORDER 180
+
+ADD FIELD "TrunkOut" OF "FixErrCDR" AS character 
+  FORMAT "x(7)"
+  INITIAL ""
+  LABEL "Trunk"
+  POSITION 21
+  MAX-WIDTH 14
+  COLUMN-LABEL "Trunk"
+  HELP "Outgoing trunk"
+  ORDER 190
+
+ADD FIELD "TBPrice" OF "FixErrCDR" AS decimal 
+  FORMAT "zz9.99999"
+  INITIAL "0"
+  LABEL "Rate /sec"
+  POSITION 22
+  MAX-WIDTH 120
+  COLUMN-LABEL "Rate /sec"
+  HELP "Call's price ex discounts / sec"
+  EXTENT 6
+  DECIMALS 5
+  ORDER 120
+
+ADD FIELD "TBDuration" OF "FixErrCDR" AS integer 
+  FORMAT "zzzzz9"
+  INITIAL "0"
+  LABEL "Duration"
+  POSITION 23
+  MAX-WIDTH 84
+  COLUMN-LABEL "Duration"
+  HELP "Call's duration (sec) within each timeband"
+  EXTENT 6
+  ORDER 110
+
+ADD FIELD "DiscValue" OF "FixErrCDR" AS decimal 
+  FORMAT "z,zz9.99"
+  INITIAL "0"
+  LABEL "Discount"
+  POSITION 24
+  MAX-WIDTH 21
+  COLUMN-LABEL "Discount"
+  HELP "Total amount of discount"
+  DECIMALS 6
+  ORDER 210
+
+ADD FIELD "StartFee" OF "FixErrCDR" AS decimal 
+  FORMAT "zzz9.99"
+  INITIAL "0"
+  LABEL "Startcharge"
+  POSITION 29
+  MAX-WIDTH 17
+  COLUMN-LABEL "Startcharge"
+  HELP "Start Charge"
+  DECIMALS 2
+  ORDER 250
+
+ADD FIELD "VatIncl" OF "FixErrCDR" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "yes"
+  LABEL "VAT Included"
+  POSITION 30
+  MAX-WIDTH 1
+  COLUMN-LABEL "VAT Incl"
+  HELP "Is VAT included in price"
+  ORDER 260
+
+ADD FIELD "DiscType" OF "FixErrCDR" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Discount"
+  POSITION 31
+  MAX-WIDTH 4
+  COLUMN-LABEL "Discount"
+  HELP "Rab. based to: 0) No 1)Land / B-sub 2) Product 3) Volum / prod."
+  ORDER 270
+
+ADD FIELD "Prefix" OF "FixErrCDR" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "CH-filname"
+  POSITION 32
+  MAX-WIDTH 24
+  COLUMN-LABEL "CH-filname"
+  HELP "Name of CDR File where this record was read"
+  ORDER 280
+
+ADD FIELD "TrunkIn" OF "FixErrCDR" AS character 
+  FORMAT "x(7)"
+  INITIAL ""
+  LABEL "Trunk in"
+  POSITION 33
+  MAX-WIDTH 14
+  COLUMN-LABEL "Trunk in"
+  HELP "CGR In"
+  ORDER 290
+
+ADD FIELD "PKDuration" OF "FixErrCDR" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "Peak secs."
+  POSITION 34
+  MAX-WIDTH 4
+  COLUMN-LABEL "PeakSecs"
+  HELP "Seconds under the peak-period"
+  ORDER 300
+
+ADD FIELD "OPDuration" OF "FixErrCDR" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "OffPk Secs"
+  POSITION 35
+  MAX-WIDTH 4
+  COLUMN-LABEL "OffPkSecs"
+  HELP "Seconds under the off-peak period"
+  ORDER 310
+
+ADD FIELD "OperIn" OF "FixErrCDR" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "ExchIn"
+  POSITION 38
+  MAX-WIDTH 16
+  COLUMN-LABEL "ExchIn"
+  HELP "Call Received from Exchange"
+  ORDER 340
+
+ADD FIELD "OperOut" OF "FixErrCDR" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "ExchOut"
+  POSITION 39
+  MAX-WIDTH 16
+  COLUMN-LABEL "ExchOut"
+  HELP "Call Sent to Exchange"
+  ORDER 350
+
+ADD FIELD "NetPrice" OF "FixErrCDR" AS decimal 
+  FORMAT "zz,zz9.99"
+  INITIAL "0"
+  LABEL "NetRate"
+  POSITION 41
+  MAX-WIDTH 21
+  COLUMN-LABEL "NetRate"
+  HELP "Call's Net rate"
+  DECIMALS 6
+  ORDER 370
+
+ADD FIELD "CSub" OF "FixErrCDR" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "C-sub"
+  POSITION 46
+  MAX-WIDTH 50
+  COLUMN-LABEL "C-sub"
+  HELP "C-number"
+  ORDER 420
+
+ADD FIELD "ExCode" OF "FixErrCDR" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "Switch"
+  POSITION 47
+  MAX-WIDTH 4
+  COLUMN-LABEL "Switch"
+  HELP "Switch that created CDR for this call"
+  ORDER 430
+
+ADD FIELD "DialType" OF "FixErrCDR" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Dialling Type"
+  POSITION 49
+  MAX-WIDTH 4
+  COLUMN-LABEL "DialType"
+  HELP "Dialling type"
+  ORDER 630
+
+ADD FIELD "Connection" OF "FixErrCDR" AS logical 
+  FORMAT "I/D"
+  INITIAL "no"
+  LABEL "A-sub type"
+  POSITION 53
+  MAX-WIDTH 1
+  COLUMN-LABEL "A-sub type"
+  HELP "Is this a call with a-sub prefix (Indirect) or not (Direct)"
+  ORDER 490
+
+ADD FIELD "TariffId" OF "FixErrCDR" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "RateRowid"
+  POSITION 54
+  MAX-WIDTH 4
+  COLUMN-LABEL "RateRowid"
+  HELP "Consecutive row identification number"
+  ORDER 500
+
+ADD FIELD "BSubType" OF "FixErrCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "B-Type"
+  POSITION 56
+  MAX-WIDTH 4
+  COLUMN-LABEL "B-Type"
+  HELP "B-subscriber type, used with FTAM server."
+  ORDER 520
+
+ADD FIELD "CLIType" OF "FixErrCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "A-Type"
+  POSITION 57
+  MAX-WIDTH 4
+  COLUMN-LABEL "A-Type"
+  HELP "A-subscriber type, used with FTAM server."
+  ORDER 530
+
+ADD FIELD "PeakType" OF "FixErrCDR" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Peak type"
+  POSITION 58
+  MAX-WIDTH 4
+  COLUMN-LABEL "Peak type"
+  HELP "Calls peak type for calculating amounts (1=Peak,2=OffPeak)"
+  ORDER 540
+
+ADD FIELD "PCMIn" OF "FixErrCDR" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "PCB In"
+  POSITION 59
+  MAX-WIDTH 4
+  COLUMN-LABEL "PCB In"
+  HELP "PCB In"
+  ORDER 550
+
+ADD FIELD "TSIn" OF "FixErrCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "TS In"
+  POSITION 60
+  MAX-WIDTH 4
+  COLUMN-LABEL "TS In"
+  HELP "TS in"
+  ORDER 560
+
+ADD FIELD "PCMOut" OF "FixErrCDR" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "PCB Out"
+  POSITION 61
+  MAX-WIDTH 4
+  COLUMN-LABEL "PCB Out"
+  HELP "PCB out"
+  ORDER 570
+
+ADD FIELD "TSOut" OF "FixErrCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "TS Out"
+  POSITION 62
+  MAX-WIDTH 4
+  COLUMN-LABEL "TS Out"
+  HELP "TS out"
+  ORDER 580
+
+ADD FIELD "OperSent" OF "FixErrCDR" AS logical 
+  FORMAT "Yes/No"
+  INITIAL ?
+  POSITION 63
+  MAX-WIDTH 1
+  HELP "Is this call sent to invoicing operator ?"
+  ORDER 590
+
+ADD FIELD "CSubType" OF "FixErrCDR" AS integer 
+  FORMAT ">9"
+  INITIAL ?
+  LABEL "C-Type"
+  POSITION 64
+  MAX-WIDTH 4
+  COLUMN-LABEL "C-Type"
+  HELP "C-subscriber type"
+  ORDER 600
+
+ADD FIELD "ErrNum" OF "FixErrCDR" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "ErrNum"
+  POSITION 65
+  MAX-WIDTH 4
+  COLUMN-LABEL "ErrNum"
+  HELP "Rating error number"
+  ORDER 621
+
+ADD FIELD "BillTarget" OF "FixErrCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Billing Target"
+  POSITION 66
+  MAX-WIDTH 4
+  COLUMN-LABEL "Bill.Targ"
+  HELP "Customer's billing target"
+  ORDER 620
+
+ADD FIELD "CurrUnit" OF "FixErrCDR" AS logical 
+  FORMAT "Full/Sub"
+  INITIAL "?"
+  LABEL "CurrUnit"
+  POSITION 67
+  MAX-WIDTH 1
+  COLUMN-LABEL "CurrUnit"
+  HELP "Currency FULL (1) or SUB (1/100)"
+  ORDER 70
+
+ADD FIELD "InvSeq" OF "FixErrCDR" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "InvSeq"
+  POSITION 68
+  MAX-WIDTH 4
+  COLUMN-LABEL "InvSeq"
+  HELP "Invoice sequence"
+  ORDER 610
+
+ADD INDEX "Date" ON "FixErrCDR" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "Date" ASCENDING 
+  INDEX-FIELD "TimeStart" ASCENDING 
+
+ADD INDEX "ErrNum" ON "FixErrCDR" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "ErrNum" ASCENDING 
+  INDEX-FIELD "Date" ASCENDING 
+
+ADD INDEX "InvCust" ON "FixErrCDR" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "InvCust" ASCENDING 
+  INDEX-FIELD "Date" ASCENDING 
+  INDEX-FIELD "TimeStart" ASCENDING 
+
+ADD TABLE "jobcron"
+  AREA "Sta_Data_256"
+  DUMP-NAME "jobcron"
+
+ADD FIELD "jobgroup" OF "jobcron" AS character 
+  FORMAT "X(10)"
+  INITIAL ""
+  LABEL "Job group"
+  POSITION 2
+  MAX-WIDTH 20
+  HELP "Job group code"
+  ORDER 10
+
+ADD FIELD "number" OF "jobcron" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Number"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Job groups sequence number"
+  ORDER 20
+
+ADD FIELD "InputData" OF "jobcron" AS character 
+  FORMAT "X(256)"
+  INITIAL ""
+  LABEL "Input Data"
+  POSITION 4
+  MAX-WIDTH 512
+  HELP "starEntry list"
+  ORDER 30
+
+ADD FIELD "programcode" OF "jobcron" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Programcode"
+  POSITION 5
+  MAX-WIDTH 24
+  HELP "Programcode"
+  ORDER 25
+
+ADD INDEX "number" ON "jobcron" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "jobgroup" ASCENDING 
+  INDEX-FIELD "number" ASCENDING 
+
+ADD INDEX "programCode" ON "jobcron" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "jobgroup" ASCENDING 
+
+ADD TABLE "jobgroup"
+  AREA "Sta_Data_256"
+  DUMP-NAME "jobgroup"
+
+ADD FIELD "jobgroup" OF "jobgroup" AS character 
+  FORMAT "X(10)"
+  INITIAL ""
+  LABEL "Job group"
+  POSITION 2
+  MAX-WIDTH 20
+  HELP "Job group code"
+  ORDER 10
+
+ADD FIELD "description" OF "jobgroup" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Description"
+  POSITION 3
+  MAX-WIDTH 100
+  HELP "Description of group"
+  ORDER 20
+
+ADD FIELD "schedulegroup" OF "jobgroup" AS character 
+  DESCRIPTION "manually,daily,weekly,monthly"
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Schedule group"
+  POSITION 4
+  MAX-WIDTH 20
+  HELP "Schedule group code"
+  ORDER 30
+
+ADD FIELD "scheduleDay" OF "jobgroup" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Schedule day"
+  POSITION 5
+  MAX-WIDTH 16
+  HELP "Schedule day code"
+  ORDER 40
+
+ADD FIELD "launchTime" OF "jobgroup" AS character 
+  FORMAT "X(5)"
+  INITIAL ""
+  LABEL "Launch"
+  POSITION 6
+  MAX-WIDTH 10
+  HELP "Time to launch"
+  ORDER 50
+
+ADD FIELD "lastTime" OF "jobgroup" AS character 
+  FORMAT "X(5)"
+  INITIAL ""
+  LABEL "Last"
+  POSITION 7
+  MAX-WIDTH 10
+  HELP "Last time to lauch"
+  ORDER 60
+
+ADD FIELD "interval" OF "jobgroup" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "Interval"
+  POSITION 8
+  MAX-WIDTH 4
+  HELP "Interval in minutes"
+  ORDER 70
+
+ADD FIELD "queueNumber" OF "jobgroup" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Queue number"
+  POSITION 9
+  MAX-WIDTH 4
+  HELP "0=any queue,1...999 queues"
+  ORDER 80
+
+ADD FIELD "onlyoneQueued" OF "jobgroup" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Only one queued"
+  POSITION 10
+  MAX-WIDTH 1
+  HELP "Only one queued job"
+  ORDER 90
+
+ADD FIELD "runType" OF "jobgroup" AS character 
+  DESCRIPTION "Periphal / sequental run"
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Run type"
+  POSITION 11
+  MAX-WIDTH 16
+  HELP "Run type"
+  ORDER 100
+
+ADD INDEX "jobgroup" ON "jobgroup" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "jobgroup" ASCENDING 
+
+ADD INDEX "schedulegroup" ON "jobgroup" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "schedulegroup" ASCENDING 
+  INDEX-FIELD "scheduleDay" ASCENDING 
+
+ADD TABLE "jobparameter"
+  AREA "Sta_Data_256"
+  DUMP-NAME "jobparam"
+
+ADD FIELD "programcode" OF "jobparameter" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Programcode"
+  POSITION 2
+  MAX-WIDTH 24
+  HELP "Programcode"
+  ORDER 10
+
+ADD FIELD "rowNumber" OF "jobparameter" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Row"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "RowNumber"
+  ORDER 20
+
+ADD FIELD "fieldNumber" OF "jobparameter" AS integer 
+  FORMAT "9"
+  INITIAL "1"
+  LABEL "Field"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Field number"
+  ORDER 30
+
+ADD FIELD "fieldLabel" OF "jobparameter" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Label"
+  POSITION 5
+  MAX-WIDTH 30
+  HELP "Field label"
+  ORDER 50
+
+ADD FIELD "fieldViewAs" OF "jobparameter" AS character 
+  FORMAT "X(12)"
+  INITIAL "FILL-IN"
+  LABEL "View As"
+  POSITION 6
+  MAX-WIDTH 24
+  HELP "Field view-as"
+  ORDER 60
+
+ADD FIELD "fieldDataType" OF "jobparameter" AS character 
+  FORMAT "X(12)"
+  INITIAL "CHARACTER"
+  LABEL "Data type"
+  POSITION 7
+  MAX-WIDTH 24
+  HELP "Field data type"
+  ORDER 70
+
+ADD FIELD "fieldFormat" OF "jobparameter" AS character 
+  FORMAT "X(12)"
+  INITIAL "X(8)"
+  LABEL "Format"
+  POSITION 8
+  MAX-WIDTH 24
+  HELP "Field format"
+  ORDER 80
+
+ADD FIELD "ForEach" OF "jobparameter" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "FOR EACH"
+  POSITION 9
+  MAX-WIDTH 100
+  HELP "FOR EACH clause if needed"
+  ORDER 100
+
+ADD FIELD "DataField" OF "jobparameter" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "DataField"
+  POSITION 10
+  MAX-WIDTH 24
+  HELP "Data field"
+  ORDER 110
+
+ADD FIELD "LabelField" OF "jobparameter" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Label field"
+  POSITION 11
+  MAX-WIDTH 24
+  ORDER 120
+
+ADD FIELD "searchfieldname" OF "jobparameter" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Search"
+  POSITION 13
+  MAX-WIDTH 30
+  HELP "Field name of search value"
+  ORDER 130
+  MANDATORY
+
+ADD FIELD "initvalueProgram" OF "jobparameter" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Init Program"
+  POSITION 14
+  MAX-WIDTH 80
+  HELP "Init value program"
+  ORDER 140
+
+ADD FIELD "fieldName" OF "jobparameter" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 15
+  MAX-WIDTH 30
+  HELP "Field name"
+  ORDER 40
+
+ADD FIELD "fieldHelp" OF "jobparameter" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  LABEL "Help"
+  POSITION 16
+  MAX-WIDTH 100
+  HELP "Help"
+  ORDER 150
+
+ADD FIELD "biggerThan" OF "jobparameter" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Bigger than"
+  POSITION 17
+  MAX-WIDTH 24
+  HELP "This equal or begger that given field"
+  ORDER 160
+
+ADD FIELD "fieldItemValue" OF "jobparameter" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "ItemValues"
+  POSITION 18
+  MAX-WIDTH 100
+  HELP "Combo-box,Toggle-box,Radio-set item values"
+  ORDER 90
+
+ADD INDEX "main" ON "jobparameter" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "programcode" ASCENDING 
+  INDEX-FIELD "rowNumber" ASCENDING 
+  INDEX-FIELD "fieldNumber" ASCENDING 
+
+ADD INDEX "fieldname" ON "jobparameter" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "programcode" ASCENDING 
+  INDEX-FIELD "fieldName" ASCENDING 
+
+ADD TABLE "jobQConfig"
+  AREA "Sta_Data_256"
+  DUMP-NAME "jobqconf"
+
+ADD FIELD "queueNumber" OF "jobQConfig" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Queue number"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "1...999 queues"
+  ORDER 150
+
+ADD FIELD "queuestatus" OF "jobQConfig" AS logical 
+  FORMAT "Active/Stopped"
+  INITIAL "Active"
+  LABEL "Active"
+  POSITION 3
+  MAX-WIDTH 1
+  ORDER 160
+
+ADD FIELD "queueType" OF "jobQConfig" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Type"
+  POSITION 4
+  MAX-WIDTH 16
+  HELP "Queue type"
+  ORDER 170
+
+ADD INDEX "Queue" ON "jobQConfig" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "queueNumber" ASCENDING 
+
+ADD TABLE "JobQueue"
+  AREA "Sta_Data_256"
+  LABEL "Job Queue"
+  DESCRIPTION "Job Queue"
+  DUMP-NAME "jobqueue"
+
+ADD FIELD "JobNum" OF "JobQueue" AS integer 
+  FORMAT ">>>,>>>,>>9"
+  INITIAL "0"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Job Id"
+  HELP "Job Id. Number which identify job"
+  ORDER 10
+
+ADD FIELD "QueueDate" OF "JobQueue" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "Queued Date"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Date when put to queue"
+  ORDER 60
+
+ADD FIELD "QueueTime" OF "JobQueue" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Queued Time"
+  POSITION 4
+  MAX-WIDTH 16
+  HELP "Time when put to queue"
+  ORDER 70
+
+ADD FIELD "RunDate" OF "JobQueue" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "Run Date"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "Date when launch"
+  ORDER 40
+
+ADD FIELD "RunTime" OF "JobQueue" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Run Time"
+  POSITION 6
+  MAX-WIDTH 16
+  HELP "Time when launch"
+  ORDER 50
+
+ADD FIELD "Priority" OF "JobQueue" AS integer 
+  FORMAT ">9"
+  INITIAL "90"
+  LABEL "Priority"
+  POSITION 7
+  MAX-WIDTH 4
+  HELP "Queue priority 0 = faster.. 99=slower.. 90=default"
+  ORDER 30
+
+ADD FIELD "JobState" OF "JobQueue" AS integer 
+  DESCRIPTION "0 = queue
+5 = running
+6 = aborted
+7 = error
+9 = done"
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Status"
+  POSITION 8
+  MAX-WIDTH 4
+  HELP "Job status"
+  ORDER 20
+
+ADD FIELD "ProgramCode" OF "JobQueue" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "ProgramCode"
+  POSITION 9
+  MAX-WIDTH 24
+  HELP "ProgramCode"
+  ORDER 80
+
+ADD FIELD "UserCode" OF "JobQueue" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "UserCode"
+  POSITION 10
+  MAX-WIDTH 16
+  HELP "Job owner"
+  ORDER 90
+
+ADD FIELD "UserName" OF "JobQueue" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "User name"
+  POSITION 11
+  MAX-WIDTH 100
+  HELP "Job owner real name"
+  ORDER 100
+
+ADD FIELD "InputData" OF "JobQueue" AS character 
+  FORMAT "X(256)"
+  INITIAL ""
+  LABEL "Input Data"
+  POSITION 15
+  MAX-WIDTH 512
+  HELP "starEntry list"
+  ORDER 110
+
+ADD FIELD "CommitDate" OF "JobQueue" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "Commit Date"
+  POSITION 16
+  MAX-WIDTH 4
+  HELP "Date when job is commited"
+  ORDER 120
+
+ADD FIELD "CommitTime" OF "JobQueue" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Commit time"
+  POSITION 17
+  MAX-WIDTH 16
+  HELP "Time when job is commited"
+  ORDER 130
+
+ADD FIELD "TotalTime" OF "JobQueue" AS character 
+  FORMAT "X(10)"
+  INITIAL ""
+  LABEL "Total time"
+  POSITION 18
+  MAX-WIDTH 20
+  HELP "Total time. Format ""HHHH:MM:SS"""
+  ORDER 140
+
+ADD FIELD "queueNumber" OF "JobQueue" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Queue number"
+  POSITION 25
+  MAX-WIDTH 4
+  HELP "0=workstation,1...999 queues"
+  ORDER 150
+
+ADD FIELD "jobgroup" OF "JobQueue" AS character 
+  FORMAT "X(10)"
+  INITIAL ""
+  LABEL "Job group"
+  POSITION 26
+  MAX-WIDTH 20
+  HELP "Job group code"
+  ORDER 160
+
+ADD FIELD "number" OF "JobQueue" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Number"
+  POSITION 27
+  MAX-WIDTH 4
+  HELP "Job groups sequence number"
+  ORDER 170
+
+ADD FIELD "archive" OF "JobQueue" AS character 
+  DESCRIPTION "Default
+Year
+Month
+Week
+Permanent"
+  FORMAT "X(10)"
+  INITIAL "Default"
+  LABEL "Archive"
+  POSITION 28
+  MAX-WIDTH 20
+  HELP "Archive time"
+  ORDER 180
+
+ADD FIELD "logfile" OF "JobQueue" AS character 
+  DESCRIPTION "max 16384 characters"
+  FORMAT "X(78)"
+  INITIAL ""
+  LABEL "Log File"
+  POSITION 29
+  MAX-WIDTH 156
+  HELP "Log File information"
+  ORDER 190
+
+ADD INDEX "JobNum" ON "JobQueue" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "JobNum" ASCENDING 
+
+ADD INDEX "archive" ON "JobQueue" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "archive" ASCENDING 
+  INDEX-FIELD "CommitDate" ASCENDING 
+
+ADD INDEX "JobGroup" ON "JobQueue" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "jobgroup" ASCENDING 
+  INDEX-FIELD "number" ASCENDING 
+  INDEX-FIELD "QueueDate" ASCENDING 
+  INDEX-FIELD "QueueTime" ASCENDING 
+
+ADD INDEX "JobState" ON "JobQueue" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "JobState" ASCENDING 
+  INDEX-FIELD "QueueDate" ASCENDING 
+  INDEX-FIELD "QueueTime" ASCENDING 
+
+ADD INDEX "Priority" ON "JobQueue" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "JobState" ASCENDING 
+  INDEX-FIELD "Priority" ASCENDING 
+  INDEX-FIELD "QueueDate" ASCENDING 
+  INDEX-FIELD "QueueTime" ASCENDING 
+
+ADD INDEX "programCode" ON "JobQueue" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "ProgramCode" ASCENDING 
+  INDEX-FIELD "QueueDate" ASCENDING 
+  INDEX-FIELD "QueueTime" ASCENDING 
+
+ADD INDEX "Queue" ON "JobQueue" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "queueNumber" ASCENDING 
+  INDEX-FIELD "JobState" ASCENDING 
+  INDEX-FIELD "Priority" ASCENDING 
+  INDEX-FIELD "QueueDate" ASCENDING 
+  INDEX-FIELD "QueueTime" ASCENDING 
+
+ADD INDEX "UserCode" ON "JobQueue" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "UserCode" ASCENDING 
+  INDEX-FIELD "JobState" ASCENDING 
+  INDEX-FIELD "QueueDate" ASCENDING 
+  INDEX-FIELD "QueueTime" ASCENDING 
+
+ADD INDEX "UserCode_ProgramCode" ON "JobQueue" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "UserCode" ASCENDING 
+  INDEX-FIELD "ProgramCode" ASCENDING 
+  INDEX-FIELD "QueueDate" DESCENDING 
+  INDEX-FIELD "QueueTime" DESCENDING 
+
+ADD TABLE "localProgram"
+  AREA "Sta_Data_256"
+  DUMP-NAME "lprogram"
+
+ADD FIELD "programcode" OF "localProgram" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Programcode"
+  POSITION 2
+  MAX-WIDTH 24
+  HELP "Programcode"
+  ORDER 10
+
+ADD FIELD "rightgroup" OF "localProgram" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "RightGroup"
+  POSITION 3
+  MAX-WIDTH 24
+  HELP "Right group code"
+  ORDER 20
+
+ADD FIELD "PrintDestinations" OF "localProgram" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Print destinations"
+  POSITION 4
+  MAX-WIDTH 80
+  HELP "Available print destinations"
+  ORDER 30
+
+ADD FIELD "emailCode" OF "localProgram" AS integer 
+  DESCRIPTION "0=all
+1=self
+2=to list
+3=not allowed"
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "eMail code"
+  POSITION 5
+  MAX-WIDTH 4
+  ORDER 40
+
+ADD FIELD "eMail" OF "localProgram" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "eMail"
+  POSITION 6
+  MAX-WIDTH 100
+  HELP "eMail addresses. Each address to own line"
+  ORDER 50
+
+ADD FIELD "menutooltip" OF "localProgram" AS character 
+  FORMAT "X(256)"
+  INITIAL ""
+  LABEL "Tooltip"
+  POSITION 7
+  MAX-WIDTH 512
+  HELP "Program tooltip. Shows on menus... local text"
+  ORDER 60
+
+ADD FIELD "archive" OF "localProgram" AS character 
+  DESCRIPTION "Default
+Year
+Month
+Week
+Permanent"
+  FORMAT "X(10)"
+  INITIAL ""
+  LABEL "Archive"
+  POSITION 8
+  MAX-WIDTH 20
+  HELP "Archive time"
+  ORDER 70
+
+ADD INDEX "programcode" ON "localProgram" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "programcode" ASCENDING 
+
+ADD TABLE "MedCTX"
+  AREA "Sta_Data_256"
+  LABEL "MedCTX"
+  DESCRIPTION "CDR preprosessor file CENTREX sections"
+  DUMP-NAME "medctx"
+
+ADD FIELD "CtxId" OF "MedCTX" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 2
+  MAX-WIDTH 16
+  COLUMN-LABEL "Name"
+  HELP "Name of FreePhone Centrex Group"
+  ORDER 10
+
+ADD FIELD "CtxFrom" OF "MedCTX" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "From"
+  POSITION 3
+  MAX-WIDTH 24
+  COLUMN-LABEL "From"
+  HELP "Number series FROM"
+  ORDER 20
+
+ADD FIELD "CtxTo" OF "MedCTX" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "TO"
+  POSITION 4
+  MAX-WIDTH 24
+  COLUMN-LABEL "TO"
+  HELP "Number series TO"
+  ORDER 30
+
+ADD FIELD "Ident" OF "MedCTX" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Ident"
+  POSITION 5
+  MAX-WIDTH 16
+  COLUMN-LABEL "Ident"
+  HELP "Identification name of the switch / fidex"
+  ORDER 80
+
+ADD FIELD "Memo" OF "MedCTX" AS character 
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "Memo"
+  POSITION 6
+  MAX-WIDTH 610
+  COLUMN-LABEL "Memo"
+  HELP "Explanation / memory field for centrex number series"
+  EXTENT 5
+  ORDER 90
+
+ADD FIELD "CustNum" OF "MedCTX" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Customer"
+  HELP "Customer's number"
+  ORDER 100
+  MANDATORY
+
+ADD INDEX "Ident" ON "MedCTX" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Ident" ASCENDING 
+  INDEX-FIELD "CtxId" ASCENDING 
+  INDEX-FIELD "CtxFrom" ASCENDING 
+  INDEX-FIELD "CtxTo" ASCENDING 
+
+ADD INDEX "CtxId" ON "MedCTX" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CtxId" ASCENDING 
+  INDEX-FIELD "CtxFrom" ASCENDING 
+
+ADD INDEX "CustNum" ON "MedCTX" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "CtxId" ASCENDING 
+  INDEX-FIELD "CtxFrom" ASCENDING 
+
+ADD TABLE "MedDefTrunk"
+  AREA "Sta_Data_256"
+  LABEL "MedDefTrunk"
+  DESCRIPTION "CDR preprosessing file default CGR values"
+  DUMP-NAME "meddeftr"
+
+ADD FIELD "Categ" OF "MedDefTrunk" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "Category"
+  POSITION 2
+  MAX-WIDTH 2
+  COLUMN-LABEL "Category"
+  HELP "Category"
+  ORDER 10
+
+ADD FIELD "DefName" OF "MedDefTrunk" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 3
+  MAX-WIDTH 24
+  COLUMN-LABEL "Name"
+  HELP "Name"
+  ORDER 20
+
+ADD FIELD "Range" OF "MedDefTrunk" AS character 
+  FORMAT "x(9)"
+  INITIAL ""
+  LABEL "Range"
+  POSITION 4
+  MAX-WIDTH 18
+  COLUMN-LABEL "Range"
+  HELP "Range"
+  ORDER 30
+
+ADD FIELD "OpCode" OF "MedDefTrunk" AS character 
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "Operator"
+  POSITION 5
+  MAX-WIDTH 8
+  COLUMN-LABEL "Operator"
+  HELP "Operator"
+  ORDER 40
+
+ADD FIELD "Type" OF "MedDefTrunk" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "Type"
+  POSITION 6
+  MAX-WIDTH 2
+  COLUMN-LABEL "Type"
+  HELP "Type"
+  ORDER 50
+
+ADD FIELD "DefFrom" OF "MedDefTrunk" AS character 
+  FORMAT "x(4)"
+  INITIAL "0"
+  LABEL "From"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "From"
+  ORDER 60
+
+ADD FIELD "DefTo" OF "MedDefTrunk" AS character 
+  FORMAT "x(4)"
+  INITIAL "0"
+  LABEL "To"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "To"
+  ORDER 70
+
+ADD FIELD "Ident" OF "MedDefTrunk" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Ident"
+  POSITION 9
+  MAX-WIDTH 16
+  COLUMN-LABEL "Ident"
+  HELP "Identification"
+  ORDER 80
+
+ADD FIELD "ExCode" OF "MedDefTrunk" AS character 
+  FORMAT "x(8)"
+  INITIAL "0"
+  LABEL "Ex-num"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "Ex-num"
+  HELP "Exchange number"
+  ORDER 90
+
+ADD INDEX "Ident" ON "MedDefTrunk" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Ident" ASCENDING 
+  INDEX-FIELD "DefFrom" ASCENDING 
+  INDEX-FIELD "DefTo" ASCENDING 
+  INDEX-FIELD "DefName" ASCENDING 
+  INDEX-FIELD "Categ" ASCENDING 
+
+ADD INDEX "DefName" ON "MedDefTrunk" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "DefName" ASCENDING 
+  INDEX-FIELD "Ident" ASCENDING 
+  INDEX-FIELD "DefFrom" ASCENDING 
+  INDEX-FIELD "DefTo" ASCENDING 
+  INDEX-FIELD "Categ" ASCENDING 
+
+ADD TABLE "MedHist"
+  AREA "Sta_Data_256"
+  LABEL "MedHist"
+  DESCRIPTION "CDR preprosessor file history"
+  DUMP-NAME "medhist"
+
+ADD FIELD "FileName" OF "MedHist" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "FileName"
+  POSITION 2
+  MAX-WIDTH 40
+  COLUMN-LABEL "FileName"
+  HELP "Name of the configuration file"
+  ORDER 10
+
+ADD FIELD "Ident" OF "MedHist" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Ident"
+  POSITION 3
+  MAX-WIDTH 16
+  COLUMN-LABEL "Ident"
+  HELP "Identification"
+  ORDER 80
+
+ADD FIELD "Date" OF "MedHist" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Date"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Date"
+  HELP "Valid from date"
+  ORDER 90
+
+ADD FIELD "FileTime" OF "MedHist" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Time"
+  POSITION 5
+  MAX-WIDTH 16
+  COLUMN-LABEL "Time"
+  HELP "Valid from time"
+  ORDER 100
+
+ADD FIELD "FileExt" OF "MedHist" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "Extension"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Extension"
+  HELP "Extension"
+  ORDER 110
+
+ADD INDEX "file" ON "MedHist" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Ident" ASCENDING 
+  INDEX-FIELD "FileExt" ASCENDING 
+
+ADD INDEX "Date" ON "MedHist" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "Date" ASCENDING 
+  INDEX-FIELD "FileTime" ASCENDING 
+  INDEX-FIELD "Ident" ASCENDING 
+  INDEX-FIELD "FileName" ASCENDING 
+
+ADD INDEX "ftam-switch" ON "MedHist" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "Ident" ASCENDING 
+  INDEX-FIELD "FileName" ASCENDING 
+  INDEX-FIELD "Date" ASCENDING 
+  INDEX-FIELD "FileTime" ASCENDING 
+
+ADD TABLE "MedSect"
+  AREA "Sta_Data_256"
+  LABEL "MedSect"
+  DESCRIPTION "CDR preprosessing file sections"
+  DUMP-NAME "medsect"
+
+ADD FIELD "Name" OF "MedSect" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 2
+  MAX-WIDTH 24
+  COLUMN-LABEL "Name"
+  HELP "Name"
+  ORDER 10
+
+ADD FIELD "Num" OF "MedSect" AS character 
+  FORMAT "x(3)"
+  INITIAL ""
+  LABEL "Num"
+  POSITION 3
+  MAX-WIDTH 6
+  COLUMN-LABEL "Num"
+  HELP "Number"
+  ORDER 20
+
+ADD FIELD "Type" OF "MedSect" AS integer 
+  FORMAT "z9"
+  INITIAL "0"
+  LABEL "Type"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Type"
+  HELP "Type"
+  ORDER 30
+
+ADD FIELD "Resvd" OF "MedSect" AS logical 
+  FORMAT "Y/N"
+  INITIAL "no"
+  LABEL "Reserverd"
+  POSITION 5
+  MAX-WIDTH 1
+  COLUMN-LABEL "Reserverd"
+  HELP "Value Yes/No"
+  ORDER 40
+
+ADD FIELD "Pref" OF "MedSect" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Prefix"
+  POSITION 6
+  MAX-WIDTH 24
+  COLUMN-LABEL "Prefix"
+  HELP "Prefix for this subscriber type"
+  ORDER 50
+
+ADD FIELD "Uniq" OF "MedSect" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Unique"
+  POSITION 7
+  MAX-WIDTH 1
+  COLUMN-LABEL "Unique"
+  HELP "Is this prefix unique (or use all that begin with this) ?"
+  ORDER 60
+
+ADD FIELD "Abs" OF "MedSect" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Abs.type"
+  POSITION 8
+  MAX-WIDTH 1
+  COLUMN-LABEL "ABS"
+  HELP "Absolute type"
+  ORDER 70
+
+ADD FIELD "APref" OF "MedSect" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "Abs.pref"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "Abs.pref"
+  HELP "Absolute prefix"
+  ORDER 80
+
+ADD FIELD "NPref" OF "MedSect" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "NatPref"
+  POSITION 10
+  MAX-WIDTH 1
+  COLUMN-LABEL "NatPref"
+  HELP "Check special national prefix (Yes/No)"
+  ORDER 90
+
+ADD INDEX "Type" ON "MedSect" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Type" ASCENDING 
+
+ADD INDEX "Name" ON "MedSect" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "Name" ASCENDING 
+  INDEX-FIELD "Type" ASCENDING 
+
+ADD TABLE "MedTrunk"
+  AREA "Sta_Data_256"
+  LABEL "MedTrunk"
+  DESCRIPTION "CDR preprosessing file CDR ranges"
+  DUMP-NAME "medtrunk"
+
+ADD FIELD "Categ" OF "MedTrunk" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "Category"
+  POSITION 2
+  MAX-WIDTH 2
+  COLUMN-LABEL "Category"
+  HELP "Category derived for this range in mediation"
+  ORDER 10
+
+ADD FIELD "TrName" OF "MedTrunk" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 3
+  MAX-WIDTH 24
+  COLUMN-LABEL "Name"
+  HELP "Trunk Group Name"
+  ORDER 20
+
+ADD FIELD "OpCode" OF "MedTrunk" AS character 
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "Operator"
+  POSITION 4
+  MAX-WIDTH 8
+  COLUMN-LABEL "Operator"
+  HELP "Operator Code"
+  ORDER 40
+
+ADD FIELD "Ident" OF "MedTrunk" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Ident"
+  POSITION 5
+  MAX-WIDTH 16
+  COLUMN-LABEL "Ident"
+  HELP "Meditation Device Name"
+  ORDER 80
+
+ADD FIELD "Type" OF "MedTrunk" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "Type"
+  POSITION 6
+  MAX-WIDTH 2
+  COLUMN-LABEL "Type"
+  HELP "Traffic Type"
+  ORDER 50
+
+ADD FIELD "TrFrom" OF "MedTrunk" AS character 
+  FORMAT "x(4)"
+  INITIAL "0"
+  LABEL "From"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Trunk Group Range From"
+  ORDER 60
+
+ADD FIELD "TrTo" OF "MedTrunk" AS character 
+  FORMAT "x(4)"
+  INITIAL "0"
+  LABEL "To"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Trunk Group Range To"
+  ORDER 70
+
+ADD FIELD "ExCode" OF "MedTrunk" AS character 
+  FORMAT "x(8)"
+  INITIAL "0"
+  LABEL "Exchange Code"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "Exchange Code"
+  HELP "Exchange Code"
+  ORDER 90
+
+ADD FIELD "Direction" OF "MedTrunk" AS character 
+  FORMAT "X(3)"
+  INITIAL ""
+  LABEL "IO Type"
+  POSITION 10
+  MAX-WIDTH 6
+  COLUMN-LABEL "IO Type"
+  HELP "Traffic Direction (I,O,IO)"
+  ORDER 100
+
+ADD INDEX "Ident" ON "MedTrunk" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Ident" ASCENDING 
+  INDEX-FIELD "TrFrom" ASCENDING 
+  INDEX-FIELD "TrTo" ASCENDING 
+  INDEX-FIELD "TrName" ASCENDING 
+  INDEX-FIELD "Categ" ASCENDING 
+
+ADD INDEX "ExCode" ON "MedTrunk" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "ExCode" ASCENDING 
+  INDEX-FIELD "TrFrom" ASCENDING 
+  INDEX-FIELD "TrTo" ASCENDING 
+
+ADD INDEX "TrName" ON "MedTrunk" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "TrName" ASCENDING 
+  INDEX-FIELD "Ident" ASCENDING 
+  INDEX-FIELD "TrFrom" ASCENDING 
+  INDEX-FIELD "TrTo" ASCENDING 
+  INDEX-FIELD "Categ" ASCENDING 
+
+ADD TABLE "menu"
+  AREA "Sta_Data_256"
+  LABEL "Menu"
+  DUMP-NAME "menu"
+
+ADD FIELD "applcode" OF "menu" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Application"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Application code. Internal use only"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "menucode" OF "menu" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "MenuCode"
+  POSITION 3
+  MAX-WIDTH 16
+  HELP "MenuCode for menu"
+  ORDER 20
+
+ADD FIELD "name" OF "menu" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 4
+  MAX-WIDTH 80
+  HELP "Menu name"
+  ORDER 30
+
+ADD FIELD "version" OF "menu" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Version"
+  POSITION 5
+  MAX-WIDTH 16
+  HELP "Version. Blank = ""default"""
+  ORDER 40
+
+ADD FIELD "rightgroup" OF "menu" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "RightGroup"
+  POSITION 6
+  MAX-WIDTH 24
+  HELP "Right group code"
+  ORDER 50
+
+ADD FIELD "visible" OF "menu" AS logical 
+  FORMAT "yes/no"
+  INITIAL "yes"
+  LABEL "Visible"
+  POSITION 7
+  MAX-WIDTH 1
+  HELP "If no, only programs can call this menu"
+  ORDER 60
+
+ADD FIELD "menutooltip" OF "menu" AS character 
+  FORMAT "X(256)"
+  INITIAL ""
+  LABEL "Tooltip"
+  POSITION 8
+  MAX-WIDTH 512
+  HELP "Menu tooltip."
+  ORDER 70
+
+ADD FIELD "sortField" OF "menu" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "SortField"
+  POSITION 9
+  MAX-WIDTH 24
+  HELP "Sort order of menues"
+  ORDER 80
+
+ADD FIELD "iconfile" OF "menu" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Iconfile"
+  POSITION 10
+  MAX-WIDTH 80
+  HELP "Icon shows in menues.."
+  ORDER 90
+
+ADD INDEX "main" ON "menu" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "applcode" ASCENDING 
+  INDEX-FIELD "menucode" ASCENDING 
+
+ADD INDEX "menucode" ON "menu" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "menucode" ASCENDING 
+
+ADD INDEX "name" ON "menu" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "name" ASCENDING 
+
+ADD INDEX "sortField" ON "menu" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "sortField" ASCENDING 
+
+ADD TABLE "menuitem"
+  AREA "Sta_Data_256"
+  LABEL "MenuItem"
+  DUMP-NAME "menuitem"
+
+ADD FIELD "applcode" OF "menuitem" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Application"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Application code. Internal use only"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "menucode" OF "menuitem" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "MenuCode"
+  POSITION 3
+  MAX-WIDTH 16
+  HELP "MenuCode for menu"
+  ORDER 20
+
+ADD FIELD "itemnumber" OF "menuitem" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Number"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "Itemnumber."
+  ORDER 50
+
+ADD FIELD "programcode" OF "menuitem" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Programcode"
+  POSITION 7
+  MAX-WIDTH 24
+  HELP "Programcode"
+  ORDER 60
+
+ADD FIELD "submenucode" OF "menuitem" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "SubMenuCode"
+  POSITION 8
+  MAX-WIDTH 16
+  HELP "Menumenu code for menu"
+  ORDER 80
+
+ADD FIELD "subapplcode" OF "menuitem" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "SubApplication"
+  POSITION 9
+  MAX-WIDTH 16
+  HELP "Submenu application code."
+  ORDER 70
+  MANDATORY
+
+ADD INDEX "item" ON "menuitem" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "applcode" ASCENDING 
+  INDEX-FIELD "menucode" ASCENDING 
+  INDEX-FIELD "itemnumber" ASCENDING 
+
+ADD INDEX "programcode" ON "menuitem" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "programcode" ASCENDING 
+
+ADD INDEX "submenu" ON "menuitem" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "subapplcode" ASCENDING 
+  INDEX-FIELD "submenucode" ASCENDING 
+
+ADD TABLE "messages"
+  AREA "Sta_Data_256"
+  LABEL "Messages"
+  DUMP-NAME "messages"
+
+ADD FIELD "messageID" OF "messages" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "MessageID"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "Message number."
+  ORDER 30
+
+ADD FIELD "filename" OF "messages" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Filename"
+  POSITION 3
+  MAX-WIDTH 100
+  HELP "Filename with directoryname.Blank.. Universal numbers"
+  ORDER 20
+
+ADD FIELD "messageText" OF "messages" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Text"
+  POSITION 4
+  MAX-WIDTH 100
+  HELP "Message text. Show's on beginin os message and logs"
+  ORDER 40
+
+ADD FIELD "messageDescription" OF "messages" AS character 
+  FORMAT "X(256)"
+  INITIAL ""
+  LABEL "Description"
+  POSITION 5
+  MAX-WIDTH 512
+  HELP "Message description. Shows only on end on message"
+  ORDER 50
+
+ADD FIELD "viewAsType" OF "messages" AS character 
+  FORMAT "X(15)"
+  INITIAL "MESSAGE"
+  LABEL "VIEW-AS"
+  POSITION 6
+  MAX-WIDTH 30
+  HELP "View-as type"
+  ORDER 60
+
+ADD FIELD "buttonsType" OF "messages" AS character 
+  FORMAT "X(15)"
+  INITIAL "OK"
+  LABEL "Buttons"
+  POSITION 7
+  MAX-WIDTH 30
+  HELP "Buttons type"
+  ORDER 70
+
+ADD FIELD "logFile" OF "messages" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "LogFile"
+  POSITION 8
+  MAX-WIDTH 1
+  VIEW-AS "VIEW-AS TOGGLE-BOX"
+  HELP "Does this message goes to logfile"
+  ORDER 80
+
+ADD FIELD "messageType" OF "messages" AS character 
+  FORMAT "X(10)"
+  INITIAL "Star"
+  LABEL "Type"
+  POSITION 9
+  MAX-WIDTH 20
+  HELP "Message Type"
+  ORDER 10
+
+ADD INDEX "messageId" ON "messages" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "messageType" ASCENDING 
+  INDEX-FIELD "filename" ASCENDING 
+  INDEX-FIELD "messageID" ASCENDING 
+
+ADD INDEX "filename" ON "messages" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "filename" ASCENDING 
+  INDEX-FIELD "messageType" ASCENDING 
+  INDEX-FIELD "messageID" ASCENDING 
+
+ADD INDEX "MessageText" ON "messages" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "messageText" ASCENDING 
+
+ADD TABLE "moreinfo"
+  AREA "Sta_Data_256"
+  LABEL "MoreInfo"
+  DESCRIPTION "Moreinfo menus"
+  DUMP-NAME "moreinfo"
+
+ADD FIELD "name" OF "moreinfo" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 2
+  MAX-WIDTH 80
+  HELP "Program name. Use menu labels and program title"
+  ORDER 30
+
+ADD FIELD "number" OF "moreinfo" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Number"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Number for moreinfo"
+  ORDER 20
+
+ADD FIELD "makemenus" OF "moreinfo" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Make menus"
+  POSITION 4
+  MAX-WIDTH 1
+  HELP "Make menus"
+  ORDER 40
+
+ADD FIELD "makebuttons" OF "moreinfo" AS logical 
+  FORMAT "yes/no"
+  INITIAL "yes"
+  LABEL "Make buttons"
+  POSITION 5
+  MAX-WIDTH 1
+  HELP "Make buttons"
+  ORDER 50
+
+ADD FIELD "programcode" OF "moreinfo" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Programcode"
+  POSITION 6
+  MAX-WIDTH 24
+  HELP "Programcode"
+  ORDER 10
+
+ADD INDEX "moreinfo" ON "moreinfo" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "programcode" ASCENDING 
+  INDEX-FIELD "number" ASCENDING 
+
+ADD TABLE "moreinfoitem"
+  AREA "Sta_Data_256"
+  LABEL "More Info Item"
+  DUMP-NAME "moreitem"
+
+ADD FIELD "number" OF "moreinfoitem" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Number"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "Number for moreinfo"
+  ORDER 20
+
+ADD FIELD "itemnumber" OF "moreinfoitem" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Item"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Item number"
+  ORDER 30
+
+ADD FIELD "programcode" OF "moreinfoitem" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Programcode"
+  POSITION 4
+  MAX-WIDTH 24
+  HELP "Programcode"
+  ORDER 10
+
+ADD FIELD "startprogramcode" OF "moreinfoitem" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Programcode"
+  POSITION 5
+  MAX-WIDTH 24
+  HELP "Programcode for starting program"
+  ORDER 40
+
+ADD FIELD "msdo" OF "moreinfoitem" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Main SDO"
+  POSITION 6
+  MAX-WIDTH 100
+  HELP "Program with recursize directory"
+  ORDER 50
+
+ADD FIELD "msdofields" OF "moreinfoitem" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Main SDO fields"
+  POSITION 7
+  MAX-WIDTH 100
+  HELP "List of main logicalfieldnames"
+  ORDER 60
+
+ADD FIELD "ssdo" OF "moreinfoitem" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Sub SDO"
+  POSITION 8
+  MAX-WIDTH 100
+  HELP "Program with recursize directory"
+  ORDER 70
+
+ADD FIELD "ssdofields" OF "moreinfoitem" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Sub SDO fields"
+  POSITION 9
+  MAX-WIDTH 100
+  HELP "List of main logicalfieldnames"
+  ORDER 80
+
+ADD FIELD "paramterstr" OF "moreinfoitem" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Parameter"
+  POSITION 10
+  MAX-WIDTH 100
+  HELP "Special parameter to subprogram.."
+  ORDER 90
+
+ADD FIELD "accelerator" OF "moreinfoitem" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Accelerator"
+  POSITION 11
+  MAX-WIDTH 40
+  HELP "Accelerator key"
+  ORDER 100
+
+ADD INDEX "itemnumber" ON "moreinfoitem" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "programcode" ASCENDING 
+  INDEX-FIELD "number" ASCENDING 
+  INDEX-FIELD "itemnumber" ASCENDING 
+
+ADD INDEX "msdo" ON "moreinfoitem" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "msdo" ASCENDING 
+
+ADD INDEX "ssdo" ON "moreinfoitem" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "ssdo" ASCENDING 
+
+ADD INDEX "startprogramcode" ON "moreinfoitem" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "startprogramcode" ASCENDING 
+
+ADD TABLE "MsReqStatistic"
+  AREA "Dyn_Data_128"
+  DUMP-NAME "MsReqStatistic"
+
+ADD FIELD "ReqType" OF "MsReqStatistic" AS integer 
+  DESCRIPTION "Request type"
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "Request type"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Type"
+  HELP "Request type"
+  ORDER 10
+
+ADD FIELD "ReqStatus" OF "MsReqStatistic" AS integer 
+  DESCRIPTION "Available status of MsRequest"
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "MsRequest Status"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "RequestStatus"
+  HELP "Request status"
+  ORDER 20
+
+ADD FIELD "ReqStatusCount" OF "MsReqStatistic" AS integer 
+  DESCRIPTION "The number of msrequests per reqtype and reqstatus"
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "MsRequest Status Count"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "ReqStatusCount"
+  HELP "Count of statuses"
+  ORDER 30
+
+ADD FIELD "Brand" OF "MsReqStatistic" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 5
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 40
+
+ADD INDEX "ReqType" ON "MsReqStatistic" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "ReqType" ASCENDING 
+  INDEX-FIELD "ReqStatus" ASCENDING 
+
+ADD TABLE "MsReqStatisticQ"
+  AREA "Dyn_Data_128"
+  DUMP-NAME "MsReqStatisticQ"
+
+ADD FIELD "Brand" OF "MsReqStatisticQ" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 10
+
+ADD FIELD "ReqType" OF "MsReqStatisticQ" AS integer 
+  DESCRIPTION "MsRequest type"
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "MsRequest type"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Type Of MsRequest"
+  ORDER 20
+
+ADD FIELD "ReqStatus" OF "MsReqStatisticQ" AS integer 
+  DESCRIPTION "MsRequest status"
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "MsRequest Status"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "ReqStat"
+  HELP "Status Code"
+  ORDER 30
+
+ADD FIELD "ReqStatUpdate" OF "MsReqStatisticQ" AS integer 
+  DESCRIPTION "MsRequest status count update"
+  FORMAT "-9"
+  INITIAL "0"
+  LABEL "Update Count"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Update"
+  HELP "Update status count"
+  ORDER 40
+
+ADD INDEX "Brand" ON "MsReqStatisticQ" 
+  AREA "Dyn_Index_1"
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+
+ADD TABLE "NatPref"
+  AREA "Sta_Data_256"
+  LABEL "NatPref"
+  DESCRIPTION "Special prefixes for national B-sub. numbers"
+  DUMP-NAME "natpref"
+
+ADD FIELD "BDest" OF "NatPref" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Nat B-sub"
+  POSITION 2
+  MAX-WIDTH 32
+  COLUMN-LABEL "Nat B-sub"
+  HELP "A National B-subscriber number"
+  ORDER 10
+
+ADD FIELD "Pref" OF "NatPref" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Prefix"
+  POSITION 3
+  MAX-WIDTH 16
+  COLUMN-LABEL "Prefix"
+  HELP "An alphanumeric prefix that is to be added into B-sub. no"
+  ORDER 20
+
+ADD FIELD "Memo" OF "NatPref" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Memo"
+  POSITION 4
+  MAX-WIDTH 60
+  COLUMN-LABEL "Memo"
+  HELP "Memo Text"
+  ORDER 30
+
+ADD INDEX "BDest" ON "NatPref" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "BDest" ASCENDING 
+
+ADD INDEX "Pref" ON "NatPref" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "Pref" ASCENDING 
+  INDEX-FIELD "BDest" ASCENDING 
+
+ADD TABLE "NumPlan"
+  AREA "Sta_Data_256"
+  LABEL "NumPlan"
+  DESCRIPTION "Numbering plan"
+  DUMP-NAME "numplan"
+
+ADD FIELD "AreaCode" OF "NumPlan" AS character 
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "Area"
+  POSITION 2
+  MAX-WIDTH 8
+  COLUMN-LABEL "Area"
+  HELP "Area Code"
+  ORDER 10
+
+ADD FIELD "Prefix" OF "NumPlan" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "Series"
+  POSITION 3
+  MAX-WIDTH 12
+  COLUMN-LABEL "Series"
+  HELP "1 - 4 firsts numbers in phonenumber after the areacode"
+  ORDER 20
+
+ADD FIELD "Operator" OF "NumPlan" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Operator"
+  POSITION 4
+  MAX-WIDTH 16
+  COLUMN-LABEL "Operator"
+  HELP "Operator code, 1 - 8 characters"
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "State" OF "NumPlan" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Status"
+  POSITION 5
+  MAX-WIDTH 32
+  COLUMN-LABEL "Status"
+  HELP "Status of number series"
+  ORDER 40
+
+ADD FIELD "NumLength" OF "NumPlan" AS integer 
+  FORMAT "z9"
+  INITIAL "0"
+  LABEL "Length"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Length"
+  HELP """Total length of tel. number (without first """"0"""")"""
+  ORDER 50
+
+ADD INDEX "Prefix" ON "NumPlan" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Prefix" ASCENDING 
+
+ADD INDEX "AreaCode" ON "NumPlan" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "AreaCode" ASCENDING 
+  INDEX-FIELD "Prefix" ASCENDING 
+
+ADD INDEX "Operator" ON "NumPlan" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "Operator" ASCENDING 
+  INDEX-FIELD "AreaCode" ASCENDING 
+  INDEX-FIELD "Prefix" ASCENDING 
+
+ADD TABLE "OLRefresh"
+  AREA "Sta_Data_256"
+  LABEL "OLRefresh"
+  DESCRIPTION "Log for updated files"
+  DUMP-NAME "olrefres"
+
+ADD FIELD "State" OF "OLRefresh" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "Yes"
+  LABEL "St."
+  POSITION 2
+  MAX-WIDTH 1
+  COLUMN-LABEL "St."
+  HELP "Are there unread updates in database ?"
+  ORDER 10
+
+ADD TABLE "Presel"
+  AREA "Schema Area"
+  LABEL "Preselection transactions"
+  DESCRIPTION "Preselction transactions"
+  DUMP-NAME "presel"
+
+ADD FIELD "CustNum" OF "Presel" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Customer"
+  HELP "Customer's number"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "CLI" OF "Presel" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Subscriber No"
+  POSITION 3
+  MAX-WIDTH 40
+  COLUMN-LABEL "Subscriber No"
+  HELP "Subscriber (Telephone) number with area code"
+  ORDER 20
+
+ADD FIELD "PsType" OF "Presel" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Type"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Type"
+  VALEXP "INPUT pstype < 4"
+  VALMSG "Type of preselction MUST be 0 ... 3 !"
+  HELP "Type of presel. 0):None 1):Nat 2):Intn'l 3):Both"
+  ORDER 30
+
+ADD FIELD "PsSeq" OF "Presel" AS integer 
+  FORMAT "zzzzzz9"
+  INITIAL "0"
+  LABEL "Sequence"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Seq"
+  HELP "Internal sequence no for a transaction"
+  ORDER 40
+
+ADD FIELD "Orderer" OF "Presel" AS character 
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "Name of Orderer"
+  POSITION 6
+  MAX-WIDTH 120
+  COLUMN-LABEL "Orderer"
+  HELP "Name of person who made this order at customer"
+  ORDER 60
+
+ADD FIELD "ReturnCode" OF "Presel" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Rc"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Rc"
+  HELP "Return Code"
+  ORDER 70
+
+ADD FIELD "ErrText" OF "Presel" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Error expl"
+  POSITION 8
+  MAX-WIDTH 40
+  COLUMN-LABEL "Expl"
+  HELP "Additional explanation of error"
+  ORDER 80
+
+ADD FIELD "AuthNo" OF "Presel" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "AuthNo"
+  POSITION 9
+  MAX-WIDTH 20
+  COLUMN-LABEL "AuthNo"
+  HELP "Number or code of authorization"
+  ORDER 90
+
+ADD FIELD "AuthDate" OF "Presel" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "AuthDate"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "AuthDate"
+  HELP "Date of Authorisation"
+  ORDER 100
+
+ADD FIELD "CrStamp" OF "Presel" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Created"
+  POSITION 11
+  MAX-WIDTH 20
+  COLUMN-LABEL "Created"
+  HELP "TimeStamp: created"
+  DECIMALS 5
+  ORDER 110
+
+ADD FIELD "ChStamp" OF "Presel" AS decimal 
+  DESCRIPTION "Time Stamp yyyymmdd.time (sec)"
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Changed"
+  POSITION 12
+  MAX-WIDTH 20
+  COLUMN-LABEL "Changed"
+  HELP "Date and Time When Preselect record was last changed"
+  DECIMALS 5
+  ORDER 120
+
+ADD FIELD "ConfDate" OF "Presel" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Date of confirm"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "ConfDate"
+  HELP "Date of confirmation"
+  ORDER 130
+
+ADD FIELD "FileSeq1" OF "Presel" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "OutFileSeq"
+  POSITION 14
+  MAX-WIDTH 4
+  COLUMN-LABEL "OutFileSeq"
+  HELP "Sequence of OutputFile"
+  ORDER 140
+
+ADD FIELD "SentDate" OF "Presel" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "SentDate"
+  POSITION 15
+  MAX-WIDTH 4
+  COLUMN-LABEL "SentDate"
+  HELP "Date when preselection has been sent"
+  ORDER 150
+
+ADD FIELD "FileSeq2" OF "Presel" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "InFileSeq"
+  POSITION 16
+  MAX-WIDTH 4
+  COLUMN-LABEL "InFileSeq"
+  HELP "Sequence of InputFile"
+  ORDER 160
+
+ADD FIELD "AuthNo2" OF "Presel" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "AuthNo"
+  POSITION 17
+  MAX-WIDTH 20
+  COLUMN-LABEL "AuthNo"
+  HELP "Second Authorisation code"
+  ORDER 170
+
+ADD FIELD "CustName" OF "Presel" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Customer's name"
+  POSITION 18
+  MAX-WIDTH 60
+  COLUMN-LABEL "Customer's name"
+  HELP "Customer's name"
+  ORDER 180
+
+ADD FIELD "OrgCode" OF "Presel" AS character 
+  FORMAT "x(11)"
+  INITIAL ""
+  LABEL "Org/pers. nr"
+  POSITION 19
+  MAX-WIDTH 22
+  COLUMN-LABEL "Org/pers. nr"
+  HELP "Customer's organisation number or personal number"
+  ORDER 190
+
+ADD INDEX "CLI" ON "Presel" 
+  AREA "Schema Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "CLI" ASCENDING 
+
+ADD INDEX "CustNum" ON "Presel" 
+  AREA "Schema Area"
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "CLI" ASCENDING 
+
+ADD INDEX "fileseq" ON "Presel" 
+  AREA "Schema Area"
+  INDEX-FIELD "FileSeq1" ASCENDING 
+
+ADD TABLE "printer"
+  AREA "Sta_Data_256"
+  DUMP-NAME "printer"
+
+ADD FIELD "PrinterCode" OF "printer" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Printer code"
+  POSITION 2
+  MAX-WIDTH 24
+  HELP "Visual name of printer"
+  ORDER 10
+
+ADD FIELD "port" OF "printer" AS character 
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Port"
+  POSITION 3
+  MAX-WIDTH 60
+  HELP "Fysical port name"
+  ORDER 20
+
+ADD FIELD "command" OF "printer" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Command"
+  POSITION 4
+  MAX-WIDTH 100
+  HELP "Output through command"
+  ORDER 30
+
+ADD FIELD "printerType" OF "printer" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Printer type"
+  POSITION 5
+  MAX-WIDTH 16
+  HELP "Printer type. Postscritp,PCL"
+  ORDER 40
+
+ADD INDEX "main" ON "printer" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "PrinterCode" ASCENDING 
+
+ADD TABLE "progjob"
+  AREA "Sta_Data_256"
+  LABEL "Program jobs"
+  DUMP-NAME "progjob"
+
+ADD FIELD "programcode" OF "progjob" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Programcode"
+  POSITION 2
+  MAX-WIDTH 24
+  HELP "Programcode"
+  ORDER 30
+
+ADD FIELD "job" OF "progjob" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Job"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Number of job"
+  ORDER 10
+
+ADD FIELD "usercode" OF "progjob" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "User"
+  POSITION 4
+  MAX-WIDTH 16
+  HELP "User code"
+  ORDER 40
+
+ADD FIELD "action" OF "progjob" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Action"
+  POSITION 5
+  MAX-WIDTH 40
+  HELP "Action: Planing,Develoment,Testing"
+  ORDER 60
+
+ADD FIELD "description" OF "progjob" AS character 
+  FORMAT "X(78)"
+  INITIAL ""
+  LABEL "Description"
+  POSITION 6
+  MAX-WIDTH 156
+  ORDER 70
+
+ADD FIELD "startdate" OF "progjob" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "Start"
+  POSITION 7
+  MAX-WIDTH 4
+  HELP "Start date"
+  ORDER 80
+
+ADD FIELD "enddate" OF "progjob" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "End"
+  POSITION 8
+  MAX-WIDTH 4
+  HELP "End date"
+  ORDER 90
+
+ADD FIELD "statuscode" OF "progjob" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Statuscode"
+  POSITION 9
+  MAX-WIDTH 4
+  HELP "0=wait,10=work on,20=waiting infromation,99=complete"
+  ORDER 50
+
+ADD FIELD "lastchanged" OF "progjob" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "Last changed"
+  POSITION 10
+  MAX-WIDTH 4
+  ORDER 100
+
+ADD FIELD "lastuser" OF "progjob" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Last user"
+  POSITION 11
+  MAX-WIDTH 16
+  ORDER 110
+
+ADD FIELD "applcode" OF "progjob" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Application"
+  POSITION 12
+  MAX-WIDTH 16
+  HELP "Application code. Internal use only"
+  ORDER 20
+  MANDATORY
+
+ADD INDEX "job" ON "progjob" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "job" ASCENDING 
+
+ADD INDEX "application" ON "progjob" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "applcode" ASCENDING 
+  INDEX-FIELD "job" ASCENDING 
+
+ADD INDEX "programcode" ON "progjob" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "programcode" ASCENDING 
+  INDEX-FIELD "job" ASCENDING 
+
+ADD INDEX "statuscode" ON "progjob" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "statuscode" ASCENDING 
+  INDEX-FIELD "programcode" ASCENDING 
+
+ADD INDEX "userstatus" ON "progjob" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "usercode" ASCENDING 
+  INDEX-FIELD "statuscode" ASCENDING 
+  INDEX-FIELD "programcode" ASCENDING 
+
+ADD TABLE "program"
+  AREA "Sta_Index_2"
+  LABEL "Program"
+  DESCRIPTION "Program specification"
+  DUMP-NAME "program"
+
+ADD FIELD "program" OF "program" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Program"
+  POSITION 2
+  MAX-WIDTH 80
+  HELP "Program with recursize directory"
+  ORDER 10
+
+ADD FIELD "name" OF "program" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 3
+  MAX-WIDTH 80
+  HELP "Program name. Use menu labels and program title"
+  ORDER 20
+
+ADD FIELD "paramstr" OF "program" AS character 
+  DESCRIPTION "Program got these information in PRIVATE-DATA"
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Parameters"
+  POSITION 5
+  MAX-WIDTH 80
+  HELP "Parameters to program"
+  ORDER 40
+
+ADD FIELD "iconfile" OF "program" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Iconfile"
+  POSITION 6
+  MAX-WIDTH 80
+  HELP "Icon shows in menues.."
+  ORDER 50
+
+ADD FIELD "menutooltip" OF "program" AS character 
+  FORMAT "X(256)"
+  INITIAL ""
+  LABEL "Tooltip"
+  POSITION 7
+  MAX-WIDTH 512
+  HELP "Program tooltip. Shows on menus..."
+  ORDER 60
+
+ADD FIELD "programcode" OF "program" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Programcode"
+  POSITION 8
+  MAX-WIDTH 24
+  HELP "Programcode"
+  ORDER 30
+
+ADD FIELD "rightgroup" OF "program" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "RightGroup"
+  POSITION 9
+  MAX-WIDTH 24
+  HELP "Right group code"
+  ORDER 70
+
+ADD FIELD "programstastus" OF "program" AS logical 
+  FORMAT "yes/no"
+  INITIAL "yes"
+  LABEL "Active"
+  POSITION 10
+  MAX-WIDTH 1
+  HELP "Program is runnable from menu"
+  ORDER 80
+
+ADD FIELD "programtype" OF "program" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Type"
+  POSITION 13
+  MAX-WIDTH 16
+  HELP "Program type"
+  ORDER 90
+
+ADD FIELD "filegroup" OF "program" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "File Group"
+  POSITION 14
+  MAX-WIDTH 24
+  HELP "File group"
+  ORDER 100
+
+ADD FIELD "canModified" OF "program" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Modified"
+  POSITION 15
+  MAX-WIDTH 1
+  HELP "Can modified"
+  ORDER 140
+
+ADD FIELD "canCopy" OF "program" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Copy"
+  POSITION 16
+  MAX-WIDTH 1
+  HELP "Can copy"
+  ORDER 120
+
+ADD FIELD "canDelete" OF "program" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Delete"
+  POSITION 17
+  MAX-WIDTH 1
+  HELP "Can Delete"
+  ORDER 130
+
+ADD FIELD "canCreate" OF "program" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Create"
+  POSITION 18
+  MAX-WIDTH 1
+  HELP "Can create"
+  ORDER 110
+
+ADD FIELD "PrintDestinations" OF "program" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Print destinations"
+  POSITION 19
+  MAX-WIDTH 80
+  HELP "Available print destinations"
+  ORDER 150
+
+ADD FIELD "archive" OF "program" AS character 
+  DESCRIPTION "Default
+Year
+Month
+Week
+Permanent"
+  FORMAT "X(10)"
+  INITIAL "Default"
+  LABEL "Archive"
+  POSITION 20
+  MAX-WIDTH 20
+  HELP "Archive time"
+  ORDER 160
+
+ADD INDEX "programcode" ON "program" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "programcode" ASCENDING 
+
+ADD INDEX "name" ON "program" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "name" ASCENDING 
+
+ADD INDEX "program" ON "program" 
+  AREA "Sta_Index_2"
+  DESCRIPTION "Same program could be multible times with different parameters"
+  INDEX-FIELD "program" ASCENDING 
+
+ADD TABLE "progwin"
+  AREA "Sta_Data_256"
+  LABEL "Program Windows"
+  DUMP-NAME "progwin"
+
+ADD FIELD "programcode" OF "progwin" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Programcode"
+  POSITION 2
+  MAX-WIDTH 24
+  HELP "Programcode"
+  ORDER 10
+
+ADD FIELD "windownumber" OF "progwin" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Window"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "Window number. Number 0 is automicly started"
+  ORDER 20
+
+ADD FIELD "objectType" OF "progwin" AS character 
+  FORMAT "X(8)"
+  INITIAL "Smart"
+  LABEL "Type"
+  POSITION 6
+  MAX-WIDTH 16
+  HELP "Object type"
+  ORDER 40
+
+ADD FIELD "object" OF "progwin" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Object"
+  POSITION 7
+  MAX-WIDTH 100
+  HELP "Object filename. Blank for browsers"
+  ORDER 50
+
+ADD FIELD "displayfields" OF "progwin" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Displayed"
+  POSITION 8
+  MAX-WIDTH 100
+  HELP "Displayed fields. Blank for static objects"
+  ORDER 80
+
+ADD FIELD "enabledFields" OF "progwin" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Enabled"
+  POSITION 9
+  MAX-WIDTH 100
+  HELP "Enabled fields. Blank for static objects"
+  ORDER 90
+
+ADD FIELD "canCreate" OF "progwin" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Create"
+  POSITION 10
+  MAX-WIDTH 1
+  HELP "Can create"
+  ORDER 110
+
+ADD FIELD "canModified" OF "progwin" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Modified"
+  POSITION 11
+  MAX-WIDTH 1
+  HELP "Can modified"
+  ORDER 120
+
+ADD FIELD "canCopy" OF "progwin" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Copy"
+  POSITION 12
+  MAX-WIDTH 1
+  HELP "Can copy"
+  ORDER 130
+
+ADD FIELD "canDelete" OF "progwin" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Delete"
+  POSITION 13
+  MAX-WIDTH 1
+  HELP "Can Delete"
+  ORDER 140
+
+ADD FIELD "sdo" OF "progwin" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "SDO"
+  POSITION 14
+  MAX-WIDTH 100
+  HELP "Program with recursize directory"
+  ORDER 70
+
+ADD FIELD "title-command" OF "progwin" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Title"
+  POSITION 15
+  MAX-WIDTH 100
+  HELP "Title command... $as-nro $as-nimi"
+  ORDER 150
+
+ADD FIELD "foreingFields" OF "progwin" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "ForeignFields"
+  POSITION 16
+  MAX-WIDTH 100
+  HELP "Foreign fields if needed"
+  ORDER 100
+
+ADD FIELD "TreeType" OF "progwin" AS character 
+  FORMAT "X(8)"
+  INITIAL "Program"
+  LABEL "TreeType"
+  POSITION 17
+  MAX-WIDTH 16
+  HELP "Tree type"
+  ORDER 170
+
+ADD FIELD "name" OF "progwin" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Menu name"
+  POSITION 18
+  MAX-WIDTH 80
+  HELP "Menu name"
+  ORDER 180
+
+ADD FIELD "rightgroup" OF "progwin" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "RightGroup"
+  POSITION 19
+  MAX-WIDTH 24
+  HELP "Right group code"
+  ORDER 190
+
+ADD FIELD "treeCode" OF "progwin" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "TreeCode"
+  POSITION 20
+  MAX-WIDTH 24
+  HELP "Exsample 1.1.2"
+  ORDER 160
+
+ADD FIELD "helptext" OF "progwin" AS character 
+  FORMAT "X(256)"
+  INITIAL ""
+  LABEL "Helptext"
+  POSITION 21
+  MAX-WIDTH 512
+  HELP "Program helptext."
+  ORDER 200
+
+ADD FIELD "appsrv" OF "progwin" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "AppServer"
+  POSITION 22
+  MAX-WIDTH 40
+  HELP "Logical name of Application Server"
+  ORDER 60
+  MANDATORY
+
+ADD FIELD "parentwindow" OF "progwin" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "ParentWindow"
+  POSITION 23
+  MAX-WIDTH 4
+  HELP "Parent Window number. Foreign keys should found there"
+  ORDER 30
+
+ADD INDEX "treecode" ON "progwin" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "programcode" ASCENDING 
+  INDEX-FIELD "treeCode" ASCENDING 
+
+ADD INDEX "windownumber" ON "progwin" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "programcode" ASCENDING 
+  INDEX-FIELD "windownumber" ASCENDING 
+
+ADD TABLE "rightgroup"
+  AREA "Sta_Data_256"
+  LABEL "Right groups"
+  DUMP-NAME "rightgrp"
+
+ADD FIELD "rightgroup" OF "rightgroup" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "RightGroup"
+  POSITION 2
+  MAX-WIDTH 24
+  HELP "Right group code"
+  ORDER 10
+
+ADD FIELD "name" OF "rightgroup" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 3
+  MAX-WIDTH 80
+  HELP "Rightgroup name"
+  ORDER 20
+
+ADD INDEX "rightgroup" ON "rightgroup" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "rightgroup" ASCENDING 
+
+ADD TABLE "searchfields"
+  AREA "Sta_Data_256"
+  LABEL "Search Fields"
+  DESCRIPTION "Automatic search fields"
+  DUMP-NAME "searchfi"
+
+ADD FIELD "fieldname" OF "searchfields" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Field"
+  POSITION 2
+  MAX-WIDTH 30
+  HELP "Field name of search value"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "program" OF "searchfields" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Program"
+  POSITION 3
+  MAX-WIDTH 100
+  HELP "Program with recursize directory, if needed"
+  ORDER 30
+
+ADD FIELD "tablename" OF "searchfields" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Table"
+  POSITION 4
+  MAX-WIDTH 30
+  HELP "Table name if needed"
+  ORDER 20
+
+ADD FIELD "sdo" OF "searchfields" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "SDO"
+  POSITION 5
+  MAX-WIDTH 80
+  HELP "Name of SDO. Recuisive directory name"
+  ORDER 40
+  MANDATORY
+
+ADD FIELD "appsrv" OF "searchfields" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "AppServer"
+  POSITION 7
+  MAX-WIDTH 40
+  HELP "Logical name of Application Server"
+  ORDER 50
+  MANDATORY
+
+ADD FIELD "searchprogram" OF "searchfields" AS character 
+  FORMAT "X(50)"
+  INITIAL "lib/wsearch.w"
+  LABEL "Search program"
+  POSITION 8
+  MAX-WIDTH 100
+  HELP "Search program name"
+  ORDER 60
+  MANDATORY
+
+ADD FIELD "valuefield" OF "searchfields" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Value field"
+  POSITION 9
+  MAX-WIDTH 40
+  HELP "Field name of returned value"
+  ORDER 70
+  MANDATORY
+
+ADD FIELD "displayfields" OF "searchfields" AS character 
+  FORMAT "X(256)"
+  INITIAL ""
+  LABEL "Display fields"
+  POSITION 10
+  MAX-WIDTH 512
+  HELP "Field's what it shown to search browser"
+  ORDER 80
+  MANDATORY
+
+ADD FIELD "viewerprogram" OF "searchfields" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Viewer"
+  POSITION 11
+  MAX-WIDTH 100
+  HELP "Viewer program, if you needed"
+  ORDER 90
+
+ADD INDEX "fieldname" ON "searchfields" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "fieldname" ASCENDING 
+  INDEX-FIELD "tablename" ASCENDING 
+  INDEX-FIELD "program" ASCENDING 
+
+ADD INDEX "program" ON "searchfields" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "program" ASCENDING 
+  INDEX-FIELD "tablename" ASCENDING 
+  INDEX-FIELD "fieldname" ASCENDING 
+
+ADD INDEX "sdo" ON "searchfields" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "sdo" ASCENDING 
+  INDEX-FIELD "tablename" ASCENDING 
+  INDEX-FIELD "fieldname" ASCENDING 
+
+ADD INDEX "tablename" ON "searchfields" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "tablename" ASCENDING 
+  INDEX-FIELD "fieldname" ASCENDING 
+  INDEX-FIELD "program" ASCENDING 
+
+ADD TABLE "starfind"
+  AREA "Sta_Data_256"
+  LABEL "Data to starFind rutine"
+  DUMP-NAME "starfind"
+
+ADD FIELD "queryname" OF "starfind" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Query"
+  POSITION 2
+  MAX-WIDTH 30
+  HELP "Name of query. Exsample CustomerName"
+  ORDER 10
+
+ADD FIELD "tablename" OF "starfind" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Table"
+  POSITION 3
+  MAX-WIDTH 30
+  HELP "Query table name"
+  ORDER 20
+
+ADD FIELD "fieldname" OF "starfind" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Field"
+  POSITION 4
+  MAX-WIDTH 80
+  HELP "Key field names of query. Separed by comma"
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "displayfield" OF "starfind" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Display"
+  POSITION 5
+  MAX-WIDTH 30
+  HELP "Field name of displayfield"
+  ORDER 40
+  MANDATORY
+
+ADD INDEX "querybane" ON "starfind" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "queryname" ASCENDING 
+
+ADD INDEX "tablename" ON "starfind" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "tablename" ASCENDING 
+
+ADD TABLE "starLanguage"
+  AREA "Sta_Data_256"
+  DUMP-NAME "starlang"
+
+ADD FIELD "translategroup" OF "starLanguage" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Group"
+  POSITION 2
+  MAX-WIDTH 30
+  HELP "Program,Menu,Label,Button,Table"
+  ORDER 10
+
+ADD FIELD "language" OF "starLanguage" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Language"
+  POSITION 3
+  MAX-WIDTH 16
+  HELP "eng,fin,swe"
+  ORDER 50
+
+ADD FIELD "key1" OF "starLanguage" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Key 1"
+  POSITION 4
+  MAX-WIDTH 100
+  HELP "Key 1"
+  ORDER 20
+
+ADD FIELD "name" OF "starLanguage" AS character 
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 5
+  MAX-WIDTH 60
+  HELP "Name in current language"
+  ORDER 60
+
+ADD FIELD "helptxt" OF "starLanguage" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Help"
+  POSITION 6
+  MAX-WIDTH 100
+  HELP "Help text in current language"
+  ORDER 70
+
+ADD FIELD "fieldformat" OF "starLanguage" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Format"
+  POSITION 7
+  MAX-WIDTH 40
+  HELP "Field format"
+  ORDER 80
+
+ADD FIELD "key2" OF "starLanguage" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Key 2"
+  POSITION 8
+  MAX-WIDTH 100
+  HELP "Key 2"
+  ORDER 30
+
+ADD FIELD "key3" OF "starLanguage" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Key 3"
+  POSITION 9
+  MAX-WIDTH 100
+  HELP "Key 3"
+  ORDER 40
+
+ADD INDEX "main" ON "starLanguage" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "translategroup" ASCENDING 
+  INDEX-FIELD "key1" ASCENDING 
+  INDEX-FIELD "key2" ASCENDING 
+  INDEX-FIELD "key3" ASCENDING 
+  INDEX-FIELD "language" ASCENDING 
+
+ADD INDEX "language" ON "starLanguage" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "language" ASCENDING 
+  INDEX-FIELD "translategroup" ASCENDING 
+  INDEX-FIELD "key1" ASCENDING 
+  INDEX-FIELD "key2" ASCENDING 
+  INDEX-FIELD "key3" ASCENDING 
+
+ADD TABLE "starParam"
+  AREA "Sta_Data_256"
+  DUMP-NAME "starpara"
+
+ADD FIELD "groupCode" OF "starParam" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Group"
+  POSITION 2
+  MAX-WIDTH 40
+  HELP "Group code"
+  ORDER 10
+
+ADD FIELD "paramCode" OF "starParam" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Code"
+  POSITION 3
+  MAX-WIDTH 16
+  HELP "Code"
+  ORDER 20
+
+ADD FIELD "c_value" OF "starParam" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Character"
+  POSITION 4
+  MAX-WIDTH 1020
+  HELP "Character values"
+  EXTENT 10
+  ORDER 30
+
+ADD FIELD "i_value" OF "starParam" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Integer"
+  POSITION 5
+  MAX-WIDTH 200
+  HELP "Intger values"
+  EXTENT 10
+  ORDER 40
+
+ADD FIELD "de_value" OF "starParam" AS decimal 
+  FORMAT "->>>>>>>>>>>9.9<<<<<<<<"
+  INITIAL "0"
+  LABEL "Decimal"
+  POSITION 6
+  MAX-WIDTH 320
+  EXTENT 10
+  DECIMALS 9
+  ORDER 50
+
+ADD FIELD "da_value" OF "starParam" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "Date"
+  POSITION 7
+  MAX-WIDTH 180
+  HELP "Date values"
+  EXTENT 10
+  ORDER 60
+
+ADD FIELD "l_value" OF "starParam" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Logical"
+  POSITION 8
+  MAX-WIDTH 80
+  HELP "Locigal values"
+  EXTENT 10
+  ORDER 70
+
+ADD FIELD "memo" OF "starParam" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Memo"
+  POSITION 9
+  MAX-WIDTH 100
+  HELP "Memo of parameter"
+  ORDER 80
+
+ADD INDEX "paramCode" ON "starParam" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "groupCode" ASCENDING 
+  INDEX-FIELD "paramCode" ASCENDING 
+
+ADD TABLE "starParamGroup"
+  AREA "Sta_Data_256"
+  DUMP-NAME "starprgr"
+
+ADD FIELD "groupCode" OF "starParamGroup" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Group"
+  POSITION 2
+  MAX-WIDTH 40
+  HELP "Group code"
+  ORDER 10
+
+ADD FIELD "groupName" OF "starParamGroup" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 3
+  MAX-WIDTH 80
+  HELP "Name"
+  ORDER 20
+
+ADD INDEX "GroupCode" ON "starParamGroup" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "groupCode" ASCENDING 
+
+ADD TABLE "StarSession"
+  AREA "Sta_Data_256"
+  DUMP-NAME "starsess"
+
+ADD FIELD "SessionId" OF "StarSession" AS integer 
+  FORMAT "->,>>>,>>>,>>9"
+  INITIAL "0"
+  LABEL "SessionId"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Id"
+  HELP "SessionId"
+  ORDER 10
+
+ADD FIELD "SessionConnectionId" OF "StarSession" AS character 
+  FORMAT "X(78)"
+  INITIAL ""
+  LABEL "Connection Id"
+  POSITION 3
+  MAX-WIDTH 40
+  HELP "Session Connection Id"
+  ORDER 30
+
+ADD FIELD "machinetime" OF "StarSession" AS integer 
+  FORMAT "->,>>>,>>>,>>9"
+  INITIAL "0"
+  LABEL "Machinetime"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Machinetime since session begin.. ETIME function"
+  ORDER 50
+
+ADD FIELD "LastDate" OF "StarSession" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "LastDate"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "LastDate"
+  ORDER 80
+
+ADD FIELD "LastTime" OF "StarSession" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "LastTime"
+  POSITION 6
+  MAX-WIDTH 16
+  HELP "Last time"
+  ORDER 90
+
+ADD FIELD "usercode" OF "StarSession" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Usercode"
+  POSITION 7
+  MAX-WIDTH 24
+  HELP "Usercode"
+  ORDER 40
+
+ADD FIELD "data" OF "StarSession" AS character 
+  FORMAT "X(78)"
+  INITIAL ""
+  LABEL "Global data"
+  POSITION 8
+  MAX-WIDTH 156
+  HELP "Global data"
+  ORDER 100
+
+ADD FIELD "clienttype" OF "StarSession" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Client Type"
+  POSITION 9
+  MAX-WIDTH 24
+  HELP "Client type"
+  ORDER 20
+
+ADD FIELD "CreateDate" OF "StarSession" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "CreateDate"
+  POSITION 10
+  MAX-WIDTH 4
+  ORDER 60
+
+ADD FIELD "CreateTime" OF "StarSession" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "CreateTime"
+  POSITION 11
+  MAX-WIDTH 16
+  ORDER 70
+
+ADD INDEX "SessionId" ON "StarSession" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "SessionId" ASCENDING 
+
+ADD INDEX "LastChange" ON "StarSession" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "LastDate" ASCENDING 
+  INDEX-FIELD "machinetime" ASCENDING 
+
+ADD INDEX "SessionConnectionId" ON "StarSession" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "clienttype" ASCENDING 
+  INDEX-FIELD "SessionConnectionId" ASCENDING 
+  INDEX-FIELD "CreateDate" ASCENDING 
+  INDEX-FIELD "CreateTime" ASCENDING 
+
+ADD INDEX "usercode" ON "StarSession" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "usercode" ASCENDING 
+  INDEX-FIELD "LastDate" ASCENDING 
+  INDEX-FIELD "LastTime" ASCENDING 
+
+ADD TABLE "starSessionActivity"
+  AREA "Sta_Data_256"
+  DUMP-NAME "starsesa"
+
+ADD FIELD "usercode" OF "starSessionActivity" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Usercode"
+  POSITION 2
+  MAX-WIDTH 24
+  HELP "Usercode"
+  ORDER 10
+
+ADD FIELD "actionDate" OF "starSessionActivity" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "Action date"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Action date"
+  ORDER 30
+
+ADD FIELD "daycount" OF "starSessionActivity" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "Day count"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Action count per day"
+  ORDER 40
+
+ADD FIELD "hourcount" OF "starSessionActivity" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "Hour"
+  POSITION 5
+  MAX-WIDTH 336
+  HELP "Action count per hour"
+  EXTENT 24
+  ORDER 50
+
+ADD FIELD "clienttype" OF "starSessionActivity" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Client Type"
+  POSITION 6
+  MAX-WIDTH 24
+  HELP "Client type"
+  ORDER 20
+
+ADD INDEX "userCode" ON "starSessionActivity" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "usercode" ASCENDING 
+  INDEX-FIELD "clienttype" ASCENDING 
+  INDEX-FIELD "actionDate" ASCENDING 
+
+ADD INDEX "actionDate" ON "starSessionActivity" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "actionDate" ASCENDING 
+
+ADD INDEX "clientType" ON "starSessionActivity" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "clienttype" ASCENDING 
+  INDEX-FIELD "actionDate" ASCENDING 
+
+ADD TABLE "StarSessionData"
+  AREA "Sta_Data_256"
+  DUMP-NAME "starsesd"
+
+ADD FIELD "SessionId" OF "StarSessionData" AS integer 
+  FORMAT "->,>>>,>>>,>>9"
+  INITIAL "0"
+  LABEL "SessionId"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Id"
+  HELP "SessionId"
+  ORDER 10
+
+ADD FIELD "programname" OF "StarSessionData" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Program name"
+  POSITION 3
+  MAX-WIDTH 100
+  HELP "Program name"
+  ORDER 20
+
+ADD FIELD "data" OF "StarSessionData" AS character 
+  FORMAT "X(78)"
+  INITIAL ""
+  LABEL "Data"
+  POSITION 5
+  MAX-WIDTH 156
+  HELP "Values using get/setStarProperty method"
+  ORDER 30
+
+ADD INDEX "ProgramName" ON "StarSessionData" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "SessionId" ASCENDING 
+  INDEX-FIELD "programname" ASCENDING 
+
+ADD TABLE "TopUpQueue"
+  AREA "Sta_Data_256"
+  DUMP-NAME "topupqueue"
+
+ADD FIELD "State" OF "TopUpQueue" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  POSITION 2
+  MAX-WIDTH 4
+  ORDER 10
+
+ADD FIELD "PPRequest" OF "TopUpQueue" AS int64 
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  POSITION 3
+  MAX-WIDTH 8
+  ORDER 20
+
+ADD FIELD "CLI" OF "TopUpQueue" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  POSITION 4
+  MAX-WIDTH 16
+  ORDER 30
+
+ADD FIELD "TopUpAmt" OF "TopUpQueue" AS decimal 
+  FORMAT "->>,>>9.99"
+  INITIAL "0"
+  POSITION 5
+  MAX-WIDTH 17
+  DECIMALS 2
+  ORDER 40
+
+ADD FIELD "VatAmt" OF "TopUpQueue" AS decimal 
+  FORMAT "->>,>>9.99"
+  INITIAL "0"
+  POSITION 6
+  MAX-WIDTH 17
+  DECIMALS 2
+  ORDER 50
+
+ADD FIELD "Date" OF "TopUpQueue" AS date 
+  FORMAT "99/99/99"
+  INITIAL ?
+  POSITION 7
+  MAX-WIDTH 4
+  ORDER 60
+
+ADD FIELD "Source" OF "TopUpQueue" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  POSITION 8
+  MAX-WIDTH 16
+  ORDER 70
+
+ADD INDEX "State" ON "TopUpQueue" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "State" ASCENDING 
+
+ADD TABLE "Trunk"
+  AREA "Sta_Data_256"
+  LABEL "Trunk"
+  DESCRIPTION "Trunk groups in each exchange"
+  DUMP-NAME "trunk"
+
+ADD FIELD "ExCode" OF "Trunk" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Switch"
+  POSITION 2
+  MAX-WIDTH 16
+  COLUMN-LABEL "Switch"
+  HELP "Swicth code"
+  ORDER 10
+
+ADD FIELD "TrunkCode" OF "Trunk" AS character 
+  FORMAT "x(7)"
+  INITIAL ""
+  LABEL "Trunk Code"
+  POSITION 3
+  MAX-WIDTH 14
+  COLUMN-LABEL "Trunk Code"
+  HELP "Trunk group's code"
+  ORDER 20
+
+ADD FIELD "Memo" OF "Trunk" AS character 
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "Memo"
+  POSITION 4
+  MAX-WIDTH 610
+  COLUMN-LABEL "Memo"
+  HELP "Memo"
+  EXTENT 5
+  ORDER 30
+
+ADD FIELD "TrunkName" OF "Trunk" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Trunk name"
+  POSITION 5
+  MAX-WIDTH 80
+  COLUMN-LABEL "Trunk name"
+  HELP "Name of a Circuit Group Route"
+  ORDER 15
+
+ADD FIELD "OpCode" OF "Trunk" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Operator"
+  POSITION 6
+  MAX-WIDTH 16
+  COLUMN-LABEL "Operator"
+  HELP "Operator code, 1 - 8 characters"
+  ORDER 40
+  MANDATORY
+
+ADD FIELD "TrInternat" OF "Trunk" AS logical 
+  FORMAT "Int/Nat"
+  INITIAL "No"
+  LABEL "Int."
+  POSITION 7
+  MAX-WIDTH 1
+  COLUMN-LABEL "Int."
+  HELP "International / National traffic"
+  ORDER 50
+
+ADD FIELD "TrunkGroup" OF "Trunk" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Group"
+  POSITION 9
+  MAX-WIDTH 32
+  COLUMN-LABEL "Group"
+  HELP "GROUP Name"
+  ORDER 70
+
+ADD FIELD "TrIn" OF "Trunk" AS logical 
+  FORMAT "Out/In"
+  INITIAL "Yes"
+  LABEL "Conn."
+  POSITION 10
+  MAX-WIDTH 1
+  COLUMN-LABEL "Conn."
+  HELP "In / Out traffic"
+  ORDER 60
+
+ADD INDEX "ExCode" ON "Trunk" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "ExCode" ASCENDING 
+  INDEX-FIELD "TrunkGroup" ASCENDING 
+  INDEX-FIELD "TrunkCode" ASCENDING 
+
+ADD INDEX "Operator" ON "Trunk" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "OpCode" ASCENDING 
+  INDEX-FIELD "ExCode" ASCENDING 
+  INDEX-FIELD "TrunkGroup" ASCENDING 
+  INDEX-FIELD "TrunkCode" ASCENDING 
+
+ADD INDEX "TrunkCode" ON "Trunk" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "TrunkCode" ASCENDING 
+  INDEX-FIELD "ExCode" ASCENDING 
+
+ADD TABLE "UpdateQueue"
+  AREA "Sta_Data_64"
+  DUMP-NAME "updatequ"
+
+ADD FIELD "Seq1" OF "UpdateQueue" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  POSITION 2
+  MAX-WIDTH 4
+  ORDER 10
+
+ADD FIELD "Value1" OF "UpdateQueue" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  POSITION 3
+  MAX-WIDTH 16
+  ORDER 20
+
+ADD FIELD "Seq2" OF "UpdateQueue" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  POSITION 4
+  MAX-WIDTH 4
+  ORDER 30
+
+ADD FIELD "Value2" OF "UpdateQueue" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  POSITION 5
+  MAX-WIDTH 16
+  ORDER 40
+
+ADD FIELD "State" OF "UpdateQueue" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  POSITION 6
+  MAX-WIDTH 4
+  ORDER 50
+
+ADD FIELD "TSCreate" OF "UpdateQueue" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  POSITION 7
+  MAX-WIDTH 20
+  DECIMALS 5
+  ORDER 60
+
+ADD FIELD "TSUpdate" OF "UpdateQueue" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  POSITION 8
+  MAX-WIDTH 20
+  DECIMALS 5
+  ORDER 70
+
+ADD INDEX "Seq1" ON "UpdateQueue" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "Seq1" ASCENDING 
+  INDEX-FIELD "State" ASCENDING 
+
+ADD INDEX "State" ON "UpdateQueue" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "State" ASCENDING 
+
+ADD TABLE "usergroup"
+  AREA "Sta_Data_256"
+  DUMP-NAME "usergrrp"
+
+ADD FIELD "usergroup" OF "usergroup" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "UserGroup"
+  POSITION 2
+  MAX-WIDTH 24
+  ORDER 10
+
+ADD FIELD "name" OF "usergroup" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 3
+  MAX-WIDTH 80
+  HELP "User group name"
+  ORDER 20
+
+ADD INDEX "usergroup" ON "usergroup" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "usergroup" ASCENDING 
+
+ADD TABLE "usergrouprights"
+  AREA "Sta_Data_256"
+  DUMP-NAME "ugrprigt"
+
+ADD FIELD "usergroup" OF "usergrouprights" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "UserGroup"
+  POSITION 2
+  MAX-WIDTH 24
+  ORDER 10
+
+ADD FIELD "rightgroup" OF "usergrouprights" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "RightGroup"
+  POSITION 3
+  MAX-WIDTH 24
+  HELP "Right group code"
+  ORDER 20
+
+ADD FIELD "canCreate" OF "usergrouprights" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Create"
+  POSITION 4
+  MAX-WIDTH 1
+  HELP "Can create"
+  ORDER 30
+
+ADD FIELD "canModified" OF "usergrouprights" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Modified"
+  POSITION 5
+  MAX-WIDTH 1
+  HELP "Can modified"
+  ORDER 40
+
+ADD FIELD "canCopy" OF "usergrouprights" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Copy"
+  POSITION 6
+  MAX-WIDTH 1
+  HELP "Can copy"
+  ORDER 50
+
+ADD FIELD "canDelete" OF "usergrouprights" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Delete"
+  POSITION 7
+  MAX-WIDTH 1
+  HELP "Can Delete"
+  ORDER 60
+
+ADD FIELD "canDisplay" OF "usergrouprights" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Display"
+  POSITION 8
+  MAX-WIDTH 1
+  HELP "Can Display"
+  ORDER 25
+
+ADD INDEX "usergroup" ON "usergrouprights" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "usergroup" ASCENDING 
+  INDEX-FIELD "rightgroup" ASCENDING 
+
+ADD INDEX "rightgroup" ON "usergrouprights" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "rightgroup" ASCENDING 
+  INDEX-FIELD "usergroup" ASCENDING 
+
+ADD TABLE "userkeys"
+  AREA "Sta_Data_256"
+  DUMP-NAME "userkeys"
+
+ADD FIELD "usercode" OF "userkeys" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "User"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "User code"
+  ORDER 10
+
+ADD FIELD "keytype" OF "userkeys" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Type"
+  POSITION 3
+  MAX-WIDTH 40
+  HELP "Key type"
+  ORDER 20
+
+ADD FIELD "key" OF "userkeys" AS character 
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Key"
+  POSITION 4
+  MAX-WIDTH 60
+  HELP "Key value"
+  ORDER 30
+
+ADD INDEX "usercode" ON "userkeys" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "usercode" ASCENDING 
+  INDEX-FIELD "keytype" ASCENDING 
+  INDEX-FIELD "key" ASCENDING 
+
+ADD INDEX "keytype" ON "userkeys" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  INDEX-FIELD "keytype" ASCENDING 
+  INDEX-FIELD "key" ASCENDING 
+  INDEX-FIELD "usercode" ASCENDING 
+
+ADD TABLE "usermenu"
+  AREA "Sta_Data_256"
+  LABEL "User menus"
+  DUMP-NAME "usermenu"
+
+ADD FIELD "usercode" OF "usermenu" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "User"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "User code"
+  ORDER 10
+
+ADD FIELD "menucode" OF "usermenu" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "MenuCode"
+  POSITION 4
+  MAX-WIDTH 16
+  HELP "MenuCode for menu"
+  ORDER 30
+
+ADD FIELD "positionx" OF "usermenu" AS integer 
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "Pos-X"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "Position x on the screen"
+  ORDER 40
+
+ADD FIELD "positiony" OF "usermenu" AS integer 
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "Pos-Y"
+  POSITION 6
+  MAX-WIDTH 4
+  HELP "Position y on the screen"
+  ORDER 50
+
+ADD FIELD "applcode" OF "usermenu" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Application"
+  POSITION 7
+  MAX-WIDTH 16
+  HELP "Application code. Internal use only"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "startup" OF "usermenu" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "StartUp"
+  POSITION 8
+  MAX-WIDTH 1
+  HELP "Menu will be start up automaticly on start"
+  ORDER 60
+
+ADD INDEX "usercode" ON "usermenu" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "usercode" ASCENDING 
+  INDEX-FIELD "applcode" ASCENDING 
+  INDEX-FIELD "menucode" ASCENDING 
+
+ADD INDEX "menucode" ON "usermenu" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "applcode" ASCENDING 
+  INDEX-FIELD "menucode" ASCENDING 
+
+ADD TABLE "username"
+  AREA "Sta_Data_256"
+  LABEL "Username"
+  DUMP-NAME "username"
+
+ADD FIELD "usercode" OF "username" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "User"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "User code"
+  ORDER 10
+
+ADD FIELD "name" OF "username" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 3
+  MAX-WIDTH 100
+  HELP "User realname"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "eMail" OF "username" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "eMail"
+  POSITION 4
+  MAX-WIDTH 100
+  HELP "eMail address"
+  ORDER 30
+
+ADD FIELD "lastname" OF "username" AS character 
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "Last Name"
+  POSITION 5
+  MAX-WIDTH 50
+  HELP "Person lastname"
+  ORDER 40
+
+ADD FIELD "firstname" OF "username" AS character 
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "Frist name"
+  POSITION 6
+  MAX-WIDTH 50
+  HELP "Person first name"
+  ORDER 50
+
+ADD FIELD "password" OF "username" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  POSITION 7
+  MAX-WIDTH 40
+  HELP "Password. It stored ecrypted to database"
+  ORDER 60
+
+ADD FIELD "helpEditor" OF "username" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Help Editor"
+  POSITION 9
+  MAX-WIDTH 1
+  HELP "Help Editor"
+  ORDER 80
+
+ADD FIELD "menulanguage" OF "username" AS character 
+  FORMAT "X(8)"
+  INITIAL "eng"
+  LABEL "Menu language"
+  POSITION 10
+  MAX-WIDTH 16
+  HELP "User's menu language"
+  ORDER 90
+
+ADD FIELD "usergroups" OF "username" AS character 
+  FORMAT "X(50)"
+  INITIAL ""
+  LABEL "UserGroups"
+  POSITION 11
+  MAX-WIDTH 80
+  HELP "Comma separed list of user groups"
+  ORDER 100
+
+ADD FIELD "durationbegin" OF "username" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "Begin"
+  POSITION 12
+  MAX-WIDTH 4
+  HELP "Duration begin"
+  ORDER 110
+
+ADD FIELD "durationend" OF "username" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "End"
+  POSITION 13
+  MAX-WIDTH 4
+  HELP "Duration end"
+  ORDER 120
+
+ADD INDEX "usercode" ON "username" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "usercode" ASCENDING 
+
+ADD INDEX "username" ON "username" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "name" ASCENDING 
+
+ADD TABLE "userprogram"
+  AREA "Sta_Data_256"
+  LABEL "User programs"
+  DESCRIPTION "postition ?
+"
+  DUMP-NAME "userprog"
+
+ADD FIELD "programcode" OF "userprogram" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Programcode"
+  POSITION 2
+  MAX-WIDTH 24
+  HELP "Programcode"
+  ORDER 20
+
+ADD FIELD "usercode" OF "userprogram" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "User"
+  POSITION 3
+  MAX-WIDTH 16
+  HELP "User code"
+  ORDER 10
+
+ADD FIELD "positionx" OF "userprogram" AS integer 
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "Pos-X"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Position x on the screen"
+  ORDER 30
+
+ADD FIELD "positiony" OF "userprogram" AS integer 
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "Pos-Y"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "Position y on the screen"
+  ORDER 40
+
+ADD FIELD "paramstr" OF "userprogram" AS character 
+  DESCRIPTION "Program got these information in PRIVATE-DATA"
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Parameters"
+  POSITION 6
+  MAX-WIDTH 80
+  HELP "Parameters to program"
+  ORDER 50
+
+ADD INDEX "userprogram" ON "userprogram" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "usercode" ASCENDING 
+  INDEX-FIELD "programcode" ASCENDING 
+
+ADD TABLE "usersettings"
+  AREA "Sta_Data_256"
+  LABEL "User settings"
+  DUMP-NAME "userset"
+
+ADD FIELD "usercode" OF "usersettings" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "User"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "User code"
+  ORDER 10
+
+ADD FIELD "settingtype" OF "usersettings" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Type"
+  POSITION 3
+  MAX-WIDTH 24
+  HELP "Setting type"
+  ORDER 20
+
+ADD FIELD "settingkey" OF "usersettings" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Key"
+  POSITION 4
+  MAX-WIDTH 40
+  HELP "Key of the setting"
+  ORDER 30
+
+ADD FIELD "settingvalue" OF "usersettings" AS character 
+  FORMAT "X(256)"
+  INITIAL ""
+  LABEL "Value"
+  POSITION 5
+  MAX-WIDTH 512
+  HELP "Setting value"
+  ORDER 40
+
+ADD INDEX "setting" ON "usersettings" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "usercode" ASCENDING 
+  INDEX-FIELD "settingtype" ASCENDING 
+  INDEX-FIELD "settingkey" ASCENDING 
+
+ADD TABLE "VASCDR"
+  AREA "Sta_Data_256"
+  LABEL "Mobile Cdr"
+  DUMP-NAME "vascdr"
+
+ADD FIELD "CMT" OF "VASCDR" AS character 
+  FORMAT "x(3)"
+  INITIAL ""
+  LABEL "CMT"
+  POSITION 2
+  MAX-WIDTH 6
+  COLUMN-LABEL "CMT"
+  HELP "Callmodule Type: MSO, MST, CFO, TMM, OMM, SSP"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "CLI" OF "VASCDR" AS character 
+  FORMAT "x(18)"
+  INITIAL ""
+  LABEL "GSMANR"
+  POSITION 3
+  MAX-WIDTH 36
+  COLUMN-LABEL "GSMANR"
+  HELP "Calling Party Number"
+  ORDER 20
+
+ADD FIELD "CallDate" OF "VASCDR" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "EXPDAT"
+  POSITION 4
+  MAX-WIDTH 16
+  COLUMN-LABEL "EXPDAT"
+  HELP "Date For Start Of Charge (YYYYMMDD)"
+  ORDER 30
+
+ADD FIELD "CallTime" OF "VASCDR" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "EXPTID"
+  POSITION 5
+  MAX-WIDTH 12
+  COLUMN-LABEL "EXPTID"
+  HELP "Time For Start Of Charge (HHMMSS)"
+  ORDER 40
+
+ADD FIELD "Duration" OF "VASCDR" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "DEBTID"
+  POSITION 6
+  MAX-WIDTH 12
+  COLUMN-LABEL "DEBTID"
+  HELP "Chargeable duration (HHMMSS)"
+  ORDER 50
+
+ADD FIELD "Bmod" OF "VASCDR" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "B-MOD"
+  POSITION 7
+  MAX-WIDTH 2
+  COLUMN-LABEL "B-MOD"
+  HELP "B-number Modification (1=yes)"
+  ORDER 60
+
+ADD FIELD "GsmBnr" OF "VASCDR" AS character 
+  FORMAT "x(18)"
+  INITIAL ""
+  LABEL "GSMBNR"
+  POSITION 8
+  MAX-WIDTH 36
+  COLUMN-LABEL "GSMBNR"
+  HELP "Called Party Number (with country code or 0: Sweden)"
+  ORDER 71
+
+ADD FIELD "CIN" OF "VASCDR" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "CIN"
+  POSITION 9
+  MAX-WIDTH 16
+  COLUMN-LABEL "CIN"
+  HELP "Call Identification Number"
+  ORDER 80
+
+ADD FIELD "IMSI" OF "VASCDR" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "IMSI"
+  POSITION 10
+  MAX-WIDTH 30
+  COLUMN-LABEL "IMSI"
+  HELP "Subscriber IMSI"
+  ORDER 90
+
+ADD FIELD "IMEI" OF "VASCDR" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "IMEI"
+  POSITION 11
+  MAX-WIDTH 30
+  COLUMN-LABEL "IMEI"
+  HELP "Subscriber IMEI"
+  ORDER 100
+
+ADD FIELD "TeleSC" OF "VASCDR" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "TELESC"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "TELESC"
+  HELP "GSM Teleservice Code"
+  ORDER 110
+
+ADD FIELD "BearSC" OF "VASCDR" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "BEARSC"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "BEARSC"
+  HELP "GSM Bearerservice Code"
+  ORDER 120
+
+ADD FIELD "ChrInfo" OF "VASCDR" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "CHRINFO"
+  POSITION 14
+  MAX-WIDTH 2
+  COLUMN-LABEL "CHRINFO"
+  HELP "Channel Rate Info"
+  ORDER 130
+
+ADD FIELD "TrpyInd" OF "VASCDR" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "TRPYIND"
+  POSITION 15
+  MAX-WIDTH 2
+  COLUMN-LABEL "TRPYIND"
+  HELP "Transparancy Indicator"
+  ORDER 140
+
+ADD FIELD "SSI" OF "VASCDR" AS character 
+  FORMAT "xx"
+  INITIAL ""
+  LABEL "SSI"
+  POSITION 16
+  MAX-WIDTH 4
+  COLUMN-LABEL "SSI"
+  HELP "Suplementary Service"
+  ORDER 150
+
+ADD FIELD "RFPowc" OF "VASCDR" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "RFPOWC"
+  POSITION 17
+  MAX-WIDTH 2
+  COLUMN-LABEL "RFPOWC"
+  HELP "RF Powerclass"
+  ORDER 160
+
+ADD FIELD "LocArea" OF "VASCDR" AS character 
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "LOCAREA"
+  POSITION 18
+  MAX-WIDTH 8
+  COLUMN-LABEL "LOCAREA"
+  HELP "Cellid For First Cell Used"
+  ORDER 170
+
+ADD FIELD "Xsub" OF "VASCDR" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "XSUB"
+  POSITION 19
+  MAX-WIDTH 30
+  COLUMN-LABEL "XSUB"
+  HELP "Original Called Number"
+  ORDER 180
+
+ADD FIELD "RN" OF "VASCDR" AS character 
+  FORMAT "xx"
+  INITIAL ""
+  LABEL "RN"
+  POSITION 20
+  MAX-WIDTH 4
+  COLUMN-LABEL "RN"
+  HELP "Partial Output Record Number"
+  ORDER 190
+
+ADD FIELD "LastPart" OF "VASCDR" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "LASTPART"
+  POSITION 21
+  MAX-WIDTH 2
+  COLUMN-LABEL "LASTPART"
+  HELP "Last Partial Output"
+  ORDER 200
+
+ADD FIELD "EndTime" OF "VASCDR" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "STOP-TID"
+  POSITION 22
+  MAX-WIDTH 12
+  COLUMN-LABEL "STOP-TID"
+  HELP "Time For Stop of Charging"
+  ORDER 210
+
+ADD FIELD "Intr" OF "VASCDR" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "INTR"
+  POSITION 23
+  MAX-WIDTH 12
+  COLUMN-LABEL "INTR"
+  HELP "Interruption Time"
+  ORDER 220
+
+ADD FIELD "TRFS" OF "VASCDR" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "TFRS"
+  POSITION 24
+  MAX-WIDTH 12
+  COLUMN-LABEL "TFRS"
+  HELP "Time From Register Seizure To Start Of Charging"
+  ORDER 230
+
+ADD FIELD "ScAddr" OF "VASCDR" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "SCADDR"
+  POSITION 25
+  MAX-WIDTH 30
+  COLUMN-LABEL "SCADDR"
+  HELP "Service Center Address"
+  ORDER 240
+
+ADD FIELD "MsCID" OF "VASCDR" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "MSCID"
+  POSITION 26
+  MAX-WIDTH 24
+  COLUMN-LABEL "MSCID"
+  HELP "MSC Identification"
+  ORDER 250
+
+ADD FIELD "MpCall" OF "VASCDR" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "MPCALL"
+  POSITION 27
+  MAX-WIDTH 2
+  COLUMN-LABEL "MPCALL"
+  HELP "Multiparty Indicator"
+  ORDER 260
+
+ADD FIELD "SSReg" OF "VASCDR" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "SSREQ"
+  POSITION 28
+  MAX-WIDTH 2
+  COLUMN-LABEL "SSREQ"
+  HELP "SSRequest"
+  ORDER 270
+
+ADD FIELD "OrgLocNr" OF "VASCDR" AS character 
+  FORMAT "x(7)"
+  INITIAL ""
+  LABEL "ORGLOCNR"
+  POSITION 29
+  MAX-WIDTH 14
+  COLUMN-LABEL "ORGLOCNR"
+  HELP "Originating Location Area"
+  ORDER 280
+
+ADD FIELD "RegDep" OF "VASCDR" AS character 
+  FORMAT "xx"
+  INITIAL ""
+  LABEL "REGDEP"
+  POSITION 30
+  MAX-WIDTH 4
+  COLUMN-LABEL "REGDEP"
+  HELP "Regional Dep Charging"
+  ORDER 290
+
+ADD FIELD "DiscPart" OF "VASCDR" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "DISCPART"
+  POSITION 31
+  MAX-WIDTH 2
+  COLUMN-LABEL "DISCPART"
+  HELP "Disconnecting Party"
+  ORDER 300
+
+ADD FIELD "PpFlag" OF "VASCDR" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "PPFLAG"
+  POSITION 32
+  MAX-WIDTH 2
+  COLUMN-LABEL "PPFLAG"
+  HELP "Prepaid Flagga"
+  ORDER 310
+
+ADD FIELD "AntEvent" OF "VASCDR" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "ANTEVENT"
+  POSITION 33
+  MAX-WIDTH 2
+  COLUMN-LABEL "ANTEVENT"
+  HELP "Number Of Event Modules"
+  ORDER 330
+
+ADD FIELD "EMT" OF "VASCDR" AS character 
+  FORMAT "x(3)"
+  INITIAL ""
+  LABEL "EMT"
+  POSITION 34
+  MAX-WIDTH 6
+  COLUMN-LABEL "EMT"
+  HELP "Event Module Type"
+  ORDER 340
+
+ADD FIELD "SSCode" OF "VASCDR" AS character 
+  FORMAT "xx"
+  INITIAL ""
+  LABEL "SSCODE"
+  POSITION 35
+  MAX-WIDTH 4
+  COLUMN-LABEL "SSCODE"
+  HELP "SSCode"
+  ORDER 350
+
+ADD FIELD "EventDuration" OF "VASCDR" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "EVTID"
+  POSITION 36
+  MAX-WIDTH 12
+  COLUMN-LABEL "EVTID"
+  HELP "Time For Event"
+  ORDER 360
+
+ADD FIELD "CellID" OF "VASCDR" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "CELLID"
+  POSITION 37
+  MAX-WIDTH 12
+  COLUMN-LABEL "CELLID"
+  HELP "Cellid For First Cell Used"
+  ORDER 175
+
+ADD FIELD "SSReg2" OF "VASCDR" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "SSREQ2"
+  POSITION 38
+  MAX-WIDTH 2
+  COLUMN-LABEL "SSREQ2"
+  HELP "SSRequest 2"
+  ORDER 355
+
+ADD FIELD "FileSeq" OF "VASCDR" AS integer 
+  FORMAT "zzzzzzzz9"
+  INITIAL "0"
+  LABEL "Sequence"
+  POSITION 39
+  MAX-WIDTH 4
+  COLUMN-LABEL "Sequence"
+  HELP "Consecutive Number of one file"
+  ORDER 370
+
+ADD FIELD "Rated" OF "VASCDR" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "rated"
+  POSITION 40
+  MAX-WIDTH 1
+  COLUMN-LABEL "rated"
+  HELP "Is this mobile cdr rated ?"
+  ORDER 380
+
+ADD FIELD "CustNum" OF "VASCDR" AS integer 
+  FORMAT "zzzzzz9"
+  INITIAL "0"
+  LABEL "CustAsub"
+  POSITION 42
+  MAX-WIDTH 4
+  COLUMN-LABEL "CustAsub"
+  HELP "Customer No who owns the A-Sub No."
+  ORDER 400
+
+ADD FIELD "InvCust" OF "VASCDR" AS integer 
+  FORMAT "zzzzzz9"
+  INITIAL "0"
+  LABEL "CustInv"
+  POSITION 43
+  MAX-WIDTH 4
+  COLUMN-LABEL "CustInv"
+  HELP "Customer who is being invoiced"
+  ORDER 410
+
+ADD FIELD "BillLevel" OF "VASCDR" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Level"
+  POSITION 44
+  MAX-WIDTH 20
+  COLUMN-LABEL "Level"
+  HELP "Billing level (where the subscription is assigned)"
+  ORDER 420
+
+ADD FIELD "BillTarget" OF "VASCDR" AS integer 
+  FORMAT "z9"
+  INITIAL "0"
+  LABEL "No"
+  POSITION 45
+  MAX-WIDTH 4
+  COLUMN-LABEL "No"
+  HELP "Consecutive No. for Customer's Invoicing Target"
+  ORDER 430
+
+ADD FIELD "TimeStart" OF "VASCDR" AS integer 
+  FORMAT "zzzzz9"
+  INITIAL "0"
+  LABEL "TimeSt"
+  POSITION 46
+  MAX-WIDTH 4
+  COLUMN-LABEL "TimeSt"
+  HELP "Time when call  started (in terms of seconds from midnight)"
+  ORDER 440
+
+ADD FIELD "UserSeq" OF "VASCDR" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "SeqNo"
+  POSITION 47
+  MAX-WIDTH 4
+  COLUMN-LABEL "SeqNo"
+  HELP "Internal, consecutive sequence no of user"
+  ORDER 610
+
+ADD FIELD "BillDur" OF "VASCDR" AS integer 
+  FORMAT "zzzzz9"
+  INITIAL "0"
+  LABEL "BillDur"
+  POSITION 48
+  MAX-WIDTH 4
+  COLUMN-LABEL "BillDur"
+  HELP "Billable Duration of call, seconds"
+  ORDER 460
+
+ADD FIELD "DateSt" OF "VASCDR" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "CallDate"
+  POSITION 49
+  MAX-WIDTH 4
+  COLUMN-LABEL "CallDate"
+  HELP "Date When call started"
+  ORDER 470
+
+ADD FIELD "CCN" OF "VASCDR" AS integer 
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "CCN"
+  POSITION 50
+  MAX-WIDTH 4
+  COLUMN-LABEL "CCN"
+  HELP "Consecutive country/service number of call's  destination"
+  ORDER 480
+  MANDATORY
+
+ADD FIELD "BDest" OF "VASCDR" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Destin"
+  POSITION 51
+  MAX-WIDTH 24
+  COLUMN-LABEL "Destin"
+  HELP "Call's destination, recognised from B-sub. number"
+  ORDER 490
+
+ADD FIELD "GrossAmt" OF "VASCDR" AS decimal 
+  FORMAT "zzz,zz9.99"
+  INITIAL "0"
+  LABEL "TotalPrice"
+  POSITION 52
+  MAX-WIDTH 17
+  COLUMN-LABEL "TotalPrice"
+  HELP "Total 'gross' Price of Call"
+  DECIMALS 2
+  ORDER 500
+
+ADD FIELD "TotDisc" OF "VASCDR" AS decimal 
+  FORMAT "zzz,zz9.99"
+  INITIAL "0"
+  LABEL "TotDisc"
+  POSITION 53
+  MAX-WIDTH 17
+  COLUMN-LABEL "TotDisc"
+  HELP "Total discount, subtracted from Total Price"
+  DECIMALS 2
+  ORDER 510
+
+ADD FIELD "Amount" OF "VASCDR" AS decimal 
+  FORMAT "zzz,zz9.99"
+  INITIAL "0"
+  LABEL "NetPrice"
+  POSITION 54
+  MAX-WIDTH 17
+  COLUMN-LABEL "NetPrice"
+  HELP "Net (billed) Price of Call"
+  DECIMALS 2
+  ORDER 520
+
+ADD FIELD "Billable" OF "VASCDR" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Billable"
+  POSITION 55
+  MAX-WIDTH 1
+  COLUMN-LABEL "Billable"
+  HELP "Shall this mobile cdr be billed (y/n)"
+  ORDER 375
+
+ADD FIELD "DiscType" OF "VASCDR" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Discount Type"
+  POSITION 56
+  MAX-WIDTH 4
+  COLUMN-LABEL "DiscType"
+  HELP "Discount type"
+  ORDER 530
+
+ADD FIELD "RateType" OF "VASCDR" AS logical 
+  FORMAT "Gen/Net"
+  INITIAL "no"
+  LABEL "Rate"
+  POSITION 57
+  MAX-WIDTH 1
+  COLUMN-LABEL "Rate"
+  HELP "Type of Rate used: (G)eneral rate / (N)et rate"
+  ORDER 540
+
+ADD FIELD "DiscGroup" OF "VASCDR" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "DgCode"
+  POSITION 58
+  MAX-WIDTH 16
+  COLUMN-LABEL "DgCode"
+  HELP "Code of Discount Group"
+  ORDER 550
+
+ADD FIELD "SecTB" OF "VASCDR" AS integer 
+  FORMAT "zz,zz9"
+  INITIAL "0"
+  LABEL "SecTb"
+  POSITION 59
+  MAX-WIDTH 84
+  COLUMN-LABEL "SecTb"
+  HELP "Call's billable secs splitted on different rated Time Bands"
+  EXTENT 6
+  ORDER 560
+
+ADD FIELD "RateTB" OF "VASCDR" AS decimal 
+  FORMAT "zz9.99999"
+  INITIAL "0"
+  LABEL "Secrate"
+  POSITION 60
+  MAX-WIDTH 120
+  COLUMN-LABEL "SecRate"
+  HELP "Rate/sec on each individual time band"
+  EXTENT 6
+  DECIMALS 2
+  ORDER 570
+
+ADD FIELD "StartCharge" OF "VASCDR" AS decimal 
+  FORMAT "zz9.999"
+  INITIAL "0"
+  LABEL "StFee"
+  POSITION 61
+  MAX-WIDTH 17
+  COLUMN-LABEL "StFee"
+  HELP "Start Fee"
+  DECIMALS 3
+  ORDER 580
+
+ADD FIELD "BillCode" OF "VASCDR" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "ProdCode"
+  POSITION 62
+  MAX-WIDTH 32
+  COLUMN-LABEL "ProdCode"
+  HELP "Product code, (call is billed with this product code)"
+  ORDER 590
+
+ADD FIELD "ErrorCode" OF "VASCDR" AS integer 
+  FORMAT "zzz9"
+  INITIAL "0"
+  LABEL "ErrC"
+  POSITION 63
+  MAX-WIDTH 4
+  COLUMN-LABEL "ErrC"
+  HELP "Rating Error Code 1 ... 9999"
+  ORDER 600
+
+ADD FIELD "DiscPlan" OF "VASCDR" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "DPCode"
+  POSITION 64
+  MAX-WIDTH 24
+  COLUMN-LABEL "DPlan"
+  HELP "Code of a Discount Plan"
+  ORDER 620
+
+ADD FIELD "CLIType" OF "VASCDR" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "CLIType"
+  POSITION 65
+  MAX-WIDTH 24
+  COLUMN-LABEL "CLIType"
+  HELP "Code of Subscription Type"
+  ORDER 630
+
+ADD FIELD "TimeEnd" OF "VASCDR" AS integer 
+  FORMAT "zzzzz9"
+  INITIAL "0"
+  LABEL "TimeEnd"
+  POSITION 66
+  MAX-WIDTH 4
+  COLUMN-LABEL "TimeEnd"
+  HELP "Time when call ended (in terms of seconds from midnight)"
+  ORDER 445
+
+ADD FIELD "FOC" OF "VASCDR" AS logical 
+  FORMAT "FoC"
+  INITIAL "no"
+  LABEL "FoC"
+  POSITION 67
+  MAX-WIDTH 1
+  HELP "Is this call Free Of Charge (Y/N) ?"
+  ORDER 640
+
+ADD FIELD "Disc%" OF "VASCDR" AS decimal 
+  FORMAT "z9.99"
+  INITIAL "0"
+  LABEL "Discount%"
+  POSITION 68
+  MAX-WIDTH 17
+  COLUMN-LABEL "Disc%"
+  HELP "Discount percent"
+  DECIMALS 2
+  ORDER 650
+
+ADD FIELD "DiscFP" OF "VASCDR" AS decimal 
+  FORMAT "z9.99"
+  INITIAL "0"
+  LABEL "Fix%"
+  POSITION 69
+  MAX-WIDTH 17
+  COLUMN-LABEL "Fix%"
+  HELP "Amount of Destination-based Fixed Discount (%%)"
+  DECIMALS 2
+  ORDER 660
+
+ADD FIELD "Fdisc" OF "VASCDR" AS decimal 
+  FORMAT "zz,zzz,zz9.99"
+  INITIAL "0"
+  LABEL "FixedDiscount"
+  POSITION 70
+  MAX-WIDTH 17
+  COLUMN-LABEL "FixedDiscount"
+  HELP "Amount  of Fixed Discount"
+  DECIMALS 2
+  ORDER 670
+
+ADD FIELD "DiscValue" OF "VASCDR" AS decimal 
+  FORMAT "zz,zz9.99"
+  INITIAL "0"
+  LABEL "Discount"
+  POSITION 71
+  MAX-WIDTH 17
+  COLUMN-LABEL "Disc"
+  HELP "Value of discount"
+  DECIMALS 2
+  ORDER 665
+
+ADD FIELD "PNP" OF "VASCDR" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "PNP"
+  POSITION 72
+  MAX-WIDTH 1
+  COLUMN-LABEL "PNP"
+  HELP "Private Numbering Plan (i.e. B-sub in 'own group')"
+  ORDER 680
+
+ADD FIELD "RefPrice" OF "VASCDR" AS decimal 
+  FORMAT "zzz,zz9.99"
+  INITIAL "0"
+  LABEL "RefPrice"
+  POSITION 73
+  MAX-WIDTH 17
+  COLUMN-LABEL "RefPrice"
+  HELP "Reference Price (gen. rate without any discounts)"
+  DECIMALS 2
+  ORDER 690
+
+ADD FIELD "IRID" OF "VASCDR" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "InvRowId"
+  POSITION 74
+  MAX-WIDTH 4
+  COLUMN-LABEL "InvRowId"
+  HELP "Invoice row identification number"
+  ORDER 700
+
+ADD FIELD "InvNum" OF "VASCDR" AS integer 
+  FORMAT "zzzzzzzz9"
+  INITIAL "0"
+  LABEL "InvNo"
+  POSITION 75
+  MAX-WIDTH 4
+  COLUMN-LABEL "InvNo"
+  HELP "Invoice No where this call was billed"
+  ORDER 710
+
+ADD FIELD "TariffNum" OF "VASCDR" AS integer 
+  DESCRIPTION "ID of nnhinta record"
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "rateid"
+  POSITION 76
+  MAX-WIDTH 4
+  COLUMN-LABEL "rateid"
+  HELP "ID of rate  record being used"
+  ORDER 720
+
+ADD FIELD "MsSeq" OF "VASCDR" AS integer 
+  DESCRIPTION "Id of a mobsub record. Note that mobsub can have been deleted"
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "SubSeq"
+  POSITION 77
+  MAX-WIDTH 4
+  COLUMN-LABEL "SubSeq"
+  HELP "Sequence for a Subscription"
+  ORDER 730
+  MANDATORY
+
+ADD FIELD "Roaming" OF "VASCDR" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Roaming"
+  POSITION 78
+  MAX-WIDTH 4
+  COLUMN-LABEL "Roaming"
+  HELP "Type of Roaming Call"
+  ORDER 740
+
+ADD FIELD "RoamCC" OF "VASCDR" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "RoamCC"
+  POSITION 79
+  MAX-WIDTH 16
+  COLUMN-LABEL "RoamCC"
+  HELP "Roaming Country Code, Country Where R-Call was orig or terminat"
+  ORDER 750
+
+ADD FIELD "RoamOp" OF "VASCDR" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "RoamOp"
+  POSITION 80
+  MAX-WIDTH 16
+  COLUMN-LABEL "RoamOp"
+  HELP "Code of Foreign Operator Whose Network Was Used"
+  ORDER 760
+
+ADD FIELD "RoamP" OF "VASCDR" AS decimal 
+  FORMAT ">9.99"
+  INITIAL "0"
+  LABEL "RoamP"
+  POSITION 81
+  MAX-WIDTH 17
+  COLUMN-LABEL "RoamP"
+  HELP "Percent Being Added To The Original Fee"
+  DECIMALS 2
+  ORDER 770
+
+ADD FIELD "RoaMarginal" OF "VASCDR" AS decimal 
+  FORMAT "->>,>>9.99"
+  INITIAL "0"
+  LABEL "RoaMarg"
+  POSITION 82
+  MAX-WIDTH 17
+  COLUMN-LABEL "RoaMarg"
+  HELP "Margin Added into Roamrate"
+  DECIMALS 2
+  ORDER 780
+
+ADD FIELD "RoamRate" OF "VASCDR" AS decimal 
+  FORMAT "->>,>>9.99"
+  INITIAL "0"
+  LABEL "RoamRate"
+  POSITION 83
+  MAX-WIDTH 17
+  COLUMN-LABEL "RoamRate"
+  HELP "Original Rate of Roaming Call, Set by Foreign Operator"
+  DECIMALS 2
+  ORDER 790
+
+ADD FIELD "RoamRateMethod" OF "VASCDR" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "RoamRM"
+  POSITION 84
+  MAX-WIDTH 4
+  COLUMN-LABEL "RoamRM"
+  HELP "Rating Method"
+  ORDER 800
+
+ADD FIELD "RepCodes" OF "VASCDR" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "ReportCode"
+  POSITION 85
+  MAX-WIDTH 60
+  COLUMN-LABEL "ReportCode"
+  HELP "Rapportdefinition"
+  ORDER 810
+
+ADD FIELD "ChItem" OF "VASCDR" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "CItem"
+  POSITION 86
+  MAX-WIDTH 2
+  COLUMN-LABEL "CItem"
+  HELP "Chargable Item"
+  ORDER 830
+
+ADD FIELD "CapTon" OF "VASCDR" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "CaPtNo"
+  POSITION 87
+  MAX-WIDTH 2
+  COLUMN-LABEL "CaPtNo"
+  HELP "Called Party Ton"
+  ORDER 840
+
+ADD FIELD "CaPNP" OF "VASCDR" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "CaPNP"
+  POSITION 88
+  MAX-WIDTH 2
+  COLUMN-LABEL "CaPNP"
+  HELP "Called Party NP"
+  ORDER 850
+
+ADD FIELD "Currency" OF "VASCDR" AS character 
+  FORMAT "x(3)"
+  INITIAL ""
+  LABEL "Currency"
+  POSITION 89
+  MAX-WIDTH 6
+  COLUMN-LABEL "Currency"
+  HELP "Charging Currency"
+  ORDER 860
+
+ADD FIELD "Ctimeo" OF "VASCDR" AS character 
+  FORMAT "x(5)"
+  INITIAL ""
+  LABEL "CTimeO"
+  POSITION 90
+  MAX-WIDTH 10
+  COLUMN-LABEL "CTimeO"
+  HELP "Call Time Offset"
+  ORDER 870
+
+ADD FIELD "Ccharge" OF "VASCDR" AS decimal 
+  FORMAT ">>,>>9.999"
+  INITIAL "0"
+  LABEL "CCharge"
+  POSITION 91
+  MAX-WIDTH 17
+  COLUMN-LABEL "CCharge"
+  HELP "Call Charge"
+  DECIMALS 2
+  ORDER 880
+
+ADD FIELD "CDPerc" OF "VASCDR" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "disc%"
+  POSITION 92
+  MAX-WIDTH 4
+  COLUMN-LABEL "Disc%"
+  HELP "Call Discount Percentage"
+  ORDER 890
+
+ADD FIELD "CDAMT" OF "VASCDR" AS decimal 
+  FORMAT ">>>,>>9.999"
+  INITIAL "0"
+  LABEL "CDAmt"
+  POSITION 93
+  MAX-WIDTH 18
+  COLUMN-LABEL "CDAmt"
+  HELP "Call Discount Amount"
+  DECIMALS 3
+  ORDER 900
+
+ADD FIELD "Charge" OF "VASCDR" AS decimal 
+  FORMAT ">>>,>>9.999"
+  INITIAL "0"
+  LABEL "Charge"
+  POSITION 94
+  MAX-WIDTH 18
+  COLUMN-LABEL "Charge"
+  HELP "Charge"
+  DECIMALS 3
+  ORDER 910
+
+ADD FIELD "DDPerc" OF "VASCDR" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "DDPerc"
+  POSITION 95
+  MAX-WIDTH 4
+  COLUMN-LABEL "DDPerc"
+  HELP "CFO Discount Percentage"
+  ORDER 920
+
+ADD FIELD "DDAMT" OF "VASCDR" AS decimal 
+  FORMAT ">>>,>>9.999"
+  INITIAL "0"
+  LABEL "DDAmt"
+  POSITION 96
+  MAX-WIDTH 18
+  COLUMN-LABEL "DDAmt"
+  HELP "CFO Discount Amount"
+  DECIMALS 3
+  ORDER 930
+
+ADD FIELD "Echarge" OF "VASCDR" AS decimal 
+  FORMAT ">>>,>>9.999"
+  INITIAL "0"
+  LABEL "ECharge"
+  POSITION 97
+  MAX-WIDTH 18
+  COLUMN-LABEL "ECharge"
+  HELP "Event Charge"
+  DECIMALS 3
+  ORDER 940
+
+ADD FIELD "EDPerc" OF "VASCDR" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "EDPerc"
+  POSITION 98
+  MAX-WIDTH 4
+  COLUMN-LABEL "EDPerc"
+  HELP "Event Discount Percent"
+  ORDER 950
+
+ADD FIELD "EDAMT" OF "VASCDR" AS decimal 
+  FORMAT ">>>,>>9.999"
+  INITIAL "0"
+  LABEL "EDAmt"
+  POSITION 99
+  MAX-WIDTH 18
+  COLUMN-LABEL "EDAmt"
+  HELP "Event Discount Amount"
+  DECIMALS 3
+  ORDER 960
+
+ADD FIELD "RoamCall" OF "VASCDR" AS logical 
+  FORMAT "Y/N"
+  INITIAL "N"
+  LABEL "RoamCall"
+  POSITION 100
+  MAX-WIDTH 1
+  COLUMN-LABEL "RoamCall"
+  HELP "Is this roaming call"
+  ORDER 970
+
+ADD FIELD "BNET" OF "VASCDR" AS character 
+  FORMAT "x(5)"
+  INITIAL ?
+  LABEL "Bnet"
+  POSITION 101
+  MAX-WIDTH 10
+  COLUMN-LABEL "Bnet"
+  HELP "Mobile Operator/Service Provider"
+  ORDER 980
+
+ADD FIELD "InvSeq" OF "VASCDR" AS integer 
+  FORMAT ">>>>>>>>>>9"
+  INITIAL "0"
+  POSITION 102
+  MAX-WIDTH 4
+  HELP "Invoice sequence"
+  ORDER 990
+
+ADD FIELD "VatIncl" OF "VASCDR" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "VAT Included"
+  POSITION 103
+  MAX-WIDTH 1
+  COLUMN-LABEL "VAT"
+  HELP "Is VAT included in call's price"
+  ORDER 1000
+
+ADD FIELD "DialType" OF "VASCDR" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Dialling Type"
+  POSITION 104
+  MAX-WIDTH 4
+  COLUMN-LABEL "DialType"
+  HELP "Dialling Type"
+  ORDER 1010
+
+ADD FIELD "CurrUnit" OF "VASCDR" AS logical 
+  FORMAT "Full/Sub"
+  INITIAL "?"
+  LABEL "CurrUnit"
+  POSITION 105
+  MAX-WIDTH 1
+  COLUMN-LABEL "CurrUnit"
+  HELP "Currency FULL (1) or SUB (1/100)"
+  ORDER 70
+
+ADD FIELD "MSMark" OF "VASCDR" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "MSMark"
+  POSITION 107
+  MAX-WIDTH 4
+  COLUMN-LABEL "MSMark"
+  HELP "Mobile Station Mark"
+  ORDER 1040
+
+ADD FIELD "DataIn" OF "VASCDR" AS decimal 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "DataIn"
+  POSITION 108
+  MAX-WIDTH 15
+  COLUMN-LABEL "DataIn"
+  HELP "Data Amount Incoming"
+  DECIMALS 0
+  ORDER 1050
+
+ADD FIELD "DataOut" OF "VASCDR" AS decimal 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "DataOut"
+  POSITION 109
+  MAX-WIDTH 17
+  COLUMN-LABEL "DataOut"
+  HELP "Data Amount Outgoing"
+  DECIMALS 2
+  ORDER 1060
+
+ADD FIELD "TaxCode" OF "VASCDR" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "TC"
+  POSITION 110
+  MAX-WIDTH 2
+  COLUMN-LABEL "TC"
+  HELP "TaxCode"
+  ORDER 1080
+
+ADD FIELD "Tax" OF "VASCDR" AS decimal 
+  FORMAT ">>>,>>9.999"
+  INITIAL "0"
+  LABEL "Tax"
+  POSITION 111
+  MAX-WIDTH 18
+  COLUMN-LABEL "Tax"
+  HELP "Tax"
+  DECIMALS 3
+  ORDER 1090
+
+ADD FIELD "tariffClass" OF "VASCDR" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "TaC"
+  POSITION 112
+  MAX-WIDTH 4
+  COLUMN-LABEL "Tac"
+  HELP "Tariff Class"
+  ORDER 1100
+
+ADD FIELD "SOPrice" OF "VASCDR" AS decimal 
+  FORMAT ">>>,>>9.999"
+  INITIAL "0"
+  LABEL "SOPRICE"
+  POSITION 113
+  MAX-WIDTH 18
+  COLUMN-LABEL "SOPRICE"
+  HELP "Service operator price"
+  DECIMALS 3
+  ORDER 1110
+
+ADD FIELD "pulses" OF "VASCDR" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "Pulses"
+  POSITION 114
+  MAX-WIDTH 4
+  COLUMN-LABEL "Pulses"
+  HELP "Pulses"
+  ORDER 1120
+
+ADD FIELD "CallType" OF "VASCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "CallType"
+  POSITION 115
+  MAX-WIDTH 4
+  COLUMN-LABEL "CallType"
+  HELP "Call Type"
+  ORDER 1130
+
+ADD FIELD "CaseType" OF "VASCDR" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "CaseType"
+  POSITION 116
+  MAX-WIDTH 4
+  COLUMN-LABEL "CaseType"
+  HELP "CaseType"
+  ORDER 1140
+
+ADD FIELD "DataInd" OF "VASCDR" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "DataInd"
+  POSITION 117
+  MAX-WIDTH 2
+  COLUMN-LABEL "DataInd"
+  HELP "Data Indicator"
+  ORDER 1150
+
+ADD FIELD "ConnType" OF "VASCDR" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "ConnType"
+  POSITION 118
+  MAX-WIDTH 2
+  COLUMN-LABEL "ConnType"
+  HELP "Connection Type"
+  ORDER 1160
+
+ADD FIELD "GPRSConn" OF "VASCDR" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "GPRSC"
+  POSITION 119
+  MAX-WIDTH 1
+  COLUMN-LABEL "GPRSC"
+  HELP "GPRS connection ready"
+  ORDER 1170
+
+ADD FIELD "PartialInd" OF "VASCDR" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "PartialInd"
+  POSITION 120
+  MAX-WIDTH 2
+  COLUMN-LABEL "PartialInd"
+  HELP "Partial type indicator"
+  ORDER 1180
+
+ADD FIELD "APNNI" OF "VASCDR" AS character 
+  FORMAT "x(63)"
+  INITIAL ""
+  LABEL "APNNI"
+  POSITION 121
+  MAX-WIDTH 126
+  COLUMN-LABEL "APNNI"
+  HELP "Access Ppoint name NI"
+  ORDER 1190
+
+ADD FIELD "APNOI" OF "VASCDR" AS character 
+  FORMAT "x(37)"
+  INITIAL ""
+  LABEL "APNOI"
+  POSITION 122
+  MAX-WIDTH 74
+  COLUMN-LABEL "APNOI"
+  HELP "Access Point Name OI"
+  ORDER 1200
+
+ADD FIELD "ServiceName" OF "VASCDR" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "ServiceName"
+  POSITION 123
+  MAX-WIDTH 40
+  COLUMN-LABEL "ServiceName"
+  HELP "Service Name"
+  ORDER 1210
+
+ADD FIELD "ServiceAddress" OF "VASCDR" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "ServiceAddress"
+  POSITION 124
+  MAX-WIDTH 30
+  COLUMN-LABEL "ServiceAddress"
+  HELP "Service Address"
+  ORDER 1220
+
+ADD FIELD "TermSMS" OF "VASCDR" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "TermSMS"
+  POSITION 125
+  MAX-WIDTH 4
+  COLUMN-LABEL "TermSMS"
+  HELP "Number of terminated SMS"
+  ORDER 1230
+
+ADD FIELD "OrigSMS" OF "VASCDR" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "OrigSMS"
+  POSITION 126
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrigSMS"
+  HELP "Number of originated SMS"
+  ORDER 1240
+
+ADD FIELD "AType" OF "VASCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "AType"
+  POSITION 127
+  MAX-WIDTH 4
+  COLUMN-LABEL "AType"
+  HELP "A-Type"
+  ORDER 1250
+
+ADD FIELD "BType" OF "VASCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "BType"
+  POSITION 128
+  MAX-WIDTH 4
+  COLUMN-LABEL "BType"
+  HELP "B-Type"
+  ORDER 1260
+
+ADD FIELD "CType" OF "VASCDR" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "CType"
+  POSITION 129
+  MAX-WIDTH 4
+  COLUMN-LABEL "CType"
+  HELP "C-Type"
+  ORDER 1270
+
+ADD FIELD "BPrefCode" OF "VASCDR" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "BPrefCode"
+  POSITION 130
+  MAX-WIDTH 2
+  COLUMN-LABEL "BPrefCode"
+  HELP "B-PrefixCode"
+  ORDER 1280
+
+ADD FIELD "BPref" OF "VASCDR" AS character 
+  FORMAT "x(5)"
+  INITIAL ""
+  LABEL "BPref"
+  POSITION 131
+  MAX-WIDTH 10
+  COLUMN-LABEL "BPref"
+  HELP "B-Prefix"
+  ORDER 1290
+
+ADD FIELD "AddInfo" OF "VASCDR" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "AddInfo"
+  POSITION 132
+  MAX-WIDTH 20
+  COLUMN-LABEL "AddInfo"
+  HELP "Additional Info"
+  ORDER 1300
+
+ADD FIELD "GsmCnr" OF "VASCDR" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  POSITION 133
+  MAX-WIDTH 40
+  ORDER 1020
+
+ADD FIELD "NetType" OF "VASCDR" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "NetType"
+  POSITION 134
+  MAX-WIDTH 2
+  COLUMN-LABEL "NetType"
+  HELP "Net Type"
+  ORDER 1330
+
+ADD FIELD "RoamSeq" OF "VASCDR" AS character 
+  FORMAT "x(19)"
+  INITIAL ""
+  LABEL "RoamSeq"
+  POSITION 135
+  MAX-WIDTH 38
+  COLUMN-LABEL "RoamSeq"
+  HELP "Roaming Sequence"
+  ORDER 1340
+
+ADD FIELD "NearCall" OF "VASCDR" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "NearCall"
+  POSITION 136
+  MAX-WIDTH 1
+  COLUMN-LABEL "NearCall"
+  HELP "Near Call"
+  ORDER 1350
+
+ADD FIELD "SubsInfo" OF "VASCDR" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "SubsInfo"
+  POSITION 137
+  MAX-WIDTH 2
+  COLUMN-LABEL "SubsInfo"
+  HELP "Subscription Information"
+  ORDER 1360
+
+ADD FIELD "ChargingID" OF "VASCDR" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "ChargingID"
+  POSITION 138
+  MAX-WIDTH 32
+  COLUMN-LABEL "ChargingID"
+  HELP "Chargind ID"
+  ORDER 1370
+
+ADD FIELD "RateCCN" OF "VASCDR" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "RateCCN"
+  POSITION 139
+  MAX-WIDTH 4
+  COLUMN-LABEL "RateCCN"
+  HELP "Rating CCN"
+  ORDER 1380
+
+ADD FIELD "ActionCode" OF "VASCDR" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "AC"
+  POSITION 140
+  MAX-WIDTH 2
+  COLUMN-LABEL "AC"
+  HELP "Action Code"
+  ORDER 1310
+
+ADD FIELD "RoamInd" OF "VASCDR" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "RoamInd"
+  POSITION 141
+  MAX-WIDTH 1
+  COLUMN-LABEL "RoamInd"
+  HELP "Roaming Indicator"
+  ORDER 1320
+
+ADD FIELD "UTC" OF "VASCDR" AS character 
+  FORMAT "x(5)"
+  INITIAL ""
+  LABEL "UTC"
+  POSITION 142
+  MAX-WIDTH 10
+  COLUMN-LABEL "UTC"
+  HELP "Start UTC offset"
+  ORDER 1410
+
+ADD FIELD "ServiceType" OF "VASCDR" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "ServiceType"
+  POSITION 143
+  MAX-WIDTH 2
+  COLUMN-LABEL "ServiceType"
+  HELP "ServiceType"
+  ORDER 1390
+
+ADD FIELD "BServiceCode" OF "VASCDR" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "BSCode"
+  POSITION 144
+  MAX-WIDTH 4
+  COLUMN-LABEL "BScode"
+  HELP "Baseic Service Code"
+  ORDER 1400
+
+ADD FIELD "NetworkOwner" OF "VASCDR" AS character 
+  FORMAT "x(5)"
+  INITIAL ""
+  LABEL "Owner"
+  POSITION 145
+  MAX-WIDTH 10
+  COLUMN-LABEL "Owner"
+  HELP "Network Owner"
+  ORDER 1420
+
+ADD FIELD "RountingNumber" OF "VASCDR" AS character 
+  FORMAT "x(15)"
+  INITIAL ?
+  LABEL "RountingNumber"
+  POSITION 146
+  MAX-WIDTH 30
+  COLUMN-LABEL "RountingNumber"
+  HELP "Routing Number"
+  ORDER 1430
+
+ADD FIELD "NPQStatus" OF "VASCDR" AS character 
+  FORMAT "x(2)"
+  INITIAL ?
+  LABEL "NPQStatus"
+  POSITION 147
+  MAX-WIDTH 4
+  COLUMN-LABEL "NPQStatus"
+  HELP "Number Portability query status"
+  ORDER 1440
+
+ADD FIELD "VASPrice" OF "VASCDR" AS decimal 
+  FORMAT ">>>>>>>9.99"
+  INITIAL "0"
+  LABEL "VAS Operator Price"
+  POSITION 148
+  MAX-WIDTH 20
+  COLUMN-LABEL "VAS Price"
+  HELP "VAS Operator price"
+  DECIMALS 5
+  ORDER 1450
+
+ADD INDEX "Date" ON "VASCDR" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "DateSt" ASCENDING 
+  INDEX-FIELD "TimeStart" ASCENDING 
+
+ADD INDEX "CLI" ON "VASCDR" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CLI" ASCENDING 
+  INDEX-FIELD "DateSt" ASCENDING 
+  INDEX-FIELD "TimeStart" ASCENDING 
+
+ADD INDEX "CustNum" ON "VASCDR" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "DateSt" ASCENDING 
+  INDEX-FIELD "TimeStart" ASCENDING 
+
+ADD INDEX "ErrorCode" ON "VASCDR" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "ErrorCode" ASCENDING 
+
+ADD INDEX "gsmbnr" ON "VASCDR" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "DateSt" ASCENDING 
+  INDEX-FIELD "GsmBnr" ASCENDING 
+
+ADD INDEX "InvCust" ON "VASCDR" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "InvCust" ASCENDING 
+  INDEX-FIELD "DateSt" ASCENDING 
+  INDEX-FIELD "TimeStart" ASCENDING 
+
+ADD INDEX "invseq" ON "VASCDR" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "InvCust" ASCENDING 
+  INDEX-FIELD "InvSeq" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000160861

@@ -1,0 +1,57 @@
+ADD FIELD "Effective" OF "DayCampaign" AS integer
+  DESCRIPTION ""
+  FORMAT ">9"
+  FORMAT-SA ?
+  POSITION 24
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "When contract becomes effective"
+  HELP-SA ""
+  LABEL "Effective"
+  LABEL-SA ?
+  COLUMN-LABEL "Eff."
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 250
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "TermFeeCalc" OF "DayCampaign" AS integer
+  DESCRIPTION ""
+  FORMAT ">9"
+  FORMAT-SA ?
+  POSITION 25
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Termination fee calculation method"
+  HELP-SA ""
+  LABEL "Term. Fee Calculation"
+  LABEL-SA ?
+  COLUMN-LABEL "TFee Calc"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 260
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+.
+PSC
+cpstream=1252
+.
+0000000437

@@ -1,0 +1,24 @@
+DEFINE INPUT PARAMETER pcTableFile AS CHARACTER NO-UNDO. 
+DEFINE INPUT PARAMETER pcDir AS CHARACTER NO-UNDO. 
+DEFINE INPUT PARAMETER iDispInterval AS INTEGER NO-UNDO. 
+DEFINE INPUT PARAMETER lOutputFixture AS LOGICAL NO-UNDO. 
+
+
+DEFINE VARIABLE cLine AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE cTableName AS CHARACTER NO-UNDO. 
+
+DEFINE STREAM sTables.
+
+INPUT STREAM sTables FROM VALUE(pcTableFile).
+
+REPEAT:
+   IMPORT STREAM sTables UNFORMATTED cLine.
+   IF NOT INDEX(cLine, "count limit") > 0 THEN
+   DO:
+       cTableName = TRIM(ENTRY(1, cLine, ":")).
+       DISP cTableName FORMAT "X(30)".
+       run dynexport.p(pcDir, cTableName, 0, iDispInterval, lOutputFixture).
+   END.
+END.
+
+INPUT STREAM sTables CLOSE.

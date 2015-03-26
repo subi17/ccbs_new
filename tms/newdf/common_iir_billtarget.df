@@ -1,0 +1,8 @@
+ADD INDEX "RatePlan" ON "BillTarget"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "RatePlan" ASCENDING
+  INDEX-FIELD "CustNum"
+.
+PSC
+cpstream=ISO8859-1
+.

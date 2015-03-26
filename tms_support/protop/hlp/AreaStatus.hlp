@@ -1,0 +1,39 @@
+Storage Area Status Help
+========================
+
+Status of Storage Areas.
+
+Area:
+
+The Area number.  (Each AI Extent is a seperate Storage Area.)
+
+Area Name:
+
+The descriptive name of the Storage Area.
+
+Blocks:
+
+The number of blocks allocated to this extent.
+
+Hi Water:
+
+The extents high water mark.
+
+Free:
+
+The number of blocks free for AI notes.
+
+%Used:
+
+The percentage of blocks in use.
+
+RPB:
+
+The number of Rows Per Block for the area.
+
+Note:
+
+The number of tables t(#) & indexes i(#) assigned to the area. If  the
+schema area has tables or indexes assigned to it that will be indicated
+via "***".
+

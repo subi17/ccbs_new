@@ -1,0 +1,20 @@
+# get_mobsub_details
+MobSubDetailsDCCLI:
+  MsSeq:25
+  TermDate:"14/09/2008"
+  DCEvent:"TERM18"
+
+# get_mobsub_details:
+MobSubDetailsDCCLITermDateNE:
+  MsSeq:28
+  ValidTo:"22/10/2010"
+  DCEvent:"TERM18"
+
+# check_renove_avail_DCCLI
+ChkRenoveDCCLI:
+  Brand:"1"
+  MsSeq:31
+  DCEvent:"TERM18"
+  ValidFrom:"08/01/1970"
+  ValidTo:"10/10/2040"
+

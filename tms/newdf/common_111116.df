@@ -1,0 +1,82 @@
+ADD FIELD "FromDate" OF "BDest" AS date
+  FORMAT "99-99-99"
+  POSITION 21
+  INITIAL ?
+  HELP "First effective day"
+  LABEL "Valid From"
+  COLUMN-LABEL "From"
+  VIEW-AS ?
+  ORDER 210
+  MAX-WIDTH 4
+
+ADD FIELD "BdestID" OF "BDest" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "BDestination ID"
+  POSITION 22
+  MAX-WIDTH 4
+  COLUMN-LABEL "BDest ID"
+  HELP "Unique ID"
+  ORDER 220
+
+RENAME INDEX "BDest" TO "temp-36878" ON "BDest"
+
+ADD INDEX "BDest" ON "BDest"
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "BDest" ASCENDING
+  INDEX-FIELD "DestType" ASCENDING
+  INDEX-FIELD "ToDate" DESCENDING
+
+UPDATE PRIMARY INDEX "BDest" ON "BDest"
+
+DROP INDEX "temp-36878" ON "BDest"
+DROP INDEX "DestType" ON "BDest"
+DROP INDEX "ws-bsub" ON "BDest"
+
+ADD FIELD "DestType" OF "RateCCN" AS integer
+  FORMAT ">9"
+  POSITION 6
+  INITIAL "0"
+  HELP "Destination type"
+  LABEL "Destination Type"
+  COLUMN-LABEL "Dest.Type"
+  VIEW-AS ?
+  ORDER 50
+  MAX-WIDTH 4
+
+ADD FIELD "BdestID" OF "RateCCN" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "BDestination ID"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "BDest ID"
+  HELP "Unique ID"
+  ORDER 60
+
+RENAME INDEX "BDest" TO "temp-72886" ON "RateCCN"
+
+ADD INDEX "BDestID" ON "RateCCN" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "BdestID" ASCENDING 
+  INDEX-FIELD "DialType" ASCENDING 
+
+ADD INDEX "BDest" ON "RateCCN"
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "BDest" ASCENDING
+  INDEX-FIELD "DestType" ASCENDING
+  INDEX-FIELD "DialType" ASCENDING
+
+UPDATE PRIMARY INDEX "BDest" ON "RateCCN"
+
+DROP INDEX "temp-72886" ON "RateCCN"
+
+.
+PSC
+cpstream=1252
+.
+0000000583

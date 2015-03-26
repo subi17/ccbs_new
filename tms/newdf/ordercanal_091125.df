@@ -1,0 +1,12 @@
+ADD FIELD "DeliStamp" OF "CallAlarm" AS decimal 
+  DESCRIPTION "Time Stamp yyyymmdd.time (sec)"
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Delivered"
+  COLUMN-LABEL "Delivered"
+  HELP "Date and Time When Call Alarm was delivered"
+  DECIMALS 5
+  ORDER 150
+.
+PSC
+cpstream=1252

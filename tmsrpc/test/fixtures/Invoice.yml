@@ -1,0 +1,96 @@
+FatimeInvoice1:
+   Brand:"1"
+   ExtInvId:"ExtInvId1"
+   invnum:1
+
+FatimeInvoice2:
+   Brand:"1"
+   ExtInvId:"ExtInvId2"
+   invnum:2
+
+InvoiceCustomer1:
+   Brand:"1"
+   ExtInvId:"ExtInvId3"
+   invnum:3
+   Custnum:1
+
+
+# get_invoices, find by orderid, one found by custnum
+InvoiceForOrder:
+   Brand:"1"
+   InvNum:4
+   InvType:5
+   CustNum:5
+   CrInvNum:15
+   ClaimState:45,24
+   ExtInvId:32
+   InvAmt:45,67
+   PaidAmt:30,23
+   DueDate:08-12-10
+   InvDate:07-11-10
+   PaymDate:21-11-10
+   CLI:"633202202"
+   WInvDisp:TRUE
+
+# get_invoices, find by custnum, 1st
+InvoiceForCustomer1:
+   Brand:"1"
+   InvNum:12
+   CustNum:7
+   InvType:1
+   CrInvNum:15
+   ClaimState:45,24
+   ExtInvId:32
+   InvAmt:45,67
+   PaidAmt:30,23
+   DueDate:08-12-10
+   InvDate:07-11-10
+   PaymDate:21-11-10
+   CLI:"633202202"
+   WInvDisp:TRUE
+
+# get_invoices, find by custnum, 2nd
+InvoiceForCustomer2:
+   Brand:"1"
+   InvNum:5
+   CustNum:7
+   InvType:5
+   CrInvNum:14
+   ClaimState:42,24
+   ExtInvId:39
+   InvAmt:47,77
+   PaidAmt:31,23
+   DueDate:09-01-11
+   InvDate:08-11-10
+   PaymDate:22-12-10
+   CLI:""
+   WInvDisp:TRUE
+ 
+# get_invoices, find by custnum, not found because invdate is not suitable
+InvoiceForCustomerNotFound1:
+   Brand:"1"
+   InvNum:6
+   CustNum:6
+   InvDate:30-01-03
+   InvType:1
+   WInvDisp:TRUE
+
+# get_invoice, find by custnum, not found because invtype not suitable
+InvoiceForCustomerNotFound2:
+   Brand:"1"
+   InvNum:7
+   CustNum:8
+   InvDate:30-01-09
+   InvType:7
+   WInvDisp:TRUE
+
+
+# get_invoice, find by custnum, not found because WInvDisp not suitable
+InvoiceForCustomerNotFound3:
+   Brand:"1"
+   InvNum:8
+   CustNum:9
+   InvDate:30-01-09
+   InvType:5
+   WInvDisp:FALSE
+

@@ -1,0 +1,74 @@
+ADD TABLE "TFConf"
+  AREA "Sta_Data_128"
+  LABEL "TFConf"
+  DESCRIPTION "Terminal financial configuration values"
+  DUMP-NAME "tfconf"
+
+ADD FIELD "TFConfId" OF "TFConf" AS int 
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "TFConfId"
+  HELP "Unique Id"
+  ORDER 10
+
+ADD FIELD "RVPercentage" OF "TFConf" AS decimal 
+  FORMAT ">>9.99"
+  INITIAL "0"
+  LABEL "RVPercentage"
+  HELP "Terminal Residual value percentage to"
+  DECIMALS 2
+  ORDER 20
+
+ADD FIELD "CommFeePerc" OF "TFConf" AS decimal 
+  FORMAT ">>9.99"
+  INITIAL "0"
+  LABEL "CommFeePerc"
+  HELP "Commission fee percentage"
+  DECIMALS 2
+  ORDER 30
+
+ADD FIELD "TAE" OF "TFConf" AS decimal 
+  FORMAT ">>9.99"
+  INITIAL "0"
+  LABEL "TAE"
+  DECIMALS 2
+  ORDER 40
+
+ADD FIELD "PaytermCode" OF "TFConf" AS character 
+  FORMAT "X(5)"
+  INITIAL ""
+  LABEL "PaytermCode"
+  ORDER 50
+
+ADD FIELD "ResidualCode" OF "TFConf" AS character 
+  FORMAT "X(5)"
+  INITIAL ""
+  LABEL "ResidualCode"
+  ORDER 60
+
+ADD FIELD "ValidFrom" OF "TFConf" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid From"
+  COLUMN-LABEL "ValidFrom"
+  HELP "Date when configuration becomes active"
+  ORDER 70
+
+ADD FIELD "ValidTo" OF "TFConf" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid To"
+  COLUMN-LABEL "ValidTo"
+  HELP "Date after configuration becomes inactive"
+  ORDER 80
+
+ADD INDEX "TFConfID" ON "TFConf" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  UNIQUE
+  INDEX-FIELD "TFConfId" ASCENDING
+
+ADD INDEX "RVPercentage" ON "TFConf" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "RVPercentage" ASCENDING
+  INDEX-FIELD "ValidTo" DESCENDING 

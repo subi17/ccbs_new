@@ -1,0 +1,169 @@
+ADD TABLE "OrderFusion"
+  AREA "Sta_Data_32"
+  LABEL "Order Fusion"
+  DESCRIPTION "Order Fusion"
+  DUMP-NAME "orderfusion"
+
+ADD FIELD "Brand" OF "OrderFusion" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  COLUMN-LABEL "Brand"
+  ORDER 10
+
+ADD FIELD "OrderId" OF "OrderFusion" AS integer 
+  DESCRIPTION "Order sequence number"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  COLUMN-LABEL "OrderId"
+  ORDER 20
+
+ADD FIELD "FusionStatus" OF "OrderFusion" AS character 
+  DESCRIPTION "Status of order"
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Fusion Order Status"
+  COLUMN-LABEL "FusionStatus"
+  ORDER 30 
+
+ADD FIELD "FixedNumberType" OF "OrderFusion" AS character 
+  DESCRIPTION "Fixed line order type NEW/MNP"
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Fixed Number Type"
+  COLUMN-LABEL "FixedNumberType"
+  ORDER 40 
+
+ADD FIELD "FixedNumber" OF "OrderFusion" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Fixed Number"
+  COLUMN-LABEL "FixedNumber"
+  ORDER 50
+
+ADD FIELD "Product" OF "OrderFusion" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Product"
+  COLUMN-LABEL "Product"
+  ORDER 60
+
+ADD FIELD "FixedCurrOper" OF "OrderFusion" AS character 
+  DESCRIPTION "Current operator"
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Fixed Current Operator"
+  COLUMN-LABEL "CurrOper"
+  HELP "Item type"
+  ORDER 70
+
+ADD FIELD "FixedOrderId" OF "OrderFusion" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Fixed Order Id"
+  COLUMN-LABEL "FixedOrderId"
+  ORDER 80
+
+ADD FIELD "FixedStatus" OF "OrderFusion" AS character 
+  DESCRIPTION "Fixed line order status code"
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Fixed Status"
+  COLUMN-LABEL "FixedStatus"
+  ORDER 90
+
+ADD FIELD "FixedSubStatus" OF "OrderFusion" AS character 
+  DESCRIPTION "Fixed line order sub-status code"
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Fixed Sub-status"
+  COLUMN-LABEL "FixedSubStatus"
+  ORDER 100
+
+ADD FIELD "ExternalTicket" OF "OrderFusion" AS character 
+  DESCRIPTION "External order ticket number"
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "External Ticket"
+  COLUMN-LABEL "ExternalTicket"
+  ORDER 110
+
+ADD FIELD "OrderDate" OF "OrderFusion" AS date 
+  DESCRIPTION "Order date"
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "OrderDate"
+  COLUMN-LABEL "OrderDate"
+  ORDER 120
+
+ADD FIELD "Salesman" OF "OrderFusion" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Salesman"
+  COLUMN-LABEL "Salesman"
+  ORDER 130
+
+ADD FIELD "FixedMNPTime" OF "OrderFusion" AS character 
+  DESCRIPTION "Fixed line MNP time"
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Fixed MNP Time"
+  COLUMN-LABEL "FixedMNPTime"
+  ORDER 140
+
+ADD FIELD "CustomerType" OF "OrderFusion" AS character 
+  DESCRIPTION "Fixed line customer type"
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Customer Type"
+  COLUMN-LABEL "CustomerType"
+  ORDER 150
+
+ADD FIELD "PhoneBook" OF "OrderFusion" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "PhoneBook"
+  COLUMN-LABEL "PhoneBook"
+  ORDER 160
+
+ADD FIELD "FixedContractID" OF "OrderFusion" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Contract ID"
+  COLUMN-LABEL "ContractID"
+  ORDER 170
+
+ADD FIELD "UpdateTS" OF "OrderFusion" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  DECIMALS 5
+  ORDER 180
+
+ADD INDEX "OrderId" ON "OrderFusion" 
+  AREA "Dyn_Index_1"
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "OrderId" ASCENDING 
+
+ADD INDEX "FusionStatus" ON "OrderFusion" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "FusionStatus" ASCENDING 
+  INDEX-FIELD "OrderDate" DESCENDING 
+
+ADD INDEX "FixedOrderId" ON "OrderFusion" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "FixedOrderId" ASCENDING 
+
+ADD INDEX "FixedNumber" ON "OrderFusion" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "FixedNumber" ASCENDING 
+
+ADD INDEX "UpdateTS" ON "OrderFusion" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "UpdateTS" ASCENDING 
+
+ADD INDEX "Salesman" ON "OrderFusion" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "Salesman" ASCENDING 
+  INDEX-FIELD "FusionStatus" ASCENDING 

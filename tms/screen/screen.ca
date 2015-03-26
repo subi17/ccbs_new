@@ -1,0 +1,10 @@
+echo "CallAlarm Sender SCREEN"
+sleep 2
+#screen 1 xfear -screen callalarm_sender
+# Node 1 and 2 use EMI UCP protocol (deprecated)
+# Update: (these now are using SMPP as well)
+screen -t Node1 1 python /apps/tms/python/callalarm.py 1
+screen -t Node2 2 python /apps/tms/python/callalarm.py 2
+# Node 3 and 4 use SMPP protocol
+screen -t Node3 3 python /apps/tms/python/callalarm.py 3
+screen -t Node4 4 python /apps/tms/python/callalarm.py 4

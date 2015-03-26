@@ -1,0 +1,25 @@
+ADD FIELD "DCType" OF "MobCDR" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Contract Type"
+  POSITION 200
+  MAX-WIDTH 16
+  COLUMN-LABEL "CType"
+  HELP "Contract type"
+  ORDER 2490
+
+ADD FIELD "DCEvent" OF "MobCDR" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Periodical Contract"
+  POSITION 201
+  MAX-WIDTH 24
+  COLUMN-LABEL "P.Contract"
+  HELP "Periodical contract"
+  ORDER 2500
+
+.
+PSC
+cpstream=1252
+.
+0000013957

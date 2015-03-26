@@ -1,0 +1,11 @@
+UPDATE FIELD "MsRequest" OF "MsRequest"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "SoLog" OF "SOLog"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "MsRequest" OF "SOLog"
+  FORMAT ">>>>>>>>9"
+.
+PSC
+cpstream=1252

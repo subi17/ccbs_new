@@ -1,0 +1,598 @@
+~/* ----------------------------------------------------------------------
+ MODULE .......: SOG-ST.P
+  TASK .........: SET selected parameters into HLR ( EXCEPT CFNRY ...
+                  because CFNRY cannot be set alone, use cfnrych.p instead )
+  APPLICATION ..: nn
+  AUTHOR .......: jp
+  CREATED ......: 08-07-99
+  CHANGED ......: 12.08.99 pt final tuning
+                  16.08.99 pt set ALL if param list = "*",  NO CFNRY
+                  01.04.04 jp break by SubSer.ssstat
+                  01.07.04 tk simbatch removed
+                  13.12.04/aam use SubSer.SSDate
+                  22.12.04/aam SubSer.SologStat, use ttSolog
+                  18.08.05/aam if barring is set, check that there aren't
+                               pending barring closures
+                  13.09.05/aam use ssparam only if ssstat > 0             
+                  29.11.06/aam subser is not necessarily created yet,
+                               new values for rc 
+  Version ......: 
+  ---------------------------------------------------------------------- */
+
+{commali.i}
+{timestamp.i}
+{tmsconst.i}
+{cparam2.i}
+{sog.i}
+{barrgrp.i}
+{provision.i}
+{fmakemsreq.i}
+{service.i}
+{fbundle.i}
+{barrfunc.i}
+
+DEF INPUT  PARAMETER  iiMsRequest LIKE MSRequest.msrequest NO-UNDO.
+DEF INPUT  PARAMETER  batch       AS LOG             NO-UNDO. 
+DEF OUTPUT PARAMETER  rc          AS INTEGER         NO-UNDO.
+DEF OUTPUT PARAMETER  ocError    AS CHAR NO-UNDO. 
+   /* -1: error occurred 
+       0: no need to create solog
+       1: solog created 
+   */
+
+FUNCTION fDoubleParam RETURNS CHARACTER
+  (INPUT pcCommLine AS CHARACTER):
+
+   DEFINE VARIABLE liIdx  AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcTemp AS CHARACTER NO-UNDO.
+
+   IF INDEX(pcCommLine,"PAYTYPE=P") > 0 AND
+      INDEX(pcCommLine,"PAYTYPE=-") > 0 THEN DO:
+               
+      DO liIdx = 1 TO NUM-ENTRIES(pcCommLine):
+         IF NOT ENTRY(liIdx,pcCommLine) BEGINS "PAYTYPE=P" THEN
+            lcTemp = lcTemp + "," + ENTRY(liIdx,pcCommLine).
+      END.
+
+      lcTemp = SUBSTR(lcTemp,2).
+
+   END.
+   ELSE lcTemp = pcCommLine.
+
+   RETURN lcTemp.
+
+END FUNCTION.
+
+DEF VAR ldSchedule    AS DEC                        NO-UNDO. 
+DEF VAR ldTime        AS DEC                        NO-UNDO. 
+DEF VAR ldCurrent     AS DEC                        NO-UNDO. 
+DEF VAR ldActStamp    AS DEC                        NO-UNDO. 
+DEF VAR ldOrder       AS DEC                        NO-UNDO. 
+DEF VAR llSkip        AS LOG                        NO-UNDO. 
+DEF VAR lcActiveBundles AS CHAR                     NO-UNDO.
+DEF VAR lcServName    AS CHAR                       NO-UNDO.
+DEF VAR lcBundle      AS CHAR                       NO-UNDO.
+DEF VAR liNumEntries  AS INT                        NO-UNDO.
+DEF VAR liCount       AS INT                        NO-UNDO.
+DEF VAR lcServiceClass AS CHAR                      NO-UNDO.
+DEF VAR liCurrentServiceClass AS INT                NO-UNDO.
+DEF VAR lcError       AS CHAR                       NO-UNDO.
+DEF VAR lcPrepaidVoiceTariffs  AS CHAR              NO-UNDO.
+DEF VAR lcBBProfile1           AS CHAR              NO-UNDO.
+DEF VAR lcBBProfile2           AS CHAR              NO-UNDO.
+DEF VAR lcShaperProfile        AS CHAR              NO-UNDO.
+DEF VAR ldaActiveDate          AS DATE              NO-UNDO.
+DEF VAR liActiveTime           AS INT               NO-UNDO.
+DEF VAR lcBarrStatus AS CHAR NO-UNDO. 
+DEF VAR lcBarrMask AS CHAR NO-UNDO. 
+DEF VAR liNamActive AS INT NO-UNDO. 
+DEF VAR llCheckSC AS LOG NO-UNDO INIT TRUE.
+DEF VAR llVoIPActive AS LOG NO-UNDO.
+DEF VAR lcShaperConfId AS CHAR NO-UNDO.
+DEF VAR lcBaseBundle AS CHAR NO-UNDO.
+
+DEF BUFFER bSubSer FOR SubSer.
+DEF BUFFER bSSPara FOR SubSerPara.
+DEF BUFFER bttBarr FOR ttBarring.
+DEF BUFFER bOrigRequest FOR MSRequest.
+DEF BUFFER bMsRequest   FOR MSRequest.
+DEF BUFFER bMsRequest2  FOR MSRequest.
+DEF BUFFER bCLIType     FOR CLIType.
+
+DEF TEMP-TABLE ttSolog NO-UNDO
+   FIELD ServCom   AS CHAR
+   FIELD CommLine  AS CHAR
+   FIELD Solog     AS INT 
+   FIELD ActStamp  AS DEC
+   FIELD MSREquest AS INT
+   INDEX ServCom ServCom ActStamp.
+ 
+DEF TEMP-TABLE ttDone NO-UNDO
+   FIELD ServCom AS CHAR
+   FIELD SSStat  AS INT
+   INDEX ServCom ServCom.
+
+   
+ldCurrent = fMakeTS().
+
+rc = -1.
+
+FIND FIRST MSrequest WHERE 
+           MSRequest.MSrequest = iiMSrequest NO-LOCK NO-ERROR.
+IF NOT AVAILABLE MsRequest THEN RETURN.           
+
+FIND MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
+IF NOT AVAILABLE MobSub THEN RETURN.
+
+/* IMSI number Record (we get KI ) */
+FIND FIRST IMSI WHERE IMSI.ICC = MobSub.ICC NO-LOCK NO-ERROR.
+IF NOT AVAILABLE IMSI THEN DO:
+   ocError = "ERROR:IMSI not found".
+   RETURN ocError.
+END.
+
+/* SIM Card  (Here we get the Batch # ) */
+FIND SIM where SIM.ICC = IMSI.ICC NO-LOCK NO-ERROR.
+IF NOT AVAILABLE SIM THEN DO:
+   ocError = "ERROR:SIM not found".
+   RETURN ocError.
+END.
+
+ASSIGN lcPrepaidVoiceTariffs = fCParamC("PREPAID_VOICE_TARIFFS")
+       lcBBProfile1          = fCParamC("BB_PROFILE_1")
+       lcBBProfile2          = fCParamC("BB_PROFILE_2").
+
+IF MobSub.CLIType = "TARJ5" THEN DO:
+   IF (MsRequest.ReqCParam1 = "HSDPA" /* OR
+      (MsRequest.ReqCParam1 = "SHAPER" AND /* prodigy will handle this */
+       MsRequest.ReqCParam2 = "HSPA_ROAM_EU") */)
+   THEN DO:
+
+      RUN air_get_account_details.p(MobSub.CLI, 
+                                    OUTPUT liCurrentServiceClass,
+                                    OUTPUT lcError).
+      IF lcError BEGINS "ERROR" THEN DO:
+         ocError = lcError.
+         RETURN ocError.
+      END.
+   END.
+END.
+/* just to mark that SERVICECLASS parameter is required*/
+/* /* prodigy will handle this */
+ELSE IF MobSub.CLIType BEGINS "TARJ" AND
+   (MsRequest.ReqCParam1 = "SHAPER" AND
+    MsRequest.ReqCParam2 = "HSPA_ROAM_EU") THEN liCurrentServiceClass = 99.
+*/
+/* Replace Service Name SHAPER to "UPSELL" in solog */
+IF MsRequest.ReqCParam1 = "SHAPER" AND
+   MsRequest.OrigRequest > 0 THEN DO:
+   FIND FIRST bMsRequest WHERE 
+              bMsRequest.MsRequest = MsRequest.OrigRequest
+        NO-LOCK NO-ERROR.
+   IF AVAILABLE bMsRequest THEN DO:
+      IF bMsRequest.ReqCparam3 MATCHES "*_UPSELL" THEN
+         lcServName = "QUOTA".
+      ELSE IF (bMsRequest.ReqType EQ 0 OR 
+               bMsRequest.ReqType EQ 81) AND
+         INDEX(MsRequest.ReqCParam2,"HSPA") > 0 THEN
+         lcServName = "QUOTA".
+   END.
+END. /* IF MsRequest.ReqCParam1 = "SHAPER" AND */
+
+IF MsRequest.ReqCparam1 = "CF" THEN DO:
+   
+   IF MsRequest.ReqCParam2 > "" THEN DO:
+      
+      IF LENGTH(MsRequest.ReqCParam2) NE 3 THEN DO:
+         ocError = "ERROR:Incorrect CF parameters".
+         RETURN ocError.
+      END.
+
+      DO liCount = 1 TO 3:
+         lcServName = lcServName + ENTRY(liCount,"CFB,CFNRC,CFNRY").
+         CASE SUBSTRING(MsRequest.ReqCparam2,liCount,1):
+            WHEN "0" THEN lcServName = lcServName + "=0".
+            WHEN "1" THEN lcServName = lcServName + "=34633633633".
+            WHEN "2" THEN lcServName = lcServName + "=34633633556".
+            OTHERWISE DO:
+               ocError = "ERROR:Incorrect CF parameters".
+               RETURN ocError.
+            END.
+         END.
+         IF liCount NE 3 THEN lcServName = lcServName + ",".
+      END.
+   END.
+   ELSE DO:
+      CASE MsRequest.ReqIParam1:
+         /* OFF */
+         WHEN 0 THEN
+            lcServName = "CFB=0,CFNRC=0,CFNRY=0".
+         /* CF */
+         WHEN 1 THEN
+            lcServName = "CFB=34633633633,CFNRC=34633633633,CFNRY=34633633633".
+         /* MCA */
+         WHEN 2 THEN
+            lcServName = "CFB=34633633556,CFNRC=34633633556,CFNRY=0".
+         OTHERWISE DO:
+            ocError = "ERROR:Incorrect CF parameters".
+            RETURN ocError.
+         END.
+      END CASE.
+   END.
+END.
+/* hot fix to YTS-4471 */
+ELSE IF MsRequest.ReqCParam1 EQ "NAM" OR
+       (MsRequest.ReqCParam1 EQ "BARRING" AND
+        MsRequest.ReqCParam2 EQ "#RESET") THEN DO:
+
+   lcBarrStatus = fCheckStatus(MsRequest.MsSeq).
+
+   IF MsRequest.ReqCParam1 EQ "NAM" THEN liNamActive = MsRequest.ReqIParam1.
+   ELSE DO:
+      liNamActive = 0.
+      FOR EACH bMsRequest2 WHERE
+               bMsRequest2.MsSeq      = MsRequest.MsSeq AND
+               bMsRequest2.ReqType    = {&REQTYPE_SERVICE_CHANGE} AND
+               bMsRequest2.ReqStatus  = {&REQUEST_STATUS_DONE} AND
+               bMsRequest2.ReqCparam1 = "NAM" AND
+               bMsRequest2.ActStamp  <= ldCurrent AND
+               bMsRequest2.UserCode  <> "barr" NO-LOCK
+         USE-INDEX MsSeq BY bMsRequest2.UpdateStamp DESC:
+
+         IF bMsRequest2.ReqIparam1 EQ 1 THEN liNamActive = 1.
+         LEAVE.
+      END. /* FOR FIRST bMsRequest WHERE */
+   END.
+
+   IF lcBarrStatus EQ "OK" THEN lcBarrMask = "0000000".
+   ELSE IF lcBarrStatus BEGINS "D_" OR
+      lcBarrStatus BEGINS "Y_" OR
+      lcBarrStatus BEGINS "C_" THEN DO:
+      
+      FIND FIRST ctservel NO-LOCK where
+                 ctservel.brand = gcBrand AND
+                 ctservel.clitype = MobSub.CLIType and
+                 ctservel.servpac = lcBarrStatus and
+                 ctservel.servcom = "BARRING" NO-ERROR.
+
+      IF AVAIL ctservel THEN lcBarrMask = ctservel.defparam.
+      ELSE DO:
+         ocError = "ERROR:Barring component not found".
+         RETURN ocError.
+      END.
+   END.
+   ELSE DO:
+      ocError = "ERROR:Ongoing barring request".
+      RETURN ocError.
+   END.
+
+   OVERLAY(lcBarrMask,7) = STRING(liNamActive).
+   IF MobSub.CLIType EQ "CONTM2" THEN OVERLAY(lcBarrMask,2) = "11".
+   lcServName = "BARRING=" + lcBarrMask.
+END.
+
+IF lcServName = "" THEN lcServName = MsRequest.ReqCParam1.
+
+FIND ServCom WHERE
+     ServCom.Brand   = gcBrand AND
+     ServCom.ServCom = MsRequest.ReqCParam1 NO-LOCK NO-ERROR.
+
+rc = 0.
+
+/* update to HLR */  
+IF ServCom.ActType = 0 THEN DO:
+ 
+   rc = -1.
+   
+   CREATE ttSolog.
+   ASSIGN ttSolog.ServCom = ""
+          ttSolog.MSRequest = iiMsRequest
+
+   ldActStamp = MAX(MsRequest.ActStamp,ldCurrent).
+  
+  IF lcServName EQ "SHAPER" AND
+     MsRequest.ReqIParam1 > 0 AND 
+     MsRequest.ReqCParam2 > "" THEN DO:
+
+     lcShaperProfile = fGetShaperConfCommline(MsRequest.ReqCParam2).
+
+     IF MsRequest.ReqCParam2 = "VOIP_ADD" OR
+        MsRequest.ReqCParam2 = "VOIP_REMOVE" THEN DO:
+
+        fSplitTS(MsRequest.ActStamp,
+                 OUTPUT ldaActiveDate,
+                 OUTPUT liActiveTime).
+
+        IF MobSub.TariffBundle = "" THEN DO:
+           FIND FIRST bCLIType WHERE
+                      bCLIType.Brand = gcBrand AND
+                      bCLIType.CLIType = MobSub.CLIType NO-LOCK NO-ERROR.
+           IF AVAIL bCLIType THEN DO:
+              IF bCLIType.BaseBundle = "" THEN
+                 lcBaseBundle = "".
+              ELSE lcBaseBundle = bCLIType.BaseBundle.
+           END.
+        END.
+        ELSE lcBaseBundle = MobSub.TariffBundle.
+
+        /* Find current Shaper Conf */
+        lcShaperConfId = fGetShaperConfId(MsRequest.MSSeq,
+                                          lcBaseBundle,
+                                          (IF lcBaseBundle = "" THEN
+                                           "#ADDBUNDLE" ELSE ""),
+                                          ldaActiveDate,
+                                          MobSub.CLIType).
+
+        /* Send defualt shaper if there is no actual shaper id returned */
+        IF lcShaperConfId = "" THEN lcShaperConfId = "DEFAULT".
+
+        FIND FIRST ShaperConf NO-LOCK WHERE
+                   ShaperConf.Brand = gcBrand AND
+                   ShaperConf.ShaperConfID = lcShaperConfId NO-ERROR.
+        IF NOT AVAIL ShaperConf THEN DO:
+           ocError = "ERROR:Shaper Configuration not found".
+           RETURN ocError.
+        END.
+
+        IF MsRequest.ReqCParam2 = "VOIP_ADD" THEN
+           lcShaperProfile = fGetShaperConfCommline(lcShaperConfId + "wVOIP").
+        ELSE
+           lcShaperProfile = fGetShaperConfCommline(lcShaperConfId).
+
+        IF INDEX(lcShaperProfile,"HSPA_MONTHLY_ADD") = 0 THEN
+           lcShaperProfile = REPLACE(lcShaperProfile,"HSPA_MONTHLY",
+                                                     "HSPA_MONTHLY_ADD").
+     END. /* IF MsRequest.ReqCParam2 = "VOIP_ADD" OR */
+
+     ELSE IF AVAILABLE bMsRequest THEN DO:
+
+        fSplitTS(bMsRequest.ActStamp,
+                 OUTPUT ldaActiveDate,
+                 OUTPUT liActiveTime).
+
+        IF bMsRequest.ReqCparam3 = "TARJ7" AND 
+           bMsRequest.ReqType = 8 THEN
+           lcShaperProfile = lcShaperProfile +
+                             ",RESET_DAY=" + STRING(DAY(ldaActiveDate)).
+        ELSE IF MsRequest.ReqCParam2 <> "DEFAULT" THEN DO:
+
+           IF fGetActiveSpecificBundle(bMsRequest.MsSeq,bMsRequest.ActStamp,
+                                          "BONO_VOIP") > "" THEN DO:
+              lcShaperProfile = fGetShaperConfCommline(MsRequest.ReqCParam2 + "wVOIP").
+              llVoIPActive = TRUE.
+           END.
+
+           IF (bMsRequest.ReqSource = {&REQUEST_SOURCE_STC} OR
+               bMsRequest.ReqSource = {&REQUEST_SOURCE_BTC} OR
+               bMsRequest.ReqType   = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR
+               bMsRequest.ReqType   = {&REQTYPE_BUNDLE_CHANGE}) THEN DO:
+
+              IF llVoIPActive THEN DO:
+                 IF INDEX(lcShaperProfile,"HSPA_MONTHLY_ADD") = 0 THEN
+                    lcShaperProfile = REPLACE(lcShaperProfile,"HSPA_MONTHLY",
+                                                              "HSPA_MONTHLY_ADD").
+              END.
+              ELSE
+                 lcShaperProfile = REPLACE(lcShaperProfile,"HSPA_MONTHLY_ADD",
+                                                           "HSPA_MONTHLY").
+           END.
+           ELSE IF
+              bMsRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} OR
+              bMsRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION}
+           THEN
+              lcShaperProfile = REPLACE(lcShaperProfile,"HSPA_MONTHLY_ADD",
+                                                        "HSPA_MONTHLY").
+        END.
+     END. /* IF AVAILABLE bMsRequest AND */
+
+     ttSolog.Commline = ttSolog.Commline + lcShaperProfile + ",".
+  END. /* IF lcServName EQ "SHAPER" AND */
+  ELSE IF LOOKUP(MsRequest.ReqCParam1,"CF,NAM") > 0 OR 
+     (MsRequest.ReqCParam1 EQ "BARRING" AND
+      MsRequest.ReqCParam2 EQ "#RESET") THEN
+     ttSolog.CommLine = ttSolog.CommLine + lcServName + ",".
+  ELSE
+     ttSolog.CommLine = ttSolog.CommLine +
+                      TRIM(lcServName)   + "="  +
+                      (IF MsRequest.ReqIParam1 > 0 AND
+                          MsRequest.ReqCparam1 NE "BPSUB" AND
+                          MsRequest.ReqCParam2 NE "" 
+                       THEN MsRequest.ReqCParam2  
+                       ELSE STRING(MsRequest.ReqIParam1)) + ",".
+
+END.     
+
+/* entries to db */
+FOR EACH ttSolog WHERE 
+         ttSolog.CommLine > ""
+BY ttSolog.ActStamp:
+
+   /* remove last comma */
+   SUBSTR(ttSolog.CommLine,length(ttSolog.CommLine)) = " ".
+
+   IF ttSolog.CommLine = "" THEN NEXT.
+   
+   ldTime = ttSolog.ActStamp.
+   
+   IF ttSolog.ActStamp > ldCurrent 
+   THEN ldSchedule = ttSolog.ActStamp.
+   ELSE ldSchedule = ldCurrent.
+   
+   REPEAT:
+      /* make sure that there is atleast 1 second gap between Sologs */
+      IF NOT CAN-FIND(FIRST Solog WHERE
+                            Solog.MsSeq = MobSub.MsSeq AND
+                            Solog.Stat  = 0            AND
+                            Solog.ActivationTS = ldTime)
+      THEN LEAVE.
+
+      ldTime = ldTime  + 0.00001.
+      
+      IF ldSchedule > 0 THEN ldSchedule = ldSchedule + 0.00010.
+   END. 
+
+   CREATE Solog.
+   ASSIGN
+      Solog.Solog        = NEXT-VALUE(Solog)
+      Solog.CreatedTS    = ldTime            /* Ceated NOW               */
+      Solog.ActivationTS = ldTime            /* Activate NOW             */
+      Solog.MsSeq        = MobSub.MsSeq      /* Mobile Subscription No.    */
+      Solog.CLI          = MobSub.CLI        /* MSISDN                     */
+      Solog.Stat         = 0                 /* just created               */
+      Solog.Brand        = gcBrand 
+      Solog.Users        = katun    
+      Solog.MSrequest    = ttSolog.MSrequest.
+   
+   /* Special handling for Prepaid Bono8 HSDPA, SER-1345  */
+   IF liCurrentServiceClass > 0 OR
+      (MSrequest.ReqCParam1 = "HSDPA" AND
+       LOOKUP(Mobsub.CLIType,lcPrepaidVoiceTariffs) > 0) THEN DO:
+
+      FIND FIRST ProvCliType WHERE
+                 ProvCliType.CliType = Mobsub.CliType 
+      NO-LOCK NO-ERROR.
+
+      IF MsRequest.ReqCParam1 = "HSDPA" AND
+         MsRequest.ReqIParam1 = 0 AND
+         LOOKUP(Mobsub.CLIType,lcPrepaidVoiceTariffs) > 0 THEN DO:
+         FIND FIRST bMsRequest NO-LOCK WHERE
+                    bMsRequest.MsSeq = Mobsub.MsSeq AND
+                    bMsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+                    LOOKUP(STRING(bMsRequest.ReqStat),"4,9,99,3") = 0 AND
+                    bMsRequest.ActStamp = MsRequest.ActStamp AND
+                    bMsRequest.ReqCparam2 = "TARJ7"
+              USE-INDEX MsSeq NO-ERROR.
+         IF AVAILABLE bMsRequest THEN
+            ASSIGN lcServiceClass = ""
+                   llCheckSC      = FALSE.
+      END. /* IF MsRequest.ReqCParam1 = "HSDPA" AND */
+
+      /* Check Service Class */
+      IF llCheckSC THEN
+      CASE Mobsub.CLIType:
+         WHEN "TARJ" THEN DO:
+            IF MsRequest.ReqIParam1 EQ 1 THEN
+               lcServiceClass = ",SERVICECLASS=0081".
+            ELSE
+               lcServiceClass = (IF AVAIL ProvCliType THEN
+                                 ",SERVICECLASS=" + ProvCliType.ServiceClass ELSE "").
+         END. /* WHEN "TARJ" THEN DO: */
+         WHEN "TARJ4" THEN DO:
+            IF MsRequest.ReqIParam1 EQ 1 THEN
+               lcServiceClass = ",SERVICECLASS=0084".
+            ELSE
+               lcServiceClass = (IF AVAIL ProvCliType THEN
+                                 ",SERVICECLASS=" + ProvCliType.ServiceClass ELSE "").
+         END. /* WHEN "TARJ4" THEN DO: */
+         WHEN "TARJ5" THEN DO:
+         
+            IF MsRequest.ReqIParam1 EQ 1 THEN DO:
+               IF liCurrentServiceClass EQ {&SC_TARJ5_PROMOTIONAL_BONO}
+               THEN lcServiceClass = "".
+               ELSE lcServiceClass = ",SERVICECLASS=0086".
+            END.
+            ELSE DO:
+               IF liCurrentServiceClass EQ {&SC_TARJ5_PROMOTIONAL}
+               THEN lcServiceClass = "".
+               ELSE lcServiceClass = (IF AVAIL ProvCliType THEN
+                    ",SERVICECLASS=" + ProvCliType.ServiceClass ELSE "").
+            END.
+         END. /* WHEN "TARJ5" THEN DO: */
+         WHEN "TARJ6" THEN DO:
+            /* TODO: This is to prevent HSDPA=0 command (should be possible
+               only from STC bundle termination) to override SERVICECLASS in
+               STC MODIFY command */  
+            IF MsRequest.ReqIParam1 EQ 0 THEN
+               lcServiceClass = "".
+            ELSE
+               lcServiceClass = (IF AVAIL ProvCliType THEN
+                                 ",SERVICECLASS=" + ProvCliType.ServiceClass
+                                 ELSE "").
+         END. /* WHEN "TARJ6" OR WHEN "TARJ7" THEN DO: */
+         WHEN "TARJ7" THEN DO:
+            IF MsRequest.ReqIParam1 EQ 1 THEN
+               lcServiceClass = ",SERVICECLASS=0003".
+            ELSE lcServiceClass = "".
+         END. /* WHEN "TARJ7" THEN DO: */
+         WHEN "TARJ8" THEN DO:
+            IF MsRequest.ReqIParam1 EQ 1 THEN
+               lcServiceClass = ",SERVICECLASS=0082".
+            ELSE
+               lcServiceClass = (IF AVAIL ProvCliType THEN
+                                 ",SERVICECLASS=" + ProvCliType.ServiceClass ELSE "").
+         END. /* WHEN "TARJ8" THEN DO: */
+         OTHERWISE
+            lcServiceClass = (IF AVAIL ProvCliType AND
+                                       ProvCliType.ServiceClass > "" THEN
+                              ",SERVICECLASS=" + ProvCliType.ServiceClass ELSE "").
+      END CASE.
+
+      ttSolog.CommLine = ttSolog.CommLine + lcServiceClass.
+   END. /* IF MSrequest.ReqCParam1 = "HSDPA" AND */
+
+   /* Special handling for BB service  */
+   IF MSrequest.ReqCParam1 = "BB" AND MsRequest.ReqIParam1 = 1 THEN DO:
+
+      IF Mobsub.CLIType = "TARJ6" OR MobSub.CLIType = "CONTS" THEN
+         ttSolog.Commline = TRIM(ttSolog.CommLine) + "|1".
+      ELSE DO:
+      lcActiveBundles = fGetActOngoingDataBundles(INPUT Mobsub.MsSeq,
+                                                  INPUT ldActStamp).
+
+      /* Main logic to find the correct profile */
+      IF lcActiveBundles > "" THEN DO:
+         ASSIGN ttSolog.Commline = TRIM(ttSolog.Commline, " ")
+                liNumEntries = NUM-ENTRIES(lcActiveBundles).
+
+         DO liCount = 1 TO liNumEntries:
+            lcBundle = ENTRY(liCount,lcActiveBundles).
+            IF LOOKUP(lcBundle,lcBBProfile1) > 0 THEN DO:
+               ASSIGN ttSolog.Commline = ttSolog.CommLine + "|1"
+                      llSkip = TRUE.
+               LEAVE.
+            END. /* IF LOOKUP(lcBundle,lcBBProfile1) > 0 THEN DO: */
+         END. /* DO liCount = 1 TO liNumEntries: */
+
+         IF NOT llSkip THEN DO:
+            liCount = 0.
+            DO liCount = 1 TO liNumEntries:
+               lcBundle = ENTRY(liCount,lcActiveBundles).
+               IF LOOKUP(lcBundle,lcBBProfile2) > 0 THEN DO:
+                  ttSolog.Commline = ttSolog.CommLine + "|2".
+                  LEAVE.
+               END. /* IF LOOKUP(lcBundle,lcBBProfile2) > 0 THEN */
+            END. /* DO liCount = 1 TO liNumEntries: */
+         END. /* IF NOT llSkip THEN DO: */
+      END. /* IF lcActiveBundles > "" THEN DO: */
+      END.
+   END. /* IF MSrequest.ReqCParam1 = "BB" THEN DO: */
+
+   ASSIGN
+      Solog.CommLine    = fMakeCommline(Solog.solog,"MODIFY") + ttSolog.CommLine
+      SoLog.CommLine    = fDoubleParam(SoLog.CommLine)
+      SoLog.CommLine    = TRIM(REPLACE(SoLog.CommLine,",,",","),",")
+      Solog.TimeSlotTMS = ldSchedule
+      rc                = 1.
+  
+   IF Solog.timeslotTMS = 0  THEN DO:
+
+      IF NOT batch THEN MESSAGE 
+         "Service order request #" string(Solog.Solog) 
+         "has been saved to the system."
+                                                                      SKIP
+         "Request is sent to the activation server. "                 SKIP(1)
+         "ALL sent Service Order requests and their current status "  SKIP
+         "can be browsed from service order log (Solog)." 
+
+         VIEW-AS ALERT-BOX TITLE "Service Order Request".
+   END.
+
+   ELSE IF NOT batch THEN  MESSAGE 
+      "Service order request #" string(Solog.Solog) 
+      "has been saved to the system."                             SKIP(1)
+      "This activation request is scheduled and will be sent to "  SKIP
+      "activation server" fTS2HMS(Solog.TimeSlotTMS) "."             
+      VIEW-AS ALERT-BOX TITLE "Service Order Request".  
+
+END.
+

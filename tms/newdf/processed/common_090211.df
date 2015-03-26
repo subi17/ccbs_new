@@ -1,0 +1,283 @@
+ADD TABLE "CustContact"
+  AREA "Sta_Data_32"
+  LABEL "CustContact"
+  DESCRIPTION "CustContact"
+  DUMP-NAME "custcontact"
+
+ADD FIELD "CustNum" OF "CustContact" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "CustContact"
+  MAX-WIDTH 4
+  COLUMN-LABEL "CustContact"
+  HELP "CustContact's number"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "CustType" OF "CustContact" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "CustType"
+  MAX-WIDTH 4
+  COLUMN-LABEL "CustType"
+  HELP "Contact customer type"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "CustName" OF "CustContact" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "CustContact's name"
+  MAX-WIDTH 60
+  COLUMN-LABEL "CustContact's name"
+  HELP "CustContact's name"
+  ORDER 30
+
+ADD FIELD "Address" OF "CustContact" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Address"
+  MAX-WIDTH 60
+  COLUMN-LABEL "Address"
+  HELP "CustContact's mailing address (street, p.o. box)"
+  ORDER 40
+
+ADD FIELD "ZipCode" OF "CustContact" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Postal code"
+  MAX-WIDTH 16
+  COLUMN-LABEL "Postcd"
+  HELP "CustContact's postal code"
+  ORDER 50
+
+ADD FIELD "PostOffice" OF "CustContact" AS character 
+  FORMAT "x(24)"
+  INITIAL ""
+  LABEL "Postal Addr."
+  MAX-WIDTH 48
+  COLUMN-LABEL "Postaddr"
+  HELP "CustContact's postal address"
+  ORDER 60
+
+ADD FIELD "Country" OF "CustContact" AS character 
+  FORMAT "x(3)"
+  INITIAL ""
+  LABEL "Country"
+  MAX-WIDTH 6
+  COLUMN-LABEL "Country"
+  HELP "CustContact's country code"
+  ORDER 70
+
+ADD FIELD "Language" OF "CustContact" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Language"
+  MAX-WIDTH 4
+  COLUMN-LABEL "Language"
+  VALEXP "Language > 0"
+  VALMSG "Must be 1 ... 9 !"
+  HELP "CustContact's language code (1 ...999)"
+  ORDER 80
+
+ADD FIELD "OrgId" OF "CustContact" AS character 
+  FORMAT "x(11)"
+  INITIAL ""
+  LABEL "Pers/Comp.ID"
+  MAX-WIDTH 22
+  HELP "CustContact's organisation ID or personal ID"
+  ORDER 90
+
+ADD FIELD "Email" OF "CustContact" AS character 
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "Email"
+  MAX-WIDTH 120
+  COLUMN-LABEL "Email"
+  HELP "CustContact's Email ID"
+  ORDER 100
+
+ADD FIELD "HonTitle" OF "CustContact" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Title"
+  MAX-WIDTH 32
+  COLUMN-LABEL "Title"
+  HELP "CustContact honorary title (printed f.ex. into invoice)"
+  ORDER 120
+
+ADD FIELD "Brand" OF "CustContact" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 140
+
+ADD FIELD "SMSNumber" OF "CustContact" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "SMS Number"
+  MAX-WIDTH 30
+  COLUMN-LABEL "SMS"
+  HELP "Mobile number for SMS messages"
+  ORDER 160
+
+ADD FIELD "FirstName" OF "CustContact" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Forename"
+  MAX-WIDTH 40
+  COLUMN-LABEL "Forename"
+  HELP "CustContact's forename"
+  ORDER 170
+
+ADD FIELD "DirMarkSMS" OF "CustContact" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Direct Marketing Via SMS"
+  MAX-WIDTH 1
+  COLUMN-LABEL "Dir.Mark.SMS"
+  HELP "Direct marketing using SMS"
+  ORDER 180
+
+ADD FIELD "DirMarkEmail" OF "CustContact" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Direct Marketing Via Email"
+  MAX-WIDTH 1
+  COLUMN-LABEL "Dir.Mark.Email"
+  HELP "Direct marketing using Email"
+  ORDER 190
+
+ADD FIELD "DirMarkPost" OF "CustContact" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Direct Marketing Via Post"
+  MAX-WIDTH 1
+  COLUMN-LABEL "Dir.Mark.Post"
+  HELP "Direct marketing using post"
+  ORDER 200 
+
+ADD FIELD "OutMarkPost" OF "CustContact" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Out. Marketing Via Post"
+  MAX-WIDTH 1
+  COLUMN-LABEL "Out.Mark.Post"
+  HELP "3rd part marketing using post"
+  ORDER 210
+
+ADD FIELD "OutMarkSMS" OF "CustContact" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Out. Marketing Via SMS"
+  MAX-WIDTH 1
+  COLUMN-LABEL "Out.Mark.SMS"
+  HELP "3rd party marketing using SMS"
+  ORDER 220 
+
+ADD FIELD "OutMarkEmail" OF "CustContact" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Out. Marketing Via Email"
+  MAX-WIDTH 1
+  COLUMN-LABEL "Out.Mark.Email"
+  HELP "3rd party marketing using eMail"
+  ORDER 221 
+
+ADD FIELD "CustIdType" OF "CustContact" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "CustContact ID Type"
+  MAX-WIDTH 16
+  COLUMN-LABEL "ID Type"
+  HELP "CustContact ID type"
+  ORDER 230 
+
+ADD FIELD "Nationality" OF "CustContact" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Nationality"
+  MAX-WIDTH 16
+  COLUMN-LABEL "Nation."
+  HELP "Nationality"
+  ORDER 240
+
+ADD FIELD "SurName2" OF "CustContact" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Second Surname"
+  MAX-WIDTH 60
+  COLUMN-LABEL "2.Surname"
+  HELP "Second surname"
+  ORDER 250
+
+ADD FIELD "Region" OF "CustContact" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Region"
+  MAX-WIDTH 16
+  HELP "Region code"
+  ORDER 260
+
+ADD FIELD "AddressCodC" OF "CustContact" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Address CodC"
+  MAX-WIDTH 16
+  COLUMN-LABEL "CodC"
+  HELP "CodC in address validation"
+  ORDER 280
+
+ADD FIELD "AddressCodP" OF "CustContact" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Address CodP"
+  MAX-WIDTH 16
+  COLUMN-LABEL "CodP"
+  HELP "CodP in address validation"
+  ORDER 290
+
+ADD FIELD "Phone" OF "CustContact" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "PhoneNo"
+  POSITION 18
+  MAX-WIDTH 32
+  COLUMN-LABEL "PhoneNo"
+  HELP "CustContact's phone number"
+  ORDER 300
+
+ADD INDEX "CustContact" ON "CustContact" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "CustType" ASCENDING 
+
+ADD FIELD "AdminUser" OF "TMSUser" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Admin User"
+  POSITION 27
+  MAX-WIDTH 1
+  COLUMN-LABEL "Admin"
+  HELP "Admin level user"
+  ORDER 250
+
+ADD FIELD "AdminToken" OF "Token" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Admin Token"
+  POSITION 4
+  MAX-WIDTH 1
+  COLUMN-LABEL "Admin"
+  HELP "Admin level token"
+  ORDER 30
+
+.
+PSC
+cpstream=1252

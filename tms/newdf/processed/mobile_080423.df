@@ -1,0 +1,557 @@
+ADD TABLE "TMCounter"
+  AREA "Sta_Data_256"
+  LABEL "TM Counter"
+  DESCRIPTION "TM counter"
+  DUMP-NAME "tmcounter"
+
+ADD FIELD "CustNum" OF "TMCounter" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Cust"
+  HELP "Customer number"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "FromDate" OF "TMCounter" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "From"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Date when rule becomes effective"
+  ORDER 50
+
+ADD FIELD "LimitID" OF "TMCounter" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Limit ID"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Limit that has been exceeded"
+  ORDER 40
+
+ADD FIELD "MsSeq" OF "TMCounter" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "MobSub"
+  HELP "Mobile subscription ID"
+  ORDER 30
+
+ADD FIELD "TMRuleSeq" OF "TMCounter" AS integer 
+  DESCRIPTION "
+"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Rule Sequence"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Seq"
+  HELP "Rule ID"
+  ORDER 10
+
+ADD FIELD "ToDate" OF "TMCounter" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 7
+  MAX-WIDTH 4
+  HELP "Date when rule expires"
+  ORDER 60
+
+ADD FIELD "Amount" OF "TMCounter" AS decimal 
+  DESCRIPTION "
+
+"
+  FORMAT "->>>>>>9.99999"
+  INITIAL "0"
+  LABEL "Amount"
+  POSITION 8
+  MAX-WIDTH 20
+  COLUMN-LABEL "Amt"
+  HELP "Amount"
+  DECIMALS 5
+  ORDER 70
+
+ADD INDEX "MsSeq" ON "TMCounter" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "CustNum" ON "TMCounter" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD TABLE "TMQueue"
+  AREA "Sta_Data_128"
+  LABEL "TM Queue"
+  DESCRIPTION "TM queue"
+  DUMP-NAME "tmqueue"
+
+ADD FIELD "EventID" OF "TMQueue" AS integer 
+  FORMAT ">>>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Event ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Event id"
+  ORDER 10
+
+ADD FIELD "MsSeq" OF "TMQueue" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "MobSub"
+  HELP "Mobile subscription ID"
+  ORDER 20
+
+ADD FIELD "CustNum" OF "TMQueue" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Cust"
+  HELP "Customer number"
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "DateSt" OF "TMQueue" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Event Date"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Date"
+  HELP "Event date"
+  ORDER 40
+
+ADD FIELD "BillCode" OF "TMQueue" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Billing Item"
+  POSITION 6
+  MAX-WIDTH 32
+  COLUMN-LABEL "BillItem"
+  HELP "Billing item code"
+  ORDER 50
+  MANDATORY
+
+ADD FIELD "RateCCN" OF "TMQueue" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "CCN"
+  POSITION 7
+  MAX-WIDTH 4
+  HELP "Call case number"
+  ORDER 60
+  MANDATORY
+
+ADD FIELD "BDest" OF "TMQueue" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "B-number"
+  POSITION 8
+  MAX-WIDTH 50
+  COLUMN-LABEL "BDest"
+  HELP "B-number"
+  ORDER 70
+  MANDATORY
+
+ADD FIELD "SpoCMT" OF "TMQueue" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "TCC"
+  POSITION 9
+  MAX-WIDTH 4
+  HELP "Technical call case number"
+  ORDER 80
+
+ADD FIELD "BillDur" OF "TMQueue" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Billing Duration"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "Duration"
+  HELP "Duration"
+  ORDER 90
+
+ADD FIELD "Amount" OF "TMQueue" AS decimal 
+  FORMAT "->>>>>>>9.99999"
+  INITIAL "0"
+  LABEL "Amount"
+  POSITION 11
+  MAX-WIDTH 20
+  HELP "Amount"
+  DECIMALS 5
+  ORDER 100
+
+ADD FIELD "Qty" OF "TMQueue" AS integer 
+  FORMAT "-9"
+  INITIAL "0"
+  LABEL "Quantity"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "Qty"
+  HELP "Quantity"
+  ORDER 110
+
+ADD FIELD "DataIn" OF "TMQueue" AS decimal 
+  FORMAT ">>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Data In"
+  POSITION 13
+  MAX-WIDTH 17
+  HELP "Data in"
+  DECIMALS 2
+  ORDER 120
+
+ADD FIELD "DataOut" OF "TMQueue" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Data Out"
+  POSITION 14
+  MAX-WIDTH 17
+  HELP "Data out"
+  DECIMALS 2
+  ORDER 130
+
+ADD INDEX "DateSt" ON "TMQueue" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "DateSt" ASCENDING 
+
+ADD TABLE "TMRItemValue"
+  AREA "Sta_Data_256"
+  LABEL "TM Rule Item Values"
+  DESCRIPTION "TM rule item values
+"
+  DUMP-NAME "tmritemvalue"
+
+ADD FIELD "FromDate" OF "TMRItemValue" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "From"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "Date when rule becomes effective"
+  ORDER 40
+
+ADD FIELD "TMRuleSeq" OF "TMRItemValue" AS integer 
+  DESCRIPTION "
+"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Rule Sequence"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Seq"
+  HELP "Rule ID"
+  ORDER 20
+
+ADD FIELD "ToDate" OF "TMRItemValue" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Date when rule expires"
+  ORDER 50
+
+ADD FIELD "CounterItemValues" OF "TMRItemValue" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Item Values"
+  POSITION 5
+  MAX-WIDTH 80
+  COLUMN-LABEL "Values"
+  HELP "List of item values used to collect the counter"
+  ORDER 60
+
+ADD INDEX "CounterItemValues" ON "TMRItemValue" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+  INDEX-FIELD "CounterItemValues" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "ToDate" ON "TMRItemValue" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD TABLE "TMRLimit"
+  AREA "Sta_Data_128"
+  LABEL "TM Rule Limit"
+  DESCRIPTION "TM rule limit"
+  DUMP-NAME "tmrlimit"
+
+ADD FIELD "FromDate" OF "TMRLimit" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "From"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "Date when rule becomes effective"
+  ORDER 40
+
+ADD FIELD "TMRuleSeq" OF "TMRLimit" AS integer 
+  DESCRIPTION "
+"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Rule Sequence"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Seq"
+  HELP "Rule ID"
+  ORDER 20
+
+ADD FIELD "ToDate" OF "TMRLimit" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Date when rule expires"
+  ORDER 50
+
+ADD FIELD "LimitID" OF "TMRLimit" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Limit ID"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Limit ID"
+  ORDER 60
+
+ADD FIELD "ValueType" OF "TMRLimit" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Value Type"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Type"
+  HELP "Type of limit value"
+  ORDER 70
+
+ADD FIELD "LimitAmt" OF "TMRLimit" AS decimal 
+  FORMAT "->>>>>>9.99"
+  INITIAL "0"
+  LABEL "Limit Amount"
+  POSITION 7
+  MAX-WIDTH 17
+  COLUMN-LABEL "Amount"
+  HELP "Limit amount"
+  DECIMALS 2
+  ORDER 80
+
+ADD FIELD "LimitPerc" OF "TMRLimit" AS decimal 
+  FORMAT ">>9.99"
+  INITIAL "0"
+  LABEL "Limit Percent"
+  POSITION 8
+  MAX-WIDTH 17
+  COLUMN-LABEL "Percent"
+  HELP "Limit percent"
+  DECIMALS 2
+  ORDER 90
+
+ADD FIELD "Action" OF "TMRLimit" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Action"
+  POSITION 9
+  MAX-WIDTH 4
+  HELP "Action to be taken when limit is exceeded"
+  ORDER 100
+
+ADD FIELD "SMSText" OF "TMRLimit" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "SMS Text"
+  POSITION 10
+  MAX-WIDTH 24
+  COLUMN-LABEL "SMS"
+  HELP "SMS text that is sent when limit is exceeded"
+  ORDER 110
+
+ADD INDEX "LimitID" ON "TMRLimit" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+  INDEX-FIELD "LimitID" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD TABLE "TMRule"
+  AREA "Sta_Data_128"
+  LABEL "TM Rule"
+  DESCRIPTION "Ticket management rule"
+  DUMP-NAME "tmrule"
+
+ADD FIELD "Brand" OF "TMRule" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code Of Brand"
+  ORDER 10
+
+ADD FIELD "FromDate" OF "TMRule" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "From"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Date when rule becomes effective"
+  ORDER 40
+
+ADD FIELD "ToDate" OF "TMRule" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Date when rule expires"
+  ORDER 50
+
+ADD FIELD "TMRuleSeq" OF "TMRule" AS integer 
+  DESCRIPTION "
+"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Rule Sequence"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Seq"
+  HELP "Rule ID"
+  ORDER 20
+
+ADD FIELD "CounterItems" OF "TMRule" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Counter Items"
+  POSITION 6
+  MAX-WIDTH 80
+  COLUMN-LABEL "Items"
+  HELP "Items that are used in counter collection"
+  ORDER 60
+
+ADD FIELD "CounterAmount" OF "TMRule" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Counter Amount"
+  POSITION 7
+  MAX-WIDTH 30
+  COLUMN-LABEL "Amount"
+  HELP "Amount that is collected to counter"
+  ORDER 70
+
+ADD FIELD "CounterType" OF "TMRule" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Counter Type"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Type"
+  HELP "Type of counter"
+  ORDER 80
+
+ADD FIELD "CounterPeriod" OF "TMRule" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Counter Period"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "Period"
+  HELP "Period of counter"
+  ORDER 90
+
+ADD FIELD "Name" OF "TMRule" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 10
+  MAX-WIDTH 80
+  HELP "Name"
+  ORDER 30
+
+ADD FIELD "NewCustomer" OF "TMRule" AS logical 
+  FORMAT "yes/no"
+  INITIAL "yes"
+  LABEL "New Customers"
+  POSITION 11
+  MAX-WIDTH 1
+  COLUMN-LABEL "New Cust"
+  HELP "Copy rule automatically to new customers"
+  ORDER 100
+
+ADD INDEX "TMRuleSeq" ON "TMRule" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+
+ADD INDEX "Brand" ON "TMRule" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "TMRuleSeq" DESCENDING 
+
+ADD INDEX "CounterType" ON "TMRule" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CounterType" ASCENDING 
+  INDEX-FIELD "TMRuleSeq" DESCENDING 
+
+ADD FIELD "SMSText" OF "MsRequest" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "SMS Text"
+  POSITION 36
+  MAX-WIDTH 24
+  COLUMN-LABEL "SMS"
+  HELP "SMS text that is sent"
+  ORDER 350
+
+ADD FIELD "DurUnit" OF "DayCampaign" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Duration Unit"
+  POSITION 23
+  MAX-WIDTH 4
+  COLUMN-LABEL "Dur.Unit"
+  HELP "Duration unit"
+  ORDER 240
+
+ADD FIELD "RenewalDate" OF "DCCli" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Renewal Date"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "Renewal"
+  HELP "Date when contract was renewed"
+  ORDER 110
+
+.
+PSC
+cpstream=1252
+.
+0000012036

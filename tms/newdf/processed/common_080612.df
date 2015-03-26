@@ -1,0 +1,91 @@
+ADD TABLE "ProgLimit"
+  AREA "Sta_Data_128"
+  DUMP-NAME "proglimit"
+
+ADD FIELD "GroupCode" OF "ProgLimit" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "GroupCode"
+  POSITION 10
+  MAX-WIDTH 32
+  COLUMN-LABEL "Group Code"
+  HELP "Group Code of Servicelimit"
+  ORDER 10
+
+ADD FIELD "SLSeq" OF "ProgLimit" AS integer
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "SLSeq"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "SLseq"
+  HELP "Sequence for Servicelimit"
+  ORDER 20
+
+ADD FIELD "ValidFrom" OF "ProgLimit" AS date 
+  DESCRIPTION ""
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 18
+  MAX-WIDTH 4
+  HELP "Valid from this date on"
+  ORDER 60
+
+ADD FIELD "ValidTo" OF "ProgLimit" AS date 
+  DESCRIPTION ""
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 19
+  MAX-WIDTH 4
+  HELP "Valid until this date"
+  ORDER 70
+
+ADD FIELD "LimitFrom" OF "ProgLimit" AS decimal 
+  FORMAT >>>>>>>>9.999999
+  INITIAL "0"
+  LABEL "LimitFrom"
+  POSITION 11
+  MAX-WIDTH 20
+  COLUMN-LABEL "LimitFrom"
+  HELP "Limit value from"
+  DECIMALS 6
+  ORDER 120
+
+ADD FIELD "LimitTo" OF "ProgLimit" AS decimal 
+  FORMAT >>>>>>>>9.999999
+  INITIAL "0"
+  LABEL "LimitTo"
+  POSITION 12
+  MAX-WIDTH 20
+  COLUMN-LABEL "LimitTo"
+  HELP "Limit value to"
+  DECIMALS 6
+  ORDER 140
+
+ADD FIELD "BDest" OF "ProgLimit" AS character
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "BDest"
+  POSITION 15
+  MAX-WIDTH 32
+  COLUMN-LABEL "Bdest"
+  HELP "Billing Destination"
+  ORDER 160
+
+ADD INDEX "ValidTo" ON "ProgLimit" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "GroupCode" ASCENDING 
+  INDEX-FIELD "Slseq"     ASCENDING
+  INDEX-FIELD "ValidTo"   DESCENDING
+  INDEX-FIELD "Limitto"   ASCENDING
+  
+ADD INDEX "LimitTo" ON "ProgLimit"
+   AREA "Sta_Index_2"
+   INDEX-FIELD "GroupCode" ASCENDING
+   INDEX-FIELD "Slseq"     ASCENDING
+   INDEX-FIELD "Limitto"   ASCENDING
+   INDEX-FIELD "ValidFrom" ASCENDING
+              

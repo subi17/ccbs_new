@@ -1,0 +1,9 @@
+-db /db1/common/common
+-L 100000
+-B  800000
+-B2 1000000 
+#-H propus
+-S pcommonrepl
+#-aiarcdir /aiarchive/common 
+#-pica 8192 
+-pf /apps/tms/pf/db/general.pf

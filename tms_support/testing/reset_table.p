@@ -1,0 +1,6 @@
+FOR EACH {1} EXCLUSIVE-LOCK WHERE
+    {1}.{2} = {3}:
+
+    DISPLAY {3}. PAUSE 0.
+    DELETE {1}.
+END.

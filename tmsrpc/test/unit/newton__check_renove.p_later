@@ -1,0 +1,99 @@
+
+{test_xmlrpc_includes.i}
+{unit/checkutils.i}
+{timestamp.i}
+
+
+gcFixtures = "mobsub,customer,order,DCCli,DayCampaign,FMItem,BillTarget,PListConf,PriceList".
+
+DEFINE VARIABLE gcParamArray AS CHARACTER NO-UNDO. 
+gcParamArray = "".
+
+DEFINE VARIABLE gcReturnStruct AS CHARACTER NO-UNDO. 
+
+
+FUNCTION call_check_renove RETURN LOGICAL:
+    run_rpc_method("newton.check_renove").
+    RETURN TRUE.
+END FUNCTION.
+
+
+
+PROCEDURE test_no_DCCLI_no_copr_cust:
+    add_string("", "", "644300300"). /* Mobsub.CLI */
+    call_check_renove().
+    assert_success().
+    gcReturnStruct = get_struct("", "").
+    fetch_fixture("CustomerForDetails", BUFFER Customer:HANDLE).
+    checkChar("Customer.OrgId", Customer.OrgId, 
+       get_string(gcReturnStruct, "person_id")).
+    checkChar("Customer.CustIdType", Customer.CustIdType, 
+       get_string(gcReturnStruct, "id_type")).
+    checkLogical("Corporate customer", FALSE, get_bool(gcReturnStruct,
+      "corporate_customer"), "").
+
+    fetch_fixture("ChkRenoveMobSubNoDCCLINotCorp", BUFFER Mobsub:HANDLE). 
+    checkChar("MobSub.CliType", MobSub.CLItype, get_string(gcReturnStruct,
+      "clitype")).
+    
+    checkLogical("Barrings set", FALSE, get_bool(gcReturnStruct, 
+      "barrings_set"), "").
+    checkLogical("Preactivated", FALSE, get_bool(gcReturnStruct, 
+      "preactivated"), "").
+    checkLogical("Ongoing orders", FALSE, get_bool(gcReturnStruct,
+      "ongoing_orders"), "").
+
+END.
+
+
+PROCEDURE test_DCCLI_and_CIF_Not_Preactivated:
+    add_string("", "", "633222222"). /* Mobsub.CLI */
+    call_check_renove().
+    assert_success().
+    gcReturnStruct = get_struct("", "").
+    fetch_fixture("ChkRenoveCorpCustOrder", BUFFER Order:HANDLE).
+
+    checkChar("Order.OrdererId", Order.OrdererId, get_string(gcReturnStruct, 
+       "person_id")).
+    checkChar("Order.OrdererIdType", Order.OrdererIdType, get_string(
+       gcReturnStruct, "id_type")).
+
+    fetch_fixture("ChkRenoveMobSubDCCLICorpNotPreAct", BUFFER Mobsub:HANDLE).
+    checkChar("MobSub.CliType", MobSub.CLItype, 
+       get_string(gcReturnStruct, "clitype")).
+    checkLogical("Corporate customer", TRUE, get_bool(gcReturnStruct,
+      "corporate_customer"), "").
+
+    assert(get_int(gcReturnStruct, "contract_days_remain") > 0,
+       "contract days remain was not positive").
+    fetch_fixture("ChkRenoveFMItem", BUFFER FMItem:HANDLE).
+    checkDecimal("FMItem.Amount * 1", TRUNCATE(FMItem.Amount, 0), 
+       get_double(gcReturnStruct, "contract_penalty")).
+
+    checkLogical("Barrings set", FALSE, get_bool(gcReturnStruct, 
+      "barrings_set"), "").
+    checkLogical("Preactivated", FALSE, get_bool(gcReturnStruct, 
+      "preactivated"), "").
+    checkLogical("Ongoing orders", FALSE, get_bool(gcReturnStruct,
+      "ongoing_orders"), "").
+
+
+    fetch_fixture("ChkRenoveDCCLI", BUFFER DCCLI:HANDLE).
+    checkDecimal("ActivationTime", fMake2Dt(DCCLI.validFrom, 0),
+       get_timestamp(gcReturnStruct, "activation_time")). 
+
+END.
+
+
+PROCEDURE test_not_exist_customer:
+    add_string("", "", "633777333"). /* Mobsub.CLI */
+    call_check_renove().
+    assert_fault(-32500,"Customer not found").
+END.
+
+
+PROCEDURE test_not_exist_order:
+   add_string("", "", "633444333").
+   call_check_renove().
+   assert_fault(-32500,"Order not found").
+END.

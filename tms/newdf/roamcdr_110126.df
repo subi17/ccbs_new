@@ -1,0 +1,15 @@
+ADD FIELD "ReadDate" OF "ErrorCDR" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Read In Date"
+  POSITION 204
+  MAX-WIDTH 4
+  COLUMN-LABEL "Read"
+  HELP "Read in date"
+  ORDER 2530
+
+.
+PSC
+cpstream=1252
+.
+0000014347

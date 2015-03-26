@@ -1,0 +1,61 @@
+ADD FIELD "FileDate" OF "Bank" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "File Date"
+  POSITION 11
+  MAX-WIDTH 4
+  COLUMN-LABEL "Date"
+  HELP "Date of the file from which data was read"
+  ORDER 1020
+
+ADD TABLE "MsReqStatistic"
+  AREA "Sta_Data_256"
+  DUMP-NAME "MsReqStatistic"
+
+ADD FIELD "ReqType" OF "MsReqStatistic" AS integer
+  DESCRIPTION "MsRequest type"
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "Request type"
+  HELP "Type Of MsRequest"
+  ORDER 10
+
+ADD FIELD "ReqStatus" OF "MsReqStatistic" AS integer
+  DESCRIPTION "MsRequest status"
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "MsRequest Status"
+  COLUMN-LABEL "RequestStatus"
+  HELP "Status Of MsRequest"
+  ORDER 20
+
+ADD FIELD "ReqStatusCount" OF "MsReqStatistic" AS integer
+  DESCRIPTION "The number of msrequests per reqtype and reqstatus"
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "MsRequest Status Count"
+  COLUMN-LABEL "ReqStatusCount"
+  HELP "Count Of Request Statuses"
+  ORDER 30
+
+ADD FIELD "Brand" OF "MsReqStatistic" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 40
+
+ADD INDEX "ReqType" ON "MsReqStatistic"
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "ReqType" ASCENDING
+  INDEX-FIELD "ReqStatus" ASCENDING
+
+.
+PSC
+cpstream=1252
+.
+0000001894

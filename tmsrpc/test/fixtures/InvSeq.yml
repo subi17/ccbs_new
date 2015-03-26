@@ -1,0 +1,13 @@
+BilledInvSeq:
+    CustNum: 1
+    InvSeq: 5
+    FromDate: "27/12/2007"
+    ToDate: "05/05/2008"
+    Billed: TRUE
+    
+NotBilledInvSeq:
+    CustNum: 2
+    InvSeq: 7
+    FromDate: "27/12/2007"
+    ToDate: "05/05/2008"
+    Billed: FALSE

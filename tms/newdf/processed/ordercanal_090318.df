@@ -1,0 +1,77 @@
+ADD INDEX "Active" ON "Offer"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "Active" ASCENDING
+  INDEX-FIELD "ToDate" DESCENDING
+
+RENAME INDEX "CriteriaType" TO "temp-36034" ON "OfferCriteria"
+
+ADD INDEX "Criteria" ON "OfferCriteria"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "Offer" ASCENDING
+  INDEX-FIELD "OfferCriteriaID" ASCENDING
+
+ADD INDEX "CriteriaType" ON "OfferCriteria"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "CriteriaType" ASCENDING
+  INDEX-FIELD "EndStamp" DESCENDING
+
+ADD INDEX "OfferCriteriaID" ON "OfferCriteria"
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "OfferCriteriaID" ASCENDING
+
+ADD INDEX "OfferCriteriaType" ON "OfferCriteria"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "Offer" ASCENDING
+  INDEX-FIELD "CriteriaType" ASCENDING
+  INDEX-FIELD "BeginStamp" DESCENDING
+
+UPDATE PRIMARY INDEX "Criteria" ON "OfferCriteria"
+
+DROP INDEX "temp-36034" ON "OfferCriteria"
+
+RENAME INDEX "ItemType" TO "temp-16033" ON "OfferItem"
+
+ADD INDEX "Item" ON "OfferItem"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "Offer" ASCENDING
+  INDEX-FIELD "OfferItemID" ASCENDING
+
+ADD INDEX "ItemKey" ON "OfferItem"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "ItemType" ASCENDING
+  INDEX-FIELD "ItemKey" ASCENDING
+
+ADD INDEX "ItemType" ON "OfferItem"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "Offer" ASCENDING
+  INDEX-FIELD "ItemType" ASCENDING
+  INDEX-FIELD "ItemKey" ASCENDING
+  INDEX-FIELD "EndStamp" DESCENDING
+
+ADD INDEX "OfferItemID" ON "OfferItem"
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "OfferItemID" ASCENDING
+
+UPDATE PRIMARY INDEX "Item" ON "OfferItem"
+
+DROP INDEX "temp-16033" ON "OfferItem"
+
+DROP FIELD "Amount" OF "TopupScheme"
+DROP FIELD "BillCode" OF "TopupScheme"
+DROP FIELD "DiscountAmount" OF "TopupScheme"
+DROP FIELD "DiscountBillCode" OF "TopupScheme"
+
+.
+PSC
+cpstream=1252
+.
+0000002705

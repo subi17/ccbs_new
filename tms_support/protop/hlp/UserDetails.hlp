@@ -1,0 +1,72 @@
+User Details Help
+=================
+
+The first section shows specific details about the selected user (use the "e"
+command to select a usr#.)
+
+Usr#:
+
+The Usr# for the selected connection.
+
+Name:
+
+The User Name associated with the selected connection.
+
+PID:
+
+Operating system Process ID of the selected connection.
+
+Device:
+
+The device that the user logged in to.  May be an IP address or DNS name.
+
+Transaction:
+
+Details from the "OpenTRX" screen if this user has an Open Transaction.
+
+Blocked On:
+
+Details from the "Blocked" screen if this user is blocked on some resource.
+
+The second section shows UIO data for all sessions being run with the same
+User Name.
+
+Usr:
+
+The Usr# for this connection.
+
+Name:
+
+The User Name associated with this connection.
+
+Flags:
+
+Connection type flags.
+
+  S  Self-service
+  R  Remote
+  B  Batch
+  O  Other
+  *  TRX is Open
+
+PID:
+
+Operating system Process ID.
+
+DB Access:
+
+The number of database block accesses that this user has requested.
+
+OS Reads:
+
+The number of times that a database block accesses that this user has
+requested resulted in an OS read() operation.
+
+OS Writes:
+
+The number of OS write() operations that this process has caused.
+
+Hit%
+
+The percentage of times that db blocks were found for this process in the
+buffer cache instead of being read from disk.

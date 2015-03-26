@@ -1,0 +1,97 @@
+ADD TABLE "MNPCal"
+  AREA "Sta_Data_32"
+  DUMP-NAME "mnpcal"
+
+ADD FIELD "Region" OF "MNPCal" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  POSITION 2
+  MAX-WIDTH 24
+  ORDER 10
+
+ADD FIELD "MessageType" OF "MNPCal" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  POSITION 3
+  MAX-WIDTH 16
+  ORDER 20
+
+ADD FIELD "Periods" OF "MNPCal" AS integer
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  POSITION 4
+  MAX-WIDTH 4
+  ORDER 30
+
+ADD INDEX "Region" ON "MNPCal"
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "Region" ASCENDING
+  INDEX-FIELD "MessageType" ASCENDING
+
+ADD INDEX "MessageType" ON "MNPCal"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "MessageType" ASCENDING
+  INDEX-FIELD "Region" ASCENDING
+
+ADD FIELD "MsgTurn" OF "MNPMessage" AS integer
+  FORMAT ">>9"
+  INITIAL "0"
+  POSITION 10
+  MAX-WIDTH 4
+  ORDER 90
+
+ADD FIELD "UpdateTS" OF "MNPProcess" AS decimal
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  POSITION 10
+  MAX-WIDTH 20
+  DECIMALS 5
+  ORDER 90
+
+ADD TABLE "MsReqStatisticQ"
+  AREA "Sta_Data_32"
+  DUMP-NAME "MsReqStatisticQ"
+
+ADD FIELD "Brand" OF "MsReqStatisticQ" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 10
+
+ADD FIELD "ReqType" OF "MsReqStatisticQ" AS integer
+  DESCRIPTION "MsRequest type"
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "MsRequest type"
+  HELP "Type Of MsRequest"
+  ORDER 20
+.
+ADD FIELD "ReqStatus" OF "MsReqStatisticQ" AS integer
+  DESCRIPTION "MsRequest status"
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "MsRequest Status"
+  COLUMN-LABEL "ReqStat"
+  HELP "Status Code"
+  ORDER 30
+
+ADD FIELD "ReqStatUpdate" OF "MsReqStatisticQ" AS integer
+  DESCRIPTION "MsRequest status count update"
+  FORMAT "-9"
+  INITIAL "0"
+  LABEL "Update Count"
+  COLUMN-LABEL "Update"
+  HELP "Update status count"
+  ORDER 40
+
+ADD INDEX "Brand" ON "MsReqStatisticQ"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING
+
+.
+PSC
+cpstream=1252
+

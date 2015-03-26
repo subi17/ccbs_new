@@ -1,0 +1,70 @@
+ADD FIELD "DeliveryType" OF "Order" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Delivery Type"
+  COLUMN-LABEL "DeliveryType"
+  ORDER 1120
+
+ADD FIELD "DeliverySecure" OF "Order" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "DeliverySecure"
+  COLUMN-LABEL "DeliverySecure"
+  ORDER 1130
+
+ADD FIELD "KialaCode" OF "OrderCustomer" AS character 
+  FORMAT "x(5)"
+  INITIAL ""
+  LABEL "Kiala Code"
+  COLUMN-LABEL "KialaCode"
+  ORDER 1000
+
+ADD FIELD "OutBankMarketing" OF "OrderCustomer" AS LOGICAL
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "OutBankMarketing"
+  COLUMN-LABEL "OutBankMarketing"
+  HELP "3rd Party Bank Marketing"
+  ORDER 990
+
+ADD FIELD "WebStatusCode" OF "CLIType" AS integer 
+  FORMAT "9"
+  INITIAL 1
+  LABEL "Web Status Code"
+  COLUMN-LABEL "WebStatus"
+  ORDER 240
+
+ADD FIELD "CommercialFee" OF "CLIType" AS integer 
+  FORMAT ">>>>9.99"
+  INITIAL 0
+  LABEL "Commercial Fee"
+  COLUMN-LABEL "CommercialFee"
+  ORDER 250
+
+ADD FIELD "LineType" OF "CLIType" AS integer 
+  FORMAT "9"
+  INITIAL 0
+  LABEL "Line Type"
+  COLUMN-LABEL "LineType"
+  ORDER 260
+
+ADD FIELD "FixedLineType" OF "CLIType" AS integer 
+  FORMAT "9"
+  INITIAL 0
+  LABEL "Fixed Line Type"
+  COLUMN-LABEL "FixedLineType"
+  ORDER 270
+
+ADD FIELD "UsageType" OF "CLIType" AS integer 
+  FORMAT "9"
+  INITIAL 1
+  LABEL "Usage Type"
+  COLUMN-LABEL "UsageType"
+  ORDER 280
+
+ADD FIELD "BundleType" OF "CLIType" AS logical 
+  FORMAT "True/False"
+  INITIAL False
+  LABEL "Bundle Based Type"
+  COLUMN-LABEL "BundleType"
+  ORDER 290

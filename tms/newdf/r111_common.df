@@ -1,0 +1,48 @@
+ADD TABLE "TerminalConf"
+  AREA "Sta_Data_128"
+  LABEL "TerminalConf"
+  DESCRIPTION "Terminal Configurations"
+  DUMP-NAME "terminalconf"
+
+ADD FIELD "TerminalCode" OF "TerminalConf" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Terminal Code"
+  COLUMN-LABEL "TerminalCode"
+  HELP "Terminal product code"
+  ORDER 10
+
+ADD FIELD "DextraPrice" OF "TerminalConf" AS decimal 
+  FORMAT ">>9.99"
+  INITIAL "0"
+  LABEL "Dextra Price"
+  COLUMN-LABEL "DextraPrice"
+  HELP "Terminal price agree between Yoigo and Dextra"
+  DECIMALS 2
+  ORDER 20
+
+ADD FIELD "ValidFrom" OF "TerminalConf" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid From"
+  COLUMN-LABEL "ValidFrom"
+  HELP "First effective day"
+  ORDER 30
+
+ADD FIELD "ValidTo" OF "TerminalConf" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid To"
+  COLUMN-LABEL "ValidTo"
+  HELP "Last effective day"
+  ORDER 40
+
+ADD INDEX "TerminalCode" ON "TerminalConf" 
+  AREA "Sta_Index_3"
+  PRIMARY
+  INDEX-FIELD "TerminalCode" ASCENDING
+  INDEX-FIELD "ValidTo" DESCENDING
+
+ADD INDEX "ValidTo" ON "TerminalConf" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "ValidTo" DESCENDING

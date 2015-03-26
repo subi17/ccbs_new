@@ -1,0 +1,206 @@
+ADD TABLE "SubsTerminal"
+  AREA "Sta_Data_64"
+  LABEL "Subscription Terminal"
+  DESCRIPTION "Terminal of a subscription"
+  DUMP-NAME "substerminal"
+
+ADD FIELD "Brand" OF "SubsTerminal" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 10
+
+ADD FIELD "MSSeq" OF "SubsTerminal" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Subs.ID"
+  HELP "Subscription ID"
+  ORDER 20
+
+ADD FIELD "OrderId" OF "SubsTerminal" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Order ID"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Order"
+  HELP "Order ID"
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "TerminalID" OF "SubsTerminal" AS integer 
+  DESCRIPTION "unique sequence nbr"
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Terminal ID"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Term.ID"
+  HELP "Terminal ID"
+  ORDER 40
+
+ADD FIELD "IMEI" OF "SubsTerminal" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "IMEI"
+  POSITION 6
+  MAX-WIDTH 30
+  COLUMN-LABEL "IMEI"
+  HELP "IMEI code"
+  ORDER 50
+
+ADD FIELD "BillCode" OF "SubsTerminal" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Billing Item"
+  POSITION 7
+  MAX-WIDTH 32
+  COLUMN-LABEL "Bill.Item"
+  HELP "Billing item code"
+  ORDER 60
+
+ADD FIELD "PurchaseTS" OF "SubsTerminal" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Purchased"
+  POSITION 8
+  MAX-WIDTH 20
+  HELP "Time of purchase"
+  DECIMALS 5
+  ORDER 70
+
+ADD FIELD "Manufacturer" OF "SubsTerminal" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Manufacturer"
+  POSITION 9
+  MAX-WIDTH 60
+  COLUMN-LABEL "Manufacturer"
+  HELP "Terminal manufacturer"
+  ORDER 110
+
+ADD FIELD "Model" OF "SubsTerminal" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Model"
+  POSITION 10
+  MAX-WIDTH 60
+  COLUMN-LABEL "Model"
+  HELP "Terminal model"
+  ORDER 90
+
+ADD FIELD "ModelColor" OF "SubsTerminal" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "ModelColor"
+  POSITION 11
+  MAX-WIDTH 60
+  COLUMN-LABEL "ModelColor"
+  HELP "Terminal color"
+  ORDER 100
+
+ADD FIELD "SIMLockCode" OF "SubsTerminal" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "SIM Lock Code"
+  POSITION 12
+  MAX-WIDTH 40
+  HELP "SIM lock code"
+  ORDER 120
+
+ADD FIELD "PerContractID" OF "SubsTerminal" AS integer 
+  DESCRIPTION "DCCLI"
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Periodical Contract ID"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "Per.Contr."
+  HELP "Periodical contract ID"
+  ORDER 130
+
+ADD FIELD "SIMChecked" OF "SubsTerminal" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "SIM Checked"
+  POSITION 14
+  MAX-WIDTH 1
+  COLUMN-LABEL "SIMCheck"
+  HELP "SIM checked"
+  ORDER 140
+
+ADD INDEX "TerminalID" ON "SubsTerminal" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TerminalID" ASCENDING 
+
+ADD INDEX "MsSeq" ON "SubsTerminal" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "MSSeq" ASCENDING 
+  INDEX-FIELD "PurchaseTS" DESCENDING 
+
+ADD INDEX "OrderId" ON "SubsTerminal" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "OrderId" ASCENDING 
+
+ADD FIELD "SendToROI" OF "Order" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Send History to ROI"
+  POSITION 58
+  MAX-WIDTH 4
+  ORDER 1060
+
+ADD FIELD "RiskCode" OF "Order" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "ROI Risk Code"
+  POSITION 59
+  MAX-WIDTH 20
+  ORDER 1070
+
+ADD INDEX "SendToROI" ON "Order" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "SendToROI" ASCENDING 
+
+ADD FIELD "Street" OF "OrderCustomer" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Street"
+  POSITION 51
+  MAX-WIDTH 60
+  COLUMN-LABEL "Street"
+  ORDER 900
+
+ADD FIELD "BuildingNum" OF "OrderCustomer" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Building Number"
+  POSITION 52
+  MAX-WIDTH 16
+  COLUMN-LABEL "Building Number"
+  ORDER 910
+
+ADD FIELD "AddressCompl" OF "OrderCustomer" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Address Complement"
+  POSITION 53
+  MAX-WIDTH 40
+  COLUMN-LABEL "Address Complement"
+  ORDER 920
+
+.
+PSC
+cpstream=1252
+.
+0000003097

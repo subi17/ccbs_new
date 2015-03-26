@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="InvoiceDocument">
+    <xs:annotation>
+      <xs:documentation>Invoice data from Qvantel Business Solutions Oy</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="1" name="Batch">
+          <xs:annotation>
+            <xs:documentation>Metadata for printhouse</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="1" maxOccurs="1" name="Company" type="xs:string"/>
+              <xs:element minOccurs="0" maxOccurs="1" name="Orderer" type="xs:string"/>
+              <xs:element minOccurs="0" maxOccurs="1" name="Created" type="xs:string"/>
+              <xs:element minOccurs="0" maxOccurs="1" name="PrintHouse" type="xs:string"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="1" maxOccurs="unbounded" name="Invoice">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="1" maxOccurs="1" ref="Header"/>
+              <xs:element minOccurs="1" maxOccurs="unbounded" ref="Customer"/>
+              <xs:element minOccurs="1" maxOccurs="1" name="InvoiceAmount" type="InvoiceAmountType">
+                <xs:annotation>
+                  <xs:documentation>Maininvoice amount. Also subinvoice amounts can be presented here, or under Contract. </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" ref="PaymentInfo"/>
+              <xs:element minOccurs="0" maxOccurs="unbounded" ref="CustomRow">
+                <xs:annotation>
+                  <xs:documentation>Customized rows, e.g. for creating a diagram</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="1" maxOccurs="1" name="Contract">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="1" maxOccurs="unbounded" name="ContractDetail">
+                      <xs:complexType>
+                        <xs:complexContent mixed="false">
+                          <xs:extension base="ContractType">
+                            <xs:sequence>
+                              <xs:element minOccurs="1" maxOccurs="unbounded" ref="InvoiceRow"/>
+                              <xs:element minOccurs="0" maxOccurs="1" name="SubInvoiceAmount" type="InvoiceAmountType"/>
+                              <xs:element minOccurs="0" maxOccurs="1" ref="Fee">
+                                <xs:annotation>
+                                  <xs:documentation>Fees included in the invoice</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element minOccurs="0" maxOccurs="1" ref="Usage">
+                                <xs:annotation>
+                                  <xs:documentation>Summary amounts of EDRs</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element minOccurs="0" maxOccurs="unbounded" ref="EDR">
+                                <xs:annotation>
+                                  <xs:documentation>Detailed EDRs</xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element minOccurs="0" maxOccurs="unbounded" ref="CustomRow"/>
+                            </xs:sequence>
+                          </xs:extension>
+                        </xs:complexContent>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="FooterNotice" type="xs:string"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="Language" type="xs:string"/>
+            <xs:attribute name="PrintHouseCode" type="xs:string">
+              <xs:annotation>
+                <xs:documentation>Code for guiding the printing process</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="Document" type="xs:string"/>
+      <xs:attribute name="Version" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Version 3.3</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Header">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="MainTitle" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Copy, credit note</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element minOccurs="1" maxOccurs="1" name="InvoiceID" type="xs:string"/>
+        <xs:element minOccurs="1" maxOccurs="1" name="InvoiceDate" type="xs:string"/>
+        <xs:element minOccurs="1" maxOccurs="1" name="DueDate" type="xs:string"/>
+        <xs:element minOccurs="1" maxOccurs="1" name="BillingPeriod" type="PeriodType"/>
+        <xs:element minOccurs="0" maxOccurs="1" name="InvoiceType" type="xs:string"/>
+        <xs:element minOccurs="0" maxOccurs="1" name="DeliveryType" type="xs:string"/>
+        <xs:element minOccurs="0" maxOccurs="1" name="ChargeType" type="xs:string"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomHeader">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="1" maxOccurs="unbounded" name="CustomHeaderData" type="CustomDataType"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Customer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="1" default="Invoice" name="CustomerType">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="Invoice"/>
+              <xs:enumeration value="Agreement"/>
+              <xs:enumeration value="Delivery"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element minOccurs="1" maxOccurs="1" name="CustomerNumber" type="xs:string"/>
+        <xs:element minOccurs="0" maxOccurs="1" name="CustomerID" type="xs:string"/>
+        <xs:element minOccurs="1" maxOccurs="1" name="CustomerName" type="NameType"/>
+        <xs:element minOccurs="1" maxOccurs="1" name="CustomerAddress" type="AddressType"/>
+        <xs:element minOccurs="0" maxOccurs="1" name="CustomerPhone" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Contact phone</xs:documentation>
+          </xs:annotation>
+        </xs:element><xs:element minOccurs="1" maxOccurs="1" name="CustomerTaxZone"><xs:simpleType><xs:restriction base="xs:string">
+              <xs:enumeration value="1"/>
+              <xs:enumeration value="2"/>
+              <xs:enumeration value="3"/>
+              <xs:enumeration value="4"/>
+            </xs:restriction></xs:simpleType></xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InvoiceRow">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="RowHeader" type="HeaderTextType"/>
+        <xs:element minOccurs="1" maxOccurs="unbounded" name="RowDetail">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="1" name="Group" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>Grouping title</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="Period" type="PeriodType"/>
+              <xs:element minOccurs="0" maxOccurs="1" name="BillingItem" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>Billing item name</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="Quantity" type="xs:decimal"/>
+              <xs:element minOccurs="0" maxOccurs="1" name="Duration" type="xs:string"/>
+              <xs:element minOccurs="0" maxOccurs="1" name="DataAmount" type="xs:decimal"/>
+              <xs:element minOccurs="0" maxOccurs="1" name="UnitPrice" type="xs:decimal"/>
+              <xs:element minOccurs="0" maxOccurs="1" name="AmountExclTax" type="xs:decimal">
+                <xs:annotation>
+                  <xs:documentation>Amount excluding tax </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="TaxPercent" type="xs:decimal"/>
+              <xs:element minOccurs="0" maxOccurs="1" name="TaxAmount" type="xs:decimal"/>
+              <xs:element minOccurs="0" maxOccurs="1" name="Amount" type="xs:decimal">
+                <xs:annotation>
+                  <xs:documentation>Including tax</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="Text" type="xs:string"/>
+            </xs:sequence>
+            <xs:attribute name="Type">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="SingleFee"/>
+                  <xs:enumeration value="FixedFee"/>
+                  <xs:enumeration value="EDR"/>
+                  <xs:enumeration value="FATime"/>
+                  <xs:enumeration value="CampaignFATime"/>
+                  <xs:enumeration value="MinimumConsumption"/>
+                  <xs:enumeration value="Memo"/>
+                  <xs:enumeration value="Discount"/>
+                  <xs:enumeration value="Charge"/>
+                  <xs:enumeration value="Compensation"/>
+                  <xs:enumeration value="SubTotal"/>
+                  <xs:enumeration value="Total"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="BillingItemGroupID" type="xs:string"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CustomRow" nillable="false">
+    <xs:annotation>
+      <xs:documentation>Customer (installation) specific data</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="1" name="CustomRowType" type="xs:string"/>
+        <xs:element minOccurs="1" maxOccurs="unbounded" name="CustomRowData" type="CustomDataType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PaymentInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="CompanyBank" type="BankType"/>
+        <xs:element minOccurs="0" maxOccurs="1" name="CustomerBank" type="BankType"/>
+        <xs:element minOccurs="0" maxOccurs="1" name="Reference" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Fee">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="FeeHeader" type="HeaderTextType"/>
+        <xs:element minOccurs="1" maxOccurs="unbounded" name="FeeDetail">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="1" maxOccurs="1" name="BillingItem" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>Billing item name</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="Period" type="PeriodType"/>
+              <xs:element minOccurs="1" maxOccurs="1" name="Quantity">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:decimal">
+                      <xs:attribute name="Unit" type="xs:string"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="Duration" type="xs:string"/>
+              <xs:element minOccurs="0" maxOccurs="1" name="DataAmount" type="xs:decimal"/>
+              <xs:element minOccurs="0" maxOccurs="1" name="Amount" type="xs:decimal"/>
+              <xs:element minOccurs="0" maxOccurs="1" name="Text" type="xs:string"/>
+            </xs:sequence>
+            <xs:attribute name="Type">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="SingleFee "/>
+                  <xs:enumeration value="FixedFee"/>
+                  <xs:enumeration value="FATime"/>
+                  <xs:enumeration value="MinimumConsumption"/>
+                  <xs:enumeration value="Interest"/>
+                  <xs:enumeration value="SubTotal"/>
+                  <xs:enumeration value="Total"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Usage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="UsageHeader" type="HeaderTextType"/>
+        <xs:element minOccurs="1" maxOccurs="unbounded" name="UsageDetail">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="1" maxOccurs="1" name="BillingItem" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>Billing Item name</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="CCN" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>CCN name</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="Destination" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>B-destination
+</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="Period" type="PeriodType"/>
+              <xs:element minOccurs="0" maxOccurs="1" name="Quantity">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:decimal">
+                      <xs:attribute name="Unit" type="xs:string"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" maxOccurs="1" name="Duration" type="xs:string"/>
+              <xs:element minOccurs="0" maxOccurs="1" name="DataAmount" type="xs:decimal"/>
+              <xs:element minOccurs="1" maxOccurs="1" name="Amount" type="xs:decimal"/>
+            </xs:sequence>
+            <xs:attribute name="Type">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="Usage"/>
+                  <xs:enumeration value="SubTotal"/>
+                  <xs:enumeration value="Total"/>
+                  <xs:enumeration value="Data"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EDR">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="EDRHeader" type="HeaderTextType"/>
+        <xs:element minOccurs="1" maxOccurs="unbounded" name="EDRDetail">
+          <xs:complexType>
+            <xs:attribute name="Type" form="unqualified">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="MobileCall"/>
+                  <xs:enumeration value="FixedCall"/>
+                  <xs:enumeration value="SubTotal"/>
+                  <xs:enumeration value="Total"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="Date" type="xs:string" use="required"/>
+            <xs:attribute name="Time" type="xs:string"/>
+            <xs:attribute name="Destination" type="xs:string"/>
+            <xs:attribute name="BillingItem" type="xs:string" use="required"/>
+            <xs:attribute name="CCN" type="xs:string"/>
+            <xs:attribute name="Duration" type="xs:string"/>
+            <xs:attribute name="DataAmount" type="xs:decimal"/>
+            <xs:attribute name="Rating" type="xs:string"/>
+            <xs:attribute name="UnitPrice" type="xs:decimal"/>
+            <xs:attribute name="Amount" type="xs:decimal" use="required"/>
+            <xs:attribute name="Quantity" type="xs:string"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="PrintToInvoice" type="xs:string"/>
+      <xs:attribute name="BillingItemGroup" type="xs:string" use="required"/>
+      <xs:attribute name="BillingItemGroupID" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="ContractType">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="ContractID" type="xs:string"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="ContractClass" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>PayType</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="1" name="ContractType">
+        <xs:annotation>
+          <xs:documentation>Subscription type</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute name="Name" type="xs:string"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="1" name="ContractName" type="NameType">
+        <xs:annotation>
+          <xs:documentation>User</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="1" name="ContractAddress" type="AddressType">
+        <xs:annotation>
+          <xs:documentation>User</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomContract" type="CustomDataType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="NameType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Title" type="xs:string"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="FirstName" type="xs:string"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="LastName" type="xs:string"/>
+      <xs:element minOccurs="1" maxOccurs="1" name="FullName" type="xs:string"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="CompanyName" type="xs:string"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="COName" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AddressType">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="StreetAddress">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="1" maxOccurs="unbounded" name="Address" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="1" maxOccurs="1" name="ZipCode" type="xs:string"/>
+      <xs:element minOccurs="1" maxOccurs="1" name="City" type="xs:string"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="Region" type="xs:string"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="Country" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PeriodType">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="BeginDate" type="xs:string"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="EndDate" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BankType">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="BankAccount">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute name="AccountType">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:enumeration value="IBAN"/>
+                    <xs:enumeration value="National"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="1" name="BankOffice" type="xs:string"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="BIC" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="InvoiceAmountType">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="unbounded" name="AmountDetail">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="ContractID" type="xs:string"/>
+            <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string"/>
+            <xs:element minOccurs="1" maxOccurs="1" name="AmountExclTax">
+              <xs:annotation>
+                <xs:documentation>Amount without tax</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:decimal">
+                    <xs:attribute name="Header"/>
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="1" maxOccurs="1" name="TaxAmount">
+              <xs:annotation>
+                <xs:documentation>Total tax amount</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:decimal">
+                    <xs:attribute name="Header"/>
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="TaxDetails">
+              <xs:annotation>
+                <xs:documentation>Tax data for each tax rate</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" maxOccurs="1" name="TaxZone" type="xs:string"/>
+                  <xs:element minOccurs="1" maxOccurs="1" name="TaxPercent">
+                    <xs:complexType>
+                      <xs:simpleContent>
+                        <xs:extension base="xs:decimal"/>
+                      </xs:simpleContent>
+                    </xs:complexType>
+                  </xs:element>
+                  <xs:element minOccurs="0" maxOccurs="1" name="AmountExclTax" type="xs:decimal"/>
+                  <xs:element minOccurs="1" maxOccurs="1" name="TaxAmount" type="xs:decimal"/>
+                  <xs:element minOccurs="0" maxOccurs="1" name="Amount" type="xs:decimal">
+                    <xs:annotation>
+                      <xs:documentation>AmountExclTax+TaxAmount</xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="SubTotal">
+              <xs:annotation>
+                <xs:documentation>Total sum including tax, before additional sums (such as overpayment) which are not included in tax calculation </xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:decimal">
+                    <xs:attribute name="Header"/>
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="OverPayment">
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:decimal">
+                    <xs:attribute name="Header"/>
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="AdvancePayment">
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:decimal">
+                    <xs:attribute name="Header"/>
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="InterestAmount">
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:decimal">
+                    <xs:attribute name="Header"/>
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="AdditionalDetail">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="1" maxOccurs="1" name="AdditionalAmount">
+                    <xs:annotation>
+                      <xs:documentation>Extra amounts included in the total amount but not included in the subtotal</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:simpleContent>
+                        <xs:extension base="xs:decimal">
+                          <xs:attribute name="Header"/>
+                        </xs:extension>
+                      </xs:simpleContent>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="1" maxOccurs="1" name="TotalAmount">
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:decimal">
+                    <xs:attribute name="Header"/>
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="Currency" type="xs:string"/>
+          </xs:sequence>
+          <xs:attribute name="Type">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="Main"/>
+                <xs:enumeration value="Sub"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="HeaderTextType">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="HeaderText" type="xs:string"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="HeaderTarget" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Column or other id, to which text is (the label) for </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CustomDataType">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="CustomType" type="xs:string"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="CustomContent" type="xs:string"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="CustomValue" type="xs:decimal"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

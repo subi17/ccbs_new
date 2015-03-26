@@ -1,0 +1,483 @@
+ADD TABLE "DiscountPlan"
+  AREA "Sta_Data_64"
+  LABEL "Discount Plans"
+  DESCRIPTION ""
+  DUMP-NAME "discountplan"
+
+ADD FIELD "Brand" OF "DiscountPlan" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 24
+  COLUMN-LABEL "Brand"
+  HELP "Brand"
+  ORDER 10
+
+ADD FIELD "DPId" OF "DiscountPlan" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Discount Plan Id"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "PlanId"
+  HELP "Discount plan Id"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "Subject" OF "DiscountPlan" AS character 
+  FORMAT "x(32)"
+  INITIAL ""
+  LABEL "Determinative Subject"
+  POSITION 4
+  MAX-WIDTH 64
+  COLUMN-LABEL "Subject"
+  HELP "Discount plan subject"
+  ORDER 30
+
+ADD FIELD "TargetType" OF "DiscountPlan" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Targeted To"
+  POSITION 5
+  MAX-WIDTH 32
+  COLUMN-LABEL "Target"
+  HELP "Targeted to All or List of targets"
+  ORDER 40
+
+ADD FIELD "DPUnit" OF "DiscountPlan" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Discount Unit"
+  POSITION 6
+  MAX-WIDTH 16
+  COLUMN-LABEL "Unit"
+  HELP "Discount unit"
+  ORDER 50
+
+ADD FIELD "Priority" OF "DiscountPlan" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "Priority"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Prior."
+  HELP "Priority between discount plans"
+  ORDER 60
+
+ADD FIELD "ProcessStopper" OF "DiscountPlan" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Process Stopper"
+  POSITION 8
+  MAX-WIDTH 1
+  COLUMN-LABEL "Stopper"
+  HELP "Process stopper for a lower priority plan"
+  ORDER 70
+
+ADD FIELD "DPCurrency" OF "DiscountPlan" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Currency"
+  POSITION 9
+  MAX-WIDTH 32
+  COLUMN-LABEL "Curr."
+  HELP "Currency in which discount units are given"
+  ORDER 80
+
+ADD FIELD "BillCode" OF "DiscountPlan" AS character 
+  FORMAT "x(32)"
+  INITIAL ""
+  LABEL "Billling Item"
+  POSITION 10
+  MAX-WIDTH 64
+  COLUMN-LABEL "Bill.Item"
+  HELP "Billing item for invoice rows"
+  ORDER 90
+
+ADD FIELD "ValidFrom" OF "DiscountPlan" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 11
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Effective from date"
+  ORDER 100
+
+ADD FIELD "ValidTo" OF "DiscountPlan" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Effective to date"
+  ORDER 110
+
+ADD FIELD "DPRuleId" OF "DiscountPlan" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Discount Rule Id"
+  POSITION 13
+  MAX-WIDTH 24
+  COLUMN-LABEL "Rule Id"
+  HELP "Discount Rule Id"
+  ORDER 120
+  MANDATORY
+
+ADD FIELD "DPName" OF "DiscountPlan" AS character 
+  FORMAT "x(64)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 14
+  MAX-WIDTH 128
+  HELP "Plan name"
+  ORDER 130
+
+ADD FIELD "DPMemo" OF "DiscountPlan" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Memo"
+  POSITION 15
+  MAX-WIDTH 80
+  HELP "Memo"
+  ORDER 140
+
+ADD FIELD "SubjectType" OF "DiscountPlan" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Subject Type"
+  POSITION 16
+  MAX-WIDTH 16
+  COLUMN-LABEL "Subj.Type"
+  HELP "Used for All or for a List"
+  ORDER 150
+
+ADD FIELD "MaxAmount" OF "DiscountPlan" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Max Amount"
+  POSITION 17
+  MAX-WIDTH 17
+  COLUMN-LABEL "Max"
+  HELP "Maximum amount per period"
+  DECIMALS 2
+  ORDER 160
+
+ADD FIELD "MinBaseAmount" OF "DiscountPlan" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Min Base Amount"
+  POSITION 18
+  MAX-WIDTH 17
+  COLUMN-LABEL "Min Base"
+  HELP "Minimum base amount for triggering discount"
+  DECIMALS 2
+  ORDER 170
+
+ADD FIELD "CCDisplay" OF "DiscountPlan" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "CC Display"
+  POSITION 19
+  MAX-WIDTH 4
+  COLUMN-LABEL "CC"
+  HELP "CC tool visibility"
+  ORDER 180
+
+ADD FIELD "ValidPeriods" OF "DiscountPlan" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Valid Periods"
+  POSITION 20
+  MAX-WIDTH 4
+  COLUMN-LABEL "Periods"
+  HELP "How many periods discount is valid for a member"
+  ORDER 190
+
+ADD INDEX "DPRuleID" ON "DiscountPlan" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "DPRuleId" ASCENDING 
+  INDEX-FIELD "ValidTo" DESCENDING 
+
+ADD INDEX "DPId" ON "DiscountPlan" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  INDEX-FIELD "DPId" ASCENDING 
+
+ADD TABLE "DPMember"
+  AREA "Sta_Data_256"
+  LABEL "Discount Plan Member"
+  DESCRIPTION ""
+  DUMP-NAME "dpmember"
+
+ADD FIELD "DPId" OF "DPMember" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "Discount Plan Id"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "PlanId"
+  HELP "Discount Plan Id"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "HostTable" OF "DPMember" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Host Table"
+  POSITION 3
+  MAX-WIDTH 24
+  COLUMN-LABEL "Host Table"
+  HELP "Name of the host table"
+  ORDER 20
+
+ADD FIELD "KeyValue" OF "DPMember" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Key Value"
+  POSITION 4
+  MAX-WIDTH 24
+  COLUMN-LABEL "Key Value"
+  HELP "Key value"
+  ORDER 30
+
+ADD FIELD "DiscValue" OF "DPMember" AS decimal 
+  FORMAT "->>>>>9.99"
+  INITIAL "0"
+  LABEL "Discount Value"
+  POSITION 5
+  MAX-WIDTH 17
+  COLUMN-LABEL "Discount Value"
+  HELP "Discount amount"
+  DECIMALS 2
+  ORDER 40
+
+ADD FIELD "ValidFrom" OF "DPMember" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Effective from date"
+  ORDER 50
+
+ADD FIELD "ValidTo" OF "DPMember" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Effective to date"
+  ORDER 60
+
+ADD INDEX "DPId" ON "DPMember" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "DPId" ASCENDING 
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "KeyValue" ASCENDING 
+
+ADD INDEX "DPHostKey" ON "DPMember" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "KeyValue" ASCENDING 
+
+ADD TABLE "DPRate"
+  AREA "Sta_Data_128"
+  LABEL "Discount Plan Rate"
+  DESCRIPTION "This table will contain actual amount/percentage"
+  DUMP-NAME "dprate"
+
+ADD FIELD "DPId" OF "DPRate" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "Discount Plan Id"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "PlanId"
+  HELP "Discount Plan Id"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "DiscValue" OF "DPRate" AS decimal 
+  FORMAT "->>>>>9.99"
+  INITIAL "0"
+  LABEL "Discount Value"
+  POSITION 3
+  MAX-WIDTH 17
+  COLUMN-LABEL "Value"
+  HELP "Discount amount"
+  DECIMALS 2
+  ORDER 20
+
+ADD FIELD "ValidFrom" OF "DPRate" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Effective from date"
+  ORDER 30
+
+ADD FIELD "ValidTo" OF "DPRate" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Effective to date"
+  ORDER 40
+
+ADD INDEX "DPId" ON "DPRate" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "DPId" ASCENDING 
+
+ADD TABLE "DPSubject"
+  AREA "Sta_Data_128"
+  LABEL "Discount Plan Subject"
+  DESCRIPTION ""
+  DUMP-NAME "dpsubject"
+
+ADD FIELD "DPId" OF "DPSubject" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "Discount Plan Id"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "PlanId"
+  HELP "Discount Plan Id"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "DPSubject" OF "DPSubject" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Subject"
+  POSITION 3
+  MAX-WIDTH 32
+  HELP "Discount plan subject"
+  ORDER 20
+
+ADD FIELD "ValidFrom" OF "DPSubject" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Effective from date"
+  ORDER 30
+
+ADD FIELD "ValidTo" OF "DPSubject" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Effective to date"
+  ORDER 40
+
+ADD INDEX "DPSubject" ON "DPSubject" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "DPId" ASCENDING 
+  INDEX-FIELD "DPSubject" ASCENDING 
+  INDEX-FIELD "ValidTo" DESCENDING 
+
+ADD TABLE "DPTarget"
+  AREA "Sta_Data_128"
+  LABEL "Discount Plan Target"
+  DESCRIPTION ""
+  DUMP-NAME "dptarget"
+
+ADD FIELD "DPId" OF "DPTarget" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Discount Plan Id"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "PlanId"
+  HELP "Discount Plan Id"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "ValidFrom" OF "DPTarget" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Effective from date"
+  ORDER 30
+
+ADD FIELD "ValidTo" OF "DPTarget" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Effective to date"
+  ORDER 40
+
+ADD FIELD "TargetTable" OF "DPTarget" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Target Table"
+  POSITION 6
+  MAX-WIDTH 40
+  COLUMN-LABEL "Table"
+  HELP "Target table"
+  ORDER 50
+
+ADD FIELD "TargetKey" OF "DPTarget" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Target Key"
+  POSITION 7
+  MAX-WIDTH 32
+  COLUMN-LABEL "Key"
+  HELP "Target key value"
+  ORDER 60
+
+ADD FIELD "Included" OF "DPTarget" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "yes"
+  LABEL "Included"
+  POSITION 8
+  MAX-WIDTH 1
+  HELP "Included in targets"
+  ORDER 70
+
+ADD INDEX "DPTarget" ON "DPTarget" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "DPId" ASCENDING 
+  INDEX-FIELD "TargetTable" ASCENDING 
+  INDEX-FIELD "TargetKey" ASCENDING 
+  INDEX-FIELD "ValidTo" DESCENDING 
+
+ADD INDEX "DPId" ON "DPTarget" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "DPId" ASCENDING 
+  INDEX-FIELD "ValidTo" DESCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000009545

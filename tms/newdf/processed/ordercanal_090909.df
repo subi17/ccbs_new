@@ -1,0 +1,26 @@
+ADD FIELD "SegmentCode" OF "MobSub" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Segmentation Code"
+  COLUMN-LABEL "SegmentCode"
+  HELP "Segmentation code"
+  ORDER 820
+
+ADD FIELD "SegmentDate" OF "MobSub" AS date
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Segmentation Date"
+  COLUMN-LABEL "SegmentDate"
+  HELP "Date when segmentation code was changed"
+  ORDER 830
+
+ADD FIELD "SIMLockCode" OF "OrderAccessory" AS character
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "SIM Lock Code"
+  MAX-WIDTH 40
+  ORDER 120
+
+.
+PSC
+cpstream=1252

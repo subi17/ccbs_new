@@ -1,0 +1,57 @@
+ADD FIELD "CLIType" OF "TMQueue" AS character
+  DESCRIPTION ""
+  FORMAT "x(12)"
+  FORMAT-SA ?
+  POSITION 17
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "CLI type"
+  HELP-SA ""
+  LABEL "CLI Type"
+  LABEL-SA ?
+  COLUMN-LABEL "CLIType"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 160
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 24
+
+ADD FIELD "LimitSource" OF "TMRule" AS integer
+  DESCRIPTION ""
+  FORMAT ">9"
+  FORMAT-SA ?
+  POSITION 13
+  INITIAL "1"
+  INITIAL-SA ?
+  HELP "Which limit is used in analysis"
+  HELP-SA ""
+  LABEL "Limit Source"
+  LABEL-SA ?
+  COLUMN-LABEL "LimitSrc"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 120
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+.
+PSC
+cpstream=1252
+.
+0000000415

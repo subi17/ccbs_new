@@ -1,0 +1,344 @@
+{commali.i}
+{tmsconst.i}
+
+DEF BUFFER provSolog     FOR Solog.
+DEF BUFFER provMobsub    FOR Mobsub.
+DEF BUFFER provMSREquest FOR MSRequest.
+DEF BUFFER provCliType   FOR CLIType.
+DEF BUFFER provIMSI      FOR IMSI.
+DEF BUFFER provSIM       FOR SIM.
+DEF BUFFER provTermMobsub FOR TermMobsub.
+
+DEF VAR oiValue      AS INT NO-UNDO.
+
+function fMakeCommLine returns CHAR
+(INPUT iiSolog     AS INT,
+ INPUT icValue     AS CHAR).
+                      
+   DEF VAR lcAdkey    AS CHAR NO-UNDO.
+   DEF VAR lcReturn   AS CHAR NO-UNDO.
+   DEF VAR lcPayTypes AS CHAR NO-UNDO INIT "UNKNOWN,POSTPAID,PREPAID".
+   DEF VAR lcProfile  AS CHAR NO-UNDO.
+   DEF VAR lcPayType  AS CHAR NO-UNDO.
+   DEF VAR liOrderId  AS INT  NO-UNDO.
+
+   DEF VAR lhMobSub   AS HANDLE NO-UNDO.
+
+   FIND FIRST provSolog WHERE 
+              provSolog.Solog = iiSolog NO-LOCK NO-ERROR.
+
+   IF NOT AVAIL provSolog THEN LEAVE.
+
+   IF icValue = "REACTIVATE" THEN DO:
+      lhMobSub = BUFFER provTermMobsub:HANDLE.
+      FIND FIRST provTermMobsub WHERE
+                 provTermMobsub.MSSeq = ProvSolog.MSSeq  NO-LOCK NO-ERROR.  
+   END. /* IF icValue = "REACTIVATE" THEN DO: */
+   ELSE DO:
+      lhMobSub = BUFFER provMobsub:HANDLE.
+      FIND FIRST provMobsub WHERE
+                 provMobsub.MSSeq = ProvSolog.MSSeq  NO-LOCK NO-ERROR.
+   END. /* ELSE DO: */
+
+   IF lhMobSub:AVAILABLE THEN
+   FIND FIRST provCliType WHERE
+              provClitype.Brand   = lhMobSub::Brand AND 
+              provClitype.CliType = lhMobSub::CliType NO-LOCK NO-ERROR.
+   IF AVAILABLE provCliType THEN lcProfile = provCliType.ServicePack.
+      
+   FOR EACH Order NO-LOCK WHERE
+            Order.MSSeq = ProvSolog.MSSeq AND
+            Order.OrderType NE 2 AND
+            Order.OrderType NE 4 BY Order.CrStamp DESC:
+      liOrderId = Order.OrderId.
+      LEAVE.
+   END. /* FOR LAST Order WHERE */
+
+   FIND FIRST Order WHERE
+              Order.Brand   = gcBrand AND
+              Order.OrderId = liOrderId NO-LOCK NO-ERROR.
+  
+   /* CREATE extra parameters */ 
+   IF LOOKUP(icValue, "CREATE,REACTIVATE") > 0 THEN DO:
+
+      /* Add the logic to support command line for Reactivation */
+      IF icValue = "REACTIVATE" THEN DO:
+         lcPayType = STRING(lhMobSub::PayType,"PREPAID/POSTPAID").
+
+         FIND FIRST Sim WHERE
+                    Sim.ICC = lhMobSub::ICC NO-LOCK NO-ERROR.
+         FIND FIRST CliType WHERE 
+                    CliType.Brand    = lhMobSub::Brand  AND 
+                    CliType.CliType  = lhMobSub::CliType NO-LOCK NO-ERROR.
+      END. /* IF icValue = "REACTIVATE" THEN DO: */
+
+      ELSE IF Avail Order THEN DO:
+         FIND FIRST Sim WHERE
+                    Sim.ICC = order.ICC NO-LOCK NO-ERROR.
+         
+         FIND FIRST CliType WHERE 
+                    CliType.Brand    = Order.Brand  AND 
+                    CliType.CliType  = Order.CliType NO-LOCK NO-ERROR.
+         ASSIGN lcPayType = (IF AVAILABLE CLIType AND 
+                             CLIType.PayType + 1 <= NUM-ENTRIES(lcPayTypes)
+                             THEN ENTRY(CLIType.PayType + 1,lcPayTypes)
+                             ELSE STRING(Order.PayType,"PREPAID/POSTPAID"))
+                lcProfile = (IF AVAILABLE CLIType 
+                             THEN CLIType.ServicePack
+                             ELSE STRING(Order.PayType,"12/11")).
+
+      END. /* ELSE IF Avail Order THEN DO: */
+
+      FIND FIRST IMSI WHERE IMSI.ICC = SIM.ICC NO-LOCK NO-ERROR.
+      
+      ASSIGN lcADkey = "PAYTYPE=" + lcPayType +
+                       ",PROFILE=" + lcProfile +
+                       ",KI=" + IMSI.KI + ",".
+      
+      IF Avail Order AND Order.MnpStatus > 0 THEN DO:
+
+         FIND FIRST MNPOperator WHERE
+                    MNPOperator.Brand = gcBrand AND
+                    MNPOperator.OperName = STRING(order.curroper) AND
+                    MNPOperator.Active = True
+         NO-LOCK NO-ERROR.
+
+         IF NOT AVAIL MNPOperator THEN
+            FIND FIRST MNPOperator WHERE
+                       MNPOperator.Brand = gcBrand AND
+                       MNPOperator.OperName = STRING(order.curroper) AND
+                       MNPOperator.Active = False
+            NO-LOCK NO-ERROR.
+
+         IF AVAIL MNPOperator AND
+                  MNPOperator.NRN > ""
+         THEN lcAdKey = lcAdKey + "MNP=" + MNPOperator.NRN + ",".
+         ELSE lcAdkey = lcAdKey + "MNP,".
+      END.
+
+                       
+      IF Avail CliType THEN DO:
+         IF CliType.ServiceClass ne "" THEN 
+            lcAdkey = lcAdkey + "SERVICECLASS=" + CliType.ServiceClass + ",".
+         IF CLIType.CLIType EQ "CONTM2" THEN
+            lcAdkey = lcAdkey + "BARRING=0110000,".
+      END.
+
+   END.
+
+   IF icValue = "DELETE" THEN DO:
+
+      FIND FIRST ProvMsRequest WHERE
+                 ProvMsRequest.MsSeq   = SoLog.MsSeq AND
+                 ProvMsRequest.ReqType = 18
+      NO-LOCK NO-ERROR.
+
+      IF NOT AVAIL ProvMsRequest THEN 
+      FIND FIRST ProvMsRequest WHERE
+                 ProvMsRequest.MsSeq   = SoLog.MsSeq AND
+                 ProvMsRequest.ReqType = 13          AND
+                 ProvMSRequest.ReqCparam1 = "DELETE" 
+      NO-LOCK NO-ERROR.
+                                                   
+      IF AVAIL provMSRequest AND 
+               ProvMsRequest.ReqCParam2 NE "" THEN
+         lcAdkey = lcAdkey + "MNP=" + STRING(ProvMsRequest.ReqCParam2) + ",".
+
+      lcReturn = STRING(ProvSolog.Solog)  +  " " + "DELETE" + ","  + /* Action*/
+                "MSISDN=34" + lhMobSub::Cli       + ","  +     /* MSISDN    */
+                "IMSI="   + lhMobSub::Imsi       + ","  +     /* IMSI      */
+                ",PAYTYPE=" + STRING(lhMobSub::PayType,"PREPAID/POSTPAID") +
+                ",OPERATOR=YOIGO,NW=ERICSSON," + lcadkey    .
+   END.                       
+   
+   ELSE IF Avail ProvMobsub  THEN DO:
+     lcReturn = STRING(ProvSolog.Solog)      +  " " + 
+                icValue                      + ","  +     /* Action  */
+               "MSISDN=34" + lhMobSub::Cli   + ","  +     /* MSISDN       */
+               "IMSI="   + lhMobSub::Imsi  + ","  +     /* IMSI         */
+               "PAYTYPE=" + STRING(lhMobSub::PayType,"PREPAID/POSTPAID") +
+               ",OPERATOR=YOIGO,NW=ERICSSON,"     .
+   END.
+   ELSE IF icValue = "REACTIVATE"  THEN
+     lcReturn = STRING(ProvSolog.Solog)      + " "  + 
+                "CREATE"                     + ","  +  /* Action-use the same command line for Reactivation */
+               "MSISDN=34" + lhMobSub::Cli   + ","  +  /* MSISDN       */
+               "IMSI="   + lhMobSub::Imsi  + ","  +    /* IMSI         */
+               ",OPERATOR=YOIGO,NW=ERICSSON," + lcAdkey.
+   ELSE IF NOT AVAIL ProvMObsub AND Avail Order  
+   THEN DO:
+        
+      FIND FIRST Imsi WHERE 
+                 Imsi.ICC = Order.ICC NO-LOCK NO-ERROR.
+        
+      lcReturn = STRING(ProvSolog.Solog)      +  " " +
+                 icValue                      + ","  +     /* Action  */
+                "MSISDN=34" + Order.Cli        + ","  +     /* MSISDN       */
+                "IMSI="   + Imsi.Imsi        + ","  +     /* IMSI         */
+                "OPERATOR=YOIGO,NW=ERICSSON," + 
+                lcAdkey .
+   END.
+   ELSE DO:
+     lcReturn = STRING(ProvSolog.Solog)      +  " " + 
+                icValue     + ","  +     /* Action  */
+               "MSISDN=34" + Order.Cli        + ","  +     /* MSISDN       */
+               "OPERATOR=YOIGO,NW=ERICSSON," + 
+               lcAdKey                      + "," .   
+   END.
+
+   RETURN lcReturn.
+
+END.   
+
+
+
+function fMakeCommLine2 returns CHAR
+(INPUT iiSolog     AS INT,
+ INPUT iiMSRequest AS INT,
+ INPUT ilSTCResend AS LOG).
+
+   DEF VAR lcAdkey    AS CHAR NO-UNDO.
+   DEF VAR lcReturn   AS CHAR NO-UNDO.
+   DEF VAR lcPayTypes AS CHAR NO-UNDO INIT "UNKNOWN,POSTPAID,PREPAID".
+   DEF VAR lcNewtype  AS CHAR NO-UNDO.
+   DEF VAR llNewType  AS LOG  NO-UNDO.
+   DEF VAR liOrderId  AS INT  NO-UNDO.
+  
+   DEF VAR lhMobSub   AS HANDLE NO-UNDO.
+
+   FIND FIRST provSolog WHERE
+              provSolog.Solog = iiSolog NO-LOCK NO-ERROR.
+   
+   FIND FIRST ProvMSRequest WHERE 
+              ProvMSRequest.MSrequest = iiMSRequest NO-LOCK NO-ERROR.
+
+   FIND FIRST provMobsub WHERE
+              provMobsub.MSSeq = ProvSolog.MSSeq NO-LOCK NO-ERROR.
+   IF AVAILABLE provMobsub THEN
+      lhMobSub = BUFFER provMobsub:HANDLE.
+   ELSE DO:
+      FIND FIRST provTermMobsub WHERE
+                 provTermMobsub.MSSeq = ProvSolog.MSSeq NO-LOCK NO-ERROR.
+      IF AVAILABLE provTermMobsub THEN
+         lhMobSub = BUFFER provTermMobsub:HANDLE.
+   END. /* ELSE DO: */
+
+   IF lhMobSub:AVAILABLE THEN
+   FIND FIRST provCliType WHERE
+              provClitype.Brand   = lhMobSub::Brand AND
+              provClitype.CliType = lhMobSub::CliType NO-LOCK NO-ERROR.
+   
+   FOR EACH Order NO-LOCK WHERE
+            Order.MSSeq = ProvSolog.MSSeq AND
+            Order.OrderType NE 2 AND
+            Order.OrderType NE 4 BY Order.CrStamp DESC:
+      liOrderId = Order.OrderId.
+      LEAVE.
+   END. /* FOR LAST Order WHERE */
+
+   FIND FIRST Order WHERE
+              Order.Brand   = gcBrand AND
+              Order.OrderId = liOrderId NO-LOCK NO-ERROR.
+  
+   IF ProvMSrequest.ReqCParam1 = "CHANGEMSISDN" THEN DO:
+   
+      lcReturn = STRING(ProvSolog.Solog)      +  " " +
+                "MODIFY" + ","  +                       /* Action  */
+                "MSISDN=34" + lhMobSub::Cli   + "->34" +    /* MSISDN  */
+                 ProvMSrequest.ReqCParam2     + ","  +
+                "IMSI="   + lhMobSub::Imsi  + ","  +    /* IMSI    */
+                "OPERATOR=YOIGO,NW=ERICSSON," + 
+                "PAYTYPE=" + STRING(lhMobSub::PayType,"PREPAID/POSTPAID").
+
+   END.
+   ELSE IF ProvMSrequest.ReqCParam1 = "CHANGEICC" THEN DO:
+      
+      FIND FIRST ProvSim WHERE 
+                 ProvSim.Icc = ProvMSrequest.ReqCParam2 NO-LOCK NO-ERROR.
+
+      FIND FIRST ProvIMSI WHERE 
+                 ProvImsi.Icc = ProvSim.Icc NO-LOCK NO-ERROR.
+      
+      lcReturn = STRING(ProvSolog.Solog)      +  " " +
+                "MODIFY" + ","  +                           /* Action  */
+                "MSISDN=34" + lhMobSub::Cli   +  ","  +    /* MSISDN  */
+                "IMSI="     + lhMobSub::IMSI + "->" + ProvIMSI.IMSI  + "," +
+                "KI=" +       ProvImsi.ki  +  "," +          
+                "OPERATOR=YOIGO,NW=ERICSSON," +
+                "PAYTYPE=" + STRING(lhMobSub::PayType,"PREPAID/POSTPAID").
+      
+   END.
+   ELSE IF ProvMSrequest.ReqType = 0 THEN DO:
+   
+      FIND FIRST ProvCliType WHERE
+                 ProvCliType.CliType = ProvMSrequest.ReqCParam2
+      NO-LOCK NO-ERROR.
+                
+      IF NOT AVAILABLE ProvCLIType THEN RETURN "". 
+                             
+      IF ProvCliType.ServiceClass ne ""
+      THEN lcAdkey = "SERVICECLASS=" + 
+            (IF ProvMSrequest.ReqCParam1 BEGINS "TARJ" AND
+                ProvCLIType.CLIType = "TARJ6" THEN "0007"
+             ELSE IF ProvMSrequest.ReqCParam1 BEGINS "TARJ" AND
+                ProvCLIType.CLIType = "TARJ7" THEN "0003"
+             ELSE ProvCliType.ServiceClass) + "," .
+
+      IF ProvCLIType.PayType + 1 <= NUM-ENTRIES(lcPayTypes)
+      THEN ASSIGN
+         lcNewType = ENTRY(ProvCLIType.PayType + 1,lcPayTypes)
+         llNewType = (ProvCLIType.PayType = 2).
+      ELSE RETURN "".
+
+      IF lhMobSub::PayType NE llNewType AND
+         NOT ilSTCResend THEN  
+      lcAdkey = lcAdkey +
+      "PAYTYPE=" + TRIM(STRING(lhMobSub::PayType,"PREPAID/POSTPAID")) + "->" +
+      TRIM(lcNewType) + "," .
+      ELSE lcAdkey = lcAdkey + "PAYTYPE=" + TRIM(lcNewType) + ",".
+      
+      lcReturn = STRING(ProvSolog.Solog)     +  " " +
+              "MODIFY"                    + ","  +     /* Action  */
+              "MSISDN=34" + lhMobSub::Cli       + ","  +     /* MSISDN       */
+              "IMSI="   +   lhMobSub::Imsi      + ","  +     /* IMSI         */
+              "OPERATOR=YOIGO,NW=ERICSSON," + 
+              lcAdkey .
+   END.
+  
+   RETURN lcReturn.
+
+END.   
+
+FUNCTION fGetShaperConfCommLine RETURN CHAR
+   (INPUT icShaperConfID AS CHAR):
+
+   DEF VAR lcCommLine AS CHAR NO-UNDO. 
+
+   FIND FIRST ShaperConf NO-LOCK WHERE
+              ShaperConf.Brand = gcBrand AND
+              ShaperConf.ShaperConfID = icShaperConfID
+   NO-ERROR.
+
+   IF NOT AVAIL ShaperConf THEN RETURN "".
+   
+   ASSIGN
+      lcCommLine = lcCommLine + 
+        "TARIFF_TYPE=" + STRING(ShaperConf.TariffType) + "," WHEN
+         ShaperConf.TariffType > ""
+      lcCommLine = lcCommLine + 
+         "TARIFF=" + STRING(ShaperConf.Tariff) + "," WHEN
+         ShaperConf.Tariff > ""
+      lcCommLine = lcCommLine + 
+         "TEMPLATE=" + STRING(ShaperConf.Template) + "," WHEN
+                              ShaperConf.Template > "" 
+      lcCommLine = lcCommLine + 
+         "LIMIT_UNSHAPED=" + STRING(ShaperConf.LimitUnShaped) + "," WHEN
+                                    ShaperConf.LimitUnShaped NE ?
+      lcCommLine = lcCommLine + 
+         "LIMIT_SHAPED=" + STRING(ShaperConf.LimitShaped) + "," WHEN
+                                  ShaperConf.LimitShaped NE ?.
+
+   RETURN lcCommLine.
+END.
+
+

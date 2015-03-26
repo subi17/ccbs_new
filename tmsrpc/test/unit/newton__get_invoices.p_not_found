@@ -1,0 +1,223 @@
+/**
+   @input
+     pdDate    =           (date)invoice date
+     piCustNum =           (int)customernumber
+*/
+{test_xmlrpc_includes.i}
+{unit/checkutils.i}
+
+gcFixtures = "Invoice,InvRow,order,TMSCodes".
+
+DEFINE VARIABLE gcParamArray AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE gcRetArray AS CHARACTER NO-UNDO. 
+gcParamArray = "".
+gcRetArray = "".
+
+
+DEFINE VARIABLE iInvNum AS INTEGER NO-UNDO. 
+DEFINE VARIABLE iInvType AS INTEGER NO-UNDO. 
+DEFINE VARIABLE iCrInvNum AS INTEGER NO-UNDO. 
+DEFINE VARIABLE cClaimState AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE cCSDesc AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE cExtInvId AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE deAmt AS DECIMAL NO-UNDO. 
+DEFINE VARIABLE dePaidAmt AS DECIMAL NO-UNDO. 
+DEFINE VARIABLE dtDue AS DATE NO-UNDO. 
+DEFINE VARIABLE dtInv AS DATE NO-UNDO. 
+DEFINE VARIABLE dtPaym AS DATE NO-UNDO. 
+DEFINE VARIABLE cMSISDN AS CHARACTER NO-UNDO. 
+
+
+
+
+
+FUNCTION call_get_invoices RETURN LOGICAL:
+    run_rpc_method("newton.get_invoices").
+    assert_success().
+    RETURN TRUE.
+END FUNCTION.
+
+FUNCTION add_params RETURN LOGICAL
+   (INPUT pcType AS CHARACTER,
+   INPUT pdDate AS DATE,
+   INPUT piKey AS INTEGER).
+   add_string(gcParamArray, "", pcType).
+   add_int(gcParamArray, "", piKey). 
+   add_date_or_time(gcParamArray, "", pdDate, ?).
+   RETURN TRUE.
+END.
+   
+
+FUNCTION fGetResultValues RETURN LOGICAL (INPUT pcRetStruct AS CHARACTER):
+    iInvNum = get_int(pcRetStruct, "invoice_number").
+    iInvType = get_int(pcRetStruct, "invoice_type").
+    iCrInvNum = get_int(pcRetStruct, "linked_invoice_number").
+    cClaimState = get_string(pcRetStruct, "claim_state").
+    cCsDesc = get_string(pcRetStruct, "claim_state_description").
+    cExtInvId = get_string(pcRetStruct, "ext_invoice_number").
+    deAmt = get_double(pcRetStruct, "amount").
+    dePaidAmt = get_double(pcRetStruct, "paid_amount").
+    dtDue = get_date(pcRetStruct, "due_date").
+    dtInv = get_date(pcRetStruct, "invoicing_date").
+    dtPaym = get_date(pcRetStruct, "payment_date").
+    cMSISDN = get_string(pcRetStruct, "msisdn").
+  RETURN TRUE.
+END.
+
+
+FUNCTION fcheck_result_struct RETURN LOGICAL (INPUT pcRetStruct AS CHARACTER,
+   INPUT pcInvoiceFixture AS CHARACTER, INPUT pcInvRowFixture AS CHARACTER):
+
+   DEFINE VARIABLE cExpMSISDN AS CHARACTER NO-UNDO. 
+   fGetResultValues(pcRetStruct).
+   fetch_fixture(pcInvoiceFixture, BUFFER Invoice:HANDLE).
+   IF pcInvRowFixture NE "" THEN
+   DO:
+      fetch_fixture(pcInvRowFixture, BUFFER InvRow:HANDLE).
+      cExpMSISDN = InvRow.CLI.
+   END.
+   ELSE
+   DO:
+      cExpMSISDN = Invoice.CLI.
+   END.
+
+   checkInt( "Invoice.InvNum", Invoice.InvNum, iInvNum ).
+   checkInt( "Invoice.InvType", Invoice.InvType, iInvType ).
+   checkInt( "Invoice.CrInvNum", Invoice.CrInvNum, iCrInvNum ).
+   checkChar( "Invoice.ClaimState", STRING(Invoice.ClaimState, ">9.9"), 
+     cClaimState). 
+
+   IF cClaimState eq "45,2" THEN
+   DO:
+      checkChar( "TMSCodes.CodeName", "ClaimState", cCsDesc ).
+   END.
+   ELSE
+   DO:
+      assert( cCsDesc eq ?, 
+      "TMSCodes for ClaimState desc was found althought not given.").
+   END.
+
+   checkChar( "Invoice.ExtInvId", Invoice.ExtInvId, cExtInvId ). 
+   checkDecimal( "Invoice.InvAmt", Invoice.InvAmt, deAmt).
+   checkDecimal( "Invoice.PaidAmt", Invoice.PaidAmt, dePaidAmt).
+   checkDate( "Invoice.DueDate", Invoice.DueDate, dtDue).
+   checkDate( "Invoice.PaymDate", Invoice.PaymDate, dtPaym).
+   checkChar( "CLI", cExpMSISDN, cMSISDN ).
+
+   RETURN TRUE.
+END.
+
+
+
+
+/**
+   Invoice found, "order"
+*/
+
+PROCEDURE test_get_invoices_by_order_onefound:
+   add_params("order", DATE(12,12,2008),15).
+   call_get_invoices().
+   assert_success().
+   gcRetArray = get_array("", "0").
+   assert(get_paramcount(gcRetArray) eq 1, 
+     "Expected exactly one invoice found but that wasn't true").
+   fcheck_result_struct(get_struct(gcRetArray, "0"), 
+      "InvoiceForOrder","").
+END.
+
+/**
+   No invoice found, "order"
+*/
+PROCEDURE test_get_invoices_by_order_notfound:
+   add_params("order", DATE(12,12,2008),99).
+   call_get_invoices().
+   gcRetArray = get_array("", "0").
+   assert(get_paramcount(gcRetArray) eq 0, 
+     "Expected no invoice found but that wasn't true").
+END.
+
+/** 
+   No invoice found, "customer"; custnum not available
+*/
+PROCEDURE test_get_invoices_by_custnum_notfound:
+   add_params("customer", DATE(12,12,2008),99).
+   call_get_invoices().
+   run_rpc_method("newton.get_invoices").
+   gcRetArray = get_array("", "0").
+   assert(get_paramcount(gcRetArray) eq 0, 
+     "Expected no invoice found but that wasn't true").
+END.
+
+
+/** 
+   No invoice found, "customer"; invdate not suitable 
+*/
+
+
+PROCEDURE test_get_invoices_by_custnum_notfound_invdate:
+   add_params("customer", DATE(12,12,2012),6).
+   call_get_invoices().
+   gcRetArray = get_array("", "0").
+   assert(get_paramcount(gcRetArray) eq 0, 
+     "Expected no invoice found but that wasn't true").
+END.
+
+
+/** 
+   No invoice found, "customer"; invtype not suitable 
+*/
+PROCEDURE test_get_invoices_by_custnum_notfound_invtype:
+   add_params("customer", DATE(12,12,2008),8).
+   call_get_invoices().
+   gcRetArray = get_array("", "0").
+   assert(get_paramcount(gcRetArray) eq 0, 
+     "Expected no invoice found but that wasn't true").
+END.
+
+
+/** 
+   No invoice found, "customer"; winvdisp not suitable 
+*/
+PROCEDURE test_get_invoices_by_custnum_notfound_winvdisp:
+   add_params("customer", DATE(12,12,2008),9).
+   call_get_invoices().
+   gcRetArray = get_array("", "0").
+   assert(get_paramcount(gcRetArray) eq 0, 
+     "Expected no invoice found but that wasn't true").
+END.
+
+/** 
+   One invoice found, "customer"
+*/
+
+
+PROCEDURE test_get_invoices_by_custnum_onefound:
+   add_params("customer", DATE(12,12,2008),5).
+   call_get_invoices().
+   gcRetArray = get_array("", "0").
+   assert(get_paramcount(gcRetArray) eq 1, 
+     "Expected one invoice found but that wasn't true").
+   fcheck_result_struct(get_struct(gcRetArray, "0"), 
+      "InvoiceForOrder","").
+END.
+
+
+/** 
+   Two invoices found, "customer"
+*/
+
+
+
+PROCEDURE test_get_invoices_by_custnum_twofound:
+   add_params("customer", DATE(12,12,2008),7).
+   call_get_invoices().
+   gcRetArray = get_array("", "0").
+   assert(get_paramcount(gcRetArray) eq 2, 
+     "Expected no invoice found but that wasn't true").
+   fcheck_result_struct(get_struct(gcRetArray, "0"), 
+      "InvoiceForCustomer2","InvRowForGetInvoices").
+   fcheck_result_struct(get_struct(gcRetArray, "1"), 
+      "InvoiceForCustomer1","").
+END.
+
+

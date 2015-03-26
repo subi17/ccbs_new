@@ -1,0 +1,251 @@
+/**
+  @input 
+      piCustNum = CustomerNumber 
+       
+*/
+
+
+{test_xmlrpc_includes.i}
+{unit/checkutils.i}
+{timestamp.i}
+
+gcFixtures = "customer,mobsub,order,ordercustomer,Limit".
+
+DEFINE VARIABLE gcParamArray AS CHARACTER NO-UNDO. 
+gcParamArray = "".
+DEFINE VARIABLE gcParamStruct AS CHARACTER NO-UNDO. 
+gcParamStruct = "".
+
+DEFINE VARIABLE gcReturnStruct AS CHARACTER NO-UNDO. 
+
+
+FUNCTION call_get_customer_details RETURN LOGICAL:
+    run_rpc_method("newton.get_customer_details").
+    RETURN TRUE.
+END FUNCTION.
+
+FUNCTION add_params RETURN LOGICAL(
+   INPUT piCustNum AS INT,
+   INPUT pcCLI AS CHARACTER):
+   add_int(gcParamArray, ?, piCustNum).
+   IF pcCLI NE ? THEN
+      add_string(gcParamArray, ?, pcCLI).
+   RETURN TRUE.
+END FUNCTION.
+
+
+&GLOBAL-DEFINE languages "es_ES,es_CA,es_EU,es_GA,en"
+
+FUNCTION fGetLanguageName RETURN CHARACTER 
+   (INPUT piLangCode AS INTEGER):
+   RETURN ENTRY(piLangCode, {&languages}).
+END.
+
+
+FUNCTION fCheckBasicCustomerData RETURN LOGICAL 
+   (INPUT pcCustomerFixture AS CHARACTER, INPUT plCorporate AS LOGICAL):
+   
+   gcReturnStruct = get_struct("", "").
+   fetch_fixture(pcCustomerFixture, BUFFER Customer:HANDLE).
+
+   checkInt("Customer.CustNum", Customer.CustNum, 
+      get_int(gcReturnStruct, "custnum")).
+   checkChar("Customer.Firstname", Customer.Firstname, 
+      get_string(gcReturnStruct, "fname")).
+   checkChar("Customer.CustName" , Customer.CustName , 
+      get_string(gcReturnStruct, "lname")).
+   checkChar("Customer.SurName2" , Customer.SurName2 , 
+      get_string(gcReturnStruct, "lname2")).
+   checkChar("Customer.coname"   , Customer.Coname   , 
+      get_string(gcReturnStruct, "coname")).
+   checkChar("Customer.Address"  , Customer.Address  ,
+      get_string(gcReturnStruct, "street")).
+   checkChar("Customer.ZipCode"  , Customer.ZipCode  ,
+      get_string(gcReturnStruct, "zip")).
+   checkChar("Customer.PostOffice", Customer.PostOffice,
+      get_string(gcReturnStruct, "city")).
+   checkChar("Customer.Region"   , Customer.Region   ,
+      get_string(gcReturnStruct, "region")).
+   checkChar("Customer.Language" , fGetLanguageName(Customer.Language),
+      get_string(gcReturnStruct, "language")).
+   checkChar("Customer.HonTitle", Customer.HonTitle,
+      get_string(gcReturnStruct, "title")).
+   checkChar("Customer.BankAcct", Customer.BankAcct, 
+      get_string(gcReturnStruct, "bankaccount")).
+   checkChar("Customer.Nationality", Customer.Nationality,
+      get_string(gcReturnStruct, "nationality")).
+   checkChar("Customer.Email", Customer.Email,
+      get_string(gcReturnStruct, "email")).
+   checkChar("Customer.smsnumber", Customer.smsnumber,
+      get_string(gcReturnStruct, "sms_number")).
+   checkChar("Customer.Phone"  , Customer.Phone,
+      get_string(gcReturnStruct, "phone_number")).
+   IF NOT plCorporate THEN
+     checkChar("Customer.OrgId", Customer.OrgId,
+        get_string(gcReturnStruct, "person_id")).
+   checkInt("Customer.DelType", Customer.DelType, 
+      get_int(gcReturnStruct, "debit_type")).
+   checkChar("Customer.BirthDay", STRING(Customer.BirthDay, "99-99-9999"),
+      get_string(gcReturnStruct,"birthday")).
+
+   checkLogical("Customer.DirMarkSMS", Customer.DirMarkSMS,  
+      get_bool(gcReturnStruct, "mark_sms"), "").
+   checkLogical("Customer.DirMarkPost", Customer.DirMarkPost,
+      get_bool(gcReturnStruct, "mark_post"), "").
+   checkLogical("Customer.DirMarkEmail", Customer.DirMarkEmail,
+      get_bool(gcReturnStruct, "mark_email"), "").
+   checkLogical("Customer.OutMarkSMS", Customer.OutMarkSMS,
+      get_bool(gcReturnStruct, "mark_sms_3rd"), "").
+   checkLogical("Customer.OutMarkEmail", Customer.OutMarkEmail,
+      get_bool(gcReturnStruct, "mark_email_3rd"), "").
+   checkLogical("Customer.OutMarkPost", Customer.OutMarkPost,
+      get_bool(gcReturnStruct, "mark_post_3rd"), "").
+
+   checkChar("Customer.AddressCodP", Customer.AddressCodP,
+      get_string(gcReturnStruct, "city_code")).
+   checkChar("Customer.AddressCodC", Customer.AddressCodC,
+      get_string(gcReturnStruct, "street_code")).
+   RETURN TRUE.
+END.
+
+
+FUNCTION fCheckCorpCustomerData RETURN LOGICAL:
+   checkChar("Customer.OrgId", Customer.OrgId,
+      get_string(gcReturnStruct, "company_id")).
+   checkChar("Customer.CompanyName", Customer.CompanyName, 
+      get_string(gcReturnStruct, 'company_name')).
+   DEFINE VARIABLE dtFoundDatetime AS DATETIME NO-UNDO.
+   dtFoundDatetime = get_datetime(gcReturnStruct, "company_foundationdate").
+   checkDateTime("Customer.FoundationDate", DATETIME( Customer.FoundationDate, 0),
+       dtFoundDatetime).
+  
+
+END.
+
+
+FUNCTION fCheckOrderCustData RETURN LOGICAL (INPUT pcOrderCustFixture AS CHARACTER):
+    fetch_fixture(pcOrderCustFixture, BUFFER OrderCustomer:HANDLE).
+    DEFINE VARIABLE contactStruct AS CHARACTER NO-UNDO. 
+    contactStruct = get_struct(gcReturnStruct, "company_contact").
+
+    checkChar("OrderCustomer.FirstName", OrderCustomer.FirstName,
+       get_string(contactStruct, "fname")).
+    checkChar("OrderCustomer.SurName1", OrderCustomer.SurName1,
+       get_string(contactStruct, "lname")).
+    checkChar("OrderCustomer.SurName2", OrderCustomer.SurName2,
+       get_string(contactStruct, "lname2")).
+    checkChar("OrderCustomer.Address", OrderCustomer.Address,
+       get_string(contactStruct, "street")).
+    checkChar("OrderCustomer.ZipCode", OrderCustomer.ZipCode,
+       get_string(contactStruct, "zip")).
+    checkChar("OrderCustomer.PostOffice", OrderCustomer.PostOffice,
+       get_string(contactStruct, "city")).
+    checkChar("OrderCustomer.Region", OrderCustomer.Region,
+       get_string(contactStruct, "region")).
+    checkChar("OrderCustomer.Language", 
+       fGetLanguageName(INT(OrderCustomer.Language)),
+       get_string(contactStruct, "language")).
+    checkChar("OrderCustomer.CustTitle", OrderCustomer.CustTitle,
+       get_string(contactStruct, "title")).
+    checkChar("OrderCustomer.BankCode", OrderCustomer.BankCode,
+       get_string(contactStruct, "bankaccount")).
+    checkChar("OrderCustomer.Nationality", OrderCustomer.Nationality,
+       get_string(contactStruct, "nationality")).
+    checkChar("OrderCustomer.Email", OrderCustomer.Email,
+       get_string(contactStruct, "email")).
+    checkChar("OrderCustomer.MobileNumber", OrderCustomer.MobileNumber,
+       get_string(contactStruct, "sms_number")).
+    checkChar("OrderCustomer.FixedNumber", OrderCustomer.FixedNumber,
+       get_string(contactStruct, "phone_number")).
+    checkChar("OrderCustomer.AddressCodP", OrderCustomer.AddressCodP,
+       get_string(contactStruct, "city_code")).
+    checkChar("OrderCustomer.AddressCodC", OrderCustomer.AddressCodC,
+       get_string(contactStruct, "street_code")).
+    RETURN TRUE.
+END.
+
+
+FUNCTION fCheckLimitWasNotReturned RETURN LOGICAL:
+   FIND tt_param WHERE tt_param.parent = gcReturnStruct AND 
+      tt_param.name = "subscription_limit" NO-ERROR.
+   assert(NOT AVAIL tt_param, 
+      "subscription_limit retunn value existed although should not").
+
+   RETURN TRUE.
+END.
+
+FUNCTION fCheckLimit RETURN LOGICAL (INPUT pcLimitFixture AS CHARACTER):
+   fetch_fixture(pcLimitFixture, BUFFER Limit:HANDLE).
+   
+   checkInt("Limit.LimitAmt", INT(Limit.LimitAmt), 
+      get_int(gcReturnStruct, "subscription_limit")).
+
+   RETURN TRUE.
+END.
+
+
+/**
+   All Customer data found from db 
+*/
+
+PROCEDURE test_check_customer_details_basic_data:
+   add_params(14, ?).
+   call_get_customer_details(). 
+   assert_success().
+   fCheckBasicCustomerData("CustomerForDetails", FALSE).
+   fCheckLimit("CustomerForDetails").
+END. 
+
+
+PROCEDURE test_check_customer_details_basic_data_with_cli_but_not_CIF:
+   add_params(222, "622123456").
+   call_get_customer_details(). 
+   assert_success().
+   fCheckBasicCustomerData("CustomerForDetails", FALSE).
+END.
+
+
+PROCEDURE test_check_customer_details_corporate_cust_no_order:
+   add_params(16, "04567890326").
+   call_get_customer_details(). 
+   assert_success().
+   fCheckBasicCustomerData("CustomerForDetailsCorp", TRUE).
+   fCheckLimitWasNotReturned().
+   fCheckCorpCustomerData().
+   assert(get_bool(gcReturnStruct, "has_postpaid") = TRUE, 
+      "has_postpaid was not TRUE as expected").
+END.
+
+PROCEDURE test_check_customer_details_with_ordercustomer:
+   add_params(12, "777222333"). 
+  /* This custnum is not used: the custnum is taken from the mobsub found with CLI */
+   call_get_customer_details(). 
+   assert_success().
+
+   fCheckBasicCustomerData("CustomerForDetailsCorp", TRUE).
+   fCheckCorpCustomerData().
+   fCheckOrderCustData("GetCustomerDetailsInfo").
+END.
+
+PROCEDURE test_not_found_subscription:
+   add_params(13, "999999999").
+   call_get_customer_details().
+   assert_fault(-32500, "Subscription with msisdn 999999999 not found").
+END.
+
+PROCEDURE test_not_found_customer_seeked_from_mobsub:
+   add_params(14, "888888888").
+   call_get_customer_details().
+   assert_fault(-32500, "Customer entry for 99999999 not found").
+
+END.
+
+
+PROCEDURE test_not_found_customer_seeked_with_param:
+   add_params(333333333, ? ).
+   call_get_customer_details().
+   assert_fault(-32500, "Customer entry for 333333333 not found").
+END.
+
+
+

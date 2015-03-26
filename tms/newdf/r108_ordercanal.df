@@ -1,0 +1,13 @@
+DROP FIELD "CommercialFee" OF "CLIType"
+
+ADD FIELD "CommercialFee" OF "CLIType" AS DECIMAL 
+  FORMAT ">>>>9.99"
+  INITIAL "0"
+  LABEL "Commercial Fee"
+  POSITION 26
+  COLUMN-LABEL "CommercialFee"
+  DECIMALS 2
+  ORDER 250
+
+UPDATE FIELD "ContrType" OF "CLIType"
+  FORMAT ">9"

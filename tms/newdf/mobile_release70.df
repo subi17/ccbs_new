@@ -1,0 +1,8 @@
+ADD FIELD "AccessType" OF "CallScanner" AS character 
+  DESCRIPTION "Type of access"
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Access Type"
+  COLUMN-LABEL "AccessType"
+  HELP "Access Type R/W"
+  ORDER 110

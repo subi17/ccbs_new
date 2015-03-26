@@ -1,0 +1,68 @@
+ADD FIELD "MNPType" OF "MNPProcess" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "MNPType"
+  POSITION 11
+  COLUMN-LABEL "MNPType"
+  MAX-WIDTH 4
+  HELP "MNP process type"
+  ORDER 100
+
+ADD FIELD "Brand" OF "MNPProcess" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 12
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 110
+
+ADD FIELD "StateFlag" OF "MNPProcess" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "StateFlag"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "StateFlag"
+  HELP "Additional process state info"
+  ORDER 120
+
+ADD FIELD "StatusReason" OF "MNPProcess" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "StatusReason"
+  POSITION 14
+  MAX-WIDTH 24
+  COLUMN-LABEL "StatusReason"
+  ORDER 141
+
+ADD FIELD "MNPUpdateTS" OF "MNPProcess" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "MNPUpdateTS"
+  POSITION 15
+  MAX-WIDTH 20
+  COLUMN-LABEL "MNPUpdateTS"
+  DECIMALS 5
+  ORDER 130
+
+ADD FIELD "OperCode" OF "MNPProcess" AS character 
+  FORMAT "x(3)"
+  INITIAL ""
+  LABEL "OperCode"
+  POSITION 16
+  MAX-WIDTH 6
+  COLUMN-LABEL "OperCode"
+  HELP "Operator code (mnp in = donor, mnp out = receptor)"
+  ORDER 150
+
+ADD FIELD "PortingTime" OF "MNPProcess" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "PortingTime"
+  POSITION 17
+  MAX-WIDTH 20
+  COLUMN-LABEL "PortingTime"
+  DECIMALS 5
+  ORDER 140

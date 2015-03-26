@@ -1,0 +1,45 @@
+Latch Requests and Waits Help
+=============================
+
+Latches are data structures which are used to regulate access to shared
+memory.   (Another term for latches is "MUTEX".)  A latch must be obtained
+any time a process needs to access a shared data structure EVEN TO READ
+IT.   This is required in order to ensure data integrity.   If a process
+cannot obtain a latch it will "spin" attempting to get the latch (the
+number of spins is controlled by the -spin startup parameter.   If the
+process fails to get the latch by spinning it will then wait.   When the
+number of latch waits starts to climb you may be experiencing "latch
+contention".   This means that your database is constrained by the speed
+of a single CPU (latches represent a single thread of execution).   If
+this is the case then you must either upgrade your hardware or modify
+your code to request fewer latches (remember that, among other things,
+latches are obtained to READ blocks and that large logical read rates will
+result in large numbers of latch requests...)  Use the Latch Wait module
+to further explore the source of latch waits.
+
+Latches are very short duration internal locks.  Very tight and highly
+optimized sections of code are executed while a latch is held.  No IO
+takes place while a latch is held.  Latch duration can typically be
+measured in microseconds.  Latches do not directly correspond to 4gl
+code.
+
+Id:
+
+The numeric id of this latch.
+
+Latch:
+
+The name of the latch.  The secret decoder ring is only available at 4gl
+fan club meetings.
+
+Requests:
+
+The number of times this latch was requested.
+
+Waits:
+
+The number of times someone had to wait for the latch.
+
+Lock%
+
+The percentage of successful requests.

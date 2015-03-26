@@ -1,0 +1,185 @@
+#!/usr/bin/bash
+
+#if test $# = 0
+#   then echo HUOLTOKATKO
+#        exit 0
+#fi
+#echo HUOLTOKATKO
+#exit 0
+#ulimit -n 4096
+
+DLC=/opt/dlc
+PATH=$PATH:$DLC:$DLC/bin
+#TERM=vt320tera
+
+export DLC PATH
+
+umask 000
+
+FOPDCONNECT="-H localhost -S 4260"
+FOPDPASSWORD=w00t
+FOPDSTATUS=ari@starnet.fi
+FOPXMLDELETE=NO
+export FOPDCONNECT FOPDPASSWORD FOPDSTATUS FOPDXMLDELETE
+
+TMSPath=/apps/tms
+PFPath=$TMSPath/pf
+
+INVXMLDIR=$TMSPath/invxml
+XLTDIR=$TMSPath/xlt
+XMLDIR=$TMSPath/xml
+XMLIMAGEDIR=$TMSPath/image
+export INVXMLDIR XLTDIR XMLDIR XMLIMAGEDIR
+
+cd $TMSPath
+
+PROPATH=$PROPATH:$TMSPath
+for dir in Ar Func Gwy Help Inv Macro Mailconf Mc Mc/lib Mf Mm Rate Syst Class
+do
+   PROPATH=$PROPATH:$TMSPath/$dir
+done
+
+PROPATH=$PROPATH:/apps/yoigo/tms/xmlrpc
+
+PROPATH=${PROPATH:1}
+
+if test -z "$1"
+   then PROPATH=/tmsapps:$PROPATH
+        export PROPATH
+        cd $TMSPath
+elif test ${1} = "-dev"
+   then PROPATH=$TMSPath/Dev:$PROPATH:/tmsapps
+        export PROPATH
+        cd $TMSPath/Dev
+elif test ${1} = "-work"
+   then PROPATH=$TMSPath/Work:$PROPATH:/tmsapps
+        export PROPATH
+        cd $TMSPath/Work
+elif test ${1} = "-class"
+   then PROPATH=$TMSPath/Class:$PROPATH:/tmsapps
+        export PROPATH
+        cd $TMSPath/Class
+elif test ${1} = "-support"
+   then PROPATH=/apps/yoigo/tms_support/$2:$PROPATH:/tmsapps
+        export PROPATH
+        cd /apps/yoigo/tms_support/$2
+else PROPATH=$PROPATH:/tmsapps
+     export PROPATH
+     cd $TMSPath
+fi
+
+if test -z "$1"
+   then mpre -pf $PFPath/oldcdr.pf -q -p tmslogin
+else case ${1} in
+        -dev|-work|-class|-support)
+           mpre -pf $PFPath/oldcdr.pf
+        ;;
+
+        -mo_postpaid)
+           mpro-cdr -pf $PFPath/oldcdr.pf -clientlog /scratch/log/mo/postpaid.log -p snscdrsw
+        ;;
+        
+        -mo_postpaid2)
+           mpro-cdr -pf $PFPath/oldcdr.pf -clientlog /scratch/log/mo/postpaid.log -p snscdrsw2
+        ;;
+
+        -mo_postpaid3)
+           mpro-cdr -pf $PFPath/oldcdr.pf -clientlog /scratch/log/mo/postpaid.log -p snscdrsw3
+        ;;
+
+        -mo_postpaid4)
+           mpro-cdr -pf $PFPath/oldcdr.pf -clientlog /scratch/log/mo/postpaid.log -p snscdrsw4
+        ;;
+
+        -mo_postpaid5)
+           mpro-cdr -pf $PFPath/oldcdr.pf -clientlog /scratch/log/mo/postpaid.log -p snscdrsw5
+        ;;
+
+        -mo_prepaid)
+           mpro-cdr -pf $PFPath/oldcdr.pf -clientlog /scratch/log/mo/prepaid.log -p snscdrswpp
+        ;;
+        
+         -mo_prepaid2)
+           mpro-cdr -pf $PFPath/oldcdr.pf -clientlog /scratch/log/mo/prepaid.log -p snscdrswpp2
+        ;;
+
+        -mo_prepaid3)
+           mpro-cdr -pf $PFPath/oldcdr.pf -clientlog /scratch/log/mo/prepaid.log -p snscdrswpp3
+        ;;
+
+        -mo_prepaid4)
+           mpro-cdr -pf $PFPath/oldcdr.pf -clientlog /scratch/log/mo/prepaid.log -p snscdrswpp4
+        ;;
+
+        -mo_prepaid5)
+           mpro-cdr -pf $PFPath/oldcdr.pf -clientlog /scratch/log/mo/prepaid.log -p snscdrswpp5
+        ;;
+
+        -mo_tap3)
+           mpro-cdr -pf $PFPath/oldcdr.pf -clientlog /scratch/log/mo/tap3.log -p snscdr_tap3
+        ;;
+                           
+        -mo_roam)
+           mpro-cdr -pf $PFPath/oldcdr.pf -clientlog /scratch/log/mo/roam.log -p roamcdr
+        ;;
+
+        -mo_vas)
+           mpro-cdr -pf $PFPath/oldcdr.pf -clientlog /scratch/log/mo/vas.log -p snscdrsw_vas
+        ;;
+        
+        -mo_plc)
+           mpro-cdr -pf $PFPath/oldcdr.pf -clientlog /scratch/log/mo/plc.log -p plccdr
+        ;;
+
+        -screen)
+           module=$2; shift; shift
+           pf=batch.pf
+           if test $1 = "oldcdr.pf"
+              then pf=oldcdr.pf
+                   shift
+           fi
+           mpre -q -pf $PFPath/$pf -p $module $*
+        ;;
+
+        -batch)
+           if test -n "${4}" 
+              then mpre -b -q -pf $PFPath/${3} -p ${2} -param ${4}
+              else mpre -b -q -pf $PFPath/${3} -p ${2}
+           fi
+        ;;
+        -bdebug)
+           if test -n "${4}" 
+              then mpre -b -q -pf $PFPath/${3} -p ${2} -param ${4} -clientlog /scratch/log/batch/debug.log -logentrytypes "4GLMessages:4,4GLTrans:2,4GLTrace:4"
+              else mpre -b -q -pf $PFPath/${3} -p ${2} -clientlog /scratch/log/batch/debug.log -logentrytypes "4GLMessages:4,4GLTrans:2,4GLTrace:4"
+           fi
+        ;;
+
+        -test)
+           if test -z "${2}"
+              then echo
+                   echo ERROR: Test environment is not given as parameter!
+                   echo
+           else
+              if test ${3}
+                 then RFILE=" -p ${3}"
+                      PROPATH=/tmp/${2}:$TMSPath/${2}:$PROPATH 
+              else RFILE=""
+                   PROPATH=$TMSPath/${2}:/tmp/${2}:$PROPATH
+              fi
+              export PROPATH
+              cd $TMSPath/${2}
+              mpre -pf $TMSPath/${2}/${2}.pf $RFILE
+           fi
+        ;;
+        
+        -billing)
+           mpre -pf $PFPath/oldcdr.pf -q -p tmslogin
+        ;;
+
+        *)
+        echo Unknown parameter: $*
+        ;;
+
+   esac
+
+fi

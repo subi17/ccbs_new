@@ -1,0 +1,4 @@
+echo "MNP SEND SCREEN"
+sleep 2
+echo $TERM
+screen 1 /apps/xfera/tms/script/xfear_extapi -screen mnpsendnc -clientlog /var/log/tms/mnp/mnpsendnc.log

@@ -1,0 +1,222 @@
+Summary Screen Help
+===================
+
+The top line of the Summary displays the current time, ProTop release
+information and the date.
+
+The second line shows the state of the Sample/Summary variable, the logical
+and physical name of the current database and the state of the Rate/Raw
+variable.
+
+Sample/Summary determines if data is presented in terms of the values seen
+in the most recent sample or as a summary since ProTop was started.  The "s"
+and "S" commands toggle between the two values.  Sampling ("s") is the
+default.  Most Summary Screen data elements are shown as both -- the first
+element is the summary data and the second is the sample.
+
+Rate/Raw controls the display of data as either a "rate", expressed per
+second, or as the raw data.  The default is to show metrics as a rate ("r").
+Not all data is sensibly interpreted this way.
+
+Hit Ratio:
+
+This is the ratio of "logical reads" to "operating system reads".  Higher
+values are generally a good thing because they mean less "physical" IO and
+IO the root of most performance problems.  This is, however, only a symptom
+of problems.  To find the root cause you must find the source of the IO or
+the reason why logical requests are not being fulfilled from the -B cache.
+
+Miss%:
+
+The inverse of Hit Ratio expressed as a percentage.  In many ways the miss%
+is a more helpful metric to look at.  Relatively small (and meaningful)
+changes in Hit Ratio are magnified and made more obvious in the miss ratio.
+
+Hit%:
+
+The Hit Ratio expressed as a percentage.  A false sense of well-being is
+often felt by people when they see numbers like "95%" -- it sounds good
+but is actually pretty awful.
+
+Log Reads:
+
+The number of "logical read" operations requested of the database.  These
+operations do not directly correspond to record reads.  These are reads of
+database blocks and include both index and data components.  Typically there
+will be approximately two logical reads per record read but fragmented
+records and other conditions can cause that ratio to vary.  YMMV.
+
+These reads are from the database engine's point of view.  Badly formed
+queries (lacking sufficient index criteria and requiring client side
+sorting and selection) that are resolved by the 4gl client show up here as
+a large number of logical reads even though only a few records are actually
+made available to application code.  If you see a large number here and
+believe that your programs are using a much smaller number of records then
+you probably have an indexing or query coding problem that needs to be
+resolved.
+
+OS Reads:
+
+This is what happens when a logical read request cannot be fulfilled by
+referring to the -B buffer cache.  A disk read will take place.  Memory
+references are measured in tens of nanoseconds (10^-9).  Disk requests are
+measured in milliseconds (10^-3).  That means that a disk is *literally*
+100,000 times slower than memory.  Every OS read comes at the expense of a
+hundred thousand or so potential logical reads (if it is satisfied
+immediately -- if you have disk queues the effect is dramatically
+multiplied.) You want OS reads to be very, very rare.   This is why a hit
+ratio of 95% sucks and why even "small" disk queues are a very bad thing.
+
+Chkpts:
+
+Checkpoints occur as BI clusters fill.  When a BI cluster is full it must be
+flushed to disk before the next cluster is filled.  It helps to have a
+reasonable amount of time between checkpoints to allow the Asynchronous
+Page Writers (APWs) time to acomplish this task.  Rapid fire checkpoints
+(spaced less than 5 to 15 minutes apart) indicate that your BI cluster size
+is too small.  Sudden business growth or unusual processes could potentially
+overwhelm your page writers causing buffer flushes and performance
+problems.
+
+If you have a WORKGROUP database rather than an Enterprise database it is
+better to have many short checkpoints than fewer long checkpoints.   This
+is because without page writers you're better off spreading the IO hit
+evenly.   With large checkpoints WORKGROUP users will periodically grind to
+long halts as checkpoints occur.
+
+Flushed:
+
+Flushed buffers occur when a "lazy" checkpoint has not finished writing
+dirty buffers before the next bi cluster fills.  Every user who is updating
+the database must stop and wait for these buffers to be flushed before they
+can continue.  These writes are synchronous and the "freeze" is very
+noticeable.  You don't want this to happen.
+
+ProTop eTime:       12       65    27        0
+
+These are measurements of ProTop performance.  In order the numbers are the
+amount of time (in milliseconds) to update current statistics, prepare the
+statistics for display, display the character data and generate HTML output.
+
+Commits:
+
+The number of transactions that have been committed to the database.
+
+Latch Waits:
+
+Latches are data structures which are used to regulate access to shared
+memory.   (Another term for latches is "MUTEX".)  A latch must be obtained
+any time a process needs to access a shared data structure EVEN TO READ
+IT.   This is required in order to ensure data integrity.   If a process
+cannot obtain a latch it will "spin" attempting to get the latch (the
+number of spins is controlled by the -spin startup parameter.   If the
+process fails to get the latch by spinning it will then wait.   When the
+number of latch waits starts to climb you may be experiencing "latch
+contention".   This means that your database is constrained by the speed
+of a single CPU (latches represent a single thread of execution).   If
+this is the case then you must either upgrade your hardware or modify
+your code to request fewer latches (remember that, among other things,
+latches are obtained to READ blocks and that large logical read rates will
+result in large numbers of latch requests...)  Use the Latch Wait module
+to further explore the source of latch waits.
+
+Tot/Mod Bufs:
+
+Total Buffers is -B + 2.   Modified Buffers is the number of buffers that
+have been updated and which need to be written back to disk.
+
+Evict Bufs:
+
+This is the number of buffer which were evicted from the buffer pool
+in order to make room for a buffer being read.   A Least Recently Used
+algorithm is used to select buffers for eviction.
+
+Lock Table:
+
+The size of the Record Lock Table as defined by the -L startup parameter
+and the current number of entries in use.  The Lock Table is shared by all
+users.   In general this value should be some relatively small number
+multiplied by the number of connections that will concurrently need to
+obtain locks.
+
+Lock Tbl HWM:
+
+The High Water Mark of the Lock Table -- the largest number of locks that
+have been used since the database started.   If this value is consistently
+near the size of the Lock Table then you might want to consider increasing
+it.
+
+Old/Curr BI:
+
+The oldest BI cluster number and the current BI cluster number.   If the
+difference between these is large then you have active transations that
+span large periods of time -- this is bad in itself.   You may also be
+experiencing unusual amounts of BI file growth since BI clusters cannot
+be reused while the still contain an active transaction.
+
+Use the "OpenTRX", "ActiveTRX" and "Blocked" modules to further examine
+possible sources of problems with BI clusters.
+
+If there are no active transations the cluster numbers will show as 0.
+
+The numbers here do not directly correspond to checkpoint numbers by
+default.   BI clusters numbers are stored as sequence since the last
+"truncate BI" was executed and can be aligned to checkpoint numbers but
+that requires a database transaction to accomplish.   There is experimental
+code that can be enabled to do this in lib/protop.i but these values
+convey the important data well enough.
+
+Local:
+
+The current number of "Self-Service" or "Shared Memory" database
+connections.
+
+Remote:
+
+The current number of "Remote" or "Client Server" database connections.
+These are connections that use the -S connection parameter.
+
+Batch:
+
+Local or Remote connections that are using the -b client startup parameter.
+
+Server:
+
+The number of servers that are running for remote clients to connect to.
+
+More information about remote connections and the servers that they attach
+to can be found in the "Servers", "ServerIO" and "Server Details" modules.
+
+Other:
+
+Other connections.  This includes page writers (AIW, APW & BIW) the watchdog
+process (WDOG), app servers and anything else that hasn't already been
+counted.
+
+TRX:
+
+The number of connections with OPEN transactions.  This includes both ACTIVE
+and ALLOCATED transactions.
+
+Check the "OpenTRX" and "ActiveTRX" modules for a more detailed look at
+Transaction activity.
+
+Blocked:
+
+Sessions which are waiting for a resource.  Generally this is a record lock
+although other resources may be unavailable in some circumstances.  The
+"Blocked" module provides details regarding which session is waiting for
+what and, in the case of record locks, who currently has the record and who
+else is in line for it.
+
+If other resource waits appear on the "Blocked" screen the "Resource Waits"
+module may have additional information.  The code shown under "Notes" on the
+"Blocked" screen is a hyper abbreviated version of the resource name shown
+by the "Resource Waits" module.  Seeing anything other than a record lock
+wait on the "Blocked" screen is highly unusual and should be pursued.
+
+Total:
+
+The total number of database connections.  This is not the sum of the
+columns above because some connection types are counted more than once.
+

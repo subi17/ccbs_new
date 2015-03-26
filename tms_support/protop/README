@@ -1,0 +1,35 @@
+This should be self-explanatory :-)
+
+Extract the programs into a directory called "protop".  Start a session against
+your target database.  For instance:
+
+	mpro sports -p protop.p -param "i;10|d;Summary,User IO"
+
+will start the monitor against "sports" with a 10 second interval using "User IO"
+for it's initial display.
+
+Type "h" or "?" for help.
+
+To create a new display clone one which is similar to the sort of presentation
+that you'd like (uio.p and resrc.p are a good examples) and modify it to suit.
+
+There's plenty of room for additional metrics in summary.p too.
+
+If you come up with something neat feel free to forward it to me.  If I like it
+I'll include it in the package.
+
+If there's something you'd like to see let me know -- I may add it.
+
+If there's something you don't like (including the coding style) tell me about
+that too -- I may choose to ignore you but I'd still like to hear it ;-)
+
+It looks better and is perhaps more useful on a "tall" screen.  If you have a
+vt100 emulator you can add a "tall" vt100 to protermcap by adding this entry:
+
+	vt100-t|Tall vt100:\
+	        :li#40:\
+		:tc=vt100:
+
+Then just stretch your window and change your TERM environment variable.
+
+Or, if you prefer, use the supplied protermcap found in etc/protermcap.protop.

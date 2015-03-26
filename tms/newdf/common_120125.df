@@ -1,0 +1,16 @@
+ADD FIELD "LastMonthCalc" OF "ServiceLimit" AS integer
+  FORMAT ">9"
+  POSITION 21
+  INITIAL "0"
+  HELP "Last month calculation method"
+  LABEL "Last Month Calculation"
+  COLUMN-LABEL "Last Month"
+  VIEW-AS ?
+  ORDER 190
+  MAX-WIDTH 4
+
+.
+PSC
+cpstream=1252
+.
+0000000238

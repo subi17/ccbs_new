@@ -1,0 +1,22 @@
+ADD FIELD "ExtInvRef" OF "Customer" AS character
+   DESCRIPTION "External invoice reference for corporate customers"
+   FORMAT "X(50)"
+   INITIAL ""
+   LABEL "External InvRef"
+   COLUMN-LABEL "ExtInvRef"
+   HELP "External Invoice Reference"
+   ORDER 1530 
+
+ADD FIELD "DefValue" OF "Limit" AS logical
+  FORMAT "Yes/No"
+  INITIAL "Yes"
+  LABEL "Default Value"
+  POSITION 12
+  MAX-WIDTH 1
+  COLUMN-LABEL "Default"
+  HELP "Limit has the default value"
+  ORDER 110
+
+.
+PSC
+cpstream=1252

@@ -1,0 +1,1 @@
+../../rpcmethods/tms__get_yoigoyoigo_balance_sms.p

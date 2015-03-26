@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema
+xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/confirmACK" xmlns:tns="http://www.example.org/confirmACK">
+    <complexType name="confirmACK">
+    	<sequence>
+<element name="portabilityRequestCode" type="string" maxOccurs="1" minOccurs="0">
+</element>
+<element name="formRequestCode" type="string" maxOccurs="1" minOccurs="1">
+</element>
+<element name="errorCode" maxOccurs="1" minOccurs="1">
+	<simpleType>
+	<restriction base="string">
+		<enumeration value="0"></enumeration>
+		<enumeration value="1"></enumeration>
+	</restriction>
+	</simpleType>
+</element>
+<element name="errorDescription" type="string" maxOccurs="1" minOccurs="0">
+</element>
+</sequence>
+</complexType>
+   <element name="confirmACK" type="tns:confirmACK"></element>
+</schema>

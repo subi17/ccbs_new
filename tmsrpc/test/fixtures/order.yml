@@ -1,0 +1,354 @@
+# newton__get_orders ( one with OrderCustomer.CustId, two with CLI )
+AnotherOrderWithStatus1AndSameCLI:
+   Brand:"1"
+   CLI:"634677444"
+   ContractId:"Contract"
+   orderid:1
+   StatusCode:"1"
+   CrStamp:20090404,20000
+   MnpStatus:1
+   OrderChannel:"ch"
+   CLIType:"CONT"
+   MsSeq:1
+
+# newton__get_orders ( two with CLI )
+GetOrdersTwoWithCLI2nd:
+   Brand:"1"
+   CLI:"634677444"
+   StatusCode:"3"
+   orderid:30
+   CrStamp:20090312,23400
+   MnpStatus:2
+   OrderChannel:"ch2"
+   CLIType:"CONT2"
+   MsSeq:0
+
+AnotherOrderWithStatus12AndSameCLI:
+   Brand:"1"
+   CLI:"634677445"
+   Orderid:3
+   StatusCode:"12"
+
+setorderdeliveryaddress:
+   Brand:"1"
+   CLI:"634677445"
+   Orderid:2
+   StatusCode:"12"
+
+AnotherOrderWithNoAcceptedStatusAndSameCLI1:
+   Brand:"1"
+   CLI:"634736722"
+   Orderid:4
+   StatusCode:"5"
+
+AnotherOrderWithNoAcceptedStatusAndSameCLI2:
+   Brand:"1"
+   CLI:"634736723"
+   Orderid:5
+   StatusCode:"7"
+
+AnotherOrderWithNoAcceptedStatusAndSameCLI3:
+   Brand:"1"
+   CLI:"634736724"
+   Orderid:6
+   StatusCode:"8"
+
+# Following 4 fixtures are used for test search_orders
+
+# newton__get_commissions
+# search_orders, orderid: 7
+OrderForSearchOrder1:
+   Brand:1
+   OrderId:7
+   CustNum:533000
+   CLI:"622000000"
+   CrStamp:20080720,65000
+
+# search_orders, orderid: 8
+OrderForSearchOrder2:
+   Brand:1
+   OrderId:8
+   CLI:"699999999"
+
+# search_orders, orderid: 9
+OrderForSearchOrder3:
+   Brand:1
+   OrderId:9
+   CLI:"622000000"
+   CrStamp:20080720,64000
+
+# search_orders, orderid: 10
+OrderForSearchOrder4:
+   Brand:1
+   OrderId:10
+   CLI:"633000000"
+
+# Following 3 fixtures are used for test get_order_details
+
+# get_order_details, orderid: 11
+OrdersForGetOrderDetails1:
+   Brand:1
+   Campaign:"NZULPZHZQ"
+   ClaimState:10347113
+   CLI:"622555507"
+   CLIType:"DOQQ"
+   ContactNum:"KVOORTTBTPNW"
+   ContractID:"QBHZPHXQ"
+   CreditRate:"WDWOPNDS"
+   CredOK:FALSE
+   CREventQty:34461335
+   CrStamp:20080408,73437
+   CurrOper:"DD"
+   CustNum:312312
+   DepoFeeAmt:1435164,580
+   DeviceID:"R"
+   FATAmount:2050723,50
+   FeeModel:"L"
+   Foreign:TRUE
+   ICC:"89342423423423407"
+   InhabitClass:31207398
+   InvCustRole:27293093
+   InvNum:11268120
+   LeadNbr:13083702
+   MNPNumber:"XFIHLJNCVD"
+   MNPStatus:14489419
+   MSSeq:1007
+   OldIcc:"8934555555555507"
+   OldPayType:false
+   OrderChannel:"NPQETWUFVMSZWKU"
+   Orderer:"H"
+   OrdererID:"NCQLBOJXPXMROFD"
+   OrdererIDType:"QTXNDN"
+   OrdererIP:"FEREAQ"
+   OrderId:11
+   OrderType:9797417
+   PayType:TRUE
+   PNPNumbers:"NNEZQSJMYCSRYT"
+   PortingDate:05-07-07
+   PortingTime:15,11
+   Referee:"KGOFO"
+   Reseller:"HHENEWEBSXCMAZA"
+   ResellerMobNbr:"YISFLVNBFOU"
+   Salesman:"YIIKACJTT"
+   Source:"RBAJXMJY"
+   StatusCode:2
+   TempCLI:"622777707"
+   Tupas:23
+   TupasRM:"UBDFZDF"
+   UserRole:9
+
+# get_order_details, get_order_logistics, orderid: 12
+OrdersForGetOrderDetails2:
+   Brand:1
+   Campaign:"BILFMLPLDTP"
+   ClaimState:30245522
+   CLI:"622555508"
+   CLIType:"XSQISYLGTBKKK"
+   ContactNum:"WULMGT"
+   ContractID:"UGXRSFR"
+   CreditRate:"AENGHUCYS"
+   CredOK:FALSE
+   CREventQty:5308438
+   CrStamp:20090317,32275
+   CurrOper:"UE"
+   CustNum:312313
+   DepoFeeAmt:809359,470
+   DeviceID:"UZJFANVVFYKHQFQ"
+   FATAmount:869222,722
+   FeeModel:"MBGEWHJVKJXCK"
+   Foreign:FALSE
+   ICC:"89342423423423408"
+   InhabitClass:14391208
+   InvCustRole:16552520
+   InvNum:42002863
+   LeadNbr:16094931
+   MNPNumber:"KRHYXTUDVKNSPI"
+   MNPStatus:3439274
+   MSSeq:1008
+   OldIcc:"8934555555555508"
+   OldPayType:FALSE
+   OrderChannel:"Q"
+   Orderer:"EXSPUFUP"
+   OrdererID:"LHV"
+   OrdererIDType:"BNNAML"
+   OrdererIP:"IMTLDLUZRC"
+   OrderId:12
+   OrderType:14447010
+   PayType:FALSE
+   PNPNumbers:"BAWJXXMAGDGN"
+   PortingDate:25-05-09
+   PortingTime:7,21
+   Referee:"CMC"
+   Reseller:"DSIP"
+   ResellerMobNbr:"YPQWKRWRE"
+   Salesman:"SYLPAYNTFHF"
+   Source:"OLCN"
+   StatusCode:3
+   TempCLI:"622777708"
+   Tupas:4
+   TupasRM:"OBZKJBUJZGAKQT"
+   UserRole:20
+
+# get_order_details, get_order_logistics, orderid: 13
+OrdersForGetOrderDetails3:
+   Brand:1
+   Campaign:"UGADTPC"
+   ClaimState:17995692
+   CLI:"622555509"
+   CLIType:"QQDHHVWVR"
+   ContactNum:"LSSGJOHKUEGITB"
+   ContractID:"NPBLB"
+   CreditRate:"OKHUZEFHPNQEN"
+   CredOK:TRUE
+   CREventQty:24827825
+   CrStamp:20080121,46437
+   CurrOper:"EPQUPNKDT"
+   CustNum:312314
+   DepoFeeAmt:1768991,484
+   DeviceID:"UXFZDSWKU"
+   FATAmount:238299,730
+   FeeModel:"K"
+   Foreign:FALSE
+   ICC:"89342423423423409"
+   InhabitClass:32965737
+   InvCustRole:2263605
+   InvNum:21042681
+   LeadNbr:13147763
+   MNPNumber:"NTJSW"
+   MNPStatus:17340020
+   MSSeq:1009
+   OldIcc:"8934555555555509"
+   OldPayType:false
+   OrderChannel:"HEGDITPOT"
+   Orderer:"WCXVO"
+   OrdererID:"SDLTRCHRM"
+   OrdererIDType:"HFVOUCRG"
+   OrdererIP:"RMSPTOMHUMA"
+   OrderId:13
+   OrderType:2559563
+   PayType:FALSE
+   PNPNumbers:"TIGDS"
+   PortingDate:05-01-08
+   PortingTime:13,0
+   Referee:"DQJTG"
+   Reseller:"ESJP"
+   ResellerMobNbr:"PQGMHUGD"
+   Salesman:"OLFYGAFJCMRFGH"
+   Source:"MZDDGPSH"
+   StatusCode:4
+   TempCLI:"622777709"
+   Tupas:1
+   TupasRM:"YUBAJGQMFJAMR"
+   UserRole:3
+
+# DextraOrder
+DextraOrder:
+   Brand:1
+   OrderId:14
+
+
+# get_invoices
+GetInvoicesOrder:
+  Brand:"1"
+  OrderId:15
+  InvNum:4
+
+# get_customer_details (with order and ordercustomer case)
+GetCustomerDetailsOrder:
+   Brand:"1"
+   OrderId:16
+   MsSeq:20
+   StatusCode:"6"
+   OrderChannel:"CC"
+
+# newton__get_mobsub_details
+GetMobSubDetailsNewOrMnp:
+   Brand:"1"
+   OrderId:23
+   MsSeq:25
+   OrderType:1
+   StatusCode:"6"
+   MNPStatus:0
+
+# newton__get_mobsub_details
+GetMobSubDetailsRenove:
+   Brand:"1"
+   CLI:"622388373"
+   OrderId:24
+   OrderType:2
+   StatusCode:"6"
+
+# newton__get_mobsub_details
+GetMobSubDetailsMnpOrder:
+   Brand:"1"
+   OrderId:25
+   MsSeq:27
+   StatusCode:"6"
+   OrderType:3
+   MNPStatus:1
+
+# newton__check_renove
+ChkRenoveCorpCustOrder:
+   Brand:"1"
+   OrderId:26
+   MsSeq:31
+   OrderType:3
+   OrdererId:"OId"
+   OrdererIdType:"OIdType"
+   StatusCode:"6"
+
+# newton__mnp_relaunch
+MNPRelaunchOrder:
+   Brand:"1"
+   OrderId:20
+   OldICC:"85147777777777777"
+   CurrOper:"OldOper"
+   StatusCode:"73"
+
+# newton__mnp_relaunch
+MnpRelaunchNotFOrderCust:
+   Brand:"1"
+   OrderId:21
+
+# newton__mnp_relaunch:
+MnpRelauchIllegalOrderStatus:
+   Brand:"1"
+   OrderId:22
+   StatusCode:"2"
+
+# newton__get_orders ( one with CLI )
+GetOrdersOneWithCLI:
+   Brand:"1"
+   CLI:"622222222"
+   StatusCode:"6"
+   orderid:31
+   CrStamp:20100420,17400
+   MnpStatus:1
+   OrderChannel:"ch3"
+   CLIType:"CONT4"
+   MsSeq:4
+
+# newton__get_orders ( two with CustId, 1st )
+GetOrdersTwoWithCustId1st:
+   Brand:"1"
+   CLI:"622333332"
+   StatusCode:"1"
+   orderid:32
+   CrStamp:20100315,12000
+   MnpStatus:2
+   OrderChannel:"ch3"
+   CLIType:"TARJ"
+   MsSeq:1
+
+# newton__get_orders ( two with CustId, 2nd )
+GetOrdersTwoWithCustId2nd:
+   Brand:"1"
+   CLI:"622232332"
+   StatusCode:"1"
+   orderid:33
+   CrStamp:20100412,15550
+   MnpStatus:1
+   OrderChannel:"ch3"
+   CLIType:"TARJ4"
+   MsSeq:2
+

@@ -1,0 +1,22 @@
+ADD FIELD "MultiSimID" OF "TermMobSub" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Multi Sim ID"
+  MAX-WIDTH 4
+  COLUMN-LABEL "Multi Sim ID"
+  HELP "Multi Sim ID"
+  ORDER 860
+
+ADD FIELD "MultiSimType" OF "TermMobSub" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "Multi Sim Type"
+  MAX-WIDTH 4
+  COLUMN-LABEL "Multi Sim Type"
+  HELP "Multi Sim type (1=primary, 2=secondary)"
+  ORDER 870
+
+ADD INDEX "MultiSimID" ON "TermMobSub" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "MultiSimID" DESCENDING

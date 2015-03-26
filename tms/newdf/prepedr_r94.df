@@ -1,0 +1,6 @@
+ADD FIELD "CLIType" OF "PrepEDR" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "CLIType"
+  COLUMN-LABEL "CLIType"
+  ORDER 150

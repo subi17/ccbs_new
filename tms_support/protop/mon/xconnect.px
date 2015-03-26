@@ -1,0 +1,260 @@
+/*******************************************************************************
+ *******************************************************************************
+ **                                                                           **
+ **                                                                           **
+ **  Copyright 2003-2006 Tom Bascom, Greenfield Technologies                  **
+ **  http://www.greenfieldtech.com                                            **
+ **                                                                           **
+ **  ProTop is free software; you can redistribute it and/or modify it        **
+ **  under the terms of the GNU General Public License (GPL) as published     **
+ **  by the Free Software Foundation; either version 2 of the License, or     **
+ **  at your option) any later version.                                       **
+ **                                                                           **
+ **  ProTop is distributed in the hope that it will be useful, but WITHOUT    **
+ **  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or    **
+ **  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License     **
+ **  for more details.                                                        **
+ **                                                                           **
+ **  See TERMS.TXT for more information regarding the Terms and Conditions    **
+ **  of use and alternative licensing options for this software.              **
+ **                                                                           **
+ **  A copy of the GPL is in GPL.TXT which was provided with this package.    **
+ **                                                                           **
+ **  See http://www.fsf.org for more information about the GPL.               **
+ **                                                                           **
+ **                                                                           **
+ *******************************************************************************
+ *******************************************************************************
+ *
+ * xconnect.p
+ *
+ *
+ * Provide eXtended _connect information via the UNIX "ps" command
+ *
+ *
+ * Author:
+ *
+ *	Tom Bascom, Greenfield Technologies
+ *	http://www.greenfieldtech.com
+ *	July 25, 2006
+ *
+ */
+
+{lib/protop.i}
+
+define variable upd_frequency as integer no-undo initial 1.			/* how often shall we shell out and update?	*/
+define variable upd_count     as integer no-undo.
+
+define variable osName      as character no-undo.				/* OS Name					*/
+define variable ps-cmd      as character no-undo.				/* the "ps -ef" command used			*/
+define variable ps-filter   as character no-undo.				/* filtering criteria applied to "pe -ef"	*/
+
+/* Cache Id/PID relationship in order to optimize the startup phase
+ * on very busy systems
+ *
+ */
+
+define temp-table zconnect no-undo
+  field ID        as integer
+  field PID       as integer
+  index pid-idx   is unique primary pid
+.
+
+/* restart
+ *
+ */
+
+procedure mon-restart:
+  empty temp-table xconnect.
+  delete procedure this-procedure.
+  return.
+end.
+
+/* initialize
+ *
+ */
+
+procedure mon-init:
+
+  empty temp-table xconnect.
+  empty temp-table zconnect.
+
+  /* Do not use PIDs from remote systems -- they will fail the uniqueness constraint
+   */
+
+  for each dictdb._connect no-lock where _connect-id >= 0 and _connect-type <> "REMC":
+    create zconnect.
+    assign
+     zconnect.id  = _connect._connect-id
+     zconnect.pid = _connect._connect-pid
+    .
+  end.
+
+  return.
+
+end.
+
+/* update
+ *
+ */
+
+procedure mon-update:
+
+  define variable psPID       as integer   no-undo.			/* PID returned by "ps -ef"				*/
+  define variable psName      as character no-undo.			/* User name returned by "ps -ef"			*/
+  define variable psTTY       as character no-undo.			/* TTY returned by "ps -ef"				*/
+  define variable psCPUTime   as character no-undo.			/* Accumulated CPU returned by "ps -ef"			*/
+  define variable psCommand   as character no-undo extent 16.		/* Command returned by "ps -ef"				*/
+
+  define variable i as integer no-undo.
+  define variable j as integer no-undo.
+
+  upd_count = upd_count + 1.
+
+  if upd_count modulo upd_frequency = 0 then
+    do:
+
+      input through value( ps-cmd ) no-echo.				/* get the current interesting process list		*/
+
+      /* import ^. */	/* if ps is filtered there is no header... */	/* eat the header line					*/
+
+      outer: repeat transaction:
+
+        inner: do j = 1 to 250:						/* chunking doesn't seem to help :-(			*/
+
+          do
+            on error undo,  leave outer
+            on endkey undo, leave outer:
+
+            find first _Connect no-lock where _Connect-Id = -1 no-error. /* lose any leftover _Connect records			*/
+
+            assign							/* initialize						*/
+              psName      = ""
+              psPID       = -1
+              psTTY       = ""
+              psCPUTime   = ""
+              psCommand   = ""
+            .
+
+            import psName psPID ^ ^ ^ psTTY psCPUTime psCommand.	/* read the values.					*/
+/***
+            if osName <> "Linux" and length( psStartTime ) = 3 then next. /* non-Linux OS's have a " " in the date which shifts	*/
+									/* everything if it is an old process.			*/
+
+									/* ultimately that problem needs to be solved by	*/
+									/* reading and parsing the data more flexibly.  but	*/
+									/* for now I'm going to skip that.			*/
+ ***/
+
+            if psPID = -1 then next.					/* oops!  skip it...					*/
+
+            if psTTY = "" then psTTY = "-".				/* import skips "-"					*/
+
+            find xconnect exclusive-lock where xconnect.PID = psPID no-error.
+            if not available xconnect then
+              do:
+                create xconnect.					/* create it if we haven't seen it before.		*/
+                assign
+                  xconnect.ID = -1
+                  xconnect.PID = psPID
+                .
+              end.
+
+            /* try to find a _Connect record for this process -- use Id first because it is faster and if it is a previously
+             * monitored session we should know what the id is.  otherwise use the PID
+             */
+
+            if xconnect.id >= 0 then
+              find _Connect no-lock where _Connect-Id = xconnect.id no-error.
+             else
+              do:
+                find zconnect where zconnect.pid = xconnect.pid no-error.
+                if available zconnect then
+                  do:
+                    xconnect.id = zconnect.id.
+                    find _Connect no-lock where _Connect-Id = xconnect.id no-error.
+                  end.
+              end.
+
+            if not available _Connect then find _Connect no-lock where _Connect-Id >= 0 and _Connect-PID = psPID and _Connect-type <> "REMC" no-error.
+
+            if not available( _Connect ) then				/* process is not connected to this db.			*/
+              do:
+                delete xconnect.
+                next inner.
+              end.
+
+            do i = 2 to 16:						/* build up a string containing the command.		*/
+              if psCommand[i] > "" then
+                psCommand[1] = psCommand[1] + " " + psCommand[i].	/* put the complete command in extent #1		*/
+               else
+                leave.
+            end.
+
+            assign
+              xconnect.ID          = _Connect-Id
+              xconnect.UsrNum      = _Connect-Usr
+              xconnect.prName      = _Connect-Name
+              xconnect.xgen        = upd_count
+              xconnect.uxName      = psName
+              xconnect.TTY         = psTTY
+              xconnect.Command     = psCommand[1]
+            .
+
+            /* calculate accumulated CPU time based on the # of ":" separated fields that are present.
+             */
+
+/*** case seems slower...
+            case num-entries( psCPUTime, ":" ):
+              when 3 then xconnect.CPUTime = integer( entry( 1, psCPUTime, ":" )) * 3600 + integer( entry( 2, psCPUTime, ":" )) * 60 + integer( entry( 3, psCPUTime, ":" )).
+              when 2 then xconnect.CPUTime = integer( entry( 1, psCPUTime, ":" )) *   60 + integer( entry( 2, psCPUTime, ":" )).
+              when 1 then xconnect.CPUTime = integer( entry( 1, psCPUTime, ":" )).
+            end.
+ ***/
+
+/***/
+            if num-entries( psCPUTime, ":" ) = 3 then
+              xconnect.CPUTime = integer( entry( 1, psCPUTime, ":" )) * 3600 + integer( entry( 2, psCPUTime, ":" )) * 60 + integer( entry( 3, psCPUTime, ":" )).
+             else if num-entries( psCPUTime, ":" ) = 2 then
+              xconnect.CPUTime = integer( entry( 1, psCPUTime, ":" )) * 60 + integer( entry( 2, psCPUTime, ":" )).
+             else
+              xconnect.CPUTime = integer( psCPUTime ).
+/***/
+
+          end. /* repeat */
+        end. /* inner */
+      end. /* outer */
+
+      input close.
+
+      for each xconnect exclusive-lock where xconnect.xgen < upd_count:	/* remove invalid processes from our list.		*/
+        delete xconnect.
+      end.
+
+    end.
+
+  return.
+
+end.
+
+/** Initialize PP
+ **
+ **/
+
+input through value( "uname -a" ).
+import osName.
+input close.
+
+ps-cmd = "ps -ef | grep _tax".						/* all interesting commands contain "_"			*/
+
+/***
+  "ps -ef | sort +6 -n -r | " +						/* obtain top CPU users	- this should be portable	*/
+  ps-filter								/* filter on "interesting" users			*/
+  .
+ ***/
+
+subscribe to "mon-restart" anywhere run-procedure "mon-restart".
+subscribe to "mon-init"    anywhere run-procedure "mon-init".
+subscribe to "mon-update"  anywhere run-procedure "mon-update".
+
+return.

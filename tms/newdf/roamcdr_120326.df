@@ -1,0 +1,22 @@
+ADD FIELD "TSDump" OF "RoamCDR" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "TSDump"
+  COLUMN-LABEL "TSDump"
+  HELP "TimeStamp when dumped to TAP3 file"
+  DECIMALS 5
+  ORDER 180
+
+ADD FIELD "TSDump" OF "RoamGPRS" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "TSDump"
+  COLUMN-LABEL "TSDump"
+  HELP "TimeStamp when dumped to TAP3 file"
+  DECIMALS 5
+  ORDER 220
+
+.
+PSC
+cpstream=1252
+.

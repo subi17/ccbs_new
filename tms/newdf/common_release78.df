@@ -1,0 +1,7 @@
+ADD FIELD "NRN" OF "MNPOperator" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "NRN"
+  COLUMN-LABEL "NRN"
+  HELP "NRN code"
+  ORDER 80

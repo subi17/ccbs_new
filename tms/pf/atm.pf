@@ -1,0 +1,13 @@
+-h 11
+-db /data1/common  -ld common
+-db /data1/mobile  -ld mobile
+-db /data1/ordercanal -ld ordercanal
+-db /data1/star -ld star
+-db /data1/tmsmisc -ld tmsmisc
+# -l 100000
+-T /tmp
+-TB 31
+-TM 32
+# -tmpbsize 8
+# -Bt 1024
+-Mm 8192

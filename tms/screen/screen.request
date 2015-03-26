@@ -1,0 +1,13 @@
+echo "REQUEST HANDLER SCREENS"
+sleep 2
+screen -t Queue1 1 xfear -screen requestrunner -clientlog /scratch/log/requester/requ1.log -db /db1/mcdr15q1/mcdr15q1 -ld mcdr -db /db1/mcdrdtl15q1/mcdrdtl15q1 -ld mcdrdtl -param 1
+screen -t Queue2 2 xfear -screen requestrunner -clientlog /scratch/log/requester/requ2.log -db /db1/mcdr15q1/mcdr15q1 -ld mcdr -db /db1/mcdrdtl15q1/mcdrdtl15q1 -ld mcdrdtl -db /db1/prepcdr15q1/prepcdr15q1 -ld prepcdr -param 2
+screen -t Queue3 3 xfear -screen requestrunner -clientlog /scratch/log/requester/requ3.log -db /db1/mcdr15q1/mcdr15q1 -ld mcdr -db /db1/mcdrdtl15q1/mcdrdtl15q1 -ld mcdrdtl -db /db1/prepcdr15q1/prepcdr15q1 -ld prepcdr -param 3
+screen -t Queue4 4 xfear -screen requestrunner -clientlog /scratch/log/requester/requ4.log -db /db1/mcdr15q1/mcdr15q1 -ld mcdr -db /db1/mcdrdtl15q1/mcdrdtl15q1 -ld mcdrdtl -db /db1/prepcdr15q1/prepcdr15q1 -ld prepcdr -param 4
+screen -t Queue5 5 xfear -screen requestrunner -clientlog /scratch/log/requester/requ5.log -db /db1/mcdr15q1/mcdr15q1 -ld mcdr -db /db1/mcdrdtl15q1/mcdrdtl15q1 -ld mcdrdtl -param 5
+screen -t Queue6 6 xfear -screen requestrunner -clientlog /scratch/log/requester/requ6.log -db /db1/mcdr15q1/mcdr15q1 -ld mcdr -db /db1/mcdrdtl15q1/mcdrdtl15q1 -ld mcdrdtl -db /db1/prepcdr15q1/prepcdr15q1 -ld prepcdr -param 6
+screen -t Queue7 7 xfear -screen requestrunner -clientlog /scratch/log/requester/requ7.log -db /db1/mcdr15q1/mcdr15q1 -ld mcdr -db /db1/mcdrdtl15q1/mcdrdtl15q1 -ld mcdrdtl -db /db1/prepcdr15q1/prepcdr15q1 -ld prepcdr -param 7
+screen -t Queue8 8 xfear -screen requestrunner -clientlog /scratch/log/requester/requ8.log -db /db1/mcdr15q1/mcdr15q1 -ld mcdr -db /db1/mcdrdtl15q1/mcdrdtl15q1 -ld mcdrdtl -db /db1/prepcdr15q1/prepcdr15q1 -ld prepcdr -param 8
+screen -t Queue9 9 xfear -screen requestrunner -clientlog /scratch/log/requester/requ9.log -db /db1/mcdr15q1/mcdr15q1 -ld mcdr -db /db1/mcdrdtl15q1/mcdrdtl15q1 -ld mcdrdtl -db /db1/prepcdr15q1/prepcdr15q1 -ld prepcdr -param 9
+screen -t Queue10 10 xfear -screen requestrunner -clientlog /scratch/log/requester/requ10.log -db /db1/mcdr15q1/mcdr15q1 -ld mcdr -db /db1/mcdrdtl15q1/mcdrdtl15q1 -ld mcdrdtl -param 10
+screen -t Queue11 11 xfear -screen requestrunner -clientlog /scratch/log/requester/requ11.log -db /db1/mcdr15q1/mcdr15q1 -ld mcdr -db /db1/mcdrdtl15q1/mcdrdtl15q1 -ld mcdrdtl -db /db1/prepcdr15q1/prepcdr15q1 -ld prepcdr -param 11 

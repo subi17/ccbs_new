@@ -1,0 +1,37 @@
+After Imaging Status Help
+==========================
+
+Displays status information about AI extents.
+
+Area:
+
+The Area number.  Each AI Extent is a seperate Storage Area.
+
+Extent:
+
+The file name of the extent.
+
+Blocks:
+
+The number of blocks allocated to this extent.
+
+Hi Water:
+
+The extents high water mark.
+
+Free:
+
+The number of blocks free for AI notes.
+
+%Used:
+
+The percentage of blocks in use.
+
+Seq#:
+
+The sequence number of this extent since after-imaging was enabled.
+
+Note:
+
+The status of the extent.  Empty, Full & Busy are the valid values.
+

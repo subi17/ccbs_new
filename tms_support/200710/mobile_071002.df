@@ -1,0 +1,137 @@
+ADD FIELD "ReqIParam4" OF "MSRequest" AS integer
+  DESCRIPTION ""
+  FORMAT "->>>>>>>9"
+  FORMAT-SA ?
+  POSITION 30
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Integer parameter 4"
+  HELP-SA ""
+  LABEL "Integer Parameter 4"
+  LABEL-SA ?
+  COLUMN-LABEL "IntParam4"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 300
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "ReqDtParam1" OF "MSRequest" AS date
+  DESCRIPTION ""
+  FORMAT "99-99-99"
+  FORMAT-SA ?
+  POSITION 31
+  INITIAL ?
+  INITIAL-SA ?
+  HELP "Date parameter 1"
+  HELP-SA ""
+  LABEL "Date parameter 1"
+  LABEL-SA ?
+  COLUMN-LABEL "DateParam1"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 310
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "ReqDtParam2" OF "MSRequest" AS date
+  DESCRIPTION ""
+  FORMAT "99-99-99"
+  FORMAT-SA ?
+  POSITION 32
+  INITIAL ?
+  INITIAL-SA ?
+  HELP "Date parameter 2"
+  HELP-SA ""
+  LABEL "Date parameter 2"
+  LABEL-SA ?
+  COLUMN-LABEL "DateParam2"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 320
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "ReqIParam3" OF "MSRequest" AS integer
+  DESCRIPTION ""
+  FORMAT "->>>>>>>9"
+  FORMAT-SA ?
+  POSITION 33
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Integer parameter 3"
+  HELP-SA ""
+  LABEL "Integer Parameter 3"
+  LABEL-SA ?
+  COLUMN-LABEL "IntParam3"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 290
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "Mandatory" OF "MSRequest" AS integer
+  DESCRIPTION "
+
+"
+  FORMAT "9"
+  FORMAT-SA ?
+  POSITION 34
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "This request must be handled before father request can continue"
+  HELP-SA ""
+  LABEL "Mandatory"
+  LABEL-SA ?
+  COLUMN-LABEL "Mand."
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 330
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+.
+PSC
+cpstream=1252
+.
+0000004316

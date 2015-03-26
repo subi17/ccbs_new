@@ -1,0 +1,52 @@
+ProTop Command Listing
+======================
+
+Commands are case-sensitive.  Type "q" to exit help screens.
+
+ ^d, q    Quit the program.
+
+     ?    Startup command help.
+     h    Obtain this help message.
+     H    Context sensitive help.
+
+     b    Select sort criteria.
+               i interval descending.
+               I interval ascending.
+               c cumulative descending.
+               C cumulative ascending.
+               n name descending.
+               N name ascending.
+
+     c    Connect a database (dialog box).
+
+     D    Directory for HTML output.
+
+     d    Change the currently displayed data.
+            <Enter> or <Space> to select/deselect an item.
+            <F1> or ^X to save changes.
+            <F4> or ^E to exit without saving changes.
+
+     e    Examine an item (detail screens.)
+     i    Adjust the monitoring interval.
+     L    Set file name for alerts to logfile.
+     m    Monitor a connected database.
+     M    Set "mailto" list for alerts by e-mail.
+     o    Display option settings.
+     O    Set directory for Op Sys specific loadable modules.
+     p    Set current page#.
+
+     r    set "rate" mode for statistics (per second).
+     R    set "Raw" mode for statistics (number per interval).
+
+     s    set "sample" mode for statistics (interval = sample).
+     S    set "Summary" mode for statistics (interval = cumulative).
+
+     t    Comma delimited list of entities to track. 
+     w    Reload loadable modules. 
+     W    Enable/disable generation of web pages.
+     x    List of entities to exclude. 
+     z    Re-initialize (zero) the counters.
+     Z    Enable/disable extended details (user flags & PID).
+
+     +    Increment page#.
+     -    Decrement page#.

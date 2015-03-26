@@ -1,0 +1,31 @@
+ADD FIELD "FileNameTag" OF "DFTimeTable" AS character
+  DESCRIPTION ""
+  FORMAT "x(20)"
+  FORMAT-SA ?
+  POSITION 13
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "Value for tag used in file name"
+  HELP-SA ""
+  LABEL "File Name Tag"
+  LABEL-SA ?
+  COLUMN-LABEL "Tag"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 100
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 40
+
+.
+PSC
+cpstream=1252
+.
+0000014878

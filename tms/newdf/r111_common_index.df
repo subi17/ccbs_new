@@ -1,0 +1,3 @@
+ADD INDEX "FinancedResult" ON "FixedFee" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "FinancedResult" ASCENDING 

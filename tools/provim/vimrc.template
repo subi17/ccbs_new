@@ -1,0 +1,3 @@
+if &syntax == "pascal"
+  set syntax=progress
+endif

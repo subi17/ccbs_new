@@ -1,0 +1,8 @@
+/* giftorderb.p    08.11.07/aam
+
+   read gift orders from file 
+*/
+
+RUN readorderb ("GIFT"). 
+
+QUIT.

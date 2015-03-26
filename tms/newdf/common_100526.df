@@ -1,0 +1,960 @@
+ADD TABLE "FuncRunConfig"
+  AREA "Sta_Data_128"
+  LABEL "Function configuration"
+  DESCRIPTION "Configuration for functions"
+  DUMP-NAME "FuncRunConfig"
+
+ADD FIELD "ConfName" OF "FuncRunConfig" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 2
+  MAX-WIDTH 24
+  HELP "Description for configuration"
+  ORDER 10
+
+ADD FIELD "FRConfigID" OF "FuncRunConfig" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Configuration ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Unique ID for configuration"
+  ORDER 20
+
+ADD FIELD "RunQty" OF "FuncRunConfig" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "Quantity Of Runs"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Runs"
+  HELP "Quantity of parallel runs"
+  ORDER 40
+
+ADD FIELD "Description" OF "FuncRunConfig" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Description"
+  POSITION 6
+  MAX-WIDTH 40
+  HELP "Short description of the run"
+  ORDER 50
+
+ADD FIELD "NotifyMail" OF "FuncRunConfig" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Notify By Mail"
+  POSITION 12
+  MAX-WIDTH 60
+  COLUMN-LABEL "Mail"
+  HELP "Notify by mail"
+  ORDER 110
+
+ADD FIELD "NotifySMS" OF "FuncRunConfig" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Notify By SMS"
+  POSITION 13
+  MAX-WIDTH 60
+  COLUMN-LABEL "SMS"
+  HELP "Notify by SMS"
+  ORDER 120
+
+ADD FIELD "RunCommand" OF "FuncRunConfig" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Run Command"
+  POSITION 14
+  MAX-WIDTH 40
+  COLUMN-LABEL "Command"
+  HELP "Command for starting the session"
+  ORDER 130
+
+ADD FIELD "StatusInterval" OF "FuncRunConfig" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "Status Update Interval"
+  POSITION 15
+  MAX-WIDTH 4
+  COLUMN-LABEL "Status Update"
+  HELP "Interval (quantity of events) for updating status info"
+  ORDER 140
+
+ADD FIELD "Brand" OF "FuncRunConfig" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 17
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 160
+
+ADD FIELD "Active" OF "FuncRunConfig" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Active"
+  POSITION 18
+  MAX-WIDTH 1
+  HELP "Is configuration active"
+  ORDER 170
+
+ADD INDEX "FRConfigID" ON "FuncRunConfig" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "FRConfigID" ASCENDING 
+
+ADD INDEX "ConfName" ON "FuncRunConfig" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "ConfName" ASCENDING 
+
+ADD TABLE "FuncRunExec"
+  AREA "Dyn_Data_128"
+  LABEL "Function execution"
+  DESCRIPTION "Execution of function"
+  DUMP-NAME "FuncRunExec"
+
+ADD FIELD "FRConfigID" OF "FuncRunExec" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Configuration ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "ID of the configuration"
+  ORDER 20
+
+ADD FIELD "EndTS" OF "FuncRunExec" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "End Time"
+  POSITION 3
+  MAX-WIDTH 17
+  COLUMN-LABEL "End"
+  HELP "Time when run ended"
+  DECIMALS 5
+  ORDER 90
+
+ADD FIELD "StartTS" OF "FuncRunExec" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Start Time"
+  POSITION 4
+  MAX-WIDTH 17
+  COLUMN-LABEL "Start"
+  HELP "Time when run started"
+  DECIMALS 5
+  ORDER 80
+
+ADD FIELD "RunState" OF "FuncRunExec" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Status Of the Run"
+  POSITION 5
+  MAX-WIDTH 32
+  COLUMN-LABEL "Status"
+  HELP "Status of the run"
+  ORDER 100
+
+ADD FIELD "FRExecID" OF "FuncRunExec" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Execution ID"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Exec."
+  HELP "Unique ID for the execution"
+  ORDER 110
+
+ADD FIELD "FRQScheduleID" OF "FuncRunExec" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Queue Timing ID"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Timing"
+  HELP "Unique ID for this timing row"
+  ORDER 120
+
+ADD FIELD "FRQRowSeq" OF "FuncRunExec" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Queue Order"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Order"
+  HELP "Execution order when belongs to a queue"
+  ORDER 130
+
+ADD FIELD "FRExecSeq" OF "FuncRunExec" AS integer 
+  DESCRIPTION "within FuncRunConfig"
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Execution Sequence"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "Exec.Seq"
+  HELP "Execution sequence"
+  ORDER 140
+
+ADD FIELD "FRQueueID" OF "FuncRunExec" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Queue ID"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "Queue"
+  HELP "Unique ID for the queue"
+  ORDER 150
+
+ADD FIELD "Brand" OF "FuncRunExec" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 11
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 160
+
+ADD FIELD "WaitForExecSeq" OF "FuncRunExec" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Wait For Execution"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "Wait Exec."
+  HELP "Execution that must be completed before this one can be started"
+  ORDER 170
+
+ADD FIELD "MinStartTime" OF "FuncRunExec" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Earliest Start Time"
+  POSITION 13
+  MAX-WIDTH 16
+  COLUMN-LABEL "Min.Start"
+  HELP "Earliest possible start time"
+  ORDER 40
+
+ADD FIELD "FeedFromExecSeq" OF "FuncRunExec" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "Feeds From"
+  POSITION 14
+  MAX-WIDTH 4
+  COLUMN-LABEL "Feeds"
+  HELP "Execution from which feeds are taken from"
+  ORDER 180
+
+ADD FIELD "RunMode" OF "FuncRunExec" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Run Mode"
+  POSITION 15
+  MAX-WIDTH 24
+  COLUMN-LABEL "Mode"
+  HELP "Run mode, e.g. production or test"
+  ORDER 190
+
+ADD INDEX "FRExecSeq" ON "FuncRunExec" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "FRConfigID" ASCENDING 
+  INDEX-FIELD "FRExecSeq" DESCENDING 
+
+ADD INDEX "FRExecID" ON "FuncRunExec" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  INDEX-FIELD "FRExecID" ASCENDING 
+
+ADD INDEX "FRQScheduleID" ON "FuncRunExec" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "FRQScheduleID" ASCENDING 
+  INDEX-FIELD "FRQRowSeq" ASCENDING 
+
+ADD INDEX "RunState" ON "FuncRunExec" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "RunState" ASCENDING 
+
+ADD TABLE "FuncRunExecLog"
+  AREA "Dyn_Data_128"
+  LABEL "Function status"
+  DESCRIPTION "Status of a function"
+  DUMP-NAME "FuncRunExecLog"
+
+ADD FIELD "FRExecID" OF "FuncRunExecLog" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Execution ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Exec."
+  HELP "Unique ID for the execution"
+  ORDER 10
+
+ADD FIELD "StatusStamp" OF "FuncRunExecLog" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Time Stamp"
+  POSITION 3
+  MAX-WIDTH 20
+  COLUMN-LABEL "Time"
+  HELP "Time of the status change"
+  DECIMALS 5
+  ORDER 20
+
+ADD FIELD "FRStatus" OF "FuncRunExecLog" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Status"
+  POSITION 4
+  MAX-WIDTH 40
+  HELP "Status"
+  ORDER 30
+
+ADD INDEX "FRExecID" ON "FuncRunExecLog" 
+  AREA "Dyn_Index_1"
+  PRIMARY
+  INDEX-FIELD "FRExecID" ASCENDING 
+  INDEX-FIELD "StatusStamp" DESCENDING 
+
+ADD TABLE "FuncRunParam"
+  AREA "Sta_Data_128"
+  LABEL "Function Config Param"
+  DESCRIPTION "Parameters for function configuration"
+  DUMP-NAME "FuncRunParam"
+
+ADD FIELD "FRConfigID" OF "FuncRunParam" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Configuration ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Conf."
+  HELP "Unique ID for configuration"
+  ORDER 10
+
+ADD FIELD "ParamType" OF "FuncRunParam" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Parameter Type"
+  POSITION 3
+  MAX-WIDTH 16
+  COLUMN-LABEL "Type"
+  HELP "Parameter type"
+  ORDER 20
+
+ADD FIELD "ParamName" OF "FuncRunParam" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Parameter Name"
+  POSITION 4
+  MAX-WIDTH 40
+  COLUMN-LABEL "Name"
+  HELP "Parameter name"
+  ORDER 30
+
+ADD FIELD "ParamSeq" OF "FuncRunParam" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Parameter Sequence"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Sequence"
+  HELP "Parameter sequence (order)"
+  ORDER 40
+
+ADD FIELD "DefaultValue" OF "FuncRunParam" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Default Value"
+  POSITION 6
+  MAX-WIDTH 40
+  COLUMN-LABEL "Default"
+  HELP "Default value for parameter"
+  ORDER 50
+
+ADD INDEX "ParamSeq" ON "FuncRunParam" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "FRConfigID" ASCENDING 
+  INDEX-FIELD "ParamSeq" ASCENDING 
+
+ADD TABLE "FuncRunProcess"
+  AREA "Dyn_Data_64"
+  LABEL "Function process"
+  DESCRIPTION "Single process of a function"
+  DUMP-NAME "FuncRunProcess"
+
+ADD FIELD "FRConfigID" OF "FuncRunProcess" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "Configuration ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Conf."
+  HELP "Configuration ID"
+  ORDER 20
+
+ADD FIELD "ProcSeq" OF "FuncRunProcess" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "Process Sequence"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Sequence"
+  HELP "Sequence of the process within the execution"
+  ORDER 30
+
+ADD FIELD "ProcessID" OF "FuncRunProcess" AS integer 
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "OS Process ID"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "OS PID"
+  HELP "OS process ID"
+  ORDER 40
+
+ADD FIELD "Processed" OF "FuncRunProcess" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Processed Events"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Events"
+  HELP "Processed event qty"
+  ORDER 70
+
+ADD FIELD "StartTS" OF "FuncRunProcess" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Start Time"
+  POSITION 8
+  MAX-WIDTH 17
+  COLUMN-LABEL "Started"
+  HELP "Start time"
+  DECIMALS 5
+  ORDER 80
+
+ADD FIELD "EndTS" OF "FuncRunProcess" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "End Time"
+  POSITION 9
+  MAX-WIDTH 17
+  COLUMN-LABEL "Ended"
+  HELP "End time"
+  DECIMALS 5
+  ORDER 90
+
+ADD FIELD "LastTS" OF "FuncRunProcess" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Last Update"
+  POSITION 10
+  MAX-WIDTH 17
+  COLUMN-LABEL "Updated"
+  HELP "Time of last update"
+  DECIMALS 5
+  ORDER 100
+
+ADD FIELD "FRExecID" OF "FuncRunProcess" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Execution ID"
+  POSITION 14
+  MAX-WIDTH 4
+  COLUMN-LABEL "Exec."
+  HELP "ID of the execution"
+  ORDER 140
+
+ADD FIELD "RunState" OF "FuncRunProcess" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Run Status"
+  POSITION 15
+  MAX-WIDTH 32
+  COLUMN-LABEL "Status"
+  HELP "Status of the process"
+  ORDER 150
+
+ADD FIELD "FRProcessID" OF "FuncRunProcess" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "FR Process ID"
+  POSITION 16
+  MAX-WIDTH 4
+  COLUMN-LABEL "Proc."
+  HELP "Unique ID of the process"
+  ORDER 160
+
+ADD FIELD "RunCommand" OF "FuncRunProcess" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Run Command"
+  POSITION 17
+  MAX-WIDTH 40
+  COLUMN-LABEL "Command"
+  HELP "Command for starting the session"
+  ORDER 170
+
+ADD INDEX "FRConfigID" ON "FuncRunProcess" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "FRConfigID" ASCENDING 
+  INDEX-FIELD "FRExecID" ASCENDING 
+  INDEX-FIELD "ProcSeq" ASCENDING 
+
+ADD INDEX "FRProcessID" ON "FuncRunProcess" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  INDEX-FIELD "FRProcessID" ASCENDING 
+
+ADD TABLE "FuncRunQRow"
+  AREA "Sta_Data_128"
+  LABEL "Function Queue Row"
+  DESCRIPTION "Row for function queue configuration"
+  DUMP-NAME "FuncRunQRow"
+
+ADD FIELD "FRQueueID" OF "FuncRunQRow" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Queue ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Queue"
+  HELP "Unique ID for the queue"
+  ORDER 10
+
+ADD FIELD "FRQRowSeq" OF "FuncRunQRow" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "Row Sequence"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Row"
+  HELP "Row sequence (order)"
+  ORDER 20
+
+ADD FIELD "FRConfigID" OF "FuncRunQRow" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Configuration ID"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Conf."
+  HELP "Unique ID for configuration"
+  ORDER 30
+
+ADD FIELD "MinStartTime" OF "FuncRunQRow" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Earliest Start Time"
+  POSITION 5
+  MAX-WIDTH 16
+  COLUMN-LABEL "Min.Start"
+  HELP "Earliest possible start time"
+  ORDER 40
+
+ADD FIELD "WaitForRowSeq" OF "FuncRunQRow" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "Wait For"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Wait"
+  HELP "Row which must be handled before this one is started"
+  ORDER 50
+
+ADD FIELD "FeedFromRowSeq" OF "FuncRunQRow" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "Feeds From"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Feeds"
+  HELP "Row from which feeds are taken from"
+  ORDER 60
+
+ADD INDEX "FuncRunQRow" ON "FuncRunQRow" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "FRQueueID" ASCENDING 
+  INDEX-FIELD "FRQRowSeq" ASCENDING 
+
+ADD INDEX "FRConfigID" ON "FuncRunQRow" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "FRConfigID" ASCENDING 
+
+ADD TABLE "FuncRunQSchedule"
+  AREA "Sta_Data_128"
+  LABEL "Function Queue Timing"
+  DESCRIPTION "Timetable for function queue"
+  DUMP-NAME "FuncRunQSchedule"
+
+ADD FIELD "FRQueueID" OF "FuncRunQSchedule" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Queue ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Queue"
+  HELP "Unique ID for the queue"
+  ORDER 10
+
+ADD FIELD "StartTS" OF "FuncRunQSchedule" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Start Time"
+  POSITION 3
+  MAX-WIDTH 20
+  COLUMN-LABEL "Start"
+  HELP "Time when run will be started"
+  DECIMALS 5
+  ORDER 20
+
+ADD FIELD "DoneTS" OF "FuncRunQSchedule" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Start Time"
+  POSITION 4
+  MAX-WIDTH 20
+  COLUMN-LABEL "Start"
+  HELP "Time when run will be started"
+  DECIMALS 5
+  ORDER 30
+
+ADD FIELD "FRQScheduleID" OF "FuncRunQSchedule" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Queue Timing ID"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Timing"
+  HELP "Unique ID for this timing row"
+  ORDER 50
+
+ADD FIELD "RunMode" OF "FuncRunQSchedule" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Run Mode"
+  POSITION 7
+  MAX-WIDTH 24
+  COLUMN-LABEL "Mode"
+  HELP "Run mode, e.g. production or test"
+  ORDER 60
+
+ADD FIELD "RunState" OF "FuncRunQSchedule" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Run Status"
+  POSITION 8
+  MAX-WIDTH 32
+  COLUMN-LABEL "Status"
+  HELP "Status of the scheduled run"
+  ORDER 40
+
+ADD INDEX "FRQScheduleID" ON "FuncRunQSchedule" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "FRQScheduleID" ASCENDING 
+
+ADD INDEX "FRQueueID" ON "FuncRunQSchedule" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "FRQueueID" ASCENDING 
+  INDEX-FIELD "StartTS" DESCENDING 
+
+ADD INDEX "RunState" ON "FuncRunQSchedule" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "FRQueueID" ASCENDING 
+  INDEX-FIELD "RunState" ASCENDING 
+  INDEX-FIELD "StartTS" DESCENDING 
+
+ADD TABLE "FuncRunQSParam"
+  AREA "Sta_Data_64"
+  LABEL "Function Queue Parameters"
+  DESCRIPTION "Parameters for scheduled function queue"
+  DUMP-NAME "FuncRunQSParam"
+
+ADD FIELD "FRQueueID" OF "FuncRunQSParam" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Queue ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Queue"
+  HELP "Unique ID for the queue"
+  ORDER 10
+
+ADD FIELD "FRQRowSeq" OF "FuncRunQSParam" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "Row Sequence"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Row"
+  HELP "Row sequence (order)"
+  ORDER 20
+
+ADD FIELD "FRQScheduleID" OF "FuncRunQSParam" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Queue Timing ID"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Timing"
+  HELP "Unique ID for scheduling row"
+  ORDER 30
+
+ADD FIELD "CharParam" OF "FuncRunQSParam" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Character Parameter"
+  POSITION 5
+  MAX-WIDTH 40
+  COLUMN-LABEL "Char"
+  HELP "Default value for character parameter"
+  ORDER 50
+
+ADD FIELD "DateParam" OF "FuncRunQSParam" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Date Parameter"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Date"
+  HELP "Default value for date parameter"
+  ORDER 60
+
+ADD FIELD "DecParam" OF "FuncRunQSParam" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Decimal Parameter"
+  POSITION 7
+  MAX-WIDTH 17
+  COLUMN-LABEL "Dec"
+  HELP "Default value for decimal parameter"
+  DECIMALS 2
+  ORDER 70
+
+ADD FIELD "IntParam" OF "FuncRunQSParam" AS integer 
+  FORMAT "->>>>>>>9"
+  INITIAL "0"
+  LABEL "Integer Parameter"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Int"
+  HELP "Default value for integer parameter"
+  ORDER 80
+
+ADD FIELD "LogParam" OF "FuncRunQSParam" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Logical Parameter"
+  POSITION 9
+  MAX-WIDTH 1
+  COLUMN-LABEL "Logic"
+  HELP "Default value for logical parameter"
+  ORDER 90
+
+ADD FIELD "FRConfigID" OF "FuncRunQSParam" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Configuration ID"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "Conf."
+  HELP "Unique ID for configuration"
+  ORDER 100
+
+ADD FIELD "ParamSeq" OF "FuncRunQSParam" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Parameter Sequence"
+  POSITION 11
+  MAX-WIDTH 4
+  COLUMN-LABEL "Sequence"
+  HELP "Parameter sequence (order)"
+  ORDER 40
+
+ADD FIELD "ParamType" OF "FuncRunQSParam" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Parameter Type"
+  POSITION 12
+  MAX-WIDTH 16
+  COLUMN-LABEL "Type"
+  HELP "Parameter type"
+  ORDER 120
+
+ADD INDEX "FuncRunQSchedule" ON "FuncRunQSParam" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "FRQScheduleID" ASCENDING 
+  INDEX-FIELD "FRQRowSeq" ASCENDING 
+  INDEX-FIELD "ParamSeq" ASCENDING 
+
+ADD INDEX "FuncRunQRow" ON "FuncRunQSParam" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "FRQueueID" ASCENDING 
+  INDEX-FIELD "FRQRowSeq" ASCENDING 
+  INDEX-FIELD "ParamSeq" ASCENDING 
+
+ADD TABLE "FuncRunQueue"
+  AREA "Sta_Data_128"
+  LABEL "Function Queue"
+  DESCRIPTION "Configuration for function queue"
+  DUMP-NAME "FuncRunQueue"
+
+ADD FIELD "FRQueueID" OF "FuncRunQueue" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Queue ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Queue"
+  HELP "Unique ID for the queue"
+  ORDER 10
+
+ADD FIELD "QueueDesc" OF "FuncRunQueue" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Description"
+  POSITION 3
+  MAX-WIDTH 60
+  HELP "Short description of the queue"
+  ORDER 20
+
+ADD FIELD "Brand" OF "FuncRunQueue" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 4
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 30
+
+ADD FIELD "Active" OF "FuncRunQueue" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Active"
+  POSITION 5
+  MAX-WIDTH 1
+  HELP "Is queue active"
+  ORDER 40
+
+ADD INDEX "FRQueueID" ON "FuncRunQueue" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "FRQueueID" ASCENDING 
+
+ADD INDEX "BrandQueue" ON "FuncRunQueue" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "FRQueueID" ASCENDING 
+
+ADD TABLE "FuncRunResult"
+  AREA "Dyn_Data_128"
+  LABEL "Function feed"
+  DESCRIPTION "Feed to a function process"
+  DUMP-NAME "FuncRunResult"
+
+ADD FIELD "CharParam" OF "FuncRunResult" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Character Parameter"
+  POSITION 3
+  MAX-WIDTH 16
+  COLUMN-LABEL "Char.Param"
+  HELP "Character parameter"
+  ORDER 20
+
+ADD FIELD "IntParam" OF "FuncRunResult" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Integer Parameter"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Int.Param"
+  HELP "Integer parameter"
+  ORDER 30
+
+ADD FIELD "FRProcessID" OF "FuncRunResult" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "FR Process ID"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Proc."
+  HELP "Unique ID of the process"
+  ORDER 40
+
+ADD FIELD "ResultOrder" OF "FuncRunResult" AS integer 
+  FORMAT ">>>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Result Order"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Order"
+  HELP "Order of the result rows"
+  ORDER 60
+
+ADD FIELD "DecParam" OF "FuncRunResult" AS decimal 
+  FORMAT "->>>>>>>>9.99999"
+  INITIAL "0"
+  LABEL "Decimal Parameter"
+  POSITION 7
+  MAX-WIDTH 20
+  COLUMN-LABEL "Dec.Param"
+  HELP "Decimal parameter"
+  DECIMALS 5
+  ORDER 50
+
+ADD FIELD "FRResultSeq" OF "FuncRunResult" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "Sequence"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Seq."
+  HELP "Sequence (order) within one execution"
+  ORDER 80
+
+ADD FIELD "FRExecID" OF "FuncRunResult" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Execution ID"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "Exec."
+  HELP "Execution from which the feeds were created"
+  ORDER 70
+
+ADD INDEX "FRProcessID" ON "FuncRunResult" 
+  AREA "Dyn_Index_1"
+  PRIMARY
+  INDEX-FIELD "FRProcessID" ASCENDING 
+  INDEX-FIELD "FRResultSeq" ASCENDING 
+  INDEX-FIELD "ResultOrder" ASCENDING 
+
+ADD INDEX "FRExecID" ON "FuncRunResult" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "FRExecID" ASCENDING 
+  INDEX-FIELD "FRResultSeq" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000020673

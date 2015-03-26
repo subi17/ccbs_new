@@ -1,0 +1,8 @@
+ADD FIELD "FirstMonthCalc" OF "ServiceLimit" AS integer
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "First Month Calculation"
+  POSITION 20
+  COLUMN-LABEL "1.Month"
+  HELP "First month calculation method"
+  ORDER 180

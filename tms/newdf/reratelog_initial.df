@@ -1,0 +1,334 @@
+ADD TABLE "EDRHistory"
+  AREA "Sta_Data_64"
+  LABEL "EDRHistory"
+  DUMP-NAME "edrhistory"
+
+ADD FIELD "CLI" OF "EDRHistory" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "MSISDN"
+  POSITION 2
+  MAX-WIDTH 22
+  COLUMN-LABEL "MSISDN"
+  HELP "MSISDN"
+  ORDER 10
+
+ADD FIELD "DateSt" OF "EDRHistory" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Event Date"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Date"
+  HELP "Event date"
+  ORDER 20
+
+ADD FIELD "TimeStart" OF "EDRHistory" AS integer 
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "Start Time"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Time"
+  HELP "Starting time"
+  ORDER 30
+
+ADD FIELD "DtlSeq" OF "EDRHistory" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "Stream Sequence"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Stream Seq."
+  HELP "Daily stream sequence"
+  ORDER 40
+
+ADD FIELD "ErrorCode" OF "EDRHistory" AS integer 
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "Error Code"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Error"
+  HELP "Error code"
+  ORDER 50
+
+ADD FIELD "InvCust" OF "EDRHistory" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Invoice Customer"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Customer"
+  HELP "Invoice customer"
+  ORDER 60
+
+ADD FIELD "BillCode" OF "EDRHistory" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Billing Item"
+  POSITION 8
+  MAX-WIDTH 32
+  COLUMN-LABEL "BillItem"
+  HELP "Billing item"
+  ORDER 70
+
+ADD FIELD "BDest" OF "EDRHistory" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "B-Destination"
+  POSITION 9
+  MAX-WIDTH 24
+  COLUMN-LABEL "BDest"
+  HELP "B-Destination"
+  ORDER 80
+
+ADD FIELD "DCEvent" OF "EDRHistory" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Rating Package"
+  POSITION 10
+  MAX-WIDTH 24
+  COLUMN-LABEL "Package"
+  HELP "Rating package (periodical contract)"
+  ORDER 90
+
+ADD FIELD "TariffNum" OF "EDRHistory" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Tariff ID"
+  POSITION 11
+  MAX-WIDTH 4
+  COLUMN-LABEL "Tariff"
+  HELP "Tariff ID"
+  ORDER 100
+
+ADD FIELD "Amount" OF "EDRHistory" AS decimal 
+  FORMAT ">>>>>>9.99"
+  INITIAL "0"
+  LABEL "Amount"
+  POSITION 12
+  MAX-WIDTH 20
+  COLUMN-LABEL "Amt"
+  HELP "Amount"
+  DECIMALS 5
+  ORDER 110
+
+ADD FIELD "UpdateDate" OF "EDRHistory" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Update Date"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "Upd.Date"
+  HELP "Update date"
+  ORDER 120
+
+ADD FIELD "UpdateTime" OF "EDRHistory" AS integer 
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "Update Time"
+  POSITION 14
+  MAX-WIDTH 4
+  COLUMN-LABEL "Upd.Time"
+  HELP "Update time"
+  ORDER 130
+
+ADD FIELD "UpdateSource" OF "EDRHistory" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Update Source"
+  POSITION 15
+  MAX-WIDTH 40
+  COLUMN-LABEL "Source"
+  HELP "Source of update"
+  ORDER 140
+
+ADD FIELD "MsSeq" OF "EDRHistory" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 16
+  MAX-WIDTH 4
+  COLUMN-LABEL "Subscr.ID"
+  HELP "Subscription ID"
+  ORDER 150
+
+ADD FIELD "Brand" OF "EDRHistory" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 17
+  MAX-WIDTH 16
+  HELP "Brand"
+  ORDER 160
+
+ADD INDEX "CLI" ON "EDRHistory" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CLI" ASCENDING 
+  INDEX-FIELD "DateSt" DESCENDING 
+  INDEX-FIELD "TimeStart" DESCENDING 
+
+ADD INDEX "InvCust" ON "EDRHistory" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "InvCust" ASCENDING 
+  INDEX-FIELD "DateSt" DESCENDING 
+
+ADD INDEX "MsSeq" ON "EDRHistory" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "DateSt" DESCENDING 
+  INDEX-FIELD "TimeStart" DESCENDING 
+
+ADD INDEX "UpdateDate" ON "EDRHistory" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "UpdateDate" DESCENDING 
+  INDEX-FIELD "UpdateTime" DESCENDING 
+
+ADD TABLE "RerateLog"
+  AREA "Sta_Data_128"
+  LABEL "Rerate Log"
+  DESCRIPTION "Rerate action log"
+  DUMP-NAME "reratelog"
+
+ADD FIELD "InvCust" OF "RerateLog" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Invoice Customer"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Customer"
+  HELP "Invoice customer"
+  ORDER 10
+
+ADD FIELD "MsSeq" OF "RerateLog" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Subscr.ID"
+  HELP "Subscription ID"
+  ORDER 20
+
+ADD FIELD "CLI" OF "RerateLog" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "MSISDN"
+  POSITION 4
+  MAX-WIDTH 22
+  COLUMN-LABEL "MSISDN"
+  HELP "MSISDN"
+  ORDER 30
+
+ADD FIELD "EventSource" OF "RerateLog" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Source"
+  POSITION 5
+  MAX-WIDTH 24
+  COLUMN-LABEL "Source"
+  HELP "Source of the rerate"
+  ORDER 40
+
+ADD FIELD "PeriodBegin" OF "RerateLog" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Period Begin"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Begin"
+  HELP "Begin date for period"
+  ORDER 50
+
+ADD FIELD "PeriodEnd" OF "RerateLog" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Period End"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "End"
+  HELP "End date for period"
+  ORDER 60
+
+ADD FIELD "Started" OF "RerateLog" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Started"
+  POSITION 8
+  MAX-WIDTH 20
+  HELP "Start time for rerate"
+  DECIMALS 5
+  ORDER 70
+
+ADD FIELD "Ended" OF "RerateLog" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Ended"
+  POSITION 9
+  MAX-WIDTH 20
+  COLUMN-LABEL "Ended"
+  HELP "End time for rerate"
+  DECIMALS 5
+  ORDER 80
+
+ADD FIELD "ChangedQty" OF "RerateLog" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Changed Qty"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "Changed"
+  HELP "Quantity of changed records"
+  ORDER 90
+
+ADD FIELD "StartDate" OF "RerateLog" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Start Date"
+  POSITION 11
+  MAX-WIDTH 4
+  COLUMN-LABEL "Started"
+  HELP "Starting date"
+  ORDER 100
+
+ADD FIELD "Brand" OF "RerateLog" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 12
+  MAX-WIDTH 16
+  HELP "Brand"
+  ORDER 110
+
+ADD INDEX "InvCust" ON "RerateLog" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "InvCust" ASCENDING 
+  INDEX-FIELD "StartDate" DESCENDING 
+
+ADD INDEX "CLI" ON "RerateLog" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CLI" ASCENDING 
+  INDEX-FIELD "StartDate" DESCENDING 
+
+ADD INDEX "MsSeq" ON "RerateLog" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "StartDate" DESCENDING 
+
+ADD INDEX "StartDate" ON "RerateLog" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "StartDate" DESCENDING 
+  INDEX-FIELD "Started" DESCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000006601

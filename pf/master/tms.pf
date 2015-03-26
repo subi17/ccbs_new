@@ -1,0 +1,25 @@
+-db /db1/common/common
+-db /db1/ordercanal/ordercanal
+-db /db1/mobile/mobile
+-db /db1/mcdr01/mcdr01 -ld mcdr
+-db /db1/mcdrdtl01/mcdrdtl01 -ld mcdrdtl
+-db /db1/star/star
+-db /db1/prepcdr/prepcdr
+-db /db1/roamcdr/roamcdr
+-db /db1/fraudcdr10/fraudcdr10 -ld fraudcdr
+-h 11
+-d dmy
+-e 100
+-l 1000
+-yy 1980
+-T /tmp
+-t
+#-T /db2/store/protmp
+#-T /scratch/protmp
+-TB 31
+-TM 32
+-rand 2
+-tmpbsize 8
+-Bt 1024
+-s 1024
+-Mm 8192

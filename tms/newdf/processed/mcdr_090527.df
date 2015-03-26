@@ -1,0 +1,24 @@
+ADD FIELD "RerateID" OF "MobCDR" AS integer
+  DESCRIPTION "Rerating run ID"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "RerateID"
+  POSITION 202
+  MAX-WIDTH 4
+  COLUMN-LABEL "RerateID"
+  ORDER 2510
+
+ADD FIELD "RerateTS" OF "MobCDR" AS decimal
+  DESCRIPTION "Date and time when rerating was done"
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "RerateTS"
+  POSITION 203
+  MAX-WIDTH 20
+  COLUMN-LABEL "RerateTS"
+  DECIMALS 5
+  ORDER 2520
+
+.
+PSC
+cpstream=1252

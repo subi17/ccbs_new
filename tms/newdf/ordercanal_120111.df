@@ -1,0 +1,15 @@
+ADD FIELD "Latitude" OF "OrderCustomer" AS character
+  FORMAT "X(14)"
+  INITIAL ""
+  LABEL "Latitude"
+  COLUMN-LABEL "Latitude"
+  HELP "Latitude in address validation"
+  ORDER 960
+
+ADD FIELD "Longitude" OF "OrderCustomer" AS character
+  FORMAT "X(14)"
+  INITIAL ""
+  LABEL "Longitude"
+  COLUMN-LABEL "Longitude"
+  HELP "Longitude in address validation"
+  ORDER 970

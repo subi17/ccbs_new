@@ -1,0 +1,31 @@
+ADD FIELD "CreditorId" OF "BankAccount" AS character
+  FORMAT "X(35)"
+  INITIAL ""
+  LABEL "Creditor Id"
+  COLUMN-LABEL "CreditorId"
+  HELP "Creditor ID for CSB19.14"
+  ORDER 100
+
+ADD FIELD "BIC" OF "BankAccount" AS character
+  FORMAT "X(11)"
+  INITIAL ""
+  LABEL "BIC"
+  COLUMN-LABEL "BIC"
+  HELP "BIC code"
+  ORDER 110
+
+ADD FIELD "ClaimStatus" OF Invoice AS character
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Claim Status"
+  COLUMN-LABEL "ClaimStatus"
+  HELP "Claiming Status (new format)"
+  ORDER 1450
+
+ADD FIELD "MandateId" OF Invoice AS character
+  FORMAT "X(35)"
+  INITIAL ""
+  LABEL "Mandate Id"
+  COLUMN-LABEL "MandateId"
+  HELP "Mandate ID for CSB19.14 file"
+  ORDER 1460

@@ -1,0 +1,6 @@
+ADD FIELD "TariffActDate" OF "MobSub" AS DATE
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Tariff Activation Date"
+  COLUMN-LABEL "TariffActDate"
+  ORDER 880

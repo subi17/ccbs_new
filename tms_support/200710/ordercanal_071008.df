@@ -1,0 +1,63 @@
+ADD FIELD "PPReqPrefix" OF "PrePaidRequest" AS character
+  DESCRIPTION ""
+  FORMAT "x(8)"
+  FORMAT-SA ?
+  POSITION 22
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "Request prefix"
+  HELP-SA ""
+  LABEL "Request Prefix"
+  LABEL-SA ?
+  COLUMN-LABEL "Prefix"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 200
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 16
+
+ADD FIELD "MSSeq" OF "PrePaidRequest" AS integer
+  DESCRIPTION ""
+  FORMAT ">>>>>>>9"
+  FORMAT-SA ?
+  POSITION 23
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Subscription ID"
+  HELP-SA ""
+  LABEL "Subscription ID"
+  LABEL-SA ?
+  COLUMN-LABEL "Subs.ID"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 210
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD INDEX "MsSeq" ON "PrePaidRequest"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "MSSeq" ASCENDING
+  INDEX-FIELD "TSRequest" DESCENDING
+
+.
+PSC
+cpstream=1252
+.
+0000001160

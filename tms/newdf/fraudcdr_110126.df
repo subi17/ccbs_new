@@ -1,0 +1,19 @@
+ADD FIELD "ReadDate" OF "FraudCDR" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Read In Date"
+  POSITION 204
+  MAX-WIDTH 4
+  COLUMN-LABEL "Read"
+  HELP "Read in date"
+  ORDER 2530
+
+ADD INDEX "ReadDate" ON "FraudCDR" 
+  AREA "Dyn_Index1"
+  INDEX-FIELD "ReadDate" DESCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000014796

@@ -1,0 +1,105 @@
+Server Details Help
+===================
+
+The first section shows both the sample and summary views of statistics for
+the selected server.
+
+Srv:
+
+Server Id.
+
+Type:
+
+What type of server is this?  Possible values include:
+
+        Login     The Broker
+        Auto      Started automatically (by default or via the -m1 parameter).
+        Manual    Started manually (via the -m2 parameter).
+        Inactive  Servers that are allocated but not yet spawned by the
+                  broker.
+
+Port:
+
+TCP/IP Port number.  The broker uses the port specified by -S.  Other servers
+get an automatically assigned port number.
+
+Con:
+
+Current number of connections to this server.
+
+Max:
+
+The maximum number of connections that this server will permit (-Ma).
+
+Msg Recv:
+
+Progress messages received by this server.  (See -Mm documentation.)
+
+Msg Sent:
+
+Progress messages sent by this server.  (See -Mm documentation.)
+
+Rec Recv:
+
+Records received from clients of this server.
+
+Rec Sent:
+
+Records sent to clients of this server.
+
+Qry Sent:
+
+Queries received by this server.
+
+TimeSlice:
+
+The number of times that the server has interrupted work on a client query
+to check for other clients work.
+
+
+The second section shows User IO Statistics for the users connected to the
+selected server.
+
+Usr:
+
+The Usr# for this connection.
+
+Name:
+
+The User Name associated with this connection.
+
+Flags:
+
+Connection type and status flags.
+
+        S  Self-service
+        R  Remote
+        B  Batch
+        O  Other
+        *  TRX is Open
+        d  Disconnecting
+        r  Resyncing
+        i  Interrupt
+
+PID:
+
+Operating system Process ID.
+
+DB Access:
+
+The number of database block accesses that this user has requested.
+
+OS Reads:
+
+The number of times that a database block accesses that this user has
+requested resulted in an OS read() operation.
+
+OS Writes:
+
+The number of OS write() operations that this process has caused.
+
+Hit%
+
+The percentage of times that db blocks were found for this process in the
+buffer cache instead of being read from disk.
+

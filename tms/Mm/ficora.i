@@ -1,0 +1,32 @@
+DEFINE temp-table TELECOMPANY
+   FIELD TCCode AS INT
+   FIELD TCName AS CHAR FORMAT "X(35)"
+   FIELD BDest  AS CHAR FORMAT "X(10)"
+   INDEX TCCode IS PRIMARY UNIQUE TCCode TCName.
+
+
+CREATE TELECOMPANY.
+ASSIGN
+   TELECOMPANY.TCCode = 71
+   TELECOMPANY.Bdest  = "626"
+   TeleCompany.TCName = "Telefonica Moviles".
+
+CREATE TELECOMPANY.
+ASSIGN
+   TELECOMPANY.TCCode = 72
+   TELECOMPANY.Bdest  = "627"
+   TeleCompany.TCName = "Vodafone".
+
+CREATE TELECOMPANY.
+ASSIGN
+   TELECOMPANY.TCCode = 73
+   TELECOMPANY.Bdest  = "665"
+   TeleCompany.TCName = "Orange"      .
+
+CREATE TELECOMPANY.
+ASSIGN
+   TELECOMPANY.TCCode = 74
+   TELECOMPANY.Bdest  = "YOIGO"
+   TeleCompany.TCName = "Xfera".
+
+         

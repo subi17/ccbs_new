@@ -1,0 +1,44 @@
+ADD FIELD "BarrCode" OF "TermMobSub" AS character
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "BarrCode"
+  COLUMN-LABEL "BarrCode"
+  ORDER 880
+
+ADD FIELD "TariffBundle" OF "TermMobSub" AS character
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Tariff Bundle"
+  COLUMN-LABEL "TariffBundle"
+  ORDER 890
+
+ADD FIELD "StatusCode" OF "DayCampaign" AS integer 
+  FORMAT "9"
+  INITIAL 1
+  LABEL "Status"
+  COLUMN-LABEL "Status"
+  ORDER 310
+
+ADD FIELD "BundleUpsell" OF "DayCampaign" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Bundle Upsell"
+  COLUMN-LABEL "Upsell"
+  ORDER 320
+
+ADD FIELD "ReqIParam5" OF "MSRequest" AS integer
+  FORMAT "->>>>>>>9"
+  INITIAL "0"
+  LABEL "Integer Parameter 5"
+  COLUMN-LABEL "IntParam5"
+  HELP "Integer parameter 5"
+  ORDER 370
+
+ADD FIELD "Amount" OF "DCCli" AS decimal
+  FORMAT "->>>>>>9.99999"
+  INITIAL ?
+  LABEL "Amount"
+  COLUMN-LABEL "Amount"
+  HELP "Penalty amount"
+  DECIMALS 5
+  ORDER 140

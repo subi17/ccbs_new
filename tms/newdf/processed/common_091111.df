@@ -1,0 +1,107 @@
+ADD TABLE "Counter"
+  AREA "Sta_Data_256"
+  LABEL "Counter"
+  DESCRIPTION "Counter"
+  DUMP-NAME "counter"
+
+ADD FIELD "Brand" OF "Counter" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 80
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brands"
+  ORDER 10
+
+ADD FIELD "HostTable" OF "Counter" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "HostTable"
+  POSITION 3
+  MAX-WIDTH 32
+  COLUMN-LABEL "HostTable"
+  HELP "HostTable"
+  ORDER 20
+
+ADD FIELD "KeyValue" OF "Counter" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "KeyValue"
+  POSITION 4
+  MAX-WIDTH 40
+  COLUMN-LABEL "KeyValue"
+  HELP "KeyValue"
+  ORDER 30
+
+ADD FIELD "CounterType" OF "Counter" AS integer 
+  FORMAT "99"
+  INITIAL "0"
+  LABEL "Counter Type"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Type"
+  HELP "Counter type"
+  ORDER 40
+
+ADD FIELD "CounterAmt" OF "Counter" AS decimal 
+  FORMAT "->>>>>>9.99"
+  INITIAL "0"
+  LABEL "Amount"
+  POSITION 6
+  MAX-WIDTH 17
+  DECIMALS 2
+  ORDER 50
+
+ADD FIELD "BeginStamp" OF "Counter" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL ""
+  LABEL "Begin Stamp"
+  POSITION 7
+  MAX-WIDTH 17
+  DECIMALS 2
+  ORDER 60
+
+ADD FIELD "EndStamp" OF "Counter" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL ""
+  LABEL "End Stamp"
+  POSITION 8
+  MAX-WIDTH 20
+  COLUMN-LABEL "End Stamp"
+  DECIMALS 5
+  ORDER 70
+
+ADD FIELD "CounterSeq" OF "Counter" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "CounterSeq"
+  POSITION 9
+  MAX-WIDTH 4
+  ORDER 80
+
+ADD INDEX "CounterSeq" ON "Counter" 
+  AREA "Sta_Data_256"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "CounterSeq" ASCENDING 
+
+ADD INDEX "HostTable" ON "Counter" 
+  AREA "Sta_Data_256"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "KeyValue" ASCENDING 
+  INDEX-FIELD "CounterType" ASCENDING 
+  INDEX-FIELD "EndStamp" DESCENDING 
+
+ADD SEQUENCE "CounterSeq"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+.
+PSC
+cpstream=1252
+.
+0000001838

@@ -1,0 +1,15 @@
+ADD FIELD "AllowReplica" OF "DumpFile" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "AllowReplica"
+  COLUMN-LABEL "AllowReplica"
+  HELP "Restriction Boolean value"
+  ORDER 310
+              
+ADD FIELD "UseReplica" OF "DFTimeTable" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "UseReplica"
+  COLUMN-LABEL "UseReplica"
+  HELP "To find Production/Replication"
+  ORDER 120

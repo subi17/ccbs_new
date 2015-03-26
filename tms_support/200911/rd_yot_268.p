@@ -1,0 +1,18 @@
+
+/* YOT-268 */
+DEFINE STREAM sout.
+DEFINE VARIABLE lcStockList AS CHARACTER NO-UNDO. 
+
+lcStockList = "CC,MNP,MNP_CAN_ISL,NEW,NEW_CAN_ISL".
+
+OUTPUT STREAM sout TO yot_268.log .
+FOR EACH SIM EXCLUSIVE-LOCK where
+         SIM.ICC BEGINS "893404" AND
+         LOOKUP(SIM.Stock,lcStockList) > 0 AND 
+         SIM.SimStat EQ 1 :
+
+      IF SIM.ICC MATCHES ("8934040909*") THEN NEXT.
+
+      PUT STREAM sout UNFORMATTED SIM.ICC CHR(9) SIM.Stock SKIP.
+      ASSIGN SIM.SimStat = 7.
+end.

@@ -1,0 +1,21 @@
+ADD FIELD "IMEIStatus" OF "OrderAccessory" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "IMEI Status"
+  COLUMN-LABEL "IMEIStat"
+  HELP "Status of IMEI"
+  ORDER 140
+
+ADD FIELD "IMEIReleased" OF "OrderAccessory" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "IMEIReleased"
+  COLUMN-LABEL "IMEIReleased"
+  HELP "Date when IMEI was released"
+  ORDER 150
+
+ADD INDEX "IMEIStatus" ON "OrderAccessory" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "IMEIStatus" ASCENDING 
+  INDEX-FIELD "IMEIReleased" DESCENDING 

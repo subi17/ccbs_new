@@ -1,0 +1,268 @@
+ADD TABLE "DCServiceAttribute"
+  AREA "Sta_Data_256"
+  LABEL "DC Service Attributes"
+  DESCRIPTION "Default values for service attributes of a periodical contract "
+  DUMP-NAME "dcserviceattribute"
+
+ADD FIELD "DCServiceAttributeID" OF "DCServiceAttribute" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "DC Service Attribute ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Unique id for record"
+  ORDER 70
+
+ADD FIELD "DefParam" OF "DCServiceAttribute" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Default Parameter"
+  POSITION 4
+  MAX-WIDTH 40
+  COLUMN-LABEL "Parameter"
+  HELP "Default value for parameter"
+  ORDER 40
+
+ADD FIELD "FromDate" OF "DCServiceAttribute" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "From"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "Date when becomes effective"
+  ORDER 50
+
+ADD FIELD "ToDate" OF "DCServiceAttribute" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 7
+  MAX-WIDTH 4
+  HELP "Date when expires"
+  ORDER 60
+
+ADD FIELD "ServAttr" OF "DCServiceAttribute" AS character 
+  FORMAT "x(14)"
+  INITIAL ""
+  LABEL "Service Attribute"
+  POSITION 8
+  MAX-WIDTH 28
+  COLUMN-LABEL "Attribute"
+  HELP "Attribute of a service component"
+  ORDER 25
+
+ADD FIELD "DCServiceComponentID" OF "DCServiceAttribute" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "DC Service Component ID"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "Comp.ID"
+  HELP "Unique id for component record"
+  ORDER 80
+
+ADD INDEX "DCServiceAttributeID" ON "DCServiceAttribute" 
+  AREA "Sta_Index_3"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "DCServiceAttributeID" ASCENDING 
+
+ADD INDEX "DCServiceComponentID" ON "DCServiceAttribute" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "DCServiceComponentID" ASCENDING 
+  INDEX-FIELD "ServAttr" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD TABLE "DCServiceComponent"
+  AREA "Sta_Data_256"
+  LABEL "DC Service Component"
+  DESCRIPTION "Service component settings for packages related to periodical contract"
+  DUMP-NAME "dcservicecomponent"
+
+ADD FIELD "DCServicePackageID" OF "DCServiceComponent" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "ID"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "Unique id for package definition"
+  ORDER 10
+
+ADD FIELD "ServCom" OF "DCServiceComponent" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Service Component"
+  POSITION 3
+  MAX-WIDTH 24
+  COLUMN-LABEL "Component"
+  HELP "Service component ID"
+  ORDER 20
+
+ADD FIELD "DefValue" OF "DCServiceComponent" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "Default Value"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Default"
+  HELP "Default value"
+  ORDER 30
+
+ADD FIELD "DefParam" OF "DCServiceComponent" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Default Parameter"
+  POSITION 5
+  MAX-WIDTH 40
+  COLUMN-LABEL "Parameter"
+  HELP "Default value for parameter"
+  ORDER 40
+
+ADD FIELD "FromDate" OF "DCServiceComponent" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "From"
+  POSITION 6
+  MAX-WIDTH 4
+  HELP "Date when becomes effective"
+  ORDER 50
+
+ADD FIELD "ToDate" OF "DCServiceComponent" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 7
+  MAX-WIDTH 4
+  HELP "Date when expires"
+  ORDER 60
+
+ADD FIELD "DCServiceComponentID" OF "DCServiceComponent" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "DC Service Component ID"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Unique id for record"
+  ORDER 70
+
+ADD INDEX "DCServiceComponentID" ON "DCServiceComponent" 
+  AREA "Sta_Index_3"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "DCServiceComponentID" ASCENDING 
+
+ADD INDEX "DCServicePackageID" ON "DCServiceComponent" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "DCServicePackageID" ASCENDING 
+  INDEX-FIELD "ServCom" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD TABLE "DCServicePackage"
+  AREA "Sta_Data_256"
+  LABEL "DC Service Package"
+  DESCRIPTION "Service packages related to periodical contract"
+  DUMP-NAME "dcservicepackage"
+
+ADD FIELD "Brand" OF "DCServicePackage" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 10
+
+ADD FIELD "DCEvent" OF "DCServicePackage" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Periodical Contract"
+  POSITION 3
+  MAX-WIDTH 24
+  COLUMN-LABEL "Per.Contract"
+  HELP "ID of periodical contract"
+  ORDER 20
+
+ADD FIELD "DCServicePackageID" OF "DCServicePackage" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "DC Service Package ID"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Unique id for record"
+  ORDER 30
+
+ADD FIELD "ServPac" OF "DCServicePackage" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Service Package"
+  POSITION 5
+  MAX-WIDTH 24
+  COLUMN-LABEL "Serv.Pack"
+  HELP "Service package code"
+  ORDER 40
+
+ADD FIELD "FromDate" OF "DCServicePackage" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "From"
+  POSITION 6
+  MAX-WIDTH 4
+  HELP "Date when becomes effective"
+  ORDER 50
+
+ADD FIELD "ToDate" OF "DCServicePackage" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 7
+  MAX-WIDTH 4
+  HELP "Date when expires"
+  ORDER 60
+
+ADD INDEX "DCServicePackageID" ON "DCServicePackage" 
+  AREA "Sta_Index_3"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "DCServicePackageID" ASCENDING 
+
+ADD INDEX "DCEvent" ON "DCServicePackage" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "DCEvent" ASCENDING 
+  INDEX-FIELD "ServPac" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "ServPac" ON "DCServicePackage" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "ServPac" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD FIELD "LastMonthCalc" OF "DayCampaign" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Last Month Calculation"
+  POSITION 28
+  MAX-WIDTH 4
+  COLUMN-LABEL "Last Month"
+  HELP "Last month calculation method"
+  ORDER 300
+
+ADD FIELD "FirstMonthCalc" OF "DayCampaign" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "First Month Calculation"
+  POSITION 29
+  MAX-WIDTH 4
+  COLUMN-LABEL "1.Month"
+  HELP "First month calculation method"
+  ORDER 290
+
+.
+PSC
+cpstream=1252
+.
+0000005581

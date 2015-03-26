@@ -1,0 +1,10 @@
+ADD FIELD "EventTS" OF "RepLog" AS datetime
+  FORMAT "99-99-9999 HH:MM:SS.SSS"
+  INITIAL ?
+  LABEL "EventTS"
+  COLUMN-LABEL "EventTS"
+  ORDER 60
+
+ADD INDEX "EventTS" ON "RepLog"
+  AREA "CDF_Index"
+  INDEX-FIELD "EventTS" ASCENDING

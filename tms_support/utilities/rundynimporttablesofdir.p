@@ -1,0 +1,29 @@
+DEFINE INPUT PARAMETER pcDir AS CHARACTER NO-UNDO. 
+DEFINE INPUT PARAMETER plTestFiles AS LOGICAL NO-UNDO. 
+
+MESSAGE "beginning working with files in dir " pcDir VIEW-AS ALERT-BOX.
+
+DEFINE VARIABLE lsCmd AS CHARACTER NO-UNDO. 
+
+DEFINE STREAM sFiles.
+DEFINE VARIABLE lcCmd AS CHARACTER NO-UNDO.  
+
+lcCmd = "ls " + pcDir + " -1".
+
+MESSAGE "ls command " lsCmd VIEW-AS ALERT-BOX.
+
+INPUT STREAM sFiles THROUGH VALUE(lcCmd).
+
+DEFINE VARIABLE cFile AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE cTable AS CHARACTER NO-UNDO. 
+
+REPEAT:
+   IMPORT STREAM sFiles UNFORMATTED cFile.
+   cTable = SUBSTRING(cFile,11).
+   cTable = ENTRY(1, cTable, ".").
+   DISP cFile FORMAT "X(37)" cTable FORMAT "X(30)".
+   IF NOT plTestFiles THEN
+       run dynimport.p(pcDir, cTable, 0, TRUE). 
+END.
+
+INPUT STREAM sFiles CLOSE.

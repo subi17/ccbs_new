@@ -1,0 +1,122 @@
+ADD TABLE "TopupSchemeRow"
+  AREA "Sta_Data_128"
+  LABEL "Topup Scheme Row"
+  DESCRIPTION "Topup scheme row"
+  DUMP-NAME "topupschemerow"
+
+ADD FIELD "Amount" OF "TopupSchemeRow" AS decimal 
+  FORMAT "->>>>>>9.99"
+  INITIAL "0"
+  LABEL "Topup Amount"
+  POSITION 2
+  MAX-WIDTH 17
+  COLUMN-LABEL "Amount"
+  HELP "Topup amount"
+  DECIMALS 2
+  ORDER 30
+
+ADD FIELD "BillCode" OF "TopupSchemeRow" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Billing Item"
+  POSITION 3
+  MAX-WIDTH 32
+  COLUMN-LABEL "Bill.Item"
+  HELP "Billing item"
+  ORDER 40
+
+ADD FIELD "Brand" OF "TopupSchemeRow" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 4
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 10
+
+ADD FIELD "DiscountAmount" OF "TopupSchemeRow" AS decimal 
+  FORMAT "->>>>>>9.99"
+  INITIAL "0"
+  LABEL "Discount Amount"
+  POSITION 5
+  MAX-WIDTH 17
+  COLUMN-LABEL "Discount"
+  HELP "Discount amount"
+  DECIMALS 2
+  ORDER 50
+
+ADD FIELD "DiscountBillCode" OF "TopupSchemeRow" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Discount Billing Item"
+  POSITION 6
+  MAX-WIDTH 32
+  COLUMN-LABEL "Discount B.Item"
+  HELP "Discount billing item"
+  ORDER 60
+
+ADD FIELD "TopupScheme" OF "TopupSchemeRow" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Topup Scheme"
+  POSITION 7
+  MAX-WIDTH 24
+  COLUMN-LABEL "Scheme ID"
+  HELP "Topup scheme ID"
+  ORDER 20
+
+ADD FIELD "BeginStamp" OF "TopupSchemeRow" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Valid From"
+  POSITION 8
+  MAX-WIDTH 20
+  COLUMN-LABEL "From"
+  HELP "Valid from"
+  DECIMALS 5
+  ORDER 70
+
+ADD FIELD "EndStamp" OF "TopupSchemeRow" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Valid To"
+  POSITION 9
+  MAX-WIDTH 20
+  COLUMN-LABEL "To"
+  HELP "Valid to"
+  DECIMALS 5
+  ORDER 80
+
+ADD FIELD "TopupSchemeRowID" OF "TopupSchemeRow" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Row ID"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Row ID"
+  ORDER 90
+
+ADD INDEX "TopupSchemeRow" ON "TopupSchemeRow" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "TopupScheme" ASCENDING 
+  INDEX-FIELD "TopupSchemeRowID" ASCENDING 
+
+ADD INDEX "EndStamp" ON "TopupSchemeRow" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "TopupScheme" ASCENDING 
+  INDEX-FIELD "EndStamp" DESCENDING 
+
+ADD INDEX "TopupSchemeRowID" ON "TopupSchemeRow" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "TopupSchemeRowID" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000002463

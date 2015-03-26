@@ -1,0 +1,251 @@
+# newton__get_orders:
+GetOrdersRequest1:
+   Brand:"1"
+   msrequest:1
+   ReqType:13
+   MsSeq:1
+   ActStamp:20070303,23000
+
+# newton__get_orders:
+GetOrdersRequest2:
+   Brand:"1"
+   msrequest:2
+   ReqType:13
+   MsSeq:2
+   ActStamp:20080404,40000
+
+DoneStatus:
+   Brand:"1"
+   msrequest:3232
+   MSSeq:1192
+   reqsource:"Source1"
+   reqstatus:2
+
+FailedStatus:
+   Brand:"1"
+   msrequest:3233
+   MSSeq:1192
+   reqsource:"Source2"
+   reqstatus:3
+
+FailedStatus2:
+   Brand:"1"
+   msrequest:3234
+   MSSeq:1192
+   reqsource:"Source9"
+   reqstatus:9
+
+CanceledStatus:
+   Brand:"1"
+   msrequest:3235
+   MSSeq:1192
+   reqsource:"Source3"
+   reqstatus:4
+
+# newton__change_request_status; ok
+PendingStatus:
+   Brand:"1"
+   MsRequest:3236
+   MSSeq:1192
+   reqsource:"Source4"
+   ReqStatus:5
+   ReqType:4
+   OrigRequest:0
+
+# newton__set_icc; existing set ICC process
+SetICCProcess:
+  Brand:"1"
+  MsRequest:3500
+  MsSeq:4
+  ReqType:15
+  ReqStatus:3
+
+# newton__get_history; address change
+GetHistoryAddressChange:
+   Brand:"1"
+   ReqType:6
+   CustNum:45
+   ReqStatus:0
+   MsRequest:3600
+   DoneStamp:20080909,43200
+   ReqCParam1:"C1"
+   ReqCParam2:"C2"
+   ReqCParam3:"C3"
+   ReqCParam4:"C4"
+   ReqIParam1:23
+   ReqIParam2:23555
+   ReqIParam3:33
+   ReqIParam4:33344
+   UserCode:"user"
+
+# newton__get_history; owner request
+GetHistoryOwnerRequest:
+   Brand:"1"
+   ReqType:7
+   CustNum:45
+   ReqStatus:2
+   MsRequest:3601
+   UserCode:"user2"
+   ActStamp:20080920,30300
+
+
+# newton__get_history; loop request, reqtype 0
+GetHistoryReqType0:
+   Brand:"1"
+   MsSeq:40
+   ReqType:0
+   MsRequest:3602
+   UserCode:"user3"
+   DoneStamp:20090202,20000
+   ReqStatus:0
+   ReqCParam1:"CONT"
+   ReqCParam2:"TARJ3"
+
+# newton__requests__list
+# newton__get_history; loop request; reqtype 1, SMS, no subrequest
+GetHistoryReqType1NoSubSMS:
+   ActStamp:20000404,20000
+   Brand:"1"
+   CLI:"621261222"
+   CustNum:14
+   DoneStamp:20090303,15000
+   ReqType:1
+   ReqStatus:2
+   MsSeq:40
+   MsRequest:3603
+   UserCode:"user4"
+   ReqCParam1:"SMS"
+
+# newton__requests__get
+# newton__requests__list
+# newton__get_history; loop request; reqtype 1: SMS, subrequest
+GetHistoryReqType1SubSMS:
+   ActStamp:20090305,20000
+   Brand:"1"
+   CLI:"622002000"
+   CreStamp:20090302,20000
+   CreateFees:FALSE
+   CustNum:16
+   DoneStamp:20090304,12000
+   UpdateStamp:20090707,20000
+   ReqType:1
+   ReqSource:"ReqSrc1"
+   ReqStatus:2
+   SendSMS:2
+   SMSText:"SMS Text was..."
+   MsSeq:40
+   MsRequest:3604
+   UserCode:"user5"
+   ReqIParam1:1
+   ReqCParam1:"SMS"
+   ReqCParam4:"3605"
+
+# newton__get_history; loop request; subrequest for MsRequest 3604
+GetHistorySubRequest:
+   Brand:"1"
+   ReqType:1
+   ReqStatus:0
+   MsSeq:40
+   MsRequest:3605
+   DoneStamp:20090503,12000 
+   ReqCParam1:"CSubData"
+
+# newton__requeest__get
+# newton__requests__list
+# newton__get_history; loop request; vms; IParam: 0 -> off
+GetHistoryVms1:
+   ActStamp:20090605,20000
+   Brand:"1"
+   CLI:"600200200"
+   CreateFees:TRUE
+   CreStamp:20090601,20000
+   CustNum:14
+   DoneStamp:20090602,23000
+   UpdateStamp:20090604,20000
+   ReqType:1
+   ReqSource:"ReqSrc2"
+   ReqStatus:2
+   MsSeq:40
+   MsRequest:3606
+   SendSMS:1
+   SMSText:"SMS Text 2 is..."
+   UserCode:"uservms1"
+   ReqCParam1:"VMS"
+   ReqIParam1:0
+
+# newton__requests__list
+# newton__get_history; loop request; vms; IParam: 1 -> on
+GetHistoryVms2:
+   ActStamp:20090705,37030
+   Brand:"1"
+   CLI:"644044044"
+   CustNum:16
+   DoneStamp:20090701,22000
+   ReqType:1
+   ReqStatus:2
+   MsSeq:40
+   MsRequest:3607
+   UserCode:"uservms2"
+   ReqCParam1:"VMS"
+   ReqIParam1:1
+
+# newton__requests__list
+# newton__get_history; loop request; vms; IParam: 2 -> "2"
+GetHistoryVms3:
+   ActStamp:20090703,23000
+   Brand:"1"
+   CLI:"622020202"
+   CustNum:999999
+   DoneStamp:20090702,22000
+   ReqType:1
+   ReqStatus:2
+   MsSeq:40
+   MsRequest:3608
+   UserCode:"uservms3"
+   ReqCParam1:"VMS"
+   ReqIParam1:2
+
+# newton__get_history; loop request; reqtype 15 = ICC change
+GetHistoryICCChange:
+   Brand:"1"
+   ReqType:15
+   ReqStatus:2
+   MsSeq:40
+   MsRequest:3609
+   UserCode:"usericcchanhe"
+   DoneStamp:20090812,34000
+   ReqCParam2:"8373737373733"
+
+# newton__get_history; loop request; other request type
+GetHistoryOtherReqType:
+   Brand:"1"
+   ReqType:3
+   ReqStatus:2
+   MsSeq:40
+   MsRequest:3610
+   UserCode:"UserOther"
+   DoneStamp:20100101,12000
+   ReqCParam1:"CData1;CData2"
+
+# newton__requests__get
+NoCustomer:
+   ActStamp:20100605,20000
+   Brand:"1"
+   CLI:"600222222"
+   CreateFees:TRUE
+   CreStamp:20100601,20000
+   CustNum:999999
+   DoneStamp:20100602,23000
+   UpdateStamp:20100604,20000
+   ReqType:2
+   ReqSource:"ReqSrc2"
+   ReqStatus:5
+   MsSeq:40
+   MsRequest:3611
+   SendSMS:1
+   SMSText:"SMS Text 3 is..."
+   UserCode:"userx"
+   ReqCParam1:""
+   ReqIParam1:0
+
+

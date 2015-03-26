@@ -1,0 +1,74 @@
+ADD FIELD "FromDate" OF "RepText" AS date
+  DESCRIPTION ""
+  FORMAT "99-99-99"
+  FORMAT-SA ?
+  POSITION 9
+  INITIAL ?
+  INITIAL-SA ?
+  HELP "Date when text becomes effective"
+  HELP-SA ""
+  LABEL "From"
+  LABEL-SA ?
+  COLUMN-LABEL ?
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 80
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "ToDate" OF "RepText" AS date
+  DESCRIPTION ""
+  FORMAT "99-99-99"
+  FORMAT-SA ?
+  POSITION 10
+  INITIAL ?
+  INITIAL-SA ?
+  HELP "Date when text expires"
+  HELP-SA ""
+  LABEL "To"
+  LABEL-SA ?
+  COLUMN-LABEL ?
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 90
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+RENAME INDEX "LinkCode" TO "temp-88469" ON "RepText"
+
+ADD INDEX "LinkCode" ON "RepText"
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "TextType" ASCENDING
+  INDEX-FIELD "LinkCode" ASCENDING
+  INDEX-FIELD "Language" ASCENDING
+  INDEX-FIELD "ToDate" DESCENDING
+
+UPDATE PRIMARY INDEX "LinkCode" ON "RepText"
+
+DROP INDEX "temp-88469" ON "RepText"
+DROP INDEX "LinkNum" ON "RepText"
+DROP INDEX "TextType" ON "RepText"
+
+.
+PSC
+cpstream=1252
+.
+0000011798

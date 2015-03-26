@@ -1,0 +1,118 @@
+@media print
+{
+  body {
+    font-size: 10pt;
+  }
+}
+
+
+body
+{
+  font-family: "DejaVu Sans","Bitstream Vera Sans",Verdana,sans-serif;
+}
+
+h1
+{
+  font-size: 2.0em;
+  margin-top: 0;
+}
+
+h2
+{
+  font-size: 1.5em;
+}
+
+h3
+{
+  font-size: 1.2em;
+}
+
+h4
+{
+  font-size: 1.0em;
+}
+
+h2, h3, h4, h5, h6
+{
+  margin-top: 1em;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+  margin-bottom: 0;
+}
+
+p, li
+{
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+}
+
+div
+{
+  margin: 0 0 0 0;
+}
+
+table
+{
+  border-collapse: collapse;
+}
+
+tr
+{
+  vertical-align: top;
+}
+
+th
+{
+  text-align: left;
+}
+
+th, td
+{
+  padding: 0.2em 0.2em 0.2em 0.2em;
+}
+
+ul, ol
+{
+  margin: 0 0 0 0;
+}
+
+var
+{
+  font-style: italic;
+}
+
+code, kbd, samp
+{
+  font-family: "DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
+  font-style: normal;
+  font-size: 1em;
+}
+
+.nolink
+{
+  text-decoration: line-through;
+}
+
+.draft, .draft a
+{
+  color: grey;
+}
+.example
+{
+  background-color: #f0f0f0;
+  border-left: solid 1px Black;
+  margin-top: 1em;
+  margin-bottom: 1.5em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+.imageBlock
+{
+  margin-top: 1em;
+  margin-bottom: 1.5em;
+}
+

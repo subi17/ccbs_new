@@ -1,0 +1,4 @@
+ADD INDEX "FirstName" ON "Customer"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "FirstName" ASCENDING

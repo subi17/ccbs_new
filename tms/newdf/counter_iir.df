@@ -1,0 +1,953 @@
+ADD TABLE "InvRowCounter"
+  AREA "Sta_Data_64"
+  LABEL "Invoice Row Counter"
+  DESCRIPTION "Invoice row counter"
+  DUMP-NAME "invrowcounter"
+
+ADD FIELD "InvNum" OF "InvRowCounter" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Invoice Number"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Invoice"
+  HELP "Invoice number (internal)"
+  ORDER 10
+
+ADD FIELD "SubInvNum" OF "InvRowCounter" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "SubInvoice Number"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "SubInv"
+  HELP "Sequential nbr of the subinvoice within the combined invoice"
+  ORDER 20
+
+ADD FIELD "InvSeq" OF "InvRowCounter" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "EDR Sequence"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "EDR Seq."
+  HELP "EDR sequence"
+  ORDER 30
+
+ADD FIELD "CLI" OF "InvRowCounter" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "MSISDN"
+  POSITION 5
+  MAX-WIDTH 24
+  HELP "MSISDN"
+  ORDER 40
+
+ADD FIELD "BillCode" OF "InvRowCounter" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Billing Item"
+  POSITION 6
+  MAX-WIDTH 32
+  COLUMN-LABEL "Bill.Item"
+  HELP "Billing item ID"
+  ORDER 50
+
+ADD FIELD "CCN" OF "InvRowCounter" AS integer 
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "Report CCN"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "CCN"
+  HELP "Reporting CCN"
+  ORDER 60
+  MANDATORY
+
+ADD FIELD "TariffNum" OF "InvRowCounter" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Tariff ID"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Tariff"
+  HELP "Tariff ID"
+  ORDER 70
+
+ADD FIELD "InvCust" OF "InvRowCounter" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Invoice Customer"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "Inv.Cust"
+  HELP "Invoice customer"
+  ORDER 80
+
+ADD FIELD "MsSeq" OF "InvRowCounter" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "Subscr.ID"
+  HELP "Subscription ID"
+  ORDER 90
+
+ADD FIELD "ReportingID" OF "InvRowCounter" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Reporting ID"
+  POSITION 11
+  MAX-WIDTH 40
+  COLUMN-LABEL "Report"
+  HELP "Reporting ID (list)"
+  ORDER 100
+
+ADD FIELD "FromDate" OF "InvRowCounter" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Events From"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Beginning of event period"
+  ORDER 110
+
+ADD FIELD "ToDate" OF "InvRowCounter" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Events To"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Events to date"
+  ORDER 120
+
+ADD FIELD "VATIncl" OF "InvRowCounter" AS logical 
+  FORMAT "Incl/Excl"
+  INITIAL "no"
+  LABEL "Tax Included"
+  POSITION 14
+  MAX-WIDTH 1
+  COLUMN-LABEL "Tax"
+  HELP "Is tax Included/Excluded in amounts"
+  ORDER 130
+
+ADD FIELD "DCEvent" OF "InvRowCounter" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Service Package ID"
+  POSITION 15
+  MAX-WIDTH 32
+  COLUMN-LABEL "Service"
+  HELP "Service package ID"
+  ORDER 140
+
+ADD FIELD "Quantity" OF "InvRowCounter" AS integer 
+  FORMAT "->>>>>>>>9"
+  INITIAL "0"
+  LABEL "Quantity"
+  POSITION 16
+  MAX-WIDTH 4
+  COLUMN-LABEL "Qty"
+  HELP "Quantity"
+  ORDER 150
+
+ADD FIELD "Duration" OF "InvRowCounter" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Duration"
+  POSITION 17
+  MAX-WIDTH 4
+  HELP "Duration"
+  ORDER 160
+
+ADD FIELD "Amount" OF "InvRowCounter" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Amount"
+  POSITION 18
+  MAX-WIDTH 21
+  COLUMN-LABEL "Amt"
+  HELP "Amount"
+  DECIMALS 6
+  ORDER 170
+
+ADD FIELD "DataAmt" OF "InvRowCounter" AS decimal 
+  FORMAT "->>>>>>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Data Amount"
+  POSITION 19
+  MAX-WIDTH 21
+  COLUMN-LABEL "Data"
+  HELP "Data amount"
+  DECIMALS 6
+  ORDER 180
+
+ADD FIELD "RefPrice" OF "InvRowCounter" AS decimal 
+  FORMAT "->>>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Reference Price"
+  POSITION 20
+  MAX-WIDTH 21
+  COLUMN-LABEL "Ref.Price"
+  HELP "Reference price amount"
+  DECIMALS 6
+  ORDER 190
+
+ADD FIELD "ExtraAmount" OF "InvRowCounter" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Extra Amount"
+  POSITION 21
+  MAX-WIDTH 21
+  COLUMN-LABEL "Extra"
+  HELP "Extra amount"
+  DECIMALS 6
+  ORDER 200
+
+ADD FIELD "RealQty" OF "InvRowCounter" AS integer 
+  FORMAT "->>>>>>>>9"
+  INITIAL "0"
+  LABEL "Real Quantity"
+  POSITION 22
+  MAX-WIDTH 4
+  COLUMN-LABEL "Real Qty"
+  HELP "Real quantity of EDRs"
+  ORDER 210
+
+ADD INDEX "InvCust" ON "InvRowCounter" 
+  AREA "Dyn_Index_1"
+  PRIMARY
+  INDEX-FIELD "InvCust" ASCENDING 
+  INDEX-FIELD "InvSeq" ASCENDING 
+  INDEX-FIELD "BillCode" ASCENDING 
+  INDEX-FIELD "CCN" ASCENDING 
+  INDEX-FIELD "ToDate" ASCENDING 
+
+ADD INDEX "MsSeq" ON "InvRowCounter" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "InvNum" ON "InvRowCounter"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "InvNum" ASCENDING
+  INDEX-FIELD "SubInvNum" ASCENDING
+
+ADD TABLE "TMQueue"
+  AREA "Sta_Data_128"
+  LABEL "TM Queue"
+  DESCRIPTION "TM queue"
+  DUMP-NAME "tmqueue"
+
+ADD FIELD "EventID" OF "TMQueue" AS integer 
+  FORMAT ">>>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Event ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Event id"
+  ORDER 10
+
+ADD FIELD "MsSeq" OF "TMQueue" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "MobSub"
+  HELP "Mobile subscription ID"
+  ORDER 20
+
+ADD FIELD "CustNum" OF "TMQueue" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Cust"
+  HELP "Customer number"
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "DateSt" OF "TMQueue" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Event Date"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Date"
+  HELP "Event date"
+  ORDER 40
+
+ADD FIELD "BillCode" OF "TMQueue" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Billing Item"
+  POSITION 6
+  MAX-WIDTH 32
+  COLUMN-LABEL "BillItem"
+  HELP "Billing item code"
+  ORDER 50
+  MANDATORY
+
+ADD FIELD "RateCCN" OF "TMQueue" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "CCN"
+  POSITION 7
+  MAX-WIDTH 4
+  HELP "Call case number"
+  ORDER 60
+  MANDATORY
+
+ADD FIELD "BDest" OF "TMQueue" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "B-number"
+  POSITION 8
+  MAX-WIDTH 50
+  COLUMN-LABEL "BDest"
+  HELP "B-number"
+  ORDER 70
+  MANDATORY
+
+ADD FIELD "SpoCMT" OF "TMQueue" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "TCC"
+  POSITION 9
+  MAX-WIDTH 4
+  HELP "Technical call case number"
+  ORDER 80
+
+ADD FIELD "BillDur" OF "TMQueue" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Billing Duration"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "Duration"
+  HELP "Duration"
+  ORDER 90
+
+ADD FIELD "Amount" OF "TMQueue" AS decimal 
+  FORMAT "->>>>>>>9.99999"
+  INITIAL "0"
+  LABEL "Amount"
+  POSITION 11
+  MAX-WIDTH 20
+  HELP "Amount"
+  DECIMALS 5
+  ORDER 100
+
+ADD FIELD "Qty" OF "TMQueue" AS integer 
+  FORMAT "-9"
+  INITIAL "0"
+  LABEL "Quantity"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "Qty"
+  HELP "Quantity"
+  ORDER 110
+
+ADD FIELD "DataIn" OF "TMQueue" AS decimal 
+  FORMAT ">>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Data In"
+  POSITION 13
+  MAX-WIDTH 17
+  HELP "Data in"
+  DECIMALS 2
+  ORDER 120
+
+ADD FIELD "DataOut" OF "TMQueue" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Data Out"
+  POSITION 14
+  MAX-WIDTH 17
+  HELP "Data out"
+  DECIMALS 2
+  ORDER 130
+
+ADD FIELD "InvCust" OF "TMQueue" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Inv.Customer"
+  POSITION 15
+  MAX-WIDTH 4
+  COLUMN-LABEL "InvCust"
+  HELP "Invoicing customer's number"
+  ORDER 140
+  MANDATORY
+
+ADD FIELD "AgrCust" OF "TMQueue" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Agr.Customer"
+  POSITION 16
+  MAX-WIDTH 4
+  COLUMN-LABEL "AgrCust"
+  HELP "Agreement customer's number"
+  ORDER 150
+  MANDATORY
+
+ADD FIELD "CLIType" OF "TMQueue" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "CLI Type"
+  POSITION 17
+  MAX-WIDTH 24
+  COLUMN-LABEL "CLIType"
+  HELP "CLI type"
+  ORDER 160
+
+ADD FIELD "PayType" OF "TMQueue" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Payment Type"
+  POSITION 18
+  MAX-WIDTH 4
+  COLUMN-LABEL "PayType"
+  HELP "Payment type"
+  ORDER 170
+
+ADD FIELD "PPBalance" OF "TMQueue" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Prepaid Balance"
+  POSITION 19
+  MAX-WIDTH 17
+  COLUMN-LABEL "PP Balance"
+  HELP "Prepaid balance after this ticket"
+  DECIMALS 2
+  ORDER 180
+
+ADD FIELD "Source" OF "TMQueue" AS character 
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "Source"
+  POSITION 20
+  MAX-WIDTH 8
+  COLUMN-LABEL "Source"
+  ORDER 190
+
+ADD FIELD "PeriodFrom" OF "TMQueue" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "FromDate"
+  POSITION 21
+  MAX-WIDTH 4
+  COLUMN-LABEL "Period from"
+  HELP "Billing period from"
+  ORDER 200
+         
+ADD FIELD "PeriodTo" OF "TMQueue" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "ToDate"
+  POSITION 22
+  MAX-WIDTH 4
+  COLUMN-LABEL "Period to"
+  HELP "Billing period to"
+  ORDER 210
+
+ADD FIELD "InvSeq" OF "TMQueue" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "InvSeq"
+  POSITION 23
+  MAX-WIDTH 4
+  COLUMN-LABEL "InvSeq"
+  HELP "InvSeq"
+  ORDER 220
+
+ADD FIELD "CCN" OF "TMQueue" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "Reporting CCN"
+  POSITION 24
+  MAX-WIDTH 4
+  COLUMN-LABEL "CCN"
+  HELP "Reporting CCN"
+  ORDER 230
+
+ADD FIELD "ReportingID" OF "TMQueue" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Reporting ID"
+  POSITION 25
+  MAX-WIDTH 40
+  COLUMN-LABEL "Rep.ID"
+  HELP "Reporting ID"
+  ORDER 240
+
+ADD FIELD "DCEvent" OF "TMQueue" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Service Package ID"
+  POSITION 26
+  MAX-WIDTH 24
+  COLUMN-LABEL "Service"
+  HELP "Service package ID"
+  ORDER 250
+
+ADD FIELD "CLI" OF "TMQueue" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "MSISDN"
+  POSITION 27
+  MAX-WIDTH 24
+  HELP "MSISDN"
+  ORDER 260
+
+ADD FIELD "TariffNum" OF "TMQueue" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Tariff ID"
+  POSITION 28
+  MAX-WIDTH 4
+  COLUMN-LABEL "Tariff"
+  HELP "Tariff ID"
+  ORDER 270
+
+ADD FIELD "VatIncl" OF "TMQueue" AS logical 
+  FORMAT "Incl/Excl"
+  INITIAL "no"
+  LABEL "Tax Included"
+  POSITION 29
+  MAX-WIDTH 1
+  COLUMN-LABEL "Tax"
+  HELP "Is tax Included/Excluded in amounts"
+  ORDER 280
+
+ADD FIELD "RefPrice" OF "TMQueue" AS decimal 
+  FORMAT "->>>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Reference Price Amount"
+  POSITION 30
+  MAX-WIDTH 21
+  COLUMN-LABEL "Ref.Price"
+  HELP "Reference price amount"
+  DECIMALS 6
+  ORDER 290
+
+ADD FIELD "ExtraAmount" OF "TMQueue" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Extra Amount"
+  POSITION 31
+  MAX-WIDTH 21
+  COLUMN-LABEL "Extra"
+  HELP "Extra amount"
+  DECIMALS 6
+  ORDER 300
+
+ADD FIELD "AccumTarget" OF "TMQueue" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Accumulation Target"
+  POSITION 32
+  MAX-WIDTH 40
+  COLUMN-LABEL "Accum.Target"
+  HELP "Accumulation target(s)"
+  ORDER 310
+
+ADD INDEX "DateSt" ON "TMQueue" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "DateSt" ASCENDING 
+
+ADD INDEX "InvSeq" ON "TMQueue" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "InvSeq" ASCENDING 
+
+ADD TABLE "ActivityCounter"
+  AREA "Sta_Data_256"
+  DUMP-NAME "activitycounter"
+
+ADD FIELD "Brand" OF "ActivityCounter" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 10
+
+ADD FIELD "AcDate" OF "ActivityCounter" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "ActDate"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "ActDate"
+  ORDER 20
+
+ADD FIELD "ACValue" OF "ActivityCounter" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "ACValue"
+  POSITION 4
+  MAX-WIDTH 16
+  COLUMN-LABEL "ACValue"
+  ORDER 30
+
+ADD FIELD "ACSubValue" OF "ActivityCounter" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "ACSubValue"
+  POSITION 5
+  MAX-WIDTH 16
+  COLUMN-LABEL "ACSubValue"
+  ORDER 40
+
+ADD FIELD "DecValue" OF "ActivityCounter" AS decimal 
+  FORMAT "->>>>>>>>9.9999"
+  INITIAL "0"
+  LABEL "Decimal Value"
+  POSITION 6
+  MAX-WIDTH 21
+  COLUMN-LABEL "Dec"
+  HELP "Decimal value"
+  DECIMALS 6
+  ORDER 50
+
+ADD FIELD "IntValue" OF "ActivityCounter" AS integer 
+  DESCRIPTION ""
+  FORMAT "->>>>>>>9"
+  INITIAL "0"
+  LABEL "Integer Value"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Int"
+  HELP "Integer value"
+  ORDER 60
+
+ADD INDEX "AcDate" ON "ActivityCounter" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "AcDate" ASCENDING 
+  INDEX-FIELD "ACValue" ASCENDING 
+  INDEX-FIELD "ACSubValue" ASCENDING 
+
+ADD INDEX "ACValue" ON "ActivityCounter" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "ACValue" ASCENDING 
+  INDEX-FIELD "ACSubValue" ASCENDING 
+  INDEX-FIELD "AcDate" DESCENDING 
+
+ADD TABLE "TriggerEvent"
+  AREA "Dyn_Data_64"
+  DESCRIPTION "Auto-generated sequence number for TriggerEvent ID"
+  DUMP-NAME "triggerevent"
+
+ADD FIELD "TriggerEventID" OF "TriggerEvent" AS integer 
+  DESCRIPTION ""
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "TriggerEventID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "TriggerEventID"
+  HELP "Trigger EventID"
+  ORDER 10
+
+ADD FIELD "TriggerConfID" OF "TriggerEvent" AS character 
+  DESCRIPTION ""
+  FORMAT "x(14)"
+  INITIAL ""
+  LABEL "TriggerConf"
+  POSITION 3
+  MAX-WIDTH 28
+  COLUMN-LABEL "TriggerConf"
+  HELP "Trigger Configuration code"
+  ORDER 20
+
+ADD FIELD "EventSource" OF "TriggerEvent" AS character 
+  DESCRIPTION ""
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Activated"
+  POSITION 4
+  MAX-WIDTH 24
+  COLUMN-LABEL "Activated"
+  HELP "Name of the activation module"
+  ORDER 30
+
+ADD FIELD "StatusCode" OF "TriggerEvent" AS integer 
+  DESCRIPTION ""
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "StatusCode"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "StatusCode"
+  HELP "Status of Trigger Event"
+  ORDER 40
+
+ADD FIELD "Created" OF "TriggerEvent" AS datetime 
+  DESCRIPTION ""
+  FORMAT "99-99-9999 HH:MM:SS.SSS"
+  INITIAL ?
+  LABEL "Created"
+  POSITION 6
+  MAX-WIDTH 8
+  COLUMN-LABEL "Created"
+  HELP "Event creation date and time"
+  ORDER 50
+
+ADD FIELD "Activated" OF "TriggerEvent" AS datetime 
+  DESCRIPTION ""
+  FORMAT "99-99-9999 HH:MM:SS.SSS"
+  INITIAL ?
+  LABEL "Activated"
+  POSITION 7
+  MAX-WIDTH 8
+  COLUMN-LABEL "Activated"
+  HELP "Event activated Date and Time"
+  ORDER 60
+
+ADD FIELD "Handled" OF "TriggerEvent" AS datetime 
+  FORMAT "99-99-9999 HH:MM:SS.SSS"
+  INITIAL ?
+  LABEL "Handled"
+  POSITION 8
+  MAX-WIDTH 8
+  COLUMN-LABEL "Handled"
+  HELP "Event handled Date and Time"
+  ORDER 70
+
+ADD FIELD "Duration" OF "TriggerEvent" AS integer 
+  DESCRIPTION ""
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "Duration"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "Duration"
+  HELP "Time(sec) taken to complete the activity"
+  ORDER 80
+
+ADD FIELD "Qty" OF "TriggerEvent" AS integer 
+  DESCRIPTION ""
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "Qty"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "Qty"
+  HELP "Generated items (qty)"
+  ORDER 90
+
+ADD FIELD "ChangedFields" OF "TriggerEvent" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "ChangedFields"
+  POSITION 11
+  MAX-WIDTH 80
+  COLUMN-LABEL "ChangedField"
+  HELP "All changed fields"
+  ORDER 100
+
+ADD FIELD "TableID" OF "TriggerEvent" AS recid 
+  DESCRIPTION ""
+  FORMAT ">>>>>>>>>>>9"
+  INITIAL ?
+  LABEL "TableID"
+  POSITION 12
+  MAX-WIDTH 8
+  COLUMN-LABEL "TableID"
+  HELP "RecordID"
+  ORDER 110
+
+ADD FIELD "TableName" OF "TriggerEvent" AS character 
+  DESCRIPTION ""
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Table Name"
+  POSITION 13
+  MAX-WIDTH 30
+  COLUMN-LABEL "Table"
+  HELP "Table related to the action"
+  ORDER 120
+  MANDATORY
+
+ADD FIELD "ChangedValues" OF "TriggerEvent" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "ChangedValues"
+  POSITION 14
+  MAX-WIDTH 40
+  COLUMN-LABEL "ChangedValues"
+  HELP "Changed Values"
+  ORDER 130
+
+ADD FIELD "KeyValue" OF "TriggerEvent" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Key Value"
+  POSITION 15
+  MAX-WIDTH 32
+  COLUMN-LABEL "Key"
+  HELP "Key value of the record related to the action"
+  ORDER 140
+  MANDATORY
+
+ADD FIELD "Reason" OF "TriggerEvent" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Reason"
+  POSITION 16
+  MAX-WIDTH 32
+  COLUMN-LABEL "Reason"
+  HELP "Reason"
+  ORDER 150
+
+ADD INDEX "TriggerConf" ON "TriggerEvent" 
+  AREA "Dyn_Index_2"
+  PRIMARY
+  INDEX-FIELD "TriggerConfID" ASCENDING 
+  INDEX-FIELD "StatusCode" ASCENDING 
+
+ADD INDEX "TriggerEventID" ON "TriggerEvent" 
+  AREA "Dyn_Index_2"
+  INDEX-FIELD "TriggerEventID" ASCENDING 
+  INDEX-FIELD "Created" DESCENDING 
+
+ADD TABLE "TriggerItem"
+  AREA "Sta_Data_64"
+  DESCRIPTION ""
+  DUMP-NAME "triggeritem"
+
+ADD FIELD "TriggerEventID" OF "TriggerItem" AS integer 
+  DESCRIPTION ""
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "TriggerEventID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "TriggerEventID"
+  HELP "Trigger EventID"
+  ORDER 10
+
+ADD FIELD "TriggerConfID" OF "TriggerItem" AS character 
+  DESCRIPTION ""
+  FORMAT "x(14)"
+  INITIAL ""
+  LABEL "TriggerConf"
+  POSITION 3
+  MAX-WIDTH 28
+  COLUMN-LABEL "TriggerConf"
+  HELP "Trigger Configuration code"
+  ORDER 20
+
+ADD FIELD "InvCust" OF "TriggerItem" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "InvCust"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "InvCust"
+  HELP "Number of Customer Invoice"
+  ORDER 30
+
+ADD FIELD "Period" OF "TriggerItem" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL "0"
+  LABEL "Period"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Period"
+  HELP "Rating Period"
+  ORDER 40
+
+ADD FIELD "Created" OF "TriggerItem" AS datetime 
+  DESCRIPTION ""
+  FORMAT "99-99-9999 HH:MM:SS.SSS"
+  INITIAL ?
+  LABEL "Created"
+  POSITION 6
+  MAX-WIDTH 8
+  COLUMN-LABEL "Created"
+  HELP "Event creation date and time"
+  ORDER 50
+
+ADD FIELD "Handled" OF "TriggerItem" AS datetime 
+  FORMAT "99-99-9999 HH:MM:SS.SSS"
+  INITIAL ?
+  LABEL "Handled"
+  POSITION 7
+  MAX-WIDTH 8
+  COLUMN-LABEL "Handled"
+  HELP "Date and Time when trigger item was handled"
+  ORDER 60
+
+ADD FIELD "Activated" OF "TriggerItem" AS datetime 
+  DESCRIPTION ""
+  FORMAT "99-99-9999 HH:MM:SS.SSS"
+  INITIAL ?
+  LABEL "Activated"
+  POSITION 8
+  MAX-WIDTH 8
+  COLUMN-LABEL "Activated"
+  HELP "Date and time when trigger item was activated"
+  ORDER 70
+
+ADD FIELD "StatusCode" OF "TriggerItem" AS integer 
+  DESCRIPTION ""
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "StatusCode"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "StatusCode"
+  HELP "Status of Trigger Item"
+  ORDER 80
+
+ADD FIELD "CLI" OF "TriggerItem" AS character 
+  FORMAT "x(14)"
+  INITIAL ""
+  LABEL "CLI"
+  POSITION 10
+  MAX-WIDTH 28
+  COLUMN-LABEL "CLI"
+  HELP "Rating CLI"
+  ORDER 35
+
+ADD INDEX "InvCust" ON "TriggerItem" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "InvCust" ASCENDING 
+  INDEX-FIELD "StatusCode" ASCENDING 
+
+ADD INDEX "Created" ON "TriggerItem" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Created" DESCENDING 
+
+ADD INDEX "TriggerConfID" ON "TriggerItem" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "TriggerConfID" ASCENDING 
+  INDEX-FIELD "TriggerEventID" ASCENDING 
+  INDEX-FIELD "StatusCode" ASCENDING 
+  INDEX-FIELD "Period" DESCENDING 
+
+ADD SEQUENCE "TriggerEvent"
+  INITIAL 1
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 1
+
+.
+PSC
+cpstream=ISO8859-1
+.
+0000005889
+

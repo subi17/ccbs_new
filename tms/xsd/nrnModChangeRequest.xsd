@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/nrnModChangeRequest" xmlns:tns="http://www.example.org/nrnModChangeRequest">
+
+
+
+    <complexType name="DataType">
+    	<attribute name="newNrn">
+    		<simpleType>
+    			<restriction base="string">
+    				<length value="6"></length>
+    				<pattern value="\d+"></pattern>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="oldNrn">
+    		<simpleType>
+    			<restriction base="string">
+    				<pattern value="\d+"></pattern>
+    				<length value="6"></length>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="msisdnStart">
+    		<simpleType>
+    			<restriction base="string">
+    				<pattern value="\d+"></pattern>
+    				<length value="9"></length>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="msisdnEnd">
+    		<simpleType>
+    			<restriction base="string">
+    				<pattern value="\d+"></pattern>
+    				<length value="9"></length>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    </complexType>
+
+    <complexType name="nrnModChangeRequestType">
+    	<sequence>
+            <element name="formRequestCode" minOccurs="1" maxOccurs="1" type="string">
+    		</element>
+            <element name="changeWindowDate" type="dateTime" minOccurs="0" maxOccurs="1">
+    		</element>
+            <element name="numberingData" type="tns:DataType"
+    			minOccurs="0" maxOccurs="unbounded">
+    		</element>
+        </sequence>
+
+    </complexType>
+
+    <element name="nrnModChangeRequest" type="tns:nrnModChangeRequestType"></element>
+</schema>

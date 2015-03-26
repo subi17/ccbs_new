@@ -1,0 +1,8 @@
+# newton__check_renove
+ChkRenoveFMItem:
+   Brand:"1"
+   FeeModel:"RenoveFeeModel"
+   PriceList:"PriceList"
+   FromDate:"12/12/1970"
+   ToDate:"10/10/2040"
+   Amount:60,70

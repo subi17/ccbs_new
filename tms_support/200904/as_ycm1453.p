@@ -1,0 +1,73 @@
+{commpaa.i}
+katun = "anttis".
+gcBrand = "1".
+{fsubstermreq.i}
+{msisdn.i}
+
+def stream sin.
+input stream sin from /apps/snet/200904/as_ycm1453.input.
+
+def stream slog.
+output stream slog to /apps/snet/200904/as_ycm1453.log.
+
+DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO. 
+def buffer tmbuf for termmobsub. 
+
+DEFINE VARIABLE liMsisdnStat AS INTEGER NO-UNDO. 
+DEFINE VARIABLE liSimStat AS INTEGER NO-UNDO. 
+DEFINE VARIABLE liQuarTime AS INTEGER NO-UNDO.
+DEFINE VARIABLE ldaKillDate AS DATE NO-UNDO. 
+DEFINE VARIABLE liTime AS INTEGER NO-UNDO. 
+
+repeat:
+   
+   import stream sin unformatted lcCLi. 
+   
+   FIND first termmobsub where
+      termmobsub.cli = lccli NO-LOCK NO-ERROR.
+   
+   FOR EACH tmbuf WHERE 
+            tmbuf.cli = termmobsub.cli NO-LOCK: 
+      
+      if tmbuf.activationdate > termmobsub.activationdate then
+         find termmobsub where rowid(termmobsub) = rowid(tmbuf) NO-LOCK.
+
+   end.
+
+   find first msisdn where
+      msisdn.brand = "1" and
+      msisdn.cli = termmobsub.cli NO-LOCK use-index cli NO-eRROR.
+
+   find first order where
+      order.msseq = termmobsub.msseq and
+      order.statuscode = "6" NO-LOCK NO-ERROR.
+   
+   FIND msrequest where
+      msrequest.msseq = termmobsub.msseq and
+      msrequest.reqtype = 18 and
+      msrequest.reqstatus = 2 NO-LOCK NO-ERROR.
+
+   fInitialiseValues(
+      2,
+      (Order.mnpstatus = 0),
+      output liMsisdnStat,
+      output liSimStat,
+      output liQuarTime
+   ).
+
+   fSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
+  
+   if msisdn.statuscode ne liMsisdnStat then do:
+      put stream slog unformatted msisdn.cli "|" 
+         msisdn.statuscode "|" liMsisdnStat "|" ldaKillDate "|" liQuarTime skip. 
+      fMakeMsidnHistory(recid(msisdn)).
+      assign
+         msisdn.statuscode = liMsisdnStat
+         msisdn.portingdate = ldaKillDate. 
+
+   end.
+   else do:
+      put stream slog unformatted msisdn.cli "|" 
+         msisdn.statuscode "|" liMsisdnStat "|" ldaKillDate "|" liQuartime "|ok" skip. 
+   end.
+end.

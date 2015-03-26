@@ -1,0 +1,12 @@
+run tablecount.p "common".
+run tablecount.p "ordercanal".
+run tablecount.p "mobile".
+run tablecount.p "mcdr".
+run tablecount.p "mcdrdtl".
+run tablecount.p "star".
+run tablecount.p "prepcdr".
+run tablecount.p "roamcdr".
+run tablecount.p "fraudcdr". 
+run tablecount.p "reratelog". 
+run tablecount.p "prepedr". 
+run tablecount.p "counter". 

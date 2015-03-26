@@ -1,0 +1,99 @@
+ADD TABLE "OrderDelivery"
+  AREA "Sta_Data_32"
+  DUMP-NAME "orderdelivery"
+
+ADD FIELD "OrderId" OF "OrderDelivery" AS integer 
+  DESCRIPTION "Order sequence number"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  COLUMN-LABEL "OrderId"
+  HELP "Order sequence number"
+  ORDER 10
+
+ADD FIELD "LOId" OF "OrderDelivery" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "LOId"
+  COLUMN-LABEL "LOId"
+  HELP "Logistic operator ID"
+  ORDER 20
+
+ADD FIELD "LOTimeStamp" OF "OrderDelivery" AS datetime 
+  FORMAT "99-99-9999 HH:MM:SS"
+  INITIAL ""
+  LABEL "LOTimeStamp"
+  COLUMN-LABEL "LOTimeStamp"
+  HELP "Date and time when the LO order status has changed"
+  ORDER 30
+
+ADD FIELD "LOStatusId" OF "OrderDelivery" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "LOStatusId"
+  COLUMN-LABEL "LOStatusId"
+  HELP "LO order status code"
+  ORDER 40
+
+ADD FIELD "CourierId" OF "OrderDelivery" AS int 
+  DESCRIPTION "Partner courier company code"
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "CourierId"
+  COLUMN-LABEL "CourierId"
+  HELP "Partner courier company code"
+  ORDER 50 
+
+ADD FIELD "CourierShippingId" OF "OrderDelivery" AS character 
+  DESCRIPTION "Courier shipment ID - just in case someone must search on the courier web for extra delivery information about a specific order"
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "CourierShippingId"
+  COLUMN-LABEL "CourierShippingId"
+  HELP "Courier shipment ID"
+  ORDER 60 
+
+ADD FIELD "IncidentInfoId" OF "OrderDelivery" AS int 
+  DESCRIPTION "Information code sent by courier when there is a transport incident during the delivery service"
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "IncidentInfoId"
+  COLUMN-LABEL "IncidentInfoId"
+  ORDER 70 
+
+ADD FIELD "MeasuresInfoId" OF "OrderDelivery" AS int 
+  DESCRIPTION "Code of the measures taken by the courier company to solve a transport incident"
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "MeasuresInfoId"
+  COLUMN-LABEL "MeasuresInfoId"
+  ORDER 80 
+
+ADD FIELD "Brand" OF "OrderDelivery" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 90 
+
+ADD INDEX "OrderID" ON "OrderDelivery" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "OrderId" ASCENDING 
+  INDEX-FIELD "LOTimeStamp" DESCENDING 
+
+ADD FIELD "PayType" OF "CLIType" AS integer
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Payment Type"
+  POSITION 23
+  MAX-WIDTH 4
+  COLUMN-LABEL "PayType"
+  HELP "Payment type"
+  ORDER 220
+
+.
+PSC
+cpstream=1252

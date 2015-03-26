@@ -1,0 +1,105 @@
+Storage Area Details Help
+=========================
+
+Details of the Storage Area specified by examine-item (the "e" command).
+The selected area, it's tables and indexes are shown.
+
+The first section shows a summary of statistics about the selected
+Storage Area.
+
+Area:
+
+The Area number.  (Each AI Extent is a seperate Storage Area.)
+
+Area Name:
+
+The descriptive name of the Storage Area.
+
+Blocks:
+
+The number of blocks allocated to this extent.
+
+Hi Water:
+
+The extent high water mark.
+
+Free:
+
+The number of blocks free for AI notes.
+
+%Used:
+
+The percentage of blocks in use.
+
+RPB:
+
+The number of Rows Per Block for the area.
+
+Note:
+
+The number of tables t(#) & indexes i(#) assigned to the area. If  the
+schema area has tables or indexes assigned to it that will be indicated
+via "***".
+
+The second section shows the tables (if any) that are assigned to the
+selected area.  Tables that do not have _TableStat data available are
+indicated with a leading"*".  (This may be because -tablebase or
+-tablerangesize need adjustment.)
+
+Tbl#:
+
+The table id#.
+
+Table Name:
+
+The table name.
+
+Create:
+
+The number of record CREATE operations for this table.
+
+Read:
+
+The number of record READ operations for this table.
+
+Update:
+
+The number of record UPDATE operations for this table.
+
+Delete:
+
+The number of record DELETE operations for this table.
+
+The third section shows the indexes (if any) that are assigned to the
+selected area.  Indexes that do not have _IndexStat data available are
+indicated with a leading"*".  (This may be because -indexbase or
+-indexrangesize need adjustment.)
+
+Idx#:
+
+The index id#.
+
+Index Name:
+
+The index name.
+
+Create:
+
+The number of index CREATE operations for this index.
+
+Read:
+
+The number of index READ operations for this index.
+
+Split:
+
+The number of index SPLIT operations for this index.
+
+Delete:
+
+The number of index DELETE operations for this index.
+
+BlkDel:
+
+The number of index BLOCK DELETE operations for this index.
+

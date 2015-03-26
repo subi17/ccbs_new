@@ -1,0 +1,39 @@
+#!/bin/bash
+
+function usage() {
+  echo "$1"
+  echo
+  echo "Usage: menu2luna <pf-file> <outfile> <sourceBaseURL>"
+  echo ""
+  echo "       pf-file must contain connection to database which"
+  echo "       holds the menutree table. Usually common database."
+  echo ""
+  echo "note. You must run this tool in tms root directory"
+  exit 1
+}
+
+if [ "$1" == "" -o ! -f "$1" ]; then
+   usage "error: PF-file missing!"
+fi
+
+if [ "$2" == "" ]; then
+   usage "error: output file missing!"
+fi
+
+if [ "$3" == "" ]; then
+   usage "error: source code base url missing!"
+fi
+
+PFFILE=$1
+OUTFILE=$2
+SOURCEBASE=$3
+
+echo ""
+echo "TMS Menutree converting to Confluence WikiFormat.."
+echo ""
+echo "Using DLC: $DLC"
+echo ""
+echo "Using PROPATH: $PROPATH"
+echo ""
+echo ""
+mpro -pf $PFFILE -b -p docgen/menutree/menu2luna.p -param $SOURCEBASE,$OUTFILE

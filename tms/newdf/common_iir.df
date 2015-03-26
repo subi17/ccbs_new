@@ -1,0 +1,37 @@
+ADD FIELD "AgrCust" OF "InvSeq" AS integer
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Agreement Customer"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "Agr.Cust"
+  HELP "Agreement customer"
+  ORDER 660
+
+ADD FIELD "CustNum" OF "ServiceLCounter" AS integer 
+  DESCRIPTION "CustNum"
+  FORMAT ">>>>>>>9"
+  INITIAL ?
+  LABEL "Customer"
+  POSITION 11
+  MAX-WIDTH 4
+  COLUMN-LABEL "Cust"
+  ORDER 90
+
+ADD FIELD "Latest" OF "ServiceLCounter" AS decimal 
+  DESCRIPTION ""
+  FORMAT "99999999.999999"
+  INITIAL "0"
+  LABEL "Latest"
+  POSITION 12
+  MAX-WIDTH 20
+  COLUMN-LABEL "Latest"
+  HELP "Latest packet EDR"
+  DECIMALS 5
+  ORDER 100
+
+.
+PSC
+cpstream=ISO8859-1
+.
+0000004781

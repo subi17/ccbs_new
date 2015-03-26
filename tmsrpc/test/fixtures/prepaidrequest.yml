@@ -1,0 +1,255 @@
+# newton__get_top_up_history
+ppr_fixture1:
+   Brand:"1"
+   CLI:"62200740"
+   Entidad:"Ent1"
+   MsSeq:1192
+   PPRequest:34
+   Reference:"Ref_12_1"
+   Request:"RCG"
+   RespCode:0
+   Source:"IVR"
+   TopUpAmt:122,30
+   TSRequest:20071025,43484
+   VatAmt:135,20
+
+# newton__get_top_up_history
+ppr_fixture_multiple_set1_1:
+   Brand:"1"
+   CLI:"62200333"
+   Entidad:"Ent2"
+   MsSeq:1193
+   PPRequest:35
+   Reference:"Ref_13_2"
+   Request:"RSS"
+   RespCode:0
+   Source:"IVA"
+   TopUpAmt:122,50
+   TSRequest:20071026,43040
+   VatAmt:133,40
+
+# newton__get_top_up_history
+ppr_fixture_multiple_set1_2:
+   Brand:"1"
+   CLI:"62200337"
+   Entidad:"Ent3"
+   MsSeq:1193
+   PPRequest:36
+   Reference:"Ref_14_3"
+   Request:"RSR"
+   RespCode:0
+   Source:"IVB"
+   TopUpAmt:222,10
+   TSRequest:20071026,43020
+   VatAmt:223,30
+
+# newton__get_top_up_history
+ppr_fixture_multiple_set1_3:
+   Brand:"1"
+   CLI:"62200340"
+   Entidad:"Ent4"
+   MsSeq:1193
+   PPRequest:37
+   Reference:"Ref_15_4"
+   Request:"RST"
+   RespCode:1
+   Source:"IVC"
+   TopUpAmt:225,40
+   TSRequest: 20071026,43000
+   VatAmt:272,50
+
+# newton__get_top_up_history
+ppr_fixture_multiple_set2_1:
+   Brand:"1"
+   CLI:"62200334"
+   Entidad:"Ent5"
+   MsSeq:1194
+   PPRequest:38
+   Reference:"Ref_16_5"
+   Request:"RSB"
+   RespCode:0
+   Source:"IVA"
+   TopUpAmt:226,20
+   TSRequest:20080115,44210
+   VatAmt:3520,20
+
+# newton__get_top_up_history
+ppr_fixture_multiple_set2_2:
+   Brand:"1"
+   CLI:"62200337"
+   Entidad:"Ent6"
+   MsSeq:1194
+   PPRequest:39
+   Reference:"Ref_17_6"
+   Request:"RSC"
+   RespCode:0
+   Source:"IVB"
+   TopUpAmt:2389,30
+   TSRequest:20080115,44200
+   VatAmt:1332,30
+
+# newton__get_top_up_history
+ppr_fixture_multiple_set2_3:
+   Brand:"1"
+   CLI:"62200340"
+   Entidad:"Ent7"
+   MsSeq:1194
+   PPRequest:40
+   Reference:"Ref_18_7"
+   Request:"RSD"
+   RespCode:0
+   Source:"IVC"
+   TopUpAmt:2277,40
+   TSRequest:20080115,44000
+   VatAmt:1333,50
+
+# newton__get_top_up_history
+ppr_fixture_multiple_set2_4:
+   Brand:"1"
+   CLI:"62200333"
+   Entidad:"Ent8"
+   MsSeq:1194
+   PPRequest:41
+   Reference:"Ref_19_8"
+   Request:"RSE"
+   RespCode:1
+   Source:"IVD"
+   TopUpAmt:226,20
+   TSRequest:20080115,43000
+   VatAmt:3520,20
+
+# newton__get_top_up_history
+ppr_fixture_multiple_set2_5:
+   Brand:"1"
+   CLI:"62200350"
+   Entidad:"Ent9"
+   MsSeq:1194
+   PPRequest:42
+   Reference:"Ref_20_9"
+   Request:"RSF"
+   RespCode:0
+   Source:"IVE"
+   TopUpAmt:2389,30
+   TSRequest:20080115,42950
+   VatAmt:1332,30
+
+# newton__get_top_up_history
+ppr_fixture_multiple_set2_6:
+   Brand:"1"
+   CLI:"62200352"
+   Entidad:"Ent10"
+   MsSeq:1194
+   PPRequest:43
+   Reference:"Ref_21_10"
+   Request:"RSG"
+   RespCode:1
+   Source:"IVF"
+   TopUpAmt:2277,40
+   TSRequest:20080115,42500
+   VatAmt:1333,50
+
+# newton__get_top_up_history
+ppr_fixture_multiple_set2_7:
+   Brand:"1"
+   CLI:"62200366"
+   Entidad:"Ent11"
+   MsSeq:1194
+   PPRequest:44
+   Reference:"Ref_22_11"
+   Request:"RSH"
+   RespCode:0
+   Source:"IVG"
+   TopUpAmt:226,20
+   TSRequest:20080115,41000
+   VatAmt:3520,20
+
+# newton__get_top_up_history
+ppr_fixture_multiple_set2_8:
+   Brand:"1"
+   CLI:"62200377"
+   Entidad:"Ent12"
+   MsSeq:1194
+   PPRequest:45
+   Reference:"Ref_23_12"
+   Request:"RSI"
+   RespCode:1
+   Source:"IVH"
+   TopUpAmt:2389,30
+   TSRequest:20080113,41000
+   VatAmt:1332,30
+
+# newton__get_top_up_history
+ppr_fixture_multiple_set2_9:
+   Brand:"1"
+   CLI:"62200380"
+   Entidad:"Ent13"
+   MsSeq:1194
+   PPRequest:46
+   Reference:"Ref_24_13"
+   Request:"RSJ"
+   RespCode:0
+   Source:"IVI"
+   TopUpAmt:2277,40
+   TSRequest:20080112,65000
+   VatAmt:1333,50
+
+# newton__get_top_up_history
+ppr_fixture_multiple_set2_10:
+   Brand:"1"
+   CLI:"62200323"
+   Entidad:"Ent14"
+   MsSeq:1194
+   PPRequest:47
+   Reference:"Ref_25_14"
+   Request:"RSK"
+   RespCode:0
+   Source:"IVI"
+   TopUpAmt:3400,30
+   TSRequest:20080112,44000
+   VatAmt:1333,30
+
+# newton__get_top_up_history
+ppr_fixture_multiple_set2_11:
+   Brand:"1"
+   CLI:"62200382"
+   Entidad:"Ent15"
+   MsSeq:1194
+   PPRequest:48
+   Reference:"Ref_26_15"
+   Request:"RSL"
+   RespCode:0
+   Source:"IVJ"
+   TopUpAmt:2233,40
+   TSRequest:20080112,43000
+   VatAmt:5000,50
+
+# newton__get_commissions
+OneMobsubFirstTopup:
+   Brand:"1"
+   PPRequest:1
+   Request:"commission"
+   Reference:"2"
+   TopUpAmt:20,00
+   TSRequest:20060910,20000
+   PPStatus:2
+
+# newton__get_commissions
+OneMobsubSecondTopup:
+   Brand:"1"
+   PPRequest:2
+   Request:"commission"
+   Reference:"2"
+   TopUpAmt:12,50
+   TSRequest:20070304,12452
+   PPStatus:3
+
+# newton__get_commissions
+OneMobsubThirdTopup:
+   Brand:"1"
+   PPRequest:3
+   Request:"commission"
+   Reference:"2"
+   TopUpAmt:32,20
+   TsRequest:20081011,54242
+   PPStatus:1
+

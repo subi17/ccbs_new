@@ -1,0 +1,27 @@
+ADD FIELD "ProcessHost" OF "FuncRunProcess" AS character
+  FORMAT "x(16)"
+  POSITION 13
+  INITIAL ""
+  HELP "Host where this is processed"
+  LABEL "Host Where Processed"
+  COLUMN-LABEL "Host"
+  VIEW-AS ?
+  ORDER 180
+  MAX-WIDTH 32
+
+ADD FIELD "ProcessHost" OF "FuncRunResult" AS character
+  FORMAT "x(16)"
+  POSITION 10
+  INITIAL ""
+  HELP "Host where this result is processed"
+  LABEL "Host Where Processed"
+  COLUMN-LABEL "Host"
+  VIEW-AS ?
+  ORDER 90
+  MAX-WIDTH 32
+
+.
+PSC
+cpstream=1252
+.
+0000000549

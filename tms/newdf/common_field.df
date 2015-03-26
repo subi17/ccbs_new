@@ -1,0 +1,7 @@
+ADD FIELD "BankType" OF "BankIdCode" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Bank Type"
+  COLUMN-LABEL "BankType"
+  HELP "Bank Type (ie: IberPay or EBA)"
+  ORDER 40

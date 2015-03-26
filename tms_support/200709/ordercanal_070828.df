@@ -1,0 +1,26 @@
+ADD FIELD "FATAmount" OF "Order" AS decimal 
+  FORMAT "->>>>>>9.99"
+  INITIAL "0"
+  LABEL "FAT Amount"
+  POSITION 92
+  MAX-WIDTH 17
+  COLUMN-LABEL "FAT"
+  HELP "FATime amount"
+  DECIMALS 2
+  ORDER 1000
+
+ADD FIELD "Discount" OF "OrderAccessory" AS decimal 
+  FORMAT "->>>>9.99"
+  INITIAL "0"
+  LABEL "Discount"
+  POSITION 9
+  MAX-WIDTH 17
+  HELP "Discount amount"
+  DECIMALS 2
+  ORDER 80
+
+.
+PSC
+cpstream=iso8859-1
+.
+0000011966

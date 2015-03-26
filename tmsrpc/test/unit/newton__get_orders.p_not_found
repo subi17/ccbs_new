@@ -1,0 +1,245 @@
+/**
+ * This is the test set for the corresponding newton__get_orders
+ * XML RPC method.
+ *
+ * The fixture usage of this test set:
+ *
+ * - fixtures fetched: 
+ *
+ * - The RPC method is assumed to fetch in addition following records:
+ *
+ *
+ * - restrictions for building other fixtures: 
+ */
+
+{test_xmlrpc_includes.i}
+{unit/checkutils.i}
+{timestamp.i}
+{tsformat.i}
+
+gcFixtures = "order,ordercustomer,OrderAccessory,orderpayment,msrequest,TMSCodes".
+
+DEFINE VARIABLE gcReturnArray AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE gcReturnStruct AS CHARACTER NO-UNDO. 
+
+FUNCTION call_get_orders RETURN LOGICAL:
+    run_rpc_method("newton.get_orders").
+    RETURN TRUE.
+END FUNCTION.
+
+
+FUNCTION fAddParams RETURN LOGICAL (INPUT pcType AS CHARACTER,
+   INPUT pcKey AS CHARACTER):
+   add_string("", "", pcType).
+   add_string("", "", pcKey).
+   RETURN TRUE.
+END.
+
+FUNCTION fGetTMSCodesCodeName RETURN CHARACTER 
+  (INPUT pcTableName AS CHARACTER,
+   INPUT pcFieldName AS CHARACTER,
+   INPUT pcCodeGroup AS CHARACTER,
+   INPUT pcCodeValue AS CHARACTER, 
+   INPUT pcNotAvailValue AS CHARACTER):
+
+   DEFINE VARIABLE cRetVal AS CHARACTER NO-UNDO. 
+   FIND TMSCodes WHERE
+        TMSCodes.TableName = pcTableName AND
+        TMSCodes.FieldName = pcFieldName AND
+        TMSCodes.CodeGroup = pcCodeGroup AND
+        TMSCodes.CodeValue = pcCodeValue NO-LOCK NO-ERROR.
+   IF AVAIL TMSCodes THEN
+      cRetVal = TMSCodes.CodeName.
+   ELSE
+      cRetVal = pcNotAvailValue.
+
+   RETURN cRetVal.
+END.
+
+
+FUNCTION fCheckOrderRelatedData RETURN LOGICAL
+  (INPUT pcOrderFix AS CHARACTER, INPUT pcOrderCustFix AS CHARACTER,
+   INPUT pcOrderAccFix AS CHARACTER, INPUT pcMsRequestFix AS CHARACTER,
+   INPUT pcOrderPaymFix AS CHARACTER, INPUT piLoop AS INTEGER):
+
+   fetch_fixture(pcOrderFix, BUFFER Order:HANDLE).
+   fetch_fixture(pcOrderCustFix, BUFFER OrderCustomer:HANDLE).
+   IF pcOrderAccFix NE "" THEN
+      fetch_fixture(pcOrderAccFix, BUFFER OrderAccessory:HANDLE).
+   IF pcMsRequestFix NE "" THEN
+      fetch_fixture(pcMsRequestFix, BUFFER MsRequest:HANDLE).
+   IF pcOrderPaymFix NE "" THEN
+      fetch_fixture(pcOrderPaymFix, BUFFER OrderPayment:HANDLE).
+   
+   gcReturnStruct = get_struct(gcReturnArray, STRING(piLoop)).
+
+   /* check corresponding names from TMSCodes */
+   DEFINE VARIABLE lcExpStatusCode AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE lcExpPaymType AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE lcExpMNPStatusCode AS CHARACTER NO-UNDO. 
+
+   lcExpStatusCode = fGetTMSCodesCodeName("Order", "StatusCode", "Orders",
+      STRING(Order.StatusCode), STRING(Order.StatusCode)).
+
+   IF pcOrderPaymFix NE "" THEN
+   DO:
+      lcExpPaymType = fGetTMSCodesCodeName("OrderPayment",
+         "Method", "Orders", STRING(OrderPayment.Method), 
+         STRING(OrderPayment.Method)).
+   END.
+   ELSE
+   DO:
+      lcExpPaymType = "".
+   END.
+
+   lcExpMnpStatusCode = fGetTMSCodesCodeName("MNPProcess", "StatusCode",
+      "MNP", STRING(Order.MnpStatus - 1), STRING(Order.MnpStatus)).
+
+   checkChar("mnp_status", lcExpMnpStatusCode, 
+      get_string(gcReturnStruct, "mnp_status")).
+   checkChar("order_status", lcExpStatusCode,
+      get_string(gcReturnStruct, "order_status")).
+   checkChar("payment_type", lcExpPaymType, 
+      get_string(gcReturnStruct, "payment_type")).
+
+
+   /* Order data */
+   checkChar("Order.OrderId", STRING(Order.OrderId), 
+      get_string(gcReturnStruct, "id")).
+   checkChar("Order.ContractID", Order.ContractID,  
+      get_string(gcReturnStruct, "contract_id")).
+   checkChar("Order.CLI", Order.CLI, get_string(gcReturnStruct, "cli")).
+   checkChar("numbertype", (IF Order.MnpStatus = 0 THEN "new" ELSE "mnp"),
+             get_string(gcReturnStruct, "numbertype")).
+   checkChar("Order.CrStamp", fTSFormat("dd-mm-yyyy", Order.CrStamp),
+      get_string(gcReturnStruct, "order_date")).
+   checkChar("Order.CliType", Order.CliType, get_string(gcReturnStruct,
+      "sub_type")).
+   checkChar("Order.Campaign", Order.Campaign, get_string(gcReturnStruct,
+      "campaign_code")).
+   checkChar("Order.OrderChannel", Order.OrderChannel, 
+      get_string(gcReturnStruct, "orderchannel")).
+
+   /* ordercustomer data */
+   checkChar("names", OrderCustomer.firstname + " " + 
+                      OrderCustomer.surname1 + " " +
+                      OrderCustomer.surname2,
+                      get_string(gcReturnStruct, "names")).
+   checkChar("OrderCustomer.CustId", OrderCustomer.CustId, 
+      get_string(gcReturnStruct, "person_id")).
+   checkChar("OrderCustomer.Address", OrderCustomer.Address,
+      get_string(gcReturnStruct, "address")).
+   checkChar("zip_and_city", OrderCustomer.ZipCode + " " +
+                             OrderCustomer.PostOffice,
+              get_string(gcReturnStruct, "zip_and_city")).
+   checkChar("OrderCustomer.Region", OrderCustomer.Region,
+      get_string(gcReturnStruct, "region")).
+   checkChar("OrderCustomer.Email" , OrderCustomer.Email,
+      get_string(gcReturnStruct, "email")).
+   checkChar("OrderCustomer.MobileNumber", OrderCustomer.MobileNumber,
+      get_string(gcReturnStruct, "second_phone")).
+   checkChar("OrderCustomer.BankCode"    , OrderCustomer.BankCode,
+      get_string(gcReturnStruct, "bank_account")).
+
+   /* OrderAccessory data */
+   IF pcOrderAccFix NE "" THEN
+      checkChar("OrderAccessory.ProductCode", OrderAccessory.ProductCode,
+         get_string(gcReturnStruct, "terminal")).
+   ELSE
+      checkChar("terminal", "", get_string(gcReturnStruct, "terminal")).
+
+   /* msrequest data */
+   IF pcMsRequestFix NE "" THEN
+      checkChar("MsRequest.ActStamp", 
+         fTSFormat("dd-mm-yyyy",MsRequest.ActStamp), 
+         get_string(gcReturnStruct, "portability_window")).
+   ELSE
+      checkChar("portability_window", "", 
+         get_string(gcReturnStruct, "portability_window")).
+
+   RETURN TRUE.
+END.
+
+
+FUNCTION fLoopOrderRelatedFix RETURN LOGICAL
+   (INPUT pcOrderFixtureList AS CHARACTER,
+    INPUT pcOrderCustFixtureList AS CHARACTER,
+    INPUT pcOrderAccFixList AS CHARACTER,
+    INPUT pcMsReqFixList AS CHARACTER,
+    INPUT pcOrderPaymFixList AS CHARACTER):
+   DEFINE VARIABLE iLoop AS INTEGER NO-UNDO. 
+   DEFINE VARIABLE iEntries AS INTEGER NO-UNDO. 
+   iEntries = NUM-ENTRIES(pcOrderFixtureList).
+   REPEAT iLoop = 1 TO iEntries:
+      fCheckOrderRelatedData
+        ( ENTRY(iLoop, pcOrderFixtureList), ENTRY(iLoop, pcOrderCustFixtureList),
+          ENTRY(iLoop, pcOrderAccFixList), ENTRY(iLoop, pcMsReqFixList),
+          ENTRY(iLoop, pcOrderPaymFixList), iLoop - 1).
+   END.
+   RETURN TRUE.
+END.
+
+
+PROCEDURE test_find_by_personid_find_one:
+   fAddParams("person_id", "JNCVDSQ"). /* OrderId:1, CustId of OrderCustomer */
+   call_get_orders().
+   assert_success().
+   gcReturnArray = get_array("", "").
+   assert(get_paramcount(gcReturnArray) EQ 1, 
+      "The amount of return structs was not 1").
+   fCheckOrderRelatedData(
+      "AnotherOrderWithStatus1AndSameCLI", 
+      "OrderCustomerDetail1", "GetOrdersTerminal1", 
+      "GetOrdersRequest1", "GetOrdersPayment1", 0).
+END.
+
+
+PROCEDURE test_find_by_CLI_find_one:
+   fAddParams("phone_number", "622222222").
+   call_get_orders().
+   assert_success().
+   gcReturnArray = get_array("", "").
+   assert(get_paramcount(gcReturnArray) EQ 1, 
+      "The amount of return structs was not 1").
+   fCheckOrderRelatedData("GetOrdersOneWithCLI", 
+      "GetOrdersCust2", "", "", "", 0).
+END.
+
+
+
+PROCEDURE test_find_by_personid_find_multiple:
+   fAddParams("person_id", "DuplCustId").
+   call_get_orders().
+   assert_success().
+   gcReturnArray = get_array("", "").
+   assert(get_paramcount(gcReturnArray) EQ 2, 
+      "The amount of return structs was not 2").
+   fLoopOrderRelatedFix(
+     "GetOrdersTwoWithCustId1st,GetOrdersTwoWithCustId2nd", 
+     "GetOrdersCustIdType1st,GetOrdersCustIdType2nd", 
+     ",GetOrdersTerminal3", 
+     "GetOrdersRequest1,GetOrdersRequest2", 
+     "GetOrdersPayment2,GetOrdersPayment3").
+END.
+
+
+PROCEDURE test_find_by_CLI_find_multiple:
+   fAddParams("phone_number", "634677444").
+   call_get_orders().
+   assert_success().
+   gcReturnArray = get_array("", "").
+   assert(get_paramcount(gcReturnArray) EQ 2, 
+      "The amount of return structs was not 2").
+
+   /* Here the returned structs are returned according to CLI_s index
+      of the order table: so the fixtures must be listed in that order */
+   fLoopOrderRelatedFix(
+      "AnotherOrderWithStatus1AndSameCLI,GetOrdersTwoWithCLI2nd", 
+      "OrderCustomerDetail1,GetOrdersCustTwoWithCLI2nd", 
+      "GetOrdersTerminal1,GetOrdersTerminal2", 
+      "GetOrdersRequest1,", 
+      "GetOrdersPayment1,").
+END.
+
+
+

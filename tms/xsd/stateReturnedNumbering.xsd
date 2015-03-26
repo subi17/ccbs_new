@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/stateChanged" xmlns:tns="http://www.example.org/stateChanged">
+
+    <element name="stateChanged" type="tns:stateReturnedNumbering"></element>
+    
+    <complexType name="stateReturnedNumbering">
+    	<sequence>
+    		<element name="formRequestCode" type="string" maxOccurs="1"
+    			minOccurs="1">
+    		</element>
+    		<element name="returnRequestCode" type="string"
+    			minOccurs="1" maxOccurs="1">
+    		</element>
+    		<element name="stateReturnedNumbering" maxOccurs="1"
+    			minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">    					<enumeration value="BCAN"></enumeration>
+    					<enumeration value="BNOT"></enumeration>
+    					<enumeration value="BDEF"></enumeration>
+    				</restriction>
+    			</simpleType>
+    		</element>
+            <element name="reasonCode" minOccurs="1" maxOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<enumeration value="NSOLI"></enumeration>
+    					<enumeration value="NOTIF"></enumeration>
+    					<enumeration value="NOPET"></enumeration>
+    				</restriction>
+    			</simpleType>
+    		</element>
+            <element name="changeWindowDate" type="string" maxOccurs="1"
+    			minOccurs="0">
+    		</element>
+    	</sequence></complexType>
+</schema>

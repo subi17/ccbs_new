@@ -1,0 +1,7 @@
+ADD FIELD "BaseBundle" OF "CLIType" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "BaseBundle"
+  COLUMN-LABEL "BaseBundle"
+  HELP "Base voice/data bundle"
+  ORDER 300

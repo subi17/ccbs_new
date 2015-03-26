@@ -1,0 +1,81 @@
+ProTop Release xix
+==================
+
+
+New Stuff
+---------
+
+ - Added new display types for:
+
+	+ Helpers -- BIW, AIW and APW information
+	+ Connection Summary -- Show Overall hit ratio as well as the
+	  breakout between interactive and batch sessions.
+	+ Config and Startup -- Show key configuration and startup
+	  details.
+
+ - Moved highly variable configuration details from lib/protop.i to
+   etc/protop.cfg.
+
+ - Added color coded alert definitions to etc/alert.cfg -- you need a
+   color capable emulator and a proper protermcap to take advantage of
+   this.  There is a sample in etc/protermcap.protop.
+
+ - R-Code for people who cannot compile ProTop!
+
+ - Added OS specific monitoring for Linux, AIX, Solaris, HP-UX and Tru64
+	+ df		Free disk space
+	+ netstat	Network traffic
+
+ - Added experimental "eXtended _Connect" feature to determine UNIX
+   username and CPU time from "ps".  Rename mon/xconnect.px to
+   mon/xconnect.p to enable this feature for your system (it may be
+   a performance problem on large systems).
+
+
+Removed
+-------
+
+ - Unused scripts
+
+ - db, log & util directories -- these currently are too complex for
+   ProTop's mission.
+
+
+Small Changes
+-------------
+
+ - Changed from %used to %allocated when reporting storage area utilization.
+
+ - Minor renaming of display types to better standardize names.
+
+ - Cleaned up some column labels and alignments.
+
+ - Added a few fields here and there.
+
+ - Updates to help files.
+
+ - Reorganized OS specific directory tree to be based off "uname -a"
+ 
+
+Bug Fixes
+---------
+
+ - Cleaned up some share locks that somehow crept in :-(
+
+ - Fixed the GUI startup bug.
+
+ - Fixed the "goslow" bug.  Joins of _UserIO and _Connect are now fast.
+
+ - Various other small stuff that I didn't keep very good notes about :-(
+
+
+Information
+-----------
+
+    http://www.greenfieldtech.com/articles/protop.shtml
+
+
+Download
+--------
+
+    http://www.greenfieldtech.com/downloads/files/protop.tar

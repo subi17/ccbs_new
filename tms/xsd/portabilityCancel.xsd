@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/cancelacionPortabilidad" xmlns:tns="http://www.example.org/cancelacionPortabilidad">
+
+    <element name="portabilityCancel"
+    	type="tns:portabilityCancel">
+    </element>
+    
+    <complexType name="portabilityCancel">
+    	<sequence>
+
+    		<element name="formRequestCode" maxOccurs="1"
+    			minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<pattern value=""></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="portabilityRequestCode" maxOccurs="1"
+    			minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<pattern value=""></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="cancelReason" maxOccurs="1" minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<enumeration value="ABONA"></enumeration>
+    					<enumeration value="TECNI"></enumeration>
+    					<enumeration value="OTROS"></enumeration>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="Commentaries" type="string"></element>
+    	</sequence></complexType>
+
+
+
+
+
+
+
+
+
+</schema>

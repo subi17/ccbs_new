@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/incidenceForm" xmlns:tns="http://www.example.org/incidenceForm">
+
+    <element name="incidence" type="tns:reportIncidentType"></element>    
+    <complexType name="reportIncidentType">
+    	<sequence>
+    		<element name="portabilityIncidentCode" maxOccurs="1"
+    			minOccurs="0">
+    			<simpleType>
+    				<restriction base="string">
+    					<pattern value=".{3}-\d{4}-.{6}"></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="contactPoint" maxOccurs="1" minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<pattern value=".+"></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="creationDate" type="dateTime" maxOccurs="1"
+    			minOccurs="1">
+    		</element>
+    		<element name="personInCharge" maxOccurs="1"
+    			minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<pattern value=".+"></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="priority" maxOccurs="1" minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<enumeration value="low"></enumeration>
+    					<enumeration value="medium"></enumeration>
+    					<enumeration value="high"></enumeration>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="type" maxOccurs="1" minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<enumeration value="1001"></enumeration>
+    					<enumeration value="1002"></enumeration>
+    					<enumeration value="1003"></enumeration>
+    					<enumeration value="1004"></enumeration>
+    					<enumeration value="1005"></enumeration>
+    					<enumeration value="2001"></enumeration>
+    					<enumeration value="2002"></enumeration>
+    					<enumeration value="2003"></enumeration>
+    					<enumeration value="2004"></enumeration>
+    					<enumeration value="2005"></enumeration>
+    					<enumeration value="2006"></enumeration>
+    					<enumeration value="2007"></enumeration>
+    					<enumeration value="2008"></enumeration>
+    					<enumeration value="2009"></enumeration>
+    					<enumeration value="2010"></enumeration>
+    					<enumeration value="3001"></enumeration>
+    					<enumeration value="3003"></enumeration>
+    					<enumeration value="3004"></enumeration>
+    					<enumeration value="3005"></enumeration>
+    					<enumeration value="3006"></enumeration>
+    					<enumeration value="3007"></enumeration>
+    					<enumeration value="4001"></enumeration>
+    					<enumeration value="4002"></enumeration>
+    					<enumeration value="4003"></enumeration>
+    					<enumeration value="4004"></enumeration>
+    					<enumeration value="4005"></enumeration>
+    					<enumeration value="5001"></enumeration>
+    					<enumeration value="5002"></enumeration>
+    					<enumeration value="5003"></enumeration>
+    					<enumeration value="5004"></enumeration>
+    					<enumeration value="6001"></enumeration>
+    					<enumeration value="6002"></enumeration>
+    					<enumeration value="6005"></enumeration>
+    					<enumeration value="6006"></enumeration>
+    					<enumeration value="6007"></enumeration>
+    					<enumeration value="6008"></enumeration>
+    					<enumeration value="7001"></enumeration>
+    					<enumeration value="7003"></enumeration>
+    					<enumeration value="7004"></enumeration>
+    					<enumeration value="7005"></enumeration>
+    					<enumeration value="7006"></enumeration>
+    					<enumeration value="7007"></enumeration>
+    					<enumeration value="7008"></enumeration>
+    					<enumeration value="7009"></enumeration>
+    					<enumeration value="7010"></enumeration>
+    					<enumeration value="7011"></enumeration>
+    					<enumeration value="8001"></enumeration>
+    					<enumeration value="8002"></enumeration>
+    					<enumeration value="8003"></enumeration>
+    					<enumeration value="8004"></enumeration>
+    					<enumeration value="8005"></enumeration>
+    					<enumeration value="8006"></enumeration>
+    					<enumeration value="8007"></enumeration>
+    					<enumeration value="8008"></enumeration>
+    					<enumeration value="8009"></enumeration>
+    					<enumeration value="8010"></enumeration>
+    					<enumeration value="8011"></enumeration>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="state" maxOccurs="1" minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<enumeration value="IABI"></enumeration>
+    					<enumeration value="IRES"></enumeration>
+    					<enumeration value="ICER"></enumeration>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="reason" maxOccurs="1" minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">    					<pattern value=".+"></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="estimatedResolutionDate" type="dateTime"
+    			maxOccurs="1" minOccurs="1">
+    		</element>
+    		<element name="affectedNumber" type="tns:affectedNumberType"
+    			maxOccurs="unbounded" minOccurs="1">
+    		</element>
+    		<element name="affectedOperator" maxOccurs="unbounded"
+    			minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">    					<length value="3"></length>
+    				</restriction>
+    			</simpleType>
+    		</element>
+            <element name="affectedRequest" maxOccurs="unbounded"
+    			minOccurs="0">
+    			<simpleType>
+    				<restriction base="string">
+    					<pattern value=".+"></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
+            <element name="otherIncident" minOccurs="0" maxOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<pattern value=".{3}-\d{4}-.{6}"></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
+            <element name="workLog" type="string" maxOccurs="1"
+    			minOccurs="1">
+    		</element>
+    		<element name="otherData" maxOccurs="1" minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">    				</restriction>
+    			</simpleType>
+    		</element>
+    	</sequence>    </complexType>
+    <complexType name="affectedNumberType">
+    	<attribute name="nrn" use="required">
+    		<simpleType>
+    			<restriction base="string">
+    				<pattern value="\d+"></pattern>
+    				<length value="6"></length>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="msisdnStart" use="required">
+    		<simpleType>
+    			<restriction base="string">    				<length value="9"></length>
+    				<pattern value="\d+"></pattern>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="msisdnEnd" use="required">
+    		<simpleType>
+    			<restriction base="string">
+    				<length value="9"></length>
+    				<pattern value="\d+"></pattern>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="iccd-idStart" use="required">
+    		<simpleType>
+    			<restriction base="string">
+    				<minLength value="19"></minLength>
+    				<maxLength value="20"></maxLength>
+    				<pattern value="\d+"></pattern>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="iccd-idEnd" use="required">
+    		<simpleType>
+    			<restriction base="string">
+    				<minLength value="19"></minLength>
+    				<maxLength value="20"></maxLength>
+    				<pattern value="\d+"></pattern>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    </complexType>
+</schema>

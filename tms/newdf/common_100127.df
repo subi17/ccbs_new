@@ -1,0 +1,73 @@
+ADD TABLE "PIndicator"
+  AREA "Sta_Data_32"
+  LABEL "PIndicator"
+  DESCRIPTION " Performance Indicator"
+  DUMP-NAME "PIndicator"
+
+ADD FIELD "Brand" OF "PIndicator" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Brand"
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brands"
+  ORDER 10
+
+ADD FIELD "HostTable" OF "PIndicator" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "HostTable"
+  COLUMN-LABEL "HostTable"
+  HELP "HostTable"
+  ORDER 20
+
+ADD FIELD "KeyValue" OF "PIndicator" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "KeyValue"
+  COLUMN-LABEL "KeyValue"
+  HELP "KeyValue"
+  ORDER 30
+
+ADD FIELD "IndicatorType" OF "PIndicator" AS integer 
+  FORMAT "99"
+  INITIAL "?"
+  LABEL "Indicator Type"
+  COLUMN-LABEL "Type"
+  HELP "Indicator type"
+  ORDER 40
+
+ADD FIELD "IndicatorValue" OF "PIndicator" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Indicator Value"
+  COLUMN-LABEL "Value"
+  HELP "Indicator Value"
+  ORDER 50
+
+ADD FIELD "TimeStamp" OF "PIndicator" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Time Stamp"
+  DECIMALS 5
+  ORDER 60
+
+ADD FIELD "Memo" OF "PIndicator" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Indicator Memo"
+  COLUMN-LABEL "Indicator Memo"
+  HELP "Indicator Memo"
+  ORDER 70
+
+ADD INDEX "HostTable" ON "PIndicator" 
+  AREA "Sta_Data_32"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "KeyValue" ASCENDING 
+  INDEX-FIELD "IndicatorType" ASCENDING 
+  INDEX-FIELD "TimeStamp" DESCENDING 
+
+.
+PSC
+cpstream=1252
+.

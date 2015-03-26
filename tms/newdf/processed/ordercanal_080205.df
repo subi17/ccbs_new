@@ -1,0 +1,24 @@
+ADD FIELD "ActInterval" OF "CallAlarm" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Activation Interval"
+  POSITION 15
+  MAX-WIDTH 24
+  COLUMN-LABEL "Act.Interval"
+  HELP "Time interval of day when CallAlarm handling is allowed"
+  ORDER 140
+                
+ADD FIELD "Active" OF "Salesman" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "yes"
+  LABEL "Active"
+  POSITION 12
+  MAX-WIDTH 1
+  HELP "Is salesman active"
+  ORDER 110
+
+.
+PSC
+cpstream=1252
+.
+0000003147

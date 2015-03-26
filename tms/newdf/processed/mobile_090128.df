@@ -1,0 +1,26 @@
+ADD FIELD "StoType" OF "Stock" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Type"
+  POSITION 12
+  MAX-WIDTH 16
+  COLUMN-LABEL "Type"
+  HELP "Stock Type"
+  ORDER 110
+
+ADD FIELD "ZipCodeExp" OF "Stock" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "ZipCodeExp"
+  POSITION 13
+  MAX-WIDTH 16
+  COLUMN-LABEL "ZipCodeExp"
+  HELP "Zip code regular expression"
+  ORDER 120
+
+UPDATE FIELD "Tariff" OF "RTItem"
+  DECIMALS 7
+
+.
+PSC
+cpstream=1252

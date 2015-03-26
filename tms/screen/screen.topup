@@ -1,0 +1,5 @@
+echo "TopUp SCREENS"
+sleep 2
+screen 1 xfear -screen topup_request 
+screen 2 xfear -screen topup_queue
+#screen 3 xfear -screen sonicreader-atm

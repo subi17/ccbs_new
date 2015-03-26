@@ -1,0 +1,15 @@
+ADD FIELD "ROIResult" OF "Order" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "ROI Result"
+  POSITION 96
+  MAX-WIDTH 40
+  COLUMN-LABEL "ROI"
+  HELP "Result code from ROI"
+  ORDER 1050
+
+.
+PSC
+cpstream=1252
+.
+0000012696

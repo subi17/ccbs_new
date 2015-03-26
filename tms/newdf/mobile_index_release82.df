@@ -1,0 +1,3 @@
+ADD INDEX "PerContractID" ON "DCCli" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "PerContractID" DESCENDING 

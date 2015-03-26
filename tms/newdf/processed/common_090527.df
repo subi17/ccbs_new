@@ -1,0 +1,191 @@
+ADD FIELD "InUse" OF "TMSCodes" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Code In Use"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "Used"
+  HELP "Is code in use"
+  ORDER 80
+
+ADD TABLE "ReportConf"
+  AREA "Sta_Data_256"
+  LABEL "Report Configuration"
+  DESCRIPTION "Report configuration"
+  DUMP-NAME "reportconf"
+
+ADD FIELD "Brand" OF "ReportConf" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of Brand"
+  ORDER 10
+
+ADD FIELD "ReportID" OF "ReportConf" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Report ID"
+  POSITION 3
+  MAX-WIDTH 24
+  COLUMN-LABEL "ID"
+  HELP "Report ID"
+  ORDER 20
+
+ADD FIELD "ReportName" OF "ReportConf" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Report Name"
+  POSITION 4
+  MAX-WIDTH 60
+  COLUMN-LABEL "Name"
+  HELP "Report name"
+  ORDER 30
+
+ADD INDEX "ReportID" ON "ReportConf" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "ReportID" ASCENDING 
+
+ADD TABLE "ReportConfRow"
+  AREA "Sta_Data_256"
+  LABEL "Report Configuration Row"
+  DESCRIPTION "Report configuration row"
+  DUMP-NAME "reportconfrow"
+
+ADD FIELD "Brand" OF "ReportConfRow" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of Brand"
+  ORDER 10
+
+ADD FIELD "ReportID" OF "ReportConfRow" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Report ID"
+  POSITION 3
+  MAX-WIDTH 24
+  COLUMN-LABEL "ID"
+  HELP "Report ID"
+  ORDER 20
+
+ADD FIELD "RowType" OF "ReportConfRow" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Row Type"
+  POSITION 4
+  MAX-WIDTH 16
+  COLUMN-LABEL "Type"
+  HELP "Row type"
+  ORDER 30
+
+ADD FIELD "CharValue" OF "ReportConfRow" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Character Value"
+  POSITION 5
+  MAX-WIDTH 24
+  COLUMN-LABEL "Char"
+  HELP "Character value"
+  ORDER 40
+
+ADD FIELD "DateValue" OF "ReportConfRow" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Date Value"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Date"
+  HELP "Date value"
+  ORDER 50
+
+ADD FIELD "IntValue" OF "ReportConfRow" AS integer 
+  FORMAT "->>>>>>>9"
+  INITIAL "0"
+  LABEL "Integer Value"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Int"
+  HELP "Integer value"
+  ORDER 60
+
+ADD FIELD "DecValue" OF "ReportConfRow" AS decimal 
+  FORMAT "->>>>>>>>9.9999"
+  INITIAL "0"
+  LABEL "Decimal Value"
+  POSITION 8
+  MAX-WIDTH 21
+  COLUMN-LABEL "Dec"
+  HELP "Decimal value"
+  DECIMALS 6
+  ORDER 70
+
+ADD FIELD "FromDate" OF "ReportConfRow" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Date when configuration becomes effective"
+  ORDER 80
+
+ADD FIELD "ToDate" OF "ReportConfRow" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 10
+  MAX-WIDTH 4
+  HELP "Date when configuration expires"
+  ORDER 90
+
+ADD FIELD "ConfRowID" OF "ReportConfRow" AS integer 
+  FORMAT ">>>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Row ID"
+  POSITION 11
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Unique row ID"
+  ORDER 100
+
+ADD FIELD "LogicValue" OF "ReportConfRow" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Logical Value"
+  POSITION 12
+  MAX-WIDTH 1
+  COLUMN-LABEL "Logic"
+  HELP "Logical value"
+  ORDER 110
+
+ADD INDEX "ConfRowID" ON "ReportConfRow" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "ConfRowID" ASCENDING 
+
+ADD INDEX "ReportID" ON "ReportConfRow" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "ReportID" ASCENDING 
+  INDEX-FIELD "RowType" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD SEQUENCE "RerateSeq"
+  INITIAL 1
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+.
+PSC
+cpstream=1252
+.
+0000002330

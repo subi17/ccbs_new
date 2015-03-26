@@ -1,0 +1,20 @@
+ADD FIELD "Sender" OF "InvText" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Sender"
+  HELP "SMS sender number"
+  ORDER 230
+
+ADD FIELD "Category" OF "InvText" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Category"
+  HELP "Text category"
+  ORDER 240
+
+ADD FIELD "Active" OF "InvText" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "Yes"
+  LABEL "Active"
+  HELP "Is the configuration active"
+  ORDER 250

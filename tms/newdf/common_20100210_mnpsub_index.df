@@ -1,0 +1,3 @@
+ADD INDEX "CLI" ON "MNPSub" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CLI" ASCENDING 

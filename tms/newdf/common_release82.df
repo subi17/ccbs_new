@@ -1,0 +1,6 @@
+ADD FIELD "Profession" OF "Customer" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Profession"
+  COLUMN-LABEL "Profession"
+  ORDER 1550

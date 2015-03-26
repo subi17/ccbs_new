@@ -1,0 +1,6 @@
+ADD FIELD "DCEvent" OF "PrepCDR" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Periodical Contract"
+  COLUMN-LABEL "P.Contract"
+  ORDER 2490

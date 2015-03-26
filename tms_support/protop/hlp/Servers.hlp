@@ -1,0 +1,53 @@
+Servers Help
+============
+
+Srv:
+
+Server Id.
+
+Type:
+
+What type of server is this?  Possible values include:
+
+        Login     The Broker
+        Inactive  Servers that are allocated but not yet spawned by the broker.
+        Auto      Started automatically (by default or via the -m1 parameter).
+        Manual    Started manually (via the -m2 parameter).
+
+Port:
+
+TCP/IP Port number.  The broker uses the port specified by -S.  Other servers
+get an automatically assigned port number.
+
+Con:
+
+Current number of connections to this server.
+
+Max:
+
+The maximum number of connections that this server will permit (-Ma).
+
+Msg Recv:
+
+Progress messages received by this server.  (See -Mm documentation.)
+
+Msg Sent:
+
+Progress messages sent by this server.  (See -Mm documentation.)
+
+Rec Recv:
+
+Records received from clients of this server.
+
+Rec Sent:
+
+Records sent to clients of this server.
+
+Qry Sent:
+
+Queries received by this server.
+
+TimeSlice:
+
+The number of times that the server has interrupted work on a client query to
+check for other clients work.

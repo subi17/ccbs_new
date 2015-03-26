@@ -1,0 +1,5 @@
+ADD INDEX "slseq" ON "MServiceLimit" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "SLSeq" ASCENDING 
+  INDEX-FIELD "DialType" ASCENDING 
+  INDEX-FIELD "EndTS" DESCENDING 

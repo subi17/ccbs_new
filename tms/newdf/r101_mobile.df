@@ -1,0 +1,13 @@
+ADD FIELD "TariffBundle" OF "MsOwner" AS character
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Tariff Bundle"
+  COLUMN-LABEL "TariffBundle"
+  ORDER 350
+
+ADD FIELD "TariffActDate" OF "TermMobSub" AS DATE
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Tariff Activation Date"
+  COLUMN-LABEL "TariffActDate"
+  ORDER 900

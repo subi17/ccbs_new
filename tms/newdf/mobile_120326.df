@@ -1,0 +1,21 @@
+ADD FIELD "IntValue" OF "TMCounter" AS integer 
+  FORMAT "->>>>>>>>9"
+  INITIAL "0"
+  LABEL "IntValue"
+  COLUMN-LABEL "IntValue"
+  HELP "General integer value field"
+  ORDER 90
+
+ADD FIELD "DecValue" OF "TMCounter" AS decimal 
+  FORMAT "->>>>>>9.99999"
+  INITIAL "0"
+  LABEL "DecValue"
+  COLUMN-LABEL "DecValue"
+  HELP "General decimal value field"
+  DECIMALS 5
+  ORDER 100
+
+.
+PSC
+cpstream=1252
+.

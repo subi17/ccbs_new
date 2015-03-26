@@ -1,0 +1,1 @@
+../../rpcmethods/ext__get_mnp_status.p

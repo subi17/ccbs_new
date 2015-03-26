@@ -1,0 +1,152 @@
+ADD TABLE "BDestTrans"
+  AREA "Sta_Data_128"
+  LABEL "BDestTrans"
+  DESCRIPTION "B-Destination short number translations"
+  DUMP-NAME "bdesttrans"
+
+ADD FIELD "BDest" OF "BDestTrans" AS character 
+  FORMAT "x(7)"
+  INITIAL ""
+  LABEL "BDest"
+  COLUMN-LABEL "BDest"
+  ORDER 10
+
+ADD FIELD "RatingZone" OF "BDestTrans" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "RatingZone"
+  COLUMN-LABEL "RatingZone"
+  ORDER 30
+
+ADD FIELD "TranslateNumber" OF "BDestTrans" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "TranslateNumber"
+  COLUMN-LABEL "TranslateNumber"
+  ORDER 40
+
+ADD FIELD "BdestID" OF "BDestTrans" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "BDestination ID"
+  COLUMN-LABEL "BDest ID"
+  HELP "Unique ID"
+  ORDER 50
+
+ADD FIELD "ToDate" OF "BDestTrans" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid To"
+  COLUMN-LABEL "ToDate"
+  HELP "Last effective day"
+  ORDER 60
+
+ADD FIELD "FromDate" OF "BDestTrans" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid From"
+  COLUMN-LABEL "FromDate"
+  HELP "First effective day"
+  ORDER 70
+
+ADD INDEX "BDestTrans" ON "BDestTrans" 
+  AREA "Dyn_Index_1"
+  PRIMARY
+  INDEX-FIELD "BDestId" ASCENDING 
+  INDEX-FIELD "TranslateNumber" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD TABLE "ResellerTF"
+  AREA "Sta_Data_128"
+  LABEL "ResellerTF"
+  DESCRIPTION "ResellerTF"
+  DUMP-NAME "resellertf"
+
+ADD FIELD "Brand" OF "ResellerTF" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 10
+
+ADD FIELD "Reseller" OF "ResellerTF" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Reseller"
+  COLUMN-LABEL "Reseller"
+  HELP "Reseller Code"
+  ORDER 20
+
+ADD FIELD "TFBank" OF "ResellerTF" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "TFBank"
+  COLUMN-LABEL "TFBank"
+  ORDER 30
+
+ADD FIELD "ValidFrom" OF "ResellerTF" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid From"
+  COLUMN-LABEL "ValidFrom"
+  ORDER 40
+
+ADD INDEX "ResellerTF" ON "ResellerTF" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  UNIQUE
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "Reseller" ASCENDING 
+  INDEX-FIELD "ValidFrom" DESCENDING 
+ 
+ADD FIELD "EntityCode" OF "Reseller" AS int 
+  FORMAT ">>9"
+  INITIAL "?"
+  LABEL "EntityCode"
+  COLUMN-LABEL "Entity Code"
+  ORDER 80
+
+ADD FIELD "Active" OF "Reseller" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "Yes"
+  LABEL "Active"
+  COLUMN-LABEL "Active"
+  ORDER 90
+
+ADD FIELD "FUC1" OF "Reseller" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "FUC1"
+  COLUMN-LABEL "FUC1"
+  ORDER 100
+
+ADD FIELD "FUC2" OF "Reseller" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "FUC2"
+  COLUMN-LABEL "FUC2"
+  ORDER 110
+
+ADD FIELD "OutMarkBank" OF "Customer" AS LOGICAL
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "OutMarkBank"
+  COLUMN-LABEL "OutMarkBank"
+  HELP "3rd Party Bank Marketing"
+  ORDER 1560
+
+ADD FIELD "TFBank" OF "FixedFee" AS CHARACTER
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "TFBank"
+  COLUMN-LABEL "TFBank"
+  HELP "Terminal Financing Bank Code"
+  ORDER 300
+
+ADD FIELD "TFNationality" OF "Nationality" AS character 
+  FORMAT "x(5)"
+  INITIAL ""
+  LABEL "TFNationality"
+  HELP "TFNationality"
+  ORDER 30

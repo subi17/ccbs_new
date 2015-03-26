@@ -1,0 +1,416 @@
+{test_xmlrpc_includes.i}
+{unit/checkutils.i}
+{timestamp.i}
+
+gcFixtures = "customer,Region".
+
+DEFINE VARIABLE gcParamArray AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE gcParamStruct AS CHARACTER NO-UNDO. 
+gcParamArray = "".
+DEFINE VARIABLE gcReturnStruct AS CHARACTER NO-UNDO. 
+
+
+FUNCTION call_set_customer_address RETURN LOGICAL:
+    run_rpc_method("newton.set_customer_address").
+    RETURN TRUE.
+END FUNCTION.
+
+
+DEFINE VARIABLE piCustNum AS INTEGER NO-UNDO. 
+DEFINE VARIABLE pcSalesman AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE plCreateFee AS LOGICAL NO-UNDO. 
+
+DEFINE VARIABLE pcConame AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcStreet AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcZip    AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcCity   AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcRegion AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcCountry AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcCityCode AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcStreetCode AS CHARACTER NO-UNDO. 
+
+DEFINE VARIABLE iLackingField AS INTEGER NO-UNDO.  
+DEFINE VARIABLE lSomeFields   AS LOGICAL NO-UNDO. 
+
+
+FUNCTION fFillParamData RETURN LOGICAL:
+   piCustNum    = 1. 
+   pcSalesman   = "salesman".
+   plCreateFee  = FALSE.
+   pcConame     = "coname".
+   pcStreet     = "street sdas".
+
+   /* region lacking. zip must match the region of the customer fixture */
+   IF iLackingField = 5 THEN
+      pcZip        = "32433".
+   ELSE
+      pcZip        = "43772".
+   pcCity       = "Madrid".
+
+   /* zip lacking. region must match the zip of the customer fixture */
+   IF iLackingField = 3 THEN       
+      pcRegion     = "32". 
+   ELSE
+      pcRegion     = "43".
+
+   pcCountry    = "Spain".
+   pcCityCode   = "324".
+   pcStreetCode = "4234989".
+   RETURN TRUE.
+END.
+
+
+
+
+
+FUNCTION fAddAllDataParams RETURN LOGICAL:
+    add_int(gcParamArray, "", piCustNum).
+    add_string(gcParamArray, "", pcSalesman).
+    add_boolean(gcParamArray, "", plCreateFee).
+    gcParamStruct = add_struct(gcParamArray, "").
+    add_string(gcParamStruct, "coname", pcConame).
+    add_string(gcParamStruct, "street", pcStreet).
+    add_string(gcParamStruct, "zip"   , pcZip).
+    add_string(gcParamStruct, "city"  , pcCity).
+    add_string(gcParamStruct, "region", pcRegion).
+    add_string(gcParamStruct, "country", pcCountry).
+    add_string(gcParamStruct, "city_code", pcCityCode).
+    add_string(gcParamStruct, "street_code", pcStreetCode).
+    lSomeFields = FALSE.
+    RETURN TRUE.
+END.
+
+
+FUNCTION fAddSomeDataParams RETURN LOGICAL:
+    add_int(gcParamArray, "", piCustNum).
+    add_string(gcParamArray, "", pcSalesman).
+    add_boolean(gcParamArray, "", plCreateFee).
+    gcParamStruct = add_struct(gcParamArray, "").
+    add_string(gcParamStruct, "street", pcStreet).
+    add_string(gcParamStruct, "zip"   , pcZip).
+    add_string(gcParamStruct, "region", pcRegion).
+    add_string(gcParamStruct, "country", pcCountry).
+    add_string(gcParamStruct, "street_code", pcStreetCode).
+    lSomeFields = TRUE.
+END.
+
+FUNCTION fAddAllDataParamExpectOne RETURN LOGICAL:
+    add_int(gcParamArray, "", piCustNum).
+    add_string(gcParamArray, "", pcSalesman).
+    add_boolean(gcParamArray, "", plCreateFee).
+    gcParamStruct = add_struct(gcParamArray, "").
+    IF iLackingField NE 1 THEN
+      add_string(gcParamStruct, "coname", pcConame).
+    IF iLackingField NE 2 THEN
+      add_string(gcParamStruct, "street", pcStreet).
+    IF iLackingField NE 3 THEN
+      add_string(gcParamStruct, "zip"   , pcZip).
+    IF iLackingField NE 4 THEN
+      add_string(gcParamStruct, "city"  , pcCity).
+    IF iLackingField NE 5 THEN
+      add_string(gcParamStruct, "region", pcRegion).
+    IF iLackingField NE 6 THEN
+      add_string(gcParamStruct, "country", pcCountry).
+    IF iLackingField NE 7 THEN
+      add_string(gcParamStruct, "city_code", pcCityCode).
+    IF iLackingField NE 8 THEN
+      add_string(gcParamStruct, "street_code", pcStreetCode).
+    lSomeFields = FALSE.
+    RETURN TRUE.
+END.
+
+
+FUNCTION fAddAllParams RETURN LOGICAL:
+   fAddAllDataParams().
+   add_string(gcParamStruct, "title", "").
+   add_string(gcParamStruct, "lname", "").
+   add_string(gcParamStruct, "lname2", "").
+   add_string(gcParamStruct, "fname", "").
+   add_string(gcParamStruct, "language", "").
+   add_string(gcParamStruct, "nationality", "").
+   add_string(gcParamStruct, "bankaccount", "").
+   add_string(gcParamStruct, "email", "").
+   add_string(gcParamStruct, "sms_number", "").
+   add_string(gcParamStruct, "phone_number", "").
+   add_string(gcParamStruct, "person_id", "").
+   add_string(gcParamStruct, "mark_sms", "").
+   add_string(gcParamStruct, "mark_email", "").
+   add_string(gcParamStruct, "mark_post", "").
+   add_string(gcParamStruct, "mark_sms_3rd", "").
+   add_string(gcParamStruct, "mark_email_3rd", "").
+   add_string(gcParamStruct, "mark_post_3rd", "").
+   RETURN TRUE.
+END.
+
+FUNCTION fIsDefaultField RETURN LOGICAL (INPUT iField AS INTEGER):
+   DEFINE VARIABLE lDefault AS LOGICAL NO-UNDO. 
+   IF lSomeFields THEN
+   DO:
+       CASE iField:
+          WHEN 1 THEN lDefault = TRUE.
+          WHEN 2 THEN lDefault = FALSE.
+          WHEN 3 THEN lDefault = FALSE.
+          WHEN 4 THEN lDefault = TRUE.
+          WHEN 5 THEN lDefault = FALSE.
+          WHEN 6 THEN lDefault = FALSE.
+          WHEN 7 THEN lDefault = TRUE.
+          WHEN 8 THEN lDefault = FALSE.
+       END.
+   END.
+   ELSE
+   DO:
+      IF iField NE iLackingField THEN lDefault = FALSE. ELSE lDefault = TRUE.
+   END.
+   RETURN lDefault.
+END.
+
+FUNCTION fGetDefaultCharValue RETURN CHARACTER (INPUT piField AS INTEGER):
+   DEFINE VARIABLE cVal AS CHARACTER NO-UNDO. 
+   CASE piField:
+      WHEN 1 THEN cVal = "DefCoName".  /* Customer.CoName   , CustNum = 1 */
+      WHEN 2 THEN cVal = "DefAddress". /* Customer.Address  , CustNum = 1 */
+      WHEN 4 THEN cVal = "DefCity".    /* Customer.city     , CustNum = 1 */
+      WHEN 6 THEN cVal = "DefCountry".  /* Customer.country  , CustNum = 1 */
+   END.
+   RETURN cVal.
+END.
+
+
+FUNCTION fGetDefaultIntValue RETURN INTEGER (INPUT piField AS INTEGER):
+   DEFINE VARIABLE iVal AS INTEGER NO-UNDO. 
+   CASE piField:
+      WHEN 3 THEN iVal = 3242.  /* Customer.Zip, CustNum = 1 */
+      WHEN 5 THEN iVal = 32.    /* Customer.Region, CustNum = 1 */
+      WHEN 8 THEN iVal = 2133.  /* Customer.AddressCodC, CustNum = 1  */
+      WHEN 7 THEN iVal = 4232.  /* Customer.AddressCodP, CustNum = 1  */
+   END.
+   RETURN iVal.
+END.
+
+
+FUNCTION fCheckMsReqCField RETURN LOGICAL 
+   (INPUT iField AS INTEGER, 
+    INPUT pcFieldName AS CHARACTER,
+    INPUT pcDbData AS CHARACTER,
+    INPUT pcParamData AS CHARACTER):
+   IF fIsDefaultField(iField) THEN
+      checkChar("MsRequest." + pcFieldName, pcDbData, 
+         fGetDefaultCharValue(iField)).
+   ELSE
+      checkChar("MsRequest." + pcFieldName, pcDbData, pcParamData).
+
+   RETURN TRUE.
+END.
+
+
+
+FUNCTION fCheckMsReqIField RETURN LOGICAL 
+   (INPUT iField AS INTEGER, 
+    INPUT pcFieldName AS CHARACTER,
+    INPUT piDbData AS INTEGER,
+    INPUT pcParamData AS CHARACTER):
+
+   IF fIsDefaultField(iField) THEN
+      checkInt("MsRequest." + pcFieldName, piDbData, 
+         fGetDefaultIntValue(iField)).
+   ELSE
+      checkInt("MsRequest." + pcFieldName, piDbData, INT(pcParamData)).
+
+   RETURN TRUE.
+END.
+
+
+FUNCTION fCheckMsRequest RETURN LOGICAL:
+   FIND LAST MsRequest NO-LOCK.
+   IF AVAIL MsRequest THEN
+   DO:
+      fCheckMsReqCField(1, "ReqCParam4", MsRequest.ReqCParam4, pcConame). 
+      fCheckMsReqCField(2, "ReqCParam1", MsRequest.ReqCParam1, pcStreet). 
+      fCheckMsReqCField(4, "ReqCParam2", MsRequest.ReqCParam2, pcCity).
+      fCheckMsReqCField(6, "ReqCParam3", MsRequest.ReqCParam3, pcCountry).
+
+      fCheckMsReqIField(3, "ReqIParam1", MsRequest.ReqIParam1, pcZip).
+      fCheckMsReqIField(5, "ReqIParam2", MsRequest.ReqIParam2, pcRegion).
+      fCheckMsReqIField(8, "ReqIParam3", MsRequest.ReqIParam3, pcStreetCode).
+      fCheckMsReqIField(7, "ReqIParam4", MsRequest.ReqIParam4, pcCityCode).
+
+      checkDecimalWithDiff(
+                   "MsRequest.ActStamp"   , MsRequest.ActStamp  , fMakeTs(), 3).
+      checkInt(    "MsRequest.ReqType"    , MsRequest.ReqType   , 6           ).
+      checkLogical("MsRequest.CreateFees" , MsRequest.CreateFees, FALSE, ""   ). 
+      checkInt(    "MsRequest.SendSMS"    , MsRequest.SendSMS   , 0           ).
+      checkDecimalWithDiff(
+                   "MsRequest.CreStamp"   , MsRequest.CreStamp  , fMakeTs(), 3).
+      checkChar(   "MsRequest.UserCode"   , MsRequest.UserCode  , 
+         "VISTA_" + pcSalesman  ).
+      checkInt (   "MsRequest.ReqStatus"  , MsRequest.ReqStatus , 0           ).
+
+      checkChar(   "MsRequest.ReqSource"  , MsRequest.ReqSource , "6"         ).
+      checkChar(   "MsRequest.Memo"       , MsRequest.Memo      , ""          ).
+      checkInt (   "MsRequest.OrigRequest", MsRequest.OrigRequest, 0          ).
+   END.
+   ELSE
+     assert(TRUE, "Expected MsRequest was not created.").
+
+   RETURN TRUE.
+END.
+
+
+
+FUNCTION fCheckMsReqStatisticQs RETURN LOGICAL:
+   FIND MsReqStatisticQ WHERE 
+      MsReqStatisticQ.Brand = "1" AND
+      MsReqStatisticQ.ReqType = 6 AND
+      MsReqStatisticQ.ReqStatus = 0 AND
+      MsReqStatisticQ.ReqStatUpdate = 1 NO-LOCK.
+   IF NOT AVAIL MsReqStatisticQ THEN
+      assert(TRUE, 
+      "MsReqStatisticsQ for setting initial Msrequest status was lacking.").
+   RETURN TRUE.
+END.
+
+
+
+PROCEDURE test_all_data_params:
+   iLackingField = 0.
+   fFillParamData().
+   fAddAllDataParams().
+   call_set_customer_address().
+   assert_success().
+   fCheckMsRequest().
+   fCheckMsReqStatisticQs().
+END.
+
+
+PROCEDURE test_some_params:
+   iLackingField = 0.
+   fFillParamData().
+   fAddSomeDataParams().
+   call_set_customer_address().
+   assert_success().
+   fCheckMsRequest().
+   fCheckMsReqStatisticQs().
+END.
+
+
+
+PROCEDURE test_all_params:
+   iLackingField = 0.
+   fFillParamData().
+   fAddAllParams().
+   call_set_customer_address().
+   assert_success().
+   fCheckMsRequest().
+   fCheckMsReqStatisticQs().
+END.
+
+
+FUNCTION fTestLackingField RETURN LOGICAL (INPUT iField AS INTEGER):
+   iLackingField = iField. 
+   fFillParamData().
+   fAddAllDataParamExpectOne().
+   call_set_customer_address().
+   assert_success().
+   fCheckMsRequest().
+   fCheckMsReqStatisticQs().
+   RETURN TRUE.
+END.
+
+
+
+PROCEDURE test_lacking_coname:
+   fTestLackingField(1).
+END.
+
+PROCEDURE test_lacking_street:
+   fTestLackingField(2).
+END.
+
+PROCEDURE test_lacking_zip:
+   fTestLackingField(3).
+END.
+
+PROCEDURE test_lacking_city:
+   fTestLackingField(4).
+END.
+
+PROCEDURE test_lacking_region:
+   fTestLackingField(5).
+END.
+
+PROCEDURE test_lacking_country:
+   fTestLackingField(6).
+END.
+    
+PROCEDURE test_lacking_citycode:
+   fTestLackingField(7).
+END.
+   
+PROCEDURE test_lacking_streetcode:
+   fTestLackingField(8).
+END.
+    
+
+PROCEDURE test_not_found_customer:
+   fFillParamData().
+   piCustNum = 99.
+   fAddAllDataParams().
+   call_set_customer_address().
+   assert_fault(-32500,"Customer for 99 not found").
+END.
+
+
+PROCEDURE test_not_integer_zipcode:
+   fFillParamData().
+   pcZip = "SHS".
+   fAddAllDataParams().
+   call_set_customer_address().
+   assert_fault(-32500,"ZipCode must be numeral").
+END.
+
+
+
+PROCEDURE test_not_integer_region:
+   fFillParamData().
+   pcRegion = "SHS".
+   fAddAllDataParams().
+   call_set_customer_address().
+   assert_fault(-32500,"Region must be numeral").
+END.
+
+
+PROCEDURE test_not_integer_streetcode:
+   fFillParamData().
+   pcStreetCode = "ABC".
+   fAddAllDataParams().
+   call_set_customer_address().
+   assert_fault(-32500,"StreetCode must be numeral").
+END.
+
+
+PROCEDURE test_not_integer_citycode:
+   fFillParamData().
+   pcCityCode = "BCD".
+   fAddAllDataParams().
+   call_set_customer_address().
+   assert_fault(-32500,"CityCode must be numeral").
+END.
+
+
+PROCEDURE test_zipcode_and_region_mismatch:
+   fFillParamData().
+   pcRegion = "45".
+   fAddAllDataParams().
+   call_set_customer_address().
+   assert_fault(-32500,"There is a conflict between zipcode and region").
+END.
+
+PROCEDURE test_unknown_region:
+   fFillParamData().
+   pcRegion = "99".
+   pcZip = "99233".
+   fAddAllDataParams().
+   call_set_customer_address().
+   assert_fault(-32500,"Unknown region 99").
+END.
+

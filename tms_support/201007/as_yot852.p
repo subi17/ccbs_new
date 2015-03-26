@@ -1,0 +1,18 @@
+DEFINE VARIABLE lcICCs AS CHARACTER NO-UNDO. 
+lcICCs = "8934040510048549952 8934040510048549689 8934040510048541827 8934040510048541835 8934040510048528451 8934040510048528444 8934040510048519716 8934040510048512430". 
+
+
+DEFINE VARIABLE lcIcc AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE i AS INTEGER NO-UNDO. 
+
+do i = 1 to num-entries(lcIccs, " "):
+
+   lcIcc = entry(i, lcIccs, " ").
+
+   find sim where
+        sim.icc = lcIcc and
+        sim.simstat = 1 EXCLUSIVE-LOCK.
+
+   disp sim.icc sim.stock sim.simstat.
+   sim.simstat = 7. 
+end.

@@ -1,0 +1,36 @@
+ADD TABLE "BankIdCode"
+   AREA "Sta_Data_64"
+   LABEL "BankIdCodes"
+   DESCRIPTION "Bank identifier Code"
+   DUMP-NAME "BankIdCode"
+
+ADD FIELD "BIC" OF BankIdCode AS CHARACTER
+   FORMAT "X(11)"
+   INITIAL ""
+   LABEL "BIC"
+   COLUMN-LABEL "BIC"
+   HELP "Bank Identifier Code"
+   ORDER 10
+
+ADD FIELD "BankCode" OF BankIdCode AS CHARACTER
+   FORMAT "X(4)"
+   INITIAL ""
+   LABEL "BankCode"
+   COLUMN-LABEL "BankCode"
+   HELP "Bank Code"
+   ORDER 20
+
+ADD FIELD "BankName" OF BankIdCode AS CHARACTER
+   FORMAT "X(60)"
+   INITIAL ""
+   LABEL "BankName"
+   COLUMN-LABEL "BankName"
+   HELP "Bank Name"
+   ORDER 30
+
+ADD INDEX "BCode" OF "BankIdCode"
+   AREA "Dyn_Index_1"
+   UNIQUE
+   PRIMARY
+   INDEX-FIELD "BankCode" ASCENDING
+

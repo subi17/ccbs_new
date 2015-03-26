@@ -1,0 +1,376 @@
+/*******************************************************************************
+ *******************************************************************************
+ **                                                                           **
+ **                                                                           **
+ **  Copyright 2003-2006 Tom Bascom, Greenfield Technologies                  **
+ **  http://www.greenfieldtech.com                                            **
+ **                                                                           **
+ **  ProTop is free software; you can redistribute it and/or modify it        **
+ **  under the terms of the GNU General Public License (GPL) as published     **
+ **  by the Free Software Foundation; either version 2 of the License, or     **
+ **  at your option) any later version.                                       **
+ **                                                                           **
+ **  ProTop is distributed in the hope that it will be useful, but WITHOUT    **
+ **  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or    **
+ **  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License     **
+ **  for more details.                                                        **
+ **                                                                           **
+ **  See TERMS.TXT for more information regarding the Terms and Conditions    **
+ **  of use and alternative licensing options for this software.              **
+ **                                                                           **
+ **  A copy of the GPL is in GPL.TXT which was provided with this package.    **
+ **                                                                           **
+ **  See http://www.fsf.org for more information about the GPL.               **
+ **                                                                           **
+ **                                                                           **
+ *******************************************************************************
+ *******************************************************************************
+ *
+ * cnx.p
+ *
+ *
+ * Session Breakdown by Connection Type (sort of)
+ *
+ * Sessions are categorized using _Connect-Type, _Connect-Device and _Connect-name
+ *
+ *
+ * Author:
+ *
+ *	Tom Bascom, Greenfield Technologies
+ *	http://www.greenfieldtech.com
+ *	May 22, 2006
+ *
+ */
+
+{lib/protop.i}
+
+define variable support as character no-undo initial "Connection Summary".
+
+define variable i as integer no-undo.
+
+define variable log-rd       as integer no-undo extent 16.
+define variable log-wr       as integer no-undo extent 16.
+define variable os-rd        as integer no-undo extent 16.
+define variable os-wr        as integer no-undo extent 16.
+define variable old_log-rd   as integer no-undo extent 16.
+define variable old_log-wr   as integer no-undo extent 16.
+define variable old_os-rd    as integer no-undo extent 16.
+define variable old_os-wr    as integer no-undo extent 16.
+define variable u            as integer no-undo extent 16.
+define variable t            as integer no-undo extent 16.
+define variable b            as integer no-undo extent 16.
+
+define temp-table tt_hit-ratio no-undo
+  field xid        as integer
+  field xlabel     as character
+  field users      as integer
+  field xlog-rd    as integer
+  field xlog-wr    as integer
+  field xos-rd     as integer
+  field xos-wr     as integer
+  field hit-ratio  as decimal
+  field trx        as integer
+  field blk        as integer
+  index xidx-rdx is unique primary xid descending.
+
+
+function init-tt_hr returns logical ( input id as integer, input logr as integer, input osr as integer, /* input logw as integer, */ input osw as integer ):
+
+  assign
+    old_log-rd[id] = old_log-rd[id] + logr
+    old_os-rd[id]  = old_os-rd[id]  + osr
+/*  old_log-wr[id] = old_log-wr[id] + logw */
+    old_os-wr[id]  = old_os-wr[id]  + osw
+  .
+
+  return yes.
+
+end.
+
+
+function mk-tt_hr returns logical ( input id as integer, input xname as character ):
+
+  create tt_hit-ratio.
+  assign
+    tt_hit-ratio.xid    = id
+    tt_hit-ratio.xlabel = xname
+    log-rd[id] = 0
+    os-rd[id]  = 0
+    log-wr[id] = 0
+    os-wr[id]  = 0
+    u[id]      = 0
+    t[id]      = 0
+    b[id]      = 0
+  .
+
+  return yes.
+
+end.
+
+
+function upd-tt_hr returns logical ( input id as integer, input logr as integer, input osr as integer, /* input logw as integer, */ input osw as integer, input trxid as integer, input w as character ):
+
+  assign
+    log-rd[id] = log-rd[id] + logr
+    os-rd[id]  = os-rd[id]  + osr
+    os-wr[id]  = os-wr[id]  + osw
+    u[id]      = u[id] + 1
+    t[id]      = t[id] + ( if trxid > 0 then 1 else 0 )
+    b[id]      = b[id] + ( if w <> " -- " then 1 else 0 )
+  .
+
+  return yes.
+
+end.
+
+
+function sum-tt_hr returns logical ( input id as integer ):
+
+  define variable x as decimal   no-undo.		/* throw away output parameter	*/
+  define variable d as character no-undo.		/* throw away output parameter	*/
+
+  find tt_hit-ratio exclusive-lock where tt_hit-ratio.xid = id no-error.
+
+  if not available tt_hit-ratio then return no.
+
+  assign
+    tt_hit-ratio.xlog-rd    = max( 0, ( log-rd[id] - old_log-rd[id] ))
+    tt_hit-ratio.xos-rd     = max( 0, ( os-rd[id]  - old_os-rd[id]  ))
+/*  tt_hit-ratio.xlog-wr    = max( 0, ( log-wr[id] - old_log-wr[id] )) */
+    tt_hit-ratio.xos-wr     = max( 0, ( os-wr[id]  - old_os-wr[id]  ))
+    tt_hit-ratio.hit-ratio  = hr( input tt_hit-ratio.xlog-rd, input tt_hit-ratio.xos-rd, output d, output x, output x )
+    tt_hit-ratio.users      = u[id]
+    tt_hit-ratio.trx        = t[id]
+    tt_hit-ratio.blk        = b[id]
+    old_log-rd[id]          = log-rd[id]
+    old_os-rd[id]           = os-rd[id]
+    old_log-wr[id]          = log-wr[id]
+    old_os-wr[id]           = os-wr[id]
+  .
+
+  if tt_hit-ratio.hit-ratio = ? then tt_hit-ratio.hit-ratio = 0.
+
+  return yes.
+
+end.
+
+/* restart
+ *
+ */
+
+procedure mon-restart:
+
+  empty temp-table tt_hit-ratio.
+
+  delete procedure this-procedure.
+
+  return.
+
+end.
+
+/* initialize
+ *
+ */
+
+procedure mon-init:
+
+  empty temp-table tt_hit-ratio.
+
+  /* define labels
+   *
+   */
+
+  ui-define-label( support, 1, 1, "xType",  " Session Type" ).
+  ui-define-label( support, 1, 2, "xUsers",         "Users" ).
+  ui-define-label( support, 1, 3, "xLogRd",     "   Log Rd" ).
+  ui-define-label( support, 1, 4, "xOsRd",      "    OS Rd" ).
+/*ui-define-label( support, 1, 5, "xLogWr",     "   Log Wr" ). */
+  ui-define-label( support, 1, 6, "xOsWr",        "  OS Wr" ).
+  ui-define-label( support, 1, 7, "xHR",         "    Hit%" ).
+  ui-define-label( support, 1, 8, "xTRX",          "   Trx" ).
+  ui-define-label( support, 1, 9, "xBLK",           " Blkd" ).
+
+  for each dictdb._Connect no-lock where _Connect-usr >= 0,
+      dictdb._UserIO no-lock where _UserIO-id = _Connect-id:
+
+    /* remote clients that are not batch are probably GUI users
+     * -- this is probably a safe assumption unless you're using -S to band-aid "runaways"
+     * -- "name" <> "" is probably overkill
+     */
+
+    if       _Connect-type = "remc" and _Connect-device <> "batch" and _Connect-name <> "" then
+      init-tt_hr( 2, _UserIO-dbaccess, _UserIO-dbread, _UserIO-dbwrite ).
+
+    /* self-service connections that are not batch are assumed to be ordinary ChUI users
+     *
+     */
+
+     else if _Connect-type = "self" and _Connect-device <> "batch" then
+      init-tt_hr( 3, _UserIO-dbaccess, _UserIO-dbread, _UserIO-dbwrite ).
+
+    /* self-service batch jobs that lack user names are assumed to be simple batch jobs
+     * -- this is questionable but it works for Trend (report managers)
+     */
+
+     else if _Connect-type = "self" and _Connect-device  = "batch" and _Connect-name = "" then
+      init-tt_hr( 4, _UserIO-dbaccess, _UserIO-dbread, _UserIO-dbwrite ).
+
+    /* self-service batch jobs that have user names are assumed to be app servers
+     * -- this is questionable but it works for Trend
+     */
+
+     else if _Connect-type = "self" and _Connect-device  = "batch" and _Connect-name <> "" then
+      init-tt_hr( 5, _UserIO-dbaccess, _UserIO-dbread, _UserIO-dbwrite ).
+
+    /* 4gl servers (for remote clients)
+     */
+
+     else if _Connect-type = "SERV" then
+      init-tt_hr( 6, _UserIO-dbaccess, _UserIO-dbread, _UserIO-dbwrite ).
+
+    /* SQL servers (for ODBC/JDBC)
+     */
+
+     else if _Connect-type = "3330" or _Connect-type = "3330" then
+      init-tt_hr( 7, _UserIO-dbaccess, _UserIO-dbread, _UserIO-dbwrite ).
+
+
+    /* APWs, BIW, AIW, WDOG & BROK processes are lumped together as "helpers"
+     */
+
+     else if lookup( _Connect-type, "APW,BIW,AIW,WDOG,BROK" ) > 0 then
+      init-tt_hr( 15, _UserIO-dbaccess, _UserIO-dbread, _UserIO-dbwrite ).
+
+    /* Whatever is leftover is "other" (and may, someday, get a category of its own if it proves interesting...)
+     */
+
+     else
+      init-tt_hr( 16, _UserIO-dbaccess, _UserIO-dbread, _UserIO-dbwrite ).
+
+  end.
+
+  find dictdb._ActBuffer no-lock.
+  init-tt_hr( 1, _ActBuffer._Buffer-LogicRds, _ActBuffer._Buffer-OSRds, _ActBuffer._Buffer-OSWrts ).
+  release dictdb._ActBuffer.
+
+  return.
+
+end.
+
+/* update
+ *
+ */
+
+procedure mon-update:
+
+  define variable x as integer no-undo.
+  define variable y as integer no-undo.
+  define variable z as integer no-undo.
+
+  if do-update( support ) = no then return.
+
+  empty temp-table tt_hit-ratio.
+
+  mk-tt_hr(  1, "All Sessions:" ).
+  mk-tt_hr(  2, "   GUI Users:" ).
+  mk-tt_hr(  3, "  ChUI Users:" ).
+  mk-tt_hr(  4, "       Batch:" ).
+  mk-tt_hr(  5, " App Servers:" ).
+  mk-tt_hr(  6, " 4GL Servers:" ).
+  mk-tt_hr(  7, " SQL Servers:" ).
+  mk-tt_hr( 15, "     Helpers:" ).
+  mk-tt_hr( 16, "       Other:" ).
+
+  for each dictdb._Connect no-lock where _Connect-usr >= 0,
+      dictdb._UserIO no-lock where _UserIO-id = _Connect-id:
+
+    assign
+      x = x + 1
+      y = y + ( if _Connect-TransId > 0 then 1 else 0 )
+      z = z + ( if _Connect-wait <> " -- " then 1 else 0 )
+    .
+
+    if       _Connect-type = "remc" and _Connect-device <> "batch" and _Connect-name <> "" then
+      upd-tt_hr(  2, _UserIO-dbaccess, _UserIO-dbread, _UserIO-dbwrite, _Connect-TransId, _Connect-wait ).
+
+     else if _Connect-type = "self" and _Connect-device <> "batch" then
+      upd-tt_hr(  3, _UserIO-dbaccess, _UserIO-dbread, _UserIO-dbwrite, _Connect-TransId, _Connect-wait ).
+
+     else if _Connect-type = "self" and _Connect-device  = "batch" and _Connect-name = "" then
+      upd-tt_hr(  4, _UserIO-dbaccess, _UserIO-dbread, _UserIO-dbwrite, _Connect-TransId, _Connect-wait ).
+
+     else if _Connect-type = "self" and _Connect-device  = "batch" and _Connect-name <> "" then
+      upd-tt_hr(  5, _UserIO-dbaccess, _UserIO-dbread, _UserIO-dbwrite, _Connect-TransId, _Connect-wait ).
+
+     else if _Connect-type = "SERV" then
+      upd-tt_hr(  6, _UserIO-dbaccess, _UserIO-dbread, _UserIO-dbwrite, _Connect-TransId, _Connect-wait ).
+
+     else if _Connect-type = "SQSV" or _Connect-type = "3330" then
+      upd-tt_hr(  7, _UserIO-dbaccess, _UserIO-dbread, _UserIO-dbwrite, _Connect-TransId, _Connect-wait ).
+
+     else if lookup( trim( _Connect-type ), "APW,BIW,AIW,WDOG,BROK" ) > 0 then
+      upd-tt_hr( 15, _UserIO-dbaccess, _UserIO-dbread, _UserIO-dbwrite, _Connect-TransId, _Connect-wait ).
+
+     else
+      upd-tt_hr( 16, _UserIO-dbaccess, _UserIO-dbread, _UserIO-dbwrite, _Connect-TransId, _Connect-wait ).
+
+  end.
+
+  find dictdb._ActBuffer no-lock.
+  upd-tt_hr( 1, _ActBuffer._Buffer-LogicRds, _ActBuffer._Buffer-OSRds, _ActBuffer._Buffer-OSWrts, 0, " -- " ).
+  release dictdb._ActBuffer.
+
+  assign
+    u[1] = x	/* since we don't actually accumulate u[1] above we need to cheat...	*/
+    t[1] = y
+    b[1] = z
+  .
+
+  do i = 1 to 16:
+    sum-tt_hr( i ).
+  end.
+
+  x = 0.
+  for each tt_hit-ratio no-lock:
+    if tt_hit-ratio.xid = 15 then
+      next.
+     else
+      x = x + tt_hit-ratio.xos-wr.
+  end.
+
+  find tt_hit-ratio exclusive-lock where tt_hit-ratio.xid = 15 no-error.
+  if available tt_hit-ratio and x > 0 then tt_hit-ratio.hit-ratio = ( tt_hit-ratio.xos-wr / x ) * 100.
+
+  do-display( support, 1, 100, 11, 1, "Connection Summary" ).
+
+  i = 0.
+  for each tt_hit-ratio no-lock by xid:
+
+    i = i + 1.
+
+    ui-det( support, 1, i,  1, "xType",  string( tt_hit-ratio.xlabel,                 "x(13)" )).
+    ui-det( support, 1, i,  2, "xusers", string( tt_hit-ratio.users ,                 ">>>>9" )).
+    ui-det( support, 1, i,  3, "xLogRd", string(( tt_hit-ratio.xlog-rd / itime ), ">>>>>>>>9" )).
+    ui-det( support, 1, i,  4, "xOsRd",  string(( tt_hit-ratio.xos-rd  / itime ), ">>>>>>>>9" )).
+    ui-det( support, 1, i,  5, "xOsWr",  string(( tt_hit-ratio.xos-wr  / itime ),   ">>>>>>9" )).
+    ui-det( support, 1, i,  6, "xHR",    string( tt_hit-ratio.hit-ratio,           "->>9.99%" )).
+    ui-det( support, 1, i,  7, "xTRX",   string( tt_hit-ratio.trx,                   ">>>>>9" )).
+    ui-det( support, 1, i,  8, "xBLK",   string( tt_hit-ratio.blk,                    ">>>>9" )).
+
+  end.
+
+  return.
+
+end.
+
+/** Initialize PP
+ **
+ **/
+
+subscribe to "mon-restart" anywhere run-procedure "mon-restart".
+subscribe to "mon-init"    anywhere run-procedure "mon-init".
+subscribe to "mon-update"  anywhere run-procedure "mon-update".
+
+publish "register-disp-type" ( input support ).
+
+return.

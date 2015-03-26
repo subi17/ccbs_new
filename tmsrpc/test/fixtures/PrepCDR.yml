@@ -1,0 +1,113 @@
+# newton__get_cdr_details
+PrepaidCDR1:
+   BillCode:"S2"
+   BillDur:2344
+   CCN:23
+   Charge:12,22
+   cli:"622323113"
+   DataIn:2332,00
+   DataOut:1245,00
+   DateSt:"1/1/2008"
+   DtlSeq:12
+   PPFlag:1
+   ErrorCode:0
+   EventType:"CALL"
+   GsmBnr:"BNR"
+   timestart:0
+   InvSeq:7
+   RateCCN:3
+
+# newton__get_cdr_details
+PrepaidCDR2:
+   BillCode:"S3"
+   BillDur:17
+   CCN:45
+   Charge:16,43
+   cli:"622323113"
+   DataIn:2123,00
+   DataOut:1323,00
+   DateSt:"12/1/2008"
+   DtlSeq:13
+   ErrorCode:0
+   EventType:"GPRS"
+   GsmBnr:"BNR2"
+   PPFlag:0
+   timestart:0
+   InvSeq:5
+   RateCCN:2
+
+# newton__get_cdr_details
+PrepaidCDR3:
+   BillCode:"S2"
+   BillDur:19
+   CCN:45
+   Charge:17,43
+   cli:"622323113"
+   DataIn:1700,00
+   DataOut:1533,00
+   DateSt:"31/1/2008"
+   DtlSeq:17
+   ErrorCode:0
+   EventType:"SMS"
+   GsmBnr:"BNR3"
+   PPFlag:1
+   timestart:0
+   InvSeq:20000
+   RateCCN:1
+
+# newton__get_cdr_details
+PrepaidCDR4Before:
+   BillCode:"S5"
+   BillDur:20
+   CCN:21
+   Charge:17,12
+   cli:"622323113"
+   DataIn:1700,00
+   DataOut:1533,00
+   DateSt:"27/12/2007"
+   DtlSeq:19
+   ErrorCode:0
+   GsmBnr:"BNR4"
+
+# newton__get_cdr_details
+PrepaidCDR5Later:
+   BillCode:"S6"
+   BillDur:29
+   CCN:27
+   Charge:19,12
+   cli:"622323113"
+   DataIn:1727,00
+   DataOut:1623,00
+   DateSt:"05/02/2008"
+   DtlSeq:27
+   ErrorCode:0
+   GsmBnr:"BNR5"
+
+# newton__get_cdr_details
+PrepaidCDR6Error:
+   BillCode:"S7"
+   BillDur:12
+   CCN:30
+   Charge:20,12
+   cli:"622323113"
+   DataIn:1822,00
+   DataOut:1622,00
+   DateSt:"18/01/2008"
+   DtlSeq:29
+   ErrorCode:1
+   GsmBnr:"BNRX"
+
+# newton__get_cdr_details
+PrepaidCDR7OtherCLI:
+   BillCode:"S7"
+   BillDur:12
+   CCN:30
+   Charge:20,12
+   cli:"622323000"
+   DataIn:1822,00
+   DataOut:1622,00
+   DateSt:"18/01/2008"
+   DtlSeq:29
+   ErrorCode:0
+   GsmBnr:"BNRX"
+

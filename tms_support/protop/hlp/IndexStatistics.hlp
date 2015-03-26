@@ -1,0 +1,35 @@
+Index IO Statistics Help
+========================
+
+Indexes that do not have _IndexStat data available are indicated with a
+leading"*".  (This may be because -indexbase or -indexrangesize need
+adjustment.)
+
+Idx#:
+
+The index id#.
+
+Index Name:
+
+The index name.
+
+Create:
+
+The number of index CREATE operations for this index.
+
+Read:
+
+The number of index READ operations for this index.
+
+Split:
+
+The number of index SPLIT operations for this index.
+
+Delete:
+
+The number of index DELETE operations for this index.
+
+BlkDel:
+
+The number of index BLOCK DELETE operations for this index.
+

@@ -1,0 +1,11 @@
+ADD FIELD "SubQty" OF "OrderCustomer" AS integer 
+  DESCRIPTION "Max subscription quantity for customer"
+  FORMAT ">>>>9"
+  INITIAL 0 
+  LABEL "SubQty"
+  COLUMN-LABEL "SubQty"
+  HELP "Max subscription quantity"
+  ORDER 880
+.
+PSC
+cpstream=1252

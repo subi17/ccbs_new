@@ -1,0 +1,9 @@
+#!/bin/bash
+# /apps/yoigo/tms_support/testing/
+
+sed -r -e "s/^(.{207})(.{9})/\1$1/" /apps/yoigo/tms_support/testing/cdrfiles/$3 > /apps/yoigo/tms_support/testing/cdrfiles/temp.asc
+cp /apps/yoigo/tms_support/testing/cdrfiles/temp.asc /apps/yoigo/tms_support/testing/cdrfiles/$3
+sed -r -e "s/^(.{183})(.{8})/\1$2/" /apps/yoigo/tms_support/testing/cdrfiles/$3 > /apps/yoigo/tms_support/testing/cdrfiles/temp.asc
+cp /apps/yoigo/tms_support/testing/cdrfiles/temp.asc /apps/yoigo/tms_support/testing/cdrfiles/$3
+sed -r -e "s/^(.{128})(.{8})/\1$2/" /apps/yoigo/tms_support/testing/cdrfiles/$3 > /apps/yoigo/tms_support/testing/cdrfiles/temp.asc
+cp /apps/yoigo/tms_support/testing/cdrfiles/temp.asc /apps/yoigo/tms_support/testing/cdrfiles/$3

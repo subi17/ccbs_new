@@ -1,0 +1,34 @@
+from gearbox.migrations import Migration
+
+class AddBillTarget(Migration):
+
+    dumped_on = 'propus'
+    database = 'common'
+
+    def up(self):
+        t = self.table('BillTarget', area='Sta_Data_256',
+                       label='Billing Target',
+                       dump_name='billtarg',
+                       desc='Customer\'s Billing Target')
+        t.column('CustNum', 'integer', mandatory=True, format='>>>>>>>>9', initial='0',
+                 label='Customer',
+                 column_label='Customer',
+                 help='Customer Number')
+        t.column('BillTarget', 'integer', format='>9', initial='0',
+                 label='Billing Target',
+                 column_label='BT',
+                 help='No. for customer\'s billing target')
+        t.column('DiscPlan', 'character', format='x(12)', initial='',
+                 label='Discount Plan',
+                 column_label='Discount Plan',
+                 help='Code of a Discount Plan')
+        t.column('RatePlan', 'character', format='x(12)', initial='',
+                 label='Rating Plan',
+                 column_label='RatePlan',
+                 help='Rating plan code')
+        t.index('CustNum', ['CustNum', 'BillTarget'], area='Sta_Index_1',
+                primary=True, unique=True)
+
+    def down(self):
+        self.drop_table('BillTarget')
+

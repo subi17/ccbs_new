@@ -1,0 +1,5 @@
+ADD INDEX "RowType" ON "OrderTimeStamp" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "RowType" ASCENDING 
+  INDEX-FIELD "TimeStamp" DESCENDING 

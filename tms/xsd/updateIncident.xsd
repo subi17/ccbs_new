@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/incidenceForm" xmlns:tns="http://www.example.org/incidenceForm">
+
+    <element name="incidence" type="tns:updateIncidentType"></element>    
+    <complexType name="updateIncidentType">
+    	<sequence>
+    		<element name="crmIncidentCode" type="string" maxOccurs="1"
+    			minOccurs="1">
+    		</element>
+    		<element name="portabilityIncidentCode" minOccurs="1"
+    			maxOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<pattern value=".{3}-\d{4}-.{6}"></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="state" maxOccurs="1" minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<enumeration value="IABI"></enumeration>
+    					<enumeration value="IRES"></enumeration>
+    					<enumeration value="ICER"></enumeration>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="estimatedResolutionDate" type="dateTime"
+    			maxOccurs="1" minOccurs="1">
+    		</element>
+    		<element name="workLog" type="string" maxOccurs="1"
+    			minOccurs="1">
+    		</element>
+    	</sequence>    </complexType>
+
+</schema>

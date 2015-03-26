@@ -1,0 +1,7 @@
+ADD FIELD "DisplayAmount" OF "TopupSchemeRow" AS decimal
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "DisplayAmount"
+  COLUMN-LABEL "DisplayAmount"
+  HELP "Display Amount"
+  ORDER 100

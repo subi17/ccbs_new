@@ -1,0 +1,146 @@
+ADD TABLE "DBConfig"
+  AREA "Sta_Data_128"
+  LABEL "DB Configuration"
+  DESCRIPTION "DB configuration"
+  DUMP-NAME "dbconfig"
+
+ADD FIELD "Brand" OF "DBConfig" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of Brand"
+  ORDER 10
+
+ADD FIELD "DBConfigID" OF "DBConfig" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "DB Config ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Unique ID for configuration"
+  ORDER 20
+
+ADD FIELD "Description" OF "DBConfig" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  LABEL "Description"
+  POSITION 4
+  MAX-WIDTH 100
+  HELP "Description"
+  ORDER 30
+
+ADD FIELD "FromDate" OF "DBConfig" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Valid from"
+  ORDER 40
+
+ADD FIELD "ToDate" OF "DBConfig" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Valid to"
+  ORDER 50
+
+ADD FIELD "TableName" OF "DBConfig" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Table Name"
+  POSITION 7
+  MAX-WIDTH 30
+  COLUMN-LABEL "Table"
+  HELP "Table name"
+  ORDER 60
+  MANDATORY
+
+ADD FIELD "Host" OF "DBConfig" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Host"
+  POSITION 8
+  MAX-WIDTH 40
+  HELP "Host"
+  ORDER 70
+
+ADD FIELD "Service" OF "DBConfig" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Service"
+  POSITION 9
+  MAX-WIDTH 40
+  HELP "Service (port)"
+  ORDER 80
+
+ADD FIELD "DBConnName" OF "DBConfig" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "DB Name"
+  POSITION 10
+  MAX-WIDTH 40
+  COLUMN-LABEL "DB"
+  HELP "Connection name of DB"
+  ORDER 90
+
+ADD FIELD "DBState" OF "DBConfig" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Status"
+  POSITION 11
+  MAX-WIDTH 4
+  HELP "Status of DB"
+  ORDER 100
+
+ADD FIELD "DirectConnect" OF "DBConfig" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Direct Connection"
+  POSITION 12
+  MAX-WIDTH 80
+  COLUMN-LABEL "Direct"
+  HELP "Path for direct connection"
+  ORDER 110
+
+ADD FIELD "LogicalName" OF "DBConfig" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Logical Name"
+  POSITION 13
+  MAX-WIDTH 40
+  COLUMN-LABEL "Logical"
+  HELP "Logical name for DB"
+  ORDER 120
+
+ADD INDEX "DBConfigID" ON "DBConfig" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "DBConfigID" ASCENDING 
+
+ADD INDEX "TableName" ON "DBConfig" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "TableName" ASCENDING 
+  INDEX-FIELD "DBState" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "ToDate" ON "DBConfig" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+  INDEX-FIELD "TableName" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000002735

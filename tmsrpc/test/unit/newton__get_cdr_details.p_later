@@ -1,0 +1,965 @@
+/**
+ * This is the test set for the corresponding newton__get_cdr_details
+ * XML RPC method.
+ *
+ * The fixture usage of this test set:
+ *
+ * - fixtures fetched:
+ *
+ *     CliType  : FirstCliType (CliType: "2" )
+ *     MobCDR   : CallCDR1 (DateSt: "1/1/2008", TimeStart: 0)
+ *                CallCDR2 (DateSt: "12/1/2008", TimeStart: 0)
+ *                CallCDR3 (DateSt: "31/1/2008", TimeStart: 0)
+ *     MCDRDtl2 : FirstCDRDtlCall  (DateSt: "1/1/2008", DtlSeq: 12)
+ *                SecondCDRDtlGRPS (DateSt: "12/1/2008", DtlSeq: 13)
+ *                ThirdCDRDtlSMS   (DateSt: "31/1/2008", DtlSeq: 17)
+ *     PrepCDR  : PrepaidCDR1 (DateSt: "1/1/2008", TimeStart: 0)
+ *                PrepaidCDR2 (DateSt: "12/1/2008", TimeStart: 0)
+ *                PrepaidCDR3 (DateSt: "31/1/2008", TimeStart: 0)
+ *     RepText  : RepTextForBC1
+ *                RepTextForBC2
+ *                RepTextForCCN2
+ *                RepTextForCCN2
+ *
+ * - The XML RPC method is expected to use also fixtures:
+ *     InvSeq   : BilledInvSeq 
+ *                NotBilledInvSeq
+ *     TMSParam: CDRDetails
+ *
+ * - restrictions for building other fixtures: 
+ */
+
+
+{test_xmlrpc_includes.i}
+
+gcFixtures = "mobsub,MobCDR,MCDRDtl2,clitype,CallScanner," + 
+             "RepText,InvSeq,ppInvSeq,PrepCDR,TMSParam,RatePlan,CSVHeader,rzItem".
+
+DEFINE VARIABLE gcParamStruct AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE gcRetStruct   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE gcRowArray    AS CHARACTER NO-UNDO. 
+
+gcParamStruct = "".
+
+DEFINE VARIABLE lLog AS LOGICAL NO-UNDO. 
+lLog = FALSE.
+
+FUNCTION fLog RETURN LOGICAL 
+   (INPUT pcMsg AS CHARACTER):
+   IF lLog THEN  MESSAGE pcMsg.
+END.
+
+
+/**
+ * Function that call the RPC method and checks the call has succeeded 
+ *
+ * @return TRUE if the call succeeded.
+ */
+FUNCTION call_get_cdr_details RETURN LOGICAL:
+    run_rpc_method("newton.get_cdr_details").
+    assert_success().
+    RETURN TRUE.
+END FUNCTION.
+
+
+/**
+ * Function to add maximum number of parameters to XML RPC method call.
+ *
+ * @param piMsSeq  MsSeq of the MobSub for which the MobCDR/PrepCDR
+ *                 records are received.
+ * @param pdaStartDate  The DateSt after or equal to which the MobCDR/PrepCDR
+ *                      records are received.
+ * @param pdaEndDate    The DateSt before or equal to which the MobCDR/PrepCDR
+ *                      records are received.
+ * @param pcUserName    The username to be set into CallScanner record
+ * @param piReasonCode  The reasoncode to be set into CallScanner record
+ * @param pcReason      The reason to be set into CallScanner record
+ */
+FUNCTION add_params RETURN LOGICAL(
+   INPUT piMsSeq AS INTEGER,
+   INPUT pdaStartDate AS DATETIME,
+   INPUT pdaEndDate AS DATETIME,
+   INPUT pcSearchMode AS CHARACTER,
+   INPUT pcUserName AS CHARACTER,
+   INPUT piReasonCode AS INTEGER,
+   INPUT pcReason AS CHARACTER):
+
+   add_int("", ?, piMsSeq).
+   add_datetime("", ?, pdaStartDate).
+   add_datetime("", ?, pdaEndDate).
+   add_string("", ?, pcSearchMode).
+   add_string("", ?, pcUserName).
+   add_int("", ?, piReasonCode).
+   add_string("", ?, pcReason).
+  
+   RETURN TRUE.
+END.
+
+/**
+ * Function to add minimum number of parameters to XML RPC method call.
+ * The XML RPC method sets default values for the rest of the parameters.
+ *
+ * @param piMsSeq  MsSeq of the MobSub for which the MobCDR/PrepCDR
+ *                 records are received.
+ * @param pdaStartDate  The DateSt after or equal to which the MobCDR/PrepCDR
+ *                      records are received.
+ * @param pdaEndDate    The DateSt before or equal to which the MobCDR/PrepCDR
+ *                      records are received.
+ */
+FUNCTION add_min_params RETURN LOGICAL(
+   INPUT piMsSeq AS INTEGER,
+   INPUT pdaStartDate AS DATETIME,
+   INPUT pdaEndDate AS DATETIME,
+   INPUT pcSearchMode AS CHARACTER):
+
+   add_int("", ? , piMsSeq).
+   add_datetime("", ?, pdaStartDate).
+   add_datetime("", ?, pdaEndDate).
+   add_string("", ?, pcSearchMode).
+   RETURN TRUE.
+END.
+
+/**
+ * Function to check the header value array from the main response struct
+ * in the case of MobCDR request.
+ * 
+ * @return TRUE if succeeded.
+ */
+FUNCTION check_headers RETURN LOGICAL (INPUT plDetailed AS LOGICAL, 
+   INPUT plSaldo AS LOGICAL):
+   DEFINE VARIABLE lcHeaderArray AS CHARACTER NO-UNDO. 
+
+   lcHeaderArray = get_array(gcRetStruct, "headers").
+
+   IF NOT plDetailed THEN
+   DO:
+      assert_equal_char(get_string(lcHeaderArray, "0"), "Fecha").
+      assert_equal_char(get_string(lcHeaderArray, "1"), "Hora").
+      assert_equal_char(get_string(lcHeaderArray, "2"), from_utf8("Nmero")).    
+      assert_equal_char(get_string(lcHeaderArray, "3"), "Tipo").
+      assert_equal_char(get_string(lcHeaderArray, "4"), "Destino").
+      assert_equal_char(get_string(lcHeaderArray, "5"), "Tarifa").
+      assert_equal_char(get_string(lcHeaderArray, "6"), "Mins/KB/Cant.").
+      assert_equal_char(get_string(lcHeaderArray, "7"), "Importe").
+      IF plSaldo THEN
+      DO:
+         DEFINE VARIABLE cRetVal AS CHARACTER NO-UNDO. 
+         cRetVal = get_string(lcHeaderArray, "8").
+         assert_equal_char(cRetVal, "Saldo").
+      END.
+      ELSE
+         assert(get_paramcount(lcHeaderArray) EQ 8, 
+            "There was not 8 headers as expected").
+   END.
+   ELSE
+   DO:
+      assert_equal_char(get_string(lcHeaderArray, "0"), "Nmero A").
+      assert_equal_char(get_string(lcHeaderArray, "1"), "Nmero B").
+      assert_equal_char(get_string(lcHeaderArray, "2"), "Informe CCN").       
+      assert_equal_char(get_string(lcHeaderArray, "3"), "Tarificacin CCN").
+      assert_equal_char(get_string(lcHeaderArray, "4"), "Plan de tarifas").    
+      assert_equal_char(get_string(lcHeaderArray, "5"), "Tipo de CDR").      
+      assert_equal_char(get_string(lcHeaderArray, "6"), "Fecha").            
+      assert_equal_char(get_string(lcHeaderArray, "7"), "Inicio").           
+      assert_equal_char(get_string(lcHeaderArray, "8"), "Fin").         
+      assert_equal_char(get_string(lcHeaderArray, "9"), "Duracin").          
+      assert_equal_char(get_string(lcHeaderArray, "10"), "Datos (MB)").        
+      assert_equal_char(get_string(lcHeaderArray, "11"), "Facturar tem"). 
+      assert_equal_char(get_string(lcHeaderArray, "12"), "Tarifa inicial").     
+      assert_equal_char(get_string(lcHeaderArray, "13"), "Cobro por unidad").   
+      assert_equal_char(get_string(lcHeaderArray, "14"), "Cobro total").       
+      assert_equal_char(get_string(lcHeaderArray, "15"), "N?Factura").       
+   END.
+   RETURN TRUE.
+END.
+
+
+/**
+ * This function check one MobCDR record with its relation RepText record
+ * against the response values found from array indentifier gcArray.
+ *
+ * @param iRow the number of the row for debugging purposes.
+ * @param pcExpectedDetail the string value expected for the detail field.
+ * @param pcFixtureNameRepTextBIName  the RepText fixture with which the response
+ *                                    value taken for MobCDR.BillCode is 
+ *                                    compared with.
+ * @param pcFixturenameRepTextCCN     the RepText fixture with which 
+ *                                    the response value taken for MobCDR.CCN 
+ *                                    is compared with.
+ * @return TRUE if succeeded.
+ */
+FUNCTION check_row RETURN LOGICAL(INPUT iRow AS INTEGER,
+                                  INPUT pcExpectedDetail AS CHARACTER,
+                                  INPUT pcFixtureNameRepTextBIName AS CHARACTER,
+                                  INPUT pcFixtureNameRepTextCCN AS CHARACTER,
+                                  INPUT pcFixtureNameRepTextPricePlan AS CHARACTER):
+
+      fLog("Begin check_row").
+      assert_equal_char(get_string(gcRowArray, "0"), 
+                        STRING(MobCDR.DateSt, "99-99-99")). 
+
+      fLog("DateSt checked").
+      assert_equal_char(get_string(gcRowArray, "1"), 
+                        STRING(MobCDR.TimeSt, "HH:MM")).
+      fLog("TimeSt checked").
+
+      assert_equal_char(get_string(gcRowArray, "2"), 
+         STRING(MobCDR.GsmBnr)).
+
+      fLog("GsmBnr checked").
+
+      fetch_fixture(pcFixtureNameRepTextBIName, BUFFER RepText:HANDLE).
+
+      DEFINE VARIABLE cRealRepText AS CHARACTER NO-UNDO. 
+      cRealRepText = get_string(gcRowArray, "3").
+      
+      assert_equal_char(get_string(gcRowArray,"3"), RepText.RepText).
+
+      fLog("First RepText checked").
+
+      fetch_fixture(pcFixtureNameRepTextCCN, BUFFER RepText:HANDLE).
+      assert_equal_char(get_string(gcRowArray,"4"), RepText.RepText).
+
+      fLog("Second RepText checked").
+
+      fetch_fixture(pcFixtureNameRepTextPricePlan, BUFFER RepText:HANDLE).
+      assert_equal_char(get_string(gcRowArray,"5"), RepText.RepText).
+
+      fLog("CLIName checked").
+
+      assert_equal_char(get_string(gcRowArray, "6"), pcExpectedDetail).
+
+      fLog("Expected detail checked").
+
+      DEFINE VARIABLE cRetVal AS CHARACTER NO-UNDO. 
+      DEFINE VARIABLE cExpVal AS CHARACTER NO-UNDO. 
+      cRetVal = get_string(gcRowArray, "7").
+      cExpVal = STRING(MobCDR.Amount, "z9.999").
+      assert_equal_char(cRetVal, cExpVal).
+
+   RETURN TRUE.
+END.
+
+/**
+ * This function check one PrepCDR record with its relation RepText record
+ * against the response values found from array indentifier gcArray.
+ *
+ * @param iRow the number of the row for debugging purposes.
+ * @param pcExpectedDetail the string value expected for the detail field.
+ * @param pcFixtureNameRepTextBIName  the RepText fixture with which the response
+ *                                    value taken for PrepCDR.BillCode is 
+ *                                    compared with.
+ * @param pcFixturenameRepTextCCN     the RepText fixture with which 
+ *                                    the response value taken for PrepCDR.CCN 
+ *                                    is compared with.
+ * @return TRUE if succeeded.
+ */
+
+FUNCTION check_prepaid_row RETURN LOGICAL (INPUT iRow AS INTEGER,
+                                  INPUT pcExpectedDetail AS CHARACTER,
+                                  INPUT pcFixtureNameRepTextBIName AS CHARACTER,
+                                  INPUT pcFixtureNameRepTextCCN AS CHARACTER,
+                                  INPUT pcFixtureNameRepTextPricePlan AS CHARACTER,
+                                  INPUT pcFixtureNameMCDRDtl2 AS CHARACTER ):
+   assert_equal_char(get_string(gcRowArray, "0"), STRING(PrepCDR.DateSt, "99-99-99")). 
+   assert_equal_char(get_string(gcRowArray, "1"), STRING(PrepCDR.TimeSt, "HH:MM")). 
+   assert_equal_char(get_string(gcRowArray, "2"), STRING(PrepCDR.GsmBnr)). 
+
+   fetch_fixture(pcFixtureNameRepTextBIName, BUFFER RepText:HANDLE).
+   assert_equal_char(get_string(gcRowArray,"3"), RepText.RepText). 
+   
+   fetch_fixture(pcFixtureNameRepTextCCN, BUFFER RepText:HANDLE).
+   assert_equal_char(get_string(gcRowArray,"4"), RepText.RepText). 
+   
+   fetch_fixture(pcFixtureNameRepTextPricePlan, BUFFER RepText:HANDLE).
+   assert_equal_char(get_string(gcRowArray,"5"), RepText.RepText). 
+   
+   assert_equal_char(get_string(gcRowArray, "6"), pcExpectedDetail). 
+
+   DEFINE VARIABLE cRetVal AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE cExpVal AS CHARACTER NO-UNDO. 
+   cRetVal = get_string(gcRowArray, "7").
+   cExpVal = STRING(PrepCDR.Charge,"z9.999").
+   assert_equal_char(cRetVal, cExpVal).
+
+   DEFINE VARIABLE cExpectedDetail AS CHARACTER NO-UNDO. 
+   cExpectedDetail = "".
+
+   CASE pcFixtureNameMCDRDtl2:
+       WHEN "FirstCDRDtlCall"  THEN cExpectedDetail = "20,20".
+       WHEN "SecondCDRDtlGRPS" THEN cExpectedDetail = "12,5".
+       WHEN "ThirdCDRDtlSMS"   THEN cExpectedDetail = "12".
+   END.
+
+   cRetVal = get_string(gcRowArray, "8").
+   assert_equal_char(cRetVal, cExpectedDetail).
+
+   RETURN TRUE.
+END.
+
+
+FUNCTION fCheckDetailedPrepaidRow RETURN LOGICAL
+    (INPUT iRow AS INTEGER,
+     INPUT pcExpectedDetail AS CHARACTER,
+     INPUT pcFixtureNameRepTextBIName AS CHARACTER,
+     INPUT pcFixtureNameRepTextCCN AS CHARACTER,
+     INPUT pcFixtureNameRepTextCCNName AS CHARACTER,
+     INPUT pcFixtureNameRepTextPricePlan AS CHARACTER,
+     INPUT pcFixtureInvSeq AS CHARACTER):
+
+   assert_equal_char(get_string(gcRowArray,"0"), PrepCDR.CLI). 
+   assert_equal_char(get_string(gcRowArray,"1"), PrepCDR.GSMBnr).
+    fetch_fixture(pcFixtureNameRepTextCCN, BUFFER RepText:HANDLE).
+   assert_equal_char(get_string(gcRowArray,"2"), RepText.RepText). 
+   fetch_fixture(pcFixtureNameRepTextCCNName, BUFFER RepText:HANDLE).
+   assert_equal_char(get_string(gcRowArray,"3"), RepText.RepText). 
+   fetch_fixture(pcFixtureNameRepTextPricePlan, BUFFER RepText:HANDLE).
+   assert_equal_char(get_string(gcRowArray,"4"), RepText.RepText). 
+   IF PrepCDR.ppFlag = 1 THEN
+      assert_equal_char(get_string(gcRowArray,"5"), "Prepaid").
+   ELSE
+      assert_equal_char(get_string(gcRowArray,"5"), "Postpaid").
+   assert_equal_char(get_string(gcRowArray, "6"), 
+      STRING(PrepCDR.DateSt, "99-99-99")). 
+   assert_equal_char(get_string(gcRowArray, "7"), STRING(PrepCDR.TimeSt, "HH:MM")). 
+
+   assert_equal_char(get_string(gcRowArray, "8"), 
+       STRING(PrepCDR.Timestart + PrepCDR.BillDur, "hh:mm:ss")). 
+
+   assert_equal_char(get_string(gcRowArray, "9"), STRING(PrepCDR.BillDur,"HH:MM:SS")).
+
+   assert_equal_char(get_string(gcRowArray, "10"), 
+      STRING((PrepCDR.DataIn + PrepCDR.DataOut) / 1024 / 1024)).
+
+   fetch_fixture(pcFixtureNameRepTextBIName, BUFFER RepText:HANDLE).
+   assert_equal_char(get_string(gcRowArray,"11"), RepText.RepText). 
+
+   DEFINE VARIABLE ldeAmount AS DECIMAL NO-UNDO. 
+   ldeAmount = PrepCDR.Charge.
+
+   assert_equal_char(get_string(gcRowArray,"12"), ""). 
+   assert_equal_char(get_string(gcRowArray,"13"), "").
+   assert_equal_char(get_string(gcRowArray,"14"), 
+      TRIM(STRING(ldeAmount, "zzz9.999"))).
+   IF pcFixtureInvSeq NE "" THEN
+   DO:
+      fetch_fixture(pcFixtureInvSeq, BUFFER InvSeq:HANDLE).
+      IF InvSeq.InvNum > 0 THEN
+         assert_equal_char(get_string(gcRowArray,"15"),
+           "" + STRING(InvSeq.InvNum)).
+      ELSE
+         assert_equal_char(get_string(gcRowArray,"15"), "").
+   END.
+   ELSE
+   DO:
+      assert_equal_char(get_string(gcRowArray,"15"), "").
+   END.
+
+   RETURN TRUE.
+END.
+
+
+
+FUNCTION fCheckDetailedPostpaidRow RETURN LOGICAL
+    (INPUT iRow AS INTEGER,
+     INPUT pcExpectedDetail AS CHARACTER,
+     INPUT pcFixtureNameRepTextBIName AS CHARACTER,
+     INPUT pcFixtureNameRepTextCCN AS CHARACTER,
+     INPUT pcFixtureNameRepTextCCNName AS CHARACTER,
+     INPUT pcFixtureNameRepTextPricePlan AS CHARACTER,
+     INPUT pcFixtureInvSeq AS CHARACTER):
+
+   assert_equal_char(get_string(gcRowArray,"0"), MobCDR.CLI). 
+   assert_equal_char(get_string(gcRowArray,"1"), MobCDR.GSMBnr).
+   fetch_fixture(pcFixtureNameRepTextCCN, BUFFER RepText:HANDLE).
+   assert_equal_char(get_string(gcRowArray,"2"), RepText.RepText). 
+   fetch_fixture(pcFixtureNameRepTextCCNName, BUFFER RepText:HANDLE).
+   assert_equal_char(get_string(gcRowArray,"3"), RepText.RepText). 
+   fetch_fixture(pcFixtureNameRepTextPricePlan, BUFFER RepText:HANDLE).
+   assert_equal_char(get_string(gcRowArray,"4"), RepText.RepText). 
+   IF MobCDR.ppFlag = 1 THEN
+      assert_equal_char(get_string(gcRowArray,"5"), "Prepaid").
+   ELSE
+      assert_equal_char(get_string(gcRowArray,"5"), "Postpaid").
+   assert_equal_char(get_string(gcRowArray, "6"), 
+      STRING(MobCDR.DateSt, "99-99-99")). 
+   assert_equal_char(get_string(gcRowArray, "7"), STRING(MobCDR.TimeSt, "HH:MM")). 
+
+   assert_equal_char(get_string(gcRowArray, "8"), 
+       STRING(MobCDR.Timestart + MobCDR.BillDur, "hh:mm:ss")). 
+
+   assert_equal_char(get_string(gcRowArray, "9"), STRING(MobCDR.BillDur,"HH:MM:SS")).
+
+   assert_equal_char(get_string(gcRowArray, "10"), 
+      STRING((MobCDR.DataIn + MobCDR.DataOut) / 1024 / 1024)).
+
+   fetch_fixture(pcFixtureNameRepTextBIName, BUFFER RepText:HANDLE).
+   assert_equal_char(get_string(gcRowArray,"11"), RepText.RepText). 
+
+   DEFINE VARIABLE ldeStartCharge AS DECIMAL NO-UNDO. 
+   DEFINE VARIABLE ldeAmount AS DECIMAL NO-UNDO. 
+   ldeStartCharge = MobCDR.StartCharge.
+   ldeAmount = MobCDR.Amount.
+
+   assert_equal_char(get_string(gcRowArray,"12"), 
+      TRIM(STRING(ldeStartCharge,"zzz9.999"))). 
+   assert_equal_char(get_string(gcRowArray,"13"), 
+      TRIM(STRING(ldeAmount - ldeStartCharge, "zzz9.999"))).
+   assert_equal_char(get_string(gcRowArray,"14"), 
+      TRIM(STRING(ldeAmount, "zzz9.999"))).
+   IF pcFixtureInvSeq NE "" THEN
+   DO:
+      fetch_fixture(pcFixtureInvSeq, BUFFER InvSeq:HANDLE).
+      IF InvSeq.InvNum > 0 THEN
+         assert_equal_char(get_string(gcRowArray,"15"),
+           "" + STRING(InvSeq.InvNum)).
+      ELSE
+         assert_equal_char(get_string(gcRowArray,"15"), "").
+   END.
+   ELSE
+   DO:
+      assert_equal_char(get_string(gcRowArray,"15"), "").
+   END.
+ 
+   RETURN TRUE.
+END.
+
+
+/**
+ * Function to check 3 row MobCDR, MCDRDtl2 and RepText fixture set against 
+ * response values.
+ *
+ * Fetched fixtures:
+ *   MobCDR   : CallCDR1 (DateSt: "1/1/2008", TimeStart: 0)
+ *              CallCDR2 (DateSt: "12/1/2008", TimeStart: 0)
+ *              CallCDR3 (DateSt: "31/1/2008", TimeStart: 0)
+ *   MCDRDtl2 : FirstCDRDtlCall  (DateSt: "1/1/2008", DtlSeq: 12)
+ *              SecondCDRDtlGRPS (DateSt: "12/1/2008", DtlSeq: 13)
+ *              ThirdCDRDtlSMS   (DateSt: "31/1/2008", DtlSeq: 17)
+ *   RepText  : RepTextForBC1    
+ *              RepTextForBC2
+ *              RepTextForCCN1
+ *              RepTextForCCN2
+ *
+ * @return TRUE if succeeded.
+ */
+FUNCTION check_rows RETURN LOGICAL:
+   DEFINE VARIABLE lcRowsArray AS CHARACTER NO-UNDO. 
+   lcRowsArray = get_array(gcRetStruct, "rows").
+   gcRowArray = get_array(lcRowsArray, "0").
+   assert_response(gcRowArray, "string,string,string,string,string,string,string,string").
+
+   fetch_fixture("CallCDR1", BUFFER MobCDR:HANDLE).
+   fetch_fixture("FirstCDRDtlCall", BUFFER MCDRDtl2:HANDLE).
+   check_row(1, "00:39:04","RepTextForBC1","RepTextForCCN1",
+             "RepTextForPricePlan1"). /* CALL */
+
+   gcRowArray = get_array(lcRowsArray, "1").
+   fetch_fixture("CallCDR2", BUFFER MobCDR:HANDLE).
+   fetch_fixture("SecondCDRDtlGRPS", BUFFER MCDRDtl2:HANDLE). 
+   check_row(2, "3","RepTextForBC2","RepTextForCCN2",
+      "RepTextForPricePlan1"). /* GRPS */ 
+
+   gcRowArray = get_array(lcRowsArray, "2"). 
+   fetch_fixture("CallCDR3", BUFFER MobCDR:HANDLE).
+   fetch_fixture("ThirdCDRDtlSMS", BUFFER MCDRDtl2:HANDLE).
+   check_row(3, "1", "RepTextForBC2","RepTextForCCN2",
+      "RepTextForPricePlan1"). /* SMS */
+   RETURN TRUE.
+END.
+
+
+FUNCTION fCheckDetailedPostpaidRows RETURN LOGICAL:
+   DEFINE VARIABLE lcRowsArray AS CHARACTER NO-UNDO. 
+   lcRowsArray = get_array(gcRetStruct, "rows").
+   gcRowArray = get_array(lcRowsArray, "0").
+
+   fetch_fixture("CallCDR1", BUFFER MobCDR:HANDLE).
+   fCheckDetailedPostpaidRow(1, "00:39:04","RepTextForBC1","RepTextForCCN1",
+      "RateCCNRepText1",
+      "RepTextForPricePlan1", "BilledInvSeq").
+
+   gcRowArray = get_array(lcRowsArray, "1").
+   fetch_fixture("CallCDR2", BUFFER MobCDR:HANDLE).
+   fCheckDetailedPostpaidRow(2, "3","RepTextForBC2","RepTextForCCN2",
+      "RateCCNRepText2",
+      "RepTextForPricePlan1", "NotBilledInvSeq"). 
+
+   gcRowArray = get_array(lcRowsArray, "2"). 
+   fetch_fixture("CallCDR3", BUFFER MobCDR:HANDLE).
+   fCheckDetailedPostpaidRow(3, "1", "RepTextForBC2","RepTextForCCN2",
+      "RateCCNRepText3",
+      "RepTextForPricePlan1", ""). 
+   RETURN TRUE.
+
+END.
+
+
+
+FUNCTION fCheckDetailedPrepaidRows RETURN LOGICAL:
+   DEFINE VARIABLE lcRowsArray AS CHARACTER NO-UNDO. 
+   lcRowsArray = get_array(gcRetStruct, "rows").
+   fetch_fixture("PrepaidCDR1", BUFFER PrepCDR:HANDLE).
+   gcRowArray = get_array(lcRowsArray, "0").
+   fCheckDetailedPrepaidRow(
+      1, "00:39:04","RepTextForBC1","RepTextForCCN1",
+      "RateCCNRepText3",
+      "RepTextForPricePlan1", "NotBilledInvSeq").
+
+   gcRowArray = get_array(lcRowsArray, "1").
+   fetch_fixture("PrepaidCDR2", BUFFER PrepCDR:HANDLE).
+   fCheckDetailedPrepaidRow(
+       2, "3","RepTextForBC2","RepTextForCCN2",
+      "RateCCNRepText2",
+      "RepTextForPricePlan1","BilledInvSeq").  
+
+   gcRowArray = get_array(lcRowsArray, "2"). 
+   fetch_fixture("PrepaidCDR3", BUFFER PrepCDR:HANDLE).
+   fCheckDetailedPrepaidRow(
+      3, "1", "RepTextForBC1","RepTextForCCN2",
+      "RateCCNRepText1",
+      "RepTextForPricePlan1","").
+
+   RETURN TRUE.
+END.
+
+
+
+/**
+ * Function to check MobCDR, MCDRDtl2 and RepText for a XML RPC request
+ * that has miyoigo special user as username. In the case of this user
+ * the XML RPC Method does not include a MobCDR row that has corresponding
+ * InvSeq indicating that the MobCDR is already billed (CallCDR1 is expected
+ * not to be received ).
+ * 
+ * Fetched fixtures:
+ *     MobCDR   : CallCDR2 (DateSt: "12/1/2008", TimeStart: 0)
+ *                CallCDR3 (DateSt: "31/1/2008", TimeStart: 0)
+ *     MCDRDtl2 : SecondCDRDtlGRPS (DateSt: "12/1/2008", DtlSeq: 13)
+ *                ThirdCDRDtlSMS   (DateSt: "31/1/2008", DtlSeq: 17)
+ *     RepText  : RepTextForBC1
+ *                RepTextForBC2
+ *                RepTextForCCN2
+ * The XML RPC method is expected to use also fixtures:
+ *     InvSeq   : BilledInvSeq 
+ *                NotBilledInvSeq 
+ *
+ * @return TRUE if succeeded.
+ */
+FUNCTION check_miyoigo_rows RETURN LOGICAL:
+   DEFINE VARIABLE lcRowsArray AS CHARACTER NO-UNDO. 
+   lcRowsArray = get_array(gcRetStruct, "rows").
+   gcRowArray = get_array(lcRowsArray, "0").
+   assert_response(gcRowArray, "string,string,string,string,string,string,string,string").
+
+   fetch_fixture("CallCDR2", BUFFER MobCDR:HANDLE).
+   fetch_fixture("SecondCDRDtlGRPS", BUFFER MCDRDtl2:HANDLE). 
+
+   check_row(2, "3","RepTextForBC2","RepTextForCCN2","RepTextForPricePlan1"). /* GRPS */ 
+
+   gcRowArray = get_array(lcRowsArray, "1"). 
+   fetch_fixture("CallCDR3", BUFFER MobCDR:HANDLE).
+   fetch_fixture("ThirdCDRDtlSMS", BUFFER MCDRDtl2:HANDLE).
+   check_row(3, "1", "RepTextForBC2","RepTextForCCN2","RepTextForPricePlan1"). /* SMS */
+
+   RETURN TRUE.
+END.
+
+/** 
+ * This function check the empty result set.
+ *
+ * @return TRUE if succeeded.
+ */
+FUNCTION check_empty_rows RETURN LOGICAL:
+   DEFINE VARIABLE lcRowsArray AS CHARACTER NO-UNDO. 
+   lcRowsArray = get_array(gcRetStruct, "rows").
+   assert_response(lcRowsArray, "").
+   assert_equal_int(get_paramcount(lcRowsArray), 0).
+   RETURN TRUE.
+END.
+
+/**
+ * Function to check 3 row PrepCDR, MCDRDtl2 and RepText fixture set against 
+ * response values.
+ *
+ * @return TRUE if succeeded.
+ */
+FUNCTION check_prepaid_rows RETURN LOGICAL:
+   DEFINE VARIABLE lcRowsArray AS CHARACTER NO-UNDO. 
+   lcRowsArray = get_array(gcRetStruct, "rows").
+   fetch_fixture("PrepaidCDR1", BUFFER PrepCDR:HANDLE).
+   fetch_fixture("FirstCDRDtlCall", BUFFER MCDRDtl2:HANDLE).
+   
+   gcRowArray = get_array(lcRowsArray, "0").
+   assert_response(gcRowArray, 
+      "string,string,string,string,string,string,string,string,string").
+   check_prepaid_row(1, "00:39:04","RepTextForBC1","RepTextForCCN1",
+      "RepTextForPricePlan1","FirstCDRDtlCall"). /* CALL */
+
+   gcRowArray = get_array(lcRowsArray, "1").
+   assert_response(gcRowArray, 
+      "string,string,string,string,string,string,string,string,string").
+   fetch_fixture("PrepaidCDR2", BUFFER PrepCDR:HANDLE).
+   fetch_fixture("SecondCDRDtlGRPS", BUFFER MCDRDtl2:HANDLE). 
+   check_prepaid_row(2, "3","RepTextForBC2","RepTextForCCN2",
+      "RepTextForPricePlan1","SecondCDRDtlGRPS"). /* GRPS */ 
+
+   gcRowArray = get_array(lcRowsArray, "2"). 
+   assert_response(gcRowArray, 
+      "string,string,string,string,string,string,string,string,string").
+   fetch_fixture("PrepaidCDR3", BUFFER PrepCDR:HANDLE).
+   fetch_fixture("ThirdCDRDtlSMS", BUFFER MCDRDtl2:HANDLE).
+   check_prepaid_row(3, "1", "RepTextForBC1","RepTextForCCN2",
+      "RepTextForPricePlan1","ThirdCDRDtlSMS"). /* SMS */
+
+   RETURN TRUE.
+END.
+
+/**
+ * Function to check last CallScanner record created to CallScanner table.
+ * The XML RPC method is expected to create one CallScanner record that
+ * is found last in the table using default index. 
+ *
+ * @param pcMobSubCLI   the expected CLI value of the CallScanner record.
+ * @param pdaStartDate  the StartDate parameter in the XML RPC method call.
+ * @param pdaEndDate    the EndDate parameter in the XML RPC method call.
+ * @param pcUserName    the expected UserName value of the CallScanner record
+ *                      - must endeed be the same as the one in the XML RPC
+ *                        method call.
+ * @param piReasonCode  the ReasonCode parameter in the XML RPC method call.
+ * @param pcReasonCode   the Reason parameter in the XML RPC method call.
+ *
+ * @return TRUE if succeeded.
+ */
+FUNCTION check_last_call_scanner RETURN LOGICAL
+(INPUT pcMobSubCLi AS CHARACTER, 
+ INPUT pdaStartDate AS DATE,
+ INPUT pdaEndDate AS DATE, 
+ INPUT pcUserName AS CHARACTER,
+ INPUT piReasonCode AS INTEGER,
+ INPUT pcReason AS CHARACTER):
+
+   FIND LAST CallScanner NO-LOCK.
+   assert(CallScanner.TMSTime <> ?, "CallScanner, unknown TMSTime").
+   assert_equal_char(CallScanner.UserCode, pcUserName).
+   assert_equal_char(CallScanner.SystemID, "XFERA_WEB").
+   assert_equal_char(CallScanner.EventType, "CLI").
+   assert_equal_char(CallScanner.Level,"").
+   assert_equal_char(CallScanner.ReasonCode, STRING(piReasonCode) + " " +
+      pcReason).
+   assert_equal_char(CallScanner.Target, MobSub.CLI).
+    
+
+   assert_equal_char(CallScanner.StartTime, 
+       STRING(pdaStartDate,"99/99/99") + " " + STRING("00:00:00")).
+   assert_equal_char(CallScanner.EndTime, 
+       STRING(pdaEndDate,"99/99/99") + " " + STRING("23:59:59")).
+
+   assert(CallScanner.SearchRule <> "", "CallScanner is empty").
+
+/*   assert_equal_char(REPLACE(CallScanner.SearchRule," ",""), 
+       REPLACE("cli = " + STRING(pcMobSubCLI) + " AND " + 
+       "DateST >= " + STRING(pdaStartDate) + " AND " + 
+       "DateSt <= " + STRING(pdaEndDate) + ";"," ","")).*/
+
+   RETURN TRUE.
+END.
+
+/**
+ * This test check MobCDR record getting for not prepaid MobSub record
+ * with MsSeq 12 passing maximum number of parameters to the XML RPC
+ * method call. 
+ *
+ * Fetched fixtures:
+ *    MobSub: not_prepaid (MsSeq: 12)
+ *    MobCDR   : CallCDR1 (DateSt: "1/1/2008", TimeStart: 0)
+ *               CallCDR2 (DateSt: "12/1/2008", TimeStart: 0)
+ *               CallCDR3 (DateSt: "31/1/2008", TimeStart: 0)
+ *    MCDRDtl2 : FirstCDRDtlCall  (DateSt: "1/1/2008", DtlSeq: 12)
+ *               SecondCDRDtlGRPS (DateSt: "12/1/2008", DtlSeq: 13)
+ *               ThirdCDRDtlSMS   (DateSt: "31/1/2008", DtlSeq: 17)
+ *    RepText  : RepTextForBC1    
+ *               RepTextForBC2
+ *               RepTextForCCN1
+ *               RepTextForCCN2
+ */
+PROCEDURE test_get_cdr_using_max_params_usual_calls:
+   add_params(12, 
+      DATETIME(DATE("1/1/2008"),0), 
+      DATETIME(DATE("31/1/2008"),0),
+      "NORMAL",
+      "hlo",
+      23423,
+      "reason why").
+   
+   call_get_cdr_details().
+   gcRetStruct = get_struct("","").
+   check_headers(FALSE, FALSE).
+   check_rows().
+
+   fetch_fixture("not_prepaid", BUFFER MobSub:HANDLE).
+
+   check_last_call_scanner(MobSub.CLI,
+      DATE("1/1/2008"), 
+      DATE("31/1/2008"),
+      "hlo",23423,"reason why").
+END.
+
+
+PROCEDURE test_get_cdr_details_using_max_params_usual_calls:
+   add_params(12, 
+      DATETIME(DATE("1/1/2008"),0), 
+      DATETIME(DATE("31/1/2008"),0),
+      "DETAILED",
+      "hlo",
+      23423,
+      "reason why").
+   
+   call_get_cdr_details().
+   gcRetStruct = get_struct("","").
+   check_headers(TRUE, FALSE).
+   fCheckDetailedPostpaidRows().
+
+   fetch_fixture("not_prepaid", BUFFER MobSub:HANDLE).
+
+   check_last_call_scanner(MobSub.CLI,
+      DATE("1/1/2008"), 
+      DATE("31/1/2008"),
+      "hlo",23423,"reason why").
+END.
+
+
+
+
+/**
+ * This test check MobCDR record getting for not prepaid MobSub record
+ * with MsSeq 12 passing minimum number of parameters to the XML RPC
+ * method call.
+ *
+ * Fetched fixtures:
+ *    MobSub: not_prepaid (MsSeq: 12)
+ *    CliType  : FirstCliType (CliType: "2")
+ *    MobCDR   : CallCDR1 (DateSt: "1/1/2008", TimeStart: 0)
+ *               CallCDR2 (DateSt: "12/1/2008", TimeStart: 0)
+ *               CallCDR3 (DateSt: "31/1/2008", TimeStart: 0)
+ *    MCDRDtl2 : FirstCDRDtlCall  (DateSt: "1/1/2008", DtlSeq: 12)
+ *               SecondCDRDtlGRPS (DateSt: "12/1/2008", DtlSeq: 13)
+ *               ThirdCDRDtlSMS   (DateSt: "31/1/2008", DtlSeq: 17)
+ *    RepText  : RepTextForBC1    
+ *               RepTextForBC2
+ *               RepTextForCCN1
+ *               RepTextForCCN2
+ *
+ * The XML RPC method is expected to fetch also following records:
+ *
+ * Limitations for the fixture generation:
+ */
+PROCEDURE test_get_cdr_using_min_params_usual_calls:
+   add_min_params(12,
+      DATETIME(DATE("1/1/2008"),0), 
+      DATETIME(DATE("31/1/2008"),0),
+      "NORMAL").
+
+   call_get_cdr_details().
+
+   gcRetStruct = get_struct("","").
+   check_headers(FALSE, FALSE).
+   check_rows().
+END.
+
+/**
+ * This test check PrepCDR record getting for prepaid MobSub record
+ * with MsSeq 11 passing minimum number of parameters to the XML RPC
+ * method call.
+ *
+ * Fetched fixtures:
+ *    MobSub   : prepaid (MsSeq: 12)
+ *    CliType  : FirstCliType (CliType: "2")
+ *    PrepCDR  : PrepaidCDR1 (DateSt: "1/1/2008", TimeStart: 0)
+ *               PrepaidCDR2 (DateSt: "12/1/2008", TimeStart: 0)
+ *               PrepaidCDR3 (DateSt: "31/1/2008", TimeStart: 0)
+ *    MCDRDtl2 : FirstCDRDtlCall  (DateSt: "1/1/2008", DtlSeq: 12)
+ *               SecondCDRDtlGRPS (DateSt: "12/1/2008", DtlSeq: 13)
+ *               ThirdCDRDtlSMS   (DateSt: "31/1/2008", DtlSeq: 17)
+ *    RepText  : RepTextForBC1    
+ *               RepTextForBC2
+ *               RepTextForCCN1
+ *               RepTextForCCN2
+ *
+ * The XML RPC method is expected to fetch also following records:
+ *
+ * Limitations for the fixture generation:
+ */
+PROCEDURE test_prepaid_cdr_using_min_params:
+   add_min_params(11,
+      DATETIME(DATE("1/1/2008"),0), 
+      DATETIME(DATE("31/1/2008"),0),
+      "NORMAL").
+
+   call_get_cdr_details().
+
+   gcRetStruct = get_struct("","").
+   check_headers(FALSE, TRUE).
+   check_prepaid_rows().
+END.
+
+/**
+ * This test check PrepCDR record getting for prepaid MobSub record
+ * with MsSeq 11 passing minimum number of parameters to the XML RPC
+ * method call.
+ *
+ * Fetched fixtures:
+ *    MobSub   : prepaid (MsSeq: 11)
+ *    CliType  : FirstCliType (CliType: "2")
+ *    PrepCDR  : PrepaidCDR1 (DateSt: "1/1/2008", TimeStart: 0)
+ *               PrepaidCDR2 (DateSt: "12/1/2008", TimeStart: 0)
+ *               PrepaidCDR3 (DateSt: "31/1/2008", TimeStart: 0)
+ *    MCDRDtl2 : FirstCDRDtlCall  (DateSt: "1/1/2008", DtlSeq: 12)
+ *               SecondCDRDtlGRPS (DateSt: "12/1/2008", DtlSeq: 13)
+ *               ThirdCDRDtlSMS   (DateSt: "31/1/2008", DtlSeq: 17)
+ *    RepText  : RepTextForBC1    
+ *               RepTextForBC2
+ *               RepTextForCCN1
+ *               RepTextForCCN2
+ *
+ * The XML RPC method is expected to fetch also following records:
+ *
+ * Limitations for the fixture generation:
+ */
+PROCEDURE test_prepaid_cdr_using_max_params:
+   add_params(11,
+      DATETIME(DATE("1/1/2008"),0), 
+      DATETIME(DATE("31/1/2008"),0),
+      "",
+       "hlo",
+       23423,
+      "reason why"   
+      ).
+
+   call_get_cdr_details().
+
+
+   gcRetStruct = get_struct("","").
+   check_headers(FALSE, TRUE).
+   check_prepaid_rows().
+END.
+
+
+PROCEDURE test_get_prepaid_cdr_details_using_max_params_usual_calls:
+   add_params(11,
+      DATETIME(DATE("1/1/2008"),0), 
+      DATETIME(DATE("31/1/2008"),0),
+      "DETAILED",
+       "hlo",
+       23423,
+      "reason why"   
+      ).
+
+   call_get_cdr_details().
+
+   gcRetStruct = get_struct("","").
+   check_headers(TRUE, FALSE).
+   fCheckDetailedPrepaidRows().
+END.
+
+
+
+
+/**
+ * This test check MobCDR record getting for not prepaid MobSub record
+ * with MsSeq 12 passing username parameter as special value miyoigo 
+ * to the XML RPC method call. The rights of the user is set to the TMSParam
+ * value so that the user does not have rights. The response is expected to
+ * have no MobCDR records.
+ *
+ * Fetched fixtures:
+ *    MobSub: not_prepaid (MsSeq: 12)
+ * 
+ * XML RPC method is expected to use also following fixtures:
+ *    TMSParam: CDRDetails
+ *
+ * Limitations for the fixture generation:
+ */
+PROCEDURE test_miyoigo_user_with_no_rights:
+   FIND FIRST 
+       TMSParam WHERE ParamCode = "CDR_Details" EXCLUSIVE-LOCK.
+   ASSIGN TMSParam.IntVal = 0.
+
+   add_params(12, 
+      DATETIME(DATE("1/1/2008"),0), 
+      DATETIME(DATE("31/1/2008"),0),
+      "NORMAL",
+      "miyoigo",1,"Reason1").
+
+   run_rpc_method("newton.get_cdr_details").
+   assert_success().
+
+   gcRetStruct = get_struct("","").
+   check_headers(FALSE, FALSE).
+
+   check_empty_rows().
+END.
+
+/**
+ * This test check MobCDR record getting for not prepaid MobSub record
+ * with MsSeq 12 passing username parameter as special value miyoigo 
+ * to the XML RPC method call. The rights of the user is set to the TMSParam
+ * value so that the user does have rights. The response is expected give
+ * MobCDR records for the MobSub so that MobCDR records having corresponding
+ * InvSeq record in the billed state will not come into the result.
+ *
+ * Fetched fixtures:
+ *    MobSub: not_prepaid (MsSeq: 12)
+ *    CliType  : FirstCliType (CliType: "2" )
+ *    MobCDR   : CallCDR2 (DateSt: "12/1/2008", TimeStart: 0)
+ *               CallCDR3 (DateSt: "31/1/2008", TimeStart: 0)
+ *    MCDRDtl2 : SecondCDRDtlGRPS (DateSt: "12/1/2008", DtlSeq: 13)
+ *               ThirdCDRDtlSMS   (DateSt: "31/1/2008", DtlSeq: 17)
+ *    RepText  : RepTextForBC1
+ *               RepTextForBC2
+ *               RepTextForCCN2
+ * The XML RPC method is expected to use also fixtures:
+ *    TMSParam: CDRDetails
+ *    InvSeq   : BilledInvSeq 
+ *               NotBilledInvSeq 
+ *
+ * Limitations for the fixture generation:
+ */
+PROCEDURE test_miyoigo_user_with_rights:
+   FIND FIRST 
+       TMSParam WHERE ParamCode = "CDR_Details" EXCLUSIVE-LOCK.
+   ASSIGN TMSParam.IntVal = 1.
+
+   add_params(12, 
+      DATETIME(DATE("1/1/2008"),0), 
+      DATETIME(DATE("31/1/2008"),0),
+      "NORMAL",
+      "miyoigo",1,"Reason1").
+      
+   call_get_cdr_details().
+
+   gcRetStruct = get_struct("","").
+   check_headers(FALSE, FALSE).
+   check_miyoigo_rows().
+END.
+
+
+
+PROCEDURE test_prepaid_miyoigo_user_with_rights:
+   FIND FIRST 
+       TMSParam WHERE ParamCode = "CDR_Details" EXCLUSIVE-LOCK.
+   ASSIGN TMSParam.IntVal = 1.
+
+   add_params(11, 
+      DATETIME(DATE("1/1/2008"),0), 
+      DATETIME(DATE("31/1/2008"),0),
+      "NORMAL",
+      "miyoigo",1,"Reason1").
+
+   call_get_cdr_details().
+
+   gcRetStruct = get_struct("","").
+   check_headers(FALSE, FALSE).
+END.
+
+

@@ -1,0 +1,72 @@
+RepTextForBC1:
+   Brand:"1"
+   Language:1
+   LinkCode:"S2"
+   RepText:"RepText1"
+   TextType:1
+   ToDate:10-10-30
+   FromDate:01-12-88
+
+RepTextForBC2:
+   Brand:"1"
+   Language:1
+   LinkCode:"S3"
+   RepText:"RepText2"
+   TextType:1
+   ToDate:10-10-30
+   FromDate:01-12-88
+
+
+RepTextForCCN1:
+   Brand:"1"
+   Language:1
+   LinkCode:"23"
+   RepText:"RepText3"
+   TextType:3
+   ToDate:10-10-30
+   FromDate:01-12-88
+
+RepTextForCCN2:
+   Brand:"1"
+   Language:1
+   LinkCode:"45"
+   RepText: "RepText4"
+   TextType:3
+   ToDate:10-10-30
+   FromDate:01-12-88
+
+RepTextForPricePlan1:
+   Brand:"1"
+   Language:1
+   LinkCode:"PricePlan1"
+   RepText:"RepText1"
+   TextType:11
+   ToDate:10-10-30
+   FromDate:01-12-88
+
+RateCCNRepText1:
+   Brand:"1"
+   TextType:3
+   LinkCode:"1"
+   Language:1
+   FromDate:10-10-60
+   ToDate:10-10-30
+   RepText:"RateCCN1"
+
+RateCCNRepText2:
+   Brand:"1"
+   TextType:3
+   LinkCode:"2"
+   Language:1
+   FromDate:10-10-60
+   ToDate:10-10-30
+   RepText:"RateCCN2"
+
+RateCCNRepText3:
+   Brand:"1"
+   TextType:3
+   LinkCode:"3"
+   Language:1
+   FromDate:10-10-60
+   ToDate:10-10-30
+   RepText:"RateCCN3"

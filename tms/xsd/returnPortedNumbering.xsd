@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/bajaNumeracionPortada" xmlns:tns="http://www.example.org/bajaNumeracionPortada">
+
+    <element name="returnPortedNumbering" type="tns:returnPortedNumbering"></element>
+    
+    <complexType name="returnPortedNumbering">
+    	<sequence>
+    		<element name="formRequestCode" maxOccurs="1"
+    			minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<pattern value=""></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="subscriberData" type="tns:subscriberData"
+    			maxOccurs="1" minOccurs="0">
+    		</element>
+    		<element name="portabilityData" type="tns:portabilityData"
+    			maxOccurs="1" minOccurs="1">
+    		</element>
+    		<element name="fallReason" maxOccurs="1" minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<pattern value=""></pattern>
+    					<enumeration value="0"></enumeration>
+    					<enumeration value="1"></enumeration>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="coment" type="string" minOccurs="0" maxOccurs="1"></element>
+    	</sequence>
+    </complexType>
+
+    
+
+    <complexType name="subscriberData">
+    	<sequence>
+
+    		<choice maxOccurs="1" minOccurs="0">
+    			<sequence>
+    				<element name="name" maxOccurs="1" minOccurs="1"
+    					type="string">
+
+    				</element>
+    				<element name="firstSurname" maxOccurs="1"
+    					minOccurs="1" type="string">
+
+    				</element>
+    				<element name="secondSurname" maxOccurs="1"
+    					minOccurs="1" type="string">
+
+    				</element>
+    			</sequence>
+    			<element name="companyName" maxOccurs="1" minOccurs="1"
+    				type="string">
+    			</element>
+    		</choice>
+    		<choice maxOccurs="1" minOccurs="0">
+
+    			<sequence>
+    				<choice>
+    					<element name="NIF" type="string"></element>
+    					<element name="NIE" type="string"></element>
+    					<element name="passport" type="string"></element>
+    				</choice>
+    				<element name="nationality" type="string"></element>
+    			</sequence>
+    			<element name="CIF" type="string"></element>
+    		</choice>
+
+    	</sequence>
+    </complexType>
+
+
+
+    <complexType name="portabilityData">
+    	<sequence>
+
+    		<element name="msisdn" type="tns:msisdn" maxOccurs="unbounded" minOccurs="1"></element>
+    		<element name="opRangeOwner" maxOccurs="1" minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<length value="3"></length>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="opDonor" maxOccurs="1" minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<length value="3"></length>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    	</sequence></complexType>
+
+   <complexType name="msisdn">
+    	<attribute name="msisdnStart">
+    		<simpleType>
+    			<restriction base="string">
+
+    				<length value="9"></length>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="msisdnEnd">
+
+    		<simpleType>
+    			<restriction base="string">
+    				<length value="9"></length>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	
+    </complexType>
+    
+</schema>

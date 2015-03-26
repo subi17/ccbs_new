@@ -1,0 +1,234 @@
+#!/usr/bin/bash
+
+#if test $# = 0
+#   then echo HUOLTOKATKO
+#        exit 0
+#fi
+#echo HUOLTOKATKO
+#exit 0
+#ulimit -n 4096
+
+DLC=/opt/dlc
+PATH=$PATH:$DLC:$DLC/bin
+#TERM=vt320tera
+
+export DLC PATH
+
+umask 0026
+
+FOPDCONNECT="-H localhost -S 4260"
+FOPDPASSWORD=w00t
+FOPDSTATUS=ari@starnet.fi
+FOPXMLDELETE=NO
+export FOPDCONNECT FOPDPASSWORD FOPDSTATUS FOPDXMLDELETE
+
+TMSPath=/apps/tms
+PFPath=$TMSPath/pf
+
+INVXMLDIR=$TMSPath/invxml
+XLTDIR=$TMSPath/xlt
+XMLDIR=$TMSPath/xml
+XMLIMAGEDIR=$TMSPath/image
+export INVXMLDIR XLTDIR XMLDIR XMLIMAGEDIR
+
+cd $TMSPath
+
+PROPATH=$PROPATH:$TMSPath
+for dir in Ar Func Gwy Help Inv Macro Mailconf Mc Mc/lib Mf Mnp Mm Rate Syst Class triggers lib/stompAdapter/stompAdapter
+do
+   PROPATH=$PROPATH:$TMSPath/$dir
+done
+
+PROPATH=$PROPATH:/apps/yoigo/tms/xmlrpc
+
+PROPATH=${PROPATH:1}
+
+if test -z "$1"
+   then PROPATH=/tmsapps:$PROPATH
+        export PROPATH
+        cd $TMSPath
+elif test ${1} = "-dev"
+   then PROPATH=$TMSPath/Dev:$PROPATH:/tmsapps
+        export PROPATH
+        cd $TMSPath/Dev
+        umask 000
+elif test ${1} = "-work"
+   then PROPATH=$TMSPath/Work:$PROPATH:/tmsapps
+        export PROPATH
+        cd $TMSPath/Work
+elif test ${1} = "-class"
+   then PROPATH=$TMSPath/Class:$PROPATH:/tmsapps
+        export PROPATH
+        cd $TMSPath/Class
+elif test ${1} = "-support"
+   then PROPATH=/apps/yoigo/tms_support/$2:$PROPATH:/tmsapps
+        export PROPATH
+        cd /apps/yoigo/tms_support/$2
+else PROPATH=/tmsapps:$PROPATH
+     export PROPATH
+     cd $TMSPath
+fi
+
+echo This is propath:
+echo Â$PROPATH
+
+if test -z "$1"
+   then mpre -pf $PFPath/tms.pf -q -p tmslogin
+else case ${1} in
+        -dev|-work|-class|-support)
+           mpre -pf $PFPath/tms.pf
+        ;;
+
+        -mo_postpaid)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/postpaid.log -p onlinereader_start -param 2210
+        ;;
+        
+        -mo_postpaid2)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/postpaid.log -p onlinereader_start -param 2211
+        ;;
+
+        -mo_postpaid3)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/postpaid.log -p onlinereader_start -param 2212
+        ;;
+
+        -mo_postpaid4)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/postpaid.log -p onlinereader_start -param 2213
+        ;;
+
+        -mo_postpaid5)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/postpaid.log -p onlinereader_start -param 2214
+        ;;
+
+        -mo_postpaid6)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/postpaid.log -p onlinereader_start -param 2215
+        ;;
+
+        -mo_postpaid7)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/postpaid.log -p onlinereader_start -param 2216
+        ;;
+
+        -mo_postpaid8)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/postpaid.log -p onlinereader_start -param 2217
+        ;;
+
+        -mo_postpaid9)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/postpaid.log -p onlinereader_start -param 2218
+        ;;
+
+        -mo_postpaid10)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/postpaid.log -p onlinereader_start -param 2219
+        ;;
+
+        -mo_prepaid)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/prepaid.log -p onlinereader_start -param 2220
+        ;;
+        
+         -mo_prepaid2)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/prepaid.log -p onlinereader_start -param 2221
+        ;;
+
+        -mo_prepaid3)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/prepaid.log -p onlinereader_start -param 2222
+        ;;
+
+        -mo_prepaid4)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/prepaid.log -p onlinereader_start -param 2223
+        ;;
+
+        -mo_prepaid5)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/prepaid.log -p onlinereader_start -param 2224
+        ;;
+
+        -mo_tap3)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/tap3.log -p onlinereader_start -param 2240
+        ;;
+                           
+        -mo_roam)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/roam.log -p onlinereader_start -param 2230
+        ;;
+
+        -mo_vas)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/vas.log -p onlinereader_start -param 2250
+        ;;
+        
+	-mo_edr)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/edr.log -p onlinereader_start -param 2260
+        ;;
+        
+        -mo_front)
+           mpro-cdr -pf $PFPath/tms_online.pf -clientlog /scratch/log/mo/front.log -p onlinereader_start -param 2270
+        ;;
+
+        -screen)
+           module=$2; shift; shift
+           pf=batch.pf
+           if test $1 = "tms.pf"
+              then pf=tms.pf
+                   shift
+           elif test $1 = "xml.pf"
+              then pf=xml.pf
+                   shift
+           elif test $1 = "tms_13q1.pf"
+              then pf=tms_13q1.pf
+                   shift
+           fi
+           mpre -q -pf $PFPath/$pf -p $module $*
+        ;;
+
+        -replog)
+           module=$2; shift; shift
+           mpre -q -p $module $*
+        ;;
+
+        -batch)
+           umask 0000
+           if test -n "${4}" 
+              then mpre -b -q -pf $PFPath/${3} -p ${2} -param ${4}
+              else mpre -b -q -pf $PFPath/${3} -p ${2}
+           fi
+        ;;
+
+        -bg_batch)
+           umask 0000
+           if test -n "${4}" 
+              then mpre -b -q -pf $PFPath/${3} -p ${2} -param ${4} &
+              else mpre -b -q -pf $PFPath/${3} -p ${2} &
+           fi
+        ;;
+
+        -bdebug)
+           if test -n "${4}" 
+              then mpro -b -q -pf $PFPath/${3} -p ${2} -param ${4} -clientlog /scratch/log/batch/debug.log -logentrytypes "4GLMessages:4,4GLTrans:2,4GLTrace:4"
+              else mpro -b -q -pf $PFPath/${3} -p ${2} -clientlog /scratch/log/batch/debug.log -logentrytypes "4GLMessages:4,4GLTrans:2,4GLTrace:4"
+           fi
+        ;;
+
+        -test)
+           if test -z "${2}"
+              then echo
+                   echo ERROR: Test environment is not given as parameter!
+                   echo
+           else
+              if test ${3}
+                 then RFILE=" -p ${3}"
+                      PROPATH=/tmp/${2}:$TMSPath/${2}:$PROPATH 
+              else RFILE=""
+                   PROPATH=$TMSPath/${2}:/tmp/${2}:$PROPATH
+              fi
+              export PROPATH
+              cd $TMSPath/${2}
+              mpro -pf $TMSPath/${2}/${2}.pf $RFILE
+           fi
+        ;;
+        
+        -billing)
+           mpro -pf $PFPath/billing.pf -q -p tmslogin
+        ;;
+
+        *)
+        echo Unknown parameter: $*
+        ;;
+
+   esac
+
+fi

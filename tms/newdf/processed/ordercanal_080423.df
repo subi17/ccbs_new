@@ -1,0 +1,43 @@
+ADD FIELD "AddressCodC" OF "OrderCustomer" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Address CodC"
+  POSITION 41
+  MAX-WIDTH 16
+  COLUMN-LABEL "CodC"
+  HELP "CodC in address validation"
+  ORDER 830
+
+ADD FIELD "AddressCodP" OF "OrderCustomer" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Address CodP"
+  POSITION 42
+  MAX-WIDTH 16
+  COLUMN-LABEL "CodP"
+  HELP "CodP in address validation"
+  ORDER 840
+
+ADD FIELD "SelfEmployed" OF "OrderCustomer" AS logical
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Selfemployed"
+  POSITION 43
+  MAX-WIDTH 1
+  COLUMN-LABEL "Selfempl."
+  ORDER 850
+
+ADD FIELD "FoundationDate" OF "OrderCustomer" AS date
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Foundation Date"
+  POSITION 44
+  MAX-WIDTH 4
+  COLUMN-LABEL "Found.Date"
+  ORDER 860
+
+.
+PSC
+cpstream=1252
+.
+0000008636

@@ -1,0 +1,140 @@
+{test_xmlrpc_includes.i}
+{unit/checkutils.i}
+
+gcFixtures = "mobsub".
+
+DEFINE VARIABLE gcParamStruct AS CHARACTER NO-UNDO. 
+
+/** 
+ * This function calls the RPC method and checks the call succeeds.
+ */
+FUNCTION call_subscription_set RETURN LOGICAL:
+    run_rpc_method("newton.subscriptions__set").
+    RETURN TRUE.
+END FUNCTION.
+
+
+PROCEDURE test_subscription_set_correct:
+    DEFINE VARIABLE gcRetStruct AS CHARACTER NO-UNDO. 
+    add_int("", ?, 25).
+    gcParamStruct = add_struct("", "").
+    add_string(gcParamStruct, "id_code", "4544").
+    add_string(gcParamStruct, "username", "tester").
+    add_int(gcParamStruct, "billing_permission", 2).
+    call_subscription_set().
+    assert_success().
+    gcRetStruct = get_struct("", "").
+    assert(gcRetStruct NE ?, "Response did not contain expected struct").
+    FIND Mobsub WHERE MobSub.MsSeq eq 25 NO-LOCK NO-ERROR.
+    IF AVAIL Mobsub THEN
+       checkChar("Mobsub.IDCode", Mobsub.IDCode, "4544").
+    ELSE
+       assert(FALSE, "expected mobsub did not exist").
+END.
+
+
+PROCEDURE test_unexisting_subscription:
+    add_int("", ?, 999999).
+    gcParamStruct = add_struct("", "").
+    add_string(gcParamStruct, "id_code", "5262").
+    add_string(gcParamStruct, "username", "tester").
+    call_subscription_set().
+    assert_fault({&APPLICATION_ERROR}, "Unknown subscription id 999999").
+END.
+
+
+PROCEDURE test_unnumeric_idcode:
+    add_int("", ?, 25).
+    gcParamStruct = add_struct("", "").
+    add_string(gcParamStruct, "id_code", "A22A").
+    add_string(gcParamStruct, "username", "tester").
+    call_subscription_set().
+    assert_fault({&APPLICATION_ERROR}, "Identification code A22A is not valid").
+    /* original value remains */
+    FIND Mobsub WHERE MobSub.MsSeq eq 25 NO-LOCK NO-ERROR.
+    IF AVAIL Mobsub THEN
+       checkChar("Mobsub.IDCode", Mobsub.IDCode, "4441").
+    ELSE
+       assert(FALSE, "expected mobsub did not exist").
+END.
+
+
+PROCEDURE test_idcode_length_not_four:
+    add_int("", ?, 25).
+    gcParamStruct = add_struct("", "").
+    add_string(gcParamStruct, "id_code", "999").
+    add_string(gcParamStruct, "username", "tester").
+    call_subscription_set().
+    assert_fault({&APPLICATION_ERROR}, "Identification code 999 is not valid").
+    /* original value remains */
+    FIND Mobsub WHERE MobSub.MsSeq eq 25 NO-LOCK NO-ERROR.
+    IF AVAIL Mobsub THEN
+       checkChar("Mobsub.IDCode", Mobsub.IDCode, "4441").
+    ELSE
+       assert(FALSE, "expected mobsub did not exist").
+END.
+
+
+
+PROCEDURE test_idcode_zero:
+    DEFINE VARIABLE gcRetStruct AS CHARACTER NO-UNDO. 
+    add_int("", ?, 25).
+    gcParamStruct = add_struct("", "").
+    add_string(gcParamStruct, "id_code", "0000").
+    add_string(gcParamStruct, "username", "tester").
+    call_subscription_set().
+    assert_success().
+    gcRetStruct = get_struct("", "").
+    assert(gcRetStruct NE ?, "Response did not contain expected struct").
+
+    /* original value remains */
+    FIND Mobsub WHERE MobSub.MsSeq eq 25 NO-LOCK NO-ERROR.
+    IF AVAIL Mobsub THEN
+       checkChar("Mobsub.IDCode", Mobsub.IDCode, "0000").
+    ELSE
+       assert(FALSE, "expected mobsub did not exist").
+END.
+
+
+
+
+PROCEDURE test_not_given_idcode_or_billing_permission:
+    DEFINE VARIABLE gcRetStruct AS CHARACTER NO-UNDO. 
+    add_int("", ?, 25).
+    gcParamStruct = add_struct("", "").
+    add_string(gcParamStruct, "username", "tester").
+   
+    call_subscription_set().
+    assert_success().
+    gcRetStruct = get_struct("", "").
+    assert(gcRetStruct NE ?, "Response did not contain expected struct").
+
+    /* original value remains */
+    FIND Mobsub WHERE MobSub.MsSeq eq 25 NO-LOCK NO-ERROR.
+    IF AVAIL Mobsub THEN
+       checkChar("Mobsub.IDCode", Mobsub.IDCode, "").
+    ELSE
+       assert(FALSE, "expected mobsub did not exist").
+END.
+
+
+PROCEDURE test_empty_idcode:
+    DEFINE VARIABLE gcRetStruct AS CHARACTER NO-UNDO. 
+    add_int("", ?, 25).
+    gcParamStruct = add_struct("", "").
+    add_string(gcParamStruct, "id_code", "").
+    add_string(gcParamStruct, "username", "tester").
+    call_subscription_set().
+    assert_success().
+    gcRetStruct = get_struct("", "").
+    assert(gcRetStruct NE ?, "Response did not contain expected struct").
+
+    /* original value remains */
+    FIND Mobsub WHERE MobSub.MsSeq eq 25 NO-LOCK NO-ERROR.
+    IF AVAIL Mobsub THEN
+       checkChar("Mobsub.IDCode", Mobsub.IDCode, "").
+    ELSE
+       assert(FALSE, "expected mobsub did not exist").
+END.
+
+

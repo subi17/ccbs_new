@@ -1,0 +1,3 @@
+echo "Transaction logging SCREEN"
+sleep 2
+screen 1 xfear -screen db_trans tms.pf

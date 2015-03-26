@@ -1,0 +1,39 @@
+File IO Help
+============
+
+IO Operations to database extents.
+
+Id:
+
+The extent id number.
+
+Extent Name:
+
+The file name of the extent.
+
+Mode:
+
+The "mode" in which the file is opened.  Possible values are:
+
+        BUFIO   The extent is opened for buffered IO.
+        UNBUFIO The extent is opened for un-buffered IO.
+        BOTHIO  The extent is opened for both buffered and un-buffered
+                IO.  Variable extents are opened with BOTHIO (there are
+                two file descriptors unless you're using -directio.)
+
+BlkSz:
+
+The Block size for the extent.  This potentially varies between data,
+before-image and after-image extents.  Values are expressed in bytes.
+
+Reads:
+
+The number of read operations.
+
+Writes:
+
+The number of write operations.
+
+Extends:
+
+The number of times that a variable extent has been expanded.

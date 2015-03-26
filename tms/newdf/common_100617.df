@@ -1,0 +1,671 @@
+ADD TABLE "InvoiceTarget"
+  AREA "Sta_Data_256"
+  LABEL "Invoice Target"
+  DESCRIPTION "Invoice target"
+  DUMP-NAME "invoicetarget"
+
+ADD FIELD "ITGroupID" OF "InvoiceTarget" AS integer 
+  FORMAT ">>>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Target Group ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "IT Group"
+  HELP "Unique ID for target group"
+  ORDER 10
+
+ADD FIELD "InvoiceTargetID" OF "InvoiceTarget" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Invoice Target ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Target ID"
+  HELP "Unique id for invoice target"
+  ORDER 20
+
+ADD FIELD "MsSeq" OF "InvoiceTarget" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Subscr.ID"
+  HELP "Subscription ID"
+  ORDER 30
+
+ADD FIELD "FromDate" OF "InvoiceTarget" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Valid from"
+  ORDER 40
+
+ADD FIELD "ToDate" OF "InvoiceTarget" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Valid to"
+  ORDER 50
+
+ADD INDEX "InvoiceTargetID" ON "InvoiceTarget" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "InvoiceTargetID" ASCENDING 
+
+ADD INDEX "ITGroupID" ON "InvoiceTarget" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "ITGroupID" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "MsSeq" ON "InvoiceTarget" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD TABLE "InvoiceTargetGroup"
+  AREA "Sta_Data_128"
+  LABEL "Invoice Target Group"
+  DESCRIPTION "Invoice target group"
+  DUMP-NAME "invoicetargetgroup"
+
+ADD FIELD "Brand" OF "InvoiceTargetGroup" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 10
+
+ADD FIELD "ITGroupID" OF "InvoiceTargetGroup" AS integer 
+  FORMAT ">>>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Target Group ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "IT Group"
+  HELP "Unique ID for target group"
+  ORDER 20
+
+ADD FIELD "AgrCust" OF "InvoiceTargetGroup" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Agreement Customer"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Agr.Cust"
+  HELP "Agreement customer"
+  ORDER 30
+
+ADD FIELD "CustNum" OF "InvoiceTargetGroup" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Invoice Customer"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Inv.Cust"
+  HELP "Invoice customer"
+  ORDER 40
+
+ADD FIELD "FromDate" OF "InvoiceTargetGroup" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Valid from"
+  ORDER 50
+
+ADD FIELD "ToDate" OF "InvoiceTargetGroup" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Valid to"
+  ORDER 60
+
+ADD FIELD "DefaultGroup" OF "InvoiceTargetGroup" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Default Group"
+  POSITION 8
+  MAX-WIDTH 1
+  COLUMN-LABEL "Default"
+  HELP "Default group for new targets"
+  ORDER 70
+
+ADD INDEX "ITGroupID" ON "InvoiceTargetGroup" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "ITGroupID" ASCENDING 
+
+ADD INDEX "CustNum" ON "InvoiceTargetGroup" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "DefaultGroup" ON "InvoiceTargetGroup" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "AgrCust" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "DefaultGroup" ASCENDING 
+
+ADD TABLE "SubInvoice"
+  AREA "Dyn_Data_32"
+  LABEL "Sub Invoice"
+  DESCRIPTION "Subinvoice within a combined invoice"
+  DUMP-NAME "subinvoice"
+
+ADD FIELD "Brand" OF "SubInvoice" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  POSITION 2
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 10
+
+ADD FIELD "InvNum" OF "SubInvoice" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "Invoice Number"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Invoice"
+  HELP "Invoice number"
+  ORDER 20
+
+ADD FIELD "SubInvNum" OF "SubInvoice" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "SubInvoice Number"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "SubInv"
+  HELP "Sequential nbr of the subinvoice within the combined invoice"
+  ORDER 30
+
+ADD FIELD "CustNum" OF "SubInvoice" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "User Customer"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Cust."
+  HELP "User customer number"
+  ORDER 40
+  MANDATORY
+
+ADD FIELD "CLI" OF "SubInvoice" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "MSISDN"
+  POSITION 6
+  MAX-WIDTH 30
+  ORDER 50
+
+ADD FIELD "MsSeq" OF "SubInvoice" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Subs.ID"
+  HELP "Subscription ID"
+  ORDER 60
+
+ADD FIELD "AmtExclVAT" OF "SubInvoice" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Total Excl.Tax"
+  POSITION 8
+  MAX-WIDTH 18
+  COLUMN-LABEL "Excl.Tax"
+  HELP "Billed total value excluding tax"
+  DECIMALS 3
+  ORDER 70
+
+ADD FIELD "VATAmt" OF "SubInvoice" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "VAT"
+  POSITION 9
+  MAX-WIDTH 18
+  COLUMN-LABEL "Tax"
+  HELP "Amount of Tax"
+  DECIMALS 3
+  ORDER 80
+
+ADD FIELD "InterestAmt" OF "SubInvoice" AS decimal 
+  FORMAT "ZZZZZ9.99-"
+  INITIAL "0"
+  LABEL "Interest"
+  POSITION 10
+  MAX-WIDTH 17
+  COLUMN-LABEL "Interest"
+  HELP "Billed interest, from earlier payments"
+  DECIMALS 2
+  ORDER 90
+
+ADD FIELD "OverPaym" OF "SubInvoice" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Overpayment"
+  POSITION 12
+  MAX-WIDTH 17
+  COLUMN-LABEL "OverPaym"
+  DECIMALS 2
+  ORDER 110
+
+ADD FIELD "Rounding" OF "SubInvoice" AS decimal 
+  FORMAT "->9.99"
+  INITIAL "0"
+  LABEL "Rounding"
+  POSITION 13
+  MAX-WIDTH 18
+  DECIMALS 3
+  ORDER 120
+
+ADD FIELD "InvAmt" OF "SubInvoice" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Invoice Amount"
+  POSITION 14
+  MAX-WIDTH 18
+  COLUMN-LABEL "Amount"
+  HELP "Invoice amount"
+  DECIMALS 3
+  ORDER 130
+
+ADD FIELD "AdvPaym" OF "SubInvoice" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Advance Payment"
+  POSITION 15
+  MAX-WIDTH 17
+  COLUMN-LABEL "Adv.Payment"
+  HELP "Value of advance payment used in this invoice"
+  DECIMALS 2
+  ORDER 100
+
+ADD FIELD "VATPercent" OF "SubInvoice" AS decimal 
+  FORMAT ">9.99"
+  INITIAL "0"
+  LABEL "Tax%"
+  POSITION 16
+  MAX-WIDTH 120
+  HELP "Tax Percentage (%)"
+  EXTENT 10
+  DECIMALS 2
+  ORDER 150
+
+ADD FIELD "VATAmount" OF "SubInvoice" AS decimal 
+  FORMAT "->>>,>>9.99"
+  INITIAL "0"
+  LABEL "Tax Amount"
+  POSITION 17
+  MAX-WIDTH 240
+  COLUMN-LABEL "Tax"
+  HELP "Amount of tax"
+  EXTENT 10
+  DECIMALS 3
+  ORDER 160
+
+ADD FIELD "PaidAmt" OF "SubInvoice" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Paid Amount"
+  POSITION 19
+  MAX-WIDTH 17
+  COLUMN-LABEL "Paid"
+  HELP "Paid amount"
+  DECIMALS 2
+  ORDER 180
+
+ADD FIELD "ClaimState" OF "SubInvoice" AS decimal 
+  FORMAT ">9.99"
+  INITIAL "0"
+  LABEL "Claiming Status"
+  POSITION 22
+  MAX-WIDTH 17
+  COLUMN-LABEL "Claim"
+  HELP "Claiming status"
+  DECIMALS 2
+  ORDER 190
+
+ADD FIELD "InvSeq" OF "SubInvoice" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Invoice Sequence"
+  POSITION 23
+  MAX-WIDTH 4
+  COLUMN-LABEL "InvSeq"
+  HELP "Invoice sequence of cdrs"
+  ORDER 200
+
+ADD FIELD "CrInvNum" OF "SubInvoice" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Credit Invoice"
+  POSITION 24
+  MAX-WIDTH 4
+  COLUMN-LABEL "Cr.Inv"
+  HELP "Credit invoice number"
+  ORDER 210
+
+ADD FIELD "PaymState" OF "SubInvoice" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Payment Status"
+  POSITION 28
+  MAX-WIDTH 4
+  COLUMN-LABEL "Paym.Stat"
+  HELP "Payment status"
+  ORDER 170
+
+ADD FIELD "VATBasis" OF "SubInvoice" AS decimal 
+  FORMAT "->>,>>9.99"
+  INITIAL "0"
+  LABEL "Tax Basis"
+  POSITION 29
+  MAX-WIDTH 220
+  HELP "Base sum for tax"
+  EXTENT 10
+  DECIMALS 3
+  ORDER 140
+
+ADD FIELD "VATAccount" OF "SubInvoice" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "VAT Account"
+  POSITION 30
+  MAX-WIDTH 180
+  COLUMN-LABEL "VATAcct"
+  HELP "Account number of VAT"
+  EXTENT 10
+  ORDER 220
+
+ADD INDEX "InvNum" ON "SubInvoice" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "InvNum" ASCENDING 
+  INDEX-FIELD "SubInvNum" ASCENDING 
+
+ADD INDEX "CLI" ON "SubInvoice" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CLI" ASCENDING 
+
+ADD INDEX "CustNum" ON "SubInvoice" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "CustNum" ASCENDING 
+
+ADD INDEX "MsSeq" ON "SubInvoice" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MsSeq" ASCENDING 
+
+ADD FIELD "InvoiceOrder" OF "BItemGroup" AS integer
+  FORMAT ">>9"
+  POSITION 8
+  INITIAL "0"
+  HELP "Printing order in invoice specification"
+  LABEL "Invoice Order"
+  COLUMN-LABEL "Order"
+  VIEW-AS ?
+  ORDER 70
+  MAX-WIDTH 4
+
+ADD FIELD "SubInvNum" OF "ClaimHist" AS integer
+  FORMAT ">>9"
+  POSITION 11
+  INITIAL "0"
+  HELP "Sequential nbr of the subinvoice within the combined invoice"
+  LABEL "SubInvoice Number"
+  COLUMN-LABEL "SubInv"
+  VIEW-AS ?
+  ORDER 100
+  MAX-WIDTH 4
+
+ADD FIELD "BilledSubInv" OF "CustIntEvent" AS integer
+  FORMAT ">>9"
+  POSITION 19
+  INITIAL "0"
+  HELP "Sequential nbr of the subinvoice within the combined invoice"
+  LABEL "Billed Subinvoice Nbr"
+  COLUMN-LABEL "Billed SubInv"
+  VIEW-AS ?
+  ORDER 190
+  MAX-WIDTH 4
+
+ADD FIELD "CLI" OF "CustIntEvent" AS character
+  FORMAT "x(15)"
+  POSITION 20
+  INITIAL ""
+  ORDER 200
+  MAX-WIDTH 30
+
+ADD FIELD "SubInvNum" OF "CustIntEvent" AS integer
+  FORMAT ">>9"
+  POSITION 21
+  INITIAL "0"
+  HELP "Sequential nbr of the subinvoice within the combined invoice"
+  LABEL "SubInvoice Number"
+  COLUMN-LABEL "SubInv"
+  VIEW-AS ?
+  ORDER 180
+  MAX-WIDTH 4
+
+RENAME FIELD "PaymQty" OF "Customer" TO "InvoiceTargetRule"
+
+UPDATE FIELD "InvoiceTargetRule" OF "Customer"
+  FORMAT "9"
+  HELP "Rule for adding new invoice targets"
+  LABEL "Invoice Target Rule"
+  COLUMN-LABEL "IT Rule"
+
+ADD FIELD "SubInvNum" OF "FATime" AS integer
+  FORMAT ">>9"
+  POSITION 36
+  INITIAL "0"
+  HELP "Sequential nbr of the subinvoice within the combined invoice"
+  LABEL "SubInvoice Number"
+  COLUMN-LABEL "SubInv"
+  VIEW-AS ?
+  ORDER 360
+  MAX-WIDTH 4
+
+RENAME INDEX "InvNum" TO "temp-13109" ON "FATime"
+
+ADD INDEX "InvNum" ON "FATime"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "InvNum" ASCENDING
+  INDEX-FIELD "SubInvNum" ASCENDING
+
+DROP INDEX "temp-13109" ON "FATime"
+
+ADD FIELD "SubInvNum" OF "FFItem" AS integer
+  FORMAT ">>9"
+  POSITION 19
+  INITIAL "0"
+  HELP "Sequential nbr of the subinvoice within the combined invoice"
+  LABEL "SubInvoice Number"
+  COLUMN-LABEL "SubInv"
+  VIEW-AS ?
+  ORDER 180
+  MAX-WIDTH 4
+
+ADD FIELD "SubInvNum" OF "InvASub" AS integer
+  FORMAT ">>9"
+  POSITION 19
+  INITIAL "0"
+  HELP "Sequential nbr of the subinvoice within the combined invoice"
+  LABEL "SubInvoice Number"
+  COLUMN-LABEL "SubInv"
+  VIEW-AS ?
+  ORDER 690
+  MAX-WIDTH 4
+
+ADD FIELD "SubInvNum" OF "InvCCN" AS integer
+  FORMAT ">>9"
+  POSITION 13
+  INITIAL "0"
+  HELP "Sequential nbr of the subinvoice within the combined invoice"
+  LABEL "SubInvoice Number"
+  COLUMN-LABEL "SubInv"
+  VIEW-AS ?
+  ORDER 140
+  MAX-WIDTH 4
+
+ADD INDEX "SubInvNum" ON "InvCCN"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "InvNum" ASCENDING
+  INDEX-FIELD "SubInvNum" ASCENDING
+
+RENAME FIELD "ClaimQty" OF "Invoice" TO "ITGroupID"
+
+UPDATE FIELD "ITGroupID" OF "Invoice"
+  FORMAT ">>>>>>>>9"
+  HELP "Invoice target group ID"
+  LABEL "Invoice Target Group"
+  COLUMN-LABEL "ITGroup"
+
+ADD FIELD "AgrCust" OF "Invoice" AS integer
+  FORMAT ">>>>>>>9"
+  POSITION 98
+  INITIAL "0"
+  HELP "Agreement customer"
+  LABEL "Agreement Customer"
+  COLUMN-LABEL "Agr.Cust"
+  VIEW-AS ?
+  ORDER 1440
+  MAX-WIDTH 4
+
+ADD FIELD "SubInvNum" OF "InvRow" AS integer
+  FORMAT ">>9"
+  POSITION 38
+  INITIAL "0"
+  HELP "Sequential nbr of the subinvoice within the combined invoice"
+  LABEL "SubInvoice Number"
+  COLUMN-LABEL "SubInv"
+  VIEW-AS ?
+  ORDER 350
+  MAX-WIDTH 4
+
+ADD FIELD "SubInvNum" OF "InvSeq" AS integer
+  FORMAT ">>9"
+  POSITION 9
+  INITIAL "0"
+  HELP "Sequential nbr of the subinvoice within the combined invoice"
+  LABEL "SubInvoice Number"
+  COLUMN-LABEL "SubInv"
+  VIEW-AS ?
+  ORDER 650
+  MAX-WIDTH 4
+
+ADD FIELD "SubInvNum" OF "OPLog" AS integer
+  FORMAT ">>9"
+  POSITION 11
+  INITIAL "0"
+  HELP "Sequential nbr of the subinvoice within the combined invoice"
+  LABEL "SubInvoice Number"
+  COLUMN-LABEL "SubInv"
+  VIEW-AS ?
+  ORDER 100
+  MAX-WIDTH 4
+
+ADD FIELD "CLI" OF "OPLog" AS character
+  FORMAT "x(15)"
+  POSITION 12
+  INITIAL ""
+  LABEL "MSISDN"
+  ORDER 110
+  MAX-WIDTH 30
+
+RENAME INDEX "InvNum" TO "temp-16033" ON "OPLog"
+
+ADD INDEX "CLI" ON "OPLog"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CLI" ASCENDING
+
+ADD INDEX "InvNum" ON "OPLog"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "InvNum" ASCENDING
+  INDEX-FIELD "SubInvNum" ASCENDING
+  INDEX-FIELD "EventDate" DESCENDING
+
+ADD INDEX "Voucher" ON "OPLog"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Voucher" ASCENDING
+
+DROP INDEX "temp-16033" ON "OPLog"
+
+ADD FIELD "SubInvNum" OF "SingleFee" AS integer
+  FORMAT ">>9"
+  POSITION 30
+  INITIAL "0"
+  HELP "Sequential nbr of the subinvoice within the combined invoice"
+  LABEL "SubInvoice Number"
+  COLUMN-LABEL "SubInv"
+  VIEW-AS ?
+  ORDER 260
+  MAX-WIDTH 4
+
+ADD FIELD "InvNum" OF "UnregLog" AS integer
+  FORMAT ">>>>>>>9"
+  POSITION 10
+  INITIAL "0"
+  HELP "Invoice number"
+  LABEL "Invoice Number"
+  COLUMN-LABEL "Invoice"
+  VIEW-AS ?
+  ORDER 90
+  MAX-WIDTH 4
+
+ADD FIELD "SubInvNum" OF "UnregLog" AS integer
+  FORMAT ">>9"
+  POSITION 11
+  INITIAL "0"
+  HELP "Sequential nbr of the subinvoice within the combined invoice"
+  LABEL "SubInvoice Number"
+  COLUMN-LABEL "SubInv"
+  VIEW-AS ?
+  ORDER 100
+  MAX-WIDTH 4
+
+ADD FIELD "CLI" OF "UnregLog" AS character
+  FORMAT "x(15)"
+  POSITION 12
+  INITIAL ""
+  ORDER 80
+  MAX-WIDTH 30
+
+ADD FIELD "SubInvNum" OF "UnregPaym" AS integer
+  FORMAT ">>9"
+  POSITION 18
+  INITIAL "0"
+  HELP "Sequential nbr of the subinvoice within the combined invoice"
+  LABEL "SubInvoice Number"
+  COLUMN-LABEL "SubInv"
+  VIEW-AS ?
+  ORDER 170
+  MAX-WIDTH 4
+
+.
+PSC
+cpstream=1252
+.
+0000033121

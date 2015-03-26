@@ -1,0 +1,14 @@
+ADD FIELD "ActivationLimit" OF "CustCat" AS integer
+  DESCRIPTION "Activation limit per customer"
+  FORMAT ">>>>9"
+  POSITION 130
+  INITIAL 0
+  LABEL "Activation Limit"
+  COLUMN-LABEL "ActivationLimit"
+  VIEW-AS ?
+  ORDER 130
+.
+PSC
+cpstream=ISO8859-1
+.
+0000000468

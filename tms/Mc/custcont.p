@@ -1,0 +1,258 @@
+/* ------------------------------------------------------
+  MODULE .......: custcont.p
+  FUNCTION .....: customer's contact data
+  APPLICATION ..: TMS
+  AUTHOR .......: aam
+  CREATED ......: 14.11.06
+  MODIFIED .....: 
+  Version ......: yoigo
+  ------------------------------------------------------ */
+
+{commali.i}
+{eventval.i}
+{tmsconst.i}
+{fmakemsreq.i}
+{femailinvoice.i}
+
+DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO. 
+
+IF llDoEvent THEN DO:
+   &GLOBAL-DEFINE STAR_EVENT_USER katun
+
+   {lib/eventlog.i}
+
+   DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
+   lhCustomer = BUFFER Customer:HANDLE.
+   RUN StarEventInitialize(lhCustomer).
+
+   ON F12 ANYWHERE DO:
+      RUN eventview2.p(lhCustomer).
+   END.
+
+END.
+
+DEF VAR llOk  AS LOG  NO-UNDO.
+DEF VAR lcResult AS CHAR NO-UNDO. 
+DEF VAR liRequest AS INT NO-UNDO. 
+DEF VAR lcEmailAddress AS CHAR NO-UNDO.
+
+FORM
+   SKIP(1)
+   Customer.Email COLON 15      
+      LABEL "Email"  FORMAT "X(50)"  SKIP
+  
+   Customer.SMSNumber COLON 15
+     LABEL "Mobile Number"
+     HELP  "Mobile contact number"
+     FORMAT "X(17)" SKIP
+       
+  Customer.Phone COLON 15
+     LABEL "Fixed Number" 
+     HELP  "Fixed contact number"
+     FORMAT "X(17)"  
+   
+   SKIP(1)
+
+   WITH ROW 4 OVERLAY SIDE-LABELS CENTERED 
+        TITLE " CONTACT DATA, CUSTOMER " + STRING(iiCustNum) + " " 
+        FRAME fCriter.
+
+VIEW FRAME fCriter.
+PAUSE 0 NO-MESSAGE.
+
+lCustMark:
+REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
+
+   FIND Customer WHERE Customer.CustNum = iiCustNum NO-LOCK.
+      
+   PAUSE 0.
+   DISPLAY Customer.Email
+           Customer.SMSNumber
+           Customer.Phone.
+
+   ASSIGN
+      ufk   = 0  
+      ufk[1]= 7  
+      ufk[5]= 1096 WHEN Customer.CustIdType = "CIF" 
+      ufk[8]= 8 
+      ehto = 0.
+   RUN ufkey.
+
+   IF toimi = 1 THEN DO:
+
+      REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
+            
+         ehto = 9. RUN ufkey.
+         
+         PROMPT Customer.Email
+                Customer.SMSNumber
+                Customer.Phone.
+
+         IF Customer.Email NE INPUT Customer.Email THEN DO:
+            IF Customer.DelType EQ {&INV_DEL_TYPE_EMAIL} OR
+               Customer.DelType EQ {&INV_DEL_TYPE_EMAIL_PENDING} THEN DO:
+
+               IF INPUT Customer.Email = "" THEN DO:
+                  MESSAGE "Customer email address can not be blank because " +
+                          "customer's invoice delivery type is EMAIL."
+                  VIEW-AS ALERT-BOX ERROR.
+                  LEAVE.
+               END. /* IF INPUT Customer.Email = "" THEN DO: */
+
+               MESSAGE "Customer's invoice delivery type is EMAIL. " +
+                       "Activation email will be mailed to customer. " + 
+                       "Are you sure you want to continue?" 
+               VIEW-AS ALERT-BOX BUTTONS YES-NO
+               TITLE "Email Address Change" UPDATE llOK.
+               IF NOT llOK THEN DO:
+                  MESSAGE "Cancelled" VIEW-AS ALERT-BOX.
+                  LEAVE.
+               END. /* IF NOT llOK THEN DO: */
+            END. /* IF Customer.DelType EQ {&INV_DEL_TYPE_EMAIL} OR */
+            ELSE DO:
+               FIND FIRST InvoiceTargetGroup WHERE
+                          InvoiceTargetGroup.CustNum = Customer.CustNum AND
+                          InvoiceTargetGroup.ToDate >= TODAY AND
+                         (InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING} OR
+                          InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL})
+                    NO-LOCK NO-ERROR.
+               IF AVAIL InvoiceTargetGroup THEN DO:
+                  IF INPUT Customer.Email = "" THEN DO:
+                     MESSAGE "Customer email address can not be blank because " +
+                             "customer's has Fusion product."
+                        VIEW-AS ALERT-BOX ERROR.
+                     LEAVE.
+                  END. /* IF INPUT Customer.Email = "" THEN DO: */
+
+                  MESSAGE "Customer has Fusion product. " +
+                          "Validation email will be mailed to customer. " + 
+                          "Are you sure you want to continue?" 
+                     VIEW-AS ALERT-BOX BUTTONS YES-NO
+                     TITLE "Email Address Change" UPDATE llOK.
+                  IF NOT llOK THEN DO:
+                     MESSAGE "Cancelled" VIEW-AS ALERT-BOX.
+                     LEAVE.
+                  END. /* IF NOT llOK THEN DO: */
+               END. /* IF AVAIL InvoiceTargetGroup THEN DO: */
+            END. /* ELSE DO: */
+         END. /* IF Customer.Email NE INPUT Customer.Email THEN DO: */
+
+         FIND CURRENT Customer EXCLUSIVE-LOCK.
+         
+         IF CURRENT-CHANGED Customer THEN DO:
+            
+            RELEASE Customer.
+
+            MESSAGE 
+               "This record has been changed elsewhere while updating" 
+            VIEW-AS ALERT-BOX TITLE "UPDATE CANCELLED".
+
+         END.
+         ELSE DO:
+      
+            IF Customer.Email NE INPUT Customer.Email THEN DO:
+               lcEmailAddress = INPUT Customer.Email.
+
+               IF Customer.DelType EQ {&INV_DEL_TYPE_EMAIL} OR
+                  Customer.DelType EQ {&INV_DEL_TYPE_EMAIL_PENDING} THEN DO:
+
+                  /* Cancel Ongoing Email Activation Request and create new */
+                  IF fPendingEmailActRequest(INPUT Customer.Custnum) THEN
+                     fCancelPendingEmailActRequest(
+                                     INPUT Customer.Custnum,
+                                     INPUT "Customer email address is changed").
+
+                  liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+                                                   INPUT TODAY,
+                                                   INPUT katun,
+                                                   INPUT 0, /* msseq */
+                                                   INPUT "", /* cli */
+                                                   INPUT Customer.CustNum,
+                                                   INPUT {&REQUEST_SOURCE_MANUAL_TMS},
+                                                   INPUT lcEmailAddress,
+                                                   OUTPUT lcResult).
+                  IF liRequest = 0 THEN DO:
+                     RELEASE Customer.
+                     MESSAGE 
+                        "Customer email address can not be changed: " + lcResult
+                     VIEW-AS ALERT-BOX ERROR.
+                     LEAVE.
+                  END. /* IF liRequest = 0 THEN DO: */
+
+                  /* If Email already validated then mark DelType EMAIL */
+                  IF liRequest = 1 THEN
+                     Customer.DelType = {&INV_DEL_TYPE_EMAIL}.
+                  ELSE
+                     Customer.DelType = {&INV_DEL_TYPE_EMAIL_PENDING}.
+               END.
+
+               FIND FIRST InvoiceTargetGroup WHERE
+                          InvoiceTargetGroup.CustNum = Customer.CustNum AND
+                          InvoiceTargetGroup.ToDate >= TODAY AND
+                         (InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING} OR
+                          InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL})
+                    EXCLUSIVE-LOCK NO-ERROR.
+               IF AVAIL InvoiceTargetGroup THEN DO:
+                  /* If request is not already created from Customer DelType */
+                  IF liRequest = 0 THEN DO:
+                     /* Cancel existing ReqType=84 request */
+                     IF fPendingEmailActRequest(INPUT Customer.Custnum) THEN
+                        fCancelPendingEmailActRequest(
+                                     INPUT Customer.Custnum,
+                                     INPUT "Customer email address is changed").
+
+                     liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+                                                      INPUT TODAY,
+                                                      INPUT katun,
+                                                      INPUT 0, /* msseq */
+                                                      INPUT "", /* cli */
+                                                      INPUT Customer.CustNum,
+                                                      INPUT {&REQUEST_SOURCE_FUSION_EMAIL},
+                                                      INPUT lcEmailAddress,
+                                                      OUTPUT lcResult).
+                     IF liRequest = 0 THEN DO:
+                        RELEASE Customer.
+                        RELEASE InvoiceTargetGroup.
+                        MESSAGE 
+                           "Customer email address can not be changed: " + lcResult
+                           VIEW-AS ALERT-BOX ERROR.
+                        LEAVE.
+                     END. /* IF liRequest = 0 THEN DO: */
+                  END. /* IF liRequest = 0 THEN DO: */
+
+                  /* If Email already validated then mark DelType EMAIL */
+                  IF liRequest = 1 THEN
+                     InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL}.
+                  ELSE
+                     InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING}.
+
+                  RELEASE InvoiceTargetGroup.
+               END. /* IF AVAIL InvoiceTargetGroup THEN DO: */
+            END.
+            
+            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).     
+
+            ASSIGN
+               Customer.Email
+               Customer.SMSNumber
+               Customer.Phone.
+            
+            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+         
+            RELEASE Customer.
+         END.
+         
+         LEAVE.
+      END.
+   END.
+   ELSE IF toimi = 5 AND ufk[5] > 0 THEN DO:
+      RUN custcontact.p(customer.custnum, 5).
+   END.
+   
+   ELSE IF toimi = 8 THEN LEAVE.
+
+END. /* lCustMark */
+
+HIDE MESSAGE NO-PAUSE.
+HIDE FRAME fCriter NO-PAUSE.    
+

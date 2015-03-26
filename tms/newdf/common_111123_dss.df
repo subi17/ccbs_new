@@ -1,0 +1,38 @@
+ADD FIELD "custnum" OF "MServiceLimit" AS integer
+  DESCRIPTION "CustNum"
+  FORMAT "->>>>>>>>9"
+  INITIAL 0
+  LABEL "CustNum"
+  COLUMN-LABEL "CustNum"
+  ORDER 80
+
+ADD INDEX "CustNum" ON "MServiceLimit"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CustNum" ASCENDING
+  INDEX-FIELD "DialType" ASCENDING
+  INDEX-FIELD "SLSeq" ASCENDING
+  INDEX-FIELD "EndTS" DESCENDING
+
+ADD FIELD "custnum" OF "MServiceLPool" AS integer
+  DESCRIPTION "CustNum"
+  FORMAT "->>>>>>>>9"
+  INITIAL 0
+  LABEL "CustNum"
+  COLUMN-LABEL "CustNum"
+  ORDER 60
+
+ADD INDEX "CustNum" ON "MServiceLPool"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CustNum" ASCENDING
+  INDEX-FIELD "SLSeq" ASCENDING
+  INDEX-FIELD "EndTS" DESCENDING
+
+ADD INDEX "CustNum" ON "ServiceLCounter"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CustNum" ASCENDING
+  INDEX-FIELD "Period" DESCENDING
+  INDEX-FIELD "SLSeq" ASCENDING
+
+.
+PSC
+cpstream=ISO8859-1

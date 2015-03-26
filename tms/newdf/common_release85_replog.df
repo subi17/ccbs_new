@@ -1,0 +1,81 @@
+ADD TABLE "RepLog"
+  AREA "CDF_Data"
+  LABEL "Replication Log"
+  DESCRIPTION "This is the replication log table for replicating the record"
+  DUMP-NAME "replog"
+
+ADD FIELD "RecordId" OF "RepLog" AS RECID 
+  FORMAT ">>>>>>>>>9"
+  INITIAL ?
+  LABEL "Record Id"
+  COLUMN-LABEL "RecordId"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "TableName" OF "RepLog" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "TableName"
+  COLUMN-LABEL "TableName"
+  ORDER 20
+
+ADD FIELD "KeyValue" OF "RepLog" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "KeyValue"
+  COLUMN-LABEL "KeyValue"
+  ORDER 30
+
+ADD FIELD "EventType" OF "RepLog" AS character  
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "EventType"
+  COLUMN-LABEL "EventType"
+  ORDER 40
+
+ADD FIELD "CreatedTS" OF "RepLog" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "CreatedTS"
+  COLUMN-LABEL "CreatedTS"
+  DECIMALS 5
+  ORDER 50
+
+ADD INDEX "CreatedTS" ON "RepLog" 
+  AREA "CDF_Index"
+  INDEX-FIELD "CreatedTS"
+
+ADD FIELD "OrderId" OF "FixedFee" AS integer
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  COLUMN-LABEL "OrderId"
+  ORDER 260
+
+ADD FIELD "SourceTable" OF "FixedFee" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "SourceTable"
+  COLUMN-LABEL "SourceTable"
+  ORDER 270
+
+ADD FIELD "SourceKey" OF "FixedFee" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "SourceKey"
+  COLUMN-LABEL "SourceKey"
+  ORDER 280
+
+ADD FIELD "SourceTable" OF "SingleFee" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "SourceTable"
+  COLUMN-LABEL "SourceTable"
+  ORDER 270
+
+ADD FIELD "SourceKey" OF "SingleFee" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "SourceKey"
+  COLUMN-LABEL "SourceKey"
+  ORDER 280

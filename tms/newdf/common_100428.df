@@ -1,0 +1,16 @@
+ADD INDEX "StatusCode" ON "MNPCancelProposal" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "StatusCode" ASCENDING 
+  INDEX-FIELD "CreatedTS" DESCENDING 
+
+UPDATE FIELD PortRequest OF "MNPProcess"
+   FORMAT "x(24)"   
+
+UPDATE FIELD FormRequest OF "MNPProcess"
+   FORMAT "x(12)"   
+
+UPDATE FIELD "RequestedTS" OF "MNPDetails"
+  DECIMALS 5
+
+UPDATE FIELD "StatusLimitTS" OF "MNPDetails"
+  DECIMALS 5

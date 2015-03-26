@@ -1,0 +1,219 @@
+UPDATE FIELD "ValidTo" OF "DayCampaign"
+  ORDER 41
+
+ADD FIELD "CalcMethod" OF "DayCampaign" AS integer
+  DESCRIPTION ""
+  FORMAT "9"
+  FORMAT-SA ?
+  POSITION 15
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Calculation method"
+  HELP-SA ""
+  LABEL "Calculation Method"
+  LABEL-SA ?
+  COLUMN-LABEL "Method"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 200
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "InclUnit" OF "DayCampaign" AS integer
+  DESCRIPTION ""
+  FORMAT ">9"
+  FORMAT-SA ?
+  POSITION 16
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Unit of included material"
+  HELP-SA ""
+  LABEL "Included Unit"
+  LABEL-SA ?
+  COLUMN-LABEL "Incl.Unit"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 40
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "DurMonths" OF "DayCampaign" AS integer
+  DESCRIPTION ""
+  FORMAT ">>9"
+  FORMAT-SA ?
+  POSITION 17
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Duration in months"
+  HELP-SA ""
+  LABEL "Duration In Months"
+  LABEL-SA ?
+  COLUMN-LABEL "Duration"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 210
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "DurType" OF "DayCampaign" AS integer
+  DESCRIPTION ""
+  FORMAT "9"
+  FORMAT-SA ?
+  POSITION 18
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Type of duration"
+  HELP-SA ""
+  LABEL "Type Of Duration"
+  LABEL-SA ?
+  COLUMN-LABEL "Dur.Type"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 205
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "Renewal" OF "DayCampaign" AS integer
+  DESCRIPTION ""
+  FORMAT "9"
+  FORMAT-SA ?
+  POSITION 19
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Renewal method"
+  HELP-SA ""
+  LABEL "Renewal Method"
+  LABEL-SA ?
+  COLUMN-LABEL "Renewal"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 215
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+UPDATE FIELD "Amount" OF "DCCounter"
+  ORDER 41
+
+ADD FIELD "CalcMethod" OF "DCCounter" AS integer
+  DESCRIPTION ""
+  FORMAT "9"
+  FORMAT-SA ?
+  POSITION 12
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Calculation method"
+  HELP-SA ""
+  LABEL "Calculation Method"
+  LABEL-SA ?
+  COLUMN-LABEL "Method"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 200
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "DCType" OF "DCCounter" AS character
+  DESCRIPTION ""
+  FORMAT "x(8)"
+  FORMAT-SA ?
+  POSITION 14
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "Campaign type"
+  HELP-SA ""
+  LABEL "Campaign Type"
+  LABEL-SA ?
+  COLUMN-LABEL "Type"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 130
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 16
+
+ADD FIELD "InclUnit" OF "DCCounter" AS integer
+  DESCRIPTION ""
+  FORMAT ">9"
+  FORMAT-SA ?
+  POSITION 15
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Unit of included material"
+  HELP-SA ""
+  LABEL "Included Unit"
+  LABEL-SA ?
+  COLUMN-LABEL "Incl.Unit"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 40
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+.
+PSC
+cpstream=1252
+.
+0000010927                

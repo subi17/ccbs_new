@@ -1,0 +1,159 @@
+
+
+{test_xmlrpc_includes.i}
+{unit/checkutils.i}
+{timestamp.i}
+
+gcFixtures = "SIM,imsi,mobsub,msrequest".
+
+DEFINE VARIABLE piMsSeq AS INTEGER NO-UNDO. 
+DEFINE VARIABLE pcSalesman AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcValue AS CHARACTER NO-UNDO. 
+
+
+/** 
+ * This function calls the RPC method and checks the call succeeds.
+ */
+FUNCTION call_set_icc RETURN LOGICAL:
+    run_rpc_method("newton.set_icc").
+    RETURN TRUE.
+END FUNCTION.
+
+
+FUNCTION fSetParams RETURN LOGICAL (
+   INPUT iMsSeq AS INTEGER,
+   INPUT cSalesMan AS CHARACTER,
+   INPUT cValue AS CHARACTER):
+
+   ASSIGN piMsSeq    = iMsSeq
+          pcSalesMan = cSalesMan
+          pcValue    = cValue.
+
+   add_int("", "", piMsSeq).
+   add_string("", "", pcSalesMan).
+   add_string("", "", pcValue).
+   RETURN TRUE.
+END.
+
+
+FUNCTION fCheckMsRequest RETURN LOGICAL (
+   INPUT pcMobsubFixture AS CHARACTER):
+
+   fetch_fixture(pcMobsubFixture, BUFFER MobSub:HANDLE).
+
+   FIND LAST MsRequest NO-LOCK.
+   checkInt( "MsRequest.MsSeq"     , MsRequest.MsSeq     , piMsSeq        ).
+   checkChar("MsRequest.CLI"       , MsRequest.CLI       , MobSub.CLI     ).
+   checkInt( "MsRequest.CustNum"   , MsRequest.CustNum   , MobSub.CustNum ).
+   checkInt( "MsRequest.ReqIParam1", MsRequest.ReqIParam1, 1              ).
+   checkChar("MsRequest.ReqCParam1", MsRequest.ReqCParam1, "CHANGEICC"    ).
+   checkChar("MsRequest.ReqCParam2", MsRequest.ReqCParam2, pcValue        ).
+   checkDecimalWithDiff(
+                "MsRequest.ActStamp"   , MsRequest.ActStamp  , fMakeTs(), 3).
+   checkInt(    "MsRequest.ReqType"    , MsRequest.ReqType   , 15          ).
+   checkLogical("MsRequest.CreateFees" , MsRequest.CreateFees, FALSE, ""   ). 
+   checkInt(    "MsRequest.SendSMS"    , MsRequest.SendSMS   , 0           ).
+   checkDecimalWithDiff(
+                "MsRequest.CreStamp"   , MsRequest.CreStamp  , fMakeTs(), 3).
+   checkChar(   "MsRequest.UserCode"   , MsRequest.UserCode  , pcSalesman  ).
+   checkInt (   "MsRequest.ReqStatus"  , MsRequest.ReqStatus , 19          ).
+   checkChar(   "MsRequest.ReqSource"  , MsRequest.ReqSource , "6"         ).
+   checkChar(   "MsRequest.Memo"       , MsRequest.Memo      , ""          ).
+   checkInt (   "MsRequest.OrigRequest", MsRequest.OrigRequest, 0          ).
+
+   RETURN TRUE.
+END.
+
+FUNCTION fCheckSIM RETURN LOGICAL (INPUT pcSIMFixture AS CHARACTER):
+   fetch_fixture(pcSIMFixture, BUFFER SIM:HANDLE).
+   DEFINE VARIABLE cICC AS CHARACTER NO-UNDO. 
+   cICC = SIM.ICC.
+
+   FIND SIM WHERE SIM.ICC = cICC NO-LOCK.
+   checkInt("SIM.SimStat", Sim.SimStat, 13 ).
+    
+   RETURN TRUE.
+END.
+
+FUNCTION fCheckMsReqStatisticQs RETURN LOGICAL:
+   FIND MsReqStatisticQ WHERE 
+      MsReqStatisticQ.Brand = "1" AND
+      MsReqStatisticQ.ReqType = 15 AND
+      MsReqStatisticQ.ReqStatus = 0 AND
+      MsReqStatisticQ.ReqStatUpdate = 1 NO-LOCK.
+   IF NOT AVAIL MsReqStatisticQ THEN
+      assert(TRUE, 
+      "MsReqStatisticsQ for setting initial Msrequest status was lacking.").
+
+   FIND MsReqStatisticQ WHERE 
+      MsReqStatisticQ.Brand = "1" AND
+      MsReqStatisticQ.ReqType = 15 AND
+      MsReqStatisticQ.ReqStatus = 0 AND
+      MsReqStatisticQ.ReqStatUpdate = -1 NO-LOCK.
+   IF NOT AVAIL MsReqStatisticQ THEN
+      assert(TRUE, 
+      "MsReqStatisticsQ for unsetting initial Msrequest status was lacking.").
+
+   FIND MsReqStatisticQ WHERE 
+      MsReqStatisticQ.Brand = "1" AND
+      MsReqStatisticQ.ReqType = 15 AND
+      MsReqStatisticQ.ReqStatus = 19 AND
+      MsReqStatisticQ.ReqStatUpdate = 1 NO-LOCK.
+   IF NOT AVAIL MsReqStatisticQ THEN
+      assert(TRUE, 
+      "MsReqStatisticsQ for setting final Msrequest status was lacking.").
+
+   RETURN TRUE.
+END.
+
+
+FUNCTION fCheckSucceededRecords RETURN LOGICAL:
+   fCheckMsRequest("search_by_CLI").
+   fCheckSIM("SIMFreeICC").
+   fCheckMsReqStatisticQs().
+   RETURN TRUE.
+END.
+
+
+PROCEDURE test_succeeded_request:
+   fSetParams(2, "value23", "8154444333355556"). 
+   call_set_icc().
+   assert_success().
+   assert(get_bool("", ""), "Return value was not TRUE").
+   fCheckSucceededRecords().
+END.
+
+
+PROCEDURE test_not_found_mobsub:
+   fSetParams(99, "value23", "8154444333355556"). 
+   call_set_icc().
+   assert_fault(-32500,"MobSub entry 99 not found").
+END.
+
+
+PROCEDURE test_not_found_SIM:
+   fSetParams(2, "value23", "9999999999999999"). 
+   call_set_icc().
+   assert_fault(-32500,"SIM 9999999999999999 not found").
+END.
+
+
+PROCEDURE test_unsuitable_status_SIM:
+   fSetParams(2, "value23", "8154444333355557"). 
+   call_set_icc().
+   assert_fault(-32500,"This SIM can not be used; status is 3").
+END.
+
+
+PROCEDURE test_lacking_IMSI:
+   fSetParams(2, "value23", "8154444333355558"). 
+   call_set_icc().
+   assert_fault(-32500,"There is NO IMSI record assigned to this SIM !").
+END.
+
+PROCEDURE test_existing_ICC_change_process:
+   fSetParams(4, "value23", "8154444333355556"). 
+   call_set_icc().
+   assert_fault(-32500,"ICC change process already exists").
+END.
+

@@ -1,0 +1,7 @@
+ADD FIELD "FinancedResult" OF "FixedFee" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "FinancedResult"
+  COLUMN-LABEL "FinancedResult"
+  HELP "Financed result code"
+  ORDER 250

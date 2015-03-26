@@ -1,0 +1,517 @@
+ADD TABLE "BRTestCase"
+  AREA "Sta_Data_128"
+  LABEL "BR Test Case"
+  DESCRIPTION "Billrun test case"
+  DUMP-NAME "brtestcase"
+
+ADD FIELD "Brand" OF "BRTestCase" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 10
+
+ADD FIELD "BRTestCaseID" OF "BRTestCase" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Test Case ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Case ID"
+  HELP "Test case ID"
+  ORDER 20
+
+ADD FIELD "Description" OF "BRTestCase" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  LABEL "Description"
+  POSITION 4
+  MAX-WIDTH 100
+  HELP "Description of test case"
+  ORDER 30
+
+ADD FIELD "BillCode" OF "BRTestCase" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Result Billing Item"
+  POSITION 5
+  MAX-WIDTH 32
+  COLUMN-LABEL "Bill.Item"
+  HELP "Result billing item ID"
+  ORDER 40
+
+ADD FIELD "ResultValue" OF "BRTestCase" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Result Value"
+  POSITION 6
+  MAX-WIDTH 18
+  COLUMN-LABEL "Result"
+  HELP "Result value"
+  DECIMALS 3
+  ORDER 50
+
+ADD FIELD "RelationalOperator" OF "BRTestCase" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Relational Operator"
+  POSITION 7
+  MAX-WIDTH 16
+  COLUMN-LABEL "Rel.Operator"
+  HELP "Relational operator for the result"
+  ORDER 60
+
+ADD FIELD "Active" OF "BRTestCase" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Active"
+  POSITION 8
+  MAX-WIDTH 1
+  HELP "Is case active"
+  ORDER 70
+
+ADD INDEX "BRTestCaseID" ON "BRTestCase" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "BRTestCaseID" ASCENDING 
+
+ADD INDEX "Description" ON "BRTestCase" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "Description" ASCENDING 
+
+ADD TABLE "BRTestCriteria"
+  AREA "Sta_Data_64"
+  LABEL "BR Test Criteria"
+  DESCRIPTION "Billrun test case criteria"
+  DUMP-NAME "brtestcriteria"
+
+ADD FIELD "BRTestCaseID" OF "BRTestCriteria" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Test Case ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Case ID"
+  HELP "Test case ID"
+  ORDER 10
+
+ADD FIELD "BRTestCriteriaID" OF "BRTestCriteria" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Test Criteria ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Criteria ID"
+  HELP "Test criteria id"
+  ORDER 20
+
+ADD FIELD "CriteriaTable" OF "BRTestCriteria" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Criteria Table"
+  POSITION 4
+  MAX-WIDTH 40
+  COLUMN-LABEL "Table"
+  HELP "Criteria table"
+  ORDER 30
+
+ADD FIELD "CriteriaField" OF "BRTestCriteria" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Criteria Field"
+  POSITION 5
+  MAX-WIDTH 40
+  COLUMN-LABEL "Field"
+  HELP "Criteria field"
+  ORDER 40
+
+ADD FIELD "ValueIncluded" OF "BRTestCriteria" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Value Included"
+  POSITION 6
+  MAX-WIDTH 40
+  COLUMN-LABEL "Included"
+  HELP "Value included"
+  ORDER 50
+
+ADD FIELD "ROValueIncluded" OF "BRTestCriteria" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Rel. Operator For Value"
+  POSITION 8
+  MAX-WIDTH 16
+  COLUMN-LABEL "Value Operator"
+  HELP "Relational operator for value included"
+  ORDER 70
+
+ADD FIELD "Setting" OF "BRTestCriteria" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Setting"
+  POSITION 9
+  MAX-WIDTH 40
+  HELP "Setting"
+  ORDER 80
+
+ADD FIELD "Active" OF "BRTestCriteria" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "yes"
+  LABEL "Active"
+  POSITION 12
+  MAX-WIDTH 1
+  HELP "Is case active"
+  ORDER 110
+
+ADD FIELD "EventDateFrom" OF "BRTestCriteria" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Event Date From"
+  POSITION 14
+  MAX-WIDTH 40
+  COLUMN-LABEL "Date From"
+  HELP "Event date from"
+  ORDER 130
+
+ADD FIELD "EventDateTo" OF "BRTestCriteria" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Event Date To"
+  POSITION 15
+  MAX-WIDTH 40
+  COLUMN-LABEL "Date To"
+  HELP "Event date to"
+  ORDER 140
+
+ADD INDEX "BRTestCriteriaID" ON "BRTestCriteria" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "BRTestCriteriaID" ASCENDING 
+
+ADD INDEX "BRTestCaseID" ON "BRTestCriteria" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "BRTestCaseID" ASCENDING 
+  INDEX-FIELD "Active" ASCENDING 
+  INDEX-FIELD "CriteriaTable" ASCENDING 
+  INDEX-FIELD "CriteriaField" ASCENDING 
+
+ADD TABLE "BRTestQResult"
+  AREA "Sta_Data_256"
+  LABEL "BR Test Queue Result"
+  DESCRIPTION "Billrun test queue result"
+  DUMP-NAME "brtestqresult"
+
+ADD FIELD "BRTestQueueID" OF "BRTestQResult" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Test Queue ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Queue ID"
+  HELP "Billrun test queue ID"
+  ORDER 10
+
+ADD FIELD "BRTestQResultID" OF "BRTestQResult" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Test Queue Result ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Result ID"
+  HELP "Test queue result ID"
+  ORDER 20
+
+ADD FIELD "TestRunStamp" OF "BRTestQResult" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Test Run Time"
+  POSITION 4
+  MAX-WIDTH 20
+  COLUMN-LABEL "Time"
+  HELP "Test run time"
+  DECIMALS 5
+  ORDER 30
+
+ADD FIELD "UserCode" OF "BRTestQResult" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "User ID"
+  POSITION 5
+  MAX-WIDTH 24
+  HELP "User ID"
+  ORDER 40
+  MANDATORY
+
+ADD INDEX "BRTestQResultID" ON "BRTestQResult" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "BRTestQResultID" ASCENDING 
+
+ADD INDEX "BRTestQueueID" ON "BRTestQResult" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "BRTestQueueID" ASCENDING 
+  INDEX-FIELD "TestRunStamp" DESCENDING 
+
+ADD TABLE "BRTestQResultRow"
+  AREA "Sta_Data_256"
+  LABEL "BR Test Queue Result Row"
+  DESCRIPTION "Billrun test queue result row"
+  DUMP-NAME "brtestqresultrow"
+
+ADD FIELD "QResultRowID" OF "BRTestQResultRow" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Queue Result Row ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Result Row ID"
+  HELP "Test queue result row ID"
+  ORDER 10
+
+ADD FIELD "BRTestQRowID" OF "BRTestQResultRow" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "Test Queue Row ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Queue Row ID"
+  HELP "Test queue row ID"
+  ORDER 20
+
+ADD FIELD "ResultValue" OF "BRTestQResultRow" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Result Value"
+  POSITION 4
+  MAX-WIDTH 18
+  COLUMN-LABEL "Result"
+  HELP "Result value"
+  DECIMALS 3
+  ORDER 30
+
+ADD FIELD "TestResult" OF "BRTestQResultRow" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Result"
+  POSITION 5
+  MAX-WIDTH 60
+  HELP "Result of the test"
+  ORDER 40
+
+ADD FIELD "BRTestQResultID" OF "BRTestQResultRow" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Test Queue Result ID"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Result ID"
+  HELP "Test queue result ID"
+  ORDER 60
+
+ADD FIELD "InvCust" OF "BRTestQResultRow" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Invoice Customer"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Inv.Cust"
+  HELP "Invoice customer"
+  ORDER 70
+
+ADD FIELD "MsSeq" OF "BRTestQResultRow" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "Subscr.ID"
+  HELP "Subscription ID"
+  ORDER 80
+
+ADD FIELD "ExtInvID" OF "BRTestQResultRow" AS character 
+  DESCRIPTION ""
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "External Invoice ID"
+  POSITION 10
+  MAX-WIDTH 24
+  COLUMN-LABEL "InvoiceID"
+  HELP "External invoice ID"
+  ORDER 90
+
+ADD FIELD "InvNum" OF "BRTestQResultRow" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Invoice Number"
+  POSITION 11
+  MAX-WIDTH 4
+  COLUMN-LABEL "Invoice"
+  HELP "Invoice number (internal)"
+  ORDER 100
+
+ADD INDEX "QResultRowID" ON "BRTestQResultRow" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "QResultRowID" ASCENDING 
+
+ADD INDEX "BRTestQResultID" ON "BRTestQResultRow" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "BRTestQResultID" ASCENDING 
+  INDEX-FIELD "BRTestQRowID" ASCENDING 
+
+ADD INDEX "BRTestQRowID" ON "BRTestQResultRow" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "BRTestQRowID" ASCENDING 
+
+ADD TABLE "BRTestQRow"
+  AREA "Sta_Data_256"
+  LABEL "BR Test Queue Row"
+  DESCRIPTION "Billrun test queue row"
+  DUMP-NAME "brtestqrow"
+
+ADD FIELD "BRTestQRowID" OF "BRTestQRow" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "Test Queue Row ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Queue Row ID"
+  HELP "Test queue row ID"
+  ORDER 10
+
+ADD FIELD "BRTestQueueID" OF "BRTestQRow" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Test Queue ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Queue ID"
+  HELP "Billrun test queue ID"
+  ORDER 20
+
+ADD FIELD "BRTestCaseID" OF "BRTestQRow" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Test Case ID"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Case ID"
+  HELP "Test case ID"
+  ORDER 30
+
+ADD FIELD "CaseQty" OF "BRTestQRow" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "Case Quantity"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Case Qty"
+  HELP "Quantity of cases to be picked"
+  ORDER 40
+
+ADD FIELD "Active" OF "BRTestQRow" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Active"
+  POSITION 6
+  MAX-WIDTH 1
+  HELP "Is row active"
+  ORDER 50
+
+ADD INDEX "BRTestQRowID" ON "BRTestQRow" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "BRTestQRowID" ASCENDING 
+
+ADD INDEX "BRTestCaseID" ON "BRTestQRow" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "BRTestCaseID" ASCENDING 
+
+ADD INDEX "BRTestQueueID" ON "BRTestQRow" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "BRTestQueueID" ASCENDING 
+  INDEX-FIELD "BRTestCaseID" ASCENDING 
+
+ADD TABLE "BRTestQueue"
+  AREA "Sta_Data_256"
+  LABEL "BR Test Queue"
+  DESCRIPTION "Billrun test queue"
+  DUMP-NAME "brtestqueue"
+
+ADD FIELD "Brand" OF "BRTestQueue" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 10
+
+ADD FIELD "BRTestQueueID" OF "BRTestQueue" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Test Queue ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Queue ID"
+  HELP "Billrun test queue ID"
+  ORDER 20
+
+ADD FIELD "Description" OF "BRTestQueue" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  LABEL "Description"
+  POSITION 4
+  MAX-WIDTH 100
+  HELP "Description of test queue"
+  ORDER 30
+
+ADD FIELD "Active" OF "BRTestQueue" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Active"
+  POSITION 5
+  MAX-WIDTH 1
+  HELP "Is queue active"
+  ORDER 40
+
+ADD FIELD "ResultEMail" OF "BRTestQueue" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Result eMail"
+  POSITION 6
+  MAX-WIDTH 80
+  COLUMN-LABEL "eMail"
+  HELP "eMail to which results are sent"
+  ORDER 50
+
+ADD INDEX "BRTestQueueID" ON "BRTestQueue" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "BRTestQueueID" ASCENDING 
+
+ADD INDEX "Description" ON "BRTestQueue" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "Description" ASCENDING 
+
+ADD SEQUENCE "QResultRowID"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+.
+PSC
+cpstream=1252
+.
+0000010556

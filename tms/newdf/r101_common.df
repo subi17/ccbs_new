@@ -1,0 +1,7 @@
+ADD FIELD "CalcAmt" OF "FixedFee" AS DECIMAL
+  FORMAT "->>>,>>9.99"
+  INITIAL ?
+  LABEL "Calculated Amount"
+  COLUMN-LABEL "CalcAmt"
+  DECIMALS 2
+  ORDER 290

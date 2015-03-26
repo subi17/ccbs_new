@@ -1,0 +1,35 @@
+
+SIMForOrder1:
+   brand : "1"
+   ICC : "8154213312312311"
+   simstat: 1
+
+# newton__icc_available
+SIMForOrder2:
+   brand : "1"
+   ICC : "8154213312312312"
+   simstat : 1
+
+# newton__set_icc
+# newton__icc_available
+SIMFreeICC:
+   brand:"1"
+   ICC:"8154444333355556"
+   simstat:9
+
+# newton__set_icc, unsuitable status
+SIMUnsuitableStatus:
+   brand:"1"
+   ICC:"8154444333355557"
+   simstat:3
+
+# newton__set_icc; suitable but IMSI is lacking
+SIMWithoutIMSI:
+   brand:"1"
+   ICC:"8154444333355558"
+   simstat:1
+
+# newton__get_history; ICC change
+SIMForGetHistory:
+   Brand:"1"
+   ICC:"840404040000000"

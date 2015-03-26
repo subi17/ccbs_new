@@ -1,0 +1,30 @@
+# newton__set_icc
+FoundIMSI:
+ IMSI:"215434888822"
+ ICC:"8154444333355556"
+ UserSeq:1
+ CustNum:1
+ BillLevel:"232"
+ 
+
+active_subscription_imsi:
+   IMSI: "214040000161160"
+   ICC: "123"
+
+# newton__get_mobsub_details
+yoigo_subscription_imsi:
+   IMSI: "214040000161161"
+   ICC: "456"
+
+#newton__add_termination_request.p
+IMSI_FIX:
+  imsi: "100000000000001"
+
+# newton__get_mobsub_details
+MobSubDetailsIMSI:
+   IMSI: "214040000161123"
+   ICC:"8514213809123883"
+   PIN1:"4536"
+   PIN2:"3545"
+   PUK1:"2138128398898"
+   PUK2:"8128309883888"

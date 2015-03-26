@@ -1,0 +1,10 @@
+# newton__get_cdr_details
+BilledInvSeq:
+    InvSeq: 5
+    InvNum:2000
+  
+# newton__get_cdr_details
+NotBilledInvSeq:
+    InvSeq: 7
+    InvNum:0
+

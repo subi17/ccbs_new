@@ -1,0 +1,12 @@
+ADD FIELD "ExtInvRef" OF "OrderCustomer" AS character
+   DESCRIPTION "External invoice reference for corporate customers"
+   FORMAT "X(50)"
+   INITIAL ""
+   LABEL "External InvRef"
+   COLUMN-LABEL "ExtInvRef"
+   HELP "External Invoice Reference"
+   ORDER 870
+
+.
+PSC
+cpstream=1252

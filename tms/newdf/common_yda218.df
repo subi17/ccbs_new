@@ -1,0 +1,50 @@
+ADD FIELD "ResultQty" OF "BRTestCase" AS integer
+  FORMAT "->>>>>>>9"
+  POSITION 9
+  INITIAL "1"
+  HELP "Result quantity"
+  LABEL "Result Quantity"
+  COLUMN-LABEL "Qty"
+  VIEW-AS ?
+  ORDER 80
+  MAX-WIDTH 4
+
+ADD FIELD "BRTestQueueID" OF "BRTestCriteria" AS integer
+  FORMAT ">>>>>>>9"
+  POSITION 16
+  INITIAL "0"
+  HELP "Billrun test queue ID"
+  LABEL "Test Queue ID"
+  COLUMN-LABEL "Queue ID"
+  VIEW-AS ?
+  ORDER 150
+  MAX-WIDTH 4
+
+ADD FIELD "CriteriaOwner" OF "BRTestCriteria" AS character
+  FORMAT "x(12)"
+  POSITION 17
+  INITIAL ""
+  HELP "Criteria owner"
+  LABEL "Criteria Owner"
+  COLUMN-LABEL "Owner"
+  VIEW-AS ?
+  ORDER 160
+  MAX-WIDTH 24
+
+ADD INDEX "BRTestQueueID" ON "BRTestCriteria"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "BRTestQueueID" ASCENDING
+  INDEX-FIELD "Active" ASCENDING
+  INDEX-FIELD "CriteriaTable" ASCENDING
+  INDEX-FIELD "CriteriaField" ASCENDING
+
+ADD INDEX "BrandID" ON "BRTestCase"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "BRTestCaseID" ASCENDING
+
+.
+PSC
+cpstream=1252
+.
+0000001074

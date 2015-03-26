@@ -1,0 +1,100 @@
+
+ ===  RPC Tests ===
+
+
+1) BASIC INFORMATION:
+==============================
+
+ * Location in every system: ../tms_support/testing/rpctest
+
+
+ * Test cases cover these categories: NEWTON / SELFSERVICE / VIPTOOL
+
+
+ * Init files:
+   ===========
+   Newton: newton_init.py
+   Selfservice: selfservice_init.py
+   Viptool: ivr_init.py
+
+   NOTE! You may need to modify port of the lighttpd server in init file.
+         There should not be any other modification
+
+
+ * Test cases prefixes:
+   ====================
+   Newton: newton_billing_items_get.py
+   Selfservice: ext_selfservice__get_invoice_information.py
+   Viptool: ivr_get_invoice_delivery_type.py
+
+
+ * Output file:
+   ============
+   Centralized module: show_results.py
+   Only few cases has their own print procedure, but it is inside the case.
+
+
+ * Parameters:
+   ===========
+   Almost all require one parameter whether: MSISDN / MSSEQ / ORDERID / CUSTNUM / etc.
+	Only few RPCs will not use parameters
+   
+   You can check any case simply:
+   $ python newton_get_mobsub_details.py 
+   Missing parameter: MsSeq
+   Example: python newton_get_mobsub_details.py 10055111
+
+
+
+2) USAGE
+==============================
+
+ * Run case:
+  $ python <test_case_file> <parameter> <ENTER>
+ 
+
+ * POSSIBLE ERROR: in case of port number does not found
+   Can be fixed by modifying port number in init file, (ivr_init.py) in this case
+   xmlrpclib.ProtocolError: <ProtocolError for localhost:3030/viptool/: 404 Not Found>
+
+
+ * Example:  FIRST EXPERIMENT RETURN INFO - MISSING PARAMETER
+   ../tms_support/testing/rpctest$ python newton_get_mobsub_details.py 
+  Missing parameter: MsSeq
+  Example: python newton_get_mobsub_details.py 10055111
+  
+
+  SECOND EXPERIMENT WITH PARAMETER GIVE RESULTS LIKE THIS:
+  ../tms_support/testing/rpctest$ python newton_get_mobsub_details.py 10055111
+  sub_terminals
+  payment_method: postpaid
+  id_code: 7596
+  segmentation_offer: OFF
+  orders
+  date: 20120224T14:35:05
+  type: new
+  id: 10050756
+  contract_id: contractid
+  -._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.
+  data_bundle_id: CONTDATA
+  cli: 622689226
+  icc: 8934040607000927455
+  segmentation_code: SN
+  memo_counts: {'customer': 0, 'mobsub': 0, 'service': 1, 'invoice': 1}
+  sub_laptops
+  number_type: new
+  activation_time: 20120224T14:36:16
+  custnum: 3717582
+  barring_code: Y_HURP
+  pin2: 2220
+  msstatus: 8
+  pin1: 4780
+  mnp_available: 0
+  subscription_type_id: CONTS
+  billing_permission: 0
+  puk1: 50724609
+  puk2: 74309642
+  -._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.
+  ../tms_support/testing/rpctest$ 
+
+

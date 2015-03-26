@@ -1,0 +1,40 @@
+BigB Help
+=========
+
+Based on the calculation in this thread:
+
+    http://www.peg.com/lists/dba/history/200301/msg00509.html
+
+which originates in a 1998 posting (by me) referring to some interesting
+research published by IBM.  The formula used here is the one derived by
+Tim Casey:
+
+    m2 = m1 * sqrt( b1 / b2 )
+
+This results in a simple calculation of the expected impact on OS reads
+which is generally the ultimate goal of tuning -B.
+
+This is not an exact calculation -- there should be a locally calibrated
+constant applied to  ( b1 / b2 ).  The value is probably between 0.5 & 1.5
+but these results are, IMHO, close enough to give an idea of what to expect
+plus or minus a bit (maybe 25%).
+
+It should also be noted that as increases in -B reduce OS reads you can
+expect to see a possibly significant increase in logical reads since
+less time will be spent waiting for OS reads -- this will impact the
+OS reads in a recursive manner.
+
+You'll get better results in you sample for a longer period.  10 second
+samples (for instance) can have quite a lot of variation from sample to
+sample.  I'd try at least 60 seconds for starters.
+
+Use the "e" command to enter a user defined exploratory value for -B.
+
+Values of -B that would result in the entire database fitting into memory
+will return a miss ratio of 0% and the hit ratio will be shown as 99999999.
+
+If the database that is being monitored has a miss ratio of 0% then it is
+not possible to estimate the impact of changes to -B. 
+
+Results will vary more with small databases than with large databases.
+

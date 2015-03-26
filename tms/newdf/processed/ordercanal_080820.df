@@ -1,0 +1,25 @@
+ADD FIELD "SMSType" OF "Order" AS INTEGER 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "SMS Type"
+  POSITION 93
+  MAX-WIDTH 3
+  COLUMN-LABEL "SMS Type"
+  HELP "SMS Type"
+  ORDER 1010
+
+ADD FIELD "DataChecked" OF "OrderCustomer" AS logical
+  DESCRIPTION "Is the ordercustomer data checked"
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "DataChecked"
+  MAX-WIDTH 1
+  COLUMN-LABEL "DataChecked"
+  HELP "Is the data checked"
+  ORDER 890
+
+.
+PSC
+cpstream=1252
+.
+0000011966

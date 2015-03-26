@@ -1,0 +1,15 @@
+ADD FIELD "MandateId" OF "MsOwner" AS character
+  FORMAT "X(35)"
+  INITIAL ""
+  LABEL "Mandate Id"
+  COLUMN-LABEL "MandateID"
+  HELP "Mandate ID for CSB19.14 file"
+  ORDER 330
+
+ADD FIELD "MandateDate" OF "MsOwner" AS date
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Mandate Date"
+  COLUMN-LABEL "MandateDate"
+  HELP "Mandate ID creation date"
+  ORDER 340

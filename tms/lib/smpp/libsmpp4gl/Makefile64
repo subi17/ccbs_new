@@ -1,0 +1,9 @@
+CC=gcc -m64
+CCFLAGS=-I /usr/local/include -fPIC 
+LDFLAGS=-L /usr/local/lib/64 -lsmpp34 -shared -Wl,-soname,libsmpp4gl.so.1 -fPIC
+libsmpp4gl.so.1.0.1: smpp34_wrapper.o
+	$(CC) $(LDFLAGS) -o $@ smpp34_wrapper.o 
+smpp34_wrapper.o: smpp34_wrapper.c
+	$(CC) $(CCFLAGS) -c -o $@ $<
+clean:
+	rm -f smpp34_wrapper.o libsmpp4gl.so.1.0.1

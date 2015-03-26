@@ -1,0 +1,22 @@
+Startup Commands
+================
+
+Type "h" to obtain a ProTop internal command help screen.
+
+The "standard" ProTop startup -- refresh interval 10 seconds, initial
+displays Summary & UIO:
+    
+    $ PROPATH="."
+    $ mpro sports -p protop.p -param "i;10|d;summary,uio" -Bt 1024
+
+Batch startup -- logging "UIO" to a file:
+    
+    $ PROPATH="."
+    $ mbpro sports -p batch-chui.p -param "i;10|d;UIO" -Bt 1024 > ProTop.UIO
+
+Just create HTML output of the "UIO" screen:
+    
+    $ PROPATH="."
+    $ mbpro sports -p batch-html.p -param "i;10|d;UIO" -Bt 1024
+
+

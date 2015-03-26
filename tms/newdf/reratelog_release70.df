@@ -1,0 +1,16 @@
+ADD FIELD "CCN" OF "EDRHistory" AS integer 
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "CCN"
+  COLUMN-LABEL "CCN"
+  HELP "Consecutive country/service number of call's  destination"
+  ORDER 170
+
+ADD FIELD "CLIType" OF "EDRHistory" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "CLIType"
+  COLUMN-LABEL "CLIType"
+  HELP "Code of Subscription Type"
+  ORDER 180
+

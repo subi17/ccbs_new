@@ -1,0 +1,12 @@
+#!/bin/bash
+# /apps/yoigo/tms_support/testing/
+
+sed -r -e "s/^(.{208})(.{9})/\1$1/" /apps/yoigo/tms_support/testing/cdrfiles/$4 > /apps/yoigo/tms_support/testing/cdrfiles/temp.asc
+cp /apps/yoigo/tms_support/testing/cdrfiles/temp.asc /apps/yoigo/tms_support/testing/cdrfiles/$4
+sed -r -e "s/^(.{170})(.{8})/\1$2/" /apps/yoigo/tms_support/testing/cdrfiles/$4 > /apps/yoigo/tms_support/testing/cdrfiles/temp.asc
+cp /apps/yoigo/tms_support/testing/cdrfiles/temp.asc /apps/yoigo/tms_support/testing/cdrfiles/$4
+if [ $3 != "N/A" ]
+then
+   sed -r -e "s/^(.{179})(.{6})/\1$3/" /apps/yoigo/tms_support/testing/cdrfiles/$4 > /apps/yoigo/tms_support/testing/cdrfiles/temp.asc
+   cp /apps/yoigo/tms_support/testing/cdrfiles/temp.asc /apps/yoigo/tms_support/testing/cdrfiles/$4
+fi

@@ -1,0 +1,380 @@
+ADD TABLE "TCC"
+  AREA "Sta_Data_128"
+  LABEL "Technical Call Case"
+  DESCRIPTION "Technical CCN"
+  DUMP-NAME "tcc"
+
+ADD FIELD "BCC" OF "TCC" AS integer 
+  FORMAT "zzzz9"
+  INITIAL "0"
+  LABEL "Billing Call Case"
+  POSITION 2
+  MAX-WIDTH 5
+  COLUMN-LABEL "Bill.CC"
+  HELP "Billing call case number (BCC)"
+  ORDER 1000
+  MANDATORY
+
+ADD FIELD "TCCName" OF "TCC" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 3
+  MAX-WIDTH 60
+  COLUMN-LABEL "Name"
+  HELP "Name"
+  ORDER 30
+
+ADD FIELD "DialType" OF "TCC" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "Dialling Type"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "DT"
+  HELP "Dialling type code"
+  ORDER 35
+
+ADD FIELD "Brand" OF "TCC" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 5
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code of brand"
+  ORDER 5
+
+ADD FIELD "Pulses" OF "TCC" AS integer 
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "Pulses"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "Pulses"
+  HELP "Pulses"
+  ORDER 95
+
+ADD FIELD "ValidFrom" OF "TCC" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 16
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Effective from"
+  ORDER 60
+
+ADD FIELD "ValidTo" OF "TCC" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 23
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Effective until"
+  ORDER 70
+
+ADD FIELD "BDest" OF "TCC" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "B-Destination"
+  POSITION 24
+  MAX-WIDTH 50
+  COLUMN-LABEL "B-Dest"
+  HELP "B-Destination"
+  ORDER 80
+
+ADD FIELD "DurTo" OF "TCC" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "Duration To"
+  POSITION 25
+  MAX-WIDTH 4
+  COLUMN-LABEL "Dur.To"
+  HELP "Duration to"
+  ORDER 88
+
+ADD FIELD "GsmBnr" OF "TCC" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "B-Number"
+  POSITION 26
+  MAX-WIDTH 50
+  COLUMN-LABEL "B-Nbr"
+  HELP "B-number"
+  ORDER 81
+
+ADD FIELD "MinBillQty" OF "TCC" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "Minimum Billing Qty"
+  POSITION 27
+  MAX-WIDTH 4
+  COLUMN-LABEL "Min.BillQty"
+  HELP "Minimum billing quantity"
+  ORDER 90
+
+ADD FIELD "TCC" OF "TCC" AS integer 
+  FORMAT "zzzz9"
+  INITIAL "0"
+  LABEL "Technical Call Case"
+  POSITION 28
+  MAX-WIDTH 5
+  COLUMN-LABEL "TCC"
+  HELP "Technical call case number (TCC)"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "TCCRule" OF "TCC" AS integer 
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "TCC Rule"
+  POSITION 29
+  MAX-WIDTH 5
+  COLUMN-LABEL "Rule"
+  HELP "Technical rule for TCC"
+  ORDER 101
+
+ADD FIELD "ErrorCode" OF "TCC" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "Error Code"
+  POSITION 30
+  MAX-WIDTH 4
+  COLUMN-LABEL "Error"
+  HELP "Error code"
+  ORDER 85
+
+ADD FIELD "BType" OF "TCC" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "B-Type"
+  POSITION 31
+  MAX-WIDTH 4
+  COLUMN-LABEL "BT"
+  HELP "B-destination type"
+  ORDER 37
+
+ADD FIELD "TariffRule" OF "TCC" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Tariff Rule"
+  POSITION 32
+  MAX-WIDTH 4
+  COLUMN-LABEL "TR"
+  HELP "Pricing method"
+  ORDER 100
+
+ADD FIELD "TrafficType" OF "TCC" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Traffic Type"
+  POSITION 33
+  MAX-WIDTH 5
+  COLUMN-LABEL "Traffic Type"
+  HELP "Traffic type"
+  ORDER 900
+
+ADD FIELD "BDestPref" OF "TCC" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Prefix For B-Destination"
+  POSITION 34
+  MAX-WIDTH 50
+  COLUMN-LABEL "Prefix For B-dest"
+  HELP "Prefix for B-Destination"
+  ORDER 82
+
+ADD FIELD "TCCPayer" OF "TCC" AS integer 
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "TCC Payer"
+  POSITION 35
+  MAX-WIDTH 5
+  COLUMN-LABEL "Payer"
+  HELP "Payer; Where to find payer/owner information"
+  ORDER 201
+
+ADD INDEX "TCC" ON "TCC" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "TCC" ASCENDING 
+  INDEX-FIELD "DurTo" ASCENDING 
+  INDEX-FIELD "ValidTo" DESCENDING 
+
+ADD INDEX "BCC" ON "TCC" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "BCC" ASCENDING 
+  INDEX-FIELD "ValidTo" DESCENDING 
+
+ADD INDEX "DialType" ON "TCC" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "DialType" ASCENDING 
+  INDEX-FIELD "ErrorCode" ASCENDING 
+
+ADD INDEX "TCCName" ON "TCC" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "TCCName" ASCENDING 
+
+ADD TABLE "TCCError"
+  AREA "Sta_Data_128"
+  LABEL "TCC Error Configuration"
+  DESCRIPTION "Technical CC Params"
+  DUMP-NAME "tccerror"
+
+ADD FIELD "TCC" OF "TCCError" AS integer 
+  FORMAT "zzzz9"
+  INITIAL "0"
+  LABEL "TCC"
+  POSITION 2
+  MAX-WIDTH 5
+  COLUMN-LABEL "TCC"
+  HELP "Technical Call Case Number "
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "ErrorValue" OF "TCCError" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Value"
+  POSITION 3
+  MAX-WIDTH 60
+  COLUMN-LABEL "Value"
+  HELP "Value that triggers errorcode"
+  ORDER 15
+
+ADD FIELD "ValidFrom" OF "TCCError" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 16
+  MAX-WIDTH 4
+  COLUMN-LABEL "Valid From"
+  HELP "The date from which this TCCError will be used."
+  ORDER 60
+
+ADD FIELD "ValidTo" OF "TCCError" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 23
+  MAX-WIDTH 4
+  COLUMN-LABEL "Valid To"
+  HELP "The date to (until) which this TCCError will be used."
+  ORDER 70
+
+ADD FIELD "TCCPName" OF "TCCError" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 24
+  MAX-WIDTH 60
+  COLUMN-LABEL "Name"
+  HELP "Name of TCC Parameter"
+  ORDER 30
+
+ADD FIELD "ErrorCode" OF "TCCError" AS integer 
+  FORMAT "zzzz9"
+  INITIAL "0"
+  LABEL "TCC"
+  POSITION 25
+  MAX-WIDTH 5
+  COLUMN-LABEL "Error Code"
+  HELP "Error code"
+  ORDER 100
+  MANDATORY
+
+ADD FIELD "ValueType" OF "TCCError" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Value Type"
+  POSITION 26
+  MAX-WIDTH 60
+  COLUMN-LABEL "Type"
+  HELP "Type of the value that triggers errorcode"
+  ORDER 110
+
+ADD INDEX "TCC" ON "TCCError" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TCC" ASCENDING 
+  INDEX-FIELD "ValueType" ASCENDING 
+  INDEX-FIELD "ErrorValue" ASCENDING 
+  INDEX-FIELD "ValidTo" DESCENDING 
+
+ADD TABLE "MServiceLPool"
+  AREA "Sta_Data_128"
+  DUMP-NAME "mservicelpool"
+
+ADD FIELD "SLSeq" OF "MServiceLPool" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "SLSeq"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "SLseq"
+  HELP "Sequence for Servicelimit"
+  ORDER 10
+
+ADD FIELD "MsSeq" OF "MServiceLPool" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Mobsub Sequence"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "MsSeq"
+  HELP "Link to mobsub-table"
+  ORDER 20
+
+ADD FIELD "LimitAmt" OF "MServiceLPool" AS decimal 
+  FORMAT ">>>>>>>>>>>>9.999"
+  INITIAL "0"
+  LABEL "Limit Amount"
+  POSITION 4
+  MAX-WIDTH 18
+  COLUMN-LABEL "LimitAmt"
+  DECIMALS 3
+  ORDER 30
+
+ADD FIELD "FromTS" OF "MServiceLPool" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "ValidFromTS"
+  POSITION 5
+  MAX-WIDTH 20
+  COLUMN-LABEL "ValidFromTS"
+  HELP "Valid From TimeStamp"
+  DECIMALS 5
+  ORDER 40
+
+ADD FIELD "EndTS" OF "MServiceLPool" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "EndTS"
+  POSITION 6
+  MAX-WIDTH 20
+  COLUMN-LABEL "EndTS"
+  HELP "End TimeStamp"
+  DECIMALS 5
+  ORDER 50
+
+ADD INDEX "MSSeq" ON "MServiceLPool" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "SLSeq" ASCENDING 
+  INDEX-FIELD "EndTS" DESCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000006073

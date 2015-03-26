@@ -1,0 +1,16 @@
+RENAME INDEX "RequestActionID" TO "temp-13109" ON "RequestAction"
+
+ADD INDEX "RequestActionID" ON "RequestAction"
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "RequestActionID" ASCENDING
+
+UPDATE PRIMARY INDEX "RequestActionID" ON "RequestAction"
+
+DROP INDEX "temp-13109" ON "RequestAction"
+
+.
+PSC
+cpstream=1252
+.
+0000002602

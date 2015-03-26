@@ -1,0 +1,30 @@
+ADD FIELD "ReqCParam1" OF "PrePaidRequest" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Char Parameter 1"
+  POSITION 24
+  MAX-WIDTH 60
+  COLUMN-LABEL "Char Parameter 1"
+  ORDER 220
+
+ADD FIELD "Logistics" OF "Order" AS character
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Logistics"
+  POSITION 95
+  COLUMN-LABEL "Logistics"
+  HELP "Logistics file name"
+  ORDER 1030
+
+ADD FIELD "FtGrp" OF "Order" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "FATime Group"
+  POSITION 96
+  MAX-WIDTH 16
+  COLUMN-LABEL "FATGroup"
+  HELP "FATime group"
+  ORDER 1040
+.
+PSC
+cpstream=1252

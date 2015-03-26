@@ -1,0 +1,158 @@
+ADD TABLE "MNPDetails"
+  AREA "Sta_Data_64"
+  DUMP-NAME "mnpdetails"
+
+ADD FIELD "MNPSeq" OF "MNPDetails" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  POSITION 2
+  MAX-WIDTH 4
+  ORDER 10
+
+ADD FIELD "CustId" OF "MNPDetails" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "CustId"
+  POSITION 3
+  MAX-WIDTH 24
+  COLUMN-LABEL "CustId"
+  ORDER 20
+
+ADD FIELD "CustIdType" OF "MNPDetails" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "CustIdType"
+  POSITION 4
+  MAX-WIDTH 16
+  COLUMN-LABEL "CustIdType"
+  ORDER 30
+
+ADD FIELD "FirstName" OF "MNPDetails" AS character 
+  DESCRIPTION "Customer's forename"
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "ForeName"
+  POSITION 5
+  MAX-WIDTH 40
+  COLUMN-LABEL "ForeName"
+  HELP "Customer's fore/given name"
+  ORDER 40
+
+ADD FIELD "SurName1" OF "MNPDetails" AS character 
+  DESCRIPTION "Customer's 1st last name"
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "SurName1"
+  POSITION 6
+  MAX-WIDTH 40
+  COLUMN-LABEL "SurName1"
+  HELP "Customer's 1st last name"
+  ORDER 50
+
+ADD FIELD "SurName2" OF "MNPDetails" AS character 
+  DESCRIPTION "Customer's 1st last name"
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "SurName2"
+  POSITION 7
+  MAX-WIDTH 40
+  COLUMN-LABEL "SurName2"
+  HELP "Customer's 1st last name"
+  ORDER 60
+
+ADD FIELD "Nationality" OF "MNPDetails" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "Nationality"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Nationality"
+  ORDER 70
+
+ADD FIELD "ReceptorCode" OF "MNPDetails" AS character 
+  FORMAT "x(3)"
+  INITIAL ""
+  LABEL "ReceptorCode"
+  POSITION 9
+  MAX-WIDTH 6
+  COLUMN-LABEL "ReceptorCode"
+  ORDER 80
+
+ADD FIELD "CompanyName" OF "MNPDetails" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "CompanyName"
+  POSITION 10
+  MAX-WIDTH 60
+  COLUMN-LABEL "CompanyName"
+  HELP "Company name"
+  ORDER 90
+
+ADD FIELD "ReceptorNRN" OF "MNPDetails" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "ReceptorNRN"
+  POSITION 11
+  MAX-WIDTH 16
+  COLUMN-LABEL "ReceptorNRN"
+  HELP "Receptor operator NRN"
+  ORDER 100
+
+ADD FIELD "PortingTimeFromCustomer" OF "MNPDetails" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "PortingTimeFromCustomer"
+  POSITION 12
+  MAX-WIDTH 1
+  COLUMN-LABEL "PortingTimeFromCustomer"
+  HELP "Is the porting time defined by customer"
+  ORDER 110
+
+ADD FIELD "DonorCode" OF "MNPDetails" AS character 
+  FORMAT "x(3)"
+  INITIAL ""
+  LABEL "DonorCode"
+  POSITION 13
+  MAX-WIDTH 6
+  COLUMN-LABEL "DonorCode"
+  HELP "Donor operator Code"
+  ORDER 120
+
+ADD FIELD "RequestedTS" OF "MNPDetails" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "RequestedTS"
+  POSITION 14
+  MAX-WIDTH 15
+  COLUMN-LABEL "RequestedTS"
+  HELP "Process creation time on operator side"
+  ORDER 130
+
+ADD FIELD "StatusLimitTS" OF "MNPDetails" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "StatusLimitTS"
+  POSITION 15
+  MAX-WIDTH 15
+  COLUMN-LABEL "StatusLimitTS"
+  HELP "Time limit for status change"
+  ORDER 140
+
+ADD FIELD "DonorExtraOrdinary" OF "MNPDetails" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "DonorExtraOrdinary"
+  POSITION 16
+  MAX-WIDTH 1
+  COLUMN-LABEL "DonorExtraOrdinary"
+  HELP "Donor operator is in extraordinary state"
+  ORDER 150
+
+ADD INDEX "MNPSeq" ON "MNPDetails" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "MNPSeq" ASCENDING 
+
+ADD INDEX "CustId" ON "MNPDetails" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CustId" ASCENDING 

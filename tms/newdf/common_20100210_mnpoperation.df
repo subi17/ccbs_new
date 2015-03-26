@@ -1,0 +1,174 @@
+ADD TABLE "MNPOperation"
+  AREA "Sta_Data_64"
+  DUMP-NAME "mnpoper"
+
+ADD FIELD "MNPOperationID" OF "MNPOperation" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "MNPOperationID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "MNPOperationID"
+  ORDER 10
+
+ADD FIELD "CreatedTS" OF "MNPOperation" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "CreatedTS"
+  POSITION 3
+  MAX-WIDTH 20
+  COLUMN-LABEL "CreatedTS"
+  DECIMALS 5
+  ORDER 20
+
+ADD FIELD "StatusCode" OF "MNPOperation" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "StatusCode"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "StatusCode"
+  ORDER 30
+
+ADD FIELD "MNPSeq" OF "MNPOperation" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MNPSeq"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "MNPSeq"
+  ORDER 40
+
+ADD FIELD "Sender" OF "MNPOperation" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Sender"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Sender"
+  ORDER 50
+
+ADD FIELD "SentTS" OF "MNPOperation" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "SentTS"
+  POSITION 7
+  MAX-WIDTH 20
+  COLUMN-LABEL "SentTS"
+  DECIMALS 5
+  ORDER 60
+
+ADD FIELD "MessageType" OF "MNPOperation" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "MessageType"
+  POSITION 8
+  MAX-WIDTH 16
+  COLUMN-LABEL "MessageType"
+  ORDER 70
+
+ADD FIELD "MsgTurn" OF "MNPOperation" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "MsgTurn"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "MsgTurn"
+  ORDER 80
+
+ADD FIELD "XMLSeq" OF "MNPOperation" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "XMLSeq"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "XMLSeq"
+  HELP "Reference to MNPXml table"
+  ORDER 90
+
+ADD FIELD "ErrorCode" OF "MNPOperation" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "ErrorCode"
+  POSITION 13
+  MAX-WIDTH 20
+  COLUMN-LABEL "ErrorCode"
+  HELP "ErrorCode"
+  ORDER 120
+
+ADD FIELD "XMLRequest" OF "MNPOperation" AS clob 
+  FORMAT "x(40)"
+  INITIAL ?
+  LABEL "XML Request"
+  POSITION 14
+  LOB-AREA "LOB_DATA"
+  LOB-BYTES 1048576
+  LOB-SIZE 1M
+  CLOB-CODEPAGE "utf-8"
+  CLOB-COLLATION "basic"
+  CLOB-TYPE 1
+  COLUMN-LABEL "XMLRequest"
+  HELP "XML request message"
+  ORDER 100
+
+ADD FIELD "XMLResponse" OF "MNPOperation" AS clob 
+  FORMAT "x(40)"
+  INITIAL ?
+  LABEL "XMLResponse"
+  POSITION 15
+  LOB-AREA "LOB_DATA"
+  LOB-BYTES 1048576
+  LOB-SIZE 1M
+  CLOB-CODEPAGE "utf-8"
+  CLOB-COLLATION "basic"
+  CLOB-TYPE 1
+  COLUMN-LABEL "XML Response"
+  HELP "XML response message"
+  ORDER 110
+
+ADD FIELD "ErrorHandled" OF "MNPOperation" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "ErrorHandled"
+  POSITION 16
+  MAX-WIDTH 4
+  COLUMN-LABEL "ErrorHandled"
+  HELP "ErrorHandled"
+  ORDER 130
+
+ADD FIELD "ErrorDesc" OF "MNPOperation" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  LABEL "ErrorDesc"
+  POSITION 17
+  MAX-WIDTH 100
+  COLUMN-LABEL "ErrorDesc"
+  HELP "Error description"
+  ORDER 140
+
+ADD INDEX "MNPOperation" ON "MNPOperation" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "MNPOperationID" ASCENDING 
+
+ADD INDEX "ErrorCode" ON "MNPOperation" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "ErrorHandled" ASCENDING 
+  INDEX-FIELD "ErrorCode" ASCENDING 
+
+ADD INDEX "MNPSeq" ON "MNPOperation" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "MNPSeq" ASCENDING 
+  INDEX-FIELD "CreatedTS" ASCENDING 
+
+ADD INDEX "Sender" ON "MNPOperation" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Sender" ASCENDING 
+  INDEX-FIELD "StatusCode" ASCENDING 
+
+ADD SEQUENCE "MNPOperSeq"
+  INITIAL 1
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0

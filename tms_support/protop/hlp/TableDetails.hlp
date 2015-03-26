@@ -1,0 +1,68 @@
+Table IO Details Help
+=====================
+
+The first section shows the selected table and both the sampled and summary
+data regarding the indicated IO operations.  Tables that do not have
+_TableStat data available are indicated with a leading"*".  (This may be
+because -tablebase or -tablerangesize need adjustment.)
+
+Tbl#:
+
+The table id#.
+
+Table Name:
+
+The table name.
+
+Operation:
+
+        Create  The number of CREATE operations for this table.
+        Read    The number of READ operations for this table.
+        Update  The number of UPDATE operations for this table.
+        Delete  The number of DELETE operations for this table.
+
+Cumulative:
+
+Summary statistics for the operation.  Displayed as either a rate or
+as the raw metric depending on the state of the Rate/Raw command.
+
+Interval:
+
+Sample statistics for the operation.  Displayed as either a rate or
+as the raw metric depending on the state of the Rate/Raw command.
+
+
+The second section shows the indexes (if any) that are associated with
+the selected table.  Indexes that do not have _IndexStat data available
+are indicated with a leading"*".  (This may be because -indexbase or
+-indexrangesize need adjustment.)  Data displayed is either sampled or
+the summary data depending on the state of the Sample/Summary command.
+
+Idx#:
+
+The index id#.
+
+Index Name:
+
+The index name.
+
+Create:
+
+The number of index CREATE operations for this index.
+
+Read:
+
+The number of index READ operations for this index.
+
+Split:
+
+The number of index SPLIT operations for this index.
+
+Delete:
+
+The number of index DELETE operations for this index.
+
+BlkDel:
+
+The number of index BLOCK DELETE operations for this index.
+

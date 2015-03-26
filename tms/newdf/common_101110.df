@@ -1,0 +1,95 @@
+ADD TABLE "MNPOperator"
+  AREA "Sta_Data_128"
+  DUMP-NAME "mnpoperator"
+
+ADD FIELD "Brand" OF "MNPOperator" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 10
+
+ADD FIELD "OperName" OF "MNPOperator" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Operator Name"
+  POSITION 3
+  MAX-WIDTH 40
+  COLUMN-LABEL "OperName"
+  ORDER 20
+
+ADD FIELD "OperCode" OF "MNPOperator" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Operator Code"
+  POSITION 4
+  MAX-WIDTH 16
+  COLUMN-LABEL "OperCode"
+  HELP "Operator code (RRC)"
+  ORDER 30
+
+ADD FIELD "ICCPrefix" OF "MNPOperator" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "ICC Prefix"
+  POSITION 5
+  MAX-WIDTH 16
+  COLUMN-LABEL "ICCPrefix"
+  ORDER 40
+
+ADD FIELD "Active" OF "MNPOperator" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Active"
+  POSITION 6
+  MAX-WIDTH 1
+  COLUMN-LABEL "Active"
+  HELP "Is operator active or not (available in order channels)"
+  ORDER 50
+
+ADD FIELD "CancelAgreement" OF "MNPOperator" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Cancellation Agreement"
+  POSITION 7
+  MAX-WIDTH 1
+  COLUMN-LABEL "CancelAgr"
+  HELP "Affects how late MNP cancellation can be done"
+  ORDER 60
+
+ADD FIELD "OperBrand" OF "MNPOperator" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Operator Brand"
+  POSITION 8
+  MAX-WIDTH 40
+  COLUMN-LABEL "OperBrand"
+  HELP "Common brand of for operators with the same operator code"
+  ORDER 70
+
+ADD INDEX "OperCode" ON "MNPOperator" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "OperCode" ASCENDING 
+  INDEX-FIELD "OperName" ASCENDING 
+
+ADD INDEX "OperName" ON "MNPOperator" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "OperName" ASCENDING 
+
+ADD FIELD "Active" OF "BillItem" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "Yes"
+  LABEL "Active"
+  HELP "Is billing item active"
+  ORDER 380
+
+.
+PSC
+cpstream=1252
+.

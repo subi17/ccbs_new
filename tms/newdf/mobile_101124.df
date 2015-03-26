@@ -1,0 +1,13 @@
+ADD FIELD "InstanceLimit" OF "DayCampaign" AS integer 
+  FORMAT ">>9"
+  INITIAL "1"
+  LABEL "Instance Limit"
+  POSITION 27
+  MAX-WIDTH 4
+  COLUMN-LABEL "InstanceLimit"
+  HELP "How many contracts can be active at the same time"
+  ORDER 280
+
+.
+PSC
+cpstream=1252

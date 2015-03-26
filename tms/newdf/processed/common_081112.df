@@ -1,0 +1,695 @@
+ADD FIELD "GroupType" OF "BItemGroup" AS integer
+  DESCRIPTION ""
+  FORMAT ">9"
+  FORMAT-SA ?
+  POSITION 6
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Group type"
+  HELP-SA ""
+  LABEL "Group Type"
+  LABEL-SA ?
+  COLUMN-LABEL "Type"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 50
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "ReportCode" OF "BItemGroup" AS character
+  DESCRIPTION ""
+  FORMAT "x(12)"
+  FORMAT-SA ?
+  POSITION 7
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "Reporting code"
+  HELP-SA ""
+  LABEL "Report Code"
+  LABEL-SA ?
+  COLUMN-LABEL "Report"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 60
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 24
+
+UPDATE FIELD "coNoInst" OF "CoRule"
+  DESCRIPTION ""
+
+ADD FIELD "CreationSMS" OF "CoRule" AS character
+  DESCRIPTION ""
+  FORMAT "x(12)"
+  FORMAT-SA ?
+  POSITION 28
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "SMS that is sent when entry is created to commission queue"
+  HELP-SA ""
+  LABEL "SMS On Creation"
+  LABEL-SA ?
+  COLUMN-LABEL "CreationSMS"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 310
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 24
+
+ADD FIELD "ActivationSMS" OF "CoRule" AS character
+  DESCRIPTION ""
+  FORMAT "x(12)"
+  FORMAT-SA ?
+  POSITION 29
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "SMS that is sent when commission is activated"
+  HELP-SA ""
+  LABEL "Activation SMS"
+  LABEL-SA ?
+  COLUMN-LABEL "Act.SMS"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 320
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 24
+
+ADD FIELD "PayType" OF "CoRule" AS integer
+  DESCRIPTION "postpaid, prepaid"
+  FORMAT "9"
+  FORMAT-SA ?
+  POSITION 31
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Payment type"
+  HELP-SA ""
+  LABEL "Payment Type"
+  LABEL-SA ?
+  COLUMN-LABEL "PayType"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 260
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "MaxPendingDays" OF "CoRule" AS integer
+  DESCRIPTION ""
+  FORMAT ">>>9"
+  FORMAT-SA ?
+  POSITION 32
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Maximum nbr of days that a commission can be pending"
+  HELP-SA ""
+  LABEL "Max. Pending Days"
+  LABEL-SA ?
+  COLUMN-LABEL "Max.Pending"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 350
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "AllowedDNI" OF "CoRule" AS character
+  DESCRIPTION ""
+  FORMAT "x(30)"
+  FORMAT-SA ?
+  POSITION 33
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "List of allowed DNIs"
+  HELP-SA ""
+  LABEL "Allowed DNIs"
+  LABEL-SA ?
+  COLUMN-LABEL "DNIs"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 280
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 60
+
+ADD FIELD "PPReqPrefix" OF "CoRule" AS character
+  DESCRIPTION ""
+  FORMAT "x(8)"
+  FORMAT-SA ?
+  POSITION 34
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "Prefix to be used for topup"
+  HELP-SA ""
+  LABEL "Topup Prefix"
+  LABEL-SA ?
+  COLUMN-LABEL "T.Prefix"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 290
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 16
+
+ADD FIELD "PPSource" OF "CoRule" AS character
+  DESCRIPTION ""
+  FORMAT "x(8)"
+  FORMAT-SA ?
+  POSITION 35
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "Source to be used for topup"
+  HELP-SA ""
+  LABEL "Topup Source"
+  LABEL-SA ?
+  COLUMN-LABEL "T.Source"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 300
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 16
+
+ADD FIELD "CommAmount" OF "CoRule" AS decimal
+  DESCRIPTION ""
+  FORMAT ">>>>>>>9.99"
+  FORMAT-SA ?
+  POSITION 36
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Commission amount"
+  HELP-SA ""
+  LABEL "Commission Amount"
+  LABEL-SA ?
+  COLUMN-LABEL "Amount"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS 2
+  ORDER 340
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 17
+
+ADD FIELD "Priority" OF "CoRule" AS integer
+  DESCRIPTION ""
+  FORMAT ">>9"
+  FORMAT-SA ?
+  POSITION 37
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Relative priority to other rules"
+  HELP-SA ""
+  LABEL "Priority"
+  LABEL-SA ?
+  COLUMN-LABEL "Pri"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 360
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+DROP FIELD "coPrdType" OF "CoRule"
+DROP FIELD "PriceList" OF "CoRule"
+
+ADD FIELD "PromotedID" OF "CoTarg" AS integer
+  DESCRIPTION ""
+  FORMAT ">>>>>>>9"
+  FORMAT-SA ?
+  POSITION 13
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Promoted ID"
+  HELP-SA ""
+  LABEL "Promoted ID"
+  LABEL-SA ?
+  COLUMN-LABEL "Prom.ID"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 111
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "PromotedCLI" OF "CoTarg" AS character
+  DESCRIPTION ""
+  FORMAT "x(12)"
+  FORMAT-SA ?
+  POSITION 14
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "Promoted MSISDN"
+  HELP-SA ""
+  LABEL "Promoted MSISDN"
+  LABEL-SA ?
+  COLUMN-LABEL "Prom.MSISDN"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 121
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 24
+
+ADD FIELD "CommStatus" OF "CoTarg" AS integer
+  DESCRIPTION ""
+  FORMAT ">9"
+  FORMAT-SA ?
+  POSITION 15
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Commission status"
+  HELP-SA ""
+  LABEL "Commission Status"
+  LABEL-SA ?
+  COLUMN-LABEL "Status"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 131
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "StatusReason" OF "CoTarg" AS integer
+  DESCRIPTION ""
+  FORMAT ">9"
+  FORMAT-SA ?
+  POSITION 16
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Reason for current status"
+  HELP-SA ""
+  LABEL "Status Reason"
+  LABEL-SA ?
+  COLUMN-LABEL "Reason"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 141
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "HandledTS" OF "CoTarg" AS decimal
+  DESCRIPTION ""
+  FORMAT "99999999.99999"
+  FORMAT-SA ?
+  POSITION 17
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Latest handling time"
+  HELP-SA ""
+  LABEL "Handled"
+  LABEL-SA ?
+  COLUMN-LABEL ?
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS 5
+  ORDER 151
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 20
+
+ADD FIELD "OrderId" OF "CoTarg" AS integer
+  DESCRIPTION "Order sequence number"
+  FORMAT ">>>>>>>>9"
+  FORMAT-SA ?
+  POSITION 18
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Order sequence number"
+  HELP-SA ""
+  LABEL "OrderId"
+  LABEL-SA ?
+  COLUMN-LABEL "OrderId"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 161
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "CreatedTS" OF "CoTarg" AS decimal
+  DESCRIPTION ""
+  FORMAT "99999999.99999"
+  FORMAT-SA ?
+  POSITION 19
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Added to commission queue"
+  HELP-SA ""
+  LABEL "Created"
+  LABEL-SA ?
+  COLUMN-LABEL ?
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS 5
+  ORDER 170
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 20
+
+RENAME INDEX "CoRuleID" TO "temp-30828" ON "CoTarg"
+
+RENAME INDEX "CoTargId" TO "temp-80833" ON "CoTarg"
+
+ADD INDEX "CommStatus" ON "CoTarg"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "CommStatus" ASCENDING
+  INDEX-FIELD "CoTarg" ASCENDING
+
+ADD INDEX "CoRuleID" ON "CoTarg"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "CoRuleID" ASCENDING
+  INDEX-FIELD "TargType" ASCENDING
+  INDEX-FIELD "CoTarg" ASCENDING
+
+ADD INDEX "CoTargID" ON "CoTarg"
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "CoTargId" ASCENDING
+
+ADD INDEX "OrderId" ON "CoTarg"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "OrderId" ASCENDING
+
+ADD INDEX "PromotedID" ON "CoTarg"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "PromotedID" ASCENDING
+
+UPDATE PRIMARY INDEX "CoRuleID" ON "CoTarg"
+
+DROP INDEX "temp-30828" ON "CoTarg"
+DROP INDEX "temp-80833" ON "CoTarg"
+
+DROP FIELD "CoAmt" OF "CoTarg"
+DROP FIELD "CoPerc" OF "CoTarg"
+DROP FIELD "coNoInst" OF "CoTarg"
+DROP FIELD "CommLimit" OF "CoTarg"
+DROP FIELD "SubsQty" OF "CoTarg"
+
+UPDATE FIELD "LastRun" OF "DFTimeTable"
+  DECIMALS 5
+
+ADD FIELD "QueryClause" OF "DumpFile" AS character
+  DESCRIPTION ""
+  FORMAT "x(30)"
+  FORMAT-SA ?
+  POSITION 21
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "Query clause used to retrieve records for the dump"
+  HELP-SA ""
+  LABEL "Query Clause"
+  LABEL-SA ?
+  COLUMN-LABEL "Query"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 200
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 60
+
+ADD FIELD "UseIndex" OF "DumpFile" AS character
+  DESCRIPTION ""
+  FORMAT "x(20)"
+  FORMAT-SA ?
+  POSITION 23
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "Index used for retrieving records"
+  HELP-SA ""
+  LABEL "Use Index"
+  LABEL-SA ?
+  COLUMN-LABEL "Index"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 210
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 40
+
+ADD FIELD "UserCode" OF "ErrorLog" AS character
+  DESCRIPTION ""
+  FORMAT "x(8)"
+  FORMAT-SA ?
+  POSITION 12
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "User ID of log event"
+  HELP-SA ""
+  LABEL "User ID"
+  LABEL-SA ?
+  COLUMN-LABEL ?
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 120
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 16
+
+ADD FIELD "HostTable" OF "FATime" AS character
+  DESCRIPTION ""
+  FORMAT "x(16)"
+  FORMAT-SA ?
+  POSITION 32
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "Host table"
+  HELP-SA ""
+  LABEL "HostTable"
+  LABEL-SA ?
+  COLUMN-LABEL ?
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 330
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 32
+
+ADD FIELD "KeyValue" OF "FATime" AS character
+  DESCRIPTION ""
+  FORMAT "x(20)"
+  FORMAT-SA ?
+  POSITION 33
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "Link key to hosttable"
+  HELP-SA ""
+  LABEL "Link Key"
+  LABEL-SA ?
+  COLUMN-LABEL "Key"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 340
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 40
+
+ADD INDEX "HostTable" ON "FATime"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "HostTable" ASCENDING
+  INDEX-FIELD "KeyValue" ASCENDING
+
+DROP INDEX "FFItemNum" ON "FATime"
+
+ADD FIELD "PayType" OF "RequestAction" AS integer
+  DESCRIPTION "postpaid, prepaid"
+  FORMAT "9"
+  FORMAT-SA ?
+  POSITION 10
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Payment type"
+  HELP-SA ""
+  LABEL "Payment Type"
+  LABEL-SA ?
+  COLUMN-LABEL "PayType"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 90
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD INDEX "PayType" ON "RequestAction"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "PayType" ASCENDING
+  INDEX-FIELD "ReqType" ASCENDING
+  INDEX-FIELD "ValidTo" DESCENDING
+
+.
+PSC
+cpstream=1252
+.
+0000029364

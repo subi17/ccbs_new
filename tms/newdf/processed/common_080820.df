@@ -1,0 +1,28 @@
+ADD FIELD "DataProtected" OF "Customer" AS logical
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "Data Protected"
+  POSITION 120
+  MAX-WIDTH 1
+  COLUMN-LABEL "DataProtected"
+  HELP "Is the data protection required by customer"
+  ORDER 1540
+
+ADD FIELD "OrderChannel" OF "MNPCal" AS character
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Order Channel"
+  POSITION 5
+  COLUMN-LABEL "Channel"
+  HELP "Order channel"
+  ORDER 40
+
+ADD INDEX "OrderChannel" ON "MNPCal"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "OrderChannel" ASCENDING
+  INDEX-FIELD "Region" ASCENDING
+  INDEX-FIELD "MessageType" ASCENDING
+.
+PSC
+cpstream=1252
+

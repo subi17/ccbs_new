@@ -1,0 +1,1414 @@
+ADD TABLE "MCDRDtl"
+  AREA "Dtl_Data_Post"
+  LABEL "Mobile Cdr"
+  DUMP-NAME "mcdrdtl"
+
+ADD FIELD "CallDate" OF "MCDRDtl" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "EXPDAT"
+  POSITION 4
+  MAX-WIDTH 16
+  COLUMN-LABEL "EXPDAT"
+  HELP "Date For Start Of Charge (YYYYMMDD)"
+  ORDER 30
+
+ADD FIELD "CallTime" OF "MCDRDtl" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "EXPTID"
+  POSITION 5
+  MAX-WIDTH 12
+  COLUMN-LABEL "EXPTID"
+  HELP "Time For Start Of Charge (HHMMSS)"
+  ORDER 40
+
+ADD FIELD "Duration" OF "MCDRDtl" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "DEBTID"
+  POSITION 6
+  MAX-WIDTH 12
+  COLUMN-LABEL "DEBTID"
+  HELP "Chargeable duration (HHMMSS)"
+  ORDER 50
+
+ADD FIELD "Bmod" OF "MCDRDtl" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "B-MOD"
+  POSITION 7
+  MAX-WIDTH 2
+  COLUMN-LABEL "B-MOD"
+  HELP "B-number Modification (1=yes)"
+  ORDER 60
+
+ADD FIELD "CIN" OF "MCDRDtl" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "CIN"
+  POSITION 9
+  MAX-WIDTH 16
+  COLUMN-LABEL "CIN"
+  HELP "Call Identification Number"
+  ORDER 80
+
+ADD FIELD "IMSI" OF "MCDRDtl" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "IMSI"
+  POSITION 10
+  MAX-WIDTH 30
+  COLUMN-LABEL "IMSI"
+  HELP "Subscriber IMSI"
+  ORDER 90
+
+ADD FIELD "IMEI" OF "MCDRDtl" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "IMEI"
+  POSITION 11
+  MAX-WIDTH 30
+  COLUMN-LABEL "IMEI"
+  HELP "Subscriber IMEI"
+  ORDER 100
+
+ADD FIELD "TeleSC" OF "MCDRDtl" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "TELESC"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "TELESC"
+  HELP "GSM Teleservice Code"
+  ORDER 110
+
+ADD FIELD "BearSC" OF "MCDRDtl" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "BEARSC"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "BEARSC"
+  HELP "GSM Bearerservice Code"
+  ORDER 120
+
+ADD FIELD "TrpyInd" OF "MCDRDtl" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "TRPYIND"
+  POSITION 15
+  MAX-WIDTH 2
+  COLUMN-LABEL "TRPYIND"
+  HELP "Transparancy Indicator"
+  ORDER 140
+
+ADD FIELD "SSI" OF "MCDRDtl" AS character 
+  FORMAT "xx"
+  INITIAL ""
+  LABEL "SSI"
+  POSITION 16
+  MAX-WIDTH 4
+  COLUMN-LABEL "SSI"
+  HELP "Suplementary Service"
+  ORDER 150
+
+ADD FIELD "RFPowc" OF "MCDRDtl" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "RFPOWC"
+  POSITION 17
+  MAX-WIDTH 2
+  COLUMN-LABEL "RFPOWC"
+  HELP "RF Powerclass"
+  ORDER 160
+
+ADD FIELD "LocArea" OF "MCDRDtl" AS character 
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "LOCAREA"
+  POSITION 18
+  MAX-WIDTH 8
+  COLUMN-LABEL "LOCAREA"
+  HELP "Cellid For First Cell Used"
+  ORDER 170
+
+ADD FIELD "Xsub" OF "MCDRDtl" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "XSUB"
+  POSITION 19
+  MAX-WIDTH 30
+  COLUMN-LABEL "XSUB"
+  HELP "Original Called Number"
+  ORDER 180
+
+ADD FIELD "RN" OF "MCDRDtl" AS character 
+  FORMAT "xx"
+  INITIAL ""
+  LABEL "RN"
+  POSITION 20
+  MAX-WIDTH 4
+  COLUMN-LABEL "RN"
+  HELP "Partial Output Record Number"
+  ORDER 190
+
+ADD FIELD "LastPart" OF "MCDRDtl" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "LASTPART"
+  POSITION 21
+  MAX-WIDTH 2
+  COLUMN-LABEL "LASTPART"
+  HELP "Last Partial Output"
+  ORDER 200
+
+ADD FIELD "EndTime" OF "MCDRDtl" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "STOP-TID"
+  POSITION 22
+  MAX-WIDTH 12
+  COLUMN-LABEL "STOP-TID"
+  HELP "Time For Stop of Charging"
+  ORDER 210
+
+ADD FIELD "ScAddr" OF "MCDRDtl" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "SCADDR"
+  POSITION 25
+  MAX-WIDTH 30
+  COLUMN-LABEL "SCADDR"
+  HELP "Service Center Address"
+  ORDER 240
+
+ADD FIELD "MsCID" OF "MCDRDtl" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "MSCID"
+  POSITION 26
+  MAX-WIDTH 24
+  COLUMN-LABEL "MSCID"
+  HELP "MSC Identification"
+  ORDER 250
+
+ADD FIELD "MpCall" OF "MCDRDtl" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "MPCALL"
+  POSITION 27
+  MAX-WIDTH 2
+  COLUMN-LABEL "MPCALL"
+  HELP "Multiparty Indicator"
+  ORDER 260
+
+ADD FIELD "SSReg" OF "MCDRDtl" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "SSREQ"
+  POSITION 28
+  MAX-WIDTH 2
+  COLUMN-LABEL "SSREQ"
+  HELP "SSRequest"
+  ORDER 270
+
+ADD FIELD "OrgLocNr" OF "MCDRDtl" AS character 
+  FORMAT "x(7)"
+  INITIAL ""
+  LABEL "ORGLOCNR"
+  POSITION 29
+  MAX-WIDTH 14
+  COLUMN-LABEL "ORGLOCNR"
+  HELP "Originating Location Area"
+  ORDER 280
+
+ADD FIELD "RegDep" OF "MCDRDtl" AS character 
+  FORMAT "xx"
+  INITIAL ""
+  LABEL "REGDEP"
+  POSITION 30
+  MAX-WIDTH 4
+  COLUMN-LABEL "REGDEP"
+  HELP "Regional Dep Charging"
+  ORDER 290
+
+ADD FIELD "DiscPart" OF "MCDRDtl" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "DISCPART"
+  POSITION 31
+  MAX-WIDTH 2
+  COLUMN-LABEL "DISCPART"
+  HELP "Disconnecting Party"
+  ORDER 300
+
+ADD FIELD "PpFlag" OF "MCDRDtl" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "PPFLAG"
+  POSITION 32
+  MAX-WIDTH 2
+  COLUMN-LABEL "PPFLAG"
+  HELP "Prepaid Flagga"
+  ORDER 310
+
+ADD FIELD "AntEvent" OF "MCDRDtl" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "ANTEVENT"
+  POSITION 33
+  MAX-WIDTH 2
+  COLUMN-LABEL "ANTEVENT"
+  HELP "Number Of Event Modules"
+  ORDER 330
+
+ADD FIELD "EMT" OF "MCDRDtl" AS character 
+  FORMAT "x(3)"
+  INITIAL ""
+  LABEL "EMT"
+  POSITION 34
+  MAX-WIDTH 6
+  COLUMN-LABEL "EMT"
+  HELP "Event Module Type"
+  ORDER 340
+
+ADD FIELD "SSCode" OF "MCDRDtl" AS character 
+  FORMAT "xx"
+  INITIAL ""
+  LABEL "SSCODE"
+  POSITION 35
+  MAX-WIDTH 4
+  COLUMN-LABEL "SSCODE"
+  HELP "SSCode"
+  ORDER 350
+
+ADD FIELD "EventDuration" OF "MCDRDtl" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "EVTID"
+  POSITION 36
+  MAX-WIDTH 12
+  COLUMN-LABEL "EVTID"
+  HELP "Time For Event"
+  ORDER 360
+
+ADD FIELD "CellID" OF "MCDRDtl" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "CELLID"
+  POSITION 37
+  MAX-WIDTH 12
+  COLUMN-LABEL "CELLID"
+  HELP "Cellid For First Cell Used"
+  ORDER 175
+
+ADD FIELD "SSReg2" OF "MCDRDtl" AS character 
+  FORMAT "x"
+  INITIAL ""
+  LABEL "SSREQ2"
+  POSITION 38
+  MAX-WIDTH 2
+  COLUMN-LABEL "SSREQ2"
+  HELP "SSRequest 2"
+  ORDER 355
+
+ADD FIELD "FileSeq" OF "MCDRDtl" AS integer 
+  FORMAT "zzzzzzzz9"
+  INITIAL "0"
+  LABEL "Sequence"
+  POSITION 39
+  MAX-WIDTH 4
+  COLUMN-LABEL "Sequence"
+  HELP "Consecutive Number of one file"
+  ORDER 370
+
+ADD FIELD "BillLevel" OF "MCDRDtl" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Level"
+  POSITION 44
+  MAX-WIDTH 20
+  COLUMN-LABEL "Level"
+  HELP "Billing level (where the subscription is assigned)"
+  ORDER 420
+
+ADD FIELD "UserSeq" OF "MCDRDtl" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "SeqNo"
+  POSITION 47
+  MAX-WIDTH 4
+  COLUMN-LABEL "SeqNo"
+  HELP "Internal, consecutive sequence no of user"
+  ORDER 610
+
+ADD FIELD "GrossAmt" OF "MCDRDtl" AS decimal 
+  FORMAT "zzz,zz9.99"
+  INITIAL "0"
+  LABEL "TotalPrice"
+  POSITION 52
+  MAX-WIDTH 17
+  COLUMN-LABEL "TotalPrice"
+  HELP "Total 'gross' Price of Call"
+  DECIMALS 3
+  ORDER 500
+
+ADD FIELD "Billable" OF "MCDRDtl" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Billable"
+  POSITION 55
+  MAX-WIDTH 1
+  COLUMN-LABEL "Billable"
+  HELP "Shall this mobile cdr be billed (y/n)"
+  ORDER 375
+
+ADD FIELD "RateType" OF "MCDRDtl" AS logical 
+  FORMAT "Gen/Net"
+  INITIAL "no"
+  LABEL "Rate"
+  POSITION 57
+  MAX-WIDTH 1
+  COLUMN-LABEL "Rate"
+  HELP "Type of Rate used: (G)eneral rate / (N)et rate"
+  ORDER 540
+
+ADD FIELD "DiscGroup" OF "MCDRDtl" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "DgCode"
+  POSITION 58
+  MAX-WIDTH 16
+  COLUMN-LABEL "DgCode"
+  HELP "Code of Discount Group"
+  ORDER 550
+
+ADD FIELD "RateTB" OF "MCDRDtl" AS decimal 
+  FORMAT "zz9.99999"
+  INITIAL "0"
+  LABEL "Secrate"
+  POSITION 60
+  MAX-WIDTH 120
+  COLUMN-LABEL "SecRate"
+  HELP "Rate/sec on each individual time band"
+  EXTENT 6
+  DECIMALS 5
+  ORDER 570
+
+ADD FIELD "DiscPlan" OF "MCDRDtl" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "DPCode"
+  POSITION 64
+  MAX-WIDTH 24
+  COLUMN-LABEL "DPlan"
+  HELP "Code of a Discount Plan"
+  ORDER 620
+
+ADD FIELD "TimeEnd" OF "MCDRDtl" AS integer 
+  FORMAT "zzzzz9"
+  INITIAL "0"
+  LABEL "TimeEnd"
+  POSITION 66
+  MAX-WIDTH 4
+  COLUMN-LABEL "TimeEnd"
+  HELP "Time when call ended (in terms of seconds from midnight)"
+  ORDER 445
+
+ADD FIELD "FOC" OF "MCDRDtl" AS logical 
+  FORMAT "FoC"
+  INITIAL "no"
+  LABEL "FoC"
+  POSITION 67
+  MAX-WIDTH 1
+  HELP "Is this call Free Of Charge (Y/N) ?"
+  ORDER 640
+
+ADD FIELD "IRID" OF "MCDRDtl" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "InvRowId"
+  POSITION 74
+  MAX-WIDTH 4
+  COLUMN-LABEL "InvRowId"
+  HELP "Invoice row identification number"
+  ORDER 700
+
+ADD FIELD "InvNum" OF "MCDRDtl" AS integer 
+  FORMAT "zzzzzzzz9"
+  INITIAL "0"
+  LABEL "InvNo"
+  POSITION 75
+  MAX-WIDTH 4
+  COLUMN-LABEL "InvNo"
+  HELP "Invoice No where this call was billed"
+  ORDER 710
+
+ADD FIELD "Roaming" OF "MCDRDtl" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Roaming"
+  POSITION 78
+  MAX-WIDTH 4
+  COLUMN-LABEL "Roaming"
+  HELP "Type of Roaming Call"
+  ORDER 740
+
+ADD FIELD "RoamCC" OF "MCDRDtl" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "RoamCC"
+  POSITION 79
+  MAX-WIDTH 16
+  COLUMN-LABEL "RoamCC"
+  HELP "Roaming Country Code, Country Where R-Call was orig or terminat"
+  ORDER 750
+
+ADD FIELD "RoamOp" OF "MCDRDtl" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "RoamOp"
+  POSITION 80
+  MAX-WIDTH 16
+  COLUMN-LABEL "RoamOp"
+  HELP "Code of Foreign Operator Whose Network Was Used"
+  ORDER 760
+
+ADD FIELD "RoamP" OF "MCDRDtl" AS decimal 
+  FORMAT ">9.99"
+  INITIAL "0"
+  LABEL "RoamP"
+  POSITION 81
+  MAX-WIDTH 17
+  COLUMN-LABEL "RoamP"
+  HELP "Percent Being Added To The Original Fee"
+  DECIMALS 2
+  ORDER 770
+
+ADD FIELD "RoaMarginal" OF "MCDRDtl" AS decimal 
+  FORMAT "->>,>>9.99"
+  INITIAL "0"
+  LABEL "RoaMarg"
+  POSITION 82
+  MAX-WIDTH 17
+  COLUMN-LABEL "RoaMarg"
+  HELP "Margin Added into Roamrate"
+  DECIMALS 3
+  ORDER 780
+
+ADD FIELD "RoamRate" OF "MCDRDtl" AS decimal 
+  FORMAT "->>,>>9.99"
+  INITIAL "0"
+  LABEL "RoamRate"
+  POSITION 83
+  MAX-WIDTH 17
+  COLUMN-LABEL "RoamRate"
+  HELP "Original Rate of Roaming Call, Set by Foreign Operator"
+  DECIMALS 3
+  ORDER 790
+
+ADD FIELD "RoamRateMethod" OF "MCDRDtl" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "RoamRM"
+  POSITION 84
+  MAX-WIDTH 4
+  COLUMN-LABEL "RoamRM"
+  HELP "Rating Method"
+  ORDER 800
+
+ADD FIELD "RepCodes" OF "MCDRDtl" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "ReportCode"
+  POSITION 85
+  MAX-WIDTH 60
+  COLUMN-LABEL "ReportCode"
+  HELP "Rapportdefinition"
+  ORDER 810
+
+ADD FIELD "ChItem" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "CItem"
+  POSITION 86
+  MAX-WIDTH 2
+  COLUMN-LABEL "CItem"
+  HELP "Chargable Item"
+  ORDER 830
+
+ADD FIELD "CapTon" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "CaPtNo"
+  POSITION 87
+  MAX-WIDTH 2
+  COLUMN-LABEL "CaPtNo"
+  HELP "Called Party Ton"
+  ORDER 840
+
+ADD FIELD "CaPNP" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "CaPNP"
+  POSITION 88
+  MAX-WIDTH 2
+  COLUMN-LABEL "CaPNP"
+  HELP "Called Party NP"
+  ORDER 850
+
+ADD FIELD "Currency" OF "MCDRDtl" AS character 
+  FORMAT "x(3)"
+  INITIAL ""
+  LABEL "Currency"
+  POSITION 89
+  MAX-WIDTH 6
+  COLUMN-LABEL "Currency"
+  HELP "Charging Currency"
+  ORDER 861
+
+ADD FIELD "Ctimeo" OF "MCDRDtl" AS character 
+  FORMAT "x(5)"
+  INITIAL ""
+  LABEL "CTimeO"
+  POSITION 90
+  MAX-WIDTH 10
+  COLUMN-LABEL "CTimeO"
+  HELP "Call Time Offset"
+  ORDER 871
+
+ADD FIELD "Ccharge" OF "MCDRDtl" AS decimal 
+  FORMAT ">>,>>9.999"
+  INITIAL "0"
+  LABEL "CCharge"
+  POSITION 91
+  MAX-WIDTH 17
+  COLUMN-LABEL "CCharge"
+  HELP "Call Charge"
+  DECIMALS 3
+  ORDER 881
+
+ADD FIELD "CDPerc" OF "MCDRDtl" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "disc%"
+  POSITION 92
+  MAX-WIDTH 4
+  COLUMN-LABEL "Disc%"
+  HELP "Call Discount Percentage"
+  ORDER 891
+
+ADD FIELD "CDAMT" OF "MCDRDtl" AS decimal 
+  FORMAT ">>>,>>9.999"
+  INITIAL "0"
+  LABEL "CDAmt"
+  POSITION 93
+  MAX-WIDTH 18
+  COLUMN-LABEL "CDAmt"
+  HELP "Call Discount Amount"
+  DECIMALS 3
+  ORDER 901
+
+ADD FIELD "DDPerc" OF "MCDRDtl" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "DDPerc"
+  POSITION 95
+  MAX-WIDTH 4
+  COLUMN-LABEL "DDPerc"
+  HELP "CFO Discount Percentage"
+  ORDER 920
+
+ADD FIELD "DDAMT" OF "MCDRDtl" AS decimal 
+  FORMAT ">>>,>>9.999"
+  INITIAL "0"
+  LABEL "DDAmt"
+  POSITION 96
+  MAX-WIDTH 18
+  COLUMN-LABEL "DDAmt"
+  HELP "CFO Discount Amount"
+  DECIMALS 3
+  ORDER 931
+
+ADD FIELD "EDPerc" OF "MCDRDtl" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "EDPerc"
+  POSITION 98
+  MAX-WIDTH 4
+  COLUMN-LABEL "EDPerc"
+  HELP "Event Discount Percent"
+  ORDER 950
+
+ADD FIELD "EDAMT" OF "MCDRDtl" AS decimal 
+  FORMAT ">>>,>>9.999"
+  INITIAL "0"
+  LABEL "EDAmt"
+  POSITION 99
+  MAX-WIDTH 18
+  COLUMN-LABEL "EDAmt"
+  HELP "Event Discount Amount"
+  DECIMALS 3
+  ORDER 960
+
+ADD FIELD "RoamCall" OF "MCDRDtl" AS logical 
+  FORMAT "Y/N"
+  INITIAL "N"
+  LABEL "RoamCall"
+  POSITION 100
+  MAX-WIDTH 1
+  COLUMN-LABEL "RoamCall"
+  HELP "Is this roaming call"
+  ORDER 970
+
+ADD FIELD "Complete" OF "MCDRDtl" AS integer 
+  FORMAT "9"
+  INITIAL ?
+  LABEL "Complete"
+  POSITION 106
+  MAX-WIDTH 4
+  COLUMN-LABEL "Complete"
+  HELP "0 = Connection still active 1= Connection ready"
+  ORDER 2050
+
+ADD FIELD "MSMark" OF "MCDRDtl" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "MSMark"
+  POSITION 107
+  MAX-WIDTH 4
+  COLUMN-LABEL "MSMark"
+  HELP "Mobile Station Mark"
+  ORDER 1040
+
+ADD FIELD "TaxCode" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "TC"
+  POSITION 110
+  MAX-WIDTH 2
+  COLUMN-LABEL "TC"
+  HELP "TaxCode"
+  ORDER 1080
+
+ADD FIELD "Tax" OF "MCDRDtl" AS decimal 
+  FORMAT ">>>,>>9.999"
+  INITIAL "0"
+  LABEL "Tax"
+  POSITION 111
+  MAX-WIDTH 18
+  COLUMN-LABEL "Tax"
+  HELP "Tax"
+  DECIMALS 3
+  ORDER 1090
+
+ADD FIELD "SOPrice" OF "MCDRDtl" AS decimal 
+  FORMAT ">>>,>>9.999"
+  INITIAL "0"
+  LABEL "SOPRICE"
+  POSITION 113
+  MAX-WIDTH 18
+  COLUMN-LABEL "SOPRICE"
+  HELP "Service operator price"
+  DECIMALS 3
+  ORDER 1110
+
+ADD FIELD "CallType" OF "MCDRDtl" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "CallType"
+  POSITION 115
+  MAX-WIDTH 4
+  COLUMN-LABEL "CallType"
+  HELP "Call Type"
+  ORDER 1130
+
+ADD FIELD "CaseType" OF "MCDRDtl" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "CaseType"
+  POSITION 116
+  MAX-WIDTH 4
+  COLUMN-LABEL "CaseType"
+  HELP "CaseType"
+  ORDER 1140
+
+ADD FIELD "DataInd" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "DataInd"
+  POSITION 117
+  MAX-WIDTH 2
+  COLUMN-LABEL "DataInd"
+  HELP "Data Indicator"
+  ORDER 1150
+
+ADD FIELD "ConnType" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "ConnType"
+  POSITION 118
+  MAX-WIDTH 2
+  COLUMN-LABEL "ConnType"
+  HELP "Connection Type"
+  ORDER 1160
+
+ADD FIELD "GPRSConn" OF "MCDRDtl" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "GPRSC"
+  POSITION 119
+  MAX-WIDTH 1
+  COLUMN-LABEL "GPRSC"
+  HELP "GPRS connection ready"
+  ORDER 1170
+
+ADD FIELD "PartialInd" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "PartialInd"
+  POSITION 120
+  MAX-WIDTH 2
+  COLUMN-LABEL "PartialInd"
+  HELP "Partial type indicator"
+  ORDER 1180
+
+ADD FIELD "APNNI" OF "MCDRDtl" AS character 
+  FORMAT "x(63)"
+  INITIAL ""
+  LABEL "APNNI"
+  POSITION 121
+  MAX-WIDTH 126
+  COLUMN-LABEL "APNNI"
+  HELP "Access Ppoint name NI"
+  ORDER 1190
+
+ADD FIELD "APNOI" OF "MCDRDtl" AS character 
+  FORMAT "x(37)"
+  INITIAL ""
+  LABEL "APNOI"
+  POSITION 122
+  MAX-WIDTH 74
+  COLUMN-LABEL "APNOI"
+  HELP "Access Point Name OI"
+  ORDER 1200
+
+ADD FIELD "TermSMS" OF "MCDRDtl" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "TermSMS"
+  POSITION 125
+  MAX-WIDTH 4
+  COLUMN-LABEL "TermSMS"
+  HELP "Number of terminated SMS"
+  ORDER 1230
+
+ADD FIELD "OrigSMS" OF "MCDRDtl" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "OrigSMS"
+  POSITION 126
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrigSMS"
+  HELP "Number of originated SMS"
+  ORDER 1240
+
+ADD FIELD "CType" OF "MCDRDtl" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "CType"
+  POSITION 129
+  MAX-WIDTH 4
+  COLUMN-LABEL "CType"
+  HELP "C-Type"
+  ORDER 1270
+
+ADD FIELD "BPrefCode" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "BPrefCode"
+  POSITION 130
+  MAX-WIDTH 2
+  COLUMN-LABEL "BPrefCode"
+  HELP "B-PrefixCode"
+  ORDER 1280
+
+ADD FIELD "AddInfo" OF "MCDRDtl" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "AddInfo"
+  POSITION 132
+  MAX-WIDTH 20
+  COLUMN-LABEL "AddInfo"
+  HELP "Additional Info"
+  ORDER 1300
+
+ADD FIELD "GsmCnr" OF "MCDRDtl" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  POSITION 133
+  MAX-WIDTH 40
+  ORDER 1020
+
+ADD FIELD "NetType" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "NetType"
+  POSITION 134
+  MAX-WIDTH 2
+  COLUMN-LABEL "NetType"
+  HELP "Net Type"
+  ORDER 1330
+
+ADD FIELD "RoamSeq" OF "MCDRDtl" AS character 
+  FORMAT "x(19)"
+  INITIAL ""
+  LABEL "RoamSeq"
+  POSITION 135
+  MAX-WIDTH 38
+  COLUMN-LABEL "RoamSeq"
+  HELP "Roaming Sequence"
+  ORDER 1340
+
+ADD FIELD "NearCall" OF "MCDRDtl" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "NearCall"
+  POSITION 136
+  MAX-WIDTH 1
+  COLUMN-LABEL "NearCall"
+  HELP "Near Call"
+  ORDER 1350
+
+ADD FIELD "SubsInfo" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "SubsInfo"
+  POSITION 137
+  MAX-WIDTH 2
+  COLUMN-LABEL "SubsInfo"
+  HELP "Subscription Information"
+  ORDER 1360
+
+ADD FIELD "ChargingID" OF "MCDRDtl" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "ChargingID"
+  POSITION 138
+  MAX-WIDTH 32
+  COLUMN-LABEL "ChargingID"
+  HELP "Chargind ID"
+  ORDER 1370
+
+ADD FIELD "ActionCode" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "AC"
+  POSITION 140
+  MAX-WIDTH 2
+  COLUMN-LABEL "AC"
+  HELP "Action Code"
+  ORDER 1310
+
+ADD FIELD "RoamInd" OF "MCDRDtl" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "RoamInd"
+  POSITION 141
+  MAX-WIDTH 1
+  COLUMN-LABEL "RoamInd"
+  HELP "Roaming Indicator"
+  ORDER 1320
+
+ADD FIELD "UTC" OF "MCDRDtl" AS character 
+  FORMAT "x(5)"
+  INITIAL ""
+  LABEL "UTC"
+  POSITION 142
+  MAX-WIDTH 10
+  COLUMN-LABEL "UTC"
+  HELP "Start UTC offset"
+  ORDER 1410
+
+ADD FIELD "ServiceType" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "ServiceType"
+  POSITION 143
+  MAX-WIDTH 2
+  COLUMN-LABEL "ServiceType"
+  HELP "ServiceType"
+  ORDER 1390
+
+ADD FIELD "BServiceCode" OF "MCDRDtl" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "BSCode"
+  POSITION 144
+  MAX-WIDTH 4
+  COLUMN-LABEL "BScode"
+  HELP "Baseic Service Code"
+  ORDER 1400
+
+ADD FIELD "NetworkOwner" OF "MCDRDtl" AS character 
+  FORMAT "x(5)"
+  INITIAL ""
+  LABEL "Owner"
+  POSITION 145
+  MAX-WIDTH 10
+  COLUMN-LABEL "Owner"
+  HELP "Network Owner"
+  ORDER 1420
+
+ADD FIELD "NPQStatus" OF "MCDRDtl" AS character 
+  FORMAT "x(2)"
+  INITIAL ?
+  LABEL "NPQStatus"
+  POSITION 147
+  MAX-WIDTH 4
+  COLUMN-LABEL "NPQStatus"
+  HELP "Number Portability query status"
+  ORDER 1440
+
+ADD FIELD "InServiceID" OF "MCDRDtl" AS character 
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "InServiceID"
+  POSITION 148
+  MAX-WIDTH 8
+  COLUMN-LABEL "InServiceID"
+  HELP "In Service ID"
+  ORDER 1470
+
+ADD FIELD "URL" OF "MCDRDtl" AS character 
+  FORMAT "x(111)"
+  INITIAL ""
+  LABEL "URL"
+  POSITION 149
+  MAX-WIDTH 222
+  COLUMN-LABEL "URL"
+  HELP "URL"
+  ORDER 1480
+
+ADD FIELD "Success" OF "MCDRDtl" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Success"
+  POSITION 150
+  MAX-WIDTH 4
+  COLUMN-LABEL "Success"
+  HELP "Success"
+  ORDER 1450
+
+ADD FIELD "InServiceType" OF "MCDRDtl" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "InServiceType"
+  POSITION 151
+  MAX-WIDTH 4
+  COLUMN-LABEL "InServiceType"
+  HELP "In service type"
+  ORDER 1460
+
+ADD FIELD "MessageClass" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "Message Class"
+  POSITION 152
+  MAX-WIDTH 2
+  COLUMN-LABEL "Message Class"
+  HELP "Message Class"
+  ORDER 1510
+
+ADD FIELD "Priority" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "Priority"
+  POSITION 153
+  MAX-WIDTH 2
+  COLUMN-LABEL "Prio"
+  HELP "Priority"
+  ORDER 1520
+
+ADD FIELD "MessageStatus" OF "MCDRDtl" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Message Status"
+  POSITION 154
+  MAX-WIDTH 4
+  COLUMN-LABEL "Message Status"
+  HELP "Status of message"
+  ORDER 1530
+
+ADD FIELD "SPID" OF "MCDRDtl" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Service Provider ID"
+  POSITION 155
+  MAX-WIDTH 4
+  COLUMN-LABEL "Service Provider ID"
+  HELP "Service Provider ID"
+  ORDER 1540
+
+ADD FIELD "MessageID" OF "MCDRDtl" AS character 
+  FORMAT "x(21)"
+  INITIAL ""
+  LABEL "Message ID"
+  POSITION 156
+  MAX-WIDTH 42
+  COLUMN-LABEL "Message ID"
+  HELP "Message ID"
+  ORDER 1550
+
+ADD FIELD "MessageFrom" OF "MCDRDtl" AS character 
+  FORMAT "x(64)"
+  INITIAL ""
+  LABEL "Message From"
+  POSITION 157
+  MAX-WIDTH 128
+  COLUMN-LABEL "Message From"
+  HELP "Message From"
+  ORDER 1560
+
+ADD FIELD "MessageTo" OF "MCDRDtl" AS character 
+  FORMAT "x(128)"
+  INITIAL ""
+  LABEL "Message To"
+  POSITION 158
+  MAX-WIDTH 256
+  COLUMN-LABEL "Message To"
+  HELP "Message to"
+  ORDER 1570
+
+ADD FIELD "ForwardedTo" OF "MCDRDtl" AS character 
+  FORMAT "x(128)"
+  INITIAL ""
+  LABEL "ForwardedTo"
+  POSITION 159
+  MAX-WIDTH 256
+  COLUMN-LABEL "ForwardedTo"
+  HELP "Forwarded to"
+  ORDER 1580
+
+ADD FIELD "NumberOfRecipients" OF "MCDRDtl" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "NumberOfRecipients"
+  POSITION 160
+  MAX-WIDTH 4
+  COLUMN-LABEL "NOR"
+  HELP "Number Of Recipients"
+  ORDER 1590
+
+ADD FIELD "DeliveryReportRequest" OF "MCDRDtl" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Delivery Report Requests"
+  POSITION 161
+  MAX-WIDTH 1
+  COLUMN-LABEL "DRR"
+  HELP "Delivery Report Requests"
+  ORDER 1600
+
+ADD FIELD "MessageOriginInd" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "Message Origin Indicator"
+  POSITION 162
+  MAX-WIDTH 2
+  COLUMN-LABEL "MOInd"
+  HELP "Message Origin Indicator"
+  ORDER 1610
+
+ADD FIELD "ExternalApplicationAddress" OF "MCDRDtl" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "External Application Address"
+  POSITION 163
+  MAX-WIDTH 80
+  COLUMN-LABEL "ExtApplAddr"
+  HELP "External Application Address"
+  ORDER 1620
+
+ADD FIELD "MessageSize" OF "MCDRDtl" AS decimal 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "MessageSize"
+  POSITION 164
+  MAX-WIDTH 15
+  COLUMN-LABEL "MessageSize"
+  HELP "Message size"
+  DECIMALS 0
+  ORDER 1490
+
+ADD FIELD "MessageCT" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "MessageCT"
+  POSITION 165
+  MAX-WIDTH 2
+  COLUMN-LABEL "MessageCT"
+  HELP "Message Content Type"
+  ORDER 1500
+
+ADD FIELD "MMSEventType" OF "MCDRDtl" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "MMS Event Type"
+  POSITION 166
+  MAX-WIDTH 12
+  COLUMN-LABEL "MMS Type"
+  HELP "MMS Event Type"
+  ORDER 1630
+
+ADD FIELD "RepCust" OF "MCDRDtl" AS integer 
+  FORMAT ">>>>>>>>>"
+  INITIAL "0"
+  LABEL "Report Customer"
+  POSITION 167
+  MAX-WIDTH 4
+  COLUMN-LABEL "Report Customer"
+  ORDER 1640
+
+ADD FIELD "SPOOper" OF "MCDRDtl" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Operator"
+  POSITION 168
+  MAX-WIDTH 16
+  COLUMN-LABEL "Operator"
+  HELP "SPO-operator"
+  ORDER 860
+
+ADD FIELD "SPOSeqno" OF "MCDRDtl" AS integer 
+  FORMAT ">>>,>>9"
+  INITIAL "0"
+  LABEL "SeqNo"
+  POSITION 169
+  MAX-WIDTH 4
+  COLUMN-LABEL "SeqNo"
+  HELP "spo Sequence number"
+  ORDER 870
+
+ADD FIELD "SPOlis" OF "MCDRDtl" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "SpoOther"
+  POSITION 171
+  MAX-WIDTH 16
+  COLUMN-LABEL "SpoOther"
+  HELP "Others SPO serveices"
+  ORDER 890
+
+ADD FIELD "sposij" OF "MCDRDtl" AS character 
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "Location"
+  POSITION 173
+  MAX-WIDTH 2
+  COLUMN-LABEL "Location"
+  HELP "Location (D=lähi, M=muu)"
+  ORDER 910
+
+ADD FIELD "orgfee" OF "MCDRDtl" AS decimal 
+  FORMAT ">>,>>9.99"
+  INITIAL "0"
+  LABEL "OrgFee"
+  POSITION 174
+  MAX-WIDTH 20
+  COLUMN-LABEL "OrgFee"
+  HELP "Originating fee  (calltype/puhlaji)"
+  DECIMALS 5
+  ORDER 930
+
+ADD FIELD "mstype" OF "MCDRDtl" AS character 
+  FORMAT "x(8)"
+  INITIAL ?
+  LABEL "MType"
+  POSITION 175
+  MAX-WIDTH 16
+  COLUMN-LABEL "Mtype"
+  HELP "Type Of Mobsub (connection type)"
+  ORDER 940
+
+ADD FIELD "DataVol" OF "MCDRDtl" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL ?
+  LABEL "Data Vol"
+  POSITION 176
+  MAX-WIDTH 4
+  COLUMN-LABEL "Data Vol"
+  HELP "Data Volume"
+  ORDER 2020
+
+ADD FIELD "DataRef" OF "MCDRDtl" AS integer 
+  FORMAT ">>>>>9"
+  INITIAL ?
+  POSITION 177
+  MAX-WIDTH 4
+  HELP "Data Volume ref"
+  ORDER 2030
+
+ADD FIELD "UserMsisdn" OF "MCDRDtl" AS character 
+  FORMAT "x(24)"
+  INITIAL ?
+  LABEL "UserMsisdn"
+  POSITION 178
+  MAX-WIDTH 60
+  COLUMN-LABEL "UserMsisdn"
+  HELP "Target MSISDN"
+  ORDER 2150
+
+ADD FIELD "ReadInTS" OF "MCDRDtl" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL ?
+  LABEL "TimeStamp"
+  POSITION 179
+  MAX-WIDTH 17
+  COLUMN-LABEL "TimeStamp"
+  HELP "Read In Timestamp"
+  DECIMALS 5
+  ORDER 2210
+
+ADD FIELD "MMSServiceName" OF "MCDRDtl" AS character 
+  FORMAT "x(20)"
+  INITIAL ?
+  LABEL "MMSServiceName"
+  POSITION 181
+  MAX-WIDTH 40
+  COLUMN-LABEL "MMSServiceName"
+  HELP "MMS Service Name"
+  ORDER 2240
+
+ADD FIELD "MMSServiceTarget" OF "MCDRDtl" AS character 
+  FORMAT "x(41)"
+  INITIAL ?
+  LABEL "MMS Service Target"
+  POSITION 182
+  MAX-WIDTH 82
+  COLUMN-LABEL "MMS Service Target"
+  HELP "MMS Service Target"
+  ORDER 2250
+
+ADD FIELD "MMSPlatformStatus" OF "MCDRDtl" AS character 
+  FORMAT "x(4)"
+  INITIAL ?
+  LABEL "Platform"
+  POSITION 183
+  MAX-WIDTH 8
+  COLUMN-LABEL "Platform"
+  HELP "MMS Platform Status"
+  ORDER 2260
+
+ADD FIELD "RateCategory" OF "MCDRDtl" AS character 
+  FORMAT "x(4)"
+  INITIAL ?
+  LABEL "Rate Category"
+  POSITION 184
+  MAX-WIDTH 8
+  COLUMN-LABEL "Rate Category"
+  HELP "Rate Category"
+  ORDER 2270
+
+ADD FIELD "SMSServType" OF "MCDRDtl" AS character 
+  FORMAT "x(2)"
+  INITIAL ""
+  LABEL "SMSServType"
+  POSITION 186
+  MAX-WIDTH 4
+  COLUMN-LABEL "SMSServType"
+  HELP "SMS Service Type"
+  ORDER 2280
+
+ADD FIELD "ServiceSubject" OF "MCDRDtl" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "ServiceSubject"
+  POSITION 187
+  MAX-WIDTH 16
+  COLUMN-LABEL "ServiceSubject"
+  ORDER 2290
+
+ADD FIELD "DateSt" OF "MCDRDtl" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "CallDate"
+  POSITION 188
+  MAX-WIDTH 4
+  COLUMN-LABEL "CallDate"
+  HELP "Date When call started"
+  ORDER 470
+
+ADD FIELD "DtlSeq" OF "MCDRDtl" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  POSITION 189
+  MAX-WIDTH 4
+  ORDER 2300
+
+ADD FIELD "Version" OF "MCDRDtl" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "Version"
+  POSITION 190
+  MAX-WIDTH 12
+  COLUMN-LABEL "Version"
+  ORDER 2310
+
+ADD INDEX "DtlSeq" ON "MCDRDtl" 
+  AREA "Dtl_Index1"
+  PRIMARY
+  INDEX-FIELD "DateSt" ASCENDING 
+  INDEX-FIELD "DtlSeq" ASCENDING 
+
+ADD TABLE "McdrDtl2"
+  AREA "Dtl_Data_Post"
+  DUMP-NAME "mcdrdtl2"
+
+ADD FIELD "DateSt" OF "McdrDtl2" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "CallDate"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "CallDate"
+  HELP "Date When call started"
+  ORDER 10
+
+ADD FIELD "DtlSeq" OF "McdrDtl2" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  POSITION 3
+  MAX-WIDTH 4
+  ORDER 20
+
+ADD FIELD "Version" OF "McdrDtl2" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "Version"
+  POSITION 4
+  MAX-WIDTH 12
+  COLUMN-LABEL "Version"
+  ORDER 30
+
+ADD FIELD "Detail" OF "McdrDtl2" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  LABEL "Detail"
+  POSITION 5
+  MAX-WIDTH 100
+  COLUMN-LABEL "Detail"
+  ORDER 40
+
+ADD INDEX "DtlSeq" ON "McdrDtl2" 
+  AREA "Dtl_Index2"
+  PRIMARY
+  INDEX-FIELD "DateSt" DESCENDING 
+  INDEX-FIELD "DtlSeq" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000027159

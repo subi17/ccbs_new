@@ -1,0 +1,437 @@
+/**
+ * Request service change(s).
+ *
+ * @input   msseq;int;mandatory;the subscription identifier
+            userlevel;string;mandatory;user level (CustomerCare|Operator),
+            user;string;mandatory;username to used with created MsRequest
+            services;array;mandatory;array of service-structs
+            Memo;struct;optional
+ * @service service_id;string;mandatory;newton alias for the service,
+            value;string;mandatory;new value for the service
+ * @Memo    title;string;mandatory
+            content;string;mandatory
+ * @output success;boolean
+ *
+ */
+{xmlrpc/xmlrpc_access.i}
+{commpaa.i}
+gcBrand = "1".
+{tmsconst.i}
+{fmakemsreq.i}
+{subser.i}
+{barrfunc.i}
+{fbundle.i}
+{service.i}
+
+/* Input parameters */
+DEF VAR piMsSeq AS INT NO-UNDO.
+DEF VAR pcUserLevel AS CHAR NO-UNDO.
+DEF VAR pcInputArray AS CHAR NO-UNDO.
+
+DEF VAR pcStruct AS CHAR NO-UNDO.
+DEF VAR pcServiceId AS CHAR NO-UNDO.
+DEF VAR pcValue AS CHAR NO-UNDO.
+DEF VAR pcParam AS CHAR NO-UNDO.
+DEF VAR lcStruct AS CHAR NO-UNDO.
+DEF VAR plSendSMS AS LOGICAL NO-UNDO INITIAL TRUE.
+
+DEF VAR liInputCounter AS INT NO-UNDO.
+DEF VAR lcStatus AS CHAR NO-UNDO.
+DEF VAR lcBarrComList AS CHARACTER NO-UNDO.
+DEF VAR lcBarrStatus AS CHARACTER NO-UNDO. 
+DEF VAR llRequest AS LOG NO-UNDO.
+DEF VAR liValue AS INT NO-UNDO.
+DEF VAR liValue2 AS INT NO-UNDO.
+DEF VAR ldActStamp AS DEC NO-UNDO.
+DEF VAR liReq AS INT NO-UNDO.
+DEF VAR lcSalesman AS CHAR NO-UNDO.
+DEF VAR lcInfo AS CHAR NO-UNDO.
+DEF VAR lcServCom AS CHAR NO-UNDO.
+DEF VAR ocError AS CHAR NO-UNDO.
+DEF VAR liValidate AS INT  NO-UNDO.
+DEF VAR pcSetServiceId AS CHAR NO-UNDO.
+DEF VAR pcUser AS CHAR NO-UNDO.
+DEF VAR cCheckMsBarringKatun AS CHAR NO-UNDO. 
+DEF VAR pcMemoStruct   AS CHAR NO-UNDO.
+DEF VAR lcMemoTitle    AS CHAR NO-UNDO.
+DEF VAR lcMemoContent  AS CHAR NO-UNDO.
+DEF VAR pcReqList      AS CHAR NO-UNDO.
+DEF VAR lcFromStat     AS CHAR NO-UNDO.
+DEF VAR lcToStat       AS CHAR NO-UNDO.
+DEF VAR lcBarringCode  AS CHAR NO-UNDO.
+DEF VAR orBarring      AS ROWID NO-UNDO.
+
+DEF BUFFER bReq  FOR MsRequest.
+DEF BUFFER bSubReq FOR MsRequest.
+
+FUNCTION fLocalMemo RETURNS LOGIC
+   (icHostTable AS CHAR,
+    icKey       AS CHAR,
+    iiCustNum   AS INT,
+    icTitle     AS CHAR,
+    icText      AS CHAR):
+
+   CREATE Memo.
+   ASSIGN
+      Memo.Brand     = gcBrand
+      Memo.CreStamp  = fMakeTS()
+      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
+      Memo.Custnum   = iiCustNum
+      Memo.HostTable = icHostTable
+      Memo.KeyValue  = icKey
+      Memo.MemoType  = "service"
+      Memo.CreUser   = katun
+      Memo.MemoTitle = icTitle
+      Memo.Memotext  = icText.
+END FUNCTION.
+
+pcReqList = validate_request(param_toplevel_id, "int,string,string,array,[struct]").
+IF pcReqList EQ ? THEN RETURN.
+
+piMsSeq = get_int(param_toplevel_id, "0").
+pcUserLevel = get_string(param_toplevel_id, "1").
+pcUser = "VISTA_" + get_string(param_toplevel_id, "2").
+pcInputArray = get_array(param_toplevel_id, "3").
+
+IF NUM-ENTRIES(pcReqList) >= 5 THEN DO:
+   pcMemoStruct = get_struct(param_toplevel_id, "4").
+   IF validate_request(pcMemoStruct,"title!,content!") EQ ? THEN RETURN.
+
+   lcMemoTitle   = get_string(pcMemoStruct, "title").
+   lcMemoContent = get_string(pcMemoStruct, "content").
+END. /* IF NUM-ENTRIES(pcReqList) >= 5 THEN DO: */
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+IF TRIM(pcUser) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+
+FIND Mobsub NO-LOCK
+WHERE Mobsub.MsSeq = piMsSeq NO-ERROR.
+IF NOT AVAILABLE Mobsub THEN
+    RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
+
+katun = pcUser.
+IF pcUserLevel EQ "Operator" THEN 
+   cCheckMsBarringKatun = "NewtonAd". 
+ELSE 
+   cCheckMsBarringKatun = "NewtonCC". 
+
+DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
+   pcStruct = get_struct(pcInputArray, STRING(liInputCounter - 1)).
+
+   lcStruct = validate_request(pcStruct,"service_id!,value!,param").
+   IF lcStruct EQ ? THEN RETURN.
+
+   pcServiceId = get_string(pcStruct, "service_id").
+   pcValue = get_string(pcStruct, "value").
+   IF LOOKUP('param', lcStruct) GT 0 THEN
+    pcParam = get_string(pcStruct, "param").
+
+   IF gi_xmlrpc_error NE 0 THEN RETURN.
+   
+   IF LOOKUP(pcServiceId,"Y_BPSUB,C_BPSUB") > 0 THEN ASSIGN
+      pcParam = pcServiceId WHEN pcValue = "on"
+      pcServiceId = "BPSUB".
+  
+   /* "BCG,OBA,OBO,OBR,RSA".*/
+
+   /* SERVICES */
+   FOR FIRST SubSer NO-LOCK WHERE
+     SubSer.MsSeq = Mobsub.MsSeq AND
+     SubSer.ServCom = pcServiceId,
+   FIRST ServCom NO-LOCK WHERE 
+      ServCom.Brand = gcBrand AND
+      ServCom.ServCom = pcServiceID:
+
+      /* Check ongoing service requests */
+      llRequest = CAN-FIND(FIRST MsRequest WHERE
+                                 MsRequest.MsSeq      = MobSub.MsSeq AND
+                                 MsRequest.ReqType    = 1       AND
+                                 MsRequest.ReqCParam1 = SubSer.ServCom AND
+                                 LOOKUP(STRING(MsRequest.ReqStatus),
+                                        {&REQ_INACTIVE_STATUSES}) = 0).
+      IF llRequest THEN RETURN appl_err("Ongoing network command").
+     
+      /* Check new value */ 
+      CASE pcValue:
+         WHEN "off" THEN liValue = 0. 
+         WHEN "on"  THEN liValue = 1.
+         OTHERWISE DO:
+            liValue = INT(pcValue) NO-ERROR.
+            IF ERROR-STATUS:ERROR THEN   
+               RETURN appl_err(SUBST("Unknown service value: &1", pcValue)).
+         END.
+      END.
+ 
+      liValidate = fSubSerValidate(
+         INPUT MobSub.MsSeq,
+         INPUT Subser.ServCom,
+         INPUT liValue,
+         OUTPUT ocError).
+
+      IF liValidate NE 0 THEN 
+      CASE liValidate:
+         WHEN 3 THEN RETURN appl_err("Ongoing network command").
+         OTHERWISE appl_err("Service change is not allowed").
+      END.
+
+      liValidate = fSubSerSSStat(
+         INPUT MobSub.MsSeq,
+         INPUT Subser.ServCom,
+         INPUT liValue,
+         OUTPUT ocError).
+     
+      IF liValidate NE 0 THEN
+         RETURN appl_err(SUBST("Unknown service value: &1", pcValue)).
+
+      /* Return error if new value is same as existing value */ 
+      IF SubSer.ServCom = "BB" AND
+         (liValue = SubSer.SSStat OR (SubSer.SSStat = 2 AND liValue = 0)) THEN
+         RETURN appl_err("Service is already " +
+                         (IF liValue = 1 THEN "active" ELSE "suspended")).
+
+      /* check the validity of change date */
+      ldActStamp = fServiceActStamp(SubSer.MsSeq,
+                                    SubSer.ServCom,
+                                    liValue).
+      IF ldActStamp > 0 THEN DO:
+         fSplitTS(ldActStamp,
+                  OUTPUT ldtActDate,
+                  OUTPUT liReq).
+
+         IF ldtActDate > SubSer.SSDate OR
+            (DAY(ldtActDate) = 1 AND liReq < TIME - 120 AND
+             DAY(SubSer.SSDate) NE 1)
+         THEN .
+         ELSE ldActStamp = fMakeTS().
+      END.
+      ELSE ldActStamp = fMakeTS().
+
+      IF ldtActDate = TODAY
+      THEN ldActStamp = fMakeTS().
+      ELSE ldActStamp = fMake2DT(ldtActDate,1).
+
+      IF pcParam EQ "" AND
+         SubSer.ServCom NE "CF" AND /* YBU-2004 */
+         LOOKUP(pcValue,"off") = 0 THEN pcParam = SubSer.SSParam.
+
+      /* Special handling for Black Berry service */
+      IF Subser.ServCom = "BB" THEN DO:
+         /* Suspended */
+         IF liValue = 0 AND SubSer.SSStat = 1 THEN
+            liValue = 2.
+         /* Resume - Pass the new status in parameter */
+         ELSE IF liValue = 1 AND SubSer.SSStat = 2 THEN
+            pcParam = "3".
+      END. /* IF Subser.ServCom = "BB" THEN DO: */
+
+      /* Extra pre-caution, if fraud barring is applied then */
+      /* don't allow to activate the BB service              */
+      IF Subser.ServCom = "BB" AND liValue = 1 THEN DO:
+         lcBarringCode = fCheckBarrStatus(INPUT MobSub.MsSeq,
+                                          OUTPUT orBarring).
+         IF lcBarringCode = "91" THEN DO:
+            FIND FIRST MsRequest WHERE
+                 ROWID(MsRequest) = orBarring AND
+                 LOOKUP(MsRequest.ReqCParam1, {&FRAUD_BARR_CODES}) > 0
+                 NO-LOCK NO-ERROR.
+            IF AVAILABLE MsRequest THEN
+               RETURN appl_err("Ongoing Fraud Barring Request").
+         END. /* IF lcBarringCode = "91" THEN DO: */
+         ELSE IF LOOKUP(lcBarringCode, {&FRAUD_BARR_CODES}) > 0 THEN
+            RETURN appl_err("BB service can not be activated since " +
+                            "subscription has fraud barring").
+
+         IF NOT fIsBBAllowed(Mobsub.MsSeq,ldActStamp)
+         THEN RETURN appl_err("BB service can not be activated since " +
+                     "subscription does not have active data bundle").
+      END. /* IF liValue = 1 THEN DO: */
+      ELSE IF Subser.ServCom = "NAM" THEN DO:
+         lcBarringCode = fCheckBarrStatus(INPUT MobSub.MsSeq,
+                                          OUTPUT orBarring).
+         IF lcBarringCode = "91" THEN DO:
+            FIND FIRST MsRequest WHERE
+                 ROWID(MsRequest) = orBarring AND
+                 MsRequest.ReqCParam1 = "C_LOS" NO-LOCK NO-ERROR.
+            IF AVAILABLE MsRequest THEN
+               RETURN appl_err("Ongoing CLB Lost or Stolen Barring Request").
+         END. /* IF lcBarringCode = "91" THEN DO: */
+         ELSE IF lcBarringCode = "C_LOS" THEN
+            RETURN appl_err("Internet service can not be " + 
+                  (IF liValue = 0 THEN "de-activated" ELSE "activated") +
+                  " since subscription has CLB Lost or Stolen Barring").
+      END. /* ELSE IF Subser.ServCom = "NAM" THEN DO: */
+
+      liReq = fServiceRequest(MobSub.MsSeq,
+                              Subser.ServCom,
+                              liValue,
+                              pcParam,
+                              ldActStamp,
+                              lcSalesman,
+                              TRUE,      /* fees */
+                              plSendSMS,      /* sms */
+                              "",
+                              {&REQUEST_SOURCE_NEWTON},
+                              0, /* father request */
+                              false, /* mandatory for father request */
+                              OUTPUT lcInfo).
+      
+      IF liReq = 0 THEN DO:
+          RETURN appl_err("Change request was not accepted for service"
+              + SubSer.ServCom + "; " + lcInfo).
+      END.
+
+      /* Create Memo */
+      IF lcMemoTitle > "" THEN DO:
+         IF SubSer.SSStat = 0 THEN lcFromStat = "cancelled".
+         ELSE IF SubSer.SSStat = 1 THEN lcFromStat = "active".
+         ELSE IF SubSer.SSStat = 2 THEN lcFromStat = "suspended".
+         
+         IF liValue = 0 THEN lcToStat = "cancelled".
+         ELSE IF liValue = 1 THEN lcToStat = "active".
+         ELSE IF liValue = 2 THEN lcToStat = "suspended".
+ 
+         fLocalMemo(INPUT "MobSub",
+                    INPUT STRING(MobSub.MsSeq),
+                    INPUT MobSub.CustNum,
+                    INPUT lcMemoTitle,
+                    INPUT lcMemoContent + ". " + UPPER(pcServiceID) +
+                          " service status is changed from " + lcFromStat +
+                          " to " + lcToStat).
+      END. /* IF lcMemoTitle > "" THEN DO: */
+      add_boolean(response_toplevel_id, "", TRUE).
+      RETURN.
+   END.
+   
+   /* Additional logic to add the new BB/LTE service to the subscription */
+   IF LOOKUP(pcServiceID,"BB,LTE,BPSUB") > 0 AND
+      pcValue = "ON" THEN DO:
+   
+      FIND FIRST ServCom WHERE
+                 ServCom.Brand = gcBrand AND
+                 ServCom.ServCom = pcServiceID NO-LOCK NO-ERROR.
+      IF NOT AVAILABLE ServCom THEN RETURN appl_err("Invalid Service Id").
+
+      IF CAN-FIND(FIRST MsRequest WHERE
+                        MsRequest.MsSeq      = MobSub.MsSeq AND
+                        MsRequest.ReqType    = 1       AND
+                        MsRequest.ReqCParam1 = ServCom.ServCom AND
+                        LOOKUP(STRING(MsRequest.ReqStatus),
+                               {&REQ_INACTIVE_STATUSES}) = 0) THEN
+         RETURN appl_err("Ongoing network command").
+
+      /* Extra logic for BB service */
+      IF pcServiceID = "BB" THEN DO:
+
+         /* Check BB allowed */
+         IF NOT fIsBBAllowed(Mobsub.MsSeq,ldActStamp) THEN
+            RETURN appl_err("BB service can not be activated since " +
+                            "subscription does not have active data bundle").
+
+         /* Extra pre-caution, if fraud barring is applied then */
+         /* don't allow to activate the BB service              */
+
+         lcBarringCode = fCheckBarrStatus(INPUT MobSub.MsSeq,
+                                          OUTPUT orBarring).
+         IF lcBarringCode = "91" THEN DO:
+            FIND FIRST MsRequest WHERE
+                 ROWID(MsRequest) = orBarring AND
+                 LOOKUP(MsRequest.ReqCParam1, {&FRAUD_BARR_CODES}) > 0
+                 NO-LOCK NO-ERROR.
+            IF AVAILABLE MsRequest THEN
+               RETURN appl_err("Ongoing Fraud Barring Request").
+         END. /* IF lcBarringCode = "91" THEN DO: */
+         ELSE IF LOOKUP(lcBarringCode, {&FRAUD_BARR_CODES}) > 0 THEN
+            RETURN appl_err("BB service can not be activated since " +
+                            "subscription has fraud barring").
+
+      END. /* IF pcServiceID = "BB" THEN DO: */
+
+      liReq = fServiceRequest(MobSub.MsSeq,
+                              ServCom.ServCom,
+                              1,
+                              pcParam,
+                              fMakeTS(),
+                              lcSalesman,
+                              TRUE,      /* fees */
+                              plSendSMS,      /* sms */
+                              "",
+                              {&REQUEST_SOURCE_NEWTON},
+                              0, /* father request */
+                              false, /* mandatory for father request */
+                              OUTPUT lcInfo).
+      IF liReq = 0 THEN
+         RETURN appl_err("New request was not accepted for service" +
+                         SubSer.ServCom + "; " + lcInfo).
+
+      IF lcMemoTitle > "" THEN
+         fLocalMemo(INPUT "MobSub",
+                    INPUT STRING(MobSub.MsSeq),
+                    INPUT MobSub.CustNum,
+                    INPUT lcMemoTitle,
+                    INPUT lcMemoContent + ". " + UPPER(pcServiceID) +
+                          " service status is changed to active.").
+
+      add_boolean(response_toplevel_id, "", TRUE).
+      RETURN.
+   END. /* IF LOOKUP(pcServiceID,"BB,LTE") > 0 AND pcValue = "ON" THEN DO: */
+   /* SERVICES END */
+
+   /* BARRINGS */ 
+   IF LOOKUP(pcValue,"on,off") EQ 0 THEN
+      RETURN appl_err(SUBST("Unknown service value: &1", pcValue)).
+
+   RUN checkmsbarring(
+         INPUT piMsSeq,
+         INPUT cCheckMsBarringKatun,
+         OUTPUT lcBarrComList,
+         OUTPUT lcBarrStatus).
+
+   CASE lcBarrStatus:
+      WHEN "NAD" THEN RETURN appl_err("Operator or debt level barring is on").
+      WHEN "ONC" THEN RETURN appl_err("Ongoing network command").
+   END.
+   
+   /* Check that barring is allowed */
+   /* Do not allow set/unset D_ barrings from newton */
+   IF INDEX(lcBarrComList,pcServiceId) = 0 OR
+      pcServiceId BEGINS "D_" THEN 
+      RETURN appl_err("Barring is not allowed").
+   
+   CASE pcValue:
+      WHEN "on" THEN pcSetServiceId = pcServiceId. 
+      WHEN "off" THEN pcSetServiceId = "UN" + pcServiceId. 
+   END.
+   
+   /* Check that barring is already with same status */
+   IF LOOKUP(pcSetServiceId,lcBarrComList,"|") = 0 THEN 
+      RETURN appl_err(SUBST("Barring &1 is already &2", pcServiceId, pcValue )).
+   
+   RUN barrengine(
+      MobSub.MsSeq,
+      pcSetServiceId,
+      "6",
+      "",
+      fMakeTS(),
+      "",
+      OUTPUT lcStatus).
+
+   CASE lcStatus:
+      WHEN "ONC" THEN RETURN appl_err("Ongoing network command").
+   END.
+
+   IF lcMemoTitle > "" THEN
+      fLocalMemo(INPUT "MobSub",
+                 INPUT STRING(MobSub.MsSeq),
+                 INPUT MobSub.CustNum,
+                 INPUT lcMemoTitle,
+                 INPUT lcMemoContent + ". " + UPPER(pcSetServiceId) +
+                       " barring is added.").
+
+END.
+
+add_boolean(response_toplevel_id, "", TRUE).
+
+FINALLY:
+   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
+END.

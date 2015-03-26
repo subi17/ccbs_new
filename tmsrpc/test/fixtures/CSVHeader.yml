@@ -1,0 +1,11 @@
+# newton__get_cdr_details
+CSVHeader1:
+   CSV:"<Title=one><Format=format>|<Title=Balance after><format=format2>"
+   Version:"Ver1"
+
+# newton__get_cdr_details
+CSVHeader2:
+   CSV:"<Title=one><Format=format>|<title=two><format=format2>|<Title=Balance after><format=format3>"
+   Version:"Ver2"
+
+

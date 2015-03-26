@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/altaPortabilidad" xmlns:tns="http://www.example.org/altaPortabilidad">
+
+    <element name="outPortabilityRequest" type="tns:outPortabilityRequest"></element>
+
+    <complexType name="outPortabilityRequest">
+    	<sequence>
+    		<element name="formRequestCode" maxOccurs="1"
+    			minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<pattern value=""></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
+            <element name="portabilityRequestCode" minOccurs="1" maxOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<pattern value=""></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
+            <element name="subscriberData" type="tns:subscriberData"
+    			maxOccurs="1" minOccurs="1">
+    		</element>
+    		<element name="portabilityData" type="tns:portabilityData"
+    			maxOccurs="1" minOccurs="1">
+    		</element>
+    		<element name="opDonor">
+    			<simpleType>
+    				<restriction base="string">
+    					<length value="3"></length>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="opReceiver">
+    			<simpleType>
+    				<restriction base="string">
+    					<length value="3"></length>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    	</sequence></complexType>
+
+    <complexType name="subscriberData">
+    	<sequence>
+
+    		<choice>
+    			<sequence>
+    				<element name="name" maxOccurs="1" minOccurs="1"
+    					type="string">
+
+    				</element>
+    				<element name="firstSurname" maxOccurs="1"
+    					minOccurs="1" type="string">
+
+    				</element>
+    				<element name="secondSurname" maxOccurs="1"
+    					minOccurs="1" type="string">
+
+    				</element>
+    			</sequence>
+    			<element name="companyName" maxOccurs="1" minOccurs="1"
+    				type="string">
+    			</element>
+    		</choice>
+    		<choice>
+
+    			<sequence>
+    				<choice>
+    					<element name="NIF" type="string"></element>
+    					<element name="NIE" type="string"></element>
+    					<element name="passport" type="string"></element>
+    				</choice>
+    				<element name="nationality" type="string"></element>
+    			</sequence>
+    			<element name="CIF" type="string"></element>
+    		</choice>
+
+    	</sequence>
+    </complexType>
+
+
+    <complexType name="portabilityData">
+    	<sequence>
+    		<element name="msisdn" type="tns:msisdn"
+    			maxOccurs="unbounded" minOccurs="1">
+    		</element>
+    		<element name="requestedDate" type="dateTime" maxOccurs="1" minOccurs="1"></element>
+    		<element name="changeWindowDate" type="dateTime" maxOccurs="1" minOccurs="0"></element>
+    	</sequence>
+    </complexType>
+
+
+
+
+
+ 
+
+    <complexType name="msisdn">
+    	<attribute name="msisdnStart">
+    		<simpleType>
+    			<restriction base="string">    				<length value="9"></length>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="msisdnEnd">    		<simpleType>    			<restriction base="string">    				<length value="9"></length>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="icc-idStart">
+    		<simpleType>
+    			<restriction base="string">
+    				<minLength value="0"></minLength>
+    				<maxLength value="19"></maxLength>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="icc-idEnd">
+    		<simpleType>
+    			<restriction base="string">
+    				<minLength value="0"></minLength>
+    				<maxLength value="19"></maxLength>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="nrn">
+    		<simpleType>
+    			<restriction base="string">
+    				<length value="6"></length>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="msisdn">
+    		<simpleType>
+    			<restriction base="string">
+    				<minLength value="0"></minLength>
+    				<maxLength value="9"></maxLength>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    </complexType>
+</schema>

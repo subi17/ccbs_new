@@ -1,0 +1,7 @@
+ADD FIELD "SegmentOffer" OF "TermMobSub" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Segmentation Renewal Offer"
+  MAX-WIDTH 16
+  COLUMN-LABEL "SegmentOffer"
+  ORDER 840

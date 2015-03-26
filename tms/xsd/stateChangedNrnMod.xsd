@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/nrnModification" xmlns:tns="http://www.example.org/nrnModification">
+
+
+    <element name="stateChanged" type="tns:stateChangednrnModType"></element>
+
+    <complexType name="stateChangednrnModType">
+    	<sequence>
+    		<element name="formRequestCode" type="string" maxOccurs="1"
+    			minOccurs="1">
+    		</element>    		<element name="state" maxOccurs="1" minOccurs="1">    			<simpleType>    				<restriction base="string">    					<enumeration value="requested"></enumeration>
+    					<enumeration value="comfirmed"></enumeration>
+    					<enumeration value="changed"></enumeration>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    	</sequence></complexType>
+
+
+
+
+</schema>

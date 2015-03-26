@@ -1,0 +1,120 @@
+# newton__get_commissions
+OneMobsubWithTwoTargs1:
+   Brand:"1"
+   TargType:"M"
+   CoTarg:"50"
+   CoTargId:1
+   CoRuleID:1
+   OrderId:7
+   PromotedId:31
+   PromotedCLI:"623555333"
+   CommStatus:3
+   StatusReason:2
+
+# newton__get_commissions
+OneMobsubWithTwoTargs2:
+   Brand:"1"
+   TargType:"M"
+   CoTarg:"50"
+   CoTargId:2
+   CoRuleID:2
+   OrderId:7
+   PromotedId:31
+   PromotedCLI:"644333333"
+   CommStatus:1
+   StatusReason:5
+
+# newton__get_commissions
+TwoMobsubsWithOneTarget1stTarget:
+   Brand:"1"
+   TargType:"M"
+   COTarg:"51"
+   COTargId:3
+   CoRuleID:3
+   OrderId:7
+   PromotedId:31
+   PromotedCLI:"677222999"
+   CommStatus:7
+   StatusReason:9
+
+# newton__get_commissions
+TwoMobsubsWithOneTarget2ndTarget:
+   Brand:"1"
+   TargType:"M"
+   COTarg:"52"
+   COTargId:4
+   CORuleID:4
+   OrderId:7
+   PromotedId:31
+   PromotedCLI:"633777222"
+   CommStatus:2
+   StatusReason:4
+
+# newton__get_commissions
+NoOrderTarget:
+  Brand:"1"
+  TargType:"M"
+  COTarg:"56"
+  COTargId:7
+  CORuleId:7
+  OrderId:0
+  PromotedId:31
+  PromotedCLI:"652424222"
+  CommStatus:2
+  StatusReason:3
+
+# newton__get_commissions
+NoRefSubscriptionTarget:
+   Brand:"1"
+   TargType:"M"
+   COTarg:"57"
+   COTargId:5
+   CORuleID:5
+   OrderId:7
+   PromotedId:999999
+   PromotedCLI:"633999222"
+   CommStatus:2
+   StatusReason:4
+
+# newton__get_commissions
+NoRefCustomerTarget:
+   Brand:"1"
+   TargType:"M"
+   CoTarg:"58"
+   COTargId:6
+   CoRuleId:6
+   OrderId:7
+   PromotedId:60
+   PromotedCLI:"653535353"
+   CommStatus:9
+   StatusReason:2
+
+# newton__get_commissions
+TermMobsubNoRefCustTarget:
+   Brand:"1"
+   TargType:"M"
+   CoTarg:"61"
+   COTargId:8
+   CoRuleId:8
+   OrderId:7
+   PromotedId:156
+   PromotedCLI:"653555777"
+   CommStatus:9
+   StatusReason:2
+
+# newton__get_commissions
+TermMobsubWithRefCustTarget:
+   Brand:"1"
+   TargType:"M"
+   CoTarg:"62"
+   COTargId:9
+   CoRuleId:9
+   OrderId:7
+   PromotedId:157
+   PromotedCLI:"653222777"
+   CommStatus:9
+   StatusReason:2
+
+
+
+

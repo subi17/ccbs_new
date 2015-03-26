@@ -1,0 +1,44 @@
+ADD TABLE "DtlSeq"
+  AREA "Sta_Data_32"
+  DUMP-NAME "dtlseq"
+
+ADD FIELD "SeqDate" OF "DtlSeq" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "Date"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Date"
+  HELP "Date"
+  ORDER 10
+
+ADD FIELD "SeqStream" OF "DtlSeq" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Stream"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Stream"
+  ORDER 20
+
+ADD FIELD "SeqVal" OF "DtlSeq" AS integer 
+  FORMAT "99999999"
+  INITIAL "0"
+  LABEL "Value"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Value"
+  ORDER 30
+
+ADD INDEX "SeqDate" ON "DtlSeq" 
+  AREA "Sta_Index_1"
+  PRIMARY 
+  UNIQUE
+  INDEX-FIELD "SeqDate" ASCENDING 
+  INDEX-FIELD "SeqStream" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000000655

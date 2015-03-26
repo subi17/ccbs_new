@@ -1,0 +1,432 @@
+# newton__set_customer_address
+# newton__search_mobsub
+NotPreactivatedMobSubCustomer:
+   Address:"DefAddress"
+   AddressCodC:"2133"
+   AddressCodP:"4232"
+   Brand:"1"
+   PostOffice:"DefCity"
+   CoName:"DefCoName"
+   Country:"DefCountry"
+   CustName:"Customer name"
+   CustNum:1
+   FirstName:"Eka nimi"
+   OrgID:""
+   Region:"32"
+   Salesman:""
+   ZipCode:"3242"
+
+# newton__add_whole_order
+# newton__search_mobsub
+NotPreactivatedMobSubCustomer2:
+   Brand:"1"
+   CustNum:2
+   Language:1
+   FirstName:"Eka nimi2"
+   CustName:"SurNamex2"
+   SurName2:"SurNamey2"
+   BirthDay:20/10/1970
+   Address:"Calle r"
+   PostOffice:"Madrid"
+   Region:"35"
+   Country:"Spain"
+   ZipCode:"35300"
+   CustIdType:"NIE"
+   OrgId:"R12388823"
+   Salesman:""
+   BankAcct:"BK38383"
+
+Customer_by_CustNum:
+   Brand:"1"
+   CustName:"LastNameByCustNum"
+   CustNum:4
+   FirstName:"FirstNameByCustNum"
+   OrgId:""
+   Salesman:""
+
+# newton__search_mobsub
+Customer_by_orgId:
+   Brand:"1"
+   CustName:"LastNameByOrgId"
+   CustNum:5
+   FirstName:"FirstNameByOrgId"
+   OrgId:"1361XX"
+   Salesman:""
+
+# newton__search_mobsub
+Customer_by_orgId_multiple_mobsub:
+   Brand:"1"
+   CustName:"LastNameByOrgIdMultiple"
+   CustNum:6
+   FirstName:"FirstNameByOrgIdMultiple"
+   OrgId:"A37888888"
+   Salesman:""
+
+Customer_PreActivated1:
+   Brand:"1"
+   CustName:"LastNameByPreactivated"
+   CustNum:7
+   FirstName:"FirstNamePreactivated"
+   OrgId:""
+   Salesman:"PRE-ACT"
+
+First_with_same_OrgId:
+   Brand:"1"
+   CustName:"SameOrgIdCustName"
+   CustNum:8
+   Firstname:"SameOrgIdFirstName"
+   OrgId:"X2"
+   Salesman:""
+
+Second_with_same_OrgId:
+   Brand:"1"
+   CustName:"LastNameSecond"
+   CustNum:9
+   FirstName:"FirstNameSecond"
+   OrgId:"X2"
+   Salesman:""
+
+Customer_for_CDRMobsub1:
+   Brand:"1"
+   CustName:"LastNameCDRMobsub1"
+   CustNum:10
+   FirstName:"FirstNameCDRMobsub1"
+   OrgId:"X2"
+   Salesman:""
+
+Customer_for_CDRMobSub2:
+   Brand:"1"
+   CustName:"LastNameCDRMobsub2"
+   CustNum:11
+   FirstName:"FirstNameCDRMobsub2"
+   OrgId:"X2"
+   Salesman:""
+
+Customer_for_freeairMobSub:
+   Brand:"1"
+   CustName:"LastNamefreeairMobsub"
+   CustNum:12
+   FirstName:"FirstNamefreeairMobsub"
+   OrgId:""
+   Salesman:""
+
+# newton__search_mobsub
+Customer_for_freeairMobSub2:
+   Brand:"1"
+   CustName:"LastNamefreeairMobsub2"
+   CustNum:13
+   FirstName:"FirstNamefreeairMobsub2"
+   OrgId:""
+   Salesman:""
+
+# newton__search_mobsub
+# newton__get_customer_details, not company
+# newton__check_renove
+CustomerForDetails:
+   Address:"street 12 23"
+   AddressCodC:"123578"
+   AddressCodP:"89923777"
+   BankAcct:"66238-2323"
+   BirthDay:"12/9/1980"
+   Brand: "1"
+   coname:"coname"
+   DirMarkEmail:TRUE
+   DirMarkPost:FALSE
+   DirMarkSMS:TRUE
+   CustName: "Customername14"
+   Custnum:14
+   CustIdType:"GG"
+   DelType:2
+   Email:"aa.bb@gmail.com"
+   FirstName: "Customer 14"
+   HonTitle:"Title"
+   Language:1
+   Nationality:"Spanish"
+   OrgId:"OrgId"
+   OutMarkEmail:TRUE
+   OutMarkPost:FALSE
+   OutMarkSMS:FALSE
+   Phone:"622882890"
+   PostOffice:"Madrid"
+   Region:"23"
+   Salesman:"Sales"
+   SMSNumber:"292000"
+   SurName2:"Surname"
+   ZipCode:"23545"
+
+
+Customer_SalesmanGIFT:
+   Brand:"1"
+   CustName:"LastNameByCustNum"
+   CustNum:15
+   FirstName:"FirstNameByCustNum"
+   OrgId:""
+   Salesman:"GIFT"
+
+# newton__get_commission
+# newton__get_customer_details, corporate customer, not order
+# newton__check_renove, corp. customer
+CustomerForDetailsCorp:
+   Address:"street 22 44"
+   AddressCodC:"112323"
+   AddressCodP:"8992123"
+   AgrCust:16
+   BankAcct:"4949-2333"
+   BirthDay:"9/10/1950"
+   Brand: "1"
+   coname:"coname2"
+   CompanyName:"NewCompany"
+   CustIdType:"CIF"
+   DirMarkEmail:FALSE
+   DirMarkPost:TRUE
+   DirMarkSMS:FALSE
+   CustName: "Customername16"
+   Custnum:16
+   DelType:1
+   Email:"bb.cc@gmail.com"
+   FirstName: "Customer 16"
+   FoundationDate:"10/06/2000"
+   HonTitle:"Title16"
+   Language:5
+   Nationality:"English"
+   OrgId:"Corporate"
+   OutMarkEmail:FALSE
+   OutMarkPost:TRUE
+   OutMarkSMS:TRUE
+   Phone:"622324444"
+   PostOffice:"Barcelona"
+   Region:"44"
+   Salesman:"Sales2"
+   SMSNumber:"234004"
+   SurName2:"Surname16"
+   ZipCode:"44999"
+
+# newton__check_referee; CIF customer
+# newton__check_renove; not found order
+ChkRenoveNotFoundOrder:
+   Brand:"1"
+   CustNum:33
+   CustIdType:"CIF"
+
+# newton__set_customer_details
+DetailsDefaults:
+  Brand:"1"
+  CustNum:34
+  HonTitle:"34deftitle"
+  CustIdType:"NIE"
+  CustName:"34deflname"
+  SurName2:"34deflname2"
+  FirstName:"34deffirstname"
+  FoundationDate:"21/3/2005"
+  Coname:"34defconame"
+  Language:5
+  Nationality:"34defnation"
+  BankAcct:"3422222-333333"
+  Email:"34def.def2@gmail.com"
+  SMSNumber:"3455555555"
+  Phone:"3477777777"
+  OrgId:"34defperson"
+  DirMarkSMS:FALSE
+  DirMarkEmail:TRUE
+  DirMarkPost:FALSE
+  OutMarkSMS:TRUE
+  OutMarkEmail:FALSE
+  OutMarkPost:TRUE
+
+# newton__set_customer_details
+DetailsDefaultsCorp:
+  Brand:"1"
+  CustNum:122
+  HonTitle:"122deftitle"
+  CustIdType:"CIF"
+  CustName:"122deflname"
+  SurName2:"122deflname2"
+  FirstName:"122deffirstname"
+  Coname:"122defconame"
+  Language:5
+  Nationality:"122defnation"
+  BankAcct:"12222222-333333"
+  Email:"122def.def2@gmail.com"
+  SMSNumber:"12255555555"
+  Phone:"12277777777"
+  OrgId:"122defperson"
+  DirMarkSMS:FALSE
+  DirMarkEmail:TRUE
+  DirMarkPost:FALSE
+  OutMarkSMS:TRUE
+  OutMarkEmail:FALSE
+  OutMarkPost:TRUE
+
+# newton__set_customer_details
+DetailsDefaultWithoutCustContactRec:
+  Brand:"1"
+  CustNum:140
+  HonTitle:"140deftitle"
+  CustIdType:"CIF"
+  CustName:"140deflname"
+  SurName2:"140deflname2"
+  FirstName:"140deffirstname"
+  Coname:"140defconame"
+  Language:5
+  Nationality:"140defnation"
+  BankAcct:"14022222-333333"
+  Email:"140def.def2@gmail.com"
+  SMSNumber:"12255555555"
+  Phone:"14077777777"
+  OrgId:"140defperson"
+  DirMarkSMS:FALSE
+  DirMarkEmail:TRUE
+  DirMarkPost:FALSE
+  OutMarkSMS:TRUE
+  OutMarkEmail:FALSE
+  OutMarkPost:TRUE
+
+# newton__get_commissions
+# tmsdump__highspender
+CustomerFor1stHighUsage:
+  Brand:"1"
+  CustNum:42
+  FirstName:"First"
+  CustName:"CustN"
+  SurName2:"SurN"
+  Address:"Address x"
+  ZipCode:"54000"
+  PostOffice:"Madrid"
+
+# newton__get_commissions, no customer with AgrCust 35 exists
+GetCommissionsNoMobsubs:
+  Brand:"1"
+  CustNum:35
+
+# newton__get_commissions
+GetCommissionsWithOneMobsub:
+  Brand:"1"
+  CustNum:36
+
+# newton__get_commissions
+# newton__check_referee
+CheckRefereeTotalMatch:
+  Brand:"1"
+  CustNum:37
+  CustIdType:"CustIdReferer"
+  OrgId:"OrgIdReferer"
+
+# newton__get_commissions
+GetCommissionsWithNoCoTarg:
+   Brand:"1"
+   CustNum:38
+
+# newton__get_commissions
+GetCommissionsWithoutOrder:
+   Brand:"1"
+   CustNum:39
+
+# newton__get_commissions
+GetCommissionsWithoutRefMobSub:
+   Brand:"1"
+   CustNum:40
+
+# newton__get_commissions
+GetCommissionsWithoutRefCustomer:
+   Brand:"1"
+   CustNum:41
+
+# newton__get_commissions
+GetCommissionsWithCoTargButWithoutCoRule:
+   Brand:"1"
+   CustNum:43
+
+# newton__get_commissions
+GetCommissionsWithTermMobSubWithRefCust:
+  Brand:"1"
+  CustNum:44
+
+# newton__get_commissions
+GetCommissionsWithTermMobSubWithoutRefCust:
+  Brand:"1"
+  CustNum:45
+
+# newton__get_commissions
+GetCommissionsWithTermMobSubAndItsRefCust:
+  Brand:"1"
+  CustNum:46
+
+# newton__get_commissions
+GetCommissionsTermMobsubRefCust:
+  Brand:"1"
+  CustNum:120
+  FirstName:"TermMobSubFName"
+
+# newton__set_customer_details
+DetailsDefaults2WithLimit:
+  Brand:"1"
+  CustNum:121
+  HonTitle:"34deftitle"
+  CustName:"34deflname"
+  SurName2:"34deflname2"
+  FirstName:"34deffirstname"
+  Coname:"34defconame"
+  Language:5
+  Nationality:"34defnation"
+  BankAcct:"3422222-333333"
+  Email:"34def.def2@gmail.com"
+  SMSNumber:"3455555555"
+  Phone:"3477777777"
+  OrgId:"34defperson"
+  DirMarkSMS:FALSE
+  DirMarkEmail:TRUE
+  DirMarkPost:FALSE
+  OutMarkSMS:TRUE
+  OutMarkEmail:FALSE
+  OutMarkPost:TRUE
+
+
+# newton__subscription_charge
+CToolPrePaidCust:
+  Brand:"1"
+  CustNum:124
+  FirstName:"Prepaid Customer for CCTool"
+  
+
+# newton__subscription_charge
+CToolPostPaidCust:
+  Brand:"1"
+  CustNum:125
+  FirstName:"Postpaid Customer for CCTool"
+  Region: "BBB"
+
+
+
+# newton_invoices_search
+TSI_Cust01:
+   Brand:"1"
+   CustNum:55
+   OrgId:"NIM55"
+   FirstName:"TSI01 FirstName"
+   CustName: "TSI01 Susrname1"
+   Surname2:"TSI01 Surname2"
+
+# newton_invoices_search
+TSI_Cust02:
+   Brand:"1"
+   CustNum:56
+   OrgId:"NIE66"
+   FirstName:"TSI02 FirstName"
+   CustName: "TSI02 Susrname1"
+   Surname2:"TSI02 Surname2"
+
+# newton_invoices_search
+TSI_Cust03:
+   Brand:"1"
+   CustNum:57
+   OrgId:"NIM333"
+   FirstName:"TSI03 FirstName"
+   CustName: "TSI03 Susrname1"
+   Surname2:"TSI03 Surname2"
+
+#newton_customers_get_counters
+CustTM01:
+  Brand:"1"
+  CustNum:58
+
+

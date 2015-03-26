@@ -1,0 +1,95 @@
+ADD TABLE "PaymConfig"
+  AREA "Sta_Data_64"
+  LABEL "Payment Configuration"
+  DESCRIPTION "Configuration rules for payments"
+  DUMP-NAME "paymconfig"
+
+ADD FIELD "Brand" OF "PaymConfig" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 10
+
+ADD FIELD "PaymType" OF "PaymConfig" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Payment Type"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "PType"
+  HELP "Payment type"
+  ORDER 20
+
+ADD FIELD "PaymSrc" OF "PaymConfig" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Payment Source"
+  POSITION 4
+  MAX-WIDTH 16
+  COLUMN-LABEL "Source"
+  HELP "Source of payment"
+  ORDER 30
+
+ADD FIELD "FromDate" OF "PaymConfig" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Date when rule becomes effective"
+  ORDER 40
+
+ADD FIELD "ToDate" OF "PaymConfig" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 6
+  MAX-WIDTH 4
+  HELP "Date when usage of this rule ends"
+  ORDER 50
+
+ADD FIELD "DebitAccNum" OF "PaymConfig" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Debit Account"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Debit"
+  HELP "Account for debit posting"
+  ORDER 60
+
+ADD FIELD "CreditAccNum" OF "PaymConfig" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Credit Account"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Credit"
+  HELP "Account for credit posting"
+  ORDER 70
+
+ADD INDEX "PaymType" ON "PaymConfig" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "PaymType" ASCENDING 
+  INDEX-FIELD "PaymSrc" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "PaymSrc" ON "PaymConfig" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "PaymSrc" ASCENDING 
+  INDEX-FIELD "PaymType" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000009263

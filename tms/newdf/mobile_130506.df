@@ -1,0 +1,7 @@
+ADD FIELD "StatusCode" OF "DayCampaign" AS integer 
+  FORMAT "9"
+  INITIAL 1
+  LABEL "Status"
+  COLUMN-LABEL "Status"
+  ORDER 310
+

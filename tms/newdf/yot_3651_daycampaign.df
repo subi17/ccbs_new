@@ -1,0 +1,38 @@
+ADD FIELD "DDS2Compatible" OF "DayCampaign" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "DDS2Compatible"
+  COLUMN-LABEL "DDS2Compatible"
+  HELP "DDS2Compatible"
+  ORDER 340
+
+ADD FIELD "DSS2PrimaryLine" OF "DayCampaign" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "DSS2PrimaryLine"
+  COLUMN-LABEL "DSS2PrimaryLine"
+  HELP "DSS2PrimaryLine"
+  ORDER 350
+
+ADD FIELD "NativeVoipComp" OF "DayCampaign" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "NativeVoipComp"
+  COLUMN-LABEL "NativeVoipComp"
+  HELP "NativeVoipComp"
+  ORDER 360
+
+ADD FIELD "OnlyVoice" OF "DayCampaign" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "OnlyVoice"
+  COLUMN-LABEL "OnlyVoice"
+  HELP "OnlyVoice"
+  ORDER 370
+
+ADD FIELD "BBProfile" OF "DayCampaign" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "BBProfile"
+  COLUMN-LABEL "BBProfile"
+  ORDER 330

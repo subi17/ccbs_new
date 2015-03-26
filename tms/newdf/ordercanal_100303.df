@@ -1,0 +1,72 @@
+ADD TABLE "OrderAction"
+  AREA "Sta_Data_128"
+  LABEL "Order Action"
+  DESCRIPTION "Order action"
+  DUMP-NAME "orderaction"
+
+ADD FIELD "Brand" OF "OrderAction" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brands"
+  ORDER 10
+
+ADD FIELD "OrderId" OF "OrderAction" AS integer 
+  DESCRIPTION "Order sequence number"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrderId"
+  ORDER 20
+
+ADD FIELD "ItemType" OF "OrderAction" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Item Type"
+  POSITION 4
+  MAX-WIDTH 32
+  COLUMN-LABEL "Type"
+  HELP "Item type"
+  ORDER 30
+
+ADD FIELD "ItemKey" OF "OrderAction" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Item Key"
+  POSITION 5
+  MAX-WIDTH 40
+  COLUMN-LABEL "Key"
+  HELP "Item key"
+  ORDER 40
+
+ADD INDEX "OrderId" ON "OrderAction" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "OrderId" ASCENDING
+
+ADD FIELD "TerminalType" OF "OrderAccessory" AS int
+  FORMAT ">9"
+  INITIAL ""
+  LABEL "Terminal Type"
+  COLUMN-LABEL "Term.Type"
+  HELP "Type of terminal"
+  ORDER 130
+
+ADD FIELD "TerminalType" OF "SubsTerminal" AS integer
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Terminal Type"
+  COLUMN-LABEL "Term.Type"
+  HELP "Type of terminal"
+  ORDER 150
+
+.
+PSC
+cpstream=1252
+.

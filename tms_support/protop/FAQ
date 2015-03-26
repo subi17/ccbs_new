@@ -1,0 +1,39 @@
+Q) Can I use ProTop with Windows?
+
+A) Yes.  You can run ProTop with the "character client".  Or a GUI client.
+   ProTop is currently a "stream-io" GUI application -- it isn't terribly
+   pretty but you do get multiple windows and a lot of mouse sensitive
+   behavior.
+
+
+
+Q) ProTop only shows TableStats for the first 50 tables in my schema.  What
+   can I do?
+
+A) By default Progress only collects table & index statistics for the first
+   50 tables in your schema.  You can, however, start your database with the
+   -tablerangesize option to increase this window.
+
+
+
+Q) Some display screens aren't showing any data -- but I'm sure that they
+   should be.
+
+A) If you have you set the current page number to a page beyond the last
+   data items there won't be any data to display.  Use the "p" option to
+   see your current page number setting and reset it.
+
+
+
+Q) Can I use ProTop with Progress version 8?
+
+A) ProTop uses a feature of the 4gl known as "Publish and Subscribe" or
+   "Named Events" which is only available in version 9 and above.
+   Furthermore the source of monitoring data is Virtual System Tables (VSTs)
+   which were first introduced in version 8.2.  None the less it is possible
+   to use ProTop via a remote connection (client/server) to a version 8
+   database if you have a version 9 license available.  You will probably
+   need to modify some code to account for differences in VST organization
+   if you do that.  Various modules in the "mon" subdirectory will not compile
+   if the target is a v8 database -- the simple thing to do is to rename them
+   and figure out what needs to change later.

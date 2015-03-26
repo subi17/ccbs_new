@@ -1,0 +1,7 @@
+ADD FIELD "CreationDB" OF DumpLog AS CHARACTER
+   FORMAT "X(8)"
+   INITIAL ""
+   LABEL "CreationDB"
+   COLUMN-LABEL "CreationDB"
+   HELP "Creation DB Master/Replica"
+   ORDER 110

@@ -1,0 +1,2 @@
+op-tstamp = fMakeTs().
+

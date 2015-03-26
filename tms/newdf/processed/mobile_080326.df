@@ -1,0 +1,45 @@
+ADD FIELD "CreateFees" OF "DCCli" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "yes"
+  LABEL "Create Fees"
+  POSITION 11
+  MAX-WIDTH 1
+  COLUMN-LABEL "Fees"
+  HELP "Create fees when contract is changed or terminated"
+  ORDER 100
+
+ADD FIELD "TermFeeModel" OF "DayCampaign" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Termination Fee Model"
+  POSITION 20
+  MAX-WIDTH 24
+  COLUMN-LABEL "Term.FM"
+  HELP "Fee model for terminating contract"
+  ORDER 230
+
+ADD FIELD "FeeModel" OF "DayCampaign" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Creation Fee Model"
+  POSITION 21
+  MAX-WIDTH 24
+  COLUMN-LABEL "Creation FM"
+  HELP "Fee model for creating contract"
+  ORDER 220
+
+ADD FIELD "ModifyFeeModel" OF "DayCampaign" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Modification Fee Model"
+  POSITION 22
+  MAX-WIDTH 24
+  COLUMN-LABEL "Mod.FM"
+  HELP "Fee model for modifying contract"
+  ORDER 225
+
+.
+PSC
+cpstream=1252
+.
+0000001894

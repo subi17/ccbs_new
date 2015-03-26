@@ -1,0 +1,27 @@
+ADD FIELD "AuthNumber" OF "OrderPayment" AS character
+  DESCRIPTION "Authorization Number"
+  FORMAT "x(20)"
+  POSITION 10
+  INITIAL ""
+  LABEL "Authorization Number"
+  COLUMN-LABEL "Authorization Number"
+  VIEW-AS ?
+  ORDER 90
+  MAX-WIDTH 40
+
+ADD FIELD "BinNumber" OF "OrderPayment" AS character
+  DESCRIPTION "BIN Number"
+  FORMAT "x(8)"
+  POSITION 11
+  INITIAL ""
+  LABEL "BIN Number"
+  COLUMN-LABEL "BIN Number"
+  VIEW-AS ?
+  ORDER 100
+  MAX-WIDTH 16
+
+.
+PSC
+cpstream=ISO8859-1
+.
+0000000480

@@ -1,0 +1,26 @@
+ADD FIELD "ReqStatus" OF "MsReqStatisticQ" AS integer
+  DESCRIPTION "MsRequest status"
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "MsRequest Status"
+  COLUMN-LABEL "ReqStat"
+  HELP "Status Code"
+  ORDER 30
+
+ADD FIELD "ReqStatUpdate" OF "MsReqStatisticQ" AS integer
+  DESCRIPTION "MsRequest status count update"
+  FORMAT "-9"
+  INITIAL "0"
+  LABEL "Update Count"
+  COLUMN-LABEL "Update"
+  HELP "Update status count"
+  ORDER 40
+
+ADD INDEX "Brand" ON "MsReqStatisticQ"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING
+
+.
+PSC
+cpstream=1252
+

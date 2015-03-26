@@ -1,0 +1,193 @@
+FirstFatime:
+   Brand:"1"
+   amt: 12,22
+   cli: "600222999"
+   custnum: 12
+   fatclass: yes
+   FatId:4
+   fatnum: 5
+   fatperc: 12,23
+   ftgrp: "grp1"
+   invnum: 1
+   msseq: 13
+   period: 12122
+   transfer: no
+   used: 15,99
+
+SecondFatime:
+   Brand:"1"
+   amt: 15,22
+   cli: "600223000"
+   custnum: 12
+   FatId:5
+   fatclass: no
+   fatnum: 6
+   fatperc: 15,23
+   ftgrp: "grp2"
+   invnum: 2
+   msseq: 15
+   period: 15444
+   transfer: yes
+   used: 13,22
+
+ThirdFatime:
+   Brand:"1"
+   amt: 2002,26
+   cli: "600223001"
+   custnum: 13
+   fatclass: no
+   FatId:6
+   fatnum: 7
+   fatperc: 15,23
+   ftgrp: "grp2"
+   invnum: 3412312 
+   msseq: 13
+   period: 352652
+   transfer: yes
+   used: 17,99
+
+# newton__get_commissions
+OneMobsubSecondPeriodFatime1:
+   Amt:20,00
+   Brand:"1"
+   CustNum:300001
+   CLI:"622222222"
+   FatNum:8
+   FatId:1
+   FatType:1
+   Period:200809
+   HostTable:"COTarg"
+   InvNum:231233
+   KeyValue:"1"
+   OrigFAT:0
+   Used:3,00
+
+# newton__get_commissions
+OneMobsubSecondPeriodFatime2:
+   Amt:17,00
+   Brand:"1"
+   CustNum:300001
+   CLI:"622222222"
+   FatNum:11
+   FatId:7
+   FatType:1
+   Period:200809
+   HostTable:"COTarg"
+   InvNum:312938
+   KeyValue:"1"
+   OrigFAT:8
+   Used:2,00
+
+# newton__get_commissions
+OneMobsubSecondPeriodFatime3:
+   Amt:15,00
+   Brand:"1"
+   CustNum:300001
+   CLI:"622222222"
+   FatNum:12
+   FatId:8
+   FatType:1
+   Period:200809
+   HostTable:"COTarg"
+   InvNum:231233
+   KeyValue:"1"
+   OrigFAT:11
+   Used:2,00
+
+# newton__get_commissions
+OneMobsubFirstPeriodFatime1:
+   Amt:15,00
+   Brand:"1"
+   CustNum:300000
+   CLI:"622222222"
+   FatId:2
+   FatNum:9
+   FatType:1
+   HostTable:"COTarg"
+   InvNum:213377
+   KeyValue:"1"
+   Period:200803
+   OrigFat:0
+   Used:5,00
+
+# newton__get_commissions
+OneMobsubFirstPeriodFatime2:
+   Amt:10,00
+   Brand:"1"
+   CustNum:300000
+   CLI:"622222222"
+   FatId:9
+   FatNum:13
+   FatType:1
+   HostTable:"COTarg"
+   InvNum:213213
+   KeyValue:"1"
+   Period:200803
+   OrigFat:9
+   Used:2,00
+
+# newton__get_commissions
+OneMobsubFirstPeriodFatime3:
+   Amt:8,00
+   Brand:"1"
+   CustNum:300000
+   CLI:"622222222"
+   FatId:10
+   FatNum:14
+   FatType:1
+   HostTable:"COTarg"
+   InvNum:219383
+   KeyValue:"1"
+   Period:200803
+   OrigFat:13
+   Used:1,00
+
+# newton__get_commissions
+OneMobsubThirdPeriodFatime1:
+   Amt:30,00
+   Brand:"1"
+   CustNum:300002
+   CLI:"622222222"
+   FatId:11
+   FatNum:10
+   FatType:1
+   HostTable:"COTarg"
+   InvNum:123213
+   KeyValue:"1"
+   Period:200810
+   OrigFat:0
+   Used:12,00
+
+# newton__get_commissions
+OneMobsubThirdPeriodFatime2:
+   Amt:18,00
+   Brand:"1"
+   CustNum:300002
+   CLI:"622222222"
+   FatId:12
+   FatNum:15
+   FatType:1
+   HostTable:"COTarg"
+   InvNum:231233
+   KeyValue:"1"
+   Period:200810
+   OrigFat:10
+   Used:1,30
+
+# newton__get_commissions
+OneMobsubThirdPeriodFatime3:
+   Amt:16,70
+   Brand:"1"
+   CustNum:300002
+   CLI:"622222222"
+   FatId:13
+   FatNum:16
+   FatType:1
+   HostTable:"COTarg"
+   InvNum:231231
+   KeyValue:"1"
+   Period:200810
+   OrigFat:15
+   Used:0,50
+
+

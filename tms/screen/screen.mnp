@@ -1,0 +1,10 @@
+echo "MNP SCREENS"
+sleep 2
+screen 1 xfear -screen mnplisten -clientlog /scratch/log/mnp/mnplisten.log
+screen 2 xfear -screen mnpread -clientlog /scratch/log/mnp/mnpread.log -db /data1/newdb/mcdr 
+screen 3 xfear -screen mnpsend -clientlog /scratch/log/mnp/mnpsend.log
+
+#screen 1 xfear -screen mnplisten -clientlog /scratch/nagios/tms/mnp/mnplisten_client.log -logentrytypes "QryInfo,FileID,4GLTrace,4GLMessages,DynObjects.*" -logginglevel 4 -logthreshold 20000000 -numlogfiles 4
+#screen 2 xfear -screen mnpread -db /data1/newdb/mcdr -clientlog /scratch/nagios/tms/mnp/mnpread_client.log -logentrytypes "QryInfo,FileID,4GLTrace,4GLMessages,DynObjects.*" -logginglevel 4 -logthreshold 20000000 -numlogfiles 4
+#screen 3 xfear -screen mnpsend -clientlog /scratch/nagios/tms/mnp/mnpsend_client.log -logentrytypes "QryInfo,FileID,4GLTrace,4GLMessages,DynObjects.*" -logginglevel 4 -logthreshold 20000000 -numlogfiles 4
+

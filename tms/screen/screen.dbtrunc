@@ -1,0 +1,11 @@
+screen -t common     1  dbtrunc.sh common
+screen -t mcdr       2  dbtrunc.sh mcdr
+screen -t mcdrdtl    3  dbtrunc.sh mcdrdtl
+screen -t mobile     4  dbtrunc.sh mobile
+screen -t ordercanal 5  dbtrunc.sh ordercanal
+screen -t prepcdr    6  dbtrunc.sh prepcdr
+screen -t roamcdr    7  dbtrunc.sh roamcdr
+screen -t smsc       8  dbtrunc.sh smsc
+screen -t star       9  dbtrunc.sh star
+screen -t tmsempty   10 dbtrunc.sh tmsempty 
+screen -t tmsmisc    11 dbtrunc.sh tmsmisc 

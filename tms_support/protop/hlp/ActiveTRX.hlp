@@ -1,0 +1,58 @@
+Active Transactions Help
+========================
+
+Active Transactions displays transactions except for those whose status is
+"Allocated".  Allocated transactions may not turn into "real" transactions
+if no data is actually updated and are considered a nusiance by some.
+
+The following fields are displayed for each active transaction:
+
+Usr:
+
+The Usr# of the connection that owns the transaction.
+
+Name:
+
+The User Name associated with the connection.
+
+TRX Num:
+
+The unique id of this transaction.
+
+BI Clstr:
+
+The BI Cluster where this transaction has been opened.  BI Clusters are
+numbered sequentially since the last "truncate bi" operation.
+
+If the difference betweenthe oldest BI cluster number and the current BI
+cluster number is large then you have active transations that span large
+periods of time -- this is bad in itself.  You may also be experiencing
+unusual amounts of BI file growth since BI clusters cannot be reused while
+the still contain an active transaction.
+
+The numbers here do not directly correspond to checkpoint numbers by
+default.   BI clusters numbers are stored as sequence since the last
+"truncate BI" was executed and can be aligned to checkpoint numbers but
+that requires a database transaction to accomplish.   There is experimental
+code that can be enabled to do this in lib/protop.i but these values
+convey the important data well enough.
+
+Start:
+
+The time when this transaction became active.  (It may be a different day!
+If so it isn't displayed.)
+
+Trx Stat:
+
+The status of this transaction.
+
+Duration:
+
+How long has this transaction been active?
+
+Wait:
+
+What, if anything, are we waiting for? Record locks are typical.  They
+are indicated by "REC" followed by the RECID of the record.  The "Blocked"
+screen gives more information about such a situation.
+

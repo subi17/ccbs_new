@@ -1,0 +1,7 @@
+ADD FIELD "DSSPriority" OF "DayCampaign" AS integer
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "DSSPriority"
+  COLUMN-LABEL "DSSPriority"
+  HELP "DSS first month fee calculation priority"
+  ORDER 330

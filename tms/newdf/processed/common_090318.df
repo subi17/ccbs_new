@@ -1,0 +1,231 @@
+ADD TABLE "RequestActionRule"
+  AREA "Sta_Data_64"
+  LABEL "Request Action Rule"
+  DESCRIPTION "Request action rule"
+  DUMP-NAME "requestactionrule"
+
+ADD FIELD "RequestActionID" OF "RequestActionRule" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Request Action ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Request action ID"
+  ORDER 10
+
+ADD FIELD "ParamField" OF "RequestActionRule" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Parameter"
+  POSITION 3
+  MAX-WIDTH 24
+  HELP "Parameter field"
+  ORDER 20
+
+ADD FIELD "ParamValue" OF "RequestActionRule" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Parameter Value"
+  POSITION 4
+  MAX-WIDTH 40
+  COLUMN-LABEL "Value"
+  HELP "Parameter value"
+  ORDER 30
+
+ADD FIELD "FromDate" OF "RequestActionRule" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Date when rule becomes effective"
+  ORDER 40
+
+ADD FIELD "ToDate" OF "RequestActionRule" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 6
+  MAX-WIDTH 4
+  HELP "Date when usage of this rule ends"
+  ORDER 50
+
+ADD INDEX "ParamField" ON "RequestActionRule" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "RequestActionID" ASCENDING 
+  INDEX-FIELD "ParamField" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD FIELD "OrderChannelOrder" OF "BillItem" AS integer
+  DESCRIPTION ""
+  FORMAT ">>>>>>>>>9"
+  FORMAT-SA ?
+  POSITION 24
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Presentation order in order channel"
+  HELP-SA ""
+  LABEL "Order Channel Order"
+  LABEL-SA ?
+  COLUMN-LABEL "Order"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 370
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+UPDATE FIELD "DumpDay" OF "DFTimeTable"
+  FORMAT "x(30)"
+  HELP "Days of the month when file is created"
+  LABEL "Days"
+  COLUMN-LABEL ?
+
+ADD FIELD "FirstMonthBR" OF "FMItem" AS integer
+  DESCRIPTION ""
+  FORMAT "9"
+  FORMAT-SA ?
+  POSITION 21
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Broken rental for first month"
+  HELP-SA ""
+  LABEL "First Month Broken Rental"
+  LABEL-SA ?
+  COLUMN-LABEL "1.Month BR"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 190
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "InvGroup" OF "Invoice" AS character
+  DESCRIPTION "
+
+"
+  FORMAT "x(12)"
+  FORMAT-SA ?
+  POSITION 97
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "Invoice group"
+  HELP-SA ""
+  LABEL "InvGroup"
+  LABEL-SA ?
+  COLUMN-LABEL ?
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 1430
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 24
+
+ADD FIELD "Brand" OF "Limit" AS character
+  DESCRIPTION ""
+  FORMAT "x(8)"
+  FORMAT-SA ?
+  POSITION 13
+  INITIAL ""
+  INITIAL-SA ?
+  HELP "Code Of Brand"
+  HELP-SA ""
+  LABEL "Brand"
+  LABEL-SA ?
+  COLUMN-LABEL "Brand"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 120
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 16
+
+ADD INDEX "LimitType" ON "Limit"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING
+  INDEX-FIELD "LimitType" ASCENDING
+  INDEX-FIELD "LimitID" ASCENDING
+  INDEX-FIELD "ToDate" DESCENDING
+
+UPDATE FIELD "ReqType" OF "MsReqStatistic"
+  DESCRIPTION "Request type"
+  HELP "Request type"
+  COLUMN-LABEL "Type"
+
+UPDATE FIELD "ReqStatus" OF "MsReqStatistic"
+  DESCRIPTION "Available status of MsRequest"
+  HELP "Request status"
+
+UPDATE FIELD "ReqStatusCount" OF "MsReqStatistic"
+  HELP "Count of statuses"
+
+ADD FIELD "RequestActionID" OF "RequestAction" AS integer
+  DESCRIPTION ""
+  FORMAT ">>>>>>>9"
+  FORMAT-SA ?
+  POSITION 11
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Request action ID"
+  HELP-SA ""
+  LABEL "Request Action ID"
+  LABEL-SA ?
+  COLUMN-LABEL "ID"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 100
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD INDEX "RequestActionID" ON "RequestAction"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "RequestActionID" ASCENDING
+
+UPDATE PRIMARY INDEX "RequestActionID" ON "RequestAction"
+
+DROP INDEX "ActionType" ON "RequestAction"
+
+.
+PSC
+cpstream=1252
+.
+0000018338

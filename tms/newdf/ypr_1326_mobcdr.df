@@ -1,0 +1,7 @@
+ADD FIELD "ReadTime" OF "MobCDR" AS integer 
+  DESCRIPTION "Time while collecting CDR's"
+  FORMAT "zzzzz9"
+  INITIAL "0"
+  LABEL "ReadTime"
+  COLUMN-LABEL "ReadTime"
+  ORDER 2540

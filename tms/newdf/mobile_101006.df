@@ -1,0 +1,22 @@
+ADD FIELD "TicketType" OF "TMRule" AS integer
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Ticket Type"
+  COLUMN-LABEL "TicketType"
+  HELP "Type of tickets/cdrs"
+  ORDER 150
+
+ADD FIELD "Source" OF "TMQueue" AS character 
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "Source"
+  COLUMN-LABEL "Source"
+  ORDER 190
+
+ADD FIELD "InclStartCharge" OF "DayCampaign" AS logical 
+  FORMAT "yes/no"
+  INITIAL "yes"
+  LABEL "Include Start Charge"
+  COLUMN-LABEL "InclStartFee"
+  HELP "Include start charge to final price"
+  ORDER 270

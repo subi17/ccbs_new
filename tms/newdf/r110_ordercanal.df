@@ -1,0 +1,20 @@
+ADD FIELD "SendOffer" OF "Order" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Send Offer"
+  COLUMN-LABEL "SendOffer"
+  ORDER 1140
+
+ADD FIELD "ResignationPeriod" OF "Order" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Resignation Period"
+  COLUMN-LABEL "ResignationPeriod"
+  ORDER 1150
+
+ADD FIELD "RoiLevel" OF "Order" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "ROI Level"
+  COLUMN-LABEL "ROILevel"
+  ORDER 1160

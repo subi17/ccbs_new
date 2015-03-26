@@ -1,0 +1,7 @@
+ADD FIELD "Periods" OF "OfferItem" AS integer 
+  FORMAT ">>9"
+  INITIAL 0
+  LABEL "Periods"
+  COLUMN-LABEL "Periods"
+  ORDER 120
+

@@ -1,0 +1,8 @@
+ADD FIELD "LimitAmt" OF "TMCounter" AS decimal
+  FORMAT "->>>>>>9.99999"
+  INITIAL "0"
+  LABEL "Amount"
+  COLUMN-LABEL "LimitAmt"
+  HELP "Limit Amount"
+  DECIMALS 5
+  ORDER 80

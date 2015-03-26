@@ -1,0 +1,632 @@
+/**
+ * This is the test set for the corresponding newton__get_commissions
+ * XML RPC method.
+ *
+ * The fixture usage of this test set:
+ *
+ * - fixtures fetched: 
+ *
+ * - The RPC method is assumed to fetch in addition following records:
+ *
+ *
+ * - restrictions for building other fixtures: 
+ */
+
+{test_xmlrpc_includes.i}
+{unit/checkutils.i}
+{timestamp.i}
+
+gcFixtures = 
+  "customer,mobsub,order,COTarg,CORule,Fatime,prepaidrequest,termmobsub".
+
+DEFINE VARIABLE gcReturnArray AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE gcMobsubStruct AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE gcTargetArray AS CHARACTER NO-UNDO. 
+
+DEFINE VARIABLE lLogOn AS LOGICAL INIT FALSE NO-UNDO. 
+DEFINE VARIABLE lTTParamLogOn AS LOGICAL INIT FALSE NO-UNDO. 
+
+FUNCTION fLog RETURN LOGICAL (INPUT pcMessage AS CHARACTER):
+   IF lLogOn THEN
+       MESSAGE pcMessage VIEW-AS ALERT-BOX.
+   RETURN TRUE.
+END.
+
+FUNCTION fLogTTParam RETURN LOGICAL (INPUT pcParent AS CHARACTER):
+   IF lTTParamLogOn THEN
+   DO:
+      IF pcParent eq "" THEN 
+         FOR EACH tt_param:
+            DISP tt_param EXCEPT parent name.
+            DISP tt_param.parent FORMAT "X(20)" name FORMAT "X(20)".
+         END.
+      ELSE
+      DO:
+         MESSAGE "Children of parent: " pcParent VIEW-AS ALERT-BOX.
+         FOR EACH tt_param WHERE tt_param.parent eq pcParent:
+            DISP tt_param EXCEPT parent name.
+            DISP tt_param.parent FORMAT "X(20)" name FORMAT "X(20)".
+         END.
+      END.
+   END.
+   RETURN TRUE.
+END.
+
+
+FUNCTION get_commissions RETURN LOGICAL (INPUT piCustNum AS INTEGER).
+   add_int("", "", piCustNum).
+   run_rpc_method("newton.get_commissions").
+END.
+
+
+FUNCTION fGetCharCommStatus RETURN CHARACTER (INPUT piCommStatus AS INTEGER):
+   DEFINE VARIABLE cStatus AS CHARACTER NO-UNDO. 
+
+   cStatus = "".
+   cStatus = ENTRY(COTarg.CommStatus,"PENDING,ACTIVATED,REJECTED") NO-ERROR.
+   IF cStatus EQ "" THEN cStatus = STRING(COTarg.CommStatus).
+
+   RETURN cStatus. 
+END.
+
+
+FUNCTION fCheckTarget RETURN LOGICAL
+    (INPUT pcStruct AS CHARACTER,
+     INPUT pcTargetFixture AS CHARACTER,
+     INPUT pcRuleFixture AS CHARACTER,
+     INPUT pcOrderFixture AS CHARACTER,
+     INPUT pcRefMobsubFixture AS CHARACTER,
+     INPUT pcRefCustomerFixture AS CHARACTER):
+
+   fLog("Begin of fCheckTarget").
+
+   fetch_fixture(pcTargetFixture, BUFFER COTarg:HANDLE).
+   fetch_fixture(pcRuleFixture  , BUFFER CORule:HANDLE).
+   IF pcRefMobsubFixture NE "" THEN
+      fetch_fixture(pcRefMobsubFixture, BUFFER Mobsub:HANDLE).
+   IF pcRefCustomerFixture NE "" THEN
+      fetch_fixture(pcRefCustomerFixture, BUFFER Customer:HANDLE).
+   IF pcOrderFixture NE "" THEN
+      fetch_fixture(pcOrderFixture, BUFFER Order:HANDLE).
+
+   checkChar("COTarg.PromotedCLI"  , COTarg.PromotedCLI, 
+      get_string(pcStruct, "msisdn")).
+   checkChar("COTarg.CommStatus"    , 
+      fGetCharCommStatus(COTarg.CommStatus),
+      get_string(pcStruct, "status")).
+   checkInt("COTarg.StatusReason"  , COTarg.StatusReason, 
+      get_int(pcStruct, "status_reason")).
+
+   fLog("testing CORule.CommAmount").
+     
+   checkDecimal("CORule.CommAmount", CORule.CommAmount, 
+      get_double(pcStruct, "commission_total")).
+
+   fLog("testing CORule.CoNoInst").
+
+   checkDecimal("CORule.CoNoInst"  , CORule.CoNoInst  , 
+      get_double(pcStruct, "commission_divided")).
+
+/* IF pcRefMobsubFixture NE "" THEN
+   DO:
+      fLog("testing Mobsub.ActivationTS").
+      checkDecimal("Mobsub.ActivationTS", Mobsub.ActivationTS,
+         get_timestamp(pcStruct, "activation_date")).
+      fLog("Expected reference Mobsub.MsSeq "  + STRING(MobSub.MsSeq)).
+   END.*/
+   IF pcRefCustomerFixture NE "" THEN
+   DO:
+      fLog("Expected reference Customer.CustNum = " + 
+         STRING(Customer.CustNum)).
+      checkChar("Customer.FirstName", Customer.FirstName, 
+         get_string(pcStruct, "firstname")).
+   END.
+   ELSE
+      checkChar("firstname", "", get_string(pcStruct, "firstname")).
+
+   IF pcOrderFixture NE "" THEN
+   DO:
+      fLog("testing Order.CrStamp").
+      checkDecimal("Order.CrStamp", Order.CrStamp,
+         get_timestamp(pcStruct, "order_date")).
+   END.
+   IF COTarg.HandledTS > 0 THEN
+   DO:
+      fLog("testing COTarg.HandledTS").
+      checkDecimal("COTarg.HandledTS", COTarg.HandledTS, 
+         get_timestamp(pcStruct, "creation_date")).
+   END.
+   fLog("End of fCheckTarget").
+   RETURN TRUE.
+END.
+
+
+FUNCTION fCheckFATimes RETURN LOGICAL 
+   (INPUT pcFATimeStruct AS CHARACTER, INPUT pcFaTimeFixtureList AS CHARACTER):
+
+
+   DEFINE VARIABLE ldaFATPeriod AS DATE NO-UNDO.  
+   DEFINE VARIABLE iFATimeFixtureCount AS INTEGER NO-UNDO. 
+   DEFINE VARIABLE iFATimeFixture AS INTEGER NO-UNDO.  
+   DEFINE VARIABLE cFATimeFixture AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE deExpectedUsed AS DECIMAL NO-UNDO. 
+
+   
+
+   fLog("Begin of fCheckFATimes").
+
+   fLog("FATime struct").
+   fLogTTParam(pcFATimeStruct).
+
+   deExpectedUsed = 0.
+   iFATimeFixtureCount = NUM-ENTRIES(pcFaTimeFixtureList).
+   REPEAT iFATimeFixture = 1 TO iFATimeFixtureCount:
+      cFATimeFixture = ENTRY(iFATimeFixture, pcFaTimeFixtureList). 
+      fetch_fixture(cFATimeFixture, BUFFER FaTime:HANDLE).
+      deExpectedUsed = deExpectedUsed + FaTime.Used.
+      fLog("Fixture " + cFATimeFixture + 
+         " loaded, added usage: " + STRING(FaTime.Used) +
+         " total expected used after addition: " + STRING(deExpectedUsed)).
+   END.
+
+   fetch_fixture(ENTRY(1, pcFaTimeFixtureList), BUFFER FaTime:HANDLE).
+   ldaFATPeriod = date((fatime.period mod 100), 
+                        1, int(fatime.period / 100)) no-error.
+   DEFINE VARIABLE ldaRetPeriod AS DATE NO-UNDO. 
+   ldaRetPeriod = get_date(pcFATimeStruct, "period").
+
+   DEFINE VARIABLE deAmt AS DECIMAL NO-UNDO. 
+   deAmt = get_double(pcFATimeStruct, "amount").
+   fLog("Struct FATime.Amt = " + STRING(deAmt)).
+   fLog("Fixture FATime.Amt = " + STRING(FATime.Amt)).
+
+   checkDecimal("FaTime.Amt", FaTime.Amt, deAmt).
+
+   checkDate("period", ldaFATPeriod, get_date(pcFATimeStruct, "period")).
+   checkDecimal("used", deExpectedUsed, get_double(pcFATimeStruct, "used")).
+   fLog("End of fCheckFATimes").
+   RETURN TRUE.
+END.
+
+
+FUNCTION fCheckPrepaidRequests RETURN LOGICAL (
+ INPUT pcPrepReqArray AS CHARACTER,
+ INPUT pcPrepReqFixtureList AS CHARACTER):
+
+ DEFINE VARIABLE iCountExpPrepReqs AS INTEGER NO-UNDO. 
+ DEFINE VARIABLE iPrepReq AS INTEGER NO-UNDO. 
+ DEFINE VARIABLE cPrepReqFixture AS CHARACTER NO-UNDO. 
+ DEFINE VARIABLE cPrepReqStruct AS CHARACTER NO-UNDO. 
+
+ fLog("Begin of fCheckPrepaidRequests").
+ iCountExpPrepReqs = NUM-ENTRIES(pcPrepReqFixtureList).
+
+ fLog("PrepReqArray: " + pcPrepReqArray).
+
+ DEFINE VARIABLE iParamCount AS INTEGER NO-UNDO. 
+ iParamCount = get_paramcount(pcPrepReqArray).
+ fLog("iParamCount = " + STRING(iParamCount) + ",iCountExpPrepReqs = " +
+    STRING(iCountExpPrepReqs)).
+ fLogTTParam("").
+ fLogTTParam(pcPrepReqArray).
+
+
+ checkInt("Count of PrepaidRequest", iCountExpPrepReqs,
+    get_paramcount(pcPrepReqArray)).
+
+ REPEAT iPrepReq = 1 TO iCountExpPrepReqs:
+    cPrepReqFixture = ENTRY(iPrepReq, pcPrepReqFixtureList).
+    cPrepReqStruct = get_struct(pcPrepReqArray, STRING(iPrepReq - 1)).
+    fetch_fixture(cPrepReqFixture, BUFFER PrepaidRequest:HANDLE).
+
+    fLog("PrepaidRequest fixture: " + cPrepReqFixture).
+    fLog("Fixture TopUpAmt: " + STRING(PrepaidRequest.TopUpAmt / 100)).
+    fLog("ret field amount: " + STRING(get_double(cPrepReqStruct,"amount"))).
+    checkDecimal("PrepaidRequest.TopUpAmt", PrepaidRequest.TopUpAmt / 100, 
+        get_double(cPrepReqStruct, "amount")).
+    fLog("Fixture TsRequest: " + STRING(PrepaidRequest.TSRequest)).
+    fLog("ret field created: " + STRING(get_timestamp(cPrepReqStruct,
+      "created"))).
+    checkDecimal("PrepaidRequest.TSRequest", PrepaidRequest.TSRequest,
+        get_timestamp(cPrepReqStruct, "created")).
+    fLog("Fixture PPStatus: " + STRING(PrepaidRequest.PPStatus)).
+    fLog("ret field status: " + STRING(get_int(cPrepReqStruct,"status"))).
+    checkInt("PrepaidRequest.PPStatus", PrepaidRequest.PPStatus,
+        get_int(cPrepReqStruct, "status")).
+ END.
+ 
+ fLog("End of fCheckPrepaidRequests").
+ RETURN TRUE.
+END.
+
+
+PROCEDURE test_no_customer:
+  fLog("*******    test_no_customer").
+  get_commissions(999999).
+  fLog("....... checking results .......").
+  assert_fault({&APPLICATION_ERROR}, "Customer 999999 not found").
+END.
+
+
+
+PROCEDURE test_no_mobsubs:
+   fLog("*******    test_no_mobsubs").
+   get_commissions(35).
+   assert_success().
+   gcReturnArray = get_array("", "").
+   assert(get_paramcount(gcReturnArray) eq 0, 
+      "Returned unexpected subscriptions (expected zero)").
+END.
+
+
+FUNCTION fSelectFATimeStruct RETURN CHARACTER (
+   INPUT pcFaTimeStructArray AS CHARACTER,
+   INPUT pcFirstFaTimeFixture AS CHARACTER):
+
+   fetch_fixture(pcFirstFaTimeFixture, BUFFER FaTime:HANDLE).
+
+   DEFINE VARIABLE iStruct AS INTEGER NO-UNDO. 
+   DEFINE VARIABLE iNumOfStructs AS INTEGER NO-UNDO. 
+   DEFINE VARIABLE cStruct AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE deStructAmount AS DECIMAL NO-UNDO.  
+   DEFINE VARIABLE deFixtureAmount AS DECIMAL NO-UNDO.  
+
+   iNumOfStructs = get_paramcount(pcFaTimeStructArray).
+
+   LoopStructs:
+   REPEAT iStruct = 0 TO iNumOfStructs:
+      cStruct = get_struct(pcFaTimeStructArray, STRING(iStruct)).
+      deStructAmount = get_double(cStruct, "amount").
+      deFixtureAmount = FATime.Amt.
+      IF deStructAmount EQ deFixtureAmount THEN RETURN cStruct.
+   END.
+   RETURN "".
+END.
+
+
+PROCEDURE test_one_mobsub_two_structs:
+   fLog("*******    test_one_mobsub_two_structs").
+   get_commissions(36).
+   assert_success().
+   fLog("....... checking results .......").
+   gcReturnArray = get_array("", "").
+   DEFINE VARIABLE iSubscriptionCount AS INTEGER NO-UNDO. 
+   iSubscriptionCount = get_paramcount(gcReturnArray).
+   assert(iSubscriptionCount eq 1, 
+      "Returned unexpected amount of subscriptions (expected one), " + 
+      " real count is " + STRING(iSubscriptionCount)).
+
+   /* first mobsub struct */
+   gcMobSubStruct = get_struct(gcReturnArray, "0").
+   fetch_fixture("GetCommissionsOneMobSub", BUFFER MobSub:HANDLE).
+   checkChar("MobSub.CLI", MobSub.CLI, get_string(gcMobSubStruct, "msisdn")).
+
+   /* targets meaning COTarg records */
+   gcTargetArray = get_array(gcMobSubStruct, "commissions").
+
+   DEFINE VARIABLE iTargetCount AS INTEGER NO-UNDO. 
+   iTargetCount = get_paramcount(gcTargetArray).
+   assert(iTargetCount eq 2,
+      "There didn't exist exactly 2 targets with the mobsub " +
+      STRING(MobSub.MsSeq) 
+      + ",actual count is " + STRING(iTargetCount)).
+
+   DEFINE VARIABLE cFirstTargetStruct AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE cSecondTargetStruct AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE cFaTimesStructArray AS CHARACTER NO-UNDO. 
+   cFirstTargetStruct = get_struct(gcTargetArray, "0").
+   cSecondTargetStruct = get_struct(gcTargetArray, "1").
+
+   fLog(" ..... checking first target ...... ").
+
+   /* COTarg records */
+   fCheckTarget(cFirstTargetStruct, 
+    /* COTarg fixture */
+    "OneMobsubWithTwoTargs1", 
+    /* CORule fixture */
+    "OneMobsubWithTwoTargsAndRules1",
+    /* Order fixture */
+    "OrderForSearchOrder1",
+    /* RefMobSub */
+    "ChkRenoveMobSubDCCLICorpNotPreAct",
+    /* RefCustomer */      
+    "CustomerForDetailsCorp").
+
+   fLog(" ..... checking second target ...... ").
+
+
+   fCheckTarget(cSecondTargetStruct, 
+      "OneMobsubWithTwoTargs2", "OneMobsubWithTwoTargsAndRules2",
+      "",
+      "ChkRenoveMobSubDCCLICorpNotPreAct", "CustomerForDetailsCorp").
+
+   /* First COTargs maps to FATime records and second to PrepaidRequest 
+      records */
+   cFaTimesStructArray = get_array(cFirstTargetStruct, "fatimes").
+
+   fLog("Size of FaTime struct array is " + 
+     STRING(get_paramcount(cFaTimesStructArray))).
+
+/* fLog("FaTimesStructArray").
+   fLogTTParam(cFaTimesStructArray). */
+
+   /* straight forward fatime selection does not succeed. 
+      Needs to select the corresponding struct based on different FATime.Amt
+      values in the first fixture */
+   fCheckFatimes(
+      fSelectFaTimeStruct(cFaTimesStructArray, "OneMobsubFirstPeriodFaTime1"),
+      /* get_struct(cFaTimesStructArray, "0"), */
+      "OneMobsubFirstPeriodFaTime1,OneMobsubFirstPeriodFaTime2," + 
+      "OneMobsubFirstPeriodFaTime3").
+
+   fCheckFatimes(
+      fSelectFaTimeStruct(cFaTimesStructArray, "OneMobsubSecondPeriodFaTime1"),
+/*      get_struct(cFaTimesStructArray, "1"), */
+      "OneMobsubSecondPeriodFaTime1,OneMobsubSecondPeriodFaTime2," + 
+      "OneMobsubSecondPeriodFaTime3").
+
+
+   fCheckFatimes(
+      fSelectFaTimeStruct(cFaTimesStructArray, "OneMobsubThirdPeriodFaTime1"),
+/*  get_struct(cFaTimesStructArray, "2"), */
+      "OneMobsubThirdPeriodFaTime1,OneMobsubThirdPeriodFaTime2," + 
+      "OneMobsubThirdPeriodFaTime3").
+
+   fLogTTParam(cSecondTargetStruct).
+   fCheckPrepaidRequests(get_array(cSecondTargetStruct, "topups"),
+      "OneMobsubFirstTopup,OneMobsubSecondTopup,OneMobsubThirdTopup").
+END.
+
+
+
+PROCEDURE test_two_mobsubs_one_struct_for_mobsub:
+   fLog("*******    test_two_mobsubs_one_struct_for_mobsub").
+   get_commissions(37).
+   assert_success().
+
+   fLog("....... checking results .......").
+
+   gcReturnArray = get_array("", "").
+   DEFINE VARIABLE iSubscriptionCount AS INTEGER NO-UNDO. 
+   iSubscriptionCount = get_paramcount(gcReturnArray).
+
+   assert(iSubscriptionCount eq 2, 
+      "Returned unexpected amount of subscriptions (expected two), " + 
+      "real count is " + STRING(iSubscriptionCount)).
+
+   fLog("...... first mobsub .......").
+
+   /* first mobsub struct */
+   gcMobSubStruct = get_struct(gcReturnArray, "0").
+   fetch_fixture("GetCommissionsTwoMobSubs1", BUFFER MobSub:HANDLE).
+   checkChar("MobSub.CLI", MobSub.CLI, get_string(gcMobSubStruct, "msisdn")).
+
+   gcTargetArray = get_array(gcMobSubStruct, "commissions").
+   DEFINE VARIABLE iTargetCount AS INTEGER NO-UNDO. 
+   iTargetCount = get_paramcount(gcTargetArray).
+
+   assert(iTargetCount eq 1,
+      "There didn't exist exactly 1 targets with the mobsub " +
+      STRING(MobSub.MsSeq) + ",actual count is " + STRING(iTargetCount)).
+
+   fCheckTarget(get_struct(gcTargetArray, "0"), 
+      "TwoMobsubsWithOneTarget1stTarget", 
+      "TwoMobsubsWithOneTargAndRule1",
+      "OrderForSearchOrder1",
+      "ChkRenoveMobSubDCCLICorpNotPreAct", "CustomerForDetailsCorp").
+
+   /* second mobsub struct */
+
+   fLog("...... second mobsub .......").
+   
+   gcMobSubStruct = get_struct(gcReturnArray, "1").
+   fetch_fixture("GetCommissionsTwoMobSubs2", BUFFER MobSub:HANDLE).
+   checkChar("MobSub.CLI", MobSub.CLI, get_string(gcMobSubStruct, "msisdn")).
+
+   fLogTTParam(gcMobsubStruct).
+   gcTargetArray = get_array(gcMobSubStruct, "commissions").
+ 
+   iTargetCount = get_paramcount(gcTargetArray).
+   assert(iTargetCount eq 1,
+      "There didn't exist exactly 1 targets with the mobsub " +
+      STRING(MobSub.MsSeq) + ", actual count is " + STRING(iTargetCount)).
+   fCheckTarget(get_struct(gcTargetArray, "0"), 
+      "TwoMobsubsWithOneTarget2ndTarget",
+      "TwoMobsubsWithOneTargAndRule2",
+      "OrderForSearchOrder1",
+      "ChkRenoveMobSubDCCLICorpNotPreAct", "CustomerForDetailsCorp").
+END.
+
+
+PROCEDURE test_no_co_targ:
+   fLog("*******    test_no_co_targ").
+   get_commissions(38).
+   assert_success().
+   fLog("....... checking results .......").
+   gcReturnArray = get_array("", "").
+   assert(get_paramcount(gcReturnArray) eq 0, 
+      "Returned unexpected amount of subscriptions (expected none)").
+END.
+
+
+PROCEDURE test_not_found_order:
+   fLog("*******     test_not_found_order").
+   get_commissions(39).
+   assert_success().
+   fLog("....... checking results .......").
+   gcReturnArray = get_array("", "").
+   DEFINE VARIABLE iSubscriptionCount AS INTEGER NO-UNDO. 
+   iSubscriptionCount = get_paramcount(gcReturnArray).
+   assert(iSubscriptionCount eq 1, 
+      "Returned unexpected amount of subscriptions (expected one), " + 
+      "real count is " + STRING(iSubscriptionCount)).
+
+   /* the one and only mobsub struct */
+   gcMobSubStruct = get_struct(gcReturnArray, "0").
+   fetch_fixture("GetCommissionsNoOrder", BUFFER MobSub:HANDLE).
+   checkChar("MobSub.CLI", MobSub.CLI, get_string(gcMobSubStruct, "msisdn")).
+
+   gcTargetArray = get_array(gcMobSubStruct, "commissions").
+   DEFINE VARIABLE iTargetCount AS INTEGER NO-UNDO. 
+   iTargetCount = get_paramcount(gcTargetArray).
+   assert(iTargetCount eq 1,
+      "There didn't exist exactly 1 targets with the mobsub " +
+      STRING(MobSub.MsSeq)
+      + ",actual count is " + STRING(iTargetCount)).
+   fCheckTarget(get_struct(gcTargetArray, "0"), 
+      "NoOrderTarget", 
+      "NoOrderRule",
+      /* not existing order */
+      "",
+      "ChkRenoveMobSubDCCLICorpNotPreAct", "CustomerForDetailsCorp").
+END.
+
+
+PROCEDURE test_not_found_ref_subscription_and_not_term_subscription:
+   fLog("*******    test_not_found_ref_subscription_and_not_term_subscription").
+   get_commissions(40).
+   assert_success().
+   gcReturnArray = get_array("", "").
+   fLog("....... checking results .......").
+   DEFINE VARIABLE iSubscriptionCount AS INTEGER NO-UNDO. 
+   iSubscriptionCount = get_paramcount(gcReturnArray).
+   assert(iSubscriptionCount eq 1, 
+      "Returned unexpected amount of subscriptions (expected one), " + 
+      "real count is " + STRING(iSubscriptionCount)).
+
+   fetch_fixture("GetCommissionsNoRefSubscription", BUFFER MobSub:HANDLE).
+   checkChar("MobSub.CLI", MobSub.CLI, get_string(gcMobSubStruct, "msisdn")).
+   gcTargetArray = get_array(gcMobSubStruct, "commissions").
+   DEFINE VARIABLE iTargetCount AS INTEGER NO-UNDO. 
+   iTargetCount = get_paramcount(gcTargetArray).
+   assert(iTargetCount eq 1,
+      "There didn't exist exactly 1 targets with the mobsub " +
+      STRING(MobSub.MsSeq)  
+      + ",actual count is " + STRING(iTargetCount)).
+
+   fCheckTarget(get_struct(gcTargetArray, "0"), 
+      "NoRefSubscriptionTarget",
+      "NoRefSubscriptionRule",
+      "OrderForSearchOrder1",
+      /* no reference subscription and hence no reference customer */
+      "", "").
+END.
+
+PROCEDURE 
+   test_not_found_ref_subscription_term_subscription_found_ref_cust_exist:
+   fLog(
+   "*******     test_not_found_ref_subscription_term_subscription_" + 
+   "found_ref_cust_exist").
+   get_commissions(46). 
+   assert_success().
+   gcReturnArray = get_array("", "").
+   fLog("....... checking results .......").
+   DEFINE VARIABLE iSubscriptionCount AS INTEGER NO-UNDO. 
+   iSubscriptionCount = get_paramcount(gcReturnArray).
+   assert(iSubscriptionCount eq 1, 
+      "Returned unexpected amount of subscriptions (expected one), " + 
+      "real count is " + STRING(iSubscriptionCount)).
+
+   fetch_fixture("GetCommissionsWithTermMobSubAndItsRefCust", 
+      BUFFER MobSub:HANDLE).
+   checkChar("MobSub.CLI", MobSub.CLI, get_string(gcMobSubStruct, "msisdn")).
+   gcTargetArray = get_array(gcMobSubStruct, "commissions").
+   DEFINE VARIABLE iTargetCount AS INTEGER NO-UNDO. 
+   iTargetCount = get_paramcount(gcTargetArray).
+   assert(iTargetCount eq 1,
+      "There didn't exist exactly 1 targets with the mobsub " +
+      STRING(MobSub.MsSeq)  
+      + ",actual count is " + STRING(iTargetCount)).
+
+   fCheckTarget(get_struct(gcTargetArray, "0"), 
+      "TermMobsubWithRefCustTarget",
+      "TermMobsubWithRefCustRule",
+      "OrderForSearchOrder1",
+      /* no reference subscription, but term subscription and 
+         its reference customer exist */
+      "", "GetCommissionsTermMobsubRefCust").
+END.
+
+
+PROCEDURE 
+   test_not_found_ref_subscription_term_subscription_found_ref_cust_not_exist:
+   fLog(
+   "*******     test_not_found_ref_subscription_term_subscription_" + 
+   "found_ref_cust_not_exist").
+   get_commissions(45). 
+   assert_success().
+   gcReturnArray = get_array("", "").
+   fLog("....... checking results .......").
+   DEFINE VARIABLE iSubscriptionCount AS INTEGER NO-UNDO. 
+   iSubscriptionCount = get_paramcount(gcReturnArray).
+   assert(iSubscriptionCount eq 1, 
+      "Returned unexpected amount of subscriptions (expected one), " + 
+      "real count is " + STRING(iSubscriptionCount)).
+
+   fetch_fixture("GetCommissionsWithTermMobSubWithoutRefCust", 
+      BUFFER MobSub:HANDLE).
+   checkChar("MobSub.CLI", MobSub.CLI, get_string(gcMobSubStruct, "msisdn")).
+   gcTargetArray = get_array(gcMobSubStruct, "commissions").
+   DEFINE VARIABLE iTargetCount AS INTEGER NO-UNDO. 
+   iTargetCount = get_paramcount(gcTargetArray).
+   assert(iTargetCount eq 1,
+      "There didn't exist exactly 1 targets with the mobsub " +
+      STRING(MobSub.MsSeq)  
+      + ",actual count is " + STRING(iTargetCount)).
+
+   fCheckTarget(get_struct(gcTargetArray, "0"), 
+      "TermMobsubNoRefCustTarget",
+      "TermMobsubNoRefCustRule",
+      "OrderForSearchOrder1",
+      /* term reference subscription but it has no reference customer */
+      "", "").
+END.
+
+
+
+PROCEDURE test_not_found_ref_customer:
+   fLog("*******     test_not_found_ref_customer").
+   get_commissions(41).
+   assert_success().
+   fLog("....... checking results .......").
+   gcReturnArray = get_array("", "").
+   DEFINE VARIABLE iSubscriptionCount AS INTEGER NO-UNDO. 
+   iSubscriptionCount = get_paramcount(gcReturnArray).
+   assert(iSubscriptionCount eq 1, 
+      "Returned unexpected amount of subscriptions (expected one), " + 
+      "real count is " + STRING(iSubscriptionCount)).
+
+   fetch_fixture("GetCommissionsNoRefCustomer",
+      BUFFER MobSub:HANDLE).
+   gcMobSubStruct = get_struct(gcReturnArray, "0").
+   checkChar("MobSub.CLI", MobSub.CLI, get_string(gcMobSubStruct, "msisdn")).
+   gcTargetArray = get_array(gcMobSubStruct, "commissions").
+   DEFINE VARIABLE iTargetCount AS INTEGER NO-UNDO. 
+   iTargetCount = get_paramcount(gcTargetArray).
+   assert(iTargetCount eq 1,
+      "There didn't exist exactly 1 targets with the mobsub " +
+      STRING(MobSub.MsSeq)
+      + ",actual count is " + STRING(iTargetCount)).
+   fCheckTarget(get_struct(gcTargetArray, "0"), 
+      "NoRefCustomerTarget",
+      "NoRefCustomerRule",
+      "OrderForSearchOrder1",
+      /* reference subscription but no customer corresponding to that */
+      "GetCommissionsNoRefCustomerRefSubscription", "").
+END.
+
+
+
+PROCEDURE test_co_targ_without_co_rule:
+   fLog("*******     test_co_targ_without_co_rule").
+   get_commissions(42).
+   fLog("....... checking results .......").
+   assert_success().
+   gcReturnArray = get_array("", "").
+   DEFINE VARIABLE iSubscriptionCount AS INTEGER NO-UNDO. 
+   iSubscriptionCount = get_paramcount(gcReturnArray).
+   assert(iSubscriptionCount eq 0, 
+      "Returned unexpected amount of subscriptions (expected none), " + 
+      "real count is " + STRING(iSubscriptionCount)).
+END.
+

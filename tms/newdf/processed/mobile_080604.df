@@ -1,0 +1,12 @@
+ADD INDEX "Contract" ON "DCCli"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "MSSeq" ASCENDING
+  INDEX-FIELD "DCEvent" ASCENDING
+
+UPDATE PRIMARY INDEX "Contract" ON "DCCli"
+
+.
+PSC
+cpstream=1252
+.
+0000001464

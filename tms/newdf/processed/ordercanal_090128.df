@@ -1,0 +1,496 @@
+ADD TABLE "Offer"
+  AREA "Sta_Data_64"
+  LABEL "Offer"
+  DESCRIPTION "Offer header"
+  DUMP-NAME "offer"
+
+ADD FIELD "Brand" OF "Offer" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 10
+
+ADD FIELD "Description" OF "Offer" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Description"
+  POSITION 5
+  MAX-WIDTH 80
+  HELP "Description of offer"
+  ORDER 40
+
+ADD FIELD "FromDate" OF "Offer" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Date when offer becomes effective"
+  ORDER 50
+
+ADD FIELD "ToDate" OF "Offer" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Date when offer expires"
+  ORDER 60
+
+ADD FIELD "Offer" OF "Offer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Offer ID"
+  POSITION 12
+  MAX-WIDTH 24
+  COLUMN-LABEL "Offer"
+  HELP "Offer ID"
+  ORDER 20
+
+ADD FIELD "OfferAmount" OF "Offer" AS decimal 
+  FORMAT "->>>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Offer Amount"
+  POSITION 13
+  MAX-WIDTH 17
+  COLUMN-LABEL "Amount"
+  HELP "Total price for the offer"
+  DECIMALS 2
+  ORDER 120
+
+ADD FIELD "VatIncl" OF "Offer" AS logical 
+  FORMAT "Included/Excluded"
+  INITIAL "no"
+  LABEL "Tax Included"
+  POSITION 14
+  MAX-WIDTH 1
+  COLUMN-LABEL "Tax Incl."
+  HELP "Tax included in amount"
+  ORDER 130
+
+ADD FIELD "DispItemAmounts" OF "Offer" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Disp Item Amounts"
+  POSITION 15
+  MAX-WIDTH 4
+  COLUMN-LABEL "Item Amt"
+  HELP "Display separate item amounts"
+  ORDER 140
+
+ADD FIELD "Priority" OF "Offer" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "Priority"
+  POSITION 16
+  MAX-WIDTH 4
+  HELP "Priority in contrast to other offers"
+  ORDER 150
+
+ADD INDEX "Offer" ON "Offer" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "Offer" ASCENDING 
+
+ADD INDEX "ToDate" ON "Offer" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD TABLE "OfferCriteria"
+  AREA "Sta_Data_128"
+  LABEL "Offer Criteria"
+  DESCRIPTION "Offer criteria"
+  DUMP-NAME "offercriteria"
+
+ADD FIELD "CriteriaType" OF "OfferCriteria" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Criteria Type"
+  POSITION 3
+  MAX-WIDTH 40
+  COLUMN-LABEL "Type"
+  HELP "Criteria type"
+  ORDER 20
+
+ADD FIELD "IncludedValue" OF "OfferCriteria" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Included Value"
+  POSITION 4
+  MAX-WIDTH 60
+  COLUMN-LABEL "Included"
+  HELP "Values that are included in this offer"
+  ORDER 30
+
+ADD FIELD "BeginStamp" OF "OfferCriteria" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Valid From"
+  POSITION 5
+  MAX-WIDTH 20
+  COLUMN-LABEL "From"
+  HELP "Valid from"
+  DECIMALS 5
+  ORDER 40
+
+ADD FIELD "EndStamp" OF "OfferCriteria" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Valid To"
+  POSITION 6
+  MAX-WIDTH 20
+  COLUMN-LABEL "To"
+  HELP "Valid to"
+  DECIMALS 5
+  ORDER 50
+
+ADD FIELD "ExcludedValue" OF "OfferCriteria" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Excluded Value"
+  POSITION 7
+  MAX-WIDTH 60
+  COLUMN-LABEL "Excluded"
+  HELP "Values that are excluded from this offer"
+  ORDER 60
+
+ADD FIELD "Offer" OF "OfferCriteria" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Offer ID"
+  POSITION 9
+  MAX-WIDTH 24
+  COLUMN-LABEL "Offer"
+  HELP "Offer ID"
+  ORDER 10
+
+ADD FIELD "Brand" OF "OfferCriteria" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 10
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 70
+
+ADD INDEX "CriteriaType" ON "OfferCriteria" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "Offer" ASCENDING 
+  INDEX-FIELD "CriteriaType" ASCENDING 
+  INDEX-FIELD "BeginStamp" DESCENDING 
+
+ADD INDEX "EndStamp" ON "OfferCriteria" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "EndStamp" DESCENDING 
+
+ADD INDEX "Offer" ON "OfferCriteria" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "Offer" ASCENDING 
+  INDEX-FIELD "EndStamp" DESCENDING 
+
+ADD TABLE "OfferItem"
+  AREA "Sta_Data_128"
+  LABEL "Offer Item"
+  DESCRIPTION "Offer item"
+  DUMP-NAME "offeritem"
+
+ADD FIELD "ItemType" OF "OfferItem" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Item Type"
+  POSITION 3
+  MAX-WIDTH 32
+  COLUMN-LABEL "Type"
+  HELP "Item type"
+  ORDER 20
+
+ADD FIELD "ItemKey" OF "OfferItem" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Item Key"
+  POSITION 4
+  MAX-WIDTH 40
+  COLUMN-LABEL "Key"
+  HELP "Item key"
+  ORDER 30
+
+ADD FIELD "BeginStamp" OF "OfferItem" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Valid From"
+  POSITION 5
+  MAX-WIDTH 20
+  COLUMN-LABEL "From"
+  HELP "Valid from"
+  DECIMALS 5
+  ORDER 40
+
+ADD FIELD "EndStamp" OF "OfferItem" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Valid To"
+  POSITION 6
+  MAX-WIDTH 20
+  COLUMN-LABEL "To"
+  HELP "Valid to"
+  DECIMALS 5
+  ORDER 50
+
+ADD FIELD "Amount" OF "OfferItem" AS decimal 
+  FORMAT "->>>>>>9.99"
+  INITIAL "0"
+  LABEL "Offer Amount"
+  POSITION 7
+  MAX-WIDTH 17
+  COLUMN-LABEL "Amount"
+  HELP "Offer amount"
+  DECIMALS 2
+  ORDER 60
+
+ADD FIELD "DispInUI" OF "OfferItem" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "yes"
+  LABEL "Display In UI"
+  POSITION 8
+  MAX-WIDTH 1
+  COLUMN-LABEL "Display"
+  HELP "Display item in UI"
+  ORDER 70
+
+ADD FIELD "DispOnInvoice" OF "OfferItem" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "yes"
+  LABEL "Display On Invoice"
+  POSITION 9
+  MAX-WIDTH 1
+  COLUMN-LABEL "Disp.Inv"
+  HELP "Display item on invoice"
+  ORDER 80
+
+ADD FIELD "VatIncl" OF "OfferItem" AS logical 
+  FORMAT "Included/Excluded"
+  INITIAL "no"
+  LABEL "Tax Included"
+  POSITION 10
+  MAX-WIDTH 1
+  COLUMN-LABEL "Tax"
+  HELP "Tax included in amount"
+  ORDER 90
+
+ADD FIELD "Offer" OF "OfferItem" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Offer ID"
+  POSITION 11
+  MAX-WIDTH 24
+  COLUMN-LABEL "Offer"
+  HELP "Offer ID"
+  ORDER 10
+
+ADD FIELD "Brand" OF "OfferItem" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 12
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 100
+
+ADD INDEX "ItemType" ON "OfferItem" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "Offer" ASCENDING 
+  INDEX-FIELD "ItemType" ASCENDING 
+  INDEX-FIELD "ItemKey" ASCENDING 
+  INDEX-FIELD "EndStamp" DESCENDING 
+
+ADD INDEX "EndStamp" ON "OfferItem" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "Offer" ASCENDING 
+  INDEX-FIELD "EndStamp" DESCENDING 
+
+ADD FIELD "Offer" OF "Order" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Offer ID"
+  POSITION 94
+  MAX-WIDTH 24
+  COLUMN-LABEL "Offer"
+  HELP "Offer ID"
+  ORDER 1020
+
+ADD TABLE "TopupScheme"
+  AREA "Sta_Data_64"
+  LABEL "Topup Scheme"
+  DESCRIPTION "Topup scheme"
+  DUMP-NAME "topupscheme"
+
+ADD FIELD "Brand" OF "TopupScheme" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 10
+
+ADD FIELD "Description" OF "TopupScheme" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Description"
+  POSITION 4
+  MAX-WIDTH 80
+  HELP "Description of topup scheme"
+  ORDER 30
+
+ADD FIELD "FromDate" OF "TopupScheme" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Date when scheme becomes effective"
+  ORDER 40
+
+ADD FIELD "ToDate" OF "TopupScheme" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Date when scheme expires"
+  ORDER 50
+
+ADD FIELD "TopupSource" OF "TopupScheme" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Topup Source"
+  POSITION 7
+  MAX-WIDTH 24
+  COLUMN-LABEL "Source"
+  HELP "Source of topup"
+  ORDER 60
+
+ADD FIELD "PPReqPrefix" OF "TopupScheme" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Topup Prefix"
+  POSITION 8
+  MAX-WIDTH 16
+  COLUMN-LABEL "Prefix"
+  HELP "Topup prefix"
+  ORDER 70
+
+ADD FIELD "Amount" OF "TopupScheme" AS decimal 
+  FORMAT "->>>>>>9.99"
+  INITIAL "0"
+  LABEL "Topup Amount"
+  POSITION 9
+  MAX-WIDTH 17
+  COLUMN-LABEL "Amount"
+  HELP "Topup amount"
+  DECIMALS 2
+  ORDER 80
+
+ADD FIELD "VatIncl" OF "TopupScheme" AS logical 
+  FORMAT "Included/Excluded"
+  INITIAL "no"
+  LABEL "Tax Included"
+  POSITION 10
+  MAX-WIDTH 1
+  COLUMN-LABEL "Tax Incl."
+  HELP "Tax included in amount"
+  ORDER 90
+
+ADD FIELD "BillCode" OF "TopupScheme" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Billing Item"
+  POSITION 11
+  MAX-WIDTH 32
+  COLUMN-LABEL "Bill.Item"
+  HELP "Billing item"
+  ORDER 100
+
+ADD FIELD "DiscountAmount" OF "TopupScheme" AS decimal 
+  FORMAT "->>>>>>9.99"
+  INITIAL "0"
+  LABEL "Discount Amount"
+  POSITION 12
+  MAX-WIDTH 17
+  COLUMN-LABEL "Discount"
+  HELP "Discount amount"
+  DECIMALS 2
+  ORDER 110
+
+ADD FIELD "DiscountBillCode" OF "TopupScheme" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Discount Billing Item"
+  POSITION 13
+  MAX-WIDTH 32
+  COLUMN-LABEL "Discount B.Item"
+  HELP "Discount billing item"
+  ORDER 120
+
+ADD FIELD "TopupScheme" OF "TopupScheme" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Topup Scheme"
+  POSITION 14
+  MAX-WIDTH 24
+  COLUMN-LABEL "Scheme ID"
+  HELP "Topup scheme ID"
+  ORDER 20
+
+ADD INDEX "ToupScheme" ON "TopupScheme" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "TopupScheme" ASCENDING 
+
+ADD INDEX "Source" ON "TopupScheme" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "TopupSource" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "ToDate" ON "TopupScheme" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD FIELD "IDCode" OF "MobSub" AS character
+  DESCRIPTION "4 digit code used to identify subscription"
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "ID Code"
+  POSITION 26
+  MAX-WIDTH 8
+  COLUMN-LABEL "ID Code"
+  HELP "Identification Code"
+  ORDER 810
+
+.
+PSC
+cpstream=1252
+.
+0000021861

@@ -1,0 +1,3 @@
+ADD INDEX "PLMN" ON "RoamOper"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "PLMN" ASCENDING

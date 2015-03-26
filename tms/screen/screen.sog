@@ -1,0 +1,4 @@
+echo "SOG SCREENS"
+sleep 2
+screen -t request  1 xfear -screen sogrequest -clientlog /scratch/log/sog/sreq.log
+screen -t response 2 xfear -screen sogresponse -clientlog /scratch/log/sog/sres.log 

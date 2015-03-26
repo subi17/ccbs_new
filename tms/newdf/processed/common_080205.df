@@ -1,0 +1,288 @@
+ADD FIELD "PaymConfig" OF "PaymConfig" AS integer
+  DESCRIPTION ""
+  FORMAT ">>>>>>>>>9"
+  FORMAT-SA ?
+  POSITION 10
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Configuration ID, used in links"
+  HELP-SA ""
+  LABEL "Configuration ID"
+  LABEL-SA ?
+  COLUMN-LABEL "ID"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 90
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD FIELD "TaxRules" OF "PaymConfig" AS logical
+  DESCRIPTION ""
+  FORMAT "Yes/No"
+  FORMAT-SA ?
+  POSITION 11
+  INITIAL "no"
+  INITIAL-SA ?
+  HELP "Are there rules for tax accounts"
+  HELP-SA ""
+  LABEL "Tax Rules"
+  LABEL-SA ?
+  COLUMN-LABEL "Tax"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 100
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 1
+
+ADD TABLE "PaymConfTax"
+  AREA "Sta_Data_64"
+  DESCRIPTION "Configuration rules for tax accounts of payments"
+  DUMP-NAME "paymconftax"
+
+ADD FIELD "PaymConfig" OF "PaymConfTax" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Configuration ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Configuration ID, used in links"
+  ORDER 90
+
+ADD FIELD "TaxZone" OF "PaymConfTax" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Tax Zone"
+  POSITION 3
+  MAX-WIDTH 16
+  COLUMN-LABEL "Zone"
+  HELP "Tax Zone"
+  ORDER 270
+
+ADD FIELD "TaxAccNum" OF "PaymConfTax" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Tax Account"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Tax Acc"
+  HELP "Tax account number"
+  ORDER 280
+
+ADD INDEX "PaymConfig" ON "PaymConfTax" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "PaymConfig" ASCENDING 
+  INDEX-FIELD "TaxZone" ASCENDING 
+
+ADD FIELD "UserCode" OF "ActionLog" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "User Code"
+  POSITION 11
+  MAX-WIDTH 16
+  COLUMN-LABEL "User"
+  HELP "User who triggered the action"
+  ORDER 100
+
+ADD FIELD "FromDate" OF "ActionLog" AS date
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "From"
+  POSITION 12
+  MAX-WIDTH 4
+  HELP "From date"
+  ORDER 110
+
+ADD FIELD "ToDate" OF "ActionLog" AS date
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 13
+  MAX-WIDTH 4
+  HELP "To date"
+  ORDER 120
+
+ADD FIELD "CustNum" OF "ActionLog" AS integer
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 14
+  MAX-WIDTH 4
+  COLUMN-LABEL "Customer"
+  HELP "Customer's number"
+  ORDER 130
+  MANDATORY
+
+ADD INDEX "CustNum" ON "ActionLog"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "CustNum" ASCENDING
+  INDEX-FIELD "ActionID" ASCENDING
+  INDEX-FIELD "ToDate" DESCENDING
+
+ADD INDEX "UserCode" ON "ActionLog" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "UserCode" ASCENDING 
+  INDEX-FIELD "ActionID" ASCENDING 
+  INDEX-FIELD "ActionTS" DESCENDING 
+
+ADD TABLE "RequestAction"
+  AREA "Sta_Data_64"
+  LABEL "Request Actions"
+  DESCRIPTION "Request actions"
+  DUMP-NAME "requestaction"
+
+ADD FIELD "Brand" OF "RequestAction" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 10
+
+ADD FIELD "ReqType" OF "RequestAction" AS integer 
+  DESCRIPTION "Request type"
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Request Type"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Type"
+  ORDER 20
+
+ADD FIELD "CLIType" OF "RequestAction" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "CLI Type"
+  POSITION 4
+  MAX-WIDTH 24
+  COLUMN-LABEL "CLIType"
+  HELP "Type of the subscription"
+  ORDER 30
+
+ADD FIELD "ValidFrom" OF "RequestAction" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Date when configuration becomes effective"
+  ORDER 40
+
+ADD FIELD "ValidTo" OF "RequestAction" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Date when configuration expires"
+  ORDER 50
+
+ADD FIELD "ActionType" OF "RequestAction" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Action Type"
+  POSITION 7
+  MAX-WIDTH 40
+  COLUMN-LABEL "Act.Type"
+  HELP "Action type"
+  ORDER 60
+
+ADD FIELD "ActionKey" OF "RequestAction" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Action Key"
+  POSITION 8
+  MAX-WIDTH 24
+  COLUMN-LABEL "Key"
+  HELP "Key value of the action type"
+  ORDER 70
+
+ADD FIELD "Action" OF "RequestAction" AS integer 
+  DESCRIPTION "1=create,2=terminate,3=move"
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Action"
+  POSITION 9
+  MAX-WIDTH 4
+  HELP "Action"
+  ORDER 80
+
+ADD INDEX "ReqType" ON "RequestAction" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "ReqType" ASCENDING 
+  INDEX-FIELD "ValidTo" DESCENDING 
+
+ADD INDEX "ActionType" ON "RequestAction" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "ActionType" ASCENDING 
+  INDEX-FIELD "ActionKey" ASCENDING 
+  INDEX-FIELD "ReqType" ASCENDING 
+  INDEX-FIELD "ValidTo" DESCENDING 
+
+ADD INDEX "CLIType" ON "RequestAction" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CLIType" ASCENDING 
+  INDEX-FIELD "ReqType" ASCENDING 
+  INDEX-FIELD "ValidTo" DESCENDING 
+
+ADD FIELD "Priority" OF "Memo" AS integer
+  DESCRIPTION ""
+  FORMAT ">>9"
+  FORMAT-SA ?
+  POSITION 14
+  INITIAL "0"
+  INITIAL-SA ?
+  HELP "Priority"
+  HELP-SA ""
+  LABEL "Priority"
+  LABEL-SA ?
+  COLUMN-LABEL "Pri"
+  COLUMN-LABEL-SA ?
+  CAN-READ "*"
+  CAN-WRITE "*"
+  VALEXP ?
+  VALMSG ""
+  VALMSG-SA ""
+  VIEW-AS ?
+  EXTENT 0
+  DECIMALS ?
+  ORDER 130
+  NULL-ALLOWED
+  NOT-CASE-SENSITIVE
+  MAX-WIDTH 4
+
+ADD INDEX "OrderId" ON "MNPProcess"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "OrderId" ASCENDING
+
+.
+PSC
+cpstream=1252
+.
+0000008551

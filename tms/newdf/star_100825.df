@@ -1,0 +1,9 @@
+ADD INDEX "State" ON "UpdateQueue" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "State" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000001168

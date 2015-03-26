@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/nrnModification" xmlns:tns="http://www.example.org/nrnModification">
+<element name="nrnModRequest" type="tns:nrnModRequest"></element>
+    <complexType name="nrnModRequest">
+    	<sequence>
+    		<element name="formRequestCode" maxOccurs="1"
+    			minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">
+    					<pattern value="\c+"></pattern>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="opOwner" maxOccurs="1" minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">    					<length value="3"></length>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="opReceiver" maxOccurs="1" minOccurs="1">
+    			<simpleType>
+    				<restriction base="string">    					<length value="3"></length>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="numberingData" type="tns:DataType"
+    			maxOccurs="unbounded" minOccurs="1">
+    		</element>    		<element name="changeWindowDate" type="dateTime" minOccurs="1" maxOccurs="1"></element>
+    	</sequence></complexType>
+
+
+    <complexType name="DataType">
+    	<attribute name="oldNrn">
+    		<simpleType>
+    			<restriction base="string">
+    				<pattern value="\d+"></pattern>
+    				<length value="6"></length>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="newNrn">
+    		<simpleType>
+    			<restriction base="string">
+    				<pattern value="\d+"></pattern>
+    				<length value="6"></length>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="msisdnStart">
+    		<simpleType>
+    			<restriction base="string">
+    				<pattern value="\d+"></pattern>
+    				<length value="9"></length>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="msisdnEnd">
+    		<simpleType>
+    			<restriction base="string">
+    				<pattern value="\d+"></pattern>
+    				<length value="9"></length>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    </complexType>
+
+
+</schema>

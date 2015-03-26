@@ -1,0 +1,7 @@
+ADD FIELD "DelType" OF "InvoiceTargetGroup" AS integer 
+  FORMAT ">>9"
+  INITIAL ?
+  LABEL "Delivery Type"
+  COLUMN-LABEL "Del.Type"
+  ORDER 80
+
