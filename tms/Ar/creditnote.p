@@ -206,12 +206,27 @@ PROCEDURE pFullCreditNote:
       END.
 
       IF ldeInvRowAmt = ? THEN ldeInvRowAmt = InvRow.Amt.
-
-      IF InvRow.Amt < ldeInvRowAmt THEN DO:
-         fReqError("Entered invrow amount is greater than actual invrow amount").
-         RETURN.
+      
+      IF (InvRow.Amt > 0 AND ldeInvRowAmt < 0) OR
+         (InvRow.Amt < 0 AND ldeInvRowAmt > 0) THEN DO:
+          fReqError("Entered invrow amount and original " +
+                    "invrow amount must be whether positive or " +
+                    "negative").
+          RETURN.
       END.
 
+      IF InvRow.Amt < 0 THEN DO:
+         IF abs(InvRow.Amt) < abs(ldeInvRowAmt) THEN DO:
+            fReqError("Entered invrow amount is greater than actual invrow amount").
+            RETURN.
+         END. 
+      END.
+      ELSE DO:
+         IF InvRow.Amt < ldeInvRowAmt THEN DO:
+            fReqError("Entered invrow amount is greater than actual invrow amount").
+             RETURN.
+         END.
+      END.
       /* Create Temp-table with SubInvoice/InvRow details */
       IF NOT CAN-FIND(FIRST ttSubInvoice WHERE
                             ttSubInvoice.SubInvoice = InvRow.SubInvNum AND

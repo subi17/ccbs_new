@@ -1275,6 +1275,7 @@ PROCEDURE pLimitAction:
    DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
    DEF VAR lcSMSSendRule AS CHAR NO-UNDO. 
    DEF VAR lcSender AS CHAR NO-UNDO. 
+   DEF VAR lrBarring  AS ROWID NO-UNDO.
    
    /* get the action (request) that is to be done */
    FIND FIRST ttLimits WHERE
@@ -1337,7 +1338,7 @@ PROCEDURE pLimitAction:
                                  9,                  /* type=info */
                                  "InvText",          /* source of message */
                                  lcSMSTxt,
-                                 fMakeTS() + 0.0012, /* act, 2min delay */
+                                 fSecOffSet(fMakeTS(),120), /* act, 2min delay */
                                  "5",
                                  "TMQueue",
                                  lcSender,
@@ -1347,11 +1348,10 @@ PROCEDURE pLimitAction:
     
    /* barring */
    WHEN 35 THEN DO:
-      /* check current barring (or pending) */
-      lcResult = fCheckStatus(TMCounter.MsSeq).
-
-      /* pending exists */
-      IF lcResult = "91" THEN DO:
+      
+      /* ongoing request */
+      IF fCheckBarrStatus(TMCounter.MsSeq, OUTPUT lcResult, OUTPUT lrBarring)
+         THEN DO:
          /* if pending was done from this same event (for another rule)
             then skip this */    
          IF llBarringDone 
@@ -1360,11 +1360,8 @@ PROCEDURE pLimitAction:
       END.
        
       /* already on */
-      ELSE IF lcResult = ttLimits.ActionParam THEN liRequest = 1.
+      ELSE IF fIsInList(ttLimits.ActionParam,lcResult) THEN liRequest = 1.
      
-      /* Debt barring on */
-      ELSE IF lcResult BEGINS "D_" THEN RETURN "".
- 
       ELSE DO:
 
          /* subscription already terminated -> no action needed */
@@ -1396,7 +1393,7 @@ PROCEDURE pLimitAction:
             END.
 
             RUN barrengine (TMCounter.MsSeq,
-                            ttLimits.ActionParam,
+                            ttLimits.ActionParam + "=1",
                             "5",                /* source  */
                             "TMQueue",          /* creator */
                             fMakeTS() + 0.0012, /* activate, 2min delay */

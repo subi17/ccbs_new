@@ -29,6 +29,240 @@ ADD SEQUENCE "PPRequest"
   CYCLE-ON-LIMIT no
   MIN-VAL 0
 
+ADD SEQUENCE "SMSSeq"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+ADD TABLE "Barring"
+  AREA "Sta_Data_128"
+  LABEL "Barring"
+  DESCRIPTION "Barring information"
+  DUMP-NAME "barring"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-barring.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-barring.p" CRC "?" 
+
+ADD FIELD "MsSeq" OF "Barring" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "SubSeq"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "MsSeq"
+  HELP "Subscription ID"
+  ORDER 10
+
+ADD FIELD "BarringCode" OF "Barring" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "Barring"
+  POSITION 3
+  MAX-WIDTH 50
+  COLUMN-LABEL "BarringCode"
+  HELP "Barring name"
+  ORDER 20
+
+ADD FIELD "BarringStatus" OF "Barring" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Barring Status"
+  POSITION 4
+  MAX-WIDTH 16
+  COLUMN-LABEL "BarringStatus"
+  HELP "Activity for status"
+  ORDER 30
+
+ADD FIELD "EventTS" OF "Barring" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Time Stamp"
+  POSITION 5
+  MAX-WIDTH 20
+  COLUMN-LABEL "EventTS"
+  HELP "Event Time Stamp"
+  DECIMALS 5
+  ORDER 40
+
+ADD FIELD "UserCode" OF "Barring" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "User ID"
+  POSITION 6
+  MAX-WIDTH 24
+  COLUMN-LABEL "UserCode"
+  HELP "User ID"
+  ORDER 50
+
+ADD FIELD "MsRequest" OF "Barring" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "MsRequest"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "MsRequest"
+  HELP "MsRequest ID"
+  ORDER 60
+
+ADD INDEX "MsSeq" ON "Barring" 
+  AREA "Dyn_Index_1"
+  PRIMARY
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "BarringCode" ASCENDING 
+  INDEX-FIELD "EventTS" DESCENDING 
+
+ADD INDEX "EventTS" ON "Barring" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "EventTS" DESCENDING 
+
+ADD TABLE "BarringConf"
+  AREA "Sta_Data_128"
+  LABEL "Barring Configuration"
+  DESCRIPTION "Barring Configuration"
+  DUMP-NAME "barringconf"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-barringconf.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-barringconf.p" CRC "?" 
+
+ADD FIELD "BarringGroup" OF "BarringConf" AS character 
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "Barring group"
+  POSITION 2
+  MAX-WIDTH 50
+  COLUMN-LABEL "BarringGroup"
+  HELP "Barring group"
+  ORDER 10
+
+ADD FIELD "BarringCode" OF "BarringConf" AS character 
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "Barring Name"
+  POSITION 3
+  MAX-WIDTH 50
+  COLUMN-LABEL "BarringCode"
+  HELP "Barring Name"
+  ORDER 20
+
+ADD FIELD "Mask" OF "BarringConf" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Limited Services"
+  POSITION 4
+  MAX-WIDTH 30
+  COLUMN-LABEL "Mask"
+  HELP "Bit mask of limited services"
+  ORDER 30
+
+ADD FIELD "AllowedAppIDs" OF "BarringConf" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Allowed Applications"
+  POSITION 6
+  MAX-WIDTH 30
+  COLUMN-LABEL "AllowedAppIDs"
+  HELP "User permissions for Barring Mask"
+  ORDER 50
+
+ADD FIELD "BarringStatus" OF "BarringConf" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Barring Status"
+  POSITION 7
+  MAX-WIDTH 20
+  COLUMN-LABEL "BarringStatus"
+  HELP "Barring status"
+  ORDER 60
+
+ADD FIELD "AllowedPaymentType" OF "BarringConf" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Allowed Payment Type"
+  POSITION 8
+  MAX-WIDTH 30
+  COLUMN-LABEL "AllowedPaymentType"
+  HELP "Allowed Payment Type"
+  ORDER 70
+
+ADD FIELD "NWComponent" OF "BarringConf" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "NWComponent"
+  POSITION 9
+  MAX-WIDTH 24
+  COLUMN-LABEL "NWComponent"
+  HELP "Network component"
+  ORDER 80
+
+ADD FIELD "NWActParam" OF "BarringConf" AS character 
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "NWActParam"
+  POSITION 10
+  MAX-WIDTH 50
+  COLUMN-LABEL "NWActParam"
+  HELP "Network activation parameter"
+  ORDER 90
+
+ADD FIELD "NWDeactParam" OF "BarringConf" AS character 
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "NWDeactParam"
+  POSITION 11
+  MAX-WIDTH 50
+  COLUMN-LABEL "NWDeactParam"
+  HELP "Network deactivation parameter"
+  ORDER 100
+
+ADD FIELD "Priority" OF "BarringConf" AS integer 
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "Priority"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "Priority"
+  HELP "Priority"
+  ORDER 110
+
+ADD FIELD "UIPriority" OF "BarringConf" AS integer 
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "UIPriority"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "UIPriority"
+  HELP "UI Priority"
+  ORDER 120
+
+ADD FIELD "IFSPriority" OF "BarringConf" AS integer 
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "IFSPriority"
+  POSITION 14
+  MAX-WIDTH 4
+  COLUMN-LABEL "IFSPriority"
+  HELP "IFS Priority"
+  ORDER 130
+
+ADD FIELD "OldCode" OF "BarringConf" AS character 
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "OldCode"
+  POSITION 15
+  MAX-WIDTH 50
+  COLUMN-LABEL "OldCode"
+  HELP "Old Code"
+  ORDER 140
+
+ADD INDEX "BarringCode" ON "BarringConf" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "BarringCode" ASCENDING 
+
+ADD INDEX "OldCode" ON "BarringConf" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "OldCode" ASCENDING 
+
 ADD TABLE "CallAlarm"
   AREA "Sta_Data_64"
   DUMP-NAME "callalar"
@@ -373,14 +607,14 @@ ADD FIELD "ContrType" OF "CLIType" AS integer
   ORDER 140
 
 ADD FIELD "CompareFee" OF "CLIType" AS decimal 
-  FORMAT ">>>>9.99"
+  FORMAT ">>>>9.999"
   INITIAL "0"
   LABEL "Comparison Fee"
   POSITION 16
   MAX-WIDTH 17
   COLUMN-LABEL "Comp.Fee"
   HELP "Comparison fee for penalty fee determination in STC/BTC"
-  DECIMALS 2
+  DECIMALS 3
   ORDER 150
 
 ADD FIELD "WebDisp" OF "CLIType" AS logical 
@@ -472,13 +706,13 @@ ADD FIELD "WebStatusCode" OF "CLIType" AS integer
   ORDER 240
 
 ADD FIELD "CommercialFee" OF "CLIType" AS decimal 
-  FORMAT ">>>>9.99"
+  FORMAT ">>>>9.999"
   INITIAL "0"
   LABEL "Commercial Fee"
   POSITION 26
   MAX-WIDTH 17
   COLUMN-LABEL "CommercialFee"
-  DECIMALS 2
+  DECIMALS 3
   ORDER 250
 
 ADD FIELD "LineType" OF "CLIType" AS integer 
@@ -2635,6 +2869,26 @@ ADD FIELD "IMEIStatus" OF "OrderAccessory" AS integer
   HELP "Status of IMEI"
   ORDER 140
 
+ADD FIELD "HardBookState" OF "OrderAccessory" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Hard Book State"
+  POSITION 17
+  MAX-WIDTH 20
+  COLUMN-LABEL "HardBookState"
+  HELP "State of hard booking"
+  ORDER 180
+
+ADD FIELD "HardBook" OF "OrderAccessory" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Hard Book"
+  POSITION 18
+  MAX-WIDTH 4
+  COLUMN-LABEL "HardBook"
+  HELP "Is the terminal hard booked"
+  ORDER 170
+
 ADD INDEX "OrderId" ON "OrderAccessory" 
   AREA "Sta_Index_1"
   PRIMARY
@@ -4425,11 +4679,182 @@ ADD INDEX "MsSeqDate" ON "Segmentation"
   INDEX-FIELD "MsSeq" ASCENDING 
   INDEX-FIELD "SegmentDate" DESCENDING 
 
+ADD TABLE "SMSMessage"
+  AREA "Sta_Data_64"
+  DUMP-NAME "smsmessage"
+
+ADD FIELD "SMSSeq" OF "SMSMessage" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "SMSSeq"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "SMSSeq"
+  HELP "SMS Sequence"
+  ORDER 10
+
+ADD FIELD "Custnum" OF "SMSMessage" AS integer 
+  FORMAT "zzzzzzzzz"
+  INITIAL "0"
+  LABEL "Custnum"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Custnum"
+  HELP "Customer Number"
+  ORDER 20
+
+ADD FIELD "MSISDN" OF "SMSMessage" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "MSISDN"
+  POSITION 4
+  MAX-WIDTH 24
+  COLUMN-LABEL "MSISDN"
+  HELP "Target MSISDN"
+  ORDER 30
+
+ADD FIELD "DeliStatus" OF "SMSMessage" AS integer 
+  FORMAT "9"
+  INITIAL "1"
+  LABEL "DeliStatus"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "DeliStatus"
+  HELP "Delivery Status"
+  ORDER 40
+
+ADD FIELD "Delitype" OF "SMSMessage" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "DeliType"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "DeliType"
+  HELP "Delivery Type"
+  ORDER 50
+
+ADD FIELD "DeliMsg" OF "SMSMessage" AS character 
+  FORMAT "x(65)"
+  INITIAL ""
+  LABEL "DeliMsg"
+  POSITION 7
+  MAX-WIDTH 510
+  COLUMN-LABEL "DeliMsg"
+  HELP "Delivery message"
+  ORDER 60
+
+ADD FIELD "ActStamp" OF "SMSMessage" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "ActStamp"
+  POSITION 8
+  MAX-WIDTH 20
+  COLUMN-LABEL "ActStamp"
+  HELP "Activation timestamp"
+  DECIMALS 5
+  ORDER 70
+
+ADD FIELD "CreStamp" OF "SMSMessage" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "CreStamp"
+  POSITION 9
+  MAX-WIDTH 20
+  COLUMN-LABEL "CreStamp"
+  HELP "Creation timestamp"
+  DECIMALS 5
+  ORDER 80
+
+ADD FIELD "SMSType" OF "SMSMessage" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "SMSType"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "SMSType"
+  HELP "Credit Type"
+  ORDER 90
+
+ADD FIELD "OrigAddress" OF "SMSMessage" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "OrigAddress"
+  POSITION 11
+  MAX-WIDTH 24
+  COLUMN-LABEL "OrigAddress"
+  HELP "Originating number"
+  ORDER 100
+
+ADD FIELD "DeliStamp" OF "SMSMessage" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Delivered"
+  POSITION 12
+  MAX-WIDTH 20
+  COLUMN-LABEL "Delivered"
+  HELP "Delivery timestamp"
+  DECIMALS 5
+  ORDER 110
+
+ADD FIELD "MsSeq" OF "SMSMessage" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MsSeq"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "MsSeq"
+  HELP "Subscription ID"
+  ORDER 120
+
+ADD FIELD "OrderId" OF "SMSMessage" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  POSITION 14
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrderId"
+  HELP "Order ID"
+  ORDER 130
+
+ADD INDEX "SMSSeq" ON "SMSMessage" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "SMSSeq" ASCENDING 
+
+ADD INDEX "ActStamp" ON "SMSMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "ActStamp" DESCENDING 
+
+ADD INDEX "Custnum" ON "SMSMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "Custnum" ASCENDING 
+
+ADD INDEX "DeliType" ON "SMSMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "Delitype" ASCENDING 
+  INDEX-FIELD "DeliStatus" ASCENDING 
+  INDEX-FIELD "ActStamp" ASCENDING 
+
+ADD INDEX "MSISDN" ON "SMSMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MSISDN" ASCENDING 
+
+ADD INDEX "MsSeq" ON "SMSMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MsSeq" ASCENDING 
+
+ADD INDEX "OrderId" ON "SMSMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "OrderId" ASCENDING 
+
 ADD TABLE "SubsTerminal"
   AREA "Sta_Data_64"
   LABEL "Subscription Terminal"
   DESCRIPTION "Terminal of a subscription"
   DUMP-NAME "substerminal"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-substerminal.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-substerminal.p" CRC "?" 
 
 ADD FIELD "Brand" OF "SubsTerminal" AS character 
   FORMAT "x(8)"
@@ -5264,4 +5689,4 @@ PSC
 bufpool=yes
 cpstream=1252
 .
-0000108194
+0000117107

@@ -6,7 +6,7 @@
 {mnpoutchk.i}
 {orderchk.i}
 
-&SCOPED-DEFINE ACC_OLB_BARRINGS_NOT_ALLOWED "Y_HURG,Y_REST,Y_SARC,Y_DATA"
+&SCOPED-DEFINE ACC_OLB_BARRINGS_NOT_ALLOWED "Y_HURG"
    
    
 FUNCTION fPreCheckSubscriptionForACC RETURNS CHARACTER
@@ -30,9 +30,6 @@ FUNCTION fPreCheckSubscriptionForACC RETURNS CHARACTER
                                         ELSE MobSub.CLIType) AND
                      CLIType.LineType = {&CLITYPE_LINETYPE_ADDITIONAL}) THEN
       RETURN "ACC is not allowed for additional line".
-
-   IF LOOKUP(MobSub.CLIType,"CONTFF,CONTSF") > 0 THEN
-      RETURN "ACC is not allowed for fusion subscription".
 
    RETURN "".
 END.
@@ -92,8 +89,9 @@ PROCEDURE pCheckSubscriptionForACC:
       RETURN "ERROR".
    END.
 
-   lcBarrStatus = fCheckStatus(MobSub.MsSeq).
-   IF lcBarrStatus BEGINS "D_" OR LOOKUP(lcBarrStatus,{&ACC_OLB_BARRINGS_NOT_ALLOWED}) > 0 THEN DO:
+   lcBarrStatus = fGetActiveBarrings(MobSub.MsSeq).
+   IF fIsInList(lcBarrStatus,{&FRAUD_BARR_CODES} + "," +
+                             {&ACC_OLB_BARRINGS_NOT_ALLOWED}) THEN DO:
       ocMessage = "Subscription has an active operator or debt barring".
       RETURN "ERROR/SMS/311".
    END.
@@ -164,8 +162,9 @@ PROCEDURE pCheckTargetCustomerForACC:
             bACCMobsub.Brand = gcBrand AND
             bACCMobsub.AgrCust = iiNewCustnum AND
             bACCMobsub.PayType = FALSE:
-      lcBarrStatus = fCheckStatus(bACCMobsub.MsSeq).
-      IF lcBarrStatus BEGINS "D_" OR LOOKUP(lcBarrStatus,{&ACC_OLB_BARRINGS_NOT_ALLOWED}) > 0 THEN DO:
+      lcBarrStatus = fGetActiveBarrings(bACCMobsub.MsSeq).
+      IF fIsInList(lcBarrStatus,{&FRAUD_BARR_CODES} + "," + 
+                                {&ACC_OLB_BARRINGS_NOT_ALLOWED}) THEN DO:
          ocMessage = "Target customer has subscription with active operator or debt barring".
          RETURN "ERROR".
       END.

@@ -74,6 +74,7 @@ FUNCTION fGetItemName RETURNS CHAR
    WHEN "IncidentInfoId" THEN liItemType = 23.
    WHEN "MeasuresInfoId" THEN liItemType = 24.
    WHEN "Profession" THEN liItemType = 25.
+   WHEN "BarringCode" THEN liItemType = 26.
    OTHERWISE RETURN "". 
    END CASE.
    

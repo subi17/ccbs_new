@@ -256,28 +256,6 @@ PROCEDURE pModifiedSubscriptions:
  
    ldChkStamp = fOffSet(idLastDump,-3).
       
-   /* and from barring requests (if barring is changed from one package 
-      to another then msstatus is not updated) */
-   FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand = gcBrand AND 
-            MsRequest.ReqType = 35 AND
-            MsRequest.ReqStat = 2  AND
-            MsRequest.ActStamp >= ldChkStamp AND
-            MsRequest.DoneStamp >= idLastDump:
-
-      FIND FIRST MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
-      IF AVAILABLE MobSub THEN DO:
-         fCollectMobSub().
-         NEXT.
-      END.
- 
-      FIND FIRST TermMobSub WHERE 
-         TermMobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
-      IF AVAILABLE TermMobSub THEN DO:
-         fCollectTermMobSub().
-      END.
-   END.   
-
    FOR EACH ttPicked:
    
       FIND FIRST MobSub WHERE MobSub.MsSeq = ttPicked.MsSeq NO-LOCK NO-ERROR.
@@ -431,6 +409,8 @@ PROCEDURE pWrite2File:
    DEF VAR liTime      AS INT  NO-UNDO.
    DEF VAR liMsSeq     AS INT  NO-UNDO.
    DEF VAR ldaActDate  AS DATE NO-UNDO.
+   DEF VAR llOngoing   AS LOG  NO-UNDO.
+   DEF VAR lrIdle      AS ROWID NO-UNDO.
 
    ASSIGN
       liMsSeq  = ihTable:BUFFER-FIELD("MsSeq"):BUFFER-VALUE
@@ -445,9 +425,14 @@ PROCEDURE pWrite2File:
    
    WHEN "MobSub" THEN DO:
       IF ihTable:BUFFER-FIELD("MsStatus"):BUFFER-VALUE = 8 THEN DO:
-         SUBS_STATUS = fCheckStatus(liMsSeq).
-         IF SUBS_STATUS = "" OR SUBS_STATUS = ? THEN 
-            SUBS_STATUS = "BARRED".
+         
+         llOngoing = fCheckBarrStatus(liMsSeq, 
+                                      OUTPUT SUBS_STATUS, 
+                                      OUTPUT lrIdle).
+         IF llOngoing EQ TRUE THEN SUBS_STATUS = "91".
+         ELSE IF SUBS_STATUS = "" OR SUBS_STATUS = ? THEN SUBS_STATUS = "OK".
+         ELSE SUBS_STATUS = fIFSBarring(SUBS_STATUS).
+
       END.
 
       ASSIGN   

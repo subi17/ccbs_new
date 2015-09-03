@@ -35,60 +35,61 @@ DEFINE VARIABLE llgPackWOCounter  AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE llgDataLimit      AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE llgVoiceLimit     AS LOGICAL   NO-UNDO.
 
-DEFINE VARIABLE lcCliType       AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcTariffBundle  AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcBaseBundle    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcLineType      AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFixLineType   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcCommFee       AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcMonthlyFee    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcServiceClass  AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcWebStatus     AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcSTCStatus     AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcPaymentType   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcUsageType     AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFMFeeCalc     AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcLMFeeCalc     AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcTOC           AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcDataLimit     AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcVoiceLimit    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcBDestLimit    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFMDataLimit   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcLMDataLimit   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFMVoiceLimit  AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcLMVoiceLimit  AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFMBDestLimit  AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcLMBDestLimit  AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcBBProfile     AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcDSS2Comp      AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcDSS2PL        AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcNVComp        AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcOnlyVoice     AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFinalTariff   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFeeModel      AS CHARACTER NO-UNDO.
-DEFINE VARIABLE icSLSeq         AS INTEGER   NO-UNDO.
-DEFINE VARIABLE lcSubList       AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcSubCount      AS INTEGER   NO-UNDO.
-DEFINE VARIABLE h_config        AS HANDLE    NO-UNDO.
-DEFINE VARIABLE lcServList      AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcServCount     AS INTEGER   NO-UNDO.
-DEFINE VARIABLE lcFinalSLCode   AS CHARACTER NO-UNDO INITIAL "".
-DEFINE VARIABLE lcFinalSLName   AS CHARACTER NO-UNDO INITIAL "".
-DEFINE VARIABLE lcFinalLimit    AS CHARACTER NO-UNDO INITIAL "".
-DEFINE VARIABLE lcFinalBDLimit  AS CHARACTER NO-UNDO INITIAL "".
-DEFINE VARIABLE lcFinalFMLimit  AS CHARACTER NO-UNDO INITIAL "".
-DEFINE VARIABLE lcFinalLMLimit  AS CHARACTER NO-UNDO INITIAL "".
-DEFINE VARIABLE liFinalDType    AS INTEGER   NO-UNDO INITIAL 0.
-DEFINE VARIABLE llgSLCreated    AS LOGICAL   NO-UNDO INITIAL NO.
-DEFINE VARIABLE ocCLIType       AS CHARACTER NO-UNDO INITIAL "".
-DEFINE VARIABLE liFirstLine     AS INTEGER   NO-UNDO INITIAL 1.
-DEFINE VARIABLE llgCTServPac    AS LOGICAL   NO-UNDO INITIAL NO.
-DEFINE VARIABLE lcMFBC          AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcCLIName       AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcSLGName       AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFMName        AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcDCName        AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcTariffName    AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcCliType        AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcTariffBundle   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcBaseBundle     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcLineType       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFixLineType    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcCommFee        AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcComparisonFee  AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcServiceClass   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcWebStatus      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcSTCStatus      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcPaymentType    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcUsageType      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFMFeeCalc      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcLMFeeCalc      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcTOC            AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcDataLimit      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcVoiceLimit     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcBDestLimit     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFMDataLimit    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcLMDataLimit    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFMVoiceLimit   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcLMVoiceLimit   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFMBDestLimit   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcLMBDestLimit   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcBBProfile      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcDSS2Comp       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcDSS2PL         AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcNVComp         AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcOnlyVoice      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFinalTariff    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFeeModel       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE icSLSeq          AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcSubList        AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcSubCount       AS INTEGER   NO-UNDO.
+DEFINE VARIABLE h_config         AS HANDLE    NO-UNDO.
+DEFINE VARIABLE lcServList       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcServCount      AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcFinalSLCode    AS CHARACTER NO-UNDO INITIAL "".
+DEFINE VARIABLE lcFinalSLName    AS CHARACTER NO-UNDO INITIAL "".
+DEFINE VARIABLE lcFinalLimit     AS CHARACTER NO-UNDO INITIAL "".
+DEFINE VARIABLE lcFinalBDLimit   AS CHARACTER NO-UNDO INITIAL "".
+DEFINE VARIABLE lcFinalFMLimit   AS CHARACTER NO-UNDO INITIAL "".
+DEFINE VARIABLE lcFinalLMLimit   AS CHARACTER NO-UNDO INITIAL "".
+DEFINE VARIABLE liFinalDType     AS INTEGER   NO-UNDO INITIAL 0.
+DEFINE VARIABLE llgSLCreated     AS LOGICAL   NO-UNDO INITIAL NO.
+DEFINE VARIABLE ocCLIType        AS CHARACTER NO-UNDO INITIAL "".
+DEFINE VARIABLE liFirstLine      AS INTEGER   NO-UNDO INITIAL 1.
+DEFINE VARIABLE llgCTServPac     AS LOGICAL   NO-UNDO INITIAL NO.
+DEFINE VARIABLE lcMFBC           AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcCLIName        AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcSLGName        AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFMName         AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcDCName         AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcTariffName     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcBonoSupport    AS CHARACTER NO-UNDO.
 
 DEFINE TEMP-TABLE ttTariffCre NO-UNDO 
    FIELD FieldName  AS CHARACTER 
@@ -130,7 +131,7 @@ REPEAT:
           ttTariffCre.FieldValue = TRIM(ENTRY(2,lcLine,";")) NO-ERROR.
    
    IF ERROR-STATUS:ERROR THEN DO:
-      fError("Incorrect input data").
+      fError("Incorrect input data 1").
       RETURN "ERROR".
    END.
    
@@ -224,18 +225,20 @@ DO lcServCount = 1 TO NUM-ENTRIES(lcServList):
                                     lcFinalLMLimit,
                                     liFinalDType,
                                     OUTPUT icSLSeq).
-      IF RETURN-VALUE EQ "OK" AND 
-         icSLSeq > 0          AND 
-         lcMFBC NE ""         THEN DO: 
-         RUN pServiceTargets IN h_config(icSLSeq,
-                                         lcFinalTariff,
-                                         ENTRY(2,lcFinalSLCode,"_")).
-         IF RETURN-VALUE <> "OK" THEN DO:
-            fError(RETURN-VALUE). 
-            RETURN RETURN-VALUE.
+      IF RETURN-VALUE EQ "OK" THEN DO:
+         IF lcPaymentType EQ "Postpaid" AND
+            icSLSeq > 0          AND 
+            lcMFBC NE ""         THEN DO: 
+            RUN pServiceTargets IN h_config(icSLSeq,
+                                            lcFinalTariff,
+                                            ENTRY(2,lcFinalSLCode,"_")).
+            IF RETURN-VALUE <> "OK" THEN DO:
+               fError(RETURN-VALUE). 
+               RETURN RETURN-VALUE.
+            END.
+            ELSE llgSLCreated = YES.
          END.
-         ELSE llgSLCreated = YES.
-      END.   
+      END.
       ELSE DO:
          fError(RETURN-VALUE). 
          RETURN RETURN-VALUE.
@@ -252,8 +255,9 @@ DO lcServCount = 1 TO NUM-ENTRIES(lcServList):
       lcFinalLMLimit = ""
       icSLSeq        = 0.                                                                
 END.
- 
-IF lcMFBC NE "" THEN DO: 
+
+IF lcPaymentType EQ "Postpaid" AND
+   lcMFBC NE "" THEN DO: 
    RUN pCreateFeeModel IN h_config(lcFinalTariff,
                                    lcFMName,    
                                    OUTPUT lcFeeModel).
@@ -261,10 +265,12 @@ IF lcMFBC NE "" THEN DO:
    IF RETURN-VALUE EQ "OK" THEN DO:
       RUN pCreateFMItem IN h_config(lcFinalTariff,
                                     lcFeeModel,
-                                    lcMonthlyFee,
+                                    lcCommFee,
                                     lcFMFeeCalc,
                                     lcLMFeeCalc,
-                                    lcMFBC).
+                                    lcMFBC,
+                                    lcCliType,      /* Main parent tariff */
+                                    lcTariffBundle  /* Tariff Bundle      */).
    
       IF RETURN-VALUE <> "OK" THEN DO:
          fError(RETURN-VALUE).
@@ -280,7 +286,6 @@ END.
 RUN pDayCampaign IN h_config(lcFinalTariff,
                              lcFeeModel,
                              lcDCName,
-                             lcSTCStatus,
                              lcBBProfile,
                              lcDSS2Comp,
                              lcDSS2PL,
@@ -288,7 +293,8 @@ RUN pDayCampaign IN h_config(lcFinalTariff,
                              lcOnlyVoice,
                              lcTOC,
                              llgSLCreated,
-                             lcMFBC).
+                             lcMFBC,
+                             lcPaymentType).
 
 IF RETURN-VALUE <> "OK" THEN DO:
    fError(RETURN-VALUE).
@@ -296,7 +302,8 @@ IF RETURN-VALUE <> "OK" THEN DO:
 END.
 ELSE DO:         
    RUN pDCServPackage IN h_config(lcFinalTariff,
-                                  llgDataLimit).
+                                  llgDataLimit,
+                                  lcBonoSupport).
 
    IF RETURN-VALUE <> "OK" THEN DO:
       fError(RETURN-VALUE).
@@ -327,12 +334,12 @@ REPEAT:
       ttTrans.tLangint   = TRIM(ENTRY(2,lcLine,";"))
       ttTrans.tLangtext  = TRIM(ENTRY(3,lcLine,";"))
       ttTrans.tLangTrans = TRIM(ENTRY(4,lcLine,";")) NO-ERROR.
-
+/*
    IF ERROR-STATUS:ERROR THEN DO:
       fError("Incorrect input data").
       RETURN "ERROR".
    END.
-                              
+*/
 END.
 
 DO lcSubCount = 1 TO NUM-ENTRIES(lcSubList):    
@@ -342,13 +349,14 @@ DO lcSubCount = 1 TO NUM-ENTRIES(lcSubList):
       llgCTServPac = YES.
    ELSE 
       llgCTServPac = NO.
-                  
+
    RUN pCreateCLIType IN h_config(ENTRY(lcSubCount,lcSubList,","),
                                   lcCLIName,        
                                   lcBaseBundle,
                                   lcLineType,
                                   lcFixLineType,
                                   lcCommFee,
+                                  lcComparisonFee,
                                   lcServiceClass,
                                   lcWebStatus,
                                   lcSTCStatus,
@@ -422,6 +430,8 @@ PROCEDURE pDataCreValidation:
          lcSubList = lcBaseBundle.
    END.    
    
+   IF lcSubList = "" THEN lcSubList = lcCliType.
+
    /* Listing ServiceLimits list */
    IF lcDataLimit NE "" THEN 
       lcServList = {&DL}. 
@@ -474,12 +484,14 @@ FOR EACH ttTariffCre NO-LOCK:
       WHEN {&TN} THEN 
          lcTariffName = ttTariffCre.FieldValue.
       WHEN {&LT} THEN DO:
-         IF (ttTariffCre.FieldValue EQ "") OR 
-             LOOKUP(ttTariffCre.FieldValue,{&LINETYPE}) = 0 THEN DO:
-             fError("No LineType data available").
-             RETURN "ERROR".
+         IF lcPaymentType EQ "Postpaid" THEN DO:
+            IF (ttTariffCre.FieldValue EQ "") OR 
+               LOOKUP(ttTariffCre.FieldValue,{&LINETYPE}) = 0 THEN DO:
+               fError("No LineType data available").
+               RETURN "ERROR".
+            END.
+            ELSE lcLineType = ttTariffCre.FieldValue.
          END.
-         ELSE lcLineType = ttTariffCre.FieldValue.
       END.
       WHEN {&FLT} THEN DO:
          IF (ttTariffCre.FieldValue NE "") AND 
@@ -489,10 +501,10 @@ FOR EACH ttTariffCre NO-LOCK:
          END.     
          ELSE lcFixLineType = ttTariffCre.FieldValue.
       END.     
-      WHEN {&MF} THEN 
+      WHEN {&CF} THEN 
          lcCommFee = ttTariffCre.FieldValue. 
       WHEN {&CMF} THEN 
-         lcMonthlyFee = ttTariffCre.FieldValue.  
+         lcComparisonFee = ttTariffCre.FieldValue.  
       WHEN {&SC} THEN DO:
          IF ttTariffCre.FieldValue NE "" THEN 
             ASSIGN llgSCPayTypeValue = YES
@@ -546,6 +558,42 @@ FOR EACH ttTariffCre NO-LOCK:
          END.
          ELSE lcUsageType = ttTariffCre.FieldValue. 
       END.
+      WHEN {&TOC} THEN DO:
+         IF (ttTariffCre.FieldValue NE "") AND
+            LOOKUP(ttTariffCre.FieldValue,{&CONTRACT}) GT 0 THEN DO:
+            IF ttTariffCre.FieldValue EQ "ServicePackage" THEN
+               llgServicePackage = YES.
+            ELSE IF ttTariffCre.FieldValue EQ "PackageWithCounter" THEN
+               llgPackWCounter = YES.
+            ELSE IF ttTariffCre.FieldValue EQ "PackageWithOutCounter" THEN
+               llgPackWOCounter = YES.
+
+            lcTOC = ttTariffCre.FieldValue.
+         END.
+         ELSE IF (ttTariffCre.FieldValue NE "") AND
+                 LOOKUP(ttTariffCre.FieldValue,{&CONTRACT}) EQ 0 THEN DO:
+            fError("Wrong Type of Contract data").
+            RETURN "ERROR".
+         END.
+      END.
+      WHEN {&NVC} THEN DO:
+         IF (ttTariffCre.FieldValue NE "") AND
+            LOOKUP(ttTariffCre.FieldValue,{&LOGVALUE}) EQ 0 THEN DO:
+            fError("Wrong Native VOIP compatible data").
+            RETURN "ERROR".
+         END.
+         ELSE lcNVComp = ttTariffCre.FieldValue.
+      END.
+      WHEN {&DL} THEN DO:
+          IF ttTariffCre.FieldValue NE "" THEN
+             ASSIGN llgDataLimit = YES
+                    lcDataLimit  = ttTariffCre.FieldValue.
+      END.
+      WHEN {&VL} THEN DO:
+          IF ttTariffCre.FieldValue NE "" THEN
+             ASSIGN llgVoiceLimit = YES
+                    lcVoiceLimit  = ttTariffCre.FieldValue.
+      END.
    END CASE. 
         
    IF llgPostPaid THEN DO:
@@ -569,35 +617,6 @@ FOR EACH ttTariffCre NO-LOCK:
              END.
              ELSE lcLMFeeCalc = ttTariffCre.FieldValue.
           END.    
-          WHEN {&TOC} THEN DO:
-             IF (ttTariffCre.FieldValue NE "") AND 
-                LOOKUP(ttTariffCre.FieldValue,{&CONTRACT}) GT 0 THEN DO:
-                
-                IF ttTariffCre.FieldValue EQ "ServicePackage" THEN 
-                    llgServicePackage = YES. 
-                ELSE IF ttTariffCre.FieldValue EQ "PackageWithCounter" THEN 
-                    llgPackWCounter = YES.
-                ELSE IF ttTariffCre.FieldValue EQ "PackageWithOutCounter" THEN 
-                    llgPackWOCounter = YES.
-                    
-                lcTOC = ttTariffCre.FieldValue.    
-             END. 
-             ELSE IF (ttTariffCre.FieldValue NE "") AND 
-                     LOOKUP(ttTariffCre.FieldValue,{&CONTRACT}) EQ 0 THEN DO:
-                fError("Wrong Type of Contract data").
-                RETURN "ERROR".
-             END. 
-          END.
-          WHEN {&DL} THEN DO:
-              IF ttTariffCre.FieldValue NE "" THEN 
-                 ASSIGN llgDataLimit = YES
-                        lcDataLimit  = ttTariffCre.FieldValue.
-          END.
-          WHEN {&VL} THEN DO:
-              IF ttTariffCre.FieldValue NE "" THEN 
-                 ASSIGN llgVoiceLimit = YES
-                        lcVoiceLimit  = ttTariffCre.FieldValue.
-          END.
           WHEN {&BDL} THEN 
               IF ttTariffCre.FieldValue NE "" THEN 
                  lcBDestLimit  = ttTariffCre.FieldValue.
@@ -673,14 +692,6 @@ FOR EACH ttTariffCre NO-LOCK:
              END.
              ELSE lcDSS2PL = ttTariffCre.FieldValue.
           END.
-          WHEN {&NVC} THEN DO:
-             IF (ttTariffCre.FieldValue NE "") AND 
-                LOOKUP(ttTariffCre.FieldValue,{&LOGVALUE}) EQ 0 THEN DO:
-                fError("Wrong Native VOIP compatible data").
-                RETURN "ERROR".    
-             END.
-             ELSE lcNVComp = ttTariffCre.FieldValue.
-          END.
           WHEN {&OV} THEN DO:
              IF (ttTariffCre.FieldValue NE "") AND 
                 LOOKUP(ttTariffCre.FieldValue,{&LOGVALUE}) EQ 0 THEN DO:
@@ -689,52 +700,55 @@ FOR EACH ttTariffCre NO-LOCK:
              END.   
              ELSE lcOnlyVoice = ttTariffCre.FieldValue.
           END.  
+          WHEN {&BS} THEN 
+             IF ttTariffCre.FieldValue NE "" THEN 
+                 lcBonoSupport = ttTariffCre.FieldValue.
        END CASE.  
        
    END. /* IF llgPostPaid THEN DO */      
 
 END. /* FOR EACH ttSubTypeCr */      
 
-   IF llgServicePackage THEN DO:
-      IF NOT llgDataLimit  OR 
-         NOT llgVoiceLimit THEN DO:
-         fError("Wrong ServicePackage-contract data with limits provided").
-         RETURN "ERROR".
-      END.       
-   END.   
-   ELSE IF llgPackWCounter THEN DO:
-      IF NOT llgDataLimit  AND 
-         NOT llgVoiceLimit THEN DO:
-         fError("Wrong PackageWithCounter-contract data with limit provided").
-         RETURN "ERROR".
-      END.       
-   END.      
-   ELSE IF llgPackWOCounter THEN DO:
-      IF llgDataLimit  OR 
-         llgVoiceLimit THEN DO:
-         fError("Wrong PackageWithoutCounter-contract data with limit provided").
-         RETURN "ERROR".    
-      END.    
-   END.   
-       
-   IF (iiPayType = 2 AND lcPaymentType = "Postpaid") OR 
-      (iiPayType = 1 AND lcPaymentType = "Prepaid")  THEN DO:
-      fError("Rateplan and Tariff with different payment types").
-      RETURN "ERROR".     
+IF llgServicePackage THEN DO:
+   IF NOT llgDataLimit OR
+      NOT llgVoiceLimit THEN DO:
+      fError("Wrong ServicePackage-contract data with limits provided").
+      RETURN "ERROR".
    END.
-      
+END.
+ELSE IF llgPackWCounter THEN DO:
+   IF NOT llgDataLimit AND
+      NOT llgVoiceLimit THEN DO:
+      fError("Wrong PackageWithCounter-contract data with limit provided").
+      RETURN "ERROR".
+   END.
+END.
+ELSE IF llgPackWOCounter THEN DO:
+   IF llgDataLimit OR
+      llgVoiceLimit THEN DO:
+      fError("Wrong PackageWithoutCounter-contract data with limit provided").
+      RETURN "ERROR".
+   END.
+END.
+
+IF (iiPayType = 2 AND lcPaymentType = "Postpaid") OR
+   (iiPayType = 1 AND lcPaymentType = "Prepaid") THEN DO:
+   fError("Rateplan and Tariff with different payment types").
+   RETURN "ERROR".
+END.
+
 ASSIGN llgTrafficBundle  = NO
-       llgSCPayTypeValue = NO   
-       llgPostPaid       = NO  
-       llgServicePackage = NO  
-       llgPackWCounter   = NO  
-       llgPackWOCounter  = NO  
-       llgDataLimit      = NO   
+       llgSCPayTypeValue = NO
+       llgPostPaid       = NO
+       llgServicePackage = NO
+       llgPackWCounter   = NO
+       llgPackWOCounter  = NO
+       llgDataLimit      = NO
        llgVoiceLimit     = NO.
-       
-RETURN "OK".       
-           
-END PROCEDURE.      
+
+RETURN "OK".
+
+END PROCEDURE.
 
 PROCEDURE pCreTranslations:
 
@@ -764,10 +778,7 @@ PROCEDURE pCreTranslations:
             RETURN "ERROR".
          END.
       END.  
-      ELSE DO:
-         fError("CliType doesn't exists").
-         RETURN "ERROR".
-      END.
+      ELSE NEXT.
    END.
    
    RETURN "OK".
@@ -783,7 +794,7 @@ DEFINE VARIABLE lcPostFix AS CHARACTER NO-UNDO.
                   ELSE IF lcCliType EQ "CONTF" THEN "F"
                   ELSE IF lcCliType EQ "CONTSF" THEN "SF"
                   ELSE ""  
-      lcPrice   = STRING(TRUNCATE(DECIMAL(lcMonthlyFee),0)).   
+      lcPrice   = STRING(TRUNCATE(DECIMAL(lcComparisonFee),0)).   
    
    IF lcPaymentType EQ "Postpaid" THEN DO:
       ASSIGN 

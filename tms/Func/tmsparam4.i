@@ -55,6 +55,31 @@ FUNCTION fCParamI4 RETURNS INTEGER
 
 END FUNCTION.
 
+FUNCTION fCParam4SetI RETURNS LOG
+  (INPUT inp1 AS CHARACTER,
+   INPUT inp2 AS CHARACTER,
+   INPUT inp3 AS CHARACTER,
+   INPUT iivalue AS INT):
+
+
+   FIND FIRST TMSParam WHERE
+              TMSParam.Brand      = inp1 AND
+              TMSParam.ParamGroup = inp2 AND
+              TMSParam.ParamCode  = inp3
+              EXCLUSIVE-LOCK.
+
+   IF AVAIL TMSParam THEN DO:
+       TMSParam.IntVal = iiValue.
+      release TMSParam.
+      RETURN True.
+   END.
+
+   RETURN False.
+
+END.
+
+
+
 FUNCTION fCParamDe4 RETURNS DECIMAL
   (INPUT inp1 AS CHARACTER,
    INPUT inp2 AS CHARACTER,

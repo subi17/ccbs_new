@@ -7,10 +7,6 @@ IF NOT get_paramcount(param_toplevel_id) EQ 0 THEN
 
 DEF VAR lcArray AS CHAR NO-UNDO.
 DEF VAR lcStruct AS CHAR NO-UNDO.
-DEF VAR lcBarrComList AS CHAR NO-UNDO.
-DEF VAR lcBarrStatus AS CHAR NO-UNDO.
-DEF VAR ldaBarrCreated AS DATE NO-UNDO.
-DEF VAR liSec AS INT NO-UNDO.
 DEF VAR liPeriod AS INT NO-UNDO.
 
 liPeriod = INT(STRING(YEAR(TODAY)) + STRING(MONTH(TODAY),"99")).
@@ -22,6 +18,7 @@ gcBrand = "1".
 {highusage_report.i}
 {timestamp.i}
 {json_key.i}
+{barrfunc.i}
 
 FUNCTION process_highspender_row RETURN LOGICAL
       ( BUFFER phInvCust FOR Customer,
@@ -38,11 +35,11 @@ FUNCTION process_highspender_row RETURN LOGICAL
         piPeriod AS INT
       ):
   
+    DEF VAR ldeBarrActTS AS DEC NO-UNDO. 
+    DEF VAR lcActiveBarrings AS CHAR NO-UNDO. 
+    DEF VAR i AS INT NO-UNDO. 
+    
     IF piPeriod NE liPeriod THEN RETURN TRUE.  
-
-    ASSIGN
-      lcBarrStatus = ""
-      ldaBarrCreated = ?.
 
     FIND HiUsageKat
     WHERE HiUsageKat.Category EQ phHighUsage.Category.
@@ -50,25 +47,20 @@ FUNCTION process_highspender_row RETURN LOGICAL
     FIND FIRST MobSub WHERE MobSub.CLI = phHighUsage.CLI NO-LOCK NO-ERROR.
     IF AVAIL MobSub THEN DO: 
       
-      RUN checkmsbarring(
-         MobSub.MsSeq,
-         katun,
-         OUTPUT lcBarrComList,
-         OUTPUT lcBarrStatus).
+      lcActiveBarrings = fGetActiveBarrings(MobSub.MsSeq).
       
-      IF LOOKUP(lcBarrStatus,"NONE,ONC,NAD") = 0 THEN DO:   
-         FOR EACH MsRequest NO-LOCK WHERE
-                  MsRequest.MsSeq = MobSub.MsSeq AND
-                  MsRequest.ReqType = 35    AND
-                  MsRequest.ReqStat = 2
-         BREAK BY MsRequest.ReqStat BY MsRequest.DoneStamp: 
-         /* Get last barring IF last was removal then no barring on */
-            IF LAST-OF(MsRequest.ReqStat) THEN DO:
-               fSplitTS(MsRequest.DoneStamp,OUTPUT ldaBarrCreated,OUTPUT liSec).
-            END.
-         END.  
-       END.
-       ELSE IF lcBarrStatus = "NONE" THEN lcBarrStatus = "".
+      IF lcActiveBarrings > "" THEN DO:
+         DO i = 1 TO NUM-ENTRIES(lcActiveBarrings):
+            FIND FIRST Barring NO-LOCK WHERE
+                       Barring.MsSeq = MobSub.MsSeq AND
+                       Barring.BarringCode = ENTRY(i,lcActiveBarrings)
+            USE-INDEX MsSeq.
+            IF AVAIL Barring AND
+                     Barring.BarringStatus EQ {&BARR_STATUS_ACTIVE} AND
+                     ldeBarrActTS < Barring.EventTS THEN
+               ldeBarrActTS = Barring.EventTS.
+         END.
+      END.
     END.
 
     lcStruct = add_json_key_struct(lcArray, "").
@@ -91,9 +83,9 @@ FUNCTION process_highspender_row RETURN LOGICAL
     add_double(lcStruct, "average_amount", pdInvoiceAverage).
     add_string(lcStruct, "period", SUBST("&1/&2", piPeriod MOD 100,
                                                   INT(piPeriod / 100))).
-    add_string(lcStruct, "barring", lcBarrStatus).
-    IF lcBarrStatus NE "" AND lcBarrStatus NE "ONC" THEN 
-       add_date_or_time(lcStruct, "barring_created", ldaBarrCreated, liSec).
+    add_string(lcStruct, "barring", lcActiveBarrings).
+    IF ldeBarrActTS > 0 THEN
+       add_timestamp(lcStruct, "barring_created", ldeBarrActTS).
 
     RETURN TRUE.
 END FUNCTION.

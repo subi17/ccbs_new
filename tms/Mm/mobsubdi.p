@@ -38,7 +38,7 @@
 {matrix.i}
 {cparam2.i}
 {fdss.i}
-
+{barrfunc.i}
 IF llDoEvent THEN DO:
 
   &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -87,10 +87,11 @@ DEF VAR EndPeriod  AS INT                        NO-UNDO FORMAT "999999".
 DEF VAR lcUsername AS CHAR                       No-UNDO.
 
 DEF VAR lcCmdList  AS CHAR                       NO-UNDO.
-DEF VAR lcStatus   AS CHAR                       NO-UNDO.
 DEF VAR llDSSActive AS LOG                       NO-UNDO.
 DEF VAR lcDSSBundleId AS CHAR                    NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType  AS CHAR           NO-UNDO.
+DEF VAR lgOngoing AS LOGICAL                     NO-UNDO.
+DEF VAR lrBarring AS ROWID                       NO-UNDO.
 
 DEF VAR lhSub AS HANDLE NO-UNDO. 
 
@@ -122,7 +123,7 @@ ELSE                    lcUserName = "".
 DO WHILE TRUE:
    ASSIGN Killed = (not avail mobsub) ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
  DISPLAY
- "A) Subscription barring packages        " WHEN NOT Killed @ menuc[1] 
+ "A) Subscription active masks            " WHEN NOT Killed @ menuc[1] 
  "P) Counters and Limits          "       @ menuc[16] SKIP
 
  "B) Change subscription type             " WHEN NOT Killed  @ menuc[2] 
@@ -176,24 +177,13 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"F8") > 0  THEN LEAVE.
 
    IF FRAME-INDEX EQ 1 AND NOT Killed THEN DO:
-      RUN checkmsbarring(MsSeq,katun,OUTPUT lcCmdList,OUTPUT lcStatus).
-      CASE lcStatus:
-
-         WHEN "NAD" THEN DO:
-            MESSAGE "Operator or debt level barring cannot be handled with " +
-                    "your current"
-                    "user level" VIEW-AS ALERT-BOX.
-            LEAVE.
-         END.
-
-         WHEN "ONC" THEN DO:
-            MESSAGE "This subscription has unfinished barring commands in HLR!"
-            VIEW-AS ALERT-BOX.
-            LEAVE.
-         END.
-      END CASE. 
-      RUN barrbrowser1(MsSeq,lcCmdList).
-   
+      lgOngoing = fCheckBarrStatus(MsSeq, OUTPUT lcCmdList, OUTPUT lrBarring). 
+      IF lgOngoing EQ TRUE THEN DO:
+         MESSAGE "This subscription has unfinished barring commands in HLR!"
+         VIEW-AS ALERT-BOX.
+         LEAVE.
+      END.
+      RUN barrbrowser1(MsSeq).
    END.
 
    ELSE IF FRAME-INDEX = 2 AND NOT Killed THEN DO :

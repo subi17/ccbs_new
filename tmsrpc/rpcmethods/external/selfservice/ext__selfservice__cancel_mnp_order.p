@@ -24,6 +24,7 @@ DEF VAR piOrderId      AS INT  NO-UNDO.
 DEF VAR pcPortRequest  AS CHAR NO-UNDO.
 DEF VAR pcTransId      AS CHAR NO-UNDO.
 DEF VAR top_struct     AS CHAR NO-UNDO.
+DEF VAR lcApplicationId AS CHAR NO-UNDO. 
 
 IF validate_request(param_toplevel_id, "string,int,string") EQ ? THEN RETURN.
 
@@ -34,8 +35,12 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF NOT fchkTMSCodeValues(gbAuthLog.UserName,substring(pcTransId,1,3)) THEN
+lcApplicationId = substring(pcTransId,1,3).
+
+IF NOT fchkTMSCodeValues(gbAuthLog.UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
+
+katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
 
 FIND FIRST Order WHERE
            Order.Brand   = gcBrand   AND

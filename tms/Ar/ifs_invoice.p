@@ -61,6 +61,7 @@ DEF VAR lcPayTermBillCode AS CHAR NO-UNDO.
 DEF VAR llFusion AS LOG NO-UNDO.
 DEF VAR ldeResidualAmount AS DEC NO-UNDO.
 DEF VAR ldeResidualAmountVAT AS DEC NO-UNDO.
+DEF VAR llPayPal AS LOG NO-UNDO.
 
 DEF TEMP-TABLE ttRow NO-UNDO
    LIKE InvRow
@@ -195,8 +196,10 @@ FUNCTION fPrintPosting RETURNS LOGIC:
       ttRow.MsSeq                         lcDelimiter  /* 15: subcription_id */
       ttRow.Quantity                      lcDelimiter  /* 16: quantity */
       ttRow.BillCode                      lcDelimiter  /* 17: billing code */
-      ttRow.BankCode                      lcDelimiter  /* 18: sales invoice - Residual Amount
-                                                              service invoice - bank code */
+      ttRow.BankCode                      lcDelimiter  /* 18: sales invoice - Residual Amount service invoice - bank code */
+      (IF ttRow.OrderId EQ -1 THEN "MANUAL"
+       ELSE IF ttRow.OrderId EQ 0 THEN "" 
+       ELSE STRING(ttRow.OrderId))        lcDelimiter  /* 19: order id */
       SKIP.
        
 END FUNCTION.
@@ -343,8 +346,9 @@ END.
 FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
 IF AVAILABLE DumpFile THEN DO:
    lcPickType = ENTRY(1,DumpFile.ConfigParam,";").
-   IF NUM-ENTRIES(DumpFile.ConfigParam,";") > 1 THEN 
-      llFusion = (TRIM(ENTRY(2,DumpFile.ConfigParam,";")) EQ "fusion").
+   IF NUM-ENTRIES(DumpFile.ConfigParam,";") > 1 THEN ASSIGN
+      llFusion = (TRIM(ENTRY(2,DumpFile.ConfigParam,";")) EQ "fusion")
+      llPayPal = (TRIM(ENTRY(2,DumpFile.ConfigParam,";")) EQ "paypal").
 END.
 
 DAYLOOP:
@@ -375,6 +379,12 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
 
    IF lcPickType > "" AND
       LOOKUP(STRING(Invoice.InvType),lcPickType) = 0 THEN NEXT.
+
+   /* IFSInvoiceSA6 Dump Config (ConfigParam = "7,9;paypal")
+      collect only PayPal invoices/credit notes and exclude 
+      them from IFSInvoiceSA7 (ConfigParam = "7,9") */
+   IF NOT llPayPal AND Invoice.ChargeType = 6 THEN NEXT.
+   ELSE IF llPayPal AND Invoice.ChargeType <> 6 THEN NEXT.
 
    IF llFusion THEN DO:
       IF LOOKUP(STRING(Invoice.DelType),lcFusionDelType) = 0 THEN NEXT.
@@ -523,18 +533,20 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
    WHEN 2 THEN lcPaymMethod = "1".
    WHEN 3 THEN lcPaymMethod = "7".
    WHEN 5 THEN lcPaymMethod = "3". /* Bank Transfer */
+   WHEN {&INV_CHARGE_T_PAYPAL} THEN /*6*/
+               lcPaymMethod = {&PAYM_METHOD_PAYPAL}. /* Paypal "6" */ 
    OTHERWISE lcPaymMethod = "1".
    END CASE.
 
    /* Document type */
    CASE Invoice.InvType:
-   WHEN 1 THEN lcInvoiceType = "10".
-   WHEN 5 THEN lcInvoiceType = "15".
-   WHEN 6 THEN lcInvoiceType = "70".
-   WHEN 7 THEN lcInvoiceType = "70".
-   WHEN 8 THEN lcInvoiceType = "15". 
-   WHEN 9 THEN lcInvoiceType = "15".
-   OTHERWISE lcInvoiceType = "10".
+   WHEN {&INV_TYPE_NORMAL}    THEN lcInvoiceType = "10".
+   WHEN 5                     THEN lcInvoiceType = "15".
+   WHEN {&INV_TYPE_CASH}      THEN lcInvoiceType = "70".
+   WHEN {&INV_TYPE_RECEIPT}   THEN lcInvoiceType = "70". /* card, paypal*/
+   WHEN 8                     THEN lcInvoiceType = "15". 
+   WHEN 9                     THEN lcInvoiceType = "15".
+   OTHERWISE                       lcInvoiceType = "10".
    END CASE.
 
    IF lcInvoiceType = "15" THEN DO:
@@ -548,7 +560,9 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
    /* NPM Changes */
    IF lcPaymMethod = "1" THEN lcNCFRef = "GROUP".
 
-   IF (lcPaymMethod = "2" OR lcPaymMethod = "7") AND
+   IF (lcPaymMethod = "2" OR 
+       lcPaymMethod = "7" OR 
+       lcPaymMethod = {&PAYM_METHOD_PAYPAL} ) AND
       lcInvoiceType <> "15" THEN DO:
       IF (Invoice.InvType = 6 OR Invoice.InvType = 7) THEN
          liInvNum = Invoice.InvNum.
@@ -578,9 +592,12 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
           IF lcPaymMethod = "2" THEN
              ASSIGN lcNumberRef = ""
                     lcNCFRef    = "".
+          IF lcPaymMethod EQ {&PAYM_METHOD_PAYPAL} THEN 
+             lcNCFRef = OrderPayment.CCNumber.
+
       END. /* FOR FIRST Order NO-LOCK WHERE */
    END. /* ELSE IF lcPaymMethod = "7" AND lcInvoiceType <> "15" THEN DO: */
-   
+
    ldVATTot = 0.
    DO liCnt = 1 TO 5:
       ldVATTot = ldVATTot + Invoice.VATAmount[liCnt].
@@ -785,6 +802,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
          FIND FIRST bttRow WHERE
                     bttRow.MsSeq = ttRow.MsSeq AND
                     bttRow.BillCode = ttRow.Billcode AND
+                    bttRow.OrderId = ttRow.OrderID AND
               ROWID(bttRow) NE ROWID(ttRow) NO-ERROR.
          IF AVAIL bttRow THEN DO:
             ASSIGN

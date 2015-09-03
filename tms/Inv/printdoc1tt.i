@@ -9,6 +9,7 @@ DEF TEMP-TABLE ttInvoice NO-UNDO
    FIELD ErrMsg AS CHAR 
    FIELD InstallmentAmt AS DEC
    FIELD PenaltyAmt AS DEC
+   FIELD PostPoned       AS LOG
    FIELD InstallmentDiscAmt AS DEC
    INDEX InvNum IS UNIQUE InvNum
    INDEX ZipCode ZipCode InvNum.

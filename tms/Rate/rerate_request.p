@@ -138,12 +138,14 @@ PROCEDURE pHandleRequest:
 
    /* should this wait for other subrequests to finish */
    IF MsRequest.OrigRequest > 0 AND MsRequest.ReqIParam1 > 0 THEN 
-   FOR FIRST bSubRequest NO-LOCK USE-INDEX OrigRequest WHERE
+   FOR EACH bSubRequest NO-LOCK USE-INDEX OrigRequest WHERE
              bSubRequest.OrigRequest = MsRequest.OrigRequest AND
              bSubRequest.MsRequest NE MsRequest.MsRequest AND
              bSubRequest.MsSeq = MsRequest.MsSeq AND
              LOOKUP(STRING(bSubRequest.ReqStatus),
                     {&REQ_INACTIVE_STATUSES}) = 0:
+      /* to skip some sub-request which have been delayed (dss termination) */
+      IF bSubRequest.ActStamp > foffset(MsRequest.ActStamp,1) THEN NEXT.
       RETURN "NEXT".
    END.
 

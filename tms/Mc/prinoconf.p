@@ -30,6 +30,31 @@ DEF VAR lcErrFile    AS CHAR NO-UNDO.
 DEF VAR liCount      AS INT  NO-UNDO.
 DEF VAR lcCheck      AS CHAR NO-UNDO.
 DEF VAR lcEmailKey   AS CHAR NO-UNDO.
+DEF VAR lcRootDir    AS CHAR NO-UNDO.
+DEF VAR lcEmailFile  AS CHAR NO-UNDO.
+
+FUNCTION fTxtSendLog RETURNS LOGIC
+   (iiSendMethod AS INT):
+
+   /* mark text as sent */
+   CREATE ITSendLog.
+   ASSIGN ITSendLog.Brand      = gcBrand
+          ITSendLog.TxtType    = 1         /* 1=invtext */
+          ITSendLog.ITNum      = liTextID  
+          ITSendLog.CustNum    = iiOrderID
+          ITSendLog.InvNum     = IF AVAILABLE Order
+                                 THEN Order.OrderID
+                                 ELSE 0
+          ITSendLog.SendMethod = 4
+          ITSendLog.EMail      = IF AVAILABLE OrderCustomer 
+                                    THEN OrderCustomer.Email
+                                 ELSE "foo@bar.fi"
+          ITSendLog.RepType    = IF AVAILABLE Order THEN "ITOrd"
+                                 ELSE "IT"
+          ITSendLog.UserCode   = katun
+          ITSendLog.SendStamp  = fMakeTS().
+END.
+
 
 FIND Order WHERE
      Order.Brand   = gcBrand  AND
@@ -107,26 +132,43 @@ IF liTextID = 0 THEN RETURN "ERROR:Text not available".
 IF CAN-FIND(FIRST ITSendLog USE-INDEX InvNum WHERE 
                   ITSendLog.InvNum  = Order.OrderID AND
                   ITSendLog.RepType = "ITOrd"       AND
-                  ITSendLog.ITNum   = liTextID)
+                  (ITSendLog.ITNum   = liTextID OR
+                   ITSendLog.ITNum   = -10)) /*temp value for new html email */
 THEN RETURN "INFO:Already printed".
 
+IF Order.OrderType < 2 THEN /* New or MNP */
+   RUN sendorderconf.p(Order.OrderId, OrderCustomer.email, OUTPUT lcErrFile).
+ELSE /* Renewal, Rollback  and STC will be changed HTML in later YDR.
+        These will need own HTML templates. */
+   RUN printxt.p (iiOrderID,
+                  0,
+                  Order.CLI,
+                  1,                      /* 1=invtext */
+                  6,                      /* order */
+                  "",
+                  "",
+                  liTextID,
+                  6,                      /* email */
+                  0,                      /* letterclass */
+                  OUTPUT lcErrFile).
 
-RUN printxt.p (iiOrderID,
-             0, 
-             Order.CLI,
-             1,                      /* 1=invtext */
-             6,                      /* order */
-             "",
-             "",
-             liTextID,
-             6,                      /* email */
-             0,                      /* letterclass */
-             OUTPUT lcErrFile).
-      
-IF lcErrFile > "" THEN 
-   RETURN "ERROR: Printout failed".
+
+
+IF lcErrFile > "" THEN DO:
+   DEF STREAM outfile.
+   OUTPUT STREAM outfile to VALUE( lcRootDir + "errors.txt").
+   PUT STREAM outfile UNFORMATTED
+           liLanguage SKIP
+           OrderCustomer.CustIDType SKIP
+           Order.Ordertype SKIP
+           lcErrFile SKIP
+           iiOrderId SKIP.
+   OUTPUT STREAM outfile CLOSE.
+   RETURN "ERROR: Printout failed " + lcErrFile.
+END.
+
 ELSE DO:
-   
+   fTxtSendLog(4). 
    /* mark printing time */
    fMarkOrderStamp(Order.OrderID,
                    "Print",

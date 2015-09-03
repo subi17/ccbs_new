@@ -7,14 +7,14 @@
 
 {commali.i}
 {timestamp.i}
+{tmsconst.i}
 
 &IF "{&fmakesms}" NE "YES"
 &THEN
 
 &GLOBAL-DEFINE fmakesms YES
 
-/* Sender number and time interval parameter added */
-FUNCTION fMakeSchedSMS2 RETURNS INTEGER
+FUNCTION _fCreateCallAlarm RETURNS INTEGER
    (iiCustNum  AS INT,
     icCLI      AS CHAR,
     iiType     AS INT,
@@ -47,7 +47,7 @@ FUNCTION fMakeSchedSMS2 RETURNS INTEGER
           CallAlarm.CustNo     = iiCustNum 
           CallAlarm.CLI        = icCLI
           CallAlarm.DeliStat   = 1            
-          CallAlarm.Delitype   = 1  
+          CallAlarm.Delitype   = (IF iiType EQ {&SMSTYPE_HPD} THEN 5 ELSE 1)
           CallAlarm.DeliPara   = "1"
           CallAlarm.DeliMsg    = icMessage
           CallAlarm.Limit      = 0
@@ -61,41 +61,41 @@ FUNCTION fMakeSchedSMS2 RETURNS INTEGER
    
 END FUNCTION.
 
+/* Sender number and time interval parameter added */
+FUNCTION fMakeSchedSMS2 RETURNS INTEGER
+   (iiCustNum  AS INT,
+    icCLI      AS CHAR,
+    iiType     AS INT,
+    icMessage  AS CHAR,
+    idtActTime AS DEC,
+    icOrig     AS CHAR,
+    icActInt   AS CHAR).
+   
+   RETURN _fCreateCallAlarm(iiCustNum,
+                            icCLI,
+                            iiType,
+                            icMessage,
+                            idtActTime,
+                            icOrig,
+                            icActInt).
+END FUNCTION.
+
 FUNCTION fMakeSchedSMS RETURNS INTEGER
    (iiCustNum  AS INT,
     icCLI      AS CHAR,
     iiType     AS INT,
     icMessage  AS CHAR,
-    idtActTime AS DEC).
+    idtActTime AS DEC):
    
-   RETURN fMakeSchedSMS2(iiCustNum,
-                        icCLI,
-                        iiType,
-                        icMessage,
-                        idtActTime,
-                        "",
-                        "").
-   
-END FUNCTION.
-
-
-FUNCTION fMakeSMS RETURNS INTEGER
-   (iiCustNum AS INT,
-    icCLI     AS CHAR,
-    iiType    AS INT,
-    icMessage AS CHAR).
-
-   DEF VAR ldtActStamp AS DEC NO-UNDO.
-   
-   ldtActStamp = fMakeTS().
-   
-   RETURN fMakeSchedSMS(iiCustNum,
-                        icCLI,
-                        iiType,
-                        icMessage,
-                        ldtActStamp).
-  
-END FUNCTION.
+   RETURN _fCreateCallAlarm(iiCustNum,
+                            icCLI,
+                            iiType,
+                            icMessage,
+                            idtActTime,
+                            "",
+                            "").
+         
+END.
 
 FUNCTION fSetTSLimit RETURNS DECIMAL
    (INPUT pdeTStamp AS DECIMAL,
@@ -118,5 +118,5 @@ FUNCTION fSetTSLimit RETURNS DECIMAL
    
    RETURN pdeTStamp.
 END.
-
+   
 &ENDIF

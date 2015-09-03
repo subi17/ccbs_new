@@ -875,8 +875,7 @@ PROCEDURE local-update-record:
    ASSIGN nap = keylabel(LASTKEY).
    
    IF LOOKUP(nap,"f3") > 0 AND ufk[3] > 0 THEN DO: 
-      RUN msrequest(?,?,ttContract.MsSeq,0,0,
-         "reqcparam3," + ttContract.Contract ).
+      RUN msrequest(?,?,ttContract.MsSeq,0,0,ttContract.Contract ).
       NEXT UPDATE-LOOP.
    END.   
    

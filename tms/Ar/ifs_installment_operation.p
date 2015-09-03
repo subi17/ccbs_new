@@ -104,30 +104,13 @@ FUNCTION fGetChannel RETURNS CHAR
 
 END FUNCTION.
 
-FUNCTION fCheckMsRequest RETURNS CHARACTER
-    (BUFFER ibFixedFee FOR FixedFee,
-     INPUT ldtFromDate AS DATE):
+FUNCTION fGetFixedFeeOrderId RETURNS CHARACTER
+    (BUFFER ibFixedFee FOR FixedFee):
     
-    DEFINE VARIABLE lFFActStamp    AS INTEGER   NO-UNDO.
-    DEFINE VARIABLE lcOrderIdValue AS CHARACTER NO-UNDO.
+    DEF VAR lcOrderIdValue AS CHARACTER NO-UNDO.
 
-    IF ldtFromDate NE ? THEN
-        lFFActStamp = YEAR(ldtFromDate) * 10000 +
-                      MONTH(ldtFromDate) * 100  +
-                      DAY(ldtFromDate).
-    ELSE lFFActStamp = YEAR(ibFixedFee.BegDate) * 10000 +
-                       MONTH(ibFixedFee.BegDate) * 100  +
-                       DAY(ibFixedFee.BegDate).
-                                                                      
-    IF ibFixedFee.OrderId = 0 AND 
-       CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                      MsRequest.MsSeq      = INTEGER(ibFixedFee.KeyValue) AND
-                      MsRequest.ReqType    = 8                            AND
-                      MsRequest.ReqSource  = {&REQUEST_SOURCE_MANUAL_TMS} AND
-                      MsRequest.ReqCParam3 = ibFixedFee.CalcObj           AND
-                      SUBSTRING(STRING(MsRequest.ActStamp),1,8) = STRING(lFFActStamp)) THEN
-       lcOrderIdValue = "MANUAL".
-    ELSE IF ibFixedFee.OrderId <= 0 THEN lcOrderIdValue = "".
+    IF ibFixedFee.OrderId EQ -1 THEN lcOrderIdValue = "MANUAL".
+    ELSE IF ibFixedFee.OrderId EQ 0 THEN lcOrderIdValue = "".
     ELSE lcOrderIdValue = STRING(ibFixedFee.OrderID).
 
     RETURN lcOrderIdValue.
@@ -255,7 +238,7 @@ IF olInterrupted THEN DO:
    LEAVE.
 END.
 
-RUN pCollectOrderCancellations.
+RUN pCollectInstallmentCancellations.
 IF olInterrupted THEN DO:
    oiEvents = {&DUMPLOG_ERROR_NOTIFICATION}. 
    LEAVE.
@@ -406,7 +389,7 @@ PROCEDURE pCollectActivations:
                                          THEN SingleFee.Amt ELSE 0)
          ttInstallment.Channel = lcChannel
          ttInstallment.FFNum = FixedFee.FFNum
-         ttInstallment.OrderId = fCheckMsRequest(BUFFER FixedFee, ?)
+         ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee)
          ttInstallment.RowSource = "ACTIVATION"
          oiEvents = oiEvents + 1.
 
@@ -600,7 +583,7 @@ PROCEDURE pCollectACC:
                                               THEN SingleFee.Amt ELSE 0)
               ttInstallment.Channel = ""
               ttInstallment.OrderId = (IF FixedFee.BegDate < 11/19/2014 THEN ""
-                                       ELSE fCheckMsRequest(BUFFER FixedFee, ?))
+                                       ELSE fGetFixedFeeOrderId(BUFFER FixedFee))
               lcOrderIdVal          = ttInstallment.OrderId
               ttInstallment.RowSource = "ACC_OLD"
               ttInstallment.FFNum = FixedFee.FFNum
@@ -667,8 +650,7 @@ PROCEDURE pCollectACC:
                                                THEN SingleFee.Amt ELSE 0)
                ttInstallment.Channel = fGetChannel(BUFFER FixedFee, OUTPUT lcOrderType)
                ttInstallment.OrderId = IF lcOrderIdVal NE "" THEN lcOrderIdVal 
-                                       ELSE fCheckMsRequest(BUFFER FixedFee, 
-                                                            DCCLI.ValidFrom)
+                                       ELSE fGetFixedFeeOrderId(BUFFER FixedFee)
                ttInstallment.RowSource = "ACC_NEW"
                ttInstallment.FFNum = FixedFee.FFNum
                oiEvents = oiEvents + 1.
@@ -705,6 +687,7 @@ PROCEDURE pCollectInstallmentContractChanges:
    DEF VAR ldeAmount AS DEC NO-UNDO. 
    DEF VAR ldaFFLastMonth AS DATE NO-UNDO. 
    DEF VAR liFFItemTotalQty AS INT NO-UNDO. 
+   DEF VAR ldeResidualFee AS DEC NO-UNDO. 
 
    DEF BUFFER bTermRequest FOR MSRequest.
    DEF BUFFER bActRequest FOR MSRequest.
@@ -871,6 +854,12 @@ PROCEDURE pCollectInstallmentContractChanges:
         IF FixedFee.BegDate > ldFeeEndDate THEN 
            fTS2Date(bTermRequest.DoneStamp, OUTPUT ldFeeEndDate).
 
+         IF AVAIL SingleFee THEN 
+            ldeResidualFee = SingleFee.Amt.
+         ELSE IF bTermDCCLI.Amount NE ? THEN
+            ldeResidualFee = bTermDCCLI.Amount.
+         ELSE ldeResidualFee = 0.
+
          CREATE ttInstallment.
          ASSIGN
             ttInstallment.OperCode = (IF llFinancedByBank THEN "D" ELSE "B")
@@ -880,10 +869,9 @@ PROCEDURE pCollectInstallmentContractChanges:
             ttInstallment.Items   = (IF llFinancedByBank THEN liFFItemQty ELSE "")
             ttInstallment.OperDate = ldFeeEndDate
             ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
-            ttInstallment.ResidualAmount = (IF AVAIL SingleFee 
-                                            THEN SingleFee.Amt ELSE 0)
+            ttInstallment.ResidualAmount = ldeResidualFee
             ttInstallment.Channel = ""
-            ttInstallment.OrderId = fCheckMsRequest(BUFFER FixedFee, ?)
+            ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee)
             ttInstallment.RowSource = "INSTALLMENT_CHANGE_OLD"
             ttInstallment.FFNum = FixedFee.FFNum
             oiEvents = oiEvents + 1.
@@ -918,6 +906,15 @@ PROCEDURE pCollectInstallmentContractChanges:
 
             NEXT REQUEST_LOOP.
          END.
+         
+         FIND FIRST SingleFee NO-LOCK WHERE
+                    SingleFee.Brand = gcBrand AND
+                    SingleFee.Custnum = FixedFee.Custnum AND
+                    SingleFee.HostTable = FixedFee.HostTable AND
+                    SingleFee.KeyValue = Fixedfee.KeyValue AND
+                    SingleFee.SourceKey = FixedFee.SourceKey AND
+                    SingleFee.SourceTable = FixedFee.SourceTable AND
+                    SingleFee.CalcObj = "RVTERM" NO-ERROR.
 
          lcChannel = fGetChannel(BUFFER FixedFee, OUTPUT lcOrderType).
 
@@ -931,9 +928,10 @@ PROCEDURE pCollectInstallmentContractChanges:
             ttInstallment.OperDate = FixedFee.Begdate
             ttInstallment.Renewal = lcOrderType
             ttInstallment.BankCode = ""
-            ttInstallment.ResidualAmount = 0
+            ttInstallment.ResidualAmount = (IF AVAIL SingleFee
+                                            THEN SingleFee.Amt ELSE 0) 
             ttInstallment.Channel = lcChannel
-            ttInstallment.OrderId = fCheckMsRequest(BUFFER FixedFee, ?) 
+            ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee) 
             ttInstallment.RowSource = "INSTALLMENT_CHANGE_NEW"
             ttInstallment.FFNum = FixedFee.FFNum
             oiEvents = oiEvents + 1.
@@ -1142,7 +1140,7 @@ PROCEDURE pCollectReactivations:
                ttInstallment.ResidualAmount = (IF AVAIL SingleFee 
                                                THEN SingleFee.Amt ELSE 0)  
                ttInstallment.Channel = ""
-               ttInstallment.OrderId = fCheckMsRequest(BUFFER FixedFee, ?)
+               ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee)
                ttInstallment.RowSource = "REACTIVATION"
                ttInstallment.FFNum = FixedFee.FFNum
                oiEvents = oiEvents + 1.
@@ -1173,7 +1171,7 @@ PROCEDURE pCollectReactivations:
                                             THEN SingleFee.Amt ELSE 0)  
             ttInstallment.Channel = ""
             ttInstallment.OrderId = (IF FixedFee.BegDate < 11/19/2014 THEN "" 
-                                     ELSE fCheckMsRequest(BUFFER FixedFee, ?))
+                                     ELSE fGetFixedFeeOrderId(BUFFER FixedFee))
             ttInstallment.RowSource = "REACTIVATION"
             ttInstallment.FFNum = FixedFee.FFNum
             oiEvents = oiEvents + 1.
@@ -1189,7 +1187,7 @@ PROCEDURE pCollectReactivations:
 
 END PROCEDURE.
 
-PROCEDURE pCollectOrderCancellations:
+PROCEDURE pCollectInstallmentCancellations:
 
    DEF VAR ldaActDate    AS DATE NO-UNDO.
    DEF VAR ldCheck       AS DEC  NO-UNDO.
@@ -1201,6 +1199,7 @@ PROCEDURE pCollectOrderCancellations:
    DEF VAR liBatches AS INT NO-UNDO. 
    DEF VAR ldeAmount AS DEC NO-UNDO. 
    DEF VAR ldeResidualAmt AS DEC NO-UNDO. 
+   DEF VAR lcCancelType AS CHAR NO-UNDO. 
 
    DEF BUFFER bTermDCCLI FOR DCCLI.
    DEF BUFFER bMainRequest FOR MSRequest.
@@ -1225,7 +1224,8 @@ PROCEDURE pCollectOrderCancellations:
             MsRequest.DoneStamp <= ldTo AND
             MsRequest.ReqCparam3 BEGINS "PAYTERM" AND
            (MsRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} OR
-            MsRequest.ReqSource = {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER})
+            MsRequest.ReqSource = {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} OR
+            MsRequest.ReqCParam2 = "canc")
       ON QUIT UNDO, RETRY
       ON STOP UNDO, RETRY:
       
@@ -1233,6 +1233,10 @@ PROCEDURE pCollectOrderCancellations:
          olInterrupted = TRUE.
          LEAVE.
       END.
+
+      IF MsRequest.ReqCparam2 EQ "canc" THEN
+         lcCancelType = "INSTALLMENT_CANCELLATION".
+      ELSE lcCancelType = "ORDER_CANCELLATION".
 
       IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND
          NOT CAN-FIND(
@@ -1259,7 +1263,7 @@ PROCEDURE pCollectOrderCancellations:
          IF lcLogDir > "" THEN
             PUT STREAM sFixedFee UNFORMATTED
                ";" MsRequest.MsSeq ";"
-               "ERROR:Order cancellation DCCLI not found"
+               "ERROR:Installment cancellation DCCLI not found"
             SKIP.
          NEXT.
       END.
@@ -1287,7 +1291,7 @@ PROCEDURE pCollectOrderCancellations:
             FixedFee.FinancedResult EQ {&TF_STATUS_SENT_TO_BANK} THEN DO:
             PUT STREAM sFixedFee UNFORMATTED
                FixedFee.FFNum ";" MsRequest.MsSeq ";"
-               "ERROR:Order cancellation contract bank response not received"
+               "ERROR:Installment cancellation contract bank response not received"
             SKIP.
             NEXT REQUEST_LOOP.
          END.
@@ -1341,8 +1345,8 @@ PROCEDURE pCollectOrderCancellations:
             ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
             ttInstallment.ResidualAmount = ldeResidualAmt
             ttInstallment.Channel = ""
-            ttInstallment.OrderId = fCheckMsRequest(BUFFER FixedFee, ?)
-            ttInstallment.RowSource = "ORDER_CANCELLATION"
+            ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee)
+            ttInstallment.RowSource = lcCancelType 
             ttInstallment.FFNum = FixedFee.FFNum
             oiEvents = oiEvents + 1.
       END.
@@ -1351,7 +1355,7 @@ PROCEDURE pCollectOrderCancellations:
          PAUSE 0.
          DISP oiEvents LABEL "Requests"
          WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
-              TITLE " Collecting order cancellations " FRAME fQty.
+              TITLE " Collecting order/installment cancellations " FRAME fQty.
       END.
    END.
 

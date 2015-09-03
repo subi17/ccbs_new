@@ -1,0 +1,1 @@
+This is file for finding template folder automatically during email parsing functionality execution. Please do not remove file.

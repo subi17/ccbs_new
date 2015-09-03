@@ -153,9 +153,9 @@ add_string(resp_struct, "mandate_id", MsOwner.MandateId).
 add_datetime(resp_struct, "mandate_date", MsOwner.Mandatedate). 
 
 /* Reset Date of benefits */
-IF MobSub.CLIType = "TARJ7" THEN
+IF MobSub.CLIType = "TARJ7" OR MobSub.CLIType = "TARJ9" THEN
    FOR FIRST ServiceLimit NO-LOCK WHERE
-             ServiceLimit.GroupCode = "TARJ7":
+             ServiceLimit.GroupCode = MobSub.CLIType:
        FIND FIRST MServiceLimit WHERE
                   MServiceLimit.MsSeq = Mobsub.MsSeq AND
                   MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -196,7 +196,7 @@ IF MobSub.CLIType = "TARJ7" THEN
                                PrepEDR.MsSeq = MobSub.Msseq AND
                                PrepEDR.DateST = TODAY AND
                                PrepEDR.SuccessCode EQ 1 AND
-                               PrepEDR.CLIType EQ "TARJ7" AND
+                               PrepEDR.CLIType EQ MobSub.CLIType AND
                                PrepEDR.ErrorCode EQ 0) THEN
             ldaRenewalDate = fLastDayOfMonth(TODAY) + 1.
             ELSE ldaRenewalDate = TODAY.

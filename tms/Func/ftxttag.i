@@ -26,6 +26,7 @@ DEF VAR lcTagCustIDType AS CHAR NO-UNDO.
 DEF VAR lcTagCustID     AS CHAR NO-UNDO.
 DEF VAR lcTagDelAddress AS CHAR NO-UNDO.
 DEF VAR lcTagDelPost    AS CHAR NO-UNDO.
+DEF VAR lcTagUPSHours   AS CHAR NO-UNDO.
 DEF VAR lcTagBankAcc    AS CHAR NO-UNDO.
 DEF VAR lcTagContact1   AS CHAR NO-UNDO.
 DEF VAR lcTagContact2   AS CHAR NO-UNDO.
@@ -75,6 +76,7 @@ FUNCTION fReplaceTag RETURNS CHAR
           icText   = REPLACE(icText,"#FIRSTNAME",lcTagFirstName)
           icText   = REPLACE(icText,"#DELADDR",lcTagDelAddress)
           icText   = REPLACE(icText,"#DELPOST",lcTagDelPost)
+          icText   = REPLACE(icText,"#UPSHOURS",lcTagUPSHours)
           icText   = REPLACE(icText,"#MGMTIENDA",lcTagMGMTienda)
           icText   = REPLACE(icText,"#MGMREFEREE",lcTagMGMReferee)
           icText   = REPLACE(icText,"#CUSTBANK",lcTagBankAcc)

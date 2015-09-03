@@ -1,0 +1,14 @@
+-H:activemq
+-P:61613
+-T:10
+#USER:tms
+#PASS:HdTkFa8-O2mMljJW!aBSEu
+#DUMP_SPOOL:/mnt/store/riftp/merga_to_hpd/spool
+#DUMP_OUTGOING:/mnt/store/riftp/merga_to_hpd/outgoing
+#DUMP_FREQ:180
+#LOG_MANAGER_FILE:/mnt/store/riftp/merga_to_hpd/logs/replog_reader_logging
+#LOG_LEVEL:4
+#LOG_STAT:/mnt/store/riftp/merga_to_hpd/logs/replog_reader_statistics
+#CDR_SPOOL:
+#CDR_OUTGOING:
+#CDR_FREQ:120

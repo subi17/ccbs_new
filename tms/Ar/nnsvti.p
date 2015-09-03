@@ -675,10 +675,11 @@ FOR EACH ttBankAcc:
                 lcTxt = REPLACE(lcTxt,"#DUEDATE",
                                      STRING(Invoice.DueDate,"99.99.99")).
                                      
-         fMakeSMS(Customer.CustNum,
-                  Customer.SMSNumber,
-                  8,
-                  lcTxt).
+         fMakeSchedSMS(Customer.CustNum,
+                        Customer.SMSNumber,
+                        8,
+                        lcTxt,
+                        fMakeTS()).
       END.
 
    END.  /* foreach ttInv */

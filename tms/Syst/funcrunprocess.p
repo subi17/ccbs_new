@@ -70,8 +70,8 @@ FORM
     lcShortLastTime         FORMAT "X(8)"  COLUMN-LABEL "Last Upd"
     lcEndTime               FORMAT "X(19)" COLUMN-LABEL "Ended"
     FuncRunProcess.ProcessHost FORMAT "X(5)" 
-    FuncRunProcess.RunState   FORMAT "X(10)"
-    FuncRunProcess.Processed  
+    FuncRunProcess.RunState   FORMAT "X(9)"
+    FuncRunProcess.Processed  FORMAT "->>>>>>>9"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(cfc)   
     TITLE COLOR VALUE(ctc) 
@@ -97,7 +97,7 @@ FORM
        FORMAT "X(20)" LABEL "Duration" SKIP
     FuncRunProcess.ProcessHost   COLON 20 LABEL "Host"   
     FuncRunProcess.RunState      COLON 20
-    FuncRunProcess.Processed     COLON 20 
+    FuncRunProcess.Processed FORMAT "->>>>>>>9" COLON 20 
     FuncRunProcess.ProcessID     COLON 20
     FuncRunProcess.RunCommand    COLON 20 
        VIEW-AS EDITOR SIZE 45 BY 3

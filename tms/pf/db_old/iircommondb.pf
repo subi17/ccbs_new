@@ -1,0 +1,7 @@
+-db /db2/iircommon/iircommon
+-L 100000
+-B  700000
+-S iircommon
+-pica 8192 
+-napmax 250
+-pf /apps/tms/pf/db/general.pf

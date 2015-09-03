@@ -231,6 +231,7 @@ DEF VAR liRequestId AS INT NO-UNDO.
 DEF VAR lcDeliveryType AS CHAR NO-UNDO. 
 DEF VAR liDeliveryType AS INT NO-UNDO. 
 DEF VAR lcKialaCode AS CHAR NO-UNDO. 
+DEF VAR lcSIMonlyMNP AS CHAR NO-UNDO.   /* Added since this is used in ordersender.i */
 
 DEF BUFFER UserCust    FOR Customer.
 DEF BUFFER InvCustomer FOR Customer.

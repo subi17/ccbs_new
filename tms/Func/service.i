@@ -674,7 +674,7 @@ PROCEDURE pCopyPackage:
 
          IF lcDefParam = "TARJ7" THEN
             FOR FIRST ServiceLimit NO-LOCK WHERE
-                      ServiceLimit.GroupCode = "TARJ7",
+                      ServiceLimit.GroupCode = lcDefParam,
                 FIRST MserviceLimit NO-LOCK WHERE
                       MserviceLimit.MsSeq = iiMsSeq AND
                       MserviceLimit.DialType = ServiceLimit.DialType AND

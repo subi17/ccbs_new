@@ -223,7 +223,7 @@ PROCEDURE pChangeSIM:
       liRequest = fServiceRequest(MobSub.MsSeq,
                                   SubSer.ServCom,
                                   1,     /* ON */
-                                  SubSer.SSParam,
+                                  "",
                                   fMakeTS(),
                                   "",
                                   TRUE, /* fees */

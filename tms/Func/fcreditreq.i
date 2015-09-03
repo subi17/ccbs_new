@@ -139,7 +139,8 @@ FUNCTION fFullCreditNote RETURNS INT
                  InvRow.InvNum    = piInvNum AND
                  InvRow.InvRowNum = liInvRowNum NO-LOCK NO-ERROR.
       IF NOT AVAIL InvRow THEN DO:
-         ocError = "Invalid invrow number".
+         ocError = "Invalid invrow number: " + STRING(liInvRowNum) +
+         ", InvN:" + STRING(piInvNum). 
          RETURN 0.
       END.
 

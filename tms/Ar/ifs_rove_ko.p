@@ -59,8 +59,8 @@ PROCEDURE pDump:
       FIRST OrderPayment NO-LOCK WHERE
             OrderPayment.Brand = gcBrand AND
             OrderPayment.OrderId = Order.OrderId AND
-            OrderPayment.Method = 2: /* credit card */
-
+            (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD} OR 
+             OrderPayment.Method = {&ORDERPAYMENT_M_PAYPAL}):
       RUN pWriteToFile.
 
    END.
@@ -91,7 +91,8 @@ PROCEDURE pDumpRetention:
          FIRST OrderPayment NO-LOCK WHERE
                OrderPayment.Brand = gcBrand AND
                OrderPayment.OrderId = Order.OrderId AND
-               OrderPayment.Method = 2: /* credit card */
+               (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD} OR
+                OrderPayment.Method = {&ORDERPAYMENT_M_PAYPAL}):
 
          IF NOT Order.OrderChannel BEGINS "retention" THEN NEXT.
 
@@ -146,8 +147,8 @@ PROCEDURE pDumpSubTerm:
          FIRST OrderPayment NO-LOCK WHERE
                OrderPayment.Brand = gcBrand AND
                OrderPayment.OrderId = Order.OrderId AND
-               OrderPayment.Method = 2: /* credit card */
-
+               (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD} OR 
+                OrderPayment.Method = {&ORDERPAYMENT_M_PAYPAL}):
          RUN pWriteToFile.
 
       END.
@@ -170,13 +171,22 @@ PROCEDURE pWriteToFile:
       fSplitTS(Order.CrStamp,
                OUTPUT ldOperationDate,
                OUTPUT liTime).
-
-   PUT STREAM sout UNFORMATTED
-      OrderPayment.CCReference lcDelimiter
-      OrderPayment.BinNumber lcDelimiter
-      OrderPayment.AuthNumber lcDelimiter
-      STRING(ldOperationDate,"99-99-9999") SKIP.
-
+   IF OrderPayment.Method EQ {&ORDERPAYMENT_M_PAYPAL} THEN DO:
+       PUT STREAM sout UNFORMATTED
+         OrderPayment.CCReference lcDelimiter
+         /* EMPTY */              lcDelimiter
+         /* EMPTY */              lcDelimiter
+         STRING(ldOperationDate,"99-99-9999") lcDelimiter
+         STRING(OrderPayment.Method) lcDelimiter  SKIP.
+   END.
+   ELSE DO:
+      PUT STREAM sout UNFORMATTED
+         OrderPayment.CCReference lcDelimiter
+         OrderPayment.BinNumber lcDelimiter
+         OrderPayment.AuthNumber lcDelimiter
+         STRING(ldOperationDate,"99-99-9999") lcDelimiter
+         STRING(OrderPayment.Method) lcDelimiter   SKIP.
+   END.
    oiEvents = oiEvents + 1.
    IF NOT SESSION:BATCH THEN DO:
       PAUSE 0.

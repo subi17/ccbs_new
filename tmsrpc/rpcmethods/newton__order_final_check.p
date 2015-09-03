@@ -3,6 +3,7 @@
  *
  * @input: msisdn;string;mandatory;Subscription msisdn 
            number_type;string;mandatory;Order type (new,mnp,renewal,stc)
+           channel;string;optional;order channel
  * @output: boolean;True=OK/False=NOT OK
  */
 {xmlrpc/xmlrpc_access.i}
@@ -18,28 +19,36 @@ gcBrand = "1".
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
 DEF VAR pcCLI AS CHAR NO-UNDO.
 DEF VAR pcNumberType AS CHAR NO-UNDO INIT ?.
+DEF VAR pcChannel AS CHAR NO-UNDO. 
+DEF VAR lcStruct AS CHAR NO-UNDO. 
 /* Output parameters */
 DEF VAR llAllow AS LOG NO-UNDO INIT TRUE. 
 
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
-
-pcstruct = get_struct(param_toplevel_id, "0").
-
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-validate_request(pcstruct,"msisdn!,number_type!").
+pcstruct = get_struct(param_toplevel_id, "0").
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+lcStruct = validate_request(pcstruct,"msisdn!,number_type!,channel").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
    pcCLI = get_string(pcStruct, "msisdn")
-   pcNumberType = get_string(pcStruct, "number_type").
+   pcNumberType = get_string(pcStruct, "number_type")
+   pcChannel = get_string(pcStruct,"channel") WHEN
+      LOOKUP("channel",lcStruct) > 0.
+
+pcChannel = REPLACE(pcChannel,"order","").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN RETURN
    appl_err(SUBST("Incorrect number type: &1",pcNumberType)).
 
-IF fOngoingOrders(pcCli, pcNumberType) THEN llAllow = FALSE.
+IF fOngoingOrders(pcCli, (IF pcChannel BEGINS "retention"
+                          THEN "retention"
+                          ELSE pcNumberType)) THEN llAllow = FALSE.
 ELSE IF pcNumberType EQ "stc" THEN DO:
 
    FIND FIRST MobSub NO-LOCK WHERE

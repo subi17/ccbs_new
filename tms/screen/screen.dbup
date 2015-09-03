@@ -8,10 +8,10 @@ screen -t star       4  dbup.sh /db1/star/star
 #screen -t roamcdr1   8  dbup.sh /db1/roamcdr11/roamcdr11
 screen -t fraudcdr   9  dbup.sh /db1/fraudcdr10/fraudcdr10
 screen -t counter    10 dbup.sh /db1/counter/counter
-screen -t mcdr2      11 dbup.sh /db1/mcdr14q1/mcdr14q1
-screen -t mcdrdtl2   12 dbup.sh /db1/mcdrdtl14q1/mcdrdtl14q1
-screen -t prepcdr2   13 dbup.sh /db1/prepcdr14q1/prepcdr14q1
-screen -t roamcdr2   14 dbup.sh /db1/roamcdr14q1/roamcdr14q1
+screen -t mcdr2      11 dbup.sh /db1/mcdr15q2/mcdr15q2
+screen -t mcdrdtl2   12 dbup.sh /db1/mcdrdtl15q2/mcdrdtl15q2
+screen -t prepcdr2   13 dbup.sh /db1/prepcdr15q2/prepcdr15q2
+screen -t roamcdr2   14 dbup.sh /db1/roamcdr15q2/roamcdr15q2
 screen -t reratelog  15 dbup.sh /db1/reratelog/reratelog
 screen -t mcdr2q     16 dbup.sh /db1/mcdr14q2/mcdr14q2
 screen -t mcdrdtl2q  17 dbup.sh /db1/mcdrdtl14q2/mcdrdtl14q2

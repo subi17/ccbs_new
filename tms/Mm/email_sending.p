@@ -98,7 +98,7 @@ PROCEDURE pSendEmail:
 
    /* Send the email */
    IF LOOKUP(lcMailHost,{&HOSTNAME_STAGING}) > 0 THEN
-      SendMaileInvoice(lcEmailText,"").
+      SendMaileInvoice(lcEmailText,"","").
    ELSE DO:
       ASSIGN xMailSubj     = "'" + xMailSubj + "'"
              xMailFileType = "text/html".
@@ -158,7 +158,7 @@ PROCEDURE pSendFusionEmail:
    OUTPUT STREAM sEmail CLOSE.
 
    /* Send the email */
-   SendMaileInvoice(lcEmailReplacedText,"").
+   SendMaileInvoice(lcEmailReplacedText,"","").
 
    /* wait for confirmation */
    fReqStatus(2,"").

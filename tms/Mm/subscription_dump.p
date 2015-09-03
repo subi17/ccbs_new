@@ -59,10 +59,6 @@ BY DFField.OrderNbr:
    lcDumpFields = lcDumpFields + (IF lcDumpFields > "" THEN "," ELSE "") +
                   DFField.DFField.
 END.
-         
-fSplitTS(idLastDump,
-         OUTPUT ldaModified,
-         OUTPUT liCnt).
 
 ASSIGN
    lhTable     = BUFFER MobSub:HANDLE
@@ -73,8 +69,7 @@ OUTPUT STREAM sFile TO VALUE(icFile).
 
 
 FatimeLoop:
-FOR EACH MobSub NO-LOCK WHERE
-         MobSub.Brand = gcBrand
+FOR EACH MobSub NO-LOCK
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:
 
@@ -82,6 +77,8 @@ FOR EACH MobSub NO-LOCK WHERE
       olInterrupted = TRUE.
       LEAVE.
    END.
+         
+   IF MobSub.Brand NE gcBrand THEN NEXT.
 
    DO liCnt = 1 TO NUM-ENTRIES(lcDumpFields):
 

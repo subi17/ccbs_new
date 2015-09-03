@@ -45,6 +45,7 @@ DEF BUFFER bMNPProcess FOR MNPProcess.
 DEF BUFFER bMNPSub FOR MNPSub.
 DEF BUFFER bOrder  FOR Order.
 DEF BUFFER lbMobSub FOR MobSub.
+DEF BUFFER bSTCMsRequest FOR MsRequest. 
 
 DEF VAR lcMNPSMSText       AS CHAR  NO-UNDO.
 DEF VAR ldaSecSIMTermDate  AS DATE  NO-UNDO.
@@ -112,6 +113,9 @@ FOR EACH ttInput NO-LOCK:
       NO-LOCK NO-ERROR.
       IF AVAIL MsRequest THEN DO:
          fReqStatus({&REQUEST_STATUS_CANCELLED},"Cancelled MNP Process").
+         
+         fAddLineSTCCancellation(MsRequest.MsRequest, MsRequest.CustNum).
+          
       END.
    
       /* Cancel possible SMS messages */

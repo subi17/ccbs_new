@@ -1,0 +1,10 @@
+-db /db1/roamcdr13q2/roamcdr13q2
+-L 100000
+#-B 500000
+-B  250000
+-B2 100000
+-S roamcdr13q2
+-aiarcdir /aiarchive/roamcdr13q2
+-DBService replserv
+-pica 8192
+-pf /apps/tms/pf/db/general.pf

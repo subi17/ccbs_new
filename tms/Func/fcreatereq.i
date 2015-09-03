@@ -14,17 +14,16 @@
 
 {commali.i}
 {timestamp.i}
+{tmsconst.i}
 
 DEF BUFFER bReqSub   FOR MobSub.
 DEF BUFFER bCreaReq  FOR MsRequest.
 
-/* customer based request types */
-DEF VAR lcCustReq    AS CHAR NO-UNDO INIT "5,6,7,11,12,22,23,83,84,86".
-
+/*  customer based request types */
+&SCOPED-DEFINE REQ_CUST_REQUESTS "5,6,7,11,12,22,23,83,84,86"
 /* types that can be issued to a closed or non-existing subscription */
-DEF VAR lcClosedSub  AS CHAR NO-UNDO INIT "8,9,13,20,87".
+&SCOPED-DEFINE REQ_CLOSED_SUBS "8,9,13,20,87"
  
-
 /* is there a pending request */
 FUNCTION fPendingRequest RETURNS LOGICAL
    (iiTarget  AS INT,   /* Mobsub.MsSeq or Customer.CustNum */
@@ -38,7 +37,7 @@ FUNCTION fPendingRequest RETURNS LOGICAL
       /* more than one are possible */
       IF LOOKUP(STRING(iiReqType),"9,13,81") > 0 THEN RETURN FALSE.
       
-      IF LOOKUP(STRING(iiReqType),lcCustReq) > 0 
+      IF LOOKUP(STRING(iiReqType),{&REQ_CUST_REQUESTS}) > 0 
       THEN RETURN CAN-FIND(FIRST MsRequest WHERE
                                  MsRequest.Brand     = gcBrand   AND
                                  MsRequest.ReqType   = iiReqType AND
@@ -56,7 +55,7 @@ FUNCTION fPendingRequest RETURNS LOGICAL
                  RequestType.Brand = gcBrand AND
                  RequestType.InUse = TRUE:
       
-      IF LOOKUP(STRING(RequestType.ReqType),lcCustReq) > 0 THEN DO: 
+      IF LOOKUP(STRING(RequestType.ReqType),{&REQ_CUST_REQUESTS}) > 0 THEN DO: 
          IF CAN-FIND(FIRST MsRequest WHERE
                            MsRequest.Brand     = gcBrand   AND
                            MsRequest.ReqType   = RequestType.ReqType AND
@@ -85,11 +84,14 @@ FUNCTION fChkRequest RETURNS CHARACTER
     icExtraParam AS CHAR).
    
    DEF VAR llExist AS LOG NO-UNDO.
+   DEF VAR liLoop  AS INT NO-UNDO. 
+   DEF VAR licount AS INT NO-UNDO.
+   licount = NUM-ENTRIES({&REQ_ONGOING_STATUSES}).
    
-   IF LOOKUP(STRING(iiReqType),lcCustReq) = 0 THEN DO:
+   IF LOOKUP(STRING(iiReqType),{&REQ_CUST_REQUESTS}) = 0 THEN DO:
       
       FIND bReqSub WHERE bReqSub.MsSeq = iiTarget NO-LOCK NO-ERROR.
-      IF LOOKUP(STRING(iiReqType),lcClosedSub) = 0 THEN DO:
+      IF LOOKUP(STRING(iiReqType),{&REQ_CLOSED_SUBS}) = 0 THEN DO:
          IF NOT AVAILABLE bReqSub THEN RETURN "Unknown subscription".
       END.
       
@@ -122,12 +124,18 @@ FUNCTION fChkRequest RETURNS CHARACTER
             IF icExtraParam = "999" THEN LEAVE skip-MsRequest.
 
             /* special case by pass for Revert renewal Order source (ie 22) */
-            ELSE IF icExtraParam <> "22" THEN
-               llExist = CAN-FIND(FIRST MsRequest WHERE
-                                  MsRequest.MsSeq      = iiTarget  AND
-                                  MsRequest.ReqType    = iiReqType AND
-                                  MsRequest.ReqCParam3 = icParam   AND
-                                  LOOKUP(STRING(MsRequest.ReqStatus),"2,4,9,99") = 0).
+            ELSE IF icExtraParam <> "22" THEN DO:
+
+               CHECK_LOOP:
+               DO liLoop = 1 TO licount:
+                  llExist = CAN-FIND(FIRST MsRequest WHERE
+                                     MsRequest.MsSeq      = iiTarget  AND
+                                     MsRequest.ReqType    = iiReqType AND
+                                     MsRequest.ReqStatus  = INT(ENTRY(liLoop,({&REQ_ONGOING_STATUSES}))) AND
+                                     MsRequest.ReqCParam3 = icParam).
+                  IF llExist THEN LEAVE CHECK_LOOP.
+               END.
+            END.
          END.
          WHEN 13 THEN llExist = FALSE.
 
@@ -161,12 +169,18 @@ FUNCTION fChkRequest RETURNS CHARACTER
              even if there's active SHAPER/HSDPA request */
             IF iiReqType EQ 1 AND LOOKUP(icParam,"SHAPER,HSDPA,BB") > 0
             THEN llExist = FALSE.
-            ELSE llExist = CAN-FIND(FIRST MsRequest WHERE
-                                    MsRequest.MsSeq      = iiTarget  AND
-                                    MsRequest.ReqType    = iiReqType AND
-                                    MsRequest.ReqCParam1 = icParam   AND
-                                    LOOKUP(STRING(MsRequest.ReqStatus),"2,4,9,99") = 0).
+            ELSE DO:
+               CHECK_LOOP2:
+               DO liLoop = 1 TO licount:
+                  llExist = CAN-FIND(FIRST MsRequest WHERE
+                                          MsRequest.MsSeq      = iiTarget  AND
+                                          MsRequest.ReqType    = iiReqType AND
+                                          MsRequest.ReqCParam1 = icParam   AND
+                                          MsRequest.ReqStatus  = INT(ENTRY(liLoop,({&REQ_ONGOING_STATUSES})))).
+                  IF llExist THEN LEAVE CHECK_LOOP2.
+               END.
             END.
+         END.
          END CASE.                            
       END.
    END.   
@@ -176,7 +190,7 @@ FUNCTION fChkRequest RETURNS CHARACTER
       /* web-user can cancel his own request */
       IF katun BEGINS "WEB" THEN DO:
          IF icParam = "" THEN DO:
-            IF LOOKUP(STRING(iiReqType),lcCustReq) > 0
+            IF LOOKUP(STRING(iiReqType),{&REQ_CUST_REQUESTS}) > 0
             THEN FIND FIRST bCreaReq NO-LOCK WHERE
                             bCreaReq.Brand     = gcBrand   AND
                             bCreaReq.ReqType   = iiReqType AND
@@ -204,7 +218,7 @@ FUNCTION fChkRequest RETURNS CHARACTER
          END.
       END.
       
-      RETURN (IF LOOKUP(STRING(iiReqType),lcCustReq) > 0
+      RETURN (IF LOOKUP(STRING(iiReqType),{&REQ_CUST_REQUESTS}) > 0
               THEN "Customer" 
               ELSE "Subscription") + " already has an active request".
    END.
@@ -221,27 +235,27 @@ FUNCTION fCreateRequest RETURNS LOGICAL
     INPUT  ilCreateFees AS LOG,
     INPUT  ilSendSMS    AS LOG).
 
+   DEF VAR llSubsRequest AS LOG NO-UNDO. 
+
    IF idChgStamp = 0 THEN idChgStamp = fMakeTS().
+   llSubsRequest = (LOOKUP(STRING(iiReqType),{&REQ_CUST_REQUESTS}) = 0 AND 
+                    AVAILABLE bReqSub).
 
    CREATE bCreaReq.
    ASSIGN bCreaReq.MsRequest  = NEXT-VALUE(MsRequest)
           bCreaReq.ReqType    = iiReqType
           bCreaReq.Brand      = gcBrand
-          bCreaReq.UserCode   = katun
+          bCreaReq.UserCode   = (katun + (IF icCreator > ""
+                                         THEN " / " + icCreator 
+                                         ELSE ""))
           bCreaReq.ActStamp   = idChgStamp
           bCreaReq.ReqStatus  = 0
           bCreaReq.CreateFees = ilCreateFees
-          bCreaReq.SendSMS    = INTEGER(ilSendSMS).
+          bCreaReq.SendSMS    = INTEGER(ilSendSMS)
+          bCreaReq.MsSeq      = bReqSub.MsSeq WHEN llSubsRequest
+          bCreaReq.CLI        = bReqSub.CLI WHEN llSubsRequest
+          bCreaReq.CustNum    = bReqSub.CustNum WHEN llSubsRequest
           bCreaReq.CreStamp   = fMakeTS().
-
-   IF LOOKUP(STRING(iiReqType),lcCustReq) = 0 AND 
-      AVAILABLE bReqSub THEN ASSIGN 
-          bCreaReq.MsSeq      = bReqSub.MsSeq
-          bCreaReq.CLI        = bReqSub.CLI
-          bCreaReq.CustNum    = bReqSub.CustNum.
-          
-   IF icCreator > "" THEN 
-      bCreaReq.UserCode = bCreaReq.UserCode + " / " + icCreator.
 
 END FUNCTION.
 

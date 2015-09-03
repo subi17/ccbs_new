@@ -1,0 +1,26 @@
+-db /db1/common/common
+-db /db1/ordercanal/ordercanal
+-db /db1/mobile/mobile
+-db /db1/mcdr13q2/mcdr13q2 -ld mcdr
+-db /db1/star/star
+-db /db1/mcdrdtl13q2/mcdrdtl13q2  -ld mcdrdtl
+-db /db1/roamcdr13q2/roamcdr13q2 -ld roamcdr
+-db /db1/prepcdr13q2/prepcdr13q2 -ld prepcdr
+-db /db1/counter/counter -ld counter
+-db /db1/prepedr/prepedr -ld prepedr
+
+-h 20
+-d dmy
+-e 100
+-l 10000
+-yy 1980
+-T /tmp
+-TB 31
+-TM 32
+-rand 2
+-tmpbsize 8
+-Bt 512
+-s 160
+-q
+-Mm 8192
+

@@ -10,6 +10,7 @@ IF NEW(DPMember) THEN DO:
       Common.RepLog.EventType = "CREATE"
       Common.RepLog.KeyValue  = STRING(DPMember.DPId) + CHR(255) +
                                 DPMember.HostTable    + CHR(255) +
+                                DPMember.KeyValue     + CHR(255) +
                                 STRING(DPMember.ValidTo)            
       Common.RepLog.EventTS   = DATETIME(TODAY,MTIME).
 END. /* IF NEW(DPMember) THEN DO: */
@@ -22,6 +23,7 @@ ELSE DO:
       Common.RepLog.EventType = "MODIFY"
       Common.RepLog.KeyValue  = STRING(Oldbuf.DPId) + CHR(255) +
                                 Oldbuf.HostTable    + CHR(255) +
+                                Oldbuf.KeyValue     + CHR(255) +
                                 STRING(Oldbuf.ValidTo)
       Common.RepLog.EventTS   = DATETIME(TODAY,MTIME).
 END. /* ELSE DO: */

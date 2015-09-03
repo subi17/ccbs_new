@@ -546,16 +546,6 @@ PROCEDURE pGetDSSBillingInfo:
 
          ldeBundleInclAmt = bMServiceLimit.InclAmt.
 
-         IF LOOKUP(bDayCampaign.DCEvent,{&DSS_BUNDLES}) > 0 THEN DO:
-            FIND FIRST MServiceLPool WHERE
-                       MserviceLPool.MsSeq   = bMServiceLimit.MsSeq   AND
-                       MserviceLPool.SLSeq   = bMServiceLimit.SLSeq   AND
-                       MserviceLPool.FromTS <= ldPeriodTo             AND
-                       MserviceLPool.EndTS  >= ldPeriodTo NO-LOCK NO-ERROR.
-            IF AVAILABLE MserviceLPool THEN
-               ldeBundleInclAmt = MserviceLPool.LimitAmt.
-         END. /* IF bDayCampaign.DCType = {&DSS} THEN DO: */
-
          ASSIGN ldeBundleAmt = (ldeBundleInclAmt * 1024 * 1024)
                 llFullMonth  = FALSE
                 ldeDataAllocated = 0.

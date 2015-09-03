@@ -279,9 +279,10 @@ ELSE DO:
       lcDetFile = fModifyFileName(lcDetFile,TODAY,"CRON")
       lcErrors = fModifyFileName(lcErrors,TODAY,"CRON")
       lcMail = fModifyFileName(lcMail,TODAY,"CRON")
-      ldBeginStamp = fHMS2TS(TODAY,"0")
+      ldBeginStamp = fHMS2TS(DATE(MONTH(Today),1,YEAR(TODAY)),"")
       ldEndStamp = fMakeTS().
 END.
+
 
 DEF STREAM sErrors.
 OUTPUT STREAM sErrors TO VALUE(lcErrors).
@@ -429,7 +430,11 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
             ELSE if liFeecreated = 1 then do:
 
                if msrequest.reqcparam2 begins "tarj" then llError = FALSE.
-               else if llRenewal eq true then llError = true.
+               /* TERM contract rule changed  3.8.2015 */
+               else if llRenewal eq true AND 
+                      MsRequest.ActStamp >= 20150804 then llError = FALSE.
+               else if llRenewal eq true AND 
+                     MsRequest.ActStamp < 20150804 then llError = true.
                else if msrequest.reqiparam5 eq 1 then llError = true. 
                else if msrequest.reqsource eq 
                   {&REQUEST_SOURCE_FUSION_ORDER_FALLBACK} then llError = true.
@@ -458,7 +463,11 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
             /* fee should NOT exist with these cases */
             else if liFeecreated = 1 then do:
                
-               if llRenewal eq true then llError = true.
+               /* TERM contract rule changed  3.8.2015 */
+               if llRenewal eq true AND 
+                      MsRequest.ActStamp >= 20150804 then llError = FALSE.
+               else if llRenewal eq true AND 
+                     MsRequest.ActStamp < 20150804 then llError = true.
                else if msrequest.reqiparam5 eq 1 then llError = true. 
                else if msrequest.crestamp <= 20130905.18000 and 
                     lookup(DCCLI.dcevent,"term18,term24,term18-50,term24-50") > 0 then llError = true.

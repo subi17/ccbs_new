@@ -111,6 +111,7 @@ IF liDelType > 0 AND Customer.DelType <> liDelType THEN DO:
                                        INPUT Customer.Custnum,
                                        INPUT {&REQUEST_SOURCE_NEWTON},
                                        INPUT Customer.Email,
+                                       INPUT 0, /* msseq */
                                        OUTPUT lcError).
       IF liRequest = 0 THEN DO:
          IF lcError = "Customer already has an active request" THEN .

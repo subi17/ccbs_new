@@ -1,0 +1,60 @@
+
+OpenEdge Replication Startup Log - Tue May 20 04:42:39 2014
+
+Envionment
+----------
+DLC               : /opt/dlc
+PROCFG            : Not set
+PROMSGS           : /opt/dlc/promsgs
+DSRHOME           : Not set
+
+Executable
+----------
+Name              : /opt/progress/102b/bin/rpserver
+Argument 1        : -db
+Argument 2        : /db1/prepedr/prepedr
+
+
+Verifying Progress Product version
+Progress Product version verification complete
+
+Beginning argument parsing
+Argument parsing complete
+
+Opening logging subsystem using message file /opt/dlc/promsgs.
+
+Opening database log /db1/prepedr/prepedr.lg.
+
+Created Replication process
+
+
+OpenEdge Replication Startup Log - Tue May 20 04:42:39 2014
+
+Envionment
+----------
+DLC               : /opt/dlc
+PROCFG            : Not set
+PROMSGS           : /opt/dlc/promsgs
+DSRHOME           : Not set
+
+Executable
+----------
+Name              : /opt/progress/102b/bin/rpserver
+Argument 1        : -db
+Argument 2        : /db1/prepedr/prepedr
+
+
+Verifying Progress Product version
+Progress Product version verification complete
+
+Beginning argument parsing
+Argument parsing complete
+
+Opening logging subsystem using message file /opt/dlc/promsgs.
+
+Opening database log /db1/prepedr/prepedr.lg.
+
+Child process started normally
+
+Parent process killed
+

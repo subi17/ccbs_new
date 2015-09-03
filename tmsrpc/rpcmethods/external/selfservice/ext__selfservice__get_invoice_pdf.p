@@ -34,6 +34,7 @@ DEF VAR llInvoiceExits  AS LOG  NO-UNDO.
 DEF VAR lcResult        AS CHAR NO-UNDO.
 DEF VAR lcCommand       AS CHAR NO-UNDO.
 DEF VAR lcMiYoigoURL    AS CHAR NO-UNDO.
+DEF VAR lcApplicationId AS CHAR NO-UNDO. 
 
 DEF STREAM sInput.
 
@@ -44,8 +45,12 @@ ASSIGN pcTransId  = get_string(param_toplevel_id,"0")
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF NOT fchkTMSCodeValues(gbAuthLog.UserName,substring(pcTransId,1,3)) THEN
+lcApplicationId = substring(pcTransId,1,3).
+
+IF NOT fchkTMSCodeValues(gbAuthLog.UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
+       
+katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
 
 lcMiYoigoURL = fCParam("URL","MiYoigoURL").
 IF lcMiYoigoURL = "" OR lcMiYoigoURL = ? THEN

@@ -13,6 +13,7 @@
 {mnpmessages.i}
 {tmsconst.i}
 {date.i}
+{fbundle.i}
 
 DEFINE INPUT PARAMETER iiOrderId AS INTEGER NO-UNDO.
 
@@ -23,6 +24,8 @@ DEFINE VARIABLE ldChgDate AS DATE NO-UNDO.
 DEFINE VARIABLE ldeToday AS DEC NO-UNDO. 
 DEFINE VARIABLE ldeChgStamp AS DECIMAL NO-UNDO.
 DEFINE VARIABLE ldePortingTime AS DECIMAL NO-UNDO.
+DEFINE VARIABLE lcProduct AS CHAR NO-UNDO. 
+DEFINE VARIABLE lcTariffType AS CHAR NO-UNDO. 
 
 FIND Order NO-LOCK WHERE
      Order.Brand   = gcBrand AND
@@ -97,6 +100,19 @@ END.
    
 IF Order.PortingDate <> ? THEN
    ldePortingTime = fMake2Dt(Order.PortingDate,0).
+FIND FIRST OrderAccessory NO-LOCK WHERE
+           OrderAccessory.Brand = gcBrand AND
+           OrderAccessory.OrderId = Order.OrderID AND
+           OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
+IF AVAIL OrderAccessory THEN
+   lcProduct = "T".
+ELSE
+   lcProduct = "S".
+
+lcTariffType = fGetDataBundleInOrderAction(Order.OrderId,
+                                           Order.CLIType).
+IF lcTariffType = "" THEN
+   lcTariffType = Order.CLIType.
 
 IF ldePortingTime <= fMakeTS() THEN
    ldChgDate = fMNPChangeWindowDate(
@@ -106,7 +122,9 @@ IF ldePortingTime <= fMakeTS() THEN
                            Order.OrderChannel NE "inversa"
                         THEN "POS"
                         ELSE Order.OrderChannel),
-                       OrderCustomer.Region).
+                       OrderCustomer.Region,
+                       lcProduct,
+                       lcTariffType).
 ELSE ldChgDate = Order.PortingDate.
 
 ldeChgStamp = fMake2Dt(ldChgDate,7200).

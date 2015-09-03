@@ -216,14 +216,7 @@ PROCEDURE pValidateFileData:
          fError("No price list available").
          RETURN "ERROR".
       END.
-                       
-      IF (ttRatePlan.Action    EQ "NEW"      AND 
-          ttRatePlan.PriceList EQ "NO")      OR  
-         (ttRatePlan.Action    EQ "EXISTING" AND 
-          ttRatePlan.PriceList EQ "YES")     THEN DO:
-         fError("Wrong Action and PriceList data provided").
-         RETURN "ERROR".
-      END.          
+                              
    END.
    ELSE DO:
       fError("No ttRateplan records available").
@@ -261,42 +254,40 @@ DEFINE VARIABLE lcERPlan AS CHARACTER NO-UNDO.
       END.
                         
       CASE ttRatePlan.Action:
-         WHEN "EXISTING" THEN 
+         WHEN "EXISTING" THEN DO:
+            
+            RUN pCreRPData.
+
+            FOR EACH PListConf WHERE 
+                     PListConf.Brand    = gcBrand AND
+                     PListConf.RatePlan = RatePlan.RatePlan NO-LOCK:
+               CREATE bPListConf.
+               BUFFER-COPY PListConf EXCEPT PListConf.RatePlan 
+                                            PListConf.dFrom 
+                                            PListConf.dTo
+                                         TO bPListConf.
+               ASSIGN bPListConf.RatePlan = REPLACE(ttRatePlan.RPSubType,"CONT","CONTRATO") 
+                      bPListConf.dFrom    = TODAY 
+                      bPListConf.dTo      = 12/31/49 NO-ERROR.
+               
+               IF ERROR-STATUS:ERROR THEN DO:
+                  fError("Error creating PListConf").
+                  RETURN "ERROR".    
+               END.                 
+            END.             
+             
             ASSIGN oRateplan = CLIType.PricePlan
                    oPayType  = CLIType.PayType.
+                   
+         END.          
          WHEN "NEW" THEN DO:
-            FIND FIRST RatePlan WHERE
-                       RatePlan.Brand    = gcBrand AND
-                       RatePlan.RatePlan = CLIType.PricePlan NO-LOCK NO-ERROR.
-            IF NOT AVAILABLE RatePlan THEN DO:           
-               fError("No Rateplan data available").
-               RETURN "ERROR".
-            END. 
-            
-            CREATE bRatePlan.
-            BUFFER-COPY RatePlan EXCEPT Rateplan.RatePlan 
-                                        Rateplan.RPName  
-                                     TO bRatePlan.
-            ASSIGN bRatePlan.RatePlan = ttRatePlan.RPSubType
-                   bRateplan.RPName   = REPLACE(ttRatePlan.RPSubType,"CONT","Contrato ") + " (Post paid)"  
-                   oRatePlan          = ttRatePlan.RPSubType 
-                   oPayType           = CLIType.PayType      NO-ERROR.
-            
-            IF ERROR-STATUS:ERROR THEN DO:
-               fError("Error creating Rateplan").
-               RETURN "ERROR".
-            END.
-            
-            RUN pCreTranslations NO-ERROR.
-            
-            IF ERROR-STATUS:ERROR THEN DO:
-               fError("Error creating Rateplan translations").
-               RETURN "ERROR".
-            END.
+                    
+            RUN pCreRPData.
                                     
             FOR EACH PListConf WHERE 
                      PListConf.Brand    = gcBrand AND
                      PListConf.RatePlan = RatePlan.RatePlan NO-LOCK:
+                 
                IF PListConf.RatePlan EQ PListConf.PriceList THEN DO:
 
                   FOR EACH Tariff WHERE 
@@ -307,7 +298,7 @@ DEFINE VARIABLE lcERPlan AS CHARACTER NO-UNDO.
                                                Tariff.ValidFrom
                                                Tariff.TariffNum
                                             TO bTariff.
-                     ASSIGN bTariff.PriceList = ttRatePlan.RPSubType
+                     ASSIGN bTariff.PriceList = REPLACE(ttRatePlan.RPSubType,"CONT","CONTRATO")
                             bTariff.ValidFrom = TODAY 
                             bTariff.TariffNum = NEXT-VALUE(Tariff) NO-ERROR. 
 
@@ -324,7 +315,7 @@ DEFINE VARIABLE lcERPlan AS CHARACTER NO-UNDO.
                      BUFFER-COPY PriceList EXCEPT PriceList.PriceList 
                                                   PriceList.PLName
                                                TO bPriceList.
-                     ASSIGN bPriceList.PriceList = ttRatePlan.RPSubType
+                     ASSIGN bPriceList.PriceList = REPLACE(ttRatePlan.RPSubType,"CONT","CONTRATO")
                             bPriceList.PLName    = REPLACE(ttRatePlan.RPSubType,"CONT","Contrato") NO-ERROR.
                          
                      IF ERROR-STATUS:ERROR THEN DO:    
@@ -340,11 +331,62 @@ DEFINE VARIABLE lcERPlan AS CHARACTER NO-UNDO.
                                                PListConf.dTo 
                                             TO bPListConf.
                   ASSIGN 
-                     bPListConf.PriceList = ttRatePlan.RPSubType
-                     bPListConf.RatePlan  = ttRatePlan.RPSubType
+                     bPListConf.PriceList = REPLACE(ttRatePlan.RPSubType,"CONT","CONTRATO")
+                     bPListConf.RatePlan  = REPLACE(ttRatePlan.RPSubType,"CONT","CONTRATO")
                      bPListConf.dFrom     = TODAY 
                      bPListConf.dTo       = 12/31/49 NO-ERROR.
-               END.    
+                  
+                  IF ERROR-STATUS:ERROR THEN DO:
+                     fError("Error creating PListConf").
+                     RETURN "ERROR".    
+                  END.
+                  
+                  IF CAN-FIND(FIRST ttTariff NO-LOCK) THEN DO:
+                     FOR EACH ttTariff NO-LOCK:
+                        FIND Tariff WHERE 
+                             Tariff.Brand     = gcBrand              AND 
+                             Tariff.PriceList = ttRatePlan.RPSubType AND 
+                             Tariff.CCN       = INT(ttTariff.CCN)    AND
+                             Tariff.BDest     = ttTariff.BDest       AND
+                             Tariff.ValidFrom <= TODAY               AND
+                             Tariff.ValidTo   >= TODAY              
+                        EXCLUSIVE-LOCK NO-ERROR.
+                                                    
+                        IF AVAILABLE Tariff THEN DO:
+                           ASSIGN 
+                              Tariff.BillCode    = ttTariff.BillItem
+                              Tariff.PriceList   = REPLACE(ttRatePlan.RPSubType,"CONT","CONTRATO")
+                              Tariff.Price       = DECIMAL(ttTariff.Price)
+                              Tariff.StartCharge = DECIMAL(ttTariff.SetupFee) NO-ERROR.
+                              
+                           IF ERROR-STATUS:ERROR THEN DO:
+                              fError("Error updating Tariff").
+                              RETURN "ERROR".
+                           END.   
+                        END.
+                        ELSE DO:
+                           CREATE Tariff.
+                           ASSIGN 
+                              Tariff.Brand       = gcBrand
+                              Tariff.TariffNum   = NEXT-VALUE(Tariff)
+                              Tariff.PriceList   = REPLACE(ttRatePlan.RPSubType,"CONT","CONTRATO")
+                              Tariff.CCN         = INT(ttTariff.CCN)
+                              Tariff.BDest       = ttTariff.BDest
+                              Tariff.BillCode    = ttTariff.BillItem
+                              Tariff.Price       = DECIMAL(ttTariff.Price)
+                              Tariff.StartCharge = DECIMAL(ttTariff.SetupFee)
+                              Tariff.ValidFrom   = TODAY 
+                              Tariff.Validto     = 12/31/49 NO-ERROR.
+                           
+                           IF ERROR-STATUS:ERROR THEN DO:
+                              fError("Error creating Tariff").
+                              RETURN "ERROR".
+                           END.
+                        END.  /* ELSE DO: */  
+                     END. /* FOR EACH ttTariff */           
+                  END.  /* IF CAN-FIND(FIRST */
+                  
+               END. /* IF PListConf.RatePlan EQ PListConf.PriceList */
                ELSE DO:        
                   CREATE bPListConf.
                   BUFFER-COPY PListConf EXCEPT PListConf.RatePlan 
@@ -352,7 +394,7 @@ DEFINE VARIABLE lcERPlan AS CHARACTER NO-UNDO.
                                                PListConf.dTo 
                                             TO bPListConf.
                   ASSIGN 
-                     bPListConf.RatePlan = ttRatePlan.RPSubType
+                     bPListConf.RatePlan = REPLACE(ttRatePlan.RPSubType,"CONT","CONTRATO")
                      bPListConf.dFrom    = TODAY 
                      bPListConf.dTo      = 12/31/49 NO-ERROR.
                END.
@@ -362,46 +404,6 @@ DEFINE VARIABLE lcERPlan AS CHARACTER NO-UNDO.
                    RETURN "ERROR".
                END.                                                    
             
-               IF CAN-FIND(FIRST ttTariff NO-LOCK) THEN DO:
-                  FOR EACH ttTariff NO-LOCK:
-                     FIND Tariff WHERE 
-                          Tariff.Brand     = gcBrand             AND 
-                          Tariff.PriceList = PListConf.PriceList AND 
-                          Tariff.CCN       = INT(ttTariff.CCN)   AND
-                          Tariff.BDest     = ttTariff.BDest      AND
-                          Tariff.ValidFrom <= TODAY              AND
-                          Tariff.ValidTo   >= TODAY              
-                     EXCLUSIVE-LOCK NO-ERROR.
-                                                    
-                     IF AVAILABLE Tariff THEN DO:
-                        ASSIGN 
-                           Tariff.BillCode    = ttTariff.BillItem
-                           Tariff.PriceList   = ttRatePlan.RPSubType
-                           Tariff.Price       = DECIMAL(ttTariff.Price)
-                           Tariff.StartCharge = DECIMAL(ttTariff.SetupFee) NO-ERROR.
-                     END.
-                     ELSE DO:
-                        CREATE Tariff.
-                        ASSIGN 
-                           Tariff.Brand       = gcBrand
-                           Tariff.TariffNum   = NEXT-VALUE(Tariff)
-                           Tariff.PriceList   = PListConf.PriceList
-                           Tariff.CCN         = INT(ttTariff.CCN)
-                           Tariff.BDest       = ttTariff.BDest
-                           Tariff.BillCode    = ttTariff.BillItem
-                           Tariff.Price       = DECIMAL(ttTariff.Price)
-                           Tariff.StartCharge = DECIMAL(ttTariff.SetupFee)
-                           Tariff.ValidFrom   = TODAY 
-                           Tariff.Validto     = 12/31/49 NO-ERROR.
-                           
-                        IF ERROR-STATUS:ERROR THEN DO:
-                           fError("Error creating Tariff").
-                           RETURN "ERROR".
-                        END.
-                     END.           
-                  END. /* FOR EACH ttTariff */   
-               END.
-               
             END.  /* FOR EACH PListConf */  
          END.  /* WHEN "NEW" */       
       END CASE.
@@ -409,6 +411,39 @@ DEFINE VARIABLE lcERPlan AS CHARACTER NO-UNDO.
    
    RETURN "OK".
            
+END PROCEDURE.    
+
+PROCEDURE pCreRPData:
+    
+   FIND FIRST RatePlan WHERE
+              RatePlan.Brand    = gcBrand AND
+              RatePlan.RatePlan = CLIType.PricePlan NO-LOCK NO-ERROR.
+   IF NOT AVAILABLE RatePlan THEN DO:           
+      fError("Rateplan doesn't exists").
+      RETURN "ERROR".
+   END. 
+    
+   CREATE bRatePlan.
+   BUFFER-COPY RatePlan EXCEPT Rateplan.RatePlan 
+                               Rateplan.RPName  
+                            TO bRatePlan.
+   ASSIGN bRatePlan.RatePlan = REPLACE(ttRatePlan.RPSubType,"CONT","CONTRATO") 
+          bRateplan.RPName   = REPLACE(ttRatePlan.RPSubType,"CONT","Contrato ") + " (Post paid)"  
+          oRatePlan          = ttRatePlan.RPSubType 
+          oPayType           = CLIType.PayType      NO-ERROR.
+    
+   IF ERROR-STATUS:ERROR THEN DO:
+      fError("Error creating Rateplan").
+      RETURN "ERROR".
+   END.
+    
+   RUN pCreTranslations NO-ERROR.
+   
+   IF ERROR-STATUS:ERROR THEN DO:
+      fError("Error creating Rateplan translations").
+      RETURN "ERROR".
+   END.
+                         
 END PROCEDURE.    
 
 PROCEDURE pCreTranslations:
@@ -448,3 +483,5 @@ PROCEDURE pCreTranslations:
    RETURN "OK".
         
 END PROCEDURE.
+
+

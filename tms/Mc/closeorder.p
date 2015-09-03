@@ -215,6 +215,16 @@ IF Order.OrderType = 3 THEN DO:
    IF AVAIL SIM THEN SIM.SimStat = 7.
 END. /* IF Order.OrderType = 3 THEN DO: */
 
+/* Release SIM in case of YDR-1825 */
+IF Order.OrderType = 1 AND
+   LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 THEN DO:
+   FIND SIM NO-LOCK WHERE
+        SIM.ICC = Order.ICC AND
+        SIM.SimStat = 20 NO-ERROR.
+   IF AVAIL SIM THEN 
+         fReleaseSIM(Order.OrderId).
+END.
+
 /* Release SIM if renewal order is made with ICC change */
 IF Order.OrderType = 2 AND
    NOT Order.OrderChannel BEGINS "RENEWAL_POS" THEN DO:

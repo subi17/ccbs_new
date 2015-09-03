@@ -247,12 +247,13 @@ PROCEDURE pFinalize:
                            INPUT MobSub.CLIType,
                            INPUT {&REQUEST_SOURCE_BTC}).
 
-   /* Activate DSS2 if allowed and terminate additional line if possible */
+   /* Activate DSS2 if allowed and additional line STC to CONT9 if possible */
    IF MsRequest.ReqCParam2 BEGINS "CONTS" THEN DO:
 
-      RUN pTermAdditionalSim(INPUT MsRequest.MsRequest,
-                             INPUT ldaActivationDate).
-
+      fAdditionalLineSTC(MsRequest.MsRequest,
+                         MSRequest.ActStamp,
+                         "").
+     
       RUN pActivateDSS2(INPUT MsRequest.MsRequest,
                         INPUT MsRequest.ActStamp,
                         INPUt ldaActivationDate).
@@ -528,11 +529,13 @@ PROCEDURE pCloseContracts:
    DEF VAR lcAllowedBonoSTCContracts AS CHAR NO-UNDO. 
    DEF VAR lcError                   AS CHAR NO-UNDO. 
    DEF VAR liRequest                 AS INT  NO-UNDO.
-   DEF VAR lcAllVoIPNativeBundles    AS CHAR NO-UNDO.
+   DEF VAR lcNativeVoipTariffs      AS CHAR NO-UNDO.
+   DEF VAR lcNativeVoipBundles      AS CHAR NO-UNDO.
    
    ASSIGN lcAllowedBonoSTCContracts = fCParamC("ALLOWED_BONO_STC_CONTRACTS")
           lcBONOContracts = fCParamC("BONO_CONTRACTS")
-          lcAllVoIPNativeBundles    = fCParamC("NATIVE_VOIP_BASE_BUNDLES").
+          lcNativeVoipTariffs    = fCParamC("NATIVE_VOIP_BASE_BUNDLES")
+          lcNativeVoipBundles    = fCParamC("NATIVE_VOIP_BUNDLES").
 
    IF LOOKUP(MsRequest.ReqCparam2,lcBonoContracts) = 0 THEN DO:
 
@@ -596,7 +599,8 @@ PROCEDURE pCloseContracts:
    END. /* IF INDEX(MsRequest.ReqCParam2,"CONTF") > 0 THEN DO: */
    END. /* IF LOOKUP(MsRequest.ReqCparam2,lcBonoContracts) = 0 THEN DO: */
    
-   IF LOOKUP(MsRequest.ReqCParam2,lcAllVoIPNativeBundles) > 0 AND
+   IF (LOOKUP(MsRequest.ReqCParam2,lcNativeVoipTariffs) > 0 OR 
+       LOOKUP(MsRequest.ReqCParam2,lcNativeVoipBundles) > 0) AND
       NOT CAN-FIND(FIRST ttContract WHERE
                          ttContract.DCEvent  = "BONO_VOIP") AND
       fGetActiveSpecificBundle(Mobsub.MsSeq,
@@ -648,97 +652,6 @@ PROCEDURE pCloseContracts:
    END. /* FOR EACH ttContract: */
 
    EMPTY TEMP-TABLE ttContract NO-ERROR.
-
-END PROCEDURE.
-
-PROCEDURE pTermAdditionalSim:
-
-   DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
-   DEF INPUT PARAMETER idtActDate  AS DATE NO-UNDO.
-
-   DEF VAR liQuarTime              AS INT  NO-UNDO.
-   DEF VAR liSimStat               AS INT  NO-UNDO.
-   DEF VAR liMSISDNStat            AS INT  NO-UNDO.
-   DEF VAR liRequest               AS INT  NO-UNDO.
-   DEF VAR lcError                 AS CHAR NO-UNDO.
-   DEF VAR ldaSecSIMTermDate       AS DATE NO-UNDO.
-   DEF VAR ldeSecSIMTermStamp      AS DEC  NO-UNDO.
-
-   DEF BUFFER lbMobSub    FOR Mobsub.
-   DEF BUFFER bMsRequest  FOR MsRequest.
-
-   EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
-
-   FIND FIRST bMsRequest No-LOCK WHERE 
-              bMsRequest.Brand     = gcBrand     AND 
-              bMsRequest.MsRequest = iiMsRequest No-ERROR.
-
-   IF NOT AVAILABLE bMsRequest THEN RETURN. 
-
-   IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                     CLIType.Brand    = gcBrand                   AND
-                     CLIType.CLIType  = bMsRequest.ReqCparam2     AND
-                     CLIType.LineType = {&CLITYPE_LINETYPE_MAIN})
-         THEN RETURN.
-
-   /* Delete same Subscription if there is not anymore */
-   CREATE ttAdditionalSIM.
-   ASSIGN ttAdditionalSIM.MsSeq   = MobSub.MsSeq
-          ttAdditionalSIM.CustNum = MobSub.CustNum
-          ttAdditionalSIM.CLI     = MobSub.CLI.
-
-   FOR EACH lbMobSub NO-LOCK WHERE
-            lbMobSub.Brand   = gcBrand AND
-            lbMobSub.InvCust = Mobsub.CustNum AND
-            lbMobSub.PayType = FALSE AND
-            lbMobSub.MsSeq NE Mobsub.MsSeq,
-      FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
-            CLIType.CLIType = (IF lbMobSub.TariffBundle > "" 
-                               THEN lbMobSub.TariffBundle
-                               ELSE lbMobSub.CLIType) AND
-            CLIType.LineType > 0:
-               
-      IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} AND
-         fHasPendingSTCToNonMainLine(
-                  lbMobSub.MsSeq,
-                  bMsRequest.ActStamp) THEN NEXT.
-
-      IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN}    OR
-         fHasPendingSTCToMainLine(ttAdditionalSIM.MsSeq) THEN DO:
-         EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
-         RETURN.
-      END.
-            
-      IF CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
-         CREATE ttAdditionalSIM.
-         ASSIGN ttAdditionalSIM.MsSeq   = lbMobSub.MsSeq
-                ttAdditionalSIM.CustNum = lbMobSub.CustNum
-                ttAdditionalSIM.CLI     = lbMobSub.CLI.
-      END.
-
-   END. /* FOR EACH lbMobSub WHERE */
-
-   FOR EACH ttAdditionalSIM NO-LOCK:
-
-      /* If there is no ongoing STC/termination request for secondary line */
-      IF fHasPendingRequests
-         (ttAdditionalSIM.MsSeq,
-          ttAdditionalSIM.CLI,
-          {&CLITYPE_LINETYPE_ADDITIONAL}) THEN NEXT.
-
-      fTermAdditionalSim(ttAdditionalSIM.Msseq,
-                         ttAdditionalSIM.CLI,
-                         ttAdditionalSIM.CustNum,
-                         {&SUBSCRIPTION_TERM_REASON_ADDITIONALSIM},
-                         idtActDate,
-                         {&REQUEST_SOURCE_BTC},
-                         iiMsrequest,
-                         OUTPUT lcError).
-
-   END. /* FOR EACH ttAdditionalSIM */
-   
-   EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
 
 END PROCEDURE.
 

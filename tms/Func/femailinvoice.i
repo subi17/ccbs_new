@@ -165,8 +165,8 @@ FUNCTION fGetEmailText RETURNS CHAR (INPUT icTarget    AS CHAR,
    
 END FUNCTION. /* FUNCTION fGetSMSText */
 
-
 FUNCTION fEmailInvoiceRequest RETURNS INTEGER
+
    (INPUT idActStamp     AS DEC,    /* when request should be handled */
     INPUT idActDate      AS DATE,   /* when request should be handled */
     INPUT icUserCode     AS CHAR,   /* user code */
@@ -175,9 +175,11 @@ FUNCTION fEmailInvoiceRequest RETURNS INTEGER
     INPUT iiCustNum      AS INT,    /* customer number */
     INPUT icSource       AS CHAR,
     INPUT icEmailAddress AS CHAR,   /* Email Address */
+    INPUT iiOrder        AS INT,   /* Order ID */
     OUTPUT ocResult      AS CHAR):
 
    DEF VAR liReqCreated AS INT NO-UNDO.
+   DEF BUFFER Order FOR Order.
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN
@@ -191,6 +193,10 @@ FUNCTION fEmailInvoiceRequest RETURNS INTEGER
                           icUserCode).
    IF ocResult > "" THEN RETURN 0.
 
+   IF iiorder > 0 THEN
+      FIND FIRST Order NO-LOCK WHERE Order.Brand = gcBrand AND
+                                     Order.OrderId = iiOrder NO-ERROR.
+
    /* If Email address is already validated then no need to send again */
    IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
                       MsRequest.Brand = gcBrand AND
@@ -198,7 +204,13 @@ FUNCTION fEmailInvoiceRequest RETURNS INTEGER
                       MsRequest.Custnum = iiCustnum                AND
                       MsRequest.ReqStatus = {&REQUEST_STATUS_DONE} AND
                       MsRequest.ReqCparam1 = icEmailAddress) THEN RETURN 1.
-
+   /* If customer does not have any postpaid subscriptions, no email needed */
+   /* iiOrder can come as 0 from other request than new customer creation */
+   IF (iiOrder = 0 OR Order.Paytype) AND 
+      NOT (CAN-FIND (FIRST Mobsub NO-LOCK WHERE
+                           Mobsub.Brand = gcBrand AND
+                           Mobsub.Custnum = iiCustNum AND
+                           Mobsub.paytype = FALSE)) THEN RETURN 1.
    fCreateRequest({&REQTYPE_ACTIVATE_EMAIL_INVOICE},
                   idActStamp,
                   icUserCode,

@@ -403,20 +403,20 @@ ELSE DO:
       fCollectBalance(MobSub.CLIType,MobSub.TariffBundle,
                       "PRETARJ6UPSELL",ldeTARJ6UpsellChargeDay,"balance_day").
    END.
-   ELSE IF MobSub.CliType = "TARJ7" THEN DO:
+   ELSE IF MobSub.CliType = "TARJ7" OR MobSub.CliType = "TARJ9" THEN DO:
       FOR FIRST ServiceLimit NO-LOCK WHERE
-                ServiceLimit.GroupCode = "TARJ7":
+                ServiceLimit.GroupCode = MobSub.CliType:
          IF CAN-FIND (FIRST MServiceLimit WHERE
                             MServiceLimit.MsSeq = Mobsub.MsSeq AND
                             MServiceLimit.DialType = ServiceLimit.DialType AND
                             MServiceLimit.SLSeq = ServiceLimit.SLSeq AND
                             MServiceLimit.EndTS >= ldeCurrentTS NO-LOCK)
          THEN DO:
-            ASSIGN ldeBundleFee = fCParamDe("TARJ7_BundleFee")
+            ASSIGN ldeBundleFee = fCParamDe(MobSub.CliType + "_BundleFee")
                    ldeUpsellFee = fCParamDe("TARJ7_UPSELLFee").
 
             fCollectBalance(MobSub.CLIType,MobSub.TariffBundle,
-                            "PRETARJ7BUNDLE",ldeBundleFee,"balance").
+                            "PRE" + MobSub.CliType + "BUNDLE",ldeBundleFee,"balance").
 
             /* Check if there is any active prepaid upsell */
             liUpsellCount = fGetUpSellCount(INPUT "TARJ7_UPSELL",

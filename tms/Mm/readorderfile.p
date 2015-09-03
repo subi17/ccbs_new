@@ -293,7 +293,7 @@ REPEAT:
     ASSIGN
        OrderPayment.Brand   = gcBrand
        OrderPayment.OrderId = Order.OrderId
-       OrderPayment.Method  = 1. 
+       OrderPayment.Method  = {&ORDERPAYMENT_M_POD}. 
 
 
     CREATE Memo.

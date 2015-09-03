@@ -378,22 +378,21 @@ PROCEDURE pCollectFusionInvoices:
                   BillItem.Brand = gcBrand AND
                   BillItem.BillCode = InvRow.BillCode:
 
-             IF LOOKUP(BillItem.BillCode,"CONTFF2MF,CONTSF14MF,CONTSF10MF") > 0
-             THEN ASSIGN
-               ttTF.MSubsType = REPLACE(BillItem.BillCode,"MF","")
-               ttTF.MTariffMF = ttTF.MTariffMF + InvRow.Amt.
-
-             IF (BillItem.BillCode BEGINS "PAYTERM" OR 
-                 BillItem.BillCode BEGINS "RVTERM") AND
-                BillItem.BiGroup EQ "33" THEN 
+             IF LOOKUP(BillItem.BillCode,"CONTFF2MF,CONTSF14MF,CONTSF10MF") > 0 THEN 
+                ASSIGN
+                   ttTF.MSubsType = REPLACE(BillItem.BillCode,"MF","")
+                   ttTF.MTariffMF = ttTF.MTariffMF + InvRow.Amt.
+             ELSE IF (BillItem.BillCode BEGINS "PAYTERM" OR 
+                      BillItem.BillCode BEGINS "RVTERM") AND
+                      BillItem.BiGroup EQ "33" THEN 
                 ttTF.MTermFinancing = ttTF.MTermFinancing + InvRow.Amt.
              ELSE IF LOOKUP(BillItem.BIGroup,"3,13,31,32") > 0 OR
-                BillItem.BillCode EQ "TERMPERIOD" OR
-                (BillItem.BIGroup EQ "18" AND
-                LOOKUP(BillItem.BillCode,"CONTFF2MF,CONTSF14MF,CONTSF10MF") = 0)
-                THEN ttTF.MOtherMF = ttTF.MOtherMF + InvRow.Amt.
+                            BillItem.BIGroup  EQ "18"          THEN 
+                ttTF.MOtherMF = ttTF.MOtherMF + InvRow.Amt.
              ELSE IF LOOKUP(BillItem.BIGroup,"1,4,5,6") > 0 THEN
                 ttTF.MTraffic = ttTF.MTraffic + InvRow.Amt.
+             ELSE IF BillItem.BillCode EQ "TERMPERIOD" THEN  
+                ttTF.MPermPenalty = ttTF.MPermPenalty + InvRow.Amt.
          END.
          
          ASSIGN

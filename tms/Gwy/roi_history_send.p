@@ -86,11 +86,15 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
               OrderPayment.OrderId = Order.OrderId NO-LOCK NO-ERROR.
    
    IF AVAIL OrderPayment THEN DO:
-        IF OrderPayment.Method = 1 THEN 
+        IF OrderPayment.Method EQ {&ORDERPAYMENT_M_POD}  THEN 
            add_string(pcStruct, "payment_method",fToUTF8("on_delivery")).
+        ELSE IF OrderPayment.Method EQ {&ORDERPAYMENT_M_PAYPAL} THEN
+           add_string(pcStruct, "payment_method",fToUTF8("PAYPAL")).
         ELSE 
            add_string(pcStruct, "payment_method",fToUTF8("credit_card")).
-        
+ 
+
+
         add_string(pcStruct,"payment_reference", fToUTF8(OrderPayment.CCReference)).
    END.
    
@@ -263,6 +267,8 @@ FUNCTION fFillAddressStruct RETURNS LOGICAL
    ELSE 
       add_string(pcStruct,"street",fToUTF8(OrderCustomer.Address)).
 
+   IF OrderCustomer.KialaCode > "" THEN 
+      add_string(pcStruct,"kiala_code",fToUTF8(OrderCustomer.KialaCode)). 
 
    RETURN TRUE.
 END.

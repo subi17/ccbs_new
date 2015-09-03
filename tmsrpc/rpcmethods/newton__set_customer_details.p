@@ -487,6 +487,7 @@ IF llCustomerChanged THEN DO:
                                            INPUT Customer.CustNum,
                                            INPUT {&REQUEST_SOURCE_NEWTON},
                                            INPUT lcNewEmailAdd,
+                                           INPUT 0, /* orderid */
                                            OUTPUT lcResult).
           IF liRequest = 0 THEN
              RETURN appl_err("Customer email address can not be changed: " +
@@ -522,6 +523,7 @@ IF llCustomerChanged THEN DO:
                                               INPUT Customer.CustNum,
                                               INPUT {&REQUEST_SOURCE_FUSION_EMAIL},
                                               INPUT lcNewEmailAdd,
+                                              INPUT 0, /* msseq */
                                               OUTPUT lcResult).
              IF liRequest = 0 THEN
                 RETURN appl_err("Customer email address can not be changed: " +

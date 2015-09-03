@@ -1,4 +1,4 @@
 echo "IIR_TRIGGERS SCREENS"
 sleep 2
-screen 1 xfear -screen run_triggerrate -db /db1/mcdr15q1/mcdr15q1 -ld mcdr -db /db1/mcdrdtl15q1/mcdrdtl15q1 -ld mcdrdtl -db /db1/prepcdr15q1/prepcdr15q1 -ld prepcdr
-screen 2 xfear -screen te_analyses -db /db1/mcdr15q1/mcdr15q1 -ld mcdr -db /db1/mcdrdtl15q1/mcdrdtl15q1 -ld mcdrdtl -db /db1/prepcdr15q1/prepcdr15q1 -ld prepcdr
+screen 1 xfear -screen run_triggerrate -db /db1/mcdr15q2/mcdr15q2 -ld mcdr -db /db1/mcdrdtl15q2/mcdrdtl15q2 -ld mcdrdtl -db /db1/prepcdr15q2/prepcdr15q2 -ld prepcdr
+screen 2 xfear -screen te_analyses -db /db1/mcdr15q2/mcdr15q2 -ld mcdr -db /db1/mcdrdtl15q2/mcdrdtl15q2 -ld mcdrdtl -db /db1/prepcdr15q2/prepcdr15q2 -ld prepcdr

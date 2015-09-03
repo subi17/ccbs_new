@@ -120,11 +120,23 @@ DO liSubInvCount = 0 TO get_paramcount(pcSubInvoiceArray) - 1:
       THEN NEXT INVROW_BLK.
 
       IF pdeInvRowAmt = 0 OR pdeInvRowAmt = ? THEN pdeInvRowAmt = InvRow.Amt.
+      
+      IF (InvRow.Amt > 0 AND pdeInvRowAmt < 0) OR
+         (InvRow.Amt < 0 AND pdeInvRowAmt > 0) THEN
+            RETURN appl_err("Entered invrow amount and original " +
+                            "invrow amount must be whether positive or " +
+                            "negative").
 
-      IF pdeInvRowAmt > InvRow.Amt THEN
-         RETURN appl_err("Entered invrow amount is greater than " +
-                         "actual invrow amount").
-
+      IF InvRow.Amt < 0 THEN DO:
+         IF abs(pdeInvRowAmt) > abs(InvRow.Amt) THEN
+            RETURN appl_err("Entered invrow amount is greater than " +
+                            "actual invrow amount").
+      END.
+      ELSE DO:
+         IF pdeInvRowAmt > InvRow.Amt THEN
+            RETURN appl_err("Entered invrow amount is greater than " +
+                            "actual invrow amount").
+      END.
       /* Create Temp-table with SubInvoice/InvRow details */
       CREATE ttSubInvoice.
       ASSIGN ttSubInvoice.SubInvoice = piSubInvoice
@@ -155,5 +167,6 @@ IF lcerror ne "" THEN RETURN appl_err(lcerror).
 add_boolean(response_toplevel_id,?,TRUE).
 
 FINALLY:
+   EMPTY TEMP-TABLE ttSubInvoice. 
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
 END FINALLY.

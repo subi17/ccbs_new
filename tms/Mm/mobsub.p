@@ -95,7 +95,7 @@ DEF VAR lcCompany     AS CHAR                   NO-UNDO.
 DEF VAR lcLine        AS CHAR                   NO-UNDO FORMAT "x(75)".
 /* BARRING */
 DEF VAR lcBarrStat    AS CHAR                   NO-UNDO FORMAT "x(24)".
-DEF VAR lcBarrStatName AS CHAR                  NO-UNDO FORMAT "x(24)".
+DEF VAR lcBarrMask    AS CHAR                  NO-UNDO FORMAT "x(24)".
 DEF VAR lcBarrCmd     AS CHAR                   NO-UNDO.
 DEF VAR lcPCLB        AS CHAR                   NO-UNDO.
 DEF VAR lcDSSInfo     AS CHAR                   NO-UNDO.
@@ -713,10 +713,8 @@ BROWSE:
        RUN local-find-this(FALSE).
        
        /* refresh mobsub status / barring status */
-       RUN checkmsbarring(INPUT MobSub.MsSeq,
-                          INPUT "NewtonAd", /* display use only, must be Syst or Vendor user */
-                          OUTPUT lcBarrCmd,
-                          OUTPUT lcBarrStat).
+       lcBarrStat = MobSub.BarrCode.
+
        RUN local-UPDATE-record(FALSE).  
 
        MOBSUBBROWSE:
@@ -759,10 +757,8 @@ BROWSE:
                 LEAVE.
              END.
              /* refresh mobsub status / barring status */
-             RUN checkmsbarring(INPUT MobSub.MsSeq,
-                                INPUT "NewtonAd",
-                                OUTPUT lcBarrCmd,
-                                OUTPUT lcBarrStat).
+             lcBarrStat = MobSub.BarrCode.
+
              /* in case a request was run */
              RUN local-UPDATE-record(FALSE).
           END.      
@@ -822,10 +818,8 @@ BROWSE:
              RUN  mobsubdi(INPUT Mobsub.MSSeq, OUTPUT killed).
              
              /* refresh mobsub status / barring status */
-             RUN checkmsbarring(INPUT MobSub.MsSeq,
-                                 INPUT "NewtonAd",
-                                 OUTPUT lcBarrCmd,
-                                 OUTPUT lcBarrStat).
+             lcBarrStat = MobSub.BarrCode.
+
               run local-update-record(FALSE).
           END.
        END.
@@ -1102,46 +1096,16 @@ PROCEDURE local-find-others.
       lcNotifyNumber  = fNotifyNbrValue(Mobsub.MsSeq)   .
 
             
-      /* Get pending CLB if any */
+      /* Get information about pending barrings */
+      /*OnHoldiot*/
       ASSIGN
          lcPCLB   = ""
-         lcDSSInfo = ""
-         lrCLBRec = fCheckRestore(MobSub.MsSeq,"CLB")
-         lrOLBRec = fCheckRestore(MobSub.MsSeq,"OLB").
-         
-      IF lrCLBRec NE ? THEN DO:
-         FIND MsRequest WHERE RECID(MsRequest) = lrCLBRec
-            NO-LOCK NO-ERROR.
-         IF AVAILABLE MsRequest AND MsRequest.ReqCParam1 NE lcBarrStat THEN 
-            lcPCLB = MsRequest.ReqCParam1.
-      END.
-         
-      IF lcPCLB = "" AND lrOLBRec NE ? THEN DO:
-         FIND MsRequest WHERE RECID(MsRequest) = lrOLBRec
-            NO-LOCK NO-ERROR.
-         IF AVAILABLE MsRequest AND MsRequest.ReqCParam1 NE lcBarrStat THEN
-            lcPCLB = MsRequest.ReqCParam1.
-      END.
-               
-      IF lcPCLB > "" THEN DO:
-         FIND FIRST ServPac WHERE 
-                    ServPac.Brand = gcBrand AND
-                    ServPac.ServPac = lcPCLB
-            NO-LOCK NO-ERROR.
-         IF NOT AVAIL ServPac THEN lcPCLB = "E!".
-         ELSE lcPCLB = "Restoration...: " + ServPac.SPName.
-      END.
-      
-      lcBarrStatName = "".
-      /* Get proper name for suspension status if on */
-      IF lcBarrStat NE "None" THEN DO: 
-         FIND FIRST ServPac WHERE
-                    ServPac.Brand = gcBrand AND
-                    ServPac.ServPac = lcBarrStat
-         NO-LOCK NO-ERROR.
-         IF NOT AVAIL ServPac THEN lcBarrStatName = "Ongoing network commands".
-         ELSE lcBarrStatName = ServPac.SPName.
-      END.
+         lcDSSInfo = "".
+/*
+      IF fGetOnHoldBarrings(MobSub.MsSeq) > "" THEN
+         lcPCLB = "Restored barrings exist". 
+*/      
+      lcBarrMask = fGetFinalMask(MobSub.MsSeq).
       
       lcMNP = fGetMNPOutOngoing(MobSub.CLI).
       IF lcMNP NE "" THEN lcMNP = "MNP: " + lcMNP.
@@ -1226,7 +1190,7 @@ PROCEDURE local-UPDATE-record.
       MobSub.Reseller
       lcLine
       lcStatus 
-      lcBarrStatName @ lcBarrStat
+      lcBarrMask @ lcBarrStat
       lcPCLB 
       lcDSSInfo
       lcNumberInquiry

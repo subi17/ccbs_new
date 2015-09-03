@@ -1,0 +1,227 @@
+ADD TABLE "BarringConf"
+  AREA "Sta_Data_128"
+  LABEL "Barring Configuration"
+  DESCRIPTION "Barring Configuration"
+  DUMP-NAME "barringconf"
+
+ADD FIELD "BarringGroup" OF "BarringConf" AS character
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "Barring group"
+  POSITION 2
+  MAX-WIDTH 50
+  COLUMN-LABEL "BarringGroup"
+  HELP "Barring group"
+  ORDER 10
+
+ADD FIELD "BarringCode" OF "BarringConf" AS character
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "Barring Name"
+  POSITION 3
+  MAX-WIDTH 50
+  COLUMN-LABEL "BarringCode"
+  HELP "Barring Name"
+  ORDER 20
+
+ADD FIELD "Mask" OF "BarringConf" AS character
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Limited Services"
+  POSITION 4
+  MAX-WIDTH 30
+  COLUMN-LABEL "Mask"
+  HELP "Bit mask of limited services"
+  ORDER 30
+
+ADD FIELD "AllowedAppIDs" OF "BarringConf" AS character
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Allowed Applications"
+  POSITION 6
+  MAX-WIDTH 30
+  COLUMN-LABEL "AllowedAppIDs"
+  HELP "User permissions for Barring Mask"
+  ORDER 50
+
+ADD FIELD "BarringStatus" OF "BarringConf" AS character
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Barring Status"
+  POSITION 7
+  MAX-WIDTH 20
+  COLUMN-LABEL "BarringStatus"
+  HELP "Barring status"
+  ORDER 60
+
+ADD FIELD "AllowedPaymentType" OF "BarringConf" AS character
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Allowed Payment Type"
+  POSITION 8
+  MAX-WIDTH 30
+  COLUMN-LABEL "AllowedPaymentType"
+  HELP "Allowed Payment Type"
+  ORDER 70
+
+ADD FIELD "NWComponent" OF "BarringConf" AS character
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "NWComponent"
+  POSITION 9
+  MAX-WIDTH 24
+  COLUMN-LABEL "NWComponent"
+  HELP "Network component"
+  ORDER 80
+
+ADD FIELD "NWActParam" OF "BarringConf" AS character
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "NWActParam"
+  POSITION 10
+  MAX-WIDTH 50
+  COLUMN-LABEL "NWActParam"
+  HELP "Network activation parameter"
+  ORDER 90
+
+ADD FIELD "NWDeactParam" OF "BarringConf" AS character
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "NWDeactParam"
+  POSITION 11
+  MAX-WIDTH 50
+  COLUMN-LABEL "NWDeactParam"
+  HELP "Network deactivation parameter"
+  ORDER 100
+
+ADD FIELD "Priority" OF "BarringConf" AS integer
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "Priority"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "Priority"
+  HELP "Priority"
+  ORDER 110
+
+ADD FIELD "UIPriority" OF "BarringConf" AS integer
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "UIPriority"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "UIPriority"
+  HELP "UI Priority"
+  ORDER 120
+
+ADD FIELD "IFSPriority" OF "BarringConf" AS integer
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "IFSPriority"
+  POSITION 14
+  MAX-WIDTH 4
+  COLUMN-LABEL "IFSPriority"
+  HELP "IFS Priority"
+  ORDER 130
+
+ADD FIELD "OldCode" OF "BarringConf" AS character
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "OldCode"
+  POSITION 15
+  MAX-WIDTH 50
+  COLUMN-LABEL "OldCode"
+  HELP "Old Code"
+  ORDER 140
+
+ADD INDEX "BarringCode" ON "BarringConf"
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "BarringCode" ASCENDING
+
+ADD INDEX "OldCode" ON "BarringConf"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "OldCode" ASCENDING
+
+ADD TABLE "Barring"
+  AREA "Sta_Data_128"
+  LABEL "Barring"
+  DESCRIPTION "Barring information"
+  DUMP-NAME "barring"
+
+ADD FIELD "MsSeq" OF "Barring" AS integer
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "SubSeq"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "MsSeq"
+  HELP "Subscription ID"
+  ORDER 10
+
+ADD FIELD "BarringCode" OF "Barring" AS character
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "Barring"
+  POSITION 3
+  MAX-WIDTH 50
+  COLUMN-LABEL "BarringCode"
+  HELP "Barring name"
+  ORDER 20
+
+ADD FIELD "BarringStatus" OF "Barring" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Barring Status"
+  POSITION 4
+  MAX-WIDTH 16
+  COLUMN-LABEL "BarringStatus"
+  HELP "Activity for status"
+  ORDER 30
+
+ADD FIELD "EventTS" OF "Barring" AS decimal
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Time Stamp"
+  POSITION 5
+  MAX-WIDTH 20
+  COLUMN-LABEL "EventTS"
+  HELP "Event Time Stamp"
+  DECIMALS 5
+  ORDER 40
+
+ADD FIELD "UserCode" OF "Barring" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "User ID"
+  POSITION 6
+  MAX-WIDTH 24
+  COLUMN-LABEL "UserCode"
+  HELP "User ID"
+  ORDER 50
+
+ADD FIELD "MsRequest" OF "Barring" AS integer
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "MsRequest"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "MsRequest"
+  HELP "MsRequest ID"
+  ORDER 60
+
+ADD INDEX "MsSeq" ON "Barring"
+  AREA "Dyn_Index_1"
+  PRIMARY
+  INDEX-FIELD "MsSeq" ASCENDING
+  INDEX-FIELD "BarringCode" ASCENDING
+  INDEX-FIELD "EventTS" DESCENDING
+
+ADD INDEX "EventTS" ON "Barring"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "EventTS" DESCENDING
+
+.
+PSC
+cpstream=1252

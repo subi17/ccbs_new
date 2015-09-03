@@ -2116,7 +2116,8 @@ PROCEDURE pFixedFee:
                     ttIR.Period   = liRowPeriod      AND
                     ttIR.VatIncl  = FixedFee.VATIncl AND
                     ttIR.RowType  = 3                AND
-                    ttIR.AgrCust  = liAgrCust NO-ERROR.
+                    ttIR.AgrCust  = liAgrCust        AND
+                    ttIR.OrderId  = FixedFee.OrderId NO-ERROR.
 
          IF NOT AVAIL ttIR THEN DO:
             CREATE ttIR.
@@ -2131,7 +2132,8 @@ PROCEDURE pFixedFee:
                ttIR.FFRow     = TRUE
                ttIR.RowType   = 3
                ttIR.VatIncl   = FixedFee.VatIncl
-               ttIR.AgrCust   = liAgrCust.
+               ttIR.AgrCust   = liAgrCust
+               ttIR.OrderId   = FixedFee.OrderId.
          END.
 
          ASSIGN
@@ -2271,7 +2273,8 @@ PROCEDURE pSingleFee:
                  ttIR.Period   = liRowPeriod        AND
                  ttIR.VatIncl  = SingleFee.VatIncl  AND
                  ttIR.RowType  = 4                  AND
-                 ttIR.AgrCust  = liAgrCust NO-ERROR.
+                 ttIR.AgrCust  = liAgrCust          AND
+                 ttIR.OrderId  = SingleFee.OrderID  NO-ERROR.
 
       IF NOT AVAIL ttIR THEN DO:
          CREATE ttIR.
@@ -2286,7 +2289,8 @@ PROCEDURE pSingleFee:
             ttIR.FFRow     = FALSE
             ttIR.RowType   = 4
             ttIR.AgrCust   = liAgrCust
-            ttIR.VatIncl   = SingleFee.VatIncl.
+            ttIR.VatIncl   = SingleFee.VatIncl
+            ttIR.OrderId   = SingleFee.OrderId.
       END.
 
       ASSIGN
@@ -4061,7 +4065,19 @@ PROCEDURE pInvoiceHeader:
 
       CASE iiInvType:
          WHEN 6 THEN ttInv.ChargeType = 1.
-         WHEN 7 THEN ttInv.ChargeType = 3.
+         WHEN 7 THEN DO:
+            FIND FIRST Order NO-LOCK WHERE
+                       Order.Brand   = gcBrand AND
+                       Order.OrderId = liOrderID NO-ERROR.
+            IF AVAILABLE Order AND
+               INDEX(Order.OrderChannel,"POS") = 0 AND
+               CAN-FIND(FIRST OrderPayment WHERE
+                              OrderPayment.Brand   = gcBrand AND
+                              OrderPayment.OrderId = liOrderID AND
+                              OrderPayment.Method  = {&ORDERPAYMENT_M_PAYPAL})
+            THEN ttInv.ChargeType = 6. /* PayPal */
+            ELSE ttInv.ChargeType = 3.
+         END.
          OTHERWISE   ttInv.ChargeType = IF Customer.ChargeType = 6 THEN 5
                                         ELSE Customer.ChargeType.
       END CASE.

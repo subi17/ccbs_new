@@ -61,8 +61,8 @@ DO liCount = 1 TO NUM-ENTRIES(lcActiveBundles):
    
    lcActiveBundle = ENTRY(liCount,lcActiveBundles).
    
-   IF lcActiveBundle = "TARJ7" THEN
-      add_string(lcResultArray,"", lcActiveBundle + "_UPSELL|" + STRING(Mobsub.MsSeq)).
+   IF lcActiveBundle = "TARJ7" OR lcActiveBundle = "TARJ9" THEN
+      add_string(lcResultArray,"", "TARJ7_UPSELL|" + STRING(Mobsub.MsSeq)).
    
    IF LOOKUP(lcActiveBundle, lcBONOContracts + "," + lcIPLContracts + ",BONO_VOIP") = 0 THEN NEXT.
    
@@ -114,6 +114,7 @@ FOR EACH DayCampaign NO-LOCK WHERE
       NOT fIsBonoVoIPAllowed(Mobsub.MsSeq, ldeCurrTS) THEN NEXT.
    
    add_string(lcResultArray,"", DayCampaign.DCEvent + "|" + STRING(Mobsub.MsSeq) ).
+   /*add_string(lcResultArray,"", DayCampaign.BundleUpsell + "|" + STRING(Mobsub.MsSeq) ). waiting for more checks ydr_1905*/
 END.
 
 

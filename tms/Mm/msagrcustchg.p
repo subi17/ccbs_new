@@ -530,6 +530,7 @@ PROCEDURE pOwnerChange:
                                                 INPUT bNewCust.CustNum,
                                                 INPUT {&REQUEST_SOURCE_ACC},
                                                 INPUT bNewCust.EMail,
+                                                INPUT 0, /*orderid*/
                                                 OUTPUT lcResult).
                IF liRequest > 0 THEN DO:
                   /* If Email already validated then mark DelType EMAIL */
@@ -729,6 +730,7 @@ PROCEDURE pOwnerChange:
                                       0,
                                       {&REQUEST_SOURCE_ACC},
                                       0, /* order id */
+                                      0,
                                       OUTPUT lcInfo).
       
       FIND bSubRequest EXCLUSIVE-LOCK WHERE
@@ -1915,6 +1917,7 @@ PROCEDURE pHandleAdditionalLines:
           bMobSub.CLI,
           CLIType.LineType) THEN NEXT ADDITIONAL_SUBS.
      
+     /* TODO: should be changed to STC ?? */
       fTermAdditionalSim(bMobSub.Msseq,
                          bMobSub.CLI,
                          bMobSub.CustNum,

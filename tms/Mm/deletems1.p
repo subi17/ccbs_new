@@ -658,7 +658,7 @@ REPEAT WITH FRAME main:
             END.
 
             IF llAddLineTerm THEN
-               MESSAGE "Termination will trigger subscription termination for additional line(s)"
+               MESSAGE "Termination will trigger STC to CONT9 for additional line(s)"
                VIEW-AS ALERT-BOX.
          END.
 
@@ -736,10 +736,15 @@ REPEAT WITH FRAME main:
                  ocResult
          VIEW-AS ALERT-BOX ERROR.
 
-      ELSE 
+      ELSE DO:
+         
+         fAdditionalLineSTC(liMsReq,
+                            fMake2Dt(ldtKillDate + 1, 0),
+                            "DELETE").
          MESSAGE
             "Request ID for subscription termination is:" liMsReq
          VIEW-AS ALERT-BOX TITLE " REQUEST ADDED ".
+      END.
    END.
 
    LEAVE.

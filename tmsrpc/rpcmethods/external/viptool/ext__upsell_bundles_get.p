@@ -50,7 +50,8 @@ lcResultStruct = add_struct(response_toplevel_id, "").
 lcContract = fGetUpSellBasicContract(MobSub.MsSeq,
                                      MobSub.CustNum,
                                      MobSub.PayType,
-                                     "MobSub").
+                                     "MobSub",
+                                     {&REQUEST_SOURCE_EXTERNAL_API}).
 IF lcContract NE "" THEN DO:
 
    FIND FIRST DayCampaign WHERE
@@ -119,7 +120,8 @@ IF Mobsub.PayType = FALSE THEN
    lcCustomerContract = fGetUpSellBasicContract(MobSub.MsSeq,
                                                 MobSub.CustNum,
                                                 MobSub.PayType,
-                                                "Customer").
+                                                "Customer",
+                                                {&REQUEST_SOURCE_EXTERNAL_API}).
 IF lcCustomerContract NE "" THEN DO:
    FIND FIRST DayCampaign WHERE
               DayCampaign.Brand = gcBrand AND

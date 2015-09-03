@@ -109,10 +109,14 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       WHEN 4  THEN ASSIGN Mod_bsub  = "ROAMLOCAL" b_type = 1.
       WHEN 7  THEN ASSIGN Mod_bsub  = "RT" b_type = 0.
       WHEN 17 THEN ASSIGN Mod_bsub  = "RT" b_type = 0 .
-      WHEN 51 THEN DO:
+      WHEN 51 THEN DO:     
          IF b_type = 1 THEN mod_bsub = "INTERNATIONAL".
          ELSE IF b_type = 4 THEN b_type = 4.
          ELSE IF b_type = 7 THEN b_type = 7. /* YOT-1684 */
+         ELSE IF b_type = 5 AND ttCall.IMSI2 BEGINS "21404" 
+            THEN Mod_Bsub = "YOIGO". /*YDR-1499*/
+         ELSE IF b_type = 5 AND ttCall.IMSI2 BEGINS "214" 
+            THEN Mod_Bsub = "OTHER". /*YDR-1499*/
          ELSE b_type = 5.
       END.
       WHEN 53 THEN ASSIGN Mod_bsub  = "ROAMSMS"  b_type = 0.
@@ -210,25 +214,18 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       END.
       
       IF lcaRoamZone = "ROAM_EU" THEN DO:
-      
-         IF lcBRoamZone   =  "ROAM_EU" OR liOrigBType NE 1 THEN DO:
-            Mod_bsub =  "ROAM_EU" .
-         END.
-         ELSE  Mod_bsub = "ROAM_EUINT" .
+         /* CC=4 are always local calls even if b-type = 1 */
+         IF ttCall.Spocmt EQ 4 OR
+            (lcBRoamZone  = "ROAM_EU" OR liOrigBType NE 1)
+            THEN Mod_bsub = "ROAM_EU".
+            ELSE Mod_bsub = "ROAM_EUINT".
       END.
       ELSE DO: 
          IF ttCall.Spocmt = 4 OR 
             ttCall.Spocmt = 7 THEN Mod_bsub = Mod_bsub.
-         
-         ELSE IF lcBRoamZone   =  "ROAM_EU" THEN DO:
-            Mod_bsub = "ROAM_INTEU" .
-         END.
-         ELSE IF liOrigBType ne 1 THEN
-         mod_bsub = "ROAM_INTEU".
-      
-         ELSE DO:
-            Mod_bsub = "ROAMINT" .
-         END.
+         ELSE IF liOrigBType NE 1 THEN mod_bsub = "ROAM_INTEU".
+         ELSE IF lcBRoamZone = "ROAM_EU" THEN Mod_bsub = "ROAM_INTEU" .
+         ELSE Mod_bsub = "ROAMINT" .
       END.
 
       IF Mod_bsub =  "ROAM_EU" AND ttCall.gsmbnr = "633800800" then

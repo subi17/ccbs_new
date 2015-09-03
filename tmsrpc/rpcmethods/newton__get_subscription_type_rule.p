@@ -212,7 +212,6 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL:
             NOT (LOOKUP(OldCLIType.CliType,"CONT7,CONTD9") > 0 
                  AND CLIType.CLIType EQ "CONT8")
             THEN NEXT.
-         IF llRenewal THEN NEXT.
 
          IF LOOKUP(MobSub.CLIType,lcBundleCLITypes) > 0 THEN DO:
             IF MobSub.TariffBundle EQ CLIType.CLIType THEN NEXT.
@@ -241,8 +240,7 @@ END FUNCTION.
 FUNCTION fGetOrigBundle RETURNS CHAR
    (iiMsSeq      AS INT,
     icDCEvent    AS CHAR,
-    idaValidDate AS DATE,
-    OUTPUT olRenewal AS LOG):
+    idaValidDate AS DATE):
 
    DEF VAR ldActivated AS DEC  NO-UNDO.
    DEF VAR ldActEnd    AS DEC  NO-UNDO.
@@ -264,13 +262,9 @@ FUNCTION fGetOrigBundle RETURNS CHAR
        LOOKUP(bufMsRequest.ReqCparam2,"act,recreate") > 0
    NO-LOCK USE-INDEX MsSeq NO-ERROR.
 
-   IF AVAIL bufMsRequest THEN DO:
-      /* YDR-168 */
-      IF bufMsRequest.ReqSource = {&REQUEST_SOURCE_RENEWAL} AND
-         bufMsRequest.ActStamp >= 20101001 THEN
-         olRenewal = TRUE.
+   IF AVAIL bufMsRequest THEN 
       ldActivated = bufMsRequest.DoneStamp.
-   END.
+   
    /* fgetpercontractactivation */
    
    IF ldActivated = TRUNCATE(ldActivated,0) THEN liOffSet = 24.
@@ -318,8 +312,7 @@ END FUNCTION.
 FUNCTION fGetOrigCLIType RETURNS CHARACTER
          (INPUT pcDCEvent AS CHAR,
           INPUT pdtValidFrom AS DATE,
-          INPUT piMsSeq AS INT,
-          OUTPUT olRenewal AS LOG):
+          INPUT piMsSeq AS INT):
 
    DEF VAR ldTS AS DEC NO-UNDO.
    DEF VAR lcCLIType AS CHAR NO-UNDO. 
@@ -335,13 +328,8 @@ FUNCTION fGetOrigCLIType RETURNS CHARACTER
        LOOKUP(bufMsRequest.ReqCparam2,"act,recreate") > 0
    NO-LOCK USE-INDEX MsSeq NO-ERROR.
 
-   IF AVAIL bufMsRequest THEN DO:
-      /* YDR-168 */
-      IF bufMsRequest.ReqSource = {&REQUEST_SOURCE_RENEWAL} AND
-         bufMsRequest.ActStamp >= 20101001 THEN
-         olRenewal = TRUE.
+   IF AVAIL bufMsRequest THEN 
       ldTS = bufMsRequest.DoneStamp.
-   END.
 
    FIND FIRST MsOwner WHERE
               MsOwner.MsSeq = piMsSeq AND 
@@ -469,14 +457,13 @@ IF NOT MobSub.PayType THEN DO:
 
       lcOrigCLIType = fGetOrigCLIType(DCCLI.DCEvent,
                                       DCCLI.ValidFrom,
-                                      MobSub.MsSeq,
-                                      OUTPUT llRenewal).
+                                      MobSub.MsSeq).
 
       IF LOOKUP(lcOrigCLIType,lcBundleCLITypes) > 0 THEN DO:
          lcOrigBundle = fGetOrigBundle(MobSub.MsSeq,
                                        DCCLI.DCEvent,
-                                       DCCLI.ValidFrom,
-                                       OUTPUT llRenewal).
+                                       DCCLI.ValidFrom).
+
          lcOrigCLIType = fConvBundleToCLIType(lcOrigBundle).
       END.
 

@@ -138,6 +138,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
     INPUT  ideFee        AS DEC,
     INPUT  icSource      AS CHAR,
     INPUT  iiOrderID     AS INT,
+    INPUT  iiOrigReq     AS INT,    /* Father request id */
     OUTPUT ocResult      AS CHAR).
 
    DEF VAR llCRes      AS LOG  NO-UNDO.
@@ -216,6 +217,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
           bCreaReq.ReqIParam5  = (IF ilExtendContract THEN 1 ELSE 0) 
           bCreaReq.Salesman    = icSalesman
           bCreaReq.ReqSource   = icSource
+          bCreaReq.OrigRequest = iiOrigReq
           liReqCreated         = bCreaReq.MsRequest.
 
    RELEASE bCreaReq.
@@ -768,7 +770,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    DEF VAR liWaitFor  AS INT  NO-UNDO.
    DEF VAR lcActParam AS CHAR NO-UNDO.
    DEF VAR lcBONOContracts  AS CHAR NO-UNDO.
-
+   
    DEF BUFFER bMsRequest FOR MsRequest.
 
    lcBONOContracts = fCParamC("BONO_CONTRACTS").
@@ -823,16 +825,6 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    /* activation time */
    IF idActStamp = ? OR idActStamp = 0 THEN
       idActStamp = fMakeTS().
-
-   /* double check (duplicate RPC call) */
-   ocResult = fChkRequest(iiMsSeq,
-                          liReqType,
-                          icContrType,
-                          IF icSource = {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION} 
-                             THEN {&SKIP_MsRequest} 
-                          ELSE icSource).
-
-   IF ocResult > "" THEN RETURN 0. 
 
    fCreateRequest(liReqtype,
                   idActStamp,
@@ -1444,6 +1436,7 @@ FUNCTION fInstallmentChangeRequest RETURNS INTEGER
     INPUT iiOrigRequest  AS INT,    /* main request */
     INPUT ilMandatory    AS LOG,    /* is subrequest mandatory */
     INPUT iiPerContID    AS INT,
+    INPUT ideResidualFee AS DEC,
     OUTPUT ocResult      AS CHAR):
  
    DEF VAR liReqCreated    AS INT  NO-UNDO.
@@ -1474,6 +1467,7 @@ FUNCTION fInstallmentChangeRequest RETURNS INTEGER
       bCreaReq.ReqIParam3  = iiPerContID
       bCreaReq.ReqCParam1  = icOldContract
       bCreaReq.ReqCParam2  = icNewContract
+      bCreaReq.ReqDParam2  = ideResidualFee
       bCreaReq.ReqSource   = icSource
       bCreaReq.OrigRequest = iiOrigRequest
       bCreaReq.Mandatory   = INTEGER(ilMandatory)

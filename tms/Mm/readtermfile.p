@@ -8,6 +8,7 @@
 {cparam2.i}
 {fsubstermreq.i}
 {msisdn_prefix.i}
+{main_add_lines.i}
 
 DEF INPUT  PARAMETER icFile      AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER icLogFile   AS CHAR NO-UNDO.
@@ -236,8 +237,13 @@ REPEAT:
       fError("Creation of termination request failed; " + lcError).
       NEXT.
    END.
+         
+   fAdditionalLineSTC(liRequest,
+                      fMake2Dt(ldtTermDate + 1, 0),
+                      "DELETE").
+
    /* Do not create memos for preactivated dummy customer */ 
-   ELSE IF lcMemoTxt > "" AND MobSub.Custnum NE 233718 THEN DO:
+   IF lcMemoTxt > "" AND MobSub.Custnum NE 233718 THEN DO:
       CREATE Memo.
       ASSIGN 
          Memo.Brand     = gcBrand

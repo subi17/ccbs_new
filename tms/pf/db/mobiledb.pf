@@ -1,6 +1,6 @@
 -db /db1/mobile/mobile
 -L 200000
--B 800000
+-B 1000000
 -B2 450000
 #-H propus
 -S mobile

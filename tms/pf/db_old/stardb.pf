@@ -1,0 +1,10 @@
+-db /db1/star/star
+-L 100000
+-B 300000
+#-H propus
+-S star
+-aiarcdir /aiarchive/star
+-DBService replserv
+-pica 8192 
+-pf /apps/tms/pf/db/general.pf
+

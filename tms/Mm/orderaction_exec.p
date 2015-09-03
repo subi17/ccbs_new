@@ -327,9 +327,10 @@ PROCEDURE pDiscountPlan:
       RETURN "ERROR:DPRate: " + OrderAction.ItemKey + " not found".
    
    FIND FIRST DPMember NO-LOCK WHERE
-              DPMember.DPId = INT(OrderAction.ItemKey) AND
-              DPMember.HostTable = "Mobsub" AND
-              DPMember.KeyValue = STRING(Order.MsSeq) NO-ERROR.
+              DPMember.DPId      = INT(OrderAction.ItemKey) AND
+              DPMember.HostTable = "Mobsub"                 AND
+              DPMember.KeyValue  = STRING(Order.MsSeq)      AND
+              DPMember.ValidTo  >= TODAY                    NO-ERROR.
    IF AVAIL DPMember THEN 
       RETURN "ERROR:DPMember: " + OrderAction.ItemKey + " for " + 
          STRING(Order.MsSeq) + " already exist".

@@ -1,0 +1,353 @@
+#!/usr/bin/env python
+"""A script for controlling OpenEdge databases.
+Usage: %(command_name)s COMMAND [PARAMETER...]
+
+Commands:
+  start       - Start database(s)
+  stop        - Shutdown database(s)
+  status      - Show database status
+  users       - Show users connected to given database(s)
+
+Command usage:
+
+ Generally: COMMAND [PROJECT] [DATABASE...]
+  If no arguments are given, the command is applied to every project's
+  every database. For example "dbctl start" starts all databases of
+  every project.
+  If only PROJECT is given, the command applies to all of PROJECT's
+  databases.
+
+  Examples:
+    Start all databases of all projects:
+      start
+
+    Start all xfera's databases:
+      start xfera
+
+    Starts xfera's common database:
+      start xfera common
+
+    Starts xfera's common and tmsempty databases:
+      start xfera common tmsempty
+
+    Starts every project's mcdr database:
+      start all mcdr
+
+    Starts every project's mcdr and vascdr databases:
+      start all mcdr vascdr
+"""
+import sys
+import os
+import time
+import pwd
+import subprocess
+
+
+DB_PROJECTS_ROOT = '/db1'
+PF_ROOT          = '/apps/yoigo/pf/staging'
+PROSHUT          = os.path.join(os.getenv('DLC'), 'bin', 'proshut')
+PROUTIL          = os.path.join(os.getenv('DLC'), 'bin', 'proutil')
+PROSERVE         = os.path.join(os.getenv('DLC'), 'bin', 'proserve')
+LOGFILE          = '/scratch/dbctl.log'
+
+P_INFO = ' '
+P_ERR  = '!'
+P_WARN = '*'
+
+
+
+def error(msg):
+    sys.stderr.write('%s: %s\n' % (sys.argv[0], msg))
+
+def fatal(msg):
+    error(msg)
+    sys.exit(1)
+
+def get_user():
+    uid = os.getuid()
+    ent = pwd.getpwuid(uid)
+    if not ent:
+        fatal("You do not exist, go away")
+    return ent[0]
+
+def log(msg):
+    f = open(LOGFILE, 'a')
+    stamp = time.strftime('%Y-%m-%d %H:%M:%S')
+    f.write('%s %s %s\n' % (stamp, get_user(), msg))
+    f.close()
+
+def dbprint(project, database, type, msg):
+    s = '[%12s : %-12s]%c %s' % (project, database, type, msg)
+    log(s)
+    print s
+
+def get_all_projects():
+    return [project
+            for project in os.listdir(DB_PROJECTS_ROOT)
+            if (project[0] != '.'
+                and os.path.isdir(os.path.join(DB_PROJECTS_ROOT, project)))]
+
+def get_project_path(project):
+    return os.path.join(DB_PROJECTS_ROOT, project)
+
+def get_all_databases(project):
+    files = os.listdir(get_project_path(project))
+    return [name for name, ext in map(os.path.splitext, files) if ext == '.db']
+
+def get_database_path(project, database):
+    return os.path.join(get_project_path(project), database)
+
+def get_pf_path(project, database):
+    return os.path.join(PF_ROOT, 'db', database + 'db.pf')
+
+def is_database_running(project, database):
+    return os.path.isfile(get_database_path(project, database) + '.lk')
+
+def get_database_log_path(project, database):
+    return os.path.join(get_project_path(project), 'db', database + '.lg')
+
+def check_database_sanity(project, database):
+    dbpath = get_database_path(project, database)
+    lock_file_exists = os.path.isfile(dbpath + '.lk')
+    get_status = GetStatus(project, database)
+    (status, output, errors) = get_status.complete()
+    if lock_file_exists:
+        if status != 6 and status != 64:
+            return 'lock file exists but database is not running: %s' % '; '.join(output)
+    else:
+        if status != 0:
+            return 'database is running but there is no lock file'
+    return None
+
+def validate_project(project):
+    if not os.path.isdir(get_project_path(project)):
+        return 'Project %s does not exist' % project
+    return None
+
+def validate_database(project, database):
+    if not os.path.isfile(get_database_path(project, database) + '.db'):
+        return 'Database %s of project %s does not exist' % (database, project)
+    return None
+
+def validate_args(projects, databases):
+    for project in projects:
+        reason = validate_project(project)
+        if reason:
+            return (False, reason)
+        if databases == 'all':
+            proj_databases = get_all_databases(project)
+        else:
+            proj_databases = databases
+        for database in proj_databases:
+            reason = validate_database(project, database)
+            if reason:
+                return (False, reason)
+    return (True, None)
+
+def parse_args(args):
+    if not args or (len(args) == 1 and args[0] == 'all'):
+        return (get_all_projects(), 'all')
+    elif len(args) == 1:
+        return ([args[0]], 'all')
+    else:
+        if args[0] == 'all':
+            projects = get_all_projects()
+        else:
+            projects = [args[0]]
+        if args[1] == 'all':
+            databases = 'all'
+        else:
+            databases = args[1:]
+        return (projects, databases)
+
+
+class Command(object):
+    def __init__(self, project, database):
+        self.dbpath = get_database_path(project, database)
+        self.command = None
+
+    def run(self):
+        env = os.environ.copy()
+        env['display_banner'] = 'no'
+        proc = subprocess.Popen(self.command,
+                                bufsize=1, # Line buffered
+                                stdin=None,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE,
+                                cwd=os.path.dirname(self.dbpath),
+                                env=env)
+        return proc
+
+    def complete(self):
+        proc = self.run()
+        errors = []
+        output = []
+        for line in proc.stderr:
+            errors.append(line.rstrip())
+        for line in proc.stdout:
+            output.append(line.rstrip())
+        proc.wait()
+        return (proc.returncode, output, errors)
+
+class ListUsers(Command):
+    def __init__(self, project, database):
+        Command.__init__(self, project, database)
+        self.command = [PROSHUT, self.dbpath, '-C', 'list']
+
+class GetStatus(Command):
+    def __init__(self, project, database):
+        Command.__init__(self, project, database)
+        self.command = [PROUTIL, self.dbpath, '-C', 'busy']
+
+class Shutdown(Command):
+    def __init__(self, project, database):
+        Command.__init__(self, project, database)
+        self.command = ['sudo', '-u', 'root', PROSHUT, self.dbpath, '-by']
+
+class Startup(Command):
+    def __init__(self, project, database):
+        Command.__init__(self, project, database)
+        self.pf = get_pf_path(project, database)
+        if os.path.isfile(self.pf):
+            self.command = ['sudo', '-u', 'root', PROSERVE, '-pf', self.pf]
+        else:
+            self.command = ['sudo', '-u', 'root', PROSERVE, self.dbpath]
+
+def generic_command(args, callback, confirm=None):
+    projects, databases = parse_args(args)
+    if confirm:
+        reply = raw_input(confirm % {'projects':  ', '.join(projects),
+                                     'databases': ', '.join(databases) })
+        if reply != 'y':
+            return
+    (result, reason) = validate_args(projects, databases)
+    if result is False:
+        fatal(reason)
+    for project in projects:
+        if databases == 'all':
+            proj_databases = get_all_databases(project)
+        else:
+            proj_databases = databases
+        for database in proj_databases:
+            callback(project, database)
+
+def cmd_help(args):
+    print __doc__ % {
+        'command_name': sys.argv[0],
+        }
+    return 0
+
+def cmd_start(args):
+    total_status = 0
+    def do_startup(project, database):
+        result = check_database_sanity(project, database)
+        if result:
+            dbprint(project, database, P_ERR, 'NOT STARTING: %s' % result)
+            return
+        if is_database_running(project, database):
+            dbprint(project, database, P_INFO, 'Already running')
+            return
+        pf = get_pf_path(project, database)
+        if os.path.isfile(pf):
+            dbprint(project, database, P_INFO, 'Starting with -pf %s...' % pf)
+        else:
+            dbprint(project, database, P_INFO, 'Starting...')
+        cmd = Startup(project, database)
+        (status, output, errors) = cmd.complete()
+        if status != 0:
+            dbprint(project, database, P_ERR, 'Exit status: %d; check %s'
+                    % (status, get_database_log_path(project, database)))
+            for line in errors + output:
+                dbprint(project, database, P_ERR, line)
+            total_status = 1
+        else:
+            dbprint(project, database, P_INFO, 'Done')
+    generic_command(args, do_startup,
+                    'Start databases %(databases)s on projects %(projects)s [y/n]? ')
+    return total_status
+
+def cmd_stop(args):
+    total_status = 0
+    def do_shutdown(project, database):
+        result = check_database_sanity(project, database)
+        if result:
+            dbprint(project, database, P_ERR, 'NOT SHUTTING DOWN: %s' % result)
+            return
+        if not is_database_running(project, database):
+            dbprint(project, database, P_INFO, 'Not running')
+            return
+        dbprint(project, database, P_INFO, 'Shutting down...')
+        cmd = Shutdown(project, database)
+        (status, output, errors) = cmd.complete()
+        if status != 0:
+            dbprint(project, database, P_ERR, 'Exit status: %d; check %s'
+                    % (status, get_database_log_path(project, database)))
+            for line in errors + output:
+                dbprint(project, database, P_ERR, line)
+            total_status = 1
+        else:
+            dbprint(project, database, P_INFO, 'Done')
+    generic_command(args, do_shutdown,
+                    'Shut down databases %(databases)s on projects %(projects)s [y/n]? ')
+    return total_status
+
+def cmd_status(args):
+    def show_status(project, database):
+        result = check_database_sanity(project, database)
+        if result:
+            dbprint(project, database, P_ERR, result)
+        elif is_database_running(project, database):
+            dbprint(project, database, P_INFO, 'UP')
+        else:
+            dbprint(project, database, P_INFO, 'DOWN')
+    generic_command(args, show_status)
+    return 0
+
+def cmd_users(args):
+    def show_users(project, database):
+        if not is_database_running(project, database):
+            dbprint(project, database, P_WARN, 'Not running')
+            return
+        cmd = ListUsers(project, database)
+        (status, output, errors) = cmd.complete()
+        if status != 0:
+            for line in errors + output:
+                dbprint(project, database, P_ERR, line)
+        else:
+            for line in output[1:]:
+                dbprint(project, database, P_INFO, line)
+    dbprint('PROJECT', 'DATABASE', P_INFO, 'usr    pid    time of login           user id     tty                  Limbo?')
+    generic_command(args, show_users)
+    return 0
+
+COMMANDS = {
+    'help':       cmd_help,
+    'start':      cmd_start,
+    'stop':       cmd_stop,
+    'status':     cmd_status,
+    'users':      cmd_users,
+    }
+
+def display_usage():
+    print 'Usage: %s COMMAND [PARAMETER...]' % sys.argv[0]
+    print 'Try "%s help" for more information' % sys.argv[0]
+
+if __name__ == '__main__':
+    if os.getuid() == 0:
+        fatal('Thank you for not running as root')
+
+    if len(sys.argv) < 2:
+        display_usage()
+        sys.exit(1)
+
+    if not os.path.isdir(DB_PROJECTS_ROOT):
+        fatal('Project root directory \"%s\" does not exist' % DB_PROJECTS_ROOT)
+
+    command_name = sys.argv[1]
+    if command_name not in COMMANDS:
+        error('Unknown command: "%s"' % command_name)
+        display_usage()
+        sys.exit(1)
+
+    command = COMMANDS[command_name]
+    sys.exit(command(sys.argv[2:]))

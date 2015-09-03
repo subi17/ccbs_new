@@ -90,11 +90,12 @@ DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
 DEF VAR lcExcludeBundles      AS CHAR NO-UNDO.
 DEF VAR liBonoCount AS INT NO-UNDO. 
 DEF VAR liDSS2BonoCount AS INT NO-UNDO. 
-DEF VAR ldeTARJ7DataUsageMonthly AS DEC NO-UNDO.
-DEF VAR ldaTARJ7Renewal AS DATE NO-UNDO. 
-DEF VAR ldeTARJ7Renewal AS DEC NO-UNDO. 
-DEF VAR ldeTARJ7DataLimit AS DEC NO-UNDO. 
-DEF VAR liTARJ7Renewal AS INT NO-UNDO. 
+DEF VAR ldePrepDataUsageMonthly AS DEC NO-UNDO.
+DEF VAR ldePrepVoiceUsageMonthly AS DEC NO-UNDO.
+DEF VAR ldaPrepRenewal AS DATE NO-UNDO. 
+DEF VAR ldePrepDataLimit AS DEC NO-UNDO.
+DEF VAR ldePrepVoiceimit AS DEC NO-UNDO.
+DEF VAR liPrepRenewal AS INT NO-UNDO. 
 DEF VAR ldaActDate AS DATE NO-UNDO. 
 DEF VAR ldaCDRCollectFrom AS DATE NO-UNDO. 
 DEF VAR ldaiSTCDate AS DATE NO-UNDO.
@@ -135,9 +136,9 @@ ASSIGN
 
 first_level_struct = add_struct(response_toplevel_id, "").
    
-IF MobSub.CliType = "TARJ7" THEN DO:
-   FOR FIRST ServiceLimit NO-LOCK WHERE
-             ServiceLimit.GroupCode = "TARJ7",
+IF MobSub.CliType = "TARJ7" OR MobSub.CliType = "TARJ9" THEN DO:
+   FOR EACH ServiceLimit NO-LOCK WHERE
+            ServiceLimit.GroupCode = MobSub.CliType,
        FIRST MServiceLimit WHERE
              MServiceLimit.MsSeq = Mobsub.MsSeq AND
              MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -147,56 +148,63 @@ IF MobSub.CliType = "TARJ7" THEN DO:
          fSplitTS(MServiceLimit.FromTS,OUTPUT ldaActDate, OUTPUT liTime).
                   
          IF ldaActDate >= DATE(MONTH(TODAY),1,YEAR(TODAY)) THEN
-            ldaTARJ7Renewal = ldaActDate.
+            ldaPrepRenewal = ldaActDate.
          ELSE DO:
          
             IF TODAY EQ fLastDayOfMonth(TODAY) AND
-               DAY(ldaActDate) >= DAY(TODAY) THEN ldaTARJ7Renewal = TODAY.
+               DAY(ldaActDate) >= DAY(TODAY) THEN ldaPrepRenewal = TODAY.
             ELSE IF DAY(ldaActDate) > DAY(TODAY)THEN DO:
-               ldaTARJ7Renewal = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1.
-               IF DAY(ldaTARJ7Renewal) > DAY(ldaActDate) THEN
-                  ldaTARJ7Renewal = DATE(MONTH(ldaTARJ7Renewal),
+               ldaPrepRenewal = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1.
+               IF DAY(ldaPrepRenewal) > DAY(ldaActDate) THEN
+                  ldaPrepRenewal = DATE(MONTH(ldaPrepRenewal),
                                          DAY(ldaActDate),
-                                         YEAR(ldaTARJ7Renewal)).
+                                         YEAR(ldaPrepRenewal)).
             END.
-            ELSE ldaTARJ7Renewal = DATE(MONTH(TODAY),
-                                        DAY(ldaActDate),
-                                        YEAR(TODAY)).
+            ELSE ldaPrepRenewal = DATE(MONTH(TODAY),
+                                       DAY(ldaActDate),
+                                       YEAR(TODAY)).
                
-            IF DAY(ldaTARJ7Renewal) EQ DAY(ldaActDate) OR
-               ldaTARJ7Renewal EQ fLastDayOfMonth(ldaTARJ7Renewal) THEN DO:
+            IF DAY(ldaPrepRenewal) EQ DAY(ldaActDate) OR
+               ldaPrepRenewal EQ fLastDayOfMonth(ldaPrepRenewal) THEN DO:
                FIND FIRST PrepEDR NO-LOCK WHERE
-                          PrepEDR.MsSeq = MobSub.Msseq AND
-                          PrepEDR.DateST = ldaTARJ7Renewal AND
-                          PrepEDR.SuccessCode EQ 1 AND
-                          PrepEDR.CLIType EQ "TARJ7" AND
-                          PrepEDR.ErrorCode EQ 0 NO-ERROR.
-               IF AVAIL PrepEDR THEN liTARJ7Renewal = PrepEDR.TimeStart.
+                          PrepEDR.MsSeq       = MobSub.Msseq AND
+                          PrepEDR.DateST      = ldaPrepRenewal AND
+                          PrepEDR.SuccessCode = 1 AND
+                          PrepEDR.CLIType     = MobSub.CliType AND
+                          PrepEDR.ErrorCode   = 0 NO-ERROR.
+               IF AVAIL PrepEDR THEN liPrepRenewal = PrepEDR.TimeStart.
             END.
          END.
 
-         ldeTARJ7DataLimit = MServiceLimit.InclAmt.
+         IF MServiceLimit.DialType = {&DIAL_TYPE_GPRS} THEN DO:
+            
+            ldePrepDataLimit = MServiceLimit.InclAmt.
 
-         /* Check if there is any active prepaid upsell */
-         liUpsellCount = fGetUpSellCount(INPUT "TARJ7_UPSELL",
-                                         INPUT Mobsub.MsSeq,
-                                         INPUT Mobsub.Custnum,
-                                         OUTPUT lcError).
-         IF liUpsellCount > 0 THEN DO:
-            FIND FIRST bServiceLimit NO-LOCK WHERE
-                       bServiceLimit.GroupCode = "TARJ7_UPSELL" NO-ERROR.
-            IF AVAIL bServiceLimit THEN
-               ldeTARJ7DataLimit = ldeTARJ7DataLimit +
-                                    (bServiceLimit.InclAmt * liUpsellCount).
-         END. /* IF liUpsellCount > 0 THEN DO: */
+            /* Check if there is any active prepaid upsell */
+            liUpsellCount = fGetUpSellCount(INPUT "TARJ7_UPSELL",
+                                            INPUT Mobsub.MsSeq,
+                                            INPUT Mobsub.Custnum,
+                                            OUTPUT lcError).
+            IF liUpsellCount > 0 THEN DO:
+               FIND FIRST bServiceLimit NO-LOCK WHERE
+                          bServiceLimit.GroupCode = "TARJ7_UPSELL" NO-ERROR.
+               IF AVAIL bServiceLimit THEN
+                  ldePrepDataLimit = ldePrepDataLimit +
+                                       (bServiceLimit.InclAmt * liUpsellCount).
+            END. /* IF liUpsellCount > 0 THEN DO: */
+         END.
+            
+         IF MServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN
+            ldePrepVoiceimit = MServiceLimit.InclAmt.
 
    END. /* FOR FIRST ServiceLimit NO-LOCK WHERE */
 END. /* ELSE IF MobSub.CliType = "TARJ7" THEN DO: */
 
 EMPTY TEMP-TABLE ttCDR.
 
-ldaCDRCollectFrom = (IF MobSub.CliType EQ "TARJ7" AND
-                        ldaTARJ7Renewal < first_of_month THEN ldaTARJ7Renewal
+ldaCDRCollectFrom = (IF (MobSub.CliType EQ "TARJ7" OR 
+                         MobSub.CliType EQ "TARJ9") AND
+                         ldaPrepRenewal < first_of_month THEN ldaPrepRenewal
                      ELSE first_of_month).
 
 IF NOT MobSub.PayType THEN DO:
@@ -232,18 +240,28 @@ fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
 
 FOR EACH ttCDR NO-LOCK WHERE
          ttCDR.ErrorCode = 0:
-         
-   /* Only Package data once TARJ7 is activated */
-   IF MobSub.CLIType EQ "TARJ7" THEN DO:
 
-      IF ttCDR.CLIType EQ "TARJ7" AND
-         ttCDR.DateSt >= ldaTARJ7Renewal AND
+   /* Only Package data once TARJ7 and TARJ9 is activated */
+   IF MobSub.CLIType EQ "TARJ7" OR
+      MobSub.CLIType EQ "TARJ9" THEN DO:
+
+      IF ((ttCDR.CLIType EQ "TARJ7" AND MobSub.CLIType EQ "TARJ7") OR
+         (ttCDR.CLIType EQ "TARJ9" AND MobSub.CLIType EQ "TARJ9")) AND
+         ttCDR.DateSt >= ldaPrepRenewal AND
          ttCDR.Charge EQ 0 THEN DO:
 
-         IF ttCDR.DateST NE ldaTARJ7Renewal OR
-            ttCDR.TimeStart >= liTARJ7Renewal THEN
-         ldeTARJ7DataUsageMonthly = ldeTARJ7DataUsageMonthly +
-                                    ttCDR.DataIn + ttCDR.DataOut.
+         IF ttCDR.DateST NE ldaPrepRenewal OR
+            ttCDR.TimeStart >= liPrepRenewal THEN DO:
+
+            ldePrepDataUsageMonthly  = ldePrepDataUsageMonthly +
+                                       ttCDR.DataIn + ttCDR.DataOut.
+            
+            IF ttCDR.EventType EQ "CALL" AND
+               ttCDR.Charge EQ 0 AND
+               LOOKUP(ttCDR.GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0 THEN
+               ldePrepVoiceUsageMonthly = ldePrepVoiceUsageMonthly + 
+                                          ttCDR.BillDur.
+         END.
       END.
 
       IF ttCDR.DateSt < first_of_month THEN NEXT.
@@ -602,10 +620,14 @@ IF MobSub.CliType = "TARJ6" THEN DO:
     add_double(first_level_struct,"data_bundle_usage_day",
                ldeTARJ6DataUsageDaily).
 END. /* IF MobSub.CliType = "TARJ6" THEN DO: */
-ELSE IF MobSub.CLIType EQ "TARJ7" THEN
+ELSE IF MobSub.CLIType EQ "TARJ7" OR
+        MobSub.CLIType EQ "TARJ9" THEN
    ASSIGN
-      ldeTotalDataBundleUsage = ldeTARJ7DataUsageMonthly / 1024
-      ldeTotalDataBundleLimit = ldeTARJ7DataLimit.
+      ldeTotalDataBundleUsage = ldePrepDataUsageMonthly / 1024
+      ldeTotalDataBundleLimit = ldePrepDataLimit
+      ldeVoiceBundleLimit     = ldePrepVoiceimit
+      ldeVoiceBundleUsage     = ldePrepVoiceUsageMonthly / 60.
+
 ELSE IF liBonoCount = 0 AND
    fGetActiveSpecificBundle(Mobsub.MsSeq,ldPeriodFrom,"BONO") > "" THEN
    liBonoCount = 1.

@@ -26,6 +26,8 @@ DEFINE VARIABLE ldTermDiscount      AS DECIMAL    NO-UNDO INIT ?.
 DEFINE VARIABLE ldTermLeasAmt       AS DECIMAL    NO-UNDO INIT ?.
 DEFINE VARIABLE ldMnpUpdateSt       AS DECIMAL    NO-UNDO INIT ?.
 DEFINE VARIABLE liMnpStatusCode     AS INTEGER    NO-UNDO INIT ?.
+DEFINE VARIABLE ldMnpCreateStamp    AS DECIMAL    NO-UNDO INIT ?.
+DEFINE VARIABLE lcMnpStatusReason   AS CHARACTER  NO-UNDO.
 
 {cparam2.i}
 {timestamp.i}
@@ -84,7 +86,9 @@ FOR EACH Order WHERE
       ldTermDiscount = ?
       ldTermLeasAmt = ?
       ldMnpUpdateSt = ?
-      liMnpStatusCode = ?.
+      liMnpStatusCode = ?
+      ldMnpCreateStamp = ?
+      lcMnpStatusReason = "".
  
    /* custid custidtype */
    FIND FIRST OrderCustomer WHERE
@@ -145,11 +149,13 @@ FOR EACH Order WHERE
    FOR EACH MNPProcess WHERE
             MNPProcess.OrderId = Order.OrderId
             NO-LOCK BY CrStamp DESC:
-      ASSIGN lcFormRequest   = MNPProcess.FormRequest
-             lcPortRequest   = MNPProcess.PortRequest
-             ldPortingTime   = MNPProcess.PortingTime
-             ldMnpUpdateSt   = MNPProcess.UpdateTS
-             liMnpStatusCode = MNPProcess.StatusCode.
+      ASSIGN lcFormRequest     = MNPProcess.FormRequest
+             lcPortRequest     = MNPProcess.PortRequest
+             ldPortingTime     = MNPProcess.PortingTime
+             ldMnpUpdateSt     = MNPProcess.UpdateTS
+             liMnpStatusCode   = MNPProcess.StatusCode
+             ldMnpCreateStamp  = MNPProcess.CreatedTS
+             lcMnpStatusReason = MNPProcess.StatusReason.
 
       LEAVE.
    END.
@@ -226,7 +232,9 @@ FOR EACH Order WHERE
                       fNotNull(STRING(ldTermDiscount))         + lcDel +
                       fNotNull(STRING(ldTermLeasAmt))          + lcDel +
                       fNotNull(STRING(Order.PortingDate))      + lcDel +
-                      fNotNull(STRING(ldMnpUpdateSt)).
+                      fNotNull(STRING(ldMnpUpdateSt))          + lcDel +
+                      fNotNull(STRING(ldMnpCreateStamp))       + lcDel +
+                      fNotNull(lcMnpStatusReason).
 
    IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN DO:
       PAUSE 0.

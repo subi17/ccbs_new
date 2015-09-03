@@ -60,6 +60,8 @@ DEF VAR lcFromStat     AS CHAR NO-UNDO.
 DEF VAR lcToStat       AS CHAR NO-UNDO.
 DEF VAR lcBarringCode  AS CHAR NO-UNDO.
 DEF VAR orBarring      AS ROWID NO-UNDO.
+DEF VAR lcOnOff        AS CHAR NO-UNDO.
+DEF VAR llOngoing      AS LOG NO-UNDO.
 
 DEF BUFFER bReq  FOR MsRequest.
 DEF BUFFER bSubReq FOR MsRequest.
@@ -84,6 +86,7 @@ FUNCTION fLocalMemo RETURNS LOGIC
       Memo.MemoTitle = icTitle
       Memo.Memotext  = icText.
 END FUNCTION.
+
 
 pcReqList = validate_request(param_toplevel_id, "int,string,string,array,[struct]").
 IF pcReqList EQ ? THEN RETURN.
@@ -128,12 +131,6 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
     pcParam = get_string(pcStruct, "param").
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
-   
-   IF LOOKUP(pcServiceId,"Y_BPSUB,C_BPSUB") > 0 THEN ASSIGN
-      pcParam = pcServiceId WHEN pcValue = "on"
-      pcServiceId = "BPSUB".
-  
-   /* "BCG,OBA,OBO,OBR,RSA".*/
 
    /* SERVICES */
    FOR FIRST SubSer NO-LOCK WHERE
@@ -228,17 +225,18 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
       /* Extra pre-caution, if fraud barring is applied then */
       /* don't allow to activate the BB service              */
       IF Subser.ServCom = "BB" AND liValue = 1 THEN DO:
-         lcBarringCode = fCheckBarrStatus(INPUT MobSub.MsSeq,
+         llOngoing = fCheckBarrStatus(INPUT MobSub.MsSeq,
+                                          OUTPUT lcBarringCode,
                                           OUTPUT orBarring).
-         IF lcBarringCode = "91" THEN DO:
+         IF llOngoing EQ TRUE THEN DO:
             FIND FIRST MsRequest WHERE
                  ROWID(MsRequest) = orBarring AND
-                 LOOKUP(MsRequest.ReqCParam1, {&FRAUD_BARR_CODES}) > 0
+                 fIsInList(MsRequest.ReqCParam1, {&FRAUD_BARR_CODES}) EQ TRUE
                  NO-LOCK NO-ERROR.
             IF AVAILABLE MsRequest THEN
                RETURN appl_err("Ongoing Fraud Barring Request").
          END. /* IF lcBarringCode = "91" THEN DO: */
-         ELSE IF LOOKUP(lcBarringCode, {&FRAUD_BARR_CODES}) > 0 THEN
+         IF fIsInList(lcBarringCode, {&FRAUD_BARR_CODES}) EQ TRUE THEN
             RETURN appl_err("BB service can not be activated since " +
                             "subscription has fraud barring").
 
@@ -246,22 +244,8 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
          THEN RETURN appl_err("BB service can not be activated since " +
                      "subscription does not have active data bundle").
       END. /* IF liValue = 1 THEN DO: */
-      ELSE IF Subser.ServCom = "NAM" THEN DO:
-         lcBarringCode = fCheckBarrStatus(INPUT MobSub.MsSeq,
-                                          OUTPUT orBarring).
-         IF lcBarringCode = "91" THEN DO:
-            FIND FIRST MsRequest WHERE
-                 ROWID(MsRequest) = orBarring AND
-                 MsRequest.ReqCParam1 = "C_LOS" NO-LOCK NO-ERROR.
-            IF AVAILABLE MsRequest THEN
-               RETURN appl_err("Ongoing CLB Lost or Stolen Barring Request").
-         END. /* IF lcBarringCode = "91" THEN DO: */
-         ELSE IF lcBarringCode = "C_LOS" THEN
-            RETURN appl_err("Internet service can not be " + 
-                  (IF liValue = 0 THEN "de-activated" ELSE "activated") +
-                  " since subscription has CLB Lost or Stolen Barring").
-      END. /* ELSE IF Subser.ServCom = "NAM" THEN DO: */
-
+      /*YPR-1965 starts*/
+      
       liReq = fServiceRequest(MobSub.MsSeq,
                               Subser.ServCom,
                               liValue,
@@ -275,7 +259,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                               0, /* father request */
                               false, /* mandatory for father request */
                               OUTPUT lcInfo).
-      
+
       IF liReq = 0 THEN DO:
           RETURN appl_err("Change request was not accepted for service"
               + SubSer.ServCom + "; " + lcInfo).
@@ -304,8 +288,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    END.
    
    /* Additional logic to add the new BB/LTE service to the subscription */
-   IF LOOKUP(pcServiceID,"BB,LTE,BPSUB") > 0 AND
-      pcValue = "ON" THEN DO:
+   IF LOOKUP(pcServiceID,"BB,LTE") > 0 AND pcValue = "ON" THEN DO:
    
       FIND FIRST ServCom WHERE
                  ServCom.Brand = gcBrand AND
@@ -331,17 +314,18 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
          /* Extra pre-caution, if fraud barring is applied then */
          /* don't allow to activate the BB service              */
 
-         lcBarringCode = fCheckBarrStatus(INPUT MobSub.MsSeq,
-                                          OUTPUT orBarring).
-         IF lcBarringCode = "91" THEN DO:
+         llOngoing = fCheckBarrStatus(INPUT MobSub.MsSeq,
+                                      OUTPUT lcBarringCode,
+                                      OUTPUT orBarring).
+         IF llOngoing EQ TRUE THEN DO:
             FIND FIRST MsRequest WHERE
                  ROWID(MsRequest) = orBarring AND
-                 LOOKUP(MsRequest.ReqCParam1, {&FRAUD_BARR_CODES}) > 0
+                 fIsInList(MsRequest.ReqCparam1, {&FRAUD_BARR_CODES}) EQ TRUE
                  NO-LOCK NO-ERROR.
             IF AVAILABLE MsRequest THEN
                RETURN appl_err("Ongoing Fraud Barring Request").
          END. /* IF lcBarringCode = "91" THEN DO: */
-         ELSE IF LOOKUP(lcBarringCode, {&FRAUD_BARR_CODES}) > 0 THEN
+         IF fIsInList(lcBarringCode,  {&FRAUD_BARR_CODES}) EQ TRUE THEN
             RETURN appl_err("BB service can not be activated since " +
                             "subscription has fraud barring").
 
@@ -377,61 +361,13 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    END. /* IF LOOKUP(pcServiceID,"BB,LTE") > 0 AND pcValue = "ON" THEN DO: */
    /* SERVICES END */
 
-   /* BARRINGS */ 
-   IF LOOKUP(pcValue,"on,off") EQ 0 THEN
-      RETURN appl_err(SUBST("Unknown service value: &1", pcValue)).
-
-   RUN checkmsbarring(
-         INPUT piMsSeq,
-         INPUT cCheckMsBarringKatun,
-         OUTPUT lcBarrComList,
-         OUTPUT lcBarrStatus).
-
-   CASE lcBarrStatus:
-      WHEN "NAD" THEN RETURN appl_err("Operator or debt level barring is on").
-      WHEN "ONC" THEN RETURN appl_err("Ongoing network command").
-   END.
-   
-   /* Check that barring is allowed */
-   /* Do not allow set/unset D_ barrings from newton */
-   IF INDEX(lcBarrComList,pcServiceId) = 0 OR
-      pcServiceId BEGINS "D_" THEN 
-      RETURN appl_err("Barring is not allowed").
-   
-   CASE pcValue:
-      WHEN "on" THEN pcSetServiceId = pcServiceId. 
-      WHEN "off" THEN pcSetServiceId = "UN" + pcServiceId. 
-   END.
-   
-   /* Check that barring is already with same status */
-   IF LOOKUP(pcSetServiceId,lcBarrComList,"|") = 0 THEN 
-      RETURN appl_err(SUBST("Barring &1 is already &2", pcServiceId, pcValue )).
-   
-   RUN barrengine(
-      MobSub.MsSeq,
-      pcSetServiceId,
-      "6",
-      "",
-      fMakeTS(),
-      "",
-      OUTPUT lcStatus).
-
-   CASE lcStatus:
-      WHEN "ONC" THEN RETURN appl_err("Ongoing network command").
-   END.
-
-   IF lcMemoTitle > "" THEN
-      fLocalMemo(INPUT "MobSub",
-                 INPUT STRING(MobSub.MsSeq),
-                 INPUT MobSub.CustNum,
-                 INPUT lcMemoTitle,
-                 INPUT lcMemoContent + ". " + UPPER(pcSetServiceId) +
-                       " barring is added.").
-
-END.
+END. 
 
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
 END.
+
+
+

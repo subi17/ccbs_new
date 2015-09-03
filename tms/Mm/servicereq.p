@@ -21,6 +21,7 @@
 {msopenbatch.i}
 {msisdn.i}
 {remfees.i}
+{barrfunc.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -265,6 +266,11 @@ PROCEDURE pServCompUpdate:
    DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
    DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
    DEF VAR lcGrpsBarring          AS CHAR NO-UNDO. 
+   /*YPR-1965 - added D_HOTLP*/
+   DEF VAR lcBarring AS CHAR NO-UNDO. 
+   DEF VAR lrBarring AS ROWID no-undo.
+   DEF VAR llOngoing AS LOG NO-UNDO. 
+      
 
    DEF BUFFER bOrigRequest    FOR MsRequest.
    DEF BUFFER bMobsub         FOR MobSub.
@@ -308,34 +314,19 @@ PROCEDURE pServCompUpdate:
       fReqStatus(2,"").
       RETURN. 
    END.
-      
-   /* hot-fix for YTS-4471 */
-   IF MsRequest.ReqCParam1 EQ "BARRING" AND
-      MsRequest.ReqIParam1 EQ 1 THEN DO:
-      
-      lcGrpsBarring = SUBSTRING(MsRequest.ReqCParam2,7,1).
 
-      FIND FIRST bSubSer NO-LOCK WHERE
-                 bSubSer.MsSeq = MsRequest.MsSeq AND
-                 bSubSer.ServCom = "NAM" NO-ERROR.
-      IF AVAIL bSubSer AND
-         STRING(bSubSer.SSStat) NE lcGrpsBarring AND
-         LOOKUP(lcGrpsBarring,"0,1") > 0
-      THEN DO:
-         FIND CURRENT bSubSer EXCLUSIVE-LOCK.
-         ASSIGN
-            bSubSer.SSStat = INT(lcGrpsBarring).
-         RELEASE bSubSer.
-      END.
-   END.
-
-   /* YPR-559-Resend NAM or hotling barring to netwrok after LTE activation */
+   /* YPR-559-Resend internet or hotling barring to network after LTE activation */
    IF MsRequest.ReqCParam1 EQ "LTE" AND
-      MsRequest.ReqIParam1 EQ 1 THEN DO:
+      MsRequest.ReqIParam1 EQ 1 AND
+      MsRequest.ReqSource NE {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION} 
+      THEN DO:
 
-      IF MobSub.BarrCode = "D_HOTL" THEN DO:
+      llOngoing = fCheckBarrStatus(MobSub.MsSeq, OUTPUT lcBarring, OUTPUT lrBarring).
+      IF NOT llOngoing AND
+          fIsInList("Debt_HOTL,Debt_HOTLP,Internet", lcBarring) EQ TRUE THEN DO:
+      
          RUN barrengine.p(MobSub.MsSeq,
-                          MobSub.BarrCode,
+                          "#REFRESH",
                           {&REQUEST_SOURCE_SERVICE_CHANGE},
                           katun,               /* creator */
                           fMakeTS(),           /* activate */
@@ -353,36 +344,7 @@ PROCEDURE pServCompUpdate:
                              "Barring and suspension",
                              "Barring resend " + MobSub.BarrCode +
                              " request failed: " + lcError).
-      END. /* IF MobSub.BarrCode = "D_HOTL" THEN DO: */
-      ELSE DO:
-         FIND FIRST SubSer WHERE
-                    SubSer.MsSeq   = Mobsub.MsSeq AND
-                    SubSer.ServCom = "NAM" NO-LOCK NO-ERROR.
-         IF AVAIL SubSer AND SubSer.SSStat = 1 THEN DO:
-            liRequest = fServiceRequest(MobSub.MsSeq,
-                                        SubSer.ServCom,
-                                        1,     /* ON */
-                                        "",
-                                        fMakeTS(),
-                                        "",
-                                        TRUE, /* fees */
-                                        FALSE, /* sms */
-                                        "",
-                                        {&REQUEST_SOURCE_SERVICE_CHANGE},
-                                        MsRequest.MsRequest, /* Father Request */
-                                        FALSE,
-                                        OUTPUT lcError).
-            /* Write possible error to a memo */
-            IF liRequest = 0 THEN
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "MobSub",
-                                STRING(Mobsub.MsSeq),
-                                Mobsub.CustNum,
-                                SubSer.ServCom + " service resend",
-                                "Service " + SubSer.ServCom +
-                                " request failed " + lcError).
-         END. /* IF AVAIL SubSer AND SubSer.SSStat = 1 THEN DO: */
-      END. /* ELSE DO: */
+      END. /* IF MobSub.BarrCode = "D_HOTL" OR MobSub.BarrCode = "D_HOTLP THEN DO: */
    END. /* IF MsRequest.ReqCParam1 EQ "LTE" AND */
 
    FIND FIRST SubSer NO-LOCK WHERE

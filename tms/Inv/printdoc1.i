@@ -29,12 +29,13 @@ DEF VAR lcTransDir  AS CHAR  NO-UNDO.
 DEF VAR lcFileExt   AS CHAR  NO-UNDO.
 DEF VAR liPCnt      AS INT   NO-UNDO.
 DEF VAR lcMessage   AS CHAR  NO-UNDO. 
+DEF VAR llgPostPay  AS LOG   NO-UNDO.
 DEF VAR lcErrFile   AS CHAR  NO-UNDO. 
 DEF VAR lcConfDir   AS CHAR  NO-UNDO. 
 DEF VAR ldAmt       AS DEC   NO-UNDO.
 DEF VAR ldMinRow    AS DEC   NO-UNDO.
 DEF VAR ldMaxRow    AS DEC   NO-UNDO.
-DEF VAR lcDataItem  AS CHAR  NO-UNDO.
+DEF VAR lcNonCombinedData AS CHAR  NO-UNDO.
 DEF VAR ldFromPer   AS DEC   NO-UNDO.
 DEF VAR ldInvoiceFromPer AS DEC   NO-UNDO.
 DEF VAR ldToPer     AS DEC   NO-UNDO.
@@ -109,6 +110,7 @@ DEF TEMP-TABLE ttSub NO-UNDO
    FIELD CLI          AS CHAR
    FIELD CLIType      AS CHAR
    FIELD CTName       AS CHAR
+   FIELD MsSeq        AS INT
    FIELD CallSpec     AS INT
    FIELD DataConv     AS INT 
    FIELD VoiceLimit   AS INT
@@ -123,6 +125,9 @@ DEF TEMP-TABLE ttSub NO-UNDO
    FIELD OldCLIType      AS CHAR
    FIELD OldCTName       AS CHAR
    FIELD TariffActDate   AS CHAR
+   FIELD MessageType     AS CHAR
+   FIELD OldVoiceLimit   AS INT
+   FIELD OldDataLimit    AS INT
    INDEX CLI CLI.
    
 DEF TEMP-TABLE ttCLIType NO-UNDO
@@ -395,7 +400,7 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL:
                 SingleFee.KeyValue    = Fixedfee.KeyValue    AND
                 SingleFee.SourceTable = "FixedFee" AND
                 SingleFee.SourceKey   = STRING(FixedFee.FFNUM) AND
-                SingleFee.BillCode    = lcTFPayTermEndBillCode:
+                SingleFee.BillCode    BEGINS "PAYTERMEND":
          
             IF NOT SingleFee.Billed THEN ASSIGN
                ttSub.TFBankAfterAmt[liFFCount]  = ttSub.TFBankAfterAmt[liFFCount] +
@@ -454,7 +459,9 @@ PROCEDURE pGetInvoiceHeaderData:
    DEF VAR ldaInvoiceFrom AS DATE NO-UNDO. 
    DEF VAR lcGraphGroup AS CHAR NO-UNDO.
    DEF VAR liOrder AS INT NO-UNDO. 
-   
+  
+   DEF BUFFER bReq FOR Msrequest.
+ 
    EMPTY TEMP-TABLE ttGraph.
    
    ASSIGN 
@@ -539,8 +546,7 @@ PROCEDURE pGetInvoiceHeaderData:
          ldMinRow = MIN(ldMinRow,ttGraph.GraphAmt) 
          ldMaxRow = MAX(ldMaxRow,ttGraph.GraphAmt).
    END.
-
-
+   
    RETURN "".
    
 END PROCEDURE.
@@ -561,13 +567,17 @@ PROCEDURE pGetSubInvoiceHeaderData:
    DEF BUFFER bMServiceLimit  FOR MServiceLimit.
    DEF BUFFER bMsOwner        FOR MsOwner.
 
+   DEF BUFFER bType FOR CLIType.
+   DEF BUFFER bReq  FOR MsRequest.
+
    EMPTY TEMP-TABLE ttSub.
    EMPTY TEMP-TABLE ttCLIType.
           
    FOR EACH SubInvoice OF Invoice NO-LOCK:
 
       CREATE ttSub.
-      ttSub.CLI = SubInvoice.CLI.
+      ASSIGN ttSub.CLI   = SubInvoice.CLI
+             ttSub.MsSeq = SubInvoice.MsSeq. 
 
       /* user name */
       IF SubInvoice.CustNum = Invoice.CustNum OR SubInvoice.CustNum = 0 THEN 
@@ -580,6 +590,60 @@ PROCEDURE pGetSubInvoiceHeaderData:
                                               BUFFER UserCustomer).
       END.
 
+      IF CAN-FIND(FIRST MsOwner WHERE
+                        Msowner.Brand  = gcBrand        AND
+                        MsOwner.CLI    = SubInvoice.CLI AND
+                        MsOwner.TsEnd >= ldFromPer      AND
+                        MsOwner.TsEnd <= ldToPer)
+      THEN DO:
+         /* subscription has been terminated during billing period */
+         FIND FIRST MsRequest WHERE
+                    MsRequest.MsSeq     = SubInvoice.MsSeq AND
+                    MsRequest.ReqType   = 18               AND
+                    MsRequest.ReqStat   = 2                AND
+                    MsRequest.ActStamp >= ldFromPer        AND
+                    MsRequest.ActStamp <= ldToPer          NO-LOCK NO-ERROR.
+
+         IF AVAILABLE MsRequest THEN DO:
+
+            IF NOT ttInvoice.PostPoned AND
+               NOT CAN-FIND(FIRST bReq WHERE
+                              bReq.MsSeq     = SubInvoice.MsSeq    AND
+                              bReq.ReqType   = 82                  AND
+                              bReq.ReqStat   = 2                   AND
+                              bReq.ActStamp >= ldFromPer           AND
+                              bReq.ActStamp <= ldToPer             AND
+                              bReq.ActStamp >  MsRequest.ActStamp) THEN
+               FOR FIRST SingleFee WHERE
+                         SingleFee.Brand    = gcBrand                  AND
+                         SingleFee.CustNum  = SubInvoice.CustNum       AND
+                         SingleFee.KeyValue = STRING(SubInvoice.MsSeq) AND
+                     NOT SingleFee.Billed                              NO-LOCK:
+                  ASSIGN ttInvoice.PostPoned = YES.
+               END.
+
+            ttSub.MessageType   = "13".   
+         END. 
+         
+         /* stc during billing period, from post to pre  */
+          FOR FIRST MsRequest NO-LOCK WHERE
+                    MsRequest.MsSeq     = SubInvoice.MsSeq AND
+                    MsRequest.ReqType   = 0                AND
+                    MsRequest.ReqStat   = 2                AND
+                    MsRequest.ActStamp >= ldFromPer        AND
+                    MsRequest.ActStamp <= ldToPer,
+              FIRST CLIType NO-LOCK WHERE
+                    CLIType.Brand   = gcBrand AND
+                    CLIType.CLIType = MsRequest.ReqCParam1,
+              FIRST bType NO-LOCK WHERE
+                    bType.Brand = gcBrand AND
+                    bType.CLIType = MsRequest.ReqCParam2:
+    
+             IF CLIType.PayType = 1 AND bType.PayType = 2 THEN ttSub.MessageType = "15".
+          END.
+      
+      END.
+    
       /* if specifications on cli level wanted -> check cli data */
       IF Invoice.InvType NE 3 AND Invoice.InvType NE 4 THEN DO:
 
@@ -625,6 +689,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
          FOR EACH MSOwner NO-LOCK USE-INDEX InvCust WHERE
                   MSOwner.InvCust = Customer.CustNum AND
                   MsOwner.CLI     = SubInvoice.CLI   AND
+                  MsOwner.MsSeq   = SubInvoice.MsSeq AND
                   MsOwner.TsBeg  <= ldPeriodTo       AND
                   MsOwner.TsEnd  >= ldPeriodFrom     AND
                   MsOwner.PayType = FALSE :
@@ -931,6 +996,7 @@ END PROCEDURE.
 PROCEDURE pGetInvoiceVatData:
 
    EMPTY TEMP-TABLE ttVat.
+   DEF VAR ldeInstallmentSum AS DEC NO-UNDO. 
 
    /* vat amount */
    DO liPCnt = 1 TO 10:
@@ -949,17 +1015,15 @@ PROCEDURE pGetInvoiceVatData:
    END.
 
    /* exclude installment amount from 0% VAT row YDR-185 */
-   IF ttInvoice.InstallmentAmt > 0 OR 
-      ttInvoice.PenaltyAmt > 0 THEN DO:
-      FIND ttVat WHERE ttVat.VatPerc = 0 EXCLUSIVE-LOCK NO-ERROR.
-      IF AVAIL ttVat AND ttVat.VatBasis >= ttInvoice.InstallmentAmt +
-                                           ttInvoice.PenaltyAmt THEN DO:
-         IF ttVat.VatBasis EQ (ttInvoice.InstallmentAmt + 
-                               ttInvoice.PenaltyAmt) THEN DELETE ttVat.
-         ELSE ttVat.VATBasis = ttVAT.VATBasis - ttInvoice.InstallmentAmt -
-                               ttInvoice.PenaltyAmt.
+   ldeInstallmentSum = ttInvoice.InstallmentAmt +
+                       ttInvoice.PenaltyAmt +
+                       ttInvoice.InstallmentDiscAmt.
+
+   IF ldeInstallmentSum NE 0 THEN
+      FOR FIRST ttVat WHERE ttVat.VatPerc = 0 EXCLUSIVE-LOCK:
+         IF ttVat.VatBasis EQ ldeInstallmentSum THEN DELETE ttVat.
+         ELSE ttVat.VATBasis = ttVAT.VATBasis - ldeInstallmentSum.
       END.
-   END.
 
    /* taxzone */
    lcTaxZone = fLocalItemName("TaxZone",
@@ -1075,59 +1139,6 @@ PROCEDURE pErrorFile:
    GetRecipients(lcConfDir + "invdoc1_error.email").
    SendMail(lcErrFile,xMailAttach).
 
-END PROCEDURE.
-
-PROCEDURE pSubInvoiceMessageField:
-   
-   DEF INPUT PARAMETER icFileType AS CHAR NO-UNDO.
-    
-   DEF BUFFER bReq  FOR Msrequest.
-   DEF BUFFER bType FOR CLIType.
-
-   /* current priority (from highest to lowest): 13,15  */
-   lcMessage = "".
-   
-   /* termination and stc have higher priority than fat/printstate/odi */
-   IF CAN-FIND(FIRST MsOwner WHERE
-                     Msowner.Brand  = gcBrand   AND
-                     MsOwner.CLI    = SubInvoice.CLI AND
-                     MsOwner.TsEnd >= ldFromPer AND
-                     MsOwner.TsEnd <= ldToPer) 
-   THEN DO:
-
-      /* subscription has been terminated during billing period */
-      IF CAN-FIND(FIRST MsRequest WHERE
-                        MsRequest.MsSeq     = SubInvoice.MsSeq AND
-                        MsRequest.ReqType   = 18               AND
-                        MsRequest.ReqStat   = 2                AND 
-                        MsRequest.ActStamp >= ldFromPer        AND
-                        MsRequest.ActStamp <= ldToPer) 
-      THEN lcMessage = "13".
-      
-      /* termination has the 2nd highest priority */
-      IF lcMessage = "13" THEN RETURN "".
-      
-      /* stc during billing period, from post to pre  */
-      FOR FIRST MsRequest NO-LOCK WHERE
-                MsRequest.MsSeq     = SubInvoice.MsSeq AND
-                MsRequest.ReqType   = 0                AND
-                MsRequest.ReqStat   = 2                AND 
-                MsRequest.ActStamp >= ldFromPer        AND
-                MsRequest.ActStamp <= ldToPer,
-          FIRST CLIType NO-LOCK WHERE
-                CLIType.Brand   = gcBrand AND
-                CLIType.CLIType = MsRequest.ReqCParam1,
-          FIRST bType NO-LOCK WHERE
-                bType.Brand = gcBrand AND
-                bType.CLIType = MsRequest.ReqCParam2:
-                
-         IF CLIType.PayType = 1 AND bType.PayType = 2 THEN lcMessage = "15".
-      END.
-      
-   END.
- 
-   RETURN "".
-   
 END PROCEDURE.
 
 PROCEDURE pCollectCDR:

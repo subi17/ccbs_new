@@ -38,6 +38,7 @@
 {tmqueue_analysis.i}
 {dpmember.i}
 {terminal_financing.i}
+{ordercancel.i}
 
 DEF BUFFER bPendRequest FOR MsRequest.
 DEF BUFFER bOrigRequest FOR MsRequest.
@@ -235,8 +236,8 @@ PROCEDURE pContractActivation:
    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
    DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
    DEF VAR lcBONOContracts   AS CHAR NO-UNDO.
-   DEF VAR ldtTARJ7ActDate   AS DATE NO-UNDO.
-   DEF VAR liTARJ7ActTime    AS INT  NO-UNDO.
+   DEF VAR ldtPrepActDate    AS DATE NO-UNDO.
+   DEF VAR liPrepActTime     AS INT  NO-UNDO.
    DEF VAR liRequest         AS INT  NO-UNDO.
    DEF VAR liConCount        AS INT  NO-UNDO.
 
@@ -273,8 +274,8 @@ PROCEDURE pContractActivation:
 
    /* day campaign id */
    ASSIGN 
-      lcDCEvent = MsRequest.ReqCParam3
-      llRerate  = FALSE.
+      lcDCEvent    = MsRequest.ReqCParam3
+      llRerate     = FALSE.
    
    FIND FIRST DayCampaign WHERE 
               DayCampaign.Brand   = gcBrand AND
@@ -335,15 +336,15 @@ PROCEDURE pContractActivation:
          RETURN.
       END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
 
-   /* Fetch TARJ7 contract start date */
+   /* Fetch TARJ7 and TARJ9 contract start date */
    IF lcDCEvent = "TARJ7_UPSELL" THEN
       FOR FIRST ServiceLimit WHERE
-                ServiceLimit.GroupCode = "TARJ7" NO-LOCK:
+                ServiceLimit.GroupCode = MsOwner.CliType NO-LOCK:
          FIND FIRST MServiceLimit WHERE
-                    MServiceLimit.MsSeq = MsOwner.MsSeq AND
+                    MServiceLimit.MsSeq    = MsOwner.MsSeq AND
                     MServiceLimit.DialType = ServiceLimit.DialType AND
-                    MServiceLimit.SlSeq = ServiceLimit.SlSeq AND
-                    MServiceLimit.EndTS >= fMakeTS() NO-LOCK NO-ERROR.
+                    MServiceLimit.SlSeq    = ServiceLimit.SlSeq AND
+                    MServiceLimit.EndTS   >= fMakeTS() NO-LOCK NO-ERROR.
          IF NOT AVAIL MServiceLimit THEN DO:
             RUN pSendSMS(INPUT MsOwner.MsSeq,INPUT 0,INPUT "UpsellTARJ7Failed",
                          INPUT 10,INPUT {&UPSELL_SMS_SENDER},INPUT "").
@@ -351,10 +352,10 @@ PROCEDURE pContractActivation:
             RETURN.
          END. /* IF NOT AVAIL MServiceLimit THEN DO: */
          fSplitTS(MServiceLimit.FromTS,
-                  OUTPUT ldtTARJ7ActDate,
-                  OUTPUT liTARJ7ActTime).
+                  OUTPUT ldtPrepActDate,
+                  OUTPUT liPrepActTime).
       END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
-    
+   
    /* Validate Prepaid Balance before making PMDUB activation request */
    IF lcDCEvent BEGINS {&PMDUB} THEN DO:
       IF lcDCEvent = {&PMDUB} THEN DO:
@@ -463,7 +464,6 @@ PROCEDURE pContractActivation:
 
    /* activate contract */
    IF LOOKUP(MsRequest.ReqCParam2,"act,recreate") > 0 THEN DO:
-      liConCount = 0.   
       /* is there already an active contract */
       IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_DCCLI_DCTYPE}) > 0 THEN DO:
          IF lcDCEvent BEGINS "PAYTERM" THEN DO:
@@ -476,8 +476,7 @@ PROCEDURE pContractActivation:
                 liConCount = liConCount + 1.             
             END.             
             
-            IF liConCount >= 2 THEN 
-            DO:
+            IF liConCount >= 2 THEN DO:
                 fReqError("Already two PayTerm contracts are actived on subscription").
                 RETURN.
             END.
@@ -591,10 +590,10 @@ PROCEDURE pContractActivation:
    /* Call the function to calculate the contract end date */
    IF lcDCEvent = "TARJ7_UPSELL" THEN DO:
       
-      IF ldtTARJ7ActDate NE ldtActDate AND
-         DAY(ldtActDate) <= DAY(ldtTARJ7ActDate) THEN DO:
+      IF ldtPrepActDate NE ldtActDate AND
+         DAY(ldtActDate) <= DAY(ldtPrepActDate) THEN DO:
 
-         IF (DAY(ldtActDate) EQ DAY(ldtTARJ7ActDate) OR
+         IF (DAY(ldtActDate) EQ DAY(ldtPrepActDate) OR
             fLastDayOfMonth(ldtActDate) EQ ldtActDate) AND 
             liActTime > 36000 THEN
             ldtEndDate = fLastDayOfMonth(ldtActDate) + 1.
@@ -602,9 +601,9 @@ PROCEDURE pContractActivation:
       END.
       ELSE ldtEndDate = fLastDayOfMonth(ldtActDate) + 1.
          
-      IF DAY(fLastDayOfMonth(ldtEndDate)) >= DAY(ldtTARJ7ActDate) THEN
+      IF DAY(fLastDayOfMonth(ldtEndDate)) >= DAY(ldtPrepActDate) THEN
          ldtEndDate = DATE(MONTH(ldtEndDate),
-                           DAY(ldtTARJ7ActDate),
+                           DAY(ldtPrepActDate),
                            YEAR(ldtEndDate)).
       ELSE ldtEndDate = fLastDayOfMonth(ldtEndDate). 
 
@@ -845,7 +844,7 @@ PROCEDURE pContractActivation:
                        FALSE,              /* no messages to screen */
                        MsRequest.UserCode,
                        "ContractActivation",
-                       0, /* order id */
+                       liOrderId, /* order id */
                        lcFeeSourceTable,
                        lcFeeSourceKey,
                        OUTPUT lcReqChar).
@@ -964,7 +963,7 @@ PROCEDURE pFinalize:
    DEF VAR ldeLastDayofMonthStamp    AS DEC  NO-UNDO.
    DEF VAR lcPostpaidDataBundles     AS CHAR NO-UNDO.
    DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
-   DEF VAR ldaTARJ7ResetDate         AS DATE NO-UNDO.
+   DEF VAR ldaPrepResetDate         AS DATE NO-UNDO.
    DEF VAR liCurrDSSMsSeq            AS INT  NO-UNDO.
    DEF VAR ldeDSSLimit               AS DEC  NO-UNDO.
    DEF VAR lcDSSBundleId             AS CHAR NO-UNDO.
@@ -1075,9 +1074,14 @@ PROCEDURE pFinalize:
       END. /* FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE */
    END. /* IF LOOKUP(lcDCEvent,lcFLATContracts) > 0 AND */
 
-   IF iiRequestType = 8 AND lcDCEvent = "TARJ7" THEN
-      ASSIGN lcSMSText         = "TARJ7Act"
-             ldaTARJ7ResetDate = ADD-INTERVAL(ldtActDate,1,"months").
+   IF lcDCEvent = "TARJ7" OR lcDCEvent = "TARJ9" THEN DO:
+      CASE iiRequestType:
+         WHEN 8 THEN ASSIGN lcSMSText = lcDCEvent + "RenewalOK"
+                            ldaPrepResetDate = ADD-INTERVAL(ldtActDate,1,"months").
+         WHEN 9 THEN ASSIGN lcSMSText = lcDCEvent + "RenewalNOK" 
+                            WHEN MsRequest.ReqSource = {&REQUEST_SOURCE_SCRIPT}.
+      END CASE.
+   END.
 
    IF lcSMSText > "" THEN DO:
 
@@ -1102,10 +1106,11 @@ PROCEDURE pFinalize:
            WHEN "MDUB5" THEN ASSIGN
               lcSMSText = REPLACE(lcSMSText,"#BUNDLE", "12")
               lcSender = "22644".
-           WHEN "TARJ7" THEN
+           WHEN "TARJ7" OR WHEN "TARJ9" THEN
               ASSIGN lcSMSText = REPLACE(lcSMSText,"#DATE",
-                                         STRING(DAY(ldaTARJ7ResetDate)) + "/" +
-                                         STRING(MONTH(ldaTARJ7ResetDate)))
+                                         STRING(DAY(ldaPrepResetDate)) + "/" +
+                                         STRING(MONTH(ldaPrepResetDate)))
+                                         WHEN iiRequestType = 8
                      lcSender  = "22622".
       END. /* CASE lcDCEvent: */
 
@@ -1442,7 +1447,7 @@ END PROCEDURE.  /* Finalize */
 /*  terminate a periodical contract */
 PROCEDURE pContractTermination:
 
-   DEF VAR lcActType        AS CHAR NO-UNDO.
+   DEF VAR lcTerminationType AS CHAR NO-UNDO.
    DEF VAR lcDCEvent        AS CHAR NO-UNDO.
    DEF VAR ldtCreDate       AS DATE NO-UNDO.
    DEF VAR liEndPeriod      AS INT  NO-UNDO.
@@ -1494,9 +1499,15 @@ PROCEDURE pContractTermination:
    DEF VAR liCustNum        AS INT NO-UNDO.
    DEF VAR llgResult        AS LOG NO-UNDO.
    DEF VAR llCancelOrder AS LOG NO-UNDO. 
+   DEF VAR llCancelInstallment AS LOG NO-UNDO. 
+   DEF VAR liOrderId AS INT NO-UNDO. 
 
    DEF VAR liEndPeriodPostpone AS INT  NO-UNDO.
    DEF VAR ldtActDatePostpone  AS DATE NO-UNDO.
+
+   DEF VAR llFMFee AS LOG  NO-UNDO. 
+   DEF VAR liDSSMsSeq AS INT NO-UNDO. 
+
 
    DEF BUFFER bLimit        FOR MServiceLimit.
    DEF BUFFER bMsRequest    FOR MsRequest.
@@ -1546,7 +1557,7 @@ PROCEDURE pContractTermination:
    
    ASSIGN
       lcDCEvent = MsRequest.ReqCParam3
-      lcActType = MsRequest.ReqCParam2
+      lcTerminationType = MsRequest.ReqCParam2
       liCustNum = MsRequest.CustNum.
    
    FIND FIRST DayCampaign WHERE 
@@ -1740,9 +1751,8 @@ PROCEDURE pContractTermination:
             THEN LEAVE.
             ldNewEndStamp = fSecOffSet(ldNewEndStamp,-1). 
          END.
-         
-    
-         IF lcDCEvent = "TARJ7" THEN DO:
+
+         IF lcDCEvent = "TARJ7" OR lcDCEvent = "TARJ9" THEN DO:
             FOR FIRST bServiceLimit WHERE
                       bServiceLimit.GroupCode = "TARJ7_UPSELL",
                 FIRST bMServiceLimit EXCLUSIVE-LOCK WHERE
@@ -1902,6 +1912,7 @@ PROCEDURE pContractTermination:
 
       /* cancellation must be done max. 14 days after activation */
       IF MsRequest.ReqCParam2 = "canc" AND 
+         DayCampaign.DCType NE {&DCTYPE_INSTALLMENT} AND
          ldtCreDate > DCCLI.ContractDate + 14 
       THEN DO:
          FIND CURRENT DCCLI EXCLUSIVE-LOCK.
@@ -1976,7 +1987,7 @@ PROCEDURE pContractTermination:
                 IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
 
             END. /* FOR FIRST DiscountPlan WHERE */
-         END. /* DO liCount = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds): */
+         END. /* DO i = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds): */
       END. /* IF lcDCEvent BEGINS "PAYTERM" THEN DO: */
    END.            
  
@@ -1990,7 +2001,8 @@ PROCEDURE pContractTermination:
                                       ldtActDate,
                                       lcDCEvent,
                                       DCCLI.PerContractID,    
-                                      OUTPUT liFFNum).
+                                      OUTPUT liFFNum,
+                                      OUTPUT liOrderId).
          IF ldPrice > 0 THEN ASSIGN
             llCreatePenaltyFee = TRUE
             lcFeeSourceTable   = "FixedFee" WHEN liFFNum > 0
@@ -2033,7 +2045,7 @@ PROCEDURE pContractTermination:
                              DayCampaign.DCType = {&DCTYPE_INSTALLMENT})
                          THEN "ContractTermination¤Postpone"
                          ELSE "ContractTermination",
-                         0, /* order id */
+                         liOrderId, /* order id */
                          lcFeeSourceTable,
                          lcFeeSourceKey,
                          OUTPUT lcReqChar).
@@ -2045,6 +2057,8 @@ PROCEDURE pContractTermination:
       END.
    END.
       
+   llCancelInstallment = (lcTerminationType EQ "canc" AND
+                          DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}).
    llCancelOrder =
       (MsRequest.ReqSource = {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} AND
        DCCLI.ValidTo < DCCLI.ValidFrom)
@@ -2094,6 +2108,24 @@ PROCEDURE pContractTermination:
          END.
       END.
 
+      /* YDR-1818 */
+      llFMFee = FALSE.
+      IF MsRequest.ReqSource  = {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND
+         (DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE} OR
+          DayCampaign.DCType = {&DCTYPE_BUNDLE}) THEN DO:
+      
+         FIND FIRST MobSub NO-LOCK WHERE
+                    MobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
+         IF AVAILABLE MobSub THEN
+            llFMFee = (MobSub.ActivationDate >= 5/6/2015).
+         ELSE DO:
+            FIND FIRST TermMobSub NO-LOCK WHERE
+                       TermMobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
+            IF AVAILABLE TermMobSub THEN
+               llFMFee = (TermMobSub.ActivationDate >= 5/6/2015).
+         END.
+      END.
+
       RUN closefee.p(FixedFee.FFNum,
                      ldtActDate,
                      FALSE, /* credit billed fees */
@@ -2105,6 +2137,7 @@ PROCEDURE pContractTermination:
                      MsRequest.UserCode, /* eventlog.usercode */
                      "ContractTermination", /* eventlog.memo */
                      MsRequest.MsRequest,
+                     llFMFee,
                      OUTPUT ldReqAmt).
 
       IF RETURN-VALUE > "" THEN NEXT.
@@ -2119,7 +2152,8 @@ PROCEDURE pContractTermination:
    
       /* Delete commission fee if the installment contract is closed
          due to revert renewal order or order cancellation */
-      IF llCancelOrder THEN
+      IF llCancelOrder OR llCancelInstallment OR 
+         MsRequest.ReqSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN
       FOR FIRST SingleFee USE-INDEX Custnum WHERE
                 SingleFee.Brand       = gcBrand AND
                 SingleFee.Custnum     = MsOwner.CustNum AND
@@ -2141,6 +2175,12 @@ PROCEDURE pContractTermination:
                  "OrderCancellation").
          DELETE SingleFee.
       END.
+
+      IF llCancelInstallment AND
+         Fixedfee.Custnum EQ MsOwner.Custnum THEN
+         RUN pCreditInstallment(FixedFee.FFNum,
+                                TRUE,
+                                MsRequest.MsRequest).
    END.
       
    IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
@@ -2161,7 +2201,8 @@ PROCEDURE pContractTermination:
          /* If Installment contract is closed from revert renewal order or 
             from order cancellation then delete single fee
             otherwise update the billing period */
-         IF llCancelOrder THEN DO:
+         IF llCancelOrder OR llCancelInstallment OR
+            MsRequest.ReqSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN DO:
             
             IF llDoEvent THEN
                RUN StarEventMakeDeleteEventWithMemo(
@@ -2312,16 +2353,18 @@ PROCEDURE pContractTermination:
    /* Update DSS limit if bundle is being deactivated from DSS group     */
    /* Delete DSS group if last bundle is being terminated from DSS group */
    IF llPostpaidBundleTerm THEN DO:
-      IF ldeDSSTotalLimit > 0 THEN
-         RUN pUpdateDSSNetworkLimit(INPUT MsRequest.MsSeq,
-                                    INPUT MsRequest.CustNum,
-                                    INPUT ldeDSSTotalLimit,
-                                    INPUT "LIMIT",
-                                    INPUT FALSE,
-                                    INPUT MsRequest.MsRequest,
-                                    INPUT MsRequest.ActStamp,
-                                    INPUT MsRequest.ReqSource,
-                                    INPUT lcBundleId).
+      IF ldeDSSTotalLimit > 0 THEN DO:
+         IF NOT fOngoingDSSTerm(MsRequest.CustNum,MsRequest.ActStamp) THEN
+            RUN pUpdateDSSNetworkLimit(INPUT MsRequest.MsSeq,
+                                       INPUT MsRequest.CustNum,
+                                       INPUT ldeDSSTotalLimit,
+                                       INPUT "LIMIT",
+                                       INPUT FALSE,
+                                       INPUT MsRequest.MsRequest,
+                                       INPUT MsRequest.ActStamp,
+                                       INPUT MsRequest.ReqSource,
+                                       INPUT lcBundleId).
+      END.
       /* Delete DSS group if last bundle is being terminated from DSS group */
       /* in this case ldeDSSTotalLimit limit will be zero except BTC/STC    */
       ELSE DO:
@@ -3118,27 +3161,29 @@ PROCEDURE pContractReactivation:
                      SingleFee.CalcObj     = "RVTERM" EXCLUSIVE-LOCK NO-ERROR.
             
             IF AVAILABLE SingleFee THEN DO:
-               IF SingleFee.Billed = TRUE AND
+
+               IF NOT (SingleFee.Billed = TRUE AND
                   CAN-FIND (FIRST Invoice NO-LOCK WHERE
                                   Invoice.InvNum  = SingleFee.InvNum AND
-                                  Invoice.InvType = 1) THEN NEXT.
+                                  Invoice.InvType = 1)) THEN DO:
 
-               IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSingleFee).
-            
-               ASSIGN SingleFee.BillCode    = "RVTERMF" WHEN llUpdateResidualFeeCode
-                      SingleFee.BillPeriod  = YEAR(ldtEndDate + 1) * 100 +
-                                              MONTH(ldtEndDate + 1)
-                      SingleFee.Concerns[1] = YEAR(ldtEndDate + 1) * 10000 + 
-                                              MONTH(ldtEndDate + 1) * 100  +
-                                              DAY(ldtEndDate + 1).
+                  IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSingleFee).
+               
+                  ASSIGN SingleFee.BillCode    = "RVTERMF" WHEN llUpdateResidualFeeCode
+                         SingleFee.BillPeriod  = YEAR(ldtEndDate + 1) * 100 +
+                                                 MONTH(ldtEndDate + 1)
+                         SingleFee.Concerns[1] = YEAR(ldtEndDate + 1) * 10000 + 
+                                                 MONTH(ldtEndDate + 1) * 100  +
+                                                 DAY(ldtEndDate + 1).
 
-               IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhSingleFee).
+                  IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhSingleFee).
+               END.
             END.
             /* in case of order cancellation the fee might have been removed */
             ELSE IF NOT AVAIL SingleFee AND
                AVAIL DCCLI AND
                      STRING(DCCLI.PerContractID) = FixedFee.SourceKey AND
-                     DCCLI.Amount > 0 THEN DO:
+                     DCCLI.Amount NE ? AND DCCLI.Amount > 0 THEN DO:
 
                RUN creasfee.p(MsOwner.CustNum,
                              MsOwner.MsSeq,
@@ -3153,7 +3198,7 @@ PROCEDURE pContractReactivation:
                              FALSE,              /* no messages to screen */
                              MsRequest.UserCode,
                              "ContractActivation",
-                             0, /* order id */
+                             FixedFee.OrderId, /* order id */
                              "FixedFee",
                              STRING(FixedFee.FFNum),
                              OUTPUT lcReqChar).

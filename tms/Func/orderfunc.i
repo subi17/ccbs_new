@@ -32,7 +32,9 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    (iOrderId AS INT,
     icStatus AS CHAR).
 
-   DEF VAR lcResult AS CHAR NO-UNDO. 
+   DEF VAR lcResult   AS CHAR    NO-UNDO. 
+   DEF VAR llHardBook AS LOGICAL NO-UNDO INIT FALSE.
+
    DEF BUFFER OrderPayment FOR OrderPayment.
    DEF BUFFER CLIType FOR CLIType.
 
@@ -55,8 +57,16 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
             when "6" then fMarkOrderStamp(bfOrder.OrderID,"Delivery",0.0).
             when "7" or when "8" or when "9" then do:
                fMarkOrderStamp(bfOrder.OrderID,"Close",0.0).
-               
-               IF bfOrder.Logistics > "" THEN DO:
+
+               FIND FIRST OrderAccessory OF bfOrder WHERE
+                          OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE}) 
+                          NO-LOCK NO-ERROR.
+               IF AVAILABLE OrderAccessory AND
+                  LOOKUP(STRING(OrderAccessory.HardBook),"1,2") > 0 THEN
+                  llHardBook = TRUE.
+
+               IF katun NE "Dextra" AND
+                 (bfOrder.Logistics > "" OR llHardBook = TRUE) THEN DO:
                   fLogisticsRequest(
                      bfOrder.MsSeq,
                      bfOrder.OrderId,
@@ -64,7 +74,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                      fMakeTS(),
                      {&REQUEST_SOURCE_ORDER_CANCELLATION},
                      OUTPUT lcResult).
-                 
+
                   IF lcResult > "" THEN 
                      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                                       "Order",
@@ -80,7 +90,10 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                   FOR FIRST OrderPayment NO-LOCK WHERE
                             OrderPayment.Brand = gcBrand AND
                             OrderPayment.OrderId = bfOrder.OrderId AND
-                            OrderPayment.Method = 2: /* credit card */
+                           (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD}
+                            OR
+                            OrderPayment.Method = {&ORDERPAYMENT_M_PAYPAL}):
+
                      CREATE ActionLog.
                      ASSIGN
                         ActionLog.Brand     = gcBrand
@@ -218,6 +231,26 @@ FUNCTION fGetSIMBillItem RETURNS CHARACTER
 
 END FUNCTION.
 
+FUNCTION fSearchStock RETURNS CHARACTER
+   (icStock AS CHAR,
+   icZipCode AS CHAR).
+
+   DEF VAR liLoop AS INT NO-UNDO. 
+
+   FOR EACH Stock WHERE
+            Stock.Brand   = gcBrand AND
+            Stock.StoType = icStock NO-LOCK:
+      DO liLoop = 1 TO NUM-ENTRIES(Stock.ZipCodeExp,","):
+        IF icZipCode MATCHES
+           ENTRY(liLoop, Stock.ZipCodeExp,",") THEN DO:
+           RETURN  Stock.Stock.
+        END.
+      END.
+   END.
+   
+   RETURN icStock.
+
+END FUNCTION.
 
 &ENDIF.
 

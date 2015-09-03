@@ -1,0 +1,8 @@
+ADD FIELD "MPermPenalty" OF "FusionInvoice" AS decimal 
+  FORMAT "-zzz,zz9.99"
+  INITIAL "0"
+  LABEL "MPermPenalty"
+  COLUMN-LABEL "MPermPenalty"
+  HELP "Mobile Permanency Penalty Fee"
+  ORDER 330
+

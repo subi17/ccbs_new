@@ -167,6 +167,89 @@ FUNCTION fReqStatus RETURNS LOGICAL
     
 END FUNCTION. 
 
+/* change status of request */
+FUNCTION fChangeReqStatus RETURNS LOGICAL
+   (iiMsRequest AS INT,
+    iiStatus    AS INT,
+    icMemo      AS CHAR).
+
+   DEF VAR liMainStatus AS INT  NO-UNDO.
+   DEF BUFFER MsRequest FOR MsRequest.
+
+   FIND MsRequest NO-LOCK where
+        MsRequest.MsRequest = iiMsRequest NO-ERROR.
+   IF NOT AVAIL MsRequest THEN RETURN FALSE.
+
+   MSREQUEST:
+   DO TRANS:
+      FIND bRequest WHERE ROWID(bRequest) = ROWID(MsRequest)
+         EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+
+      /* another process is handling this */
+      IF LOCKED(bRequest) THEN RETURN FALSE.
+
+
+      ASSIGN bRequest.UpdateStamp = fMakeTS()
+             bRequest.ReqStatus   = iiStatus.
+
+      IF bRequest.ReqStatus >= 2 AND bRequest.ReqStatus <= 4 THEN
+         bRequest.DoneStamp = fMakeTS().
+
+      IF icMemo > "" THEN
+      bRequest.Memo = bRequest.Memo +
+                      (IF bRequest.Memo > ""
+                       THEN ", "
+                       ELSE "") + icMemo.
+
+      IF MsRequest.OrigRequest > 0 AND MsRequest.Mandatory > 0 THEN DO:
+
+          liMainStatus = ?.
+
+          /* all subrequests have been succesfully handled */
+          IF MsRequest.ReqStatus = 2 AND
+             fChkSubRequest(MsRequest.OrigRequest)
+          THEN liMainStatus = 8.
+
+          /* mark main status to error if subrequest failed or was cancelled */
+          ELSE IF MsRequest.ReqStatus = 3 OR MsRequest.ReqStatus = 4
+          THEN liMainStatus = 3.
+
+          IF liMainStatus NE ? THEN DO:
+             FIND bRequest WHERE
+                  bRequest.MSRequest  = MSRequest.OrigRequest
+             EXCLUSIVE-LOCK NO-ERROR.
+
+             IF AVAILABLE bRequest THEN DO:
+                /* If subrequest is handled properly after rejection then
+                   mark main request status to 8 from 3 */
+                IF (liMainStatus = 8 AND (bRequest.ReqStatus = 3 OR
+                                          bRequest.ReqStatus = 7)) OR
+                   (liMainStatus NE 8 AND bRequest.ReqStatus NE 3 AND
+                    bRequest.ReqStatus NE 4)
+                THEN DO:
+
+                   ASSIGN bRequest.UpdateStamp = fMakeTS()
+                          bRequest.ReqStatus   = liMainStatus.
+
+                   IF liMainStatus = 3 THEN
+                      bRequest.Memo = bRequest.Memo +
+                                      (IF bRequest.Memo > ""
+                                       THEN ", "
+                                       ELSE "") +
+                                      "Subrequest " +
+                                      STRING(MsRequest.ReqType) + " failed".
+                 END.
+             END.
+          END.
+      END.
+
+      RELEASE bRequest.
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.
+
 /* write to log file */
 FUNCTION fReqLog RETURNS LOGICAL
    (icMessage AS CHAR).

@@ -1,0 +1,9 @@
+-db /db1/prepcdr/prepcdr
+-L 100000
+-B 50000
+#-H propus
+-S prepcdr
+-aiarcdir /aiarchive/prepcdr
+#-DBService replserv
+-pica 8192
+-pf /apps/tms/pf/db/general.pf

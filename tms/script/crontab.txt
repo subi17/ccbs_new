@@ -1,0 +1,257 @@
+#ident	"@(#)root	1.21	04/03/23 SMI"
+#
+# The root crontab should be used to perform accounting data collection.
+#
+#
+10 3 * * * /usr/sbin/logadm
+15 3 * * 0 /usr/lib/fs/nfs/nfsfind
+30 3 * * * [ -x /usr/lib/gss/gsscred_clean ] && /usr/lib/gss/gsscred_clean
+#10 3 * * * /usr/lib/krb5/kprop_script ___slave_kdcs___
+# Cleanup old patch backout files
+0 5 1 * * /usr/bin/find /var/sadm/pkg -name *.Z -mtime +180 -exec rm {} \; > /dev/null 2>&1
+#
+# DB BACKUP
+#
+#59 1 5 * * /opt/local/bin/db_backup.sh backup mcdrdtl00 > /var/log/tms/db_backup/db_backup.out 2>&1
+#59 1 6 * * /opt/local/bin/db_backup.sh backup mcdr00 > /var/log/tms/db_backup/db_backup.out 2>&1; /opt/local/bin/db_backup.sh backup prepcdr >> /var/log/tms/db_backup/db_backup.out 2>&1
+59 1 5 * * /opt/local/bin/db_backup.sh set1 > /var/log/tms/db_backup/db_backup.out 2>&1
+59 1 6 * * /opt/local/bin/db_backup.sh set4 > /var/log/tms/db_backup/db_backup.out 2>&1
+59 0 7 * * /opt/local/bin/db_backup.sh set3 > /var/log/tms/db_backup/db_backup.out 2>&1
+59 1 8 * * /opt/local/bin/db_backup.sh set2 > /var/log/tms/db_backup/db_backup.out 2>&1
+#59 1 15 * * /opt/local/bin/db_backup.sh backup prepcdr > /var/log/tms/db_backup/db_backup.out 2>&1
+59 1 15 * * /opt/local/bin/db_backup.sh set1 > /var/log/tms/db_backup/db_backup.out 2>&1
+59 1 16 * * /opt/local/bin/db_backup.sh set2 > /var/log/tms/db_backup/db_backup.out 2>&1
+59 0 17 * * /opt/local/bin/db_backup.sh set3 > /var/log/tms/db_backup/db_backup.out 2>&1
+59 1 19 * * /opt/local/bin/db_backup.sh set4 > /var/log/tms/db_backup/db_backup.out 2>&1
+#59 1 25 * * /opt/local/bin/db_backup.sh backup prepcdr > /var/log/tms/db_backup/db_backup.out 2>&1
+59 0 28 * * /opt/local/bin/db_backup.sh set3 > /var/log/tms/db_backup/db_backup.out 2>&1
+59 1 26 * * /opt/local/bin/db_backup.sh set2 > /var/log/tms/db_backup/db_backup.out 2>&1
+59 1 27 * * /opt/local/bin/db_backup.sh set4 > /var/log/tms/db_backup/db_backup.out 2>&1
+59 1 25 * * /opt/local/bin/db_backup.sh set1 > /var/log/tms/db_backup/db_backup.out 2>&1
+#12 0 19 * * /opt/local/bin/db_backup.sh backup mcdr13q2 > /var/log/tms/db_backup/db_backup.out 2>&1
+# Netbackup check
+0 19 * * * /opt/local/bin/backup_watcher.sh > /dev/null 2>&1
+# QSS File copy
+15,45 * * * * /opt/local/bin/qss_hourly_copy.sh >> /tmp/qss_hourly_copy.out 2>&1
+0 8 * * * /opt/local/bin/qss_copy.sh >> /tmp/qss_copy.out 2>&1
+0 4 * * * /opt/local/bin/qss_copy_0400.sh >> /tmp/qss_copy_0400.out 2>&1
+0 4-23 4 * * /opt/local/bin/qss_copy_request_full.sh >> /tmp/qss_copy_request_full.out 2>&1
+0 * * * * /opt/local/bin/DWH_offer_copy.sh >> /tmp/DWH_offer_copy.out 2>&1
+# TMSRPC log cleanup
+15 0 * * * /opt/local/bin/tmsrpc_logs_cleanup.sh > /tmp/tmsrpc_logs.out 2>&1
+# MNP pdf cleanup
+45 0 * * * /usr/bin/find /tmp -user tmsrpc -type f -ctime +1 -exec rm -f {} \; > /dev/null 2>&1
+# Move old dumps from store
+#30 5 * * * /opt/local/bin/riftp_processed_move.sh >> /tmp/riftp_processed_move.out 2>&1
+#
+# Nagios Start
+#
+00 10,22 * * * /opt/nagios/libexec/local/tmsrpc_monitoring.py > /scratch/nagios/web/tmsrpc_crc_check 2>&1
+00 5 * * * /opt/nagios/libexec/local/check_hispender_donety > /scratch/nagios/mon/hispenders 2>&1
+15 * * * * /opt/nagios/libexec/local/cron_mscount.sh 2>&1 > /opt/nagios/libexec/local/mscount.err
+#check_mscount.sh | /usr/bin/sed 's/[A-Z]*: //' > /opt/nagios/libexec/local/mscount.txt
+00,05,10,15,20,25,30,35,40,45,50,55 * * * * /opt/nagios/libexec/local/count_new_cdrs.sh >> /opt/nagios/libexec/local/cronlog.txt
+02,07,12,17,22,27,32,37,42,47,52,57 * * * * /opt/nagios/libexec/local/count_new_cdrs_categorized.sh > /dev/null
+#49 * * * * /opt/local/bin/xfear -batch get_cdrstream_counter tms.pf 26-01-2011,ALL,"POST" | tail -1 |awk '{print $8}' >> /home/akir/crontest.txt
+00,05,10,15,20,25,30,35,40,45,50,55 * * * * /opt/nagios/libexec/local/count_rerate.sh >> /opt/nagios/libexec/local/count_rerate.log 2>&1
+#
+# Nagios End
+#
+# yoigo
+#15 3 * * * /opt/local/bin/xfear -batch dailydump batch.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py dailydump >> /scratch/cron/batch.log
+01 7 * * * /opt/local/bin/xfear -batch sologrep batch.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py sologrep >> /scratch/cron/batch.log
+03 4 * * * /opt/local/bin/xfear -bdebug orderchkrep batch.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py orderchkrep >> /scratch/cron/batch.log
+# YDR-119
+11 * * * * /opt/local/bin/xfear -batch read_barringfile tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py read_barringfile >> /scratch/cron/batch.log
+00 22 * * * /opt/local/bin/xfear -batch unbarr_premium tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py unbarr_premium >> /scratch/cron/batch.log
+# YDR-136
+0,15,30,45 * * * * /opt/local/bin/xfear -batch read_orderstatusfile tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py read_orderstatusfile >> /scratch/cron/batch.log
+
+# more yoigo
+#05 22 1 * * /opt/local/bin/xfear -batch monthly tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py monthly >> /scratch/cron/batch.log
+55 1 * * 1,2,3,4,5,6 /opt/local/bin/xfear -batch mdaily tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py mdaily >> /scratch/cron/batch.log
+40 5 * * * /opt/local/bin/xfear -batch mdaily_after_mnp tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py mdaily_after_mnp >> /scratch/cron/batch.log
+#even more yogi
+#mdaily-koodissa toistaseks sunnuntaitarkistuksia
+55 1 * * 0 /opt/local/bin/xfear -batch mdaily tms.pf > /scratch/cron/mdaily_sunday.cron 2>&1
+#01 3 * * 1,2,3,4,5,6 /opt/local/bin/xfear -batch invoicedump tms.pf > /scratch/cron/invoicedump.cron 2>&1
+#01 3 * * 0 /opt/local/bin/xfear -batch invoicedump tms.pf sunday > /scratch/cron/invoicedumpall.cron 2>&1
+00 9,11,13,15,17,18 * * * /opt/local/bin/xfear -batch create_logistics_file batch.pf > /scratch/cron/icc_cron.cron 2>&1 
+00 10,22 * * * /opt/local/bin/tmsrpc_monitoring.py > /scratch/nagios/web/tmsrpc_crc_check 2>&1
+# Highspender
+5 1 * * * /opt/local/bin/xfear -batch highspender tms.pf IGIC1 > /scratch/cron/highspendercron1.cron 2>&1
+10 1 * * * /opt/local/bin/xfear -batch highspender tms.pf IPSIC1 > /scratch/cron/highspendercron2.cron 2>&1
+20 1 * * * /opt/local/bin/xfear -batch highspender tms.pf IPSIM1 > /scratch/cron/highspendercron3.cron 2>&1
+30 1 * * * /opt/local/bin/xfear -batch highspender tms.pf UNKNOWN > /scratch/cron/highspendercron4.cron 2>&1
+40 1 * * * /opt/local/bin/xfear -batch highspender tms.pf VAT1 > /scratch/cron/highspendercron5.cron 2>&1
+# TAP files
+# Hakee CDR:t kannasta. Muodostaa jokaisesta roaming-operaattorista oman cdr-filen spool-hakemistoon.
+# Lopuksi muuntaa operaattorikohtaisen filen binaariformaattiin ja siirtaa sen outgoingiin.
+# Ajetaan parametrilla today - 1.
+55 1 * * * /opt/local/bin/xfear -batch tapfilerun tms.pf > /scratch/cron/tapfilerun.cron 2>&1
+# corporate customer welcome. luo callalarmeja nipun uusille corporate-asiakkaille joille ei viela sms:aa lahetetty
+00 10 * * * /opt/local/bin/xfear -batch corporatecustomer_sms batch.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py corporatecustomer_sms >> /scratch/cron/batch.log 
+# Minimum consumption
+# lukee sisaan prepaidmc/incoming :sta tavaraa
+01 3 1,2 * * /opt/local/bin/xfear -batch mincomp_batch tms.pf > /scratch/cron/mincomp.cron 2>&1
+# payment handling
+0 23 * * * /opt/local/bin/xfear -batch paymentb tms.pf > /scratch/cron/paymentb.cron 2>&1
+# order reporting
+02 0,2,4,6,8,10,12,14,16,18,20,22 * * * /opt/local/bin/xfear -batch ordersrapo tms.pf > /scratch/cron/ordersrapo.cron 2>&1
+# weekly error calls dump
+# makefailurerep toimii niin etta se tekee dumpin ajalta su-la -ajalta joka kerta. normaalisti tama ajetaan sunnuntaina. silloin
+# dumppi tulee samalta viikolta. jos ajopaiva ei ole sunnuntai tekee tama dumpin edelliselta viikolta. nain se on helppo ajaa kasin
+# jos sunnuntaiyona on ollut huoltokatko etc. ja tama ajo jaanyt valista.
+#58 1 * * 0 /opt/local/bin/xfear -batch makefailurerep tms.pf > /scratch/cron/errcalls.cron 2>&1
+# read preactivated order files (Kytketty paalle 10.6.2008 YCM-630)
+# Deactivated on 20th of May 2015 SER-6716
+#37 * * * * /opt/local/bin/xfear -batch preactorderb tms.pf > /scratch/cron/readorderpre.cron 2>&1
+# report preactivated orders (Kytketty paalle 10.6.2008 YCM-630)
+# Deactivated on 20th of May 2015 SER-6716
+#59 11,20 * * * /opt/local/bin/xfear -batch preactorderrepb tms.pf > /scratch/cron/reporderpre.cron 2>&1
+# read cc payment files
+0 16 * * * /opt/local/bin/xfear -batch readpaymfileb tms.pf > /scratch/cron/readccpaymfile.cron 2>&1
+# refund file creation
+#0 2 * * * /opt/local/bin/xfear -batch refundfileb tms.pf > /scratch/cron/refundfile.cron 2>&1
+# read termination files
+20,50 * * * * /opt/local/bin/xfear -batch readtermfileb tms.pf > /scratch/cron/readtermfile.cron 2>&1
+# price guarantee (ei käytössä)
+# lukee pg requestit ja muodostaa lähetettävät cdr-filet
+# 30 0,2,4,6,8,10,12,14,16,18,20,22 * * * /opt/local/bin/xfear -batch pgcdrreq tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py pgcdrreq >> /scratch/cron/batch.log
+# lukee sisään pgresult-filejä
+# 40 0,2,4,6,8,10,12,14,16,18,20,22 * * * /opt/local/bin/xfear -batch readpgfile tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py readpgfile >> /scratch/cron/batch.log
+# YCM-134 subscription type change log
+# Luo login edelliseltä viikolta. Moduulia voi ajaa milloin vaan kuluvan viikon aikana ja aina se luo edellisen viikon setin.
+30 1 * * 1 /opt/local/bin/xfear -batch stclog tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py stclog >> /scratch/cron/batch.log
+# Unbarr data subscriptions
+05 0 1 * * /opt/local/bin/xfear -batch unbarrdata tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py unbarrdata >> /scratch/cron/batch.log
+# YCM-702 data scan
+#05 6 * * 1 /opt/local/bin/xfear -batch custdatachk tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py custdatachk >> /scratch/cron/batch.log
+# YCM-799 daily_roamingout
+08 3 * * * /opt/local/bin/xfear -batch roaming_in_batch tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py roamoutdump >> /scratch/cron/batch.log
+# Dump routines
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * /opt/local/bin/xfear -batch dumpfile_batch tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py dumpfile_batch >> /scratch/cron/batch.log
+# Commission (MGM)
+30 4 * * * /opt/local/bin/xfear -batch commission_batch tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py commission_batch >> /scratch/cron/batch.log
+# MSISDN quarantine release (YBR-50)
+30 3 * * 0 /opt/local/bin/xfear -batch msisdn_release tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py msisdn_release >> /scratch/cron/batch.log
+# TMSRPC logfile cleanup
+15 0 * * * /opt/tools/tmsrpc_logs.sh > /tmp/tmsrpc_logs.out 2>&1
+# Batch process for updating the fraud threshold limits (YCM-1228)
+15 5 * * 1 /opt/local/bin/xfear -batch tmlimitfile tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py tmlimitfile >> /scratch/cron/batch.log
+# daily reports from ErrorLog
+40 3 * * * /opt/local/bin/xfear -batch errorlog_report_batch tms.pf ifsdump 2>&1 | /opt/local/bin/parse_mpro_batch.py errorlog_report_ifs >> /scratch/cron/batch.log
+50 3 * * * /opt/local/bin/xfear -batch errorlog_report_batch tms.pf cashfee 2>&1 | /opt/local/bin/parse_mpro_batch.py errorlog_report_cash >> /scratch/cron/batch.log
+# Read in IFS files
+18,38,58 * * * * /opt/local/bin/xfear -batch ifs_payment_status_batch tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py ifs_payment_status >> /scratch/cron/batch.log
+#30 * * * * /opt/local/bin/xfear -batch ifs_payment_status_batch tms.pf CONTROL 2>&1 | /opt/local/bin/parse_mpro_batch.py ifs_payment_status >> /scratch/cron/batch.log
+8,28,48 * * * * /opt/local/bin/xfear -batch ifs_collection_action_batch tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py ifs_collection_action >> /scratch/cron/batch.log
+# monthlysubcount
+00 10 1 * * /opt/local/bin/xfear -batch monthlysubcount tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py monthlysubcount >> /scratch/cron/batch.log
+# segmentation code
+00 23 * * * /opt/local/bin/xfear -batch segmentationfile tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py segmentationfile >> /scratch/cron/batch.log
+# sim lock codes
+36 10 * * * /opt/local/bin/xfear -batch readsimlockcode tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py readsimlockcode >> /scratch/cron/batch.log
+# satisfaction value
+44 * * * * /opt/local/bin/xfear -batch update_satisfactionvalue tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py update_satisfactionvalue >> /scratch/cron/batch.log
+# YOT-499
+00,30 * * * * /opt/local/bin/xfear -batch read_topup_fatime tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py read_topup_fatime >> /scratch/cron/batch.log
+# YOT-524
+15,45 * * * * /opt/local/bin/xfear -batch denybillingbatch tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py denybillingbatch >> /scratch/cron/batch.log
+# duplicate invoice requests batch run
+0 4 10,22 * * /opt/local/bin/xfear -batch duplicateinvoice tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py duplicateinvoice >> /scratch/cron/batch.log
+# mnp pos order sim release. YOT-105
+0 1 * * * /opt/local/bin/xfear -batch icc_unblock_rep tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py icc_unblock_rep >> /scratch/cron/batch.log
+# direct debit bank account changes
+# stopped on 7.2.11 YOT-1190
+#0 22 * * * /opt/local/bin/xfear -batch dd_bankacc_change_batch tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py dd_bankacc_change >> /scratch/cron/batch.log
+# mnp message error check script for monitoring. SER-719
+#0,5,10,15,20,25,30,35,45,50,55 * * * * /opt/local/bin/xfear -batch mnp_errors_check tms.pf 5 2>&1 | /opt/local/bin/parse_mpro_batch.py mnp_errors_check >> /scratch/cron/batch.log
+0,5,10,15,20,25,30,35,45,50,55 * * * * /opt/local/bin/xfear -batch mnp_errors_check tms.pf 15 |tail -1 > /opt/tools/mnperrors/total_and_errors.txt
+# Cleanup of old orders in queue 44 (YOT-437)
+0 10 * * * /opt/local/bin/xfear -batch orderautoclose tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py orderautoclose >> /scratch/cron/batch.log
+# MNP confirmation/rejection message creation
+30 8,12,14,18 * * 1,2,3,4,5 /opt/local/bin/xfear -batch mnpautohandle tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py mnpautohandle >> /scratch/cron/batch.log
+0 9 * * 1,2,3,4,5 /opt/local/bin/xfear -batch mnp_release_orders tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py mnp_release_orders >> /scratch/cron/batch.log
+# MNP status file handling 
+45 * * * * /opt/local/bin/xfear -batch mnpstatusfile tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py mnpstatusfile >> /scratch/cron/batch.log
+# Returned MSISDN file read
+30 * * * * /opt/local/bin/xfear -batch read_msisdn_returned tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py read_msisdn_returned >> /scratch/cron/batch.log
+# MNP retention file creation
+0 9,10,11,12,13,14,15,16,17,18,19,20 * * 1,2,3,4,5 /opt/local/bin/xfear -batch mnp_retention_file tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py mnp_retention_file >> /scratch/cron/batch.log
+# Release MNP ON HOLD orders
+5 8,14,20 * * 1,2,3,4,5 /opt/local/bin/xfear -batch mnp_release_hold_orders tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py mnp_release_hold_orders >> /scratch/cron/batch.log
+# lighttpd logs for awstats processing
+05,15,25,35,45,55 * * * * /usr/bin/cp /apps/xfera/tmsrpc/newton/var/log/lighttpd_*_access.log /mnt/xferaweblogs/rigel/current/
+0 4 * * * /usr/bin/cp /apps/xfera/tmsrpc/newton/var/log/lighttpd_*_access.log /mnt/xferaweblogs/rigel/current/; /usr/sbin/logadm -f /etc/logadm_lighttpd.conf > /tmp/logadm_lighttpd.out 2>&1
+30 3 * * * test -x /mnt/xferaweblogs/rigel_move_logs.sh && /mnt/xferaweblogs/rigel_move_logs.sh > /tmp/rigel_move_logs.out 2>&1
+# This
+# delete error cdrs
+# run removes error codes 8042 and 8043 .. which do not come to TMS anymore :)
+#30 4 * * * /opt/local/bin/xfear -batch errorcdr_delete_batch tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py errorcdr_delete >> /scratch/cron/batch.log
+# YOT-627 Automatic Balance Transfer STC Prepaid to Postpaid 
+15 4 2 * * /opt/local/bin/xfear -batch stc_balance_query_err tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py stc_balance_query_err >> /scratch/cron/batch.log
+# YOT-1058 Credit note creation script 
+20 * * * * /opt/local/bin/xfear -batch read_creditnote_file tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py read_creditnote_file >> /scratch/cron/batch.log
+# Prepaid data bundle batch out 
+0 1 1 * * /opt/local/bin/xfear -batch pmdub_batch_out tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py pmdub_batch_out >> /scratch/cron/batch.log
+# Prepaid data bundle batch in 
+15 9 1 * * /opt/local/bin/xfear -batch pmdub_batch_in tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py pmdub_batch_in >> /scratch/cron/batch.log
+00 9 25,26,27,28,29,30,31 * * /opt/local/bin/xfear -batch pmdub_bal_check tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py pmdub_bal_check >> /scratch/cron/batch.log
+# Cancel the BB service that has been in suspend mode more than 90 days
+45 10 * * 1 /opt/local/bin/xfear -batch cancel_susp_bb_serv tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py cancel_susp_bb_serv >> /scratch/cron/batch.log
+# Double call check
+27 0 * * * /opt/local/bin/xfear -batch mobcdr_double_batch tms.pf 2>&1 |grep -v "Mobile Cdr record"| /opt/local/bin/parse_mpro_batch.py mobcdr_double_batch >> /scratch/cron/batch.log
+# YOT-826, Backdoor tools: Invoice deliverables
+01 * * * * /opt/local/bin/xfear -batch upd_invoice_deliverables tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py upd_invoice_deliverables >> /scratch/cron/batch.log
+# Cancel pending DSS activation requests
+0 4 * * * /opt/local/bin/xfear -batch cancel_waiting_dss_act_req tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py cancel_waiting_dss_act_req >> /scratch/cron/batch.log
+# trigger rerate for all before billing
+0 2 * * * /opt/local/bin/xfear -batch create_rerate_trigger_all tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py create_rerate_trigger >> /scratch/cron/batch.log
+# Remove old unbilled events
+0 23 15 * * /opt/local/bin/xfear -batch remove_old_events_batch tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py remove_old_events >> /scratch/cron/batch.log
+0 4 * * * /opt/local/bin/xfear -batch cancel_waiting_einvoice_act_req tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py cancel_waiting_einvoice_act_req >> /scratch/cron/batch.log
+# Selfservice API calls
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * /opt/nagios/libexec/report_selfservice_usage > /opt/tools/extapi/selfservice_usage.txt
+#
+# upload userdata to odin
+50 17 * * * /opt/tools/check_users/collect_userdata.sh >/dev/null 2>&1
+# DSS promotion FAT add 
+5 0 1 * * /opt/local/bin/xfear -batch add_dss_fat tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py add_dss_fat >> /scratch/cron/batch.log
+# DSS promotion FAT close 
+10 13 7 * * /opt/local/bin/xfear -batch close_dss_fat tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py close_dss_fat >> /scratch/cron/batch.log
+# read discount members
+25 * * * * /opt/local/bin/xfear -batch read_discount_member_batch tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py read_discount_member >> /scratch/cron/batch.log
+# Cancel pending ICC change requests (older than 60 days) 
+0 1 * * * /opt/local/bin/xfear -batch cancel_pending_icc_req tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py cancel_pending_icc_req >> /scratch/cron/batch.log
+# Contract Back Door Tool 
+0,20,40 * * * * /opt/local/bin/xfear -batch act_deact_contract tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py act_deact_contract >> /scratch/cron/batch.log
+# TerminalConf Back Door Tool
+5,25,45 * * * * /opt/local/bin/xfear -batch terminalconf_bob tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py terminalconf_bob >> /scratch/cron/batch.log
+# Terminal financing bank response file reading 
+32 * * * * /opt/local/bin/xfear -batch terminal_financing_read tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py terminal_financing_read >> /scratch/cron/batch.log
+# CONTM termination reminder 
+0 9 8,9,10,11,26,27,28,29 * * /opt/local/bin/xfear -batch contm_term_reminder tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py contm_term_reminder >> /scratch/cron/batch.log
+# Additional line termination reminder
+10 9 8,9,10,11,26,27,28,29 * * /opt/local/bin/xfear -batch additional_term_reminder tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py additional_term_reminder >> /scratch/cron/batch.log
+# CDR dumps for PUPU 
+#0,15,30,45 * * * * /opt/local/bin/xfear -batch mobcdr_pupu_dump_start tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py mobcdr_pupu_dump_start >> /scratch/cron/batch.log
+#5,20,35,50 * * * * /opt/local/bin/xfear -batch prepcdr_pupu_dump_start tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py prepcdr_pupu_dump_start >> /scratch/cron/batch.log
+#15 0,3,6,9,12,15,18,21 * * * /opt/local/bin/xfear -batch rerate_mobcdr_pupu_dump tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py rerate_mobcdr_pupu_dump >> /scratch/cron/batch.log
+# Close iPhone discounts
+10 0 1 * * /opt/local/bin/xfear -batch close_iphone_discount tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py close_iphone_discount >> /scratch/cron/batch.log
+# Fusion Order BOB tool
+0,15,30,45 * * * * /opt/local/bin/xfear -batch fusion_bob tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py fusion_bob >> /scratch/cron/batch.log
+0 10 * * * /opt/local/bin/xfear -batch tarj7_renewal_reminder tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py tarj7_renewal_reminder >> /scratch/cron/batch.log
+0 22 * * * /opt/local/bin/xfear -batch tarj7_termination tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py tarj7_termination >> /scratch/cron/batch.log
+55 * * * * /opt/local/bin/xfear -batch edr_rehandle tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py edr_rehandle >> /scratch/cron/batch.log
+0 * 8,9,10,11,12,13,14 * * /opt/local/bin/xfear -batch telefonica_file_read tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py telefonica_file_read >> /scratch/cron/batch.log
+30 17 12 * * /opt/local/bin/xfear -batch telefonica_file_not_received tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py telefonica_file_not_received >> /scratch/cron/batch.log
+0 8 * * * /opt/local/bin/xfear -batch /apps/yoigo/tms_support/billing/stc_billrun_control_new.p tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py stc_billrun_control_new >> /scratch/cron/batch.log
+15 4 * * * /opt/local/bin/xfear -batch recalculate_istc_irc_batch tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py recalculate_istc_irc_batch >> /scratch/cron/batch.log
+0 10 * * * /opt/local/bin/xfear -batch terminal_financing_logistics tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py terminal_financing_logistics >> /scratch/cron/batch.log
+00 7 * * 1 /opt/local/bin/xfear -batch dextra_pdf_deletion tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py dextra_pdf_deletion >> /scratch/cron/batch.log
+#YDR-1304
+00,30 * * * * /opt/local/bin/xfear -batch bob_charge tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py bob_charge >> /scratch/cron/batch.log
+00,30 * * * * /opt/local/bin/xfear -batch bob_test_invoices tms.pf 2>&1 | /opt/local/bin/parse_mpro_batch.py bob_test_invoices >> /scratch/cron/batch.log
+20 22 15 * * /opt/SUNWexplo/bin/explorer -q -e -P -w !ipaddr # SUNWexplo

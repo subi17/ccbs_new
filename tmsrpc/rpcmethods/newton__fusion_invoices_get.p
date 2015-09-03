@@ -30,6 +30,7 @@
        tax_amount;double;mandatory;Taxes
        total_amount;double;mandatory;Total invoice
        installment_amount;double;mandatory;billing items starting with PAYTERM
+       permanency_penalty;double;mandatory;Permanency penalty fees
        total_to_pay;double;mandatory;Total to pay
 */
 {xmlrpc/xmlrpc_access.i}
@@ -126,9 +127,9 @@ CASE lcMobileTariffType:
 END.
 
 CASE lcFixedProductCode:
-   WHEN "AG000000548265" THEN ldeFixedTariffMF = 32.00.
-   WHEN "AG000000548266" THEN ldeFixedTariffMF = 34.28.
-   WHEN "AG000000548264" THEN ldeFixedTariffMF = 48.28.
+   WHEN "AG000000548265" THEN ldeFixedTariffMF = 34.48.
+   WHEN "AG000000548266" THEN ldeFixedTariffMF = 36.76.
+   WHEN "AG000000548264" THEN ldeFixedTariffMF = 50.76.
 END.
 
 lcSummaryStruct = add_struct(lcResultStruct,"summary").
@@ -162,6 +163,7 @@ IF Fusion.InvNum > 0 THEN DO:
    add_double(lcMobileStruct,"tax_amount",FusionInvoice.MVatAmt).
    add_double(lcMobileStruct,"total_amount",FusionInvoice.MTotalInvoice).
    add_double(lcMobileStruct,"installment_amount",FusionInvoice.MTermFinancing).
+   add_double(lcMobileStruct,"permanency_penalty",FusionInvoice.MPermPenalty).
    add_double(lcMobileStruct,"total_to_pay",FusionInvoice.MInvAmt).
 END.
 

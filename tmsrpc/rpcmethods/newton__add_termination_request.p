@@ -22,6 +22,7 @@ gcBrand = "1".
 {fsubstermreq.i}
 {fbundle.i}
 {msisdn_prefix.i}
+{main_add_lines.i}
 
 /* Input parameters */
 DEF VAR piMsSeq    AS INT  NO-UNDO.
@@ -44,6 +45,7 @@ DEF VAR llYoigoCLI AS LOG NO-UNDO.
 DEF VAR lcKillTS AS CHAR NO-UNDO.
 DEF VAR liReq AS INT NO-UNDO.
 DEF VAR lcOpCode AS CHARACTER NO-UNDO. 
+DEF VAR ldaTermDate AS DATE NO-UNDO. 
 
 /* Output parameters */
 DEF VAR result AS LOGICAL.
@@ -176,8 +178,16 @@ liReq = fTerminationRequest(
    0,
    OUTPUT ocResult).
 
-IF liReq > 0 THEN
+IF liReq > 0 THEN DO:
+
+   fTS2Date(pdeKillTS, OUTPUT ldaTermDate).
+
+   fAdditionalLineSTC(liReq,
+                      fMake2Dt(ldaTermDate + 1, 0),
+                      "DELETE").
+   
    add_boolean(response_toplevel_id, "", true).
+END.
 ELSE
    add_boolean(response_toplevel_id, "", false).
    

@@ -15,6 +15,9 @@
 {cparam2.i}
 {date.i}
 {fsubstermreq.i}
+{msreqfunc.i}
+{fmakemsreq.i}
+{fgettxt.i}
 
 DEF TEMP-TABLE tt_AdditionalSIM NO-UNDO
     FIELD MsSeq    AS INT
@@ -161,6 +164,79 @@ FUNCTION fHasPendingSTCToMainLine RETURNS LOGICAL
 
 END.
 
+FUNCTION fHasPendingSTCToNonAddLine RETURNS LOGICAL
+   (INPUT iiMsSeq AS INT):
+
+   DEF BUFFER CLIType FOR CLIType.
+   DEF BUFFER MsRequest FOR Msrequest.
+
+   FOR EACH MsRequest NO-LOCK WHERE
+            MsRequest.MsSeq = iiMsseq AND
+            MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+            LOOKUP(STRING(MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
+      FIRST CLIType NO-LOCK WHERE
+            CLIType.Brand = gcBrand AND
+            CLIType.CLIType = (IF MsRequest.ReqCParam5 > ""
+                               THEN MsRequest.ReqCParam5
+                               ELSE MsRequest.ReqCParam2):
+      IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN}    OR 
+         CLIType.LineType EQ {&CLITYPE_LINETYPE_NONMAIN} THEN RETURN TRUE.
+   END.
+
+   FOR EACH MsRequest NO-LOCK WHERE
+            MsRequest.MsSeq = iiMsseq AND
+            MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
+            LOOKUP(STRING(MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
+      FIRST CLIType NO-LOCK WHERE
+            CLIType.Brand = gcBrand AND
+            CLIType.CLIType = MsRequest.ReqCParam2:
+
+      IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN}    OR 
+         CLIType.LineType EQ {&CLITYPE_LINETYPE_NONMAIN} THEN RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END.
+
+FUNCTION fCancelPendingSTCToAddLine RETURNS LOGICAL
+   (INPUT iiMsSeq AS INT):
+   
+   DEF BUFFER CLIType FOR CLIType.
+   DEF BUFFER MsRequest FOR Msrequest.
+   
+   FOR FIRST MsRequest NO-LOCK WHERE
+             MsRequest.MsSeq   = iiMsseq                             AND
+             MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+             LOOKUP(STRING(MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
+       FIRST CLIType NO-LOCK WHERE
+             CLIType.Brand = gcBrand AND
+             CLIType.CLIType = (IF MsRequest.ReqCParam5 > ""
+                                THEN MsRequest.ReqCParam5
+                                ELSE MsRequest.ReqCParam2):
+      IF CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN 
+         fChangeReqStatus(MsRequest.Msrequest,
+                          4,
+                          "STC has to be done for CONT9").
+   END.
+   
+   FOR FIRST MsRequest NO-LOCK WHERE
+             MsRequest.MsSeq   = iiMsseq                  AND
+             MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
+             LOOKUP(STRING(MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
+       FIRST CLIType NO-LOCK WHERE
+             CLIType.Brand = gcBrand AND
+             CLIType.CLIType = MsRequest.ReqCParam2:
+      IF CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN 
+         fChangeReqStatus(MsRequest.Msrequest,
+                          4,
+                          "STC has to be done for CONT9").
+   END.
+   
+   RETURN FALSE.
+
+END.
+ 
 FUNCTION fIsMainLineOrderPending RETURNS LOGICAL
    (INPUT pcIdType AS CHAR,
     INPUT pcPersonId AS CHAR,
@@ -320,8 +396,8 @@ FUNCTION fAdditionalSimTermination RETURNS LOGICAL
 
    FOR EACH tt_AdditionalSIM NO-LOCK:
                 
-      IF fHasPendingRequests(lbMobSub.Msseq,
-                             lbMobSub.CLI,
+      IF fHasPendingRequests(tt_AdditionalSIM.Msseq,
+                             tt_AdditionalSIM.CLI,
                              {&CLITYPE_LINETYPE_ADDITIONAL}) THEN NEXT.
                              
       fTermAdditionalSim(tt_AdditionalSIM.MsSeq,
@@ -338,5 +414,276 @@ FUNCTION fAdditionalSimTermination RETURNS LOGICAL
    RETURN TRUE.
                         
 END FUNCTION.
+
+/* YDR-1847 */
+/* IF mainline is terminated/STC is done, then STC has to be done for Additional Line */
+FUNCTION fAdditionalLineSTC RETURNS LOGICAL 
+    (INPUT iiMsRequest  AS INTEGER,
+     INPUT ldeActStamp  AS DECIMAL,
+     INPUT icTermReason AS CHARACTER):
+   
+   DEFINE VARIABLE ldeSMSStamp AS DECIMAL   NO-UNDO.
+   DEFINE VARIABLE lcSMSText   AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE oiRequest   AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcError     AS CHARACTER NO-UNDO.
+   DEF VAR llAdditionalSTC AS LOG NO-UNDO. 
+   DEF VAR lcAdditionalSMS AS CHAR NO-UNDO. 
+   DEF VAR lcMainSMS AS CHAR NO-UNDO. 
+         
+   DEFINE BUFFER MsRequest FOR MsRequest.     
+   DEFINE BUFFER MobSub    FOR MobSub.
+   DEFINE BUFFER lbMobSub  FOR MobSub.
+   DEFINE BUFFER CLIType   FOR CLIType.
+
+   FIND MsRequest NO-LOCK WHERE 
+        MsRequest.Brand     = gcBrand     AND 
+        MsRequest.MsRequest = iiMsRequest NO-ERROR. 
+   
+   IF NOT AVAILABLE MsRequest THEN RETURN FALSE.
+                
+   FIND FIRST MobSub NO-LOCK WHERE 
+              MobSub.brand = gcBrand AND 
+              MobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
+   
+   IF NOT AVAIL Mobsub THEN RETURN FALSE.
+              
+   EMPTY TEMP-TABLE tt_AdditionalSIM NO-ERROR.
+
+   FIND FIRST CLIType NO-LOCK WHERE
+              CLIType.Brand   = gcBrand             AND
+              CLIType.CLIType = MobSub.TariffBundle NO-ERROR.
+   IF NOT AVAIL CLIType OR 
+                CLIType.LineType NE {&CLITYPE_LINETYPE_MAIN} THEN RETURN FALSE.
+   
+   FOR EACH lbMobSub NO-LOCK WHERE
+            lbMobSub.Brand   = gcBrand        AND
+            lbMobSub.InvCust = Mobsub.CustNum AND
+            lbMobSub.PayType = FALSE          AND
+            lbMobSub.MsSeq  NE Mobsub.MsSeq,
+      FIRST CLIType NO-LOCK WHERE
+            CLIType.Brand = gcBrand AND
+            CLIType.CLIType = (IF lbMobSub.TariffBundle > "" 
+                                  THEN lbMobSub.TariffBundle
+                               ELSE lbMobSub.CLIType) AND
+            CLIType.LineType > 0:
+      
+      /* check main line existence */
+      IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} THEN DO:
+         EMPTY TEMP-TABLE tt_AdditionalSIM NO-ERROR.
+         RETURN FALSE.
+      END.
+
+      /* check main line existence */
+      IF CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
+         CREATE tt_AdditionalSIM.
+         ASSIGN tt_AdditionalSIM.MsSeq   = lbMobSub.MsSeq
+                tt_AdditionalSIM.CustNum = lbMobSub.CustNum
+                tt_AdditionalSIM.CLI     = lbMobSub.CLI.
+      END.
+
+   END. /* FOR EACH lbMobSub WHERE */
+     
+   FIND Customer NO-LOCK WHERE
+        Customer.Custnum = MobSub.CustNum NO-ERROR.
+      
+   CASE icTermReason:
+      WHEN "DELETE" THEN ASSIGN
+         lcAdditionalSMS = "MainTermToAddSTC"
+         lcMainSMS = "".
+      WHEN "STC" THEN ASSIGN
+         lcAdditionalSMS = "MainSTCToAddSTC"
+         lcMainSMS = "MainSTCToNonMain".
+      WHEN "MNP" THEN ASSIGN
+         lcAdditionalSMS = "MNPOutToAddSTC"
+         lcMainSMS = "MNPOutToMainLine".
+   END CASE.    
+         
+   lcAdditionalSMS = fGetSMSTxt(lcAdditionalSMS,
+                          TODAY,
+                         (IF AVAIL Customer
+                          THEN Customer.Language ELSE 1),
+                          OUTPUT ldeSMSStamp).
+      
+   FIND FIRST CLIType NO-LOCK WHERE 
+              CLIType.Brand   = gcBrand AND 
+              CLIType.CLIType = "CONT9" NO-ERROR.      
+        
+   FOR EACH tt_AdditionalSIM NO-LOCK:
+
+      /* If there is no ongoing STC/termination request for secondary line */
+      IF fHasPendingRequests(tt_AdditionalSIM.MsSeq,
+                             tt_AdditionalSIM.CLI,
+                            {&CLITYPE_LINETYPE_ADDITIONAL}) THEN NEXT.
+         
+      IF fHasPendingSTCToNonAddLine(tt_AdditionalSIM.MsSeq) THEN NEXT.
+      
+      fCancelPendingSTCToAddLine(tt_AdditionalSIM.MsSeq).   
+        
+      oiRequest = fCTChangeRequest(tt_AdditionalSIM.MsSeq,
+                                   CLIType.CLIType,
+                                   "",   /* lcBundleID */
+                                   "",   /* lcBankAcc = bank code validation is already done in newton */
+                                   IF ldeActStamp > 0 THEN ldeActStamp 
+                                   ELSE MSRequest.ActStamp,
+                                   0,   /* liCreditcheck 0 = Credit check ok */
+                                   FALSE,   /* llExtendContract extend contract */
+                                   ""    /* pcSalesman */,
+                                   FALSE, /* charge */
+                                   TRUE,  /* send sms */
+                                   "",
+                                   0,
+                                   {&REQUEST_SOURCE_MAIN_LINE_DEACTIVATION}, 
+                                   0,     /* piOrderID */
+                                   MsRequest.MsRequest,
+                                   OUTPUT lcError).
+
+      IF oiRequest = 0 THEN DO:
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          "MsRequest",
+                          STRING(MsRequest.MsRequest),
+                          MsRequest.custnum,
+                          "Additional line STC failed",
+                          tt_AdditionalSIM.CLI).
+         NEXT.
+      END.
+      ELSE llAdditionalSTC = TRUE.
+
+      lcSMSText = REPLACE(lcAdditionalSMS,"#MSISDN",MobSub.CLI).
+      
+      IF lcError = "" AND lcSMSText > "" THEN
+         fMakeSchedSMS2(tt_AdditionalSIM.CustNum,
+                        tt_AdditionalSIM.CLI,
+                        11, /* service change */
+                        lcSMSText,
+                        ldeSMSStamp,
+                        "22622",
+                        "").
+   END. /* FOR EACH ttAdditionalSIM */
+      
+   IF llAdditionalSTC AND lcMainSMS > "" THEN DO:
+
+      lcSMSText = fGetSMSTxt(lcMainSMS,
+                             TODAY,
+                             (IF AVAIL Customer
+                             THEN Customer.Language ELSE 1),
+                             OUTPUT ldeSMSStamp).
+      
+      IF lcSMSText > "" THEN
+         fMakeSchedSMS2(MobSub.CustNum,
+                        MobSub.CLI,
+                        11, /* service change */
+                        lcSMSText,
+                        ldeSMSStamp,
+                        "22622",
+                        "").
+   END.
+                        
+   EMPTY TEMP-TABLE tt_AdditionalSIM NO-ERROR.
+   
+   RETURN TRUE.
+   
+END FUNCTION.        
+
+FUNCTION fAddLineSTCCancellation RETURN LOGICAL
+    (iiMsRequest AS INTEGER,
+     iiCustnum   AS INTEGER):
+
+   DEFINE BUFFER bMsRequest FOR MsRequest.
+
+   FOR EACH bMsRequest NO-LOCK WHERE
+            bMsRequest.Brand       = gcBrand                                  AND
+            bMsRequest.ReqType     = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}      AND
+            bMsrequest.Custnum     = iiCustnum                                AND
+            bMsRequest.OrigRequest = iiMsRequest                              AND
+            bMsRequest.ReqSource   = {&REQUEST_SOURCE_MAIN_LINE_DEACTIVATION} AND
+      LOOKUP(STRING(bMsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0:
+
+      fChangeReqStatus(bMsRequest.Msrequest,
+                       4,
+                       "Additional STC cancellation").
+   END.
+
+END FUNCTION.   
+
+FUNCTION fNonAddLineSTCCancellationToAddLineSTC RETURN LOGICAL
+   (iiMsRequest AS INTEGER):
+
+   DEF BUFFER MsRequest FOR MsRequest.
+   DEF BUFFER MobSub    FOR MobSub.
+   DEF BUFFER lbMobSub  FOR MobSub.
+   DEF BUFFER lbCLIType FOR CLIType.
+   DEF BUFFER bCLIType  FOR CLIType.
+   DEF BUFFER CLIType  FOR CLIType.
+
+   DEF VAR llgMainLine AS LOG  NO-UNDO.    
+   DEF VAR lcError     AS CHAR NO-UNDO.    
+
+   FIND FIRST MsRequest NO-LOCK WHERE 
+              MsRequest.Brand     = gcBrand     AND 
+              MsRequest.MsRequest = iiMsRequest NO-ERROR.   
+   
+   FIND FIRST MobSub NO-LOCK WHERE 
+              MobSub.Brand   = gcBrand           AND
+              MobSub.MsSeq   = MsRequest.MsSeq   AND 
+              MobSub.InvCust = MsRequest.CustNum AND
+              MobSub.PayType = FALSE             NO-ERROR.
+  
+   IF AVAIL MobSub THEN 
+      FIND FIRST CLIType NO-LOCK WHERE
+                 CLIType.Brand    = gcBrand                        AND
+                 CLIType.CLIType  = (IF Mobsub.TariffBundle > ""
+                                       THEN Mobsub.TariffBundle
+                                     ELSE Mobsub.CLIType)          AND
+                 CLIType.LineType = {&CLITYPE_LINETYPE_ADDITIONAL} NO-ERROR.
+
+   IF AVAIL CLIType THEN DO:
+      
+      llgMainLine = NO.
+
+      MAINLINE:
+      FOR EACH lbMobSub NO-LOCK WHERE
+               lbMobSub.Brand   = gcBrand           AND
+               lbMobSub.InvCust = MsRequest.CustNum AND
+               lbMobSub.PayType = FALSE,
+         FIRST lbCLIType NO-LOCK WHERE
+               lbCLIType.Brand   = gcBrand                         AND
+               lbCLIType.CLIType = (IF lbMobsub.TariffBundle > ""
+                                       THEN lbMobsub.TariffBundle
+                                    ELSE lbMobsub.CLIType)         AND
+               lbCLIType.LineType > 0:
+
+         IF lbCLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} THEN DO:
+            llgMainLine = YES.
+            LEAVE MAINLINE.
+         END.
+      END.
+
+      FIND FIRST bCLIType NO-LOCK WHERE
+                 bCLIType.Brand   = gcBrand AND
+                 bCLIType.CLIType = "CONT9" NO-ERROR.
+
+      IF AVAIL bCLIType AND NOT llgMainLine THEN
+         fCTChangeRequest(MsRequest.MsSeq,
+                          bCLIType.CLIType,
+                          "",   /* lcBundleID */
+                          "",   /* lcBankAcc = bank code validation is already done in newton */
+                          fMake2Dt(TODAY + 1,0),
+                          0,   /* liCreditcheck 0 = Credit check ok */
+                          FALSE,   /* llExtendContract extend contract */
+                          ""    /* pcSalesman */,
+                          FALSE, /* charge */
+                          TRUE,  /* send sms */
+                          "",
+                          0,
+                          {&REQUEST_SOURCE_MAIN_LINE_DEACTIVATION},
+                          0,     /* piOrderID */
+                          0,
+                          OUTPUT lcError). 
+
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.   
 
 &ENDIF

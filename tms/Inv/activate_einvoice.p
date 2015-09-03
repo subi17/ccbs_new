@@ -118,7 +118,7 @@ PROCEDURE pSendEmail:
    OUTPUT STREAM sEmail CLOSE.
 
    /* Send the email */
-   SendMaileInvoice(lcEmailText,"").
+   SendMaileInvoice(lcEmailText,"","").
 
    /* wait for confirmation */
    fReqStatus(19,"").

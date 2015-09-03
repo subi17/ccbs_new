@@ -42,7 +42,8 @@ FOR EACH authlog NO-LOCK where
          authlog.timestamp >= ldtFrom AND
          authlog.timestamp < ldtTo:
 
-   if authlog.username ne "selfservice" then next.
+   if not (authlog.username eq "selfservice"  or
+           authlog.username eq "dextra" ) then next.
    if authlog.enduserid = "Monitoring" then next.
 
    PUT STREAM SOUT UNFORMATTED 

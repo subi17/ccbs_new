@@ -590,9 +590,9 @@ DO TRANS:
 
       /* UPDATE record counter */
       ASSIGN
-         TTCall.ReadInTS  = fMakeTS()
          ttCall.ReadDate  = TODAY
          ttCall.ReadTime  = TIME
+         ttCall.ReadInTS  = fMake2Dt(ttCall.ReadDate, ttCall.ReadTime)
          ldtTMSTime       = NOW
          TTCall.custNum   = liunkcust
          amt2 = amt2 + 1

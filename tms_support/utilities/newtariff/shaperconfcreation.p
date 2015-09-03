@@ -144,7 +144,7 @@ DEFINE VARIABLE lcShaperConfID AS CHARACTER NO-UNDO.
    FOR EACH ttShaperConf NO-LOCK:
       FIND FIRST ShaperConf WHERE 
                  ShaperConf.ShaperConfID = ttShaperConf.SConfId 
-      NO-LOCK NO-ERROR.
+      EXCLUSIVE-LOCK NO-ERROR.
                   
       IF AVAILABLE ShaperConf THEN DO:
          ASSIGN 
@@ -172,6 +172,8 @@ DEFINE VARIABLE lcShaperConfID AS CHARACTER NO-UNDO.
          RETURN "ERROR".     
       END.        
    END.
+
+   RELEASE ShaperConf.
    
    RETURN "OK".
       

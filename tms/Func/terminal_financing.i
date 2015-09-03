@@ -139,7 +139,7 @@ FUNCTION fGetPaytermOrderId RETURNS INT
    
    FIND MsRequest NO-LOCK WHERE
         MsRequest.MsRequest = iiMsRequest NO-ERROR.
-   IF NOT AVAIL MsRequest THEN RETURN -1.
+   IF NOT AVAIL MsRequest THEN RETURN 0.
    
    IF LOOKUP(msrequest.reqcparam2,"act,recreate") = 0 THEN RETURN 0.
 
@@ -151,34 +151,29 @@ FUNCTION fGetPaytermOrderId RETURNS INT
          FIND FIRST order NO-LOCK where
                     order.msseq = msrequest.msseq and
                     order.ordertype < 2 NO-ERROR.
-         IF NOT AVAIL order THEN RETURN -1.
+         IF NOT AVAIL order THEN RETURN 0.
          RETURN order.orderid.
       end.
 
       /* renewal */
       WHEN {&REQUEST_SOURCE_RENEWAL} then do:
 
-         if msrequest.origrequest = 0 then return -1.
+         if msrequest.origrequest = 0 then return 0.
 
          find first bmsrequest NO-LOCK where
                     bmsrequest.msrequest = msrequest.origrequest and
                     bmsrequest.reqtype = 46 no-error.
 
          /*   msrequest.reqsource eq "4" or */
-         if bmsrequest.reqiparam1 eq 0 then return -1.
+         if bmsrequest.reqiparam1 eq 0 then return 0.
 
          FIND FIRST order NO-LOCK where
                     order.brand = gcBrand and
                     order.orderid = bmsrequest.reqiparam1 NO-ERROR.
          IF AVAIL Order THEN RETURN order.orderid.
-         RETURN -1.
+         RETURN 0.
       end.
 
-      /* manual */
-      WHEN "4" then return 0.
-      /* script */
-      WHEN "5" then return 0.
-      
       /* installment contract change */
       WHEN "24" then do:
          if msrequest.reqIparam2 > 0 then do:
@@ -202,8 +197,8 @@ FUNCTION fGetPaytermOrderId RETURNS INT
          END.
          ELSE RETURN 0.
       END.
-      /* unknown */
-      OTHERWISE RETURN -1.
+      /*  not originating from order */
+      OTHERWISE RETURN -1. /*  WHEN "4" OR WHEN "5" OR WHEN "6" */ 
       
    END CASE.
 

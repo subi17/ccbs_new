@@ -189,17 +189,24 @@ FUNCTION fOngoingOrders RETURNS LOGICAL
    DEF VAR liExcludeOrderType AS INT NO-UNDO. 
 
    IF pcNumberType EQ "stc" THEN liExcludeOrderType = 2.
-   ELSE IF pcNumberType EQ "renewal" THEN liExcludeOrderType = 4.
+   ELSE IF pcNumberType EQ "renewal" OR
+           pcNumberType EQ "retention" THEN liExcludeOrderType = 4.
    ELSE liExcludeOrderType = -1.
 
    DEF BUFFER lbOtherOrder FOR Order.   
    
-   FIND FIRST lbOtherOrder NO-LOCK
-      WHERE lbOtherOrder.brand EQ gcBrand
-            AND lbOtherOrder.CLI EQ pcCLI
-            AND LOOKUP(lbOtherOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0 
-            AND lbOtherOrder.OrderType NE liExcludeOrderType NO-ERROR.
-   IF AVAILABLE lbOtherOrder THEN RETURN TRUE.
+   FOR EACH lbOtherOrder NO-LOCK WHERE
+            lbOtherOrder.brand EQ gcBrand AND
+            lbOtherOrder.CLI EQ pcCLI AND
+            LOOKUP(lbOtherOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0 AND
+            lbOtherOrder.OrderType NE liExcludeOrderType:
+
+      /* YPR-2105 */
+      IF pcNumberType EQ "retention" AND
+         lbOtherOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} THEN NEXT.
+
+      RETURN TRUE.
+   END.
 
    RETURN FALSE.
 

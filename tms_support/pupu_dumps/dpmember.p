@@ -103,6 +103,7 @@ PROCEDURE pDumpRecord:
        fNotNull(STRING(RECID(DPMember)))        lcDel
        fNotNull(STRING(DPMember.DPId) + CHR(255) +
                 DPMember.HostTable + CHR(255) +
+                DPMember.KeyValue + CHR(255) +
                 STRING(DPMember.ValidTo))   lcDel
        fNotNull(STRING(ldtTimeStamp))       lcDel
        fNotNull(STRING(DPMember.DPId))      lcDel

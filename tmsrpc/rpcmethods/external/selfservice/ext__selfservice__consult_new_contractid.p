@@ -55,6 +55,7 @@ DEFINE VARIABLE lcDelValue              AS CHARACTER NO-UNDO.
 DEFINE VARIABLE llOngoing               AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE llDelivered             AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE llClose                 AS LOGICAL   NO-UNDO.
+DEF VAR lcApplicationId AS CHAR NO-UNDO. 
 
 pcReqList = validate_request(param_toplevel_id, "string,string,string,[string]").
 IF pcReqList EQ ? THEN RETURN.
@@ -66,8 +67,12 @@ ASSIGN pcTransId    = get_string(param_toplevel_id, "0")
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF NOT fchkTMSCodeValues(gbAuthLog.UserName,substring(pcTransId,1,3)) THEN
+lcApplicationId = substring(pcTransId,1,3).
+
+IF NOT fchkTMSCodeValues(gbAuthLog.UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
+
+katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
 
 IF LOOKUP(pcDelType,"EMAIL,SMS") = 0 THEN
    RETURN appl_err("Invalid Delivery Type").

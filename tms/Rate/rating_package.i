@@ -9,7 +9,7 @@
    the priority order defined in SLGAnalyse. 
 */
 
-&GLOBAL-DEFINE BASE_BUNDLE_SUBTYPES "CONT6,CONT7,CONT8,CONTD,CONTF,CONTS,CONTFF,CONTSF,CONT9,CONT15,CONT24"
+&GLOBAL-DEFINE BASE_BUNDLE_SUBTYPES "CONT6,CONT7,CONT8,CONTD,CONTF,CONTS,CONTFF,CONTSF,CONT9,CONT15,CONT24,CONT23"
 &GLOBAL-DEFINE DSS2_SUBTYPES "CONTS,CONTM2,CONTM,CONTSF,CONT15"
 
 FUNCTION fIncludedUnit RETURNS DEC
@@ -202,7 +202,8 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
          THEN liDialtype = 4.
          
          ELSE IF (lcSLGroup BEGINS "CONTS" OR
-                  lcSLGroup EQ "CONT24") AND
+                  lcSLGroup EQ "CONT24" OR
+                  lcSLGroup EQ "CONT23") AND
             (liDialtype EQ 4 OR liDialtype EQ 12)
             THEN liDialtype = 0.
 

@@ -69,11 +69,45 @@ IF Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} THEN DO:
    
    IF Order.RoiResult EQ "risk" THEN DO:
       fSetOrderStatus(Order.OrderId, STRING(40 + Order.RoiLevel)). 
+      
+      IF llDoEvent THEN DO:
+         RUN StarEventMakeModifyEvent(lhOrder).
+         fCleanEventObjects().
+      END.
+
       RETURN "".
    END.
 
    IF Order.OrderChannel BEGINS "fusion" THEN DO:
-      fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_FIXED_LINE}).
+      FIND FIRST OrderCustomer WHERE
+         OrderCustomer.Brand = gcBrand AND
+         OrderCustomer.OrderId = Order.OrderId AND
+         OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+
+      IF OrderCustomer.CustidType = "CIF" THEN DO:
+         FIND FIRST Customer WHERE
+            Customer.Brand      = Order.Brand          AND 
+            Customer.OrgId      = OrderCustomer.CustId AND
+            Customer.CustIdType = OrderCustomer.CustIdType AND
+            Customer.Roles NE "inactive" NO-LOCK NO-ERROR. 
+         IF AVAIL Customer THEN DO:
+            FIND FIRST MobSub WHERE
+                       MobSub.Brand   = gcBrand AND
+                       MobSub.AgrCust = Customer.CustNum
+                 NO-LOCK NO-ERROR.
+            IF NOT AVAIL MobSub THEN lcNewStatus = "20".
+            ELSE lcNewStatus = "21".
+         END. /* IF AVAIL Customer THEN DO: */
+         ELSE lcNewStatus = "20".
+         fSetOrderStatus(Order.OrderId,lcNewStatus).
+      END. /* IF OrderCustomer.CustidType = "CIF" THEN */
+      ELSE fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_FIXED_LINE}).
+      
+      IF llDoEvent THEN DO:
+         RUN StarEventMakeModifyEvent(lhOrder).
+         fCleanEventObjects().
+      END.
+      
       RETURN "".
    END.
 END.
@@ -178,6 +212,7 @@ ELSE IF Order.Ordertype < 2 AND
 END.
 ELSE IF Order.Ordertype = {&ORDER_TYPE_MNP} AND
    lcOldStatus NE {&ORDER_STATUS_MNP_ON_HOLD} AND
+   lcOldStatus NE {&ORDER_STATUS_SIM_ONLY_MNP_IN} AND  /* Prevents state change from 99 to 22 again */
    Order.PortingDate <> ? THEN
    lcNewStatus = {&ORDER_STATUS_MNP_ON_HOLD}.
 
@@ -189,6 +224,8 @@ END.
 /* Check if order must go to status 20 or status 21 (no renove CIF orders) */
 IF lcOldStatus NE {&ORDER_STATUS_PENDING_MAIN_LINE} AND
    lcOldStatus NE {&ORDER_STATUS_MNP_ON_HOLD} AND
+   lcOldStatus NE {&ORDER_STATUS_SIM_ONLY_MNP_IN} AND
+   lcOldStatus NE {&ORDER_STATUS_PENDING_FIXED_LINE} AND
    Order.CREventQty = 0 AND 
    Order.CredOk = FALSE AND
    Order.OrderType NE 2 THEN DO: /* Credit scoring is not tried yet */

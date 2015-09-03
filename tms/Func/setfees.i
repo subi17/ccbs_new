@@ -245,6 +245,7 @@ FOR EACH FMItem NO-LOCK  WHERE
         xSingleFee.VATIncl     = PriceList.InclVat
         xSingleFee.SourceTable = icSourceTable  
         xSingleFee.SourceKey   = icSourceKey  
+        xSingleFee.OrderId     = iiOrderId
         xSinglefee.ServiceLimitGroup = FMItem.ServiceLimitGroup
         rc                     = 1
         liCreated              = liCreated + 1.

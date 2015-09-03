@@ -36,7 +36,7 @@ FORM
 "MSISDN........:"   Mobsub.cli      "BillTarget:" AT 50 lcBillTarget      SKIP
 "ICC/SIM.......:"   Mobsub.icc      "PUK1......:" AT 50 Imsi.Puk1         SKIP
 "Subscr.Status.:"   lcStatus        "PUK2......:" AT 50 Imsi.Puk2         SKIP
-"Susp.Status...:"   lcBarrStat FORMAT "x(62)"                             SKIP 
+"Barring Mask..:"   lcBarrStat FORMAT "x(62)"                             SKIP 
 lcPCLB FORMAT "x(47)" "PIN1......:" AT 50 IMSI.PIN1   SKIP
 "Number Inquiry:"   lcNumberInquiry "PIN2......:" AT 50 IMSI.PIN2         SKIP 
 "Agr.Customer..:"    Mobsub.AgrCust  AgrCustomer.CustName FORMAT "X(22)"  lcDSSInfo FORMAT "x(25)" AT 50 SKIP

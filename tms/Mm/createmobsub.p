@@ -68,6 +68,7 @@ DEF VAR lcReplacedTxt  AS CHAR NO-UNDO.
 DEF VAR lcMandateId AS CHAR NO-UNDO. 
 DEF VAR ldaMandateDate AS DATE NO-UNDO. 
 DEF VAR ldLastDate     AS DATE NO-UNDO. 
+DEF VAR lcInitialBarring AS CHAR NO-UNDO. 
 
 DEF BUFFER bInvCust    FOR Customer.
 DEF BUFFER bRefCust    FOR Customer.
@@ -449,7 +450,7 @@ FIND FIRST OrderAction WHERE
            OrderAction.ItemType = "BundleItem" AND
            OrderAction.ItemKey NE {&DSS} NO-LOCK NO-ERROR.
 IF NOT AVAIL OrderAction AND
-   LOOKUP(MobSub.CLIType,"CONT6,TARJRD1,CONT7,CONT8,CONTS,CONTFF,CONTSF,CONT9,CONT15,CONT24") = 0
+   LOOKUP(MobSub.CLIType,"CONT6,TARJRD1,CONT7,CONT8,CONTS,CONTFF,CONTSF,CONT9,CONT15,CONT24,CONT23") = 0
 THEN DO:
    RUN pCopyPackage(MobSub.CLIType,
                     "SHAPER",
@@ -610,29 +611,29 @@ IF TODAY - Customer.CreDate > 60 THEN DO:
       llDefBarring = FALSE. /* invoice(s) found */
    END.
 END.
-      
-IF llDefBarring THEN DO:
 
-   RUN barrengine.p(MobSub.MsSeq,
-                   "Y_HURP",
-                   "1",                 /* source = subscr. creation  */
-                   katun,               /* creator */
-                   fMakeTS(),           /* activate */
-                   "",                  /* sms */
-                   OUTPUT lcResult).
-   
-   liRequest = 0.
-   liRequest = INTEGER(lcResult) NO-ERROR. 
-   
-   IF liRequest = 0 THEN                               
-      /* write possible error to a memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
-                       STRING(MobSub.MsSeq),
-                       MobSub.Custnum,
-                       "DEFAULT PREMIUM BARRING FAILED",
-                       "Y_HURP").
-END.
+IF llDefBarring THEN lcInitialBarring = "Prod_TotalPremium_Off=1,Y_BPSUB=1".
+ELSE lcInitialBarring = "Y_BPSUB=1".
+
+RUN barrengine.p(MobSub.MsSeq,
+                lcInitialBarring,
+                "1",                 /* source = subscr. creation  */
+                katun,               /* creator */
+                fMakeTS(),           /* activate */
+                "",                  /* sms */
+                OUTPUT lcResult).
+
+liRequest = 0.
+liRequest = INTEGER(lcResult) NO-ERROR. 
+
+IF liRequest = 0 THEN                               
+   /* write possible error to a memo */
+   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                    "MobSub",
+                    STRING(MobSub.MsSeq),
+                    MobSub.Custnum,
+                    "INITIAL BARRING FAILED",
+                    lcInitialBarring).
          
 /* mark mnp process finished */
 IF Order.MNPStatus > 0 THEN DO:
@@ -654,30 +655,40 @@ END.
 IF LOOKUP(Customer.category,"20,40,41") = 0 THEN DO:
 
    lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
-
-   lcSMSText = fGetSMSTxt("WelcomeSubs",
-                          TODAY,
-                          Customer.Language,
-                          OUTPUT ldeSMSStamp).   
-
-   IF LOOKUP(Order.CLIType,lcBundleCLITypes) > 0 THEN DO:
-      lcBundleId = fGetDataBundleInOrderAction(Order.OrderId,Order.CLIType).
-      lcReplacedTxt = fConvBundleToBillItem(lcBundleId).
-      lcReplacedTxt = fGetItemName(gcBrand,
-                                   "BillItem",
-                                   lcReplacedTxt,
-                                   Customer.Language,
-                                   TODAY).
-   END.
-   ELSE 
-      lcReplacedTxt = fGetItemName(gcBrand,
-                                   "CLIType",
-                                   Order.CLIType,
-                                   Customer.Language,
-                                   TODAY).
    
-   ASSIGN lcSMSText = REPLACE(lcSMSText,"#CLITYPE",lcReplacedTxt)
-          lcSMSText = REPLACE(lcSMSText,"#CLI",Order.CLI).
+    /* TARJ7 and TARJ9 have their own Welcome SMSes */
+    IF MobSub.CliType = "TARJ7" OR
+       MobSub.CliType = "TARJ9" THEN
+       lcSMSText = fGetSMSTxt(MobSub.CliType + "Act",
+                              TODAY,
+                              Customer.Language,
+                              OUTPUT ldeSMSStamp).
+    ELSE DO:
+
+      lcSMSText = fGetSMSTxt("WelcomeSubs",
+                             TODAY,
+                             Customer.Language,
+                             OUTPUT ldeSMSStamp).   
+
+      IF LOOKUP(Order.CLIType,lcBundleCLITypes) > 0 THEN DO:
+         lcBundleId = fGetDataBundleInOrderAction(Order.OrderId,Order.CLIType).
+         lcReplacedTxt = fConvBundleToBillItem(lcBundleId).
+         lcReplacedTxt = fGetItemName(gcBrand,
+                                      "BillItem",
+                                      lcReplacedTxt,
+                                      Customer.Language,
+                                      TODAY).
+      END.
+      ELSE 
+         lcReplacedTxt = fGetItemName(gcBrand,
+                                      "CLIType",
+                                      Order.CLIType,
+                                      Customer.Language,
+                                      TODAY).
+      
+      ASSIGN lcSMSText = REPLACE(lcSMSText,"#CLITYPE",lcReplacedTxt)
+             lcSMSText = REPLACE(lcSMSText,"#CLI",Order.CLI).
+   END.
 
    IF lcSMSText > "" THEN
       fMakeSchedSMS2(MobSub.CustNum,

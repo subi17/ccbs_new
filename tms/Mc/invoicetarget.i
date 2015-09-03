@@ -34,7 +34,7 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
     iiDelType AS INTEGER,
     OUTPUT ocError AS CHARACTER):
 
-   DEF VAR liITGroupId AS INT NO-UNDO INITIAL 1. 
+   DEF VAR liITGroupId AS INT NO-UNDO. 
    DEF VAR lcResult    AS CHAR NO-UNDO.
 
    DEF BUFFER bCustomer FOR Customer. 
@@ -47,13 +47,11 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
       RETURN 0.
    END.
 
-   FIND LAST bInvoiceTargetGroup USE-INDEX ITGroupID NO-LOCK NO-ERROR.
-   IF AVAIL bInvoiceTargetGroup THEN 
-      liITGroupId = bInvoiceTargetGroup.ITGroupID + 1 .
+   liITGroupId = NEXT-VALUE(ITGroupID).
 
    CREATE bInvoiceTargetGroup.
    ASSIGN bInvoiceTargetGroup.Brand = gcBrand
-          bInvoiceTargetGroup.ITGroupId = liITGroupId 
+          bInvoiceTargetGroup.ITGroupId = liITGroupId
           bInvoiceTargetGroup.AgrCust = bCustomer.AgrCust
           bInvoiceTargetGroup.CustNum = bCustomer.CustNum 
           bInvoiceTargetGroup.FromDate = TODAY 
@@ -78,6 +76,7 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
                            INPUT bCustomer.CustNum,
                            INPUT {&REQUEST_SOURCE_FUSION_EMAIL},
                            INPUT bCustomer.Email,
+                           INPUT 0, /*orderid*/
                            OUTPUT lcResult).
 
    RETURN liITGroupId.
@@ -292,7 +291,7 @@ FUNCTION _fAddInvoiceTarget RETURNS INT
     OUTPUT ocError AS CHARACTER):
 
    DEF BUFFER lbMobsub FOR MobSub.
-   DEF VAR liInvoiceTargetId AS INT NO-UNDO INITIAL 1.
+   DEF VAR liInvoiceTargetId AS INT NO-UNDO.
    DEF BUFFER lbInvoiceTargetGroup FOR InvoiceTargetGroup.
    DEF BUFFER bInvoiceTarget FOR InvoiceTarget. 
 
@@ -332,12 +331,10 @@ FUNCTION _fAddInvoiceTarget RETURNS INT
       RETURN 0.
    END.
 
-   FIND LAST bInvoiceTarget USE-INDEX InvoiceTargetId NO-LOCK NO-ERROR.
-   IF AVAIL bInvoiceTarget THEN 
-            liInvoiceTargetid = bInvoiceTarget.InvoiceTargetId + 1.
+   liInvoiceTargetId = NEXT-VALUE(InvoiceTargetID).
 
    CREATE bInvoiceTarget. 
-   ASSIGN bInvoiceTarget.InvoiceTargetId = liInvoiceTargetId 
+   ASSIGN bInvoiceTarget.InvoiceTargetId = liInvoiceTargetId
           bInvoiceTarget.ITGroupId = lbInvoiceTargetGroup.ITGroupId 
           bInvoiceTarget.MsSeq = iiMsSeq 
           bInvoiceTarget.FromDate = TODAY 
@@ -580,11 +577,16 @@ FUNCTION fACCInvoiceTarget RETURNS LOGICAL
 
    DEF VAR liInvoiceTargetGroup AS INT NO-UNDO. 
    DEF VAR liInvoiceTargetRule AS INT NO-UNDO. 
+   DEF VAR lcFusionSubsType AS CHAR NO-UNDO. 
+   DEF VAR liDelType AS INT NO-UNDO INIT ?. 
 
    DEF BUFFER lbInvoiceTarget FOR InvoiceTarget.
    DEF BUFFER lbMobSub FOR MobSub.
    DEF BUFFER lbInvoiceTargetGroup FOR InvoiceTargetGroup.
+   DEF BUFFER Customer FOR Customer.
    
+   lcFusionSubsType    = fCParamC("FUSION_SUBS_TYPE").
+
    FIND lbMobSub NO-LOCK WHERE
         lbMobSub.MsSeq = iiMsSeq NO-ERROR.
    IF NOT AVAIL lbMobSub THEN DO:
@@ -634,17 +636,30 @@ FUNCTION fACCInvoiceTarget RETURNS LOGICAL
    IF liInvoiceTargetRule = {&INVOICE_TARGET_RULE_UNDEFINED} THEN 
       liInvoiceTargetRule = {&INVOICE_TARGET_RULE_SEPARATE_GROUP}.
 
-   IF liInvoiceTargetRule = {&INVOICE_TARGET_RULE_DEFAULT_GROUP} THEN DO:
+   IF liInvoiceTargetRule = {&INVOICE_TARGET_RULE_DEFAULT_GROUP} OR
+      LOOKUP(lbMobsub.CLIType,lcFusionSubsType) > 0 THEN DO:
       
-      liInvoiceTargetGroup = fGetDefaultInvoiceTargetGroup(lbMobsub.Custnum).
+      IF LOOKUP(lbMobsub.CLItype,lcFusionSubsType) > 0 THEN
+         liInvoiceTargetGroup = fGetFusionInvoiceTargetGroup(lbmobsub.Custnum).
+      ELSE liInvoiceTargetGroup = fGetDefaultInvoiceTargetGroup(lbMobsub.Custnum).
       
       IF liInvoiceTargetGroup <= 0 THEN DO:
+         
+         IF LOOKUP(lbMobsub.CLIType,lcFusionSubsType) > 0 THEN DO:
+            FIND FIRST Customer WHERE
+                       Customer.CustNum = lbMobsub.Custnum NO-LOCK NO-ERROR.
+            IF AVAIL Customer AND Customer.DelType = {&INV_DEL_TYPE_EMAIL} THEN
+               liDelType = {&INV_DEL_TYPE_FUSION_EMAIL}.
+            ELSE
+               liDelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING}.
+         END. /* IF LOOKUP(icCLiType,lcFusionSubsType) > 0 THEN DO: */
       
          IT_ACC_TRANS:
          DO TRANS:
-            liInvoiceTargetGroup = fAddInvoiceTargetGroup(lbMobsub.Custnum,?,OUTPUT ocError).
+            liInvoiceTargetGroup = fAddInvoiceTargetGroup(lbMobsub.Custnum,liDelType,OUTPUT ocError).
             
-            IF ocError EQ "" THEN
+            IF ocError EQ "" AND
+               LOOKUP(lbMobSub.CLIType,lcFusionSubsType) = 0 THEN
                fSetDefaultInvoiceTargetGroup(liInvoiceTargetGroup, ocError).
             
             IF ocError EQ "" THEN

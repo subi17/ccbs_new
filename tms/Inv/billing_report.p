@@ -515,33 +515,32 @@ PROCEDURE pCollectInvoices:
       IF ilDetails THEN fInvDetail(3,Invoice.ChargeType,0).
 
       /* 4: direct debit status */
-      ASSIGN
-         liRowType = Invoice.DDState
-         liError   = 0.
+      IF Invoice.ChargeType <> 5 THEN DO: /* YDR-1629 */
+         ASSIGN
+            liRowType = Invoice.DDState
+            liError   = 0.
 
-      IF Invoice.DDState = 0 THEN DO:
-         IF Invoice.InvAmt = 0 THEN ASSIGN
-            liRowType = 901
-            liError   = 401.
+         IF Invoice.DDState = 0 THEN DO:
+            IF Invoice.InvAmt = 0 THEN ASSIGN
+               liRowType = 901
+               liError   = 401.
+            
+            ELSE IF ilDetails THEN DO:
+               IF LENGTH(Customer.BankAcc) < 24 THEN liError = 402.
+               ELSE IF Invoice.PaidAmt NE 0 THEN liError = 403.
+               ELSE IF Invoice.PrintState = 0 THEN liError = 404.
+               ELSE liError = 410.
+            END.    
+         END.   
          
-         ELSE IF ilDetails THEN DO:
-            IF LENGTH(Customer.BankAcc) < 24 THEN liError = 402.
-            ELSE IF Invoice.PaidAmt NE 0 THEN liError = 403.
-            ELSE IF Invoice.PrintState = 0 THEN liError = 404.
-            ELSE liError = 410.
-         END.    
-      END.   
-      
-      IF Invoice.ChargeType = 5 THEN liRowType = 902.
-
-      fSectionAmt(4,
-                  liRowType,
-                  IF liRowType = 1 THEN Invoice.DDFile ELSE "",
-                  1,
-                  Invoice.AmtExclVat,
-                  Invoice.InvAmt).
-      IF ilDetails THEN fInvDetail(4,liRowType,liError).
-
+         fSectionAmt(4,
+                     liRowType,
+                     IF liRowType = 1 THEN Invoice.DDFile ELSE "",
+                     1,
+                     Invoice.AmtExclVat,
+                     Invoice.InvAmt).
+         IF ilDetails THEN fInvDetail(4,liRowType,liError).
+      END.
       /* 5: invoices */
       ASSIGN 
          ldPeriodBeg  = fMake2Dt(Invoice.FromDate,0)

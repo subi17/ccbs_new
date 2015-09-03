@@ -178,4 +178,3 @@ PROCEDURE pDumpActiveServices:
       
    oiEvents = oiEvents + 1.
 END.
-

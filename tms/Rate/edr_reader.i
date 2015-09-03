@@ -105,25 +105,28 @@ PROCEDURE pAnalyzeEDR:
    
    IF LOOKUP(STRING(ttEDR.SuccessCode),"1,3") = 0 THEN
       ttEDR.ErrorCode = {&EDR_ERROR_SUCCESS_CODE_VALUE}.
-   ELSE IF LOOKUP(STRING(ttEDR.NewSC),"0,7,107,3,103") = 0 THEN
+   ELSE IF LOOKUP(STRING(ttEDR.NewSC),"0,7,107,3,103,9,109") = 0 THEN
       ttEDR.ErrorCode = {&EDR_ERROR_SERVICE_CLASS_VALUE}.
    ELSE IF ttEDR.SuccessCode EQ 1 AND
-      LOOKUP(STRING(ttEDR.NewSC),"0,7,3") = 0 THEN
+      LOOKUP(STRING(ttEDR.NewSC),"0,7,3,9") = 0 THEN
       ttEDR.ErrorCode = {&EDR_ERROR_SERVICE_CLASS_INCONSISTENT}.
    ELSE IF ttEDR.SuccessCode EQ 3 AND
-      LOOKUP(STRING(ttEDR.NewSC),"0,107,103") = 0 THEN
+      LOOKUP(STRING(ttEDR.NewSC),"0,107,103,109") = 0 THEN
       ttEDR.ErrorCode = {&EDR_ERROR_SERVICE_CLASS_INCONSISTENT}.
-   ELSE IF LOOKUP(ttEDR.clitype,"TARJ6,TARJ7") = 0 THEN
+   ELSE IF LOOKUP(ttEDR.clitype,"TARJ6,TARJ7,TARJ9") = 0 THEN
       ttEDR.ErrorCode = {&EDR_ERROR_SUBSCRIPTION_TYPE}.
    ELSE IF (ttEDR.clitype EQ "TARJ6" AND
             ttEDR.ServiceFeeType NE "SC7") OR
            (ttEDR.clitype EQ "TARJ7" AND
-            ttEDR.ServiceFeeType NE "SC3") THEN
+            ttEDR.ServiceFeeType NE "SC3") OR
+           (ttEDR.clitype EQ "TARJ9" AND
+            ttEDR.ServiceFeeType NE "SC9") THEN
       ttEDR.ErrorCode = {&EDR_ERROR_SERVICE_CLASS_MISMATCH}.
    ELSE IF (ttEDR.DateST < TODAY - 1) OR
            (ttEDR.DateSt < TODAY AND
-           ((ttEDR.CLIType EQ "TARJ6" AND TIME > 1200) OR /* 00:20 */
-            (ttEDR.CLIType EQ "TARJ7" AND TIME > 43200))) THEN /* 12:00 */
+           ((ttEDR.CLIType EQ "TARJ6" AND TIME > 1200)  OR /* 00:20 */
+            (ttEDR.CLIType EQ "TARJ7" AND TIME > 43200) OR /* 12:00 */
+            (ttEDR.CLIType EQ "TARJ9" AND TIME > 43200))) THEN
       ttEDR.ErrorCode = {&EDR_ERROR_DELAYED}.
 
 END.
@@ -146,13 +149,17 @@ PROCEDURE pHandleEDR:
    DEF BUFFER bOrigrequest FOR MsRequest.
    DEF BUFFER bmservicelimit FOR MServiceLimit.
                
-   DEF VAR ldaTARJ7ResetDate AS DATE NO-UNDO. 
+   DEF VAR ldaResetDate AS DATE NO-UNDO. 
    DEF VAR ldeSMSTime AS DEC NO-UNDO. 
    DEF VAR ldaFromDate AS DATE NO-UNDO. 
    DEF VAR liTime AS INT NO-UNDO.
+   DEF VAR liLoop AS INT NO-UNDO. 
+   DEF VAR liOngStats AS CHAR NO-UNDO INIT "0,1,5,6,7,8,15,16,17,19".
+   DEF VAR licount    AS INT NO-UNDO.
 
-   ldeNow = fMakeTS().
-         
+   licount =  NUM-ENTRIES(liOngStats).
+   ldeNow  = fMakeTS().
+
    FIND FIRST Mobsub NO-LOCK WHERE
               Mobsub.msseq = ttEDR.msseq NO-ERROR.
    IF NOT AVAIL Mobsub OR Mobsub.CLIType NE ttEDR.CLIType THEN RETURN.
@@ -166,7 +173,7 @@ PROCEDURE pHandleEDR:
    IF AVAIL MsRequest AND MsRequest.ReqCParam2 NE ttEDR.CLIType THEN RETURN.
 
    /* check if edrs have arrived to TMS in wrong order (unlikely) */
-   FOR EACH bPrepEDR NO-LOCK USE-INDEX MsSeq WHERE
+   FOR EACH bPrepEDR NO-LOCK WHERE
             bPrepEDR.MsSeq = ttEDR.MsSeq AND
             bPrepEDR.Datest = ttEDR.DateST AND
             bPrepEDR.TimeStart > ttEDR.TimeStart AND
@@ -224,26 +231,39 @@ PROCEDURE pHandleEDR:
                           lcResult).
 
    END.
-   ELSE IF ttEDR.CLIType EQ "TARJ7" THEN DO:
+   ELSE IF ttEDR.CLIType EQ "TARJ7" OR
+           ttEDR.CLIType EQ "TARJ9" THEN DO:
    
       /* Restriction for termination and RESET provisioning */
       IF TIME >= 33600 AND TIME < 36900 THEN /* 09:20-10:15 */
          ldeNow = fHMS2TS(TODAY,"10:15:00").
-      
+
       FIND FIRST bActReq NO-LOCK WHERE
                  bActReq.MsSeq = ttEDR.MsSeq AND
                  bActReq.ReqType = 8 AND
                  bActReq.ReqStatus = 0 AND
-                 bActReq.ReqCparam3 = "TARJ7" AND
+                 bActReq.ReqCparam3 = ttEDR.CLIType AND
                  bActReq.ActStamp > fMakeTS() NO-ERROR.
-      
+   
+      /*
       FIND FIRST bTermReq NO-LOCK WHERE
                  bTermReq.MsSeq = ttEDR.MsSeq AND
                  bTermReq.ReqType = 9 AND
                  LOOKUP(STRING(bTermReq.ReqStatus),
                         {&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
-                 bTermReq.ReqCparam3 = "TARJ7" NO-ERROR.
+                 bTermReq.ReqCparam3 = ttEDR.CLIType NO-ERROR.
+      */
 
+      CHECK_LOOP:
+      DO liLoop = 1 TO licount:
+         FIND FIRST bTermReq NO-LOCK WHERE
+                    bTermReq.MsSeq = ttEDR.MsSeq AND
+                    bTermReq.ReqType = 9 AND
+                    bTermReq.ReqStatus = INT(ENTRY(liLoop,(liOngStats))) AND
+                    bTermReq.ReqCparam3 = ttEDR.CLIType NO-ERROR.
+         IF AVAIL bTermReq THEN LEAVE CHECK_LOOP.
+      END.
+      
       IF ttEDR.SuccessCode EQ {&EDR_SUCCESS_CODE_OK} THEN DO:
          
          IF AVAIL bActReq THEN RETURN.
@@ -257,181 +277,208 @@ PROCEDURE pHandleEDR:
       
          lcBundles = fGetCurrentBundle(MobSub.Msseq).
          
-         IF LOOKUP("TARJ7",lcBundles) > 0 THEN DO:
+         IF LOOKUP(ttEDR.CLIType,lcBundles) > 0 THEN DO:
             
             /* Benefit is already active, just send the renewal SMS 
                and possible counter reset*/
+            FOR FIRST ServiceLimit NO-LOCK WHERE
+                      ServiceLimit.GroupCode EQ ttEDR.CLIType,
+                FIRST MServiceLimit NO-LOCK WHERE
+                      MServiceLimit.MsSeq = MobSub.MsSeq AND
+                      MServiceLimit.DialType = ServiceLimit.DialType AND
+                      MServiceLimit.SLSeq = ServiceLimit.SLSeq AND
+                      MServiceLimit.EndTs >= ldeNow AND
+                      MServiceLimit.FromTS <= ldeNow:
+         
+               llActivatePromo = FALSE.
+               IF ttEDR.CLIType = "TARJ7" AND
+                  ttEDR.DateSt < 3/1/2015 AND 
+                  MServiceLimit.InclAmt EQ 600 THEN
+                  FOR EACH Order NO-LOCK WHERE
+                           Order.MsSeq = MobSub.MsSeq AND
+                           Order.CLItype = ttEDR.CLIType AND
+                           Order.OrderType = 2 AND
+                    LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) = 0,
+                     FIRST OrderAction NO-LOCK WHERE
+                           OrderAction.Brand = gcBrand AND
+                           OrderAction.OrderId = Order.OrderId AND
+                           OrderAction.ItemType = "Promotion" AND
+                           OrderAction.ItemKey  = ttEDR.CLIType,
+                     FIRST bOrigrequest NO-LOCK WHERE
+                           bOrigrequest.MsSeq = Order.MsSeq AND
+                           bOrigrequest.ReqType = 46 AND
+                           bOrigrequest.ReqStatus = 2 AND
+                           bOrigrequest.ReqIParam1 = Order.OrderId:
+
+                     IF ttEDR.DateSt >= 2/1/2015 AND 
+                        CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                                       MsRequest.MsSeq = MobSub.MsSeq AND
+                                       MsRequest.ReqType = 1 AND
+                                       MsRequest.ReqCParam1 EQ "SHAPER" AND
+                                       MsRequest.ReqCParam2 EQ ttEDR.CLIType + "_PROMO")
+                     THEN llActivatePromo = FALSE.
+                     ELSE ASSIGN
+                        llActivatePromo = TRUE
+                        liRequest = 0. /* to check if _RESET request was created */
+
+                     LEAVE.
+                  END.
+
+               IF MONTH(ttEDR.DateST) EQ 2 AND
+                  ttEDR.DateST EQ fLastDayOfMonth(ttEDR.DateST) THEN DO:
+               
+                  fSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
+
+                  IF DAY(ldaFromdate) EQ 29 OR DAY(ldaFromdate) EQ 30 THEN DO:
+                     liRequest = fServiceRequest(MobSub.MsSeq,
+                                                 "SHAPER",
+                                                 1, /* activate */
+                                                 ttEDR.CLIType + "_RESET",
+                                                 ldeNow,
+                                                 "",         /* salesman */
+                                                 FALSE,      /* fees */
+                                                 FALSE,      /* sms */          
+                                                 "",
+                                                 {&REQUEST_SOURCE_SCRIPT},
+                                                 0,
+                                                 FALSE,
+                                                 OUTPUT lcResult).
+                  
+                     IF liRequest = 0 THEN  
+                        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                         "Mobsub",
+                                         STRING(Mobsub.MsSeq),
+                                         MobSub.CustNum,
+                                         ttEDR.CLIType + " reset failed",
+                                         lcResult).
+                  END.
+               END.
+
+               /* YPR-2200 - Reset Voice Package during renewal */
+               IF ttEDR.CLIType EQ "TARJ9" AND
+                  ttEDR.ServiceFeeType = "SC9" THEN DO:
+                  liRequest = fServiceRequest(MobSub.MsSeq,
+                                              "TEMPLATE",
+                                              1,
+                                              "LADEL1_PRE_PLUS_RESET",
+                                              ldeNow,
+                                              "",
+                                              FALSE, /* fees */
+                                              FALSE, /* sms */
+                                              "",
+                                              {&REQUEST_SOURCE_SCRIPT},
+                                              0, /* father request */
+                                              FALSE,
+                                              OUTPUT lcResult).
+                  IF liRequest = 0 THEN
+                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                      "MobSub",
+                                      STRING(MobSub.MsSeq),
+                                      MobSub.CustNum,
+                                      "PREP_VOICE",
+                                      "PREP_VOICE deactivation request failed; " +
+                                      lcResult).
+               END.
+               
+               IF llActivatePromo THEN DO:
+
+                  FIND FIRST bOrigrequest NO-LOCK where
+                             bOrigrequest.msseq = MobSub.msseq and
+                             bOrigrequest.reqtype = 8 and
+                             bOrigrequest.reqstatus = 2 and
+                             bOrigrequest.reqcparam3 = ttEDR.CLIType and
+                             bOrigrequest.actstamp = MServiceLimit.fromts no-error.
+
+                  IF NOT AVAIL bOrigrequest then do:
+                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                      "Mobsub",
+                                      STRING(Mobsub.MsSeq),
+                                      MobSub.CustNum,
+                                      ttEDR.CLIType + " renewal promotion failed",
+                                      lcResult).
+                  END.
+                  ELSE DO:
+   
+                     liRequest = fServiceRequest(MobSub.MsSeq,
+                                                 "SHAPER",
+                                                 1, /* activate */
+                                                 ttEDR.CLIType + "_PROMO",
+                                                 (IF liRequest EQ 0
+                                                  THEN ldeNow
+                                                  ELSE fSecOffSet(ldeNow,60)),
+                                                 "",         /* salesman */
+                                                 FALSE,      /* fees */
+                                                 FALSE,      /* sms */
+                                                 "",
+                                                 {&REQUEST_SOURCE_SCRIPT},
+                                                 bOrigrequest.msrequest,
+                                                 FALSE,
+                                                 OUTPUT lcResult).
+     
+                     if liRequest eq 0 then
+                        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                         "Mobsub",
+                                         STRING(Mobsub.MsSeq),
+                                         MobSub.CustNum,
+                                         ttEDR.CLIType + " renewal promotion request failed",
+                                         lcResult).
+                     ELSE DO:
+                        FIND FIRST bmservicelimit EXCLUSIVE-LOCK where
+                                   rowid(bmservicelimit) = rowid(MServiceLimit).
+                        assign
+                           bmservicelimit.inclamt = 1228.
+                        
+                        release bmservicelimit.
+                     end.
+                  END. 
+               END.
+            END.
+              
+            FIND Customer NO-LOCK WHERE
+                 Customer.custnum = MobSub.Custnum NO-ERROR.
+            IF NOT AVAIL Customer THEN RETURN.
+
+            lcSMSText = fGetSMSTxt(ttEDR.CLIType + "RenewalOk", 
+                                   TODAY,
+                                   Customer.Language,
+                                   OUTPUT ldeSMSTime).
+
+            IF lcSMSText > "" THEN DO:
+
                FOR FIRST ServiceLimit NO-LOCK WHERE
-                         ServiceLimit.GroupCode EQ "TARJ7",
+                         ServiceLimit.GroupCode EQ ttEDR.CLIType,
                    FIRST MServiceLimit NO-LOCK WHERE
                          MServiceLimit.MsSeq = MobSub.MsSeq AND
                          MServiceLimit.DialType = ServiceLimit.DialType AND
                          MServiceLimit.SLSeq = ServiceLimit.SLSeq AND
                          MServiceLimit.EndTs >= ldeNow AND
                          MServiceLimit.FromTS <= ldeNow:
-            
-                  llActivatePromo = FALSE.
-                  IF ttEDR.DateSt < 3/1/2015 AND 
-                     MServiceLimit.InclAmt EQ 600 THEN
-                     FOR EACH Order NO-LOCK WHERE
-                              Order.MsSeq = MobSub.MsSeq AND
-                              Order.CLItype = "TARJ7" AND
-                              Order.OrderType = 2 AND
-                       LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) = 0,
-                        FIRST OrderAction NO-LOCK WHERE
-                              OrderAction.Brand = gcBrand AND
-                              OrderAction.OrderId = Order.OrderId AND
-                              OrderAction.ItemType = "Promotion" AND
-                              OrderAction.ItemKey  = "TARJ7",
-                        FIRST bOrigrequest NO-LOCK WHERE
-                              bOrigrequest.MsSeq = Order.MsSeq AND
-                              bOrigrequest.ReqType = 46 AND
-                              bOrigrequest.ReqStatus = 2 AND
-                              bOrigrequest.ReqIParam1 = Order.OrderId:
 
-                        IF ttEDR.DateSt >= 2/1/2015 AND 
-                           CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                                          MsRequest.MsSeq = MobSub.MsSeq AND
-                                          MsRequest.ReqType = 1 AND
-                                          MsRequest.ReqCParam1 EQ "SHAPER" AND
-                                          MsRequest.ReqCParam2 EQ "TARJ7_PROMO")
-                        THEN llActivatePromo = FALSE.
-                        ELSE ASSIGN
-                           llActivatePromo = TRUE
-                           liRequest = 0. /* to check if TARJ7_RESET request was created */
+                  fSplitTS(MServiceLimit.FromTS,
+                           OUTPUT ldaFromdate,OUTPUT liTime).
 
-                        LEAVE.
-                     END.
-
-                  IF MONTH(ttEDR.DateST) EQ 2 AND
-                     ttEDR.DateST EQ fLastDayOfMonth(ttEDR.DateST) THEN DO:
+                  ldaLastDay = ADD-INTERVAL(ttEDR.DateSt,1,"months").
+                  ldaLastDay = fLastDayOfMonth(ldaLastDay).
                   
-                     fSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
+                  IF DAY(ldaFromDate) < DAY(ldaLastDay)
+                  THEN ldaResetDate = DATE(MONTH(ldaLastDay),
+                                                DAY(ldaFromDate),
+                                                YEAR(ldaLastDay)).
+                  ELSE ldaResetDate = ldaLastDay.
 
-                     IF DAY(ldaFromdate) EQ 29 OR DAY(ldaFromdate) EQ 30 THEN DO:
-                        liRequest = fServiceRequest(MobSub.MsSeq,
-                                                    "SHAPER",
-                                                    1, /* activate */
-                                                    "TARJ7_RESET",
-                                                    ldeNow,
-                                                    "",         /* salesman */
-                                                    FALSE,      /* fees */
-                                                    FALSE,      /* sms */          
-                                                    "",
-                                                    {&REQUEST_SOURCE_SCRIPT},
-                                                    0,
-                                                    FALSE,
-                                                    OUTPUT lcResult).
-                     
-                        IF liRequest = 0 THEN  
-                           DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                            "Mobsub",
-                                            STRING(Mobsub.MsSeq),
-                                            MobSub.CustNum,
-                                            "TARJ7 reset failed",
-                                            lcResult).
-                     END.
-                  END.
+                  lcSMSText = REPLACE(lcSMSText,"#DATE",
+                              STRING(DAY(ldaResetDate),"99") + "/" +
+                              STRING(MONTH(ldaResetDate),"99")).
                   
-                  IF llActivatePromo THEN DO:
-   
-                     FIND FIRST bOrigrequest NO-LOCK where
-                                bOrigrequest.msseq = MobSub.msseq and
-                                bOrigrequest.reqtype = 8 and
-                                bOrigrequest.reqstatus = 2 and
-                                bOrigrequest.reqcparam3 = "TARJ7" and
-                                bOrigrequest.actstamp = MServiceLimit.fromts no-error.
-
-                     IF NOT AVAIL bOrigrequest then do:
-                        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                         "Mobsub",
-                                         STRING(Mobsub.MsSeq),
-                                         MobSub.CustNum,
-                                         "TARJ7 renewal promotion failed",
-                                         lcResult).
-                     END.
-                     ELSE DO:
-      
-                        liRequest = fServiceRequest(MobSub.MsSeq,
-                                                    "SHAPER",
-                                                    1, /* activate */
-                                                    "TARJ7_PROMO",
-                                                    (IF liRequest EQ 0
-                                                     THEN ldeNow
-                                                     ELSE fSecOffSet(ldeNow,60)),
-                                                    "",         /* salesman */
-                                                    FALSE,      /* fees */
-                                                    FALSE,      /* sms */
-                                                    "",
-                                                    {&REQUEST_SOURCE_SCRIPT},
-                                                    bOrigrequest.msrequest,
-                                                    FALSE,
-                                                    OUTPUT lcResult).
-        
-                        if liRequest eq 0 then
-                           DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                            "Mobsub",
-                                            STRING(Mobsub.MsSeq),
-                                            MobSub.CustNum,
-                                            "TARJ7 renewal promotion request failed",
-                                            lcResult).
-                        ELSE DO:
-                           FIND FIRST bmservicelimit EXCLUSIVE-LOCK where
-                                      rowid(bmservicelimit) = rowid(MServiceLimit).
-                           assign
-                              bmservicelimit.inclamt = 1228.
-                           
-                           release bmservicelimit.
-                        end.
-                     END. 
-                  END.
+                  fMakeSchedSMS2(Mobsub.CustNum,
+                                 Mobsub.CLI,
+                                 {&SMSTYPE_CONTRACT_ACTIVATION},
+                                 lcSMSText,
+                                 ldeSMSTime,
+                                 "22622",
+                                 "").
                END.
-                 
-               FIND Customer NO-LOCK WHERE
-                    Customer.custnum = MobSub.Custnum NO-ERROR.
-               IF NOT AVAIL Customer THEN RETURN.
-
-               lcSMSText = fGetSMSTxt("TARJ7Act", 
-                                      TODAY,
-                                      Customer.Language,
-                                      OUTPUT ldeSMSTime).
-
-               IF lcSMSText > "" THEN DO:
-
-                  FOR FIRST ServiceLimit NO-LOCK WHERE
-                            ServiceLimit.GroupCode EQ "TARJ7",
-                      FIRST MServiceLimit NO-LOCK WHERE
-                            MServiceLimit.MsSeq = MobSub.MsSeq AND
-                            MServiceLimit.DialType = ServiceLimit.DialType AND
-                            MServiceLimit.SLSeq = ServiceLimit.SLSeq AND
-                            MServiceLimit.EndTs >= ldeNow AND
-                            MServiceLimit.FromTS <= ldeNow:
-
-                     fSplitTS(MServiceLimit.FromTS,
-                              OUTPUT ldaFromdate,OUTPUT liTime).
-
-                     ldaLastDay = ADD-INTERVAL(ttEDR.DateSt,1,"months").
-                     ldaLastDay = fLastDayOfMonth(ldaLastDay).
-                     
-                     IF DAY(ldaFromDate) < DAY(ldaLastDay)
-                     THEN ldaTARJ7ResetDate = DATE(MONTH(ldaLastDay),
-                                                   DAY(ldaFromDate),
-                                                   YEAR(ldaLastDay)).
-                     ELSE ldaTARJ7ResetDate = ldaLastDay.
-
-                     lcSMSText = REPLACE(lcSMSText,"#DATE",
-                                 STRING(DAY(ldaTARJ7ResetDate),"99") + "/" +
-                                 STRING(MONTH(ldaTARJ7ResetDate),"99")).
-                     
-                     fMakeSchedSMS2(Mobsub.CustNum,
-                                    Mobsub.CLI,
-                                    {&SMSTYPE_CONTRACT_ACTIVATION},
-                                    lcSMSText,
-                                    ldeSMSTime,
-                                    "22622",
-                                    "").
-                  END.
-               END.
+            END.
          END.
          ELSE DO:
 
@@ -446,7 +493,7 @@ PROCEDURE pHandleEDR:
                ldeNow = fSecOffset(ldeNow,1).
 
             liRequest = fPCActionRequest(MobSub.MsSeq,
-                                         "TARJ7",
+                                         ttEDR.CLIType,
                                          "act",
                                          ldeNow,
                                          TRUE,    /* fees */
@@ -463,7 +510,7 @@ PROCEDURE pHandleEDR:
                                 "Mobsub",
                                 STRING(Mobsub.MsSeq),
                                 MobSub.CustNum,
-                                "TARJ7 activation failed",
+                                ttEDR.CLIType + " activation failed",
                                 lcResult).
             ELSE IF AVAIL bTermReq THEN DO:
                FIND Msrequest EXCLUSIVE-LOCK WHERE
@@ -488,10 +535,10 @@ PROCEDURE pHandleEDR:
          
          lcBundles = fGetCurrentBundle(MobSub.Msseq).
          
-         IF LOOKUP("TARJ7",lcBundles) = 0 THEN RETURN.
+         IF LOOKUP(ttEDR.CLIType,lcBundles) = 0 THEN RETURN.
 
          liRequest = fPCActionRequest(MobSub.MsSeq,
-                                      "TARJ7",
+                                      ttEDR.CLIType,
                                       "term",
                                       ldeNow,
                                       TRUE,    /* fees */
@@ -508,7 +555,7 @@ PROCEDURE pHandleEDR:
                              "Mobsub",
                              STRING(Mobsub.MsSeq),
                              MobSub.CustNum,
-                             "TARJ7 termination failed",
+                             ttEDR.CLIType + " termination failed",
                              lcResult).
       END. 
    END.
