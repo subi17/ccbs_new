@@ -36,7 +36,7 @@ DEFINE VARIABLE resp_row    AS CHARACTER NO-UNDO.
 /* Local variables */
 DEFINE VARIABLE lcBrand     AS CHARACTER NO-UNDO INIT "1".
 DEFINE VARIABLE liAllow     AS INTEGER   NO-UNDO.
-DEFINE VARIABLE lcDataBillItems AS CHARACTER  NO-UNDO.
+DEFINE VARIABLE lcNonCombinedData AS CHARACTER  NO-UNDO.
 DEFINE VARIABLE lcCLIType     AS CHARACTER  NO-UNDO.
 DEFINE VARIABLE lcCLITypeName AS CHARACTER NO-UNDO.
 DEFINE VARIABLE ldaFirstDay   AS DATE      NO-UNDO.
@@ -203,8 +203,7 @@ IF pcUserName EQ "miyoigo" THEN DO:
                     
 END. /* IF pcUserName EQ "miyoigo" THEN DO: */
 
-lcDataBillItems = (IF MobSub.PayType THEN fCParamC("DatarowItemsPre") ELSE
-                   fCParamC("DataRowItems")).
+lcNonCombinedData = fCParamC("NON_COMBINED_DATA_ROWS").
 
 /* Query TMS for CDRs */
 
@@ -267,7 +266,8 @@ FUNCTION fResponseRow RETURNS LOGICAL
          
          WHEN "GPRS" THEN DO:
             
-            IF LOOKUP(lcBillCode,lcDataBillItems) > 0 THEN DO:
+            /* assumed that all GPRS events belong to group 3 (internet) */
+            IF LOOKUP(lcBillCode,lcNonCombinedData) = 0 THEN DO:
                
                FIND FIRST ttData WHERE ttData.BIName = lcBiName NO-ERROR.
                IF NOT AVAILABLE ttData THEN DO:
@@ -283,8 +283,6 @@ FUNCTION fResponseRow RETURNS LOGICAL
                llDataRowCDR = TRUE.
             END. 
             ELSE DO:
-               /* This logic will only be executed if config BillItem not setup
-                  (DatarowItemsPre & DatarowItems) */
                /* Prepaid cdrs have value as kBytes */
                IF MobSub.PayType = TRUE THEN
                lcDetails = STRING(INT(

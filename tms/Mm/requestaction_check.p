@@ -10,6 +10,7 @@
 
 {commali.i}
 {cparam2.i}
+{barrfunc.i}
 {requestaction_exec.i}
 
 DEF INPUT  PARAMETER iiReqType    AS INT  NO-UNDO.
@@ -62,13 +63,8 @@ FUNCTION fRequestCheck RETURNS LOGICAL:
    ELSE IF RequestAction.ActionType = "BarringsNotAllowed" 
       AND iiMsSeq > 0 THEN DO:
       IF bfMobsub.MsStatus = 8 THEN DO:
-         RUN checkmsbarring(
-            INPUT iiMsSeq,
-            INPUT "NewtonAd",
-            OUTPUT lcBarrComList,
-            OUTPUT lcBarrStatus).
-      
-         IF LOOKUP(lcBarrStatus,RequestAction.ActionKey) > 0 THEN DO:
+         IF fIsInList(fGetActiveBarrings(iiMsSeq),
+                      RequestAction.ActionKey) EQ TRUE THEN DO:
             ocError = {&MSG_NOT_ALLOWED}.         
             RETURN FALSE.
          END.

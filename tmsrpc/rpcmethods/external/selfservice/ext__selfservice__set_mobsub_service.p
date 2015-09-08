@@ -3,7 +3,7 @@
  *
  * @input       transaction_id;string;mandatory;transaction id
                 msisdn;string;mandatory;subscription msisdn number
-                service_code;string;mandatory;service code(eg:VMS,LANG,CF,IRDCUTOFF,BB,NAM)
+                service_code;string;mandatory;service code(eg:VMS,LANG,CF,BB)
                 service_status;string;mandatory;on/off
                 params;struct;optional;CF/LANG
  * @params      param;string;1 OR 5 for LANG
@@ -57,12 +57,37 @@ DEF VAR top_struct      AS CHAR NO-UNDO.
 DEF VAR liValue         AS INT  NO-UNDO.
 DEF VAR liReq           AS INT  NO-UNDO.
 DEF VAR ldActStamp      AS DEC  NO-UNDO.
-DEF VAR lcBarringCode   AS CHAR NO-UNDO.
 DEF VAR lcInfo          AS CHAR NO-UNDO.
 DEF VAR lcParam         AS CHAR NO-UNDO.
-DEF VAR orBarring       AS ROWID NO-UNDO.
+DEF VAR lcAppId         AS CHAR NO-UNDO. 
+DEF VAR lcOnOff         AS CHAR NO-UNDO.
 
-DEF VAR lcAppId AS CHAR NO-UNDO. 
+FUNCTION fCheckBBFraudBarring RETURN CHAR
+   (iiMsSeq AS INT):
+      
+   DEF VAR llOngoing AS LOGICAL NO-UNDO.
+   DEF VAR orBarring       AS ROWID NO-UNDO.
+   DEF VAR lcBarringCode   AS CHAR NO-UNDO.
+
+   DEF BUFFER MsRequest FOR MsRequest.
+
+   llOngoing = fCheckBarrStatus(INPUT iiMsSeq,
+                                OUTPUT lcBarringCode,
+                                OUTPUT orBarring).
+   IF llOngoing EQ TRUE THEN DO:
+      FIND FIRST MsRequest WHERE
+           ROWID(MsRequest) = orBarring 
+           NO-LOCK NO-ERROR.
+      IF AVAILABLE MsRequest AND
+         fIsInList(MsRequest.ReqCparam1, {&FRAUD_BARR_CODES}) EQ TRUE THEN
+         RETURN "Ongoing Fraud Barring Request".
+   END. 
+   IF fIsInList(lcBarringCode, {&FRAUD_BARR_CODES}) EQ TRUE THEN
+      RETURN "BB service can not be activated since " +
+             "subscription has fraud barring".
+
+   RETURN "".
+END.
 
 pcReqList = validate_request(param_toplevel_id,
                              "string,string,string,string,[struct]").
@@ -86,25 +111,18 @@ lcAppId = substring(pcTransId,1,3).
 IF NOT fchkTMSCodeValues(gbAuthLog.UserName,lcAppId) THEN
    RETURN appl_err("Application Id does not match").
 
+katun = lcAppId + "_" + gbAuthLog.EndUserId.
+
 FIND MobSub NO-LOCK WHERE
      MobSub.CLI = pcCLI NO-ERROR.
 IF NOT AVAILABLE MobSub THEN
    RETURN appl_err("Subscription not found").
 
-IF LOOKUP(pcServiceCode,"Y_BPSUB,C_BPSUB") > 0 THEN DO:
-   
-   IF lcAppId NE "650" THEN 
-      RETURN appl_err("Application Id does not match").
-   
-   ASSIGN
-      lcParam = pcServiceCode WHEN pcServiceStatus = "on"
-      pcServiceCode = "BPSUB".
-END.
-
 FIND FIRST ServCom NO-LOCK WHERE
            ServCom.Brand = gcBrand AND
            ServCom.ServCom = pcServiceCode NO-ERROR.
-IF NOT AVAILABLE ServCom THEN
+IF NOT AVAILABLE ServCom OR
+   LOOKUP(ServCom.ServCom,"LP,NAM,BPSUB") > 0 THEN
    RETURN appl_err("Service Component not found").
 
 CASE pcServiceStatus:
@@ -149,22 +167,6 @@ FOR FIRST SubSer NO-LOCK WHERE
    IF liReq NE 0 THEN
       RETURN appl_err(SUBST("Unknown service value: &1", pcServiceStatus)).
 
-   IF Subser.ServCom = "NAM" THEN DO:
-      lcBarringCode = fCheckBarrStatus(INPUT MobSub.MsSeq,
-                                       OUTPUT orBarring).
-      IF lcBarringCode = "91" THEN DO:
-         FIND FIRST MsRequest WHERE
-                    ROWID(MsRequest) = orBarring AND
-                    MsRequest.ReqCParam1 = "C_LOS" NO-LOCK NO-ERROR.
-         IF AVAILABLE MsRequest THEN
-            RETURN appl_err("Ongoing CLB Lost or Stolen Barring Request").
-      END. /* IF lcBarringCode = "91" THEN DO: */
-      ELSE IF lcBarringCode = "C_LOS" THEN
-         RETURN appl_err("Internet service can not be " +
-                (IF liValue = 0 THEN "de-activated" ELSE "activated") +
-                 " since subscription has CLB Lost or Stolen Barring").
-   END. /* IF Subser.ServCom = "NAM" THEN DO: */
-
    IF LOOKUP(SubSer.ServCom,"CF,LANG") > 0 THEN DO:
       IF SubSer.ServCom = "LANG" AND STRING(SubSer.SSStat) = lcparam THEN
          RETURN appl_err("LANG service is already active with same language").
@@ -206,25 +208,15 @@ FOR FIRST SubSer NO-LOCK WHERE
       /* Resume - Pass the new status in parameter */
       ELSE IF liValue = 1 AND SubSer.SSStat = 2 THEN
          lcParam = "3".
+   
+      /* Extra pre-caution, if fraud barring is applied then */
+      /* don't allow to activate the BB service              */
+      IF liValue = 1 THEN DO:
+         lcInfo = fCheckBBFraudBarring(MobSub.MsSeq).
+         IF lcInfo > "" THEN
+            RETURN appl_err(lcInfo).
+      END.
    END. /* IF Subser.ServCom = "BB" THEN DO: */
-
-   /* Extra pre-caution, if fraud barring is applied then */
-   /* don't allow to activate the BB service              */
-   IF Subser.ServCom = "BB" AND liValue = 1 THEN DO:
-      lcBarringCode = fCheckBarrStatus(INPUT MobSub.MsSeq,
-                                       OUTPUT orBarring).
-      IF lcBarringCode = "91" THEN DO:
-         FIND FIRST MsRequest WHERE
-              ROWID(MsRequest) = orBarring AND
-              LOOKUP(MsRequest.ReqCParam1, {&FRAUD_BARR_CODES}) > 0
-              NO-LOCK NO-ERROR.
-         IF AVAILABLE MsRequest THEN
-            RETURN appl_err("Ongoing Fraud Barring Request").
-      END. /* IF lcBarringCode = "91" THEN DO: */
-      ELSE IF LOOKUP(lcBarringCode, {&FRAUD_BARR_CODES}) > 0 THEN
-         RETURN appl_err("BB service can not be activated since " +
-                         "subscription has fraud barring").
-   END. /* IF liValue = 1 THEN DO: */
 
    liReq = fServiceRequest(MobSub.MsSeq,
                            Subser.ServCom,
@@ -249,30 +241,35 @@ FOR FIRST SubSer NO-LOCK WHERE
    top_struct = add_struct(response_toplevel_id, "").
    add_string(top_struct, "transaction_id", pcTransId).
    add_boolean(top_struct, "result", True).
+   
+   CASE pcServiceStatus:
+      WHEN "on" THEN lcOnOff = "Activar".
+      WHEN "off" THEN lcOnOff = "Desactivar".
+   END.
+
+   DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
+                    "MobSub",                             /* HostTable */
+                    STRING(Mobsub.MsSeq),                 /* KeyValue  */
+                    MobSub.CustNum,                       /* CustNum */
+                    "Servicio modificado",                 /* MemoTitle */
+                    "Solicitado por el cliente " + pcServiceCode + " - " +
+                    lcOnOff,  /* MemoText */
+                    "Service",                            /* MemoType */
+                    fgetAppDetailedUserId(INPUT lcAppId,
+                                         INPUT Mobsub.CLI)).
 
    RETURN.
 END. /* FOR FIRST SubSer NO-LOCK WHERE */
    
 /* Additional logic to add the new BB service to the subscription */
-IF LOOKUP(pcServiceCode,"BB,BPSUB") > 0 AND
+IF pcServiceCode EQ "BB" AND
    pcServiceStatus = "ON" THEN DO:
+
    /* Extra pre-caution, if fraud barring is applied then */
    /* don't allow to activate the BB service              */
-   IF pcServiceCode EQ "BB" THEN DO:
-      lcBarringCode = fCheckBarrStatus(INPUT MobSub.MsSeq,
-                                       OUTPUT orBarring).
-      IF lcBarringCode = "91" THEN DO:
-         FIND FIRST MsRequest WHERE
-              ROWID(MsRequest) = orBarring AND
-              LOOKUP(MsRequest.ReqCParam1, {&FRAUD_BARR_CODES}) > 0
-              NO-LOCK NO-ERROR.
-         IF AVAILABLE MsRequest THEN
-            RETURN appl_err("Ongoing Fraud Barring Request").
-      END. /* IF lcBarringCode = "91" THEN DO: */
-      ELSE IF LOOKUP(lcBarringCode, {&FRAUD_BARR_CODES}) > 0 THEN
-         RETURN appl_err("BB service can not be activated since " +
-                         "subscription has fraud barring").
-   END. /* IF pcServiceStatus = "ON" THEN DO: */
+   lcInfo = fCheckBBFraudBarring(MobSub.MsSeq).
+   IF lcInfo > "" THEN
+      RETURN appl_err(lcInfo).
 
    liReq = fServiceRequest(MobSub.MsSeq,
                            ServCom.ServCom,
@@ -290,6 +287,22 @@ IF LOOKUP(pcServiceCode,"BB,BPSUB") > 0 AND
    IF liReq = 0 THEN
       RETURN appl_err("New request was not accepted").
 
+   CASE pcServiceStatus:
+      WHEN "on" THEN lcOnOff = "Activar".
+      WHEN "off" THEN lcOnOff = "Desactivar".
+   END.
+
+   DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
+                    "MobSub",                             /* HostTable */
+                    STRING(Mobsub.MsSeq),                 /* KeyValue  */
+                    MobSub.CustNum,                       /* CustNum */
+                    "Servicio modificado",                 /* MemoTitle */
+                    "Solicitado por el cliente " + pcServiceCode + " - " +
+                    lcOnOff,  /* MemoText */
+                    "Service",                            /* MemoType */
+                    fgetAppDetailedUserId(INPUT lcAppId,
+                                         INPUT Mobsub.CLI)).
+
 END. /* IF pcServiceID = "BB" THEN DO: */
 ELSE IF pcServiceStatus = "OFF" THEN
    RETURN appl_err("Service is not active").
@@ -298,6 +311,7 @@ ELSE IF pcServiceStatus = "OFF" THEN
 top_struct = add_struct(response_toplevel_id, "").
 add_string(top_struct, "transaction_id", pcTransId).
 add_boolean(top_struct, "result", True).
+
 
 FINALLY:
    /* Store the transaction id */

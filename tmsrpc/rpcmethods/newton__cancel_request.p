@@ -19,6 +19,7 @@
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {tmsconst.i}
 
+
 /* Input parameters */
 DEF VAR piReference AS INT NO-UNDO.
 DEF VAR pcMemo AS CHAR NO-UNDO.
@@ -43,7 +44,6 @@ DEF VAR lcBONOContracts    AS CHAR  NO-UNDO.
 DEF VAR lcIPLContracts     AS CHAR  NO-UNDO.
 
 DEF BUFFER lbMobSub        FOR Mobsub.
-DEF BUFFER bMsRequest      FOR MsRequest.
 
 DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
     FIELD MsSeq    AS INT
@@ -139,12 +139,17 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
             IF AVAIL Order THEN DO TRANS ON ERROR UNDO:
                RUN closeorder.p(Order.OrderId,TRUE).
                IF RETURN-VALUE NE "" THEN NEXT.
-               IF fReqStatus(4, pcMemo) = False THEN UNDO.
+               IF fReqStatus(4, pcMemo) = FALSE THEN UNDO.
                ELSE liReqCount = liReqCount + 1.
             END.
             ELSE DO:
                fReqStatus(4, pcMemo).
                liReqCount = liReqCount + 1.
+
+               /* if additional line to non-additional line pending STC is cancellled 
+                  and it doesn't contain any main line then STC request has to be created
+                  for additional line to CONT9*/
+               fNonAddLineSTCCancellationToAddLineSTC(MsRequest.MsRequest). 
             END.
 
             FIND Customer WHERE
@@ -204,60 +209,10 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
 
                END. /* IF NOT AVAIL lbMobSub THEN DO: */
             END. /* IF AVAIL MobSub THEN DO: */
-            /* Additional SIM Termination logic */
+            /* Additional SIM STC cancellation logic */
             ELSE IF AVAIL MobSub THEN DO:
-               EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
-
-               IF CAN-FIND(
-                  FIRST CLIType NO-LOCK WHERE
-                        CLIType.Brand = gcBrand AND
-                        CLIType.CLIType =
-                           (IF MobSub.TariffBundle > ""
-                            THEN MobSub.TariffBundle
-                            ELSE MobSub.CLIType) AND
-                        CLIType.LineType = {&CLITYPE_LINETYPE_ADDITIONAL})
-                  THEN DO:
-                  FOR EACH lbMobSub NO-LOCK WHERE
-                           lbMobSub.Brand   = gcBrand AND
-                           lbMobSub.InvCust = Mobsub.CustNum AND
-                           lbMobSub.PayType = FALSE,
-                     FIRST CLIType NO-LOCK WHERE
-                           CLIType.Brand = gcBrand AND
-                           CLIType.CLIType = (IF lbMobSub.TariffBundle > ""
-                                              THEN lbMobSub.TariffBundle
-                                              ELSE lbMobSub.CLIType) AND
-                           CLIType.LIneType > 0:
-                     
-                     IF CLIType.LineType = {&CLITYPE_LINETYPE_MAIN} OR
-                        fHasPendingSTCToMainLine
-                        (lbMobSub.MsSeq) THEN DO:
-                        EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
-                        LEAVE.
-                     END.
-
-                     CREATE ttAdditionalSIM.
-                     ASSIGN ttAdditionalSIM.MsSeq   = lbMobSub.MsSeq
-                            ttAdditionalSIM.CustNum = lbMobSub.CustNum
-                            ttAdditionalSIM.CLI     = lbMobSub.CLI.
-                  END.
-
-                  FOR EACH ttAdditionalSIM NO-LOCK:
-                     /* If there is no ongoing STC/termination request for secondary line */
-                     IF fHasPendingRequests
-                        (ttAdditionalSIM.MsSeq,
-                         ttAdditionalSIM.CLI,
-                         {&CLITYPE_LINETYPE_ADDITIONAL}) THEN NEXT.
-                     fTermAdditionalSim(ttAdditionalSIM.MsSeq,
-                                        ttAdditionalSIM.CLI,
-                                        ttAdditionalSIM.CustNum,
-                                        {&SUBSCRIPTION_TERM_REASON_ADDITIONALSIM},
-                                        TODAY,
-                                        {&REQUEST_SOURCE_MANUAL_TMS},
-                                        0,
-                                        OUTPUT lcError).
-
-                  END. /* FOR EACH ttAdditionalSIM NO-LOCK: */
-               END. /* IF LOOKUP(MonSub.CLITYpe,lcAllowedDSS2SubsType) > 0 */
+               fAddLineSTCCancellation(MsRequest.MsRequest, 
+                                       MsRequest.CustNum). 
             END. /* ELSE IF AVAIL MobSub THEN DO: */
          END.
       WHEN "acc" THEN
@@ -298,75 +253,16 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
                             INPUT "BTCDeAct", INPUT 10,
                             INPUT {&UPSELL_SMS_SENDER}, INPUT "").
 
-            /* Additional SIM Termination logic */
-            IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                              CLIType.Brand = gcBrand AND
-                              CLIType.CLIType = MsRequest.ReqCparam1 AND
-                              CLIType.LineType = {&CLITYPE_LINETYPE_ADDITIONAL}) AND
-               CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                              CLIType.Brand = gcBrand AND
-                              CLIType.CLIType = MsRequest.ReqCparam1 AND
-                              CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
-               FIND FIRST MobSub WHERE
-                          MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
-               IF AVAIL MobSub THEN DO:
+            /* if additional line to non-additional line pending BTC is cancelled 
+               and it doesn't contain any main line then STC request has to be created
+               for additional line to CONT9*/
+            fNonAddLineSTCCancellationToAddLineSTC(MsRequest.MsRequest). 
 
-                  EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
+            /* If cancelled BTC is doesn't contain any pending additional line to non-additional line,
+               then we have to cancel additional lines for the mainline  */
+            fAddLineSTCCancellation(MsRequest.MsRequest, 
+                                    MsRequest.CustNum).
 
-                  IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                                    CLIType.Brand = gcBrand AND
-                                    CLIType.CLIType = (IF MobSub.TariffBundle > ""
-                                                       THEN MobSub.TariffBundle
-                                                       ELSE MobSub.CLIType) AND
-                                    CLIType.LineType =
-                                    {&CLITYPE_LINETYPE_ADDITIONAL}) THEN DO:
-
-                     FOR EACH lbMobSub NO-LOCK WHERE
-                              lbMobSub.Brand   = gcBrand AND
-                              lbMobSub.InvCust = Mobsub.CustNum AND
-                              lbMobSub.PayTypE = FALSE,
-                        FIRST CLIType NO-LOCK WHERE
-                              CLIType.Brand = gcBrand AND
-                              CLIType.CLIType = (IF lbMobSub.TariffBundle > ""
-                                                 THEN lbMobSub.TariffBundle 
-                                                 ELSE lbMobSub.CLIType) AND
-                              CLIType.LineType > 0:
-
-                        IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
-                           fHasPendingSTCToMainLine
-                           (lbMobSub.MsSeq) THEN DO:
-                           EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
-                           LEAVE.
-                        END.
-                        
-                        CREATE ttAdditionalSIM.
-                        ASSIGN ttAdditionalSIM.MsSeq   = lbMobSub.MsSeq
-                               ttAdditionalSIM.CustNum = lbMobSub.CustNum
-                               ttAdditionalSIM.CLI     = lbMobSub.CLI.
-                     END.
-
-                     FOR EACH ttAdditionalSIM NO-LOCK:
-                        
-                        IF fHasPendingRequests
-                           (ttAdditionalSIM.MsSeq,
-                            ttAdditionalSIM.CLI,
-                            {&CLITYPE_LINETYPE_ADDITIONAL}) THEN NEXT.
-
-                        /* If there is no ongoing STC/termination request for secondary line */
-
-                        fTermAdditionalSim(ttAdditionalSIM.MsSeq,
-                                           ttAdditionalSIM.CLI,
-                                           ttAdditionalSIM.CustNum,
-                                           {&SUBSCRIPTION_TERM_REASON_ADDITIONALSIM},
-                                           TODAY,
-                                           {&REQUEST_SOURCE_MANUAL_TMS},
-                                           0,
-                                           OUTPUT lcError).
-
-                     END. /* FOR EACH ttAdditionalSIM NO-LOCK: */
-                  END. /* IF LOOKUP(MonSub.CLITYpe,lcAllowedDSS2SubsType) > 0 */
-               END. /* IF AVAIL MobSub THEN DO: */
-            END. /* IF MsRequest.ReqCparam1 = "CONTS15" DO: */
          END. /* IF LOOKUP(STRING(MsRequest.ReqStatus) */
       WHEN "bundle_termination" THEN
          IF MsRequest.ReqStatus = 0 AND

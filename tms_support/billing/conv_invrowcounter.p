@@ -110,11 +110,12 @@ PROCEDURE pAccumulateCounters:
    FOR EACH ttCall:
    
       liQty = liQty + 1.
+      /*
       IF liQty MOD 100 = 0 THEN DO:
          PAUSE 0.
          DISP liQty ttCall.CLI ttCall.DateSt WITH ROW 10 1 DOWN.
       END.
-      
+      */
       ASSIGN
          ldaToDate = fLastDayOfMonth(ttCall.DateSt)
          ldaFromDate    = DATE(MONTH(ldaToDate),1,

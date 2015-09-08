@@ -16,6 +16,6 @@ else:
    var1 = sys.argv[1]
 
 
-param1 = 'TARJ_UPSELL' + '|' + var1
+param1 = 'DATA6_UPSELL' + '|' + var1
 p=s.newton.mobsub_bundles__set(param1,{'value':1,'username':'vikasagr'})
 print_results(p)

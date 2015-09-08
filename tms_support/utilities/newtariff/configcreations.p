@@ -18,8 +18,9 @@ gcBrand = "1".
 {tariffconfig.i}
 {tariffcons.i}
 
-DEFINE BUFFER bCTServPac FOR CTServPac.
-DEFINE BUFFER bCTServEl  FOR CTServEl.
+DEFINE BUFFER bCTServPac  FOR CTServPac.
+DEFINE BUFFER bCTServEl   FOR CTServEl.
+DEFINE BUFFER bCTServAttr FOR CTServAttr.
 /* ********************  Functions  ******************** */
 
 FUNCTION fTMSCodeValue RETURNS CHARACTER 
@@ -276,15 +277,18 @@ DEFINE OUTPUT PARAMETER lcFeeModel   AS CHARACTER NO-UNDO.
 END PROCEDURE. 
 
 PROCEDURE pCreateFMItem:
-DEFINE INPUT PARAMETER icTariffCode AS CHARACTER NO-UNDO.    
-DEFINE INPUT PARAMETER icFeeModel   AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icAmount     AS CHARACTER NO-UNDO.    
-DEFINE INPUT PARAMETER icFMFeeCalc  AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icLMFeeCalc  AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icMFBC       AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER icTariffCode    AS CHARACTER NO-UNDO.    
+DEFINE INPUT PARAMETER icFeeModel      AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER icAmount        AS CHARACTER NO-UNDO.    
+DEFINE INPUT PARAMETER icFMFeeCalc     AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER icLMFeeCalc     AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER icMFBC          AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER lcMainPTariff   AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER lcTariffBundle  AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE liFMFeeCalc AS INTEGER NO-UNDO.
 DEFINE VARIABLE liLMFeeCalc AS INTEGER NO-UNDO.
+DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
 
    IF icTariffCode EQ "" OR 
       icFeeModel   EQ "" THEN 
@@ -301,11 +305,38 @@ DEFINE VARIABLE liLMFeeCalc AS INTEGER NO-UNDO.
    ELSE IF icLMFeeCalc BEGINS "U" THEN
       liLMFeeCalc = 2.
    ELSE liLMFeeCalc = 0.
-                           
+   
+   IF lcTariffBundle NE "" THEN DO:
+      FIND FIRST CLIType WHERE
+                 CLIType.Brand   = gcBrand       AND
+                 CLIType.CLIType = lcMainPTariff NO-LOCK NO-ERROR.
+
+      IF AVAILABLE CLIType THEN
+         ASSIGN lcRatePlan = CLIType.PricePlan.
+
+   END.
+   
+   FIND FIRST RatePlan WHERE 
+              RatePlan.Brand    = gcBrand AND 
+              RatePlan.RatePlan = IF lcRatePlan NE "" THEN lcRatePlan 
+                                  ELSE REPLACE(icTariffCode,"CONT","CONTRATO")
+   NO-LOCK NO-ERROR.           
+                
+   IF NOT AVAILABLE RatePlan THEN 
+      RETURN "ERROR: RatePlan doesn't exists".
+   
+   FIND FIRST PListConf WHERE 
+              PListConf.Brand    = gcBrand           AND 
+              PListConf.RatePlan = RatePlan.RatePlan AND 
+              PListConf.PriceList BEGINS "CONTRATO"  NO-LOCK NO-ERROR.   
+   
+   IF NOT AVAILABLE PListConf THEN 
+      RETURN "ERROR: PListConf doesn't exists".
+                             
    CREATE FMItem. 
    ASSIGN     
       FMItem.Brand             = gcBrand
-      FMItem.PriceList         = icTariffCode                                               
+      FMItem.PriceList         = PListConf.PriceList                                               
       FMItem.BillCode          = icMFBC            
       FMItem.FeeModel          = icFeeModel                  
       FMItem.FromDate          = TODAY       
@@ -327,21 +358,20 @@ DEFINE VARIABLE liLMFeeCalc AS INTEGER NO-UNDO.
 END PROCEDURE.    
 
 PROCEDURE pDayCampaign:
-DEFINE INPUT PARAMETER icTariffCode AS CHARACTER NO-UNDO. 
-DEFINE INPUT PARAMETER icFeeModel   AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icDCName     AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icSTCStatus  AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icBBProfile  AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icDSS2Comp   AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icDSS2PL     AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icNVComp     AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icOVoip      AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icTOC        AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER ilgSLCreated AS LOGICAL   NO-UNDO.
-DEFINE INPUT PARAMETER icMFBC       AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER icTariffCode  AS CHARACTER NO-UNDO. 
+DEFINE INPUT PARAMETER icFeeModel    AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER icDCName      AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER icBBProfile   AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER icDSS2Comp    AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER icDSS2PL      AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER icNVComp      AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER icOVoip       AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER icTOC         AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER ilgSLCreated  AS LOGICAL   NO-UNDO.
+DEFINE INPUT PARAMETER icMFBC        AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER icPaymentType AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE lcFeeModel  AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liSTCStatus AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
 
    IF CAN-FIND(FIRST DayCampaign WHERE
@@ -349,14 +379,11 @@ DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
                      DayCampaign.DCEvent = icTariffCode) THEN
       RETURN "ERROR: DayCampaign already exists".
  
-   IF NOT CAN-FIND(FIRST FeeModel WHERE 
+   IF icPaymentType EQ "Postpaid" AND
+      NOT CAN-FIND(FIRST FeeModel WHERE 
                          FeeModel.FeeModel = icFeeModel) THEN 
       RETURN "ERROR: FeeModel doesn't exists".                   
                             
-   IF icSTCStatus EQ "Active" THEN liSTCStatus = 1. 
-   ELSE IF icSTCStatus EQ "Retired" THEN liSTCStatus = 2.
-   ELSE IF icSTCStatus EQ "Hidden"  THEN liSTCStatus = 3.
-
    IF icTOC EQ "ServicePackage" THEN lcTOC = "1".
    ELSE IF icTOC EQ "PackageWithCounter" THEN lcTOC = "4".
    
@@ -367,11 +394,13 @@ DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
       DayCampaign.DCName          = icDCName
       DayCampaign.ValidFrom       = TODAY 
       DayCampaign.ValidTo         = 12/31/15
-      DayCampaign.StatusCode      = liSTCStatus
+      DayCampaign.StatusCode      = 1           /* Default value Active */
       DayCampaign.DCType          = lcTOC
       DayCampaign.InstanceLimit   = 1                            
       DayCampaign.BillCode        = icMFBC 
-      DayCampaign.CCN             = 0                            
+      DayCampaign.CCN             = IF icPaymentType EQ "Prepaid"
+                                    THEN 93
+                                    ELSE 0
       DayCampaign.InclUnit        = INTEGER(fTMSCodeValue("DayCampaign",
                                                           "InclUnit",
                                                           "Unit"))
@@ -395,11 +424,12 @@ DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
       DayCampaign.ModifyFeeModel  = ""                          
       DayCampaign.TermFeeModel    = ""                          
       DayCampaign.TermFeeCalc     = 0                  
-      DayCampaign.BBProfile       = INTEGER(icBBProfile)
-      DayCampaign.DDS2Compatible  = LOGICAL(icDSS2Comp)
-      DayCampaign.DSS2PrimaryLine = LOGICAL(icDSS2PL)
-      DayCampaign.NativeVoipComp  = LOGICAL(icNVComp)
-      DayCampaign.OnlyVoice       = LOGICAL(icOVoip) NO-ERROR.     
+/*      DayCampaign.BBProfile       = INTEGER(icBBProfile) 
+      DayCampaign.DDS2Compatible  = LOGICAL(icDSS2Comp) 
+      DayCampaign.DSS2PrimaryLine = LOGICAL(icDSS2PL) 
+      DayCampaign.NativeVoipComp  = LOGICAL(icNVComp) 
+      DayCampaign.OnlyVoice       = LOGICAL(icOVoip) */
+      NO-ERROR.     
    
    IF ERROR-STATUS:ERROR THEN 
       RETURN "ERROR: Creating DayCampaign".
@@ -409,8 +439,9 @@ DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
 END PROCEDURE.   
 
 PROCEDURE pDCServPackage:
-DEFINE INPUT PARAMETER icTariffCode AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER ilgDataLimit AS LOGICAL   NO-UNDO.
+DEFINE INPUT PARAMETER icTariffCode  AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER ilgDataLimit  AS LOGICAL   NO-UNDO.
+DEFINE INPUT PARAMETER icBonoSupport AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE liPackageID   AS INTEGER NO-UNDO.
 DEFINE VARIABLE liComponentID AS INTEGER NO-UNDO.
@@ -458,40 +489,44 @@ DEFINE VARIABLE liComponentID AS INTEGER NO-UNDO.
           DCServiceComponent.DCServicePackageID   = liPackageID 
           DCServiceComponent.ServCom              = "SHAPER"
           DCServiceComponent.DefValue             = 1
-          DCServiceComponent.DefParam             = icTariffCode
+          DCServiceComponent.DefParam             = IF LOGICAL(icBonoSupport) THEN 
+                                                       icTariffCode + "#ADDBUNDLE"
+                                                    ELSE icTariffCode   
           DCServiceComponent.FromDate             = TODAY 
           DCServiceComponent.ToDate               = 12/31/49 NO-ERROR.
        
        IF ERROR-STATUS:ERROR THEN  
           RETURN "ERROR: Creating DCServicePackage".
     END.
-    ELSE 
-       RETURN "DCServiceComponent already exists".
+/*    ELSE 
+       RETURN "DCServiceComponent already exists". */
        
     RETURN "OK".
        
 END PROCEDURE.     
 
 PROCEDURE pCreateCLIType:
-DEFINE INPUT  PARAMETER icCLIType       AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icCLIName       AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icBaseBundle    AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icLineType      AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icFixLineType   AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icCommFee       AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icServClass     AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icWebStatCode   AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icStatCode      AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icPayType       AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icUsageType     AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER icRateplan      AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER llgCTServPac    AS LOGICAL   NO-UNDO.
-DEFINE INPUT  PARAMETER lcMainPTariff   AS CHARACTER NO-UNDO.
-DEFINE INPUT  PARAMETER lcTariffBundle  AS CHARACTER NO-UNDO.
-DEFINE OUTPUT PARAMETER ocCLIType       AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icCLIType        AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icCLIName        AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icBaseBundle     AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icLineType       AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icFixLineType    AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icCommFee        AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icComparisonFee  AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icServClass      AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icWebStatCode    AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icStatCode       AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icPayType        AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icUsageType      AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icRateplan       AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER llgCTServPac     AS LOGICAL   NO-UNDO.
+DEFINE INPUT  PARAMETER lcMainPTariff    AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER lcTariffBundle   AS CHARACTER NO-UNDO.
+DEFINE OUTPUT PARAMETER ocCLIType        AS CHARACTER NO-UNDO.
 
-DEFINE VARIABLE liFinalBT AS INTEGER NO-UNDO.
-DEFINE VARIABLE liFinalCR AS INTEGER NO-UNDO.
+DEFINE VARIABLE liFinalBT  AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liFinalCR  AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
 
    IF NOT CAN-FIND(FIRST CLIType WHERE 
                          CLIType.Brand   = gcBrand    AND 
@@ -510,13 +545,13 @@ DEFINE VARIABLE liFinalCR AS INTEGER NO-UNDO.
          Else, already available value has to be incremented by 1 */
       IF lcTariffBundle NE "" THEN DO:   
          FIND FIRST CLIType WHERE 
-                    CLIType.Brand   = gcBrand AND 
+                    CLIType.Brand   = gcBrand       AND 
                     CLIType.CLIType = lcMainPTariff NO-LOCK NO-ERROR.
                 
-         IF AVAILABLE CLIType THEN 
-            liFinalBT = CLIType.BillTarget.
-         ELSE 
-            liFinalBT = liFinalBT + 1.      
+         IF AVAILABLE CLIType THEN
+            ASSIGN lcRatePlan = CLIType.PricePlan
+                   liFinalBT  = CLIType.BillTarget.
+               
       END.
        
       CREATE CLIType.
@@ -525,7 +560,8 @@ DEFINE VARIABLE liFinalCR AS INTEGER NO-UNDO.
          CLIType.CLIType       = icCLIType
          CLIType.CLIName       = icCLIName                            
          CLIType.BaseBundle    = icBaseBundle
-         CLIType.PricePlan     = REPLACE(icCLIType,"CONT","CONTRATO") 
+         CLIType.PricePlan     = IF lcRatePlan NE "" THEN lcRatePlan ELSE 
+                                 REPLACE(icCLIType,"CONT","CONTRATO") 
          CLIType.ServicePack   = IF icPayType EQ "Postpaid" THEN "11" 
                                  ELSE "12"
          CLIType.LineType      = INTEGER(fTMSCValue("CLIType",
@@ -535,7 +571,7 @@ DEFINE VARIABLE liFinalCR AS INTEGER NO-UNDO.
                                                     "FixedLineType",
                                                     icFixLineType))
          CLIType.CommercialFee = DECIMAL(icCommFee)
-         CLIType.CompareFee    = DECIMAL(icCommFee)
+         CLIType.CompareFee    = DECIMAL(icComparisonFee)
          ClIType.ServiceClass  = icServClass
          CLIType.WebStatusCode = INTEGER(fTMSCValue("CLIType",
                                                     "WebStatusCode",
@@ -552,8 +588,9 @@ DEFINE VARIABLE liFinalCR AS INTEGER NO-UNDO.
          CLIType.ARAccNum      = IF CLIType.PayType = 1 THEN 43000000 
                                  ELSE IF CLIType.PayType = 2 THEN 43001000
                                  ELSE 0             
-         CLIType.BillTarget    = liFinalBT
-         CLIType.ContrType     = liFinalCR + 1                                                            
+         CLIType.BillTarget    = liFinalBT + 1
+         CLIType.ContrType     = IF icPayType EQ "Postpaid" THEN liFinalCR + 1 
+                                 ELSE 1
          ocCLIType             = icCLIType           NO-ERROR.
                                             
       IF ERROR-STATUS:ERROR THEN 
@@ -577,6 +614,8 @@ PROCEDURE pCreServPack:
 DEFINE INPUT PARAMETER icCLIType AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER icPayType AS CHARACTER NO-UNDO.
 
+DEFINE VARIABLE liCTServEl AS INTEGER NO-UNDO.
+
    IF icPayType EQ "Postpaid" THEN  
       FIND FIRST CLIType WHERE 
                  CLIType.Brand   = gcBrand  AND 
@@ -584,7 +623,7 @@ DEFINE INPUT PARAMETER icPayType AS CHARACTER NO-UNDO.
    ELSE IF icPayType EQ "Prepaid" THEN 
       FIND FIRST CLIType WHERE 
                  CLIType.Brand   = gcBrand  AND 
-                 CLIType.CLIType = "TARJ4"  NO-LOCK NO-ERROR.       
+                 CLIType.CLIType = "TARJ7"  NO-LOCK NO-ERROR.       
    
    IF AVAILABLE CLIType THEN DO:              
       FOR EACH CTServPac WHERE 
@@ -611,10 +650,29 @@ DEFINE INPUT PARAMETER icPayType AS CHARACTER NO-UNDO.
                                      TO bCTServEl.
             ASSIGN bCTServEl.CTServEl = NEXT-VALUE(CTServEl)
                    bCTServEl.CLIType  = icCLIType 
-                   bCTServEl.FromDate = TODAY NO-ERROR.                                        
+                   bCTServEl.FromDate = TODAY 
+                   liCTServEl         = bCTServEl.CTServEl NO-ERROR.                                        
          
             IF ERROR-STATUS:ERROR THEN 
                RETURN "ERROR: Creating CTServEl".
+               
+            FIND ServCom WHERE
+                 ServCom.Brand   = gcBrand AND
+                 ServCom.ServCom = CTServEl.ServCom NO-LOCK NO-ERROR.
+            
+            IF AVAILABLE ServCom AND ServCom.ServAttr = TRUE THEN    
+               FOR EACH CTServAttr WHERE 
+                        CTServAttr.CTServEl = CTServEl.CTServEl NO-LOCK:
+                  CREATE bCTServAttr.
+                  BUFFER-COPY CTServAttr EXCEPT CTServAttr.CTServEl
+                                                CTServAttr.FromDate
+                                             TO bCTServAttr.
+                  ASSIGN bCTServAttr.CTServEl = liCTServEl
+                         bCTServAttr.FromDate = TODAY NO-ERROR. 
+                  
+                  IF ERROR-STATUS:ERROR THEN 
+                     RETURN "ERROR: Creating CTServAttr".                                        
+               END.            
          END.                     
       END.
    END.

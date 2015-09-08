@@ -131,6 +131,8 @@ CLASS Gwy.MqPublisher:
    DESTRUCTOR PUBLIC MqPublisher ():
       IF VALID-OBJECT(stompSession) THEN
          stompSession:CLOSE().
+      IF LOG-MANAGER:LOGGING-LEVEL GE 4 THEN
+          LOG-MANAGER:WRITE-MESSAGE("ActiveMQ object destructed","DEBUG").
    END DESTRUCTOR.
 
 END CLASS.

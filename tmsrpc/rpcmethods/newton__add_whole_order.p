@@ -130,12 +130,14 @@
                   latitude;string;optional;
                   longitude;string;optional;
                   kiala_code;string;optional;
+                  ups_hours;string;optional;
  * @device_data IMEI;int;optional;optional;
                 discount;int;optional;discount value
                 manufacturer;string;optional;terminal manufacturer (IMEI register)
                 model;string;optional;terminal model (IMEI register)
                 color;string;optional;terminal color (IMEI register)
                 serial_number;optional;laptop serial number
+                hard_book;int;mandatory;0 - No hard booking, 1 - Pending hard booking
  * @contact_data fname;string;optional;
                  lname;string;optional;
                  lname2;string;optional;
@@ -216,6 +218,14 @@ katun = "NewtonRPC".
 {main_add_lines.i}
 {msisdn.i}
 {forderstamp.i}
+{email.i}
+{ftransdir.i}
+
+{cparam2.i}
+/*{utumaa.i new }
+{edefine.i new}*/
+{order_data.i}
+{smsmessage.i}
 
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.
@@ -283,6 +293,7 @@ DEF VAR pcMandateId AS CHAR NO-UNDO.
 DEF VAR piDeliveryType AS INT NO-UNDO. 
 DEF VAR piDeliverySecure AS INT NO-UNDO. 
 DEF VAR plKeepInstallment AS LOG NO-UNDO. 
+DEF VAR pcUpsHours AS CHAR NO-UNDO. 
 
 /* Real Order Inspection parameters */
 DEF VAR pcROIresult      AS CHAR NO-UNDO.
@@ -315,7 +326,10 @@ DEF VAR lcCONTSFContracts      AS CHAR NO-UNDO.
 DEF VAR lcBundleCLITypes       AS CHAR NO-UNDO.
 DEF VAR lcRenoveSMSText        AS CHAR NO-UNDO. 
 DEF VAR lcSTCSMSText           AS CHAR NO-UNDO. 
+DEF VAR lcOfferSMSText         AS CHAR NO-UNDO. 
 DEF VAR ldeSMSStamp            AS DEC  NO-UNDO. 
+DEF VAR lcMobileNumber         AS CHAR NO-UNDO. 
+   
 DEF VAR lcSMSKey AS CHAR NO-UNDO. 
 
 /* Local variables for order */
@@ -332,6 +346,7 @@ DEF VAR pcDeviceModel   AS CHAR NO-UNDO.
 DEF VAR pcDeviceColor   AS CHAR NO-UNDO.
 DEF VAR pcDeviceID   AS CHAR NO-UNDO.
 DEF VAR pcLaptopSerial  AS CHAR NO-UNDO.
+DEF VAR piHardBook      AS INT  NO-UNDO.
 
 DEF VAR lccTemp AS CHARACTER NO-UNDO. 
 DEF VAR lcError AS CHARACTER NO-UNDO. 
@@ -360,6 +375,10 @@ DEF VAR plResignationPeriod AS LOG NO-UNDO.
 DEF VAR plPromotion AS LOG NO-UNDO.
 DEF VAR llROIClose AS LOG NO-UNDO. 
 
+DEF VAR lcPayment AS CHAR NO-UNDO.
+DEF VAR pcPaypalPayerid AS CHAR NO-UNDO.
+DEF VAR liLanguage AS INTEGER NO-UNDO.
+
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
 
@@ -376,9 +395,19 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
       piDeliveryType = get_int(pcOrderStruct, "delivery_type").
    IF LOOKUP("billing_data", lcOrderStruct) GT 0 THEN
        pcAccount = get_string(pcOrderStruct, "billing_data").
-   IF LOOKUP("payment_method", lcOrderStruct) GT 0 THEN
-       piPaymentMethod = LOOKUP(get_string(pcOrderStruct, "payment_method"),
-                           "on_delivery,credit_card").
+   IF LOOKUP("payment_method", lcOrderStruct) GT 0 THEN DO:
+      lcPayment = get_string(pcOrderStruct, "payment_method").
+      IF lcPayment EQ "on_delivery" THEN 
+         piPaymentMethod = {&ORDERPAYMENT_M_POD}.
+      ELSE IF lcPayment EQ "credit_card" THEN
+         piPaymentMethod = {&ORDERPAYMENT_M_CREDIT_CARD}.
+      ELSE IF lcPayment EQ "paypal" THEN
+         piPaymentMethod = {&ORDERPAYMENT_M_PAYPAL}.
+      ELSE 
+         piPaymentMethod = 0.
+   END.
+   IF LOOKUP("payer_id", lcOrderStruct) GT 0 THEN
+      pcPaypalPayerid = get_string(pcOrderStruct, "payer_id").
    IF LOOKUP("payment_reference", lcOrderStruct) GT 0 THEN
        pcCreditCardRefNum = get_string(pcOrderStruct, "payment_reference").
    IF LOOKUP("authorization_number", lcOrderStruct) GT 0 THEN
@@ -544,8 +573,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR ldBirthDay   AS DATE NO-UNDO. 
    DEF VAR llSelfEmployed AS LOGICAL NO-UNDO. 
    DEF VAR ldFoundationDate AS DATE NO-UNDO. 
-   DEF VAR liLanguage   AS INTEGER NO-UNDO. 
-   DEF VAR data            AS CHAR EXTENT 28 NO-UNDO.
+   DEF VAR data            AS CHAR EXTENT 29 NO-UNDO.
    DEF VAR lcIdOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR liSubLimit AS INT NO-UNDO. 
@@ -607,6 +635,10 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
           lcContactIdType = lcIdtypeOrderCustomer.
           lcIdtypeOrderCustomer = "CIF".
       END. /* data[LOOKUP("company_id", ... */
+      
+      IF piRowType EQ 4 THEN
+         pcUpsHours = data[LOOKUP("ups_hours", gcCustomerStructStringFields)].
+      
       IF lcIdOrderCustomer EQ "" AND piRowType = 1 THEN
           lcFError = "Expected either person_id or company_id".
 
@@ -757,7 +789,8 @@ FUNCTION fGetAndValidateDeviceFields RETURNS CHARACTER:
       pcDeviceID = get_string(pcDeviceStruct, "device_id").
    IF LOOKUP('serial_number', lcDeviceStruct) GT 0 THEN
       pcLaptopSerial = get_string(pcDeviceStruct, "serial_number").
-
+   IF LOOKUP('hard_book', lcDeviceStruct) GT 0 THEN
+      piHardBook = get_int(pcDeviceStruct, "hard_book").
    RETURN lcError.
 END.
 
@@ -894,22 +927,20 @@ FUNCTION fHandleCorporateCustomer RETURNS LOGICAL:
    CASE 2: If the customer has not any active subs. then order should go to 20
    */
 
-   IF lcIdType = "CIF" THEN DO:
-      FIND FIRST Customer WHERE
-                 Customer.Brand      = gcBrand  AND
-                 Customer.OrgId      = lcId     AND
-                 Customer.CustIdType = lcIdType AND
-                 Customer.Roles NE "inactive" NO-LOCK NO-ERROR. 
-      IF AVAIL Customer THEN DO:
-         FIND FIRST MobSub WHERE
-                    MobSub.Brand   = gcBrand AND
-                    MobSub.AgrCust = Customer.CustNum
-              NO-LOCK NO-ERROR.
-         IF NOT AVAIL MobSub THEN Order.StatusCode = "20".
-         ELSE Order.StatusCode = "21".
-      END. /* IF AVAIL Customer THEN DO: */
-      ELSE Order.StatusCode = "20".
-   END. /* IF lcIdType = "CIF" THEN DO: */
+   FIND FIRST Customer WHERE
+              Customer.Brand      = gcBrand  AND
+              Customer.OrgId      = lcId     AND
+              Customer.CustIdType = lcIdType AND
+              Customer.Roles NE "inactive" NO-LOCK NO-ERROR. 
+   IF AVAIL Customer THEN DO:
+      FIND FIRST MobSub WHERE
+                 MobSub.Brand   = gcBrand AND
+                 MobSub.AgrCust = Customer.CustNum
+           NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub THEN Order.StatusCode = "20".
+      ELSE Order.StatusCode = "21".
+   END. /* IF AVAIL Customer THEN DO: */
+   ELSE Order.StatusCode = "20".
 
 END. /* FUNCTION fHandleCorporateCustomer RETURNS LOGICAL: */
 
@@ -945,16 +976,17 @@ FUNCTION fCreateOrderAccessory RETURNS LOGICAL:
       
       CREATE OrderAccessory.
       ASSIGN
-         OrderAccessory.OrderId     = Order.OrderId
-         OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} 
-         OrderAccessory.brand       = gcBrand 
-         OrderAccessory.IMEI        = pcIMEI
-         OrderAccessory.discount    = piDeviceDiscount WHEN piDeviceDiscount NE 0
-         OrderAccessory.Model       = pcDeviceModel
-         OrderAccessory.Manufacturer = pcDeviceManufacturer
-         OrderAccessory.ModelColor  = pcDeviceColor
-         OrderAccessory.ProductCode = OfferItem.ItemKey WHEN AVAIL OfferItem
-         OrderAccessory.Amount      = OfferItem.Amount WHEN AVAIL OfferItem.
+         OrderAccessory.OrderId       = Order.OrderId
+         OrderAccessory.TerminalType  = {&TERMINAL_TYPE_PHONE} 
+         OrderAccessory.brand         = gcBrand 
+         OrderAccessory.IMEI          = pcIMEI
+         OrderAccessory.discount      = piDeviceDiscount WHEN piDeviceDiscount NE 0
+         OrderAccessory.Model         = pcDeviceModel
+         OrderAccessory.Manufacturer  = pcDeviceManufacturer
+         OrderAccessory.ModelColor    = pcDeviceColor
+         OrderAccessory.ProductCode   = OfferItem.ItemKey WHEN AVAIL OfferItem
+         OrderAccessory.Amount        = OfferItem.Amount WHEN AVAIL OfferItem
+         OrderAccessory.HardBook      = piHardBook.
 
       RELEASE OrderAccessory.
       RELEASE OfferItem.
@@ -991,6 +1023,9 @@ FUNCTION fCreateOrderPayment RETURNS LOGICAL:
       OrderPayment.CCReference   = pcCreditCardRefNum
       OrderPayment.AuthNumber    = pcAuthNumber
       OrderPayment.BinNumber     = pcBinNumber.
+      
+      IF piPaymentMethod EQ {&ORDERPAYMENT_M_PAYPAL} THEN
+         OrderPayment.CCNumber = pcPaypalPayerid.
 
    RETURN TRUE.
 END.
@@ -1042,6 +1077,7 @@ gcOrderStructFields = "billing_data," +
                       "mnp_porting_date," +
                       "orderer_ip!," +
                       "payment_method," +
+                      "payer_id," +
                       "payment_reference," +
                       "authorization_number," +
                       "bin_number," +
@@ -1122,7 +1158,9 @@ gcCustomerStructFields = "birthday," +
                          "zip!," +
                          "latitude," + 
                          "longitude," +
-                         "profession".
+                         "profession," +
+                         "kiala_code," + 
+                         "ups_hours".
 
 /* note: check that data variable has correct EXTENT value */
 gcCustomerStructStringFields = "city," +
@@ -1152,7 +1190,8 @@ gcCustomerStructStringFields = "city," +
                                "latitude," + 
                                "longitude," +
                                "profession," + 
-                               "kiala_code".
+                               "kiala_code," +
+                               "ups_hours".
 
 /* common validation */
 /* YBP-513 */
@@ -1251,7 +1290,7 @@ END.
 /* device validation */
 IF pcDeviceStruct > "" THEN DO:
    lcDeviceStruct = validate_request(pcDeviceStruct, 
-      "IMEI,discount,model,manufacturer,color,serial_number,device_id").
+      "IMEI,discount,model,manufacturer,color,serial_number,device_id,hard_book").
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
    lcError = fGetAndValidateDeviceFields().
@@ -1305,23 +1344,23 @@ IF pcOfferId NE "" THEN DO:
 
          case offercriteria.criteriatype:
             when "clitype" then do:
-               if includedvalue eq "ALL_VOICE" THEN DO:
+               if offercriteria.includedvalue eq "ALL_VOICE" THEN DO:
                   if lookup(pcSubType,lcPostpaidVoiceTariffs + "," +
                                       lcPrepaidVoiceTariffs) = 0 then
-                  lcErrors = lcErrors + "CLIType " + pcSubType + " not in " + includedvalue + ";".
+                  lcErrors = lcErrors + "CLIType " + pcSubType + " not in " + offercriteria.includedvalue + ";".
                end.
-               else if lookup(pcSubType, includedvalue) = 0 then do:
-                  lcErrors = lcErrors + "CLIType " + pcSubType + " not in " + includedvalue + ";".
+               else if lookup(pcSubType, offercriteria.includedvalue) = 0 then do:
+                  lcErrors = lcErrors + "CLIType " + pcSubType + " not in " + offercriteria.includedvalue + ";".
                end.
             end.
             when "paytype" then do:
-               if lookup(lcpaytype,includedvalue) = 0 then do:
-                  lcErrors = lcErrors + "PayType " + lcPayType + " not in " + includedvalue + ";".
+               if lookup(lcpaytype,offercriteria.includedvalue) = 0 then do:
+                  lcErrors = lcErrors + "PayType " + lcPayType + " not in " + offercriteria.includedvalue + ";".
                end.
             end.
             when "oldpaytype" then do:
-               if lookup(lcOldPayType,includedvalue) = 0 then do:
-                  lcErrors = lcErrors + "OldPayType " + lcOldPayType + " not in " + includedvalue + ";".
+               if lookup(lcOldPayType,offercriteria.includedvalue) = 0 then do:
+                  lcErrors = lcErrors + "OldPayType " + lcOldPayType + " not in " + offercriteria.includedvalue + ";".
                end.
             end.
             when "orderchannel" then do:
@@ -1329,15 +1368,15 @@ IF pcOfferId NE "" THEN DO:
                   (IF LOOKUP(pcChannel,"telesales,emission") > 0 THEN "cc"
                    ELSE IF LOOKUP(pcChannel,"fusion_telesales,fusion_emission,fusion_cc") > 0
                    THEN "fusion_telesales" ELSE pcChannel).
-               if lookup(lcOfferOrderChannel, includedvalue) = 0 then do:
-                  lcErrors = lcErrors + "OrderChannel " + lcOfferOrderChannel + " not in " + includedvalue + ";".
+               if lookup(lcOfferOrderChannel, offercriteria.includedvalue) = 0 then do:
+                  lcErrors = lcErrors + "OrderChannel " + lcOfferOrderChannel + " not in " + offercriteria.includedvalue + ";".
                end.
             end.
             when "numbertype" then do:
                /* renewal offers have currently numbertype value New */
                if pcNumberType NE "renewal" AND
-                  lookup(pcNumberType, includedvalue) = 0 then do:
-                  lcErrors = lcErrors  + "NumberType " + pcNumberType + " not in " + includedvalue + ";".
+                  lookup(pcNumberType, offercriteria.includedvalue) = 0 then do:
+                  lcErrors = lcErrors  + "NumberType " + pcNumberType + " not in " + offercriteria.includedvalue + ";".
                end.
             end.
             when "reseller" then do:
@@ -1648,6 +1687,25 @@ IF LOOKUP(pcNumberType,"renewal,stc") > 0 THEN DO:
          WHEN OrderCustomer.BankCode = "".
 END.
 
+/* YPR-2105 */
+IF Order.OrderChannel BEGINS "retention" THEN
+   FOR EACH lbOrder NO-LOCK WHERE
+            lbOrder.Brand = gcBrand AND
+            lbOrder.CLI = Order.CLI AND
+            lbOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} AND
+            ROWID(lbOrder) NE ROWID(Order):
+
+      RUN closeorder.p(lbOrder.OrderId, TRUE).
+
+      IF RETURN-VALUE > "" THEN 
+         fCreateMemo("Automatic order closing failed", 
+                     SUBST("Failed to close pending order. " + 
+                           "Order ID: &1, Error: &2", 
+                           lbOrder.orderid, RETURN-VALUE),
+                     "Newton RPC").
+   END.
+
+
 /* YBP-556 */
 /* With STC order, allow ongoing renewal orders */ 
 IF fOngoingOrders(pcCli,pcNumberType) THEN DO:
@@ -1797,8 +1855,9 @@ ELSE IF Order.statuscode NE "4" THEN DO:
          END.
       END.
 
-      RELEASE OrderCustomer.
+      FIND CURRENT OrderCustomer NO-LOCK.
    END.   
+   ELSE IF lcIdType = "CIF" THEN fHandleCorporateCustomer().
    ELSE IF pcChannel BEGINS "fusion" THEN DO:
       /* YBP-565 */
       Order.statuscode = {&ORDER_STATUS_PENDING_FIXED_LINE}.
@@ -1830,10 +1889,6 @@ ELSE IF Order.statuscode NE "4" THEN DO:
       ELSE IF Order.PortingDate <> ? THEN
          /* YBP-568 */
          Order.StatusCode = {&ORDER_STATUS_MNP_ON_HOLD}.
-        
-
-      /* YBP-569 */
-      fHandleCorporateCustomer().
    END.
 END.
 
@@ -1856,7 +1911,7 @@ IF piPaymentMethod NE 0 THEN
 DO:
    /* YBP-572 */ 
    fCreateOrderPayment().
-   IF piPaymentMethod EQ 1 THEN 
+   IF piPaymentMethod EQ {&ORDERPAYMENT_M_POD} THEN 
    DO:
       IF liTermOfferItemID > 0 OR pcIMEI NE ""
          THEN Order.FeeModel = "PAYDELTER".
@@ -1911,10 +1966,6 @@ CASE pcROIresult:
      END.
 END.
 
-/* should overwrite any roi status */
-IF plSendOffer AND NOT llROIClose THEN
-   Order.StatusCode = {&ORDER_STATUS_OFFER_SENT}.
-
 /* YBP-574 */ 
 /* add databundle */
 IF pcDataBundleType > "" THEN
@@ -1957,6 +2008,9 @@ IF plExtendTermContract AND Order.OrderType = {&ORDER_TYPE_STC} THEN
 /* Creating Promotional offer */
 IF plPromotion THEN 
    fCreateOrderAction(Order.Orderid,"Promotion","TARJ7",""). 
+
+IF pcUpsHours NE "" THEN 
+   fCreateOrderAction(Order.Orderid,"UPSHours",pcUpsHours,""). 
 
 /* YBP-582 */ 
 IF pcChannel BEGINS "fusion" THEN
@@ -2030,9 +2084,54 @@ IF Order.OrderType EQ {&ORDER_TYPE_STC} AND
                   "").
 END.
 
+/* should overwrite any roi status */
+IF plSendOffer AND NOT llROIClose THEN DO:
+
+   Order.StatusCode = {&ORDER_STATUS_OFFER_SENT}.
+
+   IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} OR
+      Order.OrderType EQ {&ORDER_TYPE_MNP} THEN
+      lcMobileNumber = Order.CLI.
+   ELSE IF fIsMobileNumber(OrderCustomer.MobileNumber) THEN
+      lcMobileNumber = OrderCustomer.MobileNumber.
+   ELSE IF fIsMobileNumber(OrderCustomer.FixedNumber) THEN
+      lcMobileNumber = OrderCustomer.FixedNumber.
+
+   lcOfferSMSText = fGetOrderOfferSMS(Order.OrderID, 
+                                      TRUE).
+
+   IF lcMobileNumber NE "" AND 
+      lcOfferSMSText NE "" AND lcOfferSMSText NE ? THEN
+      fCreateSMS(Order.CustNum,
+                 lcMobileNumber,
+                 Order.MsSeq, 
+                 Order.OrderId,
+                 lcOfferSMSText,
+                 "622100100",
+                 {&SMS_TYPE_OFFER}).
+
+END.
+
       
 /* YTS-2890 */
 fMakeCreateEvent((BUFFER Order:HANDLE),"",katun,"").
+
+/*YDR_1637*/
+IF INDEX(Order.OrderChannel, "pos") EQ 0 THEN DO:
+   IF (Order.StatusCode EQ {&ORDER_STATUS_MNP_ON_HOLD}        /*22*/ OR
+       Order.StatusCode EQ {&ORDER_STATUS_RESIGNATION}        /*51*/ OR
+       Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}  /*76*/ OR
+       Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} /*77*/ ) THEN DO:
+      RUN prinoconf.p(liOrderId).
+   END.
+   ELSE IF Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}    /*41*/  OR
+           Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2}    /*42*/  OR
+           Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}    /*43*/  OR 
+           Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW}    /*20*/  OR
+           Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP}    /*21*/  THEN DO: 
+      RUN sendorderreq.p(liOrderId, OrderCustomer.email, OUTPUT lcError). 
+   END.
+END.
 
 add_int(response_toplevel_id, "", liOrderId).
 

@@ -1,0 +1,15 @@
+-H:activemq
+-P:61613
+-T:10
+#USER:tms
+#PASS:g6i!ZEUFGAOpVDgSWFT-6L
+#DUMP_SPOOL:/store/riftp/pupu_dumps/logs
+#DUMP_OUTGOING:
+#DUMP_FREQ:3600
+#LOG_MANAGER_FILE:/store/riftp/pupu_dumps/logs/replog_reader_logging
+#LOG_LEVEL:4
+#NAGIOS:-H 145.247.16.93 -S 5501
+#LOG_STAT:/store/riftp/pupu_dumps/logs/replog_reader_statistics
+#CDR_SPOOL:
+#CDR_OUTGOING:
+#CDR_FREQ:120

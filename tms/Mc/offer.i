@@ -1,13 +1,16 @@
 /* offer.i     22.01.09/aam 
 */
+&IF "{&OFFER_I}" NE "YES"
+&THEN
+&GLOBAL-DEFINE OFFER_I YES
 
 {commali.i}
 {timestamp.i}
 {cparam2.i}
 {tmsconst.i}
-DEFINE TEMP-TABLE ttOffer LIKE Offer.
-DEFINE TEMP-TABLE ttOfferItem LIKE OfferItem.
-DEFINE TEMP-TABLE ttOfferCriteria LIKE OfferCriteria.
+DEFINE TEMP-TABLE ttOffer NO-UNDO LIKE Offer.
+DEFINE TEMP-TABLE ttOfferItem NO-UNDO LIKE OfferItem.
+DEFINE TEMP-TABLE ttOfferCriteria NO-UNDO LIKE OfferCriteria.
 
 FUNCTION fCriteriaMatch RETURNS LOGIC
    (icCriteria AS CHAR):
@@ -537,3 +540,4 @@ PROCEDURE pGetBundleInfo:
 
 END PROCEDURE. /* PROCEDURE pGetBundleInfo: */
 
+&ENDIF

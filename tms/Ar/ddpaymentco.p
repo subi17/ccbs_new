@@ -36,14 +36,10 @@ FUNCTION fMakeTemp RETURNS LOGICAL.
     IF Invoice.PaymState > 0 THEN RETURN FALSE.
 
     /* charge type is not direct debit */
-    IF Invoice.ChargeType NE 2 AND
-       Invoice.ChargeType NE 5 /* No Direct Debit */
-       THEN RETURN FALSE. 
+    IF Invoice.ChargeType NE 2 THEN RETURN FALSE. 
 
     /* not sent to bank */
-    IF Invoice.DDState = 0 AND
-       NOT Invoice.ChargeType = 5 /* No Direct Debit */
-       THEN RETURN FALSE. 
+    IF Invoice.DDState = 0 THEN RETURN FALSE. 
     
     /* claiming status already marked */
     IF Invoice.ClaimStatus NE "" AND
@@ -56,8 +52,7 @@ FUNCTION fMakeTemp RETURNS LOGICAL.
     IF Invoice.PaidAmt NE 0 THEN RETURN FALSE. 
     
     /* printing denied */
-    IF Invoice.InvCfg[1] = TRUE AND
-       NOT Invoice.ChargeType = 2 THEN RETURN FALSE.
+    IF Invoice.InvCfg[1] = TRUE THEN RETURN FALSE.
 
     IF iiInvType > 0 AND Invoice.InvType NE iiInvType 
     THEN RETURN FALSE.

@@ -23,9 +23,12 @@
 {fsubstermreq.i}
 {mnpoutchk.i}
 {ordercancel.i}
+{dextra.i}
 {main_add_lines.i}
 
 DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
+
+llCleanFLimitReqEventLog = FALSE.
 
 DEFINE VARIABLE llOutPort   AS LOGICAL   NO-UNDO.       
 DEFINE VARIABLE lcOutOper   AS CHARACTER NO-UNDO.
@@ -136,12 +139,15 @@ PROCEDURE pTerminate:
    DEF VAR liPeriod           AS INT  NO-UNDO.
    DEF VAR llCloseRVTermFee   AS LOG  NO-UNDO INIT TRUE.
    DEF VAR lcResult           AS CHAR NO-UNDO. 
+   DEF VAR ldeActStamp        AS DEC  NO-UNDO.  
 
    DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
 
    DEF VAR liPeriodPostpone    AS INT  NO-UNDO.
    DEF VAR ldaKillDatePostpone AS DATE NO-UNDO.
+
+   DEF VAR llHardBook          AS LOG  NO-UNDO INIT FALSE.
    
    ASSIGN liArrivalStatus = MsRequest.ReqStatus
           liMsSeq = MsRequest.MsSeq.
@@ -295,9 +301,15 @@ PROCEDURE pTerminate:
    END. /* FOR EACH MSRequest EXCLUSIVE-LOCK WHERE */
 
    IF MobSub.MultiSIMID > 0 THEN RUN pMultiSIMTermination(iiMSRequest).
+   
+   ASSIGN ldeActStamp = 0
+          ldeActStamp = fHMS2TS(TODAY + 1,"").
 
-   RUN pTermAdditionalSim(INPUT iiMSRequest,INPUT ldaKillDate).
-
+   /* TODO: for old cases (code can be removed later) */
+   fAdditionalLineSTC(iiMSRequest,
+                     ldeActStamp,
+                     "DELETE").
+   
    /* Find Original request */
    FIND FIRST MSRequest WHERE
               MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
@@ -717,6 +729,7 @@ PROCEDURE pTerminate:
                                "CREDIT NOTE CREATION FAILED",
                                lcResult). 
          END.
+
       END.
 
       IF MobSub.PayType EQ FALSE THEN
@@ -729,6 +742,48 @@ PROCEDURE pTerminate:
                           FALSE,
                           TODAY,
                           12/31/2049).
+   END.
+
+   /* Inform Dextra for Subscription terminations with 
+      reason code Order cancellation */
+   IF LOOKUP(lcTermReason,SUBST("&1,&2",
+      {&SUBSCRIPTION_TERM_REASON_ORDER_CANCELLATION},
+      {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION})) > 0 THEN DO:
+
+      FIND Order NO-LOCK WHERE
+           Order.MsSeq = MobSub.MsSeq NO-ERROR.
+      IF AVAIL Order THEN DO:
+
+         FIND FIRST OrderAccessory OF Order WHERE
+                    OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE})
+                    NO-LOCK NO-ERROR.
+         IF AVAILABLE OrderAccessory AND
+            LOOKUP(STRING(OrderAccessory.HardBook),"1,2") > 0 THEN
+            llHardBook = TRUE.
+
+         /* Find Original request */
+         FIND FIRST MSRequest WHERE
+                    MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
+
+         IF NOT MsRequest.UserCode BEGINS "Dextra" AND
+            llHardBook = TRUE THEN DO:
+            fLogisticsRequest(
+               Order.MsSeq,
+               Order.OrderId,
+               "CANCEL",
+               fMakeTS(),
+               {&REQUEST_SOURCE_ORDER_CANCELLATION},
+               OUTPUT lcResult).
+
+            IF lcResult > "" THEN
+               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                "Order",
+                                STRING(Order.OrderID),
+                                0,
+                                "Logistics cancel failed",
+                                lcResult).
+         END.
+      END.
    END.
 
    /* Close Residual Amount Single Fee */
@@ -843,7 +898,8 @@ PROCEDURE pOrderCancellation:
       FOR FIRST OrderPayment NO-LOCK WHERE
                 OrderPayment.Brand = gcBrand AND
                 OrderPayment.OrderId = Order.OrderId AND
-                OrderPayment.Method = 2: /* credit card */
+               (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD} OR
+                OrderPayment.Method = {&ORDERPAYMENT_M_PAYPAL}): 
          CREATE ActionLog.
          ASSIGN ActionLog.Brand     = gcBrand
                 ActionLog.ActionID  = "OrderCancel"

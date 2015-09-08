@@ -9,7 +9,7 @@ s = xmlrpclib.ServerProxy(address)
 fdate = xmlrpclib.DateTime(datetime.datetime.now().timetuple())
 
 # Definition
-s = xmlrpclib.ServerProxy(address)
+s = xmlrpclib.ServerProxy(address, transport=p)
 def instruction():
    print "Missing parameter: OrderId"
    print "Example: python dextra_update_order_status.py 10088467"
@@ -19,7 +19,7 @@ if len(sys.argv) < 2: instruction()
 else:
    var1 = sys.argv[1]
 
-p = s.dextra.update_order_status(
+q = s.dextra.update_order_status(
    {
       'Order_Id':var1,
       'timestamp':fdate,
@@ -43,4 +43,4 @@ p = s.dextra.update_order_status(
    }
 )
 
-print_results(p)
+print_results(q)

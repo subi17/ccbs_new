@@ -1,0 +1,3 @@
+UPDATE FIELD "ActionDec" OF "ActionLog"
+  DECIMALS 5
+  FORMAT "->>>>>>9.99999"

@@ -67,7 +67,8 @@ IF oiHandled > 0 AND iiInvCust = 0 THEN DO TRANS:
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") +
                                   STRING(MONTH(TODAY),"99")  +
                                   STRING(DAY(TODAY),"99")
-         ActionLog.ActionID     = "BUNDLEFEE"
+         ActionLog.ActionID     = "BUNDLEFEE" +
+                                  (IF icRunMode eq "test" THEN "TEST" ELSE "")
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                   MONTH(TODAY)
          ActionLog.ActionDec    = oiHandled
@@ -119,13 +120,14 @@ PROCEDURE pGetCustomerSubscriptions:
    DEF BUFFER bDayCampaign          FOR DayCampaign.
    DEF BUFFER bMSRequest            FOR MsRequest.
    DEF BUFFER MSRequest             FOR MsRequest.
+   DEF BUFFER b2MSRequest           FOR MsRequest.
    DEF BUFFER bFixedFee             FOR FixedFee.
 
    EMPTY TEMP-TABLE ttSub NO-ERROR.
    EMPTY TEMP-TABLE ttMsOwner NO-ERROR.
 
    /* Check wheather customer is linked with DSS service or not */
-   lcBundleId = fGetActiveDSSId(iiInvCust,ldPeriodTo).
+   lcBundleId = fGetDSSId(iiInvCust,ldPeriodTo).
    IF lcBundleId = "" THEN RETURN.
 
    ldeDSSUsage = fGetDSSUsage(INPUT iiInvCust,
@@ -219,6 +221,38 @@ PROCEDURE pGetCustomerSubscriptions:
                END. /* IF bMsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} */
             END. /* FOR EACH MsRequest NO-LOCK WHERE */
 
+         /* YTS-6939  CONT15, Activation >= 6.5.2015
+             Termination month = activation month
+             DSS active, CONT15 data counter not full */
+         IF llFullMonth = FALSE AND 
+            (bMServiceLimit.FromTs >= ldPeriodFrom OR
+             bMServiceLimit.EndTs <= ldPeriodTo) AND
+            (bDayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE} OR
+             bDayCampaign.DCType = {&DCTYPE_BUNDLE}) THEN DO:
+
+            FIND FIRST MSRequest NO-LOCK WHERE
+                       MSRequest.MsSeq = ttMsOwner.MsSeq AND
+                       MSRequest.ReqType = {&REQTYPE_CONTRACT_TERMINATION} AND
+                       MsRequest.ActStamp >= ldPeriodFrom AND
+                       MsRequest.ActStamp <= ldPeriodTo AND
+                       MSRequest.ReqCParam3 = bServiceLimit.GroupCode AND
+                       MsRequest.ReqSource  = {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND
+                   LOOKUP(STRING(MsRequest.ReqStatus),"2,9") > 0 USE-INDEX MsSeq NO-ERROR.
+            IF AVAIL MsRequest THEN DO:
+            
+               FIND FIRST MobSub NO-LOCK WHERE
+                          MobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
+               IF AVAILABLE MobSub THEN
+                  llFullMonth = (MobSub.ActivationDate >= 5/6/2015).
+               ELSE DO:
+                  FIND FIRST TermMobSub NO-LOCK WHERE
+                             TermMobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
+                  IF AVAILABLE TermMobSub THEN
+                     llFullMonth= (TermMobSub.ActivationDate >= 5/6/2015).
+               END.
+            END.
+         END.
+
          /* if the data bundle contract is terminated from STC/BTC
             in middle of month then skip first month fee calculation */
          IF llFullMonth = TRUE AND
@@ -241,6 +275,7 @@ PROCEDURE pGetCustomerSubscriptions:
                   LEAVE.
                END.
             END.
+
 
          IF llFullMonth THEN DO:
             IF ldeDSSUsage >= ldeBundleAmt THEN
@@ -292,7 +327,8 @@ PROCEDURE pGetCustomerSubscriptions:
           /* already billed */
           FIND FIRST FFItem OF FixedFee WHERE
                      FFItem.BillPeriod = liPeriod NO-LOCK NO-ERROR.
-          IF NOT AVAILABLE FFItem OR FFItem.Billed THEN NEXT.
+          IF NOT AVAILABLE FFItem OR 
+            (FFItem.Billed AND icRunMode NE "test") THEN NEXT.
 
           /* % of fee, based on usage */
           IF ldeDSSUsage > 0 THEN
@@ -303,9 +339,14 @@ PROCEDURE pGetCustomerSubscriptions:
                                           ttSub.InclUnit,
                                           ttSub.BundleLimitInMB,
                                           FixedFee.Amt).
+                        
           ELSE ldFeeAmount = 0.
       
-          DO TRANS:
+          IF icRunMode EQ "test" THEN oiHandled = oiHandled + 1.
+          ELSE DO TRANS:
+               
+             IF FFItem.Billed THEN NEXT.
+
              FIND CURRENT FFItem EXCLUSIVE-LOCK.
 
              FFItem.Amt = ldFeeAmount.

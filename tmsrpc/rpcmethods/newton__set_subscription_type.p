@@ -132,16 +132,6 @@ FIND FIRST NewCliType WHERE
            NewCLIType.CLIType = pcCliType NO-LOCK.
 IF NOT AVAIL NewCLIType THEN
    RETURN appl_err(SUBST("Unknown CLIType &1", pcCliType)).
-
-/* Added bank account check YTS-6453 */
-FIND FIRST Customer NO-LOCK WHERE
-           Customer.Brand = "1" AND
-           Customer.CustNum = MobSub.CustNum NO-ERROR.
-
-IF AVAIL Customer AND Customer.BankAcct = "" AND
-   pcCliType BEGINS "CONT" THEN
-      IF fCheckBankAcc(pcBankAcc) = FALSE THEN 
-         RETURN appl_err(SUBST("Empty or invalid bank account &1", pcBankAcc)).
    
 /* Check if credit check is needed */
 IF fServAttrValue(MobSub.CLIType,
@@ -163,7 +153,7 @@ IF lcError > "" THEN RETURN appl_err(lcError).
 liRequest = fCTChangeRequest(MobSub.msseq,
                   pcCliType,
                   pcDataBundleId,
-                  pcBankAcc,      /* validation is done in TMS above */
+                  pcBankAcc,      /* validation is already done in newton */
                   pdActivation,
                   liCreditCheck,  /* 0 = Credit check ok */
                   plExtendContract,
@@ -174,6 +164,7 @@ liRequest = fCTChangeRequest(MobSub.msseq,
                   pdeCharge,
                   {&REQUEST_SOURCE_NEWTON}, 
                   0, /* order id */
+                  0,
                   OUTPUT lcInfo).
 
 IF liRequest = 0 THEN DO:

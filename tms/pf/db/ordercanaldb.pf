@@ -1,7 +1,7 @@
 -db /db1/ordercanal/ordercanal
 -L   100000
 -B  1000000
--B2 500000
+-B2 400000
 -S ordercanal
 -aiarcdir /aiarchive/ordercanal
 -DBService replserv

@@ -9,3 +9,6 @@
 #LOG_MANAGER_FILE:/store/riftp/pupu_dumps/logs/replog_reader_logging
 #LOG_LEVEL:4
 #LOG_STAT:/store/riftp/pupu_dumps/logs/replog_reader_statistics
+#CDR_SPOOL:
+#CDR_OUTGOING:
+#CDR_FREQ:120

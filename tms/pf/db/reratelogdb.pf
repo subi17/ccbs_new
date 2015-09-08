@@ -1,0 +1,8 @@
+-db /db1/reratelog/reratelog
+-L 100000
+-B  300000
+-S reratelog
+-aiarcdir /aiarchive/reratelog
+-DBService replserv
+-pica 8192 
+-pf /apps/tms/pf/db/general.pf

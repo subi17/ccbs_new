@@ -38,7 +38,6 @@ DEF VAR lcInvDate          AS CHAR  NO-UNDO.
 DEF VAR lcDueDate          AS CHAR  NO-UNDO.
 DEF VAR lcPaidAmount       AS CHAR  NO-UNDO.
 DEF VAR lcUnpaidAmount     AS CHAR  NO-UNDO.
-DEF VAR lcRejection        AS CHAR  NO-UNDO.
 DEF VAR lcRejectionDesc    AS CHAR  NO-UNDO.
 DEF VAR ldtInvDate         AS DATE  NO-UNDO.
 DEF VAR ldtDueDate         AS DATE  NO-UNDO.
@@ -230,7 +229,7 @@ PROCEDURE pReadEvents:
          lcDueDate      = SUBSTRING(lcReadLine,47,8)             
          lcPaidAmount   = SUBSTRING(lcReadLine,55,16)            
          lcUnpaidAmount = SUBSTRING(lcReadLine,71,16)            
-         lcRejection    = TRIM(SUBSTRING(lcReadLine,87,6))
+         lcClaimStatus  = TRIM(SUBSTRING(lcReadLine,87,6))
          NO-ERROR.
       
       IF ERROR-STATUS:ERROR THEN DO:
@@ -284,8 +283,7 @@ PROCEDURE pReadEvents:
          ldtInvDate     = ?
          ldtDueDate     = ?
          ldPaidAmount   = 0
-         ldUnpaidAmount = 0
-         lcClaimStatus  = "".
+         ldUnpaidAmount = 0.
  
       ASSIGN 
          ldtInvDate = DATE(INTEGER(SUBSTRING(lcInvDate,5,2)),
@@ -329,13 +327,13 @@ PROCEDURE pReadEvents:
          NEXT.
       END.
 
-      IF lcRejection > "" THEN DO:
-         lcClaimStatus = lcRejection.
+      /* YDR-1665 */
+      IF lcClaimStatus BEGINS "1." THEN DO:
 
          lcRejectionDesc = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
                                             "Invoice",
                                             "ClaimStatus",
-                                            lcRejection).
+                                            lcClaimStatus).
 
          CREATE Memo.
          ASSIGN Memo.Brand     = gcBrand
@@ -346,7 +344,7 @@ PROCEDURE pReadEvents:
                 Memo.CreUser   = katun
                 Memo.MemoTitle = "Invoice rejection"
                 Memo.MemoText  = STRING(Invoice.InvNum) +
-                                 ": " + lcRejection +
+                                 ": " + lcClaimStatus +
                                  "; " + lcRejectionDesc.
                 Memo.CreStamp  = fMakeTS().
       END.

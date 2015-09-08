@@ -403,23 +403,148 @@ def buffer bufMNPCal FOR MNPCal.
 FUNCTION fFindMNPCal RETURNS INT
    (icMessageType AS CHAR,
     icRegion AS CHAR,
-    icOrderChannel AS CHAR):
+    icOrderChannel AS CHAR,
+    icMNPProduct AS CHAR,
+    icMNPTariff AS CHAR):
 
    icOrderChannel = REPLACE(icOrderChannel,"fusion_","").
 
+   /* All */
    FIND FIRST bufMNPCal WHERE
       bufMNPCal.OrderChannel = icOrderChannel AND
       bufMNPCal.Region = icRegion AND
-      bufMNPCal.MessageType = icMessageType NO-LOCK NO-ERROR.
-  
-   IF NOT AVAIL bufMNPCal THEN 
+      bufMNPCal.MessageType = icMessageType AND
+      bufMNPCal.MNPProduct = icMNPProduct AND
+      bufMNPCal.MNPTariff = icMNPTariff NO-LOCK NO-ERROR.
+
+   /* Tariff empty */
+   IF NOT AVAIL bufMNPCal THEN
+   FIND FIRST bufMNPCal WHERE
+      bufMNPCal.OrderChannel = icOrderChannel AND
+      bufMNPCal.Region = icRegion AND
+      bufMNPCal.MessageType = icMessageType AND
+      bufMNPCal.MNPProduct = icMNPProduct AND
+      bufMNPCal.MNPTariff = "" NO-LOCK NO-ERROR.
+
+   /* Product empty */
+   IF NOT AVAIL bufMNPCal THEN
+   FIND FIRST bufMNPCal WHERE
+      bufMNPCal.OrderChannel = icOrderChannel AND
+      bufMNPCal.Region = icRegion AND
+      bufMNPCal.MessageType = icMessageType AND
+      bufMNPCal.MNPProduct = "" AND
+      bufMNPCal.MNPTariff = icMNPTariff NO-LOCK NO-ERROR.
+
+   /* Product & Tariff empty */
+   IF NOT AVAIL bufMNPCal THEN
+   FIND FIRST bufMNPCal WHERE
+      bufMNPCal.OrderChannel = icOrderChannel AND
+      bufMNPCal.Region = icRegion AND
+      bufMNPCal.MessageType = icMessageType AND
+      bufMNPCal.MNPProduct = "" AND
+      bufMNPCal.MNPTariff = "" NO-LOCK NO-ERROR.
+
+   /* General Region */
+   IF NOT AVAIL bufMNPCal THEN
    FIND FIRST bufMNPCal WHERE
       bufMNPCal.OrderChannel = icOrderChannel AND
       bufMNPCal.Region = "99" AND
-      bufMNPCal.MessageType = icMessageType NO-LOCK NO-ERROR.
-   
+      bufMNPCal.MessageType = icMessageType AND
+      bufMNPCal.MNPProduct = icMNPProduct AND
+      bufMNPCal.MNPTariff = icMNPTariff NO-LOCK NO-ERROR.
+
+   /* General Region, Tariff empty */
+   IF NOT AVAIL bufMNPCal THEN
+   FIND FIRST bufMNPCal WHERE
+      bufMNPCal.OrderChannel = icOrderChannel AND
+      bufMNPCal.Region = "99" AND
+      bufMNPCal.MessageType = icMessageType AND
+      bufMNPCal.MNPProduct = icMNPProduct AND
+      bufMNPCal.MNPTariff = "" NO-LOCK NO-ERROR.
+
+   /* General Region, Product empty */
+   IF NOT AVAIL bufMNPCal THEN
+   FIND FIRST bufMNPCal WHERE
+      bufMNPCal.OrderChannel = icOrderChannel AND
+      bufMNPCal.Region = "99" AND
+      bufMNPCal.MessageType = icMessageType AND
+      bufMNPCal.MNPProduct = "" AND
+      bufMNPCal.MNPTariff = icMNPTariff NO-LOCK NO-ERROR.
+
+   /* General Region, Product & Tariff empty */
+   IF NOT AVAIL bufMNPCal THEN
+   FIND FIRST bufMNPCal WHERE
+      bufMNPCal.OrderChannel = icOrderChannel AND
+      bufMNPCal.Region = "99" AND
+      bufMNPCal.MessageType = icMessageType AND
+      bufMNPCal.MNPProduct = "" AND
+      bufMNPCal.MNPTariff = "" NO-LOCK NO-ERROR.
+
+   /* Channel empty */
+   IF NOT AVAIL bufMNPCal THEN
+   FIND FIRST bufMNPCal WHERE
+      bufMNPCal.OrderChannel = "" AND
+      bufMNPCal.Region = icRegion AND
+      bufMNPCal.MessageType = icMessageType AND
+      bufMNPCal.MNPProduct = icMNPProduct AND
+      bufMNPCal.MNPTariff = icMNPTariff NO-LOCK NO-ERROR.
+
+   /* Channel empty & Tariff empty */
+   IF NOT AVAIL bufMNPCal THEN
+   FIND FIRST bufMNPCal WHERE
+      bufMNPCal.OrderChannel = "" AND
+      bufMNPCal.Region = icRegion AND
+      bufMNPCal.MessageType = icMessageType AND
+      bufMNPCal.MNPProduct = icMNPProduct AND
+      bufMNPCal.MNPTariff = "" NO-LOCK NO-ERROR.
+
+   /* Channel empty & Product empty */
+   IF NOT AVAIL bufMNPCal THEN
+   FIND FIRST bufMNPCal WHERE
+      bufMNPCal.OrderChannel = "" AND
+      bufMNPCal.Region = icRegion AND
+      bufMNPCal.MessageType = icMessageType AND
+      bufMNPCal.MNPProduct = "" AND
+      bufMNPCal.MNPTariff = icMNPTariff NO-LOCK NO-ERROR.
+
+   /* Channel empty, Tariff & Product empty */
+   IF NOT AVAIL bufMNPCal THEN
+   FIND FIRST bufMNPCal WHERE
+      bufMNPCal.OrderChannel = "" AND
+      bufMNPCal.Region = icRegion AND
+      bufMNPCal.MessageType = icMessageType AND
+      bufMNPCal.MNPProduct = "" AND
+      bufMNPCal.MNPTariff = "" NO-LOCK NO-ERROR.
+
+   /* Channel empty, General Region */
+   IF NOT AVAIL bufMNPCal THEN
+   FIND FIRST bufMNPCal WHERE
+      bufMNPCal.OrderChannel = "" AND
+      bufMNPCal.Region = "99" AND
+      bufMNPCal.MessageType = icMessageType AND
+      bufMNPCal.MNPProduct = icMNPProduct AND
+      bufMNPCal.MNPTariff = icMNPTariff NO-LOCK NO-ERROR.
+
+   /* Channel empty, General Region, Tariff empty */
+   IF NOT AVAIL bufMNPCal THEN
+   FIND FIRST bufMNPCal WHERE
+      bufMNPCal.OrderChannel = "" AND
+      bufMNPCal.Region = "99" AND
+      bufMNPCal.MessageType = icMessageType AND
+      bufMNPCal.MNPProduct = icMNPProduct AND
+      bufMNPCal.MNPTariff = "" NO-LOCK NO-ERROR.
+
+   /* Channel empty, General Region Product empty */
+   IF NOT AVAIL bufMNPCal THEN
+   FIND FIRST bufMNPCal WHERE
+      bufMNPCal.OrderChannel = "" AND
+      bufMNPCal.Region = "99" AND
+      bufMNPCal.MessageType = icMessageType AND
+      bufMNPCal.MNPProduct = "" AND
+      bufMNPCal.MNPTariff = icMNPTariff NO-LOCK NO-ERROR.
+
    /* Use default value if calendar is not found */
-   IF NOT AVAIL bufMNPCal THEN 
+   IF NOT AVAIL bufMNPCal THEN
    FIND FIRST bufMNPCal WHERE
       bufMNPCal.OrderChannel = "" AND
       bufMNPCal.Region = "99" AND
@@ -445,7 +570,9 @@ END FUNCTION.
 FUNCTION fMNPChangeWindowDate RETURNS DATE (
    ideOrderStamp  AS DECIMAL,
    icOrderChannel AS CHARACTER,
-   icRegion       AS CHARACTER):
+   icRegion       AS CHARACTER,
+   icProduct      AS CHARACTER,
+   icTariff       AS CHARACTER):
 
    DEFINE VARIABLE liPeriods AS INTEGER NO-UNDO INIT 0. 
    DEFINE VARIABLE ldDueDate AS DATE NO-UNDO.
@@ -453,11 +580,11 @@ FUNCTION fMNPChangeWindowDate RETURNS DATE (
    DEFINE VARIABLE liOrderTime AS INTEGER NO-UNDO. 
    DEFINE VARIABLE ldaOrderDate AS DATE NO-UNDO. 
 
-   fFindMNPCal("ASOL", icRegion, icOrderChannel).    
+   fFindMNPCal("ASOL", icRegion, icOrderChannel,icProduct,icTariff).    
    liPeriods = liPeriods + bufMNPCal.Periods.
-   fFindMNPCal("ACON", icRegion, icOrderChannel).    
+   fFindMNPCal("ACON", icRegion, icOrderChannel,icProduct,icTariff).    
    liPeriods = liPeriods + bufMNPCal.Periods.
-   fFindMNPCal("APOR", icRegion, icOrderChannel).    
+   fFindMNPCal("APOR", icRegion, icOrderChannel,icProduct,icTariff).    
    liPeriods = liPeriods + bufMNPCal.Periods.
 
    liMinPeriodSum  = fGetMinMNPWindow().
@@ -490,7 +617,9 @@ FUNCTION fMNPTotalPeriods RETURNS INT (
    icMessageType  AS CHARACTER,
    iiPeriods      AS INTEGER,
    icOrderChannel AS CHARACTER,
-   icRegion       AS CHARACTER):
+   icRegion       AS CHARACTER,
+   icProduct      AS CHARACTER,
+   icTariff       AS CHARACTER):
 
    DEFINE VARIABLE ldDueDate AS DATE NO-UNDO.
    DEFINE VARIABLE lcMessages AS CHARACTER NO-UNDO INIT "ASOL,ACON,APOR".
@@ -511,13 +640,16 @@ FUNCTION fMNPTotalPeriods RETURNS INT (
             IF lcMessage EQ icMessageType THEN NEXT.
             
             IF icRegion = "99" AND icOrderChannel NE "" THEN DO:
-               fFindMNPCal(lcMessage, bMNPCal.Region, icOrderChannel).    
+               fFindMNPCal(lcMessage, bMNPCal.Region, icOrderChannel,
+               icProduct,icTariff).    
             END.
             ELSE IF icRegion NE "99" AND icOrderChannel EQ "" THEN DO: 
-               fFindMNPCal(lcMessage, icRegion, bMNPCal.OrderChannel).
+               fFindMNPCal(lcMessage, icRegion, bMNPCal.OrderChannel,
+               icProduct,icTariff).
             END.   
             ELSE DO:
-               fFindMNPCal(lcMessage, bMNPCal.Region, bMNPCal.OrderChannel).    
+               fFindMNPCal(lcMessage, bMNPCal.Region, bMNPCal.OrderChannel,
+               icProduct,icTariff).    
             END.
             liCounter= liCounter + bufMNPCal.Periods.
          END.
@@ -533,7 +665,8 @@ FUNCTION fMNPTotalPeriods RETURNS INT (
       DO i = 1 TO NUM-ENTRIES(lcMessages):
          lcMessage = ENTRY(i,lcMessages).
          IF lcMessage EQ icMessageType THEN NEXT.
-         fFindMNPCal(lcMessage, icRegion, icOrderChannel).    
+         fFindMNPCal(lcMessage, icRegion, icOrderChannel,
+               icProduct,icTariff).    
          iiPeriods = iiPeriods + bufMNPCal.Periods.
       END.
       liMaxPeriods = iiPeriods.

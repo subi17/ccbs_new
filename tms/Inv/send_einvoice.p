@@ -117,7 +117,8 @@ FOR EACH Invoice WHERE
    
 
    ASSIGN 
-          lcEmailReplacedText = REPLACE(lcEmailText,"#NAME",Customer.FirstName)
+          lcEmailReplacedText = REPLACE(lcEmailText,"#NAME",
+                                        REPLACE(Customer.FirstName,"'","&#39"))
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#MONTH",lcMonthName)
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#YEAR",STRING(YEAR(Invoice.ToDate)))
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#LINK",lcEmailPDFLink)
@@ -133,7 +134,7 @@ FOR EACH Invoice WHERE
    OUTPUT STREAM sEmail CLOSE.
 
    /* Send the email */
-   SendMaileInvoice(lcEmailReplacedText,"").
+   SendMaileInvoice(lcEmailReplacedText,"","").
 
    /* move the file to archive directory */
    IF lcTransDir > "" THEN 

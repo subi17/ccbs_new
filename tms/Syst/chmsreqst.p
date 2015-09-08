@@ -25,23 +25,25 @@ DEFINE INPUT PARAMETER iiFromStatus AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER iiToStatus   AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER icCparam     AS CHARACTER NO-UNDO.
 
-DEF VAR lcError        AS CHARACTER NO-UNDO.
-DEF VAR lcMessage      AS CHARACTER NO-UNDO.
-DEF VAR lcCancelReason AS CHARACTER NO-UNDO FORMAT "x(60)".
-DEF VAR llOk           AS LOGICAL   NO-UNDO.
-DEF VAR llCanUse       AS LOGICAL   NO-UNDO.
-DEF VAR lcErrorMessage AS CHAR      NO-UNDO.
-DEF VAR lcDoneMessage  AS CHAR      NO-UNDO.
-DEF VAR ldeSMSTime     AS DECIMAL   NO-UNDO. 
-DEF VAR lcSender       AS CHARACTER NO-UNDO. 
-DEF VAR liQuarTime         AS INT   NO-UNDO.
-DEF VAR liSimStat          AS INT   NO-UNDO.
-DEF VAR liMSISDNStat       AS INT   NO-UNDO.
-DEF VAR liRequest          AS INT   NO-UNDO.
-DEF VAR ldaSecSIMTermDate  AS DATE  NO-UNDO.
-DEF VAR liSecSIMTermTime   AS INT   NO-UNDO.
-DEF VAR ldeSecSIMTermStamp AS DEC   NO-UNDO.
-DEF VAR llgAddSIMTerm      AS LOG   NO-UNDO.
+DEF VAR lcError            AS CHARACTER    NO-UNDO.
+DEF VAR lcMessage          AS CHARACTER    NO-UNDO.
+DEF VAR lcCancelReason     AS CHARACTER    NO-UNDO FORMAT "x(60)".
+DEF VAR llOk               AS LOGICAL      NO-UNDO.
+DEF VAR llCanUse           AS LOGICAL      NO-UNDO.
+DEF VAR lcErrorMessage     AS CHAR         NO-UNDO.
+DEF VAR lcDoneMessage      AS CHAR         NO-UNDO.
+DEF VAR ldeSMSTime         AS DECIMAL      NO-UNDO. 
+DEF VAR lcSender           AS CHARACTER    NO-UNDO. 
+DEF VAR liQuarTime         AS INT          NO-UNDO.
+DEF VAR liSimStat          AS INT          NO-UNDO.
+DEF VAR liMSISDNStat       AS INT          NO-UNDO.
+DEF VAR liRequest          AS INT          NO-UNDO.
+DEF VAR ldaSecSIMTermDate  AS DATE         NO-UNDO.
+DEF VAR liSecSIMTermTime   AS INT          NO-UNDO.
+DEF VAR ldeSecSIMTermStamp AS DEC          NO-UNDO.
+DEF VAR llgAddSIMTerm      AS LOG          NO-UNDO.
+DEF VAR ldActStamp         AS DECIMAL      NO-UNDO.
+DEF VAR ldtTdDate          AS DATE         NO-UNDO.
 
 DEF BUFFER lbMobSub        FOR Mobsub.
 DEF BUFFER bMsRequest      FOR MsRequest.
@@ -206,6 +208,10 @@ CASE iiToStatus:
                               {&STC_SMS_SENDER},
                               "").
          END.
+         
+         FIND FIRST MobSub NO-LOCK WHERE 
+                    MobSub.Brand = gcBrand AND
+                    MobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
 
          IF CAN-FIND(
                 FIRST CLIType NO-LOCK WHERE
@@ -223,6 +229,9 @@ CASE iiToStatus:
                       CLIType.LineType = {&CLITYPE_LINETYPE_MAIN})    THEN  
             RUN ipMulitSIMTermination(MsRequest.ReqType).
          
+
+         fAddLineSTCCancellation(MsRequest.MsRequest, MsRequest.CustNum).  
+                       
       END.
 
       IF MsRequest.ReqType = 15 THEN DO:
@@ -278,24 +287,27 @@ CASE iiToStatus:
          RELEASE SIM.
       END.
       
-      ELSE IF MsRequest.ReqType EQ 18 AND
-         MsRequest.ReqCParam3 EQ "2" THEN DO:
-            
-         MESSAGE
-            "Termination was ordered by MNP outporting"           SKIP 
-            "process. MNP process cancellation has to be"         SKIP 
-            "accepted before request cancellation."               SKIP
-            SKIP
-            "Do you want to continue Termination cancellation."   
-         VIEW-AS ALERT-BOX QUESTION
-         BUTTONS YES-NO
-         TITLE " Termination Cancellation "
-         UPDATE llOk.
-         
-         IF NOT llOk THEN RETURN.
+      ELSE IF MsRequest.ReqType EQ 18 THEN DO:
 
+         IF MsRequest.ReqCParam3 EQ "2" THEN DO:
+            
+            MESSAGE
+               "Termination was ordered by MNP outporting"           SKIP 
+               "process. MNP process cancellation has to be"         SKIP 
+               "accepted before request cancellation."               SKIP
+               SKIP
+               "Do you want to continue Termination cancellation."   
+            VIEW-AS ALERT-BOX QUESTION
+            BUTTONS YES-NO
+            TITLE " Termination Cancellation "
+            UPDATE llOk.
+            
+            IF NOT llOk THEN RETURN.
+         END.
+      
+         fAddLineSTCCancellation(MsRequest.MsRequest, MsRequest.CustNum).
       END.
-       
+      
       /* msisdn change cancel */
       ELSE IF MsRequest.ReqType EQ 19 THEN DO:
          
@@ -488,7 +500,33 @@ ELSE DO:
                 CallAlarm.DeliStat = 1             AND
                 CallAlarm.DeliPara = "PD":
          CallAlarm.DeliStat = 4.
-      END.          
+      END.
+   END.
+   
+   /* if additional line to non-additional line pending STC is cancellled
+      and if it doesn't contain any main line then STC request has to be created
+      for additional line to CONT9*/
+   IF iiToStatus EQ 4 AND (MsRequest.Reqtype EQ 0 OR MsRequest.ReqType EQ 18) THEN 
+      fNonAddLineSTCCancellationToAddLineSTC(MsRequest.MsRequest).
+
+   /* set activation date as the 1st of next month */
+   IF iiToStatus EQ 0 AND
+      iiFromStatus EQ 19 AND
+      MsRequest.ReqType = 10 AND
+      CAN-FIND(FIRST MobSub WHERE
+                     MobSub.MsSeq = MsRequest.MsSeq AND
+                     LOOKUP(MobSub.CLIType,"CONTFF,CONTSF") > 0)
+      THEN DO:
+
+      IF MONTH(TODAY) = 12
+      THEN ldtTdDate = DATE(1,1,YEAR(TODAY) + 1).
+      ELSE ldtTdDate = DATE(MONTH(TODAY) + 1,1,YEAR(TODAY)).
+
+      ldActStamp = fMake2DT(ldtTdDate,3600).
+
+      FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
+         IF AVAILABLE MsRequest THEN MsRequest.ActStamp = ldActStamp.
+      FIND CURRENT MsRequest NO-LOCK NO-ERROR.
    END.
    
 END.
@@ -496,9 +534,10 @@ END.
 MESSAGE lcMessage VIEW-AS ALERT-BOX.
 
 PROCEDURE ipMulitSIMTermination:
-DEFINE INPUT PARAMETER iiReqType AS INTEGER NO-UNDO. 
+   
+   DEFINE INPUT PARAMETER iiReqType AS INTEGER NO-UNDO. 
 
-DEF VAR lcError AS CHAR NO-UNDO. 
+   DEF VAR lcError AS CHAR NO-UNDO. 
 
     FIND FIRST MobSub WHERE
                MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
@@ -545,17 +584,16 @@ DEF VAR lcError AS CHAR NO-UNDO.
     
        END. /* IF NOT AVAIL lbMobSub THEN DO: */
     END. /* IF AVAIL MobSub AND MobSub.MultiSIMId > 0 AND */
-    
-    /* Additional SIM Termination logic */
+    /* STC is created for Additional lines when main line is terminated 
+       YDR-1847 (Mentioned in comments) */
     ELSE DO:
-      
-      llgAddSIMTerm = fAdditionalSimTermination(MobSub.MsSeq,
-                                                {&REQUEST_SOURCE_MANUAL_TMS}).
-                                                   
-      IF NOT llgAddSIMTerm THEN 
-         MESSAGE "Additional SIM Termination request can not be cancelled."
-         VIEW-AS ALERT-BOX.  
-                                                     
+     /* TODO: cannot use this function in this case*/
+     /*
+      fAdditionalLineSTC(MsRequest.MsRequest,
+                         fMake2Dt(TODAY + 1, 0),
+                         "").
+     */
     END. /* ELSE DO: */
 
 END PROCEDURE.
+

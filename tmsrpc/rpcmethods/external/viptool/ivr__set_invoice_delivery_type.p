@@ -89,6 +89,7 @@ IF Customer.DelType NE piDelType THEN DO:
                                        INPUT Mobsub.Custnum,
                                        INPUT {&REQUEST_SOURCE_EXTERNAL_API},
                                        INPUT Customer.Email,
+                                       INPUT 0, /* msseq */
                                        OUTPUT lcResult).
       IF liRequest = 0 THEN DO:
          IF lcResult = "Customer already has an active request" THEN .

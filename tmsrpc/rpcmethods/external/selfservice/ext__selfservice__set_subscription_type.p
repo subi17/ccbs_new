@@ -154,6 +154,7 @@ liRequest = fCTChangeRequest(MobSub.msseq,
                   0,
                   {&REQUEST_SOURCE_EXTERNAL_API},
                   0, /* order id */
+                  0,
                   OUTPUT lcInfo).
 
 IF liRequest = 0 THEN DO:

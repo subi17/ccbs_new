@@ -13,7 +13,7 @@ IF NEW(MobSub) THEN DO:
 END. /* IF NEW(MobSub) THEN DO: */
 ELSE DO:
    BUFFER-COMPARE MobSub USING MsSeq CustNum CLI CLIType TariffBundle TariffActDate PayType
-   ActivationTS MultiSimType MultiSimID IMSI BarrCode TO Oldbuf SAVE RESULT IN llResult.
+   ActivationTS MultiSimType MultiSimID IMSI TO Oldbuf SAVE RESULT IN llResult.
 
    IF NOT llResult THEN DO:
       CREATE Ordercanal.RepLog.

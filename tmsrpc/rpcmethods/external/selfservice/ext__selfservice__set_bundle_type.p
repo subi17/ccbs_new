@@ -48,6 +48,7 @@ DEF VAR lcAppEndUserId     AS CHAR NO-UNDO.
 
 DEF VAR lcAllowedBONOContracts  AS CHAR NO-UNDO.
 DEF VAR lcAllowedCONTSContracts AS CHAR NO-UNDO.
+DEF VAR lcMemoType AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,string,string,datetime") EQ ? THEN RETURN.
 
@@ -63,6 +64,8 @@ ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
 
 IF NOT fchkTMSCodeValues(gbAuthLog.UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
+
+katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
 
 FIND FIRST MobSub  WHERE 
            MobSub.CLI = pcCLI NO-LOCK NO-ERROR.
@@ -98,9 +101,6 @@ IF NOT fValidateBTC (MobSub.MsSeq,
                      OUTPUT lcError)
 THEN RETURN appl_err(lcError). 
 
-katun = fgetAppUserId(INPUT lcApplicationId, 
-                      INPUT lcAppEndUserId).
-
 liCreated = fBundleChangeRequest(MobSub.MsSeq,
                                  lcOldBundle,
                                  pcNewBundle,
@@ -117,23 +117,20 @@ liCreated = fBundleChangeRequest(MobSub.MsSeq,
 IF liCreated = 0 THEN
    RETURN appl_err("Change request could not be created").
 
-CREATE Memo.
-ASSIGN
-      Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand 
-      Memo.HostTable = "MobSub" 
-      Memo.KeyValue  = STRING(MobSub.MsSeq) 
-      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
-      Memo.MemoTitle = "Bundle Type Change"
-      Memo.MemoText  = "External API bundle type change " + 
-                       lcOldBundle + " --> " + pcNewBundle
-      Memo.CustNum   = MobSub.CustNum.
-
 IF lcBundleType = "BONO" THEN
-   Memo.MemoType = "Service".
+   lcMemoType = "Service".
 ELSE
-   Memo.MemoType = "MobSub".
+   lcMemoType = "MobSub".
+
+DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
+                 "MobSub",                             /* HostTable */
+                 STRING(Mobsub.MsSeq),                 /* KeyValue  */
+                 MobSub.CustNum,                       /* CustNum */
+                 "Bono modificado",                    /* MemoTitle */
+                 lcOldBundle + " --> " + pcNewBundle,  /* MemoText */
+                 lcMemoType,                           /* MemoType */
+                 fgetAppDetailedUserId(INPUT lcApplicationId,
+                                       INPUT Mobsub.CLI)).
 
 /* Adding the details into Main struct */
 top_struct = add_struct(response_toplevel_id, "").

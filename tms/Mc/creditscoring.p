@@ -69,6 +69,7 @@ DEF VAR lcCashResult          AS CHARACTER NO-UNDO.
 DEF VAR ldePayInAdv           AS DECIMAL   NO-UNDO.
 DEF VAR lcBundleCLITypes      AS CHARACTER NO-UNDO.
 DEF VAR ldeResidualAmount     AS DECIMAL   NO-UNDO.
+DEF VAR lcUPSCode             AS CHARACTER NO-UNDO. 
 
 /* Parameter and result struct indentifiers */
 DEFINE VARIABLE gcParamStruct AS CHARACTER NO-UNDO. 
@@ -222,7 +223,8 @@ IF pcActionType EQ "ORDER" THEN DO:
    IF AVAILABLE OrderCustomer THEN
    DO:
       ASSIGN pcDelName       = OrderCustomer.Address                   /* 11 */ 
-             pcDelZip        = OrderCustomer.ZIP.                      /* 12 */
+             pcDelZip        = OrderCustomer.ZIP                       /* 12 */
+             lcUPSCode       = OrderCustomer.KialaCode.
    END. 
 
    FIND FIRST OrderCustomer WHERE
@@ -390,7 +392,10 @@ IF LOOKUP(pcActionType,"ORDER,RENEWAL_STC") > 0 THEN DO:
                  OrderPayment.Brand   = gcBrand AND
                  OrderPayment.OrderId = Order.OrderId NO-LOCK NO-ERROR.
       IF AVAIL OrderPayment THEN DO:
-         IF OrderPayment.Method = 1 THEN lcPaymentMethod = "on_delivery".
+         IF OrderPayment.Method = {&ORDERPAYMENT_M_POD} THEN 
+            lcPaymentMethod = "on_delivery".
+         ELSE IF OrderPayment.Method = {&ORDERPAYMENT_M_PAYPAL} THEN
+            lcPaymentMethod = "paypal".
          ELSE lcPaymentMethod = "credit_card".
       END. /* IF AVAIL OrderPayment THEN DO: */
 
@@ -449,6 +454,7 @@ DO:
    lcPayTerm     =  fConvertCharacter(lcPayTerm).
    lcTerm        =  fConvertCharacter(lcTerm).
    lcPaymentMethod =  fConvertCharacter(lcPaymentMethod).
+   lcUPSCode     = fConvertCharacter(lcUPSCode).
 
    /* Construct the parameter struct from the parameter values */
    gcParamStruct = add_struct("", ""). 
@@ -485,6 +491,7 @@ DO:
    add_double  (gcParamStruct, "payinadv", ldePayInAdv).
    add_string  (gcParamStruct, "payment_method", lcPaymentMethod).
    add_double  (gcParamStruct, "buyback_price", ldeResidualAmount).
+   add_string  (gcParamStruct, "kiala_code", lcUPSCode).
 
    DEFINE VARIABLE lcResult AS LONGCHAR.
 

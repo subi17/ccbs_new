@@ -18,4 +18,4 @@ screen -t postpaid 15 xfear -mo_postpaid10
 screen -t tap3     16 xfear -mo_tap3
 screen -t vas      17 xfear -mo_vas
 screen -t front    18 xfear -mo_front
-screen -t roamcdr  19 xfear -mo_roam
+#screen -t roamcdr  19 xfear -mo_roam

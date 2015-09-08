@@ -31,6 +31,9 @@ DEF VAR ldPeriodFromSTC AS DEC  NO-UNDO.
 DEF VAR ldPeriodTo      AS DEC  NO-UNDO.
 DEF VAR lcIPLContracts  AS CHAR NO-UNDO.
 DEF VAR lcBONOContracts AS CHAR NO-UNDO.
+DEF VAR liCollected     AS INT  NO-UNDO. 
+DEF VAR ldeCollectStart AS DEC NO-UNDO. 
+DEF VAR ldeCollectEnd   AS DEC NO-UNDO. 
 
 DEF VAR lcAllowedDSS2SubsType         AS CHAR NO-UNDO.
 DEF VAR lcFirstMonthUsageBasedBundles AS CHAR  NO-UNDO.
@@ -52,7 +55,8 @@ ASSIGN
    lcIPLContracts  = fCParamC("IPL_CONTRACTS")
    lcBONOContracts = fCParamC("BONO_CONTRACTS")
    lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
-   lcFirstMonthUsageBasedBundles = fCParamC("FIRST_MONTH_USAGE_BASED_BUNDLES").
+   lcFirstMonthUsageBasedBundles = fCParamC("FIRST_MONTH_USAGE_BASED_BUNDLES")
+   ldeCollectStart = fMakeTS().
 
 IF iiInvCust > 0 THEN
    RUN pGetCustomerSubscriptions(iiInvCust).
@@ -60,6 +64,8 @@ ELSE
    RUN pGetAllSubscriptions.
 
 IF RETURN-VALUE BEGINS "ERROR" THEN RETURN RETURN-VALUE.
+
+ldeCollectEnd = fMakeTs().
 
 RUN pCalculateFees. 
 IF RETURN-VALUE BEGINS "ERROR" THEN RETURN RETURN-VALUE.
@@ -77,11 +83,12 @@ PROCEDURE pGetCustomerSubscriptions:
 
    DEF INPUT PARAMETER iiInvCust AS INT  NO-UNDO.
 
-   DEF VAR lcBundleId            AS CHAR NO-UNDO.
+   DEF VAR lcBundleId     AS CHAR NO-UNDO.
+   DEF VAR ldaMsReqDate   AS DATE No-UNDO.
 
    DEF BUFFER bMsRequest FOR MsRequest.
 
-   lcBundleId = fGetActiveDSSId(iiInvCust,ldPeriodTo).
+   lcBundleId = fGetDSSId(iiInvCust,ldPeriodTo).
    
    FOR EACH MsOwner NO-LOCK WHERE
             MsOwner.InvCust = iiInvCust
@@ -105,7 +112,19 @@ PROCEDURE pGetCustomerSubscriptions:
                    DayCampaign.Brand = gcBrand AND
                    DayCampaign.DCEvent = MsRequest.ReqCParam3 AND
                    LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0:
+             
+             fTS2Date(INPUT  MsRequest.ActStamp,
+                      OUTPUT ldaMsReqDate).
 
+             FIND FIRST FMItem NO-LOCK WHERE
+                        FMItem.Brand        = gcBrand              AND
+                        FMItem.FeeModel     = DayCampaign.FeeModel AND
+                        FMItem.FromDate    <= ldaMsReqDate         AND
+                        FMItem.ToDate      >= ldaMsReqDate         AND
+                        FMItem.FirstMonthBr = 2 NO-ERROR.
+
+             IF NOT AVAILABLE FMItem THEN NEXT.
+ 
              /* skip first month fee calculation for contracts originating
                 from normal stc/btc (not immediate STC/BTC). */
              IF MsRequest.OrigRequest > 0 THEN DO:
@@ -133,6 +152,7 @@ PROCEDURE pGetAllSubscriptions:
    DEF VAR liReqStatus    AS INT  NO-UNDO. 
    DEF VAR lcReqStatuses  AS CHAR NO-UNDO INIT "2,9".
    DEF VAR lcBundleId     AS CHAR NO-UNDO.
+   DEF VAR ldaMsReqDate   AS DATE No-UNDO.
    
    DEF BUFFER bMsRequest FOR MsRequest.
    
@@ -154,7 +174,19 @@ PROCEDURE pGetAllSubscriptions:
                MsOwner.MsSeq    = MsRequest.MsSeq AND  
                MsOwner.TSEnd   >= ldPeriodFrom    AND
                MsOwner.TsBegin <= ldPeriodTo NO-LOCK:
-        
+       
+         fTS2Date(INPUT  MsRequest.ActStamp,
+                  OUTPUT ldaMsReqDate).
+
+         FIND FIRST FMItem NO-LOCK WHERE
+                    FMItem.Brand        = gcBrand              AND
+                    FMItem.FeeModel     = DayCampaign.FeeModel AND
+                    FMItem.FromDate    <= ldaMsReqDate         AND
+                    FMItem.ToDate      >= ldaMsReqDate         AND
+                    FMItem.FirstMonthBr = 2 NO-ERROR.
+          
+         IF NOT AVAILABLE FMItem THEN NEXT. 
+       
          /* skip first month fee calculation for contracts originating
             from normal stc/btc (not immediate STC/BTC). */
          IF MsRequest.OrigRequest > 0 THEN DO:   
@@ -166,7 +198,7 @@ PROCEDURE pGetAllSubscriptions:
                 bMsRequest.ReqType EQ {&REQTYPE_BUNDLE_CHANGE}) THEN NEXT.
          END. /* IF MsRequest.OrigRequest > 0 THEN DO: */
 
-         lcBundleId = fGetActiveDSSId(MsRequest.CustNum,ldPeriodTo).
+         lcBundleId = fGetDSSId(MsRequest.CustNum,ldPeriodTo).
 
          /* If this subscription is linked with DSS or DSS2 then */
          /* it will be calculated based on the DSS bundle usage  */
@@ -233,7 +265,8 @@ PROCEDURE pCollectSubscription:
       CREATE ttSub.
       ASSIGN
          ttSub.MsSeq        = iiMsSeq 
-         ttSub.ServiceLimit = ServiceLimit.GroupCode.
+         ttSub.ServiceLimit = ServiceLimit.GroupCode
+         liCollected        = liCollected + 1.
          
       fSplitTS(MServiceLimit.FromTS,
                OUTPUT ldaDate,
@@ -244,6 +277,11 @@ PROCEDURE pCollectSubscription:
                OUTPUT ldaDate,
                OUTPUT liTime).
       ttSub.ToDate = ldaDate.
+
+      IF iiUpdateInterval > 0 AND liCollected MOD iiUpdateInterval = 0 THEN DO:
+         IF NOT fUpdateFuncRunProgress(iiFRProcessID, -1 * liCollected) THEN
+            RETURN "ERROR:Stopped".
+      END.   
       
    END.
 
@@ -284,7 +322,8 @@ PROCEDURE pCalculateFees:
 
       /* already billed */
       FIND FIRST FFItem OF FixedFee NO-LOCK NO-ERROR.
-      IF NOT AVAILABLE FFItem OR FFItem.Billed THEN NEXT. 
+      IF NOT AVAILABLE FFItem OR 
+         (FFItem.Billed AND icRunMode NE "test") THEN NEXT. 
     
       ldFeeAmount = fCalculateFirstMonthFee(gcBrand,
                                             ttSub.MsSeq,
@@ -292,8 +331,11 @@ PROCEDURE pCalculateFees:
                                             FixedFee.Amt,
                                             liPeriod).
 
-      DO TRANS:
+      IF icRunMode EQ "test" THEN oiHandled = oiHandled + 1.
+      ELSE DO TRANS:
       
+         IF FFItem.Billed THEN NEXT.
+
          FIND CURRENT FFItem EXCLUSIVE-LOCK.
              
          FFItem.Amt = ldFeeAmount.
@@ -326,11 +368,18 @@ PROCEDURE pCalculateFees:
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                   STRING(MONTH(TODAY),"99")  +
                                   STRING(DAY(TODAY),"99")
-         ActionLog.ActionID     = "BUNDLEFEE"
+         ActionLog.ActionID     = "BUNDLEFEE" + 
+                                  (IF icRunMode eq "test" THEN "TEST" ELSE "")
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                   MONTH(TODAY)
          ActionLog.ActionDec    = oiHandled
-         ActionLog.ActionChar   = STRING(oiHandled) + 
+         ActionLog.ActionChar   = "Collection started: " +
+                                    fts2hms(ldeCollectStart) + CHR(10) + 
+                                  "Collection ended: " + 
+                                    fts2hms(ldeCollectEnd) + CHR(10) +
+                                  STRING(liCollected) + 
+                                    " cases were collected" + CHR(10) +
+                                  STRING(oiHandled) + 
                                   " first month fees were updated"
          ActionLog.ActionStatus = 3
          ActionLog.UserCode     = katun

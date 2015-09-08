@@ -236,13 +236,13 @@ ELSE DO:
 
       /* Update Email and Delivery type for all type of renewal orders */
       IF AVAIL OrderCustomer THEN
-         fUpdEmailDelType().
+         fUpdEmailDelType(Order.OrderId).
    END.
    ELSE IF Order.ORderType EQ {&ORDER_TYPE_STC} THEN DO:
       /* bank account is changed with a separate request from stc process */
       ASSIGN
          Customer.SMSNumber   = OrderCustomer.MobileNumber.
-      fUpdateEmail().
+      fUpdateEmail(Order.OrderId).
    END.
    ELSE DO:
       
@@ -267,7 +267,7 @@ ELSE DO:
          IF llDoEvent THEN RUN StarEventMakeModifyEvent ( lhOrderCustomer ).
 
          /* Update Email and Delivery type for all type of customers */
-         fUpdEmailDelType().
+         fUpdEmailDelType(Order.OrderId).
 
          /* Update Authorized person data with company orders */
          IF iiRole = 1 AND OrderCustomer.CustIdType = "CIF" AND

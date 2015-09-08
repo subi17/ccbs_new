@@ -1,0 +1,11 @@
+-db /db1/mcdr12/mcdr12
+-L 100000
+#-B  8000000
+#-B2 1000000
+-B  10000
+-B2 10000
+-S mcdr12
+-aiarcdir /aiarchive/mcdr12
+#-DBService replserv
+-pica 8192
+-pf /apps/tms/pf/db/general.pf

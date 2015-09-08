@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------------
   MODULE .......: logistics_request.p
-  TASK .........: Handles logistics (Dextra) requests. YDR-499
+  TASK .........: Handles logistics (Dextra/Netkia) requests. YDR-499
   APPLICATION ..: TMS
   AUTHOR .......: anttis
   CREATED ......: 15.06.12
@@ -13,6 +13,7 @@
 {msreqfunc.i}
 {tmsconst.i}
 {xmlrpc/xmlrpc_client.i}
+{forderstamp.i}
 
 DEFINE INPUT PARAMETER iiMSrequest AS INT NO-UNDO.
 
@@ -20,7 +21,11 @@ DEF VAR lcConURL AS CHARACTER NO-UNDO.
 DEF VAR lcMemo AS CHAR NO-UNDO. 
 DEF VAR liIndex AS INT NO-UNDO. 
 DEF VAR liCount AS INT NO-UNDO. 
+DEF VAR ldOPChange AS DEC NO-UNDO.
+DEF VAR ldOPStamp  AS DEC NO-UNDO.   /* SendToLogistics date from OrderStamp */
+DEF VAR lcOPName   AS CHAR NO-UNDO.  /* Name value Dextra/Netkia to XML */
 
+ldOPChange = fCParamDe("LOswitchover"). /* Get date when Dextra changed to Netkia */
 lcConURL = fCParam("URL","urlDextra").
 IF lcConURL = ? OR lcConURL = "" THEN RETURN "ERROR".
 
@@ -49,7 +54,7 @@ END.
 
 initialize(lcConURL, 15).
 
-RUN pSendDextraCancel(Order.OrderId).
+RUN pSendLogisticsCancel(Order.OrderId).
 
 /* automatic resending for NW error */
 IF RETURN-VALUE BEGINS "NW_ERROR" THEN DO:
@@ -81,13 +86,19 @@ FINALLY:
    xmlrpc_finalize().
 END.
 
-PROCEDURE pSendDextraCancel:
+PROCEDURE pSendLogisticsCancel:
 
    DEFINE INPUT PARAMETER piOrderID AS INTEGER NO-UNDO.
 
    DEF VAR liResponseCode AS INT NO-UNDO. 
 
    add_int(param_toplevel_id,"", piOrderID).
+
+   /* Add operator name to XML based on date in OrderStamp */
+   ldOPStamp = fGetOrderStamp(piOrderID,"SendToLogistics").
+   IF ldOPStamp < ldOPChange THEN lcOPName = "Dextra".
+   ELSE lcOPName = "Netkia".
+   add_string(param_toplevel_id, "operatorName ", lcOPName).
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error). 

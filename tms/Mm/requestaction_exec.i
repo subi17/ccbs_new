@@ -48,13 +48,8 @@ FUNCTION fGetPerContractActivation RETURNS DEC
       LOOKUP(bActRequest.ReqCparam2,"act,recreate") > 0
    NO-LOCK USE-INDEX MsSeq NO-ERROR.
 
-   IF AVAIL bActRequest THEN DO:
-      /* YDR-168 */
-      IF bActRequest.ReqSource = {&REQUEST_SOURCE_RENEWAL} AND
-         bActRequest.ActStamp >= 20101001 THEN RETURN 0.0.
-
+   IF AVAIL bActRequest THEN 
       ldActivated = bActRequest.DoneStamp.
-   END.
 
    RETURN ldActivated. 
 

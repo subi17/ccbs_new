@@ -114,27 +114,39 @@ PROCEDURE pUnbarrPrepaid:
    DEF VAR lcUnBarring AS CHAR NO-UNDO. 
    DEF VAR lrBarring AS ROWID NO-UNDO.
    DEF VAR lcResult AS CHAR NO-UNDO. 
+   DEF VAR llOngoing AS LOG NO-UNDO.
+   DEF VAR liReq AS INT NO-UNDO. 
          
    FIND FIRST MobSub WHERE
               MobSub.CLI = pcCLI AND
               MobSub.PayType = True NO-LOCK NO-ERROR.
    IF NOT AVAIL MobSub THEN RETURN.
-   
-   /* check current barring (or pending) */
-   lcBarring  = fCheckBarrStatus(MobSub.MsSeq, OUTPUT lrBarring).
-   IF lcBarring = "OK" THEN RETURN.
-   
-   FIND MsRequest WHERE ROWID(MsRequest) = lrBarring NO-LOCK NO-ERROR.
-   IF NOT AVAIL MsRequest THEN RETURN.
 
-   IF MsRequest.UserCode NE "CreSub / CreSub" THEN RETURN.
+   llOngoing  = fCheckBarrStatus(MobSub.MsSeq, 
+                                 OUTPUT lcBarring,
+                                 OUTPUT lrBarring).
+ 
+   
+   IF fIsInList("Prod_TotalPremium_Off",lcBarring) EQ TRUE AND
+      fGetBarringUser(MobSub.MsSeq, "Prod_TotalPremium_Off") EQ "CreSub / CreSub" 
+      THEN lcUnBarring = "Prod_TotalPremium_Off=0".
+   ELSE IF NOT llOngoing THEN RETURN.
 
-   IF lcBarring EQ "91" THEN DO:
-      IF MsRequest.ReqCParam1 NE "Y_HURP" THEN RETURN.
+   IF llOngoing EQ TRUE THEN DO:
+
+      FIND FIRST MsRequest NO-LOCK WHERE 
+           ROWID(MsRequest) = lrBarring NO-ERROR.
+
+      IF AVAIL MsRequest THEN DO:
+         IF MsRequest.UserCode EQ "CreSub / CreSub" AND
+           LOOKUP("Prod_TotalPremium_Off=1",MsRequest.ReqCParam1) > 0 THEN lcUnBarring = "".
+         ELSE IF lcUnBarring EQ "" OR 
+           LOOKUP("Prod_TotalPremium_Off=0",MsRequest.ReqCParam1) > 0 THEN RETURN.
+      END.
    END.
-   ELSE IF lcBarring = "Y_HURP" THEN DO:
 
-      lcUnBarring = "UN" + lcBarring.
+   IF lcUnBarring NE "" THEN DO:
+
       /* create barring request */
       RUN barrengine.p (MobSub.MsSeq,
                       lcUnBarring,
@@ -144,8 +156,8 @@ PROCEDURE pUnbarrPrepaid:
                       "", /* SMS */
                       OUTPUT lcResult).
 
-      INT(lcResult) NO-ERROR.
-      IF NOT ERROR-STATUS:ERROR THEN RETURN.
+      liReq = INT(lcResult) NO-ERROR.
+      IF liReq > 0 THEN RETURN.
    END.
    ELSE RETURN.
 

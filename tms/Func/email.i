@@ -266,7 +266,8 @@ END FUNCTION.
 
 /* send the mail WITH possible related to the eInvoice Project */
 FUNCTION SendMaileInvoice RETURNS LOGIC (iMailTxt AS CHAR,
-                                         iAttachFileName AS CHAR).
+                                         iAttachFileName AS CHAR,
+                                         iContentFile AS CHAR).
 
     DEF VAR lcFileName   AS CHAR NO-UNDO.
 
@@ -289,7 +290,7 @@ FUNCTION SendMaileInvoice RETURNS LOGIC (iMailTxt AS CHAR,
     xMailSubj = REPLACE(xMailSubj," ","_").    
     &ENDIF
     
-    IF iMailTxt = "" THEN 
+    IF iMailTxt = "" AND iContentFile = "" THEN 
        xMailError = xMailError + "Mail contents missing (" + iMailTxt + ") ".
     
     /* correct host for sender */
@@ -305,7 +306,8 @@ FUNCTION SendMaileInvoice RETURNS LOGIC (iMailTxt AS CHAR,
                     " -f " + "'" + xMailFrom + "'" +  /* sender */
                     " -r " + "'" + xMailAddr + "'" +  /* recipient */
                     " -a " + "'" + iAttachFileName + "'" + /* attachment */
-                    " -n " + "'" + lcFileName + "'". /* attachment file name */
+                    " -n " + "'" + lcFileName + "'" + /* attachment file name */
+                    " -i " + "'" + iContentFile + "'". /* content as file */
 
     /* possible errors */
     ELSE DO:

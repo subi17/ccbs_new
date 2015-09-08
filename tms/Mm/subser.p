@@ -407,7 +407,7 @@ REPEAT WITH FRAME sel:
         ufk[4]= (IF lcRight = "RW" THEN 248 ELSE 0)
         ufk[5]= (IF lcRight = "RW" THEN 60 ELSE 0) 
         ufk[6]= 66
-        ufk[7]= 0 
+        ufk[7]= 781  
         ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
         RUN ufkey.p.
@@ -643,7 +643,8 @@ REPEAT WITH FRAME sel:
                           ?, /* reqstat ? for all */
                           iiMsSeq,
                           0,
-                          0).
+                          0,
+                          "").
         
            ufkey = TRUE.
            NEXT LOOP.
@@ -654,6 +655,21 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0 THEN DO:  /* history */
         RUN subserhist (iiMsSeq).
         
+        ufkey = TRUE.
+        NEXT LOOP.
+     END.
+     ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:  /* history */
+        RUN local-find-this(FALSE).
+
+
+        RUN msrequest (1,
+                          ?, /* reqstat ? for all */
+                          iiMsSeq,
+                          0,
+                          0,
+                          ttSubSer.ServCom).
+
+
         ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -672,6 +688,14 @@ REPEAT WITH FRAME sel:
        IF NOT llStop THEN DO:
            RUN local-UPDATE-record.                                  
            HIDE FRAME lis NO-PAUSE.
+
+           /*YPR-1973*/
+           IF ttSubSer.ServCom EQ "NAM" AND 
+              MobSub.BarrCode EQ "D_HOTLP" AND 
+              ttSubSer.SSSTat > 0 THEN DO:
+              MESSAGE "D_HOTLP blocks NAM change" VIEW-AS ALERT-BOX.
+              UNDO, LEAVE.
+           END.
 
            /* IF  User Wanted TO Cancel this Change TRANSACTION */
            IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
@@ -1248,6 +1272,16 @@ PROCEDURE pUpdateSubSer:
             VIEW-AS ALERT-BOX ERROR.
             NEXT.
          END. /* IF ServPac.ServPac = "BB" */
+
+         /* TODO: Can be removed after services clean up (barring migration) */
+         IF LOOKUP(ttSubSer.ServCom,"NAM,BARRING,LP,BPSUB") > 0 THEN DO:
+
+            MESSAGE "Service" ttSubSer.ServCom "is retired" skip
+                    "This change is cancelled"
+            VIEW-AS ALERT-BOX ERROR.
+            NEXT.
+         
+         END.
          
          IF ttSubSer.SSDate = TODAY 
          THEN ldActStamp = ldCurrent.

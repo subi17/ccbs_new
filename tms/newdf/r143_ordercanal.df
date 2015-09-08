@@ -1,0 +1,7 @@
+UPDATE FIELD "CommercialFee" OF "CLIType"
+  DECIMALS 3
+  FORMAT ">>>>9.999"
+
+UPDATE FIELD "CompareFee" OF "CLIType"
+  DECIMALS 3
+  FORMAT ">>>>9.999"

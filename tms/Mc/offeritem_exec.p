@@ -424,15 +424,33 @@ PROCEDURE pServicePackage:
 
 END PROCEDURE.  /* pServicePackage */
 
-
-
 PROCEDURE pDiscountPlanMember:
+
    DEF VAR lcErrorReason AS CHAR NO-UNDO.
+   DEF VAR lcDiscPlan    AS CHAR NO-UNDO.
 
    IF LOOKUP(OfferItem.ItemKey,lcIPhoneDiscountRuleIds) > 0 THEN RETURN "".
 
+   /*
+      YPR-2044
+      Temporary solution to change the pending orders with the
+      "TariffMarchDISC" discount plan on the fly to correct one.
+      -- Implemented on 26/03/2015
+   */
+
+   lcDiscPlan = OfferItem.ItemKey.
+
+   IF OfferItem.ItemKey = "TariffMarchDISC" THEN DO:
+      CASE Order.CLIType:
+         WHEN "CONT9"  THEN lcDiscPlan = "CONT9DISC".
+         WHEN "CONT15" THEN lcDiscPlan = "CONT15DISC".
+         WHEN "CONT24" THEN lcDiscPlan = "CONT24DISC".
+         WHEN "CONT23" THEN lcDiscPlan = "CONT23DISC".
+      END CASE.
+   END.
+
    liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
-                                      OfferItem.ItemKey,
+                                      lcDiscPlan, /* OfferItem.ItemKey */
                                       OfferItem.Amount,
                                       TODAY,
                                       OfferItem.Periods,
@@ -440,7 +458,7 @@ PROCEDURE pDiscountPlanMember:
 
    IF liRequest NE 0 THEN 
       RETURN lcErrorReason.
-      
+
    RETURN "".
-   
+
 END PROCEDURE. /* pDiscountPlanMember */

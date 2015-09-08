@@ -308,14 +308,6 @@ IF Mobsub.PayType EQ FALSE AND NOT plBypass THEN DO:
 
 END.
 
-/* Check for active LP service */
-FIND FIRST SubSer NO-LOCK WHERE 
-           SubSer.MsSeq   = MobSub.MsSeq AND 
-           SubSer.ServCom = "LP"         NO-ERROR.
-
-IF AVAIL SubSer AND SubSer.SSStat = 1 THEN 
-   RETURN appl_err("pos_stc_barrings").
-
 /* Check if customer has any debt invoice  */
 
 ldtFirstDay = DATE(MONTH(ADD-INTERVAL(TODAY,-12,"months") + 1),
@@ -346,7 +338,10 @@ IF Mobsub.CliType = "TARJ3"
 END.
 
 
-IF llPreactivated OR fOngoingOrders(MobSub.Cli,"renewal") THEN
+IF llPreactivated OR
+   fOngoingOrders(MobSub.Cli,(IF pcChannel BEGINS "retention"
+                              THEN "retention"
+                              ELSE "renewal")) THEN
    RETURN appl_err("general").
 
 /* validations ends */

@@ -95,7 +95,6 @@ DEF VAR llMemo       AS LOG                    NO-UNDO.
 DEF VAR lcTarget     AS CHAR                   NO-UNDO. 
 DEF VAR lcCustName   AS CHAR                   NO-UNDO. 
 DEF VAR liMsSeq      AS INT                    NO-UNDO. 
-DEF VAR lcHostDesc   AS CHAR                   NO-UNDO.
 DEF VAR lcMenu       AS CHAR                   NO-UNDO  EXTENT 3 FORMAT "X(30)".
 DEF VAR llUseCCTool  AS LOG                    NO-UNDO.
 DEF VAR llIsAdmin    AS LOG                    NO-UNDO.
@@ -155,7 +154,7 @@ form
         LABEL "Fee Belongs To ."
         FORMAT "X(9)"
         HELP "(M)obile subscription or (O)rder"
-    lcHostDesc NO-LABEL FORMAT "X(30)"    
+    SingleFee.OrderId AT 40 LABEL "Order ID ....." FORMAT "->>>>>>>>9"
         SKIP
  
     SingleFee.KeyValue  
@@ -257,16 +256,6 @@ FUNCTION fValidateMsSeq RETURNS LOGIC
    
    RETURN FALSE.
    
-END FUNCTION.
-
-FUNCTION fHostDescription RETURNS LOGIC
-  (icHostTable AS CHAR):
-  
-  CASE icHostTable:
-  WHEN "MobSub" THEN lcHostDesc = "(Subscription ID)".
-  OTHERWISE lcHostDesc = "".
-  END CASE.
- 
 END FUNCTION.
 
 FIND Customer WHERE Customer.CustNum  = iiCustNum  NO-LOCK NO-ERROR.
@@ -1007,8 +996,6 @@ PROCEDURE local-update-record:
          IF AVAILABLE Order THEN lcCLI = Order.CLI.
       END.
        
-      fHostDescription(SingleFee.HostTable).  
-      
       DISP
          SingleFee.CustNum
          lcCustName
@@ -1018,7 +1005,7 @@ PROCEDURE local-update-record:
          lcCLI
          SingleFee.HostTable
          SingleFee.FMItemID
-         lcHostDesc
+         SingleFee.OrderId
          SingleFee.KeyValue
          SingleFee.BillTarget      
          SingleFee.CalcObj      
@@ -1176,8 +1163,6 @@ PROCEDURE local-update-record:
                       DISP string(SingleFee.CustNum) @ SingleFee.KeyValue.
                    END.
 
-                   fHostDescription(INPUT INPUT SingleFee.HostTable).  
-                   DISPLAY lcHostDesc WITH FRAME lis.
                 END. 
                 
                 ELSE IF FRAME-FIELD  = "keyvalue" THEN DO:

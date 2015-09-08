@@ -10,6 +10,7 @@
 {timestamp.i}
 {tmsconst.i}
 
+
 /* change possible descriptive type to an integer key */
 FUNCTION fOrderStampType RETURNS INTEGER
    (icStampType AS CHAR):
@@ -32,6 +33,14 @@ FUNCTION fOrderStampType RETURNS INTEGER
    WHEN "Pr"    OR
    WHEN "4"  THEN RETURN {&ORDERTIMESTAMP_PRINT}.
    
+   WHEN "SimOnly" OR
+   WHEN "Si"    OR
+   WHEN "5"  THEN RETURN {&ORDERTIMESTAMP_SIMONLY}.
+
+   WHEN "SendToLogistics" OR
+   WHEN "Se"    OR
+   WHEN "6"  THEN RETURN {&ORDERTIMESTAMP_SEND}.
+
    OTHERWISE RETURN 0.
    
    END CASE. 

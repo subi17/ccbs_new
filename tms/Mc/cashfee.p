@@ -29,6 +29,7 @@ DEF OUTPUT PARAMETER ocError  AS CHAR NO-UNDO.
 /* iiAction: 1=create fees and invoice
              2=just make a list of fees, don't create anything 
              3=like 2, but leave out campaign topup rows
+             4=like 3, but for conf emails use always Spanish translation
 */             
 
 DEF VAR ldAmount        AS DEC  NO-UNDO. 
@@ -299,6 +300,9 @@ PROCEDURE pMakeCashInvoice:
       liLanguage = INTEGER(OrderCustomer.Language) NO-ERROR. 
    END.
 
+   IF iiAction EQ 4 THEN
+      liLanguage = 1. /* yts-7046 only Spanish supported HTML conf emails. */
+
    IF liCashCust = ? OR liCashCust = 0 THEN DO:
       ocError = "Error:Customer has not been created".
       RETURN.
@@ -380,7 +384,7 @@ PROCEDURE pMakeCashInvoice:
    END.
 
    /* campaign events: additional topup */
-   IF ldTopupAmt NE 0 AND iiAction NE 3 THEN DO:
+   IF ldTopupAmt NE 0 AND iiAction NE 3 AND iiAction NE 4 THEN DO:
 
       ldAmt = ldTopupAmt.
       
@@ -430,7 +434,7 @@ PROCEDURE pMakeCashInvoice:
     
          /* payment on delivery */ 
          FOR FIRST OrderPayment OF Order NO-LOCK WHERE
-                OrderPayment.Method = 1:
+                OrderPayment.Method = {&ORDERPAYMENT_M_POD}:
             liInvType = 6.
          END.
    
@@ -579,6 +583,8 @@ PROCEDURE pUseOffer:
     
    DEF VAR lcUseOffer AS CHAR NO-UNDO.
    DEF VAR lcSIMBillItem AS CHAR NO-UNDO.
+   DEF VAR ldtopUpAmount AS DEC NO-UNDO.
+   DEF VAR ldDiscAmount AS DEC NO-UNDO.
 
    DEF BUFFER bOfferItem FOR OfferItem.
    
@@ -642,15 +648,26 @@ PROCEDURE pUseOffer:
                       TopupSchemeRow.TopupScheme = TopupScheme.TopupScheme AND
                       TopupSchemeRow.EndStamp   >= idOfferStamp AND
                       TopupSchemeRow.BeginStamp <= idOfferStamp:
-
+               /* Check if TopUpScheme has DisplayAmount to show */
+               IF ((Order.CliType EQ "TARJ7" OR
+                   Order.CliType EQ "TARJ9") AND
+                   TopUpSchemeRow.DisplayAmount > 0 AND
+                   (iiAction EQ 3 OR iiAction EQ 4)) THEN DO:
+                  ldtopupAmount = TopUpSchemeRow.DisplayAmount.
+                  ldDiscAmount = TopUpSchemeRow.DisplayAmount * -1.
+               END.
+               ELSE DO:
+                  ldtopupAmount = TopupSchemeRow.Amount.      
+                  ldDiscAmount = TopupSchemeRow.DiscountAmount * -1.
+               END.
                RUN pSingleFee(TopupSchemeRow.BillCode,
-                              TopupSchemeRow.Amount,
+                              ldtopupAmount,
                               TopupScheme.VatIncl,
                               "O:" + Offer.Offer).
                               
-               IF TopupSchemeRow.DiscountAmount NE 0 THEN 
+               IF ldDiscAmount NE 0 THEN 
                   RUN pSingleFee(TopupSchemeRow.DiscountBillCode,
-                                 TopupSchemeRow.DiscountAmount * -1,
+                                 ldDiscAmount,
                                  TopupScheme.VatIncl,
                                  "O:" + Offer.Offer).
                             
@@ -711,7 +728,7 @@ PROCEDURE pSingleFee:
    END.
       
    /* just make rows for reporting */
-   ELSE IF iiAction = 2 OR iiAction = 3 THEN DO:
+   ELSE IF iiAction = 2 OR iiAction = 3 OR iiAction = 4 THEN DO:
       
       fCreateDispRow(idAmount,
                      ilVatIncl,
@@ -768,7 +785,7 @@ PROCEDURE pTerminalDiscount:
    END.
       
    /* rows for reporting */
-   ELSE IF iiAction = 2 OR iiAction = 3 THEN DO:
+   ELSE IF iiAction = 2 OR iiAction = 3 OR iiAction = 4 THEN DO:
       
       FIND BillItem WHERE 
            BillItem.Brand    = gcBrand AND

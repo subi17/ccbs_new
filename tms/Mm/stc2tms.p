@@ -22,6 +22,7 @@
 {main_add_lines.i}
 {fbankdata.i}
 {create_eventlog.i}
+{barrfunc.i}
 
 DEFINE INPUT PARAMETER iiMSRequest AS INTEGER NO-UNDO.
 
@@ -252,13 +253,12 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
 
    IF MobSub.MultiSIMID > 0 THEN RUN pMultiSimSTC (INPUT ldtActDate).
 
-   /* Primary & Additional line handling logic */
+   /* TODO: for old cases (code can be removed later) */
    ELSE IF bOldTariff.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
            bNewTariff.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN
-      RUN pTermAdditionalSim(
-         INPUT MsRequest.MsRequest,
-         INPUT ldtActDate,
-         INPUT bNewTariff.LineType).
+      fAdditionalLineSTC(MsRequest.Msrequest,
+                        fMake2Dt(ldtActDate + 1,0),
+                        "STC").
 
    /* close periodical contracts that are not allowed on new type */
    RUN pCloseContracts(MsRequest.MsRequest,
@@ -846,7 +846,8 @@ PROCEDURE pFinalize:
       ASSIGN lcMultiLineSubsType = fCParamC("MULTILINE_SUBS_TYPE")
              lcFusionSubsType    = fCParamC("FUSION_SUBS_TYPE").
 
-      IF (LOOKUP(CLIType.CLIType,lcMultiLineSubsType)  > 0 AND
+      IF bOldType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID} OR
+         (LOOKUP(CLIType.CLIType,lcMultiLineSubsType)  > 0 AND
           LOOKUP(bOldType.CLIType,lcMultiLineSubsType) = 0) OR
          (LOOKUP(CLIType.CLIType,lcMultiLineSubsType)  = 0 AND
           LOOKUP(bOldType.CLIType,lcMultiLineSubsType) > 0) OR
@@ -954,6 +955,39 @@ PROCEDURE pFinalize:
    /* request handled succesfully */
    fReqStatus(2,"").
 
+   IF bOldType.CLIType EQ "CONTM2" OR
+      CLIType.CLIType EQ "CONTM2" THEN DO:
+      
+      RUN pCONTM2BarringReset.
+      /* write possible error to a memo */
+      IF RETURN-VALUE BEGINS "ERROR" THEN
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          "MobSub",
+                          STRING(MobSub.MsSeq),
+                          MobSub.Custnum,
+                          "CONTM2 barring reset failed",
+                          RETURN-VALUE).
+   END.
+   ELSE IF bOldType.PayType NE CLIType.PayType THEN DO:
+
+      RUN barrengine.p(MobSub.MsSeq,
+                      "Y_BPSUB=1",
+                      {&REQUEST_SOURCE_STC},
+                      katun,               /* creator */
+                      fSecOffSet(fMakeTS(),5),            /* activate */
+                      "",                  /* sms */
+                      OUTPUT lcError).
+      liRequest = 0.
+      liRequest = INTEGER(lcError) NO-ERROR.
+      IF liRequest = 0 THEN
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          "MobSub",
+                          STRING(MobSub.MsSeq),
+                          MobSub.Custnum,
+                          "Y_BPSUB barring activation failed",
+                          STRING(lcError)).
+   END.
+
    /* Send SMS once STC is done */
    RUN requestaction_sms.p(INPUT MsRequest.MsRequest,
                            INPUT MsRequest.ReqCParam2,
@@ -1017,6 +1051,9 @@ PROCEDURE pCloseServices:
    
       /* use newest */
       IF NOT FIRST-OF(bChkSubSer.ServCom) THEN NEXT.
+
+      /* YTS-6588 */
+      IF bChkSubSer.ServCom EQ "BB" THEN NEXT.
 
       llDelete = TRUE.
       
@@ -1435,21 +1472,17 @@ PROCEDURE pNetworkAction:
             RequestAction.ValidTo   >= MobSub.ActivationDate AND
             RequestAction.ValidFrom <= MobSub.ActivationDate AND
             RequestAction.ActionType = "CTServPac" AND 
-            RequestAction.Action     = 1,
-      FIRST CTServPac NO-LOCK WHERE
-            CTServPac.Brand   = gcBrand AND
-            CTServPac.CLIType = RequestAction.CLIType   AND
-            CTServPac.ServPac = RequestAction.ActionKey AND  
-            CTServPac.ToDate >= MobSub.ActivationDate   AND 
-            CTServPac.ServType = 8:
+            RequestAction.Action     = 1:
 
-      RUN barrengine (MobSub.MsSeq,
-                      "UN" + RequestAction.ActionKey,
-                      {&REQUEST_SOURCE_STC}, /* source  */
-                      "",                  /* creator */
-                      MsRequest.ActStamp,  /* activate */
-                      "",                  /* sms */
-                      OUTPUT lcError).
+      IF fGetBarringStatus(RequestAction.ActionKey,
+                           MobSub.MsSeq) EQ {&BARR_STATUS_ACTIVE} THEN
+         RUN barrengine.p(MobSub.MsSeq,
+                         RequestAction.ActionKey + "=0",
+                         {&REQUEST_SOURCE_STC}, /* source  */
+                         "",                  /* creator */
+                         MsRequest.ActStamp,  /* activate */
+                         "",                  /* sms */
+                         OUTPUT lcError).
 
       /* if unbarr fails, stc can still go on? */
 
@@ -2048,3 +2081,94 @@ PROCEDURE pTermAdditionalSim:
    EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
 
 END PROCEDURE.
+   
+
+PROCEDURE pCONTM2BarringReset:
+
+   DEF VAR llOngoing AS LOG NO-UNDO.
+   DEF VAR lrBarring AS ROWID NO-UNDO.
+   DEF VAR liLoop AS INT NO-UNDO. 
+   DEF VAR lcError AS CHAR NO-UNDO. 
+   DEF VAR lcBarring AS CHAR NO-UNDO. 
+   DEF VAR llHasActiveBarringComponent AS LOG NO-UNDO. 
+   DEF VAR liRequest AS INT NO-UNDO. 
+
+   IF NOT AVAIL Mobsub OR
+      NOT AVAIL MsRequest OR
+      NOT AVAIL CLiType OR 
+      NOT AVAIL bOldType THEN RETURN "OK".
+
+   IF NOT (bOldType.CLIType EQ "CONTM2" OR
+            CLIType.CLIType EQ "CONTM2") THEN RETURN "OK".
+   
+   llOngoing = fCheckBarrStatus(MobSub.MsSeq,
+                                OUTPUT lcBarring,
+                                OUTPUT lrBarring).
+      
+   IF llOngoing THEN RETURN "ERROR:Ongoing barring request".
+   
+   BARR_CONF_LOOP:
+   FOR EACH Barring NO-LOCK WHERE
+            Barring.MsSeq EQ MobSub.MsSeq
+      USE-INDEX MsSeq BREAK BY Barring.BarringCode:
+
+      IF FIRST-OF(BarringCode) AND
+         Barring.BarringStatus EQ {&BARR_STATUS_ACTIVE} THEN DO:
+         IF CAN-FIND(FIRST BarringConf NO-LOCK WHERE
+                           BarringConf.BarringCode = Barring.BarringCode AND
+                           BarringConf.NWComponent EQ "BARRING") THEN DO:
+             llHasActiveBarringComponent = TRUE.
+             LEAVE BARR_CONF_LOOP.
+         END.
+      END.
+   END.
+
+   IF llHasActiveBarringComponent THEN DO:
+
+      RUN barrengine.p(MobSub.MsSeq,
+                      "#REFRESH",
+                      {&REQUEST_SOURCE_STC},
+                      katun,               /* creator */
+                      fSecOffSet(fMakeTS(),2),            /* activate */
+                      "",                  /* sms */
+                      OUTPUT lcError).
+      liRequest = 0.
+      liRequest = INTEGER(lcError) NO-ERROR.
+      IF liRequest = 0 THEN RETURN "ERROR:Barring refresh failed:" + STRING(lcError).
+   END.
+   ELSE DO:
+      liRequest = fServiceRequest(MobSub.MsSeq,
+                       "BARRING",
+                       1, /* on */
+                       (IF CLIType.CLIType EQ "CONTM2"
+                        THEN "0110000"
+                        ELSE "0000000"),
+                       fSecOffSet(fMakeTS(),5),
+                       "",
+                       FALSE, /* fees */
+                       FALSE, /* sms */
+                       "",
+                       {&REQUEST_SOURCE_STC},
+                       MsRequest.msrequest, /* father request */
+                       FALSE, /* mandatory for father request */
+                       OUTPUT lcError).
+
+      IF liRequest = 0 THEN
+         RETURN "ERROR:Barring service request failed:" + STRING(lcError).
+      
+      IF bOldType.PayType NE CLIType.PayType THEN DO:
+         RUN barrengine.p(MobSub.MsSeq,
+                         "Y_BPSUB=1",
+                         {&REQUEST_SOURCE_STC},
+                         katun,               /* creator */
+                         fSecOffSet(fMakeTS(),6),            /* activate */
+                         "",                  /* sms */
+                         OUTPUT lcError).
+         liRequest = 0.
+         liRequest = INTEGER(lcError) NO-ERROR.
+         IF liRequest = 0 THEN RETURN "ERROR:Y_BPSUB activation failed:" + STRING(lcError).
+      END.
+   END.
+      
+   RETURN "OK".
+END PROCEDURE. 

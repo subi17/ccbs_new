@@ -28,6 +28,7 @@ gcBrand = "1".
 
 DEF VAR liRequest              AS INT  NO-UNDO.
 DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
+DEF VAR lcMemoText             AS CHAR NO-UNDO.
 
 FUNCTION fSetMDUB RETURNS INT
          (INPUT piMsSeq AS INT,
@@ -210,17 +211,17 @@ FUNCTION fSetMDUB RETURNS INT
                LOOKUP(MobSub.TariffBundle,lcOnlyVoiceContracts) > 0 THEN
                RUN pSendSMS(INPUT MobSub.MsSeq,
                             INPUT 0,
-	                     INPUT "BBDeActBundPost_1",
+                            INPUT "BBDeActBundPost_1",
                             INPUT 11,
                             INPUT {&BB_SMS_SENDER},
                             INPUT "").
          END. /* IF LOOKUP(MobSub.CliType,lcPostpaidVoiceTariffs}) > 0 */
          ELSE IF LOOKUP(MobSub.CliType,lcPrepaidVoiceTariffs) > 0 THEN
-	     RUN pSendSMS(INPUT MobSub.MsSeq,
+            RUN pSendSMS(INPUT MobSub.MsSeq,
                          INPUT 0,
-		           INPUT "BBDeActBundPre_1",
-		           INPUT 11,
-		           INPUT {&BB_SMS_SENDER},
+                         INPUT "BBDeActBundPre_1",
+                         INPUT 11,
+                         INPUT {&BB_SMS_SENDER},
                          INPUT "").
       END. /* IF AVAILABLE SubSer AND SubSer.SSStat = 1 THEN DO: */
    END. /* IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO: */
@@ -242,6 +243,7 @@ DEF VAR lcReturnValue AS CHAR NO-UNDO.
 DEF VAR lcError AS CHAR NO-UNDO. 
 DEF VAR lcCounterError AS CHAR NO-UNDO. 
 DEF VAR lcMemoTitle AS CHAR NO-UNDO. 
+DEF VAR lcOnOff AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 pcId = get_string(param_toplevel_id,"0").
@@ -269,6 +271,8 @@ IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 IF piBundleAction NE 0 AND
    piBundleAction NE 1 THEN
    RETURN appl_err(SUBST("incorrect action value: &1", piBundleAction)).
+IF piBundleAction EQ 1 THEN lcOnOff = "Activar".
+ELSE lcOnOff = "Desactivar".
 
 FIND DayCampaign NO-LOCK WHERE
      DayCampaign.Brand = gcBrand AND
@@ -319,22 +323,46 @@ END.
 lcResultStruct = add_struct(response_toplevel_id, "").
 add_int(lcResultStruct,lcReturnValue,liReturnValue).
 
+/********************************/
+
+/* Original implementation:
 IF pcReason NE '' THEN DO:
    CREATE Memo.
    ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand 
-      Memo.HostTable = "MobSub" 
-      Memo.KeyValue  = STRING(MobSub.MsSeq) 
+      Memo.Brand     = gcBrand
+      Memo.HostTable = "MobSub"
+      Memo.KeyValue  = STRING(MobSub.MsSeq)
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
+      Memo.CreUser   = katun
       Memo.MemoTitle = lcMemoTitle
       Memo.MemoText  = pcReason
       Memo.CustNum   = MobSub.CustNum
       Memo.MemoType  = "service".
-  
-END.
 
+END.
+original*/
+
+
+/*YDR_1698. Commented becase this was done in Newton.
+This can be removed when it is sure that this change is not needed.*/
+
+IF pcBundleId MATCHES ("*_UPSELL") THEN
+   lcMemoText = pcReason + " Ampliación " +  DayCampaign.DCName + " - " + lcOnOff.
+ELSE
+   lcMemoText = pcReason + " " + DayCampaign.DCName + " - " + lcOnOff.
+
+DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
+                 "MobSub",                             /* HostTable */
+                 STRING(Mobsub.MsSeq),                 /* KeyValue  */
+                 MobSub.CustNum,                       /* CustNum   */
+                 DayCampaign.DCName,                   /* MemoTitle */
+                 lcMemoText,                           /* MemoText  */
+                 "Service",                            /* MemoType  */
+                 katun).
+/*END OF YDR_1698 */
+
+/*******************************/
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.

@@ -156,6 +156,9 @@ PROCEDURE pRequestActions:
       WHEN "DayCampaign" THEN DO:
          IF liMsSeq > 0 THEN RUN pPeriodicalContract.
       END.
+      
+      /* barrings */
+      WHEN "Barring" THEN RUN pBarring.
 
       /* service packages */
       WHEN "CTServPac" THEN RUN pServicePackage.
@@ -647,8 +650,9 @@ PROCEDURE pServicePackage:
             IF SubSer.ServCom = "BB" THEN lcParam = "4".
             ELSE lcParam = "".
          END.
-         ELSE IF SubSer.SSStat = 2 AND SubSer.ServCom = "BB" AND
-                 icCLIType = "TARJ7" THEN lcParam = "3".
+         ELSE IF SubSer.SSStat  = 2 AND SubSer.ServCom = "BB" AND
+                (icCLIType = "TARJ7" OR icCLIType = "TARJ9")
+                THEN lcParam = "3".
          ELSE RETURN.
 
          liRequest = fServiceRequest(liMsSeq,
@@ -748,3 +752,36 @@ PROCEDURE pServiceRequest:
    END. /* IF llNotDssActive THEN DO: */
 
 END.
+
+PROCEDURE pBarring:
+   
+   CASE RequestAction.Action:
+
+   /* activation */
+   WHEN 1 THEN DO:
+         
+      RUN barrengine (liMsSeq,
+                      ttAction.ActionKey,
+                      icSource,            /* source  */
+                      "ReqAct",            /* creator */
+                      idActStamp,          /* activate */
+                      "",                  /* sms */
+                      OUTPUT lcResult).
+
+      liRequest = 0.
+      liRequest = INTEGER(lcResult) NO-ERROR. 
+         
+      IF liRequest = 0 THEN DO:                              
+         /* write possible error to a memo */
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          lcMemoTable,
+                          lcMemoKey,
+                          liCustNum,
+                          "BARRING FAILED",
+                          ttAction.ActionKey + ":" + STRING(lcResult)).
+      END.
+   END.
+   
+   END CASE.
+   
+END PROCEDURE.

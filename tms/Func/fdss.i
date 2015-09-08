@@ -196,20 +196,33 @@ FUNCTION fGetDSSMsSeqLimitTerm RETURNS LOG (INPUT  iiCustNum   AS INT,
                                         OUTPUT odeDSSLimit AS DEC,
                                         OUTPUT ocBundleId  AS CHAR):
 
+   DEF BUFFER ServiceLimit FOR ServiceLimit.
+   DEF BUFFER MServiceLimit FOR MServiceLimit.
+   DEF BUFFER bMServiceLimit FOR MServiceLimit.
+
    FOR EACH ServiceLimit NO-LOCK WHERE
             {dss_search.i "ServiceLimit.GroupCode"},
-      FIRST MServiceLimit NO-LOCK WHERE
+       EACH MServiceLimit NO-LOCK WHERE
             MServiceLimit.CustNum  = iiCustNum             AND
             MServiceLimit.DialType = ServiceLimit.DialType AND
             MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
-            MServiceLimit.EndTS   >= ideActStamp AND
-            MServiceLimit.FromTs  <= ideBundleTermStamp:
+            MServiceLimit.EndTS   >= ideActStamp:
 
-      ASSIGN oiDSSMsSeq  = MServiceLimit.MsSeq
-             odeDSSLimit = MServiceLimit.InclAmt
-             ocBundleId  = ServiceLimit.GroupCode.
+      IF MServiceLimit.FromTs <= ideBundleTermStamp OR
+         (MServiceLimit.FromTs EQ TRUNC(MServiceLimit.FromTs,0) AND
+          CAN-FIND(FIRST bMServiceLimit NO-LOCK WHERE
+                         bMServiceLimit.CustNum  = MServiceLimit.Custnum AND
+                         bMServiceLimit.DialType = MServiceLimit.DialType AND
+                         bMServiceLimit.SlSeq    = MServiceLimit.SlSeq    AND
+                         bMServiceLimit.EndTS    = fSecOffSet(MServiceLimit.FromTs,-1) AND
+                         bMServiceLimit.FromTs  <= ideBundleTermStamp)) THEN DO:
 
-      RETURN TRUE.
+         ASSIGN oiDSSMsSeq  = MServiceLimit.MsSeq
+                odeDSSLimit = MServiceLimit.InclAmt
+                ocBundleId  = ServiceLimit.GroupCode.
+
+         RETURN TRUE.
+      END.
    END. /* FOR FIRST ServiceLimit NO-LOCK WHERE */
 
    RETURN FALSE.
@@ -231,6 +244,28 @@ FUNCTION fGetActiveDSSId RETURNS CHAR (INPUT iiCustNum   AS INT,
 
       RETURN ServiceLimit.GroupCode.
    END. /* FOR FIRST ServiceLimit NO-LOCK WHERE */
+
+   RETURN "".
+END FUNCTION.
+
+FUNCTION fGetDSSId RETURNS CHAR (
+   INPUT iiCustNum   AS INT,
+   INPUT ideActStamp AS DEC):
+
+   DEF BUFFER ServiceLimit FOR ServiceLimit.
+   DEF BUFFER MServiceLimit FOR MServiceLimit.
+
+   FOR EACH ServiceLimit NO-LOCK WHERE
+            {dss_search.i "ServiceLimit.GroupCode"},
+      FIRST MServiceLimit NO-LOCK WHERE
+            MServiceLimit.CustNum  = iiCustNum             AND
+            MServiceLimit.DialType = ServiceLimit.DialType AND
+            MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
+            MServiceLimit.EndTS   >= ideActStamp           AND
+            MServiceLimit.FromTs  <= ideActStamp:
+
+      RETURN ServiceLimit.GroupCode.
+   END.
 
    RETURN "".
 END FUNCTION.
@@ -1038,6 +1073,7 @@ FUNCTION fTransferDSS RETURNS LOG
                       icUserCode,
                       icProcess, /* fee_memo */
                       0,
+                      FALSE, /* Full monthly fee */
                       OUTPUT ldReqAmt).
 
          /* Update First month fee based on the number of days if not billed */
@@ -1586,6 +1622,11 @@ PROCEDURE pUpdateDSSConsumption:
 
    /* Adjust DSS counter if counter is more than usage */
    IF ldeDSSUsage > ldeDSSLimit THEN DO:
+   
+      /* YTS-6595 */
+      IF fOngoingDSSTerm (bMsRequest.Custnum,
+                          bMsRequest.ActStamp) THEN RETURN.
+
       RUN pUpdateDSSNetworkLimit(INPUT bMsRequest.MsSeq,
                                  INPUT bMsRequest.CustNum,
                                  INPUT (ldeDSSUsage - ldeDSSLimit),

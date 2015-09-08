@@ -60,6 +60,7 @@
 {offer.i}
 {fbankdata.i}
 {mnp.i}
+{tmsconst.i}
 
 DEF TEMP-TABLE wError NO-UNDO
     FIELD Cust   AS INT
@@ -861,16 +862,42 @@ IF NOT llErrors THEN DO:
                     OrderCustomer.OrderID = Order.OrderID AND
                     OrderCustomer.RowType = 4 NO-ERROR.
 
-         IF AVAILABLE OrderCustomer THEN ASSIGN
-            lcTagDelAddress = (IF Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA}
-                               THEN OrderCustomer.Company + CHR(10)
-                               ELSE "") +
-                              OrderCustomer.Address
-            lcTagDelPost    = OrderCustomer.ZipCode + " " +
-                              OrderCustomer.PostOffice.
+         IF AVAILABLE OrderCustomer THEN DO:
+            ASSIGN
+               lcTagDelAddress = (IF Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA}
+                                  THEN OrderCustomer.Company + CHR(10)
+                                  ELSE "") +
+                                 OrderCustomer.Address
+               lcTagDelPost    = OrderCustomer.ZipCode + " " +
+                                 OrderCustomer.PostOffice.
+
+            FIND FIRST OrderAction WHERE
+                       OrderAction.Brand = gcBrand AND
+                       OrderAction.OrderId  = OrderCustomer.OrderId AND
+                       OrderAction.ItemType = "UPSHours"
+                       NO-LOCK NO-ERROR.
+            IF AVAILABLE OrderAction THEN
+               DO liCount = 1 TO NUM-ENTRIES(OrderAction.ItemKey,";"):
+               lcTagUPSHours = lcTagUPSHours +
+                               ENTRY(liCount,OrderAction.ItemKey,";") +
+                               CHR(10).
+
+               IF liLanguage = 5 THEN 
+                  ASSIGN lcTagUPSHours = REPLACE(lcTagUPSHours, "Dom", "Sun")
+                         lcTagUPSHours = REPLACE(lcTagUPSHours, "Lun", "Mon")
+                         lcTagUPSHours = REPLACE(lcTagUPSHours, "Mar", "Tue")
+                         lcTagUPSHours = REPLACE(lcTagUPSHours, "Mi" + CHR(233), "Wed")
+                         lcTagUPSHours = REPLACE(lcTagUPSHours, "Jue", "Thu")
+                         lcTagUPSHours = REPLACE(lcTagUPSHours, "Vie", "Fri")
+                         lcTagUPSHours = REPLACE(lcTagUPSHours, "S" + CHR(225) + "b", "Sat").
+
+            END.
+
+         END.
          ELSE ASSIGN
             lcTagDelAddress = lcEPLRAddr
-            lcTagDelPost    = lcEPLRPost.
+            lcTagDelPost    = lcEPLRPost
+            lcTagUPSHours   = "".
       END.
 
       /* MGM */
@@ -984,6 +1011,7 @@ IF NOT llErrors THEN DO:
 
          DEF VAR ldaMNP AS DATE NO-UNDO.
          DEF VAR ldePortingTime AS DEC NO-UNDO. 
+         DEF VAR lcProduct AS CHAR NO-UNDO. 
 
          FIND FIRST OrderCustomer OF Order NO-LOCK WHERE
                     OrderCustomer.RowType = 1.
@@ -991,11 +1019,29 @@ IF NOT llErrors THEN DO:
          IF Order.PortingDate <> ? THEN
             ldePortingTime = fMake2Dt(Order.PortingDate,0).
 
+         FIND FIRST OrderAccessory NO-LOCK WHERE
+                    OrderAccessory.Brand = gcBrand AND
+                    OrderAccessory.OrderId = Order.OrderID AND
+                    OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE}
+                    NO-ERROR.
+         IF AVAIL OrderAccessory THEN
+            lcProduct = "T".
+         ELSE
+            lcProduct = "S".
+         
+         lcTariffType = fGetDataBundleInOrderAction(Order.OrderId,
+                                                    Order.CLIType).
+         IF lcTariffType = "" THEN
+            lcTariffType = Order.CLIType.
+
+         
          IF ldePortingTime <= fMakeTS() THEN
             ldamnp = fmnpchangewindowdate(
                                 fmakets(),
                                 order.orderchannel,
-                                ordercustomer.region).
+                                ordercustomer.region,
+                                lcProduct,
+                                lcTariffType).
          ELSE ldaMNP = Order.PortingDate.
 
          lcMonth = fTeksti(542 + MONTH(ldaMNP),(IF liLanguage EQ 5 THEN 5 ELSE 1)).
@@ -1077,7 +1123,8 @@ IF NOT llErrors THEN DO:
                               ELSE Invoice.ToDate).
 
             /* Check if TopUpScheme has DisplayAmount to show */
-            IF Order.CliType BEGINS "TARJ7" THEN
+            IF Order.CliType BEGINS "TARJ7" OR
+               Order.CliType BEGINS "TARJ9" THEN
                FOR EACH TopUpSchemeRow NO-LOCK WHERE
                         TopUpSchemeRow.BillCode = InvRow.BillCode AND
                         TopUpSchemeRow.Amount = InvRow.Amt:
@@ -1863,24 +1910,27 @@ FOR FIRST CLIType NO-LOCK WHERE
                            OUTPUT ldiOrderDate).
 
    IF CLIType.CLIType EQ "TARJ7" THEN 
-      ldeMFWithTax = (1 + ldeTaxPerc / 100) * 6.
+      ldeMFWithTax = (1 + ldeTaxPerc / 100) * 5.99.  /* 7.25 IVA incl */
+   ELSE IF CLIType.CLIType EQ "TARJ9" THEN
+      ldeMFWithTax = (1 + ldeTaxPerc / 100) * 8.265. /* 10.00 IVA incl */
    ELSE IF CLiType.CompareFee > 0 THEN
       ldeMFWithTax = (1 + ldeTaxPerc / 100) * CLIType.CompareFee.
 
     CASE CLIType.CLIType:
       WHEN "CONT9" OR WHEN "CONT15" THEN lcList = "0 cent/min".
-      WHEN "TARJ7" THEN lcList = "1,21 cent/min".
+      WHEN "TARJ7" THEN lcList = "1 cent/min".
       WHEN "TARJ8" THEN lcList = "6,05 cent/min".
+      WHEN "TARJ9" THEN lcList = "1 cent/min".
       OTHERWISE lcList = "".
     END.
 
-    IF LOOKUP(Order.CLIType, "CONT9,CONT15,CONT24") > 0 THEN 
+    IF LOOKUP(Order.CLIType, "CONT9,CONT15,CONT24,CONT23") > 0 THEN 
        FOR FIRST OfferItem WHERE
                  OfferItem.Brand       = gcBrand             AND
                  OfferItem.Offer       = Order.Offer         AND
                  OfferItem.ItemType    = "discountplan"      AND
                  LOOKUP(OfferItem.ItemKey,
-                        "TariffMarchDISC,CONT9DISC,CONT15DISC,CONT24DISC") > 0 AND
+                 "TariffMarchDISC,CONT9DISC,CONT15DISC,CONT24DISC,CONT23DISC") > 0 AND
                  OfferItem.BeginStamp <= Order.CrStamp       AND
                  OfferItem.EndStamp   >= Order.CrStamp     NO-LOCK,
           FIRST DiscountPlan WHERE 
@@ -1936,13 +1986,14 @@ IF lcFATGroup > "" THEN DO:
       FILL(" ",36) + fTeksti(521,liLanguage).
 END. /* IF lcFATGroup > "" THEN DO: */
 
-IF Order.CLIType = "TARJ7" AND Order.OrderType < 2 THEN DO:
+IF Order.CLIType = "TARJ7" AND 
+   Order.OrderType < 2 THEN DO:
 
     FIND FIRST OrderAction NO-LOCK WHERE 
-           OrderAction.Brand    = gcBrand       AND 
-           OrderAction.OrderId  = Order.OrderID AND
-           OrderAction.ItemType = "Promotion"   AND 
-           OrderAction.ItemKey  = "Tarj7"       NO-ERROR.
+           OrderAction.Brand    = gcBrand        AND 
+           OrderAction.OrderId  = Order.OrderID  AND
+           OrderAction.ItemType = "Promotion"    AND 
+           OrderAction.ItemKey  = Order.CLIType  NO-ERROR.
     
     lcTagCTName = lcTagCTName + CHR(9) + CHR(9) + fTeksti(540,liLanguage) + 
                   IF AVAILABLE OrderAction THEN 
@@ -2268,7 +2319,7 @@ IF iiPrintTarget = 6 THEN DO:
 
       /* Send the email */
       IF LOOKUP(lcMailHost,{&HOSTNAME_STAGING}) > 0 THEN
-         SendMaileInvoice("Order Confirmation Email",lcEPLFile).
+         SendMaileInvoice("Order Confirmation Email",lcEPLFile,"").
       ELSE DO:
          xMailSubj = "'" + xMailSubj + "'".
          SendMail(lcEPLFile,"").

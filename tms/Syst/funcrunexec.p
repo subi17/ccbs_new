@@ -96,7 +96,7 @@ FORM
     FuncRunExec.FRQScheduleID COLON 20
     FuncRunExec.FRQRowSeq    COLON 20 SKIP(1)
     ldProcessed  COLON 20
-       FORMAT ">>>>>>>>>9" 
+       FORMAT "->>>>>>>>>9" 
        LABEL "Processed Events"
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(cfc)

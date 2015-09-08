@@ -28,6 +28,8 @@ katun = "MNP".
 {ordercancel.i}
 {msisdn_prefix.i}
 {orderchk.i}
+{main_add_lines.i}
+{fgettxt.i}
 
 DEFINE VARIABLE liLoop       AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTime       AS CHARACTER NO-UNDO.
@@ -41,6 +43,7 @@ DEFINE VARIABLE liOrderQty   AS INTEGER   NO-UNDO.
 DEFINE VARIABLE llOrderClosed AS LOGICAL NO-UNDO. 
 DEFINE VARIABLE liHandled AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liErrors AS INTEGER NO-UNDO. 
+DEFINE VARIABLE ldeSMSStamp  AS DECIMAL NO-UNDO.
 
 DEFINE STREAM sNagios.
 
@@ -870,6 +873,7 @@ PROCEDURE pHandleFromASOL2ACON:
       DEFINE VARIABLE liQuarTime AS INTEGER NO-UNDO.
       DEFINE VARIABLE llPenalty AS LOGICAL NO-UNDO. 
       DEFINE VARIABLE ocResult AS CHARACTER NO-UNDO. 
+      DEF VAR ldaMNPDate AS DATE NO-UNDO. 
 
       fInitialiseValues(2, 
          fIsYoigoCLI(MNPSub.CLI),
@@ -903,7 +907,14 @@ PROCEDURE pHandleFromASOL2ACON:
 
       IF liTermReqId = 0 THEN
          fErrorHandle(ocResult). 
+      ELSE DO:
 
+         fTS2Date(MNPSub.PortingTime, OUTPUT ldaMNPDate).
+
+         fAdditionalLineSTC(liTermReqId,
+                            fMake2Dt(ldaMNPDate, 0),
+                            "MNP").
+      END.
    END.
    
    ASSIGN

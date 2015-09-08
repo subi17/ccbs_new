@@ -38,7 +38,8 @@ FUNCTION fInvGroup RETURN CHARACTER
 
 END.
    
-FUNCTION fUpdateEmail RETURNS LOGICAL:
+FUNCTION fUpdateEmail RETURNS LOGICAL
+   (INPUT iiOrder AS INT):
    
    DEF VAR liRequest AS INT NO-UNDO. 
    DEF VAR lcResult AS CHAR NO-UNDO. 
@@ -64,6 +65,7 @@ FUNCTION fUpdateEmail RETURNS LOGICAL:
                                           INPUT Customer.CustNum,
                                           INPUT {&REQUEST_SOURCE_MANUAL_TMS},
                                           INPUT Customer.Email,
+                                          INPUT iiOrder,
                                           OUTPUT lcResult).
          IF liRequest > 0 THEN DO:
             /* If Email already validated then mark DelType EMAIL */
@@ -97,6 +99,7 @@ FUNCTION fUpdateEmail RETURNS LOGICAL:
                                              INPUT Customer.CustNum,
                                              INPUT {&REQUEST_SOURCE_FUSION_EMAIL},
                                              INPUT Customer.Email,
+                                             INPUT iiOrder,
                                              OUTPUT lcResult).
          END. /* IF liRequest = 0 THEN DO: */
          IF liRequest > 0 THEN DO:
@@ -111,7 +114,8 @@ FUNCTION fUpdateEmail RETURNS LOGICAL:
    END. /* IF Customer.Email <> OrderCustomer.Email THEN DO: */
 END.
 
-FUNCTION fUpdEmailDelType RETURNS LOGICAL:
+FUNCTION fUpdEmailDelType RETURNS LOGICAL
+   (INPUT iiOrder   AS INT):
 
    DEF VAR liRequest     AS INT  NO-UNDO.
    DEF VAR lcResult      AS CHAR NO-UNDO.
@@ -140,6 +144,7 @@ FUNCTION fUpdEmailDelType RETURNS LOGICAL:
                                              INPUT Customer.CustNum,
                                              INPUT {&REQUEST_SOURCE_MANUAL_TMS},
                                              INPUT Customer.Email,
+                                             INPUT iiOrder,
                                              OUTPUT lcResult).
 
             /* If Email already validated then mark DelType EMAIL */
@@ -180,7 +185,7 @@ FUNCTION fUpdEmailDelType RETURNS LOGICAL:
       END. /* ELSE DO: */
    END. /* IF OrderCustomer.DelType <> Customer.DelType THEN DO: */
 
-   fUpdateEmail().
+   fUpdateEmail(iiOrder).
 
 END. /* FUNCTION fUpdEmailDelType */
 
@@ -253,7 +258,7 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    Customer.OutMarkBank  = OrderCustomer.OutBankMarketing.
 
    /* Electronic Invoice Project - update email and delivery type */
-   fUpdEmailDelType().
+   fUpdEmailDelType(iiorder).
    
    IF OrderCustomer.AddressCodP > "" OR
       OrderCustomer.AddressCodC > "" OR

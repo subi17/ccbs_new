@@ -121,6 +121,7 @@ oiRequest = fCTChangeRequest(MobSub.msseq,
                   0,
                   {&REQUEST_SOURCE_FUSION_ORDER}, 
                   piOrderID,
+                  0,
                   OUTPUT lcError).
 
 IF oiRequest = 0 THEN

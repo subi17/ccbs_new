@@ -272,7 +272,7 @@ DO WHILE TRUE
           lcMailHost = "merak" AND
           INDEX(ttBatchInputFile.EmailId,"yoigo.com") = 0 THEN DO:
           xMailAddr = ttBatchInputFile.EmailId.
-          SendMaileInvoice(lcEmailContent,lcLogFile).
+          SendMaileInvoice(lcEmailContent,lcLogFile,"").
        END. /* IF lcMailHost = "merak" THEN DO: */
 
        /* Moved debug file to processed directory */

@@ -3,7 +3,7 @@
  *
  * @input  transaction_id;string;mandatory;transaction id
            msisdn;string;mandatory;subscription msisdn number
-           bundle_id;string;mandatory;bundle id (eg: BONO Contracts/DSS) 
+           bundle_id;string;mandatory;bundle id (eg: BONO Contracts/DSS, Bono VoIP) 
            bundle_status;string;mandatory;status value (on,off) 
  * @output     struct;mandatory;response struct
  * @response   transaction_id;string;transaction id
@@ -59,6 +59,10 @@ DEF VAR lcAllowedBONOContracts AS CHAR NO-UNDO.
 DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
 DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 DEF VAR ldeBundleFee           AS DEC  NO-UNDO.
+DEF VAR lcApplicationId        AS CHAR NO-UNDO.
+DEF VAR lcAppEndUserId         AS CHAR NO-UNDO.
+DEF VAR lcOnOff                AS CHAR NO-UNDO.
+DEF VAR secondsFromPrevious    AS INT  NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,string,string,string") EQ ? THEN RETURN.
 
@@ -69,17 +73,39 @@ ASSIGN pcTransId = get_string(param_toplevel_id, "0")
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF NOT fchkTMSCodeValues(gbAuthLog.UserName,substring(pcTransId,1,3)) THEN
+ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
+       lcAppEndUserId  = gbAuthLog.EndUserId.
+
+IF NOT fchkTMSCodeValues(gbAuthLog.UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
+
+katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
 
 FIND FIRST MobSub  WHERE 
            MobSub.CLI = pcCLI NO-LOCK NO-ERROR.
 IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
 
+/* YDR-1783 Check that previous request is not done during
+   previous five minutes from external api */
+IF CAN-FIND( FIRST MsRequest NO-LOCK WHERE
+                   MsRequest.MsSeq = Mobsub.MsSeq AND
+                   MsRequest.ActStamp > fSecOffSet(fMakeTS(),-300) AND
+                   MsRequest.ReqType = 8 AND
+                   MsRequest.ReqCParam3 = pcBundleId AND
+                   MsRequest.ReqSource = {&REQUEST_SOURCE_EXTERNAL_API} 
+                   USE-INDEX MsActStamp) THEN
+   RETURN appl_err("The requested activation was not handled because " +
+                   "there is a too recent activation.").
+
 lcBONOContracts = fCParamC("BONO_CONTRACTS").
 
+FIND FIRST DayCampaign NO-LOCK WHERE
+           DayCampaign.Brand = gcBrand AND
+           DayCampaign.DCEvent = pcBundleId NO-ERROR.
+IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
+
 /* currently we support only manual activation/termination for MDUB and MDUB2 */
-IF LOOKUP(pcBundleId,lcBONOContracts) = 0 AND
+IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") = 0 AND
    pcBundleId <> {&DSS}
 THEN RETURN appl_err("Incorrect Bundle Id").
 
@@ -117,7 +143,12 @@ CASE pcActionValue :
             RETURN appl_err("Bundle termination is not allowed since " +
                             "subscription has ongoing BTC with upgrade upsell").
       END. /* IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO: */
-
+      ELSE IF pcBundleId = "BONO_VOIP" THEN DO:
+         IF fGetActiveSpecificBundle(Mobsub.MsSeq,
+                                     ldNextMonthActStamp,
+                                     pcBundleId) = "" THEN
+            RETURN appl_err("Bundle termination is not allowed").
+      END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
       /* Customer level - As of now DSS only */
       ELSE DO:
          IF NOT fIsDSSActive(Mobsub.Custnum,ldeActStamp) THEN
@@ -128,6 +159,7 @@ CASE pcActionValue :
       END. /* ELSE DO: */
 
       liActionValue = 0.
+      lcOnOff = "Desactivar".
    END.
 
    /* activation */
@@ -147,7 +179,10 @@ CASE pcActionValue :
          IF NOT fServPackagesActive() THEN
             RETURN appl_err("Bundle activation is not allowed").
       END. /* IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO: */
-
+      ELSE IF pcBundleId = "BONO_VOIP" THEN DO:
+         IF NOT fIsBonoVoIPAllowed(Mobsub.MsSeq,ldeActStamp) THEN 
+            RETURN appl_err("Bundle activation is not allowed").
+      END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
       /* Customer level - As of now DSS only */
       ELSE DO:
          IF pcBundleId = {&DSS} THEN
@@ -161,6 +196,7 @@ CASE pcActionValue :
       END. /* ELSE DO: */
 
       liActionValue = 1. 
+      lcOnOff = "Activar".
    END.
    OTHERWISE DO: 
      RETURN appl_err("Invalid Bundle value").
@@ -214,8 +250,8 @@ ELSE
                                 0,
                                 0,
                                 OUTPUT lcResult).
-   
-IF liRequest = 0 THEN RETURN appl_err("Bundle request not created").
+
+IF liRequest = 0 THEN RETURN appl_err("Bundle request not created"). 
 
 IF LOOKUP(pcBundleId,lcBONOContracts) > 0 AND liActionValue <> 1 THEN DO:
    /* Black Berry Project */
@@ -229,7 +265,7 @@ IF LOOKUP(pcBundleId,lcBONOContracts) > 0 AND liActionValue <> 1 THEN DO:
             LOOKUP(MobSub.TariffBundle,lcOnlyVoiceContracts) > 0 THEN
             RUN pSendSMS(INPUT MobSub.MsSeq,
                          INPUT 0,
-	                  INPUT "BBDeActBundPost_1",
+                         INPUT "BBDeActBundPost_1",
                          INPUT 11,
                          INPUT {&BB_SMS_SENDER},
                          INPUT "").
@@ -265,19 +301,16 @@ top_struct = add_struct(response_toplevel_id, "").
 add_string(top_struct, "transaction_id", pcTransId).
 add_boolean(top_struct, "result", True).
 
-CREATE Memo.
-ASSIGN
-      Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand 
-      Memo.HostTable = "MobSub" 
-      Memo.KeyValue  = STRING(MobSub.MsSeq) 
-      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
-      Memo.MemoTitle = "Mobile Data Usage Bundle"
-      Memo.MemoText  = "External API bundle activation/deactivation"
-      Memo.CustNum   = MobSub.CustNum
-      Memo.MemoType  = "service".
- 
+DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
+                 "MobSub",                             /* HostTable */
+                 STRING(Mobsub.MsSeq),                 /* KeyValue  */
+                 MobSub.CustNum,                       /* CustNum */
+                 DayCampaign.DCName,                   /* MemoTitle */
+                 DayCampaign.DCName + " - " + lcOnOff, /* MemoText */
+                 "Service",                            /* MemoType */
+                 fgetAppDetailedUserId(INPUT lcApplicationId,
+                                      INPUT Mobsub.CLI)).
+
 FINALLY:
    /* Store the transaction id */
    gbAuthLog.TransactionId = pcTransId.

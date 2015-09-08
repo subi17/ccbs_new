@@ -23,7 +23,8 @@ DEF INPUT  PARAMETER iiMsSeq     AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icGroupCode AS CHAR NO-UNDO.  /* bundle ID */
 DEF INPUT  PARAMETER icUserCode  AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER icFeeMemo   AS CHAR NO-UNDO.
-DEF INPUT  PARAMETER iiMsRequest AS INT NO-UNDO.
+DEF INPUT  PARAMETER iiMsRequest AS INT  NO-UNDO.
+DEF INPUT  PARAMETER ilFMFee     AS LOG  NO-UNDO.  /* Full monthly fee   */
 DEF OUTPUT PARAMETER odBilled    AS DEC  NO-UNDO.  /* billed after end date */
 
 DEF BUFFER bCloseFee  FOR FixedFee.
@@ -178,6 +179,9 @@ FOR EACH bCloseItem OF bCloseFee EXCLUSIVE-LOCK:
                                           liShortEnd).
       ELSE IF liBrokenRental = 2 AND ldBRAmt < ldeOriginalFee THEN
          ldBRAmt = ldeOriginalFee.
+      
+      /* force to full month fee */
+      IF ilFMFee THEN ldBRAmt = ldeOriginalFee.
 
       /* unbilled item can be changed, billed must be credited */
       IF bCloseItem.Billed = FALSE THEN ASSIGN 
@@ -233,6 +237,7 @@ FOR EACH bCredFee NO-LOCK WHERE
                  icUserCode,
                  icFeeMemo,
                  0,
+                 FALSE,
                  OUTPUT ldCredAmt).
                    
    /* reduce amount to be credited for billed items */

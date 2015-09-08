@@ -18,11 +18,10 @@
 {tmsconst.i}
 {service.i}
 {main_add_lines.i}
+{barrfunc.i}
 
 DEFINE INPUT PARAMETER iiRequest AS INTEGER   NO-UNDO.
 
-DEF VAR liReq           AS INT  NO-UNDO.
-DEF VAR ocResult        AS CHAR NO-UNDO.
 DEF VAR lcValidate      AS CHAR NO-UNDO.
 DEF VAR liMasterRequest AS INT  NO-UNDO.
 DEF VAR ldActStamp      AS DEC  NO-UNDO.
@@ -38,6 +37,7 @@ FIND MsRequest WHERE
      MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
 IF NOT AVAIL MsRequest OR MsRequest.ReqType NE 35 THEN RETURN "ERROR".
+IF MsRequest.MsSeq EQ 0 THEN RETURN "ERROR".
 
 /* Store Master request request Id to be used in subrequest */
 liMasterRequest = MsRequest.MsRequest.
@@ -68,12 +68,16 @@ ELSE ASSIGN
 
 RUN pMain.
 
-fCleanEventObjects().
-
 RETURN RETURN-VALUE.
 
-/* note: ReqIParam3 and ReqIParam4 are in use for fraud tool limits */
+FINALLY:
+   fCleanEventObjects().
+   EMPTY TEMP-TABLE ttProvCommand NO-ERROR.
+   EMPTY TEMP-TABLE ttMergedBarring NO-ERROR.
+   EMPTY TEMP-TABLE ttBarringCmd NO-ERROR.
+END.
 
+/* note: ReqIParam3 and ReqIParam4 are in use for fraud tool limits */
 
 PROCEDURE pMain:
 
@@ -81,29 +85,26 @@ PROCEDURE pMain:
    CASE MsRequest.ReqStat:
 
    /* New request, create subrequest for servicepac */
-   WHEN 0 THEN DO:
-      /* Request cannot be handled until barring removal has been 
-      handled */
-      IF MsRequest.ReqIParam2 > 0 THEN DO: 
+   WHEN 0 then do:
+   
+      IF MsRequest.ReqIParam2 > 0 THEN DO:
          /* Is this mandatory for next barring package to be activated */
          FIND bMsReq NO-LOCK WHERE
               bMsReq.MsRequest = MsRequest.ReqIParam2
          NO-ERROR.
-         
+
          CASE bMsReq.ReqStat:
-          
+
             WHEN 2 THEN DO:
                /* Mandatory unbarring complete, run pending */
                RUN pNew(MsRequest.ReqCParam1,
                         ldaActDate,
-                        ldActStamp,
-                        MobSub.CliType,
-                        MobSub.MsSeq).
+                        ldActStamp).
 
                RETURN.
             END.
             WHEN 3 THEN DO:
-               fReqStatus(3,"Package change failed see requests "  + 
+               fReqStatus(3,"Package change failed see requests "  +
                              STRING(MsRequest.MsRequest) + " and " +
                              STRING(MsRequest.ReqIParam2)).
                /* Unarring failed, discontinue further handling */
@@ -111,100 +112,146 @@ PROCEDURE pMain:
             OTHERWISE RETURN. /* Handling not done yet */
          END.
       END.
-      /* No mandatory requests, handle immediately */ 
+      /* No mandatory requests, handle immediately */
       ELSE RUN pNew(MsRequest.ReqCParam1, 
-                        ldaActDate,
-                        ldActStamp,
-                        MobSub.CliType,
-                        MobSub.MsSeq).
+                    ldaActDate,
+                    ldActStamp).
    END.
    WHEN 7 OR WHEN 8 THEN RUN pDone.
 
    END CASE.
    
 END PROCEDURE.
-   
 
 PROCEDURE pNew:
     
-   DEFINE INPUT PARAMETER icServPac  AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icBarrings AS CHARACTER NO-UNDO.
    DEFINE INPUT PARAMETER idtDate    AS DATE      NO-UNDO.
    DEFINE INPUT PARAMETER ideActTime AS DECIMAL   NO-UNDO.
-   DEFINE INPUT PARAMETER icCliType  AS CHAR      NO-UNDO.
-   DEFINE INPUT PARAMETER iiMsSeq    AS INTEGER   NO-UNDO. 
-   
-   DEFINE VARIABLE lcDefParam AS CHAR NO-UNDO. 
+      
+   DEF VAR lcError AS CHAR NO-UNDO. 
+   DEF VAR liReq AS INT  NO-UNDO.
+   DEF VAR lcFinalMask AS CHAR NO-UNDO. 
+   DEF VAR liUnbarrReq AS INT NO-UNDO. 
+   DEF VAR liDelay AS INT NO-UNDO. 
 
    IF idtDate = TODAY THEN ideActTime = fMakeTS().
    ELSE ideActTime = fMake2Dt(idtDate,10800).
    
    /* Assign master request (35) to 1 */
    IF NOT fReqStatus(1,"") THEN RETURN.
-   
-   /* Package from MsRequest */
-   FIND FIRST CTServPac NO-LOCK WHERE
-              CTServPac.Brand     = gcBrand   AND
-              CTServPac.CLIType   = icCLIType AND
-              CTServPac.ServPac   = icServPac AND
-              CTServPac.FromDate <= idtDate   AND
-              CTServPac.ToDate   >= idtDate
-   NO-ERROR.
-   
-   IF NOT AVAIL CtServPac THEN DO:
-      fReqError("ERROR, Unknown servpac!"). 
-      RETURN.
+
+   IF icBarrings BEGINS "#REFRESH" THEN DO:
+
+      fRefreshBarrings(MobSub.MsSeq,
+                       icBarrings,
+                       OUTPUT TABLE ttMergedBarring).
+
+   END.
+   ELSE DO:
+
+      IF fBarringListToTT(icBarrings,
+                          OUTPUT TABLE ttBarringCmd,
+                          OUTPUT lcError) EQ FALSE THEN DO:
+         fReqError(lcError).
+         RETURN.
+      END.
+
+      IF fMergeBarrings(MobSub.MsSeq,
+                        INPUT TABLE ttBarringCmd BY-REFERENCE,
+                        OUTPUT TABLE ttMergedBarring,
+                        OUTPUT lcError) EQ FALSE THEN DO:
+          MESSAGE lcError VIEW-AS ALERT-BOX.
+         fReqError(lcError).
+         RETURN.
+      END.
    END.
 
-   /* Now create components from service pac */
-   FOR EACH CTServEl NO-LOCK WHERE
-            CTServEl.Brand     = gcBrand            AND
-            CTServEl.CLIType   = CTServPac.CLIType  AND
-            CTServEl.ServPac   = CTServPac.ServPac  AND
-            CTServEl.FromDate >= CTServPac.FromDate AND
-            CTServEl.FromDate <= CTServPac.ToDate   AND
-            CTServEl.FromDate <= idtDate,
-         FIRST ServCom NO-LOCK WHERE
-               ServCom.Brand    = gcBrand          AND
-               ServCom.ServCom  = CTServEl.ServCom AND
-               ServCom.Target   = 0
-         BREAK BY CTServEl.ServPac
-               BY ServCom.ScPosition
-               BY CTServEl.ServCom
-               BY CTServEl.FromDate DESC:
+   fBuildBarringCommand(MobSub.CLIType,
+                        MsRequest.ReqSource,
+                        INPUT TABLE ttMergedBarring BY-REFERENCE,
+                        OUTPUT TABLE ttProvCommand,
+                        OUTPUT lcFinalMask,
+                        OUTPUT lcError).
 
-      /* use newest */
-      IF NOT FIRST-OF(CTServEl.ServCom) THEN NEXT.
+   FOR EACH ttProvCommand:
+   
+      FIND ServCom NO-LOCK WHERE
+           ServCom.Brand   = gcBrand AND
+           ServCom.ServCom = ttProvCommand.component NO-ERROR.
+      
+      IF NOT AVAILABLE ServCom THEN DO:
+         fReqError("SYSTEM ERROR:BARRING service not defined").
+         RETURN.
+      END. 
+      
+      FIND FIRST CTServEl NO-LOCK WHERE
+                 CTServEl.Brand     = gcBrand   AND
+                 CTServEl.ServCom   = ServCom.ServCom AND
+                 CTServEl.CLIType   = MobSub.CLIType AND
+                 CTServEl.FromDate <= TODAY NO-ERROR.
+      
+      IF NOT AVAIL CTServEl THEN DO:
+         fReqError("SYSTEM ERROR:BARRING service not defined for " +
+            MobSub.CLIType).
+         RETURN.
+      END. 
+   
+      lcError = fChkRequest(MobSub.MsSeq,
+                            1,
+                            CTServEl.ServCom,
+                            "").
+      IF lcError > "" THEN DO:
+         fReqStatus(3,SUBST("Barring component &1: &2",
+                             CTServEl.ServCom,
+                             lcError)).
+         RETURN.
+      END.
 
-      lcDefParam = CTServEl.DefParam.
-      /* Keep NAM service active if it has been activated manually  */
-      /* hot-fix for YTS-4471 */
-      IF ServCom.ServCom = "BARRING" THEN DO:
+   END.
 
-         FOR EACH bMsRequest WHERE
-                  bMsRequest.MsSeq      = MsRequest.MsSeq AND
-                  bMsRequest.ReqType    = {&REQTYPE_SERVICE_CHANGE} AND
-                  bMsRequest.ReqStatus  = {&REQUEST_STATUS_DONE} AND
-                  bMsRequest.ReqCparam1 = "NAM" AND
-                  bMsRequest.ActStamp  <= MsRequest.ActStamp AND
-                  bMsRequest.UserCode  <> "barr" NO-LOCK
-            USE-INDEX MsSeq BY bMsRequest.UpdateStamp DESC:
-
-            IF bMsRequest.ReqIparam1 EQ 1 THEN
-               lcDefParam = SUBSTRING(CTServEl.DefParam,1,6) + "1".
-            
-            LEAVE.
-         END. /* FOR FIRST bMsRequest WHERE */
-
-         IF MobSub.CLIType EQ "CONTM2" THEN OVERLAY(lcDefParam,2) = "11".
-
-      END. /* IF icServPac = "UNC_LOS" THEN DO: */
+   FOR EACH ttProvCommand:
+     
+      /* extra request to reset barring status before hotline activation */
+      liUnbarrReq = 0.
+      IF ttProvCommand.BarringCmd NE "" THEN DO: 
+         
+         /* Create subrequests (set mandataory and orig request) */ 
+         liUnbarrReq = fServiceRequest (MobSub.MsSeq,
+                                  "BARRING",
+                                  1,
+                                  ttProvCommand.BarringCmd,
+                                  fSecOffSet(ideActTime,5), /* 5 sec delay */ 
+                                  "",                /* SalesMan */
+                                  FALSE,             /* Set fees */
+                                  FALSE,             /* SMS */
+                                  "",
+                                  "",
+                                  0,
+                                  FALSE,
+                                 OUTPUT lcError).
+         IF liUnbarrReq = 0 OR liUnbarrReq = ? THEN DO:
+            fReqStatus(3,"ServiceRequest failure: " + lcError).
+            RETURN.
+         END.
+      END.
+   
+      /* a quick fix to send provisioning commands in correct order */
+      IF MobSub.CLIType EQ "CONTM2" AND
+         MsRequest.ReqCParam1 EQ "#REFRESH" AND
+         ttProvCommand.Component NE "HOTLINE" AND
+         CAN-FIND(FIRST ttProvCommand WHERE 
+                        ttProvCommand.Component EQ "HOTLINE") THEN
+          liDelay = 10.
+      ELSE liDelay = 5.
 
       /* Create subrequests (set mandataory and orig request) */ 
-      liReq = fServiceRequest (iiMsSeq,
-                               CTServEl.ServCom,
-                               CTServEl.DefValue,
-                               lcDefParam,
-                               ideActTime + 0.00005, /* 5 sec delay */ 
+      liReq = fServiceRequest (MobSub.MsSeq,
+                               ttProvCommand.Component,
+                               (IF ttProvCommand.ComponentParam NE "" THEN 1
+                                ELSE ttProvCommand.ComponentValue),
+                               ttProvCommand.ComponentParam,
+                               fSecOffSet(ideActTime,liDelay),
                                "",                /* SalesMan */
                                FALSE,             /* Set fees */
                                FALSE,             /* SMS */
@@ -212,21 +259,29 @@ PROCEDURE pNew:
                                "",
                                liMasterRequest,
                                TRUE,
-                               OUTPUT ocResult).
-      /* Change this request to subrequest */ 
+                               OUTPUT lcError).
       
       /* Creation of subrequests failed, "fail" master request too */
       IF liReq = 0 OR liReq = ? THEN DO:
-         
-         fReqStatus(3,"ServiceRequest failure: " + ocResult).
+         fReqStatus(3,"ServiceRequest failure: " + lcError).
          RETURN.
       END.
-
+      ELSE IF liUnbarrReq > 0 THEN DO:
+         FIND bMsRequest WHERE
+              bMsRequest.MsRequest = liUnbarrReq NO-ERROR.
+         IF AVAIL bMsRequest THEN ASSIGN
+            bMsRequest.OrigRequest = liReq
+            bMsRequest.Mandatory = 1.
+         RELEASE bMsRequest.
+      END.
    END.
+
+   FIND CURRENT MsRequest EXCLUSIVE-LOCK.
+   ASSIGN
+      MsRequest.ReqCParam5 = lcFinalMask.
    
-   /* Subrequests created, assign Master request 
-      to status 7 (it has new unhandled requests */
-   fReqStatus(7,"").
+   IF liReq > 0 THEN fReqStatus(7,""). /* wait provisioning sub requests */
+   ELSE fReqStatus(8,""). /* provisioning not required */
 
 END PROCEDURE.
  
@@ -243,8 +298,13 @@ PROCEDURE pDone.
    DEF VAR llCancelSTC AS LOG NO-UNDO.
    DEF VAR lcBONOContracts  AS CHAR NO-UNDO.
    DEF VAR lcSender AS CHAR NO-UNDO.  
+   DEF VAR lrCurrentBarring AS ROWID NO-UNDO.
+   DEF VAR lcError AS CHAR NO-UNDO. 
+   DEF VAR llRefreshBarring AS LOG NO-UNDO. 
+   DEF VAR lcUserName  AS CHAR NO-UNDO.
+   DEF VAR lcMemoTitle AS CHAR NO-UNDO.
     
-   DEF BUFFER bOLBRequest FOR MsRequest.
+   DEF BUFFER bMsRequest FOR MsRequest.
    DEF BUFFER lbMobsub FOR MobSub.
 
    /* All other statuses keep mainrequest waiting until HLR
@@ -256,29 +316,76 @@ PROCEDURE pDone.
       END.   
       RETURN.
    END.
-
+   
+   /* subrequest handled succesfully */
    IF llDoEvent THEN DO:
       DEFINE VARIABLE lhMobsub AS HANDLE NO-UNDO.
       lhMobsub = BUFFER Mobsub:HANDLE.
       RUN StarEventInitialize(lhMobsub).
    END.
-
-   /* subrequest handled succesfully */
       
-   FIND MobSub WHERE
-        MobSub.MsSeq = MsRequest.MsSeq
-   EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+   /* refresh affects only to network  */
+   IF MsRequest.ReqCParam1 BEGINS "#REFRESH" THEN DO:
 
+      IF MsRequest.ReqCParam1 EQ "#REFRESH" AND
+         MobSub.MsStatus = 8 AND
+         MsRequest.ReqCParam5 ne "" THEN DO:
+
+         FIND CURRENT MobSub EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+         IF LOCKED(MobSub) THEN RETURN.
+
+         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
+         MobSub.BarrCode = MsRequest.ReqCParam5.
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
+
+         FIND CURRENT MobSub NO-LOCK.
+      END.
+      fReqStatus(2,"").
+      RETURN.
+   END.
+
+   IF fBarringListToTT(MsRequest.ReqCParam1,
+                       OUTPUT TABLE ttBarringCmd,
+                       OUTPUT lcError) EQ FALSE THEN DO:
+      fReqError(lcError).
+      RETURN.
+   END.
+
+   IF fMergeBarrings(MobSub.MsSeq,
+                     INPUT TABLE ttBarringCmd BY-REFERENCE,
+                     OUTPUT TABLE ttMergedBarring,
+                     OUTPUT lcError) EQ FALSE THEN DO:
+      fReqError(lcError).
+      RETURN.
+   END.
+
+   FIND CURRENT MobSub EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
    IF LOCKED(MobSub) THEN RETURN.         
          
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
-   IF MsRequest.ReqCParam1 BEGINS "UN" 
+   IF INDEX(MsRequest.ReqCParam5,"1") = 0
    THEN ASSIGN MobSub.MsStatus = 4
                MobSub.BarrCode = "".
    ELSE ASSIGN MobSub.MsStatus = 8
-               MobSub.BarrCode = MsRequest.ReqCParam1.
+               MobSub.BarrCode = MsRequest.ReqCParam5.
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
    
+   FIND CURRENT MobSub NO-LOCK.
+
+   FOR EACH ttMergedBarring:
+      
+      IF ttMergedBarring.NWStatus EQ "EXISTING" THEN NEXT.
+
+      CREATE Barring.
+      ASSIGN
+         Barring.MsSeq = MobSub.MsSeq
+         Barring.BarringCode = ttMergedBarring.BarrCode
+         Barring.BarringStatus = ttMergedBarring.BarrStatus
+         Barring.EventTS = fMakeTs() 
+         Barring.UserCode = MsRequest.UserCode
+         Barring.MSrequest = MSrequest.MSrequest.
+   END.
+
    /* send SMS */
    IF MsRequest.SendSMS = 1 AND MsRequest.SMSText > "" THEN DO:
 
@@ -300,7 +407,7 @@ PROCEDURE pDone.
 
          fMakeSchedSMS2(MobSub.CustNum,
                         MobSub.CLI,
-                        (IF MsRequest.ReqCParam1 EQ "Y_HURP_P"
+                        (IF MsRequest.ReqCParam1 EQ "Limits_TotalPremium_Off=1"
                          THEN {&SMSTYPE_PREMIUM} ELSE {&SMSTYPE_BARRING}),
                         lcSMSText,
                         ldSMSStamp,
@@ -309,19 +416,19 @@ PROCEDURE pDone.
       END.          
    END. 
           
-   /* remove old olb tags if this a new one */
-   IF MsRequest.ReqCParam2 = "OLB" THEN
-   FOR EACH bOLBRequest EXCLUSIVE-LOCK USE-INDEX MsSeq WHERE
-            bOLBRequest.MsSeq      = MsRequest.MsSeq AND
-            bOLBRequest.Reqtype    = 35              AND
-            bOLBRequest.ReqStat    = 2               AND
-            bOLBRequest.ReqCParam2 = "OLB"           AND
-            RECID(bOLBRequest) NE RECID(MsRequest):
-      bOLBRequest.ReqCParam2 = "".      
-   END.
-         
-   /* memo for ifs events */
-   IF MsRequest.ReqSource = {&REQUEST_SOURCE_IFS} THEN DO:
+   /* YDR-150 - Limit rules barring */
+   IF MsRequest.UserCode = "Cron / TMQueue" AND
+      INDEX(MsRequest.ReqCParam1,"=1") > 0  AND
+      MsRequest.ReqIParam3 > 0 THEN DO:
+      IF CAN-FIND(FIRST TMRule NO-LOCK WHERE 
+                        TMRule.TMRuleSeq = MsRequest.ReqIParam3 AND
+                        TMRule.TicketType = {&TICKET_TYPE_FRAUD}) THEN
+         ASSIGN lcUserName = "FRONT"
+                lcMemoTitle = "Accion para prevencion de fraude en Roaming".
+      ELSE
+         ASSIGN lcUserName = "LIMITS"
+                lcMemoTitle = "Control de de riesgo".
+ 
       CREATE Memo.
       ASSIGN 
          Memo.Brand     = gcBrand
@@ -329,49 +436,89 @@ PROCEDURE pDone.
          Memo.KeyValue  = STRING(MsRequest.MsSeq)
          Memo.CustNum   = MsRequest.CustNum
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = "IFS" 
+         Memo.CreUser   = lcUserName
          Memo.MemoType  = "service"
-         Memo.MemoTitle = "Collection Action"
-         Memo.MemoText  = IF MsRequest.ReqCParam1 BEGINS "UN"
-                          THEN SUBSTRING(MsRequest.ReqCParam1,3) + " released"
-                          ELSE MsRequest.ReqCParam1 + " applied".
+         Memo.MemoTitle = lcMemoTitle
+         Memo.MemoText  = ENTRY(1,ENTRY(1,MsRequest.ReqCParam1),"=") +
+                          " aplicado".
          Memo.CreStamp  = fMakeTS().
    END.
-   /* YDR-150 */
-   ELSE IF MsRequest.UserCode = "Cron / TMQueue" AND
-       NOT MsRequest.ReqCParam1 BEGINS "UN" AND
-       CAN-FIND(FIRST TMRule NO-LOCK WHERE 
-                      TMRule.TMRuleSeq = MsRequest.ReqIParam3 AND
-                      TMRule.TicketType = {&TICKET_TYPE_FRAUD}) THEN DO:
-      CREATE Memo.
-      ASSIGN 
-         Memo.Brand     = gcBrand
-         Memo.HostTable = "MobSub"
-         Memo.KeyValue  = STRING(MsRequest.MsSeq)
-         Memo.CustNum   = MsRequest.CustNum
-         Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = "FRONT" 
-         Memo.MemoType  = "service"
-         Memo.MemoTitle = "Accion para prevencion de fraude en Roaming"
-         Memo.MemoText  = MsRequest.ReqCParam1 + " aplicado".
-         Memo.CreStamp  = fMakeTS().
-   END.
-      
+
    /* MobSub status update ok, Master request OK */
    fReqStatus(2,"").
+   
+   IF (LOOKUP("Debt_HOTL=0", MsRequest.ReqCParam1) > 0 OR
+       LOOKUP("Debt_HOTLP=0",MsRequest.ReqCParam1) > 0) AND
+      NOT CAN-FIND(FIRST bMsRequest NO-LOCK WHERE
+                         bMsRequest.MsSeq = MobSub.MsSeq AND
+                         bMsRequest.ReqType = 35 AND
+           LOOKUP(STRING(bMsRequest.ReqStat),{&REQ_INACTIVE_STATUSES} + ",3") = 0)
+      THEN DO:
+               
+      IF MobSub.CLIType EQ "CONTM2" AND
+         MsRequest.ReqCParam1 EQ "Debt_HOTL=0" THEN llRefreshBarring = FALSE.
+      ELSE IF MobSub.CLIType EQ "CONTM2" THEN llRefreshBarring = TRUE.
+      ELSE DO:
+         BARR_CHECK:
+         FOR EACH Barring NO-LOCK WHERE
+                  Barring.MsSeq = MsRequest.MsSeq 
+            USE-INDEX MsSeq BREAK BY Barring.BarringCode:
+            
+            IF FIRST-OF(Barring.BarringCode) AND
+               Barring.BarringStatus EQ {&BARR_STATUS_ACTIVE} THEN DO:
+               
+               FIND FIRST BarringConf NO-LOCK WHERE
+                          BarringConf.BarringCode = Barring.BarringCode AND
+                          BarringConf.NWComponent = "BARRING" NO-ERROR.
+               IF AVAIL BarringConf THEN DO:
+                  llRefreshBarring = TRUE.
+                  LEAVE BARR_CHECK.
+               END.
+            END.
+         END.
+      END.
+
+      IF llRefreshBarring THEN DO:
+
+         /* create barring request */
+         RUN barrengine.p(Mobsub.MsSeq,
+                         "#REFRESH",
+                         "5",                /* source  */
+                         katun,              /* creator */
+                         fMakeTS(),
+                         "",                 /* SMS */
+                         OUTPUT lcResult).
+               
+         liReq = INTEGER(lcResult) NO-ERROR. 
+         IF liReq EQ ? OR NOT liReq > 0 THEN DO:     
+            /* Write memo */
+            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                             "MobSub",
+                             STRING(MsRequest.MsSeq),
+                             MsRequest.CustNum,
+                             "Barring",
+                             "Automatic barring refresh request failed: " + lcResult).
+         END.
+
+      END.
+
+   END.
+
+   DEF VAR lcActiveBarrings AS CHAR NO-UNDO. 
+   lcActiveBarrings = fGetActiveBarrings(MobSub.MsSeq).
 
    /* Activate/Suspend the BB service based on the fraud barring */
-   IF LOOKUP(MsRequest.ReqCParam1,{&FRAUD_BARR_CODES}) > 0 OR
-      LOOKUP(MsRequest.ReqCParam1,{&UNFRAUD_BARR_CODES}) > 0 THEN DO:
+   IF fIsInList(MsRequest.ReqCParam1,{&FRAUD_BARR_CODES}) THEN DO:
+
       FOR FIRST SubSer WHERE SubSer.ServCom = "BB" AND
                              SubSer.MsSeq   = MsRequest.MsSeq AND
                              SubSer.SsDate <= TODAY NO-LOCK:
-         IF LOOKUP(MsRequest.ReqCParam1,{&UNFRAUD_BARR_CODES}) > 0 AND
-            SubSer.SSStat = 2 AND
-            fIsBBAllowed(MsRequest.MsSeq,ldActStamp)
-         THEN liBBStat = 1.
-         ELSE IF LOOKUP(MsRequest.ReqCParam1,{&FRAUD_BARR_CODES}) > 0 AND
-            SubSer.SSStat = 1 THEN liBBStat = 2.
+
+         IF NOT fIsInList(lcActiveBarrings,{&FRAUD_BARR_CODES}) THEN DO:
+            IF SubSer.SSStat = 2 AND fIsBBAllowed(MsRequest.MsSeq,ldActStamp)
+               THEN liBBStat = 1.
+         END.
+         ELSE IF SubSer.SSStat = 1 THEN liBBStat = 2.
 
          IF liBBStat > 0 THEN DO:
             liReq = fServiceRequest(INPUT MsRequest.MsSeq,
@@ -399,7 +546,8 @@ PROCEDURE pDone.
       END. /* FOR FIRST SubSer WHERE SubSer.ServCom = "BB" AND AND */
 
       /* Cancel Ongoing STC or subs. type change BTC request */
-      IF LOOKUP(MsRequest.ReqCParam1,{&FRAUD_BARR_CODES}) > 0 THEN DO:
+      IF fIsInList(lcActiveBarrings,{&FRAUD_BARR_CODES}) THEN DO:
+
          FIND FIRST MsRequest WHERE
                     MsRequest.MsSeq = Mobsub.MSSeq AND
                     MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
@@ -457,40 +605,4 @@ PROCEDURE pDone.
       END. /* IF LOOKUP(MsRequest.ReqCParam1,{&FRAUD_BARR_CODES}) > 0 */
    END. /* IF LOOKUP(MsRequest.ReqCParam1,{&FRAUD_BARR_CODES}) > 0 THEN DO: */
      
-   /* If primary MultiSIM subscription is barred,
-      the secondary must be barred as well */
-   IF NOT MsRequest.ReqCParam1 BEGINS "UN" AND
-      MobSub.MultiSimID > 0 AND
-      MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} THEN DO:
-      
-      FIND FIRST lbMobsub NO-LOCK USE-INDEX MultiSimID WHERE
-                 lbMobsub.Brand = gcBrand AND
-                 lbMobsub.MultiSimID = MobSub.MultiSimID AND
-                 lbMobsub.MultiSimType = {&MULTISIMTYPE_SECONDARY} AND
-                 lbMobsub.Custnum = MobSub.Custnum
-      NO-ERROR.
-
-      IF AVAIL lbMobsub THEN DO:
-
-         RUN barrengine.p(lbMobSub.MsSeq,
-                          MsRequest.ReqCparam1,
-                          {&REQUEST_SOURCE_MULTISIM},
-                          "", /* creator */
-                          fMakeTS(),
-                          "", /* sms text */
-                          OUTPUT lcResult).
-          
-         liBarr = 0.
-         liBarr = INTEGER(lcResult) NO-ERROR. 
-         
-         IF liBarr = 0 THEN
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
-                             STRING(lbMobsub.MsSeq),
-                             lbMobsub.CustNum,
-                             "Barring failed",
-                             SUBST("Error: &1", lcResult)).
-      END.
-   END.
-END PROCEDURE.
-
+END PROCEDURE. /*pDone*/

@@ -18,8 +18,6 @@ DEF VAR piMsSeq AS INT NO-UNDO.
 
 /* Local variables */
 DEF VAR lii             AS INT NO-UNDO.
-DEF VAR lcBarrComList   AS CHAR NO-UNDO.
-DEF VAR lcBarrStatus    AS CHAR NO-UNDO.
 
 /* Output parameters */
 DEF VAR top_array       AS CHAR NO-UNDO.
@@ -38,8 +36,8 @@ IF NOT AVAILABLE MobSub THEN
 
 top_array = add_array(response_toplevel_id, "").
 
-DEFINE VARIABLE OnOffAlias AS CHARACTER NO-UNDO INIT "VMS,LANG,CF,IRDCUTOFF,BB,NAM,LTE,LP,C_BPSUB,Y_BPSUB".
-DEFINE VARIABLE OnOffTms   AS CHARACTER NO-UNDO INIT "VMS,LANG,CF,IRDCUTOFF,BB,NAM,LTE,LP,BPSUB,BPSUB".
+DEFINE VARIABLE OnOffAlias AS CHARACTER NO-UNDO INIT "VMS,LANG,CF,IRDCUTOFF,BB,LTE".
+DEFINE VARIABLE OnOffTms   AS CHARACTER NO-UNDO INIT "VMS,LANG,CF,IRDCUTOFF,BB,LTE".
 DEFINE VARIABLE lcService  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcServiceAlias  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcValue AS CHARACTER NO-UNDO. 
@@ -66,10 +64,6 @@ DO lii = 1 TO NUM-ENTRIES(OnOffTms):
       IF SubSer.ServCom = "BB" AND
          SubSer.SSStat EQ 2 THEN /* BB reset status */ 
         lcValue = "off".
-      ELSE IF SubSer.ServCom EQ "BPSUB" AND
-              SubSer.SSStat EQ 1 THEN DO:
-         lcValue = STRING(SubSer.SSParam EQ lcServiceAlias,"on/off").
-      END.
       ELSE
         lcValue =  TRIM(STRING(SubSer.SSStat EQ 0, "off/on")).
       
@@ -89,44 +83,13 @@ DO lii = 1 TO NUM-ENTRIES(OnOffTms):
               MsRequest.ReqCParam1 = lcService AND
         LOOKUP(STRING(MsRequest.ReqStat),{&REQ_INACTIVE_STATUSES}) = 0 NO-ERROR.
    IF AVAIL MsRequest AND
-      (MsRequest.ReqCParam1 NE "BPSUB" OR
       (MsRequest.ReqCParam2 EQ lcServiceAlias OR
       (MsRequest.ReqCParam2 EQ "" AND
-         AVAIL SubSer AND SubSer.SSParam EQ lcServiceAlias))) THEN
+         AVAIL SubSer AND SubSer.SSParam EQ lcServiceAlias)) THEN
       add_boolean(top_struct,"ongoing_request",TRUE).
 
    IF NOT AVAIL SubSer THEN
       add_string(top_struct, "value", "off").
-END.
-
-RUN checkmsbarring.p(
-      INPUT piMsSeq,
-      INPUT katun,
-      OUTPUT lcBarrComList,
-      OUTPUT lcBarrStatus).
-
-DO lii = 1 TO NUM-ENTRIES(lcBarrComList,"|"):
-   top_struct = add_struct(top_array, ""). 
-   IF ENTRY(lii,lcBarrComList,"|") BEGINS "UN" THEN DO:
-      add_string(top_struct, "service_id",
-         SUBSTRING(ENTRY(lii,lcBarrComList,"|"),3)).
-      add_string(top_struct, "value", "on").
-   END.
-   ELSE DO:
-      add_string(top_struct, "service_id", ENTRY(lii,lcBarrComList,"|")).
-      add_string(top_struct, "value", "off").
-   END.
-   /* if ongoing request for this barring */
-   IF lcBarrStatus NE "ONC" THEN NEXT. 
-   IF CAN-FIND(FIRST MsRequest WHERE
-                     MsRequest.MsSeq      = piMsSeq AND
-                     MsRequest.ReqType    = 35       AND
-                     INDEX(MsRequest.ReqCParam1,
-                           ENTRY(lii,lcBarrComList,"|")) > 0  AND
-                     LOOKUP(STRING(MsRequest.ReqStat),"2,4,9") = 0) THEN DO:
-       add_boolean(top_struct,"ongoing_request",TRUE).
-   END.
-
 END.
 
 FINALLY:

@@ -27,6 +27,12 @@
 {orderfunc.i}
 {freacmobsub.i}
 
+IF llDoEvent THEN DO:
+   &GLOBAL-DEFINE STAR_EVENT_USER katun
+
+   {lib/eventlog.i}
+END.
+
 DEFINE INPUT  PARAMETER piOrderId  AS INTEGER NO-UNDO.
 DEFINE OUTPUT PARAMETER oiOrderQty AS INT     NO-UNDO.
 
@@ -54,10 +60,14 @@ DEF BUFFER bSIM FOR SIM.
 
 DEFINE VARIABLE lii           AS INT       NO-UNDO.
 DEFINE VARIABLE lcStatuses    AS CHAR NO-UNDO EXTENT 3 INITIAL ["1","3","30"].
+DEFINE VARIABLE lcSIMonlyMNP  AS CHAR NO-UNDO. 
 
 DEF VAR lcTestCustomer AS CHAR NO-UNDO.
 
-lcTestCustomer = TRIM(fCParamC("OrderTestCustomer")).
+ASSIGN
+   lcTestCustomer = TRIM(fCParamC("OrderTestCustomer"))
+   lcSIMonlyMNP =   TRIM(fCParamC("SIMonlyMNPorder")).
+
 IF lcTestCustomer = ? THEN lcTestCustomer = "".
 
 

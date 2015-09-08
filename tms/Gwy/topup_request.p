@@ -118,6 +118,7 @@ PROCEDURE pPPRequests:
    DEFINE VARIABLE lcSource   AS CHARACTER NO-UNDO.
    DEFINE VARIABLE llOK       AS LOGICAL   NO-UNDO.
    DEFINE VARIABLE liBatchLoop AS INTEGER NO-UNDO. 
+   DEFINE VARIABLE ldeTopUpAmount AS DECIMAL NO-UNDO.
    
    DEFINE BUFFER bufPP FOR PrePaidRequest.
 
@@ -168,7 +169,8 @@ PROCEDURE pPPRequests:
 
          IF llOK THEN bufPP.PPStatus = 2.
          ELSE         bufPP.PPStatus = 3.
-        DEFINE VARIABLE liAccValue AS INTEGER NO-UNDO.   
+
+         DEFINE VARIABLE liAccValue AS INTEGER NO-UNDO.   
 
          liAccValue = INT(bufPP.TopUpAmt + bufPP.VatAmt).   
          
@@ -192,13 +194,44 @@ PROCEDURE pPPRequests:
 
             /* PrePaid initial TopUp */
             WHEN "Web Order" THEN DO:
-               IF llOK AND LOOKUP(bufPP.PPReqPrefix,"992,993") = 0 THEN
+               IF llOK AND LOOKUP(bufPP.PPReqPrefix,"992,993") = 0 THEN DO:
+
+                  ldeTopUpAmount = bufPP.TopUpAmt + bufPP.VatAmt.
+
+                  FOR FIRST Order NO-LOCK WHERE
+                            Order.Brand     = gcBrand AND
+                            Order.MSSeq     = bufPP.MSSeq AND
+                            Order.OrderType < 2 AND
+                            LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) = 0,
+                     FIRST Offer NO-LOCK WHERE
+                           Offer.Brand = gcBrand AND
+                           Offer.Offer = Order.Offer,
+                        FIRST OfferItem NO-LOCK WHERE
+                              OfferItem.Brand       = gcBrand AND
+                              OfferItem.Offer       = Offer.Offer AND
+                              OfferItem.ItemType    = "TopUp" AND
+                              OfferItem.EndStamp   >= Order.CrStamp AND
+                              OfferItem.BeginStamp <= Order.CrStamp,
+                           FIRST TopupScheme NO-LOCK WHERE
+                                 TopupScheme.Brand       = gcBrand AND
+                                 TopupScheme.TopupScheme = OfferItem.ItemKey,
+                              FIRST TopupSchemeRow NO-LOCK WHERE
+                                    TopupSchemeRow.Brand        = gcBrand AND
+                                    TopupSchemeRow.TopupScheme  = TopupScheme.TopupScheme AND
+                                    TopupSchemeRow.EndStamp    >= Order.CrStamp AND
+                                    TopupSchemeRow.BeginStamp  <= Order.CrStamp:
+
+                     IF TopupSchemeRow.DisplayAmount > 0 THEN
+                        ldeTopUpAmount = TopupSchemeRow.DisplayAmount * 100.
+                  END.
+
                   fCallAlarm("TopUpOrder",
                              bufPP.CLI,
-                             INT(bufPP.TopUpAmt + bufPP.VatAmt),
+                             INT(ldeTopUpAmount),
                              IF bufPP.PPReqPrefix = "994"
                              THEN "800622800"
                              ELSE "622").
+               END.
             END.    
                             
             /* commission */

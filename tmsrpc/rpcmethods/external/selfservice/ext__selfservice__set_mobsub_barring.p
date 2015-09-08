@@ -32,118 +32,189 @@ gcBrand = "1".
 {timestamp.i}
 {barrfunc.i}
 {fexternalapi.i}
+{transname.i}
 
 /* Input parameters */
 DEF VAR pcCLI           AS CHAR NO-UNDO.
-DEF VAR pcServiceCode   AS CHAR NO-UNDO.
+DEF VAR pcBCode   AS CHAR NO-UNDO.
 DEF VAR pcServiceStatus AS CHAR NO-UNDO.
 DEF VAR pcSetServiceId  AS CHAR NO-UNDO.
 DEF VAR pcTransId       AS CHAR NO-UNDO.
 DEF VAR top_struct      AS CHAR NO-UNDO.
 
-DEF VAR lcBarrStatus    AS CHAR NO-UNDO.
-DEF VAR lcBarrComList   AS CHAR NO-UNDO.
 DEF VAR lcStatus        AS CHAR NO-UNDO.
-DEF VAR lcAppId         AS CHAR NO-UNDO. 
-DEF VAR lcAccessRight   AS CHAR NO-UNDO.
+DEF VAR lcApplicationId AS CHAR NO-UNDO.
+DEF VAR lcAppEndUserId  AS CHAR NO-UNDO.
+DEF VAR lcOnOffEn       AS CHAR NO-UNDO.
+DEF VAR lcOnOffEs       AS CHAR NO-UNDO.
+DEF VAR lcBarrEntry AS CHAR NO-UNDO. 
+DEF VAR liLoop AS INT NO-UNDO. 
+
+DEF VAR lrBarring AS ROWID NO-UNDO.
+DEF VAR llOngoing AS LOGICAL NO-UNDO.
+DEF VAR lcBarrings AS CHAR NO-UNDO.
+DEF VAR liReq AS INT NO-UNDO.
+DEF VAR lcItemName AS CHAR NO-UNDO.
+DEF VAR lcDetailedUser AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,string,string,string") EQ ?
 THEN RETURN.
-
-ASSIGN pcTransId = get_string(param_toplevel_id, "0")
-       pcCLI     = get_string(param_toplevel_id,"1")
-       pcServiceCode = get_string(param_toplevel_id,"2")
-       pcServiceStatus = get_string(param_toplevel_id,"3").
+                                                            /*Example*/
+ASSIGN pcTransId = get_string(param_toplevel_id, "0")       /*501....*/
+       pcCLI     = get_string(param_toplevel_id,"1")        /*622689226*/
+       pcBCode = get_string(param_toplevel_id,"2")    /*C_BRAIC*/
+       pcServiceStatus = get_string(param_toplevel_id,"3"). /*off*/
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcAppId = substring(pcTransId,1,3).
+ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
+       lcAppEndUserId  = gbAuthLog.EndUserId.
 
-IF NOT fchkTMSCodeValues(gbAuthLog.UserName, lcAppId) THEN
+IF NOT fchkTMSCodeValues(gbAuthLog.UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-IF pcServiceCode EQ "Y_HURP_P" THEN DO:
-   If lcAppId NE "650" THEN
-      RETURN appl_err("Application Id does not match").
-   lcAccessRight = "NewtonAd".
-END.
-ELSE lcAccessRight = "NewtonCC".
+katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
 
 FIND MobSub NO-LOCK WHERE
+     MobSub.Brand = gcBrand AND
      MobSub.CLI = pcCLI NO-ERROR.
 IF NOT AVAILABLE MobSub THEN
-   RETURN appl_err("Subscription not found").
+  RETURN appl_err("Subscription not found").
 
+FIND FIRST BarringConf NO-LOCK WHERE
+           BarringConf.BarringCode EQ pcBCode NO-ERROR.
+IF NOT AVAIL BarringConf THEN DO:
+   /*Legacy barring code translations*/
+   FIND FIRST BarringConf NO-LOCK WHERE
+              BarringConf.OldCode EQ pcBCode AND
+              BarringConf.AllowedAppIds NE "" NO-ERROR.
+   IF AVAIL BarringConf THEN pcBCode = BarringConf.BarringCode.
+END.
+
+IF NOT AVAIL BarringConf OR
+             BarringConf.BarringStatus EQ {&BARR_RULE_STATUS_INACTIVE}
+   THEN RETURN appl_err("Barring not found").
+
+/*Also in configuration*/   
+IF LOOKUP(lcApplicationId, BarringConf.AllowedAppIds) EQ 0 THEN
+   RETURN appl_err("Application ID does not match").
+
+/*Check subscription and payment type*/
+IF BarringConf.AllowedPaymentType NE "" AND
+   LOOKUP(string(MobSub.PayType,"prepaid/postpaid"),
+          BarringConf.AllowedPaymentType) = 0 THEN
+   RETURN appl_err("Incorrect payment type").
+
+/*Check that command is reasonable*/
 IF LOOKUP(pcServiceStatus,"on,off") = 0 THEN
    RETURN appl_err("Invalid service status").
 
-FIND FIRST CtServPac NO-LOCK WHERE
-           CtServPac.Brand    = gcBrand        AND
-           CtServPac.CliType  = MobSub.CliType AND
-           CtServPac.ServPac  = pcServiceCode  AND
-           CtServPac.ToDate   >= TODAY NO-ERROR.
-IF NOT AVAIL CtServPac THEN
-   RETURN appl_err("CLIType Service Package not found").
-
-FIND FIRST ServPac  WHERE
-           ServPac.Brand   = CTServPac.Brand  AND
-           ServPAc.ServPac = CTServPac.ServPac NO-LOCK NO-ERROR.
-IF NOT AVAIL ServPac THEN
-   RETURN appl_err("Service Package not found").
-
 /* Check ongoing service requests */
-IF CAN-FIND(FIRST MsRequest WHERE
-                  MsRequest.MsSeq      = MobSub.MsSeq AND
-                  MsRequest.ReqType    = {&REQTYPE_SERVICE_CHANGE} AND
-                  MsRequest.ReqCParam1 = ServPAc.ServPac AND
-                  LOOKUP(STRING(MsRequest.ReqStatus),
-                         {&REQ_INACTIVE_STATUSES}) = 0) THEN
-   RETURN appl_err("Ongoing network command").
-
-RUN checkmsbarring(INPUT MobSub.MsSeq,
-                   INPUT lcAccessRight,
-                   OUTPUT lcBarrComList,
-                   OUTPUT lcBarrStatus).
-CASE lcBarrStatus:
-   WHEN "NAD" THEN RETURN appl_err("Operator or debt level barring is on").
-   WHEN "ONC" THEN RETURN appl_err("Ongoing network command").
-END. /* CASE lcBarrStatus: */
-  
-/* Check that barring is allowed */
-/* Do not allow set/unset D_ barrings from newton */
-IF INDEX(lcBarrComList,ServPAc.ServPac) = 0 OR
-   ServPAc.ServPac BEGINS "D_" THEN 
-RETURN appl_err("Barring is not allowed").
+llOngoing = fCheckBarrStatus(INPUT MobSub.MsSeq,
+                             OUTPUT lcBarrings,
+                             OUTPUT lrBarring).
+IF llOngoing EQ TRUE THEN
+   RETURN appl_err("Ongoing Network command").
 
 CASE pcServiceStatus:
-   WHEN "on" THEN pcSetServiceId = ServPAc.ServPac. 
-   WHEN "off" THEN pcSetServiceId = "UN" + ServPAc.ServPac. 
+   WHEN "on" THEN DO: 
+      pcSetServiceId = pcBCode + "=1".
+      IF fIsReasonableSet(pcSetServiceId, Mobsub.MsSeq) EQ FALSE THEN
+         RETURN appl_err("Barring is already on active").
+      lcOnOffEs = "Activar".
+      lcOnOffEn = "applied".
+   END.
+   WHEN "off" THEN DO: 
+      pcSetServiceId = pcBCode + "=0".
+      IF fIsReasonableSet(pcSetServiceId, Mobsub.MsSeq) EQ FALSE THEN
+         RETURN appl_err("Barring is already inactive").
+      lcOnOffEs = "Desactivar".
+      lcOnOffEn = "released".
+   END.
 END.
 
-/* Check that barring is already with same status */
-IF LOOKUP(pcSetServiceId,lcBarrComList,"|") = 0 THEN 
-   RETURN appl_err("Barring is already " + (IF pcServiceStatus = "on" then "active" ELSE "inactive")).
-   
-RUN barrengine(MobSub.MsSeq,
-               pcSetServiceId,
-               {&REQUEST_SOURCE_EXTERNAL_API},
-               "",
-               fMakeTS(),
-               "",
-               OUTPUT lcStatus).
+&SCOPED-DEFINE MIYOIGO_CUST_BARRINGS "Cust_TotalPremium_off,C_BRIAP,C_BRAIC"
+/* YPR-2350 */
+IF LOOKUP(lcApplicationId,"501,502") > 0 AND
+   LOOKUP(pcBCode,{&MIYOIGO_CUST_BARRINGS}) > 0 THEN DO:
 
-CASE lcStatus:
-   WHEN "ONC" THEN RETURN appl_err("Ongoing network command").
+   DO liLoop = 1 TO NUM-ENTRIES({&MIYOIGO_CUST_BARRINGS}): 
+      lcBarrEntry = ENTRY(liLoop,{&MIYOIGO_CUST_BARRINGS}).
+
+      IF lcBarrEntry EQ pcBCode OR
+         LOOKUP(lcBarrEntry,lcBarrings) = 0 THEN NEXT.
+
+      pcSetServiceId = pcSetServiceId + "," + lcBarrEntry + "=0".
+   END.
 END.
 
-/* Adding the details into Main struct */
-top_struct = add_struct(response_toplevel_id, "").
-add_string(top_struct, "transaction_id", pcTransId).
-add_boolean(top_struct, "result", True).
+RUN barrengine.p(MobSub.MsSeq,
+                 pcSetServiceId,
+                 {&REQUEST_SOURCE_EXTERNAL_API},
+                 (IF lcApplicationId EQ "701" THEN "Collection"
+                  ELSE ""),
+                 fMakeTS(),
+                 "",
+                 OUTPUT lcStatus).
+
+IF lcStatus EQ "ONC" THEN RETURN appl_err("Ongoing network command").
+
+liReq = INT(lcStatus) NO-ERROR.
+IF liReq > 0 THEN DO:
+
+   /* Adding the details into Main struct */
+   top_struct = add_struct(response_toplevel_id, "").
+   add_string(top_struct, "transaction_id", pcTransId).
+   add_boolean(top_struct, "result", True).
+
+   lcDetailedUser = fgetAppDetailedUserId(INPUT lcApplicationId,
+                                         INPUT Mobsub.CLI).  
+
+   /*YPR-1966, add different memo writing*/
+   IF lcApplicationId EQ "701" THEN DO:
+      lcItemName = fGetItemName(gcBrand,
+                                "BarringCode",
+                                pcBCode,
+                                5, /*en*/
+                                TODAY).
+      DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
+                    "MobSub",                             /* HostTable */
+                    STRING(Mobsub.MsSeq),                 /* KeyValue  */
+                    MobSub.CustNum,                       /* CustNum */
+                    "Collection Action",                  /* MemoTitle */
+                    pcBCode + " " +
+                    "(" + 
+                    lcItemName +
+                    ") " +
+                     lcOnOffEn,                 /* MemoText */
+                    "Service",                            /* MemoType */
+                    lcDetailedUser).
+   END.
+   ELSE DO:
+      lcItemName = fGetItemName(gcBrand,
+                                "BarringCode",
+                                pcBCode,
+                                1, /*es*/
+                                TODAY).
+      DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
+                    "MobSub",                             /* HostTable */
+                    STRING(Mobsub.MsSeq),                 /* KeyValue  */
+                    MobSub.CustNum,                       /* CustNum */
+                    "Bloqueo modificado",                 /* MemoTitle */
+                    "Solicitado por el cliente " + 
+                    lcItemName +                    
+                    " - " +
+                    lcOnOffEs,                            /* MemoText */
+                    "Service",                            /* MemoType */
+                    lcDetailedUser).
+   END.
+END.
+ELSE RETURN appl_err("ERROR: Unable to set barring").
+
 
 FINALLY:
    /* Store the transaction id */
    gbAuthLog.TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
+   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.

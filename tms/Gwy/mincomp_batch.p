@@ -23,11 +23,13 @@ ASSIGN
 
 {timestamp.i}
 {cparam2.i}
+{tmsparam4.i}
 {xmlfunction.i}
 {fgettxt.i}
 {ftaxdata.i}
 {tsformat.i}
 {ftransdir.i}
+{tmsconst.i}
 
 FUNCTION fCallAlarm RETURNS LOGICAL
   (INPUT pcAction AS CHARACTER,
@@ -104,15 +106,16 @@ DEFINE VARIABLE lcTaxZone  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcImpDir   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcDoneDir  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSpoolDir AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcErrorDir  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOutDir   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE ldeTS      AS DECIMAL   NO-UNDO.
-DEFINE VARIABLE liVoucher  AS INTEGER   NO-UNDO.
 
 ASSIGN
   lcImpDir   = fCParam("PREPAIDMC","mcincoming")
   lcDoneDir  = fCParam("PREPAIDMC","mcprocessed")
   lcOutDir   = fCParam("PREPAIDMC","mcoutgoing")
-  lcSpoolDir = fCParam("PREPAIDMC","mcspool").
+  lcSpoolDir = fCParam("PREPAIDMC","mcspool")
+  lcErrorDir  = fCParam("PREPAIDMC","mcerror").
   
 FUNCTION fPos RETURNS CHARACTER
   (INPUT piPos AS INTEGER):
@@ -127,6 +130,8 @@ DEFINE VARIABLE liTotal    AS INTEGER NO-UNDO.
 DEFINE VARIABLE liAIROk    AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liAIRErr   AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liSMS      AS INTEGER NO-UNDO. 
+DEFINE VARIABLE liNoBal    AS INTEGER NO-UNDO.
+DEFINE VARIABLE liNotTarj  AS INTEGER NO-UNDO.
 
 DEFINE STREAM sFile.
 DEFINE STREAM sLine.
@@ -150,13 +155,21 @@ REPEAT:
          lcRespFile = REPLACE(lcRespFile,"TMSIN","TMSOUT").
     
       RUN pMarkStarted.
-      IF RETURN-VALUE EQ "NOK" THEN NEXT.
-
+      IF RETURN-VALUE BEGINS "ERROR" THEN DO:
+         fTransDir(lcMincFile,
+                "",
+                lcErrorDir).
+         LEAVE.
+      END.
+      ELSE IF RETURN-VALUE NE "OK" THEN
+         LEAVE.
+      
       OUTPUT STREAM sResponse TO VALUE(lcRespFile).
       
       EMPTY TEMP-TABLE ttResponse.
 
-      liTotal = 0. liAIROk = 0. liAIRErr = 0. liSMS = 0.
+      liTotal = 0. liAIROk = 0. liAIRErr = 0. liSMS = 0. liNoBal = 0.
+      liNotTarj = 0.
 
       REPEAT:
    
@@ -181,9 +194,10 @@ REPEAT:
                     MobSub.CLI = lcCLI
          NO-LOCK NO-ERROR.
  
-         IF NOT AVAIL MobSub OR MobSub.PayType = FALSE THEN
+         IF NOT AVAIL MobSub OR MobSub.PayType = FALSE THEN DO:
          ttResponse.tcMsg = "ERROR: No MSISDN in the system or NOT TARJ".
-         
+         liNotTarj = liNotTarj + 1. /* there is no TARJ or at all mobsub */
+         END.
          ELSE DO:
             
             FIND FIRST Customer WHERE
@@ -211,6 +225,7 @@ REPEAT:
             /* nothing could be done */
             ELSE DO:
                ldeTS = fMakeTS().
+               liNoBal = liNoBal + 1.
 
                CREATE TopUpQueue.
                ASSIGN
@@ -241,17 +256,14 @@ REPEAT:
       END.
    
       OUTPUT STREAM sResponse CLOSE.
-
       fTransDir(lcRespFile,
-               "",
-               lcOutDir).
+                "",
+                lcOutDir).
 
       fTransDir(lcMincFile,
-               "",
-               lcDoneDir).
-
+                "",
+                lcDoneDir).
       RUN pMarkFinished.
-      
    END.
 
 END.
@@ -370,20 +382,81 @@ END.
 
 PROCEDURE pMarkStarted:
    
-   DEFINE VARIABLE ldCheckRun AS DECIMAL NO-UNDO. 
+   DEFINE VARIABLE lcError AS CHAR NO-UNDO. 
+
+   DEF VAR lcExpectedFileName AS CHAR NO-UNDO. 
+   DEF VAR ldaPrevMonth AS DATE NO-UNDO. 
+   DEF VAR liLogStatus AS INT NO-UNDO. 
+   DEF VAR llRerunAllowed AS LOG NO-UNDO. 
    
+   llRerunAllowed = (fCParamI("MinConsRerunAllowed") eq 1).
+      
    ASSIGN    
       ldThisRun  = fMakeTS()
-      ldCheckRun = fOffSet(ldThisRun,-72). /* newer than 3 days */
+      ldaPrevMonth = ADD-INTERVAL(TODAY, -1, "months").
+      lcExpectedFileName = "yoigo_MCP_TMSIN_" +
+         STRING(MONTH(ldaPrevMonth),"99") + "-" +
+         STRING(YEAR(ldaPrevMonth)) + "_".
 
+   IF fCheckFileNameChars(lcFileName) EQ FALSE THEN DO:
+      ASSIGN lcError = "ERROR:Incorrect file name syntax"
+             liLogStatus = 1.
+   END.
+   ELSE IF NOT lcFileName BEGINS lcExpectedFileName THEN DO:
+      ASSIGN lcError = "ERROR:Incorrect file name month or year"
+             liLogStatus = 1.
+   END.
    /* check that there isn't already another run for the same purpose */
-   IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
+   ELSE IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
+                     ActionLog.Brand        = gcBrand     AND    
+                     ActionLog.ActionID     = "MINCONS" AND                     
+                     ActionLog.ActionPeriod > 201201 AND
+                     ActionLog.ActionStatus = 0 AND
+                     actionlog.actionts > 20120101) THEN DO:
+      /* this file is already running */
+      FIND FIRST ActionLog USE-INDEX ActionID WHERE
+                 ActionLog.Brand        = gcBrand     AND
+                 ActionLog.ActionID     = "MINCONS" AND
+                 ActionLog.ActionPeriod > 201201 AND
+                 ActionLog.ActionStatus = 0 AND 
+                 Actionlog.actionts > 20120101             
+                 NO-LOCK NO-ERROR.      
+
+      IF (ActionLog.KeyValue EQ lcFileName) THEN RETURN "SKIPPED".
+
+      /* new file tryed to run during ongoing run */
+      ASSIGN lcError = "ERROR:Batch not started due to ongoing run"
+             liLogStatus = 3.
+   END.
+   ELSE IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
                      ActionLog.Brand        = gcBrand     AND    
                      ActionLog.ActionID     = "MINCONS" AND
-                     ActionLog.ActionTS    >= ldCheckRun  AND
                      ActionLog.KeyValue     = lcFileName AND
-                     ActionLog.ActionStatus = 0)
-   THEN DO:
+                     ActionLog.ActionStatus = 2 AND
+                     Actionlog.actionts > 20120101) THEN DO: 
+      ASSIGN lcError = "ERROR:File already handled"
+             liLogStatus = 1.
+   END.
+   /* check if file is already handled during this month */
+   ELSE IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
+               ActionLog.Brand        = gcBrand     AND
+               ActionLog.ActionID     = "MINCONS" AND
+               ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY) AND
+               Actionlog.actionts > 20120101) AND
+               llRerunAllowed EQ FALSE THEN DO:
+         ASSIGN lcError = "ERROR:Batch not started due to existing run on this month"
+                liLogStatus = 1.
+   END.
+   ELSE IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
+               ActionLog.Brand        = gcBrand     AND
+               ActionLog.ActionID     = "MINCONS" AND
+               ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY) AND
+               Actionlog.actionts > 20120101) AND 
+               llRerunAllowed EQ TRUE THEN
+      fCParam4SetI("1","PREPAIDMC","MinConsRerunAllowed", 0).
+      /*Allow only once after flag is switched on */
+
+   IF lcError > "" THEN DO:
       
       DO TRANS:
          CREATE ActionLog.
@@ -395,12 +468,12 @@ PROCEDURE pMarkStarted:
             ActionLog.TableName    = "Cron"
             ActionLog.KeyValue     = lcFileName
             ActionLog.UserCode     = katun
-            ActionLog.ActionStatus = 3
+            ActionLog.ActionStatus = liLogStatus
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY) 
-            ActionLog.ActionChar   = "Batch not started due to ongoing run".
+            ActionLog.ActionChar   = lcError.
          RELEASE ActionLog.   
       END.
-      RETURN "NOK". 
+      RETURN lcError. 
    END.
 
    /* mark this run started */
@@ -435,7 +508,8 @@ PROCEDURE pMarkFinished:
    EXCLUSIVE-LOCK:
       ASSIGN 
         ActionLog.ActionStatus = 2
-        ActionLog.ActionChar   = SUBST("TOTAL: &1, AIR OK: &2, AIR ERROR: &3, SMS SENT: &4", liTotal, liAIROk, liAIRErr, liSMS).
+        ActionLog.ActionDec = fMakeTS().
+        ActionLog.ActionChar   = SUBST("TOTAL: &1, AIR OK: &2, AIR ERROR: &3, SMS SENT: &4, NO BAL: &5 NOT TARJ: &6 ", liTotal, liAIROk, liAIRErr, liSMS, liNoBal, liNotTarj).
    END.
    
 END PROCEDURE.

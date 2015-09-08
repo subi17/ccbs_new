@@ -11,7 +11,8 @@ FUNCTION fAmtUnBilledFFItem RETURNS DECIMAL
           INPUT idtEnd          AS DATE,
           INPUT icCalcObj       AS CHAR,
           INPUT iiPerContractID AS INT,
-          OUTPUT oiFFNum        AS INT):
+          OUTPUT oiFFNum        AS INT,
+          OUTPUT oiOrderId      AS INT):
 
    DEFINE VARIABLE liLongEnd  AS INTEGER NO-UNDO. 
    DEFINE VARIABLE liShortEnd AS INTEGER NO-UNDO. 
@@ -33,23 +34,32 @@ FUNCTION fAmtUnBilledFFItem RETURNS DECIMAL
             FixedFee.SourceTable = "DCCLI"                 AND
             FixedFee.SourceKey   = STRING(iiPerContractID) AND
             FixedFee.InUse       = TRUE USE-INDEX HostTable:
-
+      
       i = i + 1.
-      IF i = 1 THEN oiFFNum = FixedFee.FFNum.
-             
+
       FOR EACH FFItem OF FixedFee NO-LOCK:
 
          IF FFItem.Concerns[1] > 999999
          THEN liEnd = liLongEnd.
          ELSE liEnd = liShortEnd.
 
-         IF FFItem.Concerns[1] > liEnd THEN
+         IF FFItem.Concerns[1] > liEnd THEN DO:
+            IF FFItem.Billed AND
+               CAN-FIND(FIRST Invoice NO-LOCK WHERE
+                              Invoice.Invnum = FFItem.Invnum AND
+                              Invoice.InvType = 1) THEN NEXT.
+
+            IF i = 1 THEN ASSIGN
+               oiFFNum = FixedFee.FFNum
+               oiOrderId = FixedFee.OrderId.
+            ELSE ASSIGN
+               oiFFNum = 0
+               oiOrderId = 0 WHEN oiOrderId NE FixedFee.OrderId.
+             
             ldAmount = ldAmount + FFItem.Amt.
+         END.
       END.
    END.
-
-   /* non-unique fee */
-   IF i > 1 THEN oiFFNum = 0. 
 
    RETURN ldAmount.
 

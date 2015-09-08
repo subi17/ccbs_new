@@ -170,6 +170,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
                                                    INPUT Customer.CustNum,
                                                    INPUT {&REQUEST_SOURCE_MANUAL_TMS},
                                                    INPUT lcEmailAddress,
+                                                   INPUT 0, /*orderid*/
                                                    OUTPUT lcResult).
                   IF liRequest = 0 THEN DO:
                      RELEASE Customer.
@@ -209,6 +210,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
                                                       INPUT Customer.CustNum,
                                                       INPUT {&REQUEST_SOURCE_FUSION_EMAIL},
                                                       INPUT lcEmailAddress,
+                                                      INPUT 0, /*orderid*/
                                                       OUTPUT lcResult).
                      IF liRequest = 0 THEN DO:
                         RELEASE Customer.

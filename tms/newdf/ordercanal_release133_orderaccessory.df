@@ -1,0 +1,15 @@
+ADD FIELD "HardBook" OF "OrderAccessory" AS integer
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Hard Book"
+  COLUMN-LABEL "HardBook"
+  HELP "Is the terminal hard booked"
+  ORDER 170
+
+ADD FIELD "HardBookState" OF "OrderAccessory" AS character
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Hard Book State"
+  COLUMN-LABEL "HardBookState"
+  HELP "State of hard booking"
+  ORDER 180

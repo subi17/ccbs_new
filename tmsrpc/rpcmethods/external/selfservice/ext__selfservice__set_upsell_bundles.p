@@ -30,16 +30,19 @@ gcBrand = "1".
 {fgettxt.i}
 {fexternalapi.i}
 
-DEF VAR pcUpsellId         AS CHAR NO-UNDO.
-DEF VAR pcCLI              AS CHAR NO-UNDO.
-DEF VAR pcTransId          AS CHAR NO-UNDO.
-DEF VAR top_struct         AS CHAR NO-UNDO.
+DEF VAR pcUpsellId          AS CHAR NO-UNDO.
+DEF VAR pcCLI               AS CHAR NO-UNDO.
+DEF VAR pcTransId           AS CHAR NO-UNDO.
+DEF VAR top_struct          AS CHAR NO-UNDO.
 
-DEF VAR lcError            AS CHAR NO-UNDO. 
-DEF VAR liRequest          AS INT  NO-UNDO.
-DEF VAR ldeSMSStamp        AS DEC  NO-UNDO. 
-DEF VAR llResult           AS LOG  NO-UNDO. 
-DEF VAR ldeBundleFee       AS DEC  NO-UNDO.
+DEF VAR lcError             AS CHAR NO-UNDO.
+DEF VAR liRequest           AS INT  NO-UNDO.
+DEF VAR ldeSMSStamp         AS DEC  NO-UNDO.
+DEF VAR llResult            AS LOG  NO-UNDO.
+DEF VAR ldeBundleFee        AS DEC  NO-UNDO.
+DEF VAR lcApplicationId     AS CHAR NO-UNDO.
+DEF VAR lcAppEndUserId      AS CHAR NO-UNDO.
+DEF VAR secondsFromPrevious AS INT  NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,string,string") EQ ? THEN RETURN.
 
@@ -49,13 +52,30 @@ ASSIGN pcTransId  = get_string(param_toplevel_id, "0")
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF NOT fchkTMSCodeValues(gbAuthLog.UserName,substring(pcTransId,1,3)) THEN
+ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
+       lcAppEndUserId  = gbAuthLog.EndUserId.
+
+IF NOT fchkTMSCodeValues(gbAuthLog.UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
+
+katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
 
 FIND FIRST MobSub  WHERE 
            MobSub.CLI = pcCLI NO-LOCK NO-ERROR.
 IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
-      
+
+/* YDR-1783 Check that previous request is not done during
+   previous five minutes from external api */
+IF CAN-FIND( FIRST MsRequest NO-LOCK WHERE
+                   MsRequest.MsSeq = Mobsub.MsSeq AND
+                   MsRequest.ActStamp > fSecOffSet(fMakeTS(),-300) AND
+                   MsRequest.ReqType = 8 AND
+                   MsRequest.ReqCParam3 = pcUpsellId AND
+                   MsRequest.ReqSource = {&REQUEST_SOURCE_EXTERNAL_API}
+                   USE-INDEX MsActStamp) THEN
+   RETURN appl_err("The requested activation was not handled because " +
+                   "there is a too recent activation.").
+
 FIND FIRST Customer WHERE
            Customer.Custnum = MobSub.Custnum NO-LOCK NO-ERROR.
 IF NOT AVAIL Customer THEN RETURN appl_err("Customer not found"). 
@@ -109,7 +129,7 @@ IF pcUpsellId EQ {&HSPA_ROAM_EU} OR pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
                                 0,
                                 0,
                                 OUTPUT lcError).
-   IF liRequest = 0 THEN RETURN appl_err("Bundle request not created").
+   IF liRequest = 0 THEN RETURN appl_err("Bundle request not created"). 
 END.
 
 ELSE IF NOT fCreateUpsellBundle(
@@ -141,19 +161,15 @@ ELSE IF NOT fCreateUpsellBundle(
    RETURN appl_err(lcError).
 END.
 
-
-CREATE Memo.
-ASSIGN
-      Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand 
-      Memo.HostTable = "MobSub" 
-      Memo.KeyValue  = STRING(MobSub.MsSeq) 
-      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
-      Memo.MemoTitle = DayCampaign.DCName
-      Memo.MemoText  = "External API upsell"
-      Memo.CustNum   = MobSub.CustNum
-      Memo.MemoType  = "Service".
+DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
+                 "MobSub",                             /* HostTable */
+                 STRING(Mobsub.MsSeq),                 /* KeyValue  */
+                 MobSub.CustNum,                       /* CustNum */
+                 DayCampaign.DCName,                   /* MemoTitle */
+                 "Ampliación " + DayCampaign.DCName + " - Activar",  /* MemoText */
+                 "Service",                            /* MemoType */
+                 fgetAppDetailedUserId(INPUT lcApplicationId,
+                                      INPUT Mobsub.CLI)).
 
 /* Adding the details into Main struct */
 top_struct = add_struct(response_toplevel_id, "").

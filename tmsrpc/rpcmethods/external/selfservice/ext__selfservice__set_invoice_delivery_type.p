@@ -34,6 +34,7 @@ DEF VAR top_struct     AS CHAR NO-UNDO.
 DEF VAR liRequest      AS INT  NO-UNDO.
 DEF VAR lcResult       AS CHAR NO-UNDO.
 DEF VAR lhCustomer     AS HANDLE NO-UNDO.
+DEF VAR lcApplicationId AS CHAR NO-UNDO. 
 
 {commpaa.i}
 ASSIGN
@@ -54,8 +55,12 @@ ASSIGN pcTransId = get_string(param_toplevel_id, "0")
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF NOT fchkTMSCodeValues(gbAuthLog.UserName,substring(pcTransId,1,3)) THEN
+lcApplicationId = substring(pcTransId,1,3).
+
+IF NOT fchkTMSCodeValues(gbAuthLog.UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
+
+katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun   
@@ -102,6 +107,7 @@ IF Customer.DelType NE piDelType THEN DO:
                                        INPUT Mobsub.Custnum,
                                        INPUT {&REQUEST_SOURCE_EXTERNAL_API},
                                        INPUT Customer.Email,
+                                       INPUT 0, /* msseq */
                                        OUTPUT lcResult).
       IF liRequest = 0 THEN DO:
          IF lcResult = "Customer already has an active request" THEN .

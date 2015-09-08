@@ -10,28 +10,28 @@
 -H hebe.int.asp.qvantel.net
 -S mobile
 
--db mcdr15q1
+-db mcdr15q2
 -H hebe.int.asp.qvantel.net
--S mcdr15q1
+-S mcdr15q2
 -ld mcdr
 
 -db star
 -H hebe.int.asp.qvantel.net
 -S star
 
--db mcdrdtl15q1
+-db mcdrdtl15q2
 -H hebe.int.asp.qvantel.net
--S mcdrdtl15q1
+-S mcdrdtl15q2
 -ld mcdrdtl
 
--db roamcdr15q1
+-db roamcdr15q2
 -H hebe.int.asp.qvantel.net
--S roamcdr15q1
+-S roamcdr15q2
 -ld roamcdr
 
--db prepcdr15q1
+-db prepcdr15q2
 -H hebe.int.asp.qvantel.net
--S prepcdr15q1
+-S prepcdr15q2
 -ld prepcdr
 
 -db counter

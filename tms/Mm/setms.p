@@ -83,9 +83,6 @@ DEF VAR lcBBProfile2           AS CHAR              NO-UNDO.
 DEF VAR lcShaperProfile        AS CHAR              NO-UNDO.
 DEF VAR ldaActiveDate          AS DATE              NO-UNDO.
 DEF VAR liActiveTime           AS INT               NO-UNDO.
-DEF VAR lcBarrStatus AS CHAR NO-UNDO. 
-DEF VAR lcBarrMask AS CHAR NO-UNDO. 
-DEF VAR liNamActive AS INT NO-UNDO. 
 DEF VAR llCheckSC AS LOG NO-UNDO INIT TRUE.
 DEF VAR llVoIPActive AS LOG NO-UNDO.
 DEF VAR lcShaperConfId AS CHAR NO-UNDO.
@@ -96,7 +93,6 @@ DEF BUFFER bSSPara FOR SubSerPara.
 DEF BUFFER bttBarr FOR ttBarring.
 DEF BUFFER bOrigRequest FOR MSRequest.
 DEF BUFFER bMsRequest   FOR MSRequest.
-DEF BUFFER bMsRequest2  FOR MSRequest.
 DEF BUFFER bCLIType     FOR CLIType.
 
 DEF TEMP-TABLE ttSolog NO-UNDO
@@ -220,56 +216,6 @@ IF MsRequest.ReqCparam1 = "CF" THEN DO:
       END CASE.
    END.
 END.
-/* hot fix to YTS-4471 */
-ELSE IF MsRequest.ReqCParam1 EQ "NAM" OR
-       (MsRequest.ReqCParam1 EQ "BARRING" AND
-        MsRequest.ReqCParam2 EQ "#RESET") THEN DO:
-
-   lcBarrStatus = fCheckStatus(MsRequest.MsSeq).
-
-   IF MsRequest.ReqCParam1 EQ "NAM" THEN liNamActive = MsRequest.ReqIParam1.
-   ELSE DO:
-      liNamActive = 0.
-      FOR EACH bMsRequest2 WHERE
-               bMsRequest2.MsSeq      = MsRequest.MsSeq AND
-               bMsRequest2.ReqType    = {&REQTYPE_SERVICE_CHANGE} AND
-               bMsRequest2.ReqStatus  = {&REQUEST_STATUS_DONE} AND
-               bMsRequest2.ReqCparam1 = "NAM" AND
-               bMsRequest2.ActStamp  <= ldCurrent AND
-               bMsRequest2.UserCode  <> "barr" NO-LOCK
-         USE-INDEX MsSeq BY bMsRequest2.UpdateStamp DESC:
-
-         IF bMsRequest2.ReqIparam1 EQ 1 THEN liNamActive = 1.
-         LEAVE.
-      END. /* FOR FIRST bMsRequest WHERE */
-   END.
-
-   IF lcBarrStatus EQ "OK" THEN lcBarrMask = "0000000".
-   ELSE IF lcBarrStatus BEGINS "D_" OR
-      lcBarrStatus BEGINS "Y_" OR
-      lcBarrStatus BEGINS "C_" THEN DO:
-      
-      FIND FIRST ctservel NO-LOCK where
-                 ctservel.brand = gcBrand AND
-                 ctservel.clitype = MobSub.CLIType and
-                 ctservel.servpac = lcBarrStatus and
-                 ctservel.servcom = "BARRING" NO-ERROR.
-
-      IF AVAIL ctservel THEN lcBarrMask = ctservel.defparam.
-      ELSE DO:
-         ocError = "ERROR:Barring component not found".
-         RETURN ocError.
-      END.
-   END.
-   ELSE DO:
-      ocError = "ERROR:Ongoing barring request".
-      RETURN ocError.
-   END.
-
-   OVERLAY(lcBarrMask,7) = STRING(liNamActive).
-   IF MobSub.CLIType EQ "CONTM2" THEN OVERLAY(lcBarrMask,2) = "11".
-   lcServName = "BARRING=" + lcBarrMask.
-END.
 
 IF lcServName = "" THEN lcServName = MsRequest.ReqCParam1.
 
@@ -350,7 +296,8 @@ IF ServCom.ActType = 0 THEN DO:
                  OUTPUT ldaActiveDate,
                  OUTPUT liActiveTime).
 
-        IF bMsRequest.ReqCparam3 = "TARJ7" AND 
+        IF (bMsRequest.ReqCparam3 = "TARJ7" OR 
+           bMsRequest.ReqCparam3 = "TARJ9") AND 
            bMsRequest.ReqType = 8 THEN
            lcShaperProfile = lcShaperProfile +
                              ",RESET_DAY=" + STRING(DAY(ldaActiveDate)).
@@ -387,19 +334,15 @@ IF ServCom.ActType = 0 THEN DO:
 
      ttSolog.Commline = ttSolog.Commline + lcShaperProfile + ",".
   END. /* IF lcServName EQ "SHAPER" AND */
-  ELSE IF LOOKUP(MsRequest.ReqCParam1,"CF,NAM") > 0 OR 
-     (MsRequest.ReqCParam1 EQ "BARRING" AND
-      MsRequest.ReqCParam2 EQ "#RESET") THEN
+  ELSE IF LOOKUP(MsRequest.ReqCParam1,"CF") > 0 THEN
      ttSolog.CommLine = ttSolog.CommLine + lcServName + ",".
   ELSE
      ttSolog.CommLine = ttSolog.CommLine +
                       TRIM(lcServName)   + "="  +
                       (IF MsRequest.ReqIParam1 > 0 AND
-                          MsRequest.ReqCparam1 NE "BPSUB" AND
                           MsRequest.ReqCParam2 NE "" 
                        THEN MsRequest.ReqCParam2  
                        ELSE STRING(MsRequest.ReqIParam1)) + ",".
-
 END.     
 
 /* entries to db */
@@ -460,7 +403,8 @@ BY ttSolog.ActStamp:
                     bMsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
                     LOOKUP(STRING(bMsRequest.ReqStat),"4,9,99,3") = 0 AND
                     bMsRequest.ActStamp = MsRequest.ActStamp AND
-                    bMsRequest.ReqCparam2 = "TARJ7"
+                   (bMsRequest.ReqCparam2 = "TARJ7" OR
+                    bMsRequest.ReqCparam2 = "TARJ9")
               USE-INDEX MsSeq NO-ERROR.
          IF AVAILABLE bMsRequest THEN
             ASSIGN lcServiceClass = ""
@@ -508,7 +452,7 @@ BY ttSolog.ActStamp:
                lcServiceClass = (IF AVAIL ProvCliType THEN
                                  ",SERVICECLASS=" + ProvCliType.ServiceClass
                                  ELSE "").
-         END. /* WHEN "TARJ6" OR WHEN "TARJ7" THEN DO: */
+         END. /* WHEN "TARJ6" THEN DO: */
          WHEN "TARJ7" THEN DO:
             IF MsRequest.ReqIParam1 EQ 1 THEN
                lcServiceClass = ",SERVICECLASS=0003".
@@ -521,6 +465,11 @@ BY ttSolog.ActStamp:
                lcServiceClass = (IF AVAIL ProvCliType THEN
                                  ",SERVICECLASS=" + ProvCliType.ServiceClass ELSE "").
          END. /* WHEN "TARJ8" THEN DO: */
+         WHEN "TARJ9" THEN DO:
+            IF MsRequest.ReqIParam1 EQ 1 THEN
+               lcServiceClass = ",SERVICECLASS=0009".
+            ELSE lcServiceClass = "".
+         END. /* WHEN "TARJ9" THEN DO: */
          OTHERWISE
             lcServiceClass = (IF AVAIL ProvCliType AND
                                        ProvCliType.ServiceClass > "" THEN
@@ -595,4 +544,3 @@ BY ttSolog.ActStamp:
       VIEW-AS ALERT-BOX TITLE "Service Order Request".  
 
 END.
-

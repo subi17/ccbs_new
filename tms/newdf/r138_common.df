@@ -1,0 +1,29 @@
+ADD FIELD "OrderId" OF "InvRow" AS integer 
+  FORMAT "->>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  COLUMN-LABEL "OrderId"
+  ORDER 360
+
+ADD FIELD "OrderId" OF "SingleFee" AS integer 
+  FORMAT "->>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  COLUMN-LABEL "OrderId"
+  ORDER 290
+
+ADD FIELD "MNPProduct" OF "MNPCal" AS character
+  FORMAT "x(1)"
+  INITIAL ""
+  LABEL "Product"
+  COLUMN-LABEL "Product"
+  HELP "Product"
+  ORDER 50
+
+ADD FIELD "MNPTariff" OF "MNPCal" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Tariff"
+  COLUMN-LABEL "Tariff"
+  HELP "Tariff"
+  ORDER 60

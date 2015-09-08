@@ -265,6 +265,41 @@ PROCEDURE pFinalize:
    IF MsRequest.ReqCparam3 = "DSS2" AND
       MsRequest.ReqCparam1 = "DELETE" THEN
       RUN pHandleOtherServices(INPUT iiMsRequest).
+         
+   IF MsRequest.ReqCparam3 BEGINS {&DSS} AND
+      MsRequest.ReqCparam1 = "DELETE" THEN DO:
+
+      IF NOT fIsDSSActive(MsRequest.Custnum, ldeCurrentTS) THEN DO:
+         
+         FOR EACH lbMobSub NO-LOCK WHERE
+                  lbMobSub.Custnum = MsRequest.Custnum AND
+                  lbMobSub.PayType = FALSE:
+            IF fIsVoIPAllowed(lbMobsub.MsSeq, MsRequest.ActStamp) THEN DO:
+               liRequest = fServiceRequest(
+                                lbMobsub.MsSeq,
+                                "VOIPVIDEO",
+                                1, /* on */
+                                "",
+                                ldeCurrentTS,
+                                "", /* salesman */
+                                FALSE, /* fees */
+                                FALSE, /* sms */
+                                "", /* creator */
+                                {&REQUEST_SOURCE_BTC},
+                                MsRequest.MsRequest, /* father request */
+                                FALSE, /* mandatory for father request */
+                                OUTPUT lcError).
+               IF liRequest = 0 THEN 
+                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                             "MobSub",
+                             STRING(MsRequest.MsSeq),
+                             MsRequest.Custnum,
+                             "Voip activation failed;",
+                             lcError).
+            END.
+         END. /* IF AVAILABLE MobSub THEN DO: */
+      END. /* IF NOT fIsDSSActive(MsRequest.Custnum, fMakeTS()) THEN DO: */
+   END. /* IF MsRequest.ReqCparam3 BEGINS "DSS" AND */
 
    FIND FIRST MobSub WHERE
               MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
@@ -361,41 +396,6 @@ PROCEDURE pFinalize:
       END CASE. /* CASE MsRequest.ReqCparam3: */
 
    END. /* IF MsRequest.ReqCparam3 BEGINS {&DSS} AND */
-         
-   IF MsRequest.ReqCparam3 BEGINS {&DSS} AND
-      MsRequest.ReqCparam1 = "DELETE" THEN DO:
-
-      IF NOT fIsDSSActive(MsRequest.Custnum, ldeCurrentTS) THEN DO:
-         
-         FOR EACH lbMobSub NO-LOCK WHERE
-                  lbMobSub.Custnum = MsRequest.Custnum AND
-                  lbMobSub.PayType = FALSE:
-            IF fIsVoIPAllowed(lbMobsub.MsSeq, MsRequest.ActStamp) THEN DO:
-               liRequest = fServiceRequest(
-                                MsRequest.MsSeq,
-                                "VOIPVIDEO",
-                                1, /* on */
-                                "",
-                                ldeCurrentTS,
-                                "", /* salesman */
-                                FALSE, /* fees */
-                                FALSE, /* sms */
-                                "", /* creator */
-                                {&REQUEST_SOURCE_BTC},
-                                MsRequest.MsRequest, /* father request */
-                                FALSE, /* mandatory for father request */
-                                OUTPUT lcError).
-               IF liRequest = 0 THEN 
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
-                             STRING(MsRequest.MsSeq),
-                             MsRequest.Custnum,
-                             "Voip activation failed;",
-                             lcError).
-            END.
-         END. /* IF AVAILABLE MobSub THEN DO: */
-      END. /* IF NOT fIsDSSActive(MsRequest.Custnum, fMakeTS()) THEN DO: */
-   END. /* IF MsRequest.ReqCparam3 BEGINS "DSS" AND */
 
    RETURN "".
    
@@ -433,7 +433,8 @@ PROCEDURE pHandleOtherServices:
              LOOKUP(lbMobSub.CLIType,lcDSS2PrimarySubsType) = 0) NO-LOCK:
 
       IF fGetActiveSpecificBundle(lbMobSub.MsSeq,ldeStamp,"BONO") > "" OR
-         lbMobSub.TariffBundle = "CONTS16"
+         lbMobSub.TariffBundle = "CONTS16" OR
+         lbMobSub.TariffBundle = "CONTS12" 
       THEN NEXT.
 
       RUN pChangedBBStatus(INPUT 2,

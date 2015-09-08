@@ -41,7 +41,7 @@ IF lcAddrConfDir > "" THEN DO:
    GetRecipients(lcAddrConfDir).
    /* Send via mail */
    IF LOOKUP(lcMailHost,{&HOSTNAME_STAGING}) > 0 THEN
-      SendMaileInvoice(lcEmailText,"").
+      SendMaileInvoice(lcEmailText,"","").
    ELSE
       SendMail(lcEmailText,"").
 END.

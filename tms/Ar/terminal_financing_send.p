@@ -296,7 +296,13 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    END.
    
    CASE FMItem.FFItemQty:
-      WHEN 24 THEN lcPayTermType[1] = "0024".
+      WHEN 24 THEN DO:
+         /* YTS-6873: Own code for non-residual fee cass */
+         IF ldaOrderDate >= 5/1/2015 THEN 
+            lcPayTermType[1] = "0034".
+         ELSE
+            lcPayTermType[1] = "0024".
+      END.
       WHEN 18 THEN lcPayTermType[1] = "0018".
       OTHERWISE DO:
          fErrorLog(Order.OrderID,
@@ -369,6 +375,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
               SingleFee.SourceTable = FixedFee.SourceTable AND
               SingleFee.CalcObj = "RVTERM" NO-ERROR.
    
+      
    IF AVAIL SingleFee AND SingleFee.Amt > 0 THEN DO:
 
       ASSIGN
@@ -392,6 +399,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
          lcPayTermType[1] = TFConf.PaytermCode WHEN TFConf.RVPercentage NE 0
          lcPayTermType[2] = TFConf.ResidualCode.
    END.
+
    ELSE ASSIGN
       ldeRVPerc = 0
       ldeRVAmt  = 0.
@@ -401,9 +409,16 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
       FixedFee.FinancedResult = {&TF_STATUS_SENT_TO_BANK}
       liLineNum = liLineNum + 1.
 
-   CREATE FixedFeeTF.
+   FIND FIRST FixedFeeTF EXCLUSIVE-LOCK WHERE
+              FixedFeeTF.FFNum = FixedFee.FFNum NO-ERROR.
+
+   IF NOT AVAIL FixedFeeTF THEN DO:
+      CREATE FixedFeeTF.
+      ASSIGN
+         FixedFeeTF.FFNum     = FixedFee.FFNum.
+   END.
+
    ASSIGN
-      FixedFeeTF.FFNum     = FixedFee.FFNum
       FixedFeeTF.BankDate  = TODAY
       FixedFeeTF.TFBank    = lcTFBank
       FixedFeeTF.OrgId     = OrderCustomer.CustId

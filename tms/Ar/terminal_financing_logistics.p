@@ -11,6 +11,7 @@ katun = "Qvantel".
 gcBrand = "1".
 {tmsconst.i}
 {cparam2.i}
+{timestamp.i}
 
 DEF STREAM sout.
 
@@ -50,8 +51,17 @@ FOR EACH Order NO-LOCK WHERE
    FOR EACH OrderDelivery NO-LOCK WHERE
             OrderDelivery.Brand = gcBrand AND
             OrderDelivery.Orderid = Order.OrderId 
+         BREAK BY OrderDelivery.OrderId
          BY OrderDelivery.LoTimeStamp DESC:
 
+      /* YPR-1872 */
+      IF FIRST-OF(OrderDelivery.OrderId) AND
+         OrderDelivery.LoStatusId EQ 8 AND
+         orderdelivery.LoTimeStamp < DATETIME(TODAY - 14,0) THEN DO:
+         RUN orderhold.p(Order.OrderId, "RELEASE_BATCH").
+         fLogToFile("RELEASED: delayed activation, delivered to customer more than 14 days ago").
+         NEXT ORDER_LOOP.
+      END.
       
       IF LOOKUP(STRING(orderdelivery.LoStatusId),
          {&DEXTRA_CANCELLED_STATUSES}) > 0 THEN NEXT ORDER_LOOP.
@@ -90,8 +100,33 @@ FOR EACH FixedFee NO-LOCK WHERE
 
       IF orderdelivery.LoStatusId = 12 AND
          orderdelivery.LoTimeStamp < DATETIME(TODAY - 20,0) THEN DO:
+
+         IF CAN-FIND(FIRST ActionLog NO-LOCK WHERE
+                           ActionLog.Brand = gcBrand AND
+                           ActionLog.TableName = "Order" AND
+                           ActionLog.KeyValue = STRING(Order.OrderId) AND
+                           ActionLog.ActionID = "LOCancel" AND
+                           ActionLog.ActionStatus = 3) THEN DO:
+            fLogToFile("SKIPPED: Cancellation already handled").
+            NEXT FF_LOOP.
+         END.
+
          RUN cancelorder.p(Order.OrderId,FALSE).
          fLogToFile("CANCELLED").
+
+         CREATE ActionLog.
+         ASSIGN 
+            ActionLog.Brand        = gcBrand   
+            ActionLog.TableName    = "Order"
+            ActionLog.KeyValue     = STRING(Order.OrderID)
+            ActionLog.ActionID     = "LOCancel"
+            ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
+                                     MONTH(TODAY)
+            ActionLog.ActionStatus = 3
+            ActionLog.ActionTS     = fMakeTS().
+
+         RELEASE ActionLog.
+
          NEXT FF_LOOP.
       END.
       ELSE IF orderdelivery.LOStatusId EQ 8 AND 

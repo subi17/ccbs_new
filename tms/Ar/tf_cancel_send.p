@@ -44,12 +44,17 @@ FUNCTION fLogLine RETURNS LOGICAL
       iiOrderId "|" icNote SKIP.
 
 END.
-
+/*
 RUN pCreateFile({&TF_BANK_UNOE},"CANCEL","ANULACIONESYOIGO").
-RUN pCreateFile({&TF_BANK_UNOE},"TERMINATION","CANCELACIONESYOIGO").
-RUN pCreateFile({&TF_BANK_SABADELL},"CANCEL","ANULACIONESYOIGOSABADELL").
-RUN pCreateFile({&TF_BANK_SABADELL},"TERMINATION","CANCELACIONESYOIGOSABADELL").
+*/
 
+/*
+RUN pCreateFile({&TF_BANK_UNOE},"TERMINATION","CANCELACIONESYOIGO").
+*/
+RUN pCreateFile({&TF_BANK_SABADELL},"CANCEL","ANULACIONESYOIGOSABADELL").
+/*
+RUN pCreateFile({&TF_BANK_SABADELL},"TERMINATION","CANCELACIONESYOIGOSABADELL").
+*/
 PROCEDURE pCreateFile:
 
    DEF INPUT PARAM icBank AS CHAR NO-UNDO. 
@@ -64,7 +69,7 @@ PROCEDURE pCreateFile:
    
    ASSIGN
       lcFile = lcRootDir + "spool/" + icFileName
-      lcLogFile = lcLogDir + "spool/" + icFileName + "_" +
+      lcLogFile = lcLogDir + "internal/" + icFileName + "_" +
                STRING(DAY(TODAY),"99") +
                STRING(MONTH(TODAY),"99") +
                STRING(YEAR(TODAY)) + ".LOG".
@@ -159,12 +164,11 @@ PROCEDURE pCreateFile:
       END.
       ELSE NEXT.
 
-      IF NOT SESSION:BATCH THEN DO:
-         liOk = liOk + 1.
-         IF liOk MOD 10 = 0 THEN DO:
+     liOk = liOk + 1.
+      IF NOT SESSION:BATCH AND
+         liOk MOD 10 = 0 THEN DO:
             DISP liOk WITH FRAME a.
             PAUSE 0.
-         END.
       END.
 
       RUN pPrintLine(FixedFeeTF.Amount, 
@@ -191,7 +195,7 @@ PROCEDURE pCreateFile:
       
    OUTPUT STREAM sout close.
 
-   fMove2TransDir(lcLogFile, "", lcLogDir + "outgoing/"). 
+/*   fMove2TransDir(lcLogFile, "", lcLogDir + "outgoing/").  */
    lcProcessedFile = fMove2TransDir(lcFile, "", lcRootDir + "outgoing/"). 
    IF SESSION:BATCH AND 
       lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).

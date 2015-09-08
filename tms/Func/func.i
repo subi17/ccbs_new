@@ -808,20 +808,23 @@ FUNCTION fPrintOrderName RETURNS CHARACTER
     
 END FUNCTION.
 
-FUNCTION fWriteMemo RETURNS LOGICAL
+FUNCTION fWriteMemoWithType RETURNS LOGICAL
    (icHostTable AS CHAR,
     icKeyValue  AS CHAR,
     iiCustNum   AS INT,
     icTitle     AS CHAR,
-    icText      AS CHAR).
+    icText      AS CHAR,
+    icType      AS CHAR,
+    icCreUser   AS CHAR).
     
    CREATE Memo.
    ASSIGN Memo.Brand     = gcBrand
           Memo.HostTable = icHostTable
           Memo.KeyValue  = icKeyValue
           Memo.CustNum   = iiCustNum
+          Memo.Memotype  = icType
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = icCreUser 
           Memo.MemoTitle = icTitle
           Memo.MemoText  = icText.
           Memo.CreStamp  = fMakeTS().
@@ -830,6 +833,15 @@ FUNCTION fWriteMemo RETURNS LOGICAL
    
    RETURN TRUE. 
    
-END FUNCTION.  
+END FUNCTION.
 
+FUNCTION fWriteMemo RETURNS LOGICAL
+   (icHostTable AS CHAR,
+    icKeyValue  AS CHAR,
+    iiCustNum   AS INT,
+    icTitle     AS CHAR,
+    icText      AS CHAR).
+
+   RETURN fWriteMemoWithType(icHostTable,icKeyValue,iiCustNum,icTitle,icText,"", katun).
+END FUNCTION.
 

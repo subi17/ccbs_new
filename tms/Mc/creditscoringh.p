@@ -182,7 +182,9 @@ PROCEDURE pHandleOrder:
          bOrder.PortingDate <> ? THEN
          lcNewOrderStatus = {&ORDER_STATUS_MNP_ON_HOLD}.
 
-      IF lcNewOrderStatus > "" THEN
+      IF bOrder.OrderChannel BEGINS "fusion" THEN
+          fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_PENDING_FIXED_LINE}).
+      ELSE IF lcNewOrderStatus > "" THEN
          fSetOrderStatus(bOrder.OrderId,lcNewOrderStatus).
       ELSE IF bOrder.MNPStatus NE 0 THEN
          fSetOrderStatus(bOrder.OrderId,"3").
@@ -193,7 +195,7 @@ PROCEDURE pHandleOrder:
             ELSE
                fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_RENEWAL}).
          END.
-         ELSE fSetOrderStatus(bOrder.OrderId,"1").
+         ELSE fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_NEW}).
       END.
 
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrder).

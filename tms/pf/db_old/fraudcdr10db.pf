@@ -1,0 +1,9 @@
+-db /db1/fraudcdr10/fraudcdr10
+-L 20000
+-B 300000
+#-H propus
+-S fraudcdr10
+-aiarcdir /aiarchive/fraudcdr10
+-DBService replserv
+-pica 8192
+-pf /apps/tms/pf/db/general.pf

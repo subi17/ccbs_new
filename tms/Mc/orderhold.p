@@ -74,7 +74,33 @@ IF Order.StatusCode EQ {&ORDER_STATUS_RESIGNATION} THEN DO:
       ActionLog.ActionTS = fMakeTS().
 END.
 
-IF Order.OrderType = 2 THEN DO:
+/* release fusion company order */
+IF (Order.StatusCode EQ "20" OR
+    Order.StatusCode EQ "21") AND
+    Order.OrderChannel BEGINS "fusion" AND 
+    CAN-FIND(FIRST OrderCustomer NO-LOCK WHERE
+                   OrderCustomer.Brand = gcBrand AND
+                   OrderCustomer.OrderId = Order.OrderId AND
+                   OrderCustomer.RowType = 1 AND
+                   OrderCustomer.CustidType = "CIF") THEN DO:
+
+   lcNewOrderStatus = {&ORDER_STATUS_PENDING_FIXED_LINE}.
+
+   FIND FIRST OrderFusion NO-LOCK WHERE
+              OrderFusion.Brand   = Order.Brand AND
+              OrderFusion.OrderId = Order.OrderID NO-ERROR.
+   IF AVAIL OrderFusion AND
+            OrderFusion.FusionStatus EQ "" THEN DO:
+
+      FIND CURRENT OrderFusion EXCLUSIVE-LOCK.
+      ASSIGN
+         OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_NEW}
+         OrderFusion.UpdateTS = fMakeTS().
+      FIND CURRENT OrderFusion NO-LOCK.
+   END.
+
+END.
+ELSE IF Order.OrderType = 2 THEN DO:
    
    IF Order.statuscode EQ {&ORDER_STATUS_RENEWAL_HOLD} THEN DO:
       FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE

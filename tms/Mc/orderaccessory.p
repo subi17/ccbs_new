@@ -86,10 +86,12 @@ form
     lcBIName      
        FORMAT "X(30)" 
        NO-LABEL
-    ttAccessory.IMEI      COLON 22 FORMAT "X(20)"
-    ttAccessory.Amount    COLON 22 FORMAT "->>>>>9.99"
-    ttAccessory.VatAmount COLON 22 FORMAT "->>>>>9.99"
-    ttAccessory.Discount  COLON 22 FORMAT "->>>>>9.99"
+    ttAccessory.IMEI          COLON 22 FORMAT "X(20)"
+    ttAccessory.Amount        COLON 22 FORMAT "->>>>>9.99"
+    ttAccessory.VatAmount     COLON 22 FORMAT "->>>>>9.99"
+    ttAccessory.Discount      COLON 22 FORMAT "->>>>>9.99"
+    ttAccessory.HardBook      COLON 22 FORMAT "9"
+    ttAccessory.HardBookState COLON 22 FORMAT "X(20)" 
 WITH  OVERLAY ROW 6 CENTERED
     COLOR VALUE(cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
@@ -644,6 +646,8 @@ PROCEDURE local-UPDATE-record:
       ttAccessory.Amount
       ttAccessory.VATAmount
       ttAccessory.Discount
+      ttAccessory.HardBook
+      ttAccessory.HardBookState
       WITH FRAME lis.
       
       IF lcRight = "RW" AND FALSE

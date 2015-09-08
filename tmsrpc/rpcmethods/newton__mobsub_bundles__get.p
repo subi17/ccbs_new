@@ -43,6 +43,7 @@ DEF VAR llUpComingDataBundle AS LOG NO-UNDO.
 DEF VAR llUpgradeUpsell AS LOG NO-UNDO.
 DEF VAR lcBONOContracts AS CHAR NO-UNDO.
 DEF VAR ldeActivationTS AS DEC NO-UNDO. 
+DEF VAR liActAllowed AS INT NO-UNDO INIT 1.
 
 DEFINE BUFFER bMsRequest  FOR MsRequest.
 
@@ -206,7 +207,13 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
                                       piMsSeq,
                                       MobSub.Custnum,
                                       OUTPUT lcError).
-       add_int(lcResultStruct, "activations",liActivations). 
+       add_int(lcResultStruct, "activations",liActivations).
+       /* ydr_1905 addition for web visibility
+       IF pcBundleId MATCHES("*_UPSELL") AND
+          fGetCurrentSpecificBundle(Mobsub.MsSeq,pcBundle) EQ "" THEN
+          liActAllowed = 0.
+       add_int(lcResultStruct, "activation_allowed",liActAllowed).
+       */
    END.
    ELSE lcError = "Invalid Bundle Id: " + pcBundleId .
 END.

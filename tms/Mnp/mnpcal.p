@@ -9,6 +9,7 @@
   ---------------------------------------------------------------------- */
 
 {commali.i}
+{cparam2.i}
 {lib/tokenlib.i}
 {lib/tokenchk.i 'MNPCal'}
 {timestamp.i}
@@ -58,14 +59,17 @@ DEFINE VARIABLE lcRegion     AS CHARACTER               NO-UNDO.
 DEFINE VARIABLE llAdmin      AS LOGICAL NO-UNDO. 
 DEFINE VARIABLE llSyst       AS LOGICAL NO-UNDO. 
 DEFINE VARIABLE liPeriodSum AS INTEGER NO-UNDO.  
+DEFINE VARIABLE lcBundleCLITypes AS CHARACTER           NO-UNDO.
 
 llAdmin = (getTMSRight("CCSUPER,SYST") EQ "RW").
 /* YOT-1438 */
 llSyst = (getTMSRight("SYST") EQ "RW").
-
+lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 FORM
     MNPCal.OrderChannel
     MNPCal.Region  
+    MNPCal.MNPProduct 
+    MNPCal.MNPTariff
     MNPCal.MessageType FORMAT "x(10)"
     MNPCal.Periods  
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
@@ -81,6 +85,10 @@ FORM
     "Region .....:" MNPCal.Region       FORMAT "x(2)"
     HELP "Region (F9)" 
     lcRegion FORMAT "x(20)" SKIP
+    "Product.....:" MNPCal.MNPProduct      FORMAT "X(1)"
+    HELP "MNP Product (F9)" SKIP
+    "Tariff......:" MNPCal.MNPTariff       FORMAT "X(8)"
+    HELP "Tariff (F9)" SKIP
     "Message Type:" MNPCal.MessageType  FORMAT "x(8)"
     HELP "Message Type (F9)" SKIP
     "Periods ....:" MNPCal.Periods      FORMAT ">9"
@@ -390,6 +398,8 @@ BROWSE:
         COLOR DISPLAY value(ctc)
            MNPCal.OrderChannel   
            MNPCal.Region
+           MNPCal.MNPProduct 
+           MNPCal.MNPTariff
            MNPCal.MessageType
            MNPCal.Periods
            WITH FRAME sel.
@@ -407,6 +417,8 @@ BROWSE:
         COLOR DISPLAY value(ccc)
            MNPCal.OrderChannel
            MNPCal.Region
+           MNPCal.MNPProduct 
+           MNPCal.MNPTariff 
            MNPCal.MessageType
            MNPCal.Periods
            WITH FRAME sel.
@@ -611,6 +623,8 @@ PROCEDURE local-disp-row:
    DISPLAY 
       MNPCal.OrderChannel
       MNPCal.Region
+      MNPCal.MNPProduct
+      MNPCal.MNPTariff
       MNPCal.MessageType
       MNPCal.Periods
    WITH FRAME sel.
@@ -641,6 +655,8 @@ PROCEDURE local-UPDATE-record:
    DISP
       MNPCal.Region lcRegion
       MNPCal.OrderChannel
+      MNPCal.MNPProduct
+      MNPCal.MNPTariff
       MNPCal.MessageType 
       MNPCal.Periods WITH FRAME lis.
 
@@ -650,6 +666,8 @@ PROCEDURE local-UPDATE-record:
    PROMPT
       MNPCal.OrderChannel WHEN NOT llDefault 
       MNPCal.Region WHEN NOT llDefault
+      MNPCal.MNPProduct
+      MNPCal.MNPTariff
       MNPCal.MessageType 
       MNPCal.Periods
    WITH FRAME lis EDITING:
@@ -665,29 +683,37 @@ PROCEDURE local-UPDATE-record:
             
       if nap = "F9" THEN DO:
          CASE FRAME-FIELD:
-            
             WHEN "OrderChannel" THEN DO:
-               RUN h-tmscodes
+               RUN h-tmscodes.p
                   ("MNPCal","OrderChannel","MNP", OUTPUT siirto).
-               IF siirto ne "" THEN DO:
-                  MNPCal.OrderChannel = siirto.
-               END.
-               disp MNPCal.OrderChannel WITH FRAME lis.
                ehto = 9.
                RUN ufkey.
-               NEXT.
+               IF siirto ne "" THEN DO:
+                  DISP siirto @ MNPCal.OrderChannel WITH FRAME lis.
+                  NEXT.
+               END.
             END.
             
             WHEN "MessageType" THEN DO:
-            RUN h-tmscodes
+            RUN h-tmscodes.p
                   ("MNPCal","MessageType","MNP", OUTPUT siirto).
-               IF siirto ne "" THEN DO:
-                  MNPCal.MessageType = siirto.
-               END.
-               disp MNPCal.MessageType WITH FRAME lis.
                ehto = 9.
                RUN ufkey.
-               NEXT.
+               IF siirto ne "" THEN DO:
+                  DISP siirto @ MNPCal.MessageType WITH FRAM lis.
+                  NEXT.
+               END.
+            END.
+
+            WHEN "MNPProduct" THEN DO:
+            RUN h-tmscodes.p
+                  ("MNPCal","MNPProduct","MNP", OUTPUT siirto).
+               ehto = 9.
+               RUN ufkey.
+               IF siirto ne "" AND siirto NE ? THEN DO:
+                  DISP siirto @ MNPCal.MNPProduct  WITH FRAME lis.
+                  NEXT.
+               END.
             END.
          END.
       END.
@@ -740,6 +766,42 @@ PROCEDURE local-UPDATE-record:
             DISPLAY TMSCodes.CodeValue @ MNPCal.MessageType WITH FRAME lis.
          END.
          
+         ELSE IF FRAME-FIELD = "MNPProduct" THEN DO:
+            IF INPUT MNPCal.MNPProduct NE "T" AND 
+               INPUT MNPCal.MNPProduct NE "S" AND
+               INPUT MNPCal.MNPProduct NE ""  THEN DO:
+                MESSAGE "Unknown Product" INPUT MNPCal.MNPProduct
+                VIEW-AS ALERT-BOX.
+                NEXT.
+            END.
+
+            DISPLAY INPUT MNPCal.MNPProduct WITH FRAME lis.
+         END.
+         
+         ELSE IF FRAME-FIELD = "MNPTariff" THEN DO:
+            
+            IF INPUT MNPCal.MNPTariff NE "" THEN DO:
+               FIND FIRST CliType WHERE
+                  CliType.Brand   = gcBrand AND 
+                  CliType.CliType = INPUT MNPCal.MNPTariff
+               NO-LOCK NO-ERROR.
+               IF NOT AVAIL Clitype THEN DO:
+                  MESSAGE "Unknown Tariff" INPUT MNPCal.MNPTariff
+                  VIEW-AS ALERT-BOX.
+                  NEXT.
+               END.
+               IF LOOKUP(CliType.CliType,lcBundleCLITypes) > 0 THEN DO:
+                  MESSAGE "Unknown Tariff" INPUT MNPCal.MNPTariff
+                  VIEW-AS ALERT-BOX.
+                  NEXT.
+               END.
+
+               DISPLAY Clitype.CliType @ MNPCal.MNPTariff WITH FRAME lis.
+            END.   
+            ELSE 
+               DISPLAY INPUT MNPCal.MNPTariff WITH FRAME lis.
+         END.
+         
       END.
       
       APPLY LASTKEY.
@@ -750,7 +812,9 @@ PROCEDURE local-UPDATE-record:
       INPUT INPUT MNPCal.MessageType,
       INPUT INPUT MNPCal.Periods,
       INPUT INPUT MNPCal.OrderChannel,
-      INPUT INPUT MNPCal.Region).
+      INPUT INPUT MNPCal.Region,
+      INPUT INPUT MNPCal.MNPProduct,
+      INPUT INPUT MNPCal.MNPTariff).
    
    IF liPeriodSum < liMinWindow THEN DO:
       MESSAGE "Total period sum cannot be less than minimum"
@@ -769,10 +833,11 @@ PROCEDURE local-UPDATE-record:
       NEXT MAIN.
    END.
   
-   
    FIND FIRST MNPCalBuf WHERE
       MNPCalBuf.OrderChannel = INPUT MNPCal.OrderChannel AND
       MNPCalBuf.Region = INPUT MNPCal.Region AND
+      MNPCalBuf.MNPProduct = INPUT MNPCal.MNPProduct AND 
+      MNPCalBuf.MNPTariff = INPUT MNPCal.MNPTariff AND 
       MNPCalBuf.MessageType = INPUT MNPCal.MessageType AND
       ROWID(MNPCalBuf) NE ROWID(MNPCal) NO-LOCK NO-ERROR. 
    IF AVAIL MNPCalBuf THEN DO: 
@@ -797,6 +862,8 @@ PROCEDURE local-UPDATE-record:
       ASSIGN
          MNPCal.OrderChannel WHEN NOT llDefault 
          MNPCal.Region  WHEN NOT llDefault
+         MNPCal.MNPProduct
+         MNPCal.MNPTariff
          MNPCal.MessageType 
          MNPCal.Periods.
       

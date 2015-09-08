@@ -117,7 +117,7 @@ REPEAT:
                       lcNewBarr).
 
       IF RETURN-VALUE BEGINS "ERROR" THEN DO:
-         fError(ENTRY(2,RETURN-VALUE,":")).
+         fError(LEFT-TRIM(RETURN-VALUE,"ERROR:")).
          liNumErr = liNumErr + 1 .
       END.
       ELSE DO:
@@ -145,13 +145,10 @@ PROCEDURE pSetBarring:
 
    DEF INPUT PARAMETER iiMsSeq      AS INT  NO-UNDO.
    DEF INPUT PARAMETER icMSISDN     AS CHAR  NO-UNDO.
-   DEF INPUT PARAMETER icSetBarring AS CHAR NO-UNDO.
+   DEF INPUT PARAMETER icBarringList AS CHAR NO-UNDO.
 
    DEF VAR lcResult  AS CHAR NO-UNDO.
    DEF VAR liRequest AS INT  NO-UNDO.
-  
-   /* testing going on */ 
-   /* RETURN "OK". */
 
    FIND MobSub WHERE
         MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
@@ -163,38 +160,10 @@ PROCEDURE pSetBarring:
    
    IF MobSub.PayType THEN
       RETURN "ERROR:Subscription is prepaid".
- 
-   ASSIGN
-      /* check current barring (or pending) */
-      lcResult  = fCheckStatus(iiMsSeq)
-      liRequest = 0.
-      
-   /* pending exists */
-   IF lcResult = "91" THEN RETURN "ERROR:Barring pending".
-      
-   /* already on */
-   ELSE IF lcResult = icSetBarring THEN 
-      RETURN "INFORMATION: " + icSetBarring + " already on".
-       
-   IF LOOKUP(icSetBarring,"UNY_BAR,Y_HURG,Y_HURP,Y_HURRIC,Y_REST,Y_SARC,Y_HURP_P") = 0 THEN
-      RETURN "ERROR:Unsupported barring".
-      
-   IF lcResult BEGINS "D_" THEN
-      RETURN "ERROR:Subscription has Debt barring set".
 
-   /* unbarr */
-   IF icSetBarring = "UNY_BAR" THEN DO:
-
-      /* nothing to unbarr */  
-      IF lcResult = "OK" OR NOT lcResult BEGINS "Y_" THEN 
-         RETURN "ERROR:No yoigo barrings active".
-          
-      icSetBarring =  "UN" + lcResult.
-   END.
-     
    /* create barring request */
    RUN barrengine.p (iiMsSeq,
-                   icSetBarring,
+                   icBarringList,
                    {&REQUEST_SOURCE_SCRIPT}, /* source  */
                    "", /* creator */
                    fMakeTS(), /* activate */
@@ -206,8 +175,24 @@ PROCEDURE pSetBarring:
                                
    liRequest = INTEGER(lcResult) NO-ERROR. 
                                
-   IF liRequest > 0 THEN RETURN "OK".
-   ELSE RETURN "ERROR:Barring request creation failed".
+   IF liRequest > 0 THEN DO:
+      
+      CREATE Memo.
+      ASSIGN 
+         Memo.Brand     = gcBrand
+         Memo.HostTable = "MobSub"
+         Memo.KeyValue  = STRING(MobSub.MsSeq)
+         Memo.CustNum   = MobSub.CustNum
+         Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
+         Memo.CreUser   = "BOB Tool" 
+         Memo.MemoType  = "Service"
+         Memo.MemoTitle = "Modified barring" 
+         Memo.MemoText  = REPLACE(REPLACE(icBarringList,"=0","-released"),
+                                  "=1","-applied")
+         Memo.CreStamp  = fMakeTS().
+      RETURN "OK".
+   END.
+   ELSE RETURN "ERROR:" + lcResult. 
 
 END.
 

@@ -706,7 +706,7 @@ REPEAT  WITH FRAME main:
             END.
 
             IF llAddLineTerm THEN
-               MESSAGE "STC will trigger subscription termination for additional line(s)"
+               MESSAGE "STC will trigger STC to CONT9 for additional line(s)"
                VIEW-AS ALERT-BOX.
          END. /* ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE */
 
@@ -736,6 +736,7 @@ REPEAT  WITH FRAME main:
                               ldeFee,
                               {&REQUEST_SOURCE_MANUAL_TMS},
                               0, /* order id */
+                              0,
                               OUTPUT lcInfo).
       
          MESSAGE "Request ID for CLI Type change is" i

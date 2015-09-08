@@ -12,12 +12,127 @@
                 define variable llOrdStChg   as logical   no-undo.
                 define variable lcSIMType    as character no-undo.
                 DEF VAR llReserveSimAndMsisdn AS LOG NO-UNDO. 
+                DEFINE VARIABLE lh99Order AS HANDLE NO-UNDO.
 
             &ENDIF
+            
+
 
             ASSIGN llOrdStChg = no
                    lcSIMType  = "".
+            /* YDR-1825 MNP SIM ONLY Orders
+              Additional ordertimestamp is to prevent infinitive loop */
+            IF lcSIMonlyMNP EQ "true" AND
+               Order.OrderType = 1 AND
+               Order.CrStamp >= 20150616.40200 AND
+               Order.MNPStatus = 1 AND
+               LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 AND
+               NOT CAN-FIND(FIRST OrderAccessory NO-LOCK WHERE
+                             OrderAccessory.Brand = gcBrand AND
+                             OrderAccessory.OrderId = Order.OrderID) AND
+               NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
+                             OrderTimeStamp.Brand   = gcBrand   AND
+                             OrderTimeStamp.OrderID = Order.OrderID AND
+                             OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY})
+               THEN DO:
+                  IF llDoEvent THEN DO:
+                     lh99Order = BUFFER Order:HANDLE.
+                     RUN StarEventInitialize(lh99Order).
+                  END.
 
+
+                  FIND FIRST OrderAction WHERE
+                             OrderAction.Brand    = gcBrand AND
+                             OrderAction.OrderId  = Order.OrderId AND
+                             OrderAction.ItemType = "SIMType" NO-LOCK NO-ERROR.
+                  IF AVAIL OrderAction AND OrderAction.ItemKey > "" THEN
+                     lcSIMType = OrderAction.ItemKey.
+                  ELSE 
+                     lcSIMType = "Plug_IN".
+                  FIND FIRST OrderCustomer WHERE
+                             OrderCustomer.Brand = gcBrand AND
+                             OrderCustomer.OrderId = Order.OrderId AND
+                             OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+                  SEARCHSIM:
+                  REPEAT:
+                        
+                     IF Order.ICC > "" THEN DO:
+                        
+                        FIND Sim WHERE Sim.ICC = Order.ICC 
+                        EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+
+                     END.
+                     ELSE DO:
+                        /* determine correct ICC stock */
+                        lcStock = (IF Order.MnpStatus > 0 THEN "MNP" ELSE "NEW").
+
+                        lcStock = fSearchStock(lcStock,OrderCustomer.ZipCode).
+
+                        RELEASE SIM.
+
+                        FOR EACH bSIM USE-index simstat WHERE
+                                 bSIM.Brand   = gcBrand  AND
+                                 bSIM.Stock   = lcStock  AND
+                                 bSIM.simstat = 1        AND
+                                 bSIM.SimArt  = lcSIMType NO-LOCK:
+
+                           /* one week ICC quarantine time check, YOT-924 */
+                           IF bSIM.MsSeq > 0 THEN DO:
+
+                              FIND FIRST bOldOrder WHERE
+                                         bOldOrder.MsSeq = bSIM.MsSeq AND
+                                         bOldOrder.OrderType NE 2
+                              NO-LOCK USE-INDEX MsSeq NO-ERROR.
+
+                              IF AVAIL bOldOrder AND
+                                fOffSet(bOldOrder.CrStamp, 24 * 7) > fMakeTS()
+                                THEN NEXT.
+                           END.
+
+                           FIND SIM WHERE
+                                ROWID(SIM) = ROWID(bSIM)
+                           EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+                           LEAVE.
+                        END.
+                     END.
+         
+                     IF LOCKED(SIM) THEN DO:
+                        PAUSE 5.
+                        NEXT.
+                     END.
+
+                     ELSE IF NOT LOCKED(sim) AND avail sim 
+                     THEN LEAVE SEARCHSIM.
+                     
+                     /* no free sims available */
+                     ELSE IF NOT AVAILABLE Sim THEN LEAVE SEARCHSIM.  
+                  END.
+
+                  /* free sim was not available */
+                  IF NOT AVAILABLE Sim THEN NEXT {1}.
+                  
+                  /* Event logging of 99 status setups */ 
+                  IF llDoEvent THEN RUN StarEventSetOldBuffer(lh99Order).
+                  
+                  /* Set Order status into MNP_SIM_ONLY aka 99 */
+                  llOrdStChg = fSetOrderStatus(Order.OrderId,
+                                               {&ORDER_STATUS_SIM_ONLY_MNP_IN}).
+                  IF llDoEvent THEN DO:
+                     RUN StarEventMakeModifyEvent(lh99Order).
+                     fCleanEventObjects().
+                  END.
+
+                  /* Set additional OrderStamp to avoid infinitive loop */
+                  fMarkOrderStamp(Order.OrderID,"SimOnly",0.0).
+
+                  IF Order.ICC = "" THEN
+                     ASSIGN
+                        Order.ICC = SIM.ICC
+                        SIM.SimStat = 20
+                        SIM.MsSeq = Order.MsSeq.
+                  NEXT {1}.
+            END.
+               
             /* Renove handling */ 
             IF Order.OrderType = 2 THEN DO:
               
@@ -48,7 +163,7 @@
                      FIND FIRST OrderCustomer WHERE
                                 OrderCustomer.Brand = gcBrand AND
                                 OrderCustomer.OrderId = Order.OrderId AND
-                                OrderCustomer.RowType = 1 NO-LOCK.
+                                OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
                      
                      RELEASE SIM.
 
@@ -59,19 +174,8 @@
                         /* determine correct ICC stock */
                         lcStock = "NEW".
 
-                        SEARCHSTOCK:
-                        FOR EACH Stock WHERE
-                                 Stock.Brand   = gcBrand AND
-                                 Stock.StoType = lcStock NO-LOCK:
-                           DO liLoop = 1 TO NUM-ENTRIES(Stock.ZipCodeExp,","):
-                              IF OrderCustomer.ZipCode MATCHES
-                                 ENTRY(liLoop, Stock.ZipCodeExp,",") THEN DO:
-                                 lcStock = Stock.Stock.
-                                 LEAVE SEARCHSTOCK.
-                              END.
-                           END.
-                        END.
- 
+                        lcStock = fSearchStock(lcStock,OrderCustomer.ZipCode).
+
                         FOR EACH bSIM USE-index simstat WHERE
                                  bSIM.Brand   = gcBrand  AND
                                  bSIM.Stock   = lcStock  AND
@@ -253,19 +357,22 @@
                 IF LOOKUP(Order.OrderChannel,"fusion_pos,pos,vip") = 0 AND
                    llReserveSimAndMsisdn AND
                    Sim.SimStat NE 1 AND
-                   Order.OrderType <> 3 THEN DO:
-
-                   /* YBP-605 */
-                   llOrdStChg = fSetOrderStatus(Order.OrderId,"4"). /* in control */
-                   /* YBP-605 */
-                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                    "Order",
-                                    STRING(Order.OrderID),
-                                    0,
-                                    "ICC In Use",
-                                    "ICC is already in use").
-                   NEXT {1}.                  
-                END. 
+                   Order.OrderType <> 3 AND
+                   NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
+                             OrderTimeStamp.Brand   = gcBrand   AND
+                             OrderTimeStamp.OrderID = Order.OrderID AND
+                             OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY}) THEN DO:
+                      /* YBP-605 */
+                      llOrdStChg = fSetOrderStatus(Order.OrderId,"4"). /* in control */
+                      /* YBP-605 */
+                      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                       "Order",
+                                       STRING(Order.OrderID),
+                                       0,
+                                       "ICC In Use",
+                                       "ICC is already in use").
+                      NEXT {1}.                  
+                  END.
              END.
              ELSE DO:
                 /* YBP-607 */
@@ -342,11 +449,12 @@
                 NEXT {1}.
              END.
              
-             /* YBP-612 */
-             FIND FIRST OrderCustomer WHERE
-                OrderCustomer.Brand = gcBrand AND
-                OrderCustomer.OrderId = Order.OrderId AND
-                OrderCustomer.RowType = 1 NO-LOCK.
+            /* YBP-612 */
+            FIND FIRST OrderCustomer WHERE
+                       OrderCustomer.Brand = gcBrand AND
+                       OrderCustomer.OrderId = Order.OrderId AND
+                       OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+
  
              /* print order confirmation, this is done also for mnp orders
                 but not for gift or preactivated or vip orders
@@ -404,19 +512,8 @@
                    /* determine correct ICC stock */
                    lcStock = (IF Order.MnpStatus > 0 THEN "MNP" ELSE "NEW").
 
-                   SEARCHSTOCK:
-                   FOR EACH Stock WHERE 
-                            Stock.Brand   = gcBrand AND
-                            Stock.StoType = lcStock NO-LOCK:
-                      DO liLoop = 1 TO NUM-ENTRIES(Stock.ZipCodeExp,","):
-                        IF OrderCustomer.ZipCode MATCHES 
-                           ENTRY(liLoop, Stock.ZipCodeExp,",") THEN DO:
-                           lcStock = Stock.Stock.
-                           LEAVE SEARCHSTOCK.
-                        END.
-                      END.
-                   END.
-                    
+                   lcStock = fSearchStock(lcStock,OrderCustomer.ZipCode).
+
                    RELEASE SIM.
 
                    FOR EACH bSIM USE-index simstat WHERE
@@ -485,11 +582,16 @@
                    MSISDN.Brand      = gcBrand.
              END.          
       
-             IF (LOOKUP(Order.OrderChannel,
-                 "pos,cc,pre-act,vip,fusion_pos,fusion_cc") > 0 AND
-                 Order.ICC > "") OR Order.OrderType = 3
-             THEN SIM.SimStat = 4.
-             ELSE SIM.SimStat = 20.
+             IF NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
+                        OrderTimeStamp.Brand   = gcBrand   AND
+                        OrderTimeStamp.OrderID = Order.OrderID AND
+                        OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY}) THEN DO:
+                IF (LOOKUP(Order.OrderChannel,
+                    "pos,cc,pre-act,vip,fusion_pos,fusion_cc") > 0 AND
+                    Order.ICC > "") OR Order.OrderType = 3 
+                THEN SIM.SimStat = 4.
+                ELSE SIM.SimStat = 20.
+             END.
 
              IF SIM.SimStat = 20 AND
                 Order.MNPStatus = 6 AND

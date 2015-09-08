@@ -610,7 +610,7 @@ DO WHILE TRUE
        IF ttBatchInputFile.EmailId > "" AND
           lcMailHost = "merak" THEN DO:
           xMailAddr = ttBatchInputFile.EmailId.
-          SendMaileInvoice(lcEmailContent,ttBatchInputFile.DeliverFileName).
+          SendMaileInvoice(lcEmailContent,ttBatchInputFile.DeliverFileName,"").
        END. /* IF lcMailHost = "merak" THEN DO: */
 
        /* Transfer Analyzer report */

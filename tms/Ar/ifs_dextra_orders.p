@@ -61,7 +61,8 @@ PROCEDURE pDump:
             FIRST OrderPayment NO-LOCK WHERE
                   OrderPayment.Brand = gcBrand AND
                   OrderPayment.OrderId = Order.OrderId AND
-                  OrderPayment.Method = 2: /* credit card */
+                  (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD} OR
+                   Orderpayment.Method = {&ORDERPAYMENT_M_PAYPAL}):
 
             /* Check Terminal billcode */
             FOR EACH OfferItem NO-LOCK WHERE
@@ -121,19 +122,38 @@ PROCEDURE pWriteToFile:
              ldeResidualFee = OfferItem.Amount.
       LEAVE.
    END.
+   
+   IF OrderPayment.Method EQ {&ORDERPAYMENT_M_PAYPAL} THEN DO:
+      PUT STREAM sout UNFORMATTED
+         OrderPayment.CCReference             lcDelimiter
+         /* EMPTY */                          lcDelimiter
+         /* EMPTY */                          lcDelimiter
+         STRING(ldOperationDate,"99-99-9999") lcDelimiter
+         STRING(Order.CustNum)                lcDelimiter
+         STRING(Order.MsSeq)                  lcDelimiter
+         STRING(Order.OrderId)                lcDelimiter
+         STRING(liFFItemQty)                  lcDelimiter
+         STRING(ldeFFItemAmt)                 lcDelimiter
+         STRING(ldeResidualFee)               lcDelimiter
+         STRING(OrderPayment.Method)          lcDelimiter 
+         SKIP.
+   END.
+   ELSE DO:
+       PUT STREAM sout UNFORMATTED
+         OrderPayment.CCReference             lcDelimiter
+         OrderPayment.BinNumber               lcDelimiter
+         OrderPayment.AuthNumber              lcDelimiter
+         STRING(ldOperationDate,"99-99-9999") lcDelimiter
+         STRING(Order.CustNum)                lcDelimiter
+         STRING(Order.MsSeq)                  lcDelimiter
+         STRING(Order.OrderId)                lcDelimiter
+         STRING(liFFItemQty)                  lcDelimiter
+         STRING(ldeFFItemAmt)                 lcDelimiter
+         STRING(ldeResidualFee)               lcDelimiter
+         STRING(OrderPayment.Method)          lcDelimiter 
+         SKIP.
 
-   PUT STREAM sout UNFORMATTED
-       OrderPayment.CCReference lcDelimiter
-       OrderPayment.BinNumber lcDelimiter
-       OrderPayment.AuthNumber lcDelimiter
-       STRING(ldOperationDate,"99-99-9999") lcDelimiter
-       STRING(Order.CustNum) lcDelimiter
-       STRING(Order.MsSeq) lcDelimiter
-       STRING(Order.OrderId) lcDelimiter
-       STRING(liFFItemQty) lcDelimiter
-       STRING(ldeFFItemAmt) lcDelimiter
-       STRING(ldeResidualFee) lcDelimiter
-       SKIP.
+   END.
 
    oiEvents = oiEvents + 1.
    IF NOT SESSION:BATCH THEN DO:

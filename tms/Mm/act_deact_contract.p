@@ -177,10 +177,6 @@ FUNCTION fHandleService RETURNS CHAR(INPUT icService AS CHAR,
    DEF VAR lcError     AS CHAR NO-UNDO.
    DEF VAR lcParam     AS CHAR NO-UNDO.
 
-   IF LOOKUP(icService,"Y_BPSUB,C_BPSUB") > 0 THEN ASSIGN
-      lcParam = icService WHEN icAction EQ "1"
-      icService = "BPSUB".
-
    CASE icAction:
       WHEN "1" THEN DO:
          FIND FIRST SubSer USE-INDEX ServCom WHERE
@@ -368,7 +364,7 @@ PROCEDURE pCheckContract:
              ",BONO_VOIP,VOICE3000,VOICE100") > 0 THEN DO:
       lcError = fHandleContract(lcContract,lcInputAction).
    END. /* IF LOOKUP(lcContract,lcBONOContracts */
-   ELSE IF LOOKUP(lcContract,"BB,LTE,C_BPSUB,Y_BPSUB") > 0 THEN
+   ELSE IF LOOKUP(lcContract,"BB,LTE") > 0 THEN
       lcError = fHandleService(lcContract,lcInputAction).
    ELSE lcError = "ERROR:Invalid contract type".
 

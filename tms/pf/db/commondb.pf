@@ -1,6 +1,6 @@
 -db /db1/common/common
 -L 100000
--B  1500000
+-B  1700000
 -B2 1200000 
 #-H propus
 -S common

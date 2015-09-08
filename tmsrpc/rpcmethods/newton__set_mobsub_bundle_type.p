@@ -43,6 +43,7 @@ DEF VAR llUpgradeUpsell AS LOG  NO-UNDO INIT FALSE.
 DEF VAR lcUpgradeUpsell AS CHAR NO-UNDO.
 DEF VAR liUpsellCreated AS INT  NO-UNDO.
 DEF VAR lcBONOContracts AS CHAR NO-UNDO.
+DEF VAR lcMemoType AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
@@ -77,6 +78,11 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 FIND FIRST MobSub WHERE 
            MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
 IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
+
+FIND FIRST DayCampaign NO-LOCK WHERE
+           DayCampaign.Brand = gcBrand AND
+           DayCampaign.DCEvent = pcNewBundle NO-ERROR.
+IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
 
 IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
@@ -156,24 +162,20 @@ IF llUpgradeUpsell THEN DO:
    END. /* ELSE DO: */
 END. /* IF ilUpgradeUpsell THEN DO: */
 
-IF pcMemoTitle > "" OR pcMemoContent > "" THEN DO:
-   CREATE Memo.
-   ASSIGN
-      Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand
-      Memo.HostTable = "MobSub"
-      Memo.KeyValue  = STRING(MobSub.MsSeq)
-      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun
-      Memo.MemoTitle = pcMemoTitle
-      Memo.MemoText  = pcMemoContent
-      Memo.CustNum   = MobSub.CustNum.
+IF LOOKUP(pcNewBundle,lcBONOContracts) > 0 THEN
+   lcMemoType  = "Service".
+ELSE
+   lcMemoType  = "MobSub".
 
-   IF LOOKUP(pcNewBundle,lcBONOContracts) > 0 THEN
-      Memo.MemoType  = "Service".
-   ELSE
-      Memo.MemoType  = "MobSub".
-END. /* IF pcMemoTitle > "" OR pcMemoContent > "" THEN DO: */
+DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
+                 "MobSub",                             /* HostTable */
+                 STRING(Mobsub.MsSeq),                 /* KeyValue  */
+                 MobSub.CustNum,                       /* CustNum */
+                 "Bono modificado",                    /* MemoTitle */
+                 pcMemoContent + " " + pcOldBundle + " --> " + pcNewBundle,  /* MemoText */
+                 lcMemoType,                           /* MemoType */
+                 katun).
+
 
 lcResultStruct = add_struct(response_toplevel_id, "").
 

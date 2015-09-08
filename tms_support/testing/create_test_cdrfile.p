@@ -39,6 +39,7 @@ DEFINE VARIABLE liTmpSecCLI AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcSecCLIPrefix AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liCDRTypePos AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcCDRType AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liOrigImsi AS INTEGER NO-UNDO. 
 
 /*CDR creation is available only in internal environments.
 Check that we are not in production*/
@@ -68,6 +69,8 @@ FUNCTION fReplaceValue RETURNS LOGICAL
    (INPUT-OUTPUT icLine AS CHARACTER,
     iiPos AS INTEGER,
     icValue AS CHARACTER):
+
+    if ENTRY(iiPos,icLine,"|") ne "" then
     icLine = replace(icLine,"|" + ENTRY(iiPos,icLine,"|") + "|","|" + 
       icValue + "|") NO-ERROR. 
 
@@ -97,16 +100,18 @@ repeat:
    liDataInPos = fGetPosition((lcVersion),"Data amount incoming").
    liDataOutPos = fGetPosition((lcVersion),"Data amount outgoing").
    liCDRTypePos = fGetPosition((lcVersion),"Event subtype").
+   liOrigImsi = fGetPosition((lcVersion),"Originating IMSI").
 
    /*Read Call/CDR type for correct data handling*/
    lcCDRType = ENTRY(liCDRTypePos,lcLine,"|").
 
    IF TRIM(ENTRY(liCallRecTypePos,lcLine,"|")) EQ "GE" THEN DO:
-      IF NOT fReplaceValue(lcLine,liCallOrigPos,icImsi) THEN NEXT.
-       IF (icSecCli <> "") THEN DO:
-            IF NOT fReplaceValue(INPUT-OUTPUT lcLine,liCallDestPos,icSecCli) 
-               THEN NEXT.
-       END.
+      
+      IF NOT fReplaceValue(INPUT-OUTPUT lcLine,liOrigIMSI,icImsi) THEN NEXT.
+      IF (icSecCli <> "") THEN DO:
+         IF NOT fReplaceValue(INPUT-OUTPUT lcLine,liCallDestPos,icSecCli) 
+         THEN NEXT.
+      END.
    END.
    ELSE DO:
       /*roaming calls: l*/

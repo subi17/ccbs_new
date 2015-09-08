@@ -62,7 +62,7 @@ END FUNCTION.
 /***** MAIN start *******/
 
 /* barrings that are used for debt collection, should not be on */
-lcDebtBarring = fCParamC("CommDebtBarring").
+lcDebtBarring = {&FRAUD_BARR_CODES}.
  
 RUN pCalculateCommission (OUTPUT oiChecked,
                           OUTPUT oiActivated).
@@ -585,6 +585,8 @@ PROCEDURE pBillsPaid:
 
    DEF VAR ldBilled   AS DEC  NO-UNDO. 
    DEF VAR lcBarring  AS CHAR NO-UNDO.
+   DEF VAR llOngoing AS LOG NO-UNDO. 
+   DEF VAR lrBarring  AS ROWID NO-UNDO.
 
    ldBilled = 0.
              
@@ -597,10 +599,13 @@ PROCEDURE pBillsPaid:
       ldBilled = ldBilled + SubInvoice.AmtExclVat.      
    END.
 
-   lcBarring = fCheckStatus(iiMsSeq).
+   llOngoing = fCheckBarrStatus(MobSub.MsSeq,
+                                OUTPUT lcBarring,
+                                OUTPUT lrBarring).
+   IF llOngoing THEN NEXT.
 
    /* if there is not an active barring then all billed is considered paid */
-   IF LOOKUP(lcBarring,icBarringPacket) = 0 THEN odPaid = ldBilled.
+   IF fIsInList(lcBarring, icBarringPacket) EQ FALSE THEN odPaid = ldBilled.
    
 END PROCEDURE.
 

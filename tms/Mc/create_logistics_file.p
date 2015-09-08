@@ -468,8 +468,11 @@ FUNCTION fDelivSIM RETURNS LOG
                  OrderPayment.Brand = gcBrand AND
                  OrderPayment.OrderId = Order.OrderId NO-ERROR.
       IF AVAIL OrderPayment THEN DO:
-         IF OrderPayment.Method = 2 THEN lcPaymInfo = "1".
-         ELSE lcPaymInfo = "0".
+         IF OrderPayment.Method EQ {&ORDERPAYMENT_M_CREDIT_CARD} THEN 
+            lcPaymInfo = "1". /*credit card*/
+         ELSE IF OrderPayment.Method EQ {&ORDERPAYMENT_M_PAYPAL} THEN 
+            lcPaymInfo = "6". /*paypal*/
+         ELSE lcPaymInfo = "0". /*payment on delivery*/
       END.
       ELSE lcPaymInfo = "1".
 
@@ -725,10 +728,12 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.MobConNum     = ContactCustomer.Mobile
       ttOneDelivery.FixConNum     = ContactCustomer.Fixed
       ttOneDelivery.EMail         = ContactCustomer.eMail
-      ttOneDelivery.PaymInfo      = (IF llDextraInvoice THEN lcPaymInfo
-                                     ELSE IF AVAIL Invoice AND Invoice.InvType = 6 THEN "0"
-                                     ELSE IF AVAIL Invoice AND Invoice.InvType = 7 THEN "1"
-                                     ELSE "")
+      ttOneDelivery.PaymInfo      = 
+         (IF llDextraInvoice THEN lcPaymInfo
+          ELSE IF AVAIL Invoice AND Invoice.ChargeType = 6  THEN "6"
+          ELSE IF AVAIL Invoice AND Invoice.InvType = 6     THEN "0"
+          ELSE IF AVAIL Invoice AND Invoice.InvType = 7     THEN "1"
+          ELSE "")
       ttOneDelivery.TopUp         = STRING(ldeAmtTopUp,"zzz9.99")
       ttOneDelivery.MNPTransT     = lcMNPTime
       ttOneDelivery.InvRefNum     = Invoice.RefNum WHEN AVAIL Invoice
@@ -1243,7 +1248,6 @@ FUNCTION fDelivSIM RETURNS LOG
           ttExtra.ResidualAmount = (IF ldeResidualAmountTotal > 0 THEN
                                     STRING(ldeResidualAmountTotal) ELSE "")
           ttExtra.DeliveryType = STRING(liDelType)
-          ttExtra.KialaCode   = DelivCustomer.KialaCode
           ttExtra.ContractFileName = lcContractFileName.
 
    /* update SimStat when all skipping are checked */
@@ -1300,6 +1304,7 @@ FOR EACH SIM NO-LOCK WHERE
            ROWID(xOrder) = ROWID(Order) NO-ERROR NO-WAIT.
       IF ERROR-STATUS:ERROR OR LOCKED(xOrder) THEN NEXT.
       xOrder.Logistics = lcFileName.
+      fMarkOrderStamp(xOrder.OrderID,"SendToLogistics",0.0). /* Timestamp for Logistics Operator Change Dextra->Netkia */
       RELEASE xOrder.
    END.
 END.
@@ -1346,6 +1351,7 @@ FOR EACH Order NO-LOCK WHERE
              /* Call the fSetOrderStatus function to change the order status to Delivery and make the timestamp */
              fSetOrderStatus(xOrder.OrderID,"6").
              fMarkOrderStamp(xOrder.OrderID,"Delivery",0.0).
+             fMarkOrderStamp(xOrder.OrderID,"SendToLogistics",0.0). /* Timestamp for Logistics Operator Change Dextra->Netkia */
           END. /* IF fDelivSIM( SIM.ICC ) THEN DO: */  
        END. /* IF AVAILABLE SIM THEN DO: */
        
@@ -1456,7 +1462,8 @@ IF lcTarOption > "" THEN
    fTransDir(lcContractTARFile,".tar",lcTAROutDir).
 
 /* Send email with error log file */
-IF llCreateErrLogFile THEN DO:
+IF llCreateErrLogFile AND
+   LOOKUP(lcMailHost,{&HOSTNAME_STAGING}) = 0 THEN DO:
    OUTPUT STREAM sErr CLOSE.
 
    lcEmailConfDir = fCParamC("RepConfDir").

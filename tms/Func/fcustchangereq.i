@@ -33,7 +33,8 @@ FUNCTION fMSCustChangeRequest RETURNS INTEGER
    DEF VAR liReqType    AS INT  NO-UNDO.
    DEF VAR ldFirstAct   AS DEC  NO-UNDO.
    DEF VAR liReqCreated AS INT  NO-UNDO.
-   
+
+   DEF BUFFER bReqMobSub   FOR MobSub.   
 
    IF iiNewCust = 0 AND icNewData = "" THEN DO:
       ocResult = "Invalid new customer data".
@@ -84,6 +85,15 @@ FUNCTION fMSCustChangeRequest RETURNS INTEGER
 
    If icChgType = "tarj3" THEN
       bCreaReq.ReqIParam3 = 1.
+
+   /* ACC for Fusion tariffs */
+   FIND FIRST bReqMobSub WHERE 
+              bReqMobSub.MsSeq = iiMsSeq
+              NO-LOCK NO-ERROR.
+   IF AVAILABLE bReqMobSub AND
+      LOOKUP(bReqMobSub.CLIType,"CONTFF,CONTSF") > 0 AND
+      liReqType = 10
+   THEN bCreaReq.ReqStatus  = 19. /* waiting for confirmation */
    
    RELEASE bCreaReq.
    

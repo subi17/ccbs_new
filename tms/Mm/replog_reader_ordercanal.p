@@ -11,7 +11,7 @@
                   07.07.14/vekov OrderAction
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
-
+ 
 {commpaa.i}
 katun = "Cron".
 gcBrand = "1".
@@ -310,6 +310,9 @@ PROCEDURE pHandleOrder:
    DEFINE VARIABLE ldTermLeasAmt       AS DECIMAL    NO-UNDO INIT ?.
    DEFINE VARIABLE ldMnpUpdateSt       AS DECIMAL    NO-UNDO INIT ?.
    DEFINE VARIABLE liMnpStatusCode     AS INTEGER    NO-UNDO INIT ?.
+   DEFINE VARIABLE ldMnpCreateStamp    AS DECIMAL    NO-UNDO INIT ?.
+   DEFINE VARIABLE lcMnpStatusReason   AS CHARACTER  NO-UNDO.
+
 
    IF AVAILABLE OrderCanal.RepLog THEN DO:
 
@@ -380,11 +383,13 @@ PROCEDURE pHandleOrder:
                FOR EACH MNPProcess WHERE
                         MNPProcess.OrderId = Order.OrderId
                         NO-LOCK BY CrStamp DESC:
-                  ASSIGN lcFormRequest   = MNPProcess.FormRequest
-                         lcPortRequest   = MNPProcess.PortRequest
-                         ldPortingTime   = MNPProcess.PortingTime
-                         ldMnpUpdateSt   = MNPProcess.UpdateTS
-                         liMnpStatusCode = MNPProcess.StatusCode.
+                  ASSIGN lcFormRequest     = MNPProcess.FormRequest
+                         lcPortRequest     = MNPProcess.PortRequest
+                         ldPortingTime     = MNPProcess.PortingTime
+                         ldMnpUpdateSt     = MNPProcess.UpdateTS
+                         liMnpStatusCode   = MNPProcess.StatusCode
+                         ldMnpCreateStamp  = MNPProcess.CreatedTS
+                         lcMnpStatusReason = MNPProcess.StatusReason.
 
                   LEAVE.
                END.
@@ -456,7 +461,10 @@ PROCEDURE pHandleOrder:
                            fNotNull(STRING(ldTermDiscount))         + lcDel +
                            fNotNull(STRING(ldTermLeasAmt))          + lcDel +
                            fNotNull(STRING(Order.PortingDate))      + lcDel +
-                           fNotNull(STRING(ldMnpUpdateSt)).
+                           fNotNull(STRING(ldMnpUpdateSt))          + lcDel +
+                           fNotNull(STRING(ldMnpCreateStamp))       + lcDel +
+                           fNotNull(lcMnpStatusReason).
+
 
                fWriteMessage(lcMessage).
             END.
@@ -569,6 +577,60 @@ PROCEDURE pHandleOrderDelivery:
                            fNotNull(STRING(OrderDelivery.LOId))       + lcDel +
                            fNotNull(STRING(OrderDelivery.LOTimeStamp)) + lcDel +
                            fNotNull(OrderDelivery.CourierShippingId).
+
+               fWriteMessage(lcMessage).
+            END.
+            ELSE DO:
+               olHandled = TRUE.
+               fWriteMessage(lcMessage).
+               RETURN.
+            END.
+         END.
+         OTHERWISE RETURN.
+      END CASE.
+
+      IF lMsgPublisher:send_message(lcMessage) THEN
+         olHandled = TRUE.
+      ELSE DO:
+         olHandled = FALSE.
+         IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+            LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+      END.
+   END.
+
+   CATCH anyError AS Progress.Lang.Error:
+      olHandled = FALSE.
+      LOG-MANAGER:WRITE-MESSAGE("Message failed was recovered: " + lcMessage,"DEBUG").
+   END CATCH.
+
+END PROCEDURE.
+
+PROCEDURE pHandleSubsTerminal:
+
+   DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
+
+   DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
+   
+   IF AVAILABLE OrderCanal.RepLog THEN DO:
+
+      lcMessage = fCommonMessage().
+
+      CASE RepLog.EventType:
+         WHEN "CREATE" OR WHEN "MODIFY" THEN DO:
+            FIND FIRST SubsTerminal WHERE
+                       RECID(SubsTerminal) = RepLog.RecordId NO-LOCK NO-ERROR.
+            IF AVAILABLE SubsTerminal THEN DO:
+
+               lcMessage = lcMessage                                  + lcDel +
+                           fNotNull(STRING(SubsTerminal.MSSeq))       + lcDel +
+                           fNotNull(STRING(SubsTerminal.OrderId))     + lcDel +
+                           fNotNull(STRING(SubsTerminal.TerminalId))  + lcDel +
+                           fNotNull(STRING(SubsTerminal.TerminalType)) + lcDel +
+                           fNotNull(SubsTerminal.Model)               + lcDel +
+                           fNotNull(SubsTerminal.IMEI)                + lcDel +
+                           fNotNull(SubsTerminal.BillCode)            + lcDel +
+                           fNotNull(STRING(SubsTerminal.PurchaseTS))  + lcDel +
+                           fNotNull(STRING(SubsTerminal.PerContractID)).
 
                fWriteMessage(lcMessage).
             END.
@@ -758,6 +820,109 @@ PROCEDURE pHandlePrepaidRequest:
       olHandled = FALSE.
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
          LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+   END.
+
+   CATCH anyError AS Progress.Lang.Error:
+      olHandled = FALSE.
+      LOG-MANAGER:WRITE-MESSAGE("Message failed was recovered: " + lcMessage,"DEBUG").
+   END CATCH.
+
+END PROCEDURE.
+
+PROCEDURE pHandleBarring:
+
+   DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
+
+   DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
+   
+   IF AVAILABLE OrderCanal.RepLog THEN DO:
+
+      lcMessage = fCommonMessage().
+
+      CASE RepLog.EventType:
+         WHEN "CREATE" OR WHEN "MODIFY" THEN DO:
+            FIND FIRST Barring  WHERE
+                       RECID(Barring) = RepLog.RecordId NO-LOCK NO-ERROR.
+            IF AVAILABLE Barring THEN DO:
+
+               lcMessage = lcMessage                         + lcDel +
+                           fNotNull(STRING(Barring.MsSeq))   + lcDel +
+                           fNotNull(Barring.BarringCode)     + lcDel +
+                           fNotNull(Barring.BarringStatus)   + lcDel +
+                           fNotNull(Barring.UserCode)        + lcDel +
+                           fNotNull(STRING(Barring.EventTS)).
+
+               fWriteMessage(lcMessage).
+            END.
+            ELSE DO:
+               olHandled = TRUE.
+               fWriteMessage(lcMessage).
+               RETURN.
+            END.
+         END.
+         WHEN "DELETE" THEN fWriteMessage(lcMessage).
+         OTHERWISE RETURN.
+      END CASE.
+
+      IF lMsgPublisher:send_message(lcMessage) THEN
+         olHandled = TRUE.
+      ELSE DO:
+         olHandled = FALSE.
+         IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+            LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+      END.
+   END.
+
+   CATCH anyError AS Progress.Lang.Error:
+      olHandled = FALSE.
+      LOG-MANAGER:WRITE-MESSAGE("Message failed was recovered: " + lcMessage,"DEBUG").
+   END CATCH.
+
+END PROCEDURE.
+
+
+PROCEDURE pHandleBarringConf:
+
+   DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
+   
+   DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
+
+   IF AVAILABLE OrderCanal.RepLog THEN DO:
+
+      lcMessage = fCommonMessage().
+
+      CASE RepLog.EventType:
+         WHEN "CREATE" OR WHEN "MODIFY" THEN DO:
+            FIND FIRST BarringConf  WHERE
+                       RECID(BarringConf) = RepLog.RecordId NO-LOCK NO-ERROR.
+            IF AVAILABLE BarringConf THEN DO:
+
+               lcMessage = lcMessage                                  + lcDel +
+                           fNotNull(STRING(BarringConf.BarringGroup)) + lcDel +
+                           fNotNull(BarringConf.BarringCode)          + lcDel +
+                           fNotNull(BarringConf.BarringStatus)        + lcDel +
+                           fNotNull(BarringConf.BarringCode).       
+
+               fWriteMessage(lcMessage).
+            END.
+            ELSE DO:
+               olHandled = TRUE.
+               fWriteMessage(lcMessage).
+               RETURN.
+            END.
+         END.
+         WHEN "DELETE" THEN fWriteMessage(lcMessage).
+         OTHERWISE RETURN.
+
+      END CASE.
+
+      IF lMsgPublisher:send_message(lcMessage) THEN
+         olHandled = TRUE.
+      ELSE DO:
+         olHandled = FALSE.
+         IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+            LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+      END.
    END.
 
    CATCH anyError AS Progress.Lang.Error:

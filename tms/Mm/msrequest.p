@@ -108,9 +108,8 @@ DEF VAR liIntCheck   AS INT                    NO-UNDO.
 DEF VAR lcUpdated    AS CHAR                   NO-UNDO.
 DEF VAR lcReqParamValue AS CHAR                NO-UNDO.
 
-IF icFilter NE "" THEN DO:
-   lcReqParamValue = ENTRY(2,ENTRY(1,icFilter,"|")).
-END.
+IF icFilter NE "" THEN
+   lcReqParamValue = icFilter.
 
 form
     MsRequest.MsRequest   FORMAT ">>>>>>>>9"
@@ -715,7 +714,7 @@ REPEAT WITH FRAME sel:
           VIEW-AS ALERT-BOX ERROR.
           NEXT.
        END.
-       
+
        /* Highlight */
        COLOR DISPLAY VALUE(ctc)
        MsRequest.CLI MsRequest.CustNum.
@@ -840,8 +839,17 @@ PROCEDURE local-find-FIRST:
    END.
    ELSE 
    IF iiMSSeq > 0 THEN DO:
-
-      IF iiReqType >= 0 THEN 
+      IF iiReqType EQ 1 AND lcReqParamValue NE ""  THEN DO:
+         FIND FIRST MsRequest
+             WHERE MsRequest.MSSeq  = iiMSSeq AND
+                   MsRequest.ReqType = iiReqType  AND
+                   IF iiReqstatus NE ? THEN
+                     MsRequest.ReqStatus = iiReqStatus
+                   ELSE TRUE AND
+                   MsRequest.ReqCParam1 EQ  lcReqParamValue
+         NO-LOCK NO-ERROR.
+      END. 
+      ELSE IF iiReqType >= 0 THEN 
          FIND FIRST MsRequest 
               WHERE MsRequest.MSSeq   = iiMSSeq AND
                     MsRequest.ReqType = iiReqType AND
@@ -917,6 +925,7 @@ END PROCEDURE.
 
 PROCEDURE local-find-LAST:
 
+
    IF iiMSRequest > 0 THEN DO: 
       
       IF iiMSSeq > 0 THEN 
@@ -927,7 +936,18 @@ PROCEDURE local-find-LAST:
                  MSRequest.OrigRequest = iiMSRequest NO-LOCK NO-ERROR.
    END.
    ELSE IF iiMSSeq > 0 THEN DO:
-      IF iiReqType >= 0 THEN 
+      IF iiReqType EQ 1 AND lcReqParamValue NE ""  THEN DO:
+         FIND LAST MsRequest
+             WHERE MsRequest.MSSeq  = iiMSSeq AND
+                   MsRequest.ReqType = iiReqType AND
+                   IF iiReqstatus NE ? THEN
+                     MsRequest.ReqStatus = iiReqStatus
+                   ELSE TRUE AND
+                   MsRequest.ReqCParam1 EQ  lcReqParamValue
+         NO-LOCK NO-ERROR.
+      END. 
+
+      ELSE IF iiReqType >= 0 THEN 
          FIND LAST MsRequest WHERE
                    MsRequest.MSSeq   = iiMSSeq   AND
                    MsRequest.ReqType = iiReqType AND
@@ -1007,7 +1027,19 @@ PROCEDURE local-find-NEXT:
                  MSRequest.OrigRequest = iiMSRequest NO-LOCK NO-ERROR.
    END.
    ELSE IF iiMSSeq > 0 THEN DO:
-      IF iiReqType >= 0 THEN 
+      IF iiReqType EQ 1 AND lcReqParamValue NE ""  THEN DO:
+         FIND NEXT MsRequest
+             WHERE MsRequest.MSSeq  = iiMSSeq AND
+                   MsRequest.ReqType = iiReqType AND
+                   IF iiReqstatus NE ? THEN
+                     MsRequest.ReqStatus = iiReqStatus
+                   ELSE TRUE AND
+                   MsRequest.ReqCParam1 EQ  lcReqParamValue
+         NO-LOCK NO-ERROR.
+      END. 
+
+ 
+      ELSE IF iiReqType >= 0 THEN 
          FIND NEXT MsRequest 
              WHERE MsRequest.MSSeq   = iiMSSeq AND
                    MsRequest.ReqType = iiReqType AND
@@ -1089,7 +1121,17 @@ PROCEDURE local-find-PREV:
                 MSRequest.OrigRequest = iiMSRequest NO-LOCK NO-ERROR.
    END.
    ELSE IF iiMSSeq > 0 THEN DO:
-      IF iiReqType >= 0 THEN 
+      IF iiReqType EQ 1 AND lcReqParamValue NE ""  THEN DO:
+         FIND PREV MsRequest
+             WHERE MsRequest.MSSeq  = iiMSSeq AND
+                   MsRequest.ReqType = iiReqType AND
+                   IF iiReqstatus NE ? THEN
+                     MsRequest.ReqStatus = iiReqStatus
+                   ELSE TRUE AND
+                   MsRequest.ReqCParam1 EQ  lcReqParamValue
+         NO-LOCK NO-ERROR.
+      END. 
+     ELSE IF iiReqType >= 0 THEN 
          FIND PREV MsRequest 
              WHERE MsRequest.MSSeq   = iiMSSeq AND
                    MsRequest.ReqType = iiReqType AND
@@ -1158,8 +1200,22 @@ PROCEDURE local-find-PREV:
 END PROCEDURE.
 
 PROCEDURE local-disp-row:
-       RUN local-find-others.
+   RUN local-find-others.
+   IF iiReqType EQ 1 AND lcReqParamValue NE "" THEN DO:
+       CLEAR FRAME sel NO-PAUSE.
+       DISPLAY
+       MsRequest.MsRequest
+       MsRequest.CLI
+       MsRequest.CustNum
+       MsRequest.UserCode  @ lcCustName COLUMN-LABEL "Changed by"
+       ldtActivate
+       ldtHandled
+       MsRequest.ReqType
+       MsRequest.ReqStatus
+       WITH FRAME sel.
 
+   END.
+   ELSE DO: /*old functionality*/
        CLEAR FRAME sel NO-PAUSE.
        DISPLAY 
        MsRequest.MsRequest
@@ -1171,6 +1227,7 @@ PROCEDURE local-disp-row:
        MsRequest.ReqType
        MsRequest.ReqStatus
        WITH FRAME sel.
+   END.
 END PROCEDURE.
 
 PROCEDURE local-find-others.

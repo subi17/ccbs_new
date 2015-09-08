@@ -1,0 +1,7 @@
+"IGIC1" "Canary Islands 1" "" "" "" 0 yes 0 yes 0 0 0 0 0 "IGIC1" 0 no "1" "" "" "" "" "" "" "" "" "" "2"
+"IPSIC1" "Ceuta 1" "" "" "" 0 yes 0 yes 0 0 0 0 0 "IPSIC1" 0 no "1" "" "" "" "" "" "" "" "" "" "3"
+"IPSIM1" "Melilla 1" "" "" "" 0 yes 0 yes 0 0 0 0 0 "IPSIM1" 0 no "1" "" "" "" "" "" "" "" "" "" "4"
+"UNKNOWN" "Unknown Pre paid customer" "" "" "" 0 no 0 yes 0 0 0 0 0 "UNKNOWN" 0 no "1" "" "" "" "" "" "" "" "" "" ""
+"VAT1" "Mainland 1" "" "" "" 0 yes 0 yes 0 0 0 0 0 "VAT1" 0 no "1" "" "" "" "" "" "" "" "" "" "1"
+"VIP" "Yoigo external VIP usage" "" "" "" 0 yes 0 yes 0 0 0 0 0 "VIP" 0 no "1" "" "" "" "" "" "" "" "" "" ""
+"YOIGO" "Yoigo internal VIP usage" "" "" "" 0 yes 0 yes 0 0 0 0 0 "YOIGO" 0 no "1" "" "" "" "" "" "" "" "" "" "5"

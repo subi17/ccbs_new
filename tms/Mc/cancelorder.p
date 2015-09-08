@@ -12,6 +12,7 @@ hell MODULE .......: cancelorder.p
 {fsubstermreq.i}
 {ordercancel.i}
 {fmakemsreq.i}
+{main_add_lines.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilCheckLOStatus AS LOG NO-UNDO.
@@ -98,8 +99,10 @@ IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN DO:
                            "CREDIT NOTE CREATION FAILED",
                            lcResult). 
    END.
-   
-   /* release icc */
+   /*release icc 
+     or 
+     set it to Temporally if conditions are met*/
+
    IF Order.OrderType EQ {&ORDER_TYPE_NEW} OR
       Order.OrderType EQ {&ORDER_TYPE_MNP} THEN DO:
 
@@ -108,13 +111,19 @@ IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN DO:
            SIM.SimStat = {&SIM_SIMSTAT_SENT_TO_LOGISTICS} AND
            SIM.MsSeq = Order.MsSeq
       NO-LOCK USE-INDEX simseSta_s NO-ERROR.
-
+         
       IF AVAIL SIM THEN DO:
          IF OrderDelivery.LoStatusID = 875 THEN DO:
             FIND CURRENT SIM EXCLUSIVE-LOCK.
             SIM.SimStat = {&SIM_SIMSTAT_LOST}.
             RELEASE SIM.
          END.
+         /*YPR-2486*/
+         ELSE IF fcParamI("UseTempSimStatus") EQ 1 THEN DO:
+            FIND CURRENT SIM EXCLUSIVE-LOCK.
+            SIM.SimStat = {&SIM_SIMSTAT_TEMP}.
+            RELEASE SIM.
+         END. 
          ELSE fReleaseSim(Order.OrderID).
       END.
    END.
@@ -214,6 +223,10 @@ ELSE DO:
             OUTPUT liQuarTime).
 
          IF OrderDelivery.LoStatusId = 875 THEN liSimStat = 7.
+         /*YPR-2486:*/
+         ELSE IF fcParamI("UseTempSimStatus") EQ 1 AND liSimStat EQ 1 THEN DO:
+            liSimStat = {&SIM_SIMSTAT_TEMP}.
+         END.
 
          liReq = fTerminationRequest(
                         Order.MsSeq,
@@ -228,6 +241,11 @@ ELSE DO:
                         "",
                         0,
                         OUTPUT lcResult).
+   
+         IF liReq > 0 THEN
+            fAdditionalLineSTC(liReq,
+                               fMake2Dt(TODAY + 1, 0),
+                               "DELETE").
       END.
       
       IF lcResult > "" THEN DO:

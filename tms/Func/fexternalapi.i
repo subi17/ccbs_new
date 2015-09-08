@@ -12,6 +12,19 @@
 DEF VAR lcYoigoAppId AS CHAR NO-UNDO INITIAL "501,502".
 DEF VAR lcIvrAppId   AS CHAR NO-UNDO INITIAL "601,602".
 DEF VAR lcUserId     AS CHAR NO-UNDO. 
+/*For detailed viewing*/
+DEF VAR lcMiYoigoWebId AS CHAR NO-UNDO INITIAL "501".
+DEF VAR lcMiYoigoAppId AS CHAR NO-UNDO INITIAL "502".
+DEF VAR lcSpotifyId AS CHAR NO-UNDO INITIAL "503".
+DEF VAR lcRoamingTUSId AS CHAR NO-UNDO INITIAL "504".
+DEF VAR lcBonoIPLUpgId AS CHAR NO-UNDO INITIAL "505".
+DEF VAR lcEBMId AS CHAR NO-UNDO INITIAL "506".
+DEF VAR lcCollectionId AS CHAR NO-UNDO INITIAL "507".
+DEF VAR lcCTCId AS CHAR NO-UNDO INITIAL "680".
+DEF VAR lcIFSId AS CHAR NO-UNDO INITIAL "701".
+
+DEF VAR lcCCGWId AS CHAR NO-UNDO INITIAL "650".
+
 
 /* Check certain TMSCode existence */
 FUNCTION fchkTMSCodeValues RETURNS LOGICAL
@@ -57,3 +70,39 @@ FUNCTION fgetAppUserId RETURNS CHARACTER(INPUT icAppId     AS CHARACTER,
     RETURN lcUserId.
 
 END FUNCTION.
+
+
+FUNCTION fgetAppDetailedUserId RETURNS CHARACTER(INPUT icAppId     AS CHARACTER,
+                                         INPUT icAppUserId AS CHARACTER):
+
+    IF LOOKUP(icAppId,lcMiYoigoAppId) > 0 THEN
+        lcUserId = "Mi Yoigo APP" + "_" + icAppUserId.
+    ELSE IF LOOKUP(icAppId,lcMiYoigoWebId) > 0 THEN
+        lcUserId = "Mi Yoigo WEB" + "_" + icAppUserId.
+    ELSE IF LOOKUP(icAppId,lcCollectionId) > 0 THEN
+        lcUserId = "Landing Page" + "_" + icAppUserId.
+    ELSE IF LOOKUP(icAppId,lcIvrAppId) > 0 THEN
+        lcUserId = "IVR" + "_" + icAppUserId.
+    ELSE IF LOOKUP(icAppId,lcCCGWId) > 0 THEN
+        lcUserId = "CCGW" + "_" + icAppUserId.
+    ELSE IF LOOKUP(icAppId,lcSpotifyId) > 0 THEN
+        lcUserId = "Spotify registration" + "_" + icAppUserId.
+    ELSE IF LOOKUP(icAppId,lcRoamingTUSId) > 0 THEN
+        lcUserId = "Roaming tariff upsell" + "_" + icAppUserId.
+    ELSE IF LOOKUP(icAppId,lcEBMId) > 0 THEN
+        lcUserId = "EBM" + "_" + icAppUserId.
+    ELSE IF LOOKUP(icAppId,lcCTCId) > 0 THEN
+        lcUserId = "CTC" + "_" + icAppUserId.
+    ELSE IF LOOKUP(icAppId,lcBonoIPLUpgId) > 0 THEN
+        lcUserId = "Bono/IPL/upgrade upsell" + "_" + icAppUserId.
+    ELSE IF LOOKUP(icAppId,lcIFSId) > 0 THEN
+        lcUserId = "IFS" + "_" + icAppUserId.
+    ELSE lcUserId = "SelfService" + "_" + icAppUserId.
+
+    RETURN lcUserId.
+
+END FUNCTION.
+
+
+
+

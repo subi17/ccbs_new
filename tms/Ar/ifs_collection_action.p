@@ -12,6 +12,7 @@
 {cparam2.i}
 {ftransdir.i}
 {barrfunc.i}
+{transname.i}
 
 DEF INPUT  PARAMETER icFile   AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiRead   AS INT  NO-UNDO. 
@@ -32,12 +33,9 @@ DEF VAR lcReadLine     AS CHAR NO-UNDO.
 DEF VAR lcArcDir       AS CHAR NO-UNDO.
 DEF VAR lcTransDir     AS CHAR NO-UNDO.
 DEF VAR lcBarrPacket   AS CHAR NO-UNDO.
-DEF VAR lcDebtRestrict AS CHAR NO-UNDO.
-DEF VAR lcDebtHotLine  AS CHAR NO-UNDO.
 DEF VAR lrActionID     AS RECID NO-UNDO.
 DEF VAR llLogWritten   AS LOG  NO-UNDO.
-
-DEFINE VARIABLE lcActivateLP AS CHARACTER NO-UNDO.
+DEF VAR lcDebitBarrings AS CHAR NO-UNDO. 
 
 DEF STREAM sRead.
 DEF STREAM sLog.
@@ -165,8 +163,7 @@ PROCEDURE pInitialize:
       lcLogFile      = fCParamC("IFSCollActionLog")
       lcTransDir     = fCParamC("IFSCollActionLogTrans") 
       lcArcDir       = fCParamC("IFSCollActionArc")
-      lcDebtRestrict = fCParamC("IFSCollBarrZY13")
-      lcDebtHotline  = fCParamC("IFSCollBarrZY14")
+      lcDebitBarrings = fGetBarringsInGroup("Collections")
       ldToday        = fMake2DT(TODAY,1)
       llLogWritten   = FALSE.
 
@@ -227,7 +224,6 @@ PROCEDURE pReadEvents:
          lcActionDate = SUBSTRING(lcReadLine,63,8)           
          lcDebitDate  = SUBSTRING(lcReadLine,71,8)   
          lcAmount     = SUBSTRING(lcReadLine,79,16) 
-         lcActivateLP = ""
          lcBarrPacket = ""
          NO-ERROR.
       
@@ -262,11 +258,12 @@ PROCEDURE pReadEvents:
          fError("Invalid Amount").
          NEXT.
       END.
-    
+           
       CASE lcAction:
-          WHEN "ZY13" THEN lcBarrPacket = lcDebtRestrict.
-          WHEN "ZY14" THEN lcBarrPacket = lcDebtHotline.
-          WHEN "ZY17" THEN lcActivateLP = "LP".
+          WHEN "ZY13" THEN lcBarrPacket = "Debt_Restricted".
+          WHEN "ZY14" THEN lcBarrPacket = "Debt_Hotl".
+          WHEN "ZY17" THEN lcBarrPacket = "Debt_LP".
+          WHEN "ZY18" THEN lcBarrPacket = "Debt_HOTLP". 
           WHEN "ZY99" THEN lcBarrPacket = "UN". 
           OTHERWISE lcBarrPacket = "".
       END CASE.
@@ -288,22 +285,6 @@ PROCEDURE pReadEvents:
             END.
          END.
       END.
-      ELSE IF lcActivateLP > "" THEN DO:
-          RUN pActivateLP(INPUT liMsSeq).
-          
-          IF RETURN-VALUE > "" THEN DO:
-
-            IF RETURN-VALUE BEGINS "ERROR:" THEN DO:
-               fError(ENTRY(2,RETURN-VALUE,":")).
-               NEXT.
-            END.
-         
-            ELSE IF RETURN-VALUE NE "OK" THEN DO:
-               fLogLine(RETURN-VALUE).
-            END.
-         END.
-          
-      END.     
       ELSE DO:
          fError("Invalid action code").
          NEXT.
@@ -321,73 +302,70 @@ PROCEDURE pSetBarring:
 
    DEF VAR lcResult  AS CHAR NO-UNDO.
    DEF VAR liRequest AS INT  NO-UNDO.
-  
-   /* testing going on */ 
-   /* RETURN "OK". */
- 
-   ASSIGN
-      /* check current barring (or pending) */
-      lcResult  = fCheckStatus(iiMsSeq)
-      liRequest = 0.
-      
-   /* pending exists */
-   IF lcResult = "91" THEN RETURN "ERROR:Barring pending".
-      
-   /* already on */
-   ELSE IF lcResult = icSetBarring THEN 
-      RETURN "INFORMATION: " + icSetBarring + " already on".
-       
+   DEF VAR llOngoing AS LOG  NO-UNDO.
+   DEF VAR lrIdle    AS ROWID NO-UNDO.
+   DEF VAR lcRemoveBarring AS CHAR NO-UNDO.
+   DEF VAR liCount AS INT NO-UNDO.
+   DEF VAR liAmt AS INT NO-UNDO.
+   DEF VAR lcPayType AS CHAR NO-UNDO. 
+   DEF VAR lcAllowedPayType AS CHAR NO-UNDO. 
+   DEF VAR lcBarring AS CHAR NO-UNDO. 
+   DEF VAR icBarrCommand AS CHAR NO-UNDO. 
+   DEF VAR lcBarrTrans AS CHAR NO-UNDO. 
+   
    /* subscription already terminated -> no action needed */
    FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    IF NOT AVAILABLE MobSub THEN 
       RETURN "ERROR:Subscription not found".
-
-   /* YPR-91 */
-   IF MobSub.PayType AND icSetBarring = "D_HOTL" THEN
-      RETURN "ERROR:D_HOTL barring is not allowed for Prepaid".
-
-   /* unbarr */
-   IF icSetBarring = "UN" THEN DO:
-
-       FIND FIRST SubSer WHERE 
-                  SubSer.MsSeq   = iiMsSeq AND 
-                  SubSer.ServCom = "LP"    EXCLUSIVE-LOCK NO-ERROR.
-                              
-       IF AVAILABLE SubSer AND
-                    SubSer.SSStat > 0 THEN DO:
-
-           ASSIGN SubSer.SSStat = 0
-                  SubSer.SSPAram = "".
-            
-           CREATE Memo.
-           ASSIGN Memo.Brand     = gcBrand
-                  Memo.HostTable = "MobSub"
-                  Memo.KeyValue  = STRING(MobSub.MsSeq)
-                  Memo.CustNum   = MobSub.CustNum
-                  Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-                  Memo.CreUser   = "IFS" 
-                  Memo.MemoType  = "service"
-                  Memo.MemoTitle = "Collection Action"
-                  Memo.MemoText  = SubSer.ServCom + " released"
-                  Memo.CreStamp  = fMakeTS().         
-       END.    
-   
-       RELEASE SubSer.
-     
-      /* nothing to unbarr */  
-      IF lcResult = "OK" THEN 
-         RETURN "ERROR:No barrings active".
-          
-      ELSE IF lcResult NE lcDebtRestrict AND
-              lcResult NE lcDebtHotLine THEN 
-         RETURN "ERROR:Debt barring not active".
+  
+   ASSIGN
+      /* check current barring (or pending) */
+      llOngoing  = fCheckBarrStatus(iiMsSeq, OUTPUT lcResult, OUTPUT lrIdle )
+      liRequest = 0.
       
-      icSetBarring = icSetBarring + lcResult.
+   /* pending exists */
+   IF llOngoing EQ TRUE THEN RETURN "ERROR:Barring pending".
+      
+   IF icSetBarring = "UN" THEN DO:
+    
+      /* nothing to unbarr */  
+      IF lcResult = "" THEN 
+         RETURN "ERROR:No barrings active".
+    
+      /*Remove all Debit barrings*/
+      DO liCount = 1 TO NUM-ENTRIES(lcResult):
+         lcBarring = ENTRY(liCount,lcResult).
+         IF LOOKUP(lcBarring, lcDebitBarrings) > 0 THEN DO:
+            lcRemoveBarring = lcRemoveBarring + lcBarring + "=0,". 
+            liAmt = liAmt + 1.
+         END.
+         icBarrCommand = RIGHT-TRIM(lcRemoveBarring,",").
+      END.
+      IF liAmt EQ 0 THEN RETURN "ERROR:Debt barring not active".
+   END.
+
+   /*nbs: If there is already D level barring, IFS operation overwrites it*/
+   ELSE DO: 
+      
+      /* already on */
+      IF fIsInList(lcResult, icSetBarring) EQ TRUE THEN
+         RETURN "INFORMATION: " + icSetBarring + " already on".
+   
+      ASSIGN
+         lcAllowedPayType = fGetBarrAlowedPayment(icSetBarring)
+         lcPayType = STRING(MobSub.PayType,"Prepaid/Postpaid").
+      
+      IF lcAllowedPayType NE "" AND
+         LOOKUP(lcPayType,lcAllowedPayType) = 0 THEN
+         RETURN "ERROR:" + icSetBarring + " is not allowed for " + lcPayType.
+   
+      icBarrCommand = icSetBarring + "=1".
+     /*result: D_BARR1=1,D_BARR2=0*/
    END.
      
    /* create barring request */
-   RUN barrengine (iiMsSeq,
-                   icSetBarring,
+   RUN barrengine.p(iiMsSeq,
+                   icBarrCommand,
                    "9",                /* source  */
                    "Collection",       /* creator */
                    fMakeTS() + 0.0012, /* activate, 2min delay */
@@ -406,6 +384,31 @@ PROCEDURE pSetBarring:
          MsRequest.ReqCParam3 = icActionID.
          RELEASE MsRequest.   
       END.   
+
+      lcBarring = ENTRY(1,icBarrCommand,"=").
+      lcBarrTrans = fGetItemName(gcBrand,
+                                 "BarringCode",
+                                 lcBarring,
+                                 5,
+                                 TODAY).
+      IF lcBarrTrans > "" THEN 
+         lcBarring = lcBarring + " (" + lcBarrTrans + ")".
+
+      CREATE Memo.
+      ASSIGN 
+         Memo.Brand     = gcBrand
+         Memo.HostTable = "MobSub"
+         Memo.KeyValue  = STRING(MobSub.MsSeq)
+         Memo.CustNum   = MobSub.CustNum
+         Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
+         Memo.CreUser   = "IFS" 
+         Memo.MemoType  = "service"
+         Memo.MemoTitle = "Collection Action"
+         Memo.MemoText  = lcBarring +
+                         (IF icSetBarring EQ "UN"
+                          THEN " released"
+                          ELSE " applied")
+         Memo.CreStamp  = fMakeTS().
       
       RETURN "OK".
    END.             
@@ -413,44 +416,3 @@ PROCEDURE pSetBarring:
    ELSE RETURN "ERROR:Barring request creation failed".
       
 END PROCEDURE. /* pSetBarring */
-
-PROCEDURE pActivateLP:
-
-    DEFINE INPUT PARAMETER iiMsSeq AS INTEGER   NO-UNDO.
-    DEFINE VARIABLE lcError        AS CHARACTER NO-UNDO.
-    DEFINE VARIABLE liRequest      AS INTEGER   NO-UNDO.
-    
-    FIND FIRST MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
-    
-    IF NOT AVAILABLE MobSub THEN 
-        RETURN "ERROR:Subscription not found".
-
-    liRequest = fServiceRequest(INPUT iiMsSeq,
-                                INPUT "LP",
-                                INPUT 1,                           /* ON */
-                                INPUT "REDIRECTION_COLLECTION_1",
-                                INPUT fMakeTS(),
-                                INPUT "",                          /* salesman       */ 
-                                INPUT FALSE,                       /* fees           */
-                                INPUT FALSE,                       /* sms            */
-                                INPUT "",
-                                INPUT {&REQUEST_SOURCE_IFS},
-                                INPUT 0,                           /* Father Request */
-                                INPUT FALSE,
-                                OUTPUT lcError).
-        
-    IF liRequest = 0 THEN
-    DO:                               
-            /* write possible error to a memo */
-        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                         "MobSub",
-                          STRING(MobSub.MsSeq),
-                          MobSub.Custnum,
-                         "Activate LP service failed",
-                          lcError).
-         RETURN "Activate LP service failed".                   
-    END.                         
-       
-    RETURN "OK".  
-                                                
-END PROCEDURE. /* pActivateLP */     

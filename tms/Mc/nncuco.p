@@ -133,6 +133,10 @@ DEF VAR lcKeyValue     AS CHAR                NO-UNDO.
 DEF VAR lcMemoAvail    AS CHAR                NO-UNDO.
 DEF VAR lcFinancedResult AS CHAR NO-UNDO. 
 
+
+DEF VAR llAdmin AS LOG NO-UNDO. 
+IF getTMSRight("VENDOR") EQ "RW" THEN llAdmin = TRUE. 
+
 DEF BUFFER bBillItem FOR BillItem.
 
 form                                                          
@@ -171,7 +175,7 @@ form
     FixedFee.KeyValue  
           LABEL "Target ID ......." FORMAT "X(8)" 
     FixedFee.OrderId AT 40
-          LABEL "Order ID ....." SKIP
+          LABEL "Order ID ....." FORMAT "->>>>>>>>9" SKIP
 
     FixedFee.SourceTable
           LABEL "Source Table ...." FORMAT "X(15)"
@@ -993,6 +997,15 @@ repeat WITH FRAME sel:
           ERROR.
           NEXT.
        END.   
+
+       IF NOT FixedFee.BillCode BEGINS "PAYTERM" AND
+          NOT llAdmin THEN DO:
+          MESSAGE 
+          "Contract deletion is not allowed."
+          VIEW-AS ALERT-BOX
+          ERROR.
+          NEXT.
+       END.
 
        /* line TO be deleted is lightened */
        COLOR DISPLAY value(ctc)

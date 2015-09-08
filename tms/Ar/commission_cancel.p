@@ -20,7 +20,7 @@ DEF VAR lcDebtBarring AS CHAR NO-UNDO.
 /***** MAIN start *******/
 
 /* barrings that are used for debt collection, should not be on */
-lcDebtBarring = fCParamC("CommDebtBarring").
+lcDebtBarring = {&FRAUD_BARR_CODES}.
  
 RUN pCancelCommission (OUTPUT oiChecked,
                        OUTPUT oiCancelled).
@@ -55,7 +55,10 @@ PROCEDURE pCancelCommission:
    
    DEF VAR lcBarring AS CHAR NO-UNDO.
    DEF VAR liDone    AS INT  NO-UNDO. 
-   
+   DEF VAR liCount   AS INT NO-UNDO.
+   DEF VAR llOngoing AS LOG NO-UNDO. 
+   DEF VAR lrBarring  AS ROWID NO-UNDO.
+
    FORM 
       oiHandled   AT 2 FORMAT ">>>>>>>9" LABEL "Handled ." SKIP
       oiCancelled AT 2 FORMAT ">>>>>>>9" LABEL "Cancelled" SKIP
@@ -93,10 +96,11 @@ PROCEDURE pCancelCommission:
          DISP oiHandled oiCancelled WITH FRAME fQty.
       END.
 
-      lcBarring = fCheckStatus(MobSub.MsSeq).
+      llOngoing = fCheckBarrStatus(MobSub.MsSeq, OUTPUT lcBarring, OUTPUT lrBarring).
+      IF llOngoing THEN NEXT.
 
-      IF LOOKUP(lcBarring,lcDebtBarring) > 0 THEN DO:
-
+      /*check all barrings, that are they in list*/
+      IF fIsInList(lcDebtBarring, lcBarring) EQ TRUE THEN DO:
          RUN commission_term(MobSub.MsSeq,
                              "Debt",
                              OUTPUT liDone).

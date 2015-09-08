@@ -12,6 +12,7 @@
 {fmakesms.i}
 {tmsconst.i}
 {fcreatereq.i}
+{msisdn_prefix.i}
 
 FUNCTION fSendDextraSMS RETURNS LOGICAL
 (iiOrderId AS INTEGER,
@@ -70,9 +71,9 @@ FUNCTION fSendDextraSMS RETURNS LOGICAL
 
    IF Order.MNPStatus > 0 THEN
       lcNumber = Order.CLI.
-   ELSE IF OrderCustomer.MobileNumber BEGINS "6" THEN
+   ELSE IF fIsMobileNumber(OrderCustomer.MobileNumber) THEN
       lcNumber = OrderCustomer.MobileNumber.
-   ELSE IF OrderCustomer.FixedNumber BEGINS "6" THEN
+   ELSE IF fIsMobileNumber(OrderCustomer.FixedNumber) THEN
       lcNumber = OrderCustomer.FixedNumber.
 
    IF lcNumber EQ "" THEN RETURN FALSE.

@@ -3,7 +3,7 @@
 &GLOBAL-DEFINE REPLOG_READER_I YES
 /* ----------------------------------------------------------------------
   Module .......: Func/replog_reader.i
-  Task .........: Replog Reader Include File
+  Task .........: Replog / ActiveMQ Reader Include File
   Application ..: TMS
   Author .......: Vikas
   Created ......: 03.07.13
@@ -14,38 +14,56 @@
 {log.i}
 {ftransdir.i}
 
-DEFINE VARIABLE liLoop        AS INTEGER   NO-UNDO.
-DEFINE VARIABLE ldToday       AS DATE      NO-UNDO.
-DEFINE VARIABLE ldDate        AS DATE      NO-UNDO.
-DEFINE VARIABLE ldLogDate     AS DATE      NO-UNDO.
-DEFINE VARIABLE lcTime        AS CHARACTER NO-UNDO.
-DEFINE VARIABLE ldeTimeStamp  AS DECIMAL   NO-UNDO.
-DEFINE VARIABLE lcDel         AS CHARACTER NO-UNDO INIT "|".
-DEFINE VARIABLE liAmount      AS INTEGER   NO-UNDO.
-DEFINE VARIABLE liRepLogs     AS INTEGER   NO-UNDO.
-DEFINE VARIABLE lcHostName    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcConfFile    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcReadLine    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcHost        AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcDumpSpool   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcDumpOut     AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liDumpFreq    AS INTEGER   NO-UNDO.
-DEFINE VARIABLE lcDumpFile    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcLogFile     AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcLogFileStat AS CHARACTER NO-UNDO.
-DEFINE VARIABLE llLogFileAct  AS LOGICAL   NO-UNDO INIT ?.
-DEFINE VARIABLE liPort        AS INTEGER   NO-UNDO.
-DEFINE VARIABLE liTimeOut     AS INTEGER   NO-UNDO.
-DEFINE VARIABLE liLogLevel    AS INTEGER   NO-UNDO.
-DEFINE VARIABLE lcUserName    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcPassword    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcOperator    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcServer      AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liOffSet      AS INTEGER   NO-UNDO.
-DEFINE VARIABLE lcNagiosURL   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcStatLogFile AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liLoop            AS INTEGER       NO-UNDO.
+DEFINE VARIABLE ldToday           AS DATE          NO-UNDO.
+DEFINE VARIABLE ldDate            AS DATE          NO-UNDO.
+DEFINE VARIABLE ldLogDate         AS DATE          NO-UNDO.
+DEFINE VARIABLE lcTime            AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE ldeTimeStamp      AS DECIMAL       NO-UNDO.
+DEFINE VARIABLE lcDel             AS CHARACTER     NO-UNDO INIT "|".
+DEFINE VARIABLE liAmount          AS INTEGER       NO-UNDO.
+DEFINE VARIABLE liRepLogs         AS INTEGER       NO-UNDO.
+DEFINE VARIABLE lcHostName        AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE lcConfFile        AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE lcReadLine        AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE lcHost            AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE lcDumpSpool       AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE lcDumpOut         AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE liDumpFreq        AS INTEGER       NO-UNDO.
+DEFINE VARIABLE lcDumpFile        AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE lcLogFile         AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE lcLogFileStat     AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE llLogFileAct      AS LOGICAL       NO-UNDO INIT ?.
+DEFINE VARIABLE liPort            AS INTEGER       NO-UNDO.
+DEFINE VARIABLE liTimeOut         AS INTEGER       NO-UNDO.
+DEFINE VARIABLE liLogLevel        AS INTEGER       NO-UNDO.
+DEFINE VARIABLE lcUserName        AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE lcPassword        AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE lcOperator        AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE lcServer          AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE liOffSet          AS INTEGER       NO-UNDO.
+DEFINE VARIABLE lcNagiosURL       AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE lcStatLogFile     AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE lcCdrSpool        AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE lcCdrOut          AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE liCdrFreq         AS INTEGER       NO-UNDO.
+DEFINE VARIABLE ldaCounterDate    AS DATE          NO-UNDO.
 
-DEFINE VARIABLE lMsgPublisher AS CLASS Gwy.MqPublisher NO-UNDO.
+/* amq_reader_* - common variables */
+DEFINE VARIABLE ldaReadDate       AS DATE          NO-UNDO.
+DEFINE VARIABLE ldeReadInTS       AS DECIMAL       NO-UNDO.
+DEFINE VARIABLE ldeCDRStamp       AS DECIMAL       NO-UNDO.
+DEFINE VARIABLE ldeCurrStamp      AS DECIMAL       NO-UNDO.
+DEFINE VARIABLE liReadTime        AS INTEGER       NO-UNDO.
+DEFINE VARIABLE ldaConnectDate    AS DATE          NO-UNDO.
+DEFINE VARIABLE liCdrCount        AS INTEGER       NO-UNDO.
+DEFINE VARIABLE lcDel2            AS CHARACTER     NO-UNDO. 
+DEFINE VARIABLE lcMessage         AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE lcKeyValue        AS CHARACTER     NO-UNDO.
+DEFINE VARIABLE llOk              AS LOGICAL       NO-UNDO.
+DEFINE VARIABLE llStart           AS LOGICAL       NO-UNDO INIT TRUE.
+
+DEFINE VARIABLE lMsgPublisher     AS CLASS Gwy.MqPublisher NO-UNDO.
 
 DEFINE STREAM sDump.
 DEFINE STREAM sLogStat.
@@ -203,7 +221,7 @@ PROCEDURE pInitialize:
    DEF VAR liLogTreshold  AS INT  NO-UNDO.
 
    /* get hostname */
-   INPUT THROUGH hostname.
+   INPUT THROUGH uname -n.
    IMPORT lcHostName.
    INPUT CLOSE.
 
@@ -212,8 +230,13 @@ PROCEDURE pInitialize:
          lcConfFile = "Mailconf/replog_reader_conf.dev".
       WHEN "Merak" OR WHEN "Botein" THEN
          lcConfFile = "Mailconf/replog_reader_conf.staging".
-      WHEN "Hebe"  OR WHEN "Flora"  THEN
-         lcConfFile = "Mailconf/replog_reader_conf.prod".
+      WHEN "Merga" THEN
+         lcConfFile = "Mailconf/replog_reader_conf.merga".
+      WHEN "Hebe"  OR WHEN "Flora"  THEN DO:
+         IF icModule BEGINS "amq_" 
+         THEN lcConfFile = "Mailconf/replog_reader_conf_amq.prod".
+         ELSE lcConfFile = "Mailconf/replog_reader_conf.prod".
+      END.
       OTHERWISE lcConfFile = "".
    END CASE.
 
@@ -252,13 +275,21 @@ PROCEDURE pInitialize:
          lcNagiosURL = SUBSTR(lcReadLine,9).
       ELSE IF lcReadLine BEGINS "#LOG_STAT:" THEN
          lcLogFileStat = SUBSTR(lcReadLine,11).
+      ELSE IF lcReadLine BEGINS "#CDR_SPOOL:" THEN
+         lcCdrSpool = SUBSTR(lcReadLine,12).
+      ELSE IF lcReadLine BEGINS "#CDR_OUTGOING:" THEN
+         lcCdrOut = SUBSTR(lcReadLine,15).
+      ELSE IF lcReadLine BEGINS "#CDR_FREQ:" THEN
+         liCdrFreq = INT(SUBSTR(lcReadLine,11)).
    END.
    INPUT CLOSE.
 
    IF lcHost = "" THEN RETURN "Host is missing".
    IF liPort = 0 OR liPort = ? THEN RETURN "Port is missing".
+   /*
    IF lcUserName = "" THEN RETURN "Username is missing".
    IF lcPassword = "" THEN RETURN "Password is missing".
+   */
 
    IF liLogLevel = 0 OR liLogLevel = ? THEN
       liLogLevel = 2. /* default */
@@ -278,8 +309,11 @@ PROCEDURE pInitialize:
       fSetLogTreshold(liLogTreshold).
    END. /* IF lcLogFile > "" THEN DO: */
 
-   IF lcLogFileStat = "" THEN
-      lcLogFileStat = "/store/riftp/pupu_dumps/logs/replog_reader_statistics".
+   IF lcCdrSpool > "" AND lcCdrOut = "" THEN RETURN "Outgoing path is missing".
+
+   IF liCdrFreq = 0 OR liCdrFreq = ? THEN liCdrFreq = 120.
+
+   ldaCounterDate = TODAY.
 
 END PROCEDURE.
 
@@ -301,7 +335,7 @@ PROCEDURE pFinalize:
    IF lcLogFile > "" THEN fCloseLog().
 
    /* Replog handling statistics file */
-   IF lcLogFileStat > "" THEN DO:
+   IF lcLogFileStat > "" AND ldLogDate NE ? THEN DO:
 
       lcStatLogFile = lcLogFileStat + "_" + icModule + "_" +
                       STRING(YEAR(ldLogDate)) + STRING(MONTH(ldLogDate),"99") +

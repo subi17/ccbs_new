@@ -150,6 +150,7 @@ FOR EACH FusionInvoice EXCLUSIVE-LOCK WHERE
                                  INPUT Customer.CustNum,
                                  INPUT {&REQUEST_SOURCE_FUSION_EMAIL},
                                  INPUT Customer.Email,
+                                 INPUT 0, /*orderid*/ 
                                  OUTPUT lcError).
             IF liRequest > 0 THEN DO:
                fLog(FusionInvoice.FuInvNum,"INFO:Activation email sent").
@@ -211,7 +212,7 @@ FOR EACH FusionInvoice EXCLUSIVE-LOCK WHERE
    OUTPUT STREAM sEmail CLOSE.
 
    /* Send the email */
-   SendMaileInvoice(lcEmailReplacedText,""). 
+   SendMaileInvoice(lcEmailReplacedText,"",""). 
    /* move the file to archive directory */
    IF lcTransDir > "" THEN DO:
       fTransDir(lcLatestEmailFile,

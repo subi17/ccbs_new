@@ -179,6 +179,7 @@ FUNCTION fSetInvDelType RETURNS CHAR(INPUT icDelType AS CHAR,
                                              INPUT Mobsub.Custnum,
                                              INPUT {&REQUEST_SOURCE_SCRIPT},
                                              INPUT Customer.Email,
+                                             INPUT 0, /*orderid*/
                                              OUTPUT lcResult).
             IF liRequest = 0 THEN DO:
                IF lcResult = "Customer already has an active request" THEN .

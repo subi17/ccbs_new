@@ -43,5 +43,10 @@ repeat:
    run ./import_table.p lcLine lcFolder.
 end.
 
+run ./tmsparam_staging_update.p.
+
+IF LOOKUP(lcHostName,'merga') > 0 THEN
+   run ./tmsparam_merga_update.p.
+
 MESSAGE "Import done" VIEW-AS ALERT-BOX.
 QUIT.

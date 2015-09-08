@@ -6,7 +6,7 @@
   Created ......: 24.05.13
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
-
+ 
 {commpaa.i}
 katun = "Cron".
 gcBrand = "1".
@@ -677,7 +677,10 @@ PROCEDURE pHandleFixedFee:
                            fNotNull(STRING(FixedFee.EndPeriod)) + lcDel +
                            fNotNull(STRING(FixedFee.CustPP))    + lcDel +
                            fNotNull(STRING(FixedFee.CalcAmt))   + lcDel +
-                           fNotNull(STRING(FixedFee.BegDate)).
+                           fNotNull(STRING(FixedFee.BegDate))   + lcDel +
+                           fNotNull(FixedFee.SourceTable)       + lcDel +
+                           fNotNull(FixedFee.SourceKey)         + lcDel +
+                           fNotNull(STRING(FixedFee.OrderId)).
                fWriteMessage(lcMessage).
             END.
             ELSE DO:

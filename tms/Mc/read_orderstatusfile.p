@@ -186,7 +186,7 @@ PROCEDURE pUpdateOrderStatus:
    IF Order.CLI NE icMSISDN THEN
       RETURN "ERROR:MSISDN does not match with order".
 
-   IF LOOKUP(icOldStatus,"20,21,22,41,42,43,44,50,51,76") = 0 THEN
+   IF LOOKUP(icOldStatus,"20,21,22,41,42,43,44,50,51,76,99") = 0 THEN
       RETURN "ERROR:Unsupported current order status value".
 
    IF Order.StatusCode NE icOldStatus THEN
@@ -228,7 +228,10 @@ PROCEDURE pUpdateOrderStatus:
    END.
    ELSE IF icOldStatus EQ "50" THEN DO:
       CASE icNewStatus:
-         WHEN "6" THEN RUN orderinctrl.p(Order.OrderId, iiSecure, TRUE).
+         WHEN "6" THEN DO: 
+            RUN orderinctrl.p(Order.OrderId, iiSecure, TRUE).
+            /* RUN sendorderreq.p(Order.OrderId). not needed here? confirmation sent */
+         END.
          WHEN "7" THEN RUN closeorder.p(Order.OrderId, TRUE).
          OTHERWISE RETURN "ERROR:Unsupported new order status value".
       END.

@@ -221,14 +221,10 @@ DO TRANSACTION:
    EMPTY TEMP-TABLE ttContract.
 
    /* Reactivate the Barring package(if present) */
-   FOR EACH bSubMsRequest WHERE
-            bSubMsRequest.MsSeq     = MsRequest.MsSeq AND
-            bSubMsRequest.ReqType   = {&REQTYPE_BARRING_REQUEST} AND
-            bSubMsRequest.ReqStatus = {&REQUEST_STATUS_DONE} NO-LOCK 
-            USE-INDEX MsSeq BY UpdateStamp DESC:
-       IF bSubMsRequest.ReqCParam1 BEGINS "UN" THEN LEAVE.
+   IF MobSub.MsStatus NE 4 THEN DO:
+
        RUN barrengine.p(MobSub.MsSeq,
-                        bSubMsRequest.ReqCParam1,
+                        "#REFRESH",
                         {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION},
                         katun,               /* creator */
                         ldCurrTS,            /* activate */
@@ -244,43 +240,9 @@ DO TRANSACTION:
                      STRING(Mobsub.MsSeq),
                      Mobsub.CustNum,
                      "Barring and suspension",
-                     "Barring " + bSubMsRequest.ReqCParam1 + " request failed: "
+                     "Barring REFRESH request failed: "
                      + lcResult).
-       LEAVE.
    END. /* FOR EACH bSubMsRequest WHERE */
-   
-   /* YDR-1561 */
-   FIND FIRST SubSer NO-LOCK WHERE
-              SubSer.MsSeq   = MobSub.MsSeq AND
-              SubSer.ServCom = "BPSUB" NO-ERROR.
-
-   IF AVAIL SubSer AND
-      SubSer.SSStat EQ 1 THEN DO:
-
-      liRequest = fServiceRequest(MobSub.MsSeq,
-                                  SubSer.ServCom,
-                                  1,     /* ON */
-                                  SubSer.SSParam,
-                                  fMakeTS(),
-                                  "",
-                                  TRUE, /* fees */
-                                  FALSE, /* sms */
-                                  "",
-                                  {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION},
-                                  iiMsRequest,
-                                  FALSE,
-                                  OUTPUT lcResult).
-      /* Write possible error to a memo */
-      IF liRequest = 0 THEN
-       DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                        "MobSub",
-                        STRING(Mobsub.MsSeq),
-                        Mobsub.CustNum,
-                        Subser.Servcom + " service Re-provision",
-                        "Service " + SubSer.ServCom +
-                        " (" + SubSer.SSPAram +
-                        ") request failed " + lcResult).
-   END.
 
    /* LTE service reactivation */
    FIND FIRST SubSer WHERE
@@ -520,8 +482,9 @@ DO TRANSACTION:
 
    FOR EACH ttContract:
 
-      /* Don't reactivate TARJ7 service periodical contract */
-      IF ttContract.DCEvent = "TARJ7" THEN NEXT.
+      /* Don't reactivate TARJ7 and TARJ9 service periodical contract */
+      IF ttContract.DCEvent = "TARJ7" OR
+         ttContract.DCEvent = "TARJ9" THEN NEXT.
 
       FIND FIRST DayCampaign WHERE
                  DayCampaign.Brand   = gcBrand AND

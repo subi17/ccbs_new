@@ -14,6 +14,8 @@
       creation_time;datetime;time when customer accepted order price
       referee;string;msisdn of referee subscription (MGM commission)
       order_type;int;Order Type
+      delivery_type;int;Delivery Type
+      delivery_secure;int;Delivery Secure
       reverted_renewal_order;boolean;reverted delivered POS renewal order
  *  @subscription msseq;int;subscription id
                  icc;string;subscription icc 
@@ -42,6 +44,8 @@
              discount;double;terminal discount
              amount;double;terminal or terminal offeritem amount
              vat_amount;double;always 0
+             hard_book;integer;hard booking
+             hard_book_state;string;hard book state
  * @order_laptops array of laptop structs;order laptops
  * @laptop      laptop;string;laptop billing item
                 ordered;datetime;order creation stamp
@@ -55,6 +59,17 @@
              surname_2;string;
              zip_code;string;
              region;string;
+             kiala_code;string;
+             site_name;string;
+   @secure_address street_code;string;
+                   address validation result code city_code;string;
+                   address validation result code;string;
+                   municipality_code;string;
+                   address validation result code;string;
+                   zip_code;string;
+                   region;string;
+                   city;string;
+                   country;string;
  * @fusion_data  fixed_number_type;string;NEW/MNP
                  fixed_mnp_old_operator;string;
                  fixed_mnp_time_of_change;string;
@@ -111,11 +126,12 @@ DEF VAR gcStructMnp             AS CHARACTER NO-UNDO.
 DEF VAR gcArrayMnpMessages      AS CHARACTER NO-UNDO. 
 DEF VAR gcStructMnpMessage      AS CHARACTER NO-UNDO. 
 DEF VAR lcOrderTerminals        AS CHARACTER NO-UNDO. 
-DEF VAR lcOrderTerminal        AS CHARACTER NO-UNDO. 
+DEF VAR lcOrderTerminal         AS CHARACTER NO-UNDO. 
 DEF VAR gcStructDeliveryAddress AS CHARACTER NO-UNDO. 
-DEF VAR lcFusionStruct AS CHAR NO-UNDO. 
-DEF VAR laptop_array AS  CHAR NO-UNDO.
-DEF VAR term_struct AS CHAR NO-UNDO.
+DEF VAR gcStructSecureAddress   AS CHARACTER NO-UNDO.
+DEF VAR lcFusionStruct          AS CHARACTER NO-UNDO. 
+DEF VAR laptop_array            AS CHARACTER NO-UNDO.
+DEF VAR term_struct             AS CHARACTER NO-UNDO.
 
 DEF VAR lcPaymentType           AS CHARACTER NO-UNDO. 
 DEF VAR cMnpMsgStatus           AS CHARACTER NO-UNDO. 
@@ -144,9 +160,15 @@ FIND OrderPayment WHERE
      OrderPayment.OrderId = piOrderId NO-LOCK NO-ERROR.
 
 IF AVAILABLE OrderPayment AND
-             OrderPayment.Method > 0 THEN
-   lcPaymentType = ENTRY(OrderPayment.Method, "on_delivery,credit_card"). 
-
+             OrderPayment.Method > 0 THEN DO:
+   IF OrderPayment.Method EQ {&ORDERPAYMENT_M_POD} THEN
+      lcPaymentType = "on_delivery".
+   ELSE IF OrderPayment.Method EQ {&ORDERPAYMENT_M_CREDIT_CARD} THEN
+         lcPaymentType = "credit_card".
+   ELSE IF OrderPayment.Method EQ {&ORDERPAYMENT_M_PAYPAL} THEN
+         lcPaymentType = "paypal".      
+     
+END.
 /* add values to the response if no error */
 top_struct = add_struct(response_toplevel_id, "").
 add_int(   top_struct, "tms_id"         , piOrderId         ).
@@ -164,6 +186,9 @@ add_timestamp(top_struct, "creation_time", Order.CrStamp).
 add_string(top_struct, "referee", Order.Referee).
 IF Order.RiskCode NE "" THEN 
 add_string(top_struct,"risk_code",Order.RiskCode).
+
+add_int(top_struct,"delivery_type", Order.DeliveryType).
+add_int(top_struct,"delivery_secure", Order.DeliverySecure).
 
 IF Order.OrderChannel BEGINS "RENEWAL_POS" AND
    Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND
@@ -293,6 +318,8 @@ IF AVAIL OrderAccessory THEN DO:
    /* not in use */
    add_double(lcOrderTerminal, "vat_amount", OrderAccessory.VatAmount). 
    add_double(lcOrderTerminal, "discount", OrderAccessory.Discount).
+   add_int(lcOrderTerminal, "hard_book", OrderAccessory.HardBook).
+   add_string(lcOrderTerminal, "hard_book_state", OrderAccessory.HardBookState).
 END.
 ELSE IF lcTerminalCode NE "" THEN DO:   
    add_string(lcOrderTerminal, "imei", "").
@@ -339,6 +366,27 @@ IF AVAIL OrderCustomer THEN DO:
    add_string(gcStructDeliveryAddress, "surname_2" , OrderCustomer.SurName2 ).
    add_string(gcStructDeliveryAddress, "zip_code"  , OrderCustomer.ZipCode  ).
    add_string(gcStructDeliveryAddress, "region"    , OrderCustomer.Region   ).
+   add_string(gcStructDeliveryAddress, "kiala_code", OrderCustomer.KialaCode).
+   add_string(gcStructDeliveryAddress, "site_name",  OrderCustomer.Company).
+END.
+ 
+FIND OrderCustomer WHERE 
+     OrderCustomer.Brand = gcBrand AND 
+     OrderCustomer.OrderId = piOrderId AND 
+     OrderCustomer.RowType = 8
+     NO-LOCK NO-ERROR.
+
+IF AVAIL OrderCustomer THEN DO:
+   gcStructSecureAddress = add_struct(top_struct, "secure_address").
+   
+   add_string(gcStructSecureAddress, "street_code",OrderCustomer.AddressCodC).
+   add_string(gcStructSecureAddress, "city_code",  OrderCustomer.AddressCodP).
+   add_string(gcStructSecureAddress, "municipality_code",
+                                                   OrderCustomer.AddressCodM).
+   add_string(gcStructSecureAddress, "city",       OrderCustomer.PostOffice).
+   add_string(gcStructSecureAddress, "zip_code",   OrderCustomer.ZipCode).
+   add_string(gcStructSecureAddress, "region",     OrderCustomer.Region).
+   add_string(gcStructSecureAddress, "country",    OrderCustomer.Country).
 END.
  
 IF Order.OrderChannel BEGINS "fusion" THEN DO: 

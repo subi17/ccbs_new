@@ -216,7 +216,7 @@ PROCEDURE pInitialize:
       lcCurrency   = fCParamC("DefCurrency")
       ldMinInvAmt  = fCParamDE("MinInvAmt")
       lcSesNum     = SESSION:NUMERIC-FORMAT
-      lcDataItem   = fCParamC("DataRowItems")
+      lcNonCombinedData = fCParamC("NON_COMBINED_DATA_ROWS")
       lcRefAmt     = IF iiInvCount = 0
                      THEN ""
                      ELSE " / " + STRING(iiInvCount)
@@ -530,8 +530,7 @@ PROCEDURE pInvoice2XML:
       
       RUN pGetInvoiceVatData.
       
-      FOR EACH ttVat NO-LOCK WHERE 
-               ttVat.VatPerc <> 0:
+      FOR EACH ttVat NO-LOCK:
          lhXML:START-ELEMENT("TaxDetails").
          lhXML:WRITE-DATA-ELEMENT("TaxZone",lcTaxZone).
          lhXML:WRITE-DATA-ELEMENT("TaxPercent",fDispXMLDecimal(ttVat.VatPerc)).
@@ -636,8 +635,16 @@ PROCEDURE pInvoice2XML:
 
          liPCnt = liPCnt + 1.
       END. 
-   
+ 
       lhXML:END-ELEMENT("CustomRow").
+
+      RUN pGetSubInvoiceHeaderData.
+      
+      IF ttInvoice.PostPoned THEN DO:
+         lhXML:START-ELEMENT("CustomRow").
+         lhXML:WRITE-DATA-ELEMENT("CustomRowType","PostponedPayment").
+         lhXML:END-ELEMENT("CustomRow").
+      END.
 
       /* subscription level */
       RUN pSubInvoice2XML. 
@@ -668,14 +675,11 @@ PROCEDURE pSubInvoice2XML:
     
    lhXML:START-ELEMENT("Contract").
 
-   RUN pGetSubInvoiceHeaderData.
-
    FOR EACH SubInvoice OF Invoice NO-LOCK,
-      FIRST ttSub WHERE ttSub.CLI = SubInvoice.CLI:
+      FIRST ttSub WHERE 
+            ttSub.CLI   = SubInvoice.CLI  AND
+            ttSub.MsSeq = SubInvoice.MsSeq:
       
-      /* value for message */
-      RUN pSubInvoiceMessageField ("XML"). 
-
       /* subscription */
       lhXML:START-ELEMENT("ContractDetail").
       lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.CLI).
@@ -696,11 +700,17 @@ PROCEDURE pSubInvoice2XML:
       lhXML:WRITE-DATA-ELEMENT("FullName",ttSub.UserName).
       lhXML:END-ELEMENT("ContractName").
 
-      IF lcMessage > "" THEN DO:
+      IF ttSub.MessageType > "" THEN DO:
          lhXML:START-ELEMENT("CustomContract").
          lhXML:WRITE-DATA-ELEMENT("CustomType","Message").
-         lhXML:WRITE-DATA-ELEMENT("CustomContent",lcMessage).
+         lhXML:WRITE-DATA-ELEMENT("CustomContent",ttSub.MessageType).
          lhXML:END-ELEMENT("CustomContract").
+         
+         IF llgPostPay THEN DO:
+            lhXML:START-ELEMENT("Postponed").
+            lhXML:WRITE-DATA-ELEMENT("PostponedPayment", STRING(llgPostPay)).
+            lhXML:END-ELEMENT("Postponed").
+         END.      
       END.
       
       /* invoice rows */
@@ -871,7 +881,8 @@ PROCEDURE pSubInvoice2XML:
          END.
 
          /* some data rows are combined on daily level */
-         IF LOOKUP(ttCall.BillCode,lcDataItem) > 0 THEN DO:
+         IF ttCall.BIGroup EQ {&BITEM_GRP_INTERNET} AND
+            LOOKUP(ttCall.BillCode,lcNonCombinedData) = 0 THEN DO:
             FIND FIRST ttData WHERE ttData.BIName = lcBIName NO-ERROR.
             IF NOT AVAILABLE ttData THEN DO:
                CREATE ttData.
@@ -904,7 +915,7 @@ PROCEDURE pSubInvoice2XML:
                lhXML:INSERT-ATTRIBUTE("DataAmount",lcLine).
             END.
 
-            ELSE IF ttCall.BillDur NE 0 THEN DO:
+            ELSE IF ttCall.BillDur NE 0 OR ttCall.EventType EQ "CALL" THEN DO:
                lcLine = TRIM(fSec2MinC(ttCall.BillDur,8)).
                lhXML:INSERT-ATTRIBUTE("Duration",lcLine).
             END.   
