@@ -1,0 +1,5 @@
+1 "Spanish"
+2 "Catalan"
+3 "Basque (Euskara)"
+4 "Galician"
+5 "English"
