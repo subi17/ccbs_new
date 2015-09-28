@@ -8,6 +8,7 @@
           activation_stamp;datetime;mandatory;request activation time
           charge;decimal;mandatory;0 if no charged
           charge_limit;decimal;mandatory;
+          contract_id;string;optional;contract ID
           bank_account;string;optional;new bank account for postpaid
           data_bundle_id;string;(mandatory);bundle type (Voice->Data STC)
           renewal_stc;boolean;optional;not in use
@@ -43,6 +44,7 @@ DEF VAR plExtendContract AS LOG  NO-UNDO.
 DEF VAR pcMemoStruct     AS CHAR NO-UNDO.
 DEF VAR pcMemoTitle      AS CHAR NO-UNDO.
 DEF VAR pcMemoContent    AS CHAR NO-UNDO.
+DEF VAR pcContractID     AS CHAR NO-UNDO.
 
 /* Local variables */
 DEF VAR lcc AS CHAR NO-UNDO.
@@ -67,7 +69,7 @@ IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 /* web is passing renewal_stc but we don't actually need it */
 lcstruct = validate_struct(pcStruct, 
-   "msisdn!,username!,subscription_type_id!,activation_stamp!,charge!,charge_limit!,bank_account,data_bundle_id,renewal_stc,bypass,extend_term_contract,memo").
+   "msisdn!,username!,subscription_type_id!,activation_stamp!,charge!,charge_limit!,bank_account,data_bundle_id,renewal_stc,bypass,extend_term_contract,memo,contract_id").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -87,7 +89,9 @@ ASSIGN
       WHEN LOOKUP(pcCliType,lcBundleCLITypes) > 0
    plByPass = get_bool(pcStruct, "bypass") WHEN LOOKUP("bypass", lcstruct) > 0
    plExtendContract = get_bool(pcStruct,"extend_term_contract")
-      WHEN LOOKUP("extend_term_contract", lcstruct) > 0.
+      WHEN LOOKUP("extend_term_contract", lcstruct) > 0
+   pcContractID = get_string(pcStruct,"contract_id")
+         WHEN LOOKUP("contract_id", lcstruct) > 0.
 
 IF LOOKUP("memo", lcstruct) > 0 THEN DO:
    pcMemoStruct = get_struct(pcStruct,"memo").
@@ -165,6 +169,7 @@ liRequest = fCTChangeRequest(MobSub.msseq,
                   {&REQUEST_SOURCE_NEWTON}, 
                   0, /* order id */
                   0,
+                  pcContractID, /*dms, contract_id ->ReqCParam6*/
                   OUTPUT lcInfo).
 
 IF liRequest = 0 THEN DO:

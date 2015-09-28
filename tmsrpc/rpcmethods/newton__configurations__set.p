@@ -50,6 +50,16 @@ IF LOOKUP(pcSetting,"setFlag") > 0 THEN DO:
       RETURN appl_err(SUBST("Param not found &1", pcFlag)).
 
 END.
+ELSE IF LOOKUP(pcSetting,"setDMSFlag") > 0 THEN DO:
+   IF validate_struct(pcParamStruct,"flag!,value!") = ? THEN RETURN.
+   pcFlag = get_string(pcParamStruct, "flag").
+   piValue = get_int(pcParamStruct, "value").
+   
+   IF NOT(fCParam4SetI("1","DMS",pcFlag, piValue)) THEN 
+      RETURN appl_err(SUBST("Param not found &1", pcFlag)).
+
+END.
+
 ELSE DO:
    /* validate 2nd parameter struct */
    IF validate_struct(pcParamStruct,"value!,user!") = ? THEN RETURN.

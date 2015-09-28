@@ -20,7 +20,7 @@ DEF VAR pcUserName AS CHARACTER NO-UNDO.
 DEF VAR piOrderId AS INTEGER NO-UNDO. 
 DEF VAR pcIMEI AS CHAR NO-UNDO. 
 DEF VAR pcOfferId AS CHAR NO-UNDO.
-
+DEF VAR pcContractID AS CHAR NO-UNDO.
 DEF VAR liTermOfferItemID AS INTEGER NO-UNDO.
 DEF VAR lcCurrentContract AS CHARACTER NO-UNDO.
 DEF VAR ldaCurrentContractBegin AS DATE NO-UNDO.
@@ -36,12 +36,13 @@ IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
  
-lcStruct = validate_request(pcStruct,"order_id!,imei!,offer_id!,username!,update_imei_only").
+lcStruct = validate_request(pcStruct,"order_id!,imei!,offer_id!,username!,update_imei_only,contract_id").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
    piOrderId = get_pos_int(pcStruct,"order_id")
    pcIMEI = get_string(pcStruct,"imei")
+   pcContractID = get_string(pcStruct,"contract_id")
    pcOfferId = get_string(pcStruct,"offer_id")
    pcUserName = get_string(pcStruct,"username")
    llUpdateImeiOnly = get_bool(pcStruct,"update_imei_only") WHEN
@@ -406,6 +407,7 @@ ASSIGN
    bCreaReq.reqcparam1 = lcOldIMEI
    bCreaReq.reqcparam2 = pcIMEI
    bCreaReq.reqcparam3 = pcOfferId
+   bCreaReq.reqcparam6 = pcContractID
    bCreaReq.reqiparam1 = Order.OrderId
    bCreaReq.ReqSource  = {&REQUEST_SOURCE_NEWTON}.
 

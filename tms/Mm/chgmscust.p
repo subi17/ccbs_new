@@ -913,6 +913,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                                       "4",
                                       "",
                                       0, /* orig. request */
+                                      "", /*contract id*/
                                       OUTPUT lcError).
         
       IF liRequest = 0 THEN 

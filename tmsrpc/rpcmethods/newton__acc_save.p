@@ -60,6 +60,7 @@ DEF VAR pcMemoStruct AS CHAR NO-UNDO.
 DEF VAR pcMemoTitle AS CHAR NO-UNDO. 
 DEF VAR pcMemoContent AS CHAR NO-UNDO. 
 DEF VAR pcMandateId AS CHAR NO-UNDO. 
+DEF VAR pcContractID AS CHAR NO-UNDO.
 
 DEFINE VARIABLE lcDataFields AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liRequest AS INTEGER NO-UNDO. 
@@ -80,7 +81,7 @@ DEFINE TEMP-TABLE ttCustomer NO-UNDO LIKE Customer
 DEF VAR lcAgrCustID AS CHARACTER NO-UNDO.
 DEF VAR lcAgrCustIDType AS CHARACTER NO-UNDO.
 
-IF validate_request(param_toplevel_id, "int,string,datetime,struct,double,double,struct,string") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "int,string,datetime,struct,double,double,struct,string,string") EQ ? THEN RETURN.
 
 pdeChargeLimit = get_double(param_toplevel_id, "5").
 pdeCharge = get_double(param_toplevel_id, "4").
@@ -91,7 +92,7 @@ piMsSeq = get_int(param_toplevel_id, "0").
 pcMemoStruct = get_struct(param_toplevel_id,"6").
 
 pcMandateId = get_string(param_toplevel_id,"7").
-
+pcContractID = get_string(param_toplevel_id,"8"). 
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -273,6 +274,7 @@ liRequest = fMSCustChangeRequest(
    "",
    ({&REQUEST_SOURCE_NEWTON}),
    0, /* orig. request */
+   pcContractID,
    OUTPUT lcError).
   
 IF liRequest = 0 THEN
