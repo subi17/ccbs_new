@@ -46,7 +46,10 @@
  * @output success;boolean
  */
 {xmlrpc/xmlrpc_access.i}
+{commpaa.i}
+gcBrand = "1".
 {tmsconst.i}
+{create_eventlog.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
@@ -70,6 +73,7 @@ DEF VAR liSubLimit AS INT NO-UNDO.
 DEF VAR liSubs AS INT NO-UNDO. 
 
 DEF BUFFER bOriginalCustomer FOR Customer.
+DEF BUFFER bMobSub FOR MobSub.
 
 DEFINE TEMP-TABLE ttCustomer NO-UNDO LIKE Customer
    FIELD cBirthDay AS CHAR
@@ -159,46 +163,65 @@ END.
 ELSE ttCustomer.Country = "ES".
 
 /* index fields */ 
-ttCustomer.custname = get_string(pcStruct, "lname").
-ttCustomer.firstname = get_string(pcStruct, "fname").
-ttCustomer.zipcode = get_string(pcStruct, "zip").
-ASSIGN ttCustomer.SurName2 = get_string(pcStruct, "lname2") WHEN LOOKUP("lname2", lcStruct) > 0.
-ASSIGN ttCustomer.CompanyName = get_string(pcStruct,"company_name") WHEN LOOKUP("company_name", lcStruct) > 0.
-
 ASSIGN
-   ttCustomer.Address = get_string(pcStruct, "street")
    ttCustomer.region = get_string(pcStruct, "region")
    ttCustomer.postoffice = get_string(pcStruct, "city")
-   ttCustomer.language = LOOKUP(get_string(pcStruct, "language"), {&languages})
-   ttCustomer.nationality = get_string(pcStruct,"nationality")
    /* optional fields */
-   ttCustomer.country = get_string(pcStruct, "country") WHEN LOOKUP("country", lcStruct) > 0
    ttCustomer.smsnumber = get_string(pcStruct, "sms_number") WHEN LOOKUP("sms_number", lcStruct) > 0
    ttCustomer.phone = get_string(pcStruct, "phone_number") WHEN LOOKUP("phone_number", lcStruct) > 0
-   ttCustomer.coname = get_string(pcStruct, "coname") WHEN LOOKUP("coname", lcStruct) > 0
-   ttCustomer.HonTitle = get_string(pcStruct, "title") WHEN LOOKUP("title", lcStruct) > 0
-   ttCustomer.email = get_string(pcStruct, "email") WHEN LOOKUP("email", lcStruct) > 0
    ttCustomer.FoundationDate = get_date(pcStruct,"company_foundationdate") WHEN LOOKUP("company_foundationdate", lcStruct) > 0
-   ttCustomer.cbirthday = get_string(pcStruct, "birthday") WHEN LOOKUP("birthday", lcStruct) > 0
    /* marketing fields */
-   ttCustomer.DirMarkSMS = get_bool(pcStruct, "mark_sms") WHEN LOOKUP("mark_sms", lcStruct) > 0
-   ttCustomer.DirMarkEmail = get_bool(pcStruct, "mark_email") WHEN LOOKUP("mark_email", lcStruct) > 0
-   ttCustomer.DirMarkPost = get_bool(pcStruct, "mark_post") WHEN LOOKUP("mark_post", lcStruct) > 0
-   ttCustomer.OutMarkSMS = get_bool(pcStruct, "mark_sms_3rd") WHEN LOOKUP("mark_sms_3rd", lcStruct) > 0
-   ttCustomer.OutMarkEmail = get_bool(pcStruct, "mark_email_3rd") WHEN LOOKUP("mark_email_3rd", lcStruct) > 0
-   ttCustomer.OutMarkPost = get_bool(pcStruct, "mark_post_3rd") WHEN LOOKUP("mark_post_3rd", lcStruct) > 0
    ttCustomer.StreetCode = get_string(pcStruct, "street_code") WHEN LOOKUP("street_code", lcStruct) > 0
    ttCustomer.CityCode = get_string(pcStruct, "city_code") WHEN LOOKUP("city_code", lcStruct) > 0
    ttCustomer.TownCode = get_string(pcStruct, "municipality_code") WHEN LOOKUP("municipality_code", lcStruct) > 0.
+
+/* DCH */
+IF MobSub.PayType = FALSE AND
+   NOT CAN-FIND(FIRST bMobSub WHERE
+                      bMobSub.Brand     = "1" AND
+                      bMobSub.MsSeq    <> MobSub.MsSeq AND
+                      bMobSub.CustNum   = Customer.CustNum AND
+                      bMobSub.PayType   = FALSE) THEN DO:
+   ASSIGN
+      ttCustomer.cbirthday = get_string(pcStruct, "birthday") WHEN LOOKUP("birthday", lcStruct) > 0
+      ttCustomer.HonTitle = get_string(pcStruct, "title") WHEN LOOKUP("title", lcStruct) > 0
+      ttCustomer.firstname = get_string(pcStruct, "fname")
+      ttCustomer.custname = get_string(pcStruct, "lname")
+      ttCustomer.SurName2 = get_string(pcStruct, "lname2") WHEN LOOKUP("lname2", lcStruct) > 0
+      ttCustomer.CompanyName = get_string(pcStruct,"company_name") WHEN LOOKUP("company_name", lcStruct) > 0
+      ttCustomer.coname = get_string(pcStruct, "coname") WHEN LOOKUP("coname", lcStruct) > 0
+      ttCustomer.Address = get_string(pcStruct, "street")
+      ttCustomer.zipcode = get_string(pcStruct, "zip")   
+      ttCustomer.country = get_string(pcStruct, "country") WHEN LOOKUP("country", lcStruct) > 0
+      ttCustomer.nationality = get_string(pcStruct,"nationality")
+      ttCustomer.language = LOOKUP(get_string(pcStruct, "language"), {&languages})
+      ttCustomer.email = get_string(pcStruct, "email") WHEN LOOKUP("email", lcStruct) > 0
+      ttCustomer.BankAcct = get_string(pcStruct, "bankaccount") WHEN Mobsub.PayType = FALSE
+      ttCustomer.DirMarkSMS = get_bool(pcStruct, "mark_sms") WHEN LOOKUP("mark_sms", lcStruct) > 0
+      ttCustomer.DirMarkEmail = get_bool(pcStruct, "mark_email") WHEN LOOKUP("mark_email", lcStruct) > 0
+      ttCustomer.DirMarkPost = get_bool(pcStruct, "mark_post") WHEN LOOKUP("mark_post", lcStruct) > 0
+      ttCustomer.OutMarkSMS = get_bool(pcStruct, "mark_sms_3rd") WHEN LOOKUP("mark_sms_3rd", lcStruct) > 0
+      ttCustomer.OutMarkEmail = get_bool(pcStruct, "mark_email_3rd") WHEN LOOKUP("mark_email_3rd", lcStruct) > 0
+      ttCustomer.OutMarkPost = get_bool(pcStruct, "mark_post_3rd") WHEN LOOKUP("mark_post_3rd", lcStruct) > 0.
+
+   fUpdCustEvent(BUFFER bOriginalCustomer:HANDLE,
+                 katun,
+                 "ACC",
+                 STRING(bOriginalCustomer.CustNum) + CHR(255) + 
+                 STRING(MobSub.MsSeq) + CHR(255) + 
+                 pcSalesman,
+                 "",
+                 "Birthday,HonTitle,FirstName,CustName,SurName2,CompanyName," +
+                 "CoName,Address,ZipCode,Country,Nationality,Language,Email," +
+                 "BankAcct,DirMarkSMS,DirMarkEmail,DirMarkPost,OutMarkSMS," +
+                 "OutMarkEmail,OutMarkPost").
+END.
 
 IF ttCustomer.cbirthday > "" THEN DO:
    ttCustomer.Birthday = DATE(ttCustomer.cbirthday) NO-ERROR.
    IF ERROR-STATUS:ERROR THEN RETURN
       appl_err(SUBST("Incorrect birthday &1", ttCustomer.cbirthday)).
 END.
-
-IF Mobsub.PayType = FALSE THEN
-   ttCustomer.BankAcct = get_string(pcStruct, "bankaccount").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 

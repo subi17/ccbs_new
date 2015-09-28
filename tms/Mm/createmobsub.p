@@ -15,6 +15,10 @@
                   28.08.07/aam fatime from order
                   02.10.07/aam OrderTopup handling
                   04.02.08/aam dccli for pos-orders also
+                  11.08.2015 hugo.lujan YBU-4587 [DCH] - Authorized Document id
+                  value NIF/NIE is updated when handling a postpaid order in 
+                  status 6 and company is an existing company with an active 
+                  postpaid subscription.
   Version ......: yoigo
 -------------------------------------------------------------------------- */
 
@@ -78,6 +82,7 @@ DEF BUFFER bMsRequest  FOR MsRequest.
 DEF BUFFER lbOrder     FOR Order.
 DEF BUFFER lbMobSub    FOR MobSub.
 DEF BUFFER lbOrderCustomer FOR OrderCustomer.
+DEFINE BUFFER lbMobSubAD1 FOR MobSub.
 
 FIND FIRST MSRequest WHERE 
            MSRequest.MSrequest = iiMSrequest
@@ -181,8 +186,7 @@ FOR EACH OrderCustomer NO-LOCK WHERE
    END CASE.
    
    /* Create contact data for corporate customers */
-   IF llCorporate AND
-      (OrderCustomer.RowType = 1 OR OrderCustomer.Rowtype = 5) THEN DO:
+   IF llCorporate AND OrderCustomer.Rowtype = 5 THEN DO:
       
       RUN createcustcontact.p(
           Order.OrderId,
@@ -198,6 +202,21 @@ FOR EACH OrderCustomer NO-LOCK WHERE
                           msrequest.custnum,
                           "CUSTOMER CONTACT CREATION FAILED",
                           lcError).
+      END.
+   END.
+   ELSE IF OrderCustomer.Rowtype = 1 AND
+           CliType.PayType = 1 AND
+           NOT CAN-FIND(FIRST lbMobSubAD1 WHERE
+                              lbMobSubAD1.Brand     = gcBrand AND
+                              lbMobSubAD1.MsSeq    <> MobSub.MsSeq AND
+                              lbMobSubAD1.CustNum   = MobSub.CustNum AND
+                              NOT lbMobSubAD1.PayType) THEN DO:
+      FIND FIRST Customer EXCLUSIVE-LOCK WHERE
+                 Customer.CustNum = MsRequest.Custnum NO-ERROR.
+      IF AVAILABLE Customer THEN DO:      
+         ASSIGN Customer.AuthCustId     = Order.OrdererID
+                Customer.AuthCustIdType = Order.OrdererIDType.
+         RELEASE Customer.
       END.
    END.
 END.

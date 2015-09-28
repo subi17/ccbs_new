@@ -73,7 +73,10 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
    ASSIGN
       ufk   = 0  
       ufk[1]= 7  
-      ufk[5]= 1096 WHEN Customer.CustIdType = "CIF" 
+      ufk[5]= 1096 WHEN CAN-FIND(FIRST CustContact WHERE
+                                       CustContact.Brand = gcBrand AND
+                                       CustContact.Custnum = Customer.Custnum AND
+                                       CustContact.CustType = 5)
       ufk[8]= 8 
       ehto = 0.
    RUN ufkey.

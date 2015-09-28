@@ -16,7 +16,6 @@ DEF VAR lcminMSISDN     AS CHAR NO-UNDO FORMAT "X(10)".
 DEF VAR lcmaxMSISDN     AS CHAR NO-UNDO FORMAT "X(10)".
 DEF VAR liMSISDN_status AS INT  NO-UNDO FORMAT "Z9".
 DEF VAR liCounter       AS INT NO-UNDO INIT 0.
-DEF VAR llContinue      AS LOGICAL NO-UNDO INIT FALSE.
 
 FORM
    SKIP
@@ -53,6 +52,8 @@ FUNCTION fReleaseSIM RETURNS LOG (INPUT icICC AS CHAR):
    FOR FIRST SIM EXCLUSIVE-LOCK WHERE
              SIM.Brand EQ gcBrand AND
              SIM.ICC   EQ icICC   AND
+            (SIM.Stock EQ "TESTING" OR
+             SIM.Stock EQ "EMATESTING") AND
              SIM.SimStat <> 1:
       SIM.SimStat = 1.
    END.
@@ -186,20 +187,9 @@ FOR EACH MSISDN NO-LOCK WHERE
    ELSE DO:
       FIND FIRST SIM WHERE
                  SIM.Brand EQ gcBrand   AND
-                 SIM.ICC   EQ Order.ICC  NO-LOCK NO-ERROR.
-      IF AVAIL SIM THEN   /* If stock not correct then ask confirmation */
-         IF NOT (SIM.Stock EQ "TESTING" OR
-                 SIM.Stock EQ "EMATESTING") THEN DO:
-            llContinue = FALSE.
-            MESSAGE "Incorrect SIM Stock (" + SIM.Stock + "). Release SIM anyway?" 
-            VIEW-AS ALERT-BOX QUESTION
-            BUTTONS YES-NO
-            SET llContinue.
-            IF NOT llContinue THEN DO:
-               DISPLAY "MSISDN nro: " + MSISDN.CLI + " Incorrect SIM Stock:" + SIM.Stock FORMAT "X(70)". 
-               NEXT.
-            END.
-         END.
+                 SIM.ICC   EQ Order.ICC AND
+                (SIM.Stock EQ "TESTING" OR
+                 SIM.Stock EQ "EMATESTING") NO-LOCK NO-ERROR.
       IF NOT AVAIL SIM THEN DO:
          DISPLAY "MSISDN nro: " + MSISDN.CLI + " SIM does not belong to testing tool" FORMAT "X(70)". 
          NEXT.

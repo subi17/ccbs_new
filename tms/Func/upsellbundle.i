@@ -22,7 +22,6 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
     INPUT iiCustNum     AS INT,
     INPUT ilPayType     AS LOG,
     INPUT icUpsellType  AS CHAR,
-    INPUT icUpsellId    AS CHAR,
     INPUT icCaller      AS CHAR):
 
    DEF VAR ldTS                  AS DEC  NO-UNDO.
@@ -66,11 +65,8 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
          RETURN "".
       END. /* FOR EACH bServiceLimit WHERE */
    END.
-   /*Mobsub*/
    ELSE DO:
-      IF icCaller EQ {&REQUEST_SOURCE_YOIGO_TOOL} OR
-         icUpsellId EQ "DATA200_UPSELL" OR 
-         icUpsellId EQ "DSS200_UPSELL"  THEN DO:
+      IF icCaller = {&REQUEST_SOURCE_YOIGO_TOOL} THEN DO:
          FOR EACH bMServiceLimit NO-LOCK WHERE
                   bMServiceLimit.MsSeq   = iiMsSeq AND
                   bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} AND
@@ -81,9 +77,7 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
             FIRST DayCampaign NO-LOCK WHERE
                   DayCampaign.Brand = gcBrand AND
                   DayCampaign.DCEvent = bServiceLimit.GroupCode AND
-                  INDEX(DayCampaign.DCEvent,"UPSELL") = 0 AND
-                  DayCampaign.DCEvent <> "BONO_VOIP" AND
-                  DayCampaign.DCEvent <> "HSPA_ROAM_EU":
+                  DayCampaign.DCEvent <> "BONO_VOIP".
             RETURN bServiceLimit.GroupCode.
          END. /* FOR EACH bMServiceLimit NO-LOCK WHERE */
       END.
@@ -98,6 +92,9 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
             FIRST DayCampaign NO-LOCK WHERE
                   DayCampaign.Brand = gcBrand AND
                   DayCampaign.DCEvent = bServiceLimit.GroupCode AND
+                  /* made workaround for staging with ilp configuration
+                     need to be restudied while ilp is taken in use */
+                  DayCampaign.BundleUpsell NE "DATA200_UPSELL" AND
                   DayCampaign.BundleUpsell > "":
             IF {dss_search.i "DayCampaign.DCEvent"} THEN NEXT.
             RETURN bServiceLimit.GroupCode.
@@ -269,7 +266,6 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
                                             lbMobSub.CustNum,
                                             lbMobSub.PayType,
                                             "Customer",
-                                            icDCEvent,
                                             icSource).
 
    /* check if subscription level basic contract exist */
@@ -278,13 +274,13 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
                                                lbMobSub.CustNum,
                                                lbMobSub.PayType,
                                                "MobSub",
-                                               icDCEvent,
                                                icSource).
 
    IF lcBaseContract = "" THEN DO:
       ocError = "Data contract does not exist". 
       RETURN FALSE.
    END.
+
    FIND FIRST DayCampaign WHERE
               DayCampaign.Brand    = gcBrand AND
               DayCampaign.DCEvent  = lcBaseContract AND
@@ -295,14 +291,14 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
    END.
 
    /* Should not allow to create other data upsell once DSS1/2 is active */
-   IF LOOKUP(icDCEvent, DayCampaign.BundleUpsell) EQ 0 THEN DO : 
-      IF LOOKUP(DayCampaign.DCEvent,{&DSS_BUNDLES}) > 0 THEN
+   IF LOOKUP(icDCEvent, DayCampaign.BundleUpsell) EQ 0 THEN DO : /*ilp*/
+       IF LOOKUP(DayCampaign.DCEvent,{&DSS_BUNDLES}) > 0 THEN
           ocError = icDCEvent + " is not allowed because DSS " +
                     "is active for this customer".
       /* allow upsell to any data contract by bob tool */
       ELSE IF icSource NE {&REQUEST_SOURCE_YOIGO_TOOL} THEN
          ocError = "Incorrect upsell type".
-      ELSE IF ocError <> "" THEN
+      IF ocError <> "" THEN
          RETURN FALSE.
    END. /* IF lcCustBaseContract = {&DSS} AND */
   

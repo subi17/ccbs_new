@@ -51,7 +51,6 @@ lcContract = fGetUpSellBasicContract(MobSub.MsSeq,
                                      MobSub.CustNum,
                                      MobSub.PayType,
                                      "MobSub",
-                                     "",
                                      {&REQUEST_SOURCE_EXTERNAL_API}).
 IF lcContract NE "" THEN DO:
 
@@ -122,7 +121,6 @@ IF Mobsub.PayType = FALSE THEN
                                                 MobSub.CustNum,
                                                 MobSub.PayType,
                                                 "Customer",
-                                                "",
                                                 {&REQUEST_SOURCE_EXTERNAL_API}).
 IF lcCustomerContract NE "" THEN DO:
    FIND FIRST DayCampaign WHERE

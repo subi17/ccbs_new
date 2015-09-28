@@ -401,6 +401,7 @@ IF NOT MobSub.PayType THEN DO:
             liDSS200Count = liCount.
          ELSE liDssUpsellCount = liDssUpsellCount + liCount.
       END.
+
       IF lcDSSBundleId EQ "DSS2" THEN DO:
 
          fGetMsOwnerTempTable(MobSub.Custnum,first_of_month,
@@ -492,7 +493,7 @@ DO liLoop = 1 TO 3:
              ldeDataBundleUsage = 0.
 
       IF MServiceLimit.DialType = {&DIAL_TYPE_GPRS} THEN DO:
-      /* d*200 is done under gprs*/
+      /*ilkka d*200 laskenta gprs-typen alle.*/
          /* Check DSS Upgrade upsell limit */
          FIND FIRST MsRequest NO-LOCK WHERE
                     MsRequest.MsSeq      = MobSub.MsSeq AND

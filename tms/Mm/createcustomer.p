@@ -3,7 +3,10 @@
   TASK .........: create new customer from order
   CREATED ......: JP
   CHANGED ......: 20.11.06/aam new db structure
-                  12.04.07/aam update old customer's bank data 
+                  12.04.07/aam update old customer's bank data
+                  23.07.2015 hugo.lujan YPR-1949 [DCH] TMS - Residential 
+                  customer information is updated when handling a new/mnp 
+                  order and order is in status 6 
   Version ......: yoigo
 -------------------------------------------------------------------------- */
 {commali.i} 
@@ -14,6 +17,7 @@
 {tmsconst.i}
 {order.i}
 {fcustdata.i}
+{create_eventlog.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -37,8 +41,12 @@ DEF VAR liTarget     AS INT  NO-UNDO.
 DEF VAR lcInvGroup   AS CHAR NO-UNDO.
 DEF VAR lcRegion     AS CHAR NO-UNDO.
 DEF VAR llOk         AS LOG  NO-UNDO.
+DEF VAR lcFields     AS CHAR NO-UNDO.
+DEF VAR llUpdateCust AS LOG  NO-UNDO.
 
 DEF BUFFER bOrderCustomer FOR OrderCustomer.
+DEF BUFFER bCurrentCust FOR Customer.
+DEF BUFFER bMobSub FOR MobSub.
 
 FIND FIRST Order WHERE
            Order.Brand   = gcBrand AND
@@ -51,7 +59,8 @@ IF locked(Order) THEN DO:
 END.
 
 ASSIGN llCreateCust = FALSE
-       liOldCustNum = 0.
+       liOldCustNum = 0
+       llUpdateCust = FALSE.
 
 /* is there a need to create customer */
 IF iiRole = 2 AND Order.InvCustRole NE 2 THEN RETURN.
@@ -208,6 +217,10 @@ ELSE DO:
    IF NOT AVAILABLE Customer THEN
       RETURN "ERROR:Customer not found".
 
+   /* DCH - Store previous values */
+   FIND bCurrentCust WHERE
+        bCurrentCust.CustNum = Customer.CustNum NO-LOCK NO-ERROR.
+
    FIND FIRST OrderCustomer NO-LOCK WHERE
               OrderCustomer.Brand   = gcBrand   AND
               OrderCustomer.OrderID = iiOrderID AND
@@ -224,83 +237,180 @@ ELSE DO:
       Customer.OutMarkEmail = OrderCustomer.OutEMailMarketing
       Customer.OutMarkPOST  = OrderCustomer.OutPostMarketing.
       
-   /* Remove order handling */
+   /* Renove order handling */
    IF Order.OrderType = {&ORDER_TYPE_RENEWAL} THEN DO:
 
-      IF OrderCustomer.DataChecked = TRUE THEN
+      IF OrderCustomer.DataChecked = TRUE THEN DO:
          fmakeCustomer(Order.OrderID,
-                       iiRole,    
+                       iiRole,
                        FALSE,
                        oiCustnum,
                        FALSE).
+         /* DCH */
+         fUpdCustEvent(BUFFER bCurrentCust:HANDLE,
+                       katun,
+                       "Order",
+                       STRING(bCurrentCust.CustNum) + CHR(255) +
+                       STRING(Order.OrderId) + CHR(255) +
+                       Order.Salesman,
+                       "",
+                       "Birthday,HonTitle,FirstName,CustName,SurName2," +
+                       "CompanyName,CoName,Address,ZipCode,Country," +
+                       "Nationality,Language,Email,BankAcct,DirMarkSMS," +
+                       "DirMarkEmail,DirMarkPost,OutMarkSMS,OutMarkBank," +
+                       "OutMarkEmail,OutMarkPost,Profession,SearchName," +
+                       "PostOffice,Region,Phone,SMSNumber,CustIDType," +
+                       "OrgId,Sex,ExtInvRef,Category,InvoiceTargetRule," +
+                       "InvCode,InvGroup").
+      END.
 
       /* Update Email and Delivery type for all type of renewal orders */
       IF AVAIL OrderCustomer THEN
          fUpdEmailDelType(Order.OrderId).
    END.
-   ELSE IF Order.ORderType EQ {&ORDER_TYPE_STC} THEN DO:
+   ELSE IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN DO:
       /* bank account is changed with a separate request from stc process */
       ASSIGN
          Customer.SMSNumber   = OrderCustomer.MobileNumber.
       fUpdateEmail(Order.OrderId).
    END.
-   ELSE DO:
-      
-      FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
-                 OrderCustomer.Brand   = gcBrand   AND
-                 OrderCustomer.OrderID = iiOrderID AND
-                 OrderCustomer.RowType = iiRole  NO-ERROR.
+   /* DCH */
+   ELSE IF Order.OrderType EQ {&ORDER_TYPE_NEW} OR
+           Order.OrderType EQ {&ORDER_TYPE_MNP} THEN DO:
 
-      IF AVAILABLE OrderCustomer THEN DO:
-      
-         IF llDoEvent THEN DO:
-            DEFINE VARIABLE lhOrderCustomer AS HANDLE NO-UNDO.
-            lhOrderCustomer = BUFFER OrderCustomer:HANDLE.
-            RUN StarEventInitialize(lhOrderCustomer).
-            IF llDoEvent THEN RUN StarEventSetOldBuffer ( lhOrderCustomer ).
-         END.
-      
+      IF llDoEvent THEN DO:
+         DEFINE VARIABLE lhOrderCustomer AS HANDLE NO-UNDO.
+         lhOrderCustomer = BUFFER OrderCustomer:HANDLE.
+         RUN StarEventInitialize(lhOrderCustomer).
+         IF llDoEvent THEN RUN StarEventSetOldBuffer ( lhOrderCustomer ).
+      END.
+
+      FIND CURRENT OrderCustomer EXCLUSIVE-LOCK NO-ERROR.
+      ASSIGN
+         OrderCustomer.CustNum = oiCustNum
+         OrderCustomer.PersonID = "OLD" WHEN OrderCustomer.PersonID EQ "".
+      FIND CURRENT OrderCustomer NO-LOCK NO-ERROR.
+
+      IF llDoEvent THEN RUN StarEventMakeModifyEvent ( lhOrderCustomer ).
+
+      FIND FIRST MobSub NO-LOCK WHERE
+                 MobSub.Brand   = gcBrand AND
+                 MobSub.MsSeq   = Order.MsSeq AND
+                 MobSub.CustNum = Customer.CustNum NO-ERROR.
+
+      IF AVAILABLE MobSub THEN DO:
+         IF MobSub.PayType = FALSE AND
+            NOT CAN-FIND(FIRST bMobSub WHERE
+                               bMobSub.Brand     = gcBrand AND
+                               bMobSub.MsSeq    <> MobSub.MsSeq AND
+                               bMobSub.CustNum   = Customer.CustNum AND
+                               bMobSub.PayType   = FALSE) THEN
+            llUpdateCust = TRUE.
+      END.
+      ELSE DO:
+         IF Order.PayType = FALSE AND
+            NOT CAN-FIND(FIRST bMobSub WHERE
+                               bMobSub.Brand    = gcBrand AND
+                               bMobSub.CustNum  = Customer.CustNum AND
+                               bMobSub.PayType  = FALSE) THEN
+            llUpdateCust = TRUE.
+      END.
+
+      IF llUpdateCust THEN DO:
          ASSIGN
-            OrderCustomer.CustNum = oiCustNum
-            OrderCustomer.PersonID = "OLD" WHEN OrderCustomer.PersonID EQ "".
-            
-         IF llDoEvent THEN RUN StarEventMakeModifyEvent ( lhOrderCustomer ).
+            Customer.HonTitle        = OrderCustomer.CustTitle
+            Customer.FirstName       = TRIM(OrderCustomer.FirstName)
+            Customer.CustName        = TRIM(OrderCustomer.Surname1)
+            Customer.SurName2        = TRIM(OrderCustomer.SurName2)
+            Customer.Nationality     = OrderCustomer.Nationality
+            Customer.Language        = INTEGER(OrderCustomer.Language)
+            Customer.BirthDay        = OrderCustomer.BirthDay
+            Customer.Phone           = OrderCustomer.FixedNumber
+            Customer.SMSNumber       = OrderCustomer.MobileNumber
+            Customer.BankAcc         = OrderCustomer.BankCode
+            Customer.DirMarkSMS      = OrderCustomer.OperSMSMarketing
+            Customer.Address         = OrderCustomer.Address
+            Customer.ZipCode         = OrderCustomer.ZipCode
+            Customer.PostOffice      = OrderCustomer.PostOffice
+            Customer.Region          = OrderCustomer.Region
+            Customer.Country         = OrderCustomer.Country
+            Customer.DirMarkEmail    = OrderCustomer.OperEMailMarketing
+            Customer.DirMarkPOST     = OrderCustomer.OperPostMarketing
+            Customer.OutMarkSMS      = OrderCustomer.OutSMSMarketing
+            Customer.OutMarkEmail    = OrderCustomer.OutEMailMarketing
+            Customer.OutMarkPOST     = OrderCustomer.OutPostMarketing
+            Customer.OutMarkBank     = OrderCustomer.OutBankMarketing
+            Customer.CompanyName     = TRIM(OrderCustomer.Company) WHEN
+                                       TRIM(OrderCustomer.Company) > ""
+            Customer.FoundationDate  = OrderCustomer.FoundationDate WHEN
+                                       OrderCustomer.CustIdType = "CIF"
+            Customer.Profession      = TRIM(OrderCustomer.Profession) WHEN
+                                       TRIM(OrderCustomer.Profession) > "".
 
-         /* Update Email and Delivery type for all type of customers */
-         fUpdEmailDelType(Order.OrderId).
-
-         /* Update Authorized person data with company orders */
-         IF iiRole = 1 AND OrderCustomer.CustIdType = "CIF" AND
+         IF OrderCustomer.CustIdType = "CIF" AND
             Customer.CustIdType = "CIF" THEN
-            ASSIGN
-               Customer.HonTitle     = OrderCustomer.CustTitle
-               Customer.FirstName    = TRIM(OrderCustomer.FirstName)
-               Customer.CustName     = TRIM(OrderCustomer.Surname1)
-               Customer.SurName2     = TRIM(OrderCustomer.SurName2)
-               Customer.SearchName   = SUBSTR(Customer.CustName +
-                                              Customer.FirstName,1,8)
-               Customer.Nationality  = OrderCustomer.Nationality
-               Customer.Language     = INTEGER(OrderCustomer.Language)
-               Customer.Phone        = OrderCustomer.FixedNumber
-               Customer.SMSNumber    = OrderCustomer.MobileNumber.
+         CASE iiRole:
+            WHEN 1 THEN ASSIGN
+               Customer.AuthCustId      = Order.OrdererID
+               Customer.AuthCustIdType  = Order.OrdererIDType.
+            WHEN 5 THEN DO:
+               FIND CustContact WHERE 
+                    CustContact.Brand = gcBrand AND
+                    CustContact.Custnum = Customer.CustNum AND
+                    CustContact.CustType = iiRole EXCLUSIVE-LOCK NO-ERROR.
+               IF AVAILABLE CustContact THEN DO:
+                  ASSIGN
+                     CustContact.HonTitle       = OrderCustomer.CustTitle
+                     CustContact.FirstName      = OrderCustomer.FirstName
+                     CustContact.CustName       = OrderCustomer.Surname1
+                     CustContact.Surname2       = OrderCustomer.Surname2
+                     CustContact.Nationality    = OrderCustomer.Nationality
+                     CustContact.Language       = INT(OrderCustomer.Language)
+                     CustContact.SMSNumber      = OrderCustomer.MobileNumber
+                     CustContact.Email          = OrderCustomer.Email
+                     CustContact.CustIdType     = OrderCustomer.CustIdType
+                     CustContact.OrgId          = OrderCustomer.Custid.
+               END.
+            END.
+         END CASE.
+
+         fUpdEmailDelType(Order.OrderId).
 
          /* check if bank data is now available */
          IF iiRole = 1 OR iiRole = 2 THEN DO:
             IF AVAILABLE Customer AND Customer.BankAcc = "" AND
                Customer.OrgID = OrderCustomer.CustID
             THEN DO:
-               
+
                FIND Current Customer EXCLUSIVE-LOCK.
                Customer.BankAcc = OrderCustomer.BankCode.
-               
+
                IF OrderCustomer.PersonID = "NEW" AND
                   Order.MNPStatus > 0 THEN
                   ASSIGN
                      Customer.OrgId = OrderCustomer.CustId
                      Customer.CustIdType = OrderCustomer.CustIdType.
-            END. 
+            END.
          END.
-      END.
+
+         ASSIGN lcFields = "HonTitle,FirstName,CustName,Surname2,Nationality," +
+                           "Language,Birthday,Phone,SMSNumber,BankAcct,DirMarkSMS," +
+                           "DirMarkEmail,DirMarkPOST,OutMarkSMS,OutMarkEmail," +
+                           "OutMarkPOST,OutMarkBank,Email,DelType,CompanyName," +
+                           "Address,ZipCode,PostOffice,Region,Country".
+
+         IF OrderCustomer.CustIdType NE "CIF" THEN 
+            lcFields = lcFields + ",Profession,AuthCustIdType,AuthCustId".
+
+         fUpdCustEvent(BUFFER bCurrentCust:HANDLE,
+                       katun,
+                       "Order",
+                       STRING(bCurrentCust.CustNum) + CHR(255) +
+                       STRING(Order.OrderId) + CHR(255) +
+                       Order.Salesman,
+                       "",
+                       lcFields).
+      END. /* IF llUpdateCust THEN DO: */
    END.
    
    IF llDoEvent THEN RUN StarEventMakeModifyEvent ( lhCustomer ).

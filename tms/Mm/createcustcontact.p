@@ -66,15 +66,7 @@ ELSE IF lldoevent THEN RUN StarEventSetOldBuffer(lhCustContact).
 ASSIGN
    CustContact.Brand          = gcBrand 
    CustContact.Custnum        = iiCustnum
-   CustContact.CustType       = iiRowType.
-
-IF OrderCustomer.RowType = {&CUSTCONTACT_REPRESENTATIVE} THEN DO:  
-   ASSIGN
-      CustContact.CustIdType     = Order.OrdererIDType
-      CustContact.OrgId          = Order.OrdererID.
-END.
-ELSE DO:
-   ASSIGN
+   CustContact.CustType       = iiRowType
    CustContact.HonTitle       = OrderCustomer.CustTitle
    CustContact.FirstName      = OrderCustomer.FirstName
    CustContact.CustName       = OrderCustomer.Surname1
@@ -98,7 +90,6 @@ ELSE DO:
    CustContact.AddressCodC    = OrderCustomer.AddressCodC
    CustContact.AddressCodP    = OrderCustomer.AddressCodP
    CustContact.AddressCodM    = OrderCustomer.AddressCodM. 
-END.
 
 IF llDoEvent THEN DO:
    IF NEW CustContact THEN RUN StarEventMakeCreateEvent (lhCustContact).

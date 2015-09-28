@@ -703,6 +703,7 @@ PROCEDURE pFinalize:
    DEF VAR lcDataBundleCLITypes    AS CHAR NO-UNDO.
 
    DEF BUFFER bSubRequest FOR MsRequest.
+   DEF BUFFER bMobSubCust FOR MobSub.
    
    /* now when billtarget has been updated new fees can be created */
 
@@ -917,6 +918,23 @@ PROCEDURE pFinalize:
                           MobSub.Custnum,
                           "Voicemail language change failed",
                           lcError).
+   END.
+
+   /* DCH */
+   IF bOldType.PayType = 2 AND CLIType.PayType  = 1 AND
+      NOT CAN-FIND(FIRST bMobSubCust WHERE
+                         bMobSubCust.Brand     = gcBrand AND
+                         bMobSubCust.MsSeq    <> MobSub.MsSeq AND
+                         bMobSubCust.CustNum   = Customer.CustNum AND
+                         bMobSubCust.PayType   = FALSE) THEN DO:
+
+      fUpdCustEvent(BUFFER Customer:HANDLE,
+                    katun,
+                    "STC",
+                    STRING(Customer.CustNum) + CHR(255) +
+                    STRING(MobSub.MsSeq) + CHR(255) + "",
+                    "",
+                    "BankAcct").
    END.
 
    /* Finalize fusion STC order **/

@@ -121,8 +121,6 @@ FRAME sel.
 
 
 form /* ADD */
-   "Rate ID.....:" Tariff.TariffNum FORMAT ">>>>>9"
-      help "Tarif ID number" SKIP
    "CCN ........:" Tariff.CCN
       help "Call case number"
       CCN.CCNName  format "x(30)" AT 32 SKIP
@@ -132,6 +130,9 @@ form /* ADD */
    "Pricelist ..:" Tariff.PriceList FORMAT "X(16)" 
       help "Pricelist code"
       PriceList.PLName   format "x(22)" AT 32 SKIP
+   "Customer ...:" Tariff.CustNum FORMAT ">>>>>>>>"
+      help "Customer number"
+      Customer.CustName FORMAT "x(30)" AT 32 SKIP
    "--------------------------------------------------------------------"
    SKIP
    "Valid during ..:" 
@@ -1735,7 +1736,6 @@ PROCEDURE pUpdate.
                     CCN.CCN   = Tariff.CCN
          NO-LOCK NO-ERROR.
          DISPLAY
-            Tariff.TariffNum
             Tariff.CCN
             CCN.CCNName
          WITH FRAME lis.
@@ -1753,11 +1753,21 @@ PROCEDURE pUpdate.
             Tariff.CurrUnit
          WITH FRAME lis.
       END. 
+      ELSE IF Tariff.CustNum NE 0 THEN DO:
+         FIND FIRST Customer WHERE
+                    Customer.CustNum = Tariff.CustNum
+         NO-LOCK NO-ERROR.
+         DISPLAY
+            Tariff.CustNum 
+            Customer.CustName
+         WITH FRAME lis.
+      END. 
 
       UPDATE
          Tariff.CCN       WHEN iiCCN = 0
          Tariff.BDest
          Tariff.PriceList WHEN (icPlist = "" AND iiCust = 0)
+         Tariff.CustNum   WHEN iiCust = 0
       WITH FRAME lis EDITING:
 
          READKEY.
@@ -1827,6 +1837,31 @@ PROCEDURE pUpdate.
                END.
 
             END.
+            ELSE IF FRAME-FIELD = "Tariff.CustNum" THEN DO:
+               ASSIGN Tariff.CustNum.
+               IF Tariff.CustNum NE 0 AND Tariff.PriceList NE "" THEN DO:
+                  MESSAGE
+                     "You define both PriceList and Customer Number !"
+                  VIEW-AS ALERT-BOX ERROR.
+                  NEXT. 
+               END.
+               ELSE IF Tariff.CustNum NE 0 THEN DO:
+                   FIND FIRST Customer WHERE
+                              Customer.CustNum = Tariff.CustNum
+                   NO-LOCK NO-ERROR.
+                   IF NOT AVAIL Customer THEN DO:
+                      MESSAGE
+                         "Unknown customer number !"
+                      VIEW-AS ALERT-BOX ERROR.
+                      NEXT.
+                   END.
+                   DISP
+                      Tariff.CustNum
+                      Customer.CustName
+                   WITH FRAME lis.
+               END.
+
+            END.
             ELSE IF FRAME-FIELD = "Tariff.BDest" THEN DO:
                ASSIGN FRAME lis Tariff.BDest.
                IF Tariff.BDest = "" THEN
@@ -1889,12 +1924,23 @@ PROCEDURE pUpdate.
       END.
       ELSE DISPLAY "" @ BDest.BDName WITH FRAME lis.
 
+      IF Tariff.CustNum > 0 THEN DO:
+         FIND FIRST Customer WHERE
+                    Customer.CustNum = Tariff.CustNum
+         NO-LOCK NO-ERROR.
+         IF AVAILABLE Customer THEN
+            DISPLAY Customer.CustName WITH FRAME lis.
+         ELSE 
+            DISPLAY "* UNKNOWN *" @ Customer.CustName WITH FRAME lis.
+      END. 
+      ELSE DISPLAY "" @ Customer.CustName WITH FRAME lis.
+
       DISPLAY 
-         Tariff.TariffNum
          lcCName          @ CCN.CCNName
          Tariff.CCN
          Tariff.BDest
          Tariff.PriceList
+         Tariff.CustNum
          Tariff.CurrUnit
          plname           @ PriceList.PLName
          Currency

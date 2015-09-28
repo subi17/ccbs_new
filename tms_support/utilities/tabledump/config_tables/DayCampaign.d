@@ -44,17 +44,17 @@
 "DATA5" 01/09/13 4 31/12/49 "DATA5" 0 "" "" "Bono 5" 93 0 "1" "4" 4 1 0 0 "DATA5MF" "" "" 0 1 0 yes 1 0 0 2 "DATA6_UPSELL" 68
 "DATA5_UPSELL" 01/09/13 4 31/12/49 "DATA5" 0 "" "" "Data Upsell 5" 93 0 "1" "6" 1 2 1 0 "DATA5MFUPS" "" "" 3 1 0 yes 100 0 0 1 "" 0
 "DATA6" 01/05/14 4 31/12/49 "DATA6" 0 "" "" "Bono 1 GB" 93 0 "1" "4" 4 1 0 0 "DATA6MF" "" "" 0 1 0 yes 1 0 0 1 "DATA6_UPSELL" 1
-"DATA6_UPSELL" 01/05/14 4 31/12/49 "DATA6" 0 "" "" "Ampliación 1,5 GB" 93 0 "1" "6" 1 2 1 0 "DATA6MFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0
+"DATA6_UPSELL" 01/05/14 4 31/12/49 "DATA6" 0 "" "" "Extension 1 GB" 93 0 "1" "6" 1 2 1 0 "DATA6MFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0
 "DATA9_UPSELL" 01/12/12 4 31/12/49 "" 0 "" "" "Data Upsell 9" 93 0 "1" "6" 1 2 1 0 "DATA9MFUPS" "" "" 3 1 0 yes 100 0 0 2 "" 0
 "DSS" 23/11/11 4 31/12/49 "DSS" 0 "" "" "Data Sharing Service" 93 0 "1" "4" 4 1 0 0 "DSSMF" "" "" 0 1 0 yes 1 0 0 2 "DSS_UPSELL" 0
 "DSS2" 01/09/13 4 31/12/49 "DSS2" 0 "" "" "Data Sharing Service 2" 93 0 "1" "4" 4 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "DSS2_UPSELL" 0
-"DSS2_UPSELL" 01/09/13 4 31/12/49 "DSS2" 0 "" "" "Internet compartido - Ampliación 1,5 GB" 93 0 "1" "6" 1 2 1 0 "DSS2MFUPS" "" "" 3 1 0 yes 100 0 0 1 "" 0
-"DSS_UPSELL" 23/11/11 4 31/12/49 "DSS" 0 "" "" "Internet compartido - Ampliación 1,5 GB" 93 0 "1" "6" 1 2 1 0 "DSSMFUPS" "" "" 3 1 0 yes 100 0 0 1 "" 0
+"DSS2_UPSELL" 01/09/13 4 31/12/49 "DSS2" 0 "" "" "Data Sharing 2 Service Upsell" 93 0 "1" "6" 1 2 1 0 "DSS2MFUPS" "" "" 3 1 0 yes 100 0 0 1 "" 0
+"DSS_UPSELL" 23/11/11 4 31/12/49 "DSS" 0 "" "" "Data Sharing Service Upsell" 93 0 "1" "6" 1 2 1 0 "DSSMFUPS" "" "" 3 1 0 yes 100 0 0 1 "" 0
 "DSS_UPSELL_UPGRADE" 23/03/12 4 31/12/49 "UPGRADEDATA" 0 "" "" "Upsell Upgrade DSS customer" 93 0 "1" "6" 1 2 1 0 "" "" "" 3 1 0 yes 100 0 0 2 "" 0
 "DUB" 31/01/11 4 31/12/49 "DUB" 0 "" "" "Data Usage Bundle 500 MB" 93 0 "1" "4" 4 1 0 0 "" "" "" 0 1 0 yes 1 0 0 2 "" 1
 "DUB2" 01/05/12 4 31/12/49 "DUB2" 0 "" "" "Data Usage Bundle 1 GB" 93 0 "1" "4" 4 1 0 0 "CONT7MF" "" "" 0 1 0 yes 1 0 0 2 "" 59
 "DUB3" 01/12/12 4 31/12/49 "DUB3" 0 "" "" "Data Usage Bundle 1 GB" 93 0 "1" "4" 4 1 0 0 "CONT8MF" "" "" 0 1 0 yes 1 0 0 1 "" 59
-"GPRS" 01/12/06 6 31/12/54 "14100001" 1.653 "1" "" "GPRS maximum charge per day" 93 1.653 "1" "2" 2 1 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "" 0
+"GPRS" 01/12/06 6 31/12/54 "14100001" 1.2 "1" "" "GPRS maximum charge per day" 93 1.2 "1" "2" 2 1 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "" 0
 "HSPA_ROAM_EU" 10/10/12 4 31/12/49 "14104019" 0 "" "" "HSPA Roaming EU" 90 0 "1" "8" 1 2 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "" 0
 "MDUB" 01/03/10 4 31/12/49 "MDUB" 0 "" "" "Bono 8" 93 0 "1" "4" 4 1 0 0 "MDUBMF" "" "" 0 1 0 yes 1 0 0 2 "DATA6_UPSELL" 68
 "MDUB2" 01/02/11 4 31/12/49 "MDUB2" 0 "" "" "Bono 15" 93 0 "1" "4" 4 1 0 0 "MDUB2MF" "" "" 0 1 0 yes 1 0 0 2 "DATA6_UPSELL" 62
@@ -90,8 +90,8 @@
 "PAYTERM24_4" 01/03/14 0 31/12/49 "PAYTERM" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_4" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0
 "PAYTERM24_5" 01/12/11 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_5" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0
 "PAYTERM24_8" 02/04/12 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_8" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0
-"PMDUB" 01/05/11 4 31/12/49 "PREMDUB" 0 "" "" "Bono 8" 93 0 "1" "4" 4 1 0 0 "PMDUBFee" "" "" 0 1 0 yes 1 0 0 1 "PMDUB_UPSELL" 0
-"PMDUB_UPSELL" 01/06/11 4 31/12/49 "PREMDUB" 0 "" "" "Bono 8 Upsell" 93 0 "1" "6" 1 2 1 0 "UPSELL_PMDUBFee" "" "" 3 1 0 yes 10 0 0 1 "" 0
+"PMDUB" 01/05/11 4 31/12/49 "PREMDUB" 0 "" "" "Bono 8" 93 0 "1" "4" 4 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "PMDUB_UPSELL" 0
+"PMDUB_UPSELL" 01/06/11 4 31/12/49 "PREMDUB" 0 "" "" "Bono 8 Upsell" 93 0 "1" "6" 1 2 1 0 "" "" "" 3 1 0 yes 10 0 0 1 "" 0
 "POSTRENOVE" 01/09/08 0 26/05/10 "TERMPERIOD" 0 "" "" "Terminal contract for current Postpaid" 0 0 "1" "3" 1 3 18 0 "" "" "TERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0
 "POSTRENOVEII" 09/09/09 0 26/05/10 "TERMPERIOD" 0 "" "" "Terminal contract for current Postpaid" 0 0 "1" "3" 1 3 18 0 "" "" "TERMPERIOD2" 2 1 2 yes 1 0 0 1 "" 0
 "PRERENOVE" 01/09/08 0 26/01/11 "" 0 "" "" "Terminal contract for current Prepaid" 0 0 "1" "3" 1 3 18 0 "" "" "" 2 1 0 yes 1 0 0 1 "" 0
@@ -102,11 +102,11 @@
 "STERM18" 01/05/12 0 31/12/49 "STERMPERIOD" 0 "" "" "Terminal discount(Postpaid)" 0 0 "1" "3" 1 3 18 0 "" "" "STERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0
 "TARJ" 01/05/14 4 31/12/49 "" 0 "" "" "Tarj Upsell" 93 0 "1" "8" 1 2 0 0 "" "" "" 1 1 0 yes 1 0 0 2 "TARJ_UPSELL" 0
 "TARJ6" 01/08/13 4 31/12/49 "" 0 "" "" "Tarjeta 6 Bundle" 93 0 "1" "4" 1 2 0 0 "" "" "" 1 1 0 yes 1 0 0 2 "TARJ_UPSELL" 0
-"TARJ7" 01/11/13 4 31/12/49 "" 0 "" "" "La del uno 650 MB" 93 0 "1" "4" 4 4 0 0 "TARJ7_BundleFee" "" "" 0 1 0 yes 1 0 0 1 "TARJ7_UPSELL" 0
-"TARJ7_UPSELL" 01/11/13 4 31/12/49 "" 0 "" "" "Ampliación 300 MB" 93 0 "1" "6" 1 3 1 0 "TARJ7_UPSELLFee" "" "" 2 1 0 yes 999 0 0 1 "" 0
-"TARJ9" 29/05/15 4 31/12/15 "" 0 "" "" "La del Uno 1 GB" 93 0 "1" "1" 4 4 0 0 "TARJ9_BundleFee" "" "" 0 1 0 yes 1 0 0 1 "TARJ7_UPSELL" 0
+"TARJ7" 01/11/13 4 31/12/49 "" 0 "" "" "La del 1" 93 0 "1" "4" 4 4 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "TARJ7_UPSELL" 0
+"TARJ7_UPSELL" 01/11/13 4 31/12/49 "" 0 "" "" "La del 1" 93 0 "1" "6" 1 3 1 0 "" "" "" 2 1 0 yes 999 0 0 1 "" 0
+"TARJ9" 29/05/15 4 31/12/15 "" 0 "" "" "La del Uno 1 GB" 93 0 "1" "1" 4 4 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "TARJ7_UPSELL" 0
 "TARJD1" 01/01/09 0 31/12/49 "" 0 "" "" "Tarjeta Datos" 0 0 "1" "4" 3 1 0 0 "" "" "" 0 1 0 no 1 0 0 2 "" 0
-"TARJ_UPSELL" 01/12/12 4 31/12/49 "" 0 "" "" "Tarjeta Upsell" 93 0 "1" "8" 1 2 0 0 "TARJ_UPSELLFee" "" "" 1 1 0 yes 1 0 0 1 "" 0
+"TARJ_UPSELL" 01/12/12 4 31/12/49 "" 0 "" "" "Tarjeta Upsell" 93 0 "1" "8" 1 2 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "" 0
 "TERM18" 01/11/06 0 31/12/54 "TERMPERIOD" 0 "1" "" "Terminal discount(Postpaid)" 0 0 "1" "3" 1 3 18 0 "" "" "TERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0
 "TERM18-150" 01/03/10 0 31/12/54 "TERMPERIOD" 0 "" "" "Terminal discount(Postpaid)" 0 0 "1" "3" 1 3 18 0 "" "" "TERMPERIOD15" 2 1 2 yes 1 0 0 1 "" 0
 "TERM18-50" 13/06/12 0 31/12/49 "TERMPERIOD" 0 "" "" "Terminal discount(Postpaid)" 0 0 "1" "3" 1 3 18 0 "" "" "TERMPERIOD05" 2 1 2 yes 1 0 0 1 "" 0

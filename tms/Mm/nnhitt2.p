@@ -9,7 +9,6 @@
                            Brand,
                            display BDest, PriceList etc. correctly 
               15.1.07 jp   Input parameter tariffnum
-              10.09.15/pha Removed Customer and added Rate ID
 
 
 */
@@ -22,16 +21,19 @@
 
 DEF INPUT PARAM iiTariffNum  AS INT NO-UNDO.
 
+DEF VAR cust-name    LIKE Customer.CustName.
 def var Currency     as   c    format "x(7)"   NO-UNDO EXTENT 6.
 DEF VAR fr-header    AS   CHAR                 NO-UNDO.
 DEF VAR lcCSeek      LIKE Tariff.CCN           NO-UNDO.
 DEF VAR plseek       LIKE PriceList.PriceList  NO-UNDO.
+DEF VAR liCustSeek   LIKE Tariff.CustNum       NO-UNDO. 
 DEF VAR lcCName      LIKE CCN.CCNName          NO-UNDO.
 DEF VAR plname       LIKE PriceList.PLName     NO-UNDO.
 DEF VAR xCCN         LIKE Tariff.CCN           NO-UNDO.
 DEF VAR xPriceList   LIKE PriceList.PriceList  NO-UNDO.
 DEF VAR lcBDest      AS   CHAR                 NO-UNDO. 
 DEF VAR xBDest       LIKE Tariff.BDest         NO-UNDO. 
+DEF VAR xCustNum     LIKE Tariff.CustNum       NO-UNDO. 
 
 fr-header = " PRICE DETAILS ". 
 
@@ -85,8 +87,6 @@ ELSE              lcCName = "!! BLANK !!".
 
 
 form /* ADD */
-   "Rate ID.....:" Tariff.TariffNum FORMAT ">>>>>9"
-      help "Tarif ID number" SKIP
    "CCN ........:" Tariff.CCN
       help "Call case number"
       CCN.CCNName  format "x(30)" AT 32 SKIP
@@ -96,6 +96,9 @@ form /* ADD */
    "Pricelist ..:" Tariff.PriceList
       help "Pricelist code"
       PriceList.PLName   format "x(30)" AT 32 SKIP
+   "Customer ...:" Tariff.CustNum FORMAT ">>>>>>>>"
+      help "Customer number"
+      Customer.CustName FORMAT "x(30)" AT 32 SKIP
    "--------------------------------------------------------------------"
    SKIP
    "Valid during ..:" 
@@ -198,12 +201,12 @@ DO WITH FRAME lis:
    
    DISP 
       lcCName          @ CCN.CCNName
-      Tariff.TariffNum
       Tariff.CCN  
       Tariff.BDest 
       Tariff.PriceList  
       plname           @ PriceList.PLName
       Currency
+      Tariff.CustNum   
       Tariff.ValidFrom
       Tariff.ValidTo 
       Tariff.BillCode 

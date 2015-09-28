@@ -136,12 +136,10 @@ FUNCTION fAddCreditNote RETURN LOGICAL
           RETURN FALSE.
       END.
 
-      /* Added "Invoice.ChargeType NE 5" due to YTS-7460 */
+ 
       IF ldBal NE Invoice.InvAmt AND        
          CAN-FIND(FIRST Payment OF Invoice) AND 
-           (Invoice.InvType > 1 OR 
-           (Invoice.ChargeType NE 2 AND
-            Invoice.ChargeType NE 5)) THEN DO:
+           (Invoice.InvType > 1 OR Invoice.ChargeType NE 2) THEN DO:
           lcCheckError = "Invoice has already been " +
                          (IF Invoice.PaymState = 1
                           THEN "partly " ELSE "") + "paid. Function not allowed". 

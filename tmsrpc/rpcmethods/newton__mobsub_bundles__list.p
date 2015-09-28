@@ -82,7 +82,6 @@ DO liCount = 1 TO NUM-ENTRIES(lcActiveBundles):
                  ENTRY(liUpsellCount,DayCampaign.BundleUpsell)
                  + "|" + STRING(Mobsub.MsSeq)).
    END.
-      
 END. /* DO liCount = 1 TO NUM-ENTRIES(lcActiveBundles): */
 /*  before ILP    
 /* Return DSS bundle and upsell if DSS is active */
@@ -114,7 +113,7 @@ IF lcDSSBundleId = {&DSS} OR
    END.
 END.
 /*ILP ENDS*/
- 
+
 IF MobSub.CliType EQ "CONT15" AND
    fGetCurrentSpecificBundle(
       MobSub.MsSeq,

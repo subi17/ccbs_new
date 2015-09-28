@@ -131,7 +131,6 @@
 "PAYTERM25" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERMCG1E" "Commission fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERMCGBS" "Commission fee Sabadell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
-"PMDUBFee" "Prepaid BONO8 Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "POSMNP10" "Post paid - K800i BRONZE" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "POSMNP100" "Post paid - Samsung U700 Black II" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "POSMNP101" "Post paid - Samsung U700 Violet II" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -613,10 +612,6 @@
 "STC_POSTPAID" "Change of Tariff Charge Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "STC_PREPAID" "Change of Tariff Charge Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "STERMPERIOD" "Periodical contract discount penalty" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
-"TARJ7_BundleFee" "TARJ7 Bundle Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
-"TARJ7_UPSELLFee" "TARJ7 Upsell Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
-"TARJ9_BundleFee" "TARJ9 Bundle Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
-"TARJ_UPSELLFee" "TARJ UPSELL Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "TERMCONTD2" "Terminate contr.datos 2 on 1. month" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "TERMCONTDATA" "Terminate contr.datos on 1. month" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "TERMMDUB" "Terminate Mobile Data Usage Bundle" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -639,7 +634,6 @@
 "TOPUPCAMPGIFT" "Initial topup for gift orders" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "TOPUPPREACT" "Re-charge of Pre-activated Prepaid (POS)" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "TOPUPSIM" "Initial topup for only sim orders" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
-"UPSELL_PMDUBFee" "PMDUB UPSELL Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "Uso No Razonable" "Uso No Razonable" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "UsoNoRazonable" "UsoNoRazonable" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "X9305871W" "X9305871W" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1

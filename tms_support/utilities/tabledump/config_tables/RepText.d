@@ -603,10 +603,6 @@
 1 "" 2 "Descompte promoció" 0 "CONT23DISC" "1" 12/08/15 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONT23DISC" "1" 12/08/15 31/12/49
 1 "" 5 "Promotional discount" 0 "CONT23DISC" "1" 12/08/15 31/12/49
-1 "" 1 "Descuento de La Sinfín 8 GB" 0 "CONT23DISCTELE" "1" 01/09/15 31/12/49
-1 "" 2 "Descompte de La Sinfín 8 GB" 0 "CONT23DISCTELE" "1" 01/09/15 31/12/49
-1 "" 3 "La Sinfín 8 GB tarifaren deskontua" 0 "CONT23DISCTELE" "1" 01/09/15 31/12/49
-1 "" 5 "Discount on La Sinfín 8 GB" 0 "CONT23DISCTELE" "1" 01/09/15 31/12/49
 1 "" 1 "La Sinfín 8 GB" 0 "CONT23MF" "1" 12/08/15 31/12/49
 1 "" 2 "La Sinfín 8 GB" 0 "CONT23MF" "1" 12/08/15 31/12/49
 1 "" 3 "La Sinfín 8 GB" 0 "CONT23MF" "1" 12/08/15 31/12/49
@@ -1260,18 +1256,10 @@
 1 "" 2 "Bono 1 GB" 0 "DATA6MF" "1" 01/05/14 31/12/49
 1 "" 3 "Bono 1 GB" 0 "DATA6MF" "1" 01/05/14 31/12/49
 1 "" 5 "Bono 1 GB" 0 "DATA6MF" "1" 01/05/14 31/12/49
-1 "" 1 "Compra 1,5 GB" 0 "DATA6MFUPS" "1" 01/10/15 31/12/49
-1 "" 1 "Compra MB adicionales" 0 "DATA6MFUPS" "1" 15/09/15 30/09/15
-1 "" 1 "Compra 1 GB" 0 "DATA6MFUPS" "1" 01/05/14 14/09/15
-1 "" 2 "Compra 1,5 GB" 0 "DATA6MFUPS" "1" 01/10/15 31/12/49
-1 "" 2 "Compra MB addicionals" 0 "DATA6MFUPS" "1" 15/09/15 30/09/15
-1 "" 2 "Compra 1 GB" 0 "DATA6MFUPS" "1" 01/05/14 14/09/15
-1 "" 3 "1,5 GB-ren erosketa" 0 "DATA6MFUPS" "1" 01/10/15 31/12/49
-1 "" 3 "Erosi MB gehigarriak" 0 "DATA6MFUPS" "1" 15/09/15 30/09/15
-1 "" 3 "1 GB-ren erosket" 0 "DATA6MFUPS" "1" 01/05/14 14/09/15
-1 "" 5 "Buy 1.5 GB" 0 "DATA6MFUPS" "1" 01/10/15 31/12/49
-1 "" 5 "Buy extra MB" 0 "DATA6MFUPS" "1" 15/09/15 30/09/15
-1 "" 5 "Buy 1 GB" 0 "DATA6MFUPS" "1" 01/05/14 14/09/15
+1 "" 1 "Compra 1GB" 0 "DATA6MFUPS" "1" 01/05/14 31/12/49
+1 "" 2 "Compra 1GB" 0 "DATA6MFUPS" "1" 01/05/14 31/12/49
+1 "" 3 "1GB-ren erosket" 0 "DATA6MFUPS" "1" 01/05/14 31/12/49
+1 "" 5 "Buy 1GB" 0 "DATA6MFUPS" "1" 01/05/14 31/12/49
 1 "" 1 "Internet" 0 "DATA6UPSELL" "1" 01/05/14 31/12/49
 1 "" 2 "Internet" 0 "DATA6UPSELL" "1" 01/05/14 31/12/49
 1 "" 3 "Internet" 0 "DATA6UPSELL" "1" 01/05/14 31/12/49
@@ -1318,21 +1306,13 @@
 1 "" 2 "Consumit entre totes les línies" 0 "DSS2" "1" 01/09/13 31/12/49
 1 "" 3 "Linea guztien artean kontsumitua" 0 "DSS2" "1" 01/09/13 31/12/49
 1 "" 5 "Spend on all lines" 0 "DSS2" "1" 01/09/13 31/12/49
-1 "" 1 "Compra 1,5 GB" 0 "DSS2MFUPS" "1" 01/10/15 31/12/49
-1 "" 1 "Compra MB adicionales" 0 "DSS2MFUPS" "1" 15/09/15 30/09/15
-1 "" 1 "Compra 1GB" 0 "DSS2MFUPS" "1" 01/06/14 14/09/15
+1 "" 1 "Compra 1GB" 0 "DSS2MFUPS" "1" 01/06/14 31/12/49
 1 "" 1 "Compra 500MB" 0 "DSS2MFUPS" "1" 01/09/13 31/05/14
-1 "" 2 "Compra 1,5 GB" 0 "DSS2MFUPS" "1" 01/10/15 31/12/49
-1 "" 2 "Compra MB addicionals" 0 "DSS2MFUPS" "1" 15/09/15 30/09/15
-1 "" 2 "Compra 1GB" 0 "DSS2MFUPS" "1" 01/06/14 14/09/15
+1 "" 2 "Compra 1GB" 0 "DSS2MFUPS" "1" 01/06/14 31/12/49
 1 "" 2 "Compra 500MB" 0 "DSS2MFUPS" "1" 01/09/13 31/05/14
-1 "" 3 "1,5 GB-ren erosketa" 0 "DSS2MFUPS" "1" 01/10/15 31/12/49
-1 "" 3 "Erosi MB gehigarriak" 0 "DSS2MFUPS" "1" 15/09/15 30/09/15
-1 "" 3 "1 GB-ren erosketa" 0 "DSS2MFUPS" "1" 01/06/14 14/09/15
+1 "" 3 "1 GB-ren erosketa" 0 "DSS2MFUPS" "1" 01/06/14 31/12/49
 1 "" 3 "500 MB-ren erosketa" 0 "DSS2MFUPS" "1" 01/09/13 31/05/14
-1 "" 5 "Buy 1.5 GB" 0 "DSS2MFUPS" "1" 01/10/15 31/12/49
-1 "" 5 "Buy extra MB" 0 "DSS2MFUPS" "1" 15/09/15 30/09/15
-1 "" 5 "Buy 1GB" 0 "DSS2MFUPS" "1" 01/06/14 14/09/15
+1 "" 5 "Buy 1GB" 0 "DSS2MFUPS" "1" 01/06/14 31/12/49
 1 "" 5 "Buy 500MB" 0 "DSS2MFUPS" "1" 01/09/13 31/05/14
 1 "" 1 "Promo Internet Multilínea" 0 "DSSCPFREE" "1" 01/04/12 31/12/49
 1 "" 1 "Compensación" 0 "DSSCPFREE" "1" 01/04/12 31/03/12
@@ -1350,27 +1330,19 @@
 1 "" 3 "Servicio Internet Multilínea" 0 "DSSMF" "1" 23/11/11 31/03/12
 1 "" 5 "Servicio Internet Multilínea fee" 0 "DSSMF" "1" 01/04/12 31/12/49
 1 "" 5 "Servicio Internet Multilínea" 0 "DSSMF" "1" 23/11/11 31/03/12
-1 "" 1 "Compra 1,5 GB" 0 "DSSMFUPS" "1" 01/10/15 31/12/49
-1 "" 1 "Compra MB adicionales" 0 "DSSMFUPS" "1" 15/09/15 30/09/15
-1 "" 1 "Compra 1 GB" 0 "DSSMFUPS" "1" 01/06/14 14/09/15
+1 "" 1 "Compra 1GB" 0 "DSSMFUPS" "1" 01/06/14 31/12/49
 1 "" 1 "Compra 500MB" 0 "DSSMFUPS" "1" 01/01/14 31/05/14
-1 "" 1 "Compra 1 GB" 0 "DSSMFUPS" "1" 01/04/12 31/12/13
+1 "" 1 "Compra 1GB" 0 "DSSMFUPS" "1" 01/04/12 31/12/13
 1 "" 1 "Servicio Internet Multilínea + 1GB" 0 "DSSMFUPS" "1" 23/11/11 31/03/12
-1 "" 2 "Compra 1,5 GB" 0 "DSSMFUPS" "1" 01/10/15 31/12/49
-1 "" 2 "Compra MB addicionals" 0 "DSSMFUPS" "1" 15/09/15 30/09/15
-1 "" 2 "Compra 1 GB" 0 "DSSMFUPS" "1" 01/06/14 14/09/15
+1 "" 2 "Compra  1 GB" 0 "DSSMFUPS" "1" 01/06/14 31/12/49
 1 "" 2 "Compra 500MB" 0 "DSSMFUPS" "1" 01/01/14 31/05/14
-1 "" 2 "Compra 1 GB" 0 "DSSMFUPS" "1" 01/04/12 31/12/13
+1 "" 2 "Compra  1 GB" 0 "DSSMFUPS" "1" 01/04/12 31/12/13
 1 "" 2 "Servicio Internet Multilínea + 1GB" 0 "DSSMFUPS" "1" 23/11/11 31/03/12
-1 "" 3 "1,5 GB-ren erosketa" 0 "DSSMFUPS" "1" 01/10/15 31/12/49
-1 "" 3 "Erosi MB gehigarriak" 0 "DSSMFUPS" "1" 15/09/15 30/09/15
-1 "" 3 "1 GB-ren erosketa" 0 "DSSMFUPS" "1" 01/06/14 14/09/15
+1 "" 3 "1 GB-ren erosketa" 0 "DSSMFUPS" "1" 01/06/14 31/12/49
 1 "" 3 "500 MB-ren erosketa" 0 "DSSMFUPS" "1" 01/01/14 31/05/14
 1 "" 3 "1 GB-ren erosketa" 0 "DSSMFUPS" "1" 01/04/12 31/12/13
 1 "" 3 "Servicio Internet Multilínea + 1GB" 0 "DSSMFUPS" "1" 23/11/11 31/03/12
-1 "" 5 "Buy 1.5 GB" 0 "DSSMFUPS" "1" 01/10/15 31/12/49
-1 "" 5 "Buy extra MB" 0 "DSSMFUPS" "1" 15/09/15 30/09/15
-1 "" 5 "Buy 1 GB" 0 "DSSMFUPS" "1" 01/06/14 14/09/15
+1 "" 5 "Buy 1GB" 0 "DSSMFUPS" "1" 01/06/14 31/12/49
 1 "" 5 "Buy 500MB" 0 "DSSMFUPS" "1" 01/01/14 31/05/14
 1 "" 5 "Buy 1GB" 0 "DSSMFUPS" "1" 01/04/12 31/12/13
 1 "" 5 "Servicio Internet Multilínea + 1GB" 0 "DSSMFUPS" "1" 23/11/11 31/03/12
@@ -6177,11 +6149,6 @@
 1 "" 3 "iPhone 6 16 GB Plata" 0 "P097616S2" "1" 24/09/14 31/12/49
 1 "" 4 "iPhone 6 16 GB Plata" 0 "P097616S2" "1" 24/09/14 31/12/49
 1 "" 5 "iPhone 6 16 GB Silver" 0 "P097616S2" "1" 24/09/14 31/12/49
-1 "" 1 "iPhone 6 64 GB" 0 "P097664D2" "1" 09/09/15 31/12/49
-1 "" 2 "iPhone 6 64 GB" 0 "P097664D2" "1" 09/09/15 31/12/49
-1 "" 3 "iPhone 6 64 GB" 0 "P097664D2" "1" 09/09/15 31/12/49
-1 "" 4 "iPhone 6 64 GB" 0 "P097664D2" "1" 09/09/15 31/12/49
-1 "" 5 "iPhone 6 64 GB" 0 "P097664D2" "1" 09/09/15 31/12/49
 1 "" 1 "iPhone 6 Plus 16 GB Oro" 0 "P0976P6D2" "1" 24/09/14 31/12/49
 1 "" 2 "iPhone 6 Plus 16 GB Oro" 0 "P0976P6D2" "1" 24/09/14 31/12/49
 1 "" 3 "iPhone 6 Plus 16 GB Oro" 0 "P0976P6D2" "1" 24/09/14 31/12/49
@@ -9290,11 +9257,11 @@
 9 "" 3 "La del Cinco con Internet" 0 "TARJ6" "1" 01/12/12 31/12/54
 9 "" 4 "La del Cinco con Internet" 0 "TARJ6" "1" 01/12/12 31/12/54
 9 "" 5 "La del Cinco con Internet" 0 "TARJ6" "1" 01/12/12 31/12/54
-9 "" 1 "La del Uno 650 MB" 0 "TARJ7" "1" 01/11/13 31/12/54
-9 "" 2 "La del Uno 650 MB" 0 "TARJ7" "1" 01/11/13 31/12/54
-9 "" 3 "La del Uno 650 MB" 0 "TARJ7" "1" 01/11/13 31/12/54
-9 "" 4 "La del Uno 650 MB" 0 "TARJ7" "1" 01/11/13 31/12/54
-9 "" 5 "La del Uno 650 MB" 0 "TARJ7" "1" 01/11/13 31/12/54
+9 "" 1 "La del Uno 600 MB" 0 "TARJ7" "1" 01/11/13 31/12/54
+9 "" 2 "La del Uno 600 MB" 0 "TARJ7" "1" 01/11/13 31/12/54
+9 "" 3 "La del Uno 600 MB" 0 "TARJ7" "1" 01/11/13 31/12/54
+9 "" 4 "La del Uno 600 MB" 0 "TARJ7" "1" 01/11/13 31/12/54
+9 "" 5 "La del Uno 600 MB" 0 "TARJ7" "1" 01/11/13 31/12/54
 9 "" 1 "La del Cinco" 0 "TARJ8" "1" 01/11/13 31/12/54
 9 "" 2 "La del Cinco" 0 "TARJ8" "1" 01/11/13 31/12/54
 9 "" 3 "La del Cinco" 0 "TARJ8" "1" 01/11/13 31/12/54

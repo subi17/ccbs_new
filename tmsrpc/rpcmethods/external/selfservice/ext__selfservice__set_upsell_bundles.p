@@ -44,8 +44,6 @@ DEF VAR ldeBundleFee        AS DEC  NO-UNDO.
 DEF VAR lcApplicationId     AS CHAR NO-UNDO.
 DEF VAR lcAppEndUserId      AS CHAR NO-UNDO.
 DEF VAR secondsFromPrevious AS INT  NO-UNDO.
-DEF VAR lcMemoText          AS CHAR NO-UNDO.
-DEF VAR lcMemoTitle         AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,string,string") EQ ? THEN RETURN.
 
@@ -169,29 +167,12 @@ ELSE IF NOT fCreateUpsellBundle(
    RETURN appl_err(lcError).
 END.
 
-FIND FIRST DayCampaign NO-LOCK WHERE
-           DayCampaign.Brand = gcBrand AND
-           DayCampaign.DCEvent = pcUpsellId NO-ERROR.
-
-ASSIGN lcMemoText = IF INDEX(Daycampaign.DCName,"Ampliación")>0 THEN
-                       DayCampaign.DCName ELSE "Ampliación " +
-                       DayCampaign.DCName + " - Activar"
-       lcMemoTitle = DayCampaign.DCName.
-
-IF pcUpsellId = "DATA200_UPSELL" THEN ASSIGN
-   lcMemoTitle = "Ampliación 200 MB"
-   lcMemoText = "Ampliación 200 MB".
-ELSE IF pcUpsellId = "DSS200_UPSELL" THEN ASSIGN
-   lcMemoTitle = "Ampliación 200 MB"
-   lcMemoText  = "Internet compartido - Ampliación 200 MB".
-          
-
 DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
                  "MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
                  MobSub.CustNum,                       /* CustNum */
-                 lcMemoTitle,                          /* MemoTitle */
-                 lcMemoText,                           /* MemoText */
+                 DayCampaign.DCName,                   /* MemoTitle */
+                 "Ampliación " + DayCampaign.DCName + " - Activar",  /* MemoText */
                  "Service",                            /* MemoType */
                  fgetAppDetailedUserId(INPUT lcApplicationId,
                                       INPUT Mobsub.CLI)).

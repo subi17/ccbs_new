@@ -908,12 +908,12 @@ PROCEDURE pGetInvoiceRowData:
              ldAmtExclVat = InvRow.Amt
              ldAmt        = ldAmtExclVat + ldVatAmt.
 
-         lcRowName = RIGHT-TRIM(fLocalItemName("BillItem",
+         lcRowName = fLocalItemName("BillItem",
                                     InvRow.BillCode,
                                     liLanguage,
                                     IF InvRow.ToDate NE ?
                                     THEN InvRow.ToDate
-                                    ELSE Invoice.ToDate)).
+                                    ELSE Invoice.ToDate).
 
          lcRowCode = STRING(BItemGroup.BiGroup) + lcRowName.
 

@@ -443,7 +443,6 @@ PROCEDURE pContractActivation:
       RETURN.
    END. /* IF lcDCEvent = {&DSS} AND */
    ELSE IF (lcDCEvent BEGINS {&DSS} + "_UPSELL" OR
-      lcDCEvent EQ  "DSS200_UPSELL" OR
       lcDCEvent BEGINS "DSS2_UPSELL") AND
       NOT fIsDSSActive(INPUT MsOwner.CustNum,
                        INPUT MsRequest.ActStamp) THEN DO:
@@ -804,7 +803,6 @@ PROCEDURE pContractActivation:
 
       RUN creasfee.p (MsOwner.CustNum,
                     (IF (lcDCEvent = {&DSS} + "_UPSELL" OR
-                         lcDCEvent EQ  "DSS200_UPSELL" OR
                          lcDCEvent = "DSS2_UPSELL") THEN liDSSMsSeq
                      ELSE MsRequest.MsSeq),
                     ldtFromDate,
@@ -893,7 +891,6 @@ PROCEDURE pContractActivation:
  
    /* If DSS Upsell is being added then update DSS Quota */
    IF lcDCEvent BEGINS {&DSS} + "_UPSELL" OR
-      lcDCEvent EQ  "DSS200_UPSELL" OR
       lcDCEvent BEGINS "DSS2_UPSELL" THEN
       RUN pUpdateDSSNetworkLimit(INPUT MsOwner.MsSeq,
                                  INPUT MsOwner.CustNum,
