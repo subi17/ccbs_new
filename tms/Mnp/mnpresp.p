@@ -724,6 +724,7 @@ PROCEDURE pHandleQueue:
                  NO-LOCK NO-ERROR.
             IF AVAIL MsRequest THEN
                fReqStatus(4,"Cancelled MNP Process").
+
             /* ongoing subscription requests should not exist */
             ELSE DO:
                FIND FIRST MsRequest WHERE
@@ -766,6 +767,16 @@ PROCEDURE pHandleQueue:
          /* YOT-451 */
          lcSMS = "".
          IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 THEN DO:
+            /* Release SIM if not send to LO YDR-1825*/
+            IF llOrderClosed AND
+            Order.OrderType EQ {&ORDER_TYPE_MNP} AND
+            Order.Logistics = "" THEN DO:
+               FIND SIM WHERE
+                    SIM.ICC = Order.ICC AND
+                    SIM.SimStat = 20 EXCLUSIVE-LOCK NO-ERROR.
+                  IF AVAIL SIM THEN SIM.SIMStat = {&SIM_SIMSTAT_AVAILABLE}.
+                  RELEASE SIM.
+            END.
             
             IF Order.OrderChannel EQ "self" THEN
                lcSMS = (IF MNPProcess.StatusCode = {&MNP_ST_ACON}

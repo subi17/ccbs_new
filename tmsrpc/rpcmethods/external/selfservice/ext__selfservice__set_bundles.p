@@ -37,6 +37,7 @@ gcBrand = "1".
 {fsendsms.i}
 {fdss.i}
 {fexternalapi.i}
+{fprepaidfee.i}
 
 DEF VAR pcBundleId          AS CHAR NO-UNDO.
 DEF VAR pcCLI               AS CHAR NO-UNDO.
@@ -205,7 +206,7 @@ END CASE.
 
 /* Validate Prepaid Balance before making PMDUB activation request */
 IF pcBundleId = {&PMDUB} AND liActionValue = 1 THEN DO:
-   ldeBundleFee = fCParamDe("PMDUBFee").
+   ldeBundleFee = fgetPrepaidFeeAmount(pcBundleId, TODAY).
    RUN pEnoughBalance(INPUT MobSub.CLI,
                       INPUT ldeBundleFee,
                       OUTPUT llResult).

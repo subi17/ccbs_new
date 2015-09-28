@@ -111,8 +111,8 @@ FUNCTION fMakeServLimit RETURN LOGICAL
          llCreateDSS = TRUE.
    END. /* IF lcDCEvent = {&DSS} AND */
    /* Link DSS upsell to the Main DSS subscription */
-   ELSE IF (icServiceLimitGroup BEGINS {&DSS} + "_UPSELL" OR
-            icServiceLimitGroup = "DSS2_UPSELL") AND
+   ELSE IF icServiceLimitGroup BEGINS "DSS" AND
+           INDEX(icServiceLimitGroup,"UPSELL") > 0 AND
            fGetDSSMsSeqLimit(INPUT  iiCustNum,
                              INPUT  ldeCheckTS,
                              OUTPUT liDSSMsSeq,
@@ -342,8 +342,8 @@ FUNCTION fMakeServLPool RETURN LOGICAL
                      idEndStamp,
               OUTPUT ocError).
 
-      IF icServiceLimitGroup BEGINS {&DSS} + "_UPSELL" OR
-         icServiceLimitGroup = "DSS2_UPSELL" THEN
+      IF icServiceLimitGroup BEGINS "DSS" AND
+         INDEX(icServiceLimitGroup,"UPSELL") > 0 THEN
          FIND FIRST MServiceLimit WHERE 
                     MServiceLimit.Custnum  = iiCustnum             AND
                     MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -379,6 +379,7 @@ FUNCTION fMakeServLPool RETURN LOGICAL
       END.
 
       IF icServiceLimitGroup BEGINS {&DSS} + "_UPSELL" OR
+         icServiceLimitGroup = "DSS200_UPSELL" OR
          icServiceLimitGroup = "DSS2_UPSELL" THEN
          ldeDSSUpsellLimit = ldeLimitAmt.
 

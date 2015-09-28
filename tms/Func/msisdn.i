@@ -18,6 +18,21 @@ DEF VAR lcGSDcf     AS   CHAR NO-UNDO.
 {tmsparam.i DefMSISDNPr return}.  m_pref  = TMSParam.CharVal.
 {tmsparam.i DCFPrefix   return}.  lcGSDcf = TMSParam.CharVal.
 
+/* This function returns true if given MSISDN belongs to EMA MSISDN range */
+FUNCTION fIsEmaMsisdn RETURNS LOG (INPUT icMSISDN AS CHAR):
+
+   DEF VAR liMSISDN AS INT NO-UNDO.
+   liMSISDN = INT(icMSISDN) NO-ERROR.
+   IF ERROR-STATUS:ERROR THEN RETURN FALSE.
+
+   /* EMA MSISDN range. If belongs to EMA then return true */
+   IF ((liMSISDN >= 633993700 AND liMSISDN <= 633993750) OR
+       (liMSISDN >= 633993500 AND liMSISDN <= 633993620)) THEN RETURN TRUE.
+   
+   RETURN FALSE.   /* Not in EMA MSISDN range */
+
+END FUNCTION.
+
 FUNCTION fSearchGenServNumber RETURNS CHAR
    (INPUT   VoiceCli   AS CHAR ,
     INPUT   crit       AS CHAR). 

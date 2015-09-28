@@ -338,162 +338,162 @@ FIRST PriceList NO-LOCK WHERE
       PriceList.Brand     = gcBrand AND
       PriceList.PriceList = lcPriceList:
 
-    
-     IF FMItem.BillMethod = TRUE /* a SINGLE FEE */ THEN DO:
-        /* calculate Period that this fee concerns (NEXT MONTH) */
-        ConPer = fNextP(Period).
+     IF FMItem.BillType NE "NF" THEN /* Not no fee */
+        IF FMItem.BillMethod = TRUE /* a SINGLE FEE, not No Fee */ THEN DO:
+           /* calculate Period that this fee concerns (NEXT MONTH) */
+           ConPer = fNextP(Period).
 
-        IF InterAct THEN DO:
+           IF InterAct THEN DO:
 
-           IF CAN-FIND(FIRST SingleFee WHERE 
-                             SingleFee.CustNum    = liFeeCust AND
-                             SingleFee.BillCode   = FMItem.BillCode  AND
-                             SingleFee.KeyValue   = keyvalue         AND
-                             SingleFee.HostTable  = HostTable)
+              IF CAN-FIND(FIRST SingleFee WHERE 
+                                SingleFee.CustNum    = liFeeCust AND
+                                SingleFee.BillCode   = FMItem.BillCode  AND
+                                SingleFee.KeyValue   = keyvalue         AND
+                                SingleFee.HostTable  = HostTable)
 
-           THEN DO:
-              MESSAGE
-                 "Fees may have already been created" SKIP
-                 "for " FMItem.BillCode "!" SKIP
-                 "Do you want to create more fees ?"
-              VIEW-AS ALERT-BOX BUTTONS YES-NO UPDATE ok.
+              THEN DO:
+                 MESSAGE
+                    "Fees may have already been created" SKIP
+                    "for " FMItem.BillCode "!" SKIP
+                    "Do you want to create more fees ?"
+                 VIEW-AS ALERT-BOX BUTTONS YES-NO UPDATE ok.
+              END.
+              ELSE ok = TRUE.
            END.
-           ELSE ok = TRUE.
-        END.
 
-        IF NOT ok THEN NEXT.                           
+           IF NOT ok THEN NEXT.                           
 
 
-        /* make a OBI record (a single payment) */
-        CREATE SingleFee.
-        ASSIGN
-        SingleFee.FMItemId    = NEXT-VALUE(bi-seq).                             
-        ASSIGN
-        SingleFee.Brand       = gcBrand 
-        SingleFee.CustNum     = liFeeCust  /* customer number         */
-        SingleFee.BillTarget  = MobSub.BillTarget /* Billing Target        */
-        SingleFee.CalcObj     = "MsSeq" +       /* MobSub id               */
-                                STRING(MsSeq)   
-        SingleFee.BillCode    = FMItem.BillCode    /* BillCode Code        */
-        SingleFee.BillPeriod  = Period           /* billing Period      */
-        SingleFee.Concerns[1] = ConPer           /* Period concerned       */
-        
-        SingleFee.Amt         = FMItem.Amount  /* Payment                 */
-        SingleFee.BillType    = FMItem.BillType
-        Singlefee.ServiceLimitGroup = FMItem.ServiceLimitGroup
-        SingleFee.FeeModel    = FMItem.FeeModel
-        SingleFee.HostTable   = hosttable
-        SingleFee.KeyValue    = keyvalue
-        SingleFee.VatIncl     = PriceList.InclVat
-        SingleFee.CustPP      = 0
-        SingleFee.Contract    = IF AVAILABLE Contract
-                                THEN Contract.Contract
-                                ELSE "".
+           /* make a OBI record (a single payment) */
+           CREATE SingleFee.
+           ASSIGN
+           SingleFee.FMItemId    = NEXT-VALUE(bi-seq).                             
+           ASSIGN
+           SingleFee.Brand       = gcBrand 
+           SingleFee.CustNum     = liFeeCust  /* customer number         */
+           SingleFee.BillTarget  = MobSub.BillTarget /* Billing Target        */
+           SingleFee.CalcObj     = "MsSeq" +       /* MobSub id               */
+                                   STRING(MsSeq)   
+           SingleFee.BillCode    = FMItem.BillCode    /* BillCode Code        */
+           SingleFee.BillPeriod  = Period           /* billing Period      */
+           SingleFee.Concerns[1] = ConPer           /* Period concerned       */
+           
+           SingleFee.Amt         = FMItem.Amount  /* Payment                 */
+           SingleFee.BillType    = FMItem.BillType
+           Singlefee.ServiceLimitGroup = FMItem.ServiceLimitGroup
+           SingleFee.FeeModel    = FMItem.FeeModel
+           SingleFee.HostTable   = hosttable
+           SingleFee.KeyValue    = keyvalue
+           SingleFee.VatIncl     = PriceList.InclVat
+           SingleFee.CustPP      = 0
+           SingleFee.Contract    = IF AVAILABLE Contract
+                                   THEN Contract.Contract
+                                   ELSE "".
 
-        IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhSingleFee).
+           IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhSingleFee).
 
-     END.  /* single fee */
+        END.  /* single fee */
 
-     ELSE DO: /* A PERIODICAL FEE * */
-        /* We have TO make a contract fee + Billable contract items */
-        ConPer = fNextP(Period).
-        if codate = ? then 
-        codate = date(int(substring(STRING(ConPer),5,2)),
-                      1,int(substring(STRING(ConPer),1,4))). 
+        ELSE DO: /* A PERIODICAL FEE * */
+           /* We have TO make a contract fee + Billable contract items */
+           ConPer = fNextP(Period).
+           if codate = ? then 
+           codate = date(int(substring(STRING(ConPer),5,2)),
+                         1,int(substring(STRING(ConPer),1,4))). 
 
-        IF FMItem.FFEndDate NE ? AND FMItem.FFItemQty = 0
-        THEN liEndPeriod = YEAR(FMItem.FFEndDate) * 100 + 
-                           MONTH(FMItem.FFEndDate).
-        ELSE liEndPeriod = 999999.
+           IF FMItem.FFEndDate NE ? AND FMItem.FFItemQty = 0
+           THEN liEndPeriod = YEAR(FMItem.FFEndDate) * 100 + 
+                              MONTH(FMItem.FFEndDate).
+           ELSE liEndPeriod = 999999.
 
-        IF InterAct THEN DO:
+           IF InterAct THEN DO:
 
-           IF CAN-FIND(FIRST FixedFee WHERE 
-                             FixedFee.CustNum    = liFeeCust AND
-                             FixedFee.BillCode   = FMItem.BillCode AND
-                             FixedFee.KeyValue   = keyvalue        AND
-                             FixedFee.HostTable  = HostTable       AND
-                             FixedFee.EndPeriod  = 999999)
-           THEN DO:
-              MESSAGE
-                 "Fees may have already been created" SKIP
-                 "for " FMItem.BillCode "!" SKIP
-                 "Do you want to create more fees ?"
-              VIEW-AS ALERT-BOX BUTTONS YES-NO UPDATE ok.
+              IF CAN-FIND(FIRST FixedFee WHERE 
+                                FixedFee.CustNum    = liFeeCust AND
+                                FixedFee.BillCode   = FMItem.BillCode AND
+                                FixedFee.KeyValue   = keyvalue        AND
+                                FixedFee.HostTable  = HostTable       AND
+                                FixedFee.EndPeriod  = 999999)
+              THEN DO:
+                 MESSAGE
+                    "Fees may have already been created" SKIP
+                    "for " FMItem.BillCode "!" SKIP
+                    "Do you want to create more fees ?"
+                 VIEW-AS ALERT-BOX BUTTONS YES-NO UPDATE ok.
+              END.
+              ELSE ok = TRUE.
            END.
-           ELSE ok = TRUE.
-        END.
-        
-        IF NOT ok THEN NEXT.                           
+           
+           IF NOT ok THEN NEXT.                           
 
-        CREATE FixedFee.
+           CREATE FixedFee.
 
-        ASSIGN      
-        FixedFee.Brand      = gcBrand 
-        FixedFee.FFNum      = NEXT-VALUE(contract) /* sequence FOR contract   */
-        FixedFee.BegPeriod  = Period           /* beginning Period        */
-        FixedFee.CustNum    = liFeeCust        /* customer no.            */
-        FixedFee.CalcObj    = "MsSeq" +       /* MobSub id               */
-                              STRING(MsSeq)
-        FixedFee.BillCode   = FMItem.BillCode    /* BillCode code         */
-        FixedFee.Amt        = FMItem.Amount  /* Billable amount         */
-        FixedFee.BillMethod = FMitem.BillCycle 
-        FixedFee.Interval   = FMItem.Interval   /* Billing Interval MONTHS */
-        FixedFee.EndPeriod  = (IF AVAIL contract AND 
-                                        contract.contrType = 2 AND 
-                                        contract.todate ne ? THEN 
-                                  YEAR(contract.todate) * 100 +  
-                                  MONTH(contract.todate)       
-                              ELSE  999999)   /* until further           */
-        FixedFee.BegDate    = codate
-        FixedFee.ServiceLimitGroup = FMItem.ServiceLimitGroup
-        FixedFee.KeyValue   = keyvalue
-        FixedFee.HostTable  = HostTable     
-        FixedFee.FeeModel   = FMItem.FeeModel
-        FixedFee.VatIncl    = PriceList.InclVat
-        FixedFee.CustPP     = 0
-        
-        FixedFee.InclAmt      = FMItem.InclAmt
-        FixedFee.InclUnit     = FMItem.InclUnit
-        FixedFee.InclBillCode = FMItem.InclBillCode
-        FixedFee.Cli          = mobsub.cli
-        FixedFee.Contract     = contract.contract WHEN avail Contract.
+           ASSIGN      
+           FixedFee.Brand      = gcBrand 
+           FixedFee.FFNum      = NEXT-VALUE(contract) /* sequence FOR contract   */
+           FixedFee.BegPeriod  = Period           /* beginning Period        */
+           FixedFee.CustNum    = liFeeCust        /* customer no.            */
+           FixedFee.CalcObj    = "MsSeq" +       /* MobSub id               */
+                                 STRING(MsSeq)
+           FixedFee.BillCode   = FMItem.BillCode    /* BillCode code         */
+           FixedFee.Amt        = FMItem.Amount  /* Billable amount         */
+           FixedFee.BillMethod = FMitem.BillCycle 
+           FixedFee.Interval   = FMItem.Interval   /* Billing Interval MONTHS */
+           FixedFee.EndPeriod  = (IF AVAIL contract AND 
+                                           contract.contrType = 2 AND 
+                                           contract.todate ne ? THEN 
+                                     YEAR(contract.todate) * 100 +  
+                                     MONTH(contract.todate)       
+                                 ELSE  999999)   /* until further           */
+           FixedFee.BegDate    = codate
+           FixedFee.ServiceLimitGroup = FMItem.ServiceLimitGroup
+           FixedFee.KeyValue   = keyvalue
+           FixedFee.HostTable  = HostTable     
+           FixedFee.FeeModel   = FMItem.FeeModel
+           FixedFee.VatIncl    = PriceList.InclVat
+           FixedFee.CustPP     = 0
+           
+           FixedFee.InclAmt      = FMItem.InclAmt
+           FixedFee.InclUnit     = FMItem.InclUnit
+           FixedFee.InclBillCode = FMItem.InclBillCode
+           FixedFee.Cli          = mobsub.cli
+           FixedFee.Contract     = contract.contract WHEN avail Contract.
 
-        IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhFixedFee).
+           IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhFixedFee).
 
-        /* NEXT we generate Billable items */         
-        rc = fMakeContract (FixedFee.FFNum,
-                            FMItem.FFItemQty).
+           /* NEXT we generate Billable items */         
+           rc = fMakeContract (FixedFee.FFNum,
+                               FMItem.FFItemQty).
 
-        IF InterAct THEN DO:
-           MESSAGE 
-           "Totally" rc "individual CFee items created" 
-           "for customer" MobSub.CustNum "of BillCode" FixedFee.BillCode
-           VIEW-AS ALERT-BOX
-           TITLE "PERIODICAL FEE CREATED".
+           IF InterAct THEN DO:
+              MESSAGE 
+              "Totally" rc "individual CFee items created" 
+              "for customer" MobSub.CustNum "of BillCode" FixedFee.BillCode
+              VIEW-AS ALERT-BOX
+              TITLE "PERIODICAL FEE CREATED".
 
-           /* THEN we SHOW always ALL Billable items ... */          
-        END.
-        
-        IF FMItem.ServiceLimitGroup ne "" THEN DO:
-           fMakeServLimit(INPUT  FMItem.ServiceLimitGroup,
-                                 msseq,
-                                 (IF FMItem.ServiceLimitGroup BEGINS {&DSS}
-                                  THEN Customer.Custnum ELSE ?),
-                                 ldActStamp,
-                                 ?,
-                          OUTPUT lcError).
-        
-           IF interact then 
-           MESSAGE
-           "Service Limit Group "  FMItem.ServiceLimitGroup SKIP
-           "created" 
-           VIEW-AS ALERT-BOX.
-        END.
-        
-        
-     END.   
-
+              /* THEN we SHOW always ALL Billable items ... */          
+           END.
+           
+           IF FMItem.ServiceLimitGroup ne "" THEN DO:
+              fMakeServLimit(INPUT  FMItem.ServiceLimitGroup,
+                                    msseq,
+                                    (IF FMItem.ServiceLimitGroup BEGINS {&DSS}
+                                     THEN Customer.Custnum ELSE ?),
+                                    ldActStamp,
+                                    ?,
+                             OUTPUT lcError).
+           
+              IF interact then 
+              MESSAGE
+              "Service Limit Group "  FMItem.ServiceLimitGroup SKIP
+              "created" 
+              VIEW-AS ALERT-BOX.
+           END.
+           
+           
+        END.   
+     /* END IF FMItem.BillType NE "NF" THEN */ 
 END. /* FOR EACH FMItem */
 
 

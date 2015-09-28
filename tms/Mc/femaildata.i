@@ -1736,7 +1736,7 @@ PROCEDURE pGetCTNAME:
                               OUTPUT ldiOrderDate).
 
       IF CLIType.CLIType EQ "TARJ7" THEN
-         ldeMFWithTax = (1 + ldeTaxPerc / 100) * 5.99. /* 7.25 IVA incl */
+         ldeMFWithTax = (1 + ldeTaxPerc / 100) * 6.61. /* 8.00 IVA incl */
       ELSE IF CLIType.CLIType EQ "TARJ9" THEN
          ldeMFWithTax = (1 + ldeTaxPerc / 100) * 8.265. /* 10.00 IVA incl */
       ELSE IF CLiType.CommercialFee > 0 THEN
@@ -1782,14 +1782,18 @@ PROCEDURE pGetCTNAME:
           END.
 
        IF ldeMFWithTax > 0 THEN
-         lcList = lcList + (IF lcList > "" THEN ",<br/>" ELSE "") +
-         TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
-         (IF liLang EQ 5 THEN "month" ELSE "mes").
+         /* YBU-4648 LENGTH check added for fitting one line */
+         lcList = lcList + (IF LENGTH(lcList +  TRIM(STRING(ldeMFWithTax,
+                               "->>>>>>>9.99")) + " &euro;/" + (IF liLang 
+                               EQ 5 THEN "month" ELSE "mes")) > 36 THEN 
+                               ",<br/>" ELSE " ") +
+                  TRIM(STRING(ldeMFWithTax,"->>>>>>>9.99")) + " &euro;/" +
+                  (IF liLang EQ 5 THEN "month" ELSE "mes").
 
        IF lcList > "" THEN
          lcTagCTName = lcTagCTName + ",<br/> " + lcList +
-          (IF liLang EQ 5 THEN " VAT. incl"
-           ELSE " imp. incl.").
+          (IF liLang EQ 5 THEN " VAT. incl<br/>"
+           ELSE " imp. incl.<br/>").
 
         IF lcMFText NE ""  THEN
            lcTagCTName = lcTagCTName + " " + lcMFText.
@@ -1828,7 +1832,8 @@ PROCEDURE pGetCTNAME:
    END.
 
    lcTagCTName = REPLACE(lcTagCTName,"E/mes","&euro;/mes").
-   lcTagCTName = REPLACE(lcTagCTName,"E/month","&euro;/month").   
+   lcTagCTName = REPLACE(lcTagCTName,"E/month","&euro;/month").
+   lcTagCTName = REPLACE(lcTagCTName,",00","").
 
    lcResult = lcTagCTName.
 END. /*Tariff name*/

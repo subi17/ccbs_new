@@ -303,7 +303,9 @@ PROCEDURE pHandleFMItem:
                            fNotNull(FMItem.FeeModel)              + lcDel +
                            fNotNull(FMItem.BillCode)              + lcDel +
                            fNotNull(STRING(FMItem.Amount))        + lcDel +
-                           fNotNull(STRING(FMItem.FirstMonthBR)).
+                           fNotNull(STRING(FMItem.FirstMonthBR))  + lcDel +
+                           fDateToString(FMItem.FromDate)         + lcDel +
+                           fDateToString(FMItem.ToDate).
                fWriteMessage(lcMessage).
             END.
             ELSE DO:

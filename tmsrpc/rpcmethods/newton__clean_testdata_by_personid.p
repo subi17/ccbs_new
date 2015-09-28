@@ -10,7 +10,8 @@
 gcBrand = "1".
 {msisdn.i}
 
-DEF VAR lcDNI AS CHAR NO-UNDO.
+DEF VAR lcDNI         AS CHAR NO-UNDO.
+DEF VAR MSISDN_status AS INT  NO-UNDO FORMAT "Z9".
 
 IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 
@@ -24,7 +25,8 @@ FUNCTION fReleaseSIM RETURNS LOG (INPUT icICC AS CHAR):
    FOR FIRST SIM EXCLUSIVE-LOCK WHERE
              SIM.Brand EQ gcBrand AND
              SIM.ICC   EQ icICC   AND
-             SIM.Stock EQ "TESTING" AND
+            (SIM.Stock EQ "TESTING" OR
+             SIM.Stock EQ "EMATESTING") AND
              SIM.SimStat <> 1:
       SIM.SimStat = 1.
    END.
@@ -34,14 +36,18 @@ END FUNCTION.
 
 FUNCTION fReleaseMSISDN RETURNS LOG (INPUT icMSISDN AS CHAR):
 
+/* Check if MSISDN in EMA range. If belongs to EMA then set status to 98 */
+   IF fIsEmaMsisdn(icMSISDN) THEN MSISDN_status = 98.
+   ELSE MSISDN_status = 99.   /* use normal status value */
+
    FOR FIRST MSISDN EXCLUSIVE-LOCK WHERE
              MSISDN.Brand = gcBrand AND
              MSISDN.CLI   = icMSISDN AND
-             MSISDN.StatusCode <> 99:
+             MSISDN.StatusCode < 98:
       fMakeMsidnHistory(INPUT RECID(MSISDN)).
       ASSIGN MSISDN.OrderId = 0
              Msisdn.MsSeq   = 0
-             MSISDN.StatusCode = 99.
+             MSISDN.StatusCode = MSISDN_status.
    END.
 
    RETURN TRUE.
@@ -164,7 +170,8 @@ FOR EACH Customer WHERE
    FIND FIRST SIM WHERE
               SIM.Brand EQ gcBrand    AND
               SIM.ICC   EQ MobSub.ICC AND
-              SIM.Stock EQ "TESTING" NO-LOCK NO-ERROR.
+             (SIM.Stock EQ "TESTING" OR
+              SIM.Stock EQ "EMATESTING") NO-LOCK NO-ERROR.
    IF NOT AVAIL SIM THEN
       RETURN appl_err("One of the MSISDN does not belong to testing tool").
 END.

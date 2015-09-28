@@ -6,6 +6,8 @@ from show_results import *
 
 # Definition
 s = xmlrpclib.ServerProxy(address,transport=p)
+#s = xmlrpclib.ServerProxy(address)
+
 def instruction():
    print "Missing parameter: MSISDN BUNDLE SOURCE"
    print "Example: python ext_selfservice__set_upsell_bundles.py 622689226 DATA9_UPSELL 501"
@@ -19,3 +21,5 @@ else:
 
 q=s.ext.selfservice.set_upsell_bundles(var3,var1,var2)
 print_results(q)
+
+

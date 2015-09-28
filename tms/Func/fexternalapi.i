@@ -71,6 +71,7 @@ FUNCTION fgetAppUserId RETURNS CHARACTER(INPUT icAppId     AS CHARACTER,
 
 END FUNCTION.
 
+/* YTS-6900 From Elena: 505 should be 'Landing Page_MSISDN' 507 should be 'Collection Landing Page' */
 
 FUNCTION fgetAppDetailedUserId RETURNS CHARACTER(INPUT icAppId     AS CHARACTER,
                                          INPUT icAppUserId AS CHARACTER):
@@ -80,7 +81,7 @@ FUNCTION fgetAppDetailedUserId RETURNS CHARACTER(INPUT icAppId     AS CHARACTER,
     ELSE IF LOOKUP(icAppId,lcMiYoigoWebId) > 0 THEN
         lcUserId = "Mi Yoigo WEB" + "_" + icAppUserId.
     ELSE IF LOOKUP(icAppId,lcCollectionId) > 0 THEN
-        lcUserId = "Landing Page" + "_" + icAppUserId.
+        lcUserId = "Collection Landing Page" + "_" + icAppUserId.
     ELSE IF LOOKUP(icAppId,lcIvrAppId) > 0 THEN
         lcUserId = "IVR" + "_" + icAppUserId.
     ELSE IF LOOKUP(icAppId,lcCCGWId) > 0 THEN
@@ -94,7 +95,7 @@ FUNCTION fgetAppDetailedUserId RETURNS CHARACTER(INPUT icAppId     AS CHARACTER,
     ELSE IF LOOKUP(icAppId,lcCTCId) > 0 THEN
         lcUserId = "CTC" + "_" + icAppUserId.
     ELSE IF LOOKUP(icAppId,lcBonoIPLUpgId) > 0 THEN
-        lcUserId = "Bono/IPL/upgrade upsell" + "_" + icAppUserId.
+        lcUserId = "Landing Page" + "_" + icAppUserId.
     ELSE IF LOOKUP(icAppId,lcIFSId) > 0 THEN
         lcUserId = "IFS" + "_" + icAppUserId.
     ELSE lcUserId = "SelfService" + "_" + icAppUserId.

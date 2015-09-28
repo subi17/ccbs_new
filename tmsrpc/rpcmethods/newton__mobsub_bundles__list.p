@@ -20,6 +20,7 @@ DEF VAR lcActiveBundle      AS CHAR NO-UNDO.
 DEF VAR lcActiveBundles     AS CHAR NO-UNDO. 
 DEF VAR lcError             AS CHAR NO-UNDO. 
 DEF VAR liCount             AS INT  NO-UNDO. 
+DEF VAR liUpsellCount       AS INT  NO-UNDO.
 DEF VAR ldeCurrTS           AS DEC  NO-UNDO.
 DEF VAR lcDSSBundleId       AS CHAR NO-UNDO.
 DEF VAR llActiveBonoContract AS LOG  NO-UNDO.
@@ -76,11 +77,14 @@ DO liCount = 1 TO NUM-ENTRIES(lcActiveBundles):
               DayCampaign.DCEvent = lcActiveBundle NO-ERROR.
    IF NOT AVAIL DayCampaign OR DayCampaign.BundleUpsell EQ "" THEN NEXT.
 
-   add_string(lcResultArray,"", 
-              DayCampaign.BundleUpsell + "|" + STRING(Mobsub.MsSeq)).
-   
-END. /* DO liCount = 1 TO NUM-ENTRIES(lcActiveBundles): */
+   DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
+      add_string(lcResultArray,"",
+                 ENTRY(liUpsellCount,DayCampaign.BundleUpsell)
+                 + "|" + STRING(Mobsub.MsSeq)).
+   END.
       
+END. /* DO liCount = 1 TO NUM-ENTRIES(lcActiveBundles): */
+/*  before ILP    
 /* Return DSS bundle and upsell if DSS is active */
 IF lcDSSBundleId = {&DSS} OR
    (lcDSSBundleId = "DSS2" AND
@@ -89,7 +93,28 @@ IF lcDSSBundleId = {&DSS} OR
    add_string(lcResultArray,"", lcDSSBundleId + "_UPSELL" + "|" +
               STRING(Mobsub.MsSeq)).
 END. /* IF lcDSSBundleId = {&DSS} OR */
-   
+  before ILP ends */
+/*ILP 
+read from configuration instead of hard coding _UPSELL*/
+/* Return DSS bundle and upsell if DSS is active */
+IF lcDSSBundleId = {&DSS} OR
+   (lcDSSBundleId = "DSS2" AND
+    LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0) THEN DO:
+   add_string(lcResultArray,"", lcDSSBundleId + "|" + STRING(Mobsub.MsSeq)).
+   /*Find upsells and add all to reponse*/
+   FIND FIRST DayCampaign NO-LOCK WHERE
+              DayCampaign.Brand = gcBrand AND
+              DayCampaign.DCEvent = lcDSSBundleId NO-ERROR.
+   IF AVAIL DayCampaign AND NOT DayCampaign.BundleUpsell EQ "" THEN DO:
+      DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
+         add_string(lcResultArray,"",
+                    ENTRY(liUpsellCount,DayCampaign.BundleUpsell)
+                    + "|" + STRING(Mobsub.MsSeq)).
+      END.
+   END.
+END.
+/*ILP ENDS*/
+ 
 IF MobSub.CliType EQ "CONT15" AND
    fGetCurrentSpecificBundle(
       MobSub.MsSeq,
@@ -114,7 +139,12 @@ FOR EACH DayCampaign NO-LOCK WHERE
       NOT fIsBonoVoIPAllowed(Mobsub.MsSeq, ldeCurrTS) THEN NEXT.
    
    add_string(lcResultArray,"", DayCampaign.DCEvent + "|" + STRING(Mobsub.MsSeq) ).
-   /*add_string(lcResultArray,"", DayCampaign.BundleUpsell + "|" + STRING(Mobsub.MsSeq) ). waiting for more checks ydr_1905*/
+   DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
+      add_string(lcResultArray,"",
+                 ENTRY(liUpsellCount,DayCampaign.BundleUpsell)
+                 + "|" + STRING(Mobsub.MsSeq)).
+   END.
+
 END.
 
 

@@ -16,6 +16,7 @@ gcBrand = "1".
 {bundle_first_month_fee.i}
 {tmsconst.i}
 {matrix.i}
+{fprepaidfee.i}
 
 DEF VAR lcRespFile AS CHAR NO-UNDO. 
 DEF VAR lcFileName AS CHAR NO-UNDO. 
@@ -56,7 +57,7 @@ DEF STREAM sFile.
 ASSIGN
    lcOutDir   = fCParam("PrepaidBundle","OutDir")
    lcSpoolDir = fCParam("PrepaidBundle","OutSpoolDir")
-   ldeMonthlyFee  = fCParamDe("PMDUBFee")
+   ldeMonthlyFee = fgetPrepaidFeeAmount("PMDUB", TODAY)
    ldeNow = fMakeTS()
    ldaCurrMonth = DATE(MONTH(TODAY), 1, YEAR(TODAY))
    ldaFirstMonth = ldaCurrMonth - 1

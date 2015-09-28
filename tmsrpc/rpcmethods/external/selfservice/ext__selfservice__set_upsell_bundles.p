@@ -29,6 +29,7 @@ gcBrand = "1".
 {upsellbundle.i}
 {fgettxt.i}
 {fexternalapi.i}
+{fprepaidfee.i}
 
 DEF VAR pcUpsellId          AS CHAR NO-UNDO.
 DEF VAR pcCLI               AS CHAR NO-UNDO.
@@ -43,6 +44,8 @@ DEF VAR ldeBundleFee        AS DEC  NO-UNDO.
 DEF VAR lcApplicationId     AS CHAR NO-UNDO.
 DEF VAR lcAppEndUserId      AS CHAR NO-UNDO.
 DEF VAR secondsFromPrevious AS INT  NO-UNDO.
+DEF VAR lcMemoText          AS CHAR NO-UNDO.
+DEF VAR lcMemoTitle         AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,string,string") EQ ? THEN RETURN.
 
@@ -87,7 +90,13 @@ FIND FIRST DayCampaign NO-LOCK WHERE
            DayCampaign.DCEvent = pcUpsellId NO-ERROR.
 IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
 
-   
+/* DATA200_UPSELL and DSS200_UPSELL will only be allowed
+   to activate from Landing page (application id - 505) */
+IF (pcUpsellId = "DATA200_UPSELL" OR
+    pcUpsellId = "DSS200_UPSELL") AND
+    lcApplicationId <> "505" THEN
+   RETURN appl_err(SUBST("&1 activation is allowed from LP only", pcUpsellId)).
+
 IF pcUpsellId EQ {&HSPA_ROAM_EU} OR pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
 
    /* Check if subscription type is not compatible with bundle */
@@ -101,7 +110,7 @@ IF pcUpsellId EQ {&HSPA_ROAM_EU} OR pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
       
    /* Validate Prepaid Balance before making TARJ UPSell activation request */
    IF pcUpsellId = {&TARJ_UPSELL} THEN DO:
-      ldeBundleFee = fCParamDe("TARJ_UPSELLFee").
+      ldeBundleFee = fgetPrepaidFeeAmount(pcUpsellId, TODAY).
       RUN pEnoughBalance(INPUT MobSub.CLI,
                          INPUT ldeBundleFee,
                          OUTPUT llResult).
@@ -131,7 +140,6 @@ IF pcUpsellId EQ {&HSPA_ROAM_EU} OR pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
                                 OUTPUT lcError).
    IF liRequest = 0 THEN RETURN appl_err("Bundle request not created"). 
 END.
-
 ELSE IF NOT fCreateUpsellBundle(
    MobSub.MsSeq,
    pcUpsellId,
@@ -161,12 +169,29 @@ ELSE IF NOT fCreateUpsellBundle(
    RETURN appl_err(lcError).
 END.
 
+FIND FIRST DayCampaign NO-LOCK WHERE
+           DayCampaign.Brand = gcBrand AND
+           DayCampaign.DCEvent = pcUpsellId NO-ERROR.
+
+ASSIGN lcMemoText = IF INDEX(Daycampaign.DCName,"Ampliación")>0 THEN
+                       DayCampaign.DCName ELSE "Ampliación " +
+                       DayCampaign.DCName + " - Activar"
+       lcMemoTitle = DayCampaign.DCName.
+
+IF pcUpsellId = "DATA200_UPSELL" THEN ASSIGN
+   lcMemoTitle = "Ampliación 200 MB"
+   lcMemoText = "Ampliación 200 MB".
+ELSE IF pcUpsellId = "DSS200_UPSELL" THEN ASSIGN
+   lcMemoTitle = "Ampliación 200 MB"
+   lcMemoText  = "Internet compartido - Ampliación 200 MB".
+          
+
 DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
                  "MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
                  MobSub.CustNum,                       /* CustNum */
-                 DayCampaign.DCName,                   /* MemoTitle */
-                 "Ampliación " + DayCampaign.DCName + " - Activar",  /* MemoText */
+                 lcMemoTitle,                          /* MemoTitle */
+                 lcMemoText,                           /* MemoText */
                  "Service",                            /* MemoType */
                  fgetAppDetailedUserId(INPUT lcApplicationId,
                                       INPUT Mobsub.CLI)).

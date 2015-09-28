@@ -102,7 +102,11 @@ DEF VAR ldaiSTCDate AS DATE NO-UNDO.
 DEF VAR liiSTCTime  AS INT  NO-UNDO.
 DEF VAR lliSTC      AS LOG  NO-UNDO.
 DEF VAR lcUpSellBundle AS CHAR NO-UNDO.
-
+DEF VAR liData200Count AS INT NO-UNDO.
+DEF VAR liDSS200Count AS INT NO-UNDO.
+DEF VAR lcData200Bundle AS CHAR NO-UNDO.
+DEF VAR lcUpsellId AS CHAR NO-UNDO. 
+DEF VAR liCount AS INT NO-UNDO. 
 DEF BUFFER bServiceLimit FOR ServiceLimit.
 
 DEF TEMP-TABLE ttCDR NO-UNDO LIKE MobCDR.
@@ -375,14 +379,28 @@ IF NOT MobSub.PayType THEN DO:
       IF AVAILABLE ServiceLCounter THEN
          ldeDSSDataUsed = ldeDSSDataUsed  + ServiceLCounter.amt.
    END. /* FOR EACH ServiceLimit WHERE */
+   
+   ASSIGN ldeDSSDataUsed = (ldeDSSDataUsed / 1024 / 1024)
+          ldeDSSDataBundleUsage = (ldeDSSDataBundleUsage / 1024 / 1024).
 
    /* Check if there is any active DSS upsell */
-   IF llDSSActive THEN DO:
-      liDSSUpsellCount = fGetUpSellCount(INPUT lcDSSBundleId + "_UPSELL",
-                                         INPUT Mobsub.MsSeq,
-                                         INPUT Mobsub.Custnum,
-                                         OUTPUT lcError).
+   IF llDSSActive THEN
+   FOR FIRST DayCampaign NO-LOCK WHERE
+             DayCampaign.Brand = gcBrand AND
+             DayCampaign.DCEvent = lcDSSBundleId:
+      
+      DO liLoop = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
 
+         lcUpsellId = ENTRY(liLoop,DayCampaign.BundleUpsell).
+
+         liCount = fGetUpSellCount(INPUT lcUpsellId,
+                                   INPUT Mobsub.MsSeq,
+                                   INPUT Mobsub.Custnum,
+                                   OUTPUT lcError).
+         IF lcUpsellId EQ "DSS200_UPSELL" THEN
+            liDSS200Count = liCount.
+         ELSE liDssUpsellCount = liDssUpsellCount + liCount.
+      END.
       IF lcDSSBundleId EQ "DSS2" THEN DO:
 
          fGetMsOwnerTempTable(MobSub.Custnum,first_of_month,
@@ -409,8 +427,6 @@ IF NOT MobSub.PayType THEN DO:
       END. /* IF lcDSSBundleId EQ "DSS2" THEN DO: */
    END. /* IF llDSSActive THEN DO: */
 
-   ASSIGN ldeDSSDataUsed = (ldeDSSDataUsed / 1024 / 1024)
-          ldeDSSDataBundleUsage = (ldeDSSDataBundleUsage / 1024 / 1024).
 END. /* IF NOT MobSub.PayType THEN DO: */
 
 FOR FIRST ServiceLimit NO-LOCK WHERE
@@ -476,6 +492,7 @@ DO liLoop = 1 TO 3:
              ldeDataBundleUsage = 0.
 
       IF MServiceLimit.DialType = {&DIAL_TYPE_GPRS} THEN DO:
+      /* d*200 is done under gprs*/
          /* Check DSS Upgrade upsell limit */
          FIND FIRST MsRequest NO-LOCK WHERE
                     MsRequest.MsSeq      = MobSub.MsSeq AND
@@ -495,11 +512,15 @@ DO liLoop = 1 TO 3:
                        MserviceLPool.SLSeq   = MServiceLimit.SLSeq  AND
                        MserviceLPool.EndTS  >= ldPeriodFrom         AND
                        MserviceLPool.FromTS <= ldPeriodTo NO-LOCK NO-ERROR.
-            IF AVAILABLE MserviceLPool THEN
-               ASSIGN ldeDataBundleLimit = MserviceLPool.LimitAmt
-                      ldeTotalDataBundleLimit = ldeTotalDataBundleLimit +
-                                                MserviceLPool.LimitAmt
-                      lcUpSellBundle = DayCampaign.DCEvent.
+            IF AVAILABLE MserviceLPool THEN DO:
+               ldeDataBundleLimit = MserviceLPool.LimitAmt.
+               ldeTotalDataBundleLimit = ldeTotalDataBundleLimit +
+                                         MserviceLPool.LimitAmt.
+               IF DayCampaign.DCEvent EQ "DATA200_UPSELL" THEN
+                  lcData200Bundle= DayCampaign.DCEvent.
+               ELSE   
+                  lcUpSellBundle = DayCampaign.DCEvent.
+            END.           
          END. /* IF bDayCampaign.DCType = {&DCTYPE_POOL_RATING} THEN DO: */
          ELSE
             ASSIGN ldeDataBundleLimit = MServiceLimit.InclAmt
@@ -574,7 +595,12 @@ IF lcUpSellBundle > "" THEN
                                    MobSub.MsSeq,
                                    MobSub.Custnum,
                                    OUTPUT lcError).
-
+IF lcData200Bundle > "" THEN
+   liData200Count = fGetUpSellCount(lcData200Bundle,
+                                   MobSub.MsSeq,
+                                   MobSub.Custnum,
+                                   OUTPUT lcError).
+/*ilkka add 200 countesr*/
 IF MobSub.CliType = "TARJ6" THEN DO:
    FOR FIRST ServiceLimit NO-LOCK WHERE
              ServiceLimit.GroupCode = {&TARJ_UPSELL} AND
@@ -651,6 +677,8 @@ add_int(first_level_struct,    "voice_bdest_limit", liVoiceBDestLimit).
 add_int(first_level_struct,    "voice_bdest_usage", liVoiceBDestUsage).
 add_int(first_level_struct,    "bono_count", liBonoCount).
 add_int(first_level_struct,    "data_bundle_upsell", liUpsellCount).
+add_int(first_level_struct,    "data200_upsell_count", liData200Count).
+add_int(first_level_struct,    "dss200_upsell_count", liDSS200Count).
 
 FINALLY:
    EMPTY TEMP-TABLE ttCDR.

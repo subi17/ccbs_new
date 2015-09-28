@@ -76,6 +76,7 @@ DEFINE VARIABLE lcBONOContracts    AS CHAR NO-UNDO.
 DEFINE VARIABLE lcCustData         AS CHAR NO-UNDO.
 DEFINE VARIABLE llOwnCustomer      AS LOG  NO-UNDO. 
 DEFINE VARIABLE lcOfferId          AS CHAR NO-UNDO INIT "". 
+DEFINE VARIABLE lcEmaMsisdn        AS CHAR NO-UNDO INIT "".
 
 DEFINE STREAM sOrder.
 DEFINE STREAM sOrderCust.
@@ -92,6 +93,9 @@ DEFINE TEMP-TABLE ttBatchInputFile
    FIELD AnalyzerReport  AS LOG
    FIELD OutputFileName  AS CHAR
    FIELD DeliverFileName AS CHAR
+   FIELD MsisdnStatus    AS INT
+   FIELD SimIcc          AS CHAR
+   FIELD UsedMSISDN      AS CHAR
    INDEX FileName IS PRIMARY UNIQUE FileName.
 
 DEFINE TEMP-TABLE ttInputFileContent
@@ -144,8 +148,7 @@ DEFINE TEMP-TABLE ttOrderCustomer NO-UNDO LIKE OrderCustomer.
 DEFINE BUFFER bttInputFileContent FOR ttInputFileContent.
 
 /* Include file */
-{/apps/yoigo/tms_support/testing/testing_tool/subscription_creation_tool.i} 
-
+{subscription_creation_tool.i} 
 
 /* Main Block */
 
@@ -229,7 +232,8 @@ DO WHILE TRUE
          ASSIGN
             ttBatchInputFile.FileName = REPLACE(ENTRY(NUM-ENTRIES(lcResultFile,"/"),
                                         lcResultFile,"/"),".RPT","")
-             ttBatchInputFile.Valid    = TRUE.
+             ttBatchInputFile.Valid    = TRUE
+            ttBatchInputFile.MsisdnStatus = 99. /* Status code tells that this is for normal test MSISDN */.
 
          INPUT STREAM sInputFile FROM VALUE(lcResultFile).
 
@@ -345,16 +349,35 @@ DO WHILE TRUE
 
                 IF NUM-ENTRIES(ttInputFileContent.InputLine,"|") >= 6 THEN DO:
                   lcOfferId = ENTRY(6,ttInputFileContent.InputLine,"|").                  
-                  IF NOT CAN-FIND(FIRST Offer WHERE Offer.Offer = lcOfferId) THEN DO:
-                     lcOfferId = "".
-                     fLogEntry(ttInputFileContent.InputLine, "Invalid OfferId").
-                     LEAVE FILE_CONTENT_LOOP.
+                  IF lcOfferId > "" THEN DO:  /* Offer ID is not mandatory */
+                     IF NOT CAN-FIND(FIRST Offer WHERE Offer.Offer = lcOfferId) THEN DO:
+                        lcOfferId = "".
+                        fLogEntry(ttInputFileContent.InputLine, "Invalid OfferId").
+                        LEAVE FILE_CONTENT_LOOP.
+                     END.
                   END.
                 END.
                 IF NUM-ENTRIES(ttInputFileContent.InputLine,"|") >= 7 THEN
                    ttBatchInputFile.ttUserId  = ENTRY(7,ttInputFileContent.InputLine,"|").
                 IF NUM-ENTRIES(ttInputFileContent.InputLine,"|") >= 8 THEN
                    ttBatchInputFile.EmailId = ENTRY(8,ttInputFileContent.InputLine,"|").
+                IF NUM-ENTRIES(ttInputFileContent.InputLine,"|") >= 9 THEN      /* For special MSISDN number */
+                   ttBatchInputFile.UsedMSISDN = ENTRY(9,ttInputFileContent.InputLine,"|").
+                IF NUM-ENTRIES(ttInputFileContent.InputLine,"|") >= 10 THEN      /* For special SIM number */
+                   ttBatchInputFile.SimIcc = ENTRY(10,ttInputFileContent.InputLine,"|").
+                IF NUM-ENTRIES(ttInputFileContent.InputLine,"|") >= 11 THEN DO:   /* For ADMIN user EMA testing only */
+                   lcEmaMsisdn = ENTRY(11,ttInputFileContent.InputLine,"|").
+                   IF lcEmaMsisdn > "" THEN DO:
+                      IF lcEmaMsisdn NE "EMA" THEN DO:
+                         llError = TRUE.
+                         fLogEntry(ttBatchInputFile.FileName, lcEmaMsisdn + " Incorrect EMA format").
+                         LEAVE FILE_CONTENT_LOOP.
+                      END.
+                      ELSE DO:
+                         ttBatchInputFile.MsisdnStatus = 98.   /* Status code used for EMA subscribers */
+                      END.
+                   END.
+                END.
              END. /* WHEN "SUBSCRIPTION" THEN DO: */
              WHEN "ACT_BONO" OR WHEN "DEACT_BONO" THEN DO:
                 IF ENTRY(3,ttInputFileContent.InputLine,"|") > "" THEN
@@ -402,14 +425,17 @@ DO WHILE TRUE
           END CASE.
        END. /* FOR EACH ttInputFileContent WHERE */
 
-       IF NOT fCheckMSISDN() THEN DO:
-          fLogEntry(ttBatchInputFile.FileName,"MSISDN is not available or free").
-          llError = TRUE.
-       END.
+       IF llError = FALSE THEN DO:
+          IF NOT fCheckMSISDN(INPUT ttBatchInputFile.MsisdnStatus,
+                              INPUT ttBatchInputFile.UsedMSISDN) THEN DO:
+             fLogEntry(ttBatchInputFile.FileName,"MSISDN is not available or free").
+             llError = TRUE.
+          END.
 
-       IF NOT fCheckSIM() THEN DO:
-          fLogEntry(ttBatchInputFile.FileName,"SIM is not available or free").
-          llError = TRUE.
+          IF NOT fCheckSIM(INPUT ttBatchInputFile.SimIcc) THEN DO:
+             fLogEntry(ttBatchInputFile.FileName,"SIM is not available or free").
+             llError = TRUE.
+          END.
        END.
 
        IF llError = TRUE THEN
@@ -486,13 +512,12 @@ DO WHILE TRUE
                                      INPUT ttBatchInputFile.ttUserId,
                                      INPUT llOwnCustomer,
                                      INPUT lcOfferId,
+                                     INPUT ttBatchInputFile.MsisdnStatus,
+                                     INPUT ttBatchInputFile.SimIcc,
+                                     INPUT ttBatchInputFile.UsedMSISDN,
                                      OUTPUT lcCLI,
                                      OUTPUT liOrderId).
              IF liOrderId > 0 THEN DO:
-                lcResult = fCreateOrderCustomer(INPUT liOrderId,
-                                                INPUT ttInputFileContent.CustIDType,
-                                                INPUT llOwnCustomer).
-
                 /* OrderAction for Bono Activation */
                 IF lcBono > "" THEN DO:
                    fCreateOrderAction(liOrderId,"BundleItem",lcBono,"").
@@ -502,6 +527,11 @@ DO WHILE TRUE
                 END. /* IF lcBono > "" THEN DO: */
                 ELSE
                    fLogEntry(STRING(liCount),lcCLI).
+                
+                /* Order released after creation */
+                lcResult = fCreateOrderCustomer(INPUT liOrderId,
+                                                INPUT ttInputFileContent.CustIDType,
+                                                INPUT llOwnCustomer).
              END. /* IF liOrderId > 0 THEN DO: */
              ELSE DO:
                 liBonoCount = liBonoCount - 1.

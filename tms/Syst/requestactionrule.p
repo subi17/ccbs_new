@@ -79,7 +79,7 @@ FORM
     RequestActionRule.RequestActionID COLON 25
     RequestActionRule.ParamField      COLON 25 
     lcParamDesc NO-LABEL FORMAT "X(35)" SKIP
-    RequestActionRule.ParamValue      COLON 25 FORMAT "x(256)" VIEW-AS FILL-IN SIZE 45 BY 1
+    RequestActionRule.ParamValue      COLON 25 FORMAT "x(320)" VIEW-AS FILL-IN SIZE 45 BY 1 
     RequestActionRule.ExclParamValue  COLON 25 FORMAT "x(256)" VIEW-AS FILL-IN SIZE 45 BY 1
     RequestActionRule.FromDate        COLON 25
     RequestActionRule.ToDate          COLON 25    

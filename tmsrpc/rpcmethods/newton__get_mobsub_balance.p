@@ -23,6 +23,7 @@ gcBrand = "1".
 {cparam2.i}
 {upsellbundle.i}
 {tarj6.i}
+{fprepaidfee.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
@@ -412,8 +413,7 @@ ELSE DO:
                             MServiceLimit.SLSeq = ServiceLimit.SLSeq AND
                             MServiceLimit.EndTS >= ldeCurrentTS NO-LOCK)
          THEN DO:
-            ASSIGN ldeBundleFee = fCParamDe(MobSub.CliType + "_BundleFee")
-                   ldeUpsellFee = fCParamDe("TARJ7_UPSELLFee").
+            ASSIGN ldeBundleFee = fgetPrepaidFeeAmount(MobSub.CliType, TODAY).
 
             fCollectBalance(MobSub.CLIType,MobSub.TariffBundle,
                             "PRE" + MobSub.CliType + "BUNDLE",ldeBundleFee,"balance").
@@ -424,6 +424,7 @@ ELSE DO:
                                             INPUT Mobsub.Custnum,
                                             OUTPUT lcError).
             IF liUpsellCount > 0 THEN DO:
+               ldeUpsellFee = fgetPrepaidFeeAmount("TARJ7_UPSELL", TODAY).
                ldeUpsellFee = ldeUpsellFee * liUpsellCount.
                fCollectBalance(MobSub.CLIType,MobSub.TariffBundle,
                                "PRETARJ7UPSELL",ldeUpsellFee,"balance").
@@ -440,8 +441,7 @@ ELSE DO:
                             MServiceLimit.SLSeq = ServiceLimit.SLSeq AND
                             MServiceLimit.EndTS >= ldeCurrentTS NO-LOCK)
          THEN DO:
-            ASSIGN ldeBundleFee = fCParamDe("PMDUBFee")
-                   ldeUpsellFee = fCParamDe("UPSELL_PMDUBFee").
+            ASSIGN ldeBundleFee = fgetPrepaidFeeAmount("PMDUB", TODAY).
 
             fCollectBalance(MobSub.CLIType,MobSub.TariffBundle,
                             "PREMDUB",ldeBundleFee,"balance").
@@ -452,6 +452,7 @@ ELSE DO:
                                             INPUT Mobsub.Custnum,
                                             OUTPUT lcError).
             IF liUpsellCount > 0 THEN DO:
+               ldeUpsellFee = fgetPrepaidFeeAmount("PMDUB_UPSELL", TODAY).
                ldeUpsellFee = ldeUpsellFee * liUpsellCount.
                fCollectBalance(MobSub.CLIType,MobSub.TariffBundle,
                                "PREMDUB",ldeUpsellFee,"balance").

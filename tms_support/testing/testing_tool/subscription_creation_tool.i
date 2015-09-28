@@ -36,23 +36,58 @@ FUNCTION fLoadOrderCustomer RETURNS LOG (INPUT icFileName AS CHAR):
    RETURN TRUE.
 END FUNCTION.
 
-FUNCTION fCheckMSISDN RETURNS LOG:
+FUNCTION fCheckMSISDN RETURNS LOG (INPUT iiStatus_MSISDN AS INT,
+                                   INPUT icUsedMSISDN    AS CHAR ):
 
-   FIND FIRST MSISDN EXCLUSIVE-LOCK WHERE
-              MSISDN.Brand = gcBrand AND
-              MSISDN.ValidTo GE fMakeTS() AND
-              MSISDN.StatusCode EQ 99 NO-WAIT NO-ERROR.
+   IF icUsedMSISDN > "" THEN DO:
+      FIND FIRST MSISDN EXCLUSIVE-LOCK WHERE
+                 MSISDN.Brand = gcBrand AND
+                 MSISDN.CLI   = icUsedMSISDN AND   /* Search with given MSISDN number */
+                 MSISDN.ValidTo GE fMakeTS() AND
+                 MSISDN.StatusCode EQ iiStatus_MSISDN NO-WAIT NO-ERROR. /* Normal or EMA */
+   END.
+   ELSE DO: /* Find first free */
+      FIND FIRST MSISDN EXCLUSIVE-LOCK WHERE
+                 MSISDN.Brand = gcBrand AND
+                 MSISDN.ValidTo GE fMakeTS() AND
+                 MSISDN.StatusCode EQ iiStatus_MSISDN NO-WAIT NO-ERROR. /* Normal or EMA */
+   END.
    IF NOT AVAILABLE MSISDN THEN
       RETURN FALSE.
    ELSE RETURN TRUE.
 END.
 
-FUNCTION fCheckSIM RETURNS LOG:
+FUNCTION fCheckSIM RETURNS LOG (INPUT icSimIcc AS CHAR):
 
-   FIND FIRST SIM EXCLUSIVE-LOCK WHERE
-              SIM.Brand EQ gcBrand AND
-              SIM.Stock EQ "TESTING" AND
-              SIM.SimStat EQ 1 NO-WAIT NO-ERROR.
+   DEFINE VARIABLE  llContinue  AS LOGICAL NO-UNDO INIT FALSE.
+
+   IF icSimIcc > "" THEN DO:
+      FIND FIRST SIM EXCLUSIVE-LOCK WHERE
+                 SIM.ICC   EQ icSimIcc AND   /* Search with given ICC number */
+                 SIM.Brand EQ gcBrand AND
+                 SIM.SimStat EQ 1 NO-WAIT NO-ERROR.
+
+      IF AVAILABLE SIM THEN   /* If stock not correct then ask confirmation */
+         IF NOT (SIM.Stock EQ "TESTING" OR
+                 SIM.Stock EQ "EMATESTING") THEN DO:
+            MESSAGE "Incorrect SIM Stock (" + SIM.Stock + "). Change stock to Testing?" 
+            VIEW-AS ALERT-BOX QUESTION
+            BUTTONS YES-NO
+            SET llContinue.
+            IF NOT llContinue THEN DO:
+               RELEASE SIM.
+               RETURN FALSE.
+            END.
+            IF llContinue THEN ASSIGN SIM.Stock = "TESTING".
+         END.
+   END.
+   ELSE DO:
+      FIND FIRST SIM EXCLUSIVE-LOCK WHERE
+                 SIM.Brand EQ gcBrand AND
+                (SIM.Stock EQ "TESTING" OR
+                 SIM.Stock EQ "EMATESTING") AND
+                 SIM.SimStat EQ 1 NO-WAIT NO-ERROR.
+   END.
    IF NOT AVAILABLE SIM THEN
       RETURN FALSE.
    ELSE RETURN TRUE.
@@ -80,13 +115,16 @@ FUNCTION fUpdateSIM RETURNS LOGICAL:
    RETURN TRUE.
 END.
 
-FUNCTION fCreateOrder RETURNS CHAR (INPUT icIdType    AS CHAR,
-                                    INPUT icCLIType   AS CHAR,
-                                    INPUT icUserId    AS CHAR,
-                                    INPUT ilOwnCust   AS LOG,
-                                    INPUT icOfferId   AS CHAR,
-                                    OUTPUT ocCLI      AS CHAR,
-                                    OUTPUT oiOrderId  AS INT):
+FUNCTION fCreateOrder RETURNS CHAR (INPUT icIdType       AS CHAR,
+                                    INPUT icCLIType      AS CHAR,
+                                    INPUT icUserId       AS CHAR,
+                                    INPUT ilOwnCust      AS LOG,
+                                    INPUT icOfferId      AS CHAR,
+                                    INPUT iiMsisdnStatus AS INT,
+                                    INPUT icSimIcc       AS CHAR,
+                                    INPUT icMSISDN       AS CHAR,
+                                    OUTPUT ocCLI         AS CHAR,
+                                    OUTPUT oiOrderId     AS INT):
 
    DEFINE VARIABLE lcCLIType    AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcCustId     AS CHARACTER NO-UNDO. 
@@ -98,7 +136,7 @@ FUNCTION fCreateOrder RETURNS CHAR (INPUT icIdType    AS CHAR,
          RETURN "Dummy OrderCustomer record not found for " + icIdType.
       ASSIGN
         lcCustidType = ttOrderCustomer.CustIdType
-        lcCustId     = ttOrderCustomer.CustIdType.
+        lcCustId     = ttOrderCustomer.CustId.
    END.
    ELSE DO:
       ASSIGN
@@ -121,8 +159,8 @@ FUNCTION fCreateOrder RETURNS CHAR (INPUT icIdType    AS CHAR,
               CLIType.CLIType = lcCLIType NO-LOCK NO-ERROR.
    IF NOT AVAIL CLIType THEN RETURN "Invalid CLIType is specified".
 
-   IF NOT fCheckMSISDN() THEN RETURN "MSISDN is not available or free".
-   IF NOT fCheckSIM() THEN RETURN "SIM is not available or free".
+   IF NOT fCheckMSISDN(INPUT iiMsisdnStatus, INPUT icMSISDN) THEN RETURN "MSISDN is not available or free".
+   IF NOT fCheckSIM(INPUT icSimIcc) THEN RETURN "SIM is not available or free".
 
    DO TRANS:
       CREATE Order.
@@ -143,7 +181,7 @@ FUNCTION fCreateOrder RETURNS CHAR (INPUT icIdType    AS CHAR,
          Order.OrderType       = 0
          Order.ContractID      = SUBSTRING(STRING(Order.OrderId),5,4)
          Order.Salesman        = icUserId
-         Order.Offer           = (IF icOfferId > "" THEN icOfferId ELSE "").
+         Order.Offer           = icOfferId.
 
       ASSIGN oiOrderId = Order.OrderId
              ocCLI     = Order.CLI.
@@ -721,6 +759,8 @@ PROCEDURE pSTC:
                                       0,
                                       {&REQUEST_SOURCE_SCRIPT},
                                       0,
+                                      0,
+                                      "",
                                       OUTPUT lcError).
          IF liRequest = 0 THEN
             ASSIGN

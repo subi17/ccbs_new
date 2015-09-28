@@ -19,6 +19,7 @@ gcBrand = "1".
 {fbundle.i}
 {mdub.i}
 {service.i}
+{fprepaidfee.i}
 
 /* files and dirs */
 DEF VAR lcLine           AS CHAR NO-UNDO.
@@ -52,7 +53,7 @@ ASSIGN
    lcProcDir   = fCParam("ContractBackTool","IncProcDir")
    lcSpoolDir  = fCParam("ContractBackTool","OutSpoolDir")
    lcOutDir    = fCParam("ContractBackTool","OutDir")
-   ldePMDUBFee = fCParamDe("PMDUBFee")
+   ldePMDUBFee = fgetPrepaidFeeAmount("PMDUB", TODAY)
    lcToday     = STRING(YEAR(TODAY),"9999") + 
                  STRING(MONTH(TODAY),"99")  +
                  STRING(DAY(TODAY),"99")
@@ -97,6 +98,12 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
          IF icContract EQ "BONO_VOIP" AND
             NOT fIsBonoVoIPAllowed(Mobsub.MsSeq, ldeActStamp) THEN 
                RETURN "ERROR:Contract activation is not allowed".
+
+         /* DATA200_UPSELL and DSS200_UPSELL can't be 
+            activate from TMS CUI, Vista/VFR */
+         IF icContract = "DATA200_UPSELL" OR
+            icContract = "DSS200_UPSELL" THEN
+            RETURN SUBST("&1 activation is not allowed", icContract).
 
          /* YPR */
          IF icContract EQ "VOICE3000" THEN DO:

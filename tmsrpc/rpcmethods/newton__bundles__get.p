@@ -19,7 +19,22 @@
                    voip_compatible;boolean;Voip Compatible
  */
 
-{header_get.i}
+{xmlrpc/xmlrpc_access.i}
+
+{commpaa.i}
+gcBrand = "1".
+DEF VAR lcResultStruct AS CHAR NO-UNDO. 
+DEF VAR pcId AS CHAR NO-UNDO. 
+DEF VAR pcIdArray AS CHAR NO-UNDO. 
+DEF VAR liCounter AS INTEGER NO-UNDO. 
+DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO.
+
+IF validate_request(param_toplevel_id, "array") = ? THEN RETURN.
+pcIDArray = get_array(param_toplevel_id, "0").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+resp_array = add_array(response_toplevel_id, "").
 
 DEF VAR lcIPLContracts     AS CHAR NO-UNDO.
 DEF VAR lcCONTDContracts   AS CHAR NO-UNDO.
@@ -41,6 +56,7 @@ DEF VAR llVoIPCompatible   AS LOG NO-UNDO.
 
 {cparam2.i}
 {tmsconst.i}
+{fprepaidfee.i}
 
 ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
        lcCONTDContracts = fCParamC("CONTD_CONTRACTS")
@@ -81,6 +97,11 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    IF DayCampaign.FeeModel > "" THEN DO:
       liPayType = 1.
 
+      /* temporary quick fix YTS-7421 */
+      IF LOOKUP(DayCampaign.DCEvent,
+               "PMDUB,PMDUB_UPSELL,TARJ7,TARJ7_UPSELL,TARJ9,TARJ_UPSELL") > 0
+      THEN liPayType = 2.
+
       FIND FIRST FMItem NO-LOCK WHERE
                  FMItem.Brand = gcBrand AND
                  FMItem.FeeModel = DayCampaign.FeeModel AND
@@ -90,14 +111,11 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    ELSE DO:
       liPayType = 2.
 
-      IF DayCampaign.DCEvent = "PMDUB" THEN
-         ldeFee = fCParamDe("PMDUBFee").
-      ELSE IF DayCampaign.DCEvent = "PMDUB_UPSELL" THEN
-         ldeFee = fCParamDe("UPSELL_PMDUBFee").
-      ELSE IF DayCampaign.DCEvent = {&TARJ_UPSELL} THEN
-         ldeFee = fCParamDe("TARJ_UPSELLFee").
-      ELSE IF DayCampaign.DCEvent = "TARJ7_UPSELL" THEN
-         ldeFee = fCParamDe("TARJ7_UPSELLFee").
+      IF DayCampaign.DCEvent = "PMDUB" OR 
+       DayCampaign.DCEvent = "PMDUB_UPSELL" OR
+       DayCampaign.DCEvent = {&TARJ_UPSELL} OR
+       DayCampaign.DCEvent = "TARJ7_UPSELL" THEN
+       ldeFee = fgetPrepaidFeeAmount(DayCampaign.DCEvent, TODAY).
       ELSE ldeFee = 0.
 
       IF DayCampaign.DCEvent = "HSPA_ROAM_EU" THEN liPayType = 0.
@@ -176,4 +194,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       IF AVAIL ServiceLimit THEN
          add_double(lcResultStruct,"voip_amount", ServiceLimit.InclAmt).
    END.
+END.
+
+FINALLY:
+   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
 END.

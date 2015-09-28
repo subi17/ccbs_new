@@ -13,6 +13,7 @@
 {commali.i}
 {date.i}
 {cparam2.i}
+{fprepaidfee.i}
 
 FUNCTION fGetTARJ6DataLimitAndCharges RETURNS INT
    (iiMsSeq AS INT,
@@ -42,7 +43,7 @@ FUNCTION fGetTARJ6DataLimitAndCharges RETURNS INT
       ldeTo    = fMake2Dt(ldaTo, 86399)
       ldeDayFrom = fMake2Dt(TODAY, 0)
       ldeDayTo = fMake2Dt(TODAY, 86399)
-      ldeUpsellFee = fCParamDe("TARJ_UPSELLFee").
+      ldeUpsellFee = fgetPrepaidFeeAmount("TARJ_UPSELL", TODAY).
       
    /* count upsells */
    FOR FIRST ServiceLimit NO-LOCK WHERE

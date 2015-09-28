@@ -39,6 +39,7 @@
 {dpmember.i}
 {terminal_financing.i}
 {ordercancel.i}
+{fprepaidfee.i}
 
 DEF BUFFER bPendRequest FOR MsRequest.
 DEF BUFFER bOrigRequest FOR MsRequest.
@@ -358,9 +359,11 @@ PROCEDURE pContractActivation:
    
    /* Validate Prepaid Balance before making PMDUB activation request */
    IF lcDCEvent BEGINS {&PMDUB} THEN DO:
+      ldeBundleFee = fgetPrepaidFeeAmount(lcDCEvent, TODAY).
       IF lcDCEvent = {&PMDUB} THEN DO:
          IF MsRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}
          THEN DO:
+      
             ASSIGN ldaPromoStartDate = fCParamDa("PMDUB_PROMO_START_DATE")
                    ldaPromoActStamp  = fMake2Dt(ldaPromoStartDate,0).
 
@@ -372,9 +375,7 @@ PROCEDURE pContractActivation:
             ELSE
                ldeBundleFee = fCParamDe("PMDUBFee_NEW_SUB_PROMO").
          END.
-         ELSE ldeBundleFee = fCParamDe("PMDUBFee").
       END. /* IF lcDCEvent = {&PMDUB} THEN DO: */
-      ELSE ldeBundleFee = fCParamDe("UPSELL_PMDUBFee").
 
       RUN pEnoughBalance(INPUT MsOwner.CLI,INPUT ldeBundleFee,OUTPUT llResult).
       IF NOT llResult THEN DO:
@@ -393,12 +394,11 @@ PROCEDURE pContractActivation:
 
    /* Validate Prepaid Balance before making Prepaid UPSell activation request */
    IF LOOKUP(lcDCEvent,"TARJ_UPSELL,TARJ7_UPSELL") > 0 THEN DO:
+      ldeBundleFee = fgetPrepaidFeeAmount(lcDCEvent, TODAY).
       IF lcDCEvent = "TARJ_UPSELL" THEN
-         ASSIGN ldeBundleFee = fCParamDe("TARJ_UPSELLFee")
-                lcSMSName = "UpsellTARJ6NoBal".
+         lcSMSName = "UpsellTARJ6NoBal".
       ELSE
-         ASSIGN ldeBundleFee = fCParamDe("TARJ7_UPSELLFee")
-                lcSMSName = "UpsellTARJ7NoBal".
+         lcSMSName = "UpsellTARJ7NoBal".
 
       RUN pEnoughBalance(INPUT MsOwner.CLI,INPUT ldeBundleFee,OUTPUT llResult).
 
@@ -443,6 +443,7 @@ PROCEDURE pContractActivation:
       RETURN.
    END. /* IF lcDCEvent = {&DSS} AND */
    ELSE IF (lcDCEvent BEGINS {&DSS} + "_UPSELL" OR
+      lcDCEvent EQ  "DSS200_UPSELL" OR
       lcDCEvent BEGINS "DSS2_UPSELL") AND
       NOT fIsDSSActive(INPUT MsOwner.CustNum,
                        INPUT MsRequest.ActStamp) THEN DO:
@@ -803,6 +804,7 @@ PROCEDURE pContractActivation:
 
       RUN creasfee.p (MsOwner.CustNum,
                     (IF (lcDCEvent = {&DSS} + "_UPSELL" OR
+                         lcDCEvent EQ  "DSS200_UPSELL" OR
                          lcDCEvent = "DSS2_UPSELL") THEN liDSSMsSeq
                      ELSE MsRequest.MsSeq),
                     ldtFromDate,
@@ -891,6 +893,7 @@ PROCEDURE pContractActivation:
  
    /* If DSS Upsell is being added then update DSS Quota */
    IF lcDCEvent BEGINS {&DSS} + "_UPSELL" OR
+      lcDCEvent EQ  "DSS200_UPSELL" OR
       lcDCEvent BEGINS "DSS2_UPSELL" THEN
       RUN pUpdateDSSNetworkLimit(INPUT MsOwner.MsSeq,
                                  INPUT MsOwner.CustNum,

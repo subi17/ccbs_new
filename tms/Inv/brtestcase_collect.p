@@ -57,7 +57,6 @@ DEF TEMP-TABLE ttCriteria NO-UNDO
    FIELD EndDate AS DATE
    FIELD PeriodBeg AS DEC
    FIELD PeriodEnd AS DEC
-   FIELD PriorityID AS INT
    INDEX CriteriaTable CriteriaTable CriteriaField
    INDEX BRTestCaseID BRTestCaseID.
 
@@ -81,19 +80,6 @@ DEF TEMP-TABLE ttPickCust NO-UNDO
    FIELD InvCreated AS LOG
    INDEX InvCust InvCust
    INDEX InvCreated InvCreated.
-
-DEF TEMP-TABLE ttCheckCriteria NO-UNDO   
-   FIELD CriteriaCheckID AS INTEGER 
-   FIELD CriteriaTable   AS CHARACTER 
-   FIELD CriteriaField   AS CHARACTER 
-   FIELD ValueIncluded   AS CHARACTER
-   FIELD ROValueIncluded AS CHARACTER
-   FIELD Setting         AS CHARACTER   
-   FIELD PeriodBeg       AS DECIMAL 
-   FIELD PeriodEnd       AS DECIMAL
-   FIELD ExecuResult     AS LOGICAL 
-   INDEX CriteriaCheck IS PRIMARY  
-         CriteriaTable CriteriaField ASCENDING.
 
 DEF TEMP-TABLE ttServiceLimit NO-UNDO
    LIKE ServiceLimit. 
@@ -437,11 +423,9 @@ PROCEDURE pCollect:
    DEF VAR llMatch     AS LOG  NO-UNDO.
    DEF VAR liLoop      AS INT  NO-UNDO. 
    DEF VAR llCreateInv AS LOG  NO-UNDO.
-   DEF VAR liPriority  AS INT  NO-UNDO. 
-
+   
    GetSubscription:
    FOR EACH MsOwner NO-LOCK WHERE
-            MsOwner.Brand   = gcBrand AND
             MsOwner.PayType = FALSE
    BREAK BY MsOwner.InvCust
          BY MsOwner.MsSeq
@@ -451,14 +435,12 @@ PROCEDURE pCollect:
       
       IF FIRST-OF(MsOwner.MsSeq) THEN DO:
       
-         EMPTY TEMP-TABLE ttCheckCriteria.
-
          liCheck = liCheck + 1.
          IF NOT SESSION:BATCH AND liCheck MOD 100 = 0 THEN DO:
             PAUSE 0.
             DISP liCheck oiPicked WITH FRAME fQty.
          END.
-
+ 
          CheckCase:
          FOR EACH ttCase WHERE
                   ttCase.CaseDone = FALSE:
@@ -476,82 +458,21 @@ PROCEDURE pCollect:
                END.
             */
          
-         /* As already 4 priority's are set for every test case
-            we would set priority initial value from 5 for other cases */
-            ASSIGN liPriority = 5
-                   llMatch    = TRUE.
+            llMatch = TRUE.
          
-            /* Assigning Priority for individual case criterias */
-            FOR EACH ttCriteria EXCLUSIVE-LOCK WHERE
-                     ttCriteria.BRTestCaseID = ttCase.BRTestCaseID:
-               IF ttCriteria.CriteriaTable EQ "CLIType" AND 
-                  ttCriteria.CriteriaField EQ "CLIType" THEN
-                  ttCriteria.PriorityID = 1.
-               ELSE IF ttCriteria.CriteriaTable EQ "DayCampaign" AND
-                       ttCriteria.CriteriaField EQ "DCEvent"     THEN
-                  ttCriteria.PriorityID = 2.
-               ELSE IF ttCriteria.CriteriaTable EQ "MobSub"   AND
-                       ttCriteria.CriteriaField EQ "MsStatus" THEN
-                  ttCriteria.PriorityID = 3.
-               ELSE IF ttCriteria.CriteriaTable EQ "MsRequest" AND 
-                       ttCriteria.CriteriaField EQ "ReqType"   THEN
-                  ttCriteria.PriorityID = 4.
-               ELSE 
-                  ASSIGN ttCriteria.PriorityID = liPriority
-                         liPriority            = liPriority + 1.
-            END.
-
-            /* Criteria records are processed as per priority */
-            CheckCriteria:
+            /* all given criteria must match */
             FOR EACH ttCriteria WHERE
-                     ttCriteria.BRTestCaseID = ttCase.BRTestCaseID BY ttCriteria.PriorityID:
-               
+                     ttCriteria.BRTestCaseID = ttCase.BRTestCaseID:
+
                /* subscription must have been valid during the 
                   criteria period */
                IF MsOwner.TSEnd < ttCriteria.PeriodBeg  OR 
                   MsOwner.TsBeg > ttCriteria.PeriodEnd THEN NEXT CheckCase. 
                
-               IF ttCriteria.CriteriaTable EQ "MobCDR" OR
-                  ttCriteria.CriteriaTable EQ "InvRowCounter" THEN 
-                  RELEASE ttCheckCriteria.
-               ELSE 
-                  FIND FIRST ttCheckCriteria NO-LOCK WHERE 
-                             ttCheckCriteria.CriteriaTable   = ttCriteria.CriteriaTable   AND 
-                             ttCheckCriteria.CriteriaField   = ttCriteria.CriteriaField   AND
-                             ttCheckCriteria.ValueIncluded   = ttCriteria.ValueIncluded   AND
-                             ttCheckCriteria.ROValueIncluded = ttCriteria.ROValueIncluded AND
-                             ttCheckCriteria.Setting         = ttCriteria.Setting         AND
-                             ttCheckCriteria.PeriodBeg       = ttCriteria.PeriodBeg       NO-ERROR.
-               
-               /* If ttCheckCriteria record is available AND Execution Result is true 
-                  then skip the Case. As this criteria is already FAILED in previous cases */
-               IF AVAILABLE ttCheckCriteria AND ttCheckCriteria.ExecuResult THEN 
-                  NEXT CheckCase.  
-
-               /* If ttCheckCriteria record is available AND Execution Result is false
-                  then skip current criteria, as this criteria is already PASSED in previos cases */
-               IF AVAILABLE ttCheckCriteria AND NOT ttCheckCriteria.ExecuResult THEN
-                  NEXT CheckCriteria.
-
                RUN VALUE(ttCriteria.CheckProc) (OUTPUT llMatch) NO-ERROR.    
 
                IF RETURN-VALUE BEGINS "ERROR" THEN RETURN RETURN-VALUE.
-               
-               /* Create ttCheckCriteria record for every executed Criteria */ 
-               CREATE ttCheckCriteria.
-               ASSIGN ttCheckCriteria.CriteriaTable   = ttCriteria.CriteriaTable
-                      ttCheckCriteria.CriteriaField   = ttCriteria.CriteriaField
-                      ttCheckCriteria.ValueIncluded   = ttCriteria.ValueIncluded
-                      ttCheckCriteria.ROValueIncluded = ttCriteria.ROValueIncluded 
-                      ttCheckCriteria.Setting         = ttCriteria.Setting
-                      ttCheckCriteria.PeriodBeg       = ttCriteria.PeriodBeg
-                      ttCheckCriteria.ExecuResult     = NO.
-               
-               /* If Processed Criteria results in Error then assign value with TRUE */
-               IF NOT llMatch THEN DO:
-                  ttCheckCriteria.ExecuResult = YES. 
-                  NEXT CheckCase.
-               END.   
+               IF NOT llMatch THEN NEXT CheckCase.
             END.
       
             /* valid for this case */

@@ -432,8 +432,59 @@ PROCEDURE pHandleEDR:
                      end.
                   END. 
                END.
+
+               /* YDA-650 Need to send SHAPER until 15.10.2015 after that
+                  it will be correct for also for old subscriptions */
+               IF ttEDR.CLIType EQ "TARJ7" AND
+                  ttEDR.DateST >= 9/15/15 AND 
+                  MServiceLimit.inclamt = 600 THEN DO:
+                  
+                  FIND FIRST bOrigrequest NO-LOCK where
+                             bOrigrequest.msseq = MobSub.msseq and
+                             bOrigrequest.reqtype = 8 and
+                             bOrigrequest.reqstatus = 2 and
+                             bOrigrequest.reqcparam3 = ttEDR.CLIType and
+                             bOrigrequest.actstamp = MServiceLimit.fromts no-error.
+                  IF AVAIL bOrigrequest then do:
+
+                     liRequest = fServiceRequest(MobSub.MsSeq,
+                                                 "SHAPER",
+                                                 1, /* activate */
+                                                 ttEDR.CLIType,
+                                                 (IF liRequest EQ 0
+                                                  THEN ldeNow
+                                                  ELSE fSecOffSet(ldeNow,60)),
+                                                 "",         /* salesman */
+                                                 FALSE,      /* fees */
+                                                 FALSE,      /* sms */
+                                                 "",
+                                                 {&REQUEST_SOURCE_SCRIPT},
+                                                 bOrigrequest.msrequest,
+                                                 FALSE,
+                                                 OUTPUT lcResult).
+
+                     if liRequest eq 0 then
+                        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                         "Mobsub",
+                                         STRING(Mobsub.MsSeq),
+                                         MobSub.CustNum,
+                                         ttEDR.CLIType + " renewal new tariff request failed",
+                                         lcResult).
+                     else do:
+                        FIND FIRST bmservicelimit EXCLUSIVE-LOCK where
+                                   rowid(bmservicelimit) = rowid(MServiceLimit).
+                        IF AVAIL bmservicelimit THEN DO:
+                           assign
+                              bmservicelimit.inclamt = 650.
+
+                           release bmservicelimit. 
+                        END.
+                     end.
+                  end.
+               END.
             END.
-              
+            
+
             FIND Customer NO-LOCK WHERE
                  Customer.custnum = MobSub.Custnum NO-ERROR.
             IF NOT AVAIL Customer THEN RETURN.

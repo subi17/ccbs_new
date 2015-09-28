@@ -97,8 +97,15 @@ ASSIGN
 
 MakeReq:
 REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
-
-   IF lcDCEvent > "" THEN 
+   
+   /*ILP*/
+   IF LOOKUP (lcDCEvent , "DATA200_UPSELL,DSS200_UPSELL") > 0
+   THEN DO:
+      MESSAGE lcDCEvent "  adding not allowed in CUI" VIEW-AS ALERT-BOX.
+      PAUSE 0.
+      RETURN.     
+   END.
+   ELSE IF lcDCEvent > "" THEN 
       FIND FIRST DayCampaign WHERE
                  DayCampaign.Brand = gcBrand AND
                  DayCampaign.DCEvent = lcDCEvent NO-LOCK NO-ERROR.

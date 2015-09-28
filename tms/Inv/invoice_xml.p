@@ -452,8 +452,10 @@ PROCEDURE pInvoice2XML:
       lhXML:START-ELEMENT("Header").
 
       lhXML:WRITE-DATA-ELEMENT("InvoiceID",Invoice.ExtInvID).
-      lhXML:WRITE-DATA-ELEMENT("InvoiceDate",fDispDate(Invoice.InvDate,
-                                                       liLanguage)).
+      lhXML:START-ELEMENT("InvoiceDate").
+      lhXML:INSERT-ATTRIBUTE("DateTime",fISOTimeZone(Invoice.InvDate, 0)).
+      lhXML:WRITE-CHARACTERS(fDispDate(Invoice.InvDate, liLanguage)).
+      lhXML:END-ELEMENT("InvoiceDate").      
       lhXML:WRITE-DATA-ELEMENT("DueDate",fDispDate(Invoice.DueDate,
                                                    liLanguage)).
 

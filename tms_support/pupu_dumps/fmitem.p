@@ -35,8 +35,7 @@ END. /* FUNCTION fNotNull RETURNS CHAR (INPUT): */
 OUTPUT STREAM slog TO VALUE(lcLogFile).
 
 FOR EACH FMItem WHERE
-         FMItem.Brand   = gcBrand AND
-         FMItem.ToDate >= TODAY NO-LOCK:
+         FMItem.Brand = gcBrand NO-LOCK:
 
    liEvents = liEvents + 1.
 
@@ -56,7 +55,9 @@ FOR EACH FMItem WHERE
        fNotNull(FMItem.FeeModel)              lcDel
        fNotNull(FMItem.BillCode)              lcDel
        fNotNull(STRING(FMItem.Amount))        lcDel
-       fNotNull(STRING(FMItem.FirstMonthBR))  SKIP.
+       fNotNull(STRING(FMItem.FirstMonthBR))  lcDel
+       fNotNull(STRING(FMItem.FromDate))      lcDel
+       fNotNull(STRING(FMItem.ToDate))        SKIP.
 END.
 
 OUTPUT STREAM slog CLOSE.

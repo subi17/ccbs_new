@@ -25,6 +25,7 @@ gcBrand = "1".
 {msreqfunc.i}
 {fsendsms.i}
 {fdss.i}
+{fprepaidfee.i}
 
 DEF VAR liRequest              AS INT  NO-UNDO.
 DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
@@ -94,15 +95,17 @@ FUNCTION fSetMDUB RETURNS INT
       END.
       /* activation */
       WHEN 1 THEN DO:
+         /*ILP, YPR-2174*/
+         IF LOOKUP(pcBundleId, "DATA200_UPSELL,DSS200_UPSELL") > 0 THEN 
+            ocError = pcBundleId + " activation is not allowed".         
          /* Subscription level */
-         IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO:
+         ELSE IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO:
             IF LOOKUP(pcBundleId,lcAllowedBONOContracts) = 0 OR
                NOT fAllowMDUBActivation() THEN
                ocError = pcBundleId + " activation is not allowed".
             ELSE liReturnValue = 3. /* Ongoing Activation */
          END. /* IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO: */
          ELSE IF pcBundleId = "BONO_VOIP" THEN DO:
-
             IF NOT fIsBonoVoIPAllowed(Mobsub.MsSeq, ldeActStamp) THEN DO:
                ocError = pcBundleId + " activation is not allowed".
                RETURN 0.
@@ -130,10 +133,7 @@ FUNCTION fSetMDUB RETURNS INT
    /* Validate Prepaid Balance before making PMDUB/TARJ_UPSELL activation request */
    IF (pcBundleId = {&PMDUB} AND piAction = 1) OR
       pcBundleId = {&TARJ_UPSELL} THEN DO:
-      IF pcBundleId = {&PMDUB} THEN
-         ldeBundleFee = fCParamDe("PMDUBFee").
-      ELSE
-         ldeBundleFee = fCParamDe("TARJ_UPSELLFee").
+      ldeBundleFee = fgetPrepaidFeeAmount(pcBundleId, TODAY).
 
       RUN pEnoughBalance(INPUT MobSub.CLI,
                          INPUT ldeBundleFee,
@@ -347,8 +347,13 @@ original*/
 /*YDR_1698. Commented becase this was done in Newton.
 This can be removed when it is sure that this change is not needed.*/
 
-IF pcBundleId MATCHES ("*_UPSELL") THEN
-   lcMemoText = pcReason + " Ampliación " +  DayCampaign.DCName + " - " + lcOnOff.
+IF pcBundleId MATCHES ("*_UPSELL") THEN DO:
+   IF pcBundleId EQ "TARJ7_UPSELL" THEN
+      lcMemoText = "Ampliación 300MB" + " - " + lcOnOff.
+   ELSE 
+      lcMemoText = pcReason + " Ampliación " +  DayCampaign.DCName + " - " +
+                   lcOnOff.
+END.
 ELSE
    lcMemoText = pcReason + " " + DayCampaign.DCName + " - " + lcOnOff.
 
@@ -356,7 +361,8 @@ DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
                  "MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
                  MobSub.CustNum,                       /* CustNum   */
-                 DayCampaign.DCName,                   /* MemoTitle */
+                 IF PCBundleId EQ "TARJ7_UPSELL" THEN "Ampliación 300MB" 
+                 ELSE DayCampaign.DCName,                   /* MemoTitle */
                  lcMemoText,                           /* MemoText  */
                  "Service",                            /* MemoType  */
                  katun).

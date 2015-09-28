@@ -1910,7 +1910,7 @@ FOR FIRST CLIType NO-LOCK WHERE
                            OUTPUT ldiOrderDate).
 
    IF CLIType.CLIType EQ "TARJ7" THEN 
-      ldeMFWithTax = (1 + ldeTaxPerc / 100) * 5.99.  /* 7.25 IVA incl */
+      ldeMFWithTax = (1 + ldeTaxPerc / 100) * 6.61.  /* 8.00 IVA incl */
    ELSE IF CLIType.CLIType EQ "TARJ9" THEN
       ldeMFWithTax = (1 + ldeTaxPerc / 100) * 8.265. /* 10.00 IVA incl */
    ELSE IF CLiType.CompareFee > 0 THEN

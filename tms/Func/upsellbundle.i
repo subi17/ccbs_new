@@ -15,12 +15,14 @@
 {fbundle.i}
 {fsendsms.i}
 {fdss.i}
+{fprepaidfee.i}
 
 FUNCTION fGetUpSellBasicContract RETURNS CHAR
    (INPUT iiMsSeq       AS INT,
     INPUT iiCustNum     AS INT,
     INPUT ilPayType     AS LOG,
     INPUT icUpsellType  AS CHAR,
+    INPUT icUpsellId    AS CHAR,
     INPUT icCaller      AS CHAR):
 
    DEF VAR ldTS                  AS DEC  NO-UNDO.
@@ -64,8 +66,11 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
          RETURN "".
       END. /* FOR EACH bServiceLimit WHERE */
    END.
+   /*Mobsub*/
    ELSE DO:
-      IF icCaller = {&REQUEST_SOURCE_YOIGO_TOOL} THEN DO:
+      IF icCaller EQ {&REQUEST_SOURCE_YOIGO_TOOL} OR
+         icUpsellId EQ "DATA200_UPSELL" OR 
+         icUpsellId EQ "DSS200_UPSELL"  THEN DO:
          FOR EACH bMServiceLimit NO-LOCK WHERE
                   bMServiceLimit.MsSeq   = iiMsSeq AND
                   bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} AND
@@ -76,7 +81,9 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
             FIRST DayCampaign NO-LOCK WHERE
                   DayCampaign.Brand = gcBrand AND
                   DayCampaign.DCEvent = bServiceLimit.GroupCode AND
-                  DayCampaign.DCEvent <> "BONO_VOIP".
+                  INDEX(DayCampaign.DCEvent,"UPSELL") = 0 AND
+                  DayCampaign.DCEvent <> "BONO_VOIP" AND
+                  DayCampaign.DCEvent <> "HSPA_ROAM_EU":
             RETURN bServiceLimit.GroupCode.
          END. /* FOR EACH bMServiceLimit NO-LOCK WHERE */
       END.
@@ -115,6 +122,7 @@ FUNCTION fGetUpSellCount RETURNS INT
 
    DEF BUFFER bServiceLimit  FOR ServiceLimit.
    DEF BUFFER bMServiceLimit FOR MServiceLimit.
+   DEF BUFFER DayCampaign    FOR DayCampaign.
 
    ASSIGN ldeMonthBegin = fHMS2TS(DATE(MONTH(TODAY),1,YEAR(TODAY)),"00:00:00")
           ldeMonthEnd   = fHMS2TS(fLastDayOfMonth(TODAY),"23:59:59")
@@ -128,8 +136,8 @@ FUNCTION fGetUpSellCount RETURNS INT
              ServiceLimit.ValidFrom <= TODAY  AND 
              ServiceLimit.ValidTo   >= TODAY:
 
-        IF icDCEvent = {&DSS} + "_UPSELL" OR
-           icDCEvent = "DSS2_UPSELL" THEN DO:
+        IF icDCEvent BEGINS "DSS" THEN DO:
+
            FOR EACH MServiceLPool WHERE
                     MServiceLPool.Custnum = iiCustnum AND
                     MServiceLPool.SLSeq   = ServiceLimit.SLSeq AND
@@ -261,6 +269,7 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
                                             lbMobSub.CustNum,
                                             lbMobSub.PayType,
                                             "Customer",
+                                            icDCEvent,
                                             icSource).
 
    /* check if subscription level basic contract exist */
@@ -269,13 +278,13 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
                                                lbMobSub.CustNum,
                                                lbMobSub.PayType,
                                                "MobSub",
+                                               icDCEvent,
                                                icSource).
 
    IF lcBaseContract = "" THEN DO:
       ocError = "Data contract does not exist". 
       RETURN FALSE.
    END.
-
    FIND FIRST DayCampaign WHERE
               DayCampaign.Brand    = gcBrand AND
               DayCampaign.DCEvent  = lcBaseContract AND
@@ -286,14 +295,14 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
    END.
 
    /* Should not allow to create other data upsell once DSS1/2 is active */
-   IF icDCEvent NE DayCampaign.BundleUpsell THEN DO:
+   IF LOOKUP(icDCEvent, DayCampaign.BundleUpsell) EQ 0 THEN DO : 
       IF LOOKUP(DayCampaign.DCEvent,{&DSS_BUNDLES}) > 0 THEN
-         ocError = icDCEvent + " is not allowed because DSS " +
-                   "is active for this customer".
+          ocError = icDCEvent + " is not allowed because DSS " +
+                    "is active for this customer".
       /* allow upsell to any data contract by bob tool */
       ELSE IF icSource NE {&REQUEST_SOURCE_YOIGO_TOOL} THEN
          ocError = "Incorrect upsell type".
-      IF ocError <> "" THEN
+      ELSE IF ocError <> "" THEN
          RETURN FALSE.
    END. /* IF lcCustBaseContract = {&DSS} AND */
   
@@ -329,11 +338,10 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
 
    /* Validate Prepaid Balance before making PMDUB UPSELL activation request */
    IF LOOKUP(icDCEvent,"PMDUB_UPSELL,TARJ7_UPSELL") > 0 THEN DO:
+      ldeBundleFee = fgetPrepaidFeeAmount(icDCEvent, TODAY).
       IF icDCEvent = "PMDUB_UPSELL" THEN
-         ASSIGN ldeBundleFee = fCParamDe("UPSELL_PMDUBFee")
                 lcSMSText = "PMDUBUBalChk".
       ELSE
-         ASSIGN ldeBundleFee = fCParamDe("TARJ7_UPSELLFee")
                 lcSMSText = "UpsellTARJ7NoBal".
 
       RUN pEnoughBalance(INPUT lbMobSub.CLI,

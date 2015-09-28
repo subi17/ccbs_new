@@ -14,6 +14,7 @@
 {heartbeat.i}
 {cparam2.i}
 {edr_reader.i}
+{log.i}
 
 def INPUT PARAMETER    icFileName  as char FORMAT "x(30)" no-undo.
 DEF INPUT PARAMETER    iiPort      AS INT  NO-UNDO.
@@ -26,6 +27,8 @@ DEF VAR llOL           AS LOGICAL   NO-UNDO INIT TRUE.
 DEF VAR liStream       AS INTEGER   NO-UNDO. 
 DEF VAR lcErrorLogFile AS CHAR      NO-UNDO.
 DEF STREAM sErrorFile.
+ 
+fLogBasic("Started").
 
 ASSIGN
    liPause = 60
@@ -183,6 +186,8 @@ DO WHILE TRUE WITH FRAME clog:
       END.
       NEXT EDR_LOOP.
    END.
+      
+   etime(true).
 
    DO liLoop = 1 TO NUM-ENTRIES(callrec,"|"):
 
@@ -253,6 +258,7 @@ DO WHILE TRUE WITH FRAME clog:
    IF NOT AVAIL ttEDR OR ttEDR.ErrorCode > 0 THEN NEXT EDR_LOOP.
 
    RUN pHandleEDR(BUFFER ttEDR).
+   fLogBasic("EDR handling ended:" + string(ttEDR.cli) + ":" + string(etime)).
 
 END.
 

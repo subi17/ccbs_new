@@ -12,7 +12,9 @@ gcBrand = "1".
 katun = "Qvantel".
 {msisdn.i}
 
-DEF VAR lcDNI      AS CHAR NO-UNDO FORMAT "X(15)".
+DEF VAR lcDNI           AS CHAR NO-UNDO FORMAT "X(15)".
+DEF VAR MSISDN_status   AS INT  NO-UNDO FORMAT "Z9".
+DEF VAR llContinue      AS LOGICAL NO-UNDO INIT FALSE.
 
 FORM
    SKIP
@@ -32,7 +34,6 @@ FUNCTION fReleaseSIM RETURNS LOG (INPUT icICC AS CHAR):
    FOR FIRST SIM EXCLUSIVE-LOCK WHERE
              SIM.Brand EQ gcBrand AND
              SIM.ICC   EQ icICC   AND
-             SIM.Stock EQ "TESTING" AND
              SIM.SimStat <> 1:
       SIM.SimStat = 1.
    END.
@@ -42,14 +43,18 @@ END FUNCTION.
 
 FUNCTION fReleaseMSISDN RETURNS LOG (INPUT icMSISDN AS CHAR):
 
+/* Check if MSISDN in EMA range. If belongs to EMA then set status to 98 */
+   IF fIsEmaMsisdn(icMSISDN) THEN MSISDN_status = 98.
+   ELSE MSISDN_status = 99.   /* use normal status value */
+
    FOR FIRST MSISDN EXCLUSIVE-LOCK WHERE
              MSISDN.Brand = gcBrand AND
              MSISDN.CLI   = icMSISDN AND
-             MSISDN.StatusCode <> 99:
+             MSISDN.StatusCode < 98:
       fMakeMsidnHistory(INPUT RECID(MSISDN)).
       ASSIGN MSISDN.OrderId = 0
              Msisdn.MsSeq   = 0
-             MSISDN.StatusCode = 99.
+             MSISDN.StatusCode = MSISDN_status.
    END.
 
    RETURN TRUE.
@@ -171,8 +176,20 @@ FOR EACH Customer WHERE
 
    FIND FIRST SIM WHERE
               SIM.Brand EQ gcBrand    AND
-              SIM.ICC   EQ MobSub.ICC AND
-              SIM.Stock EQ "TESTING" NO-LOCK NO-ERROR.
+              SIM.ICC   EQ MobSub.ICC NO-LOCK NO-ERROR.
+   IF AVAIL SIM THEN   /* If stock not correct then ask confirmation */
+      IF NOT (SIM.Stock EQ "TESTING" OR
+              SIM.Stock EQ "EMATESTING") THEN DO:
+         llContinue = FALSE.
+         MESSAGE "Incorrect SIM Stock (" + SIM.Stock + "). Release SIM anyway?" 
+         VIEW-AS ALERT-BOX QUESTION
+         BUTTONS YES-NO
+         SET llContinue.
+         IF NOT llContinue THEN DO:
+            DISPLAY "MSISDN nro: " + MSISDN.CLI + " Incorrect SIM Stock:" + SIM.Stock FORMAT "X(70)". 
+            RETURN.
+         END.
+      END.
    IF NOT AVAIL SIM THEN DO:
       MESSAGE "One of the MSISDN does not belong to testing tool" VIEW-AS ALERT-BOX.
       RETURN.

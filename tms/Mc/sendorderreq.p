@@ -21,9 +21,11 @@ DEF OUTPUT PARAM lcError AS CHAR NO-UNDO.
 DEF VAR lcRootDir    AS CHAR NO-UNDO.
 DEF VAR lcEmailFile  AS CHAR NO-UNDO.
 DEF VAR liLanguage   AS INT  NO-UNDO.
-
+/*
 lcRootDir = SEARCH("do_not_remove_templatefolder.txt").
 lcRootDir = REPLACE(lcrootDir, "do_not_remove_templatefolder.txt", "").
+*/
+lcrootDir = "/apps/yoigo/tms/templates/".
 lcEmailFile = fCParam("Printing","MailPrintFile") + "_" + STRING(TODAY,"999999") + "_" + STRING(TIME) + "_req.html".
 
 FIND Order WHERE

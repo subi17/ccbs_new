@@ -37,3 +37,4 @@
 26 01/03/15 31/12/49 "BillItem" "REJECTION_FEE" yes
 27 01/05/15 31/12/49 "BillItem" "CONT9MF" yes
 28 12/08/15 31/12/49 "BillItem" "CONT23MF" yes
+29 01/09/15 31/12/49 "BillItem" "CONT23MF" yes

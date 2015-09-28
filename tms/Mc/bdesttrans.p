@@ -64,9 +64,9 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     FRAME sel.
 
 form
-    bdesttrans.bdest
-    bdesttrans.translatenumber   /* LABEL FORMAT */
-    bdesttrans.ratingzone
+    bdesttrans.bdest FORMAT "999"
+    bdesttrans.translatenumber FORMAT "999999999"  /* LABEL FORMAT */
+    bdesttrans.ratingzone FORMAT "!"
     bdesttrans.Fromdate    /* LABEL FORMAT */
     bdesttrans.ToDate      /* LABEL FORMAT */
 
@@ -122,9 +122,21 @@ REPEAT WITH FRAME sel:
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ASSIGN
+            ufk    = 0
+            ufk[1] = 1052    WHEN lcRight = "RW"
+            ufk[2] = 0
+            ufk[3] = 0
+            ufk[4] = 0
+            ufk[6] = 0
+            ufk[7] = 0
+            ufk[8] = 0
+            ehto   = 3.
+       
+        RUN ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
+           MESSAGE "Leave empty for exit".
            PROMPT-FOR bdesttrans.translatenumber
            VALIDATE
               (bdesttrans.translatenumber NOT ENTERED OR
@@ -207,8 +219,8 @@ BROWSE:
       IF ufkey THEN DO:
         ASSIGN
         ufk[1]= 35 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-        ufk[5]= 0
-        ufk[6]= 0
+        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
         RUN ufkey.p.
@@ -367,7 +379,7 @@ BROWSE:
           NEXT LOOP.
        END.
      END. /* Search-1 */
-/*
+/**/
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add = TRUE.
@@ -381,8 +393,9 @@ BROWSE:
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
-       bdesttrans.translatenumber bdesttrans.CoName .
+       COLOR DISPLAY VALUE(ctc)       
+       bdesttrans.translatenumber bdesttrans.fromDate
+       bdesttrans.toDate bdesttrans.bdest bdesttrans.RatingZone.
 
        RUN local-find-NEXT.
        IF AVAILABLE bdesttrans THEN Memory = recid(bdesttrans).
@@ -404,7 +417,9 @@ BROWSE:
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
        COLOR DISPLAY VALUE(ccc)
-       bdesttrans.translatenumber bdesttrans.CoName .
+       bdesttrans.translatenumber bdesttrans.fromDate
+       bdesttrans.toDate bdesttrans.bdest bdesttrans.RatingZone.
+       
        IF ok THEN DO:
 
            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhbdesttrans).
@@ -450,7 +465,7 @@ BROWSE:
        xrecid = recid(bdesttrans).
        LEAVE.
      END.
-*/
+/**/
      ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(bdesttrans) must-print = TRUE.
@@ -523,34 +538,69 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
 END PROCEDURE.
-/*
+/**/
 PROCEDURE local-UPDATE-record:
+   
+   IF NEW bDestTrans THEN toimi = -1.
+   
+   MaintMenu:
    REPEAT ON ENDKEY UNDO, LEAVE:
       RUN local-find-others.
       DISP
-          bdesttrans.CoName
+           bdesttrans.bdest
+           bdesttrans.ToDate
+           bdesttrans.RatingZone
+           bdesttrans.FromDate
+           bdesttrans.TranslateNumber
       WITH FRAME lis.
-      IF lcRight = "RW" THEN DO:
 
-         UPDATE
-             bdesttrans.CoName
-             bdesttrans.FraudGroup
-         WITH FRAME lis.
+      IF toimi < 0 THEN toimi = 1.
+      ELSE DO:
+         ASSIGN
+            ufk    = 0
+            ufk[1] = 7    WHEN lcRight = "RW"
+            ufk[2] = 0
+            ufk[3] = 0
+            ufk[4] = 0
+            ufk[6] = 0
+            ufk[7] = 0
+            ufk[8] = 8
+            ehto   = 0.
 
-         IF bdesttrans.FraudGroup NE "" AND
-            NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                 "bdesttrans",
-                                 "FraudGroup",
-                                 bdesttrans.FraudGroup)
-         THEN DO:
-            MESSAGE "Unknown group"
-            VIEW-AS ALERT-BOX ERROR.
-            UNDO, NEXT.
-         END.
+         RUN ufkey.p.
       END.
-      ELSE PAUSE.
 
-      LEAVE.
-   END.
+      IF toimi = 1 AND lcRight = "RW" THEN DO: 
+         /*REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:*/
+            FIND CURRENT bDestTrans EXCLUSIVE-LOCK.
+            
+            ehto = 9.
+            RUN ufkey.p.
+           
+            UPDATE
+                bdesttrans.bdest
+                bdesttrans.TranslateNumber
+                bdesttrans.RatingZone
+                bdesttrans.FromDate
+                bdesttrans.ToDate
+            WITH FRAME lis EDITING:
+               
+               READKEY.    
+
+               IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN
+               DO WITH FRAME lis:
+                  PAUSE 0.
+               END. 
+           
+               APPLY LASTKEY.
+            
+            END.
+            ASSIGN bdesttrans.BDestId = iiBDestID.
+            LEAVE.
+         END.
+      ELSE IF toimi = 8 THEN LEAVE.
+   END. 
+
+
 END PROCEDURE.
-*/
+/**/

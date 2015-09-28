@@ -20,6 +20,7 @@ gcBrand = "1".
 {mdub.i}
 {service.i}
 {fdss.i}
+{fprepaidfee.i}
 
 /* files and dirs */
 DEF VAR lcLine           AS CHAR NO-UNDO.
@@ -55,7 +56,7 @@ ASSIGN
    lcProcDir   = fCParam("UpsellBackTool","IncProcDir")
    lcSpoolDir  = fCParam("UpsellBackTool","OutSpoolDir")
    lcOutDir    = fCParam("UpsellBackTool","OutDir")
-   ldePMDUBFee = fCParamDe("PMDUBFee")
+   ldePMDUBFee = fgetPrepaidFeeAmount("PMDUB", TODAY)
    lcToday     = STRING(YEAR(TODAY),"9999") + 
                  STRING(MONTH(TODAY),"99")  +
                  STRING(DAY(TODAY),"99")

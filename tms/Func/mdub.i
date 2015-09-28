@@ -300,14 +300,6 @@ FUNCTION fMDUBFixedFeeAmt RETURNS DECIMAL
    DEFINE VARIABLE liOrderTime AS INTEGER NO-UNDO. 
    DEFINE VARIABLE ldAmt AS DECIMAL NO-UNDO.
 
-   /* Monthly fee of PMDUB is maintained in the TMSParam Since its a */
-   /* prepaid bundle and there is not fixed fee associated with it   */
-   IF icBundle = "PMDUB" THEN DO:
-      ldAmt = fCParamDe("PMDUBFee").
-      IF ldAmt = 0 OR ldAmt = ? THEN ldAmt = 8.00.
-      RETURN ldAmt.
-   END. /* IF icBundle = "PMDUB" THEN DO: */
-
    fSplitTS(Order.CrStamp,
             OUTPUT ldaOrderDate,
             OUTPUT liOrderTime).

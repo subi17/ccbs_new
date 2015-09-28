@@ -1,90 +1,133 @@
-DEF var /* INPUT PARAMETER */ idtDate    AS DATE No-UNDO FORMAT "99-99-9999".
-DEF var /*INPUT PARAMETER */ icBnumber   AS CHAR NO-UNDO FORMAT "X(12)" .
-DEF VAR /* INPUT PARAMETER */ iiRateccn  AS INT  NO-UNDO .
-DEF VAR                       bsuunta    like Bdest.bdest NO-UNDO.
-DEF VAR                       paytype    like MobSub.PayType NO-UNDO.
+DEF var /* INPUT PARAMETER */ idtDate    AS DATE NO-UNDO FORMAT "99-99-9999" INIT TODAY.
+DEF var /* INPUT PARAMETER */ icBnumber  AS CHAR NO-UNDO FORMAT "X(12)" INIT "".
+DEF VAR /* INPUT PARAMETER */ iiRateccn  AS INT  NO-UNDO.
+DEF VAR                       bsuunta    LIKE Bdest.bdest NO-UNDO.
+DEF VAR                       paytype    LIKE MobSub.PayType NO-UNDO.
+DEF VAR                       rateid     LIKE Mobcdr.TariffNum NO-UNDO INIT 0.
+DEF VAR                       llFound    AS LOG  NO-UNDO.
 
-idtdate = today - 200.
-icbnumber = "".
+IF idtdate = TODAY THEN idtdate = TODAY - 200.
+llFound = FALSE.
 
-UPDATE 
-idtdate   label "Alkaen päivästä"
-icBNumber label "B-numero alkaen"
-iiRateCCN label "CC"
-bsuunta   column-label "B-suunta"
-paytype  label "Paytype".
+MAIN_LOOP:
+DO WHILE TRUE
+   ON QUIT UNDO, RETRY
+   ON STOP UNDO, RETRY:
 
-def var lddate as date no-undo.
+   IF RETRY THEN LEAVE.
 
-do lddate = idtdate to today:
+   UPDATE 
+   idtdate   LABEL "Alkaen päivästä"
+   icBNumber LABEL "B-numero alkaen"
+   iiRateCCN LABEL "CC"
+   bsuunta   COLUMN-LABEL "B-suunta" SKIP
+   paytype   LABEL "Paytype" 
+   rateid    LABEL "Rate ID".
 
-   IF icbnumber ne ""  THEN DO:
+   DEF VAR lddate AS DATE NO-UNDO.
 
-      IF not paytype THEN
-      for each mobcdr WHERE 
-               MObcdr.datest = lddate AND 
-               mobcdr.gsmbnr begins icbnumber no-lock.
+   DO lddate = idtdate TO TODAY:
 
-         IF bsuunta      ne "" AND 
-            Mobcdr.Bdest ne bsuunta  THEN NEXT.
-         
-         IF iiRateccn = 0 OR 
-            iiRateCCN = mobcdr.RAteccn THEN 
-         disp datest string(mobcdr.timest,"hh:mm:ss")
-            cli    format "x(12)"
-            gsmbnr
-            spocmt errorcode
-            mobcdr.billdur.
-      
-      ENd.
-      ELSE 
-      for each PrepCDR WHERE 
-               PrepCDR.datest = lddate AND 
-               PrepCDR.gsmbnr begins icbnumber no-lock.
+      IF icbnumber NE ""  THEN DO:
 
-         IF bsuunta      ne "" AND 
-            PrepCDR.Bdest ne bsuunta  THEN NEXT.
-         
-         IF iiRateccn = 0 OR 
-            iiRateCCN = PrepCDR.RAteccn THEN 
-         disp datest string(PrepCDR.timest,"hh:mm:ss")
-            cli    format "x(12)"
-            gsmbnr
-            spocmt errorcode
-            PrepCDR.billdur.
-      
-      ENd.
-   END.
-   ELSE DO:
-      IF not paytype THEN
-         for each mobcdr WHERE
-                  MObcdr.datest = lddate no-lock.
-                                    
-            IF bsuunta      ne "" AND
-               Mobcdr.Bdest ne bsuunta  THEN NEXT.
+         IF NOT paytype THEN
+         FOR EACH Mobcdr WHERE 
+                  Mobcdr.datest = lddate AND 
+                  Mobcdr.gsmbnr BEGINS icbnumber NO-LOCK.
 
-            IF iiRateccn = 0 OR
-               iiRateCCN = mobcdr.RAteccn THEN
-            disp datest string(mobcdr.timest,"hh:mm:ss")
-               cli    format "x(12)"
-               gsmbnr
-               spocmt errorcode
-               mobcdr.billdur.
+            IF rateid           NE 0 AND 
+               Mobcdr.TariffNum NE rateid  THEN NEXT.
+
+            IF bsuunta      NE "" AND 
+               Mobcdr.Bdest NE bsuunta  THEN NEXT.
+            
+            IF iiRateccn = 0 OR 
+               iiRateCCN = Mobcdr.RAteccn THEN DO:
+               DISP datest STRING(Mobcdr.timest,"hh:mm:ss")
+                  cli    FORMAT "x(10)"
+                  gsmbnr FORMAT "x(10)"
+                  spocmt FORMAT ">>9"
+                  errorcode
+                  Mobcdr.billdur
+                  Mobcdr.Bdest.
+
+               llFound = TRUE.
+            END.
          END.
-      ELSE
-         for each prepcdr WHERE
-                  prepcdr.datest = lddate no-lock.
-                                    
-            IF bsuunta      ne "" AND
-               prepcdr.Bdest ne bsuunta  THEN NEXT.
+         ELSE 
+         FOR EACH PrepCDR WHERE 
+                  PrepCDR.datest = lddate AND 
+                  PrepCDR.gsmbnr BEGINS icbnumber NO-LOCK.
 
-            IF iiRateccn = 0 OR
-               iiRateCCN = prepcdr.RAteccn THEN
-            disp datest string(prepcdr.timest,"hh:mm:ss")
-               cli    format "x(12)"
-               gsmbnr
-               spocmt errorcode
-               prepcdr.billdur.
+            IF rateid            NE 0 AND 
+               PrepCDR.TariffNum NE rateid  THEN NEXT.
+
+            IF bsuunta       NE "" AND 
+               PrepCDR.Bdest NE bsuunta  THEN NEXT.
+            
+            IF iiRateccn = 0 OR 
+               iiRateCCN = PrepCDR.RAteccn THEN DO:
+               DISP datest STRING(PrepCDR.timest,"hh:mm:ss")
+                  cli    FORMAT "x(10)"
+                  gsmbnr FORMAT "x(10)"
+                  spocmt FORMAT ">>9"
+                  errorcode
+                  PrepCDR.billdur
+                  PrepCDR.Bdest.
+
+               llFound = TRUE.
+            END.
          END.
+      END.
+      ELSE DO:
+         IF NOT paytype THEN
+            FOR EACH Mobcdr WHERE
+                     Mobcdr.datest = lddate NO-LOCK.
+
+               IF rateid           NE 0 AND 
+                  Mobcdr.TariffNum NE rateid  THEN NEXT.
+
+               IF bsuunta      NE "" AND
+                  Mobcdr.Bdest NE bsuunta  THEN NEXT.
+
+               IF iiRateccn = 0 OR
+                  iiRateCCN = Mobcdr.RAteccn THEN DO:
+                  DISP datest STRING(Mobcdr.timest,"hh:mm:ss")
+                     cli    FORMAT "x(10)"
+                     gsmbnr FORMAT "x(10)"
+                     spocmt FORMAT ">>9" 
+                     errorcode
+                     Mobcdr.billdur
+                     Mobcdr.Bdest.
+
+                  llFound = TRUE.
+               END.
+            END.
+         ELSE
+            FOR EACH PrepCDR WHERE
+                     PrepCDR.datest = lddate NO-LOCK.
+
+            IF rateid            NE 0 AND 
+               PrepCDR.TariffNum NE rateid  THEN NEXT.
+
+               IF bsuunta      NE "" AND
+                  PrepCDR.Bdest NE bsuunta  THEN NEXT.
+
+               IF iiRateccn = 0 OR
+                  iiRateCCN = PrepCDR.RAteccn THEN DO:
+                  DISP datest STRING(PrepCDR.timest,"hh:mm:ss")
+                     cli    FORMAT "x(10)"
+                     gsmbnr FORMAT "x(10)"
+                     spocmt FORMAT ">>9"
+                     errorcode
+                     PrepCDR.billdur
+                     PrepCDR.Bdest.
+
+                  llFound = TRUE.
+               END.
+            END.
+      END.
    END.
-ENd.
+   IF NOT llFound THEN MESSAGE "Nothing found" VIEW-AS ALERT-BOX.
+UNDO.
+END. /* DO WHILE TRUE: */

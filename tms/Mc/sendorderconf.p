@@ -42,9 +42,12 @@ FUNCTION fTxtSendLog RETURNS LOGIC
           ITSendLog.SendStamp  = fMakeTS().
 END.
 
-
+/*
 lcRootDir = SEARCH("do_not_remove_templatefolder.txt").
 lcRootDir = REPLACE(lcrootDir, "do_not_remove_templatefolder.txt", "").
+*/
+
+lcrootDir = "/apps/yoigo/tms/templates/".
 lcEmailFile = fCParam("Printing","MailPrintFile") + "_" + STRING(TODAY,"999999") + "_" + STRING(TIME) + "_conf.html".
 
 FIND Order WHERE

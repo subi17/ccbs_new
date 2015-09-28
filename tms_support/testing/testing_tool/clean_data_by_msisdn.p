@@ -12,20 +12,27 @@ gcBrand = "1".
 katun = "Qvantel".
 {msisdn.i}
 
-DEF VAR lcMSISDN   AS CHAR NO-UNDO FORMAT "X(10)".
+DEF VAR lcminMSISDN     AS CHAR NO-UNDO FORMAT "X(10)".
+DEF VAR lcmaxMSISDN     AS CHAR NO-UNDO FORMAT "X(10)".
+DEF VAR liMSISDN_status AS INT  NO-UNDO FORMAT "Z9".
+DEF VAR liCounter       AS INT NO-UNDO INIT 0.
+DEF VAR llContinue      AS LOGICAL NO-UNDO INIT FALSE.
 
 FORM
    SKIP
-   "Enter MSISDN:" lcMSISDN SKIP
-   WITH OVERLAY CENTERED ROW 10 TITLE " Data Clean up " NO-LABELS
+   "Enter one MSISDN or range start: " lcminMSISDN SKIP
+   "Enter range stop or leave empty: " lcmaxMSISDN SKIP
+   WITH OVERLAY CENTERED ROW 10 TITLE " Testing Tool Data Clean up " NO-LABELS
    FRAME fclean.
 
-UPDATE lcMSISDN with FRAME fclean.
+UPDATE lcminMSISDN lcmaxMSISDN with FRAME fclean.
 
-IF lcMSISDN = "" THEN DO:
+IF lcminMSISDN = "" THEN DO:
    MESSAGE "Please Enter MSISDN" VIEW-AS ALERT-BOX.
    RETURN.
 END.
+
+IF lcmaxMSISDN = "" THEN lcmaxMSISDN = lcminMSISDN.
 
 FUNCTION fDeleteOrder RETURNS LOG (INPUT icMSISDN AS CHAR):
 
@@ -46,7 +53,6 @@ FUNCTION fReleaseSIM RETURNS LOG (INPUT icICC AS CHAR):
    FOR FIRST SIM EXCLUSIVE-LOCK WHERE
              SIM.Brand EQ gcBrand AND
              SIM.ICC   EQ icICC   AND
-             SIM.Stock EQ "TESTING" AND
              SIM.SimStat <> 1:
       SIM.SimStat = 1.
    END.
@@ -56,14 +62,18 @@ END FUNCTION.
 
 FUNCTION fReleaseMSISDN RETURNS LOG (INPUT icMSISDN AS CHAR):
 
+/* Check if MSISDN in EMA range. If belongs to EMA then set status to 98 */
+   IF fIsEmaMsisdn(icMSISDN) THEN liMSISDN_status = 98.
+   ELSE liMSISDN_status = 99.   /* use normal status value */
+
    FOR FIRST MSISDN EXCLUSIVE-LOCK WHERE
              MSISDN.Brand = gcBrand AND
              MSISDN.CLI   = icMSISDN AND
-             MSISDN.StatusCode <> 99:
+             MSISDN.StatusCode < 98:
       fMakeMsidnHistory(INPUT RECID(MSISDN)).
       ASSIGN MSISDN.OrderId = 0
              Msisdn.MsSeq   = 0
-             MSISDN.StatusCode = 99.
+             MSISDN.StatusCode = liMSISDN_status.
    END.
 
    RETURN TRUE.
@@ -158,28 +168,49 @@ END FUNCTION.
 
 /* Main Block */
 
-FIND FIRST Order WHERE
-           Order.Brand = gcBrand AND
-           Order.CLI   = lcMSISDN AND
-           Order.OrderType = 0 NO-LOCK NO-ERROR.
-IF NOT AVAIL Order THEN DO:
-   MESSAGE "Order is not available, nothing to revert" VIEW-AS ALERT-BOX.
-   RETURN.
-END.
-ELSE DO:
-   FIND FIRST SIM WHERE
-              SIM.Brand EQ gcBrand   AND
-              SIM.ICC   EQ Order.ICC AND
-              SIM.Stock EQ "TESTING" NO-LOCK NO-ERROR.
-   IF NOT AVAIL SIM THEN DO:
-      MESSAGE "MSISDN does not belong to testing tool" VIEW-AS ALERT-BOX.
-      RETURN.
+FOR EACH MSISDN NO-LOCK WHERE
+         MSISDN.Brand = gcBrand AND
+         MSISDN.CLI   GE lcminMSISDN AND
+         MSISDN.CLI   LE lcmaxMSISDN AND
+         MSISDN.ValidTo GE fMakeTS() AND
+         MSISDN.StatusCode < 98:
+
+   FIND FIRST Order WHERE
+              Order.Brand = gcBrand AND
+              Order.CLI   = MSISDN.CLI AND
+              Order.OrderType = 0 NO-LOCK NO-ERROR.
+   IF NOT AVAIL Order THEN DO:
+      DISPLAY "MSISDN nro: " + MSISDN.CLI + " Order is not available, nothing to revert" FORMAT "X(70)".
+      NEXT.
+   END.
+   ELSE DO:
+      FIND FIRST SIM WHERE
+                 SIM.Brand EQ gcBrand   AND
+                 SIM.ICC   EQ Order.ICC  NO-LOCK NO-ERROR.
+      IF AVAIL SIM THEN   /* If stock not correct then ask confirmation */
+         IF NOT (SIM.Stock EQ "TESTING" OR
+                 SIM.Stock EQ "EMATESTING") THEN DO:
+            llContinue = FALSE.
+            MESSAGE "Incorrect SIM Stock (" + SIM.Stock + "). Release SIM anyway?" 
+            VIEW-AS ALERT-BOX QUESTION
+            BUTTONS YES-NO
+            SET llContinue.
+            IF NOT llContinue THEN DO:
+               DISPLAY "MSISDN nro: " + MSISDN.CLI + " Incorrect SIM Stock:" + SIM.Stock FORMAT "X(70)". 
+               NEXT.
+            END.
+         END.
+      IF NOT AVAIL SIM THEN DO:
+         DISPLAY "MSISDN nro: " + MSISDN.CLI + " SIM does not belong to testing tool" FORMAT "X(70)". 
+         NEXT.
+      END.
+      ELSE DO:
+         liCounter = liCounter + 1.
+         fReleaseSIM(Order.ICC).
+         fReleaseMSISDN(INPUT MSISDN.CLI).
+         fDeleteOrder(INPUT MSISDN.CLI).
+         fDeleteSubscription(INPUT MSISDN.CLI).
+      END.
    END.
 END.
-
-fReleaseSIM(Order.ICC).
-fReleaseMSISDN(lcMSISDN).
-fDeleteOrder(INPUT lcMSISDN).
-fDeleteSubscription(INPUT lcMSISDN).
-
-
+DISPLAY liCounter " MSISDNs cleaned." FORMAT "X(70)" SKIP.

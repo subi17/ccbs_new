@@ -23,7 +23,6 @@ DEFINE VARIABLE lcFormRequest AS CHARACTER NO-UNDO.
 DEFINE VARIABLE ldChgDate AS DATE NO-UNDO. 
 DEFINE VARIABLE ldeToday AS DEC NO-UNDO. 
 DEFINE VARIABLE ldeChgStamp AS DECIMAL NO-UNDO.
-DEFINE VARIABLE ldePortingTime AS DECIMAL NO-UNDO.
 DEFINE VARIABLE lcProduct AS CHAR NO-UNDO. 
 DEFINE VARIABLE lcTariffType AS CHAR NO-UNDO. 
 
@@ -98,8 +97,6 @@ FOR EACH MNPProcess where
       MNPProcess.StatusReason = MNPOperation.ErrorCode.
 END.
    
-IF Order.PortingDate <> ? THEN
-   ldePortingTime = fMake2Dt(Order.PortingDate,0).
 FIND FIRST OrderAccessory NO-LOCK WHERE
            OrderAccessory.Brand = gcBrand AND
            OrderAccessory.OrderId = Order.OrderID AND
@@ -114,19 +111,20 @@ lcTariffType = fGetDataBundleInOrderAction(Order.OrderId,
 IF lcTariffType = "" THEN
    lcTariffType = Order.CLIType.
 
-IF ldePortingTime <= fMakeTS() THEN
-   ldChgDate = fMNPChangeWindowDate(
-                       fMakeTS(),
-                       /* todo: can be removed after deplo */
-                       (IF Order.OrderType = 3 AND
-                           Order.OrderChannel NE "inversa"
-                        THEN "POS"
-                        ELSE Order.OrderChannel),
-                       OrderCustomer.Region,
-                       lcProduct,
-                       lcTariffType).
-ELSE ldChgDate = Order.PortingDate.
+ldChgDate = fMNPChangeWindowDate(   /* Count min porting date */
+            fMakeTS(),
+            /* todo: can be removed after deplo */
+            (IF Order.OrderType = 3 AND
+                Order.OrderChannel NE "inversa"
+             THEN "POS"
+             ELSE Order.OrderChannel),
+            OrderCustomer.Region,
+            lcProduct,
+            lcTariffType).
 
+IF Order.PortingDate <> ? THEN
+   IF ldChgDate < Order.PortingDate THEN /* Porting date in the future, use that */
+      ldChgDate = Order.PortingDate.
 ldeChgStamp = fMake2Dt(ldChgDate,7200).
 
 CREATE MNPProcess.

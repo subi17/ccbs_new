@@ -211,6 +211,11 @@ FOR EACH FMItem NO-LOCK  WHERE
          PriceList.Brand = gcBrand AND
          PriceList.PriceList = FMItem.PriceList:
 
+     IF FMItem.BillType EQ "NF" THEN DO:
+        liCreated = liCreated + 1.
+        next.
+     END.
+     
      IF FMItem.BillMethod = TRUE /* a SINGLE FEE */ THEN 
      DO FOR xSingleFee TRANS:
 

@@ -18,6 +18,7 @@ gcBrand = "1".
 {tmsconst.i}
 {upsellbundle.i}
 {fgettxt.i}
+{fprepaidfee.i}
 
 DEF VAR pcUpsellId       AS CHAR NO-UNDO.
 DEF VAR piMsSeq          AS INT  NO-UNDO. 
@@ -56,7 +57,7 @@ IF pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
       
    /* Validate Prepaid Balance before making TARJ UPSell activation request */
    IF pcUpsellId = {&TARJ_UPSELL} THEN DO:
-      ldeBundleFee = fCParamDe("TARJ_UPSELLFee").
+      ldeBundleFee = fgetPrepaidFeeAmount(pcUpsellId, TODAY).
       RUN pEnoughBalance(INPUT MobSub.CLI,
                          INPUT ldeBundleFee,
                          OUTPUT llResult).
