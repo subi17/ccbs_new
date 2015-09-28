@@ -10,6 +10,10 @@
                 penalty_contract;string;optional;(TERM or PAYTERM+TERM)
                 penalty_amount;double;optional;penalty amount
                 extension;boolean;optional;TRUE if extension is allowed
+   17.09.2015 hugo.lujan YPR-2524 [Q25] - TMS - STC from Postpaid to Prepaid
+   AC1: Modify get_subscription_type_rule TMSRPC to:
+   * fetch Quota 25 refinance remaining amount and
+   * add into total penalty fee.
  */
 {xmlrpc/xmlrpc_access.i}
 
@@ -29,10 +33,15 @@ gcBrand = "1".
 {main_add_lines.i}
 {fdss.i}
 
+FUNCTION fGetQ25RefRemainingAmt RETURNS DECIMAL
+         (INPUT iMsSeq          AS INTEGER,
+          INPUT iiCustnum       AS INTEGER,
+          INPUT icCalcObj       AS CHARACTER,          
+          INPUT idaCountFrom    AS DATE) FORWARD.
 /* Input parameters */
-DEF VAR piMsSeq            AS INT  NO-UNDO.
-DEF VAR pcNewCLIType       AS CHAR NO-UNDO.
-DEF VAR pcTariffBundle     AS CHAR NO-UNDO.
+DEF VAR piMsSeq            AS INT     NO-UNDO.
+DEF VAR pcNewCLIType       AS CHAR    NO-UNDO.
+DEF VAR pcTariffBundle     AS CHAR    NO-UNDO.
 
 /* Output parameters */
 DEF VAR top_struct         AS CHAR NO-UNDO.
@@ -89,14 +98,18 @@ DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 DEF VAR liFeePeriod       AS INT  NO-UNDO.
 DEF VAR liOrderId AS INT NO-UNDO. 
 
+/* q25refinance_remaining Quota 25 refinance remaining amount */
+DEF VAR pcQ25RefiRemain AS DECIMAL NO-UNDO.
+
 DEF BUFFER bCLIType        FOR CLIType.
 DEF BUFFER OldCLIType      FOR CLIType.
 DEF BUFFER lbMobSub        FOR MobSub.
 
 IF validate_request(param_toplevel_id, "int,string,string") EQ ? THEN RETURN.
-piMsSeq = get_pos_int(param_toplevel_id,"0").
-pcNewCLIType = get_string(param_toplevel_id,"1").
-pcTariffBundle = get_string(param_toplevel_id,"2").
+piMsSeq         = get_pos_int(param_toplevel_id,"0").
+pcNewCLIType    = get_string(param_toplevel_id,"1").
+pcTariffBundle  = get_string(param_toplevel_id,"2").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 FIND FIRST MobSub NO-LOCK WHERE
@@ -345,16 +358,22 @@ FUNCTION fGetOrigCLIType RETURNS CHARACTER
 END FUNCTION.
 
 
-IF NOT MobSub.PayType THEN DO:
-
+IF NOT MobSub.PayType THEN DO:   
    /* If postpaid to prepaid only */
    IF CLIType.PayType = {&CLITYPE_PAYTYPE_PREPAID} THEN DO:
       FIND FIRST DCCLI WHERE
                  DCCLI.MsSeq = MobSub.MsSeq     AND
-                 DCCLI.DCEvent BEGINS "PAYTERM" AND
+                 (DCCLI.DCEvent BEGINS "PAYTERM" OR 
+                  DCCLI.DCEvent BEGINS "RVTERM") /* Q25 */ AND
                  DCCLI.ValidTo >= ldaSTCDates[1] NO-LOCK NO-ERROR.
       IF AVAIL DCCLI THEN DO:
-
+         /* Quota 25 Q25 BEGIN */
+         pcQ25RefiRemain = 
+            fGetQ25RefRemainingAmt(MobSub.MsSeq,
+                                   MobSub.Custnum,
+                                   "RVTERM12",
+                                   ?).
+         /* Quota 25 Q25 END */
          DO liLoop = 1 TO EXTENT(ldaSTCDates):
             fGetFixedFeeInfo(MobSub.MsSeq,
                              MobSub.CustNum,
@@ -368,9 +387,9 @@ IF NOT MobSub.PayType THEN DO:
                              OUTPUT lcFinancedInfo,
                              OUTPUT liOrderId).
             IF ldePendingFee > 0 THEN
-               ASSIGN ldeTotalPenaltyFee[liLoop] = ldePendingFee
+               ASSIGN ldeTotalPenaltyFee[liLoop] = ldePendingFee + pcQ25RefiRemain
                       lcPenaltyCode = "PAYTERM".
-         END.
+         END. /* liLoop = 1 TO EXTENT(ldaSTCDates) */
       END.
 
       /* Residual Amount SingleFee */
@@ -392,7 +411,7 @@ IF NOT MobSub.PayType THEN DO:
 
          IF ldePendingFee > 0 THEN
             ASSIGN ldeTotalPenaltyFee[liLoop] = ldeTotalPenaltyFee[liLoop] +
-                                                ldePendingFee
+                                                ldePendingFee + pcQ25RefiRemain
                    lcPenaltyCode = "PAYTERM".
       END.
    END.
@@ -448,7 +467,7 @@ IF NOT MobSub.PayType THEN DO:
          ASSIGN ldeTermPendingFee[liLoop] = 
             TRUNCATE(ldePenaltyFactor * ldePeriodFee,0)
             ldeTotalPenaltyFee[liLoop] = ldeTotalPenaltyFee[liLoop]
-               + ldeTermPendingFee[liLoop]
+               + ldeTermPendingFee[liLoop] + pcQ25RefiRemain
             lcPenaltyCode = lcPenaltyCode + "+TERM" WHEN liLoop EQ 1
             ldtFrom = DATETIME(ldaSTCDates[liLoop],0)
             liLengthAfterExtension[liLoop] =
@@ -547,4 +566,87 @@ fAddCLITypeStruct().
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.
+/*
+   Purpose: Fetch Quota 25 refinance remaining amount
+   YPR-2524 - [Q25] - TMS - STC from Postpaid to Prepaid
+   Author: Hugo Alberto Lujan Chavez hugo.lujan
+   25.sep.2015
+*/
+FUNCTION fGetQ25RefRemainingAmt RETURNS DECIMAL
+         (INPUT iMsSeq          AS INTEGER,
+          INPUT iiCustnum       AS INTEGER,
+          INPUT icCalcObj       AS CHARACTER,          
+          INPUT idaCountFrom    AS DATE):
 
+   /* Quota 25 refinance remaining amount */
+   DEF VAR ldePendingFee AS DECIMAL NO-UNDO.
+   
+   DEF VAR liFFNum       AS INTEGER NO-UNDO.
+   DEF VAR liPeriodFrom  AS INTEGER NO-UNDO.
+   DEF VAR liCountPeriod AS INTEGER NO-UNDO.
+
+   DEF BUFFER FixedFee  FOR FixedFee.
+   DEF BUFFER FFItem    FOR FFItem.
+   DEF BUFFER SingleFee FOR SingleFee.
+
+   DEF VAR liPeriod AS INTEGER NO-UNDO. 
+   DEF VAR ldaDate  AS DATE    NO-UNDO.
+
+   ASSIGN
+      ldaDate        = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
+      liPeriod       = YEAR(ldaDate) * 100 + MONTH(ldaDate)
+      ldePendingFee  = 0.
+
+   IF idaCountFrom NE ? THEN
+      ASSIGN liPeriodFrom  = YEAR(idaCountFrom) * 10000 + 
+                             MONTH(idaCountFrom) * 100  +
+                             DAY(idaCountFrom).
+             liCountPeriod = YEAR(idaCountFrom) * 100 + 
+                             MONTH(idaCountFrom).
+
+   FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
+            FixedFee.Brand     EQ gcBrand        AND 
+            FixedFee.Custnum   EQ iiCustnum      AND
+            FixedFee.HostTable EQ "MobSub"       AND
+            FixedFee.KeyValue  EQ STRING(iMsSeq) AND
+            FixedFee.EndPeriod >= liPeriod       AND
+            FixedFee.BillCode  BEGINS "RVTERM"   AND
+            FixedFee.InUse:
+
+      IF icCalcObj > "" AND
+         FixedFee.CalcObj <> icCalcObj THEN NEXT.
+      
+      ASSIGN
+         liFFNum = 0.
+
+      FOR EACH FFItem OF FixedFee NO-LOCK:
+         IF idaCountFrom <> ? AND
+            FFItem.Concerns[1] < liPeriodFrom THEN NEXT.
+         ASSIGN
+            liFFNum       = FixedFee.FFNum
+            ldePendingFee = ldePendingFee + FFItem.Amt WHEN NOT FFItem.Billed.
+      END. /* FOR EACH FFItem OF FixedFee */
+
+      IF liFFNum > 0 THEN
+      DO:
+         FOR FIRST SingleFee NO-LOCK WHERE
+                   SingleFee.Brand       EQ gcBrand              AND
+                   SingleFee.Custnum     EQ FixedFee.CustNum     AND
+                   SingleFee.HostTable   EQ FixedFee.HostTable   AND
+                   SingleFee.KeyValue    EQ FixedFee.KeyValue    AND
+                   SingleFee.SourceTable EQ FixedFee.SourceTable AND
+                   SingleFee.SourceKey   EQ FixedFee.SourceKey   AND
+                   SingleFee.CalcObj     EQ FixedFee.CalcObj:
+
+             IF SingleFee.Billed AND
+                CAN-FIND (FIRST Invoice NO-LOCK WHERE
+                                Invoice.InvNum  EQ SingleFee.InvNum AND
+                                Invoice.InvType EQ 1) THEN NEXT.
+
+             IF idaCountFrom <> ? AND
+                SingleFee.BillPeriod < liCountPeriod THEN NEXT.
+         END. /* FOR FIRST SingleFee */
+      END. /* IF liFFNum > 0 */
+   END. /* FOR EACH FixedFee */
+   RETURN ldePendingFee.
+END FUNCTION. /* FUNCTION fGetQ25RefRemainingAmt */

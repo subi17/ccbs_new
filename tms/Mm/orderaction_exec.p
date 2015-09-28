@@ -78,6 +78,8 @@ FOR EACH OrderAction NO-LOCK WHERE
       END.
       WHEN "Service" THEN RUN pService.
       WHEN "Discount" THEN RUN pDiscountPlan.
+      WHEN "Q25Discount" THEN RUN pQ25Discount.
+      WHEN "Q25Extension" THEN RUN pQ25Extension.
       OTHERWISE NEXT ORDERACTION_LOOP.
    END CASE.
 
@@ -358,5 +360,99 @@ PROCEDURE pDiscountPlan:
    END.
    
    RETURN "".
+
+END PROCEDURE.
+
+PROCEDURE pQ25Extension:
+
+   DEF VAR liPercontractId AS INT NO-UNDO. 
+   DEF VAR liRequest AS INT NO-UNDO. 
+   DEF VAR lcResult AS CHAR NO-UNDO. 
+   DEF VAR ldeContractActStamp AS DEC NO-UNDO. 
+   DEF VAR ldaDate AS DATE NO-UNDO. 
+   
+   liPercontractId = INT(OrderAction.ItemKey) NO-ERROR.
+   IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
+      RETURN "ERROR:Q25 extension failed (incorrect contract id)".
+
+   FIND SingleFee USE-INDEX Custnum WHERE
+        SingleFee.Brand       = gcBrand AND
+        SingleFee.Custnum     = MobSub.CustNum AND
+        SingleFee.HostTable   = "Mobsub" AND
+        SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
+        SingleFee.SourceTable = "DCCLI" AND
+        SingleFee.SourceKey   = STRING(liPercontractId) AND
+        SingleFee.CalcObj     = "RVTERM" NO-LOCK NO-ERROR.
+   
+   IF NOT AVAIL SingleFee THEN
+      RETURN "ERROR:Q25 extension failed (residual fee not found)".
+
+   ldaDate = fPer2Date(SingleFee.BillPeriod,0) - 1.
+   ldaDate = DATE(MONTH(ldaDate),21,YEAR(ldaDate)).
+
+   IF TODAY < ldaDate THEN
+      ldeContractActStamp = fMake2dt(ldaDate,0).
+   ELSE ldeContractActStamp = fSecOffset(fMakeTS(),15).
+
+   liRequest = fPCActionRequest(MobSub.MsSeq,
+                             "RVTERM12",
+                             "act",
+                             ldeContractActStamp,
+                             TRUE, /* create fees */
+                             icSource,
+                             "",
+                             iiOrigRequest,
+                             FALSE,
+                             "",
+                             0,
+                             liPercontractId,
+                             OUTPUT lcResult).
+ 
+   IF liRequest = 0 THEN 
+      RETURN "ERROR:Periodical contract not created; " + lcResult.
+   ELSE DO:
+      FIND FIRST msrequest EXCLUSIVE-LOCK WHERE
+                 msrequest.msrequest = lirequest NO-ERROR.
+      IF AVAIL msrequest THEN ASSIGN
+         msrequest.ReqIparam1 = Order.OrderId.
+      RELEASE msrequest.
+   END.
+      
+
+END PROCEDURE.
+
+PROCEDURE pQ25Discount:
+
+   DEF VAR liPercontractId AS INT NO-UNDO. 
+   DEF VAR ldeDiscount AS DEC NO-UNDO. 
+   DEF VAR lcResult AS CHAR NO-UNDO. 
+
+   liPercontractId = INT(OrderAction.ItemKey) NO-ERROR.
+   IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
+      RETURN "ERROR:Q25 discount creation failed (incorrect contract id)".
+                                            
+   ldeDiscount = DEC(OrderAction.ItemParam) NO-ERROR.
+   IF ERROR-STATUS:ERROR OR ldeDiscount EQ 0 THEN 
+      RETURN "ERROR:Q25 discount creation failed (incorrect discount amount)".
+
+   FIND SingleFee USE-INDEX Custnum WHERE
+        SingleFee.Brand       = gcBrand AND
+        SingleFee.Custnum     = MobSub.Custnum AND
+        SingleFee.HostTable   = "Mobsub" AND
+        SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
+        SingleFee.SourceTable = "DCCLI" AND
+        SingleFee.SourceKey   = STRING(liPerContractID) AND
+        SingleFee.CalcObj     = "RVTERM" NO-LOCK NO-ERROR.
+
+   IF NOT AVAIL SingleFee THEN
+      RETURN "ERROR:Q25 discount creation failed (residual fee not found)".
+
+   fAddDiscountPlanMember(MobSub.MsSeq,
+                         "RVTERMDT1", 
+                         ldeDiscount,
+                         fPer2Date(SingleFee.BillPeriod,0),
+                         1,
+                         OUTPUT lcResult).
+   RETURN lcResult.
 
 END PROCEDURE.

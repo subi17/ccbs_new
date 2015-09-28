@@ -5,7 +5,8 @@
                         03.09.07/aam don't mark create fees for prepaid on
                                      per.contract termination
                         11.03.08/jp  removed hardcoded "begins tarj"        
-
+      22.sep.2015 hugo.lujan - YPR-2521 - [Q25] - TMS - Subscription 
+       termination/ MNP out porting, STC (postpaid to prepaid)
 */
    
 {commali.i}
@@ -605,6 +606,16 @@ PROCEDURE pTerminate:
       WHEN 3 THEN fReqStatus(9,"Handled by subs. termination").
       END.
 
+   END.
+   
+   /* Quota 25 q25 - YPR-2521 */
+   FOR EACH MSRequest NO-LOCK WHERE  
+      MSRequest.MsSeq      EQ Mobsub.MsSeq AND
+      MSRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+      MsRequest.ReqStatus EQ 0 AND
+      MSREquest.REqcparam3 EQ "RVTERM12":   
+         
+      fReqStatus(4,"ERROR:Q25 Cancelled Quota 25 extension request").
    END.
 
    /* commission termination */

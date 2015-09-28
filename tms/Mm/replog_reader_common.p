@@ -682,7 +682,9 @@ PROCEDURE pHandleFixedFee:
                            fNotNull(STRING(FixedFee.BegDate))   + lcDel +
                            fNotNull(FixedFee.SourceTable)       + lcDel +
                            fNotNull(FixedFee.SourceKey)         + lcDel +
-                           fNotNull(STRING(FixedFee.OrderId)).
+                           fNotNull(STRING(FixedFee.OrderId))   + lcDel +
+                           fNotNull(FixedFee.FinancedResult)    + lcDel +
+                           fNotNull(FixedFee.TFBank).
                fWriteMessage(lcMessage).
             END.
             ELSE DO:
@@ -1064,6 +1066,56 @@ PROCEDURE pHandleNatHoliday:
                lcMessage = lcMessage                            + lcDel +
                            fNotNull(STRING(NatHoliday.Holiday)) + lcDel +
                            fNotNull(NatHoliday.HName).
+               fWriteMessage(lcMessage).
+            END.
+            ELSE DO:
+               olHandled = TRUE.
+               fWriteMessage(lcMessage).
+               RETURN.
+            END.
+         END.
+         WHEN "DELETE" THEN fWriteMessage(lcMessage).
+         OTHERWISE RETURN.
+      END CASE.
+
+      IF lMsgPublisher:send_message(lcMessage) THEN
+         olHandled = TRUE.
+      ELSE DO:
+         olHandled = FALSE.
+         IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+            LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+      END.
+   END.
+
+   CATCH anyError AS Progress.Lang.Error:
+      olHandled = FALSE.
+      LOG-MANAGER:WRITE-MESSAGE("Message failed was recovered: " + lcMessage,"DEBUG").
+   END CATCH.
+
+END PROCEDURE.
+
+PROCEDURE pHandleDPTarget:
+
+   DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
+
+   DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
+
+   IF AVAIL Common.RepLog THEN DO:
+
+      lcMessage = fCommonMessage().
+
+      CASE RepLog.EventType:
+         WHEN "CREATE" OR WHEN "MODIFY" THEN DO:
+            FIND FIRST DPTarget WHERE
+                       RECID(DPTarget) = RepLog.RecordId NO-LOCK NO-ERROR.
+            IF AVAIL DPTarget THEN DO:
+               lcMessage = lcMessage                              + lcDel +
+                           fNotNull(STRING(DPTarget.DPId))        + lcDel +
+                           fNotNull(DPTarget.TargetTable)         + lcDel +
+                           fNotNull(DPTarget.TargetKey)           + lcDel +
+                           fNotNull(STRING(DPTarget.Included))    + lcDel +
+                           fNotNull(STRING(DPTarget.ValidFrom))   + lcDel +
+                           fNotNull(STRING(DPTarget.ValidTo)).
                fWriteMessage(lcMessage).
             END.
             ELSE DO:

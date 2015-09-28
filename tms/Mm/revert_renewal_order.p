@@ -5,6 +5,7 @@
   Author .......: Vikas
   Created ......: 29.06.12
   Version ......: Yoigo
+   09.09.2015 hugo.lujan [Q25] - TMS - Cancel Renewal Order
 ---------------------------------------------------------------------- */
 
 {commali.i}
@@ -15,16 +16,20 @@
 {msreqfunc.i}
 {tmsconst.i}
 {ordercancel.i}
+{coinv.i}
+{dpmember.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER  NO-UNDO.
 
-DEFINE VARIABLE liTermPeriod        AS INTEGER   NO-UNDO.
-DEFINE VARIABLE lcCreditFees        AS CHAR NO-UNDO. 
-DEFINE VARIABLE ldaRenewalDate      AS DATE      NO-UNDO.
-DEFINE VARIABLE liRenewalTime       AS INTEGER   NO-UNDO.
+DEF VAR liTermPeriod   AS INTEGER NO-UNDO.
+DEF VAR lcCreditFees   AS CHAR    NO-UNDO. 
+DEF VAR ldaRenewalDate AS DATE    NO-UNDO.
+DEF VAR liRenewalTime  AS INTEGER NO-UNDO.
 
-DEFINE BUFFER bSubMsRequest  FOR MsRequest.
-DEFINE BUFFER bMsRequest     FOR MsRequest.
+DEF BUFFER bSubMsRequest FOR MsRequest.
+DEF BUFFER bMsRequest    FOR MsRequest.
+
+DEF VAR ldtactdate1 AS DATE NO-UNDO.
 
 FIND FIRST MsRequest WHERE
            MsRequest.MsRequest = iiMsRequest  NO-LOCK NO-ERROR.
@@ -217,15 +222,15 @@ RETURN RETURN-VALUE.
 
 PROCEDURE pRevertRenewalOrder:
 
-   DEFINE VARIABLE liTermRequest          AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE lcError                AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE ldaLastMonth           AS DATE      NO-UNDO.
-   DEFINE VARIABLE ldaLastDayOfLastMonth  AS DATE      NO-UNDO.
-   DEFINE VARIABLE ldPeriodTo             AS DECIMAL   NO-UNDO.
-   DEFINE VARIABLE ldaTermDate            AS DATE      NO-UNDO.
-   DEFINE VARIABLE liTermTime             AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE llReCreate             AS LOGICAL   NO-UNDO.
-   DEFINE VARIABLE liCount                AS INTEGER   NO-UNDO.
+   DEF VAR liTermRequest          AS INTEGER   NO-UNDO.
+   DEF VAR lcError                AS CHARACTER NO-UNDO.
+   DEF VAR ldaLastMonth           AS DATE      NO-UNDO.
+   DEF VAR ldaLastDayOfLastMonth  AS DATE      NO-UNDO.
+   DEF VAR ldPeriodTo             AS DECIMAL   NO-UNDO.
+   DEF VAR ldaTermDate            AS DATE      NO-UNDO.
+   DEF VAR liTermTime             AS INTEGER   NO-UNDO.
+   DEF VAR llReCreate             AS LOGICAL   NO-UNDO.
+   DEF VAR liCount                AS INTEGER   NO-UNDO.
    DEF VAR ldaRequestDate AS DATE NO-UNDO. 
 
    DEFINE BUFFER bDCCLI      FOR DCCLI.
@@ -422,15 +427,171 @@ PROCEDURE pRevertRenewalOrder:
    END. /* FOR FIRST bMsRequest WHERE */
    
    RUN pCreateRenewalCreditNote(MsRequest.ReqIParam1,TRIM(lcCreditFees,",")).
-
+   /* Q25 */
+   RUN pQ25HandleDiscount IN THIS-PROCEDURE.
    /* Request handled succesfully */
    FIND FIRST MsRequest WHERE
               MsRequest.MSRequest = iiMsRequest NO-LOCK NO-ERROR.
-
-   fReqStatus(2,"").
+   
+   fReqStatus(2,"").   
 END. /* DO TRANSACTION: */
 
 RETURN "".
 
 END PROCEDURE.
 
+/* Q25 */
+/*   
+   TASK .........: Close the corresponding RVTERMDT1 discount for Quota 25
+   YPR-2520
+   If the order is cancelled (has not been delivered correctly to the customer
+   or order is cancelled by customer) before month 25 then the following 
+   actions to be performed: 
+   -Don't cancel Quota 25 extension request. 
+   -Remove the discount which was given to customer over Quota 25. 
+   -If discount (RVTERMDT1) was already billed then we have to bill 
+    the Quota 25 again to customer in next invoice. 
+   
+   Questions before month 25: 
+   Q: How to know? If the order has not been delivered correctly to the customer
+   A: Order logistics status is 3 (cancelled) and there's revert renewal 
+    request (type 49) REQTYPE_REVERT_RENEWAL_ORDER
+    with request source 14 (order cancellation) REQUEST_SOURCE_ORDER_CANCELLATION
+   Q: How to know? if order is cancelled by customer
+   A: There's a revert renewal request (type 49) REQTYPE_REVERT_RENEWAL_ORDER
+   with request source other than 14 (REQUEST_SOURCE_ORDER_CANCELLATION)
+   NOTE: From TMS point of view the handling is the same for LO and customer cancellation.
+   Q: How to? Remove the discount which was given to customer over Quota 25
+   A: Close the corresponding RVTERMDT1 discount
+*/
+PROCEDURE pQ25HandleDiscount:
+ DEF VAR liPercontractId AS INTEGER   NO-UNDO. 
+ DEF VAR ldeDiscount     AS DECIMAL   NO-UNDO. 
+ DEF VAR lcResult        AS CHARACTER NO-UNDO.
+ /* Date when the payment plan was created */   
+ DEF VAR ldBillPeriod      AS DATE NO-UNDO.
+ /* Temp variable for the date of the extension request */
+ DEF VAR ldaProrateRequest AS DATE NO-UNDO.
+ /* Month 24 Date */
+ DEF VAR ldaMonth24Date    AS DATE NO-UNDO.
+ /* Number of months elapsed since the payment plan was created */
+ DEF VAR liMonthsElapsed   AS INTEGER NO-UNDO.
+ 
+ FIND FIRST OrderAction NO-LOCK WHERE
+            OrderAction.Brand    EQ gcBrand AND
+            OrderAction.OrderId  EQ MsRequest.ReqIParam1 AND
+            OrderAction.ItemType EQ "Q25Extension" NO-ERROR.
+    
+ IF NOT AVAILABLE OrderAction THEN
+    RETURN "OK".
+
+ liPercontractId = INT(OrderAction.ItemKey) NO-ERROR.
+ IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
+    RETURN "ERROR:Q25 discount creation failed (incorrect contract id)".
+    
+ FIND FIRST DCCLI NO-LOCK WHERE
+            DCCLI.Brand   EQ gcBrand AND
+            DCCLI.DCEvent EQ "RVTERM12" AND
+            DCCLI.MsSeq   EQ Mobsub.MsSeq AND
+            DCCLI.ValidTo >= TODAY NO-ERROR.
+ 
+ IF NOT AVAILABLE DCCLI THEN
+ DO:
+  FIND FIRST MSRequest NO-LOCK WHERE 
+             MSRequest.MsSeq      EQ Mobsub.MsSeq AND
+             MSRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+             MsRequest.ReqStatus  EQ 0 AND /* ONGOING */
+             MSREquest.REqcparam3 EQ "RVTERM12" AND
+             MSREquest.ReqIParam3 = liPercontractId NO-ERROR.
+  IF AVAILABLE MSRequest THEN
+  DO:
+   fCloseDiscount("RVTERMDT1",
+      MobSub.MsSeq,
+      TODAY,
+      FALSE). /* clean event logs */
+     RETURN "OK". 
+  END.
+  RETURN "ERROR:Q25 Activation Request not found".
+ END.
+                                            
+ ldeDiscount = DEC(OrderAction.ItemParam) NO-ERROR.
+ IF ERROR-STATUS:ERROR OR ldeDiscount EQ 0 THEN 
+    RETURN "ERROR:Q25 discount creation failed (incorrect discount amount)". 
+    
+ FIND SingleFee USE-INDEX Custnum WHERE
+        SingleFee.Brand       EQ gcBrand AND
+        SingleFee.Custnum     EQ MobSub.Custnum AND
+        SingleFee.HostTable   EQ "Mobsub" AND
+        SingleFee.KeyValue    EQ STRING(Mobsub.MsSeq) AND
+        SingleFee.SourceTable EQ "DCCLI" AND
+        SingleFee.SourceKey   EQ STRING(liPerContractID) AND
+        SingleFee.CalcObj     EQ "RVTERM" NO-LOCK NO-ERROR.        
+
+ IF NOT AVAILABLE SingleFee THEN
+    RETURN "ERROR:Q25 discount creation failed (residual fee not found)".
+ IF SingleFee.Billed AND
+   CAN-FIND(FIRST Invoice NO-LOCK WHERE
+                  Invoice.Invnum  EQ SingleFee.Invnum AND
+                  Invoice.InvType EQ 1) THEN /* 1 Service Invoice */
+ DO:
+    FIND FIRST 
+       subInvoice NO-LOCK WHERE
+       subInvoice.InvNum EQ SingleFee.InvNum NO-ERROR.
+    
+    IF NOT AVAILABLE subInvoice THEN
+      RETURN "ERROR:Q25 subInvoice record not found)".
+    
+    FIND FIRST 
+       invrow NO-LOCK WHERE
+       invrow.InvNum    EQ subInvoice.InvNum AND
+       invrow.SubInvNum EQ subInvoice.SubInvNum AND
+       /* The discount which was given to customer over Quota 25 */
+       invrow.BillCode EQ "RVTERMDT1" 
+       NO-ERROR.
+    
+    IF NOT AVAILABLE invrow THEN
+      RETURN "ERROR:Q25 invrow record not found)".  
+      
+    /* Month 25 and after: Create new single fee 
+       (CRVTERMDT) with corresponding amount*/
+     RUN creasfee.p(MobSub.CustNum,
+        MobSub.MsSeq,
+        ldtActDate,
+        "FeeModel",
+        "CRVTERMDT",
+        9,
+        ABS(invrow.Amt), /* Discount amount, to charge in next invoice */
+        DCCLI.DCEvent + " created " + 
+           STRING(ldtActDate,"99.99.9999"),  /* memo */
+        FALSE,              /* no messages to screen */
+        "",
+        "RevertRenewalQ25",
+        0, /* order id */
+        SingleFee.SourceTable,
+        SingleFee.SourceKey,
+        OUTPUT lcResult).
+   IF lcResult > "" THEN
+   DO:
+      /* Create a memo in TMS */
+   CREATE Memo.
+   ASSIGN
+       Memo.CreStamp  = fMakeTS() 
+       Memo.Brand     = gcBrand
+       Memo.HostTable = ""
+       Memo.KeyValue  = STRING(MobSub.MsSeq)
+       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
+       Memo.CreUser   = katun
+       Memo.MemoTitle = "CRVTERMDT Fee creation failed"
+       Memo.MemoText  = lcResult
+       Memo.CustNum   = MobSub.CustNum.
+   END.   
+ END.
+ ELSE
+ DO:
+   fCloseDiscount("RVTERMDT1",
+      MobSub.MsSeq,
+      TODAY,
+      FALSE). /* clean event logs */
+     RETURN "OK". 
+  END.
+END PROCEDURE.

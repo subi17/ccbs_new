@@ -527,6 +527,7 @@ FOR EACH  DCCLI WHERE
       add_string(installment_struct,"installment_contract", DCCLI.DCEvent).
       add_double(installment_struct,"installment_pending_fee", ldePendingFee).
       add_double(installment_struct,"installment_residual_fee", lderesidualFee).
+      add_int(installment_struct,"per_contract_id", DCCLI.PercontractId).
       liQtyTFs = liQtyTFs + 1.
    END.
 END.

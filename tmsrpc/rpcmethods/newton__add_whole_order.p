@@ -8,6 +8,7 @@
             device_data;struct;optional
             contact_data;struct;optional
             fusion_data;struct;optional
+            q25_data;struct;optional
  * @order_data salesman;string;optional;id of the seller
                reseller;string;mandatory;reseller id
                channel;string;mandatory;controller name
@@ -198,10 +199,25 @@
                     zip;string;mandatory;
                     street_number;string;optional;
                     region;string;optional;
+ * @q25_data   q25_extension;boolean;optional;Extension of the Quota 25
+               q25_discount;double;optional;Discount amount over the Quota 25
+               per_contract_id;int;mandatory;installment contract id (related to q25)
+ 
  *
  * @output  orderid;int;handle for order
  */
 
+/*
+   12.08.2015 hugo.lujan YPR-2517 [Q25] - TMS - TMSRPC changed related to
+   Renewal Order channels
+   AC1: Accept 2 new parameters from web in add_whole_order TMSRPC for 
+   Quota 25 extension and discount amount over Quota 25
+   AC2: Create Quota 25 extension request in TMS if Quota 25 extension
+   parameter is true and request should be handled 1st day of month 25
+   AC3: Create dpmember record (RVTERMDT1) to subscription if discount 
+   amount parameter is available and it will target to Quota 25 
+   monthly fee (same period)
+*/
 {xmlrpc/xmlrpc_access.i}
 
 {commpaa.i}
@@ -378,6 +394,13 @@ DEF VAR llROIClose AS LOG NO-UNDO.
 DEF VAR lcPayment AS CHAR NO-UNDO.
 DEF VAR pcPaypalPayerid AS CHAR NO-UNDO.
 DEF VAR liLanguage AS INTEGER NO-UNDO.
+
+/* q25_data */
+DEF VAR llq25_extension   AS LOGICAL NO-UNDO. /* Quota 25 extension */
+DEF VAR ldeq25_discount   AS DECIMAL NO-UNDO. /* Discount amount over Quota 25 */
+DEF VAR liper_contract_id AS INTEGER NO-UNDO. /* installment contract id - Quota 25 */
+DEF VAR pcQ25Struct       AS CHAR NO-UNDO.    /* Quota 25 input struct */
+DEF VAR lcQ25Struct       AS CHAR NO-UNDO.    /* Quota 25 input struct */
 
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
@@ -1200,20 +1223,22 @@ top_struct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 top_struct_fields = validate_request(top_struct, 
-   "order_data!,customer_data!,address_data,device_data,contact_data,fusion_data").
+   "order_data!,customer_data!,address_data,device_data,contact_data,fusion_data,q25_data").
 IF top_struct_fields EQ ? THEN RETURN.
 
 ASSIGN
-pcOrderStruct     = get_struct(top_struct, "order_data")
-pcCustomerStruct  = get_struct(top_struct, "customer_data")
-pcAddressStruct   = get_struct(top_struct, "address_data") WHEN
-                       LOOKUP("address_data",top_struct_fields) > 0
-pcDeviceStruct    = get_struct(top_struct, "device_data") WHEN
-                       LOOKUP("device_data",top_struct_fields) > 0 
-pcContactStruct   = get_struct(top_struct, "contact_data") WHEN
-                       LOOKUP("contact_data",top_struct_fields) > 0
-pcFusionStruct    = get_struct(top_struct, "fusion_data") WHEN
-                       LOOKUP("fusion_data",top_struct_fields) > 0.
+pcOrderStruct    = get_struct(top_struct, "order_data")
+pcCustomerStruct = get_struct(top_struct, "customer_data")
+pcAddressStruct  = get_struct(top_struct, "address_data") WHEN
+                      LOOKUP("address_data",top_struct_fields) > 0
+pcDeviceStruct   = get_struct(top_struct, "device_data") WHEN
+                      LOOKUP("device_data",top_struct_fields) > 0 
+pcContactStruct  = get_struct(top_struct, "contact_data") WHEN
+                      LOOKUP("contact_data",top_struct_fields) > 0
+pcFusionStruct   = get_struct(top_struct, "fusion_data") WHEN
+                      LOOKUP("fusion_data",top_struct_fields) > 0
+pcQ25Struct      = get_struct(top_struct, "q25_data") WHEN
+                      LOOKUP("q25_data",top_struct_fields) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -1604,8 +1629,31 @@ IF pcChannel BEGINS "fusion" AND
    NOT pcFusionStruct > "" THEN
    RETURN appl_err("Fusion order parameters are missing").
 
+/* Quota 25 BEGIN */
+IF pcQ25Struct > "" THEN DO:
+
+   lcQ25Struct = validate_request(pcQ25Struct, "q25_extension,q25_discount,per_contract_id!").
+   IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+   ASSIGN
+    /* Quota 25 extension */
+    llq25_extension = get_bool(pcQ25Struct, "q25_extension")
+      WHEN LOOKUP('q25_extension', lcQ25Struct) > 0
+    /* Discount amount over Quota 25 */
+    ldeq25_discount = get_double(pcQ25Struct, "q25_discount")
+      WHEN LOOKUP('q25_discount', lcQ25Struct) > 0
+    /* installment contract id - Quota 25 */
+    liper_contract_id = get_pos_int(pcQ25Struct, "per_contract_id").
+      
+   IF gi_xmlrpc_error NE 0 THEN RETURN.
+END.
+
+
 /* YBP-532 */
-/* Creation and Update begins */
+/*********************************************************************
+ Creation and Update begins (All the validations should be done before)
+**********************************************************************/
+
 IF LOOKUP(pcNumberType,"new,mnp") > 0 THEN
    fUpdateSIM().
 
@@ -1766,7 +1814,8 @@ ELSE IF Order.statuscode NE "4" THEN DO:
          OrderCustomer.RowType = 1 EXCLUSIVE-LOCK NO-ERROR.
 
       CASE Order.OrderChannel:
-         WHEN "renewal" OR WHEN "renewal_telesales" OR WHEN "retention" THEN DO:
+         WHEN "renewal" OR WHEN "renewal_telesales" OR WHEN "retention" OR
+         WHEN "renewal_ctc" THEN DO:
             IF fCheckRenewalData() = TRUE THEN
                /* YBP-560 */
                Order.StatusCode = {&ORDER_STATUS_RENEWAL}.
@@ -2011,6 +2060,20 @@ IF plPromotion THEN
 
 IF pcUpsHours NE "" THEN 
    fCreateOrderAction(Order.Orderid,"UPSHours",pcUpsHours,""). 
+
+/* Create Quota 25 extension request */
+IF llq25_extension THEN
+   fCreateOrderAction(Order.Orderid,
+      "Q25Extension",
+      STRING(liper_contract_id),
+      "").
+
+/* Create Quota 25 discount */
+IF ldeq25_discount > 0 THEN
+   fCreateOrderAction(Order.Orderid,
+      "Q25Discount",
+      STRING(liper_contract_id),
+      STRING(ldeq25_discount)).
 
 /* YBP-582 */ 
 IF pcChannel BEGINS "fusion" THEN

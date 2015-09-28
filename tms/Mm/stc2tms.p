@@ -1,3 +1,8 @@
+/* stc2tms.p 
+   changes:
+      22.sep.2015 hugo.lujan - YPR-2521 - [Q25] - TMS - Subscription 
+       termination/ MNP out porting, STC (postpaid to prepaid)
+*/
 {commali.i}
 {msreqfunc.i}
 {eventval.i}
@@ -686,21 +691,21 @@ END PROCEDURE.
 
 PROCEDURE pFinalize:
 
-   DEF VAR liChargeReqId      AS INT  NO-UNDO.
-   DEF VAR liFatFromPeriod    AS INT  NO-UNDO. 
-   DEF VAR ldtDate            AS DATE NO-UNDO. 
-   DEF VAR liTime             AS INT  NO-UNDO.
-   DEF VAR lcCharValue        AS CHAR NO-UNDO. 
-   DEF VAR liRequest          AS INT  NO-UNDO.
-   DEF VAR liCustnum          AS INT  NO-UNDO. 
-   DEF VAR ldEndStamp         AS DEC  NO-UNDO.
-   DEF VAR ldBegStamp         AS DEC  NO-UNDO.
+   DEF VAR liChargeReqId   AS INT  NO-UNDO.
+   DEF VAR liFatFromPeriod AS INT  NO-UNDO. 
+   DEF VAR ldtDate         AS DATE NO-UNDO. 
+   DEF VAR liTime          AS INT  NO-UNDO.
+   DEF VAR lcCharValue     AS CHAR NO-UNDO. 
+   DEF VAR liRequest       AS INT  NO-UNDO.
+   DEF VAR liCustnum       AS INT  NO-UNDO. 
+   DEF VAR ldEndStamp      AS DEC  NO-UNDO.
+   DEF VAR ldBegStamp      AS DEC  NO-UNDO.
 
-   DEF VAR lcError                 AS CHAR NO-UNDO.
-   DEF VAR lcMultiLineSubsType     AS CHAR NO-UNDO.
-   DEF VAR lcFusionSubsType        AS CHAR NO-UNDO.
-   DEF VAR lcPostpaidDataBundles   AS CHAR NO-UNDO.
-   DEF VAR lcDataBundleCLITypes    AS CHAR NO-UNDO.
+   DEF VAR lcError               AS CHAR NO-UNDO.
+   DEF VAR lcMultiLineSubsType   AS CHAR NO-UNDO.
+   DEF VAR lcFusionSubsType      AS CHAR NO-UNDO.
+   DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
+   DEF VAR lcDataBundleCLITypes  AS CHAR NO-UNDO.
 
    DEF BUFFER bSubRequest FOR MsRequest.
    
@@ -950,6 +955,16 @@ PROCEDURE pFinalize:
               "Fusion order finalization failed",
               SUBST("Wrong order status: &1",Order.statusCode)).
       END.
+   END.
+   
+   /* Quota 25 q25 - YPR-2521 */
+   FOR EACH MSRequest NO-LOCK WHERE  
+      MSRequest.MsSeq      EQ Mobsub.MsSeq AND
+      MSRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+      MsRequest.ReqStatus EQ 0 AND
+      MSREquest.REqcparam3 EQ "RVTERM12":   
+         
+      fReqStatus(4,"ERROR:Q25 Cancelled Quota 25 extension request").
    END.
 
    /* request handled succesfully */
