@@ -95,6 +95,7 @@ DEFINE TEMP-TABLE ttBatchInputFile
    FIELD DeliverFileName AS CHAR
    FIELD MsisdnStatus    AS INT
    FIELD SimIcc          AS CHAR
+   FIELD UsedMSISDN      AS CHAR
    INDEX FileName IS PRIMARY UNIQUE FileName.
 
 DEFINE TEMP-TABLE ttInputFileContent
@@ -360,8 +361,12 @@ DO WHILE TRUE
                    ttBatchInputFile.ttUserId  = ENTRY(7,ttInputFileContent.InputLine,"|").
                 IF NUM-ENTRIES(ttInputFileContent.InputLine,"|") >= 8 THEN
                    ttBatchInputFile.EmailId = ENTRY(8,ttInputFileContent.InputLine,"|").
-                IF NUM-ENTRIES(ttInputFileContent.InputLine,"|") >= 9 THEN DO:   /* For ADMIN user EMA testing only */
-                   lcEmaMsisdn = ENTRY(9,ttInputFileContent.InputLine,"|").
+                IF NUM-ENTRIES(ttInputFileContent.InputLine,"|") >= 9 THEN      /* For special MSISDN number */
+                   ttBatchInputFile.UsedMSISDN = ENTRY(9,ttInputFileContent.InputLine,"|").
+                IF NUM-ENTRIES(ttInputFileContent.InputLine,"|") >= 10 THEN      /* For special SIM number */
+                   ttBatchInputFile.SimIcc = ENTRY(10,ttInputFileContent.InputLine,"|").
+                IF NUM-ENTRIES(ttInputFileContent.InputLine,"|") >= 11 THEN DO:   /* For ADMIN user EMA testing only */
+                   lcEmaMsisdn = ENTRY(11,ttInputFileContent.InputLine,"|").
                    IF lcEmaMsisdn > "" THEN DO:
                       IF lcEmaMsisdn NE "EMA" THEN DO:
                          llError = TRUE.
@@ -373,8 +378,6 @@ DO WHILE TRUE
                       END.
                    END.
                 END.
-                IF NUM-ENTRIES(ttInputFileContent.InputLine,"|") >= 10 THEN      /* For special SIM number */
-                   ttBatchInputFile.SimIcc = ENTRY(10,ttInputFileContent.InputLine,"|").
              END. /* WHEN "SUBSCRIPTION" THEN DO: */
              WHEN "ACT_BONO" OR WHEN "DEACT_BONO" THEN DO:
                 IF ENTRY(3,ttInputFileContent.InputLine,"|") > "" THEN
@@ -423,7 +426,8 @@ DO WHILE TRUE
        END. /* FOR EACH ttInputFileContent WHERE */
 
        IF llError = FALSE THEN DO:
-          IF NOT fCheckMSISDN(INPUT ttBatchInputFile.MsisdnStatus) THEN DO:
+          IF NOT fCheckMSISDN(INPUT ttBatchInputFile.MsisdnStatus,
+                              INPUT ttBatchInputFile.UsedMSISDN) THEN DO:
              fLogEntry(ttBatchInputFile.FileName,"MSISDN is not available or free").
              llError = TRUE.
           END.
@@ -510,6 +514,7 @@ DO WHILE TRUE
                                      INPUT lcOfferId,
                                      INPUT ttBatchInputFile.MsisdnStatus,
                                      INPUT ttBatchInputFile.SimIcc,
+                                     INPUT ttBatchInputFile.UsedMSISDN,
                                      OUTPUT lcCLI,
                                      OUTPUT liOrderId).
              IF liOrderId > 0 THEN DO:

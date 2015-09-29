@@ -17,7 +17,7 @@ FOR EACH DayCampaign EXCLUSIVE-LOCK WHERE
          AND
          DayCampaign.DCEvent NE "BONO_VOIP" AND
          DayCampaign.DCType EQ "4" AND
-         DayCampaign.BundleUpsell EQ lcAddWith AND
+         LOOKUP(lcAddWith, DayCampaign.BundleUpsell) > 0 AND
          INDEX(DayCampaign.BundleUpsell, lcAddUpsell,1) EQ 0 /*no double*/
          /*AND DayCampaign.DCEvent EQ "CONTD3" */
          :
@@ -36,7 +36,7 @@ FOR EACH DayCampaign EXCLUSIVE-LOCK WHERE
          AND
          DayCampaign.DCEvent NE "BONO_VOIP" AND
          DayCampaign.DCType EQ "4" AND
-         DayCampaign.BundleUpsell EQ lcAddWith AND
+         LOOKUP(lcAddWith, DayCampaign.BundleUpsell) > 0 AND
          INDEX(DayCampaign.BundleUpsell, lcAddUpsell,1) EQ 0
          :
    /*MESSAGE "Add to " + DayCampaign.BundleUpsell VIEW-AS ALERT-BOX.*/
@@ -53,7 +53,7 @@ FOR EACH DayCampaign EXCLUSIVE-LOCK WHERE
          AND
          DayCampaign.DCEvent NE "BONO_VOIP" AND
          DayCampaign.DCType EQ "4" AND
-         DayCampaign.BundleUpsell EQ lcAddWith AND
+         LOOKUP(lcAddWith, DayCampaign.BundleUpsell) > 0 AND
          INDEX(DayCampaign.BundleUpsell, lcAddUpsell,1) EQ 0 /*no double*/
          :
    /*MESSAGE "Add to " + DayCampaign.BundleUpsell VIEW-AS ALERT-BOX.*/
@@ -61,4 +61,21 @@ FOR EACH DayCampaign EXCLUSIVE-LOCK WHERE
                               "," + lcAddUpsell. 
 END.
 
+/*Add upsell also to type 1 entries:*/
+
+FOR EACH DayCampaign EXCLUSIVE-LOCK WHERE
+         (DayCampaign.StatusCode EQ 1 OR /* Active */
+         DayCampaign.StatusCode EQ 2 ) /* Retired */
+         AND
+         DayCampaign.DCEvent NE "BONO_VOIP" AND
+         (DayCampaign.DCType EQ "4"
+          OR
+          DayCampaign.DCType EQ "1") AND
+         NOT DayCampaign.DCEvent BEGINS "Tarj" AND
+         DayCampaign.BundleUpsell EQ ""
+        :
+  DayCampaign.BundleUpsell = "DATA200_UPSELL".
+  /*DISPLAY DayCampaign.DCevent.
+  DISPLAY DayCampaign.BundleUpsell.*/
+END.
 

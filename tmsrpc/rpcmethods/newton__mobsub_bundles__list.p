@@ -113,7 +113,6 @@ IF lcDSSBundleId = {&DSS} OR
    END.
 END.
 /*ILP ENDS*/
-
 IF MobSub.CliType EQ "CONT15" AND
    fGetCurrentSpecificBundle(
       MobSub.MsSeq,

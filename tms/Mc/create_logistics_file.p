@@ -1284,11 +1284,13 @@ OUTPUT STREAM sICC TO VALUE(lcSpoolDir + lcFileName).
 
 DEFINE BUFFER xOrder FOR Order.
 /* ordinary dextra */
-FOR EACH SIM NO-LOCK WHERE
+FOR EACH Stock NO-LOCK,
+   EACH SIM NO-LOCK WHERE
          SIM.Brand   = gcBrand AND
+         SIM.Stock   = Stock.Stock AND
          SIM.SimStat = 20,
-   FIRST Order NO-LOCK WHERE
-         Order.MsSeq = SIM.MsSeq:
+      FIRST Order NO-LOCK WHERE
+            Order.MsSeq = SIM.MsSeq:
 
    /* handle only NEW or MNP orders */
    IF Order.Ordertype NE 0 AND
