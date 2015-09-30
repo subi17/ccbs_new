@@ -110,7 +110,7 @@ liRequest = fPCActionRequest(mobsub.msseq, /* subscription id */
                              0,
                              FALSE,
                              "",
-                             55, /* residual (q25) fee */
+                             ldeResidualFee, /* residual (q25) fee */
                              0,
                              OUTPUT lcResult).
 
