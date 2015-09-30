@@ -967,6 +967,9 @@ PROCEDURE pFinalize:
       fReqStatus(4,"ERROR:Q25 Cancelled Quota 25 extension request").
    END.
 
+   FIND FIRST MSRequest WHERE
+              MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
+
    /* request handled succesfully */
    fReqStatus(2,"").
 
