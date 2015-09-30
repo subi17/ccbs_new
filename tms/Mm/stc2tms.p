@@ -69,6 +69,8 @@ DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
 DEF BUFFER bOldType  FOR CLIType.
 DEF BUFFER bNewTariff FOR CLIType.
 DEF BUFFER bOldTariff FOR CLIType.
+/* Q25 Quota 25 */
+DEFINE VARIABLE lrowidMSRequest AS ROWID NO-UNDO.
 
 DEF TEMP-TABLE ttContract NO-UNDO
     FIELD DCEvent AS CHAR.
@@ -77,7 +79,7 @@ DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
     FIELD MsSeq    AS INT
     FIELD CustNum  AS INT
     FIELD CLI      AS CHAR.
-
+    
 FUNCTION fMakeValidTS RETURNS DECIMAL:
 
    DEF VAR ldeCurrentTS AS DE NO-UNDO FORMAT "99999999.99999".
@@ -844,8 +846,19 @@ PROCEDURE pFinalize:
                     MobSub.CustNum,
                     "Subscription type change",
                     "FATime event could not be created: " + lcError).
-   END.
-
+      /* Quota 25 q25 - YPR-2521 */
+      lrowidMSRequest = ROWID(MSRequest).
+      FOR EACH MSRequest NO-LOCK WHERE  
+         MSRequest.MsSeq      EQ Mobsub.MsSeq AND
+         MSRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+         MsRequest.ReqStatus  EQ 0 AND
+         MSREquest.REqcparam3 EQ "RVTERM12":   
+            
+         fReqStatus(4,"ERROR:Q25 Cancelled Quota 25 extension request").
+      END. /* FOR EACH MSRequest */
+      FIND MSRequest WHERE ROWID(MSRequest) = lrowidMSRequest NO-LOCK.                 
+   END. /* PREPAID to POSTPAID */
+           
    IF CLIType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID} THEN DO:
 
       ASSIGN lcMultiLineSubsType = fCParamC("MULTILINE_SUBS_TYPE")
@@ -957,19 +970,6 @@ PROCEDURE pFinalize:
       END.
    END.
    
-   /* Quota 25 q25 - YPR-2521 */
-   FOR EACH MSRequest NO-LOCK WHERE  
-      MSRequest.MsSeq      EQ Mobsub.MsSeq AND
-      MSRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
-      MsRequest.ReqStatus EQ 0 AND
-      MSREquest.REqcparam3 EQ "RVTERM12":   
-         
-      fReqStatus(4,"ERROR:Q25 Cancelled Quota 25 extension request").
-   END.
-
-   FIND FIRST MSRequest WHERE
-              MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
-
    /* request handled succesfully */
    fReqStatus(2,"").
 
