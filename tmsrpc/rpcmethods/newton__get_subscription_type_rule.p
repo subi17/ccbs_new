@@ -34,10 +34,10 @@ gcBrand = "1".
 {fdss.i}
 
 FUNCTION fGetQ25RefRemainingAmt RETURNS DECIMAL
-         (INPUT iMsSeq          AS INTEGER,
-          INPUT iiCustnum       AS INTEGER,
-          INPUT icCalcObj       AS CHARACTER,          
-          INPUT idaCountFrom    AS DATE) FORWARD.
+         (INPUT iMsSeq       AS INTEGER,
+          INPUT iiCustnum    AS INTEGER,
+          INPUT icCalcObj    AS CHARACTER,          
+          INPUT idaCountFrom AS DATE) FORWARD.
 /* Input parameters */
 DEF VAR piMsSeq            AS INT     NO-UNDO.
 DEF VAR pcNewCLIType       AS CHAR    NO-UNDO.
@@ -367,14 +367,13 @@ IF NOT MobSub.PayType THEN DO:
                   DCCLI.DCEvent BEGINS "RVTERM") /* Q25 */ AND
                  DCCLI.ValidTo >= ldaSTCDates[1] NO-LOCK NO-ERROR.
       IF AVAIL DCCLI THEN DO:
-         /* Quota 25 Q25 BEGIN */
-         pcQ25RefiRemain = 
-            fGetQ25RefRemainingAmt(MobSub.MsSeq,
-                                   MobSub.Custnum,
-                                   "RVTERM12",
-                                   ?).
-         /* Quota 25 Q25 END */
          DO liLoop = 1 TO EXTENT(ldaSTCDates):
+            /* Quota 25 Q25 */
+            pcQ25RefiRemain = 
+               fGetQ25RefRemainingAmt(MobSub.MsSeq,
+                                      MobSub.Custnum,
+                                      "RVTERM12",
+                                      ldaSTCDates[liLoop]).
             fGetFixedFeeInfo(MobSub.MsSeq,
                              MobSub.CustNum,
                              "", /* collect all active payterms */
@@ -386,7 +385,8 @@ IF NOT MobSub.PayType THEN DO:
                              OUTPUT lderesidualFee,
                              OUTPUT lcFinancedInfo,
                              OUTPUT liOrderId).
-            IF ldePendingFee > 0 THEN
+            IF ldePendingFee   > 0 OR
+               pcQ25RefiRemain > 0 THEN
                ASSIGN ldeTotalPenaltyFee[liLoop] = ldePendingFee + pcQ25RefiRemain
                       lcPenaltyCode = "PAYTERM".
          END. /* liLoop = 1 TO EXTENT(ldaSTCDates) */
@@ -573,29 +573,25 @@ END.
    25.sep.2015
 */
 FUNCTION fGetQ25RefRemainingAmt RETURNS DECIMAL
-         (INPUT iMsSeq          AS INTEGER,
-          INPUT iiCustnum       AS INTEGER,
-          INPUT icCalcObj       AS CHARACTER,          
-          INPUT idaCountFrom    AS DATE):
+         (INPUT iMsSeq       AS INTEGER,
+          INPUT iiCustnum    AS INTEGER,
+          INPUT icCalcObj    AS CHARACTER,          
+          INPUT idaCountFrom AS DATE):
 
    /* Quota 25 refinance remaining amount */
    DEF VAR ldePendingFee AS DECIMAL NO-UNDO.
-   
-   DEF VAR liFFNum       AS INTEGER NO-UNDO.
    DEF VAR liPeriodFrom  AS INTEGER NO-UNDO.
    DEF VAR liCountPeriod AS INTEGER NO-UNDO.
+   DEF VAR liPeriod      AS INTEGER NO-UNDO. 
+   DEF VAR ldaDate       AS DATE    NO-UNDO.
 
    DEF BUFFER FixedFee  FOR FixedFee.
    DEF BUFFER FFItem    FOR FFItem.
-   DEF BUFFER SingleFee FOR SingleFee.
-
-   DEF VAR liPeriod AS INTEGER NO-UNDO. 
-   DEF VAR ldaDate  AS DATE    NO-UNDO.
 
    ASSIGN
-      ldaDate        = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
-      liPeriod       = YEAR(ldaDate) * 100 + MONTH(ldaDate)
-      ldePendingFee  = 0.
+      ldaDate       = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
+      liPeriod      = YEAR(ldaDate) * 100 + MONTH(ldaDate)
+      ldePendingFee = 0.
 
    IF idaCountFrom NE ? THEN
       ASSIGN liPeriodFrom  = YEAR(idaCountFrom) * 10000 + 
@@ -612,41 +608,15 @@ FUNCTION fGetQ25RefRemainingAmt RETURNS DECIMAL
             FixedFee.EndPeriod >= liPeriod       AND
             FixedFee.BillCode  BEGINS "RVTERM"   AND
             FixedFee.InUse:
-
       IF icCalcObj > "" AND
-         FixedFee.CalcObj <> icCalcObj THEN NEXT.
-      
-      ASSIGN
-         liFFNum = 0.
+         FixedFee.CalcObj <> icCalcObj THEN NEXT.      
 
       FOR EACH FFItem OF FixedFee NO-LOCK:
          IF idaCountFrom <> ? AND
             FFItem.Concerns[1] < liPeriodFrom THEN NEXT.
-         ASSIGN
-            liFFNum       = FixedFee.FFNum
-            ldePendingFee = ldePendingFee + FFItem.Amt WHEN NOT FFItem.Billed.
-      END. /* FOR EACH FFItem OF FixedFee */
-
-      IF liFFNum > 0 THEN
-      DO:
-         FOR FIRST SingleFee NO-LOCK WHERE
-                   SingleFee.Brand       EQ gcBrand              AND
-                   SingleFee.Custnum     EQ FixedFee.CustNum     AND
-                   SingleFee.HostTable   EQ FixedFee.HostTable   AND
-                   SingleFee.KeyValue    EQ FixedFee.KeyValue    AND
-                   SingleFee.SourceTable EQ FixedFee.SourceTable AND
-                   SingleFee.SourceKey   EQ FixedFee.SourceKey   AND
-                   SingleFee.CalcObj     EQ FixedFee.CalcObj:
-
-             IF SingleFee.Billed AND
-                CAN-FIND (FIRST Invoice NO-LOCK WHERE
-                                Invoice.InvNum  EQ SingleFee.InvNum AND
-                                Invoice.InvType EQ 1) THEN NEXT.
-
-             IF idaCountFrom <> ? AND
-                SingleFee.BillPeriod < liCountPeriod THEN NEXT.
-         END. /* FOR FIRST SingleFee */
-      END. /* IF liFFNum > 0 */
+         
+         ldePendingFee = ldePendingFee + FFItem.Amt WHEN NOT FFItem.Billed.
+      END. /* FOR EACH FFItem OF FixedFee */      
    END. /* FOR EACH FixedFee */
    RETURN ldePendingFee.
 END FUNCTION. /* FUNCTION fGetQ25RefRemainingAmt */
