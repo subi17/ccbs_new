@@ -10,7 +10,8 @@
 
 {commali.i}
 
-DEF INPUT PARAMETER iiOrderId  AS INT NO-UNDO.
+DEF INPUT PARAMETER iiOrderId     AS INT  NO-UNDO.
+DEF INPUT PARAMETER icContractId  AS CHAR NO-UNDO.
 
 FORM
    SKIP(1)
@@ -29,8 +30,9 @@ FORM
         TITLE " DOCUMENT MANAGEMENT, ORDER " + STRING(iiOrderId) + " " 
         FRAME lis.
 
-FIND DMS WHERE DMS.HostTable = "Order" AND
-               DMS.HostID = iiOrderId 
+FIND DMS WHERE DMS.HostTable  = "Order" AND
+               DMS.HostID     = iiOrderId  AND
+               DMS.ContractID = icContractId
                NO-LOCK NO-ERROR.
 
 IF NOT AVAIL DMS THEN DO:

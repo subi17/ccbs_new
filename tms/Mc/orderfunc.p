@@ -400,8 +400,8 @@ REPEAT WITH FRAME sel:
            END.
 
            ELSE IF lcModule = "dms" THEN DO:
-              RUN dms.p(Order.OrderId).
-           END. 
+              RUN dms.p(Order.OrderId,Order.ContractID).
+           END.
 
            ELSE 
            MESSAGE
