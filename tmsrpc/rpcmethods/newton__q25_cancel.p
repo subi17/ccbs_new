@@ -135,7 +135,7 @@ ELSE DO: /* Cancel Quota 25 Extension */
       RETURN appl_err("More than one active Q25 contract").
    
    IF NOT AVAIL DCCLI THEN
-      RETURN appl_err("Q25 contract not found").
+      RETURN appl_err("No active Q25 contract or activation request").
 
    IF DCCLI.TermDate NE ? THEN 
       RETURN appl_err("Q25 contract terminated").

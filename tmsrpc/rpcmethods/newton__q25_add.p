@@ -141,9 +141,9 @@ IF SingleFee.Billed AND
    RETURN appl_err("Residual fee billed").
 
 ASSIGN   
-   ldaMonth22Date    = ADD-INTERVAL(DCCLI.ValidFrom, 23, 'months':U)
+   ldaMonth22Date    = ADD-INTERVAL(DCCLI.ValidFrom, 22, 'months':U)
    ldaMonth22Date    = DATE(MONTH(ldaMonth22Date),1,YEAR(ldaMonth22Date))
-   ldaMonth24Date    = ADD-INTERVAL(DCCLI.ValidFrom, 25, 'months':U)
+   ldaMonth24Date    = ADD-INTERVAL(DCCLI.ValidFrom, 24, 'months':U)
    ldaMonth24Date    = DATE(MONTH(ldaMonth24Date),21,YEAR(ldaMonth24Date)).
 
 /* If the Quota 25 prorate request is created between 1st day of month 22
