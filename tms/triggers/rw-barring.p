@@ -28,10 +28,10 @@ ELSE DO:
          Ordercanal.RepLog.RecordId  = RECID(Barring)
          Ordercanal.RepLog.TableName = "Barring"
          Ordercanal.RepLog.EventType = "MODIFY"
-         Ordercanal.RepLog.KeyValue  =  STRING(Barring.MsSeq) + CHR(255) +
-                                        Barring.BarringCode + CHR(255) +
-                                        Barring.BarringStatus + CHR(255) +
-                                        STRING(Barring.EventTS)
+         Ordercanal.RepLog.KeyValue  =  STRING(Oldbuf.MsSeq) + CHR(255) +
+                                        Oldbuf.BarringCode + CHR(255) +
+                                        Oldbuf.BarringStatus + CHR(255) +
+                                        STRING(Oldbuf.EventTS)
          Ordercanal.RepLog.EventTS   = DATETIME(TODAY,MTIME).
    END. /* IF NOT llResult THEN DO: */
 END. /* ELSE DO: */
