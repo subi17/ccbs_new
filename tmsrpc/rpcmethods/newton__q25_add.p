@@ -105,7 +105,7 @@ FIND FIRST MobSub NO-LOCK WHERE
            MobSub.MsSeq = limsseq NO-ERROR.
            
 IF NOT AVAILABLE MobSub THEN
-   5RETURN appl_err("Subscription not found").
+   RETURN appl_err("Subscription not found").
 
 /* Find original installment contract */   
 FIND FIRST DCCLI NO-LOCK WHERE
@@ -164,8 +164,6 @@ IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                   DCCLI.MsSeq   EQ MobSub.MsSeq AND
                   DCCLI.ValidTo >= TODAY) THEN
    RETURN appl_err("Q25 extension already active").
-
-IF AVAIL DCCLI THEN 
 
 liCreated = fPCActionRequest(
    MobSub.MsSeq,

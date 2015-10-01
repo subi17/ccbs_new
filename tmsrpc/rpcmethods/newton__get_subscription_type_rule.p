@@ -614,8 +614,9 @@ FUNCTION fGetQ25RefRemainingAmt RETURNS DECIMAL
       FOR EACH FFItem OF FixedFee NO-LOCK:
          IF idaCountFrom <> ? AND
             FFItem.Concerns[1] < liPeriodFrom THEN NEXT.
-         
-         ldePendingFee = ldePendingFee + FFItem.Amt WHEN NOT FFItem.Billed.
+        
+         IF FFItem.Billed THEN NEXT.
+         ldePendingFee = ldePendingFee + FFItem.Amt.
       END. /* FOR EACH FFItem OF FixedFee */      
    END. /* FOR EACH FixedFee */
    RETURN ldePendingFee.
