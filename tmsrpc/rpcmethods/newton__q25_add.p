@@ -12,6 +12,8 @@ newton__q25_add.p
 
 * @memo_struct    title;string;mandatory
                   content;string;mandatory
+
+* @output         boolean;true
 */
 
 /*
@@ -198,6 +200,8 @@ IF lcmemo_title > "" THEN DO:
        Memo.MemoText  = lcmemo_content
        Memo.CustNum   = MobSub.CustNum.
 END. /* IF lcmemo_title > "" AND lcmemo_content > "" THEN DO: */
+
+add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 

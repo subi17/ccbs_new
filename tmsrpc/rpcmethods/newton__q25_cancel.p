@@ -1,18 +1,15 @@
 /**
-   newton__q25_cancel.p
-   * Cancel ongoing Quota 25 extension request in TMS
-    or Terminate Quota 25 extension (create single fee for remaining monthly fees)
-   
-   * @input    struct;mandatory
-   * @struct   q25_struct;struct;mandatory
+* Cancel ongoing Quota 25 extension request in TMS 
+  or Terminate Quota 25 extension (create single fee for remaining monthly fees)
+* @input       struct;mandatory
+* @struct      q25_struct;struct;mandatory
                memo_struct;struct;optional
-   * @q25_struct     username;string;mandatory;person who requests the change
-                     msseq;int;mandatory;subscription id
-                     per_contract_id;int;mandatory;installment contract id (related to q25)
-   
-   * @memo_struct    title;string;mandatory
-                    content;string;mandatory
-
+* @q25_struct  username;string;mandatory;person who requests the change
+               msseq;int;mandatory;subscription id
+               per_contract_id;int;mandatory;installment contract id (related to q25)
+* @memo_struct title;string;mandatory
+               content;string;mandatory
+* @output      boolean;true
 */
 
 /*
@@ -175,6 +172,8 @@ IF lcmemo_title > "" THEN DO:
        Memo.MemoText  = lcmemo_content
        Memo.CustNum   = MobSub.CustNum.
 END. /* IF lcmemo_title > "" AND lcmemo_content > "" THEN DO: */
+
+add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
