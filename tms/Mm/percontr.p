@@ -843,7 +843,7 @@ PROCEDURE pContractActivation:
          
       /* link to possible fee */
       IF DCCLI.PerContractID > 0 AND
-         lcFeeSourceTable NE "" THEN ASSIGN
+         lcFeeSourceTable EQ "" THEN ASSIGN
          lcFeeSourceTable = "DCCLI"
          lcFeeSourceKey = STRING(DCCLI.PerContractID).
 
