@@ -521,12 +521,12 @@ PROCEDURE pContractActivation:
                RETURN.
             END.
 
-            ldeFeeAmount = SingleFee.Amt.
             FIND FIRST OrderAction NO-LOCK WHERE
                        OrderAction.Brand = gcBrand AND
                        OrderAction.OrderId = MsRequest.ReqIParam1 AND
                        OrderAction.ItemType = "Q25Discount" NO-ERROR.
 
+            ldeFeeAmount = SingleFee.Amt.
             IF AVAIL OrderAction THEN DO:
                 FOR FIRST DiscountPlan NO-LOCK WHERE
                           DiscountPlan.Brand = gcBrand AND
@@ -544,18 +544,29 @@ PROCEDURE pContractActivation:
                END.
             END.
             ELSE fReqLog("RVTERMDT1DISC discount not found").
+               
+            FIND FIRST FMItem NO-LOCK WHERE
+                       FMITem.Brand = gcBrand AND
+                       FMItem.Feemodel = DayCampaign.FeeModel AND
+                       FMItem.FromDate <= ldtActDate AND
+                       FMITem.ToDate >= ldtActDate NO-ERROR.
+               
+            IF NOT AVAIL FMITem THEN DO:
+               fReqError("RVTERM12 fee model not found").
+               RETURN.
+            END.
 
             ASSIGN
-               ldeResidualFeeDisc = SingleFee.Amt - ldeFeeAmount
+               ldeResidualFeeDisc = ldeFeeAmount
                ldaResidualFee = fPer2Date(SingleFee.Concerns[1], 0)
-               ldeFeeAmount = ROUND(ldeFeeAmount / 12,2)
+               ldeFeeAmount = ROUND(ldeFeeAmount / FMItem.FFItemQty,2)
                /* map q25 fee to original residual fee */
                liOrderId = SingleFee.OrderId
                lcFeeSourceTable = SingleFee.SourceTable
                lcFeeSourceKey = SingleFee.SourceKey.
 
             IF ldeFeeAmount <= 0 THEN DO:
-               fReqError("Negative quota 25 extension amount").
+               fReqError("Zero or negative quota 25 extension amount").
                RETURN.
             END.
       
