@@ -535,7 +535,7 @@ PROCEDURE pContractActivation:
                           DPMember.DPId      = DiscountPlan.DPId AND
                           DPMember.HostTable = "MobSub" AND
                           DPMember.KeyValue  = STRING(MsRequest.MsSeq) AND
-                          DPMember.ValidTo >= fPer2Date(SingleFee.Concerns[1], 0) AND
+                          DPMember.ValidTo >= fInt2Date(SingleFee.Concerns[1], 0) AND
                           DPMember.ValidTo >= DPMember.ValidFrom:
                   IF DEC(OrderAction.ItemParam) EQ DPMember.DiscValue THEN DO:
                      ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
@@ -558,7 +558,7 @@ PROCEDURE pContractActivation:
 
             ASSIGN
                ldeResidualFeeDisc = ldeFeeAmount
-               ldaResidualFee = fPer2Date(SingleFee.Concerns[1], 0)
+               ldaResidualFee = fInt2Date(SingleFee.Concerns[1], 0)
                ldeFeeAmount = ROUND(ldeFeeAmount / FMItem.FFItemQty,2)
                /* map q25 fee to original residual fee */
                liOrderId = SingleFee.OrderId
