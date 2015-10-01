@@ -9,8 +9,9 @@
   CHANGE .......: 09/2015 - SMS sending throttling added with pausing YOT-3986
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-/* Description: smsinvoice is called from newton side where SMS invoice button pressed for 
-   any customers after billing run. This will generate SMS to all invoiced customers.   */
+/* Description: smsinvoice is called from newton side where SMS invoice button
+   pressed for any customers after billing run. This will generate SMS to all 
+   invoiced customers.   */
 
 {commali.i}
 {tmsconst.i}
@@ -125,7 +126,7 @@ FOR EACH Invoice WHERE
                         lcSMSReplacedText,
                         fMakeTS(),
                         "Fact. Yoigo",
-                        "36000-75600").
+                        "32400-79200").  /* Send between 9:00-22:00 */
          IF AVAIL CallAlarm THEN RELEASE CallAlarm.
       END. /* DO TRANS: */
    END. /* FOR EACH SubInvoice OF Invoice NO-LOCK: */
