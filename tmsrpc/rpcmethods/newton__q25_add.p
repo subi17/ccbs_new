@@ -158,7 +158,7 @@ ELSE IF TODAY >= ldaMonth22Date AND
    TODAY < ldaMonth24Date THEN
    /* handle it on 21st day of month 24 at 00:00 */
    ldContractActivTS = fMake2Dt(ldaMonth24Date,0).
-ELSE ldContractActivTS = fMakeTS(). /* Handle it immediately */
+ELSE ldContractActivTS = fSecOffSet(fMakeTS(),5). /* Handle it immediately */
 
 IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                   DCCLI.Brand   EQ gcBrand AND
@@ -185,6 +185,10 @@ liCreated = fPCActionRequest(
 IF liCreated = 0 THEN
    RETURN appl_err(SUBST("Q25 extension request failed: &1",
                          lcResult)).
+
+RUN requestaction_sms.p(INPUT liCreated,
+                        INPUT MobSub.CLIType,
+                        INPUT {&REQUEST_SOURCE_NEWTON}).
 
 IF lcmemo_title > "" THEN DO:
 
