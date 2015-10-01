@@ -448,7 +448,7 @@ PROCEDURE pQ25Discount:
       RETURN "ERROR:Q25 discount creation failed (residual fee not found)".
 
    fAddDiscountPlanMember(MobSub.MsSeq,
-                         "RVTERMDT1", 
+                         "RVTERMDT1DISC", 
                          ldeDiscount,
                          fPer2Date(SingleFee.BillPeriod,0),
                          1,

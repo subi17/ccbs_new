@@ -505,7 +505,7 @@ PROCEDURE pQ25HandleDiscount:
              MSREquest.ReqIParam3 = liPercontractId NO-ERROR.
   IF AVAILABLE MSRequest THEN
   DO:
-   fCloseDiscount("RVTERMDT1",
+   fCloseDiscount("RVTERMDT1DISC",
       MobSub.MsSeq,
       TODAY,
       FALSE). /* clean event logs */
@@ -588,7 +588,7 @@ PROCEDURE pQ25HandleDiscount:
  END.
  ELSE
  DO:
-   fCloseDiscount("RVTERMDT1",
+   fCloseDiscount("RVTERMDT1DISC",
       MobSub.MsSeq,
       TODAY,
       FALSE). /* clean event logs */

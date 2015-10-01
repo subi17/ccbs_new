@@ -529,7 +529,7 @@ PROCEDURE pContractActivation:
             IF AVAIL OrderAction THEN DO:
                 FOR FIRST DiscountPlan NO-LOCK WHERE
                           DiscountPlan.Brand = gcBrand AND
-                          DiscountPlan.DPRuleID = "RVTERMDT1",
+                          DiscountPlan.DPRuleID = "RVTERMDT1DISC",
                     FIRST DPMember NO-LOCK WHERE
                           DPMember.DPId      = DiscountPlan.DPId AND
                           DPMember.HostTable = "MobSub" AND
@@ -542,7 +542,7 @@ PROCEDURE pContractActivation:
                   END.
                END.
             END.
-            ELSE fReqLog("RVTERMDT1 discount not found").
+            ELSE fReqLog("RVTERMDT1DISC discount not found").
 
             ASSIGN
                ldeResidualFeeDisc = SingleFee.Amt - ldeFeeAmount
