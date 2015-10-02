@@ -70,6 +70,8 @@ END.
 
 INPUT STREAM sFile CLOSE.
 
+fCleanEventObjects().
+
 PROCEDURE pUpdateLimit:
 
    DEF INPUT PARAMETER pcLine AS CHAR NO-UNDO.
