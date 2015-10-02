@@ -20,13 +20,15 @@ DEF VAR piId AS INT NO-UNDO.
 DEF VAR lcStruct AS CHAR NO-UNDO. 
 DEF VAR liCustnum AS INT NO-UNDO.
 DEF VAR plSimChecked AS LOGICAL NO-UNDO. 
-DEF VAr pcIMEI AS CHAR NO-UNDO INITIAL "". 
+DEF VAr pcIMEI AS CHAR NO-UNDO INITIAL "".
+DEF VAR pcContractID AS CHAR NO-UNDO.
+DEF VAR pcChannel AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 
 pcId     = get_string(param_toplevel_id, "0").
 pcStruct = get_struct(param_toplevel_id, "1").
-lcstruct = validate_struct(pcStruct, "username!,reason,sim_lock_code_viewable,imei").
+lcstruct = validate_struct(pcStruct, "username!,reason,sim_lock_code_viewable,imei,contract_id,channel").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -42,6 +44,13 @@ IF LOOKUP("imei",lcStruct) > 0 THEN DO:
    IF LENGTH(pcIMEI,"CHARACTER") NE 15 THEN 
     RETURN appl_err("IMEI code doesn't contain 15 characters").
 END.
+
+ASSIGN
+pcContractID = get_string(pcStruct,"contract_id") 
+   WHEN LOOKUP("contract_id", lcstruct) > 0
+pcChannel = get_string(pcStruct,"channel")
+   WHEN LOOKUP("channel", lcstruct) > 0.
+
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 

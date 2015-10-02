@@ -61,6 +61,7 @@ DEF VAR pcMemoTitle AS CHAR NO-UNDO.
 DEF VAR pcMemoContent AS CHAR NO-UNDO. 
 DEF VAR pcMandateId AS CHAR NO-UNDO. 
 DEF VAR pcContractID AS CHAR NO-UNDO.
+DEF VAR pcChannel AS CHAR NO-UNDO.
 
 DEFINE VARIABLE lcDataFields AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liRequest AS INTEGER NO-UNDO. 
@@ -69,6 +70,9 @@ DEF VAR lcError AS CHARACTER NO-UNDO.
 DEF VAR lcCode AS CHARACTER NO-UNDO. 
 DEF VAR liSubLimit AS INT NO-UNDO. 
 DEF VAR liSubs AS INT NO-UNDO. 
+DEF VAR lcDMSInfo AS CHAR NO-UNDO.
+
+
 
 DEF BUFFER bOriginalCustomer FOR Customer.
 
@@ -93,6 +97,7 @@ pcMemoStruct = get_struct(param_toplevel_id,"6").
 
 pcMandateId = get_string(param_toplevel_id,"7").
 pcContractID = get_string(param_toplevel_id,"8"). 
+pcChannel = get_string(param_toplevel_id,"9").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -261,6 +266,11 @@ lcCode = fCreateAccDataParam(
 IF lcError > "" THEN
    RETURN appl_err(lcError).
 
+
+/*contract_id,source */
+lcDMSInfo = pcContractId + "," + pcChannel.
+
+
 liRequest = fMSCustChangeRequest(
    MobSub.MsSeq,
    "agrcust",
@@ -274,7 +284,7 @@ liRequest = fMSCustChangeRequest(
    "",
    ({&REQUEST_SOURCE_NEWTON}),
    0, /* orig. request */
-   pcContractID,
+   lcDMSInfo,
    OUTPUT lcError).
   
 IF liRequest = 0 THEN

@@ -142,7 +142,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
     INPUT  icSource      AS CHAR,
     INPUT  iiOrderID     AS INT,
     INPUT  iiOrigReq     AS INT,    /* Father request id */
-    INPUT  icContractID  AS CHAR,   /*contract_id, dms*/
+    INPUT  icDMSInfo     AS CHAR,   /*For DMS usage contract_id, channel */
     OUTPUT ocResult      AS CHAR).
 
    DEF VAR llCRes      AS LOG  NO-UNDO.
@@ -214,7 +214,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
           bCreaReq.ReqCParam2  = icNewType
           bCreaReq.ReqCparam3  = icBankNumber
           bCreaReq.ReqCparam5  = icBundleType
-          bCreaReq.ReqCparam6  = icContractID
+          bCreaReq.ReqCparam6  = icDMSInfo
           bCreaReq.ReqDParam1  = idChgStamp
           bCreaReq.ReqDParam2  = ideFee
           bCreaReq.ReqIParam1  = iiCreditCheck
