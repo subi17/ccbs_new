@@ -71,7 +71,8 @@ FOR EACH MobSub WHERE
        fNotNull(STRING(SingleFee.BillPeriod))   lcDel
        fNotNull(STRING(SingleFee.Concerns[1]))  lcDel
        fNotNull(SingleFee.SourceTable)          lcDel
-       fNotNull(SingleFee.SourceKey)            SKIP.
+       fNotNull(SingleFee.SourceKey)            lcDel
+       fNotNull(STRING(SingleFee.SourceKey))    SKIP.
 END.
 
 OUTPUT STREAM slog CLOSE.
