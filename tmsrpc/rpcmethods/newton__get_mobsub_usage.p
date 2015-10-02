@@ -263,8 +263,9 @@ FOR EACH ttCDR NO-LOCK WHERE
             IF ttCDR.EventType EQ "CALL" AND
                ttCDR.Charge EQ 0 AND
                LOOKUP(ttCDR.GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0 THEN
-               ldePrepVoiceUsageMonthly = ldePrepVoiceUsageMonthly + 
-                                          ttCDR.BillDur.
+               IF ttCDR.Accumulator > ldePrepVoiceUsageMonthly THEN 
+                  ldePrepVoiceUsageMonthly = ttCDR.Accumulator. 
+                  /*ldePrepVoiceUsageMonthly + ttCDR.BillDur.*/
          END.
       END.
 

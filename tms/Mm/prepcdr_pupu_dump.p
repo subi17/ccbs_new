@@ -73,7 +73,8 @@ FOR EACH PrepCDR NO-LOCK USE-INDEX ReadDate WHERE
       PrepCDR.DataIn + PrepCDR.DataOut     lcDel
       TRIM(STRING(PrepCDR.Charge,"->>>>>>>>>>>9.9<<<<<")) lcDel
       lcDCEvent                            lcDel
-      PrepCDR.BDest                        SKIP.
+      PrepCDR.BDest                        lcDel
+      PrepCDR.Accumulator                  SKIP.
    
    odeCDRStamp = MAX(odeCDRStamp,PrepCDR.ReadinTS).
 
