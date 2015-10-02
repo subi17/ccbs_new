@@ -381,7 +381,7 @@ DEF VAR liLanguage AS INTEGER NO-UNDO.
 
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
-ordertimestamp
+
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
    
