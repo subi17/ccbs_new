@@ -561,9 +561,7 @@ PROCEDURE pContractActivation:
                ldaResidualFee = fInt2Date(SingleFee.Concerns[1], 0)
                ldeFeeAmount = ROUND(ldeFeeAmount / FMItem.FFItemQty,2)
                /* map q25 fee to original residual fee */
-               liOrderId = SingleFee.OrderId
-               lcFeeSourceTable = SingleFee.SourceTable
-               lcFeeSourceKey = SingleFee.SourceKey.
+               liOrderId = SingleFee.OrderId.
 
             IF ldeFeeAmount <= 0 THEN DO:
                fReqError("Zero or negative quota 25 extension amount").
@@ -855,8 +853,7 @@ PROCEDURE pContractActivation:
       END.
          
       /* link to possible fee */
-      IF DCCLI.PerContractID > 0 AND
-         lcFeeSourceTable EQ "" THEN ASSIGN
+      IF DCCLI.PerContractID > 0 THEN ASSIGN
          lcFeeSourceTable = "DCCLI"
          lcFeeSourceKey = STRING(DCCLI.PerContractID).
 
