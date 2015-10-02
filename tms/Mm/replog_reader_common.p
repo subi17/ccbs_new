@@ -740,7 +740,8 @@ PROCEDURE pHandleSingleFee:
                            fNotNull(STRING(SingleFee.BillPeriod))  + lcDel +
                            fNotNull(STRING(SingleFee.Concerns[1])) + lcDel +
                            fNotNull(SingleFee.SourceTable)         + lcDel +
-                           fNotNull(SingleFee.SourceKey).
+                           fNotNull(SingleFee.SourceKey)           + lcDel +
+                           fNotNull(STRING(SingleFee.OrderId)).
                fWriteMessage(lcMessage).
             END.
             ELSE DO:
