@@ -222,7 +222,48 @@ FUNCTION fGetTerminalType RETURNS CHAR
    ELSE RETURN "Simonly".
 END.   
 
+FUNCTION fGetTerminalData RETURNS CHAR
+   (iiOrderId AS INT,
+    OUTPUT ocTotIns AS CHAR):
+   DEF BUFFER bOrder FOR Order.
+   FIND FIRST bOrder WHERE
+              bOrder.Brand EQ gcBrand AND
+              bOrder.OrderID EQ iiOrderId NO-ERROR.
+   IF NOT AVAIL Order THEN RETURN "".
 
+
+   FIND FIRST OfferItem NO-LOCK WHERE
+              OfferItem.Brand EQ gcBrand AND
+              OfferItem.EndStamp < fmakets() AND
+              OfferItem.Offer EQ Order.Offer AND
+              OfferItem.ItemType EQ "Billitem" NO-ERROR.
+   IF AVAIL OfferItem THEN DO:
+      FIND FIRST BillItem  NO-LOCK WHERE
+                 BillItem.BillCode EQ OfferItem.ItemKey AND
+                 Billitem.BiName NE ? AND
+                 NOT Billitem.Biname  BEGINS "Prepaid" AND
+                 NOT BillItem.Biname BEGINS "Postaid" NO-ERROR.
+      IF AVAIL BillItem THEN DO:
+         ocTotIns = STRING(OfferItem.Amount).
+         RETURN BillItem.BiName.
+      END.
+      ELSE RETURN "".
+   END.
+   ELSE DO:
+      FIND FIRST OrderAccessory NO-LOCK  WHERE
+                 OrderAccessory.Brand EQ gcBrand AND
+                 OrderAccessory.OrderID EQ iiOrderID NO-ERROR.
+      IF AVAIL OrderAccessory THEN DO:
+         ocTotIns = STRING(OrderAccessory.Amount).
+         RETURN  STRING(OrderAccessory.Manufacturer) + " " +
+                 STRING(OrderAccessory.Model)        + " " +
+                 STRING(OrderAccessory.ModelColor).
+      END.
+      ELSE RETURN "".
+   END.
+
+   RETURN "".
+END.
 
 
 /*Previous tariff: In case of Portability this value can be
@@ -374,17 +415,10 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
          lcDeliveryZip = OrderCustomer.ZipCode
          lcDeliveryPost = OrderCustomer.PostOffice.
    END.
+   
+   lcModel = fGetTerminalData(iiOrderId,
+                    OUTPUT lcTotIns).
 
-   FIND FIRST OrderAccessory NO-LOCK WHERE
-              OrderAccessory.Brand EQ gcBrand AND
-              OrderAccessory.OrderId EQ iiOrderId NO-ERROR.
-   IF AVAIL Orderaccessory THEN DO:
-      lcTotIns = STRING(OrderAccessory.Amount).
-      lcModel =  STRING(OrderAccessory.Manufacturer) + " " +
-                 STRING(OrderAccessory.Model)        + " " +
-                STRING(OrderAccessory.ModelColor).
-
-   END.
    ldeFirstPayment = fGetOfferDeferredPayment(Order.Offer,
                                               Order.CrStamp,
                                               OUTPUT ldeMonthlyFee,
@@ -797,7 +831,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                           MsOwner.MsSeq EQ MsRequest.MsSeq AND
                           MsOwner.TsBegin < MsRequest.ReqDparam1 
                           USE-INDEX MsSeq NO-ERROR.
-            IF NOT AVAIL MsOwner THEN DO: 
+            IF AVAIL MsOwner THEN DO: 
                IF MsOwner.TariffBundle EQ "" THEN 
                   lcTariff = MsOwner.TariffBundle.
                ELSE lcTariff = MsRequest.ReqCparam1.   
@@ -1003,13 +1037,11 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    /*Order_date*/
    fPrintDate(Order.CrStamp)      + lcDelim +
    /*Status_Code*/
-   STRING(Order.StatusCode)       + lcDelim +
-   /*Order type*/
-   STRING(Order.OrderType)        + lcDelim +
-   /*Segment*/
-   fGetSegment(Order.OrderID)     + lcDelim +
-   /*Terminal type*/
-   fGetTerminalType(iiOrderId) SKIP.
+   STRING(Order.StatusCode)       + lcDelim + /*TODO: read from DMS table*/
+   /*Cancellation date*/
+   STRING(Order.CrStamp)          + lcDelim + /*Todo this is not valid*/
+   /*Cancellation type*/
+   " -"  SKIP. /*TODO */
    OUTPUT STREAM sOutFile CLOSE.
    /*Document type,DocStatusCode,RevisionComment*/
    lcDocListEntries = lcCaseTypeID + "," + lcDocStatus + "," + "Doc created".
