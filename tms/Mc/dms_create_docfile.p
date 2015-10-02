@@ -832,7 +832,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                           MsOwner.TsBegin < MsRequest.ReqDparam1 
                           USE-INDEX MsSeq NO-ERROR.
             IF AVAIL MsOwner THEN DO: 
-               IF MsOwner.TariffBundle EQ "" THEN 
+               IF MsOwner.TariffBundle NE "" THEN 
                   lcTariff = MsOwner.TariffBundle.
                ELSE lcTariff = MsRequest.ReqCparam1.   
             END.      
