@@ -222,6 +222,9 @@ FUNCTION fGetTerminalType RETURNS CHAR
    ELSE RETURN "Simonly".
 END.   
 
+
+
+
 /*Previous tariff: In case of Portability this value can be
  TARJ for prepaid o CONT for postpaid.
  In case of STC+RENEWAL would be the current tariff,
@@ -762,7 +765,9 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
              OR MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}  /*0*/
              OR MsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} /*80*/
             ) AND
-              MsRequest.UpdateStamp <= MsRequest.DoneStamp :
+              MsRequest.UpdateStamp <= MsRequest.DoneStamp /*AND
+              ENTRY(2,MsRequest.Cparam6) EQ {&DMS_VFR_REQUEST} 
+              REMOVE COMMENT WHEN  WEB IS READY FOR THIS */:
       CASE MsRequest.ReqType:
          WHEN {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}  THEN DO:
             lcCaseTypeId = lcACCCaseTypeId.
@@ -775,7 +780,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             lcCaseFileRow =
             lcCaseTypeId                                    + lcDelim +
             /*Contract_ID */
-            STRING(ReqCparam6)                              + lcDelim +
+            STRING(ENTRY(1,ReqCparam6))                     + lcDelim +
             /*.SFID */
             REPLACE(Msrequest.UserCode, "VISTA_", "")       + lcDelim +
             /*.MSISDN*/
@@ -792,14 +797,17 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                           MsOwner.MsSeq EQ MsRequest.MsSeq AND
                           MsOwner.TsBegin < MsRequest.ReqDparam1 
                           USE-INDEX MsSeq NO-ERROR.
-            IF NOT AVAIL MsOwner OR MsOwner.TariffBundle EQ "" THEN 
+            IF NOT AVAIL MsOwner THEN DO: 
+               IF MsOwner.TariffBundle EQ "" THEN 
                   lcTariff = MsOwner.TariffBundle.
+               ELSE lcTariff = MsRequest.ReqCparam1.   
+            END.      
             ELSE lcTariff = MsRequest.ReqCparam1.
 
             lcCaseFileRow =
             lcCaseTypeID                                    + lcDelim +
             /*Contract_ID*/
-            STRING(MsRequest.ReqCparam6)                    + lcDelim +
+            STRING(ENTRY(1,MsRequest.ReqCparam6))           + lcDelim +
             /*SFID*/
             REPLACE(Msrequest.UserCode, "VISTA_", "")       + lcDelim +
             /*MSISDN*/
@@ -847,7 +855,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*Order_ID*/
             STRING(MsRequest.ReqIparam1)                    + lcDelim +
             /*Contract_ID*/
-            STRING(MsRequest.ReqCparam6)                    + lcDelim +
+            STRING(ENTRY(1,MsRequest.ReqCparam6))           + lcDelim +
             /*SFID*/
            REPLACE(Msrequest.UserCode, "VISTA_", "")        + lcDelim +
             /*MSISDN*/
@@ -887,7 +895,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
       fLogLine(lcCaseFileRow,"").
       llCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                                lcCaseTypeID,
-                               MsRequest.ReqCparam6,
+                               ENTRY(1,MsRequest.ReqCparam6),
                                {&DMS_HOST_TABLE_MSREQ},
                                MsRequest.MsRequest,
                                lcInitStatus,/*StatusCode*/
