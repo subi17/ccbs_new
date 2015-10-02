@@ -86,8 +86,7 @@ IF icDumpMode = "Full" THEN DO:
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
             Invoice.Brand    = gcBrand    AND
             Invoice.InvDate >= ldFromDate AND
-            Invoice.InvType  = 1          AND
-            Invoice.DeliveryState > 0
+            Invoice.InvType  = 1     
        ON QUIT UNDO, RETRY
        ON STOP UNDO, RETRY:
 
@@ -121,8 +120,7 @@ ELSE DO:
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
             Invoice.Brand    = gcBrand    AND
             Invoice.InvDate >= ldFromDate AND
-            Invoice.InvType  = 1          AND
-            Invoice.DeliveryState > 0
+            Invoice.InvType  = 1
        ON QUIT UNDO, RETRY
        ON STOP UNDO, RETRY:
 
