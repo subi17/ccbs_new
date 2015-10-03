@@ -610,13 +610,16 @@ PROCEDURE pTerminate:
    
    /* Quota 25 q25 - YPR-2521 */
    FOR EACH MSRequest NO-LOCK WHERE  
-      MSRequest.MsSeq      EQ Mobsub.MsSeq AND
-      MSRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
-      MsRequest.ReqStatus EQ 0 AND
-      MSREquest.REqcparam3 EQ "RVTERM12":   
-         
-      fReqStatus(4,"ERROR:Q25 Cancelled Quota 25 extension request").
+            MSRequest.MsSeq      EQ Mobsub.MsSeq AND
+            MSRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+            MsRequest.ReqStatus  EQ 0 AND
+            MSREquest.REqcparam3 EQ "RVTERM12":   
+      fReqStatus(4,"Cancelled by subs. termination").
    END.
+         
+   /* Find Original request */
+   FIND FIRST MSRequest WHERE
+              MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
 
    /* commission termination */
    RUN commission_term(MobSub.MsSeq,
@@ -771,10 +774,6 @@ PROCEDURE pTerminate:
          IF AVAILABLE OrderAccessory AND
             LOOKUP(STRING(OrderAccessory.HardBook),"1,2") > 0 THEN
             llHardBook = TRUE.
-
-         /* Find Original request */
-         FIND FIRST MSRequest WHERE
-                    MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
 
          IF NOT MsRequest.UserCode BEGINS "Dextra" AND
             llHardBook = TRUE THEN DO:

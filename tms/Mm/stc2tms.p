@@ -1,6 +1,6 @@
-/* stc2tms.p 
+/* stc2tms.p
    changes:
-      22.sep.2015 hugo.lujan - YPR-2521 - [Q25] - TMS - Subscription 
+      22.sep.2015 hugo.lujan - YPR-2521 - [Q25] - TMS - Subscription
        termination/ MNP out porting, STC (postpaid to prepaid)
 */
 {commali.i}
@@ -69,8 +69,6 @@ DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
 DEF BUFFER bOldType  FOR CLIType.
 DEF BUFFER bNewTariff FOR CLIType.
 DEF BUFFER bOldTariff FOR CLIType.
-/* Q25 Quota 25 */
-DEFINE VARIABLE lrowidMSRequest AS ROWID NO-UNDO.
 
 DEF TEMP-TABLE ttContract NO-UNDO
     FIELD DCEvent AS CHAR.
@@ -846,18 +844,7 @@ PROCEDURE pFinalize:
                     MobSub.CustNum,
                     "Subscription type change",
                     "FATime event could not be created: " + lcError).
-      /* Quota 25 q25 - YPR-2521 */
-      lrowidMSRequest = ROWID(MSRequest).
-      FOR EACH MSRequest NO-LOCK WHERE  
-         MSRequest.MsSeq      EQ Mobsub.MsSeq AND
-         MSRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
-         MsRequest.ReqStatus  EQ 0 AND
-         MSREquest.REqcparam3 EQ "RVTERM12":   
-            
-         fReqStatus(4,"ERROR:Q25 Cancelled Quota 25 extension request").
-      END. /* FOR EACH MSRequest */
-      FIND MSRequest WHERE ROWID(MSRequest) = lrowidMSRequest NO-LOCK.                 
-   END. /* PREPAID to POSTPAID */
+   END.
            
    IF CLIType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID} THEN DO:
 
@@ -886,6 +873,21 @@ PROCEDURE pFinalize:
                              "Subscription type change",
                              "Invoice target creation failed: " + lcError).
       END.
+   END.
+      
+   IF bOldType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID} AND
+      CLIType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID} THEN DO:
+
+      /* Quota 25 q25 - YPR-2521 */
+      FOR EACH MSRequest NO-LOCK WHERE  
+               MSRequest.MsSeq      EQ Mobsub.MsSeq AND
+               MSRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+               MsRequest.ReqStatus  EQ 0 AND
+               MSREquest.REqcparam3 EQ "RVTERM12":   
+         fReqStatus(4,"Cancelled by STC to prepaid").
+      END. /* FOR EACH MSRequest */
+
+      FIND MSRequest WHERE MSRequest.MsRequest = iiMSRequest NO-LOCK.
    END.
 
    IF MsRequest.ReqIParam2 > 0 THEN DO:
