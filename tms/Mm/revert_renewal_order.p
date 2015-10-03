@@ -427,8 +427,17 @@ PROCEDURE pRevertRenewalOrder:
    END. /* FOR FIRST bMsRequest WHERE */
    
    RUN pCreateRenewalCreditNote(MsRequest.ReqIParam1,TRIM(lcCreditFees,",")).
+
    /* Q25 */
-   RUN pQ25HandleDiscount IN THIS-PROCEDURE.
+   RUN pCloseQ25Discount IN THIS-PROCEDURE.
+   IF RETURN-VALUE BEGINS "ERROR" THEN
+       DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                        "MobSub",
+                        STRING(MobSub.MsSeq),
+                        MobSub.CustNum,
+                        "Revert renewal order",
+                        RETURN-VALUE).
+
    /* Request handled succesfully */
    FIND FIRST MsRequest WHERE
               MsRequest.MSRequest = iiMsRequest NO-LOCK NO-ERROR.
@@ -440,158 +449,106 @@ RETURN "".
 
 END PROCEDURE.
 
-/* Q25 */
-/*   
-   TASK .........: Close the corresponding RVTERMDT1 discount for Quota 25
-   YPR-2520
-   If the order is cancelled (has not been delivered correctly to the customer
-   or order is cancelled by customer) before month 25 then the following 
-   actions to be performed: 
-   -Don't cancel Quota 25 extension request. 
-   -Remove the discount which was given to customer over Quota 25. 
-   -If discount (RVTERMDT1) was already billed then we have to bill 
-    the Quota 25 again to customer in next invoice. 
-   
-   Questions before month 25: 
-   Q: How to know? If the order has not been delivered correctly to the customer
-   A: Order logistics status is 3 (cancelled) and there's revert renewal 
-    request (type 49) REQTYPE_REVERT_RENEWAL_ORDER
-    with request source 14 (order cancellation) REQUEST_SOURCE_ORDER_CANCELLATION
-   Q: How to know? if order is cancelled by customer
-   A: There's a revert renewal request (type 49) REQTYPE_REVERT_RENEWAL_ORDER
-   with request source other than 14 (REQUEST_SOURCE_ORDER_CANCELLATION)
-   NOTE: From TMS point of view the handling is the same for LO and customer cancellation.
-   Q: How to? Remove the discount which was given to customer over Quota 25
-   A: Close the corresponding RVTERMDT1 discount
-*/
-PROCEDURE pQ25HandleDiscount:
- DEF VAR liPercontractId AS INTEGER   NO-UNDO. 
- DEF VAR ldeDiscount     AS DECIMAL   NO-UNDO. 
- DEF VAR lcResult        AS CHARACTER NO-UNDO.
- /* Date when the payment plan was created */   
- DEF VAR ldBillPeriod      AS DATE NO-UNDO.
- /* Temp variable for the date of the extension request */
- DEF VAR ldaProrateRequest AS DATE NO-UNDO.
- /* Month 24 Date */
- DEF VAR ldaMonth24Date    AS DATE NO-UNDO.
- /* Number of months elapsed since the payment plan was created */
- DEF VAR liMonthsElapsed   AS INTEGER NO-UNDO.
- 
- FIND FIRST OrderAction NO-LOCK WHERE
-            OrderAction.Brand    EQ gcBrand AND
-            OrderAction.OrderId  EQ MsRequest.ReqIParam1 AND
-            OrderAction.ItemType EQ "Q25Extension" NO-ERROR.
-    
- IF NOT AVAILABLE OrderAction THEN
-    RETURN "OK".
+/* Q25 - Close the corresponding RVTERMDT1 discount for Quota 25. YPR-2520 */
+PROCEDURE pCloseQ25Discount:
 
- liPercontractId = INT(OrderAction.ItemKey) NO-ERROR.
- IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
-    RETURN "ERROR:Q25 discount creation failed (incorrect contract id)".
-    
- FIND FIRST DCCLI NO-LOCK WHERE
-            DCCLI.Brand   EQ gcBrand AND
-            DCCLI.DCEvent EQ "RVTERM12" AND
-            DCCLI.MsSeq   EQ Mobsub.MsSeq AND
-            DCCLI.ValidTo >= TODAY NO-ERROR.
- 
- IF NOT AVAILABLE DCCLI THEN
- DO:
-  FIND FIRST MSRequest NO-LOCK WHERE 
-             MSRequest.MsSeq      EQ Mobsub.MsSeq AND
-             MSRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
-             MsRequest.ReqStatus  EQ 0 AND /* ONGOING */
-             MSREquest.REqcparam3 EQ "RVTERM12" AND
-             MSREquest.ReqIParam3 = liPercontractId NO-ERROR.
-  IF AVAILABLE MSRequest THEN
-  DO:
-   fCloseDiscount("RVTERMDT1DISC",
-      MobSub.MsSeq,
-      TODAY,
-      FALSE). /* clean event logs */
-     RETURN "OK". 
-  END.
-  RETURN "ERROR:Q25 Activation Request not found".
- END.
-                                            
- ldeDiscount = DEC(OrderAction.ItemParam) NO-ERROR.
- IF ERROR-STATUS:ERROR OR ldeDiscount EQ 0 THEN 
-    RETURN "ERROR:Q25 discount creation failed (incorrect discount amount)". 
-    
- FIND SingleFee USE-INDEX Custnum WHERE
-        SingleFee.Brand       EQ gcBrand AND
-        SingleFee.Custnum     EQ MobSub.Custnum AND
-        SingleFee.HostTable   EQ "Mobsub" AND
-        SingleFee.KeyValue    EQ STRING(Mobsub.MsSeq) AND
-        SingleFee.SourceTable EQ "DCCLI" AND
-        SingleFee.SourceKey   EQ STRING(liPerContractID) AND
-        SingleFee.CalcObj     EQ "RVTERM" NO-LOCK NO-ERROR.        
+   DEF VAR liPercontractId AS INTEGER   NO-UNDO. 
+   DEF VAR ldeDiscount     AS DECIMAL   NO-UNDO. 
+   DEF VAR lcResult        AS CHARACTER NO-UNDO.
 
- IF NOT AVAILABLE SingleFee THEN
-    RETURN "ERROR:Q25 discount creation failed (residual fee not found)".
- IF SingleFee.Billed AND
-   CAN-FIND(FIRST Invoice NO-LOCK WHERE
-                  Invoice.Invnum  EQ SingleFee.Invnum AND
-                  Invoice.InvType EQ 1) THEN /* 1 Service Invoice */
- DO:
-    FIND FIRST 
-       subInvoice NO-LOCK WHERE
-       subInvoice.InvNum EQ SingleFee.InvNum NO-ERROR.
-    
-    IF NOT AVAILABLE subInvoice THEN
-      RETURN "ERROR:Q25 subInvoice record not found)".
-    
-    FIND FIRST 
-       invrow NO-LOCK WHERE
-       invrow.InvNum    EQ subInvoice.InvNum AND
-       invrow.SubInvNum EQ subInvoice.SubInvNum AND
-       /* The discount which was given to customer over Quota 25 */
-       invrow.BillCode EQ "RVTERMDT1" 
-       NO-ERROR.
-    
-    IF NOT AVAILABLE invrow THEN
-      RETURN "ERROR:Q25 invrow record not found)".  
+   FIND FIRST OrderAction NO-LOCK WHERE
+              OrderAction.Brand    EQ gcBrand AND
+              OrderAction.OrderId  EQ MsRequest.ReqIParam1 AND
+              OrderAction.ItemType EQ "Q25Discount" NO-ERROR.
       
-    /* Month 25 and after: Create new single fee 
-       (CRVTERMDT) with corresponding amount*/
-     RUN creasfee.p(MobSub.CustNum,
-        MobSub.MsSeq,
-        ldtActDate,
-        "FeeModel",
-        "CRVTERMDT",
-        9,
-        ABS(invrow.Amt), /* Discount amount, to charge in next invoice */
-        DCCLI.DCEvent + " created " + 
-           STRING(ldtActDate,"99.99.9999"),  /* memo */
-        FALSE,              /* no messages to screen */
-        "",
-        "RevertRenewalQ25",
-        0, /* order id */
-        SingleFee.SourceTable,
-        SingleFee.SourceKey,
-        OUTPUT lcResult).
-   IF lcResult > "" THEN
-   DO:
-      /* Create a memo in TMS */
-   CREATE Memo.
-   ASSIGN
-       Memo.CreStamp  = fMakeTS() 
-       Memo.Brand     = gcBrand
-       Memo.HostTable = ""
-       Memo.KeyValue  = STRING(MobSub.MsSeq)
-       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
-       Memo.MemoTitle = "CRVTERMDT Fee creation failed"
-       Memo.MemoText  = lcResult
-       Memo.CustNum   = MobSub.CustNum.
-   END.   
- END.
- ELSE
- DO:
+   IF NOT AVAILABLE OrderAction THEN RETURN "".
+
+   liPercontractId = INT(OrderAction.ItemKey) NO-ERROR.
+   IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
+      RETURN "ERROR:Q25 discount cancellation (contract id)".
+   
+   ldeDiscount = DEC(OrderAction.ItemParam) NO-ERROR.
+   IF ERROR-STATUS:ERROR OR ldeDiscount EQ 0 THEN 
+      RETURN "ERROR:Q25 discount cancellation (discount amount)". 
+
+   FIND SingleFee NO-LOCK WHERE
+        SingleFee.Brand       = gcBrand AND
+        SingleFee.HostTable   = "Mobsub" AND
+        SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
+        SingleFee.SourceTable = "DCCLI" AND
+        SingleFee.SourceKey   = STRING(liPerContractID) AND
+        SingleFee.CalcObj     = "RVTERM" NO-ERROR.
+   
+   IF NOT AVAILABLE SingleFee THEN RETURN "".
+
+   FIND FIRST DiscountPlan NO-LOCK WHERE
+              DiscountPlan.Brand = gcBrand AND
+              DiscountPlan.DPRuleID = "RVTERMDT1DISC" NO-ERROR.
+   IF NOT AVAIL DiscountPlan THEN
+      RETURN "ERROR:Q25 discount cancellation (RVTERMDT1DISC plan not found)".
+
+   FIND FIRST dpmember NO-LOCK WHERE
+              dpmember.dpid = DiscountPlan.DpId AND
+              dpmember.hosttable = "mobsub" AND
+              dpmember.keyvalue = string(mobsub.msseq) AND
+              dpmember.validfrom = fPer2Date(SingleFee.BillPeriod,0) AND
+              dpmember.validto >= dpmember.validfrom AND
+              dpmember.discvalue = ldeDiscount NO-ERROR.
+
+   IF NOT AVAILABLE dpmember THEN RETURN "".
+  
+   IF SingleFee.Billed AND
+      CAN-FIND(FIRST Invoice NO-LOCK WHERE
+                     Invoice.Invnum  EQ SingleFee.Invnum AND
+                     Invoice.Custnum EQ SingleFee.Custnum AND
+                     Invoice.InvType EQ 1) THEN DO:
+
+      FIND FIRST subInvoice NO-LOCK WHERE
+                 subInvoice.InvNum EQ SingleFee.InvNum AND
+                 subInvoice.MsSeq EQ Mobsub.MsSeq NO-ERROR.
+      
+      IF NOT AVAILABLE subInvoice THEN
+        RETURN "ERROR:Q25 discount cancellation (subinvoice not found)".
+      
+      FIND FIRST invrow NO-LOCK WHERE
+                 invrow.InvNum    EQ subInvoice.InvNum AND
+                 invrow.SubInvNum EQ subInvoice.SubInvNum AND
+                 invrow.BillCode EQ "RVTERMDT1" NO-ERROR.
+      
+      IF NOT AVAILABLE invrow THEN RETURN "".
+        
+      /* Month 25 and after: Create new single fee 
+         (CRVTERMDT) with corresponding amount*/
+       RUN creasfee.p(
+          SingleFee.CustNum,
+          MobSub.MsSeq,
+          TODAY,
+          "FeeModel",
+          "CRVTERMDT",
+          9,
+          MIN(ldeDiscount,ABS(invrow.Amt)),
+          "Renewal order cancelled " + 
+             STRING(TODAY,"99.99.9999"),  /* memo */
+          FALSE,              /* no messages to screen */
+          "",
+          "RevertRenewalOrder",
+          SingleFee.OrderID, /* order id */
+          SingleFee.SourceTable,
+          SingleFee.SourceKey,
+          OUTPUT lcResult).
+
+      IF lcResult BEGINS "ERROR:" OR lcResult BEGINS "0" THEN
+         RETURN "ERROR:Q25 discount cancellation (CRVTERMDT fee):" + lcResult.
+      
+      RETURN "".
+
+   END.
+
    fCloseDiscount("RVTERMDT1DISC",
-      MobSub.MsSeq,
-      TODAY,
-      FALSE). /* clean event logs */
-     RETURN "OK". 
-  END.
+     MobSub.MsSeq,
+     dpmember.ValidFrom - 1,
+     FALSE). /* clean event logs */
+      
+   RETURN "". 
+
 END PROCEDURE.
