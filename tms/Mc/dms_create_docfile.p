@@ -799,9 +799,8 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
              OR MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}  /*0*/
              OR MsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} /*80*/
             ) AND
-              MsRequest.UpdateStamp <= MsRequest.DoneStamp /*AND
-              ENTRY(2,MsRequest.Cparam6) EQ {&DMS_VFR_REQUEST} 
-              REMOVE COMMENT WHEN  WEB IS READY FOR THIS */:
+              MsRequest.UpdateStamp <= MsRequest.DoneStamp AND
+              ENTRY(2,MsRequest.ReqCparam6) EQ {&DMS_VFR_REQUEST}:
       CASE MsRequest.ReqType:
          WHEN {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}  THEN DO:
             lcCaseTypeId = lcACCCaseTypeId.

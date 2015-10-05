@@ -94,10 +94,9 @@ pdeChgStamp = get_timestamp(param_toplevel_id, "2").
 pcSalesman = get_string(param_toplevel_id, "1").
 piMsSeq = get_int(param_toplevel_id, "0").
 pcMemoStruct = get_struct(param_toplevel_id,"6").
-
 pcMandateId = get_string(param_toplevel_id,"7").
-pcContractID = get_string(param_toplevel_id,"8"). 
-pcChannel = get_string(param_toplevel_id,"9").
+pcChannel = get_string(param_toplevel_id,"8").
+pcContractID = get_string(param_toplevel_id,"9").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 

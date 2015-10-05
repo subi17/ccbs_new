@@ -175,7 +175,7 @@ liRequest = fCTChangeRequest(MobSub.msseq,
                   {&REQUEST_SOURCE_NEWTON}, 
                   0, /* order id */
                   0,
-                  lcDMSInfo, /*dms, contract_id ->ReqCParam6*/
+                  lcDMSInfo, /*dms: contract_id,channel ->ReqCParam6*/
                   OUTPUT lcInfo).
 
 IF liRequest = 0 THEN DO:
