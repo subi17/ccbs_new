@@ -51,7 +51,7 @@ IF LOOKUP(pcSetting,"setFlag") > 0 THEN DO:
 
 END.
 ELSE IF LOOKUP(pcSetting,"DMS") > 0 THEN DO:
-   IF validate_struct(pcParamStruct,"value!") = ? THEN RETURN.
+   IF validate_struct(pcParamStruct,"value!,user") = ? THEN RETURN.
    pcFlag = {&DMS_ON_OFF}.
    piValue = get_int(pcParamStruct, "value").
    
