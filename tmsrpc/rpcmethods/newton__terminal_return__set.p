@@ -57,14 +57,10 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST TermReturn EXCLUSIVE-LOCK WHERE
-           TermReturn.IMEI = lcIMEI 
-           NO-ERROR.
+IF LENGTH(lcIMEI,"CHARACTER") NE 15 THEN
+   RETURN appl_err("IMEI code doesn't contain 15 characters").
 
-IF NOT AVAILABLE TermReturn THEN 
-   CREATE TermReturn.
-ELSE IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTermReturn).
-
+CREATE TermReturn.
 ASSIGN TermReturn.IMEI           = lcIMEI
        TermReturn.MSISDN         = lcMSISDN
        TermReturn.BillCode       = lcBillCode
@@ -73,10 +69,7 @@ ASSIGN TermReturn.IMEI           = lcIMEI
        TermReturn.ReturnChannel  = lcReturnChannel
        TermReturn.ReturnTs       = ldReturnTS.
 
-IF llDoEvent THEN DO:
-   IF NEW TermReturn THEN RUN StarEventMakeCreateEvent(lhTermReturn).
-   ELSE RUN StarEventMakeModifyEvent(lhTermReturn).
-END.
+IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhTermReturn).
 
 RELEASE TermReturn.
 
