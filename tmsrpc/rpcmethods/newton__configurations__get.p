@@ -23,8 +23,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       liMaintB = INT(fCParamI4("1","PREPAIDMC","MinConsRerunAllowed")).
       IF liMaintB = ? THEN RETURN appl_err("Missing system parameter").
    END.   
-   ELSE IF LOOKUP(pcId,"DMSOnOff") > 0 THEN DO:
-      liMaintB = INT(fCParamI4("1","DMS","DmsOnOff")).
+   ELSE IF LOOKUP(pcId,"DMS") > 0 THEN DO:
+      liMaintB = INT(fCParamI4("1","DMS",{&DMS_ON_OFF})).
       IF liMaintB = ? THEN RETURN appl_err("Missing system parameter").
    END.   
    ELSE
