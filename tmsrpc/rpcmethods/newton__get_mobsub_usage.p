@@ -242,8 +242,9 @@ fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
                INPUT-OUTPUT liErrorCodeOut,
                INPUT-OUTPUT tthCDR).
 
-FOR EACH ttCDR NO-LOCK WHERE
-         ttCDR.ErrorCode = 0:
+FOR EACH ttCDR NO-LOCK USE-INDEX date:
+
+   IF ttCDR.ErrorCode NE 0 THEN NEXT.
 
    /* Only Package data once TARJ7 and TARJ9 is activated */
    IF MobSub.CLIType EQ "TARJ7" OR
@@ -262,8 +263,7 @@ FOR EACH ttCDR NO-LOCK WHERE
             
             IF ttCDR.EventType EQ "CALL" AND
                ttCDR.Charge EQ 0 AND
-               LOOKUP(ttCDR.GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0 THEN
-               IF ttCDR.Accumulator > ldePrepVoiceUsageMonthly THEN 
+               ttCDR.Accumulator > ldePrepVoiceUsageMonthly THEN 
                   ldePrepVoiceUsageMonthly = ttCDR.Accumulator. 
                   /*ldePrepVoiceUsageMonthly + ttCDR.BillDur.*/
          END.

@@ -41,4 +41,4 @@ ASSIGN
  liPartialInd          = 0.
  lcCdrId               = "".
  lcCallIdNum           = "".
-
+ liAccumulator         = 0.

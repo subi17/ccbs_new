@@ -237,8 +237,7 @@ PROCEDURE pStartReader:
             lcDCEvent = "PMDUB".
          ELSE IF PrepCDR.CLIType = "TARJ7" AND PrepCDR.Charge = 0 THEN
             lcDCEvent = "TARJ7".
-         ELSE IF PrepCDR.CLIType = "TARJ9" AND PrepCDR.Charge = 0 AND
-            LOOKUP(PrepCDR.GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0 THEN
+         ELSE IF PrepCDR.CLIType = "TARJ9" AND PrepCDR.Charge = 0 THEN
             lcDCEvent = "TARJ9".
          ELSE lcDCEvent = "".
 
