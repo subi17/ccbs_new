@@ -14,7 +14,7 @@
 
 {xmlrpc/xmlrpc_access.i}
 {tmsparam4.i}
-
+{tmsconst.i}
 
 DEF VAR custcat_struct AS CHAR NO-UNDO. 
 DEF VAR top_array AS CHARACTER NO-UNDO. 

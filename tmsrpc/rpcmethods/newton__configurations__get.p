@@ -8,6 +8,7 @@
 
 {header_get.i}
 {tmsparam4.i}
+{tmsconst.i}
 
 DEF VAR liMaintB AS INTEGER NO-UNDO.
 
