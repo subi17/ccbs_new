@@ -31,5 +31,9 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    ELSE
       RETURN appl_err(SUBST("Unknown service &1", pcId)).
 
-   add_int(resp_array, "", (IF liMaintB = 0 THEN 1 ELSE 0)).
+   IF LOOKUP(pcId,"DMS") > 0 THEN
+      add_int(resp_array, "", liMaintB).
+   ELSE
+      add_int(resp_array, "", (IF liMaintB = 0 THEN 1 ELSE 0)).
+      
 END.
