@@ -866,7 +866,7 @@ PROCEDURE pCollectInstallmentContractChanges:
             ttInstallment.Custnum = MsRequest.Custnum
             ttInstallment.MsSeq   = MsRequest.MsSeq
             ttInstallment.Amount  = (IF llFinancedByBank THEN FixedFee.Amt ELSE ldeAmount)
-            ttInstallment.Items   = (IF llFinancedByBank THEN liFFItemQty ELSE "0")
+            ttInstallment.Items   = (IF llFinancedByBank THEN liFFItemQty ELSE 0)
             ttInstallment.OperDate = ldFeeEndDate
             ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
             ttInstallment.ResidualAmount = ldeResidualFee
@@ -1340,7 +1340,7 @@ PROCEDURE pCollectInstallmentCancellations:
             ttInstallment.Custnum = MsRequest.Custnum
             ttInstallment.MsSeq   = MsRequest.MsSeq
             ttInstallment.Amount  = (IF llFinancedByBank THEN FixedFee.Amt ELSE ldeAmount)
-            ttInstallment.Items   = (IF llFinancedByBank THEN liFFItemQty ELSE "")
+            ttInstallment.Items   = (IF llFinancedByBank THEN liFFItemQty ELSE 0)
             ttInstallment.OperDate = ldFeeEndDate
             ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
             ttInstallment.ResidualAmount = ldeResidualAmt
