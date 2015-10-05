@@ -335,7 +335,7 @@ FUNCTION fBCopy RETURNS LOGICAL.
          TMQueue.ReportingID = ttCall.ServRid + "," + ttCall.MPMRid
          TMQueue.ExtraAmount = ttCall.MPMAmt.
       IF ttCall.PPFlag > 0 THEN DO:
-         IF LOOKUP(lcVersion,"0104,0105") > 0 THEN 
+         IF LOOKUP(lcVersion,"0104,0105,0106") > 0 THEN 
             TMQueue.PPBalance = DECIMAL(ENTRY(74,lcCDR,"|")) NO-ERROR.
          TmQueue.Amount = ttCall.Charge.
       END.
@@ -518,7 +518,8 @@ DO TRANS:
    WHEN "0103MM" OR
    WHEN "0104GE" OR 
    WHEN "0104MM" OR
-   WHEN "0105MM" THEN lcEvent = TRIM(ENTRY(11,callrec,lcSep)).
+   WHEN "0105MM" OR
+   WHEN "0106MM" THEN lcEvent = TRIM(ENTRY(11,callrec,lcSep)).
    OTHERWISE DO:
       MESSAGE 
          "Unknown SNS-CDR format (cdr-ticket no:"  ENTRY( 8,callrec,lcSep) 
@@ -548,6 +549,7 @@ DO TRANS:
       WHEN "0104GE" THEN DO:  {set0104ge.i}   END.
       WHEN "0104MM" OR WHEN
            "0105MM" THEN DO:  {set0104mm.i}   END.
+      WHEN "0106MM" THEN DO:  {set0106mm.i}   END.
       END CASE.
 
       {onlinesave.i}  
@@ -887,8 +889,18 @@ DO TRANS:
          ttCall.RateCCN = liCCN.
  
       /* GPRS as Data amount based (bytes) */
-      IF lidialtype = 7 THEN c_dur = ttCall.DataIN + ttCall.DataOut.
+      /* YDR-1642: added logic to save data package CDRs to separate
+         billing item in a case of Service Class = 103.
+         With Service Class = 3 or Service Class = 303 follow
+         MsOwner Billtarget. */
+      IF lidialtype = 7 THEN DO:
+         IF ttCall.ServiceClass = 3 OR ttCall.ServiceClass = 303 THEN
+            ttCall.BillTarget = MsOwner.BillTarget.
+         ELSE IF ttCall.ServiceClass = 103 THEN
+            ttCall.BillTarget = "".
+         c_dur = ttCall.DataIN + ttCall.DataOut.
 
+      END.
       /* duration may be only partly billable */
       ELSE IF CAN-FIND(FIRST ttDuration WHERE
                         ttDuration.CallCase = STRING(ttCall.RateCCN)) THEN DO:
