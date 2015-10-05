@@ -31,6 +31,7 @@ gcBrand = "1".
 {timestamp.i}
 {tmsconst.i}
 {fmakemsreq.i}
+{fsendsms.i}
 
 /* top_struct */
 DEF VAR top_struct        AS CHARACTER NO-UNDO.
@@ -56,6 +57,8 @@ DEF VAR ldaMonth22Date    AS DATE NO-UNDO.
 DEF VAR ldaMonth24Date    AS DATE NO-UNDO.
 /* Contract activation timestamp */
 DEF VAR ldContractActivTS AS DECIMAL NO-UNDO.
+DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
+DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
 
 /* common validation */
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
@@ -109,6 +112,11 @@ FIND FIRST MobSub NO-LOCK WHERE
 IF NOT AVAILABLE MobSub THEN
    RETURN appl_err("Subscription not found").
 
+FIND FIRST Customer NO-LOCK WHERE
+           Customer.Custnum = MobSub.Custnum NO-ERROR.
+IF NOT AVAILABLE Customer THEN
+   RETURN appl_err("Customer not found").
+
 /* Find original installment contract */   
 FIND FIRST DCCLI NO-LOCK WHERE
            DCCLI.Brand   = gcBrand AND
@@ -158,7 +166,9 @@ ELSE IF TODAY >= ldaMonth22Date AND
    TODAY < ldaMonth24Date THEN
    /* handle it on 21st day of month 24 at 00:00 */
    ldContractActivTS = fMake2Dt(ldaMonth24Date,0).
-ELSE ldContractActivTS = fSecOffSet(fMakeTS(),5). /* Handle it immediately */
+ELSE ASSIGN
+   ldaMonth24Date = TODAY
+   ldContractActivTS = fSecOffSet(fMakeTS(),5). /* Handle it immediately */
 
 IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                   DCCLI.Brand   EQ gcBrand AND
@@ -186,9 +196,28 @@ IF liCreated = 0 THEN
    RETURN appl_err(SUBST("Q25 extension request failed: &1",
                          lcResult)).
 
-RUN requestaction_sms.p(INPUT liCreated,
-                        INPUT MobSub.CLIType,
-                        INPUT {&REQUEST_SOURCE_NEWTON}).
+lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
+                      TODAY,
+                      Customer.Language,
+                      OUTPUT ldeSMSStamp).
+
+IF lcSMSTxt > "" THEN DO:
+
+   ASSIGN
+      lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
+                          lower(entry(month(ldaMonth24Date),{&MONTHS_ES})))
+      lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaMonth24Date)))
+      lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
+            STRING(ROUND(SingleFee.Amt / 12, 2))).
+
+   fMakeSchedSMS2(MobSub.CustNum,
+                  MobSub.CLI,
+                  {&SMSTYPE_CONTRACT_ACTIVATION},
+                  lcSMSTxt,
+                  ldeSMSStamp,
+                  "Yoigo info",
+                  "").
+END.
 
 IF lcmemo_title > "" THEN DO:
 
