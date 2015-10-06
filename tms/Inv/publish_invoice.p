@@ -23,9 +23,11 @@ DEF VAR olInterrupted  AS LOG  NO-UNDO.
 DEF VAR lcToday        AS CHAR NO-UNDO.
 DEF VAR lcAddrConfDir  AS CHAR NO-UNDO. 
 DEF VAR lcContent      AS CHAR NO-UNDO. 
-DEF VAR lcContent1     AS CHAR NO-UNDO. 
-DEF VAR lcContent2     AS CHAR NO-UNDO. 
 DEF VAR llgError       AS LOG  NO-UNDO.
+DEF VAR lcLogFile      AS CHAR NO-UNDO. 
+DEF VAR lcContLogDir   AS CHAR NO-UNDO. 
+
+DEFINE STREAM strout.
 
    FIND MsRequest WHERE 
         MsRequest.Brand     = gcBrand     AND 
@@ -46,10 +48,14 @@ DEF VAR llgError       AS LOG  NO-UNDO.
           ldaDateFrom    = DATE(MONTH(TODAY),1,YEAR(TODAY))
           lcDumpFileName = fCParam("HPD","DumpOutDir")
           lcAddrConfDir  = fCParamC("RepConfDir")
+          lcContLogDir   = fCParam("PublishInvoice","ContentLogDir")
           lcToday        = STRING(YEAR(TODAY),"9999") + 
                            STRING(MONTH(TODAY),"99")  +
                            STRING(DAY(TODAY),"99") 
-          lcDumpFileName = lcDumpFileName + "invoice_Full_" + lcToday + STRING(TIME) + ".txt.gz".
+          lcDumpFileName = lcDumpFileName + "invoice_Full_" + lcToday + STRING(TIME) + ".txt.gz"
+          lcLogFile      = lcContLogDir + "publishinvoice_" + lcToday + STRING(TIME) + ".log".
+
+   OUTPUT STREAM strout TO VALUE(lcLogFile) APPEND.
 
    IF lcAddrConfDir > "" THEN 
       lcAddrConfDir = lcAddrConfDir + "publishinvoice.email".
@@ -71,16 +77,20 @@ DEF VAR llgError       AS LOG  NO-UNDO.
                        OUTPUT liCount) NO-ERROR.
    IF ERROR-STATUS:ERROR THEN DO:
       fReqStatus(3,"ERROR: Display permit has not been set.").      
-      ASSIGN lcContent1 = "ERROR: Display permit has not been set."
-             llgError   = YES.
+      
+      PUT STREAM strout UNFORMATTED 
+         "ERROR: Display permit has not been set." SKIP.
+
+      llgError   = YES.
    END.
    ELSE  
-      lcContent1 = "Display permit was set to " + STRING(liCount) + " Invoices.".
+      PUT STREAM strout UNFORMATTED 
+         "Display permit was set to " + STRING(liCount) + " Invoices." SKIP.
 
    /* Mail recipients */
    GetRecipients(lcAddrConfDir).
    /* Send via mail */
-   SendMail(lcContent,"").
+   SendMail(lcLogFile,"").
 
    IF llgError THEN LEAVE.
 
@@ -96,21 +106,26 @@ DEF VAR llgError       AS LOG  NO-UNDO.
 
    IF olInterrupted THEN DO: 
       fReqStatus(3,"Publish Invoice Full dump to HPD Interrupted!.").
-      ASSIGN lcContent2 = "Publish Invoice Full dump to HPD Interrupted!."
-             llgError   = YES.
+      
+      PUT STREAM strout UNFORMATTED 
+         "Publish Invoice Full dump to HPD Interrupted!." SKIP.
+      
+      llgError   = YES.
    END.      
    ELSE 
-      lcContent2 = "Published total Invoice full dump event count : " + STRING(oiEvents).
+      PUT STREAM strout UNFORMATTED
+         "Published total Invoice full dump event count : " + STRING(oiEvents) SKIP.
 
    /* Mail recipients */
    GetRecipients(lcAddrConfDir).
    /* Send via mail */
-   SendMail(lcContent,"").
+   SendMail(lcLogFile,"").
 
    IF llgError THEN LEAVE.
-   
-   lcContent = lcContent1 + " " + lcContent2.
-   
+  
+   lcContent = "Display permit was set to " + STRING(liCount) + " Invoices." + "  " + 
+               "Published total Invoice full dump event count : " + STRING(oiEvents).
+
    fReqStatus(2,lcContent). /* request handled succesfully */
 
 

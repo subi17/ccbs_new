@@ -20,11 +20,13 @@ DEF VAR liCount        AS INT  NO-UNDO.
 DEF VAR lcToday        AS CHAR NO-UNDO.
 DEF VAR llgError       AS LOG  NO-UNDO.
 DEF VAR lcContent      AS CHAR NO-UNDO. 
-DEF VAR lcContent1     AS CHAR NO-UNDO. 
-DEF VAR lcContent2     AS CHAR NO-UNDO. 
 DEF VAR lcAddrConfDir  AS CHAR NO-UNDO.
 DEF VAR lcFileName     AS CHAR NO-UNDO. 
 DEF VAR llInterrupt    AS LOG  NO-UNDO. 
+DEF VAR lcContLogDir   AS CHAR NO-UNDO. 
+DEF VAR lcLogFile      AS CHAR NO-UNDO. 
+
+DEFINE STREAM strout.
 
    FIND MsRequest WHERE
         MsRequest.Brand     = gcBrand     AND
@@ -44,10 +46,14 @@ DEF VAR llInterrupt    AS LOG  NO-UNDO.
           ldaInvDate     = DATE(MONTH(TODAY),1,YEAR(TODAY)) 
           lcFileName     = fCparam("IFS","IFSMonthlyFile") 
           lcAddrConfDir  = fCParamC("RepConfDir")
+          lcContLogDir   = fCParam("PublishInvoice","ContentLogDir")
           lcToday        = STRING(YEAR(TODAY),"9999") +
                            STRING(MONTH(TODAY),"99")  +
                            STRING(DAY(TODAY),"99")
-          lcFileName     = REPLACE(lcFileName,"#DATE",lcToday).
+          lcFileName     = REPLACE(lcFileName,"#DATE",lcToday)
+          lcLogFile      = lcContLogDir + "publishifs_" + lcToday + STRING(TIME) + ".log".
+ 
+   OUTPUT STREAM strout to VALUE(lcLogFile) APPEND.
 
    IF ldaInvDate EQ ? THEN DO:
       fReqStatus(3,"Error: Invalid Invoice date").
@@ -62,17 +68,21 @@ DEF VAR llInterrupt    AS LOG  NO-UNDO.
                              ?, /* due date if entered */
                              OUTPUT liCount) NO-ERROR. 
    IF ERROR-STATUS:ERROR THEN DO:
-      fReqStatus(3,"ERROR: Delivery was not been set.").      
-      ASSIGN lcContent1 = "ERROR: Delivery was not been set."
-             llgError   = YES.
+      fReqStatus(3,"ERROR: Delivery was not been set."). 
+
+      PUT STREAM strout UNFORMATTED
+         "ERROR: Delivery was not been set." SKIP.
+      
+      llgError   = YES.
    END.
    ELSE 
-      lcContent1 = "Delivery state was set to " + STRING(liCount) + " Invoices".   
+      PUT STREAM strout UNFORMATTED 
+         "Delivery state was set to " + STRING(liCount) + " Invoices" SKIP.   
 
    /* Mail recipients */
       GetRecipients(lcAddrConfDir).
    /* Send via mail */
-      SendMail(lcContent,"").
+      SendMail(lcLogFile,"").
    
    IF llgError THEN LEAVE.
   
@@ -89,19 +99,24 @@ DEF VAR llInterrupt    AS LOG  NO-UNDO.
                    OUTPUT llInterrupt) NO-ERROR. 
    IF llInterrupt THEN DO:
       fReqStatus(3,"ERROR: Interruption in generating IFS file."). 
-      ASSIGN lcContent2 = "ERROR: Interruption in generating IFS file."
-             llgError  = YES.
+      
+      PUT STREAM strout UNFORMATTED 
+         "ERROR: Interruption in generating IFS file." SKIP.
+      
+      llgError  = YES.
    END.
    ELSE 
-      lcContent2 = "Generated IFS for " + STRING(liCount) + " Service Invoices".   
+      PUT STREAM strout UNFORMATTED 
+         "Generated IFS for " + STRING(liCount) + " Service Invoices" SKIP.   
 
    /* Mail recipients */
       GetRecipients(lcAddrConfDir).
    /* Send via mail */
-      SendMail(lcContent,"").
+      SendMail(lcLogFile,"").
    
    IF llgError THEN LEAVE.
 
-   lcContent = lcContent1 + " " + lcContent2.
+   lcContent = "Delivery state was set to " + STRING(liCount) + " Invoices" + "  " +
+               "Generated IFS for " + STRING(liCount) + " Service Invoices".
 
    fReqStatus(2,lcContent). /* request handled succesfully */
