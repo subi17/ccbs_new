@@ -1,88 +1,109 @@
-
 ADD TABLE "DMS"
   AREA "Sta_Data_128"
   LABEL "Document mgmt case"
   DESCRIPTION "Document management case"
   DUMP-NAME "dms"
-   
-ADD FIELD "HostID" OF "DMS" AS INTEGER
-   FORMAT "zzzzzzz9"
-   INITIAL "0"
-   LABEL "Host ID"
-   HELP "TMS source ID"
-   ORDER 10
 
-ADD FIELD "HostTable" OF "DMS" AS character
-   FORMAT "X(12)"
-   INITIAL ""
-   LABEL "Host Table"
-   HELP "TMS Table Information"
-   ORDER 20
-   
-ADD FIELD "DMSID" OF "DMS" AS INTEGER
-   FORMAT "zzzzzzz9"
-   INITIAL "0"
-   LABEL "DMSID"
-   HELP "DMS ID"
-   ORDER 30
-   
-ADD FIELD "DmsExternalID" OF "DMS" AS character
-   FORMAT "X(12)"
-   INITIAL ""
-   LABEL "ID in DMS"
-   HELP "ID from external DMS system"
-   ORDER 40
-  
-ADD FIELD "StatusCode" OF "DMS" AS character
-   FORMAT "X(12)"
-   INITIAL ""
-   LABEL "Status Code"
-   HELP "Status Code"
-   ORDER 50
- 
-ADD FIELD "StatusDesc" OF "DMS" AS character
-   FORMAT "X(20)"
-   INITIAL ""
-   LABEL "Status Description"
-   HELP "Status Description"
-   ORDER 60
- 
-ADD FIELD "StatusTS" OF "DMS" AS decimal
+ADD FIELD "HostID" OF "DMS" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "Host ID"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "TMS source ID"
+  ORDER 10
+
+ADD FIELD "HostTable" OF "DMS" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Host Table"
+  POSITION 3
+  MAX-WIDTH 24
+  HELP "TMS Table Information"
+  ORDER 20
+
+ADD FIELD "DMSID" OF "DMS" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "DMSID"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "DMS ID"
+  ORDER 30
+
+ADD FIELD "DmsExternalID" OF "DMS" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "ID in DMS"
+  POSITION 5
+  MAX-WIDTH 24
+  HELP "ID from external DMS system"
+  ORDER 40
+
+ADD FIELD "StatusCode" OF "DMS" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Status Code"
+  POSITION 6
+  MAX-WIDTH 24
+  HELP "Status Code"
+  ORDER 50
+
+ADD FIELD "StatusDesc" OF "DMS" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Status Description"
+  POSITION 7
+  MAX-WIDTH 40
+  HELP "Status Description"
+  ORDER 60
+
+ADD FIELD "StatusTS" OF "DMS" AS decimal 
   FORMAT "99999999.99999"
   INITIAL "0"
-  LABEL "Time Stamp"  
+  LABEL "Time Stamp"
+  POSITION 8
   MAX-WIDTH 20
   COLUMN-LABEL "StatusTS"
   HELP "Status Time Stamp"
   DECIMALS 5
   ORDER 70
- 
-ADD FIELD "CaseTypeID" OF "DMS" AS character
-   FORMAT "X(8)"
-   INITIAL ""
-   LABEL "Case Type"
-   HELP "Case Type ID"
-   ORDER 80
 
-ADD FIELD "ContractID" OF "DMS" AS character
-   FORMAT "X(8)"
-   INITIAL ""
-   LABEL "ContractID"
-   HELP "ContractID"
-   ORDER 90
+ADD FIELD "CaseTypeID" OF "DMS" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Case Type"
+  POSITION 9
+  MAX-WIDTH 16
+  HELP "Case Type ID"
+  ORDER 80
 
-ADD INDEX "DMSID" ON "DMS"
+ADD FIELD "ContractID" OF "DMS" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "ContractID"
+  POSITION 10
+  MAX-WIDTH 16
+  HELP "ContractID"
+  ORDER 90
+
+ADD INDEX "DMSID" ON "DMS" 
   AREA "Sta_Index_1"
   PRIMARY
-  INDEX-FIELD "DMSID" ASCENDING
-         
-ADD INDEX "Host" ON "DMS"
-  AREA "Sta_Index_1"
-  INDEX-FIELD "HostTable" ASCENDING
-  INDEX-FIELD "HostID" ASCENDING
-  INDEX-FIELD "StatusTS" DESCENDING       
-         
-ADD INDEX "StatusTS" ON "DMS"
-  AREA "Sta_Index_1"
-  INDEX-FIELD "StatusTS" DESCENDING
+  INDEX-FIELD "DMSID" ASCENDING 
 
+ADD INDEX "Host" ON "DMS" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "HostID" ASCENDING 
+  INDEX-FIELD "StatusTS" DESCENDING 
+
+ADD INDEX "StatusTS" ON "DMS" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "StatusTS" DESCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000001965

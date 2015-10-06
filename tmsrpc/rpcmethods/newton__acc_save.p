@@ -266,8 +266,9 @@ IF lcError > "" THEN
    RETURN appl_err(lcError).
 
 
-/*contract_id,source */
-lcDMSInfo = pcContractId + "," + pcChannel.
+/*empty contract_id if it is not from VFR*/
+IF pcChannel NE {&DMS_VFR_REQUEST} THEN
+   pcContractId = "".
 
 
 liRequest = fMSCustChangeRequest(
@@ -283,7 +284,7 @@ liRequest = fMSCustChangeRequest(
    "",
    ({&REQUEST_SOURCE_NEWTON}),
    0, /* orig. request */
-   lcDMSInfo,
+   pcContractId,
    OUTPUT lcError).
   
 IF liRequest = 0 THEN

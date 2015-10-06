@@ -11,7 +11,11 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-DEF VAR gcBrand AS CHAR INIT "1".
+{fmakemsreq.i}
+{msreqfunc.i}
+{fpcmaintreq.i}
+{fcreatereq.i}
+
 DEF VAR pcStruct AS CHAR NO-UNDO. 
 DEF VAR pcUsername AS CHAR NO-UNDO.
 DEF VAR pcReason AS CHAR NO-UNDO.
@@ -120,5 +124,33 @@ IF LOOKUP("reason",lcStruct) > 0 THEN DO:
 END. 
 
 RELEASE SubsTerminal.
+
+/* FILL FIELDS before removing comments.
+fCreateRequest({&REQTYPE_IMEI_CHANGE}, /* heat balance query request */
+               0 , /* chgstamp */
+               "", /* creator */
+               FALSE, /* create fees */
+               FALSE). /* send sms */
+
+/*empty contract_id if it is not from VFR*/
+IF pcChannel NE {&DMS_VFR_REQUEST} THEN
+   pcContractId = "".
+dms
+ASSIGN
+/*   bCreaReq.msseq = Order.msseq*/
+/*   bCreaReq.custnum = Order.custnum*/
+/*   bCreaReq.CLI = Order.cli*/
+/*   bCreaReq.reqcparam1 = lcOldIMEI*/
+/*   bCreaReq.reqcparam2 = pcIMEI*/
+/*   bCreaReq.reqcparam3 = pcOfferId*/
+/*   bCreaReq.reqcparam6 = pcContractId*/
+/*   bCreaReq.reqiparam1 = Order.OrderId*/
+   bCreaReq.ReqSource  = {&REQUEST_SOURCE_NEWTON}.
+
+FIND MSRequest WHERE
+     ROWID(MsRequest) EQ ROWID(bCreaReq) NO-LOCK.
+
+fReqStatus(2,"").
+*/
    
 add_struct(response_toplevel_id, "").

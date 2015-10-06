@@ -352,6 +352,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
                             Order.OrderId,
                             lcInitStatus,/*StatusCode*/
                             lcDMSStatusDesc,
+                            Order.StatusCode,
                             ldStatusTS,
                             lcDocListEntries /*DocList*/,
                             ",").
@@ -542,6 +543,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
                             Order.OrderId,
                             lcInitStatus,/*StatusCode*/
                             lcDMSStatusDesc,
+                            Order.StatusCode,
                             ldStatusTS,
                             lcDocListEntries /*DocList*/,
                             ",").
@@ -757,6 +759,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                             Order.OrderId,
                             lcInitStatus,/*StatusCode*/
                             lcDMSStatusDesc,
+                            Order.StatusCode,
                             ldStatusTS,
                             lcDocListEntries /*DocList*/,
                             ",").
@@ -799,8 +802,8 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
              OR MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}  /*0*/
              OR MsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} /*80*/
             ) AND
-              MsRequest.UpdateStamp <= MsRequest.DoneStamp AND
-              ENTRY(2,MsRequest.ReqCparam6) EQ {&DMS_VFR_REQUEST}:
+              MsRequest.UpdateStamp <= MsRequest.DoneStamp :
+
       CASE MsRequest.ReqType:
          WHEN {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}  THEN DO:
             lcCaseTypeId = lcACCCaseTypeId.
@@ -933,6 +936,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                                MsRequest.MsRequest,
                                lcInitStatus,/*StatusCode*/
                                lcDMSStatusDesc,
+                               "",
                                ldStatusTS,
                                lcDocListEntries /*DocList*/,
                                ",").      
@@ -998,6 +1002,7 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
                             Order.OrderId,
                             lcInitStatus,/*StatusCode*/
                             lcDMSStatusDesc,
+                            Order.StatusCode,
                             ldStatusTS,
                             lcDocListEntries /*DocList*/,
                             ",").
@@ -1036,7 +1041,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    /*Order_date*/
    fPrintDate(Order.CrStamp)      + lcDelim +
    /*Status_Code*/
-   STRING(Order.StatusCode)       + lcDelim + /*TODO: read from DMS table*/
+   fGetOrderStatusDMS(Order.ContractID) + lcDelim + /*dODS: read from DMS table*/
    /*Cancellation date*/
    STRING(Order.CrStamp)          + lcDelim + /*Todo this is not valid*/
    /*Cancellation type*/
@@ -1057,6 +1062,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
                             Order.OrderId,
                             lcInitStatus,/*StatusCode*/
                             lcDMSStatusDesc,
+                            Order.StatusCode,
                             ldStatusTS,
                             lcDocListEntries /*DocList*/,
                             ",").

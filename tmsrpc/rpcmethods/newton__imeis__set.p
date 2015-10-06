@@ -32,7 +32,6 @@ DEF VAR i AS INTEGER NO-UNDO.
 DEF VAR lcOldIMEI AS CHARACTER NO-UNDO. 
 DEF VAR lcStruct AS CHAR NO-UNDO. 
 DEF VAR llUpdateImeiOnly AS LOG NO-UNDO. 
-DEF VAR lcDMSInfo     AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
@@ -405,8 +404,9 @@ fCreateRequest({&REQTYPE_IMEI_CHANGE}, /* heat balance query request */
                FALSE, /* create fees */
                FALSE). /* send sms */
 
-/*contract_id,source */
-lcDMSInfo = pcContractId + "," + pcChannel.
+/*empty contract_id if it is not from VFR*/
+IF pcChannel NE {&DMS_VFR_REQUEST} THEN
+   pcContractId = "".
 
 ASSIGN
    bCreaReq.msseq = Order.msseq
@@ -415,7 +415,7 @@ ASSIGN
    bCreaReq.reqcparam1 = lcOldIMEI
    bCreaReq.reqcparam2 = pcIMEI
    bCreaReq.reqcparam3 = pcOfferId
-   bCreaReq.reqcparam6 = lcDMSInfo
+   bCreaReq.reqcparam6 = pcContractId
    bCreaReq.reqiparam1 = Order.OrderId
    bCreaReq.ReqSource  = {&REQUEST_SOURCE_NEWTON}.
 

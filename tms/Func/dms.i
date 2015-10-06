@@ -32,6 +32,17 @@ DEF TEMP-TABLE ttDocs NO-UNDO
    FIELD DocStatusTS    AS DEC FORMAT "99999999.99999"
    FIELD Comment        AS CHAR.
 
+
+FUNCTION fGetOrderStatusDMS RETURNS CHAR
+   (icContractID AS CHAR):
+   FIND FIRST DMS EXCLUSIVE-LOCK WHERE
+              DMS.ContractID = icContractID
+              NO-ERROR.
+   IF AVAIL DMS THEN RETURN DMS.OrderStatus.
+   RETURN "".      
+END.
+   
+
 FUNCTION fUpdateDMS RETURNS LOGICAL
    (icDmsExternalID  AS CHAR,
     icCaseTypeID     AS CHAR,
@@ -40,6 +51,7 @@ FUNCTION fUpdateDMS RETURNS LOGICAL
     iiHostId         AS INT,
     icStatusCode     AS CHAR,
     icStatusDesc     AS CHAR,
+    icOrderStatus    AS CHAR,
     idStatusTS       AS DEC,
     icDocList        AS CHAR,
     icDocListSep     AS CHAR):
@@ -64,7 +76,9 @@ FUNCTION fUpdateDMS RETURNS LOGICAL
           DMS.StatusCode    = icStatusCode
           DMS.StatusDesc    = icStatusDesc
           DMS.StatusTS      = idStatusTS.
-   
+   /*Change order status if value is given.*/       
+   IF icOrderStatus NE "" THEN DMS.OrderStatus = icOrderstatus.
+
    IF llDoEvent THEN DO:
       IF NEW DMS THEN RUN StarEventMakeCreateEvent(lhDMS).
       ELSE RUN StarEventMakeModifyEvent(lhDMS).

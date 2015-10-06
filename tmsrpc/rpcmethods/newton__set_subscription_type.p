@@ -59,7 +59,6 @@ DEF VAR lcTiePeriod   AS CHAR NO-UNDO.
 DEF VAR lcError       AS CHAR NO-UNDO.
 DEF VAR liRequest     AS INT  NO-UNDO.
 DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
-DEF VAR lcDMSInfo     AS CHAR NO-UNDO.
 DEF BUFFER NewCliType   FOR CliType.
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
@@ -157,8 +156,10 @@ END.
 
 IF lcError > "" THEN RETURN appl_err(lcError).
 
-/*contract_id,source */
-lcDMSInfo = pcContractId + "," + pcChannel.
+/*empty contract_id if it is not from VFR*/
+IF pcChannel NE {&DMS_VFR_REQUEST} THEN
+   pcContractId = "".
+
 
 liRequest = fCTChangeRequest(MobSub.msseq,
                   pcCliType,
@@ -175,7 +176,7 @@ liRequest = fCTChangeRequest(MobSub.msseq,
                   {&REQUEST_SOURCE_NEWTON}, 
                   0, /* order id */
                   0,
-                  lcDMSInfo, /*dms: contract_id,channel ->ReqCParam6*/
+                  pcContractId, /*dms: contract_id,channel ->ReqCParam6*/
                   OUTPUT lcInfo).
 
 IF liRequest = 0 THEN DO:

@@ -132,6 +132,7 @@ PROCEDURE pUpdateDMS:
                             liOrderId,
                             lcStatusCode,
                             lcStatusDesc,
+                            "",
                             ldStatusTS,
                             lcDocList,
                             ";").
