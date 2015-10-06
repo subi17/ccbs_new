@@ -141,10 +141,10 @@ PROCEDURE pUpdateDMS:
        lcCaseTypeID = {&DMS_CASE_TYPE_ID_COMPANY}) THEN DO:
       CASE lcStatusCode:
          WHEN "E" THEN RUN orderinctrl.p(liOrderId, 0, TRUE).
-         WHEN "H" THEN RUN closeorder.p(liOrderId, TRUE).
+         WHEN "J" THEN RUN closeorder.p(liOrderId, TRUE).
          WHEN "F" THEN RUN orderbyfraud.p(liOrderId, TRUE,
                                            {&ORDER_STATUS_CLOSED_BY_FRAUD}).
-         WHEN "J" OR
+         WHEN "N" OR
          WHEN "G" THEN RUN orderbyfraud.p(liOrderId, TRUE,
                                            {&ORDER_STATUS_AUTO_CLOSED}).
       END CASE.
