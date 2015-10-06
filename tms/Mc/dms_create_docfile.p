@@ -234,13 +234,13 @@ FUNCTION fGetTerminalData RETURNS CHAR
    FIND FIRST bOrder WHERE
               bOrder.Brand EQ gcBrand AND
               bOrder.OrderID EQ iiOrderId NO-ERROR.
-   IF NOT AVAIL Order THEN RETURN "".
+   IF NOT AVAIL bOrder THEN RETURN "".
 
 
    FIND FIRST OfferItem NO-LOCK WHERE
               OfferItem.Brand EQ gcBrand AND
-              OfferItem.EndStamp < fmakets() AND
-              OfferItem.Offer EQ Order.Offer AND
+              OfferItem.EndStamp > fmakets() AND
+              OfferItem.Offer EQ bOrder.Offer AND
               OfferItem.ItemType EQ "Billitem" NO-ERROR.
    IF AVAIL OfferItem THEN DO:
       FIND FIRST BillItem  NO-LOCK WHERE
@@ -1029,7 +1029,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
               Order.Brand EQ gcBrand AND
               Order.OrderID EQ iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN 
-      RETURN "5:Order not available" + STRING(iiOrderId).
+      RETURN "6:Order not available" + STRING(iiOrderId).
 
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
 
@@ -1046,7 +1046,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    /*Order_date*/
    fPrintDate(Order.CrStamp)      + lcDelim +
    /*Status_Code*/
-   fGetOrderStatusDMS(Order.ContractID) + lcDelim + /*dODS: read from DMS table*/
+   fGetOrderStatusDMS(Order.ContractID) + lcDelim + /* read from DMS table*/
    /*Cancellation date*/
    STRING(Order.CrStamp)          + lcDelim + /*Todo this is not valid*/
    /*Cancellation type*/

@@ -36,7 +36,7 @@ DEF TEMP-TABLE ttDocs NO-UNDO
 FUNCTION fGetOrderStatusDMS RETURNS CHAR
    (icContractID AS CHAR):
    FIND FIRST DMS EXCLUSIVE-LOCK WHERE
-              DMS.ContractID = icContractID
+              DMS.ContractID EQ icContractID
               NO-ERROR.
    IF AVAIL DMS THEN RETURN DMS.OrderStatus.
    RETURN "".      
