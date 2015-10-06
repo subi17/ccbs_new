@@ -72,6 +72,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
    DEF VAR llgDirect AS LOG NO-UNDO.
    DEF VAR llgAddEntry AS LOG NO-UNDO.
    DEF VAR llgTmpNeeded AS LOG NO-UNDO.
+   DEF VAR llgDirectNeeded AS LOG NO-UNDO.
    DEF VAR ldeFirstPayment AS DECIMAL NO-UNDO.
    DEF VAR ldeMonthlyFee  AS DECIMAL NO-UNDO.
    DEF VAR liMonths AS INT NO-UNDO.
@@ -79,12 +80,16 @@ FUNCTION fMakeTempTable RETURNS CHAR
    DEF VAR liCount AS INT NO-UNDO.
 
    llgTmpNeeded = FALSE.
+   llgDirectNeeded = FALSE.
    DO liCount = 1 TO NUM-ENTRIES(icCaseList):
       CASE ENTRY(liCount,icCaseList):
          WHEN {&DMS_CASE_TYPE_ID_ORDER_ACT}      THEN llgTmpNeeded = TRUE.
          WHEN {&DMS_CASE_TYPE_ID_ORDER_RESTUDY}  THEN llgTmpNeeded = TRUE.
          WHEN {&DMS_CASE_TYPE_ID_COMPANY}        THEN llgTmpNeeded = TRUE.
-         WHEN {&DMS_CASE_TYPE_ID_DIRECT_CH}      THEN llgTmpNeeded = TRUE.
+         WHEN {&DMS_CASE_TYPE_ID_DIRECT_CH}      THEN DO:
+            llgTmpNeeded = TRUE.
+            llgDirectNeeded = TRUE.
+         END.   
          WHEN {&DMS_CASE_TYPE_ID_CANCEL}         THEN llgTmpNeeded = TRUE.
      END.
    END.
@@ -107,7 +112,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
             /*This can be parallell with other cases.*/
             llgDirect = FALSE.
             llgAddEntry = FALSE.
-            IF LOOKUP(Order.OrderChannel,
+            IF llgDirectNeeded EQ TRUE AND LOOKUP(Order.OrderChannel,
                            {&ORDER_CHANNEL_DIRECT} ) NE 0 THEN DO:
                   ldeFirstPayment = fGetOfferDeferredPayment(Order.Offer,
                                               Order.CrStamp,
@@ -1104,7 +1109,7 @@ FUNCTION fCreateDocumentRows RETURNS CHAR
       WHEN {&DMS_CASE_TYPE_ID_DIRECT_CH} THEN DO:
          /*From Order*/
          FOR EACH ttOrderList WHERE
-                  ttOrderList.CaseID EQ {&DMS_CASE_TYPE_ID_DIRECT_CH}:
+                  ttOrderList.Direct EQ TRUE:
             lcStatus = fCreateDocumentCase5(ttOrderList.OrderID).
             IF lcStatus NE "" THEN fLogLine("",lcStatus).
          END.
