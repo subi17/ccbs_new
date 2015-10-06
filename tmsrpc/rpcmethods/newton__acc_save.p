@@ -85,7 +85,7 @@ DEFINE TEMP-TABLE ttCustomer NO-UNDO LIKE Customer
 DEF VAR lcAgrCustID AS CHARACTER NO-UNDO.
 DEF VAR lcAgrCustIDType AS CHARACTER NO-UNDO.
 
-IF validate_request(param_toplevel_id, "int,string,datetime,struct,double,double,struct,string,string") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "int,string,datetime,struct,double,double,struct,string,string,string") EQ ? THEN RETURN.
 
 pdeChargeLimit = get_double(param_toplevel_id, "5").
 pdeCharge = get_double(param_toplevel_id, "4").
