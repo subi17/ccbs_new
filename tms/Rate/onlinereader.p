@@ -889,17 +889,22 @@ DO TRANS:
          ttCall.RateCCN = liCCN.
  
       /* GPRS as Data amount based (bytes) */
-      /* YDR-1642: added logic to save data package CDRs to separate
-         billing item in a case of Service Class = 103.
-         With Service Class = 3 or Service Class = 303 follow
-         MsOwner Billtarget. */
       IF lidialtype = 7 THEN DO:
-         IF ttCall.ServiceClass = 3 OR ttCall.ServiceClass = 303 THEN
-            ttCall.BillTarget = MsOwner.BillTarget.
-         ELSE IF ttCall.ServiceClass = 103 THEN
-            ttCall.BillTarget = "".
+         /* YDR-1642: added logic to divide Prepaid data package CDRs
+            with these two use: current one.
+            SC_TARJ7_INSIDE_DATABUNDLE1  = 3
+            SC_TARJ7_INSIDE_DATABUNDLE2  = 303
+            with this use: BITEM_GRP_INTERNET_TARJ7DATA = 70514100
+            SC_TARJ7_OUTSIDE_DATABUNDLE  = 103
+         */
+         IF TTCall.PPFlag = 1 THEN DO:
+            IF ttCall.ServiceClass = {&SC_TARJ7_INSIDE_DATABUNDLE1} 
+            OR ttCall.ServiceClass = {&SC_TARJ7_INSIDE_DATABUNDLE2} THEN
+               ttCall.BillTarget = {&BITEM_GRP_INTERNET_TARJ7DATA}.
+            ELSE IF ttCall.ServiceClass = {&SC_TARJ7_OUTSIDE_DATABUNDLE} THEN
+               ttCall.BillTarget = MsOwner.BillTarget.
+         END.
          c_dur = ttCall.DataIN + ttCall.DataOut.
-
       END.
       /* duration may be only partly billable */
       ELSE IF CAN-FIND(FIRST ttDuration WHERE
