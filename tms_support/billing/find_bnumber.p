@@ -20,13 +20,13 @@ DO WHILE TRUE
    IF RETRY THEN LEAVE.
 
    UPDATE 
-   idtdate        LABEL "Alkaen p‰iv‰st‰"
-   icBNumber      LABEL "B-numero alkaen"
+   idtdate        LABEL "Start day"
+   icBNumber      LABEL "B-number starting"
    iiRateCCN      LABEL "CC"
-   bsuunta        COLUMN-LABEL "B-suunta" SKIP
-   idtToDate      LABEL "Loppuen p‰iv‰‰n"
+   bsuunta        COLUMN-LABEL "B-destination" SKIP
+   idtToDate      LABEL "End day"
    paytype        LABEL "Paytype" 
-   rateid   AT 33 COLUMN-LABEL "Rate ID".
+   rateid   AT 30 COLUMN-LABEL "Rate ID".
 
    DEF VAR lddate AS DATE NO-UNDO.
 
