@@ -2114,7 +2114,7 @@ END.
       
 /* YTS-2890 */
 fMakeCreateEvent((BUFFER Order:HANDLE),"",katun,"").
-fMarkOrderStamp(Order.OrderID,"Create",0.0).
+fMarkOrderStamp(Order.OrderID,"Change",0.0).
 
 
 /*YDR_1637*/

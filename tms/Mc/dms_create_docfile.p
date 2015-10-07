@@ -821,7 +821,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             lcCaseFileRow =
             lcCaseTypeId                                    + lcDelim +
             /*Contract_ID */
-            STRING(ENTRY(1,ReqCparam6))                     + lcDelim +
+            STRING(MsRequest.ReqCparam6)                    + lcDelim +
             /*.SFID */
             REPLACE(Msrequest.UserCode, "VISTA_", "")       + lcDelim +
             /*.MSISDN*/
@@ -848,7 +848,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             lcCaseFileRow =
             lcCaseTypeID                                    + lcDelim +
             /*Contract_ID*/
-            STRING(ENTRY(1,MsRequest.ReqCparam6))           + lcDelim +
+            STRING(MsRequest.ReqCparam6)                    + lcDelim +
             /*SFID*/
             REPLACE(Msrequest.UserCode, "VISTA_", "")       + lcDelim +
             /*MSISDN*/
@@ -869,6 +869,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                fLogLine(lcCaseFileRow,"Order not found " + lcCaseTypeId).
                NEXT.
             END. 
+            /*Ilkka: Search by using fGetTerminalData?*/
             FIND FIRST OrderAccessory NO-LOCK  WHERE
                        OrderAccessory.Brand EQ gcBrand AND
                        OrderAccessory.OrderID EQ MsRequest.ReqIparam1 NO-ERROR.
@@ -896,9 +897,9 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*Order_ID*/
             STRING(MsRequest.ReqIparam1)                    + lcDelim +
             /*Contract_ID*/
-            STRING(ENTRY(1,MsRequest.ReqCparam6))           + lcDelim +
+            STRING(MsRequest.ReqCparam6)                    + lcDelim +
             /*SFID*/
-           REPLACE(Msrequest.UserCode, "VISTA_", "")        + lcDelim +
+            REPLACE(Msrequest.UserCode, "VISTA_", "")       + lcDelim +
             /*MSISDN*/
             STRING(MsRequest.CLI)                           + lcDelim +
             /*Order_date*/
@@ -936,7 +937,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
       fLogLine(lcCaseFileRow,"").
       llCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                                lcCaseTypeID,
-                               ENTRY(1,MsRequest.ReqCparam6),
+                               MsRequest.ReqCparam6,
                                {&DMS_HOST_TABLE_MSREQ},
                                MsRequest.MsRequest,
                                lcInitStatus,/*StatusCode*/
