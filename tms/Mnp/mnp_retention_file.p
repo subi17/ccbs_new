@@ -181,7 +181,8 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
             MNPDetails.mnpseq = MNPProcess.mnpseq:
 
       IF mnpdetails.statuslimitts < fMakeTS() THEN NEXT MNP_LOOP.
-      IF mnpdetails.custidtype EQ "CIF" THEN NEXT MNP_LOOP.
+      /* IF mnpdetails.custidtype EQ "CIF" THEN NEXT MNP_LOOP. 
+      Commented out YOT-4095 */
    
       IF MNPProcess.StatusCode EQ {&MNP_ST_ASOL} AND NOT 
          (MNPProcess.StateFlag = {&MNP_STATEFLAG_CONFIRM_PROPOSAL} OR 
@@ -198,7 +199,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
          IF MobSub.PayType = TRUE THEN
             liExcludeOffset = -2160. /* Prepaid 90 days */
          ELSE
-            liExcludeOffset = -1440. /* Postpaid 60 days */
+            liExcludeOffset = 0. /* -1440. Commented out YOT-4095 */ /* Postpaid 60 days */
 
          /* Exclude Prepaid/postpaid clients from generated retention file */
          FOR EACH bMNPSub NO-LOCK WHERE
