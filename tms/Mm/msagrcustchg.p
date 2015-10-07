@@ -486,7 +486,7 @@ PROCEDURE pOwnerChange:
             NOT CAN-FIND(FIRST bMobSub WHERE
                                bMobSub.Brand     = gcBrand AND
                                bMobSub.MsSeq    <> MobSub.MsSeq AND
-                               bMobSub.CustNum   = bCurrentCust.CustNum AND
+                               bMobSub.CustNum   = bNewCust.CustNum AND
                                bMobSub.PayType   = FALSE) THEN DO:
             ASSIGN
                bNewCust.BirthDay        = DATE(ENTRY(14,lcDataField,";"))
