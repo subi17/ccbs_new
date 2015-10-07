@@ -73,7 +73,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
    DEF VAR llgAddEntry AS LOG NO-UNDO.
    DEF VAR llgTmpNeeded AS LOG NO-UNDO.
    DEF VAR llgDirectNeeded AS LOG NO-UNDO.
-   DEF VAR ldeFirstPayment AS DECIMAL NO-UNDO.
+   DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
    DEF VAR ldeMonthlyFee  AS DECIMAL NO-UNDO.
    DEF VAR liMonths AS INT NO-UNDO.
    DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
@@ -114,7 +114,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
             llgAddEntry = FALSE.
             IF llgDirectNeeded EQ TRUE AND LOOKUP(Order.OrderChannel,
                            {&ORDER_CHANNEL_DIRECT} ) NE 0 THEN DO:
-                  ldeFirstPayment = fGetOfferDeferredPayment(Order.Offer,
+                  ldeInstallment = fGetOfferDeferredPayment(Order.Offer,
                                               Order.CrStamp,
                                               OUTPUT ldeMonthlyFee,
                                               OUTPUT liMonths,
@@ -219,7 +219,8 @@ FUNCTION fGetTerminalType RETURNS CHAR
    (iiOrderID AS INT):
    FIND FIRST OrderAccessory NO-LOCK  WHERE
               OrderAccessory.Brand EQ gcBrand AND
-              OrderAccessory.OrderID EQ iiOrderID NO-ERROR.
+              OrderAccessory.OrderID EQ iiOrderID AND
+              Orderaccessory.TerminalType EQ {&TERMINAL_TYPE_PHONE} NO-ERROR.
    IF AVAIL OrderAccessory THEN DO:
       IF OrderAccessory.discount NE 0 THEN RETURN "Handset".
       ELSE RETURN "Financed Handset".
@@ -228,8 +229,7 @@ FUNCTION fGetTerminalType RETURNS CHAR
 END.   
 
 FUNCTION fGetTerminalData RETURNS CHAR
-   (iiOrderId AS INT,
-    OUTPUT ocTotIns AS CHAR):
+   (iiOrderId AS INT):
    DEF BUFFER bOrder FOR Order.
    FIND FIRST bOrder WHERE
               bOrder.Brand EQ gcBrand AND
@@ -249,7 +249,6 @@ FUNCTION fGetTerminalData RETURNS CHAR
                  NOT Billitem.Biname  BEGINS "Prepaid" AND
                  NOT BillItem.Biname BEGINS "Postaid" NO-ERROR.
       IF AVAIL BillItem THEN DO:
-         ocTotIns = STRING(OfferItem.Amount).
          RETURN BillItem.BiName.
       END.
       ELSE RETURN "".
@@ -257,9 +256,9 @@ FUNCTION fGetTerminalData RETURNS CHAR
    ELSE DO:
       FIND FIRST OrderAccessory NO-LOCK  WHERE
                  OrderAccessory.Brand EQ gcBrand AND
-                 OrderAccessory.OrderID EQ iiOrderID NO-ERROR.
+                 OrderAccessory.OrderID EQ iiOrderID AND
+                 Orderaccessory.TerminalType EQ {&TERMINAL_TYPE_PHONE} NO-ERROR.
       IF AVAIL OrderAccessory THEN DO:
-         ocTotIns = STRING(OrderAccessory.Amount).
          RETURN  STRING(OrderAccessory.Manufacturer) + " " +
                  STRING(OrderAccessory.Model)        + " " +
                  STRING(OrderAccessory.ModelColor).
@@ -291,6 +290,37 @@ FUNCTION fGetPrevTariff RETURNS CHAR
    ELSE RETURN "".   
 END.   
 
+FUNCTION fGetCancellationInfo RETURNS CHAR
+   (iiOrderID AS INT,
+    icStatus AS CHAR,
+    idStartTS AS DECIMAL,
+    idEndTS AS DECIMAL,
+   OUTPUT odeTime AS DECIMAL):
+   IF icStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
+      icStatus EQ {&ORDER_STATUS_COMPANY_NEW} OR
+      icStatus EQ {&ORDER_STATUS_COMPANY_MNP } OR      
+      icStatus EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} THEN 
+      RETURN "User Cancellation".
+   ELSE DO:
+      FIND FIRST MsRequest NO-LOCK WHERE
+                 MsRequest.Brand EQ gcBrand AND
+                 MsRequest.ReqStatus EQ 2 AND
+                 MsRequest.UpdateStamp > idStartTS AND
+                 MsRequest.UpdateStamp < idEndTS AND
+                 (
+                 MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} /*18*/
+                 OR MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} /*49*/
+                 ) AND
+                 MsRequest.UpdateStamp <= MsRequest.DoneStamp NO-ERROR.
+   END.
+   IF AVAIL MsRequest THEN DO:
+      IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+         MsRequest.ReqCparam3 EQ "11" THEN RETURN "POS Order Cancellation".
+      ELSE IF MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} 
+         THEN RETURN "Order CAncellation".
+   END.
+   RETURN "".
+END.   
 /*Order activation*/
 /*Function generates order documentation*/
 FUNCTION fCreateDocumentCase1 RETURNS CHAR
@@ -370,7 +400,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    DEF VAR lcDeliveryAddress AS CHAR NO-UNDO.
    DEF VAR lcDeliveryZip AS CHAR NO-UNDO.
    DEF VAR lcDeliveryPost AS CHAR NO-UNDO.
-   DEF VAR ldeFirstPayment AS DECIMAL NO-UNDO.
+   DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
    DEF VAR ldeMonthlyFee  AS DECIMAL NO-UNDO.
    DEF VAR liMonths AS INT NO-UNDO.
    DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
@@ -381,7 +411,6 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    DEF VAR ldStatusTS      AS DEC  NO-UNDO.
    DEF VAR lcRequiredDocs AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
-   DEF VAR lcTotIns  AS CHAR NO-UNDO.
    DEF VAR lcModel   AS CHAR NO-UNDO.
    DEF VAR ldePermanencyAmount AS DECIMAL.
    DEF VAR liPermancyLength AS INT.
@@ -389,7 +418,6 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    ASSIGN
       lcCaseTypeId      = "2"
       ldStatusTS        = idPeriodStart
-      lcTotIns          = "-"
       lcModel           = "-".
 
    FIND FIRST Order NO-LOCK WHERE 
@@ -422,10 +450,9 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
          lcDeliveryPost = OrderCustomer.PostOffice.
    END.
    
-   lcModel = fGetTerminalData(iiOrderId,
-                    OUTPUT lcTotIns).
+   lcModel = fGetTerminalData(iiOrderId).
 
-   ldeFirstPayment = fGetOfferDeferredPayment(Order.Offer,
+   ldeInstallment = fGetOfferDeferredPayment(Order.Offer,
                                               Order.CrStamp,
                                               OUTPUT ldeMonthlyFee,
                                               OUTPUT liMonths,
@@ -490,7 +517,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    /*Mobile number ( contact number)*/
    STRING(OrderCustomer.MobileNumber) + lcDelim +
    /*Total Installment: 528*/
-   lcTotIns                          + lcDelim +
+   STRING(ldeInstallment)            + lcDelim +
   /*Residual value: 70*/
    STRING(ldeFinalFee +
           liMonths * ldeMonthlyFee ) + lcDelim +
@@ -564,7 +591,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    DEF VAR lcCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcName AS CHAR No-UNDO.
    DEF VAR llCreateDMS     AS LOG  NO-UNDO.
-   DEF VAR ldeFirstPayment AS DECIMAL NO-UNDO.
+   DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
    DEF VAR ldeMonthlyFee  AS DECIMAL NO-UNDO.
    DEF VAR liMonths AS INT NO-UNDO.
    DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
@@ -575,14 +602,12 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
    DEF VAR liCount AS INT NO-UNDO.
    DEF VAR lcBirthday AS CHAR NO-UNDO.
-   DEF VAR lcTotIns  AS CHAR NO-UNDO.
    DEF VAR lcModel   AS CHAR NO-UNDO.
    DEF VAR ldePermanencyAmount AS DECIMAL.
    DEF VAR liPermancyLength AS INT.
 
    ASSIGN
       lcCaseTypeId      = "3"
-      lcTotIns          = "-"
       lcModel           = "-" 
       ldStatusTS        = idPeriodStart.
 
@@ -600,9 +625,9 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
 
    FIND FIRST OrderAccessory NO-LOCK WHERE
               OrderAccessory.Brand EQ gcBrand AND
-              OrderAccessory.OrderId EQ iiOrderId NO-ERROR.
+              OrderAccessory.OrderId EQ iiOrderId AND
+              Orderaccessory.TerminalType EQ {&TERMINAL_TYPE_PHONE} NO-ERROR.
    IF AVAIL Orderaccessory THEN DO:
-      lcTotIns = STRING(OrderAccessory.Amount).
       lcModel =  STRING(OrderAccessory.Manufacturer) + " " +
                  STRING(OrderAccessory.Model)        + " " +
                 STRING(OrderAccessory.ModelColor).
@@ -615,11 +640,11 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
          lcBirthday = "-".
      ELSE lcBirthday = STRING(OrderCustomer.Birthday).
    
-   ldeFirstPayment = fGetOfferDeferredPayment(Order.Offer,
+   ldeInstallment = fGetOfferDeferredPayment(Order.Offer,
                                               Order.CrStamp,
-                                              OUTPUT ldeMonthlyFee,
-                                              OUTPUT liMonths,
-                                              OUTPUT ldeFinalFee).
+                                              OUTPUT ldeMonthlyFee, 
+                                              OUTPUT liMonths, /*24*/
+                                              OUTPUT ldeFinalFee). /*residual*/
    RUN offer_penaltyfee.p(Order.OrderID,
                           OUTPUT liPermancyLength,
                           OUTPUT ldePermanencyAmount).
@@ -647,7 +672,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    fPrintDateD(OrderCustomer.FoundationDate) + lcDelim +
    /*Full Name: ELENA DE FRANCISCO MARTINEZ*/
    lcName                         + lcDelim +
-   /*Nationality: España*/
+   /*Nationality: ES*/
    STRING(OrderCustomer.Nationality) + lcDelim +
    /*Doc ID Type: NIF*/
    STRING(Order.OrdererIDType)  + lcDelim +
@@ -674,8 +699,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    /*Mobile number ( contact number ): 659016137*/
    STRING(OrderCustomer.MobileNumber) + lcDelim +  
    /*Total Installment: 720*/
-   STRING(ldeFinalFee + 
-          liMonths * ldeMonthlyFee ) + lcDelim +
+   STRING(ldeInstallment)           + lcDelim +
    /*Residual value: 50*/
    STRING(ldeFinalFee)              + lcDelim + 
    /*Permanency: 400*/
@@ -782,12 +806,11 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCaseTypeId AS CHAR NO-UNDO.
    DEF VAR llCreateDMS     AS LOG  NO-UNDO.
-   DEF VAR ldeFirstPayment AS DECIMAL NO-UNDO.
+   DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
    DEF VAR ldeMonthlyFee  AS DECIMAL NO-UNDO.
    DEF VAR liMonths AS INT NO-UNDO.
    DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
-   DEF VAR lcTotIns  AS CHAR NO-UNDO.
    DEF VAR lcModel   AS CHAR NO-UNDO.
    DEF VAR ldePermanencyAmount AS DECIMAL.
    DEF VAR liPermancyLength AS INT.
@@ -870,20 +893,8 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                NEXT.
             END. 
             /*Ilkka: Search by using fGetTerminalData?*/
-            FIND FIRST OrderAccessory NO-LOCK  WHERE
-                       OrderAccessory.Brand EQ gcBrand AND
-                       OrderAccessory.OrderID EQ MsRequest.ReqIparam1 NO-ERROR.
-            IF AVAIL Orderaccessory THEN DO:
-               lcTotIns = STRING(OrderAccessory.Amount).
-               lcModel =  STRING(OrderAccessory.Manufacturer) + " " +
-                          STRING(OrderAccessory.Model)        + " " +
-                          STRING(OrderAccessory.ModelColor).
-            END.
-            ELSE DO:
-               lcTotIns = "-".
-               lcModel = "-".
-            END.
-            ldeFirstPayment = fGetOfferDeferredPayment(Order.Offer,
+            lcModel = fGetTerminalData(MsRequest.ReqIparam1).
+            ldeInstallment = fGetOfferDeferredPayment(Order.Offer,
                                                        Order.CrStamp,
                                                        OUTPUT ldeMonthlyFee,
                                                        OUTPUT liMonths,
@@ -913,7 +924,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*New Handset*/
             STRING(lcModel)                                 + lcDelim +
             /*New Installment*/
-            STRING(lcTotIns)                                + lcDelim +
+            STRING(ldeInstallment)                          + lcDelim +
             /*New Residual value*/
             STRING(ldeFinalFee)                             + lcDelim +
             /*New Permanency*/
@@ -1020,6 +1031,9 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    DEF VAR ldStatusTS      AS DEC  NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR llCreateDMS     AS LOG  NO-UNDO.
+   DEF VAR ldeCancellationTime AS DECIMAL NO-UNDO.
+   DEF VAR lcCancellationType AS CHAR NO-UNDO.
+   DEF VAR lcPrevStatus AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
 
    ASSIGN
@@ -1032,8 +1046,13 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    IF NOT AVAIL Order THEN 
       RETURN "6:Order not available" + STRING(iiOrderId).
 
+   lcPrevStatus = fGetOrderStatusDMS(Order.ContractID).
+   lcCAncellationType = fGetCancellationInfo(Order.OrderId, 
+                                             lcPrevStatus,
+                                             idPeriodStart, 
+                                             idPeriodEnd,
+                                             OUTPUT ldeCAncellationTime).
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
-
    PUT STREAM sOutFile UNFORMATTED
    lcCaseTypeID                    + lcDelim +
    /*Order_ID*/
@@ -1047,11 +1066,11 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    /*Order_date*/
    fPrintDate(Order.CrStamp)      + lcDelim +
    /*Status_Code*/
-   fGetOrderStatusDMS(Order.ContractID) + lcDelim + /* read from DMS table*/
+   lcPrevStatus                   + lcDelim + 
    /*Cancellation date*/
-   STRING(Order.CrStamp)          + lcDelim + /*Todo this is not valid*/
+   fPrintDate(ldeCancellationTime)  + lcDelim + 
    /*Cancellation type*/
-   " -"  SKIP. /*TODO */
+   lcCancellationType  SKIP.
    OUTPUT STREAM sOutFile CLOSE.
    /*Document type,DocStatusCode,RevisionComment*/
    lcDocListEntries = lcCaseTypeID + "," + lcDocStatus + "," + "Doc created".
