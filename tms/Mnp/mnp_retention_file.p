@@ -308,13 +308,6 @@ PROCEDURE pFileDump:
    DEF VAR liMaxPeriods AS INT NO-UNDO init 100. 
    DEF VAR liPeriods AS INT NO-UNDO. 
 
-   IF iiPlatform > 0 THEN DO:
-      IF NOT CAN-FIND(FIRST ttData WHERE  
-             ttData.RetentionPlatform = lcRetentionPlatform[iiPlatform])
-      THEN RETURN.
-   END.
-   ELSE IF NOT CAN-FIND(FIRST ttData) THEN RETURN.
-
    lcDate = string(year(today),"9999") + 
             string(month(today),"99") +
             string(day(today),"99").
@@ -338,7 +331,19 @@ PROCEDURE pFileDump:
       OUTPUT STREAM sout TO VALUE (lcRetentionFile[iiPlatform]) APPEND.
       liPlatform = iiPlatform.
    END.
-   
+
+   IF iiPlatform > 0 THEN DO:
+      IF NOT CAN-FIND(FIRST ttData WHERE
+             ttData.RetentionPlatform = lcRetentionPlatform[iiPlatform])
+      THEN DO:
+         OUTPUT STREAM sout CLOSE.
+         RETURN.
+      END.
+   END.
+   ELSE IF NOT CAN-FIND(FIRST ttData) THEN DO:
+      OUTPUT STREAM sout CLOSE.
+      RETURN.
+   END.
    FOR EACH ttData WHERE
       ttData.RetentionPlatform = lcRetention NO-LOCK,
       FIRST Customer NO-LOCK WHERE
