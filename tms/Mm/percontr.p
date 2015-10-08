@@ -521,6 +521,25 @@ PROCEDURE pContractActivation:
                RETURN.
             END.
 
+            /* Find original installment contract */   
+            FIND FIRST DCCLI NO-LOCK WHERE
+                       DCCLI.Brand   = gcBrand AND
+                       DCCLI.DCEvent BEGINS "PAYTERM" AND
+                       DCCLI.MsSeq   = MsRequest.MsSeq AND 
+                       DCCLI.PerContractId = MsRequest.ReqIParam3 NO-ERROR.
+
+            IF NOT AVAIL DCCLI THEN DO:
+               fReqError("Installment contract not found").
+               RETURN.
+            END.
+
+            IF DCCLI.TermDate NE ? THEN DO:
+               fReqError("Installment contract terminated").
+               RETURN.
+            END.
+
+            RELEASE DCCLI.
+
             FIND FIRST OrderAction NO-LOCK WHERE
                        OrderAction.Brand = gcBrand AND
                        OrderAction.OrderId = MsRequest.ReqIParam1 AND
@@ -543,7 +562,8 @@ PROCEDURE pContractActivation:
                   END.
                END.
             END.
-            ELSE fReqLog("RVTERMDT1DISC discount not found").
+            ELSE fReqLog(SUBST("RVTERMDT1DISC discount not found: &1",
+                               MsRequest.ReqIParam1)).
                
             FIND FIRST FMItem NO-LOCK WHERE
                        FMITem.Brand = gcBrand AND
