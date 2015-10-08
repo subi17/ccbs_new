@@ -30,6 +30,9 @@ DEF VAR lcSHParam AS CHAR NO-UNDO.
 FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
 IF NOT AVAILABLE MobSub THEN RETURN "ERROR:Subscription not available".
 
+FIND Customer WHERE Customer.Custnum = MobSub.Custnum NO-LOCK NO-ERROR.
+IF NOT AVAILABLE Customer THEN RETURN "ERROR:Customer not available".
+
 FIND Order WHERE 
      Order.Brand   = gcBrand AND
      Order.OrderId = iiOrderId NO-LOCK NO-ERROR. 
@@ -370,10 +373,15 @@ PROCEDURE pQ25Extension:
    DEF VAR lcResult AS CHAR NO-UNDO. 
    DEF VAR ldeContractActStamp AS DEC NO-UNDO. 
    DEF VAR ldaDate AS DATE NO-UNDO. 
+   DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
+   DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
+
+   DEF BUFFER SingleFee FOR SingleFee.
+   DEF BUFFER MsRequest FOR MsRequest.
    
    liPercontractId = INT(OrderAction.ItemKey) NO-ERROR.
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
-      RETURN "ERROR:Q25 extension failed (incorrect contract id)".
+      RETURN "ERROR: incorrect contract id".
 
    FIND SingleFee USE-INDEX Custnum WHERE
         SingleFee.Brand       = gcBrand AND
@@ -385,14 +393,16 @@ PROCEDURE pQ25Extension:
         SingleFee.CalcObj     = "RVTERM" NO-LOCK NO-ERROR.
    
    IF NOT AVAIL SingleFee THEN
-      RETURN "ERROR:Q25 extension failed (residual fee not found)".
+      RETURN "ERROR: residual fee not found".
 
-   ldaDate = fPer2Date(SingleFee.BillPeriod,0) - 1.
+   ldaDate = fPer2Date(SingleFee.BillPeriod,0).
    ldaDate = DATE(MONTH(ldaDate),21,YEAR(ldaDate)).
 
    IF TODAY < ldaDate THEN
       ldeContractActStamp = fMake2dt(ldaDate,0).
-   ELSE ldeContractActStamp = fSecOffset(fMakeTS(),15).
+   ELSE ASSIGN
+      ldeContractActStamp = fSecOffset(fMakeTS(),5)
+      ldaDate = TODAY.
 
    liRequest = fPCActionRequest(MobSub.MsSeq,
                              "RVTERM12",
@@ -416,6 +426,29 @@ PROCEDURE pQ25Extension:
       IF AVAIL msrequest THEN ASSIGN
          msrequest.ReqIparam1 = Order.OrderId.
       RELEASE msrequest.
+
+      lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
+                            TODAY,
+                            Customer.Language,
+                            OUTPUT ldeSMSStamp).
+
+      IF lcSMSTxt > "" THEN DO:
+
+         ASSIGN
+            lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
+                                lower(entry(month(ldaDate),{&MONTHS_ES})))
+            lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaDate)))
+            lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
+                  STRING(ROUND(SingleFee.Amt / 12, 2))).
+
+         fMakeSchedSMS2(MobSub.CustNum,
+                        MobSub.CLI,
+                        {&SMSTYPE_CONTRACT_ACTIVATION},
+                        lcSMSTxt,
+                        ldeSMSStamp,
+                        "Yoigo info",
+                        "").
+      END.
    END.
       
 
