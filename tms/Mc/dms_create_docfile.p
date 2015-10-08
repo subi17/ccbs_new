@@ -657,18 +657,23 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
               OrderAccessory.OrderId EQ iiOrderId AND
               Orderaccessory.TerminalType EQ {&TERMINAL_TYPE_PHONE} NO-ERROR.
    IF AVAIL Orderaccessory THEN DO:
-      lcModel =  STRING(OrderAccessory.Manufacturer) + " " +
-                 STRING(OrderAccessory.Model)        + " " +
-                STRING(OrderAccessory.ModelColor).
+      FIND FIRST Billitem NO-LOCK WHERE
+                 BillItem.Brand   = gcBrand AND
+                 BillItem.BillCode = OrderAccessory.ProductCode 
+                 NO-ERROR.
+      IF AVAILABLE BillItem THEN lcModel = BillItem.BIName.
+      ELSE lcModel = STRING(OrderAccessory.Manufacturer) + " " +
+                     STRING(OrderAccessory.Model)        + " " +
+                     STRING(OrderAccessory.ModelColor).
    END.
-      ASSIGN
-      lcName = OrderCustomer.Firstname + " " +
-                  OrderCustomer.Surname1 + " " +
-                  OrderCustomer.Surname2. 
-     IF OrderCustomer.Birthday EQ ? THEN
-         lcBirthday = "-".
-     ELSE lcBirthday = STRING(OrderCustomer.Birthday).
    
+   ASSIGN lcName = OrderCustomer.Firstname + " " +
+                   OrderCustomer.Surname1 + " " +
+                   OrderCustomer.Surname2. 
+
+   IF OrderCustomer.Birthday EQ ? THEN lcBirthday = "-".
+   ELSE lcBirthday = STRING(OrderCustomer.Birthday).
+
    ldeInstallment = fGetOfferDeferredPayment(Order.Offer,
                                               Order.CrStamp,
                                               OUTPUT ldeMonthlyFee, 
