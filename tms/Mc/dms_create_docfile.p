@@ -270,23 +270,27 @@ FUNCTION fGetTerminalData RETURNS CHAR
 END.
 
 
-/*Previous tariff: In case of Portability this value can be
- TARJ for prepaid o CONT for postpaid.
- In case of STC+RENEWAL would be the current tariff,
- and in case of Fusion STC would be the current tariff.
- In all other cases this field would be blank*/
-/*0 for New adds, 1 for portability, 2 for Renewal and 4 for Fusion STC*/
+/* Previous tariff: In case of Portability this value can be TARJ 
+   for prepaid and CONT for postpaid. In case of STC+RENEWAL and 
+   Fusion STC Previous tariff should contain original tariff before STC happens. 
+   In all other cases this field would be blank */
+/* 0 for New adds, 1 for portability, 2 for Renewal and 4 for Fusion STC */
 FUNCTION fGetPrevTariff RETURNS CHAR
    (iiOrderType AS INT,
-    icCLIType AS CHAR,
+    icCLI AS CHAR,
     ilgPrevType AS LOGICAL):
    IF iiOrderType EQ {&ORDER_TYPE_MNP} /*1 Portability*/ THEN DO:
       /*pre=true pos=false*/
       IF ilgPrevType EQ TRUE THEN RETURN "TARJ".
       ELSE RETURN "CONT".
    END.
-   IF iiOrderType EQ {&ORDER_TYPE_STC} /*4 Fusion STC*/ OR
-      iiOrderType EQ {&ORDER_TYPE_RENEWAL} /*2 Renewal */ THEN RETURN icCLIType.
+   ELSE IF iiOrderType EQ {&ORDER_TYPE_STC} /*4 Fusion STC*/ OR
+           iiOrderType EQ {&ORDER_TYPE_RENEWAL} /*2 Renewal */ THEN DO:
+      FIND FIRST MsOwner NO-LOCK WHERE
+                 Msowner.Brand = gcBrand AND
+                 MsOwner.CLI   = icCLI NO-ERROR.
+      IF AVAILABLE MSOwner THEN RETURN MsOwner.TariffBundle.
+   END. 
    ELSE RETURN "".   
 END.   
 
@@ -389,7 +393,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    STRING(Order.CLIType)           + lcDelim +
    /*Previous tariff*/
    fGetPrevTariff(Order.OrderType, 
-                  Order.CLIType,
+                  Order.CLI,
                   Order.OldPayType) + lcDelim +
    /**/
    STRING(Order.OrderType)          + lcDelim +
@@ -519,7 +523,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    STRING(Order.CLIType)          + lcDelim +
    /*Previous Tariff: CONT*/
    fGetPrevTariff(Order.OrderType,
-                  Order.CLIType,
+                  Order.CLI,
                   Order.OldPayType) + lcDelim +
    /*Donor Operator: Vodafone*/
    STRING(Order.CurrOper)          + lcDelim +
@@ -707,7 +711,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    STRING(Order.CLIType)          + lcDelim +
    /*Previous Tariff: CONT*/
    fGetPrevTariff(Order.OrderType,
-                  Order.CLIType,
+                  Order.CLI,
                   Order.OldPayType) + lcDelim + 
    /*Donor operator: MoviStar*/
    STRING(Order.CurrOper)          + lcDelim +
