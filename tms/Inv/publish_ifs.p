@@ -114,6 +114,8 @@ DEFINE STREAM strout.
    /* Send via mail */
       SendMail(lcLogFile,"").
    
+   OUTPUT STREAM strout CLOSE.
+
    IF llgError THEN LEAVE.
 
    lcContent = "Delivery state was set to " + STRING(liCount) + " Invoices" + "  " +

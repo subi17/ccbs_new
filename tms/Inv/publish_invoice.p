@@ -12,14 +12,14 @@
 {tmsconst.i}
 {fmakemsreq.i}
 {email.i}
+{host.i}
 
 DEFINE INPUT PARAMETER iiMsRequest AS INT NO-UNDO. 
 
 DEF VAR ldaDateFrom    AS DATE NO-UNDO. 
 DEF VAR liCount        AS INT  NO-UNDO. 
-DEF VAR lcDumpFileName AS CHAR NO-UNDO. 
 DEF VAR oiEvents       AS INT  NO-UNDO. 
-DEF VAR olInterrupted  AS LOG  NO-UNDO. 
+DEF VAR liDumped       AS INT  NO-UNDO. 
 DEF VAR lcToday        AS CHAR NO-UNDO.
 DEF VAR lcAddrConfDir  AS CHAR NO-UNDO. 
 DEF VAR lcContent      AS CHAR NO-UNDO. 
@@ -44,15 +44,13 @@ DEFINE STREAM strout.
           oiEvents       = 0
           lcContent      = ""
           llgError       = NO
-          olInterrupted  = NO
+          liDumped       = 0
           ldaDateFrom    = DATE(MONTH(TODAY),1,YEAR(TODAY))
-          lcDumpFileName = fCParam("HPD","DumpOutDir")
           lcAddrConfDir  = fCParamC("RepConfDir")
           lcContLogDir   = fCParam("PublishInvoice","ContentLogDir")
           lcToday        = STRING(YEAR(TODAY),"9999") + 
                            STRING(MONTH(TODAY),"99")  +
                            STRING(DAY(TODAY),"99") 
-          lcDumpFileName = lcDumpFileName + "invoice_Full_" + lcToday + STRING(TIME) + ".txt.gz"
           lcLogFile      = lcContLogDir + "publishinvoice_" + lcToday + STRING(TIME) + ".log".
 
    OUTPUT STREAM strout TO VALUE(lcLogFile) APPEND.
@@ -94,32 +92,24 @@ DEFINE STREAM strout.
 
    IF llgError THEN LEAVE.
 
-   /* Publish invoices to HPD */
-   RUN invoicedump_pupu(87,              /* Dump ID */
-                        lcDumpFileName,  
-                        "Full",
-                        0,
-                        "",
-                        "",
-                        OUTPUT oiEvents,
-                        OUTPUT olInterrupted). 
-
-   IF olInterrupted THEN DO: 
-      fReqStatus(3,"Publish Invoice Full dump to HPD Interrupted!.").
-      
-      PUT STREAM strout UNFORMATTED 
-         "Publish Invoice Full dump to HPD Interrupted!." SKIP.
-      
-      llgError   = YES.
-   END.      
-   ELSE 
+   RUN dumpfile_run(86,  /* Dump ID */
+                    "Full",
+                    "",
+                    fIsThisReplica(),
+                    OUTPUT liDumped). 
+   
+   IF liDumped >= 0 THEN
       PUT STREAM strout UNFORMATTED
          "Published total Invoice full dump event count : " + STRING(oiEvents) SKIP.
-
+   ELSE
+      PUT STREAM strout UNFORMATTED
+         "Error in creating Invoice full dump event !" SKIP.
    /* Mail recipients */
    GetRecipients(lcAddrConfDir).
    /* Send via mail */
    SendMail(lcLogFile,"").
+
+   OUTPUT STREAM strout CLOSE.
 
    IF llgError THEN LEAVE.
   
