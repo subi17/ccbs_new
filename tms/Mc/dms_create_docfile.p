@@ -299,21 +299,6 @@ FUNCTION fGetPrevTariff RETURNS CHAR
    ELSE RETURN "".   
 END.   
 
-FUNCTION fCountIMEIModifications RETURN CHAR
-   (iiMsSeq AS INT):
-   DEF VAR liCount AS INT NO-UNDO.
-   FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.MsSeq EQ iiMsSeq AND
-            MsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} AND
-            MsRequest.ReqStatus EQ 2 AND
-            MsRequest.ReqCparam6 NE "" AND
-            MsRequest.UpdateStamp <= MsRequest.DoneStamp :
-      liCount = liCount + 1.
-   END.
-   RETURN STRING(liCount).
-END.
-
-
 FUNCTION fGetCancellationInfo RETURNS CHAR
    (iiMsSeq AS INT,
     icStatus AS CHAR,
@@ -354,6 +339,21 @@ FUNCTION fGetCancellationInfo RETURNS CHAR
    RETURN "".
 END.
 
+
+
+FUNCTION fCountIMEIModifications RETURN CHAR
+   (iiMsSeq AS INT):
+   DEF VAR liCount AS INT NO-UNDO.
+   FOR EACH MsRequest NO-LOCK WHERE
+            MsRequest.MsSeq EQ iiMsSeq AND
+            MsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} AND
+            MsRequest.ReqStatus EQ 2 AND
+            MsRequest.ReqCparam6 NE "" AND
+            MsRequest.UpdateStamp <= MsRequest.DoneStamp :
+      liCount = liCount + 1.
+   END.
+   RETURN STRING(liCount).
+END.
 
 /*Order activation*/
 /*Function generates order documentation*/
