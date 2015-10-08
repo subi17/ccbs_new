@@ -332,18 +332,6 @@ PROCEDURE pFileDump:
       liPlatform = iiPlatform.
    END.
 
-   IF iiPlatform > 0 THEN DO:
-      IF NOT CAN-FIND(FIRST ttData WHERE
-             ttData.RetentionPlatform = lcRetentionPlatform[iiPlatform])
-      THEN DO:
-         OUTPUT STREAM sout CLOSE.
-         RETURN.
-      END.
-   END.
-   ELSE IF NOT CAN-FIND(FIRST ttData) THEN DO:
-      OUTPUT STREAM sout CLOSE.
-      RETURN.
-   END.
    FOR EACH ttData WHERE
       ttData.RetentionPlatform = lcRetention NO-LOCK,
       FIRST Customer NO-LOCK WHERE
