@@ -333,8 +333,10 @@ FUNCTION fGetPrevTariff RETURNS CHAR
            iiOrderType EQ {&ORDER_TYPE_RENEWAL} /*2 Renewal */ THEN DO:
       FIND FIRST MsOwner NO-LOCK WHERE
                  Msowner.Brand = gcBrand AND
-                 MsOwner.CLI   = icCLI NO-ERROR.
-      IF AVAILABLE MSOwner THEN RETURN MsOwner.TariffBundle.
+                 MsOwner.CLI   = icCLI AND
+                 MsOwner.TsEnd < 99999999.99999 
+                 NO-ERROR.
+      IF AVAILABLE MSOwner THEN RETURN MsOwner.CLIType.
    END. 
    ELSE RETURN "".   
 END.   
@@ -897,14 +899,11 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             lcCaseTypeId = lcSTCCaseTypeId.
             lcTariff = "".
             FIND FIRST MsOwner NO-LOCK WHERE
-                          MsOwner.MsSeq EQ MsRequest.MsSeq AND
-                          MsOwner.TsBegin < MsRequest.ReqDparam1 
-                          USE-INDEX MsSeq NO-ERROR.
-            IF AVAIL MsOwner THEN DO: 
-               IF MsOwner.TariffBundle NE "" THEN 
-                  lcTariff = MsOwner.TariffBundle.
-               ELSE lcTariff = MsRequest.ReqCparam1.   
-            END.      
+                       MsOwner.Brand = gcBrand AND
+                       MsOwner.CLI   = MsRequest.CLI AND
+                       MsOwner.TsEnd < 99999999.99999 
+                       NO-ERROR.
+            IF AVAIL MsOwner THEN lcTariff = MsOwner.CLIType.      
             ELSE lcTariff = MsRequest.ReqCparam1.
 
             lcCaseFileRow =
