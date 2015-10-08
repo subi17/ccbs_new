@@ -8,7 +8,6 @@
             username;string;mandatory;newton username
  * @output  result;struct;empty
  */
-
 {xmlrpc/xmlrpc_access.i}
 
 {fmakemsreq.i}
@@ -124,8 +123,7 @@ IF LOOKUP("reason",lcStruct) > 0 THEN DO:
 END. 
 
 RELEASE SubsTerminal.
-
-/* FILL FIELDS before removing comments.
+/*
 fCreateRequest({&REQTYPE_IMEI_CHANGE}, /* heat balance query request */
                0 , /* chgstamp */
                "", /* creator */
@@ -135,7 +133,6 @@ fCreateRequest({&REQTYPE_IMEI_CHANGE}, /* heat balance query request */
 /*empty contract_id if it is not from VFR*/
 IF pcChannel NE {&DMS_VFR_REQUEST} THEN
    pcContractId = "".
-dms
 ASSIGN
 /*   bCreaReq.msseq = Order.msseq*/
 /*   bCreaReq.custnum = Order.custnum*/
@@ -143,7 +140,7 @@ ASSIGN
 /*   bCreaReq.reqcparam1 = lcOldIMEI*/
 /*   bCreaReq.reqcparam2 = pcIMEI*/
 /*   bCreaReq.reqcparam3 = pcOfferId*/
-/*   bCreaReq.reqcparam6 = pcContractId*/
+   bCreaReq.reqcparam6 = pcContractId
 /*   bCreaReq.reqiparam1 = Order.OrderId*/
    bCreaReq.ReqSource  = {&REQUEST_SOURCE_NEWTON}.
 
