@@ -290,17 +290,34 @@ FUNCTION fGetPrevTariff RETURNS CHAR
    ELSE RETURN "".   
 END.   
 
+FUNCTION fCountIMEIModifications RETURN CHAR
+   (iiMsSeq AS INT):
+   DEF VAR liCount AS INT NO-UNDO.
+   FOR EACH MsRequest NO-LOCK WHERE
+            MsRequest.MsSeq EQ iiMsSeq AND
+            MsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} AND
+            MsRequest.ReqStatus EQ 2 AND
+            MsRequest.ReqCparam6 NE "" AND
+            MsRequest.UpdateStamp <= MsRequest.DoneStamp :
+      liCount = liCount + 1.
+   END.
+   RETURN STRING(liCount).
+END.
+
+
 FUNCTION fGetCancellationInfo RETURNS CHAR
-   (iiOrderID AS INT,
+   (iiMsSeq AS INT,
     icStatus AS CHAR,
     idStartTS AS DECIMAL,
     idEndTS AS DECIMAL,
    OUTPUT odeTime AS DECIMAL):
+   odeTime = idEndTS.
    IF icStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
       icStatus EQ {&ORDER_STATUS_COMPANY_NEW} OR
-      icStatus EQ {&ORDER_STATUS_COMPANY_MNP } OR      
-      icStatus EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} THEN 
+      icStatus EQ {&ORDER_STATUS_COMPANY_MNP } OR
+      icStatus EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} THEN DO:
       RETURN "User Cancellation".
+   END.
    ELSE DO:
       FIND FIRST MsRequest NO-LOCK WHERE
                  MsRequest.Brand EQ gcBrand AND
@@ -310,17 +327,25 @@ FUNCTION fGetCancellationInfo RETURNS CHAR
                  (
                  MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} /*18*/
                  OR MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} /*49*/
-                 ) AND
+                 )
+                 AND Msrequest.MsSeq EQ iiMsSeq AND
                  MsRequest.UpdateStamp <= MsRequest.DoneStamp NO-ERROR.
    END.
    IF AVAIL MsRequest THEN DO:
       IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-         MsRequest.ReqCparam3 EQ "11" THEN RETURN "POS Order Cancellation".
-      ELSE IF MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} 
-         THEN RETURN "Order CAncellation".
+         MsRequest.ReqCparam3 EQ "11" THEN DO:
+         odeTime = MsRequest.CreStamp.
+         RETURN "POS Order Cancellation".
+      END.
+      ELSE IF MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} THEN DO:
+         odeTime = MsRequest.CreStamp.
+         RETURN "Order CAncellation".
+      END.
    END.
    RETURN "".
-END.   
+END.
+
+
 /*Order activation*/
 /*Function generates order documentation*/
 FUNCTION fCreateDocumentCase1 RETURNS CHAR
@@ -830,7 +855,8 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
              OR MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}  /*0*/
              OR MsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} /*80*/
             ) AND
-              MsRequest.UpdateStamp <= MsRequest.DoneStamp :
+            MsRequest.ReqCparam6 NE "" AND
+            MsRequest.UpdateStamp <= MsRequest.DoneStamp :
 
       CASE MsRequest.ReqType:
          WHEN {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}  THEN DO:
@@ -892,7 +918,6 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                fLogLine(lcCaseFileRow,"Order not found " + lcCaseTypeId).
                NEXT.
             END. 
-            /*Ilkka: Search by using fGetTerminalData?*/
             lcModel = fGetTerminalData(MsRequest.ReqIparam1).
             ldeInstallment = fGetOfferDeferredPayment(Order.Offer,
                                                        Order.CrStamp,
@@ -918,7 +943,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*Modification date*/
             fPrintDate(MsRequest.UpdateStamp)               + lcDelim +
             /*Modification number*/
-            /**************** MISSING*/                      
+            fCountIMEIModifications(MsRequest.MsSeq)        + lcDelim +
             /*New IMEI*/
             STRING(MsRequest.ReqCparam2)                    + lcDelim +
             /*New Handset*/
@@ -1047,7 +1072,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
       RETURN "6:Order not available" + STRING(iiOrderId).
 
    lcPrevStatus = fGetOrderStatusDMS(Order.ContractID).
-   lcCAncellationType = fGetCancellationInfo(Order.OrderId, 
+   lcCAncellationType = fGetCancellationInfo(Order.MsSeq, 
                                              lcPrevStatus,
                                              idPeriodStart, 
                                              idPeriodEnd,
@@ -1068,7 +1093,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    /*Status_Code*/
    lcPrevStatus                   + lcDelim + 
    /*Cancellation date*/
-   fPrintDate(ldeCancellationTime)  + lcDelim + 
+   fPrintDate(ldeCancellationTime) + lcDelim + 
    /*Cancellation type*/
    lcCancellationType  SKIP.
    OUTPUT STREAM sOutFile CLOSE.
