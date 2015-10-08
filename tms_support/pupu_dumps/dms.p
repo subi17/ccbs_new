@@ -51,12 +51,12 @@ FOR EACH DMS NO-LOCK:
        fNotNull(STRING(RECID(DMS)))          lcDel
        fNotNull(STRING(DMS.DMSID))           lcDel
        fNotNull(STRING(ldtTimeStamp))        lcDel
+       fNotNull(DMS.ContractID)              lcDel
        fNotNull(STRING(DMS.DMSID))           lcDel 
        fNotNull(DMS.DmsExternalID)           lcDel
-       fNotNull(DMS.CaseTypeID)              lcDel
-       fNotNull(DMS.ContractID)              lcDel
        fNotNull(DMS.HostTable)               lcDel
        fNotNull(STRING(DMS.HostId))          lcDel 
+       fNotNull(DMS.CaseTypeID)              lcDel
        fNotNull(DMS.StatusCode)              lcDel
        fNotNull(DMS.StatusDesc)              lcDel
        fNotNull(STRING(DMS.StatusTS))        SKIP.

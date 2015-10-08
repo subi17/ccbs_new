@@ -46,10 +46,10 @@ FOR EACH DMSDoc NO-LOCK:
    END. /* IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN DO: */
 
    PUT STREAM slog UNFORMATTED
-       "DMSDoc"                                 lcDel
+       "DMSDoc"                              lcDel
        "CREATE"                              lcDel
-       fNotNull(STRING(RECID(DMSDoc)))          lcDel
-       fNotNull(STRING(DMSDoc.DMSID))           lcDel
+       fNotNull(STRING(RECID(DMSDoc)))       lcDel
+       fNotNull(STRING(DMSDoc.DMSID))        lcDel
        fNotNull(STRING(ldtTimeStamp))        lcDel
        fNotNull(STRING(DMSDoc.DMSID))        lcDel 
        fNotNull(DMSDoc.DocTypeID)            lcDel
