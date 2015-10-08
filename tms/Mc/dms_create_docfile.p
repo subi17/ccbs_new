@@ -259,9 +259,14 @@ FUNCTION fGetTerminalData RETURNS CHAR
                  OrderAccessory.OrderID EQ iiOrderID AND
                  Orderaccessory.TerminalType EQ {&TERMINAL_TYPE_PHONE} NO-ERROR.
       IF AVAIL OrderAccessory THEN DO:
-         RETURN  STRING(OrderAccessory.Manufacturer) + " " +
-                 STRING(OrderAccessory.Model)        + " " +
-                 STRING(OrderAccessory.ModelColor).
+         FIND FIRST Billitem NO-LOCK WHERE
+                    BillItem.Brand   = gcBrand AND
+                    BillItem.BillCode = OrderAccessory.ProductCode 
+                    NO-ERROR.
+         IF AVAILABLE BillItem THEN RETURN BillItem.BIName.
+         ELSE RETURN STRING(OrderAccessory.Manufacturer) + " " +
+                     STRING(OrderAccessory.Model)        + " " +
+                     STRING(OrderAccessory.ModelColor).
       END.
       ELSE RETURN "".
    END.
