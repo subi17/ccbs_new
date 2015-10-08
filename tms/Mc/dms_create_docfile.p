@@ -299,47 +299,6 @@ FUNCTION fGetPrevTariff RETURNS CHAR
    ELSE RETURN "".   
 END.   
 
-FUNCTION fGetCancellationInfo RETURNS CHAR
-   (iiMsSeq AS INT,
-    icStatus AS CHAR,
-    idStartTS AS DECIMAL,
-    idEndTS AS DECIMAL,
-   OUTPUT odeTime AS DECIMAL):
-   odeTime = idEndTS.
-   IF icStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
-      icStatus EQ {&ORDER_STATUS_COMPANY_NEW} OR
-      icStatus EQ {&ORDER_STATUS_COMPANY_MNP } OR
-      icStatus EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} THEN DO:
-      RETURN "User Cancellation".
-   END.
-   ELSE DO:
-      FIND FIRST MsRequest NO-LOCK WHERE
-                 MsRequest.Brand EQ gcBrand AND
-                 MsRequest.ReqStatus EQ 2 AND
-                 MsRequest.UpdateStamp > idStartTS AND
-                 MsRequest.UpdateStamp < idEndTS AND
-                 (
-                 MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} /*18*/
-                 OR MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} /*49*/
-                 )
-                 AND Msrequest.MsSeq EQ iiMsSeq AND
-                 MsRequest.UpdateStamp <= MsRequest.DoneStamp NO-ERROR.
-   END.
-   IF AVAIL MsRequest THEN DO:
-      IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-         MsRequest.ReqCparam3 EQ "11" THEN DO:
-         odeTime = MsRequest.CreStamp.
-         RETURN "POS Order Cancellation".
-      END.
-      ELSE IF MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} THEN DO:
-         odeTime = MsRequest.CreStamp.
-         RETURN "Order CAncellation".
-      END.
-   END.
-   RETURN "".
-END.
-
-
 
 FUNCTION fCountIMEIModifications RETURN CHAR
    (iiMsSeq AS INT):
