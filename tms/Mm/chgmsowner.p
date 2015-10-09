@@ -21,7 +21,6 @@
 {msagrcustchg.i}
 {fcustchangereq.i}
 {fuserright.i}
-{create_eventlog.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -121,7 +120,6 @@ DEF VAR liDelType       AS INT NO-UNDO.
 DEF BUFFER bNewCust     FOR Customer.
 DEF BUFFER bCustomer    FOR Customer.
 DEF BUFFER bCurrentCust FOR Customer.
-DEF BUFFER bMobSub      FOR MobSub.
 
 FORM
 
@@ -571,34 +569,33 @@ FUNCTION fDispPostOffice RETURNS LOGICAL
 END FUNCTION. 
 
 FUNCTION fCopyCustData RETURNS LOGICAL
-   (BUFFER ibCopyFrom FOR Customer,
-    ilUpdCustData AS LOG):
+   (BUFFER ibCopyFrom FOR Customer):
 
    ASSIGN 
-      liNewCust1       = ibCopyFrom.Custnum
-      lcNewCustIDType  = ibCopyFrom.CustIDType
-      lcNewCustId      = ibCopyFrom.OrgID
-      lcNewCOName      = ibCopyFrom.COName         WHEN ilUpdCustData
-      lcNewAddress     = ibCopyFrom.Address        WHEN ilUpdCustData
-      lcNewZipCode     = ibCopyFrom.ZipCode        WHEN ilUpdCustData
-      lcNewPost        = ibCopyFrom.PostOffice     WHEN ilUpdCustData
-      lcNewRegion      = ibCopyFrom.Region         WHEN ilUpdCustData
-      liNewLanguage    = ibCopyFrom.Language       WHEN ilUpdCustData
-      lcNewCountry     = ibCopyFrom.Country        WHEN ilUpdCustData
-      lcNewEMail       = ibCopyFrom.EMail          WHEN ilUpdCustData
-      lcNewBankAcc     = ibCopyFrom.BankAcc        WHEN ilUpdCustData
-      lcNewNationality = ibCopyFrom.Nationality    WHEN ilUpdCustData
-      lcSmsnumber      = ibCopyFrom.SMSnumber      WHEN ilUpdCustData
-      lcPhone          = ibCopyFrom.Phone          WHEN ilUpdCustData
-      llDirMarkSMS     = ibCopyFrom.DirMarkSMS     WHEN ilUpdCustData
-      llDirMarkEmail   = ibCopyFrom.DirMarkEmail   WHEN ilUpdCustData
-      llDirMarkPost    = ibCopyFrom.DirMarkPost    WHEN ilUpdCustData
-      llOutMarkSMS     = ibCopyFrom.OutMarkSMS     WHEN ilUpdCustData
-      llOutMarkEmail   = ibCopyFrom.OutMarkEmail   WHEN ilUpdCustData
-      llOutMarkPost    = ibCopyFrom.OutMarkPost    WHEN ilUpdCustData
-      lcAddressCodC    = ibCopyFrom.AddressCodC
-      lcAddressCodP    = ibCopyFrom.AddRessCodP
-      liDelType        = ibCopyFrom.DelType.
+      liNewCust1    = ibCopyFrom.Custnum
+      lcNewCustIDType = ibCopyFrom.CustIDType
+      lcNewCustId   = ibCopyFrom.OrgID
+      lcNewCOName   = ibCopyFrom.COName
+      lcNewAddress  = ibCopyFrom.Address
+      lcNewZipCode  = ibCopyFrom.ZipCode
+      lcNewPost     = ibCopyFrom.PostOffice
+      lcNewRegion   = ibCopyFrom.Region
+      liNewLanguage = ibCopyFrom.Language
+      lcNewCountry  = ibCopyFrom.Country
+      lcNewEMail    = ibCopyFrom.EMail
+      lcNewBankAcc  = ibCopyFrom.BankAcc
+      lcNewNationality = ibCopyFrom.Nationality
+      lcSmsnumber    = ibCopyFrom.SMSnumber
+      lcPhone        = ibCopyFrom.Phone
+      llDirMarkSMS   = ibCopyFrom.DirMarkSMS
+      llDirMarkEmail = ibCopyFrom.DirMarkEmail
+      llDirMarkPost  = ibCopyFrom.DirMarkPost
+      llOutMarkSMS   = ibCopyFrom.OutMarkSMS
+      llOutMarkEmail = ibCopyFrom.OutMarkEmail
+      llOutMarkPost  = ibCopyFrom.OutMarkPost
+      lcAddressCodC  = ibCopyFrom.AddressCodC
+      lcAddressCodP  = ibCopyFrom.AddRessCodP
+      liDelType      = ibCopyFrom.DelType.
 
    FIND FIRST CustomerReport WHERE
               CustomerReport.Custnum = Customer.Custnum NO-LOCK NO-ERROR.
@@ -607,29 +604,33 @@ FUNCTION fCopyCustData RETURNS LOGICAL
       lcAddressCodP  = CustomerReport.CityCode
       lcAddressCodM  = CustomerReport.TownCode.
 
-   IF ilUpdCustData THEN DO:
+   IF ibCopyFrom.CustIDType = "CIF" THEN DO:
+      ASSIGN
+      lcNewCompanyname = ibCopyFrom.CompanyName
+      ldaNewBirthday   = ibCopyFrom.FoundationDate
+      lcNewFirst       = ""
+      lcNewLast        = ""
+      lcNewSurname2    = ""
+      lcNewTitle       = "".
 
-      IF ibCopyFrom.CustIDType = "CIF" THEN ASSIGN
-         lcNewCompanyname   = ibCopyFrom.CompanyName
-         ldaNewBirthday     = ibCopyFrom.FoundationDate
-         lcNewFirst         = ""
-         lcNewLast          = ""
-         lcNewSurname2      = ""
-         lcNewTitle         = ""
-         lcCIFAgrCustIDType = Customer.AuthCustIdType
-         lcCIFAgrCustID     = Customer.AuthCustId.
-      ELSE ASSIGN 
-         lcNewCompanyname   = ""
-         ldaNewBirthday     = ibCopyFrom.BirthDay 
-         lcNewFirst         = ibCopyFrom.FirstName
-         lcNewLast          = ibCopyFrom.CustName 
-         lcNewSurname2      = ibCopyFrom.SurName2
-         lcNewTitle         = ibCopyFrom.HonTitle.
-
-      FIND FIRST Region WHERE Region.Region = lcNewRegion NO-LOCK NO-ERROR. 
-      IF AVAILABLE Region THEN lcNewRegionName = Region.RgName.
-
+      FIND FIRST CustContact WHERE 
+                 CustContact.Brand = gcBrand AND
+                 CustContact.Custnum = bNewCust.Custnum AND
+                 CustContact.CustType = 1 NO-LOCK NO-ERROR.
+      IF AVAIL CustContact THEN ASSIGN
+         lcCIFAgrCustIDType = CustContact.CustIdType
+         lcCIFAgrCustID = CustContact.OrgId.
    END.
+   ELSE ASSIGN 
+      lcNewCompanyname = ""
+      ldaNewBirthday   = ibCopyFrom.BirthDay
+      lcNewFirst       = ibCopyFrom.FirstName
+      lcNewLast        = ibCopyFrom.CustName 
+      lcNewSurname2    = ibCopyFrom.SurName2
+      lcNewTitle       = ibCopyFrom.HonTitle.
+               
+   FIND FIRST Region WHERE Region.Region = lcNewRegion NO-LOCK NO-ERROR. 
+   IF AVAILABLE Region THEN lcNewRegionName = Region.RgName.
 
    DISPLAY
       liNewCust1   
@@ -1069,8 +1070,9 @@ PROCEDURE pInitialize:
       lcNewHeader     = "NEW OWNER"
       lcMainHeader[1] = "OWNER CHANGE"
       lcMainHeader[2] = "MAKE REQUEST"
-      llUpdDate       = (MobSub.PayType = FALSE OR MobSub.CLIType = "TARJ3").
-
+      llUpdDate       = (MobSub.PayType = FALSE OR MobSub.CLIType = "TARJ3")
+      llUpdCustData   = TRUE.
+    
    IF iiRequest > 0 THEN DO:
       lcMainHeader[2] = "REQUEST " + STRING(iiRequest).
 
@@ -1296,31 +1298,8 @@ PROCEDURE pUpdateNewOwner:
                  bNewCust.OrgId = lcNewCustId AND
                  bNewCust.Roles NE "inactive" NO-LOCK NO-ERROR.
                     
-      IF AVAIL bNewCust AND bNewCust.CustNum NE liNewCust1 THEN DO:
-
-         /* DCH */
-         IF MobSub.PayType = FALSE AND
-            NOT CAN-FIND(FIRST bMobSub WHERE
-                               bMobSub.Brand     = gcBrand AND
-                               bMobSub.MsSeq    <> MobSub.MsSeq AND
-                               bMobSub.CustNum   = bNewCust.CustNum AND
-                               bMobSub.PayType   = FALSE) THEN DO:
-            llUpdCustData = TRUE.
-
-            fUpdCustEvent(BUFFER bCurrentCust:HANDLE,
-                          katun,
-                          "ACC",
-                          STRING(bCurrentCust.CustNum) + CHR(255) + 
-                          STRING(MobSub.MsSeq) + CHR(255) + 
-                          lcSalesman,
-                          "",
-                          "Birthday,HonTitle,FirstName,CustName,SurName2,CompanyName," +
-                          "CoName,Address,ZipCode,Country,Nationality,Language,Email," +
-                          "BankAcct,SMSnumber,Phone,DirMarkSMS,DirMarkEmail,DirMarkPost," +
-                          "OutMarkSMS,OutMarkEmail,OutMarkPost,PostOffice,Region").
-         END.
-
-         fCopyCustData (BUFFER bNewCust, llUpdCustData).
+      IF AVAIL bNewCust AND bNewCust.CustNum NE liNewCust1 THEN DO: 
+         fCopyCustData (BUFFER bNewCust).
          llReady = TRUE.
       END.
          

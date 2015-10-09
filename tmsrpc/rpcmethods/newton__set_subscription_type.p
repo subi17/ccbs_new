@@ -28,7 +28,6 @@ katun = "Newton".
 {fmakemsreq.i}
 {fcharge_comp_loaded.i}
 {tmsconst.i}
-{create_eventlog.i}
 
 /* Input parameters */
 DEF VAR pcMSISDN         AS CHAR NO-UNDO.
@@ -59,7 +58,6 @@ DEF VAR liRequest     AS INT  NO-UNDO.
 DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
 
 DEF BUFFER NewCliType   FOR CliType.
-DEF BUFFER bMobSub      FOR MobSub.
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
 DEF VAR lcStruct AS CHAR NO-UNDO. 
@@ -151,29 +149,6 @@ IF pdeCharge > 0 THEN DO:
 END.
 
 IF lcError > "" THEN RETURN appl_err(lcError).
-
-/* DCH */
-IF MobSub.Paytype = TRUE AND
-   NewCLIType.PayType = 1 AND
-   NOT CAN-FIND(FIRST bMobSub WHERE
-                      bMobSub.Brand     = gcBrand AND
-                      bMobSub.MsSeq    <> MobSub.MsSeq AND
-                      bMobSub.CustNum   = MobSub.CustNum AND
-                      bMobSub.PayType   = FALSE) THEN DO:
-
-      FIND FIRST Customer NO-LOCK WHERE
-                 Customer.Brand = gcBrand AND
-                 Customer.Custnum = MobSub.CustNum
-                 NO-ERROR.
-      IF AVAILABLE Customer THEN
-         fUpdCustEvent(BUFFER Customer:HANDLE,
-                    katun,
-                    "STC",
-                    STRING(Customer.CustNum) + CHR(255) + 
-                    STRING(MobSub.MsSeq) + CHR(255) + "",
-                    "",
-                    "BankAcct").
-END.
 
 liRequest = fCTChangeRequest(MobSub.msseq,
                   pcCliType,
