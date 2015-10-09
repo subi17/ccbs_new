@@ -164,11 +164,7 @@ ELSE ttCustomer.Country = "ES".
 
 /* index fields */ 
 ASSIGN
-   ttCustomer.region = get_string(pcStruct, "region")
-   ttCustomer.postoffice = get_string(pcStruct, "city")
    /* optional fields */
-   ttCustomer.smsnumber = get_string(pcStruct, "sms_number") WHEN LOOKUP("sms_number", lcStruct) > 0
-   ttCustomer.phone = get_string(pcStruct, "phone_number") WHEN LOOKUP("phone_number", lcStruct) > 0
    ttCustomer.FoundationDate = get_date(pcStruct,"company_foundationdate") WHEN LOOKUP("company_foundationdate", lcStruct) > 0
    /* marketing fields */
    ttCustomer.StreetCode = get_string(pcStruct, "street_code") WHEN LOOKUP("street_code", lcStruct) > 0
@@ -192,11 +188,15 @@ IF MobSub.PayType = FALSE AND
       ttCustomer.coname = get_string(pcStruct, "coname") WHEN LOOKUP("coname", lcStruct) > 0
       ttCustomer.Address = get_string(pcStruct, "street")
       ttCustomer.zipcode = get_string(pcStruct, "zip")   
+      ttCustomer.region = get_string(pcStruct, "region")
+      ttCustomer.postoffice = get_string(pcStruct, "city")
       ttCustomer.country = get_string(pcStruct, "country") WHEN LOOKUP("country", lcStruct) > 0
       ttCustomer.nationality = get_string(pcStruct,"nationality")
       ttCustomer.language = LOOKUP(get_string(pcStruct, "language"), {&languages})
       ttCustomer.email = get_string(pcStruct, "email") WHEN LOOKUP("email", lcStruct) > 0
       ttCustomer.BankAcct = get_string(pcStruct, "bankaccount") WHEN Mobsub.PayType = FALSE
+      ttCustomer.smsnumber = get_string(pcStruct, "sms_number") WHEN LOOKUP("sms_number", lcStruct) > 0
+      ttCustomer.phone = get_string(pcStruct, "phone_number") WHEN LOOKUP("phone_number", lcStruct) > 0
       ttCustomer.DirMarkSMS = get_bool(pcStruct, "mark_sms") WHEN LOOKUP("mark_sms", lcStruct) > 0
       ttCustomer.DirMarkEmail = get_bool(pcStruct, "mark_email") WHEN LOOKUP("mark_email", lcStruct) > 0
       ttCustomer.DirMarkPost = get_bool(pcStruct, "mark_post") WHEN LOOKUP("mark_post", lcStruct) > 0
@@ -213,8 +213,8 @@ IF MobSub.PayType = FALSE AND
                  "",
                  "Birthday,HonTitle,FirstName,CustName,SurName2,CompanyName," +
                  "CoName,Address,ZipCode,Country,Nationality,Language,Email," +
-                 "BankAcct,DirMarkSMS,DirMarkEmail,DirMarkPost,OutMarkSMS," +
-                 "OutMarkEmail,OutMarkPost").
+                 "BankAcct,SMSnumber,Phone,DirMarkSMS,DirMarkEmail,DirMarkPost," +
+                 "OutMarkSMS,OutMarkEmail,OutMarkPost,PostOffice,Region").
 END.
 
 IF ttCustomer.cbirthday > "" THEN DO:
