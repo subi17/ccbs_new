@@ -126,7 +126,9 @@ FUNCTION fMakeTempTable RETURNS CHAR
                   END.
             END.
             /*Case 1: Activations*/
-            IF Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} /*6*/ AND
+            IF (Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} /*6*/ 
+               OR
+               Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC} /*32*/) AND
                R-INDEX(Order.OrderChannel, "pos") > 0 /*Only POS  orders*/ 
                THEN DO:
                   lcCase = {&DMS_CASE_TYPE_ID_ORDER_ACT}.
