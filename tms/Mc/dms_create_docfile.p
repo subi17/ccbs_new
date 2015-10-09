@@ -229,6 +229,19 @@ FUNCTION fGetTerminalType RETURNS CHAR
    END.
    ELSE RETURN "Simonly".
 END.   
+/* TODO: Indexes! */
+FUNCTION fGetPreviousHandset RETURNS CHAR
+   (icImei AS CHAR):
+   DEF BUFFER bOAcc FOR OrderAccessory.
+   FIND FIRST bOAcc NO-LOCK WHERE
+              bOAcc.Brand EQ gcBrand AND
+              bOAcc.Imei EQ icImei NO-ERROR.
+   IF AVAIL bOAcc THEN 
+      RETURN STRING(bOAcc.Manufacturer) + " " +
+             STRING(bOAcc.Model)        + " " +
+             STRING(bOAcc.ModelColor).
+   RETURN "".             
+END.   
 
 FUNCTION fGetCancellationInfo RETURNS CHAR
    (iiMsSeq AS INT,
@@ -971,12 +984,16 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*New Permanency*/
             STRING(ldePermanencyAmount)                     + lcDelim +
             /*Previous IMEI*/
-            STRING(MsRequest.ReqCparam1)
+            STRING(MsRequest.ReqCparam1)                    + lcDelim +
             /*Previous Handset*/
+            fGetPreviousHandset(MsRequest.ReqCparam1)       + lcDelim +
             /*Previous Installment*/
-            /*Previous Residual value*/ 
+            STRING(ldeInstallment)                          + lcDelim +
+            /*Previous Residual value*/
+            STRING(ldeFinalFee)                             + lcDelim +
+            /*Previous Permanency*/ 
+            STRING(ldePermanencyAmount).
 
-            /*Previous Permanency*/ .
          END.
       END.
       /*Document type,DocStatusCode,RevisionComment*/
