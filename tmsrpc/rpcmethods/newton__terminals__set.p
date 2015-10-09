@@ -69,6 +69,13 @@ FIND SubsTerminal WHERE
 
 IF NOT AVAIL SubsTerminal then return appl_err("Subscription terminal was not found").
 
+
+FIND FIRST Order NO-LOCK WHERE
+           Order.Brand EQ gcBrand AND
+           Order.ContractId EQ pcContractId NO-ERROR.
+IF NOT AVAIL Order THEN
+    appl_err("Order was not found").
+   
 /* if nothing will be updated then return empty */
 IF ( LOOKUP("sim_lock_code_viewable",lcStruct) = 0 OR 
       Substerminal.SimChecked = plSimChecked ) AND
@@ -123,7 +130,10 @@ IF LOOKUP("reason",lcStruct) > 0 THEN DO:
 END. 
 
 RELEASE SubsTerminal.
-/*
+
+
+
+
 fCreateRequest({&REQTYPE_IMEI_CHANGE}, /* heat balance query request */
                0 , /* chgstamp */
                "", /* creator */
@@ -134,20 +144,20 @@ fCreateRequest({&REQTYPE_IMEI_CHANGE}, /* heat balance query request */
 IF pcChannel NE {&DMS_VFR_REQUEST} THEN
    pcContractId = "".
 ASSIGN
-/*   bCreaReq.msseq = Order.msseq*/
-/*   bCreaReq.custnum = Order.custnum*/
-/*   bCreaReq.CLI = Order.cli*/
-/*   bCreaReq.reqcparam1 = lcOldIMEI*/
-/*   bCreaReq.reqcparam2 = pcIMEI*/
-/*   bCreaReq.reqcparam3 = pcOfferId*/
+   bCreaReq.msseq = Order.msseq
+   bCreaReq.custnum = Order.custnum
+   bCreaReq.CLI = Order.cli
+   bCreaReq.reqcparam1 = SubsTerminal.IMEI /*old IMEI*/
+   bCreaReq.reqcparam2 = pcIMEI /*new IMEI*/
+   bCreaReq.reqcparam3 = Order.Offer
    bCreaReq.reqcparam6 = pcContractId
-/*   bCreaReq.reqiparam1 = Order.OrderId*/
+   bCreaReq.reqiparam1 = Order.OrderId
    bCreaReq.ReqSource  = {&REQUEST_SOURCE_NEWTON}.
 
 FIND MSRequest WHERE
      ROWID(MsRequest) EQ ROWID(bCreaReq) NO-LOCK.
 
 fReqStatus(2,"").
-*/
+
    
 add_struct(response_toplevel_id, "").
