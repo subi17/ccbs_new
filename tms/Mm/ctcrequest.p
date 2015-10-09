@@ -16,6 +16,7 @@
 {fmakesms.i}
 {fbundle.i}
 {main_add_lines.i}
+{create_eventlog.i}
 
 DEFINE INPUT PARAMETER iiReqId AS INTEGER   NO-UNDO.
 DEF BUFFER OldCliType FOR CliType.
@@ -39,7 +40,9 @@ DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
 DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
 
-DEF BUFFER lbMobSub    FOR MobSub.
+DEF BUFFER lbMobSub     FOR MobSub.
+DEF BUFFER bMobSubCust  FOR MobSub.
+DEF BUFFER bCustomer    FOR Customer.
 
 FIND FIRST MsRequest WHERE MsRequest.MsRequest = iiReqId NO-LOCK NO-ERROR.
 
@@ -99,12 +102,23 @@ IF NOT AVAIL Customer THEN DO:
    RETURN.
 END.
 
+FIND bCustomer WHERE
+     bCustomer.Custnum = Customer.Custnum NO-LOCK NO-ERROR.
+
 ASSIGN 
    lcBankNumber  = MSRequest.ReqCparam3 
    ldeActStamp   = MSrequest.ReqDParam1
    liCreditCheck = Msrequest.ReqIParam1.
 
-IF lcBankNumber ne "" THEN DO:
+/* DCH */
+IF lcBankNumber ne "" AND
+   OldCliType.PayType = 2 AND
+   NewCliType.PayType = 1 AND
+   NOT CAN-FIND(FIRST bMobSubCust WHERE
+                      bMobSubCust.Brand     = gcBrand AND
+                      bMobSubCust.MsSeq    <> MobSub.MsSeq AND
+                      bMobSubCust.CustNum   = bCustomer.CustNum AND
+                      bMobSubCust.PayType   = FALSE) THEN DO:
 
    liReq = fSubRequest
            (INPUT  MSRequest.MSSeq,
@@ -129,6 +143,13 @@ IF lcBankNumber ne "" THEN DO:
         MobSub.Custnum,
         "BANK ACCOUNT CHANGE REQUEST FAILED",
         ocResult).
+   ELSE fUpdCustEvent(BUFFER bCustomer:HANDLE,
+                      katun,
+                      "STC",
+                      STRING(bCustomer.CustNum) + CHR(255) +
+                      STRING(MobSub.MsSeq) + CHR(255) + "",
+                      "",
+                      "BankAcct").
 END.
 
 /* Create possible Credit Check request, YDR-323 */
