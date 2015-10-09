@@ -39,6 +39,7 @@ DEF VAR lcPrepaidVoiceTariffs  AS CHAR NO-UNDO.
 DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
 DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
+DEF VAR lcSalesman             AS CHAR NO-UNDO.
 
 DEF BUFFER lbMobSub     FOR MobSub.
 DEF BUFFER bMobSubCust  FOR MobSub.
@@ -110,6 +111,10 @@ ASSIGN
    ldeActStamp   = MSrequest.ReqDParam1
    liCreditCheck = Msrequest.ReqIParam1.
 
+IF INDEX(MsRequest.UserCode,"_") > 0 THEN
+   lcSalesman = ENTRY(2,MsRequest.UserCode,"_").
+ELSE lcSalesman = MsRequest.UserCode.
+
 /* DCH */
 IF lcBankNumber ne "" AND
    OldCliType.PayType = 2 AND
@@ -144,10 +149,11 @@ IF lcBankNumber ne "" AND
         "BANK ACCOUNT CHANGE REQUEST FAILED",
         ocResult).
    ELSE fUpdCustEvent(BUFFER bCustomer:HANDLE,
-                      katun,
+                      MsRequest.UserCode,
                       "STC",
                       STRING(bCustomer.CustNum) + CHR(255) +
-                      STRING(MobSub.MsSeq) + CHR(255) + "",
+                      STRING(MobSub.MsSeq) + CHR(255) +
+                      lcSalesman,
                       "",
                       "BankAcct").
 END.
