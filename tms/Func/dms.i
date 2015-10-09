@@ -76,8 +76,15 @@ FUNCTION fUpdateDMS RETURNS LOGICAL
           DMS.StatusCode    = icStatusCode
           DMS.StatusDesc    = icStatusDesc
           DMS.StatusTS      = idStatusTS.
-   /*Change order status if value is given.*/       
-   IF icOrderStatus NE "" THEN DMS.OrderStatus = icOrderstatus.
+
+   /* Store current order status */
+   IF NEW DMS AND icOrderstatus = "" THEN DO:
+      FIND FIRST Order NO-LOCK WHERE
+                 Order.Brand = gcBrand AND
+                 Order.OrderID = iiHostId NO-ERROR.
+      IF AVAILABLE Order THEN DMS.OrderStatus = Order.StatusCode.
+   END.
+   ELSE DMS.OrderStatus = icOrderstatus.
 
    IF llDoEvent THEN DO:
       IF NEW DMS THEN RUN StarEventMakeCreateEvent(lhDMS).
