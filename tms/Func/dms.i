@@ -100,21 +100,9 @@ FUNCTION fUpdateDMS RETURNS LOGICAL
 
       ASSIGN DMSDoc.DocStatusTS   = DMS.StatusTS
              DMSDoc.DocTypeID     = ENTRY(i,icDocList,icDocListSep)
-             DMSDoc.DocStatusCode = ENTRY(i + 1,icDocList,icDocListSep)
-             DMSDoc.DocRevComment = ENTRY(i + 2,icDocList,icDocListSep).
-
-      CASE DMSDoc.DocTypeID:
-         WHEN "1"  THEN DMSDoc.DocTypeDesc = "CIF EMPRESA".
-         WHEN "2"  THEN DMSDoc.DocTypeDesc = "ESCRITURAS".
-         WHEN "3"  THEN DMSDoc.DocTypeDesc = "NIF ADMINISTRADOR".
-         WHEN "4"  THEN DMSDoc.DocTypeDesc = "NIF/NIE".
-         WHEN "5"  THEN DMSDoc.DocTypeDesc = "RECIBO BANCARIO".
-         WHEN "6"  THEN DMSDoc.DocTypeDesc = "RECIBO BANCARIO op DONANTE".
-         WHEN "7"  THEN DMSDoc.DocTypeDesc = "FACTURA op DONANTE".
-         WHEN "8"  THEN DMSDoc.DocTypeDesc = "COMPROBANTE DEPOSITO <X>".
-         WHEN "9"  THEN DMSDoc.DocTypeDesc = "OTROS".
-         WHEN "10" THEN DMSDoc.DocTypeDesc = "REQUERIDO BO".
-      END CASE.
+             DMSDoc.DocTypeDesc   = ENTRY(i + 1,icDocList,icDocListSep)
+             DMSDoc.DocStatusCode = ENTRY(i + 2,icDocList,icDocListSep)
+             DMSDoc.DocRevComment = ENTRY(i + 3,icDocList,icDocListSep).
 
       IF llDoEvent THEN DO:
          IF NEW DMSDoc THEN RUN StarEventMakeCreateEvent(lhDMSDoc).
