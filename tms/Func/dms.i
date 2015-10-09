@@ -92,7 +92,7 @@ FUNCTION fUpdateDMS RETURNS LOGICAL
    END.
 
    IF icDocList <> "" THEN
-      DO i = 1 TO NUM-ENTRIES(icDocList,icDocListSep) BY 3:
+      DO i = 1 TO NUM-ENTRIES(icDocList,icDocListSep) BY 4:
 
       FIND FIRST DMSDoc EXCLUSIVE-LOCK WHERE
                  DMSDoc.DMSID     = DMS.DMSID AND

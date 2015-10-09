@@ -409,7 +409,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    fGetTerminalType(iiOrderId).
 
    /*Document type,DocStatusCode,RevisionComment*/
-   lcDocListEntries = lcCaseTypeID + "," + lcDocStatus + "," + "Doc created".
+   lcDocListEntries = "".
 
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
@@ -592,6 +592,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
       /*Document type,DocStatusCode,RevisionComment*/
       lcDocListEntries = ENTRY(liCount,lcParam) + "," + 
+                         "," + 
                          lcDMSStatusDesc + "," + 
                          "Doc created".
       IF liCount NE NUM-ENTRIES(lcRequiredDocs) 
@@ -811,6 +812,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
       /*Document type,DocStatusCode,RevisionComment*/
       lcDocListEntries = ENTRY(liCount,lcParam) + "," + 
+                         "," +
                          lcDMSStatusDesc + "," + 
                          "Doc created".
       IF liCount NE NUM-ENTRIES(lcRequiredDocs) 
@@ -976,7 +978,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
          END.
       END.
       /*Document type,DocStatusCode,RevisionComment*/
-      lcDocListEntries = lcCaseTypeID + "," + lcDocStatus + "," + "Doc created".
+      lcDocListEntries = "". 
 
       OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
       PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
@@ -1042,7 +1044,7 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    fGetTerminalType(iiOrderId) SKIP.
    OUTPUT STREAM sOutFile CLOSE.
    /*Document type,DocStatusCode,RevisionComment*/
-   lcDocListEntries = lcCaseTypeID + "," + lcDocStatus + "," + "Doc created".
+   lcDocListEntries = "".
 
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
@@ -1110,7 +1112,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    lcCancellationType  SKIP.
    OUTPUT STREAM sOutFile CLOSE.
    /*Document type,DocStatusCode,RevisionComment*/
-   lcDocListEntries = lcCaseTypeID + "," + lcDocStatus + "," + "Doc created".
+   lcDocListEntries = "".
 
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
