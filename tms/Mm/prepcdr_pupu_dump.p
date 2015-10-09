@@ -47,7 +47,8 @@ FOR EACH PrepCDR NO-LOCK USE-INDEX ReadDate WHERE
       lcDCEvent = "PMDUB".
    ELSE IF PrepCDR.CLIType = "TARJ7" AND PrepCDR.Charge = 0 THEN
       lcDCEvent = "TARJ7".
-   ELSE IF PrepCDR.CLIType = "TARJ9" AND PrepCDR.Charge = 0 THEN
+   ELSE IF PrepCDR.CLIType = "TARJ9" AND PrepCDR.Charge = 0 AND
+           PrepCDR.accumulator > 0 THEN
       lcDCEvent = "TARJ9".
    ELSE lcDCEvent = "".
   
