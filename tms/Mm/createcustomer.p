@@ -310,9 +310,10 @@ ELSE DO:
       ELSE DO:
          IF Order.PayType = FALSE AND
             NOT CAN-FIND(FIRST bMobSub WHERE
-                               bMobSub.Brand    = gcBrand AND
-                               bMobSub.CustNum  = Customer.CustNum AND
-                               bMobSub.PayType  = FALSE) THEN
+                               bMobSub.Brand     = gcBrand AND
+                               bMobSub.MsSeq    <> Order.MsSeq AND
+                               bMobSub.CustNum   = Customer.CustNum AND
+                               bMobSub.PayType   = FALSE) THEN
             llUpdateCust = TRUE.
       END.
 
