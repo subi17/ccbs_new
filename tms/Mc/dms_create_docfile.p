@@ -162,7 +162,14 @@ FUNCTION fMakeTempTable RETURNS CHAR
                FIND FIRST DMS WHERE 
                           DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
                           DMS.HostId EQ Order.OrderID AND
-                          DMS.StatusTS < idEndTs NO-ERROR.
+                          DMS.StatusTS < idEndTs AND
+                          (DMS.OrderStatus EQ {&ORDER_STATUS_COMPANY_NEW} OR
+                          DMS.OrderStatus EQ {&ORDER_STATUS_COMPANY_MNP} OR 
+                          DMS.OrderStatus EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY}
+                          OR
+                          DMS.OrderStatus EQ {&ORDER_STATUS_DELIVERED} OR
+                          DMS.OrderStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED}) 
+                          NO-ERROR.
                IF AVAIL DMS THEN DO:
                   lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
                   llgAddEntry = TRUE.
@@ -171,6 +178,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
             /*Other cases, no need to create entry*/
             ELSE NEXT.
          END.
+ 
          IF llgAddEntry EQ TRUE THEN DO TRANS:
             CREATE ttOrderList.
             ASSIGN ttOrderList.OrderID = OrderTimestamp.OrderId
@@ -178,7 +186,47 @@ FUNCTION fMakeTempTable RETURNS CHAR
                    ttOrderList.Direct = llgDirect.
          END.           
       END.         
-   END.
+   END. /*ordertimestamp*/
+   /*If order has already gone to DELIVERED 6, the order status
+     will not return to 7,8,9. This cases need to be seeked from
+     requests.  order mobsub
+     If activation information is not sent yet to DMS (found in this exec round)
+     cancellation is not allowed to be sent -> need to erase existing entry.*/
+   FOR EACH MsRequest NO-LOCK WHERE
+            MsRequest.Brand EQ gcBrand AND
+            MsRequest.ReqStatus EQ 2 AND
+            MsRequest.UpdateStamp > idStartTS AND
+            MsRequest.UpdateStamp < idEndTS AND
+            (
+            MsRequest.ReqType EQ 
+              {&REQTYPE_SUBSCRIPTION_TERMINATION} /*18*/ 
+            OR MsRequest.ReqType EQ 
+              {&REQTYPE_REVERT_RENEWAL_ORDER} /*49*/ 
+            ) AND
+           MsRequest.UpdateStamp <= MsRequest.DoneStamp :
+      IF MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} THEN DO:
+         FIND FIRST ttOrderlist WHERE
+                    ttOrderlist.OrderId EQ MsRequest.ReqIparam1 NO-ERROR.
+         IF AVAIL ttOrderList THEN DO:
+            DELETE ttOrderList.
+            llgAddEntry = FALSE.
+         END.
+         ELSE DO:
+            lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
+            llgAddEntry = TRUE.
+         END.
+      END.
+      ELSE IF  MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+               MsRequest.ReqCparam3 EQ "11" THEN DO:
+         FIND Order NO-LOCK WHERE
+              Order.Msseq EQ MsRequest.MsSeq NO-ERROR.
+         IF AVAIL Order THEN DO:
+            lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
+            llgAddEntry = TRUE.
+         END. /*TODO: review this, order seek as in previous is needed*/
+      END.   
+   END. /*Msrequest search*/
+
 END.
 
 FUNCTION fPrintDate RETURNS CHAR
