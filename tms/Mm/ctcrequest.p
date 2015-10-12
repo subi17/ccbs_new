@@ -32,7 +32,7 @@ DEF VAR ldeEndStamp   AS DEC NO-UNDO.
 DEF VAR lcSender      AS CHAR NO-UNDO. 
 DEF VAR llBBActive    AS LOG  NO-UNDO.
 DEF VAR lcContract    AS CHAR NO-UNDO.
-DEF VAR lcBundleName   AS CHAR NO-UNDO.
+DEF VAR lcBundleName  AS CHAR NO-UNDO.
 
 DEF VAR lcPostpaidVoiceTariffs AS CHAR NO-UNDO.
 DEF VAR lcPrepaidVoiceTariffs  AS CHAR NO-UNDO.
@@ -40,6 +40,7 @@ DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
 DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
 DEF VAR lcSalesman             AS CHAR NO-UNDO.
+DEF VAR i                      AS INT NO-UNDO.
 
 DEF BUFFER lbMobSub     FOR MobSub.
 DEF BUFFER bMobSubCust  FOR MobSub.
@@ -111,11 +112,12 @@ ASSIGN
    ldeActStamp   = MSrequest.ReqDParam1
    liCreditCheck = Msrequest.ReqIParam1.
 
-IF INDEX(MsRequest.UserCode,"_") > 0 THEN
-   lcSalesman = ENTRY(2,MsRequest.UserCode,"_").
+/* DCH */
+IF INDEX(MsRequest.UserCode,"_") > 0 THEN 
+   ASSIGN i = INDEX(MsRequest.UserCode,"_")
+          lcSalesman = SUBSTRING(MsRequest.UserCode,i + 1).
 ELSE lcSalesman = MsRequest.UserCode.
 
-/* DCH */
 IF lcBankNumber ne "" AND
    OldCliType.PayType = 2 AND
    NewCliType.PayType = 1 AND
