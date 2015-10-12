@@ -53,7 +53,7 @@ FUNCTION fCollectEvent RETURNS LOGICAL
 
    DO liAmtMod = 1 TO NUM-ENTRIES(EventLog.DataValues,CHR(255)) BY 3:
       IF liAmtMod = 1 THEN
-         ASSIGN lcModValues = ENTRY(liAmtMod + 2,EventLog.DataValues,CHR(255)).
+         ASSIGN lcModValues = ENTRY(liAmtMod + 1,EventLog.DataValues,CHR(255)).
       ELSE lcModValues = lcModValues + "," + ENTRY(liAmtMod + 2,EventLog.DataValues,CHR(255)).
    END.
 
