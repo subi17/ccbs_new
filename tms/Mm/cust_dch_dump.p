@@ -46,9 +46,9 @@ FUNCTION fCollectEvent RETURNS LOGICAL
 
    PUT STREAM sFile UNFORMATTED 
       Eventlog.UserCode               + lcDel +
-      Eventlog.Action                 + lcDel +
-      ENTRY(2,EventLog.Key,lc255)     + lcDel +
-      ENTRY(3,EventLog.Key,lc255)     + lcDel +
+      ENTRY(1,EventLog.Memo,lc255)    + lcDel +
+      ENTRY(3,EventLog.Memo,lc255)    + lcDel +
+      ENTRY(4,EventLog.Memo,lc255)    + lcDel +
       STRING(Eventlog.TimingTS)       + lcDel +
       icCustNum                       + lcDel +
       Eventlog.ModifiedFields         + lcDel +
@@ -89,10 +89,12 @@ lcLastDumpTime = STRING(liLastDumpTime,"hh:mm:ss").
 IF icDumpMode = "Full" THEN DO:
    FOR EACH Eventlog NO-LOCK WHERE 
             EventLog.TableName  = "Customer" AND
-            LOOKUP(EventLog.Action, "Order,ACC,STC") > 0:
+           (EventLog.Memo BEGINS "Order" OR
+            EventLog.Memo BEGINS "ACC"   OR
+            EventLog.Memo BEGINS "STC"):
       IF EventLog.EventDate EQ ldaLastDumpDate AND
          EventLog.EventTime < lcLastDumpTime THEN NEXT.
-      lcCustNum = ENTRY(1,EventLog.Key,CHR(255)). 
+      lcCustNum = ENTRY(2,EventLog.Memo,CHR(255)). 
       IF lcCustNum NE "" THEN fCollectEvent(lcCustNum).
    END.
 END.
@@ -100,10 +102,12 @@ ELSE DO:
    FOR EACH Eventlog NO-LOCK WHERE 
             EventLog.EventDate >= ldaLastDumpDate AND
             EventLog.TableName  = "Customer" AND
-            LOOKUP(EventLog.Action, "Order,ACC,STC") > 0:
+           (EventLog.Memo BEGINS "Order" OR
+            EventLog.Memo BEGINS "ACC"   OR
+            EventLog.Memo BEGINS "STC"):
       IF EventLog.EventDate EQ ldaLastDumpDate AND
          EventLog.EventTime < lcLastDumpTime THEN NEXT.
-      lcCustNum = ENTRY(1,EventLog.Key,CHR(255)). 
+      lcCustNum = ENTRY(2,EventLog.Memo,CHR(255)). 
       IF lcCustNum NE "" THEN fCollectEvent(lcCustNum).
    END.
 END.
