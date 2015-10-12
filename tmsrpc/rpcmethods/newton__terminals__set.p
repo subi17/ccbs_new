@@ -8,6 +8,7 @@
             username;string;mandatory;newton username
  * @output  result;struct;empty
  */
+ {commpaa.i}
 {xmlrpc/xmlrpc_access.i}
 
 {fmakemsreq.i}
