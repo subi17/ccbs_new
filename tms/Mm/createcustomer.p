@@ -234,40 +234,12 @@ ELSE DO:
    /* Renove order handling */
    IF Order.OrderType = {&ORDER_TYPE_RENEWAL} THEN DO:
 
-      IF OrderCustomer.DataChecked = TRUE THEN DO:
-
-         /* DCH */
-         FIND FIRST MobSub NO-LOCK WHERE
-                    MobSub.Brand   = gcBrand AND
-                    MobSub.MsSeq   = Order.MsSeq AND
-                    MobSub.CustNum = Customer.CustNum NO-ERROR.
-
-         IF AVAILABLE MobSub THEN DO:
-            IF MobSub.PayType = FALSE AND
-               NOT CAN-FIND(FIRST bMobSub WHERE
-                                  bMobSub.Brand     = gcBrand AND
-                                  bMobSub.MsSeq    <> MobSub.MsSeq AND
-                                  bMobSub.CustNum   = Customer.CustNum AND
-                                  bMobSub.PayType   = FALSE) THEN
-               llUpdateCust = TRUE.
-         END.
-         ELSE DO:
-            IF Order.PayType = FALSE AND
-               NOT CAN-FIND(FIRST bMobSub WHERE
-                                  bMobSub.Brand     = gcBrand AND
-                                  bMobSub.MsSeq    <> Order.MsSeq AND
-                                  bMobSub.CustNum   = Customer.CustNum AND
-                                  bMobSub.PayType   = FALSE) THEN
-               llUpdateCust = TRUE.
-         END.
-
-         IF llUpdateCust THEN 
+      IF OrderCustomer.DataChecked = TRUE THEN
             fmakeCustomer(Order.OrderID,
                           iiRole,
                           FALSE,
                           oiCustnum,
                           FALSE).
-      END.
 
       /* Update Email and Delivery type for all type of renewal orders */
       IF AVAIL OrderCustomer THEN
