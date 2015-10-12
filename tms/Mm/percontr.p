@@ -540,30 +540,20 @@ PROCEDURE pContractActivation:
 
             RELEASE DCCLI.
 
-            FIND FIRST OrderAction NO-LOCK WHERE
-                       OrderAction.Brand = gcBrand AND
-                       OrderAction.OrderId = MsRequest.ReqIParam1 AND
-                       OrderAction.ItemType = "Q25Discount" NO-ERROR.
+            ldaResidualFee = fInt2Date(SingleFee.Concerns[1],0).
 
-            ldeFeeAmount = SingleFee.Amt.
-            IF AVAIL OrderAction THEN DO:
-                FOR FIRST DiscountPlan NO-LOCK WHERE
-                          DiscountPlan.Brand = gcBrand AND
-                          DiscountPlan.DPRuleID = "RVTERMDT1DISC",
-                    FIRST DPMember NO-LOCK WHERE
-                          DPMember.DPId      = DiscountPlan.DPId AND
-                          DPMember.HostTable = "MobSub" AND
-                          DPMember.KeyValue  = STRING(MsRequest.MsSeq) AND
-                          DPMember.ValidTo >= fInt2Date(SingleFee.Concerns[1], 0) AND
-                          DPMember.ValidTo >= DPMember.ValidFrom:
-                  IF DEC(OrderAction.ItemParam) EQ DPMember.DiscValue THEN DO:
-                     ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
-                     LEAVE.
-                  END.
-               END.
+            FOR FIRST DiscountPlan NO-LOCK WHERE
+                      DiscountPlan.Brand = gcBrand AND
+                      DiscountPlan.DPRuleID = "RVTERMDT1DISC",
+                 EACH DPMember NO-LOCK WHERE
+                      DPMember.DPId      = DiscountPlan.DPId AND
+                      DPMember.HostTable = "MobSub" AND
+                      DPMember.KeyValue  = STRING(MsRequest.MsSeq) AND
+                      DPMember.ValidTo >= ldaResidualFee AND
+                      DPMember.ValidTo <= fLastDayOfMonth(ldaResidualFee) AND
+                      DPMember.ValidTo >= DPMember.ValidFrom:
+                 ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
             END.
-            ELSE fReqLog(SUBST("RVTERMDT1DISC discount not found: &1",
-                               MsRequest.ReqIParam1)).
                
             FIND FIRST FMItem NO-LOCK WHERE
                        FMITem.Brand = gcBrand AND
@@ -578,7 +568,6 @@ PROCEDURE pContractActivation:
 
             ASSIGN
                ldeResidualFeeDisc = ldeFeeAmount
-               ldaResidualFee = fInt2Date(SingleFee.Concerns[1], 0)
                ldeFeeAmount = ROUND(ldeFeeAmount / FMItem.FFItemQty,2)
                /* map q25 fee to original residual fee */
                liOrderId = SingleFee.OrderId.
