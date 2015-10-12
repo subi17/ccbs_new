@@ -78,6 +78,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
    DEF VAR liMonths AS INT NO-UNDO.
    DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
    DEF VAR liCount AS INT NO-UNDO.
+   DEF VAR liAddId AS Int NO-UNDO.
 
    llgTmpNeeded = FALSE.
    llgDirectNeeded = FALSE.
@@ -183,7 +184,6 @@ FUNCTION fMakeTempTable RETURNS CHAR
             CREATE ttOrderList.
             ASSIGN ttOrderList.OrderID = OrderTimestamp.OrderId
                    ttOrderList.CaseID = lcCase.
-                   ttOrderList.Direct = llgDirect.
          END.           
       END.         
    END. /*ordertimestamp*/
@@ -212,19 +212,38 @@ FUNCTION fMakeTempTable RETURNS CHAR
             llgAddEntry = FALSE.
          END.
          ELSE DO:
+            liAddId = MsRequest.ReqIparam1.
             lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
             llgAddEntry = TRUE.
          END.
       END.
       ELSE IF  MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
                MsRequest.ReqCparam3 EQ "11" THEN DO:
-         FIND Order NO-LOCK WHERE
-              Order.Msseq EQ MsRequest.MsSeq NO-ERROR.
+
+         FIND FIRST Order NO-LOCK WHERE
+                    Order.Msseq EQ MsRequest.MsSeq AND
+                    Order.OrderType < 2 AND /*allowed only for new and MNP */
+                    Order.StatusCode EQ "6" NO-ERROR.
          IF AVAIL Order THEN DO:
-            lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
-            llgAddEntry = TRUE.
-         END. /*TODO: review this, order seek as in previous is needed*/
+            FIND FIRST ttOrderlist WHERE
+                      ttOrderlist.OrderId EQ Order.OrderId NO-ERROR.
+            IF AVAIL ttOrderList THEN DO:
+               DELETE ttOrderList.
+               llgAddEntry = FALSE.
+            END.
+            ELSE DO:
+               liAddId = Order.OrderId.
+               lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
+               llgAddEntry = TRUE.
+            END.
+         END.
       END.   
+         IF llgAddEntry EQ TRUE THEN DO TRANS:
+            CREATE ttOrderList.
+            ASSIGN ttOrderList.OrderID = OrderTimestamp.OrderId
+                   ttOrderList.CaseID = lcCase.
+                   ttOrderList.Direct = llgDirect.
+         END.
    END. /*Msrequest search*/
 
 END.
