@@ -404,10 +404,8 @@ fCreateRequest({&REQTYPE_IMEI_CHANGE}, /* heat balance query request */
                FALSE, /* create fees */
                FALSE). /* send sms */
 
-/*empty contract_id if it is not from VFR*/
-IF pcChannel NE {&DMS_VFR_REQUEST} THEN
-   pcContractId = "".
-
+/*ContractID can be given without checking because
+this RPC is used only in POS. */
 ASSIGN
    bCreaReq.msseq = Order.msseq
    bCreaReq.custnum = Order.custnum

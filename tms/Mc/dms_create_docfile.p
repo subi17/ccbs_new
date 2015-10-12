@@ -954,7 +954,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
              OR MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}  /*0*/
              OR MsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} /*80*/
             ) AND
-            MsRequest.ReqCparam6 NE "" AND
+            MsRequest.ReqCparam6 NE "" AND 
             MsRequest.UpdateStamp <= MsRequest.DoneStamp :
 
       CASE MsRequest.ReqType:
