@@ -28,6 +28,10 @@ DEFINE VARIABLE lcModified   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lc255        AS CHARACTER NO-UNDO. /* List separator */
 DEFINE VARIABLE lcCustNum    AS CHARACTER NO-UNDO.
 
+DEF VAR ldaLastDumpDate AS DATE NO-UNDO.
+DEF VAR liLastDumpTime AS INT NO-UNDO.
+DEF VAR lcLastDumpTime AS CHAR NO-UNDO.
+
 DEFINE STREAM sFile.
 
 FORM 
@@ -78,26 +82,31 @@ DO:
 END.
 OUTPUT STREAM sFile TO VALUE(icFile).
 
-IF icDumpMode = "Full" 
-THEN FOR EACH Eventlog NO-LOCK WHERE 
-              EventLog.EventDate >= TODAY - 90 AND
-              EventLog.TableName  = "Customer"
-              USE-INDEX EventDate:
-      
-      IF LOOKUP(EventLog.Action, "Order,ACC,STC") = 0 THEN NEXT.
-      lcCustNum = ENTRY(1,EventLog.Key,CHR(255)). 
-      IF lcCustNum NE "" THEN fCollectEvent(lcCustNum).
-   END.
-ELSE FOR EACH Eventlog NO-LOCK WHERE 
-              EventLog.EventDate = TODAY - 1 AND
-              EventLog.TableName = "Customer"
-              USE-INDEX EventDate:
+fSplitTs(idLastDump, OUTPUT ldaLastDumpDate, OUTPUT liLastDumpTime).
 
-      IF LOOKUP(EventLog.Action, "Order,ACC,STC") = 0 THEN NEXT.
+lcLastDumpTime = STRING(liLastDumpTime,"hh:mm:ss").
+
+IF icDumpMode = "Full" THEN DO:
+   FOR EACH Eventlog NO-LOCK WHERE 
+            EventLog.TableName  = "Customer" AND
+            LOOKUP(EventLog.Action, "Order,ACC,STC") > 0:
+      IF EventLog.EventDate EQ ldaLastDumpDate AND
+         EventLog.EventTime < lcLastDumpTime THEN NEXT.
       lcCustNum = ENTRY(1,EventLog.Key,CHR(255)). 
       IF lcCustNum NE "" THEN fCollectEvent(lcCustNum).
-      
    END.
+END.
+ELSE DO:
+   FOR EACH Eventlog NO-LOCK WHERE 
+            EventLog.EventDate >= ldaLastDumpDate AND
+            EventLog.TableName  = "Customer" AND
+            LOOKUP(EventLog.Action, "Order,ACC,STC") > 0:
+      IF EventLog.EventDate EQ ldaLastDumpDate AND
+         EventLog.EventTime < lcLastDumpTime THEN NEXT.
+      lcCustNum = ENTRY(1,EventLog.Key,CHR(255)). 
+      IF lcCustNum NE "" THEN fCollectEvent(lcCustNum).
+   END.
+END.
 
 IF NOT SESSION:BATCH THEN 
    HIDE FRAME fQty NO-PAUSE.
