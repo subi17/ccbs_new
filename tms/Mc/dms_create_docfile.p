@@ -420,7 +420,8 @@ FUNCTION fGetPrevTariff RETURNS CHAR
                  NO-ERROR.
       IF AVAILABLE MSOwner THEN RETURN MsOwner.CLIType.
    END. 
-   ELSE RETURN "".   
+   RETURN "".   
+   
 END.   
 
 
