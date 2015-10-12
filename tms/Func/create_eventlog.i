@@ -162,41 +162,4 @@ FUNCTION fMakeCreateEvent RETURNS LOGIC
     
 END FUNCTION.
 
-/* DCH */
-FUNCTION fUpdCustEvent RETURNS LOGIC
-   (INPUT ihBuffer   AS HANDLE,
-    INPUT icUserCode AS CHARACTER,
-    INPUT icAction   AS CHARACTER,
-    INPUT icKey      AS CHARACTER,
-    INPUT icMemo     AS CHARACTER,
-    INPUT icFields   AS CHARACTER):
-
-   DEFINE VARIABLE liField AS INTEGER NO-UNDO.
-   DEFINE VARIABLE lhField AS HANDLE  NO-UNDO.
-
-   CREATE EventLog.
-   ASSIGN
-      EventLog.TableName         = ihBuffer:TABLE
-      EventLog.UserCode          = icUserCode
-      EventLog.Action            = icAction
-      EventLog.Key               = icKey
-      EventLog.Memo              = icMemo
-      EventLog.ModifiedFields    = icFields      
-      EventLog.TimingTS          = fMakeTS()
-      EventLog.EventDate         = TODAY
-      EventLog.EventTime         = STRING(TIME,"HH:MM:SS").
-
-   IF icFields > "" THEN
-   DO liField = 1 TO NUM-ENTRIES(icFields):
-      lhField = ihBuffer:BUFFER-FIELD(ENTRY(liField,icFields)).
-      EventLog.DataValues = EventLog.DataValues +
-                            (IF liField > 1 THEN "," ELSE "") +
-                            (IF TRIM(lhField:BUFFER-VALUE) NE ? THEN 
-                                TRIM(lhField:BUFFER-VALUE) ELSE "").
-   END.
-END FUNCTION.
-
-
 &ENDIF
-
-

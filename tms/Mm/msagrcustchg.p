@@ -31,7 +31,6 @@
 {main_add_lines.i}
 {fbankdata.i}
 {fbundle.i}
-{create_eventlog.i}
 
 SESSION:SYSTEM-ALERT-BOXES = TRUE.
 
@@ -173,11 +172,11 @@ PROCEDURE pOwnerChange:
    
    DEF VAR liChargeReqId AS INT NO-UNDO.
    DEF VAR lcCode AS CHAR NO-UNDO. 
+   DEF VAR lcMemo AS CHAR NO-UNDO. 
 
    DEF BUFFER bSubRequest   FOR MsRequest.
    DEF BUFFER bMobSub       FOR MobSub.
    DEF BUFFER bMsRequest    FOR MsRequest.
-   DEF BUFFER bCurrentCust  FOR Customer.
    
    liOrigStat = MsRequest.ReqStat.
       
@@ -478,11 +477,7 @@ PROCEDURE pOwnerChange:
             NO-ERROR.
 
          /* DCH */
-         FIND FIRST bCurrentCust NO-LOCK WHERE
-                    bCurrentCust.CustNum = MobSub.CustNum NO-ERROR.
-
-         IF AVAILABLE bCurrentCust AND
-            MobSub.PayType = FALSE AND
+         IF MobSub.PayType = FALSE AND
             NOT CAN-FIND(FIRST bMobSub WHERE
                                bMobSub.Brand     = gcBrand AND
                                bMobSub.MsSeq    <> MobSub.MsSeq AND
@@ -517,18 +512,6 @@ PROCEDURE pOwnerChange:
             /* Electronic Invoice project */
             IF NUM-ENTRIES(lcDataField,";") >= 10 THEN
                lcEmail = ENTRY(10,lcDataField,";").
-
-            fUpdCustEvent(BUFFER bCurrentCust:HANDLE,
-                          katun,
-                          "ACC",
-                          STRING(bCurrentCust.CustNum) + CHR(255) +
-                          STRING(MobSub.MsSeq) + CHR(255) +
-                          ENTRY(11,MsRequest.ReqCParam1,";"), /* Salesman */
-                          "",
-                          "Birthday,HonTitle,FirstName,CustName,SurName2,CompanyName," +
-                          "CoName,Address,ZipCode,Country,Nationality,Language,Email," +
-                          "BankAcct,SMSnumber,Phone,DirMarkSMS,DirMarkEmail,DirMarkPost," +
-                          "OutMarkSMS,OutMarkEmail,OutMarkPost,PostOffice,Region").
          END.
 
          IF ERROR-STATUS:ERROR THEN DO:
@@ -593,8 +576,16 @@ PROCEDURE pOwnerChange:
             bNewCust.InvCust    = liNewInvCust.
          END CASE.
 
-         IF NOT llNewCust AND llDoEvent THEN 
-            RUN StarEventMakeModifyEvent(lhCustomer).
+         lcMemo = "ACC" + CHR(255) +
+                  STRING(Customer.CustNum) + CHR(255) +
+                  STRING(MobSub.MsSeq) + CHR(255) +
+                  ENTRY(11,MsRequest.ReqCParam1,";").
+
+         IF NOT llNewCust AND llDoEvent THEN
+            RUN StarEventMakeModifyEventWithMemo(
+                                    lhCustomer,
+                                    katun,
+                                    lcMemo).
          
          IF llNewCust THEN DO:
             ASSIGN 

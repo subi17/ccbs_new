@@ -17,7 +17,6 @@
 {tmsconst.i}
 {order.i}
 {fcustdata.i}
-{create_eventlog.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -41,11 +40,10 @@ DEF VAR liTarget     AS INT  NO-UNDO.
 DEF VAR lcInvGroup   AS CHAR NO-UNDO.
 DEF VAR lcRegion     AS CHAR NO-UNDO.
 DEF VAR llOk         AS LOG  NO-UNDO.
-DEF VAR lcFields     AS CHAR NO-UNDO.
 DEF VAR llUpdateCust AS LOG  NO-UNDO.
+DEF VAR lcMemo       AS CHAR NO-UNDO.
 
 DEF BUFFER bOrderCustomer FOR OrderCustomer.
-DEF BUFFER bOldCustData FOR Customer.
 DEF BUFFER bMobSub FOR MobSub.
 
 FIND FIRST Order WHERE
@@ -217,10 +215,6 @@ ELSE DO:
    IF NOT AVAILABLE Customer THEN
       RETURN "ERROR:Customer not found".
 
-   /* DCH - Store previous values */
-   FIND bOldCustData WHERE
-        bOldCustData.CustNum = Customer.CustNum NO-LOCK NO-ERROR.
-
    FIND FIRST OrderCustomer NO-LOCK WHERE
               OrderCustomer.Brand   = gcBrand   AND
               OrderCustomer.OrderID = iiOrderID AND
@@ -267,30 +261,12 @@ ELSE DO:
                llUpdateCust = TRUE.
          END.
 
-         IF llUpdateCust THEN DO:
-            
+         IF llUpdateCust THEN 
             fmakeCustomer(Order.OrderID,
-                       iiRole,
-                       FALSE,
-                       oiCustnum,
-                       FALSE).
-
-            fUpdCustEvent(BUFFER bOldCustData:HANDLE,
-                          katun,
-                          "Order",
-                          STRING(bOldCustData.CustNum) + CHR(255) +
-                          STRING(Order.OrderId) + CHR(255) +
-                          Order.Salesman,
-                          "",
-                          "Birthday,HonTitle,FirstName,CustName,SurName2," +
-                          "CompanyName,CoName,Address,ZipCode,Country," +
-                          "Nationality,Language,Email,BankAcct,DirMarkSMS," +
-                          "DirMarkEmail,DirMarkPost,OutMarkSMS,OutMarkBank," +
-                          "OutMarkEmail,OutMarkPost,Profession,SearchName," +
-                          "PostOffice,Region,Phone,SMSNumber,CustIDType," +
-                          "OrgId,Sex,ExtInvRef,Category,InvoiceTargetRule," +
-                          "InvCode,InvGroup").
-         END.
+                          iiRole,
+                          FALSE,
+                          oiCustnum,
+                          FALSE).
       END.
 
       /* Update Email and Delivery type for all type of renewal orders */
@@ -303,9 +279,9 @@ ELSE DO:
          Customer.SMSNumber   = OrderCustomer.MobileNumber.
       fUpdateEmail(Order.OrderId).
    END.
-   
+
    /* DCH NEW/MNP */
-   ELSE DO: 
+   ELSE DO:
 
       FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
                  OrderCustomer.Brand   = gcBrand   AND
@@ -351,8 +327,7 @@ ELSE DO:
                llUpdateCust = TRUE.
          END.
 
-         IF (iiRole = 1 OR iiRole = 2) AND 
-            llUpdateCust THEN DO:
+         IF llUpdateCust THEN DO:
             ASSIGN
                Customer.HonTitle        = OrderCustomer.CustTitle
                Customer.FirstName       = TRIM(OrderCustomer.FirstName)
@@ -389,7 +364,7 @@ ELSE DO:
                   Customer.AuthCustId      = Order.OrdererID
                   Customer.AuthCustIdType  = Order.OrdererIDType.
                ELSE DO:
-                  FIND CustContact WHERE 
+                  FIND CustContact WHERE
                        CustContact.Brand = gcBrand AND
                        CustContact.Custnum = Customer.CustNum AND
                        CustContact.CustType = {&CUSTCONTACT_CONTACT} EXCLUSIVE-LOCK NO-ERROR.
@@ -428,38 +403,28 @@ ELSE DO:
                END.
             END.
 
-            ASSIGN lcFields = "HonTitle,FirstName,CustName,Surname2,Nationality," +
-                              "Language,Birthday,Phone,SMSNumber,BankAcct,DirMarkSMS," +
-                              "DirMarkEmail,DirMarkPOST,OutMarkSMS,OutMarkEmail," +
-                              "OutMarkPOST,OutMarkBank,Email,DelType," +
-                              "Address,ZipCode,PostOffice,Region,Country".
-
-            IF OrderCustomer.CustIdType = "CIF" THEN
-               lcFields = lcFields + ",CompanyName,FoundationDate".
-            ELSE lcFields = lcFields + ",Profession,AuthCustIdType,AuthCustId".
-
-            fUpdCustEvent(BUFFER bOldCustData:HANDLE,
-                          katun,
-                          "Order",
-                          STRING(bOldCustData.CustNum) + CHR(255) +
-                          STRING(Order.OrderId) + CHR(255) +
-                          Order.Salesman,
-                          "",
-                          lcFields).
          END. /* IF llUpdateCust THEN DO: */
       END.
    END.
+
+   lcMemo = "Order" + CHR(255) +
+            STRING(Customer.CustNum) + CHR(255) +
+            STRING(Order.OrderId) + CHR(255) +
+            Order.Salesman.
+
+   IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(
+                           lhCustomer,
+                           katun,
+                           lcMemo).
    
-   IF llDoEvent THEN RUN StarEventMakeModifyEvent ( lhCustomer ).
-   FIND Current Customer NO-LOCK.
    RELEASE Customer.
 
 END.
 
 IF iiRole = 1 THEN Order.CustNum = oiCustNum.
-    
+
 return "ok".
-   
-FINALLY:   
-   IF llDoEvent THEN fCleanEventObjects(). 
+
+FINALLY:
+   IF llDoEvent THEN fCleanEventObjects().
 END.
