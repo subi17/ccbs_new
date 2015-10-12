@@ -24,7 +24,7 @@ DEFINE VARIABLE lcNumeric    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcDel        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcModFields  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liAmtMod     AS INTEGER   NO-UNDO.
-DEFINE VARIABLE lcModified   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcModValues  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lc255        AS CHARACTER NO-UNDO. /* List separator */
 DEFINE VARIABLE lcCustNum    AS CHARACTER NO-UNDO.
 
@@ -44,6 +44,14 @@ lc255 = CHR(255).
 FUNCTION fCollectEvent RETURNS LOGICAL
    (INPUT icCustNum AS CHARACTER):
 
+   lcModValues = "".
+
+   DO liAmtMod = 1 TO NUM-ENTRIES(EventLog.DataValues,CHR(255)) BY 3:
+      IF liAmtMod = 1 THEN
+         ASSIGN lcModValues = ENTRY(liAmtMod + 2,EventLog.DataValues,CHR(255)).
+      ELSE lcModValues = lcModValues + "," + ENTRY(liAmtMod + 2,EventLog.DataValues,CHR(255)).
+   END.
+
    PUT STREAM sFile UNFORMATTED 
       Eventlog.UserCode               + lcDel +
       ENTRY(1,EventLog.Memo,lc255)    + lcDel +
@@ -52,7 +60,7 @@ FUNCTION fCollectEvent RETURNS LOGICAL
       STRING(Eventlog.TimingTS)       + lcDel +
       icCustNum                       + lcDel +
       Eventlog.ModifiedFields         + lcDel +
-      EventLog.DataValues               SKIP.
+      lcModValues                        SKIP.
 
    oiEvents = oiEvents + 1.
    PAUSE 0.
