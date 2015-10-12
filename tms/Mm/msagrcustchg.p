@@ -577,7 +577,7 @@ PROCEDURE pOwnerChange:
          END CASE.
 
          lcMemo = "ACC" + CHR(255) +
-                  STRING(Customer.CustNum) + CHR(255) +
+                  STRING(bNewCust.CustNum) + CHR(255) +
                   STRING(MobSub.MsSeq) + CHR(255) +
                   ENTRY(11,MsRequest.ReqCParam1,";").
 
