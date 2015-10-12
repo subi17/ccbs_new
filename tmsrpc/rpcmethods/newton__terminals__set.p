@@ -14,6 +14,7 @@
 {msreqfunc.i}
 {fpcmaintreq.i}
 {fcreatereq.i}
+gcBrand = "1".
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
 DEF VAR pcUsername AS CHAR NO-UNDO.
