@@ -28,6 +28,7 @@ DEF VAR plSimChecked AS LOGICAL NO-UNDO.
 DEF VAr pcIMEI AS CHAR NO-UNDO INITIAL "".
 DEF VAR pcContractID AS CHAR NO-UNDO.
 DEF VAR pcChannel AS CHAR NO-UNDO.
+DEF VAR lcOldIMEI AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 
@@ -95,9 +96,9 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhSubsTerminal).
    RUN StarEventSetOldBuffer(lhSubsTerminal).
 END.
-
+lcOldIMEI = SubsTerminal.IMEI.
 FIND CURRENT SubsTerminal EXCLUSIVE-LOCK.
- ASSIGN 
+   ASSIGN 
     Substerminal.SimChecked = plSimChecked WHEN Substerminal.SimChecked NE plSimChecked
     Substerminal.IMEI = pcIMEI WHEN LOOKUP("imei",lcStruct) > 0 .
 
@@ -133,33 +134,34 @@ END.
 
 RELEASE SubsTerminal.
 
+/*IMEI change needs request because Document Management reads IMEI changes
+vrom MsRequest.*/
+IF LOOKUP("imei",lcStruct) > 0 THEN DO:
 
+   fCreateRequest({&REQTYPE_IMEI_CHANGE}, /* heat balance query request */
+                  0 , /* chgstamp */
+                  "", /* creator */
+                  FALSE, /* create fees */
+                  FALSE). /* send sms */
 
+   /*empty contract_id if it is not from VFR*/
+   IF pcChannel NE {&DMS_VFR_REQUEST} THEN
+      pcContractId = "".
+   ASSIGN
+      bCreaReq.msseq = Order.msseq
+      bCreaReq.custnum = Order.custnum
+      bCreaReq.CLI = Order.cli
+      bCreaReq.reqcparam1 = lcOldIMEI 
+      bCreaReq.reqcparam2 = pcIMEI /*new IMEI*/
+      bCreaReq.reqcparam3 = Order.Offer
+      bCreaReq.reqcparam6 = pcContractId
+      bCreaReq.reqiparam1 = Order.OrderId
+      bCreaReq.ReqSource  = {&REQUEST_SOURCE_NEWTON}.
 
-fCreateRequest({&REQTYPE_IMEI_CHANGE}, /* heat balance query request */
-               0 , /* chgstamp */
-               "", /* creator */
-               FALSE, /* create fees */
-               FALSE). /* send sms */
+   FIND MSRequest WHERE
+        ROWID(MsRequest) EQ ROWID(bCreaReq) NO-LOCK.
 
-/*empty contract_id if it is not from VFR*/
-IF pcChannel NE {&DMS_VFR_REQUEST} THEN
-   pcContractId = "".
-ASSIGN
-   bCreaReq.msseq = Order.msseq
-   bCreaReq.custnum = Order.custnum
-   bCreaReq.CLI = Order.cli
-   bCreaReq.reqcparam1 = SubsTerminal.IMEI /*old IMEI*/
-   bCreaReq.reqcparam2 = pcIMEI /*new IMEI*/
-   bCreaReq.reqcparam3 = Order.Offer
-   bCreaReq.reqcparam6 = pcContractId
-   bCreaReq.reqiparam1 = Order.OrderId
-   bCreaReq.ReqSource  = {&REQUEST_SOURCE_NEWTON}.
-
-FIND MSRequest WHERE
-     ROWID(MsRequest) EQ ROWID(bCreaReq) NO-LOCK.
-
-fReqStatus(2,"").
-
+   fReqStatus(2,"").
+END.
    
 add_struct(response_toplevel_id, "").
