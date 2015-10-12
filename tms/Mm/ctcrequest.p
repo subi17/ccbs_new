@@ -16,12 +16,6 @@
 {fmakesms.i}
 {fbundle.i}
 {main_add_lines.i}
-{eventval.i}
-
-IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
-END.
 
 DEFINE INPUT PARAMETER iiReqId AS INTEGER   NO-UNDO.
 DEF BUFFER OldCliType FOR CliType.
@@ -44,9 +38,6 @@ DEF VAR lcPrepaidVoiceTariffs  AS CHAR NO-UNDO.
 DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
 DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
-DEF VAR lcSalesman             AS CHAR NO-UNDO.
-DEF VAR i                      AS INT  NO-UNDO.
-DEF VAR lcMemo                 AS CHAR NO-UNDO.
 
 DEF BUFFER lbMobSub     FOR MobSub.
 DEF BUFFER bMobSubCust  FOR MobSub.
@@ -114,12 +105,6 @@ ASSIGN
    ldeActStamp   = MSrequest.ReqDParam1
    liCreditCheck = Msrequest.ReqIParam1.
 
-/* DCH */
-IF INDEX(MsRequest.UserCode,"_") > 0 THEN 
-   ASSIGN i = INDEX(MsRequest.UserCode,"_")
-          lcSalesman = SUBSTRING(MsRequest.UserCode,i + 1).
-ELSE lcSalesman = MsRequest.UserCode.
-
 IF lcBankNumber ne "" AND
    OldCliType.PayType = 2 AND
    NewCliType.PayType = 1 AND
@@ -152,25 +137,6 @@ IF lcBankNumber ne "" AND
         MobSub.Custnum,
         "BANK ACCOUNT CHANGE REQUEST FAILED",
         ocResult).
-   ELSE DO:
-      IF llDoEvent THEN DO:
-         DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
-         lhCustomer = BUFFER Customer:HANDLE.
-         RUN StarEventInitialize(lhCustomer).
-         IF llDoEvent THEN RUN StarEventSetOldBuffer ( lhCustomer ).
-      END.
-
-      lcMemo = "STC" + CHR(255) +
-               STRING(Customer.CustNum) + CHR(255) +
-               STRING(MobSub.MsSeq) + CHR(255) +
-               lcSalesman.
-
-      IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(
-                              lhCustomer,
-                              katun,
-                              lcMemo).
-      fCleanEventObjects().
-   END.
 END.
 
 /* Create possible Credit Check request, YDR-323 */
