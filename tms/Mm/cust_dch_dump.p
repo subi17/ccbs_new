@@ -10,6 +10,7 @@
 
 {commali.i}
 {dumpfile_run.i}
+{timestamp.i}
 
 DEFINE INPUT  PARAMETER icDumpID      AS INTEGER   NO-UNDO.
 DEFINE INPUT  PARAMETER icFile        AS CHARACTER NO-UNDO.
@@ -32,6 +33,8 @@ DEF VAR ldaLastDumpDate AS DATE NO-UNDO.
 DEF VAR liLastDumpTime AS INT NO-UNDO.
 DEF VAR lcLastDumpTime AS CHAR NO-UNDO.
 
+DEF VAR ldEventTS AS DECIMAL NO-UNDO.
+
 DEFINE STREAM sFile.
 
 FORM 
@@ -44,7 +47,9 @@ lc255 = CHR(255).
 FUNCTION fCollectEvent RETURNS LOGICAL
    (INPUT icCustNum AS CHARACTER):
 
-   lcModValues = "".
+   ASSIGN
+      lcModValues = ""
+      ldEventTS   = fHMS2TS(EventLog.EventDate, EventLog.EventTime).
 
    DO liAmtMod = 1 TO NUM-ENTRIES(EventLog.DataValues,CHR(255)) BY 3:
       IF liAmtMod = 1 THEN
@@ -57,7 +62,7 @@ FUNCTION fCollectEvent RETURNS LOGICAL
       ENTRY(1,EventLog.Memo,lc255)    + lcDel +
       ENTRY(3,EventLog.Memo,lc255)    + lcDel +
       ENTRY(4,EventLog.Memo,lc255)    + lcDel +
-      STRING(Eventlog.TimingTS)       + lcDel +
+      STRING(ldEventTS)               + lcDel +
       icCustNum                       + lcDel +
       Eventlog.ModifiedFields         + lcDel +
       lcModValues                        SKIP.
