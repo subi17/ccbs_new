@@ -431,11 +431,12 @@ ELSE DO:
             ASSIGN lcFields = "HonTitle,FirstName,CustName,Surname2,Nationality," +
                               "Language,Birthday,Phone,SMSNumber,BankAcct,DirMarkSMS," +
                               "DirMarkEmail,DirMarkPOST,OutMarkSMS,OutMarkEmail," +
-                              "OutMarkPOST,OutMarkBank,Email,DelType,CompanyName," +
+                              "OutMarkPOST,OutMarkBank,Email,DelType," +
                               "Address,ZipCode,PostOffice,Region,Country".
 
-            IF OrderCustomer.CustIdType NE "CIF" THEN
-               lcFields = lcFields + ",Profession,AuthCustIdType,AuthCustId".
+            IF OrderCustomer.CustIdType = "CIF" THEN
+               lcFields = lcFields + ",CompanyName,FoundationDate".
+            ELSE lcFields = lcFields + ",Profession,AuthCustIdType,AuthCustId".
 
             fUpdCustEvent(BUFFER bOldCustData:HANDLE,
                           katun,
