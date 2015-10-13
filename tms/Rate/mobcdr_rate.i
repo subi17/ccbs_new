@@ -307,14 +307,10 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       IF ttCall.ServiceClass = {&SC_TARJ7_INSIDE_DATABUNDLE1} 
       OR ttCall.ServiceClass = {&SC_TARJ7_INSIDE_DATABUNDLE2} THEN
          b_prodcode = {&BITEM_GRP_INTERNET_TARJ7DATA}.
-      ELSE IF ttCall.ServiceClass = {&SC_TARJ7_OUTSIDE_DATABUNDLE} THEN
-         b_prodcode = "PRE14100001".
       /* TARJ9 case */
       ELSE IF ttCall.ServiceClass = {&SC_TARJ9_INSIDE_DATABUNDLE1}
       OR ttCall.ServiceClass = {&SC_TARJ9_INSIDE_DATABUNDLE2} THEN
          b_prodcode = {&BITEM_GRP_INTERNET_TARJ9DATA}.
-      ELSE IF ttCall.ServiceClass = {&SC_TARJ9_OUTSIDE_DATABUNDLE} THEN
-         b_prodcode = "PRE14100001".
    END.
 
    IF dest_recid = ? OR 
