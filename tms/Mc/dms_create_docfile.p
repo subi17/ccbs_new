@@ -434,13 +434,14 @@ END.
 
 FUNCTION fCountIMEIModifications RETURN CHAR
    (iiMsSeq AS INT):
+   DEF BUFFER bMsrequest FOR MsRequest.
    DEF VAR liCount AS INT NO-UNDO.
-   FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.MsSeq EQ iiMsSeq AND
-            MsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} AND
-            MsRequest.ReqStatus EQ 2 AND
-            MsRequest.ReqCparam6 NE "" AND
-            MsRequest.UpdateStamp <= MsRequest.DoneStamp :
+   FOR EACH bMsRequest NO-LOCK WHERE
+            bMsRequest.MsSeq EQ iiMsSeq AND
+            bMsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} AND
+            bMsRequest.ReqStatus EQ 2 AND
+            bMsRequest.ReqCparam6 NE "" AND
+            bMsRequest.UpdateStamp <= bMsRequest.DoneStamp :
       liCount = liCount + 1.
    END.
    RETURN STRING(liCount).
