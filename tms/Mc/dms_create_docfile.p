@@ -240,7 +240,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
       END.   
          IF llgAddEntry EQ TRUE THEN DO TRANS:
             CREATE ttOrderList.
-            ASSIGN ttOrderList.OrderID = OrderTimestamp.OrderId
+            ASSIGN ttOrderList.OrderID = liAddId
                    ttOrderList.CaseID = lcCase.
                    ttOrderList.Direct = llgDirect.
          END.
