@@ -1173,7 +1173,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
       RETURN "6:Order not available" + STRING(iiOrderId).
 
    lcPrevStatus = fGetOrderStatusDMS(Order.ContractID).
-   lcCAncellationType = fGetCancellationInfo(Order.MsSeq, 
+   lcCAncellationType = fGetCancellationInfo(Order.MsSeq,
                                              lcPrevStatus,
                                              idPeriodStart, 
                                              idPeriodEnd,
