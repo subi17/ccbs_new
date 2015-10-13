@@ -703,7 +703,6 @@ PROCEDURE pFinalize:
    DEF VAR lcDataBundleCLITypes    AS CHAR NO-UNDO.
 
    DEF BUFFER bSubRequest FOR MsRequest.
-   DEF BUFFER bMobSubCust FOR MobSub.
    
    /* now when billtarget has been updated new fees can be created */
 

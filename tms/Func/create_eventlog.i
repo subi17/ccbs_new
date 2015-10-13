@@ -6,7 +6,6 @@
    in caller needed:
    DEF VAR lhTable AS HANDLE NO-UNDO.
    lhTable = BUFFER TableCreated:HANDLE.
-				  16.07.2015 hugo.lujan YPR-2260 [DCH] TMS - Customer information, Create Event log   
 */   
 
 &IF "{&CreateEventLog}" NE "YES" 
@@ -16,7 +15,6 @@
 
 
 {commali.i}
-{timestamp.i}
 
 FUNCTION fGetEventField RETURNS CHARACTER
    (ihField  AS HANDLE,
