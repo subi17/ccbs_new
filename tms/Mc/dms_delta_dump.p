@@ -32,8 +32,7 @@ DEF VAR lhField         AS HANDLE   NO-UNDO.
 DEF VAR lcField         AS CHAR     NO-UNDO.
 DEF VAR ldaLastDumpDate AS DATE     NO-UNDO.
 DEF VAR liLastDumpTime  AS INT      NO-UNDO.
-DEF VAR lcLastDumpTime  AS CHAR     NO-UNDO.
-DEF VAR liDMSID         AS INT      NO-UNDO. 
+DEF VAR ldFromStamp  AS DEC      NO-UNDO.
 
 DEF STREAM sFile.
 
@@ -59,119 +58,96 @@ BY DFField.OrderNbr:
                   DFField.DFField.
 END.
 
+fSplitTS(idLastDump,
+         OUTPUT ldaModified,
+         OUTPUT liCnt).
+
 ASSIGN
    lhTable     = BUFFER DMS:HANDLE
    lcKeyFields = fEventKeyFields(lhTable).
 
+IF icDumpMode = "Modified" THEN ldFromStamp = idLastDump.
+ELSE ldFromStamp = 20060101.
+
 OUTPUT STREAM sFile TO VALUE(icFile).
 
-IF idLastDump > 0 THEN
-   fSplitTs(idLastDump, OUTPUT ldaLastDumpDate, OUTPUT liLastDumpTime).
+FOR EACH DMS NO-LOCK WHERE
+         DMS.StatusTS >= ldFromStamp
+   ON QUIT UNDO, RETRY
+   ON STOP UNDO, RETRY:
 
-lcLastDumpTime = STRING(liLastDumpTime,"hh:mm:ss").
-
-
-IF icDumpMode EQ "Full" THEN
-   FOR EACH EventLog NO-LOCK WHERE
-            EventLog.TableName = "DMS"
-            USE-INDEX TableName:
-
-      RUN pWriteFile.
+   IF RETRY THEN DO:
+      olInterrupted = TRUE.
+      LEAVE.
    END.
-ELSE FOR EACH EventLog NO-LOCK WHERE
-              EventLog.EventDate >= ldaLastDumpDate AND
-              EventLog.TableName = "DMS"
-              USE-INDEX EventDate:
-      IF EventLog.EventDate EQ ldaLastDumpDate AND
-         EventLog.EventTime < lcLastDumpTime THEN NEXT.
+   
+   DO liCnt = 1 TO NUM-ENTRIES(lcDumpFields):
 
-      RUN pWriteFile.   
-   END.
+      lcField = ENTRY(liCnt,lcDumpFields).
 
-PROCEDURE pWriteFile:
+      IF lcField BEGINS "#" THEN DO:
 
-   liDMSID = INT(EventLog.Key) NO-ERROR.
-   IF ERROR-STATUS:ERROR THEN NEXT.
-
-   FOR EACH DMS NO-LOCK WHERE
-            DMS.DMSID = liDMSID
-            ON QUIT UNDO, RETRY
-      ON STOP UNDO, RETRY:
-
-      IF RETRY THEN DO:
-         olInterrupted = TRUE.
-         LEAVE.
-      END.
-      
-      DO liCnt = 1 TO NUM-ENTRIES(lcDumpFields):
-
-         lcField = ENTRY(liCnt,lcDumpFields).
-
-         IF lcField BEGINS "#" THEN DO:
-
-            CASE lcField:
-               WHEN "#TypeOfID" THEN DO:
-                  IF DMS.HostTable = "MsRequest" THEN DO:
-                     FIND FIRST MsRequest NO-LOCK WHERE
-                                MsRequest.MsRequest = DMS.HostID
-                                NO-ERROR.
-                     IF AVAILABLE MsRequest THEN DO:
-                        CASE MsRequest.ReqType:
-                           WHEN {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN
-                              lcValue = "STC_ID".
-                           WHEN {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} THEN
-                              lcValue = "ACC_ID".
-                           OTHERWISE
-                              lcValue = "REQ_ID".
-                        END CASE.
-                     END.
+         CASE lcField:
+            WHEN "#TypeOfID" THEN DO:
+               IF DMS.HostTable = "MsRequest" THEN DO:
+                  FIND FIRST MsRequest NO-LOCK WHERE
+                             MsRequest.MsRequest = DMS.HostID
+                             NO-ERROR.
+                  IF AVAILABLE MsRequest THEN DO:
+                     CASE MsRequest.ReqType:
+                        WHEN {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN
+                           lcValue = "STC_ID".
+                        WHEN {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} THEN
+                           lcValue = "ACC_ID".
+                        OTHERWISE
+                           lcValue = "REQ_ID".
+                     END CASE.
                   END.
-                  ELSE IF DMS.HostTable = "Order" THEN 
-                     lcValue = "Order_ID".
-                  ELSE
-                     lcValue = "ID".
                END.
-               WHEN "#OrderStatus" THEN DO:
-                  FIND FIRST Order NO-LOCK WHERE
-                             Order.Brand = gcBrand AND
-                             Order.OrderID = DMS.HostID NO-ERROR.
-                  IF AVAIL Order AND DMS.HostTable = "Order" THEN
-                     lcValue = Order.StatusCode.
-                  ELSE lcValue = "".
-               END.
-               OTHERWISE lcValue = "".
-            END CASE.
-         END.
-
-         ELSE DO:
-            lhField = lhTable:BUFFER-FIELD(lcField).
-            lcValue = lhField:BUFFER-VALUE.
-         END.
-         
-         PUT STREAM sFile UNFORMATTED
-            lcValue.
-
-         IF liCnt < NUM-ENTRIES(lcDumpFields) THEN 
-         PUT STREAM sFile UNFORMATTED
-            lcDelimiter.
-      
+               ELSE IF DMS.HostTable = "Order" THEN 
+                  lcValue = "Order_ID".
+               ELSE
+                  lcValue = "ID".
+            END.
+            WHEN "#OrderStatus" THEN DO:
+               FIND FIRST Order NO-LOCK WHERE
+                          Order.Brand = gcBrand AND
+                          Order.OrderID = DMS.HostID NO-ERROR.
+               IF AVAIL Order AND DMS.HostTable = "Order" THEN
+                  lcValue = Order.StatusCode.
+               ELSE lcValue = "".
+            END.
+            OTHERWISE lcValue = "".
+         END CASE.
       END.
-            
+
+      ELSE DO:
+         lhField = lhTable:BUFFER-FIELD(lcField).
+         lcValue = lhField:BUFFER-VALUE.
+      END.
+      
       PUT STREAM sFile UNFORMATTED
-         SKIP.
-      
-      oiEvents = oiEvents + 1.
+         lcValue.
 
-      IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
-         PAUSE 0. 
-         DISP oiEvents LABEL "DMS Records" 
-         WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
-            TITLE " Collecting " FRAME fQty.
-      END.
+      IF liCnt < NUM-ENTRIES(lcDumpFields) THEN 
+      PUT STREAM sFile UNFORMATTED
+         lcDelimiter.
+   
+   END.
+         
+   PUT STREAM sFile UNFORMATTED
+      SKIP.
+   
+   oiEvents = oiEvents + 1.
 
+   IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
+      PAUSE 0. 
+      DISP oiEvents LABEL "DMS Records" 
+      WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
+         TITLE " Collecting " FRAME fQty.
    END.
 
-END PROCEDURE.
+END.
 
 IF NOT SESSION:BATCH THEN 
    HIDE FRAME fQty NO-PAUSE.
