@@ -181,7 +181,8 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
             MNPDetails.mnpseq = MNPProcess.mnpseq:
 
       IF mnpdetails.statuslimitts < fMakeTS() THEN NEXT MNP_LOOP.
-      IF mnpdetails.custidtype EQ "CIF" THEN NEXT MNP_LOOP.
+      /* IF mnpdetails.custidtype EQ "CIF" THEN NEXT MNP_LOOP. 
+      Commented out YOT-4095 */
    
       IF MNPProcess.StatusCode EQ {&MNP_ST_ASOL} AND NOT 
          (MNPProcess.StateFlag = {&MNP_STATEFLAG_CONFIRM_PROPOSAL} OR 
@@ -198,7 +199,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusCodes):
          IF MobSub.PayType = TRUE THEN
             liExcludeOffset = -2160. /* Prepaid 90 days */
          ELSE
-            liExcludeOffset = -1440. /* Postpaid 60 days */
+            liExcludeOffset = 0. /* -1440. Commented out YOT-4095 */ /* Postpaid 60 days */
 
          /* Exclude Prepaid/postpaid clients from generated retention file */
          FOR EACH bMNPSub NO-LOCK WHERE
@@ -307,13 +308,6 @@ PROCEDURE pFileDump:
    DEF VAR liMaxPeriods AS INT NO-UNDO init 100. 
    DEF VAR liPeriods AS INT NO-UNDO. 
 
-   IF iiPlatform > 0 THEN DO:
-      IF NOT CAN-FIND(FIRST ttData WHERE  
-             ttData.RetentionPlatform = lcRetentionPlatform[iiPlatform])
-      THEN RETURN.
-   END.
-   ELSE IF NOT CAN-FIND(FIRST ttData) THEN RETURN.
-
    lcDate = string(year(today),"9999") + 
             string(month(today),"99") +
             string(day(today),"99").
@@ -337,7 +331,7 @@ PROCEDURE pFileDump:
       OUTPUT STREAM sout TO VALUE (lcRetentionFile[iiPlatform]) APPEND.
       liPlatform = iiPlatform.
    END.
-   
+
    FOR EACH ttData WHERE
       ttData.RetentionPlatform = lcRetention NO-LOCK,
       FIRST Customer NO-LOCK WHERE
