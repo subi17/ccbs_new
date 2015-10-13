@@ -1164,6 +1164,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
 
    ASSIGN
       lcCaseTypeId    = "6"
+      lcCancellationType = ""
       ldStatusTS      = idPeriodStart.
 
    FIND FIRST Order NO-LOCK WHERE
