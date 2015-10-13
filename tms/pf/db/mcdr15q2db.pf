@@ -1,0 +1,11 @@
+-db /db1/mcdr15q2/mcdr15q2
+-L 100000
+-B  10000000
+-B2  3000000
+#-B  10000
+#-B2 10000
+-S mcdr15q2
+-aiarcdir /aiarchive/mcdr15q2
+-DBService replserv
+-pica 8192
+-pf /apps/tms/pf/db/general.pf
