@@ -5,5 +5,7 @@ ASSIGN
    Common.RepLog.RecordId  = RECID(DMSDoc)
    Common.RepLog.TableName = "DMSDoc"
    Common.RepLog.EventType = "DELETE"
-   Common.RepLog.KeyValue  = STRING(DMSDoc.DMSID)
+   Common.RepLog.KeyValue  = STRING(DMSDoc.DMSID)          + CHR(255) +
+                             DMSDoc.DocTypeID              + CHR(255) +
+                             STRING(DMSDoc.DocStatusTS)
    Common.RepLog.EventTS   = DATETIME(TODAY,MTIME).
