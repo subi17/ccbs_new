@@ -212,6 +212,7 @@ FOR EACH servicelimit NO-LOCK,
               fmitem.feemodel = daycampaign.feemodel and
               fmitem.todate > today no-error.
    if fmitem.billmethod then next.
+   if fmitem.billtype eq "NF" then next. /* no fee (prepaid) */
 
    FIND FIRST ttServicelimit NO-LOCK where
               ttServicelimit.groupcode  = servicelimit.groupcode no-error.
