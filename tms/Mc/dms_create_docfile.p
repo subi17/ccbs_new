@@ -376,8 +376,7 @@ FUNCTION fGetTerminalData RETURNS CHAR
       FIND FIRST BillItem  NO-LOCK WHERE
                  BillItem.BillCode EQ OfferItem.ItemKey AND
                  Billitem.BiName NE ? AND
-                 NOT Billitem.Biname  BEGINS "Prepaid" AND
-                 NOT BillItem.Biname BEGINS "Postaid" NO-ERROR.
+                 BillItem.BIGroup EQ {&BITEM_GRP_TERMINAL} NO-ERROR.
       IF AVAIL BillItem THEN DO:
          RETURN BillItem.BiName.
       END.
@@ -1032,46 +1031,46 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                RUN offer_penaltyfee.p(Order.OrderID,
                                       OUTPUT liPermancyLength,
                                       OUTPUT ldePermanencyAmount).
-            /**/
-            lcCaseFileRow = 
-            lcCaseTypeId                                    + lcDelim +
-            /*Order_ID*/
-            STRING(MsRequest.ReqIparam1)                    + lcDelim +
-            /*Contract_ID*/
-            STRING(MsRequest.ReqCparam6)                    + lcDelim +
-            /*SFID*/
-            REPLACE(Msrequest.UserCode, "VISTA_", "")       + lcDelim +
-            /*MSISDN*/
-            STRING(MsRequest.CLI)                           + lcDelim +
-            /*Order_date*/
-            fPrintDate(MsRequest.CreStamp)                  + lcDelim +
-            /*Modification date*/
-            fPrintDate(MsRequest.UpdateStamp)               + lcDelim +
-            /*Modification number*/
-            fCountIMEIModifications(MsRequest.MsSeq)        + lcDelim +
-            /*New IMEI*/
-            STRING(MsRequest.ReqCparam2)                    + lcDelim +
-            /*New Handset*/
-            STRING(lcModel)                                 + lcDelim +
-            /*New Installment*/
-            STRING(ldeInstallment)                          + lcDelim +
-            /*New Residual value*/
-            STRING(ldeFinalFee)                             + lcDelim +
-            /*New Permanency*/
-            STRING(ldePermanencyAmount)                     + lcDelim +
-            /*Previous IMEI*/
-            STRING(MsRequest.ReqCparam1)                    + lcDelim +
-            /*Previous Handset*/
-            fGetPreviousHandset(MsRequest.ReqCparam1)       + lcDelim +
-            /*Previous Installment*/
-            STRING(ldeInstallment)                          + lcDelim +
-            /*Previous Residual value*/
-            STRING(ldeFinalFee)                             + lcDelim +
-            /*Previous Permanency*/ 
-            STRING(ldePermanencyAmount).
+            /**/ 
+            lcCaseFileRow =  
+            lcCaseTypeId                                    + lcDelim + 
+            /*Order_ID*/ 
+            STRING(MsRequest.ReqIparam1)                    + lcDelim + 
+            /*Contract_ID*/ 
+            STRING(MsRequest.ReqCparam6)                    + lcDelim + 
+            /*SFID*/ 
+            REPLACE(Msrequest.UserCode, "VISTA_", "")       + lcDelim + 
+            /*MSISDN*/ 
+            STRING(MsRequest.CLI)                           + lcDelim + 
+            /*Order_date*/ 
+            fPrintDate(MsRequest.CreStamp)                  + lcDelim + 
+            /*Modification date*/ 
+            fPrintDate(MsRequest.UpdateStamp)               + lcDelim + 
+            /*Modification number*/ 
+            fCountIMEIModifications(MsRequest.MsSeq)        + lcDelim + 
+            /*New IMEI*/ 
+            STRING(MsRequest.ReqCparam2)                    + lcDelim + 
+            /*New Handset*/ 
+            STRING(lcModel)                                 + lcDelim + 
+            /*New Installment*/ 
+            STRING(ldeInstallment)                          + lcDelim + 
+            /*New Residual value*/ 
+            STRING(ldeFinalFee)                             + lcDelim + 
+            /*New Permanency*/ 
+            STRING(ldePermanencyAmount)                     + lcDelim + 
+            /*Previous IMEI*/ 
+            STRING(MsRequest.ReqCparam1)                    + lcDelim + 
+            /*Previous Handset*/ 
+            fGetPreviousHandset(MsRequest.ReqCparam1)       + lcDelim + 
+            /*Previous Installment*/ 
+            STRING(ldeInstallment)                          + lcDelim + 
+            /*Previous Residual value*/ 
+            STRING(ldeFinalFee)                             + lcDelim + 
+            /*Previous Permanency*/  
+            STRING(ldePermanencyAmount). 
 
-         END.
-      END.
+         END. 
+      END. 
       /*Document type,DocStatusCode,RevisionComment*/
       lcDocListEntries = "". 
 
