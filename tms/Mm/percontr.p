@@ -1615,8 +1615,7 @@ PROCEDURE pContractTermination:
 
    DEF VAR llFMFee AS LOG  NO-UNDO. 
    DEF VAR liDSSMsSeq AS INT NO-UNDO. 
-   DEF VAR ldaLastFeeMonth AS DATE NO-UNDO. 
-
+   DEF VAR ldaMonth22 AS DATE NO-UNDO. 
 
    DEF BUFFER bLimit        FOR MServiceLimit.
    DEF BUFFER bMsRequest    FOR MsRequest.
@@ -2134,14 +2133,11 @@ PROCEDURE pContractTermination:
          /* YPR-2515 */
          IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_RENEWAL} THEN DO:
             
-            ldaLastFeeMonth = fLastDayOfMonth(ldtOrigValidTo).
-            IF ldtOrigValidTo NE ldaLastFeeMonth THEN
-               ldaLastFeeMonth = ADD-INTERVAL(ldaLastFeeMonth,-1,"months").
+            ldaMonth22  = ADD-INTERVAL(ldtOrigValidFrom, 22, "months").
+            ldaMonth22  = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
 
-            IF ADD-INTERVAL(DATE(MONTH(ldtActDate),
-                              1,
-                              YEAR(ldtActDate)),2,"months") > ldaLastFeeMonth
-            THEN llCreatePenaltyFee = FALSE.
+            IF ldtActDate >= ldaMonth22 THEN
+               llCreatePenaltyFee = FALSE.
          END.
             
       END.

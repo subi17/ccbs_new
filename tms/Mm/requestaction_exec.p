@@ -187,7 +187,7 @@ PROCEDURE pPeriodicalContract:
    DEF VAR lcPerContractIDs AS CHAR NO-UNDO. 
    DEF VAR llFound AS LOG NO-UNDO. 
    DEF VAR liFFCount AS INT NO-UNDO. 
-   DEF VAR ldaLastFeeMonth AS DATE NO-UNDO. 
+   DEF VAR ldaMonth22 AS DATE NO-UNDO. 
 
    DEF BUFFER bBundleRequest  FOR MsRequest.
    DEF BUFFER bBundleContract FOR DayCampaign.
@@ -365,13 +365,12 @@ PROCEDURE pPeriodicalContract:
             END.
 
             /* YPR-2515 */
-            ldaLastFeeMonth = fLastDayOfMonth(bDCCLI.ValidTo).
-            IF bDCCLI.ValidTo NE ldaLastFeeMonth THEN
-               ldaLastFeeMonth = ADD-INTERVAL(ldaLastFeeMonth,-1,"months").
+            ldaMonth22  = ADD-INTERVAL(bDCCLI.ValidFrom, 22, "months").
+            ldaMonth22  = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
 
             IF AVAIL Order AND
                      Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
-               ADD-INTERVAL(ldaTermDate, 2, "months") > ldaLastFeeMonth THEN DO:
+               ldaTermDate >= ldaMonth22 THEN DO:
                
                FOR EACH DCCLI NO-LOCK WHERE
                         DCCLI.Brand      = gcBrand         AND
