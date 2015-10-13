@@ -826,12 +826,12 @@ DO TRANS:
          ASSIGN
             TTCall.BDest     = b_dest       /* Classified Destination   */
             TTCall.ccn       = b_ccn        /* Consecutive Country No.   */
-            TTCall.BillCode  = b_prodcode   /* ONLY WHEN PNP */
+            TTCall.BillCode  = b_prodcode   /* ONLY WHEN PNP or Prepaid Data */
             ttCall.dialtype  = b_asubtype.
 
             /* SOME SPECIAL CASES */
 
-            /* Data call get always same product code */
+            /* Data call get always same product code with POSTPAID */
       END.
 
       ASSIGN 
@@ -890,20 +890,6 @@ DO TRANS:
  
       /* GPRS as Data amount based (bytes) */
       IF lidialtype = 7 THEN DO:
-         /* YDR-1642: added logic to divide Prepaid data package CDRs
-            with these two use: current one.
-            SC_TARJ7_INSIDE_DATABUNDLE1  = 3
-            SC_TARJ7_INSIDE_DATABUNDLE2  = 303
-            with this use: BITEM_GRP_INTERNET_TARJ7DATA = 70514100
-            SC_TARJ7_OUTSIDE_DATABUNDLE  = 103
-         */
-         IF TTCall.PPFlag = 1 THEN DO:
-            IF ttCall.ServiceClass = {&SC_TARJ7_INSIDE_DATABUNDLE1} 
-            OR ttCall.ServiceClass = {&SC_TARJ7_INSIDE_DATABUNDLE2} THEN
-               ttCall.BillTarget = {&BITEM_GRP_INTERNET_TARJ7DATA}.
-            ELSE IF ttCall.ServiceClass = {&SC_TARJ7_OUTSIDE_DATABUNDLE} THEN
-               ttCall.BillTarget = MsOwner.BillTarget.
-         END.
          c_dur = ttCall.DataIN + ttCall.DataOut.
       END.
       /* duration may be only partly billable */

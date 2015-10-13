@@ -299,6 +299,24 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       ELSE IF mod_bsub BEGINS "722" THEN mod_bsub = "YOIGO".
    END.          
 
+   /* YDR-1642: added logic to divide Prepaid data package CDRs
+      in a case of TARJ7 / TARJ9.
+   */
+   IF TTCall.PPFlag = 1 AND ttCall.SpoCMT EQ 93 THEN DO:
+      /* TARJ7 case */
+      IF ttCall.ServiceClass = {&SC_TARJ7_INSIDE_DATABUNDLE1} 
+      OR ttCall.ServiceClass = {&SC_TARJ7_INSIDE_DATABUNDLE2} THEN
+         b_prodcode = {&BITEM_GRP_INTERNET_TARJ7DATA}.
+      ELSE IF ttCall.ServiceClass = {&SC_TARJ7_OUTSIDE_DATABUNDLE} THEN
+         b_prodcode = "PRE14100001".
+      /* TARJ9 case */
+      ELSE IF ttCall.ServiceClass = {&SC_TARJ9_INSIDE_DATABUNDLE1}
+      OR ttCall.ServiceClass = {&SC_TARJ9_INSIDE_DATABUNDLE2} THEN
+         b_prodcode = {&BITEM_GRP_INTERNET_TARJ9DATA}.
+      ELSE IF ttCall.ServiceClass = {&SC_TARJ9_OUTSIDE_DATABUNDLE} THEN
+         b_prodcode = "PRE14100001".
+   END.
+
    IF dest_recid = ? OR 
       dest_recid = 0 THEN 
    DO b = LENGTH(mod_bsub) TO 1 BY -1.
