@@ -238,12 +238,20 @@ FUNCTION fMakeTempTable RETURNS CHAR
             END.
          END.
       END.   
-         IF llgAddEntry EQ TRUE THEN DO TRANS:
+      IF llgAddEntry EQ TRUE THEN DO:
+         /*Sending is allowed only if there is previous DMS entry for 
+           the change. */
+         FIND FIRST DMS NO-LOCK WHERE
+                    DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
+                    DMS.HostID EQ liAddId AND
+                    DMS.StatusTS <= idEndTs NO-ERROR.
+        
+         IF AVAIL DMS THEN DO TRANS:
             CREATE ttOrderList.
             ASSIGN ttOrderList.OrderID = liAddId
                    ttOrderList.CaseID = lcCase.
-                   ttOrderList.Direct = llgDirect.
          END.
+      END.
    END. /*Msrequest search*/
 
 END.
