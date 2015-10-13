@@ -8,21 +8,6 @@
 ASSIGN
    katun   = "Cron"
    gcBrand = "1".
-{eventval.i}
-
-IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
-
-   {lib/eventlog.i}
-
-   DEFINE VARIABLE lhDMS AS HANDLE NO-UNDO.
-   lhDMS = BUFFER DMS:HANDLE.
-   RUN StarEventInitialize(lhDMS).
-
-   DEFINE VARIABLE lhDMSDoc AS HANDLE NO-UNDO.
-   lhDMSDoc = BUFFER DMSDoc:HANDLE.
-   RUN StarEventInitialize(lhDMSDoc).
-END.
 
 DEF TEMP-TABLE ttDocs NO-UNDO
    FIELD DocTypeID      AS CHAR
@@ -32,7 +17,6 @@ DEF TEMP-TABLE ttDocs NO-UNDO
    FIELD DocStatusTS    AS DEC FORMAT "99999999.99999"
    FIELD Comment        AS CHAR.
 
-
 FUNCTION fGetOrderStatusDMS RETURNS CHAR
    (icContractID AS CHAR):
    FIND FIRST DMS NO-LOCK WHERE
@@ -41,7 +25,6 @@ FUNCTION fGetOrderStatusDMS RETURNS CHAR
    IF AVAIL DMS THEN RETURN DMS.OrderStatus.
    RETURN "".      
 END.
-   
 
 FUNCTION fUpdateDMS RETURNS LOGICAL
    (icDmsExternalID  AS CHAR,
@@ -66,7 +49,6 @@ FUNCTION fUpdateDMS RETURNS LOGICAL
       CREATE DMS.
       ASSIGN DMS.DMSID = NEXT-VALUE(DMS).
    END.
-   ELSE IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDMS).
 
    ASSIGN DMS.DmsExternalID = icDmsExternalID WHEN icDmsExternalID NE ""
           DMS.CaseTypeID    = icCaseTypeID
@@ -86,11 +68,6 @@ FUNCTION fUpdateDMS RETURNS LOGICAL
    END.
    ELSE DMS.OrderStatus = icOrderstatus.
 
-   IF llDoEvent THEN DO:
-      IF NEW DMS THEN RUN StarEventMakeCreateEvent(lhDMS).
-      ELSE RUN StarEventMakeModifyEvent(lhDMS).
-   END.
-
    IF icDocList <> "" THEN
       DO i = 1 TO NUM-ENTRIES(icDocList,icDocListSep) BY 4:
 
@@ -103,19 +80,12 @@ FUNCTION fUpdateDMS RETURNS LOGICAL
          CREATE DMSDoc.
          ASSIGN DMSDoc.DMSID = DMS.DMSID.
       END.
-      ELSE IF lldoevent THEN RUN StarEventSetOldBuffer(lhDMSDoc).
 
       ASSIGN DMSDoc.DocStatusTS   = DMS.StatusTS
              DMSDoc.DocTypeID     = ENTRY(i,icDocList,icDocListSep)
              DMSDoc.DocTypeDesc   = ENTRY(i + 1,icDocList,icDocListSep)
              DMSDoc.DocStatusCode = ENTRY(i + 2,icDocList,icDocListSep)
              DMSDoc.DocRevComment = ENTRY(i + 3,icDocList,icDocListSep).
-
-      IF llDoEvent THEN DO:
-         IF NEW DMSDoc THEN RUN StarEventMakeCreateEvent(lhDMSDoc).
-         ELSE RUN StarEventMakeModifyEvent(lhDMSDoc).
-      END.
-
    END.
 
    RELEASE DMS.
