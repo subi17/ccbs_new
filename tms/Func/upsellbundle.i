@@ -98,6 +98,7 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
             FIRST DayCampaign NO-LOCK WHERE
                   DayCampaign.Brand = gcBrand AND
                   DayCampaign.DCEvent = bServiceLimit.GroupCode AND
+                  DayCampaign.BundleUpsell NE "DATA200_UPSELL" AND
                   DayCampaign.BundleUpsell > "":
             IF {dss_search.i "DayCampaign.DCEvent"} THEN NEXT.
             RETURN bServiceLimit.GroupCode.
