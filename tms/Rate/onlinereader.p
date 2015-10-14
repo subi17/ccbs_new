@@ -826,12 +826,12 @@ DO TRANS:
          ASSIGN
             TTCall.BDest     = b_dest       /* Classified Destination   */
             TTCall.ccn       = b_ccn        /* Consecutive Country No.   */
-            TTCall.BillCode  = b_prodcode   /* ONLY WHEN PNP or Prepaid Data */
+            TTCall.BillCode  = b_prodcode   /* ONLY WHEN PNP */
             ttCall.dialtype  = b_asubtype.
 
             /* SOME SPECIAL CASES */
 
-            /* Data call get always same product code with POSTPAID */
+            /* Data call get always same product code */
       END.
 
       ASSIGN 
@@ -889,9 +889,8 @@ DO TRANS:
          ttCall.RateCCN = liCCN.
  
       /* GPRS as Data amount based (bytes) */
-      IF lidialtype = 7 THEN DO:
-         c_dur = ttCall.DataIN + ttCall.DataOut.
-      END.
+      IF lidialtype = 7 THEN c_dur = ttCall.DataIN + ttCall.DataOut.
+
       /* duration may be only partly billable */
       ELSE IF CAN-FIND(FIRST ttDuration WHERE
                         ttDuration.CallCase = STRING(ttCall.RateCCN)) THEN DO:
