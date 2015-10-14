@@ -113,7 +113,8 @@ IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN DO:
       NO-LOCK USE-INDEX simseSta_s NO-ERROR.
          
       IF AVAIL SIM THEN DO:
-         IF OrderDelivery.LoStatusID = 875 THEN DO:
+         IF ilCheckLOStatus EQ FALSE OR
+            OrderDelivery.LoStatusID = 875 THEN DO:
             FIND CURRENT SIM EXCLUSIVE-LOCK.
             SIM.SimStat = {&SIM_SIMSTAT_LOST}.
             RELEASE SIM.
@@ -222,11 +223,11 @@ ELSE DO:
             OUTPUT liSimStat,
             OUTPUT liQuarTime).
 
-         IF OrderDelivery.LoStatusId = 875 THEN liSimStat = 7.
+         IF ilCheckLOStatus EQ FALSE OR 
+            OrderDelivery.LoStatusId = 875 THEN liSimStat = 7.
          /*YPR-2486:*/
-         ELSE IF fcParamI("UseTempSimStatus") EQ 1 AND liSimStat EQ 1 THEN DO:
+         ELSE IF fcParamI("UseTempSimStatus") EQ 1 AND liSimStat EQ 1 THEN
             liSimStat = {&SIM_SIMSTAT_TEMP}.
-         END.
 
          liReq = fTerminationRequest(
                         Order.MsSeq,
