@@ -1,0 +1,4 @@
+ADD INDEX "ContractID" ON "DMS"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "ContractID" ASCENDING
+

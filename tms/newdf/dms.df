@@ -87,6 +87,15 @@ ADD FIELD "ContractID" OF "DMS" AS character
   HELP "ContractID"
   ORDER 90
 
+ADD FIELD "OrderStatus" OF "DMS" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "OrderStatus"
+  POSITION 11
+  MAX-WIDTH 16
+  HELP "Order Status in TMS"
+  ORDER 100
+
 ADD INDEX "DMSID" ON "DMS" 
   AREA "Sta_Index_1"
   PRIMARY
@@ -106,4 +115,4 @@ ADD INDEX "StatusTS" ON "DMS"
 PSC
 cpstream=1252
 .
-0000001965
+0000002134
