@@ -7,6 +7,17 @@
 gcBrand = "1".
 
 {xmlfunction.i}
+DEF VAR lcHostname AS CHAR NO-UNDO.
+INPUT THROUGH hostname.
+IMPORT lcHostName.
+INPUT CLOSE.
+
+IF LOOKUP(lcHostName,'angetenar,alpheratz') = 0 THEN DO:
+   MESSAGE 'This script is not allowed to run in'
+   lcHostName VIEW-AS ALERT-BOX.
+   RETURN.
+END.
+
 /*
 FUNCTION fRPCStruct RETURNS LOGICAL
   (INPUT pcCommand AS CHARACTER,
