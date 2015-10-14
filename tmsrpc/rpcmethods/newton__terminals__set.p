@@ -75,9 +75,9 @@ IF NOT AVAIL SubsTerminal then return appl_err("Subscription terminal was not fo
 
 FIND FIRST Order NO-LOCK WHERE
            Order.Brand EQ gcBrand AND
-           Order.ContractId EQ pcContractId NO-ERROR.
+           Order.OrderId EQ Substerminal.OrderId NO-ERROR.
 IF NOT AVAIL Order THEN
-    appl_err("Order was not found").
+    appl_err("Order for device was not found").
    
 /* if nothing will be updated then return empty */
 IF ( LOOKUP("sim_lock_code_viewable",lcStruct) = 0 OR 
