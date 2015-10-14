@@ -8,6 +8,17 @@ gcBrand = "1".
 {fgettxt.i}
 {fmakesms.i}
 
+DEF VAR lcHostname AS CHAR NO-UNDO.
+INPUT THROUGH hostname.
+IMPORT lcHostName.
+INPUT CLOSE.
+
+IF LOOKUP(lcHostName,'angetenar,alpheratz') = 0 THEN DO:
+   MESSAGE 'This script is not allowed to run in'
+   lcHostName VIEW-AS ALERT-BOX.
+   RETURN.
+END.
+
 DEFINE VARIABLE liLoop     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE ldToday    AS DATE      NO-UNDO.
 DEFINE VARIABLE lcTime     AS CHARACTER NO-UNDO.
