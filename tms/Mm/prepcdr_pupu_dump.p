@@ -22,7 +22,6 @@ DEF VAR liEvents      AS INT  NO-UNDO.
 DEF VAR lcKeyValue    AS CHAR NO-UNDO.
 DEF VAR lcDel2        AS CHAR NO-UNDO.
 DEF VAR lcDCEvent     AS CHAR NO-UNDO.
-DEF VAR llAccumulatorFound AS CHAR NO-UNDO.
 DEF STREAM sFile.
 
 lcDel2 = CHR(255).
@@ -30,11 +29,6 @@ lcDel2 = CHR(255).
 IF ilAppend THEN 
    OUTPUT STREAM sFile TO VALUE(icLogFile) APPEND.
 ELSE OUTPUT STREAM sFile TO VALUE(icLogFile).
-
-IF CAN-FIND(FIRST prepCDR WHERE prepCDR.Accumulator > 0 AND
-                                prepCDR.EventType EQ "CALL") THEN
-   llAccumulatorFound = TRUE.
-                                                            
 
 FOR EACH PrepCDR NO-LOCK USE-INDEX ReadDate WHERE
          PrepCDR.ReadDate >= idaReadDate AND
@@ -52,8 +46,8 @@ FOR EACH PrepCDR NO-LOCK USE-INDEX ReadDate WHERE
       lcDCEvent = "PMDUB".
    ELSE IF PrepCDR.CLIType = "TARJ7" AND PrepCDR.Charge = 0 THEN
       lcDCEvent = "TARJ7".
-   ELSE IF PrepCDR.CLIType = "TARJ9" AND llAccumulator AND 
-           PrepCDR.EventType = "CALL" AND PrepCDR.accumulator > 0 THEN
+   ELSE IF PrepCDR.CLIType = "TARJ9" AND PrepCDR.EventType = "CALL" AND 
+      PrepCDR.accumulator > 0 THEN
       lcDCEvent = "TARJ9".
    ELSE IF PrepCDR.CLIType = "TARJ9" AND PrepCDR.Charge = 0 AND
       LOOKUP(PrepCDR.GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0 THEN
