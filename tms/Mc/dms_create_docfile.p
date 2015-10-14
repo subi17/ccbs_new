@@ -109,10 +109,11 @@ FUNCTION fMakeTempTable RETURNS CHAR
                     Order.Brand EQ gcBrand AND
                     Order.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
          IF AVAIL Order THEN DO:
-            /*Case 5: Direct channels*/
-            /*This can be parallell with other cases.*/
             llgDirect = FALSE.
             llgAddEntry = FALSE.
+
+            /*Case 5: Direct channels*/
+            /*This can be parallell with other cases.*/
             IF llgDirectNeeded EQ TRUE AND LOOKUP(Order.OrderChannel,
                            {&ORDER_CHANNEL_DIRECT} ) NE 0 THEN DO:
                   ldeInstallment = fGetOfferDeferredPayment(Order.Offer,
@@ -184,6 +185,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
             CREATE ttOrderList.
             ASSIGN ttOrderList.OrderID = OrderTimestamp.OrderId
                    ttOrderList.CaseID = lcCase.
+                   ttOrderList.Direct = llgDirect.
          END.           
       END.         
    END. /*ordertimestamp*/
@@ -282,7 +284,9 @@ FUNCTION fGetSegment RETURNS CHAR
    (iiOrderID AS INT):
    FIND FIRST OrderCustomer NO-LOCK  WHERE
               OrderCustomer.Brand EQ gcBrand AND
-              OrderCustomer.OrderID EQ iiOrderID NO-ERROR.
+              OrderCustomer.OrderID EQ iiOrderID AND
+              Ordercustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+              NO-ERROR.
    IF AVAIL OrderCustomer THEN DO:
       IF OrderCustomer.CustIdType EQ "CIF" THEN RETURN "Company".
       ELSE IF OrderCustomer.SelfEmployed EQ TRUE THEN RETURN "Self-employed".
@@ -302,14 +306,16 @@ FUNCTION fGetTerminalType RETURNS CHAR
       IF OrderAccessory.discount NE 0 THEN RETURN "Handset".
       ELSE RETURN "Financed Handset".
    END.
-   ELSE RETURN "Simonly".
+   RETURN "Simonly".
 END.   
 /* TODO: Indexes! */
-FUNCTION fGetPreviousHandset RETURNS CHAR
-   (icImei AS CHAR):
+FUNCTION fGetHandset RETURNS CHAR
+   (iiOrderId AS INT,
+   icImei AS CHAR):
    DEF BUFFER bOAcc FOR OrderAccessory.
    FIND FIRST bOAcc NO-LOCK WHERE
               bOAcc.Brand EQ gcBrand AND
+              bOAcc.OrderId EQ iiOrderId AND
               bOAcc.Imei EQ icImei NO-ERROR.
    IF AVAIL bOAcc THEN 
       RETURN STRING(bOAcc.Manufacturer) + " " +
@@ -1062,7 +1068,8 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*Previous IMEI*/ 
             STRING(MsRequest.ReqCparam1)                    + lcDelim + 
             /*Previous Handset*/ 
-            fGetPreviousHandset(MsRequest.ReqCparam1)       + lcDelim + 
+            fGetHandset(MsRequest.ReqIparam1,
+                                MsRequest.ReqCparam1)       + lcDelim + 
             /*Previous Installment*/ 
             STRING(ldeInstallment)                          + lcDelim + 
             /*Previous Residual value*/ 
