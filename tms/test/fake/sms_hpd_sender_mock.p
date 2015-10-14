@@ -15,6 +15,16 @@ gcBrand = "1".
 {replog_reader.i}
 {smsmessage.i}
 
+INPUT THROUGH hostname.
+IMPORT lcHostName.
+INPUT CLOSE.
+
+IF LOOKUP(lcHostName,'angetenar,alpheratz') = 0 THEN DO:
+   MESSAGE 'This script is not allowed to run in'
+   lcHostName VIEW-AS ALERT-BOX.
+   RETURN.
+END.
+
 FORM
    SKIP
    "ROUND:" liLoop FORMAT ">>>>>>9"
