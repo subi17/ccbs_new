@@ -69,6 +69,17 @@ ADD FIELD "DocTypeDesc" OF "DMSDOC" AS character
   HELP "Document Type Description"
   ORDER 35
 
+ADD FIELD "DMSStatusTS" OF "DMSDOC" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "DMS Time Stamp"
+  POSITION 9
+  MAX-WIDTH 20
+  COLUMN-LABEL "DMSStatusTS"
+  HELP "DMS Time Stamp"
+  DECIMALS 5
+  ORDER 60
+
 ADD INDEX "DMSID" ON "DMSDOC" 
   AREA "Sta_Index_1"
   PRIMARY
@@ -82,4 +93,4 @@ ADD INDEX "StatusTS" ON "DMSDOC"
 PSC
 cpstream=1252
 .
-0000001586
+0000001805
