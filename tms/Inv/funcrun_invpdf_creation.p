@@ -33,14 +33,12 @@ DEFINE VARIABLE llgRecursive    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE llgMultiFile    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE llgFeedBack     AS CHARACTER NO-UNDO.
 
-DEFINE STREAM strout.
-
 ASSIGN 
    lcInputFile     = fCParam("FuncrunPDF","InputFile") 
    lcOutputFile    = fCParam("FuncrunPDF","OutputFile")
-   llgRecursive    = "FALSE" 
-   llgMultiFile    = "FALSE" 
-   llgFeedBack     = "FALSE" 
+   llgRecursive    = "false" 
+   llgMultiFile    = "false" 
+   llgFeedBack     = "false" 
    lcFeedBackQueue = ""
    lcFeedBackID    = ""
    lcType          = "invoice".
