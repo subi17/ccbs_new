@@ -541,6 +541,7 @@ PROCEDURE pContractActivation:
             RELEASE DCCLI.
 
             ldaResidualFee = fInt2Date(SingleFee.Concerns[1],0).
+            ldeFeeAmount = SingleFee.Amt.
 
             FOR FIRST DiscountPlan NO-LOCK WHERE
                       DiscountPlan.Brand = gcBrand AND
