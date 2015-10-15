@@ -141,7 +141,7 @@ PROCEDURE pUpdateDMS:
    ELSE IF (lcCaseTypeID = {&DMS_CASE_TYPE_ID_ORDER_RESTUDY} OR
             lcCaseTypeID = {&DMS_CASE_TYPE_ID_COMPANY}) THEN DO:
       CASE lcStatusCode:
-         WHEN "E" THEN RUN orderinctrl.p(liOrderId, 0, TRUE).
+         WHEN "E" THEN RUN orderhold.p(liOrderId, "RELEASE_BATCH").
          WHEN "J" THEN RUN closeorder.p(liOrderId, TRUE).
          WHEN "F" THEN RUN orderbyfraud.p(liOrderId, TRUE,
                                            {&ORDER_STATUS_CLOSED_BY_FRAUD}).
