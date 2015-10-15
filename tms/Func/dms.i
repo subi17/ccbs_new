@@ -4,17 +4,21 @@
 
 {commali.i}
 {tmsparam4.i}
+{timestamp.i}
 
 ASSIGN
    katun   = "Cron"
    gcBrand = "1".
+
+DEF TEMP-TABLE ttDMS    NO-UNDO LIKE DMS.
+DEF TEMP-TABLE ttDMSDoc NO-UNDO LIKE DMSDoc.
 
 DEF TEMP-TABLE ttDocs NO-UNDO
    FIELD DocTypeID      AS CHAR
    FIELD DocTypeDesc    AS CHAR
    FIELD DocStatusCode  AS CHAR
    FIELD DocStatusDesc  AS CHAR
-   FIELD DocStatusTS    AS DEC FORMAT "99999999.99999"
+   FIELD DMSStatusTS    AS DEC FORMAT "99999999.99999"
    FIELD Comment        AS CHAR.
 
 FUNCTION fGetOrderStatusDMS RETURNS CHAR
@@ -26,7 +30,7 @@ FUNCTION fGetOrderStatusDMS RETURNS CHAR
    RETURN "".      
 END.
 
-FUNCTION fUpdateDMS RETURNS LOGICAL
+FUNCTION fUpdateDMS RETURNS CHAR
    (icDmsExternalID  AS CHAR,
     icCaseTypeID     AS CHAR,
     icContractID     AS CHAR,
@@ -39,16 +43,22 @@ FUNCTION fUpdateDMS RETURNS LOGICAL
     icDocList        AS CHAR,
     icDocListSep     AS CHAR):
 
-   DEF VAR i AS INT NO-UNDO.
+   DEF VAR i         AS INT NO-UNDO.
+   DEF VAR llCompare AS LOG NO-UNDO.
 
-   FIND FIRST DMS EXCLUSIVE-LOCK WHERE
-              DMS.ContractID = icContractID 
-              NO-ERROR.
+   FIND DMS EXCLUSIVE-LOCK WHERE
+        DMS.ContractID = icContractID 
+        NO-ERROR.
 
-   IF NOT AVAIL DMS THEN DO:
+   IF AMBIGUOUS(DMS) THEN RETURN "AMBIGUOUS DMS".
+   ELSE IF NOT AVAIL DMS THEN DO:
       CREATE DMS.
-      ASSIGN DMS.DMSID = NEXT-VALUE(DMS).
+      ASSIGN DMS.DMSID    = NEXT-VALUE(DMS)
+             DMS.StatusTS = fMakeTS().
    END.
+
+   CREATE ttDMS.
+   BUFFER-COPY DMS TO ttDMS.
 
    ASSIGN DMS.DmsExternalID = icDmsExternalID WHEN icDmsExternalID NE ""
           DMS.CaseTypeID    = icCaseTypeID
@@ -57,7 +67,7 @@ FUNCTION fUpdateDMS RETURNS LOGICAL
           DMS.HostId        = iiHostId
           DMS.StatusCode    = icStatusCode
           DMS.StatusDesc    = icStatusDesc
-          DMS.StatusTS      = idStatusTS.
+          DMS.DMSStatusTS   = idStatusTS.
 
    /* Store current order status */
    IF NEW DMS AND icOrderstatus = "" THEN DO:
@@ -67,6 +77,11 @@ FUNCTION fUpdateDMS RETURNS LOGICAL
       IF AVAILABLE Order THEN DMS.OrderStatus = Order.StatusCode.
    END.
    ELSE DMS.OrderStatus = icOrderstatus.
+
+   IF NOT NEW DMS THEN
+      BUFFER-COMPARE DMS TO ttDMS SAVE RESULT IN llCompare.
+   IF NOT llCompare THEN DMS.StatusTS = fMakeTS().
+
 
    IF icDocList <> "" THEN
       DO i = 1 TO NUM-ENTRIES(icDocList,icDocListSep) BY 4:
@@ -78,20 +93,29 @@ FUNCTION fUpdateDMS RETURNS LOGICAL
 
       IF NOT AVAIL DMSDoc THEN DO:
          CREATE DMSDoc.
-         ASSIGN DMSDoc.DMSID = DMS.DMSID.
+         ASSIGN DMSDoc.DMSID       = DMS.DMSID
+                DMSDoc.DocStatusTS = fMakeTS().
       END.
 
-      ASSIGN DMSDoc.DocStatusTS   = DMS.StatusTS
-             DMSDoc.DocTypeID     = ENTRY(i,icDocList,icDocListSep)
+      CREATE ttDMSDoc.
+      BUFFER-COPY DMSDoc TO ttDMSDoc.
+
+      ASSIGN DMSDoc.DocTypeID     = ENTRY(i,icDocList,icDocListSep)
              DMSDoc.DocTypeDesc   = ENTRY(i + 1,icDocList,icDocListSep)
              DMSDoc.DocStatusCode = ENTRY(i + 2,icDocList,icDocListSep)
-             DMSDoc.DocRevComment = ENTRY(i + 3,icDocList,icDocListSep).
+             DMSDoc.DocRevComment = ENTRY(i + 3,icDocList,icDocListSep)
+             DMSDoc.DMSStatusTS   = idStatusTS.
+
+      IF NOT NEW DMSDoc THEN
+         BUFFER-COMPARE DMSDoc TO ttDMSDoc SAVE RESULT IN llCompare.
+      IF NOT llCompare THEN DMSDoc.DocStatusTS = fMakeTS().
+
    END.
 
    RELEASE DMS.
    RELEASE DMSDoc.
 
-   RETURN TRUE.
+   RETURN "OK".
 
 END.
 
@@ -103,7 +127,7 @@ FUNCTION fCollectDocs RETURNS LOGICAL
       ASSIGN ttDocs.DocTypeID     = DMSDoc.DocTypeID
              ttDocs.DocTypeDesc   = DMSDoc.DocTypeDesc
              ttDocs.DocStatusCode = DMSDoc.DocStatusCode
-             ttDocs.DocStatusTS   = DMSDoc.DocStatusTS
+             ttDocs.DMSStatusTS   = DMSDoc.DMSStatusTS
              ttDocs.Comment       = DMSDoc.DocRevComment.
 
       CASE DMSDoc.DocStatusCode:

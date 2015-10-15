@@ -957,7 +957,7 @@ PROCEDURE pHandleDMS:
                            fNotNull(DMS.CaseTypeID)          + lcDel +
                            fNotNull(DMS.StatusCode)          + lcDel +
                            fNotNull(DMS.StatusDesc)          + lcDel +
-                           fNotNull(STRING(DMS.StatusTS)).
+                           fNotNull(STRING(DMS.DMSStatusTS)).
 
                fWriteMessage(lcMessage).
             END.
@@ -1009,7 +1009,7 @@ PROCEDURE pHandleDMSDoc:
                            fNotNull(DMSDoc.DocTypeDesc)          + lcDel +
                            fNotNull(DMSDoc.DocStatusCode)        + lcDel +
                            fNotNull(DMSDoc.DocRevComment)        + lcDel +
-                           fNotNull(STRING(DMSDoc.DocStatusTS)).
+                           fNotNull(STRING(DMSDoc.DMSStatusTS)).
 
                fWriteMessage(lcMessage).
             END.

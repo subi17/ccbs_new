@@ -59,7 +59,7 @@ FOR EACH DMS NO-LOCK:
        fNotNull(DMS.CaseTypeID)              lcDel
        fNotNull(DMS.StatusCode)              lcDel
        fNotNull(DMS.StatusDesc)              lcDel
-       fNotNull(STRING(DMS.StatusTS))        SKIP.
+       fNotNull(STRING(DMS.DMSStatusTS))     SKIP.
 END.
 
 OUTPUT STREAM slog CLOSE.

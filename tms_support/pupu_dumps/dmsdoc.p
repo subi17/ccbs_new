@@ -51,14 +51,14 @@ FOR EACH DMSDoc NO-LOCK:
        fNotNull(STRING(RECID(DMSDoc)))          lcDel
        fNotNull(STRING(DMSDoc.DMSID)          + CHR(255) +
                 DMSDoc.DocTypeID              + CHR(255) +
-                STRING(DMSDoc.DocStatusTS))     lcDel
+                STRING(DMSDoc.DMSStatusTS))     lcDel
        fNotNull(STRING(ldtTimeStamp))           lcDel
        fNotNull(STRING(DMSDoc.DMSID))           lcDel
        fNotNull(DMSDoc.DocTypeID)               lcDel
        fNotNull(DMSDoc.DocTypeDesc)             lcDel
        fNotNull(DMSDoc.DocStatusCode)           lcDel
        fNotNull(DMSDoc.DocRevComment)           lcDel
-       fNotNull(STRING(DMSDoc.DocStatusTS))     SKIP.
+       fNotNull(STRING(DMSDoc.DMSStatusTS))     SKIP.
 END.
 
 OUTPUT STREAM slog CLOSE.

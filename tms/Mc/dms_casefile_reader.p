@@ -113,7 +113,7 @@ PROCEDURE pUpdateDMS:
    DEF VAR lcStatusDesc    AS CHAR NO-UNDO.
    DEF VAR ldStatusTS      AS DEC  NO-UNDO.
    DEF VAR lcDocList       AS CHAR NO-UNDO.
-   DEF VAR llUpdateDMS     AS LOG  NO-UNDO INIT FALSE.
+   DEF VAR lcUpdateDMS     AS CHAR NO-UNDO.
 
    ASSIGN
       lcDmsExternalID = ENTRY(1,pcLine,lcSep)
@@ -125,7 +125,7 @@ PROCEDURE pUpdateDMS:
       ldStatusTS      = DECIMAL(ENTRY(7,pcLine,lcSep))
       lcDocList       = ENTRY(8,pcLine,lcSep).
 
-   llUpdateDMS = fUpdateDMS(lcDmsExternalID,
+   lcUpdateDMS = fUpdateDMS(lcDmsExternalID,
                             lcCaseTypeID,
                             lcContractID,
                             "Order",
@@ -136,10 +136,10 @@ PROCEDURE pUpdateDMS:
                             ldStatusTS,
                             lcDocList,
                             ";").
-
-   IF llUpdateDMS AND
-      (lcCaseTypeID = {&DMS_CASE_TYPE_ID_ORDER_RESTUDY} OR
-       lcCaseTypeID = {&DMS_CASE_TYPE_ID_COMPANY}) THEN DO:
+   
+   IF lcUpdateDMS <> "OK" THEN RETURN "ERROR:" + lcUpdateDMS.
+   ELSE IF (lcCaseTypeID = {&DMS_CASE_TYPE_ID_ORDER_RESTUDY} OR
+            lcCaseTypeID = {&DMS_CASE_TYPE_ID_COMPANY}) THEN DO:
       CASE lcStatusCode:
          WHEN "E" THEN RUN orderinctrl.p(liOrderId, 0, TRUE).
          WHEN "J" THEN RUN closeorder.p(liOrderId, TRUE).

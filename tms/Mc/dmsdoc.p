@@ -44,7 +44,7 @@ FORM
    ttDocs.DocTypeDesc   FORMAT "X(20)"  COLUMN-LABEL "Description"
    ttDocs.DocStatusCode FORMAT "X(2)"   COLUMN-LABEL "S"
    ttDocs.DocStatusDesc FORMAT "X(20)"  COLUMN-LABEL "Description"
-   ttDocs.DocStatusTS   FORMAT "99999999.99999"  COLUMN-LABEL "Time"
+   ttDocs.DMSStatusTS   FORMAT "99999999.99999"  COLUMN-LABEL "Time"
 WITH ROW 1 CENTERED OVERLAY 15  DOWN
     COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "  DOCUMENTS  "  FRAME sel.
 
@@ -344,6 +344,6 @@ PROCEDURE local-disp-row:
        ttDocs.DocTypeDesc
        ttDocs.DocStatusCode
        ttDocs.DocStatusDesc
-       ttDocs.DocStatusTS
+       ttDocs.DMSStatusTS
        WITH FRAME sel.
 END PROCEDURE.

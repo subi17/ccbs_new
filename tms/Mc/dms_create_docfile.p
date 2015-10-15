@@ -460,15 +460,12 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    DEF VAR lcCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcContractID    AS CHAR NO-UNDO.
    DEF VAR lcStatusCode    AS CHAR NO-UNDO.
-   DEF VAR ldStatusTS      AS DEC  NO-UNDO.
    DEF VAR lcDocList       AS CHAR NO-UNDO.
-   DEF VAR llCreateDMS     AS LOG  NO-UNDO.
+   DEF VAR lcCreateDMS     AS CHAR NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
 
-   ASSIGN
-      lcCaseTypeId = "1"
-      ldStatusTS   = idPeriodStart.
+   lcCaseTypeId = "1".
 
    FIND FIRST Order NO-LOCK WHERE 
               Order.Brand EQ gcBrand AND
@@ -512,7 +509,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
    OUTPUT STREAM sOutFile CLOSE.
    fLogLine(lcCaseFileRow,"").
-   llCreateDMS = fUpdateDMS("", /*DmsExternalID*/
+   lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                             lcCaseTypeID,
                             Order.ContractID,
                             {&DMS_HOST_TABLE_ORDER},
@@ -520,7 +517,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
                             lcInitStatus,/*StatusCode*/
                             lcDMSStatusDesc,
                             Order.StatusCode,
-                            ldStatusTS,
+                            0,
                             lcDocListEntries /*DocList*/,
                             ",").
 END.   
@@ -539,8 +536,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    DEF VAR lcPAram AS CHAR NO-UNDO.
    DEF VAR liCount AS INT NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
-   DEF VAR llCreateDMS     AS LOG  NO-UNDO.
-   DEF VAR ldStatusTS      AS DEC  NO-UNDO.
+   DEF VAR lcCreateDMS     AS CHAR NO-UNDO.
    DEF VAR lcRequiredDocs AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
    DEF VAR lcModel   AS CHAR NO-UNDO.
@@ -549,7 +545,6 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
 
    ASSIGN
       lcCaseTypeId      = "2"
-      ldStatusTS        = idPeriodStart
       lcModel           = "-".
 
    FIND FIRST Order NO-LOCK WHERE 
@@ -701,7 +696,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    OUTPUT STREAM sOutFile CLOSE.
 
    fLogLine(lcCaseFileRow,"").
-   llCreateDMS = fUpdateDMS("", /*DmsExternalID*/
+   lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                             lcCaseTypeID,
                             Order.ContractID,
                             {&DMS_HOST_TABLE_ORDER},
@@ -709,7 +704,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
                             lcInitStatus,/*StatusCode*/
                             lcDMSStatusDesc,
                             Order.StatusCode,
-                            ldStatusTS,
+                            0,
                             lcDocListEntries /*DocList*/,
                             ",").
 
@@ -723,13 +718,12 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    (iiOrderId AS INT):
    DEF VAR lcCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcName AS CHAR No-UNDO.
-   DEF VAR llCreateDMS     AS LOG  NO-UNDO.
+   DEF VAR lcCreateDMS     AS CHAR NO-UNDO.
    DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
    DEF VAR ldeMonthlyFee  AS DECIMAL NO-UNDO.
    DEF VAR liMonths AS INT NO-UNDO.
    DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
    DEF VAR lcPAram AS CHAR NO-UNDO.
-   DEF VAR ldStatusTS      AS DEC  NO-UNDO.
    DEF VAR lcRequiredDocs AS CHAR NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
@@ -741,8 +735,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
 
    ASSIGN
       lcCaseTypeId      = "3"
-      lcModel           = "-" 
-      ldStatusTS        = idPeriodStart.
+      lcModel           = "-".
 
    FIND FIRST Order NO-LOCK WHERE 
               Order.Brand = gcBrand  AND
@@ -920,7 +913,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
    OUTPUT STREAM sOutFile CLOSE.
    fLogLine(lcCaseFileRow,"").
-   llCreateDMS = fUpdateDMS("", /*DmsExternalID*/
+   lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                             lcCaseTypeID,
                             Order.ContractID,
                             {&DMS_HOST_TABLE_ORDER},
@@ -928,7 +921,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                             lcInitStatus,/*StatusCode*/
                             lcDMSStatusDesc,
                             Order.StatusCode,
-                            ldStatusTS,
+                            0,
                             lcDocListEntries /*DocList*/,
                             ",").
 END.
@@ -941,10 +934,9 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
    DEF VAR lcSTCCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcIMEICaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcTariff AS CHAR NO-UNDO.
-   DEF VAR ldStatusTS      AS DEC  NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCaseTypeId AS CHAR NO-UNDO.
-   DEF VAR llCreateDMS     AS LOG  NO-UNDO.
+   DEF VAR lcCreateDMS     AS CHAR NO-UNDO.
    DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
    DEF VAR ldeMonthlyFee  AS DECIMAL NO-UNDO.
    DEF VAR liMonths AS INT NO-UNDO.
@@ -956,8 +948,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
    ASSIGN
       lcACCCaseTypeID   = '4c'
       lcSTCCaseTypeID   = '4b'
-      lcIMEICaseTypeID  = '4a'
-      ldStatusTS        = idPeriodStart.
+      lcIMEICaseTypeID  = '4a'.
 
    FOR EACH MsRequest NO-LOCK WHERE
             MsRequest.Brand EQ gcBrand AND
@@ -1087,7 +1078,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
       OUTPUT STREAM sOutFile CLOSE.
 
       fLogLine(lcCaseFileRow,"").
-      llCreateDMS = fUpdateDMS("", /*DmsExternalID*/
+      lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                                lcCaseTypeID,
                                MsRequest.ReqCparam6,
                                {&DMS_HOST_TABLE_MSREQ},
@@ -1095,7 +1086,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                                lcInitStatus,/*StatusCode*/
                                lcDMSStatusDesc,
                                "",
-                               ldStatusTS,
+                               0,
                                lcDocListEntries /*DocList*/,
                                ",").      
    END.
@@ -1105,14 +1096,11 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    (iiOrderId AS INT):
    DEF VAR lcCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcStatusDesc    AS CHAR NO-UNDO.
-   DEF VAR ldStatusTS      AS DEC  NO-UNDO.
-   DEF VAR llCreateDMS     AS LOG  NO-UNDO.
+   DEF VAR lcCreateDMS     AS CHAR NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
 
-   ASSIGN
-      lcCaseTypeId    = "5"
-      ldStatusTS      = idPeriodStart.
+   lcCaseTypeId    = "5".
 
    FIND FIRST Order NO-LOCK WHERE
               Order.Brand EQ gcBrand AND
@@ -1153,7 +1141,7 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    OUTPUT STREAM sOutFile CLOSE.
 
    fLogLine(lcCaseFileRow,"").
-   llCreateDMS = fUpdateDMS("", /*DmsExternalID*/
+   lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                             lcCaseTypeID,
                             Order.ContractID,
                             {&DMS_HOST_TABLE_ORDER},
@@ -1161,7 +1149,7 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
                             lcInitStatus,/*StatusCode*/
                             lcDMSStatusDesc,
                             Order.StatusCode,
-                            ldStatusTS,
+                            0,
                             lcDocListEntries /*DocList*/,
                             ",").
 END.
@@ -1169,9 +1157,8 @@ END.
 FUNCTION fCreateDocumentCase6 RETURNS CHAR
    (iiOrderId AS INT):
    DEF VAR lcCaseTypeID    AS CHAR NO-UNDO.
-   DEF VAR ldStatusTS      AS DEC  NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
-   DEF VAR llCreateDMS     AS LOG  NO-UNDO.
+   DEF VAR lcCreateDMS     AS CHAR NO-UNDO.
    DEF VAR ldeCancellationTime AS DECIMAL NO-UNDO.
    DEF VAR lcCancellationType AS CHAR NO-UNDO.
    DEF VAR lcPrevStatus AS CHAR NO-UNDO.
@@ -1179,8 +1166,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
 
    ASSIGN
       lcCaseTypeId    = "6"
-      lcCancellationType = ""
-      ldStatusTS      = idPeriodStart.
+      lcCancellationType = "".
 
    FIND FIRST Order NO-LOCK WHERE
               Order.Brand EQ gcBrand AND
@@ -1222,7 +1208,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    OUTPUT STREAM sOutFile CLOSE.
 
    fLogLine(lcCaseFileRow,"").
-   llCreateDMS = fUpdateDMS("", /*DmsExternalID*/
+   lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                             lcCaseTypeID,
                             Order.ContractID,
                             {&DMS_HOST_TABLE_ORDER},
@@ -1230,7 +1216,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
                             lcInitStatus,/*StatusCode*/
                             lcDMSStatusDesc,
                             Order.StatusCode,
-                            ldStatusTS,
+                            0,
                             lcDocListEntries /*DocList*/,
                             ",").
 END.

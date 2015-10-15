@@ -23,7 +23,7 @@ FORM
    DMS.HostTable      COLON 20 LABEL "Host Table"         FORMAT "X(12)"            SKIP
    DMS.StatusCode     COLON 20 LABEL "Status Code"        FORMAT "X(12)"            SKIP
    DMS.StatusDesc     COLON 20 LABEL "Status Description" FORMAT "X(20)"            SKIP
-   DMS.StatusTS       COLON 20 LABEL "Time Stamp"         FORMAT "99999999.99999"
+   DMS.DMSStatusTS    COLON 20 LABEL "DMS Time Stamp"     FORMAT "99999999.99999"
    SKIP(1)
 
    WITH ROW 4 OVERLAY SIDE-LABELS CENTERED 
@@ -56,7 +56,7 @@ REPEAT WITH FRAME lis ON ENDKEY UNDO LOOP, NEXT LOOP:
            DMS.HostTable
            DMS.StatusCode
            DMS.StatusDesc
-           DMS.StatusTS.
+           DMS.DMSStatusTS.
 
    ASSIGN
       ufk   = 0  
