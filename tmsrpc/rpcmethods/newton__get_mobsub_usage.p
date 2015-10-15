@@ -246,10 +246,11 @@ fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
 /* for solving situation at first month when there is not yeat received
    new CDRs with accumulator field. This can be removed one month after 
    YDR-1965 deployment */
-IF CAN-FIND(FIRST ttCDR WHERE ttCDR.Accumulator > 0 AND 
-                              ttCDR.EventType EQ "CALL") THEN
-                              llAccumulatorFound = TRUE. 
-
+IF MobSub.CLIType EQ "TARJ9" AND CAN-FIND(FIRST ttCDR WHERE 
+   ttCDR.CLIType EQ "TARJ9" AND ttCDR.EventType EQ "CALL" AND 
+   ttCDR.Accumulator > 0) THEN
+   llAccumulatorFound = TRUE.
+   
 FOR EACH ttCDR NO-LOCK USE-INDEX date:
 
    IF ttCDR.ErrorCode NE 0 THEN NEXT.
@@ -271,21 +272,17 @@ FOR EACH ttCDR NO-LOCK USE-INDEX date:
             
             IF llAccumulatorFound THEN
                IF ttCDR.EventType EQ "CALL" AND
-                  ttCDR.Charge EQ 0 AND
-                  ttCDR.Accumulator > ldePrepVoiceUsageMonthly THEN 
-                     ldePrepVoiceUsageMonthly = ttCDR.Accumulator.
+                  ttCDR.Charge EQ 0 THEN 
+                  ldePrepVoiceUsageMonthly = ttCDR.Accumulator.
                /* for getting also last CDR which partly belongs TARJ9
                   voice bundle */
                ELSE IF ttCDR.EventType EQ "CALL" AND
-                       ttCDR.CLIType EQ "TARJ9" AND
-                       ttCDR.Accumulator > ldePrepVoiceUsageMonthly THEN
-                          ldePrepVoiceUsageMonthly = ttCDR.Accumulator.
-            ELSE
-                IF ttCDR.EventType EQ "CALL" AND
-                   ttCDR.Charge EQ 0 AND
-                   LOOKUP(ttCDR.GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0 THEN
-                   ldePrepVoiceUsageMonthly = ldePrepVoiceUsageMonthly + 
-                                              ttCDR.BillDur.
+                       ttCDR.CLIType EQ "TARJ9" THEN
+                  ldePrepVoiceUsageMonthly = ttCDR.Accumulator.
+            ELSE IF ttCDR.EventType EQ "CALL" AND ttCDR.Charge EQ 0 AND
+               LOOKUP(ttCDR.GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0 THEN
+               ldePrepVoiceUsageMonthly = ldePrepVoiceUsageMonthly + 
+                                          ttCDR.BillDur.
          END.
       END.
 
