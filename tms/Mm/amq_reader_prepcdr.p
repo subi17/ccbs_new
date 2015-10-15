@@ -266,7 +266,8 @@ PROCEDURE pStartReader:
             fNotNull(STRING(PrepCDR.DataIn + PrepCDR.DataOut))            + lcDel +
             fNotNull(TRIM(STRING(PrepCDR.Charge,"->>>>>>>>>>>9.9<<<<<"))) + lcDel +
             fNotNull(lcDCEvent)                                           + lcDel +
-            fNotNull(PrepCDR.BDest).
+            fNotNull(PrepCDR.BDest)                                       + lcDel +
+            fNotNull(STRING(PrepCDR.Accumulator)).
 
          IF lcMessage = ? THEN lcMessage = "".
 
