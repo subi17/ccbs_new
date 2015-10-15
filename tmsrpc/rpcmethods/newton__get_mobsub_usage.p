@@ -270,7 +270,7 @@ FOR EACH ttCDR NO-LOCK USE-INDEX date:
             ldePrepDataUsageMonthly  = ldePrepDataUsageMonthly +
                                        ttCDR.DataIn + ttCDR.DataOut.
             
-            IF llAccumulatorFound THEN
+            IF llAccumulatorFound THEN DO:
                IF ttCDR.EventType EQ "CALL" AND
                   ttCDR.Charge EQ 0 THEN 
                   ldePrepVoiceUsageMonthly = ttCDR.Accumulator.
@@ -279,10 +279,13 @@ FOR EACH ttCDR NO-LOCK USE-INDEX date:
                ELSE IF ttCDR.EventType EQ "CALL" AND
                        ttCDR.CLIType EQ "TARJ9" THEN
                   ldePrepVoiceUsageMonthly = ttCDR.Accumulator.
-            ELSE IF ttCDR.EventType EQ "CALL" AND ttCDR.Charge EQ 0 AND
+            END.      
+            ELSE DO:
+               IF ttCDR.EventType EQ "CALL" AND ttCDR.Charge EQ 0 AND
                LOOKUP(ttCDR.GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0 THEN
                ldePrepVoiceUsageMonthly = ldePrepVoiceUsageMonthly + 
                                           ttCDR.BillDur.
+            END.                              
          END.
       END.
 
