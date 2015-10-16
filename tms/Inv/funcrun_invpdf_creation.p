@@ -16,7 +16,7 @@ ASSIGN
 {host.i}
 {ftransdir.i}
 
-DEFINE INPUT PARAMETER liFRExecID AS INTEGER NO-UNDO.
+DEFINE INPUT PARAMETER liFRExecID AS INTEGER NO-UNDO. 
 
 DEFINE VARIABLE lcConfDir       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcInputFile     AS CHARACTER NO-UNDO.
@@ -24,8 +24,8 @@ DEFINE VARIABLE lcOutputFile    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFeedBackQueue AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFeedBackID    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcType          AS CHARACTER NO-UNDO.
-DEFINE VARIABLE llgHandled      AS LOGICAL NO-UNDO.
-DEFINE VARIABLE lcFuncRunInpDir AS CHARACTER NO-UNDO INITIAL "/scratch/log/funcrun/".
+DEFINE VARIABLE llgHandled      AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE lcFuncRunInpDir AS CHARACTER NO-UNDO.
 
 /* These three variables has to be logical, but due to 
    Activemq message constraints it has been defined as char */
@@ -36,6 +36,7 @@ DEFINE VARIABLE llgFeedBack     AS CHARACTER NO-UNDO.
 ASSIGN 
    lcInputFile     = fCParam("FuncrunPDF","InputFile") 
    lcOutputFile    = fCParam("FuncrunPDF","OutputFile")
+   lcFuncRunInpDir = fCParamC("FRTestRunDir")
    llgRecursive    = "false" 
    llgMultiFile    = "false" 
    llgFeedBack     = "false" 
@@ -43,21 +44,25 @@ ASSIGN
    lcFeedBackID    = ""
    lcType          = "invoice".
 
-/* Re-calculating Billrun id */
+ /* Re-calculating Billrun id */
 FIND FIRST FuncRunExec WHERE
            FuncRunExec.Brand    EQ "1"        AND
            FuncRunExec.FRExecID EQ liFRExecID NO-LOCK NO-ERROR.
 
 IF AVAILABLE FuncRunExec THEN 
    ASSIGN 
-      lcFeedBackID    = "frq_" + STRING(FuncRunExec.FRQScheduleID)
-      lcInputFile     = lcInputFile  + lcFeedBackID
-      lcOutputFile    = lcOutputFile + lcFeedBackID
-      lcFuncRunInpDir = lcFuncRunInpDir + lcFeedBackID.
-      
+      lcFeedBackID    = "frq_" + STRING(FuncRunExec.FRQScheduleID)  
+      lcInputFile     = lcInputFile  + lcFeedBackID  
+      lcFuncRunInpDir = lcFuncRunInpDir + "/" + lcFeedBackID. 
+
 /* Copy Billrunid folder to /mnt/xmlstore/test/ location
-   as this is been accessed by revolver */
-fCopy2TargetDir(lcFuncRunInpDir,"",lcOutputFile).         
+   as this is been accessed by revolver and provide folder write permissions */
+
+UNIX SILENT VALUE("cp -r " + lcFuncRunInpDir + " " + lcOutputFile + " >/dev/null 2>&1"). 
+
+lcOutputFile = lcOutputFile + lcFeedBackID.
+
+UNIX SILENT VALUE("chmod go+w " + lcOutputFile). 
 
 RUN pInitialize(INPUT "revolver").
 
@@ -76,7 +81,7 @@ IF NOT VALID-OBJECT(lMsgPublisher) THEN DO:
    IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
       LOG-MANAGER:WRITE-MESSAGE("ActiveMQ Publisher handle not found","ERROR").
 END.
-  
+
 lcMessage = "~{" + "~"input_file~""       + "~:" + "~"" + lcInputFile  + "~"" + "," +
                    "~"output_file_name~"" + "~:" + "~"" + lcOutputFile + "~"" + "," +
                    "~"recursive~""        + "~:" +        llgRecursive        + "," +
