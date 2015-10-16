@@ -89,6 +89,31 @@ FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 IF NOT AVAILABLE MsRequest THEN 
    RETURN "ERROR:Unknown request".
 
+/* Remove duplicate Ext API requests where same content. YTS-7583 */
+   DEF BUFFER bMsRequest    FOR MsRequest.
+
+   /* Duplicate check concerns only Ext Api requests */
+   IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_EXTERNAL_API} THEN DO:
+
+      /* Content for both requests must be the same and have come within 15 seconds */
+      IF CAN-FIND(FIRST bMsRequest NO-LOCK WHERE
+               bMsRequest.Brand     EQ MsRequest.Brand AND
+               bMsRequest.ReqType   EQ MsRequest.ReqType AND
+               bMsRequest.ReqStatus EQ MsRequest.ReqStatus AND
+               bMsRequest.ActStamp  <= MsRequest.ActStamp + 0.00015 AND
+               bMsRequest.ActStamp  >= MsRequest.ActStamp - 0.00015 AND
+/*               bmsrequest.CreStamp  EQ MsRequest.CreStamp AND commenter for testing */
+               bMsRequest.MsSeq     EQ MsRequest.MsSeq AND
+               bMsRequest.CustNum   EQ MsRequest.CustNum AND
+               bMsRequest.ReqCParam3 EQ MsRequest.ReqCParam3 AND
+               bMsRequest.ReqSource EQ MsRequest.ReqSource AND
+               ROWID(bMsRequest)    NE ROWID(MsRequest)) THEN DO:
+
+         fReqStatus({&REQUEST_STATUS_REJECTED},"ERROR: Duplicate request removed from EXT API.").
+         RETURN.
+      END.
+   END.
+   
 /* is there another request that should be completed first */
 IF MsRequest.ReqStat = 0 THEN DO:
 
@@ -201,7 +226,6 @@ FINALLY:
 END.
 
 /********* Main end ********/
-
 
 /* activate a periodical contract */
 PROCEDURE pContractActivation:
