@@ -102,14 +102,14 @@ IF NOT AVAILABLE MsRequest THEN
                bMsRequest.ReqStatus EQ MsRequest.ReqStatus AND
                bMsRequest.ActStamp  <= MsRequest.ActStamp + 0.00015 AND
                bMsRequest.ActStamp  >= MsRequest.ActStamp - 0.00015 AND
-/*               bmsrequest.CreStamp  EQ MsRequest.CreStamp AND commenter for testing */
+               bmsrequest.CreStamp  EQ MsRequest.CreStamp AND
                bMsRequest.MsSeq     EQ MsRequest.MsSeq AND
                bMsRequest.CustNum   EQ MsRequest.CustNum AND
                bMsRequest.ReqCParam3 EQ MsRequest.ReqCParam3 AND
                bMsRequest.ReqSource EQ MsRequest.ReqSource AND
                ROWID(bMsRequest)    NE ROWID(MsRequest)) THEN DO:
 
-         fReqStatus({&REQUEST_STATUS_REJECTED},"ERROR: Duplicate request removed from EXT API.").
+         fReqStatus({&REQUEST_STATUS_REJECTED},"Duplicate request.").
          RETURN.
       END.
    END.
