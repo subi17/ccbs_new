@@ -521,9 +521,9 @@ FUNCTION fAddressRequest RETURNS INTEGER
    IF ERROR-STATUS:ERROR THEN ocResult = "TownCode must be numeral".
    IF ocResult > "" THEN RETURN 0.
 
-   /* YOT-4089 Make check only when Allow any address enabled in Newton.
-      In that case there is no value in icCityCode and icStreetCode */
-   IF NOT (icSource EQ {&REQUEST_SOURCE_NEWTON} AND icCityCode > "") THEN DO:
+   /* YOT-4089 Zipcode/region validation done in Newton
+      so some special cases need to pass TMS validation. */
+   IF icSource NE {&REQUEST_SOURCE_NEWTON} THEN DO:
       IF icZip > "" AND SUBSTRING(icZip,1,2) NE icRegion THEN DO:
          ocResult =  "There is a conflict between zipcode and region".
          RETURN 0.
