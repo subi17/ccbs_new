@@ -24,7 +24,7 @@ DEFINE VARIABLE lcToday       AS CHARACTER NO-UNDO.
 
 DEFINE STREAM strout.
 
-IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
 
 ASSIGN pcUserName    = get_string(param_toplevel_id, "0")
        pcMessage     = get_string(param_toplevel_id, "1")
@@ -44,6 +44,11 @@ IF TRIM(pcMessage) EQ "" THEN RETURN appl_err("Message is empty").
 katun = "VISTA_" + pcUserName.
 
 OUTPUT STREAM strout TO VALUE (lcLogFile).
+
+PUT STREAM strout UNFORMATTED 
+   pcMessage SKIP.
+
+OUTPUT STREAM strout CLOSE.
 
 /* Mail recipients */
    GetRecipients(lcAddrConfDir).
