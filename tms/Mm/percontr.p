@@ -109,7 +109,7 @@ IF NOT AVAILABLE MsRequest THEN
                bMsRequest.ReqSource EQ MsRequest.ReqSource AND
                ROWID(bMsRequest)    NE ROWID(MsRequest)) THEN DO:
 
-         fReqStatus({&REQUEST_STATUS_REJECTED},"Duplicate request.").
+         fReqStatus({&REQUEST_STATUS_HANDLED},"Duplicate request").
          RETURN.
       END.
    END.
