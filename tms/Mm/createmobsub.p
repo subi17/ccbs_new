@@ -186,7 +186,8 @@ FOR EACH OrderCustomer NO-LOCK WHERE
    END CASE.
    
    /* Create contact data for corporate customers */
-   IF llCorporate AND OrderCustomer.Rowtype = 5 THEN DO:
+   IF llCorporate AND 
+      (OrderCustomer.Rowtype = 1 OR OrderCustomer.Rowtype = 5) THEN DO:
       
       RUN createcustcontact.p(
           Order.OrderId,

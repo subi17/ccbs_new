@@ -14,6 +14,9 @@ IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    {lib/eventlog.i}
    DEFINE VARIABLE lhCustContact AS HANDLE NO-UNDO.
+   
+   lhcustcontact = buffer custcontact:handle.
+   RUN StarEventInitialize(lhCustContact).
 END.
 
 DEF INPUT PARAM iiOrderId LIKE Order.OrderId.
@@ -24,6 +27,7 @@ DEF OUTPUT PARAM ocError AS CHAR NO-UNDO.
 DEF VAR llUpdateCustContact AS LOG NO-UNDO INIT FALSE.
 
 DEF BUFFER bMobSub FOR MobSub.
+DEF BUFFER bOrderCustomer FOR OrderCustomer.
 
 FIND Order NO-LOCK WHERE
    Order.Brand   = gcBrand AND
@@ -78,57 +82,72 @@ END.
 
 IF llUpdateCustContact THEN DO:
 
-   FIND CustContact WHERE
-      CustContact.Brand = gcBrand AND
-      CustContact.Custnum = Customer.CustNum AND
-      CustContact.CustType = iiRowType EXCLUSIVE-LOCK NO-ERROR.
-
-   IF lldoevent then do:
-      lhcustcontact = buffer custcontact:handle.
-      RUN StarEventInitialize(lhCustContact).
+   IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN DO: 
+      IF NOT CAN-FIND(FIRST bOrderCustomer WHERE
+                            bOrderCustomer.Brand   = gcBrand AND
+                            bOrderCustomer.CustNum = OrderCustomer.CustNum AND
+                            bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT} AND
+                            bOrderCustomer.OrderId = OrderCustomer.OrderId) THEN DO:
+         FIND CustContact WHERE
+              CustContact.Brand    = gcBrand AND
+              CustContact.Custnum  = OrderCustomer.CustNum AND
+              CustContact.CustType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
+              EXCLUSIVE-LOCK NO-ERROR.
+         IF AVAILABLE CustContact THEN DO:
+            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhCustContact).
+            DELETE CustContact.
+         END.
+      END.
    END.
-   
-   IF NOT AVAIL CustContact THEN DO:
-      CREATE CustContact.
-   END.
-   ELSE IF lldoevent THEN RUN StarEventSetOldBuffer(lhCustContact).
+   ELSE DO:
+      FIND CustContact WHERE
+           CustContact.Brand = gcBrand AND
+           CustContact.Custnum = Customer.CustNum AND
+           CustContact.CustType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
+           EXCLUSIVE-LOCK NO-ERROR.
+      
+      IF NOT AVAIL CustContact THEN DO:
+         CREATE CustContact.
+      END.
+      ELSE IF lldoevent THEN RUN StarEventSetOldBuffer(lhCustContact).
 
-   ASSIGN
-      CustContact.Brand          = gcBrand
-      CustContact.Custnum        = iiCustnum
-      CustContact.CustType       = iiRowType
-      CustContact.HonTitle       = OrderCustomer.CustTitle
-      CustContact.FirstName      = OrderCustomer.FirstName
-      CustContact.CustName       = OrderCustomer.Surname1
-      CustContact.Surname2       = OrderCustomer.Surname2
-      CustContact.CustIdType     = OrderCustomer.CustIdType
-      CustContact.OrgId          = OrderCustomer.Custid
-      CustContact.Nationality    = OrderCustomer.Nationality
-      CustContact.Language       = INT(OrderCustomer.Language)
-      CustContact.SMSNumber      = OrderCustomer.MobileNumber
-      CustContact.Email          = OrderCustomer.Email
-      CustContact.DirMarkSMS     = OrderCustomer.OperSMSMarketing
-      CustContact.DirMarkEmail   = OrderCustomer.OperEmailMarketing
-      CustContact.DirMarkPost    = OrderCustomer.OperPostMarketing
-      CustContact.OutMarkSMS     = OrderCustomer.OutSMSMarketing
-      CustContact.OutMarkEmail   = OrderCustomer.OutEmailMarketing
-      CustContact.OutMarkPost    = OrderCustomer.OutpostMarketing
-      CustContact.Address        = OrderCustomer.Address
-      CustContact.ZipCode        = OrderCustomer.ZipCode
-      CustContact.PostOffice     = OrderCustomer.PostOffice
-      CustContact.Region         = OrderCustomer.Region
-      CustContact.AddressCodC    = OrderCustomer.AddressCodC
-      CustContact.AddressCodP    = OrderCustomer.AddressCodP
-      CustContact.AddressCodM    = OrderCustomer.AddressCodM.
+      ASSIGN
+         CustContact.Brand          = gcBrand
+         CustContact.Custnum        = iiCustnum
+         CustContact.CustType       = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
+         CustContact.HonTitle       = OrderCustomer.CustTitle
+         CustContact.FirstName      = OrderCustomer.FirstName
+         CustContact.CustName       = OrderCustomer.Surname1
+         CustContact.Surname2       = OrderCustomer.Surname2
+         CustContact.CustIdType     = OrderCustomer.CustIdType
+         CustContact.OrgId          = OrderCustomer.Custid
+         CustContact.Nationality    = OrderCustomer.Nationality
+         CustContact.Language       = INT(OrderCustomer.Language)
+         CustContact.SMSNumber      = OrderCustomer.MobileNumber
+         CustContact.Email          = OrderCustomer.Email
+         CustContact.DirMarkSMS     = OrderCustomer.OperSMSMarketing
+         CustContact.DirMarkEmail   = OrderCustomer.OperEmailMarketing
+         CustContact.DirMarkPost    = OrderCustomer.OperPostMarketing
+         CustContact.OutMarkSMS     = OrderCustomer.OutSMSMarketing
+         CustContact.OutMarkEmail   = OrderCustomer.OutEmailMarketing
+         CustContact.OutMarkPost    = OrderCustomer.OutpostMarketing
+         CustContact.Address        = OrderCustomer.Address
+         CustContact.ZipCode        = OrderCustomer.ZipCode
+         CustContact.PostOffice     = OrderCustomer.PostOffice
+         CustContact.Region         = OrderCustomer.Region
+         CustContact.AddressCodC    = OrderCustomer.AddressCodC
+         CustContact.AddressCodP    = OrderCustomer.AddressCodP
+         CustContact.AddressCodM    = OrderCustomer.AddressCodM.
 
-   IF llDoEvent THEN DO:
-      IF NEW CustContact THEN RUN StarEventMakeCreateEvent (lhCustContact).
-      ELSE RUN StarEventMakeModifyEvent (lhCustContact).
+      IF llDoEvent THEN DO:
+         IF NEW CustContact THEN RUN StarEventMakeCreateEvent (lhCustContact).
+         ELSE RUN StarEventMakeModifyEvent (lhCustContact).
+      END.
+
+      RELEASE CustContact.
+
    END.
 
 END. /* IF llUpdateCustContact THEN DO: */
 
 fCleanEventObjects().
-
-RELEASE CustContact.
-

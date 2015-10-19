@@ -305,6 +305,8 @@ ELSE DO:
                Customer.FirstName       = TRIM(OrderCustomer.FirstName)
                Customer.CustName        = TRIM(OrderCustomer.Surname1)
                Customer.SurName2        = TRIM(OrderCustomer.SurName2)
+               Customer.SearchName      = SUBSTRING(Customer.CustName +
+                                                    Customer.FirstName,1,8)
                Customer.Nationality     = OrderCustomer.Nationality
                Customer.Language        = INTEGER(OrderCustomer.Language)
                Customer.BirthDay        = OrderCustomer.BirthDay
@@ -335,25 +337,6 @@ ELSE DO:
                IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN ASSIGN
                   Customer.AuthCustId      = Order.OrdererID
                   Customer.AuthCustIdType  = Order.OrdererIDType.
-               ELSE DO:
-                  FIND CustContact WHERE
-                       CustContact.Brand = gcBrand AND
-                       CustContact.Custnum = Customer.CustNum AND
-                       CustContact.CustType = {&CUSTCONTACT_CONTACT} EXCLUSIVE-LOCK NO-ERROR.
-                  IF AVAILABLE CustContact THEN DO:
-                     ASSIGN
-                        CustContact.HonTitle       = OrderCustomer.CustTitle
-                        CustContact.FirstName      = OrderCustomer.FirstName
-                        CustContact.CustName       = OrderCustomer.Surname1
-                        CustContact.Surname2       = OrderCustomer.Surname2
-                        CustContact.Nationality    = OrderCustomer.Nationality
-                        CustContact.Language       = INT(OrderCustomer.Language)
-                        CustContact.SMSNumber      = OrderCustomer.MobileNumber
-                        CustContact.Email          = OrderCustomer.Email
-                        CustContact.CustIdType     = OrderCustomer.CustIdType
-                        CustContact.OrgId          = OrderCustomer.Custid.
-                  END.
-               END.
             END.
 
             fUpdEmailDelType(Order.OrderId).
