@@ -137,11 +137,15 @@ PROCEDURE pUpdateDMS:
                             lcDocList,
                             ";").
    
-   IF lcUpdateDMS <> "OK" THEN RETURN "ERROR:" + lcUpdateDMS.
+   IF lcUpdateDMS <> "OK" THEN RETURN "ERROR:" + lcUpdateDMS + ":UPDATE".
    ELSE IF (lcCaseTypeID = {&DMS_CASE_TYPE_ID_ORDER_RESTUDY} OR
             lcCaseTypeID = {&DMS_CASE_TYPE_ID_COMPANY}) THEN DO:
       CASE lcStatusCode:
-         WHEN "E" THEN RUN orderhold.p(liOrderId, "RELEASE_BATCH").
+         WHEN "E" THEN DO:
+            IF NOT ((Order.StatusCode = "20" OR Order.StatusCode = "21") AND
+                     Order.PayType = FALSE) THEN
+               RUN orderhold.p(liOrderId, "RELEASE_BATCH").
+         END.
          WHEN "J" THEN RUN closeorder.p(liOrderId, TRUE).
          WHEN "F" THEN RUN orderbyfraud.p(liOrderId, TRUE,
                                            {&ORDER_STATUS_CLOSED_BY_FRAUD}).
@@ -156,4 +160,3 @@ PROCEDURE pUpdateDMS:
    RETURN "OK".
 
 END PROCEDURE.
-
