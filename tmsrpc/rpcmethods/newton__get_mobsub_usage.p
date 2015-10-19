@@ -285,6 +285,8 @@ FOR EACH ttCDR NO-LOCK USE-INDEX date:
                LOOKUP(ttCDR.GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0 THEN
                ldePrepVoiceUsageMonthly = ldePrepVoiceUsageMonthly + 
                                           ttCDR.BillDur.
+               IF ldePrepVoiceUsageMonthly > 1200 THEN
+                  ldePrepVoiceUsageMonthly = 1200.
             END.                              
          END.
       END.
