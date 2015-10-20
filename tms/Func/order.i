@@ -248,15 +248,6 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    Customer.ExtInvRef    = OrderCustomer.ExtInvRef
    Customer.FoundationDate = OrderCustomer.FoundationDate
 
-   Customer.AuthCustId      = Order.OrdererID WHEN
-                              Customer.CustIdType = "CIF" AND
-                              OrderCustomer.CustIdType = "CIF" AND
-                              OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
-   Customer.AuthCustIdType  = Order.OrdererIDType WHEN
-                              Customer.CustIdType = "CIF" AND
-                              OrderCustomer.CustIdType = "CIF" AND
-                              OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
-
    /* marketing values */
    Customer.DirMarkSMS   = OrderCustomer.OperSMSMarketing
    Customer.DirMarkEmail = OrderCustomer.OperEMailMarketing
@@ -265,6 +256,16 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    Customer.OutMarkEmail = OrderCustomer.OutEMailMarketing
    Customer.OutMarkPOST  = OrderCustomer.OutPostMarketing
    Customer.OutMarkBank  = OrderCustomer.OutBankMarketing.
+
+   ASSIGN
+   Customer.AuthCustId      = Order.OrdererID WHEN
+                              Customer.CustIdType = "CIF" AND
+                              OrderCustomer.CustIdType = "CIF" AND
+                              OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+   Customer.AuthCustIdType  = Order.OrdererIDType WHEN
+                              Customer.CustIdType = "CIF" AND
+                              OrderCustomer.CustIdType = "CIF" AND
+                              OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
 
    /* Electronic Invoice Project - update email and delivery type */
    fUpdEmailDelType(iiorder).
