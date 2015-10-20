@@ -24,7 +24,8 @@ DEF INPUT PARAM iiCustNum LIKE Customer.Custnum.
 DEF INPUT PARAM iiRowType AS INTEGER NO-UNDO.
 DEF OUTPUT PARAM ocError AS CHAR NO-UNDO.
 
-DEF VAR llUpdateCustContact AS LOG NO-UNDO INIT FALSE.
+DEF VAR llUpdateCustContact AS LOG  NO-UNDO INIT FALSE.
+DEF VAR lcMemo              AS CHAR NO-UNDO.
 
 DEF BUFFER bMobSub FOR MobSub.
 DEF BUFFER bOrderCustomer FOR OrderCustomer.
@@ -55,6 +56,11 @@ IF NOT AVAIL Customer THEN DO:
    ocError = SUBST("ERROR: Customer &1 not found", iiCustnum).
    RETURN.
 END.
+
+lcMemo = "Order" + CHR(255) +
+          STRING(Customer.CustNum) + CHR(255) +
+          STRING(Order.OrderId) + CHR(255) +
+          Order.Salesman.
 
 IF Order.OrderType < 2 THEN DO:
    FIND FIRST MobSub NO-LOCK WHERE
@@ -97,7 +103,10 @@ IF llUpdateCustContact THEN DO:
               CustContact.CustType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
               EXCLUSIVE-LOCK NO-ERROR.
          IF AVAILABLE CustContact THEN DO:
-            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhCustContact).
+            IF llDoEvent THEN RUN StarEventMakeDeleteEventWithMemo(
+                                    lhCustContact,
+                                    katun,
+                                    lcMemo).
             DELETE CustContact.
          END.
       END.
@@ -144,7 +153,10 @@ IF llUpdateCustContact THEN DO:
 
       IF llDoEvent THEN DO:
          IF NEW CustContact THEN RUN StarEventMakeCreateEvent (lhCustContact).
-         ELSE RUN StarEventMakeModifyEvent (lhCustContact).
+         ELSE RUN StarEventMakeModifyEventWithMemo(
+                     lhCustContact,
+                     katun,
+                     lcMemo).
       END.
 
       RELEASE CustContact.
