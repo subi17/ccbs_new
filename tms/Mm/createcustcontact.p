@@ -56,29 +56,32 @@ IF NOT AVAIL Customer THEN DO:
    RETURN.
 END.
 
-FIND FIRST MobSub NO-LOCK WHERE
-           MobSub.Brand   = gcBrand AND
-           MobSub.MsSeq   = Order.MsSeq AND
-           MobSub.CustNum = Customer.CustNum NO-ERROR.
+IF Order.OrderType < 2 THEN DO:
+   FIND FIRST MobSub NO-LOCK WHERE
+              MobSub.Brand   = gcBrand AND
+              MobSub.MsSeq   = Order.MsSeq AND
+              MobSub.CustNum = Customer.CustNum NO-ERROR.
 
-IF AVAILABLE MobSub THEN DO:
-   IF MobSub.PayType = FALSE AND
-      NOT CAN-FIND(FIRST bMobSub WHERE
-                         bMobSub.Brand     = gcBrand AND
-                         bMobSub.MsSeq    <> MobSub.MsSeq AND
-                         bMobSub.CustNum   = Customer.CustNum AND
-                         bMobSub.PayType   = FALSE) THEN
-      llUpdateCustContact = TRUE.
+   IF AVAILABLE MobSub THEN DO:
+      IF MobSub.PayType = FALSE AND
+         NOT CAN-FIND(FIRST bMobSub WHERE
+                            bMobSub.Brand     = gcBrand AND
+                            bMobSub.MsSeq    <> MobSub.MsSeq AND
+                            bMobSub.CustNum   = Customer.CustNum AND
+                            bMobSub.PayType   = FALSE) THEN
+         llUpdateCustContact = TRUE.
+   END.
+   ELSE DO:
+      IF Order.PayType = FALSE AND
+         NOT CAN-FIND(FIRST bMobSub WHERE
+                            bMobSub.Brand     = gcBrand AND
+                            bMobSub.MsSeq    <> Order.MsSeq AND
+                            bMobSub.CustNum   = Customer.CustNum AND
+                            bMobSub.PayType   = FALSE) THEN
+         llUpdateCustContact = TRUE.
+   END.
 END.
-ELSE DO:
-   IF Order.PayType = FALSE AND
-      NOT CAN-FIND(FIRST bMobSub WHERE
-                         bMobSub.Brand     = gcBrand AND
-                         bMobSub.MsSeq    <> Order.MsSeq AND
-                         bMobSub.CustNum   = Customer.CustNum AND
-                         bMobSub.PayType   = FALSE) THEN
-      llUpdateCustContact = TRUE.
-END.
+ELSE llUpdateCustContact = TRUE.
 
 IF llUpdateCustContact THEN DO:
 

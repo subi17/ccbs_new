@@ -221,12 +221,7 @@ IF OrderCustomer.CustID = "CIF" THEN DO:
    FOR EACH OrderCustomer NO-LOCK WHERE
             OrderCustomer.Brand   = gcBrand   AND
             OrderCustomer.OrderID = Order.OrderID AND
-            LOOKUP(STRING(OrderCustomer.RowType),"1,5") > 0:
-
-      /* Create contact data for corporate customers */
-
-      IF OrderCustomer.RowType = 1 AND
-         OrderCustomer.DataChecked = FALSE THEN NEXT.
+            OrderCustomer.RowType = 5:
 
       RUN createcustcontact.p(
           Order.OrderId,
