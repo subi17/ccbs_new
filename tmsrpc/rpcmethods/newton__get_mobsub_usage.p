@@ -272,12 +272,14 @@ FOR EACH ttCDR NO-LOCK USE-INDEX date:
             
             IF llAccumulatorFound THEN DO:
                IF ttCDR.EventType EQ "CALL" AND
-                  ttCDR.Charge EQ 0 THEN 
+                  ttCDR.Charge EQ 0 AND
+                  ttCDR.Accumulator > 0 THEN 
                   ldePrepVoiceUsageMonthly = ttCDR.Accumulator.
                /* for getting also last CDR which partly belongs TARJ9
                   voice bundle */
                ELSE IF ttCDR.EventType EQ "CALL" AND
-                       ttCDR.CLIType EQ "TARJ9" THEN
+                       ttCDR.CLIType EQ "TARJ9" AND
+                       ttCDR.Accumulator > 0 THEN
                   ldePrepVoiceUsageMonthly = ttCDR.Accumulator.
             END.      
             ELSE DO:
