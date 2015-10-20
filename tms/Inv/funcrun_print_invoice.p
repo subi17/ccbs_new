@@ -39,6 +39,7 @@ DEF VAR lcActionID       AS CHAR NO-UNDO.
 DEF VAR lcTestDir        AS CHAR NO-UNDO.
 DEF VAR llTarFile        AS LOG  NO-UNDO.
 DEF VAR llReplica        AS LOG  NO-UNDO.
+DEF VAR llgFuncRunPDF    AS LOG  NO-UNDO.
 
 DEF STREAM sLog.
 
@@ -103,11 +104,12 @@ END.
 RUN pGetFuncRunProcessParameters(liFRProcessID).
 
 ASSIGN 
-   ldaInvDate   = fSetFuncRunDateParameter(1)
-   liInvType    = fSetFuncRunIntParameter(2)
-   lcFileType   = fSetFuncRunCharParameter(3).
-   llTarFile    = fSetFuncRunLogParameter(4).
-
+   ldaInvDate    = fSetFuncRunDateParameter(1)
+   liInvType     = fSetFuncRunIntParameter(2)
+   lcFileType    = fSetFuncRunCharParameter(3)
+   llTarFile     = fSetFuncRunLogParameter(4)
+   llgFuncRunPDF = fSetFuncRunLogParameter(5).
+   
 IF ldaInvDate = ? OR liInvType = ? OR lcFileType = ? THEN DO:
    RUN pCancelFuncRunProcess(liFRProcessID,"ERROR:Invalid parameters").
    QUIT.
@@ -313,6 +315,8 @@ PROCEDURE pPrintInvoices:
          ActionLog.ActionTS     = fMakeTS().
    END.
 
+   IF lcRunMode = "test" AND llgFuncRunPDF THEN 
+      RUN funcrun_invpdf_creation (INPUT liFRExecID) NO-ERROR.
    
    IF RETURN-VALUE BEGINS "ERROR:" THEN DO TRANS:
       /* send also mail if printing was interrupted */
