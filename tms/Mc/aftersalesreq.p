@@ -217,46 +217,35 @@ RUN createcustomer.p(INPUT Order.OrderId,1,FALSE,output oiCustomer).
 
 /* update corporate customer contact data */
 IF OrderCustomer.CustID = "CIF" THEN DO:
-   
-   FOR EACH OrderCustomer NO-LOCK WHERE
-            OrderCustomer.Brand   = gcBrand AND
-            OrderCustomer.OrderID = Order.OrderID:
 
-      IF OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT} THEN DO:
-         /* Create contact data for corporate customers */
-         RUN createcustcontact.p(
-             Order.OrderId,
-             MsRequest.Custnum,
-             OrderCustomer.RowType,
-             OUTPUT lcError).
-      
-         /* write possible error to an order memo */
-         IF lcError > "" THEN DO:
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "Order",
-                             STRING(Order.OrderID),
-                             oiCustomer,
-                             "CUSTOMER CONTACT CREATION FAILED",
-                             lcError).
-         END.
-      END.
-      ELSE IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
-              MobSub.PayType = FALSE AND
-              NOT CAN-FIND(FIRST bMobSub WHERE
-                                 bMobSub.Brand     = gcBrand AND
-                                 bMobSub.MsSeq    <> MobSub.MsSeq AND
-                                 bMobSub.CustNum   = MobSub.CustNum AND
-                                 bMobSub.PayType   = FALSE) THEN DO:
-         FIND FIRST Customer EXCLUSIVE-LOCK WHERE
-                    Customer.CustNum = MsRequest.Custnum NO-ERROR.
-         IF AVAILABLE Customer THEN DO:      
-            ASSIGN Customer.AuthCustId     = Order.OrdererID
-                   Customer.AuthCustIdType = Order.OrdererIDType.
-            RELEASE Customer.
-         END.
+   FOR EACH OrderCustomer NO-LOCK WHERE
+            OrderCustomer.Brand   = gcBrand   AND
+            OrderCustomer.OrderID = Order.OrderID AND
+            LOOKUP(STRING(OrderCustomer.RowType),"1,5") > 0:
+
+      /* Create contact data for corporate customers */
+
+      IF OrderCustomer.RowType = 1 AND
+         OrderCustomer.DataChecked = FALSE THEN NEXT.
+
+      RUN createcustcontact.p(
+          Order.OrderId,
+          MsRequest.Custnum,
+          OrderCustomer.RowType,
+          OUTPUT lcError).
+
+      /* write possible error to an order memo */
+      IF lcError > "" THEN DO:
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          "Order",
+                          STRING(Order.OrderID),
+                          oiCustomer,
+                          "CUSTOMER CONTACT CREATION FAILED",
+                          lcError).
       END.
    END.
 END.
+
 
 /* ICC change required, if new ICC is specified */
 IF Order.OrderType = 2 AND Order.ICC > "" AND
