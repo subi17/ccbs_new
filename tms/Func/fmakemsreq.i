@@ -525,10 +525,14 @@ FUNCTION fAddressRequest RETURNS INTEGER
    iiTownCode = INT(icTownCode) NO-ERROR.
    IF ERROR-STATUS:ERROR THEN ocResult = "TownCode must be numeral".
    IF ocResult > "" THEN RETURN 0.
-   
-   IF icZip > "" AND SUBSTRING(icZip,1,2) NE icRegion THEN DO:
-      ocResult =  "There is a conflict between zipcode and region".
-      RETURN 0.
+
+   /* YOT-4089 Zipcode/region validation done in Newton
+      so some special cases need to pass TMS validation. */
+   IF icSource NE {&REQUEST_SOURCE_NEWTON} THEN DO:
+      IF icZip > "" AND SUBSTRING(icZip,1,2) NE icRegion THEN DO:
+         ocResult =  "There is a conflict between zipcode and region".
+         RETURN 0.
+      END.
    END.
 
    IF icRegion ne "00" THEN 
