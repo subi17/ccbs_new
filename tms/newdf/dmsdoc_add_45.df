@@ -1,6 +1,0 @@
-ADD FIELD "DocRevComment" OF "DMSDOC" AS character
-   FORMAT "X(30)"
-   INITIAL ""
-   LABEL "Doc Revision Comment"
-   HELP "Document Revision Comment"
-   ORDER 45

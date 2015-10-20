@@ -1,7 +1,0 @@
-ADD FIELD "ContractID" OF "DMS" AS character
-   FORMAT "X(8)"
-   INITIAL ""
-   LABEL "ContractID"
-   HELP "ContractID"
-   ORDER 90
-

@@ -1,8 +1,0 @@
-
-ADD FIELD "DocTypeDesc" OF "DMSDOC" AS character
-   FORMAT "X(20)"
-   INITIAL ""
-   LABEL "Doc Type Desc"
-   HELP "Document Type Description"
-   ORDER 35
-   
