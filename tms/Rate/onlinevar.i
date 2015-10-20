@@ -77,4 +77,4 @@ DEF VAR lcTranslatedAddress   AS CHAR NO-UNDO.
 DEF VAR lcCdrId               AS CHAR  NO-UNDO.
 DEF VAR lcCallIdNum           AS CHAR  NO-UNDO.
 DEF VAR liServiceClass        AS INT  NO-UNDO.
-
+DEF VAR liAccumulator         AS INT   NO-UNDO.

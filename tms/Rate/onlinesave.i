@@ -35,5 +35,5 @@ ASSIGN
    ttCall.OrigRecordType      = liPartialInd
    ttCall.CdrId               = lcCdrId
    ttCall.CallIdNum           = lcCallIdNum
-   ttCall.ServiceClass        = liServiceClass.
-   
+   ttCall.ServiceClass        = liServiceClass
+   ttCall.Accumulator         = liAccumulator.

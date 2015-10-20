@@ -38,7 +38,3 @@ ASSIGN
  ldeDataOut            = DEC(TRIM(ENTRY(63,callrec,lcSep))).
  ldeCharge             =  DEC(TRIM(ENTRY(71,callrec,lcSep))).
  liRoaming             = INT(TRIM(ENTRY(67,callrec,lcSep))).
- liPartialInd          = 0.
- lcCdrId               = "".
- lcCallIdNum           = "".
-

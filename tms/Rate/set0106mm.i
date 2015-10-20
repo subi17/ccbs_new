@@ -40,6 +40,7 @@ ASSIGN
  liRoaming             = INT(TRIM(ENTRY(70,callrec,lcSep)))
  lcMSRN                =     TRIM(ENTRY(71,callrec,lcSep))
  ldeCharge             = DEC(TRIM(ENTRY(77,callrec,lcSep)))
+ liAccumulator         = INT(TRIM(ENTRY(78,callrec,lcSep)))
  liServiceClass        = INT(TRIM(ENTRY(79,callrec,lcSep)))
 
  lcPrefixCode          = ""    

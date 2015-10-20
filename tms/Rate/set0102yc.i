@@ -30,19 +30,7 @@ ASSIGN
  lcChargedsubs         =     TRIM(ENTRY(28,callrec,lcSep))
 
  lcServiceName         =     TRIM(ENTRY(57,callrec,lcSep))
- ldeCharge             = DEC(TRIM(ENTRY(60,callrec,lcSep)))
- 
- lcPrefixCode          = "" 
- lcPrefix              = "" 
- lcAddPrefix           = "" 
- lcIMEI                = "" 
- lcIMEI2               = "" 
- lcRoutingnumber       = "" 
- lcForwardIndicator    = ""
- ldeDataIn             = 0   
- ldeDataOut            = 0
- liPartialInd          = 0
- lcCallIdNum           = "".   
+ ldeCharge             = DEC(TRIM(ENTRY(60,callrec,lcSep))).
 
 IF lcSubscriptionType = "2" then liPrePaid = 1.
 ELSE                             liPrePaid = 0.

@@ -539,7 +539,7 @@ DO TRANS:
                                                       
    /* it was a real CALL record, NOT a start OR END record */
    ELSE DO : 
-         
+      {set_to_empty.i}   
       CASE lcSetVersion:
       WHEN "0101MM" THEN DO:  {set0101mm.i}   END.
       WHEN "0101YC" THEN DO:  {set0101yc.i}   END.
