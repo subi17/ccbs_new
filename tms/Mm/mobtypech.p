@@ -27,6 +27,7 @@
                   03.04.06/aam not allowed if a periodical contract active
                   15.05.07 PZ  this module has been disabled temporarily
                   24.09.07/ JP new business logic & layout
+                  25.08.15 ilkkasav new parameter to fCTChangeRequest
   Version ......: M15
   ---------------------------------------------------------------------- */
 
@@ -737,6 +738,7 @@ REPEAT  WITH FRAME main:
                               {&REQUEST_SOURCE_MANUAL_TMS},
                               0, /* order id */
                               0,
+                              "", /*request_id*/
                               OUTPUT lcInfo).
       
          MESSAGE "Request ID for CLI Type change is" i

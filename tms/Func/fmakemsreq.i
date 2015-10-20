@@ -33,6 +33,9 @@
                   19.09.07/jp   fsubscriptionrequest2
                   10.10.07/jp  icBankNumber for fCTChangeRequest
                   10.10.07/jp   fsubscriptionrequest2 Removed
+                  25.08.15/ilkkasav YPR-2378 fCTChangeRequest added parameter
+
+
 */   
 &IF "{&fmakemsreq}" NE "YES"
 &THEN
@@ -139,6 +142,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
     INPUT  icSource      AS CHAR,
     INPUT  iiOrderID     AS INT,
     INPUT  iiOrigReq     AS INT,    /* Father request id */
+    INPUT  icDMSInfo     AS CHAR,   /*For DMS usage contract_id, channel */
     OUTPUT ocResult      AS CHAR).
 
    DEF VAR llCRes      AS LOG  NO-UNDO.
@@ -210,6 +214,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
           bCreaReq.ReqCParam2  = icNewType
           bCreaReq.ReqCparam3  = icBankNumber
           bCreaReq.ReqCparam5  = icBundleType
+          bCreaReq.ReqCparam6  = icDMSInfo
           bCreaReq.ReqDParam1  = idChgStamp
           bCreaReq.ReqDParam2  = ideFee
           bCreaReq.ReqIParam1  = iiCreditCheck
