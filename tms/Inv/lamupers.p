@@ -1,4 +1,5 @@
 /* Inv/lamupers.p    29.11.2006/aam yoigo version
+   7/Oct/2015 hugo.lujan YTS-7139 Mandate fetch should not use MSISDN, instead it should be based on subscription ID only
 */
 &GLOBAL-DEFINE EDRHandling NO
 
@@ -1030,13 +1031,12 @@ FUNCTION fGetMandateForITGroup RETURNS CHAR
    FOR EACH ttSubInv NO-LOCK WHERE
             ttSubInv.ITGroup = iiITGroup:
 
-       FIND FIRST MsOwner NO-LOCK WHERE
-                  MsOwner.CustNum = ttSubInv.CustNum AND
-                  MsOwner.CLI = ttSubInv.CLI AND
-                  MsOwner.MsSeq = ttSubInv.MsSeq AND
-                  MsOwner.PayType = FALSE AND
-                  MsOwner.TsBeg <= idToPer  AND
-                  MsOwner.TsEnd >= idFromPer NO-ERROR.
+       FIND FIRST MsOwner NO-LOCK WHERE /* YTS-7139 */
+                  MsOwner.MsSeq   =  ttSubInv.MsSeq   AND
+                  MsOwner.TsBeg   <= idToPer          AND
+                  MsOwner.TsEnd   >= idFromPer        AND
+                  MsOwner.CustNum =  ttSubInv.CustNum AND
+                  MsOwner.PayType = FALSE NO-ERROR.
                   
        IF NOT AVAIL MsOwner THEN
           FIND FIRST MsOwner NO-LOCK WHERE
