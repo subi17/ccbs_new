@@ -58,7 +58,7 @@ FUNCTION fCollectEvent RETURNS LOGICAL
       lcRow       = ""
       lcOrderId   = ""
       lcSalesMan  = ""
-      ldEventTS   = fHMS2TS(EventLog.EventDate, EventLog.EventTime)
+      ldEventTS   = fHMS2TS(EventLog.EventDate, EventLog.EventTime).
 
    IF EventLog.Memo <> "" THEN 
       ASSIGN lcRow      = ENTRY(1,EventLog.Memo,lc255) 
