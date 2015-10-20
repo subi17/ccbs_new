@@ -62,41 +62,46 @@ UNIX SILENT VALUE("cp -r " + lcFuncRunInpDir + " " + lcOutputFile + " >/dev/null
 
 lcOutputFile = lcOutputFile + lcFeedBackID.
 
-UNIX SILENT VALUE("chmod go+w " + lcOutputFile). 
+FILE-INFO:FILE-NAME = lcOutputFile.
 
-RUN pInitialize(INPUT "revolver").
+IF FILE-INFO:FULL-PATHNAME NE ? THEN 
+DO:
+   UNIX SILENT VALUE("chmod go+w " + lcOutputFile). 
 
-IF RETURN-VALUE > "" THEN DO:
-   IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
-   LOG-MANAGER:WRITE-MESSAGE(RETURN-VALUE, "ERROR").
-      RETURN RETURN-VALUE.
+   RUN pInitialize(INPUT "revolver").
+
+   IF RETURN-VALUE > "" THEN DO:
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+      LOG-MANAGER:WRITE-MESSAGE(RETURN-VALUE, "ERROR").
+         RETURN RETURN-VALUE.
+   END.
+      
+   /* Call ActiveMQ Publisher class */
+   lMsgPublisher = NEW Gwy.MqPublisher(lcHost,liPort,
+                                       liTimeOut,"revolver",
+                                       lcUserName,lcPassword).
+       
+   IF NOT VALID-OBJECT(lMsgPublisher) THEN DO:
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+         LOG-MANAGER:WRITE-MESSAGE("ActiveMQ Publisher handle not found","ERROR").
+   END.
+
+   lcMessage = "~{" + "~"input_file~""       + "~:" + "~"" + lcInputFile  + "~"" + "," +
+                      "~"output_file_name~"" + "~:" + "~"" + lcOutputFile + "~"" + "," +
+                      "~"recursive~""        + "~:" +        llgRecursive        + "," +
+                      "~"multi_file~""       + "~:" +        llgMultiFile        + "," +
+                      "~"feedback~""         + "~:" +        llgFeedback         + "," +
+                      "~"feedback_id~""      + "~:" + "~"" + lcFeedbackID + "~"" + "," +
+                      "~"type~""             + "~:" + "~"" + lcType       + "~"" + "~}" .
+
+   IF lMsgPublisher:send_message(lcMessage) THEN
+      llgHandled = TRUE.
+   ELSE DO:
+      llgHandled = FALSE.
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+         LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+   END.
+
+   RUN pFinalize(INPUT "").
 END.
-   
-/* Call ActiveMQ Publisher class */
-lMsgPublisher = NEW Gwy.MqPublisher(lcHost,liPort,
-                                    liTimeOut,"revolver",
-                                    lcUserName,lcPassword).
-    
-IF NOT VALID-OBJECT(lMsgPublisher) THEN DO:
-   IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
-      LOG-MANAGER:WRITE-MESSAGE("ActiveMQ Publisher handle not found","ERROR").
-END.
 
-lcMessage = "~{" + "~"input_file~""       + "~:" + "~"" + lcInputFile  + "~"" + "," +
-                   "~"output_file_name~"" + "~:" + "~"" + lcOutputFile + "~"" + "," +
-                   "~"recursive~""        + "~:" +        llgRecursive        + "," +
-                   "~"multi_file~""       + "~:" +        llgMultiFile        + "," +
-                   "~"feedback~""         + "~:" +        llgFeedback         + "," +
-                   "~"feedback_id~""      + "~:" + "~"" + lcFeedbackID + "~"" + "," +
-                   "~"type~""             + "~:" + "~"" + lcType       + "~"" + "~}" .
-
-IF lMsgPublisher:send_message(lcMessage) THEN
-   llgHandled = TRUE.
-ELSE DO:
-   llgHandled = FALSE.
-   IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
-      LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
-END.
-
-RUN pFinalize(INPUT "").
-  
