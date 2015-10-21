@@ -60,7 +60,8 @@ FOR EACH MobCDR NO-LOCK USE-INDEX ReadDate WHERE
       MobCDR.DataIn + MobCDR.DataOut      lcDel
       TRIM(STRING(MobCDR.Amount,"->>>>>>>>>>>9.9<<<<<")) lcDel
       MobCDR.DCEvent                      lcDel
-      MobCDR.BDest                        SKIP.
+      MobCDR.BDest                        lcDel
+      MobCDR.Accumulator                  SKIP.
   
    odeCDRStamp = MAX(odeCDRStamp,MobCDR.ReadinTS).
 
