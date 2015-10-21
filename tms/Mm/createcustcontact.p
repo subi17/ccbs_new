@@ -76,7 +76,7 @@ IF Order.OrderType < 2 THEN DO:
       NOT CAN-FIND(FIRST bMobSub WHERE
                          bMobSub.Brand     = gcBrand AND
                          bMobSub.CustNum   = Customer.CustNum AND
-                         bMobSub.MsSeq    <> Order.MsSeq AND
+                         bMobSub.MsSeq    <> Order.MsSeq) 
                          AND
       NOT CAN-FIND(FIRST TermMobSub WHERE
                          TermMobSub.Brand     = gcBrand AND
