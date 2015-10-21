@@ -202,16 +202,16 @@ class GetStatus(Command):
 class Shutdown(Command):
     def __init__(self, project, database):
         Command.__init__(self, project, database)
-        self.command = ['sudo', '-u', 'root', PROSHUT, self.dbpath, '-by']
+        self.command = [PROSHUT, self.dbpath, '-by']
 
 class Startup(Command):
     def __init__(self, project, database):
         Command.__init__(self, project, database)
         self.pf = get_pf_path(project, database)
         if os.path.isfile(self.pf):
-            self.command = ['sudo', '-u', 'root', PROSERVE, '-pf', self.pf]
+            self.command = [PROSERVE, '-pf', self.pf]
         else:
-            self.command = ['sudo', '-u', 'root', PROSERVE, self.dbpath]
+            self.command = [PROSERVE, self.dbpath]
 
 def generic_command(args, callback, confirm=None):
     projects, databases = parse_args(args)
@@ -333,8 +333,8 @@ def display_usage():
     print 'Try "%s help" for more information' % sys.argv[0]
 
 if __name__ == '__main__':
-    if os.getuid() == 0:
-        fatal('Thank you for not running as root')
+#    if os.getuid() == 0:
+#        fatal('Thank you for not running as root')
 
     if len(sys.argv) < 2:
         display_usage()
@@ -351,3 +351,4 @@ if __name__ == '__main__':
 
     command = COMMANDS[command_name]
     sys.exit(command(sys.argv[2:]))
+

@@ -1,0 +1,197 @@
+ADD TABLE "DMS"
+  AREA "Sta_Data_128"
+  LABEL "Document mgmt case"
+  DESCRIPTION "Document management case"
+  DUMP-NAME "dms"
+
+ADD FIELD "HostID" OF "DMS" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "Host ID"
+  MAX-WIDTH 4
+  HELP "TMS source ID"
+  ORDER 10
+
+ADD FIELD "HostTable" OF "DMS" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Host Table"
+  MAX-WIDTH 24
+  HELP "TMS Table Information"
+  ORDER 20
+
+ADD FIELD "DMSID" OF "DMS" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "DMSID"
+  MAX-WIDTH 4
+  HELP "DMS ID"
+  ORDER 30
+
+ADD FIELD "DmsExternalID" OF "DMS" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "ID in DMS"
+  MAX-WIDTH 24
+  HELP "ID from external DMS system"
+  ORDER 40
+
+ADD FIELD "StatusCode" OF "DMS" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Status Code"
+  MAX-WIDTH 24
+  HELP "Status Code"
+  ORDER 50
+
+ADD FIELD "StatusDesc" OF "DMS" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Status Description"
+  MAX-WIDTH 40
+  HELP "Status Description"
+  ORDER 60
+
+ADD FIELD "StatusTS" OF "DMS" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Time Stamp"
+  MAX-WIDTH 20
+  COLUMN-LABEL "StatusTS"
+  HELP "Status Time Stamp"
+  DECIMALS 5
+  ORDER 70
+
+ADD FIELD "CaseTypeID" OF "DMS" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Case Type"
+  MAX-WIDTH 16
+  HELP "Case Type ID"
+  ORDER 80
+
+ADD FIELD "ContractID" OF "DMS" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "ContractID"
+  MAX-WIDTH 16
+  HELP "ContractID"
+  ORDER 90
+
+ADD FIELD "OrderStatus" OF "DMS" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "OrderStatus"
+  MAX-WIDTH 16
+  HELP "Order Status in TMS"
+  ORDER 100
+
+ADD FIELD "DMSStatusTS" OF "DMS" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "DMS Status TS"
+  MAX-WIDTH 20
+  COLUMN-LABEL "DMSStatusTS"
+  HELP "DMS Time Stamp"
+  DECIMALS 5
+  ORDER 110
+
+ADD INDEX "DMSID" ON "DMS" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "DMSID" ASCENDING 
+
+ADD INDEX "Host" ON "DMS" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "HostID" ASCENDING 
+  INDEX-FIELD "StatusTS" DESCENDING 
+
+ADD INDEX "StatusTS" ON "DMS" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "StatusTS" DESCENDING 
+
+ADD INDEX "ContractID" ON "DMS"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "ContractID" ASCENDING
+
+ADD SEQUENCE "DMS"
+   INITIAL 1
+   INCREMENT 1
+   CYCLE-ON-LIMIT no
+   MIN-VAL 1
+
+ADD TABLE "DMSDOC"
+  AREA "Sta_Data_128"
+  LABEL "Document"
+  DESCRIPTION "DMS Document"
+  DUMP-NAME "dmsdoc"
+
+ADD FIELD "DMSID" OF "DMSDOC" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "DMSID"
+  MAX-WIDTH 4
+  HELP "DMS ID"
+  ORDER 10
+
+ADD FIELD "DocTypeID" OF "DMSDOC" AS character 
+  FORMAT "X(2)"
+  INITIAL ""
+  LABEL "Document Type"
+  MAX-WIDTH 4
+  HELP "Document Type ID"
+  ORDER 20
+
+ADD FIELD "DocStatusCode" OF "DMSDOC" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Document Status"
+  MAX-WIDTH 16
+  HELP "Document Status Code"
+  ORDER 30
+
+ADD FIELD "DocTypeDesc" OF "DMSDOC" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Doc Type Desc"
+  MAX-WIDTH 40
+  HELP "Document Type Description"
+  ORDER 35
+
+ADD FIELD "DocRevComment" OF "DMSDOC" AS character 
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Doc Revision Comment"
+  MAX-WIDTH 60
+  HELP "Document Revision Comment"
+  ORDER 45
+
+ADD FIELD "DocStatusTS" OF "DMSDOC" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Time Stamp"
+  MAX-WIDTH 20
+  COLUMN-LABEL "DocStatusTS"
+  HELP "Document Status Time Stamp"
+  DECIMALS 5
+  ORDER 50
+
+ADD FIELD "DMSStatusTS" OF "DMSDOC" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "DMS Time Stamp"
+  MAX-WIDTH 20
+  COLUMN-LABEL "DMSStatusTS"
+  HELP "DMS Time Stamp"
+  DECIMALS 5
+  ORDER 60
+
+ADD INDEX "DMSID" ON "DMSDOC" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "DMSID" ASCENDING 
+
+ADD INDEX "StatusTS" ON "DMSDOC" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "DocStatusTS" DESCENDING 

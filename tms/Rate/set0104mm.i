@@ -39,10 +39,5 @@ ASSIGN
  liPrePaid             = INT(TRIM(ENTRY(69,callrec,lcSep)))
  liRoaming             = INT(TRIM(ENTRY(70,callrec,lcSep)))
  lcMSRN                =     TRIM(ENTRY(71,callrec,lcSep))
- ldeCharge             = DEC(TRIM(ENTRY(77,callrec,lcSep)))
+ ldeCharge             = DEC(TRIM(ENTRY(77,callrec,lcSep))).
 
- lcPrefixCode          = ""    
- lcPrefix              = "" 
- lcAddPrefix           = ""
- lcChargedsubs         = ""
- lcCdrId               = "".
