@@ -1,0 +1,9 @@
+ADD FIELD "ReqCParam6" OF "MSRequest" AS character
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Char Parameter 6"
+  MAX-WIDTH 60
+  COLUMN-LABEL "CParam6"
+  HELP "Character parameter 6"
+  ORDER 380
+

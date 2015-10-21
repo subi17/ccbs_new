@@ -26,6 +26,8 @@ DEFINE VARIABLE ldeChgStamp AS DECIMAL NO-UNDO.
 DEFINE VARIABLE lcProduct AS CHAR NO-UNDO. 
 DEFINE VARIABLE lcTariffType AS CHAR NO-UNDO. 
 
+&SCOPED-DEFINE COMPANY_NAME_LIMIT 64   /* Name length limitation send to Nodo Central */
+
 FIND Order NO-LOCK WHERE
      Order.Brand   = gcBrand AND
      Order.OrderId = iiOrderId NO-ERROR.
@@ -206,8 +208,12 @@ PROCEDURE pCreatePortabilityMessageXML:
 
    lcDatosPersonales = add_struct(lcAbonado, "datosPersonales").
 
-   IF OrderCustomer.CustIdType = "CIF" THEN 
-      add_string(lcDatosPersonales, "razonSocial", fConvertToUTF8(OrderCustomer.Company)).
+   IF OrderCustomer.CustIdType = "CIF" THEN DO:
+      IF LENGTH(OrderCustomer.Company) > {&COMPANY_NAME_LIMIT} THEN  /* YOT-4107 Max chars 64 */
+      add_string(lcDatosPersonales, "razonSocial", 
+                 fConvertToUTF8(SUBSTRING(OrderCustomer.Company,1,{&COMPANY_NAME_LIMIT}))).
+      ELSE add_string(lcDatosPersonales, "razonSocial", fConvertToUTF8(OrderCustomer.Company)).
+   END.
    ELSE DO:
       IF OrderCustomer.CustIdType NE "NIF" THEN
          add_string(lcDatosPersonales, "nacionalidad", OrderCustomer.Nationality).

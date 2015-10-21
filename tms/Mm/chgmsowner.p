@@ -962,6 +962,7 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
                                        "",
                                        "4",
                                        0, /* orig. request */
+                                       "", /*contract id*/
                                        OUTPUT lcError).
         
       IF liRequest = 0 THEN 

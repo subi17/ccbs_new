@@ -77,6 +77,8 @@ DEF TEMP-TABLE ttRow NO-UNDO
    FIELD GroupOrder    AS INT 
    FIELD RowOrder      AS INT
    FIELD RowToDate     AS DATE
+   FIELD VoiceLimit    AS INT
+   FIELD DataLimit     AS INT
    INDEX RowCode SubInvNum RowCode.
 
 DEF TEMP-TABLE ttGraph NO-UNDO
@@ -113,8 +115,6 @@ DEF TEMP-TABLE ttSub NO-UNDO
    FIELD MsSeq        AS INT
    FIELD CallSpec     AS INT
    FIELD DataConv     AS INT 
-   FIELD VoiceLimit   AS INT
-   FIELD DataLimit    AS INT
    FIELD UserName     AS CHAR
    FIELD InstallmentAmt  AS DEC
    FIELD PenaltyAmt   AS DEC
@@ -126,8 +126,6 @@ DEF TEMP-TABLE ttSub NO-UNDO
    FIELD OldCTName       AS CHAR
    FIELD TariffActDate   AS CHAR
    FIELD MessageType     AS CHAR
-   FIELD OldVoiceLimit   AS INT
-   FIELD OldDataLimit    AS INT
    INDEX CLI CLI.
    
 DEF TEMP-TABLE ttCLIType NO-UNDO
@@ -739,6 +737,20 @@ PROCEDURE pGetSubInvoiceHeaderData:
                ELSE IF ttCLIType.CLIType = "CONT15" THEN
                   lcGroupCode = "VOICE100".
 
+               RELEASE ttRow.
+
+               IF lcGroupCode BEGINS "CONTF" THEN
+                  FOR FIRST DayCampaign NO-LOCK WHERE 
+                            DayCampaign.Brand = gcBrand AND 
+                            DayCampaign.DCEvent = lcGroupCode,
+                      FIRST FMItem NO-LOCK WHERE
+                            FMItem.Brand = gcBrand AND
+                            FMItem.FeeModel = DayCampaign.FeeModel:
+                     FIND FIRST ttRow WHERE  
+                                ttRow.SubInvNum = SubInvoice.SubInvNum AND
+                                ttRow.RowBillCode = FMItem.BillCode NO-ERROR.   
+                  END.
+
                FOR EACH bServiceLimit NO-LOCK WHERE
                         bServiceLimit.GroupCode = lcGroupCode,
                    EACH bMServiceLimit NO-LOCK WHERE
@@ -747,10 +759,14 @@ PROCEDURE pGetSubInvoiceHeaderData:
                         bMServiceLimit.SlSeq   = bServiceLimit.SlSeq AND
                         bMServiceLimit.FromTS <= ldPeriodTo          AND
                         bMServiceLimit.EndTS  >= ldPeriodFrom:
-                  IF bMServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN
-                     ttSub.VoiceLimit = bMServiceLimit.InclAmt.
-                  ELSE IF bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} THEN
-                     ttSub.DataLimit = bMServiceLimit.InclAmt.
+                                                
+                  IF AVAIL ttRow THEN DO:
+                     IF bMServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN
+                        ttRow.VoiceLimit = bMServiceLimit.InclAmt.
+                     ELSE IF bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} THEN
+                        ttRow.DataLimit = bMServiceLimit.InclAmt.
+                  END.
+
                   IF bServiceLimit.GroupCode = "VOICE100" THEN
                      ttCLIType.CLIType = ttCLIType.CLIType + "V100".
                END.

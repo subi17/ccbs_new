@@ -15,7 +15,7 @@ gcBrand = "1".
 {tmsconst.i}
 
 DEFINE VARIABLE ldeCrStamp AS DECIMAL NO-UNDO.
-ldeCrStamp = fMake2Dt(TODAY - 25, 0).
+ldeCrStamp = fMake2Dt(TODAY - 45, 0).
 
 FOR EACH order where
    order.brand = gcbrand and
