@@ -67,13 +67,15 @@ FUNCTION fCollectEvent RETURNS LOGICAL
 
    IF icEventTable = "CustContact" THEN
       DO liCount = 1 TO NUM-ENTRIES(Eventlog.ModifiedFields):
-         lcModFields = lcModFields + "CustContact_" + ENTRY(liCount,EventLog.ModifiedFields).
+         IF liCount = 1 THEN
+            lcModFields = lcModFields + "CustContact_" + ENTRY(liCount,EventLog.ModifiedFields).
+         ELSE lcModFields = lcModFields + ",CustContact_" + ENTRY(liCount,EventLog.ModifiedFields).
       END.
    ELSE lcModFields = Eventlog.ModifiedFields.
 
    DO liAmtMod = 1 TO NUM-ENTRIES(EventLog.DataValues,CHR(255)) BY 3:
       IF liAmtMod = 1 THEN
-         ASSIGN lcModValues = ENTRY(liAmtMod + 1,EventLog.DataValues,CHR(255)).
+         lcModValues = ENTRY(liAmtMod + 1,EventLog.DataValues,CHR(255)).
       ELSE lcModValues = lcModValues + "," + ENTRY(liAmtMod + 1,EventLog.DataValues,CHR(255)).
    END.
 
