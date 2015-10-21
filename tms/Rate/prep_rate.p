@@ -77,9 +77,8 @@ DEF VAR lcInvruncode       AS C  NO-UNDO.
        
 /* DEF VAR ctype   AS LO NO-UNDO FORMAT "New Calls/All Calls". */
 
-DEF temp-table  ttCall No-UNDO like PrepCDR
-    FIELD AgrCust AS INT
-    FIELD SubsType LIKE mobcdr.SubsType.
+{rating_ttcall.i}
+
 DEF TEMP-TABLE ttdetail no-undo like mcdrdtl.
 
 {onlinevar.i}

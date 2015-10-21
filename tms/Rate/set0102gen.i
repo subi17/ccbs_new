@@ -6,7 +6,6 @@ ASSIGN
  lcRecordType          =     TRIM(ENTRY( 4,callrec,lcSep))
  lcVersion             =     TRIM(ENTRY( 5,callrec,lcSep))
  lcBatchSeq            = INT(TRIM(ENTRY( 8,callrec,lcSep)))  
- lcMediatorTime        = ""
  lcEvent               =     TRIM(ENTRY( 9,callrec,lcSep))
  lcEventSubType        =     TRIM(ENTRY( 10,callrec,lcSep))  
  lcOriginalCDRtype     =     TRIM(ENTRY(11,callrec,lcSep))
@@ -64,5 +63,4 @@ ASSIGN
  liPartialInd          = INT(TRIM(ENTRY(65,callrec,lcSep))).
  liPrePaid             = INT(TRIM(ENTRY(67,callrec,lcSep))).
  lcNCR                 =     TRIM(ENTRY(68,callrec,lcSep)).
- lcCdrId               = "".
-
+ 

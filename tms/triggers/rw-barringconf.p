@@ -23,7 +23,7 @@ ELSE DO:
          Ordercanal.RepLog.RecordId  = RECID(BarringConf)
          Ordercanal.RepLog.TableName = "BarringConf"
          Ordercanal.RepLog.EventType = "MODIFY"
-         Ordercanal.RepLog.KeyValue  = STRING(BarringConf.BarringCode)
+         Ordercanal.RepLog.KeyValue  = STRING(Oldbuf.BarringCode)
          Ordercanal.RepLog.EventTS   = DATETIME(TODAY,MTIME).
    END. /* IF NOT llResult THEN DO: */
 END. /* ELSE DO: */

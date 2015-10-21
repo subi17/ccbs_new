@@ -28,6 +28,7 @@ FUNCTION fMSCustChangeRequest RETURNS INTEGER
     INPUT  icCreator    AS CHAR,   /* who made the request */
     INPUT  icSource     AS CHAR,   /* source of the request */
     INPUT  iiOrigReq    AS INT,  /* father request */
+    INPUT  icContractID AS CHAR, /*contract id, dms*/
     OUTPUT ocResult     AS CHAR).
 
    DEF VAR liReqType    AS INT  NO-UNDO.
@@ -77,6 +78,7 @@ FUNCTION fMSCustChangeRequest RETURNS INTEGER
       liReqCreated        = bCreaReq.MsRequest
       bCreaReq.CustNum    = iiOldCust
       bCreaReq.ReqCParam1 = icNewData
+      bCreaReq.ReqCParam6 = icContractID
       bCreaReq.ReqCParam4 = "111"
       bCreaReq.ReqDParam1 = idChgStamp
       bCreaReq.ReqDParam2 = ideFee

@@ -57,11 +57,5 @@ ASSIGN
  liRoaming             = INT(TRIM(ENTRY(66,callrec,lcSep)))
  liPartialInd          = INT(TRIM(ENTRY(67,callrec,lcSep)))
  lcForwardIndicator    =     TRIM(ENTRY(68,callrec,lcSep))
- liPrePaid             = INT(TRIM(ENTRY(69,callrec,lcSep)))
-
- lcMSRN                = ""
- lcNCR                 = ""
- lcChargedsubs         = ""
- lcDestURL             = ""
- lcCdrId               = "".
+ liPrePaid             = INT(TRIM(ENTRY(69,callrec,lcSep))).
 
