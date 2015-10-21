@@ -348,6 +348,8 @@ DEF VAR pcDeviceID   AS CHAR NO-UNDO.
 DEF VAR pcLaptopSerial  AS CHAR NO-UNDO.
 DEF VAR piHardBook      AS INT  NO-UNDO.
 
+DEF VAR pcAccessory AS CHAR NO-UNDO.
+
 DEF VAR lccTemp AS CHARACTER NO-UNDO. 
 DEF VAR lcError AS CHARACTER NO-UNDO. 
 DEF VAR liRequest AS INTEGER NO-UNDO.
@@ -1007,6 +1009,17 @@ FUNCTION fCreateOrderAccessory RETURNS LOGICAL:
          OrderAccessory.brand       = gcBrand 
          OrderAccessory.IMEI        = pcLaptopSerial
          OrderAccessory.ProductCode = OfferItem.ItemKey WHEN AVAIL OfferItem.
+   END.
+   /*YPR-2478 / Accessory adding*/
+   IF pcAccessory NE "" THEN DO:
+      CREATE OrderAccessory.
+      ASSIGN
+         OrderAccessory.OrderId     = Order.OrderId
+         OrderAccessory.TerminalType = {&TERMINAL_TYPE_ACCESSORY}
+         OrderAccessory.brand       = gcBrand
+         OrderAccessory.IMEI        = pcLaptopSerial
+         OrderAccessory.ProductCode = OfferItem.ItemKey WHEN AVAIL OfferItem.
+
    END.
 
    RETURN TRUE.
