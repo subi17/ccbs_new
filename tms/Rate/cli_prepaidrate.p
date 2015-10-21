@@ -74,8 +74,8 @@ DEF VAR b_asubtype         AS I  NO-UNDO.
        
 /* DEF VAR ctype   AS LO NO-UNDO FORMAT "New Calls/All Calls". */
 
-DEF temp-table  ttCall   No-UNDO like mobcdr
-   FIELD AgrCust AS INT.
+{rating_ttcall.i}
+
 DEF TEMP-TABLE  ttDetail NO-UNDO LIKE McdrDtl.
 
 {onlinevar.i}

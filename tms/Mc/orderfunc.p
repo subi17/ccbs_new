@@ -399,6 +399,10 @@ REPEAT WITH FRAME sel:
               RUN VALUE(lcModule) (0,"MobSub",Order.MsSeq).
            END.
 
+           ELSE IF lcModule = "dms" THEN DO:
+              RUN dms.p(Order.OrderId,Order.ContractID).
+           END.
+
            ELSE 
            MESSAGE
            "Not use yet!"

@@ -14,7 +14,7 @@
 
 {xmlrpc/xmlrpc_access.i}
 {tmsparam4.i}
-
+{tmsconst.i}
 
 DEF VAR custcat_struct AS CHAR NO-UNDO. 
 DEF VAR top_array AS CHARACTER NO-UNDO. 
@@ -50,6 +50,16 @@ IF LOOKUP(pcSetting,"setFlag") > 0 THEN DO:
       RETURN appl_err(SUBST("Param not found &1", pcFlag)).
 
 END.
+ELSE IF LOOKUP(pcSetting,"DMS") > 0 THEN DO:
+   IF validate_struct(pcParamStruct,"value!,user") = ? THEN RETURN.
+   pcFlag = {&DMS_ON_OFF}.
+   piValue = get_int(pcParamStruct, "value").
+   
+   IF NOT(fCParam4SetI("1","DMS",pcFlag, piValue)) THEN 
+      RETURN appl_err(SUBST("Param not found &1", pcFlag)).
+
+END.
+
 ELSE DO:
    /* validate 2nd parameter struct */
    IF validate_struct(pcParamStruct,"value!,user!") = ? THEN RETURN.

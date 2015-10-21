@@ -535,6 +535,7 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
                                    {&REQUEST_SOURCE_MAIN_LINE_DEACTIVATION}, 
                                    0,     /* piOrderID */
                                    MsRequest.MsRequest,
+                                   "", /*contract_id*/
                                    OUTPUT lcError).
 
       IF oiRequest = 0 THEN DO:
@@ -678,6 +679,7 @@ FUNCTION fNonAddLineSTCCancellationToAddLineSTC RETURN LOGICAL
                           {&REQUEST_SOURCE_MAIN_LINE_DEACTIVATION},
                           0,     /* piOrderID */
                           0,
+                          "", /*contract_id*/
                           OUTPUT lcError). 
 
    END.
