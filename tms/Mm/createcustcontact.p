@@ -92,12 +92,11 @@ IF llUpdateCustContact THEN DO:
    IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN DO: 
       IF NOT CAN-FIND(FIRST bOrderCustomer WHERE
                             bOrderCustomer.Brand   = gcBrand AND
-                            bOrderCustomer.CustNum = OrderCustomer.CustNum AND
-                            bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT} AND
-                            bOrderCustomer.OrderId = OrderCustomer.OrderId) THEN DO:
+                            bOrderCustomer.OrderId = OrderCustomer.OrderId AND
+                            bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}) THEN DO:
          FIND CustContact WHERE
               CustContact.Brand    = gcBrand AND
-              CustContact.Custnum  = OrderCustomer.CustNum AND
+              CustContact.Custnum  = Customer.CustNum AND
               CustContact.CustType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
               EXCLUSIVE-LOCK NO-ERROR.
          IF AVAILABLE CustContact THEN DO:
