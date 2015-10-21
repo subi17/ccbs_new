@@ -66,9 +66,8 @@
 {fmakeservice.i}
 {fservlimit.i}
 {fsubser.i}
+{rating_ttcall.i}
 
-DEF TEMP-TABLE ttcall   LIKE mobcdr
-    FIELD AgrCust AS INT.
 DEF TEMP-TABLE ttDetail LIKE Mcdrdtl.
 
 {detailseq.i}
