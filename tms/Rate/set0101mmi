@@ -67,4 +67,3 @@ ASSIGN
  lictype               = INT(TRIM(ENTRY(66,callrec,lcSep))). 
  lcPrePaid             =     TRIM(ENTRY(67,callrec,lcSep)).
  lcNCR                 =     TRIM(ENTRY(68,callrec,lcSep)).
-

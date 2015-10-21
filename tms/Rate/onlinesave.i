@@ -34,5 +34,6 @@ ASSIGN
    ttCall.DataOut             = ldeDataOut
    ttCall.OrigRecordType      = liPartialInd
    ttCall.CdrId               = lcCdrId
-   ttCall.CallIdNum           = lcCallIdNum.
-   
+   ttCall.CallIdNum           = lcCallIdNum
+   ttCall.ServiceClass        = liServiceClass
+   ttCall.Accumulator         = liAccumulator.

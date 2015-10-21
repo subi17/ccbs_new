@@ -7,10 +7,8 @@ ASSIGN
  lcRecordType          =     TRIM(ENTRY( 4,callrec,lcSep))
  lcVersion             =     TRIM(ENTRY( 5,callrec,lcSep))
  lcBatchSeq            = INT(TRIM(ENTRY( 7,callrec,lcSep)))  
- lcMediatorTime        = ""
  lcEvent               =     TRIM(ENTRY( 9,callrec,lcSep))
  lcEventSubType        =     TRIM(ENTRY(10,callrec,lcSep))  
-
  lcOriginalCDRtype     =     TRIM(ENTRY(11,callrec,lcSep))
  liRateccn             = INT(TRIM(ENTRY(12,callrec,lcSep)))  
  liNoCharge            = INT(TRIM(ENTRY(13,callrec,lcSep))) 
@@ -25,26 +23,14 @@ ASSIGN
  
  liAtype               = INT(TRIM(ENTRY(21,callrec,lcSep))).
  lcIMSI                =     TRIM(ENTRY(22,callrec,lcSep)).
- lcIMEI                =  "" .
  lcDestAddress         =     TRIM(ENTRY(23,callrec,lcSep)) .
  liBtype               = INT(TRIM(ENTRY(24,callrec,lcSep))).
  lcIMSI2               =     TRIM(ENTRY(25,callrec,lcSep)).
- lcIMEI2               =  "" .
  lcSubsInfo            =     TRIM(ENTRY(20,callrec,lcSep)).
- lcPrefixCode          =  "" .
- lcPrefix              =  "" .
- lcAddPrefix           =  "" .
-  
- lcRoutingnumber       =  "" .
  lcChargedsubs         =  TRIM(ENTRY(26,callrec,lcSep)).
 
- ldeDataIn             = 0   .
- ldeDataOut            = 0   .
  lcServiceName         =      TRIM(ENTRY(55,callrec,lcSep)).
  ldeCharge             =  DEC(TRIM(ENTRY(58,callrec,lcSep))).
- liPartialInd          = 0.
- lcCdrId               = "".
- lcCallIdNum           = "".
 
 IF lcSubscriptionType = "2" then liPrePaid = 1.
 ELSE                             liPrePaid = 0.
