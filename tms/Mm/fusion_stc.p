@@ -122,6 +122,7 @@ oiRequest = fCTChangeRequest(MobSub.msseq,
                   {&REQUEST_SOURCE_FUSION_ORDER}, 
                   piOrderID,
                   0,
+                  "", /*contract id*/
                   OUTPUT lcError).
 
 IF oiRequest = 0 THEN

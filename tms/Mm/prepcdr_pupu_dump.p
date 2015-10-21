@@ -22,7 +22,6 @@ DEF VAR liEvents      AS INT  NO-UNDO.
 DEF VAR lcKeyValue    AS CHAR NO-UNDO.
 DEF VAR lcDel2        AS CHAR NO-UNDO.
 DEF VAR lcDCEvent     AS CHAR NO-UNDO.
-
 DEF STREAM sFile.
 
 lcDel2 = CHR(255).
@@ -47,6 +46,9 @@ FOR EACH PrepCDR NO-LOCK USE-INDEX ReadDate WHERE
       lcDCEvent = "PMDUB".
    ELSE IF PrepCDR.CLIType = "TARJ7" AND PrepCDR.Charge = 0 THEN
       lcDCEvent = "TARJ7".
+   ELSE IF PrepCDR.CLIType = "TARJ9" AND PrepCDR.EventType = "CALL" AND 
+      PrepCDR.accumulator > 0 THEN
+      lcDCEvent = "TARJ9".
    ELSE IF PrepCDR.CLIType = "TARJ9" AND PrepCDR.Charge = 0 AND
       LOOKUP(PrepCDR.GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0 THEN
       lcDCEvent = "TARJ9".
@@ -73,7 +75,8 @@ FOR EACH PrepCDR NO-LOCK USE-INDEX ReadDate WHERE
       PrepCDR.DataIn + PrepCDR.DataOut     lcDel
       TRIM(STRING(PrepCDR.Charge,"->>>>>>>>>>>9.9<<<<<")) lcDel
       lcDCEvent                            lcDel
-      PrepCDR.BDest                        SKIP.
+      PrepCDR.BDest                        lcDel
+      PrepCDR.Accumulator                  SKIP.
    
    odeCDRStamp = MAX(odeCDRStamp,PrepCDR.ReadinTS).
 

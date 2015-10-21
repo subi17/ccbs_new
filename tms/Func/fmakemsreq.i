@@ -33,6 +33,9 @@
                   19.09.07/jp   fsubscriptionrequest2
                   10.10.07/jp  icBankNumber for fCTChangeRequest
                   10.10.07/jp   fsubscriptionrequest2 Removed
+                  25.08.15/ilkkasav YPR-2378 fCTChangeRequest added parameter
+
+
 */   
 &IF "{&fmakemsreq}" NE "YES"
 &THEN
@@ -139,6 +142,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
     INPUT  icSource      AS CHAR,
     INPUT  iiOrderID     AS INT,
     INPUT  iiOrigReq     AS INT,    /* Father request id */
+    INPUT  icDMSInfo     AS CHAR,   /*For DMS usage contract_id, channel */
     OUTPUT ocResult      AS CHAR).
 
    DEF VAR llCRes      AS LOG  NO-UNDO.
@@ -210,6 +214,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
           bCreaReq.ReqCParam2  = icNewType
           bCreaReq.ReqCparam3  = icBankNumber
           bCreaReq.ReqCparam5  = icBundleType
+          bCreaReq.ReqCparam6  = icDMSInfo
           bCreaReq.ReqDParam1  = idChgStamp
           bCreaReq.ReqDParam2  = ideFee
           bCreaReq.ReqIParam1  = iiCreditCheck
@@ -520,10 +525,14 @@ FUNCTION fAddressRequest RETURNS INTEGER
    iiTownCode = INT(icTownCode) NO-ERROR.
    IF ERROR-STATUS:ERROR THEN ocResult = "TownCode must be numeral".
    IF ocResult > "" THEN RETURN 0.
-   
-   IF icZip > "" AND SUBSTRING(icZip,1,2) NE icRegion THEN DO:
-      ocResult =  "There is a conflict between zipcode and region".
-      RETURN 0.
+
+   /* YOT-4089 Zipcode/region validation done in Newton
+      so some special cases need to pass TMS validation. */
+   IF icSource NE {&REQUEST_SOURCE_NEWTON} THEN DO:
+      IF icZip > "" AND SUBSTRING(icZip,1,2) NE icRegion THEN DO:
+         ocResult =  "There is a conflict between zipcode and region".
+         RETURN 0.
+      END.
    END.
 
    IF icRegion ne "00" THEN 

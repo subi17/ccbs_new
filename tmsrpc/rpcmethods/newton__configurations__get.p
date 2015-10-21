@@ -8,6 +8,7 @@
 
 {header_get.i}
 {tmsparam4.i}
+{tmsconst.i}
 
 DEF VAR liMaintB AS INTEGER NO-UNDO.
 
@@ -23,8 +24,16 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       liMaintB = INT(fCParamI4("1","PREPAIDMC","MinConsRerunAllowed")).
       IF liMaintB = ? THEN RETURN appl_err("Missing system parameter").
    END.   
+   ELSE IF LOOKUP(pcId,"DMS") > 0 THEN DO:
+      liMaintB = INT(fCParamI4("1","DMS",{&DMS_ON_OFF})).
+      IF liMaintB = ? THEN RETURN appl_err("Missing system parameter").
+   END.   
    ELSE
       RETURN appl_err(SUBST("Unknown service &1", pcId)).
 
-   add_int(resp_array, "", (IF liMaintB = 0 THEN 1 ELSE 0)).
+   IF LOOKUP(pcId,"DMS") > 0 THEN
+      add_int(resp_array, "", liMaintB).
+   ELSE
+      add_int(resp_array, "", (IF liMaintB = 0 THEN 1 ELSE 0)).
+      
 END.

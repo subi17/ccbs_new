@@ -715,6 +715,7 @@ PROCEDURE pOwnerChange:
                                       {&REQUEST_SOURCE_ACC},
                                       0, /* order id */
                                       0,
+                                      "", /*contract id*/
                                       OUTPUT lcInfo).
       
       FIND bSubRequest EXCLUSIVE-LOCK WHERE
@@ -782,6 +783,7 @@ PROCEDURE pOwnerChange:
                   "",
                   ({&REQUEST_SOURCE_ACC}),
                   MsRequest.MsRequest,
+                  "", /*contract id*/
                   OUTPUT lcInfo).
 
                /* memo */
@@ -1850,6 +1852,7 @@ PROCEDURE pHandleAdditionalLines:
                "",
                ({&REQUEST_SOURCE_ACC}),
                iiMsRequest,
+               "", /*contract is*/
                OUTPUT lcInfo).
          
             IF lcInfo > "" THEN
