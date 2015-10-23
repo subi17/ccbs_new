@@ -79,6 +79,9 @@ FUNCTION fMakeTempTable RETURNS CHAR
    DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
    DEF VAR liCount AS INT NO-UNDO.
    DEF VAR liAddId AS Int NO-UNDO.
+   DEF VAR liRT AS Int NO-UNDO.
+   DEF VAR liStampTypeCount AS INT NO-UNDO.
+   DEF VAR lcStampTypes AS CHAR NO-UNDO.
 
    llgTmpNeeded = FALSE.
    llgDirectNeeded = FALSE.
@@ -96,99 +99,104 @@ FUNCTION fMakeTempTable RETURNS CHAR
    END.
    IF llgTmpNeeded EQ FALSE THEN RETURN "".
 
-   FOR EACH OrderTimestamp NO-LOCK WHERE
-            OrderTimestamp.Brand EQ gcBrand AND
-            (OrderTimestamp.RowType EQ {&ORDERTIMESTAMP_CHANGE} OR
-             OrderTimeStamp.RowType EQ {&ORDERTIMESTAMP_DELIVERY}) AND
-            Ordertimestamp.TimeStamp < idEndTS AND
-            Ordertimestamp.TimeStamp >= idStartTS:
-      FIND FIRST ttOrderList WHERE
-                 ttOrderList.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
-      IF NOT AVAIL ttOrderList THEN DO:
-         FIND FIRST Order WHERE
-                    Order.Brand EQ gcBrand AND
-                    Order.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
-         IF AVAIL Order THEN DO:
-            llgDirect = FALSE.
-            llgAddEntry = FALSE.
+   lcStampTypes = STRING({&ORDERTIMESTAMP_CHANGE}) + "," +
+                  STRING( {&ORDERTIMESTAMP_DELIVERY} ).
+   DO liStamptypeCount = 1 TO NUM-ENTRIES (lcStampTypes):
+      liRT = INT(ENTRY(liStampTypeCount,lcStampTypes)).
 
-            /*Case 5: Direct channels*/
-            /*This can be parallell with other cases.*/
-            IF llgDirectNeeded EQ TRUE AND LOOKUP(Order.OrderChannel,
-                           {&ORDER_CHANNEL_DIRECT} ) NE 0 THEN DO:
-                  ldeInstallment = fGetOfferDeferredPayment(Order.Offer,
-                                              Order.CrStamp,
-                                              OUTPUT ldeMonthlyFee,
-                                              OUTPUT liMonths,
-                                              OUTPUT ldeFinalFee).
-                  /*This is financed case*/
-                  IF liMonths NE 0 THEN DO:
-                     llgDirect = TRUE.
+      FOR EACH OrderTimestamp NO-LOCK WHERE
+               OrderTimestamp.Brand EQ gcBrand AND
+               OrderTimestamp.RowType EQ liRt AND
+               Ordertimestamp.TimeStamp < idEndTS AND
+               Ordertimestamp.TimeStamp >= idStartTS:
+         FIND FIRST ttOrderList WHERE
+                    ttOrderList.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
+         IF NOT AVAIL ttOrderList THEN DO:
+            FIND FIRST Order WHERE
+                       Order.Brand EQ gcBrand AND
+                       Order.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
+            IF AVAIL Order THEN DO:
+               llgDirect = FALSE.
+               llgAddEntry = FALSE.
+
+               /*Case 5: Direct channels*/
+               /*This can be parallell with other cases.*/
+               IF llgDirectNeeded EQ TRUE AND LOOKUP(Order.OrderChannel,
+                              {&ORDER_CHANNEL_DIRECT} ) NE 0 THEN DO:
+                     ldeInstallment = fGetOfferDeferredPayment(Order.Offer,
+                                                 Order.CrStamp,
+                                                 OUTPUT ldeMonthlyFee,
+                                                 OUTPUT liMonths,
+                                                 OUTPUT ldeFinalFee).
+                     /*This is financed case*/
+                     IF liMonths NE 0 THEN DO:
+                        llgDirect = TRUE.
+                        llgAddEntry = TRUE.
+                     END.
+               END.
+               /*Case 1: Activations*/
+               IF (Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} /*6*/ 
+                  OR
+                  Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC} /*32*/) AND
+                  R-INDEX(Order.OrderChannel, "pos") > 0 /*Only POS  orders*/ 
+                  THEN DO:
+                     lcCase = {&DMS_CASE_TYPE_ID_ORDER_ACT}.
                      llgAddEntry = TRUE.
                   END.
+               /*Case 2: More doc needed*/
+               ELSE IF Order.StatusCode EQ 
+                       {&ORDER_STATUS_MORE_DOC_NEEDED} /*44*/
+                  THEN DO:
+                     lcCase = {&DMS_CASE_TYPE_ID_ORDER_RESTUDY}.
+                     llgAddEntry = TRUE.
+                  END.
+               /*Case 3: Companies*/
+               ELSE IF Order.StatusCode EQ 
+                       {&ORDER_STATUS_COMPANY_NEW} OR  /*20*/
+                       Order.StatusCode EQ
+                       {&ORDER_STATUS_COMPANY_MNP} OR  /*21*/
+                       Order.StatusCode EQ 
+                        {&ORDER_STATUS_RENEWAL_STC_COMPANY}  /*33*/
+                  THEN DO:
+                     lcCase = {&DMS_CASE_TYPE_ID_COMPANY}.
+                     llgAddEntry = TRUE.
+                  END.
+               /*Case 4 - not related to order table*/
+               /*Csse 6: Cancellations*/
+               ELSE IF Order.StatusCode EQ {&ORDER_STATUS_CLOSED} OR 
+                       Order.StatusCode EQ {&ORDER_STATUS_CLOSED_BY_FRAUD} OR
+                       Order.StatusCode EQ {&ORDER_STATUS_AUTO_CLOSED} THEN DO:
+                  /*Send Cancel notif if TMS has sent other notif to DMS
+                   (previous sending)*/
+                  FIND FIRST DMS WHERE 
+                             DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
+                             DMS.HostId EQ Order.OrderID AND
+                             DMS.StatusTS < idEndTs AND
+                             (DMS.OrderStatus EQ {&ORDER_STATUS_COMPANY_NEW} OR
+                             DMS.OrderStatus EQ {&ORDER_STATUS_COMPANY_MNP} OR 
+                             DMS.OrderStatus EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY}
+                             OR
+                             DMS.OrderStatus EQ {&ORDER_STATUS_DELIVERED} OR
+                             DMS.OrderStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED}) 
+                             NO-ERROR.
+                  IF AVAIL DMS THEN DO:
+                     lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
+                     llgAddEntry = TRUE.
+                  END.
+               END.        
+               /*Other cases, no need to create entry*/
+               ELSE NEXT.
             END.
-            /*Case 1: Activations*/
-            IF (Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} /*6*/ 
-               OR
-               Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC} /*32*/) AND
-               R-INDEX(Order.OrderChannel, "pos") > 0 /*Only POS  orders*/ 
-               THEN DO:
-                  lcCase = {&DMS_CASE_TYPE_ID_ORDER_ACT}.
-                  llgAddEntry = TRUE.
-               END.
-            /*Case 2: More doc needed*/
-            ELSE IF Order.StatusCode EQ 
-                    {&ORDER_STATUS_MORE_DOC_NEEDED} /*44*/
-               THEN DO:
-                  lcCase = {&DMS_CASE_TYPE_ID_ORDER_RESTUDY}.
-                  llgAddEntry = TRUE.
-               END.
-            /*Case 3: Companies*/
-            ELSE IF Order.StatusCode EQ 
-                    {&ORDER_STATUS_COMPANY_NEW} OR  /*20*/
-                    Order.StatusCode EQ
-                    {&ORDER_STATUS_COMPANY_MNP} OR  /*21*/
-                    Order.StatusCode EQ 
-                     {&ORDER_STATUS_RENEWAL_STC_COMPANY}  /*33*/
-               THEN DO:
-                  lcCase = {&DMS_CASE_TYPE_ID_COMPANY}.
-                  llgAddEntry = TRUE.
-               END.
-            /*Case 4 - not related to order table*/
-            /*Csse 6: Cancellations*/
-            ELSE IF Order.StatusCode EQ {&ORDER_STATUS_CLOSED} OR 
-                    Order.StatusCode EQ {&ORDER_STATUS_CLOSED_BY_FRAUD} OR
-                    Order.StatusCode EQ {&ORDER_STATUS_AUTO_CLOSED} THEN DO:
-               /*Send Cancel notif if TMS has sent other notif to DMS
-                (previous sending)*/
-               FIND FIRST DMS WHERE 
-                          DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
-                          DMS.HostId EQ Order.OrderID AND
-                          DMS.StatusTS < idEndTs AND
-                          (DMS.OrderStatus EQ {&ORDER_STATUS_COMPANY_NEW} OR
-                          DMS.OrderStatus EQ {&ORDER_STATUS_COMPANY_MNP} OR 
-                          DMS.OrderStatus EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY}
-                          OR
-                          DMS.OrderStatus EQ {&ORDER_STATUS_DELIVERED} OR
-                          DMS.OrderStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED}) 
-                          NO-ERROR.
-               IF AVAIL DMS THEN DO:
-                  lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
-                  llgAddEntry = TRUE.
-               END.
-            END.        
-            /*Other cases, no need to create entry*/
-            ELSE NEXT.
-         END.
- 
-         IF llgAddEntry EQ TRUE THEN DO TRANS:
-            CREATE ttOrderList.
-            ASSIGN ttOrderList.OrderID = OrderTimestamp.OrderId
-                   ttOrderList.CaseID = lcCase.
-                   ttOrderList.Direct = llgDirect.
-         END.           
-      END.         
-   END. /*ordertimestamp*/
+    
+            IF llgAddEntry EQ TRUE THEN DO TRANS:
+               CREATE ttOrderList.
+               ASSIGN ttOrderList.OrderID = OrderTimestamp.OrderId
+                      ttOrderList.CaseID = lcCase.
+                      ttOrderList.Direct = llgDirect.
+            END.           
+         END.         
+      END. /*ordertimestamp*/
+   END.
    /*If order has already gone to DELIVERED 6, the order status
      will not return to 7,8,9. This cases need to be seeked from
      requests.  order mobsub
@@ -296,18 +304,37 @@ FUNCTION fGetSegment RETURNS CHAR
 END.   
 
 /*The value can be Simonly, Handset, Financed Handset.*/
-FUNCTION fGetTerminalType RETURNS CHAR
+FUNCTION fGetTerminalFinanceType RETURNS CHAR
    (iiOrderID AS INT):
+   DEF BUFFER bOrder FOR Order.
+   DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
+   DEF VAR ldeMonthlyFee  AS DECIMAL NO-UNDO.
+   DEF VAR liMonths AS INT NO-UNDO.
+   DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
+
+   FIND FIRST bOrder NO-LOCK WHERE
+              bOrder.Brand EQ gcBrand AND
+              bOrder.OrderId EQ iiOrderId NO-ERROR.
+   IF NOT AVAIL bOrder THEN RETURN "".
+
    FIND FIRST OrderAccessory NO-LOCK  WHERE
               OrderAccessory.Brand EQ gcBrand AND
               OrderAccessory.OrderID EQ iiOrderID AND
               Orderaccessory.TerminalType EQ {&TERMINAL_TYPE_PHONE} NO-ERROR.
    IF AVAIL OrderAccessory THEN DO:
-      IF OrderAccessory.discount NE 0 THEN RETURN "Handset".
+
+      ldeInstallment = fGetOfferDeferredPayment(bOrder.Offer,
+                                                bOrder.CrStamp,
+                                                OUTPUT ldeMonthlyFee,
+                                                OUTPUT liMonths,
+                                                OUTPUT ldeFinalFee).
+      IF liMonths EQ 0 THEN RETURN "Handset".
       ELSE RETURN "Financed Handset".
    END.
    RETURN "Simonly".
-END.   
+END.
+
+
 /* TODO: Indexes! */
 FUNCTION fGetHandset RETURNS CHAR
    (iiOrderId AS INT,
@@ -500,7 +527,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    /**/
    fGetSegment(Order.OrderID)       + lcDelim +
    /*Terminal Type: The value can be Simonly, Handset, Financed Handset.*/
-   fGetTerminalType(iiOrderId).
+   fGetTerminalFinanceType(iiOrderId).
 
    /*Document type,DocStatusCode,RevisionComment*/
    lcDocListEntries = "".
@@ -646,10 +673,9 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    /*Total Installment: 528*/
    STRING(ldeInstallment)            + lcDelim +
   /*Residual value: 70*/
-   STRING(ldeFinalFee +
-          liMonths * ldeMonthlyFee ) + lcDelim +
+   STRING(ldeFinalFee)               + lcDelim +
   /*Permanency: 50*/
-   STRING(ldePermanencyAmount)  + lcDelim + 
+   STRING(ldePermanencyAmount)       + lcDelim + 
    /*Model Type: Sony Xperia Z3 Blanco*/
    STRING(lcModel)                   + lcDelim +   
    /*ROI Risk: R11A;C--;S.;RSVODAFONE::02/11/2009::383::1;Z03011*/
@@ -671,8 +697,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    ELSE IF Order.OrderType EQ {&ORDER_TYPE_STC} AND
            Order.PayType EQ FALSE
       OR   
-           Order.OrderType EQ {&ORDER_TYPE_RENEWAL} /* AND
-           Order.OrderChannel EQ TODO */ THEN lcPAram = "DMS_S44_T3".
+           Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN lcPAram = "DMS_S44_T3".
    /*add new pre / portability to pre*/
    ELSE IF Order.OrderType EQ {&ORDER_TYPE_NEW} AND
            Order.PayType EQ TRUE
@@ -683,7 +708,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    lcRequiredDocs = fCParam("DMS",lcParam).
    DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
       /*Document type,DocStatusCode,RevisionComment*/
-      lcDocListEntries = ENTRY(liCount,lcParam) + "," + 
+      lcDocListEntries = ENTRY(liCount,lcRequiredDocs) + "," + 
                          "," + 
                          lcDMSStatusDesc + "," + 
                          "Doc created".
@@ -861,7 +886,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
       OR
            Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} AND  
            Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-           Order.PayType EQ TRUE THEN lcPAram = "DMS_S20_T4".
+           Order.PayType EQ TRUE THEN lcPAram = "DMS_S20_T3".
 
    /*CASE 21,33*/
    /*portability pos-pos*/
@@ -901,7 +926,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    lcRequiredDocs = fCParam("DMS",lcParam).
    DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
       /*Document type,DocStatusCode,RevisionComment*/
-      lcDocListEntries = ENTRY(liCount,lcParam) + "," + 
+      lcDocListEntries = ENTRY(liCount,lcRequiredDocs) + "," + 
                          "," +
                          lcDMSStatusDesc + "," + 
                          "Doc created".
@@ -1131,7 +1156,7 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    /*Segment*/
    fGetSegment(Order.OrderID)     + lcDelim +
    /*Terminal type*/
-   fGetTerminalType(iiOrderId) SKIP.
+   fGetTerminalFinanceType(iiOrderId) SKIP.
    OUTPUT STREAM sOutFile CLOSE.
    /*Document type,DocStatusCode,RevisionComment*/
    lcDocListEntries = "".
