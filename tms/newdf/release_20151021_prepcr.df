@@ -1,0 +1,7 @@
+ADD FIELD "Accumulator" OF "PrepCDR" AS integer
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Accumulator"
+  COLUMN-LABEL "Accumulator"
+  HELP "Accumulator value"
+  ORDER 2510
