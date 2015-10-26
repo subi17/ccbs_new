@@ -1038,3 +1038,57 @@ PROCEDURE pHandleDMSDoc:
    END CATCH.
 
 END PROCEDURE.
+
+PROCEDURE pHandleTermReturn:
+
+   DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
+
+   DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
+
+   IF AVAILABLE OrderCanal.RepLog THEN DO:
+
+      lcMessage = fCommonMessage().
+
+      CASE RepLog.EventType:
+         WHEN "CREATE" OR WHEN "MODIFY" THEN DO:
+            FIND FIRST TermReturn WHERE
+                       RECID(TermReturn) = RepLog.RecordId NO-LOCK NO-ERROR.
+            IF AVAILABLE TermReturn THEN DO:
+
+               lcMessage = lcMessage                                    + lcDel +
+                           fNotNull(TermReturn.IMEI)                    + lcDel +
+                           fNotNull(TermReturn.MSISDN)                  + lcDel +
+                           fNotNull(TermReturn.BillCode)                + lcDel +
+                           fNotNull(STRING(TermReturn.DeviceStart))     + lcDel +
+                           fNotNull(STRING(TermReturn.DeviceScreen))    + lcDel +
+                           fNotNull(TermReturn.ReturnChannel)           + lcDel +
+                           fNotNull(STRING(TermReturn.ReturnTS)).
+
+               fWriteMessage(lcMessage).
+            END.
+            ELSE DO:
+               olHandled = TRUE.
+               fWriteMessage(lcMessage).
+               RETURN.
+            END.
+         END.
+         WHEN "DELETE" THEN fWriteMessage(lcMessage).
+         OTHERWISE RETURN.
+      END CASE.
+
+      IF lMsgPublisher:send_message(lcMessage) THEN
+         olHandled = TRUE.
+      ELSE DO:
+         olHandled = FALSE.
+         IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+            LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+      END.
+   END.
+
+   CATCH anyError AS Progress.Lang.Error:
+      olHandled = FALSE.
+      LOG-MANAGER:WRITE-MESSAGE("Message failed was recovered: " + lcMessage,"DEBUG").
+   END CATCH.
+
+END PROCEDURE.
+
