@@ -4,6 +4,8 @@
  * @input int;mandatory;orderid of the order for which details are requested.
  * @orders tms_id;int;tms internal order id
       status;string;order status code
+      dms_status_code;string;dms status code
+      dms_status_desc;string;dms status description
       order_channel;string;channel where order was made from
       contract_number;string;external order id (web side order id)
       salesman_id;string;salesman of order
@@ -142,8 +144,10 @@ DEF VAR iTerminalOfferItemId    AS INTEGER   INIT -1 NO-UNDO.
 DEF VAR llPortTimeIsProp        AS LOGICAL  INIT TRUE NO-UNDO.
 DEF VAR lcDataBundle            AS CHARACTER NO-UNDO.
 DEF VAR lcBundleCLITypes        AS CHARACTER NO-UNDO.
-DEF VAR lcFixedInstallAddress AS CHAR NO-UNDO. 
-DEF VAR lcFixedBillingAddress AS CHAR NO-UNDO. 
+DEF VAR lcFixedInstallAddress   AS CHAR NO-UNDO. 
+DEF VAR lcFixedBillingAddress   AS CHAR NO-UNDO. 
+DEF VAR lcDMSStatusCode         AS CHARACTER NO-UNDO.
+DEF VAR lcDMSStatusDesc         AS CHARACTER NO-UNDO.
 
 IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piOrderId = get_int(param_toplevel_id, "0").
@@ -155,6 +159,15 @@ FIND Order WHERE Order.Brand = gcBrand AND
 
 IF NOT AVAILABLE Order THEN
   RETURN appl_err(SUBST("Order with OrderId &1 does not exist", piOrderId )).
+
+FIND FIRST DMS NO-LOCK WHERE
+           DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
+           DMS.HostId EQ Order.OrderId AND
+           DMS.StatusTS < fMakeTS() NO-ERROR.
+IF AVAIL DMS THEN DO:
+   lcDmsStatusCode = DMS.StatusCode.
+   lcDmsStatusDesc = DMS.StatusDesc.
+END.
 
 FIND OrderPayment WHERE 
      OrderPayment.Brand = gcBrand AND 
@@ -175,6 +188,8 @@ top_struct = add_struct(response_toplevel_id, "").
 add_int(   top_struct, "tms_id"         , piOrderId         ).
 add_int(   top_struct, "order_type"     , Order.OrderType   ).
 add_string(top_struct, "status"         , Order.StatusCode  ).
+add_string(top_struct, "dms_status_code" , lcDMSStatusCode).
+add_string(top_struct, "dms_status_desc" , lcDMSStatusDesc).
 add_string(top_struct, "order_channel"  , Order.OrderChannel). 
 add_string(top_struct, "contract_number", Order.ContractId  ). 
 add_string(top_struct, "salesman_id"    , Order.Salesman    ). 

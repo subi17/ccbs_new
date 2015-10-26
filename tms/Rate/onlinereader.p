@@ -335,7 +335,7 @@ FUNCTION fBCopy RETURNS LOGICAL.
          TMQueue.ReportingID = ttCall.ServRid + "," + ttCall.MPMRid
          TMQueue.ExtraAmount = ttCall.MPMAmt.
       IF ttCall.PPFlag > 0 THEN DO:
-         IF LOOKUP(lcVersion,"0104,0105") > 0 THEN 
+         IF LOOKUP(lcVersion,"0104,0105,0106") > 0 THEN 
             TMQueue.PPBalance = DECIMAL(ENTRY(74,lcCDR,"|")) NO-ERROR.
          TmQueue.Amount = ttCall.Charge.
       END.
@@ -518,7 +518,8 @@ DO TRANS:
    WHEN "0103MM" OR
    WHEN "0104GE" OR 
    WHEN "0104MM" OR
-   WHEN "0105MM" THEN lcEvent = TRIM(ENTRY(11,callrec,lcSep)).
+   WHEN "0105MM" OR
+   WHEN "0106MM" THEN lcEvent = TRIM(ENTRY(11,callrec,lcSep)).
    OTHERWISE DO:
       MESSAGE 
          "Unknown SNS-CDR format (cdr-ticket no:"  ENTRY( 8,callrec,lcSep) 
@@ -538,7 +539,7 @@ DO TRANS:
                                                       
    /* it was a real CALL record, NOT a start OR END record */
    ELSE DO : 
-         
+      {set_to_empty.i}   
       CASE lcSetVersion:
       WHEN "0101MM" THEN DO:  {set0101mm.i}   END.
       WHEN "0101YC" THEN DO:  {set0101yc.i}   END.
@@ -548,6 +549,7 @@ DO TRANS:
       WHEN "0104GE" THEN DO:  {set0104ge.i}   END.
       WHEN "0104MM" OR WHEN
            "0105MM" THEN DO:  {set0104mm.i}   END.
+      WHEN "0106MM" THEN DO:  {set0106mm.i}   END.
       END CASE.
 
       {onlinesave.i}  

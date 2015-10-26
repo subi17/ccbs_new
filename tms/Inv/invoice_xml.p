@@ -751,8 +751,8 @@ PROCEDURE pSubInvoice2XML:
                  INDEX(ttRow.RowBillCode,"FLAT") > 0 AND
                  (ttSub.CLIType BEGINS "CONTF" OR
                   ttSub.OldCLIType BEGINS "CONTF") THEN DO:
-            lhXML:WRITE-DATA-ELEMENT("DataAmount",STRING(ttSub.DataLimit)).
-            lhXML:WRITE-DATA-ELEMENT("Duration",STRING(ttSub.VoiceLimit)).
+            lhXML:WRITE-DATA-ELEMENT("DataAmount",STRING(ttRow.DataLimit)).
+            lhXML:WRITE-DATA-ELEMENT("Duration",STRING(ttRow.VoiceLimit)).
          END.
 
          IF ttSub.OldCLIType > "" AND ttRow.RowGroup = "3" AND

@@ -1207,7 +1207,8 @@ top_struct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 top_struct_fields = validate_request(top_struct, 
-   "order_data!,customer_data!,address_data,device_data,contact_data,fusion_data,accessory_data").
+   "order_data!,customer_data!,address_data,device_data,contact_data,fusion_data,order_inspection_data,accessory_data").
+
 IF top_struct_fields EQ ? THEN RETURN.
 
 ASSIGN
@@ -2141,6 +2142,8 @@ END.
       
 /* YTS-2890 */
 fMakeCreateEvent((BUFFER Order:HANDLE),"",katun,"").
+fMarkOrderStamp(Order.OrderID,"Change",0.0).
+
 
 /*YDR_1637*/
 IF INDEX(Order.OrderChannel, "pos") EQ 0 THEN DO:
