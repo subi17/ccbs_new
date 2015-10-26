@@ -62,7 +62,8 @@ FIND FIRST bSubMsRequest WHERE
            bSubMsRequest.OrigRequest = bMsRequest.MsRequest AND
           (bSubMsRequest.ReqType     = {&REQTYPE_CONTRACT_ACTIVATION} OR
            bSubMsRequest.ReqType     = {&REQTYPE_CONTRACT_TERMINATION}) AND
-           LOOKUP(STRING(bSubMsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0
+           LOOKUP(STRING(bSubMsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND
+           bSubMsRequest.ReqCParam3 NE "RVTERM12"
      NO-LOCK NO-ERROR.
 IF AVAIL bSubMsRequest THEN DO:
    fReqError("Renewal order is still ongoing").
@@ -259,6 +260,8 @@ PROCEDURE pRevertRenewalOrder:
              DayCampaign.DCEvent = bSubMsRequest.ReqCparam3 AND
             (DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} OR
              DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}):
+
+       IF bSubMsRequest.ReqCParam3 EQ "RVTERM12" THEN NEXT.
 
        IF bSubMsRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} THEN DO:
       
