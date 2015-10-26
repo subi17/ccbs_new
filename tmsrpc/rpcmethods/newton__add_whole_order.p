@@ -1030,15 +1030,6 @@ FUNCTION fCreateOrderAccessory RETURNS LOGICAL:
          OrderAccessory.ProductCode = OfferItem.ItemKey WHEN AVAIL OfferItem.
    END.
 
-   IF pcAccessory NE "" THEN DO:
-      CREATE OrderAccessory.
-      ASSIGN
-         OrderAccessory.OrderId     = Order.OrderId
-         OrderAccessory.TerminalType = {&TERMINAL_TYPE_ACCESSORY}
-         OrderAccessory.brand       = gcBrand
-         OrderAccessory.ProductCode = pcAccessory. /*deviceid - billingitem*/
-   END.
-
    RETURN TRUE.
 END.
 
