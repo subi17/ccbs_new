@@ -348,8 +348,6 @@ DEF VAR pcDeviceID   AS CHAR NO-UNDO.
 DEF VAR pcLaptopSerial  AS CHAR NO-UNDO.
 DEF VAR piHardBook      AS INT  NO-UNDO.
 
-DEF VAR pcAccessory AS CHAR NO-UNDO.
-
 DEF VAR lccTemp AS CHARACTER NO-UNDO. 
 DEF VAR lcError AS CHARACTER NO-UNDO. 
 DEF VAR liRequest AS INTEGER NO-UNDO.
@@ -380,6 +378,13 @@ DEF VAR llROIClose AS LOG NO-UNDO.
 DEF VAR lcPayment AS CHAR NO-UNDO.
 DEF VAR pcPaypalPayerid AS CHAR NO-UNDO.
 DEF VAR liLanguage AS INTEGER NO-UNDO.
+
+/*parameter s and variables for accessories*/
+
+DEF VAR pcAccessory AS CHAR NO-UNDO.
+DEF VAR pcAccessoryStruct AS CHAR NO-UNDO.
+DEF VAR lcAccessoryStruct AS CHAR NO-UNDO.
+
 
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
@@ -1010,17 +1015,6 @@ FUNCTION fCreateOrderAccessory RETURNS LOGICAL:
          OrderAccessory.IMEI        = pcLaptopSerial
          OrderAccessory.ProductCode = OfferItem.ItemKey WHEN AVAIL OfferItem.
    END.
-   /*YPR-2478 / Accessory adding*/
-   IF pcAccessory NE "" THEN DO:
-      CREATE OrderAccessory.
-      ASSIGN
-         OrderAccessory.OrderId     = Order.OrderId
-         OrderAccessory.TerminalType = {&TERMINAL_TYPE_ACCESSORY}
-         OrderAccessory.brand       = gcBrand
-         OrderAccessory.IMEI        = pcLaptopSerial
-         OrderAccessory.ProductCode = OfferItem.ItemKey WHEN AVAIL OfferItem.
-
-   END.
 
    RETURN TRUE.
 END.
@@ -1213,7 +1207,7 @@ top_struct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 top_struct_fields = validate_request(top_struct, 
-   "order_data!,customer_data!,address_data,device_data,contact_data,fusion_data").
+   "order_data!,customer_data!,address_data,device_data,contact_data,fusion_data,accessory_data").
 IF top_struct_fields EQ ? THEN RETURN.
 
 ASSIGN
@@ -1226,7 +1220,9 @@ pcDeviceStruct    = get_struct(top_struct, "device_data") WHEN
 pcContactStruct   = get_struct(top_struct, "contact_data") WHEN
                        LOOKUP("contact_data",top_struct_fields) > 0
 pcFusionStruct    = get_struct(top_struct, "fusion_data") WHEN
-                       LOOKUP("fusion_data",top_struct_fields) > 0.
+                       LOOKUP("fusion_data",top_struct_fields) > 0
+pcAccessoryStruct = get_struct(top_struct, "accessory_data") WHEN
+                       LOOKUP("accessory_data",top_struct_fields) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -1312,6 +1308,23 @@ IF pcDeviceStruct > "" THEN DO:
 
 END.
 
+/*YPR-2478*/
+IF pcAccessoryStruct > "" THEN DO:
+   lcAccessoryStruct = validate_request(pcAccessoryStruct,
+      "device_model_id!").
+   IF gi_xmlrpc_error NE 0 THEN RETURN.
+      IF LOOKUP('device_model_id', lcAccessoryStruct) GT 0 THEN
+      pcAccessory = get_string(lcAccessoryStruct, "device_model_id").
+
+   IF pcAccessory NE "" THEN DO:
+      CREATE OrderAccessory.
+      ASSIGN
+         OrderAccessory.OrderId     = Order.OrderId
+         OrderAccessory.TerminalType = {&TERMINAL_TYPE_ACCESSORY}
+         OrderAccessory.brand       = gcBrand
+         OrderAccessory.ProductCode = pcAccessory. /*deviceid - billingitem*/
+   END.
+END.
 
 IF pcOfferId NE "" THEN DO:
 

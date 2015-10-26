@@ -132,6 +132,7 @@ DEF VAR gcStructSecureAddress   AS CHARACTER NO-UNDO.
 DEF VAR lcFusionStruct          AS CHARACTER NO-UNDO. 
 DEF VAR laptop_array            AS CHARACTER NO-UNDO.
 DEF VAR term_struct             AS CHARACTER NO-UNDO.
+DEF VAR accessory_struct        AS CHARACTER NO-UNDO.
 
 DEF VAR lcPaymentType           AS CHARACTER NO-UNDO. 
 DEF VAR cMnpMsgStatus           AS CHARACTER NO-UNDO. 
@@ -345,6 +346,14 @@ FOR EACH OrderAccessory NO-LOCK WHERE
    add_string(term_struct,"serial_number", OrderAccessory.IMEI).
    add_string(term_struct,"laptop", OrderAccessory.ProductCode). 
    add_string(term_struct,"payterm", (IF AVAIL OfferItem THEN OfferItem.ItemKey ELSE "")).
+END.
+
+/*YPR-2478*/
+FOR EACH OrderAccessory NO-LOCK WHERE
+         OrderAccessory.Brand = Order.Brand AND
+         OrderAccessory.OrderID = Order.OrderID AND
+         OrderAccessory.TerminalType = {&TERMINAL_TYPE_ACCESSORY}:
+   add_string(top_struct,"sub_accessory", OrderAccessory.productcode).
 END.
 
 FIND OrderCustomer WHERE 
