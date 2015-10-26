@@ -84,7 +84,7 @@ PROCEDURE pUpdateLimit:
 
    FIND FIRST Limit EXCLUSIVE-LOCK WHERE
               Limit.CustNum   = liCustNum AND
-              limit.LimitType = {&LIMIT_TYPE_RISKLIMIT}
+              limit.LimitType = 5 /* {&LIMIT_TYPE_RISKLIMIT} */
               NO-ERROR.   
    IF AVAILABLE Limit THEN DO:
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhLimit).
@@ -95,7 +95,7 @@ PROCEDURE pUpdateLimit:
       ASSIGN
          Limit.CustNum   = liCustNum
          Limit.LimitAmt  = ldLimitAmt
-         Limit.LimitType = {&LIMIT_TYPE_RISKLIMIT}.
+         Limit.LimitType = 5. /* {&LIMIT_TYPE_RISKLIMIT} */
    END.
 
    IF llDoEvent THEN DO:
