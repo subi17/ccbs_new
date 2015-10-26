@@ -1315,7 +1315,7 @@ IF pcAccessoryStruct > "" THEN DO:
       "device_model_id!").
    IF gi_xmlrpc_error NE 0 THEN RETURN.
       IF LOOKUP('device_model_id', lcAccessoryStruct) GT 0 THEN
-      pcAccessory = get_string(lcAccessoryStruct, "device_model_id").
+      pcAccessory = get_string(pcAccessoryStruct, "device_model_id").
 
    IF pcAccessory NE "" THEN DO:
       CREATE OrderAccessory.
