@@ -969,6 +969,20 @@ FUNCTION fCreateOrderTopup RETURNS LOGICAL:
    RETURN lCreate.
 END.
 
+FUNCTION fCreateAccessory RETURNS LOGICAL:
+
+   IF pcAccessory NE "" THEN DO:
+      CREATE OrderAccessory.
+      ASSIGN
+         OrderAccessory.OrderId     = Order.OrderId
+         OrderAccessory.TerminalType = {&TERMINAL_TYPE_ACCESSORY}
+         OrderAccessory.brand       = gcBrand
+         OrderAccessory.ProductCode = pcAccessory. /*deviceid - billingitem*/
+   END.
+
+   RETURN TRUE.
+END.
+
 
 /* YBP-571 */ 
 FUNCTION fCreateOrderAccessory RETURNS LOGICAL:
@@ -1014,6 +1028,15 @@ FUNCTION fCreateOrderAccessory RETURNS LOGICAL:
          OrderAccessory.brand       = gcBrand 
          OrderAccessory.IMEI        = pcLaptopSerial
          OrderAccessory.ProductCode = OfferItem.ItemKey WHEN AVAIL OfferItem.
+   END.
+
+   IF pcAccessory NE "" THEN DO:
+      CREATE OrderAccessory.
+      ASSIGN
+         OrderAccessory.OrderId     = Order.OrderId
+         OrderAccessory.TerminalType = {&TERMINAL_TYPE_ACCESSORY}
+         OrderAccessory.brand       = gcBrand
+         OrderAccessory.ProductCode = pcAccessory. /*deviceid - billingitem*/
    END.
 
    RETURN TRUE.
@@ -1312,19 +1335,10 @@ END.
 /*YPR-2478*/
 IF pcAccessoryStruct > "" THEN DO:
    lcAccessoryStruct = validate_request(pcAccessoryStruct,
-      "device_model_id!").
+      "device_model_id").
    IF gi_xmlrpc_error NE 0 THEN RETURN.
       IF LOOKUP('device_model_id', lcAccessoryStruct) GT 0 THEN
       pcAccessory = get_string(pcAccessoryStruct, "device_model_id").
-
-   IF pcAccessory NE "" THEN DO:
-      CREATE OrderAccessory.
-      ASSIGN
-         OrderAccessory.OrderId     = Order.OrderId
-         OrderAccessory.TerminalType = {&TERMINAL_TYPE_ACCESSORY}
-         OrderAccessory.brand       = gcBrand
-         OrderAccessory.ProductCode = pcAccessory. /*deviceid - billingitem*/
-   END.
 END.
 
 IF pcOfferId NE "" THEN DO:
@@ -1631,6 +1645,8 @@ IF pcChannel BEGINS "fusion" AND
    NOT pcFusionStruct > "" THEN
    RETURN appl_err("Fusion order parameters are missing").
 
+/****************************************************************/
+/*Validation before this!*/
 /* YBP-532 */
 /* Creation and Update begins */
 IF LOOKUP(pcNumberType,"new,mnp") > 0 THEN
@@ -1928,6 +1944,9 @@ END.
 
 /* YBP-570 */ 
 fCreateOrderTopup().
+
+/* YPR-2478 */
+fCreateAccessory().
 
 /* YBP-571 */ 
 IF (pcDeviceStruct > "" AND 
