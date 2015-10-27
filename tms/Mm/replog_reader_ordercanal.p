@@ -950,7 +950,7 @@ PROCEDURE pHandleTermReturn:
 
                lcMessage = lcMessage                                    + lcDel +
                            fNotNull(TermReturn.IMEI)                    + lcDel + 
-                           fNotNull(TermReturn.MSISDN)                  + lcDel +
+                           fNotNull(STRING(TermReturn.OrderId))         + lcDel +
                            fNotNull(TermReturn.BillCode)                + lcDel +
                            fNotNull(STRING(TermReturn.DeviceStart))     + lcDel +
                            fNotNull(STRING(TermReturn.DeviceScreen))    + lcDel +

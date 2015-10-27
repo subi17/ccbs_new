@@ -55,16 +55,16 @@ FOR EACH TermReturn NO-LOCK:
        "TermReturn"                                lcDel
        "CREATE"                                    lcDel
        fNotNull(STRING(RECID(TermReturn)))         lcDel
-       fNotNull(TermReturn.IMEI  + CHR(255) +
+       fNotNull(STRING(TermReturn.OrderId)  + CHR(255) +
                 STRING(TermReturn.ReturnTS))       lcDel
        fNotNull(STRING(ldtTimeStamp))              lcDel
        fNotNull(TermReturn.IMEI)                   lcDel
-       fNotNull(TermReturn.MSISDN)                 lcDel
+       fNotNull(STRING(TermReturn.OrderId))        lcDel
        fNotNull(TermReturn.BillCode)               lcDel
        fNotNull(STRING(TermReturn.DeviceStart))    lcDel
        fNotNull(STRING(TermReturn.DeviceScreen))   lcDel
        fNotNull(TermReturn.ReturnChannel)          lcDel
-       fNotNull(STRING(TermReturn.EventTS))        SKIP.
+       fNotNull(STRING(TermReturn.ReturnTS))       SKIP.
 END.
 
 OUTPUT STREAM slog CLOSE.

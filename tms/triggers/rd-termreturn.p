@@ -5,6 +5,6 @@ ASSIGN
    ordercanal.RepLog.RecordId  = RECID(TermReturn)
    ordercanal.RepLog.TableName = "TermReturn"
    ordercanal.RepLog.EventType = "DELETE"
-   ordercanal.RepLog.KeyValue  = TermReturn.IMEI + CHR(255) +
+   ordercanal.RepLog.KeyValue  = STRING(TermReturn.OrderId) + CHR(255) +
                                  STRING(TermReturn.ReturnTS)
    ordercanal.RepLog.EventTS   = DATETIME(TODAY,MTIME).

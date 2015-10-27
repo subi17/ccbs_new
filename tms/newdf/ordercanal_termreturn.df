@@ -14,13 +14,13 @@ ADD FIELD "IMEI" OF "TermReturn" AS character
   COLUMN-LABEL "IMEI"
   ORDER 10
 
-ADD FIELD "MSISDN" OF "TermReturn" AS character
-  FORMAT "x(12)"
-  INITIAL ""
-  LABEL "MSISDN"
+ADD FIELD "OrderId" OF "TermReturn" AS integer
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
   POSITION 3
-  MAX-WIDTH 24
-  COLUMN-LABEL "MSISDN"
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrderId"
   ORDER 20
 
 ADD FIELD "BillCode" OF "TermReturn" AS character 
@@ -67,9 +67,9 @@ ADD FIELD "ReturnTS" OF "TermReturn" AS decimal
   DECIMALS 5
   ORDER 70
 
-ADD INDEX "IMEI" ON "TermReturn" 
+ADD INDEX "OrderId" ON "TermReturn" 
   AREA "Sta_Index_1"
   UNIQUE
   PRIMARY
-  INDEX-FIELD "IMEI" ASCENDING 
+  INDEX-FIELD "OrderId" ASCENDING 
   INDEX-FIELD "ReturnTS" DESCENDING 
