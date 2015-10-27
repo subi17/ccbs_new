@@ -174,9 +174,10 @@ FIND FIRST DayCampaign NO-LOCK WHERE
            DayCampaign.DCEvent = pcUpsellId NO-ERROR.
 
 ASSIGN lcMemoText = IF INDEX(Daycampaign.DCName,"Ampliación")>0 THEN
-                       DayCampaign.DCName ELSE "Ampliación " +
                        DayCampaign.DCName + " - Activar"
+                    ELSE "Ampliación " + DayCampaign.DCName + " - Activar"
        lcMemoTitle = DayCampaign.DCName.
+
 
 IF pcUpsellId = "DATA200_UPSELL" THEN ASSIGN
    lcMemoTitle = "Ampliación 200 MB"
