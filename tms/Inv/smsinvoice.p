@@ -89,12 +89,14 @@ FOR EACH Invoice WHERE
    IF liLoop = 0 THEN 
       liStartTime = TIME.
 
-   IF liLoop > 0 AND 
+   /* Pause can be passed with liSMSCntValue 0 from cparam */
+   IF liLoop > 0 AND liSMSCntValue > 0 AND
    ((liLoop MOD liSMSCntValue) EQ 0) THEN DO:
       ASSIGN liStopTime  = TIME
              liPauseTime = 1800 - (liStopTime - liStartTime).
+      IF liPauseTime > 1800 THEN liPauseTime = 1800.
 
-      PAUSE liPauseTime.
+      PAUSE liPauseTime NO-MESSAGE.
 
       liStartTime = TIME.
    END.
