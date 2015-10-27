@@ -30,6 +30,7 @@ gcBrand = "1".
 DEF VAR liRequest              AS INT  NO-UNDO.
 DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
 DEF VAR lcMemoText             AS CHAR NO-UNDO.
+DEF VAR lcMemoTitle            AS CHAR NO-UNDO.
 
 FUNCTION fSetMDUB RETURNS INT
          (INPUT piMsSeq AS INT,
@@ -242,7 +243,6 @@ DEF VAR liReturnValue AS INTEGER NO-UNDO.
 DEF VAR lcReturnValue AS CHAR NO-UNDO. 
 DEF VAR lcError AS CHAR NO-UNDO. 
 DEF VAR lcCounterError AS CHAR NO-UNDO. 
-DEF VAR lcMemoTitle AS CHAR NO-UNDO. 
 DEF VAR lcOnOff AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
@@ -347,22 +347,42 @@ original*/
 /*YDR_1698. Commented becase this was done in Newton.
 This can be removed when it is sure that this change is not needed.*/
 
-IF pcBundleId MATCHES ("*_UPSELL") THEN DO:
-   IF pcBundleId EQ "TARJ7_UPSELL" THEN
-      lcMemoText = "Ampliación 300MB" + " - " + lcOnOff.
-   ELSE 
-      lcMemoText = pcReason + " Ampliación " +  DayCampaign.DCName + " - " +
-                   lcOnOff.
+FIND DayCampaign NO-LOCK WHERE
+     DayCampaign.Brand = gcBrand AND
+     DayCampaign.DCEvent = pcBundleId NO-ERROR.
+
+IF INDEX(pcBundleId, "_UPSELL") > 0 THEN DO:
+   /* YPR-2716 Specs requirement, removed pcReason */
+   IF pcBundleId EQ "TARJ7_UPSELL" OR
+      pcBundleId EQ "DATA6_UPSELL" OR
+      pcBundleId EQ "DSS_UPSELL" OR
+      pcBundleId EQ "DSS2_UPSELL" THEN
+      ASSIGN lcMemoText = IF INDEX(Daycampaign.DCName,"Ampliación")>0 THEN
+                             DayCampaign.DCName  + " - " + lcOnOff
+                          ELSE
+                             "Ampliación " + DayCampaign.DCName + " - " +
+                             lcOnOff
+             lcMemoTitle = DayCampaign.DCName.
+
+   ELSE
+      ASSIGN lcMemoText = pcReason + " " +
+                          IF INDEX(Daycampaign.DCName,"Ampliación")>0 THEN
+                             DayCampaign.DCName + " - " + lcOnOff
+                          ELSE
+                             "Ampliación " + DayCampaign.DCName + " - " +
+                             lcOnOff
+             lcMemoTitle = DayCampaign.DCName.
+
 END.
 ELSE
-   lcMemoText = pcReason + " " + DayCampaign.DCName + " - " + lcOnOff.
+   ASSIGN lcMemoText = pcReason + " " + DayCampaign.DCName + " - " + lcOnOff
+          lcMemoTitle = DayCampaign.DCName.
 
 DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
                  "MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
                  MobSub.CustNum,                       /* CustNum   */
-                 IF PCBundleId EQ "TARJ7_UPSELL" THEN "Ampliación 300MB" 
-                 ELSE DayCampaign.DCName,                   /* MemoTitle */
+                 lcMemoTitle,                          /* MemoTitle */
                  lcMemoText,                           /* MemoText  */
                  "Service",                            /* MemoType  */
                  katun).
