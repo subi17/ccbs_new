@@ -364,12 +364,12 @@ FOR EACH OrderAccessory NO-LOCK WHERE
 END.
 
 /*YPR-2478*/
-FOR EACH OrderAccessory NO-LOCK WHERE
+FIND FIRST OrderAccessory NO-LOCK WHERE
          OrderAccessory.Brand = Order.Brand AND
          OrderAccessory.OrderID = Order.OrderID AND
-         OrderAccessory.TerminalType = {&TERMINAL_TYPE_ACCESSORY}:
+         OrderAccessory.TerminalType = {&TERMINAL_TYPE_ACCESSORY} NO-ERROR.
+IF AVAIL OrderAccessory THEN
    add_string(top_struct,"sub_accessory", OrderAccessory.productcode).
-END.
 
 FIND OrderCustomer WHERE 
      OrderCustomer.Brand = gcBrand AND 
