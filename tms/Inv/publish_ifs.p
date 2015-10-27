@@ -51,7 +51,7 @@ DEFINE STREAM strout.
                            STRING(MONTH(TODAY),"99")  +
                            STRING(DAY(TODAY),"99")
           lcFileName     = REPLACE(lcFileName,"#DATE",lcToday)
-          lcLogFile      = lcContLogDir + "publishifs_" + lcToday + STRING(TIME) + ".log".
+          lcLogFile      = lcContLogDir + "delstate_" + lcToday + STRING(TIME) + ".log".
  
    OUTPUT STREAM strout to VALUE(lcLogFile) APPEND.
 
@@ -79,6 +79,8 @@ DEFINE STREAM strout.
       PUT STREAM strout UNFORMATTED 
          "Delivery state was set to " + STRING(liCount) + " Invoices" SKIP.   
 
+   OUTPUT STREAM strout CLOSE.
+
    /* Mail recipients */
       GetRecipients(lcAddrConfDir).
    /* Send via mail */
@@ -86,8 +88,11 @@ DEFINE STREAM strout.
    
    IF llgError THEN LEAVE.
   
-   liCount = 0.
-
+   ASSIGN liCount   = 0
+          lcLogFile = lcContLogDir + "publishifs_" + lcToday + STRING(TIME) + ".log".
+ 
+   OUTPUT STREAM strout TO VALUE(lcLogFile) APPEND.
+   
    RUN ifs_invoice(32, 
                    lcFileName,
                    "Modified",
@@ -109,12 +114,12 @@ DEFINE STREAM strout.
       PUT STREAM strout UNFORMATTED 
          "Generated IFS for " + STRING(liCount) + " Service Invoices" SKIP.   
 
+   OUTPUT STREAM strout CLOSE.
+
    /* Mail recipients */
       GetRecipients(lcAddrConfDir).
    /* Send via mail */
       SendMail(lcLogFile,"").
-   
-   OUTPUT STREAM strout CLOSE.
 
    IF llgError THEN LEAVE.
 

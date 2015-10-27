@@ -51,7 +51,7 @@ DEFINE STREAM strout.
           lcToday        = STRING(YEAR(TODAY),"9999") + 
                            STRING(MONTH(TODAY),"99")  +
                            STRING(DAY(TODAY),"99") 
-          lcLogFile      = lcContLogDir + "publishinvoice_" + lcToday + STRING(TIME) + ".log".
+          lcLogFile      = lcContLogDir + "PIWebDisplay_" + lcToday + STRING(TIME) + ".log".
 
    OUTPUT STREAM strout TO VALUE(lcLogFile) APPEND.
 
@@ -85,12 +85,18 @@ DEFINE STREAM strout.
       PUT STREAM strout UNFORMATTED 
          "Display permit was set to " + STRING(liCount) + " Invoices." SKIP.
 
+   OUTPUT STREAM strout CLOSE.
+
    /* Mail recipients */
    GetRecipients(lcAddrConfDir).
    /* Send via mail */
    SendMail(lcLogFile,"").
 
    IF llgError THEN LEAVE.
+
+   lcLogFile = lcContLogDir + "PIHPDdump_" + lcToday + STRING(TIME) + ".log".
+
+   OUTPUT STREAM strout TO VALUE(lcLogFile) APPEND.
 
    RUN dumpfile_run(86,  /* Dump ID */
                     "Full",
@@ -104,12 +110,13 @@ DEFINE STREAM strout.
    ELSE
       PUT STREAM strout UNFORMATTED
          "Error in creating Invoice full dump event !" SKIP.
+   
+   OUTPUT STREAM strout CLOSE.
+   
    /* Mail recipients */
    GetRecipients(lcAddrConfDir).
    /* Send via mail */
    SendMail(lcLogFile,"").
-
-   OUTPUT STREAM strout CLOSE.
 
    IF llgError THEN LEAVE.
   
