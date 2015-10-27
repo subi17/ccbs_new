@@ -61,6 +61,7 @@ FOR EACH TermReturn NO-LOCK:
        fNotNull(TermReturn.IMEI)                   lcDel
        fNotNull(STRING(TermReturn.OrderId))        lcDel
        fNotNull(TermReturn.BillCode)               lcDel
+       fNotNull(TermReturn.MSISDN)                 lcDel
        fNotNull(STRING(TermReturn.DeviceStart))    lcDel
        fNotNull(STRING(TermReturn.DeviceScreen))   lcDel
        fNotNull(TermReturn.ReturnChannel)          lcDel
