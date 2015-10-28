@@ -460,29 +460,14 @@ PROCEDURE pOwnerChange:
          IF NOT llNewCust AND llDoEvent THEN 
             RUN StarEventSetOldBuffer(lhCustomer).
 
-         ASSIGN
-            bNewCust.CustIdType      = ENTRY(12,lcDataField,";")
-            bNewCust.OrgId           = ENTRY(13,lcDataField,";")
-            bNewCust.FoundationDate  = DATE(ENTRY(20,lcDataField,";"))
-            lcStreetCode             = ENTRY(29,lcDataField,";")
-            lcCityCode               = ENTRY(30,lcDataField,";") 
-            bNewCust.AuthCustIdType  = ENTRY(32,lcDataField,";")
-            bNewCust.AuthCustId      = ENTRY(33,lcDataField,";")
-            lcTownCode               = ENTRY(34,lcDataField,";") WHEN
-                                       NUM-ENTRIES(lcDataField,";") >= 34
-            bNewCust.SearchName      = SUBSTRING(bNewCust.CustName + " " + 
-                                                 bNewCust.FirstName,1,8)
-            bNewCust.InvGroup        = fDefInvGroup(bNewCust.Region)
-                                     WHEN bNewCust.Region NE "00"
-            NO-ERROR.
-
          /* DCH */
-         IF MobSub.PayType = FALSE AND
-            NOT CAN-FIND(FIRST bMobSub WHERE
-                               bMobSub.Brand     = gcBrand AND
-                               bMobSub.MsSeq    <> MobSub.MsSeq AND
-                               bMobSub.CustNum   = bNewCust.CustNum AND
-                               bMobSub.PayType   = FALSE) THEN DO:
+         IF llNewCust OR 
+            (NOT llNewCust AND MobSub.PayType = FALSE AND
+             NOT CAN-FIND(FIRST bMobSub WHERE
+                                bMobSub.Brand     = gcBrand AND
+                                bMobSub.MsSeq    <> MobSub.MsSeq AND
+                                bMobSub.CustNum   = bNewCust.CustNum AND
+                                bMobSub.PayType   = FALSE)) THEN DO:
             ASSIGN
                bNewCust.BirthDay        = DATE(ENTRY(14,lcDataField,";"))
                bNewCust.HonTitle        = ENTRY(16,lcDataField,";")
@@ -495,10 +480,13 @@ PROCEDURE pOwnerChange:
                bNewCust.ZipCode         = ENTRY(7,lcDataField,";")
                bNewCust.PostOffice      = ENTRY(8,lcDataField,";")
                bNewCust.Country         = ENTRY(9,lcDataField,";")
+               bNewCust.CustIdType      = ENTRY(12,lcDataField,";")
+               bNewCust.OrgId           = ENTRY(13,lcDataField,";")
                bNewCust.Nationality     = ENTRY(19,lcDataField,";")
                bNewCust.Language        = INT(ENTRY(15,lcDataField,";"))
                bNewCust.Region          = ENTRY(17,lcDataField,";")
                bNewCust.BankAcc         = ENTRY(18,lcDataField,";")
+               bNewCust.FoundationDate  = DATE(ENTRY(20,lcDataField,";"))
                bNewCust.smsnumber       = ENTRY(21,lcDataField,";")
                bNewCust.phone           = ENTRY(22,lcDataField,";")
                bNewCust.DirMarkSMS      = LOGICAL(ENTRY(23,lcDataField,";"))
@@ -507,7 +495,27 @@ PROCEDURE pOwnerChange:
                bNewCust.OutMarkSMS      = LOGICAL(ENTRY(26,lcDataField,";"))
                bNewCust.OutMarkEmail    = LOGICAL(ENTRY(27,lcDataField,";"))
                bNewCust.OutMarkPost     = LOGICAL(ENTRY(28,lcDataField,";"))
+               lcStreetCode             = ENTRY(29,lcDataField,";")
+               lcCityCode               = ENTRY(30,lcDataField,";") 
+               bNewCust.AuthCustIdType  = ENTRY(32,lcDataField,";")
+               bNewCust.AuthCustId      = ENTRY(33,lcDataField,";")
+               lcTownCode               = ENTRY(34,lcDataField,";") WHEN
+                                          NUM-ENTRIES(lcDataField,";") >= 34
+               bNewCust.SearchName      = SUBSTRING(bNewCust.CustName + " " + 
+                                                    bNewCust.FirstName,1,8)
+               bNewCust.InvGroup        = fDefInvGroup(bNewCust.Region)
+                                        WHEN bNewCust.Region NE "00"
                NO-ERROR.
+
+               FIND FIRST CustomerReport WHERE
+                          CustomerReport.Custnum = bNewCust.Custnum
+                          EXCLUSIVE-LOCK NO-ERROR.
+               IF NOT AVAIL CustomerReport THEN CREATE CustomerReport.
+               ASSIGN
+                  CustomerReport.Custnum = bNewCust.Custnum
+                  CustomerReport.StreetCode = lcStreetCode
+                  CustomerReport.CityCode = lcCityCode
+                  CustomerReport.TownCode = lcTownCode.
 
             /* Electronic Invoice project */
             IF NUM-ENTRIES(lcDataField,";") >= 10 THEN
@@ -551,16 +559,6 @@ PROCEDURE pOwnerChange:
                END. /* IF liRequest > 0 THEN DO: */
             END. /* IF bNewCust.DelType EQ {&INV_DEL_TYPE_EMAIL} */
          END. /* IF lcEmail > "" AND bNewCust.EMail <> lcEmail THEN DO: */
-
-         FIND FIRST CustomerReport WHERE
-                    CustomerReport.Custnum = bNewCust.Custnum
-         EXCLUSIVE-LOCK NO-ERROR.
-         IF NOT AVAIL CustomerReport THEN CREATE CustomerReport.
-         ASSIGN
-            CustomerReport.Custnum = bNewCust.Custnum
-            CustomerReport.StreetCode = lcStreetCode
-            CustomerReport.CityCode = lcCityCode
-            CustomerReport.TownCode = lcTownCode.
 
          CASE liReqCnt:
          WHEN 1 THEN ASSIGN 
