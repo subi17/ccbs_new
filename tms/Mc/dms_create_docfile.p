@@ -98,8 +98,8 @@ FUNCTION fMakeTempTable RETURNS CHAR
      END.
    END.
    IF llgOrderSeek EQ TRUE THEN DO:
-      lcStampTypes = STRING({&ORDERTIMESTAMP_SEND}) + "," +
-                     STRING({&ORDERTIMESTAMP_DELIVERY}) + "," +
+      lcStampTypes = STRING({&ORDERTIMESTAMP_DELIVERY}) + "," +
+                     STRING({&ORDERTIMESTAMP_SEND}) + "," +
                      STRING({&ORDERTIMESTAMP_CHANGE}).
       DO liStamptypeCount = 1 TO NUM-ENTRIES (lcStampTypes):
          liRT = INT(ENTRY(liStampTypeCount,lcStampTypes)).
@@ -128,8 +128,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
               NOT (Order.StatusCode EQ {&ORDER_STATUS_CLOSED} OR
                    Order.StatusCode EQ {&ORDER_STATUS_CLOSED_BY_FRAUD} OR
                    Order.StatusCode EQ {&ORDER_STATUS_AUTO_CLOSED}  )
-               AND  LOOKUP(Order.OrderChannel,
-                           {&ORDER_CHANNEL_DIRECT} ) NE 0 THEN DO:
+               AND R-INDEX(Order.OrderChannel, "pos") EQ 0  THEN DO: /*NO POS*/
                ldeInstallment = fGetOfferDeferredPayment(Order.Offer,
                                               Order.CrStamp,
                                               OUTPUT ldeMonthlyFee,
@@ -148,7 +147,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
             ELSE IF (Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} /*6*/
                OR
                Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC} /*32*/) AND
-               LOOKUP(Order.OrderChannel, {&ORDER_CHANNEL_INDIRECT} ) > 0
+               R-INDEX(Order.OrderChannel, "pos"  ) > 0 /* POS needed*/
                /*Only POS  orders*/
                THEN DO:
                   lcCase = {&DMS_CASE_TYPE_ID_ORDER_ACT}.
@@ -181,15 +180,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
                 (previous sending)*/
                FIND FIRST DMS WHERE
                           DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
-                          DMS.HostId EQ Order.OrderID AND
-                          DMS.StatusTS < idEndTs AND
-                          (DMS.OrderStatus EQ {&ORDER_STATUS_COMPANY_NEW} OR
-                          DMS.OrderStatus EQ {&ORDER_STATUS_COMPANY_MNP} OR
-                          DMS.OrderStatus EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY}
-                          OR
-                          DMS.OrderStatus EQ {&ORDER_STATUS_DELIVERED} OR
-                          DMS.OrderStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED})
-                          NO-ERROR.
+                          DMS.HostId EQ Order.OrderID NO-ERROR.
                IF AVAIL DMS THEN DO:
                   lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
                   llgAddEntry = TRUE.
@@ -265,8 +256,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
            the change. */
          FIND FIRST DMS NO-LOCK WHERE
                     DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
-                    DMS.HostID EQ liAddId AND
-                    DMS.StatusTS <= idEndTs NO-ERROR.
+                    DMS.HostID EQ liAddId NO-ERROR.
 
          IF AVAIL DMS THEN DO TRANS:
             CREATE ttOrderList.
@@ -458,6 +448,7 @@ END.
    Fusion STC Previous tariff should contain original tariff before STC happens. 
    In all other cases this field would be blank */
 /* 0 for New adds, 1 for portability, 2 for Renewal and 4 for Fusion STC */
+/**/
 FUNCTION fGetPrevTariff RETURNS CHAR
    (iiOrderType AS INT,
     icCLI AS CHAR,
