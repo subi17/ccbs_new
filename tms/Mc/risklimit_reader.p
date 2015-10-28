@@ -86,17 +86,15 @@ PROCEDURE pUpdateLimit:
               Limit.CustNum   = liCustNum AND
               limit.LimitType = 5 /* {&LIMIT_TYPE_RISKLIMIT} */
               NO-ERROR.   
-   IF AVAILABLE Limit THEN DO:
+   IF AVAILABLE Limit THEN
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhLimit).
-      Limit.LimitAmt = ldLimitAmt.
-   END.
-   ELSE DO:
-      CREATE Limit.
-      ASSIGN
-         Limit.CustNum   = liCustNum
-         Limit.LimitAmt  = ldLimitAmt
-         Limit.LimitType = 5. /* {&LIMIT_TYPE_RISKLIMIT} */
-   END.
+   ELSE CREATE Limit.
+
+   ASSIGN
+      Limit.CustNum   = liCustNum
+      Limit.LimitAmt  = ldLimitAmt
+      Limit.LimitType = 5  /* {&LIMIT_TYPE_RISKLIMIT} */
+      Limit.FromDate  = TODAY.
 
    IF llDoEvent THEN DO:
       IF NEW Limit THEN RUN StarEventMakeCreateEvent(lhLimit).
