@@ -1303,6 +1303,10 @@ FUNCTION fCreateDocumentRows RETURNS CHAR
          END.
       END.
    END. /*Case*/
+   OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
+   PUT STREAM sOutFile UNFORMATTED "" SKIP.
+   OUTPUT STREAM sOutFile CLOSE.
+
 END.
 
 /*Main functionality*/
