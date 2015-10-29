@@ -60,7 +60,8 @@ END.
 lcMemo = "Order" + CHR(255) +
           STRING(Customer.CustNum) + CHR(255) +
           STRING(Order.OrderId) + CHR(255) +
-          Order.Salesman.
+          Order.Salesman + CHR(255) +
+          Order.OrderChannel.
 
 IF Order.OrderType < 2 THEN DO:
    

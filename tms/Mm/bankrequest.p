@@ -22,8 +22,9 @@ DEFINE BUFFER bMsRequest FOR MsRequest.
 
 DEF VAR ocResult      AS CHAR NO-UNDO.
 DEF VAR lcSalesman    AS CHAR NO-UNDO.
-DEF VAR liCount       AS INT NO-UNDO.
+DEF VAR liCount       AS INT  NO-UNDO.
 DEF VAR lcMemo        AS CHAR NO-UNDO.
+DEF VAR lcChannel     AS CHAR NO-UNDO.
 
 FIND MsRequest WHERE 
      MsRequest.MsRequest = iiReqId AND
@@ -89,15 +90,25 @@ IF llDoEvent THEN DO:
                 lcSalesman = SUBSTRING(MsRequest.UserCode,liCount + 1).
       ELSE lcSalesman = MsRequest.UserCode.
 
+      CASE MsRequest.ReqSource:
+         WHEN {&REQUEST_SOURCE_MANUAL_TMS} THEN
+            lcChannel = "TMS".
+         WHEN {&REQUEST_SOURCE_NEWTON} THEN
+            lcChannel = "VISTA".
+         WHEN {&REQUEST_SOURCE_EXTERNAL_API} THEN
+            lcChannel = "EXT_API".
+      END CASE.
+
       lcMemo = "STC" + CHR(255) +
                STRING(AgrCust.CustNum) + CHR(255) +
                STRING(MsRequest.MsSeq) + CHR(255) +
-               lcSalesman.
+               lcSalesman + CHR(255) +
+               lcChannel.
 
-      IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(
-                              lhCustomer,
-                              "STC",
-                              lcMemo).
+      RUN StarEventMakeModifyEventWithMemo(
+            lhCustomer,
+            "STC",
+            lcMemo).
    END.
    ELSE RUN StarEventMakeModifyEvent(lhCustomer).
    fCleanEventObjects().

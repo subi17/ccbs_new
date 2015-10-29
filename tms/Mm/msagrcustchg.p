@@ -171,8 +171,9 @@ PROCEDURE pOwnerChange:
    DEF VAR liRequest    AS INT  NO-UNDO.
    
    DEF VAR liChargeReqId AS INT NO-UNDO.
-   DEF VAR lcCode AS CHAR NO-UNDO. 
-   DEF VAR lcMemo AS CHAR NO-UNDO. 
+   DEF VAR lcCode        AS CHAR NO-UNDO. 
+   DEF VAR lcMemo        AS CHAR NO-UNDO. 
+   DEF VAR lcChannel     AS CHAR NO-UNDO.
 
    DEF BUFFER bSubRequest   FOR MsRequest.
    DEF BUFFER bMobSub       FOR MobSub.
@@ -574,10 +575,18 @@ PROCEDURE pOwnerChange:
             bNewCust.InvCust    = liNewInvCust.
          END CASE.
 
+         CASE MsRequest.ReqSource:
+            WHEN {&REQUEST_SOURCE_MANUAL_TMS} THEN
+               lcChannel = "TMS".
+            WHEN {&REQUEST_SOURCE_NEWTON} THEN
+               lcChannel = "VISTA".
+         END CASE.
+
          lcMemo = "ACC" + CHR(255) +
                   STRING(bNewCust.CustNum) + CHR(255) +
                   STRING(MobSub.MsSeq) + CHR(255) +
-                  ENTRY(11,MsRequest.ReqCParam1,";").
+                  ENTRY(11,MsRequest.ReqCParam1,";") + CHR(255) +
+                  lcChannel.
 
          IF NOT llNewCust AND llDoEvent THEN
             RUN StarEventMakeModifyEventWithMemo(

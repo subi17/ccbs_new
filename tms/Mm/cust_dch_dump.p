@@ -29,15 +29,17 @@ DEFINE VARIABLE liCount      AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcModValues  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lc255        AS CHARACTER NO-UNDO. /* List separator */
 DEFINE VARIABLE lcCustNum    AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcRow        AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcAction     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOrderId    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSalesMan   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcChannel    AS CHARACTER NO-UNDO.
 
 
 DEF VAR ldaLastDumpDate AS DATE    NO-UNDO.
 DEF VAR liLastDumpTime  AS INT     NO-UNDO.
 DEF VAR lcLastDumpTime  AS CHAR    NO-UNDO.
 DEF VAR ldEventTS       AS DECIMAL NO-UNDO.
+DEF VAR liEntries       AS INT     NO-UNDO.
 
 DEFINE STREAM sFile.
 
@@ -55,15 +57,24 @@ FUNCTION fCollectEvent RETURNS LOGICAL
    ASSIGN
       lcModFields = ""
       lcModValues = ""
-      lcRow       = ""
+      lcAction    = ""
       lcOrderId   = ""
       lcSalesMan  = ""
-      ldEventTS   = fHMS2TS(EventLog.EventDate, EventLog.EventTime).
+      lcChannel   = ""
+      ldEventTS   = fHMS2TS(EventLog.EventDate, EventLog.EventTime)
+      liEntries   = NUM-ENTRIES(EventLog.Memo,lc255).
 
-   IF EventLog.Memo <> "" THEN 
-      ASSIGN lcRow      = ENTRY(1,EventLog.Memo,lc255) 
-             lcOrderId  = ENTRY(3,EventLog.Memo,lc255) 
-             lcSalesMan = ENTRY(4,EventLog.Memo,lc255). 
+   CASE liEntries:
+      WHEN 4 THEN ASSIGN
+         lcAction   = ENTRY(1,EventLog.Memo,lc255)
+         lcOrderId  = ENTRY(3,EventLog.Memo,lc255)
+         lcSalesMan = ENTRY(4,EventLog.Memo,lc255).
+      WHEN 5 THEN ASSIGN
+         lcAction   = ENTRY(1,EventLog.Memo,lc255)
+         lcOrderId  = ENTRY(3,EventLog.Memo,lc255)
+         lcSalesMan = ENTRY(4,EventLog.Memo,lc255)
+         lcChannel  = ENTRY(5,EventLog.Memo,lc255).
+   END CASE.
 
    IF icEventTable = "CustContact" THEN
       DO liCount = 1 TO NUM-ENTRIES(Eventlog.ModifiedFields):
@@ -79,9 +90,10 @@ FUNCTION fCollectEvent RETURNS LOGICAL
       ELSE lcModValues = lcModValues + "," + ENTRY(liAmtMod + 1,EventLog.DataValues,CHR(255)).
    END.
 
-   PUT STREAM sFile UNFORMATTED 
-      Eventlog.UserCode               + lcDel +
-      lcRow                           + lcDel +
+   PUT STREAM sFile UNFORMATTED
+      icEventTable                    + lcDel +
+      lcChannel                       + lcDel +
+      lcAction                        + lcDel +
       lcOrderId                       + lcDel +
       lcSalesMan                      + lcDel +
       STRING(ldEventTS)               + lcDel +
