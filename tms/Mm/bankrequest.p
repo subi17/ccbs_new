@@ -85,12 +85,12 @@ AgrCust.BankAcc = MSREquest.ReqCparam2.
 
 IF llDoEvent THEN DO:
    IF bMsRequest.ReqType = 0 THEN DO:
-      IF INDEX(MsRequest.UserCode,"_") > 0 THEN 
-         ASSIGN liCount = INDEX(MsRequest.UserCode,"_")
-                lcSalesman = SUBSTRING(MsRequest.UserCode,liCount + 1).
-      ELSE lcSalesman = MsRequest.UserCode.
+      IF INDEX(bMsRequest.UserCode,"_") > 0 THEN 
+         ASSIGN liCount = INDEX(bMsRequest.UserCode,"_")
+                lcSalesman = SUBSTRING(bMsRequest.UserCode,liCount + 1).
+      ELSE lcSalesman = bMsRequest.UserCode.
 
-      CASE MsRequest.ReqSource:
+      CASE bMsRequest.ReqSource:
          WHEN {&REQUEST_SOURCE_MANUAL_TMS} THEN
             lcChannel = "TMS".
          WHEN {&REQUEST_SOURCE_NEWTON} THEN
@@ -101,7 +101,7 @@ IF llDoEvent THEN DO:
 
       lcMemo = "STC" + CHR(255) +
                STRING(AgrCust.CustNum) + CHR(255) +
-               STRING(MsRequest.MsSeq) + CHR(255) +
+               STRING(bMsRequest.MsSeq) + CHR(255) +
                lcSalesman + CHR(255) +
                lcChannel.
 

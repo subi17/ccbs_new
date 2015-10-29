@@ -574,6 +574,9 @@ PROCEDURE pOwnerChange:
             liNewUser           = bNewCust.CustNum
             bNewCust.InvCust    = liNewInvCust.
          END CASE.
+         
+         /* Find an original request */
+         FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
          CASE MsRequest.ReqSource:
             WHEN {&REQUEST_SOURCE_MANUAL_TMS} THEN

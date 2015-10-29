@@ -68,7 +68,8 @@ FUNCTION fCollectEvent RETURNS LOGICAL
       WHEN 4 THEN ASSIGN
          lcAction   = ENTRY(1,EventLog.Memo,lc255)
          lcOrderId  = ENTRY(3,EventLog.Memo,lc255)
-         lcSalesMan = ENTRY(4,EventLog.Memo,lc255).
+         lcSalesMan = ENTRY(4,EventLog.Memo,lc255)
+         lcChannel  = Eventlog.UserCode.
       WHEN 5 THEN ASSIGN
          lcAction   = ENTRY(1,EventLog.Memo,lc255)
          lcOrderId  = ENTRY(3,EventLog.Memo,lc255)
