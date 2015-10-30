@@ -526,7 +526,7 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
                                    IF ldeActStamp > 0 THEN ldeActStamp 
                                    ELSE MSRequest.ActStamp,
                                    0,   /* liCreditcheck 0 = Credit check ok */
-                                   FALSE,   /* llExtendContract extend contract */
+                                   0, /* extend contract 0=no extend_term_contract */
                                    ""    /* pcSalesman */,
                                    FALSE, /* charge */
                                    TRUE,  /* send sms */

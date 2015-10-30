@@ -7,7 +7,8 @@
            username;string;mandatory;user name
            date;datetime;mandatory;activation date
            memo;struct;optional;
-           extend_term_contract;boolean;optional;false=terminate,true=extent
+           extend_term_contract;boolean;optional;false=terminate,true=extend
+           exclude_term_penalty (boolean, optional) * To accept the penalty exemption
  * @memo   title;string;mandatory;memo title
            contents;string;mandatory;memo content
  * @output status;empty struct;
@@ -24,33 +25,35 @@ gcBrand = "1".
 {fdss.i}
 {fmakemsreq.i}
 
-DEF VAR pcStruct AS CHARACTER NO-UNDO. 
-DEF VAR lcStruct AS CHARACTER NO-UNDO.  
-DEF VAR piMsSeq AS INTEGER NO-UNDO. 
-DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 
-DEF VAR lcError AS CHAR NO-UNDO. 
-DEF VAR pcMemoStruct AS CHARACTER NO-UNDO. 
-DEF VAR pdaActDate AS DATE NO-UNDO.
-DEF VAR pcMemoTitle AS CHARACTER NO-UNDO. 
-DEF VAR pcMemoContent AS CHARACTER NO-UNDO. 
-DEF VAR pcOldBundle AS CHAR NO-UNDO. 
-DEF VAR pcNewBundle AS CHAR NO-UNDO. 
-DEF VAR plExtendContract AS LOG NO-UNDO. 
+DEF VAR pcStruct             AS CHARACTER NO-UNDO. 
+DEF VAR lcStruct             AS CHARACTER NO-UNDO.  
+DEF VAR piMsSeq              AS INTEGER   NO-UNDO. 
+DEF VAR lcResultStruct       AS CHARACTER NO-UNDO. 
+DEF VAR lcError              AS CHAR      NO-UNDO. 
+DEF VAR pcMemoStruct         AS CHARACTER NO-UNDO. 
+DEF VAR pdaActDate           AS DATE      NO-UNDO.
+DEF VAR pcMemoTitle          AS CHARACTER NO-UNDO. 
+DEF VAR pcMemoContent        AS CHARACTER NO-UNDO. 
+DEF VAR pcOldBundle          AS CHAR      NO-UNDO. 
+DEF VAR pcNewBundle          AS CHAR      NO-UNDO. 
+DEF VAR plExtendContract     AS LOG       NO-UNDO. 
+DEF VAR plExcludeTermPenalty AS LOGICAL   NO-UNDO.
 
-DEF VAR liCreated AS INT NO-UNDO. 
-DEF VAR ldActStamp AS DEC NO-UNDO. 
-DEF VAR llUpgradeUpsell AS LOG  NO-UNDO INIT FALSE.
-DEF VAR lcUpgradeUpsell AS CHAR NO-UNDO.
-DEF VAR liUpsellCreated AS INT  NO-UNDO.
-DEF VAR lcBONOContracts AS CHAR NO-UNDO.
-DEF VAR lcMemoType AS CHAR NO-UNDO.
+DEF VAR liCreated       AS INT     NO-UNDO. 
+DEF VAR ldActStamp      AS DEC     NO-UNDO. 
+DEF VAR llUpgradeUpsell AS LOG     NO-UNDO INIT FALSE.
+DEF VAR lcUpgradeUpsell AS CHAR    NO-UNDO.
+DEF VAR liUpsellCreated AS INT     NO-UNDO.
+DEF VAR lcBONOContracts AS CHAR    NO-UNDO.
+DEF VAR lcMemoType      AS CHAR    NO-UNDO.
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcStruct = validate_request(pcStruct,
-           "msseq!,old_bundle!,new_bundle!,date!,username!,memo,upgrade_upsell,extend_term_contract").
+           "msseq!,old_bundle!,new_bundle!,date!,username!,memo,upgrade_upsell," +
+           "extend_term_contract,exclude_term_penalty ").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
@@ -62,9 +65,14 @@ ASSIGN
    llUpgradeUpsell = get_bool(pcStruct,"upgrade_upsell")
       WHEN LOOKUP("upgrade_upsell", lcstruct) > 0
    plExtendContract = get_bool(pcStruct,"extend_term_contract")
-      WHEN LOOKUP("extend_term_contract", lcstruct) > 0.
-
+      WHEN LOOKUP("extend_term_contract", lcstruct) > 0
+   plExcludeTermPenalty = get_bool(pcStruct,"exclude_term_penalty")
+      WHEN LOOKUP("exclude_term_penalty", lcstruct) > 0.
+      
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+IF plExtendContract AND plExcludeTermPenalty THEN
+   RETURN appl_err("Both 'Contract extension' and 'Penalty exemption' requested").
 
 IF LOOKUP("memo", lcstruct) > 0 THEN DO:
    pcMemoStruct = get_struct(pcStruct,"memo").
@@ -102,21 +110,34 @@ ldActStamp = fMake2Dt(pdaActDate,
                       IF pdaActDate = TODAY
                       THEN TIME
                       ELSE 0).
-
+/* YDR-2038 
+   exempt penalty fee when doing an STC
+   iiRequestFlags (0=no extend_term_contract, 
+                   1=extend_term_contract
+                   2=exclude_term_penalty)
+   */
+IF plExtendContract THEN
+DO:
+   iiRequestFlags = IF plExtendContract THEN 1 ELSE 0.
+END.
+ELSE
+IF plExcludeTermPenalty THEN
+   iiRequestFlags = 2.
 liCreated = fBundleChangeRequest(MobSub.MsSeq,
                                  pcOldBundle, 
                                  pcNewBundle,
                                  ldActStamp,
                                  {&REQUEST_SOURCE_NEWTON},
                                  "",    /* creator */
-                                 FALSE, /* create fees */
+                                 iiRequestFlags,
                                  0,     /* orig. request */
                                  FALSE, /* mandatory */
                                  llUpgradeUpsell, /* Upgrade Upsell */
                                  plExtendContract, /*extend terminal contract*/
                                  OUTPUT lcError).
-IF liCreated = 0 THEN
-   RETURN appl_err("Change request could not be created").
+IF liCreated = 0 THEN DO:
+   RETURN appl_err("Change request could not be created" + lcError).
+END.   
 
 /* Activate Upgrade Upsell */
 IF llUpgradeUpsell THEN DO:

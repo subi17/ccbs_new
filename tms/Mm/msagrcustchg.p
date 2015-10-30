@@ -722,7 +722,7 @@ PROCEDURE pOwnerChange:
                                       "",              /* bank-account */
                                       MsRequest.ActStamp,  /* new tsbegin  */
                                       0,           /* 0 = Credit check ok */
-                                      FALSE,           /* extend contract */
+                                      0, /* extend contract 0=no extend_term_contract */
                                       "",
                                       FALSE,           /* llCreateFees */
                                       FALSE,           /* llSendSMS    */
