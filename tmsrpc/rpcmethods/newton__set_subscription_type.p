@@ -51,16 +51,18 @@ DEF VAR pcChannel            AS CHAR NO-UNDO.
 
 /* Local variables */
 DEF VAR lcc AS CHAR NO-UNDO.
-DEF VAR liCreditCheck AS INT  NO-UNDO INIT 1.
-DEF VAR llCreateFees  AS LOG  NO-UNDO INIT FALSE.
-DEF VAR llSendSMS     AS LOG  NO-UNDO INIT TRUE.
-DEF VAR lcInfo        AS CHAR NO-UNDO.
-DEF VAR ok            AS LOG  NO-UNDO.
-DEF VAR lcPCDenyCT    AS CHAR NO-UNDO. 
-DEF VAR lcTiePeriod   AS CHAR NO-UNDO. 
-DEF VAR lcError       AS CHAR NO-UNDO.
-DEF VAR liRequest     AS INT  NO-UNDO.
+DEF VAR liCreditCheck    AS INT  NO-UNDO INIT 1.
+DEF VAR llCreateFees     AS LOG  NO-UNDO INIT FALSE.
+DEF VAR llSendSMS        AS LOG  NO-UNDO INIT TRUE.
+DEF VAR lcInfo           AS CHAR NO-UNDO.
+DEF VAR ok               AS LOG  NO-UNDO.
+DEF VAR lcPCDenyCT       AS CHAR NO-UNDO. 
+DEF VAR lcTiePeriod      AS CHAR NO-UNDO. 
+DEF VAR lcError          AS CHAR NO-UNDO.
+DEF VAR liRequest        AS INT  NO-UNDO.
 DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
+DEF VAR iiRequestFlags   AS INT  NO-UNDO.
+
 DEF BUFFER NewCliType   FOR CliType.
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
