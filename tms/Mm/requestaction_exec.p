@@ -17,6 +17,7 @@
 {tmsconst.i}
 {penaltyfee.i}
 {fcustpl.i}
+{func.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
 DEF INPUT PARAMETER icCLIType    AS CHAR NO-UNDO.
@@ -185,7 +186,12 @@ PROCEDURE pPeriodicalContract:
    DEF VAR lcPriceList AS CHAR NO-UNDO. 
    DEF VAR ldePenalty AS DEC NO-UNDO. 
    DEF VAR lcPerContractIDs AS CHAR NO-UNDO. 
-   DEF VAR llFound AS LOG NO-UNDO. 
+   DEF VAR llFound AS LOG NO-UNDO.
+   DEF VAR ldaReqCreDate       AS DATE    NO-UNDO.
+   DEF VAR liiReqCreDate       AS INTEGER NO-UNDO.
+   DEF VAR ldaRenewCreDate     AS DATE    NO-UNDO.
+   DEF VAR liiRenewCreDate     AS INTEGER NO-UNDO.
+   DEF VAR lbolSTCRenewSameDay AS LOGICAL NO-UNDO.   
 
    DEF BUFFER bBundleRequest  FOR MsRequest.
    DEF BUFFER bBundleContract FOR DayCampaign.
@@ -199,7 +205,6 @@ PROCEDURE pPeriodicalContract:
    NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign THEN RETURN "ERROR:Unknown contract".
    
-
    CASE RequestAction.Action:
           
    /* creation */
@@ -332,7 +337,16 @@ PROCEDURE pPeriodicalContract:
                          OrderAction.OrderId  = Order.OrderId AND
                          OrderAction.ItemType = "ExcludeTermPenalty" NO-LOCK)
       THEN llCreateFees = FALSE.
-      
+      /* YDR-2038
+         exempt penalty fee when doing an STC
+         ReqIParam5 (0=no extend_term_contract, 
+                     1=extend_term_contract
+                     2=exclude_term_penalty)
+         */
+      IF bOrigRequest.ReqIParam5 EQ 2 THEN
+      DO:
+         llCreateFees = NO.
+      END.
       /* YPR-1763 - Exclude PayTerm termination */
       IF AVAIL Order AND DayCampaign.DCType = "5" AND
          Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
@@ -346,8 +360,7 @@ PROCEDURE pPeriodicalContract:
          then no need to terminate Voip service */
       IF DayCampaign.DCEvent = "BONO_VOIP" AND 
          LOOKUP(icSource,"4,6,11,15") > 0 AND
-         fBundleWithSTC(liMsSeq,idActStamp,TRUE) THEN RETURN.
-         
+         fBundleWithSTC(liMsSeq,idActStamp,TRUE) THEN RETURN.   
       IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN DO:
 
          llFound = FALSE.
@@ -361,9 +374,7 @@ PROCEDURE pPeriodicalContract:
                liRequest = 1. /* to prevent error memo creation */
                NEXT.
             END.
-
-            llFound = TRUE.
-         
+            llFound = TRUE.                        
             liRequest = fPCActionRequest(liMsSeq,
                                         ttAction.ActionKey,
                                         "term",
@@ -397,7 +408,24 @@ PROCEDURE pPeriodicalContract:
          
    /* recreation (possible termination + creation) */
    WHEN 3 THEN DO:
-            
+      IF bOrigRequest.ReqIParam5 EQ 2 THEN
+      DO:
+         llCreateFees = NO.
+         /* Get STC creation date */
+         fSplitTS(bOrigRequest.CreStamp,ldaReqCreDate,liiReqCreDate).
+         /* Get Renewal order creation date */
+         fSplitTS(Order.CrStamp,ldaRenewCreDate,liiRenewCreDate).
+         /* Don't charge penalty when: YDR-2035
+           STC is requested on the same day of the renewal order AND
+           New type is POSTPAID */
+         IF ldaReqCreDate EQ ldaRenewCreDate AND
+         bOrigRequest.reqcparam2 BEGINS "cont" THEN /* POSTPAID */
+            lbolSTCRenewSameDay = TRUE.
+         ELSE
+            lbolSTCRenewSameDay = FALSE.
+      END.
+      IF NOT(DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} AND
+      lbolSTCRenewSameDay) THEN /* POSTPAID subscription */     
       liRequest = fPCActionRequest(liMsSeq,
                                    ttAction.ActionKey,
                                    "recreate",
