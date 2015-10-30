@@ -13,8 +13,10 @@
                 4;Renewal order does not exist with given MSISDN
                 5;Renewal order not available
                 6;Renewal order already cancelled
-                7;Subscription is cancelled (similar to 6.)
+                7;Subscription is cancelled
                 8;Missing SMS Template
+                9;Email sending is failed
+
  */
 
 {xmlrpc/xmlrpc_access.i}
@@ -73,7 +75,7 @@ IF LOOKUP(pcDelType,"SMS") = 0 THEN
 IF LENGTH(pcCLI) <> 9 OR
    NOT (pcCLI BEGINS "6" OR pcCLI BEGINS "7") THEN
    /*Incorrect format*/
-   RETURN appl_err(".El número no es correcto, por favor revísalo.").
+   RETURN appl_err("Format of the MSISDN number is not correct").
 
 FOR EACH Order WHERE
          Order.CLI = pcCLI AND
@@ -114,20 +116,18 @@ FOR EACH Order WHERE
 END. /* FOR EACH Order WHERE */
 
 IF liTotalCount = 0 THEN
-    /*"MNP order does not exist with given MSISDN"*/
-    RETURN appl_err("No hay ninguna solicitud de Renuevo para ese número"). 
+    RETURN appl_err("Renewal order does not exist with given MSISDN"). 
 ELSE IF liCount = 0 THEN
-   RETURN appl_err("La información de estado del pedido ya no está disponible.. "). /*"order information not available"*/
+   RETURN appl_err("Renewal order not available"). 
 ELSE IF NOT llOngoing THEN DO:
    IF llClose THEN
-      RETURN appl_err("La línea está cancelada.").
+      RETURN appl_err("Renewal order already cancelled").
    ELSE IF llDelivered THEN DO:
       FIND FIRST MobSub WHERE
                  MobSub.Brand = gcBrand AND
                  MobSub.CLI   = pcCLI NO-LOCK NO-ERROR.
       IF NOT AVAIL MobSub THEN
-         RETURN appl_err("La línea está cancelada."). 
-            /*"Subscription is cancelled"*/
+         RETURN appl_err("Subscription is cancelled"). 
    END. /* ELSE IF llDelivered THEN DO: */
 END. /* ELSE IF NOT llOngoing THEN DO: */
 
