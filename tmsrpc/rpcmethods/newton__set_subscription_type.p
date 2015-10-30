@@ -8,6 +8,7 @@
           activation_stamp;datetime;mandatory;request activation time
           charge;decimal;mandatory;0 if no charged
           charge_limit;decimal;mandatory;
+          contract_id;string;optional;contract ID
           bank_account;string;optional;new bank account for postpaid
           data_bundle_id;string;(mandatory);bundle type (Voice->Data STC)
           renewal_stc;boolean;optional;not in use
@@ -45,21 +46,21 @@ DEF VAR plExcludeTermPenalty AS LOG  NO-UNDO.
 DEF VAR pcMemoStruct         AS CHAR NO-UNDO.
 DEF VAR pcMemoTitle          AS CHAR NO-UNDO.
 DEF VAR pcMemoContent        AS CHAR NO-UNDO.
+DEF VAR pcContractID         AS CHAR NO-UNDO.
+DEF VAR pcChannel            AS CHAR NO-UNDO.
 
 /* Local variables */
 DEF VAR lcc AS CHAR NO-UNDO.
-DEF VAR liCreditCheck    AS INT  NO-UNDO INIT 1.
-DEF VAR llCreateFees     AS LOG  NO-UNDO INIT FALSE.
-DEF VAR llSendSMS        AS LOG  NO-UNDO INIT TRUE.
-DEF VAR lcInfo           AS CHAR NO-UNDO.
-DEF VAR ok               AS LOG  NO-UNDO.
-DEF VAR lcPCDenyCT       AS CHAR NO-UNDO. 
-DEF VAR lcTiePeriod      AS CHAR NO-UNDO. 
-DEF VAR lcError          AS CHAR NO-UNDO.
-DEF VAR liRequest        AS INT  NO-UNDO.
+DEF VAR liCreditCheck AS INT  NO-UNDO INIT 1.
+DEF VAR llCreateFees  AS LOG  NO-UNDO INIT FALSE.
+DEF VAR llSendSMS     AS LOG  NO-UNDO INIT TRUE.
+DEF VAR lcInfo        AS CHAR NO-UNDO.
+DEF VAR ok            AS LOG  NO-UNDO.
+DEF VAR lcPCDenyCT    AS CHAR NO-UNDO. 
+DEF VAR lcTiePeriod   AS CHAR NO-UNDO. 
+DEF VAR lcError       AS CHAR NO-UNDO.
+DEF VAR liRequest     AS INT  NO-UNDO.
 DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
-DEF VAR iiRequestFlags     AS INTEGER NO-UNDO.
-
 DEF BUFFER NewCliType   FOR CliType.
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
@@ -72,7 +73,7 @@ pcStruct = get_struct(param_toplevel_id, "0").
 lcstruct = validate_struct(pcStruct, 
    "msisdn!,username!,subscription_type_id!,activation_stamp!,charge!," +
    "charge_limit!,bank_account,data_bundle_id,renewal_stc,bypass," +
-   "extend_term_contract,exclude_term_penalty,memo").
+   "extend_term_contract,exclude_term_penalty,memo,contract_id,channel").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -93,6 +94,10 @@ ASSIGN
    plByPass = get_bool(pcStruct, "bypass") WHEN LOOKUP("bypass", lcstruct) > 0
    plExtendContract = get_bool(pcStruct,"extend_term_contract")
       WHEN LOOKUP("extend_term_contract", lcstruct) > 0
+   pcContractID = get_string(pcStruct,"contract_id")
+         WHEN LOOKUP("contract_id", lcstruct) > 0
+   pcChannel = get_string(pcStruct,"channel")
+            WHEN LOOKUP("channel", lcstruct) > 0
    plExcludeTermPenalty = get_bool(pcStruct,"exclude_term_penalty")
       WHEN LOOKUP("exclude_term_penalty", lcstruct) > 0.
 
@@ -107,7 +112,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF plExtendContract AND plExcludeTermPenalty THEN
    RETURN appl_err("Both 'Contract extension' and 'Penalty exemption' requested").
-
+   
 katun = "VISTA_" + pcSalesman.
 
 IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
@@ -160,6 +165,10 @@ END.
 
 IF lcError > "" THEN RETURN appl_err(lcError).
 
+/*empty contract_id if it is not from VFR*/
+IF pcChannel NE {&DMS_VFR_REQUEST} THEN
+   pcContractId = "".
+
 /* YDR-2038 
    exempt penalty fee when doing an STC
    iiRequestFlags (0=no extend_term_contract, 
@@ -172,7 +181,7 @@ DO:
 END.
 ELSE
 IF plExcludeTermPenalty THEN
-   iiRequestFlags = 2.
+   iiRequestFlags = 2.   
 
 liRequest = fCTChangeRequest(MobSub.msseq,
                   pcCliType,
@@ -180,7 +189,7 @@ liRequest = fCTChangeRequest(MobSub.msseq,
                   pcBankAcc,      /* validation is already done in newton */
                   pdActivation,
                   liCreditCheck,  /* 0 = Credit check ok */
-                  plExtendContract,
+                  iiRequestFlags,
                   "" /* pcSalesman */,
                   (pdeCharge > 0),
                   llSendSMS,
@@ -189,6 +198,7 @@ liRequest = fCTChangeRequest(MobSub.msseq,
                   {&REQUEST_SOURCE_NEWTON}, 
                   0, /* order id */
                   0,
+                  pcContractId, /*dms: contract_id,channel ->ReqCParam6*/
                   OUTPUT lcInfo).
 
 IF liRequest = 0 THEN DO:
@@ -215,3 +225,4 @@ add_boolean(response_toplevel_id, "", TRUE).
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
 END.
+
