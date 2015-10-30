@@ -1265,9 +1265,15 @@ PROCEDURE pGetUPSHOURS:
    DEF OUTPUT PARAMETER olgErr AS LOGICAL NO-UNDO.
    DEF OUTPUT PARAMETER lcResult AS CHAR NO-UNDO.
 
-   DEF VAR lcUPSHours AS CHAR NO-UNDO.
-   DEF VAR lcErr      AS CHAR NO-UNDO.
-   DEF VAR liCount    AS INT  NO-UNDO.
+   DEF VAR lcUPSHours    AS CHAR NO-UNDO.
+   DEF VAR lcErr         AS CHAR NO-UNDO.
+   DEF VAR liCount       AS INT  NO-UNDO.
+   DEF VAR lcDailyHours  AS CHAR NO-UNDO.
+   DEF VAR lcDay         AS CHAR NO-UNDO.
+   DEF VAR lcHours       AS CHAR NO-UNDO.
+   DEF VAR lcHoursText   AS CHAR NO-UNDO.
+   DEF VAR lcOpenHour    AS CHAR NO-UNDO.
+   DEF VAR lcCloseHour   AS CHAR NO-UNDO.
 
    DEF BUFFER OrderAction FOR OrderAction.
 
@@ -1278,10 +1284,27 @@ PROCEDURE pGetUPSHOURS:
               OrderAction.OrderId  = iiOrderNBR AND
               OrderAction.ItemType = "UPSHours" NO-ERROR.
    IF NOT AVAIL OrderAction THEN RETURN.
+   FIND FIRST OrderCustomer NO-LOCK WHERE
+              OrderCustomer.Brand = gcBrand AND
+              OrderCustomer.OrderId = iiOrderNBR AND
+              OrderCustomer.RowType = ORDERCUSTOMER_ROWTYPE_DELIVERY NO-ERROR.
+   lcUPSHours = "Podrás recoger el pedido en:<br />".
+   lcUPSHours = lcUPSHours + OrderCustomer.address + "<br /><br />" +
+                "<b>Horarios:</b><br />".
 
    DO liCount = 1 TO NUM-ENTRIES(OrderAction.ItemKey,";"):
+      lcDailyHours = ENTRY(liCount,OrderAction.ItemKey,";").
+      lcDailyHours = LEFT-TRIM(lcDailyHours, ";"). /*remove possible extra ; */
+      lcDay = ENTRY(1,lcDailyHours,":").
+      lcHours = ENTRY(2,lcDailyHours,":").
+      IF INDEX(lcHours,"-") > 0 THEN DO:
+         lcOpenHour = REPLACE(ENTRY(1,lcHours,"-"),"h",":").
+         lcCloseHour = REPLACE(ENTRY(2,lcHours,"-"),"h",":").
+         lcHoursText = "De" + lcOpenHour + "a" + lcCloseHour.
+      END.      
+      ELSE lcHoursText = lcDailyHours. /* Closed */
       lcUPSHours = lcUPSHours +
-                ENTRY(liCount,OrderAction.ItemKey,";") +
+                "<b>" + lcDay + "</b>: " + lcHoursText +
                 " <br /> ".
    END.
 
