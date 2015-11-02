@@ -988,7 +988,8 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             MsRequest.UpdateStamp > idStartTS AND
             MsRequest.UpdateStamp < idEndTS AND
             (
-             MsRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}  /*10*/
+             MsRequest.ReqType EQ {&REQTYPE_BUNDLE_CHANGE}  /*81*/
+             OR MsRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} /*10*/
              OR MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}  /*0*/
              OR MsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} /*80*/
             ) AND
@@ -1017,6 +1018,34 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*.Current Tariff*/
             lcTariff.
          END.
+
+         WHEN {&REQTYPE_BUNDLE_CHANGE} THEN DO:
+            lcCaseTypeId = lcSTCCaseTypeId.
+            lcTariff = "".
+            FIND FIRST MsOwner NO-LOCK WHERE
+                       MsOwner.Brand = gcBrand AND
+                       MsOwner.CLI   = MsRequest.CLI AND
+                       MsOwner.TsEnd < 99999999.99999 
+                       NO-ERROR.
+            IF AVAIL MsOwner THEN lcTariff = MsOwner.CLIType.      
+            ELSE lcTariff = MsRequest.ReqCparam1.
+
+            lcCaseFileRow =
+            lcCaseTypeID                                    + lcDelim +
+            /*Contract_ID*/
+            STRING(MsRequest.ReqCparam6)                    + lcDelim +
+            /*SFID*/
+            REPLACE(Msrequest.UserCode, "VISTA_", "")       + lcDelim +
+            /*MSISDN*/
+            STRING(MsRequest.CLI)                           + lcDelim +
+            /*STC_Request_date*/
+            fPrintDate(MsRequest.ReqDparam1)                + lcDelim +
+            /*Previous_Tariff*/            
+            STRING(MsRequest.ReqCparam1)                    + lcDelim +
+            /*New_Tariff*/
+            STRING(MsRequest.ReqCparam2).
+         END.
+ 
          WHEN {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN DO:
             lcCaseTypeId = lcSTCCaseTypeId.
             lcTariff = "".
