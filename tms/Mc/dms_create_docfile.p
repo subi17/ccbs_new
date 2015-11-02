@@ -364,25 +364,19 @@ FUNCTION fGetCancellationInfo RETURNS CHAR
     idEndTS AS DECIMAL,
    OUTPUT odeTime AS DECIMAL):
    odeTime = idEndTS.
-   IF icStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
-      icStatus EQ {&ORDER_STATUS_COMPANY_NEW} OR
-      icStatus EQ {&ORDER_STATUS_COMPANY_MNP } OR
-      icStatus EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} THEN DO:
-      RETURN "User Cancellation".
-   END.
-   ELSE DO:
-      FIND FIRST MsRequest NO-LOCK WHERE
-                 MsRequest.Brand EQ gcBrand AND
-                 MsRequest.ReqStatus EQ 2 AND
-                 MsRequest.UpdateStamp > idStartTS AND
-                 MsRequest.UpdateStamp < idEndTS AND
-                 (
-                 MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} /*18*/
-                 OR MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} /*49*/
-                 )
-                 AND Msrequest.MsSeq EQ iiMsSeq AND
-                 MsRequest.UpdateStamp <= MsRequest.DoneStamp NO-ERROR.
-   END.
+
+   FIND FIRST MsRequest NO-LOCK WHERE
+              MsRequest.Brand EQ gcBrand AND
+              MsRequest.ReqStatus EQ 2 AND
+              MsRequest.UpdateStamp > idStartTS AND
+              MsRequest.UpdateStamp < idEndTS AND
+              (
+              MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} /*18*/
+              OR MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} /*49*/
+              )
+              AND Msrequest.MsSeq EQ iiMsSeq AND
+              MsRequest.UpdateStamp <= MsRequest.DoneStamp NO-ERROR.
+   
    IF AVAIL MsRequest THEN DO:
       IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
          MsRequest.ReqCparam3 EQ "11" THEN DO:
@@ -394,52 +388,36 @@ FUNCTION fGetCancellationInfo RETURNS CHAR
          RETURN "Order Cancellation".
       END.
    END.
+   ELSE IF icStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
+      icStatus EQ {&ORDER_STATUS_COMPANY_NEW} OR
+      icStatus EQ {&ORDER_STATUS_COMPANY_MNP } OR
+      icStatus EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} THEN DO:
+      RETURN "User Cancellation".
+   END.
    RETURN "".
 END.
 
 FUNCTION fGetTerminalData RETURNS CHAR
    (iiOrderId AS INT):
-   DEF BUFFER bOrder FOR Order.
-   FIND FIRST bOrder WHERE
-              bOrder.Brand EQ gcBrand AND
-              bOrder.OrderID EQ iiOrderId NO-ERROR.
-   IF NOT AVAIL bOrder THEN RETURN "".
 
-
-   FIND FIRST OfferItem NO-LOCK WHERE
-              OfferItem.Brand EQ gcBrand AND
-              OfferItem.EndStamp > fmakets() AND
-              OfferItem.Offer EQ bOrder.Offer AND
-              OfferItem.ItemType EQ "Billitem" NO-ERROR.
-   IF AVAIL OfferItem THEN DO:
-      FIND FIRST BillItem  NO-LOCK WHERE
-                 BillItem.BillCode EQ OfferItem.ItemKey AND
-                 Billitem.BiName NE ? AND
-                 BillItem.BIGroup EQ {&BITEM_GRP_TERMINAL} NO-ERROR.
-      IF AVAIL BillItem THEN DO:
-         RETURN BillItem.BiName.
-      END.
-      ELSE RETURN "".
+   FIND FIRST OrderAccessory NO-LOCK  WHERE
+              OrderAccessory.Brand EQ gcBrand AND
+              OrderAccessory.OrderID EQ iiOrderID AND
+              Orderaccessory.TerminalType EQ {&TERMINAL_TYPE_PHONE} NO-ERROR.
+   IF AVAIL OrderAccessory THEN DO:
+      FIND FIRST Billitem NO-LOCK WHERE
+                 BillItem.Brand   = gcBrand AND
+                 BillItem.BillCode = OrderAccessory.ProductCode 
+                 NO-ERROR.
+      IF AVAILABLE BillItem THEN RETURN BillItem.BIName.
+      /* should not be possible, return just in case */
+      ELSE RETURN STRING(OrderAccessory.Manufacturer) + " " +
+                  STRING(OrderAccessory.Model)        + " " +
+                  STRING(OrderAccessory.ModelColor).
    END.
-   ELSE DO:
-      FIND FIRST OrderAccessory NO-LOCK  WHERE
-                 OrderAccessory.Brand EQ gcBrand AND
-                 OrderAccessory.OrderID EQ iiOrderID AND
-                 Orderaccessory.TerminalType EQ {&TERMINAL_TYPE_PHONE} NO-ERROR.
-      IF AVAIL OrderAccessory THEN DO:
-         FIND FIRST Billitem NO-LOCK WHERE
-                    BillItem.Brand   = gcBrand AND
-                    BillItem.BillCode = OrderAccessory.ProductCode 
-                    NO-ERROR.
-         IF AVAILABLE BillItem THEN RETURN BillItem.BIName.
-         ELSE RETURN STRING(OrderAccessory.Manufacturer) + " " +
-                     STRING(OrderAccessory.Model)        + " " +
-                     STRING(OrderAccessory.ModelColor).
-      END.
-      ELSE RETURN "".
-   END.
-
+   
    RETURN "".
+
 END.
 
 
@@ -846,7 +824,8 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    /*Previous Tariff: CONT*/
    fGetPrevTariff(Order.OrderType,
                   Order.CLI,
-                  Order.OldPayType) + lcDelim + 
+                  Order.OldPayType
+                  /*, Order.OrderChannel*/) + lcDelim + 
    /*Donor operator: MoviStar*/
    STRING(Order.CurrOper)          + lcDelim +
    /*Bank Account: ES8321040075353030002643*/
