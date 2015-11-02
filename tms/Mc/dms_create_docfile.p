@@ -1148,9 +1148,7 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    IF NOT AVAIL Order THEN 
       RETURN "5:Order not available" + STRING(iiOrderId).
 
-   OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
-
-   PUT STREAM sOutFile UNFORMATTED
+   lcCaseFileRow =
    lcCaseTypeID                    + lcDelim +
    /*Order_ID*/
    STRING(Order.OrderID)          + lcDelim +
@@ -1171,8 +1169,7 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    /*Segment*/
    fGetSegment(Order.OrderID)     + lcDelim +
    /*Terminal type*/
-   fGetTerminalFinanceType(iiOrderId) SKIP.
-   OUTPUT STREAM sOutFile CLOSE.
+   fGetTerminalFinanceType(iiOrderId).
    /*Document type,DocStatusCode,RevisionComment*/
    lcDocListEntries = "".
 
@@ -1220,8 +1217,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
                                              idPeriodStart, 
                                              idPeriodEnd,
                                              OUTPUT ldeCAncellationTime).
-   OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
-   PUT STREAM sOutFile UNFORMATTED
+   lcCaseFileRow =
    lcCaseTypeID                    + lcDelim +
    /*Order_ID*/
    STRING(Order.OrderID)          + lcDelim +
@@ -1238,8 +1234,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    /*Cancellation date*/
    fPrintDate(ldeCancellationTime) + lcDelim + 
    /*Cancellation type*/
-   lcCancellationType  SKIP.
-   OUTPUT STREAM sOutFile CLOSE.
+   lcCancellationType.
    /*Document type,DocStatusCode,RevisionComment*/
    lcDocListEntries = "".
 
