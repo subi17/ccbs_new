@@ -1343,10 +1343,10 @@ OUTPUT STREAM sLogFile TO VALUE(icLogFile) APPEND.
 
 ldCurrentTime = fMakeTS().
 
-fLogLine("","DMS Casefile creation starts" + fTS2HMS(ldCurrentTime)).
+fLogLine("","DMS Casefile creation starts " + fTS2HMS(ldCurrentTime)).
 fLogLine("", "Collection period: " + 
-         STRING(idPeriodStart) + " - " + 
-         STRING(idPeriodEnd) ).
+         STRING(idPeriodStart) + " " + fTS2HMS(idPeriodStart) + " - " + 
+         STRING(idPeriodEnd) + " " + fTS2HMS(idPeriodEnd) ).
 
 /* Create temb table to ensure that multiple order changes 
    do not produce extra documents. Only 1 doc/order is provided. */
@@ -1357,5 +1357,5 @@ DO liCaseCount = 1 TO NUM-ENTRIES(icCases):
 END.
 
 ldCurrentTime = fMakeTS().
-fLogLine("","DMS Casefile creation ends" + fTS2HMS(ldCurrentTime)).
+fLogLine("","DMS Casefile creation ends " + fTS2HMS(ldCurrentTime)).
 OUTPUT STREAM sLogFile CLOSE.
