@@ -215,18 +215,17 @@ FUNCTION fMakeTempTable RETURNS CHAR
               {&REQTYPE_REVERT_RENEWAL_ORDER} /*49*/
             ) AND
            MsRequest.UpdateStamp <= MsRequest.DoneStamp :
-      llgAddEntry = FALSE.
+      
       IF MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} THEN DO:
          FIND FIRST ttOrderlist WHERE
                     ttOrderlist.OrderId EQ MsRequest.ReqIparam1 NO-ERROR.
          IF AVAIL ttOrderList THEN DO:
             DELETE ttOrderList.
-            llgAddEntry = FALSE.
+            NEXT.
          END.
          ELSE DO:
             liAddId = MsRequest.ReqIparam1.
             lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
-            llgAddEntry = TRUE.
          END.
       END.
       ELSE IF  MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
@@ -241,28 +240,27 @@ FUNCTION fMakeTempTable RETURNS CHAR
                       ttOrderlist.OrderId EQ Order.OrderId NO-ERROR.
             IF AVAIL ttOrderList THEN DO:
                DELETE ttOrderList.
-               llgAddEntry = FALSE.
+               NEXT.
             END.
             ELSE DO:
                liAddId = Order.OrderId.
                lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
-               llgAddEntry = TRUE.
             END.
          END.
+         ELSE NEXT.
       END.
+      ELSE NEXT.
 
-      IF llgAddEntry EQ TRUE THEN DO:
-         /*Sending is allowed only if there is previous DMS entry for
-           the change. */
-         FIND FIRST DMS NO-LOCK WHERE
-                    DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
-                    DMS.HostID EQ liAddId NO-ERROR.
+      /*Sending is allowed only if there is previous DMS entry for
+        the change. */
+      FIND FIRST DMS NO-LOCK WHERE
+                 DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
+                 DMS.HostID EQ liAddId NO-ERROR.
 
-         IF AVAIL DMS THEN DO TRANS:
-            CREATE ttOrderList.
-            ASSIGN ttOrderList.OrderID = liAddId
-                   ttOrderList.CaseID = lcCase.
-         END.
+      IF AVAIL DMS THEN DO TRANS:
+         CREATE ttOrderList.
+         ASSIGN ttOrderList.OrderID = liAddId
+                ttOrderList.CaseID = lcCase.
       END.
    END. /*Msrequest search*/
 
