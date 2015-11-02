@@ -38,6 +38,7 @@ DEF VAR pcOldBundle          AS CHAR      NO-UNDO.
 DEF VAR pcNewBundle          AS CHAR      NO-UNDO. 
 DEF VAR plExtendContract     AS LOG       NO-UNDO. 
 DEF VAR plExcludeTermPenalty AS LOGICAL   NO-UNDO.
+DEF VAR iiRequestFlags       AS INTEGER   NO-UNDO. 
 
 DEF VAR liCreated       AS INT     NO-UNDO. 
 DEF VAR ldActStamp      AS DEC     NO-UNDO. 
