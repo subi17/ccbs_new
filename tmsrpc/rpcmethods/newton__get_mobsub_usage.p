@@ -261,14 +261,15 @@ FOR EACH ttCDR NO-LOCK USE-INDEX date:
 
       IF ((ttCDR.CLIType EQ "TARJ7" AND MobSub.CLIType EQ "TARJ7") OR
          (ttCDR.CLIType EQ "TARJ9" AND MobSub.CLIType EQ "TARJ9")) AND
-         ttCDR.DateSt >= ldaPrepRenewal AND
-         ttCDR.Charge EQ 0 THEN DO:
+         ttCDR.DateSt >= ldaPrepRenewal THEN DO:
 
          IF ttCDR.DateST NE ldaPrepRenewal OR
             ttCDR.TimeStart >= liPrepRenewal THEN DO:
 
-            ldePrepDataUsageMonthly  = ldePrepDataUsageMonthly +
-                                       ttCDR.DataIn + ttCDR.DataOut.
+            IF ttCDR.Charge EQ 0 THEN DO:
+               ldePrepDataUsageMonthly  = ldePrepDataUsageMonthly +
+                                          ttCDR.DataIn + ttCDR.DataOut.
+            END.
             
             IF llAccumulatorFound THEN DO:
                IF ttCDR.EventType EQ "CALL" AND
