@@ -612,15 +612,9 @@ FUNCTION fCopyCustData RETURNS LOGICAL
       lcNewFirst       = ""
       lcNewLast        = ""
       lcNewSurname2    = ""
-      lcNewTitle       = "".
-
-      FIND FIRST CustContact WHERE 
-                 CustContact.Brand = gcBrand AND
-                 CustContact.Custnum = bNewCust.Custnum AND
-                 CustContact.CustType = 1 NO-LOCK NO-ERROR.
-      IF AVAIL CustContact THEN ASSIGN
-         lcCIFAgrCustIDType = CustContact.CustIdType
-         lcCIFAgrCustID = CustContact.OrgId.
+      lcNewTitle       = ""
+      lcCIFAgrCustIDType = ibCopyFrom.AuthCustIdType
+      lcCIFAgrCustID     = ibCopyFrom.AuthCustId.
    END.
    ELSE ASSIGN 
       lcNewCompanyname = ""
