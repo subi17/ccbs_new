@@ -1287,26 +1287,35 @@ PROCEDURE pGetUPSHOURS:
    FIND FIRST OrderCustomer NO-LOCK WHERE
               OrderCustomer.Brand = gcBrand AND
               OrderCustomer.OrderId = iiOrderNBR AND
-              OrderCustomer.RowType = ORDERCUSTOMER_ROWTYPE_DELIVERY NO-ERROR.
-   lcUPSHours = "Podrás recoger el pedido en:<br />".
-   lcUPSHours = lcUPSHours + OrderCustomer.address + "<br /><br />" +
-                "<b>Horarios:</b><br />".
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY} NO-ERROR.
 
-   DO liCount = 1 TO NUM-ENTRIES(OrderAction.ItemKey,";"):
-      lcDailyHours = ENTRY(liCount,OrderAction.ItemKey,";").
-      lcDailyHours = LEFT-TRIM(lcDailyHours, ";"). /*remove possible extra ; */
-      lcDay = ENTRY(1,lcDailyHours,":").
-      lcHours = ENTRY(2,lcDailyHours,":").
-      IF INDEX(lcHours,"-") > 0 THEN DO:
-         lcOpenHour = REPLACE(ENTRY(1,lcHours,"-"),"h",":").
-         lcCloseHour = REPLACE(ENTRY(2,lcHours,"-"),"h",":").
-         lcHoursText = "De" + lcOpenHour + "a" + lcCloseHour.
-      END.      
-      ELSE lcHoursText = lcDailyHours. /* Closed */
-      lcUPSHours = lcUPSHours +
-                "<b>" + lcDay + "</b>: " + lcHoursText +
-                " <br /> ".
+   /* Check that includes at least separator characters */
+   IF INDEX(OrderAction.ItemKey,";") > 0 AND
+      INDEX(OrderAction.ItemKey,":") > 0 THEN DO:
+      lcUPSHours = "Podrás recoger el pedido en:<br />".
+      lcUPSHours = lcUPSHours + OrderCustomer.address + "<br /><br />" +
+                   "<b>Horarios:</b><br />".
+
+      DO liCount = 1 TO NUM-ENTRIES(OrderAction.ItemKey,";"):
+         lcDailyHours = ENTRY(liCount,OrderAction.ItemKey,";").
+         /*remove possible extra ; */
+         lcDailyHours = LEFT-TRIM(lcDailyHours, ";").
+         IF INDEX(lcDailyHours,":") > 0 THEN DO:
+            lcDay = ENTRY(1,lcDailyHours,":").
+            lcHours = ENTRY(2,lcDailyHours,":").
+            IF INDEX(lcHours,"-") > 0 THEN DO:
+               lcOpenHour = REPLACE(ENTRY(1,lcHours,"-"),"h",":").
+               lcCloseHour = REPLACE(ENTRY(2,lcHours,"-"),"h",":").
+               lcHoursText = "De" + lcOpenHour + "a" + lcCloseHour.
+            END.
+            ELSE lcHoursText = lcDailyHours. /* Closed */
+            lcUPSHours = lcUPSHours +
+                      "<b>" + lcDay + "</b>: " + lcHoursText +
+                      " <br /> ".
+         END.
+      END.
    END.
+
 
    lcResult = lcUPSHours.
 END. /*GetUPSHOURS*/
