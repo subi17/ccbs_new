@@ -379,6 +379,13 @@ DEF VAR lcPayment AS CHAR NO-UNDO.
 DEF VAR pcPaypalPayerid AS CHAR NO-UNDO.
 DEF VAR liLanguage AS INTEGER NO-UNDO.
 
+/*parameter s and variables for accessories*/
+
+DEF VAR pcAccessory AS CHAR NO-UNDO.
+DEF VAR pcAccessoryStruct AS CHAR NO-UNDO.
+DEF VAR lcAccessoryStruct AS CHAR NO-UNDO.
+
+
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
 
@@ -962,6 +969,20 @@ FUNCTION fCreateOrderTopup RETURNS LOGICAL:
    RETURN lCreate.
 END.
 
+FUNCTION fCreateAccessory RETURNS LOGICAL:
+
+   IF pcAccessory NE "" THEN DO:
+      CREATE OrderAccessory.
+      ASSIGN
+         OrderAccessory.OrderId     = Order.OrderId
+         OrderAccessory.TerminalType = {&TERMINAL_TYPE_ACCESSORY}
+         OrderAccessory.brand       = gcBrand
+         OrderAccessory.ProductCode = pcAccessory. /*deviceid - billingitem*/
+   END.
+
+   RETURN TRUE.
+END.
+
 
 /* YBP-571 */ 
 FUNCTION fCreateOrderAccessory RETURNS LOGICAL:
@@ -1200,7 +1221,8 @@ top_struct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 top_struct_fields = validate_request(top_struct, 
-   "order_data!,customer_data!,address_data,device_data,contact_data,fusion_data,order_inspection_data").
+   "order_data!,customer_data!,address_data,device_data,contact_data,fusion_data,order_inspection_data,accessory_data").
+
 IF top_struct_fields EQ ? THEN RETURN.
 
 ASSIGN
@@ -1213,7 +1235,9 @@ pcDeviceStruct    = get_struct(top_struct, "device_data") WHEN
 pcContactStruct   = get_struct(top_struct, "contact_data") WHEN
                        LOOKUP("contact_data",top_struct_fields) > 0
 pcFusionStruct    = get_struct(top_struct, "fusion_data") WHEN
-                       LOOKUP("fusion_data",top_struct_fields) > 0.
+                       LOOKUP("fusion_data",top_struct_fields) > 0
+pcAccessoryStruct = get_struct(top_struct, "accessory_data") WHEN
+                       LOOKUP("accessory_data",top_struct_fields) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -1297,6 +1321,15 @@ IF pcDeviceStruct > "" THEN DO:
    IF lcError <> "" THEN appl_err(lcError).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+END.
+
+/*YPR-2478*/
+IF pcAccessoryStruct > "" THEN DO:
+   lcAccessoryStruct = validate_request(pcAccessoryStruct,
+      "device_model_id").
+   IF gi_xmlrpc_error NE 0 THEN RETURN.
+      IF LOOKUP('device_model_id', lcAccessoryStruct) GT 0 THEN
+      pcAccessory = get_string(pcAccessoryStruct, "device_model_id").
 END.
 
 IF pcOfferId NE "" THEN DO:
@@ -1603,6 +1636,8 @@ IF pcChannel BEGINS "fusion" AND
    NOT pcFusionStruct > "" THEN
    RETURN appl_err("Fusion order parameters are missing").
 
+/****************************************************************/
+/*Validation before this!*/
 /* YBP-532 */
 /* Creation and Update begins */
 IF LOOKUP(pcNumberType,"new,mnp") > 0 THEN
@@ -1900,6 +1935,9 @@ END.
 
 /* YBP-570 */ 
 fCreateOrderTopup().
+
+/* YPR-2478 */
+fCreateAccessory().
 
 /* YBP-571 */ 
 IF (pcDeviceStruct > "" AND 
