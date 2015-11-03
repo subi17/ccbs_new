@@ -261,35 +261,33 @@ FOR EACH ttCDR NO-LOCK USE-INDEX date:
 
       IF ((ttCDR.CLIType EQ "TARJ7" AND MobSub.CLIType EQ "TARJ7") OR
          (ttCDR.CLIType EQ "TARJ9" AND MobSub.CLIType EQ "TARJ9")) AND
-         ttCDR.DateSt >= ldaPrepRenewal AND
-         ttCDR.Charge EQ 0 THEN DO:
+         ttCDR.DateSt >= ldaPrepRenewal THEN DO:
 
          IF ttCDR.DateST NE ldaPrepRenewal OR
             ttCDR.TimeStart >= liPrepRenewal THEN DO:
 
-            ldePrepDataUsageMonthly  = ldePrepDataUsageMonthly +
-                                       ttCDR.DataIn + ttCDR.DataOut.
-            
-            IF llAccumulatorFound THEN DO:
-               IF ttCDR.EventType EQ "CALL" AND
-                  ttCDR.Charge EQ 0 AND
-                  ttCDR.Accumulator > 0 THEN 
-                  ldePrepVoiceUsageMonthly = ttCDR.Accumulator.
-               /* for getting also last CDR which partly belongs TARJ9
-                  voice bundle */
-               ELSE IF ttCDR.EventType EQ "CALL" AND
-                       ttCDR.CLIType EQ "TARJ9" AND
-                       ttCDR.Accumulator > 0 THEN
-                  ldePrepVoiceUsageMonthly = ttCDR.Accumulator.
-            END.      
-            ELSE DO:
-               IF ttCDR.EventType EQ "CALL" AND ttCDR.Charge EQ 0 AND
-               LOOKUP(ttCDR.GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0 THEN
-               ldePrepVoiceUsageMonthly = ldePrepVoiceUsageMonthly + 
-                                          ttCDR.BillDur.
-               IF ldePrepVoiceUsageMonthly > 1200 THEN
-                  ldePrepVoiceUsageMonthly = 1200.
-            END.                              
+            IF ttCDR.EventType EQ "GPRS" THEN DO:
+               IF ttCDR.Charge EQ 0 THEN DO:
+                  ldePrepDataUsageMonthly  = ldePrepDataUsageMonthly +
+                                             ttCDR.DataIn + ttCDR.DataOut.
+               END.
+            END.
+            ELSE IF ttCDR.EventType EQ "CALL" AND 
+                    ttCDR.CLIType EQ "TARJ9" THEN DO:  
+               IF llAccumulatorFound THEN DO:
+                  IF ttCDR.Accumulator > 0 THEN
+                     ldePrepVoiceUsageMonthly = ttCDR.Accumulator.
+               END.      
+               ELSE DO:
+                  IF ttCDR.Charge EQ 0 AND
+                  LOOKUP(ttCDR.GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0 THEN DO:
+                     ldePrepVoiceUsageMonthly = ldePrepVoiceUsageMonthly + 
+                                                ttCDR.BillDur.
+                     IF ldePrepVoiceUsageMonthly > 1200 THEN
+                        ldePrepVoiceUsageMonthly = 1200.
+                  END.
+               END.
+            END.
          END.
       END.
 
