@@ -426,22 +426,51 @@ END.
 /* 0 for New adds, 1 for portability, 2 for Renewal and 4 for Fusion STC */
 /**/
 FUNCTION fGetPrevTariff RETURNS CHAR
-   (iiOrderType AS INT,
-    icCLI AS CHAR,
-    ilgPrevType AS LOGICAL):
-   IF iiOrderType EQ {&ORDER_TYPE_MNP} /*1 Portability*/ THEN DO:
+   (BUFFER Order FOR Order):
+
+   IF Order.OrderType EQ {&ORDER_TYPE_MNP} /*1 Portability*/ THEN DO:
       /*pre=true pos=false*/
-      IF ilgPrevType EQ TRUE THEN RETURN "TARJ".
+      IF Order.OldPayType EQ TRUE THEN RETURN "TARJ".
       ELSE RETURN "CONT".
    END.
-   ELSE IF iiOrderType EQ {&ORDER_TYPE_STC} /*4 Fusion STC*/ OR
-           iiOrderType EQ {&ORDER_TYPE_RENEWAL} /*2 Renewal */ THEN DO:
-      FIND FIRST MsOwner NO-LOCK WHERE
-                 Msowner.Brand = gcBrand AND
-                 MsOwner.CLI   = icCLI AND
-                 MsOwner.TsEnd < 99999999.99999 
-                 NO-ERROR.
-      IF AVAILABLE MSOwner THEN RETURN MsOwner.CLIType.
+   ELSE IF Order.OrderType EQ {&ORDER_TYPE_STC} /*4 Fusion STC*/ OR
+           (Order.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
+            INDEX(Order.OrderChannel,"stc") > 0) /*2 Renewal */ THEN DO:
+
+      FIND FIRST msrequest NO-LOCK where
+                 msrequest.msseq  = order.msseq and
+                 msrequest.reqtype = 0 and
+                 msrequest.reqiparam2 = order.orderid no-error.
+
+      IF NOT AVAIL msrequest then do:
+
+          FIND FIRST Mobsub NO-LOCK where
+                     Mobsub.MsSeq = order.msseq no-error.
+          if not avail Mobsub then return "".
+
+          if Mobsub.tariffbundle > "" THEN
+            return Mobsub.tariffbundle.
+          ELSE return Mobsub.clitype.
+
+      end.
+      else do:
+
+         /*  TODO: ongoing request handling? */
+
+         IF msrequest.reqstatus eq 2 THEN DO:
+            FIND FIRST MsOwner NO-LOCK WHERE
+                       Msowner.Brand = gcBrand AND
+                       MsOwner.CLI   = Order.CLI AND
+                       MsOwner.TsEnd < msrequest.actstamp 
+                       NO-ERROR.
+
+            IF AVAILABLE MSOwner THEN RETURN 
+               (IF MSOwner.tariffbundle > "" THEN 
+                   MSOwner.tariffbundle ELSE MsOwner.CLIType).
+         END.
+
+
+      end.
    END. 
    RETURN "".   
    
@@ -502,9 +531,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    /*Tariff type*/
    STRING(Order.CLIType)           + lcDelim +
    /*Previous tariff*/
-   fGetPrevTariff(Order.OrderType, 
-                  Order.CLI,
-                  Order.OldPayType) + lcDelim +
+   fGetPrevTariff(BUFFER Order) + lcDelim +
    /**/
    STRING(Order.OrderType)          + lcDelim +
    /**/
@@ -630,9 +657,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    /*Tariff Type: CONT9*/
    STRING(Order.CLIType)          + lcDelim +
    /*Previous Tariff: CONT*/
-   fGetPrevTariff(Order.OrderType,
-                  Order.CLI,
-                  Order.OldPayType) + lcDelim +
+   fGetPrevTariff(BUFFER Order) + lcDelim +
    /*Donor Operator: Vodafone*/
    STRING(Order.CurrOper)          + lcDelim +
    /*Bank Account:  ES4800811342630006235932*/
@@ -820,10 +845,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    /*Tariff Type: CONT15*/
    STRING(Order.CLIType)          + lcDelim +
    /*Previous Tariff: CONT*/
-   fGetPrevTariff(Order.OrderType,
-                  Order.CLI,
-                  Order.OldPayType
-                  /*, Order.OrderChannel*/) + lcDelim + 
+   fGetPrevTariff(BUFFER Order) + lcDelim +
    /*Donor operator: MoviStar*/
    STRING(Order.CurrOper)          + lcDelim +
    /*Bank Account: ES8321040075353030002643*/
