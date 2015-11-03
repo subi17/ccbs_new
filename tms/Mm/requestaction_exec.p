@@ -17,7 +17,6 @@
 {tmsconst.i}
 {penaltyfee.i}
 {fcustpl.i}
-{func.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
 DEF INPUT PARAMETER icCLIType    AS CHAR NO-UNDO.
@@ -337,7 +336,10 @@ PROCEDURE pPeriodicalContract:
                          OrderAction.OrderId  = Order.OrderId AND
                          OrderAction.ItemType = "ExcludeTermPenalty" NO-LOCK)
       THEN llCreateFees = FALSE.
-      IF bOrigRequest.ReqIParam5 EQ 2 THEN
+      IF bOrigRequest.ReqIParam5 EQ 2 AND
+      (bOrigRequest.Reqtype EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR 
+       bOrigRequest.Reqtype EQ {&REQTYPE_BUNDLE_CHANGE}) AND
+      AVAILABLE(Order) THEN
       DO:
          llCreateFees = NO.
          /* Get STC creation date */
@@ -348,13 +350,11 @@ PROCEDURE pPeriodicalContract:
            STC is requested on the same day of the renewal order AND
            New type is POSTPAID */
          IF ldaReqCreDate EQ ldaRenewCreDate AND
-         bOrigRequest.reqcparam2 BEGINS "cont" AND /* POSTPAID */
-         (bOrigRequest.Reqtype = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR 
-          bOrigRequest.Reqtype EQ {&REQTYPE_BUNDLE_CHANGE} ) THEN
+         bOrigRequest.reqcparam2 BEGINS "cont" /* POSTPAID */ THEN
             lbolSTCRenewSameDay = TRUE.
          ELSE
             lbolSTCRenewSameDay = FALSE.
-      END.
+      END. /* IF bOrigRequest.ReqIParam5 EQ 2 ... */
       /* YPR-1763 - Exclude PayTerm termination */
       IF AVAIL Order AND DayCampaign.DCType = "5" AND
          Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
