@@ -339,7 +339,6 @@ FUNCTION fGetTerminalFinanceType RETURNS CHAR
 END.
 
 
-/* TODO: Indexes! */
 FUNCTION fGetHandset RETURNS CHAR
    (iiOrderId AS INT,
    icImei AS CHAR):
@@ -428,6 +427,10 @@ END.
 FUNCTION fGetPrevTariff RETURNS CHAR
    (BUFFER Order FOR Order):
 
+   DEF BUFFER MsRequest FOR MsRequest.
+   DEF BUFFER Mobsub FOR Mobsub.
+   DEF BUFFER MsOwner FOR MsOwner.
+
    IF Order.OrderType EQ {&ORDER_TYPE_MNP} /*1 Portability*/ THEN DO:
       /*pre=true pos=false*/
       IF Order.OldPayType EQ TRUE THEN RETURN "TARJ".
@@ -442,7 +445,7 @@ FUNCTION fGetPrevTariff RETURNS CHAR
                  msrequest.reqtype = 0 and
                  msrequest.reqiparam2 = order.orderid no-error.
 
-      IF NOT AVAIL msrequest then do:
+      IF NOT AVAIL msrequest or msrequest.reqstatus NE 2 then do:
 
           FIND FIRST Mobsub NO-LOCK where
                      Mobsub.MsSeq = order.msseq no-error.
@@ -455,19 +458,15 @@ FUNCTION fGetPrevTariff RETURNS CHAR
       end.
       else do:
 
-         /*  TODO: ongoing request handling? */
+         FIND FIRST MsOwner NO-LOCK WHERE
+                    Msowner.Brand = gcBrand AND
+                    MsOwner.CLI   = Order.CLI AND
+                    MsOwner.TsEnd < msrequest.actstamp 
+                    NO-ERROR.
 
-         IF msrequest.reqstatus eq 2 THEN DO:
-            FIND FIRST MsOwner NO-LOCK WHERE
-                       Msowner.Brand = gcBrand AND
-                       MsOwner.CLI   = Order.CLI AND
-                       MsOwner.TsEnd < msrequest.actstamp 
-                       NO-ERROR.
-
-            IF AVAILABLE MSOwner THEN RETURN 
-               (IF MSOwner.tariffbundle > "" THEN 
-                   MSOwner.tariffbundle ELSE MsOwner.CLIType).
-         END.
+         IF AVAILABLE MSOwner THEN RETURN 
+            (IF MSOwner.tariffbundle > "" THEN 
+                MSOwner.tariffbundle ELSE MsOwner.CLIType).
 
 
       end.
