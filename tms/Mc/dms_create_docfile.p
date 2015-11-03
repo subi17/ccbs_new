@@ -32,9 +32,8 @@ DEF VAR liCaseCount     AS INT  NO-UNDO.
 DEF VAR lcInitStatus    AS CHAR NO-UNDO.
 DEF VAR lcDMSStatusDesc AS CHAR NO-UNDO.
 DEF VAR lcDocStatus     AS CHAR NO-UNDO.
-
-DEF BUFFER CompanyCustomer FOR OrderCustomer.
-DEF BUFFER DeliveryCustomer FOR OrderCustomer.
+DEF VAR lcBundleCLITypes AS CHAR NO-UNDO. 
+lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 
 DEF TEMP-TABLE ttOrderList NO-UNDO
    FIELD OrderID AS INT
@@ -178,7 +177,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
                     Order.StatusCode EQ {&ORDER_STATUS_AUTO_CLOSED} THEN DO:
                /*Send Cancel notif if TMS has sent other notif to DMS
                 (previous sending)*/
-               FIND FIRST DMS WHERE
+               FIND FIRST DMS NO-LOCK WHERE
                           DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
                           DMS.HostId EQ Order.OrderID NO-ERROR.
                IF AVAIL DMS THEN DO:
@@ -445,7 +444,10 @@ FUNCTION fGetPrevTariff RETURNS CHAR
                  msrequest.reqtype = 0 and
                  msrequest.reqiparam2 = order.orderid no-error.
 
-      IF NOT AVAIL msrequest or msrequest.reqstatus NE 2 then do:
+      IF AVAIL msrequest AND
+         LOOKUP(msrequest.reqcparam1, lcBundleCLITypes) = 0 THEN
+         RETURN msrequest.reqcparam1.
+      ELSE IF NOT AVAIL msrequest or msrequest.reqstatus NE 2 then do:
 
           FIND FIRST Mobsub NO-LOCK where
                      Mobsub.MsSeq = order.msseq no-error.
@@ -458,11 +460,15 @@ FUNCTION fGetPrevTariff RETURNS CHAR
       end.
       else do:
 
+         /* TODO: not fool proof check */
+         /* 100% sure solution: add */
          FIND FIRST MsOwner NO-LOCK WHERE
                     Msowner.Brand = gcBrand AND
                     MsOwner.CLI   = Order.CLI AND
-                    MsOwner.TsEnd < msrequest.actstamp 
-                    NO-ERROR.
+                    MsOwner.TsEnd < msrequest.donestamp AND 
+                    MsOwner.CLIType = msrequest.reqcparam1 AND
+                    MsOwner.MsSeq = msrequest.msseq
+              USE-INDEX CLI NO-ERROR.
 
          IF AVAILABLE MSOwner THEN RETURN 
             (IF MSOwner.tariffbundle > "" THEN 
@@ -578,6 +584,8 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    DEF VAR lcModel   AS CHAR NO-UNDO.
    DEF VAR ldePermanencyAmount AS DECIMAL.
    DEF VAR liPermancyLength AS INT.
+
+   DEF BUFFER DeliveryCustomer FOR OrderCustomer.
 
    ASSIGN
       lcCaseTypeId      = "2"
@@ -760,14 +768,12 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
    DEF VAR liCount AS INT NO-UNDO.
-   DEF VAR lcBirthday AS CHAR NO-UNDO.
    DEF VAR lcModel   AS CHAR NO-UNDO.
    DEF VAR ldePermanencyAmount AS DECIMAL.
    DEF VAR liPermancyLength AS INT.
 
    ASSIGN
-      lcCaseTypeId      = "3"
-      lcModel           = "-".
+      lcCaseTypeId      = "3".
 
    FIND FIRST Order NO-LOCK WHERE 
               Order.Brand = gcBrand  AND
@@ -781,27 +787,11 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    IF NOT AVAIL OrderCustomer THEN 
       RETURN "3:Ordercustomer not available" + STRING(iiOrderId).
 
-   FIND FIRST OrderAccessory NO-LOCK WHERE
-              OrderAccessory.Brand EQ gcBrand AND
-              OrderAccessory.OrderId EQ iiOrderId AND
-              Orderaccessory.TerminalType EQ {&TERMINAL_TYPE_PHONE} NO-ERROR.
-   IF AVAIL Orderaccessory THEN DO:
-      FIND FIRST Billitem NO-LOCK WHERE
-                 BillItem.Brand   = gcBrand AND
-                 BillItem.BillCode = OrderAccessory.ProductCode 
-                 NO-ERROR.
-      IF AVAILABLE BillItem THEN lcModel = BillItem.BIName.
-      ELSE lcModel = STRING(OrderAccessory.Manufacturer) + " " +
-                     STRING(OrderAccessory.Model)        + " " +
-                     STRING(OrderAccessory.ModelColor).
-   END.
-   
+   lcModel = fGetTerminalData(Order.OrderId).
+
    ASSIGN lcName = OrderCustomer.Firstname + " " +
                    OrderCustomer.Surname1 + " " +
                    OrderCustomer.Surname2. 
-
-   IF OrderCustomer.Birthday EQ ? THEN lcBirthday = "-".
-   ELSE lcBirthday = STRING(OrderCustomer.Birthday).
 
    ldeInstallment = fGetOfferDeferredPayment(Order.Offer,
                                               Order.CrStamp,
@@ -1019,14 +1009,6 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
 
          WHEN {&REQTYPE_BUNDLE_CHANGE} THEN DO:
             lcCaseTypeId = lcSTCCaseTypeId.
-            lcTariff = "".
-            FIND FIRST MsOwner NO-LOCK WHERE
-                       MsOwner.Brand = gcBrand AND
-                       MsOwner.CLI   = MsRequest.CLI AND
-                       MsOwner.TsEnd < 99999999.99999 
-                       NO-ERROR.
-            IF AVAIL MsOwner THEN lcTariff = MsOwner.CLIType.      
-            ELSE lcTariff = MsRequest.ReqCparam1.
 
             lcCaseFileRow =
             lcCaseTypeID                                    + lcDelim +
@@ -1047,13 +1029,24 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
          WHEN {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN DO:
             lcCaseTypeId = lcSTCCaseTypeId.
             lcTariff = "".
-            FIND FIRST MsOwner NO-LOCK WHERE
-                       MsOwner.Brand = gcBrand AND
-                       MsOwner.CLI   = MsRequest.CLI AND
-                       MsOwner.TsEnd < 99999999.99999 
-                       NO-ERROR.
-            IF AVAIL MsOwner THEN lcTariff = MsOwner.CLIType.      
-            ELSE lcTariff = MsRequest.ReqCparam1.
+
+            IF LOOKUP(msrequest.reqcparam1, lcBundleCLITypes) = 0 THEN
+               lcTariff = msrequest.ReqCParam1.
+            ELSE DO:
+               
+               FIND FIRST MsOwner NO-LOCK WHERE
+                          Msowner.Brand = gcBrand AND
+                          MsOwner.CLI   = msrequest.CLI AND
+                          MsOwner.CLIType = msrequest.reqcparam1 AND
+                          MsOwner.TsEnd < msrequest.donestamp AND 
+                          MsOwner.MsSeq = msrequest.msseq
+                    USE-INDEX CLI NO-ERROR.
+               IF AVAIL MsOwner THEN 
+                  lcTariff = (IF MsOwner.tariffbundle > ""
+                              THEN MsOwner.tariffbundle 
+                              ELSE MsOwner.CLIType).
+               ELSE lcTariff = MsRequest.ReqCparam1.
+            END.
 
             lcCaseFileRow =
             lcCaseTypeID                                    + lcDelim +
