@@ -45,12 +45,15 @@ DEF VAR liUpsellCreated AS INT  NO-UNDO.
 DEF VAR lcBONOContracts AS CHAR NO-UNDO.
 DEF VAR lcMemoType AS CHAR NO-UNDO.
 
+DEF VAR pcContractID     AS CHAR NO-UNDO.
+DEF VAR pcChannel        AS CHAR NO-UNDO.
+
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcStruct = validate_request(pcStruct,
-           "msseq!,old_bundle!,new_bundle!,date!,username!,memo,upgrade_upsell,extend_term_contract").
+           "msseq!,old_bundle!,new_bundle!,date!,username!,memo,upgrade_upsell,extend_term_contract,contract_id,channel").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
@@ -62,7 +65,11 @@ ASSIGN
    llUpgradeUpsell = get_bool(pcStruct,"upgrade_upsell")
       WHEN LOOKUP("upgrade_upsell", lcstruct) > 0
    plExtendContract = get_bool(pcStruct,"extend_term_contract")
-      WHEN LOOKUP("extend_term_contract", lcstruct) > 0.
+      WHEN LOOKUP("extend_term_contract", lcstruct) > 0
+   pcContractID = get_string(pcStruct,"contract_id")
+      WHEN LOOKUP("contract_id", lcstruct) > 0
+   pcChannel = get_string(pcStruct,"channel")
+      WHEN LOOKUP("channel", lcstruct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -103,6 +110,11 @@ ldActStamp = fMake2Dt(pdaActDate,
                       THEN TIME
                       ELSE 0).
 
+
+/*empty contract_id if it is not from VFR*/
+IF pcChannel NE {&DMS_VFR_REQUEST} THEN
+   pcContractId = "".
+
 liCreated = fBundleChangeRequest(MobSub.MsSeq,
                                  pcOldBundle, 
                                  pcNewBundle,
@@ -114,6 +126,7 @@ liCreated = fBundleChangeRequest(MobSub.MsSeq,
                                  FALSE, /* mandatory */
                                  llUpgradeUpsell, /* Upgrade Upsell */
                                  plExtendContract, /*extend terminal contract*/
+                                 pcContractId,
                                  OUTPUT lcError).
 IF liCreated = 0 THEN
    RETURN appl_err("Change request could not be created").

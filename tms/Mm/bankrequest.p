@@ -21,6 +21,10 @@ DEFINE BUFFER agrCust FOR Customer.
 DEFINE BUFFER bMsRequest FOR MsRequest.
 
 DEF VAR ocResult      AS CHAR NO-UNDO.
+DEF VAR lcSalesman    AS CHAR NO-UNDO.
+DEF VAR liCount       AS INT  NO-UNDO.
+DEF VAR lcMemo        AS CHAR NO-UNDO.
+DEF VAR lcChannel     AS CHAR NO-UNDO.
 
 FIND MsRequest WHERE 
      MsRequest.MsRequest = iiReqId AND
@@ -53,6 +57,9 @@ IF NOT AVAIL agrCust THEN DO:
    RETURN.
 END.
 
+FIND bMsRequest NO-LOCK WHERE
+     bMsRequest.MsRequest = MsRequest.OrigRequest NO-ERROR.
+
 CREATE memo.
 ASSIGN
 memo.CreStamp  = fMakeTS()
@@ -77,7 +84,33 @@ END.
 AgrCust.BankAcc = MSREquest.ReqCparam2.
 
 IF llDoEvent THEN DO:
-   RUN StarEventMakeModifyEvent(lhCustomer).
+   IF bMsRequest.ReqType = 0 THEN DO:
+      IF INDEX(bMsRequest.UserCode,"_") > 0 THEN 
+         ASSIGN liCount = INDEX(bMsRequest.UserCode,"_")
+                lcSalesman = SUBSTRING(bMsRequest.UserCode,liCount + 1).
+      ELSE lcSalesman = bMsRequest.UserCode.
+
+      CASE bMsRequest.ReqSource:
+         WHEN {&REQUEST_SOURCE_MANUAL_TMS} THEN
+            lcChannel = "TMS".
+         WHEN {&REQUEST_SOURCE_NEWTON} THEN
+            lcChannel = "VISTA".
+         WHEN {&REQUEST_SOURCE_EXTERNAL_API} THEN
+            lcChannel = "EXT_API".
+      END CASE.
+
+      lcMemo = "STC" + CHR(255) +
+               STRING(AgrCust.CustNum) + CHR(255) +
+               STRING(bMsRequest.MsSeq) + CHR(255) +
+               lcSalesman + CHR(255) +
+               lcChannel.
+
+      RUN StarEventMakeModifyEventWithMemo(
+            lhCustomer,
+            "STC",
+            lcMemo).
+   END.
+   ELSE RUN StarEventMakeModifyEvent(lhCustomer).
    fCleanEventObjects().
 END.
 
