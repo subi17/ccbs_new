@@ -15,7 +15,6 @@ DEF VAR pcCLI        AS CHARACTER NO-UNDO.
 DEF VAR pcSmsContent AS CHARACTER NO-UNDO.
 DEF VAR pcSender     AS CHARACTER NO-UNDO.
 DEF VAR pcReqList    AS CHARACTER NO-UNDO. 
-DEF VAR liSmsSuccess AS INTEGER   NO-UNDO.
 DEF VAR liLoop       AS INTEGER   NO-UNDO.
 DEF VAR pcStruct     AS CHARACTER NO-UNDO. 
 
@@ -46,13 +45,12 @@ IF NOT AVAIL MobSub THEN
    RETURN appl_err("Requested subscriber not found ").
    
 /* Sending test SMS */
-liSmsSuccess = pSendTestSMS(MobSub.MsSeq,
-                        pcSmsContent,    /* SMSText */
-                        {&SMSTYPE_INFO}, /* SMSType */
-                        pcSender,
-                        "").
-
-IF  liSmsSuccess > 0 THEN
+RUN pSendTestSMS IN THIS-PROCEDURE (MobSub.MsSeq,
+                 pcSmsContent,    /* SMSText */
+                 {&SMSTYPE_INFO}, /* SMSType */
+                 pcSender,
+                 "") NO-ERROR.
+IF ERROR-STATUS:ERROR THEN
    add_boolean(response_toplevel_id,?,TRUE).
 ELSE add_boolean(response_toplevel_id,?,FALSE).
 
