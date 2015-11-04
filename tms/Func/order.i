@@ -209,6 +209,13 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
                2 = inv.cust
                3 = user cust
    */
+
+   FIND FIRST Order NO-LOCK WHERE
+              Order.Brand   = gcBrand AND
+              Order.OrderId = iiOrder
+              NO-ERROR.
+   IF NOT AVAILABLE Order THEN RETURN FALSE. 
+
    FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
               OrderCustomer.Brand   = gcBrand AND
               OrderCustomer.OrderID = iiOrder AND
@@ -234,7 +241,8 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    Customer.ZipCode      = OrderCustomer.ZipCode
    Customer.PostOffice   = OrderCustomer.PostOffice
    Customer.Country      = OrderCustomer.Country
-   Customer.BankAcc      = OrderCustomer.BankCode
+   Customer.BankAcc      = OrderCustomer.BankCode WHEN
+      LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") = 0
    Customer.Region       = OrderCustomer.Region
    Customer.Nationality  = OrderCustomer.Nationality
    Customer.Language     = INTEGER(OrderCustomer.Language)
@@ -247,7 +255,7 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    
    Customer.ExtInvRef    = OrderCustomer.ExtInvRef
    Customer.FoundationDate = OrderCustomer.FoundationDate
-  
+
    /* marketing values */
    Customer.DirMarkSMS   = OrderCustomer.OperSMSMarketing
    Customer.DirMarkEmail = OrderCustomer.OperEMailMarketing
@@ -256,6 +264,16 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    Customer.OutMarkEmail = OrderCustomer.OutEMailMarketing
    Customer.OutMarkPOST  = OrderCustomer.OutPostMarketing
    Customer.OutMarkBank  = OrderCustomer.OutBankMarketing.
+
+   ASSIGN
+   Customer.AuthCustId      = Order.OrdererID WHEN
+                              Customer.CustIdType = "CIF" AND
+                              OrderCustomer.CustIdType = "CIF" AND
+                              OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+   Customer.AuthCustIdType  = Order.OrdererIDType WHEN
+                              Customer.CustIdType = "CIF" AND
+                              OrderCustomer.CustIdType = "CIF" AND
+                              OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
 
    /* Electronic Invoice Project - update email and delivery type */
    fUpdEmailDelType(iiorder).

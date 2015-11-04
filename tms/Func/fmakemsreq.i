@@ -142,7 +142,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
     INPUT  icSource      AS CHAR,
     INPUT  iiOrderID     AS INT,
     INPUT  iiOrigReq     AS INT,    /* Father request id */
-    INPUT  icDMSInfo     AS CHAR,   /*For DMS usage contract_id, channel */
+    INPUT  icDMSInfo     AS CHAR,   /*For DMS usage contract_id */
     OUTPUT ocResult      AS CHAR).
 
    DEF VAR llCRes      AS LOG  NO-UNDO.
