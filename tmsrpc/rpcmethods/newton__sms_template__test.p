@@ -21,7 +21,7 @@ DEF VAR lcReplaceTxt AS CHARACTER NO-UNDO.
 
 ASSIGN
    gcBrand      = "1"
-   lcReplaceTxt = "@yoigo.com" /* Replace value for #SENDER tag */
+   lcReplaceTxt = "y@yoigo.es" /* Replace value for #SENDER tag */
    pcSender     = "800622800".
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
