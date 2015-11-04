@@ -24,6 +24,7 @@ FUNCTION fBundleChangeRequest RETURNS INTEGER
     INPUT ilMandatory    AS LOG,    /* is subrequest mandatory */
     INPUT ilUpgradeUpsell AS LOG,   /* is upgrade upsell */
     INPUT ilExtendTerm   AS LOG,    /* extend terminal contract */
+    INPUT  icDMSInfo     AS CHAR,   /* For DMS usage, contract_id*/
     OUTPUT ocResult      AS CHAR):
  
    DEF VAR liReqCreated    AS INT  NO-UNDO.
@@ -77,8 +78,9 @@ FUNCTION fBundleChangeRequest RETURNS INTEGER
       bCreaReq.ReqIParam5  = (IF ilExtendTerm THEN 1 ELSE 0)
       liReqCreated         = bCreaReq.MsRequest
       bCreaReq.ReqCParam5  = (icOldBundle + "TO" + icNewBundle)
-                             WHEN ilUpgradeUpsell = TRUE.
- 
+                             WHEN ilUpgradeUpsell = TRUE
+      bCreaReq.ReqCparam6  = icDMSInfo.
+
    RELEASE bCreaReq.
 
    /* initial actions */

@@ -81,7 +81,6 @@ DEF VAR pcMemoTitle AS CHARACTER NO-UNDO.
 DEF VAR pcMemoContent AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
 DEFINE VARIABLE lhCustContact AS HANDLE NO-UNDO.
-DEFINE VARIABLE lhCustContact2 AS HANDLE NO-UNDO.
 
 IF validate_request(param_toplevel_id, "int,string,boolean,struct,struct,[struct]") EQ ? THEN
     RETURN.
@@ -323,37 +322,23 @@ END.
 
 IF Customer.CustIdType = "CIF" THEN DO:
    
+   lhCustomer = BUFFER Customer:HANDLE.
+   RUN StarEventInitialize(lhCustomer).
+   
+   FIND CURRENT Customer EXCLUSIVE-LOCK NO-ERROR.
+   IF AVAIL Customer THEN DO:
+      RUN StarEventSetOldBuffer(lhCustomer).
+      ASSIGN
+         Customer.AuthCustIdType = get_string(pcStruct, "id_type") 
+         WHEN LOOKUP("id_type", lcStruct) > 0 
+         Customer.AuthCustId = get_string(pcStruct, "person_id")
+         WHEN LOOKUP("person_id", lcStruct) > 0.
+      RUN StarEventMakeModifyEvent(lhCustomer).
+   END.
+   FIND CURRENT Customer NO-LOCK.
+  
    lhCustContact = BUFFER CustContact:HANDLE.
    RUN StarEventInitialize(lhCustContact).
-   
-   FIND CustContact WHERE
-      CustContact.Brand = gcBrand AND
-      CustContact.CustNum = piCustNum AND
-      CustContact.CustType = 1 EXCLUSIVE-LOCK NO-ERROR.
-   IF AVAIL CustContact THEN DO:
-      RUN StarEventSetOldBuffer(lhCustContact).
-      ASSIGN
-         CustContact.CustIdType    = get_string(pcStruct, "id_type") 
-         WHEN LOOKUP("id_type", lcStruct) > 0 
-         CustContact.OrgId   = get_string(pcStruct, "person_id")
-         WHEN LOOKUP("person_id", lcStruct) > 0.
-      RUN StarEventMakeModifyEvent(lhCustContact).
-   END.
-   ELSE IF LOOKUP("person_id", lcStruct) > 0 AND
-           LOOKUP("id_type", lcStruct) > 0  THEN DO:
-      CREATE CustContact.
-      ASSIGN
-         CustContact.Brand = gcBrand
-         CustContact.Custnum = Customer.Custnum
-         CustContact.CustType = 1.
-      ASSIGN
-         CustContact.CustIdType = get_string(pcStruct, "id_type")
-         CustContact.OrgId = get_string(pcStruct, "person_id").
-      RUN StarEventMakeCreateEvent (lhCustContact).
-   END.
-  
-   lhCustContact2 = BUFFER CustContact:HANDLE.
-   RUN StarEventInitialize(lhCustContact2).
    
    FIND FIRST CustContact WHERE
               CustContact.Brand = gcBrand AND
@@ -361,7 +346,7 @@ IF Customer.CustIdType = "CIF" THEN DO:
               CustContact.CustType = 5 EXCLUSIVE-LOCK NO-ERROR.
 
    IF AVAIL CustContact THEN DO:
-      RUN StarEventSetOldBuffer(lhCustContact2).
+      RUN StarEventSetOldBuffer(lhCustContact).
    END.
    ELSE IF get_paramcount(pcCCStruct) > 0 THEN DO:  
       CREATE CustContact.
@@ -425,8 +410,8 @@ IF Customer.CustIdType = "CIF" THEN DO:
          CustContact.AddressCodM = get_string(pcCCstruct, "municipality_code")
          WHEN LOOKUP("municipality_code", lcCustContact) > 0. 
 
-      IF NEW CustContact THEN RUN StarEventMakeCreateEvent (lhCustContact2).
-      ELSE RUN StarEventMakeModifyEvent(lhCustContact2).
+      IF NEW CustContact THEN RUN StarEventMakeCreateEvent (lhCustContact).
+      ELSE RUN StarEventMakeModifyEvent(lhCustContact).
    END.
 END.
 

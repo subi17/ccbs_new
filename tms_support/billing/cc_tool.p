@@ -4,12 +4,12 @@ DEF VAR odtDate AS DATE NO-UNDO.
 
 FORM
 SKIP
-"  1) Etsi puhelua b-numerolla?   "                  SKIP
-"  2) Etsi Yoigo kampanja, alle kampanjarajan"       SKIP
-"  3) Etsi Yoigo kampanja, kampanja täynnä   "       SKIP
-"  4) Etsi GPRS kampanja,  alle kampanjarajan"       SKIP
-"  5) Etsi GPRS kampanja, kampanja täynnä"           SKIP(2)
-" Valintasi?" a no-label   
+"  1) Search call with B-number                   "       SKIP
+"  2) Search Yoigo campaign, below campaign limit "       SKIP
+"  3) Search Yoigo campaign, campaign full        "       SKIP
+"  4) Search GPRS campaign, below campaign limit  "       SKIP
+"  5) Search GPRS campaign, campaign full         "       SKIP(2)
+"  Selection: " a no-label   
 
 WITH FRAME aa.
 
@@ -19,7 +19,7 @@ view frame aa.
 update a with frame aa.
 
 IF a > "1" AND a < "6" THEN 
-update odtdate column-label "Alkaen päivästä..." 
+update odtdate column-label "Start day..." 
        FORMAT "99-99-9999"  WITH FRAME ab.
 
 
