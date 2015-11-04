@@ -22,7 +22,7 @@ FUNCTION fBundleChangeRequest RETURNS INTEGER
     INPUT ilCreateFees    AS LOG,    
     INPUT iiOrigRequest   AS INT,    /* main request */
     INPUT ilMandatory     AS LOG,    /* is subrequest mandatory */
-    INPUT ilUpgradeUpsell AS LOG,    /* is upgrade upsell */
+    INPUT ilUpgradeUpsell AS LOG,   /* is upgrade upsell */
     INPUT ilExtendTerm    AS INT,    /* extend terminal contract */
     OUTPUT ocResult       AS CHAR):
  
