@@ -225,13 +225,6 @@ IF NOT AVAIL Customer THEN
 
 &SCOPED-DEFINE ERR_RENOVE "no_match"
 
-IF Customer.CustIdType = "CIF" THEN DO:
-   FIND CustContact WHERE
-        CustContact.Brand = gcBrand AND
-        CustContact.Custnum = Customer.Custnum AND
-        CustContact.CustType = 1 NO-LOCK NO-ERROR.
-END.
-
 /* renewal pos check */
 IF pcChannel BEGINS "renewal_pos" THEN DO:
    
@@ -248,13 +241,8 @@ IF pcChannel BEGINS "renewal_pos" THEN DO:
          RETURN appl_err({&ERR_RENOVE}).
       END.
       
-      IF AVAIL CustContact THEN DO:
-         IF CustContact.CustIdType NE pcIdType OR
-            CustContact.OrgId NE pcPersonId THEN DO:
-            RETURN appl_err({&ERR_RENOVE}).
-         END.
-      END.
-      ELSE DO:
+      IF Customer.AuthCustIdType NE pcIdType OR
+         Customer.AuthCustId NE pcPersonId THEN DO:
          RETURN appl_err({&ERR_RENOVE}).
       END.
    END.
@@ -488,8 +476,8 @@ ELSE DO:
 END. /* ELSE DO: */
 
 IF Customer.CustIdType EQ "CIF" THEN DO:
-   add_string(top_struct, "person_id", (IF AVAIL CustContact THEN CustContact.OrgId ELSE "")).
-   add_string(top_struct, "id_type",   (IF AVAIL CustContact THEN CustContact.CustIdType ELSE "")).
+   add_string(top_struct, "person_id", Customer.AuthCustId).
+   add_string(top_struct, "id_type",   Customer.AuthCustIdType).
 END.
 ELSE DO:
    add_string(top_struct, "person_id", Customer.OrgId).

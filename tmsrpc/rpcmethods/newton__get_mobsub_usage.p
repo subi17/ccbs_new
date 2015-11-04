@@ -515,7 +515,6 @@ DO liLoop = 1 TO 3:
              ldeDataBundleUsage = 0.
 
       IF MServiceLimit.DialType = {&DIAL_TYPE_GPRS} THEN DO:
-      /* d*200 is done under gprs*/
          /* Check DSS Upgrade upsell limit */
          FIND FIRST MsRequest NO-LOCK WHERE
                     MsRequest.MsSeq      = MobSub.MsSeq AND

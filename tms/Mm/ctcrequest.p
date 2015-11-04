@@ -31,7 +31,7 @@ DEF VAR ldeEndStamp   AS DEC NO-UNDO.
 DEF VAR lcSender      AS CHAR NO-UNDO. 
 DEF VAR llBBActive    AS LOG  NO-UNDO.
 DEF VAR lcContract    AS CHAR NO-UNDO.
-DEF VAR lcBundleName   AS CHAR NO-UNDO.
+DEF VAR lcBundleName  AS CHAR NO-UNDO.
 
 DEF VAR lcPostpaidVoiceTariffs AS CHAR NO-UNDO.
 DEF VAR lcPrepaidVoiceTariffs  AS CHAR NO-UNDO.
@@ -39,7 +39,8 @@ DEF VAR lcOnlyVoiceContracts   AS CHAR NO-UNDO.
 DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
 
-DEF BUFFER lbMobSub    FOR MobSub.
+DEF BUFFER lbMobSub     FOR MobSub.
+DEF BUFFER bMobSubCust  FOR MobSub.
 
 FIND FIRST MsRequest WHERE MsRequest.MsRequest = iiReqId NO-LOCK NO-ERROR.
 
@@ -104,7 +105,14 @@ ASSIGN
    ldeActStamp   = MSrequest.ReqDParam1
    liCreditCheck = Msrequest.ReqIParam1.
 
-IF lcBankNumber ne "" THEN DO:
+IF lcBankNumber ne "" AND
+   OldCliType.PayType = 2 AND
+   NewCliType.PayType = 1 AND
+   NOT CAN-FIND(FIRST bMobSubCust WHERE
+                      bMobSubCust.Brand     = gcBrand AND
+                      bMobSubCust.MsSeq    <> MobSub.MsSeq AND
+                      bMobSubCust.CustNum   = Customer.CustNum AND
+                      bMobSubCust.PayType   = FALSE) THEN DO:
 
    liReq = fSubRequest
            (INPUT  MSRequest.MSSeq,

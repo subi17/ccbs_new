@@ -295,27 +295,17 @@ ELSE IF LOOKUP(pcActionType, "NORMAL,RENEWAL_STC") > 0 THEN DO:
       
    END.
      
-   FIND FIRST CustContact WHERE
-              CustContact.Brand = "1" and
-              CustContact.Custnum = Customer.Custnum AND
-              CustContact.CustType = 1 NO-LOCK NO-ERROR.
-   IF NOT AVAILABLE Customer THEN DO:
-      plOK = FALSE.
-      pcAnswerCodes = "Administrator data not available".
-      RETURN.
-   END.
-
    ASSIGN pcCIF          = Customer.OrgId                    /*  1 */
           pcZIP          = Customer.ZIP                      /*  2 */
           pcFoundingDate = fDateFmt(Customer.FoundationDate, 
                                     "ddmmyyyy")              /* 3 */
           pcAddress       = Customer.Address                 /* 4 */
-          pcRepId         = CustContact.OrgId                /* 5 */
-          pcRepName       = CustContact.FirstName            /* 6 */
-          pcRepFSurname   = CustContact.CustName             /* 7 */
-          pcRepSSurname   = CustContact.SurName2             /* 8 */
-          pcRepTelphone   = CustContact.SMSNumber            /* 9 */
-          pcRepEmail      = CustContact.Email                /* 10 */ 
+          pcRepId         = Customer.OrgId                /* 5 */
+          pcRepName       = Customer.FirstName            /* 6 */
+          pcRepFSurname   = Customer.CustName             /* 7 */
+          pcRepSSurname   = Customer.SurName2             /* 8 */
+          pcRepTelphone   = Customer.SMSNumber            /* 9 */
+          pcRepEmail      = Customer.Email                /* 10 */ 
           pcDelZip        = (IF pcActionType EQ "RENEWAL_STC" AND
                              AVAIL bDeliveryOrderCustomer
                              THEN bDeliveryOrderCustomer.ZIP
