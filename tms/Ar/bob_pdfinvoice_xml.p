@@ -13,8 +13,10 @@ katun = "Cron".
 gcBrand = "1".
 
 {tmsconst.i}
-{ftransdir.i}
 {cparam2.i}
+{replog_reader.i}
+{host.i}
+{ftransdir.i}
 {eventlog.i}
 
 DEFINE VARIABLE lcLine   AS CHARACTER NO-UNDO.
@@ -23,7 +25,7 @@ DEFINE VARIABLE liNumOK  AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liNumErr AS INTEGER   NO-UNDO.
 
 /* files and dirs */
-DEFINE VARIABLE lcLogFile       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcBOBLogFile    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcIncDir        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcInputFile     AS CHARACTER NO-UNDO.
@@ -32,8 +34,10 @@ DEFINE VARIABLE lcProcessedFile AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSpoolDir      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcReportFileOut AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOutDir        AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFinalFol      AS CHARACTER NO-UNDO. 
 
 DEF VAR lcXMLFile AS CHAR NO-UNDO. 
+DEF VAR lcPDFFile AS CHAR NO-UNDO. 
 DEF VAR lcXMLFder AS CHAR NO-UNDO. 
 DEF VAR lcFile    AS CHAR NO-UNDO. 
 DEF VAR lcToday   AS CHAR NO-UNDO. 
@@ -41,7 +45,7 @@ DEF VAR lcBillRun AS CHAR NO-UNDO.
 DEF VAR liInvNum  AS INT  NO-UNDO. 
 DEF VAR liCount   AS INT  NO-UNDO. 
 DEF VAR lcError   AS CHAR NO-UNDO. 
-DEF VAR lcInvFile AS CHAR NO-UNDO. 
+DEF VAR lcInvFile AS CHAR NO-UNDO.
 
 DEF STREAM sin.
 DEF STREAM sFile.
@@ -75,6 +79,7 @@ ASSIGN
    lcOutDir   = fCParam("PDFInvoice","OutDir")
    lcFile     = fCParamC("InvXMLFile")
    lcXMLFile  = fCParamC("InvBOBXMLFile")
+   lcPDFFile  = fCParamC("InvBOBPDFFile")
    lcToday    = STRING(YEAR(TODAY),"9999") + 
                 STRING(MONTH(TODAY),"99")  +
                 STRING(DAY(TODAY),"99")
@@ -83,10 +88,10 @@ ASSIGN
 IF TODAY EQ DATE(MONTH(TODAY),1,YEAR(TODAY)) OR 
    TODAY EQ DATE(MONTH(TODAY),2,YEAR(TODAY)) THEN DO:
    
-   ASSIGN lcLogFile = "PDF_INVOICE_" + lcToday +
-                      "_" + STRING(TIME) +
-                      "_" + ".log"
-          lcOutDir  = lcOutDir + "/" + lcLogFile.
+   ASSIGN lcBOBLogFile = "PDF_INVOICE_" + lcToday +
+                         "_" + STRING(TIME) +
+                         "_" + ".log"
+          lcOutDir     = lcOutDir + "/" + lcBOBLogFile.
     
    OUTPUT STREAM sLog TO VALUE(lcOutDir) APPEND.
    
@@ -113,16 +118,17 @@ REPEAT:
    ELSE NEXT.
  
    ASSIGN 
-      lcInvFile = "PDF_INVOICE_" + lcToday              
-      lcBillRun = "PDF-INVOICE-" + lcToday + 
-                   STRING(TIME,"99999")
-      lcLogFile = "PDF_INVOICE_" + lcToday + 
-                  "_" + STRING(TIME) + 
-                  "_" + ".log"
-      lcLogFile = lcSpoolDir + lcLogFile
-      lcXMLFile = lcXMLFile + "/" + lcXMLFder + "*" + lcFile.
+      lcInvFile    = "PDF_INVOICE_" + lcToday              
+      lcBillRun    = "PDF-INVOICE-" + lcToday + 
+                     STRING(TIME,"99999")
+      lcBOBLogFile = "PDF_INVOICE_" + lcToday + 
+                     "_" + STRING(TIME) + 
+                     "_" + ".log"
+      lcBOBLogFile = lcSpoolDir + lcBOBLogFile
+      lcFinalFol   = lcXMLFile + "/" + lcXMLFder
+      lcXMLFile    = lcXMLFile + "/" + lcXMLFder + "*" + lcFile.
 
-   OUTPUT STREAM sLog TO VALUE(lcLogFile) APPEND.
+   OUTPUT STREAM sLog TO VALUE(lcBOBLogFile) APPEND.
 
    PUT STREAM sLog UNFORMATTED
               lcFilename  " "
@@ -197,6 +203,8 @@ REPEAT:
    END.
   
    RUN pTransOnError.
+
+   RUN pSendActiveMQMessage.
  
    INPUT STREAM sin CLOSE.
    OUTPUT STREAM sLog CLOSE.
@@ -212,8 +220,62 @@ PROCEDURE pTransOnError:
       "updated: " STRING(liNumOK)          ", "
       "errors: " STRING(liNumErr) SKIP.
    
-   lcReportFileOut = fMove2TransDir(lcLogFile, "", lcOutDir).
+   lcReportFileOut = fMove2TransDir(lcBOBLogFile, "", lcOutDir).
    lcProcessedFile = fMove2TransDir(lcInputFile, "", lcProcDir).
    
 END PROCEDURE. 
 
+PROCEDURE pSendActiveMQMessage:
+
+DEF VAR lcXMLInput   AS CHAR NO-UNDO INITIAL "". 
+DEF VAR lcPDFOutput  AS CHAR NO-UNDO INITIAL "". 
+DEF VAR llgRecursive AS CHAR NO-UNDO INITIAL "". 
+DEF VAR lcFeedBackID AS CHAR NO-UNDO INITIAL "".
+DEF VAR lcType       AS CHAR NO-UNDO INITIAL "".
+DEF VAR lcProcess    AS CHAR NO-UNDO INITIAL "". 
+DEF VAR llgHandled   AS LOG  NO-UNDO.
+
+   ASSIGN 
+     lcXMLInput   = lcFinalFol
+     lcPDFOutput  = lcPDFFile 
+     llgRecursive = "true"
+     lcFeedbackID = ""  /* tar will be created with input folder name */
+     lcType       = "invoice"
+     lcProcess    = "bobtool".
+
+   RUN pInitialize(INPUT "revolver").
+
+   IF RETURN-VALUE > "" THEN DO:
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+      LOG-MANAGER:WRITE-MESSAGE(RETURN-VALUE, "ERROR").
+         RETURN RETURN-VALUE.
+   END.
+
+   /* Call ActiveMQ Publisher class */
+   lMsgPublisher = NEW Gwy.MqPublisher(lcHost,liPort,
+                                       liTimeOut,"revolver",
+                                       lcUserName,lcPassword).
+
+   IF NOT VALID-OBJECT(lMsgPublisher) THEN DO:
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+         LOG-MANAGER:WRITE-MESSAGE("ActiveMQ Publisher handle not found","ERROR").
+   END.
+
+   lcMessage = "~{" + "~"input_file~""       + "~:" + "~"" + lcXMLInput   + "~"" + "," +
+                      "~"output_file_name~"" + "~:" + "~"" + lcPDFOutput  + "~"" + "," +
+                      "~"recursive~""        + "~:" +        llgRecursive        + "," +
+                      "~"feedback_id~""      + "~:" + "~"" + lcFeedbackID + "~"" + "," +
+                      "~"type~""             + "~:" + "~"" + lcType       + "~"" + "," +
+                      "~"process~""          + "~:" + "~"" + lcProcess    + "~"" + "~}".
+
+   IF lMsgPublisher:send_message(lcMessage) THEN
+      llgHandled = TRUE.
+   ELSE DO:
+      llgHandled = FALSE.
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+         LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+   END.
+
+   RUN pFinalize(INPUT "").
+
+END PROCEDURE.
