@@ -119,6 +119,7 @@ DEF VAR llAddLineTerm     AS LOG                  NO-UNDO.
 DEF BUFFER UserCustomer FOR CUstomer .
 DEF BUFFER NewCliType   FOR CliType.
 DEF BUFFER AgrCust      FOR Customer.
+DEF BUFFER bMobsub      FOR Mobsub.
 DEF BUFFER bbMobsub     FOR Mobsub.
 DEF BUFFER bCliType     FOR CLiType.
 
@@ -551,10 +552,24 @@ REPEAT  WITH FRAME main:
                END.
             END.
 
-            llBankAccount = TRUE.
+            /* DCH */
+            IF MobSub.Paytype = TRUE AND
+               NewCLIType.PayType = 1 AND
+               NOT CAN-FIND(FIRST bMobSub WHERE
+                                  bMobSub.Brand     = gcBrand AND
+                                  bMobSub.MsSeq    <> MobSub.MsSeq AND
+                                  bMobSub.CustNum   = Customer.CustNum AND
+                                  bMobSub.PayType   = FALSE) THEN DO:
+
+               llBankAccount = TRUE.
+
+            END.
+
             APPLY LASTKEY.
          END.
       END.
+
+
 
    IF new-ts-date = ? THEN DO:
       MESSAGE "Invalid change date"

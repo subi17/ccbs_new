@@ -235,11 +235,8 @@ PROCEDURE pPrintLine:
    /*IMP-OPERAC*/    FILL("0",11 - LENGTH(lcTotalAmount)) +
                      lcTotalAmount FORMAT "X(11)"
    /*MES-OPERAC*/    STRING(MONTH(idaBankDate),"99") FORMAT "X(2)"
-   /*ANO-OPERAC*/    STRING(YEAR(idaBankDate),"9999") FORMAT "X(4)".
-   
-   IF icBank EQ {&TF_BANK_SABADELL} THEN
-      PUT STREAM sout 
-      /*NUM-PEDIDO*/  STRING(FixedFee.OrderId) FORMAT "X(8)".
+   /*ANO-OPERAC*/    STRING(YEAR(idaBankDate),"9999") FORMAT "X(4)"
+   /*NUM-PEDIDO*/    STRING(FixedFee.OrderId) FORMAT "X(8)".
    
    PUT STREAM sout CONTROL CHR(13) CHR(10).
 END.

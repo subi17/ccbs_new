@@ -102,7 +102,8 @@ IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_EXTERNAL_API} THEN DO:
             bMsRequest.ReqStatus EQ MsRequest.ReqStatus AND
             bMsRequest.ActStamp  <= MsRequest.ActStamp + 0.00015 AND
             bMsRequest.ActStamp  >= MsRequest.ActStamp - 0.00015 AND
-            bmsrequest.CreStamp  EQ MsRequest.CreStamp AND
+            bmsrequest.CreStamp  <= MsRequest.CreStamp + 0.00001 AND
+            bmsrequest.CreStamp  >= MsRequest.CreStamp - 0.00001 AND
             bMsRequest.MsSeq     EQ MsRequest.MsSeq AND
             bMsRequest.CustNum   EQ MsRequest.CustNum AND
             bMsRequest.ReqCParam3 EQ MsRequest.ReqCParam3 AND
