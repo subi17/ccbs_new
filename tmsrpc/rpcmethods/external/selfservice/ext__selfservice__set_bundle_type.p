@@ -112,6 +112,7 @@ liCreated = fBundleChangeRequest(MobSub.MsSeq,
                                  FALSE, /* mandatory */
                                  FALSE, /* upgrade upsell */
                                  FALSE, /* extend terminal contract*/
+                                 "",
                                  OUTPUT lcError).                                                                                                                                                     
                                                                                                                                                                                          
 IF liCreated = 0 THEN
