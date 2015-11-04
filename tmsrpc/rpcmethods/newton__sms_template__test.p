@@ -3,7 +3,7 @@
  * newton_sms_template_test.p
  * @input       clinmbr;string;mandatory;Number to send test SMS to
                 smscontent;string;mandatory;Contains sms
-                smssender;string;mandatory;Contains sms SENDER
+                smsfrom;string;mandatory;Contains sms FROM value
 
  * @output      success;boolean;Result status of sending test SMS
 */
@@ -17,15 +17,21 @@ DEF VAR pcSender     AS CHARACTER NO-UNDO.
 DEF VAR pcReqList    AS CHARACTER NO-UNDO. 
 DEF VAR liLoop       AS INTEGER   NO-UNDO.
 DEF VAR pcStruct     AS CHARACTER NO-UNDO. 
+DEF VAR lcReplaceTxt AS CHARACTER NO-UNDO. 
 
-gcBrand = "1".
+ASSIGN
+   gcBrand      = "1"
+   lcReplaceTxt = "@yoigo.com" /* Replace value for #SENDER tag */
+   pcSender     = "800622800".
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+/*pcReqList = validate_request(pcStruct,
+           "clinmbr!,smscontent!,smsfrom!").*/
 pcReqList = validate_request(pcStruct,
-           "clinmbr!,smscontent!,smssender!").
+           "clinmbr!,smscontent!").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
       
 ASSIGN      
@@ -33,17 +39,20 @@ ASSIGN
                   WHEN LOOKUP("clinmbr", pcReqList) > 0
    pcSmsContent = get_string(pcStruct, "smscontent")
                   WHEN LOOKUP("smscontent", pcReqList) > 0
-   pcSender     = get_string(pcStruct, "smssender")
-                  WHEN LOOKUP("smssender", pcReqList) > 0.
+   /*pcSender     = get_string(pcStruct, "smsfrom")
+                  WHEN LOOKUP("smsfrom", pcReqList) > 0*/.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 FIND MobSub NO-LOCK WHERE
-     MobSub.Brand = gcBrand AND
-     Mobsub.CLI   = pcCLI NO-ERROR.
+     MobSub.Brand EQ gcBrand AND
+     Mobsub.CLI   EQ pcCLI NO-ERROR.
 IF NOT AVAIL MobSub THEN
    RETURN appl_err("Requested subscriber not found ").
-   
+IF INDEX(pcSmsContent,"#SENDER") > 0 THEN 
+DO:
+   pcSmsContent = REPLACE(pcSmsContent,"#SENDER",lcReplaceTxt).
+END.   
 /* Sending test SMS */
 RUN pSendTestSMS IN THIS-PROCEDURE (MobSub.MsSeq,
                  pcSmsContent,    /* SMSText */
