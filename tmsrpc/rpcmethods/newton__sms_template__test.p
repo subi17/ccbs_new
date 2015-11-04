@@ -29,12 +29,13 @@ pcReqList = validate_request(pcStruct,
            "clinmbr!,smscontent!,smssender!").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
       
-pcCLI        = get_string(pcStruct, "clinmbr")
-               WHEN LOOKUP("clinmbr", pcReqList) > 0.
-pcSmsContent = get_string(pcStruct, "smscontent")
-               WHEN LOOKUP("smscontent", pcReqList) > 0.
-pcSender     = get_string(pcStruct, "smssender")
-               WHEN LOOKUP("smssender", pcReqList) > 0.
+ASSIGN      
+   pcCLI        = get_string(pcStruct, "clinmbr")
+                  WHEN LOOKUP("clinmbr", pcReqList) > 0
+   pcSmsContent = get_string(pcStruct, "smscontent")
+                  WHEN LOOKUP("smscontent", pcReqList) > 0
+   pcSender     = get_string(pcStruct, "smssender")
+                  WHEN LOOKUP("smssender", pcReqList) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
