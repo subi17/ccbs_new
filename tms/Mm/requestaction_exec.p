@@ -45,6 +45,7 @@ DEF VAR lcResult     AS CHAR NO-UNDO.
 DEF VAR lhRequest    AS HANDLE NO-UNDO.
 
 DEF BUFFER bOrigRequest FOR MsRequest.
+DEF BUFFER bOrder       FOR Order.
 
 
 /****** Main start **********/
@@ -186,11 +187,6 @@ PROCEDURE pPeriodicalContract:
    DEF VAR ldePenalty AS DEC NO-UNDO. 
    DEF VAR lcPerContractIDs AS CHAR NO-UNDO. 
    DEF VAR llFound AS LOG NO-UNDO.
-   DEF VAR ldaReqCreDate       AS DATE    NO-UNDO.
-   DEF VAR liiReqCreDate       AS INTEGER NO-UNDO.
-   DEF VAR ldaRenewCreDate     AS DATE    NO-UNDO.
-   DEF VAR liiRenewCreDate     AS INTEGER NO-UNDO.
-   DEF VAR lbolSTCRenewSameDay AS LOGICAL NO-UNDO.   
 
    DEF BUFFER bBundleRequest  FOR MsRequest.
    DEF BUFFER bBundleContract FOR DayCampaign.
@@ -336,24 +332,34 @@ PROCEDURE pPeriodicalContract:
                          OrderAction.OrderId  = Order.OrderId AND
                          OrderAction.ItemType = "ExcludeTermPenalty" NO-LOCK)
       THEN llCreateFees = FALSE.
+      lbolSTCRenewSameDay = FALSE.
       IF bOrigRequest.ReqIParam5 EQ 2 AND
       (bOrigRequest.Reqtype EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR 
-       bOrigRequest.Reqtype EQ {&REQTYPE_BUNDLE_CHANGE}) AND
-      AVAILABLE(Order) THEN
-      DO:
-         llCreateFees = NO.
-         /* Get STC creation date */
-         fSplitTS(bOrigRequest.CreStamp,ldaReqCreDate,liiReqCreDate).
-         /* Get Renewal order creation date */
-         fSplitTS(Order.CrStamp,ldaRenewCreDate,liiRenewCreDate).
-         /* Don't charge penalty when: YDR-2035
-           STC is requested on the same day of the renewal order AND
-           New type is POSTPAID */
-         IF ldaReqCreDate EQ ldaRenewCreDate AND
-         bOrigRequest.reqcparam2 BEGINS "cont" /* POSTPAID */ THEN
-            lbolSTCRenewSameDay = TRUE.
-         ELSE
-            lbolSTCRenewSameDay = FALSE.
+       bOrigRequest.Reqtype EQ {&REQTYPE_BUNDLE_CHANGE}) THEN
+      DO:         
+         /* YDR-2038 */
+         llCreateFees = FALSE.
+         /*
+          Find a renewal order that was created in the same date as
+          the STC request
+         */
+         FIND FIRST bOrder NO-LOCK WHERE
+                    bOrder.OrderType EQ 
+                    {&ORDER_TYPE_RENEWAL} AND
+                    TRUNCATE(bOrder.CrStamp,0) EQ 
+                    TRUNCATE(bOrigRequest.CreStamp,0)
+         NO-ERROR.
+         IF AVAILABLE(bOrder) THEN
+         DO:
+            /* YDR-2035
+              Don't charge penalty when:
+              STC is requested on the same day of the renewal order AND
+              New type is POSTPAID */
+            IF bOrigRequest.reqcparam2 BEGINS "cont" /* POSTPAID */ THEN
+               lbolSTCRenewSameDay = TRUE.
+            ELSE
+               lbolSTCRenewSameDay = FALSE.
+         END. /* IF AVAILABLE(bOrder) */
       END. /* IF bOrigRequest.ReqIParam5 EQ 2 ... */
       /* YPR-1763 - Exclude PayTerm termination */
       IF AVAIL Order AND DayCampaign.DCType = "5" AND
@@ -372,7 +378,7 @@ PROCEDURE pPeriodicalContract:
       IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN DO:
 
          llFound = FALSE.
-         FOR EACH bDCCLI WHERE 
+         FOR EACH bDCCLI WHERE
                   bDCCLI.Brand   = gcBrand AND
                   bDCCLI.DCEvent = ttAction.ActionKey AND
                   bDCCLI.MsSeq   = liMsSeq AND
@@ -384,7 +390,7 @@ PROCEDURE pPeriodicalContract:
             END.
             llFound = TRUE.          
             IF NOT(DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} AND
-            lbolSTCRenewSameDay) THEN /* POSTPAID subscription */ 
+                   lbolSTCRenewSameDay) THEN
             DO:            
                liRequest = fPCActionRequest(liMsSeq,
                                            ttAction.ActionKey,
@@ -399,8 +405,8 @@ PROCEDURE pPeriodicalContract:
                                            0,
                                            bDCCLI.PerContractId,
                                            OUTPUT lcResult).
-            END.
-         END.
+            END. /* IF NOT(DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} */
+         END. /* FOR EACH bDCCLI */
          IF NOT llFound THEN RETURN.
       END.
       ELSE liRequest = fPCActionRequest(liMsSeq,
