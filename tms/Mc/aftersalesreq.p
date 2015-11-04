@@ -46,6 +46,7 @@ DEFINE VARIABLE lcError AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liRequest AS INTEGER NO-UNDO.
 
 DEF BUFFER bACCRequest FOR MsRequest.
+DEF BUFFER bMobSub FOR MobSub.
 
 FIND MSRequest WHERE 
      MSRequest.MSRequest = iiMSRequest
@@ -216,23 +217,18 @@ RUN createcustomer.p(INPUT Order.OrderId,1,FALSE,output oiCustomer).
 
 /* update corporate customer contact data */
 IF OrderCustomer.CustID = "CIF" THEN DO:
-   
+
    FOR EACH OrderCustomer NO-LOCK WHERE
             OrderCustomer.Brand   = gcBrand   AND
             OrderCustomer.OrderID = Order.OrderID AND
-            LOOKUP(STRING(OrderCustomer.RowType),"1,5") > 0:
-
-      /* Create contact data for corporate customers */
-      
-      IF OrderCustomer.RowType = 1 AND
-         OrderCustomer.DataChecked = FALSE THEN NEXT.
+            OrderCustomer.RowType = 5:
 
       RUN createcustcontact.p(
           Order.OrderId,
           MsRequest.Custnum,
           OrderCustomer.RowType,
           OUTPUT lcError).
-   
+
       /* write possible error to an order memo */
       IF lcError > "" THEN DO:
          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -244,6 +240,7 @@ IF OrderCustomer.CustID = "CIF" THEN DO:
       END.
    END.
 END.
+
 
 /* ICC change required, if new ICC is specified */
 IF Order.OrderType = 2 AND Order.ICC > "" AND
