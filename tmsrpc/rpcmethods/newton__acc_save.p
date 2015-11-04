@@ -13,7 +13,7 @@
             fname;string;mandatory;
             lname;string;mandatory;
             street;string;mandatory;
-     	      city;string;mandatory;
+            city;string;mandatory;
             region;string;mandatory;
             zip;string;mandatory;
             language;string;mandatory;
@@ -24,7 +24,7 @@
             company_name;string;optional;
             coname;string;optional;
             bankaccount;string;optional;
-	         country;string;optional;
+            country;string;optional;
             email;string;optional;
             sms_number;string;optional;
             company_name;string;optional;
