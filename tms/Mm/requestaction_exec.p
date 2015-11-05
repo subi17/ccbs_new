@@ -44,6 +44,8 @@ DEF VAR lcResult     AS CHAR NO-UNDO.
 
 DEF VAR lhRequest    AS HANDLE NO-UNDO.
 
+DEF VAR lbolSTCRenewSameDay AS LOGICAL NO-UNDO.
+
 DEF BUFFER bOrigRequest FOR MsRequest.
 DEF BUFFER bOrder       FOR Order.
 
@@ -343,11 +345,12 @@ PROCEDURE pPeriodicalContract:
           Find a renewal order that was created in the same date as
           the STC request
          */
-         FIND FIRST bOrder NO-LOCK WHERE
-                    bOrder.OrderType EQ 
-                    {&ORDER_TYPE_RENEWAL} AND
-                    TRUNCATE(bOrder.CrStamp,0) EQ 
-                    TRUNCATE(bOrigRequest.CreStamp,0)
+         FIND FIRST /* Stamp INDEX */
+            bOrder NO-LOCK WHERE
+            bOrder.Brand EQ gcBrand AND
+            TRUNCATE(bOrder.CrStamp,0) EQ TRUNCATE(bOrigRequest.CreStamp,0) AND
+            Order.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
+            Order.MSSeq EQ bOrigRequest.MsSeq
          NO-ERROR.
          IF AVAILABLE(bOrder) THEN
          DO:
