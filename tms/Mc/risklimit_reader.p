@@ -28,13 +28,14 @@ END.
 DEF VAR lcIncDir        AS CHAR NO-UNDO.
 DEF VAR lcProcDir       AS CHAR NO-UNDO.
 DEF VAR lcSpoolDir      AS CHAR NO-UNDO.
-DEF VAR lcLogDir       AS CHAR NO-UNDO.
+DEF VAR lcLogDir        AS CHAR NO-UNDO.
 DEF VAR lcFileName      AS CHAR NO-UNDO.
 DEF VAR lcInputFile     AS CHAR NO-UNDO.
 DEF VAR lcLine          AS CHAR NO-UNDO.
 DEF VAR lcSep           AS CHAR NO-UNDO.
 DEF VAR lcLogFile       AS CHAR NO-UNDO.
-DEF VAR liEntries       AS INT  NO-UNDO. 
+DEF VAR lcMoveProc      AS CHAR NO-UNDO.
+DEF VAR lcMoveLog       AS CHAR NO-UNDO.
 
 ASSIGN
    lcIncDir   = fCParam("RiskLimit","IncDir")
@@ -85,24 +86,26 @@ REPEAT:
 
       IMPORT STREAM sIn UNFORMATTED lcLine.
 
-      IF lcLine EQ "" THEN NEXT.
-
+      IF NUM-ENTRIES(lcLine,lcSep) NE 2 THEN DO:
+         fError("Incorrect input data format").
+         NEXT.
+      END.
+message lcLine view-as alert-box.
       FIND FIRST Limit EXCLUSIVE-LOCK WHERE
                  Limit.CustNum   = INT(ENTRY(1,lcLine,lcSep)) AND
-                 limit.LimitType = 5 /* {&LIMIT_TYPE_RISKLIMIT} */
+                 Limit.LimitType = 5 /* {&LIMIT_TYPE_RISKLIMIT} */
                  NO-ERROR.   
       IF AVAILABLE Limit THEN
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhLimit).
       ELSE CREATE Limit.
 
       ASSIGN
-         liEntries       = NUM-ENTRIES(lcLine,lcSep)
          Limit.CustNum   = INT(ENTRY(1,lcLine,lcSep))
          Limit.LimitAmt  = DEC(ENTRY(2,lcLine,lcSep))
          Limit.LimitType = 5  /* {&LIMIT_TYPE_RISKLIMIT} */
          Limit.FromDate  = TODAY.
 
-      IF ERROR-STATUS:ERROR OR liEntries NE 2 THEN DO:
+      IF ERROR-STATUS:ERROR THEN DO:
          fError("Incorrect input data format").
          NEXT.
       END.
@@ -119,8 +122,8 @@ REPEAT:
    INPUT STREAM sIn CLOSE.
    OUTPUT STREAM sLog CLOSE.
 
-   fMove2TransDir(lcInputFile, "", lcProcDir).
-   fMove2TransDir(lcLogFile, "", lcLogDir).
+   /* lcMoveProc = fMove2TransDir(lcInputFile, "", lcProcDir). */
+   lcMoveLog  = fMove2TransDir(lcLogFile, "", lcLogDir).
 
 END.
 
