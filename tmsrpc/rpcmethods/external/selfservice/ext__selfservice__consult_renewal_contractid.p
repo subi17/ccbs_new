@@ -110,8 +110,8 @@ FOR EACH Order WHERE
 
    lcReplaceText = lcReplaceText +
                    (IF lcReplaceText > "" THEN " - " ELSE "") +
-                   Order.ContractID + ", " + STRING(ldOrderDate) +
-                   ", del " + Order.CLI.
+                   Order.ContractID + ", del " + STRING(ldOrderDate) +
+                   ", del número " + Order.CLI.
 
 END. /* FOR EACH Order WHERE */
 
@@ -147,7 +147,7 @@ IF pcDelType = "SMS" THEN DO:
                   9,
                   lcSMSText,
                   ldeOrderStamp,
-                  "622622622",
+                  "Yoigo info",
                   "").
 
 END. /* IF pcDelType = "SMS" THEN DO: */
