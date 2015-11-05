@@ -120,6 +120,7 @@ DEF VAR liDelType       AS INT NO-UNDO.
 DEF BUFFER bNewCust     FOR Customer.
 DEF BUFFER bCustomer    FOR Customer.
 DEF BUFFER bCurrentCust FOR Customer.
+DEF BUFFER bMobSub      FOR MobSub.
 
 FORM
 
@@ -611,15 +612,9 @@ FUNCTION fCopyCustData RETURNS LOGICAL
       lcNewFirst       = ""
       lcNewLast        = ""
       lcNewSurname2    = ""
-      lcNewTitle       = "".
-
-      FIND FIRST CustContact WHERE 
-                 CustContact.Brand = gcBrand AND
-                 CustContact.Custnum = bNewCust.Custnum AND
-                 CustContact.CustType = 1 NO-LOCK NO-ERROR.
-      IF AVAIL CustContact THEN ASSIGN
-         lcCIFAgrCustIDType = CustContact.CustIdType
-         lcCIFAgrCustID = CustContact.OrgId.
+      lcNewTitle       = ""
+      lcCIFAgrCustIDType = ibCopyFrom.AuthCustIdType
+      lcCIFAgrCustID     = ibCopyFrom.AuthCustId.
    END.
    ELSE ASSIGN 
       lcNewCompanyname = ""
@@ -1300,7 +1295,12 @@ PROCEDURE pUpdateNewOwner:
                  bNewCust.Roles NE "inactive" NO-LOCK NO-ERROR.
                     
       IF AVAIL bNewCust AND bNewCust.CustNum NE liNewCust1 THEN DO: 
-         fCopyCustData (BUFFER bNewCust).
+         IF CAN-FIND(FIRST bMobSub WHERE
+                           bMobSub.Brand     = gcBrand AND
+                           bMobSub.MsSeq    <> MobSub.MsSeq AND
+                           bMobSub.CustNum   = bNewCust.CustNum AND
+                           bMobSub.PayType   = FALSE) THEN
+            fCopyCustData (BUFFER bNewCust).
          llReady = TRUE.
       END.
          
@@ -1522,6 +1522,8 @@ PROCEDURE pUpdateNewOwner:
                 
          APPLY LASTKEY.                              
       END. 
+
+
 
       IF (lcNewCustIdType NE "CIF" AND ldaNewBirthday >
           DATE(MONTH(TODAY), DAY(TODAY), YEAR(TODAY) - 18)) OR

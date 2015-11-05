@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------------
   MODULE .......: dms_create_file_start1.p
-  TASK .........: Create DMS file with short time period.
+  TASK .........: Create DMS casefile.
                   Module reads events from previous run time time to
                   module start time -1 minute.             
   APPLICATION ..: tms
@@ -80,12 +80,14 @@ END.
 ldPreviousEndTS = ActionLog.ActionTS.
 ldCollPeriodStartTS = ldPreviousEndTS.
 ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60).
-/*make actual file creation operations*/
-/*DMS_CASE_TYPE_ID_ORDER_RESTUDY "2"*/
-/*DMS_CASE_TYPE_ID_COMPANY "3"*/
-RUN dms_create_docfile.p(SUBST("&1,&2", 
-                       {&DMS_CASE_TYPE_ID_ORDER_RESTUDY},
-                       {&DMS_CASE_TYPE_ID_COMPANY}),
+
+RUN dms_create_docfile.p(SUBST("&1,&2,&3,&4,&5,&6",
+                          {&DMS_CASE_TYPE_ID_ORDER_ACT},
+                          {&DMS_CASE_TYPE_ID_ORDER_RESTUDY},
+                          {&DMS_CASE_TYPE_ID_COMPANY},
+                          {&DMS_CASE_TYPE_ID_ORDER_VFR},
+                          {&DMS_CASE_TYPE_ID_DIRECT_CH},
+                          {&DMS_CASE_TYPE_ID_CANCEL}),
                        ldCollPeriodStartTS, 
                        ldCollPeriodEndTS, lcCaseFile, lcLogFile).
 /* Move the file to Transfer directory */
