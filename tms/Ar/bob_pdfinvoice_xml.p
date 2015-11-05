@@ -229,7 +229,8 @@ PROCEDURE pSendActiveMQMessage:
 
 DEF VAR lcXMLInput   AS CHAR NO-UNDO INITIAL "". 
 DEF VAR lcPDFOutput  AS CHAR NO-UNDO INITIAL "". 
-DEF VAR llgRecursive AS CHAR NO-UNDO INITIAL "". 
+DEF VAR llgRecursive AS CHAR NO-UNDO INITIAL "".
+DEF VAR llgMultiFile AS CHAR NO-UNDO INITIAL "".
 DEF VAR lcFeedBackID AS CHAR NO-UNDO INITIAL "".
 DEF VAR lcType       AS CHAR NO-UNDO INITIAL "".
 DEF VAR lcProcess    AS CHAR NO-UNDO INITIAL "". 
@@ -238,7 +239,8 @@ DEF VAR llgHandled   AS LOG  NO-UNDO.
    ASSIGN 
      lcXMLInput   = lcFinalFol
      lcPDFOutput  = lcPDFFile 
-     llgRecursive = "true"
+     llgRecursive = "false"
+     llgMultiFile = "false"
      lcFeedbackID = ""  /* tar will be created with input folder name */
      lcType       = "invoice"
      lcProcess    = "bobtool".
@@ -264,6 +266,7 @@ DEF VAR llgHandled   AS LOG  NO-UNDO.
    lcMessage = "~{" + "~"input_file~""       + "~:" + "~"" + lcXMLInput   + "~"" + "," +
                       "~"output_file_name~"" + "~:" + "~"" + lcPDFOutput  + "~"" + "," +
                       "~"recursive~""        + "~:" +        llgRecursive        + "," +
+                      "~"multi_file~""       + "~:" +        llgMultiFile        + "," +
                       "~"feedback_id~""      + "~:" + "~"" + lcFeedbackID + "~"" + "," +
                       "~"type~""             + "~:" + "~"" + lcType       + "~"" + "," +
                       "~"process~""          + "~:" + "~"" + lcProcess    + "~"" + "~}".
