@@ -10,10 +10,9 @@
 {commali.i}
 {tmsconst.i}
 
-DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO.
-DEF INPUT PARAM iiCustType AS INT NO-UNDO.
+DEF INPUT PARAMETER iiCustNum  AS INT NO-UNDO.
+DEF INPUT PARAMETER iiCustType AS INT NO-UNDO.
 
-DEFINE VARIABLE lcLabel AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcLanguage AS CHARACTER NO-UNDO. 
 
 FIND Customer WHERE Customer.CustNum = iiCustNum NO-LOCK.
@@ -23,18 +22,13 @@ IF NOT AVAIL Customer THEN DO:
 END.
       
 FIND CustContact WHERE
-    CustContact.Brand = gcBrand AND
-    CustContact.Custnum = Customer.Custnum AND
-    CustContact.CustType = iiCustType NO-LOCK NO-ERROR.
+     CustContact.Brand = gcBrand AND
+     CustContact.Custnum = Customer.Custnum AND
+     CustContact.CustType = iiCustType NO-LOCK NO-ERROR.
 
 IF NOT AVAIL CustContact THEN DO:
    MESSAGE ({&MSG_DATA_NOT_FOUND}) VIEW-AS ALERT-BOX.
    RETURN.
-END.
-
-CASE iiCustType:
-   WHEN {&CUSTCONTACT_REPRESENTATIVE} THEN lcLabel = "REPRESENTATIVE PERSON".
-   WHEN {&CUSTCONTACT_CONTACT} THEN lcLabel = "CONTACT PERSON".
 END.
    
 FIND Language WHERE Language.Language = CustContact.Language 
@@ -60,7 +54,7 @@ FORM
    CustContact.Language    LABEL "Language" COLON 15  lcLanguage NO-LABEL SKIP
 
    WITH ROW 3 OVERLAY SIDE-LABELS CENTERED 
-        TITLE " " + lcLabel + ", CUSTOMER " + STRING(iiCustNum) + " " 
+        TITLE " CONTACT PERSON, CUSTOMER " + STRING(iiCustNum) + " " 
         FRAME fCustContact.
 
 VIEW FRAME fCustContact.

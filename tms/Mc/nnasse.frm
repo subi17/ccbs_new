@@ -111,14 +111,20 @@
      SPACE(0)
   lcCustAddress  
      NO-LABEL 
-     FORMAT "X(62)"
+     FORMAT "X(30)"
+   Customer.AuthCustIdType AT 46
+     LABEL "Authorized Type"
      SKIP
+
   "Zip Code ...:"
      SPACE(0) 
      llDelNote[5] NO-LABEL
      SPACE(0)
   lcCustZipCode   NO-LABEL 
-     SKIP    
+  Customer.AuthCustId AT 46
+     LABEL "Authorized ID"
+     SKIP
+
   "City ...... :"
      SPACE(0) 
      llDelNote[6] NO-LABEL

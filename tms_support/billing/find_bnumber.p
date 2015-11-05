@@ -1,4 +1,5 @@
 DEF var /* INPUT PARAMETER */ idtDate    AS DATE NO-UNDO FORMAT "99-99-9999" INIT TODAY.
+DEF var /* INPUT PARAMETER */ idtToDate  AS DATE NO-UNDO FORMAT "99-99-9999" INIT TODAY.
 DEF var /* INPUT PARAMETER */ icBnumber  AS CHAR NO-UNDO FORMAT "X(12)" INIT "".
 DEF VAR /* INPUT PARAMETER */ iiRateccn  AS INT  NO-UNDO.
 DEF VAR                       bsuunta    LIKE Bdest.bdest NO-UNDO.
@@ -6,7 +7,9 @@ DEF VAR                       paytype    LIKE MobSub.PayType NO-UNDO.
 DEF VAR                       rateid     LIKE Mobcdr.TariffNum NO-UNDO INIT 0.
 DEF VAR                       llFound    AS LOG  NO-UNDO.
 
-IF idtdate = TODAY THEN idtdate = TODAY - 200.
+IF idtdate = TODAY THEN idtdate = TODAY - 200.  /* From date is in initial value */
+IF idtdate > idtToDate THEN idtToDate = TODAY.  /* to date Smaller than from date. Initialize */
+IF idtdate > idtToDate THEN idtdate = TODAY - 200. /* From date bigger than to date. Initialize */
 llFound = FALSE.
 
 MAIN_LOOP:
@@ -17,16 +20,17 @@ DO WHILE TRUE
    IF RETRY THEN LEAVE.
 
    UPDATE 
-   idtdate   LABEL "Alkaen päivästä"
-   icBNumber LABEL "B-numero alkaen"
-   iiRateCCN LABEL "CC"
-   bsuunta   COLUMN-LABEL "B-suunta" SKIP
-   paytype   LABEL "Paytype" 
-   rateid    LABEL "Rate ID".
+   idtdate        LABEL "Start day"
+   icBNumber      LABEL "B-number starting"
+   iiRateCCN      LABEL "CC"
+   bsuunta        COLUMN-LABEL "B-destination" SKIP
+   idtToDate      LABEL "End day"
+   paytype        LABEL "Paytype" 
+   rateid   AT 30 COLUMN-LABEL "Rate ID".
 
    DEF VAR lddate AS DATE NO-UNDO.
 
-   DO lddate = idtdate TO TODAY:
+   DO lddate = idtdate TO idtToDate:
 
       IF icbnumber NE ""  THEN DO:
 

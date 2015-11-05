@@ -1,0 +1,19 @@
+ADD FIELD "AuthCustIdType" OF "Customer" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "AuthCustIdType"
+  MAX-WIDTH 16
+  COLUMN-LABEL "AuthCustIdType"
+  HELP "Authorization Cistomer ID Type"
+  ORDER 1570
+
+ADD FIELD "AuthCustId" OF "Customer" AS character
+  FORMAT "x(11)"
+  INITIAL ""
+  LABEL "AuthCustId"
+  MAX-WIDTH 22
+  COLUMN-LABEL "AuthCustId"
+  HELP "Authorization Customer ID"
+  ORDER 1580
+
+

@@ -326,6 +326,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                                        FALSE,
                                        FALSE,
                                        FALSE, /* extend terminal contract */
+                                       "", 
                                        OUTPUT lcError).
 
       IF liCreated > 0 THEN 
