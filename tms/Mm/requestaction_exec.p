@@ -349,8 +349,8 @@ PROCEDURE pPeriodicalContract:
             bOrder NO-LOCK WHERE
             bOrder.Brand EQ gcBrand AND
             TRUNCATE(bOrder.CrStamp,0) EQ TRUNCATE(bOrigRequest.CreStamp,0) AND
-            Order.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
-            Order.MSSeq EQ bOrigRequest.MsSeq
+            bOrder.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
+            bOrder.MSSeq EQ bOrigRequest.MsSeq
          NO-ERROR.
          IF AVAILABLE(bOrder) THEN
          DO:
