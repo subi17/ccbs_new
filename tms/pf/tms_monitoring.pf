@@ -1,43 +1,43 @@
 -db common
 #-H hebe.int.asp.qvantel.net
 #-S common
--H flora.int.asp.qvantel.net
+-H pallas.int.asp.qvantel.net
 -S pcommonrepl
 
 -db ordercanal
--H flora.int.asp.qvantel.net
+-H pallas.int.asp.qvantel.net
 -S pordercanalrepl
 
 -db mobile
--H flora.int.asp.qvantel.net
+-H pallas.int.asp.qvantel.net
 -S pmobilerepl
 
--db mcdr15q1
--H flora.int.asp.qvantel.net
--S pmcdr15q1repl
--ld mcdr
+#-db mcdr15q2
+#-H pallas.int.asp.qvantel.net
+#-S pmcdr15q2repl
+#-ld mcdr
 
 -db star
--H flora.int.asp.qvantel.net
+-H pallas.int.asp.qvantel.net
 -S pstarrepl
 
--db mcdrdtl15q1
--H flora.int.asp.qvantel.net
--S pmcdrdtl15q1repl
--ld mcdrdtl
+#-db mcdrdtl15q2
+#-H pallas.int.asp.qvantel.net
+#-S pmcdrdtl15q2repl
+#-ld mcdrdtl
 
--db roamcdr15q1
--H flora.int.asp.qvantel.net
--S proamcdr15q1repl
--ld roamcdr
+#-db roamcdr15q2
+#-H pallas.int.asp.qvantel.net
+#-S proamcdr15q2repl
+#-ld roamcdr
 
--db prepcdr15q1
--H flora.int.asp.qvantel.net
--S pprepcdr15q1repl
--ld prepcdr
+#-db prepcdr15q2
+#-H pallas.int.asp.qvantel.net
+#-S pprepcdr15q2repl
+#-ld prepcdr
 
 -db counter
--H flora.int.asp.qvantel.net
+-H pallas.int.asp.qvantel.net
 -S pcounterrepl
 
 -h 13
