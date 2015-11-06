@@ -817,7 +817,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
          
       END.
 
-      IF NOT llSalesInv THEN DO:
+      IF NOT llSalesInv AND AVAIL ttRow THEN DO:
          IF ttRow.BillCode = "RVTERM1EF" THEN
             ttRow.BankCode = {&TF_BANK_UNOE}.
          ELSE IF ttRow.BillCode = "RVTERMBSF" THEN

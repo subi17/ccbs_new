@@ -139,18 +139,9 @@ add_string(top_struct, "phone_number", Customer.Phone).
 add_int(top_struct, "new_subscription_grouping", Customer.InvoiceTargetRule).
 /* orgId can also hold the birthday of a user or payer */
 IF Customer.CustIdType = "CIF" THEN DO:
-   
-   FIND CustContact NO-LOCK WHERE
-      CustContact.Brand = gcBrand AND
-      CustContact.CustNum = Customer.Custnum AND
-      CustContact.CustType = {&CUSTCONTACT_REPRESENTATIVE} NO-ERROR.
-   
-   IF AVAIL CustContact THEN DO:
-      add_string(top_struct, "id_type", CustContact.CustidType).
-      add_string(top_struct, "person_id", CustContact.OrgId).
-   END.
+   add_string(top_struct, "id_type", Customer.AuthCustIdType).
+   add_string(top_struct, "person_id", Customer.AuthCustId).
    add_string(top_struct, "company_id", Customer.orgId).
-
 END.   
 ELSE DO:
    add_string(top_struct, "person_id", Customer.orgId).
