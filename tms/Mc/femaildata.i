@@ -1268,13 +1268,16 @@ PROCEDURE pGetUPSHOURS:
    DEF VAR lcUPSHours    AS CHAR NO-UNDO.
    DEF VAR lcErr         AS CHAR NO-UNDO.
    DEF VAR liCount       AS INT  NO-UNDO.
+   DEF VAR liTimeCount   AS INT  NO-UNDO.
    DEF VAR lcDailyHours  AS CHAR NO-UNDO.
+   DEF VAR lcTempHours   AS CHAR NO-UNDO.
    DEF VAR lcDay         AS CHAR NO-UNDO.
    DEF VAR lcHours       AS CHAR NO-UNDO.
    DEF VAR lcHoursText   AS CHAR NO-UNDO.
    DEF VAR lcOpenHour    AS CHAR NO-UNDO.
    DEF VAR lcCloseHour   AS CHAR NO-UNDO.
    DEF VAR lcUseEntries  AS CHAR NO-UNDO.
+   DEF VAR lcDayList     AS CHAR NO-UNDO INIT "L a V|Lun|Mar|Mie|Jue|Vie|Sab|Dom|Vacaciones".
 
    DEF BUFFER OrderAction FOR OrderAction.
 
@@ -1285,50 +1288,58 @@ PROCEDURE pGetUPSHOURS:
               OrderAction.OrderId  = iiOrderNBR AND
               OrderAction.ItemType = "UPSHours" NO-ERROR.
    IF NOT AVAIL OrderAction THEN RETURN.
-   FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand = gcBrand AND
-              OrderCustomer.OrderId = iiOrderNBR AND
-              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY} NO-ERROR.
 
    /* Check that includes at least separator characters */
-   IF INDEX(OrderAction.ItemKey,";") > 0 AND
-      INDEX(OrderAction.ItemKey,":") > 0 THEN DO:
+   IF INDEX(OrderAction.ItemKey,";") > 0 THEN DO:
          lcUPSHours = "Podrás recoger el pedido en:<br /><b>".
-         lcUPSHours = lcUPSHours + OrderCustomer.company + "</b> " +
-                      OrderCustomer.address + " " +
-                      OrderCustomer.ZipCode + " " +
-                      OrderCustomer.postoffice + "<br /><br />" +
+         lcUPSHours = lcUPSHours + DeliveryCustomer.company + "</b> " +
+                      DeliveryCustomer.address + " " +
+                      DeliveryCustomer.ZipCode + " " +
+                      DeliveryCustomer.postoffice + "<br /><br />" +
                       "<b>Horarios:</b><br />".
-      IF OrderCustomer.deltype = 2 THEN DO:
+      IF DeliveryCustomer.deltype = 2 THEN DO:
          DO liCount = 2 TO NUM-ENTRIES(OrderAction.ItemKey,";"):
             lcUseEntries = lcUseEntries + STRING(liCount) + "|".
          END.
       END.
-      ELSE IF OrderCustomer.deltype = 4 THEN DO:
+      ELSE IF DeliveryCustomer.deltype = 4 THEN DO:
          /* valid itemkey should have at least 8 entries */
-         IF NUM-ENTRIES(lcTestKey,";") >= 8 THEN
+         IF NUM-ENTRIES(OrderAction.itemKey,";") >= 8 THEN
             lcUseEntries = "1|7|8".
       END.
       lcUseEntries = RIGHT-TRIM(lcUseEntries,"|"). /* remove last separator */
+      /* get needed visible days */
       DO liCount = 1 TO NUM-ENTRIES(lcUseEntries,"|"):
+         lcHoursText = "".
          lcDailyHours = ENTRY(INT(ENTRY(liCount,lcUseEntries,"|")),
                         OrderAction.ItemKey,";").
          /*remove possible extra ; */
          lcDailyHours = LEFT-TRIM(lcDailyHours, ";").
-         IF INDEX(lcDailyHours,":") > 0 THEN DO:
-            lcDay = ENTRY(1,lcDailyHours,":").
-            lcHours = ENTRY(2,lcDailyHours,":").
-            IF INDEX(lcHours,"-") > 0 AND
-               INDEX(lcDay,"Vacaciones") = 0 THEN DO: /* open times exists */
-               lcOpenHour = REPLACE(ENTRY(1,lcHours,"-"),"h",":").
-               lcCloseHour = REPLACE(ENTRY(2,lcHours,"-"),"h",":").
-               lcHoursText = "De" + lcOpenHour + " a " + lcCloseHour.
+         /* handle several times for day */
+         DO liTimeCount = 1 TO NUM-ENTRIES(lcDailyHours,"/"):
+            lcTempHours = ENTRY(liTimeCount,lcDailyHours,"/").
+            IF INDEX(lcTempHours,"-") > 0 AND INDEX(lcTempHours,"h") > 0 AND
+               liTimeCount < 9 THEN DO: /* open times exists */
+               lcOpenHour = REPLACE(ENTRY(1,lcTempHours,"-"),"h",":").
+               lcCloseHour = REPLACE(ENTRY(2,lcTempHours,"-"),"h",":").
+               lcHoursText = lcHoursText + "De " + lcOpenHour + " a " + 
+                             lcCloseHour + "/".
             END.
-            ELSE lcHoursText = ENTRY(2,lcDailyHours,":"). /* Closed texts */
-            lcUPSHours = lcUPSHours +
-                      "<b>" + lcDay + "</b>: " + lcHoursText +
-                      " <br /> ".
+            ELSE lcHoursText = lcDailyHours. /* Closed texts */
+            
          END.
+         lcHoursText = RIGHT-TRIM(lcHoursText,"/").
+         /* Correos need different day name syntax */
+         IF DeliveryCustomer.deltype = 4 AND 
+            INT(ENTRY(liCount,lcUseEntries,"|")) = 7 THEN 
+            lcDay = "S:".
+         ELSE IF DeliveryCustomer.deltype = 4 AND
+            INT(ENTRY(liCount,lcUseEntries,"|")) = 8 THEN
+            lcDay = "Festivos:".
+         ELSE   
+            lcDay = ENTRY(INT(ENTRY(liCount,lcUseEntries,"|")),lcDayList,"|").
+         lcUPSHours = lcUPSHours + "<b>" + lcDay + "</b>: " + lcHoursText +
+                      " <br /> ".
       END.
    END.
 
