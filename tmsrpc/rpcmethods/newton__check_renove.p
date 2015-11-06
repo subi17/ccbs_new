@@ -18,6 +18,7 @@
           id_type;string;person id type of orderer
           has_terminal;bool;terminal has been ordered before (only returned when icc parameter exists)
           number_type;string;new/mnp, only available if icc paramter is given (renove stc)
+          allowed_terminal_financing_amount;double;if risk limit is configured
  * @installment;array of installment structs;two fields insidde struct
  * @installment;struct
           installment_contract;string;active installment contract
@@ -131,6 +132,7 @@ DEF VAR sub_struct AS CHAR NO-UNDO.
 /* Local variables */
 DEF VAR lcFields AS CHARACTER NO-UNDO. 
 DEF VAR ldeCurrPen AS DEC NO-UNDO.
+DEF VAR ldeAllowedFin AS DEC NO-UNDO. 
 DEF VAR ldaLastTerminal AS DATE NO-UNDO INIT ?. 
 DEF VAR liTime AS INT NO-UNDO. 
 DEF VAR ldePrice AS DEC NO-UNDO.
@@ -490,6 +492,9 @@ IF liRemperiod > 0 THEN DO:
    add_int(top_struct, "contract_days_remain", liRemPeriod).
    add_double(top_struct, "contract_penalty", ldeCurrPen).
 END.
+
+/* add empty value for Web testing */
+add_double(top_struct, "allowed_terminal_financing_amount", ldeAllowedFin).
 
 installment_array = add_array(top_struct, "installment").
 

@@ -226,7 +226,7 @@ PROCEDURE pInitialize:
    INPUT CLOSE.
 
    CASE lcHostName:
-      WHEN "Sadira" THEN
+      WHEN "Sadira" OR WHEN "Sadachbia" THEN
          lcConfFile = "Mailconf/replog_reader_conf.dev".
       WHEN "Merak" OR WHEN "Botein" THEN
          lcConfFile = "Mailconf/replog_reader_conf.staging".
