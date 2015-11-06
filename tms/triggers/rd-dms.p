@@ -1,9 +1,9 @@
 TRIGGER PROCEDURE FOR REPLICATION-DELETE OF DMS.
 
-CREATE Common.RepLog.
+CREATE OrderCanal.RepLog.
 ASSIGN
-   Common.RepLog.RecordId  = RECID(DMS)
-   Common.RepLog.TableName = "DMS"
-   Common.RepLog.EventType = "DELETE"
-   Common.RepLog.KeyValue  = STRING(DMS.DMSID)
-   Common.RepLog.EventTS   = DATETIME(TODAY,MTIME).
+   OrderCanal.RepLog.RecordId  = RECID(DMS)
+   OrderCanal.RepLog.TableName = "DMS"
+   OrderCanal.RepLog.EventType = "DELETE"
+   OrderCanal.RepLog.KeyValue  = STRING(DMS.DMSID)
+   OrderCanal.RepLog.EventTS   = DATETIME(TODAY,MTIME).
