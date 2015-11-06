@@ -1274,6 +1274,7 @@ PROCEDURE pGetUPSHOURS:
    DEF VAR lcHoursText   AS CHAR NO-UNDO.
    DEF VAR lcOpenHour    AS CHAR NO-UNDO.
    DEF VAR lcCloseHour   AS CHAR NO-UNDO.
+   DEF VAR lcUseEntries  AS CHAR NO-UNDO.
 
    DEF BUFFER OrderAction FOR OrderAction.
 
@@ -1292,30 +1293,44 @@ PROCEDURE pGetUPSHOURS:
    /* Check that includes at least separator characters */
    IF INDEX(OrderAction.ItemKey,";") > 0 AND
       INDEX(OrderAction.ItemKey,":") > 0 THEN DO:
-      lcUPSHours = "Podrás recoger el pedido en:<br />".
-      lcUPSHours = lcUPSHours + OrderCustomer.address + "<br /><br />" +
-                   "<b>Horarios:</b><br />".
-
-      DO liCount = 1 TO NUM-ENTRIES(OrderAction.ItemKey,";"):
-         lcDailyHours = ENTRY(liCount,OrderAction.ItemKey,";").
+         lcUPSHours = "Podrás recoger el pedido en:<br /><b>".
+         lcUPSHours = lcUPSHours + OrderCustomer.company + "</b> " +
+                      OrderCustomer.address + " " +
+                      OrderCustomer.ZipCode + " " +
+                      OrderCustomer.postoffice + "<br /><br />" +
+                      "<b>Horarios:</b><br />".
+      IF OrderCustomer.deltype = 2 THEN DO:
+         DO liCount = 2 TO NUM-ENTRIES(OrderAction.ItemKey,";"):
+            lcUseEntries = lcUseEntries + STRING(liCount) + "|".
+         END.
+      END.
+      ELSE IF OrderCustomer.deltype = 4 THEN DO:
+         /* valid itemkey should have at least 8 entries */
+         IF NUM-ENTRIES(lcTestKey,";") >= 8 THEN
+            lcUseEntries = "1|7|8".
+      END.
+      lcUseEntries = RIGHT-TRIM(lcUseEntries,"|"). /* remove last separator */
+      DO liCount = 1 TO NUM-ENTRIES(lcUseEntries,"|"):
+         lcDailyHours = ENTRY(INT(ENTRY(liCount,lcUseEntries,"|")),
+                        OrderAction.ItemKey,";").
          /*remove possible extra ; */
          lcDailyHours = LEFT-TRIM(lcDailyHours, ";").
          IF INDEX(lcDailyHours,":") > 0 THEN DO:
             lcDay = ENTRY(1,lcDailyHours,":").
             lcHours = ENTRY(2,lcDailyHours,":").
-            IF INDEX(lcHours,"-") > 0 THEN DO:
+            IF INDEX(lcHours,"-") > 0 AND
+               INDEX(lcDay,"Vacaciones") = 0 THEN DO: /* open times exists */
                lcOpenHour = REPLACE(ENTRY(1,lcHours,"-"),"h",":").
                lcCloseHour = REPLACE(ENTRY(2,lcHours,"-"),"h",":").
-               lcHoursText = "De" + lcOpenHour + "a" + lcCloseHour.
+               lcHoursText = "De" + lcOpenHour + " a " + lcCloseHour.
             END.
-            ELSE lcHoursText = lcDailyHours. /* Closed */
+            ELSE lcHoursText = ENTRY(2,lcDailyHours,":"). /* Closed texts */
             lcUPSHours = lcUPSHours +
                       "<b>" + lcDay + "</b>: " + lcHoursText +
                       " <br /> ".
          END.
       END.
    END.
-
 
    lcResult = lcUPSHours.
 END. /*GetUPSHOURS*/
