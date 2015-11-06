@@ -507,6 +507,11 @@ PROCEDURE pOwnerChange:
                bNewCust.InvGroup        = fDefInvGroup(bNewCust.Region)
                                         WHEN bNewCust.Region NE "00"
                NO-ERROR.
+         
+               IF ERROR-STATUS:ERROR THEN DO:
+                  fReqError("Wrong format in new customer data").
+                  RETURN.
+               END.
 
                FIND FIRST CustomerReport WHERE
                           CustomerReport.Custnum = bNewCust.Custnum
@@ -521,11 +526,6 @@ PROCEDURE pOwnerChange:
             /* Electronic Invoice project */
             IF NUM-ENTRIES(lcDataField,";") >= 10 THEN
                lcEmail = ENTRY(10,lcDataField,";").
-         END.
-
-         IF ERROR-STATUS:ERROR THEN DO:
-            fReqError("Wrong format in new customer data").
-            RETURN.
          END.
 
          IF liReqCnt = 1 AND lcEmail > "" AND
