@@ -25,7 +25,7 @@ FOR EACH dccli NO-LOCK where
       FIND FIRST msowner where 
                  msowner.msseq = dccounter.msseq no-lock no-error.
       DISP
-      "laskuri:"
+      "Counter:"
       msowner.cli
       dccounter.dcdate
       dccounter.dcevent

@@ -592,7 +592,9 @@ DISP
    Customer.Profession lcProfession
    Customer.COName @ lcCustCOName 
    Customer.Address @ lcCustAddress 
+   Customer.AuthCustIdType WHEN Customer.CustIDType = "CIF"
    Customer.ZipCode @ lcCustZipCode 
+   Customer.AuthCustId WHEN Customer.CustIDType = "CIF"
    Customer.PostOffice @ lcCustPostOffice
    Customer.Country @ lcCustCountry lcCountry
    Customer.Region @ lcCustRegion lcRegion
@@ -617,10 +619,14 @@ DISP
    Customer.DataProtected
    WITH FRAME lis.
 
+IF Customer.CustIDType NE "CIF" THEN HIDE 
+   Customer.AuthCustIdType 
+   Customer.AuthCustId
+   IN FRAME lis.
+
    RETURN TRUE.
 
 END FUNCTION. 
-
 
 FUNCTION fDispVATUsage RETURNS LOGICAL
    (iiVATUsage AS INT).
