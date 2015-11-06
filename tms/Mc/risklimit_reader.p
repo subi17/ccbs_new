@@ -90,13 +90,14 @@ REPEAT:
          fError("Incorrect input data format").
          NEXT.
       END.
-message lcLine view-as alert-box.
+
       FIND FIRST Limit EXCLUSIVE-LOCK WHERE
                  Limit.CustNum   = INT(ENTRY(1,lcLine,lcSep)) AND
                  Limit.LimitType = 5 /* {&LIMIT_TYPE_RISKLIMIT} */
                  NO-ERROR.   
-      IF AVAILABLE Limit THEN
+      IF AVAILABLE Limit THEN DO:
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhLimit).
+      END.
       ELSE CREATE Limit.
 
       ASSIGN
