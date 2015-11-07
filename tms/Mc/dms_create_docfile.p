@@ -559,7 +559,8 @@ FUNCTION fNeededDocs RETURNS CHAR
 
    END.
    /*CASE 21,33*/
-   ELSE IF Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} THEN DO:
+   ELSE IF Order.Statuscode EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} OR
+           Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} THEN DO:
       IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
          Order.PayType EQ FALSE AND
          Order.OldPayType EQ FALSE  THEN
