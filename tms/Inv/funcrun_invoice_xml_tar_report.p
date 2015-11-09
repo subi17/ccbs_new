@@ -21,6 +21,7 @@ DEF VAR lcFile           AS CHAR NO-UNDO.
 DEF VAR ldaInvDate       AS DATE NO-UNDO.
 DEF VAR lcPHList         AS CHAR NO-UNDO.
 DEF VAR ldFrom           AS DEC  NO-UNDO.
+DEF VAR ldTo             AS DEC  NO-UNDO.
 DEF VAR lcDate           AS CHAR NO-UNDO.
 DEF VAR liFRProcessID    AS INT  NO-UNDO.
 DEF VAR liFRExecID       AS INT  NO-UNDO.
@@ -28,13 +29,17 @@ DEF VAR lcRunMode        AS CHAR NO-UNDO.
 DEF VAR liUpdateInterval AS INT  NO-UNDO.
 DEF VAR liPrinted        AS INT  NO-UNDO.
 DEF VAR liCount          AS INT  NO-UNDO.
+DEF VAR liQueueID        AS INT  NO-UNDO.   
+DEF VAR liFRCount        AS INT  NO-UNDO. 
 
 DEFINE TEMP-TABLE ttFuncRunResult NO-UNDO 
     FIELD fname AS CHARACTER 
     FIELD fsize AS DECIMAL 
     FIELD fQty  AS INTEGER 
     FIELD fMD5  AS CHARACTER.
-      
+
+DEFINE BUFFER bFuncRunResult FOR FuncRunResult.
+
 DEFINE STREAM slog.
 
 /************* Main Start ***************/
@@ -51,13 +56,16 @@ END.
 RUN pGetFuncRunProcessParameters(liFRProcessID).
 
 ASSIGN lcPHList   = fSetFuncRunCharParameter(1)
-       ldaInvDate = fSetFuncRunDateParameter(2).
+       ldaInvDate = fSetFuncRunDateParameter(2)
+       liQueueID  = fSetFuncRunIntParameter(3).
 
 ASSIGN
-   lcDate = STRING(YEAR(TODAY))       +
-            STRING(MONTH(TODAY),"99") +
-            STRING(DAY(TODAY),"99")
-            ldFrom = fmake2dt(ldaInvDate,0).
+   lcDate    = STRING(YEAR(TODAY))       +
+               STRING(MONTH(TODAY),"99") +
+               STRING(DAY(TODAY),"99")
+   ldFrom    = fmake2dt(ldaInvDate,0)
+   ldTo      = fmake2dt(TODAY,86399) 
+   liFRCount = 0.
    
 DO liCount = 1 TO NUM-ENTRIES(lcPHList):
    
@@ -69,9 +77,10 @@ DO liCount = 1 TO NUM-ENTRIES(lcPHList):
       lcFile = REPLACE(lcFile,"#YYYYMMDD",lcDate).
    
    FOR EACH  FuncRunQSchedule NO-LOCK WHERE
-             FuncRunQSchedule.RunState NE "Cancelled"   AND
-             FuncRunQSchedule.RunState NE "Initialized" AND
-             FuncRunQSchedule.StartTS >= ldFrom,
+             FuncRunQSchedule.FRQueueid = liQueueID     AND
+             FuncRunQSchedule.StartTS  >= ldFrom        AND
+             FuncRunQSchedule.StartTS  <= ldTo          AND
+             FuncRunQSchedule.RunState NE "Initialized",
         EACH FuncRunExec NO-LOCK WHERE
              FuncRunExec.Brand         EQ gcBrand AND
              FuncRunExec.FRQScheduleID EQ FuncRunQSchedule.FRQScheduleID AND
@@ -98,6 +107,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcPHList):
           BY FuncRunResult.FRResultSeq
           BY FuncRunResult.ResultOrder:
 
+
       /* FRQScheduleID cannot be used here but commented only if some other needed
       IF NOT FIRST-OF(FuncRunExec.FRQScheduleID) THEN NEXT. */
 
@@ -107,11 +117,14 @@ DO liCount = 1 TO NUM-ENTRIES(lcPHList):
          ttFuncRunResult.fsize = funcrunresult.decparam
          ttFuncRunResult.fQty  = funcrunresult.intparam
          ttFuncRunResult.fMD5  = ENTRY(2,ENTRY(2,funcrunresult.charparam," "),":").
+
    END.
    
    IF CAN-FIND(FIRST ttFuncRunResult NO-LOCK) THEN DO:
       OUTPUT STREAM slog TO VALUE(lcFile).
    
+      liFRCount = liFRCount + 1. 
+      
       lcSep = ";".
    
       PUT STREAM slog UNFORMATTED
@@ -128,6 +141,12 @@ DO liCount = 1 TO NUM-ENTRIES(lcPHList):
               ttFuncRunResult.fMD5   SKIP.
       END.
 
+      CREATE bFuncRunResult.
+      ASSIGN bFuncRunResult.FRProcessID = liFRProcessID
+             bFuncRunResult.FRExecID    = liFRExecID 
+             bFuncRunResult.FRResultSeq = liFRCount
+             bFuncRunResult.CharParam   = lcFile.     
+      
       liPrinted = liPrinted + 1. 
      
      OUTPUT STREAM slog CLOSE.
