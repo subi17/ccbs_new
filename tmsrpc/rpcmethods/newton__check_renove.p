@@ -137,19 +137,19 @@ DEF VAR ldaLastTerminal AS DATE NO-UNDO INIT ?.
 DEF VAR liTime AS INT NO-UNDO. 
 DEF VAR ldePrice AS DEC NO-UNDO.
 DEF VAR lcPriceList AS CHAR NO-UNDO.
-DEF VAR liRemPeriod AS INT NO-UNDO.
-DEF VAR llPreactivated AS LOGICAL NO-UNDO.
-DEF VAR llBarrings AS LOGICAL NO-UNDO.
-DEF VAR lcBarrComList AS CHARACTER NO-UNDO. 
-DEF VAR lcBarrStatus AS CHARACTER NO-UNDO. 
-DEF VAR llPrerenove AS LOGICAL NO-UNDO INIT FALSE.
-DEF VAR lcError AS CHAR NO-UNDO.
-DEF VAR ldePendingFee AS DECIMAL NO-UNDO. 
-DEF VAR lderesidualFee AS DECIMAL NO-UNDO. 
-DEF VAR liTotalPeriods AS INTEGER NO-UNDO. 
-DEF VAR ldePeriodFee AS DECIMAL NO-UNDO. 
-DEF VAR liConfigDays AS INT NO-UNDO.
-DEF VAR llCancelledPrerenove AS LOG NO-UNDO.
+DEF VARIABLE liRemPeriod AS INT NO-UNDO.
+DEF VARIABLE llPreactivated AS LOGICAL NO-UNDO.
+DEF VARIABLE llBarrings AS LOGICAL NO-UNDO.
+DEF VARIABLE lcBarrComList AS CHARACTER NO-UNDO. 
+DEF VARIABLE lcBarrStatus AS CHARACTER NO-UNDO. 
+DEF VARIABLE llPrerenove AS LOGICAL NO-UNDO INIT FALSE.
+DEF VARIABLE lcError AS CHAR NO-UNDO.
+DEF VARIABLE ldePendingFee AS DECIMAL NO-UNDO. 
+DEF VARIABLE lderesidualFee AS DECIMAL NO-UNDO. 
+DEF VARIABLE liTotalPeriods AS INTEGER NO-UNDO. 
+DEF VARIABLE ldePeriodFee AS DECIMAL NO-UNDO. 
+DEF VARIABLE liConfigDays AS INT NO-UNDO.
+DEF VARIABLE llCancelledPrerenove AS LOG NO-UNDO.
 DEF VAR lcFinancedInfo AS CHAR NO-UNDO. 
 DEF VAR liOrderId AS INT NO-UNDO. 
 DEF VAR liQtyTFs AS INT NO-UNDO. 
@@ -157,9 +157,11 @@ DEF VAR installment_array AS CHAR NO-UNDO.
 DEF VAR installment_struct AS CHAR NO-UNDO. 
 DEF VAR llDefBarring       AS LOG NO-UNDO. 
 DEF VAR ldtFirstDay        AS DATE NO-UNDO.
+DEF VAR ldePendingFees AS DECIMAL NO-UNDO.
 
 DEF BUFFER bServiceRequest FOR MSRequest.
 DEF BUFFER bMobSub FOR MobSub.
+DEF BUFFER bMobSubAmt FOR MobSub.
 
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 
@@ -505,7 +507,59 @@ IF liRemperiod > 0 THEN DO:
    add_double(top_struct, "contract_penalty", ldeCurrPen).
 END.
 
-/* add empty value for Web testing */
+/* q25 - Calculate allowed_terminal_financing_amount if risk limit is configured 
+   and collect all non invoiced installments and ongoing orders and return 
+   the difference of risk limit and pending all installment fee.*/
+ASSIGN ldeAllowedFin = 0
+       ldePendingFees = 0.
+
+FIND FIRST Limit NO-LOCK WHERE
+           Limit.CustNum   = Customer.Custnum AND
+           Limit.LimitType = 5 AND /* {&LIMIT_TYPE_RISKLIMIT} */
+           Limit.ToDate   >= TODAY NO-ERROR.
+IF NOT AVAILABLE Limit THEN ldeAllowedFin = ?.
+ELSE DO:
+   FOR EACH bMobSubAmt NO-LOCK WHERE
+            bMobSubAmt.Brand = gcBrand AND
+            bMobSubAmt.CustNum = Customer.CustNum,
+       EACH DCCLI NO-LOCK WHERE
+            DCCLI.MsSeq = bMobSubAmt.MsSeq AND
+            DCCLI.DCEvent BEGINS "PAYTERM" AND
+            DCCLI.ValidTo >= TODAY,
+       FIRST FixedFee NO-LOCK WHERE
+             FixedFee.Brand = gcBrand AND
+             FixedFee.Custnum = Customer.Custnum AND
+             FixedFee.HostTable = "MobSub" AND
+             FixedFee.KeyValue = STRING(bMobSubAmt.MsSeq) AND
+             FixedFee.BillCode = "PAYTERM" AND
+             FixedFee.SourceTable = "DCCLI" AND
+             FixedFee.SourceKey = STRING(DCCLI.PerContractID):
+
+      FOR EACH FFItem OF FixedFee NO-LOCK:
+         IF FFItem.Billed AND
+            CAN-FIND(FIRST Invoice WHERE
+                           Invoice.InvNum = FFItem.InvNum AND
+                           Invoice.InvType = 1) THEN NEXT.
+         ldePendingFees = ldePendingFees + FFItem.Amt.
+      END.
+
+   END.
+
+   FOR EACH Order NO-LOCK WHERE
+            Order.Brand = gcBrand AND
+            Order.CustNum = Customer.CustNum AND
+            LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0,
+      FIRST OfferItem NO-LOCK WHERE
+            OfferItem.Brand       = gcBrand AND
+            OfferItem.Offer       = Order.Offer AND
+            OfferItem.ItemType    = "PerContract" AND
+            OfferItem.ItemKey     BEGINS "PAYTERM" AND
+            OfferItem.EndStamp   >= Order.CrStamp  AND
+            OfferItem.BeginStamp <= Order.CrStamp:
+      ldePendingFees = ldePendingFees + OfferItem.Amount.
+   END.
+   ldeAllowedFin = Limit.LimitAmt - ldePendingFees.
+END.
 add_double(top_struct, "allowed_terminal_financing_amount", ldeAllowedFin).
 
 installment_array = add_array(top_struct, "installment").
