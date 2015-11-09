@@ -56,13 +56,15 @@ FUNCTION fRequestCheck RETURNS LOGICAL:
                   iiReqType = {&REQTYPE_BUNDLE_CHANGE}) THEN NEXT.
             END.
             /* YDR-2036 
-            Allow STC when there is an ongoing 
-            MNP out request with ACON status
+            Allow STC/BTC when there is an ongoing 
+            MNP out request with ACON status            
             */
              IF (iiReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR
                  iiReqType = {&REQTYPE_BUNDLE_CHANGE}) AND            
                MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-               MsRequest.ReqCParam3 EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP})
+               MsRequest.ReqCParam3 EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) AND
+               (MsRequest.ReqSource EQ {&REQUEST_SOURCE_MANUAL_TMS} OR 
+                MsRequest.ReqSource EQ {&REQUEST_SOURCE_NEWTON})
                THEN NEXT.
                 
             ocError = {&MSG_ONG_REQUEST}.
