@@ -62,7 +62,7 @@ FUNCTION fRequestCheck RETURNS LOGICAL:
              IF (iiReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR
                  iiReqType = {&REQTYPE_BUNDLE_CHANGE}) AND            
                MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-               MsRequest.ReqCParam3 EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}
+               MsRequest.ReqCParam3 EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP})
                THEN NEXT.
                 
             ocError = {&MSG_ONG_REQUEST}.
