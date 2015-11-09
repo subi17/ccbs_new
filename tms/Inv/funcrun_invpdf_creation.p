@@ -26,6 +26,7 @@ DEFINE VARIABLE lcFeedBackID    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcType          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE llgHandled      AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE lcFuncRunInpDir AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcProcess       AS CHARACTER NO-UNDO. 
 
 /* These three variables has to be logical, but due to 
    Activemq message constraints it has been defined as char */
@@ -42,7 +43,8 @@ ASSIGN
    llgFeedBack     = "false" 
    lcFeedBackQueue = ""
    lcFeedBackID    = ""
-   lcType          = "invoice".
+   lcType          = "invoice"
+   lcProcess       = "funcrun".
 
  /* Re-calculating Billrun id */
 FIND FIRST FuncRunExec WHERE
@@ -92,7 +94,8 @@ DO:
                       "~"multi_file~""       + "~:" +        llgMultiFile        + "," +
                       "~"feedback~""         + "~:" +        llgFeedback         + "," +
                       "~"feedback_id~""      + "~:" + "~"" + lcFeedbackID + "~"" + "," +
-                      "~"type~""             + "~:" + "~"" + lcType       + "~"" + "~}" .
+                      "~"type~""             + "~:" + "~"" + lcType       + "~"" + "," +
+                      "~"process~""          + "~:" + "~"" + lcProcess    + "~"" + "~}".
 
    IF lMsgPublisher:send_message(lcMessage) THEN
       llgHandled = TRUE.
