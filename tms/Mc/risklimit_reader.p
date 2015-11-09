@@ -93,7 +93,7 @@ REPEAT:
 
       FIND FIRST Limit EXCLUSIVE-LOCK WHERE
                  Limit.CustNum    = INT(ENTRY(1,lcLine,lcSep)) AND
-                 Limit.LimitType  = 5 AND /* {&LIMIT_TYPE_RISKLIMIT} */
+                 Limit.LimitType  = {&LIMIT_TYPE_RISKLIMIT} AND
                  Limit.ToDate    >= TODAY
                  NO-ERROR.   
       IF AVAILABLE Limit THEN DO:
@@ -104,7 +104,7 @@ REPEAT:
       ASSIGN
          Limit.CustNum   = INT(ENTRY(1,lcLine,lcSep))
          Limit.LimitAmt  = DEC(ENTRY(2,lcLine,lcSep))
-         Limit.LimitType = 5  /* {&LIMIT_TYPE_RISKLIMIT} */
+         Limit.LimitType = {&LIMIT_TYPE_RISKLIMIT}
          Limit.ValueType = 1
          Limit.FromDate  = TODAY
          Limit.ToDate    = 12/31/2049
