@@ -119,7 +119,9 @@ FOR EACH FFItem EXCLUSIVE-LOCK where
       FFItem.InvNum    = 0
       FFItem.SubInvNum = 0
       FFItem.BillCode  = "PAYTERM" WHEN 
-         LOOKUP(FFItem.BillCode,{&TF_BANK_ALL_ACTIVE_PAYTERM_BILLCODES}) > 0.
+         LOOKUP(FFItem.BillCode,{&TF_BANK_ALL_ACTIVE_PAYTERM_BILLCODES}) > 0
+      FFItem.BillCode  = "RVTERM" WHEN 
+         LOOKUP(FFItem.BillCode,{&TF_BANK_ALL_ACTIVE_RVTERM_BILLCODES}) > 0.
 
    /* reassign the original amount for first month fee */
    IF FFItem.BillPeriod >= liCurrentPeriod THEN DO:
@@ -181,12 +183,16 @@ FOR EACH SingleFee EXCLUSIVE-LOCK where
       ASSIGN
          SingleFee.Billed    = FALSE
          SingleFee.InvNum    = 0
-         SingleFee.SubInvNum = 0
-         SingleFee.BillCode  = "PAYTERMEND" WHEN
-            LOOKUP(SingleFee.BillCode,
-                   {&TF_BANK_ALL_CLOSED_PAYTERM_BILLCODES}) > 0 AND
-                   SingleFee.SourceTable EQ "FixedFee".
-
+         SingleFee.SubInvNum = 0.
+      IF SingleFee.SourceTable EQ "FixedFee" THEN DO:
+         IF LOOKUP(SingleFee.BillCode,
+                   {&TF_BANK_ALL_CLOSED_PAYTERM_BILLCODES}) > 0 THEN
+            SingleFee.BillCode  = "PAYTERMEND".
+         ELSE IF LOOKUP(SingleFee.BillCode,
+                   {&TF_BANK_ALL_CLOSED_RVTERM_BILLCODES}) > 0 THEN
+            SingleFee.BillCode  = "RVTERMEND".
+      END.
+      
       IF llDoEvent AND Invoice.InvType NE {&INV_TYPE_TEST} THEN
          RUN StarEventMakeModifyEventWithMemo(
             lhSingleFee,
