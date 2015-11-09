@@ -15,6 +15,7 @@ ASSIGN
 {timestamp.i}
 {cparam2.i}
 {funcrunprocess_run.i}
+{ftransdir.i}
 
 DEF VAR lcSep            AS CHAR NO-UNDO.
 DEF VAR lcFile           AS CHAR NO-UNDO.
@@ -31,6 +32,8 @@ DEF VAR liPrinted        AS INT  NO-UNDO.
 DEF VAR liCount          AS INT  NO-UNDO.
 DEF VAR liQueueID        AS INT  NO-UNDO.   
 DEF VAR liFRCount        AS INT  NO-UNDO. 
+DEF VAR lcOutDir         AS CHAR NO-UNDO. 
+DEF VAR lcReportFileOut  AS CHAR NO-UNDO. 
 
 DEFINE TEMP-TABLE ttFuncRunResult NO-UNDO 
     FIELD fname AS CHARACTER 
@@ -72,9 +75,10 @@ DO liCount = 1 TO NUM-ENTRIES(lcPHList):
    EMPTY TEMP-TABLE ttFuncRunResult.
 
    ASSIGN
-      lcFile = fCParamC("InvXMLSpoolDir")
-      lcFile = REPLACE(lcFile,"#PHOUSE", ENTRY(liCount,lcPHList))
-      lcFile = REPLACE(lcFile,"#YYYYMMDD",lcDate).
+      lcFile   = fCParamC("InvXMLSpoolDir")
+      lcOutDir = fCParamC("InvXMLOutDir")
+      lcFile   = REPLACE(lcFile,"#PHOUSE", ENTRY(liCount,lcPHList))
+      lcFile   = REPLACE(lcFile,"#YYYYMMDD",lcDate).
    
    FOR EACH  FuncRunQSchedule NO-LOCK WHERE
              FuncRunQSchedule.FRQueueid = liQueueID     AND
@@ -152,6 +156,8 @@ DO liCount = 1 TO NUM-ENTRIES(lcPHList):
      OUTPUT STREAM slog CLOSE.
    END.
     
+   lcReportFileOut = fMove2TransDir(lcFile, "", lcOutDir).
+
 END. /* DO liCount = 1 TO NUM-ENTRIES(lcPHList) */
 
 RUN pFinalizeFuncRunProcess(liFRProcessID,liPrinted).
