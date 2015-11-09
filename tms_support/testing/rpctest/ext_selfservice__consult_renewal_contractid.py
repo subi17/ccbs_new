@@ -15,5 +15,5 @@ if len(sys.argv) < 2: instruction()
 else:
    var1 = sys.argv[1]
 
-q=s.ext.selfservice.consult_mnp_contractid('501',var1,'SMS')
+q=s.ext.selfservice.consult_renewal_contractid('501',var1,'SMS')
 print_results(q)
