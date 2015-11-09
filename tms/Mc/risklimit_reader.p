@@ -92,8 +92,9 @@ REPEAT:
       END.
 
       FIND FIRST Limit EXCLUSIVE-LOCK WHERE
-                 Limit.CustNum   = INT(ENTRY(1,lcLine,lcSep)) AND
-                 Limit.LimitType = 5 /* {&LIMIT_TYPE_RISKLIMIT} */
+                 Limit.CustNum    = INT(ENTRY(1,lcLine,lcSep)) AND
+                 Limit.LimitType  = 5 AND /* {&LIMIT_TYPE_RISKLIMIT} */
+                 Limit.ToDate    >= TODAY
                  NO-ERROR.   
       IF AVAILABLE Limit THEN DO:
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhLimit).
@@ -104,7 +105,10 @@ REPEAT:
          Limit.CustNum   = INT(ENTRY(1,lcLine,lcSep))
          Limit.LimitAmt  = DEC(ENTRY(2,lcLine,lcSep))
          Limit.LimitType = 5  /* {&LIMIT_TYPE_RISKLIMIT} */
-         Limit.FromDate  = TODAY.
+         Limit.ValueType = 1
+         Limit.FromDate  = TODAY
+         Limit.ToDate    = 12/31/2049
+         Limit.DefValue  = FALSE.
 
       IF ERROR-STATUS:ERROR THEN DO:
          fError("Incorrect input data format").
