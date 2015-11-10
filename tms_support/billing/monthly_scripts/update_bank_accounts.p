@@ -1,3 +1,8 @@
+/* Monthly script to update the bank accounts for list of customers.
+   Customer data must be in this order and delimited with ;
+   CustNbr;CurrentBankAccount;BankAccountLastOrder
+   Change input and output filenames according to ticket.
+   Report error cases that were not changed after the run */
 
 {commpaa.i}
 gcbrand = "1".
@@ -18,9 +23,9 @@ END.
 def stream sread.
 def stream slog.
 
-input stream sread from "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_3995.csv".
+input stream sread from "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4145.csv".
 
-output stream slog to "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_3995.log".
+output stream slog to "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4145.log".
    
 def var lcline as char no-undo.
 def var licust as int no-undo.
