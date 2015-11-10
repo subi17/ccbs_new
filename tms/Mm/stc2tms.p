@@ -930,7 +930,7 @@ PROCEDURE pFinalize:
          IF Order.StatusCode EQ {&ORDER_STATUS_ONGOING} THEN DO:
          
             /* update customer data */
-            RUN createcustomer.p(Order.OrderId,1,FALSE,output liCustnum).
+            RUN createcustomer.p(Order.OrderId,1,FALSE,TRUE,output liCustnum).
 
             /* possible bono/bono voip activation */
             RUN orderaction_exec.p (MobSub.MsSeq,
