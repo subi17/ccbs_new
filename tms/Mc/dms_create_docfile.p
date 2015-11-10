@@ -359,32 +359,38 @@ FUNCTION fGetCancellationInfo RETURNS CHAR
     idStartTS AS DECIMAL,
     idEndTS AS DECIMAL,
    OUTPUT odeTime AS DECIMAL):
+
+   DEF VAR liRt AS INT NO-UNDO.
+   DEF VAR liReqTypeCount AS INT NO-UNDO.
+   DEF VAR lcReqTypes AS CHAR NO-UNDO.
    odeTime = idEndTS.
 
-   FIND FIRST MsRequest NO-LOCK WHERE
-              MsRequest.Brand EQ gcBrand AND
-              MsRequest.ReqStatus EQ 2 AND
-              MsRequest.UpdateStamp > idStartTS AND
-              MsRequest.UpdateStamp < idEndTS AND
-              (
-              MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} /*18*/
-              OR MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} /*49*/
-              )
-              AND Msrequest.MsSeq EQ iiMsSeq AND
-              MsRequest.UpdateStamp <= MsRequest.DoneStamp NO-ERROR.
-   
-   IF AVAIL MsRequest THEN DO:
-      IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-         MsRequest.ReqCparam3 EQ "11" THEN DO:
-         odeTime = MsRequest.CreStamp.
-         RETURN "POS Order Cancellation".
+   lcReqTypes = STRING({&REQTYPE_SUBSCRIPTION_TERMINATION}) + "," +
+                STRING({&REQTYPE_REVERT_RENEWAL_ORDER} ).
+   DO liReqTypeCount = 1 TO NUM-ENTRIES (lcReqTypes):
+      liRT = INT(ENTRY(liReqTypeCount,lcReqTypes)).
+      FIND FIRST MsRequest NO-LOCK WHERE
+                 MsRequest.Brand EQ gcBrand AND
+                 MsRequest.ReqStatus EQ 2 AND
+                 MsRequest.UpdateStamp > idStartTS AND
+                 MsRequest.UpdateStamp < idEndTS AND
+                 MsRequest.ReqType EQ liRt AND
+                 Msrequest.MsSeq EQ iiMsSeq AND
+                 MsRequest.UpdateStamp <= MsRequest.DoneStamp NO-ERROR.
+
+      IF AVAIL MsRequest THEN DO:
+         IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+            MsRequest.ReqCparam3 EQ "11" THEN DO:
+            odeTime = MsRequest.CreStamp.
+            RETURN "POS Order Cancellation".
+         END.
+         ELSE IF MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} THEN DO:
+            odeTime = MsRequest.CreStamp.
+            RETURN "Order Cancellation".
+         END.
       END.
-      ELSE IF MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} THEN DO:
-         odeTime = MsRequest.CreStamp.
-         RETURN "Order Cancellation".
-      END.
-   END.
-   ELSE IF icStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
+   END. /*DO for msrequest search*/
+   IF icStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
       icStatus EQ {&ORDER_STATUS_COMPANY_NEW} OR
       icStatus EQ {&ORDER_STATUS_COMPANY_MNP } OR
       icStatus EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} THEN DO:
