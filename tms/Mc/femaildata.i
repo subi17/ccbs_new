@@ -1259,7 +1259,7 @@ PROCEDURE pGetDELPOST:
    lcResult = lcDelPost.
 END. /*GetDELPOST*/
 
-PROCEDURE pGetUPSHOURS:
+PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
 
    DEF INPUT PARAMETER iiOrderNBR AS INT NO-UNDO.
    DEF OUTPUT PARAMETER olgErr AS LOGICAL NO-UNDO.
@@ -1290,22 +1290,23 @@ PROCEDURE pGetUPSHOURS:
    IF NOT AVAIL OrderAction THEN RETURN.
 
    /* Check that includes at least separator characters */
-   IF INDEX(OrderAction.ItemKey,";") > 0 THEN DO:
+   IF INDEX(OrderAction.ItemKey,";") > 0 AND 
+      NUM-ENTRIES(OrderAction.itemKey,";") = 9 THEN DO:
          lcUPSHours = "Podrás recoger el pedido en:<br /><b>".
          lcUPSHours = lcUPSHours + DeliveryCustomer.company + "</b> " +
                       DeliveryCustomer.address + " " +
                       DeliveryCustomer.ZipCode + " " +
                       DeliveryCustomer.postoffice + "<br /><br />" +
                       "<b>Horarios:</b><br />".
-      IF DeliveryCustomer.deltype = 2 THEN DO:
+      IF DeliveryCustomer.deltype = {&ORDER_DELTYPE_KIALA} THEN DO: /* UPS */
          DO liCount = 2 TO NUM-ENTRIES(OrderAction.ItemKey,";"):
             lcUseEntries = lcUseEntries + STRING(liCount) + "|".
          END.
       END.
-      ELSE IF DeliveryCustomer.deltype = 4 THEN DO:
+      /* Correos */
+      ELSE IF DeliveryCustomer.deltype = {&ORDER_DELTYPE_POST} THEN DO:
          /* valid itemkey should have at least 8 entries */
-         IF NUM-ENTRIES(OrderAction.itemKey,";") >= 8 THEN
-            lcUseEntries = "1|7|8".
+         lcUseEntries = "1|7|8".
       END.
       lcUseEntries = RIGHT-TRIM(lcUseEntries,"|"). /* remove last separator */
       /* get needed visible days */
@@ -1316,26 +1317,31 @@ PROCEDURE pGetUPSHOURS:
          /*remove possible extra ; */
          lcDailyHours = LEFT-TRIM(lcDailyHours, ";").
          /* handle several times for day */
-         DO liTimeCount = 1 TO NUM-ENTRIES(lcDailyHours,"/"):
-            lcTempHours = ENTRY(liTimeCount,lcDailyHours,"/").
-            IF INDEX(lcTempHours,"-") > 0 AND INDEX(lcTempHours,"h") > 0 AND
-               liTimeCount < 9 THEN DO: /* open times exists */
-               lcOpenHour = REPLACE(ENTRY(1,lcTempHours,"-"),"h",":").
-               lcCloseHour = REPLACE(ENTRY(2,lcTempHours,"-"),"h",":").
-               lcHoursText = lcHoursText + "De " + lcOpenHour + " a " + 
-                             lcCloseHour + "/ ".
+         IF DeliveryCustomer.deltype = {&ORDER_DELTYPE_KIALA} THEN DO: /* UPS */
+            lcHoursText = REPLACE(lcDailyHours, "h",":").
+         END.   
+         ELSE IF DeliveryCustomer.deltype = {&ORDER_DELTYPE_POST} THEN DO:
+            DO liTimeCount = 1 TO NUM-ENTRIES(lcDailyHours,"/"):
+               lcTempHours = ENTRY(liTimeCount,lcDailyHours,"/").
+               IF INDEX(lcTempHours,"-") > 0 AND INDEX(lcTempHours,"h") > 0 AND
+                  liTimeCount < 9 THEN DO: /* open times exists */
+                  lcOpenHour = REPLACE(ENTRY(1,lcTempHours,"-"),"h",":").
+                  lcCloseHour = REPLACE(ENTRY(2,lcTempHours,"-"),"h",":").
+                  lcHoursText = lcHoursText + "De " + lcOpenHour + " a " + 
+                                lcCloseHour + "/ ".
+               END.
+               ELSE lcHoursText = lcDailyHours. /* Closed texts */
+               
             END.
-            ELSE lcHoursText = lcDailyHours. /* Closed texts */
-            
          END.
          /* Remove extra spaces and / at the end of the string */
          lcHoursText = RIGHT-TRIM(lcHoursText).
          lcHoursText = RIGHT-TRIM(lcHoursText,"/").
          /* Correos need different day name syntax */
-         IF DeliveryCustomer.deltype = 4 AND 
+         IF DeliveryCustomer.deltype = {&ORDER_DELTYPE_POST} AND /* Correos */
             INT(ENTRY(liCount,lcUseEntries,"|")) = 7 THEN 
             lcDay = "S".
-         ELSE IF DeliveryCustomer.deltype = 4 AND
+         ELSE IF DeliveryCustomer.deltype = {&ORDER_DELTYPE_POST} AND
             INT(ENTRY(liCount,lcUseEntries,"|")) = 8 THEN
             lcDay = "Festivos".
          ELSE   
