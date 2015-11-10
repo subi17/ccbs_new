@@ -85,7 +85,12 @@ REPEAT:
       END.
 
       ASSIGN liCustNum  = INT(ENTRY(1,lcLine,lcSep))
-             ldLimitAmt = DEC(ENTRY(2,lcLine,lcSep)).
+             ldLimitAmt = DEC(REPLACE(ENTRY(2,lcLine,lcSep),",",".")).
+
+      IF ERROR-STATUS:ERROR THEN DO:
+         fError("Incorrect input data format").
+         NEXT.
+      END.
 
       IF NOT CAN-FIND(FIRST Customer WHERE
                             Customer.Brand = gcBrand AND
@@ -112,11 +117,6 @@ REPEAT:
          Limit.FromDate  = TODAY
          Limit.ToDate    = 12/31/2049
          Limit.DefValue  = FALSE.
-
-      IF ERROR-STATUS:ERROR THEN DO:
-         fError("Incorrect input data format").
-         NEXT.
-      END.
 
       RELEASE Limit.
 
