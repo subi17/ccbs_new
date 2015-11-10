@@ -110,6 +110,7 @@ REPEAT:
       
       CREATE Limit.
       ASSIGN
+         Limit.Brand     = gcBrand
          Limit.CustNum   = liCustNum
          Limit.LimitAmt  = ldLimitAmt
          Limit.LimitType = {&LIMIT_TYPE_RISKLIMIT}
