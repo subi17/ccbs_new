@@ -108,6 +108,8 @@
 49 "PerContract" "DSS_UPSELL"
 49 "PerContract" "DATA5_UPSELL"
 49 "PerContract" "DATA6_UPSELL"
+49 "PerContract" "DATA200_UPSELL"
+49 "PerContract" "DSS200_UPSELL"
 49 "SubsTypeTo" "CONT*"
 51 "PerContract" "HSPA_ROAM_EU"
 51 "SubsTypeTo" "CONT*"

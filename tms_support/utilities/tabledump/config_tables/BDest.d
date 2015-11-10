@@ -40,25 +40,25 @@
 "112/911" "Emergencia" 8 2 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 31
 "11810" " de InformaciÛn TelefÛnica n˙mero 11812 (AUNA)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 32
 "11811" " de NIT SAU" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 33
-"11812" " de InformaciÛn TelefÛnica n˙mero  (AUNA)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 34
+"11812" "11812 de InformaciÛn TelefÛnica n˙mero 1" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 34
 "11813" " B.P.O. (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 35
-"11814" " de Evertrade Spain (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 36
-"11815" " de AUNA Telecomunicaciones" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 37
+"11814" "11814 de Teleservicio Expres (Quality)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 36
+"11815" "11815 de LÌneas de Red Inteligente (VODA" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 37
 "11816" " de TeleatenciÛn Mediterr·nea" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 38
 "11817" "11817 de Andarosa TV (FT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 39
 "11818" "Servicio  (T>11 seg)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 40
-"11819" " de Nirnet Invest" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 41
+"11819" "11819 de Nirnet Invest (AVYS TELECOM)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 41
 "11820" " de Operadora de Serv. de Telecom. de RI" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 42
 "11821" " Audiotex Internet Services (France Telecom)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 43
 "11822" "11822 de Atento Teleservicios Espa√±a" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 44
 "11823" "11823 de Barnor 2001 (Auna)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 45
-"11824" " de Multiasistencia (AUNA)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 46
+"11824" "11824 de Infotecnia 11824 (VODAFONE ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 46
 "11825" "11825 de Atento Teleservicios Espa√±a" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 47
 "11826" " de Informatel Hispania (Quality)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 48
 "11827" "11827 de HELLO TV (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 49
-"11828" " de Retecal      " 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 50
+"11828" "11828 de VODAFONE ONO" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 50
 "11829" "11829 de Air Ebites (AUNA)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 51
-"11830" " de BUSINESS TELECOM NETWORKS" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 52
+"11830" "11830 de BUSINESS TELECOM NETWORKS (VODA" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 52
 "11831" " de DIALPLAN TELECOM" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 53
 "11832" "11832 de ANCUTATEL (Quality)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 54
 "11833" "11833 de Premium Numbers(Orange Espagne)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 55
@@ -69,8 +69,8 @@
 "11838" " de Opera" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 60
 "11839" " de Movilservicio Urgente (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 61
 "11840" " de Euskaltel" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 62
-"11841" "11841 de LINOCIO HAGEN (ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 63
-"11842" "APLICACIONS DE SERVEI MONSAN" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 64
+"11841" "11841 de LINOCIO HAGEN (VODAFONE ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 63
+"11842" "11842 de Aplicacions de Servei Monsan (V" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 64
 "11843" " de ATENCI”N TELEF”NICA AVANZADA" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 65
 "11844" " de InformaciÛn Directa (AUNA)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 66
 "11845" " de Incotel IngenierÌa (Opera)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 67
@@ -110,7 +110,7 @@
 "11879" "11879 de TelefonosdecastellÛn (Auna)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/04/13 897
 "11880" " de NIT (11811 NIT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 98
 "11881" "11881 de NEO OPERADOR DE TELECOMUNICACIO" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 99
-"11882" " Recursos Internet (FT-UNI2)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 100
+"11882" "11882 de Telinfocom (Orange Espagne)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 100
 "11883" " de Telecom (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 101
 "11884" " de 11883 Telecom (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 102
 "11885" "11885 de TELEFON√çA INFOGUS, S.L." 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 103
@@ -920,12 +920,16 @@
 "GPRSDATA_MDUB4" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 617
 "GPRSDATA_MDUB5" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 26/03/12 777
 "GPRSDATA_MDUB9" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/12 888
+"GPRSDATA_TARJ7" "GPRS data tarj7" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 21/10/15 1002
+"GPRSDATA_TARJ9" "GPRS data tarj9" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 21/10/15 1003
 "GPRSDATA_UPGRADE" "GPRS data Upgrade Upsell" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 26/03/12 779
 "GPRSDATA_VOIP" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/04/12 843
+"GPRSDSS200_A" "GPRS data DSS200" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/06/15 1001
 "GPRSDSS2_A" "GPRS data DSS2" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/09/13 921
 "GPRSDSS2_B" "GPRS data DSS2" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/09/13 922
 "GPRSDSS_A" "GPRS data DSS" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 618
 "GPRSDSS_B" "GPRS data DSS" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 619
+"GPRS_DATA200_UPSELL" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/06/15 1000
 "GPRS_DATA5_UPSELL" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/09/13 920
 "GPRS_DATA6_UPSELL" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/05/14 953
 "GPRS_DATA9_UPSELL" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/12 890
