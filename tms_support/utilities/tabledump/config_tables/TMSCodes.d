@@ -1367,6 +1367,7 @@
 "Salesman" "SmPrefix" "IFS" "MM" "Media Markt" "" "18" 0
 "Salesman" "SmPrefix" "IFS" "PE" "Phone House Televenta Emision" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PH" "The Phone House" "" "11" 0
+"Salesman" "SmPrefix" "IFS" "PJ" "PhoneHouse Retencion Jerez" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PR" "Phone House Televenta Recepcion" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "RB" "Recepción Bilbao" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "RC" "CASTURTEL RECEPCION" "" "15" 1
