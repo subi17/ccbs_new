@@ -27,6 +27,7 @@
 "MM" "MEDIAMARKT" "" 0 "" "" "" "Ignacio.Larragan.Silva@yoigo.com" "1" 99 no "" ""
 "PE" "PhoneHouse Emision Televenta" "" 0 "" "" "" "maria.barreiro.sanisidro@ext.yoigo.com" "1" 99 yes "" ""
 "PH" "PHONE HOUSE" "" 0 "" "" "" "Ignacio.Larragan.Silva@yoigo.com" "1" 43 yes "323841551" "332296607"
+"PJ" "PhoneHouse Retencion Jerez" "" 0 "" "" "" "gonzalo.garrido.arsuaga@yoigo.com" "1" 99 yes "" ""
 "PR" "PhoneHouse Recepcion Televenta" "" 0 "" "" "" "maria.barreiro.sanisidro@ext.yoigo.com" "1" 99 yes "" ""
 "RC" "CASTURTEL RECEPCION" "" 0 "" "" "" "maria.barreiro.sanisidro@yoigo.com" "1" 99 yes "" ""
 "TA" "TAL DIGITAL" "" 0 "" "" "" "Luis.Leyva.Ruano@yoigo.com" "1" 42 yes "323841619" "332296730"
