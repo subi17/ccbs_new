@@ -38,6 +38,9 @@ DEF VAR lcResult         AS CHARACTER NO-UNDO.
 
 DEF VAR ldaMonth22Date    AS DATE NO-UNDO.
 DEF VAR ldaMonth24Date    AS DATE NO-UNDO.
+DEF VAR ldaQ25PeriodStartDate  AS DATE NO-UNDO.
+DEF VAR ldaQ25PeriodEndDate    AS DATE NO-UNDO.
+
 /* Contract activation timestamp */
 DEF VAR ldContractActivTS AS DECIMAL NO-UNDO.
 DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
@@ -64,12 +67,22 @@ FIND FIRST Customer NO-LOCK WHERE
 IF NOT AVAILABLE Customer THEN
    RETURN appl_err("Customer not found").
 
+ASSIGN
+   ldaQ25PeriodStartDate    = ADD-INTERVAL(TODAY, -22, 'months':U)
+   ldaQ25PeriodStartDate    = DATE(MONTH(ldaQ25PeriodStartDate),
+                                   DAY(fLastDayOfMonth(ldaQ25PeriodStartDate)),
+                                   YEAR(ldaQ25PeriodStartDate))
+   ldaQ25PeriodEndDate    = ADD-INTERVAL(TODAY, -24, 'months':U)
+   ldaQ25PeriodEndDate    = DATE(MONTH(ldaQ25PeriodEndDate),1,
+                                       YEAR(ldaQ25PeriodEndDate)).
+
 /* Find original installment contract */   
 FIND FIRST DCCLI NO-LOCK WHERE
            DCCLI.Brand   = gcBrand AND
            DCCLI.DCEvent BEGINS "PAYTERM" AND
-           DCCLI.MsSeq   = MobSub.MsSeq. /* AND 
-           DCCLI.PerContractId = liper_contract_id NO-ERROR. */
+           DCCLI.MsSeq   = MobSub.MsSeq AND 
+           DCCLI.FromDate < ldaQ25PeriodStartDate AND
+           DCCLI.FromDate > ldaQ25PeriodEndDate NO-ERROR. 
 
 IF NOT AVAIL DCCLI THEN
    RETURN appl_err("Installment contract not found").
