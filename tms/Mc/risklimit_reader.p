@@ -15,15 +15,6 @@ ASSIGN
 {tmsconst.i}
 {ftransdir.i}
 {cparam2.i}
-{eventval.i}
-
-IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
-   DEFINE VARIABLE lhLimit     AS HANDLE    NO-UNDO.
-   lhLimit = BUFFER Limit:HANDLE.
-   RUN StarEventInitialize(lhLimit).
-END.
 
 DEF VAR lcIncDir        AS CHAR NO-UNDO.
 DEF VAR lcProcDir       AS CHAR NO-UNDO.
@@ -36,6 +27,8 @@ DEF VAR lcSep           AS CHAR NO-UNDO.
 DEF VAR lcLogFile       AS CHAR NO-UNDO.
 DEF VAR lcMoveProc      AS CHAR NO-UNDO.
 DEF VAR lcMoveLog       AS CHAR NO-UNDO.
+DEF VAR liCustNum       AS INT  NO-UNDO.
+DEF VAR ldLimitAmt      AS DEC  NO-UNDO.
 
 ASSIGN
    lcIncDir   = fCParam("RiskLimit","IncDir")
@@ -82,7 +75,7 @@ REPEAT:
               STRING(TIME,"hh:mm:ss") SKIP.
    
    LINE_LOOP:
-   REPEAT:
+   REPEAT TRANSACTION:
 
       IMPORT STREAM sIn UNFORMATTED lcLine.
 
@@ -91,19 +84,29 @@ REPEAT:
          NEXT.
       END.
 
+      ASSIGN liCustNum  = INT(ENTRY(1,lcLine,lcSep))
+             ldLimitAmt = DEC(ENTRY(2,lcLine,lcSep)).
+
+      IF NOT CAN-FIND(FIRST Customer WHERE
+                            Customer.Brand = gcBrand AND
+                            Customer.CustNum = liCustNum)
+      THEN DO:
+         fError("Unknown Customer").
+         NEXT.
+      END.
+
       FIND FIRST Limit EXCLUSIVE-LOCK WHERE
-                 Limit.CustNum    = INT(ENTRY(1,lcLine,lcSep)) AND
+                 Limit.CustNum    = liCustNum AND
                  Limit.LimitType  = {&LIMIT_TYPE_RISKLIMIT} AND
                  Limit.ToDate    >= TODAY
-                 NO-ERROR.   
-      IF AVAILABLE Limit THEN DO:
-         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhLimit).
-      END.
-      ELSE CREATE Limit.
+                 NO-ERROR.
 
+      IF AVAILABLE Limit THEN Limit.ToDate = TODAY - 1.
+      
+      CREATE Limit.
       ASSIGN
-         Limit.CustNum   = INT(ENTRY(1,lcLine,lcSep))
-         Limit.LimitAmt  = DEC(ENTRY(2,lcLine,lcSep))
+         Limit.CustNum   = liCustNum
+         Limit.LimitAmt  = ldLimitAmt
          Limit.LimitType = {&LIMIT_TYPE_RISKLIMIT}
          Limit.ValueType = 1
          Limit.FromDate  = TODAY
@@ -115,11 +118,6 @@ REPEAT:
          NEXT.
       END.
 
-      IF llDoEvent THEN DO:
-         IF NEW Limit THEN RUN StarEventMakeCreateEvent(lhLimit).
-         ELSE RUN StarEventMakeModifyEvent(lhLimit).
-      END.
-
       RELEASE Limit.
 
    END.
@@ -127,11 +125,9 @@ REPEAT:
    INPUT STREAM sIn CLOSE.
    OUTPUT STREAM sLog CLOSE.
 
-   /* lcMoveProc = fMove2TransDir(lcInputFile, "", lcProcDir). */
+   lcMoveProc = fMove2TransDir(lcInputFile, "", lcProcDir).
    lcMoveLog  = fMove2TransDir(lcLogFile, "", lcLogDir).
 
 END.
 
 INPUT STREAM sFile CLOSE.
-
-fCleanEventObjects().
