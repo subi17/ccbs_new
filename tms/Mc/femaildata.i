@@ -1323,19 +1323,21 @@ PROCEDURE pGetUPSHOURS:
                lcOpenHour = REPLACE(ENTRY(1,lcTempHours,"-"),"h",":").
                lcCloseHour = REPLACE(ENTRY(2,lcTempHours,"-"),"h",":").
                lcHoursText = lcHoursText + "De " + lcOpenHour + " a " + 
-                             lcCloseHour + "/".
+                             lcCloseHour + "/ ".
             END.
             ELSE lcHoursText = lcDailyHours. /* Closed texts */
             
          END.
+         /* Remove extra spaces and / at the end of the string */
+         lcHoursText = RIGHT-TRIM(lcHoursText).
          lcHoursText = RIGHT-TRIM(lcHoursText,"/").
          /* Correos need different day name syntax */
          IF DeliveryCustomer.deltype = 4 AND 
             INT(ENTRY(liCount,lcUseEntries,"|")) = 7 THEN 
-            lcDay = "S:".
+            lcDay = "S".
          ELSE IF DeliveryCustomer.deltype = 4 AND
             INT(ENTRY(liCount,lcUseEntries,"|")) = 8 THEN
-            lcDay = "Festivos:".
+            lcDay = "Festivos".
          ELSE   
             lcDay = ENTRY(INT(ENTRY(liCount,lcUseEntries,"|")),lcDayList,"|").
          lcUPSHours = lcUPSHours + "<b>" + lcDay + "</b>: " + lcHoursText +
