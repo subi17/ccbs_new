@@ -66,6 +66,7 @@
 "CONTS39MF" "CONTRATOS 39 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTSF10MF" "CONTRATOSF 10 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTSF14MF" "CONTRATOSF 14 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"DATA200MFUPS" "DATA200 upsell monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DATA5MF" "Mobile Data Usage Bundle Service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DATA5MFUPS" "Cont Data Upsell Bundle" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DATA6MF" "DATA6 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -73,6 +74,7 @@
 "DATA9MFUPS" "Cont Data Upsell Bundle" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DELCOST" "Shipment costs" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "Doa no procede" "DOA no procede" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
+"DSS200MFUPS" "DSS200 upsell monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DSS2MFUPS" "Data Sharing Service 2 Upsell Bundle" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DSSMF" "Data Sharing Service Bundle package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DSSMFUPS" "Data Sharing Service Upsell Bundle" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -120,6 +122,7 @@
 "PAYTERM24_1" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_12" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_18" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_2" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_20" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_22" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_25" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
