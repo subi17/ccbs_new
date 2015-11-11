@@ -1292,8 +1292,7 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
    /* Check that includes at least separator characters */
    IF INDEX(OrderAction.ItemKey,";") > 0 AND 
       NUM-ENTRIES(OrderAction.itemKey,";") = 9 THEN DO:
-         lcUPSHours = "Podrás recoger el pedido en:<br /><b>".
-         lcUPSHours = lcUPSHours + DeliveryCustomer.company + "</b> " +
+         lcUPSHours = "<b>" + DeliveryCustomer.company + "</b> " +
                       DeliveryCustomer.address + " " +
                       DeliveryCustomer.ZipCode + " " +
                       DeliveryCustomer.postoffice + "<br /><br />" +
