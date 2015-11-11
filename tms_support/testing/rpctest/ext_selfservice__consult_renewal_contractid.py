@@ -8,7 +8,7 @@ from show_results import *
 s = xmlrpclib.ServerProxy(address,transport=p)
 def instruction():
    print "Missing parameter: MSISDN"
-   print "Example: python ext_selfservice__consult_mnp_contractid.py 622689226"
+   print "Example: python ext_selfservice__consult_renewal_contractid.py 622689226"
    sys.exit()
 
 if len(sys.argv) < 2: instruction()
