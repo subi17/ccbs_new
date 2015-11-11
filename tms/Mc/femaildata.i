@@ -1295,7 +1295,8 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
          lcUPSHours = "<b>" + DeliveryCustomer.company + "</b> " +
                       DeliveryCustomer.address + " " +
                       DeliveryCustomer.ZipCode + " " +
-                      DeliveryCustomer.postoffice + "<br /><br />" +
+                      DeliveryCustomer.postoffice + 
+                      DeliveryCustomer.region + "<br /><br />" +
                       "<b>Horarios:</b><br />".
       IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN DO: /* UPS */
          DO liCount = 2 TO NUM-ENTRIES(OrderAction.ItemKey,";"):
