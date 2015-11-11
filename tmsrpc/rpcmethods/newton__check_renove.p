@@ -158,6 +158,8 @@ DEF VAR installment_struct AS CHAR NO-UNDO.
 DEF VAR llDefBarring       AS LOG NO-UNDO. 
 DEF VAR ldtFirstDay        AS DATE NO-UNDO.
 DEF VAR ldePendingFees AS DECIMAL NO-UNDO.
+DEF VAR liPeriod AS INT NO-UNDO. 
+DEF VAR ldaDate AS DATE NO-UNDO. 
 
 DEF BUFFER bServiceRequest FOR MSRequest.
 DEF BUFFER bMobSub FOR MobSub.
@@ -510,8 +512,11 @@ END.
 /* q25 - Calculate allowed_terminal_financing_amount if risk limit is configured 
    and collect all non invoiced installments and ongoing orders and return 
    the difference of risk limit and pending all installment fee.*/
-ASSIGN ldeAllowedFin = 0
-       ldePendingFees = 0.
+ASSIGN
+   ldeAllowedFin = 0
+   ldePendingFees = 0
+   ldaDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
+   liPeriod = YEAR(ldaDate) * 100 + MONTH(ldaDate).
 
 FIND FIRST Limit NO-LOCK WHERE
            Limit.CustNum   = Customer.Custnum AND
@@ -519,30 +524,38 @@ FIND FIRST Limit NO-LOCK WHERE
            Limit.ToDate   >= TODAY NO-ERROR.
 IF NOT AVAILABLE Limit THEN ldeAllowedFin = ?.
 ELSE DO:
+   MOBSUB_LOOP:
    FOR EACH bMobSubAmt NO-LOCK WHERE
             bMobSubAmt.Brand = gcBrand AND
             bMobSubAmt.CustNum = Customer.CustNum,
-       EACH DCCLI NO-LOCK WHERE
-            DCCLI.MsSeq = bMobSubAmt.MsSeq AND
-            DCCLI.DCEvent BEGINS "PAYTERM" AND
-            DCCLI.ValidTo >= TODAY,
-       FIRST FixedFee NO-LOCK WHERE
-             FixedFee.Brand = gcBrand AND
-             FixedFee.Custnum = Customer.Custnum AND
-             FixedFee.HostTable = "MobSub" AND
-             FixedFee.KeyValue = STRING(bMobSubAmt.MsSeq) AND
-             FixedFee.BillCode = "PAYTERM" AND
-             FixedFee.SourceTable = "DCCLI" AND
-             FixedFee.SourceKey = STRING(DCCLI.PerContractID):
+      EACH DCCLI NO-LOCK WHERE
+           DCCLI.MsSeq = bMobSubAmt.MsSeq AND
+           DCCLI.ValidTo >= TODAY:
+         IF NOT DCCLI.DCEvent BEGINS "PAYTERM" OR
+            NOT DCCLI.DCEvent BEGINS "RVTERM" THEN
+            NEXT MOBSUB_LOOP.
 
-      FOR EACH FFItem OF FixedFee NO-LOCK:
-         IF FFItem.Billed AND
-            CAN-FIND(FIRST Invoice WHERE
-                           Invoice.InvNum = FFItem.InvNum AND
-                           Invoice.InvType = 1) THEN NEXT.
-         ldePendingFees = ldePendingFees + FFItem.Amt.
+      FOR FIRST FixedFee NO-LOCK WHERE
+                FixedFee.Brand = gcBrand AND
+                FixedFee.Custnum = Customer.Custnum AND
+                FixedFee.HostTable = "MobSub" AND
+                FixedFee.KeyValue = STRING(bMobSubAmt.MsSeq) AND
+                FixedFee.EndPeriod >= liPeriod AND
+                FixedFee.SourceTable = "DCCLI" AND
+                FixedFee.SourceKey = STRING(DCCLI.PerContractID):
+         IF NOT FixedFee.BillCode BEGINS "PAYTERM" OR
+            NOT FixedFee.BillCode BEGINS "RVTERM" THEN
+            NEXT MOBSUB_LOOP.
+
+         FOR EACH FFItem OF FixedFee NO-LOCK:
+            IF FFItem.Billed AND
+               CAN-FIND(FIRST Invoice WHERE
+                              Invoice.InvNum = FFItem.InvNum AND
+                              Invoice.InvType = 1) THEN
+                              NEXT MOBSUB_LOOP.
+            ldePendingFees = ldePendingFees + FFItem.Amt.
+         END.
       END.
-
    END.
 
    FOR EACH Order NO-LOCK WHERE
