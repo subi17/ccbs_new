@@ -57,6 +57,7 @@ DEF VAR llOldPayType       AS LOG  NO-UNDO.
 DEF VAR liOrigStatus       AS INT  NO-UNDO.
 DEF VAR ldaNewBeginDate    AS DATE NO-UNDO.
 DEF VAR ldeActStamp        AS DEC  NO-UNDO.
+DEF VAR llCreateFees       AS LOG  NO-UNDO.
 
 DEF VAR ldaNextMonthActDate AS DATE NO-UNDO.
 DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
@@ -1257,13 +1258,33 @@ PROCEDURE pCloseContracts:
           ENTRY(1,lcReqChar,";") NE "?") OR
          (LOOKUP(lcContract,lcBonoContracts) > 0 AND
           LOOKUP(lcContract,lcAllowedBonoSTCContracts) = 0) THEN DO:
-
+         /* YDR-2038 
+            ReqIParam5
+            (0=no extend_term_contract
+             1=extend_term_contract
+             2=exclude_term_penalty)
+          */
+         llCreateFees = TRUE. 
+         IF MsRequest.ReqIParam5 EQ 2 THEN
+         Penalty-Exemption:
+         DO: 
+            FIND FIRST DayCampaign NO-LOCK WHERE
+                       DayCampaign.Brand   EQ gcBrand AND
+                       DayCampaign.DCEvent EQ MsRequest.ReqCParam3 AND
+                       DayCampaign.ValidTo >= TODAY
+            NO-ERROR.
+            IF NOT AVAILABLE(DayCampaign) THEN LEAVE Penalty-Exemption.
+            
+            IF DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} AND
+               CLIType.PayType    EQ {&CLITYPE_PAYTYPE_PREPAID} THEN
+            llCreateFees = FALSE.
+         END.
          /* terminate periodical contract */
          liTerminate = fPCActionRequest(iiMsSeq,
                                         lcContract,
                                         "term",
                                         idEndStamp,
-                                        TRUE,   /* create fee */
+                                        llCreateFees,   /* create fee */
                                         icReqSource,
                                         "",
                                         iiMainRequest,
