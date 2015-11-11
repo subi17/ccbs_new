@@ -335,12 +335,16 @@ PROCEDURE pPeriodicalContract:
                          OrderAction.ItemType = "ExcludeTermPenalty" NO-LOCK)
       THEN llCreateFees = FALSE.
       lbolSTCRenewSameDay = FALSE.
-      IF bOrigRequest.ReqIParam5 EQ 2 AND
-      (bOrigRequest.Reqtype EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR 
-       bOrigRequest.Reqtype EQ {&REQTYPE_BUNDLE_CHANGE}) THEN
+      IF (bOrigRequest.Reqtype EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR 
+          bOrigRequest.Reqtype EQ {&REQTYPE_BUNDLE_CHANGE}) THEN
       DO:         
-         /* YDR-2038 */
-         llCreateFees = FALSE.
+         /* YDR-2038 
+            (0=no extend_term_contract
+             1=extend_term_contract
+             2=exclude_term_penalty)
+         */
+         IF bOrigRequest.ReqIParam5 EQ 2 THEN
+            llCreateFees = FALSE.
          /*
           Find a renewal order that was created in the same date as
           the STC request
