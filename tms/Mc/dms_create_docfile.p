@@ -179,7 +179,16 @@ FUNCTION fMakeTempTable RETURNS CHAR
                 (previous sending)*/
                FIND FIRST DMS NO-LOCK WHERE
                           DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
-                          DMS.HostId EQ Order.OrderID NO-ERROR.
+                          DMS.HostId EQ Order.OrderID AND
+                          (  DMS.OrderStatus EQ {&ORDER_STATUS_DELIVERED} OR
+                             DMS.OrderStatus EQ 
+                                    {&ORDER_STATUS_MORE_DOC_NEEDED} OR
+                             DMS.OrderStatus EQ 
+                                    {&ORDER_STATUS_RENEWAL_STC_COMPANY} OR
+                             DMS.OrderStatus EQ {&ORDER_STATUS_COMPANY_NEW} OR
+                             DMS.OrderStatus EQ {&ORDER_STATUS_COMPANY_MNP}
+                          )
+                          NO-ERROR.
                IF AVAIL DMS THEN DO:
                   lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
                   llgAddEntry = TRUE.
@@ -254,7 +263,15 @@ FUNCTION fMakeTempTable RETURNS CHAR
         the change. */
       FIND FIRST DMS NO-LOCK WHERE
                  DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
-                 DMS.HostID EQ liAddId NO-ERROR.
+                 DMS.HostID EQ liAddId AND
+                 (  DMS.OrderStatus EQ {&ORDER_STATUS_DELIVERED} OR
+                    DMS.OrderStatus EQ
+                       {&ORDER_STATUS_MORE_DOC_NEEDED} OR
+                    DMS.OrderStatus EQ
+                       {&ORDER_STATUS_RENEWAL_STC_COMPANY} OR
+                    DMS.OrderStatus EQ {&ORDER_STATUS_COMPANY_NEW} OR
+                    DMS.OrderStatus EQ {&ORDER_STATUS_COMPANY_MNP}
+                  )  NO-ERROR.
 
       IF AVAIL DMS THEN DO TRANS:
          CREATE ttOrderList.
