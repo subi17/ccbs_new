@@ -1277,7 +1277,7 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
    DEF VAR lcOpenHour    AS CHAR NO-UNDO.
    DEF VAR lcCloseHour   AS CHAR NO-UNDO.
    DEF VAR lcUseEntries  AS CHAR NO-UNDO.
-   DEF VAR lcDayList     AS CHAR NO-UNDO INIT "L a V|Lun|Mar|Mie|Jue|Vie|Sab|Dom|Vacaciones".
+   DEF VAR lcDayList     AS CHAR NO-UNDO INIT "L a V|Lun|Mar|Mie|Jue|Vie|Sab|Dom|<br />Vacaciones".
 
    DEF BUFFER OrderAction FOR OrderAction.
 
