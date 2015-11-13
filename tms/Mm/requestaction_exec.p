@@ -349,9 +349,10 @@ PROCEDURE pPeriodicalContract:
           Find a renewal order that was created in the same date as
           the STC request
          */
-         FIND FIRST /* Stamp INDEX */
+         FIND FIRST /* StatusCode INDEX */
             bOrder NO-LOCK WHERE
             bOrder.Brand EQ gcBrand AND
+            bOrder.StatusCode <> {&ORDER_STATUS_CLOSED} AND
             TRUNCATE(bOrder.CrStamp,0) EQ TRUNCATE(bOrigRequest.CreStamp,0) AND
             bOrder.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
             bOrder.MSSeq EQ bOrigRequest.MsSeq

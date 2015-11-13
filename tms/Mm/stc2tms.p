@@ -1160,6 +1160,7 @@ PROCEDURE pCloseContracts:
 
    DEF BUFFER bActRequest  FOR MsRequest.
    DEF BUFFER bOrigRequest FOR MsRequest.
+   DEF BUFFER bOrder       FOR Order.
 
    DEF VAR lcContractList AS CHAR NO-UNDO.
    DEF VAR lcContIDList   AS CHAR NO-UNDO.
@@ -1174,11 +1175,12 @@ PROCEDURE pCloseContracts:
    DEF VAR liPeriod       AS INT  NO-UNDO.
    DEF VAR llCloseRVTermFee AS LOG NO-UNDO INIT TRUE.
 
-   DEF VAR liBonoTerminate             AS INT  NO-UNDO INIT 0.
-   DEF VAR lcAllowedBONOSTCContracts   AS CHAR NO-UNDO.
-   DEF VAR lcOnlyVoiceContracts        AS CHAR NO-UNDO.
-   DEF VAR lcBONOContracts             AS CHAR NO-UNDO.
-   DEF VAR lcAllVoIPNativeBundles      AS CHAR NO-UNDO.
+   DEF VAR liBonoTerminate           AS INT     NO-UNDO INIT 0.
+   DEF VAR lcAllowedBONOSTCContracts AS CHAR    NO-UNDO.
+   DEF VAR lcOnlyVoiceContracts      AS CHAR    NO-UNDO.
+   DEF VAR lcBONOContracts           AS CHAR    NO-UNDO.
+   DEF VAR lcAllVoIPNativeBundles    AS CHAR    NO-UNDO.
+   DEF VAR lbolSTCRenewSameDay       AS LOGICAL NO-UNDO INITIAL FALSE.
 
    EMPTY TEMP-TABLE ttContract.
 
@@ -1258,6 +1260,30 @@ PROCEDURE pCloseContracts:
           ENTRY(1,lcReqChar,";") NE "?") OR
          (LOOKUP(lcContract,lcBonoContracts) > 0 AND
           LOOKUP(lcContract,lcAllowedBonoSTCContracts) = 0) THEN DO:
+          /*
+            Find a renewal order that was created in the same date as
+            the STC request
+           */
+           FIND FIRST /* StatusCode INDEX */
+              bOrder NO-LOCK WHERE
+              bOrder.Brand EQ gcBrand AND
+              bOrder.StatusCode <> {&ORDER_STATUS_CLOSED} AND
+              TRUNCATE(bOrder.CrStamp,0) EQ TRUNCATE(bOrigRequest.CreStamp,0) AND
+              bOrder.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
+              bOrder.MSSeq EQ bOrigRequest.MsSeq
+           NO-ERROR.
+           IF AVAILABLE(bOrder) THEN
+           DO:
+              /* YDR-2035
+                Don't charge penalty when:
+                STC is requested on the same day of the renewal order AND
+                New type is POSTPAID */
+              IF bOrigRequest.reqcparam2 BEGINS "cont" /* POSTPAID */ THEN
+                 lbolSTCRenewSameDay = TRUE.
+              ELSE
+                 lbolSTCRenewSameDay = FALSE.
+           END. /* IF AVAILABLE(bOrder) */
+
          /* YDR-2038 
             ReqIParam5
             (0=no extend_term_contract
@@ -1281,6 +1307,7 @@ PROCEDURE pCloseContracts:
                llCreateFees = FALSE.
          END.
          /* terminate periodical contract */
+         IF NOT lbolSTCRenewSameDay THEN
          liTerminate = fPCActionRequest(iiMsSeq,
                                         lcContract,
                                         "term",
