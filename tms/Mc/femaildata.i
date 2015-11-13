@@ -1307,7 +1307,9 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
                    DeliveryCustomer.ZipCode + " " +
                    DeliveryCustomer.postoffice + /* " " + 
                    lcDelRegionName + */ "<br /><br />" +
-                   "<b>Horarios:</b><br /><table border='0'>".
+                   IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN 
+                   "<b>Horarios:</b><br /><table border='0'>" ELSE
+                   "<b>Horarios:</b><br />".
       lcUseEntries = RIGHT-TRIM(lcUseEntries,"|"). /* remove last separator */
       /* get needed visible days */
       DO liCount = 1 TO NUM-ENTRIES(lcUseEntries,"|"):
@@ -1346,10 +1348,14 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
             lcDay = "Festivos".
          ELSE   
             lcDay = ENTRY(INT(ENTRY(liCount,lcUseEntries,"|")),lcDayList,"|").
-         lcUPSHours = lcUPSHours + "<tr><td><b>" + lcDay + "</b>:</td> <td>" +
-                      lcHoursText + " </td></tr> ".
+         IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN
+            lcUPSHours = lcUPSHours + "<tr><td><b>" + lcDay + 
+                         "</b>:</td> <td>" + lcHoursText + " </td></tr> ".
+         ELSE
+            lcUPSHours = lcUPSHours + "<b>" + lcDay + "</b>: " + lcHoursText.
       END.
-      lcUPSHours = lcUPSHours + "</table>".
+      IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN
+         lcUPSHours = lcUPSHours + "</table>".
    END.
 
    lcResult = lcUPSHours.
