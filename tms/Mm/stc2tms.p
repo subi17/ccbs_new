@@ -1265,19 +1265,20 @@ PROCEDURE pCloseContracts:
              2=exclude_term_penalty)
           */
          llCreateFees = TRUE. 
-         IF MsRequest.ReqIParam5 EQ 2 THEN
+         IF AVAILABLE(bOrigRequest) THEN
+         IF bOrigRequest.ReqIParam5 EQ 2 AND
+            CLIType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID} THEN
          Penalty-Exemption:
-         DO: 
+         DO:
             FIND FIRST DayCampaign NO-LOCK WHERE
                        DayCampaign.Brand   EQ gcBrand AND
-                       DayCampaign.DCEvent EQ MsRequest.ReqCParam3 AND
+                       DayCampaign.DCEvent EQ bOrigRequest.ReqCParam3 AND
                        DayCampaign.ValidTo >= TODAY
             NO-ERROR.
             IF NOT AVAILABLE(DayCampaign) THEN LEAVE Penalty-Exemption.
             
-            IF DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} AND
-               CLIType.PayType    EQ {&CLITYPE_PAYTYPE_PREPAID} THEN
-            llCreateFees = FALSE.
+            IF DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} THEN
+               llCreateFees = FALSE.
          END.
          /* terminate periodical contract */
          liTerminate = fPCActionRequest(iiMsSeq,
