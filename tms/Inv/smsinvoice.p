@@ -6,8 +6,12 @@
   CREATED ......: 04/2010 
   CHANGE .......: 07/2010 - Different SM text for invoices with many
                             subscriptions. YOT-825
+  CHANGE .......: 09/2015 - SMS sending throttling added with pausing YOT-3986
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
+/* Description: smsinvoice is called from newton side where SMS invoice button
+   pressed for any customers after billing run. This will generate SMS to all 
+   invoiced customers.   */
 
 {commali.i}
 {tmsconst.i}
@@ -31,6 +35,11 @@ DEF VAR lcSMSReplacedText       AS CHAR NO-UNDO.
 DEF VAR liLoop AS INT NO-UNDO. 
 DEF VAR lcMonitor AS CHAR NO-UNDO. 
 
+DEF VAR liSMSCntValue AS INT NO-UNDO. 
+DEF VAR liStartTime   AS INT NO-UNDO. 
+DEF VAR liStopTime    AS INT NO-UNDO. 
+DEF VAR liPauseTime   AS INT NO-UNDO. 
+
 DEF STREAM sEmail.
 
 FIND MSRequest WHERE 
@@ -49,8 +58,13 @@ lcMonitor = fGetRequestNagiosToken(MsRequest.Reqtype).
 /* Email Address Conf File */
 ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        lcContConFile = fCParamC("SMSInvContFile")
+       liSMSCntValue = fCParamI("SMSCountValue")
        ldaDateFrom   = MsRequest.ReqDtParam1
-       liMonth       = MONTH(ldaDateFrom).
+       liMonth       = MONTH(ldaDateFrom)
+       liLoop        = 0
+       liStartTime   = 0
+       liStopTime    = 0
+       liPauseTime   = 0.
 
 INVOICE_LOOP:
 FOR EACH Invoice WHERE
@@ -71,6 +85,21 @@ FOR EACH Invoice WHERE
 
    IF Invoice.DelType <> {&INV_DEL_TYPE_EMAIL_PENDING} AND
       Invoice.DelType <> {&INV_DEL_TYPE_SMS} THEN NEXT INVOICE_LOOP.
+
+   IF liLoop = 0 THEN 
+      liStartTime = TIME.
+
+   /* Pause can be passed with liSMSCntValue 0 from cparam */
+   IF liLoop > 0 AND liSMSCntValue > 0 AND
+   ((liLoop MOD liSMSCntValue) EQ 0) THEN DO:
+      ASSIGN liStopTime  = TIME
+             liPauseTime = 1800 - (liStopTime - liStartTime).
+      IF liPauseTime > 1800 THEN liPauseTime = 1800.
+
+      PAUSE liPauseTime NO-MESSAGE.
+
+      liStartTime = TIME.
+   END.
 
    lcSMSTextOriginal = fGetSMSText("SMS",
                                    "SMSInvoice",
@@ -99,7 +128,7 @@ FOR EACH Invoice WHERE
                         lcSMSReplacedText,
                         fMakeTS(),
                         "Fact. Yoigo",
-                        "36000-75600").
+                        "32400-79200").  /* Send between 9:00-22:00 */
          IF AVAIL CallAlarm THEN RELEASE CallAlarm.
       END. /* DO TRANS: */
    END. /* FOR EACH SubInvoice OF Invoice NO-LOCK: */
@@ -135,5 +164,3 @@ IF lcContConFile > "" AND SEARCH(lcAddrConfDir) <> ? THEN DO:
 END. /* IF SEARCH(lcAddrConfDir) <> ? THEN DO: */
 
 fReqStatus(2,""). /* request handled succesfully */
-
-

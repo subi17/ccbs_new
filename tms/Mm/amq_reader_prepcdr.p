@@ -237,9 +237,12 @@ PROCEDURE pStartReader:
             lcDCEvent = "PMDUB".
          ELSE IF PrepCDR.CLIType = "TARJ7" AND PrepCDR.Charge = 0 THEN
             lcDCEvent = "TARJ7".
+         ELSE IF PrepCDR.CLIType = "TARJ9" AND PrepCDR.EventType = "CALL" AND
+                 PrepCDR.accumulator > 0 THEN
+            lcDCEvent = "TARJ9".
          ELSE IF PrepCDR.CLIType = "TARJ9" AND PrepCDR.Charge = 0 AND
             LOOKUP(PrepCDR.GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0 THEN
-            lcDCEvent = "TARJ9".
+            lcDCEvent = "TARJ9". 
          ELSE lcDCEvent = "".
 
          lcMessage = 
@@ -263,7 +266,8 @@ PROCEDURE pStartReader:
             fNotNull(STRING(PrepCDR.DataIn + PrepCDR.DataOut))            + lcDel +
             fNotNull(TRIM(STRING(PrepCDR.Charge,"->>>>>>>>>>>9.9<<<<<"))) + lcDel +
             fNotNull(lcDCEvent)                                           + lcDel +
-            fNotNull(PrepCDR.BDest).
+            fNotNull(PrepCDR.BDest)                                       + lcDel +
+            fNotNull(STRING(PrepCDR.Accumulator)).
 
          IF lcMessage = ? THEN lcMessage = "".
 

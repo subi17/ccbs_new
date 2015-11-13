@@ -288,25 +288,36 @@ PROCEDURE pMakeCashInvoice:
    /* order has not been delivered, create customer for invoicing */
    IF liCashCust = 0 THEN DO:
 
-      RUN createcustomer(Order.OrderId, 
-                         1,
-                         FALSE,
-                         OUTPUT liCashCust).
+      IF iiAction EQ 1 THEN DO:
+
+         RUN createcustomer(Order.OrderId, 
+                            1,
+                            FALSE,
+                            OUTPUT liCashCust).
+         IF liCashCust = ? OR liCashCust = 0 THEN DO:
+            ocError = "Error:Customer has not been created".
+            RETURN.
+         END.
+         
+         FIND Customer NO-LOCK WHERE
+              Customer.Brand   = gcBrand AND
+              Customer.CustNum = liCashCust NO-ERROR.
+         IF NOT AVAILABLE Customer THEN DO:
+            ocError = "Error:Unknown customer " + STRING(liCashCust).
+            RETURN. 
+         END.
+      END.
   
       lcRegion = IF OrderCustomer.Region > "" 
                  THEN OrderCustomer.Region
                  ELSE SUBSTRING(OrderCustomer.ZipCode,1,2).
           
       liLanguage = INTEGER(OrderCustomer.Language) NO-ERROR. 
+
    END.
 
    IF iiAction EQ 4 THEN
       liLanguage = 1. /* yts-7046 only Spanish supported HTML conf emails. */
-
-   IF liCashCust = ? OR liCashCust = 0 THEN DO:
-      ocError = "Error:Customer has not been created".
-      RETURN.
-   END.
 
    IF liLanguage = 0 THEN liLanguage = 1. 
 
@@ -314,15 +325,7 @@ PROCEDURE pMakeCashInvoice:
       /* pricelist for terminals */
       lcTermPList = fCParamC("TerminalPriceList")
       llCreateInv = FALSE.
-
-   FIND Customer NO-LOCK WHERE
-        Customer.Brand   = gcBrand AND
-        Customer.CustNum = liCashCust NO-ERROR.
-   IF NOT AVAILABLE Customer THEN DO:
-      ocError = "Error:Unknown customer " + STRING(liCashCust).
-      RETURN. 
-   END.
-
+   
    ASSIGN 
       liBillPeriod  = YEAR(TODAY) * 100 + MONTH(TODAY)
       liConcerns    = liBillPeriod * 100 + DAY(TODAY)
@@ -368,7 +371,6 @@ PROCEDURE pMakeCashInvoice:
          RETURN. 
       END.
    END.
-
 
    /* new offer method */
    IF Order.Offer > "" THEN RUN pUseOffer(Order.Offer,

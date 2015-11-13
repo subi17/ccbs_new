@@ -13,7 +13,7 @@
             fname;string;mandatory;
             lname;string;mandatory;
             street;string;mandatory;
-     	      city;string;mandatory;
+            city;string;mandatory;
             region;string;mandatory;
             zip;string;mandatory;
             language;string;mandatory;
@@ -24,7 +24,7 @@
             company_name;string;optional;
             coname;string;optional;
             bankaccount;string;optional;
-	         country;string;optional;
+            country;string;optional;
             email;string;optional;
             sms_number;string;optional;
             company_name;string;optional;
@@ -60,6 +60,8 @@ DEF VAR pcMemoStruct AS CHAR NO-UNDO.
 DEF VAR pcMemoTitle AS CHAR NO-UNDO. 
 DEF VAR pcMemoContent AS CHAR NO-UNDO. 
 DEF VAR pcMandateId AS CHAR NO-UNDO. 
+DEF VAR pcContractID AS CHAR NO-UNDO.
+DEF VAR pcChannel AS CHAR NO-UNDO.
 
 DEFINE VARIABLE lcDataFields AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liRequest AS INTEGER NO-UNDO. 
@@ -68,6 +70,9 @@ DEF VAR lcError AS CHARACTER NO-UNDO.
 DEF VAR lcCode AS CHARACTER NO-UNDO. 
 DEF VAR liSubLimit AS INT NO-UNDO. 
 DEF VAR liSubs AS INT NO-UNDO. 
+DEF VAR lcDMSInfo AS CHAR NO-UNDO.
+
+
 
 DEF BUFFER bOriginalCustomer FOR Customer.
 
@@ -80,7 +85,7 @@ DEFINE TEMP-TABLE ttCustomer NO-UNDO LIKE Customer
 DEF VAR lcAgrCustID AS CHARACTER NO-UNDO.
 DEF VAR lcAgrCustIDType AS CHARACTER NO-UNDO.
 
-IF validate_request(param_toplevel_id, "int,string,datetime,struct,double,double,struct,string") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "int,string,datetime,struct,double,double,struct,string,string,string") EQ ? THEN RETURN.
 
 pdeChargeLimit = get_double(param_toplevel_id, "5").
 pdeCharge = get_double(param_toplevel_id, "4").
@@ -89,9 +94,9 @@ pdeChgStamp = get_timestamp(param_toplevel_id, "2").
 pcSalesman = get_string(param_toplevel_id, "1").
 piMsSeq = get_int(param_toplevel_id, "0").
 pcMemoStruct = get_struct(param_toplevel_id,"6").
-
 pcMandateId = get_string(param_toplevel_id,"7").
-
+pcChannel = get_string(param_toplevel_id,"8").
+pcContractID = get_string(param_toplevel_id,"9").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -260,6 +265,12 @@ lcCode = fCreateAccDataParam(
 IF lcError > "" THEN
    RETURN appl_err(lcError).
 
+
+/*empty contract_id if it is not from VFR*/
+IF pcChannel NE {&DMS_VFR_REQUEST} THEN
+   pcContractId = "".
+
+
 liRequest = fMSCustChangeRequest(
    MobSub.MsSeq,
    "agrcust",
@@ -273,6 +284,7 @@ liRequest = fMSCustChangeRequest(
    "",
    ({&REQUEST_SOURCE_NEWTON}),
    0, /* orig. request */
+   pcContractId,
    OUTPUT lcError).
   
 IF liRequest = 0 THEN

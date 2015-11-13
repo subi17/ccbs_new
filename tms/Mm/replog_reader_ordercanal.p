@@ -933,11 +933,10 @@ PROCEDURE pHandleBarringConf:
 END PROCEDURE.
 
 PROCEDURE pHandleTermReturn:
-
    DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
 
    DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
-   
+
    IF AVAILABLE OrderCanal.RepLog THEN DO:
 
       lcMessage = fCommonMessage().
@@ -949,7 +948,7 @@ PROCEDURE pHandleTermReturn:
             IF AVAILABLE TermReturn THEN DO:
 
                lcMessage = lcMessage                                    + lcDel +
-                           fNotNull(TermReturn.IMEI)                    + lcDel + 
+                           fNotNull(TermReturn.IMEI)                    + lcDel +
                            fNotNull(STRING(TermReturn.OrderId))         + lcDel +
                            fNotNull(TermReturn.BillCode)                + lcDel +
                            fNotNull(TermReturn.MSISDN)                  + lcDel +
@@ -957,6 +956,111 @@ PROCEDURE pHandleTermReturn:
                            fNotNull(STRING(TermReturn.DeviceScreen))    + lcDel +
                            fNotNull(TermReturn.ReturnChannel)           + lcDel +
                            fNotNull(STRING(TermReturn.ReturnTS)).
+               fWriteMessage(lcMessage).
+            END.
+            ELSE DO:
+               olHandled = TRUE.
+               fWriteMessage(lcMessage).
+               RETURN.
+            END.
+         END.
+         WHEN "DELETE" THEN fWriteMessage(lcMessage).
+         OTHERWISE RETURN.
+      END CASE.
+
+      IF lMsgPublisher:send_message(lcMessage) THEN
+         olHandled = TRUE.
+      ELSE DO:
+         olHandled = FALSE.
+         IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+            LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+      END.
+   END.
+
+   CATCH anyError AS Progress.Lang.Error:
+      olHandled = FALSE.
+      LOG-MANAGER:WRITE-MESSAGE("Message failed was recovered: " + lcMessage,"DEBUG").
+   END CATCH.
+
+END PROCEDURE.
+
+PROCEDURE pHandleDMS:
+   DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
+
+   DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
+   
+   IF AVAILABLE OrderCanal.RepLog THEN DO:
+
+      lcMessage = fCommonMessage().
+
+      CASE RepLog.EventType:
+         WHEN "CREATE" OR WHEN "MODIFY" THEN DO:
+            FIND FIRST DMS WHERE
+                       RECID(DMS) = RepLog.RecordId NO-LOCK NO-ERROR.
+            IF AVAILABLE DMS THEN DO:
+
+               lcMessage = lcMessage                         + lcDel +
+                           fNotNull(DMS.ContractID)          + lcDel +
+                           fNotNull(STRING(DMS.DMSID))       + lcDel + 
+                           fNotNull(DMS.DmsExternalID)       + lcDel +
+                           fNotNull(DMS.HostTable)           + lcDel +
+                           fNotNull(STRING(DMS.HostId))      + lcDel + 
+                           fNotNull(DMS.CaseTypeID)          + lcDel +
+                           fNotNull(DMS.StatusCode)          + lcDel +
+                           fNotNull(DMS.StatusDesc)          + lcDel +
+                           fNotNull(STRING(DMS.DMSStatusTS)).
+
+               fWriteMessage(lcMessage).
+            END.
+            ELSE DO:
+               olHandled = TRUE.
+               fWriteMessage(lcMessage).
+               RETURN.
+            END.
+         END.
+         WHEN "DELETE" THEN fWriteMessage(lcMessage).
+         OTHERWISE RETURN.
+      END CASE.
+
+      IF lMsgPublisher:send_message(lcMessage) THEN
+         olHandled = TRUE.
+      ELSE DO:
+         olHandled = FALSE.
+         IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+            LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+      END.
+   END.
+
+   CATCH anyError AS Progress.Lang.Error:
+      olHandled = FALSE.
+      LOG-MANAGER:WRITE-MESSAGE("Message failed was recovered: " + lcMessage,"DEBUG").
+   END CATCH.
+
+END PROCEDURE.
+
+PROCEDURE pHandleDMSDoc:
+
+   DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
+
+   DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
+   
+   IF AVAILABLE OrderCanal.RepLog THEN DO:
+
+      lcMessage = fCommonMessage().
+
+      CASE RepLog.EventType:
+         WHEN "CREATE" OR WHEN "MODIFY" THEN DO:
+            FIND FIRST DMSDoc WHERE
+                       RECID(DMSDoc) = RepLog.RecordId NO-LOCK NO-ERROR.
+            IF AVAILABLE DMSDoc THEN DO:
+
+               lcMessage = lcMessage                             + lcDel +
+                           fNotNull(STRING(DMSDoc.DMSID))        + lcDel + 
+                           fNotNull(DMSDoc.DocTypeID)            + lcDel +
+                           fNotNull(DMSDoc.DocTypeDesc)          + lcDel +
+                           fNotNull(DMSDoc.DocStatusCode)        + lcDel +
+                           fNotNull(DMSDoc.DocRevComment)        + lcDel +
+                           fNotNull(STRING(DMSDoc.DMSStatusTS)).
 
                fWriteMessage(lcMessage).
             END.

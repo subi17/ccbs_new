@@ -1,11 +1,18 @@
+/* Monthly script to add residual value fees to list of customers.
+   Customer data must be in this order and delimited with ;
+   MSISDN;SubscriptionID;Importe;ContractName;Valid To
+   Change input and output filenames according to ticket.
+   Before actual run simulation can be done with 
+   llcreatefee false value */
+
 {timestamp.i}
 
 def stream sread.
 def stream slog.
 
-input stream sread from "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_3757_2.csv".
+input stream sread from "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4144.csv".
 
-output stream slog to "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_3757_2.log".
+output stream slog to "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4144.log".
 
 def var llcreatefee as log no-undo init true.
 
