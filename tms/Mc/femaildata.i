@@ -1302,7 +1302,7 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
          lcUPSHours = "<b>Oficina de Correos de ".
       END.
       lcUPSHours = lcUPSHours + 
-                   DeliveryCustomer.company + "</b><br /> " +
+                   DeliveryCustomer.company + "</b> - " +
                    DeliveryCustomer.address + " " +
                    DeliveryCustomer.ZipCode + " " +
                    DeliveryCustomer.postoffice + /* " " + 
