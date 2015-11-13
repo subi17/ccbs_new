@@ -1352,7 +1352,8 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
             lcUPSHours = lcUPSHours + "<tr><td><b>" + lcDay + 
                          "</b>:</td> <td>" + lcHoursText + " </td></tr> ".
          ELSE
-            lcUPSHours = lcUPSHours + "<b>" + lcDay + "</b>: " + lcHoursText.
+            lcUPSHours = lcUPSHours + "<b>" + lcDay + "</b>: " + 
+                         lcHoursText + "<br />".
       END.
       IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN
          lcUPSHours = lcUPSHours + "</table>".
