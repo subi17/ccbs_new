@@ -1272,7 +1272,7 @@ PROCEDURE pCloseContracts:
          DO:
             FIND FIRST DayCampaign NO-LOCK WHERE
                        DayCampaign.Brand   EQ gcBrand AND
-                       DayCampaign.DCEvent EQ bOrigRequest.ReqCParam3 AND
+                       DayCampaign.DCEvent EQ lcContract AND
                        DayCampaign.ValidTo >= TODAY
             NO-ERROR.
             IF NOT AVAILABLE(DayCampaign) THEN LEAVE Penalty-Exemption.
