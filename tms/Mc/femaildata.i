@@ -1205,15 +1205,13 @@ PROCEDURE pGetDELADDR:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
    IF Order.DeliverySecure EQ 1 OR
-      Order.DeliveryType EQ {&ORDER_DELTYPE_POST} THEN
-      lcDelAddress = fTeksti(560,liLang).
+      Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR 
+      Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} THEN
+      lcDelAddress = "". /* YPR-2660 */
    ELSE DO:
       /* separate delivery address */
       IF AVAILABLE DeliveryCustomer THEN DO:
-         lcDelAddress = (IF Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA}
-                         THEN DeliveryCustomer.Company + CHR(10)
-                         ELSE "") +
-                         DeliveryCustomer.Address.
+         lcDelAddress = DeliveryCustomer.Address.
          /*IF DeliveryCustomer.AddressComp > "" THEN
             lcDelAddress = lcDelAddress + CHR(10) +
                            DeliveryCustomer.AddressComp.*/
@@ -1239,15 +1237,13 @@ PROCEDURE pGetDELPOST:
       lcErr = fGetOrderData (INPUT iiOrderNBR).
 
       IF Order.DeliverySecure EQ 1 OR
-         Order.DeliveryType EQ {&ORDER_DELTYPE_POST} THEN
+         Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR
+         Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} THEN
          lcDelPost = "".
       ELSE DO:
          /* separate delivery address */
          IF AVAILABLE DeliveryCustomer THEN ASSIGN 
-            lcDelAddress = (IF Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA}
-                            THEN DeliveryCustomer.Company + CHR(10)
-                            ELSE "") +
-                            DeliveryCustomer.Address    
+            lcDelAddress = DeliveryCustomer.Address    
             lcDelPost    = DeliveryCustomer.ZipCode + " " +
                            DeliveryCustomer.PostOffice + " " +
                            lcDelRegionName.
