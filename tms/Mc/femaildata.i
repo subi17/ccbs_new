@@ -34,6 +34,8 @@ DEF VAR liMonths      AS INT NO-UNDO.
 DEF VAR ldeFinalFee   AS DEC NO-UNDO.
 DEF VAR lcRegion      AS CHAR NO-UNDO.
 DEF VAR lcRegionName  AS CHAR NO-UNDO.
+DEF VAR lcCRegionName AS CHAR NO-UNDO.
+DEF VAR lcDelRegionName AS CHAR NO-UNDO.
 DEF VAR liCustNum     AS INT NO-UNDO.
 DEF VAR lcCustAddress AS CHAR NO-UNDO.
 DEF VAR liLang        AS INT NO-UNDO.
@@ -123,6 +125,21 @@ FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
                  OrderCustomer.Brand   = gcBrand       AND
                  OrderCustomer.OrderID = Order.OrderID AND
                  OrderCustomer.RowType = 1 NO-ERROR.
+   IF AVAIL companycustomer THEN DO:
+      FIND FIRST Region WHERE
+         Region.Region = companycustomer.Region NO-LOCK NO-ERROR.
+      IF AVAIL Region THEN
+         lcCRegionName = Region.RgName.
+      ELSE lcCRegionName = "".
+   END.
+   IF AVAIL DeliveryCustomer THEN DO:
+      FIND FIRST Region WHERE
+         Region.Region = DeliveryCustomer.Region NO-LOCK NO-ERROR.
+
+      IF AVAIL Region THEN
+         lcDelRegionName = Region.RgName.
+      ELSE lcRegionName = "".
+   END.
    RETURN "".
 END.
 
@@ -745,17 +762,10 @@ PROCEDURE pGetCCustPost:
    DEF OUTPUT PARAMETER olgErr AS LOGICAL NO-UNDO.
    DEF OUTPUT PARAMETER lcResult AS CHAR NO-UNDO.
    DEF VAR lcErr AS CHAR NO-UNDO.
-   DEF VAR lcCRegionName AS CHAR NO-UNDO.
+   DEF VAR lcCoRegionName AS CHAR NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).
    
    IF AVAIL companycustomer THEN DO:
-      FIND FIRST Region WHERE
-         Region.Region = companycustomer.Region NO-LOCK NO-ERROR.
-
-      IF AVAIL Region THEN
-         lcCRegionName = Region.RgName.
-      ELSE lcCRegionName = "". 
-
       lcResult =  companycustomer.zipcode + " " +
              companycustomer.postOffice + " " + lcCRegionName.
    END.
@@ -764,11 +774,11 @@ PROCEDURE pGetCCustPost:
          Region.Region = OrderCustomer.Region NO-LOCK NO-ERROR.
 
       IF AVAIL Region THEN
-         lcCRegionName = Region.RgName.
-      ELSE lcCRegionName = "".
+         lcCoRegionName = Region.RgName.
+      ELSE lcCoRegionName = "".
 
       lcResult =  OrderCustomer.zipcode + " " +
-             OrderCustomer.postOffice + " " + lcCRegionName.
+             OrderCustomer.postOffice + " " + lcCoRegionName.
    END.
 END.
 
@@ -1224,17 +1234,8 @@ PROCEDURE pGetDELPOST:
    DEF VAR lcDelAddress AS CHAR NO-UNDO.
    DEF VAR lcDelPost AS CHAR NO-UNDO.
    DEF VAR lcErr AS CHAR NO-UNDO.
-   DEF VAR lcDelRegionName AS CHAR NO-UNDO.
 
    IF AVAIL DeliveryCustomer THEN DO:
-      FIND FIRST Region WHERE
-         Region.Region = DeliveryCustomer.Region NO-LOCK NO-ERROR.
-
-      IF AVAIL Region THEN
-         lcDelRegionName = Region.RgName.
-      ELSE lcRegionName = "".
-      
-
       lcErr = fGetOrderData (INPUT iiOrderNBR).
 
       IF Order.DeliverySecure EQ 1 OR
@@ -1292,22 +1293,25 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
    /* Check that includes at least separator characters */
    IF INDEX(OrderAction.ItemKey,";") > 0 AND 
       NUM-ENTRIES(OrderAction.itemKey,";") = 9 THEN DO:
-         lcUPSHours = "<b>" + DeliveryCustomer.company + "</b> " +
-                      DeliveryCustomer.address + " " +
-                      DeliveryCustomer.ZipCode + " " +
-                      DeliveryCustomer.postoffice + 
-                      DeliveryCustomer.region + "<br /><br />" +
-                      "<b>Horarios:</b><br />".
       IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN DO: /* UPS */
          DO liCount = 2 TO NUM-ENTRIES(OrderAction.ItemKey,";"):
             lcUseEntries = lcUseEntries + STRING(liCount) + "|".
          END.
+         lcUPSHours = "<b>".
       END.
       /* Correos */
       ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} THEN DO:
          /* valid itemkey should have at least 8 entries */
          lcUseEntries = "1|7|8".
+         lcUPSHours = "<b>Oficina de Correos de ".
       END.
+      lcUPSHours = lcUPSHours + 
+                   DeliveryCustomer.company + "</b><br /> " +
+                   DeliveryCustomer.address + " " +
+                   DeliveryCustomer.ZipCode + " " +
+                   DeliveryCustomer.postoffice + /* " " + 
+                   lcDelRegionName + */ "<br /><br />" +
+                   "<b>Horarios:</b><br />".
       lcUseEntries = RIGHT-TRIM(lcUseEntries,"|"). /* remove last separator */
       /* get needed visible days */
       DO liCount = 1 TO NUM-ENTRIES(lcUseEntries,"|"):
