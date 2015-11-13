@@ -1274,7 +1274,7 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
    DEF VAR lcOpenHour    AS CHAR NO-UNDO.
    DEF VAR lcCloseHour   AS CHAR NO-UNDO.
    DEF VAR lcUseEntries  AS CHAR NO-UNDO.
-   DEF VAR lcDayList     AS CHAR NO-UNDO INIT "L a V|Lun|Mar|Mie|Jue|Vie|Sab|Dom|<br />Vacaciones".
+   DEF VAR lcDayList     AS CHAR NO-UNDO INIT "L a V|Lun|Mar|Mie|Jue|Vie|Sab|Dom|Vacaciones".
 
    DEF BUFFER OrderAction FOR OrderAction.
 
@@ -1307,7 +1307,7 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
                    DeliveryCustomer.ZipCode + " " +
                    DeliveryCustomer.postoffice + /* " " + 
                    lcDelRegionName + */ "<br /><br />" +
-                   "<b>Horarios:</b><br />".
+                   "<b>Horarios:</b><br /><table border='0'>".
       lcUseEntries = RIGHT-TRIM(lcUseEntries,"|"). /* remove last separator */
       /* get needed visible days */
       DO liCount = 1 TO NUM-ENTRIES(lcUseEntries,"|"):
@@ -1346,9 +1346,10 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
             lcDay = "Festivos".
          ELSE   
             lcDay = ENTRY(INT(ENTRY(liCount,lcUseEntries,"|")),lcDayList,"|").
-         lcUPSHours = lcUPSHours + "<b>" + lcDay + "</b>: " + lcHoursText +
-                      " <br /> ".
+         lcUPSHours = lcUPSHours + "<tr><td><b>" + lcDay + "</b>:</td> <td>" +
+                      lcHoursText + " </td></tr> ".
       END.
+      lcUPSHours = lcUPSHours + "</table>".
    END.
 
    lcResult = lcUPSHours.
