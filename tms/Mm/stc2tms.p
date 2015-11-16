@@ -1173,11 +1173,12 @@ PROCEDURE pCloseContracts:
    DEF VAR liPeriod       AS INT  NO-UNDO.
    DEF VAR llCloseRVTermFee AS LOG NO-UNDO INIT TRUE.
 
-   DEF VAR liBonoTerminate             AS INT  NO-UNDO INIT 0.
-   DEF VAR lcAllowedBONOSTCContracts   AS CHAR NO-UNDO.
-   DEF VAR lcOnlyVoiceContracts        AS CHAR NO-UNDO.
-   DEF VAR lcBONOContracts             AS CHAR NO-UNDO.
-   DEF VAR lcAllVoIPNativeBundles      AS CHAR NO-UNDO.
+   DEF VAR liBonoTerminate           AS INT     NO-UNDO INIT 0.
+   DEF VAR lcAllowedBONOSTCContracts AS CHAR    NO-UNDO.
+   DEF VAR lcOnlyVoiceContracts      AS CHAR    NO-UNDO.
+   DEF VAR lcBONOContracts           AS CHAR    NO-UNDO.
+   DEF VAR lcAllVoIPNativeBundles    AS CHAR    NO-UNDO.
+   DEF VAR llCreateFees       AS LOG  NO-UNDO.
 
    EMPTY TEMP-TABLE ttContract.
 
@@ -1258,12 +1259,27 @@ PROCEDURE pCloseContracts:
          (LOOKUP(lcContract,lcBonoContracts) > 0 AND
           LOOKUP(lcContract,lcAllowedBonoSTCContracts) = 0) THEN DO:
 
+         /* YDR-2038 (stc/btc to prepaid)
+            ReqIParam5
+            (0=no extend_term_contract
+             1=extend_term_contract
+             2=exclude_term_penalty)
+          */
+         IF AVAILABLE(bOrigRequest) AND
+            bOrigRequest.ReqIParam5 EQ 2 AND
+            CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
+                           DayCampaign.Brand   EQ gcBrand AND
+                           DayCampaign.DCEvent EQ lcContract AND
+                           DayCampaign.DCType EQ {&DCTYPE_DISCOUNT})
+            THEN llCreateFees = FALSE.
+         ELSE llCreateFees = TRUE. 
+
          /* terminate periodical contract */
          liTerminate = fPCActionRequest(iiMsSeq,
                                         lcContract,
                                         "term",
                                         idEndStamp,
-                                        TRUE,   /* create fee */
+                                        llCreateFees,   /* create fee */
                                         icReqSource,
                                         "",
                                         iiMainRequest,
