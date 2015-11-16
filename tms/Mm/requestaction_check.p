@@ -16,6 +16,7 @@
 DEF INPUT  PARAMETER iiReqType    AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icCLIType    AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER iiMsSeq      AS INT  NO-UNDO.
+DEF INPUT  PARAMETER icReqSource  AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER ocError      AS CHAR NO-UNDO. 
 
 DEF VAR lcBarrStatus  AS CHAR NO-UNDO. 
@@ -63,8 +64,8 @@ FUNCTION fRequestCheck RETURNS LOGICAL:
                  iiReqType = {&REQTYPE_BUNDLE_CHANGE}) AND            
                MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
                MsRequest.ReqCParam3 EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) AND
-               (MsRequest.ReqSource EQ {&REQUEST_SOURCE_MANUAL_TMS} OR 
-                MsRequest.ReqSource EQ {&REQUEST_SOURCE_NEWTON})
+               (icReqSource EQ {&REQUEST_SOURCE_MANUAL_TMS} OR 
+                icReqSource EQ {&REQUEST_SOURCE_NEWTON})
                THEN NEXT.
                 
             ocError = {&MSG_ONG_REQUEST}.
