@@ -139,11 +139,12 @@ FUNCTION fMakeTempTable RETURNS CHAR
                      llgDirect = TRUE.
                      llgAddEntry = TRUE.
                      lcCase = {&DMS_CASE_TYPE_ID_DIRECT_CH}.
+                     NEXT.  /*no need to check other cases because they                                           can not be parallel according to current specs.*/
                   END.
 
             END.
             /*Case 1: Activations*/
-            ELSE IF (Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} /*6*/
+            IF (Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} /*6*/
                OR
                Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC} /*32*/) AND
                R-INDEX(Order.OrderChannel, "pos"  ) > 0 /* POS needed*/
