@@ -57,7 +57,6 @@ DEF VAR llOldPayType       AS LOG  NO-UNDO.
 DEF VAR liOrigStatus       AS INT  NO-UNDO.
 DEF VAR ldaNewBeginDate    AS DATE NO-UNDO.
 DEF VAR ldeActStamp        AS DEC  NO-UNDO.
-DEF VAR llCreateFees       AS LOG  NO-UNDO.
 
 DEF VAR ldaNextMonthActDate AS DATE NO-UNDO.
 DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
@@ -1160,7 +1159,6 @@ PROCEDURE pCloseContracts:
 
    DEF BUFFER bActRequest  FOR MsRequest.
    DEF BUFFER bOrigRequest FOR MsRequest.
-   DEF BUFFER bOrder       FOR Order.
 
    DEF VAR lcContractList AS CHAR NO-UNDO.
    DEF VAR lcContIDList   AS CHAR NO-UNDO.
@@ -1180,7 +1178,7 @@ PROCEDURE pCloseContracts:
    DEF VAR lcOnlyVoiceContracts      AS CHAR    NO-UNDO.
    DEF VAR lcBONOContracts           AS CHAR    NO-UNDO.
    DEF VAR lcAllVoIPNativeBundles    AS CHAR    NO-UNDO.
-   DEF VAR lbolSTCRenewSameDay       AS LOGICAL NO-UNDO INITIAL FALSE.
+   DEF VAR llCreateFees       AS LOG  NO-UNDO.
 
    EMPTY TEMP-TABLE ttContract.
 
@@ -1260,54 +1258,23 @@ PROCEDURE pCloseContracts:
           ENTRY(1,lcReqChar,";") NE "?") OR
          (LOOKUP(lcContract,lcBonoContracts) > 0 AND
           LOOKUP(lcContract,lcAllowedBonoSTCContracts) = 0) THEN DO:
-          /*
-            Find a renewal order that was created in the same date as
-            the STC request
-           */
-           FIND FIRST /* StatusCode INDEX */
-              bOrder NO-LOCK WHERE
-              bOrder.Brand EQ gcBrand AND
-              bOrder.StatusCode <> {&ORDER_STATUS_CLOSED} AND
-              TRUNCATE(bOrder.CrStamp,0) EQ TRUNCATE(bOrigRequest.CreStamp,0) AND
-              bOrder.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
-              bOrder.MSSeq EQ bOrigRequest.MsSeq
-           NO-ERROR.
-           IF AVAILABLE(bOrder) THEN
-           DO:
-              /* YDR-2035
-                Don't charge penalty when:
-                STC is requested on the same day of the renewal order AND
-                New type is POSTPAID */
-              IF bOrigRequest.reqcparam2 BEGINS "cont" /* POSTPAID */ THEN
-                 lbolSTCRenewSameDay = TRUE.
-              ELSE
-                 lbolSTCRenewSameDay = FALSE.
-           END. /* IF AVAILABLE(bOrder) */
 
-         /* YDR-2038 
+         /* YDR-2038 (stc/btc to prepaid)
             ReqIParam5
             (0=no extend_term_contract
              1=extend_term_contract
              2=exclude_term_penalty)
           */
-         llCreateFees = TRUE. 
-         IF AVAILABLE(bOrigRequest) THEN
-         IF bOrigRequest.ReqIParam5 EQ 2 AND
-            CLIType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID} THEN
-         Penalty-Exemption:
-         DO:
-            FIND FIRST DayCampaign NO-LOCK WHERE
-                       DayCampaign.Brand   EQ gcBrand AND
-                       DayCampaign.DCEvent EQ lcContract AND
-                       DayCampaign.ValidTo >= TODAY
-            NO-ERROR.
-            IF NOT AVAILABLE(DayCampaign) THEN LEAVE Penalty-Exemption.
-            
-            IF DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} THEN
-               llCreateFees = FALSE.
-         END.
+         IF AVAILABLE(bOrigRequest) AND
+            bOrigRequest.ReqIParam5 EQ 2 AND
+            CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
+                           DayCampaign.Brand   EQ gcBrand AND
+                           DayCampaign.DCEvent EQ lcContract AND
+                           DayCampaign.DCType EQ {&DCTYPE_DISCOUNT})
+            THEN llCreateFees = FALSE.
+         ELSE llCreateFees = TRUE. 
+
          /* terminate periodical contract */
-         IF NOT lbolSTCRenewSameDay THEN
          liTerminate = fPCActionRequest(iiMsSeq,
                                         lcContract,
                                         "term",

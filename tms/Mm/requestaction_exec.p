@@ -44,10 +44,7 @@ DEF VAR lcResult     AS CHAR NO-UNDO.
 
 DEF VAR lhRequest    AS HANDLE NO-UNDO.
 
-DEF VAR lbolSTCRenewSameDay AS LOGICAL NO-UNDO.
-
 DEF BUFFER bOrigRequest FOR MsRequest.
-DEF BUFFER bOrder       FOR Order.
 
 
 /****** Main start **********/
@@ -188,13 +185,15 @@ PROCEDURE pPeriodicalContract:
    DEF VAR lcPriceList AS CHAR NO-UNDO. 
    DEF VAR ldePenalty AS DEC NO-UNDO. 
    DEF VAR lcPerContractIDs AS CHAR NO-UNDO. 
-   DEF VAR llFound AS LOG NO-UNDO.
+   DEF VAR llFound AS LOG NO-UNDO. 
+   DEF VAR lbolSTCRenewSameDay AS LOGICAL NO-UNDO.
 
    DEF BUFFER bBundleRequest  FOR MsRequest.
    DEF BUFFER bBundleContract FOR DayCampaign.
    DEF BUFFER bServiceLimit   FOR ServiceLimit.
    DEF BUFFER bMServiceLimit  FOR MServiceLimit.
    DEF BUFFER bDCCLI          FOR DCCLI.
+   DEF BUFFER bOrder       FOR Order.
 
    FIND FIRST DayCampaign WHERE
               DayCampaign.Brand   = gcBrand AND
@@ -202,6 +201,7 @@ PROCEDURE pPeriodicalContract:
    NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign THEN RETURN "ERROR:Unknown contract".
    
+
    CASE RequestAction.Action:
           
    /* creation */
@@ -334,9 +334,11 @@ PROCEDURE pPeriodicalContract:
                          OrderAction.OrderId  = Order.OrderId AND
                          OrderAction.ItemType = "ExcludeTermPenalty" NO-LOCK)
       THEN llCreateFees = FALSE.
+
       lbolSTCRenewSameDay = FALSE.
       IF (bOrigRequest.Reqtype EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR 
-          bOrigRequest.Reqtype EQ {&REQTYPE_BUNDLE_CHANGE}) THEN
+          bOrigRequest.Reqtype EQ {&REQTYPE_BUNDLE_CHANGE}) AND
+          DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
       DO:         
          /* YDR-2038 
             (0=no extend_term_contract
@@ -345,29 +347,28 @@ PROCEDURE pPeriodicalContract:
          */
          IF bOrigRequest.ReqIParam5 EQ 2 THEN
             llCreateFees = FALSE.
-         /*
-          Find a renewal order that was created in the same date as
-          the STC request
-         */
-         FIND FIRST /* StatusCode INDEX */
-            bOrder NO-LOCK WHERE
-            bOrder.Brand EQ gcBrand AND
-            bOrder.StatusCode <> {&ORDER_STATUS_CLOSED} AND
-            TRUNCATE(bOrder.CrStamp,0) EQ TRUNCATE(bOrigRequest.CreStamp,0) AND
-            bOrder.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
-            bOrder.MSSeq EQ bOrigRequest.MsSeq
-         NO-ERROR.
-         IF AVAILABLE(bOrder) THEN
-         DO:
-            /* YDR-2035
-              Don't charge penalty when:
-              STC is requested on the same day of the renewal order AND
-              New type is POSTPAID */
-            IF bOrigRequest.reqcparam2 BEGINS "cont" /* POSTPAID */ THEN
-               lbolSTCRenewSameDay = TRUE.
-            ELSE
-               lbolSTCRenewSameDay = FALSE.
-         END. /* IF AVAILABLE(bOrder) */
+
+         /* YDR-2035
+           Don't charge penalty when:
+           STC is requested on the same day of the renewal order AND
+           New type is POSTPAID */
+         IF bOrigRequest.reqcparam2 BEGINS "cont" /* POSTPAID */ THEN
+            ORDER_LOOP:
+            FOR EACH bOrder NO-LOCK WHERE
+               bOrder.MSSeq EQ bOrigRequest.MsSeq AND
+               LOOKUP(bOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) = 0 AND
+               TRUNCATE(bOrder.CrStamp,0) EQ TRUNCATE(bOrigRequest.CreStamp,0) AND
+               bOrder.OrderType EQ {&ORDER_TYPE_RENEWAL}:
+               IF NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                                     MsRequest.MsSeq = bOrder.MsSeq AND
+                                     MsRequest.Reqtype = 49 AND
+                                     MsRequest.Reqstatus = 2 AND
+                                     MsRequest.ReqIParam1 = bOrder.OrderId) THEN
+               DO:
+                  lbolSTCRenewSameDay = TRUE.
+                  LEAVE ORDER_LOOP.
+               END.
+            END.
       END. /* IF bOrigRequest.ReqIParam5 EQ 2 ... */
       /* YPR-1763 - Exclude PayTerm termination */
       IF AVAIL Order AND DayCampaign.DCType = "5" AND
@@ -382,11 +383,12 @@ PROCEDURE pPeriodicalContract:
          then no need to terminate Voip service */
       IF DayCampaign.DCEvent = "BONO_VOIP" AND 
          LOOKUP(icSource,"4,6,11,15") > 0 AND
-         fBundleWithSTC(liMsSeq,idActStamp,TRUE) THEN RETURN.   
+         fBundleWithSTC(liMsSeq,idActStamp,TRUE) THEN RETURN.
+         
       IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN DO:
 
          llFound = FALSE.
-         FOR EACH bDCCLI WHERE
+         FOR EACH bDCCLI WHERE 
                   bDCCLI.Brand   = gcBrand AND
                   bDCCLI.DCEvent = ttAction.ActionKey AND
                   bDCCLI.MsSeq   = liMsSeq AND
@@ -396,28 +398,28 @@ PROCEDURE pPeriodicalContract:
                liRequest = 1. /* to prevent error memo creation */
                NEXT.
             END.
-            llFound = TRUE.          
-            IF NOT(DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} AND
-                   lbolSTCRenewSameDay) THEN
-            DO:            
-               liRequest = fPCActionRequest(liMsSeq,
-                                           ttAction.ActionKey,
-                                           "term",
-                                           idTermStamp,
-                                           llCreateFees,
-                                           icSource,
-                                           "",
-                                           iiMsRequest,
-                                           FALSE,
-                                           "",
-                                           0,
-                                           bDCCLI.PerContractId,
-                                           OUTPUT lcResult).
-            END. /* IF NOT(DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} */
+
+            llFound = TRUE.
+         
+            liRequest = fPCActionRequest(liMsSeq,
+                                        ttAction.ActionKey,
+                                        "term",
+                                        idTermStamp,
+                                        llCreateFees,
+                                        icSource,
+                                        "",
+                                        iiMsRequest,
+                                        FALSE,
+                                        "",
+                                        0,
+                                        bDCCLI.PerContractId,
+                                        OUTPUT lcResult).
          END. /* FOR EACH bDCCLI */
          IF NOT llFound THEN RETURN.
       END.
-      ELSE liRequest = fPCActionRequest(liMsSeq,
+      ELSE IF NOT (DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} AND
+                   lbolSTCRenewSameDay) THEN
+         liRequest = fPCActionRequest(liMsSeq,
                                         ttAction.ActionKey,
                                         "term",
                                         idTermStamp,
@@ -433,7 +435,8 @@ PROCEDURE pPeriodicalContract:
    END.
          
    /* recreation (possible termination + creation) */
-   WHEN 3 THEN DO:     
+   WHEN 3 THEN DO:
+            
       liRequest = fPCActionRequest(liMsSeq,
                                    ttAction.ActionKey,
                                    "recreate",
