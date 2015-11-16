@@ -30,6 +30,8 @@ DEFINE INPUT PARAMETER iiMSrequest  AS INTEGER   NO-UNDO.
 
 DEFINE VARIABLE ldCurrTS            AS  DECIMAL   NO-UNDO.
 
+DEFINE BUFFER bMSRequest FOR MsRequest.
+
 FIND FIRST MSRequest WHERE
            MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
 IF NOT AVAILABLE MsRequest OR
@@ -98,7 +100,8 @@ DEFINE VARIABLE lcALLPostpaidBundles   AS CHAR    NO-UNDO.
 DEFINE VARIABLE liDSSMsSeq             AS INT     NO-UNDO.
 DEFINE VARIABLE lcAllowedDSS2SubsType  AS CHAR    NO-UNDO.
 DEFINE VARIABLE lcBundleId             AS CHAR    NO-UNDO.
-DEFINE VARIABLE lcBankAccount          AS CHAR    NO-UNDO. 
+DEFINE VARIABLE lcBankAccount          AS CHAR    NO-UNDO.
+DEF    VAR      lcInfo                 AS CHARACTER NO-UNDO.
 
 DEFINE BUFFER bSubMsRequest  FOR MsRequest.
 DEFINE BUFFER bTermMsRequest FOR MsRequest.
@@ -688,7 +691,35 @@ DO TRANSACTION:
          fMarkOrderStamp(Order.OrderID,
                          "Delivery",
                          MsRequest.ActStamp).
-
+        /* YDR-2037
+          Restore STC request by finding a 
+          cancelled STC request and create 
+          a new one with the same input parameters
+         */                 
+        FIND FIRST bMSRequest NO-LOCK WHERE
+                   bMSRequest.MsSeq     EQ Mobsub.MsSeq AND
+                   bMSRequest.ReqType   EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+                   bMSRequest.ReqStatus EQ {&REQUEST_STATUS_CANCELLED} AND
+                   bMSRequest.CreStamp  < MsRequest.CreStamp
+        NO-ERROR.
+        liRequest = fCTChangeRequest(MobSub.msseq,
+                          bMSRequest.ReqCParam1,  /* CLIType */
+                          bMSRequest.ReqCparam5,  /* BundleType */
+                          bMSRequest.ReqCparam3,  /* BankNumber */
+                          bMSRequest.ReqDParam1,  /* ChgStamp */
+                          bMSRequest.ReqIParam1,  /* CreditCheck */
+                          bMSRequest.ReqIParam5,  /* RequestFlags */ 
+                          bMSRequest.Salesman,    /* Salesman */
+                          ?,                      /* CreateFees */
+                          ?,                      /* SendSMS */
+                          ?,                      /* Creator */
+                          bMSRequest.ReqDParam2,  /* Fee */
+                          bMSRequest.ReqSource,   /* RequestSource */
+                          bMSRequest.ReqIParam2,  /* OrderId */
+                          0,                      /* Father request id */
+                          bMSRequest.ReqCparam6,  /* For DMS usage contract_id */
+                          OUTPUT lcInfo).        
+        /* YDR-2037 */
          /* Re-launch retention order if present */
          FIND FIRST OrderAction WHERE
                     OrderAction.Brand    = gcBrand AND
