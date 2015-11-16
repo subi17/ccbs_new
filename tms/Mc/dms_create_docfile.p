@@ -137,11 +137,13 @@ FUNCTION fMakeTempTable RETURNS CHAR
                  /* This is financed case */
                   IF liMonths NE 0 THEN DO:
                      llgDirect = TRUE.
-                     llgAddEntry = TRUE.
+                     CREATE ttOrderList.
+                     ASSIGN ttOrderList.OrderID = OrderTimestamp.OrderId
+                            ttOrderList.CaseID = lcCase
+                            ttOrderList.Direct = llgDirect.
                      lcCase = {&DMS_CASE_TYPE_ID_DIRECT_CH}.
                      NEXT.  /*no need to check other cases because they                                           can not be parallel according to current specs.*/
                   END.
-
             END.
             /*Case 1: Activations*/
             IF (Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} /*6*/
