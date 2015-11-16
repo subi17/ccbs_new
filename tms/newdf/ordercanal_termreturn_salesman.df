@@ -1,0 +1,8 @@
+ADD FIELD "Salesman" OF "TermReturn" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Salesman"
+  POSITION 10
+  COLUMN-LABEL "Salesman"
+  ORDER 90
+

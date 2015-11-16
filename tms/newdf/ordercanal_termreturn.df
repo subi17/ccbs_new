@@ -76,6 +76,14 @@ ADD FIELD "MSISDN" OF "TermReturn" AS character
   COLUMN-LABEL "MSISDN"
   ORDER 80
 
+ADD FIELD "Salesman" OF "TermReturn" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Salesman"
+  POSITION 10
+  COLUMN-LABEL "Salesman"
+  ORDER 90
+
 ADD INDEX "OrderId" ON "TermReturn" 
   AREA "Sta_Index_1"
   UNIQUE
