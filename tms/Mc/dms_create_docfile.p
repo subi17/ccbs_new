@@ -179,10 +179,12 @@ FUNCTION fMakeTempTable RETURNS CHAR
                     Order.StatusCode EQ {&ORDER_STATUS_CLOSED_BY_FRAUD} OR
                     Order.StatusCode EQ {&ORDER_STATUS_AUTO_CLOSED} THEN DO:
                /*Send Cancel notif if TMS has sent other notif to DMS
-                (previous sending)*/
+                (previous sending). NOTE: This is not allowed if DMS has notified the
+                cancellation(statuses E,J,F,N,G).*/
                FIND FIRST DMS NO-LOCK WHERE
-                          DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
-                          DMS.HostId EQ Order.OrderID NO-ERROR.
+                          DMS.ContractID EQ Order.ContractID AND 
+                           LOOKUP(DMS.StatusCode, "E,J,F,N,G") = 0 
+                           NO-ERROR.
                IF AVAIL DMS THEN DO:
                   lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
                   llgAddEntry = TRUE.
