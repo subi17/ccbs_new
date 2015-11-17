@@ -5,7 +5,6 @@
            id_type;str;optional;Customer id type (Representative person if company_id is given) 
            person_id;str;optional;Customer id (Representative person if company_id is given)
            company_id;str;optional;Company id
-           icc;str;optional;SIM ICC
            channel;str;mandatory;order channel
            bypass;boolean;optional;skip some business rules (YDR-90)
            offer_id;str;mandatory;offer id
@@ -16,8 +15,8 @@
           contract_penalty;double;a possible penalty in euros
           person_id;string;person id of orderer
           id_type;string;person id type of orderer
-          has_terminal;bool;terminal has been ordered before (only returned when icc parameter exists)
-          number_type;string;new/mnp, only available if icc paramter is given (renove stc)
+          has_terminal;bool;terminal has been ordered before
+          number_type;string;new/mnp (original order type)
           allowed_terminal_financing_amount;double;if risk limit is configured
  * @installment;array of installment structs;two fields insidde struct
  * @installment;struct
@@ -121,7 +120,6 @@ DEF VAR pcCLI AS CHAR NO-UNDO.
 DEF VAR pcIdType AS CHAR NO-UNDO INIT ?.
 DEF VAR pcPersonId AS CHAR NO-UNDO INIT ?.
 DEF VAR pcCIF AS CHAR NO-UNDO INIT ?.
-DEF VAR pcICC AS CHAR NO-UNDO INIT ?.
 DEF VAR pcChannel AS CHARACTER NO-UNDO. 
 DEF VAR plBypass AS LOGICAL NO-UNDO.
 DEF VAR pcOfferId AS CHARACTER NO-UNDO. 
@@ -172,7 +170,7 @@ pcstruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcFields = validate_request(pcstruct,
-   "msisdn!,person_id,id_type,company_id,icc,channel!,offer_id,bypass").
+   "msisdn!,person_id,id_type,company_id,channel!,offer_id,bypass").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
@@ -180,15 +178,11 @@ ASSIGN
    pcIdType = get_string(pcStruct, "id_type") WHEN LOOKUP ("id_type", lcFields) > 0
    pcPersonId = get_string(pcStruct, "person_id") WHEN LOOKUP ("person_id", lcFields) > 0
    pcCIF = get_string(pcStruct, "company_id") WHEN LOOKUP ("company_id", lcFields) > 0
-   pcICC = get_string(pcStruct, "icc") WHEN LOOKUP("icc", lcFields) > 0
    pcChannel = get_string(pcStruct, "channel")
    plBypass = get_bool(pcStruct, "bypass") WHEN LOOKUP("bypass", lcFields) > 0
    pcOfferId = get_string(pcStruct, "offer_id") WHEN LOOKUP("offer_id",lcFields) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-IF pcChannel = "renewal_pos_stc" AND pcIcc EQ ? THEN
-   RETURN appl_err("no_match_icc").
 
 ASSIGN lcPostpaidVoiceTariffs = fCParamC("POSTPAID_VOICE_TARIFFS")
        lcPrepaidVoiceTariffs  = fCParamC("PREPAID_VOICE_TARIFFS").
@@ -271,20 +265,13 @@ FOR EACH MsRequest NO-LOCK WHERE
    RETURN appl_err("general").
 END.
 
-IF pcICC NE ? THEN DO:
-
-   IF MobSub.ICC NE pcICC THEN DO:
-      RETURN appl_err("no_match_icc").
-   END.
-   /* NEW or MNP number */
-   FIND FIRST Order NO-LOCK WHERE 
-      Order.MsSeq = Mobsub.MsSeq AND
-      Order.StatusCode EQ "6" AND
-      Order.OrderType < 2 NO-ERROR.
-   IF NOT AVAIL Order THEN DO:
-      RETURN appl_err("order_not_found").
-   END.
-END.
+/* NEW or MNP number */
+FIND FIRST Order NO-LOCK WHERE 
+   Order.MsSeq = Mobsub.MsSeq AND
+   Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} AND
+   Order.OrderType < 2 NO-ERROR.
+IF NOT AVAIL Order THEN
+   RETURN appl_err("order_not_found").
 
 /* Check barrings */
 IF Mobsub.PayType EQ FALSE AND NOT plBypass THEN DO:
@@ -390,10 +377,8 @@ IF AVAIL SubsTerminal THEN DO:
    END.
 END.
 
-IF pcICC NE ? THEN DO:
-   add_string(top_struct,"number_type",STRING(Order.MNPStatus EQ 0, "new/mnp")).
-   add_boolean(top_struct, "has_terminal", (AVAIL Substerminal)).
-END.
+add_string(top_struct,"number_type",STRING(Order.MNPStatus EQ 0, "new/mnp")).
+add_boolean(top_struct, "has_terminal", (AVAIL Substerminal)).
 
 /* Search active terminal contract with penalty fee */
 CONTRACT_LOOP:
