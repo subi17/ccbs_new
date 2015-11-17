@@ -48,15 +48,6 @@ ADD FIELD "DeviceScreen" OF "TermReturn" AS logical
   COLUMN-LABEL "DeviceScreen"
   ORDER 50
 
-ADD FIELD "ReturnChannel" OF "TermReturn" AS character 
-  FORMAT "x(16)"
-  INITIAL ""
-  LABEL "Return Channel"
-  POSITION 7
-  MAX-WIDTH 32
-  COLUMN-LABEL "ReturnChannel"
-  ORDER 60
-
 ADD FIELD "ReturnTS" OF "TermReturn" AS decimal 
   FORMAT "99999999.99999"
   INITIAL "0"
@@ -83,6 +74,22 @@ ADD FIELD "Salesman" OF "TermReturn" AS character
   POSITION 10
   COLUMN-LABEL "Salesman"
   ORDER 90
+
+ADD FIELD "TerminalType" OF "TermReturn" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Terminal Type"
+  POSITION 11
+  COLUMN-LABEL "TerminalType"
+  ORDER 100
+
+ADD FIELD "EnvelopeNumber" OF "TermReturn" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Envelope Number"
+  POSITION 12
+  COLUMN-LABEL "EnvelopeNumber"
+  ORDER 110
 
 ADD INDEX "OrderId" ON "TermReturn" 
   AREA "Sta_Index_1"
