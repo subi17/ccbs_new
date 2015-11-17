@@ -101,7 +101,7 @@ IF llDeviceStart AND llDeviceScreen THEN DO:
 
    FIND SingleFee USE-INDEX Custnum WHERE
         SingleFee.Brand       = gcBrand AND
-        SingleFee.Custnum     = MovSub.CustNum AND
+        SingleFee.Custnum     = MobSub.CustNum AND
         SingleFee.HostTable   = "Mobsub" AND
         SingleFee.KeyValue    = STRING(MobSub.MsSeq) AND
         SingleFee.SourceTable = "DCCLI" AND
