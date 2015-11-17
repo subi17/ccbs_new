@@ -8,7 +8,9 @@
            msisdn;string;mandatory
            device_start;boolean;mandatory
            device_screen;boolean;mandatory
-           return_channel;string;mandatory
+           salesman;string;mandatory
+           terminal_type;string;mandatory
+           envelope_number;string;optional
 
  * @output success;boolean
  */
@@ -42,7 +44,9 @@ DEF VAR lcBillCode       AS CHAR   NO-UNDO.
 DEF VAR lcMSISDN         AS CHAR   NO-UNDO.
 DEF VAR llDeviceStart    AS LOG    NO-UNDO.
 DEF VAR llDeviceScreen   AS LOG    NO-UNDO.
-DEF VAR lcReturnChannel  AS CHAR   NO-UNDO.
+DEF VAR lcSalesman       AS CHAR   NO-UNDO.
+DEF VAR lcTerminalType   AS CHAR   NO-UNDO.
+DEF VAR lcEnvelopeNumber AS CHAR   NO-UNDO.
 DEF VAR ldReturnTS       AS DEC    NO-UNDO.
 DEF VAR lcResult         AS CHAR   NO-UNDO.
 DEF VAR liRequest        AS INT    NO-UNDO.
@@ -50,7 +54,7 @@ DEF VAR liRequest        AS INT    NO-UNDO.
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
-lcStruct = validate_request(pcStruct, "imei!,orderid!,bill_code!,msisdn!,device_start!,device_screen!,return_channel!").
+lcStruct = validate_request(pcStruct, "imei!,orderid!,bill_code!,msisdn!,device_start!,device_screen!,salesman!,terminal_type!,envelope_number").
 
 ASSIGN
    lcIMEI            = get_string(pcStruct,"imei")
@@ -59,7 +63,9 @@ ASSIGN
    lcMSISDN          = get_string(pcStruct,"msisdn")
    llDeviceStart     = get_bool(pcStruct,"device_start")
    llDeviceScreen    = get_bool(pcStruct,"device_screen")
-   lcReturnChannel   = get_string(pcStruct,"return_channel")
+   lcSalesman        = get_string(pcStruct,"salesman")
+   lcTerminalType    = get_string(pcStruct,"terminal_type")
+   lcEnvelopeNumber  = get_string(pcStruct,"envelope_number")
    ldReturnTS        = fMakeTS().
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -92,7 +98,7 @@ IF llDeviceStart AND llDeviceScreen THEN DO:
         SingleFee.SourceTable = "DCCLI" AND
         SingleFee.SourceKey   = OrderAction.ItemKey AND
         SingleFee.CalcObj     = "RVTERM" NO-LOCK NO-ERROR.
-   
+
    IF NOT AVAILABLE SingleFee THEN
       RETURN appl_err("Discount creation failed (residual fee not found)").
 
@@ -122,7 +128,9 @@ ASSIGN TermReturn.IMEI           = lcIMEI
        TermReturn.MSISDN         = lcMSISDN
        TermReturn.DeviceStart    = llDeviceStart
        TermReturn.DeviceScreen   = llDeviceScreen
-       TermReturn.ReturnChannel  = lcReturnChannel
+       TermReturn.Salesman       = lcSalesman
+       TermReturn.TerminalType   = lcTerminalType
+       TermReturn.EnvelopeNumber = lcEnvelopeNumber
        TermReturn.ReturnTS       = ldReturnTS.
 
 IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhTermReturn).
