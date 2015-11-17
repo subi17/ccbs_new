@@ -5,6 +5,7 @@
   Author .......: Vikas
   Created ......: 29.06.12
   Version ......: Yoigo
+   09.09.2015 hugo.lujan [Q25] - TMS - Cancel Renewal Order
 ---------------------------------------------------------------------- */
 
 {commali.i}
@@ -15,16 +16,20 @@
 {msreqfunc.i}
 {tmsconst.i}
 {ordercancel.i}
+{coinv.i}
+{dpmember.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER  NO-UNDO.
 
-DEFINE VARIABLE liTermPeriod        AS INTEGER   NO-UNDO.
-DEFINE VARIABLE lcCreditFees        AS CHAR NO-UNDO. 
-DEFINE VARIABLE ldaRenewalDate      AS DATE      NO-UNDO.
-DEFINE VARIABLE liRenewalTime       AS INTEGER   NO-UNDO.
+DEF VAR liTermPeriod   AS INTEGER NO-UNDO.
+DEF VAR lcCreditFees   AS CHAR    NO-UNDO. 
+DEF VAR ldaRenewalDate AS DATE    NO-UNDO.
+DEF VAR liRenewalTime  AS INTEGER NO-UNDO.
 
-DEFINE BUFFER bSubMsRequest  FOR MsRequest.
-DEFINE BUFFER bMsRequest     FOR MsRequest.
+DEF BUFFER bSubMsRequest FOR MsRequest.
+DEF BUFFER bMsRequest    FOR MsRequest.
+
+DEF VAR ldtactdate1 AS DATE NO-UNDO.
 
 FIND FIRST MsRequest WHERE
            MsRequest.MsRequest = iiMsRequest  NO-LOCK NO-ERROR.
@@ -57,7 +62,8 @@ FIND FIRST bSubMsRequest WHERE
            bSubMsRequest.OrigRequest = bMsRequest.MsRequest AND
           (bSubMsRequest.ReqType     = {&REQTYPE_CONTRACT_ACTIVATION} OR
            bSubMsRequest.ReqType     = {&REQTYPE_CONTRACT_TERMINATION}) AND
-           LOOKUP(STRING(bSubMsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0
+           LOOKUP(STRING(bSubMsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND
+           bSubMsRequest.ReqCParam3 NE "RVTERM12"
      NO-LOCK NO-ERROR.
 IF AVAIL bSubMsRequest THEN DO:
    fReqError("Renewal order is still ongoing").
@@ -217,15 +223,15 @@ RETURN RETURN-VALUE.
 
 PROCEDURE pRevertRenewalOrder:
 
-   DEFINE VARIABLE liTermRequest          AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE lcError                AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE ldaLastMonth           AS DATE      NO-UNDO.
-   DEFINE VARIABLE ldaLastDayOfLastMonth  AS DATE      NO-UNDO.
-   DEFINE VARIABLE ldPeriodTo             AS DECIMAL   NO-UNDO.
-   DEFINE VARIABLE ldaTermDate            AS DATE      NO-UNDO.
-   DEFINE VARIABLE liTermTime             AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE llReCreate             AS LOGICAL   NO-UNDO.
-   DEFINE VARIABLE liCount                AS INTEGER   NO-UNDO.
+   DEF VAR liTermRequest          AS INTEGER   NO-UNDO.
+   DEF VAR lcError                AS CHARACTER NO-UNDO.
+   DEF VAR ldaLastMonth           AS DATE      NO-UNDO.
+   DEF VAR ldaLastDayOfLastMonth  AS DATE      NO-UNDO.
+   DEF VAR ldPeriodTo             AS DECIMAL   NO-UNDO.
+   DEF VAR ldaTermDate            AS DATE      NO-UNDO.
+   DEF VAR liTermTime             AS INTEGER   NO-UNDO.
+   DEF VAR llReCreate             AS LOGICAL   NO-UNDO.
+   DEF VAR liCount                AS INTEGER   NO-UNDO.
    DEF VAR ldaRequestDate AS DATE NO-UNDO. 
 
    DEFINE BUFFER bDCCLI      FOR DCCLI.
@@ -254,6 +260,8 @@ PROCEDURE pRevertRenewalOrder:
              DayCampaign.DCEvent = bSubMsRequest.ReqCparam3 AND
             (DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} OR
              DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}):
+
+       IF bSubMsRequest.ReqCParam3 EQ "RVTERM12" THEN NEXT.
 
        IF bSubMsRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} THEN DO:
       
@@ -423,14 +431,127 @@ PROCEDURE pRevertRenewalOrder:
    
    RUN pCreateRenewalCreditNote(MsRequest.ReqIParam1,TRIM(lcCreditFees,",")).
 
+   /* Q25 */
+   RUN pCloseQ25Discount IN THIS-PROCEDURE.
+   IF RETURN-VALUE BEGINS "ERROR" THEN
+       DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                        "MobSub",
+                        STRING(MobSub.MsSeq),
+                        MobSub.CustNum,
+                        "Revert renewal order",
+                        RETURN-VALUE).
+
    /* Request handled succesfully */
    FIND FIRST MsRequest WHERE
               MsRequest.MSRequest = iiMsRequest NO-LOCK NO-ERROR.
-
-   fReqStatus(2,"").
+   
+   fReqStatus(2,"").   
 END. /* DO TRANSACTION: */
 
 RETURN "".
 
 END PROCEDURE.
 
+/* Q25 - Close the corresponding RVTERMDT1 discount for Quota 25. YPR-2520 */
+PROCEDURE pCloseQ25Discount:
+
+   DEF VAR liPercontractId AS INTEGER   NO-UNDO. 
+   DEF VAR ldeDiscount     AS DECIMAL   NO-UNDO. 
+   DEF VAR lcResult        AS CHARACTER NO-UNDO.
+
+   FIND FIRST OrderAction NO-LOCK WHERE
+              OrderAction.Brand    EQ gcBrand AND
+              OrderAction.OrderId  EQ MsRequest.ReqIParam1 AND
+              OrderAction.ItemType EQ "Q25Discount" NO-ERROR.
+      
+   IF NOT AVAILABLE OrderAction THEN RETURN "".
+
+   liPercontractId = INT(OrderAction.ItemKey) NO-ERROR.
+   IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
+      RETURN "ERROR:Q25 discount cancellation (contract id)".
+   
+   ldeDiscount = DEC(OrderAction.ItemParam) NO-ERROR.
+   IF ERROR-STATUS:ERROR OR ldeDiscount EQ 0 THEN 
+      RETURN "ERROR:Q25 discount cancellation (discount amount)". 
+
+   FIND SingleFee NO-LOCK WHERE
+        SingleFee.Brand       = gcBrand AND
+        SingleFee.HostTable   = "Mobsub" AND
+        SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
+        SingleFee.SourceTable = "DCCLI" AND
+        SingleFee.SourceKey   = STRING(liPerContractID) AND
+        SingleFee.CalcObj     = "RVTERM" NO-ERROR.
+   
+   IF NOT AVAILABLE SingleFee THEN RETURN "".
+
+   FIND FIRST DiscountPlan NO-LOCK WHERE
+              DiscountPlan.Brand = gcBrand AND
+              DiscountPlan.DPRuleID = "RVTERMDT1DISC" NO-ERROR.
+   IF NOT AVAIL DiscountPlan THEN
+      RETURN "ERROR:Q25 discount cancellation (RVTERMDT1DISC plan not found)".
+
+   FIND FIRST dpmember NO-LOCK WHERE
+              dpmember.dpid = DiscountPlan.DpId AND
+              dpmember.hosttable = "mobsub" AND
+              dpmember.keyvalue = string(mobsub.msseq) AND
+              dpmember.validfrom = fPer2Date(SingleFee.BillPeriod,0) AND
+              dpmember.validto >= dpmember.validfrom AND
+              dpmember.discvalue = ldeDiscount NO-ERROR.
+
+   IF NOT AVAILABLE dpmember THEN RETURN "".
+  
+   IF SingleFee.Billed AND
+      CAN-FIND(FIRST Invoice NO-LOCK WHERE
+                     Invoice.Invnum  EQ SingleFee.Invnum AND
+                     Invoice.Custnum EQ SingleFee.Custnum AND
+                     Invoice.InvType EQ 1) THEN DO:
+
+      FIND FIRST subInvoice NO-LOCK WHERE
+                 subInvoice.InvNum EQ SingleFee.InvNum AND
+                 subInvoice.MsSeq EQ Mobsub.MsSeq NO-ERROR.
+      
+      IF NOT AVAILABLE subInvoice THEN
+        RETURN "ERROR:Q25 discount cancellation (subinvoice not found)".
+      
+      FIND FIRST invrow NO-LOCK WHERE
+                 invrow.InvNum    EQ subInvoice.InvNum AND
+                 invrow.SubInvNum EQ subInvoice.SubInvNum AND
+                 invrow.BillCode EQ "RVTERMDT1" NO-ERROR.
+      
+      IF NOT AVAILABLE invrow THEN RETURN "".
+        
+      /* Month 25 and after: Create new single fee 
+         (CRVTERMDT) with corresponding amount*/
+       RUN creasfee.p(
+          SingleFee.CustNum,
+          MobSub.MsSeq,
+          TODAY,
+          "FeeModel",
+          "CRVTERMDT",
+          9,
+          MIN(ldeDiscount,ABS(invrow.Amt)),
+          "Renewal order cancelled " + 
+             STRING(TODAY,"99.99.9999"),  /* memo */
+          FALSE,              /* no messages to screen */
+          "",
+          "RevertRenewalOrder",
+          SingleFee.OrderID, /* order id */
+          SingleFee.SourceTable,
+          SingleFee.SourceKey,
+          OUTPUT lcResult).
+
+      IF lcResult BEGINS "ERROR:" OR lcResult BEGINS "0" THEN
+         RETURN "ERROR:Q25 discount cancellation (CRVTERMDT fee):" + lcResult.
+      
+      RETURN "".
+
+   END.
+
+   fCloseDiscount("RVTERMDT1DISC",
+     MobSub.MsSeq,
+     dpmember.ValidFrom - 1,
+     FALSE). /* clean event logs */
+      
+   RETURN "". 
+
+END PROCEDURE.
