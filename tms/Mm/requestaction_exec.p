@@ -338,7 +338,7 @@ PROCEDURE pPeriodicalContract:
       lbolSTCRenewSameDay = FALSE.
       IF (bOrigRequest.Reqtype EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR 
           bOrigRequest.Reqtype EQ {&REQTYPE_BUNDLE_CHANGE}) AND
-          DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
+          DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} THEN
       DO:         
          /* YDR-2038 
             (0=no extend_term_contract
