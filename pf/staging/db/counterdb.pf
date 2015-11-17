@@ -1,2 +1,3 @@
 -db counter
 -pf /apps/yoigo/pf/general.pf
+-S counter

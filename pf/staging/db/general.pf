@@ -9,4 +9,6 @@
 -Ma 7
 -Mi 4
 -spin 20000
-
+-Mm 8192
+-minport 5040
+-maxport 5300
