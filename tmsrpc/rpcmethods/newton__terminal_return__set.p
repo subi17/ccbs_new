@@ -75,26 +75,35 @@ IF LENGTH(lcIMEI,"CHARACTER") NE 15 THEN
 
 IF llDeviceStart AND llDeviceScreen THEN DO:
    
-   FIND Order WHERE
+   FIND Order NO-LOCK WHERE
         Order.Brand   = gcBrand AND
-        Order.OrderId = liOrderId NO-LOCK NO-ERROR.
-   
+        Order.OrderId = liOrderId NO-ERROR.
    IF NOT AVAILABLE Order THEN
       RETURN appl_err("Unknown order").
+
+   FIND MobSub NO-LOCK WHERE
+        MobSub.MsSeq = Order.MsSeq NO-ERROR.
+   IF NOT AVAILABLE MobSub THEN
+      RETURN appl_err("Unknown subscription").
+
+   IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} AND
+      CAN-FIND(FIRST DCCLI WHERE
+                     DCCLI.MsSeq   = MobSub.MsSeq AND
+                     DCCLI.DCEvent = "RVTERM12") THEN
+      RETURN appl_err("Already have Q25 extension").
 
    FIND FIRST OrderAction WHERE
               OrderAction.Brand    = gcBrand AND
               OrderAction.OrderId  = Order.OrderId AND
-              OrderAction.ItemType = "" NO-LOCK NO-ERROR.
-   
+              OrderAction.ItemType = "" NO-LOCK NO-ERROR.   
    IF NOT AVAILABLE OrderAction THEN
       RETURN appl_err("Not available OrderAction").
 
    FIND SingleFee USE-INDEX Custnum WHERE
         SingleFee.Brand       = gcBrand AND
-        SingleFee.Custnum     = Order.CustNum AND
+        SingleFee.Custnum     = MovSub.CustNum AND
         SingleFee.HostTable   = "Mobsub" AND
-        SingleFee.KeyValue    = STRING(Order.MsSeq) AND
+        SingleFee.KeyValue    = STRING(MobSub.MsSeq) AND
         SingleFee.SourceTable = "DCCLI" AND
         SingleFee.SourceKey   = OrderAction.ItemKey AND
         SingleFee.CalcObj     = "RVTERM" NO-LOCK NO-ERROR.
@@ -102,7 +111,7 @@ IF llDeviceStart AND llDeviceScreen THEN DO:
    IF NOT AVAILABLE SingleFee THEN
       RETURN appl_err("Discount creation failed (residual fee not found)").
 
-   liRequest = fAddDiscountPlanMember(Order.MsSeq,
+   liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
                                      "RVTERMDT3DISC",
                                      DEC(OrderAction.ItemParam),
                                      fPer2Date(SingleFee.BillPeriod,0),
@@ -110,8 +119,8 @@ IF llDeviceStart AND llDeviceScreen THEN DO:
                                      OUTPUT lcResult).
 
    DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "Order",
-                    STRING(Order.OrderID),
+                    "MobSub",
+                    STRING(MobSub.MsSeq),
                     0,
                     "OrderAction " + OrderAction.ItemType,
                     lcResult).

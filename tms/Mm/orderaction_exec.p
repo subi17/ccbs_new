@@ -376,12 +376,27 @@ PROCEDURE pQ25Extension:
    DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
    DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
 
+   DEF VAR liPeriod AS INT NO-UNDO. 
+   DEF VAR ldaPerDate AS DATE NO-UNDO. 
+   DEF VAR lcTFBank AS CHAR NO-UNDO.
+
    DEF BUFFER SingleFee FOR SingleFee.
    DEF BUFFER MsRequest FOR MsRequest.
    
-   liPercontractId = INT(OrderAction.ItemKey) NO-ERROR.
+   ASSIGN
+      ldaPerDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
+      liPeriod = YEAR(ldaPerDate) * 100 + MONTH(ldaPerDate)
+      lcTFBank = ""
+      liPercontractId = INT(OrderAction.ItemKey).
+
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
       RETURN "ERROR: incorrect contract id".
+
+   IF CAN-FIND(FIRST TermReturn WHERE
+                     TermReturn.OrderId = Order.OrderId AND
+                     TermReturn.DeviceScreen = TRUE AND
+                     TermReturn.DeviceStart = TRUE) THEN
+      RETURN "ERROR: already returned terminal".
 
    FIND SingleFee USE-INDEX Custnum WHERE
         SingleFee.Brand       = gcBrand AND
@@ -421,16 +436,39 @@ PROCEDURE pQ25Extension:
    IF liRequest = 0 THEN 
       RETURN "ERROR:Periodical contract not created; " + lcResult.
    ELSE DO:
-      FIND FIRST msrequest EXCLUSIVE-LOCK WHERE
-                 msrequest.msrequest = lirequest NO-ERROR.
-      IF AVAIL msrequest THEN ASSIGN
-         msrequest.ReqIparam1 = Order.OrderId.
-      RELEASE msrequest.
+      FIND FIRST MsRequest EXCLUSIVE-LOCK WHERE
+                 MsRequest.MsRequest = liRequest NO-ERROR.
+      IF AVAIL MsRequest THEN ASSIGN
+         MsRequest.ReqIparam1 = Order.OrderId.
+      RELEASE MsRequest.
 
-      lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
-                            TODAY,
-                            Customer.Language,
-                            OUTPUT ldeSMSStamp).
+      FIND FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
+                 FixedFee.Brand     = gcBrand   AND 
+                 FixedFee.Custnum   = MobSub.CustNum AND
+                 FixedFee.HostTable = "MobSub"  AND
+                 FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
+                 FixedFee.EndPeriod >= liPeriod AND
+                 FixedFee.BillCode BEGINS "PAYTERM" AND
+                 FixedFee.InUse     = TRUE NO-ERROR.
+      IF AVAILABLE FixedFee THEN lcTFBank = FixedFee.TFBank.
+
+      CASE lcTFBank:
+         WHEN {&TF_BANK_UNOE} THEN
+            lcSMSTxt = fGetSMSTxt("Q25ExtensionUNOE",
+                                  TODAY,
+                                  Customer.Language,
+                                  OUTPUT ldeSMSStamp).
+         WHEN {&TF_BANK_SABADELL} THEN
+            lcSMSTxt = fGetSMSTxt("Q25ExtensionSabadell",
+                                  TODAY,
+                                  Customer.Language,
+                                  OUTPUT ldeSMSStamp).
+         OTHERWISE 
+            lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
+                                  TODAY,
+                                  Customer.Language,
+                                  OUTPUT ldeSMSStamp).
+      END CASE.
 
       IF lcSMSTxt > "" THEN DO:
 
