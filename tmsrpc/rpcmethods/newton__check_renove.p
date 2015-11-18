@@ -518,10 +518,9 @@ ELSE DO:
             bMobSubAmt.CustNum = Customer.CustNum,
       EACH DCCLI NO-LOCK WHERE
            DCCLI.MsSeq = bMobSubAmt.MsSeq AND
-           DCCLI.ValidTo >= ldaDate:
-         IF NOT DCCLI.DCEvent BEGINS "PAYTERM" OR
-            NOT DCCLI.DCEvent BEGINS "RVTERM" THEN
-            NEXT MOBSUB_LOOP.
+           DCCLI.ValidTo >= ldaDate AND
+          (DCCLI.DCEvent BEGINS "PAYTERM" OR
+           DCCLI.DCEvent BEGINS "RVTERM"):
 
       FOR FIRST FixedFee NO-LOCK WHERE
                 FixedFee.Brand = gcBrand AND
@@ -530,20 +529,20 @@ ELSE DO:
                 FixedFee.KeyValue = STRING(bMobSubAmt.MsSeq) AND
                 FixedFee.EndPeriod >= liPeriod AND
                 FixedFee.SourceTable = "DCCLI" AND
-                FixedFee.SourceKey = STRING(DCCLI.PerContractID):
-         IF NOT FixedFee.BillCode BEGINS "PAYTERM" OR
-            NOT FixedFee.BillCode BEGINS "RVTERM" THEN
-            NEXT MOBSUB_LOOP.
+                FixedFee.SourceKey = STRING(DCCLI.PerContractID) AND
+               (FixedFee.BillCode BEGINS "PAYTERM" OR
+                FixedFee.BillCode BEGINS "RVTERM"):
 
          FOR EACH FFItem OF FixedFee NO-LOCK:
             IF FFItem.Billed AND
+              (FFItem.BillPeriod <= liPeriod OR
                CAN-FIND(FIRST Invoice WHERE
                               Invoice.InvNum = FFItem.InvNum AND
-                              Invoice.InvType = 1) THEN
-                              NEXT MOBSUB_LOOP.
+                              Invoice.InvType = 1)) THEN NEXT.
             ldePendingFees = ldePendingFees + FFItem.Amt.
          END.
 
+         IF FixedFee.BillCode BEGINS "PAYTERM" THEN
          FOR FIRST SingleFee NO-LOCK WHERE
                    SingleFee.Brand       = gcBrand AND
                    SingleFee.Custnum     = FixedFee.CustNum AND
@@ -555,8 +554,7 @@ ELSE DO:
             IF SingleFee.Billed = TRUE AND
                CAN-FIND (FIRST Invoice NO-LOCK WHERE
                                Invoice.InvNum  = SingleFee.InvNum AND
-                               Invoice.InvType = 1) THEN 
-                               NEXT MOBSUB_LOOP.
+                               Invoice.InvType = 1) THEN NEXT.
                ldePendingFees = ldePendingFees + SingleFee.Amt.
          END.
       END.
@@ -564,8 +562,8 @@ ELSE DO:
 
    FOR EACH Order NO-LOCK WHERE
             Order.Brand = gcBrand AND
-            Order.CustNum = Customer.CustNum AND
-            LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0,
+            Order.CustNum = Customer.CustNum and
+      LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0,
       FIRST OfferItem NO-LOCK WHERE
             OfferItem.Brand       = gcBrand AND
             OfferItem.Offer       = Order.Offer AND
@@ -576,18 +574,16 @@ ELSE DO:
 
       ldePendingFees = ldePendingFees + OfferItem.Amount.
 
-      FOR FIRST DayCampaign NO-LOCK WHERE
-                DayCampaign.Brand = gcBrand AND
-                DayCampaign.DCEvent = "RVTERM12",
-         FIRST FMItem NO-LOCK WHERE
-               FMItem.Brand     = gcBrand AND
-               FMItem.FeeModel  = DayCampaign.FeeModel  AND
-               FMItem.ToDate   >= TODAY AND
-               FMItem.FromDate <= TODAY:
-          ldePendingFees = ldePendingFees + FMItem.Amount.   
+      FOR FIRST FMItem NO-LOCK WHERE
+                FMItem.Brand     = gcBrand AND
+                FMItem.FeeModel  = OfferItem.ItemKey  AND
+                FMItem.ToDate   >= TODAY AND
+                FMItem.FromDate <= TODAY:
+          ldePendingFees = ldePendingFees + (FMItem.Amount * FMItem.FFItemQty).
       END.
-      
+
    END.
+
    ldeAllowedFin = Limit.LimitAmt - ldePendingFees.
 END.
 add_double(top_struct, "allowed_terminal_financing_amount", ldeAllowedFin).
