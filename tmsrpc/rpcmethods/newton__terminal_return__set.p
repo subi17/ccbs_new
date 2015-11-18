@@ -86,26 +86,35 @@ IF llDeviceStart AND llDeviceScreen THEN DO:
    IF NOT AVAILABLE MobSub THEN
       RETURN appl_err("Unknown subscription").
 
-   IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} AND
-      CAN-FIND(FIRST DCCLI WHERE
-                     DCCLI.MsSeq   = MobSub.MsSeq AND
-                     DCCLI.DCEvent = "RVTERM12") THEN
-      RETURN appl_err("Already have Q25 extension").
+   IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN DO:
+      IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
+                        DCCLI.Brand   EQ gcBrand AND
+                        DCCLI.DCEvent EQ "RVTERM12" AND
+                        DCCLI.MsSeq   EQ MobSub.MsSeq AND
+                        DCCLI.ValidTo >= TODAY) THEN
+      RETURN appl_err("Q25 extension already active").
 
-   FIND FIRST OrderAction WHERE
-              OrderAction.Brand    = gcBrand AND
-              OrderAction.OrderId  = Order.OrderId AND
-              OrderAction.ItemType = "" NO-LOCK NO-ERROR.   
-   IF NOT AVAILABLE OrderAction THEN
-      RETURN appl_err("Not available OrderAction").
+      IF CAN-FIND(FIRST MSRequest NO-LOCK WHERE  
+                        MSRequest.MsSeq      EQ Mobsub.MsSeq AND
+                        MSRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+                        LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND
+                        MSREquest.REqcparam3 EQ "RVTERM12") THEN
+      RETURN appl_err("Q25 extension request is ongoing").
+      
+      IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 AND
+         CAN-FIND(FIRST OrderAction WHERE
+                        OrderAction.Brand    = gcBrand AND
+                        OrderAction.OrderId  = Order.OrderId AND
+                        OrderAction.ItemType = "Q25Extension") THEN   
+      RETURN appl_err("Q25 extension order is ongoing").
+   END.
 
    FIND SingleFee USE-INDEX Custnum WHERE
         SingleFee.Brand       = gcBrand AND
         SingleFee.Custnum     = MobSub.CustNum AND
         SingleFee.HostTable   = "Mobsub" AND
         SingleFee.KeyValue    = STRING(MobSub.MsSeq) AND
-        SingleFee.SourceTable = "DCCLI" AND
-        SingleFee.SourceKey   = OrderAction.ItemKey AND
+        SingleFee.OrderId     = Order.OrderId AND
         SingleFee.CalcObj     = "RVTERM" NO-LOCK NO-ERROR.
 
    IF NOT AVAILABLE SingleFee THEN
@@ -113,7 +122,7 @@ IF llDeviceStart AND llDeviceScreen THEN DO:
 
    liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
                                      "RVTERMDT3DISC",
-                                     DEC(OrderAction.ItemParam),
+                                     SingleFee.Amt,
                                      fPer2Date(SingleFee.BillPeriod,0),
                                      1,
                                      OUTPUT lcResult).
@@ -122,7 +131,7 @@ IF llDeviceStart AND llDeviceScreen THEN DO:
                     "MobSub",
                     STRING(MobSub.MsSeq),
                     0,
-                    "OrderAction " + OrderAction.ItemType,
+                    "Terminal return discount",
                     lcResult).
 
    IF liRequest NE 0 THEN 

@@ -442,23 +442,13 @@ PROCEDURE pQ25Extension:
          MsRequest.ReqIparam1 = Order.OrderId.
       RELEASE MsRequest.
 
-      FIND FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                 FixedFee.Brand     = gcBrand   AND 
-                 FixedFee.Custnum   = MobSub.CustNum AND
-                 FixedFee.HostTable = "MobSub"  AND
-                 FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
-                 FixedFee.EndPeriod >= liPeriod AND
-                 FixedFee.BillCode BEGINS "PAYTERM" AND
-                 FixedFee.InUse     = TRUE NO-ERROR.
-      IF AVAILABLE FixedFee THEN lcTFBank = FixedFee.TFBank.
-
-      CASE lcTFBank:
-         WHEN {&TF_BANK_UNOE} THEN
+      CASE SingleFee.BillCode:
+         WHEN "RVTERM1EF" THEN
             lcSMSTxt = fGetSMSTxt("Q25ExtensionUNOE",
                                   TODAY,
                                   Customer.Language,
                                   OUTPUT ldeSMSStamp).
-         WHEN {&TF_BANK_SABADELL} THEN
+         WHEN "RVTERMBSF" THEN
             lcSMSTxt = fGetSMSTxt("Q25ExtensionSabadell",
                                   TODAY,
                                   Customer.Language,
