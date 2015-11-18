@@ -124,15 +124,15 @@ FOR EACH OrderCustomer WHERE
          lcReplaceText = lcReplaceText +
                          (IF lcReplaceText > "" THEN CHR(10) ELSE "") +
                          "Numero de Pedido: " + Order.ContractID + ", del " +
-                         STRING(ldOrderDate) + ", del número" + Order.CLI + ".".
+                         STRING(ldOrderDate) + ", del n�mero " + Order.CLI + ".".
    END. /* IF pcDelType = "EMAIL" THEN DO: */
    ELSE DO:
       IF lcDelValue = "" AND OrderCustomer.MobileNumber > "" THEN
          lcDelValue = OrderCustomer.MobileNumber.
       lcReplaceText = lcReplaceText +
                       (IF lcReplaceText > "" THEN " - " ELSE "") +
-                      Order.ContractID + ", del " + STRING(ldOrderDate) +
-                      ", del número" + Order.CLI.
+                      Order.ContractID + ", " + STRING(ldOrderDate) +
+                      ", del " + Order.CLI.
    END. /* ELSE DO: */
 END. /* FOR EACH Order WHERE */
 
@@ -178,7 +178,7 @@ IF pcDelType = "SMS" THEN DO:
                   9,
                   lcSMSText,
                   ldeOrderStamp,
-                  "Yoigo info",
+                  "622622622",
                   "").
 
 END. /* IF pcDelType = "SMS" THEN DO: */
