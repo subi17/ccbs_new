@@ -124,7 +124,7 @@ FOR EACH OrderCustomer WHERE
          lcReplaceText = lcReplaceText +
                          (IF lcReplaceText > "" THEN CHR(10) ELSE "") +
                          "Numero de Pedido: " + Order.ContractID + ", del " +
-                         STRING(ldOrderDate) + ", del numero " + Order.CLI + ".".
+                         STRING(ldOrderDate) + ", del número" + Order.CLI + ".".
    END. /* IF pcDelType = "EMAIL" THEN DO: */
    ELSE DO:
       IF lcDelValue = "" AND OrderCustomer.MobileNumber > "" THEN
