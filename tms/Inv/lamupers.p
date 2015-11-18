@@ -1053,6 +1053,11 @@ FUNCTION fGetMandateForITGroup RETURNS CHAR
       IF ldaMDate > MsOwner.MandateDate THEN ASSIGN
          ldaMDate = MsOwner.MandateDate 
          lcMandateId = MsOwner.MandateID.
+      ELSE
+         ASSIGN
+            ldaMDate = TODAY
+            lcMandateId = STRING(iiCustNum) + "X" +
+                          FILL("0",29 - LENGTH(STRING(iiCustNum))).
    END.
 
    RETURN lcMandateId.
