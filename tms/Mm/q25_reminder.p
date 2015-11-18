@@ -16,6 +16,8 @@ ASSIGN gcBrand = "1"
 {fmakesms.i}
 {tmsconst.i}
 {date.i}
+{smsmessage.i}
+{aes_encrypt.i}
 
 DEF VAR ldaFromdate       AS DATE NO-UNDO.
 DEF VAR liTime            AS INT  NO-UNDO.
@@ -23,13 +25,15 @@ DEF VAR ldeReqStamp       AS DEC  NO-UNDO.
 DEF VAR lcLogDir          AS CHAR NO-UNDO.
 DEF VAR lcLogFile         AS CHAR NO-UNDO.
 DEF VAR lcSMSText         AS CHAR NO-UNDO.
-DEF VAR liCount               AS INT  NO-UNDO.
-DEF VAR lcGroupCodes          AS CHAR NO-UNDO.
-DEF VAR liStartDay        AS INT NO-UNDO.
-DEF VAR liEndDay          AS INT NO-UNDO.
-DEF VAR liMonth           AS INT NO-UNDO.
+DEF VAR liCount           AS INT  NO-UNDO.
+DEF VAR lcGroupCodes      AS CHAR NO-UNDO.
+DEF VAR liStartDay        AS INT  NO-UNDO.
+DEF VAR liEndDay          AS INT  NO-UNDO.
+DEF VAR liMonth           AS INT  NO-UNDO.
 DEF VAR ldaStartDate      AS DATE NO-UNDO.
 DEF VAR ldaEndDate        AS DATE NO-UNDO.
+DEF VAR lcTemplate        AS CHAR NO-UNDO.
+DEF VAR ldReqStamp        AS DEC  NO-UNDO.
 
 DEF STREAM Sout.
 
@@ -56,11 +60,28 @@ FUNCTION fCheckDates RETURNS LOGICAL
 END FUNCTION.
 
 FUNCTION fSendQ25SMSMessages RETURNS LOGICAL
-   (INPUT iiStartDate AS DATE,
-    INPUT iiEndDate AS DATE).
+   (INPUT idaStartDate AS DATE,
+    INPUT idaEndDate AS DATE,
+    INPUT iiphase AS INT).
   
+   ASSIGN lcLogDir     = fCParam("Q25","Q25_reminder_LogDir").
+
+   IF lcLogDir = "" OR lcLogDir = ? THEN lcLogDir = "/tmp/".
+
+   lcLogFile = lcLogDir + "Q25_reminder_" +
+               STRING(YEAR(TODAY)) +
+               STRING(MONTH(TODAY),"99") +
+               /* STRING(DAY(TODAY),"99") + */ ".txt".
+   
+   OUTPUT STREAM Sout TO VALUE(lcLogFile) APPEND. 
    DEF VAR lcPeriod AS CHAR NO-UNDO.
-   lcPeriod = STRING(YEAR(iiStartDate)) + STRING(MONTH(iiStartDate)).
+   DEF VAR liCount AS INT NO-UNDO.
+   DEF VAR liNotSendCount AS INT NO-UNDO.
+   DEF VAR liBilledCount AS INT NO-UNDO.
+   DEF VAR liNotDCCLICount AS INT NO-UNDO.
+
+   lcPeriod = STRING(YEAR(idaStartDate)) + (IF(MONTH(idaStartDate) < 10) THEN
+              "0" ELSE "") + STRING(MONTH(idaStartDate)).
    FOR EACH SingleFee USE-INDEX BillCode WHERE
             SingleFee.Brand       = gcBrand AND
             SingleFee.Billcode BEGINS "RVTERM" AND
@@ -72,33 +93,66 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL
       IF SingleFee.Billed AND
          NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
                             Invoice.Invnum = SingleFee.InvNum aND
-                            Invoice.InvType = 99) THEN
+                            Invoice.InvType = 99) THEN DO:
+         liBilledCount = liBilledCount + 1.
          NEXT. /* "Residual fee billed". */
-
+      END.
       FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
               DCCLI.PerContractId = INT(SingleFee.sourcekey) AND
               DCCLI.Brand   = gcBrand AND
               DCCLI.DCEvent BEGINS "PAYTERM" AND
               DCCLI.MsSeq   = INT(SingleFee.KeyValue) AND
-              DCCLI.ValidTo < iiStartDate AND
-              DCCLI.ValidTo > iiEndDate NO-ERROR.
+              DCCLI.ValidTo < idaStartDate AND
+              DCCLI.ValidTo > idaEndDate NO-ERROR.
 
-      IF NOT AVAIL DCCLI OR DCCLI.TermDate NE ? OR 
-         DCCLI.RenewalDate NE ? THEN
-         NEXT. /* Installment contract not found, terminated or renewal done */
+      IF NOT AVAIL DCCLI THEN DO:
+         /* No DCCLI for example between start and end date, singlefee is for 
+            whole month or no DCCLI for some error case (?). */
+         liNotDCCLICount = liNotDCCLICount + 1.
+         NEXT.
+      END.
+      ELSE IF DCCLI.TermDate NE ? OR DCCLI.RenewalDate NE ? THEN DO:
+         liNotSendCount = liNotSendCount + 1.
+         NEXT. /* Installment contract not found, terminated or renewal done 
+                  SMS should not be send. */
+      END.            
+      liCount = liCount + 1. /* Full count in Month */
+      IF iiPhase = 1 OR iiPhase = 2 THEN DO: /* Q25 month 22 or 23 */
+         lcTemplate = fGetSMSTxt("Q25ReminderMonth22and23",
+                                 TODAY,
+                                 1, 
+                                 OUTPUT ldReqStamp).
+         lcTemplate = REPLACE(lcTemplate,"#DATE","20" + "/" +
+                                         STRING(MONTH(DCCLI.ValidTo))).
+      END.
+      ELSE IF iiPhase = 3 THEN DO: /* Q25 month 24 */
+         lcTemplate = fGetSMSTxt("Q25ReminderMonth24",
+                                 TODAY,
+                                 1,
+                                 OUTPUT ldReqStamp).
+         lcTemplate = REPLACE(lcTemplate,"#DD","20").
+      END.
+
+      fCreateSMS(SingleFee.Custnum,
+                 SingleFee.Cli,
+                 DCCLI.MsSeq,
+                 SingleFee.OrderId,
+                 lcTemplate,
+                 "622",
+                 {&SMS_TYPE_OFFER}).
+
 
    END.
+   PUT STREAM Sout UNFORMATTED
+      STRING(iiPhase) + "|" +
+      STRING(idaStartDate) + "|" STRING(idaEnddate) + "|" +
+      STRING(liCount) + "|" + STRING(liNotSendCount) + "|" +
+      STRING(liBilledCount) + "|" + STRING(liNotDCCLICount) + "|" +
+      STRING(etime / 1000) SKIP. 
+   OUTPUT STREAM Sout CLOSE.
    RETURN TRUE.
 END FUNCTION.
 
-ASSIGN lcLogDir     = fCParam("Q25","Q25_reminder_LogDir").
-
-IF lcLogDir = "" OR lcLogDir = ? THEN lcLogDir = "/tmp/".
-
-lcLogFile = lcLogDir + "Q25_reminder_" +
-            STRING(YEAR(TODAY)) +
-            STRING(MONTH(TODAY),"99") +
-            STRING(DAY(TODAY),"99") + ".txt".
 
 /* Handling of sms sending is different at January 2016 */
 IF DAY(TODAY) > 15 OR TODAY < 1/13/16 THEN
@@ -122,20 +176,17 @@ ELSE DO:
    liEndDay = (DAY(TODAY) * 2).
 END.
 
-OUTPUT STREAM Sout TO VALUE(lcLogFile).
-
 /* Month 22 */
 IF fCheckDates(2, liStartDay, liEndDay, ldaStartDate, ldaEndDate) THEN DO:
-
+   fSendQ25SMSMessages(ldaStartDate, ldaEndDate, 1).
 END.
 
 /* Month 23 */
 IF fCheckDates(1, liStartDay, liEndDay, ldaStartDate, ldaEndDate) THEN DO:
-
+   fSendQ25SMSMessages(ldaStartDate, ldaEndDate, 2).
 END.
 
 /* Month 24 */
 IF fCheckDates(0, liStartDay, liEndDay, ldaStartDate, ldaEndDate) THEN DO:
-
+   fSendQ25SMSMessages(ldaStartDate, ldaEndDate, 3).
 END.
-OUTPUT STREAM Sout CLOSE.
