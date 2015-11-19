@@ -1,25 +1,23 @@
 /**
- * Send New Order Contract Id(s) by SMS or Email
- *
+ * Send Renewal Order Contract Id(s) by SMS 
+ *  
  * @input  transaction_id;string;mandatory;transaction id
-           dni_type;string;mandatory;order dni type
-           dni;string;mandatory;order dni value
-           delivery_type;string;mandatory;SMS/EMAIL
+           msisdn;string;mandatory;MSISDN for finding the corresponding orders
+           delivery_type;string;mandatory;SMS
  * @output     struct;mandatory;response struct
  * @response   transaction_id;string;transaction id
                result;boolean;True
  * @exceptions  1;Application Id does not match
                 2;Invalid Delivery Type
-                3;Order does not exist with given DNI
-                4;Order not available
-                5;Order already cancelled
-                6;Subscription is cancelled
-                7;Order does not have email address
-                8;Order does not have contact number
-                9;Missing SMS Template
-               10;Email sending is failed
- */
+                3;Format of the MSISDN number is not correct
+                4;Renewal order does not exist with given MSISDN
+                5;Renewal order not available
+                6;Renewal order already cancelled
+                7;Subscription is cancelled
+                8;Missing SMS Template
+                9;Email sending is failed
 
+ */
 {xmlrpc/xmlrpc_access.i}
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 {commpaa.i}
@@ -34,8 +32,7 @@ ASSIGN katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId
 {fexternalapi.i}
 
 DEFINE VARIABLE pcTransId               AS CHARACTER NO-UNDO.
-DEFINE VARIABLE pcDNIType               AS CHARACTER NO-UNDO.
-DEFINE VARIABLE pcDNI                   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE pcCLI                   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcDelType               AS CHARACTER NO-UNDO.
 DEFINE VARIABLE top_struct              AS CHARACTER NO-UNDO.
 
@@ -50,8 +47,6 @@ DEFINE VARIABLE ldFinalOrderDate        AS DATE      NO-UNDO.
 DEFINE VARIABLE ldeOrderStamp           AS DECIMAL   NO-UNDO.
 DEFINE VARIABLE liRequest               AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcResult                AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcCLI                   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcDelValue              AS CHARACTER NO-UNDO.
 DEFINE VARIABLE llOngoing               AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE llDelivered             AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE llClose                 AS LOGICAL   NO-UNDO.
@@ -61,9 +56,8 @@ pcReqList = validate_request(param_toplevel_id, "string,string,string,[string]")
 IF pcReqList EQ ? THEN RETURN.
 
 ASSIGN pcTransId    = get_string(param_toplevel_id, "0")
-       pcDNIType    = get_string(param_toplevel_id, "1")
-       pcDNI        = get_string(param_toplevel_id, "2")
-       pcDelType    = get_string(param_toplevel_id, "3").
+       pcCLI        = get_string(param_toplevel_id, "1")
+       pcDelType    = get_string(param_toplevel_id, "2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -74,18 +68,17 @@ IF NOT fchkTMSCodeValues(gbAuthLog.UserName, lcApplicationId) THEN
 
 katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
 
-IF LOOKUP(pcDelType,"EMAIL,SMS") = 0 THEN
+IF LOOKUP(pcDelType,"SMS") = 0 THEN
    RETURN appl_err("Invalid Delivery Type").
 
-FOR EACH OrderCustomer WHERE 
-         OrderCustomer.Brand      = gcBrand   AND
-         OrderCustomer.CustIdType = pcDNIType AND
-         OrderCustomer.CustId     = pcDNI     AND
-         OrderCustomer.Rowtype    = 1 NO-LOCK,
-    EACH Order WHERE
-         Order.Brand     = gcBrand AND
-         Order.OrderId   = OrderCustomer.OrderId AND
-         Order.OrderType = 0 NO-LOCK BY Order.CrStamp DESC:
+IF LENGTH(pcCLI) <> 9 OR
+   NOT (pcCLI BEGINS "6" OR pcCLI BEGINS "7") THEN
+   /*Incorrect format*/
+   RETURN appl_err("Format of the MSISDN number is not correct").
+
+FOR EACH Order WHERE
+         Order.CLI = pcCLI AND
+         Order.OrderType EQ {&ORDER_TYPE_RENEWAL} NO-LOCK:
 
    IF liCount >= 3 THEN LEAVE.
    liTotalCount = liTotalCount + 1.
@@ -112,93 +105,53 @@ FOR EACH OrderCustomer WHERE
    IF liCount = 1 THEN DO:
       IF Order.StatusCode = "6" THEN llDelivered = TRUE.
       ELSE IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN llClose = TRUE.
-
-      lcCLI = Order.CLI.
    END. /* IF liCount = 1 THEN DO: */
 
-   IF pcDelType = "EMAIL" THEN DO:
-      IF lcDelValue = "" AND OrderCustomer.Email > "" THEN
-         lcDelValue = OrderCustomer.Email.
-      ASSIGN
-         
-         lcReplaceText = lcReplaceText +
-                         (IF lcReplaceText > "" THEN CHR(10) ELSE "") +
-                         "Numero de Pedido: " + Order.ContractID + ", del " +
-                         STRING(ldOrderDate) + ", del numero " + Order.CLI + ".".
-   END. /* IF pcDelType = "EMAIL" THEN DO: */
-   ELSE DO:
-      IF lcDelValue = "" AND OrderCustomer.MobileNumber > "" THEN
-         lcDelValue = OrderCustomer.MobileNumber.
-      lcReplaceText = lcReplaceText +
-                      (IF lcReplaceText > "" THEN " - " ELSE "") +
-                      Order.ContractID + ", " + STRING(ldOrderDate) +
-                      ", del " + Order.CLI.
-   END. /* ELSE DO: */
+   lcReplaceText = lcReplaceText +
+                   (IF lcReplaceText > "" THEN " - " ELSE "") +
+                   Order.ContractID + ", del " + STRING(ldOrderDate) +
+                   ", del número " + Order.CLI.
+
 END. /* FOR EACH Order WHERE */
 
 IF liTotalCount = 0 THEN
-   RETURN appl_err("Order does not exist with given DNI").
+    RETURN appl_err("Renewal order does not exist with given MSISDN"). 
 ELSE IF liCount = 0 THEN
-   RETURN appl_err("Order not available").
+   RETURN appl_err("Renewal order not available"). 
 ELSE IF NOT llOngoing THEN DO:
    IF llClose THEN
-      RETURN appl_err("Order already cancelled").
+      RETURN appl_err("Renewal order already cancelled").
    ELSE IF llDelivered THEN DO:
       FIND FIRST MobSub WHERE
                  MobSub.Brand = gcBrand AND
-                 MobSub.CLI   = lcCLI NO-LOCK NO-ERROR.
+                 MobSub.CLI   = pcCLI NO-LOCK NO-ERROR.
       IF NOT AVAIL MobSub THEN
-         RETURN appl_err("Subscription is cancelled").
+         RETURN appl_err("Subscription is cancelled"). 
    END. /* ELSE IF llDelivered THEN DO: */
 END. /* ELSE IF NOT llOngoing THEN DO: */
 
-IF lcDelValue = "" THEN DO:
-   IF pcDelType = "EMAIL" THEN
-      RETURN appl_err("Order does not have email address").
-   ELSE RETURN appl_err("Order does not have contact number").
-END. /* ELSE IF lcDelValue = "" THEN DO: */
-
 IF pcDelType = "SMS" THEN DO:
-   lcSMSText = fGetTxt("SMS",
-                       (IF liCount > 1 THEN "GetMultiConsultID"
-                        ELSE "GetConsultID"),
-                       TODAY,
-                       1).
+   lcSMSText = fGetSMSTxt((IF liCount > 1 THEN "GetMultiConsultID"
+                           ELSE "GetConsultID"),
+                           TODAY,
+                           1,
+                           OUTPUT ldeOrderStamp).
    IF lcSMSText = "" THEN
       RETURN appl_err("Missing SMS Template").
 
    lcSMSText = REPLACE(lcSMSText,"#INFO",lcReplaceText).
 
-   /* don't send messages before 8 am. */
-   ldeOrderStamp = DYNAMIC-FUNCTION("fMakeOfficeTS" in ghFunc1).
-   IF ldeOrderStamp = ? THEN ldeOrderStamp = fMakeTS().
-
    fMakeSchedSMS2(0,
-                  lcDelValue,
+                  pcCLI,
                   9,
                   lcSMSText,
                   ldeOrderStamp,
-                  "622622622",
+                  "Yoigo info",
                   "").
 
 END. /* IF pcDelType = "SMS" THEN DO: */
-ELSE DO:
-   liRequest = fEmailSendingRequest(INPUT fMakeTS(),
-                                    INPUT katun,
-                                    INPUT 0, /* custnum */
-                                    INPUT lcCLI,
-                                    INPUT lcDelValue,
-                                    INPUT (IF liCount > 1 THEN "GetMultiConsultID"
-                                           ELSE "GetConsultID"),
-                                    INPUT lcReplaceText,
-                                    INPUT 0,
-                                    INPUT {&REQUEST_SOURCE_EXTERNAL_API},
-                                    OUTPUT lcResult).
-   IF liRequest = 0 THEN
-      RETURN appl_err("Email sending is failed").
-END. /* ELSE DO: */
 
-/*  add values to the response if no error  */
+/* add values to the response if no error */
 top_struct = add_struct(response_toplevel_id, "").
 add_string(top_struct,"transaction_id",pcTransId).
 add_boolean(top_struct,"result",True).

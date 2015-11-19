@@ -26,6 +26,7 @@ END.
 DEF INPUT  PARAMETER  iiOrderId  LIKE Order.OrderId.
 DEF INPUT  PARAMETER  iiRole     AS   INT.
 DEF INPUT  PARAMETER  ilDisp     AS   LOG.
+DEF INPUT  PARAMETER  ilUpdateExisting AS LOG.
 DEF OUTPUT PARAMETER  oiCustNum  AS   INT.
 
 DEF VAR new-CustNum  AS I    NO-UNDO.
@@ -201,14 +202,15 @@ END.
 
 ELSE DO:
 
+   oiCustnum = liOldCustnum.
+   IF ilUpdateExisting EQ FALSE THEN RETURN "".
+
    IF llDoEvent THEN DO:
       DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
       lhCustomer = BUFFER Customer:HANDLE.
       RUN StarEventInitialize(lhCustomer).
 
    END.
-   
-   oiCustnum = liOldCustnum.
 
    FIND Customer WHERE
         Customer.CustNum = oiCustNum EXCLUSIVE-LOCK NO-ERROR.
