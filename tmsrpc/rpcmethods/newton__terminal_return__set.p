@@ -127,13 +127,6 @@ IF llDeviceStart AND llDeviceScreen THEN DO:
                                      1,
                                      OUTPUT lcResult).
 
-   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "MobSub",
-                    STRING(MobSub.MsSeq),
-                    0,
-                    "Terminal return discount",
-                    lcResult).
-
    IF liRequest NE 0 THEN 
       RETURN appl_err("ERROR:Discount not created; " + lcResult).
 
@@ -152,6 +145,13 @@ ASSIGN TermReturn.IMEI           = lcIMEI
        TermReturn.ReturnTS       = ldReturnTS.
 
 IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhTermReturn).
+
+DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                 "MobSub",
+                 STRING(MobSub.MsSeq),
+                 0,
+                 "Terminal return discount",
+                 lcResult).
 
 RELEASE TermReturn.
 
