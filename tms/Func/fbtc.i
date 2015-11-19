@@ -13,19 +13,19 @@
 {fctchange.i}
 
 FUNCTION fBundleChangeRequest RETURNS INTEGER
-   (INPUT iiMsSeq        AS INT,    /* subscription */
-    INPUT icOldBundle    AS CHAR,   /* old (current) bundle */ 
-    INPUT icNewBundle    AS CHAR,   /* new bundle */
-    INPUT idActStamp     AS DEC,    /* when request should be handled */
-    INPUT icSource       AS CHAR,
-    INPUT icCreator      AS CHAR,   
-    INPUT ilCreateFees   AS LOG,    
-    INPUT iiOrigRequest  AS INT,    /* main request */
-    INPUT ilMandatory    AS LOG,    /* is subrequest mandatory */
-    INPUT ilUpgradeUpsell AS LOG,   /* is upgrade upsell */
-    INPUT ilExtendTerm   AS LOG,    /* extend terminal contract */
-    INPUT  icDMSInfo     AS CHAR,   /* For DMS usage, contract_id*/
-    OUTPUT ocResult      AS CHAR):
+   (INPUT iiMsSeq         AS INT,    /* subscription */
+    INPUT icOldBundle     AS CHAR,   /* old (current) bundle */ 
+    INPUT icNewBundle     AS CHAR,   /* new bundle */
+    INPUT idActStamp      AS DEC,    /* when request should be handled */
+    INPUT icSource        AS CHAR,
+    INPUT icCreator       AS CHAR,   
+    INPUT ilCreateFees    AS LOG,    
+    INPUT iiOrigRequest   AS INT,    /* main request */
+    INPUT ilMandatory     AS LOG,    /* is subrequest mandatory */
+    INPUT ilUpgradeUpsell AS LOG,    /* is upgrade upsell */
+    INPUT ilExtendTerm    AS INT,    /* extend terminal contract */
+    INPUT icDMSInfo       AS CHAR,   /* For DMS usage, contract_id*/
+    OUTPUT ocResult       AS CHAR):
  
    DEF VAR liReqCreated    AS INT  NO-UNDO.
 
@@ -76,7 +76,7 @@ FUNCTION fBundleChangeRequest RETURNS INTEGER
       bCreaReq.ReqSource   = icSource
       bCreaReq.OrigRequest = iiOrigRequest
       bCreaReq.Mandatory   = INTEGER(ilMandatory)
-      bCreaReq.ReqIParam5  = (IF ilExtendTerm THEN 1 ELSE 0)
+      bCreaReq.ReqIParam5  = ilExtendTerm
       liReqCreated         = bCreaReq.MsRequest
       bCreaReq.ReqCParam5  = (icOldBundle + "TO" + icNewBundle)
                              WHEN ilUpgradeUpsell = TRUE

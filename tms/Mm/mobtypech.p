@@ -2,7 +2,7 @@
    - Barring */
 
 /* ----------------------------------------------------------------------
-  MODULE .......: CLITypech.P
+  MODULE .......: mobtypech.p
   TASK .........: Change Mobiletype of  MobSub
   APPLICATION ..: nn
   AUTHOR .......: jp
@@ -745,7 +745,7 @@ REPEAT  WITH FRAME main:
                               lcBankAccount ,
                               new-ts-begin,
                               liCreditCheck,  /* 0 = Credit check ok */
-                              FALSE, /* extend contract */
+                              0, /* extend contract 0=no extend_term_contract */
                               "", /* salesman */
                               llCreateFees,
                               llSendSMS,

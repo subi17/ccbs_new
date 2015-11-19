@@ -1,0 +1,15 @@
+-H:mqueue
+-P:61613
+-T:10
+#USER:
+#PASS:
+#DUMP_SPOOL:/mnt/store/riftp/hpd_test_dumps/spool
+#DUMP_OUTGOING:/mnt/store/riftp/hpd_test_dumps/outgoing
+#DUMP_FREQ:180
+#LOG_MANAGER_FILE:/mnt/store/riftp/hpd_test_dumps/logs/replog_reader_logging
+#LOG_LEVEL:4
+#LOG_STAT:/mnt/store/riftp/hpd_test_dumps/logs/replog_reader_statistics
+#CDR_SPOOL:
+#CDR_OUTGOING:
+#CDR_FREQ:120
+

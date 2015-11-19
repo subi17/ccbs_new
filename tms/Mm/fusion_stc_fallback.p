@@ -84,7 +84,7 @@ oiRequest = fCTChangeRequest(MobSub.msseq,
                   "", /* bank account ok (since post2post)*/
                   ldeSTCTS,
                   0,  /* Credit check ok (since post2post)*/
-                  FALSE, /* extend contract */
+                  0, /* extend contract 0=no extend_term_contract */
                   "" /* pcSalesman */,
                   FALSE, /* charge */
                   TRUE, /* send sms */

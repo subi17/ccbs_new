@@ -14,6 +14,7 @@
           renewal_stc;boolean;optional;not in use
           bypass;boolean;optional;Allow STC for retired subscription types
           extend_term_contract;boolean;optional;false=terminate,true=extent
+          exclude_term_penalty (boolean, optional) * To accept the penalty exemption
           memo;struct;optional;
  * @memo  title;string;mandatory;memo title
           contents;string;mandatory;memo content
@@ -31,34 +32,37 @@ katun = "Newton".
 {tmsconst.i}
 
 /* Input parameters */
-DEF VAR pcMSISDN         AS CHAR NO-UNDO.
-DEF VAR pcSalesman       AS CHAR NO-UNDO.
-DEF VAR pcCliType        AS CHAR NO-UNDO.
-DEF VAR pdActivation     AS DEC  NO-UNDO.
-DEF VAR pdeCharge        AS DEC  NO-UNDO. 
-DEF VAR pdeChargeLimit   AS DEC  NO-UNDO. 
-DEF VAR pcBankAcc        AS CHAR NO-UNDO.
-DEF VAR pcDataBundleId   AS CHAR NO-UNDO. 
-DEF VAR plByPass         AS LOG  NO-UNDO. 
-DEF VAR plExtendContract AS LOG  NO-UNDO.
-DEF VAR pcMemoStruct     AS CHAR NO-UNDO.
-DEF VAR pcMemoTitle      AS CHAR NO-UNDO.
-DEF VAR pcMemoContent    AS CHAR NO-UNDO.
-DEF VAR pcContractID     AS CHAR NO-UNDO.
-DEF VAR pcChannel        AS CHAR NO-UNDO.
+DEF VAR pcMSISDN             AS CHAR NO-UNDO.
+DEF VAR pcSalesman           AS CHAR NO-UNDO.
+DEF VAR pcCliType            AS CHAR NO-UNDO.
+DEF VAR pdActivation         AS DEC  NO-UNDO.
+DEF VAR pdeCharge            AS DEC  NO-UNDO. 
+DEF VAR pdeChargeLimit       AS DEC  NO-UNDO. 
+DEF VAR pcBankAcc            AS CHAR NO-UNDO.
+DEF VAR pcDataBundleId       AS CHAR NO-UNDO. 
+DEF VAR plByPass             AS LOG  NO-UNDO. 
+DEF VAR plExtendContract     AS LOG  NO-UNDO.
+DEF VAR plExcludeTermPenalty AS LOG  NO-UNDO.
+DEF VAR pcMemoStruct         AS CHAR NO-UNDO.
+DEF VAR pcMemoTitle          AS CHAR NO-UNDO.
+DEF VAR pcMemoContent        AS CHAR NO-UNDO.
+DEF VAR pcContractID         AS CHAR NO-UNDO.
+DEF VAR pcChannel            AS CHAR NO-UNDO.
 
 /* Local variables */
 DEF VAR lcc AS CHAR NO-UNDO.
-DEF VAR liCreditCheck AS INT  NO-UNDO INIT 1.
-DEF VAR llCreateFees  AS LOG  NO-UNDO INIT FALSE.
-DEF VAR llSendSMS     AS LOG  NO-UNDO INIT TRUE.
-DEF VAR lcInfo        AS CHAR NO-UNDO.
-DEF VAR ok            AS LOG  NO-UNDO.
-DEF VAR lcPCDenyCT    AS CHAR NO-UNDO. 
-DEF VAR lcTiePeriod   AS CHAR NO-UNDO. 
-DEF VAR lcError       AS CHAR NO-UNDO.
-DEF VAR liRequest     AS INT  NO-UNDO.
+DEF VAR liCreditCheck    AS INT  NO-UNDO INIT 1.
+DEF VAR llCreateFees     AS LOG  NO-UNDO INIT FALSE.
+DEF VAR llSendSMS        AS LOG  NO-UNDO INIT TRUE.
+DEF VAR lcInfo           AS CHAR NO-UNDO.
+DEF VAR ok               AS LOG  NO-UNDO.
+DEF VAR lcPCDenyCT       AS CHAR NO-UNDO. 
+DEF VAR lcTiePeriod      AS CHAR NO-UNDO. 
+DEF VAR lcError          AS CHAR NO-UNDO.
+DEF VAR liRequest        AS INT  NO-UNDO.
 DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
+DEF VAR iiRequestFlags   AS INT  NO-UNDO.
+
 DEF BUFFER NewCliType   FOR CliType.
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
@@ -69,7 +73,9 @@ IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 /* web is passing renewal_stc but we don't actually need it */
 lcstruct = validate_struct(pcStruct, 
-   "msisdn!,username!,subscription_type_id!,activation_stamp!,charge!,charge_limit!,bank_account,data_bundle_id,renewal_stc,bypass,extend_term_contract,memo,contract_id,channel").
+   "msisdn!,username!,subscription_type_id!,activation_stamp!,charge!," +
+   "charge_limit!,bank_account,data_bundle_id,renewal_stc,bypass," +
+   "extend_term_contract,exclude_term_penalty,memo,contract_id,channel").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -93,7 +99,9 @@ ASSIGN
    pcContractID = get_string(pcStruct,"contract_id")
          WHEN LOOKUP("contract_id", lcstruct) > 0
    pcChannel = get_string(pcStruct,"channel")
-            WHEN LOOKUP("channel", lcstruct) > 0.
+            WHEN LOOKUP("channel", lcstruct) > 0
+   plExcludeTermPenalty = get_bool(pcStruct,"exclude_term_penalty")
+      WHEN LOOKUP("exclude_term_penalty", lcstruct) > 0.
 
 IF LOOKUP("memo", lcstruct) > 0 THEN DO:
    pcMemoStruct = get_struct(pcStruct,"memo").
@@ -104,6 +112,9 @@ END. /* IF LOOKUP("memo", lcstruct) > 0 THEN DO: */
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+IF plExtendContract AND plExcludeTermPenalty THEN
+   RETURN appl_err("Both 'Contract extension' and 'Penalty exemption' requested").
+   
 katun = "VISTA_" + pcSalesman.
 
 IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
@@ -161,6 +172,19 @@ IF lcError > "" THEN RETURN appl_err(lcError).
 IF pcChannel NE {&DMS_VFR_REQUEST} THEN
    pcContractId = "".
 
+/* YDR-2038 
+   exempt penalty fee when doing an STC
+   iiRequestFlags (0=no extend_term_contract, 
+                   1=extend_term_contract
+                   2=exclude_term_penalty)
+   */
+IF plExtendContract THEN
+DO:
+   iiRequestFlags = IF plExtendContract THEN 1 ELSE 0.
+END.
+ELSE
+IF plExcludeTermPenalty THEN
+   iiRequestFlags = 2.   
 
 liRequest = fCTChangeRequest(MobSub.msseq,
                   pcCliType,
@@ -168,7 +192,7 @@ liRequest = fCTChangeRequest(MobSub.msseq,
                   pcBankAcc,      /* validation is already done in newton */
                   pdActivation,
                   liCreditCheck,  /* 0 = Credit check ok */
-                  plExtendContract,
+                  iiRequestFlags,
                   "" /* pcSalesman */,
                   (pdeCharge > 0),
                   llSendSMS,
