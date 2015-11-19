@@ -125,8 +125,8 @@ FOR EACH Order WHERE
    ELSE
       lcReplaceText = lcReplaceText +
                       (IF lcReplaceText > "" THEN " - " ELSE "") +
-                      Order.ContractID + ", " + STRING(ldOrderDate) +
-                      ", del " + Order.CLI.
+                      Order.ContractID + ", del " + STRING(ldOrderDate) +
+                      ", del número " + Order.CLI.
 
 END. /* FOR EACH Order WHERE */
 
@@ -165,7 +165,7 @@ IF pcDelType = "SMS" THEN DO:
                   9,
                   lcSMSText,
                   ldeOrderStamp,
-                  "622622622",
+                  "Yoigo info",
                   "").
 
 END. /* IF pcDelType = "SMS" THEN DO: */
@@ -185,7 +185,7 @@ ELSE DO:
       RETURN appl_err("Email sending is failed").
 END. /* ELSE DO: */
 
-/* add values to the response if no error */
+/*  add values to the response if no error  */
 top_struct = add_struct(response_toplevel_id, "").
 add_string(top_struct,"transaction_id",pcTransId).
 add_boolean(top_struct,"result",True).
