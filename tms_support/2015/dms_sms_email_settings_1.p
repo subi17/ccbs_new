@@ -85,8 +85,8 @@ fEditSmsText(
    12/31/49,      /*  idaEndDate  AS DATE, */
    1,             /*  iiLang   AS INT, */
    "Tu numero de pedido de Yoigo",    /*  icTitle   AS CHAR, */
-   "<html><body>Hola, <br /> <br /> Este es el n煤mero de pedido que tienes en tr谩mite en Yoigo: <br /> #INFO <br /> <br /> Si quieres ver c贸mo va, entra en Mi Yoigo en <a href=~"https://miyoigo.yoigo.com/miyoigo-static/miyoigo/#consulta-ped ido~"> Consulta el estado de tu solicitud</a>. <br /> <br /> Saludos, <br />
-Atenci贸n a clientes: <br /> www.yoigo.com <br /> Tel茅fono 1707 opci贸n 2, si no eres cliente. <br /> Tel茅fono 622, si eres de Yoigo. <br />",     /*  icSMSText AS CHAR, */
+   "<html><body>Hola, <br /> <br /> Este es el n鷐ero de pedido que tienes en tr醡ite en Yoigo: <br /> #INFO <br /> <br /> Si quieres ver c髆o va, entra en Mi Yoigo en <a href=~"https://miyoigo.yoigo.com/miyoigo-static/miyoigo/#consulta-ped ido~"> Consulta el estado de tu solicitud</a>. <br /> <br /> Saludos, <br />
+Atenci髇 a clientes: <br /> www.yoigo.com <br /> Tel閒ono 1707 opci髇 2, si no eres cliente. <br /> Tel閒ono 622, si eres de Yoigo. <br />",     /*  icSMSText AS CHAR, */
    1,           /*  iipos AS INT,  */
    5,           /*  iiPrint AS INT, */
    "",        /*  icRule AS CHAR, */
@@ -101,8 +101,8 @@ fEditSmsText(
    12/31/49,      /*  idaEndDate  AS DATE, */
    1,             /*  iiLang   AS INT, */
    "Tu numero de pedido de Yoigo",    /*  icTitle   AS CHAR, */
-   "<html><body>Hola, <br /> <br /> Estos son los n煤meros de pedido que tienes en tr谩mite en Yoigo: <br /> #INFO <br /> <br /> Si quieres ver c贸mo va, entra en Mi Yoigo en <a href=~"https://miyoigo.yoigo.com/miyoigo-static/miyoigo/#consulta-ped ido~"> Consulta el estado de tu solicitud</a>. <br /> <br /> Saludos, <br />
-Atenci贸n a clientes: <br /> www.yoigo.com <br /> Tel茅fono 1707 opci贸n 2, si no eres cliente. <br /> Tel茅fono 622, si eres de Yoigo. <br />",     /*  icSMSText AS CHAR, */
+   "<html><body>Hola, <br /> <br /> Estos son los n鷐eros de pedido que tienes en tr醡ite en Yoigo: <br /> #INFO <br /> <br /> Si quieres ver c髆o va, entra en Mi Yoigo en <a href=~"https://miyoigo.yoigo.com/miyoigo-static/miyoigo/#consulta-ped ido~"> Consulta el estado de tu solicitud</a>. <br /> <br /> Saludos, <br />
+Atenci髇 a clientes: <br /> www.yoigo.com <br /> Tel閒ono 1707 opci髇 2, si no eres cliente. <br /> Tel閒ono 622, si eres de Yoigo. <br />",     /*  icSMSText AS CHAR, */
    1,           /*  iipos AS INT,  */
    5,           /*  iiPrint AS INT, */
    "",        /*  icRule AS CHAR, */
