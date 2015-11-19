@@ -27,6 +27,7 @@ DEF VAR lcBundleID AS CHAR NO-UNDO.
 DEF VAR lcBankAcc AS CHAR NO-UNDO. 
 DEF VAR lcFusionSubsType AS CHAR NO-UNDO. 
 DEF VAR llExtendContract AS LOG NO-UNDO. 
+DEF VAR iiRequestFlags     AS INTEGER NO-UNDO.
 
 ASSIGN
    lcFusionSubsType =  fCParamC("FUSION_SUBS_TYPE").
@@ -106,6 +107,9 @@ IF fServAttrValue(MobSub.CLIType,
    OR NewCLIType.PayType = 2 THEN liCreditcheck = 0.
    
 IF lcError > "" THEN RETURN lcError.
+/* 0=no extend_term_contract
+   1=extend_term_contract */
+iiRequestFlags = IF llExtendContract THEN 1 ELSE 0.
 
 oiRequest = fCTChangeRequest(MobSub.msseq,
                   lcNewCLIType,
@@ -113,7 +117,7 @@ oiRequest = fCTChangeRequest(MobSub.msseq,
                   lcBankAcc, /*bank code validation is already done in newton */
                   ldeSTCTS,
                   liCreditcheck,  /* 0 = Credit check ok */
-                  llExtendContract, /* extend contract */
+                  iiRequestFlags, /* extend contract */
                   "" /* pcSalesman */,
                   FALSE, /* charge */
                   TRUE, /* send sms */
