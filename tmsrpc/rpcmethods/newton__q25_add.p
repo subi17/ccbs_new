@@ -187,7 +187,7 @@ IF CAN-FIND(FIRST TermReturn WHERE
                   TermReturn.OrderId = Order.OrderId AND
                   TermReturn.DeviceScreen = TRUE AND
                   TermReturn.DeviceStart = TRUE) THEN
-   RETURN "ERROR: Already returned terminal".
+   RETURN appl_err("Already returned terminal").
 
 liCreated = fPCActionRequest(
    MobSub.MsSeq,
