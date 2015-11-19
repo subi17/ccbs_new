@@ -32,7 +32,7 @@ DEF VAR liEndDay          AS INT  NO-UNDO.
 DEF VAR liMonth           AS INT  NO-UNDO.
 DEF VAR ldaStartDate      AS DATE NO-UNDO.
 DEF VAR ldaEndDate        AS DATE NO-UNDO.
-DEF VAR lcTemplate        AS CHAR NO-UNDO.
+DEF VAR lcSMSMessage        AS CHAR NO-UNDO.
 DEF VAR ldReqStamp        AS DEC  NO-UNDO.
 
 DEF STREAM Sout.
@@ -63,6 +63,14 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL
    (INPUT idaStartDate AS DATE,
     INPUT idaEndDate AS DATE,
     INPUT iiphase AS INT).
+
+   DEF VAR lcPeriod AS CHAR NO-UNDO.
+   DEF VAR liCount AS INT NO-UNDO.
+   DEF VAR liNotSendCount AS INT NO-UNDO.
+   DEF VAR liBilledCount AS INT NO-UNDO.
+   DEF VAR liNotDCCLICount AS INT NO-UNDO.
+   DEF VAR liReturnedDevices AS INT NO-UNDO.
+   DEF VAR lcEncryptedMSISDN AS CHAR NO-UNDO.
   
    ASSIGN lcLogDir     = fCParam("Q25","Q25_reminder_LogDir").
 
@@ -74,11 +82,6 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL
                /* STRING(DAY(TODAY),"99") + */ ".txt".
    
    OUTPUT STREAM Sout TO VALUE(lcLogFile) APPEND. 
-   DEF VAR lcPeriod AS CHAR NO-UNDO.
-   DEF VAR liCount AS INT NO-UNDO.
-   DEF VAR liNotSendCount AS INT NO-UNDO.
-   DEF VAR liBilledCount AS INT NO-UNDO.
-   DEF VAR liNotDCCLICount AS INT NO-UNDO.
 
    lcPeriod = STRING(YEAR(idaStartDate)) + (IF(MONTH(idaStartDate) < 10) THEN
               "0" ELSE "") + STRING(MONTH(idaStartDate)).
@@ -115,29 +118,49 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL
          liNotSendCount = liNotSendCount + 1.
          NEXT. /* Installment contract not found, terminated or renewal done 
                   SMS should not be send. */
-      END.            
+      END.
+      ELSE DO:
+         FIND FIRST TermReturn WHERE 
+                    TermReturn.OrderId = SingleFee.OrderId AND
+                    TermReturn.ReturnTS > fHMS2TS(DCCLI.ValidFrom, "0").
+         IF AVAIL TermReturn AND TermReturn.deviceScreen AND
+                  TermReturn.deviceStart THEN DO:
+            /* Accepted return of device */
+            liReturnedDevices = liReturnedDevices + 1.
+            NEXT.
+         END.
+
+      END.
       liCount = liCount + 1. /* Full count in Month */
       IF iiPhase = 1 OR iiPhase = 2 THEN DO: /* Q25 month 22 or 23 */
-         lcTemplate = fGetSMSTxt("Q25ReminderMonth22and23",
+         lcSMSMessage = fGetSMSTxt("Q25ReminderMonth22and23",
                                  TODAY,
                                  1, 
                                  OUTPUT ldReqStamp).
-         lcTemplate = REPLACE(lcTemplate,"#DATE","20" + "/" +
+         lcSMSMessage = REPLACE(lcSMSMessage,"#DATE","20" + "/" +
                                          STRING(MONTH(DCCLI.ValidTo))).
       END.
       ELSE IF iiPhase = 3 THEN DO: /* Q25 month 24 */
-         lcTemplate = fGetSMSTxt("Q25ReminderMonth24",
+         lcSMSMessage = fGetSMSTxt("Q25ReminderMonth24",
                                  TODAY,
                                  1,
                                  OUTPUT ldReqStamp).
-         lcTemplate = REPLACE(lcTemplate,"#DD","20").
+         lcSMSMessage = REPLACE(lcSMSMessage,"#DD","20").
       END.
+      
+      /* Encrypt MSISDN */
+      lcEncryptedMSISDN = encrypt_data("123456789",
+                     "AES_CFB_256", "YoigoQ25EncryptionPassword").
+      lcSMSMessage = REPLACE(lcSMSMessage, "#MSISDN", lcEncryptedMSISDN).
+ 
+      lcSMSMessage = REPLACE(lcSMSMessage, "#MSISDN", encrypt_data(DCCLI.Cli,
+                   "AES_CFB_256", "YoigoQ25EncryptionPassword")).
 
       fCreateSMS(SingleFee.Custnum,
                  SingleFee.Cli,
                  DCCLI.MsSeq,
                  SingleFee.OrderId,
-                 lcTemplate,
+                 lcSMSMessage,
                  "622",
                  {&SMS_TYPE_OFFER}).
 
@@ -148,7 +171,7 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL
       STRING(idaStartDate) + "|" STRING(idaEnddate) + "|" +
       STRING(liCount) + "|" + STRING(liNotSendCount) + "|" +
       STRING(liBilledCount) + "|" + STRING(liNotDCCLICount) + "|" +
-      STRING(etime / 1000) SKIP. 
+      STRING(liReturnedDevices) + "|" + STRING(etime / 1000) SKIP. 
    OUTPUT STREAM Sout CLOSE.
    RETURN TRUE.
 END FUNCTION.
