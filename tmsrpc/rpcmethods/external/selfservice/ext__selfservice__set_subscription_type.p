@@ -146,7 +146,7 @@ liRequest = fCTChangeRequest(MobSub.msseq,
                   pcBankAcc,      /* validation is already done in newton */
                   pdActivation,
                   liCreditCheck,  /* 0 = Credit check ok */
-                  FALSE, /* extend contract */
+                  0, /* 0 NO extend contract */
                   "",
                   FALSE,
                   TRUE,
