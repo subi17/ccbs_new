@@ -1046,18 +1046,17 @@ FUNCTION fGetMandateForITGroup RETURNS CHAR
                      MsOwner.TsEnd < idFromPer AND
                      MsOwner.MsSeq = ttSubInv.MsSeq USE-INDEX Custnum_s NO-ERROR.
 
-      IF NOT AVAIL MsOwner THEN NEXT.
+      IF NOT AVAIL MsOwner THEN
+         ASSIGN
+            ldaMDate = TODAY
+            lcMandateId = STRING(iiCustNum) + "X" +
+                          FILL("0",29 - LENGTH(STRING(iiCustNum))).
 
       IF MsOwner.MandateDate EQ ? THEN NEXT.
 
       IF ldaMDate > MsOwner.MandateDate THEN ASSIGN
          ldaMDate = MsOwner.MandateDate 
          lcMandateId = MsOwner.MandateID.
-      ELSE
-         ASSIGN
-            ldaMDate = TODAY
-            lcMandateId = STRING(iiCustNum) + "X" +
-                          FILL("0",29 - LENGTH(STRING(iiCustNum))).
    END.
 
    RETURN lcMandateId.
