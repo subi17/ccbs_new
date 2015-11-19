@@ -12,6 +12,8 @@
                2;Active MNP process does not exist
                3;Cancellation rules are not met
                4;Application Id does not match
+               5;Incorrect cancellation code
+               6;cancellation code SMS was not found
  */
 
 {xmlrpc/xmlrpc_access.i}
@@ -68,7 +70,7 @@ IF NOT AVAIL MNPProcess THEN
 IF pcCancel_code NE "" THEN DO:
    liCancel_code = INT(pcCancel_code). /* Check that number is in correct range */
    IF liCancel_code < 1000 OR liCancel_code > 9999 THEN 
-      RETURN appl_err("incorrect code number").
+      RETURN appl_err("Incorrect cancellation code").
 
    FIND FIRST CallAlarm NO-LOCK WHERE
               CallAlarm.Brand      = gcBrand AND
