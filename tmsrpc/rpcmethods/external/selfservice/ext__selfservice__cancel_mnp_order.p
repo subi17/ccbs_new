@@ -4,6 +4,7 @@
  * @input transaction_id;string;mandatory;transaction id
           order_id;int;mandatory;order id
           mnp_process_id;string;mandatory;mnp process reference id
+          cancel_code;string;optional;4 digit code send by SMS
  * @output     struct;mandatory;response struct
  * @response   transaction_id;string;transaction id
                result;boolean;True
@@ -19,19 +20,23 @@ DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 ASSIGN katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId
        gcBrand = "1".
 {fexternalapi.i}
+{tmsconst.i}
 
 DEF VAR piOrderId      AS INT  NO-UNDO.
 DEF VAR pcPortRequest  AS CHAR NO-UNDO.
 DEF VAR pcTransId      AS CHAR NO-UNDO.
 DEF VAR top_struct     AS CHAR NO-UNDO.
-DEF VAR lcApplicationId AS CHAR NO-UNDO. 
+DEF VAR lcApplicationId AS CHAR NO-UNDO.
+DEF VAR pcCancel_code   AS CHAR NO-UNDO.
+DEF VAR liCancel_code   AS INT  NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,int,string") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,int,string,string") EQ ? THEN RETURN.
 
 ASSIGN
    pcTransId = get_string(param_toplevel_id, "0")
    piOrderId = get_int(param_toplevel_id, "1")
    pcPortRequest = get_string(param_toplevel_id, "2").
+   pcCancel_code = get_string(param_toplevel_id, "3").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -58,6 +63,25 @@ FIND FIRST MNPProcess NO-LOCK WHERE
 
 IF NOT AVAIL MNPProcess THEN
    RETURN appl_err("Mnp process does not exist").
+
+/* If cancel code inserted then it must be the same that was send by last sms */
+IF pcCancel_code NE "" THEN DO:
+   liCancel_code = INT(pcCancel_code). /* Check that number is in correct range */
+   IF liCancel_code < 1000 OR liCancel_code > 9999 THEN 
+      RETURN appl_err("incorrect code number").
+
+   FIND FIRST CallAlarm NO-LOCK WHERE
+              CallAlarm.Brand      = gcBrand AND
+              CallAlarm.CLI        = Order.CLI   AND
+              CallAlarm.DeliStat   = 1       AND
+              CallAlarm.CreditType = {&SMSTYPE_INFO} NO-ERROR.
+
+   IF NOT AVAILABLE CallAlarm THEN
+      RETURN appl_err("SMS was not found").
+
+   IF INDEX(CallAlarm.DeliMsg,pcCancel_code,1) = 0 THEN
+      RETURN appl_err("Incorrect cancellation code").
+END.
 
 RUN mnp_operation(MNPProcess.MNPSeq,"cancel","CANC_ABONA").
 
