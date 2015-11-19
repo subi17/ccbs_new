@@ -96,33 +96,53 @@ END FUNCTION. /* FUNCTION fSendeInvoiceRequest */
    
 
 FUNCTION fOrderContainsFinancedTerminal RETURNS CHAR
-   (INPUT iiOrderId AS INT):
+   (INPUT iiOrderId  AS INT,
+    INPUT icDCEvent AS CHAR):
 
    DEF BUFFER Order FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
 
-   FOR FIRST Order NO-LOCK WHERE
-             Order.Brand  = gcBrand AND
-             Order.OrderID = iiOrderId,
-       FIRST OrderCustomer NO-LOCK WHERE
-             OrderCustomer.Brand = gcBrand AND
-             OrderCustomer.Order = iiOrderId AND
-             OrderCustomer.RowType = 1:
-   
-      IF NOT OrderCustomer.Profession > "" THEN RETURN  {&TF_STATUS_YOIGO}.
-      IF LOOKUP(OrderCustomer.CustIdType,"NIF,NIE") = 0 THEN
+   IF icDCEvent = "RVTERM12" THEN DO:
+      FOR FIRST Order NO-LOCK WHERE
+                Order.Brand  = gcBrand AND
+                Order.OrderID = iiOrderId:
+         IF CAN-FIND(FIRST SingleFee WHERE
+                           SingleFee.Brand       = gcBrand AND
+                           SingleFee.Custnum     = Order.CustNum AND
+                           SingleFee.HostTable   = "MobSub" AND
+                           SingleFee.KeyValue    = STRING(Order.MsSeq) AND
+                           SingleFee.OrderId     = iiOrderId AND
+                           SingleFee.CalcObj     = "RVTERM" AND
+                          (SingleFee.BillCode    = "RVTERM1EF" OR
+                           SingleFee.BillCode    = "RVTERMBSF")) THEN
+            RETURN {&TF_STATUS_WAITING_SENDING}.
          RETURN {&TF_STATUS_YOIGO}.
+      END.
+   END.
+   ELSE DO:
+      FOR FIRST Order NO-LOCK WHERE
+                Order.Brand  = gcBrand AND
+                Order.OrderID = iiOrderId,
+          FIRST OrderCustomer NO-LOCK WHERE
+                OrderCustomer.Brand = gcBrand AND
+                OrderCustomer.Order = iiOrderId AND
+                OrderCustomer.RowType = 1:
       
-      IF CAN-FIND(FIRST OfferItem NO-LOCK WHERE
-                        OfferItem.Brand       = gcBrand        AND
-                        OfferItem.Offer       = Order.Offer    AND
-                        OfferItem.ItemType    = "PerContract"  AND
-                        OfferItem.ItemKey BEGINS "PAYTERM"     AND
-                        OfferItem.EndStamp   >= Order.CrStamp  AND
-                        OfferItem.BeginStamp <= Order.CrStamp) THEN DO:
-         RETURN (IF INDEX(Order.OrderChannel,"POS") > 0
-                 THEN {&TF_STATUS_WAITING_SENDING}
-                 ELSE {&TF_STATUS_HOLD_SENDING}).
+         IF NOT OrderCustomer.Profession > "" THEN RETURN  {&TF_STATUS_YOIGO}.
+         IF LOOKUP(OrderCustomer.CustIdType,"NIF,NIE") = 0 THEN
+            RETURN {&TF_STATUS_YOIGO}.
+
+         IF CAN-FIND(FIRST OfferItem NO-LOCK WHERE
+                           OfferItem.Brand       = gcBrand        AND
+                           OfferItem.Offer       = Order.Offer    AND
+                           OfferItem.ItemType    = "PerContract"  AND
+                           OfferItem.ItemKey BEGINS "PAYTERM"     AND
+                           OfferItem.EndStamp   >= Order.CrStamp  AND
+                           OfferItem.BeginStamp <= Order.CrStamp) THEN DO:
+            RETURN (IF INDEX(Order.OrderChannel,"POS") > 0
+                    THEN {&TF_STATUS_WAITING_SENDING}
+                    ELSE {&TF_STATUS_HOLD_SENDING}).
+         END.
       END.
    END.
 

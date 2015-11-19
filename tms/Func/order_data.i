@@ -154,6 +154,7 @@ FUNCTION fGetOrderInstallmentData RETURNS LOGICAL
    DEF VAR ldeDeferredPayment AS DEC NO-UNDO.
    DEFINE VARIABLE ldaOrderDate AS DATE NO-UNDO.
    DEFINE VARIABLE lcBankCode AS CHARACTER NO-UNDO.
+   DEF VAR lcDCEvent AS CHAR NO-UNDO.
 
    DEF BUFFER Order FOR Order.
    DEF BUFFER Reseller FOR Reseller.
@@ -174,7 +175,12 @@ FUNCTION fGetOrderInstallmentData RETURNS LOGICAL
                               OUTPUT odeRedidualFee).
    IF ldeDeferredPayment EQ 0 THEN RETURN FALSE.
 
-   IF fOrderContainsFinancedTerminal(Order.OrderId) NE
+   FIND FIRST DCCLI NO-LOCK WHERE
+              DCCLI.MsSeq    = Order.MsSeq AND
+              DCCLI.ValidTo >= TODAY NO-ERROR.
+   IF AVAILABLE DCCLI THEN lcDCEvent = DCCLI.DCEvent.
+
+   IF fOrderContainsFinancedTerminal(Order.OrderId,lcDCEvent) NE
       {&TF_STATUS_YOIGO} THEN DO:
 
    IF INDEX(Order.OrderChannel, "POS") = 0 THEN

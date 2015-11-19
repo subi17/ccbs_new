@@ -79,11 +79,11 @@ DEF VAR liFeeCust     AS INT  NO-UNDO.
 DEF VAR liPenaltyFee  AS INT  NO-UNDO.
 DEF VAR lcError       AS CHAR NO-UNDO.
 DEF VAR lcFinancedResult AS CHAR NO-UNDO. 
-DEF VAR liIFSStatus AS INT NO-UNDO. 
+DEF VAR liIFSStatus   AS INT  NO-UNDO. 
+DEF VAR lcDCEvent     AS CHAR NO-UNDO.
 
 DEF BUFFER xSingleFee FOR SingleFee.
 DEF BUFFER xFixedFee FOR FixedFee.
-
 
 FORM
 SKIP(1)
@@ -179,8 +179,13 @@ IF ValidFrom <= TODAY
 THEN ldActStamp = 0.
 ELSE ldActStamp = fMake2DT(ValidFrom,1).
 
+FIND FIRST DCCLI NO-LOCK WHERE
+           DCCLI.MsSeq    = iiMSSeq AND
+           DCCLI.ValidTo >= TODAY NO-ERROR.
+IF AVAILABLE DCCLI THEN lcDCEvent = DCCLI.DCEvent.
+
 IF iiOrderId > 0 THEN
-   lcFinancedResult = fOrderContainsFinancedTerminal(iiOrderId).
+   lcFinancedResult = fOrderContainsFinancedTerminal(iiOrderId,lcDCEvent).
 
 IF NUM-ENTRIES(icFeememo,";") >= 2 THEN DO:
 
