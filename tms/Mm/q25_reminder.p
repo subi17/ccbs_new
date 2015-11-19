@@ -32,7 +32,7 @@ DEF VAR liEndDay          AS INT  NO-UNDO.
 DEF VAR liMonth           AS INT  NO-UNDO.
 DEF VAR ldaStartDate      AS DATE NO-UNDO.
 DEF VAR ldaEndDate        AS DATE NO-UNDO.
-DEF VAR lcSMSMessage        AS CHAR NO-UNDO.
+DEF VAR lcSMSMessage      AS CHAR NO-UNDO.
 DEF VAR ldReqStamp        AS DEC  NO-UNDO.
 
 DEF STREAM Sout.
@@ -70,7 +70,10 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL
    DEF VAR liBilledCount AS INT NO-UNDO.
    DEF VAR liNotDCCLICount AS INT NO-UNDO.
    DEF VAR liReturnedDevices AS INT NO-UNDO.
+   DEF VAR liQ25DoneCount AS INT NO-UNDO.
    DEF VAR lcEncryptedMSISDN AS CHAR NO-UNDO.
+   DEF VAR liTempMsSeq AS INT NO-UNDO.
+   DEF VAR ldaMonth22Date AS DATE NO-UNDO.
   
    ASSIGN lcLogDir     = fCParam("Q25","Q25_reminder_LogDir").
 
@@ -107,6 +110,10 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL
               DCCLI.MsSeq   = INT(SingleFee.KeyValue) AND
               DCCLI.ValidTo < idaStartDate AND
               DCCLI.ValidTo > idaEndDate NO-ERROR.
+      ASSIGN
+         liTempMsSeq = DCCLI.MsSeq /* stored for Q25 check */
+         ldaMonth22Date = ADD-INTERVAL(DCCLI.ValidFrom, 22, 'months':U)
+         ldaMonth22Date = DATE(MONTH(ldaMonth22Date),1,YEAR(ldaMonth22Date)).
 
       IF NOT AVAIL DCCLI THEN DO:
          /* No DCCLI for example between start and end date, singlefee is for 
@@ -114,9 +121,10 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL
          liNotDCCLICount = liNotDCCLICount + 1.
          NEXT.
       END.
-      ELSE IF DCCLI.TermDate NE ? OR DCCLI.RenewalDate NE ? THEN DO:
+      ELSE IF DCCLI.TermDate NE ? OR 
+              DCCLI.RenewalDate > ldaMonth22Date THEN DO:
          liNotSendCount = liNotSendCount + 1.
-         NEXT. /* Installment contract not found, terminated or renewal done 
+         NEXT. /* terminated or renewal done during 22-24 month 
                   SMS should not be send. */
       END.
       ELSE DO:
@@ -129,7 +137,15 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL
             liReturnedDevices = liReturnedDevices + 1.
             NEXT.
          END.
-
+         ELSE IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
+                  DCCLI.Brand   EQ gcBrand AND
+                  DCCLI.DCEvent EQ "RVTERM12" AND
+                  DCCLI.MsSeq   EQ liTempMsSeq AND
+                  DCCLI.ValidTo >= TODAY) THEN DO:
+            /* Q25 Extension already active */
+            liQ25DoneCount = liQ25DoneCount + 1.
+            NEXT.
+         END.
       END.
       liCount = liCount + 1. /* Full count in Month */
       IF iiPhase = 1 OR iiPhase = 2 THEN DO: /* Q25 month 22 or 23 */
@@ -149,12 +165,9 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL
       END.
       
       /* Encrypt MSISDN */
-      lcEncryptedMSISDN = encrypt_data("123456789",
-                     "AES_CFB_256", "YoigoQ25EncryptionPassword").
+      lcEncryptedMSISDN = encrypt_data(SingleFee.Cli,
+                     {&ENCRYPTION_METHOD}, {&Q25_PASSPHRASE}).
       lcSMSMessage = REPLACE(lcSMSMessage, "#MSISDN", lcEncryptedMSISDN).
- 
-      lcSMSMessage = REPLACE(lcSMSMessage, "#MSISDN", encrypt_data(DCCLI.Cli,
-                   "AES_CFB_256", "YoigoQ25EncryptionPassword")).
 
       fCreateSMS(SingleFee.Custnum,
                  SingleFee.Cli,
@@ -163,19 +176,17 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL
                  lcSMSMessage,
                  "622",
                  {&SMS_TYPE_OFFER}).
-
-
    END.
    PUT STREAM Sout UNFORMATTED
       STRING(iiPhase) + "|" +
       STRING(idaStartDate) + "|" STRING(idaEnddate) + "|" +
       STRING(liCount) + "|" + STRING(liNotSendCount) + "|" +
       STRING(liBilledCount) + "|" + STRING(liNotDCCLICount) + "|" +
-      STRING(liReturnedDevices) + "|" + STRING(etime / 1000) SKIP. 
+      STRING(liReturnedDevices) + "|" + STRING(liQ25DoneCount) + "|" +
+      STRING(etime / 1000) SKIP. 
    OUTPUT STREAM Sout CLOSE.
    RETURN TRUE.
 END FUNCTION.
-
 
 /* Handling of sms sending is different at January 2016 */
 IF DAY(TODAY) > 15 OR TODAY < 1/13/16 THEN
