@@ -81,8 +81,8 @@ FIND FIRST DCCLI NO-LOCK WHERE
            DCCLI.Brand   = gcBrand AND
            DCCLI.DCEvent BEGINS "PAYTERM" AND
            DCCLI.MsSeq   = MobSub.MsSeq AND 
-           DCCLI.FromDate < ldaQ25PeriodStartDate AND
-           DCCLI.FromDate > ldaQ25PeriodEndDate NO-ERROR. 
+           DCCLI.ValidFrom < ldaQ25PeriodStartDate AND
+           DCCLI.ValidFrom > ldaQ25PeriodEndDate NO-ERROR. 
 
 IF NOT AVAIL DCCLI THEN
    RETURN appl_err("Installment contract not found").
