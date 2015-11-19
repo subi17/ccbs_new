@@ -186,12 +186,14 @@ PROCEDURE pPeriodicalContract:
    DEF VAR ldePenalty AS DEC NO-UNDO. 
    DEF VAR lcPerContractIDs AS CHAR NO-UNDO. 
    DEF VAR llFound AS LOG NO-UNDO. 
+   DEF VAR lbolSTCRenewSameDay AS LOGICAL NO-UNDO.
 
    DEF BUFFER bBundleRequest  FOR MsRequest.
    DEF BUFFER bBundleContract FOR DayCampaign.
    DEF BUFFER bServiceLimit   FOR ServiceLimit.
    DEF BUFFER bMServiceLimit  FOR MServiceLimit.
    DEF BUFFER bDCCLI          FOR DCCLI.
+   DEF BUFFER bOrder       FOR Order.
 
    FIND FIRST DayCampaign WHERE
               DayCampaign.Brand   = gcBrand AND
@@ -332,7 +334,42 @@ PROCEDURE pPeriodicalContract:
                          OrderAction.OrderId  = Order.OrderId AND
                          OrderAction.ItemType = "ExcludeTermPenalty" NO-LOCK)
       THEN llCreateFees = FALSE.
-      
+
+      lbolSTCRenewSameDay = FALSE.
+      IF (bOrigRequest.Reqtype EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR 
+          bOrigRequest.Reqtype EQ {&REQTYPE_BUNDLE_CHANGE}) AND
+          DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} THEN
+      DO:         
+         /* YDR-2038 
+            (0=no extend_term_contract
+             1=extend_term_contract
+             2=exclude_term_penalty)
+         */
+         IF bOrigRequest.ReqIParam5 EQ 2 THEN
+            llCreateFees = FALSE.
+
+         /* YDR-2035
+           Don't charge penalty when:
+           STC is requested on the same day of the renewal order AND
+           New type is POSTPAID */
+         IF bOrigRequest.reqcparam2 BEGINS "cont" /* POSTPAID */ THEN
+            ORDER_LOOP:
+            FOR EACH bOrder NO-LOCK WHERE
+               bOrder.MSSeq EQ bOrigRequest.MsSeq AND
+               LOOKUP(bOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) = 0 AND
+               TRUNCATE(bOrder.CrStamp,0) EQ TRUNCATE(bOrigRequest.CreStamp,0) AND
+               bOrder.OrderType EQ {&ORDER_TYPE_RENEWAL}:
+               IF NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                                     MsRequest.MsSeq = bOrder.MsSeq AND
+                                     MsRequest.Reqtype = 49 AND
+                                     MsRequest.Reqstatus = 2 AND
+                                     MsRequest.ReqIParam1 = bOrder.OrderId) THEN
+               DO:
+                  lbolSTCRenewSameDay = TRUE.
+                  LEAVE ORDER_LOOP.
+               END.
+            END.
+      END. /* IF bOrigRequest.ReqIParam5 EQ 2 ... */
       /* YPR-1763 - Exclude PayTerm termination */
       IF AVAIL Order AND DayCampaign.DCType = "5" AND
          Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
@@ -377,10 +414,12 @@ PROCEDURE pPeriodicalContract:
                                         0,
                                         bDCCLI.PerContractId,
                                         OUTPUT lcResult).
-         END.
+         END. /* FOR EACH bDCCLI */
          IF NOT llFound THEN RETURN.
       END.
-      ELSE liRequest = fPCActionRequest(liMsSeq,
+      ELSE IF NOT (DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} AND
+                   lbolSTCRenewSameDay) THEN
+         liRequest = fPCActionRequest(liMsSeq,
                                         ttAction.ActionKey,
                                         "term",
                                         idTermStamp,
