@@ -64,7 +64,9 @@ FOR EACH TermReturn NO-LOCK:
        fNotNull(TermReturn.MSISDN)                 lcDel
        fNotNull(STRING(TermReturn.DeviceStart))    lcDel
        fNotNull(STRING(TermReturn.DeviceScreen))   lcDel
-       fNotNull(TermReturn.ReturnChannel)          lcDel
+       fNotNull(TermReturn.Salesman)               lcDel
+       fNotNull(TermReturn.TerminalType)           lcDel
+       fNotNull(TermReturn.EnvelopeNumber)         lcDel
        fNotNull(STRING(TermReturn.ReturnTS))       SKIP.
 END.
 
