@@ -50,6 +50,7 @@ DEF VAR lcEnvelopeNumber AS CHAR   NO-UNDO.
 DEF VAR ldReturnTS       AS DEC    NO-UNDO.
 DEF VAR lcResult         AS CHAR   NO-UNDO.
 DEF VAR liRequest        AS INT    NO-UNDO.
+DEF VAR lcMemo           AS CHAR   NO-UNDO.
 
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
@@ -86,6 +87,7 @@ IF llDeviceStart AND llDeviceScreen THEN DO:
    IF NOT AVAILABLE MobSub THEN
       RETURN appl_err("Unknown subscription").
 
+/*    
    IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN DO:
       IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                         DCCLI.Brand   EQ gcBrand AND
@@ -107,7 +109,8 @@ IF llDeviceStart AND llDeviceScreen THEN DO:
                         OrderAction.OrderId  = Order.OrderId AND
                         OrderAction.ItemType = "Q25Extension") THEN   
       RETURN appl_err("Q25 extension order is ongoing").
-   END.
+   END. 
+*/
 
    FIND SingleFee USE-INDEX Custnum WHERE
         SingleFee.Brand       = gcBrand AND
@@ -146,11 +149,16 @@ ASSIGN TermReturn.IMEI           = lcIMEI
 
 IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhTermReturn).
 
+
+IF llDeviceStart AND llDeviceScreen THEN 
+   lcMemo = "Devolución en tienda aceptada".
+ELSE lcMemo = "Devolución en tienda denegada".
+
 DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                  "MobSub",
                  STRING(MobSub.MsSeq),
                  0,
-                 "Terminal return discount",
+                 lcMemo,
                  lcResult).
 
 RELEASE TermReturn.
