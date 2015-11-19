@@ -1054,6 +1054,8 @@ FUNCTION fGetMandateForITGroup RETURNS CHAR
          ldaMDate = MsOwner.MandateDate 
          lcMandateId = MsOwner.MandateID.
    END.
+   /* Mandate generation in a fly for cases when no Mandate available. 
+      This came via YDR-2057 */
    IF lcMandateId = "" THEN
       ASSIGN
          ldaMDate = TODAY
