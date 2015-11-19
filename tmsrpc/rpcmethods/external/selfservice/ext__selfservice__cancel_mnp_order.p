@@ -69,6 +69,9 @@ IF NOT AVAIL MNPProcess THEN
 /* If cancel code inserted then it must be the same that was send by last sms */
 IF pcCancel_code NE "" THEN DO:
    liCancel_code = INT(pcCancel_code). /* Check that number is in correct range */
+   IF ERROR-STATUS:ERROR THEN 
+      RETURN appl_err("Incorrect cancellation code").
+
    IF liCancel_code < 1000 OR liCancel_code > 9999 THEN 
       RETURN appl_err("Incorrect cancellation code").
 
