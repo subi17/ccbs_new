@@ -213,7 +213,7 @@ IF Order.CLIType = "CONT5" THEN DO:
 END. /* IF Order.CLIType = "CONT5" THEN DO: */
 
 /* update customer data */
-RUN createcustomer.p(INPUT Order.OrderId,1,FALSE,output oiCustomer).
+RUN createcustomer.p(INPUT Order.OrderId,1,FALSE,TRUE,output oiCustomer).
 
 /* update corporate customer contact data */
 IF OrderCustomer.CustID = "CIF" THEN DO:

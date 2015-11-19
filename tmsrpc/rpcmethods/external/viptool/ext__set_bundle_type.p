@@ -90,9 +90,10 @@ liCreated = fBundleChangeRequest(MobSub.MsSeq,
                                  0,     /* orig. request */
                                  FALSE, /* mandatory */
                                  llUpgradeUpsell, /* Upgrade Upsell */
-                                 FALSE, /* extend terminal contract */
+                                 0,     /* 0 NO extend terminal contract*/
                                  "",
                                  OUTPUT lcError).
+
 IF liCreated = 0 THEN
    RETURN appl_err("Change request could not be created").
 
