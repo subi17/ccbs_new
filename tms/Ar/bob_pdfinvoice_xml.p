@@ -34,14 +34,11 @@ DEFINE VARIABLE lcProcessedFile AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSpoolDir      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcReportFileOut AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOutDir        AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFinalFol      AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcInvDetails    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcInvDate       AS CHARACTER NO-UNDO.
 
-DEF VAR lcXMLFile AS CHAR NO-UNDO. 
 DEF VAR lcPDFFile AS CHAR NO-UNDO. 
-DEF VAR lcXMLFder AS CHAR NO-UNDO. 
-DEF VAR lcFile    AS CHAR NO-UNDO. 
 DEF VAR lcToday   AS CHAR NO-UNDO. 
-DEF VAR lcBillRun AS CHAR NO-UNDO. 
 DEF VAR lcInvNum  AS CHAR NO-UNDO. 
 DEF VAR liCount   AS INT  NO-UNDO. 
 DEF VAR lcError   AS CHAR NO-UNDO. 
@@ -77,13 +74,10 @@ ASSIGN
    lcProcDir  = fCParam("PDFInvoice","IncProcDir")
    lcSpoolDir = fCParam("PDFInvoice","OutSpoolDir")
    lcOutDir   = fCParam("PDFInvoice","OutDir")
-   lcFile     = fCParamC("InvXMLFile")
-   lcXMLFile  = fCParamC("InvBOBXMLFile")
    lcPDFFile  = fCParamC("InvBOBPDFFile")
    lcToday    = STRING(YEAR(TODAY),"9999") + 
                 STRING(MONTH(TODAY),"99")  +
-                STRING(DAY(TODAY),"99")
-   lcXMLFder  = lcToday + STRING(TIME,"99999"). 
+                STRING(DAY(TODAY),"99").
 
 IF TODAY EQ DATE(MONTH(TODAY),1,YEAR(TODAY)) OR 
    TODAY EQ DATE(MONTH(TODAY),2,YEAR(TODAY)) THEN DO:
@@ -119,34 +113,26 @@ REPEAT:
  
    ASSIGN 
       lcInvFile    = "PDF_INVOICE_" + lcToday              
-      lcBillRun    = "PDF-INVOICE-" + lcToday + 
-                     STRING(TIME,"99999")
       lcBOBLogFile = "PDF_INVOICE_" + lcToday + 
                      "_" + STRING(TIME) + 
                      "_" + ".log"
-      lcBOBLogFile = lcSpoolDir + lcBOBLogFile
-      lcFinalFol   = lcXMLFile + "/" + lcXMLFder
-      lcXMLFile    = lcXMLFile + "/" + lcXMLFder + "*" + lcFile.
+      lcBOBLogFile = lcSpoolDir + lcBOBLogFile.
 
    OUTPUT STREAM sLog TO VALUE(lcBOBLogFile) APPEND.
 
    PUT STREAM sLog UNFORMATTED
               lcFilename  " "
               STRING(TODAY,"99.99.99") " "
-              STRING(TIME,"hh:mm:ss") SKIP
-              "BILLING RUN ID: " lcBillRun SKIP.
+              STRING(TIME,"hh:mm:ss") SKIP.
       
-   IF lcXMLFile = "" OR lcXMLFile = ? THEN DO:
-      fError("ERROR:Print file not defined").
-      LEAVE.
-   END.
-
    ASSIGN
       liNumOk         = 0
       liNumErr        = 0
       lcLine          = ""
       lcReportFileOut = ""
-      lcProcessedFile = "".
+      lcProcessedFile = ""
+      lcInvDetails    = ""
+      lcInvDate       = "".
 
    IF NOT lcFileName BEGINS lcInvFile THEN DO:
       fError("Incorrect input filename format"). 
@@ -170,41 +156,28 @@ REPEAT:
       
       FIND FIRST Invoice NO-LOCK WHERE 
                  Invoice.Brand    = gcBrand  AND 
-                 Invoice.ExtInvID = lcInvNum AND 
-                 Invoice.InvType  = 99       NO-ERROR.  
+                 Invoice.ExtInvID = lcInvNum NO-ERROR.  
       IF NOT AVAIL Invoice THEN DO:
          fError("Invalid Invoice Number").
          NEXT.
       END.
 
-      RUN printdoc1co ("",
-                       Invoice.CustNum,
-                       Invoice.CustNum,
-                       Invoice.ExtInvID,
-                       Invoice.ExtInvID,
-                       Invoice.InvDate,
-                       FALSE,     /* only unprinted */
-                       TRUE,      /* print credited */
-                       Invoice.InvType,
-                       Invoice.DelType,
-                       "XMLSEP",  
-                       lcXMLFile,
-                       FALSE,
-                       OUTPUT liCount,
-                       OUTPUT lcError).
-      
-      IF lcError NE "" THEN DO:
-         fError("Error creating Invoice XML").
-         NEXT.
-      END.
-      ELSE  
-         liNumOK = liNumOK + 1. 
+      lcInvDate = STRING(YEAR(Invoice.InvDate),"9999") +
+                  STRING(MONTH(Invoice.InvDate),"99")  +
+                  STRING(DAY(Invoice.InvDate),"99").
+
+      IF lcInvDetails EQ "" THEN 
+         lcInvDetails = "~"" + lcInvDate + "|" + STRING(Invoice.InvNum) + "|" + "CUSTOMER_ID-" + Invoice.ExtInvID + "~"".
+      ELSE 
+         lcInvDetails = lcInvDetails + "," + "~"" + lcInvDate + "|" + STRING(Invoice.InvNum) + "|" + "CUSTOMER_ID-" + Invoice.ExtInvID + "~"".
+   
+      liNumOK = liNumOK + 1. 
  
    END.
   
    RUN pTransOnError.
 
-   RUN pSendActiveMQMessage.
+   RUN pSendActiveMQMessage(lcInvDetails).
  
    INPUT STREAM sin CLOSE.
    OUTPUT STREAM sLog CLOSE.
@@ -226,8 +199,8 @@ PROCEDURE pTransOnError:
 END PROCEDURE. 
 
 PROCEDURE pSendActiveMQMessage:
+DEFINE INPUT PARAMETER lcInvoiceDetails AS CHAR NO-UNDO. 
 
-DEF VAR lcXMLInput   AS CHAR NO-UNDO INITIAL "". 
 DEF VAR lcPDFOutput  AS CHAR NO-UNDO INITIAL "". 
 DEF VAR llgRecursive AS CHAR NO-UNDO INITIAL "".
 DEF VAR llgMultiFile AS CHAR NO-UNDO INITIAL "".
@@ -237,7 +210,6 @@ DEF VAR lcProcess    AS CHAR NO-UNDO INITIAL "".
 DEF VAR llgHandled   AS LOG  NO-UNDO.
 
    ASSIGN 
-     lcXMLInput   = lcFinalFol
      lcPDFOutput  = lcPDFFile 
      llgRecursive = "false"
      llgMultiFile = "false"
@@ -263,13 +235,13 @@ DEF VAR llgHandled   AS LOG  NO-UNDO.
          LOG-MANAGER:WRITE-MESSAGE("ActiveMQ Publisher handle not found","ERROR").
    END.
 
-   lcMessage = "~{" + "~"input_file~""       + "~:" + "~"" + lcXMLInput   + "~"" + "," +
-                      "~"output_file_name~"" + "~:" + "~"" + lcPDFOutput  + "~"" + "," +
-                      "~"recursive~""        + "~:" +        llgRecursive        + "," +
-                      "~"multi_file~""       + "~:" +        llgMultiFile        + "," +
-                      "~"feedback_id~""      + "~:" + "~"" + lcFeedbackID + "~"" + "," +
-                      "~"type~""             + "~:" + "~"" + lcType       + "~"" + "," +
-                      "~"process~""          + "~:" + "~"" + lcProcess    + "~"" + "~}".
+   lcMessage = "~{" + "~"invoices~""         + "~:" + "~[" + lcInvoiceDetails + "~]" + "," +
+                      "~"output_file_name~"" + "~:" + "~"" + lcPDFOutput      + "~"" + "," +
+                      "~"recursive~""        + "~:" +        llgRecursive            + "," +
+                      "~"multi_file~""       + "~:" +        llgMultiFile            + "," +
+                      "~"feedback_id~""      + "~:" + "~"" + lcFeedbackID     + "~"" + "," +
+                      "~"type~""             + "~:" + "~"" + lcType           + "~"" + "," +
+                      "~"process~""          + "~:" + "~"" + lcProcess        + "~"" + "~}".
 
    IF lMsgPublisher:send_message(lcMessage) THEN
       llgHandled = TRUE.
