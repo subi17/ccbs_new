@@ -179,22 +179,7 @@ IF lcSMSTxt > "" THEN DO:
                   "Yoigo info",
                   "").
 END.
-/*
-IF lcmemo_title > "" THEN DO:
 
-   CREATE Memo.
-   ASSIGN
-       Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
-       Memo.HostTable = "MobSub"
-       Memo.KeyValue  = STRING(MobSub.MsSeq)
-       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
-       Memo.MemoTitle = lcmemo_title
-       Memo.MemoText  = lcmemo_content
-       Memo.CustNum   = MobSub.CustNum.
-END. /* IF lcmemo_title > "" AND lcmemo_content > "" THEN DO: */
-*/
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
