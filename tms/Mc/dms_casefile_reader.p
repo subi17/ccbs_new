@@ -78,7 +78,10 @@ REPEAT:
    REPEAT:
 
       IMPORT STREAM sIn UNFORMATTED lcLine.
+
       IF lcLine EQ "" THEN NEXT.
+      
+      lcLine = CODEPAGE-CONVERT(lcLine, SESSION:CHARSET, "UTF-8").
 
       RUN pUpdateDMS (lcLine).
 
