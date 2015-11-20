@@ -82,7 +82,7 @@ ASSIGN
 IF TODAY EQ DATE(MONTH(TODAY),1,YEAR(TODAY)) OR 
    TODAY EQ DATE(MONTH(TODAY),2,YEAR(TODAY)) THEN DO:
    
-   ASSIGN lcBOBLogFile = "PDF_INVOICE_" + lcToday +
+   ASSIGN lcBOBLogFile = "TMS_PDF_INVOICE_" + lcToday +
                          "_" + STRING(TIME) +
                          "_" + ".log"
           lcOutDir     = lcOutDir + "/" + lcBOBLogFile.
@@ -113,7 +113,7 @@ REPEAT:
  
    ASSIGN 
       lcInvFile    = "PDF_INVOICE_" + lcToday              
-      lcBOBLogFile = "PDF_INVOICE_" + lcToday + 
+      lcBOBLogFile = "TMS_PDF_INVOICE_" + lcToday + 
                      "_" + STRING(TIME) + 
                      "_" + ".log"
       lcBOBLogFile = lcSpoolDir + lcBOBLogFile.
