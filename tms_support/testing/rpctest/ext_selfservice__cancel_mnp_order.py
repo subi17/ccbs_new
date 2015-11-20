@@ -15,7 +15,11 @@ if len(sys.argv) < 3: instruction()
 else:
    var1 = int(sys.argv[1])
    var2 = sys.argv[2]
-   var3 = sys.argv[3]
+
+# Cancel_code is optional parameter
+if len(sys.argv) == 4: var3 = sys.argv[3]
+else:
+   var3 = ""
 
 q=s.ext.selfservice.cancel_mnp_order('501',var1,var2,var3)
 print_results(q)
