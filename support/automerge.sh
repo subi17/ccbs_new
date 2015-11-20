@@ -11,6 +11,7 @@ if [ `hostname` = "nunki" ]; then
   git_dir=$(git rev-parse --git-dir) || die "Not a git repository"
   git config user.email "nunki@jenkins.qvantel.net"
   git config user.name "Jenkins"
+  git fetch --prune
   #start_branch=$(git rev-parse --abbrev-ref HEAD)
   start_branch=${GIT_BRANCH#*/}
   git branch -r | ( \
@@ -23,7 +24,7 @@ if [ `hostname` = "nunki" ]; then
       [[ "$branch" =~ ^master$ ]] && continue
       git branch --no-track -f tmp "$remote_tracking_branch"
       git checkout -q tmp
-      if git merge -q "$remote/master" >/dev/null 2>&1
+      if git merge -q -m "Automerge remote branch $remote/master into $branch" "$remote/master" >/dev/null 2>&1
       then
         git push -q "$remote" "tmp:$branch" 2>/dev/null && \
         echo "        SUCCESS  $remote_tracking_branch" || \
