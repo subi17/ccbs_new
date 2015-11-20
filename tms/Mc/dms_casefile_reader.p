@@ -52,6 +52,20 @@ FUNCTION fLogLine RETURNS LOGICAL
       "DMS" SKIP.
 END FUNCTION.
 
+/*Function sends SMS and EMAIL generating information to WEB if it is needed*/
+FUNCTION fSendChangeInformation RETURNS CHAR
+   (icStatus AS CHAR,
+    iiOrderID AS INT):
+   DEF VAR lcNotifCase AS CHAR NO-UNDO.
+   CASE icStatus:
+      WHEN "E" THEN DO:
+         
+      END.
+   END.       
+     
+
+END.
+
 /*Is feature active:*/
 IF fDMSOnOff() NE TRUE THEN RETURN.
 
