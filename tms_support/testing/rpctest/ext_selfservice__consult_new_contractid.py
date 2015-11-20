@@ -15,5 +15,5 @@ if len(sys.argv) < 2: instruction()
 else:
    var1 = sys.argv[1]
 
-q=s.ext.selfservice.consult_new_contractid('501','PASSPORT',var1,'SMS')
+q=s.ext.selfservice.consult_new_contractid('501','NIF',var1,'EMAIL')
 print_results(q)
