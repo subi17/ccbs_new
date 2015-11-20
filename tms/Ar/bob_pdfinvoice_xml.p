@@ -42,7 +42,7 @@ DEF VAR lcXMLFder AS CHAR NO-UNDO.
 DEF VAR lcFile    AS CHAR NO-UNDO. 
 DEF VAR lcToday   AS CHAR NO-UNDO. 
 DEF VAR lcBillRun AS CHAR NO-UNDO. 
-DEF VAR liInvNum  AS INT  NO-UNDO. 
+DEF VAR lcInvNum  AS CHAR NO-UNDO. 
 DEF VAR liCount   AS INT  NO-UNDO. 
 DEF VAR lcError   AS CHAR NO-UNDO. 
 DEF VAR lcInvFile AS CHAR NO-UNDO.
@@ -161,7 +161,7 @@ REPEAT:
       IMPORT STREAM sin UNFORMATTED lcLine.
       IF TRIM(lcLine) EQ "" THEN NEXT.
 
-      ASSIGN liInvNum = INTEGER(ENTRY(1,lcLine,lcSep)) NO-ERROR.
+      ASSIGN lcInvNum = TRIM(ENTRY(1,lcLine,lcSep)) NO-ERROR.
         
       IF ERROR-STATUS:ERROR THEN DO:
          fError("Incorrect input data format").
@@ -169,9 +169,9 @@ REPEAT:
       END.
       
       FIND FIRST Invoice NO-LOCK WHERE 
-                 Invoice.Brand   = gcBrand  AND 
-                 Invoice.InvNum  = liInvNum AND 
-                 Invoice.InvType = 99       NO-ERROR.  
+                 Invoice.Brand    = gcBrand  AND 
+                 Invoice.ExtInvID = lcInvNum AND 
+                 Invoice.InvType  = 99       NO-ERROR.  
       IF NOT AVAIL Invoice THEN DO:
          fError("Invalid Invoice Number").
          NEXT.
