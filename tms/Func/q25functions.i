@@ -96,10 +96,6 @@ FUNCTION fCollectQ25SMSMessages RETURNS LOGICAL
               DCCLI.MsSeq   = INT(SingleFee.KeyValue) AND
               DCCLI.ValidTo < idaStartDate AND
               DCCLI.ValidTo > idaEndDate NO-ERROR.
-      ASSIGN
-         liTempMsSeq = DCCLI.MsSeq /* stored for Quota 25 check */
-         ldaMonth22Date = ADD-INTERVAL(DCCLI.ValidFrom, 22, 'months':U)
-         ldaMonth22Date = DATE(MONTH(ldaMonth22Date),1,YEAR(ldaMonth22Date)).
 
       IF NOT AVAIL DCCLI THEN DO:
          /* No DCCLI for example between start and end date, singlefee is for
@@ -114,6 +110,10 @@ FUNCTION fCollectQ25SMSMessages RETURNS LOGICAL
                   SMS should not be send. */
       END.
       ELSE DO:
+         ASSIGN
+            liTempMsSeq = DCCLI.MsSeq /* stored for Quota 25 check */
+            ldaMonth22Date = ADD-INTERVAL(DCCLI.ValidFrom, 22, 'months':U)
+            ldaMonth22Date = DATE(MONTH(ldaMonth22Date),1,YEAR(ldaMonth22Date)). 
          FIND FIRST TermReturn WHERE
                     TermReturn.OrderId = SingleFee.OrderId AND
                     TermReturn.ReturnTS > fHMS2TS(DCCLI.ValidFrom, "0").
@@ -152,7 +152,7 @@ FUNCTION fCollectQ25SMSMessages RETURNS LOGICAL
          Q25Messaging.MSSeq = DCCLI.MsSeq
          Q25Messaging.CustNum = SingleFee.CustNum
          Q25Messaging.Cli = DCCLI.Cli
-         Q25Messaging.OrderId = STRING(SingleFee.OrderId)
+         Q25Messaging.OrderId = SingleFee.OrderId
          Q25Messaging.isSent = FALSE
          Q25Messaging.ValidTo = DCCLI.ValidTo
          Q25Messaging.Amt = SingleFee.Amt.
@@ -219,7 +219,7 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL ().
       fCreateSMS(Q25Messaging.Custnum,
                  Q25Messaging.Cli,
                  Q25Messaging.MsSeq,
-                 INT(Q25Messaging.OrderId),
+                 Q25Messaging.OrderId,
                  lcSMSMessage,
                  "622",
                  {&SMS_TYPE_OFFER}).
