@@ -567,6 +567,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             ",").
+   RETURN "".                         
 END.   
 
 /*Order restudy ORDER_STATUS_MORE_DOC_NEEDED "44" */
@@ -949,6 +950,8 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             ",").
+   RETURN "".
+
 END.
 
 /*VFR*/
@@ -1147,6 +1150,8 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                                lcDocListEntries /*DocList*/,
                                ",").      
    END.
+   RETURN "".
+
 END.
 
 FUNCTION fCreateDocumentCase5 RETURNS CHAR
@@ -1206,6 +1211,8 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             ",").
+   RETURN "".
+
 END.
 
 FUNCTION fCreateDocumentCase6 RETURNS CHAR
@@ -1271,6 +1278,8 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             ",").
+   RETURN "".
+
 END.
 
 FUNCTION fCreateDocumentRows RETURNS CHAR
