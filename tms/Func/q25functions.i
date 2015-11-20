@@ -67,7 +67,7 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL
 
    IF lcLogDir = "" OR lcLogDir = ? THEN lcLogDir = "/tmp/".
 
-   lcLogFile = lcLogDir + "Q25_final_payment_" +
+   lcLogFile = lcLogDir + "Q25_sms_message_logs_" +
                STRING(YEAR(TODAY)) +
                STRING(MONTH(TODAY),"99") +
                /* STRING(DAY(TODAY),"99") + */ ".txt".
@@ -99,7 +99,7 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL
               DCCLI.ValidTo < idaStartDate AND
               DCCLI.ValidTo > idaEndDate NO-ERROR.
       ASSIGN
-         liTempMsSeq = DCCLI.MsSeq /* stored for Q25 check */
+         liTempMsSeq = DCCLI.MsSeq /* stored for Quota 25 check */
          ldaMonth22Date = ADD-INTERVAL(DCCLI.ValidFrom, 22, 'months':U)
          ldaMonth22Date = DATE(MONTH(ldaMonth22Date),1,YEAR(ldaMonth22Date)).
 
@@ -131,17 +131,58 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL
                   DCCLI.MsSeq   EQ liTempMsSeq AND
                   DCCLI.ValidTo >= TODAY) THEN DO:
             /* Q25 Extension already active */
-            liQ25DoneCount = liQ25DoneCount + 1.
-            NEXT.
+            IF iiPhase < 4 THEN DO:
+               /* before 21st day of month 24, no message needed for
+                  customers who have already chosen quota 25 extension */
+               liQ25DoneCount = liQ25DoneCount + 1.
+               NEXT.
+            END.
+            ELSE
+               /* 21st day and customer have decided to take Quota 25
+                  extension. Send message with final payment / 12. */
+               iiPhase = 5.
          END.
       END.
-      liCount = liCount + 1. /* Full count in Month */
-      lcSMSMessage = fGetSMSTxt("Q25FinalFeeMessage",
+      liCount = liCount + 1. /* Full q25 count in Month */
+      IF iiPhase = 1 OR iiPhase = 2 THEN DO: /* Q25 reminder month 22 or 23 */
+         lcSMSMessage = fGetSMSTxt("Q25ReminderMonth22and23",
+                                 TODAY,
+                                 1, 
+                                 OUTPUT ldReqStamp).
+         lcSMSMessage = REPLACE(lcSMSMessage,"#DATE","20" + "/" +
+                                         STRING(MONTH(DCCLI.ValidTo))).
+      END.
+      ELSE IF iiPhase = 3 THEN DO: /* Q25 reminder month 24 */
+         lcSMSMessage = fGetSMSTxt("Q25ReminderMonth24",
                                  TODAY,
                                  1,
                                  OUTPUT ldReqStamp).
-      lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT", STRING(SingleFee.Amt)).
+         lcSMSMessage = REPLACE(lcSMSMessage,"#DD","20").
+      END. 
+      ELSE IF iiPhase = 4 THEN DO: /* Q25 month 24 after 20th day no decision */
+         lcSMSMessage = fGetSMSTxt("Q25FinalFeeMessageNoDecision",
+                                 TODAY,
+                                 1,
+                                 OUTPUT ldReqStamp).
+         lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT", STRING(SingleFee.Amt)).
+      END.
+      ELSE IF iiPhase = 5 THEN DO: /* Q25 Month 24 20th day extension made */
+         lcSMSMessage = fGetSMSTxt("Q25FinalFeeMessageChosenExt",
+                                 TODAY,
+                                 1,
+                                 OUTPUT ldReqStamp).
+         lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT", 
+                                STRING(SingleFee.Amt / 12)).
+      END.
 
+      IF iiPhase < 4 THEN DO:
+         /* Encrypted MSISDN added to messages sent during 22 to 24 month */
+         lcEncryptedMSISDN = encrypt_data(SingleFee.Cli,
+                             {&ENCRYPTION_METHOD}, {&Q25_PASSPHRASE}).
+         lcSMSMessage = REPLACE(lcSMSMessage, "#MSISDN", lcEncryptedMSISDN).
+      END.
+
+      /* Send SMS */
       fCreateSMS(SingleFee.Custnum,
                  SingleFee.Cli,
                  DCCLI.MsSeq,
@@ -150,6 +191,7 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL
                  "622",
                  {&SMS_TYPE_OFFER}).
    END.
+   /* Logging about amount of situations for testting purposes. */
    PUT STREAM Sout UNFORMATTED
       STRING(idaStartDate) + "|" STRING(idaEnddate) + "|" +
       STRING(liCount) + "|" + STRING(liNotSendCount) + "|" +
