@@ -101,29 +101,28 @@ FUNCTION fOrderContainsFinancedTerminal RETURNS CHAR
 
    DEF BUFFER Order FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
+      
+   FIND Order NO-LOCK WHERE
+        Order.Brand  = gcBrand AND
+        Order.OrderID = iiOrderId NO-ERROR.
+   IF NOT AVAIL Order THEN
+      RETURN {&TF_STATUS_YOIGO}.
 
    IF icDCEvent = "RVTERM12" THEN DO:
-      FOR FIRST Order NO-LOCK WHERE
-                Order.Brand  = gcBrand AND
-                Order.OrderID = iiOrderId:
-         IF CAN-FIND(FIRST SingleFee WHERE
-                           SingleFee.Brand       = gcBrand AND
-                           SingleFee.Custnum     = Order.CustNum AND
-                           SingleFee.HostTable   = "MobSub" AND
-                           SingleFee.KeyValue    = STRING(Order.MsSeq) AND
-                           SingleFee.OrderId     = iiOrderId AND
-                           SingleFee.CalcObj     = "RVTERM" AND
-                          (SingleFee.BillCode    = "RVTERM1EF" OR
-                           SingleFee.BillCode    = "RVTERMBSF")) THEN
-            RETURN {&TF_STATUS_WAITING_SENDING}.
-         RETURN {&TF_STATUS_YOIGO}.
-      END.
+
+      IF CAN-FIND(FIRST SingleFee WHERE
+                        SingleFee.Brand       = gcBrand AND
+                        SingleFee.Custnum     = Order.CustNum AND
+                        SingleFee.HostTable   = "MobSub" AND
+                        SingleFee.KeyValue    = STRING(Order.MsSeq) AND
+                        SingleFee.OrderId     = iiOrderId AND
+                        LOOKUP(SingleFee.BillCode,
+                               {&TF_BANK_RVTERM_BILLCODES}) > 0) THEN
+         RETURN {&TF_STATUS_WAITING_SENDING}.
    END.
-   ELSE DO:
-      FOR FIRST Order NO-LOCK WHERE
-                Order.Brand  = gcBrand AND
-                Order.OrderID = iiOrderId,
-          FIRST OrderCustomer NO-LOCK WHERE
+   ELSE IF icDCEvent BEGINS "PAYTERM" THEN DO:
+   
+      FOR FIRST OrderCustomer NO-LOCK WHERE
                 OrderCustomer.Brand = gcBrand AND
                 OrderCustomer.Order = iiOrderId AND
                 OrderCustomer.RowType = 1:

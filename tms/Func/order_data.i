@@ -175,12 +175,7 @@ FUNCTION fGetOrderInstallmentData RETURNS LOGICAL
                               OUTPUT odeRedidualFee).
    IF ldeDeferredPayment EQ 0 THEN RETURN FALSE.
 
-   FIND FIRST DCCLI NO-LOCK WHERE
-              DCCLI.MsSeq    = Order.MsSeq AND
-              DCCLI.ValidTo >= TODAY NO-ERROR.
-   IF AVAILABLE DCCLI THEN lcDCEvent = DCCLI.DCEvent.
-
-   IF fOrderContainsFinancedTerminal(Order.OrderId,lcDCEvent) NE
+   IF fOrderContainsFinancedTerminal(Order.OrderId,"PAYTERM") NE
       {&TF_STATUS_YOIGO} THEN DO:
 
    IF INDEX(Order.OrderChannel, "POS") = 0 THEN

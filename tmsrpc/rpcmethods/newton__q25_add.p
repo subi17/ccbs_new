@@ -177,17 +177,16 @@ IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                   DCCLI.ValidTo >= TODAY) THEN
    RETURN appl_err("Q25 extension already active").
 
-FIND FIRST Order NO-LOCK WHERE
-           Order.MsSeq = MobSub.MsSeq AND
-           Order.CustNum = MobSub.CustNum NO-ERROR.
-IF NOT AVAILABLE Order THEN
-   RETURN appl_err("Unknown order").
+IF SingleFee.OrderId > 0 THEN DO:
 
-IF CAN-FIND(FIRST TermReturn WHERE
-                  TermReturn.OrderId = Order.OrderId AND
-                  TermReturn.DeviceScreen = TRUE AND
-                  TermReturn.DeviceStart = TRUE) THEN
-   RETURN appl_err("Already returned terminal").
+   FIND FIRST TermReturn NO-LOCK WHERE
+              TermReturn.OrderId = SingleFee.OrderId NO-ERROR.
+
+   IF AVAIL TermReturn AND 
+            TermReturn.DeviceScreen = TRUE AND
+            TermReturn.DeviceStart = TRUE THEN
+      RETURN appl_err("Already returned terminal").
+END.
 
 liCreated = fPCActionRequest(
    MobSub.MsSeq,

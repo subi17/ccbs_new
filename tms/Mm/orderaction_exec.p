@@ -392,12 +392,6 @@ PROCEDURE pQ25Extension:
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
       RETURN "ERROR: incorrect contract id".
 
-   IF CAN-FIND(FIRST TermReturn WHERE
-                     TermReturn.OrderId = Order.OrderId AND
-                     TermReturn.DeviceScreen = TRUE AND
-                     TermReturn.DeviceStart = TRUE) THEN
-      RETURN "ERROR: already returned terminal".
-
    FIND SingleFee USE-INDEX Custnum WHERE
         SingleFee.Brand       = gcBrand AND
         SingleFee.Custnum     = MobSub.CustNum AND
@@ -409,6 +403,17 @@ PROCEDURE pQ25Extension:
    
    IF NOT AVAIL SingleFee THEN
       RETURN "ERROR: residual fee not found".
+   
+   IF SingleFee.OrderId > 0 THEN DO:
+
+      FIND FIRST TermReturn NO-LOCK WHERE
+                 TermReturn.OrderId = SingleFee.OrderId NO-ERROR.
+
+      IF AVAIL TermReturn AND
+               TermReturn.DeviceScreen = TRUE AND
+               TermReturn.DeviceStart = TRUE THEN
+         RETURN "ERROR: already returned terminal".
+   END.
 
    ldaDate = fPer2Date(SingleFee.BillPeriod,0).
    ldaDate = DATE(MONTH(ldaDate),21,YEAR(ldaDate)).
