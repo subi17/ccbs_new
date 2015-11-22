@@ -1057,10 +1057,8 @@ FUNCTION fGetMandateForITGroup RETURNS CHAR
    /* Mandate generation in a fly for cases when no Mandate available. 
       This came via YDR-2057 */
    IF lcMandateId = "" THEN DO:
-      ASSIGN
-         ldaMDate = TODAY
-         lcMandateId = STRING(iiCustNum) + "X" +
-                 FILL("0",29 - LENGTH(STRING(iiCustNum))).
+      lcMandateId = STRING(iiCustNum) + "X" +
+                    FILL("0",29 - LENGTH(STRING(iiCustNum))).
       fErrorLog(iiCustNum,
                 "",
                 iiITGroup,
