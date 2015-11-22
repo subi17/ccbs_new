@@ -290,9 +290,10 @@ PROCEDURE pMakeCashInvoice:
 
       IF iiAction EQ 1 THEN DO:
 
-         RUN createcustomer(Order.OrderId, 
+         RUN createcustomer.p(Order.OrderId, 
                             1,
                             FALSE,
+                            FALSE, /* do not update existing customer */
                             OUTPUT liCashCust).
          IF liCashCust = ? OR liCashCust = 0 THEN DO:
             ocError = "Error:Customer has not been created".

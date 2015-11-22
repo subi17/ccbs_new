@@ -1111,6 +1111,7 @@ PROCEDURE pCreateInv:
    DEF VAR liInvseq    AS INT NO-UNDO. 
    DEF VAR idaDueDate  AS DATE NO-UNDO.
    DEF VAR llMultipleDueDate AS LOG NO-UNDO.
+   DEF VAR lcRegion AS CHAR NO-UNDO. 
    
    ASSIGN ldtBSDate     = TODAY
           liBSTime      = TIME
@@ -1205,7 +1206,18 @@ PROCEDURE pCreateInv:
       /* immediate stc split */
       EMPTY TEMP-TABLE ttInvSplit.
 
-      gcBrand = bCustomer.Brand.
+      ASSIGN
+         gcBrand = bCustomer.Brand
+         lcRegion = bCustomer.Region.
+   
+      IF llCashInvoice AND liOrderID > 0 THEN DO:
+         FIND FIRST OrderCustomer NO-LOCK WHERE   
+                    OrderCustomer.Brand = gcBrand AND
+                    OrderCustomer.OrderId = liOrderID AND
+                    OrderCustomer.RowType = 1 NO-ERROR.
+         IF AVAIL OrderCustomer THEN
+            lcRegion = OrderCustomer.Region.
+      END.
 
       /* get a list of subscriptions that should not be billed */
       lcBillDeny = "".
@@ -1425,7 +1437,7 @@ PROCEDURE pCreateInv:
          /* vat handling, run this already here so that counters (pCounterVat) 
             will get correct results */
          fInvRowVAT(bCustomer.VATUsage,
-                    bCustomer.Region,
+                    lcRegion,
                     bCustomer.Category,
                     idaInvDate). 
      
@@ -1515,7 +1527,7 @@ PROCEDURE pCreateInv:
          RUN pFixedFee (bCustomer.CustNum,
                         iiFeePeriod,
                         idaToDate,
-                        bCustomer.Region,
+                        lcRegion,
                         bCustomer.VatUsage,
                         idaInvDate).
                         
@@ -1529,13 +1541,13 @@ PROCEDURE pCreateInv:
                            iiFeePeriod,
                            idaFromDate,
                            idaToDate,
-                           bCustomer.Region,
+                           lcRegion,
                            bCustomer.VatUsage,
                            idaInvDate).
        
       /* check vat handling for rows created so far */
       fInvRowVAT (bCustomer.VATUsage,
-                  bCustomer.Region,  
+                  lcRegion,  
                   bCustomer.Category,
                   idaInvDate). 
 
@@ -1606,7 +1618,7 @@ PROCEDURE pCreateInv:
                       TRUE).
       
          fInvRowVAT (bCustomer.VATUsage,
-                     bCustomer.Region,  
+                     lcRegion,  
                      bCustomer.Category,
                      idaInvDate). 
  
@@ -1622,7 +1634,7 @@ PROCEDURE pCreateInv:
          /* check vat handling for rows created so far
             -> possible fatime ("all") gets correct sum */
          fInvRowVAT (bCustomer.VATUsage,
-                     bCustomer.Region,  
+                     lcRegion,  
                      bCustomer.Category,
                      idaInvDate). 
       
@@ -1653,7 +1665,7 @@ PROCEDURE pCreateInv:
 
             /* vat handling for rows (fat created after last run) */
             fInvRowVAT (bCustomer.VATUsage,
-                        bCustomer.Region,    
+                        lcRegion,    
                         bCustomer.Category,
                         idaInvDate). 
 
@@ -3546,6 +3558,7 @@ PROCEDURE pInvoiceHeader:
    DEF VAR ldMinConsAmt AS DEC  NO-UNDO. 
    DEF VAR liITGDeltype AS INT NO-UNDO.
    DEF VAR llNextInvNdd AS LOG NO-UNDO.
+   DEF VAR lcRegion    AS CHAR NO-UNDO. 
 
    DEF BUFFER bufseq  FOR InvSeq.
    DEF BUFFER bChkInv FOR Invoice. 
@@ -4043,7 +4056,17 @@ PROCEDURE pInvoiceHeader:
       ASSIGN lUpdAcc  = IF NOT llCashInvoice 
                         THEN InvGroup.UpdCustBal
                         ELSE FALSE
-             lcSeqPref = "".
+             lcSeqPref = ""
+             lcRegion = Customer.Region.
+      
+      IF llCashInvoice AND liOrderID > 0 THEN DO:
+         FIND FIRST OrderCustomer NO-LOCK WHERE   
+                    OrderCustomer.Brand = gcBrand AND
+                    OrderCustomer.OrderId = liOrderID AND
+                    OrderCustomer.RowType = 1 NO-ERROR.
+         IF AVAIL OrderCustomer THEN
+            lcRegion = OrderCustomer.Region.
+      END.
 
       /* update the rest of the fields */
       ASSIGN 
@@ -4072,7 +4095,7 @@ PROCEDURE pInvoiceHeader:
          ttInv.SpecDel      = Customer.SpecDel
          ttInv.WInvDisp     = FALSE
          ttInv.BillRun      = lcBillRun
-         ttInv.Region       = Customer.Region
+         ttInv.Region       = lcRegion
          ttInv.InvGroup     = Customer.InvGroup.
 
       CASE iiInvType:

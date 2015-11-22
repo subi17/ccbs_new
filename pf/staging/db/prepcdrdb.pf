@@ -1,2 +1,3 @@
 -db prepcdr
 -pf /apps/yoigo/pf/general.pf
+-S prepcdr
