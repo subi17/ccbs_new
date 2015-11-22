@@ -1056,12 +1056,19 @@ FUNCTION fGetMandateForITGroup RETURNS CHAR
    END.
    /* Mandate generation in a fly for cases when no Mandate available. 
       This came via YDR-2057 */
-   IF lcMandateId = "" THEN
+   IF lcMandateId = "" THEN DO:
       ASSIGN
          ldaMDate = TODAY
          lcMandateId = STRING(iiCustNum) + "X" +
                  FILL("0",29 - LENGTH(STRING(iiCustNum))).
+      fErrorLog(iiCustNum,
+                "",
+                iiITGroup,
+                "Temporary MandateId generation, when no MandateId available").
+      fELog(katun,"INVOICE:MandateId:Customer:" + 
+                  STRING(iiCustNum)).
 
+   END.
    RETURN lcMandateId.
 
 END FUNCTION.
