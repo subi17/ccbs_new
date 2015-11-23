@@ -137,13 +137,16 @@ FUNCTION fMakeTempTable RETURNS CHAR
                  /* This is financed case */
                   IF liMonths NE 0 THEN DO:
                      llgDirect = TRUE.
-                     llgAddEntry = TRUE.
+                     CREATE ttOrderList.
+                     ASSIGN ttOrderList.OrderID = OrderTimestamp.OrderId
+                            ttOrderList.CaseID = lcCase
+                            ttOrderList.Direct = llgDirect.
                      lcCase = {&DMS_CASE_TYPE_ID_DIRECT_CH}.
+                     NEXT.  /*no need to check other cases because they                                           can not be parallel according to current specs.*/
                   END.
-
             END.
             /*Case 1: Activations*/
-            ELSE IF (Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} /*6*/
+            IF (Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} /*6*/
                OR
                Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC} /*32*/) AND
                R-INDEX(Order.OrderChannel, "pos"  ) > 0 /* POS needed*/
@@ -176,19 +179,12 @@ FUNCTION fMakeTempTable RETURNS CHAR
                     Order.StatusCode EQ {&ORDER_STATUS_CLOSED_BY_FRAUD} OR
                     Order.StatusCode EQ {&ORDER_STATUS_AUTO_CLOSED} THEN DO:
                /*Send Cancel notif if TMS has sent other notif to DMS
-                (previous sending)*/
+                (previous sending). NOTE: This is not allowed if DMS has notified the
+                cancellation(statuses E,J,F,N,G).*/
                FIND FIRST DMS NO-LOCK WHERE
-                          DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
-                          DMS.HostId EQ Order.OrderID AND
-                          (  DMS.OrderStatus EQ {&ORDER_STATUS_DELIVERED} OR
-                             DMS.OrderStatus EQ 
-                                    {&ORDER_STATUS_MORE_DOC_NEEDED} OR
-                             DMS.OrderStatus EQ 
-                                    {&ORDER_STATUS_RENEWAL_STC_COMPANY} OR
-                             DMS.OrderStatus EQ {&ORDER_STATUS_COMPANY_NEW} OR
-                             DMS.OrderStatus EQ {&ORDER_STATUS_COMPANY_MNP}
-                          )
-                          NO-ERROR.
+                          DMS.ContractID EQ Order.ContractID AND 
+                           LOOKUP(DMS.StatusCode, "E,J,F,N,G") = 0 
+                           NO-ERROR.
                IF AVAIL DMS THEN DO:
                   lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
                   llgAddEntry = TRUE.
@@ -694,6 +690,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             ",").
+   RETURN "".                         
 END.   
 
 /*Order restudy ORDER_STATUS_MORE_DOC_NEEDED "44" */
@@ -978,6 +975,8 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             ",").
+   RETURN "".
+
 END.
 
 /*VFR*/
@@ -1176,6 +1175,8 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                                lcDocListEntries /*DocList*/,
                                ",").      
    END.
+   RETURN "".
+
 END.
 
 FUNCTION fCreateDocumentCase5 RETURNS CHAR
@@ -1235,6 +1236,8 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             ",").
+   RETURN "".
+
 END.
 
 FUNCTION fCreateDocumentCase6 RETURNS CHAR
@@ -1300,6 +1303,8 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             ",").
+   RETURN "".
+
 END.
 
 FUNCTION fCreateDocumentRows RETURNS CHAR
