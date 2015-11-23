@@ -525,7 +525,14 @@ PROCEDURE pHandleOrderCustomer:
                            fNotNull(STRING(OrderCustomer.DelType))   + lcDel +
                            fNotNull(OrderCustomer.KialaCode)         + lcDel +
                            fNotnull(OrderCustomer.CustId)            + lcDel +
-                           fNotNull(OrderCustomer.CustIdType).
+                           fNotNull(OrderCustomer.CustIdType)        + lcDel +
+                           fNotNull(STRING(OrderCustomer.FoundationDate)) 
+                                                                     + lcDel +
+                           fNotNull(OrderCustomer.Nationality)       + lcDel +
+                           fNotNull(OrderCustomer.MobileNumber)      + lcDel +
+                           fNotNull(OrderCustomer.Email)             + lcDel +
+                           fNotNull(STRING(OrderCustomer.BirthDay))  + lcDel +
+                           fNotNull(OrderCustomer.Profession).
 
                fWriteMessage(lcMessage).
             END.
