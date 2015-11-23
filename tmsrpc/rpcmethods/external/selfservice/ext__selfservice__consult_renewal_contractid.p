@@ -1,6 +1,6 @@
 /**
  * Send Renewal Order Contract Id(s) by SMS 
- *  
+ *
  * @input  transaction_id;string;mandatory;transaction id
            msisdn;string;mandatory;MSISDN for finding the corresponding orders
            delivery_type;string;mandatory;SMS
@@ -18,6 +18,7 @@
                 9;Email sending is failed
 
  */
+
 {xmlrpc/xmlrpc_access.i}
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 {commpaa.i}
