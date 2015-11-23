@@ -58,6 +58,7 @@ FUNCTION fCollectQ25SMSMessages RETURNS LOGICAL
    DEF VAR liNotDCCLICount   AS INT NO-UNDO.
    DEF VAR liReturnedDevices AS INT NO-UNDO.
    DEF VAR liQ25DoneCount    AS INT NO-UNDO.
+   DEF VAR liAlreadyCreated  AS INT NO-UNDO.
    DEF VAR liTempMsSeq       AS INT NO-UNDO.
    DEF VAR ldaMonth22Date    AS DATE NO-UNDO.
 
@@ -81,7 +82,6 @@ FUNCTION fCollectQ25SMSMessages RETURNS LOGICAL
             SingleFee.SourceTable = "DCCLI" AND
             SingleFee.CalcObj     = "RVTERM" AND
             SingleFee.BillPeriod  = INT(lcPeriod) NO-LOCK:
-
       IF SingleFee.Billed AND
          NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
                             Invoice.Invnum = SingleFee.InvNum aND
@@ -94,8 +94,8 @@ FUNCTION fCollectQ25SMSMessages RETURNS LOGICAL
               DCCLI.Brand   = gcBrand AND
               DCCLI.DCEvent BEGINS "PAYTERM" AND
               DCCLI.MsSeq   = INT(SingleFee.KeyValue) AND
-              DCCLI.ValidTo < idaStartDate AND
-              DCCLI.ValidTo > idaEndDate NO-ERROR.
+              DCCLI.ValidTo > idaStartDate AND
+              DCCLI.ValidTo < idaEndDate NO-ERROR.
 
       IF NOT AVAIL DCCLI THEN DO:
          /* No DCCLI for example between start and end date, singlefee is for
@@ -116,7 +116,8 @@ FUNCTION fCollectQ25SMSMessages RETURNS LOGICAL
             ldaMonth22Date = DATE(MONTH(ldaMonth22Date),1,YEAR(ldaMonth22Date)). 
          FIND FIRST TermReturn WHERE
                     TermReturn.OrderId = SingleFee.OrderId AND
-                    TermReturn.ReturnTS > fHMS2TS(DCCLI.ValidFrom, "0").
+                    TermReturn.ReturnTS > fHMS2TS(DCCLI.ValidFrom, "0") 
+                    NO-LOCK NO-ERROR.
          IF AVAIL TermReturn AND TermReturn.deviceScreen AND
                   TermReturn.deviceStart THEN DO:
             /* Accepted return of device */
@@ -145,17 +146,27 @@ FUNCTION fCollectQ25SMSMessages RETURNS LOGICAL
    
       /* Create table for sending messages in the second phase started
          by separate cron execution for each hour 10:00 - 21:00 */
-      CREATE Q25Messaging.
-      ASSIGN
-         Q25Messaging.phase = iiPhase
-         Q25Messaging.sendDate = TODAY
-         Q25Messaging.MSSeq = DCCLI.MsSeq
-         Q25Messaging.CustNum = SingleFee.CustNum
-         Q25Messaging.Cli = DCCLI.Cli
-         Q25Messaging.OrderId = SingleFee.OrderId
-         Q25Messaging.isSent = FALSE
-         Q25Messaging.ValidTo = DCCLI.ValidTo
-         Q25Messaging.Amt = SingleFee.Amt.
+      FIND FIRST Q25Messaging WHERE Q25Messaging.msseq = DCCLI.MsSeq AND
+                                    Q25Messaging.sendDate = TODAY NO-LOCK
+                                    NO-ERROR.
+      IF AVAIL Q25Messaging THEN DO:
+         /* Something have went wrong, SMS sending for today already marked
+            for this subscriber */
+         liAlreadyCreated = liAlreadyCreated + 1.
+      END.
+      ELSE DO:
+         CREATE Q25Messaging.
+         ASSIGN
+            Q25Messaging.phase = iiPhase
+            Q25Messaging.sendDate = TODAY
+            Q25Messaging.MSSeq = DCCLI.MsSeq
+            Q25Messaging.CustNum = SingleFee.CustNum
+            Q25Messaging.Cli = DCCLI.Cli
+            Q25Messaging.OrderId = SingleFee.OrderId
+            Q25Messaging.isSent = FALSE
+            Q25Messaging.ValidTo = DCCLI.ValidTo
+            Q25Messaging.Amt = SingleFee.Amt.
+      END.
    END.
    /* Logging about amount of situations for testting purposes. */
    PUT STREAM Sout UNFORMATTED
@@ -163,7 +174,7 @@ FUNCTION fCollectQ25SMSMessages RETURNS LOGICAL
       STRING(liCount) + "|" + STRING(liNotSendCount) + "|" +
       STRING(liBilledCount) + "|" + STRING(liNotDCCLICount) + "|" +
       STRING(liReturnedDevices) + "|" + STRING(liQ25DoneCount) + "|" +
-      STRING(etime / 1000) SKIP.
+      STRING(liAlreadyCreated) + "|" + STRING(etime / 1000) SKIP.
    OUTPUT STREAM Sout CLOSE.
    RETURN TRUE.
 END FUNCTION.
