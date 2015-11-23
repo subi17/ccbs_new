@@ -780,6 +780,14 @@ DO TRANSACTION:
               bMSRequest.ReqIParam5,   /* extend terminal contract */
               bMSRequest.ReqCparam6,   /* For DMS usage, contract_id */
               OUTPUT lcInfo).
+           IF liRequest EQ 0 THEN                               
+              /* write possible error to a memo */
+              DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                               "MobSub",
+                               STRING(MobSub.MsSeq),
+                               MobSub.Custnum,
+                               "STC/BTC creation failed",
+                               lcInfo).
         END.
         /* YDR-2037 */
          /* Re-launch retention order if present */
