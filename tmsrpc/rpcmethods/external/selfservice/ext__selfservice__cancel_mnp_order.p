@@ -29,16 +29,20 @@ DEF VAR pcPortRequest  AS CHAR NO-UNDO.
 DEF VAR pcTransId      AS CHAR NO-UNDO.
 DEF VAR top_struct     AS CHAR NO-UNDO.
 DEF VAR lcApplicationId AS CHAR NO-UNDO.
-DEF VAR pcCancel_code   AS CHAR NO-UNDO.
+DEF VAR pcCancel_code   AS CHAR NO-UNDO INIT "".
 DEF VAR liCancel_code   AS INT  NO-UNDO.
+DEF VAR top_array       AS CHAR NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,int,string,string") EQ ? THEN RETURN.
+top_array = validate_request(param_toplevel_id, "string,int,string,[string]").
+IF top_array EQ ? THEN RETURN.
 
 ASSIGN
    pcTransId = get_string(param_toplevel_id, "0")
    piOrderId = get_int(param_toplevel_id, "1")
    pcPortRequest = get_string(param_toplevel_id, "2").
-   pcCancel_code = get_string(param_toplevel_id, "3").
+
+IF NUM-ENTRIES(top_array) > 3 THEN
+    pcCancel_code = get_string(param_toplevel_id, "3").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
