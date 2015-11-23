@@ -49,17 +49,18 @@ ELSE DO:
    liEndDay = (DAY(TODAY) * 2).
 END.
 
-/* Month 22 */
-IF fCheckDates(2, liStartDay, liEndDay, ldaStartDate, ldaEndDate) THEN DO:
-   fCollectQ25SMSMessages(ldaStartDate, ldaEndDate, 1).
+/* Month 22, 2 months perm contract to go */
+IF fCheckDates(2, INPUT liStartDay, INPUT liEndDay, OUTPUT ldaStartDate, 
+               OUTPUT ldaEndDate) THEN DO:
+   fCollectQ25SMSMessages(ldaStartDate, ldaEndDate, {&Q25_MONTH_22}).
 END.
 
-/* Month 23 */
+/* Month 23 1 month perm contract to go */
 IF fCheckDates(1, liStartDay, liEndDay, ldaStartDate, ldaEndDate) THEN DO:
-   fCollectQ25SMSMessages(ldaStartDate, ldaEndDate, 2).
+   fCollectQ25SMSMessages(ldaStartDate, ldaEndDate, {&Q25_MONTH_23}).
 END.
 
-/* Month 24 */
+/* Month 24 0 month perm contract to go */
 IF fCheckDates(0, liStartDay, liEndDay, ldaStartDate, ldaEndDate) THEN DO:
-   fCollectQ25SMSMessages(ldaStartDate, ldaEndDate, 3).
+   fCollectQ25SMSMessages(ldaStartDate, ldaEndDate, {&Q25_MONTH_24}).
 END.
