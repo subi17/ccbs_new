@@ -11,6 +11,7 @@
 {commali.i}
 {cparam2.i}
 {timestamp.i}
+{tmsconst.i}
 
 DEFINE INPUT  PARAMETER icInvGrp       AS CHAR NO-UNDO.
 DEFINE INPUT  PARAMETER iiCustNum1     AS INT  NO-UNDO.
@@ -45,6 +46,10 @@ DEF VAR liFileSeq   AS INT  NO-UNDO.
 DEF VAR lcTestDir   AS CHAR NO-UNDO.
 DEF VAR lcFileXml   AS CHAR NO-UNDO. 
 DEF VAR liNBCCount  AS INT  NO-UNDO. 
+DEF VAR liSBICount  AS INT  NO-UNDO INITIAL 0.
+DEF VAR liSAICount  AS INT  NO-UNDO INITIAL 0.
+DEF VAR liBBICount  AS INT  NO-UNDO INITIAL 0.
+DEF VAR liLAICount  AS INT  NO-UNDO INITIAL 0.
 DEF VAR lcFileName AS CHAR NO-UNDO. 
 DEF VAR lcInputFile AS CHAR NO-UNDO. 
 DEF VAR lcLine      AS CHAR NO-UNDO. 
@@ -137,24 +142,28 @@ FUNCTION fMakeTemp RETURNS LOGICAL (
     ELSE IF ilSplit THEN DO:
          ttInvoice.BankCode = SUBSTRING(Customer.BankAcc,5,4).
    
-       CASE ttInvoice.BankCode:
-          WHEN "0049" OR
-          WHEN "0030" THEN
-             ttInvoice.BankCode = "0049". 
-          WHEN "0182" OR
-          WHEN "2040" OR
-          WHEN "2074" OR
-          WHEN "2059" OR
-          WHEN "2107" THEN 
-             ttInvoice.BankCode = "0182".
-          WHEN "0081" THEN .
-          /* Rest invoices will be divided based on the algorithm */
-          OTHERWISE ASSIGN
-             ttInvoice.BankCode = ""
-             ttInvoice.Movable  = TRUE
-             liNBCCount         = liNBCCount + 1.
-       END CASE.
-       
+       /* Check bank code available in BankAccount data, AND assign
+           parent bank code value to Invoice bank code field */
+       FIND FIRST BankAccount NO-LOCK WHERE
+                  BankAccount.Brand EQ gcBrand AND
+           LOOKUP(ttInvoice.BankCode,BankAccount.BankCodes) > 0 NO-ERROR.
+
+       IF AVAIL BankAccount THEN DO:
+          ttInvoice.BankCode = LEFT-TRIM(BankAccount.InvForm,"DD").
+
+          CASE ttInvoice.BankCode:
+             WHEN {&TF_BANK_UNOE}     THEN liSAICount = liSAICount + 1.
+             WHEN {&TF_BANK_BBVA}     THEN liBBICount = liBBICount + 1.
+             WHEN {&TF_BANK_SABADELL} THEN liSBICount = liSBICount + 1.
+             WHEN {&TF_BANK_LACAXIA}  THEN liLAICount = liLAICount + 1.
+          END CASE.
+       END.
+       ELSE
+          ASSIGN
+            ttInvoice.BankCode = ""
+            ttInvoice.Movable  = TRUE
+            liNBCCount         = liNBCCount + 1.
+ 
     END.
     ELSE ttInvoice.BankCode = "ALL".
 
