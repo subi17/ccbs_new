@@ -153,8 +153,11 @@ DEF VAR llCancelledPrerenove AS LOG NO-UNDO.
 DEF VAR lcFinancedInfo AS CHAR NO-UNDO. 
 DEF VAR liOrderId AS INT NO-UNDO. 
 DEF VAR liQtyTFs AS INT NO-UNDO. 
+/* 
+YPR-2748
 DEF VAR installment_array AS CHAR NO-UNDO.
 DEF VAR installment_struct AS CHAR NO-UNDO. 
+ */
 DEF VAR llDefBarring       AS LOG NO-UNDO. 
 DEF VAR ldtFirstDay        AS DATE NO-UNDO.
 DEF VAR ldePendingFees AS DECIMAL NO-UNDO.
@@ -588,6 +591,10 @@ ELSE DO:
 END.
 add_double(top_struct, "allowed_terminal_financing_amount", ldeAllowedFin).
 
+/* 
+YPR-2748
+Will be removed after making sure that everything is ok with Web.
+
 installment_array = add_array(top_struct, "installment").
 
 /* active payterm periodical contract(s) */
@@ -617,6 +624,7 @@ FOR EACH  DCCLI WHERE
    END.
 END.
 add_int(top_struct,"TF_quantity",liQtyTFs).
+ */
 
 /* Return Subs. based bundle */
 add_string(top_struct, "subscription_bundle", MobSub.TariffBundle).
