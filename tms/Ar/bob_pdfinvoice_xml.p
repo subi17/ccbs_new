@@ -167,9 +167,15 @@ REPEAT:
                   STRING(DAY(Invoice.InvDate),"99").
 
       IF lcInvDetails EQ "" THEN 
-         lcInvDetails = "~"" + lcInvDate + "|" + STRING(Invoice.InvNum) + "|" + "CUSTOMER_ID-" + Invoice.ExtInvID + "~"".
+         lcInvDetails = "~"" + lcInvDate               + "|" + 
+                               STRING(Invoice.InvNum)  + "|" + 
+                               STRING(Invoice.CustNum) + "-" + 
+                               Invoice.ExtInvID + "~"".
       ELSE 
-         lcInvDetails = lcInvDetails + "," + "~"" + lcInvDate + "|" + STRING(Invoice.InvNum) + "|" + "CUSTOMER_ID-" + Invoice.ExtInvID + "~"".
+         lcInvDetails = lcInvDetails + "," + "~"" + lcInvDate               + "|" + 
+                                                    STRING(Invoice.InvNum)  + "|" + 
+                                                    STRING(Invoice.CustNum) + "-" +
+                                                    Invoice.ExtInvID + "~"".
    
       liNumOK = liNumOK + 1. 
  
