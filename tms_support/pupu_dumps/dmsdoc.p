@@ -32,6 +32,14 @@ FUNCTION fNotNull RETURNS CHAR (INPUT icInput AS CHAR):
 
 END. /* FUNCTION fNotNull RETURNS CHAR (INPUT): */
 
+FUNCTION fCheckZeroDate RETURN CHAR (INPUT idInput AS DECIMAL):
+
+   IF IdInput EQ 0 THEN RETURN "".
+   ELSE RETURN fNotNull(STRING(idInput)).  
+
+END.
+
+
 OUTPUT STREAM slog TO VALUE(lcLogFile).
 
 FOR EACH DMSDoc NO-LOCK:
@@ -51,14 +59,14 @@ FOR EACH DMSDoc NO-LOCK:
        fNotNull(STRING(RECID(DMSDoc)))          lcDel
        fNotNull(STRING(DMSDoc.DMSID)          + CHR(255) +
                 DMSDoc.DocTypeID              + CHR(255) +
-                STRING(DMSDoc.DMSStatusTS))     lcDel
+                fCheckZeroDate(DMSDoc.DMSStatusTS))  + lcDel
        fNotNull(STRING(ldtTimeStamp))           lcDel
        fNotNull(STRING(DMSDoc.DMSID))           lcDel
        fNotNull(DMSDoc.DocTypeID)               lcDel
        fNotNull(DMSDoc.DocTypeDesc)             lcDel
        fNotNull(DMSDoc.DocStatusCode)           lcDel
        fNotNull(DMSDoc.DocRevComment)           lcDel
-       fNotNull(STRING(DMSDoc.DMSStatusTS))     SKIP.
+       fCheckZeroDate(DMSDoc.DMSStatusTS)     SKIP.
 END.
 
 OUTPUT STREAM slog CLOSE.
