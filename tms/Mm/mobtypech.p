@@ -609,6 +609,7 @@ REPEAT  WITH FRAME main:
       FALSE, /* extend contract */
       FALSE, /* bypass stc type check */
       0, /* stc order id */
+      {&REQUEST_SOURCE_MANUAL_TMS},
       OUTPUT lcError) EQ FALSE THEN DO:
      MESSAGE
          lcError 

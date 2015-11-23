@@ -16,6 +16,7 @@
 DEF INPUT  PARAMETER iiReqType    AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icCLIType    AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER iiMsSeq      AS INT  NO-UNDO.
+DEF INPUT  PARAMETER icReqSource  AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER ocError      AS CHAR NO-UNDO. 
 
 DEF VAR lcBarrStatus  AS CHAR NO-UNDO. 
@@ -55,10 +56,23 @@ FUNCTION fRequestCheck RETURNS LOGICAL:
                  (iiReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR
                   iiReqType = {&REQTYPE_BUNDLE_CHANGE}) THEN NEXT.
             END.
+            /* YDR-2036 
+            Allow STC/BTC when there is an ongoing 
+            MNP out request with ACON status            
+            */
+             IF (iiReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR
+                 iiReqType = {&REQTYPE_BUNDLE_CHANGE}) AND            
+               MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+               MsRequest.ReqCParam3 EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) AND
+               (icReqSource EQ {&REQUEST_SOURCE_MANUAL_TMS} OR 
+                icReqSource EQ {&REQUEST_SOURCE_NEWTON})
+               THEN NEXT.
+                
             ocError = {&MSG_ONG_REQUEST}.
             RETURN FALSE.
          END.
-      END.
+         
+      END. /* FOR EACH MSrequest */
    END.
    ELSE IF RequestAction.ActionType = "BarringsNotAllowed" 
       AND iiMsSeq > 0 THEN DO:
