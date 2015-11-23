@@ -423,6 +423,16 @@ PROCEDURE pHandleOrder:
                      lcTermContr = OfferItem.ItemKey.
                  
                   /* TopUp  */
+                  FIND FIRST OfferItem NO-LOCK WHERE
+                             OfferItem.Brand       = gcBrand AND
+                             OfferItem.Offer       = Order.Offer AND
+                             OfferItem.ItemType    = "BillItem" AND
+                             OfferItem.EndStamp   >= Order.CrStamp AND
+                             OfferItem.BeginStamp <= Order.CrStamp NO-ERROR.
+
+                  IF AVAILABLE OfferItem THEN
+                     liOnlySimAmt = OfferItem.Amount.
+
                   FOR FIRST OfferItem NO-LOCK WHERE
                             OfferItem.Brand       = gcBrand AND
                             OfferItem.Offer       = Order.Offer AND
@@ -432,8 +442,7 @@ PROCEDURE pHandleOrder:
                      FIRST TopupScheme NO-LOCK WHERE
                            TopupScheme.Brand       = gcBrand AND
                            TopupScheme.TopupScheme = OfferItem.ItemKey:
-                     ASSIGN
-                        liOnlySimAmt  = OfferItem.Amount
+                     
                         lcTopUpScheme = TopupScheme.TopupScheme.
                   END.
 
