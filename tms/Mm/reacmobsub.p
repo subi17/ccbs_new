@@ -31,7 +31,8 @@ DEFINE INPUT PARAMETER iiMSrequest  AS INTEGER   NO-UNDO.
 
 DEFINE VARIABLE ldCurrTS            AS  DECIMAL   NO-UNDO.
 
-DEFINE BUFFER bMSRequest FOR MsRequest.
+DEFINE BUFFER bMSRequestSTC FOR MsRequest.
+DEFINE BUFFER bMSRequestTER FOR MsRequest.
 
 FIND FIRST MSRequest WHERE
            MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
@@ -107,12 +108,14 @@ DEF VAR lbolSTCRequestFound        AS LOGICAL NO-UNDO.
 DEF VAR lbolBTCRequestFound        AS LOGICAL NO-UNDO.
 DEF VAR lbolIsUpgradeUpsell        AS LOGICAL NO-UNDO.
 
-DEFINE BUFFER bSubMsRequest  FOR MsRequest.
+DEFINE BUFFER bSubMSRequestSTC  FOR MsRequest.
 DEFINE BUFFER bTermMsRequest FOR MsRequest.
-DEFINE BUFFER bMsRequest     FOR MsRequest.
+DEFINE BUFFER bMSRequestSTC     FOR MsRequest.
 DEFINE BUFFER bOrder         FOR Order.
 DEFINE BUFFER bRenewalOrder  FOR Order.
 DEFINE BUFFER lbMobSub       FOR MobSub.
+
+DEFINE VARIABLE lrowidMsRequest AS ROWID NO-UNDO.
 
 IF MsRequest.ReqStatus <> 6 THEN RETURN.
 
@@ -250,7 +253,7 @@ DO TRANSACTION:
                      "Barring and suspension",
                      "Barring REFRESH request failed: "
                      + lcResult).
-   END. /* FOR EACH bSubMsRequest WHERE */
+   END. /* FOR EACH bSubMSRequestSTC WHERE */
 
    /* LTE service reactivation */
    FIND FIRST SubSer WHERE
@@ -289,15 +292,15 @@ DO TRANSACTION:
 
      ldeTermStamp = bTermMsRequest.ActStamp.
 
-     FOR EACH bSubMsRequest WHERE
-              bSubMsRequest.OrigRequest = bTermMsRequest.MsRequest NO-LOCK:
+     FOR EACH bSubMSRequestSTC WHERE
+              bSubMSRequestSTC.OrigRequest = bTermMsRequest.MsRequest NO-LOCK:
 
        /* BlackBerry Reactivation */
-       IF bSubMsRequest.ReqCParam1 = "BB" AND
-          bSubMsRequest.ReqIParam1 = 0    AND
-          bSubMsRequest.ReqStatus  = {&REQUEST_STATUS_DONE} THEN DO:
+       IF bSubMSRequestSTC.ReqCParam1 = "BB" AND
+          bSubMSRequestSTC.ReqIParam1 = 0    AND
+          bSubMSRequestSTC.ReqStatus  = {&REQUEST_STATUS_DONE} THEN DO:
           liRequest = fServiceRequest(MobSub.MsSeq,
-                                      bSubMsRequest.ReqCParam1,
+                                      bSubMSRequestSTC.ReqCParam1,
                                       1,     /* ON */
                                       "",
                                       ldCurrTS,
@@ -316,57 +319,57 @@ DO TRANSACTION:
                         STRING(Mobsub.MsSeq),
                         Mobsub.CustNum,
                         "BB Service Reactivation",
-                        "Service " + bSubMsRequest.ReqCParam1 +
+                        "Service " + bSubMSRequestSTC.ReqCParam1 +
                         " request failed " + lcError).
-       END. /* IF bSubMsRequest.ReqCParam1 = "BB" AND */
+       END. /* IF bSubMSRequestSTC.ReqCParam1 = "BB" AND */
 
        /* Cancel ongoing CONTM termination request */
-       IF bSubMsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-          bSubMsRequest.ReqStatus = {&REQUEST_STATUS_NEW} AND
-          bSubMsRequest.ReqCparam3 = STRING({&SUBSCRIPTION_TERM_REASON_MULTISIM}) AND
+       IF bSubMSRequestSTC.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+          bSubMSRequestSTC.ReqStatus = {&REQUEST_STATUS_NEW} AND
+          bSubMSRequestSTC.ReqCparam3 = STRING({&SUBSCRIPTION_TERM_REASON_MULTISIM}) AND
           llMultiSIMActive AND MobSub.MultiSIMId > 0 AND
           MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} THEN DO:
 
           /* Change the SubRequest buffer name because
              func has MsRequest buffere reference */
           FIND FIRST MsRequest WHERE
-                     MsRequest.MsRequest = bSubMsRequest.MsRequest
+                     MsRequest.MsRequest = bSubMSRequestSTC.MsRequest
                NO-LOCK NO-ERROR.
           fReqStatus(4,"Primary Subscription Reactivation").
           NEXT.
-       END. /* IF bSubMsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} */
+       END. /* IF bSubMSRequestSTC.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} */
 
        /* Handle all the periodical contracts */
-       IF bSubMsRequest.ReqType = {&REQTYPE_CONTRACT_TERMINATION} OR
-          bSubMsRequest.ReqType = {&REQTYPE_DSS} THEN DO:
+       IF bSubMSRequestSTC.ReqType = {&REQTYPE_CONTRACT_TERMINATION} OR
+          bSubMSRequestSTC.ReqType = {&REQTYPE_DSS} THEN DO:
 
           /* If MultiSIM is not active then don't reactivate DSS */
-          IF bSubMsRequest.ReqCParam3 BEGINS {&DSS} THEN DO:
-             IF bSubMsRequest.ReqStatus <> {&REQUEST_STATUS_NEW} THEN NEXT.
+          IF bSubMSRequestSTC.ReqCParam3 BEGINS {&DSS} THEN DO:
+             IF bSubMSRequestSTC.ReqStatus <> {&REQUEST_STATUS_NEW} THEN NEXT.
              IF NOT (llMultiSIMActive OR
-                     (bSubMsRequest.ReqCParam3 = "DSS2" AND
+                     (bSubMSRequestSTC.ReqCParam3 = "DSS2" AND
                       fIsDSS2Allowed(MobSub.CustNum,MobSub.MsSeq,ldCurrTS,
                                      OUTPUT liDSSMsSeq,OUTPUT lcError)))
              THEN NEXT.
-          END. /* IF bSubMsRequest.ReqCParam3 = {&DSS} THEN DO: */
+          END. /* IF bSubMSRequestSTC.ReqCParam3 = {&DSS} THEN DO: */
           
           /* Ongoing request with status=0 */
-          IF bSubMsRequest.ReqStatus = {&REQUEST_STATUS_NEW} THEN DO:
+          IF bSubMSRequestSTC.ReqStatus = {&REQUEST_STATUS_NEW} THEN DO:
 
              /* Activate the SHAPER and HSDPA */
-             IF LOOKUP(bSubMsRequest.ReqCParam3,lcPostpaidDataBundles) > 0
+             IF LOOKUP(bSubMSRequestSTC.ReqCParam3,lcPostpaidDataBundles) > 0
              THEN DO:
                 llReStoreDefaultShaper = FALSE.
                 /* Service Packages that need to be activated */
                 FOR EACH DCServicePackage NO-LOCK WHERE
                          DCServicePackage.Brand     = gcBrand AND
-                         DCServicePackage.DCEvent   = bSubMsRequest.ReqCParam3 AND
+                         DCServicePackage.DCEvent   = bSubMSRequestSTC.ReqCParam3 AND
                          DCServicePackage.ToDate   >= TODAY AND
                          DCServicePackage.FromDate <= TODAY:
 
                     RUN pCopyPackage(MobSub.CLIType,
                                      DCServicePackage.ServPac,
-                                     bSubMsRequest.ReqCParam3,
+                                     bSubMSRequestSTC.ReqCParam3,
                                      MobSub.MSSeq,
                                      TODAY,
                                      ?, 
@@ -387,41 +390,41 @@ DO TRANSACTION:
                                         "Service " + DCServicePackage.ServPac +
                                         " request failed.").
                 END. /* FOR EACH DCServicePackage NO-LOCK WHERE */
-             END. /* IF LOOKUP(bSubMsRequest.ReqCParam3, */
+             END. /* IF LOOKUP(bSubMSRequestSTC.ReqCParam3, */
 
              /* Change the SubRequest buffer name because
                 func has MsRequest buffere reference */
              FIND FIRST MsRequest WHERE
-                        MsRequest.MsRequest = bSubMsRequest.MsRequest
+                        MsRequest.MsRequest = bSubMSRequestSTC.MsRequest
                   NO-LOCK NO-ERROR.
              fReqStatus(4,"Subscription Reactivation").
 
-          END. /* IF bSubMsRequest.ReqStatus = {&REQUEST_STATUS_NEW} THEN DO: */
+          END. /* IF bSubMSRequestSTC.ReqStatus = {&REQUEST_STATUS_NEW} THEN DO: */
 
-          ELSE IF bSubMsRequest.ReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE}
+          ELSE IF bSubMSRequestSTC.ReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE}
           THEN DO:
              CREATE ttContract.
-             ASSIGN ttContract.DCEvent   = bSubMsRequest.ReqCParam3
+             ASSIGN ttContract.DCEvent   = bSubMSRequestSTC.ReqCParam3
                     ttContract.PerContID = IF ttContract.DCEvent BEGINS "PAYTERM" THEN 
-                                              bSubMsRequest.ReqIParam3 
+                                              bSubMSRequestSTC.ReqIParam3 
                                            ELSE 0.
              
              FIND FIRST MsRequest WHERE
-                MsRequest.MsRequest = bSubMsRequest.MsRequest NO-LOCK NO-ERROR.
+                MsRequest.MsRequest = bSubMSRequestSTC.MsRequest NO-LOCK NO-ERROR.
              fReqStatus(4,"Subscription Reactivation").
           END.
           
-          ELSE IF bSubMsRequest.ReqStatus = {&REQUEST_STATUS_DONE}      
+          ELSE IF bSubMSRequestSTC.ReqStatus = {&REQUEST_STATUS_DONE}      
           THEN DO:
              CREATE ttContract.
-             ASSIGN ttContract.DCEvent = bSubMsRequest.ReqCParam3
+             ASSIGN ttContract.DCEvent = bSubMSRequestSTC.ReqCParam3
                     ttContract.PerContID = IF ttContract.DCEvent BEGINS "PAYTERM" THEN
-                                              bSubMsRequest.ReqIParam3
+                                              bSubMSRequestSTC.ReqIParam3
                                            ELSE 0.
-          END. /* ELSE IF bSubMsRequest.ReqStatus = {&REQUEST_STATUS_DONE} */
+          END. /* ELSE IF bSubMSRequestSTC.ReqStatus = {&REQUEST_STATUS_DONE} */
           
-       END. /* IF bSubMsRequest.ReqType = {&REQTYPE_CONTRACT_TERMINATION} */
-     END. /* FOR EACH bSubMsRequest WHERE */
+       END. /* IF bSubMSRequestSTC.ReqType = {&REQTYPE_CONTRACT_TERMINATION} */
+     END. /* FOR EACH bSubMSRequestSTC WHERE */
    END. /* FOR LAST bTermMsRequest WHERE */
 
    /* Now find the Main request buffer */
@@ -704,81 +707,102 @@ DO TRANSACTION:
          */
          ASSIGN
             lbolSTCRequestFound = FALSE
-            lbolBTCRequestFound = FALSE.
+            lbolBTCRequestFound = FALSE
+            lrowidMsRequest = ?.
+
          /* STC */
-        IF CAN-FIND(FIRST MSRequest WHERE
-                   MSRequest.MsSeq       EQ Mobsub.MsSeq AND
-                   MSRequest.ReqType     EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                   MSRequest.ReqStatus   EQ {&REQUEST_STATUS_CANCELLED} AND
-                   MSRequest.ActStamp    <  Msrequest.ActStamp) THEN
-        lbolSTCRequestFound = TRUE.           
+        FIND FIRST bMSRequestSTC NO-LOCK WHERE
+                   bMSRequestSTC.MsSeq       EQ Mobsub.MsSeq AND
+                   bMSRequestSTC.ReqType     EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+                   bMSRequestSTC.ReqStatus   EQ {&REQUEST_STATUS_CANCELLED} AND
+                   bMSRequestSTC.ActStamp    <  Msrequest.ActStamp
+        NO-ERROR.           
+        lbolSTCRequestFound = AVAILABLE (bMSRequestSTC).
         /* BTC */
         IF NOT lbolSTCRequestFound THEN
-        IF CAN-FIND(FIRST MSRequest WHERE
-                   MSRequest.MsSeq       EQ Mobsub.MsSeq AND
-                   MSRequest.ReqType     EQ {&REQTYPE_BUNDLE_CHANGE} AND
-                   MSRequest.ReqStatus   EQ {&REQUEST_STATUS_CANCELLED} AND
-                   MSRequest.ActStamp    <  Msrequest.ActStamp) THEN
-        lbolBTCRequestFound = TRUE.           
+        DO:
+           FIND FIRST bMSRequestSTC NO-LOCK WHERE
+                      bMSRequestSTC.MsSeq       EQ Mobsub.MsSeq AND
+                      bMSRequestSTC.ReqType     EQ {&REQTYPE_BUNDLE_CHANGE} AND
+                      bMSRequestSTC.ReqStatus   EQ {&REQUEST_STATUS_CANCELLED} AND
+                      bMSRequestSTC.ActStamp    <  Msrequest.ActStamp
+           NO-ERROR.           
+           lbolBTCRequestFound = AVAILABLE (bMSRequestSTC).
+        END.
         /* Termination request */
-        FOR EACH bMSRequest NO-LOCK WHERE
-                   bMSRequest.MsSeq       EQ Mobsub.MsSeq AND
-                   bMSRequest.ReqType     EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-                   bMSRequest.ReqStatus   EQ {&REQUEST_STATUS_DONE} AND
-                   bMSRequest.ReqCParam3  EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) AND
-                   MSRequest.ActStamp    <  Msrequest.ActStamp
-                   BREAK BY bMSRequest.ActStamp DESC:
-           IF FIRST(bMSRequest.ActStamp) THEN LEAVE.
-        END. /* FOR EACH bMSRequest */
+        FOR EACH bMSRequestTER NO-LOCK WHERE
+                   bMSRequestTER.MsSeq       EQ Mobsub.MsSeq AND
+                   bMSRequestTER.ReqType     EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+                   bMSRequestTER.ReqStatus   EQ {&REQUEST_STATUS_DONE} AND
+                   bMSRequestTER.ReqCParam3  EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) AND
+                   bMSRequestTER.ActStamp    <  Msrequest.ActStamp
+                   BREAK BY bMSRequestTER.ActStamp DESC:
+           IF FIRST(bMSRequestTER.ActStamp) THEN
+           DO:
+              lrowidMsRequest = ROWID(bMSRequestTER).
+              LEAVE.
+           END.
+        END. /* FOR EACH bMSRequestTER */
+        IF NOT lrowidMsRequest EQ ? THEN
+           FIND bMSRequestTER NO-LOCK WHERE ROWID(bMSRequestTER) EQ lrowidMsRequest.
+        IF NOT AVAILABLE (bMSRequestTER) OR 
+           lrowidMsRequest EQ ? THEN
+        /* write possible error to a memo */
+        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                         "MobSub",
+                         STRING(MobSub.MsSeq),
+                         MobSub.Custnum,
+                         "Termination request not found:",
+                         STRING(Msrequest.ActStamp)).
         /* renewal order exists with the same creation date
            as cancelled STC request creation date */
         FIND FIRST bRenewalOrder NO-LOCK WHERE
-                   bRenewalOrder.MSSeq     EQ bMSRequest.MsSeq AND
+                   bRenewalOrder.MSSeq     EQ bMSRequestSTC.MsSeq AND
                    LOOKUP(bRenewalOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) EQ 0 AND
                    bRenewalOrder.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
-                   TRUNCATE(bRenewalOrder.CrStamp,0) EQ TRUNCATE(bMSRequest.CreStamp,0)
+                   TRUNCATE(bRenewalOrder.CrStamp,0) EQ TRUNCATE(bMSRequestSTC.CreStamp,0)
         NO-ERROR.
         /*  create a new request with the same input parameters */
         IF AVAILABLE bRenewalOrder AND
-           AVAILABLE bMSRequest THEN
+           AVAILABLE bMSRequestSTC THEN
         DO:
            IF lbolSTCRequestFound THEN   
            liRequest = fCTChangeRequest(
-             bMSRequest.MsSeq,        /* Subscription */
-             bMSRequest.ReqCParam1,   /* CLIType */
-             bMSRequest.ReqCparam5,   /* BundleType */
-             bMSRequest.ReqCparam3,   /* BankNumber */
-             bMSRequest.ReqDParam1,   /* ChgStamp */
-             bMSRequest.ReqIParam1,   /* CreditCheck */
-             bMSRequest.ReqIParam5,   /* RequestFlags */
-             bMSRequest.Salesman,     /* Salesman */
-             bMSRequest.CreateFees,   /* CreateFees */
-             IF bMSRequest.SendSMS EQ 1 THEN TRUE ELSE FALSE, /* SendSMS */
-             bMSRequest.UserCode,     /* Creator */
-             bMSRequest.ReqDParam2,   /* Fee */
-             bMSRequest.ReqSource,    /* RequestSource */
-             bMSRequest.ReqIParam2,   /* OrderId */
-             bMSRequest.OrigRequest,  /* Father request id */
-             bMSRequest.ReqCparam6,   /* For DMS usage contract_id */
+             bMSRequestSTC.MsSeq,        /* Subscription */
+             bMSRequestSTC.ReqCParam1,   /* CLIType */
+             bMSRequestSTC.ReqCparam5,   /* BundleType */
+             bMSRequestSTC.ReqCparam3,   /* BankNumber */
+             bMSRequestSTC.ReqDParam1,   /* ChgStamp */
+             bMSRequestSTC.ReqIParam1,   /* CreditCheck */
+             bMSRequestSTC.ReqIParam5,   /* RequestFlags */
+             bMSRequestSTC.Salesman,     /* Salesman */
+             bMSRequestSTC.CreateFees,   /* CreateFees */
+             IF bMSRequestSTC.SendSMS EQ 1 THEN TRUE ELSE FALSE, /* SendSMS */
+             bMSRequestSTC.UserCode,     /* Creator */
+             bMSRequestSTC.ReqDParam2,   /* Fee */
+             bMSRequestSTC.ReqSource,    /* RequestSource */
+             bMSRequestSTC.ReqIParam2,   /* OrderId */
+             bMSRequestSTC.OrigRequest,  /* Father request id */
+             bMSRequestSTC.ReqCparam6,   /* For DMS usage contract_id */
              OUTPUT lcInfo).
-           lbolIsUpgradeUpsell = IF bMSRequest.ReqCParam5 EQ 
-              (bMSRequest.ReqCParam1 + "TO" + bMSRequest.ReqCParam2)
+           lbolIsUpgradeUpsell = IF bMSRequestSTC.ReqCParam5 EQ 
+              (bMSRequestSTC.ReqCParam1 + "TO" + bMSRequestSTC.ReqCParam2)
               THEN TRUE ELSE FALSE.
            IF lbolBTCRequestFound THEN  
            liRequest = fBundleChangeRequest(
-              bMSRequest.MsSeq,        /* Subscription */
-              bMSRequest.ReqCParam1,   /* old (current) bundle */ 
-              bMSRequest.ReqCParam2,   /* new bundle */
-              fMakeTS(),               /* When request should be handled */
-              bMSRequest.ReqSource,    /* RequestSource */
-              bMSRequest.UserCode,     /* Creator */ 
-              bMSRequest.CreateFees,   /* CreateFees */    
-              bMSRequest.OrigRequest,  /* main request */
-              (IF bMSRequest.Mandatory 
+              bMSRequestSTC.MsSeq,        /* Subscription */
+              bMSRequestSTC.ReqCParam1,   /* old (current) bundle */ 
+              bMSRequestSTC.ReqCParam2,   /* new bundle */
+              fMakeTS(),                  /* When request should be handled */
+              bMSRequestSTC.ReqSource,    /* RequestSource */
+              bMSRequestSTC.UserCode,     /* Creator */ 
+              bMSRequestSTC.CreateFees,   /* CreateFees */    
+              bMSRequestSTC.OrigRequest,  /* main request */
+              (IF bMSRequestSTC.Mandatory 
               EQ 1 THEN TRUE ELSE FALSE), /* is subrequest mandatory */
-              lbolIsUpgradeUpsell,     /* is upgrade upsell */
-              bMSRequest.ReqIParam5,   /* extend terminal contract */
-              bMSRequest.ReqCparam6,   /* For DMS usage, contract_id */
+              lbolIsUpgradeUpsell,        /* is upgrade upsell */
+              bMSRequestSTC.ReqIParam5,   /* extend terminal contract */
+              bMSRequestSTC.ReqCparam6,   /* For DMS usage, contract_id */
               OUTPUT lcInfo).
            IF liRequest EQ 0 THEN                               
               /* write possible error to a memo */
