@@ -312,6 +312,8 @@ PROCEDURE pHandleOrder:
    DEFINE VARIABLE liMnpStatusCode     AS INTEGER    NO-UNDO INIT ?.
    DEFINE VARIABLE ldMnpCreateStamp    AS DECIMAL    NO-UNDO INIT ?.
    DEFINE VARIABLE lcMnpStatusReason   AS CHARACTER  NO-UNDO.
+   DEFINE VARIABLE liOnlySimAmt        AS INTEGER    NO-UNDO.
+   DEFINE VARIABLE lcTopUpScheme       AS CHARACTER  NO-UNDO.
 
 
    IF AVAILABLE OrderCanal.RepLog THEN DO:
@@ -419,7 +421,22 @@ PROCEDURE pHandleOrder:
                        
                   IF AVAIL OfferItem THEN
                      lcTermContr = OfferItem.ItemKey.
-                  
+                 
+                  /* TopUp  */
+                  FOR FIRST OfferItem NO-LOCK WHERE
+                            OfferItem.Brand       = gcBrand AND
+                            OfferItem.Offer       = Order.Offer AND
+                            OfferItem.ItemType    = "TopUp" AND
+                            OfferItem.EndStamp   >= Order.CrStamp AND
+                            OfferItem.BeginStamp <= Order.CrStamp,
+                     FIRST TopupScheme NO-LOCK WHERE
+                           TopupScheme.Brand       = gcBrand AND
+                           TopupScheme.TopupScheme = OfferItem.ItemKey:
+                     ASSIGN
+                        liOnlySimAmt  = OfferItem.Amount
+                        lcTopUpScheme = TopupScheme.TopupScheme.
+                  END.
+
                END.
 
                lcMessage = lcMessage                                + lcDel +
@@ -463,7 +480,9 @@ PROCEDURE pHandleOrder:
                            fNotNull(STRING(Order.PortingDate))      + lcDel +
                            fNotNull(STRING(ldMnpUpdateSt))          + lcDel +
                            fNotNull(STRING(ldMnpCreateStamp))       + lcDel +
-                           fNotNull(lcMnpStatusReason).
+                           fNotNull(lcMnpStatusReason)              + lcDel +
+                           fNotNull(STRING(liOnlySimAmt))           + lcDel +
+                           fNotNull(lcTopUpScheme).
 
 
                fWriteMessage(lcMessage).
@@ -1045,3 +1064,59 @@ PROCEDURE pHandleDMSDoc:
    END CATCH.
 
 END PROCEDURE.
+
+PROCEDURE pHandleTopupSchemeRow:
+
+   DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
+
+   DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
+
+   IF AVAILABLE OrderCanal.RepLog THEN DO:
+
+      lcMessage = fCommonMessage().
+
+      CASE RepLog.EventType:
+         WHEN "CREATE" OR WHEN "MODIFY" THEN DO:
+            FIND FIRST TopupSchemeRow WHERE
+                       RECID(TopupSchemeRow) = RepLog.RecordId NO-LOCK NO-ERROR.
+            IF AVAILABLE TopupSchemeRow THEN DO:
+
+               lcMessage = lcMessage                                          + lcDel +
+                           fNotNull(TopupSchemeRow.TopupScheme)               + lcDel +
+                           fNotNull(STRING(TopupSchemeRow.Amount))            + lcDel +
+                           fNotNull(TopupSchemeRow.BillCode)                  + lcDel +
+                           fNotNull(STRING(TopupSchemeRow.DiscountAmount))    + lcDel +
+                           fNotNull(TopupSchemeRow.DiscountBillCode)          + lcDel +
+                           fNotNull(STRING(TopupSchemeRow.BeginStamp))        + lcDel +
+                           fNotNull(STRING(TopupSchemeRow.EndStamp))          + lcDel +
+                           fNotNull(STRING(TopupSchemeRow.TopupSchemeRowID))  + lcDel +
+                           fNotNull(STRING(TopupSchemeRow.DisplayAmount)).
+
+               fWriteMessage(lcMessage).
+            END.
+            ELSE DO:
+               olHandled = TRUE.
+               fWriteMessage(lcMessage).
+               RETURN.
+            END.
+         END.
+         WHEN "DELETE" THEN fWriteMessage(lcMessage).
+         OTHERWISE RETURN.
+      END CASE.
+
+      IF lMsgPublisher:send_message(lcMessage) THEN
+         olHandled = TRUE.
+      ELSE DO:
+         olHandled = FALSE.
+         IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+            LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+      END.
+   END.
+
+   CATCH anyError AS Progress.Lang.Error:
+      olHandled = FALSE.
+      LOG-MANAGER:WRITE-MESSAGE("Message failed was recovered: " + lcMessage,"DEBUG").
+   END CATCH.
+
+END PROCEDURE.
+
