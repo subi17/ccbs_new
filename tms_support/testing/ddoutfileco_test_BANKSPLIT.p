@@ -120,7 +120,6 @@ FUNCTION fMakeTemp RETURNS LOGICAL.
     ASSIGN ttInvoice.InvNum   = Invoice.InvNum
            ttInvoice.InvAmt   = Invoice.InvAmt 
            ttInvoice.DueDate  = Invoice.DueDate
-           ttInvoice.Movable  = FALSE
            liPicked           = liPicked + 1. 
 
     IF ilSplit THEN DO:
@@ -145,7 +144,6 @@ FUNCTION fMakeTemp RETURNS LOGICAL.
        ELSE
           ASSIGN
             ttInvoice.BankCode = ""
-            ttInvoice.Movable  = TRUE
             liNBCCount         = liNBCCount + 1. 
     END.
     ELSE ttInvoice.BankCode = "ALL".
@@ -234,11 +232,25 @@ FOR EACH BankAccount NO-LOCK:
    END CASE.
 END.
 
+IF liSAIPerc + liBBIPerc +
+   liSBIPerc + liLAIPerc NE 100 THEN
+RETURN "ERROR: Allocation percentage is less/greater than 100%".
+
 ASSIGN 
    liSAIValue = (liSAIPerc * liPicked) / 100
    liBBIValue = (liBBIPerc * liPicked) / 100
    liSBIValue = (liSBIPerc * liPicked) / 100
    liLAIValue = (liLAIPerc * liPicked) / 100.
+
+/* After taking percentage values, the invoice count
+   may vary due to rounding the values. So the remaining
+   invoices are allocated to BBVA Bank, as in real life
+   not more than 33.5% invoices are allocated to this bank */
+IF liPicked NE (liSAIValue + liBBIValue +
+                liSBIValue + liLAIValue) THEN
+   liBBICount = liPicked - (liSAIValue + liBBIValue +
+                            liSBIValue + liLAIValue).
+
 
 IF liLAICount > liLAIValue THEN DO:
    liLAIolval = liLAICount - liLAIValue.
@@ -384,7 +396,6 @@ PROCEDURE pSplitOtherInvoices:
    /* Fetch all other invoices by amount from higher to lower */
    /* and divide based on the algorithm                       */
    FOR EACH ttInvoice WHERE 
-            ttInvoice.Movable = TRUE AND
             ttInvoice.BankCode = ""
             BY ttInvoice.InvAmt DESC:
 
@@ -409,7 +420,6 @@ DEFINE INPUT PARAMETER lcBankCode AS CHAR NO-UNDO. /* Bank code Value */
 DEF VAR liCount AS INT NO-UNDO INITIAL 0.
 
    FOR EACH ttInvoice EXCLUSIVE-LOCK WHERE
-            ttInvoice.Movable  = TRUE AND
             ttInvoice.BankCode = lcBankCode
          BY ttInvoice.InvAmt DESC:
 
