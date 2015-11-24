@@ -1099,7 +1099,6 @@ PROCEDURE pHandleTopupSchemeRow:
             IF AVAILABLE TopupSchemeRow THEN DO:
 
                lcMessage = lcMessage                                          + lcDel +
-                           fNotNull(STRING(TopupSchemeRow.TopupSchemeRowID))  + lcDel +
                            fNotNull(TopupSchemeRow.TopupScheme)               + lcDel +
                            fNotNull(STRING(TopupSchemeRow.Amount))            + lcDel +
                            fNotNull(TopupSchemeRow.BillCode)                  + lcDel +
@@ -1107,6 +1106,7 @@ PROCEDURE pHandleTopupSchemeRow:
                            fNotNull(TopupSchemeRow.DiscountBillCode)          + lcDel +
                            fNotNull(STRING(TopupSchemeRow.BeginStamp))        + lcDel +
                            fNotNull(STRING(TopupSchemeRow.EndStamp))          + lcDel +
+                           fNotNull(STRING(TopupSchemeRow.TopupSchemeRowID))  + lcDel +
                            fNotNull(STRING(TopupSchemeRow.DisplayAmount)).
 
                fWriteMessage(lcMessage).
