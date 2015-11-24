@@ -417,8 +417,9 @@ PROCEDURE pPeriodicalContract:
          END. /* FOR EACH bDCCLI */
          IF NOT llFound THEN RETURN.
       END.
-      ELSE IF NOT (DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} AND
-                   lbolSTCRenewSameDay) THEN
+      ELSE IF DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} AND
+              lbolSTCRenewSameDay THEN RETURN.
+      ELSE 
          liRequest = fPCActionRequest(liMsSeq,
                                         ttAction.ActionKey,
                                         "term",
