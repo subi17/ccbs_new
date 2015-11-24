@@ -248,9 +248,8 @@ ASSIGN
    not more than 33.5% invoices are allocated to this bank */
 IF liPicked NE (liSAIValue + liBBIValue +
                 liSBIValue + liLAIValue) THEN
-   liBBICount = liPicked - (liSAIValue + liBBIValue +
-                            liSBIValue + liLAIValue).
-
+   liBBICount = liBBICount + (liPicked - (liSAIValue + liBBIValue +
+                                          liSBIValue + liLAIValue)).
 
 IF liLAICount > liLAIValue THEN DO:
    liLAIolval = liLAICount - liLAIValue.
