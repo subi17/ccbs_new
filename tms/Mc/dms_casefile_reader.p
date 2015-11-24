@@ -17,6 +17,7 @@ ASSIGN
 {cparam2.i}
 {eventlog.i}
 {dms.i}
+{replog_reader.i}
 
 DEF VAR lcIncDir        AS CHAR NO-UNDO.
 DEF VAR lcProcDir       AS CHAR NO-UNDO.
@@ -26,10 +27,10 @@ DEF VAR lcFileName      AS CHAR NO-UNDO.
 DEF VAR lcInputFile     AS CHAR NO-UNDO.
 DEF VAR lcLogFileOut    AS CHAR NO-UNDO.
 DEF VAR lcProcessedFile AS CHAR NO-UNDO.
-DEF VAR lcLogFile       AS CHAR NO-UNDO.
+DEF VAR lcDMSLogFile    AS CHAR NO-UNDO.
 DEF VAR lcLine          AS CHAR NO-UNDO.
 DEF VAR lcSep           AS CHAR NO-UNDO.
-DEF VAR ldaReadDate     AS DATE NO-UNDO.
+DEF VAR ldaFReadDate     AS DATE NO-UNDO.
 
 DEF BUFFER bDMS FOR DMS.
 
@@ -51,6 +52,31 @@ FUNCTION fLogLine RETURNS LOGICAL
       icMessage "#"
       "DMS" SKIP.
 END FUNCTION.
+
+FUNCTION fSendToMQ RETURNS CHAR
+   (icMsg AS CHAR):
+   RUN pInitialize(INPUT "revolver").
+/*
+   IF RETURN-VALUE > "" THEN DO:
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+      LOG-MANAGER:WRITE-MESSAGE(RETURN-VALUE, "ERROR").
+         RETURN RETURN-VALUE.
+   END.
+
+   /* Call ActiveMQ Publisher class */
+   lMsgPublisher = NEW Gwy.MqPublisher(lcHost,liPort,
+                                       liTimeOut,"revolver",
+                                       lcUserName,lcPassword).
+
+   IF NOT VALID-OBJECT(lMsgPublisher) THEN DO:
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+         LOG-MANAGER:WRITE-MESSAGE("ActiveMQ Publisher handle not found",
+                                    "ERROR").
+   END.
+*/
+END.
+
+
 
 /*Function sends SMS and EMAIL generating information to WEB if it is needed*/
 FUNCTION fSendChangeInformation RETURNS CHAR
@@ -124,7 +150,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
                       "~}" +
                  "~}".
    
-
+   RETURN fSendToMQ(lcMessage).
 END.
 
 /*Is feature active:*/
@@ -141,13 +167,13 @@ REPEAT:
       INPUT STREAM sIn FROM VALUE(lcInputFile).
    ELSE NEXT.
 
-   ldaReadDate  = TODAY.
-   lcLogFile = lcSpoolDir + 
+   ldaFReadDate  = TODAY.
+   lcDMSLogFile = lcSpoolDir + 
                "dms_to_tms_" +
-               STRING(YEAR(ldaReadDate)) +
-               STRING(MONTH(ldaReadDate),"99") +
-               STRING(DAY(ldaReadDate),"99") + ".log".
-   OUTPUT STREAM sLog TO VALUE(lcLogFile) APPEND.
+               STRING(YEAR(ldaFReadDate)) +
+               STRING(MONTH(ldaFReadDate),"99") +
+               STRING(DAY(ldaFReadDate),"99") + ".log".
+   OUTPUT STREAM sLog TO VALUE(lcDMSLogFile) APPEND.
 
    LINE_LOOP:
    REPEAT:
@@ -169,7 +195,7 @@ REPEAT:
    END.
 
    ASSIGN
-      lcLogFileOut    = fMove2TransDir(lcLogFile, "", lcLogDir)
+      lcLogFileOut    = fMove2TransDir(lcDMSLogFile, "", lcLogDir)
       lcProcessedFile = fMove2TransDir(lcInputFile, "", lcProcDir).
 
    INPUT STREAM sIn CLOSE.
