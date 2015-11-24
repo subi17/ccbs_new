@@ -755,13 +755,13 @@ DO TRANSACTION:
                          "Termination request not found:",
                          STRING(Msrequest.ActStamp)).
         /* renewal order exists with the same creation date
-           as cancelled STC request creation date */
+           as cancelled STC request creation date
         FIND FIRST bRenewalOrder NO-LOCK WHERE
                    bRenewalOrder.MSSeq     EQ bMSRequestSTC.MsSeq AND
                    LOOKUP(bRenewalOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) EQ 0 AND
                    bRenewalOrder.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
                    TRUNCATE(bRenewalOrder.CrStamp,0) EQ TRUNCATE(bMSRequestSTC.CreStamp,0)
-        NO-ERROR.
+        NO-ERROR.*/
         /*  create a new request with the same input parameters */
         IF AVAILABLE bRenewalOrder AND
            AVAILABLE bMSRequestSTC THEN
