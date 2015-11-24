@@ -140,7 +140,7 @@ FOR EACH OrderCustomer WHERE
          lcDelValue = OrderCustomer.MobileNumber.
       lcReplaceText = lcReplaceText +
                       (IF lcReplaceText > "" THEN " - " ELSE "") +
-                      Order.ContractID + ", " + STRING(ldOrderDate) +
+                      Order.ContractID + ", del " + STRING(ldOrderDate) +
                       ", del " + Order.CLI.
    END. /* ELSE DO: */
 END. /* FOR EACH Order WHERE */
