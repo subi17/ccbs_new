@@ -251,10 +251,15 @@ IF liPicked NE (liSAIValue + liBBIValue +
    liBBICount = liBBICount + (liPicked - (liSAIValue + liBBIValue +
                                           liSBIValue + liLAIValue)).
 
-IF liLAICount > liLAIValue THEN DO:
-   liLAIolval = liLAICount - liLAIValue.
+IF liLAICount > 10000 THEN DO:
+   liLAIolval = liLAICount - 10000.
    RUN pSplitBankInvoices(liLAIolval,{&TF_BANK_LACAXIA}).
 END.
+
+/* IF liLAICount > liLAIValue THEN DO:
+   liLAIolval = liLAICount - liLAIValue.
+   RUN pSplitBankInvoices(liLAIolval,{&TF_BANK_LACAXIA}).
+END. */
 
 IF liSBICount > liSBIValue THEN DO:
    liSBIolval = liSBICount - liSBIValue.
@@ -403,10 +408,11 @@ PROCEDURE pSplitOtherInvoices:
 
       /* Temporary code for Nov 2015 bill run YDR-1837 */
       /* Assigning 10,000 invoices to La Caixa bank code */
-      IF liCount      <= 10000 AND
-         YEAR(TODAY)  EQ 2015  AND
-         MONTH(TODAY) EQ 11    THEN
-         ttInvoice.BankCode = {&TF_BANK_LACAXIA}.
+      IF liLAICount   <  10000 AND
+         YEAR(TODAY)  EQ 2015  THEN 
+         ASSIGN 
+            ttInvoice.BankCode = {&TF_BANK_LACAXIA}
+            liLAICount         = liLAICount + 1.
       ELSE  /* Split based on ticket ydr-1837 */
          RUN pSplitInvoice.
 
