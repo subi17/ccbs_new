@@ -30,6 +30,7 @@ ASSIGN katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId
 {forderstamp.i}
 {fgettxt.i}
 {fmakesms.i}
+{smsmessage.i}
 {fmakemsreq.i}
 {fexternalapi.i}
 
@@ -173,13 +174,13 @@ IF pcDelType = "SMS" THEN DO:
    ldeOrderStamp = DYNAMIC-FUNCTION("fMakeOfficeTS" in ghFunc1).
    IF ldeOrderStamp = ? THEN ldeOrderStamp = fMakeTS().
 
-   fMakeSchedSMS2(0,
-                  lcDelValue,
-                  9,
-                  lcSMSText,
-                  ldeOrderStamp,
-                  "622622622",
-                  "").
+   fCreateSMS(OrderCustomer.Custnum,
+              lcCLI,
+              Order.MsSeq,
+              Order.OrderId,
+              lcSMSText,
+              "Yoigo info",
+              {&SMS_TYPE_CONSULT}).
 
 END. /* IF pcDelType = "SMS" THEN DO: */
 ELSE DO:

@@ -16,6 +16,7 @@
                 7;Subscription is cancelled
                 8;Missing SMS Template
                 9;Email sending is failed
+                10.No cusomer for order
 
  */
 
@@ -29,6 +30,7 @@ ASSIGN katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId
 {forderstamp.i}
 {fgettxt.i}
 {fmakesms.i}
+{smsmessage.i}
 {fmakemsreq.i}
 {fexternalapi.i}
 
@@ -86,6 +88,13 @@ FOR EACH Order WHERE
 
    fSplitTS(Order.CrStamp,ldOrderDate,liOrderTime).
 
+   FIND FIRST OrderCustomer NO-LOCK WHERE
+              OrderCustomer.Brand EQ gcBrand AND
+              Ordercustomer.OrderID EQ Order.OrderId AND
+              OrderCustomer.Rowtype EQ 1 NO-ERROR.
+   IF NOT AVAIL OrderCustomer THEN 
+      RETURN appl_err("No customer for order").
+
    IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN DO:
       IF Order.StatusCode = {&ORDER_STATUS_DELIVERED} THEN
          ldeOrderStamp = fGetOrderStamp(Order.OrderId,"Delivery").
@@ -141,15 +150,23 @@ IF pcDelType = "SMS" THEN DO:
       RETURN appl_err("Missing SMS Template").
 
    lcSMSText = REPLACE(lcSMSText,"#INFO",lcReplaceText).
+   
+   fCreateSMS(OrderCustomer.Custnum,
+              pcCLI,
+              Order.MsSeq,
+              Order.OrderId,
+              lcSMSText,
+              "Yoigo info",
+              {&SMS_TYPE_CONSULT}).
 
-   fMakeSchedSMS2(0,
+/*   fMakeSchedSMS2(0,
                   pcCLI,
                   9,
                   lcSMSText,
                   ldeOrderStamp,
                   "Yoigo info",
                   "").
-
+*/
 END. /* IF pcDelType = "SMS" THEN DO: */
 
 /* add values to the response if no error */
