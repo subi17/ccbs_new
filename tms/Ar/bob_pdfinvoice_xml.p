@@ -34,7 +34,7 @@ DEFINE VARIABLE lcProcessedFile AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSpoolDir      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcReportFileOut AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOutDir        AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcInvDetails    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcInvDetails    AS LONGCHAR  NO-UNDO.
 DEFINE VARIABLE lcInvDate       AS CHARACTER NO-UNDO.
 
 DEF VAR lcPDFFile AS CHAR NO-UNDO. 
@@ -249,7 +249,7 @@ DEF VAR llgHandled   AS LOG  NO-UNDO.
                       "~"type~""             + "~:" + "~"" + lcType           + "~"" + "," +
                       "~"process~""          + "~:" + "~"" + lcProcess        + "~"" + "~}".
 
-   IF lMsgPublisher:send_message(lcMessage) THEN
+   IF lMsgPublisher:send_longmessage(lcMessage) THEN
       llgHandled = TRUE.
    ELSE DO:
       llgHandled = FALSE.
