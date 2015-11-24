@@ -29,6 +29,7 @@ ASSIGN katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId
 {forderstamp.i}
 {fgettxt.i}
 {fmakesms.i}
+{smsmessage.i}
 {fmakemsreq.i}
 {fexternalapi.i}
 
@@ -160,13 +161,13 @@ IF pcDelType = "SMS" THEN DO:
 
    lcSMSText = REPLACE(lcSMSText,"#INFO",lcReplaceText).
 
-   fMakeSchedSMS2(0,
-                  pcCLI,
-                  9,
-                  lcSMSText,
-                  ldeOrderStamp,
-                  "Yoigo info",
-                  "").
+   fCreateSMS(OrderCustomer.Custnum,
+              pcCLI,
+              Order.MsSeq,
+              Order.OrderId,
+              lcSMSText,
+              "Yoigo info",
+              {&SMS_TYPE_CONSULT}).
 
 END. /* IF pcDelType = "SMS" THEN DO: */
 ELSE DO:
