@@ -239,7 +239,7 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL ().
                  Q25Messaging.OrderId,
                  lcSMSMessage,
                  "622",
-                 {&SMS_TYPE_OFFER}).
+                 {&SMS_TYPE_Q25}).
       lcSentCount = lcSentCount + 1.
       ASSIGN Q25Messaging.isSent = TRUE.
       IF (lcSentCount >= {&MAXQ25MESSAGESPERHOUR} AND TIME < 75600) THEN
