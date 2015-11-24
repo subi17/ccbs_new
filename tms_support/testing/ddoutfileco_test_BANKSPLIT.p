@@ -255,15 +255,18 @@ IF liLAICount > liLAIValue THEN DO:
    liLAIolval = liLAICount - liLAIValue.
    RUN pSplitBankInvoices(liLAIolval,{&TF_BANK_LACAXIA}).
 END.
-ELSE IF liSBICount > liSBIValue THEN DO:
+
+IF liSBICount > liSBIValue THEN DO:
    liSBIolval = liSBICount - liSBIValue.
    RUN pSplitBankInvoices(liSBIolval,{&TF_BANK_SABADELL}).
 END.
-ELSE IF liSAICount > liSAIValue THEN DO:
+
+IF liSAICount > liSAIValue THEN DO:
    liSAIolval = liSAICount - liSAIValue.
    RUN pSplitBankInvoices(liSAIolval,{&TF_BANK_UNOE}).
 END.
-ELSE IF liBBICount > liBBIValue THEN DO:
+
+IF liBBICount > liBBIValue THEN DO:
    liBBIolval = liBBICount - liBBIValue.
    RUN pSplitBankInvoices(liBBIolval,{&TF_BANK_BBVA}).
 END.
