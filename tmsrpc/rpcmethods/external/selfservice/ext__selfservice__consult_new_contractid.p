@@ -118,7 +118,7 @@ FOR EACH OrderCustomer WHERE
       IF Order.StatusCode = "6" THEN llDelivered = TRUE.
       ELSE IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN llClose = TRUE.
 
-      lcCLI = OrderCustomer.ContactNum.
+      lcCLI = Order.CLI.
       liMsSeq = Order.MsSeq.
       liOrderId = Order.OrderID.
       liCustNum = OrderCustomer.Custnum.
