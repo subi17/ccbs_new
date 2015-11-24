@@ -68,21 +68,21 @@ IF NOT AVAILABLE Customer THEN
    RETURN appl_err("Customer not found").
 
 ASSIGN
-   ldaQ25PeriodStartDate    = ADD-INTERVAL(TODAY, -22, 'months':U)
-   ldaQ25PeriodStartDate    = DATE(MONTH(ldaQ25PeriodStartDate),
-                                   DAY(fLastDayOfMonth(ldaQ25PeriodStartDate)),
-                                   YEAR(ldaQ25PeriodStartDate))
-   ldaQ25PeriodEndDate    = ADD-INTERVAL(TODAY, -24, 'months':U)
-   ldaQ25PeriodEndDate    = DATE(MONTH(ldaQ25PeriodEndDate),1,
-                                       YEAR(ldaQ25PeriodEndDate)).
+   /* Possible Q25 period validto value should be between fisrt day of current
+      month and last day of current month + 2 */
+   ldaQ25PeriodStartDate    = DATE(MONTH(TODAY),1, YEAR(TODAY))
+   ldaQ25PeriodEndDate    = ADD-INTERVAL(TODAY, 2, 'months':U)
+   ldaQ25PeriodEndDate    = DATE(MONTH(ldaQ25PeriodEndDate),
+                                 DAY(fLastDayOfMonth(ldaQ25PeriodEndDate)),
+                                 YEAR(ldaQ25PeriodEndDate)).
 
 /* Find original installment contract */   
 FIND FIRST DCCLI NO-LOCK WHERE
            DCCLI.Brand   = gcBrand AND
            DCCLI.DCEvent BEGINS "PAYTERM" AND
            DCCLI.MsSeq   = MobSub.MsSeq AND 
-           DCCLI.ValidFrom < ldaQ25PeriodStartDate AND
-           DCCLI.ValidFrom > ldaQ25PeriodEndDate NO-ERROR. 
+           DCCLI.ValidTo >= ldaQ25PeriodStartDate AND
+           DCCLI.ValidTo <= ldaQ25PeriodEndDate NO-ERROR. 
 
 IF NOT AVAIL DCCLI THEN
    RETURN appl_err("Installment contract not found").

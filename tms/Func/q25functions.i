@@ -94,8 +94,8 @@ FUNCTION fCollectQ25SMSMessages RETURNS LOGICAL
               DCCLI.Brand   = gcBrand AND
               DCCLI.DCEvent BEGINS "PAYTERM" AND
               DCCLI.MsSeq   = INT(SingleFee.KeyValue) AND
-              DCCLI.ValidTo > idaStartDate AND
-              DCCLI.ValidTo < idaEndDate NO-ERROR.
+              DCCLI.ValidTo >= idaStartDate AND
+              DCCLI.ValidTo <= idaEndDate NO-ERROR.
 
       IF NOT AVAIL DCCLI THEN DO:
          /* No DCCLI for example between start and end date, singlefee is for
