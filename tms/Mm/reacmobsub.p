@@ -714,8 +714,7 @@ DO TRANSACTION:
         FIND FIRST bMSRequestSTC NO-LOCK WHERE
                    bMSRequestSTC.MsSeq       EQ Mobsub.MsSeq AND
                    bMSRequestSTC.ReqType     EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                   bMSRequestSTC.ReqStatus   EQ {&REQUEST_STATUS_CANCELLED} AND
-                   bMSRequestSTC.ActStamp    >  Msrequest.ActStamp
+                   bMSRequestSTC.ReqStatus   EQ {&REQUEST_STATUS_CANCELLED}
         NO-ERROR.           
         lbolSTCRequestFound = AVAILABLE (bMSRequestSTC).
         /* BTC */
@@ -724,8 +723,7 @@ DO TRANSACTION:
            FIND FIRST bMSRequestSTC NO-LOCK WHERE
                       bMSRequestSTC.MsSeq       EQ Mobsub.MsSeq AND
                       bMSRequestSTC.ReqType     EQ {&REQTYPE_BUNDLE_CHANGE} AND
-                      bMSRequestSTC.ReqStatus   EQ {&REQUEST_STATUS_CANCELLED} AND
-                      bMSRequestSTC.ActStamp    >  Msrequest.ActStamp
+                      bMSRequestSTC.ReqStatus   EQ {&REQUEST_STATUS_CANCELLED}
            NO-ERROR.           
            lbolBTCRequestFound = AVAILABLE (bMSRequestSTC).
         END.
@@ -754,25 +752,18 @@ DO TRANSACTION:
                          MobSub.Custnum,
                          "Termination request not found:",
                          STRING(Msrequest.ActStamp)).
-        /* renewal order exists with the same creation date
-           as cancelled STC request creation date
-        FIND FIRST bRenewalOrder NO-LOCK WHERE
-                   bRenewalOrder.MSSeq     EQ bMSRequestSTC.MsSeq AND
-                   LOOKUP(bRenewalOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) EQ 0 AND
-                   bRenewalOrder.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
-                   TRUNCATE(bRenewalOrder.CrStamp,0) EQ TRUNCATE(bMSRequestSTC.CreStamp,0)
-        NO-ERROR.*/
+        
         /*  create a new request with the same input parameters */
         IF AVAILABLE bRenewalOrder AND
            AVAILABLE bMSRequestSTC THEN
         DO:
-           IF lbolSTCRequestFound THEN   
+           IF lbolSTCRequestFound THEN
            liRequest = fCTChangeRequest(
              bMSRequestSTC.MsSeq,        /* Subscription */
-             bMSRequestSTC.ReqCParam2,   /* CLIType */
+             bMSRequestSTC.ReqCParam2,   /* NEW CLIType */
              bMSRequestSTC.ReqCparam5,   /* BundleType */
              bMSRequestSTC.ReqCparam3,   /* BankNumber */
-             bMSRequestSTC.ReqDParam1,   /* ChgStamp */
+             ?,                          /* ChgStamp check if there are scheduling rules */
              bMSRequestSTC.ReqIParam1,   /* CreditCheck */
              bMSRequestSTC.ReqIParam5,   /* RequestFlags */
              bMSRequestSTC.Salesman,     /* Salesman */
@@ -788,7 +779,7 @@ DO TRANSACTION:
            lbolIsUpgradeUpsell = IF bMSRequestSTC.ReqCParam5 EQ 
               (bMSRequestSTC.ReqCParam1 + "TO" + bMSRequestSTC.ReqCParam2)
               THEN TRUE ELSE FALSE.
-           IF lbolBTCRequestFound THEN  
+           IF lbolBTCRequestFound THEN
            liRequest = fBundleChangeRequest(
               bMSRequestSTC.MsSeq,        /* Subscription */
               bMSRequestSTC.ReqCParam1,   /* old (current) bundle */ 
