@@ -51,7 +51,6 @@ FOR EACH TopupSchemeRow NO-LOCK:
        fNotNull(STRING(RECID(TopupSchemeRow)))              lcDel
        fNotNull(STRING(TopupSchemeRow.TopupSchemeRowID))    lcDel
        fNotNull(STRING(ldtTimeStamp))                       lcDel
-       fNotNull(STRING(TopupSchemeRow.TopupSchemeRowID))    lcDel
        fNotNull(TopupSchemeRow.TopupScheme)                 lcDel
        fNotNull(STRING(TopupSchemeRow.Amount))              lcDel
        fNotNull(TopupSchemeRow.BillCode)                    lcDel
@@ -59,6 +58,7 @@ FOR EACH TopupSchemeRow NO-LOCK:
        fNotNull(TopupSchemeRow.DiscountBillCode)            lcDel
        fNotNull(STRING(TopupSchemeRow.BeginStamp))          lcDel
        fNotNull(STRING(TopupSchemeRow.EndStamp))            lcDel
+       fNotNull(STRING(TopupSchemeRow.TopupSchemeRowID))    lcDel
        fNotNull(STRING(TopupSchemeRow.DisplayAmount))       SKIP.
 
 END.
