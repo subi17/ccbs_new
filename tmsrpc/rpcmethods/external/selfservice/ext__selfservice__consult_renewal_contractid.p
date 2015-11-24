@@ -159,14 +159,6 @@ IF pcDelType = "SMS" THEN DO:
               "Yoigo info",
               {&SMS_TYPE_CONSULT}).
 
-/*   fMakeSchedSMS2(0,
-                  pcCLI,
-                  9,
-                  lcSMSText,
-                  ldeOrderStamp,
-                  "Yoigo info",
-                  "").
-*/
 END. /* IF pcDelType = "SMS" THEN DO: */
 
 /* add values to the response if no error */
