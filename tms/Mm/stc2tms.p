@@ -399,10 +399,6 @@ PROCEDURE pFeesAndServices:
       service(s) corresponding to new subscription type */
 
    IF bOldType.PayType <> CLIType.PayType THEN DO:
-      /* close services that don't exist on new type */
-      RUN pCloseServices (MsRequest.ReqCParam2,
-                          MsRequest.MsSeq,
-                          ldtActDate).
 
       /* add services of new type that didn't exist on old type */
       RUN pCopyPackage(MsRequest.ReqCParam2,
@@ -1028,73 +1024,6 @@ PROCEDURE pFinalize:
          END. /* FOR EACH InvRowCounter WHERE */
    END. /* IF DAY(ldtActDate) <> 1 THEN DO: */
 
-END PROCEDURE.
-
-PROCEDURE pCloseServices:
-
-   DEF INPUT PARAMETER icNewType    AS CHAR NO-UNDO.
-   DEF INPUT PARAMETER iiMsSeq      AS INT  NO-UNDO.
-   DEF INPUT PARAMETER idtActDate   AS DATE NO-UNDO.
-
-   DEF VAR llDelete AS LOG  NO-UNDO.
-   
-   DEF BUFFER bChkSubSer FOR SubSer.
-
-   /* subscription is first terminated, and then reactivated with new clitype
-      definitions, so services that are not defined to the new type can be
-      removed */
-   
-   FOR EACH bChkSubSer NO-LOCK WHERE
-            bChkSubSer.MsSeq = iiMsSeq
-   BREAK BY bChkSubSer.ServCom
-         BY bChkSubSer.SSDate DESC:
-   
-      /* use newest */
-      IF NOT FIRST-OF(bChkSubSer.ServCom) THEN NEXT.
-
-      /* YTS-6588 */
-      IF bChkSubSer.ServCom EQ "BB" THEN NEXT.
-
-      llDelete = TRUE.
-      
-      /* don't remove if new type has the same package with the same 
-         settings */
-      FOR FIRST CTServPac NO-LOCK WHERE
-                CTServPac.Brand     = gcBrand   AND
-                CTServPac.CLIType   = icNewType AND
-                CTServPac.ServPac   = bChkSubSer.ServPac AND
-                CTServPac.ToDate   >= idtActDate AND
-                CTServPac.FromDate <= idtActDate,
-          FIRST CTServEl NO-LOCK WHERE
-                CTServEl.Brand     = gcBrand   AND
-                CTServEl.CLIType   = icNewType AND
-                CTServEl.ServPac   = CTServPac.ServPac AND
-                CTServEl.ServCom   = bChkSubSer.ServCom AND
-                CTServEl.FromDate >= CTServPac.FromDate AND
-                CTServEl.FromDate <= CTServPac.ToDate AND
-                CTServEl.FromDate <= idtActDate:
-          
-         IF CTServEl.DefValue = bChkSubSer.SSStat THEN llDelete = FALSE.       
-      END.
-                
-      IF llDelete THEN DO TRANS:
-      
-         FIND SubSer WHERE RECID(SubSer) = RECID(bChkSubSer) EXCLUSIVE-LOCK.
-
-         IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhSubSer).
-         
-         FOR EACH SubSerPara EXCLUSIVE-LOCK WHERE
-                  SubSerPara.MsSeq   = SubSer.MsSeq AND
-                  SubSerPara.ServCom = SubSer.ServCom:
-
-            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhSubSerPara).
-            DELETE SubSerPara.      
-         END.
-         
-         DELETE SubSer.
-      END.
-   END.
-   
 END PROCEDURE.
 
 PROCEDURE pReRate:
