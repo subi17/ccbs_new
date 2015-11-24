@@ -1,13 +1,17 @@
 /* ----------------------------------------------------------------------
-  module .......: Mm/q25_reminder_collection.p
+  module .......: Mm/q25_final_msg_collection.p
   task .........: Collect customer that needs to notify customer about
-                  closing Quota 25 period ending.
+                  final fee.
   application ..: tms
   author .......: kaaikas
   created ......: 11.11.15
   version ......: yoigo
 ---------------------------------------------------------------------- */
-
+/* To be executed at 21st day of each month at least an 15 minutes before 
+   10:00. (In tests execution tooked about 11 minutes.) For to be sure 
+   execution for example at 7:00 might be wise, so data would be ready at
+   10:00 */
+   
 {commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "CRON".

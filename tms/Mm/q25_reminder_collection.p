@@ -7,6 +7,11 @@
   created ......: 11.11.15
   version ......: yoigo
 ---------------------------------------------------------------------- */
+/* To be executed at 21st day of each month at least an 15 minutes before
+   10:00. (In tests execution tooked about 11 minutes.) For to be sure
+   execution for example at 7:00 might be wise, so data would be ready at
+   10:00 */
+
 
 {commpaa.i}
 ASSIGN gcBrand = "1"
