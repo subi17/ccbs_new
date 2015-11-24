@@ -54,6 +54,10 @@ DEFINE VARIABLE llOngoing               AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE llDelivered             AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE llClose                 AS LOGICAL   NO-UNDO.
 DEF VAR lcApplicationId AS CHAR NO-UNDO. 
+DEFINE VARIABLE liCustNum               AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liMsSeq                 AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liOrderId               AS INTEGER   NO-UNDO.
+
 
 pcReqList = validate_request(param_toplevel_id, "string,string,string,[string]").
 IF pcReqList EQ ? THEN RETURN.
@@ -115,6 +119,9 @@ FOR EACH Order WHERE
    IF liCount = 1 THEN DO:
       IF Order.StatusCode = "6" THEN llDelivered = TRUE.
       ELSE IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN llClose = TRUE.
+      liMsSeq = Order.MsSeq.
+      liOrderId = Order.OrderID.
+      liCustNum = OrderCustomer.Custnum.
    END. /* IF liCount = 1 THEN DO: */
 
    lcReplaceText = lcReplaceText +
@@ -151,10 +158,10 @@ IF pcDelType = "SMS" THEN DO:
 
    lcSMSText = REPLACE(lcSMSText,"#INFO",lcReplaceText).
    
-   fCreateSMS(OrderCustomer.Custnum,
+   fCreateSMS(liCustnum,
               pcCLI,
-              Order.MsSeq,
-              Order.OrderId,
+              liMsSeq,
+              liOrderId,
               lcSMSText,
               "Yoigo info",
               {&SMS_TYPE_CONSULT}).
