@@ -56,10 +56,12 @@ END FUNCTION.
 FUNCTION fSendToMQ RETURNS CHAR
    (icMsg AS CHAR):
    RUN pInitialize(INPUT "revolver").
-/*
+
    IF RETURN-VALUE > "" THEN DO:
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
       LOG-MANAGER:WRITE-MESSAGE(RETURN-VALUE, "ERROR").
+      fLogLine("ActiveMQ init failed").
+
          RETURN RETURN-VALUE.
    END.
 
@@ -72,8 +74,21 @@ FUNCTION fSendToMQ RETURNS CHAR
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
          LOG-MANAGER:WRITE-MESSAGE("ActiveMQ Publisher handle not found",
                                     "ERROR").
+       fLogLine("ActiveMQ Publiher handle not found").
+
    END.
-*/
+
+   IF lMsgPublisher:send_message(icMsg) THEN
+      fLogLine("Message sent").
+   ELSE DO:
+      fLogLine("Message sending failed").
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+         LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+   END.
+
+   RUN pFinalize(INPUT "").
+
+
 END.
 
 
@@ -149,7 +164,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
                                       lcBankAcc + "~"" + 
                       "~}" +
                  "~}".
-   
+   fLogLine("Sending message:" + lcMessage).
    RETURN fSendToMQ(lcMessage).
 END.
 
@@ -268,7 +283,7 @@ PROCEDURE pUpdateDMS:
    END.
 
    IF RETURN-VALUE > "" THEN RETURN "ERROR:" + RETURN-VALUE.
-
+   
    RETURN "OK".
 
 END PROCEDURE.
