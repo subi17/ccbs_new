@@ -715,7 +715,7 @@ DO TRANSACTION:
                    bMSRequestSTC.MsSeq       EQ Mobsub.MsSeq AND
                    bMSRequestSTC.ReqType     EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
                    bMSRequestSTC.ReqStatus   EQ {&REQUEST_STATUS_CANCELLED} AND
-                   bMSRequestSTC.ActStamp    <  Msrequest.ActStamp
+                   bMSRequestSTC.ActStamp    >  Msrequest.ActStamp
         NO-ERROR.           
         lbolSTCRequestFound = AVAILABLE (bMSRequestSTC).
         /* BTC */
@@ -725,7 +725,7 @@ DO TRANSACTION:
                       bMSRequestSTC.MsSeq       EQ Mobsub.MsSeq AND
                       bMSRequestSTC.ReqType     EQ {&REQTYPE_BUNDLE_CHANGE} AND
                       bMSRequestSTC.ReqStatus   EQ {&REQUEST_STATUS_CANCELLED} AND
-                      bMSRequestSTC.ActStamp    <  Msrequest.ActStamp
+                      bMSRequestSTC.ActStamp    >  Msrequest.ActStamp
            NO-ERROR.           
            lbolBTCRequestFound = AVAILABLE (bMSRequestSTC).
         END.
