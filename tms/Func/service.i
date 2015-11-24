@@ -973,6 +973,7 @@ PROCEDURE pTerminatePackage:
                ELSE lcParam = ttServCom.DefParam.
             END. /* IF ttServCom.ServCom = "SHAPER" THEN DO: */
             ELSE IF AVAIL SubSer THEN lcParam = SubSer.SSParam.
+            ELSE lcParam = ttServCom.DefParam.
 
             liReq = fServiceRequest (iiMsSeq ,     
                                      ttServCom.ServCom,
