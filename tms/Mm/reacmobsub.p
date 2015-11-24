@@ -769,7 +769,7 @@ DO TRANSACTION:
            IF lbolSTCRequestFound THEN   
            liRequest = fCTChangeRequest(
              bMSRequestSTC.MsSeq,        /* Subscription */
-             bMSRequestSTC.ReqCParam1,   /* CLIType */
+             bMSRequestSTC.ReqCParam2,   /* CLIType */
              bMSRequestSTC.ReqCparam5,   /* BundleType */
              bMSRequestSTC.ReqCparam3,   /* BankNumber */
              bMSRequestSTC.ReqDParam1,   /* ChgStamp */
