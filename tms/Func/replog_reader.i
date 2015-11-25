@@ -240,7 +240,7 @@ PROCEDURE pInitialize:
       END.
       WHEN "Angetenar" THEN
          lcConfFile = "Mailconf/replog_reader_conf.angetenar".         
-      WHEN "Hebe"  OR WHEN "Flora"  THEN DO:
+      WHEN "Hebe"  OR WHEN "Flora" OR WHEN "Pallas" THEN DO:
          IF icModule BEGINS "amq_" 
          THEN lcConfFile = "Mailconf/replog_reader_conf_amq.prod".
          ELSE lcConfFile = "Mailconf/replog_reader_conf.prod".

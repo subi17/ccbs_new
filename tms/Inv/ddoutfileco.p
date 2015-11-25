@@ -11,6 +11,7 @@
 {commali.i}
 {cparam2.i}
 {timestamp.i}
+{tmsconst.i}
 
 DEFINE INPUT  PARAMETER icInvGrp       AS CHAR NO-UNDO.
 DEFINE INPUT  PARAMETER iiCustNum1     AS INT  NO-UNDO.
@@ -45,12 +46,29 @@ DEF VAR liFileSeq   AS INT  NO-UNDO.
 DEF VAR lcTestDir   AS CHAR NO-UNDO.
 DEF VAR lcFileXml   AS CHAR NO-UNDO. 
 DEF VAR liNBCCount  AS INT  NO-UNDO. 
+DEF VAR liSBICount  AS INT  NO-UNDO INITIAL 0.
+DEF VAR liSAICount  AS INT  NO-UNDO INITIAL 0.
+DEF VAR liBBICount  AS INT  NO-UNDO INITIAL 0.
+DEF VAR liLAICount  AS INT  NO-UNDO INITIAL 0.
 DEF VAR lcFileName AS CHAR NO-UNDO. 
 DEF VAR lcInputFile AS CHAR NO-UNDO. 
-DEF VAR lcLine AS CHAR NO-UNDO. 
-DEF VAR ldaDueDate AS DATE NO-UNDO. 
-DEF VAR lcBankCode AS CHAR NO-UNDO. 
-DEF VAR liFiles AS INT NO-UNDO. 
+DEF VAR lcLine      AS CHAR NO-UNDO. 
+DEF VAR ldaDueDate  AS DATE NO-UNDO. 
+DEF VAR lcBankCode  AS CHAR NO-UNDO. 
+DEF VAR liFiles     AS INT  NO-UNDO. 
+
+DEFINE VARIABLE liSBIPerc  AS DECIMAL NO-UNDO INITIAL 0.
+DEFINE VARIABLE liSAIPerc  AS DECIMAL NO-UNDO INITIAL 0.
+DEFINE VARIABLE liBBIPerc  AS DECIMAL NO-UNDO INITIAL 0.
+DEFINE VARIABLE liLAIPerc  AS DECIMAL NO-UNDO INITIAL 0.
+DEFINE VARIABLE liSBIValue AS INTEGER NO-UNDO INITIAL 0.
+DEFINE VARIABLE liSAIValue AS INTEGER NO-UNDO INITIAL 0.
+DEFINE VARIABLE liBBIValue AS INTEGER NO-UNDO INITIAL 0.
+DEFINE VARIABLE liLAIValue AS INTEGER NO-UNDO INITIAL 0.
+DEFINE VARIABLE liSBIolval AS INTEGER NO-UNDO INITIAL 0.
+DEFINE VARIABLE liSAIolval AS INTEGER NO-UNDO INITIAL 0.
+DEFINE VARIABLE liBBIolval AS INTEGER NO-UNDO INITIAL 0.
+DEFINE VARIABLE liLAIolval AS INTEGER NO-UNDO INITIAL 0.
 
 {ddoutfilett.i}
 
@@ -117,31 +135,33 @@ FUNCTION fMakeTemp RETURNS LOGICAL (
     ASSIGN ttInvoice.InvNum   = Invoice.InvNum
            ttInvoice.InvAmt   = Invoice.InvAmt 
            ttInvoice.DueDate  = Invoice.DueDate
-           ttInvoice.Movable  = FALSE
            liPicked           = liPicked + 1. 
 
     IF icBankCode > "" THEN ttInvoice.BankCode = icBankCode.
     ELSE IF ilSplit THEN DO:
          ttInvoice.BankCode = SUBSTRING(Customer.BankAcc,5,4).
    
-       CASE ttInvoice.BankCode:
-          WHEN "0049" OR
-          WHEN "0030" THEN
-             ttInvoice.BankCode = "0049". 
-          WHEN "0182" OR
-          WHEN "2040" OR
-          WHEN "2074" OR
-          WHEN "2059" OR
-          WHEN "2107" THEN 
-             ttInvoice.BankCode = "0182".
-          WHEN "0081" THEN .
-          /* Rest invoices will be divided based on the algorithm */
-          OTHERWISE ASSIGN
-             ttInvoice.BankCode = ""
-             ttInvoice.Movable  = TRUE
-             liNBCCount         = liNBCCount + 1.
-       END CASE.
-       
+       /* Check bank code available in BankAccount data, AND assign
+           parent bank code value to Invoice bank code field */
+       FIND FIRST BankAccount NO-LOCK WHERE
+                  BankAccount.Brand EQ gcBrand AND
+           LOOKUP(ttInvoice.BankCode,BankAccount.BankCodes) > 0 NO-ERROR.
+
+       IF AVAIL BankAccount THEN DO:
+          ttInvoice.BankCode = LEFT-TRIM(BankAccount.InvForm,"DD").
+
+          CASE ttInvoice.BankCode:
+             WHEN {&TF_BANK_UNOE}     THEN liSAICount = liSAICount + 1.
+             WHEN {&TF_BANK_BBVA}     THEN liBBICount = liBBICount + 1.
+             WHEN {&TF_BANK_SABADELL} THEN liSBICount = liSBICount + 1.
+             WHEN {&TF_BANK_LACAXIA}  THEN liLAICount = liLAICount + 1.
+          END CASE.
+       END.
+       ELSE
+          ASSIGN
+            ttInvoice.BankCode = ""
+            liNBCCount         = liNBCCount + 1.
+ 
     END.
     ELSE ttInvoice.BankCode = "ALL".
 
@@ -307,6 +327,62 @@ END.
 /* based on the algorithm specified in the YOT-1450           */
 IF icInputFileDir EQ "" THEN DO:
    
+   /* Fetch allocation percentage for each individual banks */
+   FOR EACH BankAccount NO-LOCK:
+      CASE LEFT-TRIM(BankAccount.InvForm,"DD"):
+             WHEN {&TF_BANK_UNOE}     THEN liSAIPerc = BankAccount.DDAllocation.
+             WHEN {&TF_BANK_BBVA}     THEN liBBIPerc = BankAccount.DDAllocation.
+             WHEN {&TF_BANK_SABADELL} THEN liSBIPerc = BankAccount.DDAllocation.
+             WHEN {&TF_BANK_LACAXIA}  THEN liLAIPerc = BankAccount.DDAllocation.
+      END CASE.
+   END.
+   
+   IF liSAIPerc + liBBIPerc + 
+      liSBIPerc + liLAIPerc NE 100 THEN 
+   RETURN "ERROR: Allocation percentage is less/greater than 100%".      
+
+   ASSIGN 
+      liSAIValue = (liSAIPerc * liPicked) / 100
+      liBBIValue = (liBBIPerc * liPicked) / 100
+      liSBIValue = (liSBIPerc * liPicked) / 100
+      liLAIValue = (liLAIPerc * liPicked) / 100.
+
+   /* After taking percentage values, the invoice count 
+      may vary due to rounding the values. So the remaining 
+      invoices are allocated to BBVA Bank, as in real life 
+      not more than 33.5% invoices are allocated to this bank */
+   IF liPicked NE (liSAIValue + liBBIValue + 
+                   liSBIValue + liLAIValue) THEN
+      liBBICount = liBBICount + (liPicked - (liSAIValue + liBBIValue +
+                                             liSBIValue + liLAIValue)).
+
+   /* This code has to deleted after the Nov bill run */
+   IF liLAICount > 10000 THEN DO:
+      liLAIolval = liLAICount - 10000.
+      RUN pSplitBankInvoices(liLAIolval,{&TF_BANK_LACAXIA}).
+   END.    
+   
+   /* This code has to be uncommented after the Nov bill run */
+ /*  IF liLAICount > liLAIValue THEN DO:
+      liLAIolval = liLAICount - liLAIValue.
+      RUN pSplitBankInvoices(liLAIolval,{&TF_BANK_LACAXIA}).
+   END. */
+
+   IF liSBICount > liSBIValue THEN DO:
+      liSBIolval = liSBICount - liSBIValue.
+      RUN pSplitBankInvoices(liSBIolval,{&TF_BANK_SABADELL}). 
+   END.    
+   
+   IF liSAICount > liSAIValue THEN DO:
+      liSAIolval = liSAICount - liSAIValue.
+      RUN pSplitBankInvoices(liSAIolval,{&TF_BANK_UNOE}).  
+   END.    
+   
+   IF liBBICount > liBBIValue THEN DO:
+      liBBIolval = liBBICount - liBBIValue.
+      RUN pSplitBankInvoices(liBBIolval,{&TF_BANK_BBVA}).
+   END.
+
    RUN pSplitOtherInvoices.
 
    FOR EACH ttInvoice:
@@ -400,34 +476,64 @@ RETURN ocError.
 
 PROCEDURE pSplitOtherInvoices:
 
-   DEFINE VARIABLE liCount    AS INTEGER NO-UNDO.
-   DEFINE VARIABLE liModValue AS INTEGER NO-UNDO.
-   DEFINE VARIABLE liTPValue  AS INTEGER NO-UNDO. /* Ten Percentage Value */
-   DEFINE VARIABLE liSBCValue AS INTEGER NO-UNDO. /* Sabadell bank Invoice Count Value */ 
-   
-   /* Ten percentage value of the Invoices which does not have BankCode */
-   ASSIGN liTPValue = TRUNCATE(((10 / 100) * liNBCCount),0). 
- 
-   /* Fetch all other invoices by amount from higher to lower */
-   /* and divide based on ticket  ydr-1601                    */
-   FOR EACH ttInvoice EXCLUSIVE-LOCK  WHERE 
-            ttInvoice.Movable  = TRUE AND
+   DEFINE VARIABLE liCount AS INTEGER NO-UNDO INITIAL 0.
+
+   FOR EACH ttInvoice EXCLUSIVE-LOCK  WHERE
             ttInvoice.BankCode = ""
          BY ttInvoice.InvAmt DESC:
    
-      IF liSBCValue < liTPValue THEN 
-         ASSIGN liCount    = liCount + 1
-                liModValue = liCount MOD 3.
-      ELSE ASSIGN liCount    = liCount + 1
-                  liModValue = (liCount MOD 2) + 1.
-   
-      CASE liModValue:
-         WHEN 1 THEN ASSIGN ttInvoice.BankCode = "0182".
-         WHEN 2 THEN ASSIGN ttInvoice.BankCode = "0049".
-         WHEN 0 THEN ASSIGN ttInvoice.BankCode = "0081"
-                            liSBCValue         = liSBCValue + 1.
-      END CASE. 
-   
+      /* Temporary code for Nov 2015 bill run YDR-1837 */
+      /* Assigning 10,000 invoices to La Caixa bank code */ 
+      IF liLAICount   < 10000 AND 
+         YEAR(TODAY)  EQ 2015 THEN 
+         ASSIGN 
+            ttInvoice.BankCode = {&TF_BANK_LACAXIA}
+            liLAICount         = liLAICount + 1.
+      ELSE  /* Split based on ticket ydr-1837 */
+         RUN pSplitInvoice.
+
+      liCount = liCount + 1.
    END. /* FOR EACH ttInvoice WHERE */
 
 END PROCEDURE. /* PROCEDURE pSplitOtherInvoices: */
+
+PROCEDURE pSplitBankInvoices:
+DEFINE INPUT PARAMETER liOLValue  AS INT  NO-UNDO. /* Over limit Value */
+DEFINE INPUT PARAMETER lcBankCode AS CHAR NO-UNDO. /* Bank code Value */
+
+DEF VAR liCount AS INT NO-UNDO INITIAL 0. 
+
+   FOR EACH ttInvoice EXCLUSIVE-LOCK WHERE
+            ttInvoice.BankCode = lcBankCode
+         BY ttInvoice.InvAmt:
+      
+     RUN pSplitInvoice.
+
+     liCount = liCount + 1.
+
+     IF liOLValue EQ liCount THEN 
+        LEAVE.
+   END.      
+
+END PROCEDURE. 
+
+PROCEDURE pSplitInvoice:
+
+   IF liSBICount <= liSBIValue THEN
+      ASSIGN 
+         ttInvoice.BankCode = {&TF_BANK_SABADELL}
+         liSBICount         = liSBICount + 1.
+   ELSE IF liSAICount <= liSAIValue THEN
+      ASSIGN 
+         ttInvoice.BankCode = {&TF_BANK_UNOE}
+         liSAICount         = liSAICount + 1.
+   ELSE IF liBBICount <= liBBIValue THEN
+      ASSIGN 
+         ttInvoice.BankCode = {&TF_BANK_BBVA}
+         liBBICount         = liBBICount + 1.
+
+/* This has to be uncommented after nov bill run */
+/*  ELSE IF liLAICount <= liLAIValue THEN
+   ttInvoice.BankCode = {&TF_BANK_LACAXIA}.  */
+
+END PROCEDURE.

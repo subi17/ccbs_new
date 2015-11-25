@@ -74,8 +74,7 @@ DO liReqStatus = 0 TO 100:
       END.
       ELSE lcReqSource = MsRequest.ReqSource.
       
-      IF LOOKUP(lcReqSource,{&REQUEST_SOURCES_MANUAL}) = 0 AND
-         MsRequest.ReqType NE 46 THEN NEXT.
+      IF LOOKUP(lcReqSource,{&REQUEST_SOURCES_HPD}) = 0 THEN NEXT.
       
       liEvents = liEvents + 1.
 
