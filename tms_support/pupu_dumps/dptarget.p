@@ -3,8 +3,7 @@ DEFINE VARIABLE lcSpoolDir   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOutDir     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcDel        AS CHARACTER NO-UNDO INIT "|".
 DEFINE VARIABLE gcBrand      AS CHARACTER NO-UNDO INIT "1".
-DEFINE VARIABLE liPeriod     AS INTEGER   NO-UNDO.
-DEFINE VARIABLE ldtCurrStamp AS DATETIME  NO-UNDO.
+DEFINE VARIABLE ldtTimeStamp AS DATETIME  NO-UNDO.
 DEFINE VARIABLE liEvents     AS INTEGER   NO-UNDO.
 
 {cparam2.i}
@@ -18,12 +17,11 @@ ASSIGN lcSpoolDir = fCParam("HPD","DumpSpoolDir")
 
 IF lcSpoolDir = "" OR lcOutDir = "" THEN RETURN.
 
-ASSIGN lcLogFile = lcSpoolDir + "/singlefee_" +
+ASSIGN lcLogFile = lcSpoolDir + "/dptarget_" +
                    STRING(YEAR(TODAY)) + STRING(MONTH(TODAY),"99") +
                    STRING(DAY(TODAY),"99") + "_" +
                    REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".txt"
-       ldtCurrStamp = DATETIME(TODAY,MTIME)
-       liPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
+       ldtTimeStamp = DATETIME(TODAY,MTIME)
        SESSION:NUMERIC-FORMAT = "AMERICAN".
 
 FUNCTION fNotNull RETURNS CHAR (INPUT icInput AS CHAR):
@@ -36,43 +34,32 @@ END. /* FUNCTION fNotNull RETURNS CHAR (INPUT): */
 
 OUTPUT STREAM slog TO VALUE(lcLogFile).
 
-FOR EACH MobSub WHERE
-         MobSub.Brand = gcBrand NO-LOCK,
-    EACH SingleFee WHERE
-         SingleFee.Brand = gcBrand AND
-         SingleFee.CustNum = MobSub.CustNum AND
-         SingleFee.HostTable = "MobSub" AND
-         SingleFee.KeyValue  = STRING(MobSub.MsSeq) AND
-         SingleFee.BillPeriod >= liPeriod NO-LOCK USE-INDEX CustNum:
+FOR EACH DPTarget NO-LOCK:
 
    liEvents = liEvents + 1.
 
    IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN DO:
       PAUSE 0.
-      DISP liEvents LABEL "SingleFee" 
+      DISP liEvents LABEL "DPTarget" 
       WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
          TITLE " Collecting " FRAME fQty.
    END. /* IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN DO: */
 
    PUT STREAM slog UNFORMATTED
-       "SingleFee"                              lcDel
+       "DPTarget"                               lcDel
        "CREATE"                                 lcDel
-       fNotNull(STRING(RECID(SingleFee)))       lcDel
-       fNotNull(STRING(SingleFee.FMItemId))     lcDel
-       fNotNull(STRING(ldtCurrStamp))           lcDel
-       fNotNull(STRING(SingleFee.FMItemId))     lcDel
-       fNotNull(STRING(SingleFee.CustNum))      lcDel
-       fNotNull(SingleFee.HostTable)            lcDel
-       fNotNull(SingleFee.KeyValue)             lcDel
-       fNotNull(SingleFee.FeeModel)             lcDel
-       fNotNull(SingleFee.BillCode)             lcDel
-       fNotNull(SingleFee.CalcObj)              lcDel
-       fNotNull(STRING(SingleFee.Amt))          lcDel
-       fNotNull(STRING(SingleFee.BillPeriod))   lcDel
-       fNotNull(STRING(SingleFee.Concerns[1]))  lcDel
-       fNotNull(SingleFee.SourceTable)          lcDel
-       fNotNull(SingleFee.SourceKey)            lcDel
-       fNotNull(STRING(SingleFee.SourceKey))    SKIP.
+       fNotNull(STRING(RECID(DPTarget)))        lcDel
+       fNotNull(STRING(DPTarget.DPId)      + CHR(255) +
+                DPTarget.TargetTable       + CHR(255) +
+                DPTarget.TargetKey         + CHR(255) +
+                STRING(DPTarget.ValidTo))       lcDel
+       fNotNull(STRING(ldtTimeStamp))           lcDel
+       fNotNull(STRING(DPTarget.DPId))          lcDel
+       fNotNull(DPTarget.TargetTable)           lcDel
+       fNotNull(DPTarget.TargetKey)             lcDel
+       fNotNull(STRING(DPTarget.Included))      lcDel
+       fNotNull(STRING(DPTarget.ValidFrom))     lcDel
+       fNotNull(STRING(DPTarget.ValidTo))       SKIP.
 END.
 
 OUTPUT STREAM slog CLOSE.
@@ -85,4 +72,5 @@ IF NOT SESSION:BATCH THEN
 
 /* Move the report to Transfer directory */
 fMove2TransDir(lcLogFile, ".txt", lcOutDir).
+
 

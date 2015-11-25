@@ -82,6 +82,31 @@ CLASS Gwy.MqPublisher:
       RETURN FALSE.
    END METHOD.
 
+   METHOD PUBLIC LOG send_longmessage ( iMessage AS LONGCHAR ):
+      DEF VAR lMessage     AS CLASS TextMessage NO-UNDO.
+      DEF VAR lcUTFMessage AS CHAR NO-UNDO.
+
+      lcUTFMessage = CODEPAGE-CONVERT(iMessage, "utf-8", SESSION:CHARSET).
+
+      IF NOT VALID-OBJECT(stompSession) OR NOT stompSession:writable THEN
+         connect() NO-ERROR.
+
+      IF NOT VALID-OBJECT(stompSession) OR NOT stompSession:writable THEN DO:
+         IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+             LOG-MANAGER:WRITE-MESSAGE("ActiveMQ connection failed","ERROR").
+      END.
+      ELSE DO:
+         IF LOG-MANAGER:LOGGING-LEVEL GE 4 THEN
+            LOG-MANAGER:WRITE-MESSAGE(SUBST("Sending message: &1...",
+                                      lcUTFMessage), "DEBUG").
+         lMessage = CAST(stompSession:createTextMessage(lcUTFMessage),TextMessage).
+         lMessage:JMSDeliveryMode = "true".
+         producer:sendMessage(lMessage).
+         RETURN TRUE.
+      END.
+      RETURN FALSE.
+   END METHOD.
+
    METHOD PUBLIC LOG send_message (iMessage AS LONGCHAR, iStompHeader AS CHAR):
       DEF VAR lMessage AS CLASS TextMessage NO-UNDO.
       DEF VAR lUTFMessage AS CHAR NO-UNDO.
