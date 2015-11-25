@@ -5,7 +5,8 @@
                         03.09.07/aam don't mark create fees for prepaid on
                                      per.contract termination
                         11.03.08/jp  removed hardcoded "begins tarj"        
-
+      22.sep.2015 hugo.lujan - YPR-2521 - [Q25] - TMS - Subscription 
+       termination/ MNP out porting, STC (postpaid to prepaid)
 */
    
 {commali.i}
@@ -606,6 +607,19 @@ PROCEDURE pTerminate:
       END.
 
    END.
+   
+   /* Quota 25 q25 - YPR-2521 */
+   FOR EACH MSRequest NO-LOCK WHERE  
+            MSRequest.MsSeq      EQ Mobsub.MsSeq AND
+            MSRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+            MsRequest.ReqStatus  EQ 0 AND
+            MSREquest.REqcparam3 EQ "RVTERM12":   
+      fReqStatus(4,"Cancelled by subs. termination").
+   END.
+         
+   /* Find Original request */
+   FIND FIRST MSRequest WHERE
+              MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
 
    /* commission termination */
    RUN commission_term(MobSub.MsSeq,
@@ -760,10 +774,6 @@ PROCEDURE pTerminate:
          IF AVAILABLE OrderAccessory AND
             LOOKUP(STRING(OrderAccessory.HardBook),"1,2") > 0 THEN
             llHardBook = TRUE.
-
-         /* Find Original request */
-         FIND FIRST MSRequest WHERE
-                    MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
 
          IF NOT MsRequest.UserCode BEGINS "Dextra" AND
             llHardBook = TRUE THEN DO:

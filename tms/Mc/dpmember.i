@@ -95,6 +95,9 @@ FUNCTION fCloseDiscount RETURNS LOGICAL
     idaEndDate     AS DATE,
     ilCleanEventObjects AS LOG):
 
+   DEF BUFFER DiscountPlan FOR DiscountPlan.
+   DEF BUFFER DPMember FOR DPMember.
+
    FOR FIRST DiscountPlan WHERE
              DiscountPlan.Brand    = gcBrand AND
              DiscountPlan.DPRuleID = icDiscountPlan NO-LOCK,

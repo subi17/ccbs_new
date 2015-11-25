@@ -16,6 +16,7 @@
                 7;Subscription is cancelled
                 8;Missing SMS Template
                 9;Email sending is failed
+                10.No cusomer for order
 
  */
 
@@ -29,6 +30,7 @@ ASSIGN katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId
 {forderstamp.i}
 {fgettxt.i}
 {fmakesms.i}
+{smsmessage.i}
 {fmakemsreq.i}
 {fexternalapi.i}
 
@@ -52,6 +54,10 @@ DEFINE VARIABLE llOngoing               AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE llDelivered             AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE llClose                 AS LOGICAL   NO-UNDO.
 DEF VAR lcApplicationId AS CHAR NO-UNDO. 
+DEFINE VARIABLE liCustNum               AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liMsSeq                 AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liOrderId               AS INTEGER   NO-UNDO.
+
 
 pcReqList = validate_request(param_toplevel_id, "string,string,string,[string]").
 IF pcReqList EQ ? THEN RETURN.
@@ -86,6 +92,13 @@ FOR EACH Order WHERE
 
    fSplitTS(Order.CrStamp,ldOrderDate,liOrderTime).
 
+   FIND FIRST OrderCustomer NO-LOCK WHERE
+              OrderCustomer.Brand EQ gcBrand AND
+              Ordercustomer.OrderID EQ Order.OrderId AND
+              OrderCustomer.Rowtype EQ 1 NO-ERROR.
+   IF NOT AVAIL OrderCustomer THEN 
+      RETURN appl_err("No customer for order").
+
    IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN DO:
       IF Order.StatusCode = {&ORDER_STATUS_DELIVERED} THEN
          ldeOrderStamp = fGetOrderStamp(Order.OrderId,"Delivery").
@@ -106,6 +119,9 @@ FOR EACH Order WHERE
    IF liCount = 1 THEN DO:
       IF Order.StatusCode = "6" THEN llDelivered = TRUE.
       ELSE IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN llClose = TRUE.
+      liMsSeq = Order.MsSeq.
+      liOrderId = Order.OrderID.
+      liCustNum = OrderCustomer.Custnum.
    END. /* IF liCount = 1 THEN DO: */
 
    lcReplaceText = lcReplaceText +
@@ -141,14 +157,14 @@ IF pcDelType = "SMS" THEN DO:
       RETURN appl_err("Missing SMS Template").
 
    lcSMSText = REPLACE(lcSMSText,"#INFO",lcReplaceText).
-
-   fMakeSchedSMS2(0,
-                  pcCLI,
-                  9,
-                  lcSMSText,
-                  ldeOrderStamp,
-                  "Yoigo info",
-                  "").
+   
+   fCreateSMS(liCustnum,
+              pcCLI,
+              liMsSeq,
+              liOrderId,
+              lcSMSText,
+              "Yoigo info",
+              {&SMS_TYPE_CONSULT}).
 
 END. /* IF pcDelType = "SMS" THEN DO: */
 
