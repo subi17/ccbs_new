@@ -1,3 +1,8 @@
+/* stc2tms.p
+   changes:
+      22.sep.2015 hugo.lujan - YPR-2521 - [Q25] - TMS - Subscription
+       termination/ MNP out porting, STC (postpaid to prepaid)
+*/
 {commali.i}
 {msreqfunc.i}
 {eventval.i}
@@ -72,7 +77,7 @@ DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
     FIELD MsSeq    AS INT
     FIELD CustNum  AS INT
     FIELD CLI      AS CHAR.
-
+    
 FUNCTION fMakeValidTS RETURNS DECIMAL:
 
    DEF VAR ldeCurrentTS AS DE NO-UNDO FORMAT "99999999.99999".
@@ -399,10 +404,6 @@ PROCEDURE pFeesAndServices:
       service(s) corresponding to new subscription type */
 
    IF bOldType.PayType <> CLIType.PayType THEN DO:
-      /* close services that don't exist on new type */
-      RUN pCloseServices (MsRequest.ReqCParam2,
-                          MsRequest.MsSeq,
-                          ldtActDate).
 
       /* add services of new type that didn't exist on old type */
       RUN pCopyPackage(MsRequest.ReqCParam2,
@@ -686,21 +687,21 @@ END PROCEDURE.
 
 PROCEDURE pFinalize:
 
-   DEF VAR liChargeReqId      AS INT  NO-UNDO.
-   DEF VAR liFatFromPeriod    AS INT  NO-UNDO. 
-   DEF VAR ldtDate            AS DATE NO-UNDO. 
-   DEF VAR liTime             AS INT  NO-UNDO.
-   DEF VAR lcCharValue        AS CHAR NO-UNDO. 
-   DEF VAR liRequest          AS INT  NO-UNDO.
-   DEF VAR liCustnum          AS INT  NO-UNDO. 
-   DEF VAR ldEndStamp         AS DEC  NO-UNDO.
-   DEF VAR ldBegStamp         AS DEC  NO-UNDO.
+   DEF VAR liChargeReqId   AS INT  NO-UNDO.
+   DEF VAR liFatFromPeriod AS INT  NO-UNDO. 
+   DEF VAR ldtDate         AS DATE NO-UNDO. 
+   DEF VAR liTime          AS INT  NO-UNDO.
+   DEF VAR lcCharValue     AS CHAR NO-UNDO. 
+   DEF VAR liRequest       AS INT  NO-UNDO.
+   DEF VAR liCustnum       AS INT  NO-UNDO. 
+   DEF VAR ldEndStamp      AS DEC  NO-UNDO.
+   DEF VAR ldBegStamp      AS DEC  NO-UNDO.
 
-   DEF VAR lcError                 AS CHAR NO-UNDO.
-   DEF VAR lcMultiLineSubsType     AS CHAR NO-UNDO.
-   DEF VAR lcFusionSubsType        AS CHAR NO-UNDO.
-   DEF VAR lcPostpaidDataBundles   AS CHAR NO-UNDO.
-   DEF VAR lcDataBundleCLITypes    AS CHAR NO-UNDO.
+   DEF VAR lcError               AS CHAR NO-UNDO.
+   DEF VAR lcMultiLineSubsType   AS CHAR NO-UNDO.
+   DEF VAR lcFusionSubsType      AS CHAR NO-UNDO.
+   DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
+   DEF VAR lcDataBundleCLITypes  AS CHAR NO-UNDO.
 
    DEF BUFFER bSubRequest FOR MsRequest.
    
@@ -840,7 +841,7 @@ PROCEDURE pFinalize:
                     "Subscription type change",
                     "FATime event could not be created: " + lcError).
    END.
-
+           
    IF CLIType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID} THEN DO:
 
       ASSIGN lcMultiLineSubsType = fCParamC("MULTILINE_SUBS_TYPE")
@@ -868,6 +869,21 @@ PROCEDURE pFinalize:
                              "Subscription type change",
                              "Invoice target creation failed: " + lcError).
       END.
+   END.
+      
+   IF bOldType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID} AND
+      CLIType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID} THEN DO:
+
+      /* Quota 25 q25 - YPR-2521 */
+      FOR EACH MSRequest NO-LOCK WHERE  
+               MSRequest.MsSeq      EQ Mobsub.MsSeq AND
+               MSRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+               MsRequest.ReqStatus  EQ 0 AND
+               MSREquest.REqcparam3 EQ "RVTERM12":   
+         fReqStatus(4,"Cancelled by STC to prepaid").
+      END. /* FOR EACH MSRequest */
+
+      FIND MSRequest WHERE MSRequest.MsRequest = iiMSRequest NO-LOCK.
    END.
 
    IF MsRequest.ReqIParam2 > 0 THEN DO:
@@ -951,7 +967,7 @@ PROCEDURE pFinalize:
               SUBST("Wrong order status: &1",Order.statusCode)).
       END.
    END.
-
+   
    /* request handled succesfully */
    fReqStatus(2,"").
 
@@ -1028,73 +1044,6 @@ PROCEDURE pFinalize:
          END. /* FOR EACH InvRowCounter WHERE */
    END. /* IF DAY(ldtActDate) <> 1 THEN DO: */
 
-END PROCEDURE.
-
-PROCEDURE pCloseServices:
-
-   DEF INPUT PARAMETER icNewType    AS CHAR NO-UNDO.
-   DEF INPUT PARAMETER iiMsSeq      AS INT  NO-UNDO.
-   DEF INPUT PARAMETER idtActDate   AS DATE NO-UNDO.
-
-   DEF VAR llDelete AS LOG  NO-UNDO.
-   
-   DEF BUFFER bChkSubSer FOR SubSer.
-
-   /* subscription is first terminated, and then reactivated with new clitype
-      definitions, so services that are not defined to the new type can be
-      removed */
-   
-   FOR EACH bChkSubSer NO-LOCK WHERE
-            bChkSubSer.MsSeq = iiMsSeq
-   BREAK BY bChkSubSer.ServCom
-         BY bChkSubSer.SSDate DESC:
-   
-      /* use newest */
-      IF NOT FIRST-OF(bChkSubSer.ServCom) THEN NEXT.
-
-      /* YTS-6588 */
-      IF bChkSubSer.ServCom EQ "BB" THEN NEXT.
-
-      llDelete = TRUE.
-      
-      /* don't remove if new type has the same package with the same 
-         settings */
-      FOR FIRST CTServPac NO-LOCK WHERE
-                CTServPac.Brand     = gcBrand   AND
-                CTServPac.CLIType   = icNewType AND
-                CTServPac.ServPac   = bChkSubSer.ServPac AND
-                CTServPac.ToDate   >= idtActDate AND
-                CTServPac.FromDate <= idtActDate,
-          FIRST CTServEl NO-LOCK WHERE
-                CTServEl.Brand     = gcBrand   AND
-                CTServEl.CLIType   = icNewType AND
-                CTServEl.ServPac   = CTServPac.ServPac AND
-                CTServEl.ServCom   = bChkSubSer.ServCom AND
-                CTServEl.FromDate >= CTServPac.FromDate AND
-                CTServEl.FromDate <= CTServPac.ToDate AND
-                CTServEl.FromDate <= idtActDate:
-          
-         IF CTServEl.DefValue = bChkSubSer.SSStat THEN llDelete = FALSE.       
-      END.
-                
-      IF llDelete THEN DO TRANS:
-      
-         FIND SubSer WHERE RECID(SubSer) = RECID(bChkSubSer) EXCLUSIVE-LOCK.
-
-         IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhSubSer).
-         
-         FOR EACH SubSerPara EXCLUSIVE-LOCK WHERE
-                  SubSerPara.MsSeq   = SubSer.MsSeq AND
-                  SubSerPara.ServCom = SubSer.ServCom:
-
-            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhSubSerPara).
-            DELETE SubSerPara.      
-         END.
-         
-         DELETE SubSer.
-      END.
-   END.
-   
 END PROCEDURE.
 
 PROCEDURE pReRate:

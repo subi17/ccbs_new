@@ -135,6 +135,7 @@ IF fValidateMobTypeCh(
    plExtendContract,
    FALSE, /* bypass stc type check */
    0, /* stc order id */
+   {&REQUEST_SOURCE_NEWTON}, 
    OUTPUT lcError) EQ FALSE THEN RETURN appl_err(lcError).
 
 /* Set the katun again with original username */

@@ -179,6 +179,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
     INPUT  ilExtendContract AS LOG,
     INPUT  plByPassTypeCheck AS LOG,
     INPUT  piOrderID AS INT,
+    INPUT  icReqSource   AS CHAR,
     OUTPUT ocError      AS CHAR):
 
    DEF VAR ocResult AS CHARACTER NO-UNDO.
@@ -227,7 +228,8 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
                         OUTPUT ocError) THEN RETURN FALSE.
 
    /* 3 */
-   RUN requestaction_check(0,MobSub.CLIType,Mobsub.MsSeq, OUTPUT ocError).
+   RUN requestaction_check.p(0,MobSub.CLIType,Mobsub.MsSeq,
+                             icReqSource, OUTPUT ocError).
    IF ocError NE "" THEN RETURN FALSE.
    
    /* 4 */

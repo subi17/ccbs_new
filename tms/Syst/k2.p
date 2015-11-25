@@ -15,7 +15,7 @@ input through value("hostname").
 import unformatted host.
 input close.
 
-if host = "hebe"
+if host = "pallas"
 then rpath = "/tmsapps/".
 else rpath = "/frontapps".
 

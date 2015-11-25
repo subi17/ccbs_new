@@ -87,6 +87,7 @@ IF fValidateMobTypeCh(
    llExtendContract, /* extend contract */
    TRUE, /* bypass stc type check */
    piOrderID,
+   "",
    OUTPUT lcError) EQ FALSE
 THEN RETURN lcError.
 
