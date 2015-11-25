@@ -187,7 +187,8 @@ END.
 /*Function sends SMS and EMAIL generating information to WEB if it is needed*/
 FUNCTION fSendChangeInformation RETURNS CHAR
    (icStatus AS CHAR,
-    icOrderID AS INT):
+    icOrderID AS INT, 
+    OUTPUT ocSentMessage AS CHAR):
 
    DEF BUFFER Order FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
@@ -255,6 +256,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
                                       lcBankAcc + "~"" +
                       "~}" +
                  "~}".
+   ocSentMessage = lcMessage.              
    RETURN fSendToMQ(lcMessage).
 END.
 
