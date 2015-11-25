@@ -730,7 +730,7 @@ PROCEDURE pSTC:
       katun = "NewtonAd".
       /* Various validations */
       IF NOT fValidateMobTypeCh(MobSub.MsSeq,NewCLIType.CLIType,
-                                ldActTS,FALSE,FALSE,0,OUTPUT lcError) THEN
+                                ldActTS,FALSE,FALSE,0,"",OUTPUT lcError) THEN
       lcRemark = lcRemark + "," + lcError.
 
       /* Set the katun again with original username */

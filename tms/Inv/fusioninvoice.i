@@ -177,9 +177,7 @@ FUNCTION fFillFusionEmailText RETURNS CHAR
    ASSIGN icEmailText = REPLACE(icEmailText,"#LINK",lcEmailLink)
           icEmailText = REPLACE(icEmailText,"#YEAR",
                         STRING(YEAR(ldaDatePrev)))
-          lcMonth     = ENTRY(MONTH(ldaDatePrev),
-                              "ENERO,FEBRERO,MARZO,ABRIL,MAYO,JUNIO,JULIO," +
-                              "AGOSTO,SEPTIEMBRE,OCTUBRE,NOVIEMBRE,DICIEMBRE")
+          lcMonth     = ENTRY(MONTH(ldaDatePrev),{&MONTHS_ES})
           icEmailText = REPLACE(icEmailText,"#MONTH",lcMonth)
           icEmailText = REPLACE(icEmailText,"#SENDER",icSenderAddress).
 

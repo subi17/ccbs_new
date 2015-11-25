@@ -153,7 +153,8 @@ FOR EACH Order WHERE
       WHEN "telesales" OR WHEN "fusion_telesales" then liTeleSales = liTeleSales + 1.
       WHEN "self" then liSelfSales = liSelfSales + 1.
       WHEN "renewal" then liRenewal = liRenewal + 1.
-      WHEN "renewal_telesales" then liRenewalTelesales = liRenewalTelesales  + 1.
+      WHEN "renewal_telesales" or
+      WHEN "renewal_ctc" then liRenewalTelesales = liRenewalTelesales  + 1.
       WHEN "renewal_pos" then liRenewalPos = liRenewalPos + 1.
       WHEN "renewal_pos_stc" then liRenewalPosStc = liRenewalPosStc + 1.
       WHEN "retention" then liRetention = liRetention + 1.
