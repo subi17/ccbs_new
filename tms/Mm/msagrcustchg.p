@@ -65,6 +65,10 @@ IF llDoEvent THEN DO:
    DEFINE VARIABLE lhMsOwner AS HANDLE NO-UNDO.
    lhMsOwner = BUFFER MsOwner:HANDLE.
    RUN StarEventInitialize(lhMsOwner).
+
+   DEFINE VARIABLE lhCustContact AS HANDLE NO-UNDO.
+   lhCustContact = BUFFER CustContact:HANDLE.
+   RUN StarEventInitialize(lhCustContact).
 END.
 
 
@@ -461,6 +465,22 @@ PROCEDURE pOwnerChange:
          IF NOT llNewCust AND llDoEvent THEN 
             RUN StarEventSetOldBuffer(lhCustomer).
 
+         /* Find an original request */
+         FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
+
+         CASE MsRequest.ReqSource:
+            WHEN {&REQUEST_SOURCE_MANUAL_TMS} THEN
+               lcChannel = "TMS".
+            WHEN {&REQUEST_SOURCE_NEWTON} THEN
+               lcChannel = "VISTA".
+         END CASE.
+
+         lcMemo = "ACC" + CHR(255) +
+                  STRING(bNewCust.CustNum) + CHR(255) +
+                  STRING(MobSub.MsSeq) + CHR(255) +
+                  ENTRY(11,MsRequest.ReqCParam1,";") + CHR(255) +
+                  lcChannel.
+
          /* DCH */
          IF llNewCust OR 
             (NOT llNewCust AND MobSub.PayType = FALSE AND
@@ -508,20 +528,41 @@ PROCEDURE pOwnerChange:
                                         WHEN bNewCust.Region NE "00"
                NO-ERROR.
          
-               IF ERROR-STATUS:ERROR THEN DO:
-                  fReqError("Wrong format in new customer data").
-                  RETURN.
-               END.
+            IF ERROR-STATUS:ERROR THEN DO:
+               fReqError("Wrong format in new customer data").
+               RETURN.
+            END.
 
-               FIND FIRST CustomerReport WHERE
-                          CustomerReport.Custnum = bNewCust.Custnum
+            FIND FIRST CustomerReport WHERE
+                       CustomerReport.Custnum = bNewCust.Custnum
+                       EXCLUSIVE-LOCK NO-ERROR.
+            IF NOT AVAIL CustomerReport THEN CREATE CustomerReport.
+            ASSIGN
+               CustomerReport.Custnum = bNewCust.Custnum
+               CustomerReport.StreetCode = lcStreetCode
+               CustomerReport.CityCode = lcCityCode
+               CustomerReport.TownCode = lcTownCode.
+
+            /* If customer makes an ACC to company customer and in Vista 
+               there is no possibility to provide Contact person information 
+               while making ACC so in this case we consider customer has chosen 
+               Contact person information same as Authorized customer information
+               and delete contact person if exist */
+            IF bNewCust.CustIdType = "CIF" AND
+               NOT llNewCust THEN DO:
+               FIND FIRST CustContact WHERE
+                          CustContact.Brand = gcBrand AND
+                          CustContact.CustNum = bNewCust.CustNum AND
+                          CustContact.CustType = {&CUSTCONTACT_CONTACT}
                           EXCLUSIVE-LOCK NO-ERROR.
-               IF NOT AVAIL CustomerReport THEN CREATE CustomerReport.
-               ASSIGN
-                  CustomerReport.Custnum = bNewCust.Custnum
-                  CustomerReport.StreetCode = lcStreetCode
-                  CustomerReport.CityCode = lcCityCode
-                  CustomerReport.TownCode = lcTownCode.
+               IF AVAILABLE CustContact THEN DO:
+                  IF llDoEvent THEN RUN StarEventMakeDeleteEventWithMemo(
+                                          lhCustContact,
+                                          katun,
+                                          lcMemo).
+                  DELETE CustContact.
+               END.
+            END.
 
             /* Electronic Invoice project */
             IF NUM-ENTRIES(lcDataField,";") >= 10 THEN
@@ -575,22 +616,6 @@ PROCEDURE pOwnerChange:
             bNewCust.InvCust    = liNewInvCust.
          END CASE.
          
-         /* Find an original request */
-         FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
-
-         CASE MsRequest.ReqSource:
-            WHEN {&REQUEST_SOURCE_MANUAL_TMS} THEN
-               lcChannel = "TMS".
-            WHEN {&REQUEST_SOURCE_NEWTON} THEN
-               lcChannel = "VISTA".
-         END CASE.
-
-         lcMemo = "ACC" + CHR(255) +
-                  STRING(bNewCust.CustNum) + CHR(255) +
-                  STRING(MobSub.MsSeq) + CHR(255) +
-                  ENTRY(11,MsRequest.ReqCParam1,";") + CHR(255) +
-                  lcChannel.
-
          IF NOT llNewCust AND llDoEvent THEN
             RUN StarEventMakeModifyEventWithMemo(
                                     lhCustomer,
@@ -716,7 +741,7 @@ PROCEDURE pOwnerChange:
                                       "",              /* bank-account */
                                       MsRequest.ActStamp,  /* new tsbegin  */
                                       0,           /* 0 = Credit check ok */
-                                      FALSE,           /* extend contract */
+                                      0, /* extend contract 0=no extend_term_contract */
                                       "",
                                       FALSE,           /* llCreateFees */
                                       FALSE,           /* llSendSMS    */

@@ -17,7 +17,7 @@ ASSIGN lcSpoolDir = fCParam("HPD","DumpSpoolDir")
 
 IF lcSpoolDir = "" OR lcOutDir = "" THEN RETURN.
 
-ASSIGN lcLogFile = lcSpoolDir + "/dmsdoc_" +
+ASSIGN lcLogFile = lcSpoolDir + "/topupschemerow_" +
                    STRING(YEAR(TODAY)) + STRING(MONTH(TODAY),"99") +
                    STRING(DAY(TODAY),"99") + "_" +
                    REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".txt"
@@ -32,41 +32,35 @@ FUNCTION fNotNull RETURNS CHAR (INPUT icInput AS CHAR):
 
 END. /* FUNCTION fNotNull RETURNS CHAR (INPUT): */
 
-FUNCTION fCheckZeroDate RETURN CHAR (INPUT idInput AS DECIMAL):
-
-   IF IdInput EQ 0 THEN RETURN "".
-   ELSE RETURN fNotNull(STRING(idInput)).  
-
-END.
-
-
 OUTPUT STREAM slog TO VALUE(lcLogFile).
 
-FOR EACH DMSDoc NO-LOCK:
+FOR EACH TopupSchemeRow NO-LOCK:
 
    liEvents = liEvents + 1.
 
    IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN DO:
       PAUSE 0.
-      DISP liEvents LABEL "DMSDoc" 
+      DISP liEvents LABEL "TopupSchemeRow" 
       WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
          TITLE " Collecting " FRAME fQty.
    END. /* IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN DO: */
 
    PUT STREAM slog UNFORMATTED
-       "DMSDoc"                                 lcDel
-       "CREATE"                                 lcDel
-       fNotNull(STRING(RECID(DMSDoc)))          lcDel
-       fNotNull(STRING(DMSDoc.DMSID)          + CHR(255) +
-                DMSDoc.DocTypeID              + CHR(255) +
-                fCheckZeroDate(DMSDoc.DMSStatusTS))  + lcDel
-       fNotNull(STRING(ldtTimeStamp))           lcDel
-       fNotNull(STRING(DMSDoc.DMSID))           lcDel
-       fNotNull(DMSDoc.DocTypeID)               lcDel
-       fNotNull(DMSDoc.DocTypeDesc)             lcDel
-       fNotNull(DMSDoc.DocStatusCode)           lcDel
-       fNotNull(DMSDoc.DocRevComment)           lcDel
-       fCheckZeroDate(DMSDoc.DMSStatusTS)     SKIP.
+       "TopupSchemeRow"                                     lcDel
+       "CREATE"                                             lcDel
+       fNotNull(STRING(RECID(TopupSchemeRow)))              lcDel
+       fNotNull(STRING(TopupSchemeRow.TopupSchemeRowID))    lcDel
+       fNotNull(STRING(ldtTimeStamp))                       lcDel
+       fNotNull(TopupSchemeRow.TopupScheme)                 lcDel
+       fNotNull(STRING(TopupSchemeRow.Amount))              lcDel
+       fNotNull(TopupSchemeRow.BillCode)                    lcDel
+       fNotNull(STRING(TopupSchemeRow.DiscountAmount))      lcDel
+       fNotNull(TopupSchemeRow.DiscountBillCode)            lcDel
+       fNotNull(STRING(TopupSchemeRow.BeginStamp))          lcDel
+       fNotNull(STRING(TopupSchemeRow.EndStamp))            lcDel
+       fNotNull(STRING(TopupSchemeRow.TopupSchemeRowID))    lcDel
+       fNotNull(STRING(TopupSchemeRow.DisplayAmount))       SKIP.
+
 END.
 
 OUTPUT STREAM slog CLOSE.
@@ -79,3 +73,4 @@ IF NOT SESSION:BATCH THEN
 
 /* Move the report to Transfer directory */
 fMove2TransDir(lcLogFile, ".txt", lcOutDir).
+
