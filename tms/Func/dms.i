@@ -5,6 +5,8 @@
 {commali.i}
 {tmsparam4.i}
 {timestamp.i}
+{replog_reader.i}
+{cparam2.i}
 
 ASSIGN
    katun   = "Cron"
@@ -146,3 +148,114 @@ FUNCTION fDMSOnOff RETURNS LOGICAL:
    IF liOnOff EQ 1 THEN RETURN TRUE.
    ELSE RETURN FALSE.
 END.
+
+
+FUNCTION fSendToMQ RETURNS CHAR
+   (icMsg AS CHAR):
+   RUN pInitialize(INPUT "dms").
+
+   IF RETURN-VALUE > "" THEN DO:
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+      LOG-MANAGER:WRITE-MESSAGE(RETURN-VALUE, "ERROR").
+
+         RETURN RETURN-VALUE.
+   END.
+
+   /* Call ActiveMQ Publisher class */
+   lMsgPublisher = NEW Gwy.MqPublisher(lcHost,liPort,
+                                       liTimeOut,"angela_in",
+                                       lcUserName,lcPassword).
+
+   IF NOT VALID-OBJECT(lMsgPublisher) THEN DO:
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+         LOG-MANAGER:WRITE-MESSAGE("ActiveMQ Publisher handle not found",
+                                    "ERROR").
+
+   END.
+
+   IF NOT lMsgPublisher:send_message(icMsg) THEN
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+         LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+   
+
+   RUN pFinalize(INPUT "").
+
+
+END.
+
+
+/*Function sends SMS and EMAIL generating information to WEB if it is needed*/
+FUNCTION fSendChangeInformation RETURNS CHAR
+   (icStatus AS CHAR,
+    icOrderID AS INT):
+
+   DEF BUFFER Order FOR Order.
+   DEF BUFFER OrderCustomer FOR OrderCustomer.
+
+   DEF VAR lcNotifCaseID AS CHAR NO-UNDO.
+   DEF VAR lcParam AS CHAR NO-UNDO.
+   DEF VAR lcMessage AS CHAR NO-UNDO.
+   DEF VAR lcMSISDN AS CHAR NO-UNDO.
+   DEF VAR lcContractID AS CHAR NO-UNDO.
+   DEF VAR lcDNIType AS CHAR NO-UNDO.
+   DEF VAR lcDNI AS CHAR NO-UNDO.
+   DEF VAR lcFname AS CHAR NO-UNDO.
+   DEF VAR lcLname AS CHAR NO-UNDO.
+   DEF VAR lcEmail AS CHAR NO-UNDO.
+   DEF VAR lcDeposit AS CHAR NO-UNDO.
+   DEF VAR lcBankAcc AS CHAR NO-UNDO.
+
+   /*Read Parameter that defines case ID*/
+   lcParam = "DMSMsgID_" + icStatus. /*DMSMsgIF_E -> returns 03 as specified.*/
+   lcNotifCaseID = fCParam("DMS",lcParam).
+
+   IF lcNotifCaseID EQ "" THEN RETURN "". /*No actions for the case*/
+
+   /*search data for message*/
+   FIND FIRST Order NO-LOCK WHERE
+              Order.Brand EQ gcBrand AND
+              Order.OrderId EQ icOrderID NO-ERROR.
+   IF NOT AVAIL Order THEN RETURN "DMS Notif: No Order available".
+
+   FIND FIRST OrderCustomer NO-LOCK WHERE
+              Order.Brand EQ gcBrand AND
+              Order.OrderId EQ icOrderID AND
+              OrderCustomer.RowType EQ 1 NO-ERROR.
+   IF NOT AVAIL Order THEN RETURN "DMS Notif: No OrderCustomer available".
+
+
+
+   lcMSISDN = fNotNull(OrderCustomer.ContactNum).
+   lcContractID = fNotNull(Order.ContractId).
+   lcDNIType = fNotNull(OrderCustomer.CustIdType).
+   lcDNI = fNotNull(OrderCustomer.CustId).
+   lcFname = fNotNull(OrderCustomer.FirstName).
+   lcLname = fNotNull(OrderCustomer.SurName1) +
+             fNotNull(Ordercustomer.SurName2).
+   lcEmail = fNotNull(OrderCustomer.Email).
+   lcDeposit = fNotNull("MISSING").
+   lcBankAcc = fNotNull(OrderCustomer.BankCode).
+
+
+   /*Fill data for message.*/
+   lcMessage = "~{" + "~"metadata~""  + "~:" + "~"" + "~{" +
+                         "~"case~""  + "~:" + "~"" + lcNotifCaseID  + "~"" +
+                     "~}" + "," +
+                      "~"data~"" + "~:" + "~{" +
+                         "~"msisdn~""   + "~:" + "~"" + lcMSISDN + "~"" + "," +
+                         "~"contractid~"" +  "~:" + "~"" +
+                                     lcContractID + "~"" + "," +
+                         "~"dni_type~"" +  "~:" + "~"" + lcDNIType + "~"" + "," +
+                         "~"dni~""      +  "~:" + "~"" + lcFname + "~"" + "," +
+                         "~"fname~""    +  "~:" + "~"" + lcLname + "~"" + "," +
+                         "~"lname~""    +  "~:" + "~"" + lcEmail + "~"" + "," +
+                         "~"deposit_amount~""   +  "~:" + "~"" +
+                                      lcDeposit + "~"" + "," +
+                         "~"bank_account_number~"" +  "~:" + "~"" +
+                                      lcBankAcc + "~"" +
+                      "~}" +
+                 "~}".
+   RETURN fSendToMQ(lcMessage).
+END.
+
+
