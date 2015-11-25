@@ -183,7 +183,7 @@ IF pcDelType = "SMS" THEN DO:
    IF ldeOrderStamp = ? THEN ldeOrderStamp = fMakeTS().
 
    fCreateSMS(liCustnum,
-              lcCLI,
+              lcDelValue,
               liMsSeq,
               liOrderId,
               lcSMSText,
