@@ -271,7 +271,10 @@ ELSE IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN DO:
         Customer.Custnum = Order.Custnum NO-ERROR.
 
    CASE Order.OrderChannel:
-      WHEN "renewal" OR WHEN "renewal_telesales" OR WHEN "retention" THEN DO:
+      WHEN "renewal" OR
+      WHEN "renewal_telesales" OR
+      WHEN "retention" OR
+      WHEN "renewal_ctc" THEN DO:
          IF fCheckRenewalData() = TRUE OR OrderCustomer.DataChecked NE ? THEN
             lcNewStatus =  {&ORDER_STATUS_RENEWAL}.
          ELSE DO:

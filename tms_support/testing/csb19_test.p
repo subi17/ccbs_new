@@ -310,7 +310,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          NEXT.
       END.
       
-      RUN /apps/yoigo/tms_support/testing/ddoutfileco_test_SCHEMA.p (lcInvGroup,
+      RUN /apps/yoigo/tms_support/testing/ddoutfileco_test_BANKSPLIT.p(lcInvGroup,
                        liCustNum[1],
                        liCustNum[2],
                        lcInvID[1],
@@ -326,7 +326,6 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                        0,
                        0,
                        lcCSBMOde,
-                       TRUE,           /* XML Schema Validation */
                        OUTPUT liCount,
                        OUTPUT liFiles,
                        OUTPUT lcError).
