@@ -71,6 +71,7 @@ IF fValidateMobTypeCh(
    FALSE, /* extend contract */
    TRUE, /* bypass stc type check */
    0, /* stc order id */
+   "",
    OUTPUT lcError) EQ FALSE THEN RETURN lcError.
 
 IF fValidateNewCliType(INPUT lcCLIType, INPUT lcBundleID,

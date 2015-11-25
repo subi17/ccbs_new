@@ -766,7 +766,7 @@ FUNCTION fDelivSIM RETURNS LOG
       IF SIM.ICC = MobSub.ICC THEN ttOneDelivery.ICCNum = "".
 
       /* Channel information */
-      IF LOOKUP(Order.OrderChannel,"renewal_telesales,retention") > 0 THEN
+      IF LOOKUP(Order.OrderChannel,"renewal_telesales,retention,renewal_ctc") > 0 THEN
          ttOneDelivery.SalesChan = "06".
       ELSE
          ttOneDelivery.SalesChan = "05".

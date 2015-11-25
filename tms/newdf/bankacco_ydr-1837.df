@@ -1,0 +1,16 @@
+ADD FIELD "BankCodes" OF "BankAccount" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "BankCodes"
+  COLUMN-LABEL "BankCodes"
+  HELP "Bank codes"
+  ORDER 120
+
+ADD FIELD "DDAllocation" OF "BankAccount" AS decimal 
+  FORMAT "Z9.99"
+  INITIAL "0"
+  LABEL "DDAllocation"
+  COLUMN-LABEL "DDAllocation"
+  HELP "Direct debit allocation value"
+  DECIMALS 2
+  ORDER 130

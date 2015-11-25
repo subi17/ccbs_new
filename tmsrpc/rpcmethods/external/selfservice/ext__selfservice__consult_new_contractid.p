@@ -30,6 +30,7 @@ ASSIGN katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId
 {forderstamp.i}
 {fgettxt.i}
 {fmakesms.i}
+{smsmessage.i}
 {fmakemsreq.i}
 {fexternalapi.i}
 
@@ -56,6 +57,10 @@ DEFINE VARIABLE llOngoing               AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE llDelivered             AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE llClose                 AS LOGICAL   NO-UNDO.
 DEF VAR lcApplicationId AS CHAR NO-UNDO. 
+DEFINE VARIABLE liCustNum               AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liMsSeq                 AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liOrderId               AS INTEGER   NO-UNDO.
+
 
 pcReqList = validate_request(param_toplevel_id, "string,string,string,[string]").
 IF pcReqList EQ ? THEN RETURN.
@@ -114,6 +119,10 @@ FOR EACH OrderCustomer WHERE
       ELSE IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN llClose = TRUE.
 
       lcCLI = Order.CLI.
+      liMsSeq = Order.MsSeq.
+      liOrderId = Order.OrderID.
+      liCustNum = OrderCustomer.Custnum.
+
    END. /* IF liCount = 1 THEN DO: */
 
    IF pcDelType = "EMAIL" THEN DO:
@@ -131,7 +140,7 @@ FOR EACH OrderCustomer WHERE
          lcDelValue = OrderCustomer.MobileNumber.
       lcReplaceText = lcReplaceText +
                       (IF lcReplaceText > "" THEN " - " ELSE "") +
-                      Order.ContractID + ", " + STRING(ldOrderDate) +
+                      Order.ContractID + ", del " + STRING(ldOrderDate) +
                       ", del " + Order.CLI.
    END. /* ELSE DO: */
 END. /* FOR EACH Order WHERE */
@@ -173,13 +182,13 @@ IF pcDelType = "SMS" THEN DO:
    ldeOrderStamp = DYNAMIC-FUNCTION("fMakeOfficeTS" in ghFunc1).
    IF ldeOrderStamp = ? THEN ldeOrderStamp = fMakeTS().
 
-   fMakeSchedSMS2(0,
-                  lcDelValue,
-                  9,
-                  lcSMSText,
-                  ldeOrderStamp,
-                  "622622622",
-                  "").
+   fCreateSMS(liCustnum,
+              lcDelValue,
+              liMsSeq,
+              liOrderId,
+              lcSMSText,
+              "Yoigo info",
+              {&SMS_TYPE_CONSULT}).
 
 END. /* IF pcDelType = "SMS" THEN DO: */
 ELSE DO:

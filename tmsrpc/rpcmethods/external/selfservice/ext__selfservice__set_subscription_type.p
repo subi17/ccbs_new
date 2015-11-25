@@ -117,6 +117,7 @@ IF fValidateMobTypeCh(
    FALSE, /* extend contract */
    FALSE, /* bypass stc type check */
    0, /* stc order id */
+   {&REQUEST_SOURCE_EXTERNAL_API},
    OUTPUT lcError) EQ FALSE THEN RETURN appl_err(lcError).
 
 IF fValidateNewCliType(INPUT pcCliType, INPUT pcDataBundleId,
