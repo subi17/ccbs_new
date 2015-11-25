@@ -55,7 +55,7 @@ END FUNCTION.
 
 FUNCTION fSendToMQ RETURNS CHAR
    (icMsg AS CHAR):
-   RUN pInitialize(INPUT "revolver").
+   RUN pInitialize(INPUT "dms").
 
    IF RETURN-VALUE > "" THEN DO:
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
@@ -67,7 +67,7 @@ FUNCTION fSendToMQ RETURNS CHAR
 
    /* Call ActiveMQ Publisher class */
    lMsgPublisher = NEW Gwy.MqPublisher(lcHost,liPort,
-                                       liTimeOut,"revolver",
+                                       liTimeOut,"angela_in",
                                        lcUserName,lcPassword).
 
    IF NOT VALID-OBJECT(lMsgPublisher) THEN DO:
@@ -134,15 +134,16 @@ FUNCTION fSendChangeInformation RETURNS CHAR
 
 
 
-   lcMSISDN = OrderCustomer.ContactNum.
-   lcContractID = Order.ContractId.
-   lcDNIType = OrderCustomer.CustIdType.
-   lcDNI = OrderCustomer.CustId.
-   lcFname = OrderCustomer.FirstName.
-   lcLname = OrderCustomer.SurName1 + Ordercustomer.SurName2.
-   lcEmail = OrderCustomer.Email.
-   lcDeposit = "MISSING".
-   lcBankAcc = OrderCustomer.BankCode.
+   lcMSISDN = fNotNull(OrderCustomer.ContactNum).
+   lcContractID = fNotNull(Order.ContractId).
+   lcDNIType = fNotNull(OrderCustomer.CustIdType).
+   lcDNI = fNotNull(OrderCustomer.CustId).
+   lcFname = fNotNull(OrderCustomer.FirstName).
+   lcLname = fNotNull(OrderCustomer.SurName1) + 
+             fNotNull(Ordercustomer.SurName2).
+   lcEmail = fNotNull(OrderCustomer.Email).
+   lcDeposit = fNotNull("MISSING").
+   lcBankAcc = fNotNull(OrderCustomer.BankCode).
            
  
 
