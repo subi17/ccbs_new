@@ -370,6 +370,29 @@ PROCEDURE pPeriodicalContract:
                END.
             END.
       END. /* IF bOrigRequest.ReqIParam5 EQ 2 ... */
+      /* YDR-2037 BEGIN */
+      IF NOT lbolSTCRenewSameDay THEN
+      DO:
+         RORDER_LOOP:
+         FOR EACH bOrder NO-LOCK WHERE
+            bOrder.MSSeq EQ bOrigRequest.MsSeq AND
+            LOOKUP(bOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) EQ 0 AND
+            bOrder.OrderType EQ {&ORDER_TYPE_RENEWAL}:
+            IF NOT CAN-FIND
+            (FIRST MsRequest NO-LOCK WHERE
+                   MsRequest.MsSeq      EQ bOrder.MsSeq AND
+                   MsRequest.Reqtype    EQ {&REQTYPE_REVERT_RENEWAL_ORDER} AND
+                   MsRequest.Reqstatus  EQ {&REQUEST_STATUS_DONE} AND
+                   MsRequest.ReqIParam1 EQ bOrder.OrderId) AND 
+            bOrigRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION}
+            THEN
+            DO:
+               lbolSTCRenewSameDay = TRUE.
+               LEAVE RORDER_LOOP.
+            END.
+         END.
+      END. /* IF NOT lbolSTCRenewSameDay THEN */
+      /* YDR-2037 END */
       /* YPR-1763 - Exclude PayTerm termination */
       IF AVAIL Order AND DayCampaign.DCType = "5" AND
          Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
