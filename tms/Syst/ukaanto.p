@@ -76,7 +76,7 @@ def temp-table wmodule no-undo
 case {&country}:
    when {&FIN} then assign
       rpath = "/frontapps"
-      rpath = "/tmsapps" when host = "hebe".
+      rpath = "/tmsapps" when host = "pallas".
 end.
 
 form
