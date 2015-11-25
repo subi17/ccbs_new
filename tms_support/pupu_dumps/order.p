@@ -29,6 +29,9 @@ DEFINE VARIABLE liMnpStatusCode     AS INTEGER    NO-UNDO INIT ?.
 DEFINE VARIABLE ldMnpCreateStamp    AS DECIMAL    NO-UNDO INIT ?.
 DEFINE VARIABLE lcMnpStatusReason   AS CHARACTER  NO-UNDO.
 
+DEFINE VARIABLE liOnlySimAmt        AS INTEGER    NO-UNDO.
+DEFINE VARIABLE lcTopUpScheme       AS CHARACTER  NO-UNDO.
+
 {cparam2.i}
 {timestamp.i}
 {ftransdir.i}
@@ -185,6 +188,38 @@ FOR EACH Order WHERE
 
       IF AVAIL OfferItem THEN
          lcTermContr = OfferItem.ItemKey.
+      
+      /* TopUp  */
+      FOR EACH OfferItem NO-LOCK WHERE
+               OfferItem.Brand       = gcBrand AND
+               OfferItem.Offer       = Order.Offer AND
+               OfferItem.ItemType    = "BillItem" AND
+               OfferItem.EndStamp   >= Order.CrStamp AND
+               OfferItem.BeginStamp <= Order.CrStamp,
+         FIRST BillItem NO-LOCK WHERE
+               BillItem.Brand    = gcBrand AND
+               BillItem.BillCode = OfferItem.ItemKey,
+         FIRST BitemGroup NO-LOCK WHERE
+               BitemGroup.Brand   = gcBrand AND
+               BitemGroup.BIGroup = BillItem.BIGroup AND
+               BItemGroup.BIGroup EQ "9":
+
+            liOnlySimAmt = OfferItem.Amount.
+            LEAVE.
+      END.
+
+      FOR FIRST OfferItem NO-LOCK WHERE
+                OfferItem.Brand       = gcBrand AND
+                OfferItem.Offer       = Order.Offer AND
+                OfferItem.ItemType    = "TopUp" AND
+                OfferItem.EndStamp   >= Order.CrStamp AND
+                OfferItem.BeginStamp <= Order.CrStamp,
+         FIRST TopupScheme NO-LOCK WHERE
+               TopupScheme.Brand       = gcBrand AND
+               TopupScheme.TopupScheme = OfferItem.ItemKey:
+         
+         lcTopUpScheme = TopupScheme.TopupScheme.
+      END.
 
    END.
 
@@ -234,7 +269,9 @@ FOR EACH Order WHERE
                       fNotNull(STRING(Order.PortingDate))      + lcDel +
                       fNotNull(STRING(ldMnpUpdateSt))          + lcDel +
                       fNotNull(STRING(ldMnpCreateStamp))       + lcDel +
-                      fNotNull(lcMnpStatusReason).
+                      fNotNull(lcMnpStatusReason)              + lcDel +
+                      fNotNull(STRING(liOnlySimAmt))           + lcDel +
+                      fNotNull(lcTopUpScheme).
 
    IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN DO:
       PAUSE 0.

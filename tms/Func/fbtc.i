@@ -48,6 +48,7 @@ FUNCTION fBundleChangeRequest RETURNS INTEGER
    RUN requestaction_check.p(INPUT {&REQTYPE_BUNDLE_CHANGE},
                            INPUT bMobSub.CLIType,
                            INPUT bMobsub.MsSeq,
+                           INPUT icSource,
                            OUTPUT ocResult).
    IF ocResult > "" THEN RETURN 0.
 
