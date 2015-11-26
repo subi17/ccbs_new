@@ -76,7 +76,7 @@ FUNCTION fUpdateDMS RETURNS CHAR
                  Order.OrderID = iiHostId NO-ERROR.
       IF AVAILABLE Order THEN DMS.OrderStatus = Order.StatusCode.
    END.
-   ELSE DMS.OrderStatus = icOrderstatus.
+   ELSE IF icOrderStatus NE "" THEN DMS.OrderStatus = icOrderstatus.
 
    IF NOT NEW DMS THEN
       BUFFER-COMPARE DMS TO ttDMS SAVE RESULT IN llCompare.
