@@ -149,9 +149,10 @@ FOR EACH Order WHERE
              ldTermAmt          = OrderAccessory.Amount
              ldTermDiscount     = OrderAccessory.Discount.
    /* MNP requests  */
-   FOR EACH MNPProcess WHERE
-            MNPProcess.OrderId = Order.OrderId
-            NO-LOCK BY CrStamp DESC:
+   FOR EACH MNPProcess NO-LOCK WHERE
+            MNPProcess.OrderId = Order.OrderId AND
+            MNPProcess.MNPType = {&MNP_TYPE_IN}
+            BY MNPProcess.CreatedTS DESC:
       ASSIGN lcFormRequest     = MNPProcess.FormRequest
              lcPortRequest     = MNPProcess.PortRequest
              ldPortingTime     = MNPProcess.PortingTime
