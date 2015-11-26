@@ -81,6 +81,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
    DEF VAR liRT AS Int NO-UNDO.
    DEF VAR liStampTypeCount AS INT NO-UNDO.
    DEF VAR lcStampTypes AS CHAR NO-UNDO.
+   DEF VAR lcCancelTypeList AS CHAR NO-UNDO.
 
    llgOrderSeek = FALSE.
    llgDirectNeeded = FALSE.
@@ -180,10 +181,22 @@ FUNCTION fMakeTempTable RETURNS CHAR
                     Order.StatusCode EQ {&ORDER_STATUS_AUTO_CLOSED} THEN DO:
                /*Send Cancel notif if TMS has sent other notif to DMS
                 (previous sending). NOTE: This is not allowed if DMS has notified the
-                cancellation(statuses E,J,F,N,G).*/
+                cancellation(statuses E,J,F,N,G).
+                Also cancellations are filtered by OrderStatus so that only specific
+                orders are allowed to produce cancellations.
+                */
+               lcCancelTypeList =  SUBST("&1,&2,&3,&4,&5",
+                  {&ORDER_STATUS_RENEWAL_STC_COMPANY},
+                  {&ORDER_STATUS_MORE_DOC_NEEDED},
+                  {&ORDER_STATUS_COMPANY_NEW},
+                  {&ORDER_STATUS_COMPANY_MNP},
+                  {&ORDER_STATUS_DELIVERED}).
+
+
                FIND FIRST DMS NO-LOCK WHERE
                           DMS.ContractID EQ Order.ContractID AND 
-                           LOOKUP(DMS.StatusCode, "E,J,F,N,G") = 0 
+                           LOOKUP(DMS.StatusCode, "E,J,F,N,G") = 0 AND
+                           LOOKUP(DMS.OrderStatus, lcCancelTypeList) > 0
                            NO-ERROR.
                IF AVAIL DMS THEN DO:
                   lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
@@ -1035,7 +1048,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*.MSISDN*/
             STRING(MsRequest.CLI)                           + lcDelim +
             /*.ACC_Request_date*/
-            fPrintDate(MsRequest.ReqDparam1)                + lcDelim +
+            fPrintDate(MsRequest.CreStamp)                  + lcDelim +
             /*.Current Tariff*/
             lcTariff.
          END.
@@ -1052,7 +1065,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*MSISDN*/
             STRING(MsRequest.CLI)                           + lcDelim +
             /*STC_Request_date*/
-            fPrintDate(MsRequest.ActStamp)                + lcDelim +
+            fPrintDate(MsRequest.CreStamp)                  + lcDelim +
             /*Previous_Tariff*/            
             STRING(MsRequest.ReqCparam1)                    + lcDelim +
             /*New_Tariff*/
@@ -1090,7 +1103,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*MSISDN*/
             STRING(MsRequest.CLI)                           + lcDelim +
             /*STC_Request_date*/
-            fPrintDate(MsRequest.ReqDparam1)                + lcDelim +
+            fPrintDate(MsRequest.CreStamp)                  + lcDelim +
             /*Previous_Tariff*/            
             lcTariff                                        + lcDelim +
             /*New_Tariff*/
