@@ -1,0 +1,8 @@
+ADD FIELD "TariffActTS" OF "MobSub" AS decimal 
+  FORMAT "999999.99999"
+  INITIAL "0"
+  LABEL "TariffActTS"
+  COLUMN-LABEL "TariffActTS"
+  HELP "Tariff activation time stamp"
+  DECIMALS 2
+  ORDER 890
