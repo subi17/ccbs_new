@@ -25,13 +25,10 @@
 {ftaxdata.i}
 {fsubstermreq.i}
 {fbankdata.i}
-{fbtc.i}
 
 DEFINE INPUT PARAMETER iiMSrequest  AS INTEGER   NO-UNDO.
 
 DEFINE VARIABLE ldCurrTS            AS  DECIMAL   NO-UNDO.
-
-DEFINE BUFFER bMSRequest FOR MsRequest.
 
 FIND FIRST MSRequest WHERE
            MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
@@ -101,17 +98,12 @@ DEFINE VARIABLE lcALLPostpaidBundles   AS CHAR    NO-UNDO.
 DEFINE VARIABLE liDSSMsSeq             AS INT     NO-UNDO.
 DEFINE VARIABLE lcAllowedDSS2SubsType  AS CHAR    NO-UNDO.
 DEFINE VARIABLE lcBundleId             AS CHAR    NO-UNDO.
-DEFINE VARIABLE lcBankAccount          AS CHAR    NO-UNDO.
-DEF    VAR      lcInfo                 AS CHARACTER NO-UNDO.
-DEF VAR lbolSTCRequestFound        AS LOGICAL NO-UNDO.
-DEF VAR lbolBTCRequestFound        AS LOGICAL NO-UNDO.
-DEF VAR lbolIsUpgradeUpsell        AS LOGICAL NO-UNDO.
+DEFINE VARIABLE lcBankAccount          AS CHAR    NO-UNDO. 
 
 DEFINE BUFFER bSubMsRequest  FOR MsRequest.
 DEFINE BUFFER bTermMsRequest FOR MsRequest.
 DEFINE BUFFER bMsRequest     FOR MsRequest.
 DEFINE BUFFER bOrder         FOR Order.
-DEFINE BUFFER bRenewalOrder  FOR Order.
 DEFINE BUFFER lbMobSub       FOR MobSub.
 
 IF MsRequest.ReqStatus <> 6 THEN RETURN.
@@ -696,92 +688,7 @@ DO TRANSACTION:
          fMarkOrderStamp(Order.OrderID,
                          "Delivery",
                          MsRequest.ActStamp).
-        /* YDR-2037
-          Restore STC/BTC request by finding a 
-          cancelled STC/BTC request
-          * Subscription has been terminated due to MNP OUT reason
-          * STC/BTC request has been cancelled due to subscription termination
-         */
-         ASSIGN
-            lbolSTCRequestFound = FALSE
-            lbolBTCRequestFound = FALSE.
-         /* STC */
-        IF CAN-FIND(FIRST MSRequest WHERE
-                   MSRequest.MsSeq       EQ Mobsub.MsSeq AND
-                   MSRequest.ReqType     EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                   MSRequest.ReqStatus   EQ {&REQUEST_STATUS_CANCELLED} AND
-                   MSRequest.ActStamp    <  Msrequest.ActStamp) THEN
-        lbolSTCRequestFound = TRUE.           
-        /* BTC */
-        IF NOT lbolSTCRequestFound THEN
-        IF CAN-FIND(FIRST MSRequest WHERE
-                   MSRequest.MsSeq       EQ Mobsub.MsSeq AND
-                   MSRequest.ReqType     EQ {&REQTYPE_BUNDLE_CHANGE} AND
-                   MSRequest.ReqStatus   EQ {&REQUEST_STATUS_CANCELLED} AND
-                   MSRequest.ActStamp    <  Msrequest.ActStamp) THEN
-        lbolBTCRequestFound = TRUE.           
-        /* Termination request */
-        FOR EACH bMSRequest NO-LOCK WHERE
-                   bMSRequest.MsSeq       EQ Mobsub.MsSeq AND
-                   bMSRequest.ReqType     EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-                   bMSRequest.ReqStatus   EQ {&REQUEST_STATUS_DONE} AND
-                   bMSRequest.ReqCParam3  EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) AND
-                   MSRequest.ActStamp    <  Msrequest.ActStamp
-                   BREAK BY bMSRequest.ActStamp DESC:
-           IF FIRST(bMSRequest.ActStamp) THEN LEAVE.
-        END. /* FOR EACH bMSRequest */
-        /* renewal order exists with the same creation date
-           as cancelled STC request creation date */
-        FIND FIRST bRenewalOrder NO-LOCK WHERE
-                   bRenewalOrder.MSSeq     EQ bMSRequest.MsSeq AND
-                   LOOKUP(bRenewalOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) EQ 0 AND
-                   bRenewalOrder.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
-                   TRUNCATE(bRenewalOrder.CrStamp,0) EQ TRUNCATE(bMSRequest.CreStamp,0)
-        NO-ERROR.
-        /*  create a new request with the same input parameters */
-        IF AVAILABLE bRenewalOrder AND
-           AVAILABLE bMSRequest THEN
-        DO:
-           IF lbolSTCRequestFound THEN   
-           liRequest = fCTChangeRequest(
-             bMSRequest.MsSeq,        /* Subscription */
-             bMSRequest.ReqCParam1,   /* CLIType */
-             bMSRequest.ReqCparam5,   /* BundleType */
-             bMSRequest.ReqCparam3,   /* BankNumber */
-             bMSRequest.ReqDParam1,   /* ChgStamp */
-             bMSRequest.ReqIParam1,   /* CreditCheck */
-             bMSRequest.ReqIParam5,   /* RequestFlags */
-             bMSRequest.Salesman,     /* Salesman */
-             bMSRequest.CreateFees,   /* CreateFees */
-             IF bMSRequest.SendSMS EQ 1 THEN TRUE ELSE FALSE, /* SendSMS */
-             bMSRequest.UserCode,     /* Creator */
-             bMSRequest.ReqDParam2,   /* Fee */
-             bMSRequest.ReqSource,    /* RequestSource */
-             bMSRequest.ReqIParam2,   /* OrderId */
-             bMSRequest.OrigRequest,  /* Father request id */
-             bMSRequest.ReqCparam6,   /* For DMS usage contract_id */
-             OUTPUT lcInfo).
-           lbolIsUpgradeUpsell = IF bMSRequest.ReqCParam5 EQ 
-              (bMSRequest.ReqCParam1 + "TO" + bMSRequest.ReqCParam2)
-              THEN TRUE ELSE FALSE.
-           IF lbolBTCRequestFound THEN  
-           liRequest = fBundleChangeRequest(
-              bMSRequest.MsSeq,        /* Subscription */
-              bMSRequest.ReqCParam1,   /* old (current) bundle */ 
-              bMSRequest.ReqCParam2,   /* new bundle */
-              fMakeTS(),               /* When request should be handled */
-              bMSRequest.ReqSource,    /* RequestSource */
-              bMSRequest.UserCode,     /* Creator */ 
-              bMSRequest.CreateFees,   /* CreateFees */    
-              bMSRequest.OrigRequest,  /* main request */
-              (IF bMSRequest.Mandatory 
-              EQ 1 THEN TRUE ELSE FALSE), /* is subrequest mandatory */
-              lbolIsUpgradeUpsell,     /* is upgrade upsell */
-              bMSRequest.ReqIParam5,   /* extend terminal contract */
-              bMSRequest.ReqCparam6,   /* For DMS usage, contract_id */
-              OUTPUT lcInfo).
-        END.
-        /* YDR-2037 */
+
          /* Re-launch retention order if present */
          FIND FIRST OrderAction WHERE
                     OrderAction.Brand    = gcBrand AND
