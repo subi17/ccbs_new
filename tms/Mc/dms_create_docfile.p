@@ -1048,7 +1048,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*.MSISDN*/
             STRING(MsRequest.CLI)                           + lcDelim +
             /*.ACC_Request_date*/
-            fPrintDate(MsRequest.ReqDparam1)                + lcDelim +
+            fPrintDate(MsRequest.CreStamp)                  + lcDelim +
             /*.Current Tariff*/
             lcTariff.
          END.
@@ -1065,7 +1065,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*MSISDN*/
             STRING(MsRequest.CLI)                           + lcDelim +
             /*STC_Request_date*/
-            fPrintDate(MsRequest.ActStamp)                + lcDelim +
+            fPrintDate(MsRequest.CreStamp)                  + lcDelim +
             /*Previous_Tariff*/            
             STRING(MsRequest.ReqCparam1)                    + lcDelim +
             /*New_Tariff*/
@@ -1103,7 +1103,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*MSISDN*/
             STRING(MsRequest.CLI)                           + lcDelim +
             /*STC_Request_date*/
-            fPrintDate(MsRequest.ReqDparam1)                + lcDelim +
+            fPrintDate(MsRequest.CreStamp)                  + lcDelim +
             /*Previous_Tariff*/            
             lcTariff                                        + lcDelim +
             /*New_Tariff*/
