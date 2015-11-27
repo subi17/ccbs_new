@@ -40,9 +40,10 @@ DEF VAR lcApplicationId  AS CHAR NO-UNDO.
 DEF VAR lcAppEndUserId   AS CHAR NO-UNDO.
 
 /* common validation */
-IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
 
-ASSIGN pcCLI = get_string(param_toplevel_id,"0").
+ASSIGN pcTransId  = get_string(param_toplevel_id,"0")
+       pcCLI      = get_string(param_toplevel_id,"1").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
