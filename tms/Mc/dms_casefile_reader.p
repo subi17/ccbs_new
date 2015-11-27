@@ -134,7 +134,7 @@ FUNCTION fFindDeposit RETURNS CHAR
          iSeekE = INDEX(lcDocTypeDesc, ">").  
          IF iSeekS EQ 0 OR iSeekE EQ 0 OR iSeekS > iSeekE
             THEN RETURN "". /*incorrect format*/
-         RETURN SUBSTR(lcDocTypeDesc,(iSeekE - iSeekS - 1)).
+         RETURN SUBSTR(lcDocTypeDesc,(iSeekS + 1),(iSeekE - iSeekS - 1)).
       END.
    END.
    RETURN "".

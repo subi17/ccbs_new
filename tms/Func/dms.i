@@ -207,6 +207,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    DEF VAR lcLname AS CHAR NO-UNDO.
    DEF VAR lcEmail AS CHAR NO-UNDO.
    DEF VAR lcBankAcc AS CHAR NO-UNDO.
+   DEF VAR lcSeq AS CHAR NO-UNDO.
 
    /*Read Parameter that defines case ID*/
    lcParam = "DMSMsgID_" + icStatus. /*DMSMsgIF_E -> returns 03 as specified.*/
@@ -237,11 +238,14 @@ FUNCTION fSendChangeInformation RETURNS CHAR
              fNotNull(Ordercustomer.SurName2).
    lcEmail = fNotNull(OrderCustomer.Email).
    lcBankAcc = fNotNull(OrderCustomer.BankCode).
+   lcSeq = STRING(NEXT-VALUE(SMSSEQ)). /*read and increase SMSSEQ. The sequence must be 
+                                         reserved as ID for WEB&HPD*/
 
 
    /*Fill data for message.*/
    lcMessage = "~{" + "~"metadata~""  + "~:" + "~{" +
-                         "~"case~""  + "~:" + "~"" + lcNotifCaseID  + "~"" +
+                         "~"case~""  + "~:" + "~"" + lcNotifCaseID  + "~"," +
+                         "~"sms_seq~""  + "~:" + "~"" + lcSeq  + "~"" +
                      "~}" + "," +
                       "~"data~"" + "~:" + "~{" +
                          "~"msisdn~""   + "~:" + "~"" + lcMSISDN + "~"" + "," +
