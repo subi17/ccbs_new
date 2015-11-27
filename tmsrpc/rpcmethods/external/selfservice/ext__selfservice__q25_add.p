@@ -8,30 +8,21 @@ external_selfservice__q25_add.p
 */
 
 {xmlrpc/xmlrpc_access.i}
+DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 {commpaa.i}
 gcBrand = "1".
 {timestamp.i}
 {tmsconst.i}
 {fmakemsreq.i}
 {fsendsms.i}
+{fexternalapi.i}
 
 /* top_struct */
 DEF VAR top_struct        AS CHARACTER NO-UNDO.
 DEF VAR top_struct_fields AS CHARACTER NO-UNDO.
 
-/* q25_struct */
-DEF VAR lcusername    AS CHARACTER NO-UNDO. /* Quota 25 person who requests the change */
-DEF VAR limsseq       AS INTEGER   NO-UNDO. /* Quota 25 subscription id */
-DEF VAR liper_contract_id AS INTEGER   NO-UNDO. /* Quota 25 installment contract id */
 DEF VAR pcCLI             AS CHARACTER   NO-UNDO. /* MSISDN */
-DEF VAR pcQ25Struct       AS CHARACTER NO-UNDO. /* Quota 25 input struct */
-DEF VAR lcQ25Struct       AS CHARACTER NO-UNDO.
-
-/* memo_struct */
-DEF VAR lcmemo_title       AS CHARACTER NO-UNDO. /* Memo Title */
-DEF VAR lcmemo_content     AS CHARACTER NO-UNDO. /* Memo Content */
-DEF VAR pcmemoStruct       AS CHARACTER NO-UNDO. /* Memo input struct */
-DEF VAR lcmemoStruct       AS CHARACTER NO-UNDO.
+DEF VAR pcTransId         AS CHAR NO-UNDO. 
 
 DEF VAR liCreated        AS INTEGER   NO-UNDO.
 DEF VAR lcResult         AS CHARACTER NO-UNDO.
@@ -45,15 +36,20 @@ DEF VAR ldaQ25PeriodEndDate    AS DATE NO-UNDO.
 DEF VAR ldContractActivTS AS DECIMAL NO-UNDO.
 DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
 DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
+DEF VAR lcApplicationId  AS CHAR NO-UNDO.
+DEF VAR lcAppEndUserId   AS CHAR NO-UNDO.
 
 /* common validation */
 IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 
 ASSIGN pcCLI = get_string(param_toplevel_id,"0").
-
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-katun = "Adapter".
+ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
+       lcAppEndUserId  = gbAuthLog.EndUserId.
+
+katun = fgetAppUserId(INPUT lcApplicationId, 
+                      INPUT lcAppEndUserId).
 
 FIND FIRST MobSub NO-LOCK WHERE
            Mobsub.brand = gcBrand AND
@@ -70,11 +66,9 @@ IF NOT AVAILABLE Customer THEN
 ASSIGN
    /* Possible Q25 period validto value should be between fisrt day of current
       month and last day of current month + 2 */
-   ldaQ25PeriodStartDate    = DATE(MONTH(TODAY),1, YEAR(TODAY))
+   ldaQ25PeriodStartDate    = DATE(MONTH(TODAY),1, YEAR(TODAY)) - 1
    ldaQ25PeriodEndDate    = ADD-INTERVAL(TODAY, 2, 'months':U)
-   ldaQ25PeriodEndDate    = DATE(MONTH(ldaQ25PeriodEndDate),
-                                 DAY(fLastDayOfMonth(ldaQ25PeriodEndDate)),
-                                 YEAR(ldaQ25PeriodEndDate)).
+   ldaQ25PeriodEndDate    = fLastDayOfMonth(ldaQ25PeriodEndDate).
 
 /* Find original installment contract */   
 FIND FIRST DCCLI NO-LOCK WHERE
@@ -137,6 +131,17 @@ IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                   DCCLI.ValidTo >= TODAY) THEN
    RETURN appl_err("Q25 extension already active").
 
+IF SingleFee.OrderId > 0 THEN DO:
+
+   FIND FIRST TermReturn NO-LOCK WHERE
+              TermReturn.OrderId = SingleFee.OrderId NO-ERROR.
+
+   IF AVAIL TermReturn AND 
+            TermReturn.DeviceScreen = TRUE AND
+            TermReturn.DeviceStart = TRUE THEN
+      RETURN appl_err("Already returned terminal").
+END.
+
 liCreated = fPCActionRequest(
    MobSub.MsSeq,
    "RVTERM12",
@@ -156,11 +161,23 @@ IF liCreated = 0 THEN
    RETURN appl_err(SUBST("Q25 extension request failed: &1",
                          lcResult)).
 
-
-lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
-                      TODAY,
-                      Customer.Language,
-                      OUTPUT ldeSMSStamp).
+CASE SingleFee.BillCode:
+   WHEN "RVTERM1EF" THEN
+      lcSMSTxt = fGetSMSTxt("Q25ExtensionUNOE",
+                            TODAY,
+                            Customer.Language,
+                            OUTPUT ldeSMSStamp).
+   WHEN "RVTERMBSF" THEN
+      lcSMSTxt = fGetSMSTxt("Q25ExtensionSabadell",
+                            TODAY,
+                            Customer.Language,
+                            OUTPUT ldeSMSStamp).
+   OTHERWISE 
+      lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
+                            TODAY,
+                            Customer.Language,
+                            OUTPUT ldeSMSStamp).
+END CASE.
 
 IF lcSMSTxt > "" THEN DO:
 
