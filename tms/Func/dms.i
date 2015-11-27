@@ -5,9 +5,9 @@
 {commali.i}
 {tmsparam4.i}
 {timestamp.i}
-{replog_reader.i}
 {cparam2.i}
 {tmsconst.i}
+{amq.i}
 
 ASSIGN
    katun   = "Cron"
