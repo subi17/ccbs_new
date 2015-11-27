@@ -2227,6 +2227,10 @@ IF INDEX(Order.OrderChannel, "pos") EQ 0 THEN DO:
            Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}    /*43*/  OR 
            Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW}    /*20*/  OR
            Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP}    /*21*/  THEN DO: 
+      FIND FIRST OrderCustomer WHERE
+                 OrderCustomer.Brand = gcBrand AND
+                 OrderCustomer.OrderId = Order.OrderId AND
+                 OrderCustomer.Rowtype = 1 NO-LOCK NO-ERROR.
       RUN sendorderreq.p(liOrderId, OrderCustomer.email, OUTPUT lcError). 
    END.
 END.

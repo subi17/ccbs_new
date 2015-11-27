@@ -34,10 +34,13 @@ DEF VAR lcEmailContent AS CHAR NO-UNDO.
 DEF VAR llErrors AS LOG NO-UNDO.
 DEF VAR liLanguage AS INT NO-UNDO.
 DEF VAR lcTransDir AS CHAR NO-UNDO.
+DEF VAR lcErrFile AS CHAR NO-UNDO.
 
 DEF TEMP-TABLE wError NO-UNDO
     FIELD Onbr   AS INT
     FIELD ErrMsg AS CHAR.
+
+DEF STREAM slog.
 
 FILE-INFO:FILE-NAME = icFile.
 IF FILE-INFO:FILE-TYPE = ? THEN DO:
@@ -166,7 +169,25 @@ IF NOT llErrors AND OrderCustomer.Email  > ""
    /* Send the email */
       SendMaileInvoice("", "", icOUTPUTFile).
 END.
+ELSE DO:
+   IF lcErrFile = "" THEN lcErrFile = "/tmp/prtxt".
 
+   ASSIGN lcErrFile  = lcErrFile + "_" +
+                               STRING(YEAR(TODAY),"9999") +
+                               STRING(MONTH(TODAY),"99")  +
+                               STRING(DAY(TODAY),"99")    +
+                               /*"_" + STRING(TIME) +*/ ".txt".
+
+   OUTPUT STREAM slog TO VALUE(lcErrFile) APPEND.
+   PUT STREAM slog UNFORMATTED
+       STRING(TODAY) + "_" + STRING(TIME) + "|" +
+       OrderCustomer.Email + "|" +
+       STRING(wError.onbr) + "|" + 
+       wError.ErrMsg.
+
+   OUTPUT STREAM slog CLOSE.
+
+END.
    /* move the file to archive directory */
    lcTransDir = fCParam("Printing","MailArcDir").
    IF lcTransDir > "" THEN
