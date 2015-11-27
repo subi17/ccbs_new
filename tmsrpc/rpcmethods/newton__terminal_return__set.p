@@ -74,6 +74,18 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF LENGTH(lcIMEI,"CHARACTER") NE 15 THEN
    RETURN appl_err("IMEI code doesn't contain 15 characters").
 
+IF CAN-FIND(FIRST TermReturn WHERE
+                  TermReturn.IMEI           = lcIMEI AND
+                  TermReturn.OrderId        = liOrderId AND
+                  TermReturn.BillCode       = lcBillCode AND
+                  TermReturn.MSISDN         = lcMSISDN AND
+                  TermReturn.DeviceStart    = llDeviceStart AND
+                  TermReturn.DeviceScreen   = llDeviceScreen AND
+                  TermReturn.Salesman       = lcSalesman AND
+                  TermReturn.TerminalType   = lcTerminalType AND
+                  TermReturn.EnvelopeNumber = lcEnvelopeNumber) THEN
+   RETURN appl_err("Terminal return data already received").
+
 IF llDeviceStart AND llDeviceScreen THEN DO:
    
    FIND Order NO-LOCK WHERE
@@ -87,7 +99,6 @@ IF llDeviceStart AND llDeviceScreen THEN DO:
    IF NOT AVAILABLE MobSub THEN
       RETURN appl_err("Unknown subscription").
 
-/*    
    IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN DO:
       IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                         DCCLI.Brand   EQ gcBrand AND
@@ -110,7 +121,6 @@ IF llDeviceStart AND llDeviceScreen THEN DO:
                         OrderAction.ItemType = "Q25Extension") THEN   
       RETURN appl_err("Q25 extension order is ongoing").
    END. 
-*/
 
    FIND SingleFee USE-INDEX Custnum WHERE
         SingleFee.Brand       = gcBrand AND
@@ -122,6 +132,9 @@ IF llDeviceStart AND llDeviceScreen THEN DO:
 
    IF NOT AVAILABLE SingleFee THEN
       RETURN appl_err("Discount creation failed (residual fee not found)").
+
+   IF SingleFee.Billed THEN
+      RETURN appl_err("Residual fee already billed").
 
    liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
                                      "RVTERMDT3DISC",
