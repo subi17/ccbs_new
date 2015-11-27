@@ -84,8 +84,10 @@ IF CAN-FIND(FIRST TermReturn WHERE
                   TermReturn.DeviceScreen   = llDeviceScreen AND
                   TermReturn.Salesman       = lcSalesman AND
                   TermReturn.TerminalType   = lcTerminalType AND
-                  TermReturn.EnvelopeNumber = lcEnvelopeNumber) THEN
-   RETURN appl_err("Terminal return data already received").
+                  TermReturn.EnvelopeNumber = lcEnvelopeNumber) THEN DO:
+   add_boolean(response_toplevel_id, "", true).
+   RETURN.
+END.
 
 IF llDeviceStart AND llDeviceScreen THEN DO:
    
