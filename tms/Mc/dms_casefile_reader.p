@@ -51,6 +51,15 @@ FUNCTION fLogLine RETURNS LOGICAL
       "DMS" SKIP.
 END FUNCTION.
 
+FUNCTION fLogMsg RETURNS LOGICAL
+   (icMessage AS CHAR):
+   PUT STREAM sLog UNFORMATTED
+      icMessage "#"
+      "DMS" SKIP.
+END FUNCTION.
+
+
+
 /*Is feature active:*/
 IF fDMSOnOff() NE TRUE THEN RETURN.
 
@@ -103,6 +112,35 @@ END.
 
 INPUT STREAM sFile CLOSE.
 
+FUNCTION fFindDeposit RETURNS CHAR
+   (icDocList AS CHAR,
+    icSep AS CHAR):
+   DEF VAR i             AS INT NO-UNDO.
+   DEF VAR iSeekS        AS INT NO-UNDO.   
+   DEF VAR iSeekE        AS INT NO-UNDO.
+   DEF VAR lcDocTypeId   AS CHAR NO-UNDO.
+   DEF VAR lcDocTypeDesc AS CHAR NO-UNDO.
+
+
+   IF icDocList EQ "" THEN RETURN "".
+
+   DO i = 1 TO NUM-ENTRIES(icDocList,icSep) BY 4:
+      lcDocTypeID     = ENTRY(i,icDocList,icSep).
+      /*Type 8 defines documentation:
+      Justificante pago deposito <300>*/
+      IF lcDocTypeId EQ "8" THEN DO:
+         lcDocTypeDesc   = ENTRY(i + 1,icDocList,icSep).
+         iSeekS = INDEX(lcDocTypeDesc, "<").
+         iSeekE = INDEX(lcDocTypeDesc, ">").  
+         IF iSeekS EQ 0 OR iSeekE EQ 0 OR iSeekS > iSeekE
+            THEN RETURN "". /*incorrect format*/
+         RETURN SUBSTR(lcDocTypeDesc,(iSeekE - iSeekS - 1)).
+      END.
+   END.
+   RETURN "".
+END.
+
+
 PROCEDURE pUpdateDMS:
 
    DEF INPUT PARAMETER pcLine AS CHAR NO-UNDO.
@@ -116,7 +154,10 @@ PROCEDURE pUpdateDMS:
    DEF VAR ldStatusTS      AS DEC  NO-UNDO.
    DEF VAR lcDocList       AS CHAR NO-UNDO.
    DEF VAR lcUpdateDMS     AS CHAR NO-UNDO.
- 
+   DEF VAR lcErr           AS CHAR NO-UNDO.
+   DEF VAR lcMSg           AS CHAR NO-UNDO.
+   DEF VAR lcDeposit       AS CHAR NO-UNDO.
+
    DEF BUFFER Order FOR Order.
 
    ASSIGN
@@ -128,7 +169,7 @@ PROCEDURE pUpdateDMS:
       lcStatusDesc    = ENTRY(6,pcLine,lcSep)
       ldStatusTS      = DECIMAL(ENTRY(7,pcLine,lcSep))
       lcDocList       = ENTRY(8,pcLine,lcSep).
-
+      
    FIND FIRST Order NO-LOCK WHERE
               Order.Brand EQ gcBrand AND
               Order.OrderID EQ liOrderId NO-ERROR.
@@ -146,7 +187,12 @@ PROCEDURE pUpdateDMS:
                             ldStatusTS,
                             lcDocList,
                             ";").
-   
+
+   lcDeposit = fFindDeposit(lcDocList, ";").                         
+   lcErr = fSendChangeInformation(lcStatusCode, liOrderId, lcDeposit, lcMsg).
+
+   fLogMsg("Msg : " + lcMsg + " #Status: " + lcErr).
+
    IF lcUpdateDMS <> "OK" THEN RETURN "ERROR:" + lcUpdateDMS + ":UPDATE".
    ELSE IF (lcCaseTypeID = {&DMS_CASE_TYPE_ID_ORDER_RESTUDY} OR
             lcCaseTypeID = {&DMS_CASE_TYPE_ID_COMPANY}) THEN DO:

@@ -7,6 +7,7 @@
 {timestamp.i}
 {replog_reader.i}
 {cparam2.i}
+{tmsconst.i}
 
 ASSIGN
    katun   = "Cron"
@@ -152,6 +153,7 @@ END.
 
 FUNCTION fSendToMQ RETURNS CHAR
    (icMsg AS CHAR):
+   DEF VAR lcRet AS CHAR NO-UNDO.
    RUN pInitialize(INPUT "dms").
 
    IF RETURN-VALUE > "" THEN DO:
@@ -160,26 +162,26 @@ FUNCTION fSendToMQ RETURNS CHAR
 
          RETURN RETURN-VALUE.
    END.
-
    /* Call ActiveMQ Publisher class */
    lMsgPublisher = NEW Gwy.MqPublisher(lcHost,liPort,
-                                       liTimeOut,"angela_in",
+                                       liTimeOut,{&DMS_MQ_ID}, 
                                        lcUserName,lcPassword).
 
    IF NOT VALID-OBJECT(lMsgPublisher) THEN DO:
-      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
-         LOG-MANAGER:WRITE-MESSAGE("ActiveMQ Publisher handle not found",
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN DO:
+            LOG-MANAGER:WRITE-MESSAGE("ActiveMQ Publisher handle not found",
                                     "ERROR").
-
+            lcRet = "ActiveMQ Publisher handle not found".
+      END.
    END.
-
-   IF NOT lMsgPublisher:send_message(icMsg) THEN
-      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+   ELSE IF NOT lMsgPublisher:send_message(icMsg) THEN DO:
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN DO:
          LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
-   
-
+         lcRet = "ActiveMQ message sending failed".
+      END.
+   END.
    RUN pFinalize(INPUT "").
-
+   RETURN lcRet.
 
 END.
 
@@ -187,7 +189,8 @@ END.
 /*Function sends SMS and EMAIL generating information to WEB if it is needed*/
 FUNCTION fSendChangeInformation RETURNS CHAR
    (icStatus AS CHAR,
-    icOrderID AS INT, 
+    icOrderID AS INT,
+    icDeposit AS CHAR,
     OUTPUT ocSentMessage AS CHAR):
 
    DEF BUFFER Order FOR Order.
@@ -203,7 +206,6 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    DEF VAR lcFname AS CHAR NO-UNDO.
    DEF VAR lcLname AS CHAR NO-UNDO.
    DEF VAR lcEmail AS CHAR NO-UNDO.
-   DEF VAR lcDeposit AS CHAR NO-UNDO.
    DEF VAR lcBankAcc AS CHAR NO-UNDO.
 
    /*Read Parameter that defines case ID*/
@@ -234,12 +236,11 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    lcLname = fNotNull(OrderCustomer.SurName1) +
              fNotNull(Ordercustomer.SurName2).
    lcEmail = fNotNull(OrderCustomer.Email).
-   lcDeposit = fNotNull("MISSING").
    lcBankAcc = fNotNull(OrderCustomer.BankCode).
 
 
    /*Fill data for message.*/
-   lcMessage = "~{" + "~"metadata~""  + "~:" + "~"" + "~{" +
+   lcMessage = "~{" + "~"metadata~""  + "~:" + "~{" +
                          "~"case~""  + "~:" + "~"" + lcNotifCaseID  + "~"" +
                      "~}" + "," +
                       "~"data~"" + "~:" + "~{" +
@@ -251,7 +252,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
                          "~"fname~""    +  "~:" + "~"" + lcLname + "~"" + "," +
                          "~"lname~""    +  "~:" + "~"" + lcEmail + "~"" + "," +
                          "~"deposit_amount~""   +  "~:" + "~"" +
-                                      lcDeposit + "~"" + "," +
+                                      icDeposit + "~"" + "," +
                          "~"bank_account_number~"" +  "~:" + "~"" +
                                       lcBankAcc + "~"" +
                       "~}" +

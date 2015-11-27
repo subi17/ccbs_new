@@ -646,6 +646,10 @@
 &GLOBAL-DEFINE DMS_HOST_TABLE_MSREQ "MsRequest"
 &GLOBAL-DEFINE DMS_VFR_REQUEST "retail_newton" 
 &GLOBAL-DEFINE DMS_ON_OFF "DMSOnOff"
+&GLOBAL-DEFINE DMS_MQ_ID "angela_in"
+
+
+
 
 /*Barring */
 /*Barring status*/
