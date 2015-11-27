@@ -401,7 +401,6 @@ DEF VAR ldeq25_discount   AS DECIMAL NO-UNDO. /* Discount amount over Quota 25 *
 DEF VAR liper_contract_id AS INTEGER NO-UNDO. /* installment contract id - Quota 25 */
 DEF VAR pcQ25Struct       AS CHAR NO-UNDO.    /* Quota 25 input struct */
 DEF VAR lcQ25Struct       AS CHAR NO-UNDO.    /* Quota 25 input struct */
-
 /*parameter s and variables for accessories*/
 
 DEF VAR pcAccessory AS CHAR NO-UNDO.
@@ -1247,20 +1246,20 @@ top_struct_fields = validate_request(top_struct,
 IF top_struct_fields EQ ? THEN RETURN.
 
 ASSIGN
-pcOrderStruct    = get_struct(top_struct, "order_data")
-pcCustomerStruct = get_struct(top_struct, "customer_data")
-pcAddressStruct  = get_struct(top_struct, "address_data") WHEN
-                      LOOKUP("address_data",top_struct_fields) > 0
-pcDeviceStruct   = get_struct(top_struct, "device_data") WHEN
-                      LOOKUP("device_data",top_struct_fields) > 0 
-pcContactStruct  = get_struct(top_struct, "contact_data") WHEN
-                      LOOKUP("contact_data",top_struct_fields) > 0
-pcFusionStruct   = get_struct(top_struct, "fusion_data") WHEN
-                      LOOKUP("fusion_data",top_struct_fields) > 0
-pcQ25Struct      = get_struct(top_struct, "q25_data") WHEN
-                      LOOKUP("q25_data",top_struct_fields) > 0
+pcOrderStruct     = get_struct(top_struct, "order_data")
+pcCustomerStruct  = get_struct(top_struct, "customer_data")
+pcAddressStruct   = get_struct(top_struct, "address_data") WHEN
+                       LOOKUP("address_data",top_struct_fields) > 0
+pcDeviceStruct    = get_struct(top_struct, "device_data") WHEN
+                       LOOKUP("device_data",top_struct_fields) > 0 
+pcContactStruct   = get_struct(top_struct, "contact_data") WHEN
+                       LOOKUP("contact_data",top_struct_fields) > 0
+pcFusionStruct    = get_struct(top_struct, "fusion_data") WHEN
+                       LOOKUP("fusion_data",top_struct_fields) > 0
 pcAccessoryStruct = get_struct(top_struct, "accessory_data") WHEN
-                       LOOKUP("accessory_data",top_struct_fields) > 0.
+                       LOOKUP("accessory_data",top_struct_fields) > 0
+pcQ25Struct      = get_struct(top_struct, "q25_data") WHEN
+                      LOOKUP("q25_data",top_struct_fields) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -1679,8 +1678,6 @@ IF pcQ25Struct > "" THEN DO:
 END.
 
 
-/****************************************************************/
-/*Validation before this!*/
 /* YBP-532 */
 /*********************************************************************
  Creation and Update begins (All the validations should be done before)

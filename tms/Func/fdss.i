@@ -69,10 +69,11 @@ FUNCTION fDSSRequest RETURNS INTEGER
 
    /* Pre-check only for CREATE, there is no ongoing ACC request */
    IF icAction = "CREATE" THEN DO:
-      RUN requestaction_check(INPUT {&REQTYPE_DSS},
-                              INPUT lcCLIType,
-                              INPUT iiMsSeq,
-                              OUTPUT ocResult).
+      RUN requestaction_check.p(INPUT {&REQTYPE_DSS},
+                                INPUT lcCLIType,
+                                INPUT iiMsSeq,
+                                INPUT icSource,
+                                OUTPUT ocResult).
       IF ocResult > "" THEN RETURN 0.
    END. /* IF icAction = "CREATE" THEN DO: */
 

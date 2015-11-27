@@ -153,13 +153,20 @@ DEF VAR llCancelledPrerenove AS LOG NO-UNDO.
 DEF VAR lcFinancedInfo AS CHAR NO-UNDO. 
 DEF VAR liOrderId AS INT NO-UNDO. 
 DEF VAR liQtyTFs AS INT NO-UNDO. 
+/* 
+YPR-2748
 DEF VAR installment_array AS CHAR NO-UNDO.
 DEF VAR installment_struct AS CHAR NO-UNDO. 
+ */
 DEF VAR llDefBarring       AS LOG NO-UNDO. 
 DEF VAR ldtFirstDay        AS DATE NO-UNDO.
+DEF VAR ldePendingFees AS DECIMAL NO-UNDO.
+DEF VAR liPeriod AS INT NO-UNDO. 
+DEF VAR ldaDate AS DATE NO-UNDO. 
 
 DEF BUFFER bServiceRequest FOR MSRequest.
 DEF BUFFER bMobSub FOR MobSub.
+DEF BUFFER bMobSubAmt FOR MobSub.
 
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 
@@ -493,8 +500,100 @@ IF liRemperiod > 0 THEN DO:
    add_double(top_struct, "contract_penalty", ldeCurrPen).
 END.
 
-/* add empty value for Web testing */
+/* q25 - Calculate allowed_terminal_financing_amount if risk limit is configured 
+   and collect all non invoiced installments and ongoing orders and return 
+   the difference of risk limit and pending all installment fee.*/
+ASSIGN
+   ldeAllowedFin = 0
+   ldePendingFees = 0
+   ldaDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
+   liPeriod = YEAR(ldaDate) * 100 + MONTH(ldaDate).
+
+FIND FIRST Limit NO-LOCK WHERE
+           Limit.CustNum   = Customer.Custnum AND
+           Limit.LimitType = {&LIMIT_TYPE_RISKLIMIT} AND
+           Limit.ToDate   >= TODAY NO-ERROR.
+IF NOT AVAILABLE Limit THEN ldeAllowedFin = ?.
+ELSE DO:
+   MOBSUB_LOOP:
+   FOR EACH bMobSubAmt NO-LOCK WHERE
+            bMobSubAmt.Brand = gcBrand AND
+            bMobSubAmt.CustNum = Customer.CustNum,
+      EACH DCCLI NO-LOCK WHERE
+           DCCLI.MsSeq = bMobSubAmt.MsSeq AND
+           DCCLI.ValidTo >= ldaDate AND
+          (DCCLI.DCEvent BEGINS "PAYTERM" OR
+           DCCLI.DCEvent BEGINS "RVTERM"):
+
+      FOR FIRST FixedFee NO-LOCK WHERE
+                FixedFee.Brand = gcBrand AND
+                FixedFee.Custnum = Customer.Custnum AND
+                FixedFee.HostTable = "MobSub" AND
+                FixedFee.KeyValue = STRING(bMobSubAmt.MsSeq) AND
+                FixedFee.EndPeriod >= liPeriod AND
+                FixedFee.SourceTable = "DCCLI" AND
+                FixedFee.SourceKey = STRING(DCCLI.PerContractID) AND
+               (FixedFee.BillCode BEGINS "PAYTERM" OR
+                FixedFee.BillCode BEGINS "RVTERM"):
+
+         FOR EACH FFItem OF FixedFee NO-LOCK:
+            IF FFItem.Billed AND
+              (FFItem.BillPeriod <= liPeriod OR
+               CAN-FIND(FIRST Invoice WHERE
+                              Invoice.InvNum = FFItem.InvNum AND
+                              Invoice.InvType = 1)) THEN NEXT.
+            ldePendingFees = ldePendingFees + FFItem.Amt.
+         END.
+
+         IF FixedFee.BillCode BEGINS "PAYTERM" THEN
+         FOR FIRST SingleFee NO-LOCK WHERE
+                   SingleFee.Brand       = gcBrand AND
+                   SingleFee.Custnum     = FixedFee.CustNum AND
+                   SingleFee.HostTable   = FixedFee.HostTable AND
+                   SingleFee.KeyValue    = FixedFee.KeyValue AND
+                   SingleFee.SourceTable = FixedFee.SourceTable AND
+                   SingleFee.SourceKey   = FixedFee.SourceKey AND
+                   SingleFee.CalcObj     = "RVTERM":
+            IF SingleFee.Billed = TRUE AND
+               CAN-FIND (FIRST Invoice NO-LOCK WHERE
+                               Invoice.InvNum  = SingleFee.InvNum AND
+                               Invoice.InvType = 1) THEN NEXT.
+               ldePendingFees = ldePendingFees + SingleFee.Amt.
+         END.
+      END.
+   END.
+
+   FOR EACH Order NO-LOCK WHERE
+            Order.Brand = gcBrand AND
+            Order.CustNum = Customer.CustNum and
+      LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0,
+      FIRST OfferItem NO-LOCK WHERE
+            OfferItem.Brand       = gcBrand AND
+            OfferItem.Offer       = Order.Offer AND
+            OfferItem.ItemType    = "PerContract" AND
+            OfferItem.ItemKey     BEGINS "PAYTERM" AND
+            OfferItem.EndStamp   >= Order.CrStamp  AND
+            OfferItem.BeginStamp <= Order.CrStamp:
+
+      ldePendingFees = ldePendingFees + OfferItem.Amount.
+
+      FOR FIRST FMItem NO-LOCK WHERE
+                FMItem.Brand     = gcBrand AND
+                FMItem.FeeModel  = OfferItem.ItemKey  AND
+                FMItem.ToDate   >= TODAY AND
+                FMItem.FromDate <= TODAY:
+          ldePendingFees = ldePendingFees + (FMItem.Amount * FMItem.FFItemQty).
+      END.
+
+   END.
+
+   ldeAllowedFin = Limit.LimitAmt - ldePendingFees.
+END.
 add_double(top_struct, "allowed_terminal_financing_amount", ldeAllowedFin).
+
+/* 
+YPR-2748
+Will be removed after making sure that everything is ok with Web.
 
 installment_array = add_array(top_struct, "installment").
 
@@ -525,6 +624,7 @@ FOR EACH  DCCLI WHERE
    END.
 END.
 add_int(top_struct,"TF_quantity",liQtyTFs).
+ */
 
 /* Return Subs. based bundle */
 add_string(top_struct, "subscription_bundle", MobSub.TariffBundle).

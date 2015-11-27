@@ -78,7 +78,10 @@ REPEAT:
    REPEAT:
 
       IMPORT STREAM sIn UNFORMATTED lcLine.
+
       IF lcLine EQ "" THEN NEXT.
+      
+      lcLine = CODEPAGE-CONVERT(lcLine, SESSION:CHARSET, "UTF-8").
 
       RUN pUpdateDMS (lcLine).
 
@@ -114,6 +117,8 @@ PROCEDURE pUpdateDMS:
    DEF VAR ldStatusTS      AS DEC  NO-UNDO.
    DEF VAR lcDocList       AS CHAR NO-UNDO.
    DEF VAR lcUpdateDMS     AS CHAR NO-UNDO.
+ 
+   DEF BUFFER Order FOR Order.
 
    ASSIGN
       lcDmsExternalID = ENTRY(1,pcLine,lcSep)
@@ -124,6 +129,12 @@ PROCEDURE pUpdateDMS:
       lcStatusDesc    = ENTRY(6,pcLine,lcSep)
       ldStatusTS      = DECIMAL(ENTRY(7,pcLine,lcSep))
       lcDocList       = ENTRY(8,pcLine,lcSep).
+
+   FIND FIRST Order NO-LOCK WHERE
+              Order.Brand EQ gcBrand AND
+              Order.OrderID EQ liOrderId NO-ERROR.
+   IF NOT AVAIL Order THEN 
+      RETURN "ERROR:ORDER NOT AVAILABLE:" + STRING(liOrderId).
 
    lcUpdateDMS = fUpdateDMS(lcDmsExternalID,
                             lcCaseTypeID,

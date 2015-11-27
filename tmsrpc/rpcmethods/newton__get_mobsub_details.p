@@ -84,9 +84,13 @@ DEF VAR liMultiSimType AS INT NO-UNDO.
 DEF VAR lcSegmentCode AS CHAR NO-UNDO.
 DEF VAR lcSegmentOffer AS CHAR NO-UNDO.
 DEF VAR lcFinancedInfo AS CHAR NO-UNDO. 
+/* 
+YPR-2748
 DEF VAR ldtFrom AS DATETIME NO-UNDO.
 DEF VAR ldtTo AS DATETIME NO-UNDO.
 DEF VAR liMonths AS INT NO-UNDO. 
+DEF VAR ldActivated AS DEC  NO-UNDO.
+ */
 DEF VAR ldeActStamp AS DEC NO-UNDO.
 DEF VAR ldaActDate AS DATE NO-UNDO.
 DEF VAR ldaRenewalDate AS DATE NO-UNDO. 
@@ -97,7 +101,6 @@ DEF VAR ldeFinalAmt  AS DECIMAL NO-UNDO.
 DEF VAR liMnpStatus AS INT NO-UNDO.
 DEF VAR liOrderId AS INT NO-UNDO. 
 DEF VAR installment_array AS CHAR NO-UNDO.
-DEF VAR ldActivated AS DEC  NO-UNDO.
 DEF VAR lderesidualFee AS DEC NO-UNDO. 
 
 DEF BUFFER lbMobSub FOR MobSub.
@@ -308,6 +311,10 @@ installment_array = add_array(resp_struct, "installments").
 
 IF NOT MobSub.PayType THEN DO:
 
+/* 
+YPR-2748
+Will be removed after making sure that everything is ok with Web.
+
    FOR EACH DCCLI NO-LOCK WHERE
             DCCLI.MsSeq = MobSub.MsSeq AND
             DCCLI.DCEvent BEGINS "PAYTERM" AND
@@ -359,6 +366,7 @@ IF NOT MobSub.PayType THEN DO:
 
       add_double(payterm_struct,"final_fee", ldeFinalAmt).
    END.
+ */
 
    /* Count possible penalty fee for terminal contract termination */
    liCount = 0.
@@ -396,7 +404,11 @@ IF NOT MobSub.PayType THEN DO:
 
       add_double(resp_struct,"penalty_fee_current",
          (IF DCCLI.Amount NE ? THEN DCCLI.Amount ELSE FMItem.Amount)).
-   
+
+/*    
+YPR-2748
+Will be removed after making sure that everything is ok with Web.
+
       add_datetime(resp_struct,"permanent_contract_valid_to",
          (IF DCCLI.Termdate NE ? THEN DCCLI.Termdate ELSE DCCLI.ValidTo)).
 
@@ -414,11 +426,15 @@ IF NOT MobSub.PayType THEN DO:
          liMonths = INTERVAL(ldtTo,ldtFrom,"months") + 1.
    
       add_int(resp_struct,"permanent_contract_length",liMonths).
-
+ */
       /* clitype at the moment of discount periodical contract creation */
       lcOrigCLIType = fGetCLITypeAtTermDiscount(BUFFER DCCLI). 
       IF lcOrigCLIType NE "" THEN 
          add_string(resp_struct,"original_subscription_type_id",lcOrigCLIType).
+
+/* 
+YPR-2748
+Will be removed after making sure that everything is ok with Web.
 
       IF DCCLI.PerContractId > 0 THEN
          FOR FIRST SubsTerminal NO-LOCK WHERE
@@ -428,7 +444,7 @@ IF NOT MobSub.PayType THEN DO:
             add_string(resp_struct,"permanent_contract_billing_item_id",
                SubsTerminal.BillCode).
          END.
-
+ 
       ldActivated = fMake2Dt(DCCLI.ValidFrom,0).
 
       FIND FIRST bActRequest WHERE
@@ -443,7 +459,7 @@ IF NOT MobSub.PayType THEN DO:
       IF AVAILABLE bActRequest AND bActRequest.ReqSource = {&REQUEST_SOURCE_RENEWAL} 
       THEN add_string(resp_struct,"permanent_contract_source","renewal").
       ELSE add_string(resp_struct,"permanent_contract_source","new").
-
+ */
    END. /* CONTRACT_LOOP: */
 END.
 

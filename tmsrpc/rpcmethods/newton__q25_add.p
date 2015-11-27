@@ -177,6 +177,17 @@ IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                   DCCLI.ValidTo >= TODAY) THEN
    RETURN appl_err("Q25 extension already active").
 
+IF SingleFee.OrderId > 0 THEN DO:
+
+   FIND FIRST TermReturn NO-LOCK WHERE
+              TermReturn.OrderId = SingleFee.OrderId NO-ERROR.
+
+   IF AVAIL TermReturn AND 
+            TermReturn.DeviceScreen = TRUE AND
+            TermReturn.DeviceStart = TRUE THEN
+      RETURN appl_err("Already returned terminal").
+END.
+
 liCreated = fPCActionRequest(
    MobSub.MsSeq,
    "RVTERM12",
@@ -196,10 +207,23 @@ IF liCreated = 0 THEN
    RETURN appl_err(SUBST("Q25 extension request failed: &1",
                          lcResult)).
 
-lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
-                      TODAY,
-                      Customer.Language,
-                      OUTPUT ldeSMSStamp).
+CASE SingleFee.BillCode:
+   WHEN "RVTERM1EF" THEN
+      lcSMSTxt = fGetSMSTxt("Q25ExtensionUNOE",
+                            TODAY,
+                            Customer.Language,
+                            OUTPUT ldeSMSStamp).
+   WHEN "RVTERMBSF" THEN
+      lcSMSTxt = fGetSMSTxt("Q25ExtensionSabadell",
+                            TODAY,
+                            Customer.Language,
+                            OUTPUT ldeSMSStamp).
+   OTHERWISE 
+      lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
+                            TODAY,
+                            Customer.Language,
+                            OUTPUT ldeSMSStamp).
+END CASE.
 
 IF lcSMSTxt > "" THEN DO:
 

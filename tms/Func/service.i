@@ -921,7 +921,6 @@ PROCEDURE pTerminatePackage:
       FIND FIRST SubSer WHERE
                  SubSer.MSSeq   = iiMSSeq AND
                  SubSer.ServCom = ttServCom.ServCom NO-LOCK NO-ERROR.
-      IF NOT AVAILABLE SubSer THEN NEXT.
 
       IF icBundleList > "" THEN 
       RETAINCOMPONENT:
@@ -944,14 +943,16 @@ PROCEDURE pTerminatePackage:
                    
             /* if another bundle has the same component with same value 
                then no need to do anything */
-            IF bDCComponent.DefValue = SubSer.SSStat AND
+            IF AVAIL SubSer AND
+               bDCComponent.DefValue = SubSer.SSStat AND
                bDCComponent.DefParam = SubSer.SSParam THEN
                NEXT TERMINATECOMPONENT.
        
            /* shaper needs special handling; if there has been several 
               bundles (not an upsell) and one has now been terminated, then 
               shaper needs to be activated again for the remaining bundle */
-            ELSE IF bDCComponent.DefValue = SubSer.SSStat AND
+            ELSE IF AVAIL SubSer AND
+               bDCComponent.DefValue = SubSer.SSStat AND
                bDCComponent.DefParam NE SubSer.SSParam THEN DO:
                ASSIGN
                   lcRetainBundle = bDCPackage.DCEvent
@@ -971,7 +972,8 @@ PROCEDURE pTerminatePackage:
                IF icOrigDCEvent = "BONO_VOIP" THEN lcParam = "VOIP_REMOVE".
                ELSE lcParam = ttServCom.DefParam.
             END. /* IF ttServCom.ServCom = "SHAPER" THEN DO: */
-            ELSE lcParam = SubSer.SSParam.
+            ELSE IF AVAIL SubSer THEN lcParam = SubSer.SSParam.
+            ELSE lcParam = ttServCom.DefParam.
 
             liReq = fServiceRequest (iiMsSeq ,     
                                      ttServCom.ServCom,
