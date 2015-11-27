@@ -25,6 +25,7 @@ gcBrand = "1".
 {timestamp.i}
 {dpmember.i}
 {coinv.i}
+{msreqfunc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -135,6 +136,32 @@ IF llDeviceStart AND llDeviceScreen THEN DO:
 
    IF SingleFee.Billed THEN
       RETURN appl_err("Residual fee already billed").
+
+   IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN DO:
+      FOR FIRST DiscountPlan NO-LOCK WHERE
+                DiscountPlan.Brand = gcBrand AND
+                DiscountPlan.DPRuleID = "RVTERMDT1DISC",
+          FIRST DPMember NO-LOCK WHERE
+                DPMember.DpID       = DiscountPlan.DpId AND
+                DPMember.HostTable  = "MobSub" AND
+                DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
+                DPMember.ValidFrom  = fPer2Date(SingleFee.BillPeriod,0) AND
+                DPMember.ValidTo   >= DPMember.ValidFrom:
+
+         fCloseDiscount("RVTERMDT1DISC",
+                        MobSub.MsSeq,
+                        DPMember.ValidFrom - 1,
+                        FALSE). /* clean event logs */
+      END.
+
+      FIND FIRST MsRequest NO-LOCK WHERE
+                 MsRequest.MsSeq      EQ Mobsub.MsSeq AND
+                 MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+                 LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND
+                 MsREquest.REqcparam3 EQ "RVTERM12" NO-ERROR.
+      IF AVAILABLE MsRequest THEN
+         fReqStatus(4,"Cancelled by Terminal Reurning").
+   END.
 
    liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
                                      "RVTERMDT3DISC",
