@@ -235,8 +235,10 @@ FUNCTION fSendChangeInformation RETURNS CHAR
        lcParam = "DMSMsgID_" + Order.StatusCode. /*DMSMsgIF_20 -> returns 1*/
        lcNotifCaseID = fCParam("DMS",lcParam).
    END.
+   IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN 
+      lcMSISDN = fNotNull(OrderCustomer.ContactNum).
+   ELSE lcMSISDN = fNotNull(OrderCustomer.ContactNum).
 
-   lcMSISDN = fNotNull(OrderCustomer.ContactNum).
    lcContractID = fNotNull(Order.ContractId).
    lcDNIType = fNotNull(OrderCustomer.CustIdType).
    lcDNI = fNotNull(OrderCustomer.CustId).
