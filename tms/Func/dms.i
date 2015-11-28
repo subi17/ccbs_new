@@ -188,7 +188,7 @@ END.
 
 /*Function sends SMS and EMAIL generating information to WEB if it is needed*/
 FUNCTION fSendChangeInformation RETURNS CHAR
-   (icStatus AS CHAR,
+   (icDMSStatus AS CHAR,
     icOrderID AS INT,
     icDeposit AS CHAR,
     OUTPUT ocSentMessage AS CHAR):
@@ -209,12 +209,6 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    DEF VAR lcBankAcc AS CHAR NO-UNDO.
    DEF VAR lcSeq AS CHAR NO-UNDO.
 
-   /*Read Parameter that defines case ID*/
-   lcParam = "DMSMsgID_" + icStatus. /*DMSMsgIF_E -> returns 03 as specified.*/
-   lcNotifCaseID = fCParam("DMS",lcParam).
-
-   IF lcNotifCaseID EQ "" THEN RETURN "". /*No actions for the case*/
-
    /*search data for message*/
    FIND FIRST Order NO-LOCK WHERE
               Order.Brand EQ gcBrand AND
@@ -227,7 +221,20 @@ FUNCTION fSendChangeInformation RETURNS CHAR
               OrderCustomer.RowType EQ 1 NO-ERROR.
    IF NOT AVAIL Order THEN RETURN "DMS Notif: No OrderCustomer available".
 
+   /*DMS triggered cases:*/
+   /*Read Parameter that defines case ID*/
+   IF icDMSStatus NE "" THEN DO:
+      lcParam = "DMSMsgID_" + icDMSStatus. /*DMSMsgIF_E -> returns 03*/
+      lcNotifCaseID = fCParam("DMS",lcParam).
 
+      IF lcNotifCaseID EQ "" THEN RETURN "". /*No actions for the case*/
+   END.
+   ELSE DO:
+   /*Get the caseId by using TMS information. This is used in casefile 
+     sending.*/
+       lcParam = "DMSMsgID_" + Order.StatusCode. /*DMSMsgIF_20 -> returns 1*/
+       lcNotifCaseID = fCParam("DMS",lcParam).
+   END.
 
    lcMSISDN = fNotNull(OrderCustomer.ContactNum).
    lcContractID = fNotNull(Order.ContractId).
@@ -245,7 +252,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    /*Fill data for message.*/
    lcMessage = "~{" + "~"metadata~""  + "~:" + "~{" +
                          "~"case~""  + "~:" + "~"" + lcNotifCaseID  + "~"," +
-                         "~"sms_seq~""  + "~:" + "~"" + lcSeq  + "~"" +
+                         "~"smsseq~""  + "~:" + "~"" + lcSeq  + "~"" +
                      "~}" + "," +
                       "~"data~"" + "~:" + "~{" +
                          "~"msisdn~""   + "~:" + "~"" + lcMSISDN + "~"" + "," +

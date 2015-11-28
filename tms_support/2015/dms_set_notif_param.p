@@ -30,7 +30,8 @@ fUpdateMessageParams("F1", "11").
 fUpdateMessageParams("G", "8").
 fUpdateMessageParams("J", "10").
 fUpdateMessageParams("N", "8").
-
-
+fUpdateMessageParams("20", "1").
+fUpdateMessageParams("21", "1").
+fUpdateMessageParams("44", "1").
 
 

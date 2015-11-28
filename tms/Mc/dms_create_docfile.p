@@ -60,6 +60,13 @@ FUNCTION fLogLine RETURNS LOGICAL
       "TMS" SKIP.
 END FUNCTION.
 
+FUNCTION fLogMsg RETURNS LOGICAL
+   (icMessage AS CHAR):
+   PUT STREAM sLogFile UNFORMATTED
+      icMessage "#"
+      "DMS" SKIP.
+END FUNCTION.
+
 /*Decide that what kind of data must be collected (Order or Msrequest data)*/
 /*Function also defines category for handling.*/
 FUNCTION fMakeTempTable RETURNS CHAR
@@ -725,7 +732,9 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
    DEF VAR lcModel   AS CHAR NO-UNDO.
    DEF VAR ldePermanencyAmount AS DECIMAL.
-   DEF VAR liPermancyLength AS INT.
+   DEF VAR liPermancyLength AS INT NO-UNDO.
+   DEF VAR lcErr AS CHAR NO-UNDO.
+   DEF VAR lcMsg AS CHAR NO-UNDO.
 
    DEF BUFFER DeliveryCustomer FOR OrderCustomer.
 
@@ -858,7 +867,8 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
                             lcDocListEntries /*DocList*/,
                             ",").
 
-
+   lcErr = fSendChangeInformation("", Order.OrderId, "", lcMsg).
+   fLogMsg("Msg : " + lcMsg + " #Status: " + lcErr).
 
    RETURN "".
 
@@ -881,6 +891,8 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    DEF VAR lcModel   AS CHAR NO-UNDO.
    DEF VAR ldePermanencyAmount AS DECIMAL.
    DEF VAR liPermancyLength AS INT.
+   DEF VAR lcErr AS CHAR NO-UNDO.
+   DEF VAR lcMsg AS CHAR NO-UNDO.
 
    ASSIGN
       lcCaseTypeId      = "3".
@@ -988,6 +1000,10 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             ",").
+   lcErr = fSendChangeInformation("", Order.OrderId, "", lcMsg).
+   fLogMsg("Msg : " + lcMsg + " #Status: " + lcErr).
+
+
    RETURN "".
 
 END.
