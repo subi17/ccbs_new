@@ -1856,17 +1856,32 @@ PROCEDURE pGetCTNAME:
           END.
        
        /* YBU-4965 X-Mas campaign 2015 */
-       FOR FIRST DPMember WHERE
+       FIND FIRST DPMember WHERE
                  DPMember.hosttable = "MobSub" AND
                  DPMember.keyValue = STRING(order.msseq)  AND
                  DPMember.validFrom <= ldtOrderDate AND
-                 DPMember.validTo >= ldtOrderDate NO-LOCK,
-           FIRST DiscountPlan WHERE
-                 DiscountPlan.DPId = DPMember.DPId AND
-                 DiscountPlan.DPRuleId = "BONO6WEBDISC" NO-LOCK:
+                 DPMember.validTo >= ldtOrderDate NO-LOCK NO-ERROR.
+       IF AVAIL DPMember THEN DO:          
+          FOR FIRST DiscountPlan WHERE
+                     DiscountPlan.DPId = DPMember.DPId AND
+                     DiscountPlan.DPRuleId = "BONO6WEBDISC" NO-LOCK:
              lcMFText = lcMFText + " 1 GB/mes gratis hasta dic. 2016".
+          END.
        END.
- 
+       ELSE DO:
+          FOR EACH Orderaction NO-LOCK where
+                   Orderaction.brand = gcBrand AND
+                   orderaction.orderid = order.orderid AND
+                   orderaction.itemtype = "discount",
+              FIRST DiscountPlan WHERE
+                    DiscountPlan.DPId = INT(Orderaction.itemkey) AND
+                    DiscountPlan.DPRuleId = "BONO6WEBDISC" AND
+                    DiscountPlan.validFrom <= ldtOrderDate AND
+                    DiscountPlan.ValidTo >= ldtOrderDate NO-LOCK:
+             lcMFText = lcMFText + " 1 GB/mes gratis hasta dic. 2016". 
+          END.
+       END.          
+    
        IF ldeMFWithTax > 0 THEN
          /* YBU-4648 LENGTH check added for fitting one line */
          lcList = lcList + (IF LENGTH(lcList +  TRIM(STRING(ldeMFWithTax,
