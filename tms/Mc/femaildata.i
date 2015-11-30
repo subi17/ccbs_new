@@ -1854,7 +1854,19 @@ PROCEDURE pGetCTNAME:
              ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
                  ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
           END.
-
+       
+       /* YBU-4965 X-Mas campaign 2015 */
+       FOR FIRST DPMember WHERE
+                 DPMember.hosttable = "MobSub" AND
+                 DPMember.keyValue = STRING(order.msseq)  AND
+                 DPMember.validFrom <= ldtOrderDate AND
+                 DPMember.validTo >= ldtOrderDate NO-LOCK,
+           FIRST DiscountPlan WHERE
+                 DiscountPlan.DPId = DPMember.DPId AND
+                 DiscountPlan.DPRuleId = "BONO6WEBDISC" NO-LOCK:
+             lcMFText = lcMFText + " 1 GB/mes gratis hasta dic. 2016".
+       END.
+ 
        IF ldeMFWithTax > 0 THEN
          /* YBU-4648 LENGTH check added for fitting one line */
          lcList = lcList + (IF LENGTH(lcList +  TRIM(STRING(ldeMFWithTax,
