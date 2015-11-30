@@ -189,7 +189,61 @@ FUNCTION fSendToMQ RETURNS CHAR
 
 END.
 
+FUNCTION fGenerateMessage RETURNS CHAR
+   (icNotifCaseId AS CHAR,
+    icDeposit AS CHAR,
+    BUFFER Order FOR Order,
+    BUFFER Ordercustomer FOR Ordercustomer):
+   DEF VAR lcMSISDN AS CHAR NO-UNDO.
+   DEF VAR lcContractID AS CHAR NO-UNDO.
+   DEF VAR lcDNIType AS CHAR NO-UNDO.
+   DEF VAR lcDNI AS CHAR NO-UNDO.
+   DEF VAR lcFname AS CHAR NO-UNDO.
+   DEF VAR lcLname AS CHAR NO-UNDO.
+   DEF VAR lcEmail AS CHAR NO-UNDO.
+   DEF VAR lcBankAcc AS CHAR NO-UNDO.
+   DEF VAR lcSeq AS CHAR NO-UNDO.
+   DEF VAR lcMessage AS CHAR NO-UNDO.
 
+
+   IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN
+      lcMSISDN = fNotNull(OrderCustomer.ContactNum).
+   ELSE lcMSISDN = fNotNull(Order.CLI).
+
+   lcContractID = fNotNull(Order.ContractId).
+   lcDNIType = fNotNull(OrderCustomer.CustIdType).
+   lcDNI = fNotNull(OrderCustomer.CustId).
+   lcFname = fNotNull(OrderCustomer.FirstName).
+   lcLname = fNotNull(OrderCustomer.SurName1) +
+             fNotNull(Ordercustomer.SurName2).
+   lcEmail = fNotNull(OrderCustomer.Email).
+   lcBankAcc = fNotNull(OrderCustomer.BankCode).
+   lcSeq = STRING(NEXT-VALUE(SMSSEQ)). /*read and increase SMSSEQ. The sequence must be
+                                         reserved as ID for WEB&HPD*/
+
+
+   /*Fill data for message.*/
+   lcMessage = "~{" + "~"metadata~""  + "~:" + "~{" +
+                         "~"case~""  + "~:" + "~"" + icNotifCaseID  + "~"," +
+                         "~"smsseq~""  + "~:" + "~"" + lcSeq  + "~"" +
+                     "~}" + "," +
+                      "~"data~"" + "~:" + "~{" +
+                         "~"msisdn~""   + "~:" + "~"" + lcMSISDN + "~"" + "," +
+                         "~"contractid~"" +  "~:" + "~"" +
+                                     lcContractID + "~"" + "," +
+                         "~"dni_type~"" +  "~:" + "~"" + lcDNIType + "~"" + "," +
+                         "~"dni~""      +  "~:" + "~"" + lcDNI + "~"" + "," +
+                         "~"fname~""    +  "~:" + "~"" + lcFname + "~"" + "," +
+                         "~"lname~""    +  "~:" + "~"" + lcLname + "~"" + "," +
+                         "~"email~""    +  "~:" + "~"" + lcEmail + "~"" + "," + 
+                         "~"deposit_amount~""   +  "~:" + "~"" +
+                                      icDeposit + "~"" + "," +
+                         "~"bank_account_number~"" +  "~:" + "~"" +
+                                      lcBankAcc + "~"" +
+                      "~}" +
+                 "~}".
+   RETURN lcMessage.
+END.
 
 
 /*Function sends SMS and EMAIL generating information to WEB if it is needed*/
@@ -205,7 +259,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    DEF VAR lcNotifCaseID AS CHAR NO-UNDO.
    DEF VAR lcParam AS CHAR NO-UNDO.
    DEF VAR lcMessage AS CHAR NO-UNDO.
-   DEF VAR lcMSISDN AS CHAR NO-UNDO.
+ /*  DEF VAR lcMSISDN AS CHAR NO-UNDO.
    DEF VAR lcContractID AS CHAR NO-UNDO.
    DEF VAR lcDNIType AS CHAR NO-UNDO.
    DEF VAR lcDNI AS CHAR NO-UNDO.
@@ -214,7 +268,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    DEF VAR lcEmail AS CHAR NO-UNDO.
    DEF VAR lcBankAcc AS CHAR NO-UNDO.
    DEF VAR lcSeq AS CHAR NO-UNDO.
-
+*/
    /*search data for message*/
    FIND FIRST Order NO-LOCK WHERE
               Order.Brand EQ gcBrand AND
@@ -243,42 +297,14 @@ FUNCTION fSendChangeInformation RETURNS CHAR
      sending.*/
        lcParam = "DMSMsgID_" + Order.StatusCode. /*DMSMsgIF_20 -> returns 1*/
        lcNotifCaseID = fCParam("DMS",lcParam).
+       IF lcNotifCaseID EQ "" THEN RETURN "". /*No actions for the case*/
+
    END.
-   IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN 
-      lcMSISDN = fNotNull(OrderCustomer.ContactNum).
-   ELSE lcMSISDN = fNotNull(Order.CLI).
+   lcMessage = fGenerateMessage(lcNotifCaseID,
+                                icDeposit,
+                                BUFFER Order,
+                                BUFFER Ordercustomer).
 
-   lcContractID = fNotNull(Order.ContractId).
-   lcDNIType = fNotNull(OrderCustomer.CustIdType).
-   lcDNI = fNotNull(OrderCustomer.CustId).
-   lcFname = fNotNull(OrderCustomer.FirstName).
-   lcLname = fNotNull(OrderCustomer.SurName1) +
-             fNotNull(Ordercustomer.SurName2).
-   lcEmail = fNotNull(OrderCustomer.Email).
-   lcBankAcc = fNotNull(OrderCustomer.BankCode).
-   lcSeq = STRING(NEXT-VALUE(SMSSEQ)). /*read and increase SMSSEQ. The sequence must be 
-                                         reserved as ID for WEB&HPD*/
-
-
-   /*Fill data for message.*/
-   lcMessage = "~{" + "~"metadata~""  + "~:" + "~{" +
-                         "~"case~""  + "~:" + "~"" + lcNotifCaseID  + "~"," +
-                         "~"smsseq~""  + "~:" + "~"" + lcSeq  + "~"" +
-                     "~}" + "," +
-                      "~"data~"" + "~:" + "~{" +
-                         "~"msisdn~""   + "~:" + "~"" + lcMSISDN + "~"" + "," +
-                         "~"contractid~"" +  "~:" + "~"" +
-                                     lcContractID + "~"" + "," +
-                         "~"dni_type~"" +  "~:" + "~"" + lcDNIType + "~"" + "," +
-                         "~"dni~""      +  "~:" + "~"" + lcFname + "~"" + "," +
-                         "~"fname~""    +  "~:" + "~"" + lcLname + "~"" + "," +
-                         "~"lname~""    +  "~:" + "~"" + lcEmail + "~"" + "," +
-                         "~"deposit_amount~""   +  "~:" + "~"" +
-                                      icDeposit + "~"" + "," +
-                         "~"bank_account_number~"" +  "~:" + "~"" +
-                                      lcBankAcc + "~"" +
-                      "~}" +
-                 "~}".
    ocSentMessage = lcMessage.              
    RETURN fSendToMQ(lcMessage).
 END.

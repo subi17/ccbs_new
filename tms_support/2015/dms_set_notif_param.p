@@ -71,7 +71,7 @@ FUNCTION fUpdateOtherParamsChar RETURNS CHAR
 END.   
 
 
-
+/*
 fUpdateMessageParams("A", "2").
 fUpdateMessageParams("B", "5").
 fUpdateMessageParams("B1", "6").
@@ -84,12 +84,12 @@ fUpdateMessageParams("N", "8").
 fUpdateMessageParams("20", "1").
 fUpdateMessageParams("21", "1").
 fUpdateMessageParams("44", "1").
-
+*/
 
 fUpdateOtherParamsInt("DMS_doc_no_provided_time", 
                        "Doc never provided waiting time", 
                        3).
-
+/*
 fUpdateOtherParamsChar("DMS_doc_no_provided_statuses", 
                        "Doc never provided alarm statuses", 
                        "A0,C").
@@ -97,4 +97,4 @@ fUpdateOtherParamsChar("DMS_doc_no_provided_statuses",
 fUpdateOtherParamsChar("DMS_MQ", 
                        "Message Queue for DMS sms/email", 
                        "angela_in").
-
+*/
