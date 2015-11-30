@@ -1856,17 +1856,16 @@ PROCEDURE pGetCTNAME:
           END.
        
        /* YBU-4965 X-Mas campaign 2015 */
+       FIND FIRST DiscountPlan WHERE
+                  DiscountPlan.DPRuleId = "BONO6WEBDISC" NO-LOCK.
        FIND FIRST DPMember WHERE
-                 DPMember.hosttable = "MobSub" AND
-                 DPMember.keyValue = STRING(order.msseq)  AND
-                 DPMember.validFrom <= ldtOrderDate AND
-                 DPMember.validTo >= ldtOrderDate NO-LOCK NO-ERROR.
+                  DPMember.DPId = DiscountPlan.DPId AND
+                  DPMember.hosttable = "MobSub" AND
+                  DPMember.keyValue = STRING(order.msseq)  AND
+                  DPMember.validFrom <= ldtOrderDate AND
+                  DPMember.validTo >= ldtOrderDate NO-LOCK NO-ERROR.
        IF AVAIL DPMember THEN DO:          
-          FOR FIRST DiscountPlan WHERE
-                     DiscountPlan.DPId = DPMember.DPId AND
-                     DiscountPlan.DPRuleId = "BONO6WEBDISC" NO-LOCK:
-             lcMFText = lcMFText + " 1 GB/mes gratis hasta dic. 2016".
-          END.
+          lcMFText = lcMFText + " 1 GB/mes gratis hasta dic. 2016".
        END.
        ELSE DO:
           FOR EACH Orderaction NO-LOCK where
