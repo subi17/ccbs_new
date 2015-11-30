@@ -20,9 +20,6 @@
           allowed_terminal_financing_amount;double;if risk limit is configured
  * @installment;array of installment structs;two fields insidde struct
  * @installment;struct
-          installment_contract;string;active installment contract
-          installment_pending_fee;double;sum of installment contract unpaid fees
-          installment_residual_fee;double;installment residual fee
           pending_stc;boolean;true
 
           liQtyTFs;int;number of installments
@@ -596,9 +593,6 @@ FOR EACH  DCCLI WHERE
                     OUTPUT liOrderId) THEN DO:
 
       installment_struct = add_struct(installment_array,"").
-      add_string(installment_struct,"installment_contract", DCCLI.DCEvent).
-      add_double(installment_struct,"installment_pending_fee", ldePendingFee).
-      add_double(installment_struct,"installment_residual_fee", lderesidualFee).
       add_int(installment_struct,"per_contract_id", DCCLI.PercontractId).
       liQtyTFs = liQtyTFs + 1.
    END.
