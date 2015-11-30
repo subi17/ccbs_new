@@ -13,6 +13,8 @@
 {commali.i}
 {fcreatereq.i}
 {tmsconst.i}
+{func.i}
+{cparam2.i}
 
 function fSMSInvoiceValidate returns logical
    (  input idaPeriod AS DATE,
@@ -66,8 +68,38 @@ function fsmsinvoicerequest returns integer
     input  icsource      as char,
     output ocresult      as char).
 
-   def var lireqcreated as int no-undo.
+def var lireqcreated as int  no-undo.
+DEF VAR lButtonTS     AS DECIMAL   NO-UNDO.
+DEF VAR lButtonDate   AS DATE      NO-UNDO.
+DEF VAR lNowSeconds   AS INTEGER   NO-UNDO.
+DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
+DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
+DEF VAR lcSMSSchedule AS CHARACTER NO-UNDO.
 
+   /* YOT-4130 */
+   lNowSeconds = INTEGER(MTIME(NOW) / 1000).
+   
+   /* Time of request */
+   fSplitTS(lButtonTS, lButtonDate, idactstamp).
+   
+   /* ie. "32400-79200" Send between 9:00-22:00 */
+   lcSMSSchedule = fCParamC("SMSSchedule").
+   lIniSeconds = INTEGER(SUBSTRING(lcSMSSchedule,1,INDEX(lcSMSSchedule,"-") - 1)).
+   lEndSeconds = INTEGER(SUBSTRING(lcSMSSchedule,INDEX(lcSMSSchedule,"-") + 1)).
+
+   /* If is too late, schedule to start next morning */
+   IF (lNowSeconds > lEndSeconds) THEN
+   DO:
+      lButtonDate = ADD-INTERVAL (lButtonDate, 1, "days").
+      idactstamp = fHMS2TS(lButtonDate, STRING(lIniSeconds,"hh:mm:ss")) .
+   END.
+   ELSE
+   /* If is too early, schedule to start when window opens */
+   IF (lNowSeconds < lIniSeconds) THEN
+   DO:
+      idactstamp = fHMS2TS(lButtonDate, STRING(lIniSeconds,"hh:mm:ss")) .
+   END.
+   
    if not fSMSInvoiceValidate(
       idaPeriod,
       output ocresult) then return 0.
@@ -75,7 +107,7 @@ function fsmsinvoicerequest returns integer
    fcreaterequest(({&REQTYPE_SMS_INVOICE}),
                   idactstamp,
                   iccreator,
-                  false,      /* fees */
+                  false,     /* fees */
                   false).    /* send sms */
 
    assign 
