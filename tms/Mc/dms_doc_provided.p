@@ -15,6 +15,7 @@ Katun = "Cron".
 {timestamp.i}
 {cparam2.i}
 {dms.i}
+{date.i}
 
 DEF VAR ldaReadDate       AS DATE NO-UNDO.
 DEF VAR lcLogDir          AS CHAR NO-UNDO.
@@ -22,6 +23,9 @@ DEF VAR lcLogFile1        AS CHAR NO-UNDO.
 DEF VAR ldStartTS         AS DECIMAL NO-UNDO.
 DEF VAR ldEndTS           AS DECIMAL NO-UNDO.
 DEF VAR lcMSg             AS CHAR NO-UNDO.
+DEF VAR lcErr             AS CHAR NO-UNDO.
+DEF VAR liNoDocProvidedPeriod AS INT NO-UNDO.
+DEF VAR lcNoDocProvidedStatuses AS CHAR NO-UNDO.
 DEF STREAM sLogFile.
 
 
@@ -30,7 +34,7 @@ FUNCTION fGetDateRange RETURNS CHAR
     OUTPUT odStart AS DECIMAL,
     OUTPUT odEnd AS DECIMAL):
    DEF VAR ldNow AS DECIMAL.
-   ldNow = DECIMAL(INT(fMakeTS())).
+   ldNow = fDate2TS(TODAY).
    odStart = fOffset(ldNow, -24 * (iiDays + 1)).
    odEnd = fOffset(ldNow, -24 * (iiDays )).
 
@@ -66,27 +70,28 @@ ASSIGN
                       STRING(DAY(ldaReadDate),"99") + ".log".
 
 
-
 OUTPUT STREAM sLogFile TO VALUE(lcLogFile1) APPEND.
 fLogLine("","DMS Reminder creation starts " + fTS2HMS(fMakeTS())).
 
 /*define time range for getting the requested entries*/
-/*fGetDateRange(3, ldStartTS, ldEndTS).
-FOR EACH DMS NO-LOCK WHERE
-      /*   DMS.DMSStatusTS  > ldStartTS AND*/ 
-        /* DMS.StatusTS < ldEndTS AND*/
-         DMS.HostTable EQ {&DMS_TABLE_ORDER}:
-   lcErr = fSendChangeInformation(DMS.StatusCode, DMS.HostID, "", lcMsg).
+liNoDocProvidedPeriod = fCParamI("DMS_doc_no_provided_time").
+fGetDateRange(liNoDocProvidedPeriod, ldStartTS, ldEndTS).
 
-   fLogMsg("Msg : " + lcMsg + " #Status: " + lcErr).
-ENa */.
-fLogLine("","DMS Reminder creation ends " + fTS2HMS(fMAkeTS())).
+lcNoDocProvidedStatuses =  fCParam("DMS","DMS_doc_no_provided_statuses").
+
+FOR EACH DMS NO-LOCK WHERE
+         DMS.DMSStatusTS  >= ldStartTS AND
+         DMS.StatusTS < ldEndTS AND
+         DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER}:
+
+   IF LOOKUP(DMS.StatusCode, lcNoDocProvidedStatuses) > 0 THEN DO:
+     /*Pending (A0), Doc errónea status (C)*/
+     lcErr = fSendChangeInformation(DMS.StatusCode, DMS.HostID, "", lcMsg).
+     fLogMsg(lcMsg).
+   END.
+END.
+     fLogLine("","DMS Reminder creation ends " + fTS2HMS(fMAkeTS())).
 
 OUTPUT STREAM sLogFile CLOSE.
-
-
-
-
-
 
 

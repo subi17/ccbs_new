@@ -154,6 +154,8 @@ END.
 FUNCTION fSendToMQ RETURNS CHAR
    (icMsg AS CHAR):
    DEF VAR lcRet AS CHAR NO-UNDO.
+   DEF VAR lcMQ  AS CHAR NO-UNDO.
+
    RUN pInitialize(INPUT "dms").
 
    IF RETURN-VALUE > "" THEN DO:
@@ -163,8 +165,10 @@ FUNCTION fSendToMQ RETURNS CHAR
          RETURN RETURN-VALUE.
    END.
    /* Call ActiveMQ Publisher class */
+   lcMQ =  fCParam("DMS","DMS_MQ").
+
    lMsgPublisher = NEW Gwy.MqPublisher(lcHost,liPort,
-                                       liTimeOut,{&DMS_MQ_ID}, 
+                                       liTimeOut,lcMQ, 
                                        lcUserName,lcPassword).
 
    IF NOT VALID-OBJECT(lMsgPublisher) THEN DO:
@@ -184,6 +188,8 @@ FUNCTION fSendToMQ RETURNS CHAR
    RETURN lcRet.
 
 END.
+
+
 
 
 /*Function sends SMS and EMAIL generating information to WEB if it is needed*/
@@ -221,6 +227,9 @@ FUNCTION fSendChangeInformation RETURNS CHAR
               OrderCustomer.RowType EQ 1 NO-ERROR.
    IF NOT AVAIL Order THEN RETURN "DMS Notif: No OrderCustomer available".
 
+   /*Messages are sent only for direct channel orders.*/
+   IF R-INDEX(Order.OrderChannel, "pos") EQ 0 THEN RETURN "".
+
    /*DMS triggered cases:*/
    /*Read Parameter that defines case ID*/
    IF icDMSStatus NE "" THEN DO:
@@ -237,7 +246,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    END.
    IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN 
       lcMSISDN = fNotNull(OrderCustomer.ContactNum).
-   ELSE lcMSISDN = fNotNull(OrderCustomer.ContactNum).
+   ELSE lcMSISDN = fNotNull(Order.CLI).
 
    lcContractID = fNotNull(Order.ContractId).
    lcDNIType = fNotNull(OrderCustomer.CustIdType).
