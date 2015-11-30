@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------
-  MODULE .......: q25smsfunctions.i
+  MODULE .......: q25functions.i
   TASK .........: Functions for handling q25 SMS messaging and checking
                   needed data
   APPLICATION ..: tms
@@ -42,10 +42,12 @@ FUNCTION fCheckDates RETURNS LOGICAL
    RETURN TRUE.
 END FUNCTION.
 
-FUNCTION fCollectQ25SMSMessages RETURNS LOGICAL
+FUNCTION fCollectQ25SMSMessages RETURNS INT
    (INPUT idaStartDate AS DATE,
     INPUT idaEndDate AS DATE,
-    INPUT iiphase AS INT).
+    INPUT iiphase AS INT
+    INPUT ilsendMsgs AS LOGICAL,
+    INPUT totalCountLeft AS INT).
    /* Data collection function for Q25. To be launched by cron execution
       on 1.-15. day of month at morning time at least one hour before 10:00 */
    DEF VAR lcLogDir          AS CHAR NO-UNDO.
@@ -61,6 +63,8 @@ FUNCTION fCollectQ25SMSMessages RETURNS LOGICAL
    DEF VAR liAlreadyCreated  AS INT NO-UNDO.
    DEF VAR liTempMsSeq       AS INT NO-UNDO.
    DEF VAR ldaMonth22Date    AS DATE NO-UNDO.
+   DEF VAR liTimeLeft        AS INT NO-UNDO.
+   DEF VAR lcSMSMessage      AS CHAR NO-UNDO.
 
    ASSIGN lcLogDir     = fCParam("Q25","Q25_reminder_LogDir").
 
@@ -147,48 +151,53 @@ FUNCTION fCollectQ25SMSMessages RETURNS LOGICAL
    
       /* Create table for sending messages in the second phase started
          by separate cron execution for each hour 10:00 - 21:00 */
-      FIND FIRST Q25Messaging WHERE Q25Messaging.msseq = DCCLI.MsSeq AND
-                                    Q25Messaging.sendDate = TODAY NO-LOCK
-                                    NO-ERROR.
-      IF AVAIL Q25Messaging THEN DO:
-         /* Something have went wrong, SMS sending for today already marked
-            for this subscriber */
-         liAlreadyCreated = liAlreadyCreated + 1.
-      END.
-      ELSE DO:
-         CREATE Q25Messaging.
-         ASSIGN
-            Q25Messaging.phase = iiPhase
-            Q25Messaging.sendDate = TODAY
-            Q25Messaging.MSSeq = DCCLI.MsSeq
-            Q25Messaging.CustNum = SingleFee.CustNum
-            Q25Messaging.Cli = DCCLI.Cli
-            Q25Messaging.OrderId = SingleFee.OrderId
-            Q25Messaging.isSent = FALSE
-            Q25Messaging.ValidTo = DCCLI.ValidTo
-            Q25Messaging.Amt = SingleFee.Amt.
-      END.
+      IF(ilSendMsgs) THEN DO:
+         TotalCountLeft = TotalcountLeft - 1.
+         FIND FIRST SMSMessage WHERE SMSMessage.msseq = DCCLI.MsSeq AND
+                                     SMSMessage.CreStamp > fDate2TS(TODAY) 
+                                     NO-LOCK NO-ERROR.
+         
+         IF AVAIL SMSMessage THEN DO:
+            /* Something have went wrong, SMS sending for today already marked
+               for this subscriber */
+            liAlreadyCreated = liAlreadyCreated + 1.
+         END.
+         ELSE DO:
+            lcSMSMessage = fgetQ25SMSMessage(iiphase).
+
+            /* Send SMS */
+            fCreateSMS(SingleFee.CustNum,
+                       DCCLI.Cli,
+                       DCCLI.MsSeq,
+                       SingleFee.OrderId,
+                       lcSMSMessage,
+                       "622",
+                       {&SMS_TYPE_Q25}).
+            lcSentCount = lcSentCount + 1.
+         END.
+      END.   
    END.
    /* Logging about amount of situations for testting purposes. */
-   PUT STREAM Sout UNFORMATTED
-      STRING(idaStartDate) + "|" STRING(idaEnddate) + "|" +
-      STRING(liCount) + "|" + STRING(liNotSendCount) + "|" +
-      STRING(liBilledCount) + "|" + STRING(liNotDCCLICount) + "|" +
-      STRING(liReturnedDevices) + "|" + STRING(liQ25DoneCount) + "|" +
-      STRING(liAlreadyCreated) + "|" + STRING(etime / 1000) SKIP.
-   OUTPUT STREAM Sout CLOSE.
-   RETURN TRUE.
+   /* If SendMsgs is False, logging of calculated values to be done */
+   IF NOT(SendMsgs) THEN DO:
+      PUT STREAM Sout UNFORMATTED
+         STRING(idaStartDate) + "|" STRING(idaEnddate) + "|" +
+         STRING(liCount) + "|" + STRING(liNotSendCount) + "|" +
+         STRING(liBilledCount) + "|" + STRING(liNotDCCLICount) + "|" +
+         STRING(liReturnedDevices) + "|" + STRING(liQ25DoneCount) + "|" +
+         STRING(liAlreadyCreated) + "|" + STRING(etime / 1000) SKIP.
+      OUTPUT STREAM Sout CLOSE.
+   END.
+   RETURN liCount.
 END FUNCTION.
 
-FUNCTION fSendQ25SMSMessages RETURNS LOGICAL ().
+FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (int iiPhase).
    DEF VAR lcSentCount AS INT NO-UNDO.
    DEF VAR lcSMSMessage      AS CHAR NO-UNDO.
    DEF VAR ldReqStamp        AS DEC  NO-UNDO.
    DEF VAR lcEncryptedMSISDN AS CHAR NO-UNDO.
-   FOR EACH Q25Messaging WHERE Q25Messaging.issent = FALSE AND
-                               Q25Messaging.sendDate = TODAY:
-      IF Q25Messaging.Phase = {&Q25_MONTH_22} OR 
-         Q25Messaging.Phase = {&Q25_MONTH_23} THEN DO: 
+      IF iiPhase = {&Q25_MONTH_22} OR 
+         iiPhase = {&Q25_MONTH_23} THEN DO: 
          /* Q25 reminder month 22 or 23 */
          lcSMSMessage = fGetSMSTxt("Q25ReminderMonth22and23",
                                  TODAY,
@@ -197,7 +206,7 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL ().
          lcSMSMessage = REPLACE(lcSMSMessage,"#DATE","20" + "/" +
                                 STRING(MONTH(Q25Messaging.ValidTo))).
       END.
-      ELSE IF Q25Messaging.Phase = {&Q25_MONTH_24} THEN DO: 
+      ELSE IF iiPhase = {&Q25_MONTH_24} THEN DO: 
       /* Q25 reminder month 24 */
          lcSMSMessage = fGetSMSTxt("Q25ReminderMonth24",
                                    TODAY,
@@ -205,7 +214,7 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL ().
                                    OUTPUT ldReqStamp).
          lcSMSMessage = REPLACE(lcSMSMessage,"#DD","20").
       END.
-      ELSE IF Q25Messaging.Phase = {&Q25_MONTH_24_FINAL_MSG} THEN DO: 
+      ELSE IF iiPhase = {&Q25_MONTH_24_FINAL_MSG} THEN DO: 
       /* Q25 month 24 after 20th day no decision */
          lcSMSMessage = fGetSMSTxt("Q25FinalFeeMessageNoDecision",
                                    TODAY,
@@ -214,7 +223,7 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL ().
          lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT", 
                         STRING(Q25Messaging.Amt)).
       END.
-      ELSE IF Q25Messaging.Phase = {&Q25_MONTH_24_CHOSEN} THEN DO: 
+      ELSE IF iiPhase = {&Q25_MONTH_24_CHOSEN} THEN DO: 
       /* Q25 Month 24 20th day extension made */
          lcSMSMessage = fGetSMSTxt("Q25FinalFeeMessageChosenExt",
                                    TODAY,
@@ -224,28 +233,14 @@ FUNCTION fSendQ25SMSMessages RETURNS LOGICAL ().
                                 STRING(Q25Messaging.Amt / 12)).
       END.
 
-      IF Q25Messaging.Phase < {&Q25_MONTH_24_FINAL_MSG} THEN DO: 
+      IF iiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO: 
       /* Month 22-24 */
          /* Encrypted MSISDN added to messages sent during 22 to 24 month */
          lcEncryptedMSISDN = encrypt_data(Q25Messaging.Cli,
                              {&ENCRYPTION_METHOD}, {&Q25_PASSPHRASE}).
          lcSMSMessage = REPLACE(lcSMSMessage, "#MSISDN", lcEncryptedMSISDN).
       END.
-   
-      /* Send SMS */
-      fCreateSMS(Q25Messaging.Custnum,
-                 Q25Messaging.Cli,
-                 Q25Messaging.MsSeq,
-                 Q25Messaging.OrderId,
-                 lcSMSMessage,
-                 "622",
-                 {&SMS_TYPE_Q25}).
-      lcSentCount = lcSentCount + 1.
-      ASSIGN Q25Messaging.isSent = TRUE.
-      IF (lcSentCount >= {&MAXQ25MESSAGESPERHOUR} AND TIME < 75600) THEN
-         LEAVE. /* maximum amount of messages sent per hour. Last sending
-                   interval is 21:00-22:00, send all rest messages here if
-                   reached */
+      RETURN lcSMSMessage.  
    END.
 
 END FUNCTION.
