@@ -380,6 +380,9 @@ PROCEDURE pQ25Extension:
    DEF VAR ldaPerDate AS DATE NO-UNDO. 
    DEF VAR lcTFBank AS CHAR NO-UNDO.
 
+   DEF VAR ldaMonth22Date    AS DATE NO-UNDO.
+   DEF VAR ldaMonth24Date    AS DATE NO-UNDO.
+
    DEF BUFFER SingleFee FOR SingleFee.
    DEF BUFFER MsRequest FOR MsRequest.
    
@@ -415,6 +418,8 @@ PROCEDURE pQ25Extension:
          RETURN "ERROR: already returned terminal".
    END.
 
+/* TODO: To be removed after code review.
+
    ldaDate = fPer2Date(SingleFee.BillPeriod,0).
    ldaDate = DATE(MONTH(ldaDate),21,YEAR(ldaDate)).
 
@@ -423,6 +428,29 @@ PROCEDURE pQ25Extension:
    ELSE ASSIGN
       ldeContractActStamp = fSecOffset(fMakeTS(),5)
       ldaDate = TODAY.
+ */
+
+   ASSIGN
+      ldaMonth22Date    = ADD-INTERVAL(DCCLI.ValidFrom, 22, 'months':U)
+      ldaMonth22Date    = DATE(MONTH(ldaMonth22Date),1,YEAR(ldaMonth22Date))
+      ldaMonth24Date    = ADD-INTERVAL(DCCLI.ValidFrom, 24, 'months':U)
+      ldaMonth24Date    = DATE(MONTH(ldaMonth24Date),21,YEAR(ldaMonth24Date)).
+
+   /* If the Quota 25 prorate request is created between 1st day of month 22
+      until 20th day of month 24 then
+      it should be handled on 21st day of month 24 at 00:00.
+      But if the request is created after 20th day of month 24 then
+      those will be handled immediately
+      */
+   IF TODAY < ldaMonth22Date THEN
+      RETURN "ERROR: Q25 extension not allowed before 22th month".
+   ELSE IF TODAY >= ldaMonth22Date AND
+      TODAY < ldaMonth24Date THEN
+      /* handle it on 21st day of month 24 at 00:00 */
+      ldeContractActStamp = fMake2Dt(ldaMonth24Date,0).
+   ELSE ASSIGN
+      ldaMonth24Date = TODAY
+      ldeContractActStamp = fSecOffSet(fMakeTS(),5). /* Handle it immediately */
 
    liRequest = fPCActionRequest(MobSub.MsSeq,
                              "RVTERM12",
