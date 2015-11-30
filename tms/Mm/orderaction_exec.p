@@ -482,8 +482,14 @@ PROCEDURE pQ25Extension:
                         "Yoigo info",
                         "").
       END.
+
+      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                       "MobSub",
+                       STRING(MobSub.MsSeq),
+                       0,
+                       "Quota 25 extension request is created",
+                       lcResult).
    END.
-      
 
 END PROCEDURE.
 
