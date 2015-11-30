@@ -2044,8 +2044,8 @@ PROCEDURE pFixedFee:
          FIND LAST FFItem OF FixedFee NO-LOCK NO-ERROR.
          IF NOT AVAIL FFItem THEN NEXT.
 
-         ldaFeesTo = ADD-INTERVAL(TODAY,5,"months").
-         /* At least 1 year unbilled fixed fee items */
+         ldaFeesTo = ADD-INTERVAL(TODAY,6,"months").
+         /* At least 6 months of unbilled fixed fee items */
          IF FFItem.BillPeriod <= YEAR(ldaFeesTo) * 100 + MONTH(ldaFeesTo) 
          THEN DO:
             fMakeContractMore(INPUT Fixedfee.FFNum, 
