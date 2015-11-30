@@ -259,16 +259,6 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    DEF VAR lcNotifCaseID AS CHAR NO-UNDO.
    DEF VAR lcParam AS CHAR NO-UNDO.
    DEF VAR lcMessage AS CHAR NO-UNDO.
- /*  DEF VAR lcMSISDN AS CHAR NO-UNDO.
-   DEF VAR lcContractID AS CHAR NO-UNDO.
-   DEF VAR lcDNIType AS CHAR NO-UNDO.
-   DEF VAR lcDNI AS CHAR NO-UNDO.
-   DEF VAR lcFname AS CHAR NO-UNDO.
-   DEF VAR lcLname AS CHAR NO-UNDO.
-   DEF VAR lcEmail AS CHAR NO-UNDO.
-   DEF VAR lcBankAcc AS CHAR NO-UNDO.
-   DEF VAR lcSeq AS CHAR NO-UNDO.
-*/
    /*search data for message*/
    FIND FIRST Order NO-LOCK WHERE
               Order.Brand EQ gcBrand AND
@@ -282,7 +272,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    IF NOT AVAIL Order THEN RETURN "DMS Notif: No OrderCustomer available".
 
    /*Messages are sent only for direct channel orders.*/
-   IF R-INDEX(Order.OrderChannel, "pos") EQ 0 THEN RETURN "".
+   IF R-INDEX(Order.OrderChannel, "pos") NE 0 THEN RETURN "".
 
    /*DMS triggered cases:*/
    /*Read Parameter that defines case ID*/
