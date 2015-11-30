@@ -6,7 +6,7 @@ INPUT THROUGH hostname.
 IMPORT lcHostName.
 INPUT CLOSE.
 
-IF LOOKUP(lcHostName,'angetenar,alpheratz') = 0 THEN DO:
+IF LOOKUP(lcHostName,'angetenar,alpheratz,sadachbia') = 0 THEN DO:
    MESSAGE 'This script is not allowed to run in'
    lcHostName VIEW-AS ALERT-BOX.
    RETURN.
