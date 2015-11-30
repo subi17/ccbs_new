@@ -7,7 +7,7 @@ import re
 sysversion = re.sub('\n','',os.popen('hostname').read())
 if sysversion == 'hebe' or sysversion == 'pallas':
    address = 'http://localhost:3001/fcgiproxy_xfera/'
-elif sysversion == 'sadira' or sysversion == 'alpheratz' or sysversion == 'angetenar':
+elif sysversion == 'sadachbia' or sysversion == 'alpheratz' or sysversion == 'angetenar':
    address =  'http://localhost:3000/tmsrpc_xfera/'
 
 def date_time_builder(pdate):
