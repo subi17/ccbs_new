@@ -75,6 +75,13 @@ FUNCTION fAddDiscountPlanMember RETURNS INTEGER
    END.
 
    IF idDiscountAmt > 0 THEN DO:
+      IF ldValidTo EQ ? THEN DO:
+         IF DiscountPlan.dprule EQ "BONO6WEBDISC" THEN
+            ldValidTo = 12/31/16.
+         ELSE
+            ldValidTo = 12/31/49.
+
+      END.
       CREATE DPMember.
       ASSIGN 
          DPMember.DPId      = DiscountPlan.DPId
