@@ -18,12 +18,11 @@
           has_terminal;bool;terminal has been ordered before
           number_type;string;new/mnp (original order type)
           allowed_terminal_financing_amount;double;if risk limit is configured
- * @installment;array of installment structs;two fields insidde struct
- * @installment;struct
           pending_stc;boolean;true
-
           liQtyTFs;int;number of installments
           subscription_bundle;string;tariff bundle of mobsub
+ * @installment;array of installment structs;two fields insidde struct
+ * @installment;struct per_contract_id;int;installment periodical contract id
 */
 {xmlrpc/xmlrpc_access.i}
 
