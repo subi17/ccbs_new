@@ -8,6 +8,7 @@
 {cparam2.i}
 {tmsconst.i}
 {amq.i}
+{jsonlib.i}
 
 ASSIGN
    katun   = "Cron"
@@ -151,6 +152,103 @@ FUNCTION fDMSOnOff RETURNS LOGICAL:
 END.
 
 
+FUNCTION fNeededDocs RETURNS CHAR
+   (BUFFER Order FOR Order):
+   DEF VAR lcPAram AS CHAR NO-UNDO.
+   DEF VAR liCount AS INT NO-UNDO.
+   DEF VAR lcDocListEntries AS CHAR NO-UNDO.
+
+   /*CASE More DOC needed*/
+   IF Order.StatusCode EQ  {&ORDER_STATUS_MORE_DOC_NEEDED}  THEN DO: /*44*/
+     /*portability pos-pos*/
+      IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
+         Order.PayType EQ FALSE AND
+         Order.OldPayType EQ FALSE  THEN
+         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T1".
+      /*new add pos / portability pre-pos.*/
+      ELSE IF (Order.OrderType EQ {&ORDER_TYPE_NEW} AND
+               Order.PayType EQ FALSE )
+         OR
+              (Order.OrderType EQ {&ORDER_TYPE_MNP} AND
+              Order.PayType EQ FALSE AND
+              Order.OldPayType EQ TRUE ) THEN
+         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T2".
+      /*stc to pos / migration+renewal*/
+      ELSE IF Order.OrderType EQ {&ORDER_TYPE_STC} AND
+              Order.PayType EQ FALSE
+         OR
+              Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN
+         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T3".
+      /*add new pre / portability to pre*/
+      ELSE IF Order.OrderType EQ {&ORDER_TYPE_NEW} AND
+              Order.PayType EQ TRUE
+         OR
+              Order.OrderType EQ {&ORDER_TYPE_MNP} AND
+              Order.PayType EQ TRUE THEN
+         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T4".
+   END.
+   /*Company orders:*/
+   ELSE IF Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} THEN DO:
+      IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
+         Order.PayType EQ FALSE AND
+         Order.OldPayType EQ FALSE  THEN
+         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T1".
+      /*new add pos / portability pre-pos.*/
+      ELSE IF (Order.OrderType EQ {&ORDER_TYPE_NEW} AND
+               Order.PayType EQ FALSE )
+         OR
+              (Order.OrderType EQ {&ORDER_TYPE_MNP} AND
+               Order.PayType EQ FALSE AND
+               Order.OldPayType EQ TRUE ) THEN
+         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T2".
+
+      /*add new pre / portability to pre*/
+      ELSE IF Order.OrderType EQ {&ORDER_TYPE_NEW} AND
+              Order.PayType EQ TRUE
+         OR
+              Order.OrderType EQ {&ORDER_TYPE_MNP} AND
+              Order.PayType EQ TRUE THEN
+         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T3".
+
+   END.
+   /*CASE 21,33*/
+   ELSE IF Order.Statuscode EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} OR
+           Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} THEN DO:
+      IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
+         Order.PayType EQ FALSE AND
+         Order.OldPayType EQ FALSE  THEN
+         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T1".
+      /*new add pos / portability pre-pos.*/
+      ELSE IF (Order.OrderType EQ {&ORDER_TYPE_NEW} AND
+               Order.PayType EQ FALSE )
+         OR
+              (Order.OrderType EQ {&ORDER_TYPE_MNP} AND
+               Order.PayType EQ FALSE AND
+               Order.OldPayType EQ TRUE ) THEN
+         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T2".
+      /*stc to pos / migration+renewal*/
+      ELSE IF Order.OrderType EQ {&ORDER_TYPE_STC} AND
+              Order.PayType EQ FALSE
+         OR
+              Order.OrderType EQ {&ORDER_TYPE_RENEWAL} /* AND
+              Order.OrderChannel EQ TODO */ THEN
+         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T3".
+      /*add new pre / portability to pre*/
+      ELSE IF Order.OrderType EQ {&ORDER_TYPE_NEW} AND
+              Order.PayType EQ TRUE
+         OR
+              Order.OrderType EQ {&ORDER_TYPE_MNP} AND
+              Order.PayType EQ TRUE THEN
+         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T4".
+
+   END.
+   RETURN fCParam("DMS",lcParam).
+
+END.
+
+
+
+
 FUNCTION fSendToMQ RETURNS CHAR
    (icMsg AS CHAR):
    DEF VAR lcRet AS CHAR NO-UNDO.
@@ -192,8 +290,9 @@ END.
 FUNCTION fGenerateMessage RETURNS CHAR
    (icNotifCaseId AS CHAR,
     icDeposit AS CHAR,
-    BUFFER Order FOR Order,
-    BUFFER Ordercustomer FOR Ordercustomer):
+   BUFFER Order FOR Order,
+   BUFFER Ordercustomer FOR Ordercustomer):
+  
    DEF VAR lcMSISDN AS CHAR NO-UNDO.
    DEF VAR lcContractID AS CHAR NO-UNDO.
    DEF VAR lcDNIType AS CHAR NO-UNDO.
@@ -204,6 +303,9 @@ FUNCTION fGenerateMessage RETURNS CHAR
    DEF VAR lcBankAcc AS CHAR NO-UNDO.
    DEF VAR lcSeq AS CHAR NO-UNDO.
    DEF VAR lcMessage AS CHAR NO-UNDO.
+   DEF VAR lcArray AS CHAR NO-UNDO.
+   DEF VAR lcDocList AS CHAR NO-UNDO.
+   DEF VAR liCount AS INT NO-UNDO.
 
 
    IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN
@@ -218,20 +320,25 @@ FUNCTION fGenerateMessage RETURNS CHAR
              fNotNull(Ordercustomer.SurName2).
    lcEmail = fNotNull(OrderCustomer.Email).
    lcBankAcc = fNotNull(OrderCustomer.BankCode).
-   lcSeq = STRING(NEXT-VALUE(SMSSEQ)). /*read and increase SMSSEQ. The sequence must be
-                                         reserved as ID for WEB&HPD*/
 
+   lcSeq = STRING(NEXT-VALUE(SMSSEQ)). /*read and increase SMSSEQ. The sequence must be reserved as ID for WEB&HPD*/
+   lcDocList = fNeededDocs(BUFFER Order).  
+   DO liCount = 1 TO NUM-ENTRIES(lcDocList):
+      fAddToJsonArray(lcArray, STRING(ENTRY(liCount,lcDocList))).
+   END.
 
    /*Fill data for message.*/
    lcMessage = "~{" + "~"metadata~""  + "~:" + "~{" +
                          "~"case~""  + "~:" + "~"" + icNotifCaseID  + "~"," +
+                         lcArray + "," +
                          "~"smsseq~""  + "~:" + "~"" + lcSeq  + "~"" +
                      "~}" + "," +
                       "~"data~"" + "~:" + "~{" +
                          "~"msisdn~""   + "~:" + "~"" + lcMSISDN + "~"" + "," +
                          "~"contractid~"" +  "~:" + "~"" +
                                      lcContractID + "~"" + "," +
-                         "~"dni_type~"" +  "~:" + "~"" + lcDNIType + "~"" + "," +
+                         "~"dni_type~"" +  "~:" + "~"" + 
+                                     lcDNIType + "~"" + "," +
                          "~"dni~""      +  "~:" + "~"" + lcDNI + "~"" + "," +
                          "~"fname~""    +  "~:" + "~"" + lcFname + "~"" + "," +
                          "~"lname~""    +  "~:" + "~"" + lcLname + "~"" + "," +
