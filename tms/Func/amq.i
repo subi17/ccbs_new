@@ -3,7 +3,7 @@
 &GLOBAL-DEFINE AMQ_I YES
 /* ----------------------------------------------------------------------
   Module .......: Func/amq.i
-  Task .........: General ActiveMQ Reader Include File
+  Task .........: General ActiveMQ Handler Include File
   Application ..: TMS
   Author .......: ilsavola
   Created ......: 27.11.2015
@@ -64,13 +64,14 @@ PROCEDURE pInitialize:
          IF icModule EQ "dms" THEN 
             lcConfFile = "Mailconf/dms_messaging_conf.alpheratz".         
       END.
-      WHEN "Angetenar" THEN
-         lcConfFile = "Mailconf/replog_reader_conf.angetenar".         
-      WHEN "Hebe"  OR WHEN "Flora" OR WHEN "Pallas" THEN DO:
+      WHEN "Pallas" THEN DO:
          IF icModule EQ "dms" THEN 
             lcConfFile = "Mailconf/dms_messaging_conf.prod". 
       END.
-      OTHERWISE lcConfFile = "".
+      OTHERWISE DO:
+         lcConfFile = "".
+         RETURN "Unknown configuration".
+      END.   
    END CASE.
 
    IF SEARCH(lcConfFile) = ? THEN
@@ -127,6 +128,45 @@ PROCEDURE pInitialize:
 
 
 END PROCEDURE.
+
+
+FUNCTION fSendToMQ RETURNS CHAR
+   (icMsg AS CHAR,
+    icInitKey AS CHAR,
+    icMQ AS CHAR):
+   DEF VAR lcRet AS CHAR NO-UNDO.
+
+   RUN pInitialize(INPUT "dms").
+
+   IF RETURN-VALUE > "" THEN DO:
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+      LOG-MANAGER:WRITE-MESSAGE(RETURN-VALUE, "ERROR").
+
+         RETURN RETURN-VALUE.
+   END.
+
+   lMsgPublisher = NEW Gwy.MqPublisher(lcHost,liPort,
+                                       liTimeOut,icMQ,
+                                       lcUserName,lcPassword).
+
+   IF NOT VALID-OBJECT(lMsgPublisher) THEN DO:
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN DO:
+            LOG-MANAGER:WRITE-MESSAGE("ActiveMQ Publisher handle not found",
+                                    "ERROR").
+            lcRet = "ActiveMQ Publisher handle not found".
+      END.
+   END.
+   ELSE IF NOT lMsgPublisher:send_message(icMsg) THEN DO:
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN DO:
+         LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+         lcRet = "ActiveMQ message sending failed".
+      END.
+   END.
+   RUN pFinalize(INPUT "").
+   RETURN lcRet.
+
+END.
+
 
 PROCEDURE pFinalize:
 

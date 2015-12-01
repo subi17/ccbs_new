@@ -246,47 +246,6 @@ FUNCTION fNeededDocs RETURNS CHAR
 
 END.
 
-
-
-
-FUNCTION fSendToMQ RETURNS CHAR
-   (icMsg AS CHAR):
-   DEF VAR lcRet AS CHAR NO-UNDO.
-   DEF VAR lcMQ  AS CHAR NO-UNDO.
-
-   RUN pInitialize(INPUT "dms").
-
-   IF RETURN-VALUE > "" THEN DO:
-      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
-      LOG-MANAGER:WRITE-MESSAGE(RETURN-VALUE, "ERROR").
-
-         RETURN RETURN-VALUE.
-   END.
-   /* Call ActiveMQ Publisher class */
-   lcMQ =  fCParam("DMS","DMS_MQ").
-
-   lMsgPublisher = NEW Gwy.MqPublisher(lcHost,liPort,
-                                       liTimeOut,lcMQ, 
-                                       lcUserName,lcPassword).
-
-   IF NOT VALID-OBJECT(lMsgPublisher) THEN DO:
-      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN DO:
-            LOG-MANAGER:WRITE-MESSAGE("ActiveMQ Publisher handle not found",
-                                    "ERROR").
-            lcRet = "ActiveMQ Publisher handle not found".
-      END.
-   END.
-   ELSE IF NOT lMsgPublisher:send_message(icMsg) THEN DO:
-      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN DO:
-         LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
-         lcRet = "ActiveMQ message sending failed".
-      END.
-   END.
-   RUN pFinalize(INPUT "").
-   RETURN lcRet.
-
-END.
-
 FUNCTION fGenerateMessage RETURNS CHAR
    (icNotifCaseId AS CHAR,
     icDeposit AS CHAR,
@@ -366,6 +325,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    DEF VAR lcNotifCaseID AS CHAR NO-UNDO.
    DEF VAR lcParam AS CHAR NO-UNDO.
    DEF VAR lcMessage AS CHAR NO-UNDO.
+   DEF VAR lcMQ AS CHAR NO-UNDO.
    /*search data for message*/
    FIND FIRST Order NO-LOCK WHERE
               Order.Brand EQ gcBrand AND
@@ -403,7 +363,8 @@ FUNCTION fSendChangeInformation RETURNS CHAR
                                 BUFFER Ordercustomer).
 
    ocSentMessage = lcMessage.              
-   RETURN fSendToMQ(lcMessage).
+   lcMQ =  fCParam("DMS","DMS_MQ"). 
+   RETURN fSendToMQ(lcMessage, "dms", lcMQ).
 END.
 
 
