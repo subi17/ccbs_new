@@ -1865,7 +1865,7 @@ PROCEDURE pGetCTNAME:
                   DPMember.validFrom <= ldtOrderDate AND
                   DPMember.validTo >= ldtOrderDate NO-LOCK NO-ERROR.
        IF AVAIL DPMember THEN DO:          
-          lcMFText = lcMFText + " 1 GB/mes gratis hasta dic. 2016".
+          lcMFText = lcMFText + "<br/>1 GB/mes gratis hasta dic. 2016".
        END.
        ELSE DO:
           FOR EACH Orderaction NO-LOCK where
@@ -1877,7 +1877,7 @@ PROCEDURE pGetCTNAME:
                     DiscountPlan.DPRuleId = "BONO6WEBDISC" AND
                     DiscountPlan.validFrom <= ldtOrderDate AND
                     DiscountPlan.ValidTo >= ldtOrderDate NO-LOCK:
-             lcMFText = lcMFText + " 1 GB/mes gratis hasta dic. 2016". 
+             lcMFText = lcMFText + "<br/>1 GB/mes gratis hasta dic. 2016". 
           END.
        END.          
     
