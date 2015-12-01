@@ -43,8 +43,8 @@ DEF VAR lcIMEI           AS CHAR   NO-UNDO.
 DEF VAR liOrderId        AS INT    NO-UNDO.
 DEF VAR lcBillCode       AS CHAR   NO-UNDO.
 DEF VAR lcMSISDN         AS CHAR   NO-UNDO.
-DEF VAR llDeviceStart    AS LOG    NO-UNDO.
-DEF VAR llDeviceScreen   AS LOG    NO-UNDO.
+DEF VAR llDeviceStart    AS LOG    NO-UNDO INIT ?.
+DEF VAR llDeviceScreen   AS LOG    NO-UNDO INIT ?.
 DEF VAR lcSalesman       AS CHAR   NO-UNDO.
 DEF VAR lcTerminalType   AS CHAR   NO-UNDO.
 DEF VAR lcEnvelopeNumber AS CHAR   NO-UNDO.
@@ -56,15 +56,15 @@ DEF VAR lcMemo           AS CHAR   NO-UNDO.
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
-lcStruct = validate_request(pcStruct, "imei!,orderid!,bill_code!,msisdn!,device_start!,device_screen!,salesman!,terminal_type!,envelope_number").
+lcStruct = validate_request(pcStruct, "imei!,orderid!,bill_code!,msisdn!,device_start,device_screen,salesman!,terminal_type!,envelope_number").
 
 ASSIGN
    lcIMEI            = get_string(pcStruct,"imei")
    liOrderId         = get_int(pcStruct,"orderid")
    lcBillCode        = get_string(pcStruct,"bill_code")
    lcMSISDN          = get_string(pcStruct,"msisdn")
-   llDeviceStart     = get_bool(pcStruct,"device_start")
-   llDeviceScreen    = get_bool(pcStruct,"device_screen")
+   llDeviceStart     = get_bool(pcStruct,"device_start") WHEN LOOKUP("device_start", lcStruct) > 0
+   llDeviceScreen    = get_bool(pcStruct,"device_screen") WHEN LOOKUP("device_screen", lcStruct) > 0
    lcSalesman        = get_string(pcStruct,"salesman")
    lcTerminalType    = get_string(pcStruct,"terminal_type")
    lcEnvelopeNumber  = get_string(pcStruct,"envelope_number")
@@ -74,6 +74,10 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF LENGTH(lcIMEI,"CHARACTER") NE 15 THEN
    RETURN appl_err("IMEI code doesn't contain 15 characters").
+
+IF (llDeviceStart  = ? AND llDeviceScreen <> ?) OR
+   (llDeviceScreen = ? AND llDeviceStart  <> ?) THEN
+   RETURN appl_err("Both should be NULL for Basic screening").
 
 IF CAN-FIND(FIRST TermReturn WHERE
                   TermReturn.IMEI           = lcIMEI AND
@@ -89,7 +93,8 @@ IF CAN-FIND(FIRST TermReturn WHERE
    RETURN.
 END.
 
-IF llDeviceStart AND llDeviceScreen THEN DO:
+IF (llDeviceStart AND llDeviceScreen) OR
+   (llDeviceStart = ? AND llDeviceScreen = ?) THEN DO:
    
    FIND Order NO-LOCK WHERE
         Order.Brand   = gcBrand AND
@@ -192,8 +197,9 @@ ASSIGN TermReturn.IMEI           = lcIMEI
 IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhTermReturn).
 
 
-IF llDeviceStart AND llDeviceScreen THEN 
-   lcMemo = "Devolución en tienda aceptada".
+IF (llDeviceStart AND llDeviceScreen) OR
+   (llDeviceStart = ? AND llDeviceScreen = ?) 
+THEN lcMemo = "Devolución en tienda aceptada".
 ELSE lcMemo = "Devolución en tienda denegada".
 
 DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
