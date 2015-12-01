@@ -2027,6 +2027,7 @@ PROCEDURE pFixedFee:
    DEF VAR ldVatPerc    AS DEC  NO-UNDO.
    DEF VAR liAgrCust    AS INT  NO-UNDO.
    DEF VAR liRowPeriod  AS INT  NO-UNDO.
+   DEF VAR ldaFeesTo    AS DATE NO-UNDO.
    
    FOR EACH ttEventCust WHERE
             (IF llInvComb 
@@ -2043,8 +2044,9 @@ PROCEDURE pFixedFee:
          FIND LAST FFItem OF FixedFee NO-LOCK NO-ERROR.
          IF NOT AVAIL FFItem THEN NEXT.
 
-         /* At least 1 year unbilled fixed fee items */
-         IF FFItem.BillPeriod <= YEAR(Today) * 100 + MONTH(Today) + 100 
+         ldaFeesTo = ADD-INTERVAL(TODAY,6,"months").
+         /* At least 6 months of unbilled fixed fee items */
+         IF FFItem.BillPeriod <= YEAR(ldaFeesTo) * 100 + MONTH(ldaFeesTo) 
          THEN DO:
             fMakeContractMore(INPUT Fixedfee.FFNum, 
                               INPUT FFItem.Concerns[2]).

@@ -361,7 +361,9 @@ PROCEDURE pDiscountPlan:
                                        DiscountPlan.ValidPeriods)
          DPMember.DiscValue = DPRate.DiscValue.
    END.
-   
+   IF DiscountPlan.dprule EQ "BONO6WEBDISC" THEN /* YPR-3083 */
+      DPMember.ValidTo = 12/31/16.
+
    RETURN "".
 
 END PROCEDURE.
