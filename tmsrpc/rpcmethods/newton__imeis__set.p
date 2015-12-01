@@ -413,7 +413,7 @@ ASSIGN
    bCreaReq.reqcparam1 = lcOldIMEI
    bCreaReq.reqcparam2 = pcIMEI
    bCreaReq.reqcparam3 = pcOfferId
-   bCreaReq.reqcparam6 = pcContractId
+   bCreaReq.reqcparam6 = Order.Contractid /*YTS-7939, take from order*/
    bCreaReq.reqiparam1 = Order.OrderId
    bCreaReq.ReqSource  = {&REQUEST_SOURCE_NEWTON}.
 
