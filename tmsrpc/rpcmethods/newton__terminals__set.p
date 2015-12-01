@@ -147,6 +147,8 @@ IF LOOKUP("imei",lcStruct) > 0 THEN DO:
    /*empty contract_id if it is not from VFR*/
    IF pcChannel NE {&DMS_VFR_REQUEST} THEN
       pcContractId = "".
+   /*In IMEI change external system needs Original order orderid.*/
+   ELSE pcContractID = Order.Contractid.
    ASSIGN
       bCreaReq.msseq = Order.msseq
       bCreaReq.custnum = Order.custnum
