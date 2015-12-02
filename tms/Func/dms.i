@@ -282,6 +282,8 @@ FUNCTION fGenerateMessage RETURNS CHAR
 
    lcSeq = STRING(NEXT-VALUE(SMSSEQ)). /*read and increase SMSSEQ. The sequence must be reserved as ID for WEB&HPD*/
    lcDocList = fNeededDocs(BUFFER Order).  
+   lcArray = fInitJsonArray("documents").
+
    DO liCount = 1 TO NUM-ENTRIES(lcDocList):
       fAddToJsonArray(lcArray, STRING(ENTRY(liCount,lcDocList))).
    END.
