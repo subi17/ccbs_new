@@ -1636,7 +1636,7 @@ PROCEDURE pContractTermination:
    DEF VAR llCancelOrder AS LOG NO-UNDO. 
    DEF VAR llCancelInstallment AS LOG NO-UNDO. 
    DEF VAR liOrderId AS INT NO-UNDO. 
-
+   DEF VAR liCnt AS INT NO-UNDO.
    DEF VAR liEndPeriodPostpone AS INT  NO-UNDO.
    DEF VAR ldtActDatePostpone  AS DATE NO-UNDO.
 
@@ -2421,16 +2421,19 @@ PROCEDURE pContractTermination:
 
       /* Deactivate Bono6 */
       IF lcDCEvent EQ "DATA6" THEN DO: 
-         FIND FIRST DiscountPlan WHERE 
-                    DiscountPlan.Brand      = gcBrand     AND 
-                    DiscountPlan.DPRuleId   = "BONO6DISC" AND 
-                    DiscountPlan.ValidTo   >= TODAY       NO-LOCK NO-ERROR.
-                       
-         IF AVAILABLE DiscountPlan THEN 
-            llgResult = fCloseDiscount(DiscountPlan.DPRuleId,
-                                       MsRequest.MsSeq,
-                                       ldtActDate,
-                                       FALSE).            
+         DO liCnt = 1 TO NUM-ENTRIES({&BONO6DISCOUNTS}):
+            FIND FIRST DiscountPlan WHERE 
+                       DiscountPlan.Brand      = gcBrand     AND 
+                       DiscountPlan.DPRuleId   = ENTRY(liCnt, 
+                                                       {&BONO6DISCOUNTS}) AND 
+                       DiscountPlan.ValidTo   >= TODAY       NO-LOCK NO-ERROR.
+                          
+            IF AVAILABLE DiscountPlan THEN 
+               llgResult = fCloseDiscount(DiscountPlan.DPRuleId,
+                                          MsRequest.MsSeq,
+                                          ldtActDate,
+                                          FALSE).            
+         END.
       END.
           
       /* iSTC - Reduce bundle consumption to network for non-DSS */
