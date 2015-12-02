@@ -333,8 +333,8 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    IF NOT AVAIL Order THEN RETURN "DMS Notif: No Order available".
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              Order.Brand EQ gcBrand AND
-              Order.OrderId EQ icOrderID AND
+              OrderCustomer.Brand EQ gcBrand AND
+              OrderCustomer.OrderId EQ icOrderID AND
               OrderCustomer.RowType EQ 1 NO-ERROR.
    IF NOT AVAIL Order THEN RETURN "DMS Notif: No OrderCustomer available".
 
