@@ -126,6 +126,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
             /*Default values for new loop*/
             llgDirect = FALSE.
             llgAddEntry = FALSE.
+            lcCase = "".
             /*Case 5: Direct channels*/
             /*This can NOT be parallell with other cases.*/
             /*Reason to store llgDirect information is that the case is easy
@@ -147,9 +148,8 @@ FUNCTION fMakeTempTable RETURNS CHAR
                      llgDirect = TRUE.
                      CREATE ttOrderList.
                      ASSIGN ttOrderList.OrderID = OrderTimestamp.OrderId
-                            ttOrderList.CaseID = lcCase
+                            ttOrderList.CaseID = {&DMS_CASE_TYPE_ID_DIRECT_CH}.
                             ttOrderList.Direct = llgDirect.
-                     lcCase = {&DMS_CASE_TYPE_ID_DIRECT_CH}.
                      NEXT.  /*no need to check other cases because they                                           can not be parallel according to current specs.*/
                   END.
             END.
