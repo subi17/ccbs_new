@@ -13,7 +13,6 @@
 {commali.i}
 {fcreatereq.i}
 {tmsconst.i}
-{func.i}
 {cparam2.i}
 
 function fSMSInvoiceValidate returns logical
