@@ -74,10 +74,13 @@ IF lcSMSText = "" THEN
 liNumber = RANDOM(1000,9999).
 lcSMSText = REPLACE(lcSMSText,"#code",STRING(liNumber)).
 
+/* Reguirement to delay SMS sending by Yoigo */
+ldReqStamp = ldReqStamp + RANDOM(90,120) * 0.00001.
+
 /* Send SMS to customer */
 fMakeSchedSMS2(0,       /* Customer number not known */
                Order.CLI,
-               {&SMSTYPE_INFO},  /* Credit Type for this SMS */
+               {&SMSTYPE_MNP_CANCEL},  /* Credit Type for this SMS */
                lcSMSText,
                ldReqStamp,
                "622",            /* Sender number */
