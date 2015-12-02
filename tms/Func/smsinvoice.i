@@ -68,7 +68,7 @@ function fsmsinvoicerequest returns integer
     output ocresult      as char).
 
 def var lireqcreated as int  no-undo.
-DEF VAR lButtonTS     AS DECIMAL   NO-UNDO.
+DEF VAR lButtonSeconds     AS DECIMAL   NO-UNDO.
 DEF VAR lButtonDate   AS DATE      NO-UNDO.
 DEF VAR lNowSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
@@ -79,12 +79,25 @@ DEF VAR lcSMSSchedule AS CHARACTER NO-UNDO.
    lNowSeconds = INTEGER(MTIME(NOW) / 1000).
    
    /* Time of request */
-   fSplitTS(lButtonTS, lButtonDate, idactstamp).
-   
+   fSplitTS(idactstamp, lButtonDate, lButtonSeconds).
+
    /* ie. "32400-79200" Send between 9:00-22:00 */
    lcSMSSchedule = fCParamC("SMSSchedule").
-   lIniSeconds = INTEGER(SUBSTRING(lcSMSSchedule,1,INDEX(lcSMSSchedule,"-") - 1)).
-   lEndSeconds = INTEGER(SUBSTRING(lcSMSSchedule,INDEX(lcSMSSchedule,"-") + 1)).
+   lIniSeconds = INTEGER(SUBSTRING(lcSMSSchedule,1,INDEX(lcSMSSchedule,"-") - 1)) NO-ERROR.
+   IF ERROR-STATUS:ERROR THEN lIniSeconds = 0.
+   lEndSeconds = INTEGER(SUBSTRING(lcSMSSchedule,INDEX(lcSMSSchedule,"-") + 1)) NO-ERROR.
+   IF ERROR-STATUS:ERROR THEN lEndSeconds = 0.
+
+   IF lIniSeconds <= 0 THEN lIniSeconds = 1.
+   IF lIniSeconds > 86399 THEN lIniSeconds = 86399. /* 23:59:59 */
+   
+   IF lEndSeconds <= 0 THEN lEndSeconds = 1.
+   IF lEndSeconds > 86399 THEN lEndSeconds = 86399. /* 23:59:59 */
+   
+   IF lIniSeconds >= lEndSeconds THEN
+   ASSIGN /* 9:00-22:00 */
+      lIniSeconds = 32400.
+      lEndSeconds = 86399.
 
    /* If is too late, schedule to start next morning */
    IF (lNowSeconds > lEndSeconds) THEN

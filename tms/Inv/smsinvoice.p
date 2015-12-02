@@ -80,7 +80,7 @@ IF liTime2Pause > 3599 THEN /* 1 Hour */
    liTime2Pause = 3599.
 
 lIniSeconds = INTEGER(SUBSTRING(lcSMSSchedule,1,INDEX(lcSMSSchedule,"-") - 1)) NO-ERROR.
-IF ERROR-STATUS:ERROR THEN lIniSeconds = 0.    
+IF ERROR-STATUS:ERROR THEN lIniSeconds = 0.
 lEndSeconds = INTEGER(SUBSTRING(lcSMSSchedule,INDEX(lcSMSSchedule,"-") + 1)) NO-ERROR.
 IF ERROR-STATUS:ERROR THEN lEndSeconds = 0.
 
