@@ -319,7 +319,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    (icDMSStatus AS CHAR,
     icOrderID AS INT,
     icDeposit AS CHAR,
-    OUTPUT ocSentMessage AS CHAR):
+    OUTPUT ocSentMessage AS CHAR): /*for debugging*/
 
    DEF BUFFER Order FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
@@ -363,6 +363,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
                                 icDeposit,
                                 BUFFER Order,
                                 BUFFER Ordercustomer).
+   IF lcMessage EQ "" THEN RETURN "No Message".
 
    ocSentMessage = lcMessage.              
    lcMQ =  fCParam("DMS","DMS_MQ"). 
