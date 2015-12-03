@@ -11,7 +11,6 @@
 {jsonlib.i}
 
 ASSIGN
-   katun   = "Cron"
    gcBrand = "1".
 
 DEF TEMP-TABLE ttDMS    NO-UNDO LIKE DMS.
@@ -33,6 +32,18 @@ FUNCTION fGetOrderStatusDMS RETURNS CHAR
    IF AVAIL DMS THEN RETURN DMS.OrderStatus.
    RETURN "".      
 END.
+
+FUNCTION fCparamNotNull RETURNS CHAR
+   (icGR AS CHAR,
+    icP AS CHAR):
+   DEF VAR lcP AS CHAR NO-UNDO.
+   lcP = fCParam(icGr,icP).
+   IF lcP NE ? THEN RETURN lcP.
+   ELSE RETURN "".
+
+END.
+
+
 
 FUNCTION fUpdateDMS RETURNS CHAR
    (icDmsExternalID  AS CHAR,
@@ -242,7 +253,7 @@ FUNCTION fNeededDocs RETURNS CHAR
          lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T4".
 
    END.
-   RETURN fCParam("DMS",lcParam).
+   RETURN fCParamNotNull("DMS",lcParam).
 
 END.
 
@@ -349,7 +360,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    /*Read Parameter that defines case ID*/
    IF icDMSStatus NE "" THEN DO:
       lcParam = "DMSMsgID_" + icDMSStatus. /*DMSMsgIF_E -> returns 03*/
-      lcNotifCaseID = fCParam("DMS",lcParam).
+      lcNotifCaseID = fCParamNotNull("DMS",lcParam).
 
       IF lcNotifCaseID EQ "" THEN RETURN "No Message for " + lcParam.
    END.
@@ -357,7 +368,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    /*Get the caseId by using TMS information. This is used in casefile 
      sending.*/
        lcParam = "DMSMsgID_" + Order.StatusCode. /*DMSMsgIF_20 -> returns 1*/
-       lcNotifCaseID = fCParam("DMS",lcParam).
+       lcNotifCaseID = fCParamNotNull("DMS",lcParam).
        IF lcNotifCaseID EQ "" THEN RETURN "No Message for " + lcParam.
    END.
    lcMessage = fGenerateMessage(lcNotifCaseID,
@@ -366,7 +377,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
                                 BUFFER Ordercustomer).
 
    ocSentMessage = lcMessage.              
-   lcMQ =  fCParam("DMS","DMS_MQ"). 
+   lcMQ =  fCParamNotNull("DMS","DMS_MQ"). 
    RETURN fSendToMQ(lcMessage, "dms", lcMQ).
 END.
 
