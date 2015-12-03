@@ -79,11 +79,12 @@ IF pcCancel_code NE "" THEN DO:
    IF liCancel_code < 1000 OR liCancel_code > 9999 THEN 
       RETURN appl_err("Incorrect cancellation code").
 
-   FIND FIRST CallAlarm USE-INDEX TimeStamp NO-LOCK WHERE
-              CallAlarm.Brand      = gcBrand AND
-              CallAlarm.CLI        = Order.CLI   AND
-              CallAlarm.CreditType = {&SMSTYPE_MNP_CANCEL}.
-
+   FOR EACH CallAlarm NO-LOCK WHERE
+            CallAlarm.Brand      = gcBrand AND
+            CallAlarm.CLI        = Order.CLI   AND
+            CallAlarm.CreditType = {&SMSTYPE_MNP_CANCEL} BY ActStamp DESC:
+      LEAVE.
+   END.
    IF NOT AVAILABLE CallAlarm THEN
       RETURN appl_err("SMS was not found").
 
