@@ -16,6 +16,7 @@ DEF TEMP-TABLE ttServiceLimitGroup NO-UNDO LIKE ServiceLimitGroup.
 DEF TEMP-TABLE ttServiceLimit NO-UNDO LIKE ServiceLimit.
 DEF TEMP-TABLE ttRequestActionRule NO-UNDO LIKE RequestActionRule.
 DEF TEMP-TABLE ttTariff NO-UNDO LIKE Tariff.
+DEF TEMP-TABLE ttDiscountPlan NO-UNDO LIKE DiscountPlan.
 
 FUNCTION fcreateRepText RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                                            INPUT icDCEvent AS CHAR,
@@ -44,7 +45,7 @@ FUNCTION fcreateRepText RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    IF iiUpdateMode NE 0 THEN DO:
       CREATE RepText.
       BUFFER-COPY ttRepText TO RepText.
-      DELETE ttRepText. /*ror safety reasons*/
+      DELETE ttRepText. /*for safety reasons*/
    END.
    IF AVAIL RepText THEN RELEASE RepText.
    RETURN TRUE.
@@ -76,7 +77,7 @@ FUNCTION fcreateBillItem RETURNS LOGICAL ( INPUT icBasebillcode AS CHAR,
    IF iiUpdateMode NE 0 THEN DO:
       CREATE BillItem.
       BUFFER-COPY ttBillItem TO BillItem.
-      DELETE ttBillItem. /*ror safety reasons*/
+      DELETE ttBillItem. /*for safety reasons*/
    END.
    IF AVAIL BillItem THEN RELEASE BillItem.
    RETURN TRUE.
@@ -106,7 +107,7 @@ FUNCTION fcreateFeeModel RETURNS LOGICAL ( INPUT icBaseMFFeeModel AS CHAR,
    IF iiUpdateMode NE 0 THEN DO:
       CREATE FeeModel.
       BUFFER-COPY ttFeeModel TO FeeModel.
-      DELETE ttFeeModel. /*ror safety reasons*/
+      DELETE ttFeeModel. /*for safety reasons*/
    END.
    IF AVAIL FeeModel THEN RELEASE FeeModel.
    RETURN TRUE.
@@ -143,7 +144,7 @@ FUNCTION fcreateDayCampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    IF iiUpdateMode NE 0 THEN DO:
       CREATE DayCampaign.
       BUFFER-COPY ttDayCampaign TO DayCampaign.
-      DELETE ttdayCampaign. /*ror safety reasons*/
+      DELETE ttdayCampaign. /*for safety reasons*/
    END.
    IF AVAIL DayCampaign THEN RELEASE DayCampaign.
    RETURN TRUE.
@@ -177,7 +178,7 @@ FUNCTION fcreateFMItem RETURNS LOGICAL ( INPUT icBaseMFFeeModel AS CHAR,
    IF iiUpdateMode NE 0 THEN DO:
       CREATE FMItem.
       BUFFER-COPY ttFMItem TO FMItem.
-      DELETE ttFMItem. /*ror safety reasons*/
+      DELETE ttFMItem. /*for safety reasons*/
    END.
    IF AVAIL FMItem THEN RELEASE FMItem.
    RETURN TRUE.
@@ -185,10 +186,17 @@ END FUNCTION.
 
 /*********************************************************/
 /* Create Discount plan                                         */
-FUNCTION fcreateDPTarget RETURNS LOGICAL ( INPUT icBaseMFFeemodel AS CHAR,
+FUNCTION fcreateDiscountPlan RETURNS LOGICAL ( INPUT icBaseMFFeemodel AS CHAR,
                                          INPUT icMFFeemodel AS CHAR,
                                          INPUT idaVAlidFrom AS DATE,
+                                         INPUT icBaseDp AS CHAR,
+                                         INPUT icDp AS CHAR,
+                                         INPUT icDpName AS CHAR,
+                                         INPUT idAmt AS DEC,
                                          INPUT iiUpdateMode AS INT):
+   DEF VAR liDpId AS INT NO-UNDO.
+   FIND LAST DiscountPlan USE-INDEX DpId NO-LOCK NO-ERROR.
+   liDpId = DiscountPlan.DpId + 1.
    FIND FIRST DPTarget WHERE
               DPTarget.targetKey EQ icBaseMFFeeModel AND
               DPTarget.validTo > TODAY.
@@ -196,19 +204,58 @@ FUNCTION fcreateDPTarget RETURNS LOGICAL ( INPUT icBaseMFFeemodel AS CHAR,
       MESSAGE "DPTarget not found:  " + icBaseMFFeeModel VIEW-AS ALERT-BOX.
       RETURN FALSE.
    END.
-
+   FIND FIRST DiscountPlan WHERE
+              DiscountPlan.billcode = icBaseDp AND
+              DiscountPlan.ValidTo > TODAY.
+   IF NOT AVAIL DiscountPlan THEN DO:
+      MESSAGE "DiscountPlan not found:  " + icBaseDp VIEW-AS ALERT-BOX.
+      RETURN FALSE.
+   END.
    CREATE ttDPTarget.
    BUFFER-COPY DPTarget TO ttDPTarget.
+   CREATE ttDiscountPlan.
+   BUFFER-COPY DiscountPlan TO ttDiscountPlan.
    /*Set correct values to new entry*/
    ttDPTarget.TargetKey = icMFFeeModel.
-   ttDPTarget.ValidFrom = idaVAlidFrom.   
+   ttDPTarget.ValidFrom = idaVAlidFrom. 
+   ttDPTarget.dpId = liDpId.
+
+   ttDiscountPlan.billcode = icDp.
+   ttDiscountPlan.dpRuleId = icDp.
+   ttDiscountPlan.DPName = icDpName.
+   ttDiscountPlan.ValidFrom = idaVAlidFrom.
+   ttDiscountPlan.dpid = liDpId.
 
    DISPLAY ttDPTarget with frame a.
    pause 0.
    IF iiUpdateMode NE 0 THEN DO:
-      CREATE DPTarget.
-      BUFFER-COPY ttDPTarget TO DPTarget.
-      DELETE ttDPTarget. /*ror safety reasons*/
+      
+      FIND FIRST DPTarget WHERE
+                 DPTarget.targetKey EQ icMFFeeModel AND
+                 DPTarget.validTo > TODAY NO-ERROR.
+
+      IF NOT AVAIL DPTarget THEN DO:                                  
+         CREATE DPTarget.
+         BUFFER-COPY ttDPTarget TO DPTarget.
+         DELETE ttDPTarget. /*for safety reasons*/
+      END.
+      FIND FIRST DiscountPlan WHERE
+                 DiscountPlan.billcode = icDp AND
+                 DiscountPlan.ValidTo > TODAY NO-ERROR.
+      IF NOT AVAIL DiscountPlan THEN DO:
+         CREATE DiscountPlan.
+         BUFFER-COPY ttDiscountPlan TO Discountplan.
+         DELETE ttDiscountPlan. /*for safety reasons*/
+      END.
+      FIND FIRST DPRate WHERE
+                 DPRate.dpid = liDpId NO-LOCK NO-ERROR.
+      IF NOT AVAIL DPRate THEN DO:
+         CREATE DPRate.
+         DPRate.dpid = liDpId.
+         DPRate.discValue = idAmt.
+         DPRate.ValidTo = 12/31/49.
+         DPRate.ValidFrom = idaValidFrom.
+      END.
    END.
    IF AVAIL DPTarget THEN RELEASE DPTarget.
    RETURN TRUE.
@@ -329,7 +376,7 @@ FUNCTION fcreateProgLimit RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    IF iiUpdateMode NE 0 THEN DO:
       CREATE ProgLimit.
       BUFFER-COPY ttProgLimit TO ProgLimit.
-      DELETE ttProgLimit. /*ror safety reasons*/
+      DELETE ttProgLimit. /*for safety reasons*/
    END.
 
    FIND FIRST ProgLimit WHERE
@@ -355,7 +402,7 @@ FUNCTION fcreateProgLimit RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    IF iiUpdateMode NE 0 THEN DO:
       CREATE ProgLimit.
       BUFFER-COPY ttProgLimit TO ProgLimit.
-      DELETE ttProgLimit. /*ror safety reasons*/
+      DELETE ttProgLimit. /*for safety reasons*/
    END.
    IF AVAIL ProgLimit THEN RELEASE ProgLimit.
    RETURN TRUE.
@@ -417,7 +464,7 @@ FUNCTION fcreateSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
          IF iiUpdateMode NE 0 THEN DO:
             CREATE SLGAnalyse.
             BUFFER-COPY ttSLGAnalyse TO SLGAnalyse.
-            DELETE ttSLGAnalyse. /*ror safety reasons*/
+            DELETE ttSLGAnalyse. /*for safety reasons*/
          END.
       END.
       IF AVAIL ttSLGAnalyse THEN RELEASE ttSLGAnalyse.
@@ -482,7 +529,7 @@ FUNCTION fcreateBDest RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
       IF NOT AVAIL bBdest THEN DO:
          CREATE BDest.
          BUFFER-COPY ttBdest TO Bdest.
-         DELETE ttBDest. /*ror safety reasons*/
+         DELETE ttBDest. /*for safety reasons*/
          RELEASE BDest.
       END.
       RELEASE bBdest.
@@ -511,7 +558,7 @@ FUNCTION fcreateBDest RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
          IF NOT AVAIL bBdest THEN DO:
             CREATE BDest.
             BUFFER-COPY ttBdest TO Bdest.
-            DELETE ttBDest. /*ror safety reasons*/
+            DELETE ttBDest. /*for safety reasons*/
             RELEASE BDest.
          END.
          RELEASE bBdest.
@@ -562,7 +609,7 @@ FUNCTION fcreateDCService RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    IF iiUpdateMode NE 0 THEN DO:
       CREATE DCServicePackage.
       BUFFER-COPY ttDCServicePackage TO DCServicePackage.
-      DELETE ttDCServicePackage. /*ror safety reasons*/
+      DELETE ttDCServicePackage. /*for safety reasons*/
    END.
    IF AVAIL DCServicePackage THEN RELEASE DCServicePackage.
 
@@ -579,7 +626,7 @@ FUNCTION fcreateDCService RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    IF iiUpdateMode NE 0 THEN DO:
       CREATE DCServiceComponent.
       BUFFER-COPY ttDCServiceComponent TO DCServiceComponent.
-      DELETE ttDCServiceComponent. /*ror safety reasons*/
+      DELETE ttDCServiceComponent. /*for safety reasons*/
    END.
    IF AVAIL DCServiceComponent THEN RELEASE DCServiceComponent.   
 
@@ -637,7 +684,7 @@ FUNCTION fcreateTariff RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
       IF iiUpdateMode NE 0 THEN DO:
          CREATE Tariff.
          BUFFER-COPY ttTariff TO Tariff.
-         DELETE ttTariff. /*ror safety reasons*/
+         DELETE ttTariff. /*for safety reasons*/
       END.
       IF AVAIL Tariff THEN RELEASE Tariff.
       IF AVAIL ttTariff THEN RELEASE ttTariff.

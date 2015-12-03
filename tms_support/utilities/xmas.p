@@ -31,7 +31,7 @@ DEF VAR lcBrand AS CHAR NO-UNDO.
 DEF VAR lcFeeName AS CHAR NO-UNDO.
 DEF VAR lcBIName AS CHAR NO-UNDO.
 DEF VAR lcBIMFName AS CHAR NO-UNDO.
-DEF VAR lcFMAmount AS DEC NO-UNDO.
+DEF VAR ldFMAmount AS DEC NO-UNDO.
 DEF VAR liUpdateMode AS INT NO-UNDO.
 DEF VAR lcMFRepTextItem AS CHAR NO-UNDO.
 DEF VAR lcRepTextItem AS CHAR NO-UNDO.
@@ -40,6 +40,9 @@ DEF VAR lcClitypeList AS CHAR NO-UNDO.
 DEF VAR llError AS LOG NO-UNDO.
 DEF VAR lcServComParam AS CHAR NO-UNDO.
 DEF VAR lcServLimitName AS CHAR NO-UNDO.
+DEF VAR lcBaseDP AS CHAR NO-UNDO.
+DEF VAR lcDP AS CHAR NO-UNDO.
+DEF VAR lcDPName AS CHAR NO-UNDO.
 
 liUpdateMode = {&SIMULATERUN}. /*0 = test mode, no DB writing. */
 /* liUpdateMode = {&MODIFYDB}.*/  /* 1 = real mode, add to DB. */
@@ -55,6 +58,10 @@ ldDataLimit = 3072.
 ldaVAlidFrom = 12/01/2015.
 lcServComParam = "#CLITYPE#BONO7".
 lcServLimitName = "Mobile Data Usage Bundle 7".
+lcDPName = "Bono 3 GB discount".
+lcDP = "BONO7DISC".
+lcBaseDP = "BONO6DISC".
+
 
 /*FeeModel*/
 lcBaseMFFeeModel = "DATA6MF".
@@ -68,7 +75,7 @@ lcRepTextItem = lcDCEvent.
 lcFeename = lcdcEvent + " monthly fee".
 lcBIName = "Data 7 national GPRS".
 lcBIMFName = "Bono 7 Package price".
-lcFMAmount = 5.785.
+ldFMAmount = 5.785.
 /*lcTrans_L1 = "Consumido entre todas la líneas".
 lcTrans_L2 = "Consumit entre totes les línies".
 lcTrans_L3 = "Linea guztien artean kontsumitua".
@@ -127,14 +134,14 @@ IF llError THEN MESSAGE "DayCampaign ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "DayCampaign error" VIEW-AS ALERT-BOX.
 
 llError = fcreateFMItem (lcBaseMFFeeModel, lcMFFeemodel, ldaVAlidFrom, 
-                         lcFMAmount, liUpdateMode).
+                         ldFMAmount, liUpdateMode).
 IF llError THEN MESSAGE "FMItem ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "FMItem error" VIEW-AS ALERT-BOX.
 
-llError = fcreateDPTarget (lcBaseMFFeeModel, lcMFFeemodel, ldaVAlidFrom, 
-                           liUpdateMode).
-IF llError THEN MESSAGE "DPTarget ready" VIEW-AS ALERT-BOX.
-ELSE  MESSAGE "DPTarget error" VIEW-AS ALERT-BOX.
+llError = fcreateDiscountPlan (lcBaseMFFeeModel, lcMFFeemodel, ldaVAlidFrom, 
+                           lcBaseDp, lcDp, lcDpName, ldFMAmount, 1 /*liUpdateMode*/).
+IF llError THEN MESSAGE "Discountplan ready" VIEW-AS ALERT-BOX.
+ELSE  MESSAGE "Discountplan error" VIEW-AS ALERT-BOX.
 
 llError = faddMatrixValue (lcBaseDCEvent, lcDCEvent, liUpdateMode).
 IF llError THEN MESSAGE "Matrix ready" VIEW-AS ALERT-BOX.
@@ -173,4 +180,5 @@ IF llError THEN MESSAGE "RequestActionRule ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "RequestActionRule error" VIEW-AS ALERT-BOX.
 
 llError = fcreateTariff(lcBaseDCEvent, lcDCEvent, ldaVAlidFrom, liUpdateMode).
-
+IF llError THEN MESSAGE "Tariff ready" VIEW-AS ALERT-BOX.
+ELSE  MESSAGE "Tariff error" VIEW-AS ALERT-BOX.
