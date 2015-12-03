@@ -279,10 +279,10 @@ FUNCTION fGenerateMessage RETURNS CHAR
    DEF VAR lcDocList AS CHAR NO-UNDO.
    DEF VAR liCount AS INT NO-UNDO.
 
-
-   IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN
-      lcMSISDN = fNotNull(OrderCustomer.ContactNum).
-   ELSE lcMSISDN = fNotNull(Order.CLI).
+   IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN
+      lcMSISDN = fNotNull(Order.CLI).
+   ELSE
+      lcMSISDN = fNotNull(OrderCustomer.MobileNumber).
 
    lcContractID = fNotNull(Order.ContractId).
    lcDNIType = fNotNull(OrderCustomer.CustIdType).
