@@ -96,16 +96,17 @@ END.
 IF (llDeviceStart AND llDeviceScreen) OR
    (llDeviceStart = ? AND llDeviceScreen = ?) THEN DO:
    
-   FIND Order NO-LOCK WHERE
-        Order.Brand   = gcBrand AND
-        Order.OrderId = liOrderId NO-ERROR.
-   IF NOT AVAILABLE Order THEN
-      RETURN appl_err("Unknown order").
-
    FIND MobSub NO-LOCK WHERE
-        MobSub.MsSeq = Order.MsSeq NO-ERROR.
+        MobSub.Brand = gcBrand AND
+        MobSub.CLI = lcMSISDN NO-ERROR.
    IF NOT AVAILABLE MobSub THEN
       RETURN appl_err("Unknown subscription").
+
+   FIND FIRST Order NO-LOCK WHERE
+              Order.MsSeq = MobSub.MsSeq
+              USE-INDEX Stamp NO-ERROR.
+   IF NOT AVAILABLE Order THEN
+      RETURN appl_err("Unknown order").
 
    IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN DO:
       IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
