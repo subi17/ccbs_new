@@ -28,7 +28,9 @@ DEF VAR liNoDocProvidedPeriod AS INT NO-UNDO.
 DEF VAR lcNoDocProvidedStatuses AS CHAR NO-UNDO.
 DEF STREAM sLogFile.
 
-
+/*iiDays: how many days are between today and the selected date
+For example
+0 - ysterday*/
 FUNCTION fGetDateRange RETURNS CHAR
    (iiDays AS INT,
     OUTPUT odStart AS DECIMAL,
@@ -86,7 +88,8 @@ FOR EACH DMS NO-LOCK WHERE
 
    IF LOOKUP(DMS.StatusCode, lcNoDocProvidedStatuses) > 0 THEN DO:
      /*Pending (A0), Doc errónea status (C)*/
-     lcErr = fSendChangeInformation(DMS.StatusCode, DMS.HostID, "", lcMsg).
+     lcErr = fSendChangeInformation(DMS.StatusCode  + "_by_batch" ,
+                     DMS.HostID, "", lcMsg).
      fLogMsg(lcMsg).
    END.
 END.

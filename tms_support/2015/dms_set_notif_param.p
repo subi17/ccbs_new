@@ -72,6 +72,8 @@ END.
 
 
 
+/*Normal cases, triggered by DMS status or by order status*/
+/*DMS status*/
 fUpdateMessageParams("A", "2").
 fUpdateMessageParams("B", "5").
 fUpdateMessageParams("B1", "6").
@@ -81,6 +83,7 @@ fUpdateMessageParams("F1", "11").
 fUpdateMessageParams("G", "8").
 fUpdateMessageParams("J", "10").
 fUpdateMessageParams("N", "8").
+/*Order status*/
 fUpdateMessageParams("20", "1").
 fUpdateMessageParams("21", "1").
 fUpdateMessageParams("44", "1").
@@ -97,4 +100,9 @@ fUpdateOtherParamsChar("DMS_doc_no_provided_statuses",
 fUpdateOtherParamsChar("DMS_MQ", 
                        "Message Queue for DMS sms/email", 
                        "angela.in").
+
+/*Cases triggered by batch job*/
+fUpdateMessageParams("A0_by_batch", "7").
+fUpdateMessageParams("C_by_batch", "7").
+
 

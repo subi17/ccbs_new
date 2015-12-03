@@ -246,6 +246,8 @@ FUNCTION fNeededDocs RETURNS CHAR
 
 END.
 
+/*Function generates JSON message for providing information for
+  SMS/EMAIL sending. */
 FUNCTION fGenerateMessage RETURNS CHAR
    (icNotifCaseId AS CHAR,
     icDeposit AS CHAR,
@@ -349,21 +351,19 @@ FUNCTION fSendChangeInformation RETURNS CHAR
       lcParam = "DMSMsgID_" + icDMSStatus. /*DMSMsgIF_E -> returns 03*/
       lcNotifCaseID = fCParam("DMS",lcParam).
 
-      IF lcNotifCaseID EQ "" THEN RETURN "". /*No actions for the case*/
+      IF lcNotifCaseID EQ "" THEN RETURN "No Message for " + lcParam.
    END.
    ELSE DO:
    /*Get the caseId by using TMS information. This is used in casefile 
      sending.*/
        lcParam = "DMSMsgID_" + Order.StatusCode. /*DMSMsgIF_20 -> returns 1*/
        lcNotifCaseID = fCParam("DMS",lcParam).
-       IF lcNotifCaseID EQ "" THEN RETURN "". /*No actions for the case*/
-
+       IF lcNotifCaseID EQ "" THEN RETURN "No Message for " + lcParam.
    END.
    lcMessage = fGenerateMessage(lcNotifCaseID,
                                 icDeposit,
                                 BUFFER Order,
                                 BUFFER Ordercustomer).
-   IF lcMessage EQ "" THEN RETURN "No Message".
 
    ocSentMessage = lcMessage.              
    lcMQ =  fCParam("DMS","DMS_MQ"). 
