@@ -139,7 +139,7 @@ IF llError THEN MESSAGE "FMItem ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "FMItem error" VIEW-AS ALERT-BOX.
 
 llError = fcreateDiscountPlan (lcBaseMFFeeModel, lcMFFeemodel, ldaVAlidFrom, 
-                           lcBaseDp, lcDp, lcDpName, ldFMAmount, 1 /*liUpdateMode*/).
+                           lcBaseDp, lcDp, lcDpName, ldFMAmount, liUpdateMode).
 IF llError THEN MESSAGE "Discountplan ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "Discountplan error" VIEW-AS ALERT-BOX.
 
