@@ -27,7 +27,7 @@ FUNCTION fcreateRepText RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    FIND FIRST RepText WHERE
               RepText.LinkCode EQ icBaseDCEvent AND
               RepText.Language EQ iiLanguage AND
-              RepText.ToDate > TODAY NO-ERROR.
+              RepText.ToDate > TODAY NO-LOCK NO-ERROR.
    IF NOT AVAIL RepText THEN DO:
       MESSAGE "RepText not found / " + STRING(iiLanguage) VIEW-AS ALERT-BOX.
       RETURN FALSE.
@@ -60,7 +60,7 @@ FUNCTION fcreateBillItem RETURNS LOGICAL ( INPUT icBasebillcode AS CHAR,
                                            INPUT iiUpdateMode AS INT):
 
    FIND FIRST BillItem WHERE
-              BillItem.billcode EQ icBasebillcode.
+              BillItem.billcode EQ icBasebillcode NO-LOCK NO-ERROR.
    IF NOT AVAIL BillItem THEN DO:
       MESSAGE "BillItem not found:  " + icBasebillcode VIEW-AS ALERT-BOX.
       RETURN FALSE.
@@ -90,7 +90,7 @@ FUNCTION fcreateFeeModel RETURNS LOGICAL ( INPUT icBaseMFFeeModel AS CHAR,
                                            INPUT icFeeName  AS CHAR,
                                            INPUT iiUpdateMode AS INT):
    FIND FIRST FeeModel WHERE
-              Feemodel.feeModel EQ icBaseMFFeeModel.
+              Feemodel.feeModel EQ icBaseMFFeeModel NO-LOCK NO-ERROR.
    IF NOT AVAIL Feemodel THEN DO:
       MESSAGE "Feemodel not found:  " + icBaseMFFeemodel VIEW-AS ALERT-BOX.
       RETURN FALSE.
@@ -124,7 +124,7 @@ FUNCTION fcreateDayCampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
 
    FIND FIRST DayCampaign WHERE
               DayCampaign.dcevent EQ icBaseDCEvent AND
-              DayCampaign.validto > TODAY.
+              DayCampaign.validto > TODAY NO-LOCK NO-ERROR.
    IF NOT AVAIL DayCampaign THEN DO:
       MESSAGE "DayCampaign not found:  " + icBaseDCEvent VIEW-AS ALERT-BOX.
       RETURN FALSE.
@@ -159,7 +159,7 @@ FUNCTION fcreateFMItem RETURNS LOGICAL ( INPUT icBaseMFFeeModel AS CHAR,
                                          INPUT iiUpdateMode AS INT):
    FIND FIRST FMItem WHERE
               FMItem.FeeModel EQ icBaseMFFeeModel AND
-              FMItem.todate > TODAY.
+              FMItem.todate > TODAY NO-LOCK NO-ERROR.
    IF NOT AVAIL FMItem THEN DO:
       MESSAGE "FMItem not found:  " + icBaseMFFeeModel VIEW-AS ALERT-BOX.
       RETURN FALSE.
@@ -199,14 +199,14 @@ FUNCTION fcreateDiscountPlan RETURNS LOGICAL ( INPUT icBaseMFFeemodel AS CHAR,
    liDpId = DiscountPlan.DpId + 1.
    FIND FIRST DPTarget WHERE
               DPTarget.targetKey EQ icBaseMFFeeModel AND
-              DPTarget.validTo > TODAY.
+              DPTarget.validTo > TODAY NO-LOCK NO-ERROR.
    IF NOT AVAIL DPTarget THEN DO:
       MESSAGE "DPTarget not found:  " + icBaseMFFeeModel VIEW-AS ALERT-BOX.
       RETURN FALSE.
    END.
    FIND FIRST DiscountPlan WHERE
               DiscountPlan.billcode = icBaseDp AND
-              DiscountPlan.ValidTo > TODAY.
+              DiscountPlan.ValidTo > TODAY NO-ERROR.
    IF NOT AVAIL DiscountPlan THEN DO:
       MESSAGE "DiscountPlan not found:  " + icBaseDp VIEW-AS ALERT-BOX.
       RETURN FALSE.
@@ -232,7 +232,7 @@ FUNCTION fcreateDiscountPlan RETURNS LOGICAL ( INPUT icBaseMFFeemodel AS CHAR,
       
       FIND FIRST DPTarget WHERE
                  DPTarget.targetKey EQ icMFFeeModel AND
-                 DPTarget.validTo > TODAY NO-ERROR.
+                 DPTarget.validTo > TODAY NO-LOCK NO-ERROR.
 
       IF NOT AVAIL DPTarget THEN DO:                                  
          CREATE DPTarget.
@@ -300,7 +300,7 @@ FUNCTION fcreateServiceLimit RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                                          INPUT iiUpdateMode AS INT):
    FIND FIRST ServiceLimitGroup WHERE
               ServiceLimitGroup.groupcode EQ icBaseDCEvent AND
-              ServiceLimitGroup.validTo > TODAY.
+              ServiceLimitGroup.validTo > TODAY NO-LOCK NO-ERROR.
    IF NOT AVAIL ServiceLimitGroup THEN DO:
       MESSAGE "ServiceLimitgroup not found:  " + icBaseDCEvent VIEW-AS ALERT-BOX.
       RETURN FALSE.
@@ -310,7 +310,7 @@ FUNCTION fcreateServiceLimit RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
  
    FIND FIRST ServiceLimit WHERE
               ServiceLimit.groupcode EQ icBaseDCEvent AND
-              ServiceLimit.validTo > TODAY.
+              ServiceLimit.validTo > TODAY NO-LOCK NO-ERROR.
    IF NOT AVAIL ServiceLimit THEN DO:
       MESSAGE "ServiceLimit not found:  " + icBaseDCEvent VIEW-AS ALERT-BOX.
       RETURN FALSE.
@@ -350,7 +350,7 @@ FUNCTION fcreateProgLimit RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    FIND FIRST ProgLimit WHERE
               ProgLimit.groupcode EQ icBaseDCEvent AND
               ProgLimit.limitfrom = 0 AND
-              ProgLimit.validTo > TODAY.
+              ProgLimit.validTo > TODAY NO-LOCK NO-ERROR.
    IF NOT AVAIL ProgLimit THEN DO:
       MESSAGE "ProgLimit not found:  " + icBaseDCEvent VIEW-AS ALERT-BOX.
       RETURN FALSE.
@@ -365,7 +365,7 @@ FUNCTION fcreateProgLimit RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    ttProgLimit.limitto = idLimitValue.
    FIND FIRST ServiceLimit WHERE
               ServiceLimit.groupcode EQ icDCEvent AND
-              ServiceLimit.validTo > TODAY.
+              ServiceLimit.validTo > TODAY NO-LOCK NO-ERROR.
    IF NOT AVAIL ProgLimit THEN DO:
       MESSAGE "ServiceLimit not found:  " + icDCEvent VIEW-AS ALERT-BOX.
       RETURN FALSE.
@@ -382,7 +382,7 @@ FUNCTION fcreateProgLimit RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    FIND FIRST ProgLimit WHERE
               ProgLimit.groupcode EQ icBaseDCEvent AND
               ProgLimit.limitfrom > 0 AND
-              ProgLimit.validTo > TODAY.
+              ProgLimit.validTo > TODAY NO-LOCK NO-ERROR.
    IF NOT AVAIL ProgLimit THEN DO:
       MESSAGE "ProgLimit not found:  " + icBaseDCEvent VIEW-AS ALERT-BOX.
       RETURN FALSE.
@@ -433,12 +433,12 @@ FUNCTION fcreateSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
       FIND FIRST SLGAnalyse WHERE
                  SLGAnalyse.servicelimitgroup EQ icBaseDCEvent AND
                  SLGAnalyse.clitype = lcCliType AND
-                 SLGAnalyse.validTo > TODAY NO-ERROR.
+                 SLGAnalyse.validTo > TODAY NO-LOCK NO-ERROR.
       IF NOT AVAIL SLGAnalyse THEN DO:
          FIND FIRST SLGAnalyse WHERE
                  SLGAnalyse.servicelimitgroup EQ icBaseDCEvent AND
                  SLGAnalyse.clitype = "CONT" AND
-                 SLGAnalyse.validTo > TODAY NO-ERROR.
+                 SLGAnalyse.validTo > TODAY NO-LOCK NO-ERROR.
          
          IF NOT AVAIL SLGAnalyse THEN DO:
             MESSAGE "SLGAnalyse not found:  " + icBaseDCEvent VIEW-AS ALERT-BOX.
@@ -451,7 +451,7 @@ FUNCTION fcreateSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
       FIND FIRST SLGAnalyse WHERE
                  SLGAnalyse.servicelimitgroup EQ icDCEvent AND
                  SLGAnalyse.clitype = lcCliType AND
-                 SLGAnalyse.validTo > TODAY NO-ERROR.
+                 SLGAnalyse.validTo > TODAY NO-LOCK NO-ERROR.
       IF NOT AVAIL SLGAnalyse THEN DO:
          /*Set correct values to new entry*/
          
@@ -503,7 +503,7 @@ FUNCTION fcreateBDest RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    FIND FIRST BDest WHERE
               INDEX(BDest.BDest, icBaseDCEvent) > 0 AND
               INDEX(BDest.BDest,"UPSELL") = 0 AND
-              BDest.ToDate > TODAY.   
+              BDest.ToDate > TODAY NO-LOCK NO-ERROR.   
 
    IF NOT AVAIL BDest THEN DO:
       MESSAGE "BDest not found:  " + icBaseDCEvent VIEW-AS ALERT-BOX.
@@ -579,7 +579,7 @@ FUNCTION fcreateDCService RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    DEF VAR lcservcomId AS INT NO-UNDO.
    FIND FIRST DCServicePackage WHERE
               DCServicePackage.dcEvent EQ icBaseDCEvent AND
-              DCServicePackage.ToDate > TODAY.
+              DCServicePackage.ToDate > TODAY NO-LOCK NO-ERROR.
    IF NOT AVAIL DCServicePackage THEN DO:
       MESSAGE "DCServicePackage not found:  " + icBaseDCEvent VIEW-AS ALERT-BOX.
       RETURN FALSE.
@@ -587,7 +587,7 @@ FUNCTION fcreateDCService RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    FIND FIRST DCServiceComponent WHERE
               DCServiceComponent.dcservicepackageid EQ 
               DCServicePackage.dcservicepackageid AND
-              DCServiceComponent.ToDate > TODAY.
+              DCServiceComponent.ToDate > TODAY NO-LOCK NO-ERROR.
    IF NOT AVAIL DCServiceComponent THEN DO:
       MESSAGE "DCServiceComponent not found:" + icBaseDCEvent VIEW-AS ALERT-BOX.
       RETURN FALSE.
@@ -658,13 +658,13 @@ FUNCTION fcreateTariff RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    DEF VAR lcNum AS INT NO-UNDO.
    FIND LAST Tariff use-index TariffNum no-lock no-error.
    lcNum = Tariff.tariffnum + 1.
-   FOR EACH BDest WHERE
+   FOR EACH BDest NO-LOCK WHERE
               INDEX(BDest.BDest, icBaseDCEvent) > 0 AND
               INDEX(BDest.BDest,"UPSELL") = 0 AND
               BDest.ToDate > TODAY:
       FIND FIRST Tariff WHERE
                  Tariff.BDest EQ BDest.bdest AND
-                 Tariff.validTo > TODAY.
+                 Tariff.validTo > TODAY NO-LOCK NO-ERROR.
       IF NOT AVAIL Tariff THEN DO:
          MESSAGE "Tariff not found:  " + icBaseDCEvent VIEW-AS ALERT-BOX.
          RETURN FALSE.
