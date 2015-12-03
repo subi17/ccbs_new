@@ -72,7 +72,8 @@ ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        liLoop        = 0
        liStartTime   = 0
        liStopTime    = 0
-       liPauseTime   = 0.
+       liPauseTime   = 0
+       PauseFlag     = FALSE.
 
 IF liTime2Pause < 0 THEN
    liTime2Pause = 0.
