@@ -366,7 +366,7 @@ FUNCTION fcreateProgLimit RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    FIND FIRST ServiceLimit WHERE
               ServiceLimit.groupcode EQ icDCEvent AND
               ServiceLimit.validTo > TODAY NO-LOCK NO-ERROR.
-   IF NOT AVAIL ProgLimit THEN DO:
+   IF NOT AVAIL ServiceLimit THEN DO:
       MESSAGE "ServiceLimit not found:  " + icDCEvent VIEW-AS ALERT-BOX.
       RETURN FALSE.
    END.
