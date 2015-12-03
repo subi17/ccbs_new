@@ -72,6 +72,9 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+IF NOT liOrderId > 0 THEN
+   RETURN appl_err("OrderId should be greater than 0").
+
 IF LENGTH(lcIMEI,"CHARACTER") NE 15 THEN
    RETURN appl_err("IMEI code doesn't contain 15 characters").
 
