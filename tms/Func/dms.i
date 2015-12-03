@@ -280,7 +280,7 @@ FUNCTION fGenerateMessage RETURNS CHAR
    DEF VAR liCount AS INT NO-UNDO.
 
 
-   IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN
+   IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN
       lcMSISDN = fNotNull(OrderCustomer.ContactNum).
    ELSE lcMSISDN = fNotNull(Order.CLI).
 
