@@ -82,10 +82,9 @@ IF pcCancel_code NE "" THEN DO:
    FOR EACH CallAlarm NO-LOCK WHERE
             CallAlarm.Brand      = gcBrand AND
             CallAlarm.CLI        = Order.CLI   AND
-            CallAlarm.CreditType = {&SMSTYPE_INFO} BY ActStamp DESC:
+            CallAlarm.CreditType = {&SMSTYPE_MNP_CANCEL} BY ActStamp DESC:
       LEAVE.
    END.
-
    IF NOT AVAILABLE CallAlarm THEN
       RETURN appl_err("SMS was not found").
 
