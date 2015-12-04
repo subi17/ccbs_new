@@ -17,6 +17,8 @@ DEF TEMP-TABLE ttServiceLimit NO-UNDO LIKE ServiceLimit.
 DEF TEMP-TABLE ttRequestActionRule NO-UNDO LIKE RequestActionRule.
 DEF TEMP-TABLE ttTariff NO-UNDO LIKE Tariff.
 DEF TEMP-TABLE ttDiscountPlan NO-UNDO LIKE DiscountPlan.
+DEF TEMP-TABLE ttRequestAction NO-UNDO LIKE RequestAction.
+DEF TEMP-TABLE ttInvText NO-UNDO LIKE InvText.
 
 FUNCTION fcreateRepText RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                                            INPUT icDCEvent AS CHAR,
@@ -281,6 +283,8 @@ END FUNCTION.
 
 FUNCTION faddRequestActionRules RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
                                                  INPUT icDCEvent AS CHAR,
+                                                 INPUT idaValidFrom AS DATE,
+                                                 INPUT icdeactSMS AS CHAR,
                                                  INPUT iiUpdateMode AS INT):
    IF iiUpdateMode NE 0 THEN DO:
       FOR EACH RequestActionRule WHERE LOOKUP(icBaseDCEvent, 
@@ -288,6 +292,46 @@ FUNCTION faddRequestActionRules RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
          RequestActionRule.paramvalue = RequestActionRule.paramvalue + "," + 
                                         icDCEvent.
       END.
+
+      FIND FIRST RequestAction WHERE RequestAction.actiontype = "SMS" AND
+                                     RequestAction.actionKey BEGINS 
+                                     icBaseDCEvent + "DeAct".
+      IF AVAIL RequestAction THEN DO:
+         FIND FIRST InvText WHERE InvText.KeyValue BEGINS icBaseDCEvent + 
+                                                          "DeAct" NO-ERROR.   
+         CREATE ttRequestAction.
+         BUFFER-COPY RequestAction TO ttRequestAction.
+         
+         IF NOT AVAIL InvText THEN RETURN FALSE.
+         CREATE ttInvText.
+         BUFFER-COPY InvText TO ttInvText.
+          
+         ttRequestAction.actionKey = REPLACE(ttRequestAction.actionKey,
+                                             icBaseDCEvent, icDCEvent).
+         ttRequestAction.validFrom = idaValidFrom.
+         FIND LAST RequestAction USE-INDEX RequestActionId NO-LOCK NO-ERROR.
+         ttRequestAction.RequestActionId = RequestAction.RequestActionId + 1.
+         DISP ttRequestAction.
+
+         CREATE RequestAction.
+         BUFFER-COPY ttRequestAction TO RequestAction.
+
+         FIND FIRST InvText WHERE InvText.KeyValue BEGINS icDCEvent +
+                                                          "DeAct" NO-ERROR.
+         IF NOT AVAIL InvText THEN DO:
+            ttInvText.invText = icdeactSMS.
+            ttInvText.KeyValue = REPLACE(ttInvText.KeyValue, icBaseDCEvent,
+                                         icDCEvent).
+            FIND LAST invText USE-INDEX ITNum NO-LOCK NO-ERROR.
+            ttInvText.ITNum = invText.ITNum + 1.
+            ttInvText.FromDate = idaValidFrom.
+            CREATE InvText.
+            BUFFER-COPY ttInvText TO InvText.
+         END.
+         DELETE ttInvText.
+         DELETE ttRequestAction.
+      END.
+
    END.
    RETURN TRUE.
 END FUNCTION.

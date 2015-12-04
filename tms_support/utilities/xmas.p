@@ -43,6 +43,7 @@ DEF VAR lcServLimitName AS CHAR NO-UNDO.
 DEF VAR lcBaseDP AS CHAR NO-UNDO.
 DEF VAR lcDP AS CHAR NO-UNDO.
 DEF VAR lcDPName AS CHAR NO-UNDO.
+DEF VAR lcDeactSMS AS CHAR NO-UNDO.
 
 liUpdateMode = {&SIMULATERUN}. /*0 = test mode, no DB writing. */
 /* liUpdateMode = {&MODIFYDB}.*/  /* 1 = real mode, add to DB. */
@@ -61,7 +62,7 @@ lcServLimitName = "Mobile Data Usage Bundle 7".
 lcDPName = "Bono 3 GB discount".
 lcDP = "BONO7DISC".
 lcBaseDP = "BONO6DISC".
-
+lcDeActSMS = "Yoigo info: Has pedido cancelacion de Bono 3 GB Internet de Contrato. Desde EXCLUSIVE-LOCK dia 1 del mes prox no estara activo.".
 
 /*FeeModel*/
 lcBaseMFFeeModel = "DATA6MF".
@@ -175,7 +176,8 @@ llError = fcreateDCService(lcBaseDCEvent, lcDCEvent, ldaVAlidFrom,
 IF llError THEN MESSAGE "DCService ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "DCService error" VIEW-AS ALERT-BOX.
 
-llError = fcreateRequestActionRule(lcBaseDCEvent, lcDCEvent, liUpdateMode).
+llError = faddRequestActionRules(lcBaseDCEvent, lcDCEvent, ldaVAlidFrom,
+                                   lcDeActSMS, 1 /*liUpdateMode*/).
 IF llError THEN MESSAGE "RequestActionRule ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "RequestActionRule error" VIEW-AS ALERT-BOX.
 
