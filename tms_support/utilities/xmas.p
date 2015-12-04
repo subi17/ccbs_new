@@ -177,7 +177,7 @@ IF llError THEN MESSAGE "DCService ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "DCService error" VIEW-AS ALERT-BOX.
 
 llError = faddRequestActionRules(lcBaseDCEvent, lcDCEvent, ldaVAlidFrom,
-                                   lcDeActSMS, 1 /*liUpdateMode*/).
+                                   lcDeActSMS, liUpdateMode).
 IF llError THEN MESSAGE "RequestActionRule ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "RequestActionRule error" VIEW-AS ALERT-BOX.
 
