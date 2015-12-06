@@ -44,6 +44,10 @@ DEF VAR lcBaseDP AS CHAR NO-UNDO.
 DEF VAR lcDP AS CHAR NO-UNDO.
 DEF VAR lcDPName AS CHAR NO-UNDO.
 DEF VAR lcDeactSMS AS CHAR NO-UNDO.
+DEF VAR lcBaseIdName AS CHAR NO-UNDO.
+DEF VAR lcIdName AS CHAR NO-UNDO.
+DEF VAR ldLimitUnShaped AS DEC NO-UNDO.
+DEF VAR ldLimitShaped AS DEC NO-UNDO.
 
 liUpdateMode = {&SIMULATERUN}. /*0 = test mode, no DB writing. */
 /* liUpdateMode = {&MODIFYDB}.*/  /* 1 = real mode, add to DB. */
@@ -54,6 +58,10 @@ lcBrand = "1".
 lcBaseDCEvent = "DATA6".
 lcDCEvent = "DATA7".
 lcDCNAme = "Bono 3 GB".
+lcBaseIdName = "BONO6".
+lcIdName = "BONO7".
+ldLimitUnShaped = 3221225472.
+ldLimitShaped = 161061274.
 ldDataLimit = 3072.
 /*ldaOldValidTo = 11/30/2015.*/
 ldaVAlidFrom = 12/01/2015.
@@ -68,7 +76,7 @@ lcDeActSMS = "Yoigo info: Has pedido cancelacion de Bono 3 GB Internet de Contra
 lcBaseMFFeeModel = "DATA6MF".
 lcMFFeemodel = "DATA7MF".
 /*to which bundle is allowed to activate*/
-lcClitypeList = "CONT7,CONT8,CONT9". 
+lcClitypeList = "CONT7,CONT8,CONT9,LADEL2". 
 lcBaseMFRepTextItem = lcBaseMFFeeModel.
 lcBaseRepTextItem = lcBaseMFFeeModel.
 lcMFRepTextItem = lcMFFeemodel.
@@ -184,3 +192,8 @@ ELSE  MESSAGE "RequestActionRule error" VIEW-AS ALERT-BOX.
 llError = fcreateTariff(lcBaseDCEvent, lcDCEvent, ldaVAlidFrom, liUpdateMode).
 IF llError THEN MESSAGE "Tariff ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "Tariff error" VIEW-AS ALERT-BOX.
+
+llError = fcreateShaperConf(lcBaseIdName, lcIdName, ldLimitUnShaped, 
+                            ldLimitShaped, lcClitypeList, 1 /*liUpdateMode*/).
+IF llError THEN MESSAGE "ShaperConf ready" VIEW-AS ALERT-BOX.
+ELSE  MESSAGE "ShaperConf error" VIEW-AS ALERT-BOX.

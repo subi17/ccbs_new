@@ -19,7 +19,7 @@ DEF TEMP-TABLE ttTariff NO-UNDO LIKE Tariff.
 DEF TEMP-TABLE ttDiscountPlan NO-UNDO LIKE DiscountPlan.
 DEF TEMP-TABLE ttRequestAction NO-UNDO LIKE RequestAction.
 DEF TEMP-TABLE ttInvText NO-UNDO LIKE InvText.
-
+DEF TEMP-TABLE ttshaperConf NO-UNDO LIKE ShaperConf.
 FUNCTION fcreateRepText RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                                            INPUT icDCEvent AS CHAR,
                                            INPUT icTransText AS CHAR,
@@ -735,3 +735,120 @@ FUNCTION fcreateTariff RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    END.
    RETURN TRUE.
 END FUNCTION.
+
+/*********************************************************/
+/* Create ShaperConf                                         */
+FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
+                                         INPUT icDCEvent AS CHAR,
+                                         INPUT idLimitUnShaped AS DEC, 
+                                         INPUT idLimitShaped AS DEC,
+                                         INPUT icClitypeList AS CHAR,
+                                         INPUT iiUpdateMode AS INT):
+      DEF VAR lcCliType AS CHAR NO-UNDO.
+      FIND FIRST ShaperConf WHERE
+                 ShaperConf.shaperConfId EQ icBaseDCEvent NO-LOCK NO-ERROR.
+      IF NOT AVAIL ShaperConf THEN DO:
+         MESSAGE "Tariff not found:  " + icBaseDCEvent VIEW-AS ALERT-BOX.
+         RETURN FALSE.
+      END.
+
+      CREATE ttShaperConf.
+      BUFFER-COPY ShaperConf TO ttShaperConf.
+      /*Set correct values to new entry*/
+      ttShaperConf.ShaperConfId = icDCEvent.
+      ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseDCEvent,
+                                    icDCEvent).
+      ttShaperConf.limitShaped = idLimitShaped.
+      ttShaperConf.limitUnShaped = idLimitUnShaped.
+
+      DISPLAY ttShaperConf with frame a.
+      pause 0.
+      IF iiUpdateMode NE 0 THEN DO:
+         FIND FIRST ShaperConf WHERE
+                    ShaperConf.shaperConfId EQ ttShaperConf.ShaperConfId
+                    NO-LOCK NO-ERROR.
+         IF NOT AVAIL ShaperConf THEN DO:
+            CREATE ShaperConf.
+            BUFFER-COPY ttShaperConf TO ShaperConf.
+            DELETE ttShaperConf. /*for safety reasons*/
+         END. 
+      END.
+      IF AVAIL ShaperConf THEN RELEASE ShaperConf.
+      IF AVAIL ttShaperConf THEN RELEASE ttShaperConf.
+      
+      FIND FIRST ShaperConf WHERE
+                 ShaperConf.shaperConfId EQ icBaseDCEvent + "wVOIP" NO-LOCK
+                 NO-ERROR.
+      IF NOT AVAIL ShaperConf THEN DO:
+         MESSAGE "Tariff with VOIP not found:  " + icBaseDCEvent VIEW-AS ALERT-BOX.
+         RETURN FALSE.
+      END.
+
+      CREATE ttShaperConf.
+      BUFFER-COPY ShaperConf TO ttShaperConf.
+      /*Set correct values to new entry*/
+      ttShaperConf.ShaperConfId = icDCEvent + "wVOIP".
+      ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseDCEvent,
+                                    icDCEvent).
+      ttShaperConf.limitShaped = idLimitShaped + 5242880.
+      ttShaperConf.limitUnShaped = idLimitUnShaped + 104857600.
+
+      DISPLAY ttShaperConf with frame a.
+      pause 0.
+      IF iiUpdateMode NE 0 THEN DO:
+         FIND FIRST ShaperConf WHERE
+                    ShaperConf.shaperConfId EQ ttShaperConf.ShaperConfId
+                    NO-LOCK NO-ERROR.
+         IF NOT AVAIL ShaperConf THEN DO:
+            CREATE ShaperConf.
+            BUFFER-COPY ttShaperConf TO ShaperConf.
+            DELETE ttShaperConf. /*for safety reasons*/
+         END.
+      END.
+      IF AVAIL ShaperConf THEN RELEASE ShaperConf.
+      IF AVAIL ttShaperConf THEN RELEASE ttShaperConf.
+     
+      DEF VAR liCount AS INT NO-UNDO.
+
+      DO liCount = 1 TO NUM-ENTRIES(icCliTypeList):
+         lcCliType = ENTRY(liCount,icCliTypeList).
+
+         FIND FIRST ShaperConf WHERE
+                    ShaperConf.shaperConfId EQ lcCliType + "w" + icBaseDCEvent
+                    NO-LOCK NO-ERROR.
+         IF NOT AVAIL ShaperConf THEN DO:
+            MESSAGE "Tariff with VOIP not found:  " + icBaseDCEvent VIEW-AS ALERT-BOX.
+            /*RETURN FALSE.*/
+            NEXT.
+         END.
+
+         CREATE ttShaperConf.
+         BUFFER-COPY ShaperConf TO ttShaperConf.
+         /*Set correct values to new entry*/
+         ttShaperConf.ShaperConfId = lcCliType + "w" + icDCEvent.
+         ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseDCEvent,
+                                       icDCEvent).
+         ttShaperConf.limitShaped = idLimitShaped + 5242880.
+         ttShaperConf.limitUnShaped = idLimitUnShaped + 104857600.
+
+         DISPLAY ttShaperConf with frame a.
+         pause 0.
+         IF iiUpdateMode NE 0 THEN DO:
+            FIND FIRST ShaperConf WHERE
+                       ShaperConf.shaperConfId EQ ttShaperConf.ShaperConfId
+                       NO-LOCK NO-ERROR.
+            IF NOT AVAIL ShaperConf THEN DO:
+               CREATE ShaperConf.
+               BUFFER-COPY ttShaperConf TO ShaperConf.
+               DELETE ttShaperConf. /*for safety reasons*/
+            END.
+         END.
+         IF AVAIL ShaperConf THEN RELEASE ShaperConf.
+         IF AVAIL ttShaperConf THEN RELEASE ttShaperConf.
+
+      END.   
+
+
+   RETURN TRUE.
+END FUNCTION.
+
