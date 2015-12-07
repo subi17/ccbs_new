@@ -142,12 +142,6 @@ FIND SingleFee USE-INDEX Custnum WHERE
 IF NOT AVAIL SingleFee THEN
    RETURN appl_err("Residual fee not found").
 
-IF SingleFee.Billed AND 
-   NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
-                      Invoice.Invnum = SingleFee.InvNum aND
-                      Invoice.InvType = 99) THEN 
-   RETURN appl_err("Residual fee billed").
-
 ASSIGN   
    ldaMonth22Date    = ADD-INTERVAL(DCCLI.ValidFrom, 22, 'months':U)
    ldaMonth22Date    = DATE(MONTH(ldaMonth22Date),1,YEAR(ldaMonth22Date))

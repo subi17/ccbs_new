@@ -40,6 +40,7 @@
 {terminal_financing.i}
 {ordercancel.i}
 {fprepaidfee.i}
+{fcreditreq.i}
 
 DEF BUFFER bPendRequest FOR MsRequest.
 DEF BUFFER bOrigRequest FOR MsRequest.
@@ -269,7 +270,8 @@ PROCEDURE pContractActivation:
    DEF VAR liConCount        AS INT  NO-UNDO.
    DEF VAR ldeFeeAmount AS DEC NO-UNDO INIT ?.
    DEF VAR ldeResidualFeeDisc AS DEC NO-UNDO. 
-   DEF VAR ldaResidualFee AS DATE NO-UNDO. 
+   DEF VAR ldaResidualFee AS DATE NO-UNDO.
+   DEF VAR lcCrNoteResult    AS CHAR NO-UNDO.
                     
    /* DSS related variables */
    DEF VAR lcResult      AS CHAR NO-UNDO.
@@ -539,12 +541,21 @@ PROCEDURE pContractActivation:
                RETURN.
             END.
 
+            /* If Quota 25 is already billed then create a 
+               "credit note" with equivalent amount. */
             IF SingleFee.Billed EQ TRUE AND
                NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
                                   Invoice.Invnum = SingleFee.Invnum AND
                                   Invoice.InvType = 99) THEN DO:
-               fReqError("Residual fee already billed").
-               RETURN.
+
+               lcCrNoteResult = fCashInvoiceCreditnote(SingleFee.Invnum, "Quota 25 Prorate Credit Note").
+               IF lcCrNoteResult > "" THEN
+                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                    "MsRequest",
+                                    STRING(MsRequest.MsRequest),
+                                    MsRequest.Custnum,
+                                    "CREDIT NOTE CREATION FAILED",
+                                    lcCrNoteResult).
             END.
 
             /* Find original installment contract */   
