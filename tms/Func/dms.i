@@ -257,19 +257,22 @@ FUNCTION fNeededDocs RETURNS CHAR
 
 END.
 
+
+
+/*DMS specific, quick implementation*/
 FUNCTION fDoc2Msg RETURNS CHAR
    (icDocNbr AS CHAR,
     icDocComment AS CHAR):
    DEF VAR lcRet AS CHAR NO-UNDO.
 
    IF icDocComment = "" THEN icDocComment = "null".
+   ELSE icDocComment =  "~"" + icDocComment + "~"".
 
-    lcRet =  "~{" + "~"number~"" + "~:" + "~"" + icDocNbr +  "~"" + "," +
-                  "~"revision_comment~"" + "~:" + "~"" + icDocComment + "~"" +
+   lcRet =  "~{" + "~"number~"" + "~:" + "~"" + icDocNbr +  "~"" + "," +
+                  "~"revision_comment~"" + "~:" + icDocComment  +
             "~}".
    RETURN lcRet.
 END.
-
 
 /*Function generates JSON message for providing information for
   SMS/EMAIL sending. */
@@ -316,7 +319,7 @@ FUNCTION fGenerateMessage RETURNS CHAR
    lcArray = fInitJsonArray("documents").
    
    /*Add document comment if DMS has given it.*/
-   IF lcDocList EQ "" THEN DO: /*from TMS, initial information*/
+   IF icDocList EQ "" THEN DO: /*from TMS, initial information, use local*/
       DO liCount = 1 TO NUM-ENTRIES(lcDocList):
          lcDocNotifEntry = fDoc2Msg(ENTRY(i,lcDocList,icDocListSep), 
                                     "").
