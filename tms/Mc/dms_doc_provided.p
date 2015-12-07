@@ -82,7 +82,7 @@ fGetDateRange(liNoDocProvidedPeriod, ldStartTS, ldEndTS).
 lcNoDocProvidedStatuses =  fCParam("DMS","DMS_doc_no_provided_statuses").
 
 FOR EACH DMS NO-LOCK WHERE
-         DMS.DMSStatusTS  >= ldStartTS AND
+         DMS.StatusTS  >= ldStartTS AND
          DMS.StatusTS < ldEndTS AND
          DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER}:
 
