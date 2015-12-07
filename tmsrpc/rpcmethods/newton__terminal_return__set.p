@@ -15,6 +15,8 @@
  * @output success;boolean
  */
 
+/* YPR-2747 */
+
 {xmlrpc/xmlrpc_access.i}
 
 {commpaa.i}
@@ -52,16 +54,18 @@ DEF VAR ldReturnTS       AS DEC    NO-UNDO.
 DEF VAR lcResult         AS CHAR   NO-UNDO.
 DEF VAR liRequest        AS INT    NO-UNDO.
 DEF VAR lcMemo           AS CHAR   NO-UNDO.
-DEF VAR llLastOrder      AS LOG    NO-UNDO INIT FALSE.
+DEF VAR ldeActFrom AS DEC NO-UNDO. 
+DEF VAR ldeActTo AS DEC NO-UNDO. 
 
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 lcStruct = validate_request(pcStruct, "imei!,orderid!,bill_code!,msisdn!,device_start,device_screen,salesman!,terminal_type!,envelope_number").
+IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
    lcIMEI            = get_string(pcStruct,"imei")
-   liOrderId         = get_int(pcStruct,"orderid")
+   liOrderId         = get_pos_int(pcStruct,"orderid")
    lcBillCode        = get_string(pcStruct,"bill_code")
    lcMSISDN          = get_string(pcStruct,"msisdn")
    llDeviceStart     = get_bool(pcStruct,"device_start") WHEN LOOKUP("device_start", lcStruct) > 0
@@ -73,26 +77,31 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF NOT liOrderId > 0 THEN
-   RETURN appl_err("OrderId should be greater than 0").
-
 IF LENGTH(lcIMEI,"CHARACTER") NE 15 THEN
    RETURN appl_err("IMEI code doesn't contain 15 characters").
 
 IF (llDeviceStart  = ? AND llDeviceScreen <> ?) OR
    (llDeviceScreen = ? AND llDeviceStart  <> ?) THEN
    RETURN appl_err("Both should be NULL for Basic screening").
+   
+FIND Order NO-LOCK WHERE
+     Order.Brand   = gcBrand AND
+     Order.OrderId = liOrderId NO-ERROR.
+IF NOT AVAILABLE Order THEN
+   RETURN appl_err("Unknown order").
 
-IF CAN-FIND(FIRST TermReturn WHERE
-                  TermReturn.IMEI           = lcIMEI AND
-                  TermReturn.OrderId        = liOrderId AND
-                  TermReturn.BillCode       = lcBillCode AND
-                  TermReturn.MSISDN         = lcMSISDN AND
-                  TermReturn.DeviceStart    = llDeviceStart AND
-                  TermReturn.DeviceScreen   = llDeviceScreen AND
-                  TermReturn.Salesman       = lcSalesman AND
-                  TermReturn.TerminalType   = lcTerminalType AND
-                  TermReturn.EnvelopeNumber = lcEnvelopeNumber) THEN DO:
+FIND FIRST TermReturn NO-LOCK WHERE
+           TermReturn.OrderId = liOrderId USE-INDEX OrderId NO-ERROR.
+
+IF AVAIL TermReturn AND
+         TermReturn.IMEI           = lcIMEI AND
+         TermReturn.BillCode       = lcBillCode AND
+         TermReturn.MSISDN         = lcMSISDN AND
+         TermReturn.DeviceStart    = llDeviceStart AND
+         TermReturn.DeviceScreen   = llDeviceScreen AND
+         TermReturn.Salesman       = lcSalesman AND
+         TermReturn.TerminalType   = lcTerminalType AND
+         TermReturn.EnvelopeNumber = lcEnvelopeNumber THEN DO:
    add_boolean(response_toplevel_id, "", true).
    RETURN.
 END.
@@ -101,98 +110,100 @@ IF (llDeviceStart AND llDeviceScreen) OR
    (llDeviceStart = ? AND llDeviceScreen = ?) THEN DO:
    
    FIND MobSub NO-LOCK WHERE
-        MobSub.Brand = gcBrand AND
-        MobSub.CLI = lcMSISDN NO-ERROR.
+        MobSub.MsSeq = Order.MsSeq NO-ERROR.
    IF NOT AVAILABLE MobSub THEN
       RETURN appl_err("Unknown subscription").
+   
+   FIND SingleFee USE-INDEX Custnum WHERE
+        SingleFee.Brand       = gcBrand AND
+        SingleFee.Custnum     = MobSub.CustNum AND
+        SingleFee.HostTable   = "Mobsub" AND
+        SingleFee.KeyValue    = STRING(MobSub.MsSeq) AND
+        SingleFee.OrderId     = Order.OrderId AND
+        SingleFee.CalcObj     = "RVTERM" NO-LOCK NO-ERROR.
 
-   /* latest order */
-   FOR EACH Order NO-LOCK WHERE
-            Order.MsSeq = MobSub.MsSeq AND
-            LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) = 0
-            BY Order.CrStamp DESC:
+   IF NOT AVAILABLE SingleFee THEN
+      RETURN appl_err("Discount creation failed (residual fee not found)").
+   
+   IF SingleFee.Billed AND
+      NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
+                         Invoice.InvNum = SingleFee.InvNum AND
+                         Invoice.InvType = {&INV_TYPE_TEST}) THEN
+      RETURN appl_err("Residual fee already billed").
 
-      llLastOrder = TRUE.
 
-      IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN DO:
-         IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
-                           DCCLI.Brand   EQ gcBrand AND
-                           DCCLI.DCEvent EQ "RVTERM12" AND
-                           DCCLI.MsSeq   EQ MobSub.MsSeq AND
-                           DCCLI.ValidTo >= TODAY) THEN
-         RETURN appl_err("Q25 extension already active").
+   /* If customer try to return terminal after Q25 extension request
+      (ongoing or Done) without renewal order then don't allow
+      terminal return.  */
+   FOR EACH DCCLI NO-LOCK WHERE
+            DCCLI.Brand   EQ gcBrand AND
+            DCCLI.DCEvent EQ "RVTERM12" AND
+            DCCLI.MsSeq   EQ MobSub.MsSeq AND
+            DCCLI.Validto >= TODAY,
+      FIRST FixedFee NO-LOCK WHERE
+            FixedFee.Brand = gcBrand AND
+            FixedFee.Custnum = MobSub.Custnum AND
+            FixedFee.HostTable = "MobSub" AND
+            Fixedfee.KeyValue = STRING(MobSub.MsSeq) AND
+            Fixedfee.BillCode BEGINS "RVTERM" AND
+            FixedFee.SourceTable EQ "DCCLI" AND
+            FixedFee.SourceKey  EQ STRING(DCCLI.PerContractId) AND
+            FixedFee.OrderId EQ SingleFee.OrderID:
 
-         IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                           MsRequest.MsSeq      EQ Mobsub.MsSeq AND
-                           MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
-                           LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND
-                           MsRequest.ReqSource  EQ {&REQUEST_SOURCE_RENEWAL} AND
-                           MsREquest.REqcparam3 EQ "RVTERM12") THEN
-         RETURN appl_err("Q25 extension request is ongoing").
+      ASSIGN
+         ldeActFrom = fMake2Dt(DCCLI.ValidFrom, 0).
+         ldeActTo = fMake2Dt(DCCLI.ValidFrom, 86399).
 
-         IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 AND
-            CAN-FIND(FIRST OrderAction WHERE
-                           OrderAction.Brand    = gcBrand AND
-                           OrderAction.OrderId  = Order.OrderId AND
-                           OrderAction.ItemType = "Q25Extension") THEN
-         RETURN appl_err("Q25 extension order is ongoing").
-      END.
+      IF NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                     MsRequest.MsSeq      EQ Mobsub.MsSeq AND
+                     MsRequest.ActStamp >= ldeActFrom AND
+                     MsRequest.ActStamp < ldeActTo AND
+                     MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+                     MsRequest.ReqStatus  EQ 2 AND
+                     MsRequest.REqcparam3 EQ "RVTERM12" AND
+                     MsRequest.ReqSource  EQ {&REQUEST_SOURCE_RENEWAL}) THEN
+         RETURN appl_err("Active Q25 extension without renewal order").
+   END.
 
-      FIND SingleFee USE-INDEX Custnum WHERE
-           SingleFee.Brand       = gcBrand AND
-           SingleFee.Custnum     = MobSub.CustNum AND
-           SingleFee.HostTable   = "Mobsub" AND
-           SingleFee.KeyValue    = STRING(MobSub.MsSeq) AND
-           SingleFee.OrderId     = Order.OrderId AND
-           SingleFee.CalcObj     = "RVTERM" NO-LOCK NO-ERROR.
+   FIND FIRST MsRequest NO-LOCK WHERE
+              MsRequest.MsSeq      EQ Mobsub.MsSeq AND
+              MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+              LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND
+              MsREquest.REqcparam3 EQ "RVTERM12" NO-ERROR.
+      
+   IF AVAIL MsREquest AND
+      MsRequest.ReqSource NE {&REQUEST_SOURCE_RENEWAL} THEN
+      RETURN appl_err("Pending Q25 extension without renewal order").
+   
+   liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
+                                     "RVTERMDT3DISC",
+                                     SingleFee.Amt,
+                                     fPer2Date(SingleFee.BillPeriod,0),
+                                     1,
+                                     OUTPUT lcResult).
 
-      IF NOT AVAILABLE SingleFee THEN
-         RETURN appl_err("Discount creation failed (residual fee not found)").
+   IF liRequest NE 0 THEN
+      RETURN appl_err("ERROR:Discount creation failed; " + lcResult).
 
-      IF SingleFee.Billed THEN
-         RETURN appl_err("Residual fee already billed").
 
-      IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN DO:
-         FOR FIRST DiscountPlan NO-LOCK WHERE
-                   DiscountPlan.Brand = gcBrand AND
-                   DiscountPlan.DPRuleID = "RVTERMDT1DISC",
-             FIRST DPMember NO-LOCK WHERE
-                   DPMember.DpID       = DiscountPlan.DpId AND
-                   DPMember.HostTable  = "MobSub" AND
-                   DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
-                   DPMember.ValidFrom  = fPer2Date(SingleFee.BillPeriod,0) AND
-                   DPMember.ValidTo   >= DPMember.ValidFrom:
+   FOR FIRST DiscountPlan NO-LOCK WHERE
+             DiscountPlan.Brand = gcBrand AND
+             DiscountPlan.DPRuleID = "RVTERMDT1DISC",
+       FIRST DPMember NO-LOCK WHERE
+             DPMember.DpID       = DiscountPlan.DpId AND
+             DPMember.HostTable  = "MobSub" AND
+             DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
+             DPMember.ValidFrom  = fPer2Date(SingleFee.BillPeriod,0) AND
+             DPMember.ValidTo   >= DPMember.ValidFrom:
 
-            fCloseDiscount("RVTERMDT1DISC",
-                           MobSub.MsSeq,
-                           DPMember.ValidFrom - 1,
-                           FALSE). /* clean event logs */
-         END.
+      fCloseDiscount("RVTERMDT1DISC",
+                     MobSub.MsSeq,
+                     DPMember.ValidFrom - 1,
+                     FALSE). /* clean event logs */
+   END.
 
-         FIND FIRST MsRequest NO-LOCK WHERE
-                    MsRequest.MsSeq      EQ Mobsub.MsSeq AND
-                    MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
-                    LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND
-                    MsREquest.REqcparam3 EQ "RVTERM12" NO-ERROR.
-         IF AVAILABLE MsRequest THEN
-            fReqStatus(4,"Cancelled by Terminal Reurning").
-      END.
-
-      liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
-                                        "RVTERMDT3DISC",
-                                        SingleFee.Amt,
-                                        fPer2Date(SingleFee.BillPeriod,0),
-                                        1,
-                                        OUTPUT lcResult).
-
-      IF liRequest NE 0 THEN
-         RETURN appl_err("ERROR:Discount not created; " + lcResult).
-
-      LEAVE.
-   END. /* FOR EACH Order NO-LOCK WHERE */
-
-   IF NOT llLastOrder THEN
-      RETURN appl_err("Order not found").
+   IF AVAILABLE MsRequest THEN
+      fReqStatus(4,"Cancelled by Terminal Return").
 
 END. /* IF llDeviceStart AND llDeviceScreen THEN DO: */
 
@@ -218,7 +229,7 @@ ELSE lcMemo = "Devolución en tienda denegada".
 
 DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                  "MobSub",
-                 STRING(MobSub.MsSeq),
+                 STRING(Order.MsSeq),
                  0,
                  lcMemo,
                  lcResult).
