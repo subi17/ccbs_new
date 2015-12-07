@@ -271,7 +271,10 @@ PROCEDURE pContractActivation:
    DEF VAR ldeFeeAmount AS DEC NO-UNDO INIT ?.
    DEF VAR ldeResidualFeeDisc AS DEC NO-UNDO. 
    DEF VAR ldaResidualFee AS DATE NO-UNDO.
-   DEF VAR lcCrNoteResult    AS CHAR NO-UNDO.
+   DEF VAR lcCrNoteResult     AS CHAR NO-UNDO.
+   DEF VAR liBillPerm         AS INT  NO-UNDO.
+   DEF VAR liDiscRequest      AS INT  NO-UNDO.
+   DEF VAR lcDiscResult       AS CHAR NO-UNDO.
                     
    /* DSS related variables */
    DEF VAR lcResult      AS CHAR NO-UNDO.
@@ -556,6 +559,26 @@ PROCEDURE pContractActivation:
                                     MsRequest.Custnum,
                                     "CREDIT NOTE CREATION FAILED",
                                     lcCrNoteResult).
+            END.
+            ELSE DO: 
+               liBillPerm = fCheckBillingPermission(MsOwner.MsSeq, OUTPUT lcError).
+               IF lcError > "" THEN DO:
+                  fReqError(lcError).
+                  RETURN.
+               END.
+               
+               IF liBillPerm = 1 OR liBillPerm = 2 THEN DO:
+                  liDiscRequest = fAddDiscountPlanMember(MsOwner.MsSeq,
+                                           "RVTERMDT3DISC",
+                                           SingleFee.Amt,
+                                           fPer2Date(SingleFee.BillPeriod,0),
+                                           1,
+                                           OUTPUT lcDiscResult).
+                  IF liDiscRequest NE 0 THEN DO:
+                     fReqError("Discount not created; " + lcDiscResult).
+                     RETURN.
+                  END.
+               END.
             END.
 
             /* Find original installment contract */   
