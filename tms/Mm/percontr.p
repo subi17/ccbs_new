@@ -548,7 +548,7 @@ PROCEDURE pContractActivation:
                                   Invoice.Invnum = SingleFee.Invnum AND
                                   Invoice.InvType = 99) THEN DO:
 
-               lcCrNoteResult = fCashInvoiceCreditnote(SingleFee.Invnum, "Quota 25 Prorate Credit Note").
+               lcCrNoteResult = fCashInvoiceCreditnote(SingleFee.Invnum, "1010").
                IF lcCrNoteResult > "" THEN
                    DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                                     "MsRequest",
