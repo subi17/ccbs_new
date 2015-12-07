@@ -21,7 +21,6 @@ DEF VAR lcToday        AS CHAR NO-UNDO.
 DEF VAR llgError       AS LOG  NO-UNDO.
 DEF VAR lcContent      AS CHAR NO-UNDO. 
 DEF VAR lcAddrConfDir  AS CHAR NO-UNDO.
-DEF VAR lcFileName     AS CHAR NO-UNDO. 
 DEF VAR llInterrupt    AS LOG  NO-UNDO. 
 DEF VAR lcContLogDir   AS CHAR NO-UNDO. 
 DEF VAR lcLogFile      AS CHAR NO-UNDO. 
@@ -44,13 +43,11 @@ DEFINE STREAM strout.
           liCount        = 0 
           llInterrupt    = NO
           ldaInvDate     = DATE(MONTH(TODAY),1,YEAR(TODAY)) 
-          lcFileName     = fCparam("IFS","IFSMonthlyFile") 
           lcAddrConfDir  = fCParamC("RepConfDir")
           lcContLogDir   = fCParam("PublishInvoice","ContentLogDir")
           lcToday        = STRING(YEAR(TODAY),"9999") +
                            STRING(MONTH(TODAY),"99")  +
                            STRING(DAY(TODAY),"99")
-          lcFileName     = REPLACE(lcFileName,"#DATE",lcToday)
           lcLogFile      = lcContLogDir + "delstate_" + lcToday + STRING(TIME) + ".log".
  
    OUTPUT STREAM strout to VALUE(lcLogFile) APPEND.
@@ -92,25 +89,14 @@ DEFINE STREAM strout.
           lcLogFile = lcContLogDir + "publishifs_" + lcToday + STRING(TIME) + ".log".
  
    OUTPUT STREAM strout TO VALUE(lcLogFile) APPEND.
+  
+   RUN dumpfile_run(32,
+                    "Modified",
+                    "",
+                    FALSE,
+                    OUTPUT liCount).
    
-   RUN ifs_invoice(32, 
-                   lcFileName,
-                   "Modified",
-                   0,
-                   "",
-                   "",
-                   "",
-                   OUTPUT liCount,
-                   OUTPUT llInterrupt) NO-ERROR. 
-   IF llInterrupt THEN DO:
-      fReqStatus(3,"ERROR: Interruption in generating IFS file."). 
-      
-      PUT STREAM strout UNFORMATTED 
-         "ERROR: Interruption in generating IFS file." SKIP.
-      
-      llgError  = YES.
-   END.
-   ELSE 
+   IF liCount > 0 THEN 
       PUT STREAM strout UNFORMATTED 
          "Generated IFS for " + STRING(liCount) + " Service Invoices" SKIP.   
 
