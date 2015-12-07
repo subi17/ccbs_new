@@ -194,6 +194,6 @@ IF llError THEN MESSAGE "Tariff ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "Tariff error" VIEW-AS ALERT-BOX.
 
 llError = fcreateShaperConf(lcBaseIdName, lcIdName, ldLimitUnShaped, 
-                            ldLimitShaped, lcClitypeList, 1 /*liUpdateMode*/).
+                            ldLimitShaped, lcClitypeList, liUpdateMode).
 IF llError THEN MESSAGE "ShaperConf ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "ShaperConf error" VIEW-AS ALERT-BOX.

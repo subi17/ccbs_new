@@ -45,9 +45,17 @@ FUNCTION fcreateRepText RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    DISPLAY ttRepText with frame a.
    pause 0. 
    IF iiUpdateMode NE 0 THEN DO:
-      CREATE RepText.
-      BUFFER-COPY ttRepText TO RepText.
-      DELETE ttRepText. /*for safety reasons*/
+      FIND FIRST RepText WHERE
+              RepText.LinkCode EQ icDCEvent AND
+              RepText.Language EQ iiLanguage AND
+              RepText.ToDate > TODAY NO-LOCK NO-ERROR.
+      IF NOT AVAIL RepText THEN DO:
+         CREATE RepText.
+         BUFFER-COPY ttRepText TO RepText.
+         DELETE ttRepText. /*for safety reasons*/
+      END.
+      ELSE  MESSAGE "RepText exists / " + STRING(iiLanguage) + " " + 
+                    icDCEvent VIEW-AS ALERT-BOX.
    END.
    IF AVAIL RepText THEN RELEASE RepText.
    RETURN TRUE.
@@ -77,9 +85,14 @@ FUNCTION fcreateBillItem RETURNS LOGICAL ( INPUT icBasebillcode AS CHAR,
    DISPLAY ttBillItem with frame a.
    pause 0.
    IF iiUpdateMode NE 0 THEN DO:
-      CREATE BillItem.
-      BUFFER-COPY ttBillItem TO BillItem.
-      DELETE ttBillItem. /*for safety reasons*/
+      FIND FIRST BillItem WHERE
+                 BillItem.billcode EQ icbillcode NO-LOCK NO-ERROR.
+      IF NOT AVAIL BillItem THEN DO:
+         CREATE BillItem.
+         BUFFER-COPY ttBillItem TO BillItem.
+         DELETE ttBillItem. /*for safety reasons*/
+      END.
+      ELSE  MESSAGE "BillItem exists / " + icBillCode VIEW-AS ALERT-BOX.
    END.
    IF AVAIL BillItem THEN RELEASE BillItem.
    RETURN TRUE.
@@ -107,9 +120,14 @@ FUNCTION fcreateFeeModel RETURNS LOGICAL ( INPUT icBaseMFFeeModel AS CHAR,
    DISPLAY ttFeeModel with frame a.
    pause 0.
    IF iiUpdateMode NE 0 THEN DO:
-      CREATE FeeModel.
-      BUFFER-COPY ttFeeModel TO FeeModel.
-      DELETE ttFeeModel. /*for safety reasons*/
+      FIND FIRST FeeModel WHERE
+                 Feemodel.feeModel EQ icMFFeeModel NO-LOCK NO-ERROR.
+      IF NOT AVAIL FeeModel THEN DO:
+         CREATE FeeModel.
+         BUFFER-COPY ttFeeModel TO FeeModel.
+         DELETE ttFeeModel. /*for safety reasons*/
+      END.
+      ELSE  MESSAGE "FeeModel exists / " + icMFFeeModel VIEW-AS ALERT-BOX.
    END.
    IF AVAIL FeeModel THEN RELEASE FeeModel.
    RETURN TRUE.
@@ -144,9 +162,15 @@ FUNCTION fcreateDayCampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    DISPLAY ttDayCampaign with frame a.
    pause 0.
    IF iiUpdateMode NE 0 THEN DO:
-      CREATE DayCampaign.
-      BUFFER-COPY ttDayCampaign TO DayCampaign.
-      DELETE ttdayCampaign. /*for safety reasons*/
+      FIND FIRST DayCampaign WHERE
+                 DayCampaign.dcevent EQ icDCEvent AND
+                 DayCampaign.validto > TODAY NO-LOCK NO-ERROR.
+      IF NOT AVAIL DayCampaign THEN DO:
+         CREATE DayCampaign.
+         BUFFER-COPY ttDayCampaign TO DayCampaign.
+         DELETE ttdayCampaign. /*for safety reasons*/
+      END.
+      ELSE  MESSAGE "DayCampaign exists / " + icDCEvent VIEW-AS ALERT-BOX.
    END.
    IF AVAIL DayCampaign THEN RELEASE DayCampaign.
    RETURN TRUE.
@@ -178,9 +202,15 @@ FUNCTION fcreateFMItem RETURNS LOGICAL ( INPUT icBaseMFFeeModel AS CHAR,
    DISPLAY ttFMItem with frame a.
    pause 0.
    IF iiUpdateMode NE 0 THEN DO:
-      CREATE FMItem.
-      BUFFER-COPY ttFMItem TO FMItem.
-      DELETE ttFMItem. /*for safety reasons*/
+      FIND FIRST FMItem WHERE
+              FMItem.FeeModel EQ icMFFeeModel AND
+              FMItem.todate > TODAY NO-LOCK NO-ERROR.
+      IF NOT AVAIL FMItem THEN DO:
+         CREATE FMItem.
+         BUFFER-COPY ttFMItem TO FMItem.
+         DELETE ttFMItem. /*for safety reasons*/
+      END.
+      ELSE  MESSAGE "FMItem exists / " + icMFFeeModel VIEW-AS ALERT-BOX.
    END.
    IF AVAIL FMItem THEN RELEASE FMItem.
    RETURN TRUE.
@@ -241,6 +271,7 @@ FUNCTION fcreateDiscountPlan RETURNS LOGICAL ( INPUT icBaseMFFeemodel AS CHAR,
          BUFFER-COPY ttDPTarget TO DPTarget.
          DELETE ttDPTarget. /*for safety reasons*/
       END.
+      ELSE  MESSAGE "DPTarget exists / " + icMFFeeModel VIEW-AS ALERT-BOX.
       FIND FIRST DiscountPlan WHERE
                  DiscountPlan.billcode = icDp AND
                  DiscountPlan.ValidTo > TODAY NO-ERROR.
@@ -249,6 +280,7 @@ FUNCTION fcreateDiscountPlan RETURNS LOGICAL ( INPUT icBaseMFFeemodel AS CHAR,
          BUFFER-COPY ttDiscountPlan TO Discountplan.
          DELETE ttDiscountPlan. /*for safety reasons*/
       END.
+      ELSE  MESSAGE "DiscountPlan exists / " + icDp VIEW-AS ALERT-BOX.
       FIND FIRST DPRate WHERE
                  DPRate.dpid = liDpId NO-LOCK NO-ERROR.
       IF NOT AVAIL DPRate THEN DO:
@@ -258,6 +290,7 @@ FUNCTION fcreateDiscountPlan RETURNS LOGICAL ( INPUT icBaseMFFeemodel AS CHAR,
          DPRate.ValidTo = 12/31/49.
          DPRate.ValidFrom = idaValidFrom.
       END.
+      ELSE  MESSAGE "DPRate exists / " + STRING(liDpId) VIEW-AS ALERT-BOX.
    END.
    IF AVAIL DPTarget THEN RELEASE DPTarget.
    RETURN TRUE.
@@ -271,7 +304,8 @@ FUNCTION faddMatrixValue RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
                           INPUT iiUpdateMode AS INT):
    
    IF iiUpdateMode NE 0 THEN DO:
-      FOR EACH MXItem WHERE LOOKUP(icBaseDCEvent, MXItem.MXValue) > 0:
+      FOR EACH MXItem WHERE LOOKUP(icBaseDCEvent, MXItem.MXValue) > 0 AND
+                            LOOKUP(icDCEvent, MXItem.MXValue) = 0:
          MXItem.MXValue = MXItem.MXValue + "," + icDCEvent.
       END.
    END.
@@ -312,9 +346,15 @@ FUNCTION faddRequestActionRules RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
          FIND LAST RequestAction USE-INDEX RequestActionId NO-LOCK NO-ERROR.
          ttRequestAction.RequestActionId = RequestAction.RequestActionId + 1.
          DISP ttRequestAction.
-
-         CREATE RequestAction.
-         BUFFER-COPY ttRequestAction TO RequestAction.
+         
+         FIND FIRST RequestAction WHERE RequestAction.actiontype = "SMS" AND
+                                     RequestAction.actionKey BEGINS
+                                     icDCEvent + "DeAct".
+         IF NOT AVAIL RequestAction THEN DO:
+            CREATE RequestAction.
+            BUFFER-COPY ttRequestAction TO RequestAction.
+         END.
+         ELSE  MESSAGE "ReqAct exists / " + icDCEvent VIEW-AS ALERT-BOX.         
 
          FIND FIRST InvText WHERE InvText.KeyValue BEGINS icDCEvent +
                                                           "DeAct" NO-ERROR.
@@ -328,6 +368,7 @@ FUNCTION faddRequestActionRules RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
             CREATE InvText.
             BUFFER-COPY ttInvText TO InvText.
          END.
+         ELSE  MESSAGE "InvText exists / " + icDCEvent VIEW-AS ALERT-BOX.
          DELETE ttInvText.
          DELETE ttRequestAction.
       END.
@@ -376,12 +417,24 @@ FUNCTION fcreateServiceLimit RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    DISPLAY ttServiceLimit with frame a.
    pause 0.
    IF iiUpdateMode NE 0 THEN DO:
-      CREATE ServiceLimitGroup.
-      BUFFER-COPY ttServiceLimitGroup TO ServiceLimitGroup.
-      DELETE ttServiceLimitGroup. /*for safety reasons*/
-      CREATE ServiceLimit.
-      BUFFER-COPY ttServiceLimit TO ServiceLimit.
-      DELETE ttServiceLimit. /*for safety reasons*/
+      FIND FIRST ServiceLimitGroup WHERE
+              ServiceLimitGroup.groupcode EQ icDCEvent AND
+              ServiceLimitGroup.validTo > TODAY NO-LOCK NO-ERROR.
+      IF NOT AVAIL ServiceLimitGroup THEN DO:
+         CREATE ServiceLimitGroup.
+         BUFFER-COPY ttServiceLimitGroup TO ServiceLimitGroup.
+         DELETE ttServiceLimitGroup. /*for safety reasons*/
+      END.
+      ELSE  MESSAGE "SLGroup exists / " + icDCEvent VIEW-AS ALERT-BOX.
+      FIND FIRST ServiceLimit WHERE
+              ServiceLimit.groupcode EQ icDCEvent AND
+              ServiceLimit.validTo > TODAY NO-LOCK NO-ERROR.    
+      IF NOT AVAIL ServiceLimit THEN DO:
+         CREATE ServiceLimit.
+         BUFFER-COPY ttServiceLimit TO ServiceLimit.
+         DELETE ttServiceLimit. /*for safety reasons*/
+      END.
+      ELSE  MESSAGE "SL exists / " + icDCEvent VIEW-AS ALERT-BOX.
    END.
    RETURN TRUE.
 END FUNCTION.
@@ -418,9 +471,16 @@ FUNCTION fcreateProgLimit RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    DISPLAY ttProgLimit with frame a.
    pause 0.
    IF iiUpdateMode NE 0 THEN DO:
-      CREATE ProgLimit.
-      BUFFER-COPY ttProgLimit TO ProgLimit.
-      DELETE ttProgLimit. /*for safety reasons*/
+      FIND FIRST ProgLimit WHERE
+              ProgLimit.groupcode EQ icDCEvent AND
+              ProgLimit.limitfrom = 0 AND
+              ProgLimit.validTo > TODAY NO-LOCK NO-ERROR.
+      IF NOT AVAIL ProgLimit THEN DO:
+         CREATE ProgLimit.
+         BUFFER-COPY ttProgLimit TO ProgLimit.
+         DELETE ttProgLimit. /*for safety reasons*/
+      END.
+      ELSE  MESSAGE "Proglimit =0 exists / " + icDCEvent VIEW-AS ALERT-BOX.
    END.
 
    FIND FIRST ProgLimit WHERE
@@ -444,9 +504,16 @@ FUNCTION fcreateProgLimit RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    DISPLAY ttProgLimit with frame a.
    pause 0.
    IF iiUpdateMode NE 0 THEN DO:
-      CREATE ProgLimit.
-      BUFFER-COPY ttProgLimit TO ProgLimit.
-      DELETE ttProgLimit. /*for safety reasons*/
+      FIND FIRST ProgLimit WHERE
+              ProgLimit.groupcode EQ icDCEvent AND
+              ProgLimit.limitfrom > 0 AND
+              ProgLimit.validTo > TODAY NO-LOCK NO-ERROR.
+      IF NOT AVAIL ProgLimit THEN DO:
+         CREATE ProgLimit.
+         BUFFER-COPY ttProgLimit TO ProgLimit.
+         DELETE ttProgLimit. /*for safety reasons*/
+      END.
+      ELSE  MESSAGE "Proglimit > 0 exists / " + icDCEvent VIEW-AS ALERT-BOX.
    END.
    IF AVAIL ProgLimit THEN RELEASE ProgLimit.
    RETURN TRUE.
@@ -511,6 +578,7 @@ FUNCTION fcreateSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
             DELETE ttSLGAnalyse. /*for safety reasons*/
          END.
       END.
+      ELSE  MESSAGE "SLGAnal exists / " + icDCEvent VIEW-AS ALERT-BOX.
       IF AVAIL ttSLGAnalyse THEN RELEASE ttSLGAnalyse.
    END.
    IF AVAIL SLGAnalyse THEN RELEASE SLGAnalyse.
@@ -524,8 +592,8 @@ FUNCTION faddTMSParam RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
                                                  INPUT icDCEvent AS CHAR,
                                                  INPUT iiUpdateMode AS INT):
    IF iiUpdateMode NE 0 THEN DO:
-      FOR EACH TMSParam WHERE LOOKUP(icBaseDCEvent,
-                                       tmsParam.charval) > 0:
+      FOR EACH TMSParam WHERE LOOKUP(icBaseDCEvent, tmsParam.charval) > 0 AND
+                              LOOKUP(icDCEvent, tmsParam.charval) = 0:
          tmsParam.charval = tmsParam.charval + "," +
                                         icDCEvent.
       END.
@@ -576,6 +644,7 @@ FUNCTION fcreateBDest RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
          DELETE ttBDest. /*for safety reasons*/
          RELEASE BDest.
       END.
+      ELSE  MESSAGE "Bdest exists / " + ttBdest.bdest VIEW-AS ALERT-BOX.
       RELEASE bBdest.
    END. 
    RELEASE ttBDest.
@@ -605,6 +674,7 @@ FUNCTION fcreateBDest RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
             DELETE ttBDest. /*for safety reasons*/
             RELEASE BDest.
          END.
+         ELSE  MESSAGE "Bdest exists / " + ttBdest.bdest VIEW-AS ALERT-BOX.
          RELEASE bBdest.
       END.
    END.
@@ -651,9 +721,15 @@ FUNCTION fcreateDCService RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    DISPLAY ttDCServicePackage with frame a.
    pause 0.
    IF iiUpdateMode NE 0 THEN DO:
-      CREATE DCServicePackage.
-      BUFFER-COPY ttDCServicePackage TO DCServicePackage.
-      DELETE ttDCServicePackage. /*for safety reasons*/
+      FIND FIRST DCServicePackage WHERE
+              DCServicePackage.dcEvent EQ icDCEvent AND
+              DCServicePackage.ToDate > TODAY NO-LOCK NO-ERROR.
+      IF NOT AVAIL DCServicePackage THEN DO:
+         CREATE DCServicePackage.
+         BUFFER-COPY ttDCServicePackage TO DCServicePackage.
+         DELETE ttDCServicePackage. /*for safety reasons*/
+      END.
+      ELSE MESSAGE "DCServicePackage exists: " + icDCEvent VIEW-AS ALERT-BOX.
    END.
    IF AVAIL DCServicePackage THEN RELEASE DCServicePackage.
 
@@ -668,9 +744,15 @@ FUNCTION fcreateDCService RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    DISPLAY ttDCServiceComponent with frame a.
    pause 0.
    IF iiUpdateMode NE 0 THEN DO:
-      CREATE DCServiceComponent.
-      BUFFER-COPY ttDCServiceComponent TO DCServiceComponent.
-      DELETE ttDCServiceComponent. /*for safety reasons*/
+      FIND FIRST DCServiceComponent WHERE
+              DCServiceComponent.dcservicepackageid EQ lcservpackId AND
+              DCServiceComponent.ToDate > TODAY NO-LOCK NO-ERROR.
+      IF NOT AVAIL DCServiceComponent THEN DO:
+         CREATE DCServiceComponent.
+         BUFFER-COPY ttDCServiceComponent TO DCServiceComponent.
+         DELETE ttDCServiceComponent. /*for safety reasons*/
+      END.
+      ELSE MESSAGE "DCServicePackage exists: " + icDCEvent VIEW-AS ALERT-BOX.
    END.
    IF AVAIL DCServiceComponent THEN RELEASE DCServiceComponent.   
 
@@ -726,9 +808,15 @@ FUNCTION fcreateTariff RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
       DISPLAY ttTariff with frame a.
       pause 0.
       IF iiUpdateMode NE 0 THEN DO:
-         CREATE Tariff.
-         BUFFER-COPY ttTariff TO Tariff.
-         DELETE ttTariff. /*for safety reasons*/
+         FIND FIRST Tariff WHERE
+                       Tariff.Bdest EQ ttTariff.Bdest AND
+                       Tariff.validTo > TODAY NO-LOCK NO-ERROR.
+         IF NOT AVAIL Tariff THEN DO:
+            CREATE Tariff.
+            BUFFER-COPY ttTariff TO Tariff.
+            DELETE ttTariff. /*for safety reasons*/
+         END.
+         ELSE MESSAGE "Tariff exists: " + icDCEvent VIEW-AS ALERT-BOX.
       END.
       IF AVAIL Tariff THEN RELEASE Tariff.
       IF AVAIL ttTariff THEN RELEASE ttTariff.
@@ -771,7 +859,8 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
             CREATE ShaperConf.
             BUFFER-COPY ttShaperConf TO ShaperConf.
             DELETE ttShaperConf. /*for safety reasons*/
-         END. 
+         END.
+         ELSE MESSAGE "ShaperConf exists: " + icDCEvent VIEW-AS ALERT-BOX. 
       END.
       IF AVAIL ShaperConf THEN RELEASE ShaperConf.
       IF AVAIL ttShaperConf THEN RELEASE ttShaperConf.
@@ -804,6 +893,8 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
             BUFFER-COPY ttShaperConf TO ShaperConf.
             DELETE ttShaperConf. /*for safety reasons*/
          END.
+         ELSE MESSAGE "ShaperConf exists: " + icDCEvent + "wVOIP"  
+              VIEW-AS ALERT-BOX.
       END.
       IF AVAIL ShaperConf THEN RELEASE ShaperConf.
       IF AVAIL ttShaperConf THEN RELEASE ttShaperConf.
@@ -817,7 +908,8 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                     ShaperConf.shaperConfId EQ lcCliType + "w" + icBaseDCEvent
                     NO-LOCK NO-ERROR.
          IF NOT AVAIL ShaperConf THEN DO:
-            MESSAGE "Tariff with VOIP not found:  " + icBaseDCEvent VIEW-AS ALERT-BOX.
+            MESSAGE "ShaperConf not exist: " + lcCliType + "w" +
+                    icBaseDCEvent VIEW-AS ALERT-BOX.
             /*RETURN FALSE.*/
             NEXT.
          END.
@@ -828,8 +920,10 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
          ttShaperConf.ShaperConfId = lcCliType + "w" + icDCEvent.
          ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseDCEvent,
                                        icDCEvent).
-         ttShaperConf.limitShaped = idLimitShaped + 5242880.
-         ttShaperConf.limitUnShaped = idLimitUnShaped + 104857600.
+         FIND FIRST ShaperConf WHERE
+                    ShaperConf.shaperConfId EQ lcCliType.
+         ttShaperConf.limitShaped = idLimitShaped + ShaperConf.limitShaped.
+         ttShaperConf.limitUnShaped = idLimitUnShaped + ShaperConf.limitUnShaped.
 
          DISPLAY ttShaperConf with frame a.
          pause 0.
@@ -842,13 +936,59 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                BUFFER-COPY ttShaperConf TO ShaperConf.
                DELETE ttShaperConf. /*for safety reasons*/
             END.
+            ELSE MESSAGE "ShaperConf exists: " + ttShaperConf.ShaperConfId 
+                 VIEW-AS ALERT-BOX.
          END.
          IF AVAIL ShaperConf THEN RELEASE ShaperConf.
          IF AVAIL ttShaperConf THEN RELEASE ttShaperConf.
+         
+         /* with VOIP */
+         FIND FIRST ShaperConf WHERE
+                    ShaperConf.shaperConfId EQ lcCliType + "w" + 
+                    icBaseDCEvent + "wVOIP"
+                    NO-LOCK NO-ERROR.
+         IF NOT AVAIL ShaperConf THEN DO:
+            MESSAGE "ShaperConf not exist: " + lcCliType + "w" +
+                    icBaseDCEvent + "wVOIP" VIEW-AS ALERT-BOX.
+            /*RETURN FALSE.*/
+            NEXT.
+         END.
 
-      END.   
+         CREATE ttShaperConf.
+         BUFFER-COPY ShaperConf TO ttShaperConf.
+         /*Set correct values to new entry*/
+         ttShaperConf.ShaperConfId = lcCliType + "w" + icDCEvent + "wVOIP".
+         ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseDCEvent,
+                                       icDCEvent).
+         FIND FIRST ShaperConf WHERE
+                    ShaperConf.shaperConfId EQ lcCliType + "wVOIP" NO-LOCK
+                    NO-ERROR.
+         IF NOT AVAIL ShaperConf THEN
+            MESSAGE "ShaperConf not exist: " + lcCliType + "wVOIP" 
+                    VIEW-AS ALERT-BOX.
+         ELSE DO:
+            ttShaperConf.limitShaped = idLimitShaped + ShaperConf.limitShaped.
+            ttShaperConf.limitUnShaped = idLimitUnShaped + 
+                                         ShaperConf.limitUnShaped.
+         END.
 
-
+         DISPLAY ttShaperConf with frame a.
+         pause 0.
+         IF iiUpdateMode NE 0 THEN DO:
+            FIND FIRST ShaperConf WHERE
+                       ShaperConf.shaperConfId EQ ttShaperConf.ShaperConfId
+                       NO-LOCK NO-ERROR.
+            IF NOT AVAIL ShaperConf THEN DO:
+               CREATE ShaperConf.
+               BUFFER-COPY ttShaperConf TO ShaperConf.
+               DELETE ttShaperConf. /*for safety reasons*/
+            END.
+            ELSE MESSAGE "ShaperConf exists: " + ttShaperConf.ShaperConfId
+                 VIEW-AS ALERT-BOX.
+         END.
+         IF AVAIL ShaperConf THEN RELEASE ShaperConf.
+         IF AVAIL ttShaperConf THEN RELEASE ttShaperConf.
+      END.
    RETURN TRUE.
 END FUNCTION.
 
