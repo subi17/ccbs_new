@@ -768,7 +768,12 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
                             lcDocListEntries /*DocList*/,
                             ",").
 
-   lcErr = fSendChangeInformation("", Order.OrderId, "", lcMsg).
+   lcErr = fSendChangeInformation("", 
+                                  Order.OrderId, 
+                                  "", 
+                                  lcDocListEntries,
+                                  ",",
+                                  lcMsg).
    fLogMsg("Msg,2 : " + lcMsg + " #Status: " + lcErr).
 
    RETURN "".
@@ -912,7 +917,12 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             ",").
-   lcErr = fSendChangeInformation("", Order.OrderId, "", lcMsg).
+   lcErr = fSendChangeInformation("", 
+                                  Order.OrderId, 
+                                  "", 
+                                  lcDocListEntries,
+                                  ",",
+                                  lcMsg).
    fLogMsg("Msg,3 : " + lcMsg + " #Status: " + lcErr).
 
 

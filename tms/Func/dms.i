@@ -257,11 +257,27 @@ FUNCTION fNeededDocs RETURNS CHAR
 
 END.
 
+FUNCTION fDoc2Msg RETURNS CHAR
+   (icDocNbr AS CHAR,
+    icDocComment AS CHAR):
+   DEF VAR lcRet AS CHAR NO-UNDO.
+
+   IF icDocComment = "" THEN icDocComment = "null".
+
+    lcRet =  "~{" + "~"number~"" + "~:" + "~"" + icDocNbr +  "~"" + "," +
+                  "~"revision_comment~"" + "~:" + "~"" + icDocComment + "~"" +
+            "~}".
+   RETURN lcRet.
+END.
+
+
 /*Function generates JSON message for providing information for
   SMS/EMAIL sending. */
 FUNCTION fGenerateMessage RETURNS CHAR
    (icNotifCaseId AS CHAR,
     icDeposit AS CHAR,
+    icDocList AS CHAR,
+    icDocListSep AS CHAR,
    BUFFER Order FOR Order,
    BUFFER Ordercustomer FOR Ordercustomer):
   
@@ -276,12 +292,14 @@ FUNCTION fGenerateMessage RETURNS CHAR
    DEF VAR lcSeq AS CHAR NO-UNDO.
    DEF VAR lcMessage AS CHAR NO-UNDO.
    DEF VAR lcArray AS CHAR NO-UNDO.
-   DEF VAR lcDocList AS CHAR NO-UNDO.
+   DEF VAR lcDocList AS CHAR NO-UNDO. /*Plain list if required doc numbers*/
    DEF VAR liCount AS INT NO-UNDO.
+   DEF VAR i AS INT NO-UNDO.
+   DEF VAR lcDocNotifEntry AS CHAR NO-UNDO.
 
    IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN
       lcMSISDN = fNotNull(Order.CLI).
-   ELSE
+   ELSE 
       lcMSISDN = fNotNull(OrderCustomer.MobileNumber).
 
    lcContractID = fNotNull(Order.ContractId).
@@ -296,11 +314,25 @@ FUNCTION fGenerateMessage RETURNS CHAR
    lcSeq = STRING(NEXT-VALUE(SMSSEQ)). /*read and increase SMSSEQ. The sequence must be reserved as ID for WEB&HPD*/
    lcDocList = fNeededDocs(BUFFER Order).  
    lcArray = fInitJsonArray("documents").
-
-   DO liCount = 1 TO NUM-ENTRIES(lcDocList):
-      fAddToJsonArray(lcArray, STRING(ENTRY(liCount,lcDocList))).
+   
+   /*Add document comment if DMS has given it.*/
+   IF lcDocList EQ "" THEN DO: /*from TMS, initial information*/
+      DO liCount = 1 TO NUM-ENTRIES(lcDocList):
+         lcDocNotifEntry = fDoc2Msg(ENTRY(i,lcDocList,icDocListSep), 
+                                    "").
+         fAddToJsonArray(lcArray, lcDocNotifEntry).
+      END.
+   END.
+   ELSE DO: /*from DMS, add doc comments*/
+      DO i = 1 TO NUM-ENTRIES(icDocList,icDocListSep) BY 4:
+         lcDocNotifEntry = fDoc2Msg(ENTRY(i,icDocList,icDocListSep),
+                                    ENTRY(i + 3,icDocList,icDocListSep)).
+         fAddToJsonArray(lcArray, lcDocNotifEntry).
+      END.
    END.
 
+
+   
    /*Fill data for message.*/
    lcMessage = "~{" + "~"metadata~""  + "~:" + "~{" +
                          "~"case~""  + "~:" + "~"" + icNotifCaseID  + "~"," +
@@ -332,6 +364,8 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    (icDMSStatus AS CHAR,
     icOrderID AS INT,
     icDeposit AS CHAR,
+    icDocList AS CHAR,
+    icDocListSep AS CHAR,
     OUTPUT ocSentMessage AS CHAR): /*for debugging, also includes additional data related to message.*/
 
    DEF BUFFER Order FOR Order.
@@ -373,6 +407,8 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    END.
    lcMessage = fGenerateMessage(lcNotifCaseID,
                                 icDeposit,
+                                icDocList,
+                                icDocListSep,
                                 BUFFER Order,
                                 BUFFER Ordercustomer).
 

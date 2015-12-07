@@ -189,7 +189,12 @@ PROCEDURE pUpdateDMS:
                             ";").
 
    lcDeposit = fFindDeposit(lcDocList, ";").                         
-   lcErr = fSendChangeInformation(lcStatusCode, liOrderId, lcDeposit, lcMsg).
+   lcErr = fSendChangeInformation(lcStatusCode, 
+                                  liOrderId, 
+                                  lcDeposit, 
+                                  lcDocList,
+                                  ";",
+                                  lcMsg).
 
    fLogMsg("Msg : " + lcMsg + " #Status: " + lcErr).
 

@@ -89,7 +89,11 @@ FOR EACH DMS NO-LOCK WHERE
    IF LOOKUP(DMS.StatusCode, lcNoDocProvidedStatuses) > 0 THEN DO:
      /*Pending (A0), Doc errónea status (C)*/
      lcErr = fSendChangeInformation(DMS.StatusCode  + "_by_batch" ,
-                     DMS.HostID, "", lcMsg).
+                                    DMS.HostID, 
+                                    "", /*deposit*/
+                                    "", /*docList*/
+                                    "", /*docListSep*/
+                                    lcMsg).
      fLogMsg(lcMsg).
    END.
 END.
