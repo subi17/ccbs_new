@@ -142,6 +142,8 @@ ASSIGN
    ldeNextMonthTS = fMake2DT(ldaSTCDates[2],0)
    ldeEndTS       = fMake2DT(fLastDayOfMonth(TODAY),86399).
 
+lliSTCAllowed = fIsiSTCAllowed(INPUT Mobsub.MsSeq).
+
 IF MobSub.PayType = FALSE THEN DO:
    ASSIGN
       lcIPLContracts        = fCParamC("IPL_CONTRACTS")
@@ -154,8 +156,6 @@ IF MobSub.PayType = FALSE THEN DO:
       lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
       lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS")
       lcDataBundleCLITypes  = fCParamC("DATA_BUNDLE_BASED_CLITYPES").
-
-   lliSTCAllowed = fIsiSTCAllowed(INPUT Mobsub.MsSeq).
 END.
 
 ASSIGN
@@ -193,12 +193,13 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL:
 
    DEF VAR liCount AS INT NO-UNDO.
 
-   IF ldaSTCDates[1] = ldaSTCDates[2] OR
-      MobSub.PayType = TRUE OR CLIType.PayType = 2 OR
-      NOT lliSTCAllowed THEN
-      liCount = 2.
-   ELSE
+   IF (NOT(MobSub.PayType = FALSE OR CLIType.PayType = 1)  OR
+       NOT(MobSub.PayType = TRUE  OR CLIType.PayType = 2)) AND
+          ldaSTCDates[1] <> ldaSTCDates[2]                 AND
+          lliSTCAllowed                                    THEN
       liCount = 1.
+   ELSE
+      liCount = 2.
 
    sub_struct = add_struct(response_toplevel_id, "").
    penalty_array = add_array(sub_struct,"penalties").
