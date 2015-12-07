@@ -20,6 +20,8 @@ DEF TEMP-TABLE ttDiscountPlan NO-UNDO LIKE DiscountPlan.
 DEF TEMP-TABLE ttRequestAction NO-UNDO LIKE RequestAction.
 DEF TEMP-TABLE ttInvText NO-UNDO LIKE InvText.
 DEF TEMP-TABLE ttshaperConf NO-UNDO LIKE ShaperConf.
+DEF TEMP-TABLE ttTMSCodes NO-UNDO LIKE TMSCodes.
+
 FUNCTION fcreateRepText RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                                            INPUT icDCEvent AS CHAR,
                                            INPUT icTransText AS CHAR,
@@ -991,4 +993,42 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
       END.
    RETURN TRUE.
 END FUNCTION.
+
+/*********************************************************/
+/* Create TMSCodes                                       */
+FUNCTION fcreateTMSCodes RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
+                                         INPUT icDCEvent AS CHAR,
+                                         INPUT icBaseSaleName AS CHAR,
+                                         INPUT icSaleName AS CHAR,
+                                         INPUT iiUpdateMode AS INT):
+      FIND FIRST TMSCodes WHERE
+                 TMSCodes.codevalue EQ icBaseDCEvent NO-LOCK NO-ERROR.
+      IF NOT AVAIL TMSCodes THEN DO:
+         MESSAGE "Tariff not found:  " + icBaseDCEvent VIEW-AS ALERT-BOX.
+         RETURN FALSE.
+      END.
+
+      CREATE ttTMSCodes.
+      BUFFER-COPY TMSCodes TO ttTMSCodes.
+      /*Set correct values to new entry*/
+      ttTMSCodes.codeValue = icDCEvent.
+      ttTMSCodes.configValue = REPLACE(ttTMSCodes.configValue, icBaseSaleName,
+                                       icSaleName).
+      DISPLAY ttTMSCodes with frame a.
+      pause 0.
+      IF iiUpdateMode NE 0 THEN DO:
+         FIND FIRST TMSCodes WHERE
+                    TMSCodes.codevalue EQ icDCEvent NO-LOCK NO-ERROR.
+         IF NOT AVAIL TMSCodes THEN DO:
+            CREATE TMSCodes.
+            BUFFER-COPY ttTMSCodes TO TMSCodes.
+            DELETE ttTMSCodes. /*for safety reasons*/
+         END.
+         ELSE MESSAGE "TMSCodes exists: " + icDCEvent VIEW-AS ALERT-BOX.
+      END.
+      IF AVAIL TMSCodes THEN RELEASE TMSCodes.
+      IF AVAIL ttTMSCodes THEN RELEASE ttTMSCodes.
+   RETURN TRUE.
+END FUNCTION.
+
 

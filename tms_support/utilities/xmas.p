@@ -197,3 +197,8 @@ llError = fcreateShaperConf(lcBaseIdName, lcIdName, ldLimitUnShaped,
                             ldLimitShaped, lcClitypeList, liUpdateMode).
 IF llError THEN MESSAGE "ShaperConf ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "ShaperConf error" VIEW-AS ALERT-BOX.
+
+llError = fcreateTMSCodes(lcBaseDCEvent, lcDCEvent,
+                          lcBaseIdName, lcIdName, liUpdateMode).
+IF llError THEN MESSAGE "TMSCodes ready" VIEW-AS ALERT-BOX.
+ELSE  MESSAGE "TMSCodes error" VIEW-AS ALERT-BOX.
