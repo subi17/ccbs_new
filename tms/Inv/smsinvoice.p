@@ -128,24 +128,26 @@ FOR EACH Invoice WHERE
 
    /* Pause can be passed with liSMSCntValue 0 from cparam */
    IF liLoop > 0 AND liSMSCntValue > 0 AND
-      PauseFlag THEN 
-   DO:
+      PauseFlag THEN
+   DO:            
       ASSIGN liStopTime  = TIME
              lNowSeconds = liStopTime.
+             
+      liPauseTime = liTime2Pause - (liStopTime - liStartTime).
+      IF liPauseTime > liTime2Pause THEN liPauseTime = liTime2Pause.       
+      
       /* If is too late, schedule to start next morning */
       IF (lNowSeconds > lEndSeconds) THEN
       DO:
-         liStopTime = ({&MIDNIGHT-SECONDS} - lNowSeconds) + lIniSeconds.
+         liPauseTime = ({&MIDNIGHT-SECONDS} - lNowSeconds) + lIniSeconds.
       END.
       ELSE
       /* If is too early, schedule to start when window opens */
       IF (lNowSeconds < lIniSeconds) THEN
       DO:
-         liStopTime = lIniSeconds.
+         liPauseTime = lIniSeconds - lNowSeconds.
       END.
-      liPauseTime = liTime2Pause - (liStopTime - liStartTime).
-      IF liPauseTime > liTime2Pause THEN liPauseTime = liTime2Pause.
-
+      
       PAUSE liPauseTime NO-MESSAGE.
       ASSIGN 
         liStartTime = TIME
