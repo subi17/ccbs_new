@@ -76,7 +76,7 @@ lcServLimitName = "Mobile Data Usage Bundle 7".
 lcDPName = "Bono 3 GB discount".
 lcDP = "BONO7DISC".
 lcBaseDP = "BONO6DISC".
-lcDeActSMS = "Yoigo info: Has pedido cancelacion de Bono 3 GB Internet de Contrato. Desde EXCLUSIVE-LOCK dia 1 del mes prox no estara activo.".
+lcDeActSMS = "Yoigo info: Has pedido cancelacion de Bono 3 GB Internet de Contrato. Desde el dia 1 del mes prox no estara activo.".
 
 /*FeeModel*/
 lcBaseMFFeeModel = "DATA6MF".

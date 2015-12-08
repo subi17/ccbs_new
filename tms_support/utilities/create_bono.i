@@ -366,11 +366,11 @@ FUNCTION faddRequestActionRules RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
             ttInvText.invText = icdeactSMS.
             ttInvText.KeyValue = REPLACE(ttInvText.KeyValue, icBaseDCEvent,
                                          icDCEvent).
-            FIND LAST invText USE-INDEX ITNum NO-LOCK NO-ERROR.
-            ttInvText.ITNum = invText.ITNum + 1.
+            /*ttInvText.ITNum = NEXT-VALUE(it-seq).*/
             ttInvText.FromDate = idaValidFrom.
             CREATE InvText.
             BUFFER-COPY ttInvText TO InvText.
+            InvText.ITNum    = NEXT-VALUE(it-seq).
          END.
          ELSE  MESSAGE "InvText exists / " + icDCEvent VIEW-AS ALERT-BOX.
          DELETE ttInvText.
@@ -786,8 +786,6 @@ FUNCTION fcreateTariff RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                                          INPUT idaVAlidFrom AS DATE,
                                          INPUT iiUpdateMode AS INT):
    DEF VAR lcNum AS INT NO-UNDO.
-   FIND LAST Tariff use-index TariffNum no-lock no-error.
-   lcNum = Tariff.tariffnum + 1.
    FOR EACH BDest NO-LOCK WHERE
               INDEX(BDest.BDest, icBaseDCEvent) > 0 AND
               INDEX(BDest.BDest,"UPSELL") = 0 AND
@@ -802,13 +800,10 @@ FUNCTION fcreateTariff RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
 
       CREATE ttTariff.
       BUFFER-COPY Tariff TO ttTariff.
-      FIND LAST Tariff use-index TariffNum no-lock no-error. 
       /*Set correct values to new entry*/
       ttTariff.BDest = REPLACE(BDest.bdest, icBaseDCEvent, icDCEvent).
       ttTariff.ValidFrom = idaVAlidFrom.
-      ttTariff.tariffnum = lcNum.
       ttTariff.billCode = icDCEvent.
-      lcNum = lcNum + 1.
       DISPLAY ttTariff with frame a.
       pause 0.
       IF iiUpdateMode NE 0 THEN DO:
@@ -818,6 +813,7 @@ FUNCTION fcreateTariff RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
          IF NOT AVAIL Tariff THEN DO:
             CREATE Tariff.
             BUFFER-COPY ttTariff TO Tariff.
+            Tariff.tariffnum = next-value(Tariff).
             DELETE ttTariff. /*for safety reasons*/
          END.
          ELSE MESSAGE "Tariff exists: " + icDCEvent VIEW-AS ALERT-BOX.

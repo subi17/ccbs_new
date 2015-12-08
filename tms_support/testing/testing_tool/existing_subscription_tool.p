@@ -8,75 +8,7 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
-gcBrand = "1".
-katun = "Qvantel".
-{timestamp.i}
-{tmsconst.i}
-{cparam2.i}
-{fmakemsreq.i}
-{msreqfunc.i}
-{service.i}
-{fdss.i}
-{ftransdir.i}
-
-DEFINE VARIABLE lcOutPutDir        AS CHAR NO-UNDO.
-DEFINE VARIABLE lcIncomingDir      AS CHAR NO-UNDO.
-DEFINE VARIABLE lcDoneDir          AS CHAR NO-UNDO.
-DEFINE VARIABLE lcMasterDataDir    AS CHAR NO-UNDO.
-DEFINE VARIABLE lcAnalyzerDataDir  AS CHAR NO-UNDO.
-
-DEFINE VARIABLE lcLogFile          AS CHAR NO-UNDO.
-DEFINE VARIABLE lcReportFile       AS CHAR NO-UNDO.
-DEFINE VARIABLE lcResultFile       AS CHAR NO-UNDO.
-DEFINE VARIABLE lcFileName         AS CHAR NO-UNDO.
-DEFINE VARIABLE lcLine             AS CHAR NO-UNDO.
-DEFINE VARIABLE lcLineType         AS CHAR NO-UNDO.
-DEFINE VARIABLE lcDel              AS CHAR NO-UNDO INIT "|".
-DEFINE VARIABLE liLine             AS INT  NO-UNDO.
-DEFINE VARIABLE llError            AS LOG  NO-UNDO.
-DEFINE VARIABLE ldThisRun          AS DEC  NO-UNDO.
-DEFINE VARIABLE liCustNum          AS INT  NO-UNDO.
-DEFINE VARIABLE lcCLI              AS CHAR NO-UNDO.
-DEFINE VARIABLE lcError            AS CHAR NO-UNDO.
-DEFINE VARIABLE lcBonoList         AS CHAR NO-UNDO.
-DEFINE VARIABLE lcBono             AS CHAR NO-UNDO.
-DEFINE VARIABLE lcResult           AS CHAR NO-UNDO.
-DEFINE VARIABLE liBonoCount        AS INT  NO-UNDO.
-DEFINE VARIABLE liBonoEntries      AS INT  NO-UNDO.
-DEFINE VARIABLE llFileAvail        AS LOG  NO-UNDO.
-DEFINE VARIABLE llKeep             AS LOG  NO-UNDO.
-
-DEF STREAM sOrder.
-DEF STREAM sOrderCust.
-DEF STREAM sFile.
-DEF STREAM sInputFile.
-DEF STREAM sOutput.
-DEF STREAM sReport.
-
-DEFINE TEMP-TABLE ttBatchInputFile
-   FIELD FileName  AS CHAR
-   INDEX FileName IS PRIMARY UNIQUE FileName.
-
-DEFINE TEMP-TABLE ttInputFileContent
-   FIELD FileName   AS CHAR
-   FIELD LineNo     AS INT
-   FIELD InputLine  AS CHAR
-   FIELD LineType   AS CHAR
-   FIELD TestList   AS CHAR
-   INDEX FileNameNo FileName LineNo.
-
-DEFINE TEMP-TABLE ttSubscription
-   FIELD FileName   AS CHAR
-   FIELD CLI        AS CHAR
-   FIELD MsSeq      AS INT
-   FIELD OrderId    AS INT
-   FIELD CustNum    AS INT
-   FIELD CustIdType AS CHAR
-   FIELD CustId     AS CHAR
-   FIELD CLIType    AS CHAR
-   FIELD Handled    AS LOG
-   INDEX CLI IS PRIMARY UNIQUE CLI.
+{/apps/xfera/kaaikas/ccbs/tms_support/testing/testing_tool/subscription_creation_tool.i}
 
 ASSIGN
    lcOutPutDir       = fCParam("TestingTool","OutDir")
@@ -84,14 +16,19 @@ ASSIGN
    lcDoneDir         = fCParam("TestingTool","InProcDir")
    lcMasterDataDir   = fCParam("TestingTool","InMasterDir")
    lcAnalyzerDataDir = fCParam("TestingTool","AnalyzerDir")
+   
+   lcOutOngoingDir   = fCParam("TestingTool","OutOutgoingDir")
+   lcOutProcDir      = fCParam("TestingTool","OutProcDir")
+   lcInIncomingDir   = fCParam("TestingTool","InIncomingDir")
+   lcInProcDir       = fCParam("TestingTool","InProcDir")
+   lcMasterDataDir   = fCParam("TestingTool","InMasterDir")
+   lcAnalyzerSpoolDir = fCParam("TestingTool","AnalyzerSpoolDir")
+   lcAnalyzerInDir   = fCParam("TestingTool","AnalyzerInDir")
+   xMailFrom         = fCparam("TestingTool","EmailFromAddress")
+   xMailSubj         = fCparam("TestingTool","EmailSubject")
+   lcLockFile        = fCparam("TestingTool","DaemonLockFile").   
+   
    ldThisRun         = fMakeTS().
-
-DEF TEMP-TABLE ttOrder    NO-UNDO LIKE Order.
-DEF TEMP-TABLE ttOrderCustomer NO-UNDO LIKE OrderCustomer.
-DEFINE BUFFER bttInputFileContent FOR ttInputFileContent.
-
-/* Include file */
-{/apps/yoigo/tms_support/testing/testing_tool/subscription_creation_tool.i}
 
 /* Main Block */
 
