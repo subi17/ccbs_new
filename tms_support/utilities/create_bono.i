@@ -835,6 +835,8 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                                          INPUT idLimitUnShaped AS DEC, 
                                          INPUT idLimitShaped AS DEC,
                                          INPUT icClitypeList AS CHAR,
+                                         INPUT icBaseTariff AS CHAR,
+                                         INPUT icTariff AS CHAR,
                                          INPUT iiUpdateMode AS INT):
       DEF VAR lcCliType AS CHAR NO-UNDO.
       FIND FIRST ShaperConf WHERE
@@ -848,8 +850,8 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
       BUFFER-COPY ShaperConf TO ttShaperConf.
       /*Set correct values to new entry*/
       ttShaperConf.ShaperConfId = icDCEvent.
-      ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseDCEvent,
-                                    icDCEvent).
+      ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseTariff,
+                                    icTariff).
       ttShaperConf.limitShaped = idLimitShaped.
       ttShaperConf.limitUnShaped = idLimitUnShaped.
 
@@ -881,8 +883,8 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
       BUFFER-COPY ShaperConf TO ttShaperConf.
       /*Set correct values to new entry*/
       ttShaperConf.ShaperConfId = icDCEvent + "wVOIP".
-      ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseDCEvent,
-                                    icDCEvent).
+      ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseTariff,
+                                    icTariff).
       ttShaperConf.limitShaped = idLimitShaped + 5242880.
       ttShaperConf.limitUnShaped = idLimitUnShaped + 104857600.
 
@@ -922,8 +924,8 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
          BUFFER-COPY ShaperConf TO ttShaperConf.
          /*Set correct values to new entry*/
          ttShaperConf.ShaperConfId = lcCliType + "w" + icDCEvent.
-         ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseDCEvent,
-                                       icDCEvent).
+         ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseTariff,
+                                       icTariff).
          FIND FIRST ShaperConf WHERE
                     ShaperConf.shaperConfId EQ lcCliType.
          ttShaperConf.limitShaped = idLimitShaped + ShaperConf.limitShaped.
@@ -962,8 +964,8 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
          BUFFER-COPY ShaperConf TO ttShaperConf.
          /*Set correct values to new entry*/
          ttShaperConf.ShaperConfId = lcCliType + "w" + icDCEvent + "wVOIP".
-         ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseDCEvent,
-                                       icDCEvent).
+         ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseTariff,
+                                       icTariff).
          FIND FIRST ShaperConf WHERE
                     ShaperConf.shaperConfId EQ lcCliType + "wVOIP" NO-LOCK
                     NO-ERROR.

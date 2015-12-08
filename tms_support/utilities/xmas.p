@@ -49,6 +49,8 @@ DEF VAR lcIdName AS CHAR NO-UNDO.
 DEF VAR ldLimitUnShaped AS DEC NO-UNDO.
 DEF VAR ldLimitShaped AS DEC NO-UNDO.
 DEF VAR liDCStatus AS INT NO-UNDO.
+DEF VAR lcBaseTariff AS CHAR NO-UNDO.
+DEF VAR lcTariff AS CHAR NO-UNDO.
 
 liUpdateMode = {&SIMULATERUN}. /*0 = test mode, no DB writing. */
 /* liUpdateMode = {&MODIFYDB}.*/  /* 1 = real mode, add to DB. */
@@ -62,6 +64,8 @@ lcDCNAme = "Bono 3 GB".
 liDCStatus = 3. /* 0=Inactive, 1=Active, 2=Retired, 3=Hidden */
 lcBaseIdName = "BONO6".
 lcIdName = "BONO7".
+lcBaseTariff = "BONO6_1".
+lcTariff = "BONO25".
 ldLimitUnShaped = 3221225472.
 ldLimitShaped = 161061274.
 ldDataLimit = 3072.
@@ -196,7 +200,8 @@ IF llError THEN MESSAGE "Tariff ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "Tariff error" VIEW-AS ALERT-BOX.
 
 llError = fcreateShaperConf(lcBaseIdName, lcIdName, ldLimitUnShaped, 
-                            ldLimitShaped, lcClitypeList, liUpdateMode).
+                            ldLimitShaped, lcClitypeList, lcBaseTariff,
+                            lcTariff, liUpdateMode).
 IF llError THEN MESSAGE "ShaperConf ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "ShaperConf error" VIEW-AS ALERT-BOX.
 
