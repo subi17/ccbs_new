@@ -193,13 +193,20 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL:
 
    DEF VAR liCount AS INT NO-UNDO.
 
-   IF (NOT(MobSub.PayType = FALSE OR CLIType.PayType = 1)  OR
+   IF ldaSTCDates[1] = ldaSTCDates[2] OR
+      MobSub.PayType = TRUE OR CLIType.PayType = 2 OR
+      NOT lliSTCAllowed THEN
+      liCount = 2.
+   ELSE
+      liCount = 1. 
+
+   /* IF (NOT(MobSub.PayType = FALSE OR CLIType.PayType = 1)  OR
        NOT(MobSub.PayType = TRUE  OR CLIType.PayType = 2)) AND
           ldaSTCDates[1] <> ldaSTCDates[2]                 AND
           lliSTCAllowed                                    THEN
       liCount = 1.
    ELSE
-      liCount = 2.
+      liCount = 2. */
 
    sub_struct = add_struct(response_toplevel_id, "").
    penalty_array = add_array(sub_struct,"penalties").
