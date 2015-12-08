@@ -4,5 +4,4 @@ ADD FIELD "TariffActTS" OF "MobSub" AS decimal
   LABEL "TariffActTS"
   COLUMN-LABEL "TariffActTS"
   HELP "Tariff activation time stamp"
-  DECIMALS 2
   ORDER 890
