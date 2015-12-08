@@ -118,8 +118,7 @@ PROCEDURE pInitialize:
       liLogTreshold = 500000.
       lcLogFile = lcLogFile + "_" + icModule + "_" +
                   STRING(YEAR(TODAY)) + STRING(MONTH(TODAY),"99") +
-                  STRING(DAY(TODAY),"99") + "_" +
-                  REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".txt".
+                  STRING(DAY(TODAY),"99") + ".txt".
 
       fSetLogFileName(lcLogFile).
       fSetGlobalLoggingLevel(liLogLevel).
@@ -140,7 +139,7 @@ FUNCTION fSendToMQ RETURNS CHAR
 
    IF RETURN-VALUE > "" THEN DO:
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
-      LOG-MANAGER:WRITE-MESSAGE(RETURN-VALUE, "ERROR").
+      LOG-MANAGER:WRITE-MESSAGE(RETURN-VALUE, "ERROR in init").
 
          RETURN RETURN-VALUE.
    END.
