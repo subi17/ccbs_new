@@ -63,12 +63,13 @@ DEFINE STREAM strout.
                              0,  /* FRProcessID */
                              0,  /* UpdateInterval */
                              ?, /* due date if entered */
-                             OUTPUT liCount) NO-ERROR. 
-   IF ERROR-STATUS:ERROR THEN DO:
-      fReqStatus(3,"ERROR: Delivery was not been set."). 
+                             OUTPUT liCount).
+
+   IF RETURN-VALUE BEGINS "ERROR" THEN DO:
+      fReqStatus(3,RETURN-VALUE). 
 
       PUT STREAM strout UNFORMATTED
-         "ERROR: Delivery was not been set." SKIP.
+         "ERROR: " + RETURN-VALUE SKIP.
       
       llgError   = YES.
    END.
@@ -89,17 +90,23 @@ DEFINE STREAM strout.
           lcLogFile = lcContLogDir + "publishifs_" + lcToday + STRING(TIME) + ".log".
  
    OUTPUT STREAM strout TO VALUE(lcLogFile) APPEND.
-  
-   RUN dumpfile_run(32,
-                    "Modified",
-                    "",
-                    FALSE,
-                    OUTPUT liCount).
-   
-   IF liCount > 0 THEN 
-      PUT STREAM strout UNFORMATTED 
-         "Generated IFS for " + STRING(liCount) + " Service Invoices" SKIP.   
+ 
+   FIND FIRST DumpFile NO-LOCK WHERE
+              DumpFile.Brand    EQ gcBrand             AND
+              DumpFile.DumpName EQ {&DUMP_IFS_INVOICE} NO-ERROR.
 
+   IF AVAIL DumpFile THEN DO:
+      RUN dumpfile_run(DumpFile.DumpID,
+                       "Modified",
+                       "",
+                       FALSE,
+                       OUTPUT liCount).
+   
+      IF liCount > 0 THEN 
+         PUT STREAM strout UNFORMATTED 
+            "Generated IFS for " + STRING(liCount) + " Service Invoices" SKIP.   
+   END.
+    
    OUTPUT STREAM strout CLOSE.
 
    /* Mail recipients */

@@ -72,18 +72,10 @@ DEFINE STREAM strout.
                        "",
                        "ZZZZZZZZZZZZ",
                        YES,
-                       OUTPUT liCount) NO-ERROR.
-   IF ERROR-STATUS:ERROR THEN DO:
-      fReqStatus(3,"ERROR: Display permit has not been set.").      
-      
-      PUT STREAM strout UNFORMATTED 
-         "ERROR: Display permit has not been set." SKIP.
-
-      llgError   = YES.
-   END.
-   ELSE  
-      PUT STREAM strout UNFORMATTED 
-         "Display permit was set to " + STRING(liCount) + " Invoices." SKIP.
+                       OUTPUT liCount).
+   
+   PUT STREAM strout UNFORMATTED 
+      "Display permit was set to " + STRING(liCount) + " Invoices." SKIP.
 
    OUTPUT STREAM strout CLOSE.
 
@@ -98,19 +90,25 @@ DEFINE STREAM strout.
 
    OUTPUT STREAM strout TO VALUE(lcLogFile) APPEND.
 
-   RUN dumpfile_run(86,  /* Dump ID */
-                    "Full",
-                    "",
-                    fIsThisReplica(),
-                    OUTPUT liDumped). 
+   FIND FIRST DumpFile NO-LOCK WHERE 
+              DumpFile.Brand    EQ gcBrand AND
+              DumpFile.DumpName EQ {&DUMP_INVOICE_PUPU} NO-ERROR.
+
+   IF AVAIL DumpFile THEN DO:
+      RUN dumpfile_run(DumpFile.DumpID,  /* Dump ID */
+                       "Full",
+                       "",
+                       fIsThisReplica(),
+                       OUTPUT liDumped). 
    
-   IF liDumped >= 0 THEN
-      PUT STREAM strout UNFORMATTED
-         "Published total Invoice full dump event count : " + STRING(oiEvents) SKIP.
-   ELSE
-      PUT STREAM strout UNFORMATTED
-         "Error in creating Invoice full dump event !" SKIP.
-   
+      IF liDumped >= 0 THEN
+         PUT STREAM strout UNFORMATTED
+            "Published total Invoice full dump event count : " + STRING(oiEvents) SKIP.
+      ELSE
+         PUT STREAM strout UNFORMATTED
+            "Error in creating Invoice full dump event !" SKIP.
+   END.
+
    OUTPUT STREAM strout CLOSE.
    
    /* Mail recipients */
