@@ -21,6 +21,8 @@
 {email.i}
 {heartbeat.i}
 
+&SCOPED-DEFINE MIDNIGHT-SECONDS 86400
+
 DEF INPUT PARAMETER iiMSrequest AS INT  NO-UNDO.
 
 DEF VAR ldaDateFrom             AS DATE NO-UNDO. 
@@ -44,6 +46,7 @@ DEF VAR lcSMSSchedule AS CHARACTER NO-UNDO.
 DEF VAR liTime2Pause  AS INTEGER   NO-UNDO.
 DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
+DEF VAR lNowSeconds   AS INTEGER   NO-UNDO.
 
 DEF STREAM sEmail.
 
@@ -125,10 +128,22 @@ FOR EACH Invoice WHERE
 
    /* Pause can be passed with liSMSCntValue 0 from cparam */
    IF liLoop > 0 AND liSMSCntValue > 0 AND
-      PauseFlag THEN DO:
-   
+      PauseFlag THEN 
+   DO:
       ASSIGN liStopTime  = TIME
-             liPauseTime = liTime2Pause - (liStopTime - liStartTime).
+             lNowSeconds = liStopTime.
+      /* If is too late, schedule to start next morning */
+      IF (lNowSeconds > lEndSeconds) THEN
+      DO:
+         liStopTime = ({&MIDNIGHT-SECONDS} - lNowSeconds) + lIniSeconds.
+      END.
+      ELSE
+      /* If is too early, schedule to start when window opens */
+      IF (lNowSeconds < lIniSeconds) THEN
+      DO:
+         liStopTime = lIniSeconds.
+      END.
+      liPauseTime = liTime2Pause - (liStopTime - liStartTime).
       IF liPauseTime > liTime2Pause THEN liPauseTime = liTime2Pause.
 
       PAUSE liPauseTime NO-MESSAGE.
