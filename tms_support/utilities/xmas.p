@@ -48,6 +48,7 @@ DEF VAR lcBaseIdName AS CHAR NO-UNDO.
 DEF VAR lcIdName AS CHAR NO-UNDO.
 DEF VAR ldLimitUnShaped AS DEC NO-UNDO.
 DEF VAR ldLimitShaped AS DEC NO-UNDO.
+DEF VAR liDCStatus AS INT NO-UNDO.
 
 liUpdateMode = {&SIMULATERUN}. /*0 = test mode, no DB writing. */
 /* liUpdateMode = {&MODIFYDB}.*/  /* 1 = real mode, add to DB. */
@@ -58,6 +59,7 @@ lcBrand = "1".
 lcBaseDCEvent = "DATA6".
 lcDCEvent = "DATA7".
 lcDCNAme = "Bono 3 GB".
+liDCStatus = 3. /* 0=Inactive, 1=Active, 2=Retired, 3=Hidden */
 lcBaseIdName = "BONO6".
 lcIdName = "BONO7".
 ldLimitUnShaped = 3221225472.
@@ -137,7 +139,7 @@ IF llError THEN MESSAGE "Feemodel ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "FeeModel error" VIEW-AS ALERT-BOX.
 
 llError = fcreateDayCampaign (lcBaseDCEvent, lcDCEvent, lcMFFeemodel, lcDCName,
-                              ldaVAlidFrom, liUpdateMode).
+                              ldaVAlidFrom, liDCStatus, liUpdateMode).
 
 IF llError THEN MESSAGE "DayCampaign ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "DayCampaign error" VIEW-AS ALERT-BOX.
