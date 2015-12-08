@@ -366,11 +366,11 @@ FUNCTION faddRequestActionRules RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
             ttInvText.invText = icdeactSMS.
             ttInvText.KeyValue = REPLACE(ttInvText.KeyValue, icBaseDCEvent,
                                          icDCEvent).
-            FIND LAST invText USE-INDEX ITNum NO-LOCK NO-ERROR.
-            ttInvText.ITNum = invText.ITNum + 1.
+            /*ttInvText.ITNum = NEXT-VALUE(it-seq).*/
             ttInvText.FromDate = idaValidFrom.
             CREATE InvText.
             BUFFER-COPY ttInvText TO InvText.
+            InvText.ITNum    = NEXT-VALUE(it-seq).
          END.
          ELSE  MESSAGE "InvText exists / " + icDCEvent VIEW-AS ALERT-BOX.
          DELETE ttInvText.
@@ -786,8 +786,6 @@ FUNCTION fcreateTariff RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                                          INPUT idaVAlidFrom AS DATE,
                                          INPUT iiUpdateMode AS INT):
    DEF VAR lcNum AS INT NO-UNDO.
-   FIND LAST Tariff use-index TariffNum no-lock no-error.
-   lcNum = Tariff.tariffnum + 1.
    FOR EACH BDest NO-LOCK WHERE
               INDEX(BDest.BDest, icBaseDCEvent) > 0 AND
               INDEX(BDest.BDest,"UPSELL") = 0 AND
@@ -802,13 +800,10 @@ FUNCTION fcreateTariff RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
 
       CREATE ttTariff.
       BUFFER-COPY Tariff TO ttTariff.
-      FIND LAST Tariff use-index TariffNum no-lock no-error. 
       /*Set correct values to new entry*/
       ttTariff.BDest = REPLACE(BDest.bdest, icBaseDCEvent, icDCEvent).
       ttTariff.ValidFrom = idaVAlidFrom.
-      ttTariff.tariffnum = lcNum.
       ttTariff.billCode = icDCEvent.
-      lcNum = lcNum + 1.
       DISPLAY ttTariff with frame a.
       pause 0.
       IF iiUpdateMode NE 0 THEN DO:
@@ -818,6 +813,7 @@ FUNCTION fcreateTariff RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
          IF NOT AVAIL Tariff THEN DO:
             CREATE Tariff.
             BUFFER-COPY ttTariff TO Tariff.
+            Tariff.tariffnum = next-value(Tariff).
             DELETE ttTariff. /*for safety reasons*/
          END.
          ELSE MESSAGE "Tariff exists: " + icDCEvent VIEW-AS ALERT-BOX.
@@ -835,6 +831,8 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                                          INPUT idLimitUnShaped AS DEC, 
                                          INPUT idLimitShaped AS DEC,
                                          INPUT icClitypeList AS CHAR,
+                                         INPUT icBaseTariff AS CHAR,
+                                         INPUT icTariff AS CHAR,
                                          INPUT iiUpdateMode AS INT):
       DEF VAR lcCliType AS CHAR NO-UNDO.
       FIND FIRST ShaperConf WHERE
@@ -848,8 +846,8 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
       BUFFER-COPY ShaperConf TO ttShaperConf.
       /*Set correct values to new entry*/
       ttShaperConf.ShaperConfId = icDCEvent.
-      ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseDCEvent,
-                                    icDCEvent).
+      ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseTariff,
+                                    icTariff).
       ttShaperConf.limitShaped = idLimitShaped.
       ttShaperConf.limitUnShaped = idLimitUnShaped.
 
@@ -881,8 +879,8 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
       BUFFER-COPY ShaperConf TO ttShaperConf.
       /*Set correct values to new entry*/
       ttShaperConf.ShaperConfId = icDCEvent + "wVOIP".
-      ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseDCEvent,
-                                    icDCEvent).
+      ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseTariff,
+                                    icTariff).
       ttShaperConf.limitShaped = idLimitShaped + 5242880.
       ttShaperConf.limitUnShaped = idLimitUnShaped + 104857600.
 
@@ -922,8 +920,8 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
          BUFFER-COPY ShaperConf TO ttShaperConf.
          /*Set correct values to new entry*/
          ttShaperConf.ShaperConfId = lcCliType + "w" + icDCEvent.
-         ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseDCEvent,
-                                       icDCEvent).
+         ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseTariff,
+                                       icTariff).
          FIND FIRST ShaperConf WHERE
                     ShaperConf.shaperConfId EQ lcCliType.
          ttShaperConf.limitShaped = idLimitShaped + ShaperConf.limitShaped.
@@ -962,8 +960,8 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
          BUFFER-COPY ShaperConf TO ttShaperConf.
          /*Set correct values to new entry*/
          ttShaperConf.ShaperConfId = lcCliType + "w" + icDCEvent + "wVOIP".
-         ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseDCEvent,
-                                       icDCEvent).
+         ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseTariff,
+                                       icTariff).
          FIND FIRST ShaperConf WHERE
                     ShaperConf.shaperConfId EQ lcCliType + "wVOIP" NO-LOCK
                     NO-ERROR.

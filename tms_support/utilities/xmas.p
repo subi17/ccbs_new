@@ -49,6 +49,8 @@ DEF VAR lcIdName AS CHAR NO-UNDO.
 DEF VAR ldLimitUnShaped AS DEC NO-UNDO.
 DEF VAR ldLimitShaped AS DEC NO-UNDO.
 DEF VAR liDCStatus AS INT NO-UNDO.
+DEF VAR lcBaseTariff AS CHAR NO-UNDO.
+DEF VAR lcTariff AS CHAR NO-UNDO.
 
 liUpdateMode = {&SIMULATERUN}. /*0 = test mode, no DB writing. */
 /* liUpdateMode = {&MODIFYDB}.*/  /* 1 = real mode, add to DB. */
@@ -62,6 +64,8 @@ lcDCNAme = "Bono 3 GB".
 liDCStatus = 3. /* 0=Inactive, 1=Active, 2=Retired, 3=Hidden */
 lcBaseIdName = "BONO6".
 lcIdName = "BONO7".
+lcBaseTariff = "BONO6_1".
+lcTariff = "BONO25".
 ldLimitUnShaped = 3221225472.
 ldLimitShaped = 161061274.
 ldDataLimit = 3072.
@@ -72,7 +76,7 @@ lcServLimitName = "Mobile Data Usage Bundle 7".
 lcDPName = "Bono 3 GB discount".
 lcDP = "BONO7DISC".
 lcBaseDP = "BONO6DISC".
-lcDeActSMS = "Yoigo info: Has pedido cancelacion de Bono 3 GB Internet de Contrato. Desde EXCLUSIVE-LOCK dia 1 del mes prox no estara activo.".
+lcDeActSMS = "Yoigo info: Has pedido cancelacion de Bono 3 GB Internet de Contrato. Desde el dia 1 del mes prox no estara activo.".
 
 /*FeeModel*/
 lcBaseMFFeeModel = "DATA6MF".
@@ -86,7 +90,7 @@ lcRepTextItem = lcDCEvent.
 lcFeename = lcdcEvent + " monthly fee".
 lcBIName = "Data 7 national GPRS".
 lcBIMFName = "Bono 7 Package price".
-ldFMAmount = 5.785.
+ldFMAmount = 5.79.
 /*lcTrans_L1 = "Consumido entre todas la líneas".
 lcTrans_L2 = "Consumit entre totes les línies".
 lcTrans_L3 = "Linea guztien artean kontsumitua".
@@ -196,7 +200,8 @@ IF llError THEN MESSAGE "Tariff ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "Tariff error" VIEW-AS ALERT-BOX.
 
 llError = fcreateShaperConf(lcBaseIdName, lcIdName, ldLimitUnShaped, 
-                            ldLimitShaped, lcClitypeList, liUpdateMode).
+                            ldLimitShaped, lcClitypeList, lcBaseTariff,
+                            lcTariff, liUpdateMode).
 IF llError THEN MESSAGE "ShaperConf ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "ShaperConf error" VIEW-AS ALERT-BOX.
 
