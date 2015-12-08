@@ -302,7 +302,7 @@ END FUNCTION.
 
 /*********************************************************/
 /* Add Matrix Item                                       */
-
+/*
 FUNCTION faddMatrixValue RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
                           INPUT icDCEvent AS CHAR,
                           INPUT iiUpdateMode AS INT):
@@ -315,7 +315,7 @@ FUNCTION faddMatrixValue RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
    END.
    RETURN TRUE.
 END FUNCTION.
-
+*/
 /*********************************************************/
 /* Add Request action rules                              */
 

@@ -158,9 +158,11 @@ llError = fcreateDiscountPlan (lcBaseMFFeeModel, lcMFFeemodel, ldaVAlidFrom,
 IF llError THEN MESSAGE "Discountplan ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "Discountplan error" VIEW-AS ALERT-BOX.
 
+/*
 llError = faddMatrixValue (lcBaseDCEvent, lcDCEvent, liUpdateMode).
 IF llError THEN MESSAGE "Matrix ready" VIEW-AS ALERT-BOX.
 ELSE  MESSAGE "Matrix error" VIEW-AS ALERT-BOX.
+*/
 
 llError = fcreateServiceLimit (lcBaseDCEvent, lcDCEvent, ldaVAlidFrom, 
                                ldDataLimit, lcservLimitName, liUpdateMode).
