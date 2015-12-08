@@ -89,6 +89,7 @@ DEFINE TEMP-TABLE ttInputFileContent
    FIELD LineNo     AS INT
    FIELD InputLine  AS CHAR
    FIELD LineType   AS CHAR
+   FIELD CustIDType AS CHAR
    FIELD TestList   AS CHAR
    FIELD Qty        AS INT
    FIELD ActDate    AS DATE

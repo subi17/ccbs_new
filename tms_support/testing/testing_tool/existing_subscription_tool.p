@@ -8,7 +8,7 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 
-{/apps/xfera/kaaikas/ccbs/tms_support/testing/testing_tool/subscription_creation_tool.i}
+{/apps/yoigo/tms_support/testing/testing_tool/subscription_creation_tool.i}
 
 ASSIGN
    lcOutPutDir       = fCParam("TestingTool","OutDir")

@@ -8,56 +8,19 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
-gcBrand = "1".
-katun = "Qvantel".
-{timestamp.i}
-{tmsconst.i}
-{cparam2.i}
-{fmakemsreq.i}
-{msreqfunc.i}
+/* Include file */
+{subscription_creation_tool.i}
+
 {msisdn.i}
-{service.i}
-{fdss.i}
-{fbtc.i}
 {forderstamp.i}
 {orderfunc.i}
-{ftransdir.i}
-{email.i}
 
-DEFINE VARIABLE lcOutOngoingDir    AS CHAR NO-UNDO.
-DEFINE VARIABLE lcOutProcDir       AS CHAR NO-UNDO.
-DEFINE VARIABLE lcInIncomingDir    AS CHAR NO-UNDO.
-DEFINE VARIABLE lcInProcDir        AS CHAR NO-UNDO.
-DEFINE VARIABLE lcMasterDataDir    AS CHAR NO-UNDO.
-DEFINE VARIABLE lcAnalyzerInDir    AS CHAR NO-UNDO.
-DEFINE VARIABLE lcAnalyzerSpoolDir AS CHAR NO-UNDO.
-
-DEFINE VARIABLE lcLogFile          AS CHAR NO-UNDO.
-DEFINE VARIABLE lcReportFile       AS CHAR NO-UNDO.
-DEFINE VARIABLE lcResultFile       AS CHAR NO-UNDO.
-DEFINE VARIABLE lcFileName         AS CHAR NO-UNDO.
-DEFINE VARIABLE lcLine             AS CHAR NO-UNDO.
-DEFINE VARIABLE lcLineType         AS CHAR NO-UNDO.
-DEFINE VARIABLE lcDel              AS CHAR NO-UNDO INIT "|".
-DEFINE VARIABLE liLine             AS INT  NO-UNDO.
 DEFINE VARIABLE liQty              AS INT  NO-UNDO.
-DEFINE VARIABLE llError            AS LOG  NO-UNDO.
 DEFINE VARIABLE llSubsHeader       AS LOG  NO-UNDO.
 DEFINE VARIABLE llDoubleCheck      AS LOG  NO-UNDO.
-DEFINE VARIABLE ldThisRun          AS DEC  NO-UNDO.
 DEFINE VARIABLE liCount            AS INT  NO-UNDO.
 DEFINE VARIABLE liActCount         AS INT  NO-UNDO.
-DEFINE VARIABLE liCustNum          AS INT  NO-UNDO.
 DEFINE VARIABLE liOrderId          AS INT  NO-UNDO.
-DEFINE VARIABLE lcCLI              AS CHAR NO-UNDO.
-DEFINE VARIABLE lcError            AS CHAR NO-UNDO.
-DEFINE VARIABLE lcBonoList         AS CHAR NO-UNDO.
-DEFINE VARIABLE lcBono             AS CHAR NO-UNDO.
-DEFINE VARIABLE lcResult           AS CHAR NO-UNDO.
-DEFINE VARIABLE liBonoCount        AS INT  NO-UNDO.
-DEFINE VARIABLE liBonoEntries      AS INT  NO-UNDO.
-DEFINE VARIABLE llFileAvail        AS LOG  NO-UNDO.
 DEFINE VARIABLE lcMailSubject      AS CHAR NO-UNDO.
 DEFINE VARIABLE lcEmailContent     AS CHAR NO-UNDO.
 DEFINE VARIABLE liOrders           AS INT  NO-UNDO.
@@ -65,62 +28,11 @@ DEFINE VARIABLE liMobSubs          AS INT  NO-UNDO.
 DEFINE VARIABLE liLoop             AS INT  NO-UNDO.
 DEFINE VARIABLE liFiles            AS INT  NO-UNDO.
 DEFINE VARIABLE lcTime             AS CHAR NO-UNDO.
-DEFINE VARIABLE lcLockFile         AS CHAR NO-UNDO.
-DEFINE VARIABLE lcIPLContracts     AS CHAR NO-UNDO.
-DEFINE VARIABLE lcCONTDContracts   AS CHAR NO-UNDO.
-DEFINE VARIABLE lcFLATContracts    AS CHAR NO-UNDO.
-DEFINE VARIABLE lcCONTSContracts   AS CHAR NO-UNDO.
-DEFINE VARIABLE lcCONTSFContracts  AS CHAR NO-UNDO.
-DEFINE VARIABLE lcBundleCLITypes   AS CHAR NO-UNDO.
-DEFINE VARIABLE lcBONOContracts    AS CHAR NO-UNDO.
 DEFINE VARIABLE lcCustData         AS CHAR NO-UNDO.
 DEFINE VARIABLE llOwnCustomer      AS LOG  NO-UNDO. 
 DEFINE VARIABLE lcOfferId          AS CHAR NO-UNDO INIT "". 
 DEFINE VARIABLE lcEmaMsisdn        AS CHAR NO-UNDO INIT "".
 
-DEFINE STREAM sOrder.
-DEFINE STREAM sOrderCust.
-DEFINE STREAM sFile.
-DEFINE STREAM sInputFile.
-DEFINE STREAM sOutput.
-DEFINE STREAM sReport.
-
-DEFINE TEMP-TABLE ttBatchInputFile
-   FIELD FileName  AS CHAR
-   FIELD ttUserId  AS CHAR
-   FIELD EmailId   AS CHAR
-   FIELD Valid     AS LOG
-   FIELD AnalyzerReport  AS LOG
-   FIELD OutputFileName  AS CHAR
-   FIELD DeliverFileName AS CHAR
-   FIELD MsisdnStatus    AS INT
-   FIELD SimIcc          AS CHAR
-   FIELD UsedMSISDN      AS CHAR
-   INDEX FileName IS PRIMARY UNIQUE FileName.
-
-DEFINE TEMP-TABLE ttInputFileContent
-   FIELD FileName   AS CHAR
-   FIELD LineNo     AS INT
-   FIELD InputLine  AS CHAR
-   FIELD LineType   AS CHAR
-   FIELD CustIDType AS CHAR
-   FIELD TestList   AS CHAR
-   FIELD Qty        AS INT
-   FIELD ActDate    AS DATE
-   INDEX FileNameNo FileName LineNo.
-
-DEFINE TEMP-TABLE ttSubscription
-   FIELD FileName   AS CHAR
-   FIELD CLI        AS CHAR
-   FIELD OrderId    AS INT
-   FIELD MsSeq      AS INT
-   FIELD CustNum    AS INT
-   FIELD CustIdType AS CHAR
-   FIELD CustId     AS CHAR
-   FIELD CLIType    AS CHAR
-   FIELD Handled    AS LOG
-   FIELD EmailId    AS CHAR
-   INDEX CLI IS PRIMARY UNIQUE CLI.
 
 ASSIGN
    lcOutOngoingDir   = fCParam("TestingTool","OutOutgoingDir")
@@ -141,14 +53,6 @@ ASSIGN lcIPLContracts        = fCParamC("IPL_CONTRACTS")
        lcCONTSFContracts     = fCParamC("CONTSF_CONTRACTS")
        lcBundleCLITypes      = fCParamC("BUNDLE_BASED_CLITYPES")
        lcBONOContracts       = fCParamC("BONO_CONTRACTS").
-
-DEFINE TEMP-TABLE ttOrder         NO-UNDO LIKE Order.
-DEFINE TEMP-TABLE ttOrderCustomer NO-UNDO LIKE OrderCustomer.
-
-DEFINE BUFFER bttInputFileContent FOR ttInputFileContent.
-
-/* Include file */
-{subscription_creation_tool.i} 
 
 /* Main Block */
 
