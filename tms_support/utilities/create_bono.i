@@ -142,6 +142,7 @@ FUNCTION fcreateDayCampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
                                               INPUT icMFFeeModel AS CHAR,
                                               INPUT icDCName  AS CHAR,
                                               INPUT idaValidFrom AS DATE,
+                                              INPUT iiStatus AS INT,
                                               INPUT iiUpdateMode AS INT):
 
    FIND FIRST DayCampaign WHERE
@@ -160,6 +161,7 @@ FUNCTION fcreateDayCampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    ttDaycampaign.feemodel = icMFFeeModel.
    ttDaycampaign.dcname = icDCName.
    ttDaycampaign.validFrom = idaValidFrom.
+   ttDaycampaign.statuscode = iiStatus. 
 
    DISPLAY ttDayCampaign with frame a.
    pause 0.
