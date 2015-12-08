@@ -33,7 +33,7 @@ DEF VAR lcLogFile1        AS CHAR NO-UNDO.
 
 
 lcTableName = "DMS".
-lcActionID = "DMS_HIGH_FREQ".
+lcActionID = {&DMS_HIGH_FREQ_FILE_CREATOR}.
 ldCurrentTimeTS = fMakeTS().
 
 /*Is feature active:*/
@@ -69,12 +69,13 @@ IF NOT AVAIL ActionLog THEN DO TRANS:
       ActionLog.Brand        = gcBrand
       ActionLog.TableName    = lcTableName
       ActionLog.ActionID     = lcActionID
-      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
+      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
       ActionLog.UserCode     = katun
       ActionLog.ActionTS     = ldCurrentTimeTS.
    RELEASE ActionLog.
    RETURN. /*No reporting in first time.*/
 END.
+ELSE IF ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN QUIT.
 
 /*Execute read operation and assign new period end time to actionlog.*/
 ldPreviousEndTS = ActionLog.ActionTS.
@@ -99,7 +100,10 @@ DO TRANS:
               ActionLog.Brand     EQ  gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName EXCLUSIVE-LOCK NO-ERROR.
-   IF AVAIL ActionLog THEN ActionLog.ActionTS = ldCollPeriodEndTS.
+   IF AVAIL ActionLog THEN DO:
+      ActionLog.ActionTS = ldCollPeriodEndTS.
+      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
+   END.   
    RELEASE ActionLog.
 END.
 

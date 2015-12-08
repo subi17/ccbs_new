@@ -28,9 +28,15 @@ DEF VAR lcProcessedFile AS CHAR NO-UNDO.
 DEF VAR lcDMSLogFile    AS CHAR NO-UNDO.
 DEF VAR lcLine          AS CHAR NO-UNDO.
 DEF VAR lcSep           AS CHAR NO-UNDO.
-DEF VAR ldaFReadDate     AS DATE NO-UNDO.
-
+DEF VAR ldaFReadDate    AS DATE NO-UNDO.
+DEF VAR lcActionID      AS CHAR NO-UNDO.
+DEF VAR lcTableName     AS CHAR NO-UNDO.
+DEF VAR ldCurrentTimeTS AS DEC  NO-UNDO.
 DEF BUFFER bDMS FOR DMS.
+
+lcTableName = "DMS".
+lcActionID = {&DMS_CASEFILE_READER}.
+ldCurrentTimeTS = fMakeTS().
 
 ASSIGN
    lcIncDir   = fCParam("DMS","TMS_IncDir")
@@ -59,9 +65,28 @@ FUNCTION fLogMsg RETURNS LOGICAL
 END FUNCTION.
 
 
-
 /*Is feature active:*/
 IF fDMSOnOff() NE TRUE THEN RETURN.
+
+
+FIND FIRST ActionLog WHERE
+           ActionLog.Brand     EQ  gcBrand        AND
+           ActionLog.ActionID  EQ  lcActionID     AND
+           ActionLog.TableName EQ  lcTableName NO-LOCK NO-ERROR.
+IF NOT AVAIL ActionLog THEN DO TRANS:
+   /*First execution stamp*/
+   CREATE ActionLog.
+   ASSIGN
+      ActionLog.Brand        = gcBrand
+      ActionLog.TableName    = lcTableName
+      ActionLog.ActionID     = lcActionID
+      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
+      ActionLog.UserCode     = katun
+      ActionLog.ActionTS     = ldCurrentTimeTS.
+   RELEASE ActionLog.
+   RETURN. /*No reporting in first time.*/
+END.
+ELSE IF ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN QUIT.
 
 
 INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcIncDir).
@@ -107,6 +132,17 @@ REPEAT:
 
    INPUT STREAM sIn CLOSE.
    OUTPUT STREAM sLog CLOSE.
+
+DO TRANS:
+   FIND FIRST ActionLog WHERE
+              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.ActionID  EQ  lcActionID     AND
+              ActionLog.TableName EQ  lcTableName EXCLUSIVE-LOCK NO-ERROR.
+   IF AVAIL ActionLog THEN DO:
+      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
+   END.
+   RELEASE ActionLog.
+END.
 
 END.
 

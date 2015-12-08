@@ -26,7 +26,14 @@ DEF VAR lcMSg             AS CHAR NO-UNDO.
 DEF VAR lcErr             AS CHAR NO-UNDO.
 DEF VAR liNoDocProvidedPeriod AS INT NO-UNDO.
 DEF VAR lcNoDocProvidedStatuses AS CHAR NO-UNDO.
+DEF VAR lcActionID        AS CHAR NO-UNDO.
+DEF VAR lcTableName       AS CHAR NO-UNDO.
+DEF VAR ldCurrentTimeTS   AS DEC  NO-UNDO.
 DEF STREAM sLogFile.
+
+lcTableName = "DMS".
+lcActionID = {&DMS_REMINDER_SENDER}.
+ldCurrentTimeTS = fMakeTS().
 
 /*iiDays: how many days are between today and the selected date
 For example
@@ -41,9 +48,6 @@ FUNCTION fGetDateRange RETURNS CHAR
    odEnd = fOffset(ldNow, -24 * (iiDays )).
 
 END.
-
-/*Is feature active:*/
-IF fDMSOnOff() NE TRUE THEN RETURN.
 
 FUNCTION fLogLine RETURNS LOGICAL
    (icLine AS CHAR,
@@ -60,6 +64,30 @@ FUNCTION fLogMsg RETURNS LOGICAL
       icMessage "#"
       "DMS" SKIP.
 END FUNCTION.
+
+/*Is feature active:*/
+IF fDMSOnOff() NE TRUE THEN RETURN.
+
+FIND FIRST ActionLog WHERE
+           ActionLog.Brand     EQ  gcBrand        AND
+           ActionLog.ActionID  EQ  lcActionID     AND
+           ActionLog.TableName EQ  lcTableName NO-LOCK NO-ERROR.
+IF NOT AVAIL ActionLog THEN DO TRANS:
+   /*First execution stamp*/
+   CREATE ActionLog.
+   ASSIGN
+      ActionLog.Brand        = gcBrand
+      ActionLog.TableName    = lcTableName
+      ActionLog.ActionID     = lcActionID
+      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
+      ActionLog.UserCode     = katun
+      ActionLog.ActionTS     = ldCurrentTimeTS.
+   RELEASE ActionLog.
+   RETURN. /*No reporting in first time.*/
+END.
+ELSE IF ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN QUIT.
+
+
 
 /*Dir and file definition*/
 ASSIGN
@@ -101,4 +129,14 @@ END.
 
 OUTPUT STREAM sLogFile CLOSE.
 
+DO TRANS:
+   FIND FIRST ActionLog WHERE
+              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.ActionID  EQ  lcActionID     AND
+              ActionLog.TableName EQ  lcTableName EXCLUSIVE-LOCK NO-ERROR.
+   IF AVAIL ActionLog THEN DO:
+      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
+   END.
+   RELEASE ActionLog.
+END.
 
