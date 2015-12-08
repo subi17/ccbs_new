@@ -125,7 +125,7 @@ PROCEDURE pInitialize:
       fSetGlobalLoggingLevel(liLogLevel).
       fSetLogTreshold(liLogTreshold).
    END. /* IF lcLogFile > "" THEN DO: */
-
+   RETURN "".
 
 END PROCEDURE.
 
