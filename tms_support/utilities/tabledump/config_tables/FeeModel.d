@@ -66,6 +66,7 @@
 "CONTS39MF" "CONTRATOS 39 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTSF10MF" "CONTRATOSF 10 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTSF14MF" "CONTRATOSF 14 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CRVTERMDT" "Q25 discount revert fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DATA200MFUPS" "DATA200 upsell monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DATA5MF" "Mobile Data Usage Bundle Service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DATA5MFUPS" "Cont Data Upsell Bundle" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -130,6 +131,7 @@
 "PAYTERM24_30" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_4" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_5" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERM24_6" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM24_8" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM25" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERMCG1E" "Commission fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -610,6 +612,7 @@
 "RECONNECTION" "Reconnection Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "Reparacion" "Reparacion" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "RVTERM" "Terminal Residual Amount" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"RVTERM12" "Q25 extension periodical contract" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "SIMLOCK" "Codigo desbloqueo" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "SIMLOCK1" "Prueba" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "SPOTIFYMF" "Spotify Monthly Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -638,6 +641,7 @@
 "TERMPERIOD5" "Periodical contract discount penalty 5" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "TERMPERIOD6" "Periodical contract discount penalty 6" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "TERMPERIOD75" "Periodical contract discount penalty" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"TERMRVTERM" "Q25 extension termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "TOPUPCAMP20" "TopUp Campaign" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "TOPUPCAMPGIFT" "Initial topup for gift orders" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "TOPUPPREACT" "Re-charge of Pre-activated Prepaid (POS)" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0

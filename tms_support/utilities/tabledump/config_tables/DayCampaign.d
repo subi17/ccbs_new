@@ -92,6 +92,7 @@
 "PAYTERM24_30" 01/08/12 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_30" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0
 "PAYTERM24_4" 01/03/14 0 31/12/49 "PAYTERM" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_4" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0
 "PAYTERM24_5" 01/12/11 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_5" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0
+"PAYTERM24_6" 25/11/15 0 31/12/49 "PAYTERM" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_6" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0
 "PAYTERM24_8" 02/04/12 0 31/12/49 "PAYTERM24" 0 "" "" "Installment" 0 0 "1" "5" 1 3 24 0 "PAYTERM24_8" "" "TERMPAYTERM" 2 1 1 yes 1 0 0 1 "" 0
 "PMDUB" 01/05/11 4 31/12/49 "PREMDUB" 0 "" "" "Bono 8" 93 0 "1" "4" 4 1 0 0 "PMDUBFee" "" "" 0 1 0 yes 1 0 0 1 "PMDUB_UPSELL" 0
 "PMDUB_UPSELL" 01/06/11 4 31/12/49 "PREMDUB" 0 "" "" "Bono 8 Upsell" 93 0 "1" "6" 1 2 1 0 "UPSELL_PMDUBFee" "" "" 3 1 0 yes 10 0 0 1 "" 0
@@ -99,6 +100,7 @@
 "POSTRENOVEII" 09/09/09 0 26/05/10 "TERMPERIOD" 0 "" "" "Terminal contract for current Postpaid" 0 0 "1" "3" 1 3 18 0 "" "" "TERMPERIOD2" 2 1 2 yes 1 0 0 1 "" 0
 "PRERENOVE" 01/09/08 0 26/01/11 "" 0 "" "" "Terminal contract for current Prepaid" 0 0 "1" "3" 1 3 18 0 "" "" "" 2 1 0 yes 1 0 0 1 "" 0
 "PRETERM" 01/12/06 0 26/01/11 "" 0 "" "" "Terminal discount(Prepaid)" 0 0 "1" "3" 1 3 18 0 "" "" "" 2 1 0 yes 1 0 0 1 "" 0
+"RVTERM12" 25/11/15 0 31/12/49 "RVTERM" 0 "" "" "RVTERM12 periodical contract" 0 0 "1" "5" 1 3 12 0 "RVTERM12" "" "TERMRVTERM" 2 1 1 yes 1 0 0 1 "" 0
 "SMSFREE" 01/04/10 6 31/12/49 "#OrigBillItem" 0 "" "1" "SMS free Sundays" 51 0 "1" "2" 2 1 0 0 "" "" "" 0 1 0 no 1 0 0 1 "" 0
 "SMSFREEOCT10" 01/10/10 6 31/10/10 "#OrigBillItem" 0 "" "1" "SMS free Sundays" 51 0 "1" "2" 2 1 0 0 "" "" "" 0 1 0 no 1 0 0 1 "" 0
 "SPOTIFY" 01/07/12 0 31/12/49 "SPOTIFYMF" 0 "" "" "Bono Spotify" 0 0 "1" "7" 4 4 0 0 "SPOTIFYMF" "" "" 0 1 0 yes 1 0 0 0 "" 0
