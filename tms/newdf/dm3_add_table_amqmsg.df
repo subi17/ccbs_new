@@ -1,0 +1,58 @@
+ADD TABLE "AMQMsq"
+   AREA "Sta_Data_128"
+   LABEL "Active MQ Messages"
+   DESCRIPTION "Active MQ Messages"
+   DUMP-NAME "amqmsg"
+  
+ADD FIELD "MQName" OF "AMQMsq" AS character
+   FORMAT "X(15)"
+   INITIAL ""
+   COLUMN-LABEL "MQ Name"
+   LABEL "MQ Name"
+   HELP "Message Queue Name"
+   ORDER 10   
+    
+ADD FIELD "MsgContent" OF "AMQMsq" AS character
+   FORMAT "X(30)"
+   INITIAL ""
+   COLUMN-LABEL "Message"
+   LABEL "Message"
+   HELP "Message"
+   ORDER 20   
+
+ADD FIELD "StatusCode" OF "AMQMsq" AS character
+   FORMAT "X(8)"
+   INITIAL ""
+   COLUMN-LABEL "Status"
+   LABEL "Status"
+   HELP "Status"
+   ORDER 30   
+
+ADD FIELD "Usage" OF "AMQMsq" AS character
+   FORMAT "X(8)"
+   INITIAL ""
+   COLUMN-LABEL "Usage"
+   LABEL "Usage"
+   HELP "Additional usage information"
+   ORDER 40      
+   
+ADD FIELD "InsertTS" OF "AMQMsq" AS decimal
+   FORMAT "99999999.99999"
+   INITIAL "0"
+   COLUMN-LABEL "InsertTS"
+   LABEL "Creation Time"
+   HELP "Creation Time"
+   ORDER 50      
+
+ADD INDEX "MQName" ON "AMQMsq" 
+   AREA "Dyn_Index_1"
+   PRIMARY
+   INDEX-FIELD "MQName" ASCENDING
+   INDEX-FIELD "InsertTS" ASCENDING
+   INDEX-FIELD "StatusCode" ASCENDING
+
+ADD INDEX "InsertTS" ON "AMQMsq" 
+   AREA "Dyn_Index_1"
+   INDEX-FIELD "InsertTS" ASCENDING
+
+

@@ -361,19 +361,43 @@ FUNCTION fGenerateMessage RETURNS CHAR
    RETURN lcMessage.
 END.
 
+FUNCTION fDmsConfig RETURNS CHAR ():
+   DEF VAR lcHostName AS CHAR NO-UNDO.   
+   DEF VAR lcConfFile AS CHAR NO-UNDO.
+
+   /* get hostname */
+   INPUT THROUGH uname -n.
+   IMPORT lcHostName.
+   INPUT CLOSE.
+   /*TODO: make constants for environments!!!*/
+   CASE lcHostName:
+      WHEN "Alpheratz" THEN DO:
+         lcConfFile = "Mailconf/dms_messaging_conf.alpheratz".
+      END.
+      WHEN "Pallas" THEN DO:
+         lcConfFile = "Mailconf/dms_messaging_conf.prod".
+      END.
+      OTHERWISE DO:
+         RETURN "Unknown configuration".
+      END.
+   END CASE.
+   RETURN lcConfFile.
+END.
 
 /*Function sends SMS and EMAIL generating information to WEB if it is needed*/
 FUNCTION fSendChangeInformation RETURNS CHAR
-   (icDMSStatus AS CHAR,
-    icOrderID AS INT,
-    icDeposit AS CHAR,
-    icDocList AS CHAR,
-    icDocListSep AS CHAR,
+   (icDMSStatus AS CHAR, /*DMS Status*/ 
+    icOrderID AS INT,    /*Order*/
+    icDeposit AS CHAR,   /*Deposit, if available*/
+    icDocList AS CHAR,   /*Doc List if available*/
+    icDocListSep AS CHAR, /*Separator if doc list is available*/
+    icModule AS CHAR,    /*identifier for MQ log file */
     OUTPUT ocSentMessage AS CHAR): /*for debugging, also includes additional data related to message.*/
 
    DEF BUFFER Order FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
-
+   
+   DEF VAR lcConfig AS CHAR NO-UNDO.
    DEF VAR lcNotifCaseID AS CHAR NO-UNDO.
    DEF VAR lcParam AS CHAR NO-UNDO.
    DEF VAR lcMessage AS CHAR NO-UNDO.
@@ -417,7 +441,9 @@ FUNCTION fSendChangeInformation RETURNS CHAR
 
    ocSentMessage = "Case param: " + lcParam + "Msg: " + lcMessage.              
    lcMQ =  fCParamNotNull("DMS","DMS_MQ"). 
-   RETURN fSendToMQ(lcMessage, "dms", lcMQ).
+   lcConfig = fDMSConfig().
+   IF lcConfig EQ "" THEN RETURN "MQ config not available".
+   RETURN fSendToMQ(lcMessage, "dms", lcMQ, lcConfig, icModule).
 END.
 
 

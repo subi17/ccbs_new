@@ -132,6 +132,7 @@ FOR EACH DMS NO-LOCK WHERE
                                     "", /*deposit*/
                                     "", /*docList*/
                                     "", /*docListSep*/
+                                    "doc_reminder",
                                     lcMsg).
      fLogMsg(lcMsg).
    END.

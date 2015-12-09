@@ -15,10 +15,8 @@
 {ftransdir.i}
 
 DEFINE VARIABLE lcHostName        AS CHARACTER     NO-UNDO.
-DEFINE VARIABLE lcConfFile        AS CHARACTER     NO-UNDO.
 DEFINE VARIABLE lcReadLine        AS CHARACTER     NO-UNDO.
 DEFINE VARIABLE lcHost            AS CHARACTER     NO-UNDO.
-DEFINE VARIABLE lcDumpFile        AS CHARACTER     NO-UNDO.
 DEFINE VARIABLE lcLogFile         AS CHARACTER     NO-UNDO.
 DEFINE VARIABLE lcLogFileStat     AS CHARACTER     NO-UNDO.
 DEFINE VARIABLE liPort            AS INTEGER       NO-UNDO.
@@ -50,34 +48,15 @@ END.
 
 PROCEDURE pInitialize:
 
-   DEF INPUT PARAMETER icModule AS CHAR NO-UNDO.
+   DEF INPUT PARAMETER icConfFile AS CHAR NO-UNDO.
+   DEF INPUT PARAMETER icModule AS CHAR NO-UNDO. /*Additional caller info*/
 
    DEF VAR liLogTreshold  AS INT  NO-UNDO.
 
-   /* get hostname */
-   INPUT THROUGH uname -n.
-   IMPORT lcHostName.
-   INPUT CLOSE.
+   IF SEARCH(icConfFile) = ? THEN
+      RETURN "Configuration file " + icConfFile + " is missing".
 
-   CASE lcHostName:
-      WHEN "Alpheratz" THEN DO:
-         IF icModule EQ "dms" THEN 
-            lcConfFile = "Mailconf/dms_messaging_conf.alpheratz".         
-      END.
-      WHEN "Pallas" THEN DO:
-         IF icModule EQ "dms" THEN 
-            lcConfFile = "Mailconf/dms_messaging_conf.prod". 
-      END.
-      OTHERWISE DO:
-         lcConfFile = "".
-         RETURN "Unknown configuration".
-      END.   
-   END CASE.
-
-   IF SEARCH(lcConfFile) = ? THEN
-      RETURN "Configuration file " + lcConfFile + " is missing".
-
-   INPUT FROM VALUE(SEARCH(lcConfFile)) NO-ECHO.
+   INPUT FROM VALUE(SEARCH(icConfFile)) NO-ECHO.
    REPEAT:
       IMPORT UNFORMATTED lcReadLine.
 
@@ -95,6 +74,7 @@ PROCEDURE pInitialize:
          lcUserName = SUBSTR(lcReadLine,7).
       ELSE IF lcReadLine BEGINS "#PASS:" THEN
          lcPassword = SUBSTR(lcReadLine,7).
+      /*Actually this is directory for building file name*/
       ELSE IF lcReadLine BEGINS "#LOG_MANAGER_FILE:" THEN
          lcLogFile  = SUBSTR(lcReadLine,19).
       ELSE IF lcReadLine BEGINS "#LOG_LEVEL:" THEN
@@ -106,10 +86,9 @@ PROCEDURE pInitialize:
 
    IF lcHost = "" THEN RETURN "Host is missing".
    IF liPort = 0 OR liPort = ? THEN RETURN "Port is missing".
-   /*
+   
    IF lcUserName = "" THEN RETURN "Username is missing".
    IF lcPassword = "" THEN RETURN "Password is missing".
-   */
 
    IF liLogLevel = 0 OR liLogLevel = ? THEN
       liLogLevel = 2. /* default */
@@ -132,10 +111,12 @@ END PROCEDURE.
 FUNCTION fSendToMQ RETURNS CHAR
    (icMsg AS CHAR,
     icInitKey AS CHAR,
-    icMQ AS CHAR):
+    icMQ AS CHAR,
+    icConfFile AS CHAR,
+    icModule AS CHAR):
    DEF VAR lcRet AS CHAR NO-UNDO.
 
-   RUN pInitialize(INPUT "dms").
+   RUN pInitialize(INPUT icConfFile, INPUT icModule).
 
    IF RETURN-VALUE > "" THEN DO:
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
@@ -161,7 +142,7 @@ FUNCTION fSendToMQ RETURNS CHAR
          lcRet = "ActiveMQ message sending failed".
       END.
    END.
-   RUN pFinalize(INPUT "").
+   RUN pFinalize.
    RETURN lcRet.
 
 END.
@@ -169,11 +150,7 @@ END.
 
 PROCEDURE pFinalize:
 
-   DEF INPUT PARAMETER icModule AS CHAR NO-UNDO.
-
    IF lcLogFile > "" THEN fCloseLog().
-
-
 
    IF VALID-OBJECT(lMsgPublisher) THEN DELETE OBJECT lMsgPublisher.
 
