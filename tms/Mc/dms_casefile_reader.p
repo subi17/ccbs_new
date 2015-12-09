@@ -68,37 +68,42 @@ END FUNCTION.
 /*Is feature active:*/
 IF fDMSOnOff() NE TRUE THEN RETURN.
 
+DO TRANS:
 
-FIND FIRST ActionLog WHERE
-           ActionLog.Brand     EQ  gcBrand        AND
-           ActionLog.ActionID  EQ  lcActionID     AND
-           ActionLog.TableName EQ  lcTableName NO-ERROR.
-IF NOT AVAIL ActionLog THEN DO TRANS:
-   /*First execution stamp*/
-   CREATE ActionLog.
-   ASSIGN
-      ActionLog.Brand        = gcBrand
-      ActionLog.TableName    = lcTableName
-      ActionLog.ActionID     = lcActionID
-      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-      ActionLog.UserCode     = katun
-      ActionLog.ActionTS     = ldCurrentTimeTS.
-   RELEASE ActionLog.
-   RETURN. /*No reporting in first time.*/
-END.
-ELSE IF ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN DO:
-   QUIT.
-END.
-ELSE DO TRANS: 
-   ASSIGN
-      ActionLog.Brand        = gcBrand
-      ActionLog.TableName    = lcTableName
-      ActionLog.ActionID     = lcActionID
-      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-      ActionLog.UserCode     = katun
-      ActionLog.ActionTS     = ldCurrentTimeTS.
+   FIND FIRST ActionLog WHERE
+              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.ActionID  EQ  lcActionID     AND
+              ActionLog.TableName EQ  lcTableName NO-ERROR.
+
+   IF AVAIL ActionLog AND
+      ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN DO:
+      QUIT.
+   END.
+
+   IF NOT AVAIL ActionLog THEN DO:
+      /*First execution stamp*/
+      CREATE ActionLog.
+      ASSIGN
+         ActionLog.Brand        = gcBrand
+         ActionLog.TableName    = lcTableName
+         ActionLog.ActionID     = lcActionID
+         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
+         ActionLog.UserCode     = katun
+         ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
+      RETURN. /*No reporting in first time.*/
+   END.
+   ELSE DO:
+      ASSIGN
+         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
+         ActionLog.UserCode     = katun
+         ActionLog.ActionTS     = ldCurrentTimeTS.
+
+      RELEASE Actionlog.
+   END.
 END.
+
+
 
 INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcIncDir).
 REPEAT:
