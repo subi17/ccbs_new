@@ -75,7 +75,19 @@ IF NOT AVAIL ActionLog THEN DO TRANS:
    RELEASE ActionLog.
    RETURN. /*No reporting in first time.*/
 END.
-ELSE IF ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN QUIT.
+ELSE IF ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN DO:
+   QUIT.
+END.
+ELSE DO TRANS:
+   ASSIGN
+      ActionLog.Brand        = gcBrand
+      ActionLog.TableName    = lcTableName
+      ActionLog.ActionID     = lcActionID
+      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
+      ActionLog.UserCode     = katun
+      ActionLog.ActionTS     = ldCurrentTimeTS.
+END.
+
 
 /*Execute read operation and assign new period end time to actionlog.*/
 ldPreviousEndTS = ActionLog.ActionTS.
@@ -99,7 +111,9 @@ DO TRANS:
    FIND FIRST ActionLog WHERE
               ActionLog.Brand     EQ  gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
-              ActionLog.TableName EQ  lcTableName EXCLUSIVE-LOCK NO-ERROR.
+              ActionLog.TableName EQ  lcTableName    AND
+              ActionLog.ActionStatus NE {&ACTIONLOG_STATUS_SUCCESS}
+   EXCLUSIVE-LOCK NO-ERROR.
    IF AVAIL ActionLog THEN DO:
       ActionLog.ActionTS = ldCollPeriodEndTS.
       ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
