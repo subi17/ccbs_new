@@ -259,7 +259,8 @@ ASSIGN
    Mobsub.IDCode           = STRING(RANDOM(0,9999),"9999")
    MobSub.MultiSimID       = Order.MultiSimID
    MobSub.MultiSimType     = Order.MultiSimType
-   MobSub.TariffActDate    = TODAY.
+   MobSub.TariffActDate    = TODAY
+   MobSub.TariffActTS      = fMakeTS().
 
 fSetOrderStatus(Order.OrderId,"6").  
 fMarkOrderStamp(Order.OrderID,
