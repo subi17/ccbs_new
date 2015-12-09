@@ -258,7 +258,6 @@ PROCEDURE pHandleMobSub:
                          lcOldtariffBundle = "".
 
                lcMessage = lcMessage + lcOldCLIType + lcDel + lcOldtariffBundle.
-
                fWriteMessage(lcMessage).
             END.
             ELSE DO:

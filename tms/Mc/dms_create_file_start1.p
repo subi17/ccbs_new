@@ -29,7 +29,7 @@ DEF VAR lcSpoolDir        AS CHAR NO-UNDO.
 DEF VAR lcOutDir          AS CHAR NO-UNDO.
 DEF VAR ldaReadDate       AS DATE NO-UNDO.
 DEF VAR lcLogDir          AS CHAR NO-UNDO.
-DEF VAR lcLogFile         AS CHAR NO-UNDO.
+DEF VAR lcLogFile1        AS CHAR NO-UNDO.
 
 
 lcTableName = "DMS".
@@ -53,7 +53,7 @@ ASSIGN
                       STRING(DAY(ldaReadDate),"99") +
                       REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".txt".
 
-       lcLogFile    = lcLogDir + "tms_to_dms_1_" +
+       lcLogFile1    = lcLogDir + "tms_to_dms_1_" +
                       STRING(YEAR(ldaReadDate)) +
                       STRING(MONTH(ldaReadDate),"99") +
                       STRING(DAY(ldaReadDate),"99") + ".log".
@@ -89,7 +89,7 @@ RUN dms_create_docfile.p(SUBST("&1,&2,&3,&4,&5,&6",
                           {&DMS_CASE_TYPE_ID_DIRECT_CH},
                           {&DMS_CASE_TYPE_ID_CANCEL}),
                        ldCollPeriodStartTS, 
-                       ldCollPeriodEndTS, lcCaseFile, lcLogFile).
+                       ldCollPeriodEndTS, lcCaseFile, lcLogFile1).
 /* Move the file to Transfer directory */
 fMove2TransDir(lcCaseFile, ".txt", lcOutDir).
 
