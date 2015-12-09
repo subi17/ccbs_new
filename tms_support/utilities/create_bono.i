@@ -302,7 +302,7 @@ END FUNCTION.
 
 /*********************************************************/
 /* Add Matrix Item                                       */
-
+/*
 FUNCTION faddMatrixValue RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
                           INPUT icDCEvent AS CHAR,
                           INPUT iiUpdateMode AS INT):
@@ -315,7 +315,7 @@ FUNCTION faddMatrixValue RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
    END.
    RETURN TRUE.
 END FUNCTION.
-
+*/
 /*********************************************************/
 /* Add Request action rules                              */
 
@@ -923,10 +923,15 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
          ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseTariff,
                                        icTariff).
          FIND FIRST ShaperConf WHERE
-                    ShaperConf.shaperConfId EQ lcCliType.
-         ttShaperConf.limitShaped = idLimitShaped + ShaperConf.limitShaped.
-         ttShaperConf.limitUnShaped = idLimitUnShaped + ShaperConf.limitUnShaped.
-
+                    ShaperConf.shaperConfId EQ lcCliType NO-LOCK NO-ERROR.
+         IF AVAIL ShaperConf THEN DO:
+            ttShaperConf.limitShaped = idLimitShaped + ShaperConf.limitShaped.
+            ttShaperConf.limitUnShaped = idLimitUnShaped + ShaperConf.limitUnShaped.
+         END.
+         ELSE DO:
+            ttShaperConf.limitShaped = idLimitShaped.
+            ttShaperConf.limitUnShaped = idLimitUnShaped.
+         END.
          DISPLAY ttShaperConf with frame a.
          pause 0.
          IF iiUpdateMode NE 0 THEN DO:
@@ -963,14 +968,14 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
          ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseTariff,
                                        icTariff).
          FIND FIRST ShaperConf WHERE
-                    ShaperConf.shaperConfId EQ lcCliType + "wVOIP" NO-LOCK
+                    ShaperConf.shaperConfId EQ lcCliType + "w" + icDCEvent NO-LOCK
                     NO-ERROR.
          IF NOT AVAIL ShaperConf THEN
             MESSAGE "ShaperConf not exist: " + lcCliType + "wVOIP" 
                     VIEW-AS ALERT-BOX.
          ELSE DO:
-            ttShaperConf.limitShaped = idLimitShaped + ShaperConf.limitShaped.
-            ttShaperConf.limitUnShaped = idLimitUnShaped + 
+            ttShaperConf.limitShaped = 5242880 + ShaperConf.limitShaped.
+            ttShaperConf.limitUnShaped = 104857600 + 
                                          ShaperConf.limitUnShaped.
          END.
 
