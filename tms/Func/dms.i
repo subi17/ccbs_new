@@ -323,14 +323,14 @@ FUNCTION fGenerateMessage RETURNS CHAR
       DO liCount = 1 TO NUM-ENTRIES(lcDocList):
          lcDocNotifEntry = fDoc2Msg(ENTRY(i,lcDocList,icDocListSep), 
                                     "").
-         fAddToJsonArray(lcArray, lcDocNotifEntry).
+         fObjectToJsonArray(lcArray, lcDocNotifEntry).
       END.
    END.
    ELSE DO: /*from DMS, add doc comments*/
       DO i = 1 TO NUM-ENTRIES(icDocList,icDocListSep) BY 4:
          lcDocNotifEntry = fDoc2Msg(ENTRY(i,icDocList,icDocListSep),
                                     ENTRY(i + 3,icDocList,icDocListSep)).
-         fAddToJsonArray(lcArray, lcDocNotifEntry).
+         fObjectToJsonArray(lcArray, lcDocNotifEntry).
       END.
    END.
 
