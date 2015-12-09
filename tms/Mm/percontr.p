@@ -3069,7 +3069,14 @@ PROCEDURE pContractReactivation:
    END. /* IF NOT AVAILABLE DayCampaign OR */
 
    /* is the contract allowed */
-   IF fMatrixAnalyse(gcBrand,
+   IF lcDCEvent = "DATA7" THEN DO:
+      IF NOT (lcUseCLIType = "CONT7" OR lcUseCLIType = "CONT8" OR
+              lcUseCLIType = "CONT9") THEN DO:
+         fReqError("Contract is not allowed for this subscription type").
+         RETURN.
+      END.
+   END.
+   ELSE IF fMatrixAnalyse(gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      lcDCEvent + ";" + lcUseCLIType,
