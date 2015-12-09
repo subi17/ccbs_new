@@ -1300,6 +1300,14 @@
 1 "" 2 "Internet" 0 "DATA6UPSELL" "1" 01/05/14 31/12/49
 1 "" 3 "Internet" 0 "DATA6UPSELL" "1" 01/05/14 31/12/49
 1 "" 5 "Internet" 0 "DATA6UPSELL" "1" 01/05/14 31/12/49
+1 "" 1 "Datos" 0 "DATA7" "1" 01/12/15 31/12/49
+1 "" 2 "Dates" 0 "DATA7" "1" 01/12/15 31/12/49
+1 "" 3 "Datuak" 0 "DATA7" "1" 01/12/15 31/12/49
+1 "" 5 "Data" 0 "DATA7" "1" 01/12/15 31/12/49
+1 "" 1 "Bono 3 GB" 0 "DATA7MF" "1" 01/12/15 31/12/49
+1 "" 2 "Bono 3 GB" 0 "DATA7MF" "1" 01/12/15 31/12/49
+1 "" 3 "Bono 3 GB" 0 "DATA7MF" "1" 01/12/15 31/12/49
+1 "" 5 "Bono 3 GB" 0 "DATA7MF" "1" 01/12/15 31/12/49
 1 "" 1 "Compra 1GB extra" 0 "DATA9MFUPS" "1" 01/12/12 31/12/49
 1 "" 2 "Compra 1GB extra" 0 "DATA9MFUPS" "1" 01/12/12 31/12/49
 1 "" 3 "1 GB gehiagoren erosketa" 0 "DATA9MFUPS" "1" 01/12/12 31/12/49

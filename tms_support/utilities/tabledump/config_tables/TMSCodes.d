@@ -133,6 +133,7 @@
 "BundleToCLIType" "CLIType" "Bundles" "MDUB" "Bundle To CLIType Conversion" "" "CONTRD3" 1
 "BundleToCoName" "Bundle" "Bundles" "DATA5" "TMS Bundle Id to Commercial Bundle Name" "" "Bono5|22622" 1
 "BundleToCoName" "Bundle" "Bundles" "DATA6" "TMS Bundle Id to Commercial Bundle Name" "" "Bono6|22622" 1
+"BundleToCoName" "Bundle" "Bundles" "DATA7" "TMS Bundle Id to Commercial Bundle Name" "" "Bono7|22622" 1
 "BundleToCoName" "Bundle" "Bundles" "MDUB" "TMS Bundle Id to Commercial Bundle Name" "" "Bono8|22642" 1
 "BundleToCoName" "Bundle" "Bundles" "MDUB2" "TMS Bundle Id to Commercial Bundle Name" "" "Bono15|22644" 1
 "BundleToCoName" "Bundle" "Bundles" "MDUB3" "TMS Bundle Id to Commercial Bundle Name" "" "Bono25|22644" 1

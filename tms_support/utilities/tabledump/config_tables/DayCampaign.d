@@ -46,6 +46,7 @@
 "DATA5_UPSELL" 01/09/13 4 31/12/49 "DATA5" 0 "" "" "Data Upsell 5" 93 0 "1" "6" 1 2 1 0 "DATA5MFUPS" "" "" 3 1 0 yes 100 0 0 1 "" 0
 "DATA6" 01/05/14 4 31/12/49 "DATA6" 0 "" "" "Bono 1 GB" 93 0 "1" "4" 4 1 0 0 "DATA6MF" "" "" 0 1 0 yes 1 0 0 1 "DATA6_UPSELL,DATA200_UPSELL" 1
 "DATA6_UPSELL" 01/05/14 4 31/12/49 "DATA6" 0 "" "" "Ampliación 1,5 GB" 93 0 "1" "6" 1 2 1 0 "DATA6MFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0
+"DATA7" 01/12/15 4 31/12/49 "DATA7" 0 "" "" "Bono 3 GB" 93 0 "1" "4" 4 1 0 0 "DATA7MF" "" "" 0 1 0 yes 1 0 0 3 "DATA6_UPSELL,DATA200_UPSELL" 1
 "DATA9_UPSELL" 01/12/12 4 31/12/49 "" 0 "" "" "Data Upsell 9" 93 0 "1" "6" 1 2 1 0 "DATA9MFUPS" "" "" 3 1 0 yes 100 0 0 2 "" 0
 "DSS" 23/11/11 4 31/12/49 "DSS" 0 "" "" "Data Sharing Service" 93 0 "1" "4" 4 1 0 0 "DSSMF" "" "" 0 1 0 yes 1 0 0 2 "DSS_UPSELL,DSS200_UPSELL" 0
 "DSS2" 01/09/13 4 31/12/49 "DSS2" 0 "" "" "Data Sharing Service 2" 93 0 "1" "4" 4 1 0 0 "" "" "" 0 1 0 yes 1 0 0 1 "DSS2_UPSELL,DSS200_UPSELL" 0

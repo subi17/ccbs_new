@@ -72,6 +72,7 @@
 "DATA5MFUPS" "Cont Data Upsell Bundle" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DATA6MF" "DATA6 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DATA6MFUPS" "DATA6 upsell monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"DATA7MF" "DATA7 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DATA9MFUPS" "Cont Data Upsell Bundle" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "DELCOST" "Shipment costs" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "Doa no procede" "DOA no procede" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
