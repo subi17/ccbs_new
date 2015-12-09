@@ -658,7 +658,8 @@ PROCEDURE pUpdateSubscription:
    ASSIGN Mobsub.CLIType    = MsRequest.ReqCParam2
           Mobsub.BillTarget = liBillTarg
           Mobsub.Paytype    = (CLIType.PayType = 2)
-          Mobsub.TariffActDate = ldtActDate.
+          Mobsub.TariffActDate = ldtActDate
+          MobSub.TariffActTS   = ldeNewBeginTs.
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
    

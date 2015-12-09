@@ -14,7 +14,6 @@ ASSIGN
    gcBrand = "1".
 {tmsconst.i}
 {ftransdir.i}
-{cparam2.i}
 {eventlog.i}
 {dms.i}
 
@@ -26,10 +25,10 @@ DEF VAR lcFileName      AS CHAR NO-UNDO.
 DEF VAR lcInputFile     AS CHAR NO-UNDO.
 DEF VAR lcLogFileOut    AS CHAR NO-UNDO.
 DEF VAR lcProcessedFile AS CHAR NO-UNDO.
-DEF VAR lcLogFile       AS CHAR NO-UNDO.
+DEF VAR lcDMSLogFile    AS CHAR NO-UNDO.
 DEF VAR lcLine          AS CHAR NO-UNDO.
 DEF VAR lcSep           AS CHAR NO-UNDO.
-DEF VAR ldaReadDate     AS DATE NO-UNDO.
+DEF VAR ldaFReadDate     AS DATE NO-UNDO.
 
 DEF BUFFER bDMS FOR DMS.
 
@@ -52,6 +51,15 @@ FUNCTION fLogLine RETURNS LOGICAL
       "DMS" SKIP.
 END FUNCTION.
 
+FUNCTION fLogMsg RETURNS LOGICAL
+   (icMessage AS CHAR):
+   PUT STREAM sLog UNFORMATTED
+      icMessage "#"
+      "DMS" SKIP.
+END FUNCTION.
+
+
+
 /*Is feature active:*/
 IF fDMSOnOff() NE TRUE THEN RETURN.
 
@@ -66,13 +74,13 @@ REPEAT:
       INPUT STREAM sIn FROM VALUE(lcInputFile).
    ELSE NEXT.
 
-   ldaReadDate  = TODAY.
-   lcLogFile = lcSpoolDir + 
+   ldaFReadDate  = TODAY.
+   lcDMSLogFile = lcSpoolDir + 
                "dms_to_tms_" +
-               STRING(YEAR(ldaReadDate)) +
-               STRING(MONTH(ldaReadDate),"99") +
-               STRING(DAY(ldaReadDate),"99") + ".log".
-   OUTPUT STREAM sLog TO VALUE(lcLogFile) APPEND.
+               STRING(YEAR(ldaFReadDate)) +
+               STRING(MONTH(ldaFReadDate),"99") +
+               STRING(DAY(ldaFReadDate),"99") + ".log".
+   OUTPUT STREAM sLog TO VALUE(lcDMSLogFile) APPEND.
 
    LINE_LOOP:
    REPEAT:
@@ -94,7 +102,7 @@ REPEAT:
    END.
 
    ASSIGN
-      lcLogFileOut    = fMove2TransDir(lcLogFile, "", lcLogDir)
+      lcLogFileOut    = fMove2TransDir(lcDMSLogFile, "", lcLogDir)
       lcProcessedFile = fMove2TransDir(lcInputFile, "", lcProcDir).
 
    INPUT STREAM sIn CLOSE.
@@ -103,6 +111,35 @@ REPEAT:
 END.
 
 INPUT STREAM sFile CLOSE.
+
+FUNCTION fFindDeposit RETURNS CHAR
+   (icDocList AS CHAR,
+    icSep AS CHAR):
+   DEF VAR i             AS INT NO-UNDO.
+   DEF VAR iSeekS        AS INT NO-UNDO.   
+   DEF VAR iSeekE        AS INT NO-UNDO.
+   DEF VAR lcDocTypeId   AS CHAR NO-UNDO.
+   DEF VAR lcDocTypeDesc AS CHAR NO-UNDO.
+
+
+   IF icDocList EQ "" THEN RETURN "".
+
+   DO i = 1 TO NUM-ENTRIES(icDocList,icSep) BY 4:
+      lcDocTypeID     = ENTRY(i,icDocList,icSep).
+      /*Type 8 defines documentation:
+      Justificante pago deposito <300>*/
+      IF lcDocTypeId EQ "8" THEN DO:
+         lcDocTypeDesc   = ENTRY(i + 1,icDocList,icSep).
+         iSeekS = INDEX(lcDocTypeDesc, "<").
+         iSeekE = INDEX(lcDocTypeDesc, ">").  
+         IF iSeekS EQ 0 OR iSeekE EQ 0 OR iSeekS > iSeekE
+            THEN RETURN "". /*incorrect format*/
+         RETURN SUBSTR(lcDocTypeDesc,(iSeekS + 1),(iSeekE - iSeekS - 1)).
+      END.
+   END.
+   RETURN "".
+END.
+
 
 PROCEDURE pUpdateDMS:
 
@@ -117,7 +154,10 @@ PROCEDURE pUpdateDMS:
    DEF VAR ldStatusTS      AS DEC  NO-UNDO.
    DEF VAR lcDocList       AS CHAR NO-UNDO.
    DEF VAR lcUpdateDMS     AS CHAR NO-UNDO.
- 
+   DEF VAR lcErr           AS CHAR NO-UNDO.
+   DEF VAR lcMSg           AS CHAR NO-UNDO.
+   DEF VAR lcDeposit       AS CHAR NO-UNDO.
+
    DEF BUFFER Order FOR Order.
 
    ASSIGN
@@ -129,7 +169,7 @@ PROCEDURE pUpdateDMS:
       lcStatusDesc    = ENTRY(6,pcLine,lcSep)
       ldStatusTS      = DECIMAL(ENTRY(7,pcLine,lcSep))
       lcDocList       = ENTRY(8,pcLine,lcSep).
-
+      
    FIND FIRST Order NO-LOCK WHERE
               Order.Brand EQ gcBrand AND
               Order.OrderID EQ liOrderId NO-ERROR.
@@ -147,7 +187,12 @@ PROCEDURE pUpdateDMS:
                             ldStatusTS,
                             lcDocList,
                             ";").
-   
+
+   lcDeposit = fFindDeposit(lcDocList, ";").                         
+   lcErr = fSendChangeInformation(lcStatusCode, liOrderId, lcDeposit, lcMsg).
+
+   fLogMsg("Msg : " + lcMsg + " #Status: " + lcErr).
+
    IF lcUpdateDMS <> "OK" THEN RETURN "ERROR:" + lcUpdateDMS + ":UPDATE".
    ELSE IF (lcCaseTypeID = {&DMS_CASE_TYPE_ID_ORDER_RESTUDY} OR
             lcCaseTypeID = {&DMS_CASE_TYPE_ID_COMPANY}) THEN DO:
@@ -167,7 +212,7 @@ PROCEDURE pUpdateDMS:
    END.
 
    IF RETURN-VALUE > "" THEN RETURN "ERROR:" + RETURN-VALUE.
-
+   
    RETURN "OK".
 
 END PROCEDURE.
