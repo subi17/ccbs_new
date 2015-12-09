@@ -72,7 +72,7 @@ IF fDMSOnOff() NE TRUE THEN RETURN.
 FIND FIRST ActionLog WHERE
            ActionLog.Brand     EQ  gcBrand        AND
            ActionLog.ActionID  EQ  lcActionID     AND
-           ActionLog.TableName EQ  lcTableName NO-LOCK NO-ERROR.
+           ActionLog.TableName EQ  lcTableName NO-ERROR.
 IF NOT AVAIL ActionLog THEN DO TRANS:
    /*First execution stamp*/
    CREATE ActionLog.
@@ -97,7 +97,7 @@ ELSE DO TRANS:
       ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
       ActionLog.UserCode     = katun
       ActionLog.ActionTS     = ldCurrentTimeTS.
-
+      RELEASE ActionLog.
 END.
 
 INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcIncDir).
