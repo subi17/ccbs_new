@@ -21,7 +21,6 @@ Katun = "Cron".
 DEF VAR ldCollPeriodStartTS   AS DEC  NO-UNDO.
 DEF VAR ldCollPeriodEndTS AS DEC  NO-UNDO.
 DEF VAR ldCurrentTimeTS   AS DEC  NO-UNDO.
-DEF VAR ldPreviousEndTS   AS DEC  NO-UNDO.
 DEF VAR lcActionID        AS CHAR NO-UNDO.
 DEF VAR lcTableName       AS CHAR NO-UNDO.
 DEF VAR lcCaseFile        AS CHAR NO-UNDO.
@@ -58,41 +57,43 @@ ASSIGN
                       STRING(MONTH(ldaReadDate),"99") +
                       STRING(DAY(ldaReadDate),"99") + ".log".
 
-FIND FIRST ActionLog WHERE
-           ActionLog.Brand     EQ  gcBrand        AND
-           ActionLog.ActionID  EQ  lcActionID     AND
-           ActionLog.TableName EQ  lcTableName NO-ERROR.
-IF NOT AVAIL ActionLog THEN DO TRANS:
-   /*First execution stamp*/
-   CREATE ActionLog.
-   ASSIGN
-      ActionLog.Brand        = gcBrand
-      ActionLog.TableName    = lcTableName
-      ActionLog.ActionID     = lcActionID
-      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-      ActionLog.UserCode     = katun
-      ActionLog.ActionTS     = ldCurrentTimeTS.
-   RELEASE ActionLog.
-   RETURN. /*No reporting in first time.*/
-END.
-ELSE IF ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN DO:
-   QUIT.
-END.
-ELSE DO TRANS:
-   ASSIGN
-      ActionLog.Brand        = gcBrand
-      ActionLog.TableName    = lcTableName
-      ActionLog.ActionID     = lcActionID
-      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-      ActionLog.UserCode     = katun
-      ActionLog.ActionTS     = ldCurrentTimeTS.
-      RELEASE Actionlog.
-END.
+DO TRANS:
 
+   FIND FIRST ActionLog WHERE
+              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.ActionID  EQ  lcActionID     AND
+              ActionLog.TableName EQ  lcTableName NO-ERROR.
+
+   IF AVAIL ActionLog AND
+      ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN DO:
+      QUIT.
+   END.
+
+   IF NOT AVAIL ActionLog THEN DO:
+      /*First execution stamp*/
+      CREATE ActionLog.
+      ASSIGN
+         ActionLog.Brand        = gcBrand
+         ActionLog.TableName    = lcTableName
+         ActionLog.ActionID     = lcActionID
+         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
+         ActionLog.UserCode     = katun
+         ActionLog.ActionTS     = ldCurrentTimeTS.
+      RELEASE ActionLog.
+      RETURN. /*No reporting in first time.*/
+   END.
+   ELSE DO:
+      ASSIGN
+         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
+         ActionLog.UserCode     = katun
+         ActionLog.ActionTS     = ldCurrentTimeTS.
+      
+      ldCollPeriodStartTS = ActionLog.ActionTS.
+      RELEASE Actionlog.
+   END.
+END.
 
 /*Execute read operation and assign new period end time to actionlog.*/
-ldPreviousEndTS = ActionLog.ActionTS.
-ldCollPeriodStartTS = ldPreviousEndTS.
 ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60).
 
 RUN dms_create_docfile.p(SUBST("&1,&2,&3,&4,&5,&6",
