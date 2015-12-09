@@ -55,6 +55,14 @@ IF NOT (CLIType.PayType = 2 OR bMobsub.PayType = TRUE) AND
           paiva = ldaSTCDates[1].
 END.
 
+/* Only prepaid to prepaid */
+IF NOT (CLIType.PayType = 1 OR bMobsub.PayType = FALSE) AND
+   ldaSTCDates[1] <> ldaSTCDates[2] AND
+   fIsiSTCAllowed(INPUT bMobsub.MsSeq) THEN DO:
+   CREATE paiva.
+          paiva = ldaSTCDates[1].
+END.
+
 CREATE paiva.
        paiva = ldaSTCDates[2].
 

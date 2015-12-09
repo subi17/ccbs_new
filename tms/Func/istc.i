@@ -36,7 +36,6 @@ FUNCTION fGetISTCDate RETURNS DATE
               MsOwner.MsSeq    = iiMsSeq   AND
               MsOwner.TsBeg   >= ldeFromTs AND
               MsOwner.TsBeg   <= ldeEndTs  AND
-              MsOwner.PayType  = FALSE     AND
               MsOwner.Custnum  = iiCustnum AND
               MsOwner.CLIEvent BEGINS "iS" NO-ERROR.
    ELSE
@@ -44,7 +43,6 @@ FUNCTION fGetISTCDate RETURNS DATE
               MsOwner.MsSeq    = iiMsSeq   AND
               MsOwner.TsBeg   >= ldeFromTs AND
               MsOwner.TsBeg   <= ldeEndTs  AND
-              MsOwner.PayType  = FALSE     AND
               MsOwner.CLIEvent BEGINS "iS" NO-ERROR.
 
    IF NOT AVAIL MsOwner THEN RETURN ?.
