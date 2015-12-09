@@ -149,22 +149,24 @@ REPEAT:
    INPUT STREAM sIn CLOSE.
    OUTPUT STREAM sLog CLOSE.
 
+END.
+
+INPUT STREAM sFile CLOSE.
+
 DO TRANS:
    FIND FIRST ActionLog WHERE
               ActionLog.Brand     EQ  gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
-EXCLUSIVE-LOCK NO-ERROR.
+   EXCLUSIVE-LOCK NO-ERROR.
+   
    IF AVAIL ActionLog THEN DO:
       ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
    END.
    RELEASE ActionLog.
 END.
 
-END.
-
-INPUT STREAM sFile CLOSE.
 
 FUNCTION fFindDeposit RETURNS CHAR
    (icDocList AS CHAR,
