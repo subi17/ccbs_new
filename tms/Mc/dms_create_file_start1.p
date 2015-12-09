@@ -83,12 +83,12 @@ DO TRANS:
       RETURN. /*No reporting in first time.*/
    END.
    ELSE DO:
+      /*store previous starting time before setting new value to db*/
+      ldCollPeriodStartTS = ActionLog.ActionTS.
       ASSIGN
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = katun
-         ActionLog.ActionTS     = ldCurrentTimeTS.
+         ActionLog.UserCode     = katun.
       
-      ldCollPeriodStartTS = ActionLog.ActionTS.
       RELEASE Actionlog.
    END.
 END.
