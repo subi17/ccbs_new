@@ -773,6 +773,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
                                   "", 
                                   lcDocListEntries,
                                   ",",
+                                  "create_cf",
                                   lcMsg).
    fLogMsg("Msg,2 : " + lcMsg + " #Status: " + lcErr).
 
@@ -922,7 +923,8 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                                   "", 
                                   lcDocListEntries,
                                   ",",
-                                  lcMsg).
+                                   "create_cf",
+                                   lcMsg).
    fLogMsg("Msg,3 : " + lcMsg + " #Status: " + lcErr).
 
 
