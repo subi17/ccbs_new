@@ -53,7 +53,7 @@ DEF VAR lcBaseTariff AS CHAR NO-UNDO.
 DEF VAR lcTariff AS CHAR NO-UNDO.
 
 liUpdateMode = {&SIMULATERUN}. /*0 = test mode, no DB writing. */
-/* liUpdateMode = {&MODIFYDB}.*/  /* 1 = real mode, add to DB. */
+ liUpdateMode = {&MODIFYDB}.  /* 1 = real mode, add to DB. */
 
 /*references to source entries that are copyyed for modifications*/
 lcBrand = "1".
@@ -82,7 +82,7 @@ lcDeActSMS = "Yoigo info: Has pedido cancelacion de Bono 3 GB Internet de Contra
 lcBaseMFFeeModel = "DATA6MF".
 lcMFFeemodel = "DATA7MF".
 /*to which bundle is allowed to activate*/
-lcClitypeList = "CONT7,CONT8,CONT9,LADEL2". 
+lcClitypeList = "CONT9,CONTD9,CONT15,CONT23,CONT24,CONTF10,CONTF11,CONTF20,CONTF20D,CONTF30,CONTF40,CONTF55,CONTF8,CONTFF2,CONTS12,CONTS15,CONTS16,CONTS20,CONTS21,CONTS25,CONTS26,CONTS30,CONTS32,CONTS35,CONTS39,CONTSF10,CONTSF14,LADEL2,LADEL4". 
 lcBaseMFRepTextItem = lcBaseMFFeeModel.
 lcBaseRepTextItem = lcBaseMFFeeModel.
 lcMFRepTextItem = lcMFFeemodel.

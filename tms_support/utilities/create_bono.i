@@ -923,10 +923,15 @@ FUNCTION fcreateShaperConf RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
          ttShaperConf.Tariff = REPLACE(ttShaperConf.Tariff, icBaseTariff,
                                        icTariff).
          FIND FIRST ShaperConf WHERE
-                    ShaperConf.shaperConfId EQ lcCliType.
-         ttShaperConf.limitShaped = idLimitShaped + ShaperConf.limitShaped.
-         ttShaperConf.limitUnShaped = idLimitUnShaped + ShaperConf.limitUnShaped.
-
+                    ShaperConf.shaperConfId EQ lcCliType NO-LOCK NO-ERROR.
+         IF AVAIL ShaperConf THEN DO:
+            ttShaperConf.limitShaped = idLimitShaped + ShaperConf.limitShaped.
+            ttShaperConf.limitUnShaped = idLimitUnShaped + ShaperConf.limitUnShaped.
+         END.
+         ELSE DO:
+            ttShaperConf.limitShaped = idLimitShaped.
+            ttShaperConf.limitUnShaped = idLimitUnShaped.
+         END.
          DISPLAY ttShaperConf with frame a.
          pause 0.
          IF iiUpdateMode NE 0 THEN DO:
