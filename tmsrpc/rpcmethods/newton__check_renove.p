@@ -7,20 +7,20 @@
            company_id;str;optional;Company id
            channel;str;mandatory;order channel
            bypass;boolean;optional;skip some business rules (YDR-90)
-           offer_id;str;mandatory;offer id
+           offer_id;str;optional;offer id
  * @output: data;struct 
- * @data  subscription_type;string;subscription type (eg. CONT2)
-          corporate_customer;bool;true <=> corporate customer
-          contract_days_remain;int;remaining contract days
-          contract_penalty;double;a possible penalty in euros
-          person_id;string;person id of orderer
-          id_type;string;person id type of orderer
-          has_terminal;bool;terminal has been ordered before
-          number_type;string;new/mnp (original order type)
-          allowed_terminal_financing_amount;double;if risk limit is configured
-          pending_stc;boolean;true
-          liQtyTFs;int;number of installments
-          subscription_bundle;string;tariff bundle of mobsub
+ * @data  subscription_type;string;mandatory;subscription type (eg. CONT2)
+          corporate_customer;bool;mandatory;true <=> corporate customer
+          contract_days_remain;int;optional;remaining contract days
+          contract_penalty;double;optional;a possible penalty in euros
+          person_id;string;mandatory;person id of orderer
+          id_type;string;mandatory;person id type of orderer
+          has_terminal;bool;optional;terminal has been ordered before
+          number_type;string;optional;new/mnp (original order type)
+          allowed_terminal_financing_amount;double;optional;
+          pending_stc;boolean;optional;true
+          liQtyTFs;int;mandatory;number of installments
+          subscription_bundle;string;mandatory;tariff bundle of mobsub
  * @installment;array of installment structs;two fields insidde struct
  * @installment;struct per_contract_id;int;installment periodical contract id
 */
@@ -126,7 +126,6 @@ DEF VAR sub_struct AS CHAR NO-UNDO.
 /* Local variables */
 DEF VAR lcFields AS CHARACTER NO-UNDO. 
 DEF VAR ldeCurrPen AS DEC NO-UNDO.
-DEF VAR ldeAllowedFin AS DEC NO-UNDO. 
 DEF VAR ldaLastTerminal AS DATE NO-UNDO INIT ?. 
 DEF VAR liTime AS INT NO-UNDO. 
 DEF VAR ldePrice AS DEC NO-UNDO.
@@ -134,7 +133,6 @@ DEF VAR lcPriceList AS CHAR NO-UNDO.
 DEF VAR liRemPeriod AS INT NO-UNDO.
 DEF VAR llPreactivated AS LOGICAL NO-UNDO.
 DEF VAR llBarrings AS LOGICAL NO-UNDO.
-DEF VAR lcBarrComList AS CHARACTER NO-UNDO. 
 DEF VAR lcBarrStatus AS CHARACTER NO-UNDO. 
 DEF VAR llPrerenove AS LOGICAL NO-UNDO INIT FALSE.
 DEF VAR lcError AS CHAR NO-UNDO.
@@ -159,7 +157,6 @@ DEF VAR ldaDate AS DATE NO-UNDO.
 
 DEF BUFFER bServiceRequest FOR MSRequest.
 DEF BUFFER bMobSub FOR MobSub.
-DEF BUFFER bMobSubAmt FOR MobSub.
 
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 
@@ -484,8 +481,6 @@ END.
    and collect all non invoiced installments and ongoing orders and return 
    the difference of risk limit and pending all installment fee.*/
 ASSIGN
-   ldeAllowedFin = 0
-   ldePendingFees = 0
    ldaDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
    liPeriod = YEAR(ldaDate) * 100 + MONTH(ldaDate).
 
@@ -493,14 +488,14 @@ FIND FIRST Limit NO-LOCK WHERE
            Limit.CustNum   = Customer.Custnum AND
            Limit.LimitType = {&LIMIT_TYPE_RISKLIMIT} AND
            Limit.ToDate   >= TODAY NO-ERROR.
-IF NOT AVAILABLE Limit THEN ldeAllowedFin = ?.
-ELSE DO:
+IF AVAILABLE Limit THEN DO:
+
    MOBSUB_LOOP:
-   FOR EACH bMobSubAmt NO-LOCK WHERE
-            bMobSubAmt.Brand = gcBrand AND
-            bMobSubAmt.CustNum = Customer.CustNum,
+   FOR EACH bMobSub NO-LOCK WHERE
+            bMobSub.Brand = gcBrand AND
+            bMobSub.CustNum = Customer.CustNum,
       EACH DCCLI NO-LOCK WHERE
-           DCCLI.MsSeq = bMobSubAmt.MsSeq AND
+           DCCLI.MsSeq = bMobSub.MsSeq AND
            DCCLI.ValidTo >= ldaDate AND
           (DCCLI.DCEvent BEGINS "PAYTERM" OR
            DCCLI.DCEvent BEGINS "RVTERM"):
@@ -509,7 +504,7 @@ ELSE DO:
                 FixedFee.Brand = gcBrand AND
                 FixedFee.Custnum = Customer.Custnum AND
                 FixedFee.HostTable = "MobSub" AND
-                FixedFee.KeyValue = STRING(bMobSubAmt.MsSeq) AND
+                FixedFee.KeyValue = STRING(bMobSub.MsSeq) AND
                 FixedFee.EndPeriod >= liPeriod AND
                 FixedFee.SourceTable = "DCCLI" AND
                 FixedFee.SourceKey = STRING(DCCLI.PerContractID) AND
@@ -567,9 +562,9 @@ ELSE DO:
 
    END.
 
-   ldeAllowedFin = Limit.LimitAmt - ldePendingFees.
+   add_double(top_struct, "allowed_terminal_financing_amount", 
+             (Limit.LimitAmt - ldePendingFees)).
 END.
-add_double(top_struct, "allowed_terminal_financing_amount", ldeAllowedFin).
 
 installment_array = add_array(top_struct, "installment").
 
