@@ -138,6 +138,7 @@ FOR EACH DMS NO-LOCK WHERE
                                     "doc_reminder",
                                     lcMsg).
      fLogMsg(lcMsg).
+     fLogLine("","Msg sending status " + lcErr).
    END.
 END.
      fLogLine("","DMS Reminder creation ends " + fTS2HMS(fMAkeTS())).
