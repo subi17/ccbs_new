@@ -142,12 +142,6 @@ FIND SingleFee USE-INDEX Custnum WHERE
 IF NOT AVAIL SingleFee THEN
    RETURN appl_err("Residual fee not found").
 
-IF SingleFee.Billed AND 
-   NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
-                      Invoice.Invnum = SingleFee.InvNum aND
-                      Invoice.InvType = 99) THEN 
-   RETURN appl_err("Residual fee billed").
-
 ASSIGN   
    ldaMonth22Date    = ADD-INTERVAL(DCCLI.ValidFrom, 22, 'months':U)
    ldaMonth22Date    = DATE(MONTH(ldaMonth22Date),1,YEAR(ldaMonth22Date))
@@ -183,8 +177,8 @@ IF SingleFee.OrderId > 0 THEN DO:
               TermReturn.OrderId = SingleFee.OrderId NO-ERROR.
 
    IF AVAIL TermReturn AND 
-            TermReturn.DeviceScreen = TRUE AND
-            TermReturn.DeviceStart = TRUE THEN
+          ((TermReturn.DeviceScreen = TRUE AND TermReturn.DeviceStart  = TRUE) OR 
+           (TermReturn.DeviceScreen = ?    AND TermReturn.DeviceStart  = ?)) THEN
       RETURN appl_err("Already returned terminal").
 END.
 

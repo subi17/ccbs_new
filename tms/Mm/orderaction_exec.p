@@ -411,9 +411,9 @@ PROCEDURE pQ25Extension:
       FIND FIRST TermReturn NO-LOCK WHERE
                  TermReturn.OrderId = SingleFee.OrderId NO-ERROR.
 
-      IF AVAIL TermReturn AND
-               TermReturn.DeviceScreen = TRUE AND
-               TermReturn.DeviceStart = TRUE THEN
+      IF AVAIL TermReturn AND 
+             ((TermReturn.DeviceScreen = TRUE AND TermReturn.DeviceStart  = TRUE) OR 
+              (TermReturn.DeviceScreen = ?    AND TermReturn.DeviceStart  = ?)) THEN
          RETURN "ERROR: already returned terminal".
    END.
 
@@ -484,8 +484,8 @@ PROCEDURE pQ25Extension:
                         "Yoigo info",
                         "").
       END.
+
    END.
-      
 
 END PROCEDURE.
 
