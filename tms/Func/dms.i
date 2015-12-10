@@ -321,7 +321,7 @@ FUNCTION fGenerateMessage RETURNS CHAR
    /*Add document comment if DMS has given it.*/
    IF icDocList EQ "" THEN DO: /*from TMS, initial information, use local*/
       DO liCount = 1 TO NUM-ENTRIES(lcDocList):
-         lcDocNotifEntry = fDoc2Msg(ENTRY(i,lcDocList,icDocListSep), 
+         lcDocNotifEntry = fDoc2Msg(ENTRY(i,lcDocList), 
                                     "").
          fObjectToJsonArray(lcArray, lcDocNotifEntry).
       END.
