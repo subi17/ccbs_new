@@ -97,9 +97,9 @@ FOR EACH MobSub WHERE
        fNotNull(MobSub.IMSI)                  lcDel
        fNotNull(MobSub.BarrCode)              lcDel
        fDateToString(MobSub.TariffActDate)    lcDel
-       STRING(MobSub.TariffActTS)             lcDel
        fNotNull(lcOldCLIType)                 lcDel
-       fNotNull(lcOldtariffBundle)            SKIP.
+       fNotNull(lcOldtariffBundle)            lcDel
+       STRING(MobSub.TariffActTS)             SKIP.         
 END.
 
 OUTPUT STREAM slog CLOSE.
