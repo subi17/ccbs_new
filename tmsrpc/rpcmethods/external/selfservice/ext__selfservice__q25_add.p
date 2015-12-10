@@ -72,12 +72,12 @@ ASSIGN
    ldaQ25PeriodEndDate    = fLastDayOfMonth(ldaQ25PeriodEndDate).
 
 /* Find original installment contract */   
-FIND FIRST DCCLI NO-LOCK WHERE
-           DCCLI.Brand   = gcBrand AND
-           DCCLI.DCEvent BEGINS "PAYTERM" AND
-           DCCLI.MsSeq   = MobSub.MsSeq AND 
-           DCCLI.ValidTo >= ldaQ25PeriodStartDate AND
-           DCCLI.ValidTo <= ldaQ25PeriodEndDate NO-ERROR. 
+FIND DCCLI NO-LOCK WHERE
+     DCCLI.Brand   = gcBrand AND
+     DCCLI.DCEvent BEGINS "PAYTERM" AND
+     DCCLI.MsSeq   = MobSub.MsSeq AND 
+     DCCLI.ValidTo >= ldaQ25PeriodStartDate AND
+     DCCLI.ValidTo <= ldaQ25PeriodEndDate NO-ERROR. 
 
 IF NOT AVAIL DCCLI THEN
    RETURN appl_err("Installment contract not found").
@@ -138,8 +138,8 @@ IF SingleFee.OrderId > 0 THEN DO:
               TermReturn.OrderId = SingleFee.OrderId NO-ERROR.
 
    IF AVAIL TermReturn AND 
-            TermReturn.DeviceScreen = TRUE AND
-            TermReturn.DeviceStart = TRUE THEN
+          ((TermReturn.DeviceScreen = TRUE AND TermReturn.DeviceStart  = TRUE) OR 
+           (TermReturn.DeviceScreen = ?    AND TermReturn.DeviceStart  = ?)) THEN
       RETURN appl_err("Already returned terminal").
 END.
 
