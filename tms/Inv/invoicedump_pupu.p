@@ -94,7 +94,9 @@ IF icDumpMode = "Full" THEN DO:
          olInterrupted = TRUE.
          LEAVE.
       END. /* IF RETRY THEN DO: */
-      
+     
+      IF Invoice.InvCfg[1] THEN NEXT.
+
       FIND FIRST Customer WHERE
                  Customer.CustNum = Invoice.CustNum
       NO-LOCK NO-ERROR.
@@ -129,6 +131,8 @@ ELSE DO:
          LEAVE.
       END. /* IF RETRY THEN DO: */
 
+      IF Invoice.InvCfg[1] THEN NEXT.
+      
       IF Invoice.ChgStamp < idLastDump THEN NEXT.
 
       FIND FIRST Customer WHERE
