@@ -746,7 +746,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
                          ENTRY(liCount,lcRequiredDocs) + "," +
                          "," + /*This field is filled only by DMS responses*/
                          lcDMSStatusDesc + "," +
-                         "Doc created".
+                         "".
       IF liCount NE NUM-ENTRIES(lcRequiredDocs)
          THEN lcDocListEntries = lcDocListEntries + ",".
    END.
@@ -897,7 +897,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                          ENTRY(liCount,lcRequiredDocs) + "," +
                          "," + /*This field is filled only by DMS responses*/
                          lcDMSStatusDesc + "," +
-                         "Doc created".
+                         "".
       IF liCount NE NUM-ENTRIES(lcRequiredDocs)
          THEN lcDocListEntries = lcDocListEntries + ",".
    END.

@@ -87,7 +87,7 @@ DO TRANS:
          ActionLog.Brand        = gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
-         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
+         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
          ActionLog.UserCode     = katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
