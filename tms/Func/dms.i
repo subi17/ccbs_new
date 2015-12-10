@@ -166,7 +166,6 @@ END.
 FUNCTION fNeededDocs RETURNS CHAR
    (BUFFER Order FOR Order):
    DEF VAR lcPAram AS CHAR NO-UNDO.
-   DEF VAR liCount AS INT NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
 
    /*CASE More DOC needed*/
@@ -296,7 +295,6 @@ FUNCTION fGenerateMessage RETURNS CHAR
    DEF VAR lcMessage AS CHAR NO-UNDO.
    DEF VAR lcArray AS CHAR NO-UNDO.
    DEF VAR lcDocList AS CHAR NO-UNDO. /*Plain list if required doc numbers*/
-   DEF VAR liCount AS INT NO-UNDO.
    DEF VAR i AS INT NO-UNDO.
    DEF VAR lcDocNotifEntry AS CHAR NO-UNDO.
 
@@ -320,7 +318,7 @@ FUNCTION fGenerateMessage RETURNS CHAR
    
    /*Add document comment if DMS has given it.*/
    IF icDocList EQ "" THEN DO: /*from TMS, initial information, use local*/
-      DO liCount = 1 TO NUM-ENTRIES(lcDocList):
+      DO i = 1 TO NUM-ENTRIES(lcDocList):
          lcDocNotifEntry = fDoc2Msg(ENTRY(i,lcDocList), 
                                     "").
          fObjectToJsonArray(lcArray, lcDocNotifEntry).
