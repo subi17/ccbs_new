@@ -664,6 +664,9 @@ DO TRANSACTION:
    END.
 
    fReqStatus(2,"").
+         
+   /* YDR-2037 */
+   RUN pRecoverSTC IN THIS-PROCEDURE (BUFFER MobSub, BUFFER MsRequest).
 
    /* Mark Order as delivered */
    IF MsRequest.ReqIparam1 > 0 THEN DO:
@@ -689,8 +692,6 @@ DO TRANSACTION:
          fMarkOrderStamp(Order.OrderID,
                          "Delivery",
                          MsRequest.ActStamp).
-         /* YDR-2037 */
-         RUN pRecoverSTC IN THIS-PROCEDURE (BUFFER MobSub, BUFFER MsRequest).
          
          /* Re-launch retention order if present */
          FIND FIRST OrderAction WHERE
