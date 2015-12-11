@@ -13,6 +13,7 @@
 {date.i}
 {log.i}
 {ftransdir.i}
+{tmsconst.i}
 
 DEFINE VARIABLE lcHostName        AS CHARACTER     NO-UNDO.
 DEFINE VARIABLE lcReadLine        AS CHARACTER     NO-UNDO.
@@ -136,8 +137,10 @@ FUNCTION fSendToMQ RETURNS CHAR
    (icMsg AS CHAR, /*message contents*/
     icMQ AS CHAR, /*message queue*/
     icConfFile AS CHAR, /*configuration file*/
-    icModule AS CHAR): /*fo ridentifying log files*/
+    icModule AS CHAR, /*for identifying log files*/
+    lgResending AS LOGICAL): /*flag for creating new entry to MESSAGE db*/
    DEF VAR lcRet AS CHAR NO-UNDO.
+   DEF VAR lcDBStatus  AS CHAR NO-UNDO.
 
    RUN pInitialize(INPUT icConfFile, INPUT icModule).
 
@@ -151,6 +154,10 @@ FUNCTION fSendToMQ RETURNS CHAR
    IF RETURN-VALUE > "" THEN DO:
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
       LOG-MANAGER:WRITE-MESSAGE(RETURN-VALUE, "ERROR in init").
+         IF lgResending EQ FALSE THEN DO:
+            /*This is the 1st sending, create new entry*/
+            fStoreMsg( icConfFile, icMQ, icMsg, {&AMQ_MSG_INIT_FAILED}, "dms").
+         END.
 
          RETURN RETURN-VALUE.
    END.
@@ -173,6 +180,16 @@ FUNCTION fSendToMQ RETURNS CHAR
       END.
    END.
    RUN pFinalize.
+
+   IF lgResending EQ FALSE THEN DO:
+      /*This is the 1st sending, create new entry*/
+      lcDBStatus = "".
+      IF lcRet NE "" THEN lcDBStatus = lcRet.
+      ELSE lcDbStatus = {&AMQ_MSG_SENT}.
+
+      fStoreMsg( icConfFile, icMQ, icMsg, lcDBStatus, "dms").
+   END.
+
    RETURN lcRet.
 
 END.
