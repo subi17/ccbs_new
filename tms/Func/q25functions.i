@@ -28,7 +28,7 @@ FUNCTION fCheckDates RETURNS LOGICAL
     INPUT  iiStartDay AS INT,
     INPUT  iiEndDay AS INT,
     OUTPUT odaStartDate AS DATE,
-    OUTPUT odaEndDate AS DATE).
+    OUTPUT odaEndDate AS DATE):
    DEF VAR  ldaCountDate       AS DATE NO-UNDO.
    ldaCountDate = ADD-INTERVAL(TODAY, iiMonths, 'months':U).
    IF iiStartDay > DAY(fLastDayOfMonth(ldaCountDate)) THEN
@@ -42,12 +42,63 @@ FUNCTION fCheckDates RETURNS LOGICAL
    RETURN TRUE.
 END FUNCTION.
 
-FUNCTION fCollectQ25SMSMessages RETURNS INT
+FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT):
+   DEF VAR lcSMSMessage      AS CHAR NO-UNDO.
+   DEF VAR ldReqStamp        AS DEC  NO-UNDO.
+   DEF VAR lcEncryptedMSISDN AS CHAR NO-UNDO.
+   IF iiPhase = {&Q25_MONTH_22} OR
+      iiPhase = {&Q25_MONTH_23} THEN DO:
+      /* Q25 reminder month 22 or 23 */
+      lcSMSMessage = fGetSMSTxt("Q25ReminderMonth22and23",
+                              TODAY,
+                              1,
+                              OUTPUT ldReqStamp).
+      lcSMSMessage = REPLACE(lcSMSMessage,"#DATE","20" + "/" +
+                             STRING(MONTH(Q25Messaging.ValidTo))).
+   END.
+   ELSE IF iiPhase = {&Q25_MONTH_24} THEN DO:
+   /* Q25 reminder month 24 */
+      lcSMSMessage = fGetSMSTxt("Q25ReminderMonth24",
+                                TODAY,
+                                1,
+                                OUTPUT ldReqStamp).
+      lcSMSMessage = REPLACE(lcSMSMessage,"#DD","20").
+   END.
+   ELSE IF iiPhase = {&Q25_MONTH_24_FINAL_MSG} THEN DO:
+   /* Q25 month 24 after 20th day no decision */
+      lcSMSMessage = fGetSMSTxt("Q25FinalFeeMessageNoDecision",
+                                TODAY,
+                                1,
+                                OUTPUT ldReqStamp).
+      lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT",
+                     STRING(Q25Messaging.Amt)).
+   END.
+   ELSE IF iiPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
+   /* Q25 Month 24 20th day extension made */
+      lcSMSMessage = fGetSMSTxt("Q25FinalFeeMessageChosenExt",
+                                TODAY,
+                                1,
+                                OUTPUT ldReqStamp).
+      lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT",
+                             STRING(Q25Messaging.Amt / 12)).
+   END.
+
+   IF iiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO:
+   /* Month 22-24 */
+      /* Encrypted MSISDN added to messages sent during 22 to 24 month */
+      lcEncryptedMSISDN = encrypt_data(Q25Messaging.Cli,
+                          {&ENCRYPTION_METHOD}, {&Q25_PASSPHRASE}).
+      lcSMSMessage = REPLACE(lcSMSMessage, "#MSISDN", lcEncryptedMSISDN).
+   END.
+   RETURN lcSMSMessage.
+END FUNCTION.
+
+FUNCTION fCollectQ25SMSMessages RETURNS INTEGER 
    (INPUT idaStartDate AS DATE,
     INPUT idaEndDate AS DATE,
-    INPUT iiphase AS INT
+    INPUT iiphase AS INT,
     INPUT ilsendMsgs AS LOGICAL,
-    INPUT totalCountLeft AS INT).
+    INPUT totalCountLeft AS INT):
    /* Data collection function for Q25. To be launched by cron execution
       on 1.-15. day of month at morning time at least one hour before 10:00 */
    DEF VAR lcLogDir          AS CHAR NO-UNDO.
@@ -65,6 +116,7 @@ FUNCTION fCollectQ25SMSMessages RETURNS INT
    DEF VAR ldaMonth22Date    AS DATE NO-UNDO.
    DEF VAR liTimeLeft        AS INT NO-UNDO.
    DEF VAR lcSMSMessage      AS CHAR NO-UNDO.
+   DEF VAR liSentCount       AS INT NO-UNDO.
 
    ASSIGN lcLogDir     = fCParam("Q25","Q25_reminder_LogDir").
 
@@ -173,74 +225,22 @@ FUNCTION fCollectQ25SMSMessages RETURNS INT
                        lcSMSMessage,
                        "622",
                        {&SMS_TYPE_Q25}).
-            lcSentCount = lcSentCount + 1.
+            liSentCount = liSentCount + 1.
          END.
       END.   
    END.
    /* Logging about amount of situations for testting purposes. */
-   /* If SendMsgs is False, logging of calculated values to be done */
-   IF NOT(SendMsgs) THEN DO:
+   /* If ilSendMsgs is False, logging of calculated values to be done */
+   IF NOT(ilSendMsgs) THEN DO:
       PUT STREAM Sout UNFORMATTED
          STRING(idaStartDate) + "|" STRING(idaEnddate) + "|" +
          STRING(liCount) + "|" + STRING(liNotSendCount) + "|" +
          STRING(liBilledCount) + "|" + STRING(liNotDCCLICount) + "|" +
          STRING(liReturnedDevices) + "|" + STRING(liQ25DoneCount) + "|" +
-         STRING(liAlreadyCreated) + "|" + STRING(etime / 1000) SKIP.
+         STRING(liAlreadyCreated) + "|" + STRING(liSentCount) + "|" +
+         STRING(etime / 1000) SKIP.
       OUTPUT STREAM Sout CLOSE.
    END.
    RETURN liCount.
 END FUNCTION.
 
-FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (int iiPhase).
-   DEF VAR lcSentCount AS INT NO-UNDO.
-   DEF VAR lcSMSMessage      AS CHAR NO-UNDO.
-   DEF VAR ldReqStamp        AS DEC  NO-UNDO.
-   DEF VAR lcEncryptedMSISDN AS CHAR NO-UNDO.
-      IF iiPhase = {&Q25_MONTH_22} OR 
-         iiPhase = {&Q25_MONTH_23} THEN DO: 
-         /* Q25 reminder month 22 or 23 */
-         lcSMSMessage = fGetSMSTxt("Q25ReminderMonth22and23",
-                                 TODAY,
-                                 1,
-                                 OUTPUT ldReqStamp).
-         lcSMSMessage = REPLACE(lcSMSMessage,"#DATE","20" + "/" +
-                                STRING(MONTH(Q25Messaging.ValidTo))).
-      END.
-      ELSE IF iiPhase = {&Q25_MONTH_24} THEN DO: 
-      /* Q25 reminder month 24 */
-         lcSMSMessage = fGetSMSTxt("Q25ReminderMonth24",
-                                   TODAY,
-                                   1,
-                                   OUTPUT ldReqStamp).
-         lcSMSMessage = REPLACE(lcSMSMessage,"#DD","20").
-      END.
-      ELSE IF iiPhase = {&Q25_MONTH_24_FINAL_MSG} THEN DO: 
-      /* Q25 month 24 after 20th day no decision */
-         lcSMSMessage = fGetSMSTxt("Q25FinalFeeMessageNoDecision",
-                                   TODAY,
-                                   1,
-                                   OUTPUT ldReqStamp).
-         lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT", 
-                        STRING(Q25Messaging.Amt)).
-      END.
-      ELSE IF iiPhase = {&Q25_MONTH_24_CHOSEN} THEN DO: 
-      /* Q25 Month 24 20th day extension made */
-         lcSMSMessage = fGetSMSTxt("Q25FinalFeeMessageChosenExt",
-                                   TODAY,
-                                   1,
-                                   OUTPUT ldReqStamp).
-         lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT",
-                                STRING(Q25Messaging.Amt / 12)).
-      END.
-
-      IF iiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO: 
-      /* Month 22-24 */
-         /* Encrypted MSISDN added to messages sent during 22 to 24 month */
-         lcEncryptedMSISDN = encrypt_data(Q25Messaging.Cli,
-                             {&ENCRYPTION_METHOD}, {&Q25_PASSPHRASE}).
-         lcSMSMessage = REPLACE(lcSMSMessage, "#MSISDN", lcEncryptedMSISDN).
-      END.
-      RETURN lcSMSMessage.  
-   END.
-
-END FUNCTION.
