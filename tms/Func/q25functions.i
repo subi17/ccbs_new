@@ -22,23 +22,61 @@
 {aes_encrypt.i}
 
 DEF STREAM Sout.
-
-FUNCTION fCheckDates RETURNS LOGICAL
-   (INPUT  iiMonths AS INT,
+FUNCTION fGetStartEndDates RETURNS LOGICAL
+   (INPUT  iiMonth AS INT,
     INPUT  iiStartDay AS INT,
     INPUT  iiEndDay AS INT,
     OUTPUT odaStartDate AS DATE,
-    OUTPUT odaEndDate AS DATE):
+    OUTPUT odaEndDate AS DATE).
    DEF VAR  ldaCountDate       AS DATE NO-UNDO.
-   ldaCountDate = ADD-INTERVAL(TODAY, iiMonths, 'months':U).
+   ldaCountDate = ADD-INTERVAL(TODAY, iiMonth, 'months':U).
    IF iiStartDay > DAY(fLastDayOfMonth(ldaCountDate)) THEN
       RETURN FALSE.
    ELSE IF iiEndDay > DAY(fLastDayOfMonth(ldaCountDate))
       THEN iiEndDay = DAY(fLastDayOfMonth(ldaCountDate)).
    ELSE IF iiEndDay = 30 and DAY(fLastDayOfMonth(ldaCountDate)) = 31 THEN
-      iiEndDay = 31.
-   odaStartDate = DATE(MONTH(ldaCountDate),iiStartDay,YEAR(ldaCountDate)).
-   odaEndDate = DATE(MONTH(ldaCountDate),iiEndDay,YEAR(ldaCountDate)).
+      iiEndDay = 31. /* Month have 31 days */
+   IF iiStartDay > 0 AND iiEndDay > 0 THEN DO:
+      odaStartDate = DATE(MONTH(ldaCountDate),iiStartDay,
+                                 YEAR(ldaCountDate)).
+      odaEndDate = DATE(MONTH(ldaCountDate),iiEndDay,YEAR(ldaCountDate)).
+   END.
+   RETURN TRUE.
+END.
+
+FUNCTION fGetDates RETURNS LOGICAL
+   (INPUT  iiStartDay AS INT,
+    INPUT  iiEndDay AS INT,
+    OUTPUT odaStartDateMonth22 AS DATE,
+    OUTPUT odaEndDateMonth22 AS DATE,
+    OUTPUT odaStartDateMonth23 AS DATE,
+    OUTPUT odaEndDateMonth23 AS DATE,
+    OUTPUT odaStartDateMonth24 AS DATE,
+    OUTPUT odaEndDateMonth24 AS DATE):
+   DEF VAR  ldaCountDate       AS DATE NO-UNDO.
+   DEF VAR  ldaStartDate AS DATE NO-UNDO.
+   DEF VAR  ldaEndDate AS DATE NO-UNDO.
+   /* Month 22 */
+   IF fGetStartEndDates(2, iiStartDay, iiEndDay, ldaStartDate, ldaEndDate) THEN 
+      ASSIGN odaStartDateMonth22 = ldaStartDate
+             odaEndDateMonth22 = ldaEndDate.
+   ELSE 
+      ASSIGN odaStartDateMonth22 = ?
+             odaEndDateMonth22 = ?.
+   /* Month 23 */
+   IF fGetStartEndDates(1, iiStartDay, iiEndDay, ldaStartDate, ldaEndDate) THEN
+      ASSIGN odaStartDateMonth22 = ldaStartDate
+             odaEndDateMonth22 = ldaEndDate.
+   ELSE
+      ASSIGN odaStartDateMonth22 = ?
+             odaEndDateMonth22 = ?.
+   /* Month 24 */
+   IF fGetStartEndDates(0, iiStartDay, iiEndDay, ldaStartDate, ldaEndDate) THEN
+      ASSIGN odaStartDateMonth22 = ldaStartDate
+             odaEndDateMonth22 = ldaEndDate.
+   ELSE
+      ASSIGN odaStartDateMonth22 = ?
+             odaEndDateMonth22 = ?.
    RETURN TRUE.
 END FUNCTION.
 
