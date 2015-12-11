@@ -5,16 +5,27 @@
   APPLICATION ..: tms
   AUTHOR .......: anttis
   CREATED ......: 11.11.2014
+                  11.12.2015 Modified program work as a part of automated process
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+{commali.i}
 {cparam2.i}
 {date.i}
 {tmsconst.i}
 {eventlog.i}
 {ftransdir.i}
+{msreqfunc.i}
+
+DEF INPUT PARAMETER iiMSrequest AS INT  NO-UNDO.
+
+FIND MSRequest WHERE 
+     MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
+IF NOT AVAILABLE MsRequest OR 
+   MsRequest.ReqType NE {&REQTYPE_TERMINAL_FINANCE_CAN_TER_BANK_FILE} THEN
+   RETURN "ERROR".
+
+/* request is under work */
+IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
 DEF STREAM sout.
 DEF STREAM slog.
@@ -44,17 +55,16 @@ FUNCTION fLogLine RETURNS LOGICAL
       iiOrderId "|" icNote SKIP.
 
 END.
-/*
-RUN pCreateFile({&TF_BANK_UNOE},"CANCEL","ANULACIONESYOIGO").
-*/
+IF MsRequest.ReqCParam1 = {&TF_BANK_UNOE} THEN DO:
+   RUN pCreateFile({&TF_BANK_UNOE},"CANCEL","ANULACIONESYOIGO").
+   RUN pCreateFile({&TF_BANK_UNOE},"TERMINATION","CANCELACIONESYOIGO").
+END.
+ELSE IF MsRequest.ReqCParam1 = {&TF_BANK_SABADELL} THEN DO:
+   RUN pCreateFile({&TF_BANK_SABADELL},"CANCEL","ANULACIONESYOIGOSABADELL").
+   RUN pCreateFile({&TF_BANK_SABADELL},"TERMINATION","CANCELACIONESYOIGOSABADELL").
+END.
 
-/*
-RUN pCreateFile({&TF_BANK_UNOE},"TERMINATION","CANCELACIONESYOIGO").
-*/
-RUN pCreateFile({&TF_BANK_SABADELL},"CANCEL","ANULACIONESYOIGOSABADELL").
-/*
-RUN pCreateFile({&TF_BANK_SABADELL},"TERMINATION","CANCELACIONESYOIGOSABADELL").
-*/
+
 PROCEDURE pCreateFile:
 
    DEF INPUT PARAM icBank AS CHAR NO-UNDO. 
