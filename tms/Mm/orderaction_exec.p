@@ -515,6 +515,12 @@ PROCEDURE pQ25Discount:
    IF NOT AVAIL SingleFee THEN
       RETURN "ERROR:Q25 discount creation failed (residual fee not found)".
 
+   IF SingleFee.Billed AND 
+      NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
+                         Invoice.InvNum = SingleFee.Invnum AND
+                         Invoice.InvType = 99) THEN
+      RETURN "ERROR:Q25 discount creation failed (residual fee is billed)".
+
    fAddDiscountPlanMember(MobSub.MsSeq,
                          "RVTERMDT1DISC", 
                          ldeDiscount,
