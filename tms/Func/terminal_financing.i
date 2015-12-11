@@ -18,6 +18,7 @@
 
 FUNCTION fValidateBankFileRequest RETURNS LOG (
    INPUT  icBankCode AS CHAR,
+   INPUT  iiReqType  AS INT,
    OUTPUT ocError AS CHAR,
    OUTPUT odaLastDump AS DATE):
    
@@ -73,6 +74,7 @@ FUNCTION fCreateBankFileRequest RETURNS INTEGER
 
    IF NOT fValidateBankFileRequest(
       icBankCode,
+      {&REQTYPE_TERMINAL_FINANCE_BANK_FILE},
       OUTPUT ocresult,
       OUTPUT ldaLastDump) THEN RETURN 0.
 
@@ -204,5 +206,40 @@ FUNCTION fGetPaytermOrderId RETURNS INT
 
 END.
 
+/*  This create Request for bank files is related into YDR-2025
+   - terminal finance cancellation report AND log file
+   - terminal finance termination report AND log file
+   these are for SABADELL AND UNOE banks monhtly based periods
+*/
+FUNCTION fCreateTFBankFileRequest RETURNS INTEGER
+   (INPUT  icBankCode  AS CHAR,
+    INPUT  iccreator   AS CHAR,
+    INPUT  icsource    AS CHAR,
+    OUTPUT ocresult    AS CHAR).
+
+   DEF VAR liReqCreated AS INT NO-UNDO.
+   DEF VAR ldaLastDump AS DATE NO-UNDO. 
+
+   IF NOT fValidateBankFileRequest(
+      icBankCode,
+      {&REQTYPE_TERMINAL_FINANCE_CAN_TER_BANK_FILE},
+      OUTPUT ocresult,
+      OUTPUT ldaLastDump) THEN RETURN 0.
+
+   fCreateRequest(({&REQTYPE_TERMINAL_FINANCE_CAN_TER_BANK_FILE}),
+                  fmakets(),
+                  iccreator,
+                  FALSE,      /* fees */
+                  FALSE).    /* send sms */
+
+   ASSIGN bCreaReq.ReqSource   = icsource
+          bCreaReq.ReqCParam1  = icBankCode
+          liReqCreated         = bCreaReq.MsRequest.
+
+   RELEASE bCreaReq.
+   
+   RETURN liReqCreated.
+     
+END FUNCTION. /* FUNCTION fSendeInvoiceRequest */
 &ENDIF
 
