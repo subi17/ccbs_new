@@ -182,6 +182,11 @@ ELSE ldActStamp = fMake2DT(ValidFrom,1).
 IF iiOrderId > 0 THEN
    lcFinancedResult = fOrderContainsFinancedTerminal(iiOrderId).
 
+/* since the fee model id is hard coded also elsewhere -> check it like
+   this here */
+IF FeeModel = "RVTERM12" THEN 
+   liIFSStatus = {&IFS_STATUS_WAITING_SENDING}.
+   
 IF NUM-ENTRIES(icFeememo,";") >= 2 THEN DO:
 
    IF ENTRY(2,icFeememo,";") NE {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION} AND
