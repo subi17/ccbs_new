@@ -207,7 +207,7 @@ ASSIGN
    Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
    Memo.CreUser   = katun 
    Memo.MemoTitle = "By customer's request (Self Service)"
-   Memo.MemoText  = "Q25 add request"
+   Memo.MemoText  = "Q25 extension request"
    Memo.CustNum   = MobSub.Custnum
    Memo.Source    = "Self Service".
 
