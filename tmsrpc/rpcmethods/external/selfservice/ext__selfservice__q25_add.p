@@ -198,6 +198,19 @@ IF lcSMSTxt > "" THEN DO:
                   "").
 END.
 
+CREATE Memo.
+ASSIGN
+   Memo.CreStamp  = {&nowTS}
+   Memo.Brand     = gcBrand
+   Memo.HostTable = "MobSub"
+   Memo.KeyValue  = STRING(Mobsub.MSSeq)
+   Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
+   Memo.CreUser   = katun 
+   Memo.MemoTitle = "By customer's request (Self Service)"
+   Memo.MemoText  = "Q25 add request"
+   Memo.CustNum   = MobSub.Custnum
+   Memo.Source    = "Self Service".
+
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
