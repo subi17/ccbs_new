@@ -57,15 +57,15 @@ END.
 /* Month 22, 2 months perm contract to go */
 IF fCheckDates(2, INPUT liStartDay, INPUT liEndDay, OUTPUT ldaStartDate, 
                OUTPUT ldaEndDate) THEN DO:
-   fCollectQ25SMSMessages(ldaStartDate, ldaEndDate, {&Q25_MONTH_22}).
+   fCollectQ25SMSMessages(ldaStartDate, ldaEndDate, {&Q25_MONTH_22}, TRUE, 0).
 END.
 
 /* Month 23 1 month perm contract to go */
 IF fCheckDates(1, liStartDay, liEndDay, ldaStartDate, ldaEndDate) THEN DO:
-   fCollectQ25SMSMessages(ldaStartDate, ldaEndDate, {&Q25_MONTH_23}).
+   fCollectQ25SMSMessages(ldaStartDate, ldaEndDate, {&Q25_MONTH_23}, TRUE, 0).
 END.
 
 /* Month 24 0 month perm contract to go */
 IF fCheckDates(0, liStartDay, liEndDay, ldaStartDate, ldaEndDate) THEN DO:
-   fCollectQ25SMSMessages(ldaStartDate, ldaEndDate, {&Q25_MONTH_24}).
+   fCollectQ25SMSMessages(ldaStartDate, ldaEndDate, {&Q25_MONTH_24}, TRUE, 0).
 END.

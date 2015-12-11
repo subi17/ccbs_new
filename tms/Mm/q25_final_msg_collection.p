@@ -30,5 +30,5 @@ DEF VAR ldaEndDate        AS DATE NO-UNDO.
 /* Month 24 21st day*/
 IF (DAY(TODAY) = 21) AND fCheckDates(0, INPUT liStartDay, INPUT liEndDay, 
                             OUTPUT ldaStartDate, OUTPUT ldaEndDate) THEN DO:
-   fCollectQ25SMSMessages(ldaStartDate, ldaEndDate, {&Q25_MONTH_24_FINAL_MSG}).
+   fCollectQ25SMSMessages(ldaStartDate, ldaEndDate, {&Q25_MONTH_24_FINAL_MSG}, TRUE, 0).
 END.
