@@ -317,7 +317,7 @@ FUNCTION fGenerateMessage RETURNS CHAR
    lcArray = fInitJsonArray("documents").
    
    /*Add document comment if DMS has given it.*/
-   IF icDocList EQ "" THEN DO: /*from TMS, initial information, use local*/
+   IF icDocList EQ "" THEN DO: /*from TMS batch, initial information, use local*/
       DO i = 1 TO NUM-ENTRIES(lcDocList):
          lcDocNotifEntry = fDoc2Msg(ENTRY(i,lcDocList), 
                                     "").
@@ -441,7 +441,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    lcMQ =  fCParamNotNull("DMS","DMS_MQ"). 
    lcConfig = fDMSConfig().
    IF lcConfig EQ "" THEN RETURN "MQ config not available".
-   RETURN fSendToMQ(lcMessage, "dms", lcMQ, lcConfig, icModule).
+   RETURN fSendToMQ(lcMessage, lcMQ, lcConfig, icModule).
 END.
 
 

@@ -102,7 +102,6 @@ DO TRANS:
    END.
 END.
 
-
 /*Dir and file definition*/
 ASSIGN
        ldaReadDate  = TODAY        

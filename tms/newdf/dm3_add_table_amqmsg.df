@@ -1,10 +1,10 @@
-ADD TABLE "AMQMsq"
+ADD TABLE "AMQMsg"
    AREA "Sta_Data_128"
    LABEL "Active MQ Messages"
    DESCRIPTION "Active MQ Messages"
    DUMP-NAME "amqmsg"
   
-ADD FIELD "MQName" OF "AMQMsq" AS character
+ADD FIELD "MQName" OF "AMQMsg" AS character
    FORMAT "X(15)"
    INITIAL ""
    COLUMN-LABEL "MQ Name"
@@ -12,7 +12,7 @@ ADD FIELD "MQName" OF "AMQMsq" AS character
    HELP "Message Queue Name"
    ORDER 10   
     
-ADD FIELD "MsgContent" OF "AMQMsq" AS character
+ADD FIELD "MsgContent" OF "AMQMsg" AS character
    FORMAT "X(30)"
    INITIAL ""
    COLUMN-LABEL "Message"
@@ -20,7 +20,7 @@ ADD FIELD "MsgContent" OF "AMQMsq" AS character
    HELP "Message"
    ORDER 20   
 
-ADD FIELD "StatusCode" OF "AMQMsq" AS character
+ADD FIELD "StatusCode" OF "AMQMsg" AS character
    FORMAT "X(8)"
    INITIAL ""
    COLUMN-LABEL "Status"
@@ -28,30 +28,48 @@ ADD FIELD "StatusCode" OF "AMQMsq" AS character
    HELP "Status"
    ORDER 30   
 
-ADD FIELD "Usage" OF "AMQMsq" AS character
+ADD FIELD "Usage" OF "AMQMsg" AS character
    FORMAT "X(8)"
    INITIAL ""
    COLUMN-LABEL "Usage"
    LABEL "Usage"
    HELP "Additional usage information"
    ORDER 40      
-   
-ADD FIELD "InsertTS" OF "AMQMsq" AS decimal
+
+ADD FIELD "ConfFile" OF "AMQMsg" AS character
+   FORMAT "X(8)"
+   INITIAL ""
+   COLUMN-LABEL "Conf File"
+   LABEL "Conf File"
+   HELP "Configuration File"
+   ORDER 50      
+
+ADD FIELD "InsertTS" OF "AMQMsg" AS decimal
    FORMAT "99999999.99999"
    INITIAL "0"
    COLUMN-LABEL "InsertTS"
    LABEL "Creation Time"
    HELP "Creation Time"
-   ORDER 50      
+   ORDER 60      
 
-ADD INDEX "MQName" ON "AMQMsq" 
+ADD FIELD "ResendCount" OF "AMQMsg" AS integer
+   FORMAT "zzzzzzz9"
+   INITIAL "0"
+   COLUMN-LABEL "Counter"
+   LABEL "Counter"
+   HELP "Resending counter"
+   ORDER 70
+
+
+
+ADD INDEX "MQName" ON "AMQMsg" 
    AREA "Dyn_Index_1"
    PRIMARY
    INDEX-FIELD "MQName" ASCENDING
    INDEX-FIELD "InsertTS" ASCENDING
    INDEX-FIELD "StatusCode" ASCENDING
 
-ADD INDEX "InsertTS" ON "AMQMsq" 
+ADD INDEX "InsertTS" ON "AMQMsg" 
    AREA "Dyn_Index_1"
    INDEX-FIELD "InsertTS" ASCENDING
 

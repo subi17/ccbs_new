@@ -107,14 +107,44 @@ PROCEDURE pInitialize:
 
 END PROCEDURE.
 
+/*Function stores message for resending / further usage*/
+/*Resendinf counter will be increased by resending cron*/
+FUNCTION fStoreMsg RETURNS CHAR
+   (icConfig AS CHAR,
+    icMQ     AS CHAR,
+    icMsg    AS CHAR,
+    icStatus AS CHAR,
+    icUsage  AS CHAR):
 
+CREATE AMQMsg.
+   ASSIGN AMQMsg.ConfFile = icConfig
+          AMQMsg.InsertTS = fMakeTS()
+          AMQMsg.MQName = icMQ
+          AMQMsg.MsgContent = icMsg
+          AMQMsg.StatusCode = icStatus
+          AMQMsg.Usage = icUsage.
+          AmQMsg.ResendCount = 0.
+
+RETURN "".
+
+END.    
+
+
+
+/*Function sends message with parametersw that are defined in icConfFile*/
 FUNCTION fSendToMQ RETURNS CHAR
-   (icMsg AS CHAR,
-    icInitKey AS CHAR,
-    icMQ AS CHAR,
-    icConfFile AS CHAR,
-    icModule AS CHAR):
+   (icMsg AS CHAR, /*message contents*/
+    icMQ AS CHAR, /*message queue*/
+    icConfFile AS CHAR, /*configuration file*/
+    icModule AS CHAR): /*fo ridentifying log files*/
    DEF VAR lcRet AS CHAR NO-UNDO.
+
+   icMsg = fNotNull(icMsg).
+   IF icMsg EQ "" THEN DO:
+      IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+      LOG-MANAGER:WRITE-MESSAGE("", "AMQ: Message is empty").
+      RETURN "AMQ: Message is empty".
+   END.
 
    RUN pInitialize(INPUT icConfFile, INPUT icModule).
 
