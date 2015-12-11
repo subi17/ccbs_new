@@ -904,85 +904,80 @@ PROCEDURE pTriggerEvents:
    END. /* DO liCount = 1 TO liNumEntries: */
 
 END PROCEDURE.
+
 PROCEDURE pRecoverSTC PRIVATE:
-DEFINE PARAMETER BUFFER bMobSub FOR Mobsub.
-DEFINE PARAMETER BUFFER bMsRequest FOR MsRequest.
 
-/* YDR-2037
-  Restore STC/BTC request by finding a 
-  cancelled STC/BTC request
-  * Subscription has been terminated due to MNP OUT reason
-  * STC/BTC request has been cancelled due to subscription termination
- */
+   DEFINE PARAMETER BUFFER bMobSub FOR Mobsub.
+   DEFINE PARAMETER BUFFER bMsRequest FOR MsRequest.
 
-DEF BUFFER bMSRequestSTC  FOR MsRequest.
-DEF BUFFER bMSRequestTER  FOR MsRequest.
+   /* YDR-2037
+     Restore STC/BTC request by finding a cancelled STC/BTC request
+     * Subscription has been terminated due to MNP OUT reason
+     * STC/BTC request has been cancelled due to subscription termination
+    */
 
-DEF VAR lcInfo              AS CHARACTER NO-UNDO.
-DEF VAR lbolSTCRequestFound AS LOGICAL   NO-UNDO.
-DEF VAR lbolBTCRequestFound AS LOGICAL   NO-UNDO.
-DEF VAR lbolIsUpgradeUpsell AS LOGICAL   NO-UNDO.
-DEF VAR lrowidMsRequest     AS ROWID     NO-UNDO.
-DEF VAR liRequest           AS INTEGER   NO-UNDO.
+   DEF BUFFER bMSRequestSTC  FOR MsRequest.
+   DEF BUFFER bMSRequestTER  FOR MsRequest.
 
-ASSIGN
-    lbolSTCRequestFound = FALSE
-    lbolBTCRequestFound = FALSE
-    lrowidMsRequest = ?
-    lcInfo = "".
+   DEF VAR lcInfo              AS CHARACTER NO-UNDO.
+   DEF VAR lbolIsUpgradeUpsell AS LOGICAL   NO-UNDO.
+   DEF VAR liRequest           AS INTEGER   NO-UNDO.
+   DEF VAR ldeSTCStamp         AS DEC NO-UNDO. 
 
-/* Termination request */
-FOR EACH
-   bMSRequestTER NO-LOCK WHERE
-   bMSRequestTER.MsSeq      EQ bMobSub.MsSeq AND
-   bMSRequestTER.ReqType    EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-   bMSRequestTER.ReqStatus  EQ {&REQUEST_STATUS_DONE} AND
-   bMSRequestTER.ActStamp   <  bMsRequest.ActStamp
-   BREAK BY bMSRequestTER.ActStamp DESC:
-   IF FIRST(bMSRequestTER.ActStamp) THEN
-   DO:
-      IF bMSRequestTER.ReqCParam3 EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) THEN
-         lrowidMsRequest = ROWID(bMSRequestTER).
+   /* Termination request */
+   FOR EACH bMSRequestTER NO-LOCK WHERE
+            bMSRequestTER.MsSeq      EQ bMobSub.MsSeq AND
+            bMSRequestTER.ReqType    EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+            bMSRequestTER.ReqStatus  EQ {&REQUEST_STATUS_DONE} AND
+            bMSRequestTER.ActStamp   <  bMsRequest.ActStamp
+            BY bMSRequestTER.ActStamp DESC:
       LEAVE.
-   END.
-END. /* FOR EACH bMSRequestTER */
-IF NOT lrowidMsRequest EQ ? THEN
-   FIND bMSRequestTER NO-LOCK WHERE 
-  ROWID(bMSRequestTER) EQ lrowidMsRequest
-  NO-ERROR.
-ELSE RETURN.
+   END. /* FOR EACH bMSRequestTER */
 
-/* STC */
-FIND FIRST bMSRequestSTC NO-LOCK USE-INDEX MsActStamp WHERE
-           bMSRequestSTC.MsSeq       EQ bMobSub.MsSeq AND
-           bMSRequestSTC.ReqType     EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-           bMSRequestSTC.ReqStatus   EQ {&REQUEST_STATUS_CANCELLED} AND
-           bMSRequestSTC.ActStamp    >  bMSRequestTER.ActStamp
-NO-ERROR.           
-lbolSTCRequestFound = AVAILABLE(bMSRequestSTC).
-/* BTC */
-IF NOT lbolSTCRequestFound THEN
-DO:
+   IF NOT AVAIL bMSRequestTER OR
+      bMSRequestTER.ReqCParam3 NE STRING({&SUBSCRIPTION_TERM_REASON_MNP}) THEN
+      RETURN.
+
+   /* STC */
    FIND FIRST bMSRequestSTC NO-LOCK USE-INDEX MsActStamp WHERE
               bMSRequestSTC.MsSeq       EQ bMobSub.MsSeq AND
-              bMSRequestSTC.ReqType     EQ {&REQTYPE_BUNDLE_CHANGE} AND
+              bMSRequestSTC.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
               bMSRequestSTC.ReqStatus   EQ {&REQUEST_STATUS_CANCELLED} AND
-              bMSRequestSTC.ActStamp    >  bMSRequestTER.ActStamp
-   NO-ERROR.           
-   lbolBTCRequestFound = AVAILABLE(bMSRequestSTC).
-END.
+              bMSRequestSTC.ActStamp    >  bMSRequestTER.ActStamp AND
+              bMSRequestSTC.ReqCParam1  EQ bMobSub.CLIType AND
+        INDEX(bMSRequestSTC.Memo,"Cancelled by subs. termination") > 0 NO-ERROR.           
+   /* BTC */
+   IF NOT AVAILABLE bMSRequestSTC THEN
+      FIND FIRST bMSRequestSTC NO-LOCK USE-INDEX MsActStamp WHERE
+                 bMSRequestSTC.MsSeq       EQ bMobSub.MsSeq AND
+                 bMSRequestSTC.ReqType     EQ {&REQTYPE_BUNDLE_CHANGE} AND
+                 bMSRequestSTC.ReqStatus   EQ {&REQUEST_STATUS_CANCELLED} AND
+                 bMSRequestSTC.ReqCParam1  EQ bMobSub.TariffBundle AND
+           INDEX(bMSRequestSTC.Memo,"Cancelled by subs. termination") > 0
+      NO-ERROR.
 
-/*  create a new request with the same input parameters */
-IF AVAILABLE bMSRequestSTC THEN
-DO:
-   IF lbolSTCRequestFound THEN
+   IF NOT AVAILABLE bMSRequestSTC THEN RETURN.
+
+   /* Calculate new STC/BTC activation time */
+   IF bMSRequestSTC.ActStamp < fMakeTS() AND
+     ((bMSRequestSTC.ReqCparam1 BEGINS "CONT" AND
+       bMSRequestSTC.ReqCparam2 BEGINS "CONT") OR
+       DAY(TODAY) EQ 1) THEN DO:
+      IF bMSRequestSTC.ReqCParam1 BEGINS "CONT" THEN
+         ldeSTCStamp = fMake2Dt(TODAY,0).
+      ELSE ldeSTCStamp = fSecOffSet(fMakeTS(),5).
+   END.
+   ELSE ldeSTCStamp = fMake2Dt(fLastDayOfMonth(TODAY) + 1,0).
+
+   /*  create a new request with the same input parameters */
+   IF bMSRequestSTC.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN
    DO:
       liRequest = fCTChangeRequest(
         bMSRequestSTC.MsSeq,        /* Subscription */
         bMSRequestSTC.ReqCParam2,   /* NEW CLIType */
         bMSRequestSTC.ReqCparam5,   /* BundleType */
         bMSRequestSTC.ReqCparam3,   /* BankNumber */
-        ?,                          /* ChgStamp check if there are scheduling rules */
+        ldeSTCStamp, /* ChgStamp check if there are scheduling rules */
         bMSRequestSTC.ReqIParam1,   /* CreditCheck */
         bMSRequestSTC.ReqIParam5,   /* RequestFlags */
         bMSRequestSTC.Salesman,     /* Salesman */
@@ -996,16 +991,15 @@ DO:
         bMSRequestSTC.ReqCparam6,   /* For DMS usage contract_id */
         OUTPUT lcInfo).
    END.
-   ELSE IF lbolBTCRequestFound THEN
+   ELSE IF bMSRequestSTC.ReqType EQ {&REQTYPE_BUNDLE_CHANGE} THEN
    DO:
-      lbolIsUpgradeUpsell = IF bMSRequestSTC.ReqCParam5 EQ 
-         (bMSRequestSTC.ReqCParam1 + "TO" + bMSRequestSTC.ReqCParam2)
-         THEN TRUE ELSE FALSE.
+      lbolIsUpgradeUpsell = (bMSRequestSTC.ReqCParam5 EQ 
+         (bMSRequestSTC.ReqCParam1 + "TO" + bMSRequestSTC.ReqCParam2)).
       liRequest = fBundleChangeRequest(
          bMSRequestSTC.MsSeq,        /* Subscription */
          bMSRequestSTC.ReqCParam1,   /* old (current) bundle */ 
          bMSRequestSTC.ReqCParam2,   /* new bundle */
-         fMakeTS(),                  /* When request should be handled */
+         ldeSTCStamp,                /* When request should be handled */
          {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION}, /* RequestSource */
          bMSRequestSTC.UserCode,     /* Creator */ 
          bMSRequestSTC.CreateFees,   /* CreateFees */    
@@ -1017,13 +1011,13 @@ DO:
          bMSRequestSTC.ReqCparam6,   /* For DMS usage, contract_id */
          OUTPUT lcInfo).
    END.
+
    IF liRequest EQ 0 THEN                               
       /* write possible error to a memo */
       DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                        "MobSub",
                        STRING(bMobSub.MsSeq),
                        bMobSub.Custnum,
-                       "STC/BTC creation failed",
+                       "Subscription reactivation: STC/BTC recovery failed",
                        lcInfo).
-END.
 END PROCEDURE. /* pRecoverSTC */

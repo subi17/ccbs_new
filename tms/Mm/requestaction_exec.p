@@ -189,7 +189,6 @@ PROCEDURE pPeriodicalContract:
    DEF VAR lbolSTCExemptPenalty AS LOGICAL NO-UNDO.
    DEF VAR liFFCount AS INT NO-UNDO. 
    DEF VAR ldaMonth22 AS DATE NO-UNDO. 
-   DEF VAR ldatSTC    AS DATE NO-UNDO.
 
    DEF BUFFER bBundleRequest  FOR MsRequest.
    DEF BUFFER bBundleContract FOR DayCampaign.
@@ -355,31 +354,34 @@ PROCEDURE pPeriodicalContract:
            Don't charge penalty when:
            STC is requested on the same day of the renewal order AND
            New type is POSTPAID */
-         IF bOrigRequest.reqcparam2 BEGINS "cont" /* POSTPAID */ THEN
-         DO:
+         IF bOrigRequest.reqcparam2 BEGINS "CONT" /* POSTPAID */ THEN DO:
             ORDER_LOOP:
             FOR EACH bOrder NO-LOCK WHERE
                bOrder.MSSeq EQ bOrigRequest.MsSeq AND
                LOOKUP(bOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) EQ 0 AND
-               TRUNCATE(bOrder.CrStamp,0) <= 
-               TRUNCATE(bOrigRequest.CreStamp,0) AND
-               bOrder.OrderType EQ {&ORDER_TYPE_RENEWAL}:
+               TRUNC(bOrder.CrStamp,0) <= TRUNC(bOrigRequest.CreStamp,0) AND
+               bOrder.OrderType EQ {&ORDER_TYPE_RENEWAL} BY bOrder.CrStamp DESC:
+
                IF NOT CAN-FIND
                (FIRST MsRequest NO-LOCK WHERE
-                      MsRequest.MsSeq      EQ bOrder.MsSeq AND
-                      MsRequest.Reqtype    EQ {&REQTYPE_REVERT_RENEWAL_ORDER} AND
-                      MsRequest.Reqstatus  EQ {&REQUEST_STATUS_DONE} AND
-                      MsRequest.ReqIParam1 EQ bOrder.OrderId) THEN
-               DO:
-                  IF bOrigRequest.ReqSource EQ
-                     {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION}  THEN /* YDR-2037 */
-                     lbolSTCExemptPenalty = TRUE.
-                  ELSE   
+                      MsRequest.MsSeq EQ bOrder.MsSeq AND
+                      MsRequest.Reqtype EQ {&REQTYPE_REVERT_RENEWAL_ORDER} AND
+                      MsRequest.Reqstatus EQ {&REQUEST_STATUS_DONE} AND
+                      MsRequest.ReqIParam1 EQ bOrder.OrderId) THEN DO:
+
                   IF TRUNCATE(bOrder.CrStamp,0) EQ 
-                     TRUNCATE(bOrigRequest.CreStamp,0) THEN   
-                     lbolSTCExemptPenalty = TRUE.                  
+                     TRUNCATE(bOrigRequest.CreStamp,0) OR
+                     /* YDR-2037 */
+                     bOrigRequest.ReqSource EQ
+                     {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION} THEN 
+                     lbolSTCExemptPenalty = TRUE.
+                  LEAVE ORDER_LOOP.
+
                END.
-               LEAVE ORDER_LOOP.
+
+               IF TRUNC(bOrder.CrStamp,0) < TRUNC(bOrigRequest.CreStamp,0) THEN
+                  LEAVE ORDER_LOOP.
+
             END. /* FOR EACH bOrder NO-LOCK WHERE */
          END. /* POSTPAID */
       END. /* IF (bOrigRequest.Reqtype EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}... */
