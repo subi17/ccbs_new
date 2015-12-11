@@ -139,14 +139,14 @@ FUNCTION fSendToMQ RETURNS CHAR
     icModule AS CHAR): /*fo ridentifying log files*/
    DEF VAR lcRet AS CHAR NO-UNDO.
 
+   RUN pInitialize(INPUT icConfFile, INPUT icModule).
+
    icMsg = fNotNull(icMsg).
    IF icMsg EQ "" THEN DO:
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
       LOG-MANAGER:WRITE-MESSAGE("", "AMQ: Message is empty").
       RETURN "AMQ: Message is empty".
    END.
-
-   RUN pInitialize(INPUT icConfFile, INPUT icModule).
 
    IF RETURN-VALUE > "" THEN DO:
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
