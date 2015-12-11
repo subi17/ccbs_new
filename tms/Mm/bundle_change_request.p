@@ -691,7 +691,10 @@ PROCEDURE pUpdateSubscription:
 
    /* update subscription */
    FIND CURRENT Mobsub EXCLUSIVE-LOCK NO-ERROR.
-   Mobsub.TariffActDate = ldaActivationDate.
+   
+   ASSIGN Mobsub.TariffActDate = ldaActivationDate
+          MobSub.TariffActTS   = ldEndStamp. 
+
    FIND CURRENT Mobsub NO-LOCK NO-ERROR.
 
 END PROCEDURE.

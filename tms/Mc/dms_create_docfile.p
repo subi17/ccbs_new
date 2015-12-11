@@ -60,6 +60,13 @@ FUNCTION fLogLine RETURNS LOGICAL
       "TMS" SKIP.
 END FUNCTION.
 
+FUNCTION fLogMsg RETURNS LOGICAL
+   (icMessage AS CHAR):
+   PUT STREAM sLogFile UNFORMATTED
+      icMessage "#"
+      "DMS" SKIP.
+END FUNCTION.
+
 /*Decide that what kind of data must be collected (Order or Msrequest data)*/
 /*Function also defines category for handling.*/
 FUNCTION fMakeTempTable RETURNS CHAR
@@ -119,6 +126,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
             /*Default values for new loop*/
             llgDirect = FALSE.
             llgAddEntry = FALSE.
+            lcCase = "".
             /*Case 5: Direct channels*/
             /*This can NOT be parallell with other cases.*/
             /*Reason to store llgDirect information is that the case is easy
@@ -140,9 +148,8 @@ FUNCTION fMakeTempTable RETURNS CHAR
                      llgDirect = TRUE.
                      CREATE ttOrderList.
                      ASSIGN ttOrderList.OrderID = OrderTimestamp.OrderId
-                            ttOrderList.CaseID = lcCase
+                            ttOrderList.CaseID = {&DMS_CASE_TYPE_ID_DIRECT_CH}.
                             ttOrderList.Direct = llgDirect.
-                     lcCase = {&DMS_CASE_TYPE_ID_DIRECT_CH}.
                      NEXT.  /*no need to check other cases because they                                           can not be parallel according to current specs.*/
                   END.
             END.
@@ -529,115 +536,6 @@ FUNCTION fCountIMEIModifications RETURN CHAR
    RETURN STRING(liCount).
 END.
 
-
-FUNCTION fNeededDocs RETURNS CHAR
-   (BUFFER Order FOR Order):
-   DEF VAR lcPAram AS CHAR NO-UNDO.
-   DEF VAR liCount AS INT NO-UNDO.
-   DEF VAR lcRequiredDocs AS CHAR NO-UNDO.
-   DEF VAR lcDocListEntries AS CHAR NO-UNDO.
-
-   /*CASE More DOC needed*/
-   IF Order.StatusCode EQ  {&ORDER_STATUS_MORE_DOC_NEEDED}  THEN DO: /*44*/
-     /*portability pos-pos*/
-      IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-         Order.PayType EQ FALSE AND
-         Order.OldPayType EQ FALSE  THEN
-         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T1".
-      /*new add pos / portability pre-pos.*/
-      ELSE IF (Order.OrderType EQ {&ORDER_TYPE_NEW} AND
-               Order.PayType EQ FALSE )
-         OR
-              (Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-              Order.PayType EQ FALSE AND
-              Order.OldPayType EQ TRUE ) THEN
-         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T2".
-      /*stc to pos / migration+renewal*/
-      ELSE IF Order.OrderType EQ {&ORDER_TYPE_STC} AND
-              Order.PayType EQ FALSE
-         OR
-              Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN
-         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T3".
-      /*add new pre / portability to pre*/
-      ELSE IF Order.OrderType EQ {&ORDER_TYPE_NEW} AND
-              Order.PayType EQ TRUE
-         OR
-              Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-              Order.PayType EQ TRUE THEN
-         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T4".
-   END.
-   /*Company orders:*/
-   ELSE IF Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} THEN DO:
-      IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-         Order.PayType EQ FALSE AND
-         Order.OldPayType EQ FALSE  THEN
-         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T1".
-      /*new add pos / portability pre-pos.*/
-      ELSE IF (Order.OrderType EQ {&ORDER_TYPE_NEW} AND
-               Order.PayType EQ FALSE )
-         OR
-              (Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-               Order.PayType EQ FALSE AND
-               Order.OldPayType EQ TRUE ) THEN
-         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T2".
-
-      /*add new pre / portability to pre*/
-      ELSE IF Order.OrderType EQ {&ORDER_TYPE_NEW} AND
-              Order.PayType EQ TRUE
-         OR
-              Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-              Order.PayType EQ TRUE THEN
-         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T3".
-
-   END.
-   /*CASE 21,33*/
-   ELSE IF Order.Statuscode EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} OR
-           Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} THEN DO:
-      IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-         Order.PayType EQ FALSE AND
-         Order.OldPayType EQ FALSE  THEN
-         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T1".
-      /*new add pos / portability pre-pos.*/
-      ELSE IF (Order.OrderType EQ {&ORDER_TYPE_NEW} AND
-               Order.PayType EQ FALSE )
-         OR
-              (Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-               Order.PayType EQ FALSE AND
-               Order.OldPayType EQ TRUE ) THEN
-         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T2".
-      /*stc to pos / migration+renewal*/
-      ELSE IF Order.OrderType EQ {&ORDER_TYPE_STC} AND
-              Order.PayType EQ FALSE
-         OR
-              Order.OrderType EQ {&ORDER_TYPE_RENEWAL} /* AND
-              Order.OrderChannel EQ TODO */ THEN
-         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T3".
-      /*add new pre / portability to pre*/
-      ELSE IF Order.OrderType EQ {&ORDER_TYPE_NEW} AND
-              Order.PayType EQ TRUE
-         OR
-              Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-              Order.PayType EQ TRUE THEN
-         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T4".
-
-   END.
-   lcRequiredDocs = fCParam("DMS",lcParam).
-
-   DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
-      /*Document type, Type desc,DocStatusCode,RevisionComment*/
-      lcDocListEntries = lcDocListEntries + 
-                         ENTRY(liCount,lcRequiredDocs) + "," +
-                         "," + /*This field is filled only by DMS responses*/
-                         lcDMSStatusDesc + "," +
-                         "Doc created".
-      IF liCount NE NUM-ENTRIES(lcRequiredDocs)
-         THEN lcDocListEntries = lcDocListEntries + ",".
-   END.
-   RETURN lcDocListEntries.
-
-END.
-
-
 /*Order activation*/
 /*Function generates order documentation*/
 FUNCTION fCreateDocumentCase1 RETURNS CHAR
@@ -725,7 +623,9 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
    DEF VAR lcModel   AS CHAR NO-UNDO.
    DEF VAR ldePermanencyAmount AS DECIMAL.
-   DEF VAR liPermancyLength AS INT.
+   DEF VAR liPermancyLength AS INT NO-UNDO.
+   DEF VAR lcErr AS CHAR NO-UNDO.
+   DEF VAR lcMsg AS CHAR NO-UNDO.
 
    DEF BUFFER DeliveryCustomer FOR OrderCustomer.
 
@@ -839,7 +739,17 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    STRING(Order.RiskCode).
    
    /*Solve tmsparam value for getting correct matrix row*/
-   lcDocListEntries = fNeededDocs(BUFFER Order).
+   lcRequiredDocs = fNeededDocs(BUFFER Order).
+   DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
+      /*Document type, Type desc,DocStatusCode,RevisionComment*/
+      lcDocListEntries = lcDocListEntries +
+                         ENTRY(liCount,lcRequiredDocs) + "," +
+                         "," + /*This field is filled only by DMS responses*/
+                         lcDMSStatusDesc + "," +
+                         "Doc created".
+      IF liCount NE NUM-ENTRIES(lcRequiredDocs)
+         THEN lcDocListEntries = lcDocListEntries + ",".
+   END.
 
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
@@ -858,7 +768,8 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
                             lcDocListEntries /*DocList*/,
                             ",").
 
-
+   lcErr = fSendChangeInformation("", Order.OrderId, "", lcMsg).
+   fLogMsg("Msg,2 : " + lcMsg + " #Status: " + lcErr).
 
    RETURN "".
 
@@ -881,6 +792,8 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    DEF VAR lcModel   AS CHAR NO-UNDO.
    DEF VAR ldePermanencyAmount AS DECIMAL.
    DEF VAR liPermancyLength AS INT.
+   DEF VAR lcErr AS CHAR NO-UNDO.
+   DEF VAR lcMsg AS CHAR NO-UNDO.
 
    ASSIGN
       lcCaseTypeId      = "3".
@@ -971,7 +884,18 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    STRING(Order.RiskCode).
    
    /*solve needed documents:*/
-   lcDocListEntries =  fNeededDocs(BUFFER Order).
+   lcRequiredDocs =  fNeededDocs(BUFFER Order).
+   DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
+      /*Document type, Type desc,DocStatusCode,RevisionComment*/
+      lcDocListEntries = lcDocListEntries +
+                         ENTRY(liCount,lcRequiredDocs) + "," +
+                         "," + /*This field is filled only by DMS responses*/
+                         lcDMSStatusDesc + "," +
+                         "Doc created".
+      IF liCount NE NUM-ENTRIES(lcRequiredDocs)
+         THEN lcDocListEntries = lcDocListEntries + ",".
+   END.
+
 
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
@@ -988,6 +912,10 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             ",").
+   lcErr = fSendChangeInformation("", Order.OrderId, "", lcMsg).
+   fLogMsg("Msg,3 : " + lcMsg + " #Status: " + lcErr).
+
+
    RETURN "".
 
 END.

@@ -235,6 +235,8 @@ PROCEDURE pInitialize:
       WHEN "Alpheratz" THEN DO:
          IF icModule EQ "revolver" THEN 
             lcConfFile = "Mailconf/revolver.alpheratz".
+         ELSE IF icModule EQ "dms" THEN 
+            lcConfFile = "Mailconf/dms_messaging_conf.alpheratz".         
          ELSE     
             lcConfFile = "Mailconf/replog_reader_conf.alpheratz".
       END.
@@ -243,6 +245,8 @@ PROCEDURE pInitialize:
       WHEN "Hebe"  OR WHEN "Flora" OR WHEN "Pallas" THEN DO:
          IF icModule BEGINS "amq_" 
          THEN lcConfFile = "Mailconf/replog_reader_conf_amq.prod".
+         ELSE IF icModule EQ "dms" THEN 
+            lcConfFile = "Mailconf/dms_messaging_conf.prod". 
          ELSE lcConfFile = "Mailconf/replog_reader_conf.prod".
       END.
       OTHERWISE lcConfFile = "".
