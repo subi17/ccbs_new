@@ -30,7 +30,7 @@ FUNCTION fValidateBankFileRequest RETURNS LOG (
    IF CAN-FIND(
       FIRST MsRequest NO-LOCK WHERE
             MsRequest.Brand = gcBrand AND
-            MsRequest.ReqType = {&REQTYPE_TERMINAL_FINANCE_BANK_FILE} AND
+            MsRequest.ReqType = iiReqType AND
             MsRequest.ReqCparam1 = icBankCode AND
       LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0) THEN DO:
       ocError = "Ongoing request".
@@ -39,7 +39,7 @@ FUNCTION fValidateBankFileRequest RETURNS LOG (
 
    FOR EACH MsRequest NO-LOCK WHERE
             MsRequest.Brand = gcBrand AND
-            MsRequest.ReqType = {&REQTYPE_TERMINAL_FINANCE_BANK_FILE} AND
+            MsRequest.ReqType = iiReqType AND
             MsRequest.ReqCparam1 = icBankCode
       BY ActStamp DESC:
 
