@@ -340,7 +340,7 @@ FUNCTION SendMaileInvoice RETURNS LOGIC (iMailTxt AS CHAR,
        with same group as tmsrpc. Currently using root, planned to be changed
        at begining of 2016. */
     IF katun EQ "NewtonRPC" THEN
-       UNIX SILENT VALUE(xMailComm + " >>/tmp/sendmail_" + katun + ".log").
+       UNIX SILENT VALUE(xMailComm + " >>/tmp/sendmail_" + katun + ".log 2>&1").
     ELSE
        UNIX SILENT VALUE(xMailComm + " >> /tmp/sendmail_einvoice.log 2>&1").
 
