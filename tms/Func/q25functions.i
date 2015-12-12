@@ -43,7 +43,7 @@ FUNCTION fGetStartEndDates RETURNS LOGICAL
    END.
    RETURN TRUE.
 END.
-
+/*
 FUNCTION fGetDates RETURNS LOGICAL
    (INPUT  iiStartDay AS INT,
     INPUT  iiEndDay AS INT,
@@ -79,7 +79,7 @@ FUNCTION fGetDates RETURNS LOGICAL
              odaEndDateMonth22 = ?.
    RETURN TRUE.
 END FUNCTION.
-
+*/
 FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT):
    DEF VAR lcSMSMessage      AS CHAR NO-UNDO.
    DEF VAR ldReqStamp        AS DEC  NO-UNDO.
@@ -131,16 +131,41 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT):
    RETURN lcSMSMessage.
 END FUNCTION.
 
+FUNCTION fQ25LogWriting RETURNS LOGICAL
+   (INPUT iclogText AS CHAR).
+   DEF VAR lcLogDir          AS CHAR NO-UNDO.
+   DEF VAR lcLogFile         AS CHAR NO-UNDO.
+
+   ASSIGN lcLogDir     = fCParam("Q25","Q25_reminder_LogDir").
+   IF lcLogDir = "" OR lcLogDir = ? THEN lcLogDir = "/tmp/".
+   /* Make Monthly log file */
+   lcLogFile = lcLogDir + "Q25_sms_message_logs_" +
+               STRING(YEAR(TODAY)) +
+               STRING(MONTH(TODAY),"99") +
+               /* STRING(DAY(TODAY),"99") + */ ".txt".
+   OUTPUT STREAM Sout TO VALUE(lcLogFile) APPEND.
+   PUT STREAM Sout UNFORMATTED
+      STRING(fMakeTS()) + " " + icLogText SKIP.
+   OUTPUT STREAM Sout CLOSE.
+END.
+
+FUNCTION fCalculateMaxPauseValue RETURN INTEGER
+   (INPUT iiToBeSend AS INT).
+   DEF VAR ldEndTime AS DEC NO-UNDO.
+   DEF VAR ldTimeLeft AS DEC NO-UNDO.
+   ldEndTime = fHMS2TS(TODAY, "21:30:00").
+   ldTimeLeft = (ldEndTime - fMakeTS()) * 100000.
+   RETURN INT(ldTimeLeft / iiToBeSend). 
+END.
+
 FUNCTION fCollectQ25SMSMessages RETURNS INTEGER 
    (INPUT idaStartDate AS DATE,
     INPUT idaEndDate AS DATE,
     INPUT iiphase AS INT,
     INPUT ilsendMsgs AS LOGICAL,
-    INPUT totalCountLeft AS INT):
+    INPUT-OUTPUT oitotalCountLeft AS INT):
    /* Data collection function for Q25. To be launched by cron execution
       on 1.-15. day of month at morning time at least one hour before 10:00 */
-   DEF VAR lcLogDir          AS CHAR NO-UNDO.
-   DEF VAR lcLogFile         AS CHAR NO-UNDO.
    DEF VAR lcSMSText         AS CHAR NO-UNDO.
    DEF VAR liCount           AS INT  NO-UNDO.   
    DEF VAR lcPeriod          AS CHAR NO-UNDO.
@@ -155,17 +180,15 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
    DEF VAR liTimeLeft        AS INT NO-UNDO.
    DEF VAR lcSMSMessage      AS CHAR NO-UNDO.
    DEF VAR liSentCount       AS INT NO-UNDO.
+   DEF VAR lcLogText         AS CHAR NO-UNDO.
+   DEF VAR liPauseValue      AS INT NO-UNDO.
+   DEF VAR liCalcPauseValue  AS INT NO-UNDO.
 
-   ASSIGN lcLogDir     = fCParam("Q25","Q25_reminder_LogDir").
-
-   IF lcLogDir = "" OR lcLogDir = ? THEN lcLogDir = "/tmp/".
-
-   lcLogFile = lcLogDir + "Q25_sms_message_logs_" +
-               STRING(YEAR(TODAY)) +
-               STRING(MONTH(TODAY),"99") +
-               /* STRING(DAY(TODAY),"99") + */ ".txt".
-
-   OUTPUT STREAM Sout TO VALUE(lcLogFile) APPEND.
+   IF idaStartDate = ? OR idaEndDate = ? THEN
+      RETURN 0.
+   ASSIGN liPauseValue = fCParamI("Q25_sms_pause").
+   IF liPauseValue = 0 OR liPauseValue = ? THEN
+      liPauseValue = 10.
 
    lcPeriod = STRING(YEAR(idaStartDate)) + (IF(MONTH(idaStartDate) < 10) THEN
               "0" ELSE "") + STRING(MONTH(idaStartDate)).
@@ -242,7 +265,7 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
       /* Create table for sending messages in the second phase started
          by separate cron execution for each hour 10:00 - 21:00 */
       IF(ilSendMsgs) THEN DO:
-         TotalCountLeft = TotalcountLeft - 1.
+         oiTotalCountLeft = oiTotalcountLeft - 1.
          FIND FIRST SMSMessage WHERE SMSMessage.msseq = DCCLI.MsSeq AND
                                      SMSMessage.CreStamp > fDate2TS(TODAY) 
                                      NO-LOCK NO-ERROR.
@@ -254,7 +277,6 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
          END.
          ELSE DO:
             lcSMSMessage = fgetQ25SMSMessage(iiphase).
-
             /* Send SMS */
             fCreateSMS(SingleFee.CustNum,
                        DCCLI.Cli,
@@ -264,21 +286,30 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
                        "622",
                        {&SMS_TYPE_Q25}).
             liSentCount = liSentCount + 1.
+            PAUSE liPauseValue.
+            /* Decrease pause time if needed, check after each 50 sent SMS */
+            IF (oiTotalCountLeft MODULO 50 = 0) THEN DO:
+               liCalcPauseValue = fCalculateMaxPauseValue(oiTotalCountLeft).
+               IF (liCalcPauseValue < liPauseValue) THEN
+                  liPauseValue = liCalcPauseValue. 
+            END.
          END.
       END.   
    END.
    /* Logging about amount of situations for testting purposes. */
    /* If ilSendMsgs is False, logging of calculated values to be done */
    IF NOT(ilSendMsgs) THEN DO:
-      PUT STREAM Sout UNFORMATTED
-         STRING(idaStartDate) + "|" STRING(idaEnddate) + "|" +
-         STRING(liCount) + "|" + STRING(liNotSendCount) + "|" +
-         STRING(liBilledCount) + "|" + STRING(liNotDCCLICount) + "|" +
-         STRING(liReturnedDevices) + "|" + STRING(liQ25DoneCount) + "|" +
-         STRING(liAlreadyCreated) + "|" + STRING(liSentCount) + "|" +
-         STRING(etime / 1000) SKIP.
-      OUTPUT STREAM Sout CLOSE.
+      lcLogText = STRING(iiPhase) + "|" +
+                  STRING(idaStartDate) + "|" + STRING(idaEnddate) + "|" +
+                  STRING(liCount) + "|" + STRING(liNotSendCount) + "|" +
+                  STRING(liBilledCount) + "|" + STRING(liNotDCCLICount) + "|" +
+                  STRING(liReturnedDevices) + "|" + STRING(liQ25DoneCount) + 
+                  "|" +
+                  STRING(liAlreadyCreated) + "|" + STRING(liSentCount) + "|" +
+                  STRING(etime / 1000).
+      fQ25LogWriting(lcLogText).
+      RETURN liCount.
    END.
-   RETURN liCount.
+   RETURN oiTotalCountLeft.
 END FUNCTION.
 
