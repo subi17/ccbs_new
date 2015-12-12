@@ -108,9 +108,9 @@ PROCEDURE pInitialize:
 
 END PROCEDURE.
 
-/*Function stores message for resending / further usage*/
+/*Function stores initial message for resending / further usage*/
 /*Resendinf counter will be increased by resending cron*/
-FUNCTION fStoreMsg RETURNS CHAR
+FUNCTION fCreateInitMsg RETURNS CHAR
    (icConfig AS CHAR,
     icMQ     AS CHAR,
     icMsg    AS CHAR,
@@ -139,6 +139,8 @@ FUNCTION fSendToMQ RETURNS CHAR
     icConfFile AS CHAR, /*configuration file*/
     icModule AS CHAR, /*for identifying log files*/
     lgResending AS LOGICAL): /*flag for creating new entry to MESSAGE db*/
+    /*TRUE - esending message, do not create entry
+      FALSE - This is first time for this message -> create entry*/
    DEF VAR lcRet AS CHAR NO-UNDO.
    DEF VAR lcDBStatus  AS CHAR NO-UNDO.
 
@@ -156,7 +158,7 @@ FUNCTION fSendToMQ RETURNS CHAR
       LOG-MANAGER:WRITE-MESSAGE(RETURN-VALUE, "ERROR in init").
          IF lgResending EQ FALSE THEN DO:
             /*This is the 1st sending, create new entry*/
-            fStoreMsg( icConfFile, icMQ, icMsg, {&AMQ_MSG_INIT_FAILED}, "dms").
+            fCreateInitMsg( icConfFile, icMQ, icMsg, {&AMQ_MSG_INIT_FAILED}, "dms").
          END.
 
          RETURN RETURN-VALUE.
@@ -187,7 +189,7 @@ FUNCTION fSendToMQ RETURNS CHAR
       IF lcRet NE "" THEN lcDBStatus = lcRet.
       ELSE lcDbStatus = {&AMQ_MSG_SENT}.
 
-      fStoreMsg( icConfFile, icMQ, icMsg, lcDBStatus, "dms").
+      fCreateInitMsg( icConfFile, icMQ, icMsg, lcDBStatus, "dms").
    END.
 
    RETURN lcRet.
