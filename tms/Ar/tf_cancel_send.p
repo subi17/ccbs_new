@@ -42,9 +42,16 @@ ASSIGN
    lcLogDir = fCParam("TermFinance","LogDir").
 
 IF lcRootDir EQ ? OR
-   NOT lcRootDir > "" THEN RETURN "ERROR:Root directory not defined".
+   NOT lcRootDir > "" THEN DO:
+   fReqStatus(3,"ERROR:Root directory not defined").
+   RETURN.
+END.
+
 IF lcLogDir EQ ? OR
-   NOT lcLogDir > "" THEN RETURN "ERROR:Log root directory not defined".
+   NOT lcLogDir > "" THEN DO:
+   fReqStatus(3,"ERROR:Log root directory not defined").
+   RETURN.
+END.
    
 FUNCTION fLogLine RETURNS LOGICAL
    (iiOrderId AS INT,
@@ -63,7 +70,10 @@ ELSE IF MsRequest.ReqCParam1 = {&TF_BANK_SABADELL} THEN DO:
    RUN pCreateFile({&TF_BANK_SABADELL},"CANCEL","ANULACIONESYOIGOSABADELL").
    RUN pCreateFile({&TF_BANK_SABADELL},"TERMINATION","CANCELACIONESYOIGOSABADELL").
 END.
-
+ELSE DO:
+   fReqStatus(3,"ERROR: Unsupported bank code").
+   RETURN.
+END.   
 
 PROCEDURE pCreateFile:
 
@@ -210,6 +220,8 @@ PROCEDURE pCreateFile:
    IF SESSION:BATCH AND 
       lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
 
+   fReqStatus(2,"").
+   
    DO TRANS:
       
       CREATE ActionLog.
