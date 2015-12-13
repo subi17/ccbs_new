@@ -72,7 +72,7 @@ ASSIGN
    llDeviceScreen    = get_bool(pcStruct,"device_screen") WHEN LOOKUP("device_screen", lcStruct) > 0
    lcSalesman        = get_string(pcStruct,"salesman")
    lcTerminalType    = get_string(pcStruct,"terminal_type")
-   lcEnvelopeNumber  = get_string(pcStruct,"envelope_number")
+   lcEnvelopeNumber  = get_string(pcStruct,"envelope_number") WHEN LOOKUP("envelope_number", lcStruct) > 0
    ldReturnTS        = fMakeTS().
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
