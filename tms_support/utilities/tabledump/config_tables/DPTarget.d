@@ -39,3 +39,14 @@
 28 12/08/15 31/12/49 "BillItem" "CONT23MF" yes
 29 01/09/15 31/12/49 "BillItem" "CONT23MF" yes
 30 01/10/15 31/12/49 "BillItem" "FLATMF8" yes
+31 24/11/15 31/12/16 "BillItem" "DATA6MF" yes
+32 25/11/15 31/12/49 "BillItem" "RVTERM" yes
+32 25/11/15 31/12/49 "BillItem" "RVTERM1E" yes
+32 25/11/15 31/12/49 "BillItem" "RVTERMBS" yes
+33 25/11/15 31/12/49 "BillItem" "RVTERM" yes
+33 25/11/15 31/12/49 "BillItem" "RVTERM1E" yes
+33 25/11/15 31/12/49 "BillItem" "RVTERMBS" yes
+34 25/11/15 31/12/49 "BillItem" "RVTERM" yes
+34 25/11/15 31/12/49 "BillItem" "RVTERM1E" yes
+34 25/11/15 31/12/49 "BillItem" "RVTERMBS" yes
+35 01/12/15 31/12/49 "BillItem" "DATA7MF" yes
