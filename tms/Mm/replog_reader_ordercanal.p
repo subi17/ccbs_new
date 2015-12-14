@@ -980,6 +980,8 @@ PROCEDURE pHandleTermReturn:
    DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
 
    DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE llDeviceStart     AS LOGICAL   NO-UNDO.
+   DEFINE VARIABLE llDeviceScreen    AS LOGICAL   NO-UNDO.
 
    IF AVAILABLE OrderCanal.RepLog THEN DO:
 
@@ -991,13 +993,19 @@ PROCEDURE pHandleTermReturn:
                        RECID(TermReturn) = RepLog.RecordId NO-LOCK NO-ERROR.
             IF AVAILABLE TermReturn THEN DO:
 
+               IF TermReturn.DeviceStart = ? AND TermReturn.DeviceScreen = ? THEN
+                  ASSIGN llDeviceStart = TRUE
+                         llDeviceScreen = TRUE.
+               ELSE ASSIGN llDeviceStart = TermReturn.DeviceStart
+                           llDeviceScreen = TermReturn.DeviceScreen.
+
                lcMessage = lcMessage                                    + lcDel +
                            fNotNull(STRING(TermReturn.OrderId))         + lcDel +
                            fNotNull(TermReturn.BillCode)                + lcDel +
                            fNotNull(TermReturn.IMEI)                    + lcDel +
                            fNotNull(TermReturn.MSISDN)                  + lcDel +
-                           fNotNull(STRING(TermReturn.DeviceStart))     + lcDel +
-                           fNotNull(STRING(TermReturn.DeviceScreen))    + lcDel +
+                           fNotNull(STRING(llDeviceStart))              + lcDel +
+                           fNotNull(STRING(llDeviceScreen))             + lcDel +
                            fNotNull(TermReturn.Salesman)                + lcDel +
                            fNotNull(TermReturn.TerminalType)            + lcDel +
                            fNotNull(TermReturn.EnvelopeNumber)          + lcDel +
