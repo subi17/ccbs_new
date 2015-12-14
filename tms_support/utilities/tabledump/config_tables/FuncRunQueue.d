@@ -9,5 +9,5 @@
 9 "Temporary billing queue, can be modified and used to run only wanted billing processes" "1" yes
 10 "IFS testing (not used)" "1" no
 11 "Test invoice deletion" "1" yes
-12 "Billing reports temporary queue, can be modified if needed" "1" yes
+12 "Billing reports, can be modified if needed" "1" yes
 13 "CSB19 creation" "1" yes
