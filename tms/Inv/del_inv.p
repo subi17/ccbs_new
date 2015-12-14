@@ -101,7 +101,7 @@ FIND FIRST Customer WHERE
       /* release events */
       RUN nnpcst.p (Invoice.InvNum,
                     SubInvoice.SubInvNum,
-                    TRUE,
+                    FALSE,
                     INPUT table wMarked).
 
       /* advance payments  */
@@ -159,7 +159,7 @@ FIND FIRST Customer WHERE
    /* make sure that nothing is left */
    RUN nnpcst.p (Invoice.InvNum,
                  0,
-                 TRUE,
+                 FALSE,
                  INPUT table wMarked).
 
    /* IF accounts have TO be updated */
