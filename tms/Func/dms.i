@@ -441,7 +441,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    lcMQ =  fCParamNotNull("DMS","DMS_MQ"). 
    lcConfig = fDMSConfig().
    IF lcConfig EQ "" THEN RETURN "MQ config not available".
-   RETURN fSendToMQ(lcMessage, lcMQ, lcConfig, icModule).
+   RETURN fSendToMQ(lcMessage, lcMQ, lcConfig, icModule, FALSE).
 END.
 
 
