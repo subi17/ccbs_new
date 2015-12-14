@@ -59,8 +59,8 @@ DEFINE VARIABLE llgDateValue  AS LOGICAL   NO-UNDO.
 
 ASSIGN
    lcIncDir     = fCParam("Charges","IncDir")
-   lcProcessDir = fCParam("Charges","IncProcessDir")
-   lcProcDir    = fCParam("Charges","IncProcDir")
+   lcProcessDir = fCParam("Charges","IncProcessDir") /* Processing Dir */
+   lcProcDir    = fCParam("Charges","IncProcDir")    /* Processed Dir */
    lcSpoolDir   = fCParam("Charges","OutSpoolDir")
    lcOutDir     = fCParam("Charges","OutDir").
    
