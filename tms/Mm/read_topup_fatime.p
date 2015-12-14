@@ -104,7 +104,7 @@ REPEAT:
    PUT STREAM sLog UNFORMATTED
               lcFilename  " "
               STRING(TODAY,"99.99.99") " "
-              TRING(TIME,"hh:mm:ss") SKIP.
+              STRING(TIME,"hh:mm:ss") SKIP.
   
    LINE_LOOP:
    REPEAT:
