@@ -33,7 +33,6 @@ DEFINE VARIABLE lcInputFile     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcProcDir       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcProcessedFile AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcProcessFile   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcIncProcFile   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSpoolDir      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcReportFileOut AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOutDir        AS CHARACTER NO-UNDO.
@@ -104,10 +103,11 @@ REPEAT:
       lcProcessFile = fMove2TransDir(lcInputFile, "", lcProcessDir).
 
       IF lcProcessFile EQ "" THEN NEXT.
-      ELSE lcIncProcFile = lcProcessDir + lcFileName.
       
-      IF NOT SEARCH(lcIncProcFile) EQ ? THEN 
-         INPUT STREAM sin FROM VALUE(lcIncProcFile).
+      IF NOT SEARCH(lcProcessFile) EQ ? THEN 
+         INPUT STREAM sin FROM VALUE(lcProcessFile).
+      ELSE NEXT.
+
    END.
    ELSE NEXT.
    
@@ -115,7 +115,7 @@ REPEAT:
       liNumOk  = 0
       liNumErr = 0.
    
-   fBatchLog("START", lcIncProcFile).
+   fBatchLog("START", lcProcessFile).
    
    lcLogFile = lcSpoolDir + lcFileName + ".log".
    
@@ -137,7 +137,7 @@ REPEAT:
    OUTPUT STREAM sLog CLOSE.
 
    lcReportFileOut = fMove2TransDir(lcLogFile, "", lcOutDir).
-   lcProcessedFile = fMove2TransDir(lcIncProcFile, "", lcProcDir).
+   lcProcessedFile = fMove2TransDir(lcProcessFile, "", lcProcDir).
     
    IF lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
 END.
