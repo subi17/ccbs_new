@@ -10,10 +10,10 @@
 def stream sread.
 def stream slog.
 
-input stream sread from "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4144.csv".
+input stream sread from "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4187.csv".
+output stream slog to "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4187.log".
 
-output stream slog to "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4144.log".
-
+/* Change here FALSE if only pre check done */
 def var llcreatefee as log no-undo init true.
 
 def var lcline as char no-undo.
@@ -50,6 +50,7 @@ if not can-find(first billitem where
    view-as alert-box.
    return.
 end.
+put stream slog unformatted lcLine "MSISDN;SubscriptionID;Importe;ContractName;Valid To;Status" skip.
 
 repeat:
 
@@ -186,5 +187,3 @@ disp i j licheck limiss liexist lidouble.
 
 input stream sread close.
 output stream slog close.
-
-
