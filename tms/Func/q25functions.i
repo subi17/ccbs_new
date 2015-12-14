@@ -192,6 +192,11 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
 
    lcPeriod = STRING(YEAR(idaStartDate)) + (IF(MONTH(idaStartDate) < 10) THEN
               "0" ELSE "") + STRING(MONTH(idaStartDate)).
+   /* Special case, if order is one at 1st day of month Q1 period ends
+      last day of previous month Q24. Need to include it. */
+   IF (iiPhase = {&Q25_MONTH_24} OR iiPhase = {&Q25_MONTH_24_FINAL_MSG}) AND 
+       DAY(idaStartDate) = 1 THEN
+      idaStartDate = idaStartDate - 1.
    FOR EACH SingleFee USE-INDEX BillCode WHERE
             SingleFee.Brand       = gcBrand AND
             SingleFee.Billcode BEGINS "RVTERM" AND
@@ -220,11 +225,9 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
          liNotDCCLICount = liNotDCCLICount + 1.
          NEXT.
       END.
-      ELSE IF DCCLI.TermDate NE ? OR
-              DCCLI.RenewalDate > ldaMonth22Date THEN DO:
+      ELSE IF DCCLI.TermDate NE ? THEN DO:
          liNotSendCount = liNotSendCount + 1.
-         NEXT. /* terminated or renewal done during 22-24 month
-                  SMS should not be send. */
+         NEXT. /* terminated, SMS should not be send. */
       END.
       ELSE DO:
          ASSIGN
@@ -259,6 +262,17 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
                   extension. Send message with final payment / 12. */
                iiPhase = {&Q25_MONTH_24_CHOSEN}.
          END.
+         ELSE IF CAN-FIND(FIRST Order NO-LOCK WHERE
+                                Order.MsSeq = liTempMsSeq AND
+                                Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
+                                Order.CrStamp > fHMS2TS(ldaMonth22Date,
+                                                        "00:00:00")) THEN DO:
+         /* Renewal / Renuvo done */
+            liNotSendCount = liNotSendCount + 1.
+            NEXT.
+         END.
+
+         
       END.
       liCount = liCount + 1. /* Full q25 count in Month */
    
@@ -267,7 +281,8 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
       IF(ilSendMsgs) THEN DO:
          oiTotalCountLeft = oiTotalcountLeft - 1.
          FIND FIRST SMSMessage WHERE SMSMessage.msseq = DCCLI.MsSeq AND
-                                     SMSMessage.CreStamp > fDate2TS(TODAY) 
+                                     SMSMessage.CreStamp > fDate2TS(TODAY) AND
+                                     SMSMessage.SMSType = {&SMS_TYPE_Q25}
                                      NO-LOCK NO-ERROR.
          
          IF AVAIL SMSMessage THEN DO:

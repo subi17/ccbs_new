@@ -68,7 +68,7 @@ fGetStartEndDates({&Q25_MONTH_22}, liStartDay, liEndDay, ldaStartDateMonth22,
 fGetStartEndDates({&Q25_MONTH_23}, liStartDay, liEndDay, ldaStartDateMonth23, 
                   ldaEndDateMonth23).
 /* Month 24 0 month perm contract to go */
-fGetStartEndDates({&Q25_MONTH_23}, liStartDay, liEndDay, ldaStartDateMonth24, 
+fGetStartEndDates({&Q25_MONTH_24}, liStartDay, liEndDay, ldaStartDateMonth24, 
                   ldaEndDateMonth24).
 
 /* Check first how many SMS is needed to send today, with third param value

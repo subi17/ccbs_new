@@ -21,14 +21,23 @@ DEF VAR liStartDay        AS INT  NO-UNDO.
 DEF VAR liEndDay          AS INT  NO-UNDO.
 DEF VAR ldaStartDate      AS DATE NO-UNDO.
 DEF VAR ldaEndDate        AS DATE NO-UNDO.
-
+DEF VAR liTotalCount      AS INT  NO-UNDO.
+DEF VAR liTempCount       AS INT NO-UNDO.
+DEF VAR ldaStartDateMonth24 AS DATE NO-UNDO.
+DEF VAR ldaEndDateMonth24   AS DATE NO-UNDO.
 
 /* each month as planned */
    liStartDay = 1. /* First day of month */
    liEndDay = 30. /* Last day of month, special cases handled in fCheckDates */
 
 /* Month 24 21st day*/
-IF (DAY(TODAY) = 21) AND fCheckDates(0, INPUT liStartDay, INPUT liEndDay, 
-                            OUTPUT ldaStartDate, OUTPUT ldaEndDate) THEN DO:
-   fCollectQ25SMSMessages(ldaStartDate, ldaEndDate, {&Q25_MONTH_24_FINAL_MSG}, TRUE, 0).
+IF (DAY(TODAY) = 21) AND fGetStartEndDates({&Q25_MONTH_24}, liStartDay, 
+                                           liEndDay, ldaStartDateMonth24,
+                                           ldaEndDateMonth24) THEN DO:
+   liTotalCount = fCollectQ25SMSMessages(ldaStartDateMonth24, 
+                                         ldaEndDateMonth24, 
+                                         {&Q25_MONTH_24_FINAL_MSG}, FALSE, 
+                                         liTempCount).
+   fCollectQ25SMSMessages(ldaStartDateMonth24, ldaEndDateMonth24, 
+                          {&Q25_MONTH_24_FINAL_MSG}, TRUE, liTotalCount).
 END.
