@@ -3,6 +3,7 @@
  * Yoigo can now press button to AND CREATE terminal finance cancellation report * OR terminal finance termination report for banks SABADELL AND UNOE.
  *
  * @input string;mandatory;username
+ *        string;mandatory;bankcode
  * @output boolean;true
  */
 
@@ -12,6 +13,9 @@ DEFINE VARIABLE pcUsername  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcError     AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liRequestID AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE pcBankCode  AS CHAR NO-UNDO.
+DEF VAR ldeMonthBeg AS DEC NO-UNDO.
+DEF VAR ldeMonthEnd AS DEC NO-UNDO. 
+
 
 IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
 
@@ -28,9 +32,23 @@ gcBrand = "1".
 katun = "VISTA_" + pcUserName.
 {tmsconst.i}
 {terminal_financing.i}
+{timestamp.i}
 
 IF LOOKUP(pcBankCode,{&TF_BANK_CODES}) EQ 0 THEN
    RETURN appl_err(SUBST("Incorrect bank code: &1", pcBankCode)).
+
+/* Checking if files are sent to certain bank at this month already.
+   In case yes, exception is returned. */
+fMonthlyStamps(TODAY, ldeMonthBeg, ldeMonthEnd).
+IF CAN-FIND( FIRST MsRequest NO-LOCK WHERE
+         MsRequest.Brand = gcBrand AND
+         MsRequest.ReqType = {&REQTYPE_TERMINAL_FINANCE_CAN_TER_BANK_FILE} AND
+         MsRequest.ReqStatus = {&REQUEST_STATUS_DONE} AND
+         MsRequest.ActStamp >= ldeMonthBeg AND
+         MsRequest.ActStamp < ldeMonthEnd AND
+         MsRequest.ReqCParam1 = pcBankCode) THEN
+   RETURN appl_err(SUBST("Files generated already at this month for bank: &1", pcBankCode)).
+
 
 liRequestID = fCreateTFBankFileRequest(
                    pcBankCode,

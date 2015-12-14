@@ -215,7 +215,7 @@ PROCEDURE pCreateFile:
       
    OUTPUT STREAM sout close.
 
-/*   fMove2TransDir(lcLogFile, "", lcLogDir + "outgoing/").  */
+   fMove2TransDir(lcLogFile, "", lcLogDir + "outgoing/"). 
    lcProcessedFile = fMove2TransDir(lcFile, "", lcRootDir + "outgoing/"). 
    IF SESSION:BATCH AND 
       lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
