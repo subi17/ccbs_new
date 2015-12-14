@@ -238,8 +238,7 @@ PROCEDURE pHandleMobSub:
                            fNotNull(STRING(MobSub.MultiSimType)) + lcDel +
                            fNotNull(MobSub.IMSI)                 + lcDel +
                            fNotNull(MobSub.BarrCode)             + lcDel +
-                           fDateToString(MobSub.TariffActDate)   + lcDel +
-                           STRING(MobSub.TariffActTS)            + lcDel .
+                           fDateToString(MobSub.TariffActDate)   + lcDel.
 
                IF RepLog.EventType = "MODIFY" AND
                   MobSub.TariffActDate <> Mobsub.Activationdate AND
@@ -259,7 +258,6 @@ PROCEDURE pHandleMobSub:
                          lcOldtariffBundle = "".
 
                lcMessage = lcMessage + lcOldCLIType + lcDel + lcOldtariffBundle.
-
                fWriteMessage(lcMessage).
             END.
             ELSE DO:

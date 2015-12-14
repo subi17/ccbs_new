@@ -1,0 +1,9 @@
+-H:activemq
+-P:61613
+-T:10
+#USER:tms
+#PASS:g6i!ZEUFGAOpVDgSWFT-6L
+#LOG_MANAGER_FILE:/mnt/store/riftp/dms/case_file_update_dms_to_tms/logs/
+#LOG_LEVEL:
+#LOG_STAT:
+
