@@ -44,6 +44,7 @@
 "1" "DATA5_UPSELL" "Cont Data Usage Bundle 5" 01/09/13 31/12/49
 "1" "DATA6" "Mobile Data Usage Bundle 6" 01/05/14 31/12/49
 "1" "DATA6_UPSELL" "Mobile Data Usage Upsell 6" 01/05/14 31/12/49
+"1" "DATA7" "Mobile Data Usage Bundle 7" 01/12/15 31/12/49
 "1" "DATA9_UPSELL" "Cont Data Usage Bundle 9" 01/12/12 31/12/49
 "1" "DSS" "DSS continuous billing period" 23/11/11 31/12/49
 "1" "DSS2" "Data Sharing Service 2" 01/09/13 31/12/49
