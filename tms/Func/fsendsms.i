@@ -92,15 +92,21 @@ FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
              END. /* IF LOOKUP(MsRequest.ReqCParam2,lcIPLContracts) > 0 OR */
 
              oiSMSType = 10.
-             
-             fConvBundleToCommName(INPUT MsRequest.ReqCParam1,
-                                   OUTPUT lcBundleName,
-                                   OUTPUT lcSMSSender).
-             icSMSText = REPLACE(icSMSText,"#OLD_BUNDLE",lcBundleName).
-             fConvBundleToCommName(INPUT MsRequest.ReqCParam2,
-                                   OUTPUT lcBundleName,
-                                   OUTPUT lcSMSSender).
-             icSMSText = REPLACE(icSMSText,"#NEW_BUNDLE",lcBundleName).
+             lcReplacedTxt = fConvBundleToBillItem(INPUT MsRequest.ReqCParam1).
+             lcReplacedTxt = fGetItemName(gcBrand,
+                                          "BillItem",
+                                          lcReplacedTxt,
+                                          Customer.Language,
+                                          TODAY).
+             icSMSText = REPLACE(icSMSText,"#OLD_BUNDLE",lcReplacedTxt).
+      
+             lcReplacedTxt = fConvBundleToBillItem(INPUT MsRequest.ReqCParam2).
+             lcReplacedTxt = fGetItemName(gcBrand,
+                                          "BillItem",
+                                          lcReplacedTxt,
+                                          Customer.Language,
+                                          TODAY).
+             icSMSText = REPLACE(icSMSText,"#NEW_BUNDLE",lcReplacedTxt).
           END. /* WHEN {&REQTYPE_BUNDLE_CHANGE} THEN DO: */
           WHEN {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN DO:
 
