@@ -27,6 +27,7 @@ DEF VAR ldaEndDateMonth23        AS DATE NO-UNDO.
 DEF VAR ldaStartDateMonth24      AS DATE NO-UNDO.
 DEF VAR ldaEndDateMonth24        AS DATE NO-UNDO.
 DEF VAR liTotalCount             AS INT  NO-UNDO.
+DEF VAR liTempCount              AS INT  NO-UNDO.
 DEF VAR lcLogText                AS CHAR NO-UNDO.
 
 /* Handling of sms sending is different at January 2016 
@@ -74,11 +75,11 @@ fGetStartEndDates({&Q25_MONTH_23}, liStartDay, liEndDay, ldaStartDateMonth24,
    FALSE no actual sending, just calculation and log generation for testing
    and checking purposes. */
 liTotalCount = fCollectQ25SMSMessages(ldaStartDateMonth22, 
-                   ldaEndDateMonth22, {&Q25_MONTH_22}, FALSE, 0) + 
+                   ldaEndDateMonth22, {&Q25_MONTH_22}, FALSE, liTempCount) + 
                fCollectQ25SMSMessages(ldaStartDateMonth23, 
-                   ldaEndDateMonth23, {&Q25_MONTH_23}, FALSE, 0) +
+                   ldaEndDateMonth23, {&Q25_MONTH_23}, FALSE, liTempCount) +
                fCollectQ25SMSMessages(ldaStartDateMonth24, 
-                   ldaEndDateMonth24, {&Q25_MONTH_24}, FALSE, 0).
+                   ldaEndDateMonth24, {&Q25_MONTH_24}, FALSE, liTempCount).
 
 lcLogText = "START|" + STRING(liStartDay) + "|" + STRING(liEndDay) + "|" + 
             STRING(ldaStartDateMonth22) + "|" + 
