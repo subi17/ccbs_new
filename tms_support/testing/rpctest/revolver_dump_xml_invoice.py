@@ -15,5 +15,5 @@ if len(sys.argv) < 2: instruction()
 else:
    var1 = int(sys.argv[1])
 
-p=s.revolver.dump_xml_invoice(var1,'FOLDER')
+p=s.revolver.dump_xml_invoice(var1,'temp')
 print_results(p)
