@@ -899,6 +899,7 @@
 "GPRSDATA2_CONT9" "GPRS data slow" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/05/14 952
 "GPRSDATA2_DATA5" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/09/13 918
 "GPRSDATA2_DATA6" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/05/14 950
+"GPRSDATA2_DATA7" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/15 1004
 "GPRSDATA2_DUB2" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/05/12 854
 "GPRSDATA2_DUB3" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/12 892
 "GPRSDATA2_MDUB2" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 610
@@ -912,6 +913,7 @@
 "GPRSDATA_CONT9" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/05/14 951
 "GPRSDATA_DATA5" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/09/13 919
 "GPRSDATA_DATA6" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/05/14 949
+"GPRSDATA_DATA7" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/15 1005
 "GPRSDATA_DUB" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 614
 "GPRSDATA_DUB2" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/05/12 853
 "GPRSDATA_DUB3" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/12 891
