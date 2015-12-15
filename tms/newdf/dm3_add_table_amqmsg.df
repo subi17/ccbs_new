@@ -50,6 +50,7 @@ ADD FIELD "InsertTS" OF "AMQMsg" AS decimal
    COLUMN-LABEL "InsertTS"
    LABEL "Creation Time"
    HELP "Creation Time"
+   DECIMALS 5
    ORDER 60      
 
 ADD FIELD "ResendCount" OF "AMQMsg" AS integer
