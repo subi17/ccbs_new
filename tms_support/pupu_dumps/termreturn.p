@@ -7,6 +7,8 @@ DEFINE VARIABLE liEvents            AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTariffBundle      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOldCLIType        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOldtariffBundle   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE llDeviceStart       AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE llDeviceScreen      AS LOGICAL   NO-UNDO.
 
 {commpaa.i}
 katun = "Cron".
@@ -51,6 +53,12 @@ FOR EACH TermReturn NO-LOCK:
          TITLE " Collecting " FRAME fQty.
    END. /* IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN DO: */
 
+   IF TermReturn.DeviceStart = ? AND TermReturn.DeviceScreen = ? THEN
+     ASSIGN llDeviceStart = TRUE
+            llDeviceScreen = TRUE.
+   ELSE ASSIGN llDeviceStart = TermReturn.DeviceStart
+               llDeviceScreen = TermReturn.DeviceScreen.
+
    PUT STREAM slog UNFORMATTED
        "TermReturn"                                lcDel
        "CREATE"                                    lcDel
@@ -62,8 +70,8 @@ FOR EACH TermReturn NO-LOCK:
        fNotNull(TermReturn.BillCode)               lcDel
        fNotNull(TermReturn.IMEI)                   lcDel
        fNotNull(TermReturn.MSISDN)                 lcDel
-       fNotNull(STRING(TermReturn.DeviceStart))    lcDel
-       fNotNull(STRING(TermReturn.DeviceScreen))   lcDel
+       fNotNull(STRING(llDeviceStart))             lcDel
+       fNotNull(STRING(llDeviceScreen))            lcDel
        fNotNull(TermReturn.Salesman)               lcDel
        fNotNull(TermReturn.TerminalType)           lcDel
        fNotNull(TermReturn.EnvelopeNumber)         lcDel
