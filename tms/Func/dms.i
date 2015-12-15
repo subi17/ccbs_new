@@ -307,7 +307,7 @@ FUNCTION fGenerateMessage RETURNS CHAR
    lcDNIType = fNotNull(OrderCustomer.CustIdType).
    lcDNI = fNotNull(OrderCustomer.CustId).
    lcFname = fNotNull(OrderCustomer.FirstName).
-   lcLname = fNotNull(OrderCustomer.SurName1) +
+   lcLname = fNotNull(OrderCustomer.SurName1) + " " + 
              fNotNull(Ordercustomer.SurName2).
    lcEmail = fNotNull(OrderCustomer.Email).
    lcBankAcc = fNotNull(OrderCustomer.BankCode).

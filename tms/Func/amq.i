@@ -85,12 +85,6 @@ PROCEDURE pInitialize:
    END.
    INPUT CLOSE.
 
-   IF lcHost = "" THEN RETURN "Host is missing".
-   IF liPort = 0 OR liPort = ? THEN RETURN "Port is missing".
-   
-   IF lcUserName = "" THEN RETURN "Username is missing".
-   IF lcPassword = "" THEN RETURN "Password is missing".
-
    IF liLogLevel = 0 OR liLogLevel = ? THEN
       liLogLevel = 2. /* default */
 
@@ -104,6 +98,13 @@ PROCEDURE pInitialize:
       fSetGlobalLoggingLevel(liLogLevel).
       fSetLogTreshold(liLogTreshold).
    END. /* IF lcLogFile > "" THEN DO: */
+
+   IF lcHost = "" THEN RETURN "Host is missing".
+   IF liPort = 0 OR liPort = ? THEN RETURN "Port is missing".
+
+   IF lcUserName = "" THEN RETURN "Username is missing".
+   IF lcPassword = "" THEN RETURN "Password is missing".
+
    RETURN "".
 
 END PROCEDURE.
@@ -144,14 +145,14 @@ FUNCTION fSendToMQ RETURNS CHAR
    DEF VAR lcRet AS CHAR NO-UNDO.
    DEF VAR lcDBStatus  AS CHAR NO-UNDO.
 
-   RUN pInitialize(INPUT icConfFile, INPUT icModule).
-
    icMsg = fNotNull(icMsg).
    IF icMsg EQ "" THEN DO:
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
       LOG-MANAGER:WRITE-MESSAGE("", "AMQ: Message is empty").
       RETURN "AMQ: Message is empty".
    END.
+
+   RUN pInitialize(INPUT icConfFile, INPUT icModule).
 
    IF RETURN-VALUE > "" THEN DO:
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
