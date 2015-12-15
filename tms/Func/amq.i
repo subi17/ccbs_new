@@ -172,14 +172,15 @@ FUNCTION fSendToMQ RETURNS CHAR
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN DO:
             LOG-MANAGER:WRITE-MESSAGE("ActiveMQ Publisher handle not found",
                                     "ERROR").
-            lcRet = "ActiveMQ Publisher handle not found".
       END.
+      lcRet = "ActiveMQ Publisher handle not found".
    END.
    ELSE IF NOT lMsgPublisher:send_message(icMsg) THEN DO:
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN DO:
          LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
-         lcRet = "ActiveMQ message sending failed".
       END.
+      lcRet = "ActiveMQ message sending failed".
+
    END.
    RUN pFinalize.
 
