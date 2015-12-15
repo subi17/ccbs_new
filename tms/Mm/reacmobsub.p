@@ -960,13 +960,12 @@ PROCEDURE pRecoverSTC PRIVATE:
    IF NOT AVAILABLE bMSRequestSTC THEN RETURN.
 
    /* Calculate new STC/BTC activation time */
-   IF bMSRequestSTC.ActStamp < fMakeTS() AND
-     ((bMSRequestSTC.ReqCparam1 BEGINS "CONT" AND
-       bMSRequestSTC.ReqCparam2 BEGINS "CONT") OR
-       DAY(TODAY) EQ 1) THEN DO:
-      IF bMSRequestSTC.ReqCParam1 BEGINS "CONT" THEN
-         ldeSTCStamp = fMake2Dt(TODAY,0).
-      ELSE ldeSTCStamp = fSecOffSet(fMakeTS(),5).
+   IF bMSRequestSTC.ActStamp > fMakeTS() THEN
+      ldeSTCStamp = bMSRequestSTC.ActStamp.
+   ELSE IF (bMSRequestSTC.ReqCparam1 BEGINS "CONT" AND
+      bMSRequestSTC.ReqCparam2 BEGINS "CONT") OR
+      DAY(TODAY) EQ 1 THEN DO:
+      ldeSTCStamp = fMake2Dt(TODAY,0).
    END.
    ELSE ldeSTCStamp = fMake2Dt(fLastDayOfMonth(TODAY) + 1,0).
 
