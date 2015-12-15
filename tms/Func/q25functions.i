@@ -21,6 +21,7 @@
 {smsmessage.i}
 {aes_encrypt.i}
 
+
 DEF STREAM Sout.
 FUNCTION fGetStartEndDates RETURNS LOGICAL
    (INPUT  iiMonth AS INT,
@@ -121,9 +122,8 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
                                 1,
                                 OUTPUT ldReqStamp).
       lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT",
-                             STRING(idAmount / 12)).
+                             STRING(ROUND(idAmount / 12,2))).
    END.
-
    IF iiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO:
    /* Month 22-24 */
       /* Encrypted MSISDN added to messages sent during 22 to 24 month */
@@ -295,7 +295,7 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
          END.
          ELSE DO:
             lcSMSMessage = fgetQ25SMSMessage(iiphase, DCCLI.ValidTo, 
-                                             SingleFee.amt, SingleFee.CLI).
+                                             SingleFee.amt, DCCLI.CLI).
             /* Send SMS */
             fCreateSMS(SingleFee.CustNum,
                        DCCLI.Cli,
