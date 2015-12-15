@@ -80,7 +80,6 @@ FUNCTION fMakeContract RETURN INT
   DEF VAR debug    AS LO NO-UNDO.
   DEF VAR monthdates  AS I NO-UNDO.
   DEF VAR billedDATES AS I NO-UNDO.
-  DEF VAR ldaEndDate AS DATE NO-UNDO. 
 
   DEF VAR liBrokenRental AS INT  NO-UNDO. 
 
@@ -91,11 +90,8 @@ FUNCTION fMakeContract RETURN INT
   FIND FixedFee where FixedFee.FFNum = FFNum no-lock.
 
   /* on 'endless' contract we must DEFINE an absolute expiration Period */
-  IF EndPeriod = 999999 THEN DO:
-     ldaEndDate = ADD-INTERVAL(FixedFee.BegDate,5,"months").
-     expper = year(ldaEndDate) * 100 + month(ldaEndDate).
-  END.
-  ELSE expper = FixedFee.EndPeriod.
+  IF EndPeriod = 999999 THEN expper = (year(FixedFee.BegDate) + 2) * 100 + 12.
+                        ELSE expper = FixedFee.EndPeriod.
 
    /* broken rental for 1. month or full */
   IF DAY(FixedFee.BegDate) NE 1 THEN DO:
