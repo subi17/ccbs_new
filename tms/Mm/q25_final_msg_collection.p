@@ -38,6 +38,10 @@ IF (DAY(TODAY) = 21) AND fGetStartEndDates({&Q25_MONTH_24}, liStartDay,
                                          ldaEndDateMonth24, 
                                          {&Q25_MONTH_24_FINAL_MSG}, FALSE, 
                                          liTempCount).
+   fQ25LogWriting(STRING(fMakeTS()) + "Start final MESSAGE sending. " + 
+                  STRING(liTotalCount) + " messages to be send.").
    fCollectQ25SMSMessages(ldaStartDateMonth24, ldaEndDateMonth24, 
                           {&Q25_MONTH_24_FINAL_MSG}, TRUE, liTotalCount).
+   fQ25LogWriting("End final message sending. " + STRING(liTotalCount) +
+                  " messages left.").
 END.
