@@ -80,7 +80,10 @@ FUNCTION fGetDates RETURNS LOGICAL
    RETURN TRUE.
 END FUNCTION.
 */
-FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT):
+FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
+                                              INPUT idaValidTo AS DATE,
+                                              INPUT idAmount AS DEC,
+                                              INPUT icCli AS CHAR):
    DEF VAR lcSMSMessage      AS CHAR NO-UNDO.
    DEF VAR ldReqStamp        AS DEC  NO-UNDO.
    DEF VAR lcEncryptedMSISDN AS CHAR NO-UNDO.
@@ -92,7 +95,7 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT):
                               1,
                               OUTPUT ldReqStamp).
       lcSMSMessage = REPLACE(lcSMSMessage,"#DATE","20" + "/" +
-                             STRING(MONTH(Q25Messaging.ValidTo))).
+                             STRING(MONTH(idaValidTo))).
    END.
    ELSE IF iiPhase = {&Q25_MONTH_24} THEN DO:
    /* Q25 reminder month 24 */
@@ -109,7 +112,7 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT):
                                 1,
                                 OUTPUT ldReqStamp).
       lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT",
-                     STRING(Q25Messaging.Amt)).
+                     STRING(idAmount)).
    END.
    ELSE IF iiPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
    /* Q25 Month 24 20th day extension made */
@@ -118,13 +121,13 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT):
                                 1,
                                 OUTPUT ldReqStamp).
       lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT",
-                             STRING(Q25Messaging.Amt / 12)).
+                             STRING(idAmount / 12)).
    END.
 
    IF iiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO:
    /* Month 22-24 */
       /* Encrypted MSISDN added to messages sent during 22 to 24 month */
-      lcEncryptedMSISDN = encrypt_data(Q25Messaging.Cli,
+      lcEncryptedMSISDN = encrypt_data(icCli,
                           {&ENCRYPTION_METHOD}, {&Q25_PASSPHRASE}).
       lcSMSMessage = REPLACE(lcSMSMessage, "#MSISDN", lcEncryptedMSISDN).
    END.
@@ -291,7 +294,8 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
             liAlreadyCreated = liAlreadyCreated + 1.
          END.
          ELSE DO:
-            lcSMSMessage = fgetQ25SMSMessage(iiphase).
+            lcSMSMessage = fgetQ25SMSMessage(iiphase, DCCLI.ValidTo, 
+                                             SingleFee.amt, SingleFee.CLI).
             /* Send SMS */
             fCreateSMS(SingleFee.CustNum,
                        DCCLI.Cli,
