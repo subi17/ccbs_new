@@ -43,6 +43,8 @@ DEFINE VARIABLE lcOperator        AS CHARACTER     NO-UNDO.
 DEFINE VARIABLE lcServer          AS CHARACTER     NO-UNDO.
 DEFINE VARIABLE liOffSet          AS INTEGER       NO-UNDO.
 DEFINE VARIABLE lcNagiosURL       AS CHARACTER     NO-UNDO.
+DEF VAR lcMonitorMethod AS CHAR NO-UNDO.
+DEF VAR lcMonitorDir    AS CHAR NO-UNDO.
 DEFINE VARIABLE lcStatLogFile     AS CHARACTER     NO-UNDO.
 DEFINE VARIABLE lcCdrSpool        AS CHARACTER     NO-UNDO.
 DEFINE VARIABLE lcCdrOut          AS CHARACTER     NO-UNDO.
@@ -67,6 +69,7 @@ DEFINE VARIABLE lMsgPublisher     AS CLASS Gwy.MqPublisher NO-UNDO.
 
 DEFINE STREAM sDump.
 DEFINE STREAM sLogStat.
+DEF STREAM sNagios.
 
 DEFINE TEMP-TABLE ttNagios NO-UNDO
    FIELD tcCommand AS CHARACTER
@@ -84,8 +87,15 @@ DEFINE TEMP-TABLE ttStat NO-UNDO
    INDEX TypeH  ttDatabase ttTable ttEventType ttDate ttHour.
 
 ASSIGN
-   lcOperator = "XF"
-   liOffSet   = 1.
+   lcOperator = fCparam("NAGIOS","Operator")
+   liOffSet   = INT(fCParam("NAGIOS","TimeOffSet"))
+   lcMonitorMethod = fCParam("NAGIOS","MonitorMethod").
+IF lcMonitorMethod = ? THEN lcMonitorMethod = "File".
+
+IF lcMonitorMethod = "File" THEN DO:
+   lcMonitorDir = fCParam("NAGIOS","MonitorDir").
+   IF lcMonitorDir = ? THEN lcMonitorDir = "/tmp".
+END.   
 
 FUNCTION fNotNull RETURNS CHAR (INPUT icInput AS CHAR):
 
@@ -138,6 +148,15 @@ FUNCTION fSocWrite RETURNS LOGICAL
 
 END FUNCTION.
 
+FUNCTION fFileWrite RETURNS LOGIC
+   (icMessage AS CHAR,
+    icFile AS CHAR):
+    
+   OUTPUT STREAM sNagios TO VALUE(icFile) APPEND.
+   PUT STREAM sNagios UNFORMATTED icMessage SKIP.
+   OUTPUT STREAM sNagios CLOSE.
+       
+END FUNCTION.
 FUNCTION fNagios RETURNS LOGICAL
   (INPUT pcCommand AS CHARACTER,
    INPUT pcURL     AS CHARACTER):
@@ -149,6 +168,14 @@ FUNCTION fNagios RETURNS LOGICAL
       
    /* nagios URL */
    IF pcURL = "" THEN RETURN FALSE.
+   FIND FIRST TMSParam WHERE
+              TMSParam.Brand      = gcBrand  AND
+              TMSParam.ParamGroup = "NAGIOS" AND
+              TMSParam.ParamCode  = "URL"
+   NO-LOCK NO-ERROR.
+   IF AVAIL TMSParam AND TRIM(TMSParam.CharVal) NE "" 
+      THEN lcNagiosURL = TMSParam.CharVal.
+   ELSE RETURN FALSE.
 
    ASSIGN
       lcCommand     = ENTRY(1,pcCommand,":")
@@ -161,16 +188,28 @@ FUNCTION fNagios RETURNS LOGICAL
                       SUBSTR(lcTimeStamp,12,2) +
                       SUBSTR(lcTimeStamp,15,2) +
                       SUBSTR(lcTimeStamp,18,2)
-      lcCommand     = UPPER(lcCommand)
-      lcNagios      = "[" + lcTimeStamp + "] " +
-                      "PROCESS_SERVICE_CHECK_RESULT;"
-      lcNagios      = lcNagios + lcHostName + ";"
-      lcNagios      = lcNagios + "Screen_" + lcOperator + "_" + lcCommand +
+      lcNagios      = "[" + lcTimeStamp + "]".
+      IF lcMonitorMethod = "File" THEN 
+         lcNagios = lcNagios + ";" + lcServer + ";" +
+                    lcOperator + ";" + lcCommand.
+      ELSE lcNagios = lcNagios +
+                      "PROCESS_SERVICE_CHECK_RESULT;" +
+                      lcServer + ";" +
+                      "Screen_" + lcOperator + "_" + 
+                      UPPER(lcCommand) +
                       ";0;Screen Ok - " + lcOperator + " ".
    
    lcNagios = lcNagios + lcDescription.
 
-   fSocWrite(lcNagios + CHR(10),pcURL).
+   IF lcMonitorMethod = "File" THEN DO:
+      fFileWrite(lcNagios,lcMonitorDir + "/" + lcCommand + ".txt").
+   END.   
+   ELSE DO:
+      IF lcNagiosURL = ? OR lcNagiosURL = "" THEN RETURN FALSE.
+      fSocWrite(lcNagios + CHR(10),lcNagiosUrl).
+   END.
+      
+   RETURN TRUE.
 END.
 
 FUNCTION fKeepAlive RETURNS INTEGER
