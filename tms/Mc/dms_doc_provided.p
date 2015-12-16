@@ -26,7 +26,14 @@ DEF VAR lcMSg             AS CHAR NO-UNDO.
 DEF VAR lcErr             AS CHAR NO-UNDO.
 DEF VAR liNoDocProvidedPeriod AS INT NO-UNDO.
 DEF VAR lcNoDocProvidedStatuses AS CHAR NO-UNDO.
+DEF VAR lcActionID        AS CHAR NO-UNDO.
+DEF VAR lcTableName       AS CHAR NO-UNDO.
+DEF VAR ldCurrentTimeTS   AS DEC  NO-UNDO.
 DEF STREAM sLogFile.
+
+lcTableName = "DMS".
+lcActionID = {&DMS_REMINDER_SENDER}.
+ldCurrentTimeTS = fMakeTS().
 
 /*iiDays: how many days are between today and the selected date
 For example
@@ -41,9 +48,6 @@ FUNCTION fGetDateRange RETURNS CHAR
    odEnd = fOffset(ldNow, -24 * (iiDays )).
 
 END.
-
-/*Is feature active:*/
-IF fDMSOnOff() NE TRUE THEN RETURN.
 
 FUNCTION fLogLine RETURNS LOGICAL
    (icLine AS CHAR,
@@ -60,6 +64,43 @@ FUNCTION fLogMsg RETURNS LOGICAL
       icMessage "#"
       "DMS" SKIP.
 END FUNCTION.
+
+/*Is feature active:*/
+IF fDMSOnOff() NE TRUE THEN RETURN.
+
+DO TRANS:
+
+   FIND FIRST ActionLog WHERE
+              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.ActionID  EQ  lcActionID     AND
+              ActionLog.TableName EQ  lcTableName NO-ERROR.
+
+   IF AVAIL ActionLog AND
+      ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN DO:
+      QUIT.
+   END.
+
+   IF NOT AVAIL ActionLog THEN DO:
+      /*First execution stamp*/
+      CREATE ActionLog.
+      ASSIGN
+         ActionLog.Brand        = gcBrand
+         ActionLog.TableName    = lcTableName
+         ActionLog.ActionID     = lcActionID
+         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
+         ActionLog.UserCode     = katun
+         ActionLog.ActionTS     = ldCurrentTimeTS.
+      RELEASE ActionLog.
+      RETURN. /*No reporting in first time.*/
+   END.
+   ELSE DO:
+      ASSIGN
+         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
+         ActionLog.UserCode     = katun
+         ActionLog.ActionTS     = ldCurrentTimeTS.
+      RELEASE Actionlog.
+   END.
+END.
 
 /*Dir and file definition*/
 ASSIGN
@@ -89,12 +130,30 @@ FOR EACH DMS NO-LOCK WHERE
    IF LOOKUP(DMS.StatusCode, lcNoDocProvidedStatuses) > 0 THEN DO:
      /*Pending (A0), Doc errónea status (C)*/
      lcErr = fSendChangeInformation(DMS.StatusCode  + "_by_batch" ,
-                     DMS.HostID, "", lcMsg).
+                                    DMS.HostID, 
+                                    "", /*deposit*/
+                                    "", /*docList*/
+                                    "", /*docListSep*/
+                                    "doc_reminder",
+                                    lcMsg).
      fLogMsg(lcMsg).
+     fLogLine("","Msg sending status " + lcErr).
    END.
 END.
      fLogLine("","DMS Reminder creation ends " + fTS2HMS(fMAkeTS())).
 
 OUTPUT STREAM sLogFile CLOSE.
 
+DO TRANS:
+   FIND FIRST ActionLog WHERE
+              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.ActionID  EQ  lcActionID     AND
+              ActionLog.TableName EQ  lcTableName    AND 
+              ActionLog.ActionStatus NE {&ACTIONLOG_STATUS_SUCCESS}
+   EXCLUSIVE-LOCK NO-ERROR.
+   IF AVAIL ActionLog THEN DO:
+      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
+   END.
+   RELEASE ActionLog.
+END.
 
