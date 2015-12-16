@@ -166,7 +166,6 @@ END.
 FUNCTION fNeededDocs RETURNS CHAR
    (BUFFER Order FOR Order):
    DEF VAR lcPAram AS CHAR NO-UNDO.
-   DEF VAR liCount AS INT NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
 
    /*CASE More DOC needed*/
@@ -257,11 +256,30 @@ FUNCTION fNeededDocs RETURNS CHAR
 
 END.
 
+
+
+/*DMS specific, quick implementation*/
+FUNCTION fDoc2Msg RETURNS CHAR
+   (icDocNbr AS CHAR,
+    icDocComment AS CHAR):
+   DEF VAR lcRet AS CHAR NO-UNDO.
+
+   IF icDocComment = "" THEN icDocComment = "null".
+   ELSE icDocComment =  "~"" + icDocComment + "~"".
+
+   lcRet =  "~{" + "~"number~"" + "~:" + "~"" + icDocNbr +  "~"" + "," +
+                  "~"revision_comment~"" + "~:" + icDocComment  +
+            "~}".
+   RETURN lcRet.
+END.
+
 /*Function generates JSON message for providing information for
   SMS/EMAIL sending. */
 FUNCTION fGenerateMessage RETURNS CHAR
    (icNotifCaseId AS CHAR,
     icDeposit AS CHAR,
+    icDocList AS CHAR,
+    icDocListSep AS CHAR,
    BUFFER Order FOR Order,
    BUFFER Ordercustomer FOR Ordercustomer):
   
@@ -276,12 +294,13 @@ FUNCTION fGenerateMessage RETURNS CHAR
    DEF VAR lcSeq AS CHAR NO-UNDO.
    DEF VAR lcMessage AS CHAR NO-UNDO.
    DEF VAR lcArray AS CHAR NO-UNDO.
-   DEF VAR lcDocList AS CHAR NO-UNDO.
-   DEF VAR liCount AS INT NO-UNDO.
+   DEF VAR lcDocList AS CHAR NO-UNDO. /*Plain list if required doc numbers*/
+   DEF VAR i AS INT NO-UNDO.
+   DEF VAR lcDocNotifEntry AS CHAR NO-UNDO.
 
    IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN
       lcMSISDN = fNotNull(Order.CLI).
-   ELSE
+   ELSE 
       lcMSISDN = fNotNull(OrderCustomer.MobileNumber).
 
    lcContractID = fNotNull(Order.ContractId).
@@ -296,11 +315,25 @@ FUNCTION fGenerateMessage RETURNS CHAR
    lcSeq = STRING(NEXT-VALUE(SMSSEQ)). /*read and increase SMSSEQ. The sequence must be reserved as ID for WEB&HPD*/
    lcDocList = fNeededDocs(BUFFER Order).  
    lcArray = fInitJsonArray("documents").
-
-   DO liCount = 1 TO NUM-ENTRIES(lcDocList):
-      fAddToJsonArray(lcArray, STRING(ENTRY(liCount,lcDocList))).
+   
+   /*Add document comment if DMS has given it.*/
+   IF icDocList EQ "" THEN DO: /*from TMS batch, initial information, use local*/
+      DO i = 1 TO NUM-ENTRIES(lcDocList):
+         lcDocNotifEntry = fDoc2Msg(ENTRY(i,lcDocList), 
+                                    "").
+         fObjectToJsonArray(lcArray, lcDocNotifEntry).
+      END.
+   END.
+   ELSE DO: /*from DMS, add doc comments*/
+      DO i = 1 TO NUM-ENTRIES(icDocList,icDocListSep) BY 4:
+         lcDocNotifEntry = fDoc2Msg(ENTRY(i,icDocList,icDocListSep),
+                                    ENTRY(i + 3,icDocList,icDocListSep)).
+         fObjectToJsonArray(lcArray, lcDocNotifEntry).
+      END.
    END.
 
+
+   
    /*Fill data for message.*/
    lcMessage = "~{" + "~"metadata~""  + "~:" + "~{" +
                          "~"case~""  + "~:" + "~"" + icNotifCaseID  + "~"," +
@@ -326,17 +359,43 @@ FUNCTION fGenerateMessage RETURNS CHAR
    RETURN lcMessage.
 END.
 
+FUNCTION fDmsConfig RETURNS CHAR ():
+   DEF VAR lcHostName AS CHAR NO-UNDO.   
+   DEF VAR lcConfFile AS CHAR NO-UNDO.
+
+   /* get hostname */
+   INPUT THROUGH uname -n.
+   IMPORT lcHostName.
+   INPUT CLOSE.
+   /*TODO: make constants for environments!!!*/
+   CASE lcHostName:
+      WHEN "Alpheratz" THEN DO:
+         lcConfFile = "Mailconf/dms_messaging_conf.alpheratz".
+      END.
+      WHEN "Pallas" THEN DO:
+         lcConfFile = "Mailconf/dms_messaging_conf.prod".
+      END.
+      OTHERWISE DO:
+         RETURN "Unknown configuration".
+      END.
+   END CASE.
+   RETURN lcConfFile.
+END.
 
 /*Function sends SMS and EMAIL generating information to WEB if it is needed*/
 FUNCTION fSendChangeInformation RETURNS CHAR
-   (icDMSStatus AS CHAR,
-    icOrderID AS INT,
-    icDeposit AS CHAR,
+   (icDMSStatus AS CHAR, /*DMS Status*/ 
+    icOrderID AS INT,    /*Order*/
+    icDeposit AS CHAR,   /*Deposit, if available*/
+    icDocList AS CHAR,   /*Doc List if available*/
+    icDocListSep AS CHAR, /*Separator if doc list is available*/
+    icModule AS CHAR,    /*identifier for MQ log file */
     OUTPUT ocSentMessage AS CHAR): /*for debugging, also includes additional data related to message.*/
 
    DEF BUFFER Order FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
-
+   
+   DEF VAR lcConfig AS CHAR NO-UNDO.
    DEF VAR lcNotifCaseID AS CHAR NO-UNDO.
    DEF VAR lcParam AS CHAR NO-UNDO.
    DEF VAR lcMessage AS CHAR NO-UNDO.
@@ -373,12 +432,16 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    END.
    lcMessage = fGenerateMessage(lcNotifCaseID,
                                 icDeposit,
+                                icDocList,
+                                icDocListSep,
                                 BUFFER Order,
                                 BUFFER Ordercustomer).
 
    ocSentMessage = "Case param: " + lcParam + "Msg: " + lcMessage.              
    lcMQ =  fCParamNotNull("DMS","DMS_MQ"). 
-   RETURN fSendToMQ(lcMessage, "dms", lcMQ).
+   lcConfig = fDMSConfig().
+   IF lcConfig EQ "" THEN RETURN "MQ config not available".
+   RETURN fSendToMQ(lcMessage, lcMQ, lcConfig, icModule).
 END.
 
 

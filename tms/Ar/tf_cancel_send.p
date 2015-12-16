@@ -5,16 +5,27 @@
   APPLICATION ..: tms
   AUTHOR .......: anttis
   CREATED ......: 11.11.2014
+                  11.12.2015 Modified program work as a part of automated process
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+{commali.i}
 {cparam2.i}
 {date.i}
 {tmsconst.i}
 {eventlog.i}
 {ftransdir.i}
+{msreqfunc.i}
+
+DEF INPUT PARAMETER iiMSrequest AS INT  NO-UNDO.
+
+FIND MSRequest WHERE 
+     MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
+IF NOT AVAILABLE MsRequest OR 
+   MsRequest.ReqType NE {&REQTYPE_TERMINAL_FINANCE_CAN_TER_BANK_FILE} THEN
+   RETURN "ERROR".
+
+/* request is under work */
+IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
 DEF STREAM sout.
 DEF STREAM slog.
@@ -31,9 +42,16 @@ ASSIGN
    lcLogDir = fCParam("TermFinance","LogDir").
 
 IF lcRootDir EQ ? OR
-   NOT lcRootDir > "" THEN RETURN "ERROR:Root directory not defined".
+   NOT lcRootDir > "" THEN DO:
+   fReqStatus(3,"ERROR:Root directory not defined").
+   RETURN.
+END.
+
 IF lcLogDir EQ ? OR
-   NOT lcLogDir > "" THEN RETURN "ERROR:Log root directory not defined".
+   NOT lcLogDir > "" THEN DO:
+   fReqStatus(3,"ERROR:Log root directory not defined").
+   RETURN.
+END.
    
 FUNCTION fLogLine RETURNS LOGICAL
    (iiOrderId AS INT,
@@ -44,17 +62,19 @@ FUNCTION fLogLine RETURNS LOGICAL
       iiOrderId "|" icNote SKIP.
 
 END.
-/*
-RUN pCreateFile({&TF_BANK_UNOE},"CANCEL","ANULACIONESYOIGO").
-*/
+IF MsRequest.ReqCParam1 = {&TF_BANK_UNOE} THEN DO:
+   RUN pCreateFile({&TF_BANK_UNOE},"CANCEL","ANULACIONESYOIGO").
+   RUN pCreateFile({&TF_BANK_UNOE},"TERMINATION","CANCELACIONESYOIGO").
+END.
+ELSE IF MsRequest.ReqCParam1 = {&TF_BANK_SABADELL} THEN DO:
+   RUN pCreateFile({&TF_BANK_SABADELL},"CANCEL","ANULACIONESYOIGOSABADELL").
+   RUN pCreateFile({&TF_BANK_SABADELL},"TERMINATION","CANCELACIONESYOIGOSABADELL").
+END.
+ELSE DO:
+   fReqStatus(3,"ERROR: Unsupported bank code").
+   RETURN.
+END.   
 
-/*
-RUN pCreateFile({&TF_BANK_UNOE},"TERMINATION","CANCELACIONESYOIGO").
-*/
-RUN pCreateFile({&TF_BANK_SABADELL},"CANCEL","ANULACIONESYOIGOSABADELL").
-/*
-RUN pCreateFile({&TF_BANK_SABADELL},"TERMINATION","CANCELACIONESYOIGOSABADELL").
-*/
 PROCEDURE pCreateFile:
 
    DEF INPUT PARAM icBank AS CHAR NO-UNDO. 
@@ -68,7 +88,9 @@ PROCEDURE pCreateFile:
    DEF VAR liOk AS INT NO-UNDO. 
    
    ASSIGN
-      lcFile = lcRootDir + "spool/" + icFileName
+      lcFile = lcRootDir + "spool/" + icFileName + "_" +
+               STRING(YEAR(TODAY),"9999") +
+               STRING(MONTH(TODAY),"99") + ".txt".
       lcLogFile = lcLogDir + "internal/" + icFileName + "_" +
                STRING(DAY(TODAY),"99") +
                STRING(MONTH(TODAY),"99") +
@@ -195,11 +217,13 @@ PROCEDURE pCreateFile:
       
    OUTPUT STREAM sout close.
 
-/*   fMove2TransDir(lcLogFile, "", lcLogDir + "outgoing/").  */
+   fMove2TransDir(lcLogFile, "", lcLogDir + "outgoing/"). 
    lcProcessedFile = fMove2TransDir(lcFile, "", lcRootDir + "outgoing/"). 
    IF SESSION:BATCH AND 
       lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
 
+   fReqStatus(2,"").
+   
    DO TRANS:
       
       CREATE ActionLog.
