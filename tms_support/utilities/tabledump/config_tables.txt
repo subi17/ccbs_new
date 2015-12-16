@@ -41,6 +41,7 @@ DCServicePackage
 #DFField
 #DFTimeTable
 DialType
+DiscountPlan
 DiscPlan
 DPBasis
 DPConf
