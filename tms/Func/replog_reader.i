@@ -13,6 +13,7 @@
 {date.i}
 {log.i}
 {ftransdir.i}
+{cparam2.i}
 
 DEFINE VARIABLE liLoop            AS INTEGER       NO-UNDO.
 DEFINE VARIABLE ldToday           AS DATE          NO-UNDO.
