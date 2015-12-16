@@ -12,6 +12,7 @@
             31.05.2007/aam SendMailX,
                            attachments are no longer mandatory with sendatt
 */
+{commali.i}
 
 DEF VAR xMailRecip    AS CHAR NO-UNDO.
 DEF VAR xMailAddr     AS CHAR NO-UNDO.
@@ -270,6 +271,7 @@ FUNCTION SendMaileInvoice RETURNS LOGIC (iMailTxt AS CHAR,
                                          iContentFile AS CHAR).
 
     DEF VAR lcFileName   AS CHAR NO-UNDO.
+    DEF VAR lcErrorLog   AS CHAR NO-UNDO.
 
     IF iAttachFileName > "" THEN
        lcFileName = ENTRY(NUM-ENTRIES(iAttachFileName,"/"),
@@ -311,7 +313,15 @@ FUNCTION SendMaileInvoice RETURNS LOGIC (iMailTxt AS CHAR,
 
     /* possible errors */
     ELSE DO:
-        OUTPUT TO /tmp/sendmail_einvoice_error.log.
+        /* YTS-7530, this can be removed when TMS is running under user account
+        with same group as tmsrpc. Currently using root, planned to be changed
+        at begining of 2016. */
+        IF katun EQ "NewtonRPC" THEN DO:
+           lcErrorLog = "/tmp/sendmail_einvoice_error_" + katun + ".log".
+           OUTPUT TO lcErrorLog.
+        END.   
+        ELSE
+           OUTPUT TO /tmp/sendmail_einvoice_error.log.
         PUT UNFORMATTED 
             THIS-PROCEDURE:FILE-NAME SKIP
             iMailTxt                 SKIP
@@ -326,8 +336,13 @@ FUNCTION SendMaileInvoice RETURNS LOGIC (iMailTxt AS CHAR,
                        " -f starnet@starnet.fi" +           /* sender */
                        " -r " + xMailAdmin.                 /* recipient */
     END.
-
-    UNIX SILENT VALUE(xMailComm + " >> /tmp/sendmail_einvoice.log 2>&1").
+    /* YTS-7530, this can be removed when TMS is running under user account  
+       with same group as tmsrpc. Currently using root, planned to be changed
+       at begining of 2016. */
+    IF katun EQ "NewtonRPC" THEN
+       UNIX SILENT VALUE(xMailComm + " >>/tmp/sendmail_" + katun + ".log 2>&1").
+    ELSE
+       UNIX SILENT VALUE(xMailComm + " >> /tmp/sendmail_einvoice.log 2>&1").
 
     RETURN (xMailError = "").
 

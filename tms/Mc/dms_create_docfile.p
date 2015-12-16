@@ -746,7 +746,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
                          ENTRY(liCount,lcRequiredDocs) + "," +
                          "," + /*This field is filled only by DMS responses*/
                          lcDMSStatusDesc + "," +
-                         "Doc created".
+                         "".
       IF liCount NE NUM-ENTRIES(lcRequiredDocs)
          THEN lcDocListEntries = lcDocListEntries + ",".
    END.
@@ -768,7 +768,13 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
                             lcDocListEntries /*DocList*/,
                             ",").
 
-   lcErr = fSendChangeInformation("", Order.OrderId, "", lcMsg).
+   lcErr = fSendChangeInformation("", 
+                                  Order.OrderId, 
+                                  "", 
+                                  lcDocListEntries,
+                                  ",",
+                                  "create_cf",
+                                  lcMsg).
    fLogMsg("Msg,2 : " + lcMsg + " #Status: " + lcErr).
 
    RETURN "".
@@ -891,7 +897,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                          ENTRY(liCount,lcRequiredDocs) + "," +
                          "," + /*This field is filled only by DMS responses*/
                          lcDMSStatusDesc + "," +
-                         "Doc created".
+                         "".
       IF liCount NE NUM-ENTRIES(lcRequiredDocs)
          THEN lcDocListEntries = lcDocListEntries + ",".
    END.
@@ -912,7 +918,13 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             ",").
-   lcErr = fSendChangeInformation("", Order.OrderId, "", lcMsg).
+   lcErr = fSendChangeInformation("", 
+                                  Order.OrderId, 
+                                  "", 
+                                  lcDocListEntries,
+                                  ",",
+                                   "create_cf",
+                                   lcMsg).
    fLogMsg("Msg,3 : " + lcMsg + " #Status: " + lcErr).
 
 

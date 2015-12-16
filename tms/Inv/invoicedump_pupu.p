@@ -292,6 +292,14 @@ PROCEDURE local-Dump-InvRow:
           IF AVAIL MsOwner THEN 
                ASSIGN lcCLIType      = MsOwner.Clitype
                       lcTariffBundle = MsOwner.TariffBundle.
+          ELSE
+            FOR FIRST MSOwner NO-LOCK USE-INDEX MsSeq WHERE
+                      MSOwner.MsSeq = SubInvoice.MsSeq AND
+                      MSOwner.InvCust = Invoice.CustNum:
+               ASSIGN lcCLIType      = MsOwner.Clitype
+                      lcTariffBundle = MsOwner.TariffBundle.
+           END.
+
        END.
        
       PUT STREAM sSubInv UNFORMATTED
