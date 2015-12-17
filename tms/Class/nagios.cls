@@ -56,8 +56,11 @@ CLASS Nagios:
                  TMSParam.ParamGroup = "NAGIOS" AND
                  TMSParam.ParamCode  = "MonitorDir"
       NO-LOCK NO-ERROR.
-      IF AVAIL TMSParam THEN lcMonitorDir = TMSParam.CharVal.
-      
+      IF AVAIL TMSParam THEN DO:
+         lcMonitorDir = TMSParam.CharVal.
+         IF lcMonitorDir = ? THEN lcMonitorDir = "/tmp".
+      END.
+
       classTD = NEW timedate().
 
    END CONSTRUCTOR.
@@ -138,8 +141,6 @@ CLASS Nagios:
                          UPPER(lcCommand) +
                          ";0;Screen Ok - " + lcOperator + " ".
    
-      lcNagios = lcNagios + lcDescription.
-
       /* SER-8026 change */
       IF lcMonitorMethod = "File" THEN DO:
          FileWrite(lcNagios,lcMonitorDir + "/" + lcCommand + ".txt").
