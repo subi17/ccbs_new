@@ -6,6 +6,10 @@ CLASS Nagios:
    DEFINE VARIABLE liOffSet   AS INTEGER       NO-UNDO.
    DEFINE VARIABLE classTD    AS timedate      NO-UNDO.
    DEFINE VARIABLE lcURL      AS CHARACTER     NO-UNDO.
+   /* SER-8026 change */
+   DEF VAR lcMonitorMethod AS CHAR NO-UNDO.
+   DEF VAR lcMonitorDir    AS CHAR NO-UNDO.
+   DEF STREAM sNagios.
 
    CONSTRUCTOR PUBLIC Nagios():
 
@@ -37,6 +41,22 @@ CLASS Nagios:
                  TMSParam.ParamCode  = "TimeOffSet"
       NO-LOCK NO-ERROR.
       IF AVAIL TMSParam THEN liOffSet = TMSParam.IntVal.
+      
+      /* SER-8026 change */
+      /* possible monitor method */
+      FIND FIRST TMSParam WHERE
+                 TMSParam.ParamGroup = "NAGIOS" AND
+                 TMSParam.ParamCode  = "MonitorMethod"
+      NO-LOCK NO-ERROR.
+      IF AVAIL TMSParam THEN lcMonitorMethod = TMSParam.CharVal.
+
+      /* SER-8026 change */
+      /* possible monitor dir */
+      FIND FIRST TMSParam WHERE
+                 TMSParam.ParamGroup = "NAGIOS" AND
+                 TMSParam.ParamCode  = "MonitorDir"
+      NO-LOCK NO-ERROR.
+      IF AVAIL TMSParam THEN lcMonitorDir = TMSParam.CharVal.
       
       classTD = NEW timedate().
 
@@ -107,16 +127,27 @@ CLASS Nagios:
                          SUBSTR(lcTimeStamp,12,2) +
                          SUBSTR(lcTimeStamp,15,2) +
                          SUBSTR(lcTimeStamp,18,2)
-         lcCommand     = UPPER(lcCommand)
-         lcNagios      = "[" + lcTimeStamp + "] " +
-                         "PROCESS_SERVICE_CHECK_RESULT;"
-         lcNagios      = lcNagios + lcServer + ";"
-         lcNagios      = lcNagios + "Screen_" + lcOperator + "_" + lcCommand +
+         lcNagios      = "[" + lcTimeStamp + "] ".
+         IF lcMonitorMethod = "File" THEN 
+              lcNagios = lcNagios + ";" + lcServer + ";" +
+                         lcOperator + ";" + lcCommand.
+         ELSE lcNagios = lcNagios +
+                         "PROCESS_SERVICE_CHECK_RESULT;" +
+                         lcServer + ";" +
+                         "Screen_" + lcOperator + "_" + 
+                         UPPER(lcCommand) +
                          ";0;Screen Ok - " + lcOperator + " ".
    
       lcNagios = lcNagios + lcDescription.
 
-      SocWrite(lcUrl, lcNagios + CHR(10)).
+      /* SER-8026 change */
+      IF lcMonitorMethod = "File" THEN DO:
+         FileWrite(lcNagios,lcMonitorDir + "/" + lcCommand + ".txt").
+      END.   
+      ELSE DO:
+         IF lcURL NE ? AND lcURL NE "" THEN
+         SocWrite(lcUrl, lcNagios + CHR(10)).
+      END.
  
 
    END METHOD.
@@ -159,6 +190,17 @@ CLASS Nagios:
       RETURN
          INTEGER((ldeAlarmLimit - (ttNagios.tdeTS2 - ttNagios.tdeTS1)) * 100000).
 
+   END METHOD.
+
+   /* SER-8026 change */
+   METHOD PUBLIC LOGICAL FileWrite
+     (INPUT pcMessage AS CHARACTER,
+      INPUT pcFile    AS CHARACTER):
+    
+      OUTPUT STREAM sNagios TO VALUE(pcFile) APPEND.
+      PUT STREAM sNagios UNFORMATTED pcMessage SKIP.
+      OUTPUT STREAM sNagios CLOSE.
+       
    END METHOD.
 
 END CLASS.

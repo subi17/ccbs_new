@@ -8,6 +8,7 @@ DEFINE VARIABLE lcServer    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liOffSet    AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcNagiosUrl AS CHARACTER NO-UNDO.
 
+/* SER-8026 change */
 DEF VAR lcMonitorMethod AS CHAR NO-UNDO.
 DEF VAR lcMonitorDir    AS CHAR NO-UNDO.
 DEF STREAM sNagios.
@@ -66,6 +67,7 @@ FUNCTION fSocWrite RETURNS LOGICAL
 
 END FUNCTION.
 
+/* SER-8026 change */
 FUNCTION fFileWrite RETURNS LOGIC
    (icMessage AS CHAR,
     icFile AS CHAR):
@@ -118,6 +120,7 @@ FUNCTION fNagios RETURNS LOGICAL
    
    lcNagios = lcNagios + lcDescription.
 
+   /* SER-8026 change */
    IF lcMonitorMethod = "File" THEN DO:
       fFileWrite(lcNagios,lcMonitorDir + "/" + lcCommand + ".txt").
    END.   

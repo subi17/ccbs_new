@@ -44,8 +44,12 @@ DEFINE VARIABLE lcOperator        AS CHARACTER     NO-UNDO.
 DEFINE VARIABLE lcServer          AS CHARACTER     NO-UNDO.
 DEFINE VARIABLE liOffSet          AS INTEGER       NO-UNDO.
 DEFINE VARIABLE lcNagiosURL       AS CHARACTER     NO-UNDO.
+
+/* SER-8026 change */
 DEF VAR lcMonitorMethod AS CHAR NO-UNDO.
 DEF VAR lcMonitorDir    AS CHAR NO-UNDO.
+DEF STREAM sNagios.
+
 DEFINE VARIABLE lcStatLogFile     AS CHARACTER     NO-UNDO.
 DEFINE VARIABLE lcCdrSpool        AS CHARACTER     NO-UNDO.
 DEFINE VARIABLE lcCdrOut          AS CHARACTER     NO-UNDO.
@@ -70,7 +74,6 @@ DEFINE VARIABLE lMsgPublisher     AS CLASS Gwy.MqPublisher NO-UNDO.
 
 DEFINE STREAM sDump.
 DEFINE STREAM sLogStat.
-DEF STREAM sNagios.
 
 DEFINE TEMP-TABLE ttNagios NO-UNDO
    FIELD tcCommand AS CHARACTER
@@ -149,6 +152,7 @@ FUNCTION fSocWrite RETURNS LOGICAL
 
 END FUNCTION.
 
+/* SER-8026 change */
 FUNCTION fFileWrite RETURNS LOGIC
    (icMessage AS CHAR,
     icFile AS CHAR):
@@ -158,6 +162,7 @@ FUNCTION fFileWrite RETURNS LOGIC
    OUTPUT STREAM sNagios CLOSE.
        
 END FUNCTION.
+
 FUNCTION fNagios RETURNS LOGICAL
   (INPUT pcCommand AS CHARACTER,
    INPUT pcURL     AS CHARACTER):
@@ -202,6 +207,7 @@ FUNCTION fNagios RETURNS LOGICAL
    
    lcNagios = lcNagios + lcDescription.
 
+   /* SER-8026 change */
    IF lcMonitorMethod = "File" THEN DO:
       fFileWrite(lcNagios,lcMonitorDir + "/" + lcCommand + ".txt").
    END.   
