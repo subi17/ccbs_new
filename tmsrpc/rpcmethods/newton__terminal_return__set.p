@@ -264,7 +264,7 @@ ELSE lcMemo = "Devolución en tienda denegada".
 DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                  "MobSub",
                  STRING(Order.MsSeq),
-                 0,
+                 Order.CustNum,
                  lcMemo,
                  lcResult).
 
