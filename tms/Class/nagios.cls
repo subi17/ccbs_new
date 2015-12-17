@@ -111,6 +111,17 @@ CLASS Nagios:
 
    END METHOD.
 
+   /* SER-8026 change */
+   METHOD PUBLIC LOGICAL FileWrite
+     (INPUT pcMessage AS CHARACTER,
+      INPUT pcFile    AS CHARACTER):
+    
+      OUTPUT STREAM sNagios TO VALUE(pcFile) APPEND.
+      PUT STREAM sNagios UNFORMATTED pcMessage SKIP.
+      OUTPUT STREAM sNagios CLOSE.
+       
+   END METHOD.
+
    METHOD PUBLIC LOGICAL WriteNagios
      (INPUT pcCommand AS CHARACTER):
 
@@ -193,15 +204,5 @@ CLASS Nagios:
 
    END METHOD.
 
-   /* SER-8026 change */
-   METHOD PUBLIC LOGICAL FileWrite
-     (INPUT pcMessage AS CHARACTER,
-      INPUT pcFile    AS CHARACTER):
-    
-      OUTPUT STREAM sNagios TO VALUE(pcFile) APPEND.
-      PUT STREAM sNagios UNFORMATTED pcMessage SKIP.
-      OUTPUT STREAM sNagios CLOSE.
-       
-   END METHOD.
 
 END CLASS.
