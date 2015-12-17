@@ -122,7 +122,7 @@ FUNCTION fNagios RETURNS LOGICAL
 
    /* SER-8026 change */
    IF lcMonitorMethod = "File" THEN DO:
-      fFileWrite(lcNagios,lcMonitorDir + "/" + lcCommand + ".txt").
+      fFileWrite(lcNagios,lcMonitorDir + "/" + UPPER(lcCommand) + ".txt").
    END.   
    ELSE DO:
       IF lcNagiosURL = ? OR lcNagiosURL = "" THEN RETURN FALSE.

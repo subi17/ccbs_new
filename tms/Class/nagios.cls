@@ -154,7 +154,7 @@ CLASS Nagios:
    
       /* SER-8026 change */
       IF lcMonitorMethod = "File" THEN DO:
-         FileWrite(lcNagios,lcMonitorDir + "/" + lcCommand + ".txt").
+         FileWrite(lcNagios,lcMonitorDir + "/" + UPPER(lcCommand) + ".txt").
       END.   
       ELSE DO:
          IF lcURL NE ? AND lcURL NE "" THEN
