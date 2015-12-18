@@ -31,8 +31,8 @@ DEF VAR lcDelim         AS CHAR NO-UNDO.
 DEF VAR liCaseCount     AS INT  NO-UNDO.
 DEF VAR lcInitStatus    AS CHAR NO-UNDO.
 DEF VAR lcDMSStatusDesc AS CHAR NO-UNDO.
-DEF VAR lcDocStatus     AS CHAR NO-UNDO.
 DEF VAR lcBundleCLITypes AS CHAR NO-UNDO. 
+DEF VAR lcDMSDOCStatus AS CHAR NO-UNDO.
 lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 
 DEF TEMP-TABLE ttOrderList NO-UNDO
@@ -44,9 +44,9 @@ INDEX CaseID CaseID
 INDEX Direct Direct.
 
 ASSIGN
-   lcInitStatus    = "SENT"
-   lcDMSStatusDesc = "SENT"
-   lcDocStatus     = "A"
+   lcInitStatus    = {&DMS_INIT_STATUS_SENT}
+   lcDMSStatusDesc = {&DMS_INIT_STATUS_COMMENT}
+   lcDMSDOCStatus  = {&DMS_INIT_STATUS_SENT}
    lcDelim         = "|".
 
 /*Functions:*/
@@ -745,7 +745,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
       lcDocListEntries = lcDocListEntries +
                          ENTRY(liCount,lcRequiredDocs) + "," +
                          "," + /*This field is filled only by DMS responses*/
-                         lcDMSStatusDesc + "," +
+                         lcDMSDOCStatus + "," +
                          "".
       IF liCount NE NUM-ENTRIES(lcRequiredDocs)
          THEN lcDocListEntries = lcDocListEntries + ",".
@@ -896,7 +896,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
       lcDocListEntries = lcDocListEntries +
                          ENTRY(liCount,lcRequiredDocs) + "," +
                          "," + /*This field is filled only by DMS responses*/
-                         lcDMSStatusDesc + "," +
+                         lcDMSDOCStatus + "," +
                          "".
       IF liCount NE NUM-ENTRIES(lcRequiredDocs)
          THEN lcDocListEntries = lcDocListEntries + ",".

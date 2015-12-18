@@ -101,7 +101,7 @@ FUNCTION fUpdateDMS RETURNS CHAR
    IF DMS.StatusCode EQ "A0" THEN DO:
       FOR EACH DMSDoc WHERE
                DMSDoc.DMSID EQ DMS.DMSID AND
-               DMSDOC.DocStatusCode EQ "SENT":
+               DMSDOC.DocStatusCode EQ {&DMS_INIT_STATUS_SENT}:
          DELETE DMSDoc.         
       END.
    END.
