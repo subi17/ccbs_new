@@ -44,43 +44,65 @@ FUNCTION fGetStartEndDates RETURNS LOGICAL
    END.
    RETURN TRUE.
 END.
-/*
-FUNCTION fGetDates RETURNS LOGICAL
-   (INPUT  iiStartDay AS INT,
-    INPUT  iiEndDay AS INT,
-    OUTPUT odaStartDateMonth22 AS DATE,
-    OUTPUT odaEndDateMonth22 AS DATE,
-    OUTPUT odaStartDateMonth23 AS DATE,
-    OUTPUT odaEndDateMonth23 AS DATE,
-    OUTPUT odaStartDateMonth24 AS DATE,
-    OUTPUT odaEndDateMonth24 AS DATE):
-   DEF VAR  ldaCountDate       AS DATE NO-UNDO.
-   DEF VAR  ldaStartDate AS DATE NO-UNDO.
-   DEF VAR  ldaEndDate AS DATE NO-UNDO.
-   /* Month 22 */
-   IF fGetStartEndDates(2, iiStartDay, iiEndDay, ldaStartDate, ldaEndDate) THEN 
-      ASSIGN odaStartDateMonth22 = ldaStartDate
-             odaEndDateMonth22 = ldaEndDate.
-   ELSE 
-      ASSIGN odaStartDateMonth22 = ?
-             odaEndDateMonth22 = ?.
-   /* Month 23 */
-   IF fGetStartEndDates(1, iiStartDay, iiEndDay, ldaStartDate, ldaEndDate) THEN
-      ASSIGN odaStartDateMonth22 = ldaStartDate
-             odaEndDateMonth22 = ldaEndDate.
-   ELSE
-      ASSIGN odaStartDateMonth22 = ?
-             odaEndDateMonth22 = ?.
-   /* Month 24 */
-   IF fGetStartEndDates(0, iiStartDay, iiEndDay, ldaStartDate, ldaEndDate) THEN
-      ASSIGN odaStartDateMonth22 = ldaStartDate
-             odaEndDateMonth22 = ldaEndDate.
-   ELSE
-      ASSIGN odaStartDateMonth22 = ?
-             odaEndDateMonth22 = ?.
-   RETURN TRUE.
-END FUNCTION.
-*/
+
+FUNCTION fUrlEncode RETURNS CHARACTER
+  (INPUT icValue AS CHARACTER,
+   INPUT icEnctype AS CHARACTER) :
+/****************************************************************************
+Description: Encodes unsafe characters in a URL as per RFC 1738 section 2.2.
+  <URL:http://ds.internic.net/rfc/rfc1738.txt>, 2.2
+Input Parameters: Character string to encode, Encoding option where "query",
+  "cookie", "default" or any specified string of characters are valid.
+  In addition, all characters specified in the global variable lcUnSafe
+  plus ASCII values 0 <= x <= 31 and 127 <= x <= 255 are considered unsafe.
+Returns: Encoded string  (unkown value is returned as blank)
+Variables: lcUnSafe, lcReserved
+****************************************************************************/
+  DEFINE VARIABLE hx          AS CHARACTER NO-UNDO INITIAL "0123456789ABCDEF":U.
+  DEFINE VARIABLE encode-list AS CHARACTER NO-UNDO.
+  DEFINE VARIABLE i           AS INTEGER   NO-UNDO.
+  DEFINE VARIABLE c           AS INTEGER   NO-UNDO.
+  DEFINE VARIABLE lcUnSafe AS CHAR NO-UNDO INIT "/,=".
+  DEFINE VARIABLE lcReserved AS CHAR NO-UNDO.
+
+
+  /* Dont bother with blank or unknown  */
+  IF LENGTH(icValue) = 0 OR icValue = ? THEN
+    RETURN "".
+
+  /* What kind of encoding should be used? */
+  CASE icEnctype:
+    WHEN "query":U THEN              /* QUERY_STRING name=value parts */
+      encode-list = lcUnSafe + lcReserved + "+":U.
+    WHEN "cookie":U THEN             /* Persistent Cookies */
+      encode-list = lcUnSafe + " ,~;":U.
+    WHEN "default":U OR WHEN "" THEN /* Standard URL encoding */
+      encode-list = lcUnSafe.
+    OTHERWISE
+      encode-list = lcUnSafe + icEnctype.   /* user specified ... */
+  END CASE.
+
+  /* Loop through entire input string */
+  ASSIGN i = 0.
+  DO WHILE TRUE:
+    ASSIGN
+      i = i + 1
+      /* ASCII value of character using single byte codepage */
+      c = ASC(SUBSTRING(icValue, i, 1, "RAW":U), "1252":U, "1252":U).
+    IF c <= 31 OR c >= 127 OR INDEX(encode-list, CHR(c)) > 0 THEN DO:
+      /* Replace character with %hh hexidecimal triplet */
+      SUBSTRING(icValue, i, 1, "RAW":U) =
+        "%":U +
+        SUBSTRING(hx, INTEGER(TRUNCATE(c / 16, 0)) + 1, 1, "RAW":U) + /* high */
+        SUBSTRING(hx, c MODULO 16 + 1, 1, "RAW":U).             /* low digit */
+      ASSIGN i = i + 2.   /* skip over hex triplet just inserted */
+    END.
+    IF i = LENGTH(icValue,"RAW":U) THEN LEAVE.
+  END.
+
+  RETURN icValue.
+END FUNCTION.  /* furl-encode */
+
 FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
                                               INPUT idaValidTo AS DATE,
                                               INPUT idAmount AS DEC,
@@ -129,6 +151,9 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
       /* Encrypted MSISDN added to messages sent during 22 to 24 month */
       lcEncryptedMSISDN = encrypt_data(icCli,
                           {&ENCRYPTION_METHOD}, {&Q25_PASSPHRASE}).
+      /* convert some special characters to url encoding (at least '+' char
+         could cause problems at later phases. */
+      lcEncryptedMSISDN = fUrlEncode(lcEncryptedMSISDN, "default").
       lcSMSMessage = REPLACE(lcSMSMessage, "#MSISDN", lcEncryptedMSISDN).
    END.
    RETURN lcSMSMessage.
@@ -331,4 +356,3 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
    END.
    RETURN oiTotalCountLeft.
 END FUNCTION.
-
