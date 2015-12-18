@@ -7,8 +7,6 @@
   CREATED ......: 13.6.2013
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-DISABLE TRIGGERS FOR LOAD OF FixedFee.
-
 {commpaa.i}
 ASSIGN 
    gcBrand = "1"
