@@ -220,6 +220,7 @@
 "1" 9 "ReqCParam3" "Contract ID" 0 "DayCampaign" yes ""
 "1" 9 "ReqCParam4" "" 0 "" yes ""
 "1" 9 "ReqCParam5" "" 0 "" yes ""
+"1" 9 "ReqCParam6" "" 0 "" yes ""
 "1" 9 "ReqDParam1" "Term.stamp for data package" 0 "" yes ""
 "1" 9 "ReqDParam2" "" 0 "" yes ""
 "1" 9 "ReqDtParam1" "" 0 "" yes ""
