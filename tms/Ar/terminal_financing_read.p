@@ -6,7 +6,6 @@
   CREATED ......: 12.6.2013
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-DISABLE TRIGGERS FOR LOAD OF FixedFee.
 {commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
