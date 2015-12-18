@@ -74,6 +74,8 @@ DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lcSMSSchedule AS CHARACTER NO-UNDO.
 
+idactstamp = fMakeTS().
+
    /* Time of request */
    fSplitTS(idactstamp, lButtonDate, lButtonSeconds).
 
@@ -110,7 +112,7 @@ DEF VAR lcSMSSchedule AS CHARACTER NO-UNDO.
    
    if not fSMSInvoiceValidate(
       idaPeriod,
-      output ocresult) then return 0.
+      output ocresult) then return 0. 
 
    fcreaterequest(({&REQTYPE_SMS_INVOICE}),
                   idactstamp,
