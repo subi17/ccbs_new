@@ -516,7 +516,7 @@ PROCEDURE pCloseQ25Discount:
       FIND FIRST invrow NO-LOCK WHERE
                  invrow.InvNum    EQ subInvoice.InvNum AND
                  invrow.SubInvNum EQ subInvoice.SubInvNum AND
-                 invrow.BillCode EQ "RVTERMDT1" NO-ERROR.
+                 invrow.BillCode EQ "RVTERMDTRW" NO-ERROR.
       
       IF NOT AVAILABLE invrow THEN RETURN "".
         
