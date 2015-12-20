@@ -586,17 +586,18 @@ PROCEDURE pContractActivation:
             ldaResidualFee = fInt2Date(bQ25SingleFee.Concerns[1],0).
             ldeFeeAmount = bQ25SingleFee.Amt.
 
-            FOR FIRST DiscountPlan NO-LOCK WHERE
-                      DiscountPlan.Brand = gcBrand AND
-                      DiscountPlan.DPRuleID = "RVTERMDT1DISC",
-                 EACH DPMember NO-LOCK WHERE
-                      DPMember.DPId      = DiscountPlan.DPId AND
-                      DPMember.HostTable = "MobSub" AND
-                      DPMember.KeyValue  = STRING(MsRequest.MsSeq) AND
-                      DPMember.ValidTo >= ldaResidualFee AND
-                      DPMember.ValidTo <= fLastDayOfMonth(ldaResidualFee) AND
-                      DPMember.ValidTo >= DPMember.ValidFrom:
-                 ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
+            FOR EACH DiscountPlan NO-LOCK WHERE
+                     DiscountPlan.Brand = gcBrand AND
+                    (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
+                     DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
+                EACH DPMember NO-LOCK WHERE
+                     DPMember.DPId      = DiscountPlan.DPId AND
+                     DPMember.HostTable = "MobSub" AND
+                     DPMember.KeyValue  = STRING(MsRequest.MsSeq) AND
+                     DPMember.ValidTo >= ldaResidualFee AND
+                     DPMember.ValidTo <= fLastDayOfMonth(ldaResidualFee) AND
+                     DPMember.ValidTo >= DPMember.ValidFrom:
+                ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
             END.
                
             FIND FIRST FMItem NO-LOCK WHERE
