@@ -98,6 +98,10 @@ PROCEDURE pSendLogisticsCancel:
    ldOPStamp = fGetOrderStamp(piOrderID,"SendToLogistics").
    IF ldOPStamp < ldOPChange THEN lcOPName = "Dextra".
    ELSE lcOPName = "Netkia".
+
+   IF ldOPStamp EQ 0 AND
+      Order.CrStamp > ldOPChange THEN lcOPName = "Netkia".
+
    add_string(param_toplevel_id, "operatorName ", lcOPName).
 
    IF gi_xmlrpc_error NE 0 THEN
