@@ -1,7 +1,7 @@
 /* ----------------------------------------------------------------------
   module .......: Mm/q25_final_msg_collection.p
   task .........: Collect customer that needs to notify customer about
-                  final fee.
+                  final fee. YPR-2972
   application ..: tms
   author .......: kaaikas
   created ......: 11.11.15
@@ -19,29 +19,29 @@ ASSIGN gcBrand = "1"
 
 DEF VAR liStartDay        AS INT  NO-UNDO.
 DEF VAR liEndDay          AS INT  NO-UNDO.
-DEF VAR ldaStartDate      AS DATE NO-UNDO.
-DEF VAR ldaEndDate        AS DATE NO-UNDO.
 DEF VAR liTotalCount      AS INT  NO-UNDO.
 DEF VAR liTempCount       AS INT NO-UNDO.
 DEF VAR ldaStartDateMonth24 AS DATE NO-UNDO.
 DEF VAR ldaEndDateMonth24   AS DATE NO-UNDO.
 
 /* each month as planned */
-   liStartDay = 1. /* First day of month */
+ASSIGN
+   liStartDay = 1 /* First day of month */
    liEndDay = 30. /* Last day of month, special cases handled in fCheckDates */
 
 /* Month 24 21st day*/
 IF (DAY(TODAY) = 21) AND fGetStartEndDates({&Q25_MONTH_24}, liStartDay, 
-                                           liEndDay, ldaStartDateMonth24,
-                                           ldaEndDateMonth24) THEN DO:
+                                           liEndDay, OUTPUT ldaStartDateMonth24,
+                                           OUTPUT ldaEndDateMonth24) THEN DO:
    liTotalCount = fCollectQ25SMSMessages(ldaStartDateMonth24, 
                                          ldaEndDateMonth24, 
                                          {&Q25_MONTH_24_FINAL_MSG}, FALSE, 
-                                         liTempCount).
+                                         INPUT-OUTPUT liTempCount).
    fQ25LogWriting(STRING(fMakeTS()) + "Start final MESSAGE sending. " + 
                   STRING(liTotalCount) + " messages to be send.").
    fCollectQ25SMSMessages(ldaStartDateMonth24, ldaEndDateMonth24, 
-                          {&Q25_MONTH_24_FINAL_MSG}, TRUE, liTotalCount).
+                          {&Q25_MONTH_24_FINAL_MSG}, TRUE,
+                          INPUT-OUTPUT liTotalCount).
    fQ25LogWriting("End final message sending. " + STRING(liTotalCount) +
                   " messages left.").
 END.
