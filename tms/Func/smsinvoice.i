@@ -74,8 +74,6 @@ DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lcSMSSchedule AS CHARACTER NO-UNDO.
 
-idactstamp = fMakeTS().
-
    /* Time of request */
    fSplitTS(idactstamp, lButtonDate, lButtonSeconds).
 

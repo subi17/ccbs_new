@@ -10,8 +10,8 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 /* Description: smsinvoice is called from newton side where SMS invoice button
-   pressed for any customers after billing run. This will generate SMS to all 
-   invoiced customers.   */
+   pressed for any customers after billing run. This will generate request 
+   that will call this program to create SMS to all invoiced customers.   */
 
 {commali.i}
 {tmsconst.i}
@@ -73,34 +73,28 @@ ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        ldaDateFrom   = MsRequest.ReqDtParam1
        liMonth       = MONTH(ldaDateFrom)
        liLoop        = 0
-       liStartTime   = 0
+       liStartTime   = TIME
        liStopTime    = 0
        liPauseTime   = 0
        PauseFlag     = FALSE.
 
-IF liTime2Pause < 0 THEN
-   liTime2Pause = 0.
-IF liTime2Pause > 3599 THEN /* 1 Hour */
-   liTime2Pause = 3599.
+IF liTime2Pause < 0 THEN liTime2Pause = 0.
+IF liTime2Pause > 3599 THEN liTime2Pause = 3599.  /* 1 Hour */
 
-lIniSeconds = INTEGER(SUBSTRING(lcSMSSchedule,1,INDEX(lcSMSSchedule,"-") - 1)) NO-ERROR.
+lIniSeconds = INTEGER(ENTRY(1,lcSMSSchedule,"-")) NO-ERROR.
 IF ERROR-STATUS:ERROR THEN lIniSeconds = 0.
-lEndSeconds = INTEGER(SUBSTRING(lcSMSSchedule,INDEX(lcSMSSchedule,"-") + 1)) NO-ERROR.
+lEndSeconds = INTEGER(ENTRY(2,lcSMSSchedule,"-")) NO-ERROR.
 IF ERROR-STATUS:ERROR THEN lEndSeconds = 0.
 
-IF lIniSeconds <= 0 THEN
-lIniSeconds = 1.
-IF lIniSeconds > 86399 THEN /* 23:59:59 */
-lIniSeconds = 86399.
+IF lIniSeconds <= 0 THEN lIniSeconds = 1.
+IF lIniSeconds > 86399 THEN lIniSeconds = 86399. /* 23:59:59 */
 
-IF lEndSeconds <= 0 THEN
-lEndSeconds = 1.
-IF lEndSeconds > 86399 THEN /* 23:59:59 */
-lEndSeconds = 86399.
+IF lEndSeconds <= 0 THEN lEndSeconds = 1.
+IF lEndSeconds > 86399 THEN lEndSeconds = 86399. /* 23:59:59 */
 
 IF lIniSeconds >= lEndSeconds THEN
 ASSIGN /* 9:00-22:00 */
-   lIniSeconds = 32400.
+   lIniSeconds = 32400
    lEndSeconds = 86399.
 
 INVOICE_LOOP:
@@ -127,8 +121,7 @@ FOR EACH Invoice WHERE
       liStartTime = TIME.
 
    /* Pause can be passed with liSMSCntValue 0 from cparam */
-   IF liLoop > 0 AND liSMSCntValue > 0 AND
-      PauseFlag THEN
+   IF liLoop > 0 AND liSMSCntValue > 0 AND PauseFlag THEN
    DO:            
       ASSIGN liStopTime  = TIME
              lNowSeconds = liStopTime.
