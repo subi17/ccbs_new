@@ -296,6 +296,8 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    END.
    
    CASE FMItem.FFItemQty:
+      WHEN 12 THEN lcPayTermType[1] = "0212".
+      WHEN 18 THEN lcPayTermType[1] = "0018".
       WHEN 24 THEN DO:
          /* YTS-6873: Own code for non-residual fee cass */
          IF ldaOrderDate >= 5/1/2015 THEN 
@@ -303,7 +305,6 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
          ELSE
             lcPayTermType[1] = "0024".
       END.
-      WHEN 18 THEN lcPayTermType[1] = "0018".
       OTHERWISE DO:
          fErrorLog(Order.OrderID,
             SUBST("SYSTEM_ERROR:Unsupported PAYTERM contract length &1",fmitem.FFItemQty)).

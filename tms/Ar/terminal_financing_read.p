@@ -423,7 +423,8 @@ PROCEDURE pProcessData:
       END.
       ELSE RELEASE bResidualFee.
       
-      IF ttTFPayment.FinancedResult EQ {&TF_STATUS_BANK} THEN DO:
+      IF ttTFPayment.FinancedResult EQ {&TF_STATUS_BANK} AND
+         FixedFee.BillCode NE "RVTERM" THEN DO:
       
          IF LOOKUP(FixedFee.TFBank,{&TF_BANK_CODES}) = 0 THEN DO:
             fWriteLog(ttTFPayment.content,
