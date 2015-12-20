@@ -122,7 +122,7 @@
 33 "Integer" "Invoice Type" 2 "1"
 33 "Character" "File Type" 3 "XMLSEP"
 33 "Logical" "Create tar file" 4 "NO"
-33 "Logical" "Create PDF Files" 5 "No"
+33 "Logical" "Create PDF Files" 5 "yes"
 34 "Character" "Print House" 1 "MEYDIS,NEXEA"
 34 "DATE" "Invoice Date" 2 "#RUNDATE"
 34 "Integer" "Queue ID" 3 "3"
