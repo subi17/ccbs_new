@@ -466,11 +466,11 @@ PROCEDURE pCloseQ25Discount:
       
    IF NOT AVAILABLE OrderAction THEN RETURN "".
 
-   liPercontractId = INT(OrderAction.ItemKey) NO-ERROR.
+   liPercontractId = INT(OrderAction.ItemParam) NO-ERROR.
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
       RETURN "ERROR:Q25 discount cancellation (contract id)".
    
-   ldeDiscount = DEC(OrderAction.ItemParam) NO-ERROR.
+   ldeDiscount = DEC(OrderAction.ItemKey) NO-ERROR.
    IF ERROR-STATUS:ERROR OR ldeDiscount EQ 0 THEN 
       RETURN "ERROR:Q25 discount cancellation (discount amount)". 
 
