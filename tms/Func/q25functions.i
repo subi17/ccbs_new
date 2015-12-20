@@ -194,18 +194,15 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
     INPUT-OUTPUT oitotalCountLeft AS INT):
    /* Data collection function for Q25. To be launched by cron execution
       on 1.-15. day of month at morning time at least one hour before 10:00 */
-   DEF VAR lcSMSText         AS CHAR NO-UNDO.
    DEF VAR liCount           AS INT  NO-UNDO.   
-   DEF VAR lcPeriod          AS CHAR NO-UNDO.
+   DEF VAR liPeriod          AS INT NO-UNDO.
    DEF VAR liNotSendCount    AS INT NO-UNDO.
    DEF VAR liBilledCount     AS INT NO-UNDO.
    DEF VAR liNotDCCLICount   AS INT NO-UNDO.
    DEF VAR liReturnedDevices AS INT NO-UNDO.
    DEF VAR liQ25DoneCount    AS INT NO-UNDO.
    DEF VAR liAlreadyCreated  AS INT NO-UNDO.
-   DEF VAR liTempMsSeq       AS INT NO-UNDO.
    DEF VAR ldaMonth22Date    AS DATE NO-UNDO.
-   DEF VAR liTimeLeft        AS INT NO-UNDO.
    DEF VAR lcSMSMessage      AS CHAR NO-UNDO.
    DEF VAR liSentCount       AS INT NO-UNDO.
    DEF VAR lcLogText         AS CHAR NO-UNDO.
@@ -214,12 +211,13 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
 
    IF idaStartDate = ? OR idaEndDate = ? THEN
       RETURN 0.
+
    ASSIGN liPauseValue = fCParamI("Q25_sms_pause").
    IF liPauseValue = 0 OR liPauseValue = ? THEN
       liPauseValue = 10.
 
-   lcPeriod = STRING(YEAR(idaStartDate)) + (IF(MONTH(idaStartDate) < 10) THEN
-              "0" ELSE "") + STRING(MONTH(idaStartDate)).
+   liPeriod = YEAR(idaStartDate) * 100 + MONTH(idaStartDate).
+
    /* Special case, if order is one at 1st day of month Q1 period ends
       last day of previous month Q24. Need to include it. */
    IF (iiPhase = {&Q25_MONTH_24} OR iiPhase = {&Q25_MONTH_24_FINAL_MSG}) AND 
@@ -231,7 +229,14 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
             SingleFee.HostTable   = "Mobsub" AND
             SingleFee.SourceTable = "DCCLI" AND
             SingleFee.CalcObj     = "RVTERM" AND
-            SingleFee.BillPeriod  = INT(lcPeriod) NO-LOCK:
+            SingleFee.BillPeriod  = liPeriod NO-LOCK:
+
+      IF NOT SingleFee.OrderId > 0 THEN NEXT.
+
+      FIND FIRST Mobsub NO-LOCK WHERE
+                 Mobsub.MsSeq = INT(SingleFee.KeyValue) NO-ERROR.
+      IF NOT AVAIL Mobsub THEN NEXT.
+
       IF SingleFee.Billed AND
          NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
                             Invoice.Invnum = SingleFee.InvNum aND
@@ -239,11 +244,12 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
          liBilledCount = liBilledCount + 1.
          NEXT. /* "Residual fee billed". */
       END.
+
       FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
               DCCLI.PerContractId = INT(SingleFee.sourcekey) AND
               DCCLI.Brand   = gcBrand AND
               DCCLI.DCEvent BEGINS "PAYTERM" AND
-              DCCLI.MsSeq   = INT(SingleFee.KeyValue) AND
+              DCCLI.MsSeq   = Mobsub.MsSeq AND
               DCCLI.ValidTo >= idaStartDate AND
               DCCLI.ValidTo <= idaEndDate NO-ERROR.
 
@@ -259,15 +265,16 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
       END.
       ELSE DO:
          ASSIGN
-            liTempMsSeq = DCCLI.MsSeq /* stored for Quota 25 check */
             ldaMonth22Date = ADD-INTERVAL(DCCLI.ValidFrom, 22, 'months':U)
             ldaMonth22Date = DATE(MONTH(ldaMonth22Date),1,YEAR(ldaMonth22Date)). 
          FIND FIRST TermReturn WHERE
-                    TermReturn.OrderId = SingleFee.OrderId AND
-                    TermReturn.ReturnTS > fHMS2TS(DCCLI.ValidFrom, "0") 
-                    NO-LOCK NO-ERROR.
-         IF AVAIL TermReturn AND TermReturn.deviceScreen AND
-                  TermReturn.deviceStart THEN DO:
+                    TermReturn.OrderId = SingleFee.OrderId NO-LOCK NO-ERROR.
+      
+         IF AVAIL TermReturn AND 
+             ((TermReturn.DeviceScreen = TRUE AND 
+               TermReturn.DeviceStart = TRUE) OR 
+              (TermReturn.DeviceScreen = ? AND
+               TermReturn.DeviceStart  = ?)) THEN DO:
             /* Accepted return of device */
             liReturnedDevices = liReturnedDevices + 1.
             NEXT.
@@ -275,7 +282,7 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
          ELSE IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                   DCCLI.Brand   EQ gcBrand AND
                   DCCLI.DCEvent EQ "RVTERM12" AND
-                  DCCLI.MsSeq   EQ liTempMsSeq AND
+                  DCCLI.MsSeq   EQ Mobsub.MsSeq AND
                   DCCLI.ValidTo >= TODAY) THEN DO:
             /* Q25 Extension already active */
             IF iiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO: 
@@ -291,7 +298,7 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
                iiPhase = {&Q25_MONTH_24_CHOSEN}.
          END.
          ELSE IF CAN-FIND(FIRST Order NO-LOCK WHERE
-                                Order.MsSeq = liTempMsSeq AND
+                                Order.MsSeq = mobsub.msseq AND
                                 Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
                                 Order.CrStamp > fHMS2TS(ldaMonth22Date,
                                                         "00:00:00")) THEN DO:
