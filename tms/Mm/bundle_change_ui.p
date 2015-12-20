@@ -1,4 +1,4 @@
-/* ------------------------------------------------------
+/*------------------------------------------------------
   MODULE .......: bundle_change_ui.p
   FUNCTION .....: create a request for bundle change 
   APPLICATION ..: TMS
@@ -325,8 +325,8 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                                        0,
                                        FALSE,
                                        FALSE,
-                                       FALSE, /* extend terminal contract */
-                                       "", 
+                                       0, /* extend contract 0=no extend_term_contract */
+                                       "",
                                        OUTPUT lcError).
 
       IF liCreated > 0 THEN 

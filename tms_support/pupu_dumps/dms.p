@@ -32,6 +32,15 @@ FUNCTION fNotNull RETURNS CHAR (INPUT icInput AS CHAR):
 
 END. /* FUNCTION fNotNull RETURNS CHAR (INPUT): */
 
+FUNCTION fCheckZeroDate RETURN CHAR (INPUT idInput AS DECIMAL):
+
+   IF IdInput EQ 0 THEN RETURN "".
+   ELSE RETURN fNotNull(STRING(idInput)).
+
+END.
+
+
+
 OUTPUT STREAM slog TO VALUE(lcLogFile).
 
 FOR EACH DMS NO-LOCK:
@@ -44,7 +53,7 @@ FOR EACH DMS NO-LOCK:
       WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
          TITLE " Collecting " FRAME fQty.
    END. /* IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN DO: */
-
+     
    PUT STREAM slog UNFORMATTED
        "DMS"                                 lcDel
        "CREATE"                              lcDel
@@ -59,7 +68,7 @@ FOR EACH DMS NO-LOCK:
        fNotNull(DMS.CaseTypeID)              lcDel
        fNotNull(DMS.StatusCode)              lcDel
        fNotNull(DMS.StatusDesc)              lcDel
-       fNotNull(STRING(DMS.DMSStatusTS))     SKIP.
+       fCheckZeroDate(DMS.DMSStatusTS)       SKIP.
 END.
 
 OUTPUT STREAM slog CLOSE.

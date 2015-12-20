@@ -151,11 +151,11 @@ IF Order.CLIType EQ "TARJ5" THEN DO:
    END.
 END.
 
-RUN createcustomer(INPUT Order.OrderId,1,FALSE,output oiCustomer).
+RUN createcustomer(INPUT Order.OrderId,1,FALSE,TRUE,output oiCustomer).
 
 ASSIGN Msrequest.CustNum = oiCustomer.
 
-RUN createcustomer(INPUT Order.OrderId,3,FALSE,output oicustomer).
+RUN createcustomer(INPUT Order.OrderId,3,FALSE,TRUE,output oicustomer).
 
 FIND FIRST CLIType WHERE
            CLIType.CliType = Order.CLIType 
@@ -259,7 +259,8 @@ ASSIGN
    Mobsub.IDCode           = STRING(RANDOM(0,9999),"9999")
    MobSub.MultiSimID       = Order.MultiSimID
    MobSub.MultiSimType     = Order.MultiSimType
-   MobSub.TariffActDate    = TODAY.
+   MobSub.TariffActDate    = TODAY
+   MobSub.TariffActTS      = fMakeTS().
 
 fSetOrderStatus(Order.OrderId,"6").  
 fMarkOrderStamp(Order.OrderID,

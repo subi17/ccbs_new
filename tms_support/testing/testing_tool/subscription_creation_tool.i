@@ -6,6 +6,112 @@
   Created ......: 03.07.12
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
+{commpaa.i}
+gcBrand = "1".
+katun = "Qvantel".
+
+{timestamp.i}
+{tmsconst.i}
+{cparam2.i}
+{fmakemsreq.i}
+{msreqfunc.i}
+{service.i}
+{fdss.i}
+{fbtc.i}
+{ftransdir.i}
+{email.i}
+
+
+DEFINE VARIABLE lcOutPutDir        AS CHAR NO-UNDO.
+DEFINE VARIABLE lcIncomingDir      AS CHAR NO-UNDO.
+DEFINE VARIABLE lcDoneDir          AS CHAR NO-UNDO.
+DEFINE VARIABLE lcMasterDataDir    AS CHAR NO-UNDO.
+DEFINE VARIABLE lcAnalyzerDataDir  AS CHAR NO-UNDO.
+
+DEFINE VARIABLE lcOutOngoingDir    AS CHAR NO-UNDO.
+DEFINE VARIABLE lcOutProcDir       AS CHAR NO-UNDO.
+DEFINE VARIABLE lcInIncomingDir    AS CHAR NO-UNDO.
+DEFINE VARIABLE lcInProcDir        AS CHAR NO-UNDO.
+DEFINE VARIABLE lcAnalyzerInDir    AS CHAR NO-UNDO.
+DEFINE VARIABLE lcAnalyzerSpoolDir AS CHAR NO-UNDO.
+
+DEFINE VARIABLE lcLogFile          AS CHAR NO-UNDO.
+DEFINE VARIABLE lcReportFile       AS CHAR NO-UNDO.
+DEFINE VARIABLE lcResultFile       AS CHAR NO-UNDO.
+DEFINE VARIABLE lcFileName         AS CHAR NO-UNDO.
+DEFINE VARIABLE lcLine             AS CHAR NO-UNDO.
+DEFINE VARIABLE lcLineType         AS CHAR NO-UNDO.
+DEFINE VARIABLE lcDel              AS CHAR NO-UNDO INIT "|".
+DEFINE VARIABLE liLine             AS INT  NO-UNDO.
+DEFINE VARIABLE llError            AS LOG  NO-UNDO.
+DEFINE VARIABLE ldThisRun          AS DEC  NO-UNDO.
+DEFINE VARIABLE liCustNum          AS INT  NO-UNDO.
+DEFINE VARIABLE lcCLI              AS CHAR NO-UNDO.
+DEFINE VARIABLE lcError            AS CHAR NO-UNDO.
+DEFINE VARIABLE lcBonoList         AS CHAR NO-UNDO.
+DEFINE VARIABLE lcBono             AS CHAR NO-UNDO.
+DEFINE VARIABLE lcResult           AS CHAR NO-UNDO.
+DEFINE VARIABLE liBonoCount        AS INT  NO-UNDO.
+DEFINE VARIABLE liBonoEntries      AS INT  NO-UNDO.
+DEFINE VARIABLE llFileAvail        AS LOG  NO-UNDO.
+DEFINE VARIABLE llKeep             AS LOG  NO-UNDO.
+DEFINE VARIABLE lcCONTDContracts   AS CHAR NO-UNDO.
+DEFINE VARIABLE lcIPLContracts     AS CHAR NO-UNDO.
+DEFINE VARIABLE lcFLATContracts    AS CHAR NO-UNDO.
+DEFINE VARIABLE lcCONTSContracts   AS CHAR NO-UNDO.
+DEFINE VARIABLE lcCONTSFContracts  AS CHAR NO-UNDO.
+DEFINE VARIABLE lcBundleCLITypes   AS CHAR NO-UNDO.
+DEFINE VARIABLE lcBONOContracts    AS CHAR NO-UNDO.
+DEFINE VARIABLE lcLockFile         AS CHAR NO-UNDO.
+
+DEF STREAM sOrder.
+DEF STREAM sOrderCust.
+DEF STREAM sFile.
+DEF STREAM sInputFile.
+DEF STREAM sOutput.
+DEF STREAM sReport.
+
+DEFINE TEMP-TABLE ttBatchInputFile
+   FIELD FileName  AS CHAR
+   FIELD ttUserId  AS CHAR
+   FIELD EmailId   AS CHAR
+   FIELD Valid     AS LOG
+   FIELD AnalyzerReport  AS LOG
+   FIELD OutputFileName  AS CHAR
+   FIELD DeliverFileName AS CHAR
+   FIELD MsisdnStatus    AS INT
+   FIELD SimIcc          AS CHAR
+   FIELD UsedMSISDN      AS CHAR
+   INDEX FileName IS PRIMARY UNIQUE FileName.
+
+DEFINE TEMP-TABLE ttInputFileContent
+   FIELD FileName   AS CHAR
+   FIELD LineNo     AS INT
+   FIELD InputLine  AS CHAR
+   FIELD LineType   AS CHAR
+   FIELD CustIDType AS CHAR
+   FIELD TestList   AS CHAR
+   FIELD Qty        AS INT
+   FIELD ActDate    AS DATE
+   INDEX FileNameNo FileName LineNo.
+
+DEFINE TEMP-TABLE ttSubscription
+   FIELD FileName   AS CHAR
+   FIELD CLI        AS CHAR
+   FIELD MsSeq      AS INT
+   FIELD OrderId    AS INT
+   FIELD CustNum    AS INT
+   FIELD CustIdType AS CHAR
+   FIELD CustId     AS CHAR
+   FIELD CLIType    AS CHAR
+   FIELD Handled    AS LOG
+   FIELD EmailId    AS CHAR
+   INDEX CLI IS PRIMARY UNIQUE CLI.
+
+DEF TEMP-TABLE ttOrder    NO-UNDO LIKE Order.
+DEF TEMP-TABLE ttOrderCustomer NO-UNDO LIKE OrderCustomer.
+DEFINE BUFFER bttInputFileContent FOR ttInputFileContent.
+
 
 FUNCTION fLogEntry RETURNS LOG (INPUT icLine AS CHAR,
                                 INPUT icRemark AS CHAR):
@@ -730,7 +836,7 @@ PROCEDURE pSTC:
       katun = "NewtonAd".
       /* Various validations */
       IF NOT fValidateMobTypeCh(MobSub.MsSeq,NewCLIType.CLIType,
-                                ldActTS,FALSE,FALSE,0,OUTPUT lcError) THEN
+                                ldActTS,FALSE,FALSE,0,"",OUTPUT lcError) THEN
       lcRemark = lcRemark + "," + lcError.
 
       /* Set the katun again with original username */
@@ -751,7 +857,7 @@ PROCEDURE pSTC:
                                       Customer.BankAcct,
                                       ldActTS,
                                       liCreditCheck,  /* 0 = Credit check ok */
-                                      FALSE,
+                                      0, /*FALSE,*/
                                       "" /* pcSalesman */,
                                       FALSE,
                                       TRUE,
@@ -854,7 +960,7 @@ PROCEDURE pBTC:
 
          ldActTS = fMake2Dt(ldaActDate,0).
 
-         IF lcErrorMsg = "" AND
+         IF lcErrorMsg = ""  AND
             NOT fValidateBTC(MobSub.MsSeq,
                              lcOldBundle,
                              lcNewBundle,
@@ -878,7 +984,8 @@ PROCEDURE pBTC:
                                  0,     /* orig. request */
                                  FALSE, /* mandatory */
                                  FALSE, /* Upgrade Upsell */
-                                 FALSE,
+                                 0,
+                                 "",
                                  OUTPUT lcError).
 
             IF liRequest = 0 THEN

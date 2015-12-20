@@ -127,23 +127,23 @@ END FUNCTION.
 
 /* CLI type change */
 FUNCTION fCTChangeRequest RETURNS INTEGER
-   (INPUT  iiMsSeq       AS INT,
-    INPUT  icNewType     AS CHAR,
-    INPUT  icBundleType  AS CHAR,
-    INPUT  icBankNumber  AS CHAR,
-    INPUT  idChgStamp    AS DEC,
-    INPUT  iiCreditCheck AS INT,
-    INPUT  ilExtendContract AS LOG,
-    INPUT  icSalesman    AS CHAR,
-    INPUT  ilCreateFees  AS LOG,
-    INPUT  ilSendSMS     AS LOG,
-    INPUT  icCreator     AS CHAR,   /* who made the request */
-    INPUT  ideFee        AS DEC,
-    INPUT  icSource      AS CHAR,
-    INPUT  iiOrderID     AS INT,
-    INPUT  iiOrigReq     AS INT,    /* Father request id */
-    INPUT  icDMSInfo     AS CHAR,   /*For DMS usage contract_id */
-    OUTPUT ocResult      AS CHAR).
+   (INPUT  iiMsSeq        AS INT,
+    INPUT  icNewType      AS CHAR,
+    INPUT  icBundleType   AS CHAR,
+    INPUT  icBankNumber   AS CHAR,
+    INPUT  idChgStamp     AS DEC,
+    INPUT  iiCreditCheck  AS INT,
+    INPUT  iiRequestFlags AS INTEGER,
+    INPUT  icSalesman     AS CHAR,
+    INPUT  ilCreateFees   AS LOG,
+    INPUT  ilSendSMS      AS LOG,
+    INPUT  icCreator      AS CHAR,   /* who made the request */
+    INPUT  ideFee         AS DEC,
+    INPUT  icSource       AS CHAR,
+    INPUT  iiOrderID      AS INT,
+    INPUT  iiOrigReq      AS INT,    /* Father request id */
+    INPUT  icDMSInfo      AS CHAR,   /* For DMS usage contract_id, channel */
+    OUTPUT ocResult       AS CHAR).
 
    DEF VAR llCRes      AS LOG  NO-UNDO.
    DEF VAR lcCReqTime  AS CHAR NO-UNDO.
@@ -209,7 +209,12 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
                   icCreator,
                   ilCreateFees,
                   ilSendSMS).
-
+   /* YDR-2038 
+      exempt penalty fee when doing an STC
+      iiRequestFlags (0=no extend_term_contract, 
+                  1=extend_term_contract
+                  2=exclude_term_penalty)
+      */
    ASSIGN bCreaReq.ReqCParam1  = bReqSub.CLIType
           bCreaReq.ReqCParam2  = icNewType
           bCreaReq.ReqCparam3  = icBankNumber
@@ -219,7 +224,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
           bCreaReq.ReqDParam2  = ideFee
           bCreaReq.ReqIParam1  = iiCreditCheck
           bCreaReq.ReqIParam2  = iiOrderID
-          bCreaReq.ReqIParam5  = (IF ilExtendContract THEN 1 ELSE 0) 
+          bCreaReq.ReqIParam5  = iiRequestFlags
           bCreaReq.Salesman    = icSalesman
           bCreaReq.ReqSource   = icSource
           bCreaReq.OrigRequest = iiOrigReq

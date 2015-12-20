@@ -279,6 +279,7 @@ FUNCTION fMakeContractMore RETURN INT
   DEF VAR per3     AS I  NO-UNDO.
   DEF VAR debug    AS LO NO-UNDO.
   DEF VAR startdate as da no-undo.
+  DEF VAR ldaEndDate AS DATE NO-UNDO. 
 
   DEF BUFFER xFFItem FOR FFItem.
 
@@ -301,7 +302,10 @@ FUNCTION fMakeContractMore RETURN INT
   FIND FixedFee where FixedFee.FFNum = FFNum no-lock.
 
   /* on 'endless' contract we must DEFINE an absolute expiration Period */
-  IF EndPeriod = 999999 THEN expper = (year(startdate) + 2) * 100 + 12.
+  IF EndPeriod = 999999 THEN DO:
+     ldaEndDate = ADD-INTERVAL(startdate,5,"months").
+     expper = year(ldaEndDate) * 100 + month(ldaEndDate).
+  END.
   ELSE expper = endperiod.
 
   ASSIGN

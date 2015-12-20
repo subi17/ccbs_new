@@ -34,6 +34,8 @@ DEF VAR liMonths      AS INT NO-UNDO.
 DEF VAR ldeFinalFee   AS DEC NO-UNDO.
 DEF VAR lcRegion      AS CHAR NO-UNDO.
 DEF VAR lcRegionName  AS CHAR NO-UNDO.
+DEF VAR lcCRegionName AS CHAR NO-UNDO.
+DEF VAR lcDelRegionName AS CHAR NO-UNDO.
 DEF VAR liCustNum     AS INT NO-UNDO.
 DEF VAR lcCustAddress AS CHAR NO-UNDO.
 DEF VAR liLang        AS INT NO-UNDO.
@@ -123,6 +125,21 @@ FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
                  OrderCustomer.Brand   = gcBrand       AND
                  OrderCustomer.OrderID = Order.OrderID AND
                  OrderCustomer.RowType = 1 NO-ERROR.
+   IF AVAIL companycustomer THEN DO:
+      FIND FIRST Region WHERE
+         Region.Region = companycustomer.Region NO-LOCK NO-ERROR.
+      IF AVAIL Region THEN
+         lcCRegionName = Region.RgName.
+      ELSE lcCRegionName = "".
+   END.
+   IF AVAIL DeliveryCustomer THEN DO:
+      FIND FIRST Region WHERE
+         Region.Region = DeliveryCustomer.Region NO-LOCK NO-ERROR.
+
+      IF AVAIL Region THEN
+         lcDelRegionName = Region.RgName.
+      ELSE lcRegionName = "".
+   END.
    RETURN "".
 END.
 
@@ -745,17 +762,10 @@ PROCEDURE pGetCCustPost:
    DEF OUTPUT PARAMETER olgErr AS LOGICAL NO-UNDO.
    DEF OUTPUT PARAMETER lcResult AS CHAR NO-UNDO.
    DEF VAR lcErr AS CHAR NO-UNDO.
-   DEF VAR lcCRegionName AS CHAR NO-UNDO.
+   DEF VAR lcCoRegionName AS CHAR NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).
    
    IF AVAIL companycustomer THEN DO:
-      FIND FIRST Region WHERE
-         Region.Region = companycustomer.Region NO-LOCK NO-ERROR.
-
-      IF AVAIL Region THEN
-         lcCRegionName = Region.RgName.
-      ELSE lcCRegionName = "". 
-
       lcResult =  companycustomer.zipcode + " " +
              companycustomer.postOffice + " " + lcCRegionName.
    END.
@@ -764,11 +774,11 @@ PROCEDURE pGetCCustPost:
          Region.Region = OrderCustomer.Region NO-LOCK NO-ERROR.
 
       IF AVAIL Region THEN
-         lcCRegionName = Region.RgName.
-      ELSE lcCRegionName = "".
+         lcCoRegionName = Region.RgName.
+      ELSE lcCoRegionName = "".
 
       lcResult =  OrderCustomer.zipcode + " " +
-             OrderCustomer.postOffice + " " + lcCRegionName.
+             OrderCustomer.postOffice + " " + lcCoRegionName.
    END.
 END.
 
@@ -1195,15 +1205,13 @@ PROCEDURE pGetDELADDR:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
    IF Order.DeliverySecure EQ 1 OR
-      Order.DeliveryType EQ {&ORDER_DELTYPE_POST} THEN
-      lcDelAddress = fTeksti(560,liLang).
+      Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR 
+      Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} THEN
+      lcDelAddress = "". /* YPR-2660 */
    ELSE DO:
       /* separate delivery address */
       IF AVAILABLE DeliveryCustomer THEN DO:
-         lcDelAddress = (IF Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA}
-                         THEN DeliveryCustomer.Company + CHR(10)
-                         ELSE "") +
-                         DeliveryCustomer.Address.
+         lcDelAddress = DeliveryCustomer.Address.
          /*IF DeliveryCustomer.AddressComp > "" THEN
             lcDelAddress = lcDelAddress + CHR(10) +
                            DeliveryCustomer.AddressComp.*/
@@ -1224,29 +1232,18 @@ PROCEDURE pGetDELPOST:
    DEF VAR lcDelAddress AS CHAR NO-UNDO.
    DEF VAR lcDelPost AS CHAR NO-UNDO.
    DEF VAR lcErr AS CHAR NO-UNDO.
-   DEF VAR lcDelRegionName AS CHAR NO-UNDO.
 
    IF AVAIL DeliveryCustomer THEN DO:
-      FIND FIRST Region WHERE
-         Region.Region = DeliveryCustomer.Region NO-LOCK NO-ERROR.
-
-      IF AVAIL Region THEN
-         lcDelRegionName = Region.RgName.
-      ELSE lcRegionName = "".
-      
-
       lcErr = fGetOrderData (INPUT iiOrderNBR).
 
       IF Order.DeliverySecure EQ 1 OR
-         Order.DeliveryType EQ {&ORDER_DELTYPE_POST} THEN
+         Order.DeliveryType EQ {&ORDER_DELTYPE_POST} OR
+         Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA} THEN
          lcDelPost = "".
       ELSE DO:
          /* separate delivery address */
          IF AVAILABLE DeliveryCustomer THEN ASSIGN 
-            lcDelAddress = (IF Order.DeliveryType EQ {&ORDER_DELTYPE_KIALA}
-                            THEN DeliveryCustomer.Company + CHR(10)
-                            ELSE "") +
-                            DeliveryCustomer.Address    
+            lcDelAddress = DeliveryCustomer.Address    
             lcDelPost    = DeliveryCustomer.ZipCode + " " +
                            DeliveryCustomer.PostOffice + " " +
                            lcDelRegionName.
@@ -1259,15 +1256,25 @@ PROCEDURE pGetDELPOST:
    lcResult = lcDelPost.
 END. /*GetDELPOST*/
 
-PROCEDURE pGetUPSHOURS:
+PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
 
    DEF INPUT PARAMETER iiOrderNBR AS INT NO-UNDO.
    DEF OUTPUT PARAMETER olgErr AS LOGICAL NO-UNDO.
    DEF OUTPUT PARAMETER lcResult AS CHAR NO-UNDO.
 
-   DEF VAR lcUPSHours AS CHAR NO-UNDO.
-   DEF VAR lcErr      AS CHAR NO-UNDO.
-   DEF VAR liCount    AS INT  NO-UNDO.
+   DEF VAR lcUPSHours    AS CHAR NO-UNDO.
+   DEF VAR lcErr         AS CHAR NO-UNDO.
+   DEF VAR liCount       AS INT  NO-UNDO.
+   DEF VAR liTimeCount   AS INT  NO-UNDO.
+   DEF VAR lcDailyHours  AS CHAR NO-UNDO.
+   DEF VAR lcTempHours   AS CHAR NO-UNDO.
+   DEF VAR lcDay         AS CHAR NO-UNDO.
+   DEF VAR lcHours       AS CHAR NO-UNDO.
+   DEF VAR lcHoursText   AS CHAR NO-UNDO.
+   DEF VAR lcOpenHour    AS CHAR NO-UNDO.
+   DEF VAR lcCloseHour   AS CHAR NO-UNDO.
+   DEF VAR lcUseEntries  AS CHAR NO-UNDO.
+   DEF VAR lcDayList     AS CHAR NO-UNDO INIT "L a V|Lun|Mar|Mie|Jue|Vie|Sab|Dom|Vacaciones".
 
    DEF BUFFER OrderAction FOR OrderAction.
 
@@ -1279,10 +1286,77 @@ PROCEDURE pGetUPSHOURS:
               OrderAction.ItemType = "UPSHours" NO-ERROR.
    IF NOT AVAIL OrderAction THEN RETURN.
 
-   DO liCount = 1 TO NUM-ENTRIES(OrderAction.ItemKey,";"):
-      lcUPSHours = lcUPSHours +
-                ENTRY(liCount,OrderAction.ItemKey,";") +
-                " <br /> ".
+   /* Check that includes at least separator characters */
+   IF INDEX(OrderAction.ItemKey,";") > 0 AND 
+      NUM-ENTRIES(OrderAction.itemKey,";") = 9 THEN DO:
+      IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN DO: /* UPS */
+         DO liCount = 2 TO NUM-ENTRIES(OrderAction.ItemKey,";"):
+            lcUseEntries = lcUseEntries + STRING(liCount) + "|".
+         END.
+         lcUPSHours = "<b>".
+      END.
+      /* Correos */
+      ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} THEN DO:
+         /* valid itemkey should have at least 8 entries */
+         lcUseEntries = "1|7|8".
+         lcUPSHours = "<b>Oficina de Correos de ".
+      END.
+      lcUPSHours = lcUPSHours + 
+                   DeliveryCustomer.company + "</b> - " +
+                   DeliveryCustomer.address + " " +
+                   DeliveryCustomer.ZipCode + " " +
+                   DeliveryCustomer.postoffice + /* " " + 
+                   lcDelRegionName + */ "<br /><br />" +
+                   IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN 
+                   "<b>Horarios:</b><br /><table border='0'>" ELSE
+                   "<b>Horarios:</b><br />".
+      lcUseEntries = RIGHT-TRIM(lcUseEntries,"|"). /* remove last separator */
+      /* get needed visible days */
+      DO liCount = 1 TO NUM-ENTRIES(lcUseEntries,"|"):
+         lcHoursText = "".
+         lcDailyHours = ENTRY(INT(ENTRY(liCount,lcUseEntries,"|")),
+                        OrderAction.ItemKey,";").
+         /*remove possible extra ; */
+         lcDailyHours = LEFT-TRIM(lcDailyHours, ";").
+         /* handle several times for day */
+         IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN DO: /* UPS */
+            lcHoursText = REPLACE(lcDailyHours, "h",":").
+         END.   
+         ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} THEN DO:
+            DO liTimeCount = 1 TO NUM-ENTRIES(lcDailyHours,"/"):
+               lcTempHours = ENTRY(liTimeCount,lcDailyHours,"/").
+               IF INDEX(lcTempHours,"-") > 0 AND INDEX(lcTempHours,"h") > 0 AND
+                  liTimeCount < 9 THEN DO: /* open times exists */
+                  lcOpenHour = REPLACE(ENTRY(1,lcTempHours,"-"),"h",":").
+                  lcCloseHour = REPLACE(ENTRY(2,lcTempHours,"-"),"h",":").
+                  lcHoursText = lcHoursText + "De " + lcOpenHour + " a " + 
+                                lcCloseHour + "/ ".
+               END.
+               ELSE lcHoursText = lcDailyHours. /* Closed texts */
+               
+            END.
+         END.
+         /* Remove extra spaces and / at the end of the string */
+         lcHoursText = RIGHT-TRIM(lcHoursText).
+         lcHoursText = RIGHT-TRIM(lcHoursText,"/").
+         /* Correos need different day name syntax */
+         IF Order.deliverytype = {&ORDER_DELTYPE_POST} AND /* Correos */
+            INT(ENTRY(liCount,lcUseEntries,"|")) = 7 THEN 
+            lcDay = "S".
+         ELSE IF Order.deliverytype = {&ORDER_DELTYPE_POST} AND
+            INT(ENTRY(liCount,lcUseEntries,"|")) = 8 THEN
+            lcDay = "Festivos".
+         ELSE   
+            lcDay = ENTRY(INT(ENTRY(liCount,lcUseEntries,"|")),lcDayList,"|").
+         IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN
+            lcUPSHours = lcUPSHours + "<tr><td><b>" + lcDay + 
+                         "</b>:</td> <td>" + lcHoursText + " </td></tr> ".
+         ELSE
+            lcUPSHours = lcUPSHours + "<b>" + lcDay + "</b>: " + 
+                         lcHoursText + "<br />".
+      END.
+      IF Order.deliverytype = {&ORDER_DELTYPE_KIALA} THEN
+         lcUPSHours = lcUPSHours + "</table>".
    END.
 
    lcResult = lcUPSHours.
@@ -1780,7 +1854,32 @@ PROCEDURE pGetCTNAME:
              ELSE IF DiscountPlan.DPUnit EQ "Fixed" THEN
                  ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
           END.
+       
+       /* YBU-4965 X-Mas campaign 2015 */
+       FIND FIRST DiscountPlan NO-LOCK WHERE
+                  DiscountPlan.DPRuleId = "BONO6WEBDISC" NO-ERROR.
 
+       IF AVAIL DiscountPlan THEN DO:
+          FIND FIRST DPMember WHERE
+                     DPMember.DPId = DiscountPlan.DPId AND
+                     DPMember.hosttable = "MobSub" AND
+                     DPMember.keyValue = STRING(order.msseq)  AND
+                     DPMember.validFrom <= ldtOrderDate AND
+                     DPMember.validTo >= ldtOrderDate NO-LOCK NO-ERROR.
+          IF AVAIL DPMember THEN DO:          
+             lcMFText = lcMFText + "<br/>1 GB/mes gratis hasta dic. 2016".
+          END.
+          ELSE DO:
+             FIND FIRST Orderaction NO-LOCK where
+                        Orderaction.brand = gcBrand AND
+                        orderaction.orderid = order.orderid AND
+                        orderaction.itemtype = "discount" AND
+                        orderaction.itemkey = STRING(DiscountPlan.DPID) NO-ERROR.
+              IF AVAIL orderaction THEN
+                lcMFText = lcMFText + "<br/>1 GB/mes gratis hasta dic. 2016". 
+          END.          
+       END.
+    
        IF ldeMFWithTax > 0 THEN
          /* YBU-4648 LENGTH check added for fitting one line */
          lcList = lcList + (IF LENGTH(lcList +  TRIM(STRING(ldeMFWithTax,

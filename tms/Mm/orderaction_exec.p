@@ -361,7 +361,9 @@ PROCEDURE pDiscountPlan:
                                        DiscountPlan.ValidPeriods)
          DPMember.DiscValue = DPRate.DiscValue.
    END.
-   
+   IF DiscountPlan.dprule EQ "BONO6WEBDISC" THEN /* YPR-3083 */
+      DPMember.ValidTo = 12/31/16.
+
    RETURN "".
 
 END PROCEDURE.
@@ -376,10 +378,19 @@ PROCEDURE pQ25Extension:
    DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
    DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
 
+   DEF VAR liPeriod AS INT NO-UNDO. 
+   DEF VAR ldaPerDate AS DATE NO-UNDO. 
+   DEF VAR lcTFBank AS CHAR NO-UNDO.
+
    DEF BUFFER SingleFee FOR SingleFee.
    DEF BUFFER MsRequest FOR MsRequest.
    
-   liPercontractId = INT(OrderAction.ItemKey) NO-ERROR.
+   ASSIGN
+      ldaPerDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
+      liPeriod = YEAR(ldaPerDate) * 100 + MONTH(ldaPerDate)
+      lcTFBank = ""
+      liPercontractId = INT(OrderAction.ItemParam).
+
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
       RETURN "ERROR: incorrect contract id".
 
@@ -394,6 +405,17 @@ PROCEDURE pQ25Extension:
    
    IF NOT AVAIL SingleFee THEN
       RETURN "ERROR: residual fee not found".
+   
+   IF SingleFee.OrderId > 0 THEN DO:
+
+      FIND FIRST TermReturn NO-LOCK WHERE
+                 TermReturn.OrderId = SingleFee.OrderId NO-ERROR.
+
+      IF AVAIL TermReturn AND 
+             ((TermReturn.DeviceScreen = TRUE AND TermReturn.DeviceStart  = TRUE) OR 
+              (TermReturn.DeviceScreen = ?    AND TermReturn.DeviceStart  = ?)) THEN
+         RETURN "ERROR: already returned terminal".
+   END.
 
    ldaDate = fPer2Date(SingleFee.BillPeriod,0).
    ldaDate = DATE(MONTH(ldaDate),21,YEAR(ldaDate)).
@@ -421,16 +443,29 @@ PROCEDURE pQ25Extension:
    IF liRequest = 0 THEN 
       RETURN "ERROR:Periodical contract not created; " + lcResult.
    ELSE DO:
-      FIND FIRST msrequest EXCLUSIVE-LOCK WHERE
-                 msrequest.msrequest = lirequest NO-ERROR.
-      IF AVAIL msrequest THEN ASSIGN
-         msrequest.ReqIparam1 = Order.OrderId.
-      RELEASE msrequest.
+      FIND FIRST MsRequest EXCLUSIVE-LOCK WHERE
+                 MsRequest.MsRequest = liRequest NO-ERROR.
+      IF AVAIL MsRequest THEN ASSIGN
+         MsRequest.ReqIparam1 = Order.OrderId.
+      RELEASE MsRequest.
 
-      lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
-                            TODAY,
-                            Customer.Language,
-                            OUTPUT ldeSMSStamp).
+      CASE SingleFee.BillCode:
+         WHEN "RVTERM1EF" THEN
+            lcSMSTxt = fGetSMSTxt("Q25ExtensionUNOE",
+                                  TODAY,
+                                  Customer.Language,
+                                  OUTPUT ldeSMSStamp).
+         WHEN "RVTERMBSF" THEN
+            lcSMSTxt = fGetSMSTxt("Q25ExtensionSabadell",
+                                  TODAY,
+                                  Customer.Language,
+                                  OUTPUT ldeSMSStamp).
+         OTHERWISE 
+            lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
+                                  TODAY,
+                                  Customer.Language,
+                                  OUTPUT ldeSMSStamp).
+      END CASE.
 
       IF lcSMSTxt > "" THEN DO:
 
@@ -449,8 +484,8 @@ PROCEDURE pQ25Extension:
                         "Yoigo info",
                         "").
       END.
+
    END.
-      
 
 END PROCEDURE.
 
@@ -460,11 +495,11 @@ PROCEDURE pQ25Discount:
    DEF VAR ldeDiscount AS DEC NO-UNDO. 
    DEF VAR lcResult AS CHAR NO-UNDO. 
 
-   liPercontractId = INT(OrderAction.ItemKey) NO-ERROR.
+   liPercontractId = INT(OrderAction.ItemParam) NO-ERROR.
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
       RETURN "ERROR:Q25 discount creation failed (incorrect contract id)".
                                             
-   ldeDiscount = DEC(OrderAction.ItemParam) NO-ERROR.
+   ldeDiscount = DEC(OrderAction.ItemKey) NO-ERROR.
    IF ERROR-STATUS:ERROR OR ldeDiscount EQ 0 THEN 
       RETURN "ERROR:Q25 discount creation failed (incorrect discount amount)".
 
@@ -479,6 +514,12 @@ PROCEDURE pQ25Discount:
 
    IF NOT AVAIL SingleFee THEN
       RETURN "ERROR:Q25 discount creation failed (residual fee not found)".
+
+   IF SingleFee.Billed AND 
+      NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
+                         Invoice.InvNum = SingleFee.Invnum AND
+                         Invoice.InvType = 99) THEN
+      RETURN "ERROR:Q25 discount creation failed (residual fee is billed)".
 
    fAddDiscountPlanMember(MobSub.MsSeq,
                          "RVTERMDT1DISC", 

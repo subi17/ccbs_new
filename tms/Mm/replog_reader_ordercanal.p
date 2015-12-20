@@ -258,7 +258,6 @@ PROCEDURE pHandleMobSub:
                          lcOldtariffBundle = "".
 
                lcMessage = lcMessage + lcOldCLIType + lcDel + lcOldtariffBundle.
-
                fWriteMessage(lcMessage).
             END.
             ELSE DO:
@@ -312,6 +311,8 @@ PROCEDURE pHandleOrder:
    DEFINE VARIABLE liMnpStatusCode     AS INTEGER    NO-UNDO INIT ?.
    DEFINE VARIABLE ldMnpCreateStamp    AS DECIMAL    NO-UNDO INIT ?.
    DEFINE VARIABLE lcMnpStatusReason   AS CHARACTER  NO-UNDO.
+   DEFINE VARIABLE liOnlySimAmt        AS INTEGER    NO-UNDO.
+   DEFINE VARIABLE lcTopUpScheme       AS CHARACTER  NO-UNDO.
 
 
    IF AVAILABLE OrderCanal.RepLog THEN DO:
@@ -379,10 +380,12 @@ PROCEDURE pHandleOrder:
                          lcTerminalBillCode = OrderAccessory.ProductCode
                          ldTermAmt          = OrderAccessory.Amount
                          ldTermDiscount     = OrderAccessory.Discount.
+               
                /* MNP requests  */
-               FOR EACH MNPProcess WHERE
-                        MNPProcess.OrderId = Order.OrderId
-                        NO-LOCK BY CrStamp DESC:
+               FOR EACH MNPProcess NO-LOCK WHERE
+                        MNPProcess.OrderId = Order.OrderId AND
+                        MNPProcess.MNPType = {&MNP_TYPE_IN}
+                        BY MNPProcess.CreatedTS DESC:
                   ASSIGN lcFormRequest     = MNPProcess.FormRequest
                          lcPortRequest     = MNPProcess.PortRequest
                          ldPortingTime     = MNPProcess.PortingTime
@@ -419,7 +422,39 @@ PROCEDURE pHandleOrder:
                        
                   IF AVAIL OfferItem THEN
                      lcTermContr = OfferItem.ItemKey.
-                  
+                 
+                  /* TopUp  */
+                  FOR EACH OfferItem NO-LOCK WHERE
+                           OfferItem.Brand       = gcBrand AND
+                           OfferItem.Offer       = Order.Offer AND
+                           OfferItem.ItemType    = "BillItem" AND
+                           OfferItem.EndStamp   >= Order.CrStamp AND
+                           OfferItem.BeginStamp <= Order.CrStamp,
+                     FIRST BillItem NO-LOCK WHERE
+                           BillItem.Brand    = gcBrand AND
+                           BillItem.BillCode = OfferItem.ItemKey,
+                     FIRST BitemGroup NO-LOCK WHERE
+                           BitemGroup.Brand   = gcBrand AND
+                           BitemGroup.BIGroup = BillItem.BIGroup AND
+                           BItemGroup.BIGroup EQ "9":
+
+                     liOnlySimAmt = OfferItem.Amount.
+                     LEAVE.
+                  END.
+
+                  FOR FIRST OfferItem NO-LOCK WHERE
+                            OfferItem.Brand       = gcBrand AND
+                            OfferItem.Offer       = Order.Offer AND
+                            OfferItem.ItemType    = "TopUp" AND
+                            OfferItem.EndStamp   >= Order.CrStamp AND
+                            OfferItem.BeginStamp <= Order.CrStamp,
+                     FIRST TopupScheme NO-LOCK WHERE
+                           TopupScheme.Brand       = gcBrand AND
+                           TopupScheme.TopupScheme = OfferItem.ItemKey:
+                     
+                        lcTopUpScheme = TopupScheme.TopupScheme.
+                  END.
+
                END.
 
                lcMessage = lcMessage                                + lcDel +
@@ -463,7 +498,9 @@ PROCEDURE pHandleOrder:
                            fNotNull(STRING(Order.PortingDate))      + lcDel +
                            fNotNull(STRING(ldMnpUpdateSt))          + lcDel +
                            fNotNull(STRING(ldMnpCreateStamp))       + lcDel +
-                           fNotNull(lcMnpStatusReason).
+                           fNotNull(lcMnpStatusReason)              + lcDel +
+                           fNotNull(STRING(liOnlySimAmt))           + lcDel +
+                           fNotNull(lcTopUpScheme).
 
 
                fWriteMessage(lcMessage).
@@ -525,7 +562,14 @@ PROCEDURE pHandleOrderCustomer:
                            fNotNull(STRING(OrderCustomer.DelType))   + lcDel +
                            fNotNull(OrderCustomer.KialaCode)         + lcDel +
                            fNotnull(OrderCustomer.CustId)            + lcDel +
-                           fNotNull(OrderCustomer.CustIdType).
+                           fNotNull(OrderCustomer.CustIdType)        + lcDel +
+                           fNotNull(STRING(OrderCustomer.FoundationDate)) 
+                                                                     + lcDel +
+                           fNotNull(OrderCustomer.Nationality)       + lcDel +
+                           fNotNull(OrderCustomer.MobileNumber)      + lcDel +
+                           fNotNull(OrderCustomer.Email)             + lcDel +
+                           fNotNull(STRING(OrderCustomer.BirthDay))  + lcDel +
+                           fNotNull(OrderCustomer.Profession).
 
                fWriteMessage(lcMessage).
             END.
@@ -932,8 +976,69 @@ PROCEDURE pHandleBarringConf:
 
 END PROCEDURE.
 
-PROCEDURE pHandleDMS:
+PROCEDURE pHandleTermReturn:
+   DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
 
+   DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE llDeviceStart     AS LOGICAL   NO-UNDO.
+   DEFINE VARIABLE llDeviceScreen    AS LOGICAL   NO-UNDO.
+
+   IF AVAILABLE OrderCanal.RepLog THEN DO:
+
+      lcMessage = fCommonMessage().
+
+      CASE RepLog.EventType:
+         WHEN "CREATE" OR WHEN "MODIFY" THEN DO:
+            FIND FIRST TermReturn WHERE
+                       RECID(TermReturn) = RepLog.RecordId NO-LOCK NO-ERROR.
+            IF AVAILABLE TermReturn THEN DO:
+
+               IF TermReturn.DeviceStart = ? AND TermReturn.DeviceScreen = ? THEN
+                  ASSIGN llDeviceStart = TRUE
+                         llDeviceScreen = TRUE.
+               ELSE ASSIGN llDeviceStart = TermReturn.DeviceStart
+                           llDeviceScreen = TermReturn.DeviceScreen.
+
+               lcMessage = lcMessage                                    + lcDel +
+                           fNotNull(STRING(TermReturn.OrderId))         + lcDel +
+                           fNotNull(TermReturn.BillCode)                + lcDel +
+                           fNotNull(TermReturn.IMEI)                    + lcDel +
+                           fNotNull(TermReturn.MSISDN)                  + lcDel +
+                           fNotNull(STRING(llDeviceStart))              + lcDel +
+                           fNotNull(STRING(llDeviceScreen))             + lcDel +
+                           fNotNull(TermReturn.Salesman)                + lcDel +
+                           fNotNull(TermReturn.TerminalType)            + lcDel +
+                           fNotNull(TermReturn.EnvelopeNumber)          + lcDel +
+                           fNotNull(STRING(TermReturn.ReturnTS)).
+               fWriteMessage(lcMessage).
+            END.
+            ELSE DO:
+               olHandled = TRUE.
+               fWriteMessage(lcMessage).
+               RETURN.
+            END.
+         END.
+         WHEN "DELETE" THEN fWriteMessage(lcMessage).
+         OTHERWISE RETURN.
+      END CASE.
+
+      IF lMsgPublisher:send_message(lcMessage) THEN
+         olHandled = TRUE.
+      ELSE DO:
+         olHandled = FALSE.
+         IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+            LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+      END.
+   END.
+
+   CATCH anyError AS Progress.Lang.Error:
+      olHandled = FALSE.
+      LOG-MANAGER:WRITE-MESSAGE("Message failed was recovered: " + lcMessage,"DEBUG").
+   END CATCH.
+
+END PROCEDURE.
+
+PROCEDURE pHandleDMS:
    DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
 
    DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
@@ -987,7 +1092,7 @@ PROCEDURE pHandleDMS:
 
 END PROCEDURE.
 
-PROCEDURE pHandleTermReturn:
+PROCEDURE pHandleDMSDoc:
 
    DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
 
@@ -999,19 +1104,17 @@ PROCEDURE pHandleTermReturn:
 
       CASE RepLog.EventType:
          WHEN "CREATE" OR WHEN "MODIFY" THEN DO:
-            FIND FIRST TermReturn WHERE
-                       RECID(TermReturn) = RepLog.RecordId NO-LOCK NO-ERROR.
-            IF AVAILABLE TermReturn THEN DO:
+            FIND FIRST DMSDoc WHERE
+                       RECID(DMSDoc) = RepLog.RecordId NO-LOCK NO-ERROR.
+            IF AVAILABLE DMSDoc THEN DO:
 
-               lcMessage = lcMessage                                    + lcDel +
-                           fNotNull(TermReturn.IMEI)                    + lcDel + 
-                           fNotNull(STRING(TermReturn.OrderId))         + lcDel +
-                           fNotNull(TermReturn.BillCode)                + lcDel +
-                           fNotNull(TermReturn.MSISDN)                  + lcDel +
-                           fNotNull(STRING(TermReturn.DeviceStart))     + lcDel +
-                           fNotNull(STRING(TermReturn.DeviceScreen))    + lcDel +
-                           fNotNull(TermReturn.ReturnChannel)           + lcDel +
-                           fNotNull(STRING(TermReturn.ReturnTS)).
+               lcMessage = lcMessage                             + lcDel +
+                           fNotNull(STRING(DMSDoc.DMSID))        + lcDel + 
+                           fNotNull(DMSDoc.DocTypeID)            + lcDel +
+                           fNotNull(DMSDoc.DocTypeDesc)          + lcDel +
+                           fNotNull(DMSDoc.DocStatusCode)        + lcDel +
+                           fNotNull(DMSDoc.DocRevComment)        + lcDel +
+                           fNotNull(STRING(DMSDoc.DMSStatusTS)).
 
                fWriteMessage(lcMessage).
             END.
@@ -1041,29 +1144,32 @@ PROCEDURE pHandleTermReturn:
 
 END PROCEDURE.
 
-PROCEDURE pHandleDMSDoc:
+PROCEDURE pHandleTopupSchemeRow:
 
    DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
 
    DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
-   
+
    IF AVAILABLE OrderCanal.RepLog THEN DO:
 
       lcMessage = fCommonMessage().
 
       CASE RepLog.EventType:
          WHEN "CREATE" OR WHEN "MODIFY" THEN DO:
-            FIND FIRST DMSDoc WHERE
-                       RECID(DMSDoc) = RepLog.RecordId NO-LOCK NO-ERROR.
-            IF AVAILABLE DMSDoc THEN DO:
+            FIND FIRST TopupSchemeRow WHERE
+                       RECID(TopupSchemeRow) = RepLog.RecordId NO-LOCK NO-ERROR.
+            IF AVAILABLE TopupSchemeRow THEN DO:
 
-               lcMessage = lcMessage                             + lcDel +
-                           fNotNull(STRING(DMSDoc.DMSID))        + lcDel + 
-                           fNotNull(DMSDoc.DocTypeID)            + lcDel +
-                           fNotNull(DMSDoc.DocTypeDesc)          + lcDel +
-                           fNotNull(DMSDoc.DocStatusCode)        + lcDel +
-                           fNotNull(DMSDoc.DocRevComment)        + lcDel +
-                           fNotNull(STRING(DMSDoc.DMSStatusTS)).
+               lcMessage = lcMessage                                          + lcDel +
+                           fNotNull(TopupSchemeRow.TopupScheme)               + lcDel +
+                           fNotNull(STRING(TopupSchemeRow.Amount))            + lcDel +
+                           fNotNull(TopupSchemeRow.BillCode)                  + lcDel +
+                           fNotNull(STRING(TopupSchemeRow.DiscountAmount))    + lcDel +
+                           fNotNull(TopupSchemeRow.DiscountBillCode)          + lcDel +
+                           fNotNull(STRING(TopupSchemeRow.BeginStamp))        + lcDel +
+                           fNotNull(STRING(TopupSchemeRow.EndStamp))          + lcDel +
+                           fNotNull(STRING(TopupSchemeRow.TopupSchemeRowID))  + lcDel +
+                           fNotNull(STRING(TopupSchemeRow.DisplayAmount)).
 
                fWriteMessage(lcMessage).
             END.

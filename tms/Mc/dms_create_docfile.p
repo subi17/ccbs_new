@@ -60,6 +60,13 @@ FUNCTION fLogLine RETURNS LOGICAL
       "TMS" SKIP.
 END FUNCTION.
 
+FUNCTION fLogMsg RETURNS LOGICAL
+   (icMessage AS CHAR):
+   PUT STREAM sLogFile UNFORMATTED
+      icMessage "#"
+      "DMS" SKIP.
+END FUNCTION.
+
 /*Decide that what kind of data must be collected (Order or Msrequest data)*/
 /*Function also defines category for handling.*/
 FUNCTION fMakeTempTable RETURNS CHAR
@@ -81,6 +88,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
    DEF VAR liRT AS Int NO-UNDO.
    DEF VAR liStampTypeCount AS INT NO-UNDO.
    DEF VAR lcStampTypes AS CHAR NO-UNDO.
+   DEF VAR lcCancelTypeList AS CHAR NO-UNDO.
 
    llgOrderSeek = FALSE.
    llgDirectNeeded = FALSE.
@@ -118,6 +126,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
             /*Default values for new loop*/
             llgDirect = FALSE.
             llgAddEntry = FALSE.
+            lcCase = "".
             /*Case 5: Direct channels*/
             /*This can NOT be parallell with other cases.*/
             /*Reason to store llgDirect information is that the case is easy
@@ -137,13 +146,15 @@ FUNCTION fMakeTempTable RETURNS CHAR
                  /* This is financed case */
                   IF liMonths NE 0 THEN DO:
                      llgDirect = TRUE.
-                     llgAddEntry = TRUE.
-                     lcCase = {&DMS_CASE_TYPE_ID_DIRECT_CH}.
+                     CREATE ttOrderList.
+                     ASSIGN ttOrderList.OrderID = OrderTimestamp.OrderId
+                            ttOrderList.CaseID = {&DMS_CASE_TYPE_ID_DIRECT_CH}.
+                            ttOrderList.Direct = llgDirect.
+                     NEXT.  /*no need to check other cases because they                                           can not be parallel according to current specs.*/
                   END.
-
             END.
             /*Case 1: Activations*/
-            ELSE IF (Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} /*6*/
+            IF (Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} /*6*/
                OR
                Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC} /*32*/) AND
                R-INDEX(Order.OrderChannel, "pos"  ) > 0 /* POS needed*/
@@ -176,10 +187,24 @@ FUNCTION fMakeTempTable RETURNS CHAR
                     Order.StatusCode EQ {&ORDER_STATUS_CLOSED_BY_FRAUD} OR
                     Order.StatusCode EQ {&ORDER_STATUS_AUTO_CLOSED} THEN DO:
                /*Send Cancel notif if TMS has sent other notif to DMS
-                (previous sending)*/
+                (previous sending). NOTE: This is not allowed if DMS has notified the
+                cancellation(statuses E,J,F,N,G).
+                Also cancellations are filtered by OrderStatus so that only specific
+                orders are allowed to produce cancellations.
+                */
+               lcCancelTypeList =  SUBST("&1,&2,&3,&4,&5",
+                  {&ORDER_STATUS_RENEWAL_STC_COMPANY},
+                  {&ORDER_STATUS_MORE_DOC_NEEDED},
+                  {&ORDER_STATUS_COMPANY_NEW},
+                  {&ORDER_STATUS_COMPANY_MNP},
+                  {&ORDER_STATUS_DELIVERED}).
+
+
                FIND FIRST DMS NO-LOCK WHERE
-                          DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
-                          DMS.HostId EQ Order.OrderID NO-ERROR.
+                          DMS.ContractID EQ Order.ContractID AND 
+                           LOOKUP(DMS.StatusCode, "E,J,F,N,G") = 0 AND
+                           LOOKUP(DMS.OrderStatus, lcCancelTypeList) > 0
+                           NO-ERROR.
                IF AVAIL DMS THEN DO:
                   lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
                   llgAddEntry = TRUE.
@@ -254,7 +279,15 @@ FUNCTION fMakeTempTable RETURNS CHAR
         the change. */
       FIND FIRST DMS NO-LOCK WHERE
                  DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
-                 DMS.HostID EQ liAddId NO-ERROR.
+                 DMS.HostID EQ liAddId AND
+                 (  DMS.OrderStatus EQ {&ORDER_STATUS_DELIVERED} OR
+                    DMS.OrderStatus EQ
+                       {&ORDER_STATUS_MORE_DOC_NEEDED} OR
+                    DMS.OrderStatus EQ
+                       {&ORDER_STATUS_RENEWAL_STC_COMPANY} OR
+                    DMS.OrderStatus EQ {&ORDER_STATUS_COMPANY_NEW} OR
+                    DMS.OrderStatus EQ {&ORDER_STATUS_COMPANY_MNP}
+                  )  NO-ERROR.
 
       IF AVAIL DMS THEN DO TRANS:
          CREATE ttOrderList.
@@ -359,32 +392,38 @@ FUNCTION fGetCancellationInfo RETURNS CHAR
     idStartTS AS DECIMAL,
     idEndTS AS DECIMAL,
    OUTPUT odeTime AS DECIMAL):
+
+   DEF VAR liRt AS INT NO-UNDO.
+   DEF VAR liReqTypeCount AS INT NO-UNDO.
+   DEF VAR lcReqTypes AS CHAR NO-UNDO.
    odeTime = idEndTS.
 
-   FIND FIRST MsRequest NO-LOCK WHERE
-              MsRequest.Brand EQ gcBrand AND
-              MsRequest.ReqStatus EQ 2 AND
-              MsRequest.UpdateStamp > idStartTS AND
-              MsRequest.UpdateStamp < idEndTS AND
-              (
-              MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} /*18*/
-              OR MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} /*49*/
-              )
-              AND Msrequest.MsSeq EQ iiMsSeq AND
-              MsRequest.UpdateStamp <= MsRequest.DoneStamp NO-ERROR.
-   
-   IF AVAIL MsRequest THEN DO:
-      IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-         MsRequest.ReqCparam3 EQ "11" THEN DO:
-         odeTime = MsRequest.CreStamp.
-         RETURN "POS Order Cancellation".
+   lcReqTypes = STRING({&REQTYPE_SUBSCRIPTION_TERMINATION}) + "," +
+                STRING({&REQTYPE_REVERT_RENEWAL_ORDER} ).
+   DO liReqTypeCount = 1 TO NUM-ENTRIES (lcReqTypes):
+      liRT = INT(ENTRY(liReqTypeCount,lcReqTypes)).
+      FIND FIRST MsRequest NO-LOCK WHERE
+                 MsRequest.Brand EQ gcBrand AND
+                 MsRequest.ReqStatus EQ 2 AND
+                 MsRequest.UpdateStamp > idStartTS AND
+                 MsRequest.UpdateStamp < idEndTS AND
+                 MsRequest.ReqType EQ liRt AND
+                 Msrequest.MsSeq EQ iiMsSeq AND
+                 MsRequest.UpdateStamp <= MsRequest.DoneStamp NO-ERROR.
+
+      IF AVAIL MsRequest THEN DO:
+         IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+            MsRequest.ReqCparam3 EQ "11" THEN DO:
+            odeTime = MsRequest.CreStamp.
+            RETURN "POS Order Cancellation".
+         END.
+         ELSE IF MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} THEN DO:
+            odeTime = MsRequest.CreStamp.
+            RETURN "Order Cancellation".
+         END.
       END.
-      ELSE IF MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} THEN DO:
-         odeTime = MsRequest.CreStamp.
-         RETURN "Order Cancellation".
-      END.
-   END.
-   ELSE IF icStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
+   END. /*DO for msrequest search*/
+   IF icStatus EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
       icStatus EQ {&ORDER_STATUS_COMPANY_NEW} OR
       icStatus EQ {&ORDER_STATUS_COMPANY_MNP } OR
       icStatus EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} THEN DO:
@@ -562,6 +601,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             ",").
+   RETURN "".                         
 END.   
 
 /*Order restudy ORDER_STATUS_MORE_DOC_NEEDED "44" */
@@ -583,7 +623,9 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
    DEF VAR lcModel   AS CHAR NO-UNDO.
    DEF VAR ldePermanencyAmount AS DECIMAL.
-   DEF VAR liPermancyLength AS INT.
+   DEF VAR liPermancyLength AS INT NO-UNDO.
+   DEF VAR lcErr AS CHAR NO-UNDO.
+   DEF VAR lcMsg AS CHAR NO-UNDO.
 
    DEF BUFFER DeliveryCustomer FOR OrderCustomer.
 
@@ -697,37 +739,15 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    STRING(Order.RiskCode).
    
    /*Solve tmsparam value for getting correct matrix row*/
-   /*portability pos-pos*/
-   IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND 
-      Order.PayType EQ FALSE AND
-      Order.OldPayType EQ FALSE  THEN lcParam = "DMS_S44_T1".
-   /*new add pos / portability pre-pos.*/
-   ELSE IF (Order.OrderType EQ {&ORDER_TYPE_NEW} AND 
-            Order.PayType EQ FALSE )
-      OR
-           (Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-           Order.PayType EQ FALSE AND
-           Order.OldPayType EQ TRUE ) THEN lcParam = "DMS_S44_T2".
-   /*stc to pos / migration+renewal*/
-   ELSE IF Order.OrderType EQ {&ORDER_TYPE_STC} AND
-           Order.PayType EQ FALSE
-      OR   
-           Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN lcPAram = "DMS_S44_T3".
-   /*add new pre / portability to pre*/
-   ELSE IF Order.OrderType EQ {&ORDER_TYPE_NEW} AND
-           Order.PayType EQ TRUE
-      OR
-           Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-           Order.PayType EQ TRUE THEN lcPAram = "DMS_S44_T4".
-
-   lcRequiredDocs = fCParam("DMS",lcParam).
+   lcRequiredDocs = fNeededDocs(BUFFER Order).
    DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
-      /*Document type,DocStatusCode,RevisionComment*/
-      lcDocListEntries = ENTRY(liCount,lcRequiredDocs) + "," + 
-                         "," + 
-                         lcDMSStatusDesc + "," + 
-                         "Doc created".
-      IF liCount NE NUM-ENTRIES(lcRequiredDocs) 
+      /*Document type, Type desc,DocStatusCode,RevisionComment*/
+      lcDocListEntries = lcDocListEntries +
+                         ENTRY(liCount,lcRequiredDocs) + "," +
+                         "," + /*This field is filled only by DMS responses*/
+                         lcDMSStatusDesc + "," +
+                         "".
+      IF liCount NE NUM-ENTRIES(lcRequiredDocs)
          THEN lcDocListEntries = lcDocListEntries + ",".
    END.
 
@@ -748,7 +768,14 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
                             lcDocListEntries /*DocList*/,
                             ",").
 
-
+   lcErr = fSendChangeInformation("", 
+                                  Order.OrderId, 
+                                  "", 
+                                  lcDocListEntries,
+                                  ",",
+                                  "create_cf",
+                                  lcMsg).
+   fLogMsg("Msg,2 : " + lcMsg + " #Status: " + lcErr).
 
    RETURN "".
 
@@ -771,6 +798,8 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    DEF VAR lcModel   AS CHAR NO-UNDO.
    DEF VAR ldePermanencyAmount AS DECIMAL.
    DEF VAR liPermancyLength AS INT.
+   DEF VAR lcErr AS CHAR NO-UNDO.
+   DEF VAR lcMsg AS CHAR NO-UNDO.
 
    ASSIGN
       lcCaseTypeId      = "3".
@@ -859,75 +888,20 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    STRING(lcModel)   + lcDelim +
    /*Roi Risk: <Blank>*/
    STRING(Order.RiskCode).
-   /*CASE 20*/
-   /*portability pos-pos*/
-   IF Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} AND
-      Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-      Order.PayType EQ FALSE AND
-      Order.OldPayType EQ FALSE  THEN lcParam = "DMS_S20_T1".
-   /*new add pos / portability pre-pos.*/
-   ELSE IF (Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} AND
-            Order.OrderType EQ {&ORDER_TYPE_NEW} AND
-            Order.PayType EQ FALSE )
-      OR
-           (Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} AND
-            Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-            Order.PayType EQ FALSE AND
-            Order.OldPayType EQ TRUE ) THEN lcParam = "DMS_S20_T2".
-   /*add new pre / portability to pre*/
-   ELSE IF Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} AND
-           Order.OrderType EQ {&ORDER_TYPE_NEW} AND
-           Order.PayType EQ TRUE
-      OR
-           Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} AND  
-           Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-           Order.PayType EQ TRUE THEN lcPAram = "DMS_S20_T3".
-
-   /*CASE 21,33*/
-   /*portability pos-pos*/
-   IF Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} AND
-      Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-      Order.PayType EQ FALSE AND
-      Order.OldPayType EQ FALSE  THEN 
-      lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T1".
-   /*new add pos / portability pre-pos.*/
-   ELSE IF (Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} AND
-            Order.OrderType EQ {&ORDER_TYPE_NEW} AND
-            Order.PayType EQ FALSE )
-      OR
-           (Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} AND
-            Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-            Order.PayType EQ FALSE AND
-            Order.OldPayType EQ TRUE ) THEN 
-      lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T2".
-   /*stc to pos / migration+renewal*/
-   ELSE IF Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} AND
-           Order.OrderType EQ {&ORDER_TYPE_STC} AND
-           Order.PayType EQ FALSE
-      OR
-           Order.OrderType EQ {&ORDER_TYPE_RENEWAL} /* AND
-           Order.OrderChannel EQ TODO */ THEN 
-      lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T3".
-   /*add new pre / portability to pre*/
-   ELSE IF Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} AND
-           Order.OrderType EQ {&ORDER_TYPE_NEW} AND
-           Order.PayType EQ TRUE
-      OR
-           Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} AND  
-           Order.OrderType EQ {&ORDER_TYPE_MNP} AND
-           Order.PayType EQ TRUE THEN 
-      lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T4".
-
-   lcRequiredDocs = fCParam("DMS",lcParam).
+   
+   /*solve needed documents:*/
+   lcRequiredDocs =  fNeededDocs(BUFFER Order).
    DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
-      /*Document type,DocStatusCode,RevisionComment*/
-      lcDocListEntries = ENTRY(liCount,lcRequiredDocs) + "," + 
-                         "," +
-                         lcDMSStatusDesc + "," + 
-                         "Doc created".
-      IF liCount NE NUM-ENTRIES(lcRequiredDocs) 
+      /*Document type, Type desc,DocStatusCode,RevisionComment*/
+      lcDocListEntries = lcDocListEntries +
+                         ENTRY(liCount,lcRequiredDocs) + "," +
+                         "," + /*This field is filled only by DMS responses*/
+                         lcDMSStatusDesc + "," +
+                         "".
+      IF liCount NE NUM-ENTRIES(lcRequiredDocs)
          THEN lcDocListEntries = lcDocListEntries + ",".
    END.
+
 
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
@@ -944,6 +918,18 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             ",").
+   lcErr = fSendChangeInformation("", 
+                                  Order.OrderId, 
+                                  "", 
+                                  lcDocListEntries,
+                                  ",",
+                                   "create_cf",
+                                   lcMsg).
+   fLogMsg("Msg,3 : " + lcMsg + " #Status: " + lcErr).
+
+
+   RETURN "".
+
 END.
 
 /*VFR*/
@@ -1002,7 +988,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*.MSISDN*/
             STRING(MsRequest.CLI)                           + lcDelim +
             /*.ACC_Request_date*/
-            fPrintDate(MsRequest.ReqDparam1)                + lcDelim +
+            fPrintDate(MsRequest.CreStamp)                  + lcDelim +
             /*.Current Tariff*/
             lcTariff.
          END.
@@ -1019,7 +1005,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*MSISDN*/
             STRING(MsRequest.CLI)                           + lcDelim +
             /*STC_Request_date*/
-            fPrintDate(MsRequest.ActStamp)                + lcDelim +
+            fPrintDate(MsRequest.CreStamp)                  + lcDelim +
             /*Previous_Tariff*/            
             STRING(MsRequest.ReqCparam1)                    + lcDelim +
             /*New_Tariff*/
@@ -1057,7 +1043,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*MSISDN*/
             STRING(MsRequest.CLI)                           + lcDelim +
             /*STC_Request_date*/
-            fPrintDate(MsRequest.ReqDparam1)                + lcDelim +
+            fPrintDate(MsRequest.CreStamp)                  + lcDelim +
             /*Previous_Tariff*/            
             lcTariff                                        + lcDelim +
             /*New_Tariff*/
@@ -1142,6 +1128,8 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                                lcDocListEntries /*DocList*/,
                                ",").      
    END.
+   RETURN "".
+
 END.
 
 FUNCTION fCreateDocumentCase5 RETURNS CHAR
@@ -1201,6 +1189,8 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             ",").
+   RETURN "".
+
 END.
 
 FUNCTION fCreateDocumentCase6 RETURNS CHAR
@@ -1266,6 +1256,8 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             ",").
+   RETURN "".
+
 END.
 
 FUNCTION fCreateDocumentRows RETURNS CHAR

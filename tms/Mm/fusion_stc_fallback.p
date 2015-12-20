@@ -71,6 +71,7 @@ IF fValidateMobTypeCh(
    FALSE, /* extend contract */
    TRUE, /* bypass stc type check */
    0, /* stc order id */
+   "",
    OUTPUT lcError) EQ FALSE THEN RETURN lcError.
 
 IF fValidateNewCliType(INPUT lcCLIType, INPUT lcBundleID,
@@ -83,7 +84,7 @@ oiRequest = fCTChangeRequest(MobSub.msseq,
                   "", /* bank account ok (since post2post)*/
                   ldeSTCTS,
                   0,  /* Credit check ok (since post2post)*/
-                  FALSE, /* extend contract */
+                  0, /* extend contract 0=no extend_term_contract */
                   "" /* pcSalesman */,
                   FALSE, /* charge */
                   TRUE, /* send sms */

@@ -93,8 +93,8 @@
 "11862" "11862 de ALAI" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 81
 "11863" "ELETTE" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 82
 "11864" "11864 de Next Touch Telecom (A" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 83
-"11865" "FUNDACIÓN DISMINUIDOS FÍSICOS" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 84
-"11866" " de Servicaterers BCN (Auna)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 85
+"11865" "11865 de Micamosa Mon de Servei (VODAFON" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 84
+"11866" "11866 de Servicaterers BCN (VODAFONE ONO" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 85
 "11867" "de Comunicaciones 2012 (ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 86
 "11868" " de Incotel" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 87
 "11869" " de Servicios Telefónicos de Audiotex" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 88
@@ -105,9 +105,9 @@
 "11874" " de Audiotex Phone Systems" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 93
 "11875" " de QDQ Media (Uni2)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 94
 "11876" " de Internet" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 95
-"11877" " de Remirson Inversora (AUNA)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 96
+"11877" "11877 de Remirson Inversora (VODAFONE ON" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 96
 "11878" " de Quality Telecom (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 97
-"11879" "11879 de Telefonosdecastellón (Auna)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/04/13 897
+"11879" "11879 de Telefonosdecastellón (VODAFONE" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/04/13 897
 "11880" " de NIT (11811 NIT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 98
 "11881" "11881 de NEO OPERADOR DE TELECOMUNICACIO" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 99
 "11882" "11882 de Telinfocom (Orange Espagne)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 100
@@ -123,7 +123,7 @@
 "11892" " de TIGRAD ATENCIÓN TELEFÓNICA" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/11/14 975
 "11894" "11894 de FULLTIME NETWORKS LIMITED (MASV" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 27/11/14 976
 "11895" " de INFONICA, S.L." 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 28/08/14 972
-"11897" "de ACTIVAOPER SERVICIOS Ibercom Telecom" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 27/02/14 935
+"11897" "11897 de ACTIVAOPER SERVICIOS (Xtra Tele" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 27/02/14 935
 "11898" "11898 de Trisonata (ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/03/12 896
 "11899" "de Servicio Telefónico para el Ciudadano" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 28/06/13 901
 "1204" "Canada" 2 1 0 0 "" "" 0 no 1 no "" 0 0 "1" 31/12/49 01/10/11 681
@@ -899,6 +899,7 @@
 "GPRSDATA2_CONT9" "GPRS data slow" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/05/14 952
 "GPRSDATA2_DATA5" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/09/13 918
 "GPRSDATA2_DATA6" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/05/14 950
+"GPRSDATA2_DATA7" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/15 1004
 "GPRSDATA2_DUB2" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/05/12 854
 "GPRSDATA2_DUB3" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/12 892
 "GPRSDATA2_MDUB2" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 610
@@ -912,6 +913,7 @@
 "GPRSDATA_CONT9" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/05/14 951
 "GPRSDATA_DATA5" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/09/13 919
 "GPRSDATA_DATA6" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/05/14 949
+"GPRSDATA_DATA7" "GPRS Data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/15 1005
 "GPRSDATA_DUB" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/06 614
 "GPRSDATA_DUB2" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/05/12 853
 "GPRSDATA_DUB3" "GPRS data" 93 1 0 0 "" "" 0 no 0 no "" 0 0 "1" 31/12/49 01/12/12 891

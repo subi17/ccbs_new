@@ -23,9 +23,8 @@ END.
 def stream sread.
 def stream slog.
 
-input stream sread from "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4145.csv".
-
-output stream slog to "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4145.log".
+input stream sread from "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4186.csv".
+output stream slog to "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4186.log".
    
 def var lcline as char no-undo.
 def var licust as int no-undo.
@@ -89,5 +88,6 @@ repeat trans:
 end.
 
 input stream sread close.
+OUTPUT STREAM slog CLOSE.
 
 fcleaneventobjects().
