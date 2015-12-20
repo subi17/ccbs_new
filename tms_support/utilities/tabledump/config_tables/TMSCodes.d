@@ -1311,6 +1311,7 @@
 "requem" "89,0,1,2,3,4" "SubsLMenu" "1" "Terminal Financing Bank File" "" "" 1
 "requem" "9,0,1,2,3,4,7,9" "SubsLMenu" "1" "Periodical contract termination" "" "" 1
 "requem" "90,0,1,2,3,4,9" "SubsLMenu" "1" "Fusion invoice email" "" "" 1
+"requem" "91,0,1,2,3,4" "SubsLMenu" "1" "Bank termination/cancellation file" "" "" 1
 "RequestAction" "Action" "Request" "1" "Create" "" "" 1
 "RequestAction" "Action" "Request" "11" "Term-PenaltyFee" "" "" 1
 "RequestAction" "Action" "Request" "12" "Init-Terminate" "" "" 1
