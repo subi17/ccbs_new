@@ -134,6 +134,7 @@ FOR EACH FixedFee NO-LOCK WHERE
          Order.OrderId = FixedFee.OrderID:
 
    IF FixedFee.BegDate > ldaToDate THEN NEXT.
+   IF FixedFee.SourceTable NE "DCCLI" THEN NEXT.
 
    IF NOT SESSION:BATCH THEN DO:
       liLoop = liLoop + 1.
@@ -224,15 +225,17 @@ FOR EACH FixedFee NO-LOCK WHERE
       NEXT ORDER_LOOP.
    END.
    
-   FIND FIRST SingleFee EXCLUSIVE-LOCK WHERE
-              SingleFee.Brand = gcBrand AND
-              SingleFee.Custnum = FixedFee.Custnum AND
-              SingleFee.HostTable = FixedFee.HostTable AND
-              SingleFee.KeyValue = Fixedfee.KeyValue AND
-              SingleFee.SourceKey = FixedFee.SourceKey AND
-              SingleFee.SourceTable = FixedFee.SourceTable AND
-              SingleFee.CalcObj = "RVTERM" AND
-              SingleFee.Billed = FALSE NO-ERROR.
+   IF FixedFee.BillCode BEGINS "PAYTERM" THEN
+      FIND FIRST SingleFee EXCLUSIVE-LOCK WHERE
+                 SingleFee.Brand = gcBrand AND
+                 SingleFee.Custnum = FixedFee.Custnum AND
+                 SingleFee.HostTable = FixedFee.HostTable AND
+                 SingleFee.KeyValue = Fixedfee.KeyValue AND
+                 SingleFee.SourceKey = FixedFee.SourceKey AND
+                 SingleFee.SourceTable = FixedFee.SourceTable AND
+                 SingleFee.CalcObj = "RVTERM" AND
+                 SingleFee.Billed = FALSE NO-ERROR.
+   ELSE RELEASE SingleFee.
 
    FIND FIRST DCCLI EXCLUSIVE-LOCK WHERE
               DCCLI.Brand   = gcBrand AND
@@ -240,9 +243,8 @@ FOR EACH FixedFee NO-LOCK WHERE
               DCCLI.DCEvent = FixedFee.CalcObj AND
               DCCLI.percontractId = int(FixedFee.SourceKey) NO-ERROR.
 
-   FIND LAST bffitem NO-LOCK WHERE
+   FIND LAST bffitem NO-LOCK USE-INDEX FFNum WHERE
              bffitem.ffnum = fixedfee.ffnum NO-ERROR.
-
    
    ASSIGN
       ldaNewBillPeriod = fPer2Date(bffitem.billperiod,1).
