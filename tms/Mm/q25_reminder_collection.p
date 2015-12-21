@@ -34,7 +34,7 @@ DEF VAR lcLogText                AS CHAR NO-UNDO.
    it starts at 13th day and ends 15th */
 IF TODAY < 1/1/16 THEN DO: /* For testing purposes */
    liStartDay = 1.
-   liEndDay = 30.
+   liEndDay = 28.
 END.
 ELSE IF DAY(TODAY) > 15 OR TODAY < 1/13/16 THEN
    RETURN.
