@@ -29,10 +29,12 @@ DEF VAR ldaEndDateMonth24        AS DATE NO-UNDO.
 DEF VAR liTotalCount             AS INT  NO-UNDO.
 DEF VAR liTempCount              AS INT  NO-UNDO.
 DEF VAR lcLogText                AS CHAR NO-UNDO.
+DEF VAR liTestStartDay           AS CHAR  NO-UNDO.
+DEF VAR liTestEndDay             AS CHAR  NO-UNDO.
 
 /* Handling of sms sending is different at January 2016 
    it starts at 13th day and ends 15th */
-IF TODAY < 1/1/16 THEN DO: /* For testing purposes */
+IF TODAY < 1/13/16 THEN DO: /* For testing purposes */
    liStartDay = 1.
    liEndDay = 28.
 END.
@@ -71,6 +73,25 @@ fGetStartEndDates({&Q25_MONTH_23}, liStartDay, liEndDay,
 fGetStartEndDates({&Q25_MONTH_24}, liStartDay, liEndDay,
                   OUTPUT ldaStartDateMonth24, OUTPUT ldaEndDateMonth24).
 
+/* TESTING SUPPORT */
+IF TODAY < 1/13/16 THEN DO:
+DEF VAR lcTestStartDay AS CHAR NO-UNDO.
+DEF VAR lcTestEndDay AS CHAR NO-UNDO.
+
+ASSIGN lcTestStartDay     = fCParam("Q25","Q25_Test_Start")
+       lcTestEndDay     = fCParam("Q25","Q25_Test_End").
+   
+   IF lcTestStartDay > "" AND lcTestEndDay > "" THEN DO:
+      ASSIGN
+         ldaStartDateMonth24 = DATE(lcTestStartDay)
+         ldaEndDateMonth24   = DATE(lcTestEndDay)
+         ldaStartDateMonth23 = ADD-INTERVAL(ldaStartDateMonth24, 1, 'months':U)
+         ldaEndDateMonth23   = ADD-INTERVAL(ldaEndDateMonth24, 1, 'months':U)
+         ldaStartDateMonth22 = ADD-INTERVAL(ldaStartDateMonth24, 2, 'months':U)
+         ldaEndDateMonth22   = ADD-INTERVAL(ldaEndDateMonth24, 2, 'months':U).
+   END.
+
+END.
 /* Check first how many SMS is needed to send today, with third param value
    FALSE no actual sending, just calculation and log generation for testing
    and checking purposes. */
