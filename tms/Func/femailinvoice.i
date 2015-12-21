@@ -110,6 +110,30 @@ FUNCTION fGenerateEmailPDFLink RETURNS CHAR (INPUT iiPeriod  AS INT,
    
 END FUNCTION. /* FUNCTION fGenerateEmailPDFLink */
 
+FUNCTION fGenerateQ25Link RETURNS CHAR (INPUT icCLI AS CHAR):
+   
+   DEF VAR lcEncodedLink    AS CHAR NO-UNDO.
+   DEF VAR lcQ25Path        AS CHAR NO-UNDO.
+   DEF VAR lcSaltKey        AS CHAR NO-UNDO.
+
+   ASSIGN lcQ25Path = fCParam("EI","Q25LandingPageLink")
+          lcSaltKey = fCParam("EI","SaltKey").
+
+   IF lcQ25Path = "" OR lcQ25Path = ? THEN RETURN "".
+
+   IF lcSaltKey = "" OR lcSaltKey = ? THEN RETURN "".
+
+   IF icCLI > "" THEN 
+      lcEncodedLink = HEX-ENCODE(SHA1-DIGEST(icCLI,lcSaltKey)).
+
+   lcEncodedLink = lcQ25Path + (IF lcEncodedLink > ""
+                                THEN "&h=" + lcEncodedLink
+                                ELSE ""). 
+
+   RETURN lcEncodedLink.
+   
+END FUNCTION. /* FUNCTION fGenerateEmailPDFLink */
+
 FUNCTION fGetSMSText RETURNS CHAR (INPUT icTarget    AS CHAR,
                                    INPUT icKeyValue  AS CHAR,
                                    INPUT iiLanguage  AS INT):

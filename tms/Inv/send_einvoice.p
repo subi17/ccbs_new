@@ -202,6 +202,7 @@ PROCEDURE pGetQ25Text:
    DEF VAR lcTextID    AS CHAR NO-UNDO.
    DEF VAR liInvPeriod AS INT  NO-UNDO.
    DEF VAR liMaxPeriod AS INT  NO-UNDO.
+   DEF VAR lcQ25Link   AS CHAR NO-UNDO.
    
    DEF BUFFER bExtension FOR DCCLI.
 
@@ -295,14 +296,15 @@ PROCEDURE pGetQ25Text:
                           iiLanguage,
                           OUTPUT xMailSubj).
 
+   IF liQ25Qty > 1 THEN lcCLI = "".
+   lcQ25Link = fGenerateQ25Link(lcCLI).
+   
+   IF lcQ25Link = ? OR lcQ25Link = "" THEN ocText = "".
+   
    ASSIGN 
       ocText = REPLACE(ocText,"#Q25DD",STRING(DATE(ldaTo),"99")) 
-      ocText = REPLACE(ocText,"#Q25MM",STRING(MONTH(ldaTo),"99")).
-      
-   IF liQ25Qty = 1 THEN 
-      ocText = REPLACE(ocText,"#Q25CLI",lcCLI).
-   ELSE 
-      ocText = REPLACE(ocText,"#Q25CLI","").
+      ocText = REPLACE(ocText,"#Q25MM",STRING(MONTH(ldaTo),"99"))
+      ocText = REPLACE(ocText,"#Q25LINK",lcQ25Link).
 
 END PROCEDURE.
 
