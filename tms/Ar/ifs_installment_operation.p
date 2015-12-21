@@ -1053,7 +1053,8 @@ PROCEDURE pCollectReactivations:
                 FixedFee.Custnum = MsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue = STRING(MsRequest.MsSeq) AND
-                LOOKUP(FixedFee.BillCode,"PAYTERM,RVTERM") > 0 AND
+                (FixedFee.BillCode BEGINS "PAYTERM" OR 
+                 FixedFee.BillCode BEGINS "RVTERM") AND 
                 FixedFee.SourceTable = "DCCLI" AND
                 FixedFee.SourceKey = STRING(DCCLI.PerContractID):
             
@@ -1263,7 +1264,8 @@ PROCEDURE pCollectInstallmentCancellations:
             MsRequest.ActStamp >= ldCheck AND
             MsRequest.DoneStamp >= ldFrom AND
             MsRequest.DoneStamp <= ldTo AND
-            MsRequest.ReqCparam3 BEGINS "PAYTERM" AND
+            (MsRequest.ReqCparam3 BEGINS "PAYTERM" OR
+             MsRequest.ReqCParam3 BEGINS "RVTERM") AND
            (MsRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} OR
             MsRequest.ReqSource = {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} OR
             MsRequest.ReqCParam2 = "canc")
@@ -1274,6 +1276,11 @@ PROCEDURE pCollectInstallmentCancellations:
          olInterrupted = TRUE.
          LEAVE.
       END.
+
+      /* for Q25 subscription termination is not reported here */
+      IF MsRequest.ReqCParam3 BEGINS "RVTERM" AND
+         MsRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION}
+      THEN NEXT. 
 
       IF MsRequest.ReqCparam2 EQ "canc" THEN
          lcCancelType = "INSTALLMENT_CANCELLATION".
@@ -1314,14 +1321,15 @@ PROCEDURE pCollectInstallmentCancellations:
                 FixedFee.Custnum = MsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue = STRING(MsRequest.MsSeq) AND
-                FixedFee.BillCode = "PAYTERM" AND
+                (FixedFee.BillCode BEGINS "PAYTERM" OR
+                 FixedFee.BillCode BEGINS "RVTERM") AND
                 FixedFee.SourceTable = "DCCLI" AND
                 FixedFee.SourceKey = STRING(bTermDCCLI.PerContractID),
           FIRST DayCampaign NO-LOCK USE-INDEX DCEvent WHERE
                 DayCampaign.Brand = gcBrand AND
                 DayCampaign.DCEvent = bTermDCCLI.DCEvent:
       
-         IF FixedFee.IFSStatus EQ {&IFS_STATUS_SENDING_CANCELLED} THEN NEXT REQUEST_LOOP. 
+         IF FixedFee.IFSStatus NE {&IFS_STATUS_SENT} THEN NEXT REQUEST_LOOP. 
          IF FixedFee.TFBank > "" AND FixedFee.TFBank NE lcTFBank THEN NEXT REQUEST_LOOP.
          IF FixedFee.TFBank EQ "" AND lcTFBank NE {&TF_BANK_UNOE} THEN NEXT REQUEST_LOOP.
          
@@ -1355,17 +1363,20 @@ PROCEDURE pCollectInstallmentCancellations:
                    ldeAmount   = liFFItemQty * FixedFee.Amt.
          END.
 
-         FIND FIRST SingleFee NO-LOCK WHERE
-                    SingleFee.Brand = gcBrand AND
-                    SingleFee.Custnum = FixedFee.Custnum AND
-                    SingleFee.HostTable = FixedFee.HostTable AND
-                    SingleFee.KeyValue = Fixedfee.KeyValue AND
-                    SingleFee.SourceKey = FixedFee.SourceKey AND
-                    SingleFee.SourceTable = FixedFee.SourceTable AND
-                    SingleFee.CalcObj = "RVTERM" NO-ERROR.
-         IF AVAIL SingleFee THEN ldeResidualAmt = SingleFee.Amt.
-         ELSE IF bTermDCCLI.Amount > 0 THEN ldeResidualAmt = bTermDCCLI.Amount.
-         ELSE ldeResidualAmt = 0.
+         ldeResidualAmt = 0.
+         IF NOT FixedFee.BillCode BEGINS "RVTERM" THEN DO: 
+            FIND FIRST SingleFee NO-LOCK WHERE
+                       SingleFee.Brand = gcBrand AND
+                       SingleFee.Custnum = FixedFee.Custnum AND
+                       SingleFee.HostTable = FixedFee.HostTable AND
+                       SingleFee.KeyValue = Fixedfee.KeyValue AND
+                       SingleFee.SourceKey = FixedFee.SourceKey AND
+                       SingleFee.SourceTable = FixedFee.SourceTable AND
+                       SingleFee.CalcObj = "RVTERM" NO-ERROR.
+            IF AVAIL SingleFee THEN ldeResidualAmt = SingleFee.Amt.
+            ELSE IF bTermDCCLI.Amount > 0 THEN 
+               ldeResidualAmt = bTermDCCLI.Amount.
+         END.
 
          ASSIGN
             ldFeeEndDate = DATE(FixedFee.EndPeriod MOD 100,
@@ -1377,7 +1388,11 @@ PROCEDURE pCollectInstallmentCancellations:
 
          CREATE ttInstallment.
          ASSIGN
-            ttInstallment.OperCode = (IF llFinancedByBank THEN "D" ELSE "B")
+            ttInstallment.OperCode = IF FixedFee.BillCode BEGINS "RVTERM" 
+                                     THEN "F"
+                                     ELSE IF llFinancedByBank 
+                                          THEN "D" 
+                                          ELSE "B"
             ttInstallment.Custnum = MsRequest.Custnum
             ttInstallment.MsSeq   = MsRequest.MsSeq
             ttInstallment.Amount  = (IF llFinancedByBank THEN FixedFee.Amt ELSE ldeAmount)
