@@ -26,9 +26,11 @@ DEFINE VARIABLE lcLogFile AS CHAR NO-UNDO.
 /* files and dirs */
 DEFINE VARIABLE lcFileName AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcIncDir  AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcProcessDir AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcInputFile AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcProcDir AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcProcessedFile AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcProcessFile AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSpoolDir AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcReportFileOut AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcOutDir AS CHARACTER NO-UNDO. 
@@ -45,11 +47,12 @@ DEFINE VARIABLE liPeriod AS INT NO-UNDO.
 DEFINE VARIABLE lcKey  AS CHARACTER NO-UNDO. 
 
 ASSIGN
-   lcIncDir   = fCParam("TopupFat","IncomingDir") 
-   lcProcDir  = fCParam("TopupFat","IncProcDir")
-   lcSpoolDir = fCParam("TopupFat","OutSpoolDir")
-   lcOutDir   = fCParam("TopupFat","OutDir")
-   lcConfDir  = fCParamC("RepConfDir").
+   lcIncDir     = fCParam("TopupFat","IncomingDir") 
+   lcProcessDir = fCParam("TopupFat","IncProcessDir") /* Processing Dir */
+   lcProcDir    = fCParam("TopupFat","IncProcDir")  /* Processed Dir */
+   lcSpoolDir   = fCParam("TopupFat","OutSpoolDir")
+   lcOutDir     = fCParam("TopupFat","OutDir")
+   lcConfDir    = fCParamC("RepConfDir").
 
 DEF STREAM sin.
 DEF STREAM sFile.
@@ -80,11 +83,21 @@ REPEAT:
    
    IF SEARCH(lcInputFile) NE ? THEN DO:
       IF fCheckFileNameChars(lcFileName) EQ FALSE THEN NEXT.
-      INPUT STREAM sin FROM VALUE(lcInputFile).
+
+      /* Transfer file from incoming folder to processing folder */
+      /* This processing folder is created, to avoid creating
+         duplicate fat time or top up records by reading incoming files */
+      lcProcessFile = fMove2TransDir(lcInputFile, "", lcProcessDir).
+
+      IF lcProcessFile EQ "" THEN NEXT.
+
+      IF NOT SEARCH(lcProcessFile) EQ ? THEN
+         INPUT STREAM sin FROM VALUE(lcProcessFile).
+      ELSE NEXT.   
    END.
    ELSE NEXT.
    
-   fBatchLog("START", lcInputFile).
+   fBatchLog("START", lcProcessFile).
    lcLogFile = lcSpoolDir + lcFileName + ".log".
    OUTPUT STREAM sLog TO VALUE(lcLogFile) append.
 
@@ -158,7 +171,8 @@ REPEAT:
        "errors: " STRING(liNumErr) SKIP.
 
    lcReportFileOut = fMove2TransDir(lcLogFile, "", lcOutDir).
-   lcProcessedFile = fMove2TransDir(lcInputFile, "", lcProcDir). 
+   lcProcessedFile = fMove2TransDir(lcProcessFile, "", lcProcDir).
+ 
    IF lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
    
    INPUT STREAM sin CLOSE.

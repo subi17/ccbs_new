@@ -193,6 +193,10 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL:
 
    DEF VAR liCount AS INT NO-UNDO.
 
+   /* This code has to be removed AND below given code
+      has to be uncommented WITH istc prepaid option 
+      to be visible in vista */
+
    IF ldaSTCDates[1] = ldaSTCDates[2] OR
       MobSub.PayType = TRUE OR CLIType.PayType = 2 OR
       NOT lliSTCAllowed THEN
