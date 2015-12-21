@@ -314,7 +314,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                                 MsRequest.reqtype = 
                                    {&REQTYPE_CONTRACT_ACTIVATION} AND
                                 MsRequest.reqStatus < 
-                                   {&REQUEST_STATUS_DONE}) THEN DO:
+                                   {&REQUEST_STATUS_DONE} AND
+                                MsRequest.ReqCParam3 = "RVTERM12") THEN DO:
             /* Pending/ongoing Q25 request */
             liPendingReq = liPendingReq + 1.
          END.
