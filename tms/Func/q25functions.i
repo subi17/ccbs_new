@@ -110,6 +110,7 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    DEF VAR lcSMSMessage      AS CHAR NO-UNDO.
    DEF VAR ldReqStamp        AS DEC  NO-UNDO.
    DEF VAR lcEncryptedMSISDN AS CHAR NO-UNDO.
+   DEF VAR lcPassPhrase      AS CHAR NO-UNDO.
    IF iiPhase = {&Q25_MONTH_22} OR
       iiPhase = {&Q25_MONTH_23} THEN DO:
       /* Q25 reminder month 22 or 23 */
@@ -149,8 +150,11 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    IF iiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO:
    /* Month 22-24 */
       /* Encrypted MSISDN added to messages sent during 22 to 24 month */
+      lcPassPhrase = fCParam("Q25","Q25_PassPhrase").
+      IF lcPassPhrase = "" OR lcPassPhrase = ? THEN 
+         lcPassPhrase = {&Q25_PASSPHRASE}.
       lcEncryptedMSISDN = encrypt_data(icCli,
-                          {&ENCRYPTION_METHOD}, {&Q25_PASSPHRASE}).
+                          {&ENCRYPTION_METHOD}, lcPassPhrase).
       /* convert some special characters to url encoding (at least '+' char
          could cause problems at later phases. */
       lcEncryptedMSISDN = fUrlEncode(lcEncryptedMSISDN, "default").
