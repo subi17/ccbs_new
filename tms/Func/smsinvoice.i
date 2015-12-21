@@ -110,7 +110,7 @@ DEF VAR lcSMSSchedule AS CHARACTER NO-UNDO.
    
    if not fSMSInvoiceValidate(
       idaPeriod,
-      output ocresult) then return 0.
+      output ocresult) then return 0. 
 
    fcreaterequest(({&REQTYPE_SMS_INVOICE}),
                   idactstamp,
