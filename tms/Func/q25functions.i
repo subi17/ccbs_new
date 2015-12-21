@@ -318,6 +318,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                                 MsRequest.ReqCParam3 = "RVTERM12") THEN DO:
             /* Pending/ongoing Q25 request */
             liPendingReq = liPendingReq + 1.
+            NEXT.
          END.
                                  
       END.
