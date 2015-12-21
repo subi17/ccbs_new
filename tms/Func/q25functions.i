@@ -186,7 +186,7 @@ FUNCTION fCalculateMaxPauseValue RETURN INTEGER
    RETURN INT(ldTimeLeft / iiToBeSend). 
 END.
 
-FUNCTION fCollectQ25SMSMessages RETURNS INTEGER 
+FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER 
    (INPUT idaStartDate AS DATE,
     INPUT idaEndDate AS DATE,
     INPUT iiphase AS INT,
