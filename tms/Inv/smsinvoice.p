@@ -10,8 +10,8 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 /* Description: smsinvoice is called from newton side where SMS invoice button
-   pressed for any customers after billing run. This will generate SMS to all 
-   invoiced customers.   */
+   pressed for any customers after billing run. This will generate request 
+   that will call this program to create SMS to all invoiced customers.   */
 
 {commali.i}
 {tmsconst.i}
@@ -20,6 +20,8 @@
 {femailinvoice.i}
 {email.i}
 {heartbeat.i}
+
+&SCOPED-DEFINE MIDNIGHT-SECONDS 86400
 
 DEF INPUT PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -35,10 +37,16 @@ DEF VAR lcSMSReplacedText       AS CHAR NO-UNDO.
 DEF VAR liLoop AS INT NO-UNDO. 
 DEF VAR lcMonitor AS CHAR NO-UNDO. 
 
-DEF VAR liSMSCntValue AS INT NO-UNDO. 
-DEF VAR liStartTime   AS INT NO-UNDO. 
-DEF VAR liStopTime    AS INT NO-UNDO. 
-DEF VAR liPauseTime   AS INT NO-UNDO. 
+DEF VAR liSMSCntValue AS INT  NO-UNDO. 
+DEF VAR liStartTime   AS INT  NO-UNDO. 
+DEF VAR liStopTime    AS INT  NO-UNDO. 
+DEF VAR liPauseTime   AS INT  NO-UNDO.
+DEF VAR PauseFlag     AS LOG  NO-UNDO.
+DEF VAR lcSMSSchedule AS CHARACTER NO-UNDO.
+DEF VAR liTime2Pause  AS INTEGER   NO-UNDO.
+DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
+DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
+DEF VAR lNowSeconds   AS INTEGER   NO-UNDO.
 
 DEF STREAM sEmail.
 
@@ -59,12 +67,35 @@ lcMonitor = fGetRequestNagiosToken(MsRequest.Reqtype).
 ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        lcContConFile = fCParamC("SMSInvContFile")
        liSMSCntValue = fCParamI("SMSCountValue")
+       /* ie. "32400-79200" Send between 9:00-22:00 */
+       lcSMSSchedule = fCParamC("SMSSchedule")
+       liTime2Pause  = fCParamI("Time2Pause")
        ldaDateFrom   = MsRequest.ReqDtParam1
        liMonth       = MONTH(ldaDateFrom)
        liLoop        = 0
-       liStartTime   = 0
+       liStartTime   = TIME
        liStopTime    = 0
-       liPauseTime   = 0.
+       liPauseTime   = 0
+       PauseFlag     = FALSE.
+
+IF liTime2Pause < 0 THEN liTime2Pause = 0.
+IF liTime2Pause > 3599 THEN liTime2Pause = 3599.  /* 1 Hour */
+
+lIniSeconds = INTEGER(ENTRY(1,lcSMSSchedule,"-")) NO-ERROR.
+IF ERROR-STATUS:ERROR THEN lIniSeconds = 0.
+lEndSeconds = INTEGER(ENTRY(2,lcSMSSchedule,"-")) NO-ERROR.
+IF ERROR-STATUS:ERROR THEN lEndSeconds = 0.
+
+IF lIniSeconds <= 0 THEN lIniSeconds = 1.
+IF lIniSeconds > 86399 THEN lIniSeconds = 86399. /* 23:59:59 */
+
+IF lEndSeconds <= 0 THEN lEndSeconds = 1.
+IF lEndSeconds > 86399 THEN lEndSeconds = 86399. /* 23:59:59 */
+
+IF lIniSeconds >= lEndSeconds THEN
+ASSIGN /* 9:00-22:00 */
+   lIniSeconds = 32400
+   lEndSeconds = 86399.
 
 INVOICE_LOOP:
 FOR EACH Invoice WHERE
@@ -90,15 +121,30 @@ FOR EACH Invoice WHERE
       liStartTime = TIME.
 
    /* Pause can be passed with liSMSCntValue 0 from cparam */
-   IF liLoop > 0 AND liSMSCntValue > 0 AND
-   ((liLoop MOD liSMSCntValue) EQ 0) THEN DO:
+   IF liLoop > 0 AND liSMSCntValue > 0 AND PauseFlag THEN
+   DO:            
       ASSIGN liStopTime  = TIME
-             liPauseTime = 1800 - (liStopTime - liStartTime).
-      IF liPauseTime > 1800 THEN liPauseTime = 1800.
-
+             lNowSeconds = liStopTime.
+             
+      liPauseTime = liTime2Pause - (liStopTime - liStartTime).
+      IF liPauseTime > liTime2Pause THEN liPauseTime = liTime2Pause.       
+      
+      /* If is too late, schedule to start next morning */
+      IF (lNowSeconds > lEndSeconds) THEN
+      DO:
+         liPauseTime = ({&MIDNIGHT-SECONDS} - lNowSeconds) + lIniSeconds.
+      END.
+      ELSE
+      /* If is too early, schedule to start when window opens */
+      IF (lNowSeconds < lIniSeconds) THEN
+      DO:
+         liPauseTime = lIniSeconds - lNowSeconds.
+      END.
+      
       PAUSE liPauseTime NO-MESSAGE.
-
-      liStartTime = TIME.
+      ASSIGN 
+        liStartTime = TIME
+        PauseFlag   = FALSE.
    END.
 
    lcSMSTextOriginal = fGetSMSText("SMS",
@@ -128,14 +174,16 @@ FOR EACH Invoice WHERE
                         lcSMSReplacedText,
                         fMakeTS(),
                         "Fact. Yoigo",
-                        "32400-79200").  /* Send between 9:00-22:00 */
+                        STRING(lIniSeconds) + "-" + STRING(lEndSeconds)).
+
          IF AVAIL CallAlarm THEN RELEASE CallAlarm.
+         liLoop = liLoop + 1. /* Count SMS scheduled */
+         IF liLoop MOD 5000 EQ 0 AND
+         lcMonitor > "" THEN fKeepAlive(lcMonitor).
+         IF NOT PauseFlag THEN
+            PauseFlag = (liLoop MOD liSMSCntValue) EQ 0.
       END. /* DO TRANS: */
    END. /* FOR EACH SubInvoice OF Invoice NO-LOCK: */
-   
-   liLoop = liLoop + 1.
-   IF liLoop MOD 5000 EQ 0 AND
-      lcMonitor > "" THEN fKeepAlive(lcMonitor).
 END. /* FOR EACH Invoice WHERE */
 
 /* Send an email to configure list*/
