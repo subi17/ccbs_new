@@ -28,9 +28,11 @@ DEFINE VARIABLE liNumErr AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcLogFile       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcIncDir        AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcProcessDir    AS CHARACTER No-UNDO.
 DEFINE VARIABLE lcInputFile     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcProcDir       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcProcessedFile AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcProcessFile   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSpoolDir      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcReportFileOut AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOutDir        AS CHARACTER NO-UNDO.
@@ -55,10 +57,11 @@ DEFINE VARIABLE llgDateValue  AS LOGICAL   NO-UNDO.
 /* ***************************  Main Block  *************************** */
 
 ASSIGN
-   lcIncDir   = fCParam("Charges","IncDir")
-   lcProcDir  = fCParam("Charges","IncProcDir")
-   lcSpoolDir = fCParam("Charges","OutSpoolDir")
-   lcOutDir   = fCParam("Charges","OutDir").
+   lcIncDir     = fCParam("Charges","IncDir")
+   lcProcessDir = fCParam("Charges","IncProcessDir") /* Processing Dir */
+   lcProcDir    = fCParam("Charges","IncProcDir")    /* Processed Dir */
+   lcSpoolDir   = fCParam("Charges","OutSpoolDir")
+   lcOutDir     = fCParam("Charges","OutDir").
    
 DEF STREAM sin.
 DEF STREAM sFile.
@@ -81,7 +84,8 @@ FUNCTION fError RETURNS LOGIC
    liNumErr = liNumErr + 1.
    
 END FUNCTION.
-    
+
+
 /* File reading and parsing */
 INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcIncDir).
 REPEAT:
@@ -92,7 +96,18 @@ REPEAT:
    
    IF SEARCH(lcInputFile) NE ? THEN DO:
       IF fCheckFileNameChars(lcFileName) EQ FALSE THEN NEXT.
-      INPUT STREAM sin FROM VALUE(lcInputFile).
+      
+      /* Transfer file from incoming folder to processing folder */
+      /* This processing folder is created, to avoid creating 
+         duplicate single fee records by reading incoming files */
+      lcProcessFile = fMove2TransDir(lcInputFile, "", lcProcessDir).
+
+      IF lcProcessFile EQ "" THEN NEXT.
+      
+      IF NOT SEARCH(lcProcessFile) EQ ? THEN 
+         INPUT STREAM sin FROM VALUE(lcProcessFile).
+      ELSE NEXT.
+
    END.
    ELSE NEXT.
    
@@ -100,7 +115,7 @@ REPEAT:
       liNumOk  = 0
       liNumErr = 0.
    
-   fBatchLog("START", lcInputFile).
+   fBatchLog("START", lcProcessFile).
    
    lcLogFile = lcSpoolDir + lcFileName + ".log".
    
@@ -122,7 +137,7 @@ REPEAT:
    OUTPUT STREAM sLog CLOSE.
 
    lcReportFileOut = fMove2TransDir(lcLogFile, "", lcOutDir).
-   lcProcessedFile = fMove2TransDir(lcInputFile, "", lcProcDir).
+   lcProcessedFile = fMove2TransDir(lcProcessFile, "", lcProcDir).
     
    IF lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
 END.
