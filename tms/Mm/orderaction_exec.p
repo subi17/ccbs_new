@@ -412,9 +412,9 @@ PROCEDURE pQ25Extension:
                  TermReturn.OrderId = SingleFee.OrderId NO-ERROR.
 
       IF AVAIL TermReturn AND 
-             ((TermReturn.DeviceScreen = TRUE AND TermReturn.DeviceStart  = TRUE) OR 
-              (TermReturn.DeviceScreen = ?    AND TermReturn.DeviceStart  = ?)) THEN
-         RETURN "ERROR: already returned terminal".
+         ((TermReturn.DeviceScreen = TRUE AND TermReturn.DeviceStart  = TRUE) OR
+          (TermReturn.DeviceScreen = ? AND TermReturn.DeviceStart  = ?))
+         THEN RETURN "ERROR: already returned terminal".
    END.
 
    ldaDate = fPer2Date(SingleFee.BillPeriod,0).
@@ -494,6 +494,7 @@ PROCEDURE pQ25Discount:
    DEF VAR liPercontractId AS INT NO-UNDO. 
    DEF VAR ldeDiscount AS DEC NO-UNDO. 
    DEF VAR lcResult AS CHAR NO-UNDO. 
+   DEF VAR lcDiscountPlan AS CHAR NO-UNDO. 
 
    liPercontractId = INT(OrderAction.ItemParam) NO-ERROR.
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
@@ -521,8 +522,15 @@ PROCEDURE pQ25Discount:
                          Invoice.InvType = 99) THEN
       RETURN "ERROR:Q25 discount creation failed (residual fee is billed)".
 
+   IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                     OrderAction.Brand = Order.Brand AND
+                     OrderAction.OrderId = Order.OrderId AND
+                     OrderAction.ItemType = "Q25Extension") THEN
+      lcDiscountPlan = "RVTERMDT4DISC".
+   ELSE lcDiscountPlan = "RVTERMDT1DISC".
+
    fAddDiscountPlanMember(MobSub.MsSeq,
-                         "RVTERMDT1DISC", 
+                         lcDiscountPlan, 
                          ldeDiscount,
                          fPer2Date(SingleFee.BillPeriod,0),
                          1,
