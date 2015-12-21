@@ -208,6 +208,8 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
    DEF VAR lcLogText         AS CHAR NO-UNDO.
    DEF VAR liPauseValue      AS INT NO-UNDO.
    DEF VAR liCalcPauseValue  AS INT NO-UNDO.
+   DEF VAR liPhase           AS INT NO-UNDO.
+   DEF VAR liPendingReq      AS INT NO-UNDO.
 
    IF idaStartDate = ? OR idaEndDate = ? THEN
       RETURN 0.
@@ -232,7 +234,7 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
             SingleFee.BillPeriod  = liPeriod NO-LOCK:
 
       IF NOT SingleFee.OrderId > 0 THEN NEXT.
-
+      liPhase = iiPhase.
       FIND FIRST Mobsub NO-LOCK WHERE
                  Mobsub.MsSeq = INT(SingleFee.KeyValue) NO-ERROR.
       IF NOT AVAIL Mobsub THEN NEXT.
@@ -285,7 +287,7 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
                   DCCLI.MsSeq   EQ Mobsub.MsSeq AND
                   DCCLI.ValidTo >= TODAY) THEN DO:
             /* Q25 Extension already active */
-            IF iiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO: 
+            IF liPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO: 
             /* Q25 month 22-24 */
                /* before 21st day of month 24, no message needed for
                   customers who have already chosen quota 25 extension */
@@ -295,8 +297,9 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
             ELSE
                /* 21st day and customer have decided to take Quota 25
                   extension. Send message with final payment / 12. */
-               iiPhase = {&Q25_MONTH_24_CHOSEN}.
+               liPhase = {&Q25_MONTH_24_CHOSEN}.
          END.
+
          ELSE IF CAN-FIND(FIRST Order NO-LOCK WHERE
                                 Order.MsSeq = mobsub.msseq AND
                                 Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
@@ -306,8 +309,16 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
             liNotSendCount = liNotSendCount + 1.
             NEXT.
          END.
-
-         
+         ELSE IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE 
+                                MsRequest.msSeq = mobsub.msseq AND
+                                MsRequest.reqtype = 
+                                   {&REQTYPE_CONTRACT_ACTIVATION} AND
+                                MsRequest.reqStatus < 
+                                   {&REQUEST_STATUS_DONE}) THEN DO:
+            /* Pending/ongoing Q25 request */
+            liPendingReq = liPendingReq + 1.
+         END.
+                                 
       END.
       liCount = liCount + 1. /* Full q25 count in Month */
    
@@ -326,7 +337,7 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
             liAlreadyCreated = liAlreadyCreated + 1.
          END.
          ELSE DO:
-            lcSMSMessage = fgetQ25SMSMessage(iiphase, DCCLI.ValidTo, 
+            lcSMSMessage = fgetQ25SMSMessage(liphase, DCCLI.ValidTo, 
                                              SingleFee.amt, DCCLI.CLI).
             /* Send SMS */
             fCreateSMS(SingleFee.CustNum,
@@ -355,8 +366,7 @@ FUNCTION fCollectQ25SMSMessages RETURNS INTEGER
                   STRING(liCount) + "|" + STRING(liNotSendCount) + "|" +
                   STRING(liBilledCount) + "|" + STRING(liNotDCCLICount) + "|" +
                   STRING(liReturnedDevices) + "|" + STRING(liQ25DoneCount) + 
-                  "|" +
-                  STRING(liAlreadyCreated) + "|" + STRING(liSentCount) + "|" +
+                  "|" + STRING(liPendingReq) + "|" +
                   STRING(etime / 1000).
       fQ25LogWriting(lcLogText).
       RETURN liCount.
