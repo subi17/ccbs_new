@@ -343,7 +343,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             liAlreadyCreated = liAlreadyCreated + 1.
          END.
          ELSE DO:
-            lcSMSMessage = fgetQ25SMSMessage(liphase, DCCLI.ValidTo, 
+            lcSMSMessage = fgetQ25SMSMessage(liphase, DCCLI.ValidTo + 1, 
                                              SingleFee.amt, DCCLI.CLI).
             /* Send SMS */
             fCreateSMS(SingleFee.CustNum,
