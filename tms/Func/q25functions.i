@@ -220,7 +220,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
       RETURN 0.
 
    ASSIGN liPauseValue = fCParamI("Q25_sms_pause").
-   IF liPauseValue = 0 OR liPauseValue = ? THEN
+   IF liPauseValue = ? THEN
       liPauseValue = 10.
 
    liPeriod = YEAR(idaStartDate) * 100 + MONTH(idaStartDate).
