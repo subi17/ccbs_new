@@ -356,7 +356,8 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    END.
    
    IF liFFItemCount NE FMItem.FFItemQty OR 
-      INT(ldeFFItemAmount) NE INT(fmitem.FFItemQty * fmitem.Amount) THEN DO:
+      (FixedFee.BillCode BEGINS "PAYTERM" AND
+       INT(ldeFFItemAmount) NE INT(fmitem.FFItemQty * fmitem.Amount)) THEN DO:
       FixedFee.FinancedResult = {&TF_STATUS_YOIGO_FF_CHANGED}.
       NEXT ORDER_LOOP.
    END.
@@ -367,6 +368,8 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
       lcBankCode = SUBSTRING(OrderCustomer.BankCode,5).
    ELSE lcBankCode = OrderCustomer.BankCode.
    
+   IF NOT FixedFee.BillCode BEGINS "PAYTERM" THEN RELEASE SingleFee.
+   ELSE
    FIND FIRST SingleFee NO-LOCK WHERE
               SingleFee.Brand = gcBrand AND
               SingleFee.Custnum = FixedFee.Custnum AND
@@ -374,10 +377,11 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
               SingleFee.KeyValue = Fixedfee.KeyValue AND
               SingleFee.SourceKey = FixedFee.SourceKey AND
               SingleFee.SourceTable = FixedFee.SourceTable AND
-              SingleFee.CalcObj = "RVTERM" NO-ERROR.
+              SingleFee.CalcObj = "RVTERM" AND
+              SingleFee.Amt > 0 NO-ERROR.
    
       
-   IF AVAIL SingleFee AND SingleFee.Amt > 0 THEN DO:
+   IF AVAIL SingleFee THEN DO:
 
       ASSIGN
          ldeRVPerc = TRUNC(SingleFee.Amt / 
@@ -416,7 +420,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    IF NOT AVAIL FixedFeeTF THEN DO:
       CREATE FixedFeeTF.
       ASSIGN
-         FixedFeeTF.FFNum     = FixedFee.FFNum.
+         FixedFeeTF.FFNum  = FixedFee.FFNum.
    END.
 
    ASSIGN
@@ -425,13 +429,13 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
       FixedFeeTF.OrgId     = OrderCustomer.CustId
       FixedFeeTF.Amount = ldeTotalAmount
       FixedFeeTF.ResidualAmount = SingleFee.Amt 
-         WHEN AVAIL SingleFee AND SingleFee.Amt > 0.
+         WHEN AVAIL SingleFee.
    
    RUN pPrintLine(lcFUC[1],
                   ldeTotalAmount,
                   lcPayTermType[1]).
    
-   IF AVAIL SingleFee AND SingleFee.Amt > 0 THEN
+   IF AVAIL SingleFee THEN
    RUN pPrintLine(lcFUC[2],
                   SingleFee.Amt,
                   lcPayTermType[2]).
