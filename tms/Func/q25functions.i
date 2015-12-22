@@ -21,7 +21,8 @@
 {smsmessage.i}
 {aes_encrypt.i}
 
-
+DEF VAR lcTestStartDay AS CHAR NO-UNDO.
+DEF VAR lcTestEndDay AS CHAR NO-UNDO.
 DEF STREAM Sout.
 FUNCTION fGetStartEndDates RETURNS LOGICAL
    (INPUT  iiMonth AS INT,
@@ -337,9 +338,11 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                                      SMSMessage.SMSType = {&SMS_TYPE_Q25}
                                      NO-LOCK NO-ERROR.
          
-         IF AVAIL SMSMessage THEN DO:
+         IF AVAIL SMSMessage AND (lcTestStartDay = "" OR 
+                                  lcTestStartDay = ?) THEN DO:
             /* Something have went wrong, SMS sending for today already marked
-               for this subscriber */
+               for this subscriber. If teststartday is defined testing ongoing
+               and SMS messaging allowed. */
             liAlreadyCreated = liAlreadyCreated + 1.
          END.
          ELSE DO:

@@ -29,11 +29,12 @@ DEF VAR ldaEndDateMonth24        AS DATE NO-UNDO.
 DEF VAR liTotalCount             AS INT  NO-UNDO.
 DEF VAR liTempCount              AS INT  NO-UNDO.
 DEF VAR lcLogText                AS CHAR NO-UNDO.
-DEF VAR liTestStartDay           AS CHAR  NO-UNDO.
-DEF VAR liTestEndDay             AS CHAR  NO-UNDO.
+DEF VAR liTestStartDay           AS CHAR NO-UNDO.
+DEF VAR liTestEndDay             AS CHAR NO-UNDO.
 
 /* Handling of sms sending is different at January 2016 
    it starts at 13th day and ends 15th */
+
 IF TODAY < 1/13/16 THEN DO: /* For testing purposes */
    liStartDay = 1.
    liEndDay = 28.
@@ -75,8 +76,6 @@ fGetStartEndDates({&Q25_MONTH_24}, liStartDay, liEndDay,
 
 /* TESTING SUPPORT */
 IF TODAY < 1/13/16 THEN DO:
-DEF VAR lcTestStartDay AS CHAR NO-UNDO.
-DEF VAR lcTestEndDay AS CHAR NO-UNDO.
 
 ASSIGN lcTestStartDay     = fCParam("Q25","Q25_Test_Start")
        lcTestEndDay     = fCParam("Q25","Q25_Test_End").
