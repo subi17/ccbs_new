@@ -175,7 +175,7 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
    lcLogFile = lcLogDir + "Q25_sms_message_logs_" +
                STRING(YEAR(TODAY)) +
                STRING(MONTH(TODAY),"99") +
-               /* STRING(DAY(TODAY),"99") + */ ".txt".
+               STRING(DAY(TODAY),"99") + ".txt".
    OUTPUT STREAM Sout TO VALUE(lcLogFile) APPEND.
    PUT STREAM Sout UNFORMATTED
       STRING(fMakeTS()) + " " + icLogText SKIP.
@@ -365,7 +365,22 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                   liPauseValue = liCalcPauseValue. 
             END.
          END.
-      END.   
+      END.
+      ELSE DO:
+         /* Some logging about SMSs to be send. */
+         IF liPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
+            /* Q25 Month 24 20th day extension made */
+            lcLogText = STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" + 
+                        STRING(DCCLI.MsSeq) + "|" + 
+                        STRING(ROUND(SingleFee.amt / 12,2)).
+         END.
+         ELSE DO:
+            lcLogText = STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
+                        STRING(DCCLI.MsSeq) + "|" +
+                        STRING(SingleFee.amt).
+         END.   
+         fQ25LogWriting(lcLogText).
+      END.
    END.
    /* Logging about amount of situations for testting purposes. */
    /* If ilSendMsgs is False, logging of calculated values to be done */
