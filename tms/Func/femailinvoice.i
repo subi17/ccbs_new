@@ -116,7 +116,7 @@ FUNCTION fGenerateQ25Link RETURNS CHAR (INPUT icCLI AS CHAR):
    DEF VAR lcQ25Path        AS CHAR NO-UNDO.
    DEF VAR lcSaltKey        AS CHAR NO-UNDO.
 
-   ASSIGN lcQ25Path = fCParam("EI","Q25LandingPageLink")
+   ASSIGN lcQ25Path = fCParam("EI","WebServerQ25LPLink")
           lcSaltKey = fCParam("EI","SaltKey").
 
    IF lcQ25Path = "" OR lcQ25Path = ? THEN RETURN "".

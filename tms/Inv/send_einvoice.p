@@ -288,6 +288,8 @@ PROCEDURE pGetQ25Text:
          liMonth = 25 - liFees.
    END.          
 
+   IF ldaTo = ? THEN RETURN.
+   
    IF liMonth = 24 THEN lcTextID = "EMailInvoiceQ25Final".
    ELSE lcTextID = "EMailInvoiceQ25Prior".
 
@@ -302,8 +304,8 @@ PROCEDURE pGetQ25Text:
    IF lcQ25Link = ? OR lcQ25Link = "" THEN ocText = "".
    
    ASSIGN 
-      ocText = REPLACE(ocText,"#Q25DD",STRING(DATE(ldaTo),"99")) 
-      ocText = REPLACE(ocText,"#Q25MM",STRING(MONTH(ldaTo),"99"))
+      ocText = REPLACE(ocText,"#DD",STRING(DAY(ldaTo),"99")) 
+      ocText = REPLACE(ocText,"#MM",STRING(MONTH(ldaTo),"99"))
       ocText = REPLACE(ocText,"#Q25LINK",lcQ25Link).
 
 END PROCEDURE.
