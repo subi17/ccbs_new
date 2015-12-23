@@ -211,7 +211,11 @@ ASSIGN
    Memo.CustNum   = MobSub.Custnum
    Memo.Source    = "Self Service".
 
-add_boolean(response_toplevel_id, "", TRUE).
+
+/* Adding the details into Main struct */
+top_struct = add_struct(response_toplevel_id, "").
+add_string(top_struct, "transaction_id", pcTransId).
+add_boolean(top_struct, "result", True).
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
