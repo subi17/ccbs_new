@@ -446,6 +446,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    END.
 
    ASSIGN
+      FixedFeeTF.OrderId   = FixedFee.OrderId
       FixedFeeTF.BankDate  = TODAY
       FixedFeeTF.TFBank    = lcTFBank
       FixedFeeTF.OrgId     = ttOrderCustomer.CustId
