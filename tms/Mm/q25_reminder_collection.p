@@ -32,12 +32,14 @@ DEF VAR lcLogText                AS CHAR NO-UNDO.
 DEF VAR liTestStartDay           AS CHAR NO-UNDO.
 DEF VAR liTestEndDay             AS CHAR NO-UNDO.
 
+liQ25Logging = fCParamI("Q25LoggingLevel"). /* 0 = none, 1 = count, 2 = all */
+
 /* Handling of sms sending is different at January 2016 
    it starts at 13th day and ends 15th */
 
 IF TODAY < 1/13/16 THEN DO: /* For testing purposes */
    liStartDay = 1.
-   liEndDay = 28.
+   liEndDay = 30.
 END.
 ELSE IF DAY(TODAY) > 15 OR TODAY < 1/13/16 THEN
    RETURN.
@@ -82,6 +84,8 @@ ASSIGN lcTestStartDay     = fCParam("Q25","Q25_Test_Start")
    
    IF lcTestStartDay > "" AND lcTestEndDay > "" THEN DO:
       ASSIGN
+         liStartDay          = DAY(lcTestStartDay)
+         liEndDay            = DAY(lcTestEndDay)
          ldaStartDateMonth24 = DATE(lcTestStartDay)
          ldaEndDateMonth24   = DATE(lcTestEndDay)
          ldaStartDateMonth23 = ADD-INTERVAL(ldaStartDateMonth24, 1, 'months':U)
@@ -112,7 +116,7 @@ lcLogText = "START|" + STRING(liStartDay) + "|" + STRING(liEndDay) + "|" +
             STRING(ldaEndDateMonth23) + "|" + 
             STRING(ldaStartDateMonth24) + "|" + 
             STRING(ldaEndDateMonth24).
-fQ25LogWriting(lcLogText).
+fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
 
 /* Actual SMS creation and sending */
 IF ldaStartDateMonth22 NE ? AND ldaEndDateMonth22 NE ? THEN
@@ -129,4 +133,5 @@ IF ldaStartDateMonth24 NE ? AND ldaEndDateMonth24 NE ? THEN
    fGenerateQ25SMSMessages(ldaStartDateMonth24, ldaEndDateMonth24, 
                           {&Q25_MONTH_24}, TRUE, INPUT-OUTPUT liTotalCount).
 fQ25LogWriting("FINISH: " + STRING(liTempCount) + " messages sent. " +
-               STRING(liTotalCount) + " messages left to send.").
+               STRING(liTotalCount) + " messages left to send.",
+               {&Q25_LOGGING_COUNTERS}).

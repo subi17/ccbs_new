@@ -23,7 +23,12 @@
 
 DEF VAR lcTestStartDay AS CHAR NO-UNDO.
 DEF VAR lcTestEndDay AS CHAR NO-UNDO.
+DEF VAR liQ25Logging AS INT NO-UNDO.
+
 DEF STREAM Sout.
+
+liQ25Logging = fCParamI("Q25LoggingLevel"). /* 0 = none, 1 = count, 2 = all */
+
 FUNCTION fGetStartEndDates RETURNS LOGICAL
    (INPUT  iiMonth AS INT,
     INPUT  iiStartDay AS INT,
@@ -165,21 +170,23 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
 END FUNCTION.
 
 FUNCTION fQ25LogWriting RETURNS LOGICAL
-   (INPUT iclogText AS CHAR).
+   (INPUT iclogText AS CHAR,
+    INPUT iiLogLevel AS INT).
    DEF VAR lcLogDir          AS CHAR NO-UNDO.
    DEF VAR lcLogFile         AS CHAR NO-UNDO.
-
-   ASSIGN lcLogDir     = fCParam("Q25","Q25_reminder_LogDir").
-   IF lcLogDir = "" OR lcLogDir = ? THEN lcLogDir = "/tmp/".
-   /* Make Monthly log file */
-   lcLogFile = lcLogDir + "Q25_sms_message_logs_" +
-               STRING(YEAR(TODAY)) +
-               STRING(MONTH(TODAY),"99") +
-               STRING(DAY(TODAY),"99") + ".txt".
-   OUTPUT STREAM Sout TO VALUE(lcLogFile) APPEND.
-   PUT STREAM Sout UNFORMATTED
-      STRING(fMakeTS()) + " " + icLogText SKIP.
-   OUTPUT STREAM Sout CLOSE.
+   IF liQ25Logging >= iiLogLevel THEN DO:
+      ASSIGN lcLogDir     = fCParam("Q25","Q25_reminder_LogDir").
+      IF lcLogDir = "" OR lcLogDir = ? THEN lcLogDir = "/tmp/".
+      /* Make Monthly log file */
+      lcLogFile = lcLogDir + "Q25_sms_message_logs_" +
+                  STRING(YEAR(TODAY)) +
+                  STRING(MONTH(TODAY),"99") +
+                  STRING(DAY(TODAY),"99") + ".txt".
+      OUTPUT STREAM Sout TO VALUE(lcLogFile) APPEND.
+      PUT STREAM Sout UNFORMATTED
+         STRING(fMakeTS()) + " " + icLogText SKIP.
+      OUTPUT STREAM Sout CLOSE.
+   END.
 END.
 
 FUNCTION fCalculateMaxPauseValue RETURN INTEGER
@@ -242,13 +249,23 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
       liPhase = iiPhase.
       FIND FIRST Mobsub NO-LOCK WHERE
                  Mobsub.MsSeq = INT(SingleFee.KeyValue) NO-ERROR.
-      IF NOT AVAIL Mobsub THEN NEXT.
-
+      IF NOT AVAIL Mobsub THEN DO:
+         lcLogText = "Mobsub not found: " +
+                     STRING(liPhase) + "|" + STRING(SingleFee.KeyValue) 
+                     + "|" + STRING(SingleFee.amt).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
+         NEXT.
+      END.
       IF SingleFee.Billed AND
          NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
                             Invoice.Invnum = SingleFee.InvNum aND
                             Invoice.InvType = 99) THEN DO:
          liBilledCount = liBilledCount + 1.
+         lcLogText = "Residual fee Billed: " +
+                        STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
+                        STRING(Mobsub.MsSeq) + "|" +
+                        STRING(SingleFee.amt).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
          NEXT. /* "Residual fee billed". */
       END.
 
@@ -264,10 +281,20 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          /* No DCCLI for example between start and end date, singlefee is for
             whole month or no DCCLI for some error case (?). */
          liNotDCCLICount = liNotDCCLICount + 1.
+         lcLogText = "NO DCCLI FOUND " +
+                        STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
+                        STRING(Mobsub.MsSeq) + "|" +
+                        STRING(SingleFee.amt).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
          NEXT.
       END.
       ELSE IF DCCLI.TermDate NE ? THEN DO:
          liNotSendCount = liNotSendCount + 1.
+         lcLogText = "DCCLI Terminated: " +
+                        STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
+                        STRING(DCCLI.MsSeq) + "|" +
+                        STRING(SingleFee.amt).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
          NEXT. /* terminated, SMS should not be send. */
       END.
       ELSE DO:
@@ -284,6 +311,11 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                TermReturn.DeviceStart  = ?)) THEN DO:
             /* Accepted return of device */
             liReturnedDevices = liReturnedDevices + 1.
+            lcLogText = "Device returned " +
+                        STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
+                        STRING(DCCLI.MsSeq) + "|" +
+                        STRING(SingleFee.amt).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
             NEXT.
          END.
          ELSE IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
@@ -297,6 +329,11 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                /* before 21st day of month 24, no message needed for
                   customers who have already chosen quota 25 extension */
                liQ25DoneCount = liQ25DoneCount + 1.
+               lcLogText = "Q25 already done: " +
+                        STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
+                        STRING(DCCLI.MsSeq) + "|" +
+                        STRING(SingleFee.amt).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
                NEXT.
             END.
             ELSE
@@ -312,6 +349,11 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                                                         "00:00:00")) THEN DO:
          /* Renewal / Renuvo done */
             liNotSendCount = liNotSendCount + 1.
+            lcLogText = "Renewal done: " +
+                        STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
+                        STRING(DCCLI.MsSeq) + "|" +
+                        STRING(SingleFee.amt).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
             NEXT.
          END.
          ELSE IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE 
@@ -323,6 +365,11 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                                 MsRequest.ReqCParam3 = "RVTERM12") THEN DO:
             /* Pending/ongoing Q25 request */
             liPendingReq = liPendingReq + 1.
+            lcLogText = "Pending Q25 Request: " +
+                        STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
+                        STRING(DCCLI.MsSeq) + "|" +
+                        STRING(SingleFee.amt).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
             NEXT.
          END.
                                  
@@ -344,6 +391,12 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                for this subscriber. If teststartday is defined testing ongoing
                and SMS messaging allowed. */
             liAlreadyCreated = liAlreadyCreated + 1.
+            lcLogText = "SMS Already created: " +
+                        STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
+                        STRING(DCCLI.MsSeq) + "|" +
+                        STRING(SingleFee.amt).         
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
+            NEXT.
          END.
          ELSE DO:
             lcSMSMessage = fgetQ25SMSMessage(liphase, DCCLI.ValidTo + 1, 
@@ -379,7 +432,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(DCCLI.MsSeq) + "|" +
                         STRING(SingleFee.amt).
          END.   
-         fQ25LogWriting(lcLogText).
+         fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
       END.
    END.
    /* Logging about amount of situations for testting purposes. */
@@ -392,7 +445,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                   STRING(liReturnedDevices) + "|" + STRING(liQ25DoneCount) + 
                   "|" + STRING(liPendingReq) + "|" +
                   STRING(etime / 1000).
-      fQ25LogWriting(lcLogText).
+      fQ25LogWriting(lcLogText, {&Q25_LOGGING_COUNTERS}).
       RETURN liCount.
    END.
    RETURN oiTotalCountLeft.
