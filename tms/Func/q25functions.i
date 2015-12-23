@@ -423,12 +423,14 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          /* Some logging about SMSs to be send. */
          IF liPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
             /* Q25 Month 24 20th day extension made */
-            lcLogText = STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" + 
+            lcLogText = "Send SMS Q25 Chosen: " +
+                        STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" + 
                         STRING(DCCLI.MsSeq) + "|" + 
                         STRING(ROUND(SingleFee.amt / 12,2)).
          END.
          ELSE DO:
-            lcLogText = STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
+            lcLogText = "Send SMS: " +
+                        STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
                         STRING(SingleFee.amt).
          END.   
