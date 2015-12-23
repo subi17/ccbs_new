@@ -84,8 +84,8 @@ ASSIGN lcTestStartDay     = fCParam("Q25","Q25_Test_Start")
    
    IF lcTestStartDay > "" AND lcTestEndDay > "" THEN DO:
       ASSIGN
-         liStartDay          = DAY(lcTestStartDay)
-         liEndDay            = DAY(lcTestEndDay)
+         liStartDay          = DAY(DATE(lcTestStartDay))
+         liEndDay            = DAY(DATE(lcTestEndDay))
          ldaStartDateMonth24 = DATE(lcTestStartDay)
          ldaEndDateMonth24   = DATE(lcTestEndDay)
          ldaStartDateMonth23 = ADD-INTERVAL(ldaStartDateMonth24, 1, 'months':U)
