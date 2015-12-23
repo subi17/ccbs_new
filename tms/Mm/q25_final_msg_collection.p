@@ -29,6 +29,9 @@ ASSIGN
    liStartDay = 1 /* First day of month */
    liEndDay = 30. /* Last day of month, special cases handled in fCheckDates */
 
+/* TESTING SUPPORT */
+IF TODAY < 1/13/16 THEN DO:
+
 /* Month 24 21st day*/
 IF (DAY(TODAY) = 21) AND fGetStartEndDates({&Q25_MONTH_24}, liStartDay, 
                                            liEndDay, OUTPUT ldaStartDateMonth24,

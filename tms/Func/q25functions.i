@@ -156,7 +156,7 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    IF iiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO:
    /* Month 22-24 */
       /* Encrypted MSISDN added to messages sent during 22 to 24 month */
-      lcPassPhrase = fCParam("Q25","Q25_PassPhrase").
+      lcPassPhrase = fCParam("Q25","Q25PassPhrase").
       IF lcPassPhrase = "" OR lcPassPhrase = ? THEN 
          lcPassPhrase = {&Q25_PASSPHRASE}.
       lcEncryptedMSISDN = encrypt_data(icCli,
@@ -175,7 +175,7 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
    DEF VAR lcLogDir          AS CHAR NO-UNDO.
    DEF VAR lcLogFile         AS CHAR NO-UNDO.
    IF liQ25Logging >= iiLogLevel THEN DO:
-      ASSIGN lcLogDir     = fCParam("Q25","Q25_reminder_LogDir").
+      ASSIGN lcLogDir     = fCParam("Q25","Q25ReminderLogDir").
       IF lcLogDir = "" OR lcLogDir = ? THEN lcLogDir = "/tmp/".
       /* Make Monthly log file */
       lcLogFile = lcLogDir + "Q25_sms_message_logs_" +
@@ -226,7 +226,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
    IF idaStartDate = ? OR idaEndDate = ? THEN
       RETURN 0.
 
-   ASSIGN liPauseValue = fCParamI("Q25_sms_pause").
+   ASSIGN liPauseValue = fCParamI("Q25SmsPause").
    IF liPauseValue = ? THEN
       liPauseValue = 10.
 

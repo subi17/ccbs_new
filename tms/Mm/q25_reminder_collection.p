@@ -79,8 +79,8 @@ fGetStartEndDates({&Q25_MONTH_24}, liStartDay, liEndDay,
 /* TESTING SUPPORT */
 IF TODAY < 1/13/16 THEN DO:
 
-ASSIGN lcTestStartDay     = fCParam("Q25","Q25_Test_Start")
-       lcTestEndDay     = fCParam("Q25","Q25_Test_End").
+ASSIGN lcTestStartDay     = fCParam("Q25","Q25TestStart")
+       lcTestEndDay     = fCParam("Q25","Q25TestEnd").
    
    IF lcTestStartDay > "" AND lcTestEndDay > "" THEN DO:
       ASSIGN
