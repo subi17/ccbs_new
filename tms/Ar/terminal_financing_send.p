@@ -162,6 +162,8 @@ END.
 
 OUTPUT STREAM sout TO VALUE(lcFile).
 
+DEFINE TEMP-TABLE ttOrderCustomer NO-UNDO LIKE OrderCustomer.
+
 ORDER_LOOP:
 FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
          FixedFee.FinancedResult = {&TF_STATUS_WAITING_SENDING},
@@ -177,6 +179,8 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
          OrderCustomer.Brand = gcBrand AND
          OrderCustomer.OrderId = Order.OrderId AND
          OrderCustomer.RowType = 1 BY OrderTimeStamp.TimeStamp:
+   
+   EMPTY TEMP-TABLE ttOrderCustomer NO-ERROR.
 
    fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
 
@@ -233,52 +237,74 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
       FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
       NEXT ORDER_LOOP. 
    END.
+   
+   FIND Mobsub NO-LOCK WHERE
+        Mobsub.MsSeq = Order.MsSeq NO-ERROR.
+   IF NOT AVAIL Mobsub THEN DO:
+      FixedFee.FinancedResult = {&TF_STATUS_YOIGO_SUB_TERMINATED}.
+      NEXT ORDER_LOOP.
+   END.
+   
+   IF FixedFee.BillCode EQ "RVTERM" THEN DO:
+      FIND FIRST Customer NO-LOCK WHERE
+                 Customer.Custnum = Mobsub.Custnum NO-ERROR.
+      IF NOT AVAIL Customer THEN NEXT.
+      BUFFER-COPY Customer EXCEPT Language CustIdType TO ttOrderCustomer.
+      ASSIGN
+         ttOrderCustomer.CustTitle  = Customer.HonTitle
+         ttOrderCustomer.CustId     = Customer.OrgId
+         ttOrderCustomer.BankCode   = Customer.BankAcct
+         ttOrderCustomer.SurName1   = Customer.Custname
+         ttOrderCustomer.Company    = Customer.CompanyName
+         ttOrderCustomer.OutBankMarketing = Customer.OutMarkBank.
+   END.
+   ELSE BUFFER-COPY OrderCustomer TO ttOrderCustomer.
 
-   CASE OrderCustomer.CustIdType:
+   CASE ttOrderCustomer.CustIdType:
       WHEN "NIF" THEN lcCustIdType = "05".
       WHEN "NIE" THEN lcCustIdType = "01".
       OTHERWISE DO: 
          fErrorLog(Order.OrderID,
                    SUBST("ERROR:Unsupported customer ID type: &1",
-                         OrderCustomer.CustIdType)).
+                         ttOrderCustomer.CustIdType)).
          FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
          NEXT ORDER_LOOP.
       END.
    END.
 
-   IF LOOKUP(OrderCustomer.CustTitle,
+   IF LOOKUP(ttOrderCustomer.CustTitle,
              "Sr.,Mr.,Sr,Mr") > 0 THEN lcGender = "01".
-   ELSE IF LOOKUP(OrderCustomer.CustTitle,
+   ELSE IF LOOKUP(ttOrderCustomer.CustTitle,
            "Mrs.,Sra.,Mrs,Sra") > 0 THEN lcGender = "02".
    ELSE DO:
       fErrorLog(Order.OrderID,SUBST("ERROR:Unknown customer title: &1",
-                              OrderCustomer.CustTitle)).
+                              ttOrderCustomer.CustTitle)).
       FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
       NEXT ORDER_LOOP.
    END.
 
    FIND Nationality NO-LOCK WHERE
-        Nationality.Nationality = OrderCustomer.Nationality NO-ERROR.
+        Nationality.Nationality = ttOrderCustomer.Nationality NO-ERROR.
    IF NOT AVAIL Nationality THEN DO:
       fErrorLog(Order.OrderID,SUBST("ERROR:Unknown nationality: &1",
-                              OrderCustomer.Nationality)).
+                              ttOrderCustomer.Nationality)).
       FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
       NEXT ORDER_LOOP.
    END.
 
    IF NOT Nationality.TFNationality > "" THEN DO:
       fErrorLog(Order.OrderID,SUBST("SYSTEM ERROR:Undefined TFNationality: &1",
-                              OrderCustomer.Nationality)).
+                              ttOrderCustomer.Nationality)).
       FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
       NEXT ORDER_LOOP.
    END.
   
    FIND FIRST ttProfession NO-LOCK WHERE
-              ttProfession.Profession = OrderCustomer.Profession NO-ERROR.
+              ttProfession.Profession = ttOrderCustomer.Profession NO-ERROR.
 
    IF NOT AVAIL ttProfession THEN DO:
       fErrorLog(Order.OrderID,SUBST("ERROR:Unknown profession: &1",
-                OrderCustomer.profession)).
+                ttOrderCustomer.profession)).
       FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
       NEXT ORDER_LOOP.
    END.
@@ -313,19 +339,16 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
       END.
    END.
 
-   
-   FIND Mobsub NO-LOCK WHERE
-        Mobsub.MsSeq = Order.MsSeq NO-ERROR.
-   IF NOT AVAIL Mobsub THEN DO:
-      FixedFee.FinancedResult = {&TF_STATUS_YOIGO_SUB_TERMINATED}.
-      NEXT ORDER_LOOP.
-   END.
-
    IF CAN-FIND(FIRST bMsRequest WHERE
                      bMsRequest.MsSeq = Order.MsSeq AND
                      bMsRequest.ReqType = 10 AND
                      LOOKUP(STRING(bMsRequest.ReqStat),
                         {&REQ_INACTIVE_STATUSES}) = 0) THEN DO:
+      FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ACC}.
+      NEXT ORDER_LOOP.
+   END.
+   
+   IF Mobsub.Custnum NE OrderCustomer.Custnum THEN DO:
       FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ACC}.
       NEXT ORDER_LOOP.
    END.
@@ -364,9 +387,9 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
 
    ldeTotalAmount = ROUND(fmitem.FFItemQty * fmitem.Amount,2).
 
-   IF LENGTH(OrderCustomer.BankCode) EQ 24 THEN 
-      lcBankCode = SUBSTRING(OrderCustomer.BankCode,5).
-   ELSE lcBankCode = OrderCustomer.BankCode.
+   IF LENGTH(ttOrderCustomer.BankCode) EQ 24 THEN 
+      lcBankCode = SUBSTRING(ttOrderCustomer.BankCode,5).
+   ELSE lcBankCode = ttOrderCustomer.BankCode.
    
    IF NOT FixedFee.BillCode BEGINS "PAYTERM" THEN RELEASE SingleFee.
    ELSE
@@ -379,7 +402,6 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
               SingleFee.SourceTable = FixedFee.SourceTable AND
               SingleFee.CalcObj = "RVTERM" AND
               SingleFee.Amt > 0 NO-ERROR.
-   
       
    IF AVAIL SingleFee THEN DO:
 
@@ -426,7 +448,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    ASSIGN
       FixedFeeTF.BankDate  = TODAY
       FixedFeeTF.TFBank    = lcTFBank
-      FixedFeeTF.OrgId     = OrderCustomer.CustId
+      FixedFeeTF.OrgId     = ttOrderCustomer.CustId
       FixedFeeTF.Amount = ldeTotalAmount
       FixedFeeTF.ResidualAmount = SingleFee.Amt 
          WHEN AVAIL SingleFee.
@@ -471,26 +493,26 @@ PROCEDURE pPrintLine:
    /*NORDEN*/        STRING(liLineNum,"999999") FORMAT "X(6)"
    /*NCTR*/          "201080" FORMAT "x(6)"
    /*CTDOCUPRS*/     UPPER(lcCustIdType) FORMAT "X(2)"
-   /*NDOCUPRS*/      UPPER(OrderCustomer.CustId) FORMAT "X(9)"
+   /*NDOCUPRS*/      UPPER(ttOrderCustomer.CustId) FORMAT "X(9)"
    /*FILLER VACIO */ " " FORMAT "X(1)"
-   /*DREDUPRS*/      UPPER(OrderCustomer.Surname1) + " " + 
-                     UPPER(OrderCustomer.Surname2) + "," + 
-                     UPPER(OrderCustomer.FirstName) FORMAT "X(26)"
-   /*NOMBRECLI*/     UPPER(OrderCustomer.FirstName) FORMAT "X(30)"
-   /*APELLIDO1*/     UPPER(OrderCustomer.SurName1) FORMAT "X(30)"
-   /*APELLIDO2*/     UPPER(OrderCustomer.SurName2) FORMAT "X(30)"
-   /*TDIRECCI*/      UPPER(OrderCustomer.Address) FORMAT "X(40)"
+   /*DREDUPRS*/      UPPER(ttOrderCustomer.Surname1) + " " + 
+                     UPPER(ttOrderCustomer.Surname2) + "," + 
+                     UPPER(ttOrderCustomer.FirstName) FORMAT "X(26)"
+   /*NOMBRECLI*/     UPPER(ttOrderCustomer.FirstName) FORMAT "X(30)"
+   /*APELLIDO1*/     UPPER(ttOrderCustomer.SurName1) FORMAT "X(30)"
+   /*APELLIDO2*/     UPPER(ttOrderCustomer.SurName2) FORMAT "X(30)"
+   /*TDIRECCI*/      UPPER(ttOrderCustomer.Address) FORMAT "X(40)"
    /*FILLER_VACIO*/  " " FORMAT "X(24)"
-   /*DPOBLACI*/      UPPER(OrderCustomer.PostOffice) FORMAT "X(30)"
-   /*CPOSTAL*/       UPPER(OrderCustomer.ZipCode) FORMAT "X(5)"
+   /*DPOBLACI*/      UPPER(ttOrderCustomer.PostOffice) FORMAT "X(30)"
+   /*CPOSTAL*/       UPPER(ttOrderCustomer.ZipCode) FORMAT "X(5)"
    /*TELEFONO*/      UPPER(MobSub.CLI) FORMAT "X(10)"
-   /*FNACCLI*/       fDate2String(OrderCustomer.BirthDay) FORMAT "X(8)"
+   /*FNACCLI*/       fDate2String(ttOrderCustomer.BirthDay) FORMAT "X(8)"
    /*COSEXO */       lcGender FORMAT "X(2)"
    /*COESTCIV*/      "01" FORMAT "X(2)"
    /*FALTACLI*/      FILL("0",8) FORMAT "X(8)"
    /*COACTPROF*/     ttProfession.activityCode FORMAT "X(4)"
    /*INGBRU*/        "0000000060101" FORMAT "X(13)"
-   /*DEMPTRAB*/      UPPER(OrderCustomer.Company) FORMAT "X(30)"
+   /*DEMPTRAB*/      UPPER(ttOrderCustomer.Company) FORMAT "X(30)"
    /*TDIREMP*/       STRING(Order.MsSeq) FORMAT "X(10)"
                      STRING(Order.OrderID) FORMAT "X(10)"
                      FILL("0",6 - LENGTH(lcRVAmt)) + 
@@ -499,7 +521,7 @@ PROCEDURE pPrintLine:
                         lcRVPerc FORMAT "X(4)"
    /*DPOBLEMP*/      "MADRID" FORMAT "X(30)"
    /*CPOEMP*/        "28000" FORMAT "X(5)"
-   /*TELEFEMP*/      STRING(OrderCustomer.Custnum) FORMAT "X(10)"
+   /*TELEFEMP*/      STRING(ttOrderCustomer.Custnum) FORMAT "X(10)"
    /*TELEFEMP2*/     " " FORMAT "X(10)"
    /*TIPOCONTR*/     ttProfession.contractType FORMAT "X(4)"
    /*ANTEMPRES*/     "01" FORMAT "X(2)"
@@ -530,7 +552,7 @@ PROCEDURE pPrintLine:
    /*DES-MAIL*/      " " FORMAT "X(50)"
    /*COD-PAIS*/      "0011" FORMAT "X(4)"
    /*XTI-ROBINSON*/  (IF lcTFBank EQ {&TF_BANK_UNOE} THEN "S"
-                      ELSE STRING(OrderCustomer.OutBankMarketing,"S/N"))
+                      ELSE STRING(ttOrderCustomer.OutBankMarketing,"S/N"))
                       FORMAT "X(1)"
    /*COD-PAISNACIM*/ Nationality.TFNationality FORMAT "X(4)"
    /*COD-PAISNACION*/ Nationality.TFNationality FORMAT "X(4)"
