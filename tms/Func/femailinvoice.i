@@ -126,9 +126,7 @@ FUNCTION fGenerateQ25Link RETURNS CHAR (INPUT icCLI AS CHAR):
    IF icCLI > "" THEN 
       lcEncodedLink = HEX-ENCODE(SHA1-DIGEST(icCLI,lcSaltKey)).
 
-   lcEncodedLink = lcQ25Path + (IF lcEncodedLink > ""
-                                THEN "&h=" + lcEncodedLink
-                                ELSE ""). 
+   lcEncodedLink = REPLACE(lcQ25Path,"#CLI",lcEncodedLink).
 
    RETURN lcEncodedLink.
    

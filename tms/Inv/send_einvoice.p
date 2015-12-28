@@ -246,20 +246,17 @@ PROCEDURE pGetQ25Text:
             FixedFee.HostTable = "MobSub" AND
             FixedFee.KeyValue = STRING(SubInvoice.MsSeq) AND
             FixedFee.BillCode BEGINS "RVTERM" AND
+            FixedFee.OrderID = SingleFee.OrderID AND
             FixedFee.InUse) THEN NEXT.
-      IF CAN-FIND(FIRST bExtension NO-LOCK WHERE
-               bExtension.Brand   = gcBrand AND
-               bExtension.DCEvent = "RVTERM12" AND
-               bExtension.MsSeq   = SubInvoice.MsSeq AND
-               bExtension.ValidTo >= TODAY) THEN NEXT.
-         
+
       /* terminal returned */
       FIND FIRST TermReturn WHERE
                  TermReturn.OrderId = SingleFee.OrderId AND
                  TermReturn.ReturnTS > fHMS2TS(DCCLI.ValidFrom,"0") 
          NO-LOCK NO-ERROR.
-      IF AVAIL TermReturn AND TermReturn.DeviceScreen AND
-               TermReturn.DeviceStart THEN NEXT.
+      IF AVAIL TermReturn AND 
+        (TermReturn.DeviceScreen OR TermReturn.DeviceScreen = ?) AND
+        (TermReturn.DeviceStart OR TermReturn.DeviceStart = ?) THEN NEXT.
       
       liFees = 0.
       /* which month is this */
