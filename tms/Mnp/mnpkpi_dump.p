@@ -48,6 +48,20 @@ output stream sout to value(icFile).
 DEFINE VARIABLE ldaUpdated AS DATE NO-UNDO. 
 DEFINE VARIABLE ldaCreated AS DATE NO-UNDO. 
 DEFINE VARIABLE lcCode AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcCreated AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcUpdated AS CHARACTER NO-UNDO.
+
+FUNCTION fTS2ModifiedHMS RETURNS CHARACTER
+   (INPUT ideTimeStamp AS DECIMAL):
+   DEFINE VARIABLE dte AS DATE NO-UNDO.
+   DEFINE VARIABLE tme AS INTEGER NO-UNDO. 
+   DEFINE VARIABLE lcStamp AS CHARACTER NO-UNDO. 
+
+   fSplitTS(ideTimeStamp, OUTPUT dte, OUTPUT tme).
+   lcStamp = STRING(TRUNCATE(ideTimeStamp,0)).
+   lcStamp = STRING(lcStamp,"9999-99-99") + " " + STRING(tme,"HH:MM:SS").
+   RETURN lcStamp.
+END FUNCTION.
 
 
    FOR EACH mnpprocess where
@@ -56,10 +70,9 @@ DEFINE VARIABLE lcCode AS CHARACTER NO-UNDO.
             mnpprocess.updatets > idLastDump NO-LOCK:
 
       run pMNPINKPI(mnpprocess.mnpseq, output lcMNPKPI).
-
-      fSplitTS(mnpprocess.createdts, output ldaCreated, output liTime).
-      fSplitTS(mnpprocess.updatets, output ldaUpdated, output liTime).
-      
+      ASSIGN
+         lcCreated = fTS2ModifiedHMS(mnpprocess.createdts)      
+         lcUpdated = fTS2ModifiedHMS(mnpprocess.updatets).     
       /* Convert TMS status to character value */
       FIND TMSCodes WHERE 
            TMSCodes.TableName = "MNPProcess" AND
@@ -79,8 +92,8 @@ DEFINE VARIABLE lcCode AS CHARACTER NO-UNDO.
          mnpprocess.mnptype "|"
          mnpprocess.orderid "|"
          mnpsub.cli "|"
-         ldaCreated "|"
-         ldaUpdated "|"
+         lcCreated "|"
+         lcUpdated "|"
          lcCode "|"
          mnpprocess.opercode "|"
          lcMNPKPI skip.
@@ -100,9 +113,9 @@ DEFINE VARIABLE lcCode AS CHARACTER NO-UNDO.
 
       RUN pMNPOutKPI(mnpprocess.mnpseq, output lcMNPKPI).
 
-      fSplitTS(mnpprocess.createdts, output ldaCreated, output liTime).
-      fSplitTS(mnpprocess.updatets, output ldaUpdated, output liTime).
-      
+      ASSIGN
+         lcCreated = fTS2ModifiedHMS(mnpprocess.createdts)      
+         lcUpdated = fTS2ModifiedHMS(mnpprocess.updatets).     
       /* Convert TMS status to character value */
       FIND TMSCodes WHERE 
            TMSCodes.TableName = "MNPProcess" AND
@@ -121,8 +134,8 @@ DEFINE VARIABLE lcCode AS CHARACTER NO-UNDO.
             mnpprocess.mnptype "|"
             mnpsub.msseq "|"
             mnpsub.cli "|"
-            ldaCreated "|"
-            ldaUpdated "|"
+            lcCreated "|"
+            lcUpdated "|"
             lccode "|"
             mnpprocess.opercode "|"
             lcMNPKPI skip.
