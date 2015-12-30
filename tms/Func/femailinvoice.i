@@ -20,6 +20,7 @@
 {fcreatereq.i}
 {msreqfunc.i}
 {fgettxt.i}
+{q25functions.i}
 
 FUNCTION fPendingEmailActRequest RETURNS LOG (INPUT iiCustnum AS INT):
    
@@ -112,23 +113,29 @@ END FUNCTION. /* FUNCTION fGenerateEmailPDFLink */
 
 FUNCTION fGenerateQ25Link RETURNS CHAR (INPUT icCLI AS CHAR):
    
-   DEF VAR lcEncodedLink    AS CHAR NO-UNDO.
-   DEF VAR lcQ25Path        AS CHAR NO-UNDO.
-   DEF VAR lcSaltKey        AS CHAR NO-UNDO.
+   DEF VAR lcEncryptedCLI AS CHAR NO-UNDO.
+   DEF VAR lcQ25Link      AS CHAR NO-UNDO.
+   DEF VAR lcSaltKey      AS CHAR NO-UNDO.
 
-   ASSIGN lcQ25Path = fCParam("EI","WebServerQ25LPLink")
-          lcSaltKey = fCParam("EI","SaltKey").
+   ASSIGN 
+      lcQ25Link = fCParam("EI","WebServerQ25LPLink")
+      lcSaltKey = fCParam("Q25","Q25PassPhrase").
 
-   IF lcQ25Path = "" OR lcQ25Path = ? THEN RETURN "".
-
+   IF lcQ25Link = "" OR lcQ25Link = ? THEN RETURN "".
    IF lcSaltKey = "" OR lcSaltKey = ? THEN RETURN "".
 
-   IF icCLI > "" THEN 
-      lcEncodedLink = HEX-ENCODE(SHA1-DIGEST(icCLI,lcSaltKey)).
+   IF icCLI > "" THEN DO:
+      lcEncryptedCLI = encrypt_data(icCLI,
+                                   {&ENCRYPTION_METHOD}, 
+                                   lcSaltKey).
+      /* convert some special characters to url encoding (at least '+' char
+         could cause problems at later phases. */
+      lcEncryptedCLI = fUrlEncode(lcEncryptedCLI, "default").
+   END.
+   
+   lcQ25Link = REPLACE(lcQ25Link,"#CLI",lcEncryptedCLI).
 
-   lcEncodedLink = REPLACE(lcQ25Path,"#CLI",lcEncodedLink).
-
-   RETURN lcEncodedLink.
+   RETURN lcQ25Link.
    
 END FUNCTION. /* FUNCTION fGenerateEmailPDFLink */
 
