@@ -1250,7 +1250,6 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 top_struct_fields = validate_request(top_struct, 
    "order_data!,customer_data!,address_data,device_data,contact_data,fusion_data,q25_data,order_inspection_data,accessory_data").
-
 IF top_struct_fields EQ ? THEN RETURN.
 
 ASSIGN
