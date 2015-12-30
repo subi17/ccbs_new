@@ -120,6 +120,8 @@ FUNCTION fGenerateQ25Link RETURNS CHAR (INPUT icCLI AS CHAR):
    ASSIGN 
       lcQ25Link = fCParam("EI","WebServerQ25LPLink")
       lcSaltKey = fCParam("Q25","Q25PassPhrase").
+   IF lcSaltKey = "" OR lcSaltKey = ? THEN 
+      lcSaltKey = {&Q25_PASSPHRASE}.
 
    IF lcQ25Link = "" OR lcQ25Link = ? THEN RETURN "".
    IF lcSaltKey = "" OR lcSaltKey = ? THEN RETURN "".
