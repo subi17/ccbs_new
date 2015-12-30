@@ -921,7 +921,6 @@ PROCEDURE pTerminatePackage:
       FIND FIRST SubSer WHERE
                  SubSer.MSSeq   = iiMSSeq AND
                  SubSer.ServCom = ttServCom.ServCom NO-LOCK NO-ERROR.
-      IF NOT AVAILABLE SubSer THEN NEXT.
 
       IF icBundleList > "" THEN 
       RETAINCOMPONENT:
@@ -944,14 +943,16 @@ PROCEDURE pTerminatePackage:
                    
             /* if another bundle has the same component with same value 
                then no need to do anything */
-            IF bDCComponent.DefValue = SubSer.SSStat AND
+            IF AVAIL SubSer AND
+               bDCComponent.DefValue = SubSer.SSStat AND
                bDCComponent.DefParam = SubSer.SSParam THEN
                NEXT TERMINATECOMPONENT.
        
            /* shaper needs special handling; if there has been several 
               bundles (not an upsell) and one has now been terminated, then 
               shaper needs to be activated again for the remaining bundle */
-            ELSE IF bDCComponent.DefValue = SubSer.SSStat AND
+            ELSE IF AVAIL SubSer AND
+               bDCComponent.DefValue = SubSer.SSStat AND
                bDCComponent.DefParam NE SubSer.SSParam THEN DO:
                ASSIGN
                   lcRetainBundle = bDCPackage.DCEvent
@@ -965,13 +966,28 @@ PROCEDURE pTerminatePackage:
       /* the Bundle and retain bundle list is empty then make sure       */
       /* DEFAULT profile should be created from next month.              */
       IF ilSolog THEN DO:
-         IF NOT llCommonComponent THEN DO:
-
-            IF ttServCom.ServCom = "SHAPER" THEN DO:
-               IF icOrigDCEvent = "BONO_VOIP" THEN lcParam = "VOIP_REMOVE".
+         
+         IF ttServCom.ServCom = "SHAPER" THEN DO:
+            IF icOrigDCEvent = "BONO_VOIP" THEN lcParam = "VOIP_REMOVE".
                ELSE lcParam = ttServCom.DefParam.
             END. /* IF ttServCom.ServCom = "SHAPER" THEN DO: */
-            ELSE lcParam = SubSer.SSParam.
+         ELSE IF AVAIL SubSer THEN lcParam = SubSer.SSParam.
+         ELSE lcParam = ttServCom.DefParam.
+      
+         /* YTS-8017 */
+         /* During prepaid STC/iSTC, while onging contract termination request 
+            If any contract activation is done WITH new clitype, THEN avoid 
+            creating termination SHAPER profile service request WITH new clitype  */
+
+         IF ttServCom.ServCom = "SHAPER"   AND 
+            icNewCLIType NE icOldCLIType   AND
+            icNewCLIType BEGINS "TARJ"     AND
+            icOldCLIType BEGINS "TARJ"     AND    
+            AVAILABLE SubSer               AND 
+            icNewCLIType EQ SubSer.SSParam THEN 
+            NEXT TERMINATECOMPONENT.
+
+         IF NOT llCommonComponent THEN DO:
 
             liReq = fServiceRequest (iiMsSeq ,     
                                      ttServCom.ServCom,
@@ -1045,7 +1061,12 @@ PROCEDURE pTerminatePackage:
                      
    END.
 
-   IF lcRetainBundle > "" THEN DO:
+   /* YTS-8017 */
+   /* During prepaid STC/iSTC ongoing termination request processing, it has 
+      to avoid creating Data bundle clitypes TARJ7, TARJ9 (Newclitype) service termination request */
+
+   IF lcRetainBundle > "" AND 
+      LOOKUP(lcRetainBundle, "TARJ7,TARJ9") = 0 THEN DO:
       /* SHAPER should be created from 1st day of next month */
       RUN pCopyPackage(icNewCLIType,
                        icServPac,

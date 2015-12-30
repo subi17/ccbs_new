@@ -775,8 +775,15 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             data[LOOKUP("invoice_ref", gcCustomerStructStringFields)].
  
          OrderCustomer.Address = OrderCustomer.Street .
-         IF OrderCustomer.BuildingNum NE "" THEN 
-            OrderCustomer.Address = OrderCustomer.Address + " " + OrderCustomer.BuildingNum .
+         IF OrderCustomer.BuildingNum NE "" THEN DO: 
+            IF (piDeliveryType = {&ORDER_DELTYPE_KIALA} AND 
+                piRowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}) THEN
+               OrderCustomer.Address = OrderCustomer.Address + ", " + 
+                                       OrderCustomer.BuildingNum .
+            ELSE
+               OrderCustomer.Address = OrderCustomer.Address + " " +
+                                       OrderCustomer.BuildingNum .
+         END.
          IF OrderCustomer.AddressCompl NE "" THEN 
             OrderCustomer.Address = OrderCustomer.Address + " " + OrderCustomer.AddressCompl .
 
@@ -1243,7 +1250,6 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 top_struct_fields = validate_request(top_struct, 
    "order_data!,customer_data!,address_data,device_data,contact_data,fusion_data,q25_data,order_inspection_data,accessory_data").
-
 IF top_struct_fields EQ ? THEN RETURN.
 
 ASSIGN

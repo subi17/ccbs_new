@@ -40,6 +40,7 @@
 {terminal_financing.i}
 {ordercancel.i}
 {fprepaidfee.i}
+{fcreditreq.i}
 
 DEF BUFFER bPendRequest FOR MsRequest.
 DEF BUFFER bOrigRequest FOR MsRequest.
@@ -269,7 +270,11 @@ PROCEDURE pContractActivation:
    DEF VAR liConCount        AS INT  NO-UNDO.
    DEF VAR ldeFeeAmount AS DEC NO-UNDO INIT ?.
    DEF VAR ldeResidualFeeDisc AS DEC NO-UNDO. 
-   DEF VAR ldaResidualFee AS DATE NO-UNDO. 
+   DEF VAR ldaResidualFee AS DATE NO-UNDO.
+   DEF VAR lcCrNoteResult     AS CHAR NO-UNDO.
+   DEF VAR liBillPerm         AS INT  NO-UNDO.
+   DEF VAR liDiscRequest      AS INT  NO-UNDO.
+   DEF VAR lcDiscResult       AS CHAR NO-UNDO.
                     
    /* DSS related variables */
    DEF VAR lcResult      AS CHAR NO-UNDO.
@@ -338,7 +343,14 @@ PROCEDURE pContractActivation:
    END.
 
    /* is the new contract allowed */
-   IF fMatrixAnalyse(gcBrand,
+   IF lcDCEvent = "DATA7" THEN DO:
+      IF NOT (lcUseCLIType = "CONT7" OR lcUseCLIType = "CONT8" OR
+              lcUseCLIType = "CONT9") THEN DO:
+         fReqError("Contract is not allowed for this subscription type").
+         RETURN.
+      END.
+   END.   
+   ELSE IF fMatrixAnalyse(gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      lcDCEvent + ";" + lcUseCLIType,
@@ -539,12 +551,41 @@ PROCEDURE pContractActivation:
                RETURN.
             END.
 
+            /* If Quota 25 is already billed then create a 
+               "credit note" with equivalent amount. */
             IF SingleFee.Billed EQ TRUE AND
                NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
                                   Invoice.Invnum = SingleFee.Invnum AND
                                   Invoice.InvType = 99) THEN DO:
-               fReqError("Residual fee already billed").
-               RETURN.
+
+               lcCrNoteResult = fCashInvoiceCreditnote(SingleFee.Invnum, "1010").
+               IF lcCrNoteResult > "" THEN
+                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                    "MsRequest",
+                                    STRING(MsRequest.MsRequest),
+                                    MsRequest.Custnum,
+                                    "CREDIT NOTE CREATION FAILED",
+                                    lcCrNoteResult).
+            END.
+            ELSE DO: 
+               liBillPerm = fCheckBillingPermission(MsOwner.MsSeq, OUTPUT lcError).
+               IF lcError > "" THEN DO:
+                  fReqError(lcError).
+                  RETURN.
+               END.
+               
+               IF liBillPerm = 1 OR liBillPerm = 2 THEN DO:
+                  liDiscRequest = fAddDiscountPlanMember(MsOwner.MsSeq,
+                                           "RVTERMDT3DISC",
+                                           SingleFee.Amt,
+                                           fPer2Date(SingleFee.BillPeriod,0),
+                                           1,
+                                           OUTPUT lcDiscResult).
+                  IF liDiscRequest NE 0 THEN DO:
+                     fReqError("Discount not created; " + lcDiscResult).
+                     RETURN.
+                  END.
+               END.
             END.
 
             /* Find original installment contract */   
@@ -1636,7 +1677,7 @@ PROCEDURE pContractTermination:
    DEF VAR llCancelOrder AS LOG NO-UNDO. 
    DEF VAR llCancelInstallment AS LOG NO-UNDO. 
    DEF VAR liOrderId AS INT NO-UNDO. 
-
+   DEF VAR liCnt AS INT NO-UNDO.
    DEF VAR liEndPeriodPostpone AS INT  NO-UNDO.
    DEF VAR ldtActDatePostpone  AS DATE NO-UNDO.
 
@@ -2421,16 +2462,19 @@ PROCEDURE pContractTermination:
 
       /* Deactivate Bono6 */
       IF lcDCEvent EQ "DATA6" THEN DO: 
-         FIND FIRST DiscountPlan WHERE 
-                    DiscountPlan.Brand      = gcBrand     AND 
-                    DiscountPlan.DPRuleId   = "BONO6DISC" AND 
-                    DiscountPlan.ValidTo   >= TODAY       NO-LOCK NO-ERROR.
-                       
-         IF AVAILABLE DiscountPlan THEN 
-            llgResult = fCloseDiscount(DiscountPlan.DPRuleId,
-                                       MsRequest.MsSeq,
-                                       ldtActDate,
-                                       FALSE).            
+         DO liCnt = 1 TO NUM-ENTRIES({&BONO6DISCOUNTS}):
+            FIND FIRST DiscountPlan WHERE 
+                       DiscountPlan.Brand      = gcBrand     AND 
+                       DiscountPlan.DPRuleId   = ENTRY(liCnt, 
+                                                       {&BONO6DISCOUNTS}) AND 
+                       DiscountPlan.ValidTo   >= TODAY       NO-LOCK NO-ERROR.
+                          
+            IF AVAILABLE DiscountPlan THEN 
+               llgResult = fCloseDiscount(DiscountPlan.DPRuleId,
+                                          MsRequest.MsSeq,
+                                          ldtActDate,
+                                          FALSE).            
+         END.
       END.
           
       /* iSTC - Reduce bundle consumption to network for non-DSS */
@@ -3059,7 +3103,14 @@ PROCEDURE pContractReactivation:
    END. /* IF NOT AVAILABLE DayCampaign OR */
 
    /* is the contract allowed */
-   IF fMatrixAnalyse(gcBrand,
+   IF lcDCEvent = "DATA7" THEN DO:
+      IF NOT (lcUseCLIType = "CONT7" OR lcUseCLIType = "CONT8" OR
+              lcUseCLIType = "CONT9") THEN DO:
+         fReqError("Contract is not allowed for this subscription type").
+         RETURN.
+      END.
+   END.
+   ELSE IF fMatrixAnalyse(gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      lcDCEvent + ";" + lcUseCLIType,

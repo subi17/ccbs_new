@@ -29,6 +29,7 @@ ASSIGN katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId
 {forderstamp.i}
 {fgettxt.i}
 {fmakesms.i}
+{smsmessage.i}
 {fmakemsreq.i}
 {fexternalapi.i}
 
@@ -53,6 +54,10 @@ DEFINE VARIABLE llOngoing               AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE llDelivered             AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE llClose                 AS LOGICAL   NO-UNDO.
 DEF VAR lcApplicationId AS CHAR NO-UNDO. 
+DEFINE VARIABLE liCustNum               AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liMsSeq                 AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liOrderId               AS INTEGER   NO-UNDO.
+
 
 pcReqList = validate_request(param_toplevel_id, "string,string,string,[string]").
 IF pcReqList EQ ? THEN RETURN.
@@ -106,6 +111,10 @@ FOR EACH Order WHERE
    IF liCount = 1 THEN DO:
       IF Order.StatusCode = "6" THEN llDelivered = TRUE.
       ELSE IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN llClose = TRUE.
+      liMsSeq = Order.MsSeq.
+      liOrderId = Order.OrderID.
+      liCustNum = Order.Custnum.
+
    END. /* IF liCount = 1 THEN DO: */
 
    IF pcDelType = "EMAIL" THEN DO:
@@ -125,8 +134,8 @@ FOR EACH Order WHERE
    ELSE
       lcReplaceText = lcReplaceText +
                       (IF lcReplaceText > "" THEN " - " ELSE "") +
-                      Order.ContractID + ", " + STRING(ldOrderDate) +
-                      ", del " + Order.CLI.
+                      Order.ContractID + ", del " + STRING(ldOrderDate) +
+                      ", del número " + Order.CLI.
 
 END. /* FOR EACH Order WHERE */
 
@@ -160,13 +169,13 @@ IF pcDelType = "SMS" THEN DO:
 
    lcSMSText = REPLACE(lcSMSText,"#INFO",lcReplaceText).
 
-   fMakeSchedSMS2(0,
-                  pcCLI,
-                  9,
-                  lcSMSText,
-                  ldeOrderStamp,
-                  "622622622",
-                  "").
+   fCreateSMS(liCustnum,
+              pcCLI,
+              liMsSeq,
+              liOrderId,
+              lcSMSText,
+              "Yoigo info",
+              {&SMS_TYPE_CONSULT}).
 
 END. /* IF pcDelType = "SMS" THEN DO: */
 ELSE DO:
@@ -185,7 +194,7 @@ ELSE DO:
       RETURN appl_err("Email sending is failed").
 END. /* ELSE DO: */
 
-/* add values to the response if no error */
+/*  add values to the response if no error  */
 top_struct = add_struct(response_toplevel_id, "").
 add_string(top_struct,"transaction_id",pcTransId).
 add_boolean(top_struct,"result",True).

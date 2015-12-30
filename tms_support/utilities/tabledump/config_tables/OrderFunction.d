@@ -23,3 +23,4 @@
 53 "Show Action Items" "orderaction,iiOrderId"
 55 "Change Customer Data" "orderhold,iiOrderId,MODIFY"
 57 "Release in control with secure" "orderinctrl,iiOrderId,1"
+59 "Document Management" "dms"

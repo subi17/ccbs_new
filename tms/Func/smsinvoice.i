@@ -13,6 +13,7 @@
 {commali.i}
 {fcreatereq.i}
 {tmsconst.i}
+{cparam2.i}
 
 function fSMSInvoiceValidate returns logical
    (  input idaPeriod AS DATE,
@@ -66,16 +67,55 @@ function fsmsinvoicerequest returns integer
     input  icsource      as char,
     output ocresult      as char).
 
-   def var lireqcreated as int no-undo.
+def var lireqcreated as int  no-undo.
+DEF VAR lButtonSeconds     AS DECIMAL   NO-UNDO.
+DEF VAR lButtonDate   AS DATE      NO-UNDO.
+DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
+DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
+DEF VAR lcSMSSchedule AS CHARACTER NO-UNDO.
 
+   /* Time of request */
+   fSplitTS(idactstamp, lButtonDate, lButtonSeconds).
+
+   /* ie. "32400-79200" Send between 9:00-22:00 YOT-4130 */
+   lcSMSSchedule = fCParamC("SMSSchedule").
+   lIniSeconds = INTEGER(ENTRY(1,lcSMSSchedule,"-")) NO-ERROR.
+   IF ERROR-STATUS:ERROR THEN lIniSeconds = 0.
+   lEndSeconds = INTEGER(ENTRY(2,lcSMSSchedule,"-")) NO-ERROR.
+   IF ERROR-STATUS:ERROR THEN lEndSeconds = 0.
+
+   IF lIniSeconds <= 0 THEN lIniSeconds = 1.
+   IF lIniSeconds > 86399 THEN lIniSeconds = 86399. /* 23:59:59 */
+   
+   IF lEndSeconds <= 0 THEN lEndSeconds = 1.
+   IF lEndSeconds > 86399 THEN lEndSeconds = 86399. /* 23:59:59 */
+   
+   IF lIniSeconds >= lEndSeconds THEN
+   ASSIGN /* 9:00-22:00 */
+      lIniSeconds = 32400
+      lEndSeconds = 86399.
+
+   /* If is too late, schedule to start next morning */
+   IF (lButtonSeconds > lEndSeconds) THEN
+   DO:
+      lButtonDate = ADD-INTERVAL (lButtonDate, 1, "days").
+      idactstamp = fHMS2TS(lButtonDate, STRING(lIniSeconds,"hh:mm:ss")) .
+   END.
+   ELSE
+   /* If is too early, schedule to start when window opens */
+   IF (lButtonSeconds < lIniSeconds) THEN
+   DO:
+      idactstamp = fHMS2TS(lButtonDate, STRING(lIniSeconds,"hh:mm:ss")) .
+   END.
+   
    if not fSMSInvoiceValidate(
       idaPeriod,
-      output ocresult) then return 0.
+      output ocresult) then return 0. 
 
    fcreaterequest(({&REQTYPE_SMS_INVOICE}),
                   idactstamp,
                   iccreator,
-                  false,      /* fees */
+                  false,     /* fees */
                   false).    /* send sms */
 
    assign 

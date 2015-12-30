@@ -474,6 +474,10 @@
 1 "" 2 "PROMO BONO 1 GB" 0 "BONO6DISC" "1" 01/10/14 31/12/49
 1 "" 3 "BONO 1 GB PROMOZIOA" 0 "BONO6DISC" "1" 01/10/14 31/12/49
 1 "" 5 "BONO 1GB OFFER" 0 "BONO6DISC" "1" 01/10/14 31/12/49
+1 "" 1 "Promo 1 GB/mes gratis" 0 "BONO6WEBDISC" "1" 24/11/15 31/12/49
+1 "" 2 "Promo 1 GB/mes gratis" 0 "BONO6WEBDISC" "1" 24/11/15 31/12/49
+1 "" 3 "Promozioa: 1 GB/hilabete doan" 0 "BONO6WEBDISC" "1" 24/11/15 31/12/49
+1 "" 5 "Offer 1GB a month free" 0 "BONO6WEBDISC" "1" 24/11/15 31/12/49
 1 "" 1 "Promo" 0 "BONO8CPACT" "1" 01/04/12 31/12/49
 1 "" 1 "Compensación" 0 "BONO8CPACT" "1" 01/06/11 31/03/12
 1 "" 2 "Promo" 0 "BONO8CPACT" "1" 01/04/12 31/12/49
@@ -1240,6 +1244,10 @@
 1 "" 3 "Konpentsazio" 0 "CPSMS200" "1" 28/09/09 31/03/12
 1 "" 5 "SMS promo" 0 "CPSMS200" "1" 01/04/12 31/12/49
 1 "" 5 "Compensation" 0 "CPSMS200" "1" 28/09/09 31/03/12
+1 "" 1 "Pago Final." 0 "CRVTERMDT" "1" 27/11/15 31/12/49
+1 "" 2 "Pagament Final" 0 "CRVTERMDT" "1" 27/11/15 31/12/49
+1 "" 3 "Azken ordainketa." 0 "CRVTERMDT" "1" 27/11/15 31/12/49
+1 "" 5 "Final Payment" 0 "CRVTERMDT" "1" 27/11/15 31/12/49
 1 "" 1 "Ampliación 200 MB" 0 "DATA200MFUPS" "1" 04/06/15 31/12/49
 1 "" 2 "Ampliació 200 MB" 0 "DATA200MFUPS" "1" 04/06/15 31/12/49
 1 "" 3 "200 MB-ko tarifa-hedatzea" 0 "DATA200MFUPS" "1" 04/06/15 31/12/49
@@ -1292,6 +1300,14 @@
 1 "" 2 "Internet" 0 "DATA6UPSELL" "1" 01/05/14 31/12/49
 1 "" 3 "Internet" 0 "DATA6UPSELL" "1" 01/05/14 31/12/49
 1 "" 5 "Internet" 0 "DATA6UPSELL" "1" 01/05/14 31/12/49
+1 "" 1 "Internet" 0 "DATA7" "1" 01/12/15 31/12/49
+1 "" 2 "Internet" 0 "DATA7" "1" 01/12/15 31/12/49
+1 "" 3 "Internet" 0 "DATA7" "1" 01/12/15 31/12/49
+1 "" 5 "Internet" 0 "DATA7" "1" 01/12/15 31/12/49
+1 "" 1 "Bono 3 GB" 0 "DATA7MF" "1" 01/12/15 31/12/49
+1 "" 2 "Bono 3 GB" 0 "DATA7MF" "1" 01/12/15 31/12/49
+1 "" 3 "Bono 3 GB" 0 "DATA7MF" "1" 01/12/15 31/12/49
+1 "" 5 "Bono 3 GB" 0 "DATA7MF" "1" 01/12/15 31/12/49
 1 "" 1 "Compra 1GB extra" 0 "DATA9MFUPS" "1" 01/12/12 31/12/49
 1 "" 2 "Compra 1GB extra" 0 "DATA9MFUPS" "1" 01/12/12 31/12/49
 1 "" 3 "1 GB gehiagoren erosketa" 0 "DATA9MFUPS" "1" 01/12/12 31/12/49
@@ -2665,6 +2681,46 @@
 1 "" 3 "BQ Aquaris A45" 0 "G0000239" "1" 28/10/15 31/12/49
 1 "" 4 "BQ Aquaris A45" 0 "G0000239" "1" 28/10/15 31/12/49
 1 "" 5 "BQ Aquaris A45" 0 "G0000239" "1" 28/10/15 31/12/49
+1 "" 1 "Alcatel Onetouch Go Play con Onetouch Go Watch" 0 "G0000240" "1" 30/11/15 31/12/49
+1 "" 2 "Alcatel Onetouch Go Play con Onetouch Go Watch" 0 "G0000240" "1" 30/11/15 31/12/49
+1 "" 3 "Alcatel Onetouch Go Play con Onetouch Go Watch" 0 "G0000240" "1" 30/11/15 31/12/49
+1 "" 4 "Alcatel Onetouch Go Play con Onetouch Go Watch" 0 "G0000240" "1" 30/11/15 31/12/49
+1 "" 5 "Alcatel Onetouch Go Play con Onetouch Go Watch" 0 "G0000240" "1" 30/11/15 31/12/49
+1 "" 1 "LG Leon 4G" 0 "G0000241" "1" 30/11/15 31/12/49
+1 "" 2 "LG Leon 4G" 0 "G0000241" "1" 30/11/15 31/12/49
+1 "" 3 "LG Leon 4G" 0 "G0000241" "1" 30/11/15 31/12/49
+1 "" 4 "LG Leon 4G" 0 "G0000241" "1" 30/11/15 31/12/49
+1 "" 5 "LG Leon 4G" 0 "G0000241" "1" 30/11/15 31/12/49
+1 "" 1 "Microsoft Lumia 550" 0 "G0000242" "1" 30/11/15 31/12/49
+1 "" 2 "Microsoft Lumia 550" 0 "G0000242" "1" 30/11/15 31/12/49
+1 "" 3 "Microsoft Lumia 550" 0 "G0000242" "1" 30/11/15 31/12/49
+1 "" 4 "Microsoft Lumia 550" 0 "G0000242" "1" 30/11/15 31/12/49
+1 "" 5 "Microsoft Lumia 550" 0 "G0000242" "1" 30/11/15 31/12/49
+1 "" 1 "BQ Aquaris X5" 0 "G0000243" "1" 30/11/15 31/12/49
+1 "" 2 "BQ Aquaris X5" 0 "G0000243" "1" 30/11/15 31/12/49
+1 "" 3 "BQ Aquaris X5" 0 "G0000243" "1" 30/11/15 31/12/49
+1 "" 4 "BQ Aquaris X5" 0 "G0000243" "1" 30/11/15 31/12/49
+1 "" 5 "BQ Aquaris X5" 0 "G0000243" "1" 30/11/15 31/12/49
+1 "" 1 "HTC Desire 626" 0 "G0000244" "1" 30/11/15 31/12/49
+1 "" 2 "HTC Desire 626" 0 "G0000244" "1" 30/11/15 31/12/49
+1 "" 3 "HTC Desire 626" 0 "G0000244" "1" 30/11/15 31/12/49
+1 "" 4 "HTC Desire 626" 0 "G0000244" "1" 30/11/15 31/12/49
+1 "" 5 "HTC Desire 626" 0 "G0000244" "1" 30/11/15 31/12/49
+1 "" 1 "Sony Xperia Z5 Premium" 0 "G0000245" "1" 30/11/15 31/12/49
+1 "" 2 "Sony Xperia Z5 Premium" 0 "G0000245" "1" 30/11/15 31/12/49
+1 "" 3 "Sony Xperia Z5 Premium" 0 "G0000245" "1" 30/11/15 31/12/49
+1 "" 4 "Sony Xperia Z5 Premium" 0 "G0000245" "1" 30/11/15 31/12/49
+1 "" 5 "Sony Xperia Z5 Premium" 0 "G0000245" "1" 30/11/15 31/12/49
+1 "" 1 "ZTE Blade V6" 0 "G0000246" "1" 30/11/15 31/12/49
+1 "" 2 "ZTE Blade V6" 0 "G0000246" "1" 30/11/15 31/12/49
+1 "" 3 "ZTE Blade V6" 0 "G0000246" "1" 30/11/15 31/12/49
+1 "" 4 "ZTE Blade V6" 0 "G0000246" "1" 30/11/15 31/12/49
+1 "" 5 "ZTE Blade V6" 0 "G0000246" "1" 30/11/15 31/12/49
+1 "" 1 "Alcatel ONETOUCH PIXI 3" 0 "G0000247" "1" 01/12/15 31/12/49
+1 "" 2 "Alcatel ONETOUCH PIXI 3" 0 "G0000247" "1" 01/12/15 31/12/49
+1 "" 3 "Alcatel ONETOUCH PIXI 3" 0 "G0000247" "1" 01/12/15 31/12/49
+1 "" 4 "Alcatel ONETOUCH PIXI 3" 0 "G0000247" "1" 01/12/15 31/12/49
+1 "" 5 "Alcatel ONETOUCH PIXI 3" 0 "G0000247" "1" 01/12/15 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -2714,6 +2770,10 @@
 1 "" 2 "Compensació per problema a la xarxa" 0 "INC_DISC" "1" 01/12/14 31/12/49
 1 "" 3 "Sareko arazoengatiko ordaina" 0 "INC_DISC" "1" 01/12/14 31/12/49
 1 "" 5 "Compensation due to network issues" 0 "INC_DISC" "1" 01/12/14 31/12/15
+1 "" 1 "At. otras emp" 0 "INFSERVICE" "1" 01/11/15 31/12/49
+1 "" 2 "A. altr. empr" 0 "INFSERVICE" "1" 01/11/15 31/12/49
+1 "" 3 "Bes. enp. at." 0 "INFSERVICE" "1" 01/11/15 31/12/49
+1 "" 5 "Other co att" 0 "INFSERVICE" "1" 01/11/15 31/12/49
 1 "" 1 "Descuento promoción" 0 "INTLCALLDISC" "1" 01/07/14 31/12/49
 1 "" 2 "Descompte promoció" 0 "INTLCALLDISC" "1" 01/07/14 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "INTLCALLDISC" "1" 01/07/14 31/12/49
@@ -3587,6 +3647,16 @@
 1 "" 3 "Microsoft Lumia 535 Negro" 0 "P023535N2" "1" 22/04/15 31/12/49
 1 "" 4 "Microsoft Lumia 535 Negro" 0 "P023535N2" "1" 22/04/15 31/12/49
 1 "" 5 "Microsoft Lumia 535 Black" 0 "P023535N2" "1" 22/04/15 31/12/49
+1 "" 1 "Microsoft Lumia 550 Negro" 0 "P023550N2" "1" 19/11/15 31/12/49
+1 "" 2 "Microsoft Lumia 550 Negro" 0 "P023550N2" "1" 19/11/15 31/12/49
+1 "" 3 "Microsoft Lumia 550 Negro" 0 "P023550N2" "1" 19/11/15 31/12/49
+1 "" 4 "Microsoft Lumia 550 Negro" 0 "P023550N2" "1" 19/11/15 31/12/49
+1 "" 5 "Microsoft Lumia 550 Black" 0 "P023550N2" "1" 19/11/15 31/12/49
+1 "" 1 "Microsoft Lumia 550 Blanco" 0 "P023550W2" "1" 19/11/15 31/12/49
+1 "" 2 "Microsoft Lumia 550 Blanco" 0 "P023550W2" "1" 19/11/15 31/12/49
+1 "" 3 "Microsoft Lumia 550 Blanco" 0 "P023550W2" "1" 19/11/15 31/12/49
+1 "" 4 "Microsoft Lumia 550 Blanco" 0 "P023550W2" "1" 19/11/15 31/12/49
+1 "" 5 "Microsoft Lumia 550 White" 0 "P023550W2" "1" 19/11/15 31/12/49
 1 "" 1 "Nokia 5700 XpressMusic Negro" 0 "P023570N1" "1" 01/01/06 31/12/49
 1 "" 5 "Nokia 5700 XpressMusic Black" 0 "P023570N1" "1" 01/01/06 31/12/49
 1 "" 1 "Nokia 5800 XpressMusic Rojo" 0 "P023580R2" "1" 02/03/09 31/12/49
@@ -4008,6 +4078,16 @@
 1 "" 3 "LG Optimus L3 II Blanco" 0 "P030L32W2" "1" 20/05/13 31/12/49
 1 "" 4 "LG Optimus L3 II Blanco" 0 "P030L32W2" "1" 20/05/13 31/12/49
 1 "" 5 "LG Optimus L3 II White" 0 "P030L32W2" "1" 20/05/13 31/12/49
+1 "" 1 "LG León 4G Oro" 0 "P030L4GD2" "1" 19/11/15 31/12/49
+1 "" 2 "LG León 4G Oro" 0 "P030L4GD2" "1" 19/11/15 31/12/49
+1 "" 3 "LG León 4G Oro" 0 "P030L4GD2" "1" 19/11/15 31/12/49
+1 "" 4 "LG León 4G Oro" 0 "P030L4GD2" "1" 19/11/15 31/12/49
+1 "" 5 "LG Lion 4G Gold" 0 "P030L4GD2" "1" 19/11/15 31/12/49
+1 "" 1 "LG León 4G Titán" 0 "P030L4GN2" "1" 19/11/15 31/12/49
+1 "" 2 "LG León 4G Titán" 0 "P030L4GN2" "1" 19/11/15 31/12/49
+1 "" 3 "LG León 4G Titán" 0 "P030L4GN2" "1" 19/11/15 31/12/49
+1 "" 4 "LG León 4G Titán" 0 "P030L4GN2" "1" 19/11/15 31/12/49
+1 "" 5 "LG Lion 4G Titan" 0 "P030L4GN2" "1" 19/11/15 31/12/49
 1 "" 1 "LG L50 Negro" 0 "P030L50N2" "1" 11/08/14 31/12/49
 1 "" 2 "LG L50 Negro" 0 "P030L50N2" "1" 11/08/14 31/12/49
 1 "" 3 "LG L50 Negro" 0 "P030L50N2" "1" 11/08/14 31/12/49
@@ -4063,6 +4143,11 @@
 1 "" 3 "LG G4 Granate" 0 "P030LG4G2" "1" 27/05/15 31/12/49
 1 "" 4 "LG G4 Granate" 0 "P030LG4G2" "1" 27/05/15 31/12/49
 1 "" 5 "LG G4 Leather Red" 0 "P030LG4G2" "1" 27/05/15 31/12/49
+1 "" 1 "LG G4 Blanco" 0 "P030LG4W2" "1" 27/11/15 31/12/49
+1 "" 2 "LG G4 Blanco" 0 "P030LG4W2" "1" 27/11/15 31/12/49
+1 "" 3 "LG G4 Blanco" 0 "P030LG4W2" "1" 27/11/15 31/12/49
+1 "" 4 "LG G4 Blanco" 0 "P030LG4W2" "1" 27/11/15 31/12/49
+1 "" 5 "LG G4 White" 0 "P030LG4W2" "1" 27/11/15 31/12/49
 1 "" 1 "Google Nexus 5 Negro" 0 "P030NE5N2" "1" 29/01/14 31/12/49
 1 "" 2 "Google Nexus 5 Negro" 0 "P030NE5N2" "1" 29/01/14 31/12/49
 1 "" 3 "Google Nexus 5 Negro" 0 "P030NE5N2" "1" 29/01/14 31/12/49
@@ -4847,12 +4932,17 @@
 1 "" 2 "Sony Xperia M4 Aqua Negro con Auriculares" 0 "P0374AAN2" "1" 30/10/15 31/12/49
 1 "" 3 "Sony Xperia M4 Aqua Negro con Auriculares" 0 "P0374AAN2" "1" 30/10/15 31/12/49
 1 "" 4 "Sony Xperia M4 Aqua Negro con Auriculares" 0 "P0374AAN2" "1" 30/10/15 31/12/49
-1 "" 5 "Sony Xperia M4 Aqua Black with Headset" 0 "P0374AAN2" "1" 30/10/15 31/12/49
+1 "" 5 "Sony Xperia M4 Aqua Black with Headsets" 0 "P0374AAN2" "1" 30/10/15 31/12/49
 1 "" 1 "Sony Xperia M4 Aqua Blanco con Auriculares" 0 "P0374AAW2" "1" 30/10/15 31/12/49
 1 "" 2 "Sony Xperia M4 Aqua Blanco con Auriculares" 0 "P0374AAW2" "1" 30/10/15 31/12/49
 1 "" 3 "Sony Xperia M4 Aqua Blanco con Auriculares" 0 "P0374AAW2" "1" 30/10/15 31/12/49
 1 "" 4 "Sony Xperia M4 Aqua Blanco con Auriculares" 0 "P0374AAW2" "1" 30/10/15 31/12/49
 1 "" 5 "Sony Xperia M4 Aqua White with Headsets" 0 "P0374AAW2" "1" 30/10/15 31/12/49
+1 "" 1 "Sony Xperia Z5 Premium Negro con Reloj Smartwatch 3 Classic Negro" 0 "P0375PSN2" "1" 19/11/15 31/12/49
+1 "" 2 "Sony Xperia Z5 Premium Negro con Reloj Smartwatch 3 Classic Negro" 0 "P0375PSN2" "1" 19/11/15 31/12/49
+1 "" 3 "Sony Xperia Z5 Premium Negro con Reloj Smartwatch 3 Classic Negro" 0 "P0375PSN2" "1" 19/11/15 31/12/49
+1 "" 4 "Sony Xperia Z5 Premium Negro con Reloj Smartwatch 3 Classic Negro" 0 "P0375PSN2" "1" 19/11/15 31/12/49
+1 "" 5 "Sony Xperia Z5 Premium Black with Smartwatch 3 Classic Black" 0 "P0375PSN2" "1" 19/11/15 31/12/49
 1 "" 1 "Sony Xperia E4G Blanco" 0 "P037E4GW2" "1" 22/04/15 31/12/49
 1 "" 2 "Sony Xperia E4G Blanco" 0 "P037E4GW2" "1" 22/04/15 31/12/49
 1 "" 3 "Sony Xperia E4G Blanco" 0 "P037E4GW2" "1" 22/04/15 31/12/49
@@ -4868,6 +4958,16 @@
 1 "" 3 "Sony Xperia M4 Aqua Blanco" 0 "P037M4AW2" "1" 27/05/15 31/12/49
 1 "" 4 "Sony Xperia M4 Aqua Blanco" 0 "P037M4AW2" "1" 27/05/15 31/12/49
 1 "" 5 "Sony Xperia M4 Aqua White" 0 "P037M4AW2" "1" 27/05/15 31/12/49
+1 "" 1 "Sony Xperia M4 Aqua Negro con Reloj Smartwatch 3 Classic Negro" 0 "P037M4SN2" "1" 19/11/15 31/12/49
+1 "" 2 "Sony Xperia M4 Aqua Negro con Reloj Smartwatch 3 Classic Negro" 0 "P037M4SN2" "1" 19/11/15 31/12/49
+1 "" 3 "Sony Xperia M4 Aqua Negro con Reloj Smartwatch 3 Classic Negro" 0 "P037M4SN2" "1" 19/11/15 31/12/49
+1 "" 4 "Sony Xperia M4 Aqua Negro con Reloj Smartwatch 3 Classic Negro" 0 "P037M4SN2" "1" 19/11/15 31/12/49
+1 "" 5 "Sony Xperia M4 Aqua Black with Smartwatch 3 Classic Black" 0 "P037M4SN2" "1" 19/11/15 31/12/49
+1 "" 1 "Sony Xperia M4 Aqua Blanco con Reloj Smartwatch 3 Classic Negro" 0 "P037M4SW2" "1" 19/11/15 31/12/49
+1 "" 2 "Sony Xperia M4 Aqua Blanco con Reloj Smartwatch 3 Classic Negro" 0 "P037M4SW2" "1" 19/11/15 31/12/49
+1 "" 3 "Sony Xperia M4 Aqua Blanco con Reloj Smartwatch 3 Classic Negro" 0 "P037M4SW2" "1" 19/11/15 31/12/49
+1 "" 4 "Sony Xperia M4 Aqua Blanco con Reloj Smartwatch 3 Classic Negro" 0 "P037M4SW2" "1" 19/11/15 31/12/49
+1 "" 5 "Sony Xperia M4 Aqua White with Smartwatch 3 Classic Black" 0 "P037M4SW2" "1" 19/11/15 31/12/49
 1 "" 1 "Sony Xperia U Blanco con PSP" 0 "P037PPUB2" "1" 10/12/12 31/12/49
 1 "" 2 "Sony Xperia U Blanco con PSP" 0 "P037PPUB2" "1" 10/12/12 31/12/49
 1 "" 3 "Sony Xperia U Blanco con PSP" 0 "P037PPUB2" "1" 10/12/12 31/12/49
@@ -5108,6 +5208,21 @@
 1 "" 3 "Sony Xperia Z Negro" 0 "P037XZYN1" "1" 25/11/13 31/12/49
 1 "" 4 "Sony Xperia Z Negro" 0 "P037XZYN1" "1" 25/11/13 31/12/49
 1 "" 5 "Sony Xperia Z Black" 0 "P037XZYN1" "1" 25/11/13 31/12/49
+1 "" 1 "Sony Xperia Z5 Premium Negro" 0 "P037Z5PN2" "1" 19/11/15 31/12/49
+1 "" 2 "Sony Xperia Z5 Premium Negro" 0 "P037Z5PN2" "1" 19/11/15 31/12/49
+1 "" 3 "Sony Xperia Z5 Premium Negro" 0 "P037Z5PN2" "1" 19/11/15 31/12/49
+1 "" 4 "Sony Xperia Z5 Premium Negro" 0 "P037Z5PN2" "1" 19/11/15 31/12/49
+1 "" 5 "Sony Xperia Z5 Premium Black" 0 "P037Z5PN2" "1" 19/11/15 31/12/49
+1 "" 1 "Sony Xperia Z5 Negro con Reloj Smartwatch 3 Classic Negro" 0 "P037Z5SN2" "1" 19/11/15 31/12/49
+1 "" 2 "Sony Xperia Z5 Negro con Reloj Smartwatch 3 Classic Negro" 0 "P037Z5SN2" "1" 19/11/15 31/12/49
+1 "" 3 "Sony Xperia Z5 Negro con Reloj Smartwatch 3 Classic Negro" 0 "P037Z5SN2" "1" 19/11/15 31/12/49
+1 "" 4 "Sony Xperia Z5 Negro con Reloj Smartwatch 3 Classic Negro" 0 "P037Z5SN2" "1" 19/11/15 31/12/49
+1 "" 5 "Sony Xperia Z5 Black with Smartwatch 3 Classic Black" 0 "P037Z5SN2" "1" 19/11/15 31/12/49
+1 "" 1 "Sony Xperia Z5 Blanco con Reloj Smartwatch 3 Classic Negro" 0 "P037Z5SW2" "1" 19/11/15 31/12/49
+1 "" 2 "Sony Xperia Z5 Blanco con Reloj Smartwatch 3 Classic Negro" 0 "P037Z5SW2" "1" 19/11/15 31/12/49
+1 "" 3 "Sony Xperia Z5 Blanco con Reloj Smartwatch 3 Classic Negro" 0 "P037Z5SW2" "1" 19/11/15 31/12/49
+1 "" 4 "Sony Xperia Z5 Blanco con Reloj Smartwatch 3 Classic Negro" 0 "P037Z5SW2" "1" 19/11/15 31/12/49
+1 "" 5 "Sony Xperia Z5 White with Smartwatch 3 Classic Black" 0 "P037Z5SW2" "1" 19/11/15 31/12/49
 1 "" 1 "Módem USB Toshiba G450 Negro" 0 "P040G45N2" "1" 01/04/09 31/12/49
 1 "" 5 "Modem USB Toshiba G450 Black" 0 "P040G45N2" "1" 01/04/09 31/12/49
 1 "" 1 "Módem USB Toshiba G450 Negro" 0 "P040G45N3" "1" 01/04/09 31/12/49
@@ -5173,6 +5288,16 @@
 1 "" 3 "Huawei U8800 Blanco" 0 "P043880W2" "1" 30/11/11 31/12/49
 1 "" 4 "Huawei U8800 Blanco" 0 "P043880W2" "1" 30/11/11 31/12/49
 1 "" 5 "Huawei U8800 White" 0 "P043880W2" "1" 30/11/11 31/12/49
+1 "" 1 "Huawei P8 Lite Negro con Talkband B2 Negro" 0 "P0438LRN2" "1" 19/11/15 31/12/49
+1 "" 2 "Huawei P8 Lite Negro con Reloj Smartband B2 Negro" 0 "P0438LRN2" "1" 19/11/15 31/12/49
+1 "" 3 "Huawei P8 Lite Negro con Reloj Smartband B2 Negro" 0 "P0438LRN2" "1" 19/11/15 31/12/49
+1 "" 4 "Huawei P8 Lite Negro con Reloj Smartband B2 Negro" 0 "P0438LRN2" "1" 19/11/15 31/12/49
+1 "" 5 "Huawei P8 Lite Black with Talkband B2 Black" 0 "P0438LRN2" "1" 19/11/15 31/12/49
+1 "" 1 "Huawei P8 Lite Blanco con Talkband B2 Negro" 0 "P0438LRW2" "1" 19/11/15 31/12/49
+1 "" 2 "Huawei P8 Lite Blanco con Reloj Smartband B2 Negro" 0 "P0438LRW2" "1" 19/11/15 31/12/49
+1 "" 3 "Huawei P8 Lite Blanco con Reloj Smartband B2 Negro" 0 "P0438LRW2" "1" 19/11/15 31/12/49
+1 "" 4 "Huawei P8 Lite Blanco con Reloj Smartband B2 Negro" 0 "P0438LRW2" "1" 19/11/15 31/12/49
+1 "" 5 "Huawei P8 Lite White with Talkband B2 Black" 0 "P0438LRW2" "1" 19/11/15 31/12/49
 1 "" 1 "Huawei Ascend G7 Negro" 0 "P043AG7N2" "1" 28/10/14 31/12/49
 1 "" 2 "Huawei Ascend G7 Negro" 0 "P043AG7N2" "1" 28/10/14 31/12/49
 1 "" 3 "Huawei Ascend G7 Negro" 0 "P043AG7N2" "1" 28/10/14 31/12/49
@@ -5314,6 +5439,16 @@
 1 "" 3 "Huawei G7105 Blanco" 0 "P043G75W2" "1" 30/11/11 31/12/49
 1 "" 4 "Huawei G7105 Blanco" 0 "P043G75W2" "1" 30/11/11 31/12/49
 1 "" 5 "Huawei G7105 White" 0 "P043G75W2" "1" 30/11/11 31/12/49
+1 "" 1 "Huawei G8 Blanco-Champán con Talkband B2 Negro" 0 "P043G8RD2" "1" 19/11/15 31/12/49
+1 "" 2 "Huawei G8 Blanco-Champán con Reloj Smartband B2 Negro" 0 "P043G8RD2" "1" 19/11/15 31/12/49
+1 "" 3 "Huawei G8 Blanco-Champán con Reloj Smartband B2 Negro" 0 "P043G8RD2" "1" 19/11/15 31/12/49
+1 "" 4 "Huawei G8 Blanco-Champán con Reloj Smartband B2 Negro" 0 "P043G8RD2" "1" 19/11/15 31/12/49
+1 "" 5 "Huawei G8 White-Champagne with Talktband B2 Black" 0 "P043G8RD2" "1" 19/11/15 31/12/49
+1 "" 1 "Huawei G8 Gris con Reloj Talkand B2 Negro" 0 "P043G8RG2" "1" 19/11/15 31/12/49
+1 "" 2 "Huawei G8 Gris con Reloj Smartband B2 Negro" 0 "P043G8RG2" "1" 19/11/15 31/12/49
+1 "" 3 "Huawei G8 Gris con Reloj Smartband B2 Negro" 0 "P043G8RG2" "1" 19/11/15 31/12/49
+1 "" 4 "Huawei G8 Gris con Reloj Smartband B2 Negro" 0 "P043G8RG2" "1" 19/11/15 31/12/49
+1 "" 5 "Huawei G8 Grey with Talkband B2 Black" 0 "P043G8RG2" "1" 19/11/15 31/12/49
 1 "" 1 "Huawei G8 Blanco-Champán" 0 "P043HG8D2" "1" 25/09/15 31/12/49
 1 "" 2 "Huawei G8 Blanco-Champán" 0 "P043HG8D2" "1" 25/09/15 31/12/49
 1 "" 3 "Huawei G8 Blanco-Champán" 0 "P043HG8D2" "1" 25/09/15 31/12/49
@@ -5359,6 +5494,16 @@
 1 "" 3 "Huawei P8 Lite Blanco" 0 "P043P8LW2" "1" 22/04/15 31/12/49
 1 "" 4 "Huawei P8 Lite Blanco" 0 "P043P8LW2" "1" 22/04/15 31/12/49
 1 "" 5 "Huawei P8 Lite White" 0 "P043P8LW2" "1" 22/04/15 31/12/49
+1 "" 1 "Huawei P8 Champán con Talkband B2 Negro" 0 "P043P8RD2" "1" 19/11/15 31/12/49
+1 "" 2 "Huawei P8 Champán con Reloj Smartband B2 Negro" 0 "P043P8RD2" "1" 19/11/15 31/12/49
+1 "" 3 "Huawei P8 Champán con Reloj Smartband B2 Negro" 0 "P043P8RD2" "1" 19/11/15 31/12/49
+1 "" 4 "Huawei P8 Champán con Reloj Smartband B2 Negro" 0 "P043P8RD2" "1" 19/11/15 31/12/49
+1 "" 5 "Huawei P8 Champagne with Talkband B2 Black" 0 "P043P8RD2" "1" 19/11/15 31/12/49
+1 "" 1 "Huawei P8 Gris con Talkband B2 Negro" 0 "P043P8RG2" "1" 19/11/15 31/12/49
+1 "" 2 "Huawei P8 Gris con Reloj Smartband B2 Negro" 0 "P043P8RG2" "1" 19/11/15 31/12/49
+1 "" 3 "Huawei P8 Gris con Reloj Smartband B2 Negro" 0 "P043P8RG2" "1" 19/11/15 31/12/49
+1 "" 4 "Huawei P8 Gris con Reloj Smartband B2 Negro" 0 "P043P8RG2" "1" 19/11/15 31/12/49
+1 "" 5 "Huawei P8 Grey with Talkband B2 Black" 0 "P043P8RG2" "1" 19/11/15 31/12/49
 1 "" 1 "Huawei Ascend P LTE 2 Negro" 0 "P043PL2N2" "1" 26/06/13 31/12/49
 1 "" 2 "Huawei Ascend P LTE 2 Negro" 0 "P043PL2N2" "1" 26/06/13 31/12/49
 1 "" 3 "Huawei Ascend P LTE 2 Negro" 0 "P043PL2N2" "1" 26/06/13 31/12/49
@@ -5653,6 +5798,11 @@
 1 "" 3 "Alcatel ONETOUCH POP D5 Blanco" 0 "P045D5SW2" "1" 11/08/14 31/12/49
 1 "" 4 "Alcatel ONETOUCH POP D5 Blanco" 0 "P045D5SW2" "1" 11/08/14 31/12/49
 1 "" 5 "Alcatel ONETOUCH POP D5 White" 0 "P045D5SW2" "1" 11/08/14 31/12/49
+1 "" 1 "Alcatel Onetouch Go Play Blanco- Azul con Onetouch Go Watch Blanco" 0 "P045GPWW2" "1" 19/11/15 31/12/49
+1 "" 2 "Alcatel Onetouch Go Play Blanco y Azul con Onetouch Go Watch Blanco" 0 "P045GPWW2" "1" 19/11/15 31/12/49
+1 "" 3 "Alcatel Onetouch Go Play Blanco y Azul con Onetouch Go Watch Blanco" 0 "P045GPWW2" "1" 19/11/15 31/12/49
+1 "" 4 "Alcatel Onetouch Go Play Blanco y Azul con Onetouch Go Watch Blanco" 0 "P045GPWW2" "1" 19/11/15 31/12/49
+1 "" 5 "Alcatel Onetouch Go Play White-Blue with Onetouch Go Watch White" 0 "P045GPWW2" "1" 19/11/15 31/12/49
 1 "" 1 "Alcatel Onetouch Idol 3 (5.5) Gris" 0 "P045ID3S2" "1" 27/05/15 31/12/49
 1 "" 2 "Alcatel Onetouch Idol 3 (5.5) Gris" 0 "P045ID3S2" "1" 27/05/15 31/12/49
 1 "" 3 "Alcatel Onetouch Idol 3 (5.5) Gris" 0 "P045ID3S2" "1" 27/05/15 31/12/49
@@ -5673,6 +5823,16 @@
 1 "" 3 "Alcatel One Touch Idol S Gris" 0 "P045IDSS2" "1" 28/10/13 31/12/49
 1 "" 4 "Alcatel One Touch Idol S Gris" 0 "P045IDSS2" "1" 28/10/13 31/12/49
 1 "" 5 "ALCATEL ONETOUCH Idol S Grey" 0 "P045IDSS2" "1" 28/10/13 31/12/49
+1 "" 1 "Alcatel Onetouch Pixi 3 (4.5) Negro" 0 "P045P34N2" "1" 02/12/15 31/12/49
+1 "" 2 "Alcatel Onetouch Pixi 3 (4.5) Negro" 0 "P045P34N2" "1" 02/12/15 31/12/49
+1 "" 3 "Alcatel Onetouch Pixi 3 (4.5) Negro" 0 "P045P34N2" "1" 02/12/15 31/12/49
+1 "" 4 "Alcatel Onetouch Pixi 3 (4.5) Negro" 0 "P045P34N2" "1" 02/12/15 31/12/49
+1 "" 5 "Alcatel Onetouch Pixi 3 (4.5) Black" 0 "P045P34N2" "1" 02/12/15 31/12/49
+1 "" 1 "Alcatel Onetouch Pixi 3 (4.5) Blanco" 0 "P045P34W2" "1" 02/12/15 31/12/49
+1 "" 2 "Alcatel Onetouch Pixi 3 (4.5) Blanco" 0 "P045P34W2" "1" 02/12/15 31/12/49
+1 "" 3 "Alcatel Onetouch Pixi 3 (4.5) Blanco" 0 "P045P34W2" "1" 02/12/15 31/12/49
+1 "" 4 "Alcatel Onetouch Pixi 3 (4.5) Blanco" 0 "P045P34W2" "1" 02/12/15 31/12/49
+1 "" 5 "Alcatel Onetouch Pixi 3 (4.5) White" 0 "P045P34W2" "1" 02/12/15 31/12/49
 1 "" 1 "Alcatel ONETOUCH POP 3 (5) Dorado" 0 "P045P3SD2" "1" 25/08/15 31/12/49
 1 "" 2 "Alcatel ONETOUCH POP 3 Dorado" 0 "P045P3SD2" "1" 25/08/15 31/12/49
 1 "" 3 "Alcatel ONETOUCH POP 3 Dorado" 0 "P045P3SD2" "1" 25/08/15 31/12/49
@@ -5824,6 +5984,11 @@
 1 "" 3 "ZTE Blade S6 Blanco" 0 "P075BS6W2" "1" 22/04/15 31/12/49
 1 "" 4 "ZTE Blade S6 Blanco" 0 "P075BS6W2" "1" 22/04/15 31/12/49
 1 "" 5 "ZTE Blade S6 White" 0 "P075BS6W2" "1" 22/04/15 31/12/49
+1 "" 1 "ZTE Blade V6 Gris" 0 "P075BV6G2" "1" 30/11/15 31/12/49
+1 "" 2 "ZTE Blade V6 Gris" 0 "P075BV6G2" "1" 30/11/15 31/12/49
+1 "" 3 "ZTE Blade V6 Gris" 0 "P075BV6G2" "1" 30/11/15 31/12/49
+1 "" 4 "ZTE Blade V6 Gris" 0 "P075BV6G2" "1" 30/11/15 31/12/49
+1 "" 5 "ZTE Blade V6 Grey" 0 "P075BV6G2" "1" 30/11/15 31/12/49
 1 "" 1 "ZTE Blade Vec 4G Negro" 0 "P075BVYN1" "1" 14/10/14 31/12/49
 1 "" 2 "ZTE Blade Vec 4G Negro" 0 "P075BVYN1" "1" 14/10/14 31/12/49
 1 "" 3 "ZTE Blade Vec 4G Negro" 0 "P075BVYN1" "1" 14/10/14 31/12/49
@@ -6019,6 +6184,11 @@
 1 "" 3 "HTC Desire 601 Blanco" 0 "P086601W2" "1" 26/09/13 31/12/49
 1 "" 4 "HTC Desire 601 Blanco" 0 "P086601W2" "1" 26/09/13 31/12/49
 1 "" 5 "HTC Desire 601 White" 0 "P086601W2" "1" 26/09/13 31/12/49
+1 "" 1 "HTC Desire 626 Blanco" 0 "P086626W2" "1" 19/11/15 31/12/49
+1 "" 2 "HTC Desire 626 Blanco" 0 "P086626W2" "1" 19/11/15 31/12/49
+1 "" 3 "HTC Desire 626 Blanco" 0 "P086626W2" "1" 19/11/15 31/12/49
+1 "" 4 "HTC Desire 626 Blanco" 0 "P086626W2" "1" 19/11/15 31/12/49
+1 "" 5 "HTC Desire 626 White" 0 "P086626W2" "1" 19/11/15 31/12/49
 1 "" 1 "HTC Desire 816 Blanco" 0 "P086816W2" "1" 28/07/14 31/12/49
 1 "" 2 "HTC Desire 816 Blanco" 0 "P086816W2" "1" 28/07/14 31/12/49
 1 "" 3 "HTC Desire 816 Blanco" 0 "P086816W2" "1" 28/07/14 31/12/49
@@ -6129,6 +6299,16 @@
 1 "" 3 "BQ Aquaris M5 Blanco" 0 "P088AM5W2" "1" 22/06/15 31/12/49
 1 "" 4 "BQ Aquaris M5 Blanco" 0 "P088AM5W2" "1" 22/06/15 31/12/49
 1 "" 5 "BQ Aquaris M5 White" 0 "P088AM5W2" "1" 22/06/15 31/12/49
+1 "" 1 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
+1 "" 2 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
+1 "" 3 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
+1 "" 4 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
+1 "" 5 "BQ Aquaris X5 Black" 0 "P088AX5N2" "1" 19/11/15 31/12/49
+1 "" 1 "BQ Aquaris X5 Blanco" 0 "P088AX5W2" "1" 19/11/15 31/12/49
+1 "" 2 "BQ Aquaris X5 Blanco" 0 "P088AX5W2" "1" 19/11/15 31/12/49
+1 "" 3 "BQ Aquaris X5 Blanco" 0 "P088AX5W2" "1" 19/11/15 31/12/49
+1 "" 4 "BQ Aquaris X5 Blanco" 0 "P088AX5W2" "1" 19/11/15 31/12/49
+1 "" 5 "BQ Aquaris X5 White" 0 "P088AX5W2" "1" 19/11/15 31/12/49
 1 "" 1 "Hansel PT100 Negro" 0 "P092HPTN1" "1" 27/11/13 31/12/49
 1 "" 2 "Hansel PT100 Negro" 0 "P092HPTN1" "1" 27/11/13 31/12/49
 1 "" 3 "Hansel PT100 Negro" 0 "P092HPTN1" "1" 27/11/13 31/12/49
@@ -6319,11 +6499,11 @@
 1 "" 3 "iPhone 5s 16 GB Gris" 0 "P0975S6S2" "1" 23/10/13 31/12/49
 1 "" 4 "iPhone 5s 16 GB Gris" 0 "P0975S6S2" "1" 23/10/13 31/12/49
 1 "" 5 "iPhone 5s 16 GB Silver" 0 "P0975S6S2" "1" 23/10/13 31/12/49
-1 "" 1 "iPhone 5s 32 GB Gold" 0 "P0975SPD2" "1" 17/11/14 31/12/49
+1 "" 1 "iPhone 5s 32 GB Oro" 0 "P0975SPD2" "1" 17/11/14 31/12/49
 1 "" 2 "iPhone 5s 32 GB Gold" 0 "P0975SPD2" "1" 17/11/14 31/12/49
 1 "" 3 "iPhone 5s 32 GB Gold" 0 "P0975SPD2" "1" 17/11/14 31/12/49
 1 "" 4 "iPhone 5s 32 GB Gold" 0 "P0975SPD2" "1" 17/11/14 31/12/49
-1 "" 5 "iPhone 5s 32 GB Oro" 0 "P0975SPD2" "1" 17/11/14 31/12/49
+1 "" 5 "iPhone 5s 32 GB Gold" 0 "P0975SPD2" "1" 17/11/14 31/12/49
 1 "" 1 "iPhone 5s 32 GB Gris" 0 "P0975SPN2" "1" 17/11/14 31/12/49
 1 "" 2 "iPhone 5s 32 GB Gris" 0 "P0975SPN2" "1" 17/11/14 31/12/49
 1 "" 3 "iPhone 5s 32 GB Gris" 0 "P0975SPN2" "1" 17/11/14 31/12/49
@@ -6349,11 +6529,51 @@
 1 "" 3 "iPhone 6 16 GB Plata" 0 "P097616S2" "1" 24/09/14 31/12/49
 1 "" 4 "iPhone 6 16 GB Plata" 0 "P097616S2" "1" 24/09/14 31/12/49
 1 "" 5 "iPhone 6 16 GB Silver" 0 "P097616S2" "1" 24/09/14 31/12/49
-1 "" 1 "iPhone 6 64 GB" 0 "P097664D2" "1" 09/09/15 31/12/49
+1 "" 1 "iPhone 6 128 GB Oro" 0 "P097628D2" "1" 27/11/15 31/12/49
+1 "" 2 "iPhone 6 128 GB Oro" 0 "P097628D2" "1" 27/11/15 31/12/49
+1 "" 3 "iPhone 6 128 GB Oro" 0 "P097628D2" "1" 27/11/15 31/12/49
+1 "" 4 "iPhone 6 128 GB Oro" 0 "P097628D2" "1" 27/11/15 31/12/49
+1 "" 5 "iPhone 6 128 GB Gold" 0 "P097628D2" "1" 27/11/15 31/12/49
+1 "" 1 "iPhone 6 128 GB Gris" 0 "P097628G2" "1" 27/11/15 31/12/49
+1 "" 2 "iPhone 6 128 GB Gris" 0 "P097628G2" "1" 27/11/15 31/12/49
+1 "" 3 "iPhone 6 128 GB Gris" 0 "P097628G2" "1" 27/11/15 31/12/49
+1 "" 4 "iPhone 6 128 GB Gris" 0 "P097628G2" "1" 27/11/15 31/12/49
+1 "" 5 "iPhone 6 128 GB Space Grey" 0 "P097628G2" "1" 27/11/15 31/12/49
+1 "" 1 "iPhone 6 128 GB Plata" 0 "P097628S2" "1" 27/11/15 31/12/49
+1 "" 2 "iPhone 6 128 GB Plata" 0 "P097628S2" "1" 27/11/15 31/12/49
+1 "" 3 "iPhone 6 128 GB Plata" 0 "P097628S2" "1" 27/11/15 31/12/49
+1 "" 4 "iPhone 6 128 GB Plata" 0 "P097628S2" "1" 27/11/15 31/12/49
+1 "" 5 "iPhone 6 128 GB Silver" 0 "P097628S2" "1" 27/11/15 31/12/49
+1 "" 1 "iPhone 6 64 GB Oro" 0 "P097664D2" "1" 09/09/15 31/12/49
 1 "" 2 "iPhone 6 64 GB" 0 "P097664D2" "1" 09/09/15 31/12/49
 1 "" 3 "iPhone 6 64 GB" 0 "P097664D2" "1" 09/09/15 31/12/49
 1 "" 4 "iPhone 6 64 GB" 0 "P097664D2" "1" 09/09/15 31/12/49
-1 "" 5 "iPhone 6 64 GB" 0 "P097664D2" "1" 09/09/15 31/12/49
+1 "" 5 "iPhone 6 64 GB Gold" 0 "P097664D2" "1" 09/09/15 31/12/49
+1 "" 1 "iPhone 6 64 GB Gris" 0 "P097664N2" "1" 26/11/15 31/12/49
+1 "" 2 "iPhone 6 64 GB Gris" 0 "P097664N2" "1" 26/11/15 31/12/49
+1 "" 3 "iPhone 6 64 GB Gris" 0 "P097664N2" "1" 26/11/15 31/12/49
+1 "" 4 "iPhone 6 64 GB Gris" 0 "P097664N2" "1" 26/11/15 31/12/49
+1 "" 5 "iPhone 6 64 GB Space Grey" 0 "P097664N2" "1" 26/11/15 31/12/49
+1 "" 1 "iPhone 6 64 GB Plata" 0 "P097664S2" "1" 27/11/15 31/12/49
+1 "" 2 "iPhone 6 64 GB Plata" 0 "P097664S2" "1" 27/11/15 31/12/49
+1 "" 3 "iPhone 6 64 GB Plata" 0 "P097664S2" "1" 27/11/15 31/12/49
+1 "" 4 "iPhone 6 64 GB Plata" 0 "P097664S2" "1" 27/11/15 31/12/49
+1 "" 5 "iPhone 6 64 GB Silver" 0 "P097664S2" "1" 27/11/15 31/12/49
+1 "" 1 "iPhone 6 Plus 64 GB Oro" 0 "P0976P4D2" "1" 27/11/15 31/12/49
+1 "" 2 "iPhone 6 Plus 64 GB Oro" 0 "P0976P4D2" "1" 27/11/15 31/12/49
+1 "" 3 "iPhone 6 Plus 64 GB Oro" 0 "P0976P4D2" "1" 27/11/15 31/12/49
+1 "" 4 "iPhone 6 Plus 64 GB Oro" 0 "P0976P4D2" "1" 27/11/15 31/12/49
+1 "" 5 "iPhone 6 Plus 64 GB Gold" 0 "P0976P4D2" "1" 27/11/15 31/12/49
+1 "" 1 "iPhone 6 Plus 64 GB Gris" 0 "P0976P4G2" "1" 27/11/15 31/12/49
+1 "" 2 "iPhone 6 Plus 64 GB Gris" 0 "P0976P4G2" "1" 27/11/15 31/12/49
+1 "" 3 "iPhone 6 Plus 64 GB Gris" 0 "P0976P4G2" "1" 27/11/15 31/12/49
+1 "" 4 "iPhone 6 Plus 64 GB Gris" 0 "P0976P4G2" "1" 27/11/15 31/12/49
+1 "" 5 "iPhone 6 Plus 64 GB Space Grey" 0 "P0976P4G2" "1" 27/11/15 31/12/49
+1 "" 1 "iPhone 6 Plus 64 GB Plata" 0 "P0976P4S2" "1" 27/11/15 31/12/49
+1 "" 2 "iPhone 6 Plus 64 GB Plata" 0 "P0976P4S2" "1" 27/11/15 31/12/49
+1 "" 3 "iPhone 6 Plus 64 GB Plata" 0 "P0976P4S2" "1" 27/11/15 31/12/49
+1 "" 4 "iPhone 6 Plus 64 GB Plata" 0 "P0976P4S2" "1" 27/11/15 31/12/49
+1 "" 5 "iPhone 6 Plus 64 GB Silver" 0 "P0976P4S2" "1" 27/11/15 31/12/49
 1 "" 1 "iPhone 6 Plus 16 GB Oro" 0 "P0976P6D2" "1" 24/09/14 31/12/49
 1 "" 2 "iPhone 6 Plus 16 GB Oro" 0 "P0976P6D2" "1" 24/09/14 31/12/49
 1 "" 3 "iPhone 6 Plus 16 GB Oro" 0 "P0976P6D2" "1" 24/09/14 31/12/49
@@ -6369,16 +6589,66 @@
 1 "" 3 "iPhone 6 Plus 16 GB Plata" 0 "P0976P6S2" "1" 24/09/14 31/12/49
 1 "" 4 "iPhone 6 Plus 16 GB Plata" 0 "P0976P6S2" "1" 24/09/14 31/12/49
 1 "" 5 "iPhone 6 Plus 16 GB Silver" 0 "P0976P6S2" "1" 24/09/14 31/12/49
+1 "" 1 "iPhone 6 Plus 128 GB Oro" 0 "P0976P8D2" "1" 27/11/15 31/12/49
+1 "" 2 "iPhone 6 Plus 128 GB Oro" 0 "P0976P8D2" "1" 27/11/15 31/12/49
+1 "" 3 "iPhone 6 Plus 128 GB Oro" 0 "P0976P8D2" "1" 27/11/15 31/12/49
+1 "" 4 "iPhone 6 Plus 128 GB Oro" 0 "P0976P8D2" "1" 27/11/15 31/12/49
+1 "" 5 "iPhone 6 Plus 128 GB Gold" 0 "P0976P8D2" "1" 27/11/15 31/12/49
+1 "" 1 "iPhone 6 Plus 128 GB Gris" 0 "P0976P8G2" "1" 27/11/15 31/12/49
+1 "" 2 "iPhone 6 Plus 128 GB Gris" 0 "P0976P8G2" "1" 27/11/15 31/12/49
+1 "" 3 "iPhone 6 Plus 128 GB Gris" 0 "P0976P8G2" "1" 27/11/15 31/12/49
+1 "" 4 "iPhone 6 Plus 128 GB Gris" 0 "P0976P8G2" "1" 27/11/15 31/12/49
+1 "" 5 "iPhone 6 Plus 128 GB Space Grey" 0 "P0976P8G2" "1" 27/11/15 31/12/49
+1 "" 1 "iPhone 6 Plus 128 GB Plata" 0 "P0976P8S2" "1" 27/11/15 31/12/49
+1 "" 2 "iPhone 6 Plus 128 GB Plata" 0 "P0976P8S2" "1" 27/11/15 31/12/49
+1 "" 3 "iPhone 6 Plus 128 GB Plata" 0 "P0976P8S2" "1" 27/11/15 31/12/49
+1 "" 4 "iPhone 6 Plus 128 GB Plata" 0 "P0976P8S2" "1" 27/11/15 31/12/49
+1 "" 5 "iPhone 6 Plus 128 GB Silver" 0 "P0976P8S2" "1" 27/11/15 31/12/49
 1 "" 1 "iPhone 6s 128 GB Oro" 0 "P0976S1D2" "1" 29/09/15 31/12/49
 1 "" 2 "iPhone 6s 128 GB Oro" 0 "P0976S1D2" "1" 29/09/15 31/12/49
 1 "" 3 "iPhone 6s 128 GB Oro" 0 "P0976S1D2" "1" 29/09/15 31/12/49
 1 "" 4 "iPhone 6s 128 GB Oro" 0 "P0976S1D2" "1" 29/09/15 31/12/49
 1 "" 5 "iPhone 6s 128 GB Gold" 0 "P0976S1D2" "1" 29/09/15 31/12/49
+1 "" 1 "iPhone 6s 128 GB Gris" 0 "P0976S1G2" "1" 26/11/15 31/12/49
+1 "" 2 "iPhone 6s 128 GB Gris" 0 "P0976S1G2" "1" 26/11/15 31/12/49
+1 "" 3 "iPhone 6s 128 GB Gris" 0 "P0976S1G2" "1" 26/11/15 31/12/49
+1 "" 4 "iPhone 6s 128 GB Gris" 0 "P0976S1G2" "1" 26/11/15 31/12/49
+1 "" 5 "iPhone 6s 128 GB Space Grey" 0 "P0976S1G2" "1" 26/11/15 31/12/49
+1 "" 1 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P0976S1P2" "1" 25/11/15 31/12/49
+1 "" 2 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P0976S1P2" "1" 25/11/15 31/12/49
+1 "" 3 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P0976S1P2" "1" 25/11/15 31/12/49
+1 "" 4 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P0976S1P2" "1" 25/11/15 31/12/49
+1 "" 5 "iPhone 6s Plus 128 GB Rose Gold" 0 "P0976S1P2" "1" 25/11/15 31/12/49
+1 "" 1 "iPhone 6s 128 GB Oro Rosa" 0 "P0976S1R2" "1" 26/11/15 31/12/49
+1 "" 2 "iPhone 6s 128 GB Oro Rosa" 0 "P0976S1R2" "1" 26/11/15 31/12/49
+1 "" 3 "iPhone 6s 128 GB Oro Rosa" 0 "P0976S1R2" "1" 26/11/15 31/12/49
+1 "" 4 "iPhone 6s 128 GB Oro Rosa" 0 "P0976S1R2" "1" 26/11/15 31/12/49
+1 "" 5 "iPhone 6s 128 GB Rose Gold" 0 "P0976S1R2" "1" 26/11/15 31/12/49
+1 "" 1 "iPhone 6s 128 GB Plata" 0 "P0976S1S2" "1" 26/11/15 31/12/49
+1 "" 2 "iPhone 6s 128 GB Plata" 0 "P0976S1S2" "1" 26/11/15 31/12/49
+1 "" 3 "iPhone 6s 128 GB Plata" 0 "P0976S1S2" "1" 26/11/15 31/12/49
+1 "" 4 "iPhone 6s 128 GB Plata" 0 "P0976S1S2" "1" 26/11/15 31/12/49
+1 "" 5 "iPhone 6s 128 GB Silver" 0 "P0976S1S2" "1" 26/11/15 31/12/49
 1 "" 1 "iPhone 6s 64 GB Oro" 0 "P0976S6D2" "1" 29/09/15 31/12/49
 1 "" 2 "iPhone 6s Oro rosa" 0 "P0976S6D2" "1" 29/09/15 31/12/49
 1 "" 3 "iPhone 6s Oro rosa" 0 "P0976S6D2" "1" 29/09/15 31/12/49
 1 "" 4 "iPhone 6s Oro rosa" 0 "P0976S6D2" "1" 29/09/15 31/12/49
 1 "" 5 "iPhone 6s 64 GB Gold" 0 "P0976S6D2" "1" 29/09/15 31/12/49
+1 "" 1 "iPhone 6s 64 GB Gris" 0 "P0976S6G2" "1" 19/11/15 31/12/49
+1 "" 2 "iPhone 6s 64 GB Gris" 0 "P0976S6G2" "1" 19/11/15 31/12/49
+1 "" 3 "iPhone 6s 64 GB Gris" 0 "P0976S6G2" "1" 19/11/15 31/12/49
+1 "" 4 "iPhone 6s 64 GB Gris" 0 "P0976S6G2" "1" 19/11/15 31/12/49
+1 "" 5 "iPhone 6s 64 GB Space Grey" 0 "P0976S6G2" "1" 19/11/15 31/12/49
+1 "" 1 "iPhone 6s 64GB Oro Rosa" 0 "P0976S6R2" "1" 19/11/15 31/12/49
+1 "" 2 "iPhone 6s 64GB Oro Rosa" 0 "P0976S6R2" "1" 19/11/15 31/12/49
+1 "" 3 "iPhone 6s 64GB Oro Rosa" 0 "P0976S6R2" "1" 19/11/15 31/12/49
+1 "" 4 "iPhone 6s 64GB Oro Rosa" 0 "P0976S6R2" "1" 19/11/15 31/12/49
+1 "" 5 "iPhone 6s 64 GB Rose Gold" 0 "P0976S6R2" "1" 19/11/15 31/12/49
+1 "" 1 "iPhone 6s 64 GB Plata" 0 "P0976S6S2" "1" 19/11/15 31/12/49
+1 "" 2 "iPhone 6s 64 GB Plata" 0 "P0976S6S2" "1" 19/11/15 31/12/49
+1 "" 3 "iPhone 6s 64 GB Plata" 0 "P0976S6S2" "1" 19/11/15 31/12/49
+1 "" 4 "iPhone 6s 64 GB Plata" 0 "P0976S6S2" "1" 19/11/15 31/12/49
+1 "" 5 "iPhone 6s 64 GB Silver" 0 "P0976S6S2" "1" 19/11/15 31/12/49
 1 "" 1 "iPhone 6s Plus 16 GB Oro" 0 "P0976SPD2" "1" 29/09/15 31/12/49
 1 "" 2 "iPhone 6s Plus Oro" 0 "P0976SPD2" "1" 29/09/15 31/12/49
 1 "" 3 "iPhone 6s Plus Oro" 0 "P0976SPD2" "1" 29/09/15 31/12/49
@@ -6409,11 +6679,36 @@
 1 "" 3 "iPhone 6s Plus 128 GB Oro" 0 "P097SP1D2" "1" 29/09/15 31/12/49
 1 "" 4 "iPhone 6s Plus 128 GB Oro" 0 "P097SP1D2" "1" 29/09/15 31/12/49
 1 "" 5 "iPhone 6s Plus 128 GB Gold" 0 "P097SP1D2" "1" 29/09/15 31/12/49
+1 "" 1 "iPhone 6s Plus 128 GB Gris" 0 "P097SP1G2" "1" 26/11/15 31/12/49
+1 "" 2 "iPhone 6s Plus 128 GB Gris" 0 "P097SP1G2" "1" 26/11/15 31/12/49
+1 "" 3 "iPhone 6s Plus 128 GB Gris" 0 "P097SP1G2" "1" 26/11/15 31/12/49
+1 "" 4 "iPhone 6s Plus 128 GB Gris" 0 "P097SP1G2" "1" 26/11/15 31/12/49
+1 "" 5 "iPhone 6s Plus 128 GB Space Grey" 0 "P097SP1G2" "1" 26/11/15 31/12/49
+1 "" 1 "iPhone 6s Plus 128 GB Plata" 0 "P097SP1S2" "1" 26/11/15 31/12/49
+1 "" 2 "iPhone 6s Plus 128 GB Plata" 0 "P097SP1S2" "1" 26/11/15 31/12/49
+1 "" 3 "iPhone 6s Plus 128 GB Plata" 0 "P097SP1S2" "1" 26/11/15 31/12/49
+1 "" 4 "iPhone 6s Plus 128 GB Plata" 0 "P097SP1S2" "1" 26/11/15 31/12/49
+1 "" 5 "iPhone 6s Plus 128 GB Silver" 0 "P097SP1S2" "1" 26/11/15 31/12/49
 1 "" 1 "iPhone 6s Plus 64 GB Oro" 0 "P097SP6D2" "1" 29/09/15 31/12/49
 1 "" 2 "iPhone 6s Plus 64 GB Oro" 0 "P097SP6D2" "1" 29/09/15 31/12/49
 1 "" 3 "iPhone 6s Plus 64 GB Oro" 0 "P097SP6D2" "1" 29/09/15 31/12/49
 1 "" 4 "iPhone 6s Plus 64 GB Oro" 0 "P097SP6D2" "1" 29/09/15 31/12/49
 1 "" 5 "iPhone 6s Plus 64 GB Gold" 0 "P097SP6D2" "1" 29/09/15 31/12/49
+1 "" 1 "iPhone 6s Plus 64 GB Gris" 0 "P097SP6G2" "1" 26/11/15 31/12/49
+1 "" 2 "iPhone 6s Plus 64 GB Gris" 0 "P097SP6G2" "1" 26/11/15 31/12/49
+1 "" 3 "iPhone 6s Plus 64 GB Gris" 0 "P097SP6G2" "1" 26/11/15 31/12/49
+1 "" 4 "iPhone 6s Plus 64 GB Gris" 0 "P097SP6G2" "1" 26/11/15 31/12/49
+1 "" 5 "iPhone 6s Plus 64 GB Space Grey" 0 "P097SP6G2" "1" 26/11/15 31/12/49
+1 "" 1 "iPhone 6s Plus 64 GB Oro Rosa" 0 "P097SP6R2" "1" 26/11/15 31/12/49
+1 "" 2 "iPhone 6s Plus 64 GB Oro Rosa" 0 "P097SP6R2" "1" 26/11/15 31/12/49
+1 "" 3 "iPhone 6s Plus 64 GB Oro Rosa" 0 "P097SP6R2" "1" 26/11/15 31/12/49
+1 "" 4 "iPhone 6s Plus 64 GB Oro Rosa" 0 "P097SP6R2" "1" 26/11/15 31/12/49
+1 "" 5 "iPhone 6s Plus 64 GB Rose Gold" 0 "P097SP6R2" "1" 26/11/15 31/12/49
+1 "" 1 "iPhone 6s Plus 64 GB Plata" 0 "P097SP6S2" "1" 26/11/15 31/12/49
+1 "" 2 "iPhone 6s Plus 64 GB Plata" 0 "P097SP6S2" "1" 26/11/15 31/12/49
+1 "" 3 "iPhone 6s Plus 64 GB Plata" 0 "P097SP6S2" "1" 26/11/15 31/12/49
+1 "" 4 "iPhone 6s Plus 64 GB Plata" 0 "P097SP6S2" "1" 26/11/15 31/12/49
+1 "" 5 "iPhone 6s Plus 64 GB Silver" 0 "P097SP6S2" "1" 26/11/15 31/12/49
 1 "" 1 "LG GU280 Gris" 0 "P0P030GU2S2" "1" 18/03/10 31/12/49
 1 "" 2 "LG GU280 Gris" 0 "P0P030GU2S2" "1" 18/03/10 31/12/49
 1 "" 3 "LG GU280 Gris" 0 "P0P030GU2S2" "1" 18/03/10 31/12/49
@@ -6456,9 +6751,8 @@
 1 "" 5 "Cost/month to buy laptop" 0 "PAYTERM18" "1" 16/03/10 31/08/11
 1 "" 5 "Laptop purchase payments outstanding" 0 "PAYTERM18" "1" 01/03/10 15/03/10
 1 "" 1 "Cuota Pago a Plazos UNO-E" 0 "PAYTERM1E" "1" 01/06/13 31/12/49
-1 "" 2 "Quota Pagament a Terminis UNO-E" 0 "PAYTERM1E" "1" 01/06/13 31/12/40
+1 "" 2 "Quota Pagament a Terminis UNO-E" 0 "PAYTERM1E" "1" 01/06/13 31/12/49
 1 "" 3 "Epekako ordainketaren kuota, UNO-E bidez" 0 "PAYTERM1E" "1" 01/03/14 31/12/49
-1 "" 3 "Epekako ordainketaren kuota, UNO-E erakundearen bidez" 0 "PAYTERM1E" "1" 01/06/13 28/02/14
 1 "" 5 "Installment payable to UNO-E for purchase" 0 "PAYTERM1E" "1" 01/06/13 31/12/49
 1 "" 1 "Cuota Pago a Plazos" 0 "PAYTERM24" "1" 01/04/12 31/12/49
 1 "" 1 "Pago mensual compra móvil o portátil" 0 "PAYTERM24" "1" 01/09/11 31/03/12
@@ -6997,6 +7291,22 @@
 1 "" 2 "Abonament Pagament Final per devolució del mòbil" 0 "RVTERMBSFD" "1" 01/05/14 31/12/49
 1 "" 3 "Azken ordainketaren itzulera mugikorra itzultzeagatik" 0 "RVTERMBSFD" "1" 01/05/14 31/12/49
 1 "" 5 "Meeting the final payment by returning the mobile" 0 "RVTERMBSFD" "1" 01/05/14 31/12/49
+1 "" 1 "Descuento del Pago Final." 0 "RVTERMDTEQ25" "1" 27/11/15 31/12/49
+1 "" 2 "Descompte del Pagament Final." 0 "RVTERMDTEQ25" "1" 27/11/15 31/12/49
+1 "" 3 "Azken ordainketako deskontua." 0 "RVTERMDTEQ25" "1" 27/11/15 31/12/49
+1 "" 5 "Discount on Final Payment" 0 "RVTERMDTEQ25" "1" 27/11/15 31/12/49
+1 "" 1 "Descuento sobre Pago Final por Renuevo." 0 "RVTERMDTRW" "1" 27/11/15 31/12/49
+1 "" 2 "Descompte sobre el Pagament Final per Renuevo." 0 "RVTERMDTRW" "1" 27/11/15 31/12/49
+1 "" 3 "Azken ordainketako deskontua Renuevogatik." 0 "RVTERMDTRW" "1" 27/11/49 31/12/49
+1 "" 5 "Discount on Final Payment for Renuevo" 0 "RVTERMDTRW" "1" 27/11/15 31/12/49
+1 "" 1 "Descuento del Pago Final." 0 "RVTERMDTTD" "1" 27/11/15 31/12/49
+1 "" 2 "Descompte del Pagament Final." 0 "RVTERMDTTD" "1" 27/11/15 31/12/49
+1 "" 3 "Azken ordainketako deskontua." 0 "RVTERMDTTD" "1" 27/11/15 31/12/49
+1 "" 5 "Discount on Final Payment" 0 "RVTERMDTTD" "1" 27/11/15 31/12/49
+1 "" 1 "Descuento del Pago Final por devolver móvil." 0 "RVTERMDTTR" "1" 27/11/15 31/12/49
+1 "" 2 "Descompte del Pagament Final per retornar el mòbil." 0 "RVTERMDTTR" "1" 27/11/15 31/12/49
+1 "" 3 "Azken ordainketako deskontua mobila itzultzeagatik." 0 "RVTERMDTTR" "1" 27/11/15 31/12/49
+1 "" 5 "Discount on Final Payment for returning mobile" 0 "RVTERMDTTR" "1" 27/11/15 31/12/49
 1 "" 1 "Pago Final" 0 "RVTERMF" "1" 01/02/14 31/12/49
 1 "" 2 "Pagament Final" 0 "RVTERMF" "1" 01/02/14 31/12/49
 1 "" 3 "Azken ordainketa" 0 "RVTERMF" "1" 01/02/14 31/12/49
@@ -7062,16 +7372,21 @@
 1 "" 3 "Iraupen-konpromisoa ez betetzea" 0 "STERMPERIOD" "1" 01/07/12 30/09/12
 1 "" 5 "Early termination of La Infinita contract period" 0 "STERMPERIOD" "1" 01/10/12 31/12/49
 1 "" 5 "Failure to comply with Minimum Contract Period" 0 "STERMPERIOD" "1" 01/07/12 30/09/12
-1 "" 1 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
+1 "" 1 "Huawei P8 Lite" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 2 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 3 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 4 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
-1 "" 5 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
+1 "" 5 "Huawei P8 Lite" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 1 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
 1 "" 2 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
 1 "" 3 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
 1 "" 4 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
 1 "" 5 "sumi" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
+1 "" 1 "Sony Xperia Z5 Premium" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
+1 "" 2 "Huawei P8 Lite" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
+1 "" 3 "Huawei P8 Lite" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
+1 "" 4 "Huawei P8 Lite" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
+1 "" 5 "Sony Xperia Z5 Premium" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
 1 "" 1 "Incumplimiento de Permanencia" 0 "TERMPERIOD" "1" 01/04/12 31/12/49
 1 "" 1 "Penalización" 0 "TERMPERIOD" "1" 01/01/06 31/03/12
 1 "" 2 "Incompliment de Permanència" 0 "TERMPERIOD" "1" 01/04/12 31/12/49

@@ -18,6 +18,7 @@
 
 FUNCTION fValidateBankFileRequest RETURNS LOG (
    INPUT  icBankCode AS CHAR,
+   INPUT  iiReqType  AS INT,
    OUTPUT ocError AS CHAR,
    OUTPUT odaLastDump AS DATE):
    
@@ -29,7 +30,7 @@ FUNCTION fValidateBankFileRequest RETURNS LOG (
    IF CAN-FIND(
       FIRST MsRequest NO-LOCK WHERE
             MsRequest.Brand = gcBrand AND
-            MsRequest.ReqType = {&REQTYPE_TERMINAL_FINANCE_BANK_FILE} AND
+            MsRequest.ReqType = iiReqType AND
             MsRequest.ReqCparam1 = icBankCode AND
       LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0) THEN DO:
       ocError = "Ongoing request".
@@ -38,7 +39,7 @@ FUNCTION fValidateBankFileRequest RETURNS LOG (
 
    FOR EACH MsRequest NO-LOCK WHERE
             MsRequest.Brand = gcBrand AND
-            MsRequest.ReqType = {&REQTYPE_TERMINAL_FINANCE_BANK_FILE} AND
+            MsRequest.ReqType = iiReqType AND
             MsRequest.ReqCparam1 = icBankCode
       BY ActStamp DESC:
 
@@ -73,6 +74,7 @@ FUNCTION fCreateBankFileRequest RETURNS INTEGER
 
    IF NOT fValidateBankFileRequest(
       icBankCode,
+      {&REQTYPE_TERMINAL_FINANCE_BANK_FILE},
       OUTPUT ocresult,
       OUTPUT ldaLastDump) THEN RETURN 0.
 
@@ -96,33 +98,52 @@ END FUNCTION. /* FUNCTION fSendeInvoiceRequest */
    
 
 FUNCTION fOrderContainsFinancedTerminal RETURNS CHAR
-   (INPUT iiOrderId AS INT):
+   (INPUT iiOrderId  AS INT,
+    INPUT icDCEvent AS CHAR):
 
    DEF BUFFER Order FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
-
-   FOR FIRST Order NO-LOCK WHERE
-             Order.Brand  = gcBrand AND
-             Order.OrderID = iiOrderId,
-       FIRST OrderCustomer NO-LOCK WHERE
-             OrderCustomer.Brand = gcBrand AND
-             OrderCustomer.Order = iiOrderId AND
-             OrderCustomer.RowType = 1:
-   
-      IF NOT OrderCustomer.Profession > "" THEN RETURN  {&TF_STATUS_YOIGO}.
-      IF LOOKUP(OrderCustomer.CustIdType,"NIF,NIE") = 0 THEN
-         RETURN {&TF_STATUS_YOIGO}.
       
-      IF CAN-FIND(FIRST OfferItem NO-LOCK WHERE
-                        OfferItem.Brand       = gcBrand        AND
-                        OfferItem.Offer       = Order.Offer    AND
-                        OfferItem.ItemType    = "PerContract"  AND
-                        OfferItem.ItemKey BEGINS "PAYTERM"     AND
-                        OfferItem.EndStamp   >= Order.CrStamp  AND
-                        OfferItem.BeginStamp <= Order.CrStamp) THEN DO:
-         RETURN (IF INDEX(Order.OrderChannel,"POS") > 0
-                 THEN {&TF_STATUS_WAITING_SENDING}
-                 ELSE {&TF_STATUS_HOLD_SENDING}).
+   FIND Order NO-LOCK WHERE
+        Order.Brand  = gcBrand AND
+        Order.OrderID = iiOrderId NO-ERROR.
+   IF NOT AVAIL Order THEN
+      RETURN {&TF_STATUS_YOIGO}.
+
+   IF icDCEvent = "RVTERM12" THEN DO:
+
+      IF CAN-FIND(FIRST SingleFee WHERE
+                        SingleFee.Brand       = gcBrand AND
+                        SingleFee.Custnum     = Order.CustNum AND
+                        SingleFee.HostTable   = "MobSub" AND
+                        SingleFee.KeyValue    = STRING(Order.MsSeq) AND
+                        SingleFee.OrderId     = iiOrderId AND
+                        LOOKUP(SingleFee.BillCode,
+                               {&TF_BANK_RVTERM_BILLCODES}) > 0) THEN
+         RETURN {&TF_STATUS_WAITING_SENDING}.
+   END.
+   ELSE IF icDCEvent BEGINS "PAYTERM" THEN DO:
+   
+      FOR FIRST OrderCustomer NO-LOCK WHERE
+                OrderCustomer.Brand = gcBrand AND
+                OrderCustomer.Order = iiOrderId AND
+                OrderCustomer.RowType = 1:
+      
+         IF NOT OrderCustomer.Profession > "" THEN RETURN  {&TF_STATUS_YOIGO}.
+         IF LOOKUP(OrderCustomer.CustIdType,"NIF,NIE") = 0 THEN
+            RETURN {&TF_STATUS_YOIGO}.
+
+         IF CAN-FIND(FIRST OfferItem NO-LOCK WHERE
+                           OfferItem.Brand       = gcBrand        AND
+                           OfferItem.Offer       = Order.Offer    AND
+                           OfferItem.ItemType    = "PerContract"  AND
+                           OfferItem.ItemKey BEGINS "PAYTERM"     AND
+                           OfferItem.EndStamp   >= Order.CrStamp  AND
+                           OfferItem.BeginStamp <= Order.CrStamp) THEN DO:
+            RETURN (IF INDEX(Order.OrderChannel,"POS") > 0
+                    THEN {&TF_STATUS_WAITING_SENDING}
+                    ELSE {&TF_STATUS_HOLD_SENDING}).
+         END.
       END.
    END.
 
@@ -204,5 +225,40 @@ FUNCTION fGetPaytermOrderId RETURNS INT
 
 END.
 
+/*  This create Request for bank files is related into YDR-2025
+   - terminal finance cancellation report AND log file
+   - terminal finance termination report AND log file
+   these are for SABADELL AND UNOE banks monhtly based periods
+*/
+FUNCTION fCreateTFBankFileRequest RETURNS INTEGER
+   (INPUT  icBankCode  AS CHAR,
+    INPUT  iccreator   AS CHAR,
+    INPUT  icsource    AS CHAR,
+    OUTPUT ocresult    AS CHAR).
+
+   DEF VAR liReqCreated AS INT NO-UNDO.
+   DEF VAR ldaLastDump AS DATE NO-UNDO. 
+
+   IF NOT fValidateBankFileRequest(
+      icBankCode,
+      {&REQTYPE_TERMINAL_FINANCE_CAN_TER_BANK_FILE},
+      OUTPUT ocresult,
+      OUTPUT ldaLastDump) THEN RETURN 0.
+
+   fCreateRequest(({&REQTYPE_TERMINAL_FINANCE_CAN_TER_BANK_FILE}),
+                  fmakets(),
+                  iccreator,
+                  FALSE,      /* fees */
+                  FALSE).    /* send sms */
+
+   ASSIGN bCreaReq.ReqSource   = icsource
+          bCreaReq.ReqCParam1  = icBankCode
+          liReqCreated         = bCreaReq.MsRequest.
+
+   RELEASE bCreaReq.
+   
+   RETURN liReqCreated.
+     
+END FUNCTION. /* FUNCTION fSendeInvoiceRequest */
 &ENDIF
 

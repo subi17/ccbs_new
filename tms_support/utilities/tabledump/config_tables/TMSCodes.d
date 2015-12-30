@@ -133,6 +133,7 @@
 "BundleToCLIType" "CLIType" "Bundles" "MDUB" "Bundle To CLIType Conversion" "" "CONTRD3" 1
 "BundleToCoName" "Bundle" "Bundles" "DATA5" "TMS Bundle Id to Commercial Bundle Name" "" "Bono5|22622" 1
 "BundleToCoName" "Bundle" "Bundles" "DATA6" "TMS Bundle Id to Commercial Bundle Name" "" "Bono6|22622" 1
+"BundleToCoName" "Bundle" "Bundles" "DATA7" "TMS Bundle Id to Commercial Bundle Name" "" "Bono7|22622" 1
 "BundleToCoName" "Bundle" "Bundles" "MDUB" "TMS Bundle Id to Commercial Bundle Name" "" "Bono8|22642" 1
 "BundleToCoName" "Bundle" "Bundles" "MDUB2" "TMS Bundle Id to Commercial Bundle Name" "" "Bono15|22644" 1
 "BundleToCoName" "Bundle" "Bundles" "MDUB3" "TMS Bundle Id to Commercial Bundle Name" "" "Bono25|22644" 1
@@ -170,6 +171,7 @@
 "CallAlarm" "CreditType" "SMS" "44" "SMS invoice" "" "3" 1
 "CallAlarm" "CreditType" "SMS" "45" "MNP Retention" "" "" 1
 "CallAlarm" "CreditType" "SMS" "46" "Marketing" "" "9" 1
+"CallAlarm" "CreditType" "SMS" "48" "MNP In cancell code" "" "1" 1
 "CallAlarm" "CreditType" "SMS" "5" "SMS reminder" "" "" 1
 "CallAlarm" "CreditType" "SMS" "6" "CLI type change" "" "" 1
 "CallAlarm" "CreditType" "SMS" "66" "Debt lock" "" "" 1
@@ -1309,6 +1311,7 @@
 "requem" "89,0,1,2,3,4" "SubsLMenu" "1" "Terminal Financing Bank File" "" "" 1
 "requem" "9,0,1,2,3,4,7,9" "SubsLMenu" "1" "Periodical contract termination" "" "" 1
 "requem" "90,0,1,2,3,4,9" "SubsLMenu" "1" "Fusion invoice email" "" "" 1
+"requem" "91,0,1,2,3,4" "SubsLMenu" "1" "Bank termination/cancellation file" "" "" 1
 "RequestAction" "Action" "Request" "1" "Create" "" "" 1
 "RequestAction" "Action" "Request" "11" "Term-PenaltyFee" "" "" 1
 "RequestAction" "Action" "Request" "12" "Init-Terminate" "" "" 1
