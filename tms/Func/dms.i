@@ -297,6 +297,10 @@ FUNCTION fGenerateMessage RETURNS CHAR
    DEF VAR lcDocList AS CHAR NO-UNDO. /*Plain list if required doc numbers*/
    DEF VAR i AS INT NO-UNDO.
    DEF VAR lcDocNotifEntry AS CHAR NO-UNDO.
+   DEF VAR lcVersion AS CHAR NO-UNDO.
+   DEF VAR lcRecEmail AS CHAR NO-UNDO.
+   DEF VAR lcRecMSISDN AS CHAR NO-UNDO.
+
 
    IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN
       lcMSISDN = fNotNull(Order.CLI).
@@ -311,6 +315,9 @@ FUNCTION fGenerateMessage RETURNS CHAR
              fNotNull(Ordercustomer.SurName2).
    lcEmail = fNotNull(OrderCustomer.Email).
    lcBankAcc = fNotNull(OrderCustomer.BankCode).
+
+   lcRecEmail = lcEmail.
+   lcRecMSISDN = lcMSISDN.
 
    lcSeq = STRING(NEXT-VALUE(SMSSEQ)). /*read and increase SMSSEQ. The sequence must be reserved as ID for WEB&HPD*/
    lcDocList = fNeededDocs(BUFFER Order).  
@@ -336,9 +343,14 @@ FUNCTION fGenerateMessage RETURNS CHAR
    
    /*Fill data for message.*/
    lcMessage = "~{" + "~"metadata~""  + "~:" + "~{" +
+                         "~"version~""  + "~:" + "~"" + lcVersion + "~"," +
                          "~"case~""  + "~:" + "~"" + icNotifCaseID  + "~"," +
                          lcArray + "," +
-                         "~"smsseq~""  + "~:" + "~"" + lcSeq  + "~"" +
+                         "~"smsseq~""  + "~:" + "~"" + lcSeq  + "~"," +
+                         "~"recipient_email~""  + "~:" + "~"" + 
+                            lcRecEmail  + "~"," +
+                         "~"recipient_msisdn~""  + "~:" + "~"" + 
+                            lcRecMSISDN  + "~"" +
                      "~}" + "," +
                       "~"data~"" + "~:" + "~{" +
                          "~"msisdn~""   + "~:" + "~"" + lcMSISDN + "~"" + "," +
