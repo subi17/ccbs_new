@@ -49,7 +49,7 @@ END.
    15th day of month. */
 ELSE IF ldaExecuteDate < 1/31/16 THEN DO:
    liStartDay = ((DAY(ldaExecuteDate) - 19) * 3) - 2.
-   liEndDay = (DAY(ldaExecuteDate) * 3).
+   liEndDay = ((DAY(ldaExecuteDate) - 19) * 3).
 END.
 ELSE IF DAY(ldaExecuteDate) > 15 THEN
    RETURN. /* All messages already send for this month */
