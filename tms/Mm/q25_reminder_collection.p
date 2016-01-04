@@ -27,7 +27,6 @@ DEF VAR liTempCount              AS INT  NO-UNDO.
 DEF VAR lcLogText                AS CHAR NO-UNDO.
 DEF VAR liTestStartDay           AS CHAR NO-UNDO.
 DEF VAR liTestEndDay             AS CHAR NO-UNDO.
-DEF VAR lcExecuteDate            AS CHAR NO-UNDO.
 DEF VAR ldaExecuteDate           AS DATE NO-UNDO.
 
 liQ25Logging = fCParamI("Q25LoggingLevel"). /* 0 = none, 1 = count, 2 = all */
@@ -79,7 +78,7 @@ IF ldaExecuteDate <= 1/19/16 THEN DO:
 ASSIGN lcTestStartDay     = fCParam("Q25","Q25TestStart")
        lcTestEndDay     = fCParam("Q25","Q25TestEnd").
    
-   IF lcTestStartDay > "" AND lcTestEndDay > "" THEN DO:
+   IF lcExecuteDate = "" AND lcTestStartDay > "" AND lcTestEndDay > "" THEN DO:
       ASSIGN
          liStartDay          = DAY(DATE(lcTestStartDay))
          liEndDay            = DAY(DATE(lcTestEndDay))

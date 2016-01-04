@@ -23,6 +23,7 @@
 
 DEF VAR lcTestStartDay AS CHAR NO-UNDO.
 DEF VAR lcTestEndDay AS CHAR NO-UNDO.
+DEF VAR lcExecuteDate AS CHAR NO-UNDO.
 DEF VAR liQ25Logging AS INT NO-UNDO.
 
 DEF STREAM Sout.
@@ -36,7 +37,10 @@ FUNCTION fGetStartEndDates RETURNS LOGICAL
     OUTPUT odaStartDate AS DATE,
     OUTPUT odaEndDate AS DATE).
    DEF VAR  ldaCountDate       AS DATE NO-UNDO.
-   ldaCountDate = ADD-INTERVAL(TODAY, iiMonth, 'months':U).
+   IF lcExecuteDate > "" THEN
+      ldaCountDate = ADD-INTERVAL(DATE(lcExecuteDate), iiMonth, 'months':U).
+   ELSE
+      ldaCountDate = ADD-INTERVAL(TODAY, iiMonth, 'months':U).
    IF iiStartDay > DAY(fLastDayOfMonth(ldaCountDate)) THEN
       RETURN FALSE.
    ELSE IF iiEndDay > DAY(fLastDayOfMonth(ldaCountDate))
