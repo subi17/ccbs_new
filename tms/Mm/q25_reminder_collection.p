@@ -1,16 +1,12 @@
 /* ----------------------------------------------------------------------
   module .......: Mm/q25_reminder_collection.p
   task .........: Collect customer that needs to notify customer about
-                  closing Quota 25 period ending.
+                  closing Quota 25 period ending and send SMSs.
   application ..: tms
   author .......: kaaikas
   created ......: 11.11.15
   version ......: yoigo
 ---------------------------------------------------------------------- */
-/* To be executed at 21st day of each month at least an 15 minutes before
-   10:00. (In tests execution tooked about 11 minutes.) For to be sure
-   execution for example at 7:00 might be wise, so data would be ready at
-   10:00 */
 
 
 {commpaa.i}
@@ -31,39 +27,40 @@ DEF VAR liTempCount              AS INT  NO-UNDO.
 DEF VAR lcLogText                AS CHAR NO-UNDO.
 DEF VAR liTestStartDay           AS CHAR NO-UNDO.
 DEF VAR liTestEndDay             AS CHAR NO-UNDO.
+DEF VAR lcExecuteDate            AS CHAR NO-UNDO.
+DEF VAR ldaExecuteDate           AS DATE NO-UNDO.
 
 liQ25Logging = fCParamI("Q25LoggingLevel"). /* 0 = none, 1 = count, 2 = all */
+lcExecuteDate = fCParam("Q25","Q25TestExecDate"). /* manipulated exec date */
 
-/* Handling of sms sending is different at January 2016 
-   it starts at 13th day and ends 15th */
+/* For testing usage possibility to manipulate execution date. In actual 
+   use parameter should be empty, so ELSE branch (TODAY) value is used. */
+IF lcExecuteDate > "" THEN
+   ldaExecuteDate = DATE(lcExecuteDate).
+ELSE
+   ldaExecuteDate = TODAY.
 
-IF TODAY < 1/13/16 THEN DO: /* For testing purposes */
+IF ldaExecuteDate <= 1/19/16 THEN DO: /* For testing purposes can be removed later on*/
    liStartDay = 1.
    liEndDay = 30.
 END.
-ELSE IF DAY(TODAY) > 15 OR TODAY < 1/13/16 THEN
-   RETURN.
-ELSE IF TODAY = 1/13/16 THEN DO:
-   liStartDay = 1.
-   liEndDay = 10.
+/* January 2016 messages will be sent during 20.1. - 30.1. after that this 
+   can be removed because later on messages will be send between 1st and
+   15th day of month. */
+ELSE IF ldaExecuteDate < 1/31/16 THEN DO:
+   liStartDay = ((DAY(ldaExecuteDate) - 19) * 3) - 2.
+   liEndDay = (DAY(ldaExecuteDate) * 3).
 END.
-ELSE IF TODAY = 1/14/16 THEN DO:
-   liStartDay = 11.
-   liEndDay = 20.
-END.
-ELSE IF TODAY = 1/15/16 THEN DO:
-   liStartDay = 21.
-   liEndDay = 30.
-END.
-
+ELSE IF DAY(ldaExecuteDate) > 15 THEN
+   RETURN. /* All messages already send for this month */
 ELSE DO:
    /* Other months collection is made during between 1st and 15th day of
     month. Handled two days cases in each of these days. At 1st contracts
     with validto date 1 and 2, 2nd day valid to dates 3 and 4 and so on. 
     15th day will be handled days 29-31. fCheckDates function resolves 
     last day of month. */
-   liStartDay = (DAY(TODAY) * 2) - 1. 
-   liEndDay = (DAY(TODAY) * 2).
+   liStartDay = (DAY(ldaExecuteDate) * 2) - 1. 
+   liEndDay = (DAY(ldaExecuteDate) * 2).
 END.
 
 /* Month 22, 2 months perm contract to go */
@@ -77,7 +74,7 @@ fGetStartEndDates({&Q25_MONTH_24}, liStartDay, liEndDay,
                   OUTPUT ldaStartDateMonth24, OUTPUT ldaEndDateMonth24).
 
 /* TESTING SUPPORT */
-IF TODAY < 1/13/16 THEN DO:
+IF ldaExecuteDate <= 1/19/16 THEN DO:
 
 ASSIGN lcTestStartDay     = fCParam("Q25","Q25TestStart")
        lcTestEndDay     = fCParam("Q25","Q25TestEnd").
