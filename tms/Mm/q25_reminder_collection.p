@@ -39,10 +39,6 @@ IF lcExecuteDate > "" THEN
 ELSE
    ldaExecuteDate = TODAY.
 
-IF ldaExecuteDate <= 1/19/16 THEN DO: /* For testing purposes can be removed later on*/
-   liStartDay = 1.
-   liEndDay = 30.
-END.
 /* January 2016 messages will be sent during 20.1. - 30.1. after that this 
    can be removed because later on messages will be send between 1st and
    15th day of month. */
@@ -89,6 +85,8 @@ ASSIGN lcTestStartDay     = fCParam("Q25","Q25TestStart")
          ldaStartDateMonth22 = ADD-INTERVAL(ldaStartDateMonth24, 2, 'months':U)
          ldaEndDateMonth22   = ADD-INTERVAL(ldaEndDateMonth24, 2, 'months':U).
    END.
+   ELSE IF lcExecuteDate = "" THEN
+      RETURN. /* No test dates set, so nothing to do */
 
 END.
 /* Check first how many SMS is needed to send today, with third param value
