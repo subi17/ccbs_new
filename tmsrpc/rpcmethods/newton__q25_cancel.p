@@ -3,6 +3,7 @@
   or Terminate Quota 25 extension (create single fee for remaining monthly fees)
 * @input       struct;mandatory
 * @struct      q25_struct;struct;mandatory
+               action;string;mandatory
                memo_struct;struct;optional
 * @q25_struct  username;string;mandatory;person who requests the change
                msseq;int;mandatory;subscription id
@@ -45,6 +46,8 @@ DEF VAR lcmemo_content     AS CHARACTER NO-UNDO. /* Memo Content */
 DEF VAR pcmemoStruct       AS CHARACTER NO-UNDO. /* Memo input struct */
 DEF VAR lcmemoStruct       AS CHARACTER NO-UNDO.
 
+DEF VAR pcAction           AS CHARACTER NO-UNDO.
+
 DEF VAR liCreated        AS INTEGER   NO-UNDO.
 DEF VAR lcResult         AS CHARACTER NO-UNDO.
 DEF VAR liLoop AS INT NO-UNDO. 
@@ -62,6 +65,7 @@ IF top_struct_fields EQ ? THEN RETURN.
 
 ASSIGN
    pcQ25Struct  = get_struct(top_struct, "q25_struct")
+   pcAction     = get_string(top_struct, "action")
    pcmemoStruct = get_struct(top_struct, "memo_struct") WHEN
       LOOKUP("memo_struct", top_struct_fields) > 0.
 
@@ -140,22 +144,50 @@ ELSE DO: /* Cancel Quota 25 Extension */
    IF DCCLI.TermDate NE ? THEN 
       RETURN appl_err("Q25 contract terminated").
       
-   liCreated = fPCActionRequest(MobSub.MsSeq,
-      "RVTERM12",
-      "term",
-      fMakeTS(),
-      TRUE, /* create fees */
-      {&REQUEST_SOURCE_NEWTON},
-      "",
-      0,
-      FALSE,
-      "",
-      0, /* payterm residual fee */
-      0,
-      OUTPUT lcResult).
+   IF pcAction EQ "Remove" THEN DO:
+      liCreated = fPCActionRequest(MobSub.MsSeq,
+         "RVTERM12",
+         "term",
+         fMakeTS(),
+         TRUE, /* create fees */
+         {&REQUEST_SOURCE_NEWTON},
+         "",
+         0,
+         FALSE,
+         "",
+         0, /* payterm residual fee */
+         0,
+         OUTPUT lcResult).
 
-      IF liCreated EQ 0 THEN
-         RETURN appl_err("ERROR:Q25 Unable to cancel Quota 25 extension request").
+         IF liCreated EQ 0 THEN
+            RETURN appl_err("ERROR:Q25 Unable to remove Quota 25 extension " +
+                             "request").
+   END.
+   ELSE IF pcAction EQ "Cancel" THEN DO:
+      IF ADD-INTERVAL(TODAY, -5, "months") >= DCCLI.ValidFrom THEN
+         RETURN appl_err("Installment is older than 5 months").      
+      liCreated = fPCActionRequest(MobSub.MsSeq,
+         "RVTERM12",
+         "canc",
+         fMakeTS(),
+         FALSE, /* create fees */
+         {&REQUEST_SOURCE_NEWTON},
+         "",
+         0,
+         FALSE,
+         "",
+         0, /* payterm residual fee */
+         0,
+         OUTPUT lcResult).
+
+         IF liCreated EQ 0 THEN
+            RETURN appl_err("ERROR:Q25 Unable to cancel Quota 25 extension " +
+                             "request").
+   END.
+   ELSE
+      RETURN appl_err("ERROR:Q25 Invalid action in Quota 25 extension " +
+                      "request").
+
 END. /* Cancel Quota 25 Extension */   
 
 /* Create a memo in TMS */
