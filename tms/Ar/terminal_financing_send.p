@@ -249,10 +249,11 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
       FIND FIRST Customer NO-LOCK WHERE
                  Customer.Custnum = Mobsub.Custnum NO-ERROR.
       IF NOT AVAIL Customer THEN NEXT.
-      BUFFER-COPY Customer EXCEPT Language CustIdType TO ttOrderCustomer.
+      BUFFER-COPY Customer EXCEPT Language TO ttOrderCustomer.
       ASSIGN
          ttOrderCustomer.CustTitle  = Customer.HonTitle
          ttOrderCustomer.CustId     = Customer.OrgId
+         ttOrderCustomer.CustIdType = Customer.CustIdType
          ttOrderCustomer.BankCode   = Customer.BankAcct
          ttOrderCustomer.SurName1   = Customer.Custname
          ttOrderCustomer.Company    = Customer.CompanyName
