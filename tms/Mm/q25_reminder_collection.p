@@ -42,7 +42,7 @@ ELSE
 /* January 2016 messages will be sent during 20.1. - 30.1. after that this 
    can be removed because later on messages will be send between 1st and
    15th day of month. */
-ELSE IF ldaExecuteDate < 1/31/16 THEN DO:
+IF ldaExecuteDate < 1/31/16 THEN DO:
    liStartDay = ((DAY(ldaExecuteDate) - 19) * 3) - 2.
    liEndDay = ((DAY(ldaExecuteDate) - 19) * 3).
 END.
