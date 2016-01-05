@@ -287,7 +287,7 @@ PROCEDURE pProcessData:
                     ELSE TRUE) NO-ERROR.
 
          IF NOT AVAIL FixedFeeTF THEN DO:
-            fWriteLog(ttTFCancel.content, "ERROR:PAYTERM fee not found").
+            fWriteLog(ttTFCancel.content, "ERROR:Installment fee not found").
             NEXT LINE_LOOP.
          END.
          
