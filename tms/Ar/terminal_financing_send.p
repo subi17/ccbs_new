@@ -310,11 +310,18 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
       NEXT ORDER_LOOP.
    END.
 
-   FIND FIRST FMItem NO-LOCK WHERE
-              FMItem.Brand     = gcBrand AND
-              FMItem.FeeModel  = FixedFee.FeeModel AND
-              FMItem.ToDate   >= ldaOrderDate AND
-              FMItem.FromDate <= ldaOrderDate NO-ERROR.
+   IF FixedFee.BillCode EQ "RVTERM" THEN
+      FIND FIRST FMItem NO-LOCK WHERE
+                 FMItem.Brand     = gcBrand AND
+                 FMItem.FeeModel  = FixedFee.FeeModel AND
+                 FMItem.ToDate   >= FixedFee.BegDate AND
+                 FMItem.FromDate <= FixedFee.BegDate NO-ERROR.
+   ELSE
+      FIND FIRST FMItem NO-LOCK WHERE
+                 FMItem.Brand     = gcBrand AND
+                 FMItem.FeeModel  = FixedFee.FeeModel AND
+                 FMItem.ToDate   >= ldaOrderDate AND
+                 FMItem.FromDate <= ldaOrderDate NO-ERROR.
    IF NOT AVAIL FMItem THEN DO:
       fErrorLog(Order.OrderID,
          SUBST("SYSTEM_ERROR:FeeModel not defined for &1",FixedFee.CalcObj)).
