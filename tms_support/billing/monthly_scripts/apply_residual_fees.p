@@ -10,11 +10,11 @@
 def stream sread.
 def stream slog.
 
-input stream sread from "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4187.csv".
-output stream slog to "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4187.log".
+input stream sread from "logs/yot_4253.csv".
+output stream slog to "logs/yot_4253.log".
 
 /* Change here FALSE if only pre check done */
-def var llcreatefee as log no-undo init true.
+def var llcreatefee as log no-undo init TRUE.
 
 def var lcline as char no-undo.
 def var limsseq as int no-undo.
