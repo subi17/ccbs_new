@@ -249,10 +249,11 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
       FIND FIRST Customer NO-LOCK WHERE
                  Customer.Custnum = Mobsub.Custnum NO-ERROR.
       IF NOT AVAIL Customer THEN NEXT.
-      BUFFER-COPY Customer EXCEPT Language CustIdType TO ttOrderCustomer.
+      BUFFER-COPY Customer EXCEPT Language TO ttOrderCustomer.
       ASSIGN
          ttOrderCustomer.CustTitle  = Customer.HonTitle
          ttOrderCustomer.CustId     = Customer.OrgId
+         ttOrderCustomer.CustIdType = Customer.CustIdType
          ttOrderCustomer.BankCode   = Customer.BankAcct
          ttOrderCustomer.SurName1   = Customer.Custname
          ttOrderCustomer.Company    = Customer.CompanyName
@@ -309,11 +310,18 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
       NEXT ORDER_LOOP.
    END.
 
-   FIND FIRST FMItem NO-LOCK WHERE
-              FMItem.Brand     = gcBrand AND
-              FMItem.FeeModel  = FixedFee.FeeModel AND
-              FMItem.ToDate   >= ldaOrderDate AND
-              FMItem.FromDate <= ldaOrderDate NO-ERROR.
+   IF FixedFee.BillCode EQ "RVTERM" THEN
+      FIND FIRST FMItem NO-LOCK WHERE
+                 FMItem.Brand     = gcBrand AND
+                 FMItem.FeeModel  = FixedFee.FeeModel AND
+                 FMItem.ToDate   >= FixedFee.BegDate AND
+                 FMItem.FromDate <= FixedFee.BegDate NO-ERROR.
+   ELSE
+      FIND FIRST FMItem NO-LOCK WHERE
+                 FMItem.Brand     = gcBrand AND
+                 FMItem.FeeModel  = FixedFee.FeeModel AND
+                 FMItem.ToDate   >= ldaOrderDate AND
+                 FMItem.FromDate <= ldaOrderDate NO-ERROR.
    IF NOT AVAIL FMItem THEN DO:
       fErrorLog(Order.OrderID,
          SUBST("SYSTEM_ERROR:FeeModel not defined for &1",FixedFee.CalcObj)).
