@@ -17,6 +17,7 @@ DEFINE INPUT PARAMETER iiMsRequest AS INT NO-UNDO.
 
 DEF VAR ldaInvDate     AS DATE NO-UNDO.
 DEF VAR liCount        AS INT  NO-UNDO.
+DEF VAR liDumped       AS INT  NO-UNDO. 
 DEF VAR lcToday        AS CHAR NO-UNDO.
 DEF VAR llgError       AS LOG  NO-UNDO.
 DEF VAR lcContent      AS CHAR NO-UNDO. 
@@ -41,6 +42,7 @@ DEFINE STREAM strout.
    ASSIGN lcContent      = ""
           llgError       = NO
           liCount        = 0 
+          liDumped       = 0
           llInterrupt    = NO
           ldaInvDate     = DATE(MONTH(TODAY),1,YEAR(TODAY)) 
           lcAddrConfDir  = fCParamC("RepConfDir")
@@ -86,8 +88,7 @@ DEFINE STREAM strout.
    
    IF llgError THEN LEAVE.
   
-   ASSIGN liCount   = 0
-          lcLogFile = lcContLogDir + "publishifs_" + lcToday + STRING(TIME) + ".log".
+   lcLogFile = lcContLogDir + "publishifs_" + lcToday + STRING(TIME) + ".log".
  
    OUTPUT STREAM strout TO VALUE(lcLogFile) APPEND.
  
@@ -100,11 +101,11 @@ DEFINE STREAM strout.
                        "Modified",
                        "",
                        FALSE,
-                       OUTPUT liCount).
+                       OUTPUT liDumped).
    
-      IF liCount > 0 THEN 
+      IF liDumped > 0 THEN 
          PUT STREAM strout UNFORMATTED 
-            "Generated IFS for " + STRING(liCount) + " Service Invoices" SKIP.   
+            "Generated IFS for " + STRING(liDumped) + " Service Invoices" SKIP.   
    END.
     
    OUTPUT STREAM strout CLOSE.
@@ -117,6 +118,6 @@ DEFINE STREAM strout.
    IF llgError THEN LEAVE.
 
    lcContent = "Delivery state was set to " + STRING(liCount) + " Invoices" + "  " +
-               "Generated IFS for " + STRING(liCount) + " Service Invoices".
+               "Generated IFS for " + STRING(liDumped) + " Service Invoices".
 
    fReqStatus(2,lcContent). /* request handled succesfully */

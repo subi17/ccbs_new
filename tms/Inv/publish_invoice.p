@@ -18,7 +18,6 @@ DEFINE INPUT PARAMETER iiMsRequest AS INT NO-UNDO.
 
 DEF VAR ldaDateFrom    AS DATE NO-UNDO. 
 DEF VAR liCount        AS INT  NO-UNDO. 
-DEF VAR oiEvents       AS INT  NO-UNDO. 
 DEF VAR liDumped       AS INT  NO-UNDO. 
 DEF VAR lcToday        AS CHAR NO-UNDO.
 DEF VAR lcAddrConfDir  AS CHAR NO-UNDO. 
@@ -41,7 +40,6 @@ DEFINE STREAM strout.
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
    ASSIGN liCount        = 0
-          oiEvents       = 0
           lcContent      = ""
           llgError       = NO
           liDumped       = 0
@@ -103,7 +101,7 @@ DEFINE STREAM strout.
    
       IF liDumped >= 0 THEN
          PUT STREAM strout UNFORMATTED
-            "Published total Invoice full dump event count : " + STRING(oiEvents) SKIP.
+            "Published total Invoice full dump event count : " + STRING(liDumped) SKIP.
       ELSE
          PUT STREAM strout UNFORMATTED
             "Error in creating Invoice full dump event !" SKIP.
@@ -119,7 +117,7 @@ DEFINE STREAM strout.
    IF llgError THEN LEAVE.
   
    lcContent = "Display permit was set to " + STRING(liCount) + " Invoices." + "  " + 
-               "Published total Invoice full dump event count : " + STRING(oiEvents).
+               "Published total Invoice full dump event count : " + STRING(liDumped).
 
    fReqStatus(2,lcContent). /* request handled succesfully */
 
