@@ -29,12 +29,17 @@ DEF VAR liTestStartDay           AS CHAR NO-UNDO.
 DEF VAR liTestEndDay             AS CHAR NO-UNDO.
 DEF VAR ldaExecuteDate           AS DATE NO-UNDO.
 
-liQ25Logging = fCParamI("Q25LoggingLevel"). /* 0 = none, 1 = count, 2 = all */
-lcExecuteDate = fCParam("Q25","Q25TestExecDate"). /* manipulated exec date */
+/* for testing and logging support */
+ASSIGN lcTestStartDay = fCParam("Q25","Q25TestStart")
+       lcTestEndDay   = fCParam("Q25","Q25TestEnd")
+       liQ25Logging   = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = count, 
+                                                      2 = all */
+       lcExecuteDate  = fCParam("Q25","Q25TestExecDate"). /* manipulated exec 
+                                                            date */
 
 /* For testing usage possibility to manipulate execution date. In actual 
    use parameter should be empty, so ELSE branch (TODAY) value is used. */
-IF lcExecuteDate > "" THEN
+IF lcExecuteDate NE ? AND lcExecuteDate GT "" THEN
    ldaExecuteDate = DATE(lcExecuteDate).
 ELSE
    ldaExecuteDate = TODAY.
@@ -42,7 +47,8 @@ ELSE
 /* January 2016 messages will be sent during 20.1. - 30.1. after that this 
    can be removed because later on messages will be send between 1st and
    15th day of month. */
-IF ldaExecuteDate < 1/31/16 THEN DO:
+IF ldaExecuteDate GE 1/20/16 AND
+   ldaExecuteDate LT 1/31/16 THEN DO:
    liStartDay = ((DAY(ldaExecuteDate) - 19) * 3) - 2.
    liEndDay = ((DAY(ldaExecuteDate) - 19) * 3).
 END.
@@ -68,13 +74,13 @@ fGetStartEndDates({&Q25_MONTH_23}, liStartDay, liEndDay,
 fGetStartEndDates({&Q25_MONTH_24}, liStartDay, liEndDay,
                   OUTPUT ldaStartDateMonth24, OUTPUT ldaEndDateMonth24).
 
-/* TESTING SUPPORT */
-IF ldaExecuteDate <= 1/19/16 THEN DO:
+/* TESTING SUPPORT 
+   Start and end date manipulation */
+IF ldaExecuteDate EQ TODAY AND lcTestStartDay NE ? AND 
+                               lcTestStartDay NE "" AND
+                               lcTestEndDay NE ? AND
+                               lcTestEndDay NE "" THEN DO:
 
-ASSIGN lcTestStartDay     = fCParam("Q25","Q25TestStart")
-       lcTestEndDay     = fCParam("Q25","Q25TestEnd").
-   
-   IF lcExecuteDate = "" AND lcTestStartDay > "" AND lcTestEndDay > "" THEN DO:
       ASSIGN
          liStartDay          = DAY(DATE(lcTestStartDay))
          liEndDay            = DAY(DATE(lcTestEndDay))
@@ -84,9 +90,6 @@ ASSIGN lcTestStartDay     = fCParam("Q25","Q25TestStart")
          ldaEndDateMonth23   = ADD-INTERVAL(ldaEndDateMonth24, 1, 'months':U)
          ldaStartDateMonth22 = ADD-INTERVAL(ldaStartDateMonth24, 2, 'months':U)
          ldaEndDateMonth22   = ADD-INTERVAL(ldaEndDateMonth24, 2, 'months':U).
-   END.
-   ELSE IF lcExecuteDate = "" THEN
-      RETURN. /* No test dates set, so nothing to do */
 
 END.
 /* Check first how many SMS is needed to send today, with third param value
