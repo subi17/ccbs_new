@@ -67,7 +67,7 @@ FUNCTION fGetPerContractActivation RETURNS DEC
          considered as reference tariff */
         
       IF bActRequest.ReqSource = {&REQUEST_SOURCE_RENEWAL} THEN 
-         ldActivated = fMake2Dt(idaEventDate - 1,0).
+         ldActivated = fMake2Dt(idaEventDate - 1,86399).
 
    END. 
 
