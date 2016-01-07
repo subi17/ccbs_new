@@ -44,91 +44,97 @@ IF lcExecuteDate NE ? AND lcExecuteDate GT "" THEN
 ELSE
    ldaExecuteDate = TODAY.
 
-/* January 2016 messages will be sent during 20.1. - 30.1. after that this 
-   can be removed because later on messages will be send between 1st and
-   15th day of month. */
-IF ldaExecuteDate GE 1/20/16 AND
-   ldaExecuteDate LT 1/31/16 THEN DO:
-   liStartDay = ((DAY(ldaExecuteDate) - 19) * 3) - 2.
-   liEndDay = ((DAY(ldaExecuteDate) - 19) * 3).
+DO:
+   /* January 2016 messages will be sent during 20.1. - 30.1. after that this 
+      can be removed because later on messages will be send between 1st and
+      15th day of month. */
+   IF ldaExecuteDate GE 1/20/16 AND
+      ldaExecuteDate LT 1/31/16 THEN DO:
+      liStartDay = ((DAY(ldaExecuteDate) - 19) * 3) - 2.
+      liEndDay = ((DAY(ldaExecuteDate) - 19) * 3).
+   END.
+   ELSE IF DAY(ldaExecuteDate) > 15 THEN
+      LEAVE. /* All messages already send for this month */
+   ELSE DO:
+      /* Other months collection is made during between 1st and 15th day of
+       month. Handled two days cases in each of these days. At 1st contracts
+       with validto date 1 and 2, 2nd day valid to dates 3 and 4 and so on. 
+       15th day will be handled days 29-31. fCheckDates function resolves 
+       last day of month. */
+      liStartDay = (DAY(ldaExecuteDate) * 2) - 1. 
+      liEndDay = (DAY(ldaExecuteDate) * 2).
+   END.
+
+   /* Month 22, 2 months perm contract to go */
+   fGetStartEndDates({&Q25_MONTH_22}, liStartDay, liEndDay,
+                     OUTPUT ldaStartDateMonth22, OUTPUT ldaEndDateMonth22).
+   /* Month 23 1 month perm contract to go */
+   fGetStartEndDates({&Q25_MONTH_23}, liStartDay, liEndDay,
+                     OUTPUT ldaStartDateMonth23, OUTPUT ldaEndDateMonth23).
+   /* Month 24 0 month perm contract to go */
+   fGetStartEndDates({&Q25_MONTH_24}, liStartDay, liEndDay,
+                     OUTPUT ldaStartDateMonth24, OUTPUT ldaEndDateMonth24).
+
+   /* TESTING SUPPORT 
+      Start and end date manipulation */
+   IF ldaExecuteDate EQ TODAY AND lcTestStartDay NE ? AND 
+                                  lcTestStartDay NE "" AND
+                                  lcTestEndDay NE ? AND
+                                  lcTestEndDay NE "" THEN DO:
+
+         ASSIGN
+            liStartDay          = DAY(DATE(lcTestStartDay))
+            liEndDay            = DAY(DATE(lcTestEndDay))
+            ldaStartDateMonth24 = DATE(lcTestStartDay)
+            ldaEndDateMonth24   = DATE(lcTestEndDay)
+            ldaStartDateMonth23 = ADD-INTERVAL(ldaStartDateMonth24, 1, 
+                                               'months':U)
+            ldaEndDateMonth23   = ADD-INTERVAL(ldaEndDateMonth24, 1, 
+                                               'months':U)
+            ldaStartDateMonth22 = ADD-INTERVAL(ldaStartDateMonth24, 2, 
+                                               'months':U)
+            ldaEndDateMonth22   = ADD-INTERVAL(ldaEndDateMonth24, 2, 
+                                               'months':U).
+
+   END.
+   /* Check first how many SMS is needed to send today, with third param value
+      FALSE no actual sending, just calculation and log generation for testing
+      and checking purposes. */
+   liTotalCount = fGenerateQ25SMSMessages(ldaStartDateMonth22, 
+                      ldaEndDateMonth22, {&Q25_MONTH_22}, FALSE,
+                      INPUT-OUTPUT liTempCount) + 
+                  fGenerateQ25SMSMessages(ldaStartDateMonth23, 
+                      ldaEndDateMonth23, {&Q25_MONTH_23}, FALSE,
+                      INPUT-OUTPUT liTempCount) +
+                  fGenerateQ25SMSMessages(ldaStartDateMonth24, 
+                      ldaEndDateMonth24, {&Q25_MONTH_24}, FALSE, 
+                      INPUT-OUTPUT liTempCount).
+   liTempCount = liTotalCount. /* for logging purposes */
+
+   lcLogText = "START|" + STRING(liStartDay) + "|" + STRING(liEndDay) + "|" + 
+               STRING(ldaStartDateMonth22) + "|" + 
+               STRING(ldaEndDateMonth22) + "|" + 
+               STRING(ldaStartDateMonth23) + "|" + 
+               STRING(ldaEndDateMonth23) + "|" + 
+               STRING(ldaStartDateMonth24) + "|" + 
+               STRING(ldaEndDateMonth24).
+   fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
+
+   /* Actual SMS creation and sending */
+   IF ldaStartDateMonth22 NE ? AND ldaEndDateMonth22 NE ? THEN
+      fGenerateQ25SMSMessages(ldaStartDateMonth22, ldaEndDateMonth22, 
+                             {&Q25_MONTH_22}, TRUE, INPUT-OUTPUT liTotalCount).
+
+   /* Month 23 1 month perm contract to go */
+   IF ldaStartDateMonth23 NE ? AND ldaEndDateMonth23 NE ? THEN
+      fGenerateQ25SMSMessages(ldaStartDateMonth23, ldaEndDateMonth23, 
+                             {&Q25_MONTH_23}, TRUE, INPUT-OUTPUT liTotalCount).
+
+   /* Month 24 0 month perm contract to go */
+   IF ldaStartDateMonth24 NE ? AND ldaEndDateMonth24 NE ? THEN
+      fGenerateQ25SMSMessages(ldaStartDateMonth24, ldaEndDateMonth24, 
+                             {&Q25_MONTH_24}, TRUE, INPUT-OUTPUT liTotalCount).
+   fQ25LogWriting("FINISH: " + STRING(liTempCount) + " messages sent. " +
+                  STRING(liTotalCount) + " messages left to send.",
+                  {&Q25_LOGGING_COUNTERS}).
 END.
-ELSE IF DAY(ldaExecuteDate) > 15 THEN
-   RETURN. /* All messages already send for this month */
-ELSE DO:
-   /* Other months collection is made during between 1st and 15th day of
-    month. Handled two days cases in each of these days. At 1st contracts
-    with validto date 1 and 2, 2nd day valid to dates 3 and 4 and so on. 
-    15th day will be handled days 29-31. fCheckDates function resolves 
-    last day of month. */
-   liStartDay = (DAY(ldaExecuteDate) * 2) - 1. 
-   liEndDay = (DAY(ldaExecuteDate) * 2).
-END.
-
-/* Month 22, 2 months perm contract to go */
-fGetStartEndDates({&Q25_MONTH_22}, liStartDay, liEndDay,
-                  OUTPUT ldaStartDateMonth22, OUTPUT ldaEndDateMonth22).
-/* Month 23 1 month perm contract to go */
-fGetStartEndDates({&Q25_MONTH_23}, liStartDay, liEndDay,
-                  OUTPUT ldaStartDateMonth23, OUTPUT ldaEndDateMonth23).
-/* Month 24 0 month perm contract to go */
-fGetStartEndDates({&Q25_MONTH_24}, liStartDay, liEndDay,
-                  OUTPUT ldaStartDateMonth24, OUTPUT ldaEndDateMonth24).
-
-/* TESTING SUPPORT 
-   Start and end date manipulation */
-IF ldaExecuteDate EQ TODAY AND lcTestStartDay NE ? AND 
-                               lcTestStartDay NE "" AND
-                               lcTestEndDay NE ? AND
-                               lcTestEndDay NE "" THEN DO:
-
-      ASSIGN
-         liStartDay          = DAY(DATE(lcTestStartDay))
-         liEndDay            = DAY(DATE(lcTestEndDay))
-         ldaStartDateMonth24 = DATE(lcTestStartDay)
-         ldaEndDateMonth24   = DATE(lcTestEndDay)
-         ldaStartDateMonth23 = ADD-INTERVAL(ldaStartDateMonth24, 1, 'months':U)
-         ldaEndDateMonth23   = ADD-INTERVAL(ldaEndDateMonth24, 1, 'months':U)
-         ldaStartDateMonth22 = ADD-INTERVAL(ldaStartDateMonth24, 2, 'months':U)
-         ldaEndDateMonth22   = ADD-INTERVAL(ldaEndDateMonth24, 2, 'months':U).
-
-END.
-/* Check first how many SMS is needed to send today, with third param value
-   FALSE no actual sending, just calculation and log generation for testing
-   and checking purposes. */
-liTotalCount = fGenerateQ25SMSMessages(ldaStartDateMonth22, 
-                   ldaEndDateMonth22, {&Q25_MONTH_22}, FALSE,
-                   INPUT-OUTPUT liTempCount) + 
-               fGenerateQ25SMSMessages(ldaStartDateMonth23, 
-                   ldaEndDateMonth23, {&Q25_MONTH_23}, FALSE,
-                   INPUT-OUTPUT liTempCount) +
-               fGenerateQ25SMSMessages(ldaStartDateMonth24, 
-                   ldaEndDateMonth24, {&Q25_MONTH_24}, FALSE, 
-                   INPUT-OUTPUT liTempCount).
-liTempCount = liTotalCount. /* for logging purposes */
-
-lcLogText = "START|" + STRING(liStartDay) + "|" + STRING(liEndDay) + "|" + 
-            STRING(ldaStartDateMonth22) + "|" + 
-            STRING(ldaEndDateMonth22) + "|" + 
-            STRING(ldaStartDateMonth23) + "|" + 
-            STRING(ldaEndDateMonth23) + "|" + 
-            STRING(ldaStartDateMonth24) + "|" + 
-            STRING(ldaEndDateMonth24).
-fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
-
-/* Actual SMS creation and sending */
-IF ldaStartDateMonth22 NE ? AND ldaEndDateMonth22 NE ? THEN
-   fGenerateQ25SMSMessages(ldaStartDateMonth22, ldaEndDateMonth22, 
-                          {&Q25_MONTH_22}, TRUE, INPUT-OUTPUT liTotalCount).
-
-/* Month 23 1 month perm contract to go */
-IF ldaStartDateMonth23 NE ? AND ldaEndDateMonth23 NE ? THEN
-   fGenerateQ25SMSMessages(ldaStartDateMonth23, ldaEndDateMonth23, 
-                          {&Q25_MONTH_23}, TRUE, INPUT-OUTPUT liTotalCount).
-
-/* Month 24 0 month perm contract to go */
-IF ldaStartDateMonth24 NE ? AND ldaEndDateMonth24 NE ? THEN
-   fGenerateQ25SMSMessages(ldaStartDateMonth24, ldaEndDateMonth24, 
-                          {&Q25_MONTH_24}, TRUE, INPUT-OUTPUT liTotalCount).
-fQ25LogWriting("FINISH: " + STRING(liTempCount) + " messages sent. " +
-               STRING(liTotalCount) + " messages left to send.",
-               {&Q25_LOGGING_COUNTERS}).
