@@ -44,17 +44,20 @@ IF lcExecuteDate NE ? AND lcExecuteDate GT "" THEN
 ELSE
    ldaExecuteDate = TODAY.
 
+execution:
 DO:
    /* January 2016 messages will be sent during 20.1. - 30.1. after that this 
       can be removed because later on messages will be send between 1st and
       15th day of month. */
-   IF ldaExecuteDate GE 1/20/16 AND
+   IF ldaExecuteDate LT 1/20/16 THEN
+         LEAVE execution.
+   ELSE IF ldaExecuteDate GE 1/20/16 AND
       ldaExecuteDate LT 1/31/16 THEN DO:
       liStartDay = ((DAY(ldaExecuteDate) - 19) * 3) - 2.
       liEndDay = ((DAY(ldaExecuteDate) - 19) * 3).
    END.
    ELSE IF DAY(ldaExecuteDate) > 15 THEN
-      LEAVE. /* All messages already send for this month */
+      LEAVE execution. /* All messages already send for this month */
    ELSE DO:
       /* Other months collection is made during between 1st and 15th day of
        month. Handled two days cases in each of these days. At 1st contracts
