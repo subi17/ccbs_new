@@ -459,7 +459,8 @@ PROCEDURE pCloseQ25Discount:
    DEF VAR ldeDiscount     AS DECIMAL   NO-UNDO. 
    DEF VAR lcResult        AS CHARACTER NO-UNDO.
    DEF VAR liRequest       AS INT NO-UNDO. 
-   DEF VAR lcError AS CHAR NO-UNDO. 
+
+   DEF BUFFER bMsRequest FOR MSRequest.
 
    FIND FIRST OrderAction NO-LOCK WHERE
               OrderAction.Brand    EQ gcBrand AND
@@ -486,13 +487,16 @@ PROCEDURE pCloseQ25Discount:
    
    IF NOT AVAILABLE SingleFee THEN RETURN "".
 
-   FIND FIRST msrequest NO-LOCK WHERE
-              msrequest.msseq = mobsub.msseq AND
-              msrequest.reqtype = 8 AND
-              msrequest.reqstatus = 0 AND
-              msrequest.reqcparam3 = "RVTERM12" AND
-              msrequest.reqiparam3 = liPerContractID NO-ERROR.
-   IF AVAIL msrequest THEN DO:
+   FIND FIRST bmsrequest NO-LOCK WHERE
+              bmsrequest.msseq = mobsub.msseq AND
+              bmsrequest.reqtype = 8 AND
+              bmsrequest.reqstatus = 0 AND
+              bmsrequest.reqcparam3 = "RVTERM12" AND
+              bmsrequest.reqiparam3 = liPerContractID NO-ERROR.
+   IF AVAIL bmsrequest THEN DO:
+
+      FIND MsRequest NO-LOCK WHERE
+           MsRequest.MSRequest = bmsrequest.MSRequest.
 
       fReqStatus(4,"Cancelled by renewal cancellation").
       
@@ -508,7 +512,7 @@ PROCEDURE pCloseQ25Discount:
            DCCLI.ValidTo >= TODAY NO-ERROR.
 
       IF AMBIGUOUS(DCCLI) THEN 
-         lcError = "ERROR:More than one active Q25 extension contract".
+         RETURN "ERROR:More than one active Q25 extension contract".
 
       IF AVAIL DCCLI THEN DO:
 
@@ -528,9 +532,8 @@ PROCEDURE pCloseQ25Discount:
             OUTPUT lcResult).
 
          IF liRequest EQ 0 THEN
-            lcError = lcError + (IF lcError > "" THEN CHR(10) ELSE "") + 
-               SUBST("ERROR:Q25 extension contract termination failed: &1",
-                     lcResult).
+            RETURN SUBST("ERROR:Q25 extension contract termination failed: &1",
+                   lcResult).
       END.
    END.
    
@@ -561,8 +564,7 @@ PROCEDURE pCloseQ25Discount:
                  subInvoice.MsSeq EQ Mobsub.MsSeq NO-ERROR.
       
       IF NOT AVAILABLE subInvoice THEN
-        RETURN (lcError + (IF lcError > "" THEN CHR(10) ELSE "") + 
-                "ERROR:Q25 discount cancellation (subinvoice not found)").
+        RETURN "ERROR:Q25 discount cancellation (subinvoice not found)".
       
       FIND FIRST invrow NO-LOCK WHERE
                  invrow.InvNum    EQ subInvoice.InvNum AND
@@ -592,8 +594,7 @@ PROCEDURE pCloseQ25Discount:
           OUTPUT lcResult).
 
       IF lcResult BEGINS "ERROR:" OR lcResult BEGINS "0" THEN
-         RETURN (lcError + (IF lcError > "" THEN CHR(10) ELSE "") + 
-           SUBST("ERROR:Q25 discount cancellation (CRVTERMDT):&1",lcResult)).
+         RETURN SUBST("ERROR:Q25 discount cancellation (CRVTERMDT):&1",lcResult).
       
       RETURN "".
 
