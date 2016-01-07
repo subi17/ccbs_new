@@ -249,7 +249,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             SingleFee.CalcObj     = "RVTERM" AND
             SingleFee.BillPeriod  = liPeriod NO-LOCK:
 
-      IF NOT SingleFee.OrderId > 0 THEN NEXT.
+      IF NOT SingleFee.OrderId NE 0 THEN NEXT.
       liPhase = iiPhase.
       FIND FIRST Mobsub NO-LOCK WHERE
                  Mobsub.MsSeq = INT(SingleFee.KeyValue) NO-ERROR.
