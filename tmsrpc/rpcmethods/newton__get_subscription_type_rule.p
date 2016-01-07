@@ -331,39 +331,55 @@ FUNCTION fGetOrigBundle RETURNS CHAR
 
 END FUNCTION.
 
-FUNCTION fGetOrigCLIType RETURNS CHARACTER
-         (INPUT pcDCEvent AS CHAR,
-          INPUT pdtValidFrom AS DATE,
-          INPUT piMsSeq AS INT):
+FUNCTION fGetReferenceTariff RETURNS CHARACTER
+         (INPUT pcDCEvent      AS CHAR,
+          INPUT pdtValidFrom   AS DATE,
+          INPUT pdtRenewalDate AS DATE,
+          INPUT piMsSeq        AS INT):
 
-   DEF VAR ldTS AS DEC NO-UNDO.
-   DEF VAR lcCLIType AS CHAR NO-UNDO. 
+   DEF VAR ldTS        AS DEC  NO-UNDO.
+   DEF VAR lcCLIType   AS CHAR NO-UNDO.
+   DEF VAR lcReqParam2 AS CHAR NO-UNDO.
+
    DEF BUFFER bufMsRequest FOR MsRequest .
 
-   ldTS = fHMS2TS(pdtValidFrom,"00:00:00").
+   IF pdtRenewalDate <> ? THEN
+      ASSIGN
+         ldTS        = fHMS2TS(pdtRenewalDate,"00:00:00")
+         lcReqParam2 = "update".
+   ELSE
+      ASSIGN
+         ldTS        = fHMS2TS(pdtValidFrom,"00:00:00")
+         lcReqParam2 = "act,recreate".
+
    FIND FIRST bufMsRequest WHERE
-              bufMsRequest.MsSeq = piMsseq AND
-              bufMsRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} AND
-              bufMsRequest.ReqStatus =  {&REQUEST_STATUS_DONE} AND
-              bufMsRequest.DoneStamp >= ldTS AND
-              bufMsRequest.ReqCParam3 = pcDCEvent AND
-       LOOKUP(bufMsRequest.ReqCparam2,"act,recreate") > 0
+              bufMsRequest.MsSeq      = piMsseq                        AND
+              bufMsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND
+              bufMsRequest.ReqStatus  = {&REQUEST_STATUS_DONE}         AND
+              bufMsRequest.DoneStamp >= ldTS                           AND
+              bufMsRequest.ReqCParam3 = pcDCEvent                      AND
+       LOOKUP(bufMsRequest.ReqCparam2,lcReqParam2) > 0
    NO-LOCK USE-INDEX MsSeq NO-ERROR.
 
-   IF AVAIL bufMsRequest THEN 
+   IF AVAIL bufMsRequest THEN
       ldTS = bufMsRequest.DoneStamp.
 
    FIND FIRST MsOwner WHERE
-              MsOwner.MsSeq = piMsSeq AND 
-              MsOwner.TSBegin <= ldTS NO-LOCK NO-ERROR. 
-   IF NOT AVAILABLE MsOwner THEN 
+              MsOwner.MsSeq = piMsSeq AND
+              MsOwner.TSBegin <= ldTS NO-LOCK NO-ERROR.
+   IF NOT AVAILABLE MsOwner THEN
       FIND LAST MsOwner WHERE
-                MsOwner.MsSeq = piMsSeq AND 
-                MsOwner.TSBegin > ldTS NO-LOCK NO-ERROR. 
-   IF AVAIL MsOwner THEN
-           lcCLIType = MsOwner.CLIType.
+                MsOwner.MsSeq = piMsSeq AND
+                MsOwner.TSBegin > ldTS NO-LOCK NO-ERROR.
+   
+   IF AVAIL MsOwner THEN DO:
+      lcCLIType = MsOwner.CLIType.
 
-   RETURN lcCLIType.  
+      IF MsOwner.TariffBundle <> "" THEN 
+         lcCLIType = MsOwner.TariffBundle.
+   END.
+
+   RETURN lcCLIType.
 END FUNCTION.
 
 /*
@@ -550,17 +566,10 @@ IF NOT MobSub.PayType THEN DO:
               INTERVAL(ldtTo,ldtFrom,"months") + 13.
       END.
 
-      lcOrigCLIType = fGetOrigCLIType(DCCLI.DCEvent,
-                                      DCCLI.ValidFrom,
-                                      MobSub.MsSeq).
-
-      IF LOOKUP(lcOrigCLIType,lcBundleCLITypes) > 0 THEN DO:
-         lcOrigBundle = fGetOrigBundle(MobSub.MsSeq,
-                                       DCCLI.DCEvent,
-                                       DCCLI.ValidFrom).
-
-         lcOrigCLIType = fConvBundleToCLIType(lcOrigBundle).
-      END.
+      lcOrigCLIType = fGetReferenceTariff(DCCLI.DCEvent,
+                                          DCCLI.ValidFrom,
+                                          DCCLI.RenewalDate,
+                                          MobSub.MsSeq).
 
    END. /* FOR EACH DCCLI NO-LOCK WHERE */
 

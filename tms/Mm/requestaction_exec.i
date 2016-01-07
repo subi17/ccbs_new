@@ -23,6 +23,7 @@ FUNCTION fGetPerContractActivation RETURNS DEC
     idaEventDate AS DATE):
 
    DEF VAR ldActivated AS DEC  NO-UNDO.
+   DEF VAR lcReqParam2 AS CHAR NO-UNDO. 
 
    DEF BUFFER bActRequest FOR MsRequest.
    DEF BUFFER bDCCLI FOR DCCLI.
@@ -36,7 +37,17 @@ FUNCTION fGetPerContractActivation RETURNS DEC
               bDCCLI.ValidFrom <= idaEventDate NO-LOCK NO-ERROR. 
    IF NOT AVAIL bDCCLI THEN RETURN 0.0.
 
-   ldActivated = fMake2Dt(bDCCLI.ValidFrom,0).
+   /* YDR-2046 */
+   /* If we have Renewaldate (Extended permanency) THEN renewal dated
+      clitype is considered as reference tariff */
+   IF bDCCLI.RenewalDate <> ? THEN 
+      ASSIGN 
+         ldActivated = fMake2Dt(bDCCLI.RenewalDate,0)
+         lcReqParam2 = "update".
+   ELSE     
+      ASSIGN 
+         ldActivated = fMake2Dt(bDCCLI.ValidFrom,0)
+         lcReqParam2 = "act,recreate".
 
    /* must use request handling time instead of contract begin time, YBU-991 */
    FIND FIRST bActRequest WHERE
@@ -45,11 +56,20 @@ FUNCTION fGetPerContractActivation RETURNS DEC
       bActRequest.ReqStatus  = {&REQUEST_STATUS_DONE} AND
       bActRequest.DoneStamp >= ldActivated AND
       bActRequest.ReqCParam3 = bDCCLI.DCEvent AND
-      LOOKUP(bActRequest.ReqCparam2,"act,recreate") > 0
+      LOOKUP(bActRequest.ReqCparam2,lcReqParam2) > 0
    NO-LOCK USE-INDEX MsSeq NO-ERROR.
 
-   IF AVAIL bActRequest THEN 
+   IF AVAIL bActRequest THEN DO: 
       ldActivated = bActRequest.DoneStamp.
+      
+      /* YDR-2046 */
+      /* If we have any renewal order THEN before STC clitye is 
+         considered as reference tariff */
+        
+      IF bActRequest.ReqSource = {&REQUEST_SOURCE_RENEWAL} THEN 
+         ldActivated = fMake2Dt(idaEventDate - 1,0).
+
+   END. 
 
    RETURN ldActivated. 
 
