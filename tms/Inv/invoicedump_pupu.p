@@ -83,9 +83,11 @@ IF icDumpMode = "Full" THEN DO:
    ldFromDate = fInt2Date(INT(liFromPeriod),1).
 
    /* Dump ALL invoices */
+   /* YOT-3710 = Full dump has to be done only for 
+      FIRST dated invoices of every month */
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
             Invoice.Brand    = gcBrand    AND
-            Invoice.InvDate >= ldFromDate AND
+            Invoice.InvDate  = ldFromDate AND  /* YOT-3710 */
             Invoice.InvType  = 1     
        ON QUIT UNDO, RETRY
        ON STOP UNDO, RETRY:
