@@ -184,10 +184,37 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
 
    fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
 
+   IF FixedFee.BillCode EQ "RVTERM" THEN DO:
+
+      FIND SingleFee NO-LOCK WHERE
+           SingleFee.Brand       = gcBrand AND
+           SingleFee.Custnum     = Order.CustNum AND
+           SingleFee.HostTable   = "Mobsub" AND
+           SingleFee.KeyValue    = STRING(Order.MsSeq) AND
+           SingleFee.OrderID     = FixedFee.OrderID AND
+           SingleFee.CalcObj     = "RVTERM" NO-ERROR.
+      
+      IF NOT AVAIL SingleFee THEN DO:
+         fErrorLog(Order.OrderID,"ERROR:Q25 fee not found").
+         FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
+         NEXT ORDER_LOOP. 
+      END.
+      CASE SingleFee.BillCode:
+         WHEN "RVTERM1EF" THEN IF lcTFBank NE "0049" THEN NEXT ORDER_LOOP.
+         WHEN "RVTERMBSF" THEN IF TFBank NE "0081" THEN NEXT ORDER_LOOP.
+         OTHERWISE DO:
+            fErrorLog(Order.OrderID,"ERROR:Q25 fee financed by Yoigo").
+            FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
+            NEXT ORDER_LOOP. 
+         END.
+      END.
+   END.
+
    /* direct channels */
    IF INDEX(Order.OrderChannel, "POS") = 0 THEN DO:
 
-      IF lcTFBank NE {&TF_BANK_UNOE} THEN NEXT ORDER_LOOP.
+      IF lcTFBank NE {&TF_BANK_UNOE} AND
+         FixedFee.BillCode NE "RVTERM" THEN NEXT ORDER_LOOP.
 
       IF LOOKUP(Order.OrderChannel,"self,renewal") > 0 THEN ASSIGN
          lcFUC[1] = "332577543" 
@@ -209,27 +236,30 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
          FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
          NEXT ORDER_LOOP.
       END.
-
-      FIND FIRST ResellerTF NO-LOCK USE-INDEX ResellerTF WHERE
-                 ResellerTF.Brand = Reseller.Brand AND
-                 ResellerTF.Reseller = Reseller.Reseller AND
-                 ResellerTF.ValidFrom <= ldaOrderDate NO-ERROR.
-      IF NOT AVAIL ResellerTF THEN DO:
-         fErrorLog(Order.OrderID,SUBST("ERROR:Missing ResellerTF: &1",
-                                        Reseller.Reseller)).
-         FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
-         NEXT ORDER_LOOP. 
-      END.
-
-      IF ResellerTF.TFBank NE lcTFBank THEN DO:
-         IF ResellerTF.TFBank EQ "0000"
-            THEN FixedFee.FinancedResult = {&TF_STATUS_YOIGO}.
-         NEXT ORDER_LOOP.
-      END.
-
+      
       ASSIGN
          lcFUC[1] = reseller.fuc1
          lcFUC[2] = reseller.fuc2.
+
+      IF FixedFee.BillCode NE "RVTERM" THEN DO: 
+         FIND FIRST ResellerTF NO-LOCK USE-INDEX ResellerTF WHERE
+                    ResellerTF.Brand = Reseller.Brand AND
+                    ResellerTF.Reseller = Reseller.Reseller AND
+                    ResellerTF.ValidFrom <= ldaOrderDate NO-ERROR.
+         IF NOT AVAIL ResellerTF THEN DO:
+            fErrorLog(Order.OrderID,SUBST("ERROR:Missing ResellerTF: &1",
+                                           Reseller.Reseller)).
+            FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
+            NEXT ORDER_LOOP. 
+         END.
+
+         IF ResellerTF.TFBank NE lcTFBank THEN DO:
+            IF ResellerTF.TFBank EQ "0000"
+               THEN FixedFee.FinancedResult = {&TF_STATUS_YOIGO}.
+            NEXT ORDER_LOOP.
+         END.
+      END.
+
    END.
    ELSE DO:
       fErrorLog(Order.OrderID,SUBST("WARNING:Unsupported reseller: &1",
