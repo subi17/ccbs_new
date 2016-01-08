@@ -201,7 +201,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
       END.
       CASE SingleFee.BillCode:
          WHEN "RVTERM1EF" THEN IF lcTFBank NE "0049" THEN NEXT ORDER_LOOP.
-         WHEN "RVTERMBSF" THEN IF TFBank NE "0081" THEN NEXT ORDER_LOOP.
+         WHEN "RVTERMBSF" THEN IF lcTFBank NE "0081" THEN NEXT ORDER_LOOP.
          OTHERWISE DO:
             fErrorLog(Order.OrderID,"ERROR:Q25 fee financed by Yoigo").
             FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
