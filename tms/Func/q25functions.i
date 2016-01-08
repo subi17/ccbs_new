@@ -167,7 +167,7 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
                           {&ENCRYPTION_METHOD}, lcPassPhrase).
       /* convert some special characters to url encoding (at least '+' char
          could cause problems at later phases. */
-      lcEncryptedMSISDN = fUrlEncode(lcEncryptedMSISDN, "default").
+      lcEncryptedMSISDN = fUrlEncode(lcEncryptedMSISDN, "query").
       lcSMSMessage = REPLACE(lcSMSMessage, "#MSISDN", lcEncryptedMSISDN).
    END.
    RETURN lcSMSMessage.
