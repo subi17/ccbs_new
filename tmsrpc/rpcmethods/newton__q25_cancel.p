@@ -144,15 +144,18 @@ ELSE DO: /* Cancel Quota 25 Extension */
 
    IF DCCLI.TermDate NE ? THEN 
       RETURN appl_err("Q25 contract terminated").
-   
+
    CASE pcAction:
    WHEN "remove" THEN ASSIGN
       lcAction = "term"
       llCreateFees = TRUE.
-   WHEN "cancel" THEN ASSIGN
-      lcAction = "canc"
-      llCreateFees = FALSE.
-
+   WHEN "cancel" THEN DO: 
+      IF ADD-INTERVAL(TODAY, -5, "months") >= DCCLI.ValidFrom THEN
+         RETURN appl_err("Installment is older than 5 months").
+      ASSIGN
+         lcAction = "canc"
+         llCreateFees = FALSE.
+   END.
    OTHERWISE RETURN appl_err("Incorrect action").
    END. 
 
