@@ -226,21 +226,6 @@ PROCEDURE pHandleMobSub:
 
                ldaFromDate = DATE(MONTH(TODAY),1,YEAR(TODAY)).
 
-               lcMessage = lcMessage                             + lcDel +
-                           fNotNull(STRING(MobSub.MsSeq))        + lcDel +
-                           fNotNull(STRING(MobSub.CustNum))      + lcDel +
-                           fNotNull(MobSub.CLI)                  + lcDel +
-                           fNotNull(MobSub.CLIType)              + lcDel +
-                           fNotNull(lcTariffBundle)              + lcDel +
-                           fNotNull(STRING(MobSub.PayType))      + lcDel +
-                           fNotNull(STRING(MobSub.ActivationTS)) + lcDel +
-                           fNotNull(STRING(MobSub.MultiSimID))   + lcDel +
-                           fNotNull(STRING(MobSub.MultiSimType)) + lcDel +
-                           fNotNull(MobSub.IMSI)                 + lcDel +
-                           fNotNull(MobSub.BarrCode)             + lcDel +
-                           fDateToString(MobSub.TariffActDate)   + lcDel + 
-                           STRING(MobSub.TariffActTS)            + lcDel.
-
                IF RepLog.EventType = "MODIFY" AND
                   MobSub.TariffActDate <> Mobsub.Activationdate AND
                   MobSub.TariffActDate > ldaFromDate THEN
@@ -258,7 +243,23 @@ PROCEDURE pHandleMobSub:
                   ASSIGN lcOldCLIType = ""
                          lcOldtariffBundle = "".
 
-               lcMessage = lcMessage + lcOldCLIType + lcDel + lcOldtariffBundle.
+               lcMessage = lcMessage                             + lcDel +
+                           fNotNull(STRING(MobSub.MsSeq))        + lcDel +
+                           fNotNull(STRING(MobSub.CustNum))      + lcDel +
+                           fNotNull(MobSub.CLI)                  + lcDel +
+                           fNotNull(MobSub.CLIType)              + lcDel +
+                           fNotNull(lcTariffBundle)              + lcDel +
+                           fNotNull(STRING(MobSub.PayType))      + lcDel +
+                           fNotNull(STRING(MobSub.ActivationTS)) + lcDel +
+                           fNotNull(STRING(MobSub.MultiSimID))   + lcDel +
+                           fNotNull(STRING(MobSub.MultiSimType)) + lcDel +
+                           fNotNull(MobSub.IMSI)                 + lcDel +
+                           fNotNull(MobSub.BarrCode)             + lcDel +
+                           fDateToString(MobSub.TariffActDate)   + lcDel + 
+                           fNotNull(lcOldCLIType)                + lcDel + 
+                           fNotNull(lcOldtariffBundle)           + lcDel + 
+                           STRING(MobSub.TariffActTS)            + lcDel.
+
                fWriteMessage(lcMessage).
             END.
             ELSE DO:
