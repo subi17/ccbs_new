@@ -54,6 +54,9 @@ DEFINE STREAM strout.
  
    OUTPUT STREAM strout to VALUE(lcLogFile) APPEND.
 
+   IF lcAddrConfDir > "" THEN
+      lcAddrConfDir = lcAddrConfDir + "publishinvoice.email".
+
    IF ldaInvDate EQ ? THEN DO:
       fReqStatus(3,"Error: Invalid Invoice date").
       LEAVE.
