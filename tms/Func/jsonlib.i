@@ -70,4 +70,36 @@ FUNCTION fObjectToJsonArray RETURNS CHAR
    RETURN "".
 END.
 
+/*Functions that will be valuable when the lib*/
+
+
+/*fAddJsonStruct idea:
+ocModStruct - Original struct that will be changed
+icBase - location where the struct is added.
+   For example if we want to add new field to "data" then this parameter will get the value 
+   {"metadata":{"case":"03"},"data":{"msisdn":"8876","other":"8876",{ADD NEW STRUCT HERE}}}
+icNewStruct - struct that will be added to original struct   
+*/
+FUNCTION fAddJsonStruct_DRAFT RETURNS CHAR
+   (INPUT-OUTPUT ocModStruct AS CHAR,
+    icBase AS CHAR, /*level where to add, empty if main level*/
+    icNewStruct AS CHAR):
+   RETURN "".
+END.    
+
+/*fAddJsonChar idea:
+ocModStruct - Original struct that will be changed
+icBase - location where the new name-value pair is added.
+   For example if we want to add new name field to "data" then this parameter will get the value 
+   {"metadata":{"case":"03"},"data":{"msisdn":"8876","other":"8876","NEW_NAME":"NEW_VALUE"}}
+icNewCharName - new data(name) that will be added to original struct   
+icNewCharVal - new data(value) that will be added to original struct   
+*/
+FUNCTION fAddJsonChar_DRAFT  RETURNS CHAR
+   (INPUT-OUTPUT ocModStruct AS CHAR,
+    icBase AS CHAR, /*level where to add, empty if main level*/
+    icNewCharName AS CHAR,
+    icNewCharVal AS CHAR):
+   RETURN "".
+END.   
 
