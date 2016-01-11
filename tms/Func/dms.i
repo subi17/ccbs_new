@@ -317,7 +317,7 @@ FUNCTION fGenerateMessage RETURNS CHAR
    lcBankAcc = fNotNull(OrderCustomer.BankCode).
 
    lcRecEmail = lcEmail.
-   lcRecMSISDN = lcMSISDN.
+   lcRecMSISDN = fNotNull(Order.CLI).
 
    lcSeq = STRING(NEXT-VALUE(SMSSEQ)). /*read and increase SMSSEQ. The sequence must be reserved as ID for WEB&HPD*/
    lcDocList = fNeededDocs(BUFFER Order).  
