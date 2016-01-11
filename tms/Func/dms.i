@@ -315,7 +315,7 @@ FUNCTION fGenerateMessage RETURNS CHAR
    lcDNIType = fNotNull(OrderCustomer.CustIdType).
    lcDNI = fNotNull(OrderCustomer.CustId).
    lcFname = fNotNull(OrderCustomer.FirstName).
-   lcLname = fNotNull(OrderCustomer.SurName1) +
+   lcLname = fNotNull(OrderCustomer.SurName1) + " " + 
              fNotNull(Ordercustomer.SurName2).
    lcEmail = fNotNull(OrderCustomer.Email).
    lcBankAcc = fNotNull(OrderCustomer.BankCode).
@@ -449,7 +449,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    lcMQ =  fCParamNotNull("DMS","DMS_MQ"). 
    lcConfig = fDMSConfig().
    IF lcConfig EQ "" THEN RETURN "MQ config not available".
-   RETURN fSendToMQ(lcMessage, lcMQ, lcConfig, icModule).
+   RETURN fSendToMQ(lcMessage, lcMQ, lcConfig, icModule, FALSE).
 END.
 
 
