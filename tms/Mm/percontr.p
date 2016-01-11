@@ -2268,8 +2268,7 @@ PROCEDURE pContractTermination:
    END.
       
    llCancelInstallment = (lcTerminationType EQ "canc" AND
-                          DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} AND
-                          DayCampaign.DCEvent BEGINS "PAYTERM").
+                          DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}).
    llCancelOrder =
       (MsRequest.ReqSource = {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} AND
        DCCLI.ValidTo < DCCLI.ValidFrom)
