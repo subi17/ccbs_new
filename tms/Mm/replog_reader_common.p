@@ -572,7 +572,21 @@ PROCEDURE pHandleCustomer:
                            fNotNull(Customer.Email)                 + lcDel +
                            fNotNull(Customer.Phone)                 + lcDel +
                            fNotNull(Customer.SMSNumber)             + lcDel +
-                           fNotNull(Customer.BankAcct).
+                           fNotNull(Customer.BankAcct)              + lcDel +
+                           /*YPR-3204*/
+                           fNotNull(Customer.HonTitle)              + lcDel +
+                           fNotNull(Customer.)             + lcDel +                          .
+                           fNotNull(Customer.)             + lcDel +
+                           fNotNull(Customer.)             + lcDel +
+                           fNotNull(Customer.)             + lcDel +
+                           fNotNull(Customer.)             + lcDel +
+                           fNotNull(Customer.)             + lcDel +
+                           fNotNull(Customer.)             + lcDel +
+                           fNotNull(Customer.)             + lcDel +
+                           fNotNull(Customer.)             + lcDel +
+                           fNotNull(Customer.)             
+
+
                fWriteMessage(lcMessage).
             END.
             ELSE DO:
