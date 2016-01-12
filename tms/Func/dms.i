@@ -273,6 +273,16 @@ FUNCTION fDoc2Msg RETURNS CHAR
    RETURN lcRet.
 END.
 
+
+FUNCTION fGetBankName RETURNS CHAR
+   (icCode AS CHAR):
+   FIND FIRST Bank WHERE
+              Bank.Brand      = gcBrand AND
+              Bank.BankID     = SUBSTRING(icCode,5,4) NO-LOCK NO-ERROR.
+   IF AVAIL Bank THEN RETURN Bank.Name.
+   RETURN "".
+END.   
+
 /*Function generates JSON message for providing information for
   SMS/EMAIL sending. */
 FUNCTION fGenerateMessage RETURNS CHAR
@@ -300,13 +310,16 @@ FUNCTION fGenerateMessage RETURNS CHAR
    DEF VAR lcVersion AS CHAR NO-UNDO.
    DEF VAR lcRecEmail AS CHAR NO-UNDO.
    DEF VAR lcRecMSISDN AS CHAR NO-UNDO.
+   DEF VAR lcBankName AS CHAR NO-UNDO.
+
 
 
    IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN
-      lcMSISDN = fNotNull(Order.CLI).
+      lcRecMSISDN = fNotNull(Order.CLI).
    ELSE 
-      lcMSISDN = fNotNull(OrderCustomer.MobileNumber).
+      lcRecMSISDN = fNotNull(OrderCustomer.MobileNumber).
 
+   lcVersion = "3".
    lcContractID = fNotNull(Order.ContractId).
    lcDNIType = fNotNull(OrderCustomer.CustIdType).
    lcDNI = fNotNull(OrderCustomer.CustId).
@@ -315,9 +328,11 @@ FUNCTION fGenerateMessage RETURNS CHAR
              fNotNull(Ordercustomer.SurName2).
    lcEmail = fNotNull(OrderCustomer.Email).
    lcBankAcc = fNotNull(OrderCustomer.BankCode).
+   lcBankName = fNotNull(fGetBankName(OrderCustomer.BankCode)).
 
    lcRecEmail = lcEmail.
-   lcRecMSISDN = fNotNull(Order.CLI).
+
+   lcMSISDN = fNotNull(Order.CLI).
 
    lcSeq = STRING(NEXT-VALUE(SMSSEQ)). /*read and increase SMSSEQ. The sequence must be reserved as ID for WEB&HPD*/
    lcDocList = fNeededDocs(BUFFER Order).  
@@ -364,6 +379,8 @@ FUNCTION fGenerateMessage RETURNS CHAR
                          "~"email~""    +  "~:" + "~"" + lcEmail + "~"" + "," + 
                          "~"deposit_amount~""   +  "~:" + "~"" +
                                       icDeposit + "~"" + "," +
+                         "~"bank_name~"" +  "~:" + "~"" +
+                                      lcBankName + "~"" +
                          "~"bank_account_number~"" +  "~:" + "~"" +
                                       lcBankAcc + "~"" +
                       "~}" +
