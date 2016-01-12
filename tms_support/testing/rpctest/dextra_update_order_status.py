@@ -18,7 +18,7 @@ def instruction():
 if len(sys.argv) < 2: instruction()
 else:
    var1 = sys.argv[1]
-   var2 = sys.argv[2]
+   var2 = int(sys.argv[2])
 
 q = s.dextra.update_order_status(
    {
