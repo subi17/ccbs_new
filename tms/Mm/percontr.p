@@ -40,7 +40,6 @@
 {terminal_financing.i}
 {ordercancel.i}
 {fprepaidfee.i}
-{fcreditreq.i}
 
 DEF BUFFER bPendRequest FOR MsRequest.
 DEF BUFFER bOrigRequest FOR MsRequest.
@@ -270,14 +269,12 @@ PROCEDURE pContractActivation:
    DEF VAR liConCount        AS INT  NO-UNDO.
    DEF VAR ldeFeeAmount AS DEC NO-UNDO INIT ?.
    DEF VAR ldeResidualFeeDisc AS DEC NO-UNDO. 
-   DEF VAR ldaResidualFee AS DATE NO-UNDO.
-   DEF VAR llQ25CreditNote AS LOG NO-UNDO. 
+   DEF VAR ldaResidualFee AS DATE NO-UNDO. 
                     
    /* DSS related variables */
    DEF VAR lcResult      AS CHAR NO-UNDO.
    
    DEF BUFFER bOrigReq   FOR MsRequest.
-   DEF BUFFER bQ25SingleFee FOR SingleFee.
    
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
@@ -535,33 +532,26 @@ PROCEDURE pContractActivation:
          /* Q25 creation validation */
          IF MsRequest.ReqCParam3 EQ "RVTERM12" THEN DO:
 
-            FIND bQ25SingleFee NO-LOCK USE-INDEX Custnum WHERE
-                 bQ25SingleFee.Brand       = gcBrand AND
-                 bQ25SingleFee.Custnum     = MsOwner.CustNum AND
-                 bQ25SingleFee.HostTable   = "Mobsub" AND
-                 bQ25SingleFee.KeyValue    = STRING(MsOwner.MsSeq) AND
-                 bQ25SingleFee.SourceTable = "DCCLI" AND
-                 bQ25SingleFee.SourceKey   = STRING(MsRequest.ReqIParam3) AND
-                 bQ25SingleFee.CalcObj     = "RVTERM" NO-ERROR.
+            FIND SingleFee NO-LOCK USE-INDEX Custnum WHERE
+                 SingleFee.Brand       = gcBrand AND
+                 SingleFee.Custnum     = MsOwner.CustNum AND
+                 SingleFee.HostTable   = "Mobsub" AND
+                 SingleFee.KeyValue    = STRING(MsOwner.MsSeq) AND
+                 SingleFee.SourceTable = "DCCLI" AND
+                 SingleFee.SourceKey   = STRING(MsRequest.ReqIParam3) AND
+                 SingleFee.CalcObj     = "RVTERM" NO-ERROR.
 
-            IF NOT AVAIL bQ25SingleFee THEN DO:
+            IF NOT AVAIL SingleFee THEN DO:
                fReqError("Residual fee not found").
                RETURN.
             END.
 
-            /* If Quota 25 is already billed then create a 
-               "credit note" with equivalent amount. */
-            IF bQ25SingleFee.Billed EQ TRUE AND
+            IF SingleFee.Billed EQ TRUE AND
                NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
-                                  Invoice.Invnum = bQ25SingleFee.Invnum AND
+                                  Invoice.Invnum = SingleFee.Invnum AND
                                   Invoice.InvType = 99) THEN DO:
-
-               IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_NEWTON} THEN
-                  llQ25CreditNote = TRUE.
-               ELSE DO:
-                  fReqError("Residual fee already billed").
-                  RETURN.
-               END.
+               fReqError("Residual fee already billed").
+               RETURN.
             END.
 
             /* Find original installment contract */   
@@ -583,8 +573,8 @@ PROCEDURE pContractActivation:
 
             RELEASE DCCLI.
 
-            ldaResidualFee = fInt2Date(bQ25SingleFee.Concerns[1],0).
-            ldeFeeAmount = bQ25SingleFee.Amt.
+            ldaResidualFee = fInt2Date(SingleFee.Concerns[1],0).
+            ldeFeeAmount = SingleFee.Amt.
 
             FOR FIRST DiscountPlan NO-LOCK WHERE
                       DiscountPlan.Brand = gcBrand AND
@@ -614,7 +604,7 @@ PROCEDURE pContractActivation:
                ldeResidualFeeDisc = ldeFeeAmount
                ldeFeeAmount = ROUND(ldeFeeAmount / FMItem.FFItemQty,2)
                /* map q25 fee to original residual fee */
-               liOrderId = bQ25SingleFee.OrderId.
+               liOrderId = SingleFee.OrderId.
 
             IF ldeFeeAmount <= 0 THEN DO:
                fReqError("Zero or negative quota 25 extension amount").
@@ -989,52 +979,6 @@ PROCEDURE pContractActivation:
          ELSE DCCLI.Amount = MsRequest.ReqDParam2.
 
       END.
-      ELSE IF lcDCEvent EQ "RVTERM12" AND
-         AVAIL bQ25SingleFee AND
-         llQ25CreditNote EQ TRUE THEN DO:
-
-         ASSIGN
-           lcError = ""
-           liRequest = 0.
-
-         FOR FIRST Invoice NO-LOCK WHERE
-                   Invoice.InvNum = bQ25SingleFee.InvNum AND
-                   Invoice.InvType = 1,
-             FIRST SubInvoice NO-LOCK WHERE
-                   Subinvoice.InvNum = Invoice.InvNum AND
-                   Subinvoice.MsSeq = MsOwner.MsSeq,
-              EACH InvRow NO-LOCK WHERE
-                   InvRow.InvNum = Invoice.InvNum AND
-                   InvRow.SubInvNum = SubInvoice.SubInvNum AND
-                   InvRow.BillCode = bQ25SingleFee.BillCode AND
-                   InvRow.CreditInvNum = 0 AND
-                   InvRow.Amt >= bQ25SingleFee.Amt:
-            
-            IF InvRow.OrderId > 0 AND
-               bQ25SingleFee.OrderID > 0 AND
-               InvRow.OrderId NE bQ25SingleFee.OrderId THEN NEXT.
-         
-            liRequest = fFullCreditNote(Invoice.InvNum,
-                                    STRING(SubInvoice.SubInvNum),
-                                    "InvRow=" + STRING(InvRow.InvRowNum) + "|" +
-                                    "InvRowAmt=" + STRING(MIN(InvRow.Amt,
-                                                       bQ25SingleFee.Amt)),
-                                    "Correct",
-                                    "2013",
-                                    "",
-                                    OUTPUT lcError).
-            LEAVE.
-         END.
-            
-         IF liRequest = 0 THEN
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
-                             STRING(MsRequest.MsRequest),
-                             MsRequest.Custnum,
-                             "CREDIT NOTE CREATION FAILED",
-                             "ERROR:" + lcError). 
-      END. 
-
       ELSE IF lcDCEvent EQ "RVTERM12" AND
          ldeResidualFeeDisc > 0 THEN DO:
 
