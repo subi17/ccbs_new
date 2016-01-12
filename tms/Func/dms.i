@@ -328,7 +328,7 @@ FUNCTION fGenerateMessage RETURNS CHAR
              fNotNull(Ordercustomer.SurName2).
    lcEmail = fNotNull(OrderCustomer.Email).
    lcBankAcc = "ES13 0049 1500 08 2310410432". 
-   lcBankName = "Banco Santander".
+   lcBankName = "Santander".
 
    lcRecEmail = lcEmail.
 
@@ -381,7 +381,6 @@ FUNCTION fGenerateMessage RETURNS CHAR
                                       icDeposit + "~"" + "," +
                          "~"bank_name~"" +  "~:" + "~"" +
                                       lcBankName + "~"" + "," +
-
                          "~"bank_account_number~"" +  "~:" + "~"" +
                                       lcBankAcc + "~"" +
                       "~}" +
