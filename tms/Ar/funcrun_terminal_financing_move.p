@@ -194,7 +194,8 @@ FOR EACH FixedFee NO-LOCK WHERE
       END.
 
       IF liFFItemCount NE FMItem.FFItemQty OR
-         INT(ldeFFItemAmount) NE INT(FMItem.FFItemQty * FMItem.Amount) THEN DO:
+         (FixedFee.BillCode BEGINS "PAYTERM" AND
+         INT(ldeFFItemAmount) NE INT(FMItem.FFItemQty * FMItem.Amount)) THEN DO:
          
          fLogLine("UPDATE:" + {&TF_STATUS_YOIGO_FF_CHANGED}). 
       
