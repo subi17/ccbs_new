@@ -54,12 +54,17 @@ DEF VAR ldReturnTS       AS DEC    NO-UNDO.
 DEF VAR lcResult         AS CHAR   NO-UNDO.
 DEF VAR liRequest        AS INT    NO-UNDO.
 DEF VAR lcMemo           AS CHAR   NO-UNDO.
-DEF VAR ldeActFrom AS DEC NO-UNDO. 
-DEF VAR ldeActTo AS DEC NO-UNDO. 
+DEF VAR ldaMonth22 AS DATE NO-UNDO. 
+DEF VAR ldeMonth22 AS DEC NO-UNDO. 
+DEF VAR llRenewalOrder AS LOG NO-UNDO. 
+
+DEF BUFFER bDCCLI FOR DCCLI.
+DEF BUFFER bOrder FOR Order.
 
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
 lcStruct = validate_request(pcStruct, "imei!,orderid!,bill_code!,msisdn!,device_start,device_screen,salesman!,terminal_type!,envelope_number").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -72,7 +77,7 @@ ASSIGN
    llDeviceScreen    = get_bool(pcStruct,"device_screen") WHEN LOOKUP("device_screen", lcStruct) > 0
    lcSalesman        = get_string(pcStruct,"salesman")
    lcTerminalType    = get_string(pcStruct,"terminal_type")
-   lcEnvelopeNumber  = get_string(pcStruct,"envelope_number")
+   lcEnvelopeNumber  = get_string(pcStruct,"envelope_number") WHEN LOOKUP("envelope_number", lcStruct) > 0
    ldReturnTS        = fMakeTS().
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -123,7 +128,7 @@ IF (llDeviceStart AND llDeviceScreen) OR
         SingleFee.CalcObj     = "RVTERM" NO-LOCK NO-ERROR.
 
    IF NOT AVAILABLE SingleFee THEN
-      RETURN appl_err("Discount creation failed (residual fee not found)").
+      RETURN appl_err("Residual fee not found").
    
    IF SingleFee.Billed AND
       NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
@@ -131,49 +136,77 @@ IF (llDeviceStart AND llDeviceScreen) OR
                          Invoice.InvType = {&INV_TYPE_TEST}) THEN
       RETURN appl_err("Residual fee already billed").
 
+   IF SingleFee.SourceTable NE "DCCLI" THEN
+      RETURN appl_err("Residual fee is not linked with installment contract").
+      
+   FIND bDCCLI NO-LOCK WHERE    
+        bDCCLI.PerContractId = INT(SingleFee.SourceKey) AND
+        bDCCLI.MsSeq = Mobsub.MsSeq AND
+        bDCCLI.DCEvent BEGINS "PAYTERM" NO-ERROR.
+
+   IF NOT AVAIL bDCCLI THEN RETURN
+      appl_err("Installment contract not found").
+
+   ldaMonth22 = ADD-INTERVAL(bDCCLI.ValidFrom,22,"months":U).
+   ldaMonth22 = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
+   ldeMonth22 = fMake2Dt(ldaMonth22,0).
+
+   IF ldaMonth22 > TODAY THEN
+      RETURN appl_err("Installment contract has been active less than 22 months").
+
+   FOR EACH bOrder NO-LOCK WHERE
+            bOrder.MsSeq = MobSub.MsSeq AND
+            bOrder.OrderType = 2 AND
+            bOrder.CrStamp >= ldeMonth22:
+
+      IF LOOKUP(bOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN NEXT.
+
+      IF bOrder.StatusCode EQ {&ORDER_STATUS_DELIVERED} AND
+         CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                        MsRequest.MsSeq = MobSub.MsSeq AND
+                        MsRequest.ReqType = {&REQTYPE_REVERT_RENEWAL_ORDER} AND
+                        MsRequest.ReqStatus NE {&REQUEST_STATUS_CANCELLED} AND
+                        MsRequest.ReqIParam1 EQ bOrder.OrderID) THEN NEXT.
+
+      llRenewalOrder = TRUE.
+      LEAVE.
+   END.
 
    /* If customer try to return terminal after Q25 extension request
       (ongoing or Done) without renewal order then don't allow
       terminal return.  */
-   FOR EACH DCCLI NO-LOCK WHERE
-            DCCLI.Brand   EQ gcBrand AND
-            DCCLI.DCEvent EQ "RVTERM12" AND
-            DCCLI.MsSeq   EQ MobSub.MsSeq AND
-            DCCLI.Validto >= TODAY,
-      FIRST FixedFee NO-LOCK WHERE
-            FixedFee.Brand = gcBrand AND
-            FixedFee.Custnum = MobSub.Custnum AND
-            FixedFee.HostTable = "MobSub" AND
-            Fixedfee.KeyValue = STRING(MobSub.MsSeq) AND
-            Fixedfee.BillCode BEGINS "RVTERM" AND
-            FixedFee.SourceTable EQ "DCCLI" AND
-            FixedFee.SourceKey  EQ STRING(DCCLI.PerContractId) AND
-            FixedFee.OrderId EQ SingleFee.OrderID:
-
-      ASSIGN
-         ldeActFrom = fMake2Dt(DCCLI.ValidFrom, 0).
-         ldeActTo = fMake2Dt(DCCLI.ValidFrom, 86399).
-
-      IF NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                     MsRequest.MsSeq      EQ Mobsub.MsSeq AND
-                     MsRequest.ActStamp >= ldeActFrom AND
-                     MsRequest.ActStamp < ldeActTo AND
-                     MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
-                     MsRequest.ReqStatus  EQ 2 AND
-                     MsRequest.REqcparam3 EQ "RVTERM12" AND
-                     MsRequest.ReqSource  EQ {&REQUEST_SOURCE_RENEWAL}) THEN
-         RETURN appl_err("Active Q25 extension without renewal order").
-   END.
-
+      
    FIND FIRST MsRequest NO-LOCK WHERE
               MsRequest.MsSeq      EQ Mobsub.MsSeq AND
               MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
               LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND
+              MsRequest.ReqIParam3 EQ bDCCLI.PerContractID AND
               MsREquest.REqcparam3 EQ "RVTERM12" NO-ERROR.
-      
-   IF AVAIL MsREquest AND
-      MsRequest.ReqSource NE {&REQUEST_SOURCE_RENEWAL} THEN
-      RETURN appl_err("Pending Q25 extension without renewal order").
+
+   IF NOT llRenewalOrder THEN DO:
+
+      FOR EACH DCCLI NO-LOCK WHERE
+               DCCLI.Brand   EQ gcBrand AND
+               DCCLI.DCEvent EQ "RVTERM12" AND
+               DCCLI.MsSeq   EQ MobSub.MsSeq AND
+               DCCLI.Validto >= TODAY,
+          EACH FixedFee NO-LOCK WHERE
+               FixedFee.Brand = gcBrand AND
+               FixedFee.Custnum = MobSub.Custnum AND
+               FixedFee.HostTable = "MobSub" AND
+               Fixedfee.KeyValue = STRING(MobSub.MsSeq) AND
+               Fixedfee.BillCode BEGINS "RVTERM" AND
+               FixedFee.SourceTable EQ "DCCLI" AND
+               FixedFee.SourceKey EQ STRING(DCCLI.PerContractId):
+
+        IF FixedFee.OrderID <= 0 OR
+           FixedFee.OrderId EQ SingleFee.OrderID THEN
+           RETURN appl_err("Active Q25 extension without renewal order").
+      END.
+
+      IF AVAIL MsRequest THEN
+         RETURN appl_err("Pending Q25 extension without renewal order").
+   END.
    
    liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
                                      "RVTERMDT3DISC",
@@ -202,7 +235,8 @@ IF (llDeviceStart AND llDeviceScreen) OR
                      FALSE). /* clean event logs */
    END.
 
-   IF AVAILABLE MsRequest THEN
+   IF AVAILABLE MsRequest AND
+      MsRequest.ReqStatus EQ {&REQUEST_STATUS_NEW} THEN
       fReqStatus(4,"Cancelled by Terminal Return").
 
 END. /* IF llDeviceStart AND llDeviceScreen THEN DO: */
@@ -230,7 +264,7 @@ ELSE lcMemo = "Devolución en tienda denegada".
 DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                  "MobSub",
                  STRING(Order.MsSeq),
-                 0,
+                 Order.CustNum,
                  lcMemo,
                  lcResult).
 

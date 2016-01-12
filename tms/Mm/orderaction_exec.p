@@ -389,7 +389,7 @@ PROCEDURE pQ25Extension:
       ldaPerDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
       liPeriod = YEAR(ldaPerDate) * 100 + MONTH(ldaPerDate)
       lcTFBank = ""
-      liPercontractId = INT(OrderAction.ItemKey).
+      liPercontractId = INT(OrderAction.ItemParam).
 
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
       RETURN "ERROR: incorrect contract id".
@@ -495,11 +495,11 @@ PROCEDURE pQ25Discount:
    DEF VAR ldeDiscount AS DEC NO-UNDO. 
    DEF VAR lcResult AS CHAR NO-UNDO. 
 
-   liPercontractId = INT(OrderAction.ItemKey) NO-ERROR.
+   liPercontractId = INT(OrderAction.ItemParam) NO-ERROR.
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
       RETURN "ERROR:Q25 discount creation failed (incorrect contract id)".
                                             
-   ldeDiscount = DEC(OrderAction.ItemParam) NO-ERROR.
+   ldeDiscount = DEC(OrderAction.ItemKey) NO-ERROR.
    IF ERROR-STATUS:ERROR OR ldeDiscount EQ 0 THEN 
       RETURN "ERROR:Q25 discount creation failed (incorrect discount amount)".
 
@@ -514,6 +514,12 @@ PROCEDURE pQ25Discount:
 
    IF NOT AVAIL SingleFee THEN
       RETURN "ERROR:Q25 discount creation failed (residual fee not found)".
+
+   IF SingleFee.Billed AND 
+      NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
+                         Invoice.InvNum = SingleFee.Invnum AND
+                         Invoice.InvType = 99) THEN
+      RETURN "ERROR:Q25 discount creation failed (residual fee is billed)".
 
    fAddDiscountPlanMember(MobSub.MsSeq,
                          "RVTERMDT1DISC", 

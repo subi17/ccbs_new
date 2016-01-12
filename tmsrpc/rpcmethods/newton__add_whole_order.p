@@ -2104,15 +2104,15 @@ IF pcUpsHours NE "" THEN
 IF llq25_extension THEN
    fCreateOrderAction(Order.Orderid,
       "Q25Extension",
-      STRING(liper_contract_id),
-      "").
+      "Yes",
+      STRING(liper_contract_id)).
 
 /* Create Quota 25 discount */
 IF ldeq25_discount > 0 THEN
    fCreateOrderAction(Order.Orderid,
       "Q25Discount",
-      STRING(liper_contract_id),
-      STRING(ldeq25_discount)).
+      STRING(ldeq25_discount),
+      STRING(liper_contract_id)).
 
 /* YBP-582 */ 
 IF pcChannel BEGINS "fusion" THEN
