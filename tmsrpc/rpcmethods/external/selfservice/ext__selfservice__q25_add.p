@@ -1,113 +1,60 @@
 /**
-newton__q25_add.p
+external_selfservice__q25_add.p
 * Create Quota 25 extension request in TMS
 
-* @input    struct;mandatory
-            q25_struct;struct;mandatory
-            memo_struct;struct;optional
-
-* @q25_struct     username;string;mandatory;person who requests the change
-                  msseq;int;mandatory;subscription id
-                  per_contract_id;int;mandatory;installment contract id (related to q25)
-
-* @memo_struct    title;string;mandatory
-                  content;string;mandatory
+* @input    msisdn;string;mandatory
 
 * @output         boolean;true
 */
 
-/*
-   19.08.2015 hugo.lujan YPR-2516 [Q25] - TMS - TMSRPC changes related
-   to Vista/VFR
-    AC1: Create new TMSRPC to perform following actions:
-    Create - Create Quota 25 extension request in TMS
-    AC2: Create a memo in TMS
-    AC3: Send an SMS to customer if he selects Quota 25 extension
-*/
-
 {xmlrpc/xmlrpc_access.i}
+DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 {commpaa.i}
 gcBrand = "1".
 {timestamp.i}
 {tmsconst.i}
 {fmakemsreq.i}
 {fsendsms.i}
+{fexternalapi.i}
 
 /* top_struct */
 DEF VAR top_struct        AS CHARACTER NO-UNDO.
 DEF VAR top_struct_fields AS CHARACTER NO-UNDO.
 
-/* q25_struct */
-DEF VAR lcusername    AS CHARACTER NO-UNDO. /* Quota 25 person who requests the change */
-DEF VAR limsseq       AS INTEGER   NO-UNDO. /* Quota 25 subscription id */
-DEF VAR liper_contract_id AS INTEGER   NO-UNDO. /* Quota 25 installment contract id */
-DEF VAR pcQ25Struct       AS CHARACTER NO-UNDO. /* Quota 25 input struct */
-DEF VAR lcQ25Struct       AS CHARACTER NO-UNDO.
-
-/* memo_struct */
-DEF VAR lcmemo_title       AS CHARACTER NO-UNDO. /* Memo Title */
-DEF VAR lcmemo_content     AS CHARACTER NO-UNDO. /* Memo Content */
-DEF VAR pcmemoStruct       AS CHARACTER NO-UNDO. /* Memo input struct */
-DEF VAR lcmemoStruct       AS CHARACTER NO-UNDO.
+DEF VAR pcCLI             AS CHARACTER   NO-UNDO. /* MSISDN */
+DEF VAR pcTransId         AS CHAR NO-UNDO. 
 
 DEF VAR liCreated        AS INTEGER   NO-UNDO.
 DEF VAR lcResult         AS CHARACTER NO-UNDO.
 
 DEF VAR ldaMonth22Date    AS DATE NO-UNDO.
 DEF VAR ldaMonth24Date    AS DATE NO-UNDO.
+DEF VAR ldaQ25PeriodStartDate  AS DATE NO-UNDO.
+DEF VAR ldaQ25PeriodEndDate    AS DATE NO-UNDO.
+
 /* Contract activation timestamp */
 DEF VAR ldContractActivTS AS DECIMAL NO-UNDO.
 DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
 DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
+DEF VAR lcApplicationId  AS CHAR NO-UNDO.
+DEF VAR lcAppEndUserId   AS CHAR NO-UNDO.
 
 /* common validation */
-IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
-top_struct = get_struct(param_toplevel_id, "0").
+IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
+
+ASSIGN pcTransId  = get_string(param_toplevel_id,"0")
+       pcCLI      = get_string(param_toplevel_id,"1").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-top_struct_fields = validate_request(top_struct, 
-   "q25_struct!,memo_struct").
-IF top_struct_fields EQ ? THEN RETURN.
+ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
+       lcAppEndUserId  = gbAuthLog.EndUserId.
 
-ASSIGN
-   pcQ25Struct  = get_struct(top_struct, "q25_struct")
-   pcmemoStruct = get_struct(top_struct, "memo_struct") WHEN
-      LOOKUP("memo_struct", top_struct_fields) > 0.
-
-IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-lcQ25Struct = validate_request(pcQ25Struct,"username!,msseq!,per_contract_id!").
-IF lcQ25Struct EQ ? THEN RETURN.
-
-ASSIGN
-   lcusername = get_string(pcQ25Struct, "username")
-      WHEN LOOKUP("username", lcQ25Struct) > 0
-   limsseq = get_int(pcQ25Struct, "msseq")
-      WHEN LOOKUP("msseq", lcQ25Struct) > 0
-    /* Quota 25 installment contract id */
-   liper_contract_id = get_int(pcQ25Struct, "per_contract_id")      
-      WHEN LOOKUP("per_contract_id", lcQ25Struct) > 0.
-
-IF gi_xmlrpc_error NE 0 THEN RETURN.
-      
-IF pcmemoStruct > "" THEN DO:
-   
-   lcmemoStruct = validate_request(pcmemoStruct, "title!,content!").
-   IF lcmemoStruct EQ ? THEN RETURN.
-   
-   ASSIGN
-      lcmemo_title = get_string(pcmemoStruct, "title")
-         WHEN LOOKUP("title", lcmemoStruct) > 0
-      lcmemo_content = get_string(pcmemoStruct, "content")
-         WHEN LOOKUP("content", lcmemoStruct) > 0.
-
-   IF gi_xmlrpc_error NE 0 THEN RETURN.
-END.
-
-katun = "VISTA_" + lcusername.
+katun = fgetAppUserId(INPUT lcApplicationId, 
+                      INPUT lcAppEndUserId).
 
 FIND FIRST MobSub NO-LOCK WHERE
-           MobSub.MsSeq = limsseq NO-ERROR.
+           Mobsub.brand = gcBrand AND
+           MobSub.CLI = pcCLI NO-ERROR.
            
 IF NOT AVAILABLE MobSub THEN
    RETURN appl_err("Subscription not found").
@@ -117,12 +64,20 @@ FIND FIRST Customer NO-LOCK WHERE
 IF NOT AVAILABLE Customer THEN
    RETURN appl_err("Customer not found").
 
+ASSIGN
+   /* Possible Q25 period validto value should be between fisrt day of current
+      month and last day of current month + 2 */
+   ldaQ25PeriodStartDate    = DATE(MONTH(TODAY),1, YEAR(TODAY)) - 1
+   ldaQ25PeriodEndDate    = ADD-INTERVAL(TODAY, 2, 'months':U)
+   ldaQ25PeriodEndDate    = fLastDayOfMonth(ldaQ25PeriodEndDate).
+
 /* Find original installment contract */   
-FIND FIRST DCCLI NO-LOCK WHERE
-           DCCLI.Brand   = gcBrand AND
-           DCCLI.DCEvent BEGINS "PAYTERM" AND
-           DCCLI.MsSeq   = MobSub.MsSeq AND 
-           DCCLI.PerContractId = liper_contract_id NO-ERROR.
+FIND DCCLI NO-LOCK WHERE
+     DCCLI.Brand   = gcBrand AND
+     DCCLI.DCEvent BEGINS "PAYTERM" AND
+     DCCLI.MsSeq   = MobSub.MsSeq AND 
+     DCCLI.ValidTo >= ldaQ25PeriodStartDate AND
+     DCCLI.ValidTo <= ldaQ25PeriodEndDate NO-ERROR. 
 
 IF NOT AVAIL DCCLI THEN
    RETURN appl_err("Installment contract not found").
@@ -177,6 +132,17 @@ IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                   DCCLI.ValidTo >= TODAY) THEN
    RETURN appl_err("Q25 extension already active").
 
+IF SingleFee.OrderId > 0 THEN DO:
+
+   FIND FIRST TermReturn NO-LOCK WHERE
+              TermReturn.OrderId = SingleFee.OrderId NO-ERROR.
+
+   IF AVAIL TermReturn AND 
+          ((TermReturn.DeviceScreen = TRUE AND TermReturn.DeviceStart  = TRUE) OR 
+           (TermReturn.DeviceScreen = ?    AND TermReturn.DeviceStart  = ?)) THEN
+      RETURN appl_err("Already returned terminal").
+END.
+
 liCreated = fPCActionRequest(
    MobSub.MsSeq,
    "RVTERM12",
@@ -196,10 +162,23 @@ IF liCreated = 0 THEN
    RETURN appl_err(SUBST("Q25 extension request failed: &1",
                          lcResult)).
 
-lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
-                      TODAY,
-                      Customer.Language,
-                      OUTPUT ldeSMSStamp).
+CASE SingleFee.BillCode:
+   WHEN "RVTERM1EF" THEN
+      lcSMSTxt = fGetSMSTxt("Q25ExtensionUNOE",
+                            TODAY,
+                            Customer.Language,
+                            OUTPUT ldeSMSStamp).
+   WHEN "RVTERMBSF" THEN
+      lcSMSTxt = fGetSMSTxt("Q25ExtensionSabadell",
+                            TODAY,
+                            Customer.Language,
+                            OUTPUT ldeSMSStamp).
+   OTHERWISE 
+      lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
+                            TODAY,
+                            Customer.Language,
+                            OUTPUT ldeSMSStamp).
+END CASE.
 
 IF lcSMSTxt > "" THEN DO:
 
@@ -219,22 +198,24 @@ IF lcSMSTxt > "" THEN DO:
                   "").
 END.
 
-IF lcmemo_title > "" THEN DO:
+CREATE Memo.
+ASSIGN
+   Memo.CreStamp  = {&nowTS}
+   Memo.Brand     = gcBrand
+   Memo.HostTable = "MobSub"
+   Memo.KeyValue  = STRING(Mobsub.MSSeq)
+   Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
+   Memo.CreUser   = katun 
+   Memo.MemoTitle = "By customer's request (Self Service)"
+   Memo.MemoText  = "Q25 extension request"
+   Memo.CustNum   = MobSub.Custnum
+   Memo.Source    = "Self Service".
 
-   CREATE Memo.
-   ASSIGN
-       Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
-       Memo.HostTable = "MobSub"
-       Memo.KeyValue  = STRING(MobSub.MsSeq)
-       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
-       Memo.MemoTitle = lcmemo_title
-       Memo.MemoText  = lcmemo_content
-       Memo.CustNum   = MobSub.CustNum.
-END. /* IF lcmemo_title > "" AND lcmemo_content > "" THEN DO: */
 
-add_boolean(response_toplevel_id, "", TRUE).
+/* Adding the details into Main struct */
+top_struct = add_struct(response_toplevel_id, "").
+add_string(top_struct, "transaction_id", pcTransId).
+add_boolean(top_struct, "result", True).
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 

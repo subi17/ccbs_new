@@ -775,15 +775,9 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             data[LOOKUP("invoice_ref", gcCustomerStructStringFields)].
  
          OrderCustomer.Address = OrderCustomer.Street .
-         IF OrderCustomer.BuildingNum NE "" THEN DO: 
-            IF (piDeliveryType = {&ORDER_DELTYPE_KIALA} AND 
-                piRowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}) THEN
-               OrderCustomer.Address = OrderCustomer.Address + ", " + 
-                                       OrderCustomer.BuildingNum .
-            ELSE
-               OrderCustomer.Address = OrderCustomer.Address + " " +
-                                       OrderCustomer.BuildingNum .
-         END.
+         IF OrderCustomer.BuildingNum NE "" THEN 
+            OrderCustomer.Address = OrderCustomer.Address + " " +
+                                    OrderCustomer.BuildingNum .         
          IF OrderCustomer.AddressCompl NE "" THEN 
             OrderCustomer.Address = OrderCustomer.Address + " " + OrderCustomer.AddressCompl .
 
@@ -2105,15 +2099,15 @@ IF pcUpsHours NE "" THEN
 IF llq25_extension THEN
    fCreateOrderAction(Order.Orderid,
       "Q25Extension",
-      "Yes",
-      STRING(liper_contract_id)).
+      STRING(liper_contract_id),
+      "").
 
 /* Create Quota 25 discount */
 IF ldeq25_discount > 0 THEN
    fCreateOrderAction(Order.Orderid,
       "Q25Discount",
-      STRING(ldeq25_discount),
-      STRING(liper_contract_id)).
+      STRING(liper_contract_id),
+      STRING(ldeq25_discount)).
 
 /* YBP-582 */ 
 IF pcChannel BEGINS "fusion" THEN
