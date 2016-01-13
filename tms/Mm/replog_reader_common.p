@@ -575,7 +575,7 @@ PROCEDURE pHandleCustomer:
                            fNotNull(Customer.BankAcct)              + lcDel +
                            /*YPR-3204*/
                            fNotNull(Customer.HonTitle)              + lcDel +
-                           fNotNull(Customer.)             + lcDel +                          .
+                           fNotNull(fDateToString(Customer.Birthday)) + lcDel +                          
                            fNotNull(Customer.)             + lcDel +
                            fNotNull(Customer.)             + lcDel +
                            fNotNull(Customer.)             + lcDel +
@@ -585,7 +585,7 @@ PROCEDURE pHandleCustomer:
                            fNotNull(Customer.)             + lcDel +
                            fNotNull(Customer.)             + lcDel +
                            fNotNull(Customer.)             
-
+                           .
 
                fWriteMessage(lcMessage).
             END.
