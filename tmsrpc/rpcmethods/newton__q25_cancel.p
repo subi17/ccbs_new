@@ -3,11 +3,11 @@
   or Terminate Quota 25 extension (create single fee for remaining monthly fees)
 * @input       struct;mandatory
 * @struct      q25_struct;struct;mandatory
-               action;string;mandatory
                memo_struct;struct;optional
 * @q25_struct  username;string;mandatory;person who requests the change
                msseq;int;mandatory;subscription id
                per_contract_id;int;mandatory;installment contract id (related to q25)
+               action;string;mandatory
 * @memo_struct title;string;mandatory
                content;string;mandatory
 * @output      boolean;true
@@ -66,7 +66,6 @@ IF top_struct_fields EQ ? THEN RETURN.
 
 ASSIGN
    pcQ25Struct  = get_struct(top_struct, "q25_struct")
-   pcAction     = get_string(top_struct, "action")
    pcmemoStruct = get_struct(top_struct, "memo_struct") WHEN
       LOOKUP("memo_struct", top_struct_fields) > 0.
 
@@ -82,7 +81,8 @@ ASSIGN
       WHEN LOOKUP("msseq", lcQ25Struct) > 0
     /* Quota 25 installment contract id */
    liper_contract_id = get_int(pcQ25Struct, "per_contract_id")      
-      WHEN LOOKUP("per_contract_id", lcQ25Struct) > 0.
+      WHEN LOOKUP("per_contract_id", lcQ25Struct) > 0
+   pcAction     = get_string(pcQ25Struct, "action").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
       
