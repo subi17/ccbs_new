@@ -378,19 +378,10 @@ PROCEDURE pQ25Extension:
    DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
    DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
 
-   DEF VAR liPeriod AS INT NO-UNDO. 
-   DEF VAR ldaPerDate AS DATE NO-UNDO. 
-   DEF VAR lcTFBank AS CHAR NO-UNDO.
-
    DEF BUFFER SingleFee FOR SingleFee.
    DEF BUFFER MsRequest FOR MsRequest.
    
-   ASSIGN
-      ldaPerDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
-      liPeriod = YEAR(ldaPerDate) * 100 + MONTH(ldaPerDate)
-      lcTFBank = ""
-      liPercontractId = INT(OrderAction.ItemKey).
-
+   liPercontractId = INT(OrderAction.ItemKey) NO-ERROR.
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
       RETURN "ERROR: incorrect contract id".
 
@@ -405,17 +396,6 @@ PROCEDURE pQ25Extension:
    
    IF NOT AVAIL SingleFee THEN
       RETURN "ERROR: residual fee not found".
-   
-   IF SingleFee.OrderId > 0 THEN DO:
-
-      FIND FIRST TermReturn NO-LOCK WHERE
-                 TermReturn.OrderId = SingleFee.OrderId NO-ERROR.
-
-      IF AVAIL TermReturn AND 
-             ((TermReturn.DeviceScreen = TRUE AND TermReturn.DeviceStart  = TRUE) OR 
-              (TermReturn.DeviceScreen = ?    AND TermReturn.DeviceStart  = ?)) THEN
-         RETURN "ERROR: already returned terminal".
-   END.
 
    ldaDate = fPer2Date(SingleFee.BillPeriod,0).
    ldaDate = DATE(MONTH(ldaDate),21,YEAR(ldaDate)).
@@ -443,29 +423,16 @@ PROCEDURE pQ25Extension:
    IF liRequest = 0 THEN 
       RETURN "ERROR:Periodical contract not created; " + lcResult.
    ELSE DO:
-      FIND FIRST MsRequest EXCLUSIVE-LOCK WHERE
-                 MsRequest.MsRequest = liRequest NO-ERROR.
-      IF AVAIL MsRequest THEN ASSIGN
-         MsRequest.ReqIparam1 = Order.OrderId.
-      RELEASE MsRequest.
+      FIND FIRST msrequest EXCLUSIVE-LOCK WHERE
+                 msrequest.msrequest = lirequest NO-ERROR.
+      IF AVAIL msrequest THEN ASSIGN
+         msrequest.ReqIparam1 = Order.OrderId.
+      RELEASE msrequest.
 
-      CASE SingleFee.BillCode:
-         WHEN "RVTERM1EF" THEN
-            lcSMSTxt = fGetSMSTxt("Q25ExtensionUNOE",
-                                  TODAY,
-                                  Customer.Language,
-                                  OUTPUT ldeSMSStamp).
-         WHEN "RVTERMBSF" THEN
-            lcSMSTxt = fGetSMSTxt("Q25ExtensionSabadell",
-                                  TODAY,
-                                  Customer.Language,
-                                  OUTPUT ldeSMSStamp).
-         OTHERWISE 
-            lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
-                                  TODAY,
-                                  Customer.Language,
-                                  OUTPUT ldeSMSStamp).
-      END CASE.
+      lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
+                            TODAY,
+                            Customer.Language,
+                            OUTPUT ldeSMSStamp).
 
       IF lcSMSTxt > "" THEN DO:
 
@@ -484,8 +451,8 @@ PROCEDURE pQ25Extension:
                         "Yoigo info",
                         "").
       END.
-
    END.
+      
 
 END PROCEDURE.
 

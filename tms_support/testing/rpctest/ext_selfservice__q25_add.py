@@ -15,6 +15,6 @@ if len(sys.argv) < 2: instruction()
 else:
    var1 = sys.argv[1]
 
-q=s.ext.selfservice.q25_add(var1)
+q=s.ext.selfservice.q25_add('501', var1)
 print_results(q)
 

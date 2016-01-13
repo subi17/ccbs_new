@@ -97,6 +97,14 @@ FUNCTION fUpdateDMS RETURNS CHAR
       BUFFER-COMPARE DMS TO ttDMS SAVE RESULT IN llCompare.
    IF NOT llCompare THEN DMS.StatusTS = fMakeTS().
 
+   /*YPR-3077:A0 response must erase SENT doocuments*/
+   IF DMS.StatusCode EQ "A0" THEN DO:
+      FOR EACH DMSDoc WHERE
+               DMSDoc.DMSID EQ DMS.DMSID AND
+               DMSDOC.DocStatusCode EQ {&DMS_INIT_STATUS_SENT}:
+         DELETE DMSDoc.         
+      END.
+   END.
 
    IF icDocList <> "" THEN
       DO i = 1 TO NUM-ENTRIES(icDocList,icDocListSep) BY 4:
@@ -307,7 +315,7 @@ FUNCTION fGenerateMessage RETURNS CHAR
    lcDNIType = fNotNull(OrderCustomer.CustIdType).
    lcDNI = fNotNull(OrderCustomer.CustId).
    lcFname = fNotNull(OrderCustomer.FirstName).
-   lcLname = fNotNull(OrderCustomer.SurName1) +
+   lcLname = fNotNull(OrderCustomer.SurName1) + " " + 
              fNotNull(Ordercustomer.SurName2).
    lcEmail = fNotNull(OrderCustomer.Email).
    lcBankAcc = fNotNull(OrderCustomer.BankCode).
@@ -441,7 +449,7 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    lcMQ =  fCParamNotNull("DMS","DMS_MQ"). 
    lcConfig = fDMSConfig().
    IF lcConfig EQ "" THEN RETURN "MQ config not available".
-   RETURN fSendToMQ(lcMessage, lcMQ, lcConfig, icModule).
+   RETURN fSendToMQ(lcMessage, lcMQ, lcConfig, icModule, FALSE).
 END.
 
 
