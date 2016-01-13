@@ -1,0 +1,4 @@
+
+ADD INDEX "StatusCode" ON "AMQMsg" 
+   AREA "Dyn_Index_1"
+   INDEX-FIELD "StatusCode" ASCENDING
