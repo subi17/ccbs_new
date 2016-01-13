@@ -20,6 +20,8 @@ else:
 p=s.newton.q25_cancel({'q25_struct':
                        {'username':'tester',
                        'msseq':var2,
-                       'per_contract_id':var3},
-                       'action':var1})
+                       'per_contract_id':var3,
+                       'action':var1},
+                       {'title':'test memo',
+                       'content':var1}})
 print_results(p)
