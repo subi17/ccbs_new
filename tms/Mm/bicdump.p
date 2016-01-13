@@ -10,7 +10,7 @@
 
    Invalid Customer data
    1.  where Charge Type = direct debit but Bank Account is empty or erroneous. 
-   2.  where Charge Type is different than Direct Debit. 
+   REMOVED ERROR: 2.  where Charge Type is different than Direct Debit. 
    3.  where Delivery Type is different than Via Print House. 
    4.  where Postal Code is empty or erroneous. 
    5.  where Region Code is empty or erroneous. 
@@ -128,10 +128,6 @@ FOR EACH Customer WHERE
          "Charge Type = direct debit but Bank Account is empty or erroneous.".
    END.
 
-   ELSE IF Customer.ChargeType NE 2 THEN DO:
-      lcReason = "Charge Type is different than Direct Debit.".
-   END.
-   
    ELSE IF Customer.DelType NE {&INV_DEL_TYPE_PAPER} AND
            Customer.DelType NE {&INV_DEL_TYPE_EMAIL} AND
            Customer.DelType NE {&INV_DEL_TYPE_SMS}   AND
