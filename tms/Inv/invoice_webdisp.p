@@ -24,6 +24,23 @@ DEF OUTPUT PARAMETER oiMarked   AS INT  NO-UNDO.
 
 DEF BUFFER bInv FOR Invoice.
 
+DO TRANS:
+   CREATE ActionLog.
+   ASSIGN 
+      ActionLog.Brand        = gcBrand   
+      ActionLog.TableName    = "Invoice"  
+      ActionLog.ActionID     = "WebDisp"
+      ActionLog.KeyValue     = STRING(YEAR(idaInvDate),"9999") + 
+                               STRING(MONTH(idaInvDate),"99") + 
+                               STRING(DAY(idaInvDate),"99")
+      ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
+      ActionLog.ActionDec    = iiInvType
+      ActionLog.UserCode     = katun
+      ActionLog.ActionStatus = 0.
+
+   FIND CURRENT ActionLog NO-LOCK.
+
+END.   
 
 FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
          Invoice.Brand    = gcBrand    AND
@@ -51,25 +68,26 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
       DISP oiMarked LABEL "Marked" FORMAT ">>>>>>>>9" 
       WITH OVERLAY SIDE-LABELS ROW 10 CENTERED TITLE " Invoices " FRAME fQty.
    END.
+
+   IF oiMarked MOD 100000 EQ 0 THEN DO TRANS:
+      FIND CURRENT ActionLog EXCLUSIVE-LOCK NO-ERROR.
+
+      ASSIGN 
+         ActionLog.ActionChar   = 'Web display permit marked as "' +
+                                  STRING(ilDisplay,"allowed/denied") + '" to ' +
+                                  STRING(oiMarked) + " invoices."
+         ActionLog.ActionTS     = fMakeTS().
+   END.
 END.
 
 IF oiMarked > 0 THEN DO TRANS:
+   FIND CURRENT ActionLog EXCLUSIVE-LOCK NO-ERROR.
 
-   CREATE ActionLog.
-   ASSIGN 
-      ActionLog.Brand        = gcBrand   
-      ActionLog.TableName    = "Invoice"  
-      ActionLog.ActionID     = "WebDisp"
-      ActionLog.KeyValue     = STRING(YEAR(idaInvDate),"9999") + 
-                               STRING(MONTH(idaInvDate),"99") + 
-                               STRING(DAY(idaInvDate),"99")
-      ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
-      ActionLog.ActionDec    = iiInvType
-      ActionLog.UserCode     = katun
+   ASSIGN    
       ActionLog.ActionStatus = 3
       ActionLog.ActionChar   = 'Web display permit marked as "' + 
                                STRING(ilDisplay,"allowed/denied") + '" to ' +
-                               STRING(oiMarked) + " invoices.".
+                               STRING(oiMarked) + " invoices."
       ActionLog.ActionTS     = fMakeTS().
          
    RELEASE ActionLog.   

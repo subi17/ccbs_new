@@ -9,7 +9,6 @@
 
 {commpaa.i}
 {timestamp.i}
-{heartbeat.i}
 {log.i}
 {cparam2.i}
 {mnp.i}
@@ -17,6 +16,7 @@
 
 katun = "MNP".
 gcBrand = "1".
+{heartbeat.i}
 
 DEFINE VARIABLE liLoop     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTime     AS CHARACTER NO-UNDO.

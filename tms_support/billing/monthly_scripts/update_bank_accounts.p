@@ -23,8 +23,8 @@ END.
 def stream sread.
 def stream slog.
 
-input stream sread from "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4186.csv".
-output stream slog to "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4186.log".
+input stream sread from "logs/yot_4252.csv".
+output stream slog to "logs/yot_4252.log".
    
 def var lcline as char no-undo.
 def var licust as int no-undo.
