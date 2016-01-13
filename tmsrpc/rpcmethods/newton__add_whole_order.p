@@ -775,15 +775,9 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             data[LOOKUP("invoice_ref", gcCustomerStructStringFields)].
  
          OrderCustomer.Address = OrderCustomer.Street .
-         IF OrderCustomer.BuildingNum NE "" THEN DO: 
-            IF (piDeliveryType = {&ORDER_DELTYPE_KIALA} AND 
-                piRowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}) THEN
-               OrderCustomer.Address = OrderCustomer.Address + ", " + 
-                                       OrderCustomer.BuildingNum .
-            ELSE
-               OrderCustomer.Address = OrderCustomer.Address + " " +
-                                       OrderCustomer.BuildingNum .
-         END.
+         IF OrderCustomer.BuildingNum NE "" THEN 
+            OrderCustomer.Address = OrderCustomer.Address + " " +
+                                    OrderCustomer.BuildingNum .         
          IF OrderCustomer.AddressCompl NE "" THEN 
             OrderCustomer.Address = OrderCustomer.Address + " " + OrderCustomer.AddressCompl .
 

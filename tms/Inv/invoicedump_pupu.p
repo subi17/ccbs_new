@@ -83,11 +83,12 @@ IF icDumpMode = "Full" THEN DO:
    ldFromDate = fInt2Date(INT(liFromPeriod),1).
 
    /* Dump ALL invoices */
+   /* YOT-3710 = Full dump has to be done only for 
+      FIRST dated invoices of every month */
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
             Invoice.Brand    = gcBrand    AND
-            Invoice.InvDate >= ldFromDate AND
-            Invoice.InvType  = 1          AND
-            Invoice.DeliveryState > 0
+            Invoice.InvDate  = ldFromDate AND  /* YOT-3710 */
+            Invoice.InvType  = 1     
        ON QUIT UNDO, RETRY
        ON STOP UNDO, RETRY:
 
@@ -95,7 +96,9 @@ IF icDumpMode = "Full" THEN DO:
          olInterrupted = TRUE.
          LEAVE.
       END. /* IF RETRY THEN DO: */
-      
+     
+      IF Invoice.InvCfg[1] THEN NEXT.
+
       FIND FIRST Customer WHERE
                  Customer.CustNum = Invoice.CustNum
       NO-LOCK NO-ERROR.
@@ -121,8 +124,7 @@ ELSE DO:
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
             Invoice.Brand    = gcBrand    AND
             Invoice.InvDate >= ldFromDate AND
-            Invoice.InvType  = 1          AND
-            Invoice.DeliveryState > 0
+            Invoice.InvType  = 1
        ON QUIT UNDO, RETRY
        ON STOP UNDO, RETRY:
 
@@ -131,6 +133,8 @@ ELSE DO:
          LEAVE.
       END. /* IF RETRY THEN DO: */
 
+      IF Invoice.InvCfg[1] THEN NEXT.
+      
       IF Invoice.ChgStamp < idLastDump THEN NEXT.
 
       FIND FIRST Customer WHERE
