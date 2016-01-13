@@ -360,7 +360,6 @@ FUNCTION fGenerateMessage RETURNS CHAR
    lcMessage = "~{" + "~"metadata~""  + "~:" + "~{" +
                          "~"version~""  + "~:" + "~"" + lcVersion + "~"," +
                          "~"case~""  + "~:" + "~"" + icNotifCaseID  + "~"," +
-                         lcArray + "," +
                          "~"smsseq~""  + "~:" + "~"" + lcSeq  + "~"," +
                          "~"recipient_email~""  + "~:" + "~"" + 
                             lcRecEmail  + "~"," +
@@ -368,6 +367,7 @@ FUNCTION fGenerateMessage RETURNS CHAR
                             lcRecMSISDN  + "~"" +
                      "~}" + "," +
                       "~"data~"" + "~:" + "~{" +
+                         lcArray + "," +
                          "~"msisdn~""   + "~:" + "~"" + lcMSISDN + "~"" + "," +
                          "~"contractid~"" +  "~:" + "~"" +
                                      lcContractID + "~"" + "," +
