@@ -550,8 +550,6 @@ PROCEDURE pProcessData:
                                       FixedFeeTF.CancelStatus EQ "NEW" AND
                                       ttTFPayment.FinancedResult NE "00".
 
-      RELEASE FixedFee.
-      
       IF INDEX(Order.OrderChannel,"pos") > 0 AND 
          FixedFee.BillCode NE "RVTERM" THEN
       FOR FIRST OrderTimeStamp NO-LOCK WHERE
@@ -568,6 +566,8 @@ PROCEDURE pProcessData:
             ldaFromDate = ldaDate WHEN ldaDate < ldaFromDate
             ldaToDate = ldaDate WHEN ldaDate > ldaToDate.
       END.
+      
+      RELEASE FixedFee.
       
    END.
 
