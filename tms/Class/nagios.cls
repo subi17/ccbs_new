@@ -141,7 +141,7 @@ CLASS Nagios:
                          SUBSTR(lcTimeStamp,12,2) +
                          SUBSTR(lcTimeStamp,15,2) +
                          SUBSTR(lcTimeStamp,18,2)
-         lcNagios      = "[" + lcTimeStamp + "] ".
+         lcNagios      = "[" + lcTimeStamp + "]".
          IF lcMonitorMethod = "File" THEN 
               lcNagios = lcNagios + ";" + lcServer + ";" +
                          lcOperator + ";" + lcCommand.

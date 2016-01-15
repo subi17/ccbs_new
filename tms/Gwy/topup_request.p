@@ -16,13 +16,14 @@
 {commpaa.i} 
 {xmlfunction.i}
 {timestamp.i}
-{heartbeat.i}
 {fgettxt.i}
 {fmakesms.i}
 
 ASSIGN
    katun   = "Cron"
    gcBrand = "1".
+
+{heartbeat.i}
 
 FUNCTION fCallAlarm RETURNS LOGICAL
   (INPUT pcAction AS CHARACTER,
