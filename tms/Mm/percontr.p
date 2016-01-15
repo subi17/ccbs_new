@@ -2363,7 +2363,9 @@ PROCEDURE pContractTermination:
       /* Delete commission fee if the installment contract is closed
          due to revert renewal order or order cancellation */
       IF llCancelOrder OR llCancelInstallment OR 
-         MsRequest.ReqSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN
+         MsRequest.ReqSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} OR
+         MsRequest.ReqSource EQ {&REQUEST_SOURCE_Q25_CONTRACT_CHANGE} THEN
+         
       FOR FIRST SingleFee USE-INDEX Custnum WHERE
                 SingleFee.Brand       = gcBrand AND
                 SingleFee.Custnum     = MsOwner.CustNum AND
@@ -2413,7 +2415,10 @@ PROCEDURE pContractTermination:
             from order cancellation then delete single fee
             otherwise update the billing period */
          IF llCancelOrder OR llCancelInstallment OR
-            MsRequest.ReqSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN DO:
+            MsRequest.ReqSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE}
+            OR
+            MsRequest.ReqSource EQ {&REQUEST_SOURCE_Q25_CONTRACT_CHANGE}
+            THEN DO:
             
             IF llDoEvent THEN
                RUN StarEventMakeDeleteEventWithMemo(

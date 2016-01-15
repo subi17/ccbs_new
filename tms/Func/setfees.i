@@ -189,11 +189,14 @@ IF FeeModel = "RVTERM12" THEN
 IF NUM-ENTRIES(icFeememo,";") >= 2 THEN DO:
 
    IF ENTRY(2,icFeememo,";") NE {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION} AND
-      ENTRY(2,icFeememo,";") NE {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE}
+      ENTRY(2,icFeememo,";") NE {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} AND
+      ENTRY(2,icFeememo,";") NE {&REQUEST_SOURCE_Q25_CONTRACT_CHANGE}
       THEN liIFSStatus = {&IFS_STATUS_WAITING_SENDING}.
 
    IF ENTRY(2,icFeememo,";") EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN
       lcFinancedResult = {&TF_STATUS_YOIGO}.
+   IF ENTRY(2,icFeememo,";") EQ {&REQUEST_SOURCE_Q25_CONTRACT_CHANGE} THEN
+         lcFinancedResult = {&TF_STATUS_YOIGO}.
 END.
 
 /******************************************************

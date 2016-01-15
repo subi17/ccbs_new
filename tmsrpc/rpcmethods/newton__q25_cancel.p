@@ -61,7 +61,7 @@ top_struct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 top_struct_fields = validate_request(top_struct, 
-   "q25_struct!,action!,memo_struct").
+   "q25_struct!,memo_struct").
 IF top_struct_fields EQ ? THEN RETURN.
 
 ASSIGN
@@ -71,7 +71,7 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcQ25Struct = validate_request(pcQ25Struct,"username!,msseq!,per_contract_id!").
+lcQ25Struct = validate_request(pcQ25Struct,"username!,msseq!,per_contract_id!,action").
 IF lcQ25Struct EQ ? THEN RETURN.
 
 ASSIGN
@@ -82,7 +82,8 @@ ASSIGN
     /* Quota 25 installment contract id */
    liper_contract_id = get_int(pcQ25Struct, "per_contract_id")      
       WHEN LOOKUP("per_contract_id", lcQ25Struct) > 0
-   pcAction     = get_string(pcQ25Struct, "action").
+   pcAction     = get_string(pcQ25Struct, "action")
+      WHEN LOOKUP("action", lcQ25Struct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
       
