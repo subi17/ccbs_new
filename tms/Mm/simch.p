@@ -311,6 +311,9 @@ ACTION:
                     INPUT  fMakeTS(),
                     INPUT  "CHANGEICC",
                     INPUT  new-icc,
+                    INPUT  "", /*for old SIM*/
+                    INPUT  "", /*for Reason info*/
+                    INPUT  "", /*for ContractID*/
                     INPUT  llCreateFees,
                     INPUT  ldeFee,
                     INPUT  {&REQUEST_SOURCE_MANUAL_TMS},

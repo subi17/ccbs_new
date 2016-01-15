@@ -24,8 +24,11 @@ DEF VAR lcError AS CHARACTER NO-UNDO.
 DEF VAR pdeCharge AS DECIMAL NO-UNDO. 
 DEF VAR pdeChargeLimit AS DECIMAL NO-UNDO. 
 DEF VAR pcReason AS CHARACTER NO-UNDO. 
+DEF VAR pcContractID AS CHAR NO-UNDO.
+DEF VAR pcChannel AS CHAR NO-UNDO.
+DEF VAR lcOldICC AS CHAR NO-UNDO.
 
-lcc = validate_request(param_toplevel_id, "string,string,string,double,double,string").
+lcc = validate_request(param_toplevel_id, "string,string,string,double,double,string,string,string").
 IF lcc EQ ? THEN RETURN.
 pcMSISDN    = get_string(param_toplevel_id, "0").
 pcSalesman  = get_string(param_toplevel_id, "1").
@@ -33,7 +36,10 @@ pcValue     = get_string(param_toplevel_id, "2").
 pdeCharge   = get_double(param_toplevel_id, "3").
 pdeChargeLimit = get_double(param_toplevel_id, "4").
 pcReason   = get_string(param_toplevel_id, "5").
-
+pcChannel = get_string(param_toplevel_id, "6").
+pcContractID = get_string(param_toplevel_id, "7").
+/*pcChannel 6
+pcContract 7*/
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 FIND mobsub NO-LOCK
@@ -85,19 +91,30 @@ IF lcError > "" THEN DO:
    RETURN appl_err(lcError).
 END.
 
+/*YPR-3233*/
+lcOldICC = Mobsub.ICC.
+IF pcChannel NE "pos" THEN DO:
+   pcContractId = "".
+   lcOldICC = "".
+END.   
+
+
 liReq = fSubscriptionRequest(
             mobsub.MsSeq,
             Mobsub.Cli,
             Mobsub.CustNum,
-            1,
-            "",
-            ?,
-            "CHANGEICC",
-            pcValue,
-            (pdeCharge > 0),
-            pdeCharge,
-            {&REQUEST_SOURCE_NEWTON},
-            OUTPUT lcc). 
+            1,                        /*tarifftype*/
+            "",                       /*creator*/
+            ?,                        /*ActStamp*/
+            "CHANGEICC",              /*ReqParam*/
+            pcValue,                  /*ReqParam2*/
+            lcOldICC,               /*old SIM*/
+            pcReason,                 /*Reason*/
+            pcContractID,             /*ContractID*/
+            (pdeCharge > 0),          /*CreateFees*/
+            pdeCharge,                /*Charge*/
+            {&REQUEST_SOURCE_NEWTON}, /*Request source*/
+            OUTPUT lcc).              /*result*/
             
 IF liReq EQ 0 THEN RETURN appl_err(lcc).
 
