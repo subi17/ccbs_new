@@ -305,6 +305,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          ASSIGN
             ldaMonth22Date = ADD-INTERVAL(DCCLI.ValidFrom, 22, 'months':U)
             ldaMonth22Date = DATE(MONTH(ldaMonth22Date),1,YEAR(ldaMonth22Date)). 
+         /*         
          FIND FIRST TermReturn WHERE
                     TermReturn.OrderId = SingleFee.OrderId NO-LOCK NO-ERROR.
       
@@ -321,8 +322,10 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(SingleFee.amt).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
             NEXT.
-         END.
-         ELSE IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
+             
+            END.
+         */   
+         IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                   DCCLI.Brand   EQ gcBrand AND
                   DCCLI.DCEvent EQ "RVTERM12" AND
                   DCCLI.MsSeq   EQ Mobsub.MsSeq AND
