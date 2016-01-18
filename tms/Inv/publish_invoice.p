@@ -14,6 +14,8 @@
 {email.i}
 {host.i}
 
+DEFINE INPUT PARAMETER iiMsRequest AS INT NO-UNDO.
+
 DEF VAR ldaDateFrom    AS DATE NO-UNDO. 
 DEF VAR liCount        AS INT  NO-UNDO. 
 DEF VAR liDumped       AS INT  NO-UNDO. 
@@ -26,16 +28,17 @@ DEF VAR lcContLogDir   AS CHAR NO-UNDO.
 
 DEFINE STREAM strout.
 
-REQUEST_DAEMON:
-REPEAT TRANS:
-   
-   FIND MsRequest WHERE 
-        MsRequest.Brand     EQ gcBrand                      AND 
-        MsRequest.ReqType   EQ ({&REQTYPE_PUBLISH_INVOICE}) AND
-        MsRequest.ReqStatus EQ 0 NO-LOCK NO-ERROR.
+   FIND MsRequest WHERE
+        MsRequest.Brand     = gcBrand     AND
+        MsRequest.MsRequest = iiMsRequest NO-LOCK NO-ERROR.   
+  
+   IF NOT AVAIL MsRequest OR
+                MsRequest.ReqType NE ({&REQTYPE_PUBLISH_INVOICE}) THEN
+      RETURN "ERROR".
 
-   IF NOT AVAIL MsRequest THEN NEXT REQUEST_DAEMON.  
-      
+   /* request is under work */
+   IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
+ 
    ASSIGN liCount        = 0
           lcContent      = ""
           llgError       = NO
@@ -123,4 +126,3 @@ REPEAT TRANS:
 
    fReqStatus(2,lcContent). /* request handled succesfully */
 
-END.
