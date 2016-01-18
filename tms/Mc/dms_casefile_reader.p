@@ -261,7 +261,7 @@ PROCEDURE pUpdateDMS:
       CASE lcStatusCode:
          WHEN "E" THEN DO:
             IF ((Order.StatusCode = "20" OR Order.StatusCode = "21") AND
-                Order.PayType = True) OR Order.StatusCode = "44" THEN
+                 Order.PayType = True) OR Order.StatusCode = "44" THEN
                RUN orderhold.p(liOrderId, "RELEASE_BATCH").
          END.
          WHEN "J" THEN RUN closeorder.p(liOrderId, TRUE).
