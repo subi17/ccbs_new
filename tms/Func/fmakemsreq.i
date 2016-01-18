@@ -1161,7 +1161,7 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
       bCreaReq.ReqCParam1 = icReqParam
       bCreaReq.ReqCParam2 = icReqParam2
       bCreaReq.ReqCParam3 = icReqParam3
-      bCreaReq.ReqCParam3 = icReqParam4
+      bCreaReq.ReqCParam4 = icReqParam4
       bCreaReq.ReqCParam6 = icReqParam6
       bCreaReq.ReqIParam1 = iiTrafficType
       bCreaReq.ReqDParam2 = ideCharge

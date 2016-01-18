@@ -93,7 +93,8 @@ END.
 
 /*YPR-3233*/
 lcOldICC = Mobsub.ICC.
-IF pcChannel NE "pos" THEN DO:
+/*DM gets the value only by contractID*/
+IF R-INDEX(pcChannel, "pos") EQ 0 THEN DO:
    pcContractId = "".
    lcOldICC = "".
 END.   

@@ -968,14 +968,13 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
              OR MsRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} /*10*/
              OR MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}  /*0*/
              OR MsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} /*80*/
+             OR MsRequest.ReqType EQ {&REQTYPE_ICC_CHANGE} /*15*/
             ) AND
             MsRequest.ReqCparam6 NE "" AND 
-            MsRequest.UpdateStamp <= MsRequest.DoneStamp :
-
+            MsRequest.UpdateStamp <= MsRequest.DoneStamp:
       CASE MsRequest.ReqType:
          WHEN {&REQTYPE_ICC_CHANGE} THEN DO:
             lcCaseTypeId = lcICCCaseTypeId.
-
             lcCaseFileRow =
             lcCaseTypeID                                    + lcDelim +
             /*Contract_ID*/
@@ -989,9 +988,9 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*request reason*/            
             STRING(MsRequest.ReqCparam4)                    + lcDelim +
             /*Previous_ICC*/
-            STRING(MsRequest.ReqCparam2)                    + lcDelim +
+            STRING(MsRequest.ReqCparam3)                    + lcDelim +
             /*New_ICC*/
-            STRING(MsRequest.ReqCparam3).  
+            STRING(MsRequest.ReqCparam2).  
          END.
          WHEN {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}  THEN DO:
             lcCaseTypeId = lcACCCaseTypeId.
