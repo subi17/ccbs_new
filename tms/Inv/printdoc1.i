@@ -119,9 +119,9 @@ DEF TEMP-TABLE ttSub NO-UNDO
    FIELD InstallmentAmt  AS DEC
    FIELD PenaltyAmt   AS DEC
    FIELD InstallmentDiscAmt AS DEC  
-   FIELD TFBankBeforeAmt AS DEC EXTENT 3
-   FIELD TFBankAfterAmt  AS DEC EXTENT 3 
-   FIELD TFBankFooterText AS CHAR
+   FIELD TFBankBeforeAmt AS DEC EXTENT 6
+   FIELD TFBankAfterAmt  AS DEC EXTENT 6 
+   FIELD TFBankFooterText AS CHAR EXTENT 2
    FIELD OldCLIType      AS CHAR
    FIELD OldCTName       AS CHAR
    FIELD TariffActDate   AS CHAR
@@ -301,7 +301,8 @@ FUNCTION fLocalCCName RETURNS CHARACTER:
    
 END FUNCTION.
 
-FUNCTION fTFBankFooterText RETURNS LOGICAL:
+FUNCTION fTFBankFooterText RETURNS LOGICAL
+   (icBillCode AS CHAR):
 
    DEF VAR lcTFRVTermBillCode   AS CHAR NO-UNDO.
    DEF VAR liFooterConf1        AS INT  NO-UNDO.
@@ -310,38 +311,56 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL:
    DEF VAR ldeTotalAmount       AS DEC  NO-UNDO. 
    DEF VAR ldaOrderDate         AS DATE NO-UNDO. 
    DEF VAR lcTFPayTermEndBillCode AS CHAR NO-UNDO.
-   DEF VAR liFFCount              AS INT  NO-UNDO INIT 1. 
+   DEF VAR liFFCount              AS INT  NO-UNDO. 
    DEF VAR lcPaytermEndCodes      AS CHAR NO-UNDO. 
-   DEF VAR llPenaltyFound       AS LOG NO-UNDO. 
+   DEF VAR llPenaltyFound         AS LOG  NO-UNDO. 
+   DEF VAR liAmtPos               AS INT  NO-UNDO.
+   DEF VAR liFtrPos               AS INT  NO-UNDO.
+   DEF VAR llFooter               AS LOG  NO-UNDO.
+   DEF VAR ldTAE                  AS DEC  NO-UNDO.
+   
+   /* PAYTERM values to pos. 1-3, footer 1
+      RVTERM  values to pos. 4-6, footer 2
+   */
+   IF icBillCode BEGINS "PAYTERM" THEN ASSIGN
+      liAmtPos = 1
+      liFtrPos = 1.
+   ELSE ASSIGN
+      liAmtPos = 4
+      liFtrPos = 2. 
 
+   liFFCount = liAmtPos. 
+   
    FOR EACH FixedFee NO-LOCK WHERE
             FixedFee.Brand      = gcBrand                    AND
             FixedFee.CustNum    = Invoice.CustNum            AND
             FixedFee.HostTable  = "MobSub"                   AND
             FixedFee.KeyValue   = STRING(SubInvoice.MsSeq)   AND
-            FixedFee.BillCode BEGINS "PAYTERM"               AND
+            FixedFee.BillCode BEGINS icBillCode              AND
      LOOKUP(FixedFee.FinancedResult,{&TF_STATUSES_BANK}) > 0 AND
             FixedFee.TFBank    <> ""                         AND
             FixedFee.BegDate   <= Invoice.Todate             AND
             FixedFee.EndPeriod >= liPeriod BY FixedFee.BegDate:
       
-      IF liFFCount > 3 THEN LEAVE.
+      IF liFFCount > liAmtPos + 2 THEN LEAVE.
             
       IF FixedFee.TFBank = {&TF_BANK_UNOE} THEN
-         ASSIGN lcTFRVTermBillCode    = "RVTERM1EF"
+         ASSIGN lcTFRVTermBillCode    = "RVTERM1EF" 
+                                        WHEN icBillCode BEGINS "PAYTERM"
                 liFooterConf1         = 536
                 liFooterConf2         = 557
-                lcTFPayTermEndBillCode = "PAYTERMEND1E".
+                lcTFPayTermEndBillCode = icBillCode + "END1E".
       ELSE IF FixedFee.TFBank = {&TF_BANK_SABADELL} THEN
          ASSIGN lcTFRVTermBillCode    = "RVTERMBSF"
+                                        WHEN icBillCode BEGINS "PAYTERM"
                 liFooterConf1         = 558
                 liFooterConf2         = 559
-                lcTFPayTermEndBillCode = "PAYTERMENDBS".
+                lcTFPayTermEndBillCode = icBillCode + "ENDBS".
       ELSE NEXT.
       
       FOR EACH FFItem NO-LOCK WHERE
                FFItem.FFNum = FixedFee.FFNum AND
-               FFItem.BillCode BEGINS "PAYTERM":
+               FFItem.BillCode BEGINS icBillCode:
             
          IF NOT FFItem.Billed THEN ASSIGN
             ttSub.TFBankAfterAmt[liFFCount]  = ttSub.TFBankAfterAmt[liFFCount] +
@@ -357,6 +376,7 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL:
              llPenaltyFound                   = FALSE.
    
       /* Find the correct TAE value */
+      IF lcTFRVTermBillCode > "" THEN
       FOR FIRST SingleFee NO-LOCK WHERE
                 SingleFee.Brand       = gcBrand              AND
                 SingleFee.Custnum     = FixedFee.Custnum     AND
@@ -398,7 +418,7 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL:
                 SingleFee.KeyValue    = Fixedfee.KeyValue    AND
                 SingleFee.SourceTable = "FixedFee" AND
                 SingleFee.SourceKey   = STRING(FixedFee.FFNUM) AND
-                SingleFee.BillCode    BEGINS "PAYTERMEND":
+                SingleFee.BillCode    BEGINS icBillCode + "END":
          
             IF NOT SingleFee.Billed THEN ASSIGN
                ttSub.TFBankAfterAmt[liFFCount]  = ttSub.TFBankAfterAmt[liFFCount] +
@@ -424,23 +444,37 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL:
       END.
       ELSE ldaOrderDate = FixedFee.BegDate.
     
-      FIND FIRST TFConf NO-LOCK WHERE
-                 TFConf.RVPercentage = ldeRVPerc    AND
-                 TFConf.ValidTo     >= ldaOrderDate AND
-                 TFConf.ValidFrom   <= ldaOrderDate NO-ERROR.
+      ASSIGN 
+         llFooter = FALSE
+         ldTAE    = 0.
+         
+      IF icBillCode BEGINS "PAYTERM" THEN DO: 
+         FIND FIRST TFConf NO-LOCK WHERE
+                    TFConf.RVPercentage = ldeRVPerc    AND
+                    TFConf.ValidTo     >= ldaOrderDate AND
+                    TFConf.ValidFrom   <= ldaOrderDate NO-ERROR.
        
-      IF AVAIL TFConf THEN
-         ASSIGN ttSub.TFBankFooterText = ttSub.TFBankFooterText + 
-                                        (IF ttSub.TFBankFooterText > ""
-                                         THEN CHR(10) ELSE "") +
-                                         fHeadTxt(liFooterConf1,liLanguage)
-                ttSub.TFBankFooterText = REPLACE(ttSub.TFBankFooterText,"#TAE",
-                               REPLACE(fDispXMLDecimal(TFConf.TAE),
-                                                        ".",",")).
+         IF AVAIL TFConf THEN ASSIGN 
+            llFooter = TRUE
+            ldTAE    = TFConf.TAE.
+      END.
+      ELSE llFooter = TRUE.
+      
+      IF llFooter THEN ASSIGN
+         ttSub.TFBankFooterText[liFtrPos] = ttSub.TFBankFooterText[liFtrPos] + 
+                                 (IF ttSub.TFBankFooterText[liFtrPos] > ""
+                                  THEN CHR(10) ELSE "") +
+                                 fHeadTxt(liFooterConf1,liLanguage)
+         ttSub.TFBankFooterText[liFtrPos] = 
+            REPLACE(ttSub.TFBankFooterText[liFtrPos],"#TAE",
+                       REPLACE(fDispXMLDecimal(ldTAE),".",",")).
           
       IF llPenaltyFound AND 
          LOOKUP(lcTFPayTermEndBillCode,lcPaytermEndCodes) = 0 THEN ASSIGN
-         ttSub.TFBankFooterText = ttSub.TFBankFooterText + CHR(10) + fHeadTxt(liFooterConf2,liLanguage)
+         ttSub.TFBankFooterText[liFtrPos] = ttSub.TFBankFooterText[liFtrPos] + 
+                                 (IF ttSub.TFBankFooterText[liFtrPos] > ""
+                                  THEN CHR(10) ELSE "") +
+                                 fHeadTxt(liFooterConf2,liLanguage)
          lcPaytermEndCodes = lcPaytermEndCodes + "," + lcTFPayTermEndBillCode.
       
       liFFCount = liFFCount + 1.
@@ -558,7 +592,8 @@ PROCEDURE pGetSubInvoiceHeaderData:
    DEF VAR ldPeriodFrom       AS DEC  NO-UNDO.
    DEF VAR ldPeriodTo         AS DEC  NO-UNDO.
    DEF VAR lcGroupCode        AS CHAR NO-UNDO.
-   DEF VAR llFinancedByBank   AS LOG NO-UNDO.
+   DEF VAR llPTFinancedByBank AS LOG  NO-UNDO.
+   DEF VAR llRVFinancedByBank AS LOG  NO-UNDO.
    
    DEF BUFFER UserCustomer    FOR Customer.
    DEF BUFFER bServiceLimit   FOR ServiceLimit.
@@ -813,7 +848,8 @@ PROCEDURE pGetSubInvoiceHeaderData:
          unit for data in cdrs is bytes */
       ASSIGN
          ttSub.DataConv = 1024 * 1024
-         llFinancedByBank = FALSE.
+         llPTFinancedByBank = FALSE
+         llRVFinancedByBank = FALSE.
 
       /* is call itemization printed */
       ttSub.CallSpec = fCallSpecDuring(SubInvoice.MsSeq,Invoice.InvDate).
@@ -837,7 +873,12 @@ PROCEDURE pGetSubInvoiceHeaderData:
          IF (LOOKUP(ttRow.RowBillCode,{&TF_BANK_RVTERM_BILLCODES})           > 0) OR
             (LOOKUP(ttRow.RowBillCode,{&TF_BANK_UNOE_PAYTERM_BILLCODES})     > 0) OR 
             (LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_PAYTERM_BILLCODES}) > 0) THEN 
-            llFinancedByBank = TRUE.
+            llPTFinancedByBank = TRUE.
+            
+         ELSE IF 
+            LOOKUP(ttRow.RowBillCode,{&TF_BANK_UNOE_RVTERM_BILLCODES}) > 0 OR
+            LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_RVTERM_BILLCODES}) > 0
+         THEN llRVFinancedByBank = TRUE.   
       END.
 
       IF ttSub.InstallmentAmt > 0 THEN
@@ -849,9 +890,10 @@ PROCEDURE pGetSubInvoiceHeaderData:
             ttSub.InstallmentDiscAmt = ttSub.InstallmentDiscAmt + ttRow.RowAmt.
          END.              
 
-      IF llFinancedByBank THEN 
-         fTFBankFooterText(). 
-      
+      IF llPTFinancedByBank THEN 
+         fTFBankFooterText("PAYTERM"). 
+      IF llRVFinancedByBank THEN
+         fTFBankFooterText("RVTERM").
    END.
    
    RETURN "".
