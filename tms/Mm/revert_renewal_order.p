@@ -466,11 +466,11 @@ PROCEDURE pCloseQ25Discount:
       
    IF NOT AVAILABLE OrderAction THEN RETURN "".
 
-   liPercontractId = INT(OrderAction.ItemKey) NO-ERROR.
+   liPercontractId = INT(OrderAction.ItemParam) NO-ERROR.
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
       RETURN "ERROR:Q25 discount cancellation (contract id)".
    
-   ldeDiscount = DEC(OrderAction.ItemParam) NO-ERROR.
+   ldeDiscount = DEC(OrderAction.ItemKey) NO-ERROR.
    IF ERROR-STATUS:ERROR OR ldeDiscount EQ 0 THEN 
       RETURN "ERROR:Q25 discount cancellation (discount amount)". 
 
@@ -516,7 +516,7 @@ PROCEDURE pCloseQ25Discount:
       FIND FIRST invrow NO-LOCK WHERE
                  invrow.InvNum    EQ subInvoice.InvNum AND
                  invrow.SubInvNum EQ subInvoice.SubInvNum AND
-                 invrow.BillCode EQ "RVTERMDT1" NO-ERROR.
+                 invrow.BillCode EQ "RVTERMDTRW" NO-ERROR.
       
       IF NOT AVAILABLE invrow THEN RETURN "".
         
