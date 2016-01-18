@@ -19,83 +19,73 @@ ASSIGN
 
 /******** Main start *********/
 
-DO WHILE TRUE 
-   ON QUIT UNDO, RETRY
-   ON STOP UNDO, RETRY:
+FOR EACH RequestType WHERE 
+         RequestType.Brand = gcBrand AND 
+         RequestType.Mode  = "Batch" AND
+         RequestType.InUse:
+   
+   /* logging on type level */
+   IF RequestType.LogOn THEN DO:
 
-   IF RETRY THEN LEAVE. 
-    
-   FOR EACH RequestType WHERE 
-            RequestType.Brand = gcBrand AND 
-            RequestType.Mode  = "Batch" AND
-            RequestType.InUse:
+      IF RequestType.LogFile > "" AND RequestType.LogEntry > "" THEN DO:
+         fSetLogFileName(RequestType.LogFile).
+         fSetLogEntryTypes(RequestType.LogEntry).
+         fSetLogTreshold(INTEGER(RequestType.LogThreshold)).      
       
-      /* logging on type level */
-      IF RequestType.LogOn THEN DO:
+         IF RequestType.LogClear THEN DO:
+            fClearLog().
+         END.
+      END.
+   END. 
+   
+   FOR EACH RequestStatus OF RequestType NO-LOCK WHERE
+            RequestStatus.InUse:
 
-         IF RequestType.LogFile > "" AND RequestType.LogEntry > "" THEN DO:
-            fSetLogFileName(RequestType.LogFile).
-            fSetLogEntryTypes(RequestType.LogEntry).
-            fSetLogTreshold(INTEGER(RequestType.LogThreshold)).      
-         
-            IF RequestType.LogClear THEN DO:
+       /* logging on status level */
+      IF RequestStatus.LogOn THEN DO:
+
+         IF RequestStatus.LogFile > "" AND RequestStatus.LogEntry > "" 
+         THEN DO:
+            fSetLogFileName(RequestStatus.LogFile).
+            fSetLogEntryTypes(RequestStatus.LogEntry).
+            fSetLogTreshold(INTEGER(RequestStatus.LogThreshold)).      
+      
+            IF RequestStatus.LogClear THEN DO:
                fClearLog().
             END.
          END.
-      END. 
-      
-      FOR EACH RequestStatus OF RequestType NO-LOCK WHERE
-               RequestStatus.InUse:
-
-          /* logging on status level */
-         IF RequestStatus.LogOn THEN DO:
-
-            IF RequestStatus.LogFile > "" AND RequestStatus.LogEntry > "" 
-            THEN DO:
-               fSetLogFileName(RequestStatus.LogFile).
-               fSetLogEntryTypes(RequestStatus.LogEntry).
-               fSetLogTreshold(INTEGER(RequestStatus.LogThreshold)).      
-         
-               IF RequestStatus.LogClear THEN DO:
-                  fClearLog().
-               END.
-            END.
-         END.
-
-         FIND MsRequest NO-LOCK WHERE 
-              MsRequest.Brand     EQ gcBrand               AND
-              MsRequest.ReqType   EQ RequestType.ReqType   AND 
-              MsRequest.ReqStatus EQ RequestStatus.ReqStat NO-ERROR.                 
-         IF AVAIL MsRequest THEN DO:
-
-            IF MsRequest.ReqType EQ ({&REQTYPE_PUBLISH_IFS}) THEN 
-               RUN publish_invoice.p (MsRequest.MsRequest).
-            ELSE IF MsRequest.ReqType EQ ({&REQTYPE_PUBLISH_IFS}) THEN 
-               RUN publish_ifs.p (MsRequest.MsRequest).
-            
-         END.
-
-         /* close status level log */  
-         IF RequestStatus.LogOn THEN DO:
-            fCloseLog().
-         END.
-
-         /* type level log back on */
-         IF RequestType.LogOn THEN DO:
-            fSetLogFileName(RequestType.LogFile).
-         END.
-                           
       END.
 
-      /* close type level log */  
-      IF RequestType.LogOn THEN DO:
+      FIND MsRequest NO-LOCK WHERE 
+           MsRequest.Brand     EQ gcBrand               AND
+           MsRequest.ReqType   EQ RequestType.ReqType   AND 
+           MsRequest.ReqStatus EQ RequestStatus.ReqStat NO-ERROR.                 
+      IF AVAIL MsRequest THEN DO:
+
+         IF MsRequest.ReqType EQ ({&REQTYPE_PUBLISH_INVOICE}) THEN 
+            RUN publish_invoice.p (MsRequest.MsRequest).
+         ELSE IF MsRequest.ReqType EQ ({&REQTYPE_PUBLISH_IFS}) THEN 
+            RUN publish_ifs.p (MsRequest.MsRequest).
+         
+      END.
+
+      /* close status level log */  
+      IF RequestStatus.LogOn THEN DO:
          fCloseLog().
       END.
 
-   END.         
-    
-END.
+      /* type level log back on */
+      IF RequestType.LogOn THEN DO:
+         fSetLogFileName(RequestType.LogFile).
+      END.
+                        
+   END.
 
-QUIT.
+   /* close type level log */  
+   IF RequestType.LogOn THEN DO:
+      fCloseLog().
+   END.
 
+END.         
+ 
 /********** Main end **********/
