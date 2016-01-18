@@ -1,0 +1,7 @@
+ADD FIELD "Mode" OF "RequestType" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Mode"
+  COLUMN-LABEL "Mode"
+  HELP "Mode for executing requests"
+  ORDER 130

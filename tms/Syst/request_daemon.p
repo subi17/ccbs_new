@@ -84,11 +84,8 @@ DO WHILE TRUE
       ldaLastLoggingDay = TODAY.
    END.
    
-   IF NOT llReplica THEN DO: 
-      RUN pExecPublishInvoiceRequest.
-
-      RUN pExecPublishIFSRequest.
-   END.
+   IF NOT llReplica THEN  
+      RUN pExecPublishingRequest.
 
    liLoop = liLoop + 1.
 
@@ -112,40 +109,67 @@ QUIT.
 
 /********** Main end **********/
 
-PROCEDURE pExecPublishInvoiceRequest:
+PROCEDURE pExecPublishingRequest:
 DEF VAR lcCommand AS CHAR NO-UNDO. 
 
    DO ON QUIT UNDO, RETRY:
    
       IF RETRY THEN LEAVE.
 
-      FIND FIRST RequestType WHERE 
-                 RequestType.Brand   EQ gcBrand                    AND 
-                 RequestType.ReqType EQ {&REQTYPE_PUBLISH_INVOICE} AND
-                 RequestType.InUse NO-LOCK NO-ERROR.
-      
-      lcCommand = "/opt/local/bin/xfear -bg_batch " + RequestType.Program + ".p " + "tms.pf #PARAM ".
+      FOR EACH RequestType WHERE 
+               RequestType.Brand = gcBrand AND 
+               RequestType.Mode  = "Batch" AND
+               RequestType.InUse:
+         
+         /* logging on type level */
+         IF RequestType.LogOn THEN DO:
 
-      UNIX SILENT VALUE(lcCommand + " >/dev/null 2>&1").
-   END.
+            IF RequestType.LogFile > "" AND RequestType.LogEntry > "" THEN DO:
+               fSetLogFileName(RequestType.LogFile).
+               fSetLogEntryTypes(RequestType.LogEntry).
+               fSetLogTreshold(INTEGER(RequestType.LogThreshold)).      
+            
+               IF RequestType.LogClear THEN DO:
+                  fClearLog().
+               END.
+            END.
+         END. 
+         
+         FOR EACH RequestStatus OF RequestType NO-LOCK WHERE
+                  RequestStatus.InUse:
 
-END PROCEDURE.
+             /* logging on status level */
+            IF RequestStatus.LogOn THEN DO:
 
-PROCEDURE pExecPublishIFSRequest:
-DEF VAR lcCommand AS CHAR NO-UNDO. 
+               IF RequestStatus.LogFile > "" AND RequestStatus.LogEntry > "" 
+               THEN DO:
+                  fSetLogFileName(RequestStatus.LogFile).
+                  fSetLogEntryTypes(RequestStatus.LogEntry).
+                  fSetLogTreshold(INTEGER(RequestStatus.LogThreshold)).      
+            
+                  IF RequestStatus.LogClear THEN DO:
+                     fClearLog().
+                  END.
+               END.
+            END.
 
-   DO ON QUIT UNDO, RETRY:
+            FIND MsRequest NO-LOCK WHERE 
+                 MsRequest.Brand     EQ gcBrand             AND
+                 MsRequest.ReqType   EQ RequestType.ReqType AND 
+                 MsRequest.ReqStatus EQ RequestType.ReqStat NO-ERROR.                 
+            IF AVAIL MsRequest THEN DO:
+
+               IF MsRequest.ReqType NE ({&REQTYPE_PUBLISH_IFS}) THEN 
+                  RUN publish_invoice.p (MsRequest.MsRequest).
+               ELSE IF MsRequest.ReqType NE ({&REQTYPE_PUBLISH_IFS}) THEN 
+                  RUN publish_ifs.p (MsRequest.MsRequest).
+ 
+               LEAVE.
+
+            END.                           
+         END.
+      END.         
    
-      IF RETRY THEN LEAVE.
-      
-      FIND FIRST RequestType WHERE 
-                 RequestType.Brand   EQ gcBrand                AND 
-                 RequestType.ReqType EQ {&REQTYPE_PUBLISH_IFS} AND
-                 RequestType.InUse NO-LOCK NO-ERROR.
-      
-      lcCommand = "/opt/local/bin/xfear -bg_batch " + RequestType.Program + ".p " + "tms.pf #PARAM ".
-
-      UNIX SILENT VALUE(lcCommand + " >/dev/null 2>&1").
    END.
 
 END PROCEDURE.
