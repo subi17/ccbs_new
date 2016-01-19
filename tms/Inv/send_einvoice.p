@@ -232,7 +232,6 @@ PROCEDURE pGetQ25Text:
       FIRST DCCLI NO-LOCK WHERE
             DCCLI.PerContractId = INT(SingleFee.SourceKey) AND
             DCCLI.MsSeq   = INT(SingleFee.KeyValue) AND
-            DCCLI.DCEvent = SingleFee.CalcObj AND
             /* not yet terminated */
             DCCLI.TermDate = ? AND
             /* renewal not done */
@@ -269,7 +268,7 @@ PROCEDURE pGetQ25Text:
                 FixedFee.InUse AND
                 FixedFee.EndPer >= liInvPeriod,
            EACH FFItem OF FixedFee NO-LOCK WHERE
-                FFItem.BillPeriod > liInvPeriod:
+                FFItem.BillPeriod >= liInvPeriod:
          liFees = liFees + 1.       
       END.        
       IF liFees = 0 OR liFees > 3 THEN NEXT.      
