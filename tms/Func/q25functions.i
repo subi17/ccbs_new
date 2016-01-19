@@ -23,6 +23,7 @@
 
 DEF VAR lcTestStartDay AS CHAR NO-UNDO.
 DEF VAR lcTestEndDay AS CHAR NO-UNDO.
+DEF VAR lcExecuteDate AS CHAR NO-UNDO.
 DEF VAR liQ25Logging AS INT NO-UNDO.
 
 DEF STREAM Sout.
@@ -36,7 +37,10 @@ FUNCTION fGetStartEndDates RETURNS LOGICAL
     OUTPUT odaStartDate AS DATE,
     OUTPUT odaEndDate AS DATE).
    DEF VAR  ldaCountDate       AS DATE NO-UNDO.
-   ldaCountDate = ADD-INTERVAL(TODAY, iiMonth, 'months':U).
+   IF lcExecuteDate > "" THEN
+      ldaCountDate = ADD-INTERVAL(DATE(lcExecuteDate), iiMonth, 'months':U).
+   ELSE
+      ldaCountDate = ADD-INTERVAL(TODAY, iiMonth, 'months':U).
    IF iiStartDay > DAY(fLastDayOfMonth(ldaCountDate)) THEN
       RETURN FALSE.
    ELSE IF iiEndDay > DAY(fLastDayOfMonth(ldaCountDate))
@@ -163,7 +167,7 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
                           {&ENCRYPTION_METHOD}, lcPassPhrase).
       /* convert some special characters to url encoding (at least '+' char
          could cause problems at later phases. */
-      lcEncryptedMSISDN = fUrlEncode(lcEncryptedMSISDN, "default").
+      lcEncryptedMSISDN = fUrlEncode(lcEncryptedMSISDN, "query").
       lcSMSMessage = REPLACE(lcSMSMessage, "#MSISDN", lcEncryptedMSISDN).
    END.
    RETURN lcSMSMessage.
@@ -245,7 +249,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             SingleFee.CalcObj     = "RVTERM" AND
             SingleFee.BillPeriod  = liPeriod NO-LOCK:
 
-      IF NOT SingleFee.OrderId > 0 THEN NEXT.
+      IF NOT SingleFee.OrderId NE 0 THEN NEXT.
       liPhase = iiPhase.
       FIND FIRST Mobsub NO-LOCK WHERE
                  Mobsub.MsSeq = INT(SingleFee.KeyValue) NO-ERROR.
@@ -301,6 +305,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          ASSIGN
             ldaMonth22Date = ADD-INTERVAL(DCCLI.ValidFrom, 22, 'months':U)
             ldaMonth22Date = DATE(MONTH(ldaMonth22Date),1,YEAR(ldaMonth22Date)). 
+         /*         
          FIND FIRST TermReturn WHERE
                     TermReturn.OrderId = SingleFee.OrderId NO-LOCK NO-ERROR.
       
@@ -317,8 +322,10 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(SingleFee.amt).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
             NEXT.
-         END.
-         ELSE IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
+             
+            END.
+         */   
+         IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                   DCCLI.Brand   EQ gcBrand AND
                   DCCLI.DCEvent EQ "RVTERM12" AND
                   DCCLI.MsSeq   EQ Mobsub.MsSeq AND

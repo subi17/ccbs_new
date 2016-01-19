@@ -13,6 +13,7 @@
 {date.i}
 {log.i}
 {ftransdir.i}
+{tmsconst.i}
 
 DEFINE VARIABLE lcHostName        AS CHARACTER     NO-UNDO.
 DEFINE VARIABLE lcReadLine        AS CHARACTER     NO-UNDO.
@@ -84,12 +85,6 @@ PROCEDURE pInitialize:
    END.
    INPUT CLOSE.
 
-   IF lcHost = "" THEN RETURN "Host is missing".
-   IF liPort = 0 OR liPort = ? THEN RETURN "Port is missing".
-   
-   IF lcUserName = "" THEN RETURN "Username is missing".
-   IF lcPassword = "" THEN RETURN "Password is missing".
-
    IF liLogLevel = 0 OR liLogLevel = ? THEN
       liLogLevel = 2. /* default */
 
@@ -103,13 +98,20 @@ PROCEDURE pInitialize:
       fSetGlobalLoggingLevel(liLogLevel).
       fSetLogTreshold(liLogTreshold).
    END. /* IF lcLogFile > "" THEN DO: */
+
+   IF lcHost = "" THEN RETURN "Host is missing".
+   IF liPort = 0 OR liPort = ? THEN RETURN "Port is missing".
+
+   IF lcUserName = "" THEN RETURN "Username is missing".
+   IF lcPassword = "" THEN RETURN "Password is missing".
+
    RETURN "".
 
 END PROCEDURE.
 
-/*Function stores message for resending / further usage*/
+/*Function stores initial message for resending / further usage*/
 /*Resendinf counter will be increased by resending cron*/
-FUNCTION fStoreMsg RETURNS CHAR
+FUNCTION fCreateInitMsg RETURNS CHAR
    (icConfig AS CHAR,
     icMQ     AS CHAR,
     icMsg    AS CHAR,
@@ -136,10 +138,12 @@ FUNCTION fSendToMQ RETURNS CHAR
    (icMsg AS CHAR, /*message contents*/
     icMQ AS CHAR, /*message queue*/
     icConfFile AS CHAR, /*configuration file*/
-    icModule AS CHAR): /*fo ridentifying log files*/
+    icModule AS CHAR, /*for identifying log files*/
+    lgResending AS LOGICAL): /*flag for creating new entry to MESSAGE db*/
+    /*TRUE - esending message, do not create entry
+      FALSE - This is first time for this message -> create entry*/
    DEF VAR lcRet AS CHAR NO-UNDO.
-
-   RUN pInitialize(INPUT icConfFile, INPUT icModule).
+   DEF VAR lcDBStatus  AS CHAR NO-UNDO.
 
    icMsg = fNotNull(icMsg).
    IF icMsg EQ "" THEN DO:
@@ -148,9 +152,15 @@ FUNCTION fSendToMQ RETURNS CHAR
       RETURN "AMQ: Message is empty".
    END.
 
+   RUN pInitialize(INPUT icConfFile, INPUT icModule).
+
    IF RETURN-VALUE > "" THEN DO:
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
       LOG-MANAGER:WRITE-MESSAGE(RETURN-VALUE, "ERROR in init").
+         IF lgResending EQ FALSE THEN DO:
+            /*This is the 1st sending, create new entry*/
+            fCreateInitMsg( icConfFile, icMQ, icMsg, {&AMQ_MSG_INIT_FAILED}, "dms").
+         END.
 
          RETURN RETURN-VALUE.
    END.
@@ -163,16 +173,27 @@ FUNCTION fSendToMQ RETURNS CHAR
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN DO:
             LOG-MANAGER:WRITE-MESSAGE("ActiveMQ Publisher handle not found",
                                     "ERROR").
-            lcRet = "ActiveMQ Publisher handle not found".
       END.
+      lcRet = "ActiveMQ Publisher handle not found".
    END.
    ELSE IF NOT lMsgPublisher:send_message(icMsg) THEN DO:
       IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN DO:
          LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
-         lcRet = "ActiveMQ message sending failed".
       END.
+      lcRet = "ActiveMQ message sending failed".
+
    END.
    RUN pFinalize.
+
+   IF lgResending EQ FALSE THEN DO:
+      /*This is the 1st sending, create new entry*/
+      lcDBStatus = "".
+      IF lcRet NE "" THEN lcDBStatus = lcRet.
+      ELSE lcDbStatus = {&AMQ_MSG_SENT}.
+
+      fCreateInitMsg( icConfFile, icMQ, icMsg, lcDBStatus, "dms").
+   END.
+
    RETURN lcRet.
 
 END.

@@ -16,9 +16,9 @@ else:
    var1 = sys.argv[1]
 
 p=s.newton.check_renove({'msisdn':var1,
-                         'channel':'renewal'
-#                         'person_id':'27388306K',
-#                         'id_type':'NIF'
+                         'channel':'renewal_pos',
+                         'person_id':'27388306K',
+                         'id_type':'NIF'
                         }
                        )
 print_results(p)
