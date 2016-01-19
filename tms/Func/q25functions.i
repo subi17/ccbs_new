@@ -31,6 +31,26 @@ DEF STREAM Sout.
 
 liQ25Logging = fCParamI("Q25LoggingLevel"). /* 0 = none, 1 = count, 2 = all */
 
+/* Q24 Messages are needed to send before 20th day of month. No sending weekend
+   or national holiday. Check if there are such days left or do we have to
+   sent rest of messages right now. 19th day is last possible sending date.
+   */
+FUNCTION fIsLastDayToSend RETURNS LOGICAL (INPUT idaDate AS DATE):
+   DO WHILE idaDate < DATE(MONTH(idaDate),19,YEAR(idaDate)).
+      IF fChkDueDate(idaDate + 1) = idaDate + 1 THEN
+         RETURN FALSE. /* there is at least one sending day left */
+      idaDate = idaDate + 1.
+   END.
+   RETURN TRUE. /* is last day for sending */
+END.
+
+/* Function for getting start and end dates, based on calculated start day and
+   end day. Checks that end date is not bigger than last day of month. 
+   Start day and end day defines period where Q25 subscriptions are searched.
+   Month Q22 = execution date + 2 months
+   Month Q23 = execution date + 1 months 
+   Month Q24 = execution month 
+*/
 FUNCTION fGetStartEndDates RETURNS LOGICAL
    (INPUT  iiMonth AS INT,
     INPUT  iiStartDay AS INT,
@@ -56,6 +76,7 @@ FUNCTION fGetStartEndDates RETURNS LOGICAL
    RETURN TRUE.
 END.
 
+/* Make URL encoding, because it was not supported yeat in 10.2b version */
 FUNCTION fUrlEncode RETURNS CHARACTER
   (INPUT icValue AS CHARACTER,
    INPUT icEnctype AS CHARACTER) :
@@ -132,6 +153,7 @@ FUNCTION fCountNormalWeekday RETURNS INTEGER (INPUT idaDate AS DATE):
    RETURN lccount.
 END.
 
+/* Function for finding correct SMS message to be send. */
 FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
                                               INPUT idaValidTo AS DATE,
                                               INPUT idAmount AS DEC,
@@ -192,6 +214,7 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    RETURN lcSMSMessage.
 END FUNCTION.
 
+/* Logs for testing */
 FUNCTION fQ25LogWriting RETURNS LOGICAL
    (INPUT iclogText AS CHAR,
     INPUT iiLogLevel AS INT).
@@ -212,6 +235,8 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
    END.
 END.
 
+/* Function to calculate dynamically pause value between message sending. 
+   To ensure all messages will be sent before 22:00 */
 FUNCTION fCalculateMaxPauseValue RETURN INTEGER
    (INPUT iiToBeSend AS INT).
    DEF VAR ldEndTime AS DEC NO-UNDO.
@@ -221,6 +246,7 @@ FUNCTION fCalculateMaxPauseValue RETURN INTEGER
    RETURN INT(ldTimeLeft / iiToBeSend). 
 END.
 
+/* SMS message generating and sending for Q25. */
 FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER 
    (INPUT idaStartDate AS DATE,
     INPUT idaEndDate AS DATE,

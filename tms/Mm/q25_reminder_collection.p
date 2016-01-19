@@ -63,19 +63,17 @@ DO:
    ELSE IF fChkDueDate(ldaExecuteDate) NE ldaExecuteDate THEN
       LEAVE execution. /* no sending weekend and national holiday */
    ELSE DO:
-      /* Other months collection is made during between 6st and 31th day of
-       month. Handled two days cases in each of these days. No message 
+      /* Other months collection is made during weekdays after 5th day of
+       month. Handled three days cases in each of these days. No message 
        sending at weekend and national holidays. Delayed messages will be
        sent first normal weekday.  At 1st valid weekday after 5th day contracts
-       with validto date 1 and 2, 2nd day valid to dates 3 and 4 and so on. 
+       with validto date 1, 2 and 3, 2nd day valid to dates 3,4,5 and so on. 
        fCheckDates function resolves last day of month. */
        
        /* After weekend or national holiday, these days should be included */
-       liWeekdayCount = fCountNormalWeekday(ldaExecuteDate).
-       
-       liStartDay = (liWeekdayCount * 2) - 1. 
-       liEndDay = (liWeekdaycount * 2).
-                  
+       liWeekdayCount = fCountNormalWeekday(ldaExecuteDate).       
+       liStartDay = (liWeekdayCount * 3) - 2. 
+       liEndDay = (liWeekdaycount * 3).                  
    END.
 
    /* Month 22, 2 months perm contract to go */
@@ -87,7 +85,13 @@ DO:
    /* Month 24 0 month perm contract to go */
    fGetStartEndDates({&Q25_MONTH_24}, liStartDay, liEndDay,
                      OUTPUT ldaStartDateMonth24, OUTPUT ldaEndDateMonth24).
-
+   /* at month 24 all messages are needed to be send before 20th day.
+      If there is national holidays during 6th and 20th day, might be
+      needed to send some extra messages at the end. */
+   IF fisLastDayToSend(ldaExecuteDate) THEN
+      ldaEndDateMonth24 = DATE(MONTH(ldaEndDateMonth24),
+                               DAY(fLastDayOfMonth(ldaEndDateMonth24)),
+                               YEAR(ldaEndDateMonth24)).
    /* TESTING SUPPORT 
       Start and end date manipulation */
    IF ldaExecuteDate EQ TODAY AND lcTestStartDay NE ? AND 
