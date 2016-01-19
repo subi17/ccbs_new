@@ -28,6 +28,7 @@ DEF VAR lcLogText                AS CHAR NO-UNDO.
 DEF VAR liTestStartDay           AS CHAR NO-UNDO.
 DEF VAR liTestEndDay             AS CHAR NO-UNDO.
 DEF VAR ldaExecuteDate           AS DATE NO-UNDO.
+DEF VAR liWeekdayCount           AS INT  NO-UNDO.
 
 /* for testing and logging support */
 ASSIGN lcTestStartDay = fCParam("Q25","Q25TestStart")
@@ -49,23 +50,32 @@ DO:
    /* January 2016 messages will be sent during 20.1. - 30.1. after that this 
       can be removed because later on messages will be send between 1st and
       15th day of month. */
-   IF ldaExecuteDate LT 1/20/16 THEN
+   IF ldaExecuteDate LE 2/5/16 THEN
          LEAVE execution.
-   ELSE IF ldaExecuteDate GE 1/20/16 AND
+/*   ELSE IF ldaExecuteDate GT 2/5/16 AND
       ldaExecuteDate LT 1/31/16 THEN DO:
       liStartDay = ((DAY(ldaExecuteDate) - 19) * 3) - 2.
       liEndDay = ((DAY(ldaExecuteDate) - 19) * 3).
-   END.
-   ELSE IF DAY(ldaExecuteDate) > 15 THEN
-      LEAVE execution. /* All messages already send for this month */
+   END. */
+   /* No sending first 5 days of month, no sending at Saturday or Sunday. */
+   ELSE IF DAY(ldaExecuteDate) LE 5 THEN
+      LEAVE execution. /* Messages will be sent after 5th day of month */   
+   ELSE IF fChkDueDate(ldaExecuteDate) NE ldaExecuteDate THEN
+      LEAVE execution. /* no sending weekend and national holiday */
    ELSE DO:
-      /* Other months collection is made during between 1st and 15th day of
-       month. Handled two days cases in each of these days. At 1st contracts
+      /* Other months collection is made during between 6st and 31th day of
+       month. Handled two days cases in each of these days. No message 
+       sending at weekend and national holidays. Delayed messages will be
+       sent first normal weekday.  At 1st valid weekday after 5th day contracts
        with validto date 1 and 2, 2nd day valid to dates 3 and 4 and so on. 
-       15th day will be handled days 29-31. fCheckDates function resolves 
-       last day of month. */
-      liStartDay = (DAY(ldaExecuteDate) * 2) - 1. 
-      liEndDay = (DAY(ldaExecuteDate) * 2).
+       fCheckDates function resolves last day of month. */
+       
+       /* After weekend or national holiday, these days should be included */
+       liWeekdayCount = fCountNormalWeekday(ldaExecuteDate).
+       
+       liStartDay = (liWeekdayCount * 2) - 1. 
+       liEndDay = (liWeekdaycount * 2).
+                  
    END.
 
    /* Month 22, 2 months perm contract to go */

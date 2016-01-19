@@ -20,6 +20,7 @@
 {date.i}
 {smsmessage.i}
 {aes_encrypt.i}
+{fduedate.i}
 
 DEF VAR lcTestStartDay AS CHAR NO-UNDO.
 DEF VAR lcTestEndDay AS CHAR NO-UNDO.
@@ -112,6 +113,24 @@ Variables: lcUnSafe, lcReserved
 
   RETURN icValue.
 END FUNCTION.  /* furl-encode */
+
+/* Calculate count of normal week day (no weekend ot national holiday) from
+   sixth day (sms sending start date) until specified date. This is used for
+   solving which messages should be sent in specified date. Goal is sent two
+   messages in each day weekday after 6th until all messages of month is sent.
+   */
+FUNCTION fCountNormalWeekday RETURNS INTEGER (INPUT idaDate AS DATE):
+   DEF VAR lcCount AS INT NO-UNDO.
+   DEF VAR ldaTempDate AS DATE NO-UNDO.
+   ldaTempDate = DATE(MONTH(idaDate),6,YEAR(idaDate)).
+   DO WHILE ldaTempDate <= idaDate:
+      IF fChkDueDate(ldaTempDate) EQ ldaTempDate THEN
+         lcCount = lcCount + 1.
+      ldaTempDate = ldaTempdate + 1.
+   END.
+
+   RETURN lccount.
+END.
 
 FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
                                               INPUT idaValidTo AS DATE,
