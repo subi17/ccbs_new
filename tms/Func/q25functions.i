@@ -234,7 +234,7 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
                   STRING(DAY(TODAY),"99") + ".txt".
       OUTPUT STREAM Sout TO VALUE(lcLogFile) APPEND.
       PUT STREAM Sout UNFORMATTED
-         STRING(fMakeTS()) + " " + icLogText SKIP.
+         STRING(fMakeTS()) + "|" + icLogText SKIP.
       OUTPUT STREAM Sout CLOSE.
    END.
 END.
@@ -468,6 +468,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             liSentCount = liSentCount + 1.
             lcLogText = STRING(liphase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" + lcSMSMessage.
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_SENT_MSGS}).
             PAUSE liPauseValue.
             /* Decrease pause time if needed, check after each 50 sent SMS */
             IF (oiTotalCountLeft MODULO 50 = 0) THEN DO:
