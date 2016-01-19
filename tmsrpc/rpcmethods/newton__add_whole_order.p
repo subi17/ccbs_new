@@ -2132,6 +2132,7 @@ IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" AND
                     INPUT  "CHANGEICC",
                     INPUT  Order.ICC,
                     INPUT  "", /*for old SIM*/
+                    INPUT  "", /*reason*/
                     INPUT  "", /*for ContractID*/
                     INPUT  FALSE,
                     INPUT  0.0,
