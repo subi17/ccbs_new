@@ -1493,57 +1493,5 @@ FUNCTION fInstallmentChangeRequest RETURNS INTEGER
      
 END FUNCTION.
 
-FUNCTION fQ25ChangeRequest RETURNS INTEGER
-   (INPUT iiMsSeq        AS INT,    /* subscription */
-    INPUT icNewContract  AS CHAR,   /* new contract */
-    INPUT icOldContract  AS CHAR,   /* old contract */
-    INPUT icSource       AS CHAR,
-    INPUT icCreator      AS CHAR,
-    INPUT iiOrigRequest  AS INT,    /* main request */
-    INPUT ilMandatory    AS LOG,    /* is subrequest mandatory */
-    INPUT iiPerContID    AS INT,
-    INPUT ideResidualFee AS DEC,
-    OUTPUT ocResult      AS CHAR):
-
-   DEF VAR liReqCreated    AS INT  NO-UNDO.
-
-   DEF BUFFER bMobSub   FOR MobSub.
-
-   FIND FIRST bMobSub WHERE
-              bMobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
-   IF NOT AVAIL bMobSub THEN DO:
-      ocResult = "MobSub not found".
-      RETURN 0.
-   END. /* IF NOT AVAIL bMobSub THEN DO: */
-
-   ocResult = fChkRequest(iiMsSeq,
-                          {&REQTYPE_Q25_CONTRACT_CHANGE},
-                          icOldContract,
-                          icCreator).
-   IF ocResult > "" THEN RETURN 0.
-
-   fCreateRequest({&REQTYPE_Q25_CONTRACT_CHANGE},
-                  fMakeTS(),
-                  icCreator,
-                  TRUE,
-                  FALSE).   /* sms */
-
-   ASSIGN
-      bCreaReq.MsSeq       = iiMsSeq
-      bCreaReq.ReqIParam3  = iiPerContID
-      bCreaReq.ReqCParam1  = icOldContract
-      bCreaReq.ReqCParam2  = icNewContract
-      bCreaReq.ReqDParam2  = ideResidualFee
-      bCreaReq.ReqSource   = icSource
-      bCreaReq.OrigRequest = iiOrigRequest
-      bCreaReq.Mandatory   = INTEGER(ilMandatory)
-      liReqCreated         = bCreaReq.MsRequest.
-
-   RELEASE bCreaReq.
-
-   RETURN liReqCreated.
-
-END FUNCTION.
-
 &ENDIF            
  
