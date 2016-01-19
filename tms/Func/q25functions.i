@@ -29,7 +29,8 @@ DEF VAR liQ25Logging AS INT NO-UNDO.
 
 DEF STREAM Sout.
 
-liQ25Logging = fCParamI("Q25LoggingLevel"). /* 0 = none, 1 = count, 2 = all */
+liQ25Logging = fCParamI("Q25LoggingLevel"). /* 0 = none, 1 = sent msg, 
+                                               2 = count, 3 = all */
 
 /* Q24 Messages are needed to send before 20th day of month. No sending weekend
    or national holiday. Check if there are such days left or do we have to
@@ -465,6 +466,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                        "622",
                        {&SMS_TYPE_Q25}).
             liSentCount = liSentCount + 1.
+            lcLogText = STRING(liphase) + "|" + STRING(DCCLI.CLI) + "|" +
+                        STRING(DCCLI.MsSeq) + "|" + lcSMSMessage.
             PAUSE liPauseValue.
             /* Decrease pause time if needed, check after each 50 sent SMS */
             IF (oiTotalCountLeft MODULO 50 = 0) THEN DO:

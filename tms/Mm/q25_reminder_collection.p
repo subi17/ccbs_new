@@ -145,7 +145,7 @@ DO:
    IF ldaStartDateMonth23 NE ? AND ldaEndDateMonth23 NE ? THEN
       lcLogText = lcLogtext + "23:" + STRING(ldaStartDateMonth23) + "|" + 
                   STRING(ldaEndDateMonth23) + "|".
-   IF ldaStartDateMonth23 NE ? AND ldaEndDateMonth23 NE ? THEN
+   IF ldaStartDateMonth24 NE ? AND ldaEndDateMonth24 NE ? THEN
       lcLogText = lcLogtext + "24:" + STRING(ldaStartDateMonth24) + "|" + 
                   STRING(ldaEndDateMonth24).
    fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
