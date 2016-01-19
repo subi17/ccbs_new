@@ -91,7 +91,8 @@ FORM
     RequestType.LogFile        COLON 15
     RequestType.LogEntry       COLON 15 FORMAT "X(40)"
     RequestType.LogClear       COLON 15
-    RequestType.LogThreshold   COLON 15
+    RequestType.LogThreshold   COLON 15 
+    RequestType.Mode           COLON 15
     
 WITH  OVERLAY ROW 4 centered
     COLOR VALUE(cfc)
@@ -696,7 +697,8 @@ PROCEDURE local-UPDATE-record:
          RequestType.LogFile        
          RequestType.LogEntry       
          RequestType.LogClear       
-         RequestType.LogThreshold   
+         RequestType.LogThreshold
+         RequestType.Mode
        WITH FRAME lis.
 
       
@@ -725,6 +727,7 @@ PROCEDURE local-UPDATE-record:
          RequestType.LogEntry       
          RequestType.LogClear       
          RequestType.LogThreshold   
+         RequestType.Mode
       WITH FRAME lis EDITING:
  
          READKEY.
