@@ -16,6 +16,8 @@ ASSIGN gcBrand = "1"
 
 DEF VAR liStartDay               AS INT  NO-UNDO.
 DEF VAR liEndDay                 AS INT  NO-UNDO.
+DEF VAR liStartDay24M            AS INT  NO-UNDO.
+DEF VAR liEndDay24M              AS INT  NO-UNDO.
 DEF VAR ldaStartDateMonth22      AS DATE NO-UNDO.
 DEF VAR ldaEndDateMonth22        AS DATE NO-UNDO.
 DEF VAR ldaStartDateMonth23      AS DATE NO-UNDO.
@@ -63,17 +65,25 @@ DO:
    ELSE IF fChkDueDate(ldaExecuteDate) NE ldaExecuteDate THEN
       LEAVE execution. /* no sending weekend and national holiday */
    ELSE DO:
-      /* Other months collection is made during weekdays after 5th day of
-       month. Handled three days cases in each of these days. No message 
-       sending at weekend and national holidays. Delayed messages will be
-       sent first normal weekday.  At 1st valid weekday after 5th day contracts
-       with validto date 1, 2 and 3, 2nd day valid to dates 3,4,5 and so on. 
-       fCheckDates function resolves last day of month. */
+      /* Other months collection is made during Q22 and Q23weekdays after 
+         5th day of month. Handled two days cases in each of these days. 
+         No message sending at weekend and national holidays. 
+         At 1st valid weekday after 5th day contracts with validto date 1, 2, 
+         2nd day valid to dates 3,4 and so on. 
+         
+         Q24 all messages are needed to send before 20th day. So sending three
+         days messages an each weekday. If national holidays, last weekday
+         before 20th need to send all rest of day messages.
+
+         fCheckDates function resolves last day of month. */
        
-       /* After weekend or national holiday, these days should be included */
        liWeekdayCount = fCountNormalWeekday(ldaExecuteDate).       
-       liStartDay = (liWeekdayCount * 3) - 2. 
-       liEndDay = (liWeekdaycount * 3).                  
+       /* sending days for Q22 and Q23 */
+       liStartDay = (liWeekdayCount * 2) - 1. 
+       liEndDay = (liWeekdaycount * 2).
+       /* Sending days for Q24 */
+       liStartDay24M = (liWeekdayCount * 3) - 2.
+       liEndDay24M = (liWeekdaycount * 3).
    END.
 
    /* Month 22, 2 months perm contract to go */
@@ -83,7 +93,7 @@ DO:
    fGetStartEndDates({&Q25_MONTH_23}, liStartDay, liEndDay,
                      OUTPUT ldaStartDateMonth23, OUTPUT ldaEndDateMonth23).
    /* Month 24 0 month perm contract to go */
-   fGetStartEndDates({&Q25_MONTH_24}, liStartDay, liEndDay,
+   fGetStartEndDates({&Q25_MONTH_24}, liStartDay24M, liEndDay24M,
                      OUTPUT ldaStartDateMonth24, OUTPUT ldaEndDateMonth24).
    /* at month 24 all messages are needed to be send before 20th day.
       If there is national holidays during 6th and 20th day, might be
@@ -128,13 +138,16 @@ DO:
                       INPUT-OUTPUT liTempCount).
    liTempCount = liTotalCount. /* for logging purposes */
 
-   lcLogText = "START|" + STRING(liStartDay) + "|" + STRING(liEndDay) + "|" + 
-               STRING(ldaStartDateMonth22) + "|" + 
-               STRING(ldaEndDateMonth22) + "|" + 
-               STRING(ldaStartDateMonth23) + "|" + 
-               STRING(ldaEndDateMonth23) + "|" + 
-               STRING(ldaStartDateMonth24) + "|" + 
-               STRING(ldaEndDateMonth24).
+   lcLogText = "START|" + STRING(liStartDay) + "|" + STRING(liEndDay) + "|".
+   IF ldaStartDateMonth22 NE ? AND ldaEndDateMonth22 NE ? THEN
+      lcLogText = lcLogtext + "22:" + STRING(ldaStartDateMonth22) + "|" + 
+                  STRING(ldaEndDateMonth22) + "|".
+   IF ldaStartDateMonth23 NE ? AND ldaEndDateMonth23 NE ? THEN
+      lcLogText = lcLogtext + "23:" + STRING(ldaStartDateMonth23) + "|" + 
+                  STRING(ldaEndDateMonth23) + "|".
+   IF ldaStartDateMonth23 NE ? AND ldaEndDateMonth23 NE ? THEN
+      lcLogText = lcLogtext + "24:" + STRING(ldaStartDateMonth24) + "|" + 
+                  STRING(ldaEndDateMonth24).
    fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
 
    /* Actual SMS creation and sending */
