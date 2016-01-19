@@ -62,7 +62,10 @@ FUNCTION fGetStartEndDates RETURNS LOGICAL
       ldaCountDate = ADD-INTERVAL(DATE(lcExecuteDate), iiMonth, 'months':U).
    ELSE
       ldaCountDate = ADD-INTERVAL(TODAY, iiMonth, 'months':U).
-   IF iiStartDay > DAY(fLastDayOfMonth(ldaCountDate)) THEN
+   /* Start date should not be bigger than 29. 31 day handled todether with
+      days 29 and 30 */
+   IF iiStartDay > DAY(fLastDayOfMonth(ldaCountDate)) OR
+      iiStartDay > 29 THEN
       RETURN FALSE.
    ELSE IF iiEndDay > DAY(fLastDayOfMonth(ldaCountDate))
       THEN iiEndDay = DAY(fLastDayOfMonth(ldaCountDate)).
@@ -350,7 +353,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          ASSIGN
             ldaMonth22Date = ADD-INTERVAL(DCCLI.ValidFrom, 22, 'months':U)
             ldaMonth22Date = DATE(MONTH(ldaMonth22Date),1,YEAR(ldaMonth22Date)). 
-         /*         
+                  
          FIND FIRST TermReturn WHERE
                     TermReturn.OrderId = SingleFee.OrderId NO-LOCK NO-ERROR.
       
@@ -369,7 +372,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             NEXT.
              
             END.
-         */   
+            
          IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                   DCCLI.Brand   EQ gcBrand AND
                   DCCLI.DCEvent EQ "RVTERM12" AND
@@ -492,13 +495,15 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
    /* Logging about amount of situations for testting purposes. */
    /* If ilSendMsgs is False, logging of calculated values to be done */
    IF NOT(ilSendMsgs) THEN DO:
-      lcLogText = STRING(iiPhase) + "|" +
-                  STRING(idaStartDate) + "|" + STRING(idaEnddate) + "|" +
-                  STRING(liCount) + "|" + STRING(liNotSendCount) + "|" +
-                  STRING(liBilledCount) + "|" + STRING(liNotDCCLICount) + "|" +
-                  STRING(liReturnedDevices) + "|" + STRING(liQ25DoneCount) + 
-                  "|" + STRING(liPendingReq) + "|" +
-                  STRING(etime / 1000).
+      lcLogText = STRING(iiPhase) + "|".
+      IF idaStartDate NE ? THEN
+         lcLogText = lcLogText + "S:" + STRING(idaStartDate) + "|".
+      IF idaEndDate NE ? THEN
+         lcLogText = lcLogText + "E:" + STRING(idaEnddate) + "|".
+      lcLogText = lcLogText + STRING(liCount) + "|" + STRING(liNotSendCount) + 
+         "|" + STRING(liBilledCount) + "|" + STRING(liNotDCCLICount) + "|" +
+         STRING(liReturnedDevices) + "|" + STRING(liQ25DoneCount) + 
+         "|" + STRING(liPendingReq) + "|" + STRING(etime / 1000).
       fQ25LogWriting(lcLogText, {&Q25_LOGGING_COUNTERS}).
       RETURN liCount.
    END.

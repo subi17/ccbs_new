@@ -164,7 +164,7 @@ DO:
    IF ldaStartDateMonth24 NE ? AND ldaEndDateMonth24 NE ? THEN
       fGenerateQ25SMSMessages(ldaStartDateMonth24, ldaEndDateMonth24, 
                              {&Q25_MONTH_24}, TRUE, INPUT-OUTPUT liTotalCount).
-   fQ25LogWriting("FINISH: " + STRING(liTempCount) + " messages sent. " +
+   fQ25LogWriting("FINISH: Total " + STRING(liTempCount) + " messages. " +
                   STRING(liTotalCount) + " messages left to send.",
                   {&Q25_LOGGING_COUNTERS}).
 END.
