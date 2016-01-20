@@ -79,11 +79,10 @@ DEF VAR liFeeCust     AS INT  NO-UNDO.
 DEF VAR liPenaltyFee  AS INT  NO-UNDO.
 DEF VAR lcError       AS CHAR NO-UNDO.
 DEF VAR lcFinancedResult AS CHAR NO-UNDO. 
-DEF VAR liIFSStatus AS INT NO-UNDO. 
+DEF VAR liIFSStatus   AS INT  NO-UNDO. 
 
 DEF BUFFER xSingleFee FOR SingleFee.
 DEF BUFFER xFixedFee FOR FixedFee.
-
 
 FORM
 SKIP(1)
@@ -180,8 +179,13 @@ THEN ldActStamp = 0.
 ELSE ldActStamp = fMake2DT(ValidFrom,1).
 
 IF iiOrderId > 0 THEN
-   lcFinancedResult = fOrderContainsFinancedTerminal(iiOrderId).
+   lcFinancedResult = fOrderContainsFinancedTerminal(iiOrderId,icCalcObj).
 
+/* since the fee model id is hard coded also elsewhere -> check it like
+   this here */
+IF FeeModel = "RVTERM12" THEN 
+   liIFSStatus = {&IFS_STATUS_WAITING_SENDING}.
+   
 IF NUM-ENTRIES(icFeememo,";") >= 2 THEN DO:
 
    IF ENTRY(2,icFeememo,";") NE {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION} AND

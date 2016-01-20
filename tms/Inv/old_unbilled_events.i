@@ -12,7 +12,7 @@ FUNCTION fOldUnbilledEventLimit RETURNS DATE
    DEF VAR ldaEventDate  AS DATE NO-UNDO.
    
    liOldMonth = fCParamI("OldUnbilledEventLimit").
-   IF liOldMonth = ? THEN liOldMonth = 5.   
+   IF liOldMonth = ? THEN liOldMonth = 4.   
 
    ASSIGN
       liOldMonth = liOldMonth + iiAddMonths

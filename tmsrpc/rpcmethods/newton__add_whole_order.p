@@ -1244,7 +1244,6 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 top_struct_fields = validate_request(top_struct, 
    "order_data!,customer_data!,address_data,device_data,contact_data,fusion_data,q25_data,order_inspection_data,accessory_data").
-
 IF top_struct_fields EQ ? THEN RETURN.
 
 ASSIGN
@@ -2099,15 +2098,15 @@ IF pcUpsHours NE "" THEN
 IF llq25_extension THEN
    fCreateOrderAction(Order.Orderid,
       "Q25Extension",
-      STRING(liper_contract_id),
-      "").
+      "Yes",
+      STRING(liper_contract_id)).
 
 /* Create Quota 25 discount */
 IF ldeq25_discount > 0 THEN
    fCreateOrderAction(Order.Orderid,
       "Q25Discount",
-      STRING(liper_contract_id),
-      STRING(ldeq25_discount)).
+      STRING(ldeq25_discount),
+      STRING(liper_contract_id)).
 
 /* YBP-582 */ 
 IF pcChannel BEGINS "fusion" THEN
