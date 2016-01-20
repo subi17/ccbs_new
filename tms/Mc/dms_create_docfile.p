@@ -771,7 +771,6 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    lcErr = fSendChangeInformation("", 
                                   Order.OrderId, 
                                   "", 
-                                  lcDocListEntries,
                                   ",",
                                   "create_cf",
                                   lcMsg).
@@ -921,7 +920,6 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    lcErr = fSendChangeInformation("", 
                                   Order.OrderId, 
                                   "", 
-                                  lcDocListEntries,
                                   ",",
                                    "create_cf",
                                    lcMsg).

@@ -248,7 +248,6 @@ PROCEDURE pUpdateDMS:
    lcErr = fSendChangeInformation(lcStatusCode, 
                                   liOrderId, 
                                   lcDeposit, 
-                                  lcDocList,
                                   ";",
                                   "casef_reader",
                                   lcMsg).

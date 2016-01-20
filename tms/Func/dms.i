@@ -283,7 +283,7 @@ END.
 /*returns document type - comment pairs: "1,PENDING,2,SENT,...*/
 FUNCTION fDocListByOrder RETURNS CHAR
    (iiOrderId AS INT,
-    icNotifCaseId AS CHAR):   
+    icNotifCaseId AS CHAR):
    DEF BUFFER bDMS FOR DMS.
    DEF BUFFER bDMSDOC FOR DMSDOC.
    DEF VAR lcDocList AS CHAR NO-UNDO.
@@ -292,26 +292,35 @@ FUNCTION fDocListByOrder RETURNS CHAR
 
    FIND FIRST bDMS NO-LOCK WHERE
               bDMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
-              bDMS.HostId EQ iiOrderID.
+              bDMS.HostId EQ iiOrderID NO-ERROR.
+
    IF NOT AVAIL bDMS THEN RETURN "".
    FOR EACH bDMSDOC NO-LOCK WHERE
             bDMSDOC.DMSID EQ bDMS.DMSID:
       IF icNotifCaseID EQ {&DMS_INITIAL_NOTIF_CASE} /*1*/ THEN DO:
+         DISP bDMSDOC.
          IF bDMSDOC.DocStatusCode EQ {&DMS_INIT_STATUS_SENT} THEN DO:
-            lcDocList = lcDocList + bDmsDoc.DocTypeId + "," + 
+            lcDocList = lcDocList + bDmsDoc.DocTypeId + "," +
                         /*no comment*/ ",".
          END.
       END.
       ELSE DO:
-         lcDocReminderStatuses =  fCParam("DMS","DMS_doc_reminder_statuses"). /*2,3*/
-         IF LOOKUP(DMS.StatusCode, lcDocReminderStatuses) > 0 THEN DO:
-            lcDocList = lcDocList + bDmsDoc.DocTypeId + "," +  
+         lcDocReminderStatuses =  fCParam("DMS","DMS_doc_reminder_statuses"). /*A,C*/
+         DISP bDMSDOC.
+         lcDocReminderStatuses = "A,C".
+         IF LOOKUP(bDMSDOC.DocStatusCode, lcDocReminderStatuses) > 0 THEN DO:
+            lcDocList = lcDocList + bDmsDoc.DocTypeId + "," +
                                     bDmsDoc.DocRevComment + ",".
          END.
       END.
 
-   END.         
-   RETURN TRIM(lcDocList , ",").
+   END.
+   IF icNotifCaseID EQ "1" THEN DO:
+      RETURN lcDocList.
+   END.
+   ELSE DO:
+      RETURN RIGHT-TRIM(lcDocList , ",").
+   END.
 END.
 
 /*Function generates JSON message for providing information for
@@ -319,8 +328,6 @@ END.
 FUNCTION fGenerateMessage RETURNS CHAR
    (icNotifCaseId AS CHAR,
     icDeposit AS CHAR,
-    icDocList AS CHAR,
-    icDocListSep AS CHAR,
    BUFFER Order FOR Order,
    BUFFER Ordercustomer FOR Ordercustomer):
   
@@ -418,7 +425,6 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    (icDMSStatus AS CHAR, /*DMS Status*/ 
     icOrderID AS INT,    /*Order*/
     icDeposit AS CHAR,   /*Deposit, if available*/
-    icDocList AS CHAR,   /*Doc List if available*/
     icDocListSep AS CHAR, /*Separator if doc list is available*/
     icModule AS CHAR,    /*identifier for MQ log file */
     OUTPUT ocSentMessage AS CHAR): /*for debugging, also includes additional data related to message.*/
@@ -463,8 +469,6 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    END.
    lcMessage = fGenerateMessage(lcNotifCaseID,
                                 icDeposit,
-                                icDocList,
-                                icDocListSep,
                                 BUFFER Order,
                                 BUFFER Ordercustomer).
 
