@@ -1,0 +1,7 @@
+ADD FIELD "BirthDay" OF "CustContact" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "BirthDay"
+  MAX-WIDTH 4
+  COLUMN-LABEL "BirthDay"
+  ORDER 350

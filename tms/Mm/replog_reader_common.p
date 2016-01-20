@@ -14,6 +14,8 @@ gcBrand = "1".
 {log.i}
 {ftransdir.i}
 {replog_reader.i}
+{tmsconst.i}
+{fcustdata.i}
 
 FORM
    SKIP
@@ -542,6 +544,12 @@ PROCEDURE pHandleCustomer:
    DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
 
    DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE llSelfEmployed    AS LOGICAL   NO-UNDO.
+   DEFINE VARIABLE lcEmployer        AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liSubLimit        AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE liSubActLimit     AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE llSubLimit        AS LOGICAL   NO-UNDO.
+   DEFINE VARIABLE llSubActLimit     AS LOGICAL   NO-UNDO.
 
    IF AVAIL Common.RepLog THEN DO:
 
@@ -552,6 +560,25 @@ PROCEDURE pHandleCustomer:
             FIND FIRST Customer WHERE
                        RECID(Customer) = RepLog.RecordId NO-LOCK NO-ERROR.
             IF AVAIL Customer THEN DO:
+
+               FIND FIRST CustCat NO-LOCK WHERE
+                          CustCat.Brand = gcBrand AND
+                          CustCat.Category = Customer.Category NO-ERROR.
+               IF AVAILABLE CustCat THEN llSelfEmployed = CustCat.SelfEmployed.
+
+               IF Customer.CustIDType = "passport" THEN llSelfEmployed = FALSE.
+
+               IF Customer.CustIDType NE "CIF" AND
+                  Customer.Profession > "" THEN lcEmployer = Customer.CompanyName.
+
+               liSubLimit = fGetMobsubLimit(INPUT Customer.Custnum,
+                                            INPUT Customer.Category,
+                                            OUTPUT llSubLimit).
+
+               liSubActLimit = fGetMobsubActLimit(INPUT Customer.Custnum,
+                                                  INPUT Customer.Category,
+                                                  OUTPUT llSubActLimit).
+
                lcMessage = lcMessage                                + lcDel +
                            fNotNull(STRING(Customer.CustNum))       + lcDel +
                            fNotNull(Customer.CustId)                + lcDel +
@@ -574,18 +601,74 @@ PROCEDURE pHandleCustomer:
                            fNotNull(Customer.SMSNumber)             + lcDel +
                            fNotNull(Customer.BankAcct)              + lcDel +
                            /*YPR-3204*/
-                           fNotNull(Customer.HonTitle)              + lcDel +
-                           fNotNull(fDateToString(Customer.Birthday)) + lcDel +                          
-                           fNotNull(Customer.)             + lcDel +
-                           fNotNull(Customer.)             + lcDel +
-                           fNotNull(Customer.)             + lcDel +
-                           fNotNull(Customer.)             + lcDel +
-                           fNotNull(Customer.)             + lcDel +
-                           fNotNull(Customer.)             + lcDel +
-                           fNotNull(Customer.)             + lcDel +
-                           fNotNull(Customer.)             + lcDel +
-                           fNotNull(Customer.)             
-                           .
+                           fNotNull(Customer.HonTitle)                        + lcDel +
+                           fNotNull(fDateToString(Customer.Birthday))         + lcDel +                          
+                           fNotNull(STRING(llSelfEmployed))                   + lcDel +
+                           fNotNull(fDateToString(Customer.FoundationDate))   + lcDel +
+                           fNotNull(Customer.AuthCustId)                      + lcDel +
+                           fNotNull(Customer.AuthCustIdType)                  + lcDel +
+                           fNotNull(lcEmployer)                               + lcDel +
+                           fNotNull(STRING(llSubLimit))                       + lcDel +
+                           fNotNull(STRING(llSubActLimit)).
+
+               fWriteMessage(lcMessage).
+            END.
+            ELSE DO:
+               olHandled = TRUE.
+               fWriteMessage(lcMessage).
+               RETURN.
+            END.
+         END.
+         WHEN "DELETE" THEN fWriteMessage(lcMessage).
+         OTHERWISE RETURN.
+      END CASE.
+
+      IF lMsgPublisher:send_message(lcMessage) THEN
+         olHandled = TRUE.
+      ELSE DO:
+         olHandled = FALSE.
+         IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+            LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+      END.
+   END.
+
+   CATCH anyError AS Progress.Lang.Error:
+      olHandled = FALSE.
+      LOG-MANAGER:WRITE-MESSAGE("Message failed was recovered: " + lcMessage,"DEBUG").
+   END CATCH.
+
+END PROCEDURE.
+
+PROCEDURE pHandleCustContact:
+
+   DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
+
+   DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
+
+   IF AVAIL Common.RepLog THEN DO:
+
+      lcMessage = fCommonMessage().
+
+      CASE RepLog.EventType:
+         WHEN "CREATE" OR WHEN "MODIFY" THEN DO:
+            FIND FIRST CustContact WHERE
+                       RECID(CustContact) = RepLog.RecordId NO-LOCK NO-ERROR.
+            IF AVAIL CustContact THEN DO:
+
+               lcMessage = lcMessage                                       + lcDel +
+                           fNotNull(STRING(CustContact.CustNum))           + lcDel +
+                           fNotNull(CustContact.HonTitle)                  + lcDel +
+                           fNotNull(CustContact.FirstName)                 + lcDel +
+                           fNotNull(CustContact.CustName)                  + lcDel +
+                           fNotNull(CustContact.SurName2)                  + lcDel +
+                           fNotNull(fDateToString(CustContact.Birthday))   + lcDel +
+                           fNotNull(CustContact.OrgId)                     + lcDel +
+                           fNotNull(CustContact.CustIdType)                + lcDel +
+                           fNotNull(CustContact.Nationality)               + lcDel +
+                           fNotNull(STRING(CustContact.Language))          + lcDel +
+                           fNotNull(CustContact.SMSNumber)                 + lcDel +
+                           fNotNull(CustContact.Phone)                     + lcDel +
+                           fNotNull(CustContact.Email).
 
                fWriteMessage(lcMessage).
             END.
