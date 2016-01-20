@@ -34,9 +34,11 @@ DEF VAR lcEmailPDFLink          AS CHAR NO-UNDO.
 DEF VAR lcLatestEmailFile       AS CHAR NO-UNDO.
 DEF VAR lcEmailReplacedText     AS CHAR NO-UNDO.
 DEF VAR lcMonitor               AS CHAR NO-UNDO. 
-DEF VAR liLoop                  AS INT NO-UNDO. 
+DEF VAR liLoop                  AS INT  NO-UNDO. 
 DEF VAR lcName                  AS CHAR NO-UNDO. 
-DEF VAR lcMonthName AS CHAR NO-UNDO. 
+DEF VAR lcMonthName             AS CHAR NO-UNDO. 
+DEF VAR lcQ25Note               AS CHAR NO-UNDO. 
+
 
 DEF STREAM sEmail.
 
@@ -126,7 +128,14 @@ FOR EACH Invoice WHERE
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#AMOUNT", 
           REPLACE(TRIM(STRING(Invoice.InvAmt,"->>>>>>9.99")),".",lcSep))
           xMailAddr = Customer.Email.
-   
+
+   /* additional text for q25 cases */
+   RUN pGetQ25Text(Invoice.InvNum,
+                   Invoice.CustNum,
+                   Invoice.InvDate,
+                   Customer.Language,
+                   OUTPUT lcQ25Note).
+   lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#Q25NOTE",lcQ25Note).
 
    OUTPUT STREAM sEmail TO VALUE(lcLatestEmailFile).
    PUT STREAM sEmail UNFORMATTED xMailSubj SKIP(1).
@@ -176,4 +185,125 @@ END. /* IF SEARCH(lcAddrConfDir) <> ? THEN DO: */
 
 fReqStatus(2,""). /* request handled succesfully */
 
+
+PROCEDURE pGetQ25Text:
+
+   DEF INPUT  PARAMETER iiInvNum    AS INT  NO-UNDO.
+   DEF INPUT  PARAMETER iiInvCust   AS INT  NO-UNDO.
+   DEF INPUT  PARAMETER idaInvDate  AS DATE NO-UNDO.
+   DEF INPUT  PARAMETER iiLanguage  AS INT  NO-UNDO.
+   DEF OUTPUT PARAMETER ocText      AS CHAR NO-UNDO.
+   
+   DEF VAR liQ25Qty    AS INT  NO-UNDO.
+   DEF VAR liFees      AS INT  NO-UNDO.
+   DEF VAR liMonth     AS INT  NO-UNDO.
+   DEF VAR lcCLI       AS CHAR NO-UNDO.
+   DEF VAR ldaTo       AS DATE NO-UNDO.
+   DEF VAR lcTextID    AS CHAR NO-UNDO.
+   DEF VAR liInvPeriod AS INT  NO-UNDO.
+   DEF VAR liMaxPeriod AS INT  NO-UNDO.
+   DEF VAR lcQ25Link   AS CHAR NO-UNDO.
+   
+   DEF BUFFER bExtension FOR DCCLI.
+
+   ASSIGN 
+      ocText = ""
+      liInvPeriod = YEAR(idaInvDate) * 100 + MONTH(idaInvDate)
+      liMaxPeriod = IF MONTH(idaInvDate) <= 8
+                    THEN YEAR(idaInvDate) * 100 + MONTH(idaInvDate) + 3
+                    ELSE (YEAR(idaInvDate) + 1) * 100 +
+                         3 - (12 - MONTH(idaInvDate)).
+   
+   FOR EACH SubInvoice NO-LOCK WHERE
+            SubInvoice.InvNum = iiInvNum AND
+            SubInvoice.MsSeq > 0,
+      FIRST MobSub NO-LOCK WHERE
+            MobSub.MsSeq = SubInvoice.MsSeq,
+      FIRST SingleFee NO-LOCK USE-INDEX HostTable WHERE
+            SingleFee.Brand       = gcBrand AND
+            SingleFee.HostTable   = "Mobsub" AND
+            SingleFee.KeyValue    = STRING(SubInvoice.MsSeq) AND
+            SingleFee.CustNum     = iiInvCust AND
+            SingleFee.BillPeriod <= liMaxPeriod AND
+            SingleFee.SourceTable = "DCCLI" AND
+            SingleFee.CalcObj     = "RVTERM" AND
+            SingleFee.Active AND
+            SingleFee.Billed = FALSE,
+      FIRST DCCLI NO-LOCK WHERE
+            DCCLI.PerContractId = INT(SingleFee.SourceKey) AND
+            DCCLI.MsSeq   = INT(SingleFee.KeyValue) AND
+            DCCLI.DCEvent = SingleFee.CalcObj AND
+            /* not yet terminated */
+            DCCLI.TermDate = ? AND
+            /* renewal not done */
+            DCCLI.RenewalDate = ?:
+
+      IF INTERVAL(DCCLI.ValidTo,DCCLI.ValidFrom,"Months") < 23 THEN NEXT. 
+      
+      /* extension done */
+      IF CAN-FIND(FIRST FixedFee WHERE
+            FixedFee.Brand = gcBrand AND
+            FixedFee.HostTable = "MobSub" AND
+            FixedFee.KeyValue = STRING(SubInvoice.MsSeq) AND
+            FixedFee.BillCode BEGINS "RVTERM" AND
+            FixedFee.OrderID = SingleFee.OrderID AND
+            FixedFee.InUse) THEN NEXT.
+
+      /* terminal returned */
+      FIND FIRST TermReturn WHERE
+                 TermReturn.OrderId = SingleFee.OrderId AND
+                 TermReturn.ReturnTS > fHMS2TS(DCCLI.ValidFrom,"0") 
+         NO-LOCK NO-ERROR.
+      IF AVAIL TermReturn AND 
+        (TermReturn.DeviceScreen OR TermReturn.DeviceScreen = ?) AND
+        (TermReturn.DeviceStart OR TermReturn.DeviceStart = ?) THEN NEXT.
+      
+      liFees = 0.
+      /* which month is this */
+      FOR FIRST FixedFee NO-LOCK WHERE
+                FixedFee.Brand = gcBrand AND
+                FixedFee.HostTable = "MobSub" AND
+                FixedFee.KeyValue = SingleFee.KeyValue AND
+                FixedFee.BillCode BEGINS "PAYTERM" AND
+                FixedFee.SourceKey = SingleFee.SourceKey AND
+                FixedFee.InUse AND
+                FixedFee.EndPer >= liInvPeriod,
+           EACH FFItem OF FixedFee NO-LOCK WHERE
+                FFItem.BillPeriod > liInvPeriod:
+         liFees = liFees + 1.       
+      END.        
+      IF liFees = 0 OR liFees > 3 THEN NEXT.      
+      
+      /* msisdn is used only if there is one subscription in q25 */
+      ASSIGN 
+         lcCLI = MobSub.CLI
+         liQ25Qty = liQ25Qty + 1.
+
+      /* text according to the oldest */
+      IF 25 - liFees > liMonth THEN ASSIGN
+         ldaTo = DCCLI.ValidTo
+         liMonth = 25 - liFees.
+   END.          
+
+   IF ldaTo = ? THEN RETURN.
+   
+   IF liMonth = 24 THEN lcTextID = "EMailInvoiceQ25Final".
+   ELSE lcTextID = "EMailInvoiceQ25Prior".
+
+   ocText = fGetEmailText("EMAIL",
+                          lcTextID,
+                          iiLanguage,
+                          OUTPUT xMailSubj).
+
+   IF liQ25Qty > 1 THEN lcCLI = "".
+   lcQ25Link = fGenerateQ25Link(lcCLI).
+   
+   IF lcQ25Link = ? OR lcQ25Link = "" THEN ocText = "".
+   
+   ASSIGN 
+      ocText = REPLACE(ocText,"#DD",STRING(DAY(ldaTo),"99")) 
+      ocText = REPLACE(ocText,"#MM",STRING(MONTH(ldaTo),"99"))
+      ocText = REPLACE(ocText,"#Q25LINK",lcQ25Link).
+
+END PROCEDURE.
 

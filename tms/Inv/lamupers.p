@@ -2126,13 +2126,14 @@ PROCEDURE pFixedFee:
          IF liRowPeriod > 999999 THEN 
             liRowPeriod = TRUNCATE(liRowPeriod / 100,0).
          
-         /* change payterm billcode if the contract is financed by bank */
-         IF FixedFee.BillCode EQ "PAYTERM" AND
+         /* change payterm/rvterm billcodes if the contract is financed 
+            by bank */
+         IF LOOKUP(FixedFee.BillCode,"PAYTERM,RVTERM") > 0 AND
             LOOKUP(FixedFee.FinancedResult,{&TF_STATUSES_BANK}) > 0 THEN DO:
             IF FixedFee.TFBank = "0081" THEN
-               FFItem.BillCode = "PAYTERMBS".
+               FFItem.BillCode = FFItem.BillCode + "BS".
             ELSE
-               FFItem.BillCode = "PAYTERM1E".
+               FFItem.BillCode = FFItem.BillCode + "1E".
          END.
           
          FIND FIRST ttIR WHERE
@@ -2269,9 +2270,9 @@ PROCEDURE pSingleFee:
       IF liRowPeriod > 999999 THEN 
          liRowPeriod = TRUNCATE(liRowPeriod / 100,0).
 
-      /* change PAYTERMEND billcode if original terminated contract is
-         financed by bank */
-      IF SingleFee.BillCode EQ "PAYTERMEND" AND
+      /* change PAYTERMEND and RVTERMEND billcodes if original terminated 
+         contract is financed by bank */
+      IF LOOKUP(SingleFee.BillCode,"PAYTERMEND,RVTERMEND") > 0 AND
          SingleFee.SourceTable = "FixedFee" THEN DO:
          
          ASSIGN
@@ -2285,9 +2286,9 @@ PROCEDURE pSingleFee:
             IF AVAIL FixedFee AND 
                LOOKUP(FixedFee.FinancedResult,{&TF_STATUSES_BANK}) > 0 THEN DO:
                IF FixedFee.TFBank = "0081" THEN
-                  SingleFee.BillCode = "PAYTERMENDBS".
+                  SingleFee.BillCode = SingleFee.BillCode + "BS".
                ELSE
-                  SingleFee.BillCode = "PAYTERMEND1E".
+                  SingleFee.BillCode = SingleFee.BillCode + "1E".
             END.
          END.
       END.

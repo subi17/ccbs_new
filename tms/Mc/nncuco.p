@@ -1199,10 +1199,11 @@ repeat WITH FRAME sel:
           FixedFee.EndPeriod      WHEN amt-nonbilled > 0
           FixedFee.BillMethod     WHEN amt-nonbilled > 0
           FixedFee.Contract       WHEN amt-nonbilled > 0
+          FixedFee.FinancedResult WHEN amt-nonbilled > 0 AND 
+                                       (FixedFee.BillCode BEGINS "PAYTERM" OR
+                                        FixedFee.BillCode BEGINS "RVTERM")
           FixedFee.InUse
           FixedFee.VATIncl        WHEN amt-nonbilled > 0
-          FixedFee.FinancedResult WHEN amt-nonbilled > 0 AND 
-                                       FixedFee.BillCode BEGINS "PAYTERM"
           WITH FRAME lis EDITING:
 
             READKEY.
@@ -1217,7 +1218,8 @@ repeat WITH FRAME sel:
 
                IF FRAME-FIELD EQ "FinancedResult" THEN DO:
                   IF (INPUT FixedFee.FinancedResult NE 
-                            FixedFee.FinancedResult) THEN DO:
+                            FixedFee.FinancedResult) AND
+                     INPUT FixedFee.FinancedResult > "" THEN DO:
                      IF LOOKUP((INPUT FixedFee.FinancedResult),
                                {&TF_STATUSES_MANUAL}) = 0 OR
                         (INPUT FixedFee.FinancedResult = "B99" AND

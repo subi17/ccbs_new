@@ -780,11 +780,13 @@ PROCEDURE pSubInvoice2XML:
       lhXML:END-ELEMENT("RowDetail").
 
       /* TF phase2 - Footer Text */
-      IF ttSub.TFBankFooterText > "" THEN DO:
-         lhXML:START-ELEMENT("RowDetail").
-         lhXML:INSERT-ATTRIBUTE("Type","FooterText").
-         lhXML:WRITE-DATA-ELEMENT("Text",ttSub.TFBankFooterText).
-         lhXML:END-ELEMENT("RowDetail").
+      DO liTFCount = 1 TO EXTENT(ttSub.TFBankFooterText):
+         IF ttSub.TFBankFooterText[liTFCount] > "" THEN DO:
+            lhXML:START-ELEMENT("RowDetail").
+            lhXML:INSERT-ATTRIBUTE("Type","FooterText").
+            lhXML:WRITE-DATA-ELEMENT("Text",ttSub.TFBankFooterText[liTFCount]).
+            lhXML:END-ELEMENT("RowDetail").
+         END.
       END.
 
       lhXML:END-ELEMENT("InvoiceRow").

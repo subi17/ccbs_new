@@ -702,8 +702,8 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
          NEXT InvoiceLoop.
       END.   
 
-      /* YDR-427 - Special rule for PAYTERM */
-      IF BillItem.BillCode = "PAYTERMEND" THEN
+      /* YDR-427 - Special rule for PAYTERMEND/RVTERMEND */
+      IF LOOKUP(BillItem.BillCode,"PAYTERMEND,RVTERMEND") > 0 THEN
          FOR EACH DayCampaign WHERE
                   DayCampaign.Brand = gcBrand AND
                   DayCampaign.DCType = {&DCTYPE_INSTALLMENT} AND
@@ -794,10 +794,15 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
          ttTax.TaxBase   = ttTax.TaxBase   + ttRow.AmtExclVat
          ttTax.TaxAmount = ttTax.TaxAmount + ttRow.VatAmt.
 
-      /* Merge payterm rows. YDR-694 */
+      /* Merge payterm/rvterm rows. YDR-694 */
       IF NOT llSalesInv AND
          LOOKUP(ttRow.BillCode,
-                "PAYTERM,PAYTERMEND,PAYTERM1E,PAYTERMEND1E,PAYTERMBS,PAYTERMENDBS") > 0 THEN DO:
+                "PAYTERM,PAYTERMEND," +
+                {&TF_BANK_UNOE_PAYTERM_BILLCODES} + "," +
+                {&TF_BANK_SABADELL_PAYTERM_BILLCODES} + "," +
+                "RVTERM,RVTERMEND," + 
+                {&TF_BANK_UNOE_RVTERM_BILLCODES} + "," +
+                {&TF_BANK_SABADELL_RVTERM_BILLCODES}) > 0 THEN DO: 
 
          FIND FIRST bttRow WHERE
                     bttRow.MsSeq = ttRow.MsSeq AND
@@ -810,11 +815,14 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                bttRow.VatAmt = bttRow.VatAmt + ttRow.VatAmt.
             DELETE ttRow.
          END.
-         ELSE IF LOOKUP(ttRow.BillCode,"PAYTERM1E,PAYTERMEND1E") > 0 THEN
-            ttRow.BankCode = {&TF_BANK_UNOE}.
-         ELSE IF LOOKUP(ttRow.BillCode,"PAYTERMBS,PAYTERMENDBS") > 0 THEN
-            ttRow.BankCode = {&TF_BANK_SABADELL}.
-         
+         ELSE IF 
+            LOOKUP(ttRow.BillCode,{&TF_BANK_UNOE_PAYTERM_BILLCODES}) > 0 OR
+            LOOKUP(ttRow.BillCode,{&TF_BANK_UNOE_RVTERM_BILLCODES}) > 0 
+         THEN ttRow.BankCode = {&TF_BANK_UNOE}.
+         ELSE IF 
+            LOOKUP(ttRow.BillCode,{&TF_BANK_SABADELL_PAYTERM_BILLCODES}) > 0 OR
+            LOOKUP(ttRow.BillCode,{&TF_BANK_SABADELL_RVTERM_BILLCODES}) > 0 
+         THEN ttRow.BankCode = {&TF_BANK_SABADELL}.
       END.
 
       IF NOT llSalesInv AND AVAIL ttRow THEN DO:
