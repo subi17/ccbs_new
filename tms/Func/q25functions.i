@@ -467,7 +467,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                        {&SMS_TYPE_Q25}).
             liSentCount = liSentCount + 1.
             lcLogText = STRING(liphase) + "|" + STRING(DCCLI.CLI) + "|" +
-                        STRING(DCCLI.MsSeq) + "|" + lcSMSMessage.
+                        STRING(DCCLI.MsSeq).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_SENT_MSGS}).
             PAUSE liPauseValue.
             /* Decrease pause time if needed, check after each 50 sent SMS */
