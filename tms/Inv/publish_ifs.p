@@ -111,9 +111,14 @@ DEFINE STREAM strout.
                        FALSE,
                        OUTPUT liDumped).
    
-      IF liDumped > 0 THEN 
+      IF liDumped >= 0 THEN 
          PUT STREAM strout UNFORMATTED 
-            "Generated IFS for " + STRING(liDumped) + " Service Invoices" SKIP.   
+            "Generated IFS for " + STRING(liDumped) + " Service Invoices" SKIP.
+      ELSE DO: 
+         PUT STREAM strout UNFORMATTED
+            "Error in creating IFS dump event !" SKIP.
+         llgError = YES.
+      END.   
    END.
     
    OUTPUT STREAM strout CLOSE.
