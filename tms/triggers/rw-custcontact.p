@@ -8,7 +8,8 @@ IF NEW(CustContact) THEN DO:
       Common.RepLog.RecordId  = RECID(CustContact)
       Common.RepLog.TableName = "CustContact"
       Common.RepLog.EventType = "CREATE"
-      Common.RepLog.KeyValue  = STRING(CustContact.CustNum)
+      Common.RepLog.KeyValue  = STRING(CustContact.CustNum) + CHR(255) +
+                                STRING(CustContact.CustType)
       Common.RepLog.EventTS   = DATETIME(TODAY,MTIME).
 END. /* IF NEW(CustContact) THEN DO: */
 ELSE DO:
@@ -34,7 +35,8 @@ ELSE DO:
          Common.RepLog.RecordId  = RECID(CustContact)
          Common.RepLog.TableName = "CustContact"
          Common.RepLog.EventType = "MODIFY"
-         Common.RepLog.KeyValue  = STRING(Oldbuf.CustNum)
+         Common.RepLog.KeyValue  = STRING(Oldbuf.CustNum) + CHR(255) +
+                                   STRING(Oldbuf.CustType)
          Common.RepLog.EventTS   = DATETIME(TODAY,MTIME).
    END. /* IF NOT llResult THEN DO: */
 END. /* ELSE DO: */
