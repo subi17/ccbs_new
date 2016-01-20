@@ -1,0 +1,2 @@
+UPDATE TABLE "OrderAccessory"
+TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-orderaccessory.p" CRC "?"
