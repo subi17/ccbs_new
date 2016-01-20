@@ -219,17 +219,18 @@ IF (llDeviceStart AND llDeviceScreen) OR
       RETURN appl_err("ERROR:Discount creation failed; " + lcResult).
 
 
-   FOR FIRST DiscountPlan NO-LOCK WHERE
-             DiscountPlan.Brand = gcBrand AND
-             DiscountPlan.DPRuleID = "RVTERMDT1DISC",
-       FIRST DPMember NO-LOCK WHERE
-             DPMember.DpID       = DiscountPlan.DpId AND
-             DPMember.HostTable  = "MobSub" AND
-             DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
-             DPMember.ValidFrom  = fPer2Date(SingleFee.BillPeriod,0) AND
-             DPMember.ValidTo   >= DPMember.ValidFrom:
+   FOR EACH DiscountPlan NO-LOCK WHERE
+            DiscountPlan.Brand = gcBrand AND
+           (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
+            DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
+       EACH DPMember NO-LOCK WHERE
+            DPMember.DpID       = DiscountPlan.DpId AND
+            DPMember.HostTable  = "MobSub" AND
+            DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
+            DPMember.ValidFrom  = fPer2Date(SingleFee.BillPeriod,0) AND
+            DPMember.ValidTo   >= DPMember.ValidFrom:
 
-      fCloseDiscount("RVTERMDT1DISC",
+      fCloseDiscount(DiscountPlan.DPRuleId,
                      MobSub.MsSeq,
                      DPMember.ValidFrom - 1,
                      FALSE). /* clean event logs */

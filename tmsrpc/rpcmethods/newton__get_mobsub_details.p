@@ -22,9 +22,14 @@
                 mandate_id;string;mandate id
                 mandate_date;datetime;mandate date
                 satisfaction_value;string;satisfaction value 
+                penalty_fee;double;original terminal contract price
+                penalty_fee_current;double;terminal contract price (same as penalty_fee if terminal contract is not extended)
+                permanent_contract_billing_item_id;string;terminal product code of active permanency contract
                 permanent_contract_valid_to;datetime;
                 permanent_contract_original_valid_to;datetime;
                 permanent_contract_valid_from;datetime;
+                permanent_contract_length;int;terminal contract original length in months terminal;array of terminals structures;
+                permanent_contract_source;string;
                 mnp_available;int;0 = not found, 1 = found inactive, 2 = found active
                 multisim_type;int;optional;multisim subscription type (1=primary, 2=secondary)
                 multisim_msisdn;string;optional;multisim primary/secondary msisdn
@@ -44,8 +49,14 @@
                 ordered;datetime;order creation stamp
                 serial_number;string;laptop serial number
  * @installments;array of installment_contract structs;
- * @installment_contract 
+ * @installment_contract payterm_name;string;payterm name
+                number_of_payments;int;total periods included to contract
+                monthly_fee;double;payterm monthly fee
                 pending_fee;double;how much is unpaid
+                valid_from;datetime;valid from
+                valid_to;datetime;valid to
+                financed_by;string;PENDING/YOIGO/BANK
+                billing_item_id;string;optional terminal product code
                 final_fee;double;residual amount final payment
                 per_contract_id;int;unique contract id 
  */
@@ -73,7 +84,9 @@ DEF VAR liMultiSimType AS INT NO-UNDO.
 DEF VAR lcSegmentCode AS CHAR NO-UNDO.
 DEF VAR lcSegmentOffer AS CHAR NO-UNDO.
 DEF VAR lcFinancedInfo AS CHAR NO-UNDO. 
-
+DEF VAR ldtFrom AS DATETIME NO-UNDO.
+DEF VAR ldtTo AS DATETIME NO-UNDO.
+DEF VAR liMonths AS INT NO-UNDO. 
 DEF VAR ldeActStamp AS DEC NO-UNDO.
 DEF VAR ldaActDate AS DATE NO-UNDO.
 DEF VAR ldaRenewalDate AS DATE NO-UNDO. 
@@ -84,6 +97,7 @@ DEF VAR ldeFinalAmt  AS DECIMAL NO-UNDO.
 DEF VAR liMnpStatus AS INT NO-UNDO.
 DEF VAR liOrderId AS INT NO-UNDO. 
 DEF VAR installment_array AS CHAR NO-UNDO.
+DEF VAR ldActivated AS DEC  NO-UNDO.
 DEF VAR lderesidualFee AS DEC NO-UNDO. 
 
 DEF BUFFER lbMobSub FOR MobSub.
@@ -294,7 +308,6 @@ installment_array = add_array(resp_struct, "installments").
 
 IF NOT MobSub.PayType THEN DO:
 
-
    FOR EACH DCCLI NO-LOCK WHERE
             DCCLI.MsSeq = MobSub.MsSeq AND
             DCCLI.DCEvent BEGINS "PAYTERM" AND
@@ -313,8 +326,23 @@ IF NOT MobSub.PayType THEN DO:
                               OUTPUT liOrderId) THEN NEXT.
 
       payterm_struct = add_struct(installment_array,"").
+      add_string(payterm_struct,"payterm_name", DCCLI.DCEvent).
+      add_int(payterm_struct,"number_of_payments",liTotalPeriods).
+      add_double(payterm_struct,"monthly_fee", ldePeriodFee).
       add_double(payterm_struct,"pending_fee", ldePendingFee).
+      add_datetime(payterm_struct,"valid_from", DCCLI.ValidFrom).
+      add_datetime(payterm_struct,"valid_to", DCCLI.ValidTo).
+      add_string(payterm_struct,"financed_by", lcFinancedInfo).
       add_int(payterm_struct,"per_contract_id", DCCLI.PerContractId).
+
+      IF liOrderId > 0 THEN DO:
+         FIND FIRST SubsTerminal NO-LOCK WHERE
+                    SubsTerminal.Brand = gcBrand AND
+                    SubsTerminal.OrderId = liOrderID AND
+                    SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
+         IF AVAIL SubsTerminal THEN
+            add_string(payterm_struct,"billing_item_id", SubsTerminal.BillCode).
+      END.
 
       ldeFinalAmt = 0.
       FOR EACH SingleFee USE-INDEX Custnum WHERE
@@ -331,7 +359,6 @@ IF NOT MobSub.PayType THEN DO:
 
       add_double(payterm_struct,"final_fee", ldeFinalAmt).
    END.
-
 
    /* Count possible penalty fee for terminal contract termination */
    liCount = 0.
@@ -365,6 +392,11 @@ IF NOT MobSub.PayType THEN DO:
                  FMItem.FromDate <= TODAY     AND
                  FMItem.ToDate   >= TODAY NO-ERROR.
    
+      add_double(resp_struct,"penalty_fee",FMItem.Amount).
+
+      add_double(resp_struct,"penalty_fee_current",
+         (IF DCCLI.Amount NE ? THEN DCCLI.Amount ELSE FMItem.Amount)).
+   
       add_datetime(resp_struct,"permanent_contract_valid_to",
          (IF DCCLI.Termdate NE ? THEN DCCLI.Termdate ELSE DCCLI.ValidTo)).
 
@@ -373,11 +405,44 @@ IF NOT MobSub.PayType THEN DO:
    
       add_datetime(resp_struct,"permanent_contract_original_valid_to",
          (IF DCCLI.ValidToOrig NE ? THEN DCCLI.ValidToOrig ELSE DCCLI.ValidTo)).
+   
+      IF DCCLI.RenewalDate EQ ? THEN
+         liMonths =  DayCampaign.DurMonths.
+      ELSE ASSIGN
+         ldtFrom = DATETIME(DCCLI.ValidFrom,0)
+         ldtTo = DATETIME(DCCLI.ValidTo,0)
+         liMonths = INTERVAL(ldtTo,ldtFrom,"months") + 1.
+   
+      add_int(resp_struct,"permanent_contract_length",liMonths).
 
       /* clitype at the moment of discount periodical contract creation */
       lcOrigCLIType = fGetCLITypeAtTermDiscount(BUFFER DCCLI). 
       IF lcOrigCLIType NE "" THEN 
          add_string(resp_struct,"original_subscription_type_id",lcOrigCLIType).
+
+      IF DCCLI.PerContractId > 0 THEN
+         FOR FIRST SubsTerminal NO-LOCK WHERE
+                   SubsTerminal.MsSeq = DCCLI.MsSeq AND
+                   SubsTerminal.PercontractId = DCCLI.PercontractId AND
+                   SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE}:
+            add_string(resp_struct,"permanent_contract_billing_item_id",
+               SubsTerminal.BillCode).
+         END.
+
+      ldActivated = fMake2Dt(DCCLI.ValidFrom,0).
+
+      FIND FIRST bActRequest WHERE
+         bActRequest.MsSeq      = piMsSeq AND
+         bActRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND
+         bActRequest.ReqStatus  = {&REQUEST_STATUS_DONE} AND
+         bActRequest.DoneStamp >= ldActivated AND
+         bActRequest.ReqCParam3 = DCCLI.DCEvent AND
+         LOOKUP(bActRequest.ReqCparam2,"act,recreate") > 0
+      NO-LOCK USE-INDEX MsSeq NO-ERROR.
+
+      IF AVAILABLE bActRequest AND bActRequest.ReqSource = {&REQUEST_SOURCE_RENEWAL} 
+      THEN add_string(resp_struct,"permanent_contract_source","renewal").
+      ELSE add_string(resp_struct,"permanent_contract_source","new").
 
    END. /* CONTRACT_LOOP: */
 END.
