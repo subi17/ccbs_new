@@ -586,17 +586,18 @@ PROCEDURE pContractActivation:
             ldaResidualFee = fInt2Date(bQ25SingleFee.Concerns[1],0).
             ldeFeeAmount = bQ25SingleFee.Amt.
 
-            FOR FIRST DiscountPlan NO-LOCK WHERE
-                      DiscountPlan.Brand = gcBrand AND
-                      DiscountPlan.DPRuleID = "RVTERMDT1DISC",
-                 EACH DPMember NO-LOCK WHERE
-                      DPMember.DPId      = DiscountPlan.DPId AND
-                      DPMember.HostTable = "MobSub" AND
-                      DPMember.KeyValue  = STRING(MsRequest.MsSeq) AND
-                      DPMember.ValidTo >= ldaResidualFee AND
-                      DPMember.ValidTo <= fLastDayOfMonth(ldaResidualFee) AND
-                      DPMember.ValidTo >= DPMember.ValidFrom:
-                 ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
+            FOR EACH DiscountPlan NO-LOCK WHERE
+                     DiscountPlan.Brand = gcBrand AND
+                    (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
+                     DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
+                EACH DPMember NO-LOCK WHERE
+                     DPMember.DPId      = DiscountPlan.DPId AND
+                     DPMember.HostTable = "MobSub" AND
+                     DPMember.KeyValue  = STRING(MsRequest.MsSeq) AND
+                     DPMember.ValidTo >= ldaResidualFee AND
+                     DPMember.ValidTo <= fLastDayOfMonth(ldaResidualFee) AND
+                     DPMember.ValidTo >= DPMember.ValidFrom:
+                ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
             END.
                
             FIND FIRST FMItem NO-LOCK WHERE
@@ -2267,8 +2268,7 @@ PROCEDURE pContractTermination:
    END.
       
    llCancelInstallment = (lcTerminationType EQ "canc" AND
-                          DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} AND
-                          DayCampaign.DCEvent BEGINS "PAYTERM").
+                          DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}).
    llCancelOrder =
       (MsRequest.ReqSource = {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} AND
        DCCLI.ValidTo < DCCLI.ValidFrom)
@@ -2363,7 +2363,9 @@ PROCEDURE pContractTermination:
       /* Delete commission fee if the installment contract is closed
          due to revert renewal order or order cancellation */
       IF llCancelOrder OR llCancelInstallment OR 
-         MsRequest.ReqSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN
+         MsRequest.ReqSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} OR
+         MsRequest.ReqSource EQ {&REQUEST_SOURCE_Q25_CONTRACT_CHANGE} THEN
+         
       FOR FIRST SingleFee USE-INDEX Custnum WHERE
                 SingleFee.Brand       = gcBrand AND
                 SingleFee.Custnum     = MsOwner.CustNum AND
@@ -2413,7 +2415,10 @@ PROCEDURE pContractTermination:
             from order cancellation then delete single fee
             otherwise update the billing period */
          IF llCancelOrder OR llCancelInstallment OR
-            MsRequest.ReqSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN DO:
+            MsRequest.ReqSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE}
+            OR
+            MsRequest.ReqSource EQ {&REQUEST_SOURCE_Q25_CONTRACT_CHANGE}
+            THEN DO:
             
             IF llDoEvent THEN
                RUN StarEventMakeDeleteEventWithMemo(

@@ -458,6 +458,9 @@ PROCEDURE pCloseQ25Discount:
    DEF VAR liPercontractId AS INTEGER   NO-UNDO. 
    DEF VAR ldeDiscount     AS DECIMAL   NO-UNDO. 
    DEF VAR lcResult        AS CHARACTER NO-UNDO.
+   DEF VAR liRequest       AS INT NO-UNDO. 
+
+   DEF BUFFER bMsRequest FOR MSRequest.
 
    FIND FIRST OrderAction NO-LOCK WHERE
               OrderAction.Brand    EQ gcBrand AND
@@ -484,27 +487,77 @@ PROCEDURE pCloseQ25Discount:
    
    IF NOT AVAILABLE SingleFee THEN RETURN "".
 
-   FIND FIRST DiscountPlan NO-LOCK WHERE
-              DiscountPlan.Brand = gcBrand AND
-              DiscountPlan.DPRuleID = "RVTERMDT1DISC" NO-ERROR.
-   IF NOT AVAIL DiscountPlan THEN
-      RETURN "ERROR:Q25 discount cancellation (RVTERMDT1DISC plan not found)".
+   FIND FIRST bmsrequest NO-LOCK WHERE
+              bmsrequest.msseq = mobsub.msseq AND
+              bmsrequest.reqtype = 8 AND
+              bmsrequest.reqstatus = 0 AND
+              bmsrequest.reqcparam3 = "RVTERM12" AND
+              bmsrequest.reqiparam3 = liPerContractID NO-ERROR.
+   IF AVAIL bmsrequest THEN DO:
 
-   FIND FIRST dpmember NO-LOCK WHERE
-              dpmember.dpid = DiscountPlan.DpId AND
-              dpmember.hosttable = "mobsub" AND
-              dpmember.keyvalue = string(mobsub.msseq) AND
-              dpmember.validfrom = fPer2Date(SingleFee.BillPeriod,0) AND
-              dpmember.validto >= dpmember.validfrom AND
-              dpmember.discvalue = ldeDiscount NO-ERROR.
+      FIND MsRequest NO-LOCK WHERE
+           MsRequest.MSRequest = bmsrequest.MSRequest.
 
+      fReqStatus(4,"Cancelled by renewal cancellation").
+      
+      FIND FIRST MsRequest WHERE
+                 MsRequest.MsRequest = iiMsRequest  NO-LOCK NO-ERROR.
+   END.
+   ELSE DO:
+
+      FIND DCCLI NO-LOCK WHERE
+           DCCLI.Brand   EQ gcBrand AND
+           DCCLI.DCEvent EQ "RVTERM12" AND
+           DCCLI.MsSeq   EQ MobSub.MsSeq AND
+           DCCLI.ValidTo >= TODAY NO-ERROR.
+
+      IF AMBIGUOUS(DCCLI) THEN 
+         RETURN "ERROR:More than one active Q25 extension contract".
+
+      IF AVAIL DCCLI THEN DO:
+
+         liRequest = fPCActionRequest(
+            MobSub.MsSeq,
+            "RVTERM12",
+            "term",
+            fMakeTS(),
+            TRUE, /* create fees */
+            {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER},
+            "",
+            MsRequest.MsRequest,
+            FALSE,
+            "",
+            0, /* payterm residual fee */
+            0,
+            OUTPUT lcResult).
+
+         IF liRequest EQ 0 THEN
+            RETURN SUBST("ERROR:Q25 extension contract termination failed: &1",
+                   lcResult).
+      END.
+   END.
+   
+   FOR EACH DiscountPlan NO-LOCK WHERE
+            DiscountPlan.Brand = gcBrand AND
+     LOOKUP(DiscountPlan.DPRuleID,"RVTERMDT1DISC,RVTERMDT4DISC") > 0:
+
+      FIND FIRST dpmember NO-LOCK WHERE
+                 dpmember.dpid = DiscountPlan.DpId AND
+                 dpmember.hosttable = "mobsub" AND
+                 dpmember.keyvalue = string(mobsub.msseq) AND
+                 dpmember.validfrom = fPer2Date(SingleFee.BillPeriod,0) AND
+                 dpmember.validto >= dpmember.validfrom AND
+                 dpmember.discvalue = ldeDiscount NO-ERROR.
+      IF AVAIL dpmember THEN LEAVE.
+   END.
+   
    IF NOT AVAILABLE dpmember THEN RETURN "".
   
    IF SingleFee.Billed AND
-      CAN-FIND(FIRST Invoice NO-LOCK WHERE
+      NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
                      Invoice.Invnum  EQ SingleFee.Invnum AND
                      Invoice.Custnum EQ SingleFee.Custnum AND
-                     Invoice.InvType EQ 1) THEN DO:
+                     Invoice.InvType EQ 99) THEN DO:
 
       FIND FIRST subInvoice NO-LOCK WHERE
                  subInvoice.InvNum EQ SingleFee.InvNum AND
@@ -516,7 +569,7 @@ PROCEDURE pCloseQ25Discount:
       FIND FIRST invrow NO-LOCK WHERE
                  invrow.InvNum    EQ subInvoice.InvNum AND
                  invrow.SubInvNum EQ subInvoice.SubInvNum AND
-                 invrow.BillCode EQ "RVTERMDTRW" NO-ERROR.
+          LOOKUP(invrow.BillCode,"RVTERMDTRW,RVTERMDTEQ25") > 0  NO-ERROR.
       
       IF NOT AVAILABLE invrow THEN RETURN "".
         
@@ -541,13 +594,13 @@ PROCEDURE pCloseQ25Discount:
           OUTPUT lcResult).
 
       IF lcResult BEGINS "ERROR:" OR lcResult BEGINS "0" THEN
-         RETURN "ERROR:Q25 discount cancellation (CRVTERMDT fee):" + lcResult.
+         RETURN SUBST("ERROR:Q25 discount cancellation (CRVTERMDT):&1",lcResult).
       
       RETURN "".
 
    END.
 
-   fCloseDiscount("RVTERMDT1DISC",
+   fCloseDiscount(DiscountPlan.DPRuleID,
      MobSub.MsSeq,
      dpmember.ValidFrom - 1,
      FALSE). /* clean event logs */

@@ -1,0 +1,10 @@
+ADD FIELD "OrderId" OF "FixedFeeTF" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  COLUMN-LABEL "OrderId"
+  ORDER 160
+
+ADD INDEX "OrderId" ON "FixedFeeTF" 
+  AREA "Sta_Index_4"
+  INDEX-FIELD "OrderId" ASCENDING 
