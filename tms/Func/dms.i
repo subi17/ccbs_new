@@ -281,6 +281,16 @@ FUNCTION fDoc2Msg RETURNS CHAR
    RETURN lcRet.
 END.
 
+
+FUNCTION fGetBankName RETURNS CHAR
+   (icCode AS CHAR):
+   FIND FIRST Bank WHERE
+              Bank.Brand      = gcBrand AND
+              Bank.BankID     = SUBSTRING(icCode,5,4) NO-LOCK NO-ERROR.
+   IF AVAIL Bank THEN RETURN Bank.Name.
+   RETURN "".
+END.   
+
 /*Function generates JSON message for providing information for
   SMS/EMAIL sending. */
 FUNCTION fGenerateMessage RETURNS CHAR
@@ -305,12 +315,19 @@ FUNCTION fGenerateMessage RETURNS CHAR
    DEF VAR lcDocList AS CHAR NO-UNDO. /*Plain list if required doc numbers*/
    DEF VAR i AS INT NO-UNDO.
    DEF VAR lcDocNotifEntry AS CHAR NO-UNDO.
+   DEF VAR lcVersion AS CHAR NO-UNDO.
+   DEF VAR lcRecEmail AS CHAR NO-UNDO.
+   DEF VAR lcRecMSISDN AS CHAR NO-UNDO.
+   DEF VAR lcBankName AS CHAR NO-UNDO.
+
+
 
    IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN
-      lcMSISDN = fNotNull(Order.CLI).
+      lcRecMSISDN = fNotNull(Order.CLI).
    ELSE 
-      lcMSISDN = fNotNull(OrderCustomer.MobileNumber).
+      lcRecMSISDN = fNotNull(OrderCustomer.MobileNumber).
 
+   lcVersion = "3".
    lcContractID = fNotNull(Order.ContractId).
    lcDNIType = fNotNull(OrderCustomer.CustIdType).
    lcDNI = fNotNull(OrderCustomer.CustId).
@@ -318,7 +335,12 @@ FUNCTION fGenerateMessage RETURNS CHAR
    lcLname = fNotNull(OrderCustomer.SurName1) + " " + 
              fNotNull(Ordercustomer.SurName2).
    lcEmail = fNotNull(OrderCustomer.Email).
-   lcBankAcc = fNotNull(OrderCustomer.BankCode).
+   lcBankAcc = "ES13 0049 1500 08 2310410432". 
+   lcBankName = "Santander".
+
+   lcRecEmail = lcEmail.
+
+   lcMSISDN = fNotNull(Order.CLI).
 
    lcSeq = STRING(NEXT-VALUE(SMSSEQ)). /*read and increase SMSSEQ. The sequence must be reserved as ID for WEB&HPD*/
    lcDocList = fNeededDocs(BUFFER Order).  
@@ -344,11 +366,16 @@ FUNCTION fGenerateMessage RETURNS CHAR
    
    /*Fill data for message.*/
    lcMessage = "~{" + "~"metadata~""  + "~:" + "~{" +
+                         "~"version~""  + "~:" + "~"" + lcVersion + "~"," +
                          "~"case~""  + "~:" + "~"" + icNotifCaseID  + "~"," +
-                         lcArray + "," +
-                         "~"smsseq~""  + "~:" + "~"" + lcSeq  + "~"" +
+                         "~"smsseq~""  + "~:" + "~"" + lcSeq  + "~"," +
+                         "~"recipient_email~""  + "~:" + "~"" + 
+                            lcRecEmail  + "~"," +
+                         "~"recipient_msisdn~""  + "~:" + "~"" + 
+                            lcRecMSISDN  + "~"" +
                      "~}" + "," +
                       "~"data~"" + "~:" + "~{" +
+                         lcArray + "," +
                          "~"msisdn~""   + "~:" + "~"" + lcMSISDN + "~"" + "," +
                          "~"contractid~"" +  "~:" + "~"" +
                                      lcContractID + "~"" + "," +
@@ -360,6 +387,8 @@ FUNCTION fGenerateMessage RETURNS CHAR
                          "~"email~""    +  "~:" + "~"" + lcEmail + "~"" + "," + 
                          "~"deposit_amount~""   +  "~:" + "~"" +
                                       icDeposit + "~"" + "," +
+                         "~"bank_name~"" +  "~:" + "~"" +
+                                      lcBankName + "~"" + "," +
                          "~"bank_account_number~"" +  "~:" + "~"" +
                                       lcBankAcc + "~"" +
                       "~}" +
