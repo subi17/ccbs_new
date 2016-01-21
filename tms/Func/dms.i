@@ -297,30 +297,26 @@ FUNCTION fDocListByOrder RETURNS CHAR
    IF NOT AVAIL bDMS THEN RETURN "".
    FOR EACH bDMSDOC NO-LOCK WHERE
             bDMSDOC.DMSID EQ bDMS.DMSID:
-      IF icNotifCaseID EQ {&DMS_INITIAL_NOTIF_CASE} /*1*/ THEN DO:
+      IF icNotifCaseID EQ /*{&DMS_INITIAL_NOTIF_CASE}*/ "1" /*1*/ THEN DO:
          DISP bDMSDOC.
+         IF lcDocList NE "" THEN lcDocList = lcDocList + ",".
          IF bDMSDOC.DocStatusCode EQ {&DMS_INIT_STATUS_SENT} THEN DO:
-            lcDocList = lcDocList + bDmsDoc.DocTypeId + "," +
-                        /*no comment*/ ",".
+            lcDocList = lcDocList + bDmsDoc.DocTypeId + "," /*no comment*/ .
          END.
       END.
       ELSE DO:
          lcDocReminderStatuses =  fCParam("DMS","DMS_doc_reminder_statuses"). /*A,C*/
          DISP bDMSDOC.
-         lcDocReminderStatuses = "A,C".
+  /*       lcDocReminderStatuses = "A,C".*/
          IF LOOKUP(bDMSDOC.DocStatusCode, lcDocReminderStatuses) > 0 THEN DO:
+            IF lcDocList NE "" THEN lcDocList = lcDocList + ",".
             lcDocList = lcDocList + bDmsDoc.DocTypeId + "," +
-                                    bDmsDoc.DocRevComment + ",".
+                                    bDmsDoc.DocRevComment.
          END.
       END.
 
    END.
-   IF icNotifCaseID EQ "1" THEN DO:
-      RETURN lcDocList.
-   END.
-   ELSE DO:
-      RETURN RIGHT-TRIM(lcDocList , ",").
-   END.
+   RETURN lcDocList.
 END.
 
 /*Function generates JSON message for providing information for
