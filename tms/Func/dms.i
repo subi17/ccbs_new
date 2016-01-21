@@ -297,7 +297,7 @@ FUNCTION fDocListByOrder RETURNS CHAR
    IF NOT AVAIL bDMS THEN RETURN "".
    FOR EACH bDMSDOC NO-LOCK WHERE
             bDMSDOC.DMSID EQ bDMS.DMSID:
-      IF icNotifCaseID EQ /*{&DMS_INITIAL_NOTIF_CASE}*/ "1" /*1*/ THEN DO:
+      IF icNotifCaseID EQ {&DMS_INITIAL_NOTIF_CASE} /*1*/ THEN DO:
          DISP bDMSDOC.
          IF lcDocList NE "" THEN lcDocList = lcDocList + ",".
          IF bDMSDOC.DocStatusCode EQ {&DMS_INIT_STATUS_SENT} THEN DO:
