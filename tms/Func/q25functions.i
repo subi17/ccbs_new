@@ -26,19 +26,19 @@ DEF VAR lcTestStartDay AS CHAR NO-UNDO.
 DEF VAR lcTestEndDay AS CHAR NO-UNDO.
 DEF VAR lcExecuteDate AS CHAR NO-UNDO.
 DEF VAR liQ25Logging AS INT NO-UNDO.
-DEF VAR lcLogDir          AS CHAR NO-UNDO.
-DEF VAR lcSpoolDir        AS CHAR NO-UNDO.
-DEF VAR lcLogFile         AS CHAR NO-UNDO.
+DEF VAR lcQ25LogDir          AS CHAR NO-UNDO.
+DEF VAR lcQ25SpoolDir        AS CHAR NO-UNDO.
+DEF VAR lcQ25LogFile         AS CHAR NO-UNDO.
 
 DEF STREAM Sout.
 
 ASSIGN liQ25Logging = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg, 
                                                      2 = count, 3 = all */
-       lcLogDir     = fCParam("Q25","Q25ReminderLogDir")
-       lcSpoolDir   = fCParam("Q25","Q25ReminderLogSpoolDir").
+       lcQ25LogDir     = fCParam("Q25","Q25ReminderLogDir")
+       lcQ25SpoolDir   = fCParam("Q25","Q25ReminderLogSpoolDir").
                   
-IF lcLogDir = "" OR lcLogDir = ? THEN lcLogDir = "/tmp/".
-IF lcSpoolDir = "" OR lcSpoolDir = ? THEN lcSpoolDir = "/tmp/".
+IF lcQ25LogDir = "" OR lcQ25LogDir = ? THEN lcQ25LogDir = "/tmp/".
+IF lcQ25SpoolDir = "" OR lcQ25SpoolDir = ? THEN lcQ25SpoolDir = "/tmp/".
 
 /* Q24 Messages are needed to send before 20th day of month. No sending weekend
    or national holiday. Check if there are such days left or do we have to
@@ -232,11 +232,11 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
     INPUT iiLogLevel AS INT).
    IF liQ25Logging >= iiLogLevel THEN DO:
       /* Make Monthly log file */
-      lcLogFile = lcSpoolDir + "Q25_sms_message_logs_" +
+      lcQ25LogFile = lcQ25SpoolDir + "Q25_sms_message_logs_" +
                   STRING(YEAR(TODAY)) +
                   STRING(MONTH(TODAY),"99") +
                   STRING(DAY(TODAY),"99") + ".txt".
-      OUTPUT STREAM Sout TO VALUE(lcLogFile) APPEND.
+      OUTPUT STREAM Sout TO VALUE(lcQ25LogFile) APPEND.
       PUT STREAM Sout UNFORMATTED
          STRING(fMakeTS()) + "|" + icLogText SKIP.
       OUTPUT STREAM Sout CLOSE.

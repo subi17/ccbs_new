@@ -168,6 +168,6 @@ DO:
    fQ25LogWriting("FINISH: Total " + STRING(liTempCount) + " messages. " +
                   STRING(liTotalCount) + " messages left to send.",
                   {&Q25_LOGGING_COUNTERS}).
-   IF lcSpoolDir NE lcLogDir AND lcLogFile > "" THEN
-      fMove2TransDir(lcSpoolDir + lcLogFile, "", lcLogDir).
+   IF lcQ25SpoolDir NE lcQ25LogDir AND lcQ25LogFile > "" THEN
+      fMove2TransDir(lcQ25SpoolDir + lcQ25LogFile, "", lcQ25LogDir).
 END.
