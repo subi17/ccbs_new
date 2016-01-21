@@ -7,9 +7,17 @@ DEFINE VARIABLE ldtTimeStamp AS DATETIME  NO-UNDO.
 DEFINE VARIABLE liEvents     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcMessage    AS CHARACTER NO-UNDO.
 
+DEFINE VARIABLE llSelfEmployed    AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE lcEmployer        AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liSubLimit        AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liSubActLimit     AS INTEGER   NO-UNDO.
+DEFINE VARIABLE llSubLimit        AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE llSubActLimit     AS LOGICAL   NO-UNDO.
+
 {cparam2.i}
 {timestamp.i}
 {ftransdir.i}
+{fcustdata.i}
 
 DEFINE STREAM slog.
 
@@ -45,6 +53,24 @@ OUTPUT STREAM slog TO VALUE(lcLogFile).
 FOR EACH Customer WHERE
          Customer.Brand = gcBrand NO-LOCK:
 
+   FIND FIRST CustCat NO-LOCK WHERE
+              CustCat.Brand = gcBrand AND
+              CustCat.Category = Customer.Category NO-ERROR.
+   IF AVAILABLE CustCat THEN llSelfEmployed = CustCat.SelfEmployed.
+
+   IF Customer.CustIDType = "passport" THEN llSelfEmployed = FALSE.
+
+   IF Customer.CustIDType NE "CIF" AND
+      Customer.Profession > "" THEN lcEmployer = Customer.CompanyName.
+
+   liSubLimit = fGetMobsubLimit(INPUT Customer.Custnum,
+                                INPUT Customer.Category,
+                                OUTPUT llSubLimit).
+
+   liSubActLimit = fGetMobsubActLimit(INPUT Customer.Custnum,
+                                      INPUT Customer.Category,
+                                      OUTPUT llSubActLimit).
+
    ASSIGN liEvents  = liEvents + 1
           lcMessage = "Customer"                               + lcDel +
                       "CREATE"                                 + lcDel +
@@ -70,7 +96,17 @@ FOR EACH Customer WHERE
                       fNotNull(Customer.Email)                 + lcDel +
                       fNotNull(Customer.Phone)                 + lcDel +
                       fNotNull(Customer.SMSNumber)             + lcDel +
-                      fNotNull(Customer.BankAcct).
+                      fNotNull(Customer.BankAcct)              + lcDel +
+                      /*YPR-3204*/
+                      fNotNull(Customer.HonTitle)                + lcDel +
+                      fNotNull(STRING(Customer.Birthday))        + lcDel +
+                      fNotNull(STRING(llSelfEmployed))           + lcDel +
+                      fNotNull(STRING(Customer.FoundationDate))  + lcDel +
+                      fNotNull(Customer.AuthCustId)              + lcDel +
+                      fNotNull(Customer.AuthCustIdType)          + lcDel +
+                      fNotNull(lcEmployer)                       + lcDel +
+                      fNotNull(STRING(llSubLimit))               + lcDel +
+                      fNotNull(STRING(llSubActLimit)).
 
    IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN DO:
       PAUSE 0.
@@ -94,3 +130,4 @@ IF NOT SESSION:BATCH THEN
 
 /* Move the report to Transfer directory */
 fMove2TransDir(lcLogFile, ".txt", lcOutDir).
+
