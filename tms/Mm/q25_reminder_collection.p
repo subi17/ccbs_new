@@ -13,6 +13,7 @@
 ASSIGN gcBrand = "1"
        katun   = "CRON".
 {q25functions.i}
+{ftransdir.i}
 
 DEF VAR liStartDay               AS INT  NO-UNDO.
 DEF VAR liEndDay                 AS INT  NO-UNDO.
@@ -167,4 +168,6 @@ DO:
    fQ25LogWriting("FINISH: Total " + STRING(liTempCount) + " messages. " +
                   STRING(liTotalCount) + " messages left to send.",
                   {&Q25_LOGGING_COUNTERS}).
+   IF lcSpoolDir NE lcLogDir AND lcLogFile > "" THEN
+      fMove2TransDir(lcSpoolDir + lcLogFile, "", lcLogDir).
 END.
