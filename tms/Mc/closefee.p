@@ -368,13 +368,6 @@ IF iiMsRequest > 0 AND
             ELSE lcReason = {&TF_CANCEL_INSTALLMENT}.
          END.
 
-         WHEN {&REQUEST_SOURCE_Q25_CONTRACT_CHANGE} THEN DO:
-
-            IF llUpdateTFStatus THEN
-               bCloseFee.FinancedResult = {&TF_STATUS_YOIGO_INSTALLMENT_CHANGE}.
-            ELSE lcReason = {&TF_CANCEL_INSTALLMENT}.
-         END.
-         
          WHEN {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} THEN DO:
                
             FIND FIRST bMsrequest NO-LOCK WHERE
