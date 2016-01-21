@@ -1125,18 +1125,6 @@ PROCEDURE pContractActivation:
                                    "CREDIT NOTE CREATION FAILED",
                                    "ERROR:" + lcError).
                END.
-
-               IF liRequest = 0 THEN
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                   "MobSub",
-                                   STRING(MsRequest.MsRequest),
-                                   MsRequest.Custnum,
-                                   "CREDIT NOTE CREATION FAILED",
-                                   "ERROR:" + lcError).
-
-                            
-                   
-                  
             END.      
       
       END.
