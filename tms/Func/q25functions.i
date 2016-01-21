@@ -229,10 +229,17 @@ END FUNCTION.
 /* Logs for testing */
 FUNCTION fQ25LogWriting RETURNS LOGICAL
    (INPUT iclogText AS CHAR,
-    INPUT iiLogLevel AS INT).
+    INPUT iiLogLevel AS INT,
+    INPUT iilogPhase AS INT).
+   DEF VAR lcQ25LogType AS CHAR NO-UNDO. 
    IF liQ25Logging >= iiLogLevel THEN DO:
       /* Make Monthly log file */
+      IF iilogPhase LT {&Q25_MONTH_24_FINAL_MSG} THEN
+         lcQ25LogType = "reminder".
+      ELSE
+         lcQ25LogType = "final".
       lcQ25LogFile = lcQ25SpoolDir + "Q25_sms_message_logs_" +
+                  lcQ25logType +
                   STRING(YEAR(TODAY)) +
                   STRING(MONTH(TODAY),"99") +
                   STRING(DAY(TODAY),"99") + ".txt".
@@ -310,7 +317,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          lcLogText = "Mobsub not found: " +
                      STRING(liPhase) + "|" + STRING(SingleFee.KeyValue) 
                      + "|" + STRING(SingleFee.amt).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
          NEXT.
       END.
       IF SingleFee.Billed AND
@@ -322,7 +329,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
                         STRING(Mobsub.MsSeq) + "|" +
                         STRING(SingleFee.amt).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
          NEXT. /* "Residual fee billed". */
       END.
 
@@ -342,7 +349,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
                         STRING(Mobsub.MsSeq) + "|" +
                         STRING(SingleFee.amt).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
          NEXT.
       END.
       ELSE IF DCCLI.TermDate NE ? THEN DO:
@@ -351,7 +358,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
                         STRING(SingleFee.amt).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
          NEXT. /* terminated, SMS should not be send. */
       END.
       ELSE DO:
@@ -373,7 +380,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
                         STRING(SingleFee.amt).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
             NEXT.
              
             END.
@@ -393,7 +400,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
                         STRING(SingleFee.amt).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
                NEXT.
             END.
             ELSE
@@ -413,7 +420,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
                         STRING(SingleFee.amt).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
             NEXT.
          END.
          ELSE IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE 
@@ -429,7 +436,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
                         STRING(SingleFee.amt).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
             NEXT.
          END.
                                  
@@ -455,7 +462,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
                         STRING(SingleFee.amt).         
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
             NEXT.
          END.
          ELSE DO:
@@ -472,7 +479,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             liSentCount = liSentCount + 1.
             lcLogText = STRING(liphase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_SENT_MSGS}).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_SENT_MSGS}, liphase).
             PAUSE liPauseValue.
             /* Decrease pause time if needed, check after each 50 sent SMS */
             IF (oiTotalCountLeft MODULO 50 = 0) THEN DO:
@@ -497,7 +504,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(DCCLI.MsSeq) + "|" +
                         STRING(SingleFee.amt).
          END.   
-         fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}).
+         fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
       END.
    END.
    /* Logging about amount of situations for testting purposes. */
@@ -512,7 +519,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          "|" + STRING(liBilledCount) + "|" + STRING(liNotDCCLICount) + "|" +
          STRING(liReturnedDevices) + "|" + STRING(liQ25DoneCount) + 
          "|" + STRING(liPendingReq) + "|" + STRING(etime / 1000).
-      fQ25LogWriting(lcLogText, {&Q25_LOGGING_COUNTERS}).
+      fQ25LogWriting(lcLogText, {&Q25_LOGGING_COUNTERS}, liphase).
       RETURN liCount.
    END.
    RETURN oiTotalCountLeft.
