@@ -296,9 +296,8 @@ FUNCTION fDocListByOrder RETURNS CHAR
 
    IF NOT AVAIL bDMS THEN RETURN "".
    FOR EACH bDMSDOC NO-LOCK WHERE
-            bDMSDOC.DMSID EQ bDMS.DMSID:
+            bDMSDOC.DMSID EQ bDMS.DMSID BY bDMSDOC.DocTypeId:
       IF icNotifCaseID EQ {&DMS_INITIAL_NOTIF_CASE} /*1*/ THEN DO:
-         DISP bDMSDOC.
          IF lcDocList NE "" THEN lcDocList = lcDocList + {&DMS_DOCLIST_SEP}.
          IF bDMSDOC.DocStatusCode EQ {&DMS_INIT_STATUS_SENT} THEN DO:
             lcDocList = lcDocList + bDmsDoc.DocTypeId + {&DMS_DOCLIST_SEP} /*no comment*/ .
@@ -306,7 +305,6 @@ FUNCTION fDocListByOrder RETURNS CHAR
       END.
       ELSE DO:
          lcDocReminderStatuses =  fCParam("DMS","DMS_doc_reminder_statuses"). /*A,C*/
-         DISP bDMSDOC.
   /*       lcDocReminderStatuses = "A,C".*/
          IF LOOKUP(bDMSDOC.DocStatusCode, lcDocReminderStatuses) > 0 THEN DO:
             IF lcDocList NE "" THEN lcDocList = lcDocList + {&DMS_DOCLIST_SEP}.
