@@ -59,9 +59,11 @@ FOR EACH CustContact WHERE
           lcMessage = "CustContact"                                  + lcDel +
                       "CREATE"                                       + lcDel +
                       fNotNull(STRING(RECID(CustContact)))           + lcDel +
-                      fNotNull(STRING(CustContact.CustNum)        + CHR(255) +                                 STRING(CustContact.CustType))         + lcDel +
+                      fNotNull(STRING(CustContact.CustNum)        + CHR(255) +                                 
+                               STRING(CustContact.CustType))         + lcDel +
                       fNotNull(STRING(ldtTimeStamp))                 + lcDel +
                       fNotNull(STRING(CustContact.CustNum))          + lcDel +
+                      fNotNull(STRING(CustContact.CustType))         + lcDel +
                       fNotNull(CustContact.HonTitle)                 + lcDel +
                       fNotNull(CustContact.FirstName)                + lcDel +
                       fNotNull(CustContact.CustName)                 + lcDel +

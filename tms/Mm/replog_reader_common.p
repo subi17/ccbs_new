@@ -657,6 +657,7 @@ PROCEDURE pHandleCustContact:
 
                lcMessage = lcMessage                                       + lcDel +
                            fNotNull(STRING(CustContact.CustNum))           + lcDel +
+                           fNotNull(STRING(CustContact.CustType))          + lcDel +
                            fNotNull(CustContact.HonTitle)                  + lcDel +
                            fNotNull(CustContact.FirstName)                 + lcDel +
                            fNotNull(CustContact.CustName)                  + lcDel +
