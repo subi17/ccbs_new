@@ -53,6 +53,8 @@ OUTPUT STREAM slog TO VALUE(lcLogFile).
 FOR EACH CustContact WHERE
          CustContact.Brand = gcBrand NO-LOCK:
 
+   IF CustContact.CustType NE 5 THEN NEXT.
+
    ASSIGN liEvents  = liEvents + 1
           lcMessage = "CustContact"                                  + lcDel +
                       "CREATE"                                       + lcDel +
