@@ -259,7 +259,7 @@ FUNCTION fNeededDocs RETURNS CHAR
          lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T4".
 
    END.
-   RETURN fCParamNotNull("DMS",lcParam).
+   RETURN fCParamNotNull("DMS",lcParam). /*NOTE: in this return the doc list is comma separated*/
 
 END.
 
@@ -299,9 +299,9 @@ FUNCTION fDocListByOrder RETURNS CHAR
             bDMSDOC.DMSID EQ bDMS.DMSID:
       IF icNotifCaseID EQ {&DMS_INITIAL_NOTIF_CASE} /*1*/ THEN DO:
          DISP bDMSDOC.
-         IF lcDocList NE "" THEN lcDocList = lcDocList + ",".
+         IF lcDocList NE "" THEN lcDocList = lcDocList + {&DMS_DOCLIST_SEP}.
          IF bDMSDOC.DocStatusCode EQ {&DMS_INIT_STATUS_SENT} THEN DO:
-            lcDocList = lcDocList + bDmsDoc.DocTypeId + "," /*no comment*/ .
+            lcDocList = lcDocList + bDmsDoc.DocTypeId + {&DMS_DOCLIST_SEP} /*no comment*/ .
          END.
       END.
       ELSE DO:
@@ -309,8 +309,8 @@ FUNCTION fDocListByOrder RETURNS CHAR
          DISP bDMSDOC.
   /*       lcDocReminderStatuses = "A,C".*/
          IF LOOKUP(bDMSDOC.DocStatusCode, lcDocReminderStatuses) > 0 THEN DO:
-            IF lcDocList NE "" THEN lcDocList = lcDocList + ",".
-            lcDocList = lcDocList + bDmsDoc.DocTypeId + "," +
+            IF lcDocList NE "" THEN lcDocList = lcDocList + {&DMS_DOCLIST_SEP}.
+            lcDocList = lcDocList + bDmsDoc.DocTypeId + {&DMS_DOCLIST_SEP} +
                                     bDmsDoc.DocRevComment.
          END.
       END.
@@ -362,9 +362,9 @@ FUNCTION fGenerateMessage RETURNS CHAR
 /*Doc list is created from matrix in type1(initial info of the case) notificatoins. 
 In other notifications only A&C (pending&error) cases are sent to identify missing docs*/
    lcDocList = fDocListByOrder(Order.Orderid, icNotifCaseId).
-   DO i = 1 TO NUM-ENTRIES(lcDocList) BY 2:
-      lcDocNotifEntry = fDoc2Msg(ENTRY(i,lcDocList),
-                                       ENTRY(i + 1,lcDocList)).
+   DO i = 1 TO NUM-ENTRIES(lcDocList, {&DMS_DOCLIST_SEP}) BY 2:
+      lcDocNotifEntry = fDoc2Msg(ENTRY(i,lcDocList,{&DMS_DOCLIST_SEP}),
+                                 ENTRY(i + 1,lcDocList,{&DMS_DOCLIST_SEP})).
       fObjectToJsonArray(lcArray, lcDocNotifEntry).
    END.
    
