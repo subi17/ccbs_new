@@ -50,8 +50,10 @@ DEF VAR liLoop AS INTEGER NO-UNDO.
 DEF VAR lcTime AS CHAR NO-UNDO. 
 DEF VAR ldaNewRFPeriod AS DATE NO-UNDO. 
 DEF VAR ldaNewFFEndPeriod AS DATE NO-UNDO. 
+DEF VAR ldaFromDate AS DATE NO-UNDO. 
 
 def buffer bffitem for ffitem.
+DEF BUFFER bFirstFFItem FOR FFItem.
 
 RUN pInitializeFuncRunProcess(OUTPUT liFRProcessID,
                               OUTPUT liFRExecID,    
@@ -261,6 +263,9 @@ FOR EACH FixedFee NO-LOCK WHERE
       (IF AVAIL SingleFee THEN SingleFee.billperiod ELSE ?) ";"
       (IF AVAIL SingleFee THEN SingleFee.concerns[1] ELSE ?) skip.
 
+   FIND FIRST bFirstFFItem OF FixedFee USE-INDEX FFNum.
+   ldaFromDate = fPer2Date(bFirstFFItem.BillPeriod,1).
+
    IF lcRunMode EQ "Production" THEN DO:
       FIND CURRENT FFItem EXCLUSIVE-LOCK.
       FIND bFixedFee EXCLUSIVE-LOCK WHERE
@@ -279,7 +284,10 @@ FOR EACH FixedFee NO-LOCK WHERE
       ffitem.concerns[2] = YEAR(ldaNewBillPeriod) * 10000 + 
                            MONTH(ldaNewBillPeriod) * 100 + 
                            DAY(ldaNewBillPeriod)
-      DCCLI.ValidTo = add-interval(DCCLI.ValidTo,1,"months") WHEN AVAIL DCCLI
+      bFixedFee.BegDate = ldaFromDate
+      bFixedFee.BegPeriod = YEAR(ldaFromDate) * 100 + MONTH(ldaFromDate)
+      DCCLI.ValidFrom = ldaFromDate WHEN AVAIL DCCLI
+      DCCLI.ValidTo = ldaNewBillPeriod WHEN AVAIL DCCLI
       ldaNewRFPeriod = fPer2Date(SingleFee.billperiod,1) WHEN AVAIL SingleFee
       SingleFee.billperiod  = YEAR(ldaNewRFPeriod) * 100 + 
                            MONTH(ldaNewRFPeriod) WHEN AVAIL SingleFee
