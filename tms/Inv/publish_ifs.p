@@ -27,7 +27,7 @@ DEF VAR lcContLogDir   AS CHAR NO-UNDO.
 DEF VAR lcLogFile      AS CHAR NO-UNDO. 
 
 DEFINE STREAM strout.
-
+   
    FIND MsRequest WHERE
         MsRequest.Brand     = gcBrand     AND
         MsRequest.MsRequest = iiMsRequest NO-LOCK NO-ERROR.
@@ -44,6 +44,11 @@ DEFINE STREAM strout.
           liCount        = 0 
           liDumped       = 0
           llInterrupt    = NO
+          ldaInvDate     = ?
+          lcAddrConfDir  = ""
+          lcContLogDir   = ""
+          lcToday        = ""
+          lcLogFile      = ""
           ldaInvDate     = DATE(MONTH(TODAY),1,YEAR(TODAY)) 
           lcAddrConfDir  = fCParamC("RepConfDir")
           lcContLogDir   = fCParam("PublishInvoice","ContentLogDir")
@@ -106,9 +111,14 @@ DEFINE STREAM strout.
                        FALSE,
                        OUTPUT liDumped).
    
-      IF liDumped > 0 THEN 
+      IF liDumped >= 0 THEN 
          PUT STREAM strout UNFORMATTED 
-            "Generated IFS for " + STRING(liDumped) + " Service Invoices" SKIP.   
+            "Generated IFS for " + STRING(liDumped) + " Service Invoices" SKIP.
+      ELSE DO: 
+         PUT STREAM strout UNFORMATTED
+            "Error in creating IFS dump event !" SKIP.
+         llgError = YES.
+      END.   
    END.
     
    OUTPUT STREAM strout CLOSE.
@@ -124,3 +134,4 @@ DEFINE STREAM strout.
                "Generated IFS for " + STRING(liDumped) + " Service Invoices".
 
    fReqStatus(2,lcContent). /* request handled succesfully */
+

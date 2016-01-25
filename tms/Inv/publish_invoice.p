@@ -14,7 +14,7 @@
 {email.i}
 {host.i}
 
-DEFINE INPUT PARAMETER iiMsRequest AS INT NO-UNDO. 
+DEFINE INPUT PARAMETER iiMsRequest AS INT NO-UNDO.
 
 DEF VAR ldaDateFrom    AS DATE NO-UNDO. 
 DEF VAR liCount        AS INT  NO-UNDO. 
@@ -28,21 +28,26 @@ DEF VAR lcContLogDir   AS CHAR NO-UNDO.
 
 DEFINE STREAM strout.
 
-   FIND MsRequest WHERE 
-        MsRequest.Brand     = gcBrand     AND 
-        MsRequest.MsRequest = iiMsRequest NO-LOCK NO-ERROR.
-
-   IF NOT AVAIL MsRequest OR 
+   FIND MsRequest WHERE
+        MsRequest.Brand     = gcBrand     AND
+        MsRequest.MsRequest = iiMsRequest NO-LOCK NO-ERROR.   
+  
+   IF NOT AVAIL MsRequest OR
                 MsRequest.ReqType NE ({&REQTYPE_PUBLISH_INVOICE}) THEN
       RETURN "ERROR".
 
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
-
+ 
    ASSIGN liCount        = 0
           lcContent      = ""
           llgError       = NO
           liDumped       = 0
+          ldaDateFrom    = ?
+          lcLogFile      = ""
+          lcAddrConfDir  = ""
+          lcContLogDir   = ""
+          lcToday        = ""
           ldaDateFrom    = DATE(MONTH(TODAY),1,YEAR(TODAY))
           lcAddrConfDir  = fCParamC("RepConfDir")
           lcContLogDir   = fCParam("PublishInvoice","ContentLogDir")
@@ -91,7 +96,7 @@ DEFINE STREAM strout.
    FIND FIRST DumpFile NO-LOCK WHERE 
               DumpFile.Brand    EQ gcBrand AND
               DumpFile.DumpName EQ {&DUMP_INVOICE_PUPU} NO-ERROR.
-
+ 
    IF AVAIL DumpFile THEN DO:
       RUN dumpfile_run(DumpFile.DumpID,  /* Dump ID */
                        "Full",
@@ -120,5 +125,4 @@ DEFINE STREAM strout.
                "Published total Invoice full dump event count : " + STRING(liDumped).
 
    fReqStatus(2,lcContent). /* request handled succesfully */
-
 
