@@ -30,5 +30,6 @@
 "1" 32 "Contract Target" "List" "Fixed" 1 no "" "RVTERMDTRW" 25/11/15 31/12/49 "RVTERMDT1DISC" "Discount over Quota 25 from renewal channel" "" "All " 0 0 0 1
 "1" 33 "Contract Target" "List" "Fixed" 1 no "" "RVTERMDTEQ25" 25/11/15 31/12/49 "RVTERMDT2DISC" "Discount over Quota 25 refinance" "" "All " 0 0 0 1
 "1" 34 "Contract Target" "List" "Fixed" 1 no "" "RVTERMDTTR" 25/11/15 31/12/49 "RVTERMDT3DISC" "Terminal return discount over Quota 25" "" "All " 0 0 0 1
+"1" 35 "Contract Target" "List" "Fixed" 1 no "" "RVTERMDTTD" 01/11/15 31/12/49 "RVTERMDT4DISC" "Discount over Quota 25 from renewal channel" "" "All " 0 0 0 1
 "1" 13 "Contract Target" "List" "Percentage" 1 no "" "RVTERMFD" 01/03/14 31/12/49 "RVTERMFD" "Residual Value Yoigo discount" "" "All " 0 0 0 1
 "1" 22 "Contract Target" "List" "Percentage" 1 no "" "TariffMarchDISC" 04/03/15 08/04/15 "TariffMarchDISC" "Discount March Promo" "" "List" 0 0 0 6
