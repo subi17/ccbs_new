@@ -963,6 +963,19 @@ PROCEDURE pContractActivation:
       IF lcDCEvent BEGINS "PAYTERM" THEN ASSIGN
          liOrderid = fGetPaytermOrderId(msrequest.msrequest)
          lcReqSource = ";" + MsRequest.Reqsource. 
+      
+      /* Q25 Change, get same orderid as in previous fixedfee */
+      IF MsRequest.ReqCparam1 EQ "RVTERM12" THEN DO:
+         FIND FIRST FixedFee WHERE FixedFee.brand EQ "1" AND
+                                   FixedFee.HostTable EQ "DCCLI" AND
+                                   FixedFee.KeyValue EQ 
+                                   STRING(MsRequest.MsSeq) AND
+                                   FixedFee.SourceKey EQ 
+                                   STRING(MsRequest.ReqIParam3)
+                                   NO-LOCK NO-ERROR.
+         IF AVAIL FixedFee THEN
+            liOrderid = FixedFee.OrderId.
+      END.
 
       RUN creasfee.p (MsOwner.CustNum,
                     (IF (lcDCEvent = {&DSS} + "_UPSELL" OR
