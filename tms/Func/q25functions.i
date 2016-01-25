@@ -296,10 +296,10 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
 
    liPeriod = YEAR(idaStartDate) * 100 + MONTH(idaStartDate).
 
-   /* Special case, if order is one at 1st day of month Q1 period ends
-      last day of previous month Q24. Need to include it. */
-   IF (iiPhase = {&Q25_MONTH_24} OR iiPhase = {&Q25_MONTH_24_FINAL_MSG}) AND 
-       DAY(idaStartDate) = 1 THEN
+   /* Special case, if order is done at 1st day of month Q0, period ends
+      last day of previous month Q24. Need to include it. 
+      for example contract ends 29.2.2016, singlefee is in 201603 */
+   IF DAY(idaStartDate) = 1 THEN
       idaStartDate = idaStartDate - 1.
    FOR EACH SingleFee USE-INDEX BillCode WHERE
             SingleFee.Brand       = gcBrand AND
