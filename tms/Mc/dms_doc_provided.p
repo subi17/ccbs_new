@@ -132,7 +132,6 @@ FOR EACH DMS NO-LOCK WHERE
      lcErr = fSendChangeInformation(DMS.StatusCode  + "_by_batch" ,
                                     DMS.HostID, 
                                     "", /*deposit*/
-                                    "", /*docList*/
                                     "", /*docListSep*/
                                     "doc_reminder",
                                     lcMsg).

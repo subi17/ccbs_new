@@ -43,7 +43,7 @@ ASSIGN
    lcProcDir  = fCParam("DMS","TMS_ProcDir")
    lcSpoolDir = fCParam("DMS","TMS_SpoolDir")
    lcLogDir   = fCParam("DMS","TMS_LogDir")
-   lcSep      = "|".
+   lcSep      = {&DMS_FILE_SEP}.
 
 DEF STREAM sIn.
 DEF STREAM sFile.
@@ -242,14 +242,13 @@ PROCEDURE pUpdateDMS:
                             "",
                             ldStatusTS,
                             lcDocList,
-                            ";").
+                            {&DMS_DOCLIST_SEP}).
 
-   lcDeposit = fFindDeposit(lcDocList, ";").                         
+   lcDeposit = fFindDeposit(lcDocList, {&DMS_DOCLIST_SEP}).                         
    lcErr = fSendChangeInformation(lcStatusCode, 
                                   liOrderId, 
                                   lcDeposit, 
-                                  lcDocList,
-                                  ";",
+                                  {&DMS_DOCLIST_SEP},
                                   "casef_reader",
                                   lcMsg).
 

@@ -47,7 +47,7 @@ ASSIGN
    lcInitStatus    = {&DMS_INIT_STATUS_SENT}
    lcDMSStatusDesc = {&DMS_INIT_STATUS_COMMENT}
    lcDMSDOCStatus  = {&DMS_INIT_STATUS_SENT}
-   lcDelim         = "|".
+   lcDelim         = {&DMS_FILE_SEP}.
 
 /*Functions:*/
 
@@ -600,7 +600,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
                             Order.StatusCode,
                             0,
                             lcDocListEntries /*DocList*/,
-                            ",").
+                            {&DMS_DOCLIST_SEP}).
    RETURN "".                         
 END.   
 
@@ -743,12 +743,12 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
       /*Document type, Type desc,DocStatusCode,RevisionComment*/
       lcDocListEntries = lcDocListEntries +
-                         ENTRY(liCount,lcRequiredDocs) + "," +
-                         "," + /*This field is filled only by DMS responses*/
-                         lcDMSDOCStatus + "," +
+                         ENTRY(liCount,lcRequiredDocs) + {&DMS_DOCLIST_SEP} +
+                         {&DMS_DOCLIST_SEP} + /*filled only by DMS responses*/
+                         lcDMSDOCStatus + {&DMS_DOCLIST_SEP} +
                          "".
-      IF liCount NE NUM-ENTRIES(lcRequiredDocs)
-         THEN lcDocListEntries = lcDocListEntries + ",".
+      IF liCount NE NUM-ENTRIES(lcRequiredDocs, {&DMS_DOCLIST_SEP})
+         THEN lcDocListEntries = lcDocListEntries + {&DMS_DOCLIST_SEP}.
    END.
 
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
@@ -766,13 +766,12 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
                             Order.StatusCode,
                             0,
                             lcDocListEntries /*DocList*/,
-                            ",").
+                            {&DMS_DOCLIST_SEP}).
 
    lcErr = fSendChangeInformation("", 
                                   Order.OrderId, 
                                   "", 
-                                  lcDocListEntries,
-                                  ",",
+                                  {&DMS_DOCLIST_SEP},
                                   "create_cf",
                                   lcMsg).
    fLogMsg("Msg,2 : " + lcMsg + " #Status: " + lcErr).
@@ -894,12 +893,12 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
       /*Document type, Type desc,DocStatusCode,RevisionComment*/
       lcDocListEntries = lcDocListEntries +
-                         ENTRY(liCount,lcRequiredDocs) + "," +
-                         "," + /*This field is filled only by DMS responses*/
-                         lcDMSDOCStatus + "," +
+                         ENTRY(liCount,lcRequiredDocs) + {&DMS_DOCLIST_SEP} +
+                         {&DMS_DOCLIST_SEP} + /* filled only by DMS responses*/
+                         lcDMSDOCStatus + {&DMS_DOCLIST_SEP} +
                          "".
       IF liCount NE NUM-ENTRIES(lcRequiredDocs)
-         THEN lcDocListEntries = lcDocListEntries + ",".
+         THEN lcDocListEntries = lcDocListEntries + {&DMS_DOCLIST_SEP}.
    END.
 
 
@@ -917,12 +916,11 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                             Order.StatusCode,
                             0,
                             lcDocListEntries /*DocList*/,
-                            ",").
+                            {&DMS_DOCLIST_SEP}).
    lcErr = fSendChangeInformation("", 
                                   Order.OrderId, 
                                   "", 
-                                  lcDocListEntries,
-                                  ",",
+                                  {&DMS_DOCLIST_SEP},
                                    "create_cf",
                                    lcMsg).
    fLogMsg("Msg,3 : " + lcMsg + " #Status: " + lcErr).
@@ -1126,7 +1124,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                                "",
                                0,
                                lcDocListEntries /*DocList*/,
-                               ",").      
+                               {&DMS_DOCLIST_SEP}).      
    END.
    RETURN "".
 
@@ -1188,7 +1186,7 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
                             Order.StatusCode,
                             0,
                             lcDocListEntries /*DocList*/,
-                            ",").
+                            {&DMS_DOCLIST_SEP}).
    RETURN "".
 
 END.
@@ -1255,7 +1253,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
                             Order.StatusCode,
                             0,
                             lcDocListEntries /*DocList*/,
-                            ",").
+                            {&DMS_DOCLIST_SEP}).
    RETURN "".
 
 END.
