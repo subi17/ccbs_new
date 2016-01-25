@@ -110,7 +110,7 @@
 "TARJ6" 01/08/13 4 31/12/49 "" 0 "" "" "Tarjeta 6 Bundle" 93 0 "1" "4" 1 2 0 0 "" "" "" 1 1 0 yes 1 0 0 2 "TARJ_UPSELL" 0
 "TARJ7" 01/11/13 4 31/12/49 "" 0 "" "" "La del uno 650 MB" 93 0 "1" "4" 4 4 0 0 "TARJ7_BundleFee" "" "" 0 1 0 yes 1 0 0 1 "TARJ7_UPSELL" 0
 "TARJ7_UPSELL" 01/11/13 4 31/12/49 "" 0 "" "" "Ampliación 300 MB" 93 0 "1" "6" 1 3 1 0 "TARJ7_UPSELLFee" "" "" 2 1 0 yes 999 0 0 1 "" 0
-"TARJ9" 29/05/15 4 31/12/15 "" 0 "" "" "La del Uno 1 GB" 93 0 "1" "1" 4 4 0 0 "TARJ9_BundleFee" "" "" 0 1 0 yes 1 0 0 1 "TARJ7_UPSELL" 0
+"TARJ9" 29/05/15 4 31/12/49 "" 0 "" "" "La del Uno 1 GB" 93 0 "1" "1" 4 4 0 0 "TARJ9_BundleFee" "" "" 0 1 0 yes 1 0 0 1 "TARJ7_UPSELL" 0
 "TARJD1" 01/01/09 0 31/12/49 "" 0 "" "" "Tarjeta Datos" 0 0 "1" "4" 3 1 0 0 "" "" "" 0 1 0 no 1 0 0 2 "" 0
 "TARJ_UPSELL" 01/12/12 4 31/12/49 "" 0 "" "" "Tarjeta Upsell" 93 0 "1" "8" 1 2 0 0 "TARJ_UPSELLFee" "" "" 1 1 0 yes 1 0 0 1 "" 0
 "TERM18" 01/11/06 0 31/12/54 "TERMPERIOD" 0 "1" "" "Terminal discount(Postpaid)" 0 0 "1" "3" 1 3 18 0 "" "" "TERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0
