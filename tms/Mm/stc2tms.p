@@ -697,6 +697,8 @@ PROCEDURE pFinalize:
    DEF VAR liCustnum       AS INT  NO-UNDO. 
    DEF VAR ldEndStamp      AS DEC  NO-UNDO.
    DEF VAR ldBegStamp      AS DEC  NO-UNDO.
+   DEF VAR ldeNow          AS DEC  NO-UNDO.
+   DEF VAR lcResult        AS CHAR NO-UNDO.
 
    DEF VAR lcError               AS CHAR NO-UNDO.
    DEF VAR lcMultiLineSubsType   AS CHAR NO-UNDO.
@@ -705,7 +707,7 @@ PROCEDURE pFinalize:
    DEF VAR lcDataBundleCLITypes  AS CHAR NO-UNDO.
 
    DEF BUFFER bSubRequest FOR MsRequest.
-   
+   DEF BUFFER DataContractReq FOR MsRequest. 
    /* now when billtarget has been updated new fees can be created */
 
    llRerate = FALSE.
@@ -724,7 +726,8 @@ PROCEDURE pFinalize:
       ldBegStamp = MsOwner.TSBeg
       ldEndStamp = fSecOffSet(MsOwner.TsBeg,-1)
       /* some time has already passed from subscription update */
-      llRerate   = TRUE.
+      llRerate   = TRUE
+      ldeNow     = fMakeTS().
          
    fSplitTS(MsOwner.TsBeg,
             OUTPUT ldaNewBeginDate,
@@ -806,6 +809,52 @@ PROCEDURE pFinalize:
            "STC_" + (IF Mobsub.PayType THEN "PREPAID" ELSE "POSTPAID"),
            MsRequest.MsRequest, 
            OUTPUT liChargeReqId) NO-ERROR.
+
+   /* YTS-8159 */
+    IF bOldType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID} AND
+       bOldType.CLIType EQ "TARJ6"                    AND
+       CLIType.PayType  EQ {&CLITYPE_PAYTYPE_PREPAID} AND
+       LOOKUP(CLIType.CLIType,"TARJ7,TARJ9") > 0      THEN DO:
+
+       FIND FIRST ServiceLimit NO-LOCK WHERE
+                  ServiceLimit.Groupcode EQ CLIType.CLIType AND
+                  ServiceLimit.DialType  EQ 7               NO-ERROR.
+
+       IF AVAIL ServiceLimit AND
+          NOT CAN-FIND(FIRST DataContractReq NO-LOCK WHERE
+                             DataContractReq.MsSeq      = MobSub.MsSeq                   AND
+                             DataContractReq.ActStamp  >= ldeActStamp                    AND
+                             DataContractReq.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND
+                             DataContractReq.ReqCparam3 = CLIType.CLIType)               AND
+          NOT CAN-FIND(FIRST MServiceLimit NO-LOCK WHERE
+                             MServiceLimit.MsSeq    = MobSub.MsSeq          AND
+                             MServiceLimit.SLSeq    = ServiceLimit.SlSeq    AND
+                             MserviceLimit.DialType = ServiceLimit.DialType AND
+                             MserviceLimit.EndTS   >= ldeNow                AND
+                             MserviceLimit.FromTs  <= ldeNow) THEN DO:
+
+          liRequest = fServiceRequest(MobSub.MsSeq,
+                                      "SHAPER",
+                                      1,
+                                      "DEFAULT",
+                                      ldeNow,
+                                      "",
+                                      FALSE,
+                                      FALSE,
+                                      "",
+                                      {&REQUEST_SOURCE_STC},
+                                      MsRequest.MsRequest,
+                                      FALSE,
+                                      OUTPUT lcResult).
+          IF liRequest = 0 THEN
+            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                       "MobSub",
+                       STRING(MobSub.MsSeq),
+                       MobSub.CustNum,
+                       "ERROR:DEFAULT SHAPER request creation failed",
+                       lcResult).
+       END.
+    END.
 
    /* run rerate (needed especially with saldo-services) */
    IF llReRate THEN DO:
