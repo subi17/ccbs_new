@@ -212,11 +212,15 @@ FOR EACH FixedFee NO-LOCK WHERE
 
    /* move monthly fee to the end if not yet sent to bank */
    FIND FIRST FFItem NO-LOCK WHERE
-              FFItem.FFNum = fixedfee.ffnum AND
-              ffitem.billperiod = liBillPeriod NO-ERROR.
+              FFItem.FFNum = fixedfee.ffnum USE-INDEX FFNum NO-ERROR.
 
    IF NOT AVAIL FFItem THEN DO:
       fLogLine("ERROR:FFItem not found"). 
+      NEXT ORDER_LOOP.
+   END.
+   
+   IF ffitem.billperiod NE liBillPeriod THEN DO:
+      fLogLine(SUBST("ERROR:Installment first MF period &1 does not match with billing period &2", FFItem.billperiod, liBillPeriod)). 
       NEXT ORDER_LOOP.
    END.
 
