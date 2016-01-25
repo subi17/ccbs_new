@@ -71,7 +71,7 @@
 "1" "OCEANS" "174" "893490311" yes no "" "903174"
 "1" "VODAFONE-ONO" "183" "89345618" yes no "" "725183"
 "1" "Voz Telecom Sistemas" "184" "893490312" yes no "VZT" "903184"
-"1" "BLUEPHONE" "194" "893490317" yes no "" "903194"
+"1" "Fleximovil" "194" "893490317" yes no "" "903194"
 "1" "Lebara" "203" "893456" no no "" ""
 "1" "Lebara Movil" "213" "893457" yes no "" "970213"
 "1" "BT" "223" "893457" yes no "" "970223"
