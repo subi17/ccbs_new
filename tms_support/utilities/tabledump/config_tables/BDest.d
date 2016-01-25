@@ -74,10 +74,10 @@
 "11843" " de ATENCIÓN TELEFÓNICA AVANZADA" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 65
 "11844" " de Información Directa (AUNA)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 66
 "11845" " de Incotel Ingeniería (Opera)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 67
-"11846" " de Mediaduero (Uni2)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 68
+"11846" "11846 de TICTACTELECOMUNICACIONES" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 68
 "11847" "11847 de TELECOMING, S.A.UNIPERSONAL" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 69
 "11848" "11848 de Grupo R" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 70
-"11849" "11849" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/01/13 894
+"11849" "11849 de Digitaran (Orange Espagne)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/01/13 894
 "11850" "11850 de 11850 INFORMACIÃ“N EMPRESARIAL," 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 71
 "11851" " TELELÍNEA LOCAL (France Telecom)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 72
 "11852" "11852 de Viajes Bolero (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 73
@@ -85,13 +85,13 @@
 "11854" " de Servicios de Información Audiotex Telelínea (Uni2)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 75
 "11855" " de Vodafone" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 76
 "11856" "de Emsertex 2002 (ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/08/12 870
-"11857" "de MEDIAPUBLILINE (ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/09/12 873
+"11857" "11857 de MEDIAPUBLILINE (VODAFONE ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/09/12 873
 "11858" " de Opera" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 77
 "11859" " de Spantel 2000 (BT)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 78
 "11860" "11860 de 11850 INFORMACIÃ“N EMPRESARIAL," 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 79
-"11861" "11861 de Hispano TelevisiÃ³n y TelefonÃ­" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 80
+"11861" "11861 de Hispano Televisión y Telefonía" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 80
 "11862" "11862 de ALAI" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 81
-"11863" "ELETTE" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 82
+"11863" "11863 de Guías 118  (Quality)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 82
 "11864" "11864 de Next Touch Telecom (A" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 83
 "11865" "11865 de Micamosa Mon de Servei (VODAFON" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 84
 "11866" "11866 de Servicaterers BCN (VODAFONE ONO" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 85
@@ -122,9 +122,9 @@
 "11891" " de IN4YOU SIGLO XXI, S.L. UNIPERSONAL" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 28/08/14 971
 "11892" " de TIGRAD ATENCIÓN TELEFÓNICA" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/11/14 975
 "11894" "11894 de FULLTIME NETWORKS LIMITED (MASV" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 27/11/14 976
-"11895" " de INFONICA, S.L." 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 28/08/14 972
+"11895" "11895 de INFONICA, S.L. (VODAFONE ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 28/08/14 972
 "11897" "11897 de ACTIVAOPER SERVICIOS (Xtra Tele" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 27/02/14 935
-"11898" "11898 de Trisonata (ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/03/12 896
+"11898" "11898 de Trisonata (VODAFONE ONO)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/03/12 896
 "11899" "de Servicio Telefónico para el Ciudadano" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 28/06/13 901
 "1204" "Canada" 2 1 0 0 "" "" 0 no 1 no "" 0 0 "1" 31/12/49 01/10/11 681
 "1226" "Canada" 2 1 0 0 "" "" 0 no 1 no "" 0 0 "1" 31/12/49 01/10/11 682
