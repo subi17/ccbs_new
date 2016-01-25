@@ -967,7 +967,7 @@ PROCEDURE pContractActivation:
       /* Q25 Change, get same orderid as in previous fixedfee */
       IF MsRequest.ReqCparam1 EQ "RVTERM12" THEN DO:
          FIND FIRST FixedFee WHERE FixedFee.brand EQ "1" AND
-                                   FixedFee.HostTable EQ "DCCLI" AND
+                                   FixedFee.HostTable EQ "Mobsub" AND
                                    FixedFee.KeyValue EQ 
                                    STRING(MsRequest.MsSeq) AND
                                    FixedFee.SourceKey EQ 

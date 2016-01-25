@@ -181,7 +181,7 @@ PROCEDURE pInstallmentContractChange:
                                TRUE,
                                "",
                                MsRequest.ReqDParam2, /* residual fee */
-                               0,
+                               liPercontrId,
                                OUTPUT lcError).
    IF liActReq = 0 OR liActReq = ? THEN
        UNDO, RETURN "ERROR:New Installment Contract termination request " +
