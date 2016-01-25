@@ -264,12 +264,24 @@ PROCEDURE pUpdateDMS:
                  Order.PayType = True) OR Order.StatusCode = "44" THEN
                RUN orderhold.p(liOrderId, "RELEASE_BATCH").
          END.
-         WHEN "J" THEN RUN closeorder.p(liOrderId, TRUE).
-         WHEN "F" THEN RUN orderbyfraud.p(liOrderId, TRUE,
+         WHEN "J" THEN RUN closeorder.p(liOrderId, TRUE). /*status is checked in                                                            closeorder.p */
+         WHEN "F" THEN DO:
+            IF LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) NE 0 THEN
+               RUN orderbyfraud.p(liOrderId, TRUE,
                                            {&ORDER_STATUS_CLOSED_BY_FRAUD}).
+            ELSE fLogLine(lcStatusCode + "Incorrect data from DMS: " +
+                            Order.StatusCode + " cannot be moved to " +
+                            {&ORDER_STATUS_CLOSED_BY_FRAUD}).
+         END.
          WHEN "N" OR
-         WHEN "G" THEN RUN orderbyfraud.p(liOrderId, TRUE,
+         WHEN "G" THEN DO:
+            IF LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) NE 0 THEN 
+               RUN orderbyfraud.p(liOrderId, TRUE,
                                            {&ORDER_STATUS_AUTO_CLOSED}).
+            ELSE fLogLine(lcStatusCode + "Incorrect data from DMS: " +
+                            Order.StatusCode + " cannot be moved to " +
+                            {&ORDER_STATUS_AUTO_CLOSED}).
+         END.
       END CASE.
    END.
 
