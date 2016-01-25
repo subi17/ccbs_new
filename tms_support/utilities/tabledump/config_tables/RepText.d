@@ -4423,6 +4423,16 @@
 1 "" 3 "Samsung GalaxyS4 mini Blanco con fundas de regalo" 0 "P0349PYW2" "1" 25/11/13 31/12/49
 1 "" 4 "Samsung GalaxyS4 mini Blanco con fundas de regalo" 0 "P0349PYW2" "1" 25/11/13 31/12/49
 1 "" 5 "Samsung Galaxy S4 mini Blanco with covers" 0 "P0349PYW2" "1" 25/11/13 31/12/49
+1 "" 1 "Samsung Galaxy A5 2016 Oro" 0 "P034A56D2" "1" 19/01/16 31/12/49
+1 "" 2 "Samsung Galaxy A5 2016 Oro" 0 "P034A56D2" "1" 19/01/16 31/12/49
+1 "" 3 "Samsung Galaxy A5 2016 Oro" 0 "P034A56D2" "1" 19/01/16 31/12/49
+1 "" 4 "Samsung Galaxy A5 2016 Oro" 0 "P034A56D2" "1" 19/01/16 31/12/49
+1 "" 5 "Samsung Galaxy A5 2016 Gold" 0 "P034A56D2" "1" 19/01/16 31/12/49
+1 "" 1 "Samsung Galaxy A5 2016 Negro" 0 "P034A56N2" "1" 19/01/16 31/12/49
+1 "" 2 "Samsung Galaxy A5 2016 Negro" 0 "P034A56N2" "1" 19/01/16 31/12/49
+1 "" 3 "Samsung Galaxy A5 2016 Negro" 0 "P034A56N2" "1" 19/01/16 31/12/49
+1 "" 4 "Samsung Galaxy A5 2016 Negro" 0 "P034A56N2" "1" 19/01/16 31/12/49
+1 "" 5 "Samsung Galaxy A5 2016 Black" 0 "P034A56N2" "1" 19/01/16 31/12/49
 1 "" 1 "Samsung SGH B130 Blanco" 0 "P034B13G2" "1" 27/10/08 31/12/54
 1 "" 5 "Samsung SGH B130 White" 0 "P034B13G2" "1" 27/10/08 31/12/54
 1 "" 1 "Samsung SGH B130 Blanco" 0 "P034B13G3" "1" 29/10/08 31/12/54
@@ -4490,6 +4500,16 @@
 1 "" 3 "Samsung Galaxy Alpha Blanco" 0 "P034G85W2" "1" 24/09/14 31/12/49
 1 "" 4 "Samsung Galaxy Alpha Blanco" 0 "P034G85W2" "1" 24/09/14 31/12/49
 1 "" 5 "Samsung Galaxy Alpha White" 0 "P034G85W2" "1" 24/09/14 31/12/49
+1 "" 1 "Samsung Galaxy A3 2016 Oro" 0 "P034GA3D2" "1" 18/01/16 31/12/49
+1 "" 2 "Samsung Galaxy A3 2016 Oro" 0 "P034GA3D2" "1" 18/01/16 31/12/49
+1 "" 3 "Samsung Galaxy A3 2016 Oro" 0 "P034GA3D2" "1" 18/01/16 31/12/49
+1 "" 4 "Samsung Galaxy A3 2016 Oro" 0 "P034GA3D2" "1" 18/01/16 31/12/49
+1 "" 5 "Samsung Galaxy A3 2016 Gold" 0 "P034GA3D2" "1" 18/01/16 31/12/49
+1 "" 1 "Samsung Galaxy A3 2016 Negro" 0 "P034GA3N2" "1" 18/01/16 31/12/49
+1 "" 2 "Samsung Galaxy A3 2016 Negro" 0 "P034GA3N2" "1" 18/01/16 31/12/49
+1 "" 3 "Samsung Galaxy A3 2016 Negro" 0 "P034GA3N2" "1" 18/01/16 31/12/49
+1 "" 4 "Samsung Galaxy A3 2016 Negro" 0 "P034GA3N2" "1" 18/01/16 31/12/49
+1 "" 5 "Samsung Galaxy A3 2016 Black" 0 "P034GA3N2" "1" 18/01/16 31/12/49
 1 "" 1 "Samsung Galaxy A5 Negro" 0 "P034GA5N2" "1" 27/01/15 31/12/49
 1 "" 2 "Samsung Galaxy A5 Negro" 0 "P034GA5N2" "1" 27/01/15 31/12/49
 1 "" 3 "Samsung Galaxy A5 Negro" 0 "P034GA5N2" "1" 27/01/15 31/12/49
@@ -4978,6 +4998,16 @@
 1 "" 3 "Sony Xperia U Negro con PSP" 0 "P037PPUN2" "1" 10/12/12 31/12/49
 1 "" 4 "Sony Xperia U Negro con PSP" 0 "P037PPUN2" "1" 10/12/12 31/12/49
 1 "" 5 "Sony Xperia U Black con PSP" 0 "P037PPUN2" "1" 10/12/12 31/12/49
+1 "" 1 "Sony Xperia C5 Ultra Dual Negro" 0 "P037XC5N2" "1" 04/01/16 31/12/49
+1 "" 2 "Sony Xperia C5 Ultra Dual Negro" 0 "P037XC5N2" "1" 04/01/16 31/12/49
+1 "" 3 "Sony Xperia C5 Ultra Dual Negro" 0 "P037XC5N2" "1" 04/01/16 31/12/49
+1 "" 4 "Sony Xperia C5 Ultra Dual Negro" 0 "P037XC5N2" "1" 04/01/16 31/12/49
+1 "" 5 "Sony Xperia C5 Ultra Dual Black" 0 "P037XC5N2" "1" 04/01/16 31/12/49
+1 "" 1 "Sony Xperia C5 Ultra Dual Blanco" 0 "P037XC5W2" "1" 04/01/16 31/12/49
+1 "" 2 "Sony Xperia C5 Ultra Dual Blanco" 0 "P037XC5W2" "1" 04/01/16 31/12/49
+1 "" 3 "Sony Xperia C5 Ultra Dual Blanco" 0 "P037XC5W2" "1" 04/01/16 31/12/49
+1 "" 4 "Sony Xperia C5 Ultra Dual Blanco" 0 "P037XC5W2" "1" 04/01/16 31/12/49
+1 "" 5 "Sony Xperia C5 Ultra Dual White" 0 "P037XC5W2" "1" 04/01/16 31/12/49
 1 "" 1 "Sony Xperia E1 Negro" 0 "P037XE1N2" "1" 27/10/14 31/12/49
 1 "" 2 "Sony Xperia E1 Negro" 0 "P037XE1N2" "1" 27/10/14 31/12/49
 1 "" 3 "Sony Xperia E1 Negro" 0 "P037XE1N2" "1" 27/10/14 31/12/49
@@ -5208,11 +5238,31 @@
 1 "" 3 "Sony Xperia Z Negro" 0 "P037XZYN1" "1" 25/11/13 31/12/49
 1 "" 4 "Sony Xperia Z Negro" 0 "P037XZYN1" "1" 25/11/13 31/12/49
 1 "" 5 "Sony Xperia Z Black" 0 "P037XZYN1" "1" 25/11/13 31/12/49
+1 "" 1 "Sony Xperia Z3 Negro con Base de carga magnética" 0 "P037Z3BN2" "1" 07/01/16 31/12/49
+1 "" 2 "Sony Xperia Z3 Negro con Base de carga magnética" 0 "P037Z3BN2" "1" 07/01/16 31/12/49
+1 "" 3 "Sony Xperia Z3 Negro con Base de carga magnética" 0 "P037Z3BN2" "1" 07/01/16 31/12/49
+1 "" 4 "Sony Xperia Z3 Negro con Base de carga magnética" 0 "P037Z3BN2" "1" 07/01/16 31/12/49
+1 "" 5 "Sony Xperia Z3 Negro with Magnetic charging dock" 0 "P037Z3BN2" "1" 07/01/16 31/12/49
+1 "" 1 "Sony Xperia Z3 Blanco con Base de carga magnética" 0 "P037Z3BW2" "1" 07/01/16 31/12/49
+1 "" 2 "Sony Xperia Z3 Blanco con Base de carga magnética" 0 "P037Z3BW2" "1" 07/01/16 31/12/49
+1 "" 3 "Sony Xperia Z3 Blanco con Base de carga magnética" 0 "P037Z3BW2" "1" 07/01/16 31/12/49
+1 "" 4 "Sony Xperia Z3 Blanco con Base de carga magnética" 0 "P037Z3BW2" "1" 07/01/16 31/12/49
+1 "" 5 "Sony Xperia Z3 Blanco with Magnetic charging dock" 0 "P037Z3BW2" "1" 07/01/16 31/12/49
 1 "" 1 "Sony Xperia Z5 Premium Negro" 0 "P037Z5PN2" "1" 19/11/15 31/12/49
 1 "" 2 "Sony Xperia Z5 Premium Negro" 0 "P037Z5PN2" "1" 19/11/15 31/12/49
 1 "" 3 "Sony Xperia Z5 Premium Negro" 0 "P037Z5PN2" "1" 19/11/15 31/12/49
 1 "" 4 "Sony Xperia Z5 Premium Negro" 0 "P037Z5PN2" "1" 19/11/15 31/12/49
 1 "" 5 "Sony Xperia Z5 Premium Black" 0 "P037Z5PN2" "1" 19/11/15 31/12/49
+1 "" 1 "Sony Xperia Z5 Negro con Sony Smartband 2 Negra" 0 "P037Z5RN2" "1" 07/01/16 31/12/49
+1 "" 2 "Sony Xperia Z5 Negro con Sony Smartband 2 Negra" 0 "P037Z5RN2" "1" 07/01/16 31/12/49
+1 "" 3 "Sony Xperia Z5 Negro con Sony Smartband 2 Negra" 0 "P037Z5RN2" "1" 07/01/16 31/12/49
+1 "" 4 "Sony Xperia Z5 Negro con Sony Smartband 2 Negra" 0 "P037Z5RN2" "1" 07/01/16 31/12/49
+1 "" 5 "Sony Xperia Z5 Negro with Sony Smartband 2 Black" 0 "P037Z5RN2" "1" 07/01/16 31/12/49
+1 "" 1 "Sony Xperia Z5 Blanco con Sony Smartband 2 Negra" 0 "P037Z5RW2" "1" 07/01/16 31/12/49
+1 "" 2 "Sony Xperia Z5 Blanco con Sony Smartband 2 Negra" 0 "P037Z5RW2" "1" 07/01/16 31/12/49
+1 "" 3 "Sony Xperia Z5 Blanco con Sony Smartband 2 Negra" 0 "P037Z5RW2" "1" 07/01/16 31/12/49
+1 "" 4 "Sony Xperia Z5 Blanco con Sony Smartband 2 Negra" 0 "P037Z5RW2" "1" 07/01/16 31/12/49
+1 "" 5 "Sony Xperia Z5 Blanco with Sony Smartband 2 Black" 0 "P037Z5RW2" "1" 07/01/16 31/12/49
 1 "" 1 "Sony Xperia Z5 Negro con Reloj Smartwatch 3 Classic Negro" 0 "P037Z5SN2" "1" 19/11/15 31/12/49
 1 "" 2 "Sony Xperia Z5 Negro con Reloj Smartwatch 3 Classic Negro" 0 "P037Z5SN2" "1" 19/11/15 31/12/49
 1 "" 3 "Sony Xperia Z5 Negro con Reloj Smartwatch 3 Classic Negro" 0 "P037Z5SN2" "1" 19/11/15 31/12/49
@@ -5798,11 +5848,11 @@
 1 "" 3 "Alcatel ONETOUCH POP D5 Blanco" 0 "P045D5SW2" "1" 11/08/14 31/12/49
 1 "" 4 "Alcatel ONETOUCH POP D5 Blanco" 0 "P045D5SW2" "1" 11/08/14 31/12/49
 1 "" 5 "Alcatel ONETOUCH POP D5 White" 0 "P045D5SW2" "1" 11/08/14 31/12/49
-1 "" 1 "Alcatel Onetouch Go Play Blanco- Azul con Onetouch Go Watch Blanco" 0 "P045GPWW2" "1" 19/11/15 31/12/49
+1 "" 1 "Alcatel ONETOUCH Go Play Blanco-Azul con ONETOUCH Go Watch Blanco" 0 "P045GPWW2" "1" 19/11/15 31/12/49
 1 "" 2 "Alcatel Onetouch Go Play Blanco y Azul con Onetouch Go Watch Blanco" 0 "P045GPWW2" "1" 19/11/15 31/12/49
 1 "" 3 "Alcatel Onetouch Go Play Blanco y Azul con Onetouch Go Watch Blanco" 0 "P045GPWW2" "1" 19/11/15 31/12/49
 1 "" 4 "Alcatel Onetouch Go Play Blanco y Azul con Onetouch Go Watch Blanco" 0 "P045GPWW2" "1" 19/11/15 31/12/49
-1 "" 5 "Alcatel Onetouch Go Play White-Blue with Onetouch Go Watch White" 0 "P045GPWW2" "1" 19/11/15 31/12/49
+1 "" 5 "Alcatel ONETOUCH Go Play White-Blue with ONETOUCH Go Watch White" 0 "P045GPWW2" "1" 19/11/15 31/12/49
 1 "" 1 "Alcatel Onetouch Idol 3 (5.5) Gris" 0 "P045ID3S2" "1" 27/05/15 31/12/49
 1 "" 2 "Alcatel Onetouch Idol 3 (5.5) Gris" 0 "P045ID3S2" "1" 27/05/15 31/12/49
 1 "" 3 "Alcatel Onetouch Idol 3 (5.5) Gris" 0 "P045ID3S2" "1" 27/05/15 31/12/49
@@ -5823,16 +5873,26 @@
 1 "" 3 "Alcatel One Touch Idol S Gris" 0 "P045IDSS2" "1" 28/10/13 31/12/49
 1 "" 4 "Alcatel One Touch Idol S Gris" 0 "P045IDSS2" "1" 28/10/13 31/12/49
 1 "" 5 "ALCATEL ONETOUCH Idol S Grey" 0 "P045IDSS2" "1" 28/10/13 31/12/49
-1 "" 1 "Alcatel Onetouch Pixi 3 (4.5) Negro" 0 "P045P34N2" "1" 02/12/15 31/12/49
+1 "" 1 "Alcatel ONETOUCH POP UP Negro" 0 "P045OPUN2" "1" 19/01/16 31/12/49
+1 "" 2 "Alcatel One Touch Pop Up Negro" 0 "P045OPUN2" "1" 19/01/16 31/12/49
+1 "" 3 "Alcatel One Touch Pop Up Negro" 0 "P045OPUN2" "1" 19/01/16 31/12/49
+1 "" 4 "Alcatel One Touch Pop Up Negro" 0 "P045OPUN2" "1" 19/01/16 31/12/49
+1 "" 5 "Alcatel ONETOUCH POP UP Black" 0 "P045OPUN2" "1" 19/01/16 31/12/49
+1 "" 1 "Alcatel ONETOUCH POP UP Blanco" 0 "P045OPUW2" "1" 19/01/16 31/12/49
+1 "" 2 "Alcatel One Touch Pop Up Blanco" 0 "P045OPUW2" "1" 19/01/16 31/12/49
+1 "" 3 "Alcatel One Touch Pop Up Blanco" 0 "P045OPUW2" "1" 19/01/16 31/12/49
+1 "" 4 "Alcatel One Touch Pop Up Blanco" 0 "P045OPUW2" "1" 19/01/16 31/12/49
+1 "" 5 "Alcatel ONETOUCH POP UP White" 0 "P045OPUW2" "1" 19/01/16 31/12/49
+1 "" 1 "Alcatel ONETOUCH PIXI 3 (4.5) Negro" 0 "P045P34N2" "1" 02/12/15 31/12/49
 1 "" 2 "Alcatel Onetouch Pixi 3 (4.5) Negro" 0 "P045P34N2" "1" 02/12/15 31/12/49
 1 "" 3 "Alcatel Onetouch Pixi 3 (4.5) Negro" 0 "P045P34N2" "1" 02/12/15 31/12/49
 1 "" 4 "Alcatel Onetouch Pixi 3 (4.5) Negro" 0 "P045P34N2" "1" 02/12/15 31/12/49
-1 "" 5 "Alcatel Onetouch Pixi 3 (4.5) Black" 0 "P045P34N2" "1" 02/12/15 31/12/49
-1 "" 1 "Alcatel Onetouch Pixi 3 (4.5) Blanco" 0 "P045P34W2" "1" 02/12/15 31/12/49
+1 "" 5 "Alcatel ONETOUCH PIXI 3 (4.5) Black" 0 "P045P34N2" "1" 02/12/15 31/12/49
+1 "" 1 "Alcatel ONETOUCH PIXI 3 (4.5) Blanco" 0 "P045P34W2" "1" 02/12/15 31/12/49
 1 "" 2 "Alcatel Onetouch Pixi 3 (4.5) Blanco" 0 "P045P34W2" "1" 02/12/15 31/12/49
 1 "" 3 "Alcatel Onetouch Pixi 3 (4.5) Blanco" 0 "P045P34W2" "1" 02/12/15 31/12/49
 1 "" 4 "Alcatel Onetouch Pixi 3 (4.5) Blanco" 0 "P045P34W2" "1" 02/12/15 31/12/49
-1 "" 5 "Alcatel Onetouch Pixi 3 (4.5) White" 0 "P045P34W2" "1" 02/12/15 31/12/49
+1 "" 5 "Alcatel ONETOUCH PIXI 3 (4.5) White" 0 "P045P34W2" "1" 02/12/15 31/12/49
 1 "" 1 "Alcatel ONETOUCH POP 3 (5) Dorado" 0 "P045P3SD2" "1" 25/08/15 31/12/49
 1 "" 2 "Alcatel ONETOUCH POP 3 Dorado" 0 "P045P3SD2" "1" 25/08/15 31/12/49
 1 "" 3 "Alcatel ONETOUCH POP 3 Dorado" 0 "P045P3SD2" "1" 25/08/15 31/12/49
@@ -5899,6 +5959,21 @@
 1 "" 3 "ZTE Blade V220 Plata" 0 "P075220S2" "1" 22/04/15 31/12/49
 1 "" 4 "ZTE Blade V220 Plata" 0 "P075220S2" "1" 22/04/15 31/12/49
 1 "" 5 "ZTE Blade V220 Silver" 0 "P075220S2" "1" 22/04/15 31/12/49
+1 "" 1 "ZTE Blade A452 Oro" 0 "P075452D2" "1" 19/01/16 31/12/49
+1 "" 2 "ZTE Blade A452 Oro" 0 "P075452D2" "1" 19/01/16 31/12/49
+1 "" 3 "ZTE Blade A452 Oro" 0 "P075452D2" "1" 19/01/16 31/12/49
+1 "" 4 "ZTE Blade A452 Oro" 0 "P075452D2" "1" 19/01/16 31/12/49
+1 "" 5 "ZTE Blade A452 Gold" 0 "P075452D2" "1" 19/01/16 31/12/49
+1 "" 1 "ZTE Blade A452 Negro" 0 "P075452N2" "1" 19/01/16 31/12/49
+1 "" 2 "ZTE Blade A452 Negro" 0 "P075452N2" "1" 19/01/16 31/12/49
+1 "" 3 "ZTE Blade A452 Negro" 0 "P075452N2" "1" 19/01/16 31/12/49
+1 "" 4 "ZTE Blade A452 Negro" 0 "P075452N2" "1" 19/01/16 31/12/49
+1 "" 5 "ZTE Blade A452 Black" 0 "P075452N2" "1" 19/01/16 31/12/49
+1 "" 1 "ZTE Blade A452 Blanco" 0 "P075452W2" "1" 19/01/16 31/12/49
+1 "" 2 "ZTE Blade A452 Blanco" 0 "P075452W2" "1" 19/01/16 31/12/49
+1 "" 3 "ZTE Blade A452 Blanco" 0 "P075452W2" "1" 19/01/16 31/12/49
+1 "" 4 "ZTE Blade A452 Blanco" 0 "P075452W2" "1" 19/01/16 31/12/49
+1 "" 5 "ZTE Blade A452 White" 0 "P075452W2" "1" 19/01/16 31/12/49
 1 "" 1 "ZTE F950 táctil" 0 "P07595002" "1" 26/11/09 31/12/49
 1 "" 2 "ZTE F950 táctil" 0 "P07595002" "1" 26/11/09 31/12/49
 1 "" 3 "ZTE F950 táctil" 0 "P07595002" "1" 26/11/09 31/12/49
@@ -6304,6 +6379,11 @@
 1 "" 3 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
 1 "" 4 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
 1 "" 5 "BQ Aquaris X5 Black" 0 "P088AX5N2" "1" 19/11/15 31/12/49
+1 "" 1 "BQ Aquaris X5 Oro rosa" 0 "P088AX5R2" "1" 18/01/16 31/12/49
+1 "" 2 "BQ Aquaris X5 Oro rosa" 0 "P088AX5R2" "1" 18/01/16 31/12/49
+1 "" 3 "BQ Aquaris X5 Oro rosa" 0 "P088AX5R2" "1" 18/01/16 31/12/49
+1 "" 4 "BQ Aquaris X5 Oro rosa" 0 "P088AX5R2" "1" 18/01/16 31/12/49
+1 "" 5 "BQ Aquaris X5 Rose Gold" 0 "P088AX5R2" "1" 18/01/16 31/12/49
 1 "" 1 "BQ Aquaris X5 Blanco" 0 "P088AX5W2" "1" 19/11/15 31/12/49
 1 "" 2 "BQ Aquaris X5 Blanco" 0 "P088AX5W2" "1" 19/11/15 31/12/49
 1 "" 3 "BQ Aquaris X5 Blanco" 0 "P088AX5W2" "1" 19/11/15 31/12/49
@@ -6618,7 +6698,7 @@
 1 "" 2 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P0976S1P2" "1" 25/11/15 31/12/49
 1 "" 3 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P0976S1P2" "1" 25/11/15 31/12/49
 1 "" 4 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P0976S1P2" "1" 25/11/15 31/12/49
-1 "" 5 "iPhone 6s Plus 128 GB Rose Gold" 0 "P0976S1P2" "1" 25/11/15 31/12/49
+1 "" 5 "SUMIDERO3" 0 "P0976S1P2" "1" 25/11/15 31/12/49
 1 "" 1 "iPhone 6s 128 GB Oro Rosa" 0 "P0976S1R2" "1" 26/11/15 31/12/49
 1 "" 2 "iPhone 6s 128 GB Oro Rosa" 0 "P0976S1R2" "1" 26/11/15 31/12/49
 1 "" 3 "iPhone 6s 128 GB Oro Rosa" 0 "P0976S1R2" "1" 26/11/15 31/12/49
@@ -6684,6 +6764,11 @@
 1 "" 3 "iPhone 6s Plus 128 GB Gris" 0 "P097SP1G2" "1" 26/11/15 31/12/49
 1 "" 4 "iPhone 6s Plus 128 GB Gris" 0 "P097SP1G2" "1" 26/11/15 31/12/49
 1 "" 5 "iPhone 6s Plus 128 GB Space Grey" 0 "P097SP1G2" "1" 26/11/15 31/12/49
+1 "" 1 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P097SP1R2" "1" 05/01/16 31/12/49
+1 "" 2 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P097SP1R2" "1" 05/01/16 31/12/49
+1 "" 3 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P097SP1R2" "1" 05/01/16 31/12/49
+1 "" 4 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P097SP1R2" "1" 05/01/16 31/12/49
+1 "" 5 "iPhone 6s Plus 128 GB Rose Gold" 0 "P097SP1R2" "1" 05/01/16 31/12/49
 1 "" 1 "iPhone 6s Plus 128 GB Plata" 0 "P097SP1S2" "1" 26/11/15 31/12/49
 1 "" 2 "iPhone 6s Plus 128 GB Plata" 0 "P097SP1S2" "1" 26/11/15 31/12/49
 1 "" 3 "iPhone 6s Plus 128 GB Plata" 0 "P097SP1S2" "1" 26/11/15 31/12/49
