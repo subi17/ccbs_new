@@ -19,6 +19,8 @@ DEF VAR liTotalCount      AS INT  NO-UNDO.
 DEF VAR liTempCount       AS INT NO-UNDO.
 DEF VAR ldaStartDateMonth24 AS DATE NO-UNDO.
 DEF VAR ldaEndDateMonth24   AS DATE NO-UNDO.
+DEF VAR liSendDay         AS INT NO-UNDO.
+DEF VAR ldaTempDate       AS DATE NO-UNDO.
 
 /* each month as planned */
 ASSIGN
@@ -28,7 +30,16 @@ ASSIGN
 /* Month 24 21st day*/
 fQ25LogWriting("START FINAL MESSAGE SENDING", {&Q25_LOGGING_COUNTERS},
                {&Q25_MONTH_24_FINAL_MSG}).
-IF (DAY(TODAY) = 21) AND fGetStartEndDates({&Q25_MONTH_24}, liStartDay, 
+
+liSendDay = 21.  /* First possible sending day if not weekend or national 
+                    holiday. Sending is done at first possible normal weekday 
+                    in each month. (if 21. is saturday, send messages on 23.)*/
+
+ldaTempDate = DATE(MONTH(TODAY),liSendDay,YEAR(TODAY)).
+ldaTempDate = fChkDueDate(ldaTempDate). /* find normal weekday */
+liSendDay = DAY(ldaTempDate). /* Add found day number here */
+                    
+IF (DAY(TODAY) = liSendDay) AND fGetStartEndDates({&Q25_MONTH_24}, liStartDay, 
                                            liEndDay, OUTPUT ldaStartDateMonth24,
                                            OUTPUT ldaEndDateMonth24) THEN DO:
    liTotalCount = fGenerateQ25SMSMessages(ldaStartDateMonth24, 
