@@ -199,7 +199,7 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
                                 1,
                                 OUTPUT ldReqStamp).
       lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT",
-                     STRING(idAmount)).
+                     STRING(ROUND(idAmount,2))).
    END.
    ELSE IF iiPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
    /* Q25 Month 24 20th day extension made */
