@@ -49,3 +49,5 @@
 "1" 89 "Terminal Financing Bank File" "terminal_financing_send" "" yes 10 "" "" 0 no no
 "1" 90 "Fusion invoice email" "fusioninvoice_send" "" yes 10 "" "" 0 no no
 "1" 91 "Terminal Finance CAN TER file" "tf_cancel_send" "" yes 10 "" "" 0 no no
+"1" 92 "Publish Invoices" "publish_invoice" "" yes 0 "" "" 0 no no
+"1" 93 "Publish IFS file" "publish_ifs" "" yes 0 "" "" 0 no no
