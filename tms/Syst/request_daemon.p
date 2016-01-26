@@ -15,7 +15,6 @@ ASSIGN
 {timestamp.i}
 {log.i}
 {cparam2.i}
-{tmsconst.i}
 
 /******** Main start *********/
 
@@ -60,15 +59,9 @@ FOR EACH RequestType WHERE
            MsRequest.Brand     EQ gcBrand               AND
            MsRequest.ReqType   EQ RequestType.ReqType   AND 
            MsRequest.ReqStatus EQ RequestStatus.ReqStat NO-ERROR.                 
-      IF AVAIL MsRequest THEN DO:
-
-         IF MsRequest.ReqType EQ ({&REQTYPE_PUBLISH_INVOICE}) THEN 
-            RUN publish_invoice.p (MsRequest.MsRequest).
-         ELSE IF MsRequest.ReqType EQ ({&REQTYPE_PUBLISH_IFS}) THEN 
-            RUN publish_ifs.p (MsRequest.MsRequest).
+      IF AVAIL MsRequest THEN 
+         RUN VALUE(RequestType.Program + ".p")(MsRequest.MsRequest).
          
-      END.
-
       /* close status level log */  
       IF RequestStatus.LogOn THEN DO:
          fCloseLog().
