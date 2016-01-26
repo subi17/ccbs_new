@@ -256,13 +256,17 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
 END.
 
 /* Function to calculate dynamically pause value between message sending. 
-   To ensure all messages will be sent before 22:00 */
+   To ensure all messages will be sent before 22:00, for safety reason
+   calculation is made to 21:45 so there will be time to send last messages
+   for sure before 22:00 */
 FUNCTION fCalculateMaxPauseValue RETURN INTEGER
    (INPUT iiToBeSend AS INT).
    DEF VAR ldEndTime AS DEC NO-UNDO.
    DEF VAR ldTimeLeft AS DEC NO-UNDO.
-   ldEndTime = fHMS2TS(TODAY, "21:30:00").
+   ldEndTime = fHMS2TS(TODAY, "21:45:00").
    ldTimeLeft = (ldEndTime - fMakeTS()) * 100000.
+   IF iiToBeSend = 0 THEN RETURN 0. /* no messages left, no pause needed and
+                                       do not divide by zero */
    RETURN INT(ldTimeLeft / iiToBeSend). 
 END.
 
@@ -487,7 +491,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_SENT_MSGS}, liphase).
             PAUSE liPauseValue.
             /* Decrease pause time if needed, check after each 50 sent SMS */
-            IF (oiTotalCountLeft MODULO 50 = 0) THEN DO:
+            IF (oiTotalCountLeft MODULO 50 = 0) AND 
+                oiTotalCountLeft > 0 THEN DO:
                liCalcPauseValue = fCalculateMaxPauseValue(oiTotalCountLeft).
                IF (liCalcPauseValue < liPauseValue) THEN
                   liPauseValue = liCalcPauseValue. 
