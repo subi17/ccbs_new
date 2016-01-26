@@ -52,7 +52,7 @@ liSendDay = 21.  /* First possible sending day if not weekend or national
                     holiday. Sending is done at first possible normal weekday 
                     in each month. (if 21. is saturday, send messages on 23.)*/
 
-ldaTempDate = DATE(MONTH(TODAY),liSendDay,YEAR(TODAY)).
+ldaTempDate = DATE(MONTH(ldaExecuteDate),liSendDay,YEAR(ldaExecuteDate)).
 ldaTempDate = fChkDueDate(ldaTempDate). /* find normal weekday */
 liSendDay = DAY(ldaTempDate). /* Add found day number here */
                     
