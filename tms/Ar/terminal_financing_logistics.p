@@ -70,7 +70,17 @@ FOR EACH Order NO-LOCK WHERE
 
       IF orderdelivery.LoStatusId = 12 AND
          orderdelivery.LoTimeStamp < DATETIME(TODAY - 20,0) THEN DO:
+
          RUN closeorder.p(Order.OrderId, TRUE).
+         /* YOT-4103 */
+         IF RETURN-VALUE EQ "" THEN DO: 
+            FIND SIM EXCLUSIVE-LOCK WHERE
+                 SIM.ICC = Order.ICC AND
+                 SIM.SimStat = 21 NO-ERROR.
+            IF AVAIL SIM THEN SIM.SimStat = 7.
+            RELEASE Sim.
+         END.
+
          fLogToFile("CLOSED (no final status for 12 status after 20 days):"
                      + STRING(RETURN-VALUE)).
       END.
