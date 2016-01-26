@@ -174,6 +174,7 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    DEF VAR ldReqStamp        AS DEC  NO-UNDO.
    DEF VAR lcEncryptedMSISDN AS CHAR NO-UNDO.
    DEF VAR lcPassPhrase      AS CHAR NO-UNDO.
+   DEF VAR lcAmount          AS CHAR NO-UNDO.
    IF iiPhase = {&Q25_MONTH_22} OR
       iiPhase = {&Q25_MONTH_23} THEN DO:
       /* Q25 reminder month 22 or 23 */
@@ -194,21 +195,25 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    END.
    ELSE IF iiPhase = {&Q25_MONTH_24_FINAL_MSG} THEN DO:
    /* Q25 month 24 after 20th day no decision */
+      lcAmount = STRING(idAmount,"->>>>>>9.99").
+      lcAmount = LEFT-TRIM(lcAmount).
+      lcAmount = REPLACE(lcAmount,".",",").
       lcSMSMessage = fGetSMSTxt("Q25FinalFeeMsgNoDecision",
                                 TODAY,
                                 1,
                                 OUTPUT ldReqStamp).
-      lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT",
-                     STRING(idAmount)).
+      lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT", lcAmount).
    END.
    ELSE IF iiPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
-   /* Q25 Month 24 20th day extension made */
+   /* Q25 Month 24 20th day extension made */  
+      lcAmount = STRING(ROUND(idAmount / 12,2),"->>>>>>9.99").
+      lcAmount = LEFT-TRIM(lcAmount).
+      lcAmount = REPLACE(lcAmount,".",",").                  
       lcSMSMessage = fGetSMSTxt("Q25FinalFeeMsgChosenExt",
                                 TODAY,
                                 1,
                                 OUTPUT ldReqStamp).
-      lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT",
-                             STRING(ROUND(idAmount / 12,2))).
+      lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT", lcAmount).
    END.
    IF iiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO:
    /* Month 22-24 */
@@ -296,10 +301,10 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
 
    liPeriod = YEAR(idaStartDate) * 100 + MONTH(idaStartDate).
 
-   /* Special case, if order is one at 1st day of month Q1 period ends
-      last day of previous month Q24. Need to include it. */
-   IF (iiPhase = {&Q25_MONTH_24} OR iiPhase = {&Q25_MONTH_24_FINAL_MSG}) AND 
-       DAY(idaStartDate) = 1 THEN
+   /* Special case, if order is done at 1st day of month Q0, period ends
+      last day of previous month Q24. Need to include it. 
+      for example contract ends 29.2.2016, singlefee is in 201603 */
+   IF DAY(idaStartDate) = 1 THEN
       idaStartDate = idaStartDate - 1.
    FOR EACH SingleFee USE-INDEX BillCode WHERE
             SingleFee.Brand       = gcBrand AND
