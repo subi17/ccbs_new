@@ -174,6 +174,7 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    DEF VAR ldReqStamp        AS DEC  NO-UNDO.
    DEF VAR lcEncryptedMSISDN AS CHAR NO-UNDO.
    DEF VAR lcPassPhrase      AS CHAR NO-UNDO.
+   DEF VAR lcAmount          AS CHAR NO-UNDO.
    IF iiPhase = {&Q25_MONTH_22} OR
       iiPhase = {&Q25_MONTH_23} THEN DO:
       /* Q25 reminder month 22 or 23 */
@@ -194,21 +195,25 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    END.
    ELSE IF iiPhase = {&Q25_MONTH_24_FINAL_MSG} THEN DO:
    /* Q25 month 24 after 20th day no decision */
+      lcAmount = STRING(idAmount,"->>>>>>9.99").
+      lcAmount = LEFT-TRIM(lcAmount).
+      lcAmount = REPLACE(lcAmount,".",",").
       lcSMSMessage = fGetSMSTxt("Q25FinalFeeMsgNoDecision",
                                 TODAY,
                                 1,
                                 OUTPUT ldReqStamp).
-      lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT",
-                     STRING(ROUND(idAmount,2))).
+      lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT", lcAmount).
    END.
    ELSE IF iiPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
-   /* Q25 Month 24 20th day extension made */
+   /* Q25 Month 24 20th day extension made */  
+      lcAmount = STRING(ROUND(idAmount / 12,2),"->>>>>>9.99").
+      lcAmount = LEFT-TRIM(lcAmount).
+      lcAmount = REPLACE(lcAmount,".",",").                  
       lcSMSMessage = fGetSMSTxt("Q25FinalFeeMsgChosenExt",
                                 TODAY,
                                 1,
                                 OUTPUT ldReqStamp).
-      lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT",
-                             STRING(ROUND(idAmount / 12,2))).
+      lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT", lcAmount).
    END.
    IF iiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO:
    /* Month 22-24 */
