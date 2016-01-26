@@ -50,15 +50,6 @@ ADD FIELD "DeviceScreen" OF "TermReturn" AS logical
   COLUMN-LABEL "DeviceScreen"
   ORDER 50
 
-ADD FIELD "ReturnChannel" OF "TermReturn" AS character
-  FORMAT "x(16)"
-  INITIAL ""
-  LABEL "Return Channel"
-  POSITION 7
-  MAX-WIDTH 32
-  COLUMN-LABEL "ReturnChannel"
-  ORDER 60
-
 ADD FIELD "ReturnTS" OF "TermReturn" AS decimal
   FORMAT "99999999.99999"
   INITIAL "0"
