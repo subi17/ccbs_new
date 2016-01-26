@@ -50,8 +50,10 @@ DEF VAR liLoop AS INTEGER NO-UNDO.
 DEF VAR lcTime AS CHAR NO-UNDO. 
 DEF VAR ldaNewRFPeriod AS DATE NO-UNDO. 
 DEF VAR ldaNewFFEndPeriod AS DATE NO-UNDO. 
+DEF VAR ldaFromDate AS DATE NO-UNDO. 
 
 def buffer bffitem for ffitem.
+DEF BUFFER bFirstFFItem FOR FFItem.
 
 RUN pInitializeFuncRunProcess(OUTPUT liFRProcessID,
                               OUTPUT liFRExecID,    
@@ -100,7 +102,7 @@ OUTPUT STREAM sout to VALUE(lcLogFile).
 OUTPUT STREAM sout2 to VALUE(lcLogFile2).
 
 put stream sout unformatted
-   "ORDER_ID|SUBSCR.ID|CUSTNUM|FF_ID|FINANCED_RESULT|NOTE:[FFItemNum;BillPeriod;concerns[1];concerns[2];NewBillPeriod]" skip.
+   "ORDER_ID|MSSEQ|CUSTNUM|FF_ID|FINANCED_RESULT|<MOVE/UPDATE/ERROR>:[DETAILS]" skip.
 
 put stream sout2 unformatted
   "MSISDN;SUBSCRIPTION_ID;ORDER_ID;PAYTERM_TYPE_MOVED;DATE" SKIP.
@@ -115,8 +117,8 @@ FUNCTION fLogLine RETURNS LOGICAL
       Order.OrderID "|"
       Order.MsSeq "|"
       Order.Custnum "|"
-      (IF AVAIL FixedFee THEN FixedFee.FFNum ELSE 0) "|"
-      (IF AVAIL FixedFee THEN FixedFee.FinancedResult ELSE "") "|"
+      FixedFee.FFNum "|"
+      FixedFee.FinancedResult "|"
       icNote SKIP.
 END.
 
@@ -210,11 +212,15 @@ FOR EACH FixedFee NO-LOCK WHERE
 
    /* move monthly fee to the end if not yet sent to bank */
    FIND FIRST FFItem NO-LOCK WHERE
-              FFItem.FFNum = fixedfee.ffnum AND
-              ffitem.billperiod = liBillPeriod NO-ERROR.
+              FFItem.FFNum = fixedfee.ffnum USE-INDEX FFNum NO-ERROR.
 
    IF NOT AVAIL FFItem THEN DO:
       fLogLine("ERROR:FFItem not found"). 
+      NEXT ORDER_LOOP.
+   END.
+   
+   IF ffitem.billperiod NE liBillPeriod THEN DO:
+      fLogLine(SUBST("ERROR:Installment first MF period &1 does not match with billing period &2", FFItem.billperiod, liBillPeriod)). 
       NEXT ORDER_LOOP.
    END.
 
@@ -239,33 +245,46 @@ FOR EACH FixedFee NO-LOCK WHERE
               DCCLI.MsSeq   = INT(FixedFee.KeyValue) AND
               DCCLI.DCEvent = FixedFee.CalcObj AND
               DCCLI.percontractId = int(FixedFee.SourceKey) NO-ERROR.
+   IF NOT AVAIL DCCLI THEN DO:
+      fLogLine("ERROR:DCCLI not found"). 
+      NEXT ORDER_LOOP.
+   END.
 
    FIND LAST bffitem NO-LOCK WHERE
              bffitem.ffnum = fixedfee.ffnum NO-ERROR.
-
    
    ASSIGN
-      ldaNewBillPeriod = fPer2Date(bffitem.billperiod,1).
       liMoved = liMoved + 1.
    
    put stream sout unformatted 
       Order.OrderID "|"
+      Order.MsSeq "|"
+      Order.Custnum "|"
       FixedFee.FFNUM "|"
       FixedFee.FinancedResult "|MOVE:"
       FFItem.FFItemNum ";"
+      DCCLI.PerContractId ";"
+      "|BEFORE_VALUES;"
       FFItem.BillPeriod ";"
       ffitem.concerns[1] ";"
       ffitem.concerns[2] ";"
       FixedFee.EndPeriod ";"
-      (IF AVAIL DCCLI THEN DCCLI.ValidTo ELSE ?) ";"
+      FixedFee.BegDate ";"
+      FixedFee.BegPeriod ";"
+      DCCLI.ValidFrom ";"
+      DCCLI.ValidTo ";"
       (IF AVAIL SingleFee THEN SingleFee.billperiod ELSE ?) ";"
-      (IF AVAIL SingleFee THEN SingleFee.concerns[1] ELSE ?) skip.
+      (IF AVAIL SingleFee THEN SingleFee.concerns[1] ELSE ?) ";".
 
    IF lcRunMode EQ "Production" THEN DO:
+   
+      FIND FIRST bFirstFFItem OF FixedFee NO-LOCK USE-INDEX FFNum.
+
       FIND CURRENT FFItem EXCLUSIVE-LOCK.
       FIND bFixedFee EXCLUSIVE-LOCK WHERE
            ROWID(bFixedFee) = ROWID(FixedFee).
       ASSIGN
+      ldaFromDate = fPer2Date(bFirstFFItem.BillPeriod,1)
       ldaNewBillPeriod = fPer2Date(bffitem.billperiod,1)
       ldaNewFFEndPeriod = fPer2Date(bFixedFee.EndPeriod,1)
       bFixedFee.EndPeriod = YEAR(ldaNewFFEndPeriod) * 100 +
@@ -279,7 +298,10 @@ FOR EACH FixedFee NO-LOCK WHERE
       ffitem.concerns[2] = YEAR(ldaNewBillPeriod) * 10000 + 
                            MONTH(ldaNewBillPeriod) * 100 + 
                            DAY(ldaNewBillPeriod)
-      DCCLI.ValidTo = add-interval(DCCLI.ValidTo,1,"months") WHEN AVAIL DCCLI
+      bFixedFee.BegDate = ldaFromDate
+      bFixedFee.BegPeriod = YEAR(ldaFromDate) * 100 + MONTH(ldaFromDate)
+      DCCLI.ValidFrom = ldaFromDate
+      DCCLI.ValidTo = ldaNewBillPeriod
       ldaNewRFPeriod = fPer2Date(SingleFee.billperiod,1) WHEN AVAIL SingleFee
       SingleFee.billperiod  = YEAR(ldaNewRFPeriod) * 100 + 
                            MONTH(ldaNewRFPeriod) WHEN AVAIL SingleFee
@@ -287,6 +309,18 @@ FOR EACH FixedFee NO-LOCK WHERE
                            MONTH(ldaNewRFPeriod) * 100 + 
                            DAY(ldaNewRFPeriod) WHEN AVAIL SingleFee.
    END.
+      
+   put stream sout unformatted "|AFTER_VALUES:"
+      FFItem.BillPeriod ";"
+      ffitem.concerns[1] ";"
+      ffitem.concerns[2] ";"
+      FixedFee.EndPeriod ";"
+      FixedFee.BegDate ";"
+      FixedFee.BegPeriod ";"
+      DCCLI.ValidFrom ";"
+      DCCLI.ValidTo ";"
+      (IF AVAIL SingleFee THEN SingleFee.billperiod ELSE ?) ";"
+      (IF AVAIL SingleFee THEN SingleFee.concerns[1] ELSE ?) skip.
   
    PUT STREAM sout2 UNFORMATTED
       Order.CLI ";"
