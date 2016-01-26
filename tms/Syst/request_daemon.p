@@ -17,6 +17,7 @@ ASSIGN
 {cparam2.i}
 
 DEF VAR llHandled AS LOG NO-UNDO INIT FALSE. 
+DEF VAR lcProgram AS CHAR NO-UNDO. 
 
 /******** Main start *********/
 FOR EACH RequestType NO-LOCK WHERE 
@@ -63,7 +64,18 @@ FOR EACH RequestType NO-LOCK WHERE
                MsRequest.ActStamp <= fMakeTS()
             BY MsRequest.ActStamp 
             BY MsRequest.MsRequest:
-         RUN VALUE(RequestType.Program + ".p")(MsRequest.MsRequest).
+
+         IF RequestStatus.Program > "" THEN lcProgram = RequestStatus.Program.
+         ELSE lcProgram = RequestType.Program.
+   
+         IF SEARCH(lcProgram + ".r") = ? THEN DO:
+            IF SEARCH(lcProgram + ".p") = ? THEN DO:
+               fLogError(SUBST("ERROR:Module &1 not found", lcProgram)).
+               LEAVE.
+            END.
+         END.
+
+         RUN VALUE(lcProgram + ".p")(MsRequest.MsRequest).
          IF RETURN-VALUE BEGINS "ERROR" THEN NEXT.
          llHandled = TRUE.
          LEAVE.
