@@ -9,6 +9,7 @@ newton__q25_add.p
 * @q25_struct     username;string;mandatory;person who requests the change
                   msseq;int;mandatory;subscription id
                   per_contract_id;int;mandatory;installment contract id (related to q25)
+                  contract_id;string;optional;Contract ID
 
 * @memo_struct    title;string;mandatory
                   content;string;mandatory
@@ -16,14 +17,6 @@ newton__q25_add.p
 * @output         boolean;true
 */
 
-/*
-   19.08.2015 hugo.lujan YPR-2516 [Q25] - TMS - TMSRPC changes related
-   to Vista/VFR
-    AC1: Create new TMSRPC to perform following actions:
-    Create - Create Quota 25 extension request in TMS
-    AC2: Create a memo in TMS
-    AC3: Send an SMS to customer if he selects Quota 25 extension
-*/
 
 {xmlrpc/xmlrpc_access.i}
 {commpaa.i}
@@ -60,6 +53,8 @@ DEF VAR ldContractActivTS AS DECIMAL NO-UNDO.
 DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
 DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
 
+DEF VAR lcContractId AS CHAR NO-UNDO.
+
 /* common validation */
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 top_struct = get_struct(param_toplevel_id, "0").
@@ -76,7 +71,7 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcQ25Struct = validate_request(pcQ25Struct,"username!,msseq!,per_contract_id!").
+lcQ25Struct = validate_request(pcQ25Struct,"username!,msseq!,per_contract_id!,contract_id").
 IF lcQ25Struct EQ ? THEN RETURN.
 
 ASSIGN
@@ -86,7 +81,10 @@ ASSIGN
       WHEN LOOKUP("msseq", lcQ25Struct) > 0
     /* Quota 25 installment contract id */
    liper_contract_id = get_int(pcQ25Struct, "per_contract_id")      
-      WHEN LOOKUP("per_contract_id", lcQ25Struct) > 0.
+      WHEN LOOKUP("per_contract_id", lcQ25Struct) > 0
+   /*Contract ID*/   
+   lcContractId = get_string(pcQ25Struct, "contract_id")      
+      WHEN LOOKUP("contract_id", lcQ25Struct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
       
@@ -200,6 +198,21 @@ liCreated = fPCActionRequest(
 IF liCreated = 0 THEN
    RETURN appl_err(SUBST("Q25 extension request failed: &1",
                          lcResult)).
+/*YPR-3256*/
+
+FIND FIRST MSRequest WHERE
+           MSRequest.MSrequest EQ liCreated EXCLUSIVE-LOCK NO-ERROR.
+IF AVAIL MsRequest THEN DO:
+   IF lcContractId EQ "" THEN 
+      Msrequest.UserCode = "VISTA_" + MsRequest.Usercode.
+   ELSE DO:   
+      Msrequest.UserCode = "POS_" + MsRequest.Usercode.
+      MsRequest.ReqCparam4 = lcContractId.
+   END.
+END.
+RELEASE MsRequest.
+
+/*YPR-3256 ends*/
 
 CASE SingleFee.BillCode:
    WHEN "RVTERM1EF" THEN
