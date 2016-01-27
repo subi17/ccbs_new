@@ -157,6 +157,8 @@ DO WHILE TRUE
             RequestType.Queue = RequestQueue.Queue AND
             RequestType.InUse:
 
+      IF RequestType.Mode EQ "BATCH" THEN NEXT.
+
       /* current time for getting scheduled requests */
       IF TODAY > ldaSystemDay THEN ldaSystemDay = TODAY.
       ldCurrent = fMake2DT(ldaSystemDay,TIME).
