@@ -936,7 +936,8 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
     idEndTS AS DECIMAL):
    DEF VAR lcACCCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcSTCCaseTypeID    AS CHAR NO-UNDO.
-   DEF VAR lcIMEICaseTypeID    AS CHAR NO-UNDO.
+   DEF VAR lcIMEICaseTypeID    AS CHAR NO-UNDO. 
+   DEF VAR lcICCCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcTariff AS CHAR NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCaseTypeId AS CHAR NO-UNDO.
@@ -950,6 +951,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
    DEF VAR ldePermanencyAmount AS DECIMAL.
    DEF VAR liPermancyLength AS INT.
    ASSIGN
+      lcICCCaseTypeID   = '4d'
       lcACCCaseTypeID   = '4c'
       lcSTCCaseTypeID   = '4b'
       lcIMEICaseTypeID  = '4a'.
@@ -964,11 +966,30 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
              OR MsRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} /*10*/
              OR MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}  /*0*/
              OR MsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} /*80*/
+             OR MsRequest.ReqType EQ {&REQTYPE_ICC_CHANGE} /*15*/
             ) AND
             MsRequest.ReqCparam6 NE "" AND 
-            MsRequest.UpdateStamp <= MsRequest.DoneStamp :
-
+            MsRequest.UpdateStamp <= MsRequest.DoneStamp:
       CASE MsRequest.ReqType:
+         WHEN {&REQTYPE_ICC_CHANGE} THEN DO:
+            lcCaseTypeId = lcICCCaseTypeId.
+            lcCaseFileRow =
+            lcCaseTypeID                                    + lcDelim +
+            /*Contract_ID*/
+            STRING(MsRequest.ReqCparam6)                    + lcDelim +
+            /*SFID*/
+            REPLACE(Msrequest.UserCode, "VISTA_", "")       + lcDelim +
+            /*MSISDN*/
+            STRING(MsRequest.CLI)                           + lcDelim +
+            /*STC_Request_date*/
+            fPrintDate(MsRequest.CreStamp)                  + lcDelim +
+            /*request reason*/            
+            STRING(MsRequest.ReqCparam4)                    + lcDelim +
+            /*Previous_ICC*/
+            STRING(MsRequest.ReqCparam3)                    + lcDelim +
+            /*New_ICC*/
+            STRING(MsRequest.ReqCparam2).  
+         END.
          WHEN {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}  THEN DO:
             lcCaseTypeId = lcACCCaseTypeId.
             /*fenerate tariff:*/
@@ -990,7 +1011,6 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*.Current Tariff*/
             lcTariff.
          END.
-
          WHEN {&REQTYPE_BUNDLE_CHANGE} THEN DO:
             lcCaseTypeId = lcSTCCaseTypeId.
 
