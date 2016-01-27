@@ -1110,7 +1110,10 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
     INPUT  icCreator     AS CHAR,
     INPUT  idActStamp    AS DEC,    /* when request should be handled */
     INPUT  icReqParam    AS CHAR,
-    INPUT  icReqParam2   AS CHAR,
+    INPUT  icReqParam2   AS CHAR,  /*New SIM or ISDN*/
+    INPUT  icReqParam3   AS CHAR,  /*DMS usage, old SIM*/
+    INPUT  icReqParam4   AS CHAR,  /*DMS usage, reason*/
+    INPUT  icReqParam6   AS CHAR,  /*DMS usage, contract_id*/
     INPUT  ilCreateFees  AS LOG,
     INPUT  ideCharge     AS DEC,
     INPUT  icReqSource   AS CHAR,
@@ -1122,16 +1125,16 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
    CASE icReqParam:
 
       WHEN "CREATE" THEN DO:
-         liReqType = 13.
+         liReqType = {&REQTYPE_SUBSCRIPTION_CREATE}. /*13*/
          IF (iiMSSeq  = 0 OR
              NOT CAN-FIND(Order WHERE
                           Order.MSSeq = iiMSSeq)) THEN
             ocResult = "Invalid Order subscription".
       END.
 
-      WHEN "CHANGEICC" THEN liReqType = 15.
+      WHEN "CHANGEICC" THEN liReqType = {&REQTYPE_ICC_CHANGE}. /*15*/
 
-      WHEN "CHANGEMSISDN" THEN liReqType = 19.
+      WHEN "CHANGEMSISDN" THEN liReqType = {&REQTYPE_MSISDN_CHANGE}. /*19*/
 
    END.
 
@@ -1158,6 +1161,9 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
       bCreaReq.CustNum    = iiCustNum
       bCreaReq.ReqCParam1 = icReqParam
       bCreaReq.ReqCParam2 = icReqParam2
+      bCreaReq.ReqCParam3 = icReqParam3
+      bCreaReq.ReqCParam4 = icReqParam4
+      bCreaReq.ReqCParam6 = icReqParam6
       bCreaReq.ReqIParam1 = iiTrafficType
       bCreaReq.ReqDParam2 = ideCharge
       bCreaReq.ReqSource  = icReqSource
