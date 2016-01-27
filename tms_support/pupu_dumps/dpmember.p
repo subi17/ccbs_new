@@ -58,7 +58,8 @@ END. /* FUNCTION fNotNull RETURNS CHAR (INPUT): */
 OUTPUT STREAM slog TO VALUE(lcLogFile).
 
 FOR EACH DPMember WHERE
-         DPMember.HostTable = "MobSub" NO-LOCK:
+         DPMember.HostTable = "MobSub" AND
+         DPMember.ValidTo >= ADD-INTERVAL(TODAY, -6, "MONTHS") NO-LOCK:
 
     FIND FIRST MobSub WHERE
                MobSub.MsSeq = INTEGER(DPMember.KeyValue) NO-LOCK NO-ERROR.
