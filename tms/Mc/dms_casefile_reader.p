@@ -253,7 +253,6 @@ PROCEDURE pUpdateDMS:
                                   lcMsg).
 
    fLogMsg("Msg : " + lcMsg + " #Status: " + lcErr).
-
    IF lcUpdateDMS <> "OK" THEN RETURN "ERROR:" + lcUpdateDMS + ":UPDATE".
    ELSE IF (lcCaseTypeID = {&DMS_CASE_TYPE_ID_ORDER_RESTUDY} OR
             lcCaseTypeID = {&DMS_CASE_TYPE_ID_COMPANY}) THEN DO:
@@ -265,7 +264,11 @@ PROCEDURE pUpdateDMS:
          END.
          WHEN "J" THEN RUN closeorder.p(liOrderId, TRUE). /*status is checked in closeorder.p */
          WHEN "F" THEN DO:
-            IF Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} THEN
+            IF Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} /*44*/ OR
+               Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} /*20*/ OR
+               Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} /*21*/ OR
+               Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} /*33*/
+            THEN
                RUN orderbyfraud.p(liOrderId, TRUE,
                                            {&ORDER_STATUS_CLOSED_BY_FRAUD}).
             ELSE fLogLine(lcStatusCode + " Incorrect data from DMS: " +
@@ -274,7 +277,11 @@ PROCEDURE pUpdateDMS:
          END.
          WHEN "N" OR
          WHEN "G" THEN DO:
-            IF Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} THEN 
+            IF Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} /*44*/ OR
+               Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} /*20*/ OR
+               Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} /*21*/ OR
+               Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} /*33*/
+            THEN
                RUN orderbyfraud.p(liOrderId, TRUE,
                                            {&ORDER_STATUS_AUTO_CLOSED}).
             ELSE fLogLine(lcStatusCode + " Incorrect data from DMS: " +
@@ -287,5 +294,8 @@ PROCEDURE pUpdateDMS:
    IF RETURN-VALUE > "" THEN RETURN "ERROR:" + RETURN-VALUE.
    
    RETURN "OK".
+
+
+
 
 END PROCEDURE.
