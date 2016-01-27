@@ -47,7 +47,7 @@ ASSIGN
    lcInitStatus    = {&DMS_INIT_STATUS_SENT}
    lcDMSStatusDesc = {&DMS_INIT_STATUS_COMMENT}
    lcDMSDOCStatus  = {&DMS_INIT_STATUS_SENT}
-   lcDelim         = "|".
+   lcDelim         = {&DMS_FILE_SEP}.
 
 /*Functions:*/
 
@@ -600,7 +600,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
                             Order.StatusCode,
                             0,
                             lcDocListEntries /*DocList*/,
-                            ",").
+                            {&DMS_DOCLIST_SEP}).
    RETURN "".                         
 END.   
 
@@ -743,12 +743,12 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
       /*Document type, Type desc,DocStatusCode,RevisionComment*/
       lcDocListEntries = lcDocListEntries +
-                         ENTRY(liCount,lcRequiredDocs) + "," +
-                         "," + /*This field is filled only by DMS responses*/
-                         lcDMSDOCStatus + "," +
+                         ENTRY(liCount,lcRequiredDocs) + {&DMS_DOCLIST_SEP} +
+                         {&DMS_DOCLIST_SEP} + /*filled only by DMS responses*/
+                         lcDMSDOCStatus + {&DMS_DOCLIST_SEP} +
                          "".
-      IF liCount NE NUM-ENTRIES(lcRequiredDocs)
-         THEN lcDocListEntries = lcDocListEntries + ",".
+      IF liCount NE NUM-ENTRIES(lcRequiredDocs, {&DMS_DOCLIST_SEP})
+         THEN lcDocListEntries = lcDocListEntries + {&DMS_DOCLIST_SEP}.
    END.
 
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
@@ -766,13 +766,12 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
                             Order.StatusCode,
                             0,
                             lcDocListEntries /*DocList*/,
-                            ",").
+                            {&DMS_DOCLIST_SEP}).
 
    lcErr = fSendChangeInformation("", 
                                   Order.OrderId, 
                                   "", 
-                                  lcDocListEntries,
-                                  ",",
+                                  {&DMS_DOCLIST_SEP},
                                   "create_cf",
                                   lcMsg).
    fLogMsg("Msg,2 : " + lcMsg + " #Status: " + lcErr).
@@ -894,12 +893,12 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
       /*Document type, Type desc,DocStatusCode,RevisionComment*/
       lcDocListEntries = lcDocListEntries +
-                         ENTRY(liCount,lcRequiredDocs) + "," +
-                         "," + /*This field is filled only by DMS responses*/
-                         lcDMSDOCStatus + "," +
+                         ENTRY(liCount,lcRequiredDocs) + {&DMS_DOCLIST_SEP} +
+                         {&DMS_DOCLIST_SEP} + /* filled only by DMS responses*/
+                         lcDMSDOCStatus + {&DMS_DOCLIST_SEP} +
                          "".
       IF liCount NE NUM-ENTRIES(lcRequiredDocs)
-         THEN lcDocListEntries = lcDocListEntries + ",".
+         THEN lcDocListEntries = lcDocListEntries + {&DMS_DOCLIST_SEP}.
    END.
 
 
@@ -917,12 +916,11 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                             Order.StatusCode,
                             0,
                             lcDocListEntries /*DocList*/,
-                            ",").
+                            {&DMS_DOCLIST_SEP}).
    lcErr = fSendChangeInformation("", 
                                   Order.OrderId, 
                                   "", 
-                                  lcDocListEntries,
-                                  ",",
+                                  {&DMS_DOCLIST_SEP},
                                    "create_cf",
                                    lcMsg).
    fLogMsg("Msg,3 : " + lcMsg + " #Status: " + lcErr).
@@ -938,7 +936,8 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
     idEndTS AS DECIMAL):
    DEF VAR lcACCCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcSTCCaseTypeID    AS CHAR NO-UNDO.
-   DEF VAR lcIMEICaseTypeID    AS CHAR NO-UNDO.
+   DEF VAR lcIMEICaseTypeID    AS CHAR NO-UNDO. 
+   DEF VAR lcICCCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcTariff AS CHAR NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCaseTypeId AS CHAR NO-UNDO.
@@ -952,6 +951,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
    DEF VAR ldePermanencyAmount AS DECIMAL.
    DEF VAR liPermancyLength AS INT.
    ASSIGN
+      lcICCCaseTypeID   = '4d'
       lcACCCaseTypeID   = '4c'
       lcSTCCaseTypeID   = '4b'
       lcIMEICaseTypeID  = '4a'.
@@ -966,11 +966,30 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
              OR MsRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} /*10*/
              OR MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}  /*0*/
              OR MsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} /*80*/
+             OR MsRequest.ReqType EQ {&REQTYPE_ICC_CHANGE} /*15*/
             ) AND
             MsRequest.ReqCparam6 NE "" AND 
-            MsRequest.UpdateStamp <= MsRequest.DoneStamp :
-
+            MsRequest.UpdateStamp <= MsRequest.DoneStamp:
       CASE MsRequest.ReqType:
+         WHEN {&REQTYPE_ICC_CHANGE} THEN DO:
+            lcCaseTypeId = lcICCCaseTypeId.
+            lcCaseFileRow =
+            lcCaseTypeID                                    + lcDelim +
+            /*Contract_ID*/
+            STRING(MsRequest.ReqCparam6)                    + lcDelim +
+            /*SFID*/
+            REPLACE(Msrequest.UserCode, "VISTA_", "")       + lcDelim +
+            /*MSISDN*/
+            STRING(MsRequest.CLI)                           + lcDelim +
+            /*STC_Request_date*/
+            fPrintDate(MsRequest.CreStamp)                  + lcDelim +
+            /*request reason*/            
+            STRING(MsRequest.ReqCparam4)                    + lcDelim +
+            /*Previous_ICC*/
+            STRING(MsRequest.ReqCparam3)                    + lcDelim +
+            /*New_ICC*/
+            STRING(MsRequest.ReqCparam2).  
+         END.
          WHEN {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}  THEN DO:
             lcCaseTypeId = lcACCCaseTypeId.
             /*fenerate tariff:*/
@@ -992,7 +1011,6 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*.Current Tariff*/
             lcTariff.
          END.
-
          WHEN {&REQTYPE_BUNDLE_CHANGE} THEN DO:
             lcCaseTypeId = lcSTCCaseTypeId.
 
@@ -1126,7 +1144,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                                "",
                                0,
                                lcDocListEntries /*DocList*/,
-                               ",").      
+                               {&DMS_DOCLIST_SEP}).      
    END.
    RETURN "".
 
@@ -1188,7 +1206,7 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
                             Order.StatusCode,
                             0,
                             lcDocListEntries /*DocList*/,
-                            ",").
+                            {&DMS_DOCLIST_SEP}).
    RETURN "".
 
 END.
@@ -1255,7 +1273,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
                             Order.StatusCode,
                             0,
                             lcDocListEntries /*DocList*/,
-                            ",").
+                            {&DMS_DOCLIST_SEP}).
    RETURN "".
 
 END.

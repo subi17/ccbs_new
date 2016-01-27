@@ -655,6 +655,9 @@
                                   INPUT  ldeSwitchTS,
                                   INPUT  "CREATE",
                                   INPUT  STRING(Order.OrderId),
+                                  INPUT  "", /*for old SIM*/
+                                  INPUT  "", /*for Reason info*/
+                                  INPUT  "", /*for ContractID*/
                                   INPUT  FALSE,
                                   INPUT  0,
                                   INPUT  {&REQUEST_SOURCE_NEWTON},

@@ -173,8 +173,7 @@ END.
 
 FUNCTION fNeededDocs RETURNS CHAR
    (BUFFER Order FOR Order):
-   DEF VAR lcPAram AS CHAR NO-UNDO.
-   DEF VAR lcDocListEntries AS CHAR NO-UNDO.
+   DEF VAR lcParam AS CHAR NO-UNDO.
 
    /*CASE More DOC needed*/
    IF Order.StatusCode EQ  {&ORDER_STATUS_MORE_DOC_NEEDED}  THEN DO: /*44*/
@@ -260,7 +259,7 @@ FUNCTION fNeededDocs RETURNS CHAR
          lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T4".
 
    END.
-   RETURN fCParamNotNull("DMS",lcParam).
+   RETURN fCParamNotNull("DMS",lcParam). /*NOTE: in this return the doc list is comma separated*/
 
 END.
 
@@ -281,7 +280,6 @@ FUNCTION fDoc2Msg RETURNS CHAR
    RETURN lcRet.
 END.
 
-
 FUNCTION fGetBankName RETURNS CHAR
    (icCode AS CHAR):
    FIND FIRST Bank WHERE
@@ -291,13 +289,48 @@ FUNCTION fGetBankName RETURNS CHAR
    RETURN "".
 END.   
 
+/*returns document type - comment pairs: "1,PENDING,2,SENT,...*/
+FUNCTION fDocListByOrder RETURNS CHAR
+   (iiOrderId AS INT,
+    icNotifCaseId AS CHAR):
+   DEF BUFFER bDMS FOR DMS.
+   DEF BUFFER bDMSDOC FOR DMSDOC.
+   DEF VAR lcDocList AS CHAR NO-UNDO.
+   DEF VAR lcDocReminderStatuses AS CHAR NO-UNDO. /*docs that need reminder */
+   DEF VAR i AS INT NO-UNDO.
+
+   FIND FIRST bDMS NO-LOCK WHERE
+              bDMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
+              bDMS.HostId EQ iiOrderID NO-ERROR.
+
+   IF NOT AVAIL bDMS THEN RETURN "".
+   FOR EACH bDMSDOC NO-LOCK WHERE
+            bDMSDOC.DMSID EQ bDMS.DMSID BY bDMSDOC.DocTypeId:
+      IF icNotifCaseID EQ {&DMS_INITIAL_NOTIF_CASE} /*1*/ THEN DO:
+         IF lcDocList NE "" THEN lcDocList = lcDocList + {&DMS_DOCLIST_SEP}.
+         IF bDMSDOC.DocStatusCode EQ {&DMS_INIT_STATUS_SENT} THEN DO:
+            lcDocList = lcDocList + bDmsDoc.DocTypeId + {&DMS_DOCLIST_SEP} /*no comment*/ .
+         END.
+      END.
+      ELSE DO:
+         lcDocReminderStatuses =  fCParam("DMS","DMS_doc_reminder_statuses"). /*A,C*/
+  /*       lcDocReminderStatuses = "A,C".*/
+         IF LOOKUP(bDMSDOC.DocStatusCode, lcDocReminderStatuses) > 0 THEN DO:
+            IF lcDocList NE "" THEN lcDocList = lcDocList + {&DMS_DOCLIST_SEP}.
+            lcDocList = lcDocList + bDmsDoc.DocTypeId + {&DMS_DOCLIST_SEP} +
+                                    bDmsDoc.DocRevComment.
+         END.
+      END.
+
+   END.
+   RETURN lcDocList.
+END.
+
 /*Function generates JSON message for providing information for
   SMS/EMAIL sending. */
 FUNCTION fGenerateMessage RETURNS CHAR
    (icNotifCaseId AS CHAR,
     icDeposit AS CHAR,
-    icDocList AS CHAR,
-    icDocListSep AS CHAR,
    BUFFER Order FOR Order,
    BUFFER Ordercustomer FOR Ordercustomer):
   
@@ -343,26 +376,16 @@ FUNCTION fGenerateMessage RETURNS CHAR
    lcMSISDN = fNotNull(Order.CLI).
 
    lcSeq = STRING(NEXT-VALUE(SMSSEQ)). /*read and increase SMSSEQ. The sequence must be reserved as ID for WEB&HPD*/
-   lcDocList = fNeededDocs(BUFFER Order).  
    lcArray = fInitJsonArray("documents").
-   
-   /*Add document comment if DMS has given it.*/
-   IF icDocList EQ "" THEN DO: /*from TMS batch, initial information, use local*/
-      DO i = 1 TO NUM-ENTRIES(lcDocList):
-         lcDocNotifEntry = fDoc2Msg(ENTRY(i,lcDocList), 
-                                    "").
-         fObjectToJsonArray(lcArray, lcDocNotifEntry).
-      END.
-   END.
-   ELSE DO: /*from DMS, add doc comments*/
-      DO i = 1 TO NUM-ENTRIES(icDocList,icDocListSep) BY 4:
-         lcDocNotifEntry = fDoc2Msg(ENTRY(i,icDocList,icDocListSep),
-                                    ENTRY(i + 3,icDocList,icDocListSep)).
-         fObjectToJsonArray(lcArray, lcDocNotifEntry).
-      END.
-   END.
 
-
+/*Doc list is created from matrix in type1(initial info of the case) notificatoins. 
+In other notifications only A&C (pending&error) cases are sent to identify missing docs*/
+   lcDocList = fDocListByOrder(Order.Orderid, icNotifCaseId).
+   DO i = 1 TO NUM-ENTRIES(lcDocList, {&DMS_DOCLIST_SEP}) BY 2:
+      lcDocNotifEntry = fDoc2Msg(ENTRY(i,lcDocList,{&DMS_DOCLIST_SEP}),
+                                 ENTRY(i + 1,lcDocList,{&DMS_DOCLIST_SEP})).
+      fObjectToJsonArray(lcArray, lcDocNotifEntry).
+   END.
    
    /*Fill data for message.*/
    lcMessage = "~{" + "~"metadata~""  + "~:" + "~{" +
@@ -424,7 +447,6 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    (icDMSStatus AS CHAR, /*DMS Status*/ 
     icOrderID AS INT,    /*Order*/
     icDeposit AS CHAR,   /*Deposit, if available*/
-    icDocList AS CHAR,   /*Doc List if available*/
     icDocListSep AS CHAR, /*Separator if doc list is available*/
     icModule AS CHAR,    /*identifier for MQ log file */
     OUTPUT ocSentMessage AS CHAR): /*for debugging, also includes additional data related to message.*/
@@ -469,8 +491,6 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    END.
    lcMessage = fGenerateMessage(lcNotifCaseID,
                                 icDeposit,
-                                icDocList,
-                                icDocListSep,
                                 BUFFER Order,
                                 BUFFER Ordercustomer).
 

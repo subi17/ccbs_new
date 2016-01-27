@@ -88,7 +88,6 @@ fUpdateMessageParams("20", "1").
 fUpdateMessageParams("21", "1").
 fUpdateMessageParams("44", "1").
 
-
 fUpdateOtherParamsInt("DMS_doc_no_provided_time", 
                        "Doc never provided waiting time", 
                        3).
@@ -104,5 +103,11 @@ fUpdateOtherParamsChar("DMS_MQ",
 /*Cases triggered by batch job*/
 fUpdateMessageParams("A0_by_batch", "7").
 fUpdateMessageParams("C_by_batch", "7").
+
+/*YBU-5129*/
+/*Filtering whe*/
+fUpdateOtherParamsChar("DMS_doc_reminder_statuses", 
+                       "Statuses for reminder message", 
+                       "A,C").
 
 
