@@ -2130,6 +2130,9 @@ IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" AND
                     INPUT  fMakeTS(),
                     INPUT  "CHANGEICC",
                     INPUT  Order.ICC,
+                    INPUT  "", /*for old SIM*/
+                    INPUT  "", /*reason*/
+                    INPUT  "", /*for ContractID*/
                     INPUT  FALSE,
                     INPUT  0.0,
                     INPUT {&REQUEST_SOURCE_ICC_CHANGE_AUTO},

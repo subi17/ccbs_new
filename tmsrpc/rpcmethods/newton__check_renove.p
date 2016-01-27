@@ -5,28 +5,24 @@
            id_type;str;optional;Customer id type (Representative person if company_id is given) 
            person_id;str;optional;Customer id (Representative person if company_id is given)
            company_id;str;optional;Company id
-           icc;str;optional;SIM ICC
            channel;str;mandatory;order channel
            bypass;boolean;optional;skip some business rules (YDR-90)
-           offer_id;str;mandatory;offer id
+           offer_id;str;optional;offer id
  * @output: data;struct 
- * @data  subscription_type;string;subscription type (eg. CONT2)
-          corporate_customer;bool;true <=> corporate customer
-          contract_days_remain;int;remaining contract days
-          contract_penalty;double;a possible penalty in euros
-          person_id;string;person id of orderer
-          id_type;string;person id type of orderer
-          has_terminal;bool;terminal has been ordered before (only returned when icc parameter exists)
-          number_type;string;new/mnp, only available if icc paramter is given (renove stc)
+ * @data  subscription_type;string;mandatory;subscription type (eg. CONT2)
+          corporate_customer;bool;mandatory;true <=> corporate customer
+          contract_days_remain;int;optional;remaining contract days
+          contract_penalty;double;optional;a possible penalty in euros
+          person_id;string;mandatory;person id of orderer
+          id_type;string;mandatory;person id type of orderer
+          has_terminal;bool;optional;terminal has been ordered before
+          number_type;string;optional;new/mnp (original order type)
+          allowed_terminal_financing_amount;double;optional;
+          pending_stc;boolean;optional;true
+          liQtyTFs;int;mandatory;number of installments
+          subscription_bundle;string;mandatory;tariff bundle of mobsub
  * @installment;array of installment structs;two fields insidde struct
- * @installment;struct
-          installment_contract;string;active installment contract
-          installment_pending_fee;double;sum of installment contract unpaid fees
-          installment_residual_fee;double;installment residual fee
-          pending_stc;boolean;true
-
-          liQtyTFs;int;number of installments
-          subscription_bundle;string;tariff bundle of mobsub
+ * @installment;struct per_contract_id;int;installment periodical contract id
 */
 {xmlrpc/xmlrpc_access.i}
 
@@ -120,7 +116,6 @@ DEF VAR pcCLI AS CHAR NO-UNDO.
 DEF VAR pcIdType AS CHAR NO-UNDO INIT ?.
 DEF VAR pcPersonId AS CHAR NO-UNDO INIT ?.
 DEF VAR pcCIF AS CHAR NO-UNDO INIT ?.
-DEF VAR pcICC AS CHAR NO-UNDO INIT ?.
 DEF VAR pcChannel AS CHARACTER NO-UNDO. 
 DEF VAR plBypass AS LOGICAL NO-UNDO.
 DEF VAR pcOfferId AS CHARACTER NO-UNDO. 
@@ -138,7 +133,6 @@ DEF VAR lcPriceList AS CHAR NO-UNDO.
 DEF VAR liRemPeriod AS INT NO-UNDO.
 DEF VAR llPreactivated AS LOGICAL NO-UNDO.
 DEF VAR llBarrings AS LOGICAL NO-UNDO.
-DEF VAR lcBarrComList AS CHARACTER NO-UNDO. 
 DEF VAR lcBarrStatus AS CHARACTER NO-UNDO. 
 DEF VAR llPrerenove AS LOGICAL NO-UNDO INIT FALSE.
 DEF VAR lcError AS CHAR NO-UNDO.
@@ -151,10 +145,15 @@ DEF VAR llCancelledPrerenove AS LOG NO-UNDO.
 DEF VAR lcFinancedInfo AS CHAR NO-UNDO. 
 DEF VAR liOrderId AS INT NO-UNDO. 
 DEF VAR liQtyTFs AS INT NO-UNDO. 
+
 DEF VAR installment_array AS CHAR NO-UNDO.
 DEF VAR installment_struct AS CHAR NO-UNDO. 
+
 DEF VAR llDefBarring       AS LOG NO-UNDO. 
 DEF VAR ldtFirstDay        AS DATE NO-UNDO.
+DEF VAR ldePendingFees AS DECIMAL NO-UNDO.
+DEF VAR liPeriod AS INT NO-UNDO. 
+DEF VAR ldaDate AS DATE NO-UNDO. 
 
 DEF BUFFER bServiceRequest FOR MSRequest.
 DEF BUFFER bMobSub FOR MobSub.
@@ -166,7 +165,7 @@ pcstruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcFields = validate_request(pcstruct,
-   "msisdn!,person_id,id_type,company_id,icc,channel!,offer_id,bypass").
+   "msisdn!,person_id,id_type,company_id,channel!,offer_id,bypass").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
@@ -174,15 +173,11 @@ ASSIGN
    pcIdType = get_string(pcStruct, "id_type") WHEN LOOKUP ("id_type", lcFields) > 0
    pcPersonId = get_string(pcStruct, "person_id") WHEN LOOKUP ("person_id", lcFields) > 0
    pcCIF = get_string(pcStruct, "company_id") WHEN LOOKUP ("company_id", lcFields) > 0
-   pcICC = get_string(pcStruct, "icc") WHEN LOOKUP("icc", lcFields) > 0
    pcChannel = get_string(pcStruct, "channel")
    plBypass = get_bool(pcStruct, "bypass") WHEN LOOKUP("bypass", lcFields) > 0
    pcOfferId = get_string(pcStruct, "offer_id") WHEN LOOKUP("offer_id",lcFields) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-IF pcChannel = "renewal_pos_stc" AND pcIcc EQ ? THEN
-   RETURN appl_err("no_match_icc").
 
 ASSIGN lcPostpaidVoiceTariffs = fCParamC("POSTPAID_VOICE_TARIFFS")
        lcPrepaidVoiceTariffs  = fCParamC("PREPAID_VOICE_TARIFFS").
@@ -265,20 +260,13 @@ FOR EACH MsRequest NO-LOCK WHERE
    RETURN appl_err("general").
 END.
 
-IF pcICC NE ? THEN DO:
-
-   IF MobSub.ICC NE pcICC THEN DO:
-      RETURN appl_err("no_match_icc").
-   END.
-   /* NEW or MNP number */
-   FIND FIRST Order NO-LOCK WHERE 
-      Order.MsSeq = Mobsub.MsSeq AND
-      Order.StatusCode EQ "6" AND
-      Order.OrderType < 2 NO-ERROR.
-   IF NOT AVAIL Order THEN DO:
-      RETURN appl_err("order_not_found").
-   END.
-END.
+/* NEW or MNP number */
+FIND FIRST Order NO-LOCK WHERE 
+   Order.MsSeq = Mobsub.MsSeq AND
+   Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} AND
+   Order.OrderType < 2 NO-ERROR.
+IF NOT AVAIL Order THEN
+   RETURN appl_err("order_not_found").
 
 /* Check barrings */
 IF Mobsub.PayType EQ FALSE AND NOT plBypass THEN DO:
@@ -384,10 +372,8 @@ IF AVAIL SubsTerminal THEN DO:
    END.
 END.
 
-IF pcICC NE ? THEN DO:
-   add_string(top_struct,"number_type",STRING(Order.MNPStatus EQ 0, "new/mnp")).
-   add_boolean(top_struct, "has_terminal", (AVAIL Substerminal)).
-END.
+add_string(top_struct,"number_type",STRING(Order.MNPStatus EQ 0, "new/mnp")).
+add_boolean(top_struct, "has_terminal", (AVAIL Substerminal)).
 
 /* Search active terminal contract with penalty fee */
 CONTRACT_LOOP:
@@ -491,6 +477,95 @@ IF liRemperiod > 0 THEN DO:
    add_double(top_struct, "contract_penalty", ldeCurrPen).
 END.
 
+/* q25 - Calculate allowed_terminal_financing_amount if risk limit is configured 
+   and collect all non invoiced installments and ongoing orders and return 
+   the difference of risk limit and pending all installment fee.*/
+ASSIGN
+   ldaDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
+   liPeriod = YEAR(ldaDate) * 100 + MONTH(ldaDate).
+
+FIND FIRST Limit NO-LOCK WHERE
+           Limit.CustNum   = Customer.Custnum AND
+           Limit.LimitType = {&LIMIT_TYPE_RISKLIMIT} AND
+           Limit.ToDate   >= TODAY NO-ERROR.
+IF AVAILABLE Limit THEN DO:
+
+   MOBSUB_LOOP:
+   FOR EACH bMobSub NO-LOCK WHERE
+            bMobSub.Brand = gcBrand AND
+            bMobSub.CustNum = Customer.CustNum,
+      EACH DCCLI NO-LOCK WHERE
+           DCCLI.MsSeq = bMobSub.MsSeq AND
+           DCCLI.ValidTo >= ldaDate AND
+          (DCCLI.DCEvent BEGINS "PAYTERM" OR
+           DCCLI.DCEvent BEGINS "RVTERM"):
+
+      FOR FIRST FixedFee NO-LOCK WHERE
+                FixedFee.Brand = gcBrand AND
+                FixedFee.Custnum = Customer.Custnum AND
+                FixedFee.HostTable = "MobSub" AND
+                FixedFee.KeyValue = STRING(bMobSub.MsSeq) AND
+                FixedFee.EndPeriod >= liPeriod AND
+                FixedFee.SourceTable = "DCCLI" AND
+                FixedFee.SourceKey = STRING(DCCLI.PerContractID) AND
+               (FixedFee.BillCode BEGINS "PAYTERM" OR
+                FixedFee.BillCode BEGINS "RVTERM"):
+
+         FOR EACH FFItem OF FixedFee NO-LOCK:
+            IF FFItem.Billed AND
+              (FFItem.BillPeriod <= liPeriod OR
+               CAN-FIND(FIRST Invoice WHERE
+                              Invoice.InvNum = FFItem.InvNum AND
+                              Invoice.InvType = 1)) THEN NEXT.
+            ldePendingFees = ldePendingFees + FFItem.Amt.
+         END.
+
+         IF FixedFee.BillCode BEGINS "PAYTERM" THEN
+         FOR FIRST SingleFee NO-LOCK WHERE
+                   SingleFee.Brand       = gcBrand AND
+                   SingleFee.Custnum     = FixedFee.CustNum AND
+                   SingleFee.HostTable   = FixedFee.HostTable AND
+                   SingleFee.KeyValue    = FixedFee.KeyValue AND
+                   SingleFee.SourceTable = FixedFee.SourceTable AND
+                   SingleFee.SourceKey   = FixedFee.SourceKey AND
+                   SingleFee.CalcObj     = "RVTERM":
+            IF SingleFee.Billed = TRUE AND
+               CAN-FIND (FIRST Invoice NO-LOCK WHERE
+                               Invoice.InvNum  = SingleFee.InvNum AND
+                               Invoice.InvType = 1) THEN NEXT.
+               ldePendingFees = ldePendingFees + SingleFee.Amt.
+         END.
+      END.
+   END.
+
+   FOR EACH Order NO-LOCK WHERE
+            Order.Brand = gcBrand AND
+            Order.CustNum = Customer.CustNum and
+      LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0,
+      FIRST OfferItem NO-LOCK WHERE
+            OfferItem.Brand       = gcBrand AND
+            OfferItem.Offer       = Order.Offer AND
+            OfferItem.ItemType    = "PerContract" AND
+            OfferItem.ItemKey     BEGINS "PAYTERM" AND
+            OfferItem.EndStamp   >= Order.CrStamp  AND
+            OfferItem.BeginStamp <= Order.CrStamp:
+
+      ldePendingFees = ldePendingFees + OfferItem.Amount.
+
+      FOR FIRST FMItem NO-LOCK WHERE
+                FMItem.Brand     = gcBrand AND
+                FMItem.FeeModel  = OfferItem.ItemKey  AND
+                FMItem.ToDate   >= TODAY AND
+                FMItem.FromDate <= TODAY:
+          ldePendingFees = ldePendingFees + (FMItem.Amount * FMItem.FFItemQty).
+      END.
+
+   END.
+
+   add_double(top_struct, "allowed_terminal_financing_amount", 
+             (Limit.LimitAmt - ldePendingFees)).
+END.
+
 installment_array = add_array(top_struct, "installment").
 
 /* active payterm periodical contract(s) */
@@ -512,14 +587,12 @@ FOR EACH  DCCLI WHERE
                     OUTPUT liOrderId) THEN DO:
 
       installment_struct = add_struct(installment_array,"").
-      add_string(installment_struct,"installment_contract", DCCLI.DCEvent).
-      add_double(installment_struct,"installment_pending_fee", ldePendingFee).
-      add_double(installment_struct,"installment_residual_fee", lderesidualFee).
       add_int(installment_struct,"per_contract_id", DCCLI.PercontractId).
       liQtyTFs = liQtyTFs + 1.
    END.
 END.
 add_int(top_struct,"TF_quantity",liQtyTFs).
+
 
 /* Return Subs. based bundle */
 add_string(top_struct, "subscription_bundle", MobSub.TariffBundle).

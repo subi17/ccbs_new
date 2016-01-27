@@ -359,6 +359,9 @@ REPEAT TRANSACTION WITH FRAME main:
                     INPUT  fMakeTS(),
                     INPUT  "CHANGEMSISDN",
                     INPUT  new-cli,
+                    INPUT  "", /*for old SIM*/
+                    INPUT  "", /*for Reason info*/
+                    INPUT  "", /*for ContractID*/
                     INPUT  llCreateFees,
                     INPUT  ldeFee,
                     INPUT  {&REQUEST_SOURCE_MANUAL_TMS},
