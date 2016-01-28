@@ -49,8 +49,8 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
        lcAppEndUserId  = gbAuthLog.EndUserId.
 
-katun = fgetAppUserId(INPUT lcApplicationId, 
-                      INPUT lcAppEndUserId).
+katun = fgetAppDetailedUserId(INPUT lcApplicationId, 
+                              INPUT lcAppEndUserId).
 
 FIND FIRST MobSub NO-LOCK WHERE
            Mobsub.brand = gcBrand AND
