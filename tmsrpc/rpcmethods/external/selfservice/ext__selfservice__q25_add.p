@@ -49,8 +49,8 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
        lcAppEndUserId  = gbAuthLog.EndUserId.
 
-katun = fgetAppDetailedUserId(INPUT lcApplicationId, 
-                              INPUT lcAppEndUserId).
+katun = fgetAppUserId(INPUT lcApplicationId, 
+                      INPUT lcAppEndUserId).
 
 FIND FIRST MobSub NO-LOCK WHERE
            Mobsub.brand = gcBrand AND
@@ -198,19 +198,15 @@ IF lcSMSTxt > "" THEN DO:
                   "").
 END.
 
-CREATE Memo.
-ASSIGN
-   Memo.CreStamp  = {&nowTS}
-   Memo.Brand     = gcBrand
-   Memo.HostTable = "MobSub"
-   Memo.KeyValue  = STRING(Mobsub.MSSeq)
-   Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-   Memo.CreUser   = katun 
-   Memo.MemoTitle = "By customer's request (Self Service)"
-   Memo.MemoText  = "Q25 extension request"
-   Memo.CustNum   = MobSub.Custnum
-   Memo.Source    = "Self Service".
-
+DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
+                 "MobSub",                             /* HostTable */
+                 STRING(Mobsub.MsSeq),                 /* KeyValue  */
+                 MobSub.CustNum,                       /* CustNum */
+                 "By customer's request (Self Service)", /* MemoTitle */
+                 "Q25 extension request",              /* MemoText */
+                 "Service",                            /* MemoType */
+                 fgetAppDetailedUserId(INPUT lcApplicationId,
+                                       INPUT Mobsub.CLI)).
 
 /* Adding the details into Main struct */
 top_struct = add_struct(response_toplevel_id, "").
