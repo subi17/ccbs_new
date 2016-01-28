@@ -208,7 +208,7 @@ DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
                  MobSub.CustNum,                       /* CustNum */
                  lcMemoTitle,                          /* MemoTitle */
                  "Q25 add extension request",          /* MemoText */
-                 "Service",                            /* MemoType */
+                 "Mobsub",                             /* MemoType */
                  fgetAppDetailedUserId(INPUT lcApplicationId,
                                        INPUT Mobsub.CLI)).
 
