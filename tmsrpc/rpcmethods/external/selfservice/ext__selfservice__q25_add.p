@@ -38,6 +38,7 @@ DEF VAR ldeSMSStamp AS DEC NO-UNDO.
 DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
 DEF VAR lcApplicationId  AS CHAR NO-UNDO.
 DEF VAR lcAppEndUserId   AS CHAR NO-UNDO.
+DEF VAR lcMemoTitle      AS CHAR NO-UNDO.
 
 /* common validation */
 IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
@@ -198,12 +199,15 @@ IF lcSMSTxt > "" THEN DO:
                   "").
 END.
 
+lcMemoTitle = "By customer's request (" + fgetAppDetailedUserId(
+              INPUT lcApplicationId, INPUT Mobsub.CLI) + ")".
+
 DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
                  "MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
                  MobSub.CustNum,                       /* CustNum */
-                 "By customer's request (Self Service)", /* MemoTitle */
-                 "Q25 extension request",              /* MemoText */
+                 lcMemoTitle,                          /* MemoTitle */
+                 "Q25 add extension request",          /* MemoText */
                  "Service",                            /* MemoType */
                  fgetAppDetailedUserId(INPUT lcApplicationId,
                                        INPUT Mobsub.CLI)).
