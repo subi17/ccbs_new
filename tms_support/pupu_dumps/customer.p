@@ -59,6 +59,15 @@ OUTPUT STREAM slog TO VALUE(lcLogFile).
 FOR EACH Customer WHERE
          Customer.Brand = gcBrand NO-LOCK:
 
+   ASSIGN llSelfEmployed         = FALSE
+          lcEmployer             = "" 
+          liSubLimit             = 0
+          liSubActLimit          = 0
+          llSubLimitReached      = FALSE
+          llSubActLimitReached   = FALSE
+          liSubCount             = 0
+          liActOrderCount        = 0. 
+
    FIND FIRST CustCat NO-LOCK WHERE
               CustCat.Brand = gcBrand AND
               CustCat.Category = Customer.Category NO-ERROR.
