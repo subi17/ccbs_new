@@ -543,13 +543,18 @@ PROCEDURE pHandleCustomer:
 
    DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
 
-   DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE llSelfEmployed    AS LOGICAL   NO-UNDO.
-   DEFINE VARIABLE lcEmployer        AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE liSubLimit        AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE liSubActLimit     AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE llSubLimit        AS LOGICAL   NO-UNDO.
-   DEFINE VARIABLE llSubActLimit     AS LOGICAL   NO-UNDO.
+   DEFINE VARIABLE lcMessage            AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE llSelfEmployed       AS LOGICAL   NO-UNDO.
+   DEFINE VARIABLE lcEmployer           AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liSubLimit           AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE liSubActLimit        AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE llDefSubLimit        AS LOGICAL   NO-UNDO.
+   DEFINE VARIABLE llDefSubActLimit     AS LOGICAL   NO-UNDO.
+   DEFINE VARIABLE llSubLimitReached    AS LOGICAL   NO-UNDO.
+   DEFINE VARIABLE llSubActLimitReached AS LOGICAL   NO-UNDO.
+   DEFINE VARIABLE liSubCount           AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE liActOrderCount      AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE ldaOrderDate         AS DATE      NO-UNDO. 
 
    IF AVAIL Common.RepLog THEN DO:
 
@@ -573,11 +578,47 @@ PROCEDURE pHandleCustomer:
 
                liSubLimit = fGetMobsubLimit(INPUT Customer.Custnum,
                                             INPUT Customer.Category,
-                                            OUTPUT llSubLimit).
+                                            OUTPUT llDefSubLimit).
 
                liSubActLimit = fGetMobsubActLimit(INPUT Customer.Custnum,
                                                   INPUT Customer.Category,
-                                                  OUTPUT llSubActLimit).
+                                                  OUTPUT llDefSubActLimit).
+
+               FOR EACH OrderCustomer NO-LOCK WHERE   
+                        OrderCustomer.Brand      EQ gcBrand AND
+                        OrderCustomer.CustIdType EQ Customer.CustIdType AND
+                        OrderCustomer.CustId     EQ Customer.OrgId AND
+                        OrderCustomer.RowType    EQ 1,
+                   EACH Order NO-LOCK WHERE
+                        Order.Brand              EQ gcBrand AND
+                        Order.orderid            EQ OrderCustomer.Orderid AND
+                        Order.OrderType          NE {&ORDER_TYPE_RENEWAL} AND
+                        Order.OrderType          NE {&ORDER_TYPE_STC} AND
+                        Order.SalesMan NE "GIFT":
+
+                  IF LOOKUP(STRING(Order.statuscode),{&ORDER_CLOSE_STATUSES}) EQ 0
+                  THEN DO:
+                     IF Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} THEN DO:
+                        fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+                        IF INTERVAL(TODAY, ldaOrderDate, "months") >= 24 THEN NEXT.
+                     END.
+                     liActOrderCount = liActOrderCount + 1.
+                  END.
+        
+                  IF LOOKUP(STRING(Order.statuscode),{&ORDER_INACTIVE_STATUSES}) EQ 0 THEN
+                     liSubCount = liSubCount + 1.
+      
+               END.
+
+               FOR EACH Mobsub NO-LOCK WHERE 
+                        MobSub.Brand    EQ gcBrand AND
+                        Mobsub.AgrCust  EQ Customer.CustNum AND
+                        MobSub.SalesMan NE "GIFT":
+                  liSubCount = liSubCount + 1.
+               END.
+
+               IF liSubCount >= liSubLimit THEN llSubLimitReached = TRUE. 
+               IF liActOrderCount >= liSubActLimit THEN llSubActLimitReached = TRUE.
 
                lcMessage = lcMessage                                + lcDel +
                            fNotNull(STRING(Customer.CustNum))       + lcDel +
@@ -608,8 +649,8 @@ PROCEDURE pHandleCustomer:
                            fNotNull(Customer.AuthCustId)                      + lcDel +
                            fNotNull(Customer.AuthCustIdType)                  + lcDel +
                            fNotNull(lcEmployer)                               + lcDel +
-                           fNotNull(STRING(llSubLimit))                       + lcDel +
-                           fNotNull(STRING(llSubActLimit)).
+                           fNotNull(STRING(llSubLimitReached))                + lcDel +
+                           fNotNull(STRING(llSubActLimitReached)).
 
                fWriteMessage(lcMessage).
             END.
