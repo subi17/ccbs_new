@@ -381,6 +381,7 @@ PROCEDURE pQ25Extension:
    DEF VAR liPeriod AS INT NO-UNDO. 
    DEF VAR ldaPerDate AS DATE NO-UNDO. 
    DEF VAR lcTFBank AS CHAR NO-UNDO.
+   DEF VAR lcOrigKatun AS CHAR NO-UNDO.
 
    DEF BUFFER SingleFee FOR SingleFee.
    DEF BUFFER MsRequest FOR MsRequest.
@@ -390,6 +391,7 @@ PROCEDURE pQ25Extension:
       liPeriod = YEAR(ldaPerDate) * 100 + MONTH(ldaPerDate)
       lcTFBank = ""
       liPercontractId = INT(OrderAction.ItemParam).
+      lcOrigKatun = katun.
 
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
       RETURN "ERROR: incorrect contract id".
@@ -426,6 +428,9 @@ PROCEDURE pQ25Extension:
       ldeContractActStamp = fSecOffset(fMakeTS(),5)
       ldaDate = TODAY.
 
+   IF Order.OrderType = {&ORDER_TYPE_RENEWAL} THEN
+      katun = Order.OrderChannel + "_" + Order.Salesman.
+
    liRequest = fPCActionRequest(MobSub.MsSeq,
                              "RVTERM12",
                              "act",
@@ -439,6 +444,8 @@ PROCEDURE pQ25Extension:
                              0,
                              liPercontractId,
                              OUTPUT lcResult).
+
+   katun = lcOrigKatun.
  
    IF liRequest = 0 THEN 
       RETURN "ERROR:Periodical contract not created; " + lcResult.
@@ -446,7 +453,8 @@ PROCEDURE pQ25Extension:
       FIND FIRST MsRequest EXCLUSIVE-LOCK WHERE
                  MsRequest.MsRequest = liRequest NO-ERROR.
       IF AVAIL MsRequest THEN ASSIGN
-         MsRequest.ReqIparam1 = Order.OrderId.
+         MsRequest.ReqIparam1 = Order.OrderId
+         MsRequest.ReqCparam4 = OrderAction.ItemKey.
       RELEASE MsRequest.
 
       CASE SingleFee.BillCode:
