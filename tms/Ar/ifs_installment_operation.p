@@ -960,7 +960,7 @@ PROCEDURE pCollectInstallmentContractChanges:
          IF FixedFee.TFBank > "" AND FixedFee.TFBank NE lcTFBank THEN NEXT REQUEST_LOOP.
          IF FixedFee.TFBank EQ "" AND lcTFBank NE {&TF_BANK_UNOE} THEN NEXT REQUEST_LOOP.
          
-         /* wait bank response for the old contract before sending D/B + A row 
+         /* wait bank response for the old contract before sending F + E row 
             A/C row for the old contract should go in the same or earlier HIRE file */
          IF FixedFee.FinancedResult EQ {&TF_STATUS_HOLD_SENDING} OR
             FixedFee.FinancedResult EQ {&TF_STATUS_WAITING_SENDING} OR
@@ -1014,7 +1014,7 @@ PROCEDURE pCollectInstallmentContractChanges:
 
          CREATE ttInstallment.
          ASSIGN
-            ttInstallment.OperCode = "F" /*(IF llFinancedByBank THEN "D" ELSE "B")*/
+            ttInstallment.OperCode = "F" 
             ttInstallment.Custnum = MsRequest.Custnum
             ttInstallment.MsSeq   = MsRequest.MsSeq
             ttInstallment.Amount  = (IF llFinancedByBank THEN FixedFee.Amt ELSE ldeAmount)
@@ -1063,7 +1063,7 @@ PROCEDURE pCollectInstallmentContractChanges:
 
          CREATE ttInstallment.
          ASSIGN
-            ttInstallment.OperCode = "G" 
+            ttInstallment.OperCode = "E" 
             ttInstallment.Custnum = FixedFee.Custnum
             ttInstallment.MsSeq   = INT(FixedFee.KeyValue)
             ttInstallment.Amount  = FixedFee.Amt
