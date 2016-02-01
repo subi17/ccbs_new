@@ -71,7 +71,7 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcQ25Struct = validate_request(pcQ25Struct,"username!,msseq!,per_contract_id!,action").
+lcQ25Struct = validate_request(pcQ25Struct,"username!,msseq!,per_contract_id!,action!").
 IF lcQ25Struct EQ ? THEN RETURN.
 
 ASSIGN
