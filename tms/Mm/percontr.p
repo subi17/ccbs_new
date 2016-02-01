@@ -639,7 +639,7 @@ PROCEDURE pContractActivation:
                {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN DO:
                ASSIGN
                   ldeResidualFeeDisc = ldeFeeAmount
-                  ldeFeeAmount = ROUND(ldeFeeAmount / FMItem.FFItemQty,2).
+                  ldeFeeAmount = TRUNC(ldeFeeAmount / FMItem.FFItemQty,2).
             END.
             ELSE DO:
                ASSIGN
