@@ -1090,7 +1090,7 @@ PROCEDURE pCollectInstallmentContractChanges:
 
          CREATE ttInstallment.
          ASSIGN
-            ttInstallment.OperCode = "E" 
+            ttInstallment.OperCode = "G" 
             ttInstallment.Custnum = FixedFee.Custnum
             ttInstallment.MsSeq   = INT(FixedFee.KeyValue)
             ttInstallment.Amount  = FixedFee.Amt
