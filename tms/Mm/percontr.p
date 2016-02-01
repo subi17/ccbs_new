@@ -644,7 +644,7 @@ PROCEDURE pContractActivation:
             ELSE DO:
                ASSIGN
                   ldeResidualFeeDisc = 0
-                  ldeFeeAmount = ROUND(MsRequest.ReqDParam2 / FMItem.FFItemQty,
+                  ldeFeeAmount = TRUNC(MsRequest.ReqDParam2 / FMItem.FFItemQty,
                                        2).
             END.
 
