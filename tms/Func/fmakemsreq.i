@@ -859,7 +859,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
           bCreaReq.CLI        = bReqOwner.CLI
           bCreaReq.CustNum    = bReqOwner.CustNum.
     END.
-   /*NOTE: rReqCparam4 is reserved in this case for DMS usage, contractid
+   /*NOTE: rReqCparam4 is reserved in this case  for ontractid
            instead of using the commonc ReqCparam6 for that purpose*/
    ASSIGN bCreaReq.ReqSource   = icSource
           bCreaReq.ReqCParam2  = icActType

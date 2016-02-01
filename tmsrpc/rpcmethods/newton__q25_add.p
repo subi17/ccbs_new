@@ -9,7 +9,7 @@ newton__q25_add.p
 * @q25_struct     username;string;mandatory;person who requests the change
                   msseq;int;mandatory;subscription id
                   per_contract_id;int;mandatory;installment contract id (related to q25)
-                  contract_id;string;optional;Contract ID
+                  q25_contract_id;string;optional;Contract ID
 
 * @memo_struct    title;string;mandatory
                   content;string;mandatory
@@ -53,7 +53,7 @@ DEF VAR ldContractActivTS AS DECIMAL NO-UNDO.
 DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
 DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
 
-DEF VAR lcContractId AS CHAR NO-UNDO.
+DEF VAR lcQ25ContractId AS CHAR NO-UNDO.
 
 /* common validation */
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
@@ -83,8 +83,8 @@ ASSIGN
    liper_contract_id = get_int(pcQ25Struct, "per_contract_id")      
       WHEN LOOKUP("per_contract_id", lcQ25Struct) > 0
    /*Contract ID*/   
-   lcContractId = get_string(pcQ25Struct, "contract_id")      
-      WHEN LOOKUP("contract_id", lcQ25Struct) > 0.
+   lcQ25ContractId = get_string(pcQ25Struct, "q25_contract_id")      
+      WHEN LOOKUP("q25_contract_id", lcQ25Struct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
       
@@ -203,11 +203,12 @@ IF liCreated = 0 THEN
 FIND FIRST MSRequest WHERE
            MSRequest.MSrequest EQ liCreated EXCLUSIVE-LOCK NO-ERROR.
 IF AVAIL MsRequest THEN DO:
-   IF lcContractId EQ "" THEN 
+   IF lcQ25ContractId EQ "" THEN 
       Msrequest.UserCode = "VISTA_" + MsRequest.Usercode.
    ELSE DO:   
       Msrequest.UserCode = "POS_" + MsRequest.Usercode.
-      MsRequest.ReqCparam4 = lcContractId.
+      MsRequest.ReqCparam4 = lcQ25ContractId.
+      MsRequest.ReqCparam6 = lcQ25ContractId. /*For findinf entry in DMS usage*/
    END.
 END.
 RELEASE MsRequest.
