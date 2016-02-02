@@ -43,7 +43,7 @@ lcLogDir = fCParam("TermFinance","LogDir").
 IF lcLogDir EQ ? OR
    NOT lcLogDir > "" THEN RETURN "ERROR:Log root directory not defined".
 
-DEFINE TEMP-TABLE ttTFCancel NO-UNDO
+DEFINE TEMP-TABLE ttTFCancel
    FIELD lineNum AS INT
    FIELD content AS char
    FIELD OrgId AS CHAR 
@@ -51,7 +51,6 @@ DEFINE TEMP-TABLE ttTFCancel NO-UNDO
    FIELD BankYear AS INT
    FIELD CancelAmt AS DEC
    FIELD ErrorCode AS CHAR
-   FIELD OrderId AS INT
 INDEX linenum IS PRIMARY linenum.
 
 ASSIGN
@@ -156,7 +155,6 @@ PROCEDURE pReadFileData:
    DEF VAR lcOrgId AS CHAR NO-UNDO. 
    DEF VAR liMonth AS INT NO-UNDO. 
    DEF VAR liYear AS INT NO-UNDO. 
-   DEF VAR liOrderId AS INT NO-UNDO. 
    DEF VAR lcErrorCode AS CHAR NO-UNDO. 
    DEF VAR ldeCancelAmt AS DEC NO-UNDO. 
 
@@ -187,7 +185,6 @@ PROCEDURE pReadFileData:
          ldeCancelAmt = int(substring(lcLine,14,11))
          liMonth     = int(substring(lcLine,25,2))
          liYear      = int(substring(lcLine,27,4))
-         liOrderId   = int(substring(lcLine,31,8))
          ldeCancelAmt = ldeCancelAmt / 100.0
          lcErrorCode = substring(lcLine,167,2)
          NO-ERROR.
@@ -214,7 +211,6 @@ PROCEDURE pReadFileData:
          ttTFCancel.OrgId = lcOrgId
          ttTFCancel.BankMonth = liMonth
          ttTFCancel.BankYear = liYear
-         ttTFCancel.OrderId = liOrderId
          ttTFCancel.CancelAmt = ldeCancelAmt
          ttTFCancel.ErrorCode = lcErrorCode.
    END.
@@ -232,22 +228,14 @@ PROCEDURE pProcessData:
          DISP "Processing data.. " lcFilename ttTFCancel.LineNum with frame a.
          PAUSE 0.
       END.
-      
-      IF ttTFCancel.OrderId > 0 THEN
-         FIND FixedFeeTF EXCLUSIVE-LOCK WHERE
-              FixedFeeTF.OrderId = ttTFCancel.OrderId AND
-         YEAR(FixedFeeTF.BankDate) = ttTFCancel.BankYear AND
-        MONTH(FixedFeeTF.BankDate) = ttTFCancel.BankMonth AND
-              FixedFeeTF.Amount = ttTFCancel.CancelAmt AND
-              FixedFeeTF.TFBank = lcTFBank NO-ERROR.
-      ELSE 
-         FIND FIRST FixedFeeTF EXCLUSIVE-LOCK WHERE
-                    FixedFeeTF.OrgId = ttTFCancel.OrgId AND 
-               YEAR(FixedFeeTF.BankDate) = ttTFCancel.BankYear AND
-              MONTH(FixedFeeTF.BankDate) = ttTFCancel.BankMonth AND
-                    FixedFeeTF.Amount = ttTFCancel.CancelAmt AND
-                    FixedFeeTF.TFBank = lcTFBank AND
-                    FixedFeeTF.CancelStatus = "SENT" NO-ERROR.
+
+      FIND FIRST FixedFeeTF EXCLUSIVE-LOCK WHERE
+                 FixedFeeTF.OrgId = ttTFCancel.OrgId AND 
+            YEAR(FixedFeeTF.BankDate) = ttTFCancel.BankYear AND
+           MONTH(FixedFeeTF.BankDate) = ttTFCancel.BankMonth AND
+                 FixedFeeTF.Amount = ttTFCancel.CancelAmt AND
+                 FixedFeeTF.TFBank = lcTFBank AND
+                 FixedFeeTF.CancelStatus = "SENT" NO-ERROR.
       
       IF AVAIL FixedFeeTF THEN DO:
                
@@ -260,10 +248,7 @@ PROCEDURE pProcessData:
                      bttTFCancel.CancelAmt = FixedFeeTF.ResidualAmount AND
                      bttTFCancel.BankYear = ttTFCancel.BankYear AND
                      bttTFCancel.BankMont = ttTFCancel.BankMonth AND
-               ROWID(bttTFCancel) NE ROWID(ttTFCancel) AND
-                     (IF ttTFCancel.OrderId > 0
-                      THEN bttTFCancel.OrderId = ttTFCancel.OrderID
-                      ELSE TRUE)) THEN DO:
+               ROWID(bttTFCancel) NE ROWID(ttTFCancel)) THEN DO:
             ASSIGN
                FixedFeeTF.CancelStatus = "ERROR_RESP"
                FixedFeeTF.CancelMemo = "ERROR:Response file does not contain related residual fee".
@@ -281,13 +266,11 @@ PROCEDURE pProcessData:
                     /* the PAYTERM fee should be handled in the previous loop,
                        so the cancel status is not SENT anymore */
                    (FixedFeeTF.CancelStatus NE "NEW" AND
-                    FixedFeeTF.CancelStatus NE "") AND
-                   (IF ttTFCancel.OrderId > 0
-                    THEN FixedFeeTF.OrderId = ttTFCancel.OrderID
-                    ELSE TRUE) NO-ERROR.
+                    FixedFeeTF.CancelStatus NE "")
+                    NO-ERROR.
 
          IF NOT AVAIL FixedFeeTF THEN DO:
-            fWriteLog(ttTFCancel.content, "ERROR:Installment fee not found").
+            fWriteLog(ttTFCancel.content, "ERROR:PAYTERM fee not found").
             NEXT LINE_LOOP.
          END.
          
@@ -300,10 +283,7 @@ PROCEDURE pProcessData:
                      bttTFCancel.CancelAmt = FixedFeeTF.Amount AND
                      bttTFCancel.BankYear = ttTFCancel.BankYear AND
                      bttTFCancel.BankMont = ttTFCancel.BankMonth AND
-               ROWID(bttTFCancel) NE ROWID(ttTFCancel) AND
-                  (IF ttTFCancel.OrderId > 0
-                   THEN bttTFCancel.OrderId = ttTFCancel.OrderID
-                   ELSE TRUE)) THEN DO:
+               ROWID(bttTFCancel) NE ROWID(ttTFCancel)) THEN DO:
 
             ASSIGN
                FixedFeeTF.CancelStatus = "ERROR_RESP"
