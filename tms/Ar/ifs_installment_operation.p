@@ -805,12 +805,14 @@ PROCEDURE pCollectInstallmentContractChanges:
 
       RELEASE ttInstallment.
 
+      /* Old fee */
       FOR FIRST FixedFee NO-LOCK WHERE
                 FixedFee.Brand = gcBrand AND
                 FixedFee.Custnum = MsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue = STRING(MsRequest.MsSeq) AND
-                FixedFee.BillCode = "PAYTERM" AND
+                (FixedFee.BillCode = "PAYTERM" OR
+                 FixedFee.BillCode = "RVTERM") AND
                 FixedFee.SourceTable = "DCCLI" AND
                 FixedFee.SourceKey = STRING(bTermDCCLI.PerContractID),
           FIRST DayCampaign NO-LOCK USE-INDEX DCEvent WHERE
@@ -861,15 +863,6 @@ PROCEDURE pCollectInstallmentContractChanges:
                    ldeAmount   = liFFItemQty * FixedFee.Amt.
          END.
 
-         FIND FIRST SingleFee NO-LOCK WHERE
-                    SingleFee.Brand = gcBrand AND
-                    SingleFee.Custnum = FixedFee.Custnum AND
-                    SingleFee.HostTable = FixedFee.HostTable AND
-                    SingleFee.KeyValue = Fixedfee.KeyValue AND
-                    SingleFee.SourceKey = FixedFee.SourceKey AND
-                    SingleFee.SourceTable = FixedFee.SourceTable AND
-                    SingleFee.CalcObj = "RVTERM" NO-ERROR.
-
          ASSIGN
             ldFeeEndDate = DATE(FixedFee.EndPeriod MOD 100,
                                 1,
@@ -880,16 +873,30 @@ PROCEDURE pCollectInstallmentContractChanges:
 
         IF FixedFee.BegDate > ldFeeEndDate THEN 
            fTS2Date(bTermRequest.DoneStamp, OUTPUT ldFeeEndDate).
+         
+         IF FixedFee.BillCode EQ "PAYTERM" THEN DO:
 
-         IF AVAIL SingleFee THEN 
-            ldeResidualFee = SingleFee.Amt.
-         ELSE IF bTermDCCLI.Amount NE ? THEN
-            ldeResidualFee = bTermDCCLI.Amount.
+            FIND FIRST SingleFee NO-LOCK WHERE
+                       SingleFee.Brand = gcBrand AND
+                       SingleFee.Custnum = FixedFee.Custnum AND
+                       SingleFee.HostTable = FixedFee.HostTable AND
+                       SingleFee.KeyValue = Fixedfee.KeyValue AND
+                       SingleFee.SourceKey = FixedFee.SourceKey AND
+                       SingleFee.SourceTable = FixedFee.SourceTable AND
+                       SingleFee.CalcObj = "RVTERM" NO-ERROR.
+
+            IF AVAIL SingleFee THEN 
+               ldeResidualFee = SingleFee.Amt.
+            ELSE IF bTermDCCLI.Amount NE ? THEN
+               ldeResidualFee = bTermDCCLI.Amount.
+            ELSE ldeResidualFee = 0.
+         END.
          ELSE ldeResidualFee = 0.
 
          CREATE ttInstallment.
          ASSIGN
-            ttInstallment.OperCode = (IF llFinancedByBank THEN "D" ELSE "B")
+            ttInstallment.OperCode = (IF FixedFee.BillCode EQ "RVTERM" THEN "F"
+                                      ELSE IF llFinancedByBank THEN "D" ELSE "B")
             ttInstallment.Custnum = MsRequest.Custnum
             ttInstallment.MsSeq   = MsRequest.MsSeq
             ttInstallment.Amount  = (IF llFinancedByBank THEN FixedFee.Amt ELSE ldeAmount)
@@ -904,12 +911,14 @@ PROCEDURE pCollectInstallmentContractChanges:
             oiEvents = oiEvents + 1.
       END.
 
+      /* New fee */
       FOR FIRST FixedFee NO-LOCK WHERE
                 FixedFee.Brand = gcBrand AND
                 FixedFee.Custnum = MsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue = STRING(MsRequest.MsSeq) AND
-                FixedFee.BillCode = "PAYTERM" AND
+               (FixedFee.BillCode = "PAYTERM" OR
+                FixedFee.BillCode = "RVTERM") AND
                 FixedFee.SourceTable = "DCCLI" AND
                 FixedFee.SourceKey = STRING(bActDCCLI.PerContractID):
 
@@ -934,20 +943,23 @@ PROCEDURE pCollectInstallmentContractChanges:
             NEXT REQUEST_LOOP.
          END.
          
-         FIND FIRST SingleFee NO-LOCK WHERE
-                    SingleFee.Brand = gcBrand AND
-                    SingleFee.Custnum = FixedFee.Custnum AND
-                    SingleFee.HostTable = FixedFee.HostTable AND
-                    SingleFee.KeyValue = Fixedfee.KeyValue AND
-                    SingleFee.SourceKey = FixedFee.SourceKey AND
-                    SingleFee.SourceTable = FixedFee.SourceTable AND
-                    SingleFee.CalcObj = "RVTERM" NO-ERROR.
+         IF FixedFee.BillCode EQ "PAYTERM" THEN 
+            FIND FIRST SingleFee NO-LOCK WHERE
+                       SingleFee.Brand = gcBrand AND
+                       SingleFee.Custnum = FixedFee.Custnum AND
+                       SingleFee.HostTable = FixedFee.HostTable AND
+                       SingleFee.KeyValue = Fixedfee.KeyValue AND
+                       SingleFee.SourceKey = FixedFee.SourceKey AND
+                       SingleFee.SourceTable = FixedFee.SourceTable AND
+                       SingleFee.CalcObj = "RVTERM" NO-ERROR.
+         ELSE RELEASE SingleFee.
 
          lcChannel = fGetChannel(BUFFER FixedFee, OUTPUT lcOrderType).
 
          CREATE ttInstallment.
          ASSIGN
-            ttInstallment.OperCode = "A" 
+            ttInstallment.OperCode = (IF FixedFee.BillCode EQ "PAYTERM" THEN "A" 
+                                      ELSE "G")
             ttInstallment.Custnum = FixedFee.Custnum
             ttInstallment.MsSeq   = INT(FixedFee.KeyValue)
             ttInstallment.Amount  = FixedFee.Amt
@@ -970,149 +982,7 @@ PROCEDURE pCollectInstallmentContractChanges:
                  TITLE " Collecting installment contract changes " FRAME fQty.
          END.
       END.
-	  
-	  /* Q25 Contract change Start YPR-2930 */
-	  FOR FIRST FixedFee NO-LOCK WHERE
-                FixedFee.Brand = gcBrand AND
-                FixedFee.Custnum = MsRequest.Custnum AND
-                FixedFee.HostTable = "MobSub" AND
-                FixedFee.KeyValue = STRING(MsRequest.MsSeq) AND
-                FixedFee.BillCode = "RVTERM12" AND
-                FixedFee.SourceTable = "DCCLI" AND
-                FixedFee.SourceKey = STRING(bTermDCCLI.PerContractID),
-          FIRST DayCampaign NO-LOCK USE-INDEX DCEvent WHERE
-                DayCampaign.Brand = gcBrand AND
-                DayCampaign.DCEvent = bTermDCCLI.DCEvent:
-            
-         IF FixedFee.TFBank > "" AND FixedFee.TFBank NE lcTFBank THEN NEXT REQUEST_LOOP.
-         IF FixedFee.TFBank EQ "" AND lcTFBank NE {&TF_BANK_UNOE} THEN NEXT REQUEST_LOOP.
-         
-         /* wait bank response for the old contract before sending F + E row 
-            A/C row for the old contract should go in the same or earlier HIRE file */
-         IF FixedFee.FinancedResult EQ {&TF_STATUS_HOLD_SENDING} OR
-            FixedFee.FinancedResult EQ {&TF_STATUS_WAITING_SENDING} OR
-            FixedFee.FinancedResult EQ {&TF_STATUS_SENT_TO_BANK} THEN DO:
-            PUT STREAM sFixedFee UNFORMATTED
-               FixedFee.FFNum ";" MsRequest.MsSeq ";"
-               "ERROR:Installment contract change old contract bank response not received"
-            SKIP.
-            NEXT REQUEST_LOOP.
-         END.
-            
-         ASSIGN
-            liBatches = 0
-            ldeAmount = 0
-            liFFItemQty = 0.
-
-         FOR FIRST FeeModel NO-LOCK WHERE 
-                   FeeModel.Brand = gcBrand AND
-                   FeeModel.FeeModel EQ FixedFee.FeeModel,
-            FIRST FMItem OF FeeModel NO-LOCK:
-
-            FOR EACH FFItem OF FixedFee NO-LOCK:
-               liBatches = liBatches + 1.
-            END.
-         
-            /* The total fee quantity might not be full 24 months
-               due to ACCs */
-            ldaFFLastMonth = fPer2Date(YEAR(bActDCCLI.ValidFrom) * 100 + 
-                                       MONTH(bActDCCLI.ValidFrom),
-                                       DayCampaign.DurMonths) - 1.
-         
-            liFFItemTotalQty = MIN(INTERVAL(ldaFFLastMonth,
-                                            FixedFee.BegDate,
-                                            "months") + 1,
-                                   FMItem.FFItemQty).
-
-            ASSIGN liFFItemQty = liFFItemTotalQty - liBatches
-                   ldeAmount   = liFFItemQty * FixedFee.Amt.
-         END.
-
-         ASSIGN
-            ldFeeEndDate = DATE(FixedFee.EndPeriod MOD 100,
-                                1,
-                                INT(FixedFee.EndPeriod / 100))
-            ldFeeEndDate = fLastDayOfMonth(ldFeeEndDate)
-            llFinancedByBank = (LOOKUP(FixedFee.FinancedResult,
-                                {&TF_STATUSES_BANK}) > 0).
-
-        IF FixedFee.BegDate > ldFeeEndDate THEN 
-           fTS2Date(bTermRequest.DoneStamp, OUTPUT ldFeeEndDate).         
-
-         CREATE ttInstallment.
-         ASSIGN
-            ttInstallment.OperCode = "F" 
-            ttInstallment.Custnum = MsRequest.Custnum
-            ttInstallment.MsSeq   = MsRequest.MsSeq
-            ttInstallment.Amount  = (IF llFinancedByBank THEN FixedFee.Amt ELSE ldeAmount)
-            ttInstallment.Items   = (IF llFinancedByBank THEN liFFItemQty ELSE 0)
-            ttInstallment.OperDate = ldFeeEndDate
-            ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
-            ttInstallment.ResidualAmount = 0
-            ttInstallment.Channel = ""
-            ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee)
-            ttInstallment.RowSource = "INSTALLMENT_CHANGE_OLD"
-            ttInstallment.FFNum = FixedFee.FFNum
-            oiEvents = oiEvents + 1.
-      END.
-
-      FOR FIRST FixedFee NO-LOCK WHERE
-                FixedFee.Brand = gcBrand AND
-                FixedFee.Custnum = MsRequest.Custnum AND
-                FixedFee.HostTable = "MobSub" AND
-                FixedFee.KeyValue = STRING(MsRequest.MsSeq) AND
-                FixedFee.BillCode = "RVTERM12" AND
-                FixedFee.SourceTable = "DCCLI" AND
-                FixedFee.SourceKey = STRING(bActDCCLI.PerContractID):
-
-         /* calculate these directly from items (not from FMItem.FFItemQty),
-            to get the actualized quantity */
-         liBatches = 0.
-         FOR EACH FFItem OF FixedFee NO-LOCK:
-            liBatches = liBatches + 1.
-         END.
-         
-         /* the contract should be always financed by Yoigo */
-         IF NOT (FixedFee.FinancedResult BEGINS "Y" OR
-                 FixedFee.FinancedResult EQ "" OR
-                 (LENGTH(FixedFee.FinancedResult) EQ 2 AND
-                         FixedFee.FinancedResult NE "00"))
-            THEN DO:
-            PUT STREAM sFixedFee UNFORMATTED
-               FixedFee.FFNum ";" MsRequest.MsSeq ";"
-               "Installment contract change new Fixedfee financial status is not not Y00"
-            SKIP.
-
-            NEXT REQUEST_LOOP.
-         END.      
-
-         lcChannel = fGetChannel(BUFFER FixedFee, OUTPUT lcOrderType).
-
-         CREATE ttInstallment.
-         ASSIGN
-            ttInstallment.OperCode = "G" 
-            ttInstallment.Custnum = FixedFee.Custnum
-            ttInstallment.MsSeq   = INT(FixedFee.KeyValue)
-            ttInstallment.Amount  = FixedFee.Amt
-            ttInstallment.Items   = liBatches
-            ttInstallment.OperDate = FixedFee.Begdate
-            ttInstallment.Renewal = lcOrderType
-            ttInstallment.BankCode = ""
-            ttInstallment.ResidualAmount = 0 
-            ttInstallment.Channel = lcChannel
-            ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee) 
-            ttInstallment.RowSource = "INSTALLMENT_CHANGE_NEW"
-            ttInstallment.FFNum = FixedFee.FFNum
-            oiEvents = oiEvents + 1.
-         
-         IF NOT SESSION:BATCH AND oiEvents MOD 10 = 0 THEN DO:
-            PAUSE 0.
-            DISP oiEvents LABEL "Requests"
-            WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
-                 TITLE " Collecting installment contract changes " FRAME fQty.
-         END.
-      END.
-	  /* Q25 Contract change End */
+ 
    END.
 
 END PROCEDURE.
