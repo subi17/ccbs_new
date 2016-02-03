@@ -50,8 +50,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
        lcAppEndUserId  = gbAuthLog.EndUserId.
 
-katun = fgetAppUserId(INPUT lcApplicationId, 
-                      INPUT lcAppEndUserId).
+katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
 
 FIND FIRST MobSub NO-LOCK WHERE
            Mobsub.brand = gcBrand AND
@@ -218,5 +217,7 @@ add_string(top_struct, "transaction_id", pcTransId).
 add_boolean(top_struct, "result", True).
 
 FINALLY:
+   /* Store the transaction id */
+   gbAuthLog.TransactionId = pcTransId.
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
 END.
