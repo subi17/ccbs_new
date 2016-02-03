@@ -171,7 +171,7 @@ ELSE DO: /* Cancel Quota 25 Extension */
       FALSE,
       "",
       0, /* payterm residual fee */
-      0,
+      DCCLI.PerContractId,
       OUTPUT lcResult).
 
       IF liCreated EQ 0 THEN
