@@ -361,8 +361,7 @@ REPEAT WITH FRAME sel:
            END.
            
            ELSE IF lcModule = "Eventsel" THEN DO:
-              RUN
-              eventsel ("Order", Order.Brand +  CHR(255) +                                  STRING(Order.OrderID)).                
+              RUN eventsel("Order", Order.Brand + CHR(255) + STRING(Order.OrderID)).
            END.
 
            ELSE IF lcModule = "nnasla" THEN DO:

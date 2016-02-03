@@ -926,8 +926,7 @@ PROCEDURE local-UPDATE-record:
                   IF lcFirstname ENTERED THEN OrderCustomer.FirstName = lcFirstname.
                   IF lcSurname1 ENTERED THEN OrderCustomer.Surname1 = lcSurname1.
                   IF lcSurname2 ENTERED THEN OrderCustomer.Surname2 = lcSurname2.
-                  IF llDoEvent THEN RUN 
-                     StarEventMakeModifyEvent(lhOrderCustomer).
+                  IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrderCustomer).
                   RELEASE OrderCustomer.
                END.
 
