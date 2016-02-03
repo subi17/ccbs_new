@@ -534,6 +534,7 @@ PROCEDURE pQ25Discount:
                          ldeDiscount,
                          fPer2Date(SingleFee.BillPeriod,0),
                          1,
+                         SingleFee.OrderId, /* Q25 OrderId */
                          OUTPUT lcResult).
    RETURN lcResult.
 
