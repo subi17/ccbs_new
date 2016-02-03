@@ -15,8 +15,8 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{log.i}
-{tmsconst.i}
+{Func/log.i}
+{Syst/tmsconst.i}
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
 DEF VAR pcUsername AS CHAR NO-UNDO.
@@ -95,7 +95,7 @@ END.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = pcUsername.
 gcBrand = "1".
 

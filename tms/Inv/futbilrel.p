@@ -9,7 +9,7 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR lcUfkey     AS LOG                     NO-UNDO.
 DEF VAR lcFile      AS CHAR  FORMAT "X(40)"    NO-UNDO.

@@ -10,8 +10,8 @@
   VERSIO .......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER Salesman AS c NO-UNDO.
 

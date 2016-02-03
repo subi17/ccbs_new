@@ -12,8 +12,8 @@
   ---------------------------------------------------------------------- */
 /* &GLOBAL-DEFINE BrTable Order */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 
 DEFINE TEMP-TABLE ttOrder NO-UNDO

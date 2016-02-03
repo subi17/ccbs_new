@@ -10,8 +10,8 @@
   VERSION ......: SCRUNKO4 (10.06.99)
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{eventval.i}
+{Syst/commali.i} 
+{Syst/eventval.i}
 
 DEF INPUT PARAMETER     RZItem-code AS CHAR NO-UNDO.
 
@@ -452,13 +452,13 @@ BROWSE:
      /* Update Memo */
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = true.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-line.
        RUN local-find-this (false).
 

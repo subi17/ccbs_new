@@ -8,9 +8,9 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commali.i}.
-{dataformat.i}
-{cparam2.i}
+{Syst/commali.i}.
+{Func/dataformat.i}
+{Func/cparam2.i}
 
 DEFINE INPUT PARAM piTMRuleSeq AS INT NO-UNDO. 
 DEFINE INPUT PARAM piMsSeq     AS INT NO-UNDO. 

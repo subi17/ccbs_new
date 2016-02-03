@@ -12,9 +12,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}                             
-{excel.i}
-{fsubser.i}
+{Syst/commali.i}                             
+{Func/excel.i}
+{Func/fsubser.i}
 
 DEF VAR xdays         AS I  NO-UNDO INIT 7.
 DEF VAR ok            AS LO NO-UNDO FORMAT "Yes/No".
@@ -36,8 +36,8 @@ DEF VAR liBalance     AS I  NO-UNDO.
 DEF VAR lcCustName    AS C  NO-UNDO.
 
 DEF STREAM fraud.
-{tmsparam.i WatchDogFile RETURN}.  outfile = TMSParam.CharVal.
-{cparam.i Fraudfile     RETURN}.  outfile2  = tmsparam.CharVal.
+{Func/tmsparam.i WatchDogFile RETURN}.  outfile = TMSParam.CharVal.
+{Func/cparam.i Fraudfile     RETURN}.  outfile2  = tmsparam.CharVal.
 
 hdr = "SubId,MSISDN,GSM No,Activated,Contract,CreditLimit,CustNo,"
     + "Customer's Name,Add'l Name,Address,PostCode,City,RatePlan,"

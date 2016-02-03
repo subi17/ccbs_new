@@ -9,8 +9,8 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
-{excel.i}
+{Syst/commpaa.i}
+{Func/excel.i}
 
 
 DEF VAR pecode    AS C  NO-UNDO.
@@ -26,7 +26,7 @@ DEF VAR cdate2    AS DA NO-UNDO FORMAT "99-99-99".
 DEF VAR newrecs   AS LO NO-UNDO FORMAT "Yes/No".
 DEF VAR rsopers   AS LO NO-UNDO FORMAT "Yes/No".
 
-{tmsparam.i PreselRep RETURN}. prerep = TMSParam.CharVal.
+{Func/tmsparam.i PreselRep RETURN}. prerep = TMSParam.CharVal.
 
 form 
  skip(1)

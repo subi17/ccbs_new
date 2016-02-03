@@ -5,7 +5,7 @@
  * @output struct;array of topup scheme row ids
 */
 
-{flistrpc.i}
+{rpcmethods/flistrpc.i}
 
 lcStruct = validate_struct(pcStruct, "topup_scheme_id").
 

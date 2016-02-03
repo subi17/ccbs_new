@@ -51,14 +51,14 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}  
-{fixedfee.i}
-{nncoit2.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'fixedfee'}
+{Syst/commali.i}  
+{Func/fixedfee.i}
+{Func/nncoit2.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'fixedfee'}
 
-{eventval.i}
-{tmsconst.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -79,7 +79,7 @@ IF llDoEvent THEN DO:
 
 END.
 
-{ffeecont.i}
+{Func/ffeecont.i}
 
 DEF  NEW shared VAR siirto AS CHAR.
 

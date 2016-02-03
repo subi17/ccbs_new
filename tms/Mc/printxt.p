@@ -36,31 +36,31 @@
 &GLOBAL-DEFINE ServiceListTag YES
 &GLOBAL-DEFINE MailTitleSpaces Allow
 
-{commali.i}
-{cparam2.i}
-{ftransdir.i}
-{email.i}
-{fdivtxt.i}
-{edefine.i}
-{refcode.i}
-{fcustref.i}
-{utumaa.i}
-{timestamp.i}
-{fsubser.i}
-{ftxttag.i}
-{feffect.i}
-{fconinfo.i}
-{fwidlst.i}
-{fcustdata.i}
-{forderstamp.i}
-{ftaxdata.i}
-{transname.i}
-{mdub.i}
-{fbundle.i}
-{offer.i}
-{fbankdata.i}
-{mnp.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/email.i}
+{Func/fdivtxt.i}
+{Inv/edefine.i}
+{Func/refcode.i}
+{Func/fcustref.i}
+{Syst/utumaa.i}
+{Func/timestamp.i}
+{Func/fsubser.i}
+{Func/ftxttag.i}
+{Func/feffect.i}
+{Func/fconinfo.i}
+{Func/fwidlst.i}
+{Func/fcustdata.i}
+{Func/forderstamp.i}
+{Func/ftaxdata.i}
+{Func/transname.i}
+{Func/mdub.i}
+{Mm/fbundle.i}
+{Mc/offer.i}
+{Func/fbankdata.i}
+{Mnp/mnp.i}
+{Syst/tmsconst.i}
 
 DEF TEMP-TABLE wError NO-UNDO
     FIELD Cust   AS INT
@@ -190,7 +190,7 @@ DEF VAR ldeCommFee AS DEC NO-UNDO.
 DEF VAR ldeRVPerc  AS DEC NO-UNDO.
 DEF VAR lcProfession AS CHAR NO-UNDO.
 
-{faddress.i}
+{Func/faddress.i}
 
 DEF STREAM slog.
 
@@ -304,7 +304,7 @@ FUNCTION fLocalPage RETURNS LOGICAL
           PUT STREAM tul skip(spit1 - liLine).
        END.
        ELSE DO:
-          {uprfeed.i liLine}
+          {Syst/uprfeed.i liLine}
        END.
 
     END.
@@ -2294,7 +2294,7 @@ ELSE IF NOT llErrors AND NOT llEPLPrint THEN DO:
    END.
 
    IF iiPrintTarget NE 6 THEN DO:
-      {uprfeed.i liLine}
+      {Syst/uprfeed.i liLine}
    END.
 
    /* mark text as sent */

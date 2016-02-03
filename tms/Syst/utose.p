@@ -16,7 +16,7 @@
                   order  : (in)  1: toimintoBROWSE 2: nimiBROWSE
   ------------------------------------------------------ */
 
-{commali.i} 
+{Syst/commali.i} 
 
 DEF shared VAR siirto AS CHAR.
 DEF shared VAR order   AS INT.

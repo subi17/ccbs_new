@@ -1,6 +1,6 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "qvantel".
-{barrfunc.i}
+{Func/barrfunc.i}
 
 def stream sread.
 input stream sread from /home/ari/work/aam_yts2141.log.

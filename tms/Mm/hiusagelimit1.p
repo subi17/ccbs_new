@@ -1,3 +1,3 @@
-{commali.i}
+{Syst/commali.i}
 
 run hiusagelimit(input "").

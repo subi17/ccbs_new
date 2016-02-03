@@ -11,10 +11,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoice'}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoice'}
 
 DEF VAR tdebt  AS DE  NO-UNDO EXTENT 3.
 DEF VAR debt   AS DE  NO-UNDO.

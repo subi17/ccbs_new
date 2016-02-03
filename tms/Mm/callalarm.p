@@ -25,9 +25,9 @@
 DEF  INPUT PARAMETER    iiCustNum AS INT NO-UNDO.
 DEF  INPUT PARAMETER    icCli     AS CHAR No-UNDO.
 
-{commali.i}
-{eventval.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
     {lib/eventlog.i}
@@ -93,7 +93,7 @@ WITH ROW FrmRow width 80 overlay FrmDown  down
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     "Alarm Sequence:" CallAlarm.CASeq FORMAT ">>>>>>>>>9" SKIP
@@ -507,14 +507,14 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = true.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-line.
        RUN local-find-this (false).
 

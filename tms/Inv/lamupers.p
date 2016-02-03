@@ -3,31 +3,31 @@
 */
 &GLOBAL-DEFINE EDRHandling NO
 
-{commali.i}                                                                   
-{tmsconst.i}
-{fixedfee.i}
-{cparam2.i}
-{timestamp.i}
-{fapvat.i}
-{billrund.i {1}}
-{fcustbal.i}
-{fcustcnt.i}
-{nncoit2.i}
-{fcurrency.i}
-{eventval.i}
-{fduedate.i}
-{fsubser.i}
-{eventlog.i}
-{finvnum.i}
-{ftaxdata.i}
-{log.i}
-{finvoiceacc.i}
-{funcrunprocess_update.i}
-{rerate_request.i}
-{lamupers_temptable.i}
-{invrowcounter_move.i}
-{old_unbilled_events.i}
-{eventval.i}
+{Syst/commali.i}                                                                   
+{Syst/tmsconst.i}
+{Func/fixedfee.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/fapvat.i}
+{Inv/billrund.i {1}}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Func/nncoit2.i}
+{Func/fcurrency.i}
+{Syst/eventval.i}
+{Func/fduedate.i}
+{Func/fsubser.i}
+{Func/lib/eventlog.i}
+{Func/finvnum.i}
+{Func/ftaxdata.i}
+{Func/log.i}
+{Func/finvoiceacc.i}
+{Syst/funcrunprocess_update.i}
+{Rate/rerate_request.i}
+{Inv/lamupers_temptable.i}
+{Inv/invrowcounter_move.i}
+{Inv/old_unbilled_events.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -254,7 +254,7 @@ IF lcMinConsFatime > "" THEN DO:
    lcMinConsFatimeBillCode = SUBSTRING(lcMinConsFatimeBillCode,2).
 END.
 
-{cparam2.i}
+{Func/cparam2.i}
 IF AdvPaymAcc = 0 THEN AdvPaymAcc = OverPayAcc. 
 IF lcNoMinCons = ? THEN lcNoMinCons = "".
 IF lcMinConsFatime = ? THEN lcMinConsFatime = "".

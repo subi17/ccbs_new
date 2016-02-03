@@ -17,12 +17,12 @@
           limit_of_subscriptions    integer - mandatory
   */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "Newton".
-{tmsconst.i}
-{fbundle.i}
-{fdss.i}
+{Syst/tmsconst.i}
+{Mm/fbundle.i}
+{Func/fdss.i}
 
 /* Input parameters */
 DEF VAR pcCliType      AS CHAR NO-UNDO.

@@ -18,12 +18,12 @@
   Version ......: M15
  ---------------------------------------------------------------------------- */
 
-{commali.i}
-{excel.i}
-{date.i} 
+{Syst/commali.i}
+{Func/excel.i}
+{Func/date.i} 
 /* temp-table */
-{paymfile.i}
-{farplog.i}
+{Ar/paymfile.i}
+{Func/farplog.i}
 
 DEF INPUT  PARAMETER  ocr-file   AS c NO-UNDO.
 DEF INPUT  PARAMETER  ocr-acct   AS i NO-UNDO.
@@ -107,7 +107,7 @@ FUNCTION fClearInvNo   RETURNS INTEGER
 
 END FUNCTION.
 
-{cparam.i DateLimit RETURN} DateLimit = TMSParam.DateVal.
+{Func/cparam.i DateLimit RETURN} DateLimit = TMSParam.DateVal.
 
 rc = 0.
 

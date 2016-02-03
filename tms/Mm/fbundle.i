@@ -7,18 +7,18 @@
 
 &GLOBAL-DEFINE fbundle YES
    
-{commali.i}
-{tmsconst.i}
-{date.i}
-{timestamp.i}
-{cparam2.i}
-{fcreatereq.i}
-{matrix.i}
-{transname.i}
-{ftaxdata.i}
-{xmlfunction.i}
-{date.i}
-{fdss.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fcreatereq.i}
+{Func/matrix.i}
+{Func/transname.i}
+{Func/ftaxdata.i}
+{Func/xmlfunction.i}
+{Func/date.i}
+{Func/fdss.i}
 
 FUNCTION fOngoingContractAct RETURNS LOG (INPUT iiMsSeq    AS INT,
                                           INPUT icBundleId AS CHAR):

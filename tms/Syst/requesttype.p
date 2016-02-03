@@ -10,11 +10,11 @@
 
 &GLOBAL-DEFINE BrTable RequestType
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'RequestType'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'RequestType'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -77,7 +77,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
        string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     RequestType.Brand          COLON 15

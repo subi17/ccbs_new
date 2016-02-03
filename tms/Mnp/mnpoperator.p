@@ -7,14 +7,14 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MNPOperator'} 
-{timestamp.i}
-{ftaxdata.i}
-{timestamp.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MNPOperator'} 
+{Func/timestamp.i}
+{Func/ftaxdata.i}
+{Func/timestamp.i}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

@@ -12,7 +12,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 
@@ -102,7 +102,7 @@ LOOP:
          ufk = 0 ufk[1] = 35 ufk[5] = 11
          ufk[6] = 5 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = FALSE.
-         {uright1.i '"6"'}
+         {Syst/uright1.i '"6"'}
          RUN ufkey.p.
       END.
   END. /* print-line */
@@ -261,7 +261,7 @@ BROWSE:
 
         /* Lisays */
         else if lookup(nap,"6,f6") > 0 THEN DO:
-           {uright2.i}
+           {Syst/uright2.i}
            ASSIGN must-add = TRUE.
            NEXT LOOP.
         END. /* Lisays */

@@ -16,10 +16,10 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{email.i}
-{direct_dbconnect.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/email.i}
+{Func/direct_dbconnect.i}
 
 def var cadate1   as da no-undo.
 def var cadate2   as da no-undo. 
@@ -40,8 +40,8 @@ DEF VAR liCurrent AS INT  NO-UNDO.
 
 bbatch = session:batch.
 
-{tmsparam.i DefDoubMDir   return}.   logfile      = TMSParam.CharVal.
-{tmsparam.i RepConfDir     return}.  xConfDir     = TMSParam.CharVal. 
+{Func/tmsparam.i DefDoubMDir   return}.   logfile      = TMSParam.CharVal.
+{Func/tmsparam.i RepConfDir     return}.  xConfDir     = TMSParam.CharVal. 
 
 IF bbatch THEN DO: 
    /* get the recipients FOR EMail */

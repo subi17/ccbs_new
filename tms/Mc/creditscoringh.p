@@ -8,12 +8,12 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{orderfunc.i}
-{tmsconst.i}
-{eventval.i}
-{flimitreq.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/orderfunc.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
+{Func/flimitreq.i}
 
 DEF INPUT PARAMETER piOrderId AS INT NO-UNDO.
 

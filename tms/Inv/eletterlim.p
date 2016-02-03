@@ -22,9 +22,9 @@
   VERSIO .......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{feplstart.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/feplstart.i}
 
 DEF VAR asno         AS INTEGER   FORMAT "zzzzzzz9"  INIT "0"        NO-UNDO.
 DEF VAR lano1        AS INTEGER   FORMAT "zzzzzzz9"  INIT "1"        NO-UNDO.

@@ -10,9 +10,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MCDRFile'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MCDRFile'}
 
 
 IF gcAllBrand = FALSE THEN DO:

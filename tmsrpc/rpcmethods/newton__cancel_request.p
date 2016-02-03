@@ -17,7 +17,7 @@
  */
 
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 
 /* Input parameters */
@@ -76,15 +76,15 @@ CASE pcReqType:
    OTHERWISE RETURN appl_err("Unknown request type " + pcReqType).
 END.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun   = "VISTA_" + get_string(param_toplevel_id, "1").
 gcBrand = "1".
-{cparam2.i}
-{msreqfunc.i}
-{eventval.i}
-{fsendsms.i}
-{fsubstermreq.i}
-{main_add_lines.i}
+{Func/cparam2.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Func/fsendsms.i}
+{Func/fsubstermreq.i}
+{Func/main_add_lines.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

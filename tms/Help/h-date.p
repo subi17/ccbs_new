@@ -10,10 +10,10 @@
   Version ......: yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
-{date.i}
-{fctchange.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/date.i}
+{Func/fctchange.i}
 
 def shared var siirto as char.
 

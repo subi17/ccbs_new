@@ -3,7 +3,7 @@
    changes:     16.04.07/aam new parameters to tmscodesbr
 */
    
-{commali.i}   
+{Syst/commali.i}   
 
 DEF VAR lcValue       AS CHAR NO-UNDO.
 

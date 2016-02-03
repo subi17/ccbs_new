@@ -10,11 +10,11 @@
 
 &GLOBAL-DEFINE BrTable RequestAction
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'RequestAction'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'RequestAction'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -90,7 +90,7 @@ WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
        "  ACTIONS OF TYPE " + STRING(iiReqType) + " (Active) "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     RequestAction.Brand        COLON 20

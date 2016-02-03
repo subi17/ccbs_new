@@ -7,13 +7,13 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun   = "CRON".
-{cparam2.i}
-{timestamp.i}
-{fcpfat.i}
-{fbundle.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/fcpfat.i}
+{Mm/fbundle.i}
 
 DEF VAR lcPromotionPath          AS CHAR NO-UNDO.
 DEF VAR ldaPromoFromDate         AS DATE NO-UNDO.

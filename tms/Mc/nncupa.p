@@ -8,11 +8,11 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{function.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'payment'}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/function.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'payment'}
 
 DEF INPUT PARAM CustNum AS i NO-UNDO.
 

@@ -18,10 +18,10 @@
 ------------------------------------------------------ */
 
 &GLOBAL-DEFINE BrTable Account
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'account'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'account'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -100,7 +100,7 @@ form
     fr-header WITH side-labels 1 columns
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* BROWSE search WITH FIELD Account */
     "Brand .:" lcBrand skip
@@ -496,7 +496,7 @@ BROWSE:
 
      else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSAction:  /* removal */
-       {uright2.i}
+       {Syst/uright2.i}
        delline = FRAME-LINE.
        FIND Account where recid(Account) = rtab[FRAME-LINE] no-lock.
 
@@ -555,7 +555,7 @@ BROWSE:
 
      else if lookup(nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
-       {uright2.i}
+       {Syst/uright2.i}
        /* change */
        FIND Account where recid(Account) = rtab[frame-line(sel)]
        exclusive-lock.

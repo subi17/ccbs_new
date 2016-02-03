@@ -8,11 +8,11 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{ftransdir.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PrepaidRequest'}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PrepaidRequest'}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR liCount       AS INT  NO-UNDO. 

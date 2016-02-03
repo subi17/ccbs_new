@@ -8,10 +8,10 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'DumpFile'}
-{host.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'DumpFile'}
+{Syst/host.i}
 
 DEF VAR liDumpID      AS INT  NO-UNDO.
 DEF VAR liDumped      AS INT  NO-UNDO.

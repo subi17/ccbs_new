@@ -10,9 +10,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{tmsparam2.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/tmsparam2.i}
 
 DEF VAR ufkey  AS LOG NO-UNDO.
 

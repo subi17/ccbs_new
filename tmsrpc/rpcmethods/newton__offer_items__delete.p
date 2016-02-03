@@ -34,15 +34,15 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-{timestamp.i}
+{Func/timestamp.i}
 
 IF OfferItem.BeginStamp < fMakeTs() THEN 
    RETURN appl_err("Cannot delete active or history data").
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = pcUserName.
-{eventval.i}
+{Syst/eventval.i}
 
 FIND CURRENT OfferItem EXCLUSIVE-LOCK.
 

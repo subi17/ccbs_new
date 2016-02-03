@@ -8,8 +8,8 @@
                    31.10.02 jr Eventlog
    VERSIO .......: SCRUNKO3, (23.10.96)
    -------------------------------------------------------------- */
-{eventval.i} 
-{commali.i}
+{Syst/eventval.i} 
+{Syst/commali.i}
 
 DEF INPUT PARAMETER UserGroup LIKE UserGrp.UserGroup NO-UNDO.
 

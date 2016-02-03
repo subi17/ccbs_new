@@ -1,6 +1,6 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
-{timestamp.i}
+{Func/timestamp.i}
 
 def var lireq as int no-undo.
 

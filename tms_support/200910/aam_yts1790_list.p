@@ -1,5 +1,5 @@
-{testpaa.i}
-{timestamp.i}
+{Syst/testpaa.i}
+{Func/timestamp.i}
 
 def var limsseq as int no-undo.
 def var i as int no-undo.

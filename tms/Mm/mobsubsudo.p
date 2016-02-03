@@ -11,7 +11,7 @@
   SHARED .......: INPUT: msseq
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER msseq  AS INT .
 

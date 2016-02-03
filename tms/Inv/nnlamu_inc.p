@@ -42,9 +42,9 @@
 &GLOBAL-DEFINE InitPersistent NO
 &GLOBAL-DEFINE GetAllParams NO
 
-{commali.i}
-{cparam2.i}
-{faccper.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/faccper.i}
 
 DEF INPUT  PARAMETER  CustNum1  LIKE Customer.CustNum NO-UNDO.
 DEF INPUT  PARAMETER  iiOrderID AS INT                NO-UNDO. 
@@ -80,7 +80,7 @@ DEF VAR liPaymTerm AS INT  NO-UNDO.
 DEF VAR lcPrefix   AS CHAR NO-UNDO.
 DEF VAR ldTotal    AS DEC  NO-UNDO.
 
-{tmsparam.i oh-tuasno  RETURN}. unknown = TMSParam.IntVal.
+{Func/tmsparam.i oh-tuasno  RETURN}. unknown = TMSParam.IntVal.
 
 {lamupers.p NEW}
 

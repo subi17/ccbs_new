@@ -29,13 +29,13 @@
   Version ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i "new"}
-{tmsparam2.i}
-{fcurrency.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoice'}
-{invjournal.i}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
+{Func/tmsparam2.i}
+{Func/fcurrency.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoice'}
+{Ar/invjournal.i}
 
 assign tuni1 = "nnlalu"
        tuni2 = "".
@@ -363,14 +363,14 @@ ASSIGN ttCriter.InvGroup    = InvGroup
        ttCriter.Summary     = tikoo.
 
 assign tila = true.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 RUN invjournal (INPUT TABLE TCustGroup,
                 INPUT TABLE ttCriter,
                 OUTPUT i).
                   
 assign tila = false.
-{utuloste.i}
+{Syst/utuloste.i}
 
 IF RETURN-VALUE BEGINS "ERROR:" THEN 
    MESSAGE "Printing failed:" RETURN-VALUE

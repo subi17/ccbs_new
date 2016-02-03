@@ -8,14 +8,14 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
-{faccper.i}
-{fcustbal.i}
-{eventval.i} 
-{fbankday.i}
-{fhdrtext.i}
-{frefundreq.i}
+{Func/faccper.i}
+{Func/fcustbal.i}
+{Syst/eventval.i} 
+{Func/fbankday.i}
+{Func/fhdrtext.i}
+{Func/frefundreq.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

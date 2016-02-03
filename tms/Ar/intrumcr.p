@@ -10,9 +10,9 @@
  VERSION .......: M15
  ============================================================================*/
 
-{commali.i}          
-{cparam2.i}            
-{intrumcr.i}
+{Syst/commali.i}          
+{Func/cparam2.i}            
+{Ar/intrumcr.i}
 
 DEFINE OUTPUT PARAMETER TABLE FOR ttError.
 

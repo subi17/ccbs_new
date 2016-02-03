@@ -8,8 +8,8 @@
   VERSION ......: SCRUNKO3
   ------------------------------------------------------ */
 
-{commali.i} 
-{eventval.i}
+{Syst/commali.i} 
+{Syst/eventval.i}
 
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun

@@ -8,7 +8,7 @@ CHANGED .....: 30.06.1999 pt get OUTPUT directory from TMSParam
 VERSION .....: M15
 =============================================================== */
 
-{commali.i}  
+{Syst/commali.i}  
 
 DEF STREAM whitelist.
 
@@ -77,7 +77,7 @@ FIND LAST Customer no-lock no-error.
 ASSIGN cust-nr2 = Customer.CustNum date1 = TODAY date2 = TODAY.
 
 
-{tmsparam.i WlFileDir return}.  
+{Func/tmsparam.i WlFileDir return}.  
 
 /*
 DO FOR kayt:

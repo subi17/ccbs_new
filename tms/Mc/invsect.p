@@ -16,10 +16,10 @@
 
 &GLOBAL-DEFINE BrTable InvSect
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invsect'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invsect'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -85,7 +85,7 @@ WITH  OVERLAY ROW 4 centered
     1 columns
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek Invoice Section  BY  InvSect */
     "Brand:" lcBrand skip

@@ -8,10 +8,10 @@
 
  */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
-{timestamp.i}
-{tmsconst.i}
-{barrfunc.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/barrfunc.i}
 katun    = "NewtonAd".
 gcBrand  = "1".
 

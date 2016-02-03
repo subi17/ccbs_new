@@ -8,19 +8,19 @@
 ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE TraceLog NO
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 &IF "{&TraceLog}" = "YES" 
 &THEN
-{log.i}
+{Func/log.i}
 fSetLogFileName("/tmp/billing_quality.log").
 fSetLogEntryTypes("4GLTrace:4").
 fClearLog().
 &ENDIF
 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Invoice'}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Invoice'}
 
 DEF VAR ufkey          AS LOG  NO-UNDO.
 DEF VAR liCount        AS INT  NO-UNDO. 

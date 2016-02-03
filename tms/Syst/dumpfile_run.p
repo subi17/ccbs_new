@@ -8,13 +8,13 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{transname.i}
-{cparam2.i}
-{ftransdir.i}
-{eventlog.i}
-{dumpfile_run.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/transname.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/lib/eventlog.i}
+{Syst/dumpfile_run.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icDumpMode    AS CHAR NO-UNDO. /* full/modified */

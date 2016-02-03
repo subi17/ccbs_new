@@ -7,7 +7,7 @@
   VERSIO .......: <16.12.93>
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 

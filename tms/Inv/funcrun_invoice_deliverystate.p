@@ -7,12 +7,12 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1"
    katun   = "Cron".
 
-{funcrunprocess_run.i}
+{Syst/funcrunprocess_run.i}
 
 DEF VAR liFRProcessID    AS INT  NO-UNDO.
 DEF VAR liFRExecID       AS INT  NO-UNDO.

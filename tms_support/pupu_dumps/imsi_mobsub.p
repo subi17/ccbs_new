@@ -7,10 +7,10 @@ DEFINE VARIABLE ldtTimeStamp AS DATETIME  NO-UNDO.
 DEFINE VARIABLE liEvents     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE ldaPeriod    AS DATE      NO-UNDO.
 
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
-{date.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
+{Func/date.i}
 
 DEFINE TEMP-TABLE ttMsRequest NO-UNDO
        FIELD MsSeq       AS INT.

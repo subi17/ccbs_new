@@ -1,15 +1,15 @@
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN
    katun   = "cron"
    gcBrand = "1".
 
-{timestamp.i}
-{cparam.i2}
-{xmlfunction.i}
-{fgettxt.i}
-{ftaxdata.i}
-{tsformat.i}
+{Func/timestamp.i}
+{Func/cparam.i2}
+{Func/xmlfunction.i}
+{Func/fgettxt.i}
+{Func/ftaxdata.i}
+{Func/tsformat.i}
 
 DEFINE VARIABLE lcXML      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE ldeTaxPerc AS DECIMAL   NO-UNDO.

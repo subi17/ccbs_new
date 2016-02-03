@@ -12,9 +12,9 @@
   VERSIO .......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
-{fecgtask.i}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Func/fecgtask.i}
 
 DEF INPUT PARAMETER CustNum AS i NO-UNDO.
 

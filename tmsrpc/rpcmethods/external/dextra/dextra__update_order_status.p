@@ -171,14 +171,14 @@ END.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Dextra".
 gcBrand = "1".
-{eventval.i}
-{tmsconst.i}
-{dextra.i}
-{eventval.i}
-{create_eventlog.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Func/dextra.i}
+{Syst/eventval.i}
+{Func/create_eventlog.i}
 
 FIND Order NO-LOCK WHERE
      Order.Brand = gcBrand AND

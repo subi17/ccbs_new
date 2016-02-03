@@ -4,15 +4,15 @@
    changes:       
 */   
 
-{commali.i}
-{timestamp.i}
-{fvoucher.i}
-{eventval.i}
-{fcustbal.i}
-{fclvat.i}
-{fapvat.i}
-{ftaxdata.i}
-{fpaymconfig.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/fvoucher.i}
+{Syst/eventval.i}
+{Func/fcustbal.i}
+{Func/fclvat.i}
+{Func/fapvat.i}
+{Func/ftaxdata.i}
+{Func/fpaymconfig.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

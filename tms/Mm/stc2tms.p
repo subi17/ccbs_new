@@ -3,35 +3,35 @@
       22.sep.2015 hugo.lujan - YPR-2521 - [Q25] - TMS - Subscription
        termination/ MNP out porting, STC (postpaid to prepaid)
 */
-{commali.i}
-{msreqfunc.i}
-{eventval.i}
-{fmakemsreq.i}
-{fctchange.i}
-{matrix.i}
-{service.i}
-{fbundle.i}
-{transname.i}
-{ftmrlimit.i}
-{orderfunc.i}
-{invoicetarget.i}
-{rerate_request.i}
-{tmsconst.i}
-{bundle_first_month_fee.i}
-{fdss.i}
-{fcpfat.i}
-{servcomfee.i}
-{fsubstermreq.i}
-{mnpoutchk.i}
-{dpmember.i}
-{main_add_lines.i}
-{fbankdata.i}
-{create_eventlog.i}
-{barrfunc.i}
+{Syst/commali.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Func/fmakemsreq.i}
+{Func/fctchange.i}
+{Func/matrix.i}
+{Func/service.i}
+{Mm/fbundle.i}
+{Func/transname.i}
+{Func/ftmrlimit.i}
+{Func/orderfunc.i}
+{Mc/invoicetarget.i}
+{Rate/rerate_request.i}
+{Syst/tmsconst.i}
+{Mm/bundle_first_month_fee.i}
+{Func/fdss.i}
+{Func/fcpfat.i}
+{Func/servcomfee.i}
+{Func/fsubstermreq.i}
+{Mnp/mnpoutchk.i}
+{Mc/dpmember.i}
+{Func/main_add_lines.i}
+{Func/fbankdata.i}
+{Func/create_eventlog.i}
+{Func/barrfunc.i}
 
 DEFINE INPUT PARAMETER iiMSRequest AS INTEGER NO-UNDO.
 
-{remfees.i}
+{Func/remfees.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

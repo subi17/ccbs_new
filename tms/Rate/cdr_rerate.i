@@ -13,9 +13,9 @@
 
 &GLOBAL-DEFINE CDR_RERATE_I YES
 
-{commali.i}
-{date.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/date.i}
+{Func/cparam2.i}
 
 DEF STREAM sRerateRep.
 

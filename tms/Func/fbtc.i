@@ -3,14 +3,14 @@
 
 &GLOBAL-DEFINE fbtc YES
 
-{commali.i}
-{tmsconst.i}
-{fcreatereq.i}
-{cparam2.i}
-{fbundle.i}
-{stc_extension.i}
-{mnpoutchk.i}
-{fctchange.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/fcreatereq.i}
+{Func/cparam2.i}
+{Mm/fbundle.i}
+{Func/stc_extension.i}
+{Mnp/mnpoutchk.i}
+{Func/fctchange.i}
 
 FUNCTION fBundleChangeRequest RETURNS INTEGER
    (INPUT iiMsSeq         AS INT,    /* subscription */

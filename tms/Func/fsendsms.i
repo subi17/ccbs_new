@@ -12,14 +12,14 @@
 
 &GLOBAL-DEFINE fsendsms YES
 
-{commali.i}
-{fgettxt.i}
-{timestamp.i}
-{cparam2.i}
-{fmakesms.i}
-{tmsconst.i}
-{transname.i}
-{fbundle.i}
+{Syst/commali.i}
+{Func/fgettxt.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fmakesms.i}
+{Syst/tmsconst.i}
+{Func/transname.i}
+{Mm/fbundle.i}
 
 FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
                                         INPUT icSMSText     AS CHARACTER,

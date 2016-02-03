@@ -16,10 +16,10 @@
 
 &GLOBAL-DEFINE BrTable FeeModel
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'feemodel'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'feemodel'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -84,7 +84,7 @@ WITH  OVERLAY ROW 4 centered
     1 columns
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek Billing Event  BY  FeeModel */
     "Brand:" lcBrand skip
@@ -450,7 +450,7 @@ BROWSE:
      END.
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
-        {uright2.i}.
+        {Syst/uright2.i}.
         must-add = TRUE.
         NEXT LOOP.
      END.

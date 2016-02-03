@@ -21,11 +21,11 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i "new"}
-{eventlog.i}
-{cparam2.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
+{Func/lib/eventlog.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
 
 assign tuni1 = "accdatll"
        tuni2 = "".
@@ -278,7 +278,7 @@ END. /* toimi */
 /* Avataan striimi */
 IF llPaper THEN DO:
     ASSIGN tila = TRUE.
-    {tmsreport.i "return"}
+    {Syst/tmsreport.i "return"}
 END.
 
 ehto = 5.
@@ -329,7 +329,7 @@ fELog("REVENUE","Stopped:" + lcLogLine).
 
 IF llPaper THEN DO:
     ASSIGN tila = FALSE.
-    {tmsreport.i}
+    {Syst/tmsreport.i}
 END.
 
 ldEndTime = fMakeTS().

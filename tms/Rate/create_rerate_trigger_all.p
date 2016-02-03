@@ -1,13 +1,13 @@
 /* create_rerate_trigger_all.p   14.02.12/aam
 */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun = "cron".
-{eventlog.i}
-{cparam2.i}
-{date.i}
+{Func/lib/eventlog.i}
+{Func/cparam2.i}
+{Func/date.i}
 
 DEF VAR llCreated  AS LOG  NO-UNDO.
 DEF VAR liRateDay  AS INT  NO-UNDO.

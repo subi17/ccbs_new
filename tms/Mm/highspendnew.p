@@ -19,12 +19,12 @@
   VERSION ......: M15
 ------------------------------------------------------ */
 
-{commali.i}
-{eventlog.i}
-{timestamp.i}
-{cparam2.i}
-{fmakemsreq.i}
-{callquery.i}
+{Syst/commali.i}
+{Func/lib/eventlog.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fmakemsreq.i}
+{Func/callquery.i}
 
 DEF INPUT PARAMETER  icInvGroup AS CHAR       NO-UNDO.    
 

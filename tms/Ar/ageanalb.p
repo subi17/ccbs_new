@@ -9,11 +9,11 @@
   ------------------------------------------------------ */
 
 
-{commpaa.i}
-{utumaa.i "new"}
-{ageanal.i}
-{cparam2.i}
-{email.i}
+{Syst/commpaa.i}
+{Syst/utumaa.i "new"}
+{Ar/ageanal.i}
+{Func/cparam2.i}
+{Func/email.i}
 
 DEF VAR exfile      AS CHAR  FORMAT "X(40)"    NO-UNDO.
 DEF VAR lcConfDir   AS CHAR                    NO-UNDO.

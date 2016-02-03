@@ -9,10 +9,10 @@
 
 &GLOBAL-DEFINE BrTable PremiumNumber
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PremiumNumber'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PremiumNumber'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -67,7 +67,7 @@ WITH ROW FrmRow width 80 centered OVERLAY FrmDown  DOWN
        " Premium Numbers Information "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     PremiumNumber.Brand          COLON 20

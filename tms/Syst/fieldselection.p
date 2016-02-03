@@ -7,7 +7,7 @@
   CHANGED ......: 
   Version ......: yoigo
   ---------------------------------------------------------------------- */
-{commali.i}
+{Syst/commali.i}
 
 
 DEF INPUT  PARAMETER icTable        AS CHAR NO-UNDO.

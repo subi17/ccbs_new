@@ -13,7 +13,7 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE pcID AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE pcStruct AS CHARACTER NO-UNDO. 
@@ -56,13 +56,13 @@ IF MNPOperation.ErrorHandled NE ({&MNP_ERRORHANDLED_NO}) THEN
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = pcUserName.
-{eventval.i}
-{tmsconst.i}
-{mnpoperation.i}
-{log.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Mnp/mnpoperation.i}
+{Func/log.i}
 
 CASE pcOperation:
    WHEN "handle_error" THEN .

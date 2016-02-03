@@ -26,10 +26,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'BillTarget'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'BillTarget'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -401,7 +401,7 @@ BROWSE:
      END. /* Search-1 */
 
      ELSE IF lookup(nap,"3,f3") > 0 THEN DO: /* discounts */
-        {uright2.i}
+        {Syst/uright2.i}
         FIND BillTarget WHERE recid(BillTarget) = rtab[FRAME-LINE] no-lock.
         IF BillTarget.DiscPlan = "" THEN DO:
            MESSAGE "Discount plan has not been selected."

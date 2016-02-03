@@ -14,8 +14,8 @@
   VERSIO .......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{email.i}
+{Syst/commali.i}
+{Func/email.i}
 
 def var xDate1     as date no-undo.
 def var xDate2     as date no-undo. 

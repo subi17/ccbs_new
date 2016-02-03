@@ -8,10 +8,10 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{utumaa.i "new"}
-{edefine.i "new"}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/utumaa.i "new"}
+{Inv/edefine.i "new"}
 
 assign tuni1 = "nnpura5"
        tuni2 = "".
@@ -111,7 +111,7 @@ toimi:
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 RUN umakro (TRUE).
 
@@ -123,7 +123,7 @@ RUN nnpura5.p(INPUT CustNum1,input CustNum2,
 
 /* Suljetaan striimi */
 ASSIGN tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

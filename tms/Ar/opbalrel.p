@@ -8,9 +8,9 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "opbalrel"
        tuni2 = "".
@@ -82,7 +82,7 @@ toimi:
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 message "Printing in process...".         
 
@@ -91,7 +91,7 @@ RUN opbalrep  (ldtDate,
                OUTPUT oiCount).
 
 ASSIGN tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 MESSAGE oiCount "customers with overpayment balance were reported."
 VIEW-AS ALERT-BOX

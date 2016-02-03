@@ -11,7 +11,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR i AS INT.
 def var date1 as Date format "99-99-9999" NO-UNDO.

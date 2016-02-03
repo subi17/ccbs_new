@@ -1,4 +1,4 @@
-{ttinpmobsub.i}
+{tms_support/utilities/ttinpmobsub.i}
 RUN fixdumpexport.p(
     "/home/harrim/dumps/fixtures/",
     0,

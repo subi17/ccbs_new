@@ -1,4 +1,4 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "snet".
 
 def var llfound as log no-undo.

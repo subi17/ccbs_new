@@ -14,7 +14,7 @@
 
 &GLOBAL-DEFINE BrTable Brand
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR xBrand     like Brand.Brand  NO-UNDO.
 DEF VAR xBRName     like Brand.BRName NO-UNDO.
@@ -45,7 +45,7 @@ WITH ROW FrmRow width 80 overlay FrmDown  down
          + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     Brand.Brand     /* label format */

@@ -101,18 +101,18 @@
   Version ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{faccper.i}
-{fbankday.i}
-{nnpcst.i}
-{fcreditreq.i}
-{cparam2.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Payment'}
-{fuserright.i}
-{fcreditvalid.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/faccper.i}
+{Func/fbankday.i}
+{Ar/nnpcst.i}
+{Func/fcreditreq.i}
+{Func/cparam2.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Payment'}
+{Func/fuserright.i}
+{Func/fcreditvalid.i}
+{Syst/tmsconst.i}
 
 def var ok         as lo  format "Yes/No"     NO-UNDO.
 def var State      as lo  format "Yes/No"     NO-UNDO.

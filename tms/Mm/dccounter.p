@@ -8,8 +8,8 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{daycampaign.i}
+{Syst/commali.i}
+{Rate/daycampaign.i}
 
 DEF  INPUT PARAMETER iiMsseq       AS INT    NO-UNDO.
 DEF  INPUT PARAMETER icEvent       AS CHAR   NO-UNDO.

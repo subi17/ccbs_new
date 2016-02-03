@@ -14,10 +14,10 @@
   Version ......: M15
   ------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'areacode'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'areacode'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 

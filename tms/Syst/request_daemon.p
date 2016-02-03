@@ -7,14 +7,14 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1"
    katun   = "Cron".
    
-{timestamp.i}
-{log.i}
-{cparam2.i}
+{Func/timestamp.i}
+{Func/log.i}
+{Func/cparam2.i}
 
 DEF VAR llHandled AS LOG NO-UNDO INIT FALSE. 
 DEF VAR lcProgram AS CHAR NO-UNDO. 

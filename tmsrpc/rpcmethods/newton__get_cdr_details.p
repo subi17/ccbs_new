@@ -11,9 +11,9 @@
  * @output      cdr_datastruct;struct;contains needed CDR information as specified above ruby stub implementation
  */
 {xmlrpc/xmlrpc_access.i}
-{transname.i}
-{rate_roamzone.i}
-{tmsconst.i}
+{Func/transname.i}
+{Rate/rate_roamzone.i}
+{Syst/tmsconst.i}
 
 &SCOPED-DEFINE NORMAL "NORMAL" 
 &SCOPED-DEFINE DETAILED "DETAILED" 
@@ -124,15 +124,15 @@ FIND FIRST RatePlan WHERE
 IF NOT AVAILABLE RatePlan THEN
    RETURN appl_err(SUBST("RatePlan &1 not found", CliType.PricePlan)).
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Newton RPC".
 gcBrand = "1".
 
-{timestamp.i}
-{cparam2.i}
-{fdestcountry.i}
-{callquery.i}
-{istc.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fdestcountry.i}
+{Func/callquery.i}
+{Func/istc.i}
 
     /* HEADERS FIRST ROW */
 /* "headers" => 

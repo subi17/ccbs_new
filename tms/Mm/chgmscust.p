@@ -10,13 +10,13 @@
   Version ......: TF
   ------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobSub'}
-{timestamp.i}
-{cparam2.i}
-{fcustchangereq.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobSub'}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fcustchangereq.i}
+{Func/fcustdata.i}
 
 DEF INPUT PARAMETER iiMsSeq   AS INT  NO-UNDO. 
 DEF INPUT PARAMETER icChgType AS CHAR NO-UNDO.   /* user / invcust */

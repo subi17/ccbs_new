@@ -7,7 +7,7 @@
   changePVM ....:
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER iiMsSeq  AS INT .
 

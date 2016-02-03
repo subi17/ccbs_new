@@ -13,11 +13,11 @@
    VERSIO .......: M15
    -------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
-{fecgtask.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CGMember'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Func/fecgtask.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CGMember'}
 
 DEF INPUT PARAMETER icCustGroup LIKE CustGroup.CustGroup NO-UNDO .
 

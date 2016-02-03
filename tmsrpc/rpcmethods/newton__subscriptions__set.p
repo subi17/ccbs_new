@@ -76,19 +76,19 @@ IF pcIDCode NE "0000" AND pcIDCode NE "" THEN DO:
       RETURN appl_err(SUBST("Identification code &1 is not valid", pcIDCode)).
 END.
 
-{commpaa.i}
-{eventval.i}
+{Syst/commpaa.i}
+{Syst/eventval.i}
 katun = pcUserName.
 gcbrand = "1".
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
 END.
 
-{flimitreq.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{subser.i}
-{fcounter.i}
+{Func/flimitreq.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Mm/subser.i}
+{Func/fcounter.i}
 
 FUNCTION fSetSMSBundle RETURN CHARACTER 
          (INPUT piCurrValue AS INT,

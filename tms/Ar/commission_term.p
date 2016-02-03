@@ -8,9 +8,9 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{commission.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/commission.i}
 
 DEF INPUT  PARAMETER iiMsSeq      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icSource     AS CHAR NO-UNDO.

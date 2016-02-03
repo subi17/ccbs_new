@@ -8,9 +8,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'contact'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'contact'}
 
 DEF TEMP-TABLE ttContact NO-UNDO
    FIELD UserCode  AS CHAR

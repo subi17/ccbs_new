@@ -15,12 +15,12 @@
                   15.02.06/aam row to eventlog
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
-{func.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobCDR'} 
-{feventlog.i}
+{Syst/commali.i}
+{Func/msisdn.i}
+{Func/func.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobCDR'} 
+{Func/feventlog.i}
 
 DEF INPUT  PARAMETER      CLI          AS C NO-UNDO.
 

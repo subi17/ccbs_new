@@ -18,7 +18,7 @@
  */
 
 {xmlrpc/xmlrpc_access.i} 
-{tmsconst.i}
+{Syst/tmsconst.i}
 /* Input parameters */
 DEF VAR piOrderId     AS INT NO-UNDO.
 DEF VAR pcOldOperator AS CHAR NO-UNDO.
@@ -108,12 +108,12 @@ IF Order.OldPayType AND pcOldICC EQ "" THEN DO:
    RETURN appl_err("ICC is missing").
 END.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = pcCreator.
 gcBrand = "1".
-{orderfunc.i}
-{fcustdata.i}
-{eventval.i}
+{Func/orderfunc.i}
+{Func/fcustdata.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

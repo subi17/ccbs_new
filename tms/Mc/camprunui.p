@@ -8,7 +8,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR lcCampaign1   AS CHAR NO-UNDO. 
@@ -22,7 +22,7 @@ DEF VAR liErrors      AS INT  NO-UNDO.
 DEF VAR lcErrFile     AS CHAR NO-UNDO. 
 DEF VAR llOk          AS LOG  NO-UNDO.
 
-{camprundf.i}
+{Mc/camprundf.i}
 
 FORM
    SKIP(4)

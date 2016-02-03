@@ -12,10 +12,10 @@
   VERSIO .......: SCRUNKO3, (23.10.96)
   ------------------------------------------------------ */
 
-{commali.i}                           
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'usergrp'}
+{Syst/commali.i}                           
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'usergrp'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 

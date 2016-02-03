@@ -1,5 +1,5 @@
-{excel.i}
-{country.i}
+{Func/excel.i}
+{Syst/country.i}
 
 def var a      as c no-undo format "x(35)".
 DEF VAR b      AS c NO-UNDO.

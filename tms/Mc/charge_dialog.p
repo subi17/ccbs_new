@@ -8,12 +8,12 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{fcustpl.i}
-{fuserright.i}
-{lib/tokenlib.i}
-{fcharge_comp_loaded.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/fcustpl.i}
+{Func/fuserright.i}
+{Mc/lib/tokenlib.i}
+{Func/fcharge_comp_loaded.i}
 
 DEFINE INPUT PARAMETER iiMsSeq AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER icOperation AS CHARACTER NO-UNDO.

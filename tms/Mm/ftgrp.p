@@ -15,10 +15,10 @@
 
 &GLOBAL-DEFINE BrTable fatgroup
 
-{commali.i} 
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FatGroup'}
+{Syst/commali.i} 
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FatGroup'}
 
 DEF NEW shared VAR siirto AS CHAR.
 
@@ -77,7 +77,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     FATGroup.FTGrp       COLON 17 FORMAT "X(16)"
@@ -492,14 +492,14 @@ REPEAT WITH FRAME sel:
      END.
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0 THEN DO:  /* add */
-        {uright2.i}.
+        {Syst/uright2.i}.
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0  THEN DO TRANSACTION:
        /* DELETE */
-       {uright2.i}.
+       {Syst/uright2.i}.
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -556,7 +556,7 @@ REPEAT WITH FRAME sel:
      END. /* DELETE */
 
      ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:
-       {uright2.i}.
+       {Syst/uright2.i}.
        RUN local-find-this (FALSE).
        
        ufkey = TRUE.
@@ -567,7 +567,7 @@ REPEAT WITH FRAME sel:
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this(FALSE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
        cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.

@@ -5,7 +5,7 @@
  * @output struct;array of discount plan ids
 */
 
-{flistrpc.i}
+{rpcmethods/flistrpc.i}
 
 DEF VAR lcQuery AS CHAR NO-UNDO.
 

@@ -3,7 +3,7 @@
    mobsub should be in buffer
 */
 
-{setfees.i}
+{Func/setfees.i}
 
 /* fee for opening an service */
 FUNCTION fServiceOpenFee RETURNS LOGICAL

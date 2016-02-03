@@ -21,22 +21,22 @@
 
 DEFINE INPUT PARAMETER iiCustNum AS INT  NO-UNDO INIT 0.
 DEFINE INPUT PARAMETER icType    AS CHAR NO-UNDO.
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'OrdStat'}
-{timestamp.i}
-{errors.i}
-{fcustbal.i}
-{eventval.i}
-{cparam2.i}
-{mobsub1.i}
-{matrix.i}
-{ffeecont.i}
-{fsubser.i}
-{fctserval.i}
-{barrfunc.i}
-{mnpoutchk.i}
-{fdss.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'OrdStat'}
+{Func/timestamp.i}
+{Mf/errors.i}
+{Func/fcustbal.i}
+{Syst/eventval.i}
+{Func/cparam2.i}
+{Mm/mobsub1.i}
+{Func/matrix.i}
+{Func/ffeecont.i}
+{Func/fsubser.i}
+{Func/fctserval.i}
+{Func/barrfunc.i}
+{Mnp/mnpoutchk.i}
+{Func/fdss.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -872,22 +872,22 @@ PROCEDURE local-find-FIRST:
        IF      order = 1  AND iiCustNum =  0 
        THEN FIND FIRST Mobsub USE-INDEX cli     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 1  THEN DO: {mobfind.i FIRST } end.
+       ELSE IF order = 1  THEN DO: {Mm/mobfind.i FIRST } end.
        
        ELSE IF order = 2 AND iiCustNum = 0 THEN 
        FIND FIRST Mobsub USE-INDEX MSSeq     NO-LOCK NO-ERROR.
        
-       ELSE IF ORDER = 2 THEN  {mobfind.i FIRST }
+       ELSE IF ORDER = 2 THEN  {Mm/mobfind.i FIRST }
        
        ELSE IF order = 3 and iiCustNum =  0  
        THEN FIND FIRST Mobsub USE-INDEX AgrCust NO-LOCK NO-ERROR.
        
-       ELSE IF order = 3 THEN  {mobfind.i FIRST }
+       ELSE IF order = 3 THEN  {Mm/mobfind.i FIRST }
        
        ELSE IF order = 4 AND iiCustNum = 0 THEN 
        FIND FIRST Mobsub USE-INDEX MSSTatus     NO-LOCK NO-ERROR.
        
-       ELSE IF ORDER = 4 THEN  {mobfind.i FIRST }
+       ELSE IF ORDER = 4 THEN  {Mm/mobfind.i FIRST }
        
 
 END PROCEDURE.
@@ -897,22 +897,22 @@ PROCEDURE local-find-LAST:
        IF      order = 1  AND iiCustNum =  0 
        THEN FIND LAST  Mobsub USE-INDEX cli     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 1  THEN  {mobfind.i LAST  }
+       ELSE IF order = 1  THEN  {Mm/mobfind.i LAST  }
        
        ELSE IF order = 2 AND iiCustNum = 0 THEN 
        FIND LAST Mobsub USE-INDEX MSSeq     NO-LOCK NO-ERROR.
        
-       ELSE IF ORDER = 2 THEN  {mobfind.i LAST }
+       ELSE IF ORDER = 2 THEN  {Mm/mobfind.i LAST }
        
        ELSE IF order = 3 and iiCustNum =  0  
        THEN FIND LAST  Mobsub USE-INDEX AgrCust NO-LOCK NO-ERROR.
        
-       ELSE IF order = 3 THEN  {mobfind.i LAST  }
+       ELSE IF order = 3 THEN  {Mm/mobfind.i LAST  }
        
        ELSE IF order = 4 AND iiCustNum = 0 THEN 
        FIND LAST  Mobsub USE-INDEX MSSTatus     NO-LOCK NO-ERROR.
        
-       ELSE IF ORDER = 4 THEN  {mobfind.i LAST  }
+       ELSE IF ORDER = 4 THEN  {Mm/mobfind.i LAST  }
  
 END PROCEDURE.
 
@@ -921,22 +921,22 @@ PROCEDURE local-find-NEXT:
        IF      order = 1  AND iiCustNum =  0 
        THEN FIND NEXT Mobsub USE-INDEX cli     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 1  THEN  {mobfind.i NEXT }
+       ELSE IF order = 1  THEN  {Mm/mobfind.i NEXT }
  
        ELSE IF order = 2 AND iiCustNum = 0 THEN 
        FIND NEXT Mobsub USE-INDEX MSSeq     NO-LOCK NO-ERROR.
        
-       ELSE IF ORDER = 2 THEN  {mobfind.i NEXT }
+       ELSE IF ORDER = 2 THEN  {Mm/mobfind.i NEXT }
        
        ELSE IF order = 3 and iiCustNum =  0  
        THEN FIND NEXT Mobsub USE-INDEX AgrCust NO-LOCK NO-ERROR.
        
-       ELSE IF order = 3 THEN  {mobfind.i NEXT }
+       ELSE IF order = 3 THEN  {Mm/mobfind.i NEXT }
        
        ELSE IF order = 4 AND iiCustNum = 0 THEN 
        FIND NEXT Mobsub USE-INDEX MSSTatus     NO-LOCK NO-ERROR.
        
-       ELSE IF ORDER = 4 THEN  {mobfind.i NEXT }
+       ELSE IF ORDER = 4 THEN  {Mm/mobfind.i NEXT }
 
 END PROCEDURE.
 
@@ -945,22 +945,22 @@ PROCEDURE local-find-PREV:
        IF      order = 1  AND iiCustNum =  0 
        THEN FIND PREV Mobsub USE-INDEX cli     NO-LOCK NO-ERROR.
        
-       ELSE IF order = 1  THEN  {mobfind.i PREV }
+       ELSE IF order = 1  THEN  {Mm/mobfind.i PREV }
        
        ELSE IF order = 2 AND iiCustNum = 0 THEN 
        FIND PREV Mobsub USE-INDEX MSSeq     NO-LOCK NO-ERROR.
        
-       ELSE IF ORDER = 2 THEN  {mobfind.i PREV }
+       ELSE IF ORDER = 2 THEN  {Mm/mobfind.i PREV }
        
        ELSE IF order = 3 and iiCustNum =  0  
        THEN FIND PREV Mobsub USE-INDEX AgrCust NO-LOCK NO-ERROR.
        
-       ELSE IF order = 3 THEN  {mobfind.i PREV }
+       ELSE IF order = 3 THEN  {Mm/mobfind.i PREV }
        
        ELSE IF order = 4 AND iiCustNum = 0 THEN 
        FIND PREV Mobsub USE-INDEX MSSTatus     NO-LOCK NO-ERROR.
        
-       ELSE IF ORDER = 4 THEN  {mobfind.i PREV }
+       ELSE IF ORDER = 4 THEN  {Mm/mobfind.i PREV }
 
 END PROCEDURE.
 

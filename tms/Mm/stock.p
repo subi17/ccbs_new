@@ -15,11 +15,11 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'stock'}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'stock'}
+{Syst/tmsconst.i}
 
 &GLOBAL-DEFINE BrTable Stock
 
@@ -81,7 +81,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     Stock.Stock format "x(12)"     /* LABEL FORMAT */

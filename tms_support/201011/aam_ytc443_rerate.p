@@ -1,4 +1,4 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "qvantel".
 
 def var i as int no-undo.

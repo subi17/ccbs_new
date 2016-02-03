@@ -11,9 +11,9 @@
   MODIFIED .....: 
 -------------------------------------------------------------------------- */
 
-{commali.i}
-{excel.i}
-{mobsub1.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Mm/mobsub1.i}
 
 DEF VAR stname    AS  CHAR                       NO-undo.
 DEF VAR invno      AS int  FORMAT "zzzzzzz9"     NO-UNDO.

@@ -7,13 +7,13 @@
   MODIFIED .....: 14.02.07/aam yoigo version
   ------------------------------------------------------ */
 
-{commali.i}
-{invseq.i}
-{errors.i}
-{fcustbal.i}
-{nnpcst.i}
-{tmsconst.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/invseq.i}
+{Mf/errors.i}
+{Func/fcustbal.i}
+{Ar/nnpcst.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
 

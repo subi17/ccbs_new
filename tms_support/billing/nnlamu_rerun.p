@@ -1,12 +1,12 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
-{tmsparam2.i}
-{billrund.i NEW}
-{faccper.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Invoice'}
-{finvnum.i}
-{timestamp.i}
+{Func/tmsparam2.i}
+{Inv/billrund.i NEW}
+{Func/faccper.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Invoice'}
+{Func/finvnum.i}
+{Func/timestamp.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE " You cannot create invoices ! " VIEW-AS ALERT-BOX.
@@ -55,7 +55,7 @@ DEF VAR lcFile AS CHAR NO-UNDO.
 
 DEF STREAM sTimeLog.
 
-{tmsparam.i oh-tuasno  RETURN}. unknown = TMSParam.IntVal.
+{Func/tmsparam.i oh-tuasno  RETURN}. unknown = TMSParam.IntVal.
 
 /* Check that no Test Invoices exist in TMS,
    Tests must be deleted before real invoicing can be done.  */

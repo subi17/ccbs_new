@@ -7,12 +7,12 @@
   Version ......: TMS
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{files.i}
-{funcrunprocess_update.i}
-{funcrun_replica.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/files.i}
+{Syst/funcrunprocess_update.i}
+{Syst/funcrun_replica.i}
 
 DEF INPUT  PARAMETER idaInvDate      AS DATE NO-UNDO.
 DEF INPUT  PARAMETER ilOnlyNew       AS LOG  NO-UNDO.

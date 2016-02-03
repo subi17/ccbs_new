@@ -1,22 +1,22 @@
 /* rerate_define.i     11.03.11/aam separated from man_rate
 */
 
-{commali.i}
-{cparam2.i}
-{fcustcnt.i}
-{func.i}
-{cdrvar.i}
-{ficora.i}
-{chkbal2.i} 
-{mobol_tt.i}
-{fmakeservice.i}
-{fservlimit.i}
-{fsubser.i}
-{detailseq.i}
-{daycampaign.i}
-{cdr_rerate.i}
-{reratelog.i}
-{create_eventlog.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/fcustcnt.i}
+{Func/func.i}
+{Mm/cdrvar.i}
+{Mm/ficora.i}
+{Rate/chkbal2.i} 
+{Rate/mobol_tt.i}
+{Func/fmakeservice.i}
+{Func/fservlimit.i}
+{Func/fsubser.i}
+{Func/detailseq.i}
+{Rate/daycampaign.i}
+{Rate/cdr_rerate.i}
+{Rate/reratelog.i}
+{Func/create_eventlog.i}
 
 DEF VAR totalchanges       AS DEC NO-UNDO.
 DEF VAR CLI  LIKE MobCDR.CLI NO-UNDO.
@@ -35,11 +35,11 @@ DEF VAR b_foc              AS LO NO-UNDO.
 DEF VAR b_pref             AS C  NO-UNDO.
 DEF VAR b_asubtype         AS I  NO-UNDO.
        
-{rating_ttcall.i}
+{Rate/rating_ttcall.i}
 DEF TEMP-TABLE  ttDetail NO-UNDO LIKE McdrDtl.
 
-{onlinevar.i}
-{ticketfunc.i}
+{Rate/onlinevar.i}
+{Rate/ticketfunc.i}
 
 DEF VAR ok              AS LO   NO-UNDO FORMAT "Yes/No".
 DEF VAR count           AS I    NO-UNDO.
@@ -61,18 +61,18 @@ DEF VAR liUnkCust       AS INT  NO-UNDO.
 DEF VAR llChanged       AS LOG  NO-UNDO.
 DEF VAR lcRerateSource  AS CHAR NO-UNDO. 
  
-{cparam.i RepConfDir      return}.   xConfDir      = TmsParam.CharVAl.
-{cparam.i ErrCDouble      return}.   errorcode     = TmsParam.IntVal.
-{cparam.i PulseRate       return}.   ldPulserate   = TmsParam.DecVal.
-{cparam.i UnknownCustomer return}.   liUnkCust     = TmsParam.IntVal.
+{Func/cparam.i RepConfDir      return}.   xConfDir      = TmsParam.CharVAl.
+{Func/cparam.i ErrCDouble      return}.   errorcode     = TmsParam.IntVal.
+{Func/cparam.i PulseRate       return}.   ldPulserate   = TmsParam.DecVal.
+{Func/cparam.i UnknownCustomer return}.   liUnkCust     = TmsParam.IntVal.
 
-{rate_roamzone.i}
-{mobcdr_rate.i}
-{rating_double_check.i}
-{rerate_savecdr.i}
+{Rate/rate_roamzone.i}
+{Rate/mobcdr_rate.i}
+{Rate/rating_double_check.i}
+{Rate/rerate_savecdr.i}
 
-{tariff_tt.i}
-{rating_package.i}
+{Rate/tariff_tt.i}
+{Rate/rating_package.i}
 
 FUNCTION fEmptyRerateTempTables RETURNS LOG:
    EMPTY TEMP-TABLE ttServiceLCounter.

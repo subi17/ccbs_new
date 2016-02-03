@@ -8,8 +8,8 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 DEFINE INPUT PARAM piMNPType AS INTEGER NO-UNDO.
 

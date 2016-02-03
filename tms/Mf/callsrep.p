@@ -8,7 +8,7 @@
                   12.09.03/aam brand
   VERSION ......: M15
 ------------------------------------------------------ */
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR email   AS CHAR                NO-UNDO FORMAT "x(40)".
 DEF VAR asno    LIKE Customer.CustNum  NO-UNDO.

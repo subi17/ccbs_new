@@ -10,6 +10,6 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 RUN reqstatmenu.p({&REQTYPE_SUBSCRIPTION_CREATE}).

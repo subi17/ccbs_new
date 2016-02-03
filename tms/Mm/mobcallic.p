@@ -8,11 +8,11 @@
   Version ......: SCRUNKO4 (10.06.99)
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{msisdn.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobcdr'}
-{func.i}
+{Syst/commali.i} 
+{Func/msisdn.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobcdr'}
+{Func/func.i}
 
 DEF INPUT PARAMETER  CustNum AS INT NO-UNDO.
 

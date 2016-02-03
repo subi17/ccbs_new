@@ -11,7 +11,7 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i} 
+{Syst/commali.i} 
 
 DEF VAR lcMenuc   AS CHAR  NO-UNDO EXTENT 12 FORMAT "X(35)". 
 DEF VAR liReqType AS INT   NO-UNDO EXTENT 12.

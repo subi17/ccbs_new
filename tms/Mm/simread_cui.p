@@ -9,8 +9,8 @@
   Version ......: 
 ------------------------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEFINE VARIABLE lcSIMfile          AS CHARACTER NO-UNDO FORMAT "X(40)".
 DEFINE VARIABLE lcProcessedDir     AS CHARACTER NO-UNDO.

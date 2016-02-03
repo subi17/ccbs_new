@@ -8,8 +8,8 @@
   Version ......:
   ------------------------------------------------------------------ */
 
-{commali.i}  
-{mobsub1.i}
+{Syst/commali.i}  
+{Mm/mobsub1.i}
 
 DEF VAR InvGroup  LIKE Customer.InvGroup NO-UNDO.
 DEF VAR CustNum1  AS I   no-undo format "zzzzzz9".

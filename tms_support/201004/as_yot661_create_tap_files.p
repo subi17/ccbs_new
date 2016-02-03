@@ -1,4 +1,4 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
 /*RUN tapfilecr_yot661.p("TURTC",4/9/2010,4/9/2010,"",FALSE).*/

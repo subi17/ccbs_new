@@ -8,8 +8,8 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{dms.i}
+{Syst/commali.i}
+{Func/dms.i}
 
 DEF INPUT PARAMETER iiDMSID  AS INT NO-UNDO.
 

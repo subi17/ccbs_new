@@ -28,9 +28,9 @@ DEFINE VARIABLE ldtTime      AS DECIMAL   NO-UNDO.
 
 
 /* ***************************  Main Block  *************************** */
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
 
 DEFINE STREAM slog.
 

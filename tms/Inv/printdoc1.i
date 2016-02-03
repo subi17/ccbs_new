@@ -1,21 +1,21 @@
 &GLOBAL-DEFINE AllIncludes YES
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{printdoc1tt.i}
-{refcode.i}
-{transname.i}
-{ftransdir.i}
-{email.i}
-{fsubser.i}
-{nnpura.i}
-{customer_address.i}
-{fdestcountry.i}
-{tmsconst.i}
-{callquery.i}
-{ftaxdata.i}
-{fbundle.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Inv/printdoc1tt.i}
+{Func/refcode.i}
+{Func/transname.i}
+{Func/ftransdir.i}
+{Func/email.i}
+{Func/fsubser.i}
+{Inv/nnpura.i}
+{Func/customer_address.i}
+{Func/fdestcountry.i}
+{Syst/tmsconst.i}
+{Func/callquery.i}
+{Func/ftaxdata.i}
+{Mm/fbundle.i}
 
 &GLOBAL-DEFINE INSTALLMENT_DISCOUNT_BILLCODES "DISCPAYTERMDIR,DISCPAYTERMINDIR"
 

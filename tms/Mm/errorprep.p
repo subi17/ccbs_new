@@ -9,8 +9,8 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
+{Syst/commali.i}
+{Func/msisdn.i}
 
 DEF INPUT PARAMETER  errorcode AS INT             NO-UNDO.
 def /* new */ shared var siirto AS char.
@@ -52,7 +52,7 @@ DEF VAR SL_prefix    AS C                      NO-UNDO.
 DEF VAR mi-no        AS C                      NO-UNDO.
 DEf var roamview     AS i                      NO-UNDO.
 
-{cparam.i DefMSISDNPr  return} SL_prefix = tmsparam.CharVal.
+{Func/cparam.i DefMSISDNPr  return} SL_prefix = tmsparam.CharVal.
 
 form
     PrepCDR.ErrorCode

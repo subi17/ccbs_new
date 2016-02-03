@@ -7,9 +7,9 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{eventlog.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/lib/eventlog.i}
 
 DEF INPUT PARAMETER iiFRExecID AS INT  NO-UNDO.
 DEF INPUT PARAMETER icHost     AS CHAR NO-UNDO.

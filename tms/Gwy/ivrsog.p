@@ -8,7 +8,7 @@
   Version ......: 
   --------------------------------------------------------------------------- */
 
-{timestamp.i}
+{Func/timestamp.i}
 
 DEFINE INPUT PARAMETER piSoLog    AS INTEGER   NO-UNDO.
 DEFINE INPUT PARAMETER pcCommLine AS CHARACTER NO-UNDO.

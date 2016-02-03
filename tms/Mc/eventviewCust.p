@@ -12,7 +12,7 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR /*INPUT PARAMETER*/ xxtable LIKE Eventlog.TableName INIT "Customer".
 DEF INPUT PARAMETER xxkey   LIKE Eventlog.Key. 

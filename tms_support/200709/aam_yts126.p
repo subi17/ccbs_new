@@ -1,6 +1,6 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
-{timestamp.i}
+{Func/timestamp.i}
 
 def var lclist as char no-undo.
 def var lcerr  as char no-undo.

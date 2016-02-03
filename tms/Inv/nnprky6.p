@@ -11,9 +11,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnpura6"
        tuni2 = "".
@@ -120,7 +120,7 @@ toimi:
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.
-{tmsreport.i "return"}
+{Syst/tmsreport.i "return"}
 
 message "Printing in process".            
 
@@ -130,7 +130,7 @@ RUN nnpura6(INPUT CustNum1, INPUT CustNum1,
 
 /* Suljetaan striimi */
 ASSIGN tila = FALSE.
-{tmsreport.i}
+{Syst/tmsreport.i}
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

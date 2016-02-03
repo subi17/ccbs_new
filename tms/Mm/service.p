@@ -17,10 +17,10 @@
 
 &GLOBAL-DEFINE BrTable Service
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Service'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Service'}
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
@@ -84,7 +84,7 @@ WITH  OVERLAY ROW 4 centered
     FRAME lis.
 
 
-{brand.i}
+{Func/brand.i}
 form /* seek Service  BY  Service */
     "Brand Code:" lcBrand  HELP "Enter Brand"
      VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
@@ -493,7 +493,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
-       {uright2.i}
+       {Syst/uright2.i}
        /* change */
        RUN local-find-this(TRUE).
 

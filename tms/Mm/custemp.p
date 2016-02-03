@@ -12,10 +12,10 @@
 
 &GLOBAL-DEFINE BrTable custtemp
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CustTemp'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CustTemp'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -69,7 +69,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     CustTemp.TemplNum      COLumn-label "Code"

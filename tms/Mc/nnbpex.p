@@ -8,7 +8,7 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{commali.i}          
+{Syst/commali.i}          
 
 DEF VAR exdir     AS c  NO-UNDO.
 DEF VAR exName    AS c  NO-UNDO.

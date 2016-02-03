@@ -24,12 +24,12 @@
 
 &GLOBAL-DEFINE BrTable BDest
 
-{commali.i} 
-{tmsparam2.i}
-{timestamp.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'bdest'}
+{Syst/commali.i} 
+{Func/tmsparam2.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'bdest'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -110,7 +110,7 @@ WITH
    OVERLAY ROW 4 centered COLOR value(cfc) TITLE COLOR value(ctc)
    fr-header WITH side-LABELs FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 
 FORM 

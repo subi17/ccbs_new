@@ -10,7 +10,7 @@
   Version ......: TMS Master
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 
 DEF INPUT  PARAMETER /*VAR*/ icTableName AS CHAR NO-UNDO.

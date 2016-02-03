@@ -1,8 +1,8 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
 
-{timestamp.i}
-{eventval.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

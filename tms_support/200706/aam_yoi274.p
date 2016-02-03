@@ -1,7 +1,7 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
 
-{timestamp.i}
+{Func/timestamp.i}
 
 def stream sread.
 input stream sread from /apps/snet/200706/clitype_change_yoi274.txt.

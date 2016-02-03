@@ -9,7 +9,7 @@
   Version ......: M15
   -------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 
 DEF STREAM ticket.
@@ -179,7 +179,7 @@ toimi:
     END.
     DOWN cnum - 1.
     CHOOSE ROW bnfile
-    help "Choose customer and press ENTER !" {uchoose.i} no-error
+    help "Choose customer and press ENTER !" {Syst/uchoose.i} no-error
     WITH FRAME act.
     COLOR DISPLAY value(ccc) bnfile.
 

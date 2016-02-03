@@ -8,7 +8,7 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commali.i}.
+{Syst/commali.i}.
 
 DEF NEW shared VAR siirto AS CHAR.
 

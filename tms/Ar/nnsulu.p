@@ -46,11 +46,11 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i "new"}
-{fcurrency.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'payment'}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
+{Func/fcurrency.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'payment'}
 
 assign tuni1 = "nnsulu"
        tuni2 = "".
@@ -269,7 +269,7 @@ FUNCTION fChgPage RETURNS LOGICAL
 
    IF rl + iAddLine >= skayt1 THEN DO:
       if sl > 0 then do:
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
       end.
       ASSIGN rlx = 0
              sl = sl + 1
@@ -437,7 +437,7 @@ rival:      repeat ON ENDKEY UNDO rival, LEAVE rival WITH FRAME rival:
    END. /* toimi */
 
 ASSIGN tila = TRUE.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 ASSIGN
 sl = 0
@@ -695,7 +695,7 @@ END.
 IF sukoo THEN DO:
 
    IF NOT xOnlySum THEN DO:
-       {uprfeed.i rl}
+       {Syst/uprfeed.i rl}
    END.
 
    ASSIGN
@@ -733,9 +733,9 @@ LEAVE main.
 END. /* main */
 
 /* Adjust LAST page */
-{uprfeed.i rl}
+{Syst/uprfeed.i rl}
 ASSIGN tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 HIDE MESSAGE no-pause.
 HIDE FRAME options no-pause.

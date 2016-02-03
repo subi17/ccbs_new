@@ -12,9 +12,9 @@
 
 &GLOBAL-DEFINE BrTable bnet
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'EPGroup'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'EPGroup'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -52,7 +52,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     EPGroup.EpGroup     /* LABEL FORMAT */

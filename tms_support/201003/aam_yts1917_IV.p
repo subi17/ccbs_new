@@ -1,14 +1,14 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "Qvantel".
-{timestamp.i}
-{eventval.i}
-{faccper.i}
-{fcustbal.i}
-{fcustcnt.i}
-{finvnum.i}
-{fhdrtext.i}
-{finvoiceacc.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Func/faccper.i}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Func/finvnum.i}
+{Func/fhdrtext.i}
+{Func/finvoiceacc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

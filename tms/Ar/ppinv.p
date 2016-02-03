@@ -13,15 +13,15 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{finvbal.i}
-{fpaymplan.i}
-{fppinv.i}
+{Syst/commali.i}
+{Func/finvbal.i}
+{Func/fpaymplan.i}
+{Func/fppinv.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PPInv'}
-{invdet.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PPInv'}
+{Ar/invdet.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -447,7 +447,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         IF CAN-FIND(FIRST PPBatch WHERE PPBatch.PPlanID = iiPlanID)
         THEN DO:
            MESSAGE "Plan has already been divided into batches"
@@ -461,7 +461,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 

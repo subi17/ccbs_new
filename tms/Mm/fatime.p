@@ -30,11 +30,11 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable FATime
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Fatime'}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Fatime'}
+{Syst/tmsconst.i}
 
 DEF INPUT PARAMETER  icFatGrp    AS CHAR NO-UNDO.
 DEF INPUT PARAMETER  iiCustNum   AS INT  NO-UNDO.
@@ -642,7 +642,7 @@ REPEAT WITH FRAME sel:
 
      /* UPDATE memo */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
-        {uright2.i}.
+        {Syst/uright2.i}.
         cfc = "puyr". run ufcolor.
         ehto = 9. 
         RUN ufkey. ufkey = TRUE.

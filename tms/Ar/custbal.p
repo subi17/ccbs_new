@@ -7,12 +7,12 @@
   CHANGED ......: 
   Version ......: 
   ---------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CustBal'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CustBal'}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO.
 

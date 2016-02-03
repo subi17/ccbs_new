@@ -10,16 +10,16 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{fsubser.i}
-{fctserval.i}
-{ffeecont.i}
-{service.i}
-{timestamp.i}
-{fctchange.i}
-{fmakemsreq.i}
-{fnumberinq.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/fsubser.i}
+{Func/fctserval.i}
+{Func/ffeecont.i}
+{Func/service.i}
+{Func/timestamp.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/fnumberinq.i}
 
 DEF INPUT PARAMETER iiMsSeq AS INT NO-UNDO.
 

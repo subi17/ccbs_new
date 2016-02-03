@@ -11,14 +11,14 @@
                     28.06.07/aam new source "MCNOC"
 */   
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{fvoucher.i}
-{eventval.i}
-{fcustbal.i}
-{fpaymconfig.i}
-{msbalance.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/fvoucher.i}
+{Syst/eventval.i}
+{Func/fcustbal.i}
+{Func/fpaymconfig.i}
+{Mm/msbalance.i}
 
 DEF INPUT  PARAMETER iiRequest  AS INT  NO-UNDO.  /* prepaid request id */
 DEF INPUT  PARAMETER icCLI      AS CHAR NO-UNDO.  /* msisdn */

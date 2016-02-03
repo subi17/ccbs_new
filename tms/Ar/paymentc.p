@@ -9,7 +9,7 @@
   VERSION ......: M15
 ----------------------------------------------------------------------------*/
 
-{commali.i}
+{Syst/commali.i}
 
 /* call payments with customer 0 -> all */
 RUN payments.p (0,0,"").

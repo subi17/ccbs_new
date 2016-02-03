@@ -1,7 +1,7 @@
-{commali.i}
-{cparam2.i}
-{xmlfunction.i}
-{airnodes.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/xmlfunction.i}
+{Gwy/airnodes.i}
 
 DEFINE TEMP-TABLE ttUCIP NO-UNDO
    FIELD ttName   AS CHARACTER

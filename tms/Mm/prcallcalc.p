@@ -8,8 +8,8 @@
   changePVM ....:
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER msseq  AS INT .
 

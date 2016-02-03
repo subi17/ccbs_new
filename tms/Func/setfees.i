@@ -33,13 +33,13 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{fmakeservlimit.i}
-{create_eventlog.i}
-{nncoit2.i}
-{fcustpl.i}
-{eventval.i}
-{terminal_financing.i}
+{Syst/commali.i}
+{Func/fmakeservlimit.i}
+{Func/create_eventlog.i}
+{Func/nncoit2.i}
+{Func/fcustpl.i}
+{Syst/eventval.i}
+{Func/terminal_financing.i}
 
 FUNCTION fMakeSetfees RETURN INT
 ( INPUT  FeeModel     AS CHAR, 

@@ -170,25 +170,25 @@
             23.08.2007/aam ttIr and whole invoice as msseq based
 */
 
-{commali.i}                                                                   
-{country.i}
-{fixedfee.i}
-{cparam.i2}
-{timestamp.i}
-{fapvat.i}
-{billrund.i {1}}
-{fcustbal.i}
-{fcustcnt.i}
-{nncoit2.i}
-{fcurrency.i}
-{eventval.i}
-{fvasinv.i}
-{fduedate.i}
-{fsubser.i}
-{eventlog.i}
-{finvnum.i}
-{ftaxdata.i}
-{log.i}
+{Syst/commali.i}                                                                   
+{Syst/country.i}
+{Func/fixedfee.i}
+{Func/cparam.i2}
+{Func/timestamp.i}
+{Func/fapvat.i}
+{Inv/billrund.i {1}}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Func/nncoit2.i}
+{Func/fcurrency.i}
+{Syst/eventval.i}
+{Func/fvasinv.i}
+{Func/fduedate.i}
+{Func/fsubser.i}
+{Func/lib/eventlog.i}
+{Func/finvnum.i}
+{Func/ftaxdata.i}
+{Func/log.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

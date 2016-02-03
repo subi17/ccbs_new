@@ -9,14 +9,14 @@
                   order and order is in status 6 
   Version ......: yoigo
 -------------------------------------------------------------------------- */
-{commali.i} 
-{timestamp.i}
-{cparam2.i}
-{eventval.i}
-{forderstamp.i}
-{tmsconst.i}
-{order.i}
-{fcustdata.i}
+{Syst/commali.i} 
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Func/forderstamp.i}
+{Syst/tmsconst.i}
+{Func/order.i}
+{Func/fcustdata.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

@@ -11,14 +11,14 @@
   VERSIO .......: yoigo
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{utumaa.i new }
-{feplstart.i}
-{cparam2.i}
-{edefine.i NEW}
-{forderstamp.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/utumaa.i new }
+{Func/feplstart.i}
+{Func/cparam2.i}
+{Inv/edefine.i NEW}
+{Func/forderstamp.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER iiOrderID AS INT  NO-UNDO.
 

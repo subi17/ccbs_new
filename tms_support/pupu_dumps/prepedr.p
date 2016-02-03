@@ -21,11 +21,11 @@ DEF VAR lcDel2        AS CHAR NO-UNDO.
 DEF VAR gcBrand       AS CHAR NO-UNDO INIT "1".
 DEF VAR ldtTimeStamp  AS DATETIME  NO-UNDO.
 
-{tmsconst.i}
-{timestamp.i}
-{date.i}
-{cparam2.i}
-{ftransdir.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/date.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
 
 DEF STREAM sFile.
 

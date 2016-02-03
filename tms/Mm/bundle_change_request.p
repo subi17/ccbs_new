@@ -6,22 +6,22 @@
   CREATED ......: 10.11.10   
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{tmsconst.i}
-{timestamp.i}
-{fmakemsreq.i}
-{service.i}
-{msreqfunc.i}
-{fbundle.i}
-{rerate_request.i}
-{fsubstermreq.i}
-{fsendsms.i}
-{fbtc.i}
-{mnpoutchk.i}
-{main_add_lines.i}
-{invoicetarget.i}
-{dpmember.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/fmakemsreq.i}
+{Func/service.i}
+{Func/msreqfunc.i}
+{Mm/fbundle.i}
+{Rate/rerate_request.i}
+{Func/fsubstermreq.i}
+{Func/fsendsms.i}
+{Func/fbtc.i}
+{Mnp/mnpoutchk.i}
+{Func/main_add_lines.i}
+{Mc/invoicetarget.i}
+{Mc/dpmember.i}
 
 DEF INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 

@@ -6,13 +6,13 @@
   CREATED ......: 26.03.10
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commali.i}
-{fgettxt.i}
-{date.i}
-{fmakesms.i}
-{tmsconst.i}
-{fcreatereq.i}
-{msisdn_prefix.i}
+{Syst/commali.i}
+{Func/fgettxt.i}
+{Func/date.i}
+{Func/fmakesms.i}
+{Syst/tmsconst.i}
+{Func/fcreatereq.i}
+{Func/msisdn_prefix.i}
 
 FUNCTION fSendDextraSMS RETURNS LOGICAL
 (iiOrderId AS INTEGER,

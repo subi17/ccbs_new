@@ -10,9 +10,9 @@
   ----------------------------------------------------------------- */
 
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MthCall'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MthCall'}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE 

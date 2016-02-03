@@ -19,15 +19,15 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "NewtonRPC".
 gcBrand = "1".
-{tmsconst.i}
-{eventval.i}
-{timestamp.i}
-{dpmember.i}
-{coinv.i}
-{msreqfunc.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Mc/dpmember.i}
+{Func/coinv.i}
+{Func/msreqfunc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

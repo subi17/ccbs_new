@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 def shared var siirto as char.
 

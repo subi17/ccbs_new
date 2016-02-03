@@ -9,15 +9,15 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{fctserval.i}
-{fctchange.i}
-{fmakemsreq.i}
-{fduedate.i}
-{finvbal.i}
-{fpaymplan.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/fctserval.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/fduedate.i}
+{Func/finvbal.i}
+{Func/fpaymplan.i}
 
 DEF INPUT PARAMETER iiInvNum AS INT  NO-UNDO. 
 

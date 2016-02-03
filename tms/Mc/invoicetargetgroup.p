@@ -9,10 +9,10 @@
 
 &GLOBAL-DEFINE BrTable invoicetargetgroup
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoicetargetgroup'}
-{invoicetarget.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoicetargetgroup'}
+{Mc/invoicetarget.i}
 
 DEF INPUT PARAMETER iiCustnum  AS INT NO-UNDO.
 
@@ -59,7 +59,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
        string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     invoicetargetgroup.Brand            COLON 20

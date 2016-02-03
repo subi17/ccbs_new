@@ -1,6 +1,6 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
-{barrfunc.i}
+{Func/barrfunc.i}
 
 def var lcline  as char no-undo.
 def var limsseq as int  no-undo.

@@ -21,11 +21,11 @@
 
 &GLOBAL-DEFINE BrTable MsRequest
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'OrdStat'}
-{msisdn.i}
-{msreqfunc.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'OrdStat'}
+{Func/msisdn.i}
+{Func/msreqfunc.i}
 
 DEF INPUT  PARAMETER iiMsRequest  AS INT  NO-UNDO.
 

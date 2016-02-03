@@ -13,14 +13,14 @@
 &THEN
 
 &GLOBAL-DEFINE orderfunc YES
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
-{eventval.i}
-{forderstamp.i}
-{dextra.i}
-{cparam2.i}
-{main_add_lines.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
+{Func/forderstamp.i}
+{Func/dextra.i}
+{Func/cparam2.i}
+{Func/main_add_lines.i}
 
 DEF BUFFER bfOrder  FOR Order.
 DEF BUFFER bfOrder2 FOR Order.

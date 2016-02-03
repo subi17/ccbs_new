@@ -4,15 +4,15 @@
   APPLICATION ..: TMS
   AUTHOR .......: JP
   --------------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1"
    katun   = "Cron".
    
-{timestamp.i}
-{cparam2.i}
-{heartbeat.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/heartbeat.i}
+{Syst/tmsconst.i}
 
 DEF VAR lhField       AS HANDLE NO-UNDO.
 DEF VAR liField       AS INT    NO-UNDO. 

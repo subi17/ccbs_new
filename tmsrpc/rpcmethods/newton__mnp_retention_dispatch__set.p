@@ -29,8 +29,8 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-{commpaa.i}
-{eventval.i}
+{Syst/commpaa.i}
+{Syst/eventval.i}
 ASSIGN
    katun = pcUsername
    gcBrand = "1".

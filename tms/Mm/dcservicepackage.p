@@ -9,11 +9,11 @@
 
 &GLOBAL-DEFINE BrTable DCServicePackage
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'DCServicePackage'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'DCServicePackage'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -76,7 +76,7 @@ WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
        "  SERVICE PACKAGES OF " + STRING(icDCEvent) + " (Active) "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     DCServicePackage.Brand        COLON 20

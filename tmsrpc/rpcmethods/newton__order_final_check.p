@@ -8,12 +8,12 @@
  */
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "NewtonRPC".
 gcBrand = "1".
-{tmsconst.i}
-{date.i}
-{orderchk.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/orderchk.i}
 
 /* Input parameters */
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 

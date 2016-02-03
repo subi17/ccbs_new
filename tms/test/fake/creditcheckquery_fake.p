@@ -1,8 +1,8 @@
-{commali.i} 
-{xmlfunction.i}
-{mathfunction.i}
-{msreqfunc.i}
-{timestamp.i}
+{Syst/commali.i} 
+{Func/xmlfunction.i}
+{Func/mathfunction.i}
+{Func/msreqfunc.i}
+{Func/timestamp.i}
 
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.

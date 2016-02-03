@@ -81,10 +81,10 @@ IF NOT AVAIL FMItem THEN DO:
        RETURN appl_err("Item has been deleted by other user").
 END.
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = pcUserName.
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER pcUsername 

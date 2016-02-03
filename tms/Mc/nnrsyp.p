@@ -17,8 +17,8 @@
   -------------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable Reseller
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 def /* new */ shared var siirto as char.
 
@@ -73,7 +73,7 @@ with width 80 overlay scroll 1 15 down
     + string(pvm,"99-99-99") + " "
     frame sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     Reseller.Reseller     /* label format */
@@ -243,7 +243,7 @@ BROWSE:
         ufk[5]= 5  ufk[6]= 4   ufk[7]= 0 ufk[8]= 8   ufk[9]= 1
         ehto = 3 ufkey = false.
 
-        {uright1.i '"5,6"'}
+        {Syst/uright1.i '"5,6"'}
 
         run ufkey.p.
       end.
@@ -467,7 +467,7 @@ BROWSE:
 
      else if lookup(nap,"5,f5") > 0 then do:  /* lisays */
 
-        {uright2.i}
+        {Syst/uright2.i}
 
         must-add = true.
         next LOOP.
@@ -475,7 +475,7 @@ BROWSE:
 
      else if lookup(nap,"6,f6") > 0 then do transaction:  /* removal */
 
-       {uright2.i}
+       {Syst/uright2.i}
 
        delline = frame-line.
        find Reseller where recid(Reseller) = rtab[frame-line] no-lock.
@@ -532,7 +532,7 @@ BROWSE:
      else if lookup(nap,"enter,return") > 0 then CHANGE:
      do with frame lis transaction:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
 
        find Reseller where recid(Reseller) = rtab[frame-line(sel)]
        exclusive-lock.

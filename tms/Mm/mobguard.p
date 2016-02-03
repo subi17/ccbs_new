@@ -9,7 +9,7 @@
   ---------------------------------------------------------------------- */
 
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR ReasonC        AS CHAR NO-UNDO.
 DEF VAR ReasonT        AS CHAR NO-UNDO FORMAT "X(60)" .

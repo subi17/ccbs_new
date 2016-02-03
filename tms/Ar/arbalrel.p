@@ -12,9 +12,9 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "arbalrel"
        tuni2 = "".
@@ -99,7 +99,7 @@ toimi:
    END. /* toimi */
 
 ASSIGN tila = TRUE.
-{tmsreport.i "return"}
+{Syst/tmsreport.i "return"}
 
 MESSAGE "Printing in process...".            
 
@@ -107,7 +107,7 @@ RUN arbalrep.p(lcInvGroup[1],
                lcInvGroup[2]).
 
 ASSIGN tila = FALSE.
-{tmsreport.i}        
+{Syst/tmsreport.i}        
 
 MESSAGE "Printing complete !" VIEW-AS ALERT-BOX.
 

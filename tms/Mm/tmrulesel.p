@@ -8,7 +8,7 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commali.i}.
+{Syst/commali.i}.
 
 DEFINE INPUT PARAM piMsSeq     AS INT NO-UNDO. 
 DEFINE INPUT PARAM piCustNum   AS INT NO-UNDO. 

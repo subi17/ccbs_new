@@ -99,31 +99,31 @@
 
 &GLOBAL-DEFINE BrTable order      
 
-{commali.i} 
+{Syst/commali.i} 
 
 DEFINE  INPUT PARAMETER  ipTupas1  AS INTEGER NO-UNDO.
 DEFINE  INPUT PARAMETER  ipTupas2  AS INTEGER NO-UNDO.
 DEFINE  INPUT PARAMETER  icStatus  AS CHAR    NO-UNDO.
 DEFINE  INPUT PARAMETER  iiOrderID AS INT     NO-UNDO.
 
-{cparam2.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Order'}
-{eventval.i}
-{timestamp.i}
-{finvtxt.i}
-{fcustdata.i}
-{fctchange.i}
-{fmakemsreq.i}
-{msisdn.i}
-{forderstamp.i}
-{fcontrolupd.i}
-{ftmscode.i}
-{transname.i}
-{tmsconst.i}
-{orderfunc.i}
-{mnp.i}
-{freacmobsub.i}
+{Func/cparam2.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Order'}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Func/finvtxt.i}
+{Func/fcustdata.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/msisdn.i}
+{Func/forderstamp.i}
+{Func/fcontrolupd.i}
+{Func/ftmscode.i}
+{Func/transname.i}
+{Syst/tmsconst.i}
+{Func/orderfunc.i}
+{Mnp/mnp.i}
+{Func/freacmobsub.i}
 
 session:system-alert-boxes = true.
 
@@ -372,9 +372,9 @@ FORM
     COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "Multi SIM Info" 
     SIDE-LABEL FRAME frMultiSIM.
 
-{brand.i}
+{Func/brand.i}
 
-{order.i}
+{Func/order.i}
 
 form
     "OrderID ......:" Order.OrderID
@@ -1196,7 +1196,7 @@ PROCEDURE pOrderView:
         FIND Order WHERE recid(Order) = rtab[frame-line(sel)]
         EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
                                  
-        {ordersender.i Action}
+        {Mc/ordersender.i Action}
         
         ASSIGN
            memory = recid(order)

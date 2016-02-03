@@ -32,10 +32,10 @@
 
 &GLOBAL-DEFINE BrTable SingleFee
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'fixedfee'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'fixedfee'}
 
 DEF new shared VAR siirto AS CHAR.
 
@@ -85,8 +85,8 @@ DO:
    END.
 END.
 
-{ffeecont.i}
-{fixedfee.i}
+{Func/ffeecont.i}
+{Func/fixedfee.i}
 
 form
     SingleFee.Brand       FORMAT "x(4)" 
@@ -105,7 +105,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 lcBrand = "1".
 
 form

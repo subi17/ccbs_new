@@ -36,10 +36,10 @@
                   18.08.06/aam    don't prompt user when tuni2 = "direct"
   Version ......: M15
   ------------------------------------------------------ */
-{commali.i}
-{utumaa.i}
-{email.i}
-{chkmail.i}
+{Syst/commali.i}
+{Syst/utumaa.i}
+{Func/email.i}
+{Func/chkmail.i}
 
 DEF VAR ret          AS i                      NO-UNDO.
 DEF NEW SHARED VAR umaara  AS I  NO-UNDO.

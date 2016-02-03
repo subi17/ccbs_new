@@ -7,12 +7,12 @@
   Version ......: yoigo 
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
-{func.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PrepEDR'} 
-{feventlog.i}
+{Syst/commali.i}
+{Func/msisdn.i}
+{Func/func.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PrepEDR'} 
+{Func/feventlog.i}
 
 DEF INPUT  PARAMETER  icCLI              AS C NO-UNDO.
 

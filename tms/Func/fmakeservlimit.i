@@ -9,11 +9,11 @@
 
 &GLOBAL-DEFINE fmakeservlimit YES
 
-{commali.i}
-{date.i}
-{timestamp.i}
-{eventval.i}
-{fdss.i}
+{Syst/commali.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Func/fdss.i}
 
 /* somehow have to prevent calling fCleanEventObjects */
 DEF VAR llCleanServLimitEventLog AS LOGICAL NO-UNDO INIT TRUE.

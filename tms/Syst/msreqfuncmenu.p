@@ -7,7 +7,7 @@
   Version ......: TMS Master
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEFINE INPUT PARAMETER iiMsRequest AS INTEGER NO-UNDO.
 

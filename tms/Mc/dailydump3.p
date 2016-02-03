@@ -10,11 +10,11 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "cron".
 
-{eventlog.i}
+{Func/lib/eventlog.i}
 
 def var period  as int    no-undo.
 DEF VAR liQty   AS INT    NO-UNDO.

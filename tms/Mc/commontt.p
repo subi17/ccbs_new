@@ -45,8 +45,8 @@
   SHARED .......: INPUT: CustNum
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO.
 

@@ -68,13 +68,13 @@
 &GLOBAL-DEFINE TMSCodeDef NO
 &GLOBAL-DEFINE BrTable Invoice
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoice'}
-{invdet.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoice'}
+{Ar/invdet.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -155,7 +155,7 @@ WITH
     OVERLAY ROW 3 centered COLOR value(cfc) TITLE COLOR value(ctc)
     " ATTENTION ! ! ! " NO-LABEL WITH FRAME unetto.
 
-{brand.i}
+{Func/brand.i}
 
 form /* Invoicen numerohakua varten */
     "Brand .:" lcBrand skip

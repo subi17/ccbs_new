@@ -9,8 +9,8 @@
   Version ......: M15
   ----------------------------------------------------------------------- */
 
-{testpaa.i}
-{eventval.i} 
+{Syst/testpaa.i}
+{Syst/eventval.i} 
 
 DEF TEMP-TABLE xxSubserParam LIKE SubserPara.
 

@@ -1,10 +1,10 @@
-{commali.i}
-{cparam2.i}
-{msreqfunc.i}
-{provision.i}
-{fmakemsreq.i}
-{tmsconst.i}
-{fdss.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/msreqfunc.i}
+{Gwy/provision.i}
+{Func/fmakemsreq.i}
+{Syst/tmsconst.i}
+{Func/fdss.i}
 
 DEF INPUT PARAMETER iiRequest AS INTEGER NO-UNDO.
 

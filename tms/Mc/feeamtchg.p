@@ -1,10 +1,10 @@
 /* feeamtchg.p          01.12.04/aam
 */
 
-{commali.i}
-{eventval.i}
-{cparam2.i}
-{nncoit2.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/cparam2.i}
+{Func/nncoit2.i}
 
 DEF VAR lcCLIType   AS CHAR NO-UNDO.
 DEF VAR ldOldAmt    AS DEC  NO-UNDO.

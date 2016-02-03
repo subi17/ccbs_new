@@ -11,26 +11,26 @@
   Version ......: Yoigo
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{msreqfunc.i}
-{eventval.i}
-{fwebuser.i}
-{fmakemsreq.i}
-{msisdn.i}
-{timestamp.i}
-{ftmrlimit.i}
-{fcustdata.i}
-{msagrcustchg.i}
-{fuserright.i}
-{tmsconst.i}
-{invoicetarget.i}
-{fdss.i}
-{femailinvoice.i}
-{fcustchangereq.i}
-{fsubstermreq.i}
-{main_add_lines.i}
-{fbankdata.i}
-{fbundle.i}
+{Syst/commali.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Func/fwebuser.i}
+{Func/fmakemsreq.i}
+{Func/msisdn.i}
+{Func/timestamp.i}
+{Func/ftmrlimit.i}
+{Func/fcustdata.i}
+{Mm/msagrcustchg.i}
+{Func/fuserright.i}
+{Syst/tmsconst.i}
+{Mc/invoicetarget.i}
+{Func/fdss.i}
+{Func/femailinvoice.i}
+{Func/fcustchangereq.i}
+{Func/fsubstermreq.i}
+{Func/main_add_lines.i}
+{Func/fbankdata.i}
+{Mm/fbundle.i}
 
 SESSION:SYSTEM-ALERT-BOXES = TRUE.
 

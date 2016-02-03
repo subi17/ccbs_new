@@ -10,11 +10,11 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
-{cparam2.i}
-{timestamp.i}
-{billrund.i NEW}
-{ftransdir.i}
+{Syst/commpaa.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Inv/billrund.i NEW}
+{Func/ftransdir.i}
 
 DEFINE VARIABLE lcInvRunFile AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLine       AS CHARACTER NO-UNDO.

@@ -9,12 +9,12 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{excel.i}
-{function.i}
-{commali.i}
-{date.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoice'}
+{Func/excel.i}
+{Func/function.i}
+{Syst/commali.i}
+{Func/date.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoice'}
 
 DEF TEMP-TABLE imth NO-UNDO
    FIELD yr   AS i

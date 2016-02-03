@@ -10,7 +10,7 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 DEF INPUT PARAMETER ipMsSeq AS INTEGER NO-UNDO.
 DEF VAR lcStatus AS CHAR NO-UNDO.
 

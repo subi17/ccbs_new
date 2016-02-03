@@ -21,10 +21,10 @@
 
 &GLOBAL-DEFINE BrTable RepText
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'reptext'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'reptext'}
 
 DEF INPUT PARAMETER iiTextType AS INT  NO-UNDO.
 DEF INPUT PARAMETER icKeyValue AS CHAR NO-UNDO.
@@ -113,7 +113,7 @@ FORM
 WITH OVERLAY ROW 7 CENTERED COLOR VALUE(cfc) TITLE COLOR VALUE(ctc)
    fr-header WITH SIDE-LABELS FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 FORM /* hakua2 varten */
    "Brand ...:" lcBrand skip

@@ -29,15 +29,15 @@ DEF VAR liRequest      AS INT  NO-UNDO.
 DEF VAR lcResult       AS CHAR NO-UNDO.
 DEF VAR lhCustomer     AS HANDLE NO-UNDO.
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    katun = "IVR_" + gbAuthLog.EndUserId.
    gcBrand = "1".
-{tmsconst.i}
-{timestamp.i}
-{eventval.i}
-{fmakemsreq.i}
-{femailinvoice.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Func/fmakemsreq.i}
+{Func/femailinvoice.i}
 
 IF validate_request(param_toplevel_id, "string,int") EQ ? THEN RETURN.
 pcMSISDN = get_string(param_toplevel_id,"0").

@@ -10,7 +10,7 @@
   Version ......: M15
 --------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 def var module as c  format "x(30)"   NO-UNDO.
 def var ok     as lo format "Yes/No" NO-UNDO.

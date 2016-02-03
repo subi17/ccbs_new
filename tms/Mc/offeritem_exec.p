@@ -6,15 +6,15 @@
   Version ......: yoigo
 -------------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{timestamp.i}
-{ftaxdata.i}
-{offer.i}
-{ftopup.i}
-{service.i}
-{dpmember.i}
-{contract_end_date.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/ftaxdata.i}
+{Mc/offer.i}
+{Func/ftopup.i}
+{Func/service.i}
+{Mc/dpmember.i}
+{Func/contract_end_date.i}
 
 DEF INPUT  PARAMETER iiMsSeq       AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiOrderID     AS INT  NO-UNDO.

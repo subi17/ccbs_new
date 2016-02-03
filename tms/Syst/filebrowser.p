@@ -9,7 +9,7 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEFINE TEMP-TABLE ttFiles NO-UNDO
    FIELD FileName AS CHARACTER FORMAT "X(78)".

@@ -8,17 +8,17 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN 
    gcBrand = "1" 
    katun   = "Cron".
        
-{eventlog.i}
-{timestamp.i}
-{dftimetable.i}
-{cparam2.i}
-{host.i}
+{Func/lib/eventlog.i}
+{Func/timestamp.i}
+{Syst/dftimetable.i}
+{Func/cparam2.i}
+{Syst/host.i}
 
 DEF VAR liFiles     AS INT  NO-UNDO.
 DEF VAR liCnt       AS INT  NO-UNDO.

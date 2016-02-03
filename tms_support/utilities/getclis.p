@@ -1,4 +1,4 @@
-{ttinpmobsub.i}
+{tms_support/utilities/ttinpmobsub.i}
 fAddOption("ValueField", "Mobsub.MsSeq").
 fAddOption("DefaultExport", "FALSE").
 fAddOption("ExportCOTarg", "TRUE").

@@ -12,12 +12,12 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{date.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'cotarg'}
+{Func/date.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'cotarg'}
 DEF INPUT PARAMETER iiKey AS INT NO-UNDO. 
 DEF INPUT PARAMETER icType   AS CHAR NO-UNDO. 
 
@@ -308,7 +308,7 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  /* SHARING */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this (FALSE).
        IF AVAILABLE CoTarg 
        THEN RUN coshare.p (CoTarg.CoTargID). 
@@ -317,7 +317,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0 AND lcRight = "RW"
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.

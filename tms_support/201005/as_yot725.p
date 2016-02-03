@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand  = "1".
-{date.i}
-{msreqfunc.i}
+{Func/date.i}
+{Func/msreqfunc.i}
 
 input from Bono8_promotion.csv.
 

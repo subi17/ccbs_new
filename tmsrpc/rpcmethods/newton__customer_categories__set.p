@@ -11,9 +11,9 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{eventval.i}
+{Syst/eventval.i}
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
 DEF VAR pcCategory AS CHAR NO-UNDO.

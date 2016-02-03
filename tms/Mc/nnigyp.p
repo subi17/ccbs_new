@@ -36,11 +36,11 @@
 
 &GLOBAL-DEFINE BrTable InvGroup
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invgroup'}
-{function.i}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invgroup'}
+{Func/function.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -97,7 +97,7 @@ form
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     InvGroup.InvGroup    /* LABEL FORMAT */ COLON 22

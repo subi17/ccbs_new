@@ -23,13 +23,13 @@
 
 &GLOBAL-DEFINE TMSCodeDef NO
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ffitem'}
-{eventval.i} 
-{invdet.i}
-{finvbal.i}
-{cparam2.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ffitem'}
+{Syst/eventval.i} 
+{Ar/invdet.i}
+{Func/finvbal.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER  FFNum  AS i  NO-UNDO.
 

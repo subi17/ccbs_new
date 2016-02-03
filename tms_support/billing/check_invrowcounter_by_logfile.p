@@ -1,12 +1,12 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
-{timestamp.i}
-{date.i}
-{cparam2.i}
-{istc.i}
-{chk_cdr_invrowcounter.i &ttReference = "REFERENCE-ONLY"}
-{date.i}
-{timestamp.i}
+{Func/timestamp.i}
+{Func/date.i}
+{Func/cparam2.i}
+{Func/istc.i}
+{Inv/chk_cdr_invrowcounter.i &ttReference = "REFERENCE-ONLY"}
+{Func/date.i}
+{Func/timestamp.i}
 
 def var i as int no-undo.
 def var k as int no-undo.

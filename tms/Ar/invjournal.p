@@ -35,13 +35,13 @@
   VERSION ......: Yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i}
-{invjournal.i}
-{cparam2.i}
-{fcurrency.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoice'}
+{Syst/commali.i}
+{Syst/utumaa.i}
+{Ar/invjournal.i}
+{Func/cparam2.i}
+{Func/fcurrency.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoice'}
 
 
 DEF INPUT  PARAMETER TABLE FOR TCustGroup.
@@ -168,7 +168,7 @@ FUNCTION fChgPage RETURNS LOGICAL
 
    if rl + iAddLine >= skayt1 then do:
       if sl > 0 then do:
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
       end.
       ASSIGN rlx = 0 sl = sl + 1 rl = 9.
       view stream tul frame sivuots.
@@ -552,7 +552,7 @@ END.
 if ttCriter.Summary AND oiInvQty > 0 then do:
 
    IF ttCriter.Invoices THEN DO:
-      {uprfeed.i rl}
+      {Syst/uprfeed.i rl}
    END.
 
    ASSIGN sl = sl + 1 rl = 7.
@@ -599,7 +599,7 @@ if ttCriter.Summary AND oiInvQty > 0 then do:
 end. /* summary */
 
 IF ttCriter.ToFile = "" OR llStreamOpen THEN DO:
-   {uprfeed.i rl}
+   {Syst/uprfeed.i rl}
 
    IF ttCriter.ToFile > "" THEN DO:
       OUTPUT STREAM tul CLOSE.

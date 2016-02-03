@@ -8,9 +8,9 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "unregrep"
        tuni2 = "".
@@ -78,7 +78,7 @@ toimi:
    END. /* toimi */
 
 ASSIGN tila = TRUE.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 MESSAGE "Printing in progress...".
 

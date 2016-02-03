@@ -7,13 +7,13 @@ CREATED ......: 8.5.2015
 CHANGED ......:
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commali.i}
+{Syst/commali.i}
 gcBrand = "1".
-{cparam2.i}
-/*{utumaa.i new }*/
-/*{edefine.i new}*/
-{tmsconst.i}
-{timestamp.i}
+{Func/cparam2.i}
+/*{Syst/utumaa.i new }*/
+/*{Inv/edefine.i new}*/
+{Syst/tmsconst.i}
+{Func/timestamp.i}
 
 DEF INPUT PARAM iiOrderId AS INT NO-UNDO.
 DEF INPUT PARAM icEmailAddress AS CHAR NO-UNDO.

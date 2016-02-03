@@ -18,7 +18,7 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE pcId          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcStruct      AS CHARACTER NO-UNDO. 
@@ -90,9 +90,9 @@ END.
 IF LENGTH(pcId) > 16
    THEN RETURN appl_err("Billing Item code max size exceeded").
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = lcBrand.
-{eventval.i}
+{Syst/eventval.i}
 katun = "VISTA_" + get_string(pcStruct, "username").
 
 IF TRIM(katun) EQ "VISTA_" THEN DO:

@@ -11,8 +11,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF shared VAR siirto AS CHAR.
 
@@ -228,7 +228,7 @@ add-new:
           ufk[1] = 133  ufk[2] = 134  ufk[3] = 0    ufk[4] = 7
           ufk[5] = 5    ufk[6] = 4    ufk[7] = 11   ufk[8] = 8
           ufkey = FALSE ehto = 3.
-          {uright1.i '"4,5,6"'}
+          {Syst/uright1.i '"4,5,6"'}
           RUN ufkey.p.
        END.
 
@@ -434,13 +434,13 @@ add-new:
        END.
 
        else if nap = "5" or nap = "f5" THEN DO :  /* lisAys */
-          {uright2.i}
+          {Syst/uright2.i}
           must-add = TRUE.
           NEXT LOOP.
        END.
 
      else if lookup(nap,"6,f6") > 0 THEN DO:  /* removal */
-        {uright2.i}
+        {Syst/uright2.i}
         delline = FRAME-LINE.
         FIND MenuText where recid(MenuText) = rtab[FRAME-LINE] no-lock.
 
@@ -485,7 +485,7 @@ add-new:
      END. /* removal */
 
        else  if nap = "4" or nap = "f4" THEN DO:  /* change */
-          {uright2.i}
+          {Syst/uright2.i}
           FIND MenuText where recid(MenuText) = rtab[FRAME-LINE] exclusive-lock.
           IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMenuText).
           ASSIGN

@@ -7,20 +7,20 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{timestamp.i}
-{eventlog.i}
-{fmakemsreq.i}
-{fbundle.i}
-{mdub.i}
-{service.i}
-{fdss.i}
-{fprepaidfee.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/lib/eventlog.i}
+{Func/fmakemsreq.i}
+{Mm/fbundle.i}
+{Func/mdub.i}
+{Func/service.i}
+{Func/fdss.i}
+{Func/fprepaidfee.i}
 
 /* files and dirs */
 DEF VAR lcLine           AS CHAR NO-UNDO.

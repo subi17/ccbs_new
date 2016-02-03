@@ -8,9 +8,9 @@
   VERSION ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "subsrel"
        tuni2 = "".
@@ -189,7 +189,7 @@ run ufkey.
 
 IF lcFile = "" THEN DO:
    assign tila = true.
-   {utuloste.i "return"}
+   {Syst/utuloste.i "return"}
 END.
 
 message "Printing in process".            
@@ -208,7 +208,7 @@ run subsrep (ldtDate1,
 
 IF lcFile = "" THEN DO:
    assign tila = false.
-   {utuloste.i}
+   {Syst/utuloste.i}
 END.
 
 message "Subscription revenue report is finished."

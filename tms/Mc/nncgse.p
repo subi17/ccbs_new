@@ -10,7 +10,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 
@@ -135,7 +135,7 @@ print-line:
          ASSIGN
          ufk = 0 ufk[1] = 35 ufk[4] = 510 ufk[5] = 11
          ufk[8] = 8  ufk[9] = 1 siirto = ? ehto = 3 ufkey = FALSE.
-         {uright1.i '"4"'}
+         {Syst/uright1.i '"4"'}
          RUN ufkey.p.
       END.
   END. /* print-line */
@@ -271,7 +271,7 @@ BROWSE:
 
         /* look members */
         else if lookup(nap,"4,f4") > 0 THEN DO:
-           {uright2.i}
+           {Syst/uright2.i}
            FIND CustGroup where recid(CustGroup) = rtab[FRAME-LINE] no-lock.
 
            ufkey = TRUE.

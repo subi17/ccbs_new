@@ -9,8 +9,8 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEF VAR lkm       AS i  NO-UNDO.
 def var pvm1      as da no-undo format "99-99-99".

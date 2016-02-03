@@ -7,9 +7,9 @@ ocResult:
                         request creation is failed.
 */
 
-{commali.i}
-{barrfunc.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/barrfunc.i}
+{Func/timestamp.i}
 
 DEFINE INPUT PARAMETER iiMsSeq    AS INTEGER   NO-UNDO.
 DEFINE INPUT PARAMETER icBarringCommands AS CHARACTER NO-UNDO.

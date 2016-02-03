@@ -25,11 +25,11 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable MsRequest
 
-{commali.i}
-{timestamp.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MsRequest'}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MsRequest'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -126,7 +126,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
        "  Requests "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     MsRequest.MsRequest  COLON 18  FORMAT ">>>>>>>>9"
@@ -703,7 +703,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        MESSAGE "Deleting!" VIEW-AS ALERT-BOX.
        RUN local-find-this (FALSE).

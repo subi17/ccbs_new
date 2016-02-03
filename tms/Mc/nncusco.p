@@ -10,7 +10,7 @@ CHANGED .....: 08.12.1998 pt
 VERSION .....: M15
 ----------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 def var date1    as da format "99-99-99"  NO-UNDO.
 def var date2    as da format "99-99-99"  NO-UNDO.

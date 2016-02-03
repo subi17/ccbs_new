@@ -1,6 +1,6 @@
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
 katun = "cron"
 gcbrand = "1".

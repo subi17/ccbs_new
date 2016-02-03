@@ -10,10 +10,10 @@
 
 &GLOBAL-DEFINE BrTable TopupScheme
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'TopupScheme'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'TopupScheme'}
+{Syst/eventval.i}
 
 DEF BUFFER bItemValue FOR TMRItemValue.
 
@@ -72,7 +72,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
        string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     TopupScheme.Brand          COLON 20

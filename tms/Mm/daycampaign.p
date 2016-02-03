@@ -8,12 +8,12 @@
   VERSION ......: SCRUNKO3
   ------------------------------------------------------ */
 
-{commali.i}
-{tmsconst.i}
-{daycampaign.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'DayCampaign'}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Rate/daycampaign.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'DayCampaign'}
 
 SESSION:SYSTEM-ALERT-BOXES = TRUE.
 

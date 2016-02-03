@@ -21,8 +21,8 @@
   Version ......: M15
 --------------------------------------------------------------*/
 
-{commali.i}
-{cliinlog.i}
+{Syst/commali.i}
+{Mf/cliinlog.i}
 
 DEFINE INPUT PARAMETER pFileName  AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER pMessage   AS CHARACTER FORMAT "X(200)" NO-UNDO.
@@ -68,7 +68,7 @@ IF ilLogType = "FileEmail" AND pEmail THEN DO:
 
    /* Look FOR the emailaddress in TMSParam */
 
-   {tmsparam.i NotifyAddress RETURN}
+   {Func/tmsparam.i NotifyAddress RETURN}
 
    lAddress = TMSParam.CharVal.
 

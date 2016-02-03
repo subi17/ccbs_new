@@ -14,10 +14,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 /* print-linemuuttujat */
-{utumaa.i NEW }
+{Syst/utumaa.i NEW }
 
 assign tuni1 = "nnlati"
        tuni2 = "".
@@ -128,7 +128,7 @@ TOIMI:
 
    /* Avataan striimi */
    ASSIGN tila = TRUE.
-   {tmsreport.i "return"}
+   {Syst/tmsreport.i "return"}
 
    message "Printing, break = ESC".
 

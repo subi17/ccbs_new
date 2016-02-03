@@ -8,7 +8,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{testpaa.i} 
+{Syst/testpaa.i} 
 
 DEF shared VAR siirto AS CHAR.
 

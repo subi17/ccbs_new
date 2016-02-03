@@ -7,11 +7,11 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'InvoiceTarget'}
-{timestamp.i}
-{invoicetarget.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'InvoiceTarget'}
+{Func/timestamp.i}
+{Mc/invoicetarget.i}
 
 DEF INPUT PARAM iiITGroupID AS INT NO-UNDO.
 DEF INPUT PARAM iiMsSeq AS INTEGER NO-UNDO. 

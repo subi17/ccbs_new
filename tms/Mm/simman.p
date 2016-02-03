@@ -12,10 +12,10 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable bnet
 
-{commali.i}                
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'simman'}
+{Syst/commali.i}                
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'simman'}
 
 
 IF llDoEvent THEN DO:
@@ -64,7 +64,7 @@ form
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     SimMan.Mancode     /* LABEL FORMAT */

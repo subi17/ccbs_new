@@ -16,9 +16,9 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}                        
+{Syst/commali.i}                        
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 
 DEF VAR asno1   LIKE Customer.CustNum       NO-UNDO init 0.
@@ -174,7 +174,7 @@ repeat WITH FRAME rajat:
                   ELSE up 1.
                END.
                DOWN (order1 - 1).
-               CHOOSE ROW j1 {uchoose.i} no-error.
+               CHOOSE ROW j1 {Syst/uchoose.i} no-error.
                order1 = frame-line(jar1).
                HIDE FRAME jar1 no-pause.
                DISP entry(order1,jar1) @ j1 WITH FRAME rajat.
@@ -189,7 +189,7 @@ repeat WITH FRAME rajat:
                   ELSE up 1.
                END.
                DOWN (order2 - 1).
-               CHOOSE ROW j2 {uchoose.i} no-error.
+               CHOOSE ROW j2 {Syst/uchoose.i} no-error.
                order2 = frame-line(jar2).
                HIDE FRAME jar2 no-pause.
                DISP entry(order2,jar2) @ j2 WITH FRAME rajat.
@@ -241,7 +241,7 @@ toimi:
          tuni1 = "nnasll"
          tuni2 = "".
          tila =true.
-         {tmsreport.i "return"}
+         {Syst/tmsreport.i "return"}
 
          RUN nnasll(CustGroup,
                     asno1,asno2,
@@ -282,7 +282,7 @@ toimi:
             tuni1 = "nnasls"
             tuni2 = "".
             tila =true.
-            {tmsreport.i "return"}
+            {Syst/tmsreport.i "return"}
          END.
 
          RUN nnasls( CustGroup,
@@ -327,7 +327,7 @@ toimi:
    /* CLOSE the printer STREAM IF a paper report was done */
    IF toimi = 3 OR toimi = 5 THEN DO:
       tila = FALSE.
-      {tmsreport.i}.
+      {Syst/tmsreport.i}.
    END.
    LEAVE rajat.
 END.

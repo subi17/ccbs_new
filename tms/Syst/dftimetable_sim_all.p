@@ -7,8 +7,8 @@
   CHANGED ......: 
   Version ......: yoigo
   ---------------------------------------------------------------------- */
-{commali.i}
-{scheduled_dumps.i}
+{Syst/commali.i}
+{Func/scheduled_dumps.i}
 
 DEF VAR xrecid       AS RECID                           init ?.
 DEF VAR FIRSTrow     AS INT                    NO-UNDO  init 0.

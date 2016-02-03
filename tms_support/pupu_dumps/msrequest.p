@@ -12,13 +12,13 @@ DEF VAR ldeFrom      AS DEC NO-UNDO.
 DEF VAR ldeTo        AS DEC NO-UNDO. 
 DEF VAR lcReqSource  AS CHAR NO-UNDO.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcbrand = "1".
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
-{tmsconst.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
+{Syst/tmsconst.i}
 
 IF idaFromDate EQ ? OR
    idaToDate EQ ? OR

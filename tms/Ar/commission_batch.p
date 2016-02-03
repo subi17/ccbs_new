@@ -8,13 +8,13 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN 
    gcBrand = "1" 
    katun   = "Cron".
        
-{eventlog.i}
+{Func/lib/eventlog.i}
 
 DEF VAR liChecked AS INT  NO-UNDO.
 DEF VAR liDone    AS INT  NO-UNDO.

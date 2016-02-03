@@ -8,16 +8,16 @@
    09.09.2015 hugo.lujan [Q25] - TMS - Cancel Renewal Order
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{fpcmaintreq.i}
-{fmakemsreq.i}
-{msreqfunc.i}
-{tmsconst.i}
-{ordercancel.i}
-{coinv.i}
-{dpmember.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Func/fpcmaintreq.i}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Syst/tmsconst.i}
+{Func/ordercancel.i}
+{Func/coinv.i}
+{Mc/dpmember.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER  NO-UNDO.
 

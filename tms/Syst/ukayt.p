@@ -34,14 +34,14 @@
   Version ......: Yoigo
   ----------------------------------------------------------------------- */
 
-{timestamp.i} 
-{chkmail.i}
-{commali.i} 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'TMSUser'}
-{cparam2.i}
-{fuserright.i}
+{Func/timestamp.i} 
+{Func/chkmail.i}
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'TMSUser'}
+{Func/cparam2.i}
+{Func/fuserright.i}
 
 
 DEF NEW shared VAR siirto AS CHAR.

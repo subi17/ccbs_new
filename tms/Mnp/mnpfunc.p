@@ -7,10 +7,10 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i} 
-{mnpmessages.i}
-{tmsconst.i}
-{create_eventlog.i}
+{Syst/commali.i} 
+{Mnp/mnpmessages.i}
+{Syst/tmsconst.i}
+{Func/create_eventlog.i}
 
 DEF INPUT PARAMETER pimnpseq AS INT . 
 DEF VAR lhTable AS HANDLE NO-UNDO.

@@ -10,15 +10,15 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
+{Syst/commali.i}
+{Func/excel.i}
 
 DEF VAR path    AS  CHAR NO-UNDO FORMAT "x(50)".
 DEF VAR date1   AS  DATE NO-UNDO.
 DEF VAR date2   AS  DATE NO-UNDO.
 DEF VAR i       AS  INT  NO-UNDO.
 
-{tmsparam.i DefBillStatDir     return}.  path = tmsparam.CharVal.
+{Func/tmsparam.i DefBillStatDir     return}.  path = tmsparam.CharVal.
 
 
 DEF TEMP-TABLE invdata

@@ -14,9 +14,9 @@
              18.04.2006/aam update payment plan
 */   
 
-{commali.i}
-{tmsparam2.i}
-{fpplan.i}
+{Syst/commali.i}
+{Func/tmsparam2.i}
+{Func/fpplan.i}
 
 DEF INPUT PARAMETER iInvno AS INT  NO-UNDO.
 DEF INPUT PARAMETER iDate  AS Date NO-UNDO.

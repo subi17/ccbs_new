@@ -16,14 +16,14 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{nncoit2.i}
-{fcustpl.i}
-{timestamp.i}
-{fmakeservlimit.i}
-{setfees.i}
-{eventval.i}
-{ffeecont.i}
+{Syst/commali.i}
+{Func/nncoit2.i}
+{Func/fcustpl.i}
+{Func/timestamp.i}
+{Func/fmakeservlimit.i}
+{Func/setfees.i}
+{Syst/eventval.i}
+{Func/ffeecont.i}
 
 DEF  INPUT PARAMETER   asnro LIKE Customer.CustNum NO-UNDO.
 

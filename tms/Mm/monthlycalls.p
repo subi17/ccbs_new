@@ -8,11 +8,11 @@
                   
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "cron".
 
-{eventlog.i}
+{Func/lib/eventlog.i}
 
 DEFINE VARIABLE period  AS INTEGER NO-UNDO.
 

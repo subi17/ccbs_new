@@ -108,7 +108,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
 
    IF LOOKUP(MSOwner.CLIType,{&BASE_BUNDLE_SUBTYPES}) > 0 THEN DO:
       FOR EACH ttServiceLimit NO-LOCK WHERE
-          {dss_search.i "ttServiceLimit.GroupCode"},
+          {Func/dss_search.i "ttServiceLimit.GroupCode"},
           FIRST MServiceLimit NO-LOCK WHERE
                 MServiceLimit.CustNum  = MSOwner.CustNum      AND
                 MServiceLimit.SlSeq    = ttServiceLimit.SlSeq AND

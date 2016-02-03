@@ -29,14 +29,14 @@
 {xmlrpc/xmlrpc_access.i}
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{fbankdata.i}
-{fctchange.i}
-{fmakemsreq.i}
-{fcharge_comp_loaded.i}
-{tmsconst.i}
-{fexternalapi.i}
+{Func/fbankdata.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/fcharge_comp_loaded.i}
+{Syst/tmsconst.i}
+{Func/fexternalapi.i}
 
 /* Input parameters */
 DEF VAR pcMSISDN         AS CHAR NO-UNDO.

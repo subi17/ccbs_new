@@ -41,12 +41,12 @@
 &GLOBAL-DEFINE TMSCodeDef NO
 &GLOBAL-DEFINE BrTable Payment
 
-{commali.i} 
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'payment'}
-{eventval.i}
-{invdet.i}
+{Syst/commali.i} 
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'payment'}
+{Syst/eventval.i}
+{Ar/invdet.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -196,7 +196,7 @@ WITH OVERLAY ROW 1 centered
      COLOR VALUE(cfc) TITLE  " Details (" + STRING(Payment.Voucher) + ") "
      side-labels FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek  Voucher */
     "Brand .:" lcBrand skip

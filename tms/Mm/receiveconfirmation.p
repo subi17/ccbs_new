@@ -1,7 +1,7 @@
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{orderfunc.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Func/orderfunc.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 

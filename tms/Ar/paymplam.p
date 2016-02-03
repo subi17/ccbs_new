@@ -4,7 +4,7 @@
 
 */
 
-{commali.i}
+{Syst/commali.i}
 
 /* all customers & invoices */
 RUN paymplan (0,0,0).

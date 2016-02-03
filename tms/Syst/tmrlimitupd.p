@@ -8,9 +8,9 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
+{Syst/commali.i} 
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

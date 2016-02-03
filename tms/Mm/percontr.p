@@ -19,28 +19,28 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{date.i}
-{msreqfunc.i}
-{fmakemsreq.i}
-{daycampaign.i}
-{eventval.i}
-{penaltyfee.i}
-{fmakeservlimit.i}
-{tmsconst.i}
-{matrix.i}
-{service.i}
-{fbundle.i}
-{nncoit2.i}
-{contract_end_date.i}
-{fcpfat.i}
-{rerate_request.i}
-{tmqueue_analysis.i}
-{dpmember.i}
-{terminal_financing.i}
-{ordercancel.i}
-{fprepaidfee.i}
-{fcreditreq.i}
+{Syst/commali.i}
+{Func/date.i}
+{Func/msreqfunc.i}
+{Func/fmakemsreq.i}
+{Rate/daycampaign.i}
+{Syst/eventval.i}
+{Func/penaltyfee.i}
+{Func/fmakeservlimit.i}
+{Syst/tmsconst.i}
+{Func/matrix.i}
+{Func/service.i}
+{Mm/fbundle.i}
+{Func/nncoit2.i}
+{Func/contract_end_date.i}
+{Func/fcpfat.i}
+{Rate/rerate_request.i}
+{Rate/tmqueue_analysis.i}
+{Mc/dpmember.i}
+{Func/terminal_financing.i}
+{Func/ordercancel.i}
+{Func/fprepaidfee.i}
+{Func/fcreditreq.i}
 
 DEF BUFFER bPendRequest FOR MsRequest.
 DEF BUFFER bOrigRequest FOR MsRequest.

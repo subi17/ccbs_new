@@ -3,10 +3,10 @@
    Remove old unbilled events from billing
 */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{eventval.i} 
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Syst/eventval.i} 
 
 DEF INPUT  PARAMETER iiInvCust    AS INT  NO-UNDO.
 DEF INPUT  PARAMETER idaEventDate AS DATE NO-UNDO.

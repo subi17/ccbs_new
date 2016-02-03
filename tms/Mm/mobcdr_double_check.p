@@ -1,11 +1,11 @@
 /* mobcdr_double_check.p     10.01.11/aam separated from nndomco
 */
 
-{commali.i}
-{cparam2.i}
-{funcrunprocess_update.i}
-{error_codes.i}
-{rate_roamzone.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/funcrunprocess_update.i}
+{Rate/error_codes.i}
+{Rate/rate_roamzone.i}
 
 DEF INPUT  PARAMETER icFindMode  AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER idaFromDate AS DATE NO-UNDO.

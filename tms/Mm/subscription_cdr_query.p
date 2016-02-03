@@ -5,9 +5,9 @@
   CREATED ......: 21.06.10
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobCDR'} 
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobCDR'} 
 
 DEF VAR lcCLI        AS CHAR NO-UNDO.
 DEF VAR liErrorCode  AS INT  NO-UNDO.

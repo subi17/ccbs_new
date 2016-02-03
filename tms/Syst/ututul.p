@@ -18,11 +18,11 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{chkmail.i}
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'TMSReport'}
+{Func/chkmail.i}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'TMSReport'}
 
 DEF NEW shared VAR si-tul LIKE TMSReport.RepName NO-UNDO.
 
@@ -396,7 +396,7 @@ BROWSE:
 
      else if lookup(nap,"enter,return") > 0 THEN DO WITH FRAME lis:
         /* change */
-        {uright2.i}
+        {Syst/uright2.i}
         FIND TMSReport where recid(TMSReport) = rtab[frame-line(sel)]
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.

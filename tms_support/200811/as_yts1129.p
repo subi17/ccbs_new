@@ -1,4 +1,4 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun  = "anttis".
 gcBrand = "1".
 DEFINE VARIABLE lcCharValue AS CHARACTER NO-UNDO. 

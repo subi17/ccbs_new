@@ -19,9 +19,9 @@
   Version ......: M15
  ---------------------------------------------------------------------- */
 
-{commali.i}
-{rate_roamzone.i}
-{mobcdr_bdest.i}
+{Syst/commali.i}
+{Rate/rate_roamzone.i}
+{Mm/mobcdr_bdest.i}
 
 DEF TEMP-TABLE  ttCall NO-UNDO LIKE Mobcdr
    FIELD CDRTable AS CHAR.  

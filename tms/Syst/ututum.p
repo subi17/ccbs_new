@@ -16,10 +16,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'TMSRepCfg'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'TMSRepCfg'}
 DEF NEW shared VAR si-kirj AS CHAR.
 DEF shared VAR si-tul LIKE TMSPrinter.PrinterId NO-UNDO init "memo".
 

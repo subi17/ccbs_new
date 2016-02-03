@@ -12,7 +12,7 @@
                  valid_to;date;
           
 */
-{header_get.i}
+{rpcmethods/header_get.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    

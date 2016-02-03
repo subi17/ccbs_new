@@ -7,12 +7,12 @@
   VERSION ......: Yoigo
  ---------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
-{fbankdata.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
+{Func/fbankdata.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

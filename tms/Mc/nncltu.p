@@ -19,9 +19,9 @@ DEF VAR fst      AS lo NO-UNDO.
 DEF VAR i        AS i NO-UNDO.
 DEF VAR rl       AS i NO-UNDO.
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nncltu"
        tuni2 = "".
@@ -100,7 +100,7 @@ toimi:
    ASSIGN INPUT LtrMargin.
 
    tila = TRUE.
-   {tmsreport.i "leave rajat"}
+   {Syst/tmsreport.i "leave rajat"}
 
    message "Printing ...".
 
@@ -131,7 +131,7 @@ toimi:
    END. /* FOR EACH */
 
    ASSIGN tila = FALSE.
-   {tmsreport.i}
+   {Syst/tmsreport.i}
 
    LEAVE.
 END. /* rajat */

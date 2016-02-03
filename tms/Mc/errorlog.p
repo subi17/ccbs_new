@@ -10,12 +10,12 @@
 
 &GLOBAL-DEFINE BrTable ErrorLog
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ErrorLog'}
-{timestamp.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ErrorLog'}
+{Func/timestamp.i}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -95,7 +95,7 @@ WITH  OVERLAY ROW 3 centered
     SIDE-LABELS 
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek  ErrorLog */
     "Brand :" lcBrand skip

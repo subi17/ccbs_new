@@ -24,10 +24,10 @@
 
 &GLOBAL-DEFINE BrTable CustCat
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'custcat'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'custcat'}
 
 
 IF llDoEvent THEN DO:
@@ -114,7 +114,7 @@ form
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     CustCat.Category    LABEL "Category Code" COLON 24 SKIP

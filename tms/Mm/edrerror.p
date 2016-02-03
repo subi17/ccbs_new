@@ -6,7 +6,7 @@
   CREATED ......: 12.2.2013
   VERSION ......: Yoigo
   ---------------------------------------------------------------------- */
-{commali.i} 
+{Syst/commali.i} 
 
 def /* new */ shared var siirto AS char.
 

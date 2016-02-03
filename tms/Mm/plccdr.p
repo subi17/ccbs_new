@@ -8,13 +8,13 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun   = "OnlineReader".
 gcBrand = "1".
-{timestamp.i}
-{detailvalue.i}
-{tmsconst.i}
-{fmakemsreq.i}
+{Func/timestamp.i}
+{Func/detailvalue.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
 
 DEFINE STREAM sCDR.
 

@@ -13,10 +13,10 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable PaymCfg
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'paymcfg'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'paymcfg'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -85,7 +85,7 @@ WITH  OVERLAY ROW 4 centered
     1 columns
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek PaymCfg  BY  PaymCfg */
     "Brand:" lcBrand skip

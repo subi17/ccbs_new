@@ -1,5 +1,5 @@
-{testpaa.i}
-{cparam2.i}
+{Syst/testpaa.i}
+{Func/cparam2.i}
 
 DEFINE VARIABLE lcInvoiceStatusDir     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcInvoiceStatisticsDir AS CHARACTER NO-UNDO.

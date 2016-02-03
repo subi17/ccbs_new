@@ -7,7 +7,7 @@
   Version ......: TMS Master
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF TEMP-TABLE ttMenu 
  FIELD Type       AS INT

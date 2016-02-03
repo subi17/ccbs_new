@@ -31,24 +31,24 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PrePaidRequest'}
-{xmlfunction.i}
-{ftaxdata.i}
-{timestamp.i}
-{cparam2.i}
-{matrix.i}
-{ftaxdata.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PrePaidRequest'}
+{Func/xmlfunction.i}
+{Func/ftaxdata.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/matrix.i}
+{Func/ftaxdata.i}
 
-{tmsconst.i}
-{fuserright.i}
-{fcustpl.i}
-{dialog.i}
+{Syst/tmsconst.i}
+{Func/fuserright.i}
+{Func/fcustpl.i}
+{Func/dialog.i}
 
 DEFINE INPUT PARAMETER  iiMsSeq AS INT  NO-UNDO.
                       
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

@@ -1,6 +1,6 @@
 TRIGGER PROCEDURE FOR REPLICATION-WRITE OF SubSer OLD BUFFER Oldbuf.
 
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 IF LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) > 0
 THEN DO:

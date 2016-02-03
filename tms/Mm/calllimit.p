@@ -13,10 +13,10 @@
 
 &GLOBAL-DEFINE BrTable CallLimit
 
-{commali.i}
-{fsubser.i}
-{eventval.i}
-{func.i}
+{Syst/commali.i}
+{Func/fsubser.i}
+{Syst/eventval.i}
+{Func/func.i}
 
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -94,7 +94,7 @@ WITH ROW FrmRow width 80 overlay FrmDown down
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     "Cust num ......" CallLimit.CustNo   SKIP
@@ -422,13 +422,13 @@ BROWSE:
        END.
      END. /* Search-2 */
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = true.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-line.
        RUN local-find-this (false).
 

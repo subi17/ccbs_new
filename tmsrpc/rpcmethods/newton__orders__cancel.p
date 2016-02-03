@@ -8,14 +8,14 @@
  */
 
 {xmlrpc/xmlrpc_access.i} 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
-{fsubstermreq.i}
-{tmsconst.i}
-{msisdn_prefix.i}
-{fmakemsreq.i}
-{ordercancel.i}
+{Func/timestamp.i}
+{Func/fsubstermreq.i}
+{Syst/tmsconst.i}
+{Func/msisdn_prefix.i}
+{Func/fmakemsreq.i}
+{Func/ordercancel.i}
 
 /* Input parameters */
 DEF VAR piOrderId    AS INT  NO-UNDO.

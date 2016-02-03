@@ -8,17 +8,17 @@
   Version ......: TF
   ------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobSub'}
-{cparam2.i}
-{timestamp.i}
-{fctserval.i}
-{fctchange.i}
-{fmakemsreq.i}
-{fcustdata.i}
-{finvtxt.i}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobSub'}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/fctserval.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/fcustdata.i}
+{Func/finvtxt.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

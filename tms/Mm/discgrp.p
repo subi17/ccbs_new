@@ -11,8 +11,8 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{eventval.i}
+{Syst/commali.i} 
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -217,7 +217,7 @@ BROWSE:
         ufk[1]= 35 ufk[2]= 30 ufk[3]= 0 ufk[4]= 927
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        {uright1.i '"4,5,6"'}.
+        {Syst/uright1.i '"4,5,6"'}.
         RUN ufkey.p.
       END.
 
@@ -410,13 +410,13 @@ BROWSE:
      END.
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}.
+        {Syst/uright2.i}.
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}.
+       {Syst/uright2.i}.
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -468,7 +468,7 @@ BROWSE:
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this(TRUE).
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDiscGroup).

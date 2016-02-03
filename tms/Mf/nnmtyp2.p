@@ -10,9 +10,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{tmsparam2.i}
-{eventval.i} 
+{Syst/commali.i}
+{Func/tmsparam2.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER Month LIKE MthCall.Month.
 

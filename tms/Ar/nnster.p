@@ -12,11 +12,11 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}  
-{fcurrency.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'payment'}
-{utumaa.i "new"}
+{Syst/commali.i}  
+{Func/fcurrency.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'payment'}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnster"
        tuni2 = "".
@@ -111,7 +111,7 @@ FUNCTION fChgPage RETURNS LOGICAL
 
    IF rl + iAddLine >= skayt1 THEN DO:
       ASSIGN sl = sl + 1 rl = 8.
-      {uprfeed.i rl}
+      {Syst/uprfeed.i rl}
       view STREAM tul FRAME sivuots.
    END.
 
@@ -168,7 +168,7 @@ toimi:
        IF toimi = 5 THEN DO:
 
           tila = TRUE.
-          {tmsreport.i "leave rajat"}
+          {Syst/tmsreport.i "leave rajat"}
 
           LEAVE TOIMI.
        END.
@@ -376,8 +376,8 @@ toimi:
 
          tila = FALSE.
 
-         {uprfeed.i rl}
-         {tmsreport.i}
+         {Syst/uprfeed.i rl}
+         {Syst/tmsreport.i}
       END.
 
    END.

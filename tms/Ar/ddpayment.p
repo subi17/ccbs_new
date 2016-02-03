@@ -10,13 +10,13 @@
 
 &GLOBAL-DEFINE AllIncludes YES
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
-{email.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
+{Func/email.i}
 
-{ddpaymentt.i}
+{Ar/ddpaymentt.i}
 
 /* invoices to be paid */
 DEFINE INPUT-OUTPUT PARAMETER TABLE FOR ttInvoice.

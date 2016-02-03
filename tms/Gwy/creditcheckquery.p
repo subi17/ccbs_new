@@ -1,9 +1,9 @@
-{commali.i} 
-{xmlfunction.i}
-{mathfunction.i}
-{msreqfunc.i}
-{timestamp.i}
-{tmsconst.i}
+{Syst/commali.i} 
+{Func/xmlfunction.i}
+{Func/mathfunction.i}
+{Func/msreqfunc.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 
 DEFINE INPUT PARAMETER iiRequest AS INT             NO-UNDO.
 

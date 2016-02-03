@@ -1,9 +1,9 @@
     
-{commpaa.i}
-{timestamp.i}
-{xmlfunction.i}
-{heartbeat.i}
-{fgettxt.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
+{Func/xmlfunction.i}
+{Func/heartbeat.i}
+{Func/fgettxt.i}
 
 gcBrand = "1".
 

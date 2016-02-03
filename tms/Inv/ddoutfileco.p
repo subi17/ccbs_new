@@ -8,10 +8,10 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 
 DEFINE INPUT  PARAMETER icInvGrp       AS CHAR NO-UNDO.
 DEFINE INPUT  PARAMETER iiCustNum1     AS INT  NO-UNDO.
@@ -70,7 +70,7 @@ DEFINE VARIABLE liSAIolval AS INTEGER NO-UNDO INITIAL 0.
 DEFINE VARIABLE liBBIolval AS INTEGER NO-UNDO INITIAL 0.
 DEFINE VARIABLE liLAIolval AS INTEGER NO-UNDO INITIAL 0.
 
-{ddoutfilett.i}
+{Inv/ddoutfilett.i}
 
 DEF TEMP-TABLE ttDueDate NO-UNDO
    FIELD DueDate  AS DATE

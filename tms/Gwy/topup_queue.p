@@ -8,15 +8,15 @@
   VERSION ......: XFERA
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN
    gcBrand = "1"
    katun   = "ATM".
 
-{tmsconst.i}
-{barrfunc.i}
-{cparam2.i}
+{Syst/tmsconst.i}
+{Func/barrfunc.i}
+{Func/cparam2.i}
 
 DEFINE VARIABLE ldaDate     AS DATE      NO-UNDO FORMAT "99.99.9999".
 DEFINE VARIABLE lcTime      AS CHARACTER NO-UNDO.

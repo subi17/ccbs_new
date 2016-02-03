@@ -15,12 +15,12 @@
 
 &GLOBAL-DEFINE BrTable killms 
 
-{commali.i}                  
-{eventval.i}
+{Syst/commali.i}                  
+{Syst/eventval.i}
 
-{msisdn.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'KillMS'}
+{Func/msisdn.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'KillMS'}
 
 
 DEF /* NEW */ SHARED VAR siirto AS C.
@@ -88,7 +88,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     "MSISDN .....:" KillMs.CLI                              SKIP

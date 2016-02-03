@@ -47,15 +47,15 @@ ASSIGN
       WHEN LOOKUP("update_ts", lcTopStructFields) > 0.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = pcUserName.
 gcbrand = "1".
-{orderfunc.i} 
-{eventval.i}
-{tmsconst.i}
-{fbundle.i}
-{fctchange.i}
-{fmakemsreq.i}
+{Func/orderfunc.i} 
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Mm/fbundle.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
 &GLOBAL-DEFINE STAR_EVENT_USER katun 
 
 IF llDoEvent THEN DO:

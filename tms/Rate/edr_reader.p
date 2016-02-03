@@ -6,15 +6,15 @@
   CREATED ......: 6.2.2013
   Version ......: xfera 
   ---------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
-{onlinereader_oldcdr.i}
-{detailseq.i}
-{heartbeat.i}
-{cparam2.i}
-{edr_reader.i}
-{log.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Rate/onlinereader_oldcdr.i}
+{Func/detailseq.i}
+{Func/heartbeat.i}
+{Func/cparam2.i}
+{Rate/edr_reader.i}
+{Func/log.i}
 
 def INPUT PARAMETER    icFileName  as char FORMAT "x(30)" no-undo.
 DEF INPUT PARAMETER    iiPort      AS INT  NO-UNDO.

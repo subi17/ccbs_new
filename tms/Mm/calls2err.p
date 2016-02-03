@@ -8,9 +8,9 @@
  VERSION .......: 
  ============================================================================*/
          
-{commali.i} 
-{timestamp.i}
-{error_codes.i}
+{Syst/commali.i} 
+{Func/timestamp.i}
+{Rate/error_codes.i}
 
 DEF STREAM msg.
          

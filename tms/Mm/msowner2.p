@@ -14,10 +14,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'msowner'}
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'msowner'}
 
 DEF SHARED VAR siirto AS CHAR.
 

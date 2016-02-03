@@ -1,5 +1,5 @@
-{date.i}
-{commpaa.i}
+{Func/date.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
 

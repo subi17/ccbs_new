@@ -7,8 +7,8 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER idaInvDate AS DATE NO-UNDO.
 DEF INPUT PARAMETER icBillRun  AS CHAR NO-UNDO.

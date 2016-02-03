@@ -10,11 +10,11 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{function.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobpref'}
+{Syst/commali.i}
+{Func/function.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobpref'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

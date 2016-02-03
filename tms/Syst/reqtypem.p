@@ -2,7 +2,7 @@
    run request type browser from menu
 */
 
-{commali.i}
+{Syst/commali.i}
 
 RUN requesttype(0).
 

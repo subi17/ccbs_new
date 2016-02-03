@@ -8,10 +8,10 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 /* print-linemuuttujat */
-{utumaa.i NEW }
+{Syst/utumaa.i NEW }
 
 assign tuni1 = "nnlati"
        tuni2 = "".
@@ -105,7 +105,7 @@ TOIMI:
 
    /* Avataan striimi */
    ASSIGN tila = TRUE.
-   {tmsreport.i "leave LOOP"}
+   {Syst/tmsreport.i "leave LOOP"}
 
    message "Printing ...".
 
@@ -187,7 +187,7 @@ TOIMI:
 
          /* Tarvitaanko uusi sivu */
          IF rl >= skayt1 THEN DO:
-            {uprfeed.i rl}
+            {Syst/uprfeed.i rl}
             ASSIGN rl = 7 sl = sl + 1.
             view STREAM tul FRAME sivuotsi.
          END.
@@ -211,7 +211,7 @@ TOIMI:
       IF last-of (Customer.Salesman) THEN DO:
         /* Tarvitaanko uusi sivu */
          IF rl >= skayt1 - 2 THEN DO:
-            {uprfeed.i rl}
+            {Syst/uprfeed.i rl}
             ASSIGN rl = 7  sl = sl + 1.
             view STREAM tul FRAME sivuotsi.
          END.
@@ -234,7 +234,7 @@ TOIMI:
 
    /* Tarvitaanko uusi sivu */
    IF rl >= skayt1 - 2 THEN DO:
-      {uprfeed.i rl}
+      {Syst/uprfeed.i rl}
       ASSIGN  sl = sl + 1.
       view STREAM tul FRAME sivuotsi.  rl = 7.
    END.

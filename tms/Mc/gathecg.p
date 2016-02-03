@@ -9,8 +9,8 @@
   Version ......: M15
   ----------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF TEMP-TABLE TMarked
 FIELD CustGroup LIKE CustGroup.CustGroup

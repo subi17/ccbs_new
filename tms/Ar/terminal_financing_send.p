@@ -6,14 +6,14 @@
   CREATED ......: 25.04.13
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commali.i}
-{cparam2.i}
-{dumpfile_run.i}
-{timestamp.i}
-{tmsconst.i}
-{forderstamp.i}
-{msreqfunc.i}
-{ftransdir.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/dumpfile_run.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/forderstamp.i}
+{Func/msreqfunc.i}
+{Func/ftransdir.i}
 
 DEF INPUT PARAMETER iiMSrequest AS INT  NO-UNDO.
 

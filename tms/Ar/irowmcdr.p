@@ -20,8 +20,8 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
+{Syst/commali.i}
+{Func/msisdn.i}
 
 DEF /* NEW */ SHARED VAR siirto AS C.
 DEF INPUT PARAMETER  iiInvNum   AS i    NO-UNDO.
@@ -58,7 +58,7 @@ DEF VAR stime        AS C                      NO-UNDO.
 DEF VAR Billed     AS LOG                      NO-UNDO.
 DEF VAR def-ccode    AS C                      NO-UNDO.
 DEF VAR lcCustName   AS CHAR                   NO-UNDO.
-{tmsparam.i DefCCode   return} def-ccode = TMSParam.CharVal.
+{Func/tmsparam.i DefCCode   return} def-ccode = TMSParam.CharVal.
 
 DEF TEMP-TABLE ttRow NO-UNDO
    FIELD MobCdr   AS INT

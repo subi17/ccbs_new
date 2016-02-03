@@ -14,7 +14,7 @@
              can_have_bank;boolean;mandatory;
  */
 
-{header_get.i}
+{rpcmethods/header_get.i}
 
 DEF VAR lcArray AS CHAR NO-UNDO. 
 DEF VAR lcStruct AS CHAR NO-UNDO. 

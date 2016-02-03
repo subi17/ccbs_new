@@ -14,9 +14,9 @@
                                use GroupType
   VERSION ......: M15
   ------------------------------------------------------ */
-{commali.i}
-{func.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/func.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -32,7 +32,7 @@ IF llDoEvent THEN DO:
    END.
 END.
 
-{remfees.i}
+{Func/remfees.i}
 
 DEF  INPUT PARAMETER   icCLI AS CHAR NO-UNDO.
 

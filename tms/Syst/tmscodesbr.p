@@ -15,9 +15,9 @@
   Version ......: TMS Master
   ------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'OrdStat'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'OrdStat'}
 
 DEF INPUT PARAMETER /*VAR*/ icTableName  AS CHAR  NO-UNDO.
 DEF INPUT PARAMETER /*VAR*/ icFieldName  AS CHAR  NO-UNDO.

@@ -22,10 +22,10 @@ DEFINE VARIABLE lcActStamp AS CHARACTER NO-UNDO.
 DEFINE STREAM sin.
 DEFINE STREAM sout.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "rafaeldv".
 gcBrand = "1".
-{eventval.i}
+{Syst/eventval.i}
 IF llDoEvent THEN DO:
   &GLOBAL-DEFINE STAR_EVENT_USER katun
   {lib/eventlog.i}

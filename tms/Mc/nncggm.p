@@ -16,11 +16,11 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{eventval.i}
-{fecgtask.i}
-{timestamp.i}
+{Syst/eventval.i}
+{Func/fecgtask.i}
+{Func/timestamp.i}
 
 DEF BUFFER rcust FOR Customer.
 DEF BUFFER new-cgmember FOR CGMember.

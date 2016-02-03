@@ -18,7 +18,7 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE piOrderId                  AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE pcCreator                  AS CHARACTER NO-UNDO. 

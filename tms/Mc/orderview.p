@@ -20,7 +20,7 @@
                   OUTPUT Kille
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER msseq  AS INT .
 

@@ -13,10 +13,10 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'pnplist'}
+{Syst/commali.i}
+{Func/excel.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'pnplist'}
 
 DEF input PARAMETer ipCustNum AS INT NO-UNDO .
 

@@ -13,11 +13,11 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'TMSPrinter'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'TMSPrinter'}
 
-{eventval.i} 
+{Syst/eventval.i} 
 
 IF karyhma = "1" THEN DO:
    BELL.
@@ -346,7 +346,7 @@ BROWSE:
      END. /* NEXT page */
 
      if lookup(nap,"1,f1") > 0 THEN DO:  /* Tehosteet */
-        {uright2.i}
+        {Syst/uright2.i}
         FIND TMSPrinter where recid(TMSPrinter) = rtab[FRAME-LINE] no-lock.
         si-kirj = TMSPrinter.PrinterId.
         RUN ututeh.
@@ -354,7 +354,7 @@ BROWSE:
         NEXT LOOP.
      END.
      else if lookup(nap,"2,f2") > 0 THEN DO:
-          {uright2.i}
+          {Syst/uright2.i}
 
           FIND TMSPrinter where recid(TMSPrinter) = rtab[FRAME-LINE]
           no-lock no-error.

@@ -7,8 +7,8 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER iiInvNum   AS INT  NO-UNDO.
 DEF INPUT PARAMETER icTransDir AS CHAR NO-UNDO.

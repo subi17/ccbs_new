@@ -7,15 +7,15 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "Cron".
        
-{cparam2.i}
-{eventlog.i}
-{timestamp.i}
-{ftransdir.i}
+{Func/cparam2.i}
+{Func/lib/eventlog.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
 
 DEF VAR lcFile      AS CHAR NO-UNDO.
 DEF VAR liRead      AS INT  NO-UNDO. 

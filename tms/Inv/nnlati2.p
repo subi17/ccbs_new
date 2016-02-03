@@ -14,10 +14,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 /* print-linemuuttujat */
-{utumaa.i NEW }
+{Syst/utumaa.i NEW }
 
 assign tuni1 = "nnlati"
        tuni2 = "".
@@ -113,7 +113,7 @@ TOIMI:
 
    /* Avataan striimi */
    ASSIGN tila = TRUE.
-   {tmsreport.i "return"}
+   {Syst/tmsreport.i "return"}
 
    message "Printing ...".                        
 
@@ -178,7 +178,7 @@ TOIMI:
 
       /* Tarvitaanko uusi sivu */
       IF rl >= skayt1 THEN DO:
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
          ASSIGN rl = 7  sl = sl + 1.
          view STREAM tul FRAME sivuotsi.
       END.
@@ -232,7 +232,7 @@ MAA:     FOR EACH FixCDR  no-lock where
             IF maalkm < 6 THEN DO:
                /* Tarvitaanko uusi sivu */
                IF rl >= skayt1 - 2 THEN DO:
-                  {uprfeed.i rl}
+                  {Syst/uprfeed.i rl}
                   ASSIGN
                   sl = sl + 1.
                   view STREAM tul FRAME sivuotsi.  rl = 7.
@@ -260,7 +260,7 @@ MAA:     FOR EACH FixCDR  no-lock where
       IF last-of (Customer.Salesman) THEN DO:
         /* Tarvitaanko uusi sivu */
          IF rl >= skayt1 - 2 THEN DO:
-            {uprfeed.i rl}
+            {Syst/uprfeed.i rl}
             ASSIGN rl = 7  sl = sl + 1.
             view STREAM tul FRAME sivuotsi.
          END.
@@ -273,13 +273,13 @@ MAA:     FOR EACH FixCDR  no-lock where
          (accum sub-total BY Customer.Salesman Invoice.AmtExclVAT)
                   format "zz,zzz,zz9.99-" AT 45 SKIP.
          rl = rl + 2.
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
       END.
    END.
 
    /* Tarvitaanko uusi sivu */
    IF rl >= skayt1 - 2 THEN DO:
-      {uprfeed.i rl}
+      {Syst/uprfeed.i rl}
       ASSIGN
         sl = sl + 1.
       view STREAM tul FRAME sivuotsi.  rl = 7.
@@ -291,7 +291,7 @@ MAA:     FOR EACH FixCDR  no-lock where
        "TOTAL" AT 11
        (accum total Invoice.AmtExclVAT) format "zz,zzz,zz9.99-" AT 45 SKIP.
    rl = rl + 2.
-   {uprfeed.i rl}.
+   {Syst/uprfeed.i rl}.
 
    MESSAGE "Report completed !" VIEW-AS ALERT-BOX.
 

@@ -16,11 +16,11 @@
 
 &GLOBAL-DEFINE BrTable RateCCN
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'RateCCN'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'RateCCN'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -102,7 +102,7 @@ WITH  OVERLAY ROW 4 centered
     SIDE-LABELS 
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form 
     "Brand:" lcBrand skip

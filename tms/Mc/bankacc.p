@@ -13,12 +13,12 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable BankAccount
 
-{commali.i}
-{fbankdata.i}
+{Syst/commali.i}
+{Func/fbankdata.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'BankAccount'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'BankAccount'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -90,7 +90,7 @@ WITH  OVERLAY ROW 4 centered
     SIDE-LABELS 
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek  BankAccount */
     "Brand ......:" lcBrand SKIP
@@ -416,7 +416,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 

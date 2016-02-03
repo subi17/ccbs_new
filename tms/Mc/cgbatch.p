@@ -8,9 +8,9 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commpaa.i}
-{eventval.i}
-{fecgtask.i}
+{Syst/commpaa.i}
+{Syst/eventval.i}
+{Func/fecgtask.i}
 
 DEF buffer new-cgmember for cgmember.
 

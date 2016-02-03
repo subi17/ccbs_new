@@ -37,12 +37,12 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = pcUserName.
-{eventval.i}
-{tmsconst.i}
-{offer.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Mc/offer.i}
 
 CREATE ttOffer.
 

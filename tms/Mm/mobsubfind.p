@@ -8,11 +8,11 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Customer'}
-{eventval.i}
-{func.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Customer'}
+{Syst/eventval.i}
+{Func/func.i}
 
 
 DEFINE INPUT PARAMETER  icCriteria AS C NO-UNDO.

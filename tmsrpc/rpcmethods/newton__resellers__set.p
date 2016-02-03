@@ -16,10 +16,10 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{eventval.i}
-{tmsconst.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
 
 DEFINE TEMP-TABLE ttReseller LIKE Reseller.
 

@@ -7,8 +7,8 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 def var i-date1      AS DATE FORMAT "99-99-99"       NO-UNDO.
 def var i-date2      AS DATE FORMAT "99-99-99"       NO-UNDO.

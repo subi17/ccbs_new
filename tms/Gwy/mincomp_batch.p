@@ -15,21 +15,21 @@
   VERSION ......: XFERA
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN
    katun   = "PPMINC"
    gcBrand = "1".
 
-{timestamp.i}
-{cparam2.i}
-{tmsparam4.i}
-{xmlfunction.i}
-{fgettxt.i}
-{ftaxdata.i}
-{tsformat.i}
-{ftransdir.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/tmsparam4.i}
+{Func/xmlfunction.i}
+{Func/fgettxt.i}
+{Func/ftaxdata.i}
+{Func/tsformat.i}
+{Func/ftransdir.i}
+{Syst/tmsconst.i}
 
 FUNCTION fCallAlarm RETURNS LOGICAL
   (INPUT pcAction AS CHARACTER,

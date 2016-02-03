@@ -7,8 +7,8 @@
   Version ......: yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{fuserright.i}
+{Syst/commali.i}
+{Func/fuserright.i}
 
 DEF INPUT PARAMETER iiTMRuleSeq AS INT  NO-UNDO.
 

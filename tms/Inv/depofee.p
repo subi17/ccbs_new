@@ -8,9 +8,9 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
 
 DEF INPUT  PARAMETER iiOrder  AS INT  NO-UNDO. 
 DEF INPUT  PARAMETER icClass  AS CHAR NO-UNDO.  

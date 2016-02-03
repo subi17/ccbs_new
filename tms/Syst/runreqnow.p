@@ -8,8 +8,8 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEFINE INPUT PARAMETER iiMsRequest AS INTEGER.
 DEFINE INPUT PARAMETER iiStatNow   AS INTEGER.

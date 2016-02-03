@@ -8,10 +8,10 @@
   VERSION ......: TeleF
   ------------------------------------------------------------------ */
 
-{testpaa.i}
-{excel.i}
-{email.i}
-{timestamp.i}
+{Syst/testpaa.i}
+{Func/excel.i}
+{Func/email.i}
+{Func/timestamp.i}
 
 DEF VAR Reseller  LIKE Reseller.Reseller NO-UNDO.
 DEF VAR dFrom     AS DATE FORMAT "99-99-99" NO-UNDO.

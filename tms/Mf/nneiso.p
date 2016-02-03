@@ -9,8 +9,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
+{Syst/commali.i}
+{Func/excel.i}
 
 def var cust-name as char no-undo format "x(30)".
 def var date1     as Date no-undo format "99-99-9999" init TODAY.

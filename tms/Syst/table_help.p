@@ -7,7 +7,7 @@
   CHANGED ......: 
   Version ......: yoigo
   ---------------------------------------------------------------------- */
-{commali.i}
+{Syst/commali.i}
 
 
 DEF SHARED VAR siirto AS CHAR.

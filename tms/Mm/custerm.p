@@ -10,11 +10,11 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
 
-{fsubser.i}
+{Func/fsubser.i}
 
 DEF INPUT  PARAMETER CustNum     AS I  NO-UNDO .
 

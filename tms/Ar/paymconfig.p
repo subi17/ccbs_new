@@ -10,11 +10,11 @@
 
 &GLOBAL-DEFINE BrTable PaymConfig
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PaymConfig'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PaymConfig'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -77,7 +77,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
        " PAYMENT POSTING RULES "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     PaymConfig.Brand     COLON 18

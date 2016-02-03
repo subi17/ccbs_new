@@ -8,8 +8,8 @@
   --------------------------------------------------------------------------- */
 
 
-{commpaa.i}     gcBrand = "1" . katun = "Order".
-{heartbeat.i}
+{Syst/commpaa.i}     gcBrand = "1" . katun = "Order".
+{Func/heartbeat.i}
 
 DEFINE VARIABLE liLoop     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE ldToday    AS DATE      NO-UNDO.

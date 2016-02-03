@@ -8,13 +8,13 @@
   VERSIO .......: 
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fcustbal.i}
-{fbankdata.i}
-{fmanualpaymreq.i}
-{fuserright.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fcustbal.i}
+{Func/fbankdata.i}
+{Func/fmanualpaymreq.i}
+{Func/fuserright.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT  NO-UNDO.
 DEF INPUT PARAMETER icCLI     AS CHAR NO-UNDO.

@@ -1,7 +1,7 @@
 /* usearch.p  - searches a module THROUGH PROPATH */   
 
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 def var module  as c  format "x(8)".
 def var source  as c  format "x(40)".

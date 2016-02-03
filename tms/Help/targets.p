@@ -10,8 +10,8 @@
 
   ------------------------------------------------------ */
 
-{commali.i}
-{invotxt.i}
+{Syst/commali.i}
+{Func/invotxt.i}
 
 DEF shared VAR siirto AS CHAR.
 DEF VAR rtab          AS RECID EXTENT 11 NO-UNDO.

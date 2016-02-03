@@ -9,8 +9,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{mobsub1.i}
+{Syst/commali.i}
+{Mm/mobsub1.i}
 
 def temp-table ttStatus
   field StatusCode like mobsub.msstat

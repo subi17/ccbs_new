@@ -10,9 +10,9 @@
   VERSION ......: TeleF
   ------------------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{email.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/email.i}
 
 DEF VAR lcResell LIKE Reseller.Reseller NO-UNDO.
 DEF VAR lcRSName LIKE Reseller.RSName   NO-UNDO.

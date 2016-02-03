@@ -11,8 +11,8 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{email.i}
+{Syst/commali.i}
+{Func/email.i}
 
 DEF VAR CustNum1  LIKE Customer.CustNum   NO-UNDO.
 DEF VAR CustNum2  LIKE Customer.CustNum   NO-UNDO.

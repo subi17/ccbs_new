@@ -10,7 +10,7 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF  INPUT PARAMETER  ServCom LIKE ServEl.ServCom NO-UNDO.
 DEF /* NEW */ shared VAR siirto AS CHAR.
@@ -212,7 +212,7 @@ BROWSE:
         ufk[1]= 35  ufk[2]= 0 ufk[3]= 0 /* 250 */ ufk[4]= 0
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        {uright1.i '"5,6"'}
+        {Syst/uright1.i '"5,6"'}
         RUN ufkey.p.
       END.
 
@@ -367,13 +367,13 @@ BROWSE:
      END. /* Search-1 */
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -422,7 +422,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
-       {uright2.i}
+       {Syst/uright2.i}
        /* change */
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.

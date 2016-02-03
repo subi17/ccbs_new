@@ -9,7 +9,7 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable dmarketing
 
-{commali.i}
+{Syst/commali.i}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -44,7 +44,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     "Direct marketing code ..:"  DMarketing.DirMark     NO-LABEL SKIP
@@ -178,7 +178,7 @@ BROWSE:
         ufk[1]= 35  ufk[2]= 30 ufk[3]= 0 ufk[4]= 0
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        {uright1.i '"5,6"'}
+        {Syst/uright1.i '"5,6"'}
         RUN ufkey.p.
       END.
 
@@ -358,13 +358,13 @@ BROWSE:
      END. /* Search-2 */
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -412,7 +412,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSACTION:
-       {uright2.i} 
+       {Syst/uright2.i} 
        /* change */
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.

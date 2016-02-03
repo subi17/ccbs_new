@@ -25,7 +25,7 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 
 DEF VAR pcInputStruct AS CHAR NO-UNDO. 

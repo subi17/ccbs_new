@@ -5,9 +5,9 @@
                     19.07.05/tk  fSetTSLimit
 */
 
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 
 &IF "{&fmakesms}" NE "YES"
 &THEN

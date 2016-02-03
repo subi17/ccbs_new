@@ -2,13 +2,13 @@
 
 */
 
-{commali.i}
-{tmsparam4.i}
-{timestamp.i}
-{cparam2.i}
-{tmsconst.i}
-{amq.i}
-{jsonlib.i}
+{Syst/commali.i}
+{Func/tmsparam4.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/amq.i}
+{Func/jsonlib.i}
 
 ASSIGN
    gcBrand = "1".

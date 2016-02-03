@@ -7,11 +7,11 @@
   MODIFIED .....: 
   VERSION ......: SL
   ------------------------------------------------------ */
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ddauth'}
+{Syst/utumaa.i "new"}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ddauth'}
 
 ASSIGN tuni1 = "ddstatre"
        tuni2 = "".
@@ -134,7 +134,7 @@ END. /* toimi */
 /* Avataan striimi */
 IF lcFile = "" THEN DO:
    ASSIGN tila = TRUE.
-   {utuloste.i "return"}
+   {Syst/utuloste.i "return"}
 END.
 
 MESSAGE "Printing in process".            
@@ -149,7 +149,7 @@ run ddstatrep (ldtAuthDate1,
 
 IF lcFile = "" THEN DO:
    ASSIGN tila = FALSE.
-   {utuloste.i}
+   {Syst/utuloste.i}
 END.
 
 MESSAGE "DD status report is finished."

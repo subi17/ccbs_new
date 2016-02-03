@@ -3,9 +3,9 @@
 
 &GLOBAL-DEFINE flimitreq YES
 
-{commali.i}
-{fcreatereq.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
+{Syst/eventval.i}
 
 DEF BUFFER bufLimit FOR Limit.
 /* somehow have to prevent calling fCleanEventObjects */

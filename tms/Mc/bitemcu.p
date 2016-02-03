@@ -31,16 +31,16 @@
 
 &GLOBAL-DEFINE BrTable bitem
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'singlefee'}
-{timestamp.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'singlefee'}
+{Func/timestamp.i}
 
-{fcustpl.i}
-{eventval.i}
-{dialog.i}
-{tmsconst.i}
-{fuserright.i}
+{Func/fcustpl.i}
+{Syst/eventval.i}
+{Func/dialog.i}
+{Syst/tmsconst.i}
+{Func/fuserright.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -57,9 +57,9 @@ IF llDoEvent THEN DO:
 
 END.
 
-{ffeecont.i}
-{fixedfee.i}
-{fcharge_comp_loaded.i}
+{Func/ffeecont.i}
+{Func/fixedfee.i}
+{Func/fcharge_comp_loaded.i}
 
 DEF INPUT  PARAMETER  iiCustNum LIKE Customer.CustNum NO-UNDO.
 DEF INPUT  PARAMETER  icMsseq LIKE Singlefee.keyvalue  NO-UNDO.

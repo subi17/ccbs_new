@@ -6,14 +6,14 @@
                   12.04.07/aam update old customer's bank data 
   Version ......: yoigo
 -------------------------------------------------------------------------- */
-{commali.i} 
-{timestamp.i}
-{cparam.i2}
-{eventval.i}
-/* {fwebuser.i} */ 
-{forderstamp.i}
-{order.i}
-{fcustdata.i}
+{Syst/commali.i} 
+{Func/timestamp.i}
+{Func/cparam.i2}
+{Syst/eventval.i}
+/* {Func/fwebuser.i} */ 
+{Func/forderstamp.i}
+{Func/order.i}
+{Func/fcustdata.i}
 
 DEF INPUT  PARAMETER  iiOrderId  LIKE Order.OrderId.
 DEF INPUT  PARAMETER  iiRole     AS   INT.

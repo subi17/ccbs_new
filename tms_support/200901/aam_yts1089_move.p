@@ -1,12 +1,12 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
 
-{eventval.i}
-{coinv.i}
-{fmakemsreq.i}
-{msisdn.i}
-{timestamp.i}
-{ftmrlimit.i}
+{Syst/eventval.i}
+{Func/coinv.i}
+{Func/fmakemsreq.i}
+{Func/msisdn.i}
+{Func/timestamp.i}
+{Func/ftmrlimit.i}
 
 def var lcline     as char no-undo.
 def var litarget   as int  no-undo.

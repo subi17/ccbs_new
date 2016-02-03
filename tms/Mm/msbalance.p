@@ -7,13 +7,13 @@
   CHANGED ......: 
   Version ......: 
   ---------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
-{ftopup.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/ftopup.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MSBalance'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MSBalance'}
 
 DEF INPUT PARAMETER iiMsSeq   AS INT NO-UNDO.
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO.

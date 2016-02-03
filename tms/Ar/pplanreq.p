@@ -9,9 +9,9 @@
   -------------------------------------------------------------------------- */
 
 
-{msreqfunc.i}
-{finvbal.i}
-{fpaymplan.i}
+{Func/msreqfunc.i}
+{Func/finvbal.i}
+{Func/fpaymplan.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 

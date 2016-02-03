@@ -13,19 +13,19 @@
   Version ......: M15
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "RetFile".
        
-{cparam2.i}
-{utumaa.i "new"}
+{Func/cparam2.i}
+{Syst/utumaa.i "new"}
 /* temp-table */
-{paymfile.i}
-{paymtrans.i}
-{farplog.i}
-{eventlog.i}
-{timestamp.i}
+{Ar/paymfile.i}
+{Ar/paymtrans.i}
+{Func/farplog.i}
+{Func/lib/eventlog.i}
+{Func/timestamp.i}
 
 DEF TEMP-TABLE ttFiles NO-UNDO
    FIELD PaymFile AS CHAR

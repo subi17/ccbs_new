@@ -10,13 +10,13 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{finvbal.i}
-{fpaymplan.i}
-{fppbatch.i}
-{fppinv.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/finvbal.i}
+{Func/fpaymplan.i}
+{Func/fppbatch.i}
+{Func/fppinv.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

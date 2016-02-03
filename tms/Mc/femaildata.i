@@ -12,15 +12,15 @@
   Modified:
 */
 
-{commali.i}
-{refcode.i}
-{timestamp.i}
-{fbundle.i}
-{offer.i}
-{fbankdata.i}
-{mnp.i}
-{cparam2.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/refcode.i}
+{Func/timestamp.i}
+{Mm/fbundle.i}
+{Mc/offer.i}
+{Func/fbankdata.i}
+{Mnp/mnp.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
 
 &SCOPED-DEFINE ORDERTYPE_MNP_EN "Portability"
 &SCOPED-DEFINE ORDERTYPE_MNP_SP "Portabilidad"

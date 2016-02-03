@@ -7,7 +7,7 @@
   CREATED ......: 17.06.1990
   ------------------------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def new shared var siirto as char format "x(75)".
 DEF VAR i AS INT NO-UNDO.

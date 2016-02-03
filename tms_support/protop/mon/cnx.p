@@ -42,7 +42,7 @@
  *
  */
 
-{lib/protop.i}
+{tms_support/protop/lib/protop.i}
 
 &global-define	EXT	101
 

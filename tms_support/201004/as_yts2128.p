@@ -1,4 +1,4 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
 /* RUN tapfilecr_yts2128.p("",TODAY - 5,TODAY - 5,"",FALSE). */

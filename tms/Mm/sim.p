@@ -26,11 +26,11 @@
 
 &GLOBAL-DEFINE BrTable Sim
 
-{commali.i}
-{eventval.i}
-{tmsconst.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Sim'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Sim'}
 
 /** Call with input parameter 0 to browse all simbatches other 
  * values limit brosing to the specified batch.
@@ -106,7 +106,7 @@ WITH width 80 OVERLAY FrmDown DOWN ROW FrmRow
      " Sim Cards " + string(pvm,"99-99-99") + " "
      FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 form
     SIM.ICC     label "Serial No ......."          SKIP
     SIM.SimBatch  label "Batch  No. ......"          SKIP
@@ -523,7 +523,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION:
        
-       {uright2.i}
+       {Syst/uright2.i}
        /* change */
        FIND SIM WHERE recid(SIM) = rtab[FRAME-line(sel)] NO-LOCK.
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.

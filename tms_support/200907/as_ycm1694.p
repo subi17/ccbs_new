@@ -1,6 +1,6 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "anttis".
-{msisdn.i}
+{Func/msisdn.i}
 
 find msisdn where
    msisdn.brand = "1" and

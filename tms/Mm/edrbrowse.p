@@ -7,10 +7,10 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}  
-{msisdn.i}
-{func.i}
-{callquery.i}
+{Syst/commali.i}  
+{Func/msisdn.i}
+{Func/func.i}
+{Func/callquery.i}
 /*
 DEF  TEMP-TABLE ttCall NO-UNDO LIKE  Mobcdr
    FIELD CDRTable AS CHAR 
@@ -111,8 +111,8 @@ DEF VAR stime        AS C                      NO-UNDO.
 DEF VAR def-ccode    AS C                      NO-UNDO.
 DEF VAR SL_prefix  AS C  NO-UNDO.
 
-{tmsparam.i SL_prefix      return}.  SL_prefix = TMSParam.CharVal.
-{tmsparam.i DefCCode       return}.  def-ccode = TMSParam.CharVal.
+{Func/tmsparam.i SL_prefix      return}.  SL_prefix = TMSParam.CharVal.
+{Func/tmsparam.i DefCCode       return}.  def-ccode = TMSParam.CharVal.
 
 form
     ttCall.DateSt  

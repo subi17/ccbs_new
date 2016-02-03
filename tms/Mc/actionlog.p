@@ -10,12 +10,12 @@
 
 &GLOBAL-DEFINE BrTable ActionLog
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ActionLog'}
-{timestamp.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ActionLog'}
+{Func/timestamp.i}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -120,7 +120,7 @@ WITH OVERLAY ROW 1 centered
     COLOR VALUE(cfc) TITLE " VIEW INFO " 
     SIDE-LABELS FRAME fInfo.
    
-{brand.i}
+{Func/brand.i}
 
 form /* seek  ActionLog */
     "Brand :" lcBrand skip

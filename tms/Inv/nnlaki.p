@@ -92,18 +92,18 @@
 
 &GLOBAL-DEFINE LocalContactInfo YES
 
-{commali.i}
-{refcode.i}
-{utumaa.i "new"}
-{cparam2.i}
-{edefine.i new}
-{feplform.i}
-{fsubser.i}
-{fotint.i}
-{eventval.i} 
-{feffect.i}
-{fprintinv.i}
-{fgetclis.i}
+{Syst/commali.i}
+{Func/refcode.i}
+{Syst/utumaa.i "new"}
+{Func/cparam2.i}
+{Inv/edefine.i new}
+{Func/feplform.i}
+{Func/fsubser.i}
+{Func/fotint.i}
+{Syst/eventval.i} 
+{Func/feffect.i}
+{Func/fprintinv.i}
+{Func/fgetclis.i}
 
 ASSIGN tuni1 = "nnlaki"
        tuni2 = "".
@@ -761,7 +761,7 @@ repeat:
 
 
 tila = TRUE.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 las_teh = "".
 
@@ -1205,7 +1205,7 @@ repeat:
 END. /* print-line  */
 
 ASSIGN tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 IF kesk AND UpdState THEN DO:
    /* jos print-rivi keskeytettiin, nollataan tulostettujen 

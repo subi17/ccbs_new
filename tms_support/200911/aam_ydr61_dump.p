@@ -1,6 +1,6 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
-{create_eventlog.i}
+{Func/create_eventlog.i}
 
 def var llcut as log no-undo.
 def var liqty as int no-undo.

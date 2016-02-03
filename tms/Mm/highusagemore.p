@@ -12,8 +12,8 @@
   SHARED .......: INPUT: msseq
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 DEF INPUT PARAMETER iinvseq  AS INT  NO-UNDO.
 DEF INPUT PARAMETER icli     AS CHAR NO-UNDO.
 

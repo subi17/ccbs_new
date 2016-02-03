@@ -20,18 +20,18 @@
 
 &GLOBAL-DEFINE BrTable Memo
 
-{commali.i} 
-{timestamp.i}
-{eventval.i}
-{fuserright.i}            
+{Syst/commali.i} 
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Func/fuserright.i}            
 
 DEF INPUT PARAMETER iCustNum  LIKE memo.CustNum    NO-UNDO.
 DEF INPUT PARAMETER HostTable LIKE memo.HostTable  NO-UNDO.
 DEF INPUT PARAMETER KeyValue  LIKE memo.KeyValue   NO-UNDO.
 DEF INPUT PARAMETER ftitle    AS  C FORMAT "x(20)" NO-UNDO.
 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Memo'} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Memo'} 
 /* check for hosttable, not memo table */
 
 DEF VAR MemoTitle  LIKE memo.MemoTitle  NO-UNDO.
@@ -101,7 +101,7 @@ form
     COLOR VALUE(cfc)
     TITLE COLOR VALUE(ctc) " memo TEXT " FRAME lis2 NO-LABELS.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek Status Code  BY  MemoTitle */
     MemoTitle

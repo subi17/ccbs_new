@@ -8,12 +8,12 @@ DEFINE VARIABLE lcTariffBundle AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOldCLIType AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOldtariffBundle AS CHARACTER NO-UNDO.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcbrand = "1".
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
 
 DEFINE STREAM slog.
 

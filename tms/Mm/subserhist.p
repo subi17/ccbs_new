@@ -8,12 +8,12 @@
   Version ......: M15
  ---------------------------------------------------------------------- */
 
-{commali.i}
-{sername.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'SubSer'}
-{eventval.i}
-{msisdn.i}
+{Syst/commali.i}
+{Func/sername.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'SubSer'}
+{Syst/eventval.i}
+{Func/msisdn.i}
 
 
 IF llDoEvent THEN DO:
@@ -131,7 +131,7 @@ VIEW FRAME sel.
 
 orders = "By Service,By ServPac,By 3, By 4".
 
-{tmsparam.i MobSubDefPack return}. defprof = TMSParam.CharVal.
+{Func/tmsparam.i MobSubDefPack return}. defprof = TMSParam.CharVal.
 
 
 RUN local-find-first.

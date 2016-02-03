@@ -7,10 +7,10 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FuncRunQueue'}
-{tmsconst.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FuncRunQueue'}
+{Syst/tmsconst.i}
 
 DEF VAR liFRQueueID     AS INT  NO-UNDO.
 DEF VAR liFRQScheduleID AS INT  NO-UNDO.

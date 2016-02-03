@@ -75,11 +75,11 @@ procedure upd-tt_index:
       .
       if available _IndexStat then		/* _IndexStat range may not be active...	*/
         assign
-          {lib/init-xrec.i tt_index.idx-blkdel _IndexStat-blockdelete}
-          {lib/init-xrec.i tt_index.idx-cre    _IndexStat-create}
-          {lib/init-xrec.i tt_index.idx-del    _IndexStat-delete}
-          {lib/init-xrec.i tt_index.idx-rd     _IndexStat-read}
-          {lib/init-xrec.i tt_index.idx-split  _IndexStat-split}
+          {tms_support/protop/lib/init-xrec.i tt_index.idx-blkdel _IndexStat-blockdelete}
+          {tms_support/protop/lib/init-xrec.i tt_index.idx-cre    _IndexStat-create}
+          {tms_support/protop/lib/init-xrec.i tt_index.idx-del    _IndexStat-delete}
+          {tms_support/protop/lib/init-xrec.i tt_index.idx-rd     _IndexStat-read}
+          {tms_support/protop/lib/init-xrec.i tt_index.idx-split  _IndexStat-split}
         .
     end.
    else
@@ -87,11 +87,11 @@ procedure upd-tt_index:
 
   if available _IndexStat then		/* _IndexStat range may not be active...	*/
     assign
-      {lib/upd-xrec.i tt_index.idx-blkdel _IndexStat-blockdelete}
-      {lib/upd-xrec.i tt_index.idx-cre    _IndexStat-create}
-      {lib/upd-xrec.i tt_index.idx-del    _IndexStat-delete}
-      {lib/upd-xrec.i tt_index.idx-rd     _IndexStat-read}
-      {lib/upd-xrec.i tt_index.idx-split  _IndexStat-split}
+      {tms_support/protop/lib/upd-xrec.i tt_index.idx-blkdel _IndexStat-blockdelete}
+      {tms_support/protop/lib/upd-xrec.i tt_index.idx-cre    _IndexStat-create}
+      {tms_support/protop/lib/upd-xrec.i tt_index.idx-del    _IndexStat-delete}
+      {tms_support/protop/lib/upd-xrec.i tt_index.idx-rd     _IndexStat-read}
+      {tms_support/protop/lib/upd-xrec.i tt_index.idx-split  _IndexStat-split}
     .
 
   return.
@@ -122,9 +122,9 @@ procedure age_index:
         tt_index.xvalid = no
 /***
  ***
-        {lib/upd-xrec.i tt_index.stat1 tt_index.stat1[3]}
-        {lib/upd-xrec.i tt_index.stat2 tt_index.stat2[3]}
-        {lib/upd-xrec.i tt_index.stat3 tt_index.stat3[3]}
+        {tms_support/protop/lib/upd-xrec.i tt_index.stat1 tt_index.stat1[3]}
+        {tms_support/protop/lib/upd-xrec.i tt_index.stat2 tt_index.stat2[3]}
+        {tms_support/protop/lib/upd-xrec.i tt_index.stat3 tt_index.stat3[3]}
         tt_xstat.stat-ratio  = 100 * (( tt_xstat.stat1[x] - tt_xstat.stat2[x] ) / tt_xstat.stat1[x] )
         tt_xstat.stat-ratio  = ( if tt_xstat.stat-ratio = ? then 0 else tt_xstat.stat-ratio )
  ***

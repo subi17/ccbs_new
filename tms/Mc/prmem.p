@@ -7,9 +7,9 @@
  Version ..........: M15
 --------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{utumaa.i new }
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/utumaa.i new }
 
 DEF INPUT PARAMETER  HostTable LIKE memo.HostTable  NO-UNDO.
 DEF INPUT PARAMETER  KeyValue  LIKE memo.KeyValue   NO-UNDO.
@@ -48,7 +48,7 @@ FIND FIRST memo WHERE memo.Brand     = gcBrand   AND
 ASSIGN tuni1 = "memo"
        tuni2 = "".
        tila  = true.
-{tmsreport.i RETURN}
+{Syst/tmsreport.i RETURN}
 
 FORM HEADER                                                 
    FILL ("=",78) FORMAT "x(78)"                                          SKIP
@@ -119,6 +119,6 @@ PUT STREAM tul UNFORMATTED CHR(12).
 
 /* close stream */
 tila = false.
-{tmsreport.i}
+{Syst/tmsreport.i}
 
 

@@ -7,7 +7,7 @@
                 15.12.05/aam user name from customer, not msowner
 */
 
-{fgetclis.i}
+{Func/fgetclis.i}
 
 DEF BUFFER xCustomer FOR Customer.
 

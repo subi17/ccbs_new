@@ -31,12 +31,12 @@
 
 &GLOBAL-DEFINE BrTable InvText
 
-{commali.i}
-{invotxt.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invtext'}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/invotxt.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invtext'}
+{Syst/tmsconst.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -159,7 +159,7 @@ WITH  OVERLAY ROW 1 centered
     SIDE-LABELS
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek InvText BY  Date */
     "Brand:" lcBrand skip
@@ -410,7 +410,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW InvText.FromDate {uchoose.i} NO-ERROR WITH FRAME sel.
+        CHOOSE ROW InvText.FromDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) InvText.FromDate WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:

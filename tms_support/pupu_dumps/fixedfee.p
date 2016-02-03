@@ -7,9 +7,9 @@ DEFINE VARIABLE ldtTimeStamp AS DATETIME  NO-UNDO.
 DEFINE VARIABLE liPeriod     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liEvents     AS INTEGER   NO-UNDO.
 
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
 
 DEFINE STREAM slog.
 

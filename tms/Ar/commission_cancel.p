@@ -7,9 +7,9 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{barrfunc.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/barrfunc.i}
 
 DEF OUTPUT PARAMETER oiChecked   AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER oiCancelled AS INT  NO-UNDO.

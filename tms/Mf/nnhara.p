@@ -8,10 +8,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 /* Maaritellaan print-linemuuttujat */
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnhara"
        tuni2 = "".
@@ -93,7 +93,7 @@ toimi:
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.
-{tmsreport.i "return"}
+{Syst/tmsreport.i "return"}
 
 message "Writing report, cancel = ESC".
 
@@ -101,7 +101,7 @@ RUN nnhara1(INPUT cust-nr1,input cust-nr2).
 
 /* Suljetaan striimi */
 ASSIGN tila = FALSE.
-{tmsreport.i}
+{Syst/tmsreport.i}
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

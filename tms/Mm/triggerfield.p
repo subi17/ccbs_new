@@ -9,10 +9,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Mobsub'}
-{eventval.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Mobsub'}
+{Syst/eventval.i}
 
 
 DEF INPUT PARAMETER  icTriggerConfID AS CHARACTER NO-UNDO.

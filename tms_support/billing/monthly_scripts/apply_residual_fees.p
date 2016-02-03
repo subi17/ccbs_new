@@ -5,7 +5,7 @@
    Before actual run simulation can be done with 
    llcreatefee false value */
 
-{timestamp.i}
+{Func/timestamp.i}
 
 def stream sread.
 def stream slog.

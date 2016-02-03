@@ -8,8 +8,8 @@
   Version ......: yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Func/fcustdata.i}
 
 DEF shared VAR siirto AS CHAR.
 

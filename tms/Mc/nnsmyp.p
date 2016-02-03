@@ -22,8 +22,8 @@
   ------------------------------------------------------------------ */
 &GLOBAL-DEFINE BrTable Salesman
 
-{commali.i}
-{eventval.i}
+{Syst/commali.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -104,7 +104,7 @@ form
     fr-header with  no-labels /* 1 columns */
     frame lis.
 
-{brand.i}
+{Func/brand.i}
 
 form
    skip(1)
@@ -290,7 +290,7 @@ BROWSE:
         ufk[8]= 8    ufk[9]= 1
         ehto = 3 ufkey = false.
 
-        {uright1.i '"4,5,6,7"'} 
+        {Syst/uright1.i '"4,5,6,7"'} 
 
         run ufkey.p.
       end.
@@ -552,7 +552,7 @@ BROWSE:
 
      if lookup(nap,"5,f5") > 0 then do:  /* lisays */
 
-        {uright2.i}
+        {Syst/uright2.i}
 
         must-add = true.
         next LOOP.
@@ -560,7 +560,7 @@ BROWSE:
 
      else if lookup(nap,"6,f6") > 0 then do transaction:  /* removal */
 
-       {uright2.i}
+       {Syst/uright2.i}
 
        delline = frame-line.
        find Salesman where recid(Salesman) = rtab[frame-line] no-lock.
@@ -630,7 +630,7 @@ BROWSE:
      else if lookup(nap,"7,f7") > 0 then do with frame move TRANS: 
         /* TRANSFER */
 
-        {uright2.i}
+        {Syst/uright2.i}
 
         find Salesman where recid(Salesman) = rtab[frame-line(sel)] no-lock.
         pause 0.
@@ -691,7 +691,7 @@ BROWSE:
      else if lookup(nap,"enter,return") > 0 then
      do with frame lis transaction:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
        find Salesman where recid(Salesman) = rtab[frame-line(sel)]
        exclusive-lock.
 

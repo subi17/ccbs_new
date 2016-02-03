@@ -12,8 +12,8 @@
   --------------------------------------------------------------------------- */
 
 
-{excel.i}
-{testpaa.i}
+{Func/excel.i}
+{Syst/testpaa.i}
 
 def var exPaymFile as c  no-undo format "x(30)".
 DEF VAR i          AS i  NO-UNDO.

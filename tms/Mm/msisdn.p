@@ -36,14 +36,14 @@ DEF  INPUT PARAMETER   icCli     LIKE MSISDN.Cli     NO-UNDO.
 DEF  INPUT PARAMETER   iiCustNum LIKE MSISDN.CustNum NO-UNDO.
 DEF  INPUT PARAMETER   iiStatusCode LIKE MSISDN.StatusCode NO-UNDO.
 
-{commali.i}
-{msisdn.i}
-{eventval.i} 
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
-{freplacesms.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/msisdn.i}
+{Syst/eventval.i} 
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
+{Func/freplacesms.i}
+{Syst/tmsconst.i}
 
 DEF /* SHARED */ VAR siirto AS char.
 
@@ -92,7 +92,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {create_eventlog.i}
+   {Func/create_eventlog.i}
    {lib/eventlog.i}
 
    DEFINE VARIABLE lhttMSISDN AS HANDLE NO-UNDO.
@@ -159,7 +159,7 @@ WITH ROW FrmRow width 80 overlay FrmDown  down
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
   "MSISDN .....:" ttMSISDN.CLI  lcMSISDNType SKIP
@@ -713,7 +713,7 @@ CU-ACTION:
      END.
 */
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i} 
+        {Syst/uright2.i} 
         RUN local-find-this (false).
         must-add = true.
         NEXT LOOP.

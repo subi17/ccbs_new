@@ -16,10 +16,10 @@
 
 &GLOBAL-DEFINE BrTable SMGroup
 
-{commali.i} 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'smgroup'}
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'smgroup'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -86,7 +86,7 @@ WITH  OVERLAY ROW 4 centered
     lm-ots WITH side-labels 1 columns
 FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* Salesman group :n haku kentällä SMGroup */
     "Brand:" lcBrand skip
@@ -228,7 +228,7 @@ SELAUS:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        {uright1.i '"3,5,6"'}
+        {Syst/uright1.i '"3,5,6"'}
         RUN ufkey.p.
       END.
 
@@ -433,14 +433,14 @@ SELAUS:
      END.
 
      if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
-        {uright2.i}
+        {Syst/uright2.i}
         lisattava = TRUE.
         NEXT LOOP.
      END.
 
      else if lookup(nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* poisto */
-       {uright2.i}
+       {Syst/uright2.i}
        privi = FRAME-LINE.
        FIND SMGroup where recid(SMGroup) = rtab[FRAME-LINE] no-lock.
 
@@ -514,7 +514,7 @@ SELAUS:
      else if lookup(nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
        /* muutos */
-       {uright2.i}
+       {Syst/uright2.i}
        FIND SMGroup where recid(SMGroup) = rtab[frame-line(sel)]
        exclusive-lock.
        assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.

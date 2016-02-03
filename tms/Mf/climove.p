@@ -9,8 +9,8 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEF INPUT PARAMETER CustNum LIKE Customer.CustNum.
 

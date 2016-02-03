@@ -8,8 +8,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i "new"}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnmatu"
        tuni2 = "".
@@ -104,7 +104,7 @@ toimi:
 
    IF NOT excel THEN DO:
       tila = TRUE.
-      {tmsreport.i "leave rajat"}
+      {Syst/tmsreport.i "leave rajat"}
    END.
 
    message "Printing ...".
@@ -168,7 +168,7 @@ toimi:
       PUT STREAM tul UNFORMATTED skip(spit1 - rl).
 
       ASSIGN tila = FALSE.
-      {tmsreport.i}
+      {Syst/tmsreport.i}
    END.
 
    LEAVE.

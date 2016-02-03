@@ -18,9 +18,9 @@
                     04.09.07/aam use createpaym.p
 */   
 
-{commali.i}
-{finvpayment.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/finvpayment.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

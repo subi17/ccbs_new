@@ -3,8 +3,8 @@
    temporary version; print an attachment to the end of epl invoice 
 */
 
-{commali.i}
-{finvtxt.i}
+{Syst/commali.i}
+{Func/finvtxt.i}
 
 DEF VAR liAttITNum AS INT NO-UNDO.
 

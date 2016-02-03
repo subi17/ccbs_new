@@ -8,10 +8,10 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i "new"}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'coevent'}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'coevent'}
 
 assign tuni1 = "coacrel"
        tuni2 = "".
@@ -255,7 +255,7 @@ RUN ufkey.
 
 IF lcFile = "" THEN DO:
    assign tila = true.
-   {utuloste.i "return"}
+   {Syst/utuloste.i "return"}
 END.
 
 RUN coacrep   (liCORuleID,
@@ -275,7 +275,7 @@ RUN coacrep   (liCORuleID,
 
 IF lcFile = "" THEN DO:
    assign tila = false.
-   {utuloste.i}
+   {Syst/utuloste.i}
 END.
 
 llMark = FALSE.

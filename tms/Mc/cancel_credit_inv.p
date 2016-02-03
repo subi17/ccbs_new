@@ -17,13 +17,13 @@
 
 */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "snet".
 gcBrand = "1".
 
-{coinv.i}
-{eventval.i} 
-{fcustbal.i}
+{Func/coinv.i}
+{Syst/eventval.i} 
+{Func/fcustbal.i}
 
 def buffer bInvoice for Invoice.
 def buffer cInvoice for Invoice.

@@ -15,12 +15,12 @@
 &THEN
 
 &GLOBAL-DEFINE msreqfunc YES
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{fmakesms.i}
-{fgettxt.i}
-{freplacesms.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/fmakesms.i}
+{Func/fgettxt.i}
+{Func/freplacesms.i}
 
 DEF BUFFER bRequest  FOR MsRequest.
 

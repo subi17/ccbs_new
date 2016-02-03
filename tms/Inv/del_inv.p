@@ -32,13 +32,13 @@
 DISABLE TRIGGERS FOR LOAD OF FixedFee.
 DISABLE TRIGGERS FOR LOAD OF SingleFee.
 
-{commali.i}
-{invseq.i}
-{fcustbal.i}
-{fcustcnt.i}
-{eventval.i} 
-{nnpcst.i}
-{combine_invseq.i}
+{Syst/commali.i}
+{Func/invseq.i}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Syst/eventval.i} 
+{Ar/nnpcst.i}
+{Inv/combine_invseq.i}
 
 DEF INPUT PARAMETER pInvNo AS i NO-UNDO.
 

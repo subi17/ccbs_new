@@ -1,5 +1,5 @@
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE lcMenu AS CHARACTER NO-UNDO
    EXTENT 9 FORMAT "X(30)".

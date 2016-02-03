@@ -96,15 +96,15 @@
 &GLOBAL-DEFINE TimeStampDef NO
 &GLOBAL-DEFINE TMSCodeDef NO
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{eventval.i}
-{fcustbal.i}
-{feplstart.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoice'}
-{invdet.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Func/fcustbal.i}
+{Func/feplstart.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoice'}
+{Ar/invdet.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -217,7 +217,7 @@ DEF TEMP-TABLE ttInvoice NO-UNDO
 DEF TEMP-TABLE ttAll NO-UNDO
    LIKE ttInvoice.
 
-{invfilterkey.i}
+{Ar/invfilterkey.i}
 
 assign defcurr       = fCParamC("DefCurrency")
        IntCalcMet    = fCParamI("IntCalcMet")

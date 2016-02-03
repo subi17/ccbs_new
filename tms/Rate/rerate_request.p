@@ -5,11 +5,11 @@
   CREATED ......: 10.03.11
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{msreqfunc.i}
-{tmsconst.i}
-{fdss.i}
-{direct_dbconnect.i}
+{Syst/commali.i}
+{Func/msreqfunc.i}
+{Syst/tmsconst.i}
+{Func/fdss.i}
+{Func/direct_dbconnect.i}
 
 DEF INPUT  PARAMETER iiRequest AS INT NO-UNDO.
 

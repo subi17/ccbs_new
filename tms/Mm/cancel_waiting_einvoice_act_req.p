@@ -9,14 +9,14 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "Cron".
-{timestamp.i}
-{cparam2.i}
-{tmsconst.i}
-{msreqfunc.i}
-{eventval.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
 
 DEF VAR liConfDays       AS INT  NO-UNDO.
 DEF VAR ldMsActDate      AS DATE NO-UNDO.

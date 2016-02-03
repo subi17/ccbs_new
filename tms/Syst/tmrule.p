@@ -10,12 +10,12 @@
 
 &GLOBAL-DEFINE BrTable TMRule
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'TMRule'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'TMRule'}
 
-{eventval.i}
-{tmsconst.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
 
 DEF BUFFER bItemValue FOR TMRItemValue.
 
@@ -89,7 +89,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
        string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     TMRule.Brand          COLON 15

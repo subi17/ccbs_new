@@ -3,9 +3,9 @@ DEFINE VARIABLE i AS INTEGER NO-UNDO.
 def buffer bmsrequest for msrequest.
 def stream sout.
 output stream sout to yts_2682.log.
-{date.i}
+{Func/date.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "anttis".
 

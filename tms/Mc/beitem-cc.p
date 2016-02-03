@@ -20,11 +20,11 @@
 
 &GLOBAL-DEFINE BrTable FMItem
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FMItem'}
-{tmsconst.i}
-{eventval.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FMItem'}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -98,7 +98,7 @@ FIND TMSParam WHERE TMSParam.Brand = "1" AND
  IF AVAIL TMSParam THEN lcBIGroup = TMSParam.CharVal.
 
 
-{dialog.i}
+{Func/dialog.i}
  /* create records in ttable  for bill items */
 FOR EACH BillItem WHERE LOOKUP(BillItem.BIGroup , lcBIGroup ) > 0 AND
                         BillItem.Brand = "1" NO-LOCK:
@@ -165,11 +165,11 @@ FUNCTION fFetchPriceList RETURN LOGICAL ():
     RETURN TRUE.
 END FUNCTION.
 
- {brand.i} 
+ {Func/brand.i} 
 
  /*call cui browser -----------------------------*/
 
-{beitem.i 'cc'}
+{Mc/beitem.i 'cc'}
 
 /* ---------------------------------------------- */
 

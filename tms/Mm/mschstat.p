@@ -9,12 +9,12 @@
                   30.12.04/aam Secret, RepCode, SaldoLimit from services
 -------------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{fcustbal.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobSub'}
-{fsubser.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/fcustbal.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobSub'}
+{Func/fsubser.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -58,7 +58,7 @@ DEF VAR lcMNP         AS CHARACTER NO-UNDO.
 
 
 
-{mobsub1.i}
+{Mm/mobsub1.i}
 
 DEF BUFFER AgrCustomer FOR Customer.
 DEF BUFFER InvCustomer FOR Customer.

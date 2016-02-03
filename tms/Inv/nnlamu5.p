@@ -40,13 +40,13 @@
 /* don't initialize rerate etc. */
 &GLOBAL-DEFINE InitPersistent NO
 
-{commali.i}
-{tmsparam2.i}
-{billrund.i NEW}
-{faccper.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Invoice'}
-{finvnum.i}
+{Syst/commali.i}
+{Func/tmsparam2.i}
+{Inv/billrund.i NEW}
+{Func/faccper.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Invoice'}
+{Func/finvnum.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE " You cannot create invoices ! " VIEW-AS ALERT-BOX.
@@ -89,7 +89,7 @@ DEF VAR lcItem     AS CHAR NO-UNDO.
 DEF VAR liPaymTerm AS INT  NO-UNDO. 
 DEF VAR lcPrefix   AS CHAR NO-UNDO.
 
-{tmsparam.i oh-tuasno  RETURN}. unknown = TMSParam.IntVal.
+{Func/tmsparam.i oh-tuasno  RETURN}. unknown = TMSParam.IntVal.
 
 /* default values from TMSParam */
 ASSIGN

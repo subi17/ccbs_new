@@ -39,8 +39,8 @@
  */
 
 {mnp_obtener.i}
-{orderfunc.i}
-{ordercancel.i}
+{Func/orderfunc.i}
+{Func/ordercancel.i}
 
 DEF VAR lcSMS AS CHAR NO-UNDO. 
 

@@ -4,9 +4,9 @@ input from contrd1_rerate.input.
 
 def stream sout.
 output stream sout to contrd1_rerate.log.
-{date.i}
+{Func/date.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "anttis".
 

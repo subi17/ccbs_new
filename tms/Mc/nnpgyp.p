@@ -23,10 +23,10 @@
 
 &GLOBAL-DEFINE BrTable BItemGroup
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'bitemgroup'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'bitemgroup'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -108,7 +108,7 @@ form
 WITH  OVERLAY ROW 7 col 5 COLOR value(cfc) TITLE COLOR value(ctc)
     fr-header WITH side-labels FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* produkt :n tunnuksella hakua varten */
     "Brand:" lcBrand skip
@@ -534,7 +534,7 @@ BROWSE:
      else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSAction:  /* removal */
 
-        {uright2.i}
+        {Syst/uright2.i}
 
         delline = FRAME-LINE.
         FIND BItemGroup where recid(BItemGroup) = rtab[FRAME-LINE] no-lock.

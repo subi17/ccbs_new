@@ -20,8 +20,8 @@
   VERSION ......: XFera 
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
-{date.i}
+{Syst/commpaa.i}
+{Func/date.i}
 
 DEFINE VARIABLE liPassValidDays AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liPassNotifyDays AS INTEGER NO-UNDO. 
@@ -33,8 +33,8 @@ DEFINE VARIABLE liLoop AS INTEGER NO-UNDO.
 
 /* use brand 1 to get tmsparams, will be selected later */
 gcBrand = "1".
-{tmsparam.i PassWdValidDays} liPassValidDays = TMSParam.IntVal.
-{tmsparam.i PassWdExpireNotify} liPassNotifyDays = TMSParam.IntVal.
+{Func/tmsparam.i PassWdValidDays} liPassValidDays = TMSParam.IntVal.
+{Func/tmsparam.i PassWdExpireNotify} liPassNotifyDays = TMSParam.IntVal.
 
 form
    skip(1)

@@ -8,14 +8,14 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1"
    katun   = "Cron".
    
-{cparam2.i}
-{eventlog.i}
-{ftransdir.i}
+{Func/cparam2.i}
+{Func/lib/eventlog.i}
+{Func/ftransdir.i}
 
 DEF VAR liCount       AS INT  NO-UNDO. 
 DEF VAR lcFile        AS CHAR NO-UNDO.

@@ -9,8 +9,8 @@ CHANGED ......:
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
-{timestamp.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
 ASSIGN
    katun = "Qvantel"
    gcBrand = "1".

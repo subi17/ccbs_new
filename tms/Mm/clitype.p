@@ -23,10 +23,10 @@
 
 &GLOBAL-DEFINE BrTable Clitype
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CLIType'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CLIType'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -100,7 +100,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     "CLIType ......:"  CLIType.CLIType SKIP

@@ -9,8 +9,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF VAR i           AS INT                  NO-UNDO.
 DEF VAR order       AS INT                  NO-UNDO.

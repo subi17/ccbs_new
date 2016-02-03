@@ -14,10 +14,10 @@
            actor;string;the person who requested the change
 */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{tmsconst.i}
-{cparam2.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.

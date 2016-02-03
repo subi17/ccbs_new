@@ -1,7 +1,7 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
 
-{barrfunc.i}
+{Func/barrfunc.i}
 
 
 def var i as int no-undo.

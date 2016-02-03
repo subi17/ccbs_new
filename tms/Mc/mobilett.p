@@ -9,7 +9,7 @@
   SHARED .......: INPUT: CustNum
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF  INPUT PARAMETER   CustNum AS INT.
 

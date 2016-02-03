@@ -11,10 +11,10 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{date.i}
-{tmsparam2.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/date.i}
+{Func/tmsparam2.i}
 
 DEF TEMP-TABLE Calls
    FIELD pref       AS c

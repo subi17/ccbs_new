@@ -10,9 +10,9 @@
    VERSION .......: M15
 -------------------------------------------------------------------------- */
 
-{commali.i}                      
-{excel.i}
-{tmsparam2.i}
+{Syst/commali.i}                      
+{Func/excel.i}
+{Func/tmsparam2.i}
 
 DEF VAR i      AS i  NO-UNDO.
 DEF VAR hdr    AS c  NO-UNDO.

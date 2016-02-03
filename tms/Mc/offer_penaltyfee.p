@@ -5,10 +5,10 @@
   Version ......: yoigo
 -------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{offer.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Mc/offer.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER iiOrderID    AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER oiTermMonths AS INT  NO-UNDO.

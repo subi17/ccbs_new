@@ -9,12 +9,12 @@
                   
   Version ......: M15
   ---------------------------------------------------------------------- */
-{commali.i}
+{Syst/commali.i}
 
  DEF INPUT PARAMETER  MsSeq LIKE MobSub.MsSeq   NO-UNDO.
  DEF OUTPUT PARAMETER rc     AS   I             NO-UNDO.
 
-{eventval.i}
+{Syst/eventval.i}
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 

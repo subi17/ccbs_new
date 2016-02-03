@@ -14,10 +14,10 @@
                   03.03.03 tk tokens            
   Version ......: M15
   -------------------------------------------------------------------------- */
-{timestamp.i}
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'cli'}
+{Func/timestamp.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'cli'}
 
 DEF INPUT PARAM liCustNum  LIKE CLI.CustNum  NO-UNDO.
 /*

@@ -7,9 +7,9 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{pdfinvdf.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Inv/pdfinvdf.i}
 
 DEF INPUT  PARAMETER iiInvNum1     AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiInvNum2     AS INT  NO-UNDO.

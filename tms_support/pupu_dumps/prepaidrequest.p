@@ -8,9 +8,9 @@ DEF VAR liEvents     AS INTEGER   NO-UNDO.
 DEF VAR liPPstatus AS INT NO-UNDO.
 DEF VAR ldeFrom AS DEC NO-UNDO. 
 
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
 
 DEFINE STREAM slog.
 

@@ -7,19 +7,19 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{date.i}
-{cparam2.i}
-{ftransdir.i}
-{tmsconst.i}
-{fcustpl.i}
-{penaltyfee.i}
-{fgettxt.i}
-{fmakesms.i}
-{mnp.i}
+{Func/date.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/tmsconst.i}
+{Func/fcustpl.i}
+{Func/penaltyfee.i}
+{Func/fgettxt.i}
+{Func/fmakesms.i}
+{Mnp/mnp.i}
 
 FUNCTION fGetPenalty RETURN DECIMAL
    (OUTPUT odaEndDate AS DATE):

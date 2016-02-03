@@ -10,9 +10,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'StoBal'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'StoBal'}
 
 DEF INPUT PARAMETER icBrand  AS C NO-UNDO.
 DEF INPUT PARAMETER p-SimArt LIKE Stock.Stock.

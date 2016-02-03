@@ -12,10 +12,10 @@ MODIFIED .......: 01.10.1998 kl CustNum
 VERSION ........: M15
 ------------------------------------------------------------------------ */
 
-{commali.i}
-{fixedfee.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'fixedfee'}
+{Syst/commali.i}
+{Func/fixedfee.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'fixedfee'}
 
 DEF VAR idate   AS DA NO-UNDO.
 DEF VAR CustNum AS i  NO-UNDO.

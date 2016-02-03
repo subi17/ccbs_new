@@ -9,10 +9,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MNPProcess'}
-{fcustdata.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MNPProcess'}
+{Func/fcustdata.i}
 
 DEFINE INPUT PARAMETER piMNPType AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER piMsSeq AS INT NO-UNDO.
@@ -32,7 +32,7 @@ IF pcCLI NE "" THEN DO:
    END.
 END.
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

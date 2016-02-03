@@ -8,13 +8,13 @@
   Version ......: yoigo
 -------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    katun   = "Cron"
    gcBrand = "1".
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
 
 DEF VAR lcIncDir        AS CHAR NO-UNDO.
 DEF VAR lcProcDir       AS CHAR NO-UNDO.

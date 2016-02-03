@@ -10,15 +10,15 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{msreqfunc.i}
-{fmakemsreq.i}
-{eventval.i}
-{tmsconst.i}
-{service.i}
-{main_add_lines.i}
-{barrfunc.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/msreqfunc.i}
+{Func/fmakemsreq.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Func/service.i}
+{Func/main_add_lines.i}
+{Func/barrfunc.i}
 
 DEFINE INPUT PARAMETER iiRequest AS INTEGER   NO-UNDO.
 

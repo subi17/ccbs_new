@@ -19,9 +19,9 @@
   
  */
 
-{header_get.i}
-{tsformat.i}
-{xmlfunction.i}
+{rpcmethods/header_get.i}
+{Func/tsformat.i}
+{Func/xmlfunction.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    

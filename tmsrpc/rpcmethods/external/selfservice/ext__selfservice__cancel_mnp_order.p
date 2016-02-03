@@ -18,11 +18,11 @@
 
 {xmlrpc/xmlrpc_access.i}
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId
        gcBrand = "1".
-{fexternalapi.i}
-{tmsconst.i}
+{Func/fexternalapi.i}
+{Syst/tmsconst.i}
 
 DEF VAR piOrderId      AS INT  NO-UNDO.
 DEF VAR pcPortRequest  AS CHAR NO-UNDO.

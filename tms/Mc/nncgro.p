@@ -20,11 +20,11 @@
 
 &GLOBAL-DEFINE BrTable CustGroup
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CustGroup'}
-{eventval.i}
-{fecgtask.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CustGroup'}
+{Syst/eventval.i}
+{Func/fecgtask.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -95,7 +95,7 @@ WITH  OVERLAY ROW 4 centered
     COLOR value(cfc) TITLE COLOR value(ctc) lm-ots WITH side-labels 1 columns
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form
    CustGroup.Memo
@@ -558,7 +558,7 @@ SELAUS:
      else if lookup(nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction ON ENDKEY UNDO, NEXT LOOP:
        /* muutos */
-       {uright2.i}
+       {Syst/uright2.i}
        FIND CustGroup where recid(CustGroup) = rtab[frame-line(sel)] 
        exclusive-lock.
 

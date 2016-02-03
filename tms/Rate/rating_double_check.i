@@ -2,8 +2,8 @@
    do a double call check for a single cdr
 */
 
-{commali.i}
-{error_codes.i}
+{Syst/commali.i}
+{Rate/error_codes.i}
 
 /* post/pre dbs are renewed at the same time -> one variable is enough */
 DEF VAR ldaYesterday AS DATE NO-UNDO INIT ?.

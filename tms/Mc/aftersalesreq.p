@@ -7,16 +7,16 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{fmakemsreq.i}
-{forderstamp.i}
-{orderfunc.i}
-{fsubsterminal.i}
-{tmsconst.i}
-{offer.i}
-{fcpfat.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/fmakemsreq.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
+{Func/fsubsterminal.i}
+{Syst/tmsconst.i}
+{Mc/offer.i}
+{Func/fcpfat.i}
+{Syst/tmsconst.i}
 
 DEFINE INPUT PARAMETER iiMSrequest AS INT NO-UNDO.
 

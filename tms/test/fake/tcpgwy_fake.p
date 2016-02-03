@@ -7,8 +7,8 @@
   VERSION ......: XFERA
 ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 gcBrand = "1".
 
 DEF VAR lcHostname AS CHAR NO-UNDO.

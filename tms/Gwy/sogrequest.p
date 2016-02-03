@@ -16,9 +16,9 @@
   Version ......: TMS / Production version
   --------------------------------------------------------------------------- */
 
-{commpaa.i} katun = "SOG". gcbrand = "1".
-{msreqfunc.i}
-{tmsparam4.i}
+{Syst/commpaa.i} katun = "SOG". gcbrand = "1".
+{Func/msreqfunc.i}
+{Func/tmsparam4.i}
 
 gcBrand = "1".
 

@@ -20,11 +20,11 @@
 &GLOBAL-DEFINE TMSCodeDef NO
 &GLOBAL-DEFINE BrTable ClaimHist
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'claimhist'}
-{eventval.i}
-{invdet.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'claimhist'}
+{Syst/eventval.i}
+{Ar/invdet.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -88,7 +88,7 @@ WITH ROW FrmRow width 80 overlay FrmDown  down
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek  invoice */
     "Brand .:" lcBrand skip
@@ -460,7 +460,7 @@ REPEAT WITH FRAME sel:
 
      /* update memo */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS on ENDkey undo, NEXT LOOP:
-        {uright2.i}.
+        {Syst/uright2.i}.
 
         RUN local-find-this(FALSE).
         PAUSE 0.
@@ -508,7 +508,7 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
      
-        {uright2.i}
+        {Syst/uright2.i}
         delrow = FRAME-LINE.
         RUN local-find-this (FALSE).
                           

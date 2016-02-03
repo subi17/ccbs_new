@@ -10,7 +10,7 @@
 
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1} 
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 
 /* Input parameters */

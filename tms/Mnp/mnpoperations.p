@@ -12,15 +12,15 @@
 
 &GLOBAL-DEFINE BrTable MNPOperation
 
-{commali.i} 
-{eventval.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MNPOperation'}
-{xmlfunction.i}
-{mnpmessages.i}
-{tmsconst.i}
-{mnpoperation.i}
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MNPOperation'}
+{Func/xmlfunction.i}
+{Mnp/mnpmessages.i}
+{Syst/tmsconst.i}
+{Mnp/mnpoperation.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

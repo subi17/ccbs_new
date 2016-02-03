@@ -6,17 +6,17 @@
   CREATED ......: 28.05.2012
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
-{commali.i}
+{Syst/commali.i}
 /*
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
 qupd = True.
 */
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'iprange'}
-{iprange.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'iprange'}
+{Rate/iprange.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -361,7 +361,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}.
+       {Syst/uright2.i}.
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -413,7 +413,7 @@ BROWSE:
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this(FALSE).
        
        ASSIGN ac-hdr = " IPRange " ufkey = TRUE ehto = 9. RUN ufkey.

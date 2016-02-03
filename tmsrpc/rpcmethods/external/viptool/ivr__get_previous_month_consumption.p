@@ -11,12 +11,12 @@ DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 /* Input parameters */
 DEF VAR pcMSISDN AS CHAR NO-UNDO.
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    katun = "IVR_" + gbAuthLog.EndUserId.
    gcBrand = "1".
 
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 DEF VAR liPeriod AS INT NO-UNDO. 
 DEF VAR ldaDate AS DATE NO-UNDO. 

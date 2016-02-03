@@ -9,17 +9,17 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "Cron".
        
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
-{eventlog.i}
-{printdoc1tt.i}
-{email.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/lib/eventlog.i}
+{Inv/printdoc1tt.i}
+{Func/email.i}
 
 DEF VAR liCnt        AS INT  NO-UNDO.
 DEF VAR liRead       AS INT  NO-UNDO. 

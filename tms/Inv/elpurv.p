@@ -12,10 +12,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i}
-{cparam2.i}
-{edefine.i}
+{Syst/commali.i}
+{Syst/utumaa.i}
+{Func/cparam2.i}
+{Inv/edefine.i}
 
 def input parameter asno1  as int  format "zzzzzz9"  NO-UNDO.
 def input parameter asno2  as int  format "zzzzzz9"  NO-UNDO.

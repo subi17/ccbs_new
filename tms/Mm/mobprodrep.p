@@ -7,7 +7,7 @@
   MODIFIED .....: 12.09.03 jp Brand
   VERSION ......: M15
   -------------------------------------------------------------------------- */
-{commali.i}
+{Syst/commali.i}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -140,7 +140,7 @@ BROWSE:
          ufk[1]= 703 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 0   ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         {uright1.i '"5,6"'}
+         {Syst/uright1.i '"5,6"'}
          RUN ufkey.p.
       END.
 

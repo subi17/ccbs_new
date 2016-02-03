@@ -8,10 +8,10 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{msreqfunc.i}
-{fsubstermreq.i}
-{msisdn_prefix.i}
+{Syst/commali.i}
+{Func/msreqfunc.i}
+{Func/fsubstermreq.i}
+{Func/msisdn_prefix.i}
 
 DEFINE INPUT PARAMETER iiMSrequest AS INT NO-UNDO.
 

@@ -1,9 +1,9 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
-{date.i}
-{cparam2.i}
-{timestamp.i}
+{Func/date.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
 
 DEFINE VARIABLE lcOutputFile AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liCount AS INTEGER NO-UNDO. 

@@ -8,12 +8,12 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{fbankday.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/fbankday.i}
 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Payment'}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Payment'}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR liCount       AS INT  NO-UNDO. 

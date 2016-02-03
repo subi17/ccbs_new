@@ -6,11 +6,11 @@ AUTHOR .......: anttis
 CREATED ......: 12.02.14
 Version ......: yoigo
 ----------------------------------------------------------------------- */
-{commali.i}
-{date.i}
-{istc.i}
-{tmsconst.i}
-{chk_cdr_invrowcounter.i}
+{Syst/commali.i}
+{Func/date.i}
+{Func/istc.i}
+{Syst/tmsconst.i}
+{Inv/chk_cdr_invrowcounter.i}
 
 DEFINE INPUT PARAMETER iiDate AS DATE NO-UNDO. 
 DEFINE INPUT PARAMETER icMode AS CHAR NO-UNDO. 

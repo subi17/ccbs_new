@@ -9,12 +9,12 @@
   ----------------------------------------------------------------------*/
 
 /* ***************************  Definitions  ************************** */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{cparam2.i}
-{eventlog.i}
-{ftransdir.i}
+{Func/cparam2.i}
+{Func/lib/eventlog.i}
+{Func/ftransdir.i}
 {tariffconfig.i}
 {tariffcons.i}
 

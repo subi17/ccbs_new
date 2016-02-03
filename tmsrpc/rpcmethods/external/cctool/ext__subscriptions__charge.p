@@ -15,11 +15,11 @@
 /* &GLOBAL-DEFINE SKIP_FUNC_I YES */
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId.
 gcBrand = "1".
-{tmsconst.i}
-{fcustpl.i}
+{Syst/tmsconst.i}
+{Func/fcustpl.i}
 
 DEF VAR lcstruct AS CHAR NO-UNDO.
 DEF VAR pcstruct AS CHAR NO-UNDO. 
@@ -91,7 +91,7 @@ END.
 /* by the moment we don't have many details
   of how they will apply one time limit */
 
-{fcharge_comp_loaded.i}
+{Func/fcharge_comp_loaded.i}
 /* check monthly limit */
 ldeLoaded = fMonthLoaded(
                (IF ldAmount > 0 THEN "CHARGE" ELSE "COMP"),

@@ -8,10 +8,10 @@
   VERSIO .......: M15
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fcustbal.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fcustbal.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT  NO-UNDO.
 

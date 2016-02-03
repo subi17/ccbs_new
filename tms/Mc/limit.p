@@ -8,17 +8,17 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commali.i}.
+{Syst/commali.i}.
 
 DEFINE INPUT PARAM piCustNum   AS INT NO-UNDO. 
 DEFINE INPUT PARAM piMsSeq     AS INT NO-UNDO. 
 DEFINE INPUT PARAM piLimitType AS INT NO-UNDO. 
 DEFINE INPUT PARAM piTMRuleSeq AS INT NO-UNDO. 
 
-{lib/tokenlib.i}
-{dataformat.i}
-{flimitreq.i}
-{tmsconst.i}
+{Mc/lib/tokenlib.i}
+{Func/dataformat.i}
+{Func/flimitreq.i}
+{Syst/tmsconst.i}
 
 DEF NEW shared VAR siirto AS CHAR.
 

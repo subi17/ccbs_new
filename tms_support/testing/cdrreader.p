@@ -8,8 +8,8 @@ CHANGED ......: 29.1.2015 kariaika & ilkkasav
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
-{cdrreader.i}
+{Syst/commpaa.i}
+{tms_support/testing/cdrreader.i}
 ASSIGN
    katun = "Qvantel"
    gcBrand = "1".

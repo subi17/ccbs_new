@@ -44,13 +44,13 @@
 
 &GLOBAL-DEFINE BrTable FixedFee
 
-{commali.i} 
-{fixedfee.i} 
-{nncoit2.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'fixedfee'}
+{Syst/commali.i} 
+{Func/fixedfee.i} 
+{Func/nncoit2.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'fixedfee'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -72,7 +72,7 @@ IF llDoEvent THEN DO:
 
 END.
 
-{ffeecont.i}
+{Func/ffeecont.i}
 
 DEF NEW shared VAR siirto AS CHAR.
 
@@ -172,7 +172,7 @@ help "First Period YYYYMM from which this payment shall be invoiced"
     COLOR value(cfc) TITLE COLOR value(ctc) fr-header NO-LABEL
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form
    "Changes made above shall ONLY be updated onto"

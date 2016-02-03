@@ -4,6 +4,6 @@
 
 */
 
-{commali.i}
+{Syst/commali.i}
 
 RUN offer ("",TRUE).

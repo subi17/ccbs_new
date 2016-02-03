@@ -7,25 +7,25 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{cparam2.i}
-{fmakemsreq.i}
-{msreqfunc.i}
-{msisdn.i}
-{tmsconst.i}
-{freacmobsub.i}
-{contract_end_date.i}
-{service.i}
-{fdss.i}
-{forderstamp.i}
-{orderfunc.i}
-{ftopup.i}
-{ftaxdata.i}
-{fsubstermreq.i}
-{fbankdata.i}
-{fbtc.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Func/msisdn.i}
+{Syst/tmsconst.i}
+{Func/freacmobsub.i}
+{Func/contract_end_date.i}
+{Func/service.i}
+{Func/fdss.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
+{Func/ftopup.i}
+{Func/ftaxdata.i}
+{Func/fsubstermreq.i}
+{Func/fbankdata.i}
+{Func/fbtc.i}
 
 DEFINE INPUT PARAMETER iiMSrequest  AS INTEGER   NO-UNDO.
 

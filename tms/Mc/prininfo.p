@@ -11,12 +11,12 @@
   VERSIO .......: M15
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{utumaa.i new }
-{feplstart.i}
-{cparam2.i}
-{edefine.i new}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/utumaa.i new }
+{Func/feplstart.i}
+{Func/cparam2.i}
+{Inv/edefine.i new}
 
 DEF INPUT PARAMETER iiITNum   AS INT  NO-UNDO.
 DEF INPUT PARAMETER iiCustNum AS INT  NO-UNDO.
@@ -529,7 +529,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
        
       ELSE DO:
          tila = TRUE.
-         {tmsreport.i RETURN}
+         {Syst/tmsreport.i RETURN}
          
       END.
 
@@ -547,7 +547,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       
       IF NOT llEPL THEN DO:
          tila = FALSE.
-         {utuloste.i}
+         {Syst/utuloste.i}
       END.
 
       IF lcErrFile = "" THEN 

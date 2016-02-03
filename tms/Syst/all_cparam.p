@@ -11,11 +11,11 @@
 
 &GLOBAL-DEFINE BrTable TMSParam
 
-{commali.i}
-{function.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'TMSParam'}
-{eventval.i}
+{Syst/commali.i}
+{Func/function.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'TMSParam'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -95,7 +95,7 @@ form
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek PARAM  BY  ParamCode */
     "Brand:" lcBrand skip

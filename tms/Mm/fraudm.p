@@ -6,10 +6,10 @@
   CREATED ......: 5.3.2013 
   Version ......: yoigo 
   ---------------------------------------------------------------------- */
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FraudCDR'} 
-{feventlog.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FraudCDR'} 
+{Func/feventlog.i}
 
 DEF INPUT PARAM icCLI AS C NO-UNDO.
 

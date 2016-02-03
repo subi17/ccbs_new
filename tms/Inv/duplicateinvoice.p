@@ -7,14 +7,14 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{printdoc1tt.i}
-{cparam2.i}
-{duplicate_invoice.i}
-{tmsconst.i}
-{msreqfunc.i}
+{Inv/printdoc1tt.i}
+{Func/cparam2.i}
+{Func/duplicate_invoice.i}
+{Syst/tmsconst.i}
+{Func/msreqfunc.i}
 
 DEF VAR liInvCount AS INTEGER NO-UNDO.
 DEF VAR liPrinted AS INT NO-UNDO. 

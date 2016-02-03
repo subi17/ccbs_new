@@ -8,14 +8,14 @@
   Version ......: TF
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{func.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'SubInvoice'}
-{finvbal.i}
-{subinvdet.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/func.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'SubInvoice'}
+{Func/finvbal.i}
+{Ar/subinvdet.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -208,7 +208,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW SubInvoice.SubInvNum {uchoose.i} NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SubInvoice.SubInvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SubInvoice.SubInvNum WITH FRAME sel.
       END.
 

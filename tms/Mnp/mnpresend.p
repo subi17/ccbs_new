@@ -1,6 +1,6 @@
-{commali.i}
-{eventval.i}
-{orderfunc.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/orderfunc.i}
 DEFINE INPUT PARAMETER piOrderId AS INTEGER NO-UNDO.
 
 DEFINE VARIABLE lcStatus AS CHARACTER NO-UNDO.

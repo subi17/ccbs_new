@@ -22,11 +22,11 @@ The information (fields) we need are:
     When Action=Modify: All fields that have changed (old value and new value)
 */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{tmsconst.i}
-{dumpfile_run.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Syst/dumpfile_run.i}
 
 DEF INPUT PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT PARAMETER icFile        AS CHAR NO-UNDO.

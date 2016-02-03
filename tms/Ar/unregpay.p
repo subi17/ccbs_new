@@ -61,15 +61,15 @@
 
 &GLOBAL-DEFINE BrTable UnregPaym
 
-{commali.i}
-{timestamp.i}
-{eventval.i}
-{faccper.i}
-{fcustbal.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'unregpaym'}
-{finvbal.i}
-{fpaymentreq.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Func/faccper.i}
+{Func/fcustbal.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'unregpaym'}
+{Func/finvbal.i}
+{Func/fpaymentreq.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -159,14 +159,14 @@ DEF VAR mench AS CHARACTER FORMAT "x(26)" EXTENT 5
              "    4. To credit loss     ",
              "    5. Exit               " ].
 
-{cparam.i BankAcc       RETURN}. PayAcc        = TMSParam.IntVal.
-{cparam.i IntCalcMet    RETURN}. IntCalcMet    = TMSParam.IntVal.
-{cparam.i OTIntAcc      RETURN}. IntAcc        = TMSParam.IntVal.
-{cparam.i OverPayAcc    RETURN}. OpAcc         = TMSParam.IntVal.
-{cparam.i ClaimCostAcc  RETURN}. ColAcc        = TMSParam.IntVal.
-{cparam.i ReceivAcc     RETURN}. RecAcc        = TMSParam.IntVal.
-{cparam.i AdvPaymAcc    RETURN}. ApAcc         = TMSParam.IntVal.
-{cparam.i CreditLossAcc RETURN}. liCredLossAcc = TMSParam.IntVal.
+{Func/cparam.i BankAcc       RETURN}. PayAcc        = TMSParam.IntVal.
+{Func/cparam.i IntCalcMet    RETURN}. IntCalcMet    = TMSParam.IntVal.
+{Func/cparam.i OTIntAcc      RETURN}. IntAcc        = TMSParam.IntVal.
+{Func/cparam.i OverPayAcc    RETURN}. OpAcc         = TMSParam.IntVal.
+{Func/cparam.i ClaimCostAcc  RETURN}. ColAcc        = TMSParam.IntVal.
+{Func/cparam.i ReceivAcc     RETURN}. RecAcc        = TMSParam.IntVal.
+{Func/cparam.i AdvPaymAcc    RETURN}. ApAcc         = TMSParam.IntVal.
+{Func/cparam.i CreditLossAcc RETURN}. liCredLossAcc = TMSParam.IntVal.
 
 
 FUNCTION fDispOrder RETURNS LOGICAL.
@@ -287,7 +287,7 @@ FORM
 WITH  OVERLAY ROW 6 CENTERED COLOR VALUE(cfc) TITLE COLOR VALUE(ctc)
    " ADVANCE PAYMENT FOR CUSTOMER " WITH SIDE-LABELS 1 COLUMNS FRAME AdvPaym.
 
-{brand.i}
+{Func/brand.i}
 
 FORM /* Seek a Date */
    "Brand:" lcBrand skip
@@ -633,7 +633,7 @@ REPEAT WITH FRAME sel:
       ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
       DO WITH FRAME lis TRANSAction:
 
-         {uright2.i}
+         {Syst/uright2.i}
          FIND UnregPaym WHERE RECID(UnregPaym) = rtab[FRAME-LINE(sel)]
          NO-LOCK.
          ASSIGN  fr-header = " SHOW MORE INFORMATION " ufkey = TRUE.
@@ -901,7 +901,7 @@ REPEAT WITH FRAME sel:
 
       ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" AND ufk[5] > 0
       THEN DO:  /* add */
-         {uright2.i}
+         {Syst/uright2.i}
          must-add = TRUE.
          NEXT LOOP.
       END.
@@ -909,7 +909,7 @@ REPEAT WITH FRAME sel:
       /* removal */
       ELSE IF LOOKUP(nap,"6,f6") > 0 AND xState = 0 AND lcRight = "RW"
       THEN DO TRANSAction: 
-         {uright2.i}
+         {Syst/uright2.i}
          delline = FRAME-LINE.
          FIND UnregPaym WHERE RECID(UnregPaym) = rtab[FRAME-LINE] NO-LOCK.
 
@@ -1005,7 +1005,7 @@ REPEAT WITH FRAME sel:
             post2inv:
             REPEAT WITH FRAME lis TRANSACTION ON ENDKEY UNDO, LEAVE:
 
-            {uright2.i}
+            {Syst/uright2.i}
             FIND UnregPaym WHERE RECID(UnregPaym) = memory EXCLUSIVE-LOCK.
 
             ASSIGN 
@@ -1232,7 +1232,7 @@ REPEAT WITH FRAME sel:
 
             REPEAT WITH FRAME over TRANSAction:
 
-            {uright2.i}
+            {Syst/uright2.i}
             FIND UnregPaym WHERE RECID(UnregPaym) = memory
             EXCLUSIVE-LOCK.
 
@@ -1356,7 +1356,7 @@ REPEAT WITH FRAME sel:
 
             REPEAT WITH FRAME AdvPaym TRANSAction:
 
-            {uright2.i}
+            {Syst/uright2.i}
             FIND UnregPaym WHERE RECID(UnregPaym) = memory
             EXCLUSIVE-LOCK.
 

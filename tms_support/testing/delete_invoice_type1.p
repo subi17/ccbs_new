@@ -1,4 +1,4 @@
-{commali.i} 
+{Syst/commali.i} 
 
 def var ldainvdate as date no-undo.
 def var i as int no-undo.

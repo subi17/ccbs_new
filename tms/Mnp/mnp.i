@@ -13,10 +13,10 @@
 &THEN
 &GLOBAL-DEFINE MNP_I YES
 
-{commali.i}
-{timestamp.i}
-{fgettxt.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/fgettxt.i}
+{Syst/tmsconst.i}
 
 FUNCTION fMNPCallAlarm RETURNS LOGICAL
   (INPUT pcAction  AS CHARACTER,

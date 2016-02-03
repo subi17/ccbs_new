@@ -7,8 +7,8 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 DEF INPUT PARAMETER idaReadDate    AS DATE NO-UNDO.
 DEF INPUT PARAMETER ideReadInTS    AS DEC  NO-UNDO.

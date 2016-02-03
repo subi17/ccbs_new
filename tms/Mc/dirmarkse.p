@@ -8,7 +8,7 @@
                   16.09.03 jp Brand 
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF SHARED VAR siirto AS CHAR.
 

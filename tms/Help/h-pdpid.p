@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 DEF INPUT PARAMETER servCom AS CHAR NO-UNDO.
 

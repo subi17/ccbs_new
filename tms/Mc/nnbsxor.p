@@ -12,7 +12,7 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{commali.i} /* katun = "eka". */
+{Syst/commali.i} /* katun = "eka". */
 
 DEF WORKFILE sums
    field accno   as i format "zzz9"
@@ -44,7 +44,7 @@ DEF VAR DLimit    AS DA NO-UNDO.
 
 DEF NEW shared STREAM excel.
 
-{tmsparam.i DateLimit return}. DLimit = TMSParam.DateVal.
+{Func/tmsparam.i DateLimit return}. DLimit = TMSParam.DateVal.
 
 MESSAGE
 "NOTE !" skip(1)

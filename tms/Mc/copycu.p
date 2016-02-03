@@ -20,8 +20,8 @@
   Version ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
+{Syst/commali.i}
+{Syst/eventval.i}
 
 DEF BUFFER new-Customer FOR Customer.
 DEF BUFFER new-Target   FOR BillTarget. 

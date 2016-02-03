@@ -1,7 +1,7 @@
 /* fdestcountry.i    30.11.09/aam 
 */
 
-{transname.i}
+{Func/transname.i}
 
 &IF "{&DestCountry}" NE "YES" 
 &THEN

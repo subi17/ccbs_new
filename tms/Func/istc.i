@@ -2,8 +2,8 @@
 &THEN
 &GLOBAL-DEFINE ISTC_I YES
 
-{date.i}
-{timestamp.i}
+{Func/date.i}
+{Func/timestamp.i}
 
 DEF TEMP-TABLE ttMsOwner NO-UNDO
    FIELD CustNum          AS INT

@@ -9,9 +9,9 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 ASSIGN tuni1 = "arpurel"
        tuni2 = "".
@@ -140,7 +140,7 @@ toimi:
 
 /* Avataan striimi */
 ASSIGN tila = true.
-{utuloste.i "RETURN"}
+{Syst/utuloste.i "RETURN"}
 
 MESSAGE "Printing in process...".   
 
@@ -152,7 +152,7 @@ RUN arpurep.p (ldtDate1,
                lcCLIType[2]).
 
 ASSIGN tila = false.
-{utuloste.i}
+{Syst/utuloste.i}
 
 MESSAGE "Average revenue report is finished."
 VIEW-AS ALERT-BOX

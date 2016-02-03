@@ -13,8 +13,8 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{commali.i}  
-{tmsparam2.i}
+{Syst/commali.i}  
+{Func/tmsparam2.i}
 
 DEF VAR exdir     AS c  NO-UNDO.
 DEF VAR exName    AS c  NO-UNDO.

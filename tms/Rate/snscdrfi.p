@@ -16,8 +16,8 @@
                   Version ......: Tele1Europe
                        -------------------------------------------------------------------------- */
 
-{testpaa.i}
-{tmsparam2.i}
+{Syst/testpaa.i}
+{Func/tmsparam2.i}
 
 def var pvmlog    as log  no-undo format "Yes/No" init TRUE.
 def var ticfile   as char no-undo format "x(60)".

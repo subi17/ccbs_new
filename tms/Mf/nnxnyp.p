@@ -10,9 +10,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'areapair'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'areapair'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -249,7 +249,7 @@ BROWSE:
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
 
-         {uright1.i '"5,6"'}
+         {Syst/uright1.i '"5,6"'}
 
          RUN ufkey.p.
       END.

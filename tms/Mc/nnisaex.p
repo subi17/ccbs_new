@@ -11,9 +11,9 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}                      
-{function.i}
-{utumaa.i new} 
+{Syst/commali.i}                      
+{Func/function.i}
+{Syst/utumaa.i new} 
 
 assign tuni1 = "nnisaex"
        tuni2 = "".
@@ -128,7 +128,7 @@ TOIMI:
          IF print THEN DO:
             /* ask FOR printer IF letters are wanted */
             ASSIGN tila = TRUE.
-            {tmsreport.i "next toimi"}
+            {Syst/tmsreport.i "next toimi"}
          END.
          LEAVE TOIMI.
       END.   
@@ -444,7 +444,7 @@ form header
 
    IF print THEN DO:
       ASSIGN tila = FALSE.
-      {tmsreport.i}
+      {Syst/tmsreport.i}
    END.   
 
    message "File" exfile "is ready - press ENTER !".

@@ -9,10 +9,10 @@
   -------------------------------------------------------------------------- */
 
 
-{msreqfunc.i}
-{eventval.i}
-{fwebuser.i}
-{coinv.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Func/fwebuser.i}
+{Func/coinv.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

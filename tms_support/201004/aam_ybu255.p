@@ -1,7 +1,7 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "Qvantel".
 
-{timestamp.i}
+{Func/timestamp.i}
 DEF VAR ldaActDate    AS DATE NO-UNDO.
 DEF VAR liTime        AS INT  NO-UNDO.
 def var j as int no-undo.

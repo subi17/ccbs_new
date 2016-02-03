@@ -8,16 +8,16 @@
   VERSION ......: xfera
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{eventval.i}
-{cparam2.i}
-{daycampaign.i}
-{date.i}
-{fctserval.i}
-{fctchange.i}
-{fmakemsreq.i}
-{lib/tokenlib.i}
+{Syst/eventval.i}
+{Func/cparam2.i}
+{Rate/daycampaign.i}
+{Func/date.i}
+{Func/fctserval.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Mc/lib/tokenlib.i}
 
 DEF INPUT PARAMETER  icKeyType AS CHAR        NO-UNDO.
 DEF INPUT PARAMETER  iiKey AS INT           NO-UNDO.                

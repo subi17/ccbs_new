@@ -17,12 +17,12 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
-{cparam2.i}
-{upsellbundle.i}
-{fdss.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/upsellbundle.i}
+{Func/fdss.i}
 
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcId AS CHAR NO-UNDO. 

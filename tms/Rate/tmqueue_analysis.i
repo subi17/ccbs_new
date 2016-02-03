@@ -3,11 +3,11 @@
 
 &GLOBAL-DEFINE TMQUEUE_ANALYSIS_I YES
 
-{commali.i}
-{date.i}
-{cparam2.i}
-{tmsconst.i}
-{istc.i}
+{Syst/commali.i}
+{Func/date.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/istc.i}
    
 DEF VAR lcPMDUBUpsell     AS CHAR NO-UNDO.
 DEF VAR lcIPLData         AS CHAR NO-UNDO. 

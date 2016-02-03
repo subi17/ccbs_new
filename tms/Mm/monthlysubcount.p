@@ -1,12 +1,12 @@
 /* monthlysubcount.p    04.01.11/aam 
 */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "cron".
 gcBrand = "1".
 
-{direct_dbconnect.i}
-{eventlog.i}
+{Func/direct_dbconnect.i}
+{Func/lib/eventlog.i}
 
 DEF VAR ldaPrevPeriod AS DATE NO-UNDO.
 

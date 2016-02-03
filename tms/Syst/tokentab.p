@@ -8,10 +8,10 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'tabletoken'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'tabletoken'}
 
 DEF INPUT PARAMETER itoken LIKE token.tokencode NO-UNDO.
 

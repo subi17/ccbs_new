@@ -8,17 +8,17 @@
                   22.11.07/as  reqtype 18 and 19 cancel handling
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{msreqfunc.i}
-{msisdn.i}
-{fuserright.i}
-{eventval.i}
-{forderstamp.i}
-{fmakemsreq.i}
-{fmakesms.i}
-{fsendsms.i}
-{fdss.i}
-{fsubstermreq.i}
-{main_add_lines.i}
+{Func/msreqfunc.i}
+{Func/msisdn.i}
+{Func/fuserright.i}
+{Syst/eventval.i}
+{Func/forderstamp.i}
+{Func/fmakemsreq.i}
+{Func/fmakesms.i}
+{Func/fsendsms.i}
+{Func/fdss.i}
+{Func/fsubstermreq.i}
+{Func/main_add_lines.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER iiFromStatus AS INTEGER NO-UNDO.

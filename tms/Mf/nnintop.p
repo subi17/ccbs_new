@@ -8,9 +8,9 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{date.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/date.i}
 
 DEF TEMP-TABLE Calls
    FIELD CCN        AS i

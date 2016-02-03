@@ -18,10 +18,10 @@
   Version ......: M15
  -------------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'tariff'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'tariff'}
 
 DEF VAR i       AS i  NO-UNDO.
 def var ok      as lo no-undo format "Yes/No".

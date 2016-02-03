@@ -9,11 +9,11 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{excel.i}
-{function.i}
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'fixedfee'}
+{Func/excel.i}
+{Func/function.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'fixedfee'}
 
 DEF VAR cname   AS c  NO-UNDO.
 def var fname   as c  no-undo format "x(40)".

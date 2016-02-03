@@ -11,11 +11,11 @@
 
 &GLOBAL-DEFINE BrTable RatePref
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ratepref'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ratepref'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -85,7 +85,7 @@ WITH  OVERLAY ROW 4 centered
     SIDE-LABELS 
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek  Prefix */
     "Brand :" lcBrand skip

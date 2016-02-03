@@ -13,8 +13,8 @@
 
 &GLOBAL-DEFINE BrTable FATGMember
 
-{commali.i} 
-{eventval.i} 
+{Syst/commali.i} 
+{Syst/eventval.i} 
 
 DEF  NEW  shared VAR siirto AS CHAR.
 
@@ -73,7 +73,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     TITLE COLOR VALUE(ctc) "All members "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     "FAT Group .....:" Fatgmember.ftgrp no-label skip 
@@ -387,7 +387,7 @@ BROWSE:
 
      /* UPDATE memo */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
-        {uright2.i}.
+        {Syst/uright2.i}.
 
         cfc = "puyr". run ufcolor.
         ehto = 9. 
@@ -400,13 +400,13 @@ BROWSE:
      END.
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
-/*       {uright2.i} */
+/*       {Syst/uright2.i} */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 

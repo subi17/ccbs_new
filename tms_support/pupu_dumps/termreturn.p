@@ -10,12 +10,12 @@ DEFINE VARIABLE lcOldtariffBundle   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE llDeviceStart       AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE llDeviceScreen      AS LOGICAL   NO-UNDO.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcbrand = "1".
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
 
 DEFINE STREAM slog.
 

@@ -6,8 +6,8 @@
  * CHANGELOG : 
  *
  *-----------------------------------------------------------------*/
-{commpaa.i}
-{timestamp.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
 
 DEF VAR sid LIKE solog.solog.
 DEF VAR sologi AS C NO-UNDO.

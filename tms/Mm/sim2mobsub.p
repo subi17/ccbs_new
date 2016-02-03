@@ -7,9 +7,9 @@
   CHANGED ......: 
   VERSION ......: TF
   ---------------------------------------------------------------------- */
-{commali.i} 
-{func.i}
-{fgettxt.i}
+{Syst/commali.i} 
+{Func/func.i}
+{Func/fgettxt.i}
 
 DEF INPUT  PARAMETER   msseq  AS INT . 
 
@@ -27,7 +27,7 @@ DEF VAR liPortingTime1      AS INT            NO-UNDO init 8.
 DEF VAR liPortingTime2      AS INT            NO-UNDO init 17.
 
 
-{tmsparam.i SimStatusContSig return}.  sim-in-cont = TMSParam.IntVal.
+{Func/tmsparam.i SimStatusContSig return}.  sim-in-cont = TMSParam.IntVal.
 
 FIND mobsub NO-LOCK  WHERE 
      mobsub.msseq = msseq NO-ERROR.
@@ -342,7 +342,7 @@ END.
 HIDE FRAME stat.
 
     
-{connect-tables.i}    
+{Mm/connect-tables.i}    
 
   
 

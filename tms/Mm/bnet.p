@@ -10,7 +10,7 @@
 
 &GLOBAL-DEFINE BrTable bnet
 
-{commali.i}
+{Syst/commali.i}
 
 def /* new */ shared var siirto AS char.
 
@@ -48,7 +48,7 @@ WITH ROW FrmRow width 80 overlay FrmDown  down
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     bnet.BnetCode     /* label format */
@@ -385,7 +385,7 @@ BROWSE:
 
      /* Update Memo */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS on ENDkey undo, NEXT LOOP:
-        {uright2.i}.
+        {Syst/uright2.i}.
 
         cfc = "puyr". RUN ufcolor.
         ehto = 9. 
@@ -396,13 +396,13 @@ BROWSE:
      END.
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}                           
+        {Syst/uright2.i}                           
         must-add = true.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-line.
        RUN local-find-this (false).
 

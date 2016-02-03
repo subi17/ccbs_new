@@ -5,13 +5,13 @@
   CREATED ......: 28.10.11
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun = "cron".
-{eventlog.i}
-{timestamp.i}
-{cparam2.i}
+{Func/lib/eventlog.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
 
 DEF VAR liMarked    AS INT  NO-UNDO.
 DEF VAR ldaReadDate AS DATE NO-UNDO.

@@ -12,9 +12,9 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{eventval.i}
-{cparam2.i}
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Func/cparam2.i}
 
 def new shared var siirto AS char.
 

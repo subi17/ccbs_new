@@ -3,7 +3,7 @@
    changes:         04.02.05/aam fSubSerValue, fCSSParamValue, fCallSpecDuring
                     24.08.05/aam ilSolog to fUpdateSubser(&Para)
 */
-{commali.i}
+{Syst/commali.i}
 
 DEF BUFFER bSubCur     FOR SubSer.
 DEF BUFFER bSubParaCur FOR SubSerPara.

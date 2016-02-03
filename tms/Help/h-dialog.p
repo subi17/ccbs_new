@@ -9,9 +9,9 @@
   Version ......: 
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{dialog.i}
+{Func/dialog.i}
 
 DEF INPUT  PARAMETER TABLE FOR ttable. 
 DEF INPUT  PARAMETER ititle  AS CHAR NO-UNDO.      

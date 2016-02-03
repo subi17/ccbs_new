@@ -7,16 +7,16 @@
   Version ......: xfera
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
-{timestamp.i}
-{log.i}
-{cparam2.i}
-{mnp.i}
-{tmsconst.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
+{Func/log.i}
+{Func/cparam2.i}
+{Mnp/mnp.i}
+{Syst/tmsconst.i}
 
 katun = "MNP".
 gcBrand = "1".
-{heartbeat.i}
+{Func/heartbeat.i}
 
 DEFINE VARIABLE liLoop     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTime     AS CHARACTER NO-UNDO.

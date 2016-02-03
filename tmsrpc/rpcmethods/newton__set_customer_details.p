@@ -62,7 +62,7 @@
  * Note: Address data is updated using RPC newton__set_customer_address.p
  */
 {xmlrpc/xmlrpc_access.i}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 /* Input parameters */
 DEF VAR piCustNum AS INT NO-UNDO.
@@ -112,7 +112,7 @@ WHERE customer.custnum = piCustNum
 IF NOT AVAILABLE Customer THEN
     RETURN appl_err(SUBST("Customer for &1 not found", piCustNum)).
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "VISTA_" + scUser.
 gcBrand = "1".
 
@@ -277,10 +277,10 @@ END.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{flimitreq.i}
-{fcustdata.i}
-{fmakemsreq.i}
-{femailinvoice.i}
+{Func/flimitreq.i}
+{Func/fcustdata.i}
+{Func/fmakemsreq.i}
+{Func/femailinvoice.i}
 
 DEF BUFFER bCustomer FOR Customer.
 DEFINE VARIABLE lcOrgId AS CHARACTER NO-UNDO. 

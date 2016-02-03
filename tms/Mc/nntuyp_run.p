@@ -34,10 +34,10 @@
 
 &GLOBAL-DEFINE BrTable BillItem
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'billitem'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'billitem'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -167,7 +167,7 @@ form
 WITH  OVERLAY ROW 3 CENTERED COLOR value(cfc) TITLE COLOR value(ctc)
     fr-header WITH side-labels FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* produkt :n tunnuksella hakua varten */
     "Brand:" lcBrand skip

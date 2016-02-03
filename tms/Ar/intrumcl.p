@@ -9,11 +9,11 @@
  VERSION .......: M15
  ============================================================================*/
 
-{commali.i}                      
-{cparam2.i}
-{ftransdir.i}
-{utumaa.i NEW}
-{intrumcr.i}
+{Syst/commali.i}                      
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/utumaa.i NEW}
+{Ar/intrumcr.i}
 
 ASSIGN tuni1 = "intrumcl"
        tuni2 = "".
@@ -133,13 +133,13 @@ REPEAT WITH FRAME main:
    IF CAN-FIND(FIRST ttError) THEN DO:
 
       ASSIGN tila = TRUE.
-      {utuloste.i "return"}
+      {Syst/utuloste.i "return"}
 
       RUN intrumcrp (INPUT TABLE ttError,
                      lcInfile).
 
       ASSIGN tila = FALSE.
-      {utuloste.i}
+      {Syst/utuloste.i}
 
       MESSAGE "Error list was printed." 
       VIEW-AS ALERT-BOX. 

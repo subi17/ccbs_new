@@ -7,9 +7,9 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{requestaction_exec.i}
-{fsendsms.i}
+{Syst/commali.i}
+{Mm/requestaction_exec.i}
+{Func/fsendsms.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
 DEF INPUT PARAMETER icCLIType    AS CHAR NO-UNDO.

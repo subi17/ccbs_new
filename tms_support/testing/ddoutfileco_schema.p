@@ -8,9 +8,9 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
 
 DEFINE INPUT  PARAMETER icInvGrp       AS CHAR NO-UNDO.
 DEFINE INPUT  PARAMETER iiCustNum1     AS INT  NO-UNDO.
@@ -47,7 +47,7 @@ DEF VAR lcFileTxt   AS CHAR NO-UNDO.
 DEF VAR lcFileXml   AS CHAR NO-UNDO. 
 DEF VAR liNBCCount  AS INT  NO-UNDO. 
 
-{ddoutfilett.i}
+{Inv/ddoutfilett.i}
 
 DEF TEMP-TABLE ttDueDate NO-UNDO
    FIELD DueDate  AS DATE

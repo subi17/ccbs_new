@@ -16,10 +16,10 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{cparam2.i}
-{utumaa.i "new"}
+{Func/cparam2.i}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnkaen"
        tuni2 = "".
@@ -295,7 +295,7 @@ rival:      repeat ON ENDKEY UNDO rival, LEAVE rival WITH FRAME rival:
    END. /* toimi */
 
 ASSIGN tila = TRUE.
-{tmsreport.i "return"}
+{Syst/tmsreport.i "return"}
 
 ASSIGN
 sl = 0
@@ -429,7 +429,7 @@ END. /* runko */
 PUT STREAM tul skip(spit1 - rl).
 
 ASSIGN tila = FALSE.
-{tmsreport.i}
+{Syst/tmsreport.i}
 
 MESSAGE "Printing complete !" VIEW-AS ALERT-BOX.
 

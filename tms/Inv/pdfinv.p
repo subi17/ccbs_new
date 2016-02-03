@@ -14,16 +14,16 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{eventval.i}
-{refcode.i}
-{fxmlfile.i}
-{pdfinvdf.i}
-{invotxtp.i} 
-{timestamp.i}
-{finvbal.i}
-{fdivtxt.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Func/refcode.i}
+{Func/fxmlfile.i}
+{Inv/pdfinvdf.i}
+{Func/invotxtp.i} 
+{Func/timestamp.i}
+{Func/finvbal.i}
+{Func/fdivtxt.i}
 
 DEF INPUT-OUTPUT PARAMETER TABLE FOR ttPDFInv.
 DEF INPUT        PARAMETER ilPrintRep    AS LOG  NO-UNDO.
@@ -57,7 +57,7 @@ DEF VAR llInvFile    AS LOG   NO-UNDO.
 DEF VAR lcTxtTarget  AS CHAR  NO-UNDO.
 DEF VAR lcTxtKey     AS CHAR  NO-UNDO. 
 
-{fpdfrun.i}
+{Func/fpdfrun.i}
 
 DEF BUFFER bInvoice FOR Invoice.
 

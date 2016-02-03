@@ -4,13 +4,13 @@
                 14.02.06/aam assign firstname
                 20.11.06/aam new db structure
 */
-{commali.i}   
-{fwebuser.i}
-{fcustdata.i}
-{ftmrlimit.i}
-{tmsconst.i}
-{eventval.i}
-{femailinvoice.i}
+{Syst/commali.i}   
+{Func/fwebuser.i}
+{Func/fcustdata.i}
+{Func/ftmrlimit.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
+{Func/femailinvoice.i}
       
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

@@ -4,7 +4,7 @@
 
 */
 
-{commali.i}
+{Syst/commali.i}
 
 /* plans in credit control */
 RUN paymplan (0,0,7).

@@ -7,11 +7,11 @@
   Version ......: M15
   ------------------------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobcdr'}
-{fvatfact.i}
-{callquery.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobcdr'}
+{Func/fvatfact.i}
+{Func/callquery.i}
 
 
 DEF  INPUT PARAMETER iiInvCust AS INT NO-UNDO.

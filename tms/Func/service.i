@@ -19,13 +19,13 @@
 
 &GLOBAL-DEFINE service_i YES
 
-{commali.i}
-{ffeecont.i}
-{fctserval.i}
-{fctchange.i}
-{fmakemsreq.i}
-{upsellbundle.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/ffeecont.i}
+{Func/fctserval.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/upsellbundle.i}
+{Func/cparam2.i}
 
 DEF TEMP-TABLE ttServCom NO-UNDO
    FIELD ServPac AS CHAR 

@@ -15,11 +15,11 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable ifispx
 
-{commali.i}
-{eventval.i} 
-{cparam2.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'IFISpx'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Func/cparam2.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'IFISpx'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -76,7 +76,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 form
     IFiSpx.ManCode   label "Manufacturer ..." SimMan.ManName NO-LABEL AT 38 SKIP
     IFiSpx.Version   label "Version ........"                               SKIP
@@ -276,7 +276,7 @@ BROWSE:
             ufk[1]= 215  ufk[2]= 0 ufk[3]= 0   ufk[4] = 0
             ufk[5]= 5    ufk[6]= 4 ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
             ehto = 3 ufkey = FALSE.
-            {uright1.i '"5,6"'}  
+            {Syst/uright1.i '"5,6"'}  
          IF NOT llIsAdmin THEN ASSIGN  ufk[5]= 0    ufk[6]= 0. 
          RUN ufkey.p.
       END.
@@ -455,14 +455,14 @@ BROWSE:
 
       ELSE IF LOOKUP(nap,"5,f5") > 0 AND llIsAdmin THEN 
       DO:  /* add */
-         {uright2.i}
+         {Syst/uright2.i}
          must-add = TRUE.
          NEXT LOOP.
       END.
 
       ELSE IF LOOKUP(nap,"6,f6") > 0 AND llIsAdmin THEN 
       DO TRANSACTION:  /* DELETE */
-         {uright2.i}
+         {Syst/uright2.i}
          delrow = FRAME-LINE.
          RUN local-find-this (FALSE).
 
@@ -512,7 +512,7 @@ BROWSE:
 
       ELSE IF LOOKUP(nap,"enter,return") > 0  AND llIsAdmin THEN
       REPEAT WITH FRAME lis TRANSACTION ON ENDKEY UNDO, LEAVE:
-         {uright2.i}
+         {Syst/uright2.i}
          /* change */
          RUN local-find-this(TRUE).
          RUN local-find-others.

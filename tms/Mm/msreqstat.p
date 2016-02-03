@@ -9,7 +9,7 @@
   Version ......: Yoigo
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER iiReqType AS INT NO-UNDO.
 DEF INPUT PARAMETER iiMsSeq   AS INT NO-UNDO.

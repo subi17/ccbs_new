@@ -14,8 +14,8 @@ DEF VAR katun   AS CHAR NO-UNDO.
 ASSIGN katun = "Newton"
        gcBrand = "1".
 
-{tmsconst.i}
-{cparam2.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
 
 /* Output parameters */
 DEF VAR top_struct         AS CHAR NO-UNDO.

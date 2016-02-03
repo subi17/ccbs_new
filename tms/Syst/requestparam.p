@@ -10,11 +10,11 @@
 
 &GLOBAL-DEFINE BrTable RequestParam
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'RequestParam'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'RequestParam'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -72,7 +72,7 @@ WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
        "  PARAMETERS OF TYPE " + STRING(iiReqType) + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     RequestParam.Brand          COLON 20

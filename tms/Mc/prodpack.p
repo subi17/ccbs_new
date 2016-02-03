@@ -10,10 +10,10 @@
                   06.02.04 jp custnum for memo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'prodpack'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'prodpack'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -521,7 +521,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
-       {uright2.i}
+       {Syst/uright2.i}
        /* change */
        FIND ProdPack WHERE recid(ProdPack) = rtab[FRAME-line(sel)]
        EXCLUSIVE-LOCK.

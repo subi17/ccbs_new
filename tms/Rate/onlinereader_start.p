@@ -7,8 +7,8 @@
   VERSION ......: Yoigo
   -------------------------------------------------------------------------- */
 
-{commpaa.i}
-{direct_dbconnect.i}
+{Syst/commpaa.i}
+{Func/direct_dbconnect.i}
 
 DEF VAR llDateLog       AS LOG  NO-UNDO INIT TRUE.
 DEF VAR llDispErrors    AS LOG  NO-UNDO INIT TRUE.

@@ -17,8 +17,8 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable DDAuth
 
-{commali.i}  
-{eventval.i}
+{Syst/commali.i}  
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -108,7 +108,7 @@ WITH  OVERLAY ROW 7 centered
     SIDE-LABELS 
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek ddAuth  BY  CustNum */
     "Brand ..:" lcBrand skip

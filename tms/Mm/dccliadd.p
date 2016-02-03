@@ -8,12 +8,12 @@
   Version ......: Yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fmakemsreq.i}
-{upsellbundle.i}
-{fdss.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fmakemsreq.i}
+{Func/upsellbundle.i}
+{Func/fdss.i}
 
 DEF INPUT PARAMETER iiMsSeq AS INT NO-UNDO. 
 

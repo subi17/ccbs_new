@@ -1,8 +1,8 @@
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{xmlfunction.i}
-{airnodes.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/xmlfunction.i}
+{Gwy/airnodes.i}
 
 DEFINE INPUT PARAMETER pcBrand AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER piPPReq AS INTEGER   NO-UNDO.

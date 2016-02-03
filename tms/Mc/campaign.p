@@ -10,11 +10,11 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable Campaign
 
-{commali.i}
+{Syst/commali.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Campaign'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Campaign'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -70,7 +70,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
        " CAMPAIGNS "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     Campaign.Campaign    COLON 20   
@@ -454,7 +454,7 @@ REPEAT WITH FRAME sel:
      END. /* Search-3 */
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:  /* rows */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this (FALSE).
        IF AVAILABLE Campaign 
        THEN RUN camprow.p (Campaign.Campaign). 
@@ -463,14 +463,14 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" 
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 

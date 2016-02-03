@@ -1,4 +1,4 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
 
 &GLOBAL-DEFINE STAR_EVENT_USER katun

@@ -10,12 +10,12 @@
 &THEN
 
 &GLOBAL-DEFINE ordercancel YES
-{commali.i}
-{eventval.i} 
-{tmsconst.i}
-{timestamp.i}
-{fcreditvalid.i}
-{fcreditreq.i}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/fcreditvalid.i}
+{Func/fcreditreq.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 

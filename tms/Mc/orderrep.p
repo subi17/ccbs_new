@@ -10,8 +10,8 @@
   Version ......: MTV3
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 def var dfrom as da no-undo.
 def var dto   as da no-undo.

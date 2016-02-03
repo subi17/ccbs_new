@@ -8,9 +8,9 @@
   Version ......:
   ------------------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{utumaa.i "new"}
+{Syst/commali.i}
+{Func/excel.i}
+{Syst/utumaa.i "new"}
 
 ASSIGN tuni1 = ""
        tuni2 = "".
@@ -37,7 +37,7 @@ DEF TEMP-TABLE ttMobSub
    INDEX MSStatus IS PRIMARY MSStatus CLIType CLI.
 
 ASSIGN tila = true.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 message "Printing in progress, wait ...".
 
@@ -139,7 +139,7 @@ IF details then do:
 END.
 
 ASSIGN tila = false.
-{utuloste.i}
+{Syst/utuloste.i}
 
 
 

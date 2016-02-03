@@ -9,7 +9,7 @@
   Version ......: 5.1
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF  shared VAR siirto AS CHAR.
 

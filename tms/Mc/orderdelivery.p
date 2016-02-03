@@ -7,10 +7,10 @@
   CHANGED ......: 
   Version ......: xfera 
   ---------------------------------------------------------------------- */
-{commali.i}
-{lib/tokenlib.i}
-{timestamp.i}
-{transname.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Func/timestamp.i}
+{Func/transname.i}
 
 DEFINE INPUT PARAMETER iiOrderId AS INTEGER NO-UNDO. 
 

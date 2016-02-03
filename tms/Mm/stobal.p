@@ -13,10 +13,10 @@
 
 &GLOBAL-DEFINE BrTable stobal
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'StoBal'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'StoBal'}
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
 DEF VAR Stock  LIKE StoBal.StoBal  NO-UNDO.
@@ -73,7 +73,7 @@ WITH ROW FrmRow width 80  OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 form
     StoBal.StoBal     /* LABEL FORMAT */
     StoBal.SimArt    /* LABEL FORMAT */

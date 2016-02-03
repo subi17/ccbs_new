@@ -9,11 +9,11 @@
 
 &GLOBAL-DEFINE BrTable BDestConf
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'BDestConf'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'BDestConf'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -67,7 +67,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
        " BDEST CONFIGURATION "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     BDestConf.Brand        COLON 20

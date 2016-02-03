@@ -9,7 +9,7 @@
   Version ......: all 
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAM icTableName  AS CHAR  NO-UNDO.
 DEF INPUT PARAM icFieldName  AS CHAR  NO-UNDO.

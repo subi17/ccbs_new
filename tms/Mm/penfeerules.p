@@ -8,10 +8,10 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{daycampaign.i}
-{fcustpl.i}
-{penaltyfee.i}
+{Syst/commali.i}
+{Rate/daycampaign.i}
+{Func/fcustpl.i}
+{Func/penaltyfee.i}
 
 DEF  INPUT PARAMETER iiDCCLIRecId  AS RECID NO-UNDO.
 DEF VAR liPeriod   AS INT   NO-UNDO.

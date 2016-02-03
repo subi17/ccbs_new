@@ -12,9 +12,9 @@
 
 &GLOBAL-DEFINE CounterHandling TempTable
 
-{commali.i} 
-{rerate_define.i}
-{premiumnumber.i}
+{Syst/commali.i} 
+{Rate/rerate_define.i}
+{Rate/premiumnumber.i}
 
 DEF VAR bwild              AS LOG NO-UNDO.       
 DEF VAR lcInvruncode       AS C  NO-UNDO.
@@ -334,6 +334,6 @@ for each inv-cust no-lock where
         ELSE TRUE)         
        TRANSACTION WITH FRAME MobCDR: 
        
-       {man_rate2.i}
+       {Rate/man_rate2.i}
         
 fRerateLogFinish(liRerateSeq).

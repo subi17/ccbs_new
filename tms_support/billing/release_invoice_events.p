@@ -1,7 +1,7 @@
-{commali.i}
-{fcustbal.i}
-{fcustcnt.i}
-{nnpcst.i}
+{Syst/commali.i}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Ar/nnpcst.i}
 
 DEF INPUT PARAMETER iiInvNum AS INT NO-UNDO.
 

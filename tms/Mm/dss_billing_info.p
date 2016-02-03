@@ -7,8 +7,8 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER iiCustNum   AS INT NO-UNDO.
 
@@ -82,7 +82,7 @@ DEF VAR lcAllowedDSS2SubsType   AS CHAR        NO-UNDO.
 DEF VAR lcExcludeBundles        AS CHAR        NO-UNDO.
 DEF VAR lcFirstMonthUsageBasedBundles AS CHAR  NO-UNDO.
 
-{dss_bundle_first_month_fee.i}
+{Mm/dss_bundle_first_month_fee.i}
 
 form
     ttDSSInfo.CLI           FORMAT "X(9)"  LABEL "MSISDN"

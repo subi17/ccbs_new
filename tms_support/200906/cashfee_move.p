@@ -1,5 +1,5 @@
-{commali.i}
-{eventval.i}
+{Syst/commali.i}
+{Syst/eventval.i}
 
 DEFINE INPUT PARAMETER icFile AS CHARACTER NO-UNDO. 
 

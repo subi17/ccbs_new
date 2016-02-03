@@ -27,7 +27,7 @@
 
 DEF INPUT PARAMETER CustNum AS INT.
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR i AS INT.
 DEF VAR val  AS CHAR EXTENT 7.

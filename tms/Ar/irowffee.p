@@ -18,8 +18,8 @@
   Version ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER  iiInvNum    AS I    NO-UNDO.
 DEF INPUT PARAMETER  icBillCode  AS c    NO-UNDO.

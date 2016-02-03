@@ -8,9 +8,9 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{daycampaign.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Rate/daycampaign.i}
+{Syst/tmsconst.i}
 
 DEF  INPUT PARAM iiMsseq       AS INT    NO-UNDO.
 DEF  INPUT PARAM iiCustNum     AS INT    NO-UNDO.

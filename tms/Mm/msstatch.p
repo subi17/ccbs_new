@@ -11,8 +11,8 @@
   ---------------------------------------------------------------------- */
 
  
-{commali.i} 
-{eventval.i}
+{Syst/commali.i} 
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
 

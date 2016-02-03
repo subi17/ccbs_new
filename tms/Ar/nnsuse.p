@@ -12,7 +12,7 @@
   Version ......: M15
 ------------------------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER InvNum  LIKE Payment.InvNum  NO-UNDO.
 DEF OUTPUT PARAMETER Voucher LIKE Payment.Voucher NO-UNDO.
@@ -69,7 +69,7 @@ DO WITH FRAME suo:
       ASSIGN ufk = 0 ehto = 3 ufk[1] = 992 ufk[5] = 11 ufk[8] = 8.
       RUN ufkey.
 
-      CHOOSE ROW Payment.Voucher {uchoose.i} no-error.
+      CHOOSE ROW Payment.Voucher {Syst/uchoose.i} no-error.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 

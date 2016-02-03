@@ -10,12 +10,12 @@
 
 &GLOBAL-DEFINE BrTable DumpLog
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'DumpLog'}
-{timestamp.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'DumpLog'}
+{Func/timestamp.i}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

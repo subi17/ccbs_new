@@ -25,8 +25,8 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
-{timestamp.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
 
 &SCOPED-DEFINE SEARCH_LIMIT 1000
 

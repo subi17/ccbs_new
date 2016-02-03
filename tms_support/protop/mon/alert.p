@@ -54,7 +54,7 @@
  *
  */
 
-{lib/protop.i}
+{tms_support/protop/lib/protop.i}
 
 define stream alert-stream.
 

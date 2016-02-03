@@ -50,13 +50,13 @@ WHERE mobsub.msseq = liMsSeq
 IF NOT AVAILABLE mobsub THEN
    RETURN appl_err(SUBST("MobSub entry &1 not found", liMsSeq)).
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = lcUserId.
 gcBrand = "1". 
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 
-{fcharge_comp_loaded.i}
+{Func/fcharge_comp_loaded.i}
 /* check monthly limit */
 ldeLoaded = fMonthLoaded(
                (IF ldAmount > 0 THEN "CHARGE" ELSE "COMP"),

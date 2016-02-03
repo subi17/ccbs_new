@@ -38,12 +38,12 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{fcustbal.i}
-{cparam2.i}
-{faccper.i}
-{fpaymentreq.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/fcustbal.i}
+{Func/cparam2.i}
+{Func/faccper.i}
+{Func/fpaymentreq.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

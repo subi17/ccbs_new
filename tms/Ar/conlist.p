@@ -8,13 +8,13 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Contact'}
-{timestamp.i}
-{eventval.i}
-{cparam2.i}
-{finvbal.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Contact'}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Func/cparam2.i}
+{Func/finvbal.i}
 
 DEF INPUT PARAMETER icUserCode AS CHAR NO-UNDO.
 DEF INPUT PARAMETER idtConDate AS DATE NO-UNDO. 
@@ -581,7 +581,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0
      THEN DO TRANSACTION:  /* mark handled */
 
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -684,14 +684,14 @@ REPEAT WITH FRAME sel:
         END.
         
         ELSE IF toimi = 5 THEN DO:
-           {uright2.i}
+           {Syst/uright2.i}
            must-add = TRUE.
            NEXT LOOP.
         END.
 
         ELSE IF toimi = 6 THEN DO TRANS:
        
-           {uright2.i}
+           {Syst/uright2.i}
            delrow = FRAME-LINE.
            RUN local-find-this (FALSE).
 

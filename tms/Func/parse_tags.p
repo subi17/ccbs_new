@@ -13,10 +13,10 @@ DEFINE VARIABLE lcOriginalNumericFormat AS CHARACTER NO-UNDO.
 lcOriginalNumericFormat = SESSION:NUMERIC-FORMAT.
 SESSION:NUMERIC-FORMAT = "European".
 
-{commali.i}
-{femaildata.i}
-{email.i}
-{ftransdir.i}
+{Syst/commali.i}
+{Mc/femaildata.i}
+{Func/email.i}
+{Func/ftransdir.i}
 /*{femaildata2.i}*/
 
 ASSIGN gcBrand = "1".

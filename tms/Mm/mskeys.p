@@ -8,8 +8,8 @@
   Version ......: MTV3
   ---------------------------------------------------------------------- */
 
-{testpaa.i}
-{eventval.i}
+{Syst/testpaa.i}
+{Syst/eventval.i}
 
 def var /*input parameter*/ ipMsSeq like mobsub.msseq no-undo.
 
@@ -392,13 +392,13 @@ BROWSE:
 
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 

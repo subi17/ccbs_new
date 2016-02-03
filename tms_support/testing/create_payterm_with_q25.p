@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
-{fmakemsreq.i}
+{Func/fmakemsreq.i}
 
 DEF VAR lccli AS CHAR NO-UNDO format "x(10)".
 DEF VAR lcResult AS CHAR NO-UNDO.

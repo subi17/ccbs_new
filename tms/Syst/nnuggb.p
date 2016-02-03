@@ -8,8 +8,8 @@
   VERSIO .......: SCRUNKO3, (23.10.96)
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER UserCode LIKE TMSUser.UserCode NO-UNDO.
 

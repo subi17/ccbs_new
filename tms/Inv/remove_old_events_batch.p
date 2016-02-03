@@ -5,12 +5,12 @@
   CREATED ......: 03.04.12
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun = "cron".
-{eventlog.i}
-{old_unbilled_events.i}
+{Func/lib/eventlog.i}
+{Inv/old_unbilled_events.i}
 
 DEF VAR liEvents     AS INT  NO-UNDO.
 DEF VAR ldaEventDate AS DATE NO-UNDO.

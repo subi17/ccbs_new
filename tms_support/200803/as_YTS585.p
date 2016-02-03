@@ -1,10 +1,10 @@
-{commpaa.i} 
+{Syst/commpaa.i} 
 katun = "anttis".
 gcBrand = "1".
-{msreqfunc.i}
-{daycampaign.i}
-{eventval.i}
-{fmakeservlimit.i}
+{Func/msreqfunc.i}
+{Rate/daycampaign.i}
+{Syst/eventval.i}
+{Func/fmakeservlimit.i}
 
 def buffer m for msrequest.
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 

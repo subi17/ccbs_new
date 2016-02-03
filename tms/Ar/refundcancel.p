@@ -8,11 +8,11 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{eventval.i} 
-{fcustbal.i}
-{msreqfunc.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/eventval.i} 
+{Func/fcustbal.i}
+{Func/msreqfunc.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
 DEF INPUT PARAMETER icCancelType AS CHAR NO-UNDO.

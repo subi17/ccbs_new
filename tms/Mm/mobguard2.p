@@ -9,7 +9,7 @@
   ---------------------------------------------------------------------- */
 
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER   ilAskDates AS LOG  NO-UNDO.
 DEF OUTPUT PARAMETER   ReasonC    AS CHAR NO-UNDO.

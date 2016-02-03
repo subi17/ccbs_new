@@ -8,8 +8,8 @@
   Version ......: TMS Master
   ------------------------------------------------------ */
 
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 DEF INPUT PARAMETER   icStatusCode  AS CHAR NO-UNDO.
 DEF INPUT PARAMETER   iiOrderID     AS INT  NO-UNDO.

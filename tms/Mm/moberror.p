@@ -8,9 +8,9 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
+{Syst/commali.i} 
 
-{eventval.i}
+{Syst/eventval.i}
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
     {lib/eventlog.i}
@@ -417,7 +417,7 @@ BROWSE:
 
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO: 
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-line.
        RUN local-find-this (false).
 
@@ -434,7 +434,7 @@ BROWSE:
      END. 
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO : 
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-line.
        RUN local-find-this (false).
        

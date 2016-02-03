@@ -11,9 +11,9 @@
   Version ......: TMS Master
   ------------------------------------------------------ */
 
-{commali.i}
-{barrfunc.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/barrfunc.i}
+{Func/timestamp.i}
 
 DEFINE INPUT PARAMETER iiMsSeq   AS INTEGER    NO-UNDO.
 

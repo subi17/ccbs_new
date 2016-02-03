@@ -9,15 +9,15 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "Cron".
        
-{cparam2.i}
-{ftransdir.i}
-{eventlog.i}
-{timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/lib/eventlog.i}
+{Func/timestamp.i}
 
 DEF INPUT PARAMETER icFileType AS CHAR NO-UNDO.
 

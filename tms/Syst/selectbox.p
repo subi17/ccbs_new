@@ -8,7 +8,7 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 def input param pcHeader  AS CHARACTER NO-UNDO.
 def input param pcOptions AS CHARACTER NO-UNDO.
 def output param ocSelected AS CHAR NO-UNDO. 

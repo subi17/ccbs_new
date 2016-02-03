@@ -28,10 +28,10 @@
 
 &GLOBAL-DEFINE BrTable CCN
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ccn'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ccn'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -81,7 +81,7 @@ form
     title color value(ctc) " " + ynimi + " CALL CASE NUMBERS (CCN) "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     CCN.Brand    COLON 20 

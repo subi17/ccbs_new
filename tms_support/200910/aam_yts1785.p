@@ -1,8 +1,8 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "ari".
 
-{eventval.i}
-{lib/tokenlib.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

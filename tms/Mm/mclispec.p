@@ -14,13 +14,13 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
-{eplspec.i}
-{feplstart.i}
-{fsubser.i}
-{timestamp.i}
+{Syst/utumaa.i "new"}
+{Inv/eplspec.i}
+{Func/feplstart.i}
+{Func/fsubser.i}
+{Func/timestamp.i}
 
 DEF INPUT PARAMETER icCLI AS CHAR NO-UNDO.
 
@@ -302,7 +302,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                 tuni2    = ""
                 llCaSivu = -1.
        
-         {utuloste.i "return"}
+         {Syst/utuloste.i "return"}
 
          llOk = TRUE.
       END.
@@ -375,7 +375,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       
       ELSE DO:
          tila = FALSE.
-         {utuloste.i}
+         {Syst/utuloste.i}
       END.
       
       /* create usage fee */

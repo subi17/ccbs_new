@@ -15,10 +15,10 @@
 
 &GLOBAL-DEFINE BrTable SimBatch
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'SimBatch'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'SimBatch'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAl-DEFINE STAR_EVENT_USER katun
@@ -75,7 +75,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}                       
+{Func/brand.i}                       
 form
     "Code of Manufacturer ..:" SimBatch.ManCode SimMan.ManName 
     format "x(20)" AT 40                                                  SKIP
@@ -547,7 +547,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
-       {uright2.i}
+       {Syst/uright2.i}
        /* change */
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.

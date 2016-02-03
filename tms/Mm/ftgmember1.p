@@ -9,8 +9,8 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF   shared VAR siirto AS CHAR.
 
@@ -398,7 +398,7 @@ BROWSE:
 
      /* UPDATE memo */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
-        {uright2.i}.
+        {Syst/uright2.i}.
 
         cfc = "puyr". run ufcolor.
         ehto = 9. 
@@ -411,7 +411,7 @@ BROWSE:
      END.
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.

@@ -16,8 +16,8 @@
   VERSION ......: Yoigo
 ------------------------------------------------------ */
 
-{country.i}
-{excel.i}
+{Syst/country.i}
+{Func/excel.i}
 
 def var line      as char format "x(78)".
 def var moduli    as char format "x(15)".

@@ -16,7 +16,7 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF TEMP-TABLE wMarked NO-UNDO
     FIELD Line AS INT

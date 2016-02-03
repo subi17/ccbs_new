@@ -1,6 +1,6 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{heartbeat.i}
+{Func/heartbeat.i}
 
 FUNCTION fLogOut RETURNS LOGICAL:
 

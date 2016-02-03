@@ -11,10 +11,10 @@
 
 &GLOBAL-DEFINE TERMINAL_FINANCING_I YES
 
-{commali.i}
-{tmsconst.i}
-{date.i}
-{fcreatereq.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/fcreatereq.i}
 
 FUNCTION fValidateBankFileRequest RETURNS LOG (
    INPUT  icBankCode AS CHAR,

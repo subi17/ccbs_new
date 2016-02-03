@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{date.i}
+{Func/date.i}
 
 find daycampaign where
      daycampaign.dcevent = "SMSFREEOCT10" no-lock.

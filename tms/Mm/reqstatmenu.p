@@ -9,7 +9,7 @@
   CREATED ......: 22.08.07
   Version ......: TMS Master
   ------------------------------------------------------ */
-{commali.i}
+{Syst/commali.i}
 
 DEFINE INPUT PARAMETER iiType  AS INTEGER   NO-UNDO.
 

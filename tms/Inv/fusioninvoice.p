@@ -6,10 +6,10 @@
   CREATED ......: 12.12.13
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FusionInvoice'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FusionInvoice'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -446,7 +446,7 @@ BROWSE:
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
-/*       {uright2.i} */
+/*       {Syst/uright2.i} */
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN ufkey.

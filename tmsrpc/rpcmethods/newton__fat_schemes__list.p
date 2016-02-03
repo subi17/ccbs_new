@@ -5,7 +5,7 @@
  * @output struct;array of fat scheme ids
 */
 
-{flistrpc.i}
+{rpcmethods/flistrpc.i}
 
 lcStruct = validate_struct(pcStruct, "").
 

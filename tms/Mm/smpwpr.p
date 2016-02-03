@@ -8,9 +8,9 @@
   VERSION ......: TeleF
   ------------------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{email.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/email.i}
 
 DEF INPUT PARAMETER icResell LIKE Reseller.Reseller NO-UNDO.
 

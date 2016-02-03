@@ -20,11 +20,11 @@
   VERSION ......: M15
   ------------------------------------------------------------------------ */
 
-{commali.i}
-{fcustpl.i}
-{fvatfact.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'fixcdr'}
+{Syst/commali.i}
+{Func/fcustpl.i}
+{Func/fvatfact.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'fixcdr'}
 
 DEF INPUT PARAMETER  liCustNum LIKE Customer.CustNum NO-UNDO.
 

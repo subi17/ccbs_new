@@ -10,10 +10,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{msisdn.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/msisdn.i}
+{Func/cparam2.i}
 
 DEF INPUT  PARAMETER ms-code-res AS INTEGER                       NO-UNDO.
 DEF INPUT  PARAMETER CustNum     AS INTEGER                       NO-UNDO.
@@ -115,7 +115,7 @@ END. /* PROCEDURE chkOnlyDigits */
 rc = FALSE.
 
 /* set the status code FOR a unreserved MSISDN No. */
-{tmsparam.i MSStatusUnr return}.  
+{Func/tmsparam.i MSStatusUnr return}.  
 ms-code1 = tmsparam.intVal. 
 ms-code2 = ms-code1.
 mc-code1 = 0. 

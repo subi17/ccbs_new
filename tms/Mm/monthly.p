@@ -10,11 +10,11 @@
                   
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "cron".
 
-{eventlog.i}
+{Func/lib/eventlog.i}
 
 /* delete old counters */
 RUN tmcdelete (TODAY).

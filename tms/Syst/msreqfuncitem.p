@@ -7,7 +7,7 @@
   Version ......: TMS Master
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEFINE INPUT PARAMETER icFuncGroup AS CHAR  NO-UNDO.
 

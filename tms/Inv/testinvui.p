@@ -11,7 +11,7 @@
 DISABLE TRIGGERS FOR LOAD OF FixedFee.
 DISABLE TRIGGERS FOR LOAD OF SingleFee.
 
-{log.i}
+{Func/log.i}
 fsetLogFileName("/scratch/print/testinv/testinvui_" + 
    STRING(YEAR(TODAY),"9999") + 
    STRING(MONTH(TODAY),"99") +
@@ -22,14 +22,14 @@ fSetLogEntryTypes(fGetValidLogEntryTypes()).
 fSetGlobalLoggingLevel(1).
 fClearLog().
 
-{commali.i}
-{tmsparam2.i}
-{billrund.i NEW}
-{faccper.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Invoice'}
-{finvnum.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/tmsparam2.i}
+{Inv/billrund.i NEW}
+{Func/faccper.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Invoice'}
+{Func/finvnum.i}
+{Func/timestamp.i}
 IF lcRight NE "RW" THEN DO:
    MESSAGE " You cannot create invoices ! " VIEW-AS ALERT-BOX.
    RETURN.
@@ -76,7 +76,7 @@ DEF VAR lcBillRun   AS CHAR NO-UNDO.
 
 DEF STREAM sTimeLog.
 
-{tmsparam.i oh-tuasno  RETURN}. unknown = TMSParam.IntVal.
+{Func/tmsparam.i oh-tuasno  RETURN}. unknown = TMSParam.IntVal.
 
 /* default values from TMSParam */
 ASSIGN

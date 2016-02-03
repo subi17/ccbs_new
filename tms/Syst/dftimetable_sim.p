@@ -7,8 +7,8 @@
   CHANGED ......: 
   Version ......: yoigo
   ---------------------------------------------------------------------- */
-{commali.i}
-{dftimetable.i}
+{Syst/commali.i}
+{Syst/dftimetable.i}
 
 DEF INPUT PARAMETER irTimeTable AS RECID NO-UNDO.
 

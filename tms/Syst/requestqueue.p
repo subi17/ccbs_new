@@ -10,11 +10,11 @@
 
 &GLOBAL-DEFINE BrTable RequestQueue
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'RequestQueue'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'RequestQueue'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -70,7 +70,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
        " REQUEST QUEUES "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     RequestQueue.Brand          COLON 15

@@ -20,12 +20,12 @@
 ----------------  ------------------------------------------------------ */
 &GLOBAL-DEFINE BrTable CustIntEvent
 
-{commali.i}
-{eventval.i}
-{fcustbal.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'custintevent'}
-{cparam2.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/fcustbal.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'custintevent'}
+{Func/cparam2.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -117,7 +117,7 @@ form
 WITH  OVERLAY ROW 3 col 3
     COLOR value(cfc) TITLE COLOR value(ctc) ac-hdr 1 col FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form
    "Days   %%      Total"                          SKIP
@@ -504,7 +504,7 @@ repeat WITH FRAME sel:
 
      else if lookup(nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* removal */
-        {uright2.i}
+        {Syst/uright2.i}
         delline = FRAME-LINE.
         FIND CustIntEvent where recid(CustIntEvent) = rtab[FRAME-LINE] no-lock.
         

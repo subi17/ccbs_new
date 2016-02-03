@@ -8,10 +8,10 @@
   Version ......: Yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fmakemsreq.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fmakemsreq.i}
 
 DEF INPUT PARAMETER iiMsSeq     AS INT  NO-UNDO. 
 DEF INPUT PARAMETER icDCEvent   AS CHAR NO-UNDO.

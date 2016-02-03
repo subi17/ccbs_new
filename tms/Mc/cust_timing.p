@@ -8,11 +8,11 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{sog.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MSOwner'}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/sog.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MSOwner'}
 
 DEF BUFFER bCustomer for Customer.
 
@@ -24,7 +24,7 @@ IF lcRight NE "RW" THEN DO:
    RETURN.   
 END.
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

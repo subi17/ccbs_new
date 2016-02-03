@@ -38,12 +38,12 @@
 
 &GLOBAL-DEFINE BrTable PriceList
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'pricelist'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'pricelist'}
 
-{eventval.i}
-{fpricelistcopy.i}
+{Syst/eventval.i}
+{Func/fpricelistcopy.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -142,7 +142,7 @@ form
     fr-header WITH side-labels 
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* Price List search WITH FIELD PriceList */
     "Brand:" lcBrand skip

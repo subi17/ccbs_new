@@ -15,10 +15,10 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable ServEl
 
-{commali.i} 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ServEl'}
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ServEl'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -75,7 +75,7 @@ WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     ServEl.ServPac COLON 20 FORMAT "X(12)"
@@ -590,7 +590,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"enter,return") > 0 AND lcRight = "RW" THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
-       {uright2.i}
+       {Syst/uright2.i}
        /* change */
        RUN local-find-this((lcRight = "RW")).
 

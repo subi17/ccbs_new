@@ -13,10 +13,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PrintCodes'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PrintCodes'}
 
 DEF  shared VAR si-kirj LIKE TMSPrinter.PrinterId NO-UNDO.
 

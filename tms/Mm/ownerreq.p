@@ -12,13 +12,13 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable MsRequest
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MsRequest'}
-{msreqfunc.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MsRequest'}
+{Func/msreqfunc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -109,7 +109,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
        "  OWNER CHANGES  "  + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     MsRequest.MsRequest  COLON 18  FORMAT ">>>>>>>9"

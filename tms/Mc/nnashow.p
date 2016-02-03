@@ -7,9 +7,9 @@
   MODIFIED .....: 09.10.02 lp DefClStamp instead fMakeTS()
   VERSIO .......:   
   -------------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
 
 DEF /*NEW*/ shared VAR siirto AS CHAR.
 

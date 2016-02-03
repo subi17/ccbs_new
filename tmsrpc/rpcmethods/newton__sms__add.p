@@ -10,7 +10,7 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{date.i}
+{Func/date.i}
 
 /* Input parameters */
 DEF VAR pcCli AS CHAR NO-UNDO.

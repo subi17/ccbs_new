@@ -8,10 +8,10 @@
   ------------------------------------------------------ */
 
 
-{commali.i}
-{utumaa.i "new"}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'contact'}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'contact'}
 
 assign tuni1 = "conrep"
        tuni2 = "".
@@ -187,7 +187,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
 
       IF lcFile = "" THEN DO:
          assign tila = true.
-         {utuloste.i "return"}
+         {Syst/utuloste.i "return"}
       END.
 
       RUN conrep (icUserCode,
@@ -199,7 +199,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
 
       IF lcFile = "" THEN DO:
          assign tila = false.
-         {utuloste.i}
+         {Syst/utuloste.i}
       END.
 
       MESSAGE liCount "events were printed on contact report." 

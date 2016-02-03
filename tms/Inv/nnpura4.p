@@ -43,19 +43,19 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{refcode.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/refcode.i}
+{Func/cparam2.i}
 /* print-linemuuttujat */
-{utumaa.i}
-{edefine.i}
-{nnpura.i}
-{fcurrency.i}
+{Syst/utumaa.i}
+{Inv/edefine.i}
+{Inv/nnpura.i}
+{Func/fcurrency.i}
 
 /* xml / pdf */
-{xmlpura2.i}
-{fpdfrun.i}
-{fdivtxt.i}
+{Inv/xmlpura2.i}
+{Func/fpdfrun.i}
+{Func/fdivtxt.i}
 
 def input  parameter CustNum1      as int FORMAT "zzzzzz9"   NO-UNDO.
 def input  parameter CustNum2      as int FORMAT "zzzzzz9"   NO-UNDO.
@@ -90,10 +90,10 @@ DEF VAR llDispMPM     AS LOG   NO-UNDO.
 DEF BUFFER bRateCust FOR Customer.
 DEF BUFFER bCust     FOR Customer. 
 
-{nnpurac.i}
-{ereppage.i}
-{nnpura4.i}
-{spechead.i}
+{Inv/nnpurac.i}
+{Inv/ereppage.i}
+{Inv/nnpura4.i}
+{Inv/spechead.i}
 
 /* printing type */
 ASSIGN epltul     = (iiTarg = 1)
@@ -210,7 +210,7 @@ FUNCTION fChgPage RETURNS LOGICAL
    IF rl + iiAddLine >= skayt1 THEN DO:
       
       IF sl > 0 THEN DO:
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
       END. 
       ELSE DO:
       END.
@@ -408,7 +408,7 @@ BREAK BY ttCall.VATIncl
          IF epltul THEN DO:
             ASSIGN licalask = lireppage.
             fNewPage(3).
-            {nnpura4e.i}
+            {Inv/nnpura4e.i}
             
             PUT STREAM eKirje UNFORMATTED
                " J" 
@@ -456,7 +456,7 @@ BREAK BY ttCall.VATIncl
 
          IF epltul THEN DO:
             fNewPage(5).
-            {nnpura4e.i}
+            {Inv/nnpura4e.i}
          END.
          ELSE DO:
             fChgPage(5).
@@ -499,7 +499,7 @@ BREAK BY ttCall.VATIncl
                   
          IF epltul THEN DO:
             fNewPage(6).
-            {nnpura4e.i}
+            {Inv/nnpura4e.i}
          END.
          ELSE DO:
             fChgPage(6).
@@ -539,7 +539,7 @@ BREAK BY ttCall.VATIncl
          
          IF epltul THEN DO:
             fNewPage(4).
-            {nnpura4e.i}
+            {Inv/nnpura4e.i}
          END.
          ELSE DO:
             fChgPage(4).
@@ -605,7 +605,7 @@ BREAK BY ttCall.VATIncl
       IF epltul THEN DO:
 
          fNewPage(0).
-         {nnpura4e.i}
+         {Inv/nnpura4e.i}
          
          PUT STREAM eKirje UNFORMATTED 
             " J" 
@@ -638,7 +638,7 @@ BREAK BY ttCall.VATIncl
             licalask = licalask + 1.
             
             fNewPage(0).
-            {nnpura4e.i}
+            {Inv/nnpura4e.i}
             
             lcRep4Dur = fSec2C(DECIMAL(ENTRY(liTaff,ttCall.CDur,"/")),10).
             
@@ -744,7 +744,7 @@ BREAK BY ttCall.VATIncl
          IF epltul THEN DO:
             
             fNewPage(3).
-            {nnpura4e.i}
+            {Inv/nnpura4e.i}
 
             PUT STREAM eKirje UNFORMATTED
                " J" 
@@ -830,7 +830,7 @@ BREAK BY ttCall.VATIncl
          IF epltul THEN DO:
 
             fNewPage(3).
-            {nnpura4e.i}
+            {Inv/nnpura4e.i}
             
             PUT STREAM eKirje UNFORMATTED
                " J" viiva5
@@ -912,7 +912,7 @@ BREAK BY ttCall.VATIncl
          IF epltul THEN DO:
 
             fNewPage(3).
-            {nnpura4e.i}
+            {Inv/nnpura4e.i}
 
             PUT STREAM eKirje UNFORMATTED
                " J" viiva3 
@@ -990,7 +990,7 @@ BREAK BY ttCall.VATIncl
             IF epltul THEN DO:
                ASSIGN licalask = lireppage. 
                fNewPage(3).
-               {nnpura4e.i}
+               {Inv/nnpura4e.i}
             END.
             ELSE DO:
                fChgPage(999).
@@ -1008,7 +1008,7 @@ BREAK BY ttCall.VATIncl
             IF liCLIQTy > 1 THEN DO:
 
                fNewPage(3).
-               {nnpura4e.i}
+               {Inv/nnpura4e.i}
             
                PUT STREAM eKirje UNFORMATTED
                " J"  viiva2
@@ -1142,7 +1142,7 @@ BREAK BY ttCall.VATIncl
                rl = rl + 3.
             END.
             
-            {uprfeed.i rl}
+            {Syst/uprfeed.i rl}
             
          END.
 

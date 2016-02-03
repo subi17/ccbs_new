@@ -5,7 +5,7 @@
  * @output struct;array of active charge events ids  
 */
 
-{flistrpc.i}
+{rpcmethods/flistrpc.i}
 
 
 lcStruct = validate_struct(pcStruct, "paytype").

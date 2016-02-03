@@ -7,9 +7,9 @@
    MODIFIED .....: 
    VERSION.......: M2.0
 ------------------------------------------------------ */
-{commpaa.i}
-{eventlog.i}
-{timestamp.i}
+{Syst/commpaa.i}
+{Func/lib/eventlog.i}
+{Func/timestamp.i}
 
 gcbrand = "1".
 katun = "cron".

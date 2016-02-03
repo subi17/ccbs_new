@@ -8,11 +8,11 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}        
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
-{eventval.i}
-{callquery.i}
+{Syst/commali.i}        
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
+{Syst/eventval.i}
+{Func/callquery.i}
 
 DEF   INPUT PARAMETER   idtDate    AS DATE.
 DEF   INPUT Parameter   iiDtlSeq   AS INT.

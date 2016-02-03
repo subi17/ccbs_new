@@ -8,8 +8,8 @@
                   26.07.2000 ht WHITE LIST MESSAGE
   VERSIO .......: SCRUNKO3, (23.10.96)
   --------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 

@@ -1,4 +1,4 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "Qvantel".
 
 def var lcmaintask as char no-undo init "YOT-566".

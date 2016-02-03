@@ -13,9 +13,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}  /*qupd = TRUE.*/
-{lib/tokenlib.i}
-{lib/tokenchk.i 'oplog'}
+{Syst/commali.i}  /*qupd = TRUE.*/
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'oplog'}
 
 DEF INPUT PARAMETER iiCustNum AS I NO-UNDO.
 DEF /* NEW */ shared VAR siirto AS CHAR.

@@ -38,9 +38,9 @@
 VERSIO .......: M15
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{edefine.i NEW}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Inv/edefine.i NEW}
 
 DEFINE INPUT  PARAMETER iiInvNum1      AS INTEGER   NO-UNDO.
 DEFINE INPUT  PARAMETER iiInvNum2      AS INTEGER   NO-UNDO.
@@ -59,7 +59,7 @@ DEFINE OUTPUT PARAMETER ocError        AS CHAR      NO-UNDO.
 DEF VAR ldtNameDate AS DATE NO-UNDO. 
 DEF VAR lcDate      AS CHAR NO-UNDO.
 
-{invprdf.i}
+{Inv/invprdf.i}
 
 
 FUNCTION fMakeTemp RETURNS LOGICAL.

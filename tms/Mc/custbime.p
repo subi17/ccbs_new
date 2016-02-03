@@ -8,9 +8,9 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/fcustdata.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO.
 

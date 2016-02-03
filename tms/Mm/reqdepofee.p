@@ -7,10 +7,10 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{eventval.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
 
 DEF INPUT  PARAMETER iiRequest AS INT  NO-UNDO. 
 DEF OUTPUT PARAMETER olCreated AS LOG  NO-UNDO. 

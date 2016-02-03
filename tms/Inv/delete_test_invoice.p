@@ -7,8 +7,8 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{funcrunprocess_update.i}
+{Syst/commali.i}
+{Syst/funcrunprocess_update.i}
 
 DEF INPUT  PARAMETER icFromExtInvID   AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER icToExtInvID     AS CHAR NO-UNDO.

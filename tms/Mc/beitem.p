@@ -21,11 +21,11 @@
 
 &GLOBAL-DEFINE BrTable FMItem
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FMItem'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FMItem'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -174,11 +174,11 @@ FUNCTION fFirstMonth RETURNS LOGIC
    
 END FUNCTION.
 
- {brand.i} 
+ {Func/brand.i} 
 
  /*-- cui browser in a include file  -----------------------------*/
 
- {beitem.i 'general'}
+ {Mc/beitem.i 'general'}
 
 /* --------------------------------------------------------------- */
 

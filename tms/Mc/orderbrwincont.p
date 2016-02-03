@@ -7,5 +7,5 @@
   CHANGED ......: 14.06.04 tk input parameters to 3 and 7
   Version ......: SHARK
   ---------------------------------------------------------------------- */
-{commali.i}
+{Syst/commali.i}
 run order(1,8,"4",0).

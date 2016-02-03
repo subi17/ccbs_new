@@ -13,10 +13,10 @@
   Version ......: M15  ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable Interest
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'interest'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'interest'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -90,7 +90,7 @@ WITH  OVERLAY ROW 4 centered
     SIDE-LABELS 
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek Interest record  BY  ValidFrom */
     "Brand:" lcBrand skip

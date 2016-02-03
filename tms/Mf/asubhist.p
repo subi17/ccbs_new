@@ -12,9 +12,9 @@
   VERSION ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
 
 DEF /* NEW */ SHARED VAR siirto AS CHAR.
 
@@ -155,19 +155,19 @@ BROWSE:
 
       hide MESSAGE NO-PAUSE.
       IF jarj = 1 THEN DO:
-         CHOOSE ROW lcfrom {uchoose.i} NO-ERROR WITH FRAME sel.
+         CHOOSE ROW lcfrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) lcfrom WITH FRAME sel.
       END.
 /*      ELSE IF jarj = 2 THEN DO:
-         CHOOSE ROW CLI.CLI {uchoose.i} NO-ERROR WITH FRAME sel.
+         CHOOSE ROW CLI.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) CLI.CLI WITH FRAME sel.
       END.
     IF jarj = 3 THEN DO:
-         CHOOSE ROW CLI.?? {uchoose.i} NO-ERROR WITH FRAME sel.
+         CHOOSE ROW CLI.?? {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) CLI.?? WITH FRAME sel.
       END.
       ELSE IF jarj = 4 THEN DO:
-         CHOOSE ROW CLI.??  {uchoose.i} NO-ERROR WITH FRAME sel.
+         CHOOSE ROW CLI.??  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) CLI.? WITH FRAME sel.
       END.
 */

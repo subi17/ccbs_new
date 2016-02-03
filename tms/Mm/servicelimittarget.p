@@ -10,10 +10,10 @@
   Version ......: SCRUNKO4 (10.06.99)
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Mobsub'}
+{Syst/commali.i} 
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Mobsub'}
 
 DEF INPUT PARAMETER iiSLSeq AS INT NO-UNDO.
 

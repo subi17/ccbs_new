@@ -2,11 +2,11 @@
    changed:             20.11.06/aam new db structure, ask verification
 */
 
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{forderstamp.i}
-{orderfunc.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilOrder AS LOG NO-UNDO.
 

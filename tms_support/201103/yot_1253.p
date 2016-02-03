@@ -1,11 +1,11 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun  = "anttis".
 gcBrand = "1".
-{tmsconst.i}
-{msreqfunc.i}
-{orderfunc.i}
-{mnp.i}
-{eventval.i}
+{Syst/tmsconst.i}
+{Func/msreqfunc.i}
+{Func/orderfunc.i}
+{Mnp/mnp.i}
+{Syst/eventval.i}
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 

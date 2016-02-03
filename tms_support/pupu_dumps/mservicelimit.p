@@ -9,9 +9,9 @@ DEFINE VARIABLE liEvents     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE ldaFromDate  AS DATE      NO-UNDO.
 DEFINE VARIABLE liCustNum    AS INTEGER   NO-UNDO.
 
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
 
 DEFINE STREAM slog.
 

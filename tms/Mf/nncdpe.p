@@ -11,7 +11,7 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{commali.i}                  
+{Syst/commali.i}                  
 
 DEF NEW shared STREAM excel.
 

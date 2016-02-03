@@ -6,14 +6,14 @@
   CREATED ......: 10.09.11   
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{date.i}
-{timestamp.i}
-{fsendsms.i}
-{fcpfat.i}
-{fbundle.i}
-{service.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Func/fsendsms.i}
+{Func/fcpfat.i}
+{Mm/fbundle.i}
+{Func/service.i}
 
 DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
 

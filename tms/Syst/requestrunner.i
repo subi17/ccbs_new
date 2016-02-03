@@ -1,7 +1,7 @@
 /* requestrunner.i     01.11.07/aam
 */
 
-{commali.i}
+{Syst/commali.i}
 
 /* process requests */
 PROCEDURE pRunRequest:

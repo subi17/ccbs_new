@@ -1,12 +1,12 @@
 /* Set Solog to status Ok for a defined list of ServCom */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "fakeSolog".
 gcBrand = "1".
-{timestamp.i}
-{msreqfunc.i}
-{fgettxt.i}
-{fmakesms.i}
+{Func/timestamp.i}
+{Func/msreqfunc.i}
+{Func/fgettxt.i}
+{Func/fmakesms.i}
 
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.

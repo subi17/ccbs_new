@@ -9,7 +9,7 @@
  * @output boolean;true
 */
 {xmlrpc/xmlrpc_access.i}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE pcArray AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE pcStruct AS CHARACTER NO-UNDO. 
@@ -56,10 +56,10 @@ DO liCounter = 0 TO get_paramcount(pcArray) - 1:
    
 END.
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".
-{eventval.i}
+{Syst/eventval.i}
    
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 

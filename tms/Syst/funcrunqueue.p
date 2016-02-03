@@ -9,10 +9,10 @@
 
 &GLOBAL-DEFINE BrTable FuncRunQueue
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FuncRunQueue'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FuncRunQueue'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -64,7 +64,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
        string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     FuncRunQueue.Brand       COLON 25

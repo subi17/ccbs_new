@@ -8,7 +8,7 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{testpaa.i}
+{Syst/testpaa.i}
 
 DEF VAR haku-pnpgroup    LIKE pnpgroup.pnpgroup  NO-UNDO.
 DEF VAR xrecid     AS RECID                           init ?.

@@ -19,17 +19,17 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
-{cparam2.i}
-{sog.i}
-{barrgrp.i}
-{provision.i}
-{fmakemsreq.i}
-{service.i}
-{fbundle.i}
-{barrfunc.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/sog.i}
+{Mm/barrgrp.i}
+{Gwy/provision.i}
+{Func/fmakemsreq.i}
+{Func/service.i}
+{Mm/fbundle.i}
+{Func/barrfunc.i}
 
 DEF INPUT  PARAMETER  iiMsRequest LIKE MSRequest.msrequest NO-UNDO.
 DEF INPUT  PARAMETER  batch       AS LOG             NO-UNDO. 

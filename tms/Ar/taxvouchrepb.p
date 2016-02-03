@@ -8,9 +8,9 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{eventlog.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/lib/eventlog.i}
 
 DEF VAR liCount      AS INT  NO-UNDO. 
 DEF VAR lcFile       AS CHAR NO-UNDO.

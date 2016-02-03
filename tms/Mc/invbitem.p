@@ -8,7 +8,7 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER  InvNum     AS I  NO-UNDO.
 DEF INPUT PARAMETER  BillCode      AS C  NO-UNDO.

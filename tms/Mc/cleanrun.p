@@ -12,10 +12,10 @@
   VERSION ......: M15 
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{finvnum.i}
-{billrund.i NEW}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/finvnum.i}
+{Inv/billrund.i NEW}
 
 def var invDte     as date format "99-99-99"     no-undo init today.
 def var lasno      as char format "x(12)"        no-undo.
@@ -49,7 +49,7 @@ DEF VAR lcPrefix   AS CHAR NO-UNDO.
 
 DEF BUFFER bEventCust FOR Customer.
 
-{tmsparam.i oh-tuasno  RETURN}. unknown  = tmsparam.IntVal.
+{Func/tmsparam.i oh-tuasno  RETURN}. unknown  = tmsparam.IntVal.
 
 /* default values from cparam */
 defcurr  = fCParamC("DefCurrency").

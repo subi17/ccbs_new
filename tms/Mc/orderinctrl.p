@@ -3,13 +3,13 @@
    changed:         22.11.06/aam fMarkOrderStamp, ask verification
 */
    
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{forderstamp.i}
-{orderchk.i}
-{orderfunc.i}
-{mnpoutchk.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Func/forderstamp.i}
+{Func/orderchk.i}
+{Func/orderfunc.i}
+{Mnp/mnpoutchk.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER iiSecureOption AS INT NO-UNDO.

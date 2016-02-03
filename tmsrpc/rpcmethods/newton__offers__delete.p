@@ -36,10 +36,10 @@ IF NOT AVAIL Offer THEN
 IF Offer.FromDate <= TODAY THEN 
    RETURN appl_err("Cannot delete active or history data").
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = pcUserName.
-{eventval.i}
+{Syst/eventval.i}
 
 DO TRANSACTION:
 

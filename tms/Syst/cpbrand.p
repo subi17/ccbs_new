@@ -8,7 +8,7 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER icSourceBrand AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER icTargetBrand AS CHAR NO-UNDO.

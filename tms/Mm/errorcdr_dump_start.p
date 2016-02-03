@@ -7,8 +7,8 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{direct_dbconnect.i}
+{Syst/commali.i}
+{Func/direct_dbconnect.i}
 
 def input  parameter icdumpid      as int  no-undo.
 def input  parameter icfile        as char no-undo.

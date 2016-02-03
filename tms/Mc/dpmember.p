@@ -6,14 +6,14 @@
   CREATED ......: 26.04.11
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'DPMember'}
-{date.i}
-{dpmember.i}
-{tmsconst.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'DPMember'}
+{Func/date.i}
+{Mc/dpmember.i}
+{Syst/tmsconst.i}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    
@@ -286,7 +286,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DPMember.KeyValue {uchoose.i} NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DPMember.KeyValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DPMember.KeyValue WITH FRAME sel.
       END.
 

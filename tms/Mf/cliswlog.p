@@ -14,8 +14,8 @@
   Version ......: M15
 --------------------------------------------------------------*/
 
-{commali.i} 
-{function.i}
+{Syst/commali.i} 
+{Func/function.i}
 
 DEFINE STREAM sLog.
 
@@ -45,7 +45,7 @@ DEFINE TEMP-TABLE wlresp NO-UNDO
 
 DEFINE BUFFER bufcliwl FOR CLIWL.
 
-{cliinlog.i "NEW" "swlog"}
+{Mf/cliinlog.i "NEW" "swlog"}
 
 RUN clilog.p 
   (INPUT PROGRAM-NAME(1),
@@ -55,26 +55,26 @@ RUN clilog.p
    INPUT NO).  /* NO = EMail will NOT be Sent */
 
 /* WhiteList LOG directory */
-{tmsparam.i SwitchLogFileDir RETURN}
+{Func/tmsparam.i SwitchLogFileDir RETURN}
 FileDir = fChkPath(TMSParam.CharVal).  /* Directory Name */
 
 /* Search STRING TO seach FOR a specific STRING in SW-log File */
-{tmsparam.i SwLogSearch1 RETURN}
+{Func/tmsparam.i SwLogSearch1 RETURN}
 searchstring1 = TMSParam.CharVal. 
 
 /* Seach STRING TO seach FOR a specific sign in SW-log File */
-{tmsparam.i SwLogSearch2 RETURN}
+{Func/tmsparam.i SwLogSearch2 RETURN}
 searchstring2 = TMSParam.CharVal. 
 
 /* Search STRING TO seach FOR a specific STRING in AXE-log File */
-{tmsparam.i AxeLogSearch1 RETURN}
+{Func/tmsparam.i AxeLogSearch1 RETURN}
 axestring1 = TMSParam.CharVal. 
 
 /* Seach STRING TO seach FOR a specific sign in AXE-log File */
-{tmsparam.i AxeLogSearch2 RETURN}
+{Func/tmsparam.i AxeLogSearch2 RETURN}
 axestring2 = TMSParam.CharVal. 
 
-{tmsparam.i InitialCliSign RETURN}.
+{Func/tmsparam.i InitialCliSign RETURN}.
 lInitSign = CharVal.
 
 FOR EACH CLIWL NO-LOCK WHERE 

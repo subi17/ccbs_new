@@ -7,12 +7,12 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'EDRHistory'}
-{timestamp.i}
-{callquery.i}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'EDRHistory'}
+{Func/timestamp.i}
+{Func/callquery.i}
+{Syst/eventval.i}
 
 DEF INPUT PARAMETER icCLI     AS CHAR NO-UNDO.
 DEF INPUT PARAMETER idaDateSt AS DATE NO-UNDO.

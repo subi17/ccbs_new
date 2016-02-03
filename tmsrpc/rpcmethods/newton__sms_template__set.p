@@ -10,11 +10,11 @@
  * @output      success;boolean;Result status of saving SMS
 */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
-{tmsconst.i}
+{Syst/commpaa.i}
+{Syst/tmsconst.i}
 gcBrand = "1".
 
-{eventval.i}
+{Syst/eventval.i}
 DEFINE VARIABLE pcReqList AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE pcKeyValue AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcUserName AS CHARACTER NO-UNDO.

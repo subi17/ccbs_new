@@ -8,10 +8,10 @@
   VERSION ......: xfera
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{date.i}
-{tmsconst.i}
-{nnpura.i}
+{Syst/commali.i}
+{Func/date.i}
+{Syst/tmsconst.i}
+{Inv/nnpura.i}
  
 DEF INPUT PARAM iMSSeq    AS INT  NO-UNDO.
 DEF INPUT PARAM iiCustNum AS INT  NO-UNDO.

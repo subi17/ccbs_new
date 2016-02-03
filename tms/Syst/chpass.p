@@ -9,7 +9,7 @@
   Version ......: Yoigo
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEFINE VARIABLE olPasswordChanged AS LOGICAL NO-UNDO.
 

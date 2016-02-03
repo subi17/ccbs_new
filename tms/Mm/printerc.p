@@ -8,12 +8,12 @@
   VERSIO .......: M15
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i new}
-{feplstart.i}
-{cparam2.i}
-{edefine.i new}
-{finvtxt.i}
+{Syst/commali.i}
+{Syst/utumaa.i new}
+{Func/feplstart.i}
+{Func/cparam2.i}
+{Inv/edefine.i new}
+{Func/finvtxt.i}
 
 DEF INPUT  PARAMETER icCLI     AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER iiCustNum AS INT  NO-UNDO. 

@@ -8,8 +8,8 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
+{Syst/commali.i}
+{Func/excel.i}
 
 DEF VAR line    AS c  NO-UNDO.
 def var exFile  as c  no-undo format "x(30)".

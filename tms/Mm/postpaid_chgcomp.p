@@ -9,10 +9,10 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-{timestamp.i}
-{commali.i}
-{msreqfunc.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Syst/commali.i}
+{Func/msreqfunc.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER  iiMSrequest AS INT  NO-UNDO.
 

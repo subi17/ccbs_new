@@ -24,14 +24,14 @@
    Version ......: YOIGO
 --------------------------------------------------- */               
 
-{commali.i}
-{cparam2.i}
-{date.i}
-{timestamp.i}
-{coinv.i}
-{refcode.i}
-{frefnum.i}
-{dumpfile_run.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Func/coinv.i}
+{Func/refcode.i}
+{Func/frefnum.i}
+{Syst/dumpfile_run.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.

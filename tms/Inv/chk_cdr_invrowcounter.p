@@ -1,10 +1,10 @@
-{commali.i}
-{funcrunprocess_update.i}
-{timestamp.i}
-{date.i}
-{cparam2.i}
-{istc.i}
-{chk_cdr_invrowcounter.i &ttReference = "REFERENCE-ONLY"}
+{Syst/commali.i}
+{Syst/funcrunprocess_update.i}
+{Func/timestamp.i}
+{Func/date.i}
+{Func/cparam2.i}
+{Func/istc.i}
+{Inv/chk_cdr_invrowcounter.i &ttReference = "REFERENCE-ONLY"}
 
 DEF INPUT  PARAMETER TABLE FOR ttSubs.
 DEF INPUT  PARAMETER iiRun         AS INT  NO-UNDO.

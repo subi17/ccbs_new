@@ -92,17 +92,17 @@
   Version ......: M15
   ------------------------------------------------------------------*/
 
-{commali.i}
-{timestamp.i}
-{fvoucher.i}
-{fapvat.i}
-{faccper.i}
-{fcustbal.i}
-{eventval.i} 
-{fclvat.i}
-{fpplan.i}
-{finvbal.i}
-{fpaymact.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/fvoucher.i}
+{Func/fapvat.i}
+{Func/faccper.i}
+{Func/fcustbal.i}
+{Syst/eventval.i} 
+{Func/fclvat.i}
+{Func/fpplan.i}
+{Func/finvbal.i}
+{Func/fpaymact.i}
 
 DEF BUFFER bsuor     FOR Payment.
 
@@ -388,18 +388,18 @@ END FUNCTION.
 
 
 DO:
-    {cparam.i OverPayAcc     return}. OverPayAcc  = TMSParam.IntVal.
-    {cparam.i AdvPaymAcc     return}. AdvPaymAcc  = TMSParam.IntVal.
-    {cparam.i ResDepositsAcc return}. DepositAcc  = TMSParam.IntVal.
-    {cparam.i CreditLossAcc  return}. liCLossAcc  = TMSParam.IntVal.
-    {cparam.i BankAcc        return}. BankAcc     = TMSParam.IntVal.
-    {cparam.i OTIntAcc       return}. OTIntAcc    = TMSParam.IntVal.
-    {cparam.i OverTimeInt    return}. OverTimeInt = TMSParam.DecVal.
-    {cparam.i MinIntPay      return}. MinIntPay   = TMSParam.DecVal.
-    {cparam.i ReceivAcc      return}. ReceivAcc   = TMSParam.IntVal.
-    {cparam.i DiscAcc        return}. DiscAcc     = TMSParam.IntVal.
-    {cparam.i DateLimit      return}. DateLimit   = TMSParam.DateVal.
-    {cparam.i IntCalcMet     return}. IntCalcMet  = TMSParam.IntVal.
+    {Func/cparam.i OverPayAcc     return}. OverPayAcc  = TMSParam.IntVal.
+    {Func/cparam.i AdvPaymAcc     return}. AdvPaymAcc  = TMSParam.IntVal.
+    {Func/cparam.i ResDepositsAcc return}. DepositAcc  = TMSParam.IntVal.
+    {Func/cparam.i CreditLossAcc  return}. liCLossAcc  = TMSParam.IntVal.
+    {Func/cparam.i BankAcc        return}. BankAcc     = TMSParam.IntVal.
+    {Func/cparam.i OTIntAcc       return}. OTIntAcc    = TMSParam.IntVal.
+    {Func/cparam.i OverTimeInt    return}. OverTimeInt = TMSParam.DecVal.
+    {Func/cparam.i MinIntPay      return}. MinIntPay   = TMSParam.DecVal.
+    {Func/cparam.i ReceivAcc      return}. ReceivAcc   = TMSParam.IntVal.
+    {Func/cparam.i DiscAcc        return}. DiscAcc     = TMSParam.IntVal.
+    {Func/cparam.i DateLimit      return}. DateLimit   = TMSParam.DateVal.
+    {Func/cparam.i IntCalcMet     return}. IntCalcMet  = TMSParam.IntVal.
 END.
 
 

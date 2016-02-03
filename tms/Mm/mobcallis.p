@@ -8,8 +8,8 @@
   Version ......: SCRUNKO4 (10.06.99)
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
+{Syst/commali.i}
+{Func/msisdn.i}
 
 DEF  INPUT PARAMETER  icCLI    AS C.   /* NOTE: 467018.....  */
 DEF  INPUT PARAMETER  iiInvseq AS I.

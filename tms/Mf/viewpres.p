@@ -7,7 +7,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER CLI LIKE Presel.CLI NO-UNDO.
 /*

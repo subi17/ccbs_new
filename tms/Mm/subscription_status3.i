@@ -52,10 +52,10 @@ PROCEDURE subscription_status2.
    DEF VAR ContIDList  AS CHAR NO-UNDO.
    DEF VAR oiAcct      AS INT  NO-UNDO.
    
-   {cparam.i DefFixOverduedays return}. fixoverdue  = tmsparam.IntVal. 
-   {cparam.i DefMobOverduedays return}. moboverdue  = tmsparam.IntVal. 
-   {cparam.i DefFixUnpdaiLimit return}. fixlimit    = tmsparam.IntVal. 
-   {cparam.i DefMobUnpaidLimit return}. moblimit    = tmsparam.IntVal. 
+   {Func/cparam.i DefFixOverduedays return}. fixoverdue  = tmsparam.IntVal. 
+   {Func/cparam.i DefMobOverduedays return}. moboverdue  = tmsparam.IntVal. 
+   {Func/cparam.i DefFixUnpdaiLimit return}. fixlimit    = tmsparam.IntVal. 
+   {Func/cparam.i DefMobUnpaidLimit return}. moblimit    = tmsparam.IntVal. 
 
    for each Tinvno.
        delete Tinvno.

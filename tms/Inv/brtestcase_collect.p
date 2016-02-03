@@ -10,15 +10,15 @@
 DISABLE TRIGGERS FOR LOAD OF FixedFee.
 DISABLE TRIGGERS FOR LOAD OF SingleFee.
 
-{commali.i}
-{timestamp.i}
-{finvnum.i}
-{funcrunprocess_update.i}
-{date.i}
-{tmsconst.i}
-{ftaxdata.i}
-{old_unbilled_events.i}
-{billrund.i NEW}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/finvnum.i}
+{Syst/funcrunprocess_update.i}
+{Func/date.i}
+{Syst/tmsconst.i}
+{Func/ftaxdata.i}
+{Inv/old_unbilled_events.i}
+{Inv/billrund.i NEW}
 
 DEF INPUT  PARAMETER iiBRTestQueueID  AS INT  NO-UNDO. 
 DEF INPUT  PARAMETER idaPeriodBeg     AS DATE NO-UNDO.

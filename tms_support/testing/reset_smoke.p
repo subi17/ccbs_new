@@ -1,4 +1,4 @@
-{commpaa.i}
+{Syst/commpaa.i}
 
 katun = "Cron".
 gcBrand = "1".

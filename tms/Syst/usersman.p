@@ -11,13 +11,13 @@
 &GLOBAL-DEFINE TMSCodeDef NO
 &GLOBAL-DEFINE BrTable UserSman
 
-{commali.i}
-{finvbal.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'UserSman'}
-{fduedate.i}
-{invdet.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/finvbal.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'UserSman'}
+{Func/fduedate.i}
+{Ar/invdet.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -71,7 +71,7 @@ WITH ROW FrmRow centered overlay FrmDown  down
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     UserSman.UserCode   COLON 20

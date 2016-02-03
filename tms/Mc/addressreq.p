@@ -7,10 +7,10 @@
   Changed . ....: 
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
-{commali.i}
-{msreqfunc.i}
-{eventval.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Func/fcustdata.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 

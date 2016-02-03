@@ -11,12 +11,12 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{function.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/function.i}
 
 /* Maaritellaan print-linemuuttujat */
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnhilu"
        tuni2 = "".
@@ -120,7 +120,7 @@ toimi:
 /* Avataan striimi */
 IF paper THEN DO:
    ASSIGN tila = TRUE.
-   {tmsreport.i "return"}
+   {Syst/tmsreport.i "return"}
 END.
 ELSE OUTPUT STREAM tul TO value(fname).
 
@@ -250,7 +250,7 @@ IF paper THEN PUT STREAM tul skip(spit1 - rl).
 
 /* Suljetaan striimi */
 ASSIGN tila = FALSE.
-{tmsreport.i}
+{Syst/tmsreport.i}
 
 HIDE MESSAGE no-pause.
 /* HIDE FRAME rajat no-pause. */

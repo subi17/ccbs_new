@@ -13,20 +13,20 @@
 &IF "{&fctchange}" NE "YES"
 &THEN
 &GLOBAL-DEFINE fctchange YES
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fctserval.i}
-{matrix.i}
-{tmsconst.i}
-{mnpoutchk.i}
-{mnp.i}
-{requestaction_exec.i}
-{fcustpl.i}
-{penaltyfee.i}
-{stc_extension.i}
-{istc.i}
-{main_add_lines.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fctserval.i}
+{Func/matrix.i}
+{Syst/tmsconst.i}
+{Mnp/mnpoutchk.i}
+{Mnp/mnp.i}
+{Mm/requestaction_exec.i}
+{Func/fcustpl.i}
+{Func/penaltyfee.i}
+{Func/stc_extension.i}
+{Func/istc.i}
+{Func/main_add_lines.i}
 
 /* ount number of requests */
 FUNCTION fCountRequest RETURNS INTEGER

@@ -7,17 +7,17 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun   = "Cron".
    
-{timestamp.i}
-{cparam2.i}
-{printdoc1tt.i}
-{email.i}
-{funcrunprocess_run.i}
-{host.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Inv/printdoc1tt.i}
+{Func/email.i}
+{Syst/funcrunprocess_run.i}
+{Syst/host.i}
 
 DEF VAR ldaInvDate       AS DATE NO-UNDO.
 DEF VAR liInvType        AS INT  NO-UNDO.

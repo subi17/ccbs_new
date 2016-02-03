@@ -7,13 +7,13 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 Katun = "Cron".
-{tmsconst.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
 
 DEF VAR lcDel         AS CHAR NO-UNDO INIT "|".
 DEF VAR ldaReadDate   AS DATE NO-UNDO.

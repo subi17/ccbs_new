@@ -8,22 +8,22 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
-{finvbal.i}
-{faccper.i}
-{fcustbal.i}
-{fcustcnt.i}
-{finvamt.i}
-{eventval.i} 
-{fbankday.i}
-{nnpcst.i}
-{finvnum.i}
-{fhdrtext.i}
-{frefundreq.i}
-{finvoiceacc.i}
-{fcreditvalid.i}
-{fparse.i}
+{Func/finvbal.i}
+{Func/faccper.i}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Func/finvamt.i}
+{Syst/eventval.i} 
+{Func/fbankday.i}
+{Ar/nnpcst.i}
+{Func/finvnum.i}
+{Func/fhdrtext.i}
+{Func/frefundreq.i}
+{Func/finvoiceacc.i}
+{Func/fcreditvalid.i}
+{Func/fparse.i}
 
 DEFINE TEMP-TABLE ttSubInvoice
        FIELD SubInvoice        AS INT

@@ -7,17 +7,17 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{ftransdir.i}
-{eventlog.i}
-{cparam2.i}
-{date.i}
-{fgettxt.i}
-{smsmessage.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/lib/eventlog.i}
+{Func/cparam2.i}
+{Func/date.i}
+{Func/fgettxt.i}
+{Func/smsmessage.i}
 
 DEF VAR lcLine AS CHARACTER NO-UNDO.
 DEF VAR lcSep AS CHARACTER NO-UNDO INIT ",".

@@ -9,15 +9,15 @@
   Version ......: M15
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "ddauth".
 
-{utumaa.i "new"}
-{cparam2.i}
-{ddtrans.i}
-{eventlog.i}
+{Syst/utumaa.i "new"}
+{Func/cparam2.i}
+{Ar/ddtrans.i}
+{Func/lib/eventlog.i}
 
 ASSIGN tuni1 = "nnsvlu"
        tuni2 = "".

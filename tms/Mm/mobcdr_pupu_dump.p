@@ -7,7 +7,7 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER idaReadDate    AS DATE NO-UNDO.
 DEF INPUT PARAMETER ideReadInTS    AS DEC  NO-UNDO.

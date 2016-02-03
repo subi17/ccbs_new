@@ -8,7 +8,7 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER iiInvNum  AS INT  NO-UNDO.
 

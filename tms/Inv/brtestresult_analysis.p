@@ -7,13 +7,13 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{finvnum.i}
-{funcrunprocess_update.i}
-{date.i}
-{tmsconst.i}
-{ftaxdata.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/finvnum.i}
+{Syst/funcrunprocess_update.i}
+{Func/date.i}
+{Syst/tmsconst.i}
+{Func/ftaxdata.i}
 
 DEF INPUT  PARAMETER iiBRTestQueueID  AS INT  NO-UNDO.
 DEF INPUT  PARAMETER idaInvDate       AS DATE NO-UNDO.

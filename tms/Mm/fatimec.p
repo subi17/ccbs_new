@@ -4,7 +4,7 @@
 */
 
 
-{commali.i}
+{Syst/commali.i}
 
 run fatime("",
            0,

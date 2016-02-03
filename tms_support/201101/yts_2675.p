@@ -1,10 +1,10 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
-{tmsconst.i}
-{msreqfunc.i}
-{mnp.i}
-{orderfunc.i}
+{Syst/tmsconst.i}
+{Func/msreqfunc.i}
+{Mnp/mnp.i}
+{Func/orderfunc.i}
 
 input from st_20110211_0800.dat.log.
 

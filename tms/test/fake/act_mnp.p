@@ -1,6 +1,6 @@
-{commali.i}
+{Syst/commali.i}
 
-{date.i}
+{Func/date.i}
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.
 IMPORT lcHostName.

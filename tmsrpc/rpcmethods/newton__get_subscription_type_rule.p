@@ -19,21 +19,21 @@
  */
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".
 
-{tmsconst.i}
-{date.i}
-{timestamp.i}
-{cparam2.i}
-{fixedfee.i}
-{fbundle.i}
-{fcustpl.i}
-{penaltyfee.i}
-{fctchange.i}
-{main_add_lines.i}
-{fdss.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fixedfee.i}
+{Mm/fbundle.i}
+{Func/fcustpl.i}
+{Func/penaltyfee.i}
+{Func/fctchange.i}
+{Func/main_add_lines.i}
+{Func/fdss.i}
 
 /* Input parameters */
 DEF VAR piMsSeq            AS INT     NO-UNDO.

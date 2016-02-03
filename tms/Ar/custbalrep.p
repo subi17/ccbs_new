@@ -14,9 +14,9 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i}
-{fcustbal.i}
+{Syst/commali.i}
+{Syst/utumaa.i}
+{Func/fcustbal.i}
 
 
 DEF INPUT PARAMETER iiCustNum AS INT  NO-UNDO.
@@ -50,7 +50,7 @@ FUNCTION CheckPage RETURNS LOGIC
     (iAddLine AS INT).
 
     IF rl >= skayt1 - iAddLine THEN DO:
-        {uprfeed.i rl}
+        {Syst/uprfeed.i rl}
         ASSIGN rlx = 0
                sl = sl + 1.
         view STREAM tul FRAME pagehead.  
@@ -257,7 +257,7 @@ BREAK BY CustIntEvent.PaymDate:
    
 END.
 
-{uprfeed.i rl}
+{Syst/uprfeed.i rl}
 ASSIGN SESSION:NUMERIC-FORMAT = xSesNum.
 
 

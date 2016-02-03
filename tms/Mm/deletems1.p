@@ -29,16 +29,16 @@
 
 DEFINE INPUT PARAMETER  MsSeq LIKE MobSub.MsSeq.
 
-{commali.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobSub'}
-{fsubstermreq.i}
-{msisdn_prefix.i}
-{tmsconst.i}
-{cparam2.i}
-{mnpoutchk.i}
-{main_add_lines.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobSub'}
+{Func/fsubstermreq.i}
+{Func/msisdn_prefix.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Mnp/mnpoutchk.i}
+{Func/main_add_lines.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE

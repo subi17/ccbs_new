@@ -12,7 +12,7 @@
 &THEN
 &GLOBAL-DEFINE MSISDN_PREFIX_I YES
 
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 FUNCTION fIsYoigoCLI RETURNS LOG            
 (icCLI AS CHAR):

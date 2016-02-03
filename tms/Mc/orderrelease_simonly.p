@@ -8,12 +8,12 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{cparam2.i}
-{tmsconst.i}
-{timestamp.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
 
 DEF VAR liReleaseCycle AS INT NO-UNDO.
 DEF VAR liCycleinSec AS INT NO-UNDO. 

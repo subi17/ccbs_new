@@ -11,13 +11,13 @@
   Version ......: skeleton
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MSISDN'}
-{fmakemsreq.i}
-{msisdn.i} 
-{mnpoutchk.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MSISDN'}
+{Func/fmakemsreq.i}
+{Func/msisdn.i} 
+{Mnp/mnpoutchk.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE 
@@ -67,8 +67,8 @@ WITH
    TITLE COLOR VALUE(ctc) " CHANGE MSISDN Number FOR A SUBSCRIPTION "
 FRAME main.
 
-{tmsparam.i MSStatusUse return}. ms-use = TMSParam.IntVal.
-{tmsparam.i MSStatusRes return}. ms-res = TMSParam.IntVal.
+{Func/tmsparam.i MSStatusUse return}. ms-use = TMSParam.IntVal.
+{Func/tmsparam.i MSStatusRes return}. ms-res = TMSParam.IntVal.
 
 PROCEDURE pAskPassword:
    DEF OUTPUT PARAM olOk AS LOGICAL.

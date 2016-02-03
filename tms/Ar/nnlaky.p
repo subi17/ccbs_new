@@ -25,13 +25,13 @@
 &GLOBAL-DEFINE TimeStampDef NO
 &GLOBAL-DEFINE Brtable Invoice
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoice'}
-{invdet.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoice'}
+{Ar/invdet.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -86,7 +86,7 @@ WITH width 80 OVERLAY ROW 1 scroll 1 15 DOWN
     " " + ynimi + " ALL INVOICES "
     + string(pvm,"99-99-99") + " " FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form /* Invoicen numerohakua varten */
     "Brand .:" lcBrand skip

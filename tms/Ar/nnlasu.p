@@ -25,9 +25,9 @@
   Version ......: M15
 -------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'payment'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'payment'}
 
 DEF INPUT PARAMETER InvNum LIKE Invoice.InvNum. 
 
@@ -114,7 +114,7 @@ repeat WITH FRAME PaidAmt:
 
    CHOOSE ROW Payment.Voucher 
    help "An unique voucher number for payment; F1: look all accounts"
-   {uchoose.i} no-error.
+   {Syst/uchoose.i} no-error.
    IF rtab[FRAME-LINE] = ? THEN NEXT.
 
    if lookup(keylabel(lastkey),"1,F1") > 0 THEN DO:

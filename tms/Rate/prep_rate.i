@@ -1,6 +1,6 @@
 /* prep_rate.i
 */
-{error_codes.i}
+{Rate/error_codes.i}
 
   
    /* Is this double call */    

@@ -21,12 +21,12 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "cron".
 
-{eventlog.i}
-{direct_dbconnect.i}
+{Func/lib/eventlog.i}
+{Func/direct_dbconnect.i}
 
 /* weekday related processes */
 CASE WEEKDAY(TODAY):

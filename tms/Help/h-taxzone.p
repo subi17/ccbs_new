@@ -9,7 +9,7 @@
   Version ......: yoigo
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def shared var siirto as char.
 

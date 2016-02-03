@@ -1,6 +1,6 @@
-{xmlfunction.i}
-{mathfunction.i}
-{timestamp.i}
+{Func/xmlfunction.i}
+{Func/mathfunction.i}
+{Func/timestamp.i}
 
 DEFINE INPUT PARAMETER pcCLI AS CHARACTER NO-UNDO.
 

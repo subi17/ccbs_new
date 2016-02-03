@@ -1,5 +1,5 @@
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 
 DEF INPUT PARAMETER icCLI      AS CHAR NO-UNDO.
 DEF INPUT PARAMETER iiCustNum  AS INT  NO-UNDO.

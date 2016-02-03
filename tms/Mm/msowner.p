@@ -26,12 +26,12 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MSOwner'}
-{cparam2.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MSOwner'}
+{Func/cparam2.i}
+{Func/timestamp.i}
 
 DEF /* NEW */ SHARED VAR siirto AS CHAR .
 

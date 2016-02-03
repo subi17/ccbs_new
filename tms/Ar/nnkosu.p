@@ -20,13 +20,13 @@
   Version ......: M15
   ------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{utumaa.i "new"}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/utumaa.i "new"}
 /* temp-table */
-{paymfile.i}
-{paymtrans.i}
-{farplog.i}
+{Ar/paymfile.i}
+{Ar/paymtrans.i}
+{Func/farplog.i}
 
 ASSIGN tuni1 = "nnkosu"
        tuni2 = "".
@@ -212,7 +212,7 @@ REPEAT:
                  STRING(DAY(ldtFileDate),"99")    +
                  "_" + STRING(TIME) + ".txt".
      
-   {utuloste.i "return"}
+   {Syst/utuloste.i "return"}
 
    RUN readpaym (INPUT TABLE ttPayment,
                  xPaymFile,
@@ -258,7 +258,7 @@ PROCEDURE local-set-origin:
     END.
     ASSIGN ufk = 0 ufk[5] = 11 ufk[8] = 8 ehto = 3.
     RUN ufkey.
-    CHOOSE ROW worigin.worname no-error {uchoose.i}
+    CHOOSE ROW worigin.worname no-error {Syst/uchoose.i}
     WITH FRAME origin.   
 
     IF keylabel(lastkey) = "f8" THEN oiChosen = 0.

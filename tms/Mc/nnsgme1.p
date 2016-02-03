@@ -9,8 +9,8 @@
    VERSIO .......: M15
    ----------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER SMGroup LIKE SMGroup.SmGroup NO-UNDO.
 

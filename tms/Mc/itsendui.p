@@ -8,8 +8,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{tmsparam2.i}
+{Syst/commali.i}
+{Func/tmsparam2.i}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR lcInvGroup    AS CHAR NO-UNDO.

@@ -21,10 +21,10 @@
             send_sms;string;sms id to send customer
  */
 
-{header_get.i}
+{rpcmethods/header_get.i}
 DEFINE VARIABLE katun AS CHARACTER NO-UNDO. 
 &SCOPED-DEFINE BrandVarDefined YES
-{func.i}
+{Func/func.i}
 DEF VAR liId AS INT NO-UNDO. 
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:

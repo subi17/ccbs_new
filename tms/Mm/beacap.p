@@ -11,10 +11,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'beacap'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'beacap'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -94,7 +94,7 @@ cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By Number,By Name  ,By 3, By 4".
-{brand.i}
+{Func/brand.i}
 
 FIND FIRST BeaCap
 WHERE BeaCap.Brand = lcBrand NO-LOCK NO-ERROR.

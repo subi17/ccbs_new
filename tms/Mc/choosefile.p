@@ -9,7 +9,7 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER icFilter AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER ocChosen AS CHAR NO-UNDO.
@@ -145,7 +145,7 @@ BROWSE:
         ufk[5]= 11 /* 5 */     ufk[6]= 0 /* 4 */ 
         ufk[7]= 0   ufk[8]= 8  ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        {uright1.i '"5,6"'}.
+        {Syst/uright1.i '"5,6"'}.
         RUN ufkey.p.
       END.
 
@@ -308,7 +308,7 @@ BROWSE:
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}.
+       {Syst/uright2.i}.
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 

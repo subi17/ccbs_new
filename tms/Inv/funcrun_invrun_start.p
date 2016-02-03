@@ -10,12 +10,12 @@
 DISABLE TRIGGERS FOR LOAD OF FixedFee.
 DISABLE TRIGGERS FOR LOAD OF SingleFee.
 
-{commpaa.i}
-{cparam2.i}
-{timestamp.i}
-{billrund.i NEW}
-{funcrunprocess_run.i}
-{funcrunprocess_update.i}
+{Syst/commpaa.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Inv/billrund.i NEW}
+{Syst/funcrunprocess_run.i}
+{Syst/funcrunprocess_update.i}
 
 DEF VAR liCustQty    AS INT  NO-UNDO.
 DEF VAR lhHandle     AS HANDLE NO-UNDO.

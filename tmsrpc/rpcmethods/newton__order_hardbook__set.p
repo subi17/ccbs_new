@@ -11,10 +11,10 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "NewtonRPC".
 gcBrand = "1".
-{tmsconst.i}
+{Syst/tmsconst.i}
 &GLOBAL-DEFINE STAR_EVENT_USER katun 
 {lib/eventlog.i}
 

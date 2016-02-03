@@ -13,10 +13,10 @@
 
 &GLOBAL-DEFINE BrTable DPConf
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'dpconf'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'dpconf'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -86,7 +86,7 @@ WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN
     " Discounts of Discount Plan " + DiscPlan + " " 
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     "Valid from .:" DPConf.ValidFrom SKIP
@@ -614,7 +614,7 @@ ASK-F2:
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this(true).
        ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
        cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.

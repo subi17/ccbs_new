@@ -13,7 +13,7 @@
   siirto:  STRING, joka ilmaisee valitun numeron          (out)
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 

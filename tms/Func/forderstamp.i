@@ -6,9 +6,9 @@
 
    mark and read order time stamps 
 */
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 
 
 /* change possible descriptive type to an integer key */

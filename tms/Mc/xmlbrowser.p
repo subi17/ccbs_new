@@ -9,7 +9,7 @@
   Version ......: TeleF
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEFINE TEMP-TABLE ttXMLSchema NO-UNDO
    FIELD LevelNum AS INTEGER

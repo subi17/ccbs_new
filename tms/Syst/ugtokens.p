@@ -8,10 +8,10 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'usergrp'}
-{fuserright.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'usergrp'}
+{Func/fuserright.i}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 

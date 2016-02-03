@@ -6,12 +6,12 @@
   CREATED ......: 24.06.14
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
-{tmsconst.i}
-{cparam2.i}
-{timestamp.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
 
 DEF STREAM sout.
 

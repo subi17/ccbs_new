@@ -31,18 +31,18 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobSub'}
-{cparam2.i}
-{fctchange.i}
-{fmakemsreq.i}
-{eventval.i}
-{fbankdata.i}
-{matrix.i}
-{tmsconst.i}
-{mnpoutchk.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobSub'}
+{Func/cparam2.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Syst/eventval.i}
+{Func/fbankdata.i}
+{Func/matrix.i}
+{Syst/tmsconst.i}
+{Mnp/mnpoutchk.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

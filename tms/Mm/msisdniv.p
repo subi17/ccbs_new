@@ -12,11 +12,11 @@
   Version ......: M15
   ------------------------------------------------------------------------ */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Mobcdr'}
-{callquery.i}
-{fvatfact.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Mobcdr'}
+{Func/callquery.i}
+{Func/fvatfact.i}
 
 DEF INPUT PARAMETER    MsSeq LIKE MobSub.MsSeq  NO-UNDO.
 

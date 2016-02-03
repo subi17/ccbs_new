@@ -10,7 +10,7 @@
 
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER pimsseq  AS INT .
 

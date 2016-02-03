@@ -9,23 +9,23 @@
        termination/ MNP out porting, STC (postpaid to prepaid)
 */
    
-{commali.i}
-{date.i}
-{eventval.i}
-{fctserval.i}
-{fctchange.i}
-{fmakemsreq.i}
-{msreqfunc.i}
-{msisdn.i}
-{fcreditreq.i}
-{flimitreq.i}
-{fdss.i}
-{msisdn_prefix.i}
-{fsubstermreq.i}
-{mnpoutchk.i}
-{ordercancel.i}
-{dextra.i}
-{main_add_lines.i}
+{Syst/commali.i}
+{Func/date.i}
+{Syst/eventval.i}
+{Func/fctserval.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Func/msisdn.i}
+{Func/fcreditreq.i}
+{Func/flimitreq.i}
+{Func/fdss.i}
+{Func/msisdn_prefix.i}
+{Func/fsubstermreq.i}
+{Mnp/mnpoutchk.i}
+{Func/ordercancel.i}
+{Func/dextra.i}
+{Func/main_add_lines.i}
 
 DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 

@@ -29,13 +29,13 @@
 
 &GLOBAL-DEFINE BrTable Tariff
 
-{commali.i}
-{eventval.i}
-{tariffd.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Tariff'}
-{cparam2.i}
-{fcustpl.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/tariffd.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Tariff'}
+{Func/cparam2.i}
+{Func/fcustpl.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -216,7 +216,7 @@ WITH
    fr-header NO-LABEL OVERLAY
 FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* haku PriceList:lla */
    "Brand:" lcBrand skip
@@ -434,7 +434,7 @@ repeat WITH FRAME sel:
          THEN ASSIGN ufk[1] = 0
                      ufk[3] = 0.
 
-         {uright1.i '"5,6"'}
+         {Syst/uright1.i '"5,6"'}
 
          RUN ufkey.p.
       END.

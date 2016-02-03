@@ -10,7 +10,7 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 run msrequest (0,
                ?, /* reqstat ? for all */

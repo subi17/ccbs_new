@@ -9,10 +9,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}  /*qupd = TRUE.*/
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'presel'}
+{Syst/commali.i}  /*qupd = TRUE.*/
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'presel'}
 
 DEF INPUT PARAMETER CustNum LIKE Presel.CustNum.
 /*
@@ -448,7 +448,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
-       {uright2.i}
+       {Syst/uright2.i}
        /* change */
        RUN local-find-this(TRUE).
        FIND Customer WHERE Customer.CustNum = Presel.CustNum NO-LOCK NO-ERROR.

@@ -1,10 +1,10 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "YOT-858".
 gcBrand = "1".
-{orderfunc.i}
-{msreqfunc.i}
-{eventval.i}
-{log.i}
+{Func/orderfunc.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Func/log.i}
 
   &GLOBAL-DEFINE STAR_EVENT_USER katun
    

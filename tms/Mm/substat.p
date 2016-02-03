@@ -9,13 +9,13 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}       
-{timestamp.i}
-{finvbal.i}
-{subscription_status3.i}
-{email.i}
-{excel.i}
-{sog.i}
+{Syst/commali.i}       
+{Func/timestamp.i}
+{Func/finvbal.i}
+{Mm/subscription_status3.i}
+{Func/email.i}
+{Func/excel.i}
+{Func/sog.i}
 
 def var CustomerFrom as I no-undo FORMAT "zzzzzzzz9".
 def var CustomerTo   as I no-undo FORMAT "zzzzzzzz9" .

@@ -8,11 +8,11 @@
   Version ......: yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{femailinvoice.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/femailinvoice.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO. 
 

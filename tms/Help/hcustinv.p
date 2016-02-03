@@ -18,7 +18,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEFINE INPUT PARAMETER CustNum LIKE Customer.CustNum.
 DEFINE INPUT PARAMETER paid    AS LOG.
@@ -136,7 +136,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
          ufk[5]= 11  
          ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         {uright1.i '"3,4,7"'}
+         {Syst/uright1.i '"3,4,7"'}
          RUN ufkey.p.
       END.
 

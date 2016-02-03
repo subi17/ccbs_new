@@ -8,9 +8,9 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CoTarg'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CoTarg'}
 
 DEF VAR liChecked   AS INT  NO-UNDO.
 DEF VAR liActivated AS INT  NO-UNDO.

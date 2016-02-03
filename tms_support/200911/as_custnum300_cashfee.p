@@ -1,7 +1,7 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{eventval.i}
+{Syst/eventval.i}
 
 DEFINE var icFile AS CHARACTER NO-UNDO. 
 icfile = "/apps/snet/200911/as_custnum300_problem.input".

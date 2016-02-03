@@ -13,11 +13,11 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{tmsconst.i}
-{date.i}
-{ftmscode.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/ftmscode.i}
 
 DEF INPUT PARAMETER SIMfile AS CHARACTER NO-UNDO. 
 DEF INPUT PARAMETER ProcessedDir AS CHARACTER NO-UNDO. 
@@ -95,9 +95,9 @@ WITH
    ROW 2 FRAME MAIN.
 
 /* set the status code FOR a NEW SIM card */
-{tmsparam.i SIMStatusNew return}. SIMStat = TMSParam.IntVal. 
+{Func/tmsparam.i SIMStatusNew return}. SIMStat = TMSParam.IntVal. 
 cSimStat = STRING(SIMStat).
-{tmsparam.i MainStock    return}. Stock = TMSParam.CharVal.
+{Func/tmsparam.i MainStock    return}. Stock = TMSParam.CharVal.
 
 DEFINE STREAM sIFile.
 FUNCTION IsInputFile RETURNS LOGICAL (INPUT pFileName AS CHARACTER):

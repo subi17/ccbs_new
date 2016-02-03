@@ -24,16 +24,16 @@
  VERSION .......: M15
  ============================================================================*/
 
-{commali.i}
-{excel.i}
-{refcode.i}
-{cparam2.i}
-{ftransdir.i}
-{timestamp.i}
-{fbankday.i}
-{frefnum.i}
-{fmakesms.i}
-{fgettxt.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/refcode.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/timestamp.i}
+{Func/fbankday.i}
+{Func/frefnum.i}
+{Func/fmakesms.i}
+{Func/fgettxt.i}
 
 FUNCTION fYear2digit RETURNS INTEGER
    (INPUT yy AS INTEGER).

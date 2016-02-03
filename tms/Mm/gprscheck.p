@@ -1,5 +1,5 @@
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/timestamp.i}
 DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO format "x(9)". 
 DEFINE VARIABLE lcFrom AS CHARACTER NO-UNDO FORMAT "x(8)". 
 DEFINE VARIABLE lcTo AS CHARACTER NO-UNDO FORMAT "x(8)".

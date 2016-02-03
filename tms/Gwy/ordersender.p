@@ -12,20 +12,20 @@
      this module is run from orderrun.p 
 ****/
 
-{commali.i}
-{cparam2.i}
-{eventval.i}
-{timestamp.i}
-{tmsconst.i}
-{finvtxt.i}
-{fcustdata.i}
-{fctchange.i}
-{fmakemsreq.i}
-{msisdn.i}
-{heartbeat.i}
-{forderstamp.i}
-{orderfunc.i}
-{freacmobsub.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/finvtxt.i}
+{Func/fcustdata.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/msisdn.i}
+{Func/heartbeat.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
+{Func/freacmobsub.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -90,7 +90,7 @@ IF piOrderID = 0 THEN DO lii = 1 to EXTENT(lcStatuses):
             
       IF LOCKED(Order) THEN NEXT.       
       
-      {ordersender.i LOOP}
+      {Mc/ordersender.i LOOP}
    
       oiOrderQty = oiOrderQty + 1.
  
@@ -106,7 +106,7 @@ ELSE DO:
              Order.Brand   = gcBrand  AND
              Order.OrderId = piOrderId:
 
-      {ordersender.i ORDERLOOP}
+      {Mc/ordersender.i ORDERLOOP}
    
       oiOrderQty = oiOrderQty + 1.
       

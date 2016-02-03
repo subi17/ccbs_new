@@ -19,9 +19,9 @@
   VERSION ......: M15
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsparam2.i}
-{lib/tokenlib.i}
+{Syst/commali.i}
+{Func/tmsparam2.i}
+{Mc/lib/tokenlib.i}
 
 def new shared var siirto as char.
 def new shared var order as int.

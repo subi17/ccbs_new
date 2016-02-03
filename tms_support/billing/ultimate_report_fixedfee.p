@@ -1,9 +1,9 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand  = "1".
-{flimitreq.i}
-{date.i}
-{tmsconst.i}
+{Func/flimitreq.i}
+{Func/date.i}
+{Syst/tmsconst.i}
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE j AS INTEGER NO-UNDO. 
 DEFINE VARIABLE k AS INTEGER NO-UNDO. 

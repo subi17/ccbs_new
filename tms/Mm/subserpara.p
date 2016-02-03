@@ -13,11 +13,11 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
+{Syst/commali.i} 
 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'} 
-{eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'} 
+{Syst/eventval.i}
 
 DEF  NEW  shared VAR siirto AS CHAR.
 

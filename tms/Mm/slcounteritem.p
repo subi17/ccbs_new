@@ -8,8 +8,8 @@ CHANGED ......:
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
+{Syst/commali.i}
+{Syst/eventval.i}
 
 DEF INPUT PARAM piMsSeq AS INT NO-UNDO. 
 DEF INPUT PARAM piPeriod AS INT NO-UNDO. 

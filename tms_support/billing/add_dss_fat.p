@@ -8,12 +8,12 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun   = "Qvantel".
-{cparam2.i}
-{timestamp.i}
-{fdss.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/fdss.i}
 
 DEF VAR lcSimulate               AS CHAR NO-UNDO.
 DEF VAR ldaPromoFromDate         AS DATE NO-UNDO.

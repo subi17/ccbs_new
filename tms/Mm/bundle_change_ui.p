@@ -7,13 +7,13 @@
   Version ......: Yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fbundle.i}
-{fbtc.i}
-{mnpoutchk.i}
-{main_add_lines.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Mm/fbundle.i}
+{Func/fbtc.i}
+{Mnp/mnpoutchk.i}
+{Func/main_add_lines.i}
 
 DEF INPUT PARAMETER iiMsSeq   AS INT NO-UNDO. 
 

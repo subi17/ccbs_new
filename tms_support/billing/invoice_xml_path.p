@@ -1,10 +1,10 @@
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1"
    katun = "cron".
 
-{cparam2.i}
-{timestamp.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
 
 DEF VAR lcFile      AS CHAR NO-UNDO.
 DEF VAR lcDir       AS CHAR NO-UNDO.

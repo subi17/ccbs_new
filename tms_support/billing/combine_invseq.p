@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{date.i}
-{combine_invseq.i}
+{Func/date.i}
+{Inv/combine_invseq.i}
 
 DEF VAR idafromdate as date no-undo.
 DEF VAR idatodate as date no-undo.

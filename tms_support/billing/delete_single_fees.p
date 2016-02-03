@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 assign gcbrand = "1"
        katun = "Qvantel".
-{timestamp.i}
-{eventval.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
 
 def stream sin.
 def stream sout.

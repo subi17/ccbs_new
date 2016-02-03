@@ -30,8 +30,8 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{commali.i}
-{country.i}
+{Syst/commali.i}
+{Syst/country.i}
 {invsta2.frm}
 
 DEF VAR exdir     AS c  NO-UNDO.
@@ -102,11 +102,11 @@ dos-skip   = chr(13) + chr(10).
 exname-i   = exdir + "/" + "xorinv-i.txt".
 exname-e   = exdir + "/" + "xorinv-e.txt".
 
-{tmsparam.i RoundAcc   return}. RoundAcc   = TMSParam.IntVal.
-{tmsparam.i OTIntAcc   return}. OTIntAcc   = TMSParam.IntVal.
-{tmsparam.i VatAcc     return}. VatAcc     = TMSParam.IntVal.
-{tmsparam.i OverPayAcc return}. OverPayAcc = TMSParam.IntVal.
-{tmsparam.i ReceivAcc  return}. ReceivAcc  = TMSParam.IntVal.
+{Func/tmsparam.i RoundAcc   return}. RoundAcc   = TMSParam.IntVal.
+{Func/tmsparam.i OTIntAcc   return}. OTIntAcc   = TMSParam.IntVal.
+{Func/tmsparam.i VatAcc     return}. VatAcc     = TMSParam.IntVal.
+{Func/tmsparam.i OverPayAcc return}. OverPayAcc = TMSParam.IntVal.
+{Func/tmsparam.i ReceivAcc  return}. ReceivAcc  = TMSParam.IntVal.
 
 form
    skip(19)

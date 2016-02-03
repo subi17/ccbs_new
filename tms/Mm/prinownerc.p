@@ -8,13 +8,13 @@
   VERSIO .......: M15
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i new}
-{cparam2.i}
-{edefine.i new}
-{finvtxt.i}
-{fcustdata.i}
-{msreqfunc.i}
+{Syst/commali.i}
+{Syst/utumaa.i new}
+{Func/cparam2.i}
+{Inv/edefine.i new}
+{Func/finvtxt.i}
+{Func/fcustdata.i}
+{Func/msreqfunc.i}
 
 DEF INPUT  PARAMETER iiRequest   AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiPrintType AS INT  NO-UNDO. /* 1=epl,2=local */
@@ -87,7 +87,7 @@ ASSIGN lcEPLRName    = ENTRY(1,MsRequest.ReqCParam1,";") + " " +
 /* local print */
 IF iiPrintType = 2 THEN DO:
    tila = TRUE.
-   {utuloste.i "return"}
+   {Syst/utuloste.i "return"}
 END.
 
 DO liPrintCnt = 1 TO 4:
@@ -119,7 +119,7 @@ END.
 /* local print */
 IF iiPrintType = 2 THEN DO:
    tila = FALSE.
-   {utuloste.i}
+   {Syst/utuloste.i}
 END.
 
 /* if printing succeeded then update new status for request */

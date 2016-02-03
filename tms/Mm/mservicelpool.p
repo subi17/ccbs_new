@@ -7,9 +7,9 @@
   VERSION ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{date.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/date.i}
+{Func/timestamp.i}
  
 DEF INPUT PARAM iiMSSeq as INT  no-undo.
 DEF INPUT PARAM iiSlSeq AS INT NO-UNDO.

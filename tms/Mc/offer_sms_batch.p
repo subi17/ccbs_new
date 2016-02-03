@@ -8,17 +8,17 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "CRON".
-{timestamp.i}
-{cparam2.i}
-{fmakesms.i}
-{tmsconst.i}
-{msisdn_prefix.i}
-{fgettxt.i}
-{order_data.i}
-{smsmessage.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fmakesms.i}
+{Syst/tmsconst.i}
+{Func/msisdn_prefix.i}
+{Func/fgettxt.i}
+{Func/order_data.i}
+{Func/smsmessage.i}
 
 DEF VAR lcLogDir          AS CHAR NO-UNDO.
 DEF VAR lcLogFile         AS CHAR NO-UNDO.

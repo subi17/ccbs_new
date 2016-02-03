@@ -24,9 +24,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} /*upd = TRUE.*/
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Eventlog'}
+{Syst/commali.i} /*upd = TRUE.*/
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Eventlog'}
 
 &GLOBAL-DEFINE STAR_EVENT_USER katun
 

@@ -8,9 +8,9 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{msreqfunc.i}
-{fwebuser.i}
-{eventval.i}
+{Func/msreqfunc.i}
+{Func/fwebuser.i}
+{Syst/eventval.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 

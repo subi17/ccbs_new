@@ -8,9 +8,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{fwebuser.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/fwebuser.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO. 
 

@@ -10,10 +10,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CTServEl'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CTServEl'}
 
 
 IF llDoEvent THEN DO:
@@ -311,7 +311,7 @@ REPEAT WITH FRAME sel:
            ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
            ehto = 3 ufkey = FALSE.
            
-        {uright1.i '"5,6"'}
+        {Syst/uright1.i '"5,6"'}
         RUN ufkey.p.
       END.
 
@@ -490,14 +490,14 @@ REPEAT WITH FRAME sel:
 
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 

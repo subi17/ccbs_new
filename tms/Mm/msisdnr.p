@@ -11,9 +11,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
-{eventval.i} 
+{Syst/commali.i}
+{Func/msisdn.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER ra-recid AS re NO-UNDO.
 

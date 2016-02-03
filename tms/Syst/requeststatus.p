@@ -10,11 +10,11 @@
 
 &GLOBAL-DEFINE BrTable RequestStatus
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'RequestStatus'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'RequestStatus'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -71,7 +71,7 @@ WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
        "  STATUS HANDLING FOR TYPE " + STRING(iiReqType) + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     RequestStatus.Brand          COLON 15

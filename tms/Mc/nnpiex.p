@@ -14,10 +14,10 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}                              
-{excel.i}
-{nnacyp.i}
-{tmsparam2.i}
+{Syst/commali.i}                              
+{Func/excel.i}
+{Mc/nnacyp.i}
+{Func/tmsparam2.i}
 
 DEF VAR iAR     AS i  NO-UNDO.
 def var debt    as de no-undo format "-zzzzzz9.99".

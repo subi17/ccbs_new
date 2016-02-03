@@ -46,7 +46,7 @@
  *
  */
 
-{lib/protop.i}
+{tms_support/protop/lib/protop.i}
 
 define variable support as character no-undo initial "Area Details".
 
@@ -61,8 +61,8 @@ define temp-table tt_area no-undo
   field xnote   as character
   index xid-idx is unique primary xid.
 
-{lib/tt_table.i}
-{lib/tt_index.i}
+{tms_support/protop/lib/tt_table.i}
+{tms_support/protop/lib/tt_index.i}
 
 /* restart
  *

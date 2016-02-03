@@ -7,15 +7,15 @@
   Version ......: TMS
   --------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1"
    katun   = "request".
    
-{heartbeat.i}
-{timestamp.i}
-{log.i}
-{requestrunner.i}
+{Func/heartbeat.i}
+{Func/timestamp.i}
+{Func/log.i}
+{Syst/requestrunner.i}
 
 DEF VAR lcUser     AS CHAR NO-UNDO.
 DEF VAR liErrors   AS INT  NO-UNDO.

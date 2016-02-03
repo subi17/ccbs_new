@@ -4,7 +4,7 @@
 &THEN
 
 &GLOBAL-DEFINE SCHEDULED_DUMPS_I YES
-{dftimetable.i}
+{Syst/dftimetable.i}
 
 DEF TEMP-TABLE ttEvent NO-UNDO
    FIELD DumpID      AS INT

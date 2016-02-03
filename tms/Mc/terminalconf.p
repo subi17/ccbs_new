@@ -8,10 +8,10 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'TerminalConf'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'TerminalConf'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -382,7 +382,7 @@ BROWSE:
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* details
-       {uright2.i} */
+       {Syst/uright2.i} */
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " DETAILS " ufkey = TRUE ehto = 9. RUN ufkey.

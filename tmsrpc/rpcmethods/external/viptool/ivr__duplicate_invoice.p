@@ -19,13 +19,13 @@ DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 /* Input parameters */
 DEF VAR pcExtInviId AS CHAR NO-UNDO.
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    katun = "IVR_" + gbAuthLog.EndUserId.
    gcBrand = "1".
 
-{tmsconst.i}
-{duplicate_invoice.i}
+{Syst/tmsconst.i}
+{Func/duplicate_invoice.i}
 
 DEF VAR lcError AS CHAR NO-UNDO. 
 DEF VAR liRequestId AS INT NO-UNDO.

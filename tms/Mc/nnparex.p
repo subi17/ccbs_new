@@ -8,9 +8,9 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{function.i}
+{Func/function.i}
 
 DEF NEW shared STREAM excel.
 

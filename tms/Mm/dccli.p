@@ -11,14 +11,14 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{cparam2.i}
-{daycampaign.i}
-{timestamp.i}
-{fctserval.i}
-{fctchange.i}
-{fmakemsreq.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/cparam2.i}
+{Rate/daycampaign.i}
+{Func/timestamp.i}
+{Func/fctserval.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
 
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -583,7 +583,7 @@ REPEAT WITH FRAME sel:
            
      ELSE IF LOOKUP(nap,"6,f6,7,F7") > 0 THEN DO TRANSACTION:  
 
-        {uright2.i}
+        {Syst/uright2.i}
         RUN local-find-this (false).
 
         ufkey = TRUE.

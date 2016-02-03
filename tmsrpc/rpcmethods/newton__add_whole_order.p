@@ -220,28 +220,28 @@
 */
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "NewtonRPC".
-{date.i}
-{orderchk.i}
-{order.i}
-{tmsconst.i}
-{fbundle.i}
-{mnpoutchk.i}
-{create_eventlog.i}
-{fmakemsreq.i}
-{main_add_lines.i}
-{msisdn.i}
-{forderstamp.i}
-{email.i}
-{ftransdir.i}
+{Func/date.i}
+{Func/orderchk.i}
+{Func/order.i}
+{Syst/tmsconst.i}
+{Mm/fbundle.i}
+{Mnp/mnpoutchk.i}
+{Func/create_eventlog.i}
+{Func/fmakemsreq.i}
+{Func/main_add_lines.i}
+{Func/msisdn.i}
+{Func/forderstamp.i}
+{Func/email.i}
+{Func/ftransdir.i}
 
-{cparam2.i}
-/*{utumaa.i new }
-{edefine.i new}*/
-{order_data.i}
-{smsmessage.i}
+{Func/cparam2.i}
+/*{Syst/utumaa.i new }
+{Inv/edefine.i new}*/
+{Func/order_data.i}
+{Func/smsmessage.i}
 
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.

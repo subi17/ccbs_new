@@ -7,16 +7,16 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun   = "Cron".
    
-{cparam2.i}
-{files.i}
-{timestamp.i}
-{funcrunprocess_run.i}
-{tmsconst.i}
+{Func/cparam2.i}
+{Func/files.i}
+{Func/timestamp.i}
+{Syst/funcrunprocess_run.i}
+{Syst/tmsconst.i}
 
 DEF VAR liBRTestQueueID  AS INT  NO-UNDO.
 DEF VAR ldaPeriodBeg     AS DATE NO-UNDO.

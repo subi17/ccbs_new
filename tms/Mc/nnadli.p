@@ -11,12 +11,12 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}  
+{Syst/commali.i}  
 
-{utumaa.i "new"}
-{fcustbal.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'custbal'}
+{Syst/utumaa.i "new"}
+{Func/fcustbal.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'custbal'}
 
 assign tuni1 = "nnadli"
        tuni2 = "".
@@ -146,7 +146,7 @@ Action:
        IF toimi = 5 THEN DO:
 
           tila = TRUE.
-          {tmsreport.i "leave rajat"}
+          {Syst/tmsreport.i "leave rajat"}
 
           LEAVE Action.
        END.
@@ -177,7 +177,7 @@ Action:
    BY   ttCust.CustNum.
 
       IF rl >= skayt1 THEN DO:
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
          ASSIGN sl = sl + 1 rl = 8.
          view STREAM tul FRAME hdr-1.
       END.
@@ -200,7 +200,7 @@ Action:
       IF last(ttCust.CustNum) THEN DO:
 
          IF rl >= skayt1 - 1 THEN DO:
-            {uprfeed.i rl}
+            {Syst/uprfeed.i rl}
             ASSIGN sl = sl + 1 rl = 8.
             view STREAM tul FRAME hdr-1.
          END.
@@ -215,10 +215,10 @@ Action:
          SKIP.
          rl = rl + 2.
 
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
 
          tila = FALSE.
-         {tmsreport.i}
+         {Syst/tmsreport.i}
       END.
 
    END.

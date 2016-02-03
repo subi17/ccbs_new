@@ -12,12 +12,12 @@
 
 &GLOBAL-DEFINE BrTable MNPMessage
 
-{commali.i} 
-{eventval.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MNPMessage'}
-{xmlfunction.i}
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MNPMessage'}
+{Func/xmlfunction.i}
 
 
 IF llDoEvent THEN DO:

@@ -11,14 +11,14 @@
   TODO..........: add process logging
   -------------------------------------------------------------------------- */
 
-{commali.i} 
-{tmsparam2.i}
-{billrund.i NEW}
-{faccper.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Invoice'}
-{finvnum.i}
-{timestamp.i}
+{Syst/commali.i} 
+{Func/tmsparam2.i}
+{Inv/billrund.i NEW}
+{Func/faccper.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Invoice'}
+{Func/finvnum.i}
+{Func/timestamp.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE " You cannot delete invoices ! " VIEW-AS ALERT-BOX.

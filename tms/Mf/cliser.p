@@ -7,8 +7,8 @@
   MODIFIED .....: 
   VERSION ......: M15
   --------------------------------------------------------------------- */
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAM startCLI LIKE CLI.CLI          NO-UNDO.
 DEF INPUT PARAM endCLI   LIKE CLI.CLI          NO-UNDO.

@@ -7,13 +7,13 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun   = "Qvantel".
-{cparam2.i}
-{timestamp.i}
-{fcpfat.i}
-{fbundle.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/fcpfat.i}
+{Mm/fbundle.i}
 
 DEF VAR ldaPromoFromDate         AS DATE NO-UNDO.
 DEF VAR ldaPromoToDate           AS DATE NO-UNDO.

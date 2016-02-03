@@ -20,12 +20,12 @@
 */
 
 
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
-{fuserright.i}            
-{finvbal.i}
-{fduedate.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/fuserright.i}            
+{Func/finvbal.i}
+{Func/fduedate.i}
 
 DEF VAR lcInvType    AS CHAR NO-UNDO.
 DEF VAR lcClaimDesc AS CHAR NO-UNDO. 

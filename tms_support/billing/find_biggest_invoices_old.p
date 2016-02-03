@@ -1,10 +1,10 @@
 &GLOBAL-DEFINE BrandVarDefined Yes
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
-{func.i}
-{tmsconst.i}
-{cparam2.i}
+{Func/timestamp.i}
+{Func/func.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
 
 def stream slog.
 

@@ -11,9 +11,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invseq'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invseq'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -165,7 +165,7 @@ BROWSE:
         ufk[1]= 1840  ufk[2]= 702 ufk[3]= 0 /* 92 */ ufk[4]= 0
         ufk[5]= 1830  ufk[6]= 1831 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        {uright1.i '"7"'}
+        {Syst/uright1.i '"7"'}
         RUN ufkey.p.
       END.
 

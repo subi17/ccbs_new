@@ -72,11 +72,11 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = pcUserName.
 gcbrand = "1".
-{fixedfee.i}
-{fcounter.i}
+{Func/fixedfee.i}
+{Func/fcounter.i}
 /* Check that mobsub is available */
 FIND MobSub WHERE
      MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.

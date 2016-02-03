@@ -9,16 +9,16 @@
   VERSION ......: yoigo
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{tmsconst.i}
-{eventval.i}
-{fcustpl.i}
-{ftaxdata.i}
-{transname.i}
-{timestamp.i}
-{offer.i}
-{orderfunc.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
+{Func/fcustpl.i}
+{Func/ftaxdata.i}
+{Func/transname.i}
+{Func/timestamp.i}
+{Mc/offer.i}
+{Func/orderfunc.i}
 
 DEF INPUT  PARAMETER iiOrder  AS INT  NO-UNDO. 
 DEF INPUT  PARAMETER iiAction AS INT  NO-UNDO.  

@@ -18,11 +18,11 @@
 */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{eventval.i}
-{offer.i}
-{xmlrpc_names.i}
+{Syst/eventval.i}
+{Mc/offer.i}
+{rpcmethods/xmlrpc_names.i}
 
 DEFINE VARIABLE pcStruct AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcStruct AS CHARACTER NO-UNDO. 

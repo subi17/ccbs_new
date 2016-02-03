@@ -9,7 +9,7 @@
 
   Version ......: M15
 --------------------------------------------------------------*/
-{commali.i}
+{Syst/commali.i}
 
 DEFINE INPUT  PARAMETER pOrderID    AS CHARACTER NO-UNDO.
 DEFINE INPUT  PARAMETER pResellerID AS CHARACTER NO-UNDO.
@@ -26,7 +26,7 @@ DEFINE VARIABLE sDX2Del   AS CHARACTER NO-UNDO.
 
 DEFINE STREAM sFile.
 
-{cliinlog.i}
+{Mf/cliinlog.i}
 
 FUNCTION fWL RETURNS CHARACTER
   (INPUT lFileName AS CHAR).
@@ -82,7 +82,7 @@ FUNCTION fWL RETURNS CHARACTER
 END.
 
 /* Get the Name of the directory where the Alist will be stored */
-{tmsparam.i WLDir RETURN}.   
+{Func/tmsparam.i WLDir RETURN}.   
 lDirName = TMSParam.CharVal .  /* Directory Name */ 
 
 IF CAN-FIND(FIRST CLIQueue WHERE 

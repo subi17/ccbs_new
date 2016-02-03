@@ -8,9 +8,9 @@ DEFINE VARIABLE liEvents            AS INTEGER    NO-UNDO.
 DEFINE VARIABLE lcMessage           AS CHARACTER  NO-UNDO.
 DEFINE VARIABLE lcItemTypeDesc      AS CHARACTER  NO-UNDO.
 
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
 
 DEFINE STREAM slog.
 

@@ -8,8 +8,8 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{daycampaign.i}
+{Syst/commali.i}
+{Rate/daycampaign.i}
 
 DEF  INPUT PARAM iiMsseq       AS INT    NO-UNDO.
 DEF  INPUT PARAM icEvent       AS CHAR   NO-UNDO.

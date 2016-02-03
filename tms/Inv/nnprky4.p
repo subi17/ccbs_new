@@ -25,13 +25,13 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
-{feplstart.i}
-{eplspec.i}
-{timestamp.i}
-{transelog.i}
+{Syst/utumaa.i "new"}
+{Func/feplstart.i}
+{Inv/eplspec.i}
+{Func/timestamp.i}
+{Func/transelog.i}
 
 assign tuni1 = "nnpura4"
        tuni2 = "".
@@ -465,7 +465,7 @@ END.
 ELSE IF liPrintTo = 2 THEN DO:
   
    ASSIGN tila = TRUE.
-   {utuloste.i "return"}
+   {Syst/utuloste.i "return"}
 
 END.
 
@@ -568,7 +568,7 @@ IF liPrintTo <= 2 THEN DO:
  
    ELSE IF liPrintTo = 2 THEN DO: 
       ASSIGN tila = FALSE.
-      {utuloste.i}
+      {Syst/utuloste.i}
    END.
    
    IF lcErrFile = "" AND liError NE -1 THEN DO:

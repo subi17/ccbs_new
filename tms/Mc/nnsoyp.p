@@ -15,10 +15,10 @@
 
 &GLOBAL-DEFINE BrTable salesoffice
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'salesoffice'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'salesoffice'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -66,7 +66,7 @@ WITH width 80 OVERLAY scroll 1 15 DOWN
     " Maintain sales offices " + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     Salesoffice.SalesOffice

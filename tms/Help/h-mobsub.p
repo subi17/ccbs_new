@@ -10,7 +10,7 @@
                  03.03.03  jp billLevel removed
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def shared var siirto as char.
 

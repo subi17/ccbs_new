@@ -9,14 +9,14 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 Katun = "Cron".
-{tmsconst.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
-{dms.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/dms.i}
 
 DEF VAR ldCollPeriodStartTS   AS DEC  NO-UNDO.
 DEF VAR ldCollPeriodEndTS AS DEC  NO-UNDO.

@@ -132,25 +132,25 @@ DEFINE INPUT PARAMETER icType    AS CHAR NO-UNDO.
 
 &GLOBAL-DEFINE BrTable Customer
 
-{commali.i}
+{Syst/commali.i}
 
-{cparam2.i}
-{eventval.i}
-{timestamp.i}
-{fcustbal.i}
-{fcustcnt.i}
-{fctype.i}
-{refcode.i}
-{fcustref.i}
-{frefnum.i}
-{fbankdata.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'customer'}
-{fcustdata.i}
-{matrix.i}
-{fmakemsreq.i}
-{flimitreq.i}
-{femailinvoice.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Func/timestamp.i}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Func/fctype.i}
+{Func/refcode.i}
+{Func/fcustref.i}
+{Func/frefnum.i}
+{Func/fbankdata.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'customer'}
+{Func/fcustdata.i}
+{Func/matrix.i}
+{Func/fmakemsreq.i}
+{Func/flimitreq.i}
+{Func/femailinvoice.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -407,7 +407,7 @@ form
 WITH centered OVERLAY ROW 4 no-LABELs TITLE " eMail Addresses " 
      FRAME femails.
 
-{brand.i}
+{Func/brand.i}
 
 form /* Customer :n tunnuksella hakua varten */
    "Brand Code:" lcBrand  HELP "Enter Brand" 
@@ -873,7 +873,7 @@ IF icType = "address_chg" AND lcRight = "RW" THEN DO:
        lcCustRegion
        
        WITH FRAME lis
-       {nnasse.i}
+       {Mc/nnasse.i}
 
        /* cross reference checks */  
        IF Customer.CustNum > 1000 THEN DO:
@@ -972,7 +972,7 @@ repeat WITH FRAME sel:
          ELSE DO:
             UNDO add-new, LEAVE add-new.
             /*
-            {custfind.i LAST CustNum}
+            {Mc/custfind.i LAST CustNum}
             IF AVAIL Customer THEN new_custNo = Customer.CustNum + 1. */
          END. 
 
@@ -1149,7 +1149,7 @@ repeat WITH FRAME sel:
       HIDE FRAME lis no-pause.
       ASSIGN must-print = TRUE.
       /* any records AVAILABLE ? */
-      {custfind.i FIRST CustNum}
+      {Mc/custfind.i FIRST CustNum}
       IF NOT AVAILABLE Customer THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -1382,7 +1382,7 @@ repeat WITH FRAME sel:
 
               IF lcBrand = "*" THEN lcTyyppi = "".
 
-              {custfind.i FIRST CustNum "AND Customer.CustNum >= CustNum"}.
+              {Mc/custfind.i FIRST CustNum "AND Customer.CustNum >= CustNum"}.
 
               ASSIGN lcTyyppi = "brand".
 
@@ -1420,63 +1420,63 @@ repeat WITH FRAME sel:
               
               /* one field defined */
               IF lcSurName1 = "" AND lcSurName2 = "" AND lcCompany = "" THEN DO:
-                 {custfind.i FIRST CustName  "AND Customer.FirstName MATCHES '*' + lcFirstName + '*'"}.
+                 {Mc/custfind.i FIRST CustName  "AND Customer.FirstName MATCHES '*' + lcFirstName + '*'"}.
               END.
               ELSE IF lcFirstName = "" AND lcSurName2 = "" AND lcCompany = "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.CustName >= lcSurName1"}.
               END.
               ELSE IF lcFirstName = "" AND lcSurName1 = "" AND lcCompany = "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.SurName2 >= lcSurName2"}.
               END.
               ELSE IF lcFirstName = "" AND lcSurName1 = "" AND lcSurName2 = "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.Company MATCHES '*' + lcCompany + '*'"}.
               END.
               /* two fields defined */
               ELSE IF lcFirstName NE "" AND lcSurName1 NE "" AND lcSurName2 = "" AND lcCompany = "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.FirstName MATCHES '*' + lcFirstName + '*'" 
                             + "AND Customer.CustName  >= lcSurName1"}.
               END.
               ELSE IF lcFirstName = "" AND lcSurName1 NE "" AND lcSurName2 NE "" AND lcCompany = "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.CustName  >= lcSurName1
                               AND Customer.SurName2  >= lcSurName2"}.
               END.
               ELSE IF lcFirstName = "" AND lcSurName1 = "" AND lcSurName2 NE "" AND lcCompany NE "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.SurName2  >= lcSurName2
                               AND Customer.Company MATCHES '*' + lcCompany + '*'"}.
               END.
               /* three fields defined */
               ELSE IF lcFirstName NE "" AND lcSurName1 NE "" AND lcSurName2 NE "" AND lcCompany = "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.FirstName  MATCHES '*' + lcFirstName + '*'"
                               AND Customer.CustName  >= lcSurName1
                               AND Customer.SurName2  >= lcSurName2"}.
               END.
               ELSE IF lcFirstName = "" AND lcSurName1 NE "" AND lcSurName2 NE "" AND lcCompany NE "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.CustName  >= lcSurName1
                               AND Customer.SurName2  >= lcSurName2
                               AND Customer.Company   MATCHES '*' + lcCompany + '*'"}.
               END.
               ELSE IF lcFirstName NE "" AND lcSurName1 = "" AND lcSurName2 NE "" AND lcCompany NE "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.FirstName  MATCHES '*' + lcFirstName + '*'"
                               AND Customer.SurName2  >= lcSurName2
                               AND Customer.Company MATCHES '*' + lcCompany + '*'"}.
               END.
               ELSE IF lcFirstName NE "" AND lcSurName1 NE "" AND lcSurName2 = "" AND lcCompany NE "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.FirstName MATCHES '*' + lcFirstName + '*'"
                               AND Customer.CustName  >= lcSurName1
                               AND Customer.Company MATCHES '*' + lcCompany + '*'"}.
               END.
               ELSE IF lcFirstName NE "" AND lcSurName1 NE "" AND lcSurName2 NE "" AND lcCompany = "" THEN DO:
-                 {custfind.i FIRST CustName 
+                 {Mc/custfind.i FIRST CustName 
                              "AND Customer.FirstName MATCHES '*' + lcFirstName + '*'"
                               AND Customer.CustName  >= lcSurName1
                               AND Customer.SurName2  >= lcSurName2"}.
@@ -1502,7 +1502,7 @@ repeat WITH FRAME sel:
 
            if lcZip <> "" THEN DO:
 
-              {custfind.i FIRST ZipCode "AND Customer.ZipCode >= lcZip"}.
+              {Mc/custfind.i FIRST ZipCode "AND Customer.ZipCode >= lcZip"}.
 
               IF NOT fRecFound(3) THEN NEXT BROWSE.
 
@@ -1520,7 +1520,7 @@ repeat WITH FRAME sel:
            HIDE FRAME search-6 no-pause.
            if OrgId <> "" THEN DO:
 
-              {custfind.i FIRST OrgId "AND Customer.OrgId >= OrgId"}.
+              {Mc/custfind.i FIRST OrgId "AND Customer.OrgId >= OrgId"}.
 
               IF NOT fRecFound(4) THEN NEXT BROWSE.
 
@@ -1876,7 +1876,7 @@ PROCEDURE local-update-customer:
       pdMobSubActLimit
       Customer.DataProtected 
       WITH FRAME lis
-      {nnasse.i}
+      {Mc/nnasse.i}
 
 
       /* cross reference checks */  
@@ -2569,39 +2569,39 @@ PROCEDURE local-disp-row:
 END PROCEDURE.
 
 PROCEDURE pFindFirst.
-   IF      order = 1 THEN DO: {custfind.i FIRST CustNum
+   IF      order = 1 THEN DO: {Mc/custfind.i FIRST CustNum
                                           "AND Customer.CustNum > 1000"}. END.
-   ELSE IF order = 2 THEN DO: {custfind.i FIRST CustName
+   ELSE IF order = 2 THEN DO: {Mc/custfind.i FIRST CustName
                                           "AND Customer.CustNum > 1000"}. END.
-   ELSE IF order = 3 THEN DO: {custfind.i FIRST ZipCode
+   ELSE IF order = 3 THEN DO: {Mc/custfind.i FIRST ZipCode
                                           "AND Customer.CustNum > 1000"}. END.
-   ELSE IF order = 4 THEN DO: {custfind.i FIRST OrgId
+   ELSE IF order = 4 THEN DO: {Mc/custfind.i FIRST OrgId
                                           "AND Customer.CustNum > 1000"}. END.
-   ELSE IF order = 5 THEN DO: {custfind.i FIRST SearchName
+   ELSE IF order = 5 THEN DO: {Mc/custfind.i FIRST SearchName
                                           "AND Customer.CustNum > 1000"}. END.
 END PROCEDURE. 
 
 PROCEDURE pFindLast.
-   IF      order = 1 THEN DO: {custfind.i LAST CustNum}.    END.
-   ELSE IF order = 2 THEN DO: {custfind.i LAST CustName}.   END.
-   ELSE IF order = 3 THEN DO: {custfind.i LAST ZipCode}.    END.
-   ELSE IF order = 4 THEN DO: {custfind.i LAST OrgId}.      END.
-   ELSE IF order = 5 THEN DO: {custfind.i LAST SearchName}. END.
+   IF      order = 1 THEN DO: {Mc/custfind.i LAST CustNum}.    END.
+   ELSE IF order = 2 THEN DO: {Mc/custfind.i LAST CustName}.   END.
+   ELSE IF order = 3 THEN DO: {Mc/custfind.i LAST ZipCode}.    END.
+   ELSE IF order = 4 THEN DO: {Mc/custfind.i LAST OrgId}.      END.
+   ELSE IF order = 5 THEN DO: {Mc/custfind.i LAST SearchName}. END.
 END PROCEDURE.
 
 PROCEDURE pFindNext.
-   IF      order = 1 THEN DO: {custfind.i NEXT CustNum}.    END.
-   ELSE IF order = 2 THEN DO: {custfind.i NEXT CustName}.   END.
-   ELSE IF order = 3 THEN DO: {custfind.i NEXT ZipCode}.    END.
-   ELSE IF order = 4 THEN DO: {custfind.i NEXT OrgId}.      END.
-   ELSE IF order = 5 THEN DO: {custfind.i NEXT SearchName}. END.
+   IF      order = 1 THEN DO: {Mc/custfind.i NEXT CustNum}.    END.
+   ELSE IF order = 2 THEN DO: {Mc/custfind.i NEXT CustName}.   END.
+   ELSE IF order = 3 THEN DO: {Mc/custfind.i NEXT ZipCode}.    END.
+   ELSE IF order = 4 THEN DO: {Mc/custfind.i NEXT OrgId}.      END.
+   ELSE IF order = 5 THEN DO: {Mc/custfind.i NEXT SearchName}. END.
 END PROCEDURE.
 
 PROCEDURE pFindPrev.
-   IF      order = 1 THEN DO: {custfind.i PREV CustNum}.    END.
-   ELSE IF order = 2 THEN DO: {custfind.i PREV CustName}.   END.
-   ELSE IF order = 3 THEN DO: {custfind.i PREV ZipCode}.    END.
-   ELSE IF order = 4 THEN DO: {custfind.i PREV OrgId}.      END.
-   ELSE IF order = 5 THEN DO: {custfind.i PREV SearchName}. END.
+   IF      order = 1 THEN DO: {Mc/custfind.i PREV CustNum}.    END.
+   ELSE IF order = 2 THEN DO: {Mc/custfind.i PREV CustName}.   END.
+   ELSE IF order = 3 THEN DO: {Mc/custfind.i PREV ZipCode}.    END.
+   ELSE IF order = 4 THEN DO: {Mc/custfind.i PREV OrgId}.      END.
+   ELSE IF order = 5 THEN DO: {Mc/custfind.i PREV SearchName}. END.
 END PROCEDURE.
 

@@ -9,11 +9,11 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{coinv.i}
-{eventval.i}
-{bundle_first_month_fee.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/coinv.i}
+{Syst/eventval.i}
+{Mm/bundle_first_month_fee.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER iiFFNum     AS INT  NO-UNDO.
 DEF INPUT  PARAMETER idtEnd      AS DATE NO-UNDO.  /* end date */

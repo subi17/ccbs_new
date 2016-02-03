@@ -7,13 +7,13 @@
  */
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN gcBrand = "1"
        katun   = "tmsrpc".
-{cparam2.i}
-{tmsconst.i}
-{msreqfunc.i}
-{eventval.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
 
 DEF VAR pcHashKey      AS CHAR   NO-UNDO.
 DEF VAR piRequestId    AS INT    NO-UNDO.

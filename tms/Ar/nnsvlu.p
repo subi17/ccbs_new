@@ -26,10 +26,10 @@
  VERSION .......: M15
 ============================================================================*/
 
-{commali.i}
-{utumaa.i "new"}
-{cparam2.i}
-{ddtrans.i}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
+{Func/cparam2.i}
+{Ar/ddtrans.i}
 
 ASSIGN tuni1 = "nnsvlu"
        tuni2 = "".
@@ -162,7 +162,7 @@ ASSIGN tila = TRUE
               STRING(DAY(TODAY),"99")    +
               "_" + STRING(TIME) + ".txt".
 
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 ehto = 5.
 RUN ufkey.

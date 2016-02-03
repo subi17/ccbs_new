@@ -31,10 +31,10 @@
  */
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
-{fmakemsreq.i}
+{Func/timestamp.i}
+{Func/fmakemsreq.i}
 
 /* Input parameters */
 DEF VAR piCustNum AS INT NO-UNDO.

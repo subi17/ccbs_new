@@ -9,8 +9,8 @@
   Version ......: TF
   ------------------------------------------------------ */
 
-{commali.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Func/fcustdata.i}
 
 DEF INPUT  PARAMETER icCriteria AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER icValue    AS CHAR NO-UNDO.

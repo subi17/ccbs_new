@@ -29,16 +29,16 @@
                   OUTPUT Kille
   -------------------------------------------------------------------------- */
 
-{commali.i} 
-{tmsconst.i}
-{func.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'OrdStat'}
-{eventval.i}
-{matrix.i}
-{cparam2.i}
-{fdss.i}
-{barrfunc.i}
+{Syst/commali.i} 
+{Syst/tmsconst.i}
+{Func/func.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'OrdStat'}
+{Syst/eventval.i}
+{Func/matrix.i}
+{Func/cparam2.i}
+{Func/fdss.i}
+{Func/barrfunc.i}
 IF llDoEvent THEN DO:
 
   &GLOBAL-DEFINE STAR_EVENT_USER katun

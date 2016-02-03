@@ -14,9 +14,9 @@
   Version ......: SCRUNKO4 (10.06.99)
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
-{func.i}
+{Syst/commali.i}
+{Func/msisdn.i}
+{Func/func.i}
 
 DEFINE TEMP-TABLE ttCall LIKE MobCDR.
 
@@ -51,7 +51,7 @@ DEF VAR SL_prefix    AS C                      NO-UNDO.
 DEF VAR roamview     AS i                      NO-UNDO.
 DEF VAR lcTime       AS C                      NO-UNDO.
 
-{tmsparam.i DefMSISDNPr  return} SL_prefix = TMSParam.CharVal.
+{Func/tmsparam.i DefMSISDNPr  return} SL_prefix = TMSParam.CharVal.
 
 form
     MobCDR.DateSt  

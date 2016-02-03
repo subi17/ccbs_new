@@ -8,9 +8,9 @@
   Version ......: Yoigo
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{msreqfunc.i}
-{billrund.i NEW}
+{Syst/commali.i}
+{Func/msreqfunc.i}
+{Inv/billrund.i NEW}
 
 DEF INPUT  PARAMETER iiRequest AS INT NO-UNDO.
 

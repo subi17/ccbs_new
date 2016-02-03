@@ -12,8 +12,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i "new"}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnmttu"
        tuni2 = "".
@@ -132,7 +132,7 @@ toimi:
    if not b-exc then s-head = s-head + " with exceeded limit".
 
    tila = TRUE.
-   {tmsreport.i "leave rajat"}
+   {Syst/tmsreport.i "leave rajat"}
 
    message "Printing ...".
    FOR EACH MthCall no-lock  where
@@ -213,7 +213,7 @@ toimi:
 
    PUT STREAM tul UNFORMATTED skip(spit1 - rl).
    ASSIGN tila = FALSE.
-   {tmsreport.i}
+   {Syst/tmsreport.i}
 
    IF i = 0 THEN DO:
       BELL.

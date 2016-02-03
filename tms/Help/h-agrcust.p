@@ -8,8 +8,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Func/fcustdata.i}
 
 DEF INPUT PARAMETER icOrgID AS CHAR NO-UNDO.
 

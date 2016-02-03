@@ -7,7 +7,7 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER iiFatNum    AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER oiVoucher   AS INT  NO-UNDO.

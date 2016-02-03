@@ -9,13 +9,13 @@
   Version ......: M15
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN gcBrand = "1" 
        katun   = "csb19b".
        
-{cparam2.i}
-{eventlog.i}
+{Func/cparam2.i}
+{Func/lib/eventlog.i}
 
 DEF VAR liCount    AS INT  NO-UNDO.
 DEF VAR liFiles    AS INT  NO-UNDO.

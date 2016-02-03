@@ -1,5 +1,5 @@
-{testpaa.i}
-{fmakemsreq.i}
+{Syst/testpaa.i}
+{Func/fmakemsreq.i}
 
 katun = "ari".
 

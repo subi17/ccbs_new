@@ -14,10 +14,10 @@ DEF VAR ufkey       AS LOG NO-UNDO  init TRUE.
 DEF VAR i           AS i   NO-UNDO.
 DEF VAR new_custlet AS LOG NO-UNDO INIT FALSE.
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CustLetter'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CustLetter'}
 
 IF llDoEvent THEN 
 DO:

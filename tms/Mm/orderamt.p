@@ -18,8 +18,8 @@ DEF VAR lcValue      AS CHAR  NO-UNDO.
 DEF VAR liParam      AS INT   NO-UNDO EXTENT 3.
 DEF VAR liCount      AS INT   NO-UNDO.
 
-{commali.i}   
-{cparam2.i}
+{Syst/commali.i}   
+{Func/cparam2.i}
 
     /* If the rights to use this module have been already cheked and */
     /* accepted, there is no meaning to ask it again.                */

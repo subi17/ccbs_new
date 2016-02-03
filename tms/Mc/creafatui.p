@@ -8,9 +8,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{fcustdata.i}
-{fixedfee.i}
+{Syst/commali.i}
+{Func/fcustdata.i}
+{Func/fixedfee.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO. 
 DEF INPUT PARAMETER iiMsSeq   AS INT NO-UNDO. 

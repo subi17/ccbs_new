@@ -43,16 +43,16 @@
   Version ......: M15
  ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'SubSer'}
-{cparam2.i}
-{eventval.i}
-{msisdn.i}
-{ffeecont.i}
-{timestamp.i}
-{fmakemsreq.i}
-{service.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'SubSer'}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Func/msisdn.i}
+{Func/ffeecont.i}
+{Func/timestamp.i}
+{Func/fmakemsreq.i}
+{Func/service.i}
 
 DEF TEMP-TABLE ttSubSer NO-UNDO
    LIKE SubSer.
@@ -65,7 +65,7 @@ DEF TEMP-TABLE ttRequest NO-UNDO
    FIELD Service AS CHAR
    INDEX ReqID ReqID.
    
-{sername.i}
+{Func/sername.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

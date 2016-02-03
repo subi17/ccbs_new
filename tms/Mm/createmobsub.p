@@ -22,27 +22,27 @@
   Version ......: yoigo
 -------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{msisdn.i}
-{forderstamp.i}
-{ftaxdata.i}
-{ftopup.i}
-{fmakemsreq.i}
-{msreqfunc.i}
-{service.i}
-{ftmrlimit.i}
-{fsmsreq.i}
-{orderfunc.i}
-{fsubsterminal.i}
-{invoicetarget.i}
-{fdss.i}
-{orderchk.i}
-{fmakesms.i}
-{transname.i}
-{fbundle.i}
-{fbankdata.i}
-{create_eventlog.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/msisdn.i}
+{Func/forderstamp.i}
+{Func/ftaxdata.i}
+{Func/ftopup.i}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Func/service.i}
+{Func/ftmrlimit.i}
+{Func/fsmsreq.i}
+{Func/orderfunc.i}
+{Func/fsubsterminal.i}
+{Mc/invoicetarget.i}
+{Func/fdss.i}
+{Func/orderchk.i}
+{Func/fmakesms.i}
+{Func/transname.i}
+{Mm/fbundle.i}
+{Func/fbankdata.i}
+{Func/create_eventlog.i}
 
 DEF INPUT  PARAMETER iiMSRequest AS INT  NO-UNDO.
 
@@ -239,7 +239,7 @@ IF Customer.DataProtected = TRUE THEN DO:
    FIND CURRENT Customer NO-LOCK NO-ERROR.
 END.
 
-{cr_bscode.i}
+{Mm/cr_bscode.i}
 
    
 ASSIGN

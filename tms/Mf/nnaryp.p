@@ -8,9 +8,9 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'AreaPair'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'AreaPair'}
 
 DEF INPUT PARAMETER AreaCode LIKE AreaCode.AreaCode NO-UNDO.
 

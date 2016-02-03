@@ -8,7 +8,7 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR lcStatus AS CHAR NO-UNDO.
 

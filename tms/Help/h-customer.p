@@ -8,8 +8,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Func/fcustdata.i}
 
 DEF INPUT PARAMETER iiMainCust AS INT  NO-UNDO.
 DEF INPUT PARAMETER icMainType AS CHAR NO-UNDO.

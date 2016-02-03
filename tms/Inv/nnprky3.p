@@ -13,12 +13,12 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
-{feplstart.i}
-{eplspec.i}
-{timestamp.i}
+{Syst/utumaa.i "new"}
+{Func/feplstart.i}
+{Inv/eplspec.i}
+{Func/timestamp.i}
 
 assign tuni1 = "nnpura3"
        tuni2 = "".
@@ -293,7 +293,7 @@ ELSE IF liPrintTo = 2 THEN DO:
 
     
    ASSIGN tila = TRUE.
-   {utuloste.i "return"}
+   {Syst/utuloste.i "return"}
 
    RUN umakro (lcMacros).
 END.
@@ -335,7 +335,7 @@ END.
  
 ELSE IF liPrintTo = 2 THEN DO: 
    ASSIGN tila = FALSE.
-   {utuloste.i}
+   {Syst/utuloste.i}
 END.
 
 IF lcErrFile = "" AND liError NE -1 THEN DO:

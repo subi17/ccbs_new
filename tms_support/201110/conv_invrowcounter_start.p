@@ -1,6 +1,6 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "qvantel".
-{timestamp.i}
+{Func/timestamp.i}
 
 DEF VAR liCount AS INT  NO-UNDO. 
 DEF VAR i AS INT NO-UNDO.

@@ -1,8 +1,8 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "snet".
 
-{timestamp.i}
-{ftaxdata.i}
+{Func/timestamp.i}
+{Func/ftaxdata.i}
 
 def stream sread.
 def stream sdone.

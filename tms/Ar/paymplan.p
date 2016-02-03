@@ -14,15 +14,15 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable PaymPlan
 
-{commali.i}
-{cparam2.i}
-{finvbal.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PaymPlan'}
-{fpaymplan.i}
-{fppinv.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/finvbal.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PaymPlan'}
+{Func/fpaymplan.i}
+{Func/fppinv.i}
+{Func/timestamp.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -216,7 +216,7 @@ FORM
    WITH SIDE-LABELS OVERLAY ROW 4 CENTERED 
         TITLE " NEW PLAN " FRAME fCreate.
         
-{brand.i}
+{Func/brand.i}
 
 form /* seek  */
     "Brand:" lcBrand skip
@@ -780,7 +780,7 @@ REPEAT WITH FRAME sel:
 
      /* automatic creation of payment plan */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 THEN DO TRANS:  
-       {uright2.i}
+       {Syst/uright2.i}
 
        ASSIGN ldtFromDate = ?
               ldtToDate   = ?
@@ -947,7 +947,7 @@ REPEAT WITH FRAME sel:
      END.
  
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:  /* Invoices */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this (FALSE).
        liAutoRun = 0.
        IF AVAILABLE PaymPlan 
@@ -961,7 +961,7 @@ REPEAT WITH FRAME sel:
      END.
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:  /* batches */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this (FALSE).
        liAutoRun = 0.
        IF AVAILABLE PaymPlan 
@@ -981,14 +981,14 @@ REPEAT WITH FRAME sel:
      END.
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0 THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0 
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 

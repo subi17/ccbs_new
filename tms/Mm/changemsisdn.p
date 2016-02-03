@@ -10,14 +10,14 @@
   ---------------------------------------------------------------------- */
 
 
-{commali.i}
-{msisdn.i}
-{fcustbal.i}
-{msreqfunc.i}
-{eventval.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{create_eventlog.i}
+{Syst/commali.i}
+{Func/msisdn.i}
+{Func/fcustbal.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/create_eventlog.i}
 
 DEF INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 

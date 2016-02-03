@@ -8,10 +8,10 @@
 
 &GLOBAL-DEFINE BrTable DiscountPlan
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'DiscountPlan'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'DiscountPlan'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -71,7 +71,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
        string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     DiscountPlan.Brand          COLON 25
@@ -335,7 +335,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DiscountPlan.DPRuleID {uchoose.i} NO-ERROR 
+        CHOOSE ROW DiscountPlan.DPRuleID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DiscountPlan.DPRuleID WITH FRAME sel.
       END.

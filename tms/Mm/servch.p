@@ -9,9 +9,9 @@
   VERSION ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Order'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Order'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 

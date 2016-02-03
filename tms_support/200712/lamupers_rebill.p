@@ -170,24 +170,24 @@
             23.08.2007/aam ttIr and whole invoice as msseq based
 */
 
-{commali.i}                                                                   
-{country.i}
-{fixedfee.i}
-{cparam.i2}
-{timestamp.i}
-{fapvat.i}
-{billrund.i {1}}
-{fcustbal.i}
-{fcustcnt.i}
-{nncoit2.i}
-{fcurrency.i}
-{eventval.i}
-{fvasinv.i}
-{fduedate.i}
-{fsubser.i}
-{eventlog.i}
-{finvnum.i}
-{ftaxdata.i}
+{Syst/commali.i}                                                                   
+{Syst/country.i}
+{Func/fixedfee.i}
+{Func/cparam.i2}
+{Func/timestamp.i}
+{Func/fapvat.i}
+{Inv/billrund.i {1}}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Func/nncoit2.i}
+{Func/fcurrency.i}
+{Syst/eventval.i}
+{Func/fvasinv.i}
+{Func/fduedate.i}
+{Func/fsubser.i}
+{Func/lib/eventlog.i}
+{Func/finvnum.i}
+{Func/ftaxdata.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -400,22 +400,22 @@ with row 3 centered overlay
    12 DOWN FRAME LOG.
 
 
-{tmsparam.i ReceivAcc      RETURN} ReceivAcc  = TMSParam.IntVal.
-{tmsparam.i RoundAcc       RETURN} RoundAcc   = TMSParam.IntVal.
-{tmsparam.i OTIntAcc       RETURN} OTIntAcc   = TMSParam.IntVal.
-{tmsparam.i OverPayAcc     RETURN} OverPayAcc = TMSParam.IntVal.
-{tmsparam.i CreditLossAcc  RETURN} liCLossAcc = TMSParam.IntVal.
+{Func/tmsparam.i ReceivAcc      RETURN} ReceivAcc  = TMSParam.IntVal.
+{Func/tmsparam.i RoundAcc       RETURN} RoundAcc   = TMSParam.IntVal.
+{Func/tmsparam.i OTIntAcc       RETURN} OTIntAcc   = TMSParam.IntVal.
+{Func/tmsparam.i OverPayAcc     RETURN} OverPayAcc = TMSParam.IntVal.
+{Func/tmsparam.i CreditLossAcc  RETURN} liCLossAcc = TMSParam.IntVal.
 /* NOT mandatory */
-{tmsparam.i AdvPaymAcc}   IF AVAILABLE TMSParam THEN 
+{Func/tmsparam.i AdvPaymAcc}   IF AVAILABLE TMSParam THEN 
                                        AdvPaymAcc = tmsparam.intVal.
-{tmsparam.i ProdNoBill     RETURN} lNotBilled = TMSParam.CharVal.
-{tmsparam.i BillInterest}   IF AVAILABLE TMSParam THEN
+{Func/tmsparam.i ProdNoBill     RETURN} lNotBilled = TMSParam.CharVal.
+{Func/tmsparam.i BillInterest}   IF AVAILABLE TMSParam THEN
                                        llBillInt = (TMSParam.IntVal = 1). 
-{tmsparam.i BillDblVat}   IF AVAILABLE TMSParam THEN
+{Func/tmsparam.i BillDblVat}   IF AVAILABLE TMSParam THEN
                                        llAllowDbl = (TMSParam.IntVal = 1). 
-{tmsparam.i CLossCustomer  RETURN} liCLossCust = TMSParam.IntVal.
-{tmsparam.i PrefixBillItem RETURN} lcMarkPref  = TMSParam.CharVal.
-{tmsparam.i InvCustCombine}   IF AVAILABLE TMSParam THEN
+{Func/tmsparam.i CLossCustomer  RETURN} liCLossCust = TMSParam.IntVal.
+{Func/tmsparam.i PrefixBillItem RETURN} lcMarkPref  = TMSParam.CharVal.
+{Func/tmsparam.i InvCustCombine}   IF AVAILABLE TMSParam THEN
                                        llInvComb = (TMSParam.IntVal = 1). 
 ASSIGN lcOwnUse   = fCParamC("OwnUseCategory")
        liOwnUsePA = fCParamI("OwnUsePaymAcc")

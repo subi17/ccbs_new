@@ -8,9 +8,9 @@
   VERSION ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "contrel"
        tuni2 = "".
@@ -249,7 +249,7 @@ ehto = 5.
 run ufkey.
 
 tila = true.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 run contrep (lcInvGroup[1],
              lcInvGroup[2],
@@ -268,7 +268,7 @@ run contrep (lcInvGroup[1],
              liClosed).
 
 tila = false.
-{utuloste.i}
+{Syst/utuloste.i}
 
 MESSAGE "Contract report is finished."
 VIEW-AS ALERT-BOX

@@ -16,12 +16,12 @@
 
 &GLOBAL-DEFINE BrTable ITSendLog
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ITSendLog'}
-{timestamp.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ITSendLog'}
+{Func/timestamp.i}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -112,7 +112,7 @@ WITH  OVERLAY ROW 4 centered
     SIDE-LABELS 
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek  ITSendLog */
     "Brand ..:" lcBrand skip

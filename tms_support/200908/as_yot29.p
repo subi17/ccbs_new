@@ -1,6 +1,6 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "anttis".
-{barrfunc.i}
+{Func/barrfunc.i}
 
 def var lcline  as char no-undo.
 def var lccli   as char no-undo.

@@ -9,18 +9,18 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MNPProcess'}
-{fcustdata.i}
-{date.i}
-{tmsconst.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MNPProcess'}
+{Func/fcustdata.i}
+{Func/date.i}
+{Syst/tmsconst.i}
 
 DEFINE INPUT PARAMETER piOrderId AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER piStatus AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER piMNPType AS INTEGER NO-UNDO.
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

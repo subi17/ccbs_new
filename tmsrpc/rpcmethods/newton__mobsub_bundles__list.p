@@ -7,10 +7,10 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{tmsconst.i}
-{fbundle.i}
+{Syst/tmsconst.i}
+{Mm/fbundle.i}
 
 DEF VAR lcResultArray       AS CHAR NO-UNDO. 
 DEF VAR pcStruct            AS CHAR NO-UNDO. 

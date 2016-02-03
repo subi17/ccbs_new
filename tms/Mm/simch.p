@@ -13,14 +13,14 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'SIM'}
-{fmakemsreq.i}
-{msreqfunc.i}
-{mnpoutchk.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'SIM'}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Mnp/mnpoutchk.i}
+{Syst/tmsconst.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE 
@@ -173,8 +173,8 @@ END.
 **************************************************************************/
 
 /* search the default "lost-string" of SIMStat */
-{tmsparam.i SIMStatusLost return} ss-code-lost = TMSParam.IntVal.
-{tmsparam.i SIMStatusAtc  return} ss-code-atc  = TMSParam.IntVal.
+{Func/tmsparam.i SIMStatusLost return} ss-code-lost = TMSParam.IntVal.
+{Func/tmsparam.i SIMStatusAtc  return} ss-code-atc  = TMSParam.IntVal.
 
 
 

@@ -39,14 +39,14 @@
   Version ......: M15
   ---------------------------------------------------------------------------*/
 
-{commali.i}
-{timestamp.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoice'}
-{fctype.i}
-{fduedate.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoice'}
+{Func/fctype.i}
+{Func/fduedate.i}
+{Func/cparam2.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

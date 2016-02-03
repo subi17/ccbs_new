@@ -1,7 +1,7 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "anttis".
 
-{barrfunc.i}
+{Func/barrfunc.i}
 
 FUNCTION fCheckStatus2 RETURNS CHARACTER
 (INPUT iiMsSeq AS INTEGER,

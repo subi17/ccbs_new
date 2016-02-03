@@ -8,13 +8,13 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
-{faccper.i}
-{finvpayment.i}
-{fpaymconfig.i}
-{ftaxdata.i}
-{eventval.i}
+{Func/faccper.i}
+{Func/finvpayment.i}
+{Func/fpaymconfig.i}
+{Func/ftaxdata.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

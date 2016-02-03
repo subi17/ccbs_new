@@ -8,10 +8,10 @@
   ------------------------------------------------------ */
 
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{cparam2.i}
-{email.i}
+{Func/cparam2.i}
+{Func/email.i}
 
 DEF VAR lcConfDir    AS CHAR NO-UNDO.
 DEF VAR lcFile       AS CHAR NO-UNDO.

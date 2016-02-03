@@ -27,9 +27,9 @@
   Version ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'eventlog'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'eventlog'}
 
 DEF INPUT PARAMETER xxkey LIKE Eventlog.Key NO-UNDO.
 DEF VAR xxvalues LIKE Eventlog.DataValues   NO-UNDO.

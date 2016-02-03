@@ -7,14 +7,14 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
  
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
-{timestamp.i}
-{log.i}
-{ftransdir.i}
-{replog_reader.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Func/log.i}
+{Func/ftransdir.i}
+{Func/replog_reader.i}
+{Syst/tmsconst.i}
 
 FORM
    SKIP

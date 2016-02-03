@@ -8,8 +8,8 @@
   Version ......: Yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{invfilterkey.i}
+{Syst/commali.i}
+{Ar/invfilterkey.i}
 
 DEF INPUT  PARAMETER TABLE FOR ttFilter.
 DEF INPUT  PARAMETER iiFilterType AS INT  NO-UNDO. 

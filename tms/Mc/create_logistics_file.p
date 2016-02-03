@@ -10,24 +10,24 @@
 
 &GLOBAL-DEFINE MailTitleSpaces Allow
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Cron".
 gcBrand = "1".
 
-{tmsconst.i}
-{date.i}
-{fwebuser.i}
-{transname.i}
-{ftaxdata.i}
-{eventlog.i}
-{log.i}
-{ftransdir.i}
-{tmsparam4.i}
-{forderstamp.i}
-{orderfunc.i}
-{fbundle.i}
-{mnp.i}
-{email.i}
+{Syst/tmsconst.i}
+{Func/date.i}
+{Func/fwebuser.i}
+{Func/transname.i}
+{Func/ftaxdata.i}
+{Func/lib/eventlog.i}
+{Func/log.i}
+{Func/ftransdir.i}
+{Func/tmsparam4.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
+{Mm/fbundle.i}
+{Mnp/mnp.i}
+{Func/email.i}
 
 DEFINE VARIABLE lcLogFile          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName         AS CHARACTER NO-UNDO.

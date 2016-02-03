@@ -8,8 +8,8 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i "new"}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
 
 ASSIGN tuni1 = "pbankrel"
        tuni2 = "".
@@ -157,7 +157,7 @@ END. /* toimi */
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 MESSAGE "Printing in process".            
 
@@ -166,7 +166,7 @@ run pbankrep (InvGroup,
               ldtPaid2).
 
 ASSIGN tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 MESSAGE "Payments' bank account report is finished."
 VIEW-AS ALERT-BOX

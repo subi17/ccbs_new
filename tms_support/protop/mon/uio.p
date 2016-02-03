@@ -40,11 +40,11 @@
  *
  */
 
-{lib/protop.i}
+{tms_support/protop/lib/protop.i}
 
 define variable support  as character no-undo initial "User IO".
 
-{lib/tt_xstat.i}
+{tms_support/protop/lib/tt_xstat.i}
 
 /* restart
  *

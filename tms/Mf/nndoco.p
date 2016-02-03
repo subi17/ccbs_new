@@ -25,19 +25,19 @@
   VERSION ......: M15
   ------------------------------------------------------------------ */
 
-{errors.i}
+{Mf/errors.i}
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'fixcdr'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'fixcdr'}
 
 
 def buffer double  for FIXcdr.
 def buffer bufcdr  for FIXcdr.
 def buffer delcall for FIXcdr.
-{deldouble.i}
+{Mf/deldouble.i}
 
-{excel.i}
+{Func/excel.i}
 
 def var exdir     as c  no-undo.
 def var exname    as c  no-undo.

@@ -8,7 +8,7 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER iiOrderId     AS INT  NO-UNDO.
 DEF INPUT PARAMETER icContractId  AS CHAR NO-UNDO.

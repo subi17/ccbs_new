@@ -12,7 +12,7 @@
             31.05.2007/aam SendMailX,
                            attachments are no longer mandatory with sendatt
 */
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR xMailRecip    AS CHAR NO-UNDO.
 DEF VAR xMailAddr     AS CHAR NO-UNDO.

@@ -21,15 +21,15 @@
  * @output success;boolean
  */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "Newton".
 
-{fbankdata.i}
-{fctchange.i}
-{fmakemsreq.i}
-{fcharge_comp_loaded.i}
-{tmsconst.i}
+{Func/fbankdata.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/fcharge_comp_loaded.i}
+{Syst/tmsconst.i}
 
 /* Input parameters */
 DEF VAR pcMSISDN             AS CHAR NO-UNDO.

@@ -25,9 +25,9 @@
   VERSION ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i "new"}
-{ageanal.i}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
+{Ar/ageanal.i}
 
 assign tuni1 = "nnikaj"
        tuni2 = "".
@@ -307,7 +307,7 @@ EMPTY TEMP-TABLE TCustGroup.
 
 IF ttCriter.ToFile = "" THEN DO:
    assign tila = true.
-   {utuloste.i "return"}
+   {Syst/utuloste.i "return"}
 END.
 
 message "Printing in process".
@@ -317,7 +317,7 @@ RUN ageanal (INPUT TABLE TCustGroup,
 
 IF ttCriter.ToFile = "" THEN DO:
    assign tila = false.
-   {utuloste.i}
+   {Syst/utuloste.i}
 END.   
 
 MESSAGE "Age analysis report has been printed."

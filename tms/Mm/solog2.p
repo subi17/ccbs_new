@@ -17,15 +17,15 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'SoLog'}
-{solog.i}
-{timestamp.i}
-{eventval.i}
-{sog.i}
-{solog_create.i}
-{fdss.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'SoLog'}
+{Func/solog.i}
+{Func/timestamp.i}
+{Syst/eventval.i}
+{Func/sog.i}
+{Gwy/solog_create.i}
+{Func/fdss.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

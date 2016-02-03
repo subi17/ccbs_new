@@ -6,17 +6,17 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    gcBrand = "1"
    katun   = "fr_daemon".
    
-{heartbeat.i}
-{timestamp.i}
-{log.i}
-{cparam2.i}
-{eventlog.i}
-{host.i}
+{Func/heartbeat.i}
+{Func/timestamp.i}
+{Func/log.i}
+{Func/cparam2.i}
+{Func/lib/eventlog.i}
+{Syst/host.i}
 
 DEF VAR liLoop               AS INT  NO-UNDO.
 DEF VAR lcLockFile           AS CHAR NO-UNDO.

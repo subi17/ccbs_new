@@ -32,10 +32,10 @@ DEFINE VARIABLE lcMnpStatusReason   AS CHARACTER  NO-UNDO.
 DEFINE VARIABLE liOnlySimAmt        AS INTEGER    NO-UNDO.
 DEFINE VARIABLE lcTopUpScheme       AS CHARACTER  NO-UNDO.
 
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
-{tmsconst.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Func/ftransdir.i}
+{Syst/tmsconst.i}
 
 DEFINE STREAM slog.
 

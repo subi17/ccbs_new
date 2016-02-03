@@ -6,17 +6,17 @@
   CREATED ......: 12.6.2013
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
-{cparam2.i}
-{timestamp.i}
-{tmsconst.i}
-{tsformat.i}
-{ftransdir.i}
-{eventlog.i}
-{coinv.i}
-{host.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/tsformat.i}
+{Func/ftransdir.i}
+{Func/lib/eventlog.i}
+{Func/coinv.i}
+{Syst/host.i}
       
 &GLOBAL-DEFINE TF_PAYTERM_CODES "0018,0024,0034,0125,0127,0129,0131,0225,0227,0229,0231"
 &GLOBAL-DEFINE TF_PAYTERM_WITH_RESIDUAL "0125,0127,0129,0131,0225,0227,0229,0231"

@@ -1,8 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "anttis".
 gcBrand = "1".
-{timestamp.i}
-{barrfunc.i}
+{Func/timestamp.i}
+{Func/barrfunc.i}
 
 DEF VAR lrOLBRec      AS RECID                  NO-UNDO.
 

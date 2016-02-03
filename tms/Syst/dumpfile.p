@@ -10,10 +10,10 @@
 
 &GLOBAL-DEFINE BrTable DumpFile
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'DumpFile'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'DumpFile'}
+{Syst/eventval.i}
 
 DEF BUFFER bItemValue FOR TMRItemValue.
 
@@ -76,7 +76,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
        string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     DumpFile.Brand          COLON 20

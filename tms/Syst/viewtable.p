@@ -7,10 +7,10 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 
-{commali.i}        
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
-{eventval.i}
+{Syst/commali.i}        
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
+{Syst/eventval.i}
 
 DEFINE INPUT PARAMETER ihTable  AS HANDLE NO-UNDO. 
 

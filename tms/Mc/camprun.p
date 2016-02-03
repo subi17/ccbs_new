@@ -14,13 +14,13 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{camprundf.i}
-{fcustpl.i}
-{nncoit2.i}
-{timestamp.i}
-{fmakeservlimit.i}
-{setfees.i}
+{Syst/commali.i}
+{Mc/camprundf.i}
+{Func/fcustpl.i}
+{Func/nncoit2.i}
+{Func/timestamp.i}
+{Func/fmakeservlimit.i}
+{Func/setfees.i}
 
 DEF STREAM sLog.
 OUTPUT STREAM sLog TO /apps/tms/snet/camrun.log append.

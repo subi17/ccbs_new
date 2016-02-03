@@ -18,16 +18,16 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "NewtonRPC".
-{date.i}
-{orderchk.i}
-{order.i}
-{tmsconst.i}
-{timestamp.i}
-{create_eventlog.i}
-{fbundle.i}
+{Func/date.i}
+{Func/orderchk.i}
+{Func/order.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/create_eventlog.i}
+{Mm/fbundle.i}
 
 DEF VAR pcArray              AS CHAR  NO-UNDO.
 DEF VAR pcStruct             AS CHAR  NO-UNDO.

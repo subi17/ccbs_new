@@ -1,4 +1,4 @@
-{heartbeat.i}
+{Func/heartbeat.i}
 
 DEFINE VARIABLE ldaDate     AS DATE      NO-UNDO.
 DEFINE VARIABLE lcTime      AS CHARACTER NO-UNDO.

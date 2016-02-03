@@ -9,12 +9,12 @@
 
 &GLOBAL-DEFINE BrTable RerateLog
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'RerateLog'}
-{timestamp.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'RerateLog'}
+{Func/timestamp.i}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -102,7 +102,7 @@ WITH  OVERLAY ROW 2 centered
     FRAME lis.
 
    
-{brand.i}
+{Func/brand.i}
 
 FORM
    "Brand:" lcBrand skip

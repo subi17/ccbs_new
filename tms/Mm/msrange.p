@@ -14,11 +14,11 @@
 
 &GLOBAL-DEFINE BrTable msrange
 
-{commali.i} 
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MSRange'}
-{msisdn.i}
+{Syst/commali.i} 
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MSRange'}
+{Func/msisdn.i}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -90,7 +90,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 
 form
@@ -139,8 +139,8 @@ VIEW FRAME sel.
 
 orders = "By MSISDN  ,By Customer,By 3, By 4".
 
-{tmsparam.i MSStatusRes return}. stat-res = TMSParam.IntVal.
-{tmsparam.i MSStatusUnr return}. stat-ava = TMSParam.IntVal.
+{Func/tmsparam.i MSStatusRes return}. stat-res = TMSParam.IntVal.
+{Func/tmsparam.i MSStatusUnr return}. stat-ava = TMSParam.IntVal.
 
 FIND FIRST MSRange
 WHERE msrange.Brand = lcBrand NO-LOCK NO-ERROR.

@@ -8,8 +8,8 @@
  * @output success;boolean
  */
 {xmlrpc/xmlrpc_access.i}
-{mnpoutchk.i}
-{commpaa.i}
+{Mnp/mnpoutchk.i}
+{Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".
 

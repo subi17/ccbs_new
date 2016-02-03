@@ -6,16 +6,16 @@
   CREATED ......: 25.11.2013
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
-{cparam2.i}
-{timestamp.i}
-{tmsconst.i}
-{ftransdir.i}
-{email.i}
-{eventlog.i}
-{fusioninvoice.i}
+{Func/cparam2.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/email.i}
+{Func/lib/eventlog.i}
+{Inv/fusioninvoice.i}
 
 DEF VAR lcProcessedFile AS CHAR NO-UNDO.
 DEF VAR lcIncDir AS CHAR NO-UNDO. 

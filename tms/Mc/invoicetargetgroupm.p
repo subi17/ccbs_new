@@ -7,5 +7,5 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 run invoicetargetgroup.p(0).

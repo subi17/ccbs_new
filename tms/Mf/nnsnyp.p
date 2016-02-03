@@ -10,8 +10,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -540,7 +540,7 @@ BROWSE:
      else if lookup(nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
        FIND NumPlan where recid(NumPlan) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.

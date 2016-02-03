@@ -51,12 +51,12 @@
   shared .......: InvNum (INPUT PARAMETER)
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i}
+{Syst/commali.i}
+{Syst/eventval.i}
 
-{faccper.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invrow'}
+{Func/faccper.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invrow'}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

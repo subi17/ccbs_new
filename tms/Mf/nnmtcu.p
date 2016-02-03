@@ -9,9 +9,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mthcall'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mthcall'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 

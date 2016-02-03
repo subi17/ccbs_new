@@ -4,11 +4,11 @@
 &THEN
 &GLOBAL-DEFINE frequestaction YES
 
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
-{cparam2.i}
-{fbundle.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Mm/fbundle.i}
 
 DEF TEMP-TABLE ttAction NO-UNDO
    FIELD ActionType AS CHAR

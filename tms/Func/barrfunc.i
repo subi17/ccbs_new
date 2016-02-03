@@ -12,8 +12,8 @@
 &THEN
 
 &GLOBAL-DEFINE barrfunc YES
-{fmakemsreq.i}
-{tmsconst.i}
+{Func/fmakemsreq.i}
+{Syst/tmsconst.i}
 
 DEFINE TEMP-TABLE ttBarringCmd NO-UNDO
    FIELD BarrCode AS CHAR

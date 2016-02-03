@@ -7,7 +7,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER  xPrinterId LIKE TMSPrinter.PrinterId NO-UNDO.
 DEF OUTPUT PARAMETER xeff    AS c                  NO-UNDO.

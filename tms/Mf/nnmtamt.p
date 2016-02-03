@@ -9,8 +9,8 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
+{Syst/commali.i}
+{Func/excel.i}
 
 DEF VAR Month    AS i  NO-UNDO.
 DEF VAR xMonth   AS i  NO-UNDO EXTENT 12.

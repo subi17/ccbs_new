@@ -10,12 +10,12 @@
 
 
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'UserLimit'}
-{eventval.i}
-{tmsconst.i}
-{fuserright.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'UserLimit'}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Func/fuserright.i}
 
 /* input parameters */
 

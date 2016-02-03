@@ -9,10 +9,10 @@
 
 &GLOBAL-DEFINE BrTable DBConfig
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'DBConfig'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'DBConfig'}
+{Syst/eventval.i}
 
 DEF BUFFER bItemValue FOR TMRItemValue.
 
@@ -71,7 +71,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
        string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     DBConfig.Brand          COLON 20

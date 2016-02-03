@@ -7,17 +7,17 @@
   CREATED ......: 13.6.2013
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
    gcBrand = "1"
    katun   = "Cron".
-{cparam2.i}
-{funcrunprocess_run.i}
-{funcrunprocess_update.i}
-{date.i}
-{tmsconst.i}
-{coinv.i}
-{ftransdir.i}
+{Func/cparam2.i}
+{Syst/funcrunprocess_run.i}
+{Syst/funcrunprocess_update.i}
+{Func/date.i}
+{Syst/tmsconst.i}
+{Func/coinv.i}
+{Func/ftransdir.i}
 
 DEF VAR ldaToDate AS DATE NO-UNDO. 
 DEF VAR liFRProcessID AS INT  NO-UNDO.

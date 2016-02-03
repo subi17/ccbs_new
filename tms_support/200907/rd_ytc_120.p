@@ -1,10 +1,10 @@
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "rafaeldv".
 gcBrand = "1".
 
-{timestamp.i}
-{xmlfunction.i}
+{Func/timestamp.i}
+{Func/xmlfunction.i}
 
 DEFINE VARIABLE cOutputFile AS CHARACTER NO-UNDO INITIAL "ytc_121_4.output".
 DEFINE VARIABLE cLine AS CHARACTER NO-UNDO.  

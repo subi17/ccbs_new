@@ -8,11 +8,11 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "cron".
 
-{eventlog.i}
+{Func/lib/eventlog.i}
 
 fELog("HIGHSPENDER","AdvPaymStarted").
 run highspendnew ("ADVPAYM").

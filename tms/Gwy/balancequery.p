@@ -1,9 +1,9 @@
-{commali.i}
-{xmlfunction.i}
-{mathfunction.i}
-{timestamp.i}
-{cparam2.i}
-{airnodes.i}
+{Syst/commali.i}
+{Func/xmlfunction.i}
+{Func/mathfunction.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Gwy/airnodes.i}
 
 DEFINE INPUT PARAMETER pcCLI AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcTCPModule  AS CHARACTER NO-UNDO INITIAL "tcpgwy" . 

@@ -11,7 +11,7 @@
 
 
 
-{commali.i}
+{Syst/commali.i}
 
 def new shared var uviikko as int format "999999".
 DEF NEW shared VAR uvpvm AS Date.

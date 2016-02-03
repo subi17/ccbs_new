@@ -16,8 +16,8 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i "new"}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "custbalrep"
        tuni2 = ""
@@ -149,13 +149,13 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 
 END. /* toimi */
 
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 RUN custbalrep (liCustNum,
                 ldtFromDate).
 
 tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 IF llCreaFee THEN 
 RUN creasfee (Customer.CustNum,

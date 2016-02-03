@@ -9,9 +9,9 @@
  Version .......: M15
  ============================================================================*/
 
-{commali.i}
-{utumaa.i new}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/utumaa.i new}
+{Syst/eventval.i} 
 
 ASSIGN tuni1 = "*******"
        tuni2 = "".
@@ -83,9 +83,9 @@ WITH
 
 
 /* get default codes */
-{tmsparam.i "MainStock"     return}. Stock1 = TMSParam.CharVal.
-{tmsparam.i "DefDelivStock" return}. Stock2 = TMSParam.CharVal.
-{tmsparam.i "SIMStatusNew"  return}. SIMStat  = TMSParam.IntVal.
+{Func/tmsparam.i "MainStock"     return}. Stock1 = TMSParam.CharVal.
+{Func/tmsparam.i "DefDelivStock" return}. Stock2 = TMSParam.CharVal.
+{Func/tmsparam.i "SIMStatusNew"  return}. SIMStat  = TMSParam.IntVal.
 
 PAUSE 0.
 

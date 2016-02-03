@@ -10,10 +10,10 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{tmsparam4.i}
-{cparam2.i}
-{provmaint.i}
+{Syst/commali.i}
+{Func/tmsparam4.i}
+{Func/cparam2.i}
+{Mc/provmaint.i}
 
 session:system-alert-boxes = true.
 

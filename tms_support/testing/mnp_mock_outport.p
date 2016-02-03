@@ -8,14 +8,14 @@ CHANGED ......:
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
    katun = "Qvantel"
       gcBrand = "1".
-{cparam2.i}
+{Func/cparam2.i}
 {xmlrpc/xmlrpc_client.i}
-{tmsconst.i}
-{timestamp.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
 
 
 DEFINE VARIABLE ocResponse AS CHAR NO-UNDO.

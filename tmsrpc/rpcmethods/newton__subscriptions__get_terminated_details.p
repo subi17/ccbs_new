@@ -43,15 +43,15 @@
                 service;int;0 = no memos, 1 = at least one memo
  */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".
-{tmsconst.i}
-{flimitreq.i}
-{fbundle.i}
-{get_memos.i}
-{timestamp.i}
-{msisdn_prefix.i}
+{Syst/tmsconst.i}
+{Func/flimitreq.i}
+{Mm/fbundle.i}
+{rpcmethods/get_memos.i}
+{Func/timestamp.i}
+{Func/msisdn_prefix.i}
 
 DEF VAR plAdmin AS LOG NO-UNDO.
 

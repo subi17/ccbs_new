@@ -9,8 +9,8 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i "new"}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "balrel"
        tuni2 = "".
@@ -200,7 +200,7 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       
       IF lcFile = "" THEN DO:  
          tila = TRUE.
-         {tmsreport.i "return"}
+         {Syst/tmsreport.i "return"}
       END.
       ELSE DO:
          ehto = 5.
@@ -221,7 +221,7 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 
       IF lcFile = "" THEN DO:
          tila = FALSE.
-         {tmsreport.i}        
+         {Syst/tmsreport.i}        
       END.
       
       MESSAGE "Balance report finished" 

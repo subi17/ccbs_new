@@ -15,10 +15,10 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable CoRule
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'corule'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'corule'}
 
 DEF BUFFER bCoRule  FOR CoRule.
 DEF BUFFER bCoBasis FOR CoBasis.
@@ -173,7 +173,7 @@ WITH  OVERLAY ROW 7 centered
     SIDE-LABELS 
     FRAME fTemplate.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek  */
     "Brand :" lcBrand skip
@@ -652,7 +652,7 @@ REPEAT WITH FRAME sel:
      END.
 
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0 THEN DO:  /* BASIS */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this (FALSE).
        IF AVAILABLE CoRule 
        THEN RUN cobasis (CoRule.CoRuleID). 
@@ -660,7 +660,7 @@ REPEAT WITH FRAME sel:
      END.
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:  /* TARGETS */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this (FALSE).
        IF AVAILABLE CoRule 
        THEN RUN cotarg (CoRule.CoRuleID, "rule"). 
@@ -669,14 +669,14 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" 
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 

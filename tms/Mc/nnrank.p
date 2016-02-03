@@ -15,8 +15,8 @@
   Version ......: M15
 ----------------------------------------------------------------------- */
 
-{commali.i} 
-{utumaa.i "new"}
+{Syst/commali.i} 
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnrank"
        tuni2 = "".
@@ -395,7 +395,7 @@ toimi:
       IF toimi = 6 THEN 
       DO:
          ASSIGN tila = TRUE.
-         {tmsreport.i "return"}
+         {Syst/tmsreport.i "return"}
          llprint = TRUE.
          VIEW STREAM tul FRAME sivuots.
          LEAVE toimi.
@@ -700,7 +700,7 @@ CUSTOMER:
       END.
 
       ASSIGN tila = FALSE.
-      {tmsreport.i}
+      {Syst/tmsreport.i}
    END.
    PAUSE 0.
    IF NOT llprint THEN 

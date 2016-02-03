@@ -22,11 +22,11 @@
   ------------------------------------------------------ */
 &GLOBAL-DEFINE BrTable PNPGroup
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PNPGroup'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PNPGroup'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -42,7 +42,7 @@ IF llDoEvent THEN DO:
    END.
 END.
 
-{remfees.i}
+{Func/remfees.i}
 
 DEF VAR haku-PNPGroup    LIKE PNPGroup.PNPGroup FORMAT "X(11)" NO-UNDO.
 DEF VAR haku-name        LIKE PNPGroup.Name      NO-UNDO.    
@@ -87,7 +87,7 @@ WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1
    + string(pvm,"99-99-99") + " "
 FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
    "Group code :" PNPGroup.PNPGroup FORMAT "X(11)"  SKIP

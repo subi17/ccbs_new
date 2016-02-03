@@ -1,9 +1,9 @@
-{commpaa.i}
-{timestamp.i}
+{Syst/commpaa.i}
+{Func/timestamp.i}
 gcbrand = "1".
 katun = "cron".
 
-{eventlog.i}
+{Func/lib/eventlog.i}
 
 def var period  as int    no-undo.
 DEF VAR liQty   AS INT    NO-UNDO.

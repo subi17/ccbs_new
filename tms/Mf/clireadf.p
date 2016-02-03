@@ -16,12 +16,12 @@
 /* FOR batch RUN */
 IF SESSION:BATCH THEN OUTPUT TO /dev/null.
 
-{commali.i}  /*{commpaa.i} */
-{function.i}
-{timestamp.i}
-{tmsparam2.i}
+{Syst/commali.i}  /*{Syst/commpaa.i} */
+{Func/function.i}
+{Func/timestamp.i}
+{Func/tmsparam2.i}
 
-{cliinlog.i "NEW" "request"}
+{Mf/cliinlog.i "NEW" "request"}
 
 DEFINE BUFFER buf-rsoper FOR rsoper.
 
@@ -72,7 +72,7 @@ lT1EPref = fCParamC("Tele1Pref").
 
 /*---- Functions ------------------------------------------*/
 
-{clivalif.i}
+{Func/clivalif.i}
 
 /*---- Start up the process -------------------------------*/
 
@@ -105,7 +105,7 @@ FOR EACH rsoper NO-LOCK WHERE
    END.
 
    /* Get the separator from TMSParam. */
-   {tmsparam.i CliFileSeparator RETURN}
+   {Func/tmsparam.i CliFileSeparator RETURN}
    lCliSeparator = TMSParam.CharVal.
 
    IF OPSYS = "UNIX" THEN 

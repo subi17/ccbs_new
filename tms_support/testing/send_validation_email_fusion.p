@@ -1,10 +1,10 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "Qvantel".
-{tmsconst.i}
-{timestamp.i}
-{fmakemsreq.i}
-{femailinvoice.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/fmakemsreq.i}
+{Func/femailinvoice.i}
 
 DEF VAR liRequest AS INT  NO-UNDO.
 DEF VAR lcResult  AS CHAR NO-UNDO.

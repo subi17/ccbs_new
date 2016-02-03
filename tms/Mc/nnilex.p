@@ -16,13 +16,13 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{country.i}
+{Syst/country.i}
 
-{excel.i}
+{Func/excel.i}
 
-{function.i}
+{Func/function.i}
 
 DEF VAR exdir     AS c  NO-UNDO.
 DEF VAR exName    AS c  NO-UNDO.

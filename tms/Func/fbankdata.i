@@ -7,8 +7,8 @@
    
 */
 
-{timestamp.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
    
 /* convert into data form */
 FUNCTION fBankAcc2Data RETURNS CHARACTER

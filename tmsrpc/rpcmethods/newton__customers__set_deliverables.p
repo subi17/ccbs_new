@@ -14,13 +14,13 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{fmakemsreq.i}
-{subser.i}
-{tmsconst.i}
-{femailinvoice.i}
-{invoicetarget.i}
+{Func/fmakemsreq.i}
+{Mm/subser.i}
+{Syst/tmsconst.i}
+{Func/femailinvoice.i}
+{Mc/invoicetarget.i}
 
 DEF VAR liCount AS INT NO-UNDO.
 DEF VAR pcStruct AS CHAR NO-UNDO. 
@@ -85,7 +85,7 @@ IF pcInvoiceGrouping NE "" AND
    pcInvoiceGrouping NE {&INVOICE_TARGET_ALL_GROUPED} THEN
    RETURN appl_err(SUBST("Unsupported invoice_target value &1", pcInvoiceGrouping)).
 
-{eventval.i}
+{Syst/eventval.i}
 &GLOBAL-DEFINE STAR_EVENT_USER katun   
 {lib/eventlog.i}
 DEF VAR lhCustomer AS HANDLE NO-UNDO. 

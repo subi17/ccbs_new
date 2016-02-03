@@ -8,10 +8,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 /* Maaritellaan print-linemuuttujat */
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnmora"
        tuni2 = "".
@@ -107,7 +107,7 @@ toimi:
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.
-{tmsreport.i "return"}
+{Syst/tmsreport.i "return"}
 
 message "Utskrivning pAgAr, avbryt = ESC".
 
@@ -121,7 +121,7 @@ RUN nnmora1(
 
 /* Suljetaan striimi */
 ASSIGN tila = FALSE.
-{tmsreport.i}
+{Syst/tmsreport.i}
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

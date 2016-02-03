@@ -8,8 +8,8 @@
   Version ......:
   ------------------------------------------------------------------ */
 
-{commali.i}  
-{cparam2.i}
+{Syst/commali.i}  
+{Func/cparam2.i}
 
 DEF VAR ldtDate  AS DATE NO-UNDO.
 DEF VAR ldtdate2 AS DATE NO-UNDO.

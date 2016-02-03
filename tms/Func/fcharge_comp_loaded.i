@@ -1,9 +1,9 @@
 
 
 /* return the amount of charge or compensation for a mobsub */
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
 
 FUNCTION fMonthLoaded RETURN DECIMAL 
    (icSource AS CHAR, icCLI AS CHAR, ilPayType AS LOG):

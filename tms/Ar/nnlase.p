@@ -24,7 +24,7 @@
   -------------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable Invoice
 
-{commali.i}
+{Syst/commali.i}
 
 DEF NEW shared VAR order AS INT NO-UNDO.
 DEF shared VAR siirto AS CHAR.
@@ -89,7 +89,7 @@ form
     with row 4 col 2 title color value(ctc) " FIND DATE"
     COLOR value(cfc) NO-LABELS OVERLAY FRAME F4.
 
-{brand.i}
+{Func/brand.i}
 
 cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
@@ -177,7 +177,7 @@ print-line:
             ufk[3] = 0
             ufk[4] = 0.
 
-         {uright1.i '"6,7"'}
+         {Syst/uright1.i '"6,7"'}
          RUN ufkey.
       END.
 

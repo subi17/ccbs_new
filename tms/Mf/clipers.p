@@ -15,9 +15,9 @@
   Version ......: M15
  --------------------------------------------------------------------------- */
 
-{timestamp.i}
-{commali.i}
-{cparam2.i}
+{Func/timestamp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF TEMP-TABLE ttCLI NO-UNDO LIKE CLI.
 DEF BUFFER bufatno FOR CLI.

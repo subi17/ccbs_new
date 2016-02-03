@@ -9,9 +9,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'coevent'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'coevent'}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR liCoRule      AS INT  NO-UNDO.

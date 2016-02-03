@@ -38,15 +38,15 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{nncoit2.i}
-{fcustpl.i}
-{timestamp.i}
-{fmakeservlimit.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FixedFee'}
-{eventval.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Func/nncoit2.i}
+{Func/fcustpl.i}
+{Func/timestamp.i}
+{Func/fmakeservlimit.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FixedFee'}
+{Syst/eventval.i}
+{Func/fcustdata.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

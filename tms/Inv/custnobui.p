@@ -9,7 +9,7 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR ldtDate  AS DATE NO-UNDO EXTENT 2.
 DEF VAR lcFile   AS CHAR NO-UNDO.

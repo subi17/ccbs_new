@@ -20,15 +20,15 @@ DEF VAR liLanguage AS INT NO-UNDO.
 
 DEF BUFFER bMNPOngoing FOR MNPProcess.
 
-{commali.i}
-{mnpmessages.i}
-{mnp.i}
-{tmsconst.i}
-{forderstamp.i}
-{orderfunc.i}
-{log.i}
-{eventval.i}
-{ordercancel.i}
+{Syst/commali.i}
+{Mnp/mnpmessages.i}
+{Mnp/mnp.i}
+{Syst/tmsconst.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
+{Func/log.i}
+{Syst/eventval.i}
+{Func/ordercancel.i}
 
 FIND MNPProcess WHERE
      MNPProcess.MNPSeq = piMNPSeq NO-LOCK NO-ERROR.

@@ -8,16 +8,16 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MNPProcess'}
-{timestamp.i}
-{xmlfunction.i}
-{ftaxdata.i}
-{timestamp.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MNPProcess'}
+{Func/timestamp.i}
+{Func/xmlfunction.i}
+{Func/ftaxdata.i}
+{Func/timestamp.i}
 
-{eventval.i}
+{Syst/eventval.i}
 
 DEFINE INPUT PARAMETER piMNPSeq AS INTEGER NO-UNDO.
 

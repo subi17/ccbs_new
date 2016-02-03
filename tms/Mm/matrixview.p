@@ -114,10 +114,10 @@ END.
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commpaa.i} katun = "polkki". gcbrand = "1".
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
-{eventval.i}
+{Syst/commpaa.i} katun = "polkki". gcbrand = "1".
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

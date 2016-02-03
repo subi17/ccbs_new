@@ -9,8 +9,8 @@
   Version ......: M15
   ------------------------------------------------------------------- */
 
-{commali.i}
-{func.i}
+{Syst/commali.i}
+{Func/func.i}
 
 def shared var siirto as char. 
 DEF INPUT PARAMETER ictarget   AS CHAR NO-UNDO.

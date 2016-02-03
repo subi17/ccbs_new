@@ -14,8 +14,8 @@
 
 {xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
-{orderchk.i}
+{Syst/commpaa.i}
+{Func/orderchk.i}
 gcBrand = "1".
 
 /* Input parameters */

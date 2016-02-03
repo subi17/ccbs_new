@@ -1,6 +1,6 @@
-{testpaa.i}
+{Syst/testpaa.i}
 katun = "YOT-612".
-{timestamp.i}
+{Func/timestamp.i}
 
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun

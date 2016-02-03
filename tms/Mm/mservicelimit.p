@@ -8,16 +8,16 @@
   VERSION ......: SCRUNKO3, (23.10.96)
   ------------------------------------------------------ */
 
-{commali.i}                    
-{timestamp.i}
-{tmsconst.i}
-{lib/tokenlib.i}
+{Syst/commali.i}                    
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Mc/lib/tokenlib.i}
 
 DEF  INPUT PARAMETER  iiMSSeq    AS INT            NO-UNDO.
 DEF  INPUT PARAMETER  iiDialType AS INT            NO-UNDO.
 DEF  INPUT PARAMETER  iiSlSeq    AS INT            NO-UNDO.
 
-{eventval.i}
+{Syst/eventval.i}
 IF llDoEvent THEN DO :
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    

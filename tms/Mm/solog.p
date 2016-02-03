@@ -34,17 +34,17 @@
 
 &GLOBAL-DEFINE BrTable Solog
 
-{commali.i}
-{solog.i}
-{msisdn.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'SOLog'}
-{sog.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/solog.i}
+{Func/msisdn.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'SOLog'}
+{Func/sog.i}
+{Func/timestamp.i}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
-{excel.i}
+{Func/excel.i}
 DEF VAR CLI   LIKE SOLog.CLI   NO-UNDO.
 DEF VAR Solog  LIKE SOLog.SOLog  NO-UNDO FORMAT ">>>>>>>>>9".
 DEF VAR Stat LIKE SOLog.Stat NO-UNDO.
@@ -94,7 +94,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     + string(pvm,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek SOLog  BY  CLI */
     "Brand Code:" lcBrand  HELP "Enter Brand  "    SKIP

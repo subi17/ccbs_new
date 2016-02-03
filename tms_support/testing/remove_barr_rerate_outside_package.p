@@ -1,10 +1,10 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
 katun = "Qvantel".
-{timestamp.i}
-{date.i}
-{fdss.i}
-{barrfunc.i}
+{Func/timestamp.i}
+{Func/date.i}
+{Func/fdss.i}
+{Func/barrfunc.i}
 
 def var lltrue        as log   no-undo.
 def var ldeTime       as dec   no-undo.
