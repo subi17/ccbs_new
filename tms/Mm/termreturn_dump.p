@@ -1,9 +1,9 @@
 /* ----------------------------------------------------------------------
-  MODULE .......: dms_delta_dump.p
-  TASK .........: Collect rows to a dump file for DMS records
+  MODULE .......: termreturn_dump.p
+  TASK .........: Collect rows to a dump file for termreturn records
   APPLICATION ..: tms
-  AUTHOR .......: ivekov
-  CREATED ......: 7.9.2015
+  AUTHOR .......: ilsavola
+  CREATED ......: 3.2.2015
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
@@ -63,7 +63,7 @@ fSplitTS(idLastDump,
          OUTPUT liCnt).
 
 ASSIGN
-   lhTable     = BUFFER DMS:HANDLE
+   lhTable     = BUFFER TermReturn:HANDLE
    lcKeyFields = fEventKeyFields(lhTable).
 
 IF icDumpMode = "Modified" THEN ldFromStamp = idLastDump.
