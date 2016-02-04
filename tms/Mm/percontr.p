@@ -533,7 +533,8 @@ PROCEDURE pContractActivation:
          END.         
 
          /* Q25 creation validation */
-         IF MsRequest.ReqCParam3 EQ "RVTERM12" THEN DO:
+         IF MsRequest.ReqCParam3 EQ "RVTERM12" AND
+            MsRequest.ReqSource NE {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN DO:
 
             FIND bQ25SingleFee NO-LOCK USE-INDEX Custnum WHERE
                  bQ25SingleFee.Brand       = gcBrand AND
@@ -552,9 +553,8 @@ PROCEDURE pContractActivation:
             END.
 
             /* If Quota 25 is already billed then create a 
-               "credit note" with equivalent amount. If ReqCParam2 is RVTERMS12 then
-               it is Q25 extension amount change. Singlefee already credited. */
-            IF AVAIL bQ25SingleFee AND MsRequest.ReqCParam2 NE "RVTERM12" THEN DO:
+               "credit note" with equivalent amount. */
+            IF AVAIL bQ25SingleFee THEN DO:
                IF bQ25SingleFee.Billed EQ TRUE AND
                   NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
                                      Invoice.Invnum = bQ25SingleFee.Invnum AND
@@ -970,11 +970,13 @@ PROCEDURE pContractActivation:
          lcReqSource = ";" + MsRequest.Reqsource. 
       
       /* Q25 Change, get same orderid as in previous fixedfee */
-      IF MsRequest.ReqCparam1 EQ "RVTERM12" THEN DO:
+      IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} AND
+         MsRequest.ReqCparam3 EQ "RVTERM12" THEN DO:
          FIND FIRST FixedFee WHERE FixedFee.brand EQ "1" AND
                                    FixedFee.HostTable EQ "Mobsub" AND
                                    FixedFee.KeyValue EQ 
                                    STRING(MsRequest.MsSeq) AND
+                                   FixedFee.SourceTable EQ "DCCLI" AND
                                    FixedFee.SourceKey EQ 
                                    STRING(MsRequest.ReqIParam3)
                                    NO-LOCK NO-ERROR.
