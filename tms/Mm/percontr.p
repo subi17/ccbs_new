@@ -552,8 +552,9 @@ PROCEDURE pContractActivation:
             END.
 
             /* If Quota 25 is already billed then create a 
-               "credit note" with equivalent amount. */
-            IF AVAIL bQ25SingleFee THEN DO:
+               "credit note" with equivalent amount. If ReqCParam2 is RVTERMS12 then
+               it is Q25 extension amount change. Singlefee already credited. */
+            IF AVAIL bQ25SingleFee AND MsRequest.ReqCParam2 NE "RVTERM12" THEN DO:
                IF bQ25SingleFee.Billed EQ TRUE AND
                   NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
                                      Invoice.Invnum = bQ25SingleFee.Invnum AND
@@ -579,6 +580,8 @@ PROCEDURE pContractActivation:
                         FixedFee.FeeModel  = DayCampaign.FeeModel AND
                         FixedFee.CalcObj   = DayCampaign.DCEvent AND
                         FixedFee.InUse     = TRUE AND
+                        FixedFee.SourceTable = "DCCLI" AND
+                        FixedFee.SourceKey = MsRequest.ReqIParam3 AND
                         FixedFee.BegDate  <= ldtActDate:
                    IF CAN-FIND (FIRST FFItem NO-LOCK WHERE
                                       FFItem.FFNum = FixedFee.FFNum) THEN DO:
