@@ -581,7 +581,7 @@ PROCEDURE pContractActivation:
                         FixedFee.CalcObj   = DayCampaign.DCEvent AND
                         FixedFee.InUse     = TRUE AND
                         FixedFee.SourceTable = "DCCLI" AND
-                        FixedFee.SourceKey = MsRequest.ReqIParam3 AND
+                        FixedFee.SourceKey = STRING(MsRequest.ReqIParam3) AND
                         FixedFee.BegDate  <= ldtActDate:
                    IF CAN-FIND (FIRST FFItem NO-LOCK WHERE
                                       FFItem.FFNum = FixedFee.FFNum) THEN DO:
