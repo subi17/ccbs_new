@@ -370,7 +370,7 @@ repeat WITH FRAME cdr:
                   ttCall.bpref,
                   TRUE).
 
-      RUN   local-Show-record.
+      RUN local-Show-record.
 
       IF reasonc > "0" THEN DO TRANS:
 

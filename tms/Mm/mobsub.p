@@ -795,16 +795,16 @@ BROWSE:
                    LEAVE CALLBROWSE.
                 ENd.
 
-                IF       toimi = 1  THEN RUN  msisdniv(Mobsub.MsSeq).
+                IF       toimi = 1  THEN RUN msisdniv(Mobsub.MsSeq).
 
                 ELSE IF toimi = 2 AND avail mobsub  THEN
-                   RUN  callstat(INPUT 0,Mobsub.cli,"PRODUCT").
+                   RUN callstat(INPUT 0,Mobsub.cli,"PRODUCT").
        
                 ELSE IF toimi = 3 AND avail mobsub  THEN 
-                   RUN  callstat(INPUT 0,Mobsub.cli,"DATE").
+                   RUN callstat(INPUT 0,Mobsub.cli,"DATE").
        
                 ELSE IF toimi = 4 AND avail mobsub  THEN
-                   RUN  callstat(INPUT 0,Mobsub.cli,"CCN").
+                   RUN callstat(INPUT 0,Mobsub.cli,"CCN").
 
                 ELSE IF toimi = 6 THEN 
                    RUN persondata(mobsub.msseq).
@@ -815,7 +815,7 @@ BROWSE:
              END.
           END.
           ELSE IF toimi = 7 AND avail mobsub  THEN DO:
-             RUN  mobsubdi(INPUT Mobsub.MSSeq, OUTPUT killed).
+             RUN mobsubdi(INPUT Mobsub.MSSeq, OUTPUT killed).
              
              /* refresh mobsub status / barring status */
              lcBarrStat = MobSub.BarrCode.

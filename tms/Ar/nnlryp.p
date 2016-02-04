@@ -442,7 +442,7 @@ BROWSE:
            when 2 OR WHEN 6 THEN DO:
               ASSIGN ufkey = TRUE.
 
-           RUN  mobguard2(INPUT  FALSE,
+           RUN mobguard2(INPUT  FALSE,
                             OUTPUT ocReasonCode,
                             OUTPUT odtDate1,
                             OUTPUT odtDate2,

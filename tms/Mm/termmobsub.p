@@ -674,16 +674,16 @@ BROWSE:
                    LEAVE CALLBROWSE.
                 ENd.
 
-                IF       toimi = 1  THEN RUN  msisdniv(TermMobsub.MsSeq).
+                IF       toimi = 1  THEN RUN msisdniv(TermMobsub.MsSeq).
 
                 ELSE IF toimi = 2 AND avail TermMobsub  THEN
-                   RUN  callstat.p(INPUT 0,TermMobsub.cli,"PRODUCT").
+                   RUN callstat.p(INPUT 0,TermMobsub.cli,"PRODUCT").
        
                 ELSE IF toimi = 3 AND avail TermMobsub  THEN 
-                   RUN  callstat.p(INPUT 0,TermMobsub.cli,"DATE").
+                   RUN callstat.p(INPUT 0,TermMobsub.cli,"DATE").
        
                 ELSE IF toimi = 4 AND avail TermMobsub  THEN
-                   RUN  callstat.p(INPUT 0,TermMobsub.cli,"CCN").
+                   RUN callstat.p(INPUT 0,TermMobsub.cli,"CCN").
 
                 ELSE IF toimi = 6 THEN 
                    RUN persondata(TermMobsub.msseq).

@@ -733,7 +733,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
           FRAME-FIELD = "ServiceLimitGroup"  THEN DO:
 
          IF      INPUT SLGAnalyse.SLGAType = 1 THEN run h-servlimitgrp.
-         ELSE IF INPUT SLGAnalyse.SLGAType = 2 THEN run  h-daycamp.p.
+         ELSE IF INPUT SLGAnalyse.SLGAType = 2 THEN run h-daycamp.p.
 
          ASSIGN SLGAnalyse.ServiceLimitGroup = siirto.
          disp SLGAnalyse.ServiceLimitGroup WITH FRAME lis.
@@ -966,7 +966,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
           FRAME-FIELD = "lcServiceL"  THEN DO:
 
          IF      INPUT lcSLGAType = "1" THEN run h-servlimitgrp.
-         ELSE IF INPUT lcSLGAType = "2" THEN run  h-daycamp.p.
+         ELSE IF INPUT lcSLGAType = "2" THEN run h-daycamp.p.
 
          ASSIGN lcServiceL = siirto.
          disp lcServiceL WITH FRAME Generate.
