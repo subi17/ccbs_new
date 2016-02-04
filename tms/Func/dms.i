@@ -264,21 +264,24 @@ FUNCTION fNeededDocs RETURNS CHAR
 END.
 
 
-
 /*DMS specific, quick implementation*/
 FUNCTION fDoc2Msg RETURNS CHAR
    (icDocNbr AS CHAR,
-    icDocComment AS CHAR):
+    icDocComment AS CHAR,
+    icDocDesc AS CHAR):
    DEF VAR lcRet AS CHAR NO-UNDO.
 
    IF icDocComment = "" THEN icDocComment = "null".
    ELSE icDocComment =  "~"" + icDocComment + "~"".
-
-   lcRet =  "~{" + "~"number~"" + "~:" + "~"" + icDocNbr +  "~"" + "," +
-                  "~"revision_comment~"" + "~:" + icDocComment  +
+   lcRet =  "~{" + "~"number~"" + "~:" + "~"" + icDocNbr +  "~"" + ",".
+   IF icDocNbr EQ "10" THEN
+      lcRet = lcRet + "~"type_description~"" + "~:" + "~"" + icDocDesc +  "~"" + ",".
+   lcRet = lcRet + "~"revision_comment~"" + "~:" + icDocComment  +
             "~}".
+
    RETURN lcRet.
 END.
+
 
 FUNCTION fGetBankName RETURNS CHAR
    (icCode AS CHAR):
@@ -289,7 +292,7 @@ FUNCTION fGetBankName RETURNS CHAR
    RETURN "".
 END.   
 
-/*returns document type - comment pairs: "1,PENDING,2,SENT,...*/
+/*returns document type - comment - description sets: "1;PENDING;comment2;SENT;2;PENDING..."*/
 FUNCTION fDocListByOrder RETURNS CHAR
    (iiOrderId AS INT,
     icNotifCaseId AS CHAR):
@@ -309,7 +312,9 @@ FUNCTION fDocListByOrder RETURNS CHAR
       IF icNotifCaseID EQ {&DMS_INITIAL_NOTIF_CASE} /*1*/ THEN DO:
          IF lcDocList NE "" THEN lcDocList = lcDocList + {&DMS_DOCLIST_SEP}.
          IF bDMSDOC.DocStatusCode EQ {&DMS_INIT_STATUS_SENT} THEN DO:
-            lcDocList = lcDocList + bDmsDoc.DocTypeId + {&DMS_DOCLIST_SEP} /*no comment*/ .
+            lcDocList = lcDocList + bDmsDoc.DocTypeId + {&DMS_DOCLIST_SEP}  +
+                                    /*empty*/           {&DMS_DOCLIST_SEP} +
+                                    bDmsDoc.DocTypeDesc.
          END.
       END.
       ELSE DO:
@@ -318,13 +323,15 @@ FUNCTION fDocListByOrder RETURNS CHAR
          IF LOOKUP(bDMSDOC.DocStatusCode, lcDocReminderStatuses) > 0 THEN DO:
             IF lcDocList NE "" THEN lcDocList = lcDocList + {&DMS_DOCLIST_SEP}.
             lcDocList = lcDocList + bDmsDoc.DocTypeId + {&DMS_DOCLIST_SEP} +
-                                    bDmsDoc.DocRevComment.
-         END.
+                                    bDmsDoc.DocRevComment + {&DMS_DOCLIST_SEP} +
+                                    bDmsDoc.DocTypeDesc.
+         END. 
       END.
 
    END.
    RETURN lcDocList.
 END.
+
 
 /*Function generates JSON message for providing information for
   SMS/EMAIL sending. */
@@ -383,7 +390,8 @@ In other notifications only A&C (pending&error) cases are sent to identify missi
    lcDocList = fDocListByOrder(Order.Orderid, icNotifCaseId).
    DO i = 1 TO NUM-ENTRIES(lcDocList, {&DMS_DOCLIST_SEP}) BY 2:
       lcDocNotifEntry = fDoc2Msg(ENTRY(i,lcDocList,{&DMS_DOCLIST_SEP}),
-                                 ENTRY(i + 1,lcDocList,{&DMS_DOCLIST_SEP})).
+                                 ENTRY(i + 1,lcDocList,{&DMS_DOCLIST_SEP}),
+                                 ENTRY(i + 2,lcDocList,{&DMS_DOCLIST_SEP})).
       fObjectToJsonArray(lcArray, lcDocNotifEntry).
    END.
    
