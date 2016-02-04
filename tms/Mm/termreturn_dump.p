@@ -71,7 +71,7 @@ ELSE ldFromStamp = 20150101. /*Full dump*/
 
 OUTPUT STREAM sFile TO VALUE(icFile).
 
-FOR EACH TermReturn NO-LOCK WHERE
+FOR EACH TermReturn use-index orderid NO-LOCK WHERE
          TermReturn.ReturnTS >= ldFromStamp
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:
@@ -80,7 +80,7 @@ FOR EACH TermReturn NO-LOCK WHERE
       olInterrupted = TRUE.
       LEAVE.
    END.
-   
+
    DO liCnt = 1 TO NUM-ENTRIES(lcDumpFields):
 
       lcField = ENTRY(liCnt,lcDumpFields).
@@ -117,12 +117,20 @@ FOR EACH TermReturn NO-LOCK WHERE
                   lcValue = "DETAILED".
             END.
             WHEN "#Q25Amount" THEN DO:
-               FIND FIRST SingleFee NO-LOCK WHERE
-                          SingleFee.Brand EQ gcBrand AND
-                          SingleFee.Contract EQ TermReturn.ContractId AND
-                          SingleFee.SourceTable EQ "DCCLI" AND
-                          SingleFee.CalcObj EQ "RVTERM".
-               IF AVAIL SingleFee THEN lcValue = STRING(SingleFee.Amt).
+               FIND FIRST MobSub NO-LOCK WHERE
+                          MobSub.Brand = gcBrand AND
+                          MobSub.CLI   = TermReturn.MSISDN NO-ERROR.
+               IF AVAILABLE MobSub THEN DO:
+                  FIND SingleFee USE-INDEX Custnum WHERE
+                       SingleFee.Brand       = gcBrand AND
+                       SingleFee.Custnum     = MobSub.CustNum AND
+                       SingleFee.HostTable   = "Mobsub" AND
+                       SingleFee.KeyValue    = STRING(MobSub.MsSeq) AND
+                       SingleFee.OrderId     = TermReturn.OrderId AND
+                       SingleFee.CalcObj     = "RVTERM" NO-LOCK NO-ERROR.
+                  IF AVAIL SingleFee THEN lcValue = STRING(SingleFee.Amt).
+                  ELSE lcValue = "".
+               END.
                ELSE lcValue = "".
             END.
             OTHERWISE lcValue = "".
