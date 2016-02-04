@@ -140,7 +140,7 @@ END.
 
 IF Order.CLIType EQ "TARJ5" THEN DO:
 
-   RUN air_update_serviceclass.p(Order.CLI,
+   RUN Gwy/air_update_serviceclass.p(Order.CLI,
                                  {&SC_TARJ5_NORMAL},
                                  {&SC_TARJ5_PROMOTIONAL},
                                  TODAY + 31,
@@ -151,11 +151,11 @@ IF Order.CLIType EQ "TARJ5" THEN DO:
    END.
 END.
 
-RUN createcustomer(INPUT Order.OrderId,1,FALSE,TRUE,output oiCustomer).
+RUN Mm/createcustomer(INPUT Order.OrderId,1,FALSE,TRUE,output oiCustomer).
 
 ASSIGN Msrequest.CustNum = oiCustomer.
 
-RUN createcustomer(INPUT Order.OrderId,3,FALSE,TRUE,output oicustomer).
+RUN Mm/createcustomer(INPUT Order.OrderId,3,FALSE,TRUE,output oicustomer).
 
 FIND FIRST CLIType WHERE
            CLIType.CliType = Order.CLIType 
@@ -189,7 +189,7 @@ FOR EACH OrderCustomer NO-LOCK WHERE
    IF llCorporate AND 
       (OrderCustomer.Rowtype = 1 OR OrderCustomer.Rowtype = 5) THEN DO:
       
-      RUN createcustcontact.p(
+      RUN Mm/createcustcontact.p(
           Order.OrderId,
           MsRequest.Custnum,
           OrderCustomer.RowType,
@@ -271,7 +271,7 @@ IF Avail imsi THEN Mobsub.imsi = IMSI.IMSI.
 
 /* Initial TopUp */
 IF MobSub.PayType = TRUE AND Order.Offer = "" THEN 
-   RUN topupcamp(MobSub.MsSeq, OUTPUT liPPRequest).
+   RUN Mm/topupcamp(MobSub.MsSeq, OUTPUT liPPRequest).
 
 /* additional topup */
 lcTaxZone = "".
@@ -346,14 +346,14 @@ IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
 fSetOrderStatus(Order.OrderId,"6").
 
 /* default services */
-RUN copysp(MobSub.MsSeq,
+RUN Mm/copysp(MobSub.MsSeq,
            MobSub.ActivationDate,
            TRUE,   /* new subs */
            TRUE).  /* silent */
 
 /* clitype spesific fees */
 IF AVAIL CliType AND CliType.FeeModel1 > "" THEN DO:
-   RUN creasfee (MobSub.CustNum,
+   RUN Mc/creasfee (MobSub.CustNum,
                  MobSub.MsSeq,
                  Today,
                  "MobSub",
@@ -371,7 +371,7 @@ IF AVAIL CliType AND CliType.FeeModel1 > "" THEN DO:
 END.
 
 /* general fees */
-RUN creasfee (MobSub.CustNum,
+RUN Mc/creasfee (MobSub.CustNum,
               MobSub.MsSeq,
               Today,
               "MobSub",
@@ -389,7 +389,7 @@ RUN creasfee (MobSub.CustNum,
 
 /* add initial fees and additional cost (delivery charge) and cash invoice */
 IF Order.InvNum > 0 THEN
-   RUN cashfee (Order.OrderID,
+   RUN Mc/cashfee (Order.OrderID,
              1,                     /* action 1=create fees */
              OUTPUT lcCharValue,
              OUTPUT ldAmount,
@@ -441,7 +441,7 @@ IF Order.FatAmount NE 0 OR Order.FtGrp > "" THEN DO:
    IF lcFatGroup = ? OR lcFatGroup = "" THEN 
       lcError = "FATime group for campaign not defined".
       
-   ELSE RUN creafat (MobSub.CustNum,
+   ELSE RUN Mc/creafat (MobSub.CustNum,
                      MobSub.MsSeq,
                      lcFatGroup,
                      Order.FatAmount,
@@ -496,13 +496,13 @@ END. /* IF NOT AVAIL OfferItem AND NOT AVAIL OrderAction THEN DO: */
 
 /* initial topup, fatime, per.contracts from offer */
 IF Order.Offer > "" THEN 
-   RUN offeritem_exec.p (MobSub.MsSeq,
+   RUN Mc/offeritem_exec.p (MobSub.MsSeq,
                        Order.OrderID,
                        MsRequest.MsRequest,
                        "1").
 
 /* activate periodical contracts, service packages etc. */
-RUN requestaction_exec.p (MsRequest.MsRequest,
+RUN Mm/requestaction_exec.p (MsRequest.MsRequest,
                           MobSub.CLIType,
                           Order.OrderID,
                           MobSub.ActivationTS,
@@ -512,7 +512,7 @@ RUN requestaction_exec.p (MsRequest.MsRequest,
                           {&REQUEST_ACTIONLIST_ALL}).
 
 /* per.contract and service package created with the order */
-RUN orderaction_exec (MobSub.MsSeq,
+RUN Mm/orderaction_exec (MobSub.MsSeq,
                       Order.OrderID,
                       MsRequest.MsRequest,
                       "1").
@@ -636,7 +636,7 @@ END.
 IF llDefBarring THEN lcInitialBarring = "Prod_TotalPremium_Off=1,Y_BPSUB=1".
 ELSE lcInitialBarring = "Y_BPSUB=1".
 
-RUN barrengine.p(MobSub.MsSeq,
+RUN Mm/barrengine.p(MobSub.MsSeq,
                 lcInitialBarring,
                 "1",                 /* source = subscr. creation  */
                 katun,               /* creator */
@@ -770,7 +770,7 @@ IF CLIType.LineType > 0 AND
             lbOrder.Brand              EQ gcBrand AND
             lbOrder.orderid            EQ lbOrderCustomer.Orderid AND
             lbOrder.statuscode         EQ {&ORDER_STATUS_PENDING_MAIN_LINE}:
-      RUN orderinctrl.p(lbOrder.OrderID, 0, TRUE).
+      RUN Mc/orderinctrl.p(lbOrder.OrderID, 0, TRUE).
    END.
 
 
@@ -805,7 +805,7 @@ END.
 /* request handled succesfully */
 fReqStatus(2,""). 
 
-RUN requestaction_sms.p(INPUT MsRequest.MsRequest,
+RUN Mm/requestaction_sms.p(INPUT MsRequest.MsRequest,
                         INPUT MobSub.CliType,
                         INPUT MsRequest.ReqSource).
 

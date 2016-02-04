@@ -68,7 +68,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN read_printhouse_zipcode.p (ttFiles.ZipCodeFile,
+   RUN Mc/read_printhouse_zipcode.p (ttFiles.ZipCodeFile,
                                   OUTPUT liRead,
                                   OUTPUT liError).
    

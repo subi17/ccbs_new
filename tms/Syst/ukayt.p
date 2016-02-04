@@ -88,7 +88,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhTMSUser).
+      RUN Mc/eventview2.p(lhTMSUser).
    END.
 END.
 
@@ -175,7 +175,7 @@ FRAME PWD.
 
 llAdminUser = fIsAdminUser(katun).
 
- cfc = "sel". RUN ufcolor. ccc = cfc.
+ cfc = "sel". RUN Syst/ufcolor. ccc = cfc.
  view FRAME sel.
 
 order = 1.
@@ -213,8 +213,8 @@ BROWSE:
        ufkey = TRUE.
 
        IF must-add THEN DO:
-          cfc = "lis". RUN ufcolor.
-          ehto = 9. run ufkey. ufkey = true.
+          cfc = "lis". RUN Syst/ufcolor.
+          ehto = 9. RUN Syst/ufkey. ufkey = true.
           PAUSE 0 no-message.
 add-new:
           repeat WITH FRAME lis:
@@ -281,7 +281,7 @@ add-new:
           IF NOT can-find(FIRST TMSUser) THEN RETURN.
           must-print = TRUE.
           must-add = FALSE.
-          cfc = "sel". RUN ufcolor.
+          cfc = "sel". RUN Syst/ufcolor.
 
           IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhTMSUser).
 
@@ -325,7 +325,7 @@ add-new:
           ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
           ufk[7] = 0   ufk[8] = 8  ufk[9] = 1
           ufkey = FALSE ehto = 3.
-          RUN ufkey.p.
+          RUN Syst/ufkey.p.
        END.
 
        PAUSE 0 no-message.
@@ -380,7 +380,7 @@ add-new:
 
        /* haku */
        if nap = "f1"  or nap = "1" THEN DO:  /* tms tunnuksen haku */
-          cfc = "haku". RUN ufcolor.
+          cfc = "haku". RUN Syst/ufcolor.
           ha-nimi = "".
           UPDATE ha-nimi WITH FRAME syha1.
           HIDE FRAME syha1.
@@ -393,7 +393,7 @@ add-new:
                 no-lock no-error.
                 IF NOT AVAILABLE TMSUser THEN DO:
                    message "NOT FOUND".
-                   cfc = "sel". RUN ufcolor.
+                   cfc = "sel". RUN Syst/ufcolor.
                    NEXT BROWSE.
                 END.
              END.
@@ -402,13 +402,13 @@ add-new:
              memory = recid(TMSUser)
              must-print = TRUE
              order = 1.
-             cfc = "sel". RUN ufcolor.
+             cfc = "sel". RUN Syst/ufcolor.
              NEXT BROWSE.
           END. /* tunnuksen haku */
        END. /* f1 */
 
        else if nap = "f2" or nap = "2" THEN DO: /* foreign id haku */
-          cfc = "haku". RUN ufcolor.
+          cfc = "haku". RUN Syst/ufcolor.
           ha-nimi = "".
           UPDATE ha-nimi WITH FRAME syha2.
           HIDE FRAME syha2.
@@ -422,7 +422,7 @@ add-new:
                 USE-INDEX ForeignId no-lock no-error.
                 IF NOT AVAILABLE TMSUser THEN DO:
                    message "NOT FOUND".
-                   cfc = "sel". RUN ufcolor.
+                   cfc = "sel". RUN Syst/ufcolor.
                    NEXT BROWSE.
                 END.
              END.
@@ -430,13 +430,13 @@ add-new:
              memory = recid(TMSUser).
              must-print = TRUE.
              order = 3.
-             cfc = "sel". RUN ufcolor.
+             cfc = "sel". RUN Syst/ufcolor.
              NEXT BROWSE.
           END. /* haku foreignidllä */
        END. /* f2 */
 
        else if nap = "f3" or nap = "3" THEN DO: /* nimihaku */
-          cfc = "haku". RUN ufcolor.
+          cfc = "haku". RUN Syst/ufcolor.
           ha-nimi = "".
           UPDATE ha-nimi WITH FRAME syha3.
           HIDE FRAME syha3.
@@ -450,7 +450,7 @@ add-new:
                 USE-INDEX UserName no-lock no-error.
                 IF NOT AVAILABLE TMSUser THEN DO:
                    message "NOT FOUND".
-                   cfc = "sel". RUN ufcolor.
+                   cfc = "sel". RUN Syst/ufcolor.
                    NEXT BROWSE.
                 END.
              END.
@@ -458,7 +458,7 @@ add-new:
              memory = recid(TMSUser).
              must-print = TRUE.
              order = 2.
-             cfc = "sel". RUN ufcolor.
+             cfc = "sel". RUN Syst/ufcolor.
              NEXT BROWSE.
           END. /* nimihaku */
        END. /* f3 */
@@ -472,7 +472,7 @@ add-new:
              memory = recid(TMSUser)
              must-print = TRUE 
              cfc = "sel".
-          RUN ufcolor.
+          RUN Syst/ufcolor.
           NEXT BROWSE.
        END.
        /* previous line */
@@ -579,7 +579,7 @@ add-new:
 
        else if nap = "3" or nap = "f3" AND lcRight = "RW" THEN DO:
           FIND TMSUser where recid(TMSUser) = rtab[FRAME-LINE] no-lock.
-          RUN usersman (TMSUser.UserCode).
+          RUN Syst/usersman (TMSUser.UserCode).
           
           ufkey = TRUE.
           NEXT BROWSE.
@@ -667,11 +667,11 @@ add-new:
                 ufk[3] = 26 WHEN lcRight = "RW" 
                 ufk[8] = 8.
              
-         RUN ufkey.
+         RUN Syst/ufkey.
  
           IF toimi = 1 AND lcRight = "RW" THEN DO: /* update it */
              
-             ehto = 9. run ufkey.
+             ehto = 9. RUN Syst/ufkey.
 
              IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTMSUser).
              
@@ -698,7 +698,7 @@ add-new:
           END.
           
           IF toimi = 3 THEN DO:
-             RUN adduserlimitcui ("TMSUser", TMSUser.UserCode).
+             RUN Syst/adduserlimitcui ("TMSUser", TMSUser.UserCode).
           END.
 
           IF toimi = 8 THEN LEAVE.

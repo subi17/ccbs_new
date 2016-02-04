@@ -18,7 +18,7 @@ DO WHILE TRUE:
    
    PUT SCREEN ROW 22 "Sending SMSs ......".
 
-   RUN smscgwy("CallAlarm","","").
+   RUN Gwy/smscgwy("CallAlarm","","").
 
    ASSIGN
       ldaDate = TODAY

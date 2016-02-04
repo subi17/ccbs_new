@@ -101,7 +101,7 @@ FOR EACH servicelimit where
 
             find current bMServicelimit NO-LOCK.
 
-            RUN creasfee.p (mobsub.CustNum,
+            RUN Mc/creasfee.p (mobsub.CustNum,
                           mobsub.MsSeq,
                           ldaDate,
                           "FeeModel",

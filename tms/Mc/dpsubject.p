@@ -22,7 +22,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhDPSubject).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhDPSubject).
+      RUN Mc/eventview2.p(lhDPSubject).
    END.
 
 END.
@@ -91,7 +91,7 @@ IF NOT AVAILABLE DiscountPlan THEN DO:
 END.
 lcPlan = DiscountPlan.DPRuleID.
 
-cfc = "sel". RUN ufcolor.p. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -116,7 +116,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a DPSubject  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.p.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -124,7 +124,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN ufkey.p.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -223,7 +223,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -434,8 +434,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDPSubject).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.p.
-       cfc = "lis". RUN ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -472,7 +472,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.p.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -556,7 +556,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
          
          IF toimi = 8 THEN LEAVE.
       END.
@@ -566,7 +566,7 @@ PROCEDURE local-UPDATE-record:
                 
          FIND CURRENT DPSubject EXCLUSIVE-LOCK.
          ehto = 9.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
          
          UPDATE
             DPSubject.DPSubject WHEN NEW DPSubject

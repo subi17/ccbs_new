@@ -397,7 +397,7 @@ PROCEDURE pCheckNumbering:
 
          IF NOT SESSION:BATCH THEN 
             PUT SCREEN ROW 22 COL 2 "Run invoice numbering ..". 
-         RUN invoice_extinvid.p(idaInvDate,
+         RUN Inv/invoice_extinvid.p(idaInvDate,
                                 liInvType,
                                 2,   
                                 0,
@@ -409,7 +409,7 @@ PROCEDURE pCheckNumbering:
          PUT SCREEN ROW 22 COL 2 "Check invoice numbering ..". 
    
       /* check */
-      RUN invoice_extinvid.p(idaInvDate,
+      RUN Inv/invoice_extinvid.p(idaInvDate,
                              liInvType,
                              0,   
                              0,

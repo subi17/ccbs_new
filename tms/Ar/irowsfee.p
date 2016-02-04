@@ -69,7 +69,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhSingleFee).
+      RUN Mc/eventview2.p(lhSingleFee).
    END.
 END.
 
@@ -171,7 +171,7 @@ else do:
    return.
 end.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
 view frame sel.
 LOOP:
 repeat with frame sel:
@@ -228,7 +228,7 @@ BROWSE:
         ufk[1]= 771 ufk[2]= 0  ufk[3]= 927 ufk[4]= 0
         ufk[5]= 0   ufk[6]= 0  ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
         ehto  = 3 ufkey = false.
-        run ufkey.p.
+        RUN Syst/ufkey.p.
       end.
 
       hide message no-pause.
@@ -366,9 +366,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
-       cfc = "puyr". run ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        BillPeriod = 0.
-       ehto = 9. run ufkey. ufkey = true.
+       ehto = 9. RUN Syst/ufkey. ufkey = true.
        update BillPeriod with frame f1.
        hide frame f1 no-pause.
        if BillPeriod <> ? then do:
@@ -390,7 +390,7 @@ BROWSE:
      if lookup(nap,"3,f3") > 0 then     /* memo */
      do trans with frame memo on endkey undo, next LOOP:
        assign ehto = 9 cfc = "lis" ufkey = true.
-       run ufkey. run ufcolor.
+       RUN Syst/ufkey. RUN Syst/ufcolor.
        find ttRow where recid(ttRow) = rtab[frame-line(sel)].
        FIND SingleFee WHERE RECID(SingleFee) = ttRow.SingleFee NO-LOCK.
 
@@ -415,7 +415,7 @@ BROWSE:
      do with frame lis transaction on endkey undo, next LOOP:
        /* change */
 
-       assign fr-header = " VIEW " cfc = "lis".  run ufcolor.
+       assign fr-header = " VIEW " cfc = "lis".  RUN Syst/ufcolor.
 
        find ttRow where recid(ttRow) = rtab[frame-line(sel)].
        FIND SingleFee WHERE RECID(SingleFee) = ttRow.SingleFee NO-LOCK.

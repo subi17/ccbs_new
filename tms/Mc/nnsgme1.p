@@ -49,7 +49,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhSMGMember).
+      RUN Mc/eventview2.p(lhSMGMember).
    END.
 END.
 
@@ -99,7 +99,7 @@ FIND SMGroup where
      SMGroup.SmGroup = SMGroup no-lock.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST SMGMember 
@@ -130,7 +130,7 @@ ADD-SMAN:
      repeat TRANS ON ENDKEY UNDO ADD-SMAN, LEAVE ADD-SMAN.
      ASSIGN ufkey = TRUE ufk = 0 ehto = 0
      ufk[1] = 521 ufk[2] = 522 ufk[3] = 516 ufk[8] = 8.
-     RUN ufkey.
+     RUN Syst/ufkey.
 
      IF toimi = 8 THEN LEAVE ADD-SMAN.
      IF toimi = 1 THEN DO:
@@ -140,7 +140,7 @@ ADD-SMAN:
     repeat WITH FRAME lis ON ENDKEY UNDO ADD-SMAN,
                NEXT ADD-SMAN:
       PAUSE 0.
-      ehto = 9. RUN ufkey.
+      ehto = 9. RUN Syst/ufkey.
       CLEAR FRAME lis no-pause.
       PROMPT-FOR SMGMember.Salesman
       validate(input SMGMember.Salesman = "" OR 
@@ -184,7 +184,7 @@ ADD-SMAN:
      END. /* toimi = 1: add a single group */
 
      ELSE IF toimi = 2 THEN DO:
-        RUN nnsgsb(SMGroup.SmGroup).
+        RUN Mc/nnsgsb(SMGroup.SmGroup).
         LEAVE ADD-SMAN.
      END.
 
@@ -300,7 +300,7 @@ SELAUS:
    ufk[1]= 885 ufk[2]= 30 ufk[3]= 0 ufk[4]= 518
    ufk[5]= 5   ufk[6]= 4  ufk[7]= 0 ufk[8]=   8 ufk[9]= 1
    ehto = 3 ufkey = FALSE.
-   RUN ufkey.p.
+   RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -453,9 +453,9 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        Salesman = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE Salesman WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if Salesman <> "" THEN DO:
@@ -477,9 +477,9 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        SmName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE SmName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if SmName <> "" THEN DO:
@@ -501,7 +501,7 @@ SELAUS:
      else if lookup(nap,"4,f4") > 0 THEN DO:  /* other memberships */
    FIND SMGMember where recid(SMGMember) = rtab[FRAME-LINE] no-lock.
    disp smgmember.
-   RUN nnsgme2.p(SMGMember.Salesman).
+   RUN Mc/nnsgme2.p(SMGMember.Salesman).
    ufkey = TRUE.
    NEXT LOOP.
      END.

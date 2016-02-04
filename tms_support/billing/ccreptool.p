@@ -11,7 +11,7 @@ DISP "Logfiles will be saved to [ /store/riftp/tmp ]  folder" SKIP
      "BillItemsTotalLog:    billing_item_totals_#DATE.txt" SKIP(1)
      "please wait ... " SKIP.
 
-RUN ccreport_test.p
+RUN Mm/ccreport_test.p
          (ldtdate,
          ldtdate2,
          1,

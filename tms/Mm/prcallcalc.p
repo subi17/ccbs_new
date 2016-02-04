@@ -40,7 +40,7 @@ IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
 ELSE lcUserName = "".
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey. 
  
  DISPLAY
  "A) Calls Browse                "  @ menuc[1]    SKIP
@@ -59,24 +59,24 @@ DO WHILE TRUE:
 
    IF FRAME-INDEX = 1 THEN DO:
        /* Show the prepaid calls of this cli. */
-       RUN mobcallm.p(lhSub::cli).
+       RUN Mm/mobcallm.p(lhSub::cli).
    END.   
 
    ELSE IF FRAME-INDEX = 2 THEN DO:
       /* Sum the prepaid calls of this cli and show the current balance. */
-      RUN msisdni2(lhSub::MsSeq).
+      RUN Mm/msisdni2(lhSub::MsSeq).
    END.
          
    ELSE IF FRAME-INDEX = 3 THEN DO:
-      RUN limit.p(lhSub::InvCust, lhSub::Msseq, {&LIMIT_TYPE_BILLPERM}, 0).
+      RUN Mc/limit.p(lhSub::InvCust, lhSub::Msseq, {&LIMIT_TYPE_BILLPERM}, 0).
    END.
    
    ELSE IF FRAME-INDEX = 4 THEN DO:
-      RUN edrm.p(lhSub::cli).
+      RUN Mm/edrm.p(lhSub::cli).
    END.   
    
    ELSE IF FRAME-INDEX = 5 THEN DO:
-      RUN fraudm.p(lhSub::cli).
+      RUN Mm/fraudm.p(lhSub::cli).
    END.   
 
    ELSE IF FRAME-INDEX > 5 OR FRAME-INDEX = 0 THEN LEAVE.

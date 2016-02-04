@@ -43,7 +43,7 @@ DO WHILE TRUE:
       ASSIGN ufk    = 0 
              ufk[8] = 8 
              ehto   = 3. 
-      RUN ufkey. 
+      RUN Syst/ufkey. 
 
       DISPLAY
          lcMenuc[1] SKIP(1)
@@ -62,19 +62,19 @@ DO WHILE TRUE:
       IF LOOKUP(KEYLABEL(LASTKEY),"x,8,F8") > 0 THEN LEAVE.
 
       IF FRAME-INDEX = 1 THEN DO:
-         RUN paymplan (Invoice.CustNum,0,0).
+         RUN Ar/paymplan (Invoice.CustNum,0,0).
       END.
       
       ELSE IF FRAME-INDEX = 2  THEN DO:
-          RUN duedatechg (iiInvNum).
+          RUN Ar/duedatechg (iiInvNum).
       END.
 
       ELSE IF FRAME-INDEX = 3  THEN DO:
-         RUN ppaymcrea (iiInvNum).
+         RUN Ar/ppaymcrea (iiInvNum).
       END.
 
       ELSE IF FRAME-INDEX = 4  THEN DO:
-         RUN paymplan (Invoice.CustNum,-1,0).
+         RUN Ar/paymplan (Invoice.CustNum,-1,0).
       END.
 
       ELSE LEAVE.

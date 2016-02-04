@@ -72,14 +72,14 @@ PAUSE 0.
 MAIN:
 REPEAT WITH FRAME main:
 IF NOT bbatch THEN DO:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.
 
       UPDATE xdays outfile.
 
 ACTION:
    REPEAT WITH FRAME MAIN:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 15 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.
 
       IF toimi = 8 THEN LEAVE main.
       IF toimi = 1 THEN NEXT  main.
@@ -102,7 +102,7 @@ END.  /* bbatch */
    YEAR (TODAY) FORMAT "9999" "-"
    MONTH(TODAY) FORMAT "99"   "-"
    DAY  (TODAY) FORMAT "99".
-   RUN uexskip(2).                           
+   RUN Syst/uexskip(2).                           
 
    PUT STREAM fraud UNFORMATTED
    ynimi " Credit balance report of mobile subscribers, Printed out " 
@@ -120,7 +120,7 @@ END.  /* bbatch */
          ENTRY(i,hdr) 
          tab.
    END.
-   RUN uexskip(1).   
+   RUN Syst/uexskip(1).   
 
    FOR
    EACH MobSub NO-LOCK WHERE 
@@ -213,7 +213,7 @@ END.  /* bbatch */
             dbalance                tab     /* Unbilled Balance       */
             dlimit  .                      /* CreditInvNum Limit           */
 
-         RUN uexskip(1).
+         RUN Syst/uexskip(1).
 
       END.
    END.

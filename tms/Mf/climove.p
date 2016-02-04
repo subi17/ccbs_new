@@ -106,7 +106,7 @@ form /* FIND asub */
 with row 4 col 2 title color value(ctc) " FIND ASUB No. "
    COLOR value(cfc) NO-LABELS OVERLAY FRAME search-1.
 
-cfc = "kline". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "kline". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 ASSIGN
@@ -178,7 +178,7 @@ BROWSE:
             ehto   = 3
             ufkey  = FALSE.
 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
 
       END.
 
@@ -197,12 +197,12 @@ BROWSE:
 
       /* Search 1 */
       if lookup(nap,"F1,1") > 0 THEN DO:
-         cfc = "puyr". RUN ufcolor.
+         cfc = "puyr". RUN Syst/ufcolor.
          assign
             asub  = ""
             ehto  = 9
             ufkey = TRUE.
-         RUN ufkey. 
+         RUN Syst/ufkey. 
          UPDATE asub WITH FRAME search-1.
          HIDE FRAME search-1 no-pause.
          if asub <> "" THEN DO:
@@ -274,7 +274,7 @@ BROWSE:
             ehto  = 9
             ufkey = TRUE.
 
-         RUN ufkey.
+         RUN Syst/ufkey.
 
          ASSIGN
             movedate = today
@@ -645,7 +645,7 @@ PROCEDURE pGetCustNum:
       siirto = ?
       ufkey  = TRUE.
 
-   RUN nnasel.
+   RUN Mc/nnasel.
 
    IF int(siirto) NE ? THEN DO:
       i = 0.
@@ -677,7 +677,7 @@ PROCEDURE pGetCustNum:
          " billing targets."
       VIEW-AS ALERT-BOX.
 
-      RUN h-billtarg(ttCLISer.cust).
+      RUN Help/h-billtarg(ttCLISer.cust).
 
       IF siirto NE ? THEN DO:
          ASSIGN

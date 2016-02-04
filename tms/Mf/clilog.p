@@ -3,7 +3,7 @@
   FUNCTION .....: Writes the logmessage TO a logfile OR
                   TO an EMail depending on the flag ilLogType
                   which is set BY TMSParam (in cliinitlog.i).
-   USAGE:         RUN clilog.p 
+   USAGE:         RUN Mf/clilog.p 
                     (INPUT "FileName",     /* IF FileName should be shown */
                                            /* enter FileName here, mabye  */
                                            /* WITH FUNCTION PROGRAM-NAME(1) */
@@ -72,7 +72,7 @@ IF ilLogType = "FileEmail" AND pEmail THEN DO:
 
    lAddress = TMSParam.CharVal.
 
-   RUN climail.p (INPUT lAddress,
+   RUN Mf/climail.p (INPUT lAddress,
                   INPUT "Cli updatestatus",
                   INPUT ilDestination).
 

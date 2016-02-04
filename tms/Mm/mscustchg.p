@@ -161,7 +161,7 @@ PROCEDURE pMsCustChange:
       
       liCreated = liDefCust.
 
-      RUN copymobcu (INPUT-OUTPUT liCreated,
+      RUN Mm/copymobcu (INPUT-OUTPUT liCreated,
                      FALSE).
       
       FIND bNewCust WHERE bNewCust.CustNum = liCreated EXCLUSIVE-LOCK NO-ERROR.
@@ -299,7 +299,7 @@ PROCEDURE pMsCustChange:
       create_account(liUserCust,?,?).
 
       /* print a letter */
-      RUN prinuser(liUserCust,
+      RUN Mc/prinuser(liUserCust,
                    "new", 
                    OUTPUT lcReqChar).
 
@@ -502,7 +502,7 @@ PROCEDURE pOwnerChange:
          ASSIGN liCreated[liReqCnt] = liDefCust
                 llNewCust           = TRUE.
 
-         RUN copymobcu (INPUT-OUTPUT liCreated[liReqCnt],
+         RUN Mm/copymobcu (INPUT-OUTPUT liCreated[liReqCnt],
                         FALSE).
       END.
       
@@ -656,7 +656,7 @@ PROCEDURE pOwnerChange:
 
       /* print a letter */
       IF liReqCnt >= 2 THEN DO:
-         RUN prinuser(liChkCust,
+         RUN Mc/prinuser(liChkCust,
                       "ownerchg", 
                       OUTPUT lcReqChar).
 
@@ -668,7 +668,7 @@ PROCEDURE pOwnerChange:
    END.
 
    /* confirmation letters to both old and new owner */
-   RUN prinocconf(liOldOwner,
+   RUN Mm/prinocconf(liOldOwner,
                   liNewOwner,
                   MsRequest.MsSeq,
                   MsRequest.CLI,
@@ -722,7 +722,7 @@ PROCEDURE pOwnerChange:
    /* fee from owner change to new customer (actually to invoice customer) */
    IF MsRequest.CreateFees THEN DO:
    
-      RUN creasfee (0,
+      RUN Mc/creasfee (0,
                     MsRequest.MsSeq,
                     TODAY,
                     "MobSub",

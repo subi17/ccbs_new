@@ -87,9 +87,9 @@ WITH OVERLAY ROW 2 centered
 
 
 assign ufkey = TRUE ehto = 3.
-RUN ufkey.
+RUN Syst/ufkey.
 
-cfc = "lis". RUN ufcolor.
+cfc = "lis". RUN Syst/ufcolor.
 
 RUN LOCAL-UPDATE-RECORD.
        

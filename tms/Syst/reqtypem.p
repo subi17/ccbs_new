@@ -4,5 +4,5 @@
 
 {Syst/commali.i}
 
-RUN requesttype(0).
+RUN Syst/requesttype(0).
 

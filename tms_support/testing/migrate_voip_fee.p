@@ -66,7 +66,7 @@ FOR FIRST DayCampaign WHERE
 
       /*IF llActive = FALSE AND FixedFee.CustPP > 0 THEN FixedFee.CustPP = 0.*/
 
-      RUN closefee.p(FixedFee.FFNum,
+      RUN Mc/closefee.p(FixedFee.FFNum,
                      (ldaDate - 1),
                      FALSE, /* credit billed fees */
                      TRUE,
@@ -85,7 +85,7 @@ FOR FIRST DayCampaign WHERE
       NEXT.
    END.
 
-   RUN creasfee.p(liCustNum,
+   RUN Mc/creasfee.p(liCustNum,
                   liMsSeq,
                   (IF ldaDate > ldaMobActDate THEN ldaDate ELSE ldaMobActDate),
                   "FeeModel",

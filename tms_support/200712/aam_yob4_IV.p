@@ -30,7 +30,7 @@ for each invoice no-lock use-index invdate where
        invoice.cli      chr(9)
        invoice.msseq    skip.
        
-   run del_inv.p (invoice.invnum).
+   RUN Inv/del_inv.p (invoice.invnum).
    
    i = i + 1.
    pause 0.

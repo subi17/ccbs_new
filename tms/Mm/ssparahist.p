@@ -31,7 +31,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhSubserpara).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhSubserpara).
+      RUN Mc/eventview2(lhSubserpara).
    END.
 
 END.
@@ -87,7 +87,7 @@ WITH  OVERLAY ROW 4 centered
 
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -160,7 +160,7 @@ REPEAT WITH FRAME sel:
         ufk = 0
         ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -301,8 +301,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSubserpara).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

@@ -226,7 +226,7 @@ WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.
    UPDATE 
       liOrderer 
       lcOutOper WHEN liOrderer EQ 2
@@ -251,7 +251,7 @@ REPEAT WITH FRAME main:
       
       IF FRAME-FIELD = "liOrderer" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
             
-         RUN h-tmscodes(INPUT "MsRequest",  /* TableName */
+         RUN Help/h-tmscodes(INPUT "MsRequest",  /* TableName */
                              "TermReason",  /* FieldName */
                              "Request",   /* GroupCode */
                        OUTPUT lcCode).
@@ -276,13 +276,13 @@ REPEAT WITH FRAME main:
 
          llHelp = TRUE. 
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
          NEXT. 
       END.
       
       IF FRAME-FIELD = "liMsisdnStat" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
          
-         RUN tmscodesel(INPUT "MSISDN",  
+         RUN Syst/tmscodesel(INPUT "MSISDN",  
                               "StatusCode",
                               "MSISDN",
                               "",
@@ -299,14 +299,14 @@ REPEAT WITH FRAME main:
          END.   
          
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
          NEXT. 
       
       END.
 
       IF FRAME-FIELD = "liSimStat" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
             
-         RUN tmscodesel(INPUT "SIM",  
+         RUN Syst/tmscodesel(INPUT "SIM",  
                               "SimStat",
                               "SIM",
                               "",
@@ -323,7 +323,7 @@ REPEAT WITH FRAME main:
          END.   
 
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
          NEXT. 
          
       END.
@@ -579,7 +579,7 @@ REPEAT WITH FRAME main:
          ufk[5] = 795
          ufk[8] = 8.
 
-      RUN ufkey.
+      RUN Syst/ufkey.
       
       IF toimi = 1 THEN NEXT  main.
       

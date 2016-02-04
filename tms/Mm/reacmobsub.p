@@ -224,7 +224,7 @@ DO TRANSACTION:
    /* Reactivate the Barring package(if present) */
    IF MobSub.MsStatus NE 4 THEN DO:
 
-       RUN barrengine.p(MobSub.MsSeq,
+       RUN Mm/barrengine.p(MobSub.MsSeq,
                         "#REFRESH",
                         {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION},
                         katun,               /* creator */

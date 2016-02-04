@@ -59,7 +59,7 @@ END.
 IF llCSBValidation EQ ? THEN llCSBValidation = FALSE.
 IF lcInputFileDir  EQ ? THEN lcInputFileDir = "".
 
-RUN ddoutfileco.p ("",
+RUN Inv/ddoutfileco.p ("",
                    0,
                    99999999,
                    "",

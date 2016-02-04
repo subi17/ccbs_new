@@ -117,7 +117,7 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
 END. 
 
 
-RUN ddpayment (INPUT-OUTPUT TABLE ttInvoice,  
+RUN Ar/ddpayment (INPUT-OUTPUT TABLE ttInvoice,  
                idtPaymDate,
                liPicked,
                OUTPUT oiInvCount). 

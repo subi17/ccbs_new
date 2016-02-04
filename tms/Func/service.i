@@ -810,7 +810,7 @@ PROCEDURE pCopyPackage:
    
          IF ENTRY(liSCnt,lcFeeModel) = "" THEN NEXT.
       
-         RUN setfees.p(ENTRY(liSCnt,lcFeeModel),
+         RUN Mm/setfees.p(ENTRY(liSCnt,lcFeeModel),
                      iiMsSeq,
                      YEAR(idtDate) * 100 + MONTH(idtDate),
                      "Mobsub",
@@ -1050,7 +1050,7 @@ PROCEDURE pTerminatePackage:
    
          IF ENTRY(liCount,lcFeeModel) = "" THEN NEXT.
       
-         RUN setfees.p(ENTRY(liCount,lcFeeModel),
+         RUN Mm/setfees.p(ENTRY(liCount,lcFeeModel),
                      iiMsSeq,
                      YEAR(ldaEndDate) * 100 + MONTH(ldaEndDate),
                      "Mobsub",

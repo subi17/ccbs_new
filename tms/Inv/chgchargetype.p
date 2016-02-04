@@ -43,7 +43,7 @@ IF fTokenRights(katun,"CCSUPER") NE "RW" THEN DO:
 END.
 
 ehto = 9.
-RUN ufkey.
+RUN Syst/ufkey.
 
 liChargeType = MsRequest.ReqIParam2.
 
@@ -61,7 +61,7 @@ REPEAT ON ENDKEY UNDO, LEAVE:
          
       IF KEYLABEL(LASTKEY) = "F9" THEN DO:
             
-         RUN h-tmscodes(INPUT "Invoice",      /* TableName */
+         RUN Help/h-tmscodes(INPUT "Invoice",      /* TableName */
                               "ChargeType",   /* FieldName */
                               "AccRec",       /* GroupCode */
                         OUTPUT lcCode).
@@ -72,7 +72,7 @@ REPEAT ON ENDKEY UNDO, LEAVE:
          END.
 
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
          NEXT. 
       END.
 

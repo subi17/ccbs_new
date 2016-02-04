@@ -148,7 +148,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 795
          ufk[8] = 8 
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.
    END.
    ELSE ASSIGN toimi = 1
                ufkey = TRUE.
@@ -156,7 +156,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    IF toimi = 1 THEN DO:
 
       ehto = 9. 
-      RUN ufkey.
+      RUN Syst/ufkey.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
@@ -176,7 +176,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                LOOKUP(FRAME-FIELD,"liPaymType") > 0 THEN DO:
 
                IF FRAME-FIELD = "liPaymType" THEN DO:
-                  RUN h-tmscodes(INPUT "Payment",  /* TableName*/
+                  RUN Help/h-tmscodes(INPUT "Payment",  /* TableName*/
                                        "PaymType",  /* FieldName */
                                        "AccRec",   /* GroupCode */
                                  OUTPUT lcCode).
@@ -188,7 +188,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                END.
                
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
                NEXT. 
             END.
 
@@ -245,7 +245,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          NEXT. 
       END.
       
-      RUN taxvouchrep (lcTaxZone,
+      RUN Ar/taxvouchrep (lcTaxZone,
                        lcCustID,
                        liPaymType,
                        ldtAccDate[1],

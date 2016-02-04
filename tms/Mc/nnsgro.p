@@ -8,7 +8,7 @@
                   26.04.02/tk eventlogging added  
                   12.07.02/tk delete smgmembers on delete
                   25.02.03/tk tokens
-                  18.03.03/tk run memo
+                  18.03.03/tk RUN Mc/memo
                   17.09.03/aam brand
                   06.02.04 jp custnum for memo
   VERSIO .......: M15
@@ -31,7 +31,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhSMGroup).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhSMGroup).
+      RUN Mc/eventview2.p(lhSMGroup).
    END.
 
 END.
@@ -102,7 +102,7 @@ form /* Salesman group :n haku kentällä SGName */
     with row 4 col 2 title color value(ctc) " FIND Name "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST SMGroup
@@ -133,12 +133,12 @@ repeat WITH FRAME sel:
 
    IF lisattava THEN DO:  /* smgroupn lisäys  */
       assign cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 lisaa:
       repeat WITH FRAME lis ON ENDKEY UNDO lisaa, LEAVE lisaa.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         DO TRANSAction:
            PROMPT-FOR SMGroup.SmGroup
            VALIDATE
@@ -229,7 +229,7 @@ SELAUS:
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
         {Syst/uright1.i '"3,5,6"'}
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -382,9 +382,9 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        SMGroup = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
               SMGroup WITH FRAME f1.
@@ -405,9 +405,9 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        SGName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN gcAllBrand
               SGName WITH FRAME f2.
@@ -427,7 +427,7 @@ SELAUS:
 
      else if lookup(nap,"4,f4") > 0 THEN DO TRANSAction:  /* members */
         FIND SMGroup where recid(SMGroup) = rtab[FRAME-LINE] no-lock.
-        RUN nnsgme1(SMGroup.SmGroup).
+        RUN Mc/nnsgme1(SMGroup.SmGroup).
         ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -503,7 +503,7 @@ SELAUS:
      else if lookup(nap,"3,f3") > 0 THEN DO:    /* memo */
         FIND SMGroup where recid(SMGroup) = rtab[frame-line(sel)]
         no-lock.
-        RUN memo(INPUT 0,
+        RUN Mc/memo(INPUT 0,
                  INPUT "SMGroup",
                  INPUT STRING(SMGroup.SMGroup),
                  INPUT "Salesman group").
@@ -518,8 +518,8 @@ SELAUS:
        FIND SMGroup where recid(SMGroup) = rtab[frame-line(sel)]
        exclusive-lock.
        assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor.
        DISPLAY 
          SMGroup.SmGroup
          SMGroup.SGName.

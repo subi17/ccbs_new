@@ -6,7 +6,7 @@ katun = "cron".
 {Func/lib/eventlog.i}
 
 fELog("DAILY","ServiceDumpStarted").
-run servicedump.
+RUN Mm/servicedump.
 fELog("DAILY","ServiceDumpStopped").
 
 quit.

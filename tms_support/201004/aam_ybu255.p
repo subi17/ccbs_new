@@ -57,7 +57,7 @@ FOR EACH MsRequest NO-LOCK WHERE
             invoice.invtype = 1 no-lock no-error.
       if not available invoice then do:
 
-            RUN creasfee (MsRequest.CustNum,
+            RUN Mc/creasfee (MsRequest.CustNum,
                           MsRequest.MsSeq,
                           ldaActDate,
                           "FeeModel",

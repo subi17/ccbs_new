@@ -44,7 +44,7 @@ FIND Order WHERE
      Order.Brand = gcBrand AND
      Order.OrderId = piOrderId NO-LOCK NO-ERROR.
 
-RUN creditscoring.p(
+RUN Mc/creditscoring.p(
    piOrderId,
    (IF Order.OrderType = 2 THEN "RENEWAL_STC" ELSE "ORDER"),
    OUTPUT llOk,

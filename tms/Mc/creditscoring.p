@@ -390,7 +390,7 @@ IF LOOKUP(pcActionType,"ORDER,RENEWAL_STC") > 0 THEN DO:
       END. /* IF AVAIL OrderPayment THEN DO: */
 
       /* Amount paid in direct channels */
-      RUN cashfee.p(Order.OrderID,
+      RUN Mc/cashfee.p(Order.OrderID,
                     2, /* action 2=just make a list of fees, don't create */
                     OUTPUT lcCashResult,
                     OUTPUT ldePayInAdv,

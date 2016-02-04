@@ -47,14 +47,14 @@ ELSE ASSIGN
 
 LOOP:
 repeat:
-ehto = 9. RUN ufkey.
+ehto = 9. RUN Syst/ufkey.
 
    UPDATE Month WITH FRAME frm.
 
 do-it:
    repeat WITH FRAME frm:
       ASSIGN ufk = 0 ehto = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.
       IF toimi = 1 THEN NEXT  LOOP.
       IF toimi = 8 THEN LEAVE LOOP.
       IF toimi = 5 THEN LEAVE do-it.

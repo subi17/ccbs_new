@@ -29,7 +29,7 @@ FUNCTION setTMSUser RETURNS LOGICAL
 
 /* if tokenlib is not running... start it */
 IF NOT VALID-HANDLE(ghTokenLib) THEN DO:
-    RUN tokenlib PERSISTENT SET ghTokenLib.
+    RUN Mc/lib/tokenlib PERSISTENT SET ghTokenLib.
     IF NOT setTMSUser(katun) THEN DO:
         MESSAGE 
             'Token initialize is not possible' SKIP

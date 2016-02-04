@@ -10,6 +10,6 @@
   
  {Syst/commali.i}
  
- RUN campstat ("",
+ RUN Mc/campstat ("",
                0,
                "").

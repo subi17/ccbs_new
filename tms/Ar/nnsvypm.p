@@ -10,4 +10,4 @@
 
 {Syst/commali.i}
 
-run nnsvyp (FALSE). /* false = not failed = valid */
+RUN Ar/nnsvyp (FALSE). /* false = not failed = valid */

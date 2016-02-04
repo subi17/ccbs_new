@@ -49,7 +49,7 @@ IF liITNum = 0 THEN DO:
    RETURN.
 END.
 
-RUN printxt (Customer.CustNum,
+RUN Mc/printxt (Customer.CustNum,
              0, 
              "",
              1,  /* 1=invtext */

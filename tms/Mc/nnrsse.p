@@ -71,7 +71,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 LOOP:
@@ -137,7 +137,7 @@ BROWSE:
         ufk[1]= 35  ufk[2]= 30 ufk[3]= 885 ufk[4]= 0
         ufk[5]= 11  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -293,9 +293,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        Reseller = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE Reseller WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if Reseller <> "" THEN DO:
@@ -318,9 +318,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        RsName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE RsName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if RsName <> "" THEN DO:

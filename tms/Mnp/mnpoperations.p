@@ -32,7 +32,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhMNPOperation).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhMNPOperation).
+      RUN Mc/eventview2.p(lhMNPOperation).
    END.
 
 END.
@@ -114,7 +114,7 @@ WITH OVERLAY ROW 6 centered 1 columns
    TITLE COLOR value(ctc) " View Message " WITH side-labels
    FRAME lis.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = " By CLI ,  By Name  ,By 3, By 4".
@@ -195,7 +195,7 @@ BROWSE:
         ufk[7] = 2819
         ufk[8] = 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -332,7 +332,7 @@ BROWSE:
         ufk[1] > 0 THEN DO:
         
         RUN local-find-this(false).
-        run mnpfunc.p(MNPOperation.mnpseq). 
+        RUN Mnp/mnpfunc.p(MNPOperation.mnpseq). 
         
         RUN local-find-first.
         must-print = true.
@@ -349,7 +349,7 @@ BROWSE:
         find mnpprocess where mnpprocess.mnpseq = MNPOperation.mnpseq NO-LOCK.
          
         ehto = 10.
-        run ufkey.p.
+        RUN Syst/ufkey.p.
 
         copy-lob MNPOperation.XMLResponse to lcLongXML.
         

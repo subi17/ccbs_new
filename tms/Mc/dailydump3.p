@@ -23,11 +23,11 @@ fELog("DAILYDUMP","InvoiceDumpStarted").
 
 IF WEEKDAY(TODAY) = 1 THEN DO:
    /* All invoices on Sunday */
-   RUN invoicedump(FALSE).
+   RUN Inv/invoicedump(FALSE).
 END.
 ELSE IF WEEKDAY(TODAY) NE 2 THEN DO:
    /* only new invoices on Tuesday-Saturday */
-   RUN invoicedump(TRUE).
+   RUN Inv/invoicedump(TRUE).
 END.
 
 fELog("DAILYDUMP","InvoiceDumpStopped").

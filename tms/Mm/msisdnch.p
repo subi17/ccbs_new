@@ -155,7 +155,7 @@ WITH FRAME main.
 MAIN:
 REPEAT TRANSACTION WITH FRAME main:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.
 
    UPDATE
       new-CLI-end 
@@ -326,7 +326,7 @@ REPEAT TRANSACTION WITH FRAME main:
          ufk[5] = 261
          ufk[8] = 8.
       
-      RUN ufkey.
+      RUN Syst/ufkey.
 
       IF toimi = 1 THEN NEXT  main.
 
@@ -334,7 +334,7 @@ REPEAT TRANSACTION WITH FRAME main:
 
       IF TOIMI = 5 THEN DO:
          
-         RUN charge_dialog.p(
+         RUN Mc/charge_dialog.p(
             MobSub.MsSeq,
             (IF MobSub.PayType THEN "MSISDN_PREPAID" ELSE "MSISDN_POSTPAID"),
             OUTPUT ldeFee).

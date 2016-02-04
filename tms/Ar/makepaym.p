@@ -64,7 +64,7 @@ ASSIGN
    liAccount[1] = iiAccNum
    liAccount[2] = PaidInv.ArAccNum.
    
-RUN createpaym (PaidInv.CustNum,
+RUN Ar/createpaym (PaidInv.CustNum,
                 PaidInv.InvNum,
                 PaidInv.CLI,
                 idtDate,

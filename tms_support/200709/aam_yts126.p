@@ -28,7 +28,7 @@ for each order no-lock where
       can-find(invoice where invoice.invnum = order.invnum)
    then next.
    
-   run cashfee.p (order.orderid,
+   RUN Mc/cashfee.p (order.orderid,
                   2,
                   output lclist,
                   output ldamt,

@@ -70,7 +70,7 @@ THEN DO:
    QUIT.
 END.   
 
-RUN brtestcase_collect.p(liBRTestQueueID,
+RUN Inv/brtestcase_collect.p(liBRTestQueueID,
                          ldaPeriodBeg,
                          ldaPeriodEnd,
                          liFeePeriod,

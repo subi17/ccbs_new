@@ -27,7 +27,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhErrorLog).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhErrorLog).
+      RUN Mc/eventview2(lhErrorLog).
    END.
 
 END.
@@ -123,7 +123,7 @@ IF icTableName > "" OR icActionID > "" THEN ASSIGN
  FrmRow   = 3
  FrmDown  = 13.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -211,7 +211,7 @@ REPEAT WITH FRAME sel:
         ELSE IF icActionID > "" THEN 
            ufk[1] = 0.
 
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -349,8 +349,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
 
@@ -374,8 +374,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        
@@ -466,8 +466,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhErrorLog).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ErrorLog.TableName.
 
        RUN local-UPDATE-record.                                  

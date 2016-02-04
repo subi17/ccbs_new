@@ -118,8 +118,8 @@ tab = chr(9).
 
 krit:
 repeat WITH FRAME krit:
-   cfc = "sel". RUN ufcolor.
-   ehto = 9. RUN ufkey.
+   cfc = "sel". RUN Syst/ufcolor.
+   ehto = 9. RUN Syst/ufkey.
    disp "<" + entry(cnum,cname) + ">" @ bnfile.
 
    UPDATE ticfile excfile WITH FRAME krit
@@ -166,11 +166,11 @@ toimi:
     PAUSE no-message.
       END.
 
-      RUN ufkey.
+      RUN Syst/ufkey.
       IF toimi = 8 THEN LEAVE krit.
       IF toimi = 1 THEN NEXT  krit.
       IF toimi = 4 THEN DO WITH FRAME act.
-    cfc = "lis". RUN ufcolor.
+    cfc = "lis". RUN Syst/ufcolor.
     CLEAR FRAME act ALL no-pause.
     DO i = 1 TO fsize WITH FRAME act.
        bnfile = entry(i,cname).
@@ -274,7 +274,7 @@ TICKET:
     ELSE DO:
 
        /* calculate call's seconds on peak AND off-peak InstDuePeriod */
-       RUN nncapo(
+       RUN Mf/nncapo(
          INPUT  xdate,
          INPUT  tic_stim,
          INPUT  tic_ttim,
@@ -313,7 +313,7 @@ TICKET:
    "Min/peak"     tab
    "Min/off-peak".
 
-      RUN uexskip(2).
+      RUN Syst/uexskip(2).
 
       FOR EACH  wstat BY wstat.wdate:
 
@@ -324,7 +324,7 @@ TICKET:
     wstat.wsec[1] / 60         format "zzzzzzz9"   tab
     wstat.wsec[2] / 60         format "zzzzzzz9".
 
-    RUN uexskip(1).
+    RUN Syst/uexskip(1).
       END.
       OUTPUT STREAM excel  CLOSE.
       PAUSE 0 no-message.

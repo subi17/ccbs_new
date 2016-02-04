@@ -134,7 +134,7 @@ FOR EACH ttDSSFat NO-LOCK:
    END. /* IF fFatExists("DSSCPFREE",ttDSSFat.DSSMsSeq,liPeriod) THEN DO: */
 
    IF lcSimulate <> "yes" THEN DO:
-      RUN creafat.p(ttDSSFat.CustNum,
+      RUN Mc/creafat.p(ttDSSFat.CustNum,
                     ttDSSFat.DSSMsSeq,
                     "DSSCPFREE",
                     ?, /* amount */

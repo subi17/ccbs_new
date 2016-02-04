@@ -114,7 +114,7 @@ repeat:
          
          PUT SCREEN ROW 1 COL 1 STRING(liCliAmt).
          
-         RUN balancequery(lccli).
+         RUN Gwy/balancequery(lccli).
          
          fMinComp(lccli,fMakeTS(),DECIMAL(RETURN-VALUE)).
 

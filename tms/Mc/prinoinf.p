@@ -204,7 +204,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
       ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
       ehto = 3.
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
 
       READKEY.
       nap = keylabel(LASTKEY).
@@ -214,7 +214,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
    if lookup(nap,"1,f1") > 0 THEN DO:
    
       ASSIGN ehto = 9.
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
 
       REPEAT ON ENDKEY UNDO, LEAVE:
       
@@ -238,12 +238,12 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
                 ELSE IF keylabel(lastkey) = "F9" THEN DO:
                    ASSIGN gcHelpParam = "prt"
                           si-recid    = 0.
-                   RUN invotxt ("",
+                   RUN Mc/invotxt ("",
                                 "").
                    gcHelpParam = "".
                    
                    ehto = 9.
-                   RUN ufkey.
+                   RUN Syst/ufkey.
        
                    IF si-recid > 0 THEN DO:
                       FIND InvText WHERE RECID(InvText) = si-recid 
@@ -312,7 +312,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       
       IF NOT ilSilent THEN DO:      
          ehto = 5. 
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
       
       IF llEPl THEN DO:
@@ -327,7 +327,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
          
       END.
 
-      RUN printxt (iiOrderID,
+      RUN Mc/printxt (iiOrderID,
                    liMSSeq, 
                    "",
                    1,                      /* 1=invtext */

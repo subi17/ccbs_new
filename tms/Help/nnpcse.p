@@ -47,7 +47,7 @@ form /* Program Class :n hakua varten */
     with row 4 col 2 title color value(ctc) " FIND Program Class "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "tlse". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "tlse". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 Runko:
 repeat:
 
@@ -67,7 +67,7 @@ LOOP:
       ASSIGN
       cfc = "tlli"
       tlli-ots = " ADD ".
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 add-new:
       repeat WITH FRAME tlli:
          PAUSE 0 no-message.
@@ -130,7 +130,7 @@ print-line:
          ufk = 0 ufk[1] = 35 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
   END. /* print-line */
 
@@ -234,9 +234,9 @@ BROWSE:
 
         /* Haku */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
-           cfc = "puyr". RUN ufcolor.
+           cfc = "puyr". RUN Syst/ufcolor.
            MenuClass = 0.
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
            UPDATE MenuClass WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            IF MenuClass <> 0 THEN DO:

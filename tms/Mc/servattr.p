@@ -28,7 +28,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhServAttr).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhServAttr).
+      RUN Mc/eventview2(lhServAttr).
    END.
 END.
 
@@ -107,7 +107,7 @@ FIND ServCom WHERE
      ServCom.ServCom = icServCom NO-LOCK NO-ERROR.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -134,12 +134,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ServAttr  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            disp icServCom @ servAttr.ServCom WITH FRAME lis.
@@ -238,7 +238,7 @@ BROWSE:
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
         {Syst/uright1.i '"4,5,6"'}
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -375,8 +375,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        SET ServAttr WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -400,8 +400,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f2.
        SET SAName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -424,7 +424,7 @@ BROWSE:
      /* UPDATE memo */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
         RUN local-find-this(FALSE).
-        RUN memo(INPUT 0,
+        RUN Mc/memo(INPUT 0,
                  INPUT "ServAttr",
                  INPUT STRING(ServAttr.ServAttr),
                  INPUT "Service component").
@@ -498,8 +498,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhServAttr).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ServAttr.ServAttr.
 
        RUN local-UPDATE-record.                                  
@@ -623,7 +623,7 @@ PROCEDURE local-UPDATE-record:
       IF lcRight = "RW" THEN DO:
       
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
 
       
          UPDATE

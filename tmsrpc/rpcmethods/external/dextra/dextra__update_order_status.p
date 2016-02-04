@@ -308,8 +308,8 @@ FIND CURRENT OrderDelivery NO-LOCK.
 IF LOOKUP(STRING(OrderDelivery.LOStatusId),
    {&DEXTRA_CANCELLED_STATUSES}) > 0 THEN DO:
    IF Order.StatusCode = {&ORDER_STATUS_RESIGNATION} THEN
-      RUN closeorder.p(Order.OrderId,TRUE).
-   ELSE RUN cancelorder.p(Order.OrderId,TRUE).
+      RUN Mc/closeorder.p(Order.OrderId,TRUE).
+   ELSE RUN Mc/cancelorder.p(Order.OrderId,TRUE).
 END.
 
 add_int(response_toplevel_id, "", liResult).

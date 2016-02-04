@@ -66,7 +66,7 @@ FIND EPGroup WHERE
      EPGroup.Brand   = gcBrand  AND 
      EPGroup.EpGroup = EpGroup NO-LOCK.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Price List,By BillCode  ,By 3, By 4".
@@ -94,12 +94,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a EPMember  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR  EPMember.BillCode
@@ -213,7 +213,7 @@ BROWSE:
         ufk[5]= 5    ufk[6]= 4 ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
         {Syst/uright1.i '"5,6"'}.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -348,8 +348,8 @@ BROWSE:
      /* Search BY col 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME F1.
        SET BillCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -454,8 +454,8 @@ VIEW-AS ALERT-BOX INFORMATION.
 
 
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY
           EPMember.BillCode.
 

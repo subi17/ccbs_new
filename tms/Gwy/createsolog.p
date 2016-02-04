@@ -250,7 +250,7 @@ PROCEDURE pSolog:
          
          /* Create a memo with prepaid balance if any */
          IF bufMobSub.PayType THEN DO:
-            RUN balancequery.p(bufMobSub.CLI).
+            RUN Gwy/balancequery.p(bufMobSub.CLI).
             ldCurrBal = DEC(RETURN-VALUE) / 100 NO-ERROR.
             IF ldCurrBal > 0 THEN
                fLocalMemo("Mobsub",

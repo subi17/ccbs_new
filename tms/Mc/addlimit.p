@@ -21,7 +21,7 @@ if llDoEvent THEN DO:
     RUN StarEventInitialize(lhAddCustLimit).
 
     ON F12 ANYWHERE DO:
-        run eventview2.p(lhAddCustLimit).
+        RUN Mc/eventview2.p(lhAddCustLimit).
     END.
 END.
 
@@ -85,7 +85,7 @@ form /* seek  CustNum */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer"
     COLOR VALUE(cfc) NO-labels overlay FRAME f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -113,12 +113,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a AddCustLimit  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR AddCustLimit.CustNum
@@ -206,7 +206,7 @@ BROWSE:
         ufk[1]= 707 ufk[2]= 0 ufk[3]= 0  ufk[4]= 0
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = false.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -339,8 +339,8 @@ BROWSE:
 
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = true.
        CLEAR FRAME f1.
        DISP lcBrand WITH FRAME f1.
        SET lcBrand 
@@ -421,8 +421,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY AddCustLimit.CustNum.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhAddCustLimit).

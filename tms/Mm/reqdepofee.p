@@ -205,7 +205,7 @@ DO FOR SingleFee:
 END.
 
 /* create invoice */
-RUN nnlamu5 (MsRequest.ReqIParam1,
+RUN Inv/nnlamu5 (MsRequest.ReqIParam1,
              MsRequest.MsRequest,
              "",
              liInvType,
@@ -226,7 +226,7 @@ ELSE DO:
        FIRST Invoice NO-LOCK WHERE
              Invoice.InvNum = SingleFee.InvNum:
              
-       RUN eletterinv(INPUT Invoice.InvNum,
+       RUN Inv/eletterinv(INPUT Invoice.InvNum,
                      INPUT Invoice.InvNum,
                      INPUT Invoice.InvDate,
                      INPUT "",
@@ -269,7 +269,7 @@ PROCEDURE pCreateCustomer:
       RETURN.
    END. 
       
-   RUN copymobcu (INPUT-OUTPUT liDefCust,
+   RUN Mm/copymobcu (INPUT-OUTPUT liDefCust,
                   FALSE).
       
    FIND Customer WHERE Customer.CustNum = liDefCust EXCLUSIVE-LOCK NO-ERROR.

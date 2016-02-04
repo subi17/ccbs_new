@@ -5,7 +5,7 @@
   AUTHOR .......: JP
   CREATED ......: 13-01-00 
   MODIFIED .....: 
-                  13.11.01 lp  RUN memo added
+                  13.11.01 lp  RUN Mc/memo added
                   30.01.02/aam shorter FORMAT FOR ac-type-name
                   26.04.02/tk  eventlogging added
                   05.03.03/tk  tokens
@@ -33,7 +33,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhAccount).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhAccount). 
+      RUN Mc/eventview2.p(lhAccount). 
    END.
 
 END.
@@ -122,7 +122,7 @@ WITH
     color value(cfc) title color value(cfc) " Update memo "
     FRAME memo.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST Account WHERE Account.Brand = lcBrand
@@ -154,12 +154,12 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* Account -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         DO TRANSAction:
 
            DISPLAY lcBrand @ Account.Brand.
@@ -275,7 +275,7 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -435,9 +435,9 @@ BROWSE:
 
      /* SEARCH 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        haku-ac-nr = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME haku-f1.
        UPDATE lcBrand WHEN gcAllBrand 
               haku-ac-nr WITH FRAME haku-f1.
@@ -457,9 +457,9 @@ BROWSE:
      /* SEARCH 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        haku-ac-name = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME haku-f2.
        UPDATE lcBrand WHEN gcAllBrand 
               haku-ac-name WITH FRAME haku-f2.
@@ -481,7 +481,7 @@ BROWSE:
      THEN DO TRANS: /* memo */
         FIND account where recid(account) = rtab[frame-line(sel)]
         NO-LOCK NO-ERROR.
-        RUN memo(INPUT 0,
+        RUN Mc/memo(INPUT 0,
                  INPUT "ACCOUNT",
                  INPUT STRING(account.AccNum),
                  INPUT "Account number").
@@ -560,8 +560,8 @@ BROWSE:
        FIND Account where recid(Account) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor.
        /* Checks names of Account type */
        ac-type-name = paiv(AccType).
 

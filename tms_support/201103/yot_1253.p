@@ -137,7 +137,7 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
 
       FIND CURRENT Order NO-LOCK.
 
-    /*  run cancelorder.p(Order.OrderID). */
+    /*  RUN Mc/cancelorder.p(Order.OrderID). */
 
       /* YDR-70 */
       IF Order.OrderChannel = "pos" THEN DO:

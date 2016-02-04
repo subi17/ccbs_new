@@ -44,7 +44,7 @@ if lookup(frame-field,"InvCust,RateCust,RepCust,PaymCust,AgrCust") > 0 OR
    index(frame-field,"custno") > 0 
 
    THEN DO:
-   RUN nnasel.
+   RUN Mc/nnasel.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
@@ -52,26 +52,26 @@ else if index(frame-field,"BillCode") > 0  OR
         index(frame-field,"BillItem") > 0  OR 
         index(frame-field,"ServiceLMember") > 0
 THEN DO:
-     RUN nntuse.
+     RUN Help/nntuse.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"Target") > 0 THEN 
 DO:
-   RUN targets.
+   RUN Help/targets.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"gcbrand,Brand") > 0 OR
      index(frame-field,"brand") > 0 
 THEN DO:
-   RUN h-brand.
+   RUN Help/h-brand.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"BankId") > 0 THEN
 DO:
-   RUN bankid.
+   RUN Mc/bankid.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
@@ -79,50 +79,50 @@ else if lookup(frame-field,"Parent") > 0 OR
         index(frame-field,"salesman") > 0 OR
         index(frame-field,"myyja") > 0 OR
         index(frame-field,"sm-code") > 0 THEN DO:
-     RUN nnmyse.
+     RUN Help/nnmyse.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"SalesOffice") > 0 THEN DO:
-     RUN nnsose.
+     RUN Help/nnsose.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if index(frame-field,"Reseller") > 0 THEN DO:
-     RUN nnrsse.
+     RUN Mc/nnrsse.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"Language,kie,CCLang") > 0 THEN DO:
-     RUN h-language.
+     RUN Help/h-language.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"AccType") > 0 THEN DO:
-     RUN h-acyp.
+     RUN Help/h-acyp.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 
 else if lookup(frame-field,"xug-code") > 0  then do:
-   run nnugse.p.
+   RUN Help/nnugse.p.
    if siirto <> ? then frame-value = siirto.
 end.
 
 
 else if lookup(frame-field,"RepCodes") > 0 THEN DO:
-     RUN h-repcode.
+     RUN Help/h-repcode.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if 
      index(frame-field,"BDest") > 0 THEN DO:
-     RUN nnbtse.
+     RUN Mc/nnbtse.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if index(frame-field,"Category") > 0 THEN DO:
-     RUN nnakse.
+     RUN Mc/nnakse.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
@@ -165,7 +165,7 @@ else if
         df = "99-99-9999".
      frame-value = string(si-pvm,df).
 
-     RUN ukale.p.
+     RUN Syst/ukale.p.
      IF si-pvm <> ? THEN DO:
         PAUSE 0 no-message.
         frame-value = string(si-pvm,df).
@@ -174,7 +174,7 @@ else if
 END.
 ELSE IF lookup(frame-field,"UserCode") 
     > 0 THEN DO:
-     RUN uktse.p.
+     RUN Syst/uktse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
@@ -185,17 +185,17 @@ else if lookup(frame-field,"UserName")
 END.
 
 else if lookup(frame-field,"MenuClass") > 0 THEN DO:
-     RUN nnpcse.p.
+     RUN Help/nnpcse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if index(frame-field,"InvNum") > 0  THEN DO:
-     RUN nnlase.p.
+     RUN Ar/nnlase.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 ELSE IF INDEX(FRAME-FIELD,"ExtInvID") > 0 THEN DO:
-   RUN nnlase. 
+   RUN Ar/nnlase. 
    IF siirto NE ? THEN DO:
       FIND Invoice WHERE Invoice.InvNum = INTEGER(siirto) NO-LOCK NO-ERROR.
       IF AVAILABLE Invoice THEN siirto = Invoice.ExtInvID.
@@ -204,44 +204,44 @@ ELSE IF INDEX(FRAME-FIELD,"ExtInvID") > 0 THEN DO:
 END.
 
 else if lookup(frame-field,"OpCode,Operator,h-op-code") > 0  THEN DO:
-     RUN nnopse.p.
+     RUN Help/nnopse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if index(frame-field,"ExCode") > 0   OR
         index(frame-field,"ex-code") > 0   
 THEN DO:
-     RUN nnexse.p.
+     RUN Mf/nnexse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if index(frame-field,"TrunkCode") > 0 OR
         index(frame-field,"TrunkName") > 0 THEN DO:
-     RUN nntrse.p.
+     RUN Mf/nntrse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"PriceList,xPriceList") > 0  THEN DO:
-     RUN nnplse.p.
+     RUN Help/nnplse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if index(frame-field,"InvGroup") > 0 OR
         index(frame-field,"ig-code") > 0
 THEN DO:
-     RUN nnigse.p.
+     RUN Mc/nnigse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"custgroup,xCustGroup,xcg-code") > 0  THEN DO:
-     RUN nncgse.p.
+     RUN Mc/nncgse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 
 
 else if lookup(frame-field,"SmGroup,xSmGroup,xg-code,mry1,mry2") > 0  THEN DO:
-     RUN nnsgse.p.
+     RUN Help/nnsgse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
@@ -249,7 +249,7 @@ ELSE IF INDEX(frame-field,"areacode") > 0 OR
         LOOKUP(frame-field,"neigarea") > 0
 
 THEN DO:
-     RUN nnrnse.p.
+     RUN Mf/nnrnse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
@@ -259,7 +259,7 @@ else if lookup(frame-field,"xb-code,xb-name") > 0  THEN DO:
 END.
 
 else if lookup(frame-field,"TrafficArea") > 0  THEN DO:
-     RUN nnsnse.p.
+     RUN Mf/nnsnse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
@@ -270,29 +270,29 @@ va-tno,v#10,v#11,v#12,v#15,v#16"
 */
 ) > 0 THEN DO:
    siirto = frame-value.
-   RUN umese.p.
+   RUN Syst/umese.p.
    IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"PrinterId") > 0  THEN DO:
-     RUN ukirse.p.
+     RUN Syst/ukirse.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"BIGroup,lcGraph") > 0 THEN DO:
-     RUN nnpgse.
+     RUN Help/nnpgse.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 else if index(frame-field,"AccNum") > 0  OR 
      index(frame-field,"Acc") > 0   THEN DO:
-     RUN nnacse.
+     RUN Mc/nnacse.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"repccn,ccn,hakumaa") > 0 OR
      INDEX(frame-field,"ccn") > 0
 THEN DO:
-     RUN nnmase.
+     RUN Help/nnmase.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
@@ -302,12 +302,12 @@ else if lookup(frame-field,"cc-code") > 0 THEN DO:
 END.
 
 else if lookup(frame-field,"Ident") > 0 THEN DO:
-     RUN nnidse.
+     RUN Mf/nnidse.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"Desttype") > 0 THEN DO:
-   RUN h-tmscodes.p(INPUT "BDest",  /* TableName*/
+   RUN Help/h-tmscodes.p(INPUT "BDest",  /* TableName*/
                           "BDestType", /* FieldName */
                           ?, /* GroupCode */
                     OUTPUT lcCode).
@@ -316,82 +316,82 @@ else if lookup(frame-field,"Desttype") > 0 THEN DO:
 END.
 
 else if lookup(frame-field,"Currency") > 0 THEN DO:
-     RUN nncuse.
+     RUN Help/nncuse.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if index(frame-field,"PaymSrc") > 0 then do:
-     run h-paymsrc.p.
+     RUN Help/h-paymsrc.p.
      if siirto <> ? then frame-value = siirto.
 end.
 
 else if index(frame-field,"DialType") > 0  THEN DO:
-     RUN h-dialtype.p.
+     RUN Help/h-dialtype.p.
      IF siirto <> ? THEN frame-value = siirto.
 END.
 
 else if lookup(frame-field,"UserGroup,UserGrp") > 0 THEN DO:
-     RUN hugroup.
+     RUN Help/hugroup.
      IF siirto NE ? THEN frame-value = siirto.
 
 END.
 
 else if lookup(frame-field,"tokencode") > 0 THEN DO:
-    run htoken.
+    RUN Help/htoken.
     if siirto ne ? then frame-value = siirto.
 END.
 
 else if index(frame-field,"contract") > 0 and
      si-recid2 > 0 and si-recid2 ne ?
 then do:
-   run h-contract(si-recid2).
+   RUN Help/h-contract(si-recid2).
    if siirto <> ? then frame-value = siirto.
 end.
 
 else if index(frame-field,"CostCentre") > 0 THEN DO:
-   RUN ccentre.
+   RUN Mc/ccentre.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if index(frame-field,"dcevent") > 0 THEN DO:
-   RUN h-daycamp.
+   RUN Help/h-daycamp.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if index(frame-field,"Region") > 0 THEN DO:
-   RUN h-region.
+   RUN Help/h-region.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if index(frame-field,"TaxZone") > 0 THEN DO:
-   RUN h-taxzone.
+   RUN Help/h-taxzone.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if index(frame-field,"TaxClass") > 0 THEN DO:
-   RUN h-taxclass.
+   RUN Help/h-taxclass.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if index(frame-field,"Nationality") > 0 THEN DO:
-   RUN h-nationality.
+   RUN Help/h-nationality.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 else if index(frame-field,"ZipCode") > 0 OR
         INDEX(FRAME-FIELD,"PostCode") > 0 
 THEN DO:
-   RUN h-postcode.
+   RUN Help/h-postcode.
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
 ELSE IF INDEX(FRAME-FIELD,"BRTestCase") > 0 THEN DO:
-   RUN brtestcase.p.
+   RUN Inv/brtestcase.p.
    IF siirto NE ? THEN FRAME-VALUE = siirto.
 END.
 
 ELSE IF INDEX(FRAME-FIELD,"DPRuleID") > 0 THEN DO:
-   RUN discountplan.p.
+   RUN Mc/discountplan.p.
    IF siirto NE ? THEN ASSIGN FRAME-VALUE = siirto.
 END.
 
@@ -481,6 +481,6 @@ DO i = 1 TO 9:
    ufk[i] = save-ufk[i].
 END.
 PAUSE 0.   /* KJÄH KJÄH */
-RUN ufkey.p.
+RUN Syst/ufkey.p.
 PAUSE 0.
 

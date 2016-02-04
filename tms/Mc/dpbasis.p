@@ -28,7 +28,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhDPBasis).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhDPBasis).
+      RUN Mc/eventview2(lhDPBasis).
    END.
 
 END.
@@ -96,7 +96,7 @@ FORM /* seek DPBasis  by KeyField */
 
 FIND DPConf WHERE DPConf.DPConfNum = DPConfNum NO-LOCK no-error.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.  
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.  
 VIEW FRAME sel.                              
 
 orders = "By Product,By BDestination,By 3, By 4".
@@ -133,13 +133,13 @@ REPEAT WITH FRAME sel:
       ufkey = true 
       ac-hdr = " ADD (F4: RETURN) " 
       must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         ehto = 9. 
-        RUN ufkey.
+        RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -373,7 +373,7 @@ BROWSE:
         ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
         ehto = 3  
         ufkey = false.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -510,8 +510,8 @@ ASK-F1:
         REPEAT WITH FRAME F1 
         ON ENDKEY UNDO ask-f1, LEAVE ask-f1.
 
-          cfc = "puyr". RUN ufcolor.
-          ehto = 9. RUN ufkey. ufkey = true.
+          cfc = "puyr". RUN Syst/ufcolor.
+          ehto = 9. RUN Syst/ufkey. ufkey = true.
           CLEAR FRAME f1.
           SET KeyField WITH FRAME f1.
           LEAVE.
@@ -604,8 +604,8 @@ ASK-F1:
        /* change */
        {Syst/uright2.i}
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY DPBasis.BillCode DPBasis.CCN.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDPBasis).

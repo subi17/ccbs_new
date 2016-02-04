@@ -93,7 +93,7 @@ END.
 IF llPickedCust THEN DO:
 
    FOR EACH ttCustomer NO-LOCK:
-      RUN bundle_first_month_fee.p(ldaFromDate,
+      RUN Mm/bundle_first_month_fee.p(ldaFromDate,
                                    ldaToDate,
                                    ttCustomer.CustNum,
                                    liFRProcessID,
@@ -109,7 +109,7 @@ IF llPickedCust THEN DO:
 
       /* If customer has DSS active then calculate Bundle fee */
       /* based on the DSS total consumption                   */
-      RUN dss_bundle_first_month_fee.p(ldaFromDate,
+      RUN Mm/dss_bundle_first_month_fee.p(ldaFromDate,
                                        ldaToDate,
                                        ttCustomer.CustNum,
                                        liFRProcessID,
@@ -131,7 +131,7 @@ IF llPickedCust THEN DO:
 END. 
 
 ELSE DO:
-   RUN bundle_first_month_fee.p(ldaFromDate,
+   RUN Mm/bundle_first_month_fee.p(ldaFromDate,
                                 ldaToDate,
                                 0,
                                 liFRProcessID,
@@ -148,7 +148,7 @@ ELSE DO:
 
    /* If customer has DSS active then calculate Bundle fee */
    /* based on the DSS total consumption                   */
-   RUN dss_bundle_first_month_fee.p(ldaFromDate,
+   RUN Mm/dss_bundle_first_month_fee.p(ldaFromDate,
                                     ldaToDate,
                                     0,
                                     liFRProcessID,

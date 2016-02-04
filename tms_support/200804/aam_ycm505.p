@@ -131,7 +131,7 @@ REPEAT:
       ldAmount = ROUND(ldAmount / (1 + ldVatPerc / 100),2).
    END.
    
-   RUN balancequery(lcCLI).
+   RUN Gwy/balancequery(lcCLI).
    ldCurrBal = INT(RETURN-VALUE) / 100.
 
    IF ldCurrBal NE ldAmount THEN DO:
@@ -198,7 +198,7 @@ PROCEDURE pAdjustBalance:
       PrePaidRequest.TaxZone     = lcTaxZone
       PrePaidRequest.OrigRequest = liOrigReq.
    
-   RUN pp_platform(gcBrand,PrePaidRequest.PPRequest).
+   RUN Gwy/pp_platform(gcBrand,PrePaidRequest.PPRequest).
    
    lcXML = RETURN-VALUE.
    

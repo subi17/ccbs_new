@@ -575,7 +575,7 @@ PROCEDURE pCloseQ25Discount:
         
       /* Month 25 and after: Create new single fee 
          (CRVTERMDT) with corresponding amount*/
-       RUN creasfee.p(
+       RUN Mc/creasfee.p(
           SingleFee.CustNum,
           MobSub.MsSeq,
           TODAY,

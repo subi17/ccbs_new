@@ -46,10 +46,10 @@ FOR EACH PrepaidRequest NO-LOCK WHERE
         */
          PrepaidRequest.PPStatus = 2 :
        /*
-       RUN balancequery (PrepaidRequest.CLI).
+       RUN Gwy/balancequery (PrepaidRequest.CLI).
        */
 
-        RUN pp_platform(gcBrand,PrePaidRequest.PPRequest).
+        RUN Gwy/pp_platform(gcBrand,PrePaidRequest.PPRequest).
         lcXML = RETURN-VALUE.
         liRespCode = INT(fGetRPCNodeValue(lcXML,"responseCode")) NO-ERROR.
         

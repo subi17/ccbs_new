@@ -20,7 +20,7 @@ if llDoEvent THEN DO:
     RUN StarEventInitialize(lhProgLimit).
                     
     ON F12 ANYWHERE DO:
-        run eventview2.p(lhProgLimit).
+        RUN Mc/eventview2.p(lhProgLimit).
     END.
 END.
 
@@ -110,7 +110,7 @@ ELSE DO:
    RETURN.
 
 END.
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -134,13 +134,13 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* ProgLimit -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         DO TRANSACTION:
 
            CREATE ProgLimit.
@@ -230,7 +230,7 @@ repeat WITH FRAME sel:
 
         IF llShowHistory = TRUE THEN ufk[4]= 38.
         ELSE                         ufk[4]= 37.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -372,7 +372,7 @@ repeat WITH FRAME sel:
          ELSE                          llShowHistory = FALSE.
 
          run local-find-first.
-         run ufkey.
+         RUN Syst/ufkey.
          must-print = true.
          ufkey = true.
          NEXT LOOP.
@@ -445,9 +445,9 @@ repeat WITH FRAME sel:
             recid(ProgLimit) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
+       RUN Syst/ufkey.
 
-       cfc = "lis". RUN ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhProgLimit).
 
@@ -462,7 +462,7 @@ repeat WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhProgLimit).
 
        run local-find-first.
-       run ufkey.
+       RUN Syst/ufkey.
        must-print = true.
        ufkey = true.
        NEXT LOOP.

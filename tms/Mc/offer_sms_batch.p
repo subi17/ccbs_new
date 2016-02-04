@@ -88,7 +88,7 @@ FOR EACH Order NO-LOCK WHERE
 
    IF fOffSet(Order.CrStamp, 10 * 24) < ldeCurrStamp THEN DO:
 
-      RUN closeorder.p(Order.OrderId, TRUE).
+      RUN Mc/closeorder.p(Order.OrderId, TRUE).
 
       IF RETURN-VALUE BEGINS "ERROR" THEN DO:
          IF lcLogDir > "" THEN

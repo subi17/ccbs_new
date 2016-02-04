@@ -27,7 +27,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhDumpFile).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhDumpFile).
+      RUN Mc/eventview2(lhDumpFile).
    END.
 
 END.
@@ -140,7 +140,7 @@ IF gcHelpParam > "" THEN ASSIGN
    FrmRow  = 3
    FrmDown = 11.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -170,7 +170,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a DumpFile  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -178,7 +178,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
 
@@ -298,7 +298,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -432,8 +432,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
@@ -454,7 +454,7 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:
-        RUN dftimetable_sim_all.p.
+        RUN Syst/dftimetable_sim_all.p.
         ufkey = TRUE.
      END.
 
@@ -563,8 +563,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDumpFile).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY DumpFile.DumpID.
 
        RUN local-UPDATE-record.                                  
@@ -602,7 +602,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.
 
 fCleanEventObjects().
 
@@ -717,7 +717,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
                   
       IF toimi = 1 THEN 
@@ -726,7 +726,7 @@ PROCEDURE local-UPDATE-record:
          FIND CURRENT DumpFile EXCLUSIVE-LOCK.
       
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
    
          UPDATE
             DumpFile.Active          
@@ -755,13 +755,13 @@ PROCEDURE local-UPDATE-record:
 
                IF FRAME-FIELD = "MainTable" THEN DO:
                   siirto = "".
-                  RUN table_help.
+                  RUN Syst/table_help.
                   IF siirto > "" THEN 
                      DISP siirto @ DumpFile.MainTable WITH FRAME lis.
                END.
                   
                ELSE IF FRAME-FIELD = "FileCategory" THEN DO:
-                  RUN h-tmscodes(INPUT "DumpFile",     /* TableName */
+                  RUN Help/h-tmscodes(INPUT "DumpFile",     /* TableName */
                                        "FileCategory",  /* FieldName */
                                        "DumpFile",     /* GroupCode */
                                 OUTPUT lcCode).
@@ -773,7 +773,7 @@ PROCEDURE local-UPDATE-record:
                END.
  
                ELSE IF FRAME-FIELD = "DumpFormat" THEN DO:
-                  RUN h-tmscodes(INPUT "DumpFile",     /* TableName */
+                  RUN Help/h-tmscodes(INPUT "DumpFile",     /* TableName */
                                        "DumpFormat",  /* FieldName */
                                        "DumpFile",     /* GroupCode */
                                 OUTPUT lcCode).
@@ -784,7 +784,7 @@ PROCEDURE local-UPDATE-record:
                END.
  
                ELSE IF FRAME-FIELD = "DecimalPoint" THEN DO:
-                  RUN h-tmscodes(INPUT "DumpFile",     /* TableName */
+                  RUN Help/h-tmscodes(INPUT "DumpFile",     /* TableName */
                                        "DecimalPoint",  /* FieldName */
                                        "DumpFile",     /* GroupCode */
                                 OUTPUT lcCode).
@@ -795,7 +795,7 @@ PROCEDURE local-UPDATE-record:
                END.
            
                ELSE IF FRAME-FIELD = "ModFromField" THEN DO:
-                  RUN fieldselection (INPUT INPUT FRAME lis DumpFile.MainTable,
+                  RUN Syst/fieldselection (INPUT INPUT FRAME lis DumpFile.MainTable,
                                       "SELECT FIELD",
                                       "",
                                       "",
@@ -813,7 +813,7 @@ PROCEDURE local-UPDATE-record:
                END.
                 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
 
                NEXT. 
             END.
@@ -890,7 +890,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.
       
          IF toimi = 1 THEN 
          REPEAT WITH FRAME fAddit ON ENDKEY UNDO, LEAVE MaintMenu:
@@ -898,7 +898,7 @@ PROCEDURE local-UPDATE-record:
             FIND CURRENT DumpFile EXCLUSIVE-LOCK.
       
             ehto = 9.
-            RUN ufkey.
+            RUN Syst/ufkey.
    
             UPDATE
                DumpFile.UseIndex 
@@ -922,7 +922,7 @@ PROCEDURE local-UPDATE-record:
 
                   IF FRAME-FIELD = "SideTables" THEN DO:
                      siirto = "".
-                     RUN table_help.
+                     RUN Syst/table_help.
                      IF siirto > "" THEN DO:
                         IF INPUT FRAME fAddit DumpFile.SideTables > ""
                         THEN siirto = INPUT FRAME fAddit DumpFile.SideTables +
@@ -932,7 +932,7 @@ PROCEDURE local-UPDATE-record:
                   END.
                   
                   ELSE IF FRAME-FIELD = "LinkKey" THEN DO:
-                     RUN fieldselection (DumpFile.MainTable,
+                     RUN Syst/fieldselection (DumpFile.MainTable,
                                          "SELECT FIELD",
                                          "",
                                          "",
@@ -947,7 +947,7 @@ PROCEDURE local-UPDATE-record:
                   END.
 
                   ELSE IF FRAME-FIELD = "EventLogFields" THEN DO:
-                     RUN fieldselection (DumpFile.MainTable,
+                     RUN Syst/fieldselection (DumpFile.MainTable,
                                          "SELECT FIELD",
                                          "",
                                          "",
@@ -966,7 +966,7 @@ PROCEDURE local-UPDATE-record:
                   END.
                 
                   ehto = 9.
-                  RUN ufkey.
+                  RUN Syst/ufkey.
 
                   NEXT. 
                END.
@@ -996,7 +996,7 @@ PROCEDURE local-UPDATE-record:
                ufk[8] = 8
                ehto   = 0.
          
-            RUN ufkey.
+            RUN Syst/ufkey.
    
             IF toimi = 1 THEN 
             REPEAT WITH FRAME fQuery ON ENDKEY UNDO, LEAVE:
@@ -1004,7 +1004,7 @@ PROCEDURE local-UPDATE-record:
                FIND CURRENT DumpFile EXCLUSIVE-LOCK.
       
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
    
                UPDATE DumpFile.QueryClause WITH FRAME fQuery.
                LEAVE.
@@ -1019,15 +1019,15 @@ PROCEDURE local-UPDATE-record:
       END.
       
       ELSE IF toimi = 3 THEN DO:
-         RUN dffield (DumpFile.DumpID).
+         RUN Syst/dffield (DumpFile.DumpID).
       END.
  
       ELSE IF toimi = 4 THEN DO:
-         RUN dftimetable (DumpFile.DumpID).
+         RUN Syst/dftimetable (DumpFile.DumpID).
       END.
       
       ELSE IF toimi = 5 THEN DO:
-         RUN dumplog (DumpFile.DumpID).
+         RUN Syst/dumplog (DumpFile.DumpID).
       END.
 
       ELSE IF toimi = 8 THEN LEAVE.  

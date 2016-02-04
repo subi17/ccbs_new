@@ -37,7 +37,7 @@ FOR FIRST DayCampaign WHERE
 
       IF FixedFee.Amt <> ldAmt THEN NEXT EACH_MOBSUB.
 
-      RUN closefee.p(FixedFee.FFNum,
+      RUN Mc/closefee.p(FixedFee.FFNum,
                      (ldaDate - 1),
                      FALSE, /* credit billed fees */
                      TRUE,
@@ -56,7 +56,7 @@ FOR FIRST DayCampaign WHERE
       NEXT.
    END.
 
-   RUN creasfee.p(MobSub.CustNum,
+   RUN Mc/creasfee.p(MobSub.CustNum,
                   MobSub.MsSeq,
                   (IF ldaDate > DCCLI.ValidFrom THEN ldaDate ELSE DCCLI.ValidFrom),
                   "FeeModel",

@@ -110,7 +110,7 @@ form /* seek Mobile Call  BY A-sub. */
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Call Date,,BY MSISDN No.,By 4".
@@ -221,7 +221,7 @@ BROWSE:
         ufk[1]= 713 ufk[2]= 0  ufk[3]= 0 ufk[4]= 0
         ufk[5]= 265 ufk[6]= 0  ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -363,8 +363,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        SET DateSt WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -387,7 +387,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"enter,return,5,f5") > 0 THEN DO:  /* VIEW */
         RUN local-find-this(TRUE).
-        RUN viewmbd(ttRow.MobCDR).
+        RUN Mm/viewmbd(ttRow.MobCDR).
 
         ufkey = TRUE.
         NEXT loop.

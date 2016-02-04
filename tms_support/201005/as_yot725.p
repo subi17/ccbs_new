@@ -64,7 +64,7 @@ repeat:
    find current mservicelimit no-lock.
    find current bmservicelimit no-lock.
 
-   RUN cli_rate.p (Mobsub.cli,
+   RUN Rate/cli_rate.p (Mobsub.cli,
                  5/1/2010,
                  5/31/2010,
                  TRUE).

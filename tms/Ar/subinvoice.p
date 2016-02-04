@@ -27,7 +27,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhSubInvoice).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhSubInvoice).
+      RUN Mc/eventview2.p(lhSubInvoice).
    END.
 
 END.
@@ -118,7 +118,7 @@ IF gcHelpParam > "" THEN DO:
 END.
 ELSE llHelp = FALSE.          
 
-cfc = "sel". RUN ufcolor.p. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -202,7 +202,7 @@ REPEAT WITH FRAME sel:
            ufk[5] = 790 
            ufk[7] = 1152.
            
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
         
       END.
 
@@ -338,8 +338,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.p.
-       ehto = 9. RUN ufkey.p. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE liSubInvNum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -365,7 +365,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 THEN DO:  
         RUN local-find-this(FALSE).
  
-        RUN memo.p(INPUT SubInvoice.CustNum,
+        RUN Mc/memo.p(INPUT SubInvoice.CustNum,
                  INPUT "SubInvoice",
                  INPUT STRING(SubInvoice.InvNum) + "/" + 
                        STRING(SubInvoice.SubInvNum),
@@ -378,7 +378,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  
         RUN local-find-this(FALSE).
 
-        RUN payments.p(0,
+        RUN Ar/payments.p(0,
                      SubInvoice.InvNum,
                      SubInvoice.SubInvNum).
         ufkey = TRUE.
@@ -401,7 +401,7 @@ REPEAT WITH FRAME sel:
 
         RUN local-find-this(FALSE).
        
-        RUN nnlryp.p(SubInvoice.InvNum,
+        RUN Ar/nnlryp.p(SubInvoice.InvNum,
                      SubInvoice.SubInvNum).
 
         ufkey = TRUE.
@@ -425,7 +425,7 @@ REPEAT WITH FRAME sel:
                   ufk[8] = 8
                   ehto   = 0
                   ufkey  = true.
-           RUN ufkey.p.
+           RUN Syst/ufkey.p.
                
            /* credit invoice */
            IF toimi = 3 THEN DO:
@@ -435,7 +435,7 @@ REPEAT WITH FRAME sel:
                      si-recid  = RECID(SubInvoice)
                      memory    = RECID(SubInvoice).
               
-              RUN nncimu.p.
+              RUN Ar/nncimu.p.
 
               ASSIGN si-recid2  = ?   
                      si-recid   = ?
@@ -452,7 +452,7 @@ REPEAT WITH FRAME sel:
 
               FIND Invoice OF SubInvoice NO-LOCK.
                 
-              RUN calcint.p(Invoice.DueDate,
+              RUN Ar/calcint.p(Invoice.DueDate,
                           ldtDate,
                           liIntMethod,
                           ldDebt,
@@ -468,7 +468,7 @@ REPEAT WITH FRAME sel:
               end.   
               
               ehto = 9. 
-              RUN ufkey.p.
+              RUN Syst/ufkey.p.
 
               PAUSE 0.
               DISP 
@@ -486,7 +486,7 @@ REPEAT WITH FRAME sel:
                  UPDATE ldtDate WITH FRAME fInterest.
               
                  IF ldtdate ENTERED THEN DO:
-                    RUN calcint.p(Invoice.DueDate,
+                    RUN Ar/calcint.p(Invoice.DueDate,
                                 ldtDate,
                                 liIntMethod,
                                 ldDebt,
@@ -529,7 +529,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSubInvoice).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -652,7 +652,7 @@ PROCEDURE local-UPDATE-record:
          ufk = 0
          ufk[8] = 8
          ehto = 0.
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
 
       IF toimi = 8 THEN DO:
          HIDE FRAME fInvDet NO-PAUSE.

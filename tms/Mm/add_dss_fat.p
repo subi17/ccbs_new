@@ -107,7 +107,7 @@ FOR EACH ttDSSFat NO-LOCK:
    END. /* IF fFatExists */
 
    /* Create FAT */
-   RUN creafat.p(ttDSSFat.CustNum,
+   RUN Mc/creafat.p(ttDSSFat.CustNum,
                  ttDSSFat.DSSMsSeq,
                  "DSSCPFREE",
                  ?, /* amount */

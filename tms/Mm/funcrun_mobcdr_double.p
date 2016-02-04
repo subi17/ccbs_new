@@ -50,7 +50,7 @@ lcLogFile = REPLACE(lcLogFile,"#DATE",STRING(YEAR(TODAY),"9999") +
                                       STRING(MONTH(TODAY),"99") + 
                                       STRING(DAY(TODAY),"99")).
 
-RUN mobcdr_double_check.p ("ReadDate",
+RUN Mm/mobcdr_double_check.p ("ReadDate",
                            ldaReadDate,
                            ldaReadDate,
                            "",

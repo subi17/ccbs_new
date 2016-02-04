@@ -31,7 +31,7 @@ END CASE.
 
 DO WHILE TRUE:
 
-   RUN tmscodesbr("MsRequest",
+   RUN Syst/tmscodesbr("MsRequest",
                   "ReqStatus",
                   lcSkip,
                   lcReqName,
@@ -39,7 +39,7 @@ DO WHILE TRUE:
                   OUTPUT lcStatus).
 
    IF lcStatus > "" THEN 
-      RUN msrequest (iiReqType,
+      RUN Mm/msrequest (iiReqType,
                      INTEGER(lcStatus),
                      iiMsSeq,
                      0,

@@ -87,7 +87,7 @@ IF ldaPrevDb NE ? THEN DO:
    END.
 END.
 
-RUN billed_prev_calls.p(INPUT liInvType,
+RUN Mm/billed_prev_calls.p(INPUT liInvType,
                         INPUT liBillPeriod,
                         INPUT liFRProcessID,
                         INPUT liUpdateInterval,

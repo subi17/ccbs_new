@@ -101,7 +101,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhttMSISDN).
+      RUN Mc/eventview2.p(lhttMSISDN).
    END.
 END.
 
@@ -250,7 +250,7 @@ END FUNCTION.
 
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By ttMSISDN ,By CustNo ,By Status ,By OrderId".
@@ -277,12 +277,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ttMSISDN  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, leave ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            
@@ -403,7 +403,7 @@ BROWSE:
         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
         ufk[6]= 1752 /* 238 */ ufk[7]= 0 /* 788 */ ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = false.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -546,14 +546,14 @@ BROWSE:
        ASSIGN ufkey = TRUE ufk = 0 ehto = 1
        ufk[1]= 209  ufk[2]= 702 ufk[3]= 559 ufk[4] = 2211 
        ufk[8] = 8.
-       run ufkey.
+       RUN Syst/ufkey.
 
        if toimi = 8 then next browse.
 
        if toimi = 1 then do:
 
-          cfc = "puyr". RUN ufcolor.
-          ehto = 9. RUN ufkey. ufkey = true.
+          cfc = "puyr". RUN Syst/ufcolor.
+          ehto = 9. RUN Syst/ufkey. ufkey = true.
           clear frame f1.
           Disp lcBrand With FRAME f1.
           CLI = m_pref.             
@@ -587,8 +587,8 @@ BROWSE:
 
         /* Search by col 2 */
         else if toimi = 2 then do:
-          cfc = "puyr". RUN ufcolor.
-          ehto = 9. RUN ufkey. ufkey = true.
+          cfc = "puyr". RUN Syst/ufcolor.
+          ehto = 9. RUN Syst/ufkey. ufkey = true.
           CLEAR FRAME f2.
           Disp lcBrand With FRAME f2.
           SET  lcBrand WHEN gcAllBrand = TRUE 
@@ -607,8 +607,8 @@ BROWSE:
 
         /* Search by col 3 */
         else if toimi = 3 then do:
-          cfc = "puyr". RUN ufcolor.
-          ehto = 9. RUN ufkey. ufkey = true.
+          cfc = "puyr". RUN Syst/ufcolor.
+          ehto = 9. RUN Syst/ufkey. ufkey = true.
           DISP lcBrand WITH FRAME f3.
           SET  lcBrand WHEN gcAllBrand = TRUE
                StatusCode WITH FRAME f3.
@@ -625,8 +625,8 @@ BROWSE:
 
         /* Search by col 4 */
         else if toimi = 4 then do:
-          cfc = "puyr". RUN ufcolor.
-          ehto = 9. RUN ufkey. ufkey = true.
+          cfc = "puyr". RUN Syst/ufcolor.
+          ehto = 9. RUN Syst/ufkey. ufkey = true.
            Disp lcBrand With FRAME f4.
           SET   lcBrand WHEN gcAllBrand = TRUE  
                orderid WITH FRAME f4.
@@ -692,7 +692,7 @@ CU-DATA:
 CU-ACTION:
            repeat with frame cust:
               assign ufk = 0 ufk[8] = 8 ehto =  0.
-              run ufkey.
+              RUN Syst/ufkey.
               case toimi:
                  WHEN 8 THEN do:
                     hide frame cust no-pause.
@@ -707,7 +707,7 @@ CU-ACTION:
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO: /* list known users of ttMSISDN */
        RUN local-find-this (false).
-       RUN msowner2(ttMSISDN.cli).
+       RUN Mm/msowner2(ttMSISDN.cli).
        ufkey = TRUE.
        NEXT loop.
      END.
@@ -721,7 +721,7 @@ CU-ACTION:
       
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO: 
         RUN local-find-this (false).
-        RUN eventsel.p("MSISDN",
+        RUN Mc/eventsel.p("MSISDN",
                         "#BEGIN" + CHR(255) + gcBrand + CHR(255) +
                         STRING(ttMSISDN.CLI)).
         ufkey = true.
@@ -794,8 +794,8 @@ end.
              Customer.CustNum  lcCustName 
           VIEW-AS ALERT-BOX TITLE " MSISDN is in use !".
        END.
-       ASSIGN ac-hdr = " VIEW " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = true ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-update-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -1004,7 +1004,7 @@ PROCEDURE local-update-record:
            ufk[9]= 1
            ehto = 0.
 
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
       ELSE ASSIGN toimi = 1.
 /*
@@ -1030,7 +1030,7 @@ PROCEDURE local-update-record:
 
 /*       lcMenuOptions = lcMenuOptions + "|" + {&MSISDN_FUNC_HISTORY}. */
          
-         RUN selectbox(
+         RUN Syst/selectbox(
             "MSISDN FUNCTION",
             lcMenuOptions,
             OUTPUT lcSelected).
@@ -1045,7 +1045,7 @@ PROCEDURE local-update-record:
                UPDATE ok.
                IF NOT ok THEN NEXT UPDATE-LOOP.
                
-               RUN mnpnumbertermrequest.p(ttMSISDN.CLI,0).
+               RUN Mnp/mnpnumbertermrequest.p(ttMSISDN.CLI,0).
                
                IF RETURN-VALUE BEGINS "ERROR:" THEN 
                   MESSAGE ENTRY(2,RETURN-VALUE,":") VIEW-AS ALERT-BOX ERROR.
@@ -1054,12 +1054,12 @@ PROCEDURE local-update-record:
             END.      
             WHEN {&MSISDN_FUNC_PROCESS} THEN DO:
             
-               RUN mnpclibr.p({&MNP_TYPE_TERMINATION}, 0, ttMSISDN.CLI).
+               RUN Mnp/mnpclibr.p({&MNP_TYPE_TERMINATION}, 0, ttMSISDN.CLI).
 
             END.      
             WHEN {&MSISDN_FUNC_HISTORY} THEN DO:
             
-               RUN msisdn.p(ttMSISDN.CLI, 0, 0).
+               RUN Mm/msisdn.p(ttMSISDN.CLI, 0, 0).
 
             END.      
          END.
@@ -1085,7 +1085,7 @@ PROCEDURE pUpdate:
    FIND CURRENT ttMSISDN EXCLUSIVE-LOCK.
       
    ehto = 9.
-   RUN ufkey.
+   RUN Syst/ufkey.
    
    REPEAT ON ENDKEY UNDO, LEAVE:
    
@@ -1104,7 +1104,7 @@ PROCEDURE pUpdate:
 
                WHEN "POS" THEN DO:
 
-                  RUN tmscodesbr.p(input "MSISDN",
+                  RUN Syst/tmscodesbr.p(input "MSISDN",
                                  input "POS",
                                  input "SNSTest",
                                  input "Choose Stock",
@@ -1116,7 +1116,7 @@ PROCEDURE pUpdate:
                   END.
 
                   DISP ttMSISDN.POS WITH FRAME lis.
-                  ehto = 9. RUN ufkey.
+                  ehto = 9. RUN Syst/ufkey.
                   NEXT.
                END.
             END.

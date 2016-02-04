@@ -36,7 +36,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhCLI).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhCLI).
+      RUN Mc/eventview2.p(lhCLI).
    END.
 
 END.

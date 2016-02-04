@@ -223,7 +223,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 63  
          ufk[8] = 8 
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.
    END.
    ELSE ASSIGN toimi = 1
                ufkey = TRUE.
@@ -231,7 +231,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    IF toimi = 1 THEN DO:
 
       ehto = 9. 
-      RUN ufkey.
+      RUN Syst/ufkey.
       
       liPreQty = 0.
       
@@ -255,7 +255,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
             THEN DO:
 
                IF FRAME-FIELD = "liInvType" THEN DO:
-                  RUN h-tmscodes(INPUT "Invoice",  /* TableName*/
+                  RUN Help/h-tmscodes(INPUT "Invoice",  /* TableName*/
                                        "InvType", /* FieldName */
                                        "Report", /* GroupCode */
                                  OUTPUT lcCode).
@@ -266,7 +266,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                END.
  
                ELSE IF FRAME-FIELD = "liDelType" THEN DO:
-                  RUN h-tmscodes(INPUT "Invoice",  /* TableName*/
+                  RUN Help/h-tmscodes(INPUT "Invoice",  /* TableName*/
                                        "DelType", /* FieldName */
                                        "Billing", /* GroupCode */
                                  OUTPUT lcCode).
@@ -277,7 +277,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                END.
                 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
                NEXT. 
             END.
 
@@ -329,7 +329,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    /* quantity of invoices */ 
    ELSE IF toimi = 3 THEN DO:
       
-      RUN printdoc1co (lcInvGroup,
+      RUN Inv/printdoc1co (lcInvGroup,
                        liCustNum[1],
                        liCustNum[2],
                        lcInvID[1],
@@ -361,7 +361,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       
       lcFile = lcTransDir + "*" + lcFile.
          
-      RUN printdoc1co (lcInvGroup,
+      RUN Inv/printdoc1co (lcInvGroup,
                        liCustNum[1],
                        liCustNum[2],
                        lcInvID[1],

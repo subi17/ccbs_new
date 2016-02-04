@@ -389,10 +389,10 @@ else do:
 end.      
 
 
-ehto = 3. run ufkey.
+ehto = 3. RUN Syst/ufkey.
    
    /* QUIT menutext */
-   run ufxkey(8,3).
+   RUN Syst/ufxkey(8,3).
    
    If NOT bOL then
       disp

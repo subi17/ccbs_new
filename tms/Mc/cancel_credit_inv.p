@@ -282,7 +282,7 @@ IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhbInvoice).
 delete bInvoice.
 
 /* check the actual payment status */
-run invbal.p (Invoice.InvNum, output xbal).
+RUN Ar/invbal.p (Invoice.InvNum, output xbal).
 assign Invoice.PaidAmt = Invoice.InvAmt - xbal. 
 CASE Invoice.PaidAmt:
 WHEN 0.00           THEN Invoice.PaymState = 0.
@@ -293,7 +293,7 @@ END CASE.
 IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhInvoice).
 
 /* recalculate inv-asub and inv-ccn */
-run creprows.p (Invoice.InvNum,0). 
+RUN Mc/creprows.p (Invoice.InvNum,0). 
 
 message "Credit invoice has been deleted and debit invoice has been"
         "marked as uncredited. Events have been remarked as billed."

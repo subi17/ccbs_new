@@ -148,7 +148,7 @@ IF LOOKUP(lcApplicationId,"501,502") > 0 AND
    END.
 END.
 
-RUN barrengine.p(MobSub.MsSeq,
+RUN Mm/barrengine.p(MobSub.MsSeq,
                  pcSetServiceId,
                  {&REQUEST_SOURCE_EXTERNAL_API},
                  (IF lcApplicationId EQ "701" THEN "Collection"

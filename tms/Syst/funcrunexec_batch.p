@@ -40,7 +40,7 @@ BY FuncRunExec.FRExecID:
 
    lcOrigState = FuncRunExec.RunState.
    
-   RUN funcrunexec_run.p (FuncRunExec.FRExecID,
+   RUN Syst/funcrunexec_run.p (FuncRunExec.FRExecID,
                           lcHost).
    
    /* nothing done or interrupted */

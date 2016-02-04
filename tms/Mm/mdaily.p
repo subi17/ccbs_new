@@ -35,7 +35,7 @@ CASE WEEKDAY(TODAY):
    WHEN 1 THEN DO:
       
       fELog("DAILY","PrePaidReportStarted").
-      RUN ppcomprep.
+      RUN Mc/ppcomprep.
       fELog("DAILY","PrePaidReportStopped").
    END.
    

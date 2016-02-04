@@ -34,7 +34,7 @@ repeat:
    if not available order then next.
    
    if order.invnum = 0 and lioldnum = 0 then do:
-      run cashfee.p (order.orderid,
+      RUN Mc/cashfee.p (order.orderid,
                      1,
                      output lclist,
                      output ldamt,
@@ -67,7 +67,7 @@ repeat:
            lioldnum format ">>>>>>>>9".
            
 
-   run del_inv.p (invoice.invnum).
+   RUN Inv/del_inv.p (invoice.invnum).
    
 
    for each singlefee exclusive-lock where

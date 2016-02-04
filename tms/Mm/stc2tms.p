@@ -737,7 +737,7 @@ PROCEDURE pFinalize:
    
    /* clitype spesific fees */
    IF AVAIL CliType AND CliType.FeeModel1 > "" THEN DO:
-      RUN creasfee (MobSub.CustNum,
+      RUN Mc/creasfee (MobSub.CustNum,
                     MobSub.MsSeq,
                     ldaNewBeginDate,
                     "MobSub",
@@ -755,7 +755,7 @@ PROCEDURE pFinalize:
    END.
 
    /* general fees */
-   RUN creasfee (MobSub.CustNum,
+   RUN Mc/creasfee (MobSub.CustNum,
                  MobSub.MsSeq,
                  ldaNewBeginDate,
                  "MobSub",
@@ -777,12 +777,12 @@ PROCEDURE pFinalize:
 
    /* commission termination */
    IF llOldPayType NE MobSub.PayType THEN 
-      RUN commission_term(MobSub.MsSeq,
+      RUN Ar/commission_term(MobSub.MsSeq,
                           "STC",
                           OUTPUT liReqCnt).
 
     /* activate/terminate periodical contracts, service packages etc. */
-    RUN requestaction_exec.p (MsRequest.MsRequest,
+    RUN Mm/requestaction_exec.p (MsRequest.MsRequest,
                               MsRequest.ReqCParam2, /* definitions on new type */
                               0,                      /* order */
                               ldBegStamp,
@@ -801,7 +801,7 @@ PROCEDURE pFinalize:
     
     /* Create charge for new paytype */
     IF MsRequest.CreateFees THEN 
-        RUN create_charge_comp.p(
+        RUN Mm/create_charge_comp.p(
            {&REQUEST_SOURCE_MANUAL_TMS},
            Mobsub.MsSeq,   
            MsRequest.UserCode,
@@ -856,7 +856,7 @@ PROCEDURE pFinalize:
        END.
     END.
 
-   /* run rerate (needed especially with saldo-services) */
+   /* RUN Rate/rerate (needed especially with saldo-services) */
    IF llReRate THEN DO:
       
       fReRateTriggerEvent(INPUT MsRequest.MSRequest,RECID(MSRequest)).
@@ -873,7 +873,7 @@ PROCEDURE pFinalize:
       liFatFromPeriod = YEAR(ldaNewBeginDate) * 100 + MONTH(ldaNewBeginDate).
     
       /* create FAtime */
-      RUN creafat.p (MobSub.CustNum,
+      RUN Mc/creafat.p (MobSub.CustNum,
                      MobSub.MsSeq,
                      "BTPREPOST1000",
                      (MsRequest.ReqIParam3 / 100),
@@ -996,10 +996,10 @@ PROCEDURE pFinalize:
          IF Order.StatusCode EQ {&ORDER_STATUS_ONGOING} THEN DO:
          
             /* update customer data */
-            RUN createcustomer.p(Order.OrderId,1,FALSE,TRUE,output liCustnum).
+            RUN Mm/createcustomer.p(Order.OrderId,1,FALSE,TRUE,output liCustnum).
 
             /* possible bono/bono voip activation */
-            RUN orderaction_exec.p (MobSub.MsSeq,
+            RUN Mm/orderaction_exec.p (MobSub.MsSeq,
                                     Order.OrderID,
                                     MsRequest.MsRequest,
                                     {&REQUEST_SOURCE_STC}).
@@ -1036,7 +1036,7 @@ PROCEDURE pFinalize:
    END.
    ELSE IF bOldType.PayType NE CLIType.PayType THEN DO:
 
-      RUN barrengine.p(MobSub.MsSeq,
+      RUN Mm/barrengine.p(MobSub.MsSeq,
                       "Y_BPSUB=1",
                       {&REQUEST_SOURCE_STC},
                       katun,               /* creator */
@@ -1055,7 +1055,7 @@ PROCEDURE pFinalize:
    END.
 
    /* Send SMS once STC is done */
-   RUN requestaction_sms.p(INPUT MsRequest.MsRequest,
+   RUN Mm/requestaction_sms.p(INPUT MsRequest.MsRequest,
                            INPUT MsRequest.ReqCParam2,
                            INPUT MsRequest.ReqSource).
 
@@ -1491,7 +1491,7 @@ PROCEDURE pNetworkAction:
 
       IF fGetBarringStatus(RequestAction.ActionKey,
                            MobSub.MsSeq) EQ {&BARR_STATUS_ACTIVE} THEN
-         RUN barrengine.p(MobSub.MsSeq,
+         RUN Mm/barrengine.p(MobSub.MsSeq,
                          RequestAction.ActionKey + "=0",
                          {&REQUEST_SOURCE_STC}, /* source  */
                          "",                  /* creator */
@@ -1509,7 +1509,7 @@ PROCEDURE pNetworkAction:
    IF bOldType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID} AND
       CLIType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID} THEN DO:
 
-      RUN balancequery.p(MobSub.CLI).
+      RUN Gwy/balancequery.p(MobSub.CLI).
       
       FIND CURRENT MsRequest EXCLUSIVE-LOCK.
 
@@ -1539,7 +1539,7 @@ PROCEDURE pNetworkAction:
          MsRequest.ReqIParam4 = liOffSet.
       END.
       
-      RUN createsolog.p(MSRequest.MSRequest).
+      RUN Gwy/createsolog.p(MSRequest.MSRequest).
    
       RETURN "SubRequest created".
    END.
@@ -1907,7 +1907,7 @@ PROCEDURE pActivateTARJ5PromotionalPrice:
       liServiceClass = {&SC_TARJ5_NORMAL}
       liTempServiceClass = {&SC_TARJ5_PROMOTIONAL}.
 
-   RUN air_update_serviceclass.p(MsRequest.CLI,
+   RUN Gwy/air_update_serviceclass.p(MsRequest.CLI,
                                  liServiceClass,
                                  liTempServiceClass,
                                  TODAY + 31,
@@ -2140,7 +2140,7 @@ PROCEDURE pCONTM2BarringReset:
 
    IF llHasActiveBarringComponent THEN DO:
 
-      RUN barrengine.p(MobSub.MsSeq,
+      RUN Mm/barrengine.p(MobSub.MsSeq,
                       "#REFRESH",
                       {&REQUEST_SOURCE_STC},
                       katun,               /* creator */
@@ -2172,7 +2172,7 @@ PROCEDURE pCONTM2BarringReset:
          RETURN "ERROR:Barring service request failed:" + STRING(lcError).
       
       IF bOldType.PayType NE CLIType.PayType THEN DO:
-         RUN barrengine.p(MobSub.MsSeq,
+         RUN Mm/barrengine.p(MobSub.MsSeq,
                          "Y_BPSUB=1",
                          {&REQUEST_SOURCE_STC},
                          katun,               /* creator */

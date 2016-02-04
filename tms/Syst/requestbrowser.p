@@ -77,7 +77,7 @@ form /* seek CodeName */
 
 IF icTitle = "" THEN icTitle = "Requests".
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 /* column-labels for parameters */
@@ -161,7 +161,7 @@ REPEAT WITH FRAME sel:
            ehto   = 3 
            ufkey  = FALSE.
       
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -278,7 +278,7 @@ REPEAT WITH FRAME sel:
         RUN local-find-this(FALSE).
 
         IF AVAILABLE ttMenu THEN DO:
-           RUN reqstatmaint(ttMenu.RType). 
+           RUN Syst/reqstatmaint(ttMenu.RType). 
            ASSIGN ufk    = 0
                   ufk[1] = 0
                   ufk[2] = 0
@@ -287,7 +287,7 @@ REPEAT WITH FRAME sel:
                   ehto   = 3
                   ufkey  = FALSE.
            
-           RUN ufkey.
+           RUN Syst/ufkey.
            RUN pInitMenu.
            must-print = true.
            NEXT LOOP.

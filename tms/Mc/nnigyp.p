@@ -16,7 +16,7 @@
                   05.10.01 kl two column labels hard-coded
                   13.02.02 ht CollCustNum for "collection for Intrum"
                   26.04.02 tk eventlogging added
-                  20.05.02/tk RUN memo
+                  20.05.02/tk RUN Mc/memo
                   20.05.02/tk invoice texts
                   31.05.02 aam UnbilledLimit includes days, NOT months 
                   09.09.02/jp some validation
@@ -52,7 +52,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhInvGroup).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhInvGroup).
+      RUN Mc/eventview2.p(lhInvGroup).
    END.
 
 END.
@@ -160,7 +160,7 @@ FUNCTION fZoneName RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 run pFindFirst.
@@ -190,14 +190,14 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* InvGroup -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
       
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
        
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.
 
          DO TRANSAction:
          
@@ -259,7 +259,7 @@ repeat WITH FRAME sel:
          IF NEW InvGroup THEN DO:
             fOLRefresh(TRUE).
             /* create invoice run logs for new group */
-            RUN invrunlog(YEAR(TODAY) * 100 + MONTH(TODAY),
+            RUN Mc/invrunlog(YEAR(TODAY) * 100 + MONTH(TODAY),
                           YEAR(TODAY) * 100 + 12).
          END.
 
@@ -332,7 +332,7 @@ BROWSE:
          ufk[7]= 1760 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -472,9 +472,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.
         haku-ig-code = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
         DISP lcBrand with frame haku-f1.
         UPDATE 
            lcBrand when gcAllBrand
@@ -495,9 +495,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.
         haku-ig-name = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
         DISP lcBrand WITH FRAME haku-f2.
         UPDATE 
            lcBrand when gcAllBrand
@@ -519,7 +519,7 @@ BROWSE:
      THEN DO TRANS:
         FIND InvGroup WHERE RECID(InvGroup) = rtab[FRAME-LINE(sel)]
         NO-LOCK NO-ERROR.
-        RUN memo(INPUT 0,
+        RUN Mc/memo(INPUT 0,
                  INPUT "INVGROUP",
                  INPUT STRING(InvGroup.InvGroup),
                  INPUT "Invoice group code").
@@ -539,7 +539,7 @@ BROWSE:
                   ufk[2] = 1119
                   ufk[8] = 8
                   ehto   = 0.
-           RUN ufkey.
+           RUN Syst/ufkey.
             
            /* invoice number sequences */
            IF toimi = 1 THEN DO:
@@ -551,7 +551,7 @@ BROWSE:
                     VIEW-AS ALERT-BOX INFORMATION.
                  END.
 
-                 ELSE RUN iginvnum(InvGroup.InvGroup).
+                 ELSE RUN Mc/iginvnum(InvGroup.InvGroup).
               END.
            END.
 
@@ -559,7 +559,7 @@ BROWSE:
            ELSE IF toimi = 2 THEN DO:
 
               IF AVAILABLE InvGroup THEN DO:
-                 RUN igvoucher(InvGroup.InvGroup).
+                 RUN Mc/igvoucher(InvGroup.InvGroup).
               END.
            END.
             
@@ -655,7 +655,7 @@ BROWSE:
 
      ELSE IF lookup(nap,"7,f7") > 0 THEN DO:
         FIND InvGroup WHERE recid(InvGroup) = rtab[FRAME-LINE] NO-LOCK.
-        RUN invotxt("InvGroup",InvGroup.InvGroup).
+        RUN Mc/invotxt("InvGroup",InvGroup.InvGroup).
         must-print=true.
         ufkey=true.
         NEXT LOOP.
@@ -668,8 +668,8 @@ BROWSE:
         FIND InvGroup where recid(InvGroup) = rtab[frame-line(sel)]
         exclusive-lock.
         ASSIGN ufkey = TRUE ehto = 9.
-        RUN ufkey.
-        cfc = "lis". RUN ufcolor.
+        RUN Syst/ufkey.
+        cfc = "lis". RUN Syst/ufcolor.
         assign fr-header = " CHANGE ".
 
         fZoneName(InvGroup.TaxZone).

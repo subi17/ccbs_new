@@ -8,7 +8,7 @@
                                only "all invoices" allowed when ilAutoMode
                   16.03.06/aam TF version             
                   18.04.06/aam use payments.p instead of nnlasu.p
-                  22.03.07 kl  new param for run payments
+                  22.03.07 kl  new param for RUN Ar/payments
 
   Version ......: M15
   ---------------------------------------------------------------------- */
@@ -33,7 +33,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhPPInv).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhPPInv).
+      RUN Mc/eventview2(lhPPInv).
    END.
 
 END.
@@ -118,7 +118,7 @@ ASSIGN lcTitle     = " INVOICES IN PLAN: " +
                      STRING(PaymPlan.PPDate,"99.99.9999") + " "
        gcHelpParam = STRING(PaymPlan.CustNum) + ",TRUE".           
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 ASSIGN orders   = "  By Invoice ,    ,   , By 4"
@@ -144,7 +144,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a PPInv  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -154,7 +154,7 @@ REPEAT WITH FRAME sel:
         
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
-           RUN hcustinv(PaymPlan.CustNum,FALSE).
+           RUN Help/hcustinv(PaymPlan.CustNum,FALSE).
                    
            IF siirto = ? THEN LEAVE.
            
@@ -271,7 +271,7 @@ REPEAT WITH FRAME sel:
          IF ilAutoMode THEN ASSIGN ufk[5] = 0               
                                    ufk[6] = 0.
          
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -439,7 +439,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO:
      
         RUN local-find-this (FALSE).
-        RUN payments(0,PPInv.InvNum,"").
+        RUN Ar/payments(0,PPInv.InvNum,"").
         
         ufkey = TRUE.
         NEXT LOOP.
@@ -538,7 +538,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(FALSE).
 
        ehto = 5.
-       RUN ufkey.
+       RUN Syst/ufkey.
        
        /* show details */
        RUN pInvoiceDetails(PPInv.InvNum,

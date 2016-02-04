@@ -27,7 +27,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhCoEvent).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCoEvent).
+      RUN Mc/eventview2(lhCoEvent).
    END.
 
 END.
@@ -122,7 +122,7 @@ form /* seek date  */
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Salesman  ,  By Customer   , By Payment , By 4".
@@ -201,7 +201,7 @@ REPEAT WITH FRAME sel:
          ufk[7]= (IF lcRight = "RW" THEN 1817 ELSE 0)
          ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -342,8 +342,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
@@ -364,8 +364,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN gcAllBrand
@@ -386,8 +386,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f3.
        DISPLAY lcBrand WITH FRAME F3.
        UPDATE lcBrand WHEN gcAllBrand
@@ -489,11 +489,11 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCoEvent).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CoEvent.Salesman.
 
        ehto = IF LOOKUP(nap,"7,F7") > 0 THEN 9 ELSE 5.
-       RUN ufkey.
+       RUN Syst/ufkey.
        
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -642,7 +642,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" AND LOOKUP(nap,"7,F7") > 0 THEN DO:
        
-          ehto = 9. RUN ufkey.
+          ehto = 9. RUN Syst/ufkey.
  
           UPDATE
           CoEvent.PaymDate

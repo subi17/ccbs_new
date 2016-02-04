@@ -370,7 +370,7 @@ PROCEDURE pFullCreditNote:
             WHEN 3 THEN lcReqChar = "Advance p".
             END CASE. 
             
-            RUN makepaym (BUFFER Invoice,
+            RUN Ar/makepaym (BUFFER Invoice,
                           -1 * ldTotRefund,
                           TODAY,
                           liAccNum,
@@ -828,7 +828,7 @@ PROCEDURE pFullCreditNote:
       END.
           
       IF NUM-ENTRIES(lcSubInvNums) = 0 THEN 
-         RUN nnpcst.p(Invoice.InvNum,
+         RUN Ar/nnpcst.p(Invoice.InvNum,
                     0,
                     TRUE,
                     INPUT TABLE wMarked).
@@ -838,7 +838,7 @@ PROCEDURE pFullCreditNote:
             
             IF LOOKUP(STRING(InvCCN.SubInvNum), lcSubInvNums) = 0 THEN NEXT.
             
-            RUN nnpcst.p(Invoice.InvNum,
+            RUN Ar/nnpcst.p(Invoice.InvNum,
                        SubInvoice.SubInvNum,
                        TRUE,
                        INPUT TABLE wMarked).

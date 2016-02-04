@@ -27,7 +27,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhActionLog).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhActionLog).
+      RUN Mc/eventview2(lhActionLog).
    END.
 
 END.
@@ -151,7 +151,7 @@ FUNCTION fStatusName RETURNS LOGICAL
 END.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 IF icTableName > "" THEN 
@@ -245,7 +245,7 @@ REPEAT WITH FRAME sel:
            ufk[1] = 0
            ufk[3] = 0.
 
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -383,8 +383,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
 
@@ -408,8 +408,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        
@@ -500,8 +500,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhActionLog).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ActionLog.TableName.
 
        RUN local-UPDATE-record.                                  
@@ -770,13 +770,13 @@ PROCEDURE local-UPDATE-record:
          ufk[1] = 7 WHEN lcRight = "RW"
          ufk[4] = 1697
          ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.
       
       IF toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
          
          FIND CURRENT ActionLog EXCLUSIVE-LOCK.
          UPDATE ActionLog.ActionStatus WITH FRAME lis EDITING:
@@ -787,7 +787,7 @@ PROCEDURE local-UPDATE-record:
             
             IF nap = "F9" AND FRAME-FIELD = "ActionStatus" THEN DO:
 
-               RUN h-tmscodes(INPUT "ActionLog",  /* TableName*/
+               RUN Help/h-tmscodes(INPUT "ActionLog",  /* TableName*/
                                     "ActionStatus", /* FieldName */
                                     "Log", /* GroupCode */
                               OUTPUT lcCode).
@@ -798,7 +798,7 @@ PROCEDURE local-UPDATE-record:
                END.
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
                NEXT. 
             END.
  
@@ -854,7 +854,7 @@ PROCEDURE local-UPDATE-record:
             IF liInfoPos < NUM-ENTRIES(ActionLog.ActionChar,CHR(10)) 
             THEN ufk[4] = 20.
  
-            RUN ufkey.
+            RUN Syst/ufkey.
         
             IF toimi = 4 THEN NEXT. 
             

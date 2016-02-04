@@ -231,7 +231,7 @@ PROCEDURE pSogRequest:
 
       PUT SCREEN ROW 23 "Running Solog " + string(solog.solog).            
 
-      RUN sogpost.p(Solog.CommLine, "LOGIN yoigo toro", lcURL, 
+      RUN Gwy/sogpost.p(Solog.CommLine, "LOGIN yoigo toro", lcURL, 
                     INPUT-OUTPUT lhSocket, OUTPUT ocError).
 
       lcCommandline = ENTRY(1,(ENTRY(2,Solog.CommLine," ")),",") + " " +

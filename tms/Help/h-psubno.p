@@ -39,7 +39,7 @@ form /* SEEK CODE */
 
 find  Customer where Customer.CustNum =  CustNum no-lock.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
 view frame sel.
 MAIN:
 repeat:
@@ -93,7 +93,7 @@ print-line:
          ufk = 0 ufk[1] = 36 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = false.
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -210,8 +210,8 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* bs-code */
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.
+           ehto = 9. RUN Syst/ufkey. ufkey = true.
            set CLI with frame hayr.
            hide frame hayr no-pause.
            if CLI ENTERED then do:

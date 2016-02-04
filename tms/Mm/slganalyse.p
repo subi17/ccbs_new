@@ -20,7 +20,7 @@ if llDoEvent THEN DO:
     RUN StarEventInitialize(lhSLGAnalyse).
                     
     ON F12 ANYWHERE DO:
-        run eventview2.p(lhSLGAnalyse).
+        RUN Mc/eventview2.p(lhSLGAnalyse).
     END.
 END.
 
@@ -126,7 +126,7 @@ form /*  search WITH FIELD SLGAnalyse */
     with row 4 col 2 title color value(ctc) " FIND Event "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
                      
@@ -153,13 +153,13 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* SLGAnalyse -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
       
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         DO TRANSACTION:
 
            CREATE SLGAnalyse.
@@ -244,7 +244,7 @@ repeat WITH FRAME sel:
 
         IF llShowHistory = TRUE THEN ufk[4]= 38.
         ELSE                         ufk[4]= 37.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -376,7 +376,7 @@ repeat WITH FRAME sel:
      END. /* NEXT page */
 
      ELSE IF lookup(nap,"1,f1") > 0 THEN DO:  
-        RUN slgareport.
+        RUN Mm/slgareport.
         NEXT LOOP.
      END.
      
@@ -387,10 +387,10 @@ repeat WITH FRAME sel:
 
      ELSE IF lookup(nap,"3,f3") > 0 THEN DO:  
         ufk = 0.
-        run ufkey.
+        RUN Syst/ufkey.
         RUN LOCAL-GENERATE-RECORD.
         run local-find-first.
-        run ufkey.
+        RUN Syst/ufkey.
         must-print = true.
         ufkey = true.
         NEXT LOOP.
@@ -402,7 +402,7 @@ repeat WITH FRAME sel:
          ELSE                          llShowHistory = FALSE.
 
          run local-find-first.
-         run ufkey.
+         RUN Syst/ufkey.
          must-print = true.
          ufkey = true.
          NEXT LOOP.
@@ -482,9 +482,9 @@ repeat WITH FRAME sel:
             recid(SLGAnalyse) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
+       RUN Syst/ufkey.
 
-       cfc = "lis". RUN ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSlganalyse).
 
@@ -716,7 +716,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       IF keylabel(LASTKEY) = "F9" AND
          FRAME-FIELD = "SLGAType"  THEN DO:
  
-         RUN h-tmscodes(INPUT "SLGAanalyse",    /* TableName */
+         RUN Help/h-tmscodes(INPUT "SLGAanalyse",    /* TableName */
                               "SLGAType",       /* FieldName */
                               "ServiceLimit",   /* GroupCode */
                               OUTPUT lcCode).
@@ -726,14 +726,14 @@ PROCEDURE LOCAL-UPDATE-RECORD.
             WITH FRAME lis.
          END.
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
          NEXT.
       END.
       ELSE IF keylabel(LASTKEY) = "F9" AND
           FRAME-FIELD = "ServiceLimitGroup"  THEN DO:
 
-         IF      INPUT SLGAnalyse.SLGAType = 1 THEN run h-servlimitgrp.
-         ELSE IF INPUT SLGAnalyse.SLGAType = 2 THEN run h-daycamp.p.
+         IF      INPUT SLGAnalyse.SLGAType = 1 THEN RUN Help/h-servlimitgrp.
+         ELSE IF INPUT SLGAnalyse.SLGAType = 2 THEN RUN Help/h-daycamp.p.
 
          ASSIGN SLGAnalyse.ServiceLimitGroup = siirto.
          disp SLGAnalyse.ServiceLimitGroup WITH FRAME lis.
@@ -949,7 +949,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
       IF keylabel(LASTKEY) = "F9" AND
          FRAME-FIELD = "lcSLGAType"  THEN DO:
  
-         RUN h-tmscodes(INPUT "SLGAanalyse",    /* TableName */
+         RUN Help/h-tmscodes(INPUT "SLGAanalyse",    /* TableName */
                               "SLGAType",       /* FieldName */
                               "ServiceLimit",   /* GroupCode */
                               OUTPUT lcCode).
@@ -959,14 +959,14 @@ PROCEDURE LOCAL-GENERATE-RECORD.
             WITH FRAME generate.
          END.
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
          NEXT.
       END.
       ELSE IF keylabel(LASTKEY) = "F9" AND
           FRAME-FIELD = "lcServiceL"  THEN DO:
 
-         IF      INPUT lcSLGAType = "1" THEN run h-servlimitgrp.
-         ELSE IF INPUT lcSLGAType = "2" THEN run h-daycamp.p.
+         IF      INPUT lcSLGAType = "1" THEN RUN Help/h-servlimitgrp.
+         ELSE IF INPUT lcSLGAType = "2" THEN RUN Help/h-daycamp.p.
 
          ASSIGN lcServiceL = siirto.
          disp lcServiceL WITH FRAME Generate.
@@ -974,7 +974,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
       ELSE IF keylabel(LASTKEY) = "F9" AND
          FRAME-FIELD = "lidesttype"  THEN DO:
 
-         RUN h-tmscodes(INPUT "SLGAnalyse", /* TableName */
+         RUN Help/h-tmscodes(INPUT "SLGAnalyse", /* TableName */
                               "bdest",       /* FieldName */
                               "bdest",       /* GroupCode */
                               OUTPUT lcCode).
@@ -984,14 +984,14 @@ PROCEDURE LOCAL-GENERATE-RECORD.
             WITH FRAME generate.
          END.
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
          NEXT.
       END.
       ELSE IF keylabel(LASTKEY) = "F9" AND
          FRAME-FIELD = "lcbdest"       AND 
          INPUT lidesttype  = 2 THEN DO:
  
-         RUN h-tmscodes(INPUT "Bdest", /* TableName */
+         RUN Help/h-tmscodes(INPUT "Bdest", /* TableName */
                               "bDestClass",       /* FieldName */
                               "analysis",       /* GroupCode */
                               OUTPUT lcCode).
@@ -1001,7 +1001,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
             WITH FRAME generate.
          END.
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
          NEXT.
       END.
       
@@ -1324,7 +1324,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
     "New records " liQty
    view-as alert-box.
    
-   run ttslganalyse(INPUT-OUTPUT TABLE ttslg).
+   RUN Mm/ttslganalyse(INPUT-OUTPUT TABLE ttslg).
 
    liQty = 0.
    

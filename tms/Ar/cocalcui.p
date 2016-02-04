@@ -220,7 +220,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
          ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
          ehto = 3 .
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
 
          READKEY.
          nap = keylabel(LASTKEY).
@@ -230,7 +230,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
       IF LOOKUP(nap,"1,f1") > 0 THEN DO:
 
          repeat WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
-             ehto = 9. RUN ufkey.p.
+             ehto = 9. RUN Syst/ufkey.p.
              UPDATE 
                 lcInvGroup
                 liCustNum1
@@ -304,9 +304,9 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
          IF NOT llOk THEN NEXT.
 
          ehto = 5.
-         RUN ufkey.
+         RUN Syst/ufkey.
 
-         RUN cocalc(lcInvGroup,
+         RUN Ar/cocalc(lcInvGroup,
                     liCustNum1,
                     liCustNum2,
                     liCustNum3,

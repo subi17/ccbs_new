@@ -39,7 +39,7 @@ for each msowner no-lock where
                output i).
          
               
-      RUN creasfee (MsOwner.CustNum,
+      RUN Mc/creasfee (MsOwner.CustNum,
                     MsRequest.MsSeq,
                     ldtdate ,
                     "MobSub",

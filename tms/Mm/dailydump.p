@@ -18,7 +18,7 @@ def var period  as int    no-undo.
 DEF VAR liQty   AS INT    NO-UNDO.
 
 fELog("DAILYDUMP","DatadumpStarted").
-run dumpall.
+RUN Mm/dumpall.
 fELog("DAILYDUMP","DatadumpStopped").
 
 quit.

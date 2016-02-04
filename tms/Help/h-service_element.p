@@ -34,7 +34,7 @@ form /* SEEK Code */
     with row 4 col 2 title color value(ctc) " FIND Component "
     color value(cfc) no-labels overlay frame hayr.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
 
 ASSIGN
    lcServPac = gcHelpParam
@@ -89,7 +89,7 @@ repeat:
          siirto = ? 
          ehto  = 3 
          ufkey = false.
-         run ufkey.
+         RUN Syst/ufkey.
       end.
   end. /* print-line */
 
@@ -203,8 +203,8 @@ repeat:
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*lcEvent*/
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.
+           ehto = 9. RUN Syst/ufkey. ufkey = true.
            set lcEvent with frame hayr.
            hide frame hayr no-pause.
            if lcEvent ENTERED then do:

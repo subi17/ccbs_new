@@ -56,7 +56,7 @@ form
 with row 1 centered overlay title " SEEK SALESMEN " FRAME alku.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
    FIND FIRST Salesman USE-INDEX Salesman WHERE 
       Salesman.Brand = gcBrand NO-LOCK no-error.
    IF NOT AVAIL Salesman THEN DO:
@@ -78,7 +78,7 @@ repeat WITH FRAME sel:
        ASSIGN haettava = FALSE nro = FALSE.
        PAUSE 0 no-message.
 alku:  repeat WITH FRAME alku ON ENDKEY UNDO, RETURN:
-          ehto = 9. RUN ufkey. ufkey = TRUE.
+          ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
           UPDATE Salesman WITH FRAME alku EDITING:
              READKEY. nap = keylabel(LASTKEY).
              /* onko painettu home */
@@ -176,7 +176,7 @@ BROWSE:
          ufk[1]= 0   ufk[2]= 0   ufk[3]= 0 ufk[4]= 0
          ufk[5]= 11 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.

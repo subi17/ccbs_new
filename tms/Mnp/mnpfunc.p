@@ -113,7 +113,7 @@ IF llOngoingMNPMsg THEN DO:
    RETURN "".
 END.
 
-RUN selectbox.p(
+RUN Syst/selectbox.p(
   "Create MNP Message",
   lcOptions,
   OUTPUT lcSelected).
@@ -123,7 +123,7 @@ CASE lcSelected:
    WHEN {&MNP_CANCEL} THEN DO:
      
      ehto = 10.
-     run ufkey.p.
+     RUN Syst/ufkey.p.
      
      UPDATE 
       lcCancellationReason column-label "Reason code"
@@ -132,7 +132,7 @@ CASE lcSelected:
 
      if lookup(keylabel(LASTKEY),"f1,return") > 0 then do:
          
-         RUN mnp_operation.p(MNPProcess.MNPSeq,
+         RUN Mnp/mnp_operation.p(MNPProcess.MNPSeq,
             "cancel",
             lcCancellationReason).
          IF RETURN-VALUE NE "OK" THEN
@@ -142,7 +142,7 @@ CASE lcSelected:
    
    WHEN {&MNP_REJECT} THEN DO:
      ehto = 10.
-     run ufkey.p.
+     RUN Syst/ufkey.p.
      
      UPDATE 
       lcRejectionReason column-label "Reason code"
@@ -151,7 +151,7 @@ CASE lcSelected:
 
      if lookup(keylabel(LASTKEY),"f1,return") > 0 then do:
          
-         RUN mnp_operation.p(MNPProcess.MNPSeq,
+         RUN Mnp/mnp_operation.p(MNPProcess.MNPSeq,
             "reject",
             lcRejectionReason).
          IF RETURN-VALUE NE "OK" THEN
@@ -170,7 +170,7 @@ CASE lcSelected:
    WHEN {&MNP_NR_DETAIL} THEN DO:
      
      ehto = 10.
-     run ufkey.p.
+     RUN Syst/ufkey.p.
      
      UPDATE 
       lcNumberRangeCode column-label "Code"
@@ -186,7 +186,7 @@ CASE lcSelected:
    WHEN {&MNP_PR_REQUESTED} THEN DO:
      
      ehto = 10.
-     run ufkey.p.
+     RUN Syst/ufkey.p.
      
      UPDATE 
       liPages column-label "Pages"
@@ -216,7 +216,7 @@ PROCEDURE pCreatePortabilityQuery:
    DEF FRAME a.     
    CREATE ttPortabilityQuery.
    ehto = 10.
-   run ufkey.p.
+   RUN Syst/ufkey.p.
 
    UPDATE ttPortabilityQuery WITH 
       FRAME a overlay 2 col row 2 centered
@@ -235,7 +235,7 @@ PROCEDURE pCreateNumberRangesQuery:
    DEF FRAME a.     
    CREATE ttNumberRangesQuery.
    ehto = 10.
-   run ufkey.p.
+   RUN Syst/ufkey.p.
 
    UPDATE ttNumberRangesQuery WITH 
       FRAME a overlay 1 col row 2 centered
@@ -254,7 +254,7 @@ PROCEDURE pCreateNumberTermQuery:
    DEF FRAME a.     
    CREATE ttNumberTermQuery.
    ehto = 10.
-   run ufkey.p.
+   RUN Syst/ufkey.p.
 
    UPDATE ttNumberTermQuery WITH 
       FRAME a overlay 2 col row 2 centered

@@ -104,7 +104,7 @@ CASE pcOperation:
          RELEASE MNPProcess.
          FIND CURRENT Order NO-LOCK.
 
-         RUN cancelorder.p(Order.OrderId, TRUE).
+         RUN Mc/cancelorder.p(Order.OrderId, TRUE).
 
          llResponse = TRUE.
 
@@ -175,7 +175,7 @@ CASE pcOperation:
 
       IF Order.StatusCode NE "73" THEN RETURN "ERROR:Order is in wrong status".
 
-      RUN closeorder.p(Order.Orderid, TRUE).
+      RUN Mc/closeorder.p(Order.Orderid, TRUE).
       IF RETURN-VALUE NE "" THEN RETURN "ERROR:" + RETURN-VALUE.
 
       IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND

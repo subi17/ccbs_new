@@ -84,32 +84,32 @@ DO WHILE TRUE:
       lcOptions = lcOptions + "|" + {&MNP_ST_TXT_AREC_CLOSED}.
    lcOptions = lcOptions + "|" + {&MNP_ST_TXT_QUIT}.
          
-   RUN selectbox.p(
+   RUN Syst/selectbox.p(
      "MNP Status",
      lcOptions,
      OUTPUT lcSelected).
 
    CASE lcSelected:
-      WHEN {&MNP_ST_TXT_NEW} THEN run mnpbr(0,{&MNP_ST_NEW},piMNPType).
-      WHEN {&MNP_ST_TXT_AENV} THEN run mnpbr(0,{&MNP_ST_AENV},piMNPType).
-      WHEN {&MNP_ST_TXT_ASOL} THEN run mnpbr(0,{&MNP_ST_ASOL},piMNPType).
-      WHEN {&MNP_ST_TXT_ACON} THEN run mnpbr(0,{&MNP_ST_ACON},piMNPType).
-      WHEN {&MNP_ST_TXT_APOR} THEN run mnpbr(0,{&MNP_ST_APOR},piMNPType).
-      WHEN {&MNP_ST_TXT_AREC} THEN run mnpbr(0,{&MNP_ST_AREC},piMNPType).
-      WHEN {&MNP_ST_TXT_ACAN} THEN run mnpbr(0,{&MNP_ST_ACAN},piMNPType).
-      WHEN {&MNP_ST_TXT_MENV} THEN run mnpbr(0,{&MNP_ST_MENV},piMNPType).
-      WHEN {&MNP_ST_TXT_MPRC} THEN run mnpbr(0,{&MNP_ST_MPRC},piMNPType).
-      wheN {&MNP_ST_TXT_MFIN} THEN run mnpbr(0,{&MNP_ST_MFIN},piMNPType).
-      WHEN {&MNP_ST_TXT_NENV} THEN run mnpbr(0,{&MNP_ST_NENV},piMNPType).
-      WHEN {&MNP_ST_TXT_NCON} THEN run mnpbr(0,{&MNP_ST_NCON},piMNPType).
-      WHEN {&MNP_ST_TXT_NMIG} THEN run mnpbr(0,{&MNP_ST_NMIG},piMNPType).
-      WHEN {&MNP_ST_TXT_BNOT} THEN run mnpbr(0,{&MNP_ST_BNOT},piMNPType).
-      WHEN {&MNP_ST_TXT_BCAN} THEN run mnpbr(0,{&MNP_ST_BCAN},piMNPType).
-      WHEN {&MNP_ST_TXT_BDEF} THEN run mnpbr(0,{&MNP_ST_BDEF},piMNPType).
-      WHEN {&MNP_ST_TXT_BDET} THEN run mnpbr(0,{&MNP_ST_BDET},piMNPType).
-      WHEN {&MNP_ST_TXT_ERROR} THEN run mnpbr(0,{&MNP_ST_ERROR},piMNPType).
+      WHEN {&MNP_ST_TXT_NEW} THEN RUN Mnp/mnpbr(0,{&MNP_ST_NEW},piMNPType).
+      WHEN {&MNP_ST_TXT_AENV} THEN RUN Mnp/mnpbr(0,{&MNP_ST_AENV},piMNPType).
+      WHEN {&MNP_ST_TXT_ASOL} THEN RUN Mnp/mnpbr(0,{&MNP_ST_ASOL},piMNPType).
+      WHEN {&MNP_ST_TXT_ACON} THEN RUN Mnp/mnpbr(0,{&MNP_ST_ACON},piMNPType).
+      WHEN {&MNP_ST_TXT_APOR} THEN RUN Mnp/mnpbr(0,{&MNP_ST_APOR},piMNPType).
+      WHEN {&MNP_ST_TXT_AREC} THEN RUN Mnp/mnpbr(0,{&MNP_ST_AREC},piMNPType).
+      WHEN {&MNP_ST_TXT_ACAN} THEN RUN Mnp/mnpbr(0,{&MNP_ST_ACAN},piMNPType).
+      WHEN {&MNP_ST_TXT_MENV} THEN RUN Mnp/mnpbr(0,{&MNP_ST_MENV},piMNPType).
+      WHEN {&MNP_ST_TXT_MPRC} THEN RUN Mnp/mnpbr(0,{&MNP_ST_MPRC},piMNPType).
+      wheN {&MNP_ST_TXT_MFIN} THEN RUN Mnp/mnpbr(0,{&MNP_ST_MFIN},piMNPType).
+      WHEN {&MNP_ST_TXT_NENV} THEN RUN Mnp/mnpbr(0,{&MNP_ST_NENV},piMNPType).
+      WHEN {&MNP_ST_TXT_NCON} THEN RUN Mnp/mnpbr(0,{&MNP_ST_NCON},piMNPType).
+      WHEN {&MNP_ST_TXT_NMIG} THEN RUN Mnp/mnpbr(0,{&MNP_ST_NMIG},piMNPType).
+      WHEN {&MNP_ST_TXT_BNOT} THEN RUN Mnp/mnpbr(0,{&MNP_ST_BNOT},piMNPType).
+      WHEN {&MNP_ST_TXT_BCAN} THEN RUN Mnp/mnpbr(0,{&MNP_ST_BCAN},piMNPType).
+      WHEN {&MNP_ST_TXT_BDEF} THEN RUN Mnp/mnpbr(0,{&MNP_ST_BDEF},piMNPType).
+      WHEN {&MNP_ST_TXT_BDET} THEN RUN Mnp/mnpbr(0,{&MNP_ST_BDET},piMNPType).
+      WHEN {&MNP_ST_TXT_ERROR} THEN RUN Mnp/mnpbr(0,{&MNP_ST_ERROR},piMNPType).
       WHEN {&MNP_ST_TXT_AREC_CLOSED} THEN 
-         run mnpbr(0,{&MNP_ST_AREC_CLOSED},piMNPType).
+         RUN Mnp/mnpbr(0,{&MNP_ST_AREC_CLOSED},piMNPType).
       WHEN {&MNP_ST_TXT_QUIT} THEN leave CHOISES. 
    END.
    IF lcSelected = "" THEN LEAVE.

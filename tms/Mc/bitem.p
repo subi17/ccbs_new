@@ -81,7 +81,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhSingleFee).
+      RUN Mc/eventview2.p(lhSingleFee).
    END.
 END.
 
@@ -173,7 +173,7 @@ form
     FRAME f4.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Customer No.,   By Period  ,  By BillItem , By 4".
@@ -208,12 +208,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a SingleFee  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR SingleFee.CustNum 
@@ -320,7 +320,7 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 2150 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -454,8 +454,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR  FRAME f1.
        Disp lcBrand With FRAME f1.
        SET  lcBrand WHEN gcAllBrand = TRUE 
@@ -477,8 +477,8 @@ BROWSE:
      
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f3.
        Disp lcBrand With FRAME f3.
        
@@ -502,7 +502,7 @@ BROWSE:
      
      DO: /* MEMO */
         RUN local-find-this(false).
-        RUN memo(INPUT SingleFee.Custnum,
+        RUN Mc/memo(INPUT SingleFee.Custnum,
                  INPUT "SingleFee",
                  INPUT STRING(FMItemId),
                  INPUT "SingleFee").
@@ -512,9 +512,9 @@ BROWSE:
 
      /* UPDATE memo */
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.
         ehto = 9. 
-        RUN ufkey. ufkey = TRUE.
+        RUN Syst/ufkey. ufkey = TRUE.
 
         RUN local-find-this(TRUE).
 
@@ -609,8 +609,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY SingleFee.CustNum.
 
        new_singlefee = FALSE.
@@ -811,8 +811,8 @@ PROCEDURE local-update-record:
               IF FRAME-FIELD = "keyvalue" and keylabel(Lastkey) = "F9"
               THEN DO:
                   ASSIGN INPUT lbelongto.
-                  IF    lbelongto = TRUE THEN RUN nnasel.
-                  ELSE  IF lbelongto = FALSE THEN RUN h-mobsub.
+                  IF    lbelongto = TRUE THEN RUN Mc/nnasel.
+                  ELSE  IF lbelongto = FALSE THEN RUN Help/h-mobsub.
 
                   IF siirto NE ? THEN 
                   ASSIGN singlefee.keyvalue = siirto.
@@ -821,12 +821,12 @@ PROCEDURE local-update-record:
              END.
 
              IF FRAME-FIELD = "BillTarget" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
-                RUN h-billtarg(INPUT INPUT FRAME lis Singlefee.CustNum).
+                RUN Help/h-billtarg(INPUT INPUT FRAME lis Singlefee.CustNum).
                 IF siirto NE ? THEN DO:
                    ASSIGN Singlefee.BillTarget = INT(siirto).
                    DISP Singlefee.BillTarget WITH FRAME lis.
                    ASSIGN ehto = 9 ufkey = TRUE.
-                   RUN ufkey.p.
+                   RUN Syst/ufkey.p.
                    
                    NEXT.
                 END.
@@ -947,7 +947,7 @@ PROCEDURE local-update-record:
                 END.
 
                 ELSE IF FRAME-FIELD = "Billperiod" THEN DO:
-                   RUN uperch(INPUT FRAME lis SingleFee.BillPeriod,OUTPUT rc).
+                   RUN Syst/uperch(INPUT FRAME lis SingleFee.BillPeriod,OUTPUT rc).
                    IF rc NE 0 THEN NEXT.
                    IF INPUT FRAME lis SingleFee.Concerns[1] = 0 THEN DISP
                       INPUT FRAME lis SingleFee.BillPeriod @ 

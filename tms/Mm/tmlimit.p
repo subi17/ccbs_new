@@ -122,7 +122,7 @@ ELSE DO:
    MESSAGE "No existing values" VIEW-AS ALERT-BOX.
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 LOOP:
@@ -189,7 +189,7 @@ BROWSE:
         ufk[6] = 1752   WHEN AVAIL Limit 
         /*ufk[7]= 9016*/  ufk[8]= 8 
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -202,7 +202,7 @@ BROWSE:
          nap = keylabel(LASTKEY).
         
         IF LOOKUP(nap,"f3") > 0 AND ufk[3] > 0 THEN DO: 
-           RUN msrequest.p(40,?,0,piCustnum,0,"").
+           RUN Mm/msrequest.p(40,?,0,piCustnum,0,"").
            must-print = true.
            ufkey = true.
            NEXT LOOP.
@@ -214,7 +214,7 @@ BROWSE:
             
             IF NOT AVAIL Limit THEN DO:
             
-               RUN selectbox(
+               RUN Syst/selectbox(
                   "TMR limit ADMIN FUNCTIONS",
                   "New limit",
                   OUTPUT lcSelected).
@@ -228,7 +228,7 @@ BROWSE:
                END.
             END.
             ELSE DO:
-               RUN selectbox(
+               RUN Syst/selectbox(
                   "TMR limit ADMIN FUNCTIONS",
                   "Update limit",
                   OUTPUT lcSelected).
@@ -371,7 +371,7 @@ BROWSE:
      END. /* NEXT page */
          
      IF LOOKUP(nap,"f3") > 0 AND ufk[3] > 0 THEN DO: 
-        RUN msrequest(40,?,0,piCustnum,0,"").
+        RUN Mm/msrequest(40,?,0,piCustnum,0,"").
         must-print = true.
         ufkey = true.
         NEXT LOOP.
@@ -380,7 +380,7 @@ BROWSE:
       ELSE IF LOOKUP(nap,"f4") > 0 AND ufk[4] > 0 THEN DO:
          
          IF AVAIL Limit THEN DO:
-            RUN selectbox(
+            RUN Syst/selectbox(
                "TMR limit ADMIN FUNCTIONS",
                "Update limit",
                OUTPUT lcSelected).
@@ -400,7 +400,7 @@ BROWSE:
          
          RUN local-find-this(FALSE).
          
-         RUN memo
+         RUN Mc/memo
             (Limit.Custnum,
             "Limit",
             STRING(Limit.Custnum) + ";" + STRING(Limit.TMRuleSeq),
@@ -415,7 +415,7 @@ BROWSE:
       
          RUN local-find-this(FALSE).
          
-         RUN eventsel("limit",
+         RUN Mc/eventsel("limit",
          "#BEGIN" + chr(255) + STRING(piCustnum) + chr(255) + 
          STRING(Limit.LimitType) + chr(255) + string(tmrule.tmruleseq) + 
          chr(255) + STRING(Limit.LimitID)).
@@ -615,7 +615,7 @@ END PROCEDURE.
 PROCEDURE local-view-record:
 
    ufk = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.
 
    RUN local-find-this(FALSE).
   
@@ -693,7 +693,7 @@ PROCEDURE local-UPDATE-record:
          ldeValue[2]:label   in frame lis = "Limit 2 value.".
       ELSE ldeValue[2]:label in frame lis = "               ".
       
-      ehto = 9. RUN ufkey.
+      ehto = 9. RUN Syst/ufkey.
   
    DO j = 1 TO i:
       DISP ldeValue[j] WITH FRAME lis.
@@ -745,7 +745,7 @@ PROCEDURE local-UPDATE-record:
    ELSE DO:   
       
       ehto = 10.
-      RUN ufkey.
+      RUN Syst/ufkey.
       REPEAT:
          READKEY.
          IF LOOKUP(keylabel(lastkey),"1,f1") > 0 THEN LEAVE.

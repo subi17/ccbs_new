@@ -284,7 +284,7 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
                       OUTPUT lcDeviceName,
                       OUTPUT ldeDeviceFee).
 
-   RUN offer_penaltyfee.p(Order.OrderID,
+   RUN Mc/offer_penaltyfee.p(Order.OrderID,
                         Output liPermancyLength,
                         OUTPUT ldePermanencyAmount).
 

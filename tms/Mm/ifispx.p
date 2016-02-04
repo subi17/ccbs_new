@@ -8,7 +8,7 @@
                   05.10.99 jp urights added
                   05.11.02 jr Eventlog  
                   09.09.03 jp Brand
-                  16.03.07 kl run filebrowser
+                  16.03.07 kl RUN Syst/filebrowser
                   19.04.07 kl search fixed, path added to SIMFile
 
   Version ......: M15
@@ -59,7 +59,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhIFisPX).
+      RUN Mc/eventview2.p(lhIFisPX).
    END.
 END.
 
@@ -126,7 +126,7 @@ form /* seek Spex  BY  Mancode */
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By 1,By 2,By 3, By 4".
@@ -153,12 +153,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a IFiSpx  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
    REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
       PAUSE 0 no-MESSAGE.
-      ehto = 9. RUN ufkey.
+      ehto = 9. RUN Syst/ufkey.
       DO TRANSACTION:
          CLEAR FRAME lis NO-PAUSE.
          PROMPT-FOR 
@@ -278,7 +278,7 @@ BROWSE:
             ehto = 3 ufkey = FALSE.
             {Syst/uright1.i '"5,6"'}  
          IF NOT llIsAdmin THEN ASSIGN  ufk[5]= 0    ufk[6]= 0. 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -434,9 +434,9 @@ BROWSE:
       /* Search BY column 1 */
       ELSE IF LOOKUP(nap,"1,f1") > 0 THEN 
       DO ON ENDKEY UNDO, NEXT LOOP:
-         cfc = "puyr". run ufcolor.
+         cfc = "puyr". RUN Syst/ufcolor.
          Mancode = "".
-         ehto = 9. RUN ufkey. ufkey = TRUE.
+         ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
          Disp lcBrand With FRAME f1.
          UPDATE lcBrand WHEN gcAllBrand = TRUE
             Mancode WITH FRAME f1.
@@ -518,8 +518,8 @@ BROWSE:
          RUN local-find-others.
 
          ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-         RUN ufkey.
-         cfc = "lis". run ufcolor.
+         RUN Syst/ufkey.
+         cfc = "lis". RUN Syst/ufcolor.
          CLEAR FRAME lis NO-PAUSE.
          DISPLAY IFiSpx.ManCode.
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhIFisPX).

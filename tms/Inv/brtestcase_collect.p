@@ -225,7 +225,7 @@ PROCEDURE pInitialize:
                STRING(YEAR(TODAY),"9999") + STRING(MONTH(TODAY),"99") +
                STRING(DAY(TODAY),"99") + STRING(TIME,"99999").
 
-   RUN lamupers.p PERSISTENT SET lhHandle.
+   RUN Inv/lamupers.p PERSISTENT SET lhHandle.
      
    RETURN "". 
       
@@ -1314,7 +1314,7 @@ PROCEDURE pCreateInvoice:
 
       EMPTY TEMP-TABLE ttInvCust.
 
-      RUN bundle_first_month_fee.p(idaPeriodBeg,
+      RUN Mm/bundle_first_month_fee.p(idaPeriodBeg,
                                    idaPeriodEnd,
                                    Customer.CustNum,
                                    0,
@@ -1330,7 +1330,7 @@ PROCEDURE pCreateInvoice:
       END.
 
       /* If customer has DSS active then calculate bundle fee */
-      RUN dss_bundle_first_month_fee.p(idaPeriodBeg,
+      RUN Mm/dss_bundle_first_month_fee.p(idaPeriodBeg,
                                        idaPeriodEnd,
                                        Customer.CustNum,
                                        0,

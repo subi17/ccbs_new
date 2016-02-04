@@ -481,7 +481,7 @@ REPEAT TRANSACTION:
                  
                  
                  /* are there still other authorizations */
-                 RUN nnsvte (Customer.CustNum,
+                 RUN Ar/nnsvte (Customer.CustNum,
                              TODAY,
                              OUTPUT lcBankAcc).
                  /* if not then update charge type */            

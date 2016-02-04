@@ -25,7 +25,7 @@ WITH
 
 
 PAUSE 0.
-ehto = 9. RUN ufkey.
+ehto = 9. RUN Syst/ufkey.
 UPDATE module WITH FRAME modu.
 if module ne "" THEN DO:
 

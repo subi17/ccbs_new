@@ -43,7 +43,7 @@ IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
 ELSE lcUserName = "".
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey. 
  
  DISPLAY
  "A) Agreement Customer          "  @ menuc[1]    SKIP
@@ -63,17 +63,17 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    IF FRAME-INDEX EQ 1 THEN DO:
-      run nnasse(Mobsub.AgrCust,
+      RUN Mc/nnasse(Mobsub.AgrCust,
                  "").
    END.
 
    ELSE IF FRAME-INDEX = 2 THEN DO:
-     RUN nnasse(mobsub.InvCust,
+     RUN Mc/nnasse(mobsub.InvCust,
                 "").
    END.
 
    ELSE IF FRAME-INDEX = 3 THEN DO:
-      run nnasse(mobsub.Custnum,
+      RUN Mc/nnasse(mobsub.Custnum,
                  "").
    END.             
   

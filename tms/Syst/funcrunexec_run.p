@@ -241,7 +241,7 @@ PROCEDURE pLaunchProcesses:
                   STRING(TIME,"hh:mm:ss").
    END.   
 
-   RUN funcrunexec_notify.p (iiFRExecID,
+   RUN Syst/funcrunexec_notify.p (iiFRExecID,
                              lcMessage).
                               
 END.        
@@ -325,7 +325,7 @@ PROCEDURE pFinalize:
 
       fELog("FUNCRUNEXEC_" + STRING(iiFRExecID),FuncRunExec.RunState).
       
-      RUN funcrunexec_notify.p (iiFRExecID,
+      RUN Syst/funcrunexec_notify.p (iiFRExecID,
                                 FuncRunExec.RunState + " at " +
                                    STRING(TIME,"hh:mm:ss")).
    END.

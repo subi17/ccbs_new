@@ -39,7 +39,7 @@ IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
 ELSE lcUserName = "".
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey. 
  
  DISPLAY
  "A) Service Limits              "  @ menuc[1]    SKIP
@@ -55,13 +55,13 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    IF FRAME-INDEX EQ 1 THEN DO:
-      RUN mservicelimit.p(iiMsSeq, 0, 0).
+      RUN Mm/mservicelimit.p(iiMsSeq, 0, 0).
    END.
    ELSE IF FRAME-INDEX = 2 THEN DO:
-      RUN counter.p("MobSub",STRING(iiMsSeq)).
+      RUN Mc/counter.p("MobSub",STRING(iiMsSeq)).
    END.
    ELSE IF FRAME-INDEX = 3 THEN 
-      RUN invrowcounter.p (0,iiMsSeq,0,"").
+      RUN Inv/invrowcounter.p (0,iiMsSeq,0,"").
 
    ELSE IF FRAME-INDEX > 3 OR FRAME-INDEX = 0 THEN LEAVE.
 

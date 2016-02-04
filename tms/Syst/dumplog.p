@@ -27,7 +27,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhDumpLog).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhDumpLog).
+      RUN Mc/eventview2(lhDumpLog).
    END.
 
 END.
@@ -115,7 +115,7 @@ FUNCTION fStatusName RETURNS LOGICAL
 END.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -193,7 +193,7 @@ REPEAT WITH FRAME sel:
            ufk[1] = 0
            ufk[3] = 0.
 
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -305,8 +305,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY liDumpID WITH FRAME F1.
 
@@ -331,8 +331,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDumpLog).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -503,13 +503,13 @@ PROCEDURE local-UPDATE-record:
          ufk[1] = 7 WHEN lcRight = "RW"
       /* ufk[4] = 1697 */
          ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.
       
       IF toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
          
          FIND CURRENT DumpLog EXCLUSIVE-LOCK.
          UPDATE DumpLog.DumpLogStatus WITH FRAME lis EDITING:
@@ -520,7 +520,7 @@ PROCEDURE local-UPDATE-record:
             
             IF nap = "F9" AND FRAME-FIELD = "DumpLogStatus" THEN DO:
 
-               RUN h-tmscodes(INPUT "ActionLog",  /* TableName*/
+               RUN Help/h-tmscodes(INPUT "ActionLog",  /* TableName*/
                                     "ActionStatus", /* FieldName */
                                     "Log", /* GroupCode */
                               OUTPUT lcCode).
@@ -531,7 +531,7 @@ PROCEDURE local-UPDATE-record:
                END.
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
                NEXT. 
             END.
  

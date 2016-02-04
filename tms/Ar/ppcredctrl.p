@@ -7,4 +7,4 @@
 {Syst/commali.i}
 
 /* plans in credit control */
-RUN paymplan (0,0,7).
+RUN Ar/paymplan (0,0,7).

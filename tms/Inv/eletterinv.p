@@ -191,7 +191,7 @@ END.
 ELSE icFile = REPLACE(icFile,"#IDATE","").
 
 /* print */
-RUN eplfile (INPUT-OUTPUT TABLE wInvoice,  
+RUN Inv/eplfile (INPUT-OUTPUT TABLE wInvoice,  
              ?,           /* print date (= Invoice.InvDate) */
              (IF ilPrintService 
               THEN 2

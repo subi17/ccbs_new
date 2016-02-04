@@ -39,7 +39,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhbCoRule).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCoRule).
+      RUN Mc/eventview2(lhCoRule).
    END.
 
 END.
@@ -294,7 +294,7 @@ END FUNCTION.
 
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -317,14 +317,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CoRule  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -336,7 +336,7 @@ REPEAT WITH FRAME sel:
                  LOOKUP(FRAME-FIELD,"RuleType,PayType") > 0 THEN DO:
             
                  IF FRAME-FIELD = "PayType" THEN DO:
-                    RUN h-tmscodes(INPUT "CLIType",     /* TableName */
+                    RUN Help/h-tmscodes(INPUT "CLIType",     /* TableName */
                                          "PayType",  /* FieldName */
                                          "MobSub", /* GroupCode */
                                    OUTPUT lcCode).
@@ -348,7 +348,7 @@ REPEAT WITH FRAME sel:
                  END.
                                       
                  ELSE IF FRAME-FIELD = "RuleType" THEN DO:
-                    RUN h-tmscodes(INPUT "CoRule",     /* TableName */
+                    RUN Help/h-tmscodes(INPUT "CoRule",     /* TableName */
                                          "RuleType",  /* FieldName */
                                          "Commission", /* GroupCode */
                                    OUTPUT lcCode).
@@ -360,7 +360,7 @@ REPEAT WITH FRAME sel:
                  END.
  
                  ehto = 9.
-                 RUN ufkey.
+                 RUN Syst/ufkey.
                  NEXT. 
               END.
            
@@ -457,7 +457,7 @@ REPEAT WITH FRAME sel:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[8]= 8 
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -601,12 +601,12 @@ REPEAT WITH FRAME sel:
         ufk[8]= 8 
         ehto = 0
         ufkey = TRUE.
-        RUN ufkey.
+        RUN Syst/ufkey.
 
         /* Search BY column 1 */
         IF toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           cfc = "puyr". run ufcolor.
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.
+           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
            CLEAR FRAME f1.
            DISPLAY lcBrand WITH FRAME F1.
            UPDATE lcBrand WHEN gcAllBrand
@@ -628,8 +628,8 @@ REPEAT WITH FRAME sel:
 
         /* Search BY column 2 */
         ELSE IF toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           cfc = "puyr". run ufcolor.
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.
+           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
            CLEAR FRAME f2.
            DISPLAY lcBrand WITH FRAME F2.
            UPDATE lcBrand WHEN gcAllBrand
@@ -655,7 +655,7 @@ REPEAT WITH FRAME sel:
        {Syst/uright2.i}
        RUN local-find-this (FALSE).
        IF AVAILABLE CoRule 
-       THEN RUN cobasis (CoRule.CoRuleID). 
+       THEN RUN Mc/cobasis (CoRule.CoRuleID). 
        ufkey = true. 
      END.
 
@@ -663,7 +663,7 @@ REPEAT WITH FRAME sel:
        {Syst/uright2.i}
        RUN local-find-this (FALSE).
        IF AVAILABLE CoRule 
-       THEN RUN cotarg (CoRule.CoRuleID, "rule"). 
+       THEN RUN Ar/cotarg (CoRule.CoRuleID, "rule"). 
        ufkey = true. 
      END.
 
@@ -747,7 +747,7 @@ REPEAT WITH FRAME sel:
         END.
      
         ehto = 9.
-        RUN ufkey.
+        RUN Syst/ufkey.
         ufkey = TRUE.
         
         REPEAT WITH FRAME fTemplate ON ENDKEY UNDO, NEXT LOOP:
@@ -820,7 +820,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCoRule).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        must-print = FALSE.
        
@@ -998,7 +998,7 @@ PROCEDURE local-UPDATE-record:
             ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
             ufk[3] = 1550 WHEN lcRight = "RW" AND gcHelpParam = ""
             ufk[8] = 8.
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
       
       IF toimi = 1 THEN 
@@ -1007,7 +1007,7 @@ PROCEDURE local-UPDATE-record:
          FIND CURRENT CoRule EXCLUSIVE-LOCK.
             
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
       
          UPDATE
             CoRule.RuleDesc WHEN NOT NEW CoRule
@@ -1037,7 +1037,7 @@ PROCEDURE local-UPDATE-record:
             
                IF FRAME-FIELD = "PPReqPrefix" THEN DO:
                
-                  RUN h-tmscodes(INPUT "PrepaidRequest",     /* TableName */
+                  RUN Help/h-tmscodes(INPUT "PrepaidRequest",     /* TableName */
                                        "PPReqPrefix",  /* FieldName */
                                        "Prepaid", /* GroupCode */
                                  OUTPUT lcCode).
@@ -1050,7 +1050,7 @@ PROCEDURE local-UPDATE-record:
                                       
                ELSE IF FRAME-FIELD = "PPSource" THEN DO:
                
-                  RUN h-tmscodes(INPUT "PrepaidRequest",     /* TableName */
+                  RUN Help/h-tmscodes(INPUT "PrepaidRequest",     /* TableName */
                                        "Source",  /* FieldName */
                                        "Prepaid", /* GroupCode */
                                  OUTPUT lcCode).
@@ -1067,7 +1067,7 @@ PROCEDURE local-UPDATE-record:
                      si-recid    = ?
                      lcField     = FRAME-FIELD.
                
-                  RUN invotxt("SMS","").
+                  RUN Mc/invotxt("SMS","").
         
                   gcHelpParam = "".
                         
@@ -1083,7 +1083,7 @@ PROCEDURE local-UPDATE-record:
                END.
                 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
                NEXT. 
             END.
             
@@ -1194,7 +1194,7 @@ PROCEDURE local-UPDATE-record:
       ELSE IF toimi = 3 THEN DO:
  
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
         
          REPEAT WITH FRAME fTemplate ON ENDKEY UNDO, LEAVE:
             PAUSE 0.

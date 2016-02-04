@@ -25,7 +25,7 @@ WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
 title color value(ctc) " Banks (" + gcBrand + ") "
 OVERLAY FRAME kase.
 
-cfc = "kase". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "kase". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 runko:
 repeat:
 
@@ -34,7 +34,7 @@ repeat:
      ufk = 0 ufk[5] = 11
      ufk[6] = 0  ufk[7] = 0  ufk[8] = 8  ufk[9] = 1 siirto = ?.
 
-   ehto = 3. RUN ufkey.p.
+   ehto = 3. RUN Syst/ufkey.p.
 
    FIND FIRST bank WHERE Bank.Brand = gcBrand NO-LOCK no-error.
    IF NOT AVAILABLE bank THEN DO:

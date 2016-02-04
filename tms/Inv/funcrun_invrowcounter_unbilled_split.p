@@ -43,7 +43,7 @@ END.
 IF liUseReplica = ? THEN liUseReplica = 0.
 
 
-RUN invrowcounter_unbilled_split.p(liRunAmt,
+RUN Inv/invrowcounter_unbilled_split.p(liRunAmt,
                                    liFRProcessID,
                                    liFRExecID,
                                    liUpdateInterval,

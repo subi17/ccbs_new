@@ -51,7 +51,7 @@ ldaPeriodEnd = fLastDayOfMonth(TODAY).
 
 RUN pGetFeeds.
 
-RUN chk_cdr_invrowcounter.p(INPUT TABLE ttSubs BY-REFERENCE,
+RUN Inv/chk_cdr_invrowcounter.p(INPUT TABLE ttSubs BY-REFERENCE,
                             FuncRunProcess.ProcSeq,    
                             ldaPeriodEnd,
                             liFRProcessID,

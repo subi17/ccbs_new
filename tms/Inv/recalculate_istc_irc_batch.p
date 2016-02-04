@@ -16,4 +16,4 @@ DEFINE VARIABLE lcParam AS CHARACTER NO-UNDO.
 lcParam = SESSION:PARAMETER.
 IF lcParam NE "month" THEN lcParam = "".
 
-run recalculate_istc_irc.p(TODAY,lcParam).
+RUN Inv/recalculate_istc_irc.p(TODAY,lcParam).

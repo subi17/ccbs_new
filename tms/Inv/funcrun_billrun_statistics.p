@@ -100,7 +100,7 @@ DO WHILE TRUE:
          takes doesn't affect this timing */
       ldtLastRun = NOW.  
       
-      RUN billrun_statistics.p (INPUT ldaInvDate,
+      RUN Inv/billrun_statistics.p (INPUT ldaInvDate,
                                 INPUT liInvType,
                                 INPUT lcRunMode,
                                 OUTPUT liInvQty).

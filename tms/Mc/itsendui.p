@@ -125,7 +125,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
          ufk[9]= 1
          ehto = 3 
          ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       IF llFirst THEN ASSIGN nap     = "1"  
@@ -138,7 +138,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
       IF LOOKUP(nap,"1,f1") > 0 THEN DO:
 
          repeat WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
-             ehto = 9. RUN ufkey.p.
+             ehto = 9. RUN Syst/ufkey.p.
              UPDATE 
                 lcInvGroup
                 llExtCustGrp
@@ -172,10 +172,10 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
                       IF INPUT llExtCustGrp = TRUE THEN DO:
 
-                         RUN gathecg(INPUT-OUTPUT table ttCustGroup).
+                         RUN Mc/gathecg(INPUT-OUTPUT table ttCustGroup).
 
                          ehto = 9.
-                         RUN ufkey.
+                         RUN Syst/ufkey.
 
                          FOR EACH ttCustGroup:
                             lcExtCustGrp = lcExtCustGrp + 
@@ -227,17 +227,17 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
          IF NOT llOk THEN NEXT.
 
          ehto = 5.
-         RUN ufkey.
+         RUN Syst/ufkey.
 
          /* collect customers */
-         RUN itsendco (lcInvGroup,
+         RUN Mc/itsendco (lcInvGroup,
                        INPUT TABLE ttCustGroup,
                        liCustNum1,
                        liCustNum2,
                        OUTPUT TABLE ttCust).
 
          /* send texts */
-         RUN itsend   (INPUT TABLE ttCust,
+         RUN Mc/itsend   (INPUT TABLE ttCust,
                        ldtDate1,
                        ldtDate2,
                        OUTPUT liCount,

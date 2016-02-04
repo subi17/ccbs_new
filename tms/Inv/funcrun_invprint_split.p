@@ -60,7 +60,7 @@ IF llCheckNumbers = ? THEN llCheckNumbers = TRUE.
 IF lcPrintHouse = ? THEN lcPrintHouse = "".
 
 
-RUN printdoc1_split.p (ldaInvDate,
+RUN Inv/printdoc1_split.p (ldaInvDate,
                        llOnlyNew,
                        (liInvType = 1),
                        lcPrintHouse,

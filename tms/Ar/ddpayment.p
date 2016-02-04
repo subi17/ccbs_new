@@ -80,7 +80,7 @@ FOR EACH ttInvoice,
    FIRST Customer OF Invoice NO-LOCK
 BY Invoice.ExtInvID:
 
-   RUN makepaym (BUFFER Invoice,
+   RUN Ar/makepaym (BUFFER Invoice,
                  Invoice.InvAmt,
                  idtPaymDate,
                  liBankAcc,

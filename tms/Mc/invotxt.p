@@ -10,7 +10,7 @@
                                Attachments
                   07.04.03/jp  new report type order confirmation             
                   23.05.03/aam view send log (itsendlo)
-                  28.05.03/aam run ufkey after f9,
+                  28.05.03/aam RUN Syst/ufkey after f9,
                                title instead of language in browser
                   10.06.03/aam InfoType
                   30.07.03/jp  printcont&orderconf case
@@ -48,7 +48,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhInvText).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhInvText).
+      RUN Mc/eventview2.p(lhInvText).
    END.
 
 END.
@@ -201,7 +201,7 @@ FUNCTION fAddrTarget RETURNS CHARACTER
 END FUNCTION.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By FromDate, By Target ,By 3, By 4".
@@ -233,7 +233,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a InvText  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -242,7 +242,7 @@ REPEAT WITH FRAME sel:
 
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
-           ehto = 9. RUN ufkey.
+           ehto = 9. RUN Syst/ufkey.
 
            ASSIGN InvText.InvText:SCREEN-VALUE = "". 
 
@@ -266,7 +266,7 @@ REPEAT WITH FRAME sel:
                     IF siirto NE ? THEN DISP siirto @ InvText.KeyValue.        
 
                     ehto = 9.
-                    RUN ufkey.
+                    RUN Syst/ufkey.
 
                  END.   
               END.
@@ -405,7 +405,7 @@ BROWSE:
            ufk[6] = 0
            ufk[7] = 0.
         
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -543,8 +543,8 @@ BROWSE:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND NOT llMore AND ufk[1] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME f1.
        SET lcBrand WHEN gcAllBrand AND icTarget = ""
@@ -575,13 +575,13 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND NOT llMore AND ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
 
        ASSIGN
          lcTarget   = "SMS"
          lcKeyValue = "".
 
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME f2.
        UPDATE lcBrand WHEN gcAllBrand AND icTarget = ""
            lcTarget validate(lctarget > "", "Enter Target!")  
@@ -607,7 +607,7 @@ BROWSE:
          IF InvText.Target NE "SMS" THEN
             MESSAGE "Function not supported for" InvText.Target VIEW-AS ALERT-BOX.
          ELSE
-            RUN invlang(32,InvText.ITNum).
+            RUN Mc/invlang(32,InvText.ITNum).
 
        ufkey = TRUE.
        NEXT LOOP.
@@ -715,7 +715,7 @@ BROWSE:
 
         /*RUN local-find-this (FALSE).*/
  
-        RUN memo(INPUT 0,
+        RUN Mc/memo(INPUT 0,
                  INPUT "InvText",
                  INPUT STRING(InvText.ITNum),
                  INPUT "Information Text").
@@ -731,7 +731,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND llMore AND ufk[2] > 0 THEN DO:
          RUN local-find-this (TRUE).
-         RUN prininfo(InvText.ITNum,
+         RUN Mc/prininfo(InvText.ITNum,
                     0,
                     "").
          ufkey = TRUE.
@@ -741,7 +741,7 @@ BROWSE:
      /* VIEW SEND LOG in F3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND llMore AND ufk[3] > 0 THEN DO:  
        RUN local-find-this (FALSE).
-       RUN itsendlo(IF InvText.Target = "Customer" 
+       RUN Mc/itsendlo(IF InvText.Target = "Customer" 
                     THEN INTEGER(InvText.KeyValue) ELSE 0,
                     0,
                     1,
@@ -761,9 +761,9 @@ BROWSE:
              ac-hdr = " CHANGE " 
              ufkey  = TRUE 
              ehto = 9. 
-       RUN ufkey.
+       RUN Syst/ufkey.
        cfc = "lis". 
-       RUN ufcolor. 
+       RUN Syst/ufcolor. 
        CLEAR FRAME lis NO-PAUSE.
        DISPLAY InvText.KeyValue.
 
@@ -1108,7 +1108,7 @@ PROCEDURE local-update-record:
             ufk    = 0
             ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
             ufk[8] = 8.
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
       
       IF toimi = 1 THEN 
@@ -1117,7 +1117,7 @@ PROCEDURE local-update-record:
          FIND CURRENT InvText EXCLUSIVE-LOCK.
             
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
          
          CASE InvText.Target:
              WHEN "BillItem" THEN DO:
@@ -1168,7 +1168,7 @@ PROCEDURE local-update-record:
             THEN DO:
 
                IF FRAME-FIELD = "InfoType" THEN DO:
-                  RUN h-tmscodes(INPUT "InvText",    /* TableName */
+                  RUN Help/h-tmscodes(INPUT "InvText",    /* TableName */
                                        "InfoType", /* FieldName */
                                        "CustCare",     /* GroupCode */
                                  OUTPUT lcCode).
@@ -1183,7 +1183,7 @@ PROCEDURE local-update-record:
                END.
 
                ELSE IF FRAME-FIELD = "AddrTarget" THEN DO:
-                  RUN h-tmscodes(INPUT "InvText",    /* TableName */
+                  RUN Help/h-tmscodes(INPUT "InvText",    /* TableName */
                                        "AddrTarget", /* FieldName */
                                        "Printing",     /* GroupCode */
                                  OUTPUT lcCode).
@@ -1199,7 +1199,7 @@ PROCEDURE local-update-record:
                END.
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
                NEXT. 
             END.
 

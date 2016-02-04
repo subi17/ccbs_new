@@ -59,7 +59,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhCGMember).
+      RUN Mc/eventview2.p(lhCGMember).
    END.
 END.
 
@@ -112,7 +112,7 @@ FIND CustGroup where
      CustGroup.CustGroup = icCustGroup no-lock.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST CGMember 
@@ -148,7 +148,7 @@ ADD-CUST:
        repeat TRANS ON ENDKEY UNDO ADD-CUST, LEAVE ADD-CUST.
           ASSIGN ufkey = TRUE ufk = 0 ehto = 0
           ufk[1] = 511 ufk[2] = 513 ufk[3] = 516 ufk[4] = 529 ufk[8] = 8.
-          RUN ufkey.
+          RUN Syst/ufkey.
 
           IF toimi = 8 THEN LEAVE ADD-CUST.
           IF toimi = 1 THEN DO:
@@ -158,7 +158,7 @@ ADD-CUST:
              repeat WITH FRAME lis ON ENDKEY UNDO ADD-CUST,
                                NEXT ADD-CUST:
                 PAUSE 0.
-                ehto = 9. RUN ufkey.
+                ehto = 9. RUN Syst/ufkey.
                 CLEAR FRAME lis no-pause.
                 PROMPT-FOR CGMember.CustNum
                 validate(INPUT CGMember.CustNum  = 0 OR 
@@ -206,7 +206,7 @@ ADD-CUST:
           END. /* toimi = 1: add a single group */
 
           ELSE IF toimi = 2 THEN DO:
-             RUN nncgcb(CustGroup.CustGroup).
+             RUN Mc/nncgcb(CustGroup.CustGroup).
              LEAVE add-cust.
           END.
           ELSE IF toimi = 3 THEN DO WITH FRAME copy:
@@ -216,7 +216,7 @@ ADD-CUST:
              repeat WITH FRAME copy ON ENDKEY UNDO ADD-CUST: 
 
                 PAUSE 0.
-                                                                                            ehto = 9. RUN ufkey.
+                                                                                            ehto = 9. RUN Syst/ufkey.
                 CLEAR FRAME lis no-pause.
                 PROMPT-FOR xcg-code
                 validate(INPUT xcg-code  = "" OR 
@@ -272,7 +272,7 @@ ADD-CUST:
              HIDE FRAME copy.
           END. /* toimi = 3 */
           ELSE IF toimi = 4 THEN DO:
-             RUN nncggm(CustGroup.CustGroup).
+             RUN Mc/nncggm(CustGroup.CustGroup).
              LEAVE add-cust.
           END.
       END. /* add-cust */
@@ -345,7 +345,7 @@ SELAUS:
         ufk[6]= (IF lcRight = "RW" THEN 4    ELSE 0)
         ufk[7]= 185 ufk[8]=   8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -503,9 +503,9 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        CustNum = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE CustNum WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        IF CustNum <> 0 THEN DO:
@@ -527,9 +527,9 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        CustName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE CustName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if CustName <> "" THEN DO:
@@ -549,7 +549,7 @@ SELAUS:
 
      else if lookup(nap,"4,f4") > 0 THEN DO:  /* other memberships */
         FIND CGMember where recid(CGMember) = rtab[FRAME-LINE] no-lock.
-        RUN nncgme2(CGMember.CustNum).
+        RUN Mc/nncgme2(CGMember.CustNum).
         ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -561,7 +561,7 @@ SELAUS:
 
      else if lookup(nap,"3,f3") > 0 THEN DO:  /* count # of members */
 
-        ASSIGN Qty = 0 ehto = 3 ufkey = TRUE ufk = 0. RUN ufkey.
+        ASSIGN Qty = 0 ehto = 3 ufkey = TRUE ufk = 0. RUN Syst/ufkey.
         message "Calculating no. of members, wait a moment please ...".
         FOR EACH CGMember OF CustGroup no-lock:
            Qty = Qty + 1.
@@ -581,13 +581,13 @@ SELAUS:
            ehto  = 1
            ufk[1] = 1883 ufk[2] = 1888 
            ufk[4] = 0 ufk[5]= 0 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8.
-        run ufkey.   
+        RUN Syst/ufkey.   
 
         IF toimi = 8 THEN NEXT SELAUS.
 
-        IF toimi = 1 THEN RUN commontt(CGMember.CustNum).
+        IF toimi = 1 THEN RUN Mc/commontt(CGMember.CustNum).
 
-        IF toimi = 2 THEN RUN mobilett(CGMember.CustNum).
+        IF toimi = 2 THEN RUN Mc/mobilett(CGMember.CustNum).
 
      END.
 
@@ -656,7 +656,7 @@ SELAUS:
        FIND CGMember where recid(CGMember) = rtab[frame-line(sel)]
        exclusive-lock.
        assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
+       RUN Syst/ufkey.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCGMember).
        UPDATE CGMember.Memo.
        IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCGMember).

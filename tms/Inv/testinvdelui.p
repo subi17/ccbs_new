@@ -74,7 +74,7 @@ DISP liTestInvCount WITH FRAME mainFrame.
 mainLoop:
 REPEAT WITH FRAME mainFrame:
    ehto = 9.
-   RUN ufkey.
+   RUN Syst/ufkey.
 
    UPDATE 
      lcFloor
@@ -105,7 +105,7 @@ REPEAT WITH FRAME mainFrame:
       ufk[5] = 795 /* start     */
       ufk[8] = 8   /* return    */
       ehto = 1.
-   RUN ufkey.
+   RUN Syst/ufkey.
    
    IF toimi = 1 THEN NEXT mainLoop.
    IF toimi = 5 THEN DO:
@@ -120,7 +120,7 @@ END.
 PROCEDURE pDeleteTestInvoices:
 
    /* delete test invoices */
-   RUN delete_test_invoice.p (lcFloor,
+   RUN Inv/delete_test_invoice.p (lcFloor,
                               lcRoof,
                               0,
                               0,

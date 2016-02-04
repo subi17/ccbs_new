@@ -14,7 +14,7 @@
         ufk[5]    = 401 /* EVENT MANAG */
         ufk[8]    = 8
         ehto      = 0.
-       RUN ufkey .
+       RUN Syst/ufkey .
        
        IF toimi = 2 THEN DO:
       
@@ -24,7 +24,7 @@
                               TMSParam.ParamCode = "BIGroup" NO-LOCK NO-ERROR.
           IF AVAIL TMSParam THEN DO:
             lcBIGroup = TMSParam.CharVal.
-            RUN nntuyp_run (lcBIGroup, "update-mode-cc").
+            RUN Mc/nntuyp_run (lcBIGroup, "update-mode-cc").
           END.
 
        END.
@@ -37,7 +37,7 @@
 
           IF AVAIL TMSParam THEN DO:
              liFMGroup = TMSParam.IntVal.
-             RUN bevent_run (liFMGroup).
+             RUN Mc/bevent_run (liFMGroup).
           END.
 
        END.

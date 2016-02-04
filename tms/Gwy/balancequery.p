@@ -160,7 +160,7 @@ PROCEDURE pPrePaidPlatform:
 
    /* wait only 6 seconds for response */
    RUN VALUE(lcTCPModule) (lcHTTPHeader + lcXML,lcURL,3,2,"<").
-   /* RUN tcpgwy(lcHTTPHeader + lcXML,lcURL,3,2,"<"). */
+   /* RUN Gwy/tcpgwy(lcHTTPHeader + lcXML,lcURL,3,2,"<"). */
    
    lcReturn = RETURN-VALUE.
 

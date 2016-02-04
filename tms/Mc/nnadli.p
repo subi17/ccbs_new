@@ -106,7 +106,7 @@ END FUNCTION.
 
 rajat:
 repeat WITH FRAME rajat:
-   ehto = 9.  RUN ufkey.
+   ehto = 9.  RUN Syst/ufkey.
 
    UPDATE
    lcInvGroup
@@ -138,7 +138,7 @@ Action:
    repeat WITH FRAME sel:
        ASSIGN
        ufk = 0 ehto = 0 ufk[1] = 91  ufk[5] = 63 ufk[8] = 8.
-       RUN ufkey.
+       RUN Syst/ufkey.
 
 
        IF toimi = 1 THEN NEXT rajat.

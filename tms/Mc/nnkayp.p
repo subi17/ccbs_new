@@ -40,7 +40,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhCustCat).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhCustCat).
+      RUN Mc/eventview2.p(lhCustCat).
    END.
 
 END.
@@ -157,7 +157,7 @@ form /* kategorian nimella hakua varten */
     with row 4 col 2 title color value(ctc) " FIND Name "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 order = 1.
 
@@ -189,12 +189,12 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* CustCat -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.
          DO TRANSAction:
             PROMPT-FOR CustCat.Category
             VALIDATE
@@ -223,7 +223,7 @@ add-new:
                   FRAME-FIELD = "CustIDType"
                THEN DO:
 
-                  RUN h-tmscodes(INPUT "Customer",    /* TableName */
+                  RUN Help/h-tmscodes(INPUT "Customer",    /* TableName */
                                        "CustIDType",  /* FieldName */
                                        "CustCare",  /* GroupCode */
                                  OUTPUT lcCode).
@@ -241,7 +241,7 @@ add-new:
                   END.   
 
                   ehto = 9.
-                  RUN ufkey.
+                  RUN Syst/ufkey.
                   NEXT. 
                END.
 
@@ -363,7 +363,7 @@ BROWSE:
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -513,9 +513,9 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.
         haku = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
         DISP lcBrand with frame hayr.
         UPDATE 
            lcBrand WHEN gcAllBrand
@@ -535,9 +535,9 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.
         haku2 = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
         DISP lcBrand WITH FRAME hayr2.
         UPDATE 
            lcBrand WHEN gcAllBrand
@@ -620,7 +620,7 @@ BROWSE:
         /* change */
         FIND CustCat where recid(CustCat) = rtab[frame-line(sel)]
         exclusive-lock.
-        ASSIGN ufkey = TRUE ehto = 9. RUN ufkey.
+        ASSIGN ufkey = TRUE ehto = 9. RUN Syst/ufkey.
 
         PAUSE 0.
         DISPLAY CustCat.Category WITH FRAME lis.
@@ -643,7 +643,7 @@ BROWSE:
               FRAME-FIELD = "CustIDType"
            THEN DO:
 
-                  RUN h-tmscodes(INPUT "Customer",    /* TableName */
+                  RUN Help/h-tmscodes(INPUT "Customer",    /* TableName */
                                        "CustIDType",  /* FieldName */
                                        "CustCare",  /* GroupCode */
                                  OUTPUT lcCode).
@@ -661,7 +661,7 @@ BROWSE:
                   END.   
 
                   ehto = 9.
-                  RUN ufkey.
+                  RUN Syst/ufkey.
                   NEXT. 
            END.
            

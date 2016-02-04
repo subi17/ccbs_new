@@ -158,7 +158,7 @@ form /* seek Mobile Call  BY A-sub. */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 FIND FIRST ttCall NO-LOCK NO-ERROR.
@@ -232,7 +232,7 @@ BROWSE:
         ufk[1]= 713 ufk[2]= 702 ufk[3]= 209 ufk[4]= 0
         ufk[5]= 2421 ufk[6]= 1115 ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -374,8 +374,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        SET DateSt timest WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -402,8 +402,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME F2.
        SET CustNum WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -425,8 +425,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME F3.
        SET CLI WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
@@ -453,7 +453,7 @@ BROWSE:
         FIND FIRST ttCall WHERE
              recid(ttCall) = rtab[FRAME-LINE] NO-LOCK NO-ERROR.
         
-        RUN viewtable.p((BUFFER ttcall:HANDLE)).
+        RUN Syst/viewtable.p((BUFFER ttcall:HANDLE)).
         ufkey = TRUE.
         NEXT loop.
      END.
@@ -463,7 +463,7 @@ BROWSE:
         FIND FIRST ttCall WHERE
              recid(ttCall) = rtab[FRAME-LINE] NO-LOCK NO-ERROR.
         
-        RUN viewmcdr2.p(INPUT ttCall.Datest, ttCall.Dtlseq,
+        RUN Mm/viewmcdr2.p(INPUT ttCall.Datest, ttCall.Dtlseq,
                       IF ttCall.CDRTable > ""
                       THEN ttCall.CDRTable
                       ELSE "MobCdr").
@@ -477,8 +477,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttCall.DateSt.
 
        RUN local-UPDATE-record.                                  

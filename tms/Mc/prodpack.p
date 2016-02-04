@@ -29,7 +29,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhPPItem).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhProdPack).
+      RUN Mc/eventview2.p(lhProdPack).
    END.
 
 END.
@@ -91,7 +91,7 @@ form /* seek ProdPack BY PPName */
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND Name "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -122,12 +122,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ProdPack  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         DO TRANSAction:
            PROMPT-FOR ProdPack.ProdPack
            VALIDATE
@@ -232,7 +232,7 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 1760 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -369,9 +369,9 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        ProdPack = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE ProdPack WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF ProdPack <> "" THEN DO:
@@ -392,9 +392,9 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        PPName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE PPName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF PPName <> "" THEN DO:
@@ -415,7 +415,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO TRANS:  /* Package Contains */
 
        FIND ProdPack WHERE recid(ProdPack) = rtab[FRAME-LINE] NO-LOCK.
-       RUN ppcomp(ProdPack.ProdPack).
+       RUN Mc/ppcomp(ProdPack.ProdPack).
        ufkey = TRUE.
        NEXT LOOP.
      END.
@@ -423,7 +423,7 @@ BROWSE:
      IF LOOKUP(nap,"4,F4") > 0 THEN DO TRANS: /* memo */
        FIND ProdPack WHERE RECID(ProdPack) = rtab[FRAME-LINE(sel)]
        NO-LOCK NO-ERROR.
-       RUN memo(INPUT 0,
+       RUN Mc/memo(INPUT 0,
                 INPUT "PRODPACK",
                 INPUT STRING(ProdPack.ProdPack),
                 INPUT "Prodpack Id").
@@ -514,7 +514,7 @@ BROWSE:
 
      ELSE IF lookup(nap,"7,f7") > 0 THEN DO:
         FIND ProdPack WHERE recid(ProdPack) = rtab[FRAME-line(sel)] NO-LOCK.
-        RUN invotxt("ProdPack",ProdPack.ProdPack).
+        RUN Mc/invotxt("ProdPack",ProdPack.ProdPack).
         ASSIGN memory = recid(ProdPack) must-print = TRUE ufkey=true.
         NEXT LOOP.
      END.
@@ -526,8 +526,8 @@ BROWSE:
        FIND ProdPack WHERE recid(ProdPack) = rtab[FRAME-line(sel)]
        EXCLUSIVE-LOCK.
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor.
 
        DISPLAY 
           ProdPack.ProdPack.

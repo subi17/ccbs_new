@@ -67,7 +67,7 @@ DO WHILE TRUE:
           ufk[8] = 8
           ehto   = 3.
 
-      RUN ufkey.
+      RUN Syst/ufkey.
    
    DISPLAY lcStatText[1]  @ menuc[1] SKIP
            lcStatText[2]  @ menuc[2] SKIP   
@@ -148,7 +148,7 @@ DO WHILE TRUE:
          MsRequest Type and MsRequest Status to store
          values with browser */
       
-      RUN msreqfuncitem(MsReqStatFunc.FuncGroup,
+      RUN Syst/msreqfuncitem(MsReqStatFunc.FuncGroup,
                         OUTPUT lcReturn).
       FIND CURRENT MsReqStatFunc EXCLUSIVE-LOCK.
       ASSIGN MsReqStatFunc.FuncGroup = lcReturn.

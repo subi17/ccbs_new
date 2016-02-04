@@ -29,7 +29,7 @@ for each order no-lock where
       disp prepaidrequest.pprequest format ">>>>>>>>9".
    else do:
                      
-      RUN topupcamp(MobSub.MsSeq, 
+      RUN Mm/topupcamp(MobSub.MsSeq, 
                     OUTPUT lireq).
  
       put stream slog unformatted 

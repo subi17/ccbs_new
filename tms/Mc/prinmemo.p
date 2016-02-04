@@ -168,7 +168,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
       ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
       ehto = 3.
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
 
       READKEY.
       nap = keylabel(LASTKEY).
@@ -178,7 +178,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
    if lookup(nap,"1,f1") > 0 THEN DO:
    
       ASSIGN ehto = 9.
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
 
       REPEAT ON ENDKEY UNDO, LEAVE:
       
@@ -193,7 +193,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
              IF FRAME-FIELD = "liAddress" AND keylabel(lastkey) = "F9" 
              THEN DO:
               
-                RUN h-tmscodes(INPUT "InvText",   /* TableName*/
+                RUN Help/h-tmscodes(INPUT "InvText",   /* TableName*/
                                      "AddrTarget", /* FieldName */
                                      "Printing",   /* GroupCode */
                                OUTPUT lcCode).
@@ -202,7 +202,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
                 DISPLAY INTEGER(lcCode) @ liAddress WITH FRAME rajat.
                 
                 ehto = 9.
-                RUN ufkey.
+                RUN Syst/ufkey.
                 
                 NEXT.
              END.
@@ -243,7 +243,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       END.
       
       ehto = 5. 
-      RUN ufkey.
+      RUN Syst/ufkey.
  
       IF llEPl THEN DO:
          IF NOT fEPLStart(lcTestFlag) THEN NEXT.
@@ -255,7 +255,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      RUN printxt (Memo.CustNum,
+      RUN Mc/printxt (Memo.CustNum,
                    0,                      /* msseq  */
                    "",
                    2,                      /* 2=memo */

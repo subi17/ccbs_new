@@ -32,7 +32,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhDPBasis).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhDPConf).
+      RUN Mc/eventview2(lhDPConf).
    END.
 
 END.
@@ -163,7 +163,7 @@ FORM /* seek DPConf  by DPCName */
 
 FIND DiscPlan WHERE DiscPlan.DiscPlan = DiscPlan NO-LOCK no-error.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Eff. Date  ,By Description,By 3, By 4".
@@ -196,13 +196,13 @@ REPEAT WITH FRAME sel:
       ufkey = true 
       ac-hdr = " ADD " 
       must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         ehto = 9. 
-        RUN ufkey.
+        RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -337,7 +337,7 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)  
         ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = false.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -479,8 +479,8 @@ ASK-F1:
        REPEAT WITH FRAME f1 
        ON ENDKEY UNDO ASK-F1, LEAVE ASK-F1.
 
-         cfc = "puyr". RUN ufcolor.
-         ehto = 9. RUN ufkey. ufkey = true.
+         cfc = "puyr". RUN Syst/ufcolor.
+         ehto = 9. RUN Syst/ufkey. ufkey = true.
          CLEAR FRAME f1.
          SET ValidFrom WITH FRAME f1.
          LEAVE.
@@ -512,8 +512,8 @@ ASK-F2:
         REPEAT WITH FRAME f2 
         ON ENDKEY UNDO ASK-F2, LEAVE ASK-F2.
 
-          cfc = "puyr". RUN ufcolor.
-          ehto = 9. RUN ufkey. ufkey = true.
+          cfc = "puyr". RUN Syst/ufcolor.
+          ehto = 9. RUN Syst/ufkey. ufkey = true.
           CLEAR FRAME f2.
           SET DPCName WITH FRAME f2.
           LEAVE.
@@ -602,7 +602,7 @@ ASK-F2:
         /* read this DPConf record into record buffer, NO-LOCK */
         RUN local-find-this(false).
 
-        RUN dpbasis(DPConf.DPConfNum).  
+        RUN Mc/dpbasis(DPConf.DPConfNum).  
 
         ufkey = TRUE.
         NEXT loop.
@@ -616,8 +616,8 @@ ASK-F2:
        /* change */
        {Syst/uright2.i}
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY DPConf.ValidFrom DPConf.ValidTo.
        DISPLAY DPConf.DPCName.
 

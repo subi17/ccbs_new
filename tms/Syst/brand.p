@@ -24,7 +24,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhBrand).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhBrand).
+      RUN Mc/eventview2(lhBrand).
    END.
 
 END.
@@ -82,7 +82,7 @@ form /* seek  Brand */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND BANK ACCOUNT "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Bank Account ,  By Name    ,By 3, By 4".
@@ -111,14 +111,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a Brand  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -217,7 +217,7 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
         ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -350,8 +350,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcBrand WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -375,7 +375,7 @@ BROWSE:
         RUN local-find-this(FALSE).
         
         IF AVAILABLE Brand 
-        THEN RUN cpbrandui(Brand.Brand).
+        THEN RUN Syst/cpbrandui(Brand.Brand).
         
         ufkey = TRUE.
         must-print = true.
@@ -457,7 +457,7 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhBrand).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE. 
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY Brand.Brand.
 
        RUN local-UPDATE-record.                                  
@@ -555,7 +555,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.
          UPDATE
           Brand.BRName
           Brand.Address

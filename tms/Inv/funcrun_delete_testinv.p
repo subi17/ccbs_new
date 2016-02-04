@@ -36,7 +36,7 @@ IF RETURN-VALUE BEGINS "ERROR" THEN DO:
    QUIT.
 END.
 
-RUN delete_test_invoice.p("",
+RUN Inv/delete_test_invoice.p("",
                           "",
                           liFRProcessID,
                           liUpdateInterval,

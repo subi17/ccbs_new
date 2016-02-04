@@ -24,7 +24,7 @@ if llDoEvent THEN DO:
     RUN StarEventInitialize(lhRZItem).
     
     ON F12 ANYWHERE DO:
-        run eventview2(lhRZItem).
+        RUN Mc/eventview2(lhRZItem).
     END.
 END.
     
@@ -104,7 +104,7 @@ form /* seek  CountryPrefix */
 
  
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -159,12 +159,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a RZItem  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PAUSE 0.
@@ -267,7 +267,7 @@ BROWSE:
                                ufk[2]= 96.
                    ELSE ASSIGN ufk[1]= 0
                                UFK[2]= 0.
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -406,8 +406,8 @@ BROWSE:
      /* Search by column 1 */
      ELSE IF llEmpty AND
      LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = true.
        CLEAR FRAME f1.
        SET RZItem-code WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -430,8 +430,8 @@ BROWSE:
      ELSE IF llEmpty AND
      LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = true.
        CLEAR FRAME F2.
        SET lcCountryPrefix WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -510,8 +510,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY RZItem.PLMNCode.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhRZItem).

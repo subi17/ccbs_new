@@ -574,7 +574,7 @@ ELSE DO:
    IF lcMacros NE ? AND lcMacros > "" THEN DO:
 
       /* copy macros TO printer */
-      RUN umakro(lcMacroDir + lcMacros).
+      RUN Syst/umakro(lcMacroDir + lcMacros).
 
       /* macro nbr is in it's name */
       liCount = INTEGER(SUBSTRING(lcMacros,LENGTH(lcMacros),1)) NO-ERROR.
@@ -1193,7 +1193,7 @@ IF NOT llErrors THEN DO:
          /* fees have not been created yet */
          ELSE DO:
             /* make virtual creation */
-            RUN cashfee.p (Order.OrderID,
+            RUN Mc/cashfee.p (Order.OrderID,
                          3,     /* leave out campaign topups */
                          OUTPUT lcList,
                          OUTPUT ldInvTot,
@@ -1320,7 +1320,7 @@ IF NOT llErrors THEN DO:
          IF Order.CLIType = "CONTS" AND Order.CrStamp < 20120901 THEN
             lcList = CHR(10) + fTeksti(532,liLanguage).
 
-         RUN offer_penaltyfee(Order.OrderID,
+         RUN Mc/offer_penaltyfee(Order.OrderID,
                               Output liTermMonths,
                               OUTPUT ldAmt).
 
@@ -1466,7 +1466,7 @@ IF NOT llErrors THEN DO:
       IF INDEX(lcText,"#POSTDISC") > 0 THEN DO:
          lcList = "".
          IF Order.Paytype = FALSE THEN DO:
-            RUN offer_penaltyfee.p(Order.OrderID,
+            RUN Mc/offer_penaltyfee.p(Order.OrderID,
                                    OUTPUT liTermMonths,
                                    OUTPUT ldAmt).
             IF ldAmt > 0 THEN DO:

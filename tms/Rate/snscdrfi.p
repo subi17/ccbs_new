@@ -47,7 +47,7 @@ ASSIGN ok = TRUE
        "/apps/mtv/tms/snet".
 ticfile = "/tmp/cdr2004022.asc".
 IF ok THEN DO:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.
    UPDATE
       ticfile
    WITH FRAME loki EDITING.
@@ -66,7 +66,7 @@ if ticfile = "" OR ticfile = "Mobile OnLine" THEN LEAVE.
 
 
 ufk = 0. ehto = 3.
-RUN ufkey. PAUSE 0.
+RUN Syst/ufkey. PAUSE 0.
 
 message "Are You SURE You want to start reading CDRs into database ?"
 UPDATE ok.

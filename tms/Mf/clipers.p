@@ -377,7 +377,7 @@ PROCEDURE pDelSeries:
 
       MESSAGE "Deleting a-sub numbers, wait ...". 
 
-      RUN nnatmu 
+      RUN Mf/nnatmu 
         (INPUT  CLISer.SerNum,
          INPUT  CLISer.CLIFrom,  
          INPUT  CLISer.CLITo,  
@@ -503,12 +503,12 @@ PROCEDURE pAddSeries:
 
          IF nap = "F9" AND FRAME-FIELD = "xBillTarg" THEN DO:
 
-            RUN h-billtarg (INPUT xCustNum).
+            RUN Help/h-billtarg (INPUT xCustNum).
 
             IF siirto NE "" AND siirto NE ? THEN
                DISPLAY INTEGER(siirto) @ xBillTarg WITH FRAME frmAddSeries.
 
-            RUN ufkey.
+            RUN Syst/ufkey.
 
          END.    
 
@@ -656,7 +656,7 @@ PROCEDURE pAddSeries:
                   lCRStamp = fHMS2TS(lDate1,lCTime1)
                   lCLStamp = fHMS2TS(lDate2,lCTime2). 
 
-               RUN nnatmu 
+               RUN Mf/nnatmu 
                  (INPUT  0,
                   INPUT  xCLIFrom,  
                   INPUT  xCLITo,  
@@ -710,7 +710,7 @@ PROCEDURE pAddSeries:
          PAUSE 0. 
          MESSAGE "Creating unique number records into database, wait ...". 
 
-         RUN nnatmu 
+         RUN Mf/nnatmu 
            (INPUT  CLISer.SerNum,
             INPUT  CLISer.CLIFrom,  
             INPUT  CLISer.CLITo,  

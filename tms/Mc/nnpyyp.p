@@ -26,7 +26,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhNatHoliday).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhNatHoliday).
+      RUN Mc/eventview2.p(lhNatHoliday).
    END.
 
 END.
@@ -84,7 +84,7 @@ form /* ArkipyhA :n nimella hakua varten */
     with row 4 col 2 title color value(ctc) " HOLIDAYNAME "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
    FIND FIRST NatHoliday no-lock no-error.
 IF AVAILABLE NatHoliday THEN ASSIGN memory = recid(NatHoliday)
@@ -110,12 +110,12 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* NatHoliday -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.
          DO TRANSAction:
             PROMPT-FOR NatHoliday.Holiday
             VALIDATE
@@ -202,7 +202,7 @@ BROWSE:
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -356,9 +356,9 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.
         haku = ?.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
         UPDATE haku WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
         IF haku <> ? THEN DO:
@@ -387,9 +387,9 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.
         haku2 = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
         UPDATE haku2 WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
         if haku2 <> "" THEN DO:
@@ -485,8 +485,8 @@ BROWSE:
         FIND NatHoliday where recid(NatHoliday) = rtab[frame-line(sel)]
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        RUN ufkey.
-        cfc = "lis". RUN ufcolor.
+        RUN Syst/ufkey.
+        cfc = "lis". RUN Syst/ufcolor.
         DISPLAY NatHoliday.Holiday.
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhNatHoliday).

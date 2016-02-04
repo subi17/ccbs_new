@@ -86,7 +86,7 @@ END.
 ELSE RETURN appl_err("Invalid Order type").
 
 IF llCloseOrder THEN DO:
-   RUN closeorder.p (INPUT piOrderId, INPUT TRUE).
+   RUN Mc/closeorder.p (INPUT piOrderId, INPUT TRUE).
    ocResult = RETURN-VALUE. 
    IF ocResult NE "" THEN 
      RETURN appl_err(ocResult).

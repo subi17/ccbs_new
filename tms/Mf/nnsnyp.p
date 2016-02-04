@@ -45,7 +45,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhNumPlan).
+      RUN Mc/eventview2.p(lhNumPlan).
    END.
 END.
 
@@ -89,7 +89,7 @@ form /* Nummerserie search WITH FIELD Operator */
     with row 4 col 2 title color value(ctc) " FIND OPERATOR "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME h-f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST NumPlan
@@ -114,12 +114,12 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* NumPlan -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         DO TRANSAction:
            PROMPT-FOR NumPlan.AreaCode
            VALIDATE
@@ -222,7 +222,7 @@ BROWSE:
 
 
 
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -425,9 +425,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        h-rn-rnr = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE h-rn-rnr WITH FRAME h-f1.
        HIDE FRAME h-f1 no-pause.
        if h-rn-rnr <> "" THEN DO:
@@ -448,9 +448,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        h-op-code = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE h-op-code WITH FRAME h-f2.
        HIDE FRAME h-f2 no-pause.
        if h-op-code <> "" THEN DO:
@@ -544,8 +544,8 @@ BROWSE:
        FIND NumPlan where recid(NumPlan) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor.
        FIND Operator where Operator.Operator = 
           NumPlan.Operator no-lock no-error.
        FIND AreaCode where AreaCode.AreaCode = 

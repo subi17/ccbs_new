@@ -7,7 +7,7 @@
   MUUTOSPVM ....: 25-05-99 jp uright1 & uright2 added
                   31.10.02 jr Eventlog 
                   20.02.03 tk F7 tokens, ugmembers removed
-                  05.03.03 tk run memo, check tokens
+                  05.03.03 tk RUN Mc/memo, check tokens
                   06.02.04 jp custnum for memo
   VERSIO .......: SCRUNKO3, (23.10.96)
   ------------------------------------------------------ */
@@ -53,7 +53,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhUserGrp).
+      RUN Mc/eventview2.p(lhUserGrp).
    END.
 END.
 
@@ -100,7 +100,7 @@ form /* User Group :n haku kentällä UGName */
     with row 4 col 2 title color value(ctc) " FIND name "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST UserGrp
@@ -123,12 +123,12 @@ repeat WITH FRAME sel:
 
    IF lisattava THEN DO:  /* ugroupn lisäys  */
       assign cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 lisaa:
       repeat WITH FRAME lis ON ENDKEY UNDO lisaa, LEAVE lisaa.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         DO TRANSAction:
            PROMPT-FOR UserGrp.UserGroup
            VALIDATE
@@ -214,7 +214,7 @@ SELAUS:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
         ufk[7]= 1900   ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -368,9 +368,9 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        UserGroup = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE UserGroup WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if UserGroup <> "" THEN DO:
@@ -391,9 +391,9 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        UGName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE UGName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if UGName <> "" THEN DO:
@@ -412,7 +412,7 @@ SELAUS:
 
      else if lookup(nap,"3,f3") > 0 THEN  DO: /* memo */
         FIND UserGrp where RECID(UserGrp) = rtab[FRAME-LINE] no-lock.
-        RUN memo(INPUT 0,
+        RUN Mc/memo(INPUT 0,
                  INPUT "UserGrp",
                  INPUT STRING(UserGrp.UserGroup),
                  INPUT "UserGroup").
@@ -491,7 +491,7 @@ SELAUS:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhUserGrp).
 
-       run ugtokens(UserGrp.UserGroup,
+       RUN Syst/ugtokens(UserGrp.UserGroup,
                     INPUT-OUTPUT lShoTokens,
                     INPUT-OUTPUT lModTokens).
 
@@ -531,14 +531,14 @@ SELAUS:
                  ufk[8] = 8
                  lm-ots = " DETAILS "
                  ufkey = TRUE.
-          RUN ufkey.
-          cfc = "lis". RUN ufcolor.
+          RUN Syst/ufkey.
+          cfc = "lis". RUN Syst/ufcolor.
 
           IF toimi = 1 THEN DO:
 
               assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
-              RUN ufkey.
-              cfc = "lis". RUN ufcolor.
+              RUN Syst/ufkey.
+              cfc = "lis". RUN Syst/ufcolor.
               FIND CURRENT UserGrp EXCLUSIVE-LOCK.
               IF llDoEvent THEN RUN StarEventSetOldBuffer(lhUserGrp).
               UPDATE UserGrp.UGName.
@@ -550,7 +550,7 @@ SELAUS:
           END.
 
           IF toimi = 3 THEN DO:
-             RUN adduserlimitcui ("UserGroup", UserGrp.UserGroup).
+             RUN Syst/adduserlimitcui ("UserGroup", UserGrp.UserGroup).
           END.
 
           IF toimi = 8 THEN LEAVE.

@@ -59,7 +59,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhIMSI).
+      RUN Mc/eventview2.p(lhIMSI).
    END.
 END.
 
@@ -102,7 +102,7 @@ form /* seek IMSI number  BY CustNum */
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CUST No "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By IMSI No,By Cust No.,By 3, By 4".
@@ -139,12 +139,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a IMSI  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         DO TRANSACTION:
            MESSAGE 
            "Double SIM card not possible yet"
@@ -220,7 +220,7 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -357,9 +357,9 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        IMSI = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE IMSI WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF IMSI <> "" THEN DO:
@@ -380,9 +380,9 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        CustNum = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE CustNum WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF CustNum <> 0 THEN DO:
@@ -410,7 +410,7 @@ BROWSE:
           "With This IMSI No."
           VIEW-AS ALERT-BOX error.
        END.   
-       ELSE RUN shmobu(IMSI.UserSeq).
+       ELSE RUN Mm/shmobu(IMSI.UserSeq).
        ufkey = TRUE.
        NEXT LOOP.
      END.  
@@ -419,7 +419,7 @@ BROWSE:
        FIND IMSI WHERE recid(IMSI) = rtab[FRAME-LINE] NO-LOCK.
        ufkey = TRUE.
        /* show ALL MSISDN no.s associated TO this IMSI no. */
-       run msisdni(IMSI.IMSI).
+       RUN Mm/msisdni(IMSI.IMSI).
        NEXT LOOP.
      END.  
 
@@ -483,8 +483,8 @@ BROWSE:
        FIND IMSI WHERE recid(IMSI) = rtab[FRAME-line(sel)]
        EXCLUSIVE-LOCK.
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". run ufcolor.
+       RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor.
        DISPLAY IMSI.IMSI.
 
 

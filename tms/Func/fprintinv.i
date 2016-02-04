@@ -760,7 +760,7 @@ FUNCTION fPrintSpecRep RETURNS LOGICAL
 
          case liRepNum:
          when 3 THEN 
-            run nnpura3 (Invoice.CustNum,
+            RUN Inv/nnpura3 (Invoice.CustNum,
                          Invoice.FirstCall,
                          Invoice.ToDate,
                          1,
@@ -771,7 +771,7 @@ FUNCTION fPrintSpecRep RETURNS LOGICAL
                          OUTPUT liDumCnt).
 
          WHEN 4 THEN
-            RUN nnpura4 (Invoice.CustNum,
+            RUN Inv/nnpura4 (Invoice.CustNum,
                          Invoice.CustNum,
                          Invoice.FirstCall,
                          Invoice.ToDate,

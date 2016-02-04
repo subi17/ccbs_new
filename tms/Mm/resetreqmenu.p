@@ -54,7 +54,7 @@ DO WHILE TRUE:
       ufk    = 0 
       ufk[8] = 8 
       ehto   = 3. 
-   RUN ufkey. 
+   RUN Syst/ufkey. 
 
    PAUSE 0.
    DISPLAY

@@ -22,7 +22,7 @@ FOR EACH order where
    order.statuscode = {&ORDER_STATUS_MORE_DOC_NEEDED} and
    order.crstamp < ldeCrStamp NO-LOCK:
 
-   RUN orderbyfraud.p(order.orderid,TRUE,{&ORDER_STATUS_AUTO_CLOSED}).
+   RUN Mc/orderbyfraud.p(order.orderid,TRUE,{&ORDER_STATUS_AUTO_CLOSED}).
 
 END.
 

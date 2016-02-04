@@ -364,7 +364,7 @@ PROCEDURE pSetBarring:
    END.
      
    /* create barring request */
-   RUN barrengine.p(iiMsSeq,
+   RUN Mm/barrengine.p(iiMsSeq,
                    icBarrCommand,
                    "9",                /* source  */
                    "Collection",       /* creator */

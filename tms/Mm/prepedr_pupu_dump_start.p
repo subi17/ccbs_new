@@ -62,7 +62,7 @@ PROCEDURE pStartDump:
    IF RETURN-VALUE BEGINS "ERROR" THEN 
       RETURN RETURN-VALUE.
  
-   RUN prepedr_pupu_dump.p(INPUT icDumpID,
+   RUN Mm/prepedr_pupu_dump.p(INPUT icDumpID,
                            INPUT icFile,
                            INPUT icDumpMode,
                            INPUT idLastDump,

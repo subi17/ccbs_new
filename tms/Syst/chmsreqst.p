@@ -151,7 +151,7 @@ IF MsRequest.ReqType = 0 AND (iiToStatus = 4 OR iiToStatus = 9) THEN DO:
       
    IF AVAIL Order THEN DO:
       
-      RUN closeorder.p(Order.OrderId,TRUE).
+      RUN Mc/closeorder.p(Order.OrderId,TRUE).
    
       IF RETURN-VALUE NE "" THEN DO:
          MESSAGE "Error with renewal order closing:" 
@@ -428,7 +428,7 @@ CASE iiToStatus:
          SET llOk.
 
          IF llOk THEN 
-            RUN acc_sendsms(MsRequest.MsRequest,
+            RUN Mm/acc_sendsms(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "Cancelled",
                             lcCancelReason).
@@ -475,7 +475,7 @@ END.
 /* refund */
 IF MsRequest.ReqType = 23 AND LOOKUP(STRING(iiToStatus),"4,9") > 0 THEN DO:
  
-   RUN refundcancel(MsRequest.MsRequest,
+   RUN Ar/refundcancel(MsRequest.MsRequest,
                     "AP",
                     0,
                     MsRequest.CustNum,

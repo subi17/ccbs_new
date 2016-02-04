@@ -245,7 +245,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
          ufk[1] = 0
          ufk[3] = 0.
          
-      RUN ufkey.
+      RUN Syst/ufkey.
    END.
 
    ELSE ASSIGN toimi = 1  
@@ -256,7 +256,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
          
-         ehto = 9. RUN ufkey.p.
+         ehto = 9. RUN Syst/ufkey.p.
          
          IF lcNewCategory = "" THEN lcNewCategory = lcAgrCategory.
          IF lcNewCountry  = "" THEN lcNewCountry  = lcAgrCountry.
@@ -273,7 +273,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
 
                IF FRAME-FIELD = "liNewCust1" THEN DO:
 
-                  RUN h-customer (liInvCust,
+                  RUN Help/h-customer (liInvCust,
                                   "invcust",
                                   "user").
                    
@@ -285,7 +285,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                END. 
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
                NEXT.
             END. 
  

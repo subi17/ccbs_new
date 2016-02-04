@@ -7,7 +7,7 @@
   CHANGED ......: 21.05.02/tk  Event logging added
                   28.02.03 tk  tokens
                   08.02.06/aam periodical contract 
-                  12.12.06/mvi new param to run msrequest (reqstat = ?)
+                  12.12.06/mvi new param to RUN Mm/msrequest (reqstat = ?)
                   20.03.07 kl  yoigo version
                   18.07.07 kl  termmobsubfind
                   31.10.07 jp  new parameter for msrequest
@@ -45,7 +45,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhTermMobsub).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhTermMobsub).
+      RUN Mc/eventview2(lhTermMobsub).
    END.
 
 END.
@@ -173,7 +173,7 @@ form /* seek Mobsub MsSeq */
     WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND Subscription ID "
     COLOR VALUE(cfc) WIDTH 24  NO-LABELS OVERLAY FRAME fMsSeq.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By MSISDN  ,  By SUBS ID ,  By CUSTNUM  ,  BY STATUS  , By 4".
@@ -266,7 +266,7 @@ BROWSE:
          UFK[6] =  0
          UFK[7] =  0.
          
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -412,8 +412,8 @@ BROWSE:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lccli WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -435,8 +435,8 @@ BROWSE:
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME fMsSeq.
        SET liMsSeq WITH FRAME fMsSeq.
        HIDE FRAME fMsSeq NO-PAUSE.
@@ -457,8 +457,8 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f3.
        SET liCustNum WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
@@ -481,34 +481,34 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND 
        icType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f4.
        SET lcLastName lcFirstname WITH FRAME f4.
        HIDE FRAME f4 NO-PAUSE.
 
        IF lcFirstName  > ""  OR lcLastName   > ""  THEN DO:
-          run termmobsubfind.p("AGRNAME",lcLastname + "|" + lcFirstName).
+          RUN Mm/termmobsubfind.p("AGRNAME",lcLastname + "|" + lcFirstName).
        END.
      END. /* Search-4 */
     
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f5.
        SET lcPersonid WITH FRAME f5.
        HIDE FRAME f5 NO-PAUSE.
 
        IF lcPersonID > "" THEN DO:
-          run termmobsubfind.p("ID",lcPersonid).
+          RUN Mm/termmobsubfind.p("ID",lcPersonid).
        END.
      END. /* Search-5 */
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" AND 
        ictype = "" THEN DO: 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f6.
        SET liMSStatus WITH FRAME f6.
        IF  liMSStatus  ne 0  THEN DO:
@@ -530,8 +530,8 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"7,f7") > 0 AND 
        iCType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f7.
        SET lcICC WITH FRAME f7.
        HIDE FRAME f7 NO-PAUSE.
@@ -573,7 +573,7 @@ BROWSE:
         RUN local-find-others(TRUE).
        
         
-        RUN nnfmcu(OUTPUT liCustNum, OUTPUT liMsSeq).
+        RUN Mm/nnfmcu(OUTPUT liCustNum, OUTPUT liMsSeq).
 
         IF liCustNum NE ? AND liCustNum > 0 THEN DO:
            FIND  SearchCustomer WHERE 
@@ -627,16 +627,16 @@ BROWSE:
              ufk[7] = 249 WHEN getTMSRight("VENDOR") = "RW"
              ufk[8] = 8  .
           
-          run ufkey.   
+          RUN Syst/ufkey.   
           
           IF toimi = 8 THEN DO:
              HIDE FRAME lis NO-PAUSE.
              LEAVE.
           ENd.
 
-          IF toimi = 2  THEN RUN persondata(TermMobsub.msseq).
+          IF toimi = 2  THEN RUN Mm/persondata(TermMobsub.msseq).
           ELSE IF toimi = 3  THEN DO:
-             RUN msrequest(-1,
+             RUN Mm/msrequest(-1,
                            ?, /* reqstat ? for all */
                            TermMobsub.MsSeq,
                            0,
@@ -645,8 +645,8 @@ BROWSE:
              /* in case a request was run */
              RUN local-UPDATE-record(FALSE).
           END.      
-          ELSE IF toimi = 4  THEN RUN termsubser(TermMobsub.MsSeq).
-          ELSE IF Toimi = 5  THEN RUN memo(INPUT TermMobsub.CustNum,
+          ELSE IF toimi = 4  THEN RUN Mm/termsubser(TermMobsub.MsSeq).
+          ELSE IF Toimi = 5  THEN RUN Mc/memo(INPUT TermMobsub.CustNum,
                                            INPUT "TermMobsub",
                                            INPUT STRING(TermMobsub.MsSeq),
                                            INPUT "TermMobsub").
@@ -668,33 +668,33 @@ BROWSE:
                    ufk[6]= 0
                    ufk[7]= 0.
                    ufk[8]= 8.
-                run ufkey.   
+                RUN Syst/ufkey.   
         
                 IF toimi = 8 THEN DO:
                    LEAVE CALLBROWSE.
                 ENd.
 
-                IF       toimi = 1  THEN RUN msisdniv(TermMobsub.MsSeq).
+                IF       toimi = 1  THEN RUN Mm/msisdniv(TermMobsub.MsSeq).
 
                 ELSE IF toimi = 2 AND avail TermMobsub  THEN
-                   RUN callstat.p(INPUT 0,TermMobsub.cli,"PRODUCT").
+                   RUN Mm/callstat.p(INPUT 0,TermMobsub.cli,"PRODUCT").
        
                 ELSE IF toimi = 3 AND avail TermMobsub  THEN 
-                   RUN callstat.p(INPUT 0,TermMobsub.cli,"DATE").
+                   RUN Mm/callstat.p(INPUT 0,TermMobsub.cli,"DATE").
        
                 ELSE IF toimi = 4 AND avail TermMobsub  THEN
-                   RUN callstat.p(INPUT 0,TermMobsub.cli,"CCN").
+                   RUN Mm/callstat.p(INPUT 0,TermMobsub.cli,"CCN").
 
                 ELSE IF toimi = 6 THEN 
-                   RUN persondata(TermMobsub.msseq).
+                   RUN Mm/persondata(TermMobsub.msseq).
         
              END.
           END.
           ELSE IF toimi = 7 AND ufk[7] > 0 AND avail TermMobsub  THEN DO:
-             RUN mobsubdi.p(INPUT TermMobsub.MSSeq, OUTPUT killed).
+             RUN Mm/mobsubdi.p(INPUT TermMobsub.MSSeq, OUTPUT killed).
           END.
           ELSE IF toimi = 6 THEN 
-             RUN persondata(TermMobsub.msseq).
+             RUN Mm/persondata(TermMobsub.msseq).
        END.
        ASSIGN  Memory = recid(TermMobsub) must-print = TRUE.
        NEXT LOOP.

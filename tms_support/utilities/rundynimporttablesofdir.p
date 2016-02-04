@@ -23,7 +23,7 @@ REPEAT:
    cTable = ENTRY(1, cTable, ".").
    DISP cFile FORMAT "X(37)" cTable FORMAT "X(30)".
    IF NOT plTestFiles THEN
-       run dynimport.p(pcDir, cTable, 0, TRUE). 
+       RUN tms_support/utilities/dynimport.p(pcDir, cTable, 0, TRUE). 
 END.
 
 INPUT STREAM sFiles CLOSE.

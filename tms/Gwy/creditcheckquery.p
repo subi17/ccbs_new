@@ -83,7 +83,7 @@ IF Customer.CustIdType = "CIF" AND
       RETURN.
    END.
    
-   RUN creditscoring.p(
+   RUN Mc/creditscoring.p(
       MobSub.MsSeq,
       "NORMAL",
       OUTPUT llOk,
@@ -109,7 +109,7 @@ ELSE DO:
       fReqError(lcResp).
 
       IF lcType = "ACC" THEN
-         RUN acc_sendsms(MsRequest.OrigRequest,
+         RUN Mm/acc_sendsms(MsRequest.OrigRequest,
                          MsRequest.CustNum,
                          "Rejected",
                          "HT:309").
@@ -229,7 +229,7 @@ PROCEDURE pCreditScoring:
    SET-SIZE(lmXML) = 0.
 
    RUN VALUE(lcTCPModule) (lcHTTPHeader + lcXML,lcURL,5,2,"<").  
-   /* RUN tcpgwy(lcHTTPHeader + lcXML,lcURL,5,2,"<").   */
+   /* RUN Gwy/tcpgwy(lcHTTPHeader + lcXML,lcURL,5,2,"<").   */
 
    lcReturn = RETURN-VALUE.
    

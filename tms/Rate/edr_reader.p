@@ -126,8 +126,8 @@ VIEW FRAME clog . pause 0.
 DISP " PORT " + STRING(iiport) + " WAITING..." @ cdrfile WITH FRAME cLOG.
 
 ehto = 3.
-RUN ufkey.p.
-RUN ufxkey.p(8,3).
+RUN Syst/ufkey.p.
+RUN Syst/ufxkey.p(8,3).
 
 IF NOT llOL THEN INPUT STREAM sCDR FROM VALUE(icFileName).
    

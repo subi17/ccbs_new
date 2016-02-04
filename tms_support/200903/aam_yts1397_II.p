@@ -35,7 +35,7 @@ for each mobsub no-lock by msseq desc:
       mobsub.cli chr(9)
       order.orderid skip.
       
-   run topupcamp.p (order.msseq,
+   RUN Mm/topupcamp.p (order.msseq,
                     output lireq).
    j = j + 1.
 

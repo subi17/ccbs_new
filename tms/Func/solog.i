@@ -110,20 +110,20 @@ PROCEDURE local-UPDATE-record:
       
       ASSIGN ufk = 0 ufk[1] = 2244 ufk[2] = 9823 ufk[8]= 8 ufk[9]= 1
          ehto = 3 llRefresh = FALSE.
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
    END.
 
      READKEY.
      nap = keylabel(lastkey).
      
      IF LOOKUP(nap,"1,f1") > 0 THEN DO:
-        ufk = 0. ehto = 3. RUN ufkey.
+        ufk = 0. ehto = 3. RUN Syst/ufkey.
         DISP solog.commline WITH FRAME lfCommline.
         HIDE FRAME lfCommline.
         llRefresh = TRUE.
      END.
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO:
-        ufk = 0. ehto = 3. RUN ufkey.
+        ufk = 0. ehto = 3. RUN Syst/ufkey.
         DISP solog.response WITH FRAME lfResponse.
         HIDE FRAME lfResponse.
         llRefresh = TRUE.

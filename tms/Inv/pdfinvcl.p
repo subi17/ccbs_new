@@ -124,7 +124,7 @@ IF NOT CAN-FIND(FIRST ttPDFInv) THEN DO:
    
 END.
 
-RUN pdfinv(INPUT-OUTPUT TABLE ttPDFInv,
+RUN Inv/pdfinv(INPUT-OUTPUT TABLE ttPDFInv,
            INPUT  ilPrintRep,
            INPUT  ilFormPDF,
            INPUT  iiSendMail,

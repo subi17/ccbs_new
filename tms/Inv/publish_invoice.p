@@ -67,7 +67,7 @@ DEFINE STREAM strout.
    END.
 
    /* Publish invoices to Newton */
-   RUN invoice_webdisp(ldaDateFrom,
+   RUN Inv/invoice_webdisp(ldaDateFrom,
                        1,     /* inv.type */
                        "",
                        0,
@@ -98,7 +98,7 @@ DEFINE STREAM strout.
               DumpFile.DumpName EQ {&DUMP_INVOICE_PUPU} NO-ERROR.
  
    IF AVAIL DumpFile THEN DO:
-      RUN dumpfile_run(DumpFile.DumpID,  /* Dump ID */
+      RUN Syst/dumpfile_run(DumpFile.DumpID,  /* Dump ID */
                        "Full",
                        "",
                        fIsThisReplica(),

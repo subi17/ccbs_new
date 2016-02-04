@@ -26,7 +26,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhRequestAction).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhRequestAction).
+      RUN Mc/eventview2(lhRequestAction).
    END.
 
 END.
@@ -155,7 +155,7 @@ END FUNCTION.
 
 RUN pInitTempTable.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -185,7 +185,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a RequestAction  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -193,7 +193,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -208,7 +208,7 @@ REPEAT WITH FRAME sel:
 
               IF KEYLABEL(LASTKEY) = "F9" AND FRAME-FIELD = "PayType" THEN DO:
 
-                 RUN h-tmscodes(INPUT "CLIType",     /* TableName*/
+                 RUN Help/h-tmscodes(INPUT "CLIType",     /* TableName*/
                                       "PayType",       /* FieldName */
                                       "MobSub",     /* GroupCode */
                                 OUTPUT lcCode).
@@ -218,7 +218,7 @@ REPEAT WITH FRAME sel:
                             WITH FRAME lis.
 
                  ehto = 9.
-                 RUN ufkey.
+                 RUN Syst/ufkey.
                  NEXT. 
               END.
                  
@@ -355,7 +355,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -489,8 +489,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        SET lcCLIType WITH FRAME f1.
@@ -608,8 +608,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhRequestAction).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -646,7 +646,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.
 
 fCleanEventObjects().
 
@@ -792,12 +792,12 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.
 
          IF toimi = 1 THEN LEAVE.
          
          ELSE IF toimi = 4 THEN 
-            RUN requestactionrule(RequestAction.RequestActionID).
+            RUN Syst/requestactionrule(RequestAction.RequestActionID).
             
          ELSE IF toimi = 8 THEN LEAVE ActionDetails.
       END.
@@ -820,7 +820,7 @@ PROCEDURE local-UPDATE-record:
 
             IF FRAME-FIELD = "Action" THEN DO:
 
-               RUN h-tmscodes(INPUT "RequestAction",     /* TableName*/
+               RUN Help/h-tmscodes(INPUT "RequestAction",     /* TableName*/
                                     "Action",       /* FieldName */
                                     "Request",     /* GroupCode */
                               OUTPUT lcCode).
@@ -832,7 +832,7 @@ PROCEDURE local-UPDATE-record:
 
             ELSE IF FRAME-FIELD = "ActionType" THEN DO:
 
-               RUN h-tmscodes(INPUT "RequestAction",     /* TableName*/
+               RUN Help/h-tmscodes(INPUT "RequestAction",     /* TableName*/
                                     "ActionType",       /* FieldName */
                                     "Request",     /* GroupCode */
                               OUTPUT lcCode).
@@ -843,7 +843,7 @@ PROCEDURE local-UPDATE-record:
             END.
 
             ehto = 9.
-            RUN ufkey.
+            RUN Syst/ufkey.
             NEXT. 
          END.
 

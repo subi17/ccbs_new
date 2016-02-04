@@ -101,7 +101,7 @@ repeat:
    end.
 
    else if ldcounter < liuselimit2 and lcbarrpack = "y_rest" then do:
-      RUN barrengine (msowner.MsSeq,
+      RUN Mm/barrengine (msowner.MsSeq,
                    "UNY_REST",
                    "9",                /* source  */
                    katun,       /* creator */

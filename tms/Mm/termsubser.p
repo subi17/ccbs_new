@@ -6,7 +6,7 @@
   CREATED ......: 29-06-99
   CHANGED ......: 21.07.99 pt f5 / add allowed 
                   12.08.99 pt F6 restricted
-                  13.08.99 pt RUN setms when exiting
+                  13.08.99 pt RUN Mm/setms when exiting
                   13.10.99 pt setfee operations
                   31.01.00 jp ScChgable added
                   22.02.00 pt setfee OBOPRI corrected
@@ -36,7 +36,7 @@
                   11.02.05/aam Salesman to fServiceRequest
                   06.04.04 jp  llsendsms
                   15.12.05/aam new parameter to runscreqim
-                  12.12.06/mvi new param to run msrequest (reqstat = ?)
+                  12.12.06/mvi new param to RUN Mm/msrequest (reqstat = ?)
                   19.03.07 kl  all updates removed
 
   Version ......: M15
@@ -81,7 +81,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhTermMobsub).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhSubSer).
+      RUN Mc/eventview2.p(lhSubSer).
    END.
 
 END.
@@ -190,7 +190,7 @@ FIND TermMobsub WHERE TermMobsub.MsSeq = iiMsSeq NO-LOCK.
 /* get current definitions, servpac index is sorted by date */
 RUN pSetTempTable.
         
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Service,By ServPac,By 3, By 4".
@@ -289,7 +289,7 @@ REPEAT WITH FRAME sel:
            ehto   = 3
            ufkey  = FALSE.
       
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
 
       END.
 
@@ -426,8 +426,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 2 BUT ORDER IS STILL 1 !!!! */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        SET ServCom WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -450,8 +450,8 @@ REPEAT WITH FRAME sel:
      /* Search BY col 1 BUT ORDER IS 2 !!!! */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f2.
        SET ServPac WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -487,7 +487,7 @@ REPEAT WITH FRAME sel:
               INFORMATION.
            END.
 
-           ELSE RUN subserpara (INPUT-OUTPUT TABLE ttSubserPara,
+           ELSE RUN Mm/subserpara (INPUT-OUTPUT TABLE ttSubserPara,
                                 ttSubSer.MsSeq,
                                 ttSubSer.ServCom).
         END. 
@@ -497,7 +497,7 @@ REPEAT WITH FRAME sel:
      END.
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0 THEN DO:  /* history */
-        RUN subserhist (iiMsSeq).
+        RUN Mm/subserhist (iiMsSeq).
         
         ufkey = TRUE.
         NEXT LOOP.
@@ -510,7 +510,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttSubSer.ServCom.
 
        RUN local-UPDATE-record.                                  
@@ -648,7 +648,7 @@ PROCEDURE local-UPDATE-record:
       WITH FRAME lis. 
           
       ehto = 5.
-      RUN ufkey.
+      RUN Syst/ufkey.
       PAUSE MESSAGE "Press ENTER to continue".
    
       LEAVE.

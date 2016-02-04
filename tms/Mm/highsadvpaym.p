@@ -15,7 +15,7 @@ katun = "cron".
 {Func/lib/eventlog.i}
 
 fELog("HIGHSPENDER","AdvPaymStarted").
-run highspendnew ("ADVPAYM").
+RUN Mm/highspendnew ("ADVPAYM").
 fELog("HIGHSPENDER","AdvPaymStopped").
 
 quit.

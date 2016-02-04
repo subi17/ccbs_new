@@ -23,7 +23,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhFuncRunParam).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhFuncRunParam).
+      RUN Mc/eventview2(lhFuncRunParam).
    END.
 
 END.
@@ -96,7 +96,7 @@ IF NOT AVAILABLE FuncRunConfig THEN DO:
 END.
 lcConfName = FuncRunConfig.ConfName.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -125,7 +125,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a FuncRunParam  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -133,7 +133,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
 
         REPEAT TRANS WITH FRAME lis:
 
@@ -236,7 +236,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -443,8 +443,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFuncRunParam).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -481,7 +481,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.
 
 fCleanEventObjects().
 
@@ -559,7 +559,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
       ELSE toimi = 1.
       
@@ -570,7 +570,7 @@ PROCEDURE local-UPDATE-record:
                 
             FIND CURRENT FuncRunParam EXCLUSIVE-LOCK.
             ehto = 9.
-            RUN ufkey.
+            RUN Syst/ufkey.
          
             UPDATE
                FuncRunParam.ParamName
@@ -584,7 +584,7 @@ PROCEDURE local-UPDATE-record:
                   FRAME-FIELD = "ParamType"
                THEN DO:
 
-                  RUN h-tmscodes(INPUT "FuncRunParam", /* TableName */
+                  RUN Help/h-tmscodes(INPUT "FuncRunParam", /* TableName */
                                        "ParamType",   /* FieldName */
                                        "FuncRun",   /* GroupCode */
                                  OUTPUT lcCode).
@@ -593,7 +593,7 @@ PROCEDURE local-UPDATE-record:
                      DISPLAY lcCode @ FuncRunParam.ParamType WITH FRAME lis.
 
                   ehto = 9.
-                  RUN ufkey.
+                  RUN Syst/ufkey.
                   NEXT.
                END.
 
@@ -602,7 +602,7 @@ PROCEDURE local-UPDATE-record:
                   FRAME-FIELD = "DefaultValue"
                THEN DO:
 
-                  RUN h-tmscodes(INPUT "FuncRunParam", /* TableName */
+                  RUN Help/h-tmscodes(INPUT "FuncRunParam", /* TableName */
                                        FuncRunParam.ParamName,   /* FieldName */
                                        "FuncRun",   /* GroupCode */
                                  OUTPUT lcCode).
@@ -611,7 +611,7 @@ PROCEDURE local-UPDATE-record:
                      DISPLAY lcCode @ FuncRunParam.DefaultValue WITH FRAME lis.
 
                   ehto = 9.
-                  RUN ufkey.
+                  RUN Syst/ufkey.
                   NEXT. 
                END.
 

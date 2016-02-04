@@ -210,7 +210,7 @@ REPEAT:
            DumpFile.DumpName = "IFSInstallmentAction" NO-ERROR.
    
       IF AVAIL DumpFile THEN
-         RUN dumpfile_run.p(dumpfile.dumpid,
+         RUN Syst/dumpfile_run.p(dumpfile.dumpid,
                           "modified",
                           lcTFBank,
                           FALSE,
@@ -482,7 +482,7 @@ PROCEDURE pProcessData:
    
          IF liFeePeriod > 0 AND NOT AVAIL SingleFee THEN DO:
          
-            RUN creasfee.p (
+            RUN Mc/creasfee.p (
               fixedfee.CustNum,
               Order.MsSeq,
               ldaFeePeriod,

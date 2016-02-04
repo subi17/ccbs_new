@@ -1,3 +1,3 @@
 {Syst/commali.i}
 
-run fatime("",0,"",0) .
+RUN Mm/fatime("",0,"",0) .

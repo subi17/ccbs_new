@@ -25,7 +25,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhBDestConf).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhBDestConf).
+      RUN Mc/eventview2(lhBDestConf).
    END.
 
 END.
@@ -107,7 +107,7 @@ END FUNCTION.
 
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -137,7 +137,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a BDestConf  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -145,7 +145,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -252,7 +252,7 @@ REPEAT WITH FRAME sel:
         ehto  = 3 
         ufkey = FALSE.
         
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -387,8 +387,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
@@ -412,7 +412,7 @@ REPEAT WITH FRAME sel:
         RUN local-find-this (FALSE).
        
         IF AVAILABLE BDestConf THEN 
-           RUN bdestconfitem.p (BDestConf.BDCGroup).
+           RUN Mc/bdestconfitem.p (BDestConf.BDCGroup).
           
         ufkey = TRUE.
         NEXT LOOP.
@@ -503,8 +503,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhBDestConf).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY BDestConf.BDCGroup.
 
        RUN local-UPDATE-record.                                  
@@ -542,7 +542,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.
 
 fCleanEventObjects().
 
@@ -628,7 +628,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.
          
          IF toimi = 8 THEN LEAVE.
       END.
@@ -649,7 +649,7 @@ PROCEDURE local-UPDATE-record:
             LOOKUP(FRAME-FIELD,"GroupType") > 0 
          THEN DO:
             
-            RUN h-tmscodes(INPUT "BDestConf", 
+            RUN Help/h-tmscodes(INPUT "BDestConf", 
                                  "GroupType", 
                                  ?, 
                            OUTPUT lcCode).
@@ -658,7 +658,7 @@ PROCEDURE local-UPDATE-record:
                DISP lcCode @ BDestConf.GroupType WITH FRAME lis.
  
             ehto = 9.
-            RUN ufkey.
+            RUN Syst/ufkey.
             NEXT. 
          END.
 

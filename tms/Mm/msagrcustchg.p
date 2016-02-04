@@ -133,12 +133,12 @@ PROCEDURE pFinalize:
    IF AVAILABLE MsOwner AND MsOwner.PayType THEN liPayType = 2.
    
    IF liPayType = 2 THEN 
-      RUN cli_prepaidrate (icCLI,     
+      RUN Rate/cli_prepaidrate (icCLI,     
                            ldaFromDate,  
                            ldaToDate,    
                            TRUE).      /* silent = true */  
    ELSE 
-      RUN cli_rate (icCLI,
+      RUN Rate/cli_rate (icCLI,
                     ldaFromDate,
                     ldaToDate,
                     TRUE).
@@ -216,7 +216,7 @@ PROCEDURE pOwnerChange:
       ELSE DO:
          IF liOrigStat > 0 AND INDEX(RETURN-VALUE,"SMS") > 0 THEN DO:
             
-            RUN acc_sendsms(MsRequest.MsRequest,
+            RUN Mm/acc_sendsms(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "Rejected",
                             IF NUM-ENTRIES(RETURN-VALUE,"/") >= 3 
@@ -309,12 +309,12 @@ PROCEDURE pOwnerChange:
             MsRequest.ReqDParam1 > MsRequest.ActStamp
          THEN DO:
             
-            RUN acc_sendsms(MsRequest.MsRequest,
+            RUN Mm/acc_sendsms(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "Accepted",
                             "").
 
-            RUN acc_sendsms(MsRequest.MsRequest,
+            RUN Mm/acc_sendsms(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "PreviousDay",
                             "").
@@ -444,7 +444,7 @@ PROCEDURE pOwnerChange:
       
          ASSIGN liCreated[liReqCnt] = liDefCust
                 llNewCust           = TRUE.
-         RUN copymobcu.p(INPUT-OUTPUT liCreated[liReqCnt],
+         RUN Mm/copymobcu.p(INPUT-OUTPUT liCreated[liReqCnt],
                        FALSE).
       END.
       
@@ -703,7 +703,7 @@ PROCEDURE pOwnerChange:
 
    /* send SMS */
    IF MsRequest.SendSMS = 1 THEN 
-      RUN acc_sendsms(MsRequest.MsRequest,
+      RUN Mm/acc_sendsms(MsRequest.MsRequest,
                       liNewOwner,
                       "Done",
                       "").  
@@ -711,7 +711,7 @@ PROCEDURE pOwnerChange:
    /* fee from owner change to new customer (actually to invoice customer) */
    IF MsRequest.CreateFees THEN DO:
    
-      RUN create_charge_comp.p(
+      RUN Mm/create_charge_comp.p(
          {&REQUEST_SOURCE_MANUAL_TMS},
          Mobsub.MsSeq,   
          MsRequest.UserCode,

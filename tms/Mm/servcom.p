@@ -7,7 +7,7 @@
   CHANGED ......: 28-06-99 pt added FIELD ScLocalName 
                   05-10-99 jp urights added  
                   31-01-00 jp cp-chgable added
-                  19.03.03 tk run memo
+                  19.03.03 tk RUN Mc/memo
                   14.01.03 jp servattr
                   06.02.04 jp custnum for memo
                   07.12.04/aam tokens & eventlog,
@@ -35,7 +35,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhServCom).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhServCom).
+      RUN Mc/eventview2(lhServCom).
    END.
 
 END.
@@ -177,7 +177,7 @@ FIND Service WHERE
      Service.Service = Service AND 
      Service.Brand   = gcBrand NO-LOCK.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -204,12 +204,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ServCom  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
       
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
@@ -303,7 +303,7 @@ REPEAT WITH FRAME sel:
         ufk[7]= 814 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
         {Syst/uright1.i '"3,5,6"'}
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -446,12 +446,12 @@ REPEAT WITH FRAME sel:
            ufk[8] = 8
            ehto   = 0
            ufkey  = TRUE.
-        RUN ufkey.
+        RUN Syst/ufkey.
         
         /* Search BY column 1 */
         IF toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           cfc = "puyr". run ufcolor.
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.
+           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
            CLEAR FRAME f1.
            SET ServCom WITH FRAME f1.
            HIDE FRAME f1 NO-PAUSE.
@@ -475,8 +475,8 @@ REPEAT WITH FRAME sel:
         /* Search BY col 2 */
         ELSE IF toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-           cfc = "puyr". run ufcolor.
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.
+           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
            CLEAR FRAME f2.
            SET ScName WITH FRAME f2.
            HIDE FRAME f2 NO-PAUSE.
@@ -499,7 +499,7 @@ REPEAT WITH FRAME sel:
           
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO TRANS:  /* Within ServPac */
        RUN local-find-this(FALSE).                                        
-       run servel2(ServCom.ServCom).
+       RUN Mm/servel2(ServCom.ServCom).
        ufkey = TRUE.
        NEXT LOOP.
      END.
@@ -508,7 +508,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
         RUN local-find-this(FALSE).
         IF ServCom.ServAttr = TRUE THEN 
-        RUN servattr(INPUT ServCom.servcom).
+        RUN Mc/servattr(INPUT ServCom.servcom).
         ELSE  
         MESSAGE 
         "There are no defined attributes to service component" 
@@ -524,7 +524,7 @@ REPEAT WITH FRAME sel:
      /* UPDATE memo */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
         RUN local-find-this(FALSE).
-        RUN memo(INPUT 0,
+        RUN Mc/memo(INPUT 0,
                  INPUT "ServCom",
                  INPUT STRING(ServCom.ServCom),
                  INPUT "Service component").
@@ -592,7 +592,7 @@ REPEAT WITH FRAME sel:
      /* translations */
      ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:  
         FIND ServCom WHERE RECID(ServCom) = rtab[FRAME-LINE] NO-LOCK.
-        RUN invlang(13,ServCom.ServCom).
+        RUN Mc/invlang(13,ServCom.ServCom).
           
         ufkey = TRUE.
         NEXT LOOP.
@@ -606,7 +606,7 @@ REPEAT WITH FRAME sel:
        /* change */
        RUN local-find-this((lcRight = "RW")).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ServCom.ServCom.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhServCom).
@@ -761,7 +761,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" THEN DO:
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
       
          UPDATE
            ServCom.ScName
@@ -791,7 +791,7 @@ PROCEDURE local-UPDATE-record:
                 FRAME-FIELD = "Target" 
              THEN DO:
             
-                RUN h-tmscodes(INPUT "ServCom",     /* TableName */
+                RUN Help/h-tmscodes(INPUT "ServCom",     /* TableName */
                                      "Target",  /* FieldName */
                                      "Service", /* GroupCode */
                                OUTPUT lcCode).
@@ -807,7 +807,7 @@ PROCEDURE local-UPDATE-record:
                 END.
                
                 ehto = 9.
-                RUN ufkey.
+                RUN Syst/ufkey.
                 NEXT. 
              END.
 
@@ -818,12 +818,12 @@ PROCEDURE local-UPDATE-record:
                 ASSIGN gcHelpParam = "prt"
                        si-recid    = 0
                        lcField     = FRAME-FIELD.
-                RUN invotxt ("",
+                RUN Mc/invotxt ("",
                              "").
                 gcHelpParam = "".
                    
                 ehto = 9.
-                RUN ufkey.
+                RUN Syst/ufkey.
        
                 IF si-recid > 0 THEN DO:
                    FIND InvText WHERE RECID(InvText) = si-recid 
@@ -951,7 +951,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "ActType" THEN DO:
                    ASSIGN INPUT servcom.ActType.
 
-                   RUN v-tmscodes(INPUT "ServCom", 
+                   RUN Syst/v-tmscodes(INPUT "ServCom", 
                                         "ActType", 
                                         "Service",
                                     INPUT INPUT ActType,

@@ -6,7 +6,7 @@
 
 {Syst/commali.i}
 
-run fatime("",
+RUN Mm/fatime("",
            0,
            "",
            0).

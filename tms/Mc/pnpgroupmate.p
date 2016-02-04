@@ -71,7 +71,7 @@ form /*  search WITH FIELD pnpgroup */
     with row 4 col 2 title color value(ctc) " FIND xxxxxxx "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -97,12 +97,12 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* pnpgroup -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         DO TRANSACTION:
 
            CREATE pnpgroup.
@@ -181,7 +181,7 @@ BROWSE:
         ufk[1]= 35  ufk[2]= 30 ufk[3]= 0 ufk[4]= 1761
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 1762 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -315,9 +315,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        haku-pnpgroup = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE haku-pnpgroup WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        if haku-pnpgroup <> "" THEN DO:
@@ -397,9 +397,9 @@ BROWSE:
             RECID(pnpgroup) = rtab[FRAME-LINE] 
        NO-LOCK NO-ERROR.
 
-       RUN pnplist.p(INPUT pnpgroup.pnpSeq, INPUT pnpgroup.pnpgroup).
+       RUN Mc/pnplist.p(INPUT pnpgroup.pnpSeq, INPUT pnpgroup.pnpgroup).
        ufkey = true.
-       run ufkey.
+       RUN Syst/ufkey.
        PAUSE 0.
      END.
 
@@ -419,9 +419,9 @@ BROWSE:
             recid(pnpgroup) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
+       RUN Syst/ufkey.
 
-       cfc = "lis". RUN ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.
 
        RUN LOCAL-UPDATE-RECORD(FALSE).
        

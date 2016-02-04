@@ -25,7 +25,7 @@ FOR EACH Invoice NO-LOCK WHERE
    IF icFromExtInvID > "" AND Invoice.ExtInvID < icFromExtInvID THEN NEXT.
    IF icToExtInvID > "" AND Invoice.ExtInvID > icToExtInvID  THEN NEXT.  
       
-   RUN del_inv.p(Invoice.InvNum).
+   RUN Inv/del_inv.p(Invoice.InvNum).
    
    IF RETURN-VALUE BEGINS "ERROR" THEN RETURN RETURN-VALUE.
    

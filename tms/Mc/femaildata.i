@@ -357,7 +357,7 @@ FUNCTION fGetOFEES_internal RETURNS CHAR (INPUT iiOrderNBR AS INT,
          /* fees have not been created yet */
          ELSE DO:
             /* make virtual creation */
-            RUN cashfee.p (Order.OrderID,
+            RUN Mc/cashfee.p (Order.OrderID,
                          4,     /* leave out campaign topups */
                          OUTPUT lcList,
                          OUTPUT ldInvTot,
@@ -1483,7 +1483,7 @@ PROCEDURE pGetPENALTYFEE:
    DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).  
    
-   RUN offer_penaltyfee(Order.OrderID,
+   RUN Mc/offer_penaltyfee(Order.OrderID,
                         Output liTermMonths,
                         OUTPUT ldAmt).
 
@@ -1587,7 +1587,7 @@ PROCEDURE pGetPOD:
    DEF VAR ldInvTot AS DEC NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).
          
-   RUN cashfee.p (Order.OrderID,
+   RUN Mc/cashfee.p (Order.OrderID,
                   4,     /* leave out campaign topups */
                   OUTPUT lcList,
                   OUTPUT ldInvTot,
@@ -1955,7 +1955,7 @@ PROCEDURE pGetORDERSUMMARY:
     lcList = fGetOFEES_internal( INPUT iiOrderNBR,
                                  OUTPUT lgErr,
                                  OUTPUT ldTotalFee ).
-   /*RUN cashfee.p (Order.OrderID,
+   /*RUN Mc/cashfee.p (Order.OrderID,
                   4,     /* leave out campaign topups */
                   OUTPUT lcList,
                   OUTPUT ldInvTot,
@@ -1980,7 +1980,7 @@ PROCEDURE pGetINITIALFEE:
    DEF VAR lgErr AS LOG NO-UNDO.
 
    lcErr = fGetOrderData (INPUT iiOrderNBR).
-   /*RUN cashfee.p (Order.OrderID,
+   /*RUN Mc/cashfee.p (Order.OrderID,
                          4,     /* leave out campaign topups */
                          OUTPUT lcList,
                          OUTPUT ldInvTot,

@@ -26,7 +26,7 @@ end.
 
 DEFINE VARIABLE liOrderQty AS INTEGER NO-UNDO.
 /* create request */
-RUN ordersender(MNPProcess.OrderId,
+RUN Mc/ordersender(MNPProcess.OrderId,
                OUTPUT liOrderQty).
 FIND FIRST order EXCLUSIVE-LOCK WHERE
    order.brand = "1" and

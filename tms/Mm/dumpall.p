@@ -36,6 +36,6 @@ DO liLoop = 1 to NUM-ENTRIES(lcFiles):
       lcFile = ENTRY(liLoop,lcFiles)
       lcArea = clsTools:FindDb(lcFile).
    
-   RUN dumpall.i lcArea lcFile.
+   RUN Mm/dumpall.i lcArea lcFile.
    
 END.

@@ -88,7 +88,7 @@ form /*  search WITH FIELD DCCounter */
     with row 4 col 2 title color value(ctc) " FIND xxxxxxx "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FUNCTION fDispUnit RETURNS LOGICAL
@@ -140,13 +140,13 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* DCCounter -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
       
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 5. RUN ufkey.
+        ehto = 5. RUN Syst/ufkey.
         DO TRANSACTION:
 
            CREATE DCCounter.
@@ -226,7 +226,7 @@ BROWSE:
         
         IF iiMsseq > 0 THEN ufk[1] = 0.
         ASSIGN ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -360,9 +360,9 @@ BROWSE:
             recid(DCCounter) = rtab[frame-line(sel)]
        /*exclusive-lock*/ no-lock.
        assign fr-header = " VIEW " ufkey = TRUE ehto = 5.
-       RUN ufkey.
+       RUN Syst/ufkey.
 
-       cfc = "lis". RUN ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.
 
        RUN LOCAL-UPDATE-RECORD(FALSE).
        

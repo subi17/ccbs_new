@@ -11,10 +11,10 @@
 
 
 /* read payment files */
-RUN readpaymb.
+RUN Ar/readpaymb.
 
 /* make payments to invoices that have been sent to bank for direct debiting */
-RUN ddpaymentb.
+RUN Ar/ddpaymentb.
 
 QUIT.
 

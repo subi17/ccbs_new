@@ -12,7 +12,7 @@
                   26.02.03/aam Prefix and DedicList added 
                   03.03.03/aam priority shift corrected
                   20.03.03/aam one parameter added for tariff.p
-                  04.04.03 kl run tariff, new parameter
+                  04.04.03 kl RUN Mc/tariff, new parameter
                   26.06.03 kl new paramter for tariff
                   15.09.03/aam brand
 
@@ -39,7 +39,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhTariff).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhPListConf).
+      RUN Mc/eventview2.p(lhPListConf).
    END.
 END.
 
@@ -111,7 +111,7 @@ form /* Price List search with field PLName */
 with row 4 col 2 title color value(ctc) " FIND NAME "
    color value(cfc) no-labels overlay frame f2.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
 view frame sel.
 
 FIND FIRST RatePlan WHERE
@@ -139,12 +139,12 @@ repeat with frame sel:
 
    if must-add then do:  /* PListConf -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = false.
-      run ufcolor.
+      RUN Syst/ufcolor.
       add-new:
       repeat with frame lis on endkey undo add-new, leave add-new.
          pause 0 no-message.
          clear frame lis no-pause.
-         ehto = 9. run ufkey.
+         ehto = 9. RUN Syst/ufkey.
          do transaction:
             create PListConf.
             assign PListConf.Brand    = RatePlan.Brand 
@@ -224,7 +224,7 @@ BROWSE:
 
          {Syst/uright1.i '"5,6"'}
 
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
 
       hide message no-pause.
@@ -369,9 +369,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
-        cfc = "puyr". run ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.
         PList = "".
-        ehto = 9. run ufkey. ufkey = true.
+        ehto = 9. RUN Syst/ufkey. ufkey = true.
         update PList with frame f1.
         hide frame f1 no-pause.
         if PList <> "" then do:
@@ -395,7 +395,7 @@ BROWSE:
             no-lock no-error.
 
         IF AVAILABLE PListConf THEN DO:
-           RUN tariff(0,0,PListConf.PriceList,0,"",0). 
+           RUN Mc/tariff(0,0,PListConf.PriceList,0,"",0). 
            UFKEY = TRUE.
            ex-order = 0. 
            NEXT LOOP. 
@@ -496,8 +496,8 @@ BROWSE:
              recid(PListConf) = rtab[frame-line(sel)]
         exclusive-lock no-error.
         assign fr-header = " CHANGE " ufkey = true ehto = 9.
-        run ufkey.
-        cfc = "lis". run ufcolor.
+        RUN Syst/ufkey.
+        cfc = "lis". RUN Syst/ufcolor.
         display PListConf.RatePlan .
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPListConf).

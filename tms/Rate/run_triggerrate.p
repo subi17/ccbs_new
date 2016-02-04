@@ -6,4 +6,4 @@ ASSIGN
 DEF VAR liDone AS INT  NO-UNDO.
 
 
-run triggerrate.p(0,0,OUTPUT liDone).
+RUN Rate/triggerrate.p(0,0,OUTPUT liDone).

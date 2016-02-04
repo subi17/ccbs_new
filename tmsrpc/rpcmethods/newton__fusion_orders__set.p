@@ -142,7 +142,7 @@ IF ttOrderFusion.FixedStatus > "" AND
             Order.StatusCode EQ {&ORDER_STATUS_MNP_REJECTED} OR
             Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} THEN DO:
 
-            RUN closeorder.p(Order.OrderId,TRUE).
+            RUN Mc/closeorder.p(Order.OrderId,TRUE).
 
             IF RETURN-VALUE NE "" THEN
                lcFusionError = "Order closing failed: " + 
@@ -153,7 +153,7 @@ IF ttOrderFusion.FixedStatus > "" AND
             THEN lcFusionError = "Order closing not allowed".
          ELSE IF LOOKUP(Order.StatusCode,{&ORDER_STATUS_DELIVERED}) > 0 THEN DO:
 
-            RUN fusion_stc_fallback.p(Order.OrderId, OUTPUT liRequest).
+            RUN Mm/fusion_stc_fallback.p(Order.OrderId, OUTPUT liRequest).
 
             IF liRequest = 0 THEN
                lcFusionError = "Fallback STC request creation failed: " + 
@@ -179,7 +179,7 @@ IF ttOrderFusion.FixedStatus > "" AND
             ELSE IF Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} THEN
                lcFusionError = "Wrong mobile order status".
             ELSE DO:
-               RUN orderinctrl.p(Order.OrderId, 0, TRUE).
+               RUN Mc/orderinctrl.p(Order.OrderId, 0, TRUE).
                IF RETURN-VALUE > "" THEN
                   lcFusionError = "Mobile order release failed".
                ELSE ttOrderFusion.FusionStatus = "FIN".
@@ -196,7 +196,7 @@ IF llReleaseMobile AND
    Order.ICC > "" AND 
    ttOrderFusion.FixedStatus NE "cancelled" AND
    Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
-   RUN orderinctrl.p(Order.OrderId, 0, TRUE).
+   RUN Mc/orderinctrl.p(Order.OrderId, 0, TRUE).
    IF RETURN-VALUE > "" THEN
       lcFusionError = "Mobile order release failed".
 END.

@@ -9,7 +9,7 @@
                   07.10.99 jp urights added  
                   21.05.02/tk Event logging added
                   10.03.03 tk tokens
-                  19.03.03 tk run memo
+                  19.03.03 tk RUN Mc/memo
                   19.01.04 jp Brand
                   06.02.04 jp custnum for memo
   Version ......: M15
@@ -31,7 +31,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhService).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhService).
+      RUN Mc/eventview2(lhService).
    END.
 
 END.
@@ -99,7 +99,7 @@ form /* seek Service  BY SEName */
     "ServiceName:" SEName HELP "Enter Name of Service"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -133,12 +133,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a Service  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR Service.Service
@@ -229,7 +229,7 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
         ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -366,8 +366,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        DISP lcBrand WITH FRAME f1.
 
@@ -389,8 +389,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f2.
        SET SEName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -407,7 +407,7 @@ BROWSE:
     /* UPDATE memo */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
         RUN local-find-this(FALSE).
-        RUN memo(INPUT 0,
+        RUN Mc/memo(INPUT 0,
                  INPUT "Service",
                  INPUT STRING(Service.Service),
                  INPUT "Service").
@@ -422,7 +422,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO TRANS:  /* ServComponents */
        RUN local-find-this(FALSE).                                        
-       run servcom.p(Service.Service).
+       RUN Mm/servcom.p(Service.Service).
        ufkey = TRUE.
        NEXT LOOP.
      END.
@@ -499,8 +499,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhService).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY Service.Service.
 
        RUN local-UPDATE-record.                                  

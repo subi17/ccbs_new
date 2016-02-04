@@ -40,30 +40,30 @@ liLanguage = INT(OrderCustomer.Language).
 
 IF liLanguage = 5 THEN DO: /*English*/
    IF OrderCustomer.CustIDType EQ "CIF" THEN
-      RUN parse_tags.p (lcRootDir + "email_company_en.html",
+      RUN Func/parse_tags.p (lcRootDir + "email_company_en.html",
              lcEmailFile, iiOrderId, 1, 
              icEmailAddress, OUTPUT lcError).
    ELSE IF Order.Ordertype = {&ORDER_TYPE_NEW} THEN
-       RUN parse_tags.p (lcRootDir + "email_new_en.html",
+       RUN Func/parse_tags.p (lcRootDir + "email_new_en.html",
               lcEmailFile, iiOrderId, 1, 
               icEmailAddress, OUTPUT lcError).
    ELSE IF Order.Ordertype = {&ORDER_TYPE_MNP} THEN
-       RUN parse_tags.p (lcRootDir + "email_mnp_en.html",
+       RUN Func/parse_tags.p (lcRootDir + "email_mnp_en.html",
               lcEmailFile, iiOrderId, 1, 
               icEmailAddress, OUTPUT lcError).
    /* do we need some other handling here */
 END.
 ELSE DO:*/ /*Spanish*/
    IF OrderCustomer.CustIDType EQ "CIF" THEN
-      RUN parse_tags.p (lcRootDir + "email_company_es.html",
+      RUN Func/parse_tags.p (lcRootDir + "email_company_es.html",
              lcEmailFile, iiOrderId, 1, 
              icEmailAddress, OUTPUT lcError).
    ELSE IF Order.Ordertype = {&ORDER_TYPE_NEW} THEN
-       RUN parse_tags.p (lcRootDir + "email_new_es.html",
+       RUN Func/parse_tags.p (lcRootDir + "email_new_es.html",
               lcEmailFile, iiOrderId, 1, 
               icEmailAddress, OUTPUT lcError).
    ELSE IF Order.Ordertype = {&ORDER_TYPE_MNP} THEN
-       RUN parse_tags.p (lcRootDir + "email_mnp_es.html",
+       RUN Func/parse_tags.p (lcRootDir + "email_mnp_es.html",
               lcEmailFile, iiOrderId, 1, 
               icEmailAddress, OUTPUT lcError).
    /* do we need some other handling/checks  here */

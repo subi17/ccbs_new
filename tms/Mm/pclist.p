@@ -31,7 +31,7 @@ if llDoEvent THEN DO:
     RUN StarEventInitialize(lhDCCLI).
                     
     ON F12 ANYWHERE DO:
-        run eventview2.p(lhDCCLI).
+        RUN Mc/eventview2.p(lhDCCLI).
     END.
 END.
 
@@ -316,7 +316,7 @@ END.
 
 IF getTMSRight("CCSUPER,SYST") EQ "RW" THEN llAdmin = TRUE.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -396,7 +396,7 @@ REPEAT WITH FRAME sel:
         
         IF icEvent > "" THEN ufk[3] = 0.
            
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -537,8 +537,8 @@ REPEAT WITH FRAME sel:
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = true.
        CLEAR FRAME f1.
        SET liMsSeq WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -560,8 +560,8 @@ REPEAT WITH FRAME sel:
      /* Search by column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = true.
        CLEAR FRAME f2.
        SET lCCli WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -584,8 +584,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = true.
        CLEAR FRAME F3.
        SET lCEvent WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
@@ -606,13 +606,13 @@ REPEAT WITH FRAME sel:
      IF LOOKUP(nap,"f4") > 0 AND ufk[4] > 0 THEN DO:
         RUN local-find-this(false).
       
-        RUN selectbox(
+        RUN Syst/selectbox(
            "PERIODICAL CONTRACT FUNCTION",
            " CREATE NEW CONTRACT      ",
            OUTPUT lcSelected).
             
         CASE lcSelected: 
-           WHEN " CREATE NEW CONTRACT      " THEN RUN dccliadd.p(iiKey).
+           WHEN " CREATE NEW CONTRACT      " THEN RUN Mm/dccliadd.p(iiKey).
         END.
          
         ufkey = true.
@@ -625,7 +625,7 @@ REPEAT WITH FRAME sel:
               RECID(ttContract) = rtab[FRAME-LINE]
          NO-LOCK NO-ERROR.
 
-         RUN memo
+         RUN Mc/memo
               (INPUT 0,
               "mobsub",
               STRING(ttContract.msseq),
@@ -870,18 +870,18 @@ PROCEDURE local-update-record:
      ufk[5]= 927  ufk[6]= 1752 ufk[7]= 1036 ufk[8]= 8 ufk[9]= 1
      ehto = 3.
 
-     RUN ufkey.
+     RUN Syst/ufkey.
    READKEY. 
    ASSIGN nap = keylabel(LASTKEY).
    
    IF LOOKUP(nap,"f3") > 0 AND ufk[3] > 0 THEN DO: 
-      RUN msrequest(?,?,ttContract.MsSeq,0,0,ttContract.Contract ).
+      RUN Mm/msrequest(?,?,ttContract.MsSeq,0,0,ttContract.Contract ).
       NEXT UPDATE-LOOP.
    END.   
    
    IF LOOKUP(nap,"f4") > 0 AND ufk[4] > 0 THEN DO:
 
-      RUN selectbox(
+      RUN Syst/selectbox(
          "PERIODICAL CONTRACT FUNCTION",
          " CONTRACT TERMINATION     " + "|" + 
          " DENY SINGLE FEE CREATION ",
@@ -889,8 +889,8 @@ PROCEDURE local-update-record:
             
       CASE lcSelected:
          
-         WHEN " CONTRACT TERMINATION     " THEN RUN dccliterm(ttContract.MsSeq, ttContract.Contract, ttContract.PerContractID).
-         WHEN " DENY SINGLE FEE CREATION " THEN RUN dcclifees(ttContract.MsSeq, ttContract.Contract).
+         WHEN " CONTRACT TERMINATION     " THEN RUN Mm/dccliterm(ttContract.MsSeq, ttContract.Contract, ttContract.PerContractID).
+         WHEN " DENY SINGLE FEE CREATION " THEN RUN Mm/dcclifees(ttContract.MsSeq, ttContract.Contract).
 
       END.
       
@@ -900,7 +900,7 @@ PROCEDURE local-update-record:
    
    IF LOOKUP(nap,"f5") > 0  AND ufk[5] > 0 THEN DO: 
       
-      RUN memo
+      RUN Mc/memo
          (INPUT 0,
          "mobsub",
          STRING(ttContract.msseq),
@@ -913,10 +913,10 @@ PROCEDURE local-update-record:
    ELSE IF LOOKUP(nap,"6,F6") > 0 THEN DO:
       
       IF DayCampaign.DCType = "1" THEN 
-         RUN eventsel("mservicelimit",
+         RUN Mc/eventsel("mservicelimit",
          "#BEGIN" + chr(255) + STRING(ttContract.MsSeq)).
       ELSE
-         RUN eventsel("dccli",
+         RUN Mc/eventsel("dccli",
          "#BEGIN" + chr(255) 
          + STRING(ttContract.MsSeq) + chr(255) 
          + STRING(ttContract.Contract)).    
@@ -949,7 +949,7 @@ PROCEDURE local-update-record:
 
       END.
       
-      RUN selectbox.p(
+      RUN Syst/selectbox.p(
          "PERIODICAL CONTRACT FUNCTION",
          lcMenuOptions,
          OUTPUT lcSelected).
@@ -960,14 +960,14 @@ PROCEDURE local-update-record:
                IF TRIM(lcSelected) EQ "RATING POOLS" THEN DO:
                   FIND MServiceLimit NO-LOCK WHERE
                        RECID(MServiceLimit) = ttContract.Record.
-                  RUN mservicelpool.p(
+                  RUN Mm/mservicelpool.p(
                      ttContract.msseq,
                      MServiceLimit.SLSeq,
                      ttContract.validFrom,
                      ttContract.validTo).
                END.
                ELSE IF ttContract.PayType THEN
-               RUN pre_dccounterper.p(
+               RUN Mm/pre_dccounterper.p(
                   ttContract.Msseq,
                   ttContract.Contract,
                   ttContract.SLSeq,
@@ -975,7 +975,7 @@ PROCEDURE local-update-record:
                   ttContract.ValidFrom,
                   ttContract.ValidTo).
                ELSE               
-               RUN dccounterper.p(
+               RUN Mm/dccounterper.p(
                   ttContract.Msseq,
                   ttContract.CustNum,
                   ttContract.Contract,
@@ -985,7 +985,7 @@ PROCEDURE local-update-record:
                   ttContract.ValidTo). 
              END.
              WHEN "3" THEN DO:
-               RUN penfeerules(ttContract.Record).
+               RUN Mm/penfeerules(ttContract.Record).
              END.  
          END.   
       END.      

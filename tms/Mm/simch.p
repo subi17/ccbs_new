@@ -222,7 +222,7 @@ MAIN:
 REPEAT WITH FRAME main:
 
    ehto = 9. 
-   RUN ufkey.
+   RUN Syst/ufkey.
 
    UPDATE
       liSimdeliv
@@ -278,13 +278,13 @@ ACTION:
 
       IF new-icc = "" THEN ufk[5] = 0.
 
-      RUN ufkey.
+      RUN Syst/ufkey.
 
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.
       IF TOIMI = 5 THEN DO:
          
-         RUN charge_dialog.p(
+         RUN Mc/charge_dialog.p(
             MobSub.MsSeq,
             (IF MobSub.PayType THEN "ICC_PREPAID" ELSE "ICC_POSTPAID"),
             OUTPUT ldeFee).

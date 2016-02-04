@@ -32,7 +32,7 @@ END.
 
 fELog("TAXREPORT","PrePaidStarted").
 
-RUN taxvouchrep ("",             /* TaxZone */
+RUN Ar/taxvouchrep ("",             /* TaxZone */
                  "",             /* CustID */
                  0,              /* PaymType */
                  ldtAccDate[1],

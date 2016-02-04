@@ -27,7 +27,7 @@ IF RETURN-VALUE BEGINS "ERROR" THEN DO:
    QUIT.
 END.
 
-RUN killerrcalls(ldaLimitDate).
+RUN Mm/killerrcalls(ldaLimitDate).
 
 fELog("DAILY","killerrcallsRepStopped" + SESSION:PARAMETER).
 

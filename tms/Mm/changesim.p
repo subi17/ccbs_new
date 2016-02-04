@@ -154,7 +154,7 @@ PROCEDURE pChangeSIM:
  
    IF MsRequest.CreateFees THEN DO:
       
-      RUN create_charge_comp.p(
+      RUN Mm/create_charge_comp.p(
          {&REQUEST_SOURCE_MANUAL_TMS},
          Mobsub.MsSeq,   
          MsRequest.UserCode,

@@ -26,7 +26,7 @@ IF lcFile = "" OR lcFile = ? THEN RETURN "ERROR:Print file not defined".
 /* print invoices to a directory named after the billing run id */
 lcFile = lcTestDir + "/" + icBillRun + "*" + lcFile.
    
-RUN printdoc1co ("",
+RUN Inv/printdoc1co ("",
                  0,
                  99999999,
                  "",

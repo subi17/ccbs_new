@@ -69,14 +69,14 @@ END.
 /* check balance in prepaid */
 IF Mobsub.PayType AND ldAmount > 0 THEN DO:
    ldeCurrBal = 0.
-   RUN balancequery(Mobsub.CLI).
+   RUN Gwy/balancequery(Mobsub.CLI).
    ldeCurrBal = INT(RETURN-VALUE) / 100 NO-ERROR.
    IF ldeCurrBal < ldAmount THEN DO:
       RETURN appl_err("Charge exceeds balance").
    END.
 END.
 
-RUN create_charge_comp.p( {&REQUEST_SOURCE_NEWTON} ,
+RUN Mm/create_charge_comp.p( {&REQUEST_SOURCE_NEWTON} ,
                        liMsSeq,
                        (IF MobSub.PayType THEN lcUserId ELSE ""), 
                        ldAmount,

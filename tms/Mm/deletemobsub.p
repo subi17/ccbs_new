@@ -622,7 +622,7 @@ PROCEDURE pTerminate:
               MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
 
    /* commission termination */
-   RUN commission_term(MobSub.MsSeq,
+   RUN Ar/commission_term(MobSub.MsSeq,
                        "termination",
                        OUTPUT liReqCnt).
 
@@ -655,7 +655,7 @@ PROCEDURE pTerminate:
                Order.MsSeq = MobSub.MsSeq AND
                Order.StatusCode = {&ORDER_STATUS_MNP_RETENTION}:
 
-         RUN closeorder.p(Order.OrderID, TRUE).
+         RUN Mc/closeorder.p(Order.OrderID, TRUE).
          
          FIND FIRST MNPRetPlatform WHERE
                     MNPRetPlatform.Brand = gcBrand AND
@@ -693,7 +693,7 @@ PROCEDURE pTerminate:
    IF LOOKUP(lcTermReason,"1,4,5,6,9,10") > 0 AND
       fIsYoigoCLI(MobSub.CLI) EQ FALSE THEN DO:
       
-      RUN mnpnumbertermrequest.p(MobSub.CLI,MobSub.MsSeq).
+      RUN Mnp/mnpnumbertermrequest.p(MobSub.CLI,MobSub.MsSeq).
       
       IF RETURN-VALUE BEGINS "ERROR" THEN
          fLocalMemo("TermMobsub",

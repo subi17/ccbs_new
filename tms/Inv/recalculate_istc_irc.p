@@ -90,7 +90,7 @@ FOR EACH msrequest NO-LOCK WHERE
 END.
 
 IF CAN-FIND(FIRST ttSubs) THEN
-   RUN chk_cdr_invrowcounter.p(INPUT TABLE ttSubs BY-REFERENCE,
+   RUN Inv/chk_cdr_invrowcounter.p(INPUT TABLE ttSubs BY-REFERENCE,
                                0, /* fr run id */
                                ldaPeriodEnd,
                                0, /* fr process id */
@@ -101,7 +101,7 @@ FOR EACH ttSubs:
 
    IF ttSubs.ErrorFound THEN DO:
       
-      run recalculate_invrowcounter.p(
+      RUN Inv/recalculate_invrowcounter.p(
          ttSubs.InvCust,
          ttSubs.msseq,
          0, /* invseq */

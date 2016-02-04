@@ -320,7 +320,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Date  ,  By User  ,  By Table ".
@@ -383,7 +383,7 @@ BROWSE:
         ufk[1]= 28  ufk[2]= 542 ufk[3]= 2121 ufk[4]= 0
         ufk[5]=265  ufk[6]=0    ufk[7]= 0    ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -525,8 +525,8 @@ BROWSE:
 
      /* Search BY column 1 */                          
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        ASSIGN
              lcevtime = "".
@@ -572,8 +572,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME F2.
        SET UserCode 
            evdate
@@ -599,8 +599,8 @@ BROWSE:
 
      /* Search BY column 3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f3.
        ASSIGN
              lcTable = ""
@@ -633,7 +633,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"5,f5,enter,return") > 0 THEN DO:
 
         RUN local-find-this (FALSE).
-        RUN eventview (temp-event.ttEventLog).
+        RUN Mc/eventview (temp-event.ttEventLog).
 
         ufkey = TRUE.
         NEXT LOOP.

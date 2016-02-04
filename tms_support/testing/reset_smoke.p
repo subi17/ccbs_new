@@ -87,29 +87,29 @@ FOR EACH ttSmokeMsseq NO-LOCK:
         CREATE ttSmokeOrder.
         ASSIGN ttSmokeOrder.orderid = order.orderid.
     END.
-    RUN reset_table.p "mobsub" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
-    RUN reset_table.p "subser" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
-    RUN reset_table.p "subserpara" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
-    RUN reset_table.p "mservicelimit" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
-    RUN reset_table.p "msowner" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
-    RUN reset_table.p "msrequest" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
-    RUN reset_table.p "dccli" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
-    RUN reset_table.p "msisdn" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
-    RUN reset_table.p "substerminal" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
-    RUN reset_table.p "limit" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
-    RUN reset_table.p "prepaidrequest" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
-    RUN reset_table.p "ServiceLCounter" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
-    RUN reset_table.p "SaldoCounter" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
-    RUN reset_table.p "DCCounter" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
-    RUN reset_table.p "MSBalance" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
-    RUN reset_table.p "TMCounter" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
-    RUN reset_table.p "MNPSub" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "mobsub" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "subser" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "subserpara" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "mservicelimit" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "msowner" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "msrequest" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "dccli" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "msisdn" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "substerminal" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "limit" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "prepaidrequest" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "ServiceLCounter" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "SaldoCounter" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "DCCounter" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "MSBalance" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "TMCounter" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "MNPSub" "msseq" ttsmokeMsseq.msseq. PAUSE 0.
 END.
 
 FOR EACH ttSmokeOrder NO-LOCK:
-    RUN reset_table.p "orderaccessory" "orderid" ttSmokeOrder.orderid. PAUSE 0.
-    RUN reset_table.p "orderpayment" "orderid" ttSmokeOrder.orderid. PAUSE 0.
-    RUN reset_table.p "mnpprocess" "orderid" ttSmokeOrder.orderid. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "orderaccessory" "orderid" ttSmokeOrder.orderid. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "orderpayment" "orderid" ttSmokeOrder.orderid. PAUSE 0.
+    RUN tms_support/testing/reset_table.p "mnpprocess" "orderid" ttSmokeOrder.orderid. PAUSE 0.
 END.
 
 FOR EACH ttSmokeCli NO-LOCK:

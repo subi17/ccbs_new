@@ -42,7 +42,7 @@ form
     " PRINTER '" + xPrinterId + "' EFFECTS "
     FRAME sel.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 FIND FIRST TMSPrinter where TMSPrinter.PrinterId = xPrinterId no-lock no-error.
 FIND FIRST PrintCodes where PrintCodes.PrinterId = xPrinterId no-lock no-error.
@@ -113,7 +113,7 @@ BROWSE:
          ufk[1]= 0   ufk[2]= 0    ufk[3]= 0 ufk[4]= 0
          ufk[5]= 11  ufk[6]= 0    ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.

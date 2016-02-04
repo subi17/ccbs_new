@@ -481,7 +481,7 @@ PROCEDURE pDone.
       IF llRefreshBarring THEN DO:
 
          /* create barring request */
-         RUN barrengine.p(Mobsub.MsSeq,
+         RUN Mm/barrengine.p(Mobsub.MsSeq,
                          "#REFRESH",
                          "5",                /* source  */
                          katun,              /* creator */

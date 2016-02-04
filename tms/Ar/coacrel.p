@@ -180,7 +180,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
          ehto = 3 
          lcUfkey = FALSE.
 
-      RUN ufkey.
+      RUN Syst/ufkey.
 
    END.
 
@@ -193,7 +193,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
    IF LOOKUP(nap,"1,f1") > 0 THEN DO:
 
       ehto = 9. 
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
 
       REPEAT WITH FRAME valinta ON ENDKEY UNDO, LEAVE:
 
@@ -251,14 +251,14 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
 END. /* toimi */
 
 ehto = 5.
-RUN ufkey.
+RUN Syst/ufkey.
 
 IF lcFile = "" THEN DO:
    assign tila = true.
    {Syst/utuloste.i "return"}
 END.
 
-RUN coacrep   (liCORuleID,
+RUN Ar/coacrep   (liCORuleID,
                lcReseller[1],
                lcReseller[2],
                lcSalesman[1],
@@ -292,7 +292,7 @@ ELSE
    TITLE " Finished ".
 
 IF llMark THEN DO:
-   RUN copayrem (INPUT TABLE ttMark,
+   RUN Ar/copayrem (INPUT TABLE ttMark,
                  INPUT  ldtPaymDate,
                  OUTPUT liCount).
 

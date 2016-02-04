@@ -162,7 +162,7 @@ PROCEDURE pRunQueue:
    
       IF RETRY THEN LEAVE.
       
-      RUN funcrunqueue_batch.p.
+      RUN Syst/funcrunqueue_batch.p.
    END.
 
 END PROCEDURE.
@@ -173,7 +173,7 @@ PROCEDURE pRunExecution:
    
       IF RETRY THEN LEAVE.
       
-      RUN funcrunexec_batch.p.
+      RUN Syst/funcrunexec_batch.p.
    END.
 
 END PROCEDURE.

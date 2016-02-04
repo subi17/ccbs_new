@@ -25,7 +25,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhCoBasis).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCoBasis).
+      RUN Mc/eventview2(lhCoBasis).
    END.
 
 END.
@@ -103,7 +103,7 @@ ASSIGN lcTitle = " COMM. BASIS FOR: " +
                  STRING(CoRule.CCN)    + "/" +
                  STRING(CoRule.CoFrom,"99.99.99") + " ". 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By BillCode ,    ,   , By 4".
@@ -130,14 +130,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CoBasis  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -301,7 +301,7 @@ BROWSE:
         ufk[6]= 4
         ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -502,7 +502,7 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCoBasis).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CoBasis.BillCode.
 
        RUN local-UPDATE-record.                                  
@@ -632,7 +632,7 @@ PROCEDURE local-UPDATE-record:
       
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.
        
          UPDATE
          CoBasis.SubsQty WHEN NOT NEW CoBasis

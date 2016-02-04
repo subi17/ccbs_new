@@ -131,7 +131,7 @@ repeat:
 
    FIND Customer WHERE Customer.CustNum = Invoice.CustNum NO-LOCK.
 
-   run invbal(invoice.invnum,
+   RUN Ar/invbal(invoice.invnum,
               output ldbal).
    
    /*

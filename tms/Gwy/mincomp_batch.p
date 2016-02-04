@@ -210,7 +210,7 @@ REPEAT:
  
             /* check current balance */
             liCurrBal = 0.
-            RUN balancequery.p(lcCLI).
+            RUN Gwy/balancequery.p(lcCLI).
             liCurrBal = INT(RETURN-VALUE) NO-ERROR.
 
             liAdjBal = liCurrBal - liAmt.
@@ -300,7 +300,7 @@ PROCEDURE pAdjustBalance:
       PrePaidRequest.VatAmt      = 0
       PrePaidRequest.TaxZone     = lcTaxZone.
    
-   RUN pp_platform(gcBrand,PrePaidRequest.PPRequest).
+   RUN Gwy/pp_platform(gcBrand,PrePaidRequest.PPRequest).
    
    lcXML = RETURN-VALUE.
    ldeTS = fMakeTS().

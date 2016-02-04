@@ -68,7 +68,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhRepText).
+      RUN Mc/eventview2.p(lhRepText).
    END.
 END.
 
@@ -154,7 +154,7 @@ IF icKeyValue > "" THEN ASSIGN
    FrmDown = 8.
 
 cfc = "sel". 
-RUN ufcolor. 
+RUN Syst/ufcolor. 
 ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
@@ -195,13 +195,13 @@ REPEAT WITH FRAME sel:
          ufkey     = true 
          fr-header = " ADD " 
          must-add  = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-NEW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-NEW, LEAVE ADD-NEW.
          PAUSE 0 NO-MESSAGE.
          CLEAR FRAME lis NO-PAUSE.
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.
          DO TRANSACTION:
                                
             IF iiTextType > 0 THEN DISPLAY iiTextType @ RepText.TextType.
@@ -313,7 +313,7 @@ REPEAT WITH FRAME sel:
          ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0) 
          ufk[7] = 0 ufk[8] = 8 ufk[9]= 1
          ehto = 3 ufkey = false.
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -455,9 +455,9 @@ REPEAT WITH FRAME sel:
 
       /* Haku sarakk. 1 */
       IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN DO:  
-         cfc = "puyr". RUN ufcolor.
+         cfc = "puyr". RUN Syst/ufcolor.
          haku2 = "".
-         ehto = 9. RUN ufkey. ufkey = true.
+         ehto = 9. RUN Syst/ufkey. ufkey = true.
          DISPLAY lcBrand WITH FRAME hayr1.
          UPDATE lcBrand WHEN gcAllBrand
                 liType
@@ -552,7 +552,7 @@ REPEAT WITH FRAME sel:
             fr-header = " CHANGE " 
             ufkey = true
             liLength = LENGTH(RepText.RepText).
-            cfc = "lis". RUN ufcolor.   
+            cfc = "lis". RUN Syst/ufcolor.   
 
        
        FIND FIRST language WHERE
@@ -580,7 +580,7 @@ REPEAT WITH FRAME sel:
             ufk[8] = 8
             ehto = 0.
 
-         RUN ufkey.
+         RUN Syst/ufkey.
          
          IF toimi = 1 THEN DO:
          
@@ -589,7 +589,7 @@ REPEAT WITH FRAME sel:
             REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
             
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
             
                UPDATE 
                   RepText.FromDate

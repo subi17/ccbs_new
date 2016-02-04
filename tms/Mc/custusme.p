@@ -28,7 +28,7 @@ END.
 PAUSE 0.
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey. 
 
       DISPLAY
        " A) Username And Password          "             @ menuc[1] SKIP
@@ -45,15 +45,15 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    ELSE IF FRAME-INDEX EQ 1 THEN DO:
-      RUN custuserid(iiCustNum).
+      RUN Mc/custuserid(iiCustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 2 THEN DO:
-      RUN custuserchg(iiCustNum,TRUE).
+      RUN Mc/custuserchg(iiCustNum,TRUE).
    END.
 
    ELSE IF FRAME-INDEX EQ 3 THEN DO:
-      RUN custuserchg(iiCustNum,FALSE).
+      RUN Mc/custuserchg(iiCustNum,FALSE).
    END.
 
    ELSE IF FRAME-INDEX = 4 OR FRAME-INDEX = 0 THEN LEAVE.

@@ -163,7 +163,7 @@ PROCEDURE subscription_status2.
 
          IF  Invoice.duedate > today THEN NEXT.
                           
-         run invbal(INPUT Invoice.InvNum, OUTPUT balance).
+         RUN Ar/invbal(INPUT Invoice.InvNum, OUTPUT balance).
 
          unpaidbal = unpaidbal + balance.
       END.

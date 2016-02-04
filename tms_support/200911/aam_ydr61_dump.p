@@ -10,7 +10,7 @@ def var licnt as int no-undo.
 
 find first dumpfile where dumpid = 31 no-lock.
 
-run ifs_subscription
+RUN Ar/ifs_subscription
                                   (dumpfile.dumpid,
                                    "/store/riftp/ifs/outgoing/spool/" + 
                                        "IFS_SU_FULL_26112009.DAT",

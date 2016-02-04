@@ -49,7 +49,7 @@ with row 4 col 2 title color value(ctc) " FIND Land  "
     COLOR value(cfc) NO-LABELS OVERLAY
 FRAME hayr.
 
-cfc = "tlse". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "tlse". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 Runko:
 repeat:
 
@@ -71,7 +71,7 @@ LOOP:
       ASSIGN
       cfc = "tlli"
       tlli-ots = " ADD ".
-      RUN ufcolor.
+      RUN Syst/ufcolor.
        add-new:
       repeat WITH FRAME tlli:
          PAUSE 0 no-message.
@@ -135,7 +135,7 @@ print-line:
          ufk[6] = 5 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = FALSE.
          {Syst/uright1.i '"6"'}
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
   END. /* print-line */
 
@@ -244,8 +244,8 @@ BROWSE:
 
         /* Haku */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
-           cfc = "puyr". RUN ufcolor.
-           haku = "". ehto = 9. RUN ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.
+           haku = "". ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
            UPDATE haku WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            if haku <> "" THEN DO:

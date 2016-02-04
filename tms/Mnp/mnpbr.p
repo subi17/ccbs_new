@@ -40,7 +40,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhOrderCustomer). 
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhMNPProcess).
+      RUN Mc/eventview2(lhMNPProcess).
    END.
 
 END.
@@ -112,7 +112,7 @@ form /* seek  PortRequest */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  , By Status , By 4".
@@ -199,7 +199,7 @@ BROWSE:
            ehto   = 3
            ufkey  = FALSE.
       
-         RUN ufkey.
+         RUN Syst/ufkey.
 
       END.
 
@@ -343,8 +343,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcFormRequest WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -374,8 +374,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME F2.
        SET lcPortRequest WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -408,7 +408,7 @@ BROWSE:
 
        RUN local-find-this (FALSE).
 
-       RUN order.p(0,0,"",MNPProcess.OrderId).
+       RUN Mc/order.p(0,0,"",MNPProcess.OrderId).
        ufkey = true.
        next loop.
 
@@ -419,7 +419,7 @@ BROWSE:
        run local-find-this (false).
        memory = recid(mnpprocess).
        
-       run mnpsub(MNPProcess.mnpseq).
+       RUN Mnp/mnpsub(MNPProcess.mnpseq).
        
        must-print = true.
        ufkey = true.
@@ -433,8 +433,8 @@ BROWSE:
        memory = recid(mnpprocess).
        
        /* choose different module for old and new mnp processes */
-       IF MNPProcess.MNPType EQ 0 THEN RUN mnpmessages(MNPProcess.MNPSeq).
-       ELSE RUN mnpoperations(MNPProcess.MNPSeq).
+       IF MNPProcess.MNPType EQ 0 THEN RUN Mm/mnpmessages(MNPProcess.MNPSeq).
+       ELSE RUN Mnp/mnpoperations(MNPProcess.MNPSeq).
        
        must-print = true.
        ufkey = true.
@@ -448,8 +448,8 @@ BROWSE:
        /* change */
        RUN local-find-this(false).
 
-       ASSIGN ac-hdr = " MNP Process " ufkey = TRUE ehto = 5. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " MNP Process " ufkey = TRUE ehto = 5. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY MNPProcess.FormRequest.
 
        RUN local-UPDATE-record.                                  
@@ -737,7 +737,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 3.
       
-         RUN ufkey. 
+         RUN Syst/ufkey. 
          
          DISPLAY
             " A) Update MNP data         " @ lcMenu[1]  SKIP
@@ -777,7 +777,7 @@ PROCEDURE local-UPDATE-record:
                   lcOldICC     = Order.OldICC
                   lcOpCode     = Order.CurrOper. 
                
-               ehto = 9. RUN ufkey.
+               ehto = 9. RUN Syst/ufkey.
 
                MNPDATA:
                REPEAT ON ENDKEY UNDO,LEAVE:
@@ -808,7 +808,7 @@ PROCEDURE local-UPDATE-record:
 
                            WHEN "lcCustIdType" THEN DO:
 
-                              RUN tmscodesbr(input "Customer",
+                              RUN Syst/tmscodesbr(input "Customer",
                                              input "CustIdType",
                                              input "N/A",
                                              input "Choose ID Type",
@@ -818,21 +818,21 @@ PROCEDURE local-UPDATE-record:
                               IF lcReturn NE "" THEN lcCustIdType = lcReturn.
 
                               DISP lcCustIdType WITH FRAME fUpdMNPData.
-                              ehto = 9. RUN ufkey.
+                              ehto = 9. RUN Syst/ufkey.
                               NEXT.
 
                            END.
 
                            WHEN "lcOpCode" THEN DO:
 
-                              RUN h-mnpoperator.
+                              RUN Help/h-mnpoperator.
                               
                               IF siirto NE ? THEN DO:
                                  lcOpCode = siirto NO-ERROR.
                               END.
 
                               DISP lcOpCode WITH FRAME fUpdMNPData.
-                              ehto = 9. RUN ufkey.
+                              ehto = 9. RUN Syst/ufkey.
                               NEXT.
 
                            END.
@@ -950,7 +950,7 @@ PROCEDURE local-UPDATE-record:
                UPDATE ok.
                IF NOT ok THEN NEXT.
 
-               RUN mnpresend.p(Order.Orderid).
+               RUN Mnp/mnpresend.p(Order.Orderid).
 
                LEAVE CHOISES.
 

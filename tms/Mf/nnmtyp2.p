@@ -40,7 +40,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhMthCall).
+      RUN Mc/eventview2.p(lhMthCall).
    END.
 END.
 
@@ -63,19 +63,19 @@ WITH
     OVERLAY  width 80
     FRAME frm.
 
-cfc = "kline".  RUN ufcolor.
+cfc = "kline".  RUN Syst/ufcolor.
 
 LOOP:
 repeat WITH FRAME frm:
 
-  ehto = 9. RUN ufkey.
+  ehto = 9. RUN Syst/ufkey.
   DISP liClDays WITH FRAME frm.
   UPDATE Month InvGroup WITH FRAME frm.
 
    toimi:
       repeat WITH FRAME LOOP:
          ASSIGN ufk = 0 ehto = 0 ufk[1] = 7 ufk[5] = 795 ufk[8] = 8.
-         RUN ufkey.
+         RUN Syst/ufkey.
          IF toimi = 1 THEN NEXT  toimi.
          IF toimi = 5 THEN LEAVE toimi.
          IF toimi = 8 THEN LEAVE LOOP.

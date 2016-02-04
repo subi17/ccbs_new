@@ -49,7 +49,7 @@ IF ldaInvDate = ? OR liInvType = ? THEN DO:
    QUIT.
 END.   
 
-RUN invoice_extinvid.p(ldaInvDate,
+RUN Inv/invoice_extinvid.p(ldaInvDate,
                        liInvType,
                        2,   /* action */  
                        liFRProcessID,

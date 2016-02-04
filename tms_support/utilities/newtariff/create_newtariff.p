@@ -120,18 +120,18 @@ DO TRANSACTION:
          BY ttFiles.FOrder:
       
       IF INDEX(ttFiles.FName,"billingitem") > 0 THEN 
-         RUN billitemcreation.p(lcIncDir,
+         RUN tms_support/utilities/newtariff/billitemcreation.p(lcIncDir,
                                 lcSpoolDir) NO-ERROR.
       ELSE IF INDEX(ttFiles.FName,"shaperconf") > 0 THEN
-         RUN shaperconfcreation.p(lcIncDir,
+         RUN Mc/shaperconfcreation.p(lcIncDir,
                                   lcSpoolDir) NO-ERROR.      
       ELSE IF INDEX(ttFiles.FName,"rateplan") > 0 THEN 
-         RUN rateplan.p(lcIncDir,
+         RUN Mc/rateplan.p(lcIncDir,
                         lcSpoolDir,
                         OUTPUT lcPayType,
                         OUTPUT lcRatePlan) NO-ERROR.
       ELSE IF INDEX(ttFiles.FName,"tariffcreation") > 0 THEN 
-        RUN tariffcreation.p(lcIncDir,
+        RUN Mc/tariffcreation.p(lcIncDir,
                              lcSpoolDir,
                              lcPayType,
                              lcRatePlan) NO-ERROR.

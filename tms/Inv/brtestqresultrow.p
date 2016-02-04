@@ -23,7 +23,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhBRTestQResultRow).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhBRTestQResultRow).
+      RUN Mc/eventview2(lhBRTestQResultRow).
    END.
 
 END.
@@ -124,7 +124,7 @@ IF NOT AVAILABLE BRTestQResult THEN DO:
    RETURN.
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -211,7 +211,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -366,8 +366,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhBRTestQResultRow).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -404,7 +404,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.
 
 fCleanEventObjects().
 
@@ -509,7 +509,7 @@ PROCEDURE local-UPDATE-record:
          ufk[8] = 8
          ehto   = 0.
          
-      RUN ufkey.
+      RUN Syst/ufkey.
       
       IF toimi = 8 THEN LEAVE. 
    END.

@@ -350,7 +350,7 @@ DO FOR DumpLog TRANS:
       DumpLog.DumpLogStatus = 5.
    ELSE DO:
       DumpLog.DumpLogStatus = 3.
-      RUN dumpfile_calcavedur.p(DumpFile.DumpId).
+      RUN Syst/dumpfile_calcavedur.p(DumpFile.DumpId).
    END.
    /* TODO - quick solution (otherwise requires a new logic module param.) */
    IF oiEventCount EQ {&DUMPLOG_ERROR_NOTIFICATION} THEN ASSIGN

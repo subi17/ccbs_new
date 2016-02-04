@@ -25,7 +25,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhDPMember).
    
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhDPMember).
+      RUN Mc/eventview2.p(lhDPMember).
    END.
 
 END.
@@ -129,7 +129,7 @@ FUNCTION fDispHostTable RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "sel". RUN ufcolor.p. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -154,7 +154,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a DPMember  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.p.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -162,7 +162,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN ufkey.p.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -281,7 +281,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -415,8 +415,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.p.
-       ehto = 9. RUN ufkey.p. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        lcHostTable = "MobSub".
@@ -519,8 +519,8 @@ REPEAT WITH FRAME sel:
           LEAVE LOOP.
        END.
  
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.p.
-       cfc = "lis". RUN ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -555,7 +555,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.p.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -716,7 +716,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
          
          IF toimi = 8 THEN LEAVE.
       END.
@@ -725,7 +725,7 @@ PROCEDURE local-UPDATE-record:
       REPEAT TRANS WITH FRAME lis ON ENDKEY UNDO, LEAVE:
                 
          ehto = 9.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
          
          PROMPT
             lcDPRuleID WHEN NEW DPMember AND iiDPId = 0

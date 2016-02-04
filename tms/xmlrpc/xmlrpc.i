@@ -111,7 +111,7 @@ FUNCTION xmlrpc_initialize RETURN LOGICAL
       ( plServer AS LOGICAL ):
     &IF DEFINED(SERIALIZE_ONLY) = 0 &THEN
     CREATE SAX-READER ghParser. 
-    RUN saxhandler PERSISTENT SET ghCallback.
+    RUN xmlrpc/saxhandler PERSISTENT SET ghCallback.
     ghParser:HANDLER = ghCallback .
     RUN init_production_temptable IN ghCallback (plServer).
     &ENDIF

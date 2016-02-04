@@ -98,7 +98,7 @@ END.
 ELSE IF icType = "mobsub" THEN
    lcTitle = "COMMISSIONS FOR SUBSCRIPTION: " + STRING(iiKey).
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -168,7 +168,7 @@ REPEAT WITH FRAME sel:
         ufk[2]= 0  ufk[3]= 0  
         ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -311,7 +311,7 @@ REPEAT WITH FRAME sel:
        {Syst/uright2.i}
        RUN local-find-this (FALSE).
        IF AVAILABLE CoTarg 
-       THEN RUN coshare.p (CoTarg.CoTargID). 
+       THEN RUN Ar/coshare.p (CoTarg.CoTargID). 
        ufkey = true. 
      END.
 
@@ -328,7 +328,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(FALSE).
       
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        /*DISPLAY CoTarg.TargType.*/
 
        RUN local-UPDATE-record.                                  
@@ -535,10 +535,10 @@ PROCEDURE local-UPDATE-record:
           ehto  = 1
           ufk[5] = 927
           ufk[8]= 8.
-      RUN ufkey.          
+      RUN Syst/ufkey.          
 
       IF toimi = 5 THEN DO:
-         RUN memo("0",
+         RUN Mc/memo("0",
                   INPUT "CoTarg",
                   INPUT STRING(CoTarg.COTargId),
                   INPUT "Commission").

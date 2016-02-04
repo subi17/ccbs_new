@@ -55,7 +55,7 @@ FOR EACH TMSCodes NO-LOCK WHERE
 END.
 
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
 
 MAIN:
 repeat:
@@ -102,7 +102,7 @@ print-line:
          ufk = 0 ufk[1] = 35 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = false.
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -207,8 +207,8 @@ BROWSE:
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*se-code*/
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.
+           ehto = 9. RUN Syst/ufkey. ufkey = true.
            set AccType with frame hayr.
            hide frame hayr no-pause.
            if AccType ENTERED then do:

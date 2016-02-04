@@ -29,7 +29,7 @@ IF icTransDir > "" THEN
 FIND FIRST Invoice WHERE Invoice.InvNum = iiInvNum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Invoice THEN RETURN "ERROR:Invoice not found".
 
-RUN printdoc1co ("",
+RUN Inv/printdoc1co ("",
                  Invoice.CustNum,
                  Invoice.CustNum,
                  Invoice.ExtInvID,

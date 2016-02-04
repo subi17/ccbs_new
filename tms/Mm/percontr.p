@@ -451,7 +451,7 @@ PROCEDURE pContractActivation:
 
    IF lcDCEvent EQ {&PMDUB} AND MsOwner.CLIType EQ "TARJ5" THEN DO:
       
-      RUN air_get_account_details.p(MsOwner.CLI, 
+      RUN Gwy/air_get_account_details.p(MsOwner.CLI, 
                                     OUTPUT liCurrentServiceClass,
                                     OUTPUT lcError).
    
@@ -462,7 +462,7 @@ PROCEDURE pContractActivation:
 
       IF liCurrentServiceClass EQ {&SC_TARJ5_PROMOTIONAL} THEN DO:
 
-         RUN air_update_serviceclass.p(MsOwner.CLI,
+         RUN Gwy/air_update_serviceclass.p(MsOwner.CLI,
                                        {&SC_TARJ5_NORMAL_BONO},
                                        {&SC_TARJ5_PROMOTIONAL_BONO},
                                        ?,
@@ -860,7 +860,7 @@ PROCEDURE pContractActivation:
 
          liFatPeriod = YEAR(ldtFatDate) * 100 + MONTH(ldtFatDate).
          
-         RUN creafat (MsOwner.CustNum,
+         RUN Mc/creafat (MsOwner.CustNum,
                       DCCLI.MsSeq,
                       DCCLI.DCEvent,
                       0,   /* amount */
@@ -933,7 +933,7 @@ PROCEDURE pContractActivation:
          liOrderid = fGetPaytermOrderId(msrequest.msrequest)
          lcReqSource = ";" + MsRequest.Reqsource. 
 
-      RUN creasfee.p (MsOwner.CustNum,
+      RUN Mc/creasfee.p (MsOwner.CustNum,
                     (IF (lcDCEvent = {&DSS} + "_UPSELL" OR
                          lcDCEvent EQ  "DSS200_UPSELL" OR
                          lcDCEvent = "DSS2_UPSELL") THEN liDSSMsSeq
@@ -965,7 +965,7 @@ PROCEDURE pContractActivation:
          AVAIL DCCLI AND
          MsRequest.ReqDParam2 > 0 THEN DO:
 
-         RUN creasfee.p(MsOwner.CustNum,
+         RUN Mc/creasfee.p(MsOwner.CustNum,
                        MsOwner.MsSeq,
                        DCCLI.ValidTo + 1,
                        "FeeModel",
@@ -1059,7 +1059,7 @@ PROCEDURE pContractActivation:
    
    /* Temporary FAT creation for BONO_VOIP. YDA-173 */
    IF lcDCEvent EQ "BONO_VOIP" THEN DO:
-      RUN creafat.p (MsOwner.CustNum,
+      RUN Mc/creafat.p (MsOwner.CustNum,
                      MsOwner.MsSeq,
                      "BONOVOIPCPACT",
                      ?, /* amount */
@@ -1429,12 +1429,12 @@ PROCEDURE pFinalize:
    fReqStatus(2,""). 
 
    /* Send the SMS using Request Action Rules */
-   RUN requestaction_sms.p(INPUT MsRequest.MsRequest,
+   RUN Mm/requestaction_sms.p(INPUT MsRequest.MsRequest,
                            INPUT MsOwner.CliType,
                            INPUT MsRequest.ReqSource).
 
    /* terminate BB service package etc. */
-   RUN requestaction_exec.p(MsRequest.MsRequest,
+   RUN Mm/requestaction_exec.p(MsRequest.MsRequest,
                             MsOwner.CLIType,        /* CLI Type */
                             0,                      /* order    */
                             MsRequest.ActStamp,
@@ -1853,7 +1853,7 @@ PROCEDURE pContractTermination:
       MsRequest.ReqSource NE {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION}
       THEN DO:
       
-      RUN air_get_account_details.p(MsOwner.CLI, 
+      RUN Gwy/air_get_account_details.p(MsOwner.CLI, 
                                     OUTPUT liCurrentServiceClass,
                                     OUTPUT lcError).
    
@@ -1864,7 +1864,7 @@ PROCEDURE pContractTermination:
 
       IF liCurrentServiceClass EQ {&SC_TARJ5_PROMOTIONAL_BONO} THEN DO:
 
-         RUN air_update_serviceclass.p(MsOwner.CLI,
+         RUN Gwy/air_update_serviceclass.p(MsOwner.CLI,
                                        {&SC_TARJ5_NORMAL},
                                        {&SC_TARJ5_PROMOTIONAL},
                                        ?, 
@@ -2238,7 +2238,7 @@ PROCEDURE pContractTermination:
 
       IF llCreatePenaltyFee THEN DO:
 
-         RUN creasfee.p (MsOwner.CustNum,
+         RUN Mc/creasfee.p (MsOwner.CustNum,
                          MsRequest.MsSeq,
                          ldtActDate,
                          "FeeModel",
@@ -2336,7 +2336,7 @@ PROCEDURE pContractTermination:
          END.
       END.
 
-      RUN closefee.p(FixedFee.FFNum,
+      RUN Mc/closefee.p(FixedFee.FFNum,
                      ldtActDate,
                      FALSE, /* credit billed fees */
                      TRUE,
@@ -2757,7 +2757,7 @@ PROCEDURE pMaintainContract:
                OUTPUT ldtActDate,
                OUTPUT liReqCnt).
                
-      RUN creasfee.p (MsRequest.CustNum,
+      RUN Mc/creasfee.p (MsRequest.CustNum,
                     MsRequest.MsSeq,
                     ldtActDate,
                     "FeeModel",
@@ -2835,7 +2835,7 @@ PROCEDURE pPerContractPIN:
    END. 
    
    /* print a letter */
-   RUN prinpcpin(MsRequest.CustNum,
+   RUN Mm/prinpcpin(MsRequest.CustNum,
                  MsRequest.MsRequest,
                  OUTPUT lcReqChar).
 
@@ -3411,7 +3411,7 @@ PROCEDURE pContractReactivation:
                      STRING(DCCLI.PerContractID) = FixedFee.SourceKey AND
                      DCCLI.Amount NE ? AND DCCLI.Amount > 0 THEN DO:
 
-               RUN creasfee.p(MsOwner.CustNum,
+               RUN Mc/creasfee.p(MsOwner.CustNum,
                              MsOwner.MsSeq,
                              DCCLI.ValidTo + 1,
                              "FeeModel",

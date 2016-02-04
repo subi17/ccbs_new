@@ -19,7 +19,7 @@ DEFINE VARIABLE liSeq         AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcFormRequest AS CHARACTER NO-UNDO.
      
 ehto = 10.
-run ufkey.p.
+RUN Syst/ufkey.p.
 
 CREATE ttMigrationRequest.
 

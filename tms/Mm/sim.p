@@ -89,7 +89,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhSim).
+      RUN Mc/eventview2.p(lhSim).
    END.
 END.
 
@@ -180,7 +180,7 @@ form
     OVERLAY ROW 2
     CENTERED FRAME imsi.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel. 
 
 orders = "By ICC,By CustNo,By ArtCode, By 4".
@@ -214,12 +214,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a SIM  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         DO TRANSACTION:
            PROMPT-FOR SIM.ICC
            VALIDATE
@@ -308,7 +308,7 @@ BROWSE:
         ufk[4]= 9808
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.          
+        RUN Syst/ufkey.p.          
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -441,9 +441,9 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        ICC = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
       
        DISP lcBrand WITH FRAME F1. pause 0.
        UPDATE ICC WITH FRAME f1. 
@@ -508,7 +508,7 @@ BROWSE:
             ehto = 1.
             ufk = 0.
             ufk[8] = 8.
-            RUN ufkey.
+            RUN Syst/ufkey.
             ufkey = TRUE.
         END.
         ELSE
@@ -527,8 +527,8 @@ BROWSE:
        /* change */
        FIND SIM WHERE recid(SIM) = rtab[FRAME-line(sel)] NO-LOCK.
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". run ufcolor.
+       RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor.
        CLEAR FRAME  lis no-pause.
        DISPLAY SIM.ICC WITH FRAME lis.
        ASSIGN 

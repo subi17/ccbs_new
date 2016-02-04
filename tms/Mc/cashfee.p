@@ -290,7 +290,7 @@ PROCEDURE pMakeCashInvoice:
 
       IF iiAction EQ 1 THEN DO:
 
-         RUN createcustomer.p(Order.OrderId, 
+         RUN Mm/createcustomer.p(Order.OrderId, 
                             1,
                             FALSE,
                             FALSE, /* do not update existing customer */
@@ -441,7 +441,7 @@ PROCEDURE pMakeCashInvoice:
             liInvType = 6.
          END.
    
-         RUN nnlamu_inc (liCashCust,
+         RUN Inv/nnlamu_inc (liCashCust,
                          Order.OrderID,
                          "",
                          liInvType,

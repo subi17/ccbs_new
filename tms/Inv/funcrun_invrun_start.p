@@ -145,7 +145,7 @@ PROCEDURE pInitialize:
                        ENTRY(2,FuncRunResult.CharParam,":").
    END.
 
-   RUN lamupers.p PERSISTENT SET lhHandle.
+   RUN Inv/lamupers.p PERSISTENT SET lhHandle.
 
 END PROCEDURE.
    

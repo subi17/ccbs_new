@@ -10,15 +10,15 @@ RUN cdrcntdump.
 fELog("STAT","CdrCountStopped").
 
 fELog("STAT","WebSessionCountStarted").
-RUN websessioncount.
+RUN Mc/websessioncount.
 fELog("STAT","WebSessionCountStopped").
 
 fELog("STAT","AreaStatusStarted").
-RUN areastatus.
+RUN Syst/areastatus.
 fELog("STAT","AreaStatusStopped").
 
 fELog("STAT","CdrCountStarted").
-RUN msstatcount.
+RUN Mm/msstatcount.
 fELog("STAT","CdrCountStopped").
 
 QUIT.

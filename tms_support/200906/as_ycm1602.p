@@ -112,7 +112,7 @@ repeat:
    if lcUser ne "CreSub / CreSub" then next.
    
    
-   RUN barrengine (Mobsub.MsSeq,
+   RUN Mm/barrengine (Mobsub.MsSeq,
                     "UN" + lcstat,     /* package for unbarring */
                       "5",                /* source  */
                       katun,             /* creator */

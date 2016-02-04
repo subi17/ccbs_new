@@ -119,7 +119,7 @@ for each Order where
       status default STRING(icount).
 
       IF NOT llsimulate AND llFATAllowed THEN DO:
-         RUN creafat.p (Order.CustNum,
+         RUN Mc/creafat.p (Order.CustNum,
                         Order.MsSeq,
                         lcnewftgrp,
                         ?, /* amount */

@@ -9,7 +9,7 @@
                               Event logging added
                   11.03.03/tk tokens
                               invotxt tablename changed
-                  18.03.03/tk run memo            
+                  18.03.03/tk RUN Mc/memo            
                   19.03.03 aam EnterTask & LeaveTask,
                                run tasks when changes occur (fecgtask)
                   27.03.03 tk  f4 in update closed program             
@@ -40,7 +40,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhCGMember).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCustGroup).
+      RUN Mc/eventview2(lhCustGroup).
    END.
 END.
 
@@ -118,7 +118,7 @@ form /* Customer Group :n haku kentällä CGName */
     with row 4 col 2 title color value(ctc) " FIND Name "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST CustGroup
@@ -149,13 +149,13 @@ repeat WITH FRAME sel:
 
    IF lisattava THEN DO:  /* cgroupn lisäys  */
       assign cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
       lisaa:
       repeat WITH FRAME lis ON ENDKEY UNDO lisaa, LEAVE lisaa.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         DO TRANSAction:
            PROMPT-FOR CustGroup.CustGroup
            VALIDATE
@@ -248,7 +248,7 @@ SELAUS:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
         ufk[7]= 1760   ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -402,9 +402,9 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        CustGroup = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
               CustGroup WITH FRAME f1.
@@ -425,9 +425,9 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        CGName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN gcAllBrand
               CGName WITH FRAME f2.
@@ -450,7 +450,7 @@ SELAUS:
 
        FIND CustGroup where recid(CustGroup) = rtab[frame-line(sel)]
        no-lock.
-       RUN memo(INPUT 0,
+       RUN Mc/memo(INPUT 0,
                 INPUT "CustGroup",
                 INPUT STRING(CustGroup.CustGroup),
                 INPUT "Customer group").
@@ -461,7 +461,7 @@ SELAUS:
 
      else if lookup(nap,"4,f4") > 0 THEN DO TRANSAction:  /* members */
         FIND CustGroup where recid(CustGroup) = rtab[FRAME-LINE] no-lock.
-        RUN nncgme1(CustGroup.CustGroup).
+        RUN Mc/nncgme1(CustGroup.CustGroup).
         ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -550,7 +550,7 @@ SELAUS:
 
      ELSE IF lookup(nap,"7,f7") > 0 THEN DO:
         FIND CustGroup WHERE recid(CustGroup) = rtab[FRAME-line(sel)] NO-LOCK.
-        RUN invotxt("CustGroup",CustGroup.CustGroup).
+        RUN Mc/invotxt("CustGroup",CustGroup.CustGroup).
         ASSIGN memory = recid(CustGroup) must-print = TRUE ufkey=true.
         NEXT LOOP.
      END.
@@ -563,7 +563,7 @@ SELAUS:
        exclusive-lock.
 
        assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
-       cfc = "lis". RUN ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.
        DISPLAY CustGroup.CustGroup
        CustGroup.EnterTask CustGroup.LeaveTask
        CustGroup.CreUser CustGroup.CreDate
@@ -571,7 +571,7 @@ SELAUS:
        CustGroup.CGName .
 
        IF lcRight = "RW" THEN DO:
-          RUN ufkey.
+          RUN Syst/ufkey.
 
           IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustGroup).
 

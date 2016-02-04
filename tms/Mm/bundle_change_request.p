@@ -223,7 +223,7 @@ PROCEDURE pFinalize:
       RUN pUpdateSubscription.
 
    /* re-activate/terminate service packages etc. */
-   RUN requestaction_exec.p(MsRequest.MsRequest,
+   RUN Mm/requestaction_exec.p(MsRequest.MsRequest,
                             MobSub.CLIType,       /* CLI Type */
                             0,                    /* order */
                             MsRequest.ActStamp,
@@ -243,7 +243,7 @@ PROCEDURE pFinalize:
    fReqStatus(2,"").
 
    /* Send SMS "STC_DONE" for IPL -> IPL and Flat Tariffs */
-   RUN requestaction_sms.p(INPUT MsRequest.MsRequest,
+   RUN Mm/requestaction_sms.p(INPUT MsRequest.MsRequest,
                            INPUT MobSub.CLIType,
                            INPUT {&REQUEST_SOURCE_BTC}).
 

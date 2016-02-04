@@ -48,7 +48,7 @@ repeat:
            lioldnum format ">>>>>>>>9".
            
 
-   run del_inv.p (invoice.invnum).
+   RUN Inv/del_inv.p (invoice.invnum).
    
    for each singlefee exclusive-lock where
             singlefee.brand = "1" and

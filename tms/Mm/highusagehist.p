@@ -25,7 +25,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhHighUsage).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhHighUsage).
+      RUN Mc/eventview2(lhHighUsage).
    END.
 
 END.
@@ -123,7 +123,7 @@ form /* seek  CLI */
 
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "   By Customer ,   By MSISDN    ,    By amount  , By 4".
@@ -207,7 +207,7 @@ BROWSE:
         ufk[7]= 0
         ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -352,7 +352,7 @@ BROWSE:
 
        RUN local-find-this(FALSE).
 
-       run highusagemore.p(INPUT HighUsage.invseq, HighUsage.cli).
+       RUN Mm/highusagemore.p(INPUT HighUsage.invseq, HighUsage.cli).
 
        ufkey = TRUE. 
        NEXT LOOP.
@@ -367,8 +367,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhHighUsage).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY Highusage.cli   .
 
        RUN local-UPDATE-record.                                  

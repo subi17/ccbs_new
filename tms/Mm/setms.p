@@ -144,7 +144,7 @@ IF MobSub.CLIType = "TARJ5" THEN DO:
        MsRequest.ReqCParam2 = "HSPA_ROAM_EU") */)
    THEN DO:
 
-      RUN air_get_account_details.p(MobSub.CLI, 
+      RUN Gwy/air_get_account_details.p(MobSub.CLI, 
                                     OUTPUT liCurrentServiceClass,
                                     OUTPUT lcError).
       IF lcError BEGINS "ERROR" THEN DO:

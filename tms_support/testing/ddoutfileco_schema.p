@@ -251,7 +251,7 @@ FOR EACH ttDueDate:
    
    IF icCSBFileForm EQ "XML" OR
       icCSBFileForm EQ "BOTH" THEN 
-      RUN ddoutfile_xml.p (INPUT-OUTPUT TABLE ttInvoice,  
+      RUN Inv/ddoutfile_xml.p (INPUT-OUTPUT TABLE ttInvoice,  
                     ttDueDate.DueDate,
                     ttDueDate.BankCode,
                     liPicked,

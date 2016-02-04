@@ -75,10 +75,10 @@ date1 = date(month(pvm),1,year(pvm)).
 date2 = date1 + 35.
 date2 = date(month(date2),1,year(date2)) - 1.
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.
 LOOP:
 repeat WITH FRAME rajat:
-    ehto = 9. RUN ufkey.
+    ehto = 9. RUN Syst/ufkey.
 
     UPDATE 
     date1    
@@ -106,7 +106,7 @@ repeat WITH FRAME rajat:
 TOIMI:
    repeat:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.
       IF toimi = 1 THEN NEXT LOOP.
       IF toimi = 8 THEN LEAVE LOOP.
       IF toimi = 5 THEN DO:
@@ -118,26 +118,26 @@ TOIMI:
 
    PUT STREAM excel UNFORMATTED
       ynimi  tab "Invoice summary by Salesman / agent".
-      RUN uexskip(1).
+      RUN Syst/uexskip(1).
 
    PUT STREAM excel UNFORMATTED
       "All amounts are from invoice rows; amounts are rounded and ex VAT".
-      RUN uexskip(1).
+      RUN Syst/uexskip(1).
 
    PUT STREAM excel UNFORMATTED
       "Invoicing Group" tab.
       if InvGroup = "" then put stream excel "ALL".
       ELSE PUT STREAM excel UNFORMATTED InvGroup.
-      RUN uexskip(1).
+      RUN Syst/uexskip(1).
 
    PUT STREAM excel UNFORMATTED
       "Salesman:" tab Salesman tab SmName.
-      RUN uexskip(1).
+      RUN Syst/uexskip(1).
 
    PUT STREAM excel UNFORMATTED
       "Invoices written:" tab date1 format "99.99.9999" " - "
                               date2 format "99.99.9999".
-      RUN uexskip(1).
+      RUN Syst/uexskip(1).
 
    PUT STREAM excel UNFORMATTED
    tab   
@@ -145,7 +145,7 @@ TOIMI:
    "Calls"        tab
    "Contr.Fees"   tab
    "Inv.ex.VAT"   tab.
-   RUN uexskip(2).
+   RUN Syst/uexskip(2).
 
    message "Printing ...".
 
@@ -200,7 +200,7 @@ TOIMI:
          Calls          tab
          cfees          tab
          totinv         tab.
-         RUN uexskip(1).
+         RUN Syst/uexskip(1).
       END.
    END.
 
@@ -213,7 +213,7 @@ TOIMI:
    cfees   = round((accum total cfees),0).
    totinv  = round((accum total totinv),0).
 
-   RUN uexskip(1).
+   RUN Syst/uexskip(1).
 
    PUT STREAM excel UNFORMATTED
    "All Salesman"    tab
@@ -221,7 +221,7 @@ TOIMI:
    Calls             tab
    cfees             tab
    totinv            tab.
-   RUN uexskip(1).
+   RUN Syst/uexskip(1).
 
    OUTPUT STREAM excel CLOSE.
 

@@ -40,7 +40,7 @@ do i = 1 to num-entries(orders, " ")with frame a:
    END.
    
    /* add initial fees and additional cost (delivery charge) and cash invoice */
-   RUN cashfee (Order.OrderID,
+   RUN Mc/cashfee (Order.OrderID,
              1,                     /* action 1=create fees */
              OUTPUT lcCharValue,
              OUTPUT ldAmount,

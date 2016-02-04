@@ -9,9 +9,9 @@
   Version ......: M15
   ------------------------------------------------------------------------- */
 
-RUN readpaymb.
+RUN Ar/readpaymb.
 
-RUN ddauthb.
+RUN Ar/ddauthb.
 
 QUIT.
 

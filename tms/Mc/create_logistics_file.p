@@ -429,7 +429,7 @@ FUNCTION fDelivSIM RETURNS LOG
       /* YDR-1034-Move the Sales invoice creation
          from order process to Dextra */
       IF Order.InvNum = 0 OR Order.InvNum = ? THEN DO:
-         RUN cashfee.p(Order.OrderID,
+         RUN Mc/cashfee.p(Order.OrderID,
                        1,                     /* action 1=create fees */
                        OUTPUT lcError,
                        OUTPUT ldeAmount,

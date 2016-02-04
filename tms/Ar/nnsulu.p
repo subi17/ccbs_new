@@ -280,9 +280,9 @@ FUNCTION fChgPage RETURNS LOGICAL
 END FUNCTION.
 
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.
 view FRAME MAIN.
-cfc = "puli". RUN ufcolor.
+cfc = "puli". RUN Syst/ufcolor.
 PAUSE 0 no-message.
 
 ASSIGN vapv = 0 kake = 0 ermk = 0 PrVou = 0 sutil = TRUE sukoo = TRUE
@@ -296,9 +296,9 @@ DISPLAY pvm1 pvm2 sutil sukoo xOnlySum
 toimi:
    repeat WITH FRAME MAIN ON ENDKEY UNDO toimi, NEXT toimi:
       ASSIGN ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.
       IF toimi = 1 THEN DO:
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.
          IF tosi2  = 9999999 THEN tosi2 = 0.
          repeat:
             UPDATE
@@ -328,7 +328,7 @@ toimi:
 
                   lcFrameField = FRAME-FIELD.
 
-                  RUN h-tmscodes(INPUT "Payment",  /* TableName*/
+                  RUN Help/h-tmscodes(INPUT "Payment",  /* TableName*/
                                        "PaymType", /* FieldName */
                                        "AccRec", /* GroupCode */
                                  OUTPUT lcCode).
@@ -341,7 +341,7 @@ toimi:
                   END.
 
                   ehto = 9.
-                  RUN ufkey.
+                  RUN Syst/ufkey.
                   NEXT. 
                END.
 
@@ -409,7 +409,7 @@ toimi:
 
       IF toimi = 5 THEN DO:
 
-         assign cfc = "uusi". RUN ufcolor.   ccc = cfc.
+         assign cfc = "uusi". RUN Syst/ufcolor.   ccc = cfc.
          DO i = 1 TO 2 WITH FRAME rival:
             valik = valikko[i].
             DISPLAY valik.

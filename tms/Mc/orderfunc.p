@@ -98,7 +98,7 @@ WITH ROW FrmRow width 40 OVERLAY FrmDown DOWN
     FRAME sel.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -180,7 +180,7 @@ REPEAT WITH FRAME sel:
            ehto   = 3 
            ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -341,7 +341,7 @@ REPEAT WITH FRAME sel:
            lcModule = ENTRY(1,ttbrowser.ofmodule,",").
            
            IF lcModule = "prinoinf" THEN DO:
-              RUN prinoinf (INPUT 0,iiOrderID,FALSE,OUTPUT lcError).           
+              RUN Mc/prinoinf (INPUT 0,iiOrderID,FALSE,OUTPUT lcError).           
 
               IF lcError > "" THEN MESSAGE
               lcerror
@@ -361,19 +361,19 @@ REPEAT WITH FRAME sel:
            END.
            
            ELSE IF lcModule = "Eventsel" THEN DO:
-              RUN eventsel("Order", Order.Brand + CHR(255) + STRING(Order.OrderID)).
+              RUN Mc/eventsel("Order", Order.Brand + CHR(255) + STRING(Order.OrderID)).
            END.
 
            ELSE IF lcModule = "nnasla" THEN DO:
-              RUN nnasla(0,Order.OrderID).
+              RUN Mc/nnasla(0,Order.OrderID).
            END. 
            
            ELSE IF lcModule = "mnpbr" THEN DO:
-              RUN mnpbr(Order.OrderId,0,0).
+              RUN Mnp/mnpbr(Order.OrderId,0,0).
            END. 
            
            ELSE IF lcModule = "offer" THEN DO:
-              IF Order.Offer NE "" THEN RUN offer.p(Order.Offer,FALSE).
+              IF Order.Offer NE "" THEN RUN Mc/offer.p(Order.Offer,FALSE).
            END. 
            
            ELSE IF lcModule = "orderinctrl" THEN DO:
@@ -399,7 +399,7 @@ REPEAT WITH FRAME sel:
            END.
 
            ELSE IF lcModule = "dms" THEN DO:
-              RUN dms.p(Order.OrderId,Order.ContractID).
+              RUN Mc/dms.p(Order.OrderId,Order.ContractID).
            END.
 
            ELSE 

@@ -158,7 +158,7 @@ FIRST MSOwner NO-LOCK USE-INDEX MSSeq WHERE
       WHEN 3 THEN DO:  /* fatime */
       
                 IF liPer > 0 THEN DO:
-                   RUN creafat (Customer.CustNum,
+                   RUN Mc/creafat (Customer.CustNum,
                                 MsOwner.MsSeq,
                                 ttCamp.CRowItem,
                                 0, /* amount */

@@ -100,7 +100,7 @@ FOR EACH Contact NO-LOCK WHERE
    
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Date , By 3, By 4".
@@ -178,7 +178,7 @@ REPEAT WITH FRAME sel:
         ufk[6]= 0
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -320,7 +320,7 @@ REPEAT WITH FRAME sel:
           ufkey = TRUE.
 
           /* browse list */
-          RUN conlist (ttContact.UserCode,
+          RUN Ar/conlist (ttContact.UserCode,
                        ttContact.ConDate,
                        0).
 

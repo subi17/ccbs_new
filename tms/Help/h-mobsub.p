@@ -41,7 +41,7 @@ form /* SEEK Code */
 
 
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
 
 MAIN:
 repeat:
@@ -88,7 +88,7 @@ print-line:
          ufk = 0 ufk[1] = 36 ufk[3] = 238 ufk[4] = 788 ufk[5] = 11
          ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = false.
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -200,8 +200,8 @@ BROWSE:
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*CLI*/
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.
+           ehto = 9. RUN Syst/ufkey. ufkey = true.
            clear frame hayr.
            set CLI with frame hayr.
            hide frame hayr no-pause.
@@ -247,7 +247,7 @@ BROWSE:
            "With IMSI No." mobsub.IMSI
            view-as alert-box error.
         END.   
-        ELSE run shmobu(IMSI.UserSeq).
+        ELSE RUN Mm/shmobu(IMSI.UserSeq).
 
         ufkey = true.
         NEXT loop.
@@ -281,7 +281,7 @@ CU-DATA:
 CU-Action:
            repeat with frame cust:
               assign ufk = 0 ufk[8] = 8 ehto =  0.
-              run ufkey.
+              RUN Syst/ufkey.
               case toimi:
                  WHEN 8 THEN do:
                     ufkey = true. 

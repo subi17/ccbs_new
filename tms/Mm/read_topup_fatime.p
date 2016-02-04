@@ -206,7 +206,7 @@ PROCEDURE pCreateFatime :
       else 
          RETURN "ERROR:Unknown MSISDN".
       
-   run creafat (msowner.invcust,
+   RUN Mc/creafat (msowner.invcust,
                 msowner.msseq,
                 lcKey, /* FatGroup */
                 ldAmt,

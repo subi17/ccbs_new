@@ -153,7 +153,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
          READKEY.
          nap = keylabel(LASTKEY).
       END.
@@ -161,7 +161,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 
       if lookup(nap,"1,f1") > 0 THEN DO:
          ASSIGN ehto = 9 ufkey = TRUE. 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
 
          REPEAT ON ENDKEY UNDO, LEAVE:
             UPDATE 
@@ -230,7 +230,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 END. /* toimi */
 
 ehto = 5.
-RUN ufkey.
+RUN Syst/ufkey.
 
 ASSIGN llOk      = TRUE
        lcErrFile = "".
@@ -295,14 +295,14 @@ ELSE IF liPrintTo = 2 THEN DO:
    ASSIGN tila = TRUE.
    {Syst/utuloste.i "return"}
 
-   RUN umakro (lcMacros).
+   RUN Syst/umakro (lcMacros).
 END.
 
 /* cover sheet */
 IF llCover THEN llCaSivu = -1.
 
 IF llOk THEN 
-RUN nnpura3 (INPUT CustNum,
+RUN Inv/nnpura3 (INPUT CustNum,
              INPUT pvm1,
              INPUT pvm2,
              INPUT tilak,
@@ -364,7 +364,7 @@ END.
 
 /* create fee */
 IF llCreFee THEN
-RUN creasfee (CustNum,
+RUN Mc/creasfee (CustNum,
               0,
               TODAY,
               "InvSpec",

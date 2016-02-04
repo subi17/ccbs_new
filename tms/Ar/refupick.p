@@ -132,7 +132,7 @@ FUNCTION fDispTotal RETURNS LOGICAL.
     
 END FUNCTION.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Customer ," +
@@ -243,7 +243,7 @@ REPEAT WITH FRAME sel:
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
 
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -380,8 +380,8 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.
+        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
         CLEAR FRAME f1.
         UPDATE liCustNum WITH FRAME f1.
         HIDE FRAME f1 NO-PAUSE.
@@ -406,8 +406,8 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.
+        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
         CLEAR FRAME f2.
         UPDATE ldAmt WITH FRAME f2.
         HIDE FRAME f2 NO-PAUSE.
@@ -433,7 +433,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
          ASSIGN ehto = 9
                 ufkey = TRUE.
-         RUN ufkey.
+         RUN Syst/ufkey.
          REPEAT WITH FRAME fBank ON ENDKEY UNDO, LEAVE:
             
             UPDATE lcBankAcc ldtDate WITH FRAME fBank EDITING:
@@ -443,11 +443,11 @@ REPEAT WITH FRAME sel:
                THEN DO:
                    ASSIGN gcHelpParam = "bank"
                           si-recid    = 0.
-                   RUN bankacc.
+                   RUN Mc/bankacc.
                    gcHelpParam = "".
                    
                    ehto = 9.
-                   RUN ufkey.
+                   RUN Syst/ufkey.
        
                    IF si-recid > 0 THEN DO:
                       FIND BankAcc WHERE RECID(BankAcc) = si-recid 
@@ -496,7 +496,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
         RUN local-find-this (FALSE).
 
-        RUN memo(INPUT 0,
+        RUN Mc/memo(INPUT 0,
                  INPUT "payment",
                  INPUT STRING(ttPaym.Voucher),
                  INPUT "Voucher number").
@@ -526,7 +526,7 @@ REPEAT WITH FRAME sel:
         
         IF NOT ok THEN NEXT LOOP.
         
-        RUN refufile (INPUT-OUTPUT TABLE ttPaym,
+        RUN Ar/refufile (INPUT-OUTPUT TABLE ttPaym,
                       lcBankAcc,
                       ldtDate,
                       OUTPUT i,
@@ -610,7 +610,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

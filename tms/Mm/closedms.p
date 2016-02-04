@@ -50,14 +50,14 @@ toimi:
          ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
 
           READKEY.
           ASSIGN
           nap = keylabel(LASTKEY).
       if lookup(nap,"1,f1") > 0 THEN DO:
-         ehto = 9. RUN ufkey.p.
+         ehto = 9. RUN Syst/ufkey.p.
          repeat WITH FRAME valinta ON ENDKEY UNDO, LEAVE:
             UPDATE 
                 lDate
@@ -81,7 +81,7 @@ ASSIGN tila = TRUE.
 
 MESSAGE "Printing in progress...".
 
-RUN unregrep2(INPUT lDate, INPUT lDef). 
+RUN Ar/unregrep2(INPUT lDate, INPUT lDef). 
 
 MESSAGE "Printing complete !" VIEW-AS ALERT-BOX.
 

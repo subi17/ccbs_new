@@ -64,7 +64,7 @@ DO WHILE TRUE:
 
       IF NOT LOCKED(bufQueue) AND NOT ERROR-STATUS:ERROR THEN DO:
 
-         RUN topuppaym(TopUpQueue.PPRequest,
+         RUN Mm/topuppaym(TopUpQueue.PPRequest,
                        TopUpQueue.CLI,
                        TopUpQueue.TopUpAmt,
                        TopUpQueue.VatAmt,
@@ -148,7 +148,7 @@ PROCEDURE pUnbarrPrepaid:
    IF lcUnBarring NE "" THEN DO:
 
       /* create barring request */
-      RUN barrengine.p (MobSub.MsSeq,
+      RUN Mm/barrengine.p (MobSub.MsSeq,
                       lcUnBarring,
                       {&REQUEST_SOURCE_SCRIPT}, /* source  */
                       "", /* creator */

@@ -22,7 +22,7 @@ for each mobsub no-lock where
    end.
    
    if not llfound then do:
-      run topupcamp.p (mobsub.msseq,
+      RUN Mm/topupcamp.p (mobsub.msseq,
                        output lireq).
    end.
     

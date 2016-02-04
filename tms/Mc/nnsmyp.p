@@ -39,7 +39,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhInvText).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhSalesman).
+      RUN Mc/eventview2.p(lhSalesman).
    END.
 END.
 
@@ -156,7 +156,7 @@ FUNCTION fRsName RETURNS CHARACTER.
 END FUNCTION.
 
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
 
 view frame sel.
 
@@ -187,13 +187,13 @@ repeat with frame sel:
    if must-add then do:  /* Salesman -ADD  */
       hide frame lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = false.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       add-new:
       repeat with frame lis on endkey undo add-new, leave add-new.
         pause 0 no-message.
         clear frame lis no-pause.
-        ehto = 9. run ufkey.
+        ehto = 9. RUN Syst/ufkey.
 
         PROMPT-FOR Salesman.Salesman.
         IF INPUT FRAME lis Salesman.Salesman = "" THEN UNDO, LEAVE add-new.
@@ -292,7 +292,7 @@ BROWSE:
 
         {Syst/uright1.i '"4,5,6,7"'} 
 
-        run ufkey.p.
+        RUN Syst/ufkey.p.
       end.
 
       hide message no-pause.
@@ -451,16 +451,16 @@ BROWSE:
            ufk[1] = 0 ufk[3] = 0. 
 
         ehto = 3. ufkey = false.
-        run ufkey.p.
+        RUN Syst/ufkey.p.
 
         readkey. nap = keylabel(lastkey).
 
          /* Haku sarakk. 1 */
          if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
 
-           cfc = "puyr". run ufcolor.
+           cfc = "puyr". RUN Syst/ufcolor.
            xReseller = "".
-           ehto = 9. run ufkey. ufkey = true.
+           ehto = 9. RUN Syst/ufkey. ufkey = true.
            DISPLAY lcBrand WITH FRAME F1.
            UPDATE lcBrand WHEN gcAllBrand
                   xReseller with frame f1.
@@ -481,9 +481,9 @@ BROWSE:
          /* Haku sarakk. 2 */
          else if lookup(nap,"2,f2") > 0 then do on endkey undo, next LOOP:
 
-           cfc = "puyr". run ufcolor.
+           cfc = "puyr". RUN Syst/ufcolor.
            SmName = "".
-           ehto = 9. run ufkey. ufkey = true.
+           ehto = 9. RUN Syst/ufkey. ufkey = true.
            DISPLAY lcBrand WITH FRAME F2.
            UPDATE lcBrand WHEN gcAllBrand
                   SmName with frame f2.
@@ -509,9 +509,9 @@ BROWSE:
 
          /* Haku 3 */
          else if lookup(nap,"3,f3") > 0 then do on endkey undo, next LOOP:
-           cfc = "puyr". run ufcolor.
+           cfc = "puyr". RUN Syst/ufcolor.
            xSalesman = "".
-           ehto = 9. run ufkey. ufkey = true.
+           ehto = 9. RUN Syst/ufkey. ufkey = true.
            DISPLAY lcBrand WITH FRAME F3.
            UPDATE lcBrand WHEN gcAllBrand
                   xSalesman with frame f3.
@@ -537,14 +537,14 @@ BROWSE:
 
      ELSE IF lookup(nap,"3,f3") > 0 THEN DO:
         FIND Salesman WHERE recid(Salesman) = rtab[FRAME-line(sel)] NO-LOCK.
-        RUN smname(Salesman.Salesman). 
+        RUN Mc/smname(Salesman.Salesman). 
         ASSIGN memory = recid(Salesman) must-print = true ufkey=true.
         NEXT LOOP.
      END.   
 
      ELSE IF lookup(nap,"4,f4") > 0 THEN DO:
         FIND Salesman WHERE recid(Salesman) = rtab[FRAME-line(sel)] NO-LOCK.
-        RUN contract(0,
+        RUN Mc/contract(0,
                      Salesman.Salesman). 
         ASSIGN memory = recid(Salesman) must-print = true ufkey=true.
         NEXT LOOP.
@@ -635,7 +635,7 @@ BROWSE:
         find Salesman where recid(Salesman) = rtab[frame-line(sel)] no-lock.
         pause 0.
         disp Salesman.Salesman Salesman.SmName.
-        ehto = 9. ufkey = true. run ufkey.
+        ehto = 9. ufkey = true. RUN Syst/ufkey.
         xSalesman = "". update xSalesman.
 
         IF xSalesman = Salesman.Salesman THEN DO:
@@ -696,8 +696,8 @@ BROWSE:
        exclusive-lock.
 
        assign fr-header = " CHANGE " ufkey = true ehto = 9.
-       run ufkey.
-       cfc = "lis". run ufcolor.
+       RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSalesman).
 

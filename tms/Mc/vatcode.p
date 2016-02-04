@@ -29,7 +29,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhVATCode).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhVATCode).
+      RUN Mc/eventview2.p(lhVATCode).
    END.
 
 END.
@@ -156,7 +156,7 @@ END FUNCTION.
 
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 
@@ -186,12 +186,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a VATCode  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       DO WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         DO TRANSAction:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR VATCode.VATCode
@@ -281,7 +281,7 @@ REPEAT WITH FRAME sel:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -425,9 +425,9 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        VATCode = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE liVATCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF liVATCode <> 0 THEN DO:
@@ -448,9 +448,9 @@ REPEAT WITH FRAME sel:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        VATPercent = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE VATPercent WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF VATPercent <> 0 THEN DO:
@@ -471,9 +471,9 @@ REPEAT WITH FRAME sel:
      /* Search BY col 3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        VATPercent = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE lcTaxZone WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
 
@@ -495,9 +495,9 @@ REPEAT WITH FRAME sel:
      /* Search BY col 4 */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        VATPercent = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE lcTaxClass WITH FRAME f4.
        HIDE FRAME f4 NO-PAUSE.
 
@@ -582,8 +582,8 @@ REPEAT WITH FRAME sel:
        /* change */
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor.
        CLEAR FRAME lis NO-PAUSE.
        DISPLAY VATCode.VATCode.
 

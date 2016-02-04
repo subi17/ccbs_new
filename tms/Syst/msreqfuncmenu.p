@@ -73,7 +73,7 @@ WITH ROW 2 OVERLAY FrmDown DOWN
     CENTERED
     FRAME sel.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 /* Empty label */
@@ -156,7 +156,7 @@ REPEAT WITH FRAME sel:
            ehto   = 3 
            ufkey  = FALSE.
       
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.

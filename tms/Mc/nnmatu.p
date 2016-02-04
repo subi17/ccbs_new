@@ -78,7 +78,7 @@ ASSIGN
 rajat:
 repeat WITH FRAME rajat:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.
    UPDATE
       ma-nro1    ma-nro2
       excel
@@ -96,7 +96,7 @@ toimi:
       ASSIGN
       ufk = 0 ehto = 0
       ufk[1] = 7 ufk[5] = 63 ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.
       IF toimi = 1 THEN NEXT  rajat.
       IF toimi = 8 THEN LEAVE rajat.
       IF toimi = 5 THEN  LEAVE toimi.
@@ -151,7 +151,7 @@ toimi:
                PUT STREAM excel UNFORMATTED
                   entry(i,exheader) tab.
             END.
-            RUN uexskip(2).
+            RUN Syst/uexskip(2).
          END.
 
          PUT STREAM excel UNFORMATTED
@@ -159,7 +159,7 @@ toimi:
             CCN.CCNName   tab
             BDest.BDest.
 
-         RUN uexskip(1).
+         RUN Syst/uexskip(1).
 
       END.
    END. /* FOR EACH */

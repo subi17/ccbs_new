@@ -254,7 +254,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
          ufk[1] = 0
          ufk[3] = 0.
 
-      RUN ufkey.
+      RUN Syst/ufkey.
    END.
 
    ELSE ASSIGN toimi = 1  
@@ -265,7 +265,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
          
-         ehto = 9. RUN ufkey.p.
+         ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE liNewCust1 WHEN llUpdCustNum
          WITH FRAME fCriter EDITING:
@@ -279,7 +279,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
 
                IF FRAME-FIELD = "liNewCust1" THEN DO:
 
-                  RUN h-customer (liAgrCust,
+                  RUN Help/h-customer (liAgrCust,
                                   "agrcust",
                                   "all").
                    
@@ -291,7 +291,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseInvCust, NEXT ChooseInvCust:
                END. 
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
                NEXT.
             END. 
  

@@ -70,7 +70,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN read_discount_member.p (ttFiles.DPMemberFile,
+   RUN Mc/read_discount_member.p (ttFiles.DPMemberFile,
                                OUTPUT liRead,
                                OUTPUT liError).
    

@@ -87,7 +87,7 @@ ASSIGN
                                     THEN STRING(llSubDetails,"d/s")
                                     ELSE "n")).
 
-RUN billing_report.p (ldaInvDate,
+RUN Inv/billing_report.p (ldaInvDate,
                       liInvType,
                       (IF llSubReport 
                        THEN "no*no**" 
@@ -118,7 +118,7 @@ IF llSubReport THEN DO:
       QUIT.
    END.   
 
-   RUN unbilled_subsqty.p (liPeriod,
+   RUN Inv/unbilled_subsqty.p (liPeriod,
                            ldaFromDate,
                            ldaToDate,
                            "append*trans*" + lcTransDir + "*" + lcFile,

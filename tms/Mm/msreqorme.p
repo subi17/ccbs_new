@@ -12,4 +12,4 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-RUN reqstatmenu.p({&REQTYPE_SUBSCRIPTION_CREATE}).
+RUN Mm/reqstatmenu.p({&REQTYPE_SUBSCRIPTION_CREATE}).

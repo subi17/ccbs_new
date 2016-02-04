@@ -17,7 +17,7 @@ DEF VAR lcError AS CHAR   NO-UNDO.
 /* new customers to post's address surveillance */
 fELog("DAILY","NewCust2PostiStarted").
 
-RUN postfilec (OUTPUT liQty,
+RUN Mc/postfilec (OUTPUT liQty,
                OUTPUT liDel,
                OUTPUT lcError).
 

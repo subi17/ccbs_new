@@ -29,7 +29,7 @@ IF llDoEvent THEN DO:
 
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhCGMember).
+      RUN Mc/eventview2.p(lhCGMember).
    END.
 
 END.

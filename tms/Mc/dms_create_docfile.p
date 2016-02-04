@@ -670,7 +670,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
                                               OUTPUT ldeMonthlyFee,
                                               OUTPUT liMonths,
                                               OUTPUT ldeFinalFee).
-   RUN offer_penaltyfee.p(Order.OrderID,
+   RUN Mc/offer_penaltyfee.p(Order.OrderID,
                           OUTPUT liPermancyLength,
                           OUTPUT ldePermanencyAmount).
    lcCaseFileRow =
@@ -826,7 +826,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                                               OUTPUT ldeMonthlyFee, 
                                               OUTPUT liMonths, /*24*/
                                               OUTPUT ldeFinalFee). /*residual*/
-   RUN offer_penaltyfee.p(Order.OrderID,
+   RUN Mc/offer_penaltyfee.p(Order.OrderID,
                           OUTPUT liPermancyLength,
                           OUTPUT ldePermanencyAmount).
    lcCaseFileRow =
@@ -1082,7 +1082,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                                                        OUTPUT ldeMonthlyFee,
                                                        OUTPUT liMonths,
                                                        OUTPUT ldeFinalFee).
-               RUN offer_penaltyfee.p(Order.OrderID,
+               RUN Mc/offer_penaltyfee.p(Order.OrderID,
                                       OUTPUT liPermancyLength,
                                       OUTPUT ldePermanencyAmount).
             /**/ 

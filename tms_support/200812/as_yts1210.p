@@ -35,7 +35,7 @@ FOR EACH msrequest where
          IF AVAILABLE MsRequest2 THEN DO:
          
 
-          RUN barrengine.p (MobSub.MsSeq,
+          RUN Mm/barrengine.p (MobSub.MsSeq,
                       "UN" + "Y_PRODINT",
                       "5",                 /* source  */
                       "",                  /* creator */

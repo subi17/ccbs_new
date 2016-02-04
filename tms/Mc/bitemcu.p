@@ -52,7 +52,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhSingleFee).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhSingleFee).
+      RUN Mc/eventview2.p(lhSingleFee).
    END.
 
 END.
@@ -262,7 +262,7 @@ FIND Customer WHERE Customer.CustNum  = iiCustNum  NO-LOCK NO-ERROR.
 lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
                               BUFFER Customer).
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first. 
@@ -301,7 +301,7 @@ REPEAT WITH FRAME sel:
             ufk[8]    = 8
             ehto      = 3.
       
-         RUN ufkey. 
+         RUN Syst/ufkey. 
 
          DISPLAY
             " A) Charges and Compensations  " @ lcMenu[1]  SKIP
@@ -342,7 +342,7 @@ REPEAT WITH FRAME sel:
         must-add = FALSE
         must-print = TRUE.
 
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       IF llUseCCTool THEN DO :
            /* using predefined charges and compensations */
@@ -356,7 +356,7 @@ REPEAT WITH FRAME sel:
            REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
       
            PAUSE 0 NO-MESSAGE.
-           ehto = 9. RUN ufkey.
+           ehto = 9. RUN Syst/ufkey.
         
            REPEAT TRANSACTION WITH FRAME lis:
               PAUSE 0.
@@ -476,7 +476,7 @@ REPEAT WITH FRAME sel:
            ufk[1] = 0
            ufk[2] = 0.
            
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -613,8 +613,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        
        CLEAR  FRAME f1.
        
@@ -654,8 +654,8 @@ REPEAT WITH FRAME sel:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f2.
        SET BillPeriod WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -678,7 +678,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN 
      DO: /* MEMO */
         RUN local-find-this(false).
-        RUN memo(INPUT SingleFee.Custnum,
+        RUN Mc/memo(INPUT SingleFee.Custnum,
                  INPUT "SingleFee",
                  INPUT STRING(FMItemId),
                  INPUT "SingleFee").
@@ -768,7 +768,7 @@ REPEAT WITH FRAME sel:
        /* change */
        RUN local-find-this(FALSE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY SingleFee.CustNum.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSingleFee).
@@ -1028,14 +1028,14 @@ PROCEDURE local-update-record:
                                (NOT SingleFee.Billed OR NEW SingleFee)
                 ufk[8] = 8.
              
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
       ELSE toimi = 1.
       
       IF toimi = 1 AND lcRight = "RW" THEN DO:
 
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
          
          si-recid2 = SingleFee.CustNum.
          lcCLI = "".
@@ -1064,7 +1064,7 @@ PROCEDURE local-update-record:
 
             IF FRAME-FIELD = "keyvalue" and keylabel(Lastkey) = "F9"
             THEN DO:
-                IF INPUT SingleFee.HostTable = "Customer" THEN RUN nnasel.
+                IF INPUT SingleFee.HostTable = "Customer" THEN RUN Mc/nnasel.
                 ELSE DO:
                    MESSAGE "No help available." SKIP
                            "Check ID from subscription or order."
@@ -1076,12 +1076,12 @@ PROCEDURE local-update-record:
              END.
 
              IF FRAME-FIELD = "BillTarget" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
-                RUN h-billtarg(INPUT INPUT FRAME lis SingleFee.CustNum).
+                RUN Help/h-billtarg(INPUT INPUT FRAME lis SingleFee.CustNum).
                 IF siirto NE ? THEN DO:
                    ASSIGN SingleFee.BillTarget = INT(siirto).
                    DISP SingleFee.BillTarget WITH FRAME lis.
                    ASSIGN ehto = 9 ufkey = TRUE.
-                   RUN ufkey.p.
+                   RUN Syst/ufkey.p.
                    NEXT.
                 END.
              END.
@@ -1241,7 +1241,7 @@ PROCEDURE local-update-record:
                 END. /* KeyValue */
                            
                 ELSE IF FRAME-FIELD = "period" THEN DO:
-                   RUN uperch(INPUT FRAME lis SingleFee.BillPeriod,OUTPUT rc).
+                   RUN Syst/uperch(INPUT FRAME lis SingleFee.BillPeriod,OUTPUT rc).
                    IF rc NE 0 THEN NEXT.
                    IF INPUT FRAME lis SingleFee.Concerns[1] = 0 THEN DISP
                       INPUT FRAME lis SingleFee.BillPeriod @ 
@@ -1329,7 +1329,7 @@ PROCEDURE cctool:
             ufk[8]    = 8
             ehto      = 3.
       
-         RUN ufkey . 
+         RUN Syst/ufkey . 
 
           /* dialog to fetch the charge/compensation  amount using 
             ServFee, FeeModel and FMItem  */
@@ -1339,7 +1339,7 @@ PROCEDURE cctool:
           DEFINE VARIABLE loutValueId AS CHARACTER NO-UNDO. 
 
 
-          RUN h-dialog.p (INPUT TABLE ttable BY-REFERENCE ,
+          RUN Help/h-dialog.p (INPUT TABLE ttable BY-REFERENCE ,
                           INPUT lctitle,
                           OUTPUT lrecid,
                           OUTPUT loutValueId).
@@ -1466,12 +1466,12 @@ PROCEDURE cctool:
 
            IF NOT llChanged THEN ASSIGN 
                toimi    = 1.
-           ELSE RUN ufkey. 
+           ELSE RUN Syst/ufkey. 
                           
            IF toimi = 1 AND lcRight = "RW" THEN DO:
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
           
               REPEAT TRANSACTION WITH FRAME lis-cctools ON ENDKEY UNDO, LEAVE:
             
@@ -1568,7 +1568,7 @@ PROCEDURE cctool:
          DEF VAR  liReqId    AS INT NO-UNDO.
 
 
-         RUN create_charge_comp ({&REQUEST_SOURCE_MANUAL_TMS}, 
+         RUN Mm/create_charge_comp ({&REQUEST_SOURCE_MANUAL_TMS}, 
                                  MobSub.MsSeq,
                                  "",  /* katun, */
                                  ldFItemAmt,

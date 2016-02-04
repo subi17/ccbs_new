@@ -193,7 +193,7 @@ repeat trans:
       IF NOT AVAIL MsRequest THEN DO:
   
          if not llSimulate then
-         RUN ordersender.p(MNPProcess.OrderId,
+         RUN Mc/ordersender.p(MNPProcess.OrderId,
                          OUTPUT liOrderQty).        
          
       END.

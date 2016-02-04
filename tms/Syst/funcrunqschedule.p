@@ -24,7 +24,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhFuncRunQSchedule).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhFuncRunQSchedule).
+      RUN Mc/eventview2(lhFuncRunQSchedule).
    END.
 
 END.
@@ -111,7 +111,7 @@ IF NOT AVAILABLE FuncRunQueue THEN DO:
 END.
 lcQueueDesc = FuncRunQueue.QueueDesc.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -140,7 +140,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a FuncRunQSchedule  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -148,7 +148,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
 
         REPEAT TRANS WITH FRAME lis:
 
@@ -174,7 +174,7 @@ REPEAT WITH FRAME sel:
            UNDO add-row, LEAVE add-row.
 
            FuncRunQSchedule.RunState = "Scheduled".
-           RUN funcrunqsparam_initialize.p (FuncRunQSchedule.FRQScheduleID).
+           RUN Syst/funcrunqsparam_initialize.p (FuncRunQSchedule.FRQScheduleID).
 
            RUN pInvoiceTypeParameters.
            
@@ -260,7 +260,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -485,8 +485,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFuncRunQSchedule).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -523,7 +523,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.
 
 fCleanEventObjects().
 
@@ -639,7 +639,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
       ELSE toimi = 1.
       
@@ -650,7 +650,7 @@ PROCEDURE local-UPDATE-record:
                 
             FIND CURRENT FuncRunQSchedule EXCLUSIVE-LOCK.
             ehto = 9.
-            RUN ufkey.
+            RUN Syst/ufkey.
          
             lcOldMode = FuncRunQSchedule.RunMode.
              
@@ -755,18 +755,18 @@ PROCEDURE local-UPDATE-record:
       END.
 
       ELSE IF toimi = 2 THEN 
-         RUN errorlog.p ("FuncRunQSchedule",
+         RUN Mc/errorlog.p ("FuncRunQSchedule",
                          STRING(FuncRunQSchedule.FRQScheduleID),
                          "").
 
       ELSE IF toimi = 3 THEN DO:
-         RUN funcrunexec.p (0,FuncRunQSchedule.FRQScheduleID).
+         RUN Syst/funcrunexec.p (0,FuncRunQSchedule.FRQScheduleID).
          IF RETURN-VALUE = "Updated" THEN 
             LEAVE. 
       END.
       
       ELSE IF toimi = 4 THEN DO:
-         RUN funcrunqsparam.p (FuncRunQSchedule.FRQScheduleID).
+         RUN Syst/funcrunqsparam.p (FuncRunQSchedule.FRQScheduleID).
       END.
 
       ELSE IF toimi = 5 THEN DO:
@@ -1000,7 +1000,7 @@ PROCEDURE pInvoiceTypeParameters:
       END CASE.
    END.
 
-   RUN funcrunqsparam_initialize.p (FuncRunQSchedule.FRQScheduleID).
+   RUN Syst/funcrunqsparam_initialize.p (FuncRunQSchedule.FRQScheduleID).
    
 END PROCEDURE.
 

@@ -149,7 +149,7 @@ PROCEDURE pPrePaidPlatform:
    SET-SIZE(lmXML) = 0.
 
    /* wait only 6 seconds for response */
-   RUN tg(lcHTTPHeader + lcXML,lcURL,3,2,"<").
+   RUN Gwy/tg(lcHTTPHeader + lcXML,lcURL,3,2,"<").
    
    lcReturn = RETURN-VALUE.
 

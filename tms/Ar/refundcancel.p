@@ -105,7 +105,7 @@ PROCEDURE pCancelRefund:
       END CASE.    
 
       IF liPaymType NE ? THEN 
-      RUN createpaym (MsRequest.CustNum,
+      RUN Ar/createpaym (MsRequest.CustNum,
                       MsRequest.ReqIParam1,   /* invoice */
                       lcCLI,
                       TODAY,

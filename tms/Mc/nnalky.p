@@ -4,12 +4,12 @@
   SOVELLUTUS ...: NN
   AUTHOR .......: TT
   CREATED ......: 06.02.1997
-  changePVM ....: 22.04.1997 pt,  RUN nnasle
+  changePVM ....: 22.04.1997 pt,  RUN Mc/nnasle
                   04.05.1997 pt, 2 x 2 jArjestystA ym.
                   07.05.1998 kl, myyja1 & 2 from INT into CHAR
                   13.05.1998 kl, PriceList InvGroup Reseller
                   02.11.1998 pt, exdir: default BY user
-                  11.11.1998 pt, NEW FUNCTION into F7: RUN nnxorcu
+                  11.11.1998 pt, NEW FUNCTION into F7: RUN Mc/nnxorcu
                   09.01.1999 pt, CustGroup
                   26.09.2002/aam PriceList removed 
                   12.09.2003/aam brand
@@ -116,7 +116,7 @@ form
 with width 80 title color value(ctc) " CUSTOMER LISTS " side-labels
    COLOR value(cfc) OVERLAY FRAME rajat.
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.
 PAUSE 0 no-message.
 
 ASSIGN
@@ -134,7 +134,7 @@ WITH FRAME rajat.
 rajat:
 repeat WITH FRAME rajat:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.
    UPDATE
       CustGroup validate(input CustGroup = "" OR
          can-find(FIRST CustGroup where
@@ -206,7 +206,7 @@ toimi:
                      ufk[5] = 808 ufk[6] = 847 ufk[7] = 997 ufk[8] = 8
              ehto = 0.
 
-      RUN ufkey.
+      RUN Syst/ufkey.
 
       IF toimi = 1 THEN  NEXT  RAJAT.
       IF toimi = 8 THEN  LEAVE RAJAT.
@@ -214,7 +214,7 @@ toimi:
       IF toimi = 4 OR toimi = 6 OR toimi = 7 THEN DO:
          /* Ask Name FOR Excel / XOR File */
          if toimi = 7 then exFile = exdir + "/" + "xorcod.txt".
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.
          UPDATE exFile WITH FRAME rajat.
          if exFile = "" THEN NEXT toimi.
       END.
@@ -243,7 +243,7 @@ toimi:
          tila =true.
          {Syst/tmsreport.i "return"}
 
-         RUN nnasll(CustGroup,
+         RUN Mc/nnasll(CustGroup,
                     asno1,asno2,
                     myyja1,myyja2,
                     Category,
@@ -259,7 +259,7 @@ toimi:
 
       /* Large Excel/ascii printout */
       IF toimi = 6 THEN DO:
-         RUN nnasle(CustGroup,
+         RUN Mc/nnasle(CustGroup,
                     asno1,asno2,
                     myyja1,myyja2,
                     Category,
@@ -285,7 +285,7 @@ toimi:
             {Syst/tmsreport.i "return"}
          END.
 
-         RUN nnasls( CustGroup,
+         RUN Mc/nnasls( CustGroup,
                      asno1,asno2,
                      myyja1,myyja2,
                      Category,
@@ -308,7 +308,7 @@ toimi:
             PAUSE no-message.
          END.
 
-         RUN nnxorcu( CustGroup,
+         RUN Mc/nnxorcu( CustGroup,
                       asno1,asno2,
                       myyja1,myyja2,
                       Category,

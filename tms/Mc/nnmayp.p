@@ -16,7 +16,7 @@
                   24.02.03/tk  user rights replaced with tokens
                   04.03.03/aam RepCCN added 
                   20.03.03/aam one parameter added for tariff.p
-                  04.04.03 kl run tariff, new parameter
+                  04.04.03 kl RUN Mc/tariff, new parameter
                   27.08.03/jp tariff needs 6 parameters
                   08.09.03/aam brand
                   16.10.03/aam report ccn removed
@@ -44,7 +44,7 @@ IF llDoEvent THEN DO:
 
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhCCN).
+      RUN Mc/eventview2.p(lhCCN).
    END.
 END.
 
@@ -114,7 +114,7 @@ form /* report ccn  */
     with row 4 col 2 title color value(ctc) " FIND REPORT CCN "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
    FIND FIRST CCN WHERE CCN.Brand = lcBrand NO-LOCK NO-ERROR.
    IF AVAILABLE CCN THEN ASSIGN memory = recid(CCN)
@@ -134,13 +134,13 @@ LOOP:
 
    IF must-add THEN DO:  /* CCN -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.
          DO TRANSAction:
 
             DISPLAY lcBrand @ CCN.Brand.
@@ -253,7 +253,7 @@ BROWSE:
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -421,9 +421,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.
         haku = 0.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
         UPDATE lcBrand WHEN gcAllBrand
                haku WITH FRAME hayr.
@@ -443,9 +443,9 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.
         haku2 = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
         UPDATE lcBrand WHEN gcAllBrand
                haku2 WITH FRAME hayr2.
@@ -467,7 +467,7 @@ BROWSE:
      /* translations */
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0 THEN DO:  
          FIND CCN WHERE RECID(CCN) = rtab[FRAME-LINE] NO-LOCK.
-         RUN invlang(3,STRING(CCN.CCN)).
+         RUN Mc/invlang(3,STRING(CCN.CCN)).
          
          ufkey = TRUE.
          NEXT LOOP.
@@ -476,7 +476,7 @@ BROWSE:
      else if lookup(nap,"4,f4") > 0 THEN DO:  /* tariffs */
         FIND CCN where recid(CCN) = rtab[FRAME-LINE] NO-LOCK.
 
-        RUN tariff(0,CCN.CCN,"",0,"",0). 
+        RUN Mc/tariff(0,CCN.CCN,"",0,"",0). 
 
         UFKEY = TRUE.
         NEXT. 
@@ -578,8 +578,8 @@ BROWSE:
         FIND CCN where recid(CCN) = rtab[frame-line(sel)]
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        RUN ufkey.
-        cfc = "lis". RUN ufcolor.
+        RUN Syst/ufkey.
+        cfc = "lis". RUN Syst/ufcolor.
         DISPLAY CCN.Brand CCN.CCN .
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCCN).

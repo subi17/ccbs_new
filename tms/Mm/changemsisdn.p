@@ -240,7 +240,7 @@ PROCEDURE pChangeMSISDN:
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSISDN).
    
    IF MsRequest.CreateFees THEN 
-         RUN create_charge_comp.p(
+         RUN Mm/create_charge_comp.p(
             {&REQUEST_SOURCE_MANUAL_TMS},
             Mobsub.MsSeq,   
             MsRequest.UserCode,

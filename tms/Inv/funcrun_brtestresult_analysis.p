@@ -50,7 +50,7 @@ IF liBRTestQueueID = 0 THEN DO:
    QUIT.
 END.   
 
-RUN brtestresult_analysis.p(liBRTestQueueID,
+RUN Inv/brtestresult_analysis.p(liBRTestQueueID,
                             ldaInvDate,
                             liInvType,
                             liFRProcessID,

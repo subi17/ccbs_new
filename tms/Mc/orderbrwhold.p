@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------------
   MODULE .......: order34.p
-  TASK .........: run order.p with input parameters
+  TASK .........: RUN Mc/order.p with input parameters
   APPLICATION ..: tms
   AUTHOR .......: tk
   CREATED ......: 07.10.03 
@@ -8,4 +8,4 @@
   Version ......: SHARK
   ---------------------------------------------------------------------- */
 {Syst/commali.i}
-run order(1,8,"8",0).
+RUN Mc/order(1,8,"8",0).

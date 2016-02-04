@@ -22,7 +22,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhxxcustomer).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhxxcustomer).
+      RUN Mc/eventview2(lhxxcustomer).
    END.
 END.
 

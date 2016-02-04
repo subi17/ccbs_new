@@ -23,7 +23,7 @@ IF llDoEvent THEN DO FOR Customer:
    RUN StarEventInitialize(lhCustomer).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhCustomer).
+      RUN Mc/eventview2.p(lhCustomer).
    END.
 
 END.
@@ -97,13 +97,13 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       ufk[1]= 7  
       ufk[8]= 8 
       ehto = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.
 
    IF toimi = 1 THEN DO:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
             
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.
          
          FIND CURRENT Customer EXCLUSIVE-LOCK.
 

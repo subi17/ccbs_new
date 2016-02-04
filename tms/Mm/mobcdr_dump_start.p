@@ -66,7 +66,7 @@ PROCEDURE pStartDump:
    IF RETURN-VALUE BEGINS "ERROR" THEN 
       RETURN RETURN-VALUE.
  
-   RUN mobcdr_dump.p (icDumpID,
+   RUN Mm/mobcdr_dump.p (icDumpID,
                       icFile,
                       icDumpMode,
                       idLastDump,

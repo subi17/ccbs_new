@@ -23,7 +23,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhTMSCodes).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhTMSCodes).
+      RUN Mc/eventview2.p(lhTMSCodes).
    END.
 
 END.
@@ -109,7 +109,7 @@ form
     FRAME f4.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -139,12 +139,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a TMSCodes  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR TMSCodes.Tablename.
@@ -230,7 +230,7 @@ BROWSE:
         ufk[6]= 4
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -368,8 +368,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        SET TMSCodes WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -391,8 +391,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME F2.
        SET CodeGroup WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -412,9 +412,9 @@ BROWSE:
 
      /* UPDATE memo */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". run ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.
         ehto = 9. 
-        RUN ufkey. ufkey = TRUE.
+        RUN Syst/ufkey. ufkey = TRUE.
         RUN local-find-this(TRUE).
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTMSCodes).
         UPDATE TMSCodes.Memo WITH FRAME f4.
@@ -425,7 +425,7 @@ BROWSE:
      /* translations */
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  
         FIND TMSCodes WHERE RECID(TMSCodes) = rtab[FRAME-LINE] NO-LOCK.
-        RUN invlang(10,TMSCodes.TableName + "|" +
+        RUN Mc/invlang(10,TMSCodes.TableName + "|" +
                        TMSCodes.FieldName + "|" + 
                        TMSCodes.CodeValue).
           
@@ -493,8 +493,8 @@ BROWSE:
        /* change */
        RUN local-find-this(FALSE).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY TMSCodes.Tablename.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTMSCodes).
@@ -612,7 +612,7 @@ PROCEDURE local-UPDATE-record:
             ufk  = 0
             ufk[1] = 7
             ufk[8] = 8.
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
       ELSE toimi = 1.
          
@@ -621,7 +621,7 @@ PROCEDURE local-UPDATE-record:
          FIND CURRENT TMSCodes EXCLUSIVE-LOCK.   
 
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
 
          UPDATE
             TMSCodes.FieldName  

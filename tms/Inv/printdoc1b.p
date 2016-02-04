@@ -196,7 +196,7 @@ IF NOT lcFileType BEGINS "XML" THEN
 
 /* print */
 IF lcFileType BEGINS "XML" THEN 
-   RUN invoice_xml (INPUT-OUTPUT TABLE ttInvoice,
+   RUN Inv/invoice_xml (INPUT-OUTPUT TABLE ttInvoice,
                     ldtNameDate,
                     liInvCount,
                     llSeparate,

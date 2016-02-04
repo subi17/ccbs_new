@@ -93,7 +93,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhMSOwner).
+      RUN Mc/eventview2.p(lhMSOwner).
    END.
 END.
 
@@ -214,7 +214,7 @@ FUNCTION fChkTime RETURNS LOGICAL
 END FUNCTION.                    
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 
 orders = "By Date,By 2,By 3, By 4".
 
@@ -248,12 +248,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a MSOwner  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR MSOwner.CLI
@@ -342,7 +342,7 @@ BROWSE:
         ufk[4]= 7 WHEN llVendor AND NOT llTerminated
         ufk[5]= 0  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -495,7 +495,7 @@ BROWSE:
 
         IF llUpdate AND lcRight = "RW" THEN DO:
 
-           ehto = 9. RUN ufkey.
+           ehto = 9. RUN Syst/ufkey.
 
            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOwner).
 
@@ -572,8 +572,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
-       ASSIGN ac-hdr = " VIEW MSOwner " ufkey = TRUE ehto = 9. /*RUN ufkey.*/
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW MSOwner " ufkey = TRUE ehto = 9. /*RUN Syst/ufkey.*/
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY MSOwner.CLI.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOwner).
        RUN local-UPDATE-record.                                  
@@ -693,7 +693,7 @@ END PROCEDURE.
 
 PROCEDURE local-UPDATE-record:
 
-   ehto = 3. ufk = 0. run ufkey.p.
+   ehto = 3. ufk = 0. RUN Syst/ufkey.p.
    ufkey = true.
 
    DEF VAR llUpdate    AS LOG  NO-UNDO. 

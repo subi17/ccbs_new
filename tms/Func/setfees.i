@@ -345,7 +345,7 @@ FOR EACH FMItem NO-LOCK  WHERE
            TITLE "PERIODICAL FEE CREATED".
 
            /* THEN we SHOW always ALL Billable items ... */          
-           RUN nncobi(xFixedFee.FFNum).
+           RUN Mc/nncobi(xFixedFee.FFNum).
         END.
 
      END.

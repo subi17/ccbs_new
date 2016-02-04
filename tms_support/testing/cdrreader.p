@@ -90,7 +90,7 @@ PROCEDURE pUserInput:
          lcMeas WITH FRAME lis EDITING:
       
          IF ufkey THEN DO:
-            ASSIGN ehto = 9. RUN ufkey.p.
+            ASSIGN ehto = 9. RUN Syst/ufkey.p.
             ufkey = false.
          END.
 
@@ -100,7 +100,7 @@ PROCEDURE pUserInput:
             
          IF KEYLABEL(LASTKEY) = "F9" AND 
             FRAME-FIELD = "lcCDRFile" THEN DO:
-            RUN filebrowser.p(
+            RUN Syst/filebrowser.p(
                lcRootDir + "cdrfiles/*.asc").
             LCcdrfILE = RETURN-VALUE.
             DISP lcCDRFile WITH FRAME lis.

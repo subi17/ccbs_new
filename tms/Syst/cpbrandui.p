@@ -65,8 +65,8 @@ END.
 
 lcNewName = Brand.BRName.
 
-cfc = "lis". RUN ufcolor.
-ehto = 9. RUN ufkey.
+cfc = "lis". RUN Syst/ufcolor.
+ehto = 9. RUN Syst/ufkey.
 
 PAUSE 0.
 DISPLAY icNewBrand lcNewName WITH frame main. 
@@ -78,7 +78,7 @@ repeat WITH FRAME main:
 
    REPEAT WITH FRAME main ON ENDKEY UNDO, LEAVE:
    
-      ehto = 9. RUN ufkey.
+      ehto = 9. RUN Syst/ufkey.
       pause 0 no-MESSAGE.
 
       update
@@ -129,7 +129,7 @@ repeat WITH FRAME main:
       ASSIGN
       ufk = 0 ufk[1] = 132 ufk[4] = 0  ufk[5] = 795 ufk[8] = 8 
       ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.
 
       IF toimi = 1 THEN next LOOP.
 
@@ -165,7 +165,7 @@ END.
 
 IF llCopy THEN DO:
 
-   RUN cpbrand.p (lcSrcBrand,
+   RUN Syst/cpbrand.p (lcSrcBrand,
                   icNewBrand,
                   OUTPUT llCopy).
 

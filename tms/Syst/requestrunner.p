@@ -97,7 +97,7 @@ IF liQueue = 0 THEN DO:
       gcHelpParam = "choose"
       si-recid    = 0.
       
-   RUN requestqueue.
+   RUN Syst/requestqueue.
    
    IF si-recid > 0 THEN DO:
       FIND RequestQueue WHERE RECID(RequestQueue) = si-recid

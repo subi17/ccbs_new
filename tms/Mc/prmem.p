@@ -70,7 +70,7 @@ FORM HEADER
 
 /* Get label for table */
 tabLbl = HostTable.
-RUN ufile1(INPUT HostTable, OUTPUT db-name, OUTPUT tabLbl).
+RUN Syst/ufile1(INPUT HostTable, OUTPUT db-name, OUTPUT tabLbl).
 
 /* user names */
 FIND TMSUser WHERE TMSUser.UserCode = memo.CreUser NO-LOCK NO-ERROR.
@@ -90,7 +90,7 @@ MemoTitle = "Memo belongs to   " + tabLbl + " '" + KeyValue + "'".
 
 /* copy memotext (line BY line) into temp table */
 
-RUN ulfscon(memo.memotext,60,OUTPUT TABLE t-text).
+RUN Syst/ulfscon(memo.memotext,60,OUTPUT TABLE t-text).
 
 /* print page header */
 sl = 1.

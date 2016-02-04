@@ -36,7 +36,7 @@ IF llDoEvent THEN DO:
 
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCTServPac).
+      RUN Mc/eventview2(lhCTServPac).
    END.
 
 END.
@@ -145,7 +145,7 @@ FUNCTION fServTypeName RETURNS LOGIC
                              STRING(iiServType)).
 END FUNCTION.
  
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -168,14 +168,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CTServPac  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -285,7 +285,7 @@ REPEAT WITH FRAME sel:
         ufk[8]= 8 
         ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -418,8 +418,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
@@ -443,7 +443,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(FALSE).                                        
        
        /*  elements of a CLI type */
-       RUN ctservel(icCLIType,
+       RUN Mm/ctservel(icCLIType,
                     CTServPac.ServPac,
                     CTServPac.FromDate,
                     CTServPac.ToDate).
@@ -532,7 +532,7 @@ REPEAT WITH FRAME sel:
        REPEAT ON ENDKEY UNDO, LEAVE:
                 
           ehto = 9.
-          RUN ufkey.
+          RUN Syst/ufkey.
           
           PAUSE 0.
           UPDATE ldtFromDate WITH FRAME fCopyComp.
@@ -542,7 +542,7 @@ REPEAT WITH FRAME sel:
                  ufk[5] = 795
                  ufk[8] = 8
                  ehto   = 0.
-          RUN ufkey.        
+          RUN Syst/ufkey.        
           
           IF toimi = 5 AND ldtFromDate NE ? THEN DO:
           
@@ -572,7 +572,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCTServPac).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CTServPac.CLIType.
 
        RUN local-UPDATE-record.                                  
@@ -706,11 +706,11 @@ PROCEDURE local-UPDATE-record:
          ufk[1] = 7 WHEN lcRight = "RW"
          ufk[8] = 8
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.
          
       IF toimi = 1 THEN DO:
       
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.
       
          FIND CURRENT CTServPac EXCLUSIVE-LOCK.
          
@@ -728,7 +728,7 @@ PROCEDURE local-UPDATE-record:
                   FRAME-FIELD = "ServType"
              THEN DO:
 
-                RUN h-tmscodes(INPUT "CTServPac",    /* TableName */
+                RUN Help/h-tmscodes(INPUT "CTServPac",    /* TableName */
                                      "ServType",  /* FieldName */
                                      "MobSub",  /* GroupCode */
                                OUTPUT lcCode).
@@ -738,7 +738,7 @@ PROCEDURE local-UPDATE-record:
                 END.   
                   
                 ehto = 9.
-                RUN ufkey.
+                RUN Syst/ufkey.
                 NEXT. 
              END.
     

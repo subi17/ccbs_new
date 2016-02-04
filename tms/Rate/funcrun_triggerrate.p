@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------------
   MODULE .......: funcrun_triggerrate
-  TASK .........: Run rerate from FuncRun
+  TASK .........: RUN Rate/rerate from FuncRun
   AUTHOR .......: 14.02.12/aam 
   ---------------------------------------------------------------------- */
 
@@ -34,7 +34,7 @@ END.
 
 RUN pGetFuncRunProcessParameters(liFRProcessID).
 
-RUN triggerrate.p (liFRProcessID,
+RUN Rate/triggerrate.p (liFRProcessID,
                    liUpdateInterval,
                    OUTPUT liItems).
                    

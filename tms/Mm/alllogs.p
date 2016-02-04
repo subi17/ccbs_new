@@ -46,7 +46,7 @@ IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
 ELSE lcUserName = "".
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey. 
  
  DISPLAY
  "A) Subscription EventLog       "  @ menuc[1]    SKIP
@@ -62,11 +62,11 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    IF FRAME-INDEX EQ 1 THEN DO:
-      RUN evbrmob.p(pimsseq).
+      RUN Mm/evbrmob.p(pimsseq).
    END.
 
    ELSE IF FRAME-INDEX = 2 THEN DO :
-      run solog2.p(pimsSeq).
+      RUN Mm/solog2.p(pimsSeq).
    END.
 
    ELSE IF FRAME-INDEX = 3 THEN DO:
@@ -75,11 +75,11 @@ DO WHILE TRUE:
                  Order.MNPStatus > 0 NO-LOCK NO-ERROR.   
       IF NOT AVAIL Order THEN 
          MESSAGE "Order not found!" VIEW-AS ALERT-BOX ERROR.
-      ELSE RUN mnpbr.p(Order.OrderId,0,0).
+      ELSE RUN Mnp/mnpbr.p(Order.OrderId,0,0).
    END.
    
    ELSE IF FRAME-INDEX EQ 4 THEN DO:   
-      RUN callalarm.p(0, lccli).
+      RUN Mm/callalarm.p(0, lccli).
    END.
    ELSE IF FRAME-INDEX > 4 OR FRAME-INDEX = 0 THEN LEAVE.
 

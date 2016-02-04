@@ -43,15 +43,15 @@ DEF VAR fhVDHandle AS HANDLE  NO-UNDO.
 /* volume discount functions */
 FUNCTION fVolDiscMob RETURNS LOG (BUFFER VMobCDR FOR MobCDR,iiAgrCust AS INT) 
    IN fhVDHandle. 
-RUN voldisc.p PERSISTENT SET fhVDHandle. 
+RUN Inv/voldisc.p PERSISTENT SET fhVDHandle. 
 
 &IF "{&EDRHandling}" NE "NO"
 &THEN
 DEF VAR fhDCHandle AS HANDLE  NO-UNDO.
 DEF VAR fhRRHandle AS HANDLE  NO-UNDO.
 
-RUN domcopers.p  PERSISTENT SET fhDCHandle.
-RUN cust_ratep.p PERSISTENT SET fhRRHandle.
+RUN Mm/domcopers.p  PERSISTENT SET fhDCHandle.
+RUN Rate/cust_ratep.p PERSISTENT SET fhRRHandle.
 
 &ENDIF
 &ENDIF
@@ -1453,7 +1453,7 @@ PROCEDURE pCreateInv:
       IF llRunSpecFee AND
          CAN-FIND(FIRST ttIR) AND NOT llCashInvoice THEN 
       DO liCnt = 1 TO LENGTH(bCustomer.RepCodes):
-         RUN creasfee.p (bCustomer.CustNum,
+         RUN Mc/creasfee.p (bCustomer.CustNum,
                          0,
                          idaToDate,
                          "InvSpec",
@@ -1502,7 +1502,7 @@ PROCEDURE pCreateInv:
                
                IF lcMobRep > "" THEN 
                DO liCnt = 1 TO LENGTH(lcMobRep):
-                  RUN creasfee.p (MsOwner.CustNum,
+                  RUN Mc/creasfee.p (MsOwner.CustNum,
                                   MsOwner.MSSeq,
                                   idaToDate,
                                   "CLISpec",
@@ -1909,7 +1909,7 @@ PROCEDURE pCancel:
 
    FOR EACH ttNewInv:
 
-      RUN del_inv.p (ttNewInv.InvNum). 
+      RUN Inv/del_inv.p (ttNewInv.InvNum). 
 
       /* no need to save eventlog to db */
       FOR EACH EventLog EXCLUSIVE-LOCK WHERE
@@ -4556,7 +4556,7 @@ PROCEDURE pInvoiceHeader:
 
       /* write payment */
       IF lcPaymSrc > "" THEN DO:
-         RUN makepaym.p(BUFFER Invoice,
+         RUN Ar/makepaym.p(BUFFER Invoice,
                         Invoice.InvAmt,
                         Invoice.InvDate,
                         liPaymAcc,
@@ -4908,18 +4908,18 @@ PROCEDURE pRatingQueues:
    
       IF lcParamList > "" THEN DO:
          THIS-PROCEDURE:PRIVATE-DATA = "TMQueue_Param:" + lcParamList.
-         RUN tmqueue_analysis.p.
+         RUN Mm/tmqueue_analysis.p.
       END.   
    END.
 
    WHEN "TriggerRate" THEN DO:
       THIS-PROCEDURE:PRIVATE-DATA = "TriggerRate_Param:" + STRING(iiInvCust).
-      RUN triggerrate.p(0,0,OUTPUT liDone).
+      RUN Rate/triggerrate.p(0,0,OUTPUT liDone).
    END.
 
    WHEN "RerateRequest" THEN DO:
       THIS-PROCEDURE:PRIVATE-DATA = "Rerate_Param:" + STRING(iiInvCust).
-      RUN rerate_request.p(-1).
+      RUN Rate/rerate_request.p(-1).
    END.
    
    END CASE.

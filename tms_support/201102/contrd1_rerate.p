@@ -26,7 +26,7 @@ repeat:
    put stream sout unformatted
       mobsub.msseq skip.
 
-   run cli_rate.p (mobsub.cli,
+   RUN Rate/cli_rate.p (mobsub.cli,
                    2/1/11,
                    2/28/11,
                    true).   

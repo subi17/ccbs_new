@@ -116,7 +116,7 @@ ASSIGN ldtNewDueDate = fChkDueDate(Invoice.DueDate + liAddDays)
        llCreateFees  = TRUE
        llOrdCust     = TRUE.
 
-RUN invbal(Invoice.InvNum, OUTPUT ldDebt).
+RUN Ar/invbal(Invoice.InvNum, OUTPUT ldDebt).
  
 PAUSE 0.
 DISPLAY Invoice.InvNum 
@@ -159,13 +159,13 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lDueDate, NEXT lDueDate:
       ufk[5] = 1027  
       ufk[8] = 8 
       ehto   = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.
 
    IF toimi = 1 THEN DO:
    
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
          
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.
          
          UPDATE llCreateFees llOrdCust WITH FRAME fCriter.
          LEAVE.

@@ -24,7 +24,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhFuncRunQueue).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhFuncRunQueue).
+      RUN Mc/eventview2(lhFuncRunQueue).
    END.
 
 END.
@@ -90,7 +90,7 @@ IF gcHelpParam > "" THEN ASSIGN
    FrmRow  = 3
    FrmDown = 11.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -120,7 +120,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a FuncRunQueue  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -128,7 +128,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -234,7 +234,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -370,8 +370,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
@@ -483,8 +483,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFuncRunQueue).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY FuncRunQueue.FRQueueID.
 
        RUN local-UPDATE-record.                                  
@@ -527,7 +527,7 @@ IF gcHelpParam > "" THEN DO:
 END.
  
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.
 
 fCleanEventObjects().
 
@@ -617,7 +617,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
                   
       IF toimi = 1 THEN 
@@ -626,7 +626,7 @@ PROCEDURE local-UPDATE-record:
          FIND CURRENT FuncRunQueue EXCLUSIVE-LOCK.
       
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
    
          UPDATE
             FuncRunQueue.Active
@@ -648,11 +648,11 @@ PROCEDURE local-UPDATE-record:
       END.
 
       ELSE IF toimi = 3 THEN DO:
-         RUN funcrunqrow.p(FuncRunQueue.FRQueueID).
+         RUN Syst/funcrunqrow.p(FuncRunQueue.FRQueueID).
       END.
  
       ELSE IF toimi = 4 THEN DO:
-         RUN funcrunqschedule.p(FuncRunQueue.FRQueueID).
+         RUN Syst/funcrunqschedule.p(FuncRunQueue.FRQueueID).
       END.
        
       ELSE IF toimi = 8 THEN LEAVE.  

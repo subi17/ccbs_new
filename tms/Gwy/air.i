@@ -100,7 +100,7 @@ PROCEDURE pPrePaidPlatform:
    SET-SIZE(lmXML) = 0.
 
    RUN VALUE(lcTCPModule) (lcHTTPHeader + lcXML,lcURL,3,10,"</methodResponse>").
-   /* RUN tcpgwy(lcHTTPHeader + lcXML,lcURL,3,2,"<"). */
+   /* RUN Gwy/tcpgwy(lcHTTPHeader + lcXML,lcURL,3,2,"<"). */
    
    lcReturn = RETURN-VALUE.
 

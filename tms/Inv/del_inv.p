@@ -99,7 +99,7 @@ FIND FIRST Customer WHERE
    FOR EACH SubInvoice OF Invoice EXCLUSIVE-LOCK:
 
       /* release events */
-      RUN nnpcst.p (Invoice.InvNum,
+      RUN Ar/nnpcst.p (Invoice.InvNum,
                     SubInvoice.SubInvNum,
                     FALSE,
                     INPUT table wMarked).
@@ -157,7 +157,7 @@ FIND FIRST Customer WHERE
    END.
 
    /* make sure that nothing is left */
-   RUN nnpcst.p (Invoice.InvNum,
+   RUN Ar/nnpcst.p (Invoice.InvNum,
                  0,
                  FALSE,
                  INPUT table wMarked).

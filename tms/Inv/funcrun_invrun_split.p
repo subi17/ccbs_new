@@ -58,7 +58,7 @@ END.
 
 liFeePeriod = YEAR(ldaDateTo) * 100 + MONTH(ldaDateTo).
    
-RUN invrun_split.p (?,
+RUN Inv/invrun_split.p (?,
                     ?,
                     ldaDateFrom,
                     ldaDateTo,

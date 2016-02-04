@@ -74,7 +74,7 @@ PROCEDURE pStartDump:
 
    IF RETURN-VALUE BEGINS "ERROR" THEN RETURN RETURN-VALUE.
  
-   run errorcdr_dump.p(icDumpID,
+   RUN Mm/errorcdr_dump.p(icDumpID,
                        icFile,
                        icDumpMode,
                        idLastDump,

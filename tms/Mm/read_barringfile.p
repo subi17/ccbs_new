@@ -162,7 +162,7 @@ PROCEDURE pSetBarring:
       RETURN "ERROR:Subscription is prepaid".
 
    /* create barring request */
-   RUN barrengine.p (iiMsSeq,
+   RUN Mm/barrengine.p (iiMsSeq,
                    icBarringList,
                    {&REQUEST_SOURCE_SCRIPT}, /* source  */
                    "", /* creator */

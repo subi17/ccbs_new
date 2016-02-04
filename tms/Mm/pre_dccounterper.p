@@ -50,7 +50,7 @@ WITH OVERLAY CENTERED  scroll 3 15 DOWN
    FRAME sel.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 IF idtFrom = ? THEN idtFrom = 12/1/2006.
@@ -127,7 +127,7 @@ BROWSE:
         
         IF iiMsseq > 0 THEN ufk[1] = 0.
         ASSIGN ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -282,11 +282,11 @@ BROWSE:
          
          /* dccounter for rating limits */
          IF AVAIL DayCampaign AND DayCampaign.DCType = "2" THEN DO:
-            RUN dccounter(
+            RUN Mm/dccounter(
                PPInvSeq.MSSEQ,icEvent,PPInvSeq.fromdate,PPInvSeq.todate).
          END.
          ELSE DO:
-            RUN servicelcounter(
+            RUN Mm/servicelcounter(
                PPInvSeq.MSSEQ,0,iiSLSeq,icEvent,liPeriod,iimsid).
          END.     
 

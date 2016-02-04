@@ -950,7 +950,7 @@ BY wInvoice.InvNum:
        IF CAN-FIND(FIRST InvRow OF Invoice WHERE
                          /* InvRow.Qty > 1 AND */
                          LOOKUP(STRING(InvRow.RowType),"3,4,7") > 0)
-       THEN RUN nncore1 (Invoice.InvNum, TRUE). 
+       THEN RUN Mc/nncore1 (Invoice.InvNum, TRUE). 
    END.
   
    /* call reports are always started from separate report sheet 
@@ -1217,7 +1217,7 @@ END.
 
 /* form pdf-invoices */
 IF CAN-FIND(FIRST ttPDFInv) THEN DO:
-   RUN pdfinv(INPUT-OUTPUT TABLE ttPDFInv,
+   RUN Inv/pdfinv(INPUT-OUTPUT TABLE ttPDFInv,
               INPUT  TRUE,      /* print specifications */
               INPUT  TRUE,      /* form pdf */
               INPUT  FALSE,     /* send pdf via email */

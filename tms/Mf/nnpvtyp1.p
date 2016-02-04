@@ -70,7 +70,7 @@ form /* Ask period */
 FRAME add-new.
 
 ufkey = TRUE.
-ehto = 9. RUN ufkey.
+ehto = 9. RUN Syst/ufkey.
 
 FIND FIRST FixCDR NO-LOCK.
 ASSIGN pvm1 = FixCDR.Date
@@ -82,7 +82,7 @@ WITH FRAME add-new.
 ASSIGN
 cfc      = "Lis"
 ufkey    = TRUE.
-RUN ufcolor.
+RUN Syst/ufcolor.
 
 ASSIGN
 ok = FALSE.
@@ -91,7 +91,7 @@ HIDE FRAME add-new.
 IF NOT ok THEN RETURN.
 
 ehto = 5.
-RUN ufkey.
+RUN Syst/ufkey.
 
 RUN nnptla1(INPUT pvm1, INPUT pvm2).
 
@@ -144,7 +144,7 @@ BROWSE:
          ufk[5]= 0   ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
          {Syst/uright1.i '"5,6"'}
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -264,9 +264,9 @@ BROWSE:
 
       /* Search column 1 */
       ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-         cfc = "puyr". RUN ufcolor.
+         cfc = "puyr". RUN Syst/ufcolor.
          haku-pt-tuno = "".
-         ehto = 9. RUN ufkey. ufkey = TRUE.
+         ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
          UPDATE haku-pt-tuno WITH FRAME haku.
          HIDE FRAME haku NO-PAUSE.
          IF haku-pt-tuno <> "" THEN DO:

@@ -56,7 +56,7 @@ form
     " Comment: " WITH NO-LABELS 1 columns
     FRAME fComment.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 fCollectDocs(iiDMSID).
@@ -131,7 +131,7 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.
         
       END.
 

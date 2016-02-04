@@ -67,7 +67,7 @@ DEFINE STREAM strout.
       LEAVE.
    END.
 
-   RUN invoice_deliverystate(ldaInvDate,
+   RUN Inv/invoice_deliverystate(ldaInvDate,
                              1,  /* inv.type */
                              1,  /* state */
                              0,  /* FRProcessID */
@@ -105,7 +105,7 @@ DEFINE STREAM strout.
               DumpFile.DumpName EQ {&DUMP_IFS_INVOICE} NO-ERROR.
 
    IF AVAIL DumpFile THEN DO:
-      RUN dumpfile_run(DumpFile.DumpID,
+      RUN Syst/dumpfile_run(DumpFile.DumpID,
                        "Modified",
                        "",
                        FALSE,

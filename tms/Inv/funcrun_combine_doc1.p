@@ -44,7 +44,7 @@ IF ldaInvDate = ? THEN DO:
    QUIT.
 END.   
 
-RUN combine_doc1_files.p (ldaInvDate,
+RUN Inv/combine_doc1_files.p (ldaInvDate,
                           liFRProcessID,
                           liUpdateInterval,
                           lcRunMode,

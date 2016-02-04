@@ -52,7 +52,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhTMSReport).
+      RUN Mc/eventview2.p(lhTMSReport).
    END.
 END.
 
@@ -90,7 +90,7 @@ form
     TITLE COLOR value(ctc) fr-header WITH side-labels
     FRAME lis.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 PAUSE 0 no-message.
 view FRAME sel.
 FIND FIRST TMSReport no-lock no-error.
@@ -116,12 +116,12 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
       cfc = "lis"
       ufkey = TRUE
       fr-header = " ADD ".
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 add-new:
       repeat WITH FRAME lis:
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.
          PROMPT-FOR TMSReport.RepName
          VALIDATE
             (RepName = "" OR
@@ -215,7 +215,7 @@ BROWSE:
          ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -336,7 +336,7 @@ BROWSE:
      if lookup(nap,"1,f1") > 0 THEN DO:  /* lisAys */
         FIND TMSReport where recid(TMSReport) = rtab[FRAME-LINE] no-lock.
         ASSIGN si-tul = TMSReport.RepName.
-        RUN ututum.p.
+        RUN Syst/ututum.p.
         ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -400,7 +400,7 @@ BROWSE:
         FIND TMSReport where recid(TMSReport) = rtab[frame-line(sel)]
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        cfc = "lis". RUN ufcolor.
+        cfc = "lis". RUN Syst/ufcolor.
         moremail = SUBSTRING(TMSReport.EMail,51,50).
         DISPLAY 
             TMSReport.RepName
@@ -412,7 +412,7 @@ BROWSE:
 
         IF lcRight = "RW" THEN DO :
 
-           run ufkey.
+           RUN Syst/ufkey.
 
            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTMSReport).
 

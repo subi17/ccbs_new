@@ -24,7 +24,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhOrderAction).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhOrderAction).
+      RUN Mc/eventview2(lhOrderAction).
    END.
 
 END.
@@ -104,7 +104,7 @@ FUNCTION fItemName RETURNS LOGIC
    
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 FIND FIRST Order WHERE 
@@ -196,7 +196,7 @@ REPEAT WITH FRAME sel:
         ehto  = 3 
         ufkey = FALSE.
           
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -407,8 +407,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrderAction).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -437,7 +437,7 @@ REPEAT WITH FRAME sel:
      END.
          
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO: 
-        RUN eventsel.p("OrderAction", "#BEGIN" + chr(255) + gcBrand + chr(255) + STRING(iiOrder)).
+        RUN Mc/eventsel.p("OrderAction", "#BEGIN" + chr(255) + gcBrand + chr(255) + STRING(iiOrder)).
         ufkey = TRUE.
         NEXT.
      END.   
@@ -451,7 +451,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.
 
 fCleanEventObjects().
 
@@ -540,7 +540,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.
          
          IF toimi = 8 THEN LEAVE.
       END.

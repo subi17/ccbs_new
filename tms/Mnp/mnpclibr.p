@@ -52,7 +52,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhOrderCustomer). 
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhttMNPProcess).
+      RUN Mc/eventview2(lhttMNPProcess).
    END.
 
 END.
@@ -111,7 +111,7 @@ WITH  OVERLAY ROW 4 centered
     TITLE COLOR VALUE(ctc) ac-hdr with no-labels side-labels
     FRAME lis.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  , By Status , By 4".
@@ -198,7 +198,7 @@ BROWSE:
            ehto   = 3
            ufkey  = FALSE.
       
-         RUN ufkey.
+         RUN Syst/ufkey.
 
       END.
 
@@ -344,7 +344,7 @@ BROWSE:
      else if lookup(nap,"4,f4") > 0 then do:
        run local-find-this (false).
 
-       run mnpfunc.p(mnpprocess.mnpseq).
+       RUN Mnp/mnpfunc.p(mnpprocess.mnpseq).
        ufkey = true.
        next loop.
      
@@ -355,7 +355,7 @@ BROWSE:
        run local-find-this (false).
        memory = recid(ttmnpprocess).
        
-       run mnpsub(ttMNPProcess.mnpseq).
+       RUN Mnp/mnpsub(ttMNPProcess.mnpseq).
        
        must-print = true.
        ufkey = true.
@@ -369,8 +369,8 @@ BROWSE:
        memory = recid(ttmnpprocess).
        
        /* choose different module for old and new mnp processes */
-       IF ttMNPProcess.MNPType EQ 0 THEN RUN mnpmessages(ttMNPProcess.MNPSeq).
-       ELSE RUN mnpoperations(ttMNPProcess.MNPSeq).
+       IF ttMNPProcess.MNPType EQ 0 THEN RUN Mm/mnpmessages(ttMNPProcess.MNPSeq).
+       ELSE RUN Mnp/mnpoperations(ttMNPProcess.MNPSeq).
        
        must-print = true.
        ufkey = true.
@@ -384,8 +384,8 @@ BROWSE:
        /* change */
        RUN local-find-this(false).
 
-       ASSIGN ac-hdr = " MNP Process " ufkey = TRUE ehto = 5. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " MNP Process " ufkey = TRUE ehto = 5. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttMNPProcess.FormRequest.
 
        RUN local-UPDATE-record.                                  

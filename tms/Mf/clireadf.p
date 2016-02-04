@@ -83,7 +83,7 @@ FOR EACH rsoper NO-LOCK WHERE
    FIRST OperIndir NO-LOCK WHERE
          OperIndir.Operator = rsoper.Operator.
 
-   RUN clilog.p 
+   RUN Mf/clilog.p 
      (INPUT PROGRAM-NAME(1),
       INPUT "Readprocessing starts...", 
       INPUT 0,      /* No ErrCode */
@@ -123,7 +123,7 @@ FOR EACH rsoper NO-LOCK WHERE
       IMPORT STREAM s1 UNFORMATTED lCliFileName.
 
       IF SEARCH (lCliFileDir + lCliFileName) = ? THEN DO:
-         RUN clilog.p 
+         RUN Mf/clilog.p 
            (INPUT PROGRAM-NAME(1),
             INPUT "The requestfile " + 
                    lCliFileDir +
@@ -136,7 +136,7 @@ FOR EACH rsoper NO-LOCK WHERE
          LEAVE.
       END.        
 
-      RUN clilog.p 
+      RUN Mf/clilog.p 
         (INPUT PROGRAM-NAME(1),
          INPUT "File " + lCliFileName + " is being Processed.", 
          INPUT 0,      /* No ErrCode */
@@ -153,14 +153,14 @@ FOR EACH rsoper NO-LOCK WHERE
 
       IF lError <> 0 THEN DO:
 
-         RUN clilog.p 
+         RUN Mf/clilog.p 
            (INPUT PROGRAM-NAME(1),
             INPUT "File rejected.",
             INPUT lError,  
             INPUT NO,     /* Date will NOT show in LOG */     
             INPUT NO).    /* NO = EMail will NOT be Sent */    
 
-         RUN clicrrej.p (INPUT lCliFileName,
+         RUN Mf/clicrrej.p (INPUT lCliFileName,
                          INPUT lError).
          NEXT inputfile.
 
@@ -192,7 +192,7 @@ FOR EACH rsoper NO-LOCK WHERE
                   ASSIGN CLIFile.FileName = lCliFileName.
                END.
                ELSE DO:
-                  RUN clilog.p
+                  RUN Mf/clilog.p
                     (INPUT PROGRAM-NAME(1),
                      INPUT "File " + lCliFileName + 
                            " already updated in table CLIFile," +
@@ -214,7 +214,7 @@ FOR EACH rsoper NO-LOCK WHERE
             OTHERWISE DO:
                NEXT.      /* Ignore anything until header, "HDR" */
                /*********
-               RUN clilog.p 
+               RUN Mf/clilog.p 
                  (INPUT PROGRAM-NAME(1),
                   INPUT "No header in requestfile. " +
                         "Error in validation code. " +
@@ -253,7 +253,7 @@ FOR EACH rsoper NO-LOCK WHERE
                   IF ERROR-STATUS:ERROR THEN DO:
 
                      lErrorCode = 1.
-                     RUN clilog.p
+                     RUN Mf/clilog.p
                        (INPUT PROGRAM-NAME(1),
                         INPUT "Cli " +  ENTRY(4,lRecord,lCliSeparator),
                         INPUT lErrorCode, /* No ErrCode */
@@ -271,7 +271,7 @@ FOR EACH rsoper NO-LOCK WHERE
                   No more than 16 digits is allowed. */
                IF LENGTH(lCli) > 16 THEN DO:
                   lErrorCode = 1.
-                  RUN clilog.p
+                  RUN Mf/clilog.p
                     (INPUT PROGRAM-NAME(1),
                      INPUT "Cli " + lCli,
                      INPUT lErrorCode, /* No ErrCode */
@@ -304,7 +304,7 @@ FOR EACH rsoper NO-LOCK WHERE
                ELSE DO:
                   /* Show this MESSAGE only once. */
                   IF lQueueMessg = NO THEN DO:
-                     RUN clilog.p 
+                     RUN Mf/clilog.p 
                        (INPUT PROGRAM-NAME(1),
                         INPUT "Table CLIQueue already " +
                               "updated with OrderId " + lOrder + ".", 
@@ -357,7 +357,7 @@ FOR EACH rsoper NO-LOCK WHERE
                            IF NOT lCreated THEN DO:
                               /* This MESSAGE shows only once in the logfile */
                               IF lNntable = NO THEN DO:
-                                 RUN clilog.p 
+                                 RUN Mf/clilog.p 
                                    (INPUT PROGRAM-NAME(1),
                                     INPUT "Any valid CLI already "    +
                                           "updated in tables CLI " +
@@ -527,7 +527,7 @@ FOR EACH rsoper NO-LOCK WHERE
                         CLIQueue.Result = "Error".
                   END.
                   ELSE DO:
-                     RUN clilog.p 
+                     RUN Mf/clilog.p 
                        (INPUT PROGRAM-NAME(1),
                         INPUT "Errorcode is missing.", 
                         INPUT lErrorCode,  
@@ -563,7 +563,7 @@ FOR EACH rsoper NO-LOCK WHERE
          IF AVAILABLE CLIFile THEN
             ASSIGN CLIFile.DtlCount = lDetailCount.
          ELSE DO:
-            RUN clilog.p 
+            RUN Mf/clilog.p 
               (INPUT PROGRAM-NAME(1),
                INPUT "Record " + lCliFileName + 
                      " is missing in table CLIFile. Please contact a sysadm.",
@@ -583,13 +583,13 @@ FOR EACH rsoper NO-LOCK WHERE
                         CLIQueue.Command = "Delete" AND 
                         CLIQueue.ErrCode = 0)  THEN DO:
 
-         RUN clicrlis.p 
+         RUN Mf/clicrlis.p 
            (INPUT  lOrder,
             INPUT  lResellerId,
             OUTPUT lDone).
 
          IF NOT lDone THEN
-           RUN clilog.p 
+           RUN Mf/clilog.p 
              (INPUT PROGRAM-NAME(1),
               INPUT "The whitelist updatefile was not created. " +
                     "Please contact a sysadm.",
@@ -597,7 +597,7 @@ FOR EACH rsoper NO-LOCK WHERE
               INPUT NO,     /* NO = Date will NOT show in LOG */
               INPUT NO).    /* NO = EMail will NOT be Sent */
          ELSE 
-            RUN clilog.p 
+            RUN Mf/clilog.p 
               (INPUT PROGRAM-NAME(1),
                INPUT "A whitelist updatefile has been created.",
                INPUT 0,      /* No ErrCode */
@@ -608,14 +608,14 @@ FOR EACH rsoper NO-LOCK WHERE
          Response File is created rightaway */
       ELSE IF CAN-FIND(FIRST CLIQueue WHERE 
                              CLIQueue.OrderId = lOrder) THEN DO:
-         RUN clicrres.p
+         RUN Mf/clicrres.p
            (INPUT  CLIQueue.OrderId,
             INPUT  rsoper.CustNum,
             OUTPUT lFiles,
             OUTPUT lDone).
 
          IF NOT lDone THEN
-            RUN clilog.p 
+            RUN Mf/clilog.p 
               (INPUT PROGRAM-NAME(1),
                INPUT "Responsefile not created for OrderId " + 
                       CLIQueue.OrderId + ". Please contact a sysadm.", 
@@ -624,7 +624,7 @@ FOR EACH rsoper NO-LOCK WHERE
                INPUT NO). /* NO = EMail will NOT be Sent */
       END.
       ELSE
-         RUN clilog.p 
+         RUN Mf/clilog.p 
            (INPUT PROGRAM-NAME(1),
             INPUT "No new whitelist updatefile was created. " +
                   "No new valid CLI in requestfile.",
@@ -633,10 +633,10 @@ FOR EACH rsoper NO-LOCK WHERE
             INPUT NO).    /* NO = EMail will NOT be Sent */
 
       /* Save executed files in ZipCode FORMAT in a backup directory */
-      RUN clisavef.p
+      RUN Mf/clisavef.p
         (INPUT lCliFileDir + lCliFileName, INPUT rsoper.CustNum).
       IF RETURN-VALUE <> "" THEN
-         RUN clilog.p 
+         RUN Mf/clilog.p 
            (INPUT PROGRAM-NAME(1),
             INPUT "Could not store " + 
                   lCliFileDir  +
@@ -647,14 +647,14 @@ FOR EACH rsoper NO-LOCK WHERE
    END.
 
    IF NOT lFileFound THEN
-      RUN clilog.p 
+      RUN Mf/clilog.p 
         (INPUT PROGRAM-NAME(1),
          INPUT "No requestfile found.",
          INPUT 0,      /* No ErrCode */
          INPUT NO,     /* NO = Date will NOT show in LOG */
          INPUT NO).    /* NO = EMail will NOT be Sent */
 
-   RUN clilog.p 
+   RUN Mf/clilog.p 
      (INPUT PROGRAM-NAME(1),
       INPUT "Readprocessing done.",
       INPUT 0,       /* No ErrCode */

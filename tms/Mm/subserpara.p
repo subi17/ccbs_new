@@ -7,7 +7,7 @@
   CHANGED ......: 14.01.04 jp servattr
                   01.07.04 tk subser.i moved
                   13.12.04/aam use ttSubserPara
-                  12.12.06/mvi new param to run msrequest (reqstat = ?)
+                  12.12.06/mvi new param to RUN Mm/msrequest (reqstat = ?)
                   31.10.07 jp  new parameter for msrequest
                   
   Version ......: M15
@@ -38,7 +38,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhttSubserPara).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhttSubserPara).
+      RUN Mc/eventview2(lhttSubserPara).
    END.
 
 END.
@@ -94,7 +94,7 @@ WITH  OVERLAY ROW 4 centered
     FRAME lis.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -169,7 +169,7 @@ BROWSE:
         ufk[6]= 66
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -308,7 +308,7 @@ BROWSE:
         VIEW-AS ALERT-BOX ERROR.
 
         ELSE DO:
-           RUN msrequest (1,
+           RUN Mm/msrequest (1,
                           ?, /* reqstat ? for all */
                           iiMsSeq,
                           0,
@@ -323,7 +323,7 @@ BROWSE:
  
      
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0 THEN DO:  /* history */
-        RUN ssparahist (iiMsSeq,
+        RUN Mm/ssparahist (iiMsSeq,
                         icServCom).
         
         ufkey = TRUE.
@@ -339,8 +339,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhttSubserPara).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -502,7 +502,7 @@ PROCEDURE local-UPDATE-record:
             IF FRAME-FIELD = "PAraValue" AND 
                keylabel(lastkey) = "F9"
             THEN DO:
-               RUN h-tmscodes(INPUT "ServAttr",        /* TableName*/
+               RUN Help/h-tmscodes(INPUT "ServAttr",        /* TableName*/
                                      ttSubSerPara.paraname, /* FieldName */
                                      ttSubserPara.ServCom, /* GroupCode */
                               OUTPUT siirto).

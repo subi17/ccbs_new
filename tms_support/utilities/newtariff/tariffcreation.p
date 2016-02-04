@@ -144,7 +144,7 @@ IF RETURN-VALUE <> "OK" THEN DO:
    RETURN RETURN-VALUE.
 END.
    
-RUN configcreations.p PERSISTENT SET h_config. 
+RUN tms_support/utilities/newtariff/configcreations.p PERSISTENT SET h_config. 
 
 RUN pDataCreValidation.
 

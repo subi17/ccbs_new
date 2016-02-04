@@ -29,7 +29,7 @@ lcLogFile = REPLACE(lcLogFile,"#DATE",STRING(YEAR(TODAY),"9999") +
 
 fELog("DAILY","MobCDRDoubleCheckStarted:" + STRING(ldaReadDate,"99-99-9999")).
 
-RUN mobcdr_double_check.p ("ReadDate",
+RUN Mm/mobcdr_double_check.p ("ReadDate",
                            ldaReadDate,
                            ldaReadDate,
                            "",

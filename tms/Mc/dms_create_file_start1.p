@@ -96,7 +96,7 @@ END.
 /*Execute read operation and assign new period end time to actionlog.*/
 ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60).
 
-RUN dms_create_docfile.p(SUBST("&1,&2,&3,&4,&5,&6",
+RUN Mc/dms_create_docfile.p(SUBST("&1,&2,&3,&4,&5,&6",
                           {&DMS_CASE_TYPE_ID_ORDER_ACT},
                           {&DMS_CASE_TYPE_ID_ORDER_RESTUDY},
                           {&DMS_CASE_TYPE_ID_COMPANY},

@@ -51,7 +51,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhSim).
+      RUN Mc/eventview2.p(lhSim).
    END.
 END.
 
@@ -92,7 +92,7 @@ PAUSE 0.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.
 
    UPDATE
    Stock1 Stock2 SIMStat SimArt icc1 icc2
@@ -203,7 +203,7 @@ ACTION:
       END.   
 
 
-      RUN ufkey.
+      RUN Syst/ufkey.
 
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.

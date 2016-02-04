@@ -7,7 +7,7 @@
   CHANGED ......: 14.01.04 jp servattr
                   01.07.04 tk subser.i moved
                   13.12.04/aam use ttSLG
-                  12.12.06/mvi new param to run msrequest (reqstat = ?)
+                  12.12.06/mvi new param to RUN Mm/msrequest (reqstat = ?)
                   31.10.07 jp  new parameter for msrequest
                   
   Version ......: M15
@@ -35,7 +35,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhttSLG).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhttSLG).
+      RUN Mc/eventview2(lhttSLG).
    END.
 
 END.
@@ -92,7 +92,7 @@ WITH  OVERLAY ROW 4 centered
     FRAME lis.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -167,7 +167,7 @@ BROWSE:
         ufk[6]= 4 
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -359,8 +359,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhttSLG).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

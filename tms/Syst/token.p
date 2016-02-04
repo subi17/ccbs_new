@@ -24,7 +24,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhtoken).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhtoken).
+      RUN Mc/eventview2(lhtoken).
    END.
 
 END.
@@ -80,7 +80,7 @@ form /* seek Token by Code */
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -113,12 +113,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a token  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       DO WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         DO TRANSAction:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR token.tokencode
@@ -209,7 +209,7 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -342,9 +342,9 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        tokencode = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE tokencode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF tokencode <> "" THEN DO:
@@ -364,7 +364,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
         RUN local-find-this(FALSE).
-        RUN tokentab.p(token.tokencode).
+        RUN Syst/tokentab.p(token.tokencode).
         ufkey = true.
         next loop.
      END.
@@ -453,8 +453,8 @@ BROWSE:
        /* change */
        RUN local-find-this(TRUE).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor.
        CLEAR FRAME lis NO-PAUSE.
        DISPLAY token.tokencode.
 

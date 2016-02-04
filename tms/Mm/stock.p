@@ -33,7 +33,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhStock).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhStock).
+      RUN Mc/eventview2(lhStock).
    END.
 END.
 
@@ -119,7 +119,7 @@ form /* seek Stock  BY StoName */
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND Name "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -152,12 +152,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a Stock  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         DO TRANSACTION:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR Stock.Stock
@@ -242,7 +242,7 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -379,9 +379,9 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        Stock = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        DISP lcBrand With Frame f1.
        UPDATE lcBrand WHEN gcAllBrand = TRUE Stock WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -404,9 +404,9 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        StoName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        Disp lcBrand With FRAME f2.
        UPDATE lcBrand WHEN gcAllBrand = TRUE 
               StoName WITH FRAME f2.
@@ -423,7 +423,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:  /* CONTAINS ... */
        ufkey = TRUE.              
        RUN local-find-this (FALSE).
-       run stobal2.p(Stock.Stock).
+       RUN Mm/stobal2.p(Stock.Stock).
        NEXT loop.
      END.
 
@@ -489,8 +489,8 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhStock).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". run ufcolor.
+       RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor.
        CLEAR FRAME lis no-pause.
        DISPLAY Stock.Stock.
        RUN local-UPDATE-record.

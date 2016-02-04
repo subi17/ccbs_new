@@ -48,8 +48,8 @@ FIRST blasku exclusive-lock where
     blasku.CrInvNum = Invoice.InvNum:
 
     /* CURRENT balances */
-    RUN invbal (Invoice.InvNum, OUTPUT xDebit).
-    RUN invbal (blasku.InvNum, OUTPUT xcredit).
+    RUN Ar/invbal (Invoice.InvNum, OUTPUT xDebit).
+    RUN Ar/invbal (blasku.InvNum, OUTPUT xcredit).
 
     /* Balance FOR debit invoice must be greater OR equal TO the 
        credit Balance */
@@ -65,7 +65,7 @@ FIRST blasku exclusive-lock where
     /* FIRST the debit invoice */
     DO liRetry = 1 TO 5:  /* in case of an undo error try again */
 
-       RUN makepaym (BUFFER Invoice,
+       RUN Ar/makepaym (BUFFER Invoice,
                      xDebit,
                      iDate,
                      xClearAcc,
@@ -98,7 +98,7 @@ FIRST blasku exclusive-lock where
     /* THEN the credit invoice */
     DO liRetry = 1 TO 5:  /* in case of an undo error try again */
 
-       RUN makepaym (BUFFER blasku,
+       RUN Ar/makepaym (BUFFER blasku,
                      xCredit,
                      iDate,
                      xClearAcc,

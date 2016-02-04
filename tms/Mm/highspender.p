@@ -22,7 +22,7 @@ lcInvGroup = SESSION:PARAMETER.
 
 
 fELog("HIGHSPENDER", lcInvGroup + "Started").
-run highspendnew (lcInvGroup).
+RUN Mm/highspendnew (lcInvGroup).
 fELog("HIGHSPENDER", lcInvGroup + "Stopped").
 
 quit.

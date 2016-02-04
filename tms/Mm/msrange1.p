@@ -194,7 +194,7 @@ END.
 
 MAIN:
 REPEAT WITH FRAME range.
-   ehto = 9.  RUN ufkey.
+   ehto = 9.  RUN Syst/ufkey.
 
    UPDATE 
       Size 
@@ -235,7 +235,7 @@ REPEAT WITH FRAME range.
       /* Rank input checking when using F9; description generated */
       IF FRAME-FIELD = "lcMSCode" AND cLastKeyLabel = "F9" THEN 
       DO:
-         RUN h-tmscodes(INPUT "MSISDNNumber",  /* TableName */
+         RUN Help/h-tmscodes(INPUT "MSISDNNumber",  /* TableName */
                               "Rank",  /* FieldName */
                               "Rank",   /* GroupCode */
                        OUTPUT lcCode).
@@ -275,7 +275,7 @@ REPEAT WITH FRAME range.
       /* POS code input checking when using F9; description generated */
       IF FRAME-FIELD = "ocPosCode" AND cLastKeyLabel = "F9" THEN 
       DO:
-         RUN h-tmscodes(INPUT "MSISDN",  /* TableName */
+         RUN Help/h-tmscodes(INPUT "MSISDN",  /* TableName */
                               "POS",  /* FieldName */
                               "Reservation Position",   /* GroupCode */
                        OUTPUT lcCode).
@@ -294,13 +294,13 @@ REPEAT WITH FRAME range.
 
       APPLY LASTKEY.
       ehto = 9.
-      RUN ufkey.
+      RUN Syst/ufkey.
    END. /* EDITING */
 
 ACTION:
    REPEAT WITH FRAME range.
       ASSIGN ehto = 0 ufk = 0 ufk[1] = 7 ufk[5] =  15 ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.
       IF toimi = 1 THEN NEXT main.
       IF toimi = 8 THEN LEAVE main.
       IF TOIMI = 5 THEN DO:

@@ -91,7 +91,7 @@ lcFile = lcSpoolDir + "NewDup" + STRING(YEAR(TODAY),"9999") +
    STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99") + ".txt".
 lcFileCall = lcInvoiceDir + "*" + lcFile.
 
-RUN invoice_xml.p (INPUT-OUTPUT TABLE ttInvoice,
+RUN Inv/invoice_xml.p (INPUT-OUTPUT TABLE ttInvoice,
                    TODAY, /* not used */
                    liInvCount,
                    FALSE, /* separate files */

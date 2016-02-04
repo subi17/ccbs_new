@@ -63,7 +63,7 @@ DISP liqty WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.
    username = "(" + lcUserName  + ").".
 
 disp mobsub.cli   username .
@@ -80,7 +80,7 @@ WITH FRAME main EDITING:
 
                IF FRAME-FIELD = "lckeyvalue" AND  
                   LOOKUP(KEYLABEL(LASTKEY),"F9") > 0 THEN DO:
-                  run h-invotxt(INPUT "SMS","", mobsub.msseq).
+                  RUN Help/h-invotxt(INPUT "SMS","", mobsub.msseq).
                   If siirto ne ? THEN ASSIGN
                      
                      updtext[1] = substring(siirto,  1,40)
@@ -129,7 +129,7 @@ ACTION:
       ufk[1] = 7 
       ufk[5] = 2355
       ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.
 
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.

@@ -132,7 +132,7 @@ PROCEDURE pStartDump:
 
    DEF INPUT PARAMETER ilAppend  AS LOG  NO-UNDO.
 
-   RUN prepcdr_pupu_dump.p(ldaReadDate,ldeReadInTS,ldeCurrStamp,
+   RUN Mm/prepcdr_pupu_dump.p(ldaReadDate,ldeReadInTS,ldeCurrStamp,
                            lcLogFile,ilAppend,INPUT-OUTPUT ldeCDRStamp).
 
 END PROCEDURE.

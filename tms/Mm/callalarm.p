@@ -37,7 +37,7 @@ if llDoEvent THEN DO:
     RUN StarEventInitialize(lhCallAlarm).
 
     ON F12 ANYWHERE DO:
-        run eventview2.p(lhCallAlarm).
+        RUN Mc/eventview2.p(lhCallAlarm).
     END.
 END.
 
@@ -150,7 +150,7 @@ form /* seek  CLI */
     COLOR VALUE(cfc) NO-labels overlay FRAME f3.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,  By Stamp  , By 4".
@@ -180,12 +180,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CallAlarm  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            CREATE CallAlarm.
@@ -274,7 +274,7 @@ BROWSE:
           ufk[5] = 0
           ufk[6] = 0.
           
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -417,8 +417,8 @@ BROWSE:
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = true.
        IF CustNo > 0 THEN DO:
           MESSAGE
           "Customer number search is not allowed with this functionality"
@@ -451,8 +451,8 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = true.
        CLEAR FRAME F2.
        DISP lcBrand WITH FRAME f2.
        SET lcBrand WHEN gcAllBrand TRUE 
@@ -476,8 +476,8 @@ BROWSE:
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = true.
        CLEAR FRAME F3.
        Actdate = today.
        SET actDate ActTime WITH FRAME f3.
@@ -584,7 +584,7 @@ ACTION: repeat with frame lis:
           ufk = 0 ufk[1] = 7 ufk[2] = 0 ufk[3] = 0 ufk[4] = 0
           ufk[5] = 0 ufk[8] = 8 ehto = 0 
           ufkey = true.
-          run ufkey.
+          RUN Syst/ufkey.
 
           if toimi = 8 then do:
              hide frame lis.
@@ -593,8 +593,8 @@ ACTION: repeat with frame lis:
           else if toimi = 1 then do: 
 
              RUN local-find-this(true).
-             ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-             cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+             ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.
+             cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
              DISPLAY CallAlarm.CustNO.
 
              IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCallAlarm).
@@ -871,7 +871,7 @@ PROCEDURE local-update-record:
          READKEY.
              IF FRAME-FIELD = "delitype" AND keylabel(lastkey) = "F9" 
              THEN DO:
-                RUN h-tmscodes(INPUT "CallLimit",  /* TableName*/
+                RUN Help/h-tmscodes(INPUT "CallLimit",  /* TableName*/
                                      "DeliType", /* FieldName */
                                      "Delitype", /* GroupCode */
                                OUTPUT siirto).
@@ -882,7 +882,7 @@ PROCEDURE local-update-record:
 
              ELSE IF FRAME-FIELD = "credittype" AND keylabel(lastkey) = "F9" 
              THEN DO:
-                RUN h-tmscodes(INPUT "CallAlarm",  /* TableName*/
+                RUN Help/h-tmscodes(INPUT "CallAlarm",  /* TableName*/
                                      "CreditType", /* FieldName */
                                      "SMS", /* GroupCode */
                                OUTPUT siirto).
@@ -932,7 +932,7 @@ PROCEDURE local-update-record:
                 END.
 
                 ELSE IF FRAME-FIELD = "delitype" THEN DO:
-                   RUN v-tmscodes(INPUT "CallLimit",    /* TableName */
+                   RUN Syst/v-tmscodes(INPUT "CallLimit",    /* TableName */
                                         "Delitype", /* FieldName */
                                         "delitype",     /* GroupCode */
                                   INPUT INPUT delitype,
@@ -952,7 +952,7 @@ PROCEDURE local-update-record:
                 END.
 
                 ELSE IF FRAME-FIELD = "credittype" THEN DO:
-                   RUN v-tmscodes(INPUT "CallAlarm",    /* TableName */
+                   RUN Syst/v-tmscodes(INPUT "CallAlarm",    /* TableName */
                                         "credittype", /* FieldName */
                                         "SMS",     /* GroupCode */
                                   INPUT INPUT callalarm.credittype,

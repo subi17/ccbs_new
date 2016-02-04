@@ -23,7 +23,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhOFItem).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhOFItem).
+      RUN Mc/eventview2(lhOFItem).
    END.
 
 END.
@@ -92,7 +92,7 @@ WITH  OVERLAY ROW 4 centered
     FRAME lis.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -126,12 +126,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a OFItem  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
 
            CREATE OFItem.
@@ -212,7 +212,7 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -410,8 +410,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOFItem).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY OFItem.OFID.
 
        RUN local-UPDATE-record.                                  
@@ -542,7 +542,7 @@ PROCEDURE local-UPDATE-record:
              
              IF FRAME-FIELD = "StatusCode" AND keylabel(lastkey) = "F9" 
              THEN DO:
-                run tmscodesbr(INPUT   "ORDER",
+                RUN Syst/tmscodesbr(INPUT   "ORDER",
                                INPUT   "StatusCode",
                                INPUT   "",
                                INPUT   "",

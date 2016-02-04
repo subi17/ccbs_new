@@ -24,7 +24,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhCTServAttr).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCTServAttr).
+      RUN Mc/eventview2(lhCTServAttr).
    END.
 END.
 
@@ -93,7 +93,7 @@ form /* seek CTServAttr  BY  CTServAttr */
 FIND CTServEl WHERE CTServEl.CTServEl = iiCTServEl NO-LOCK NO-ERROR.
 IF NOT AVAILABLE CTServEl THEN RETURN. 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -119,12 +119,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CTServAttr  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -241,7 +241,7 @@ REPEAT WITH FRAME sel:
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
         {Syst/uright1.i '"4,5,6"'}
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -375,8 +375,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcServAttr WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -462,8 +462,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCTServAttr).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CTServAttr.ServAttr.
 
        RUN local-UPDATE-record.                                  
@@ -584,7 +584,7 @@ PROCEDURE local-UPDATE-record:
       IF lcRight = "RW" THEN DO:
       
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
       
          UPDATE
            CTServAttr.DefValue

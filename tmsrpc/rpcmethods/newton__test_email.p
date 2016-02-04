@@ -42,6 +42,6 @@ FIND FIRST order NO-LOCK where
 IF NOT AVAIL order then return
    appl_err("Order not Found").
 
-RUN sendorderreq.p(piOrderId, "antti.savolainen@qvantel.com", OUTPUT lcErrFile).
+RUN Mc/sendorderreq.p(piOrderId, "antti.savolainen@qvantel.com", OUTPUT lcErrFile).
 
 add_boolean(response_toplevel_id, "", true).

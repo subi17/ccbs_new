@@ -21,7 +21,7 @@ ldaEventDate = fOldUnbilledEventLimit(0).
 fELog("REMOVE_OLD_UNBILLED_EVENTS","Started:Limit" +
                                    STRING(ldaEventDate,"99-99-9999")).
 
-RUN remove_old_events.p(0,
+RUN Inv/remove_old_events.p(0,
                         ldaEventDate,
                         TRUE,
                         TRUE,

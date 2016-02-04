@@ -50,7 +50,7 @@ with overlay title " W A R N I N G !!! " ROW 6 centered
 {pwd.i00}
 
 PAUSE 0 no-message.
-ehto = 9. RUN ufkey.
+ehto = 9. RUN Syst/ufkey.
 UPDATE ToDate WITH FRAME CallsTo.
 
 IF ToDate NE ? THEN DO:

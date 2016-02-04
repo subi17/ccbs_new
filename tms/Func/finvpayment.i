@@ -43,7 +43,7 @@ FUNCTION fInvoicePaymentUpdate RETURNS LOGIC
       liIntMethod = fCParamI("IntCalcMet").
       IF liIntMethod = ? OR liIntMethod = 0 THEN liIntMethod = 1.
 
-      RUN calcint (PaidInv.DueDate,
+      RUN Ar/calcint (PaidInv.DueDate,
                    idtPaymDate,
                    liIntMethod,
                    idPaymAmt,

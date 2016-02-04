@@ -54,7 +54,7 @@ rajat:
 repeat with frame rajat:
 
    pause 0.
-   ehto = 9. run ufkey.
+   ehto = 9. RUN Syst/ufkey.
 
    update 
    date1 date2
@@ -64,7 +64,7 @@ repeat with frame rajat:
 toimi:
    repeat with frame toimi:
       assign ufk = 0 ehto = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8.
-      run ufkey.
+      RUN Syst/ufkey.
       if toimi = 1 then next  rajat.
       if toimi = 8 then leave rajat.
       if toimi = 5 then leave toimi.

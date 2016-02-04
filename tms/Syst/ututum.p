@@ -51,7 +51,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhTMSRepCfg).
+      RUN Mc/eventview2.p(lhTMSRepCfg).
    END.
 END.
 
@@ -78,7 +78,7 @@ form
     FRAME lis.
 
 FIND FIRST TMSReport where TMSReport.RepName = si-tul no-lock no-error.
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 FIND FIRST TMSRepCfg where TMSRepCfg.RepName = si-tul no-lock no-error.
 IF AVAILABLE TMSRepCfg THEN DO:
@@ -104,12 +104,12 @@ repeat WITH FRAME sel:
       cfc = "lis"
       ufkey = TRUE
       fr-header = " ADD, (width " + string(TMSReport.PageWidth) + ") ".
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 add-new:
       repeat WITH FRAME lis:
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.
          assign tnimi = "".
 
          CREATE TMSRepCfg.
@@ -135,7 +135,7 @@ add-new:
             end.  
             if frame-field = "Effect" and keylabel(lastkey) = "F9"
             THEN DO:
-               RUN utehse(INPUT INPUT TMSRepCfg.PrinterId,
+               RUN Syst/utehse(INPUT INPUT TMSRepCfg.PrinterId,
                           OUTPUT xeff).
                IF xeff NE ? THEN DISP xeff @ TMSRepCfg.Effect.
                NEXT.
@@ -273,7 +273,7 @@ BROWSE:
          ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -464,8 +464,8 @@ BROWSE:
                                     + ")".
 
         ASSIGN ufkey = TRUE ehto = 9.
-        RUN ufkey.
-        cfc = "lis". RUN ufcolor.
+        RUN Syst/ufkey.
+        cfc = "lis". RUN Syst/ufcolor.
 
         FIND FIRST PrintCodes where 
                    PrintCodes.Effect = TMSRepCfg.Effect AND 
@@ -499,7 +499,7 @@ BROWSE:
 
             if frame-field = "Effect" and keylabel(lastkey) = "F9"
             THEN DO:
-               RUN utehse(INPUT INPUT TMSRepCfg.PrinterId,
+               RUN Syst/utehse(INPUT INPUT TMSRepCfg.PrinterId,
                           OUTPUT xeff).
                IF xeff NE ? THEN DISP xeff @ TMSRepCfg.Effect.
                NEXT.

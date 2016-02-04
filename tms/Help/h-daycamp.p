@@ -35,7 +35,7 @@ form /* SEEK Code */
     with row 4 col 2 title color value(ctc) " FIND CONTRACT"
     color value(cfc) no-labels overlay frame hayr.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
 
 IF gcHelpParam > "" THEN DO:
    IF ENTRY(1,gcHelpParam,":") = "Restricted" AND
@@ -94,7 +94,7 @@ repeat:
          ufk[5] = 11
          ufk[6] = 0  ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = false.
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -210,8 +210,8 @@ repeat:
         do on ENDkey undo, NEXT LOOP:
 
            /*lcEvent*/
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.
+           ehto = 9. RUN Syst/ufkey. ufkey = true.
            set lcEvent with frame hayr.
            hide frame hayr no-pause.
            if lcEvent ENTERED then do:

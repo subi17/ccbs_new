@@ -92,7 +92,7 @@ DO WHILE TRUE:
           ufk[8] = 8 
           ehto = 3. 
    
-   RUN ufkey.
+   RUN Syst/ufkey.
    
    DISP "      On        " @ lcOnOff[1]
         "      Off       " @ lcOnOff[2]

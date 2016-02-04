@@ -58,7 +58,7 @@ form /* seek  BY  name */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND FILE "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 
 IF INDEX(icFilter,"¤") > 0 
 THEN ASSIGN llHideDir = (ENTRY(2,icFilter,"¤") > "")
@@ -146,7 +146,7 @@ BROWSE:
         ufk[7]= 0   ufk[8]= 8  ufk[9]= 1
         ehto = 3 ufkey = FALSE.
         {Syst/uright1.i '"5,6"'}.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -279,8 +279,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcFileName WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.

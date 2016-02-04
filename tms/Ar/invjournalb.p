@@ -184,7 +184,7 @@ PROCEDURE pPrintReport:
       ttCriter.Summary     = ilSummary
       ttCriter.ToFile      = lcFile.
 
-   RUN invjournal (INPUT TABLE TCustGroup,
+   RUN Ar/invjournal (INPUT TABLE TCustGroup,
                    INPUT TABLE ttCriter,
                    OUTPUT liInvQty).
 

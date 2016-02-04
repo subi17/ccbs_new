@@ -64,7 +64,7 @@ FUNCTION fWL RETURNS CHARACTER
                      CLIWL.FileName BEGINS lFileName AND 
                      CLIWL.OrderId   = pOrderId      AND 
                      CLIWL.Processed = FALSE)        THEN DO:
-      RUN clilog.p 
+      RUN Mf/clilog.p 
         (INPUT PROGRAM-NAME(1),
          INPUT "The list has already been created for OrderId " + 
                pOrderID + ", proceeds...",
@@ -171,7 +171,7 @@ FOR EACH CLIQueue NO-LOCK WHERE
 END.
 
 IF lFileName = "" THEN DO:
-   RUN clilog.p 
+   RUN Mf/clilog.p 
      (INPUT PROGRAM-NAME(1),
       INPUT "Could not find a CLI to put in ADD or Delete list." + 
             "Please contact a sysadm.",

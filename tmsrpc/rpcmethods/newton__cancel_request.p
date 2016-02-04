@@ -137,7 +137,7 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
                LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES} + ",12") = 0
                NO-LOCK NO-ERROR.
             IF AVAIL Order THEN DO TRANS ON ERROR UNDO:
-               RUN closeorder.p(Order.OrderId,TRUE).
+               RUN Mc/closeorder.p(Order.OrderId,TRUE).
                IF RETURN-VALUE NE "" THEN NEXT.
                IF fReqStatus(4, pcMemo) = FALSE THEN UNDO.
                ELSE liReqCount = liReqCount + 1.
@@ -219,7 +219,7 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
          IF MsRequest.ReqStatus = 0 OR 
             MsRequest.ReqStatus = 8 THEN DO:
             fReqStatus(4, pcMemo).
-            RUN acc_sendsms.p(MsRequest.MsRequest,
+            RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "Cancelled",
                             "").

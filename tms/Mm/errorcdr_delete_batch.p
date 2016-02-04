@@ -78,7 +78,7 @@ DO liRun = 1 TO 2:
       QUIT.
    END.
 
-   RUN errorcdr_delete.p (ldaRunFrom[liRun],
+   RUN Mm/errorcdr_delete.p (ldaRunFrom[liRun],
                           ldaRunTo[liRun],
                           OUTPUT liQty).
 

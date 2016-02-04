@@ -137,10 +137,10 @@ IF CAN-FIND(FIRST ITSendLog USE-INDEX InvNum WHERE
 THEN RETURN "INFO:Already printed".
 
 IF Order.OrderType < 2 THEN /* New or MNP */
-   RUN sendorderconf.p(Order.OrderId, OrderCustomer.email, OUTPUT lcErrFile).
+   RUN Mc/sendorderconf.p(Order.OrderId, OrderCustomer.email, OUTPUT lcErrFile).
 ELSE /* Renewal, Rollback  and STC will be changed HTML in later YDR.
         These will need own HTML templates. */
-   RUN printxt.p (iiOrderID,
+   RUN Mc/printxt.p (iiOrderID,
                   0,
                   Order.CLI,
                   1,                      /* 1=invtext */

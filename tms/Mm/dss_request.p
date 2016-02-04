@@ -195,7 +195,7 @@ PROCEDURE pFinalize:
    ldeCurrentTS = fMakeTS().
 
    /* Send the SMS using Request Action Rules for DSS */
-   RUN requestaction_sms.p(INPUT MsRequest.MsRequest,
+   RUN Mm/requestaction_sms.p(INPUT MsRequest.MsRequest,
                            INPUT lcUseCLIType,
                            INPUT MsRequest.ReqSource).
 
@@ -339,7 +339,7 @@ PROCEDURE pFinalize:
                         MsRequest.Custnum,
                         liPeriod) THEN DO:
 
-         RUN creafat.p(MsRequest.CustNum,
+         RUN Mc/creafat.p(MsRequest.CustNum,
                        liDSSMsSeq,
                        "DSSCPFREE",
                        ?, /* amount */

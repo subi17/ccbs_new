@@ -35,7 +35,7 @@ IF RETURN-VALUE BEGINS "ERROR" THEN DO:
    RETURN.
 END.
 
-RUN edrhistory_dump.p(
+RUN Rate/edrhistory_dump.p(
    iiDumpID,
    icFile,
    icDumpMode,

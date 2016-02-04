@@ -10,5 +10,5 @@
 
 {Syst/commali.i}
 
-run nnkoyp (0).
+RUN Ar/nnkoyp (0).
 

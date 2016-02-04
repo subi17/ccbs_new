@@ -49,7 +49,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhUgMember).
+      RUN Mc/eventview2.p(lhUgMember).
    END.
 END.
 
@@ -100,7 +100,7 @@ WITH
 FIND UserGrp where UserGrp.UserGroup = UserGroup no-lock.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST UGMember
@@ -132,7 +132,7 @@ ADD-USER:
        repeat TRANS ON ENDKEY UNDO ADD-USER, LEAVE ADD-USER.
      ASSIGN ufkey = TRUE ufk = 0 ehto = 0
      ufk[1] = 540 ufk[2] = 541 ufk[3] = 516 ufk[8] = 8.
-     RUN ufkey.
+     RUN Syst/ufkey.
 
      IF toimi = 8 THEN LEAVE ADD-USER.
      IF toimi = 1 THEN DO:
@@ -141,7 +141,7 @@ add-single:
         repeat WITH FRAME lis ON ENDKEY UNDO ADD-USER,
                 NEXT ADD-USER:
       PAUSE 0.
-      ehto = 9. RUN ufkey.
+      ehto = 9. RUN Syst/ufkey.
       CLEAR FRAME lis no-pause.
       PROMPT-FOR UGMember.UserCode
       validate(input UGMember.UserCode = "" OR can-find(TMSUser where
@@ -179,7 +179,7 @@ add-single:
      END. /* toimi = 1: add a single group */
 
      ELSE IF toimi = 2 THEN DO:
-        RUN nnugcb(UserGrp.UserGroup).
+        RUN Syst/nnugcb(UserGrp.UserGroup).
         LEAVE add-USER.
      END.
      ELSE IF toimi = 3 THEN DO WITH FRAME copy:
@@ -292,7 +292,7 @@ SELAUS:
    ufk[1]= 542 ufk[2]= 30 ufk[3]= 530 ufk[4]= 518
    ufk[5]= 5   ufk[6]= 4  ufk[7]=   0 ufk[8]=   8 ufk[9]= 1
    ehto = 3 ufkey = FALSE.
-   RUN ufkey.p.
+   RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -449,9 +449,9 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        UserCode = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE UserCode WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if UserCode <> "" THEN DO:
@@ -473,9 +473,9 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        UserName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE UserName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if UserName <> "" THEN DO:
@@ -496,7 +496,7 @@ SELAUS:
 
      else if lookup(nap,"4,f4") > 0 THEN DO:  /* other memberships */
    FIND UGMember where recid(UGMember) = rtab[FRAME-LINE] no-lock.
-   RUN nnugme2(UGMember.UserCode).
+   RUN Syst/nnugme2(UGMember.UserCode).
    ufkey = TRUE.
    NEXT LOOP.
      END.
@@ -580,7 +580,7 @@ SELAUS:
        FIND UGMember where recid(UGMember) = rtab[frame-line(sel)]
        exclusive-lock.
        assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
+       RUN Syst/ufkey.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhUgMember).
        UPDATE UGMember.Memo.

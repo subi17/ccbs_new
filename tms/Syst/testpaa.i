@@ -104,7 +104,7 @@ with side-labels row 10 centered title " Default brand " frame tstfram.
 
 hide frame tstfram.
 /* set propath etc. */
-RUN testbr.p.
+RUN Syst/testbr.p.
 
 &ENDIF
 

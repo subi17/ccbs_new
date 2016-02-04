@@ -108,7 +108,7 @@ FOR EACH ttFiles:
          ActionLog.ActionTS     = fMakeTS().
    END.
    
-   RUN readtermfile.p (ttFiles.TermFile,
+   RUN Mm/readtermfile.p (ttFiles.TermFile,
                      lcLogFile,
                      OUTPUT liRead,
                      OUTPUT liError).

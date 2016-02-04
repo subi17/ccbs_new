@@ -58,7 +58,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 795
          ufk[8] = 8 
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.
    END.
    ELSE ASSIGN toimi = 1
                ufkey = TRUE.
@@ -66,7 +66,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    IF toimi = 1 THEN DO:
 
       ehto = 9. 
-      RUN ufkey.
+      RUN Syst/ufkey.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
@@ -84,7 +84,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                THEN ASSIGN liCount = R-INDEX(INPUT lcFile,"/")
                            lcDir   = SUBSTRING(INPUT lcFile,1,liCount - 1).
 
-               RUN choosefile (IF lcDir NE "" 
+               RUN Mc/choosefile (IF lcDir NE "" 
                                THEN lcDir
                                ELSE INPUT lcFile,
                                OUTPUT lcChosen).
@@ -96,7 +96,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                END. 
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
             END. 
 
             ELSE APPLY LASTKEY. 
@@ -127,7 +127,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       SET llOk.
       IF NOT llOk THEN NEXT.
       
-      RUN read_printhouse_zipcode.p (lcFile,
+      RUN Mc/read_printhouse_zipcode.p (lcFile,
                                      OUTPUT liRead,
                                      OUTPUT liErrors).
       

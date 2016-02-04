@@ -37,7 +37,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       ufk[5] = 795
       ufk[8] = 8 
       ehto   = 0.
-   RUN ufkey.
+   RUN Syst/ufkey.
 
    IF toimi = 5 THEN DO:
       
@@ -48,7 +48,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       SET llOk.
       IF NOT llOk THEN NEXT. 
         
-      RUN commission_run(OUTPUT liChecked,
+      RUN Ar/commission_run(OUTPUT liChecked,
                          OUTPUT liActivated).
 
       MESSAGE liChecked "rows in commission queue were checked," SKIP

@@ -1034,7 +1034,7 @@ PROCEDURE pLaunchHandlers:
       FuncRunQSchedule.RunMode       = "Production"
       FuncRunQSchedule.StartTS       = fSecOffSet(fMakeTS(),liDelay + 300).
       
-   RUN funcrunqsparam_initialize.p (FuncRunQSchedule.FRQScheduleID).
+   RUN Syst/funcrunqsparam_initialize.p (FuncRunQSchedule.FRQScheduleID).
    
    RELEASE FuncRunQSchedule.
 

@@ -5,7 +5,7 @@
   AUTHOR .......: TT
   CREATED ......: 26.02.97
   CHANGED ......: 09.10.98 pr RUN nninme (memo): F4
-                  20.05.02/tk RUN memo
+                  20.05.02/tk RUN Mc/memo
                   22.07.02 tk print full page on "end"
                   12.11.02 jr "nnlasku" => "invoice" in memo
                   21.03.03/aam claiming history
@@ -16,7 +16,7 @@
                   06.02.04 jp  CustNum for memos             
                   14.04.04/aam index CustName replaced with CustNum
                   18.04.06/aam use payments.p instead of nnlasu.p
-                  22.03.07 kl  new param for run payments
+                  22.03.07 kl  new param for RUN Ar/payments
 
   Version ......: M15
   ------------------------------------------------------ */
@@ -43,7 +43,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhInvoice).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhInvoice).
+      RUN Mc/eventview2(lhInvoice).
    END.
 
 END.
@@ -103,7 +103,7 @@ form /* Invoicen asnolla hakua varten */
     COLOR value(cfc) NO-LABELS OVERLAY FRAME F2.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 
@@ -184,7 +184,7 @@ BROWSE:
          ufk[1]= 92  ufk[2]= 707 ufk[3]= 927 ufk[4]= 1492
          ufk[5]= 829  ufk[6]= 0  ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -370,9 +370,9 @@ BROWSE:
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO:
 
-           cfc = "puyr". RUN ufcolor.
+           cfc = "puyr". RUN Syst/ufcolor.
            liInvNum = 0.
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME F1.
            UPDATE lcBrand WHEN gcAllBrand
                   liInvNum WITH FRAME F1.
@@ -398,9 +398,9 @@ BROWSE:
 
      else if lookup(nap,"2,f2") > 0 THEN DO:
 
-           cfc = "puyr". RUN ufcolor.
+           cfc = "puyr". RUN Syst/ufcolor.
            liCustNum = 0.
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME F2.
            UPDATE lcBrand WHEN gcAllBrand
                   liCustNum WITH FRAME F2.
@@ -422,7 +422,7 @@ BROWSE:
      IF LOOKUP(nap,"3,F3") > 0 THEN DO : /* memo */
         FIND Invoice WHERE RECID(Invoice) = rtab[FRAME-LINE(sel)]
         NO-LOCK NO-ERROR.
-        RUN memo(INPUT Invoice.CustNum,
+        RUN Mc/memo(INPUT Invoice.CustNum,
                  INPUT "invoice",
                  INPUT STRING(Invoice.InvNum),
                  INPUT "Invoice number").
@@ -432,7 +432,7 @@ BROWSE:
 
      else if lookup(nap,"4,f4") > 0 THEN DO : /* claiming history */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
-        RUN claimhis(0,
+        RUN Ar/claimhis(0,
                      INPUT Invoice.InvNum).
         ufkey = TRUE.
         NEXT LOOP.
@@ -440,7 +440,7 @@ BROWSE:
 
      else if lookup(nap,"5,f5") > 0 THEN DO : /* valitaan tAmA */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
-        RUN payments(0,Invoice.InvNum,"").
+        RUN Ar/payments(0,Invoice.InvNum,"").
         ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -486,7 +486,7 @@ BROWSE:
      REPEAT : 
 
         ehto = 5.
-        run ufkey.
+        RUN Syst/ufkey.
         ufkey = true.
 
         DO transaction
@@ -506,7 +506,7 @@ BROWSE:
            ufk[1] = IF lcRight = "RW" THEN 7 ELSE 0
            ufk[8] = 8
            ehto = 3.
-           run ufkey.
+           RUN Syst/ufkey.
 
            READKEY.
 
@@ -514,7 +514,7 @@ BROWSE:
               lcRight = "RW" THEN DO:
 
               ehto = 9.
-              run ufkey.
+              RUN Syst/ufkey.
 
               FIND Current Invoice EXCLUSIVE-LOCK.
 
@@ -557,7 +557,7 @@ HIDE FRAME sel no-pause.
 
 PROCEDURE local-disp-row:
 
-   RUN invbal(Invoice.InvNum,
+   RUN Ar/invbal(Invoice.InvNum,
               OUTPUT avoinna).
 
    memo = CAN-FIND(FIRST memo WHERE

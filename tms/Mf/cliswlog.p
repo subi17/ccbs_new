@@ -47,7 +47,7 @@ DEFINE BUFFER bufcliwl FOR CLIWL.
 
 {Mf/cliinlog.i "NEW" "swlog"}
 
-RUN clilog.p 
+RUN Mf/clilog.p 
   (INPUT PROGRAM-NAME(1),
    INPUT "Switchlogprocessing starts...", 
    INPUT 0,    /* No ErrCode */
@@ -101,7 +101,7 @@ FOR EACH CLIWL NO-LOCK WHERE
       NO-LOCK NO-ERROR.
 
    IF NOT AVAIL OperIndir THEN DO:
-      RUN clilog.p 
+      RUN Mf/clilog.p 
         (INPUT PROGRAM-NAME(1),
          INPUT "Operator prefix definition is missing.",
          INPUT 0,        /* No ErrCode */
@@ -115,7 +115,7 @@ FOR EACH CLIWL NO-LOCK WHERE
       FileName   = LC(SUBSTRING(CLIWL.FileName,1,LENGTH(CLIWL.FileName) - 4)).
 
    IF SEARCH(FileDir + FileName + ".log") = ? THEN DO:
-      RUN clilog.p 
+      RUN Mf/clilog.p 
         (INPUT PROGRAM-NAME(1),
          INPUT "The File " + FileDir + 
                 FileName + ".log" + " not created yet.", 
@@ -125,7 +125,7 @@ FOR EACH CLIWL NO-LOCK WHERE
       NEXT.
    END.        
 
-   RUN clilog.p 
+   RUN Mf/clilog.p 
      (INPUT PROGRAM-NAME(1),
       INPUT "The File " + FileDir + 
              FileName + ".log" + " is being Processed.", 
@@ -346,14 +346,14 @@ FOR EACH CLIWL NO-LOCK WHERE
                          bufCLIWL.Processed = NO AND
                          bufCLIWL.OrderId   = CLIWL.OrderId) THEN DO:
 
-      RUN clicrres.p
+      RUN Mf/clicrres.p
         (INPUT  CLIWL.OrderId,
          INPUT  rsoper.CustNum,
          OUTPUT lFiles,
          OUTPUT lDone).
 
       IF NOT lDone THEN
-         RUN clilog.p 
+         RUN Mf/clilog.p 
            (INPUT PROGRAM-NAME(1),
             INPUT "Responsefile not created for OrderId " + 
                    CLIWL.OrderId + ". Please contact a sysadm.", 
@@ -363,7 +363,7 @@ FOR EACH CLIWL NO-LOCK WHERE
 
    END.
    ELSE DO:
-      RUN clilog.p 
+      RUN Mf/clilog.p 
         (INPUT PROGRAM-NAME(1),
          INPUT "No responsefile created. " +
                "The order with OrderId "   + CLIWL.OrderId +
@@ -376,12 +376,12 @@ FOR EACH CLIWL NO-LOCK WHERE
 
    /* Save executed files (both .log AND .txt) 
       in ZipCode FORMAT in a backup directory */
-   RUN clisavef.p
+   RUN Mf/clisavef.p
      (INPUT FileDir + FileName + ".log",
       INPUT rsoper.CustNum).
 
    IF RETURN-VALUE <> "" THEN
-      RUN clilog.p 
+      RUN Mf/clilog.p 
         (INPUT PROGRAM-NAME(1),
          INPUT "Could not store " + FileDir + 
                 FileName + ".log" + " in backup directory" ,
@@ -389,12 +389,12 @@ FOR EACH CLIWL NO-LOCK WHERE
          INPUT NO,  /* NO = Date will NOT show in LOG */
          INPUT NO). /* NO = EMail will NOT be Sent */
 
-   RUN clisavef.p 
+   RUN Mf/clisavef.p 
      (INPUT FileDir + FileName + ".txt",
       INPUT rsoper.CustNum).
 
    IF RETURN-VALUE <> "" THEN
-      RUN clilog.p 
+      RUN Mf/clilog.p 
         (INPUT PROGRAM-NAME(1),
          INPUT "Could not store " + FileDir + 
                 FileName + ".txt" + " in backup directory" ,
@@ -405,14 +405,14 @@ FOR EACH CLIWL NO-LOCK WHERE
 END.    
 
 IF NOT lprocessed THEN
-  RUN clilog.p 
+  RUN Mf/clilog.p 
     (INPUT PROGRAM-NAME(1),
      INPUT "No logfile expected, switchlogprocessing done.", 
      INPUT 0,     /* No ErrCode */
      INPUT YES,   /* YES = Date will show in LOG */
      INPUT YES).  /* YES = EMail will be Sent */ 
 ELSE
-  RUN clilog.p 
+  RUN Mf/clilog.p 
     (INPUT PROGRAM-NAME(1),
      INPUT "Switchlogprocessing done.", 
      INPUT 0,    /* No ErrCode */

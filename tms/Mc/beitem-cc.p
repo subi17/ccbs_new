@@ -36,7 +36,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhFMItem).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhFMItem).
+      RUN Mc/eventview2(lhFMItem).
    END.
 
 END.
@@ -286,7 +286,7 @@ PROCEDURE local-add-record:
           DEFINE VARIABLE loutValueId AS CHARACTER NO-UNDO. 
 
 
-          RUN h-dialog.p (INPUT TABLE ttable BY-REFERENCE ,
+          RUN Help/h-dialog.p (INPUT TABLE ttable BY-REFERENCE ,
                           INPUT lctitle,
                           OUTPUT lrecid,
                           OUTPUT loutValueId).
@@ -306,12 +306,12 @@ PROCEDURE local-add-record:
             BillItem.BillCode = ttable.ValueId NO-LOCK NO-ERROR.
 
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
       
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 

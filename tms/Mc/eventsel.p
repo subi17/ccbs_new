@@ -131,7 +131,7 @@ IF ENTRY(1,icKey,CHR(255)) = "#BEGIN" THEN ASSIGN
    llBegins = TRUE.
 ELSE llBegins = FALSE.
    
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Date  ,  By User  ,  By Table ".
@@ -209,7 +209,7 @@ REPEAT WITH FRAME sel:
            ufk[2] = 0
            ufk[3] = 0.
            
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -360,8 +360,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */                          
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        ASSIGN
              lcevtime = "".
@@ -407,8 +407,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME F2.
        SET UserCode 
            ldate
@@ -435,8 +435,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f3.
        ASSIGN
              lcTable = ""
@@ -474,9 +474,9 @@ REPEAT WITH FRAME sel:
         RUN local-find-this (FALSE).
 
         IF Eventlog.eventlogstatus = 0 OR EventLog.EventLogStatus > 2 
-        THEN RUN eventview (RECID(Eventlog)).
+        THEN RUN Mc/eventview (RECID(Eventlog)).
 
-        ELSE RUN eventview3(INPUT Eventlog.TableName,
+        ELSE RUN Mc/eventview3(INPUT Eventlog.TableName,
                             INPUT Eventlog.DataValues,
                             INPUT Eventlog.EventDate,
                             INPUT Eventlog.Eventtime,

@@ -52,7 +52,7 @@ form
   ASSIGN
   kk=month(si-pvm) vv=year(si-pvm) pp=day(si-pvm)
   chalku=string(pp)
-  cfc = "kal". RUN ufcolor.
+  cfc = "kal". RUN Syst/ufcolor.
 
 
 LOOP:
@@ -86,7 +86,7 @@ repeat:
    END.
    /* lasketaan viikkonumerot */
    DO i = 1 TO 6:
-      RUN uviik.
+      RUN Syst/uviik.
       ASSIGN
       vk[i] = substring(string(uviikko,"999999"),3,2) + "-"
             + substring(string(uviikko,"999999"),5,2)
@@ -102,7 +102,7 @@ toimi:
             ufk[1]=24 ufk[2]=25 ufk[3]=0 ufk[4]=0
             ufk[5]=11 ufk[6]=0  ufk[7]=0 ufk[8]=8 ehto=3.
          if helpkey <> "f9" THEN ufk[5] = 0.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
          uf=false.
       END.
       nap = "".

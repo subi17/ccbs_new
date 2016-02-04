@@ -79,7 +79,7 @@ IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
 ELSE lcUserName = "".
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey. 
  
  DISPLAY
  "A) Agreement Customer          "  @ menuc[1]    SKIP
@@ -102,7 +102,7 @@ DO WHILE TRUE:
    IF FRAME-INDEX EQ 1 THEN DO:
       IF CAN-FIND(FIRST Customer WHERE
                         Customer.CustNum = liAgrCust) THEN
-         run nnasse(liAgrCust,"").
+         RUN Mc/nnasse(liAgrCust,"").
       ELSE 
          MESSAGE
             "Agreement customer " + STRING(liAgrCust) + " does not exist!"
@@ -118,7 +118,7 @@ DO WHILE TRUE:
       ELSE DO:
          IF CAN-FIND(FIRST Customer WHERE
                            Customer.CustNum = liInvCust) THEN
-            run nnasse(liInvCust,"").
+            RUN Mc/nnasse(liInvCust,"").
          ELSE 
             MESSAGE
                "Invoice customer " + STRING(liAgrCust) + " does not exist!"
@@ -129,7 +129,7 @@ DO WHILE TRUE:
    ELSE IF FRAME-INDEX = 3 THEN DO:
       IF CAN-FIND(FIRST Customer WHERE
                         Customer.CustNum = liCustNum) THEN
-         run nnasse(liCustNum,"").
+         RUN Mc/nnasse(liCustNum,"").
       ELSE 
          MESSAGE
             "User customer " + STRING(liCustNum) + " does not exist!"
@@ -138,7 +138,7 @@ DO WHILE TRUE:
 
    ELSE IF FRAME-INDEX = 4 THEN DO:
       
-      RUN chgmsowner(MobSub.MsSeq,
+      RUN Mm/chgmsowner(MobSub.MsSeq,
                      0,
                      "new").
    END. 
@@ -153,7 +153,7 @@ DO WHILE TRUE:
    END.
 
    ELSE IF FRAME-INDEX = 7 THEN DO:
-      RUN ownerreq(MobSub.MsSeq,0,?).
+      RUN Mm/ownerreq(MobSub.MsSeq,0,?).
    END. 
     
    ELSE IF FRAME-INDEX = 8 OR FRAME-INDEX = 0 THEN LEAVE.

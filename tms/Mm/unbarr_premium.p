@@ -33,7 +33,7 @@ FOR EACH MobSub NO-LOCK WHERE
    IF AVAIL Barring AND
             Barring.BarringStatus EQ {&BARR_STATUS_ACTIVE} AND
             Barring.UserCode EQ "CreSub / CreSub" THEN
-      RUN barrengine.p (MobSub.MsSeq,
+      RUN Mm/barrengine.p (MobSub.MsSeq,
                         "Prod_TotalPremium_Off=0",
                         {&REQUEST_SOURCE_SCRIPT}, /* source  */
                         "", /* creator */

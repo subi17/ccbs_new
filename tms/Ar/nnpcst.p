@@ -443,7 +443,7 @@ FOR EACH ttReCalc,
       (included/excluded) may have been converted in billing run according
       to the customer's VatIncl value -> now counters need to be in their 
       original tax status again */
-   RUN recalculate_invrowcounter.p(Invoice.CustNum,
+   RUN Inv/recalculate_invrowcounter.p(Invoice.CustNum,
                                    0,
                                    xInvSeq.InvSeq,       
                                    xInvSeq.FromDate,

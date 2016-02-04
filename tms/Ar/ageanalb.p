@@ -48,7 +48,7 @@ ASSIGN ttCriter.InvGroup = ""
        ttCriter.OnlySum  = TRUE
        ttCriter.SortBy   = 1.
 
-RUN ageanal (INPUT TABLE TCustGroup,
+RUN Ar/ageanal (INPUT TABLE TCustGroup,
              INPUT TABLE ttCriter).
 
 /* send the report AS email */

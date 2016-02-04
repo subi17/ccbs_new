@@ -24,7 +24,7 @@ for first msowner no-lock use-index cli_s where
 
       i = i + 1.
 
-      RUN conv_invrowcounter.p(InvSeq.InvSeq,
+      RUN tms_support/billing/conv_invrowcounter.p(InvSeq.InvSeq,
                                OUTPUT liCount).
 
       j = j + liCount.

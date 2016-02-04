@@ -107,7 +107,7 @@ FOR EACH ttFiles:
    ASSIGN spit1  = 80
           skayt1 = 80.
 
-   RUN ddauthin (ttFiles.AuthFile, 
+   RUN Ar/ddauthin (ttFiles.AuthFile, 
                  FALSE,      /* show messages */
                  TRUE,       /* send mail     */
                  OUTPUT liCount).

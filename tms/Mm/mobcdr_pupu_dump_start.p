@@ -131,7 +131,7 @@ PROCEDURE pStartDump:
 
    DEF INPUT PARAMETER ilAppend  AS LOG  NO-UNDO.
 
-   RUN mobcdr_pupu_dump.p(ldaReadDate,ldeReadInTS,fTimeStamp2DateTime(ldeCurrStamp),
+   RUN Mm/mobcdr_pupu_dump.p(ldaReadDate,ldeReadInTS,fTimeStamp2DateTime(ldeCurrStamp),
                           lcLogFile,ilAppend,INPUT-OUTPUT ldeCDRStamp).
 
 END PROCEDURE.

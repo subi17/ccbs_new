@@ -65,7 +65,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhMenuTree).
+      RUN Mc/eventview2.p(lhMenuTree).
    END.
 END.
 
@@ -159,7 +159,7 @@ form /*  Search by module  */
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
    FIND FIRST MenuTree no-lock no-error.
    IF AVAILABLE MenuTree THEN ASSIGN memory = recid(MenuTree)
@@ -185,7 +185,7 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* valikon lisays  */
       assign cfc = "lis" ufkey = true fr-header = " LISAYS " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
@@ -195,7 +195,7 @@ add-new:
 
             CREATE MenuTree.
             ufkey = TRUE.
-            ehto = 9. RUN ufkey.
+            ehto = 9. RUN Syst/ufkey.
 
             UPDATE
                 MenuTree.Level 
@@ -393,7 +393,7 @@ BROWSE:
          ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -580,7 +580,7 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". run ufcolor. haku = "". ehto = 9. RUN ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor. haku = "". ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
         FIND MenuTree where recid(MenuTree) = rtab[FRAME-LINE] no-lock.
         if MenuTree.Level ne "0" THEN DO:
            IF MenuTree.MenuType = 2 THEN haku = MenuTree.Level + string(
@@ -607,9 +607,9 @@ BROWSE:
 
      /* Haku sarakk. 3 */
      if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.
         haku2 = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
         UPDATE haku2 WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
         if haku2 <> "" THEN DO:
@@ -628,9 +628,9 @@ BROWSE:
 
      /* Search by module */
      if lookup(nap,"2,f2") > 0 THEN DO: 
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.
         haku3 = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
         UPDATE haku3 WITH FRAME hayr3.
         HIDE FRAME hayr3 no-pause.
         if haku3 <> "" THEN DO:
@@ -648,7 +648,7 @@ BROWSE:
      END. /* Search by module */
 
      else if nap = "7" or nap = "f7" AND lcRight = "RW" THEN DO: /* siirto */
-        assign ufkey = true ehto = 9. cfc = "kline". RUN ufcolor. RUN ufkey.
+        assign ufkey = true ehto = 9. cfc = "kline". RUN Syst/ufcolor. RUN Syst/ufkey.
         DO TRANSACTION ON ENDKEY UNDO, NEXT LOOP:
            assign mista = "" minne = "".
            UPDATE mista minne WITH FRAME siirto EDITING:
@@ -832,7 +832,7 @@ siirto:             repeat:
 
         ASSIGN ed-taso = MenuTree.Level ed-pka = MenuTree.Position.
         assign ufkey = true ehto = 9 fr-header = " CHANGE MenuText "
-        cfc = "lis". RUN ufcolor.
+        cfc = "lis". RUN Syst/ufcolor.
         PAUSE 0 no-message.
 
         FIND FIRST MenuText where 
@@ -859,7 +859,7 @@ siirto:             repeat:
 
         IF lcRight = "RW" THEN DO:
 
-           RUN ufkey.
+           RUN Syst/ufkey.
 
            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMenuTree).
            UPDATE 

@@ -241,7 +241,7 @@ fMarkOrderStamp(Order.OrderID,
 
 IF llDoEvent THEN fCleanEventObjects().
 
-RUN cancelorder.p(Order.OrderId,TRUE).
+RUN Mc/cancelorder.p(Order.OrderId,TRUE).
 
 RETURN "".
 

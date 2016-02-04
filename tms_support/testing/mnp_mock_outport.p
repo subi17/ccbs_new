@@ -84,7 +84,7 @@ PROCEDURE pUserInput:
       UPDATE lcCLI liCustNum WITH FRAME lis EDITING:
 
          IF ufkey THEN DO:
-            ASSIGN ehto = 9. RUN ufkey.p.
+            ASSIGN ehto = 9. RUN Syst/ufkey.p.
             ufkey = false.
          END.
 

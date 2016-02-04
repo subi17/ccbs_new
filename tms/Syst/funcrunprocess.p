@@ -23,7 +23,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhFuncRunProcess).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhFuncRunProcess).
+      RUN Mc/eventview2(lhFuncRunProcess).
    END.
 
 END.
@@ -132,7 +132,7 @@ IF NOT AVAILABLE FuncRunConfig THEN DO:
 END.
 lcConfName = FuncRunConfig.ConfName.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -226,7 +226,7 @@ REPEAT WITH FRAME sel:
            ufk[5] = 11
            ufk[3] = 0.
            
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -472,8 +472,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFuncRunProcess).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -510,7 +510,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.
 
 fCleanEventObjects().
 
@@ -638,7 +638,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
       ELSE toimi = 1.
       
@@ -649,7 +649,7 @@ PROCEDURE local-UPDATE-record:
                 
             FIND CURRENT FuncRunProcess EXCLUSIVE-LOCK.
             ehto = 9.
-            RUN ufkey.
+            RUN Syst/ufkey.
          
             UPDATE
                FuncRunProcess.StartTS
@@ -675,11 +675,11 @@ PROCEDURE local-UPDATE-record:
       END.
 
       ELSE IF toimi = 2 THEN 
-         RUN errorlog.p ("FuncRunProcess",
+         RUN Mc/errorlog.p ("FuncRunProcess",
                          STRING(FuncRunProcess.FRProcessID),
                          "").
 
-      ELSE IF toimi = 4 THEN RUN funcrunresult.p(FuncRunProcess.FRProcessID).
+      ELSE IF toimi = 4 THEN RUN Syst/funcrunresult.p(FuncRunProcess.FRProcessID).
         
       ELSE IF toimi = 8 THEN LEAVE. 
    END.

@@ -214,7 +214,7 @@ END.
 IF pcICC > "" AND
    Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
 
-   RUN orderinctrl.p(Order.OrderId, 0, TRUE).
+   RUN Mc/orderinctrl.p(Order.OrderId, 0, TRUE).
 
    IF RETURN-VALUE > "" THEN 
       UNDO, RETURN appl_err("Mobile order release failed").

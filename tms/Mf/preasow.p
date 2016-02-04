@@ -134,7 +134,7 @@ SKIP(1)
     NO-LABELS OVERLAY FRAME saved.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 pstypes = "NATIONAL,INTERNATIONAL,NAT & INT".
@@ -234,7 +234,7 @@ BROWSE:
          ufk[1]= 36  ufk[2]= 0 ufk[3]= /*1500*/ 0 ufk[4]= 1501
          ufk[5]= 1500   ufk[6]= 15 ufk[7]= 1503 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -417,9 +417,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.
         haku-CLI = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
         UPDATE haku-CLI WITH FRAME haku-f1.
         HIDE FRAME haku-f1 no-pause.
         if haku-CLI <> "" THEN DO:
@@ -439,7 +439,7 @@ BROWSE:
 
      else if lookup(nap,"5,f5") > 0 THEN DO:
        FIND CLI where recid(CLI) = rtab[FRAME-LINE] NO-LOCK NO-ERROR.
-       RUN viewpres(CLI.CLI).
+       RUN Mf/viewpres(CLI.CLI).
        ufkey = TRUE.
      END.
 
@@ -490,7 +490,7 @@ BROWSE:
         ASSIGN
         ehto  = 9
         ufkey = TRUE.
-        RUN ufkey.
+        RUN Syst/ufkey.
 
         MESSAGE
         "All customer's A-sub. nos. between/including"    SKIP
@@ -518,7 +518,7 @@ BROWSE:
          ASSIGN
          ehto  = 9
          ufkey = TRUE.
-         RUN ufkey.
+         RUN Syst/ufkey.
 
          RUN presel(FALSE).
 
@@ -532,7 +532,7 @@ BROWSE:
      else if lookup(nap,"enter,return") > 0 THEN
      DO:
        FIND CLI where recid(CLI) = rtab[FRAME-LINE] NO-LOCK NO-ERROR.
-       RUN viewpres(CLI.CLI).
+       RUN Mf/viewpres(CLI.CLI).
        ufkey = TRUE.
      END.
 

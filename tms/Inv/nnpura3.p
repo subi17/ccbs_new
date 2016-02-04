@@ -280,7 +280,7 @@ repeat:
                       liPrCust = MsOwner.CustNum.
             END.
             
-            RUN printxt (liPrCust,
+            RUN Mc/printxt (liPrCust,
                          liMsSeq, 
                          "",
                          1,                      /* 1=invtext */

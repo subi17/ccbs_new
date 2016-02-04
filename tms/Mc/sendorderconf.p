@@ -64,27 +64,27 @@ FIND FIRST OrderCustomer WHERE OrderCustomer.Brand = gcBrand AND
 IF liLanguage = 5 THEN DO:
    IF (OrderCustomer.CustIdType EQ "CIF") AND 
       (Order.Ordertype = {&ORDER_TYPE_NEW}) THEN
-      RUN parse_tags.p (lcRootDir + "conf_email_company_new_en.html",
+      RUN Func/parse_tags.p (lcRootDir + "conf_email_company_new_en.html",
                 lcEmailFile, iiOrderId, 2, 
                 icEmailAddress, OUTPUT lcErrFile). /*2=conf mes*/
    ELSE IF (OrderCustomer.CustIdType EQ "CIF") AND 
            (Order.Ordertype = {&ORDER_TYPE_MNP})
-      THEN RUN parse_tags.p (lcRootDir + 
+      THEN RUN Func/parse_tags.p (lcRootDir + 
                      "conf_email_company_mnp_en.html",
                      lcEmailFile, iiOrderId, 2, 
                      icEmailAddress, OUTPUT lcErrFile). /*2=conf mes*/
    ELSE IF Order.Ordertype = {&ORDER_TYPE_NEW} THEN
-      RUN parse_tags.p (lcRootDir + "conf_email_new_en.html",
+      RUN Func/parse_tags.p (lcRootDir + "conf_email_new_en.html",
                 lcEmailFile, iiOrderId, 2, 
                 icEmailAddress, OUTPUT lcErrFile). /* 2 = conf mes */
    ELSE IF Order.Ordertype = {&ORDER_TYPE_MNP} THEN
-      RUN parse_tags.p (lcRootDir + "conf_email_mnp_en.html",
+      RUN Func/parse_tags.p (lcRootDir + "conf_email_mnp_en.html",
                 lcEmailFile, iiOrderId, 2, 
                 icEmailAddress, OUTPUT lcErrFile). /* 2 = conf mes */
    /* fusion STC needs propably own template. TODO later 
    ELSE IF (Order.Ordertype = {&ORDER_TYPE_STC}  AND
             Order.OrderChannel BEGINS "fusion") THEN /* new fusion order */
-      RUN parse_tags.p (lcRootDir + "conf_email_new_en.html",
+      RUN Func/parse_tags.p (lcRootDir + "conf_email_new_en.html",
                 lcEmailFile, iiOrderId, 2, OUTPUT lcErrFile). /* 2 = conf mes */
 
    */
@@ -94,27 +94,27 @@ END.*/
 /*ELSE DO:*/ /*Spanish*/
    IF (OrderCustomer.CustIdType EQ "CIF") AND 
       (Order.Ordertype = {&ORDER_TYPE_NEW}) THEN
-      RUN parse_tags.p (lcRootDir + "conf_email_company_new_es.html",
+      RUN Func/parse_tags.p (lcRootDir + "conf_email_company_new_es.html",
                 lcEmailFile, iiOrderId, 2, 
                 icEmailAddress, OUTPUT lcErrFile). /*2=conf mes*/
    ELSE IF (OrderCustomer.CustIdType EQ "CIF") AND 
            (Order.Ordertype = {&ORDER_TYPE_MNP})
-      THEN RUN parse_tags.p (lcRootDir + 
+      THEN RUN Func/parse_tags.p (lcRootDir + 
                      "conf_email_company_mnp_es.html",
                      lcEmailFile, iiOrderId, 2, 
                      icEmailAddress, OUTPUT lcErrFile). /*2=conf mes*/  
    ELSE IF Order.Ordertype = {&ORDER_TYPE_NEW} THEN
-       RUN parse_tags.p (lcRootDir + "conf_email_new_es.html",
+       RUN Func/parse_tags.p (lcRootDir + "conf_email_new_es.html",
                  lcEmailFile, iiOrderId, 2, 
                  icEmailAddress, OUTPUT lcErrFile). /* 2 = conf mes */
    ELSE IF Order.Ordertype = {&ORDER_TYPE_MNP} THEN
-       RUN parse_tags.p (lcRootDir + "conf_email_mnp_es.html",
+       RUN Func/parse_tags.p (lcRootDir + "conf_email_mnp_es.html",
                  lcEmailFile, iiOrderId, 2, 
                  icEmailAddress, OUTPUT lcErrFile). /* 2 = conf mes */
    /* fusion STC needs propably own template. TODO later
    ELSE IF (Order.Ordertype = {&ORDER_TYPE_STC} AND 
             Order.OrderChannel BEGINS "fusion") THEN  /* new fusion order */
-          RUN parse_tags.p (lcRootDir + "conf_email_new_es.html",
+          RUN Func/parse_tags.p (lcRootDir + "conf_email_new_es.html",
                            lcEmailFile, iiOrderId, 2, OUTPUT lcErrFile). /* 2 = conf mes */
    */
    ELSE lcErrFile = "Not supported type in order " + " " + 

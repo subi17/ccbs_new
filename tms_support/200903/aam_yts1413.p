@@ -37,7 +37,7 @@ repeat:
    lcstat = fCheckStatus(MobSub.MsSeq).
    if not lcstat begins "y_" then next.
    
-   RUN barrengine.p (Mobsub.MsSeq,
+   RUN Mm/barrengine.p (Mobsub.MsSeq,
                     "UN" + lcstat,     /* package for unbarring */
                       "5",                /* source  */
                       katun,             /* creator */

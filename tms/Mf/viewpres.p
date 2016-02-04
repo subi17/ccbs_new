@@ -99,6 +99,6 @@ WITH
 
 
    ASSIGN
-   ufk = 0 ufk[8] = 8 ehto = 0. RUN ufkey.
+   ufk = 0 ufk[8] = 8 ehto = 0. RUN Syst/ufkey.
 
    HIDE FRAME Presel NO-PAUSE.

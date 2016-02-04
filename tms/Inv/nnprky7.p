@@ -93,7 +93,7 @@ toimi:
          ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       IF llStart THEN ASSIGN nap     = "1"
@@ -105,7 +105,7 @@ toimi:
 
       if lookup(nap,"1,f1") > 0 THEN DO:
          ASSIGN ehto = 9 ufkey = TRUE. 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
 
          REPEAT ON ENDKEY UNDO, LEAVE:
             UPDATE 
@@ -169,7 +169,7 @@ END. /* toimi */
 ASSIGN tila = TRUE.
 {Syst/utuloste.i "return"}
 
-RUN umakro (TRUE,
+RUN Syst/umakro (TRUE,
             lcMacros).
 
 message "Printing in progress, ESC = cancel".

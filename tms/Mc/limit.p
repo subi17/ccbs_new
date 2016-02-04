@@ -110,7 +110,7 @@ WITH  OVERLAY ROW 8 centered
 orders = "By Customer    ,By Subscription".
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -207,7 +207,7 @@ BROWSE:
         ufk[6] = 1752   WHEN AVAIL Limit 
         ufk[8]= 8 
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -244,7 +244,7 @@ BROWSE:
       
       IF LOOKUP(nap,"f4") > 0 AND ufk[4] > 0 THEN DO:
          
-         RUN selectbox(
+         RUN Syst/selectbox(
             "LIMIT FUNCTIONS",
             "Set limit",
             OUTPUT lcSelected).
@@ -375,7 +375,7 @@ BROWSE:
          
          RUN local-find-this(FALSE).
          
-         RUN memo
+         RUN Mc/memo
             (Limit.Custnum,
             "Limit",
             STRING(Limit.Custnum) + ";" + STRING(Limit.TMRuleSeq),
@@ -390,7 +390,7 @@ BROWSE:
       
          RUN local-find-this(FALSE).
          
-         RUN eventsel("limit",
+         RUN Mc/eventsel("limit",
          "#BEGIN" + chr(255) + STRING(piCustnum) + chr(255) + 
          STRING(Limit.LimitType) + chr(255) + string(pitmruleseq) + 
          chr(255) + STRING(Limit.LimitID) + chr(255) + 
@@ -568,7 +568,7 @@ PROCEDURE local-UPDATE-record:
    UPDATE-LOOP:
    REPEAT ON ENDKEY UNDO, LEAVE:
    
-      ehto = 9. RUN ufkey.
+      ehto = 9. RUN Syst/ufkey.
   
       DISP ldeValue lcValueDesc WITH FRAME lis.
    
@@ -585,7 +585,7 @@ PROCEDURE local-UPDATE-record:
       
       IF FRAME-FIELD = "ldeValue" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
             
-         RUN tmscodesel(INPUT "Limit",  
+         RUN Syst/tmscodesel(INPUT "Limit",  
                               lcLimitType,
                               "Limit",
                               "",
@@ -601,7 +601,7 @@ PROCEDURE local-UPDATE-record:
          END.   
 
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
          NEXT. 
          
       END.

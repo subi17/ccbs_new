@@ -26,7 +26,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhMobsub).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhMobsub).
+      RUN Mc/eventview2.p(lhMobsub).
    END.
 
 END.
@@ -79,7 +79,7 @@ loop:
 repeat:
 
    assign ufkey = true ehto = 9.
-   run ufkey.
+   RUN Syst/ufkey.
 
    update cli with frame askcli.
 
@@ -97,7 +97,7 @@ repeat:
       ASSIGN ufkey = TRUE ufk = 0 ehto = 1
       ufk[1] = 7
       ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.
 
       if toimi = 8 then do:
          next loop.
@@ -105,7 +105,7 @@ repeat:
 
       if toimi = 1 then do:
          assign ufkey = true ehto = 9.
-         run ufkey.
+         RUN Syst/ufkey.
 
          if llDoEvent THEN RUN StarEventSetOldBuffer(lhMobSub).
          update mobsub.msstat with frame lis.

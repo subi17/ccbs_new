@@ -435,7 +435,7 @@ FOR EACH ttDueDate:
    IF icRunMode = "test" AND lcTestDir > "" THEN 
       lcFile = lcTestDir + "*" + lcFile.
 
-   RUN ddoutfile_xml.p (INPUT-OUTPUT TABLE ttInvoice,  
+   RUN Inv/ddoutfile_xml.p (INPUT-OUTPUT TABLE ttInvoice,  
                  ttDueDate.DueDate,
                  ttDueDate.BankCode,
                  liPicked,

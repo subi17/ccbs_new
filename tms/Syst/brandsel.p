@@ -7,7 +7,7 @@
   CHANGED ......: 1.9.03 jp /TMS+
                   03.10.03/aam use fChgBrand
                   03.03.05 kl return correctly
-                  28.01.08 kl run ufkey, not .p
+                  28.01.08 kl RUN Syst/ufkey, not .p
 
   VERSION ......: M15
   ---------------------------------------------------------------------- */
@@ -69,7 +69,7 @@ form /* seek Brand  by xBRName */
     WITH row 4 col 2 TITLE " FIND NAME "
     NO-labels overlay FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -107,12 +107,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a Brand  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR Brand.Brand
@@ -205,7 +205,7 @@ BROWSE:
         ufk[1]= 35  ufk[2]= 0 /* 30 */ ufk[3]= 0 ufk[4]= 0
         ufk[5]= 11  ufk[6]= 0 /* 4  */ ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = false.
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -342,8 +342,8 @@ BROWSE:
 
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = true.
        CLEAR FRAME f1.
        SET xBrand WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -406,7 +406,7 @@ si-recid = xrecid.
 
 /* start TMS */
 IF LOOKUP(nap,"8,f8") = 0 THEN DO:
-   RUN nn_brand.
+   RUN Syst/nn_brand.
    RETURN RETURN-VALUE.
 END.
 ELSE RETURN "LEAVE".

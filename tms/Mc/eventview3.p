@@ -24,7 +24,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhEventlog).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhEventlog).
+      RUN Mc/eventview2.p(lhEventlog).
    END.
 
 END.
@@ -157,7 +157,7 @@ form /* seek Eventlog  BY UserCode */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND User "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 view frame lis2.
 
@@ -241,7 +241,7 @@ BROWSE:
           ufk[8]= 8 
           ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -413,7 +413,7 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-update-record.                       
        HIDE FRAME lis. /* NO-PAUSE.*/

@@ -45,7 +45,7 @@ form
     with scroll 1 5 down  row 11 centered 
     title lctitle   overlay frame sel.
 
-   cfc = "sel". run ufcolor. assign ccc = cfc.
+   cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
 END.
 
 DEF BUFFER xxCustomer FOR Customer.
@@ -202,7 +202,7 @@ print-line:
          ufk[4] = 5
          ufk[5] = 11 ufk[8] = 8  ufk[9] = 1
          ehto = 3 ufkey = false.
-         run ufkey.p.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -315,8 +315,8 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* CustNum */
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.
+           ehto = 9. RUN Syst/ufkey. ufkey = true.
            update CustNum with frame hayr.
            hide frame hayr no-pause.
            if CustNum ENTERED then do:

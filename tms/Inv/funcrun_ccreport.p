@@ -65,7 +65,7 @@ IF AVAILABLE Invoice THEN DO:
    END.   
 END.
  
-RUN ccreport.p (ldaInvDate,
+RUN Mm/ccreport.p (ldaInvDate,
                 ldaInvDate,
                 liInvType,
                 "",

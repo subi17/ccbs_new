@@ -73,14 +73,14 @@ toimi:
          ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       READKEY.
       nap = keylabel(LASTKEY).
 
       if lookup(nap,"1,f1") > 0 THEN DO:
-         ehto = 9. RUN ufkey.p.
+         ehto = 9. RUN Syst/ufkey.p.
          UPDATE CustNum1
              CustNum2 validate(input CustNum2 >= input CustNum1, "Invalid order !")
                 pvm1
@@ -113,7 +113,7 @@ toimi:
 ASSIGN tila = TRUE.
 {Syst/utuloste.i "return"}
 
-RUN umakro (TRUE).
+RUN Syst/umakro (TRUE).
 
 message "Printing, ESC = break".
 

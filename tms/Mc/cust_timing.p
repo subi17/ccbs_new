@@ -36,7 +36,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhMobSub).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhMobSub).
+      RUN Mc/eventview2.p(lhMobSub).
    END.
 
 END.
@@ -165,7 +165,7 @@ WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.
    
    CREATE ttCustomer. 
 
@@ -271,7 +271,7 @@ ACTION:
       ufk[8] = 8.
 
 
-      RUN ufkey.
+      RUN Syst/ufkey.
 
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.

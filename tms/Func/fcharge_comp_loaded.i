@@ -81,7 +81,7 @@ FUNCTION fCheckChargeLimits RETURNS CHAR
 
    IF ilPaytype = TRUE THEN DO:
       ldeCurrBal = 0.
-      RUN balancequery(icCLI).
+      RUN Gwy/balancequery(icCLI).
       ldeCurrBal = INT(RETURN-VALUE) / 100 NO-ERROR.
       IF ldeCurrBal < ideCharge THEN RETURN "Charge exceeds balance".
    END.

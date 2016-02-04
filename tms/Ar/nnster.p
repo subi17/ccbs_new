@@ -127,7 +127,7 @@ tnro2   = 9999999.
 
 rajat:
 repeat WITH FRAME rajat:
-   ehto = 9.  RUN ufkey.
+   ehto = 9.  RUN Syst/ufkey.
 
    UPDATE
    pvm1  pvm2  validate (input pvm2  >= input pvm1,"Invalid order !")
@@ -160,7 +160,7 @@ toimi:
        ASSIGN
        ufk = 0 ehto = 0 ufk[1] = 91  ufk[5] = 63 ufk[8] = 8.
        IF acct = 0 THEN ufk[5] = 0.
-       RUN ufkey.
+       RUN Syst/ufkey.
 
 
        IF toimi = 1 THEN NEXT rajat.

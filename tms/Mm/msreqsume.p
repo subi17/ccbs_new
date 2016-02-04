@@ -4,7 +4,7 @@
   SOVELLUTUS ...: TMS
   AUTHOR .......: aam 
   CREATED ......: 13.02.06
-  changePVM ....: 12.12.06 mvi new param to run msrequest (reqstat = ?)
+  changePVM ....: 12.12.06 mvi new param to RUN Mm/msrequest (reqstat = ?)
                   31.10.07 jp  new parameter for msrequest
                    
 
@@ -42,7 +42,7 @@ DO WHILE TRUE:
    ASSIGN ufk    = 0 
           ufk[8] = 8 
           ehto   = 3. 
-   RUN ufkey. 
+   RUN Syst/ufkey. 
 
    DISPLAY
       lcMenuc
@@ -56,13 +56,13 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,8,F8") > 0 THEN LEAVE.
 
    ELSE IF FRAME-INDEX = liMenu - 5  THEN DO:
-      RUN msreqocme.
+      RUN Mm/msreqocme.
    END. 
    
    ELSE IF FRAME-INDEX >= 1 AND FRAME-INDEX <= liMenu - 1 
    THEN DO:
 
-      RUN msrequest (liReqType[FRAME-INDEX],
+      RUN Mm/msrequest (liReqType[FRAME-INDEX],
                      ?, /* reqstat ? for all */
                      0,
                      0,

@@ -300,7 +300,7 @@ FUNCTION fResponseRow RETURNS LOGICAL
       IF ilLastCDROfDay THEN DO:
          /* Saldo Amount for prepaid subscription */
          IF Mobsub.PayType = TRUE AND pcUserName NE "miyoigo" THEN
-            RUN cdr_detail_value.p("PrepCDR",
+            RUN Mm/cdr_detail_value.p("PrepCDR",
                                    ldaDatest,
                                    ihCDR::DtlSeq,
                                    "Balance after",
@@ -350,7 +350,7 @@ FUNCTION fResponseRow RETURNS LOGICAL
       
       IF Mobsub.PayType = TRUE AND pcUserName NE "miyoigo" THEN DO:
          
-         RUN cdr_detail_value.p("PrepCDR",
+         RUN Mm/cdr_detail_value.p("PrepCDR",
                                 ldaDatest,
                                 ihCDR::DtlSeq,
                                 "Balance after",

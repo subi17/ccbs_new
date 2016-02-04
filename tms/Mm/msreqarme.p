@@ -39,7 +39,7 @@ DO WHILE TRUE:
    ASSIGN ufk    = 0 
           ufk[8] = 8 
           ehto   = 3. 
-   RUN ufkey. 
+   RUN Syst/ufkey. 
 
    DISPLAY
       lcMenuc
@@ -54,7 +54,7 @@ DO WHILE TRUE:
 
    ELSE IF FRAME-INDEX >= 1 AND FRAME-INDEX <= liMenu - 1 
    THEN DO:
-      RUN msreqstat (liReqType[FRAME-INDEX],
+      RUN Mm/msreqstat (liReqType[FRAME-INDEX],
                      0).
    END.
 

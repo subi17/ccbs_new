@@ -46,7 +46,7 @@ IF ilOrder  /* HOLD */ THEN DO:
                    "Change",
                    0.0).
                                 
-   RUN memo(INPUT Order.Custnum,
+   RUN Mc/memo(INPUT Order.Custnum,
             INPUT "ORDER" ,
             INPUT STRING(Order.OrderID),
             INPUT "CreditHold").   

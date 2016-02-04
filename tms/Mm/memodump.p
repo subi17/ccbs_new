@@ -23,9 +23,9 @@ DEF TEMP-TABLE ttMemo
    FIELD chetu    as ch
    FIELD msseq    as int.               
 
-RUN memodumpper ("Mobsub","mobsubmemo").
+RUN Mm/memodumpper ("Mobsub","mobsubmemo").
 EMPTY TEMP-TABLE ttMemo.
-RUN memodumpper ("Order","ordermemo").
+RUN Mm/memodumpper ("Order","ordermemo").
 
 
 /* ----------------------------------------------------- */

@@ -108,7 +108,7 @@ PROCEDURE pSingleInvoice:
    END. 
  
    /* create plan */
-   RUN pplancre (Invoice.CustNum,  /* request may be made by agr.cust */
+   RUN Ar/pplancre (Invoice.CustNum,  /* request may be made by agr.cust */
                  Invoice.InvNum,
                  0,
                  liBatchQty,
@@ -136,7 +136,7 @@ PROCEDURE pSingleInvoice:
  
    /* print a letter, if request was made after original due date */
    IF ldtActDate > Invoice.DueDate THEN DO:
-      RUN prinpplan(liPlanID,
+      RUN Ar/prinpplan(liPlanID,
                     MsRequest.CustNum,
                     OUTPUT lcReqChar).
 
@@ -152,7 +152,7 @@ PROCEDURE pSingleInvoice:
    /* fee for activating a payment plan */
    IF MsRequest.CreateFees THEN DO:
    
-      RUN creasfee (Invoice.CustNum,
+      RUN Mc/creasfee (Invoice.CustNum,
                     0,
                     TODAY,
                     "PaymPlan",

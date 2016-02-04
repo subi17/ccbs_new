@@ -624,7 +624,7 @@ PROCEDURE pServicePackage:
       CASE CTServPac.ServType:
       /* barring */
       WHEN 8 THEN DO:
-         RUN barrengine (liMsSeq,
+         RUN Mm/barrengine (liMsSeq,
                          lcActionKey,
                          icSource,            /* source  */
                          "ReqAct",            /* creator */
@@ -848,7 +848,7 @@ PROCEDURE pBarring:
    /* activation */
    WHEN 1 THEN DO:
          
-      RUN barrengine (liMsSeq,
+      RUN Mm/barrengine (liMsSeq,
                       ttAction.ActionKey,
                       icSource,            /* source  */
                       "ReqAct",            /* creator */

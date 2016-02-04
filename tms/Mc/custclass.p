@@ -6,7 +6,7 @@
   CREATED ......: 28-12-99
   CHANGED ......: 21.05.02/tk Event logging added
                   27.02.03 tk tokens
-                  19.03.03/tk run memo
+                  19.03.03/tk RUN Mc/memo
                   24.03.03/jp prompt-for not used
                   16.09.03 jp Brand 
                   06.02.04 jp custnum for memo
@@ -30,7 +30,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhCustClass).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCustClass).
+      RUN Mc/eventview2(lhCustClass).
    END.
 
 END.
@@ -112,7 +112,7 @@ form
     FRAME f4.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -146,12 +146,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CustClass  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            CREATE CustClass.
@@ -234,7 +234,7 @@ BROWSE:
         ufk[7]= (IF lcRight = "RW" THEN 1851 ELSE 0)
         ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -372,8 +372,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        Disp lcBrand With FRAME f1.
        SET lcBrand WHEN gcAllBrand = TRUE
@@ -393,8 +393,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME F2.
        DISP lcBrand WITH frame f2.
        SET lcBrand WHEN gcAllBrand = TRUE 
@@ -415,7 +415,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
 
         RUN local-find-this(FALSE).
-        RUN memo(INPUT 0,
+        RUN Mc/memo(INPUT 0,
                  INPUT "CustClass",
                  INPUT STRING(CustClass.CustClass),
                  INPUT "Customer class").
@@ -486,8 +486,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustClass).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CustClass.CustClass CustClass.Brand .
 
        RUN local-UPDATE-record.                                  
@@ -510,7 +510,7 @@ BROWSE:
        MESSAGE
        "Invoices from ?" update oldestdate.
 
-       run updcustclass.p(input oldestdate).
+       RUN Mc/updcustclass.p(input oldestdate).
 
        NEXT LOOP.
      END.

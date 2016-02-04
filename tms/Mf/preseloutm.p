@@ -101,7 +101,7 @@ IF NOT bBatch THEN DO:
    MAIN:
    REPEAT WITH FRAME main:
 
-      ehto = 9. RUN ufkey.
+      ehto = 9. RUN Syst/ufkey.
 
       pause 0.
          DISPLAY
@@ -119,7 +119,7 @@ IF NOT bBatch THEN DO:
          ufk[1] = 0 
          ufk[5] = 795
          ufk[8] = 8.
-         RUN ufkey.
+         RUN Syst/ufkey.
 
          IF toimi = 1 THEN NEXT  main.
          IF toimi = 8 THEN LEAVE main.

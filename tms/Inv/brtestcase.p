@@ -24,7 +24,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhBRTestCase).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhBRTestCase).
+      RUN Mc/eventview2(lhBRTestCase).
    END.
 
 END.
@@ -150,7 +150,7 @@ IF gcHelpParam > "" THEN ASSIGN
    FrmRow  = 3
    FrmDown = 11.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -180,7 +180,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a BRTestCase  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -188,7 +188,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -308,7 +308,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -447,8 +447,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
@@ -471,8 +471,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
@@ -584,8 +584,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhBRTestCase).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY BRTestCase.BRTestCaseID.
 
        RUN local-UPDATE-record.                                  
@@ -629,7 +629,7 @@ END.
    
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.
 
 fCleanEventObjects().
 
@@ -735,7 +735,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
                   
       IF toimi = 1 THEN 
@@ -744,7 +744,7 @@ PROCEDURE local-UPDATE-record:
          FIND CURRENT BRTestCase EXCLUSIVE-LOCK.
       
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
    
          UPDATE
             BRTestCase.Active          
@@ -761,7 +761,7 @@ PROCEDURE local-UPDATE-record:
                FRAME-FIELD = "RelationalOperator"
             THEN DO:
 
-               RUN h-tmscodes(INPUT "BRTestCase", /* TableName */
+               RUN Help/h-tmscodes(INPUT "BRTestCase", /* TableName */
                                     "RelationalOperator",   /* FieldName */
                                     "BRTest",   /* GroupCode */
                               OUTPUT lcCode).
@@ -771,7 +771,7 @@ PROCEDURE local-UPDATE-record:
                   WITH FRAME lis.   
                   
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
                NEXT. 
             END.
 
@@ -807,7 +807,7 @@ PROCEDURE local-UPDATE-record:
       ELSE IF toimi = 2 THEN RUN pCopyCriteria(BRTestCase.BRTestCaseID).
 
       ELSE IF toimi = 4 THEN DO:
-         RUN brtestcriteria.p (0,BRTestCase.BRTestCaseID).
+         RUN Inv/brtestcriteria.p (0,BRTestCase.BRTestCaseID).
       END.
        
       ELSE IF toimi = 8 THEN LEAVE.  
@@ -833,7 +833,7 @@ PROCEDURE pCopyCriteria:
    REPEAT ON ENDKEY UNDO, LEAVE:
 
       ehto = 9.
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
       
       PAUSE 0.
       UPDATE liCopyBRTestCaseID WITH FRAME fCopy.
@@ -849,7 +849,7 @@ PROCEDURE pCopyCriteria:
          ufk[5] = 98
          ufk[8] = 8
          ehto = 0.
-      RUN ufkey.p. 
+      RUN Syst/ufkey.p. 
    
       IF toimi = 5 THEN DO:
          IF liCopyBRTestCaseID = 0 OR NOT AVAILABLE bCopyFrom THEN DO:

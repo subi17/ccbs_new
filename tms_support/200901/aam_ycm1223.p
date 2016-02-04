@@ -56,7 +56,7 @@ for each order no-lock use-index stamp where
         string(order.mnpstatus > 0,"mnp/new")
         binvoice.invdate.
 
-   RUN createcustomer(Order.OrderId, 
+   RUN Mm/createcustomer(Order.OrderId, 
                       1,
                       FALSE,
                       OUTPUT liCashCust).

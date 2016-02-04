@@ -81,7 +81,7 @@ ASSIGN
 
 /* Move CLIs to new customer */
 
-RUN climove.p(CLISER.CustNum,   /* from cust */
+RUN Mf/climove.p(CLISER.CustNum,   /* from cust */
               newcust,          /* to cust   */
               startcli,         /* from CLI  */
               endcli,           /* to CLI    */

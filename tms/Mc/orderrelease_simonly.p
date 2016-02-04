@@ -40,7 +40,7 @@ FOR EACH Order NO-LOCK WHERE
          ldtnow = fTimeStamp2DateTime(fMakeTS())
          lidiffer = INT(ldtnow - ldtset) / 1000.
       IF lidiffer >= liCycleinSec THEN
-         RUN orderinctrl.p(Order.OrderId,0,TRUE).
+         RUN Mc/orderinctrl.p(Order.OrderId,0,TRUE).
    END.
 END.
              

@@ -43,7 +43,7 @@ BY FuncRunQSchedule.StartTS:
 
    lcOrigState = FuncRunQSchedule.RunState.
    
-   RUN funcrunqueue_run.p (FuncRunQSchedule.FRQueueID,
+   RUN Syst/funcrunqueue_run.p (FuncRunQSchedule.FRQueueID,
                            FuncRunQSchedule.FRQScheduleID).
    
    /* nothing done or interrupted */

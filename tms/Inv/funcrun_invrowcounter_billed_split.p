@@ -47,7 +47,7 @@ END.
 IF liUseReplica = ? THEN liUseReplica = 0.
 
 
-RUN invrowcounter_billed_split.p(ldaInvDate,
+RUN Inv/invrowcounter_billed_split.p(ldaInvDate,
                                  liInvType,
                                  liRunAmt,
                                  liFRProcessID,

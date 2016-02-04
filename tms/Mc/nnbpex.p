@@ -74,12 +74,12 @@ WITH
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1.
 exdate1 = date(month(exdate2),1,year(exdate2)).
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.
 exConnType = ?.  InvGroup = "T1E".
 
 CRIT:
 repeat WITH FRAME start:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.
    DISP exName.
    UPDATE
       exName
@@ -102,7 +102,7 @@ repeat WITH FRAME start:
 task:
    repeat WITH FRAME start:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.
       IF toimi = 1 THEN NEXT  CRIT.
       IF toimi = 8 THEN LEAVE CRIT.
 
@@ -121,18 +121,18 @@ task:
            InvGroup.InvGroup = InvGroup.
    END.   
    PUT STREAM excel UNFORMATTED ynimi.
-   RUN uexskip(1).
+   RUN Syst/uexskip(1).
    put stream excel unformatted "Invoicing group: ".
    if InvGroup ne "" THEN PUT STREAM excel UNFORMATTED
       InvGroup.InvGroup + " - " + InvGroup.IGName.
    else put stream excel unformatted "ALL".
-   RUN uexskip(1).
+   RUN Syst/uexskip(1).
    PUT STREAM excel UNFORMATTED
   "Summary of all Billed products within time Period " +
    string(exdate1,"99.99.9999") " - " string(exdate2,"99.99.9999").
-   RUN uexskip(2).
+   RUN Syst/uexskip(2).
    put stream excel unformatted "ProdCode" tab "ProdName" tab "BilledAmt".
-   RUN uexskip(2).
+   RUN Syst/uexskip(2).
 
    message "Browsing and sorting data ...".
 
@@ -187,7 +187,7 @@ task:
          InvRow.BillCode                  tab
          ProdName                        tab
          csum.
-         RUN uexskip(1).
+         RUN Syst/uexskip(1).
       END.
 
    END.
@@ -199,7 +199,7 @@ task:
       PUT STREAM excel UNFORMATTED
       tab /* no BillCode */
       "Övertidsränta"  tab csum .
-      RUN uexskip(1).
+      RUN Syst/uexskip(1).
    END.
 
    IF totrou NE 0 THEN DO:
@@ -208,7 +208,7 @@ task:
       PUT STREAM excel UNFORMATTED
       tab /* no BillCode */
       "Öresutjämning"  tab csum .
-      RUN uexskip(1).
+      RUN Syst/uexskip(1).
    END.
 
    OUTPUT STREAM excel CLOSE.

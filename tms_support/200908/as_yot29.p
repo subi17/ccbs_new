@@ -154,7 +154,7 @@ repeat:
       next.
    end.
    
-   run cli_rate (mobsub.cli,
+   RUN Rate/cli_rate (mobsub.cli,
                    8/1/9,
                    8/31/9,
                    true).

@@ -10,5 +10,5 @@
 
 {Syst/commali.i}
 
-run servel ("").
+RUN Mm/servel ("").
 

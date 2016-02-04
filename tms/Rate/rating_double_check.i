@@ -212,7 +212,7 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
                                                ttCall.Dtlseq,
                                                "Call identification number").
 
-         RUN olddb_double_check.p(ttCall.CLI,
+         RUN Rate/olddb_double_check.p(ttCall.CLI,
                                   ttCall.DateSt,
                                   ttCall.TimeStart,
                                   ttCall.BillDur,

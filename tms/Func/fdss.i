@@ -69,7 +69,7 @@ FUNCTION fDSSRequest RETURNS INTEGER
 
    /* Pre-check only for CREATE, there is no ongoing ACC request */
    IF icAction = "CREATE" THEN DO:
-      RUN requestaction_check.p(INPUT {&REQTYPE_DSS},
+      RUN Mm/requestaction_check.p(INPUT {&REQTYPE_DSS},
                                 INPUT lcCLIType,
                                 INPUT iiMsSeq,
                                 INPUT icSource,
@@ -102,7 +102,7 @@ FUNCTION fDSSRequest RETURNS INTEGER
    RELEASE bCreaReq.
 
    /* Send the SMS using Request Action Rules for DSS */
-   RUN requestaction_sms.p(INPUT liReqCreated,
+   RUN Mm/requestaction_sms.p(INPUT liReqCreated,
                            INPUT lcCLIType,
                            INPUT icSource).
   
@@ -1066,7 +1066,7 @@ FUNCTION fTransferDSS RETURNS LOG
            EXCLUSIVE-LOCK NO-ERROR.
       IF AVAIL FixedFee THEN DO:
          /* Close Fee from current subscription */
-         RUN closefee(FixedFee.FFNum,
+         RUN Mc/closefee(FixedFee.FFNum,
                       ldMonthEndDate,
                       FALSE,
                       FALSE,
@@ -1091,7 +1091,7 @@ FUNCTION fTransferDSS RETURNS LOG
          END. /* IF DAY(FixedFee.BegPeriod) > 1 AND FMItem.FirstMonthBR = 0 */
 
          /* Open fee on new DSS subs. from next month */
-         RUN creasfee(bMobSub.CustNum,
+         RUN Mc/creasfee(bMobSub.CustNum,
                       bMobSub.MsSeq,
                       ldNextMonthFromDate,
                       "FeeModel",

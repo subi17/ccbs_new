@@ -48,7 +48,7 @@ FOR EACH mobsub where
    ELSE DO:
 
 
-       RUN barrengine (MobSub.MsSeq,
+       RUN Mm/barrengine (MobSub.MsSeq,
                    "Y_SARC",
                    "5",                 /* source  */
                    "YOT-317",           /* creator */

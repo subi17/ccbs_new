@@ -75,7 +75,7 @@ FOR EACH ttDays,
    ttEvent.EventTime = ttTimes.DumpTime.
 END.    
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 lcDays = "Sun,Mon,Tues,Wednes,Thurs,Fri,Satur".
@@ -150,7 +150,7 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.
         
       END.
 

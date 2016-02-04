@@ -81,7 +81,7 @@ ASSIGN msstatus = mobsub.msstatus.
 loop:
 REPEAT WITH FRAME stat:
    ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 0 ehto = 9 .
-   RUN ufkey.
+   RUN Syst/ufkey.
    DISPLAY
       mobsub.cli
       nam 
@@ -94,7 +94,7 @@ REPEAT WITH FRAME stat:
    action:
    REPEAT WITH FRAME stat:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[8] = 8 ufk[5] = 9033  ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.
       IF toimi = 1 THEN LEAVE action.
       IF toimi = 8 THEN DO:
          LEAVE loop.

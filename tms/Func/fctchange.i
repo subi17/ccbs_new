@@ -228,7 +228,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
                         OUTPUT ocError) THEN RETURN FALSE.
 
    /* 3 */
-   RUN requestaction_check.p(0,MobSub.CLIType,Mobsub.MsSeq,
+   RUN Mm/requestaction_check.p(0,MobSub.CLIType,Mobsub.MsSeq,
                              icReqSource, OUTPUT ocError).
    IF ocError NE "" THEN RETURN FALSE.
    

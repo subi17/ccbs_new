@@ -99,11 +99,11 @@ exdate2 = date(month(TODAY),1,year(TODAY)) + 32.
 exdate2 = date(month(exdate2),1,year(exdate2)) - 1.
 exdate1 = date(month(exdate2),1,year(exdate2)).
 
-cfc = "sel". RUN ufcolor.
+cfc = "sel". RUN Syst/ufcolor.
 
 CRIT:
 repeat WITH FRAME start:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.
    DISP exName.
    UPDATE
       exdate1  validate(exdate1 ne ?,"Give first Date !")
@@ -123,7 +123,7 @@ repeat WITH FRAME start:
 task:
    repeat WITH FRAME start:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.
       IF toimi = 1 THEN NEXT  CRIT.
       IF toimi = 8 THEN LEAVE CRIT.
 
@@ -203,13 +203,13 @@ task:
             ref = (InvNum * 10) + ( (length(string(InvNum)) + 2) MODULO 10).
 
             /* calculate the LAST number of the reference */
-            RUN nnrswe(INPUT ref, OUTPUT ref1).
+            RUN Mf/nnrswe(INPUT ref, OUTPUT ref1).
 
             /* reference into a STRING */
             ocr1 = string(ref) + string(ref1).
 
             /* checksum due TO the amount of crowns */ 
-            RUN nnrswe(Invoice.InvAmt * 100, OUTPUT ref2).
+            RUN Mf/nnrswe(Invoice.InvAmt * 100, OUTPUT ref2).
             ocr2 = string(ref2).
          END.
 

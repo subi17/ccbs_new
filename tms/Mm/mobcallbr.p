@@ -177,7 +177,7 @@ form /* seek Mobile Call  BY A-sub. */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND B-NUMBER "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f4.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 FIND FIRST ttCall NO-LOCK NO-ERROR.
@@ -255,7 +255,7 @@ BROWSE:
         ufk[1]= 713 ufk[2]= 702 ufk[3]= 209 ufk[4]= 704
         ufk[5]= 265 ufk[6]= 0   ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -405,8 +405,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        SET DateSt timest WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -433,8 +433,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME F2.
        SET CustNum WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -456,8 +456,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME F3.
        SET CLI WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
@@ -483,8 +483,8 @@ BROWSE:
      
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME F4.
        SET gsmbnr WITH FRAME f4.
        HIDE FRAME f4 NO-PAUSE.
@@ -510,7 +510,7 @@ BROWSE:
         FIND FIRST ttCall WHERE
              recid(ttCall) = rtab[FRAME-LINE] NO-LOCK NO-ERROR.
        
-        RUN viewmbd.p(INPUT TABLE ttcall,
+        RUN Mm/viewmbd.p(INPUT TABLE ttcall,
                     ttcall.datest,
                     ttcall.timest,
                     ttCall.cli,
@@ -525,8 +525,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttCall.DateSt.
 
        RUN local-UPDATE-record.                                  

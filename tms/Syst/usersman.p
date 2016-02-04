@@ -29,7 +29,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhUserSman).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhUserSman).
+      RUN Mc/eventview2(lhUserSman).
    END.
 
 END.
@@ -103,7 +103,7 @@ ELSE DO:
    memory = ?.
 END.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Brand  ,".
@@ -120,14 +120,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a UserSman  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE ADD-ROW:
 
@@ -240,7 +240,7 @@ REPEAT WITH FRAME sel:
          ufk[8]= 8 
          ehto = 3 ufkey = false.
          
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -383,8 +383,8 @@ REPEAT WITH FRAME sel:
      
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " VIEW " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = true ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY UserSman.Brand.
 
        RUN local-update-record.                                  
@@ -555,7 +555,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.
          
          UPDATE
          UserSman.Salesman  

@@ -100,10 +100,10 @@ ASSIGN
    i-date2   = pvm
    liDelType = 2.
 
-cfc = "sel". RUN ufcolor. ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ccc = cfc.
 view FRAME taka. PAUSE 0 no-message.
 
-ehto = 9. RUN ufkey.
+ehto = 9. RUN Syst/ufkey.
 ASSIGN InvNum1 = 000000 InvNum2 = 99999999
        CustNum1  = 0 CustNum2 = 99999999.
 
@@ -149,7 +149,7 @@ LOOP:
 repeat:
 
    /* KysellAAn rajaukset */
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.
    PAUSE 0 no-message.
    
     UPDATE
@@ -172,7 +172,7 @@ repeat:
           FRAME-FIELD = "liDelType"
        THEN DO:
 
-         RUN h-tmscodes(INPUT "Invoice",     /* TableName*/
+         RUN Help/h-tmscodes(INPUT "Invoice",     /* TableName*/
                               "DelType",       /* FieldName */
                               "Billing",     /* GroupCode */
                         OUTPUT lcCode).
@@ -181,7 +181,7 @@ repeat:
          THEN DISPLAY INTEGER(lcCode) ;& liDelType WITH FRAME rajat.
                   
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
          NEXT. 
       END.
  
@@ -307,7 +307,7 @@ repeat:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       ASSIGN
       ufk = 0 ufk[1] = 132 ufk[4] = 0 /* 797*/ ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.
 
       IF toimi = 1 THEN NEXT LOOP.
 
@@ -368,7 +368,7 @@ repeat:
       
    END. /* toimi */
 
-   RUN pdfinvcl (InvNum1, 
+   RUN Inv/pdfinvcl (InvNum1, 
                  InvNum2,
                  i-date1,
                  i-date2,

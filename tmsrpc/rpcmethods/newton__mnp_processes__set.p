@@ -116,7 +116,7 @@ IF pcOperation = "cancel" AND LOOKUP("pdf",lcstruct) > 0 THEN DO:
    END.
 END.
 
-RUN mnp_operation.p(MNPProcess.MNPSeq,pcOperation,pcReason).
+RUN Mnp/mnp_operation.p(MNPProcess.MNPSeq,pcOperation,pcReason).
 
 IF RETURN-VALUE NE "OK" THEN DO:
    IF AVAIL MNPCancelProposal THEN DELETE MNPCancelProposal.

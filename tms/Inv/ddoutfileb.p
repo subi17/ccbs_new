@@ -33,7 +33,7 @@ END.
 
 fELog("DDOUT","Started").
 
-RUN ddoutfileco ("",                   /* InvGroup  */
+RUN Inv/ddoutfileco ("",                   /* InvGroup  */
                  0,                    /* customers from */
                  99999999,             /* customers to   */
                  "",                   /* invoices from  */

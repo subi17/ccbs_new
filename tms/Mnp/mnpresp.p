@@ -816,7 +816,7 @@ PROCEDURE pHandleQueue:
 
          FIND CURRENT Order NO-LOCK.
 
-         run cancelorder.p(Order.OrderID,TRUE).
+         RUN Mc/cancelorder.p(Order.OrderID,TRUE).
 
          /* YDR-70 */
          IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 THEN DO:

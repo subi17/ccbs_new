@@ -51,7 +51,7 @@ IF fIsReasonableSet(pcCommand, MobSub.MsSeq) EQ FALSE THEN
    RETURN appl_err("Barring status already active/inactive").
 
 /*Barrengine makes required validations*/
-RUN barrengine.p(MobSub.MsSeq,
+RUN Mm/barrengine.p(MobSub.MsSeq,
                  pcCommand,
                  {&REQUEST_SOURCE_NEWTON},
                  "",

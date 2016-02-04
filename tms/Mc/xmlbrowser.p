@@ -43,7 +43,7 @@ FORM
    
 cfc = "sel".
 
-run ufcolor.
+RUN Syst/ufcolor.
 
 ccc = cfc.
 
@@ -111,7 +111,7 @@ REPEAT WITH FRAME sel:
            ehto   = 3
            ufkey  = FALSE.
          
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -239,7 +239,7 @@ REPEAT WITH FRAME sel:
           ufk    = 0
           ufk[8] = 8
           ufkey  = TRUE.
-       RUN ufkey.   
+       RUN Syst/ufkey.   
           
        HIDE FRAME fDetail NO-PAUSE.
        NEXT loop.

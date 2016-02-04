@@ -17,6 +17,6 @@ katun = "cron".
 {Func/lib/eventlog.i}
 
 /* delete old counters */
-RUN tmcdelete (TODAY).
+RUN Syst/tmcdelete (TODAY).
 
 quit.

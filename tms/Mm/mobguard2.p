@@ -68,7 +68,7 @@ PROCEDURE local-Show-record:
    
    REPEAT ON ENDKEY UNDO, LEAVE:
    
-      ASSIGN ufk = 0 ufk[8] = 8 ehto = 10. RUN ufkey.
+      ASSIGN ufk = 0 ufk[8] = 8 ehto = 10. RUN Syst/ufkey.
       
       IF ilAskDates THEN ASSIGN
       ldDate1 = DATE(Month(Today),1,YEAR(Today))
@@ -91,7 +91,7 @@ PROCEDURE local-Show-record:
              
              IF FRAME-FIELD = "ReasonC" AND keylabel(lastkey) = "F9" 
              THEN DO:
-                RUN h-tmscodes(INPUT "FixCDR",  /* TableName*/
+                RUN Help/h-tmscodes(INPUT "FixCDR",  /* TableName*/
                                      "ReasonCode", /* FieldName */
                                      "ReasonCode", /* GroupCode */
                                OUTPUT siirto).

@@ -48,7 +48,7 @@ date2 = date1.
 cdate = date(1,1,year(TODAY)).
 
 DO WITH FRAME count:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.
    UPDATE 
    date1 
    date2 VALIDATE ( input date2 >= input date1,"Invalid order !")
@@ -60,7 +60,7 @@ DO WITH FRAME count:
              "Unknown Invoice Group Code!").
 
 
-   ufk = 0. ehto = 3. RUN ufkey.
+   ufk = 0. ehto = 3. RUN Syst/ufkey.
 
    message "Counting ...".
    FOR EACH Customer no-lock where

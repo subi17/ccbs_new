@@ -101,7 +101,7 @@ DO liPrintCnt = 1 TO 4:
          THEN liPrintType = 1.
          ELSE liPrintType = 2.  /* local */
     
-    RUN printxt (MsRequest.CustNum,
+    RUN Mc/printxt (MsRequest.CustNum,
                  MsRequest.MsSeq, 
                  MsRequest.CLI,
                  1,  /* 1=invtext */

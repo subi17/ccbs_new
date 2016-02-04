@@ -31,7 +31,7 @@ FORM
    WITH SCROLL 1 11 DOWN ROW 4 CENTERED COLOR VALUE(cfc)
         TITLE COLOR VALUE(ctc) " CHOOSE KEY " OVERLAY FRAME sel.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
 
 ASSIGN
    ufkey      = TRUE
@@ -82,7 +82,7 @@ REPEAT with frame sel:
             ehto   = 3 
             ufkey  = false.
 
-         run ufkey.
+         RUN Syst/ufkey.
       end.
 
    end. /* print-line */

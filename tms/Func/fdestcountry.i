@@ -26,7 +26,7 @@ FUNCTION fDestCountry RETURNS CHAR
 
       /* in TAP format we get network owner, in POST not, so use MSRN there */
       IF LOOKUP(icMSCID,"TAP3,NRTRDE") > 0 THEN DO:
-         RUN cdr_detail_value.p("MobCDR",
+         RUN Mm/cdr_detail_value.p("MobCDR",
                                 idaCallDate,
                                 iiDtlSeq,
                                 "Network owner",
@@ -38,7 +38,7 @@ FUNCTION fDestCountry RETURNS CHAR
       END.
        
       ELSE DO:
-         RUN cdr_detail_value.p("MobCDR",
+         RUN Mm/cdr_detail_value.p("MobCDR",
                                 idaCallDate,
                                 iiDtlSeq,
                                 "MSRN",

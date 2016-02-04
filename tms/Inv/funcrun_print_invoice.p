@@ -251,7 +251,7 @@ PROCEDURE pPrintInvoices:
       /* tar file is not needed for no paper invoices */
       IF LOOKUP(lcPrintHouse,"NOPAPER,DELTYPE10") > 0 THEN llTarFile = FALSE.
  
-      RUN invoice_xml.p (INPUT-OUTPUT TABLE ttInvoice,
+      RUN Inv/invoice_xml.p (INPUT-OUTPUT TABLE ttInvoice,
                          ldaInvDate,
                          liInvCount,
                          llSeparate,
@@ -316,7 +316,7 @@ PROCEDURE pPrintInvoices:
    END.
 
    IF lcRunMode = "test" AND llgFuncRunPDF THEN 
-      RUN funcrun_invpdf_creation (INPUT liFRExecID) NO-ERROR.
+      RUN Inv/funcrun_invpdf_creation (INPUT liFRExecID) NO-ERROR.
    
    IF RETURN-VALUE BEGINS "ERROR:" THEN DO TRANS:
       /* send also mail if printing was interrupted */

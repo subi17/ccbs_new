@@ -31,7 +31,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhCustLetter).
+      RUN Mc/eventview2.p(lhCustLetter).
    END.
 END.
 
@@ -45,7 +45,7 @@ WITH
 DO TRANS WITH FRAME memo ON ENDKEY UNDO, RETURN:
 
    assign ehto = 9 cfc = "lis" ufkey = TRUE.
-   RUN ufkey. RUN ufcolor.
+   RUN Syst/ufkey. RUN Syst/ufcolor.
    FIND FIRST CustLetter WHERE CustLetter.Brand = gcBrand
       exclusive-lock no-error.
    IF NOT AVAIL CustLetter THEN 

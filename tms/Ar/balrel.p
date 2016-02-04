@@ -137,7 +137,7 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
       ufk[9]= 1
       ehto = 3 ufkey = FALSE.
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
 
       READKEY.
       nap = keylabel(lastkey).
@@ -147,7 +147,7 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
    IF LOOKUP(nap,"1,f1") > 0 THEN DO:
 
       ehto = 9. 
-      RUN ufkey.p.
+      RUN Syst/ufkey.p.
       
       REPEAT WITH frame valinta ON ENDKEY UNDO, LEAVE:
          UPDATE 
@@ -168,7 +168,7 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 
                liField = FRAME-INDEX.
                 
-               RUN h-tmscodes(INPUT "Invoice",  /* TableName*/
+               RUN Help/h-tmscodes(INPUT "Invoice",  /* TableName*/
                                     "InvType", /* FieldName */
                                     "Report", /* GroupCode */
                               OUTPUT lcCode).
@@ -179,7 +179,7 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                END.
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
                NEXT. 
             END.
 
@@ -204,10 +204,10 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       END.
       ELSE DO:
          ehto = 5.
-         RUN ufkey.
+         RUN Syst/ufkey.
       END. 
       
-      RUN balrep  (lcInvGroup[1],
+      RUN Ar/balrep  (lcInvGroup[1],
                    lcInvGroup[2],
                    liCustNum[1],
                    liCustNum[2],

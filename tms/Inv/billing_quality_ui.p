@@ -144,7 +144,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 795
          ufk[8] = 8 
          ehto   = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.
    END.
    
    ELSE ASSIGN 
@@ -154,7 +154,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    IF toimi = 1 THEN DO:
 
       ehto = 9. 
-      RUN ufkey.
+      RUN Syst/ufkey.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
@@ -176,7 +176,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
                IF FRAME-FIELD = "liInvType" THEN DO:
 
-                  RUN h-tmscodes(INPUT "Invoice", 
+                  RUN Help/h-tmscodes(INPUT "Invoice", 
                                        "InvType",  
                                        "Report",   
                                  OUTPUT lcCode).
@@ -188,7 +188,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                END.
                
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
                NEXT. 
             END.
 
@@ -226,10 +226,10 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    END.
 
    ELSE IF toimi = 3 THEN  
-      RUN report_config.p ("BillingReport").
+      RUN Syst/report_config.p ("BillingReport").
 
    ELSE IF toimi = 4 THEN 
-      RUN report_config.p ("UnbilledSubsQty").
+      RUN Syst/report_config.p ("UnbilledSubsQty").
  
    ELSE IF toimi = 5 THEN DO:
       
@@ -251,7 +251,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          NEXT.
       END.
            
-      RUN billing_report.p (ldaBillInvDate,
+      RUN Inv/billing_report.p (ldaBillInvDate,
                             liInvType,
                             "no*no**" + lcFile,
                             llBillDetails,
@@ -261,7 +261,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                             OUTPUT liBillCount).
       lcBillError = RETURN-VALUE.                      
  
-      RUN unbilled_subsqty.p (liPeriod,
+      RUN Inv/unbilled_subsqty.p (liPeriod,
                               ldaInvDate[1],
                               ldaInvDate[2],
                               "append*trans*" + lcTransDir + "*" + lcFile,

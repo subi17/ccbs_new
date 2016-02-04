@@ -89,7 +89,7 @@ IF iiMsSeq > 0 THEN ASSIGN
    FrmRow = 3
    FrmDown = 8.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 IF iiITGroupID > 0  THEN DO:
@@ -130,7 +130,7 @@ REPEAT WITH FRAME sel:
    
    IF must-add THEN DO:  /* Add a InvoiceTarget  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      RUN Syst/ufcolor.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -138,7 +138,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
 
         UpdateField:
         REPEAT TRANS WITH FRAME lis:
@@ -148,7 +148,7 @@ REPEAT WITH FRAME sel:
            DISPLAY 12/31/2049 @ InvoiceTarget.ToDate.
 
            ehto = 9.
-           RUN ufkey.
+           RUN Syst/ufkey.
            
            UPDATE
               liMsSeq
@@ -164,14 +164,14 @@ REPEAT WITH FRAME sel:
               THEN DO:
 
                  IF FRAME-FIELD = "liMsSeq" THEN DO:
-                    RUN h-msseq.p(InvoiceTargetGroup.Custnum).
+                    RUN Help/h-msseq.p(InvoiceTargetGroup.Custnum).
                     
                     IF siirto NE ? THEN 
                        DISP siirto @ liMsSeq WITH FRAME lis.
                  END.
                
                  ehto = 9.
-                 RUN ufkey.
+                 RUN Syst/ufkey.
                  NEXT. 
               END.
 
@@ -294,7 +294,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0.
  
           
-        RUN ufkey.
+        RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -449,8 +449,8 @@ REPEAT WITH FRAME sel:
           LEAVE LOOP.
        END.
  
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-VIEW-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -487,7 +487,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN ufkey.
+RUN Syst/ufkey.
 
 PROCEDURE local-find-this:
 
@@ -588,10 +588,10 @@ PROCEDURE local-VIEW-record:
          ufk[8] = 8
          ehto   = 0.
       
-      RUN ufkey.
+      RUN Syst/ufkey.
       
       IF toimi = 6 THEN DO: 
-         RUN eventsel.p("invoicetarget", 
+         RUN Mc/eventsel.p("invoicetarget", 
                         STRING(InvoiceTarget.InvoiceTargetID)).
       END.   
    
@@ -602,7 +602,7 @@ PROCEDURE local-VIEW-record:
 
          lcMenuOptions = "MOVE TO ANOTHER GROUP".
          
-         RUN selectbox.p(
+         RUN Syst/selectbox.p(
             "INVOICE TARGET",
             lcMenuOptions,
             OUTPUT lcSelected).
@@ -611,7 +611,7 @@ PROCEDURE local-VIEW-record:
                               
             WHEN "MOVE TO ANOTHER GROUP" THEN DO:
                 
-               ehto = 9. RUN ufkey. ufkey = true.
+               ehto = 9. RUN Syst/ufkey. ufkey = true.
                CLEAR FRAME f1.
                REPEAT WITH FRAM f1 ON ENDKEY UNDO, LEAVE.
 

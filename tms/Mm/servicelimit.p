@@ -29,7 +29,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhServiceLimit).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhServiceLimit).
+      RUN Mc/eventview2(lhServiceLimit).
    END.
 
 END.
@@ -135,7 +135,7 @@ END FUNCTION.
          
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Price List,By SLCode  ,By 3, By 4".
@@ -169,12 +169,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ServiceLimit  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -309,7 +309,7 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -457,8 +457,8 @@ BROWSE:
 
         IF AVAIL DayCampaign AND            
                  LOOKUP(DayCampaign.dcType,"4,8") > 0 
-        THEN RUN proglimit(INPUT ServiceLimit.slseq).           
-        ELSE RUN servicelimittarget(INPUT ServiceLimit.slseq).
+        THEN RUN Mm/proglimit(INPUT ServiceLimit.slseq).           
+        ELSE RUN Mm/servicelimittarget(INPUT ServiceLimit.slseq).
 
         ufkey = TRUE.
         NEXT loop.
@@ -468,7 +468,7 @@ BROWSE:
      
         RUN local-find-this(FALSE).
 
-        RUN mservicelimit(INPUT 0 , 
+        RUN Mm/mservicelimit(INPUT 0 , 
                                   ServiceLimit.dialtype,
                                   Servicelimit.slseq ).
         ufkey = TRUE.
@@ -543,8 +543,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY
           ServiceLimit.SLCode
           ServiceLimit.GroupCode
@@ -669,7 +669,7 @@ PROCEDURE local-update-record:
              IF keylabel(LASTKEY) = "F9" AND 
                 FRAME-FIELD = "InclUnit" 
              THEN DO:
-                RUN h-tmscodes(INPUT "ServiceLimit", /* TableName */
+                RUN Help/h-tmscodes(INPUT "ServiceLimit", /* TableName */
                                      "InclUnit", /* FieldName */
                                      "ServiceLimit", /* GroupCode */
                                OUTPUT lcCode).
@@ -680,7 +680,7 @@ PROCEDURE local-update-record:
                    WITH FRAME lis.
                 END.
                 ehto = 9.
-                RUN ufkey.
+                RUN Syst/ufkey.
                 NEXT. 
              END.
 

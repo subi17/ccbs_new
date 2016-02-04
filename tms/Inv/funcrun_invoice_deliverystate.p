@@ -40,7 +40,7 @@ liInvType = fSetFuncRunIntParameter(1).
 ldInvDate = fSetFuncRunDateParameter(2).
 liDeliveryState = fSetFuncRunIntParameter(3).
 
-RUN invoice_deliverystate.p(INPUT ldInvDate,
+RUN Inv/invoice_deliverystate.p(INPUT ldInvDate,
                             INPUT liInvType,
                             INPUT liDeliveryState,
                             INPUT liFRProcessID,

@@ -77,7 +77,7 @@ WITH row 4 col 2 title color value(ctc) " FIND A-SUB. NO "
 FRAME haku-f1.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST CLI WHERE
@@ -166,7 +166,7 @@ BROWSE:
          ufk[1]= 36  ufk[2]= 0 ufk[3]= 0  ufk[4]= 0
          ufk[5]= 0 /*5*/   ufk[6]= 0 /*4*/ ufk[7]= 37 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -344,9 +344,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.
         haku-CLI = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
         UPDATE haku-CLI WITH FRAME haku-f1.
         HIDE FRAME haku-f1 no-pause.
         if haku-CLI <> "" THEN DO:
@@ -410,7 +410,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
         FIND CLI WHERE recid(CLI) = rtab[frame-line(sel)].
-        RUN asubhist.p(CLI.CLI).
+        RUN Mf/asubhist.p(CLI.CLI).
         must-print = true.
         ufkey = true.
         NEXT LOOP.

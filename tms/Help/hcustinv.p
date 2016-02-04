@@ -13,7 +13,7 @@
                   20.03.06/aam use proper index for find etc.
                   18.04.06/aam use payments.p instead of nnlasu.p
                   16.06.06/aam ClaimState instead of ClaimQty
-                  22.03.07 kl  new param for run payments
+                  22.03.07 kl  new param for RUN Ar/payments
 
   Version ......: M15
   ------------------------------------------------------ */
@@ -60,7 +60,7 @@ FIND Customer WHERE Customer.CustNum = CustNum NO-LOCK.
 lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
                               BUFFER Customer).
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 
@@ -137,7 +137,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
          ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
          {Syst/uright1.i '"3,4,7"'}
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -297,7 +297,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
      else if lookup(nap,"1,f1") > 0 THEN DO:
         ex-order = order.
         ASSIGN order = 1.
-        RUN nnlaha.p.
+        RUN Ar/nnlaha.p.
         ASSIGN ufkey = TRUE.
         IF si-recid <> ? THEN
           ASSIGN memory = si-recid
@@ -305,14 +305,14 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
         ELSE ASSIGN
              order = ex-order
              must-print = FALSE.
-        cfc = "sel". RUN ufcolor. ccc = cfc.
+        cfc = "sel". RUN Syst/ufcolor. ccc = cfc.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"3,f3") >0 THEN DO TRANS: /* memo */
         FIND Invoice WHERE recid(Invoice) = rtab;<frame-line;>
         NO-LOCK NO-ERROR.
-        RUN memo(INPUT Invoice.CustNum,
+        RUN Mc/memo(INPUT Invoice.CustNum,
                  INPUT "invoice",
                  INPUT STRING(Invoice.InvNum),
                  INPUT "Invoice number").
@@ -323,7 +323,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
 
      else if lookup(nap,"f4,4") > 0 THEN DO:
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
-        RUN payments(0,Invoice.InvNum,"").
+        RUN Ar/payments(0,Invoice.InvNum,"").
         ufkey = TRUE.
         NEXT.
      END.
@@ -362,7 +362,7 @@ si-recid = xrecid.
 
 PROCEDURE local-find-others:
 
-   RUN invbal(Invoice.InvNum, OUTPUT BalDue).
+   RUN Ar/invbal(Invoice.InvNum, OUTPUT BalDue).
 
    FIND FIRST memo WHERE
               Memo.Brand = Invoice.Brand AND

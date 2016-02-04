@@ -1,5 +1,5 @@
 {tms_support/utilities/ttinpmobsub.i}
-RUN fixdumpexport.p(
+RUN tms_support/utilities/fixdumpexport.p(
     "/home/harrim/dumps/fixtures/",
     0,
     0,

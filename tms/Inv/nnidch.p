@@ -43,7 +43,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhInvoice).
+      RUN Mc/eventview2.p(lhInvoice).
    END.
 END.
 
@@ -89,7 +89,7 @@ PAUSE 0.
 
 rajat:
 repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.
 
    UPDATE
       lcInvGroup
@@ -149,7 +149,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
              
       IF InvNum2 = 0 OR diff = 0 THEN ufk[5] = 0.
 
-      ehto = 0. RUN ufkey.
+      ehto = 0. RUN Syst/ufkey.
       IF toimi = 1 THEN NEXT rajat.
 
       ELSE IF toimi = 3 THEN DO:

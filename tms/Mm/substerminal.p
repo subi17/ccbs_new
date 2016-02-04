@@ -24,7 +24,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhSubsTerminal).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhSubsTerminal).
+      RUN Mc/eventview2(lhSubsTerminal).
    END.
 
 END.
@@ -153,7 +153,7 @@ END FUNCTION.
 /* collect accessories to temp-table */
 RUN pFillTempTable.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -228,7 +228,7 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.
         
       END.
 
@@ -366,8 +366,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE liMsSeq WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -466,7 +466,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSubsTerminal).
 
        ASSIGN ac-hdr = " TERMINAL " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -622,10 +622,10 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.
          
          IF toimi = 6 THEN DO:
-            RUN eventsel ("SubsTerminal",STRING(SubsTerminal.TerminalID)). 
+            RUN Mc/eventsel ("SubsTerminal",STRING(SubsTerminal.TerminalID)). 
             NEXT. 
          END.
          
@@ -634,7 +634,7 @@ PROCEDURE local-UPDATE-record:
       
       FIND CURRENT SubsTerminal EXCLUSIVE-LOCK.
       
-      ehto = 9. RUN ufkey.
+      ehto = 9. RUN Syst/ufkey.
       
       UPDATE
          SubsTerminal.IMEI

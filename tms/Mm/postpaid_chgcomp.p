@@ -59,7 +59,7 @@ END.
  
 fSplitTS(MsRequest.CreStamp, OUTPUT lDateCr, OUTPUT lTimeCr).
 
-RUN creasfee.p(MobSub.CustNum,
+RUN Mc/creasfee.p(MobSub.CustNum,
               MobSub.MsSeq,
               lDateCr,
               "FeeModel",         /* FeeModel where using CHARGE */

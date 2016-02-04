@@ -51,7 +51,7 @@ DO liRun = 1 TO 2:
       QUIT.
    END.
 
-   RUN errorcdr_dump.p (ldaRunFrom[liRun],
+   RUN Mm/errorcdr_dump.p (ldaRunFrom[liRun],
                         ldaRunTo[liRun],
                         ldaFromDate,
                         ldaToDate).

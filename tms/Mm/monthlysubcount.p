@@ -28,7 +28,7 @@ IF RETURN-VALUE BEGINS "ERROR" THEN DO:
    QUIT.
 END.
 
-RUN monthlysubcount_report.p (TODAY).
+RUN Mm/monthlysubcount_report.p (TODAY).
 
 fELog("MONTHLYSUBCOUNT","Finished").
 

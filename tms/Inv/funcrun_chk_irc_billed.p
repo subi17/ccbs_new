@@ -46,7 +46,7 @@ END.
 
 RUN pGetFeeds.
 
-RUN chk_cdr_invrowcounter_billed.p(INPUT TABLE ttInvoice BY-REFERENCE,
+RUN Inv/chk_cdr_invrowcounter_billed.p(INPUT TABLE ttInvoice BY-REFERENCE,
                                    FuncRunProcess.ProcSeq,
                                    liFRProcessID,
                                    liUpdateInterval,

@@ -366,7 +366,7 @@ PROCEDURE pInvoiceUpdate:
          ufk[7] = 1752
          ufk[8] = 8
          ehto   = 0.
-      run ufkey.
+      RUN Syst/ufkey.
 
       IF toimi = 1 THEN DO TRANS:
 
@@ -380,7 +380,7 @@ PROCEDURE pInvoiceUpdate:
          END.
 
          ehto = 9.
-         RUN ufkey.
+         RUN Syst/ufkey.
 
          ASSIGN 
             lcOldBank  = Invoice.DDBankAcc
@@ -403,7 +403,7 @@ PROCEDURE pInvoiceUpdate:
 
                IF FRAME-FIELD = "DelType" THEN DO:
 
-                  RUN h-tmscodes(INPUT "Invoice",     /* TableName*/
+                  RUN Help/h-tmscodes(INPUT "Invoice",     /* TableName*/
                                        "DelType",       /* FieldName */
                                        "Billing",     /* GroupCode */
                                  OUTPUT lcCode).
@@ -429,7 +429,7 @@ PROCEDURE pInvoiceUpdate:
 
                ELSE IF FRAME-FIELD = "PrintState" THEN DO:
 
-                  RUN h-tmscodes(INPUT "Invoice",   
+                  RUN Help/h-tmscodes(INPUT "Invoice",   
                                        "PrintState", 
                                        "Report",    
                                  OUTPUT lcCode).
@@ -446,7 +446,7 @@ PROCEDURE pInvoiceUpdate:
                END.
                ELSE IF FRAME-FIELD = "DeliveryState" THEN DO:
 
-                  RUN h-tmscodes(INPUT "Invoice",   
+                  RUN Help/h-tmscodes(INPUT "Invoice",   
                                        "DeliveryState", 
                                        "Billing",    
                                  OUTPUT lcCode).
@@ -463,7 +463,7 @@ PROCEDURE pInvoiceUpdate:
                END.
 
                ehto = 9.
-               RUN ufkey.
+               RUN Syst/ufkey.
                NEXT. 
             END.
 
@@ -566,7 +566,7 @@ PROCEDURE pInvoiceUpdate:
 
       /* memo */
       ELSE IF toimi = 2 THEN DO:
-         RUN memo(INPUT Invoice.CustNum,
+         RUN Mc/memo(INPUT Invoice.CustNum,
                   INPUT "Invoice",
                   INPUT STRING(Invoice.InvNum),
                   INPUT "Invoice number").
@@ -574,19 +574,19 @@ PROCEDURE pInvoiceUpdate:
 
       /* payments */
       ELSE IF toimi = 3 THEN DO:
-        RUN payments(0,
+        RUN Ar/payments(0,
                      Invoice.InvNum,
                      "").
       END.
       
       /* subinvoices */
       ELSE IF toimi = 4 THEN DO:
-         RUN subinvoice.p (Invoice.InvNum).
+         RUN Ar/subinvoice.p (Invoice.InvNum).
       END.
       
       /* invoice rows */
       ELSE IF toimi = 5 THEN DO:
-         RUN nnlryp(Invoice.InvNum,0).
+         RUN Ar/nnlryp(Invoice.InvNum,0).
       END.
       
       /* other actions */
@@ -605,11 +605,11 @@ PROCEDURE pInvoiceUpdate:
                    ufk[7] = 1796
                    ufk[8] = 8
                    ehto   = 0.
-            RUN ufkey.
+            RUN Syst/ufkey.
                
             /* reference nbr  */
             IF toimi = 1 THEN DO: 
-               RUN showpr(Invoice.CustNum,
+               RUN Mc/showpr(Invoice.CustNum,
                           Invoice.InvNum).
             END.
   
@@ -621,7 +621,7 @@ PROCEDURE pInvoiceUpdate:
                   ufk    = 0
                   ufk[8] = 8
                   ehto   = 0.
-               RUN ufkey.
+               RUN Syst/ufkey.
             
                HIDE FRAME fBillRunID NO-PAUSE. 
             END.
@@ -630,7 +630,7 @@ PROCEDURE pInvoiceUpdate:
             ELSE IF toimi = 3 THEN DO:
                si-recid2 = RECID(Invoice).
               
-               RUN nncimu.
+               RUN Ar/nncimu.
 
                si-recid2  = ?.
                
@@ -639,22 +639,22 @@ PROCEDURE pInvoiceUpdate:
 
             /* claiming history */
             ELSE IF toimi = 4 THEN DO:
-               RUN claimhis(0,Invoice.InvNum).
+               RUN Ar/claimhis(0,Invoice.InvNum).
             END.
  
             /* invoice row counters */
             ELSE IF toimi = 5 THEN DO:
-               RUN invrowcounter.p(0,0,Invoice.InvNum,""). 
+               RUN Inv/invrowcounter.p(0,0,Invoice.InvNum,""). 
             END. 
            
             /* interest events */ 
             ELSE IF toimi = 6 THEN DO:
-               RUN nnkoyp (Invoice.CustNum).
+               RUN Ar/nnkoyp (Invoice.CustNum).
             END.
              
             /* view send log */
             ELSE IF toimi = 7 THEN DO:
-               RUN itsendlo(0,
+               RUN Mc/itsendlo(0,
                             Invoice.InvNum,
                             0,
                             0).
@@ -668,7 +668,7 @@ PROCEDURE pInvoiceUpdate:
       
       /* show eventlog */
       ELSE IF toimi = 7 THEN DO:
-         RUN eventsel ("Invoice",
+         RUN Mc/eventsel ("Invoice",
                        STRING(iiInvNum)).
       END.
         

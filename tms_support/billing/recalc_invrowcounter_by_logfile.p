@@ -68,7 +68,7 @@ for each ttCLI no-lock,
 
       j = j + 1.
 
-      RUN conv_invrowcounter.p(InvSeq.InvSeq,
+      RUN tms_support/billing/conv_invrowcounter.p(InvSeq.InvSeq,
                                OUTPUT liCount).
 
       k = k + liCount.

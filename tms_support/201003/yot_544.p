@@ -1,5 +1,5 @@
 
-RUN changemsisdnstatus.p ("yot_544.input", 
+RUN Mm/changemsisdnstatus.p ("yot_544.input", 
                           "yot_544.log",
                           "VIP", 
                           1,

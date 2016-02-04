@@ -59,7 +59,7 @@ MAIN:
 REPEAT WITH FRAME main:
 
 IF NOT bbatch THEN DO:
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.
     
  DISPLAY
  cdate1 cdate2 with frame main.
@@ -87,7 +87,7 @@ WITH FRAME main  EDITING:
       ufk[1] = 7 
       ufk[5] = 795
       ufk[8] = 8.
-      RUN ufkey.
+      RUN Syst/ufkey.
       
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.

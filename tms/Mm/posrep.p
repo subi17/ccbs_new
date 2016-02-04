@@ -46,7 +46,7 @@ ASSIGN
 loop:
 repeat with frame rajat:
    PAUSE 0 no-message.
-   ehto = 9. RUN ufkey.
+   ehto = 9. RUN Syst/ufkey.
    UPDATE 
       Reseller
       Salesman1
@@ -127,7 +127,7 @@ repeat with frame rajat:
       ufk[8] = 8
       ehto = 0.
 
-   run ufkey.
+   RUN Syst/ufkey.
    case toimi:
       when 8 then return.
       when 1 then next loop.

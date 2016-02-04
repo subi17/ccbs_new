@@ -92,7 +92,7 @@ form /* seek CodeName */
 
 IF icTitle = "" THEN icTitle = "Requests".
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 /* column-labels for parameters */
@@ -177,7 +177,7 @@ REPEAT WITH FRAME sel:
            ehto   = 3 
            ufkey  = FALSE.
       
-         RUN ufkey.
+         RUN Syst/ufkey.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -295,7 +295,7 @@ REPEAT WITH FRAME sel:
 
         IF AVAILABLE ttMenu THEN DO:
            
-           RUN reqstatmenu.p(ttMenu.Type). 
+           RUN Mm/reqstatmenu.p(ttMenu.Type). 
            ufkey = TRUE.
            NEXT LOOP.
         END.

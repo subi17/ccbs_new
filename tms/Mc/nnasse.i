@@ -30,7 +30,7 @@
               THEN DO:
                   
                   IF FRAME-FIELD = "CustIDType" THEN DO:           
-                     RUN h-tmscodes(INPUT "Customer",    /* TableName */
+                     RUN Help/h-tmscodes(INPUT "Customer",    /* TableName */
                                           "CustIDType",  /* FieldName */
                                           "CustCare",  /* GroupCode */
                                     OUTPUT lcCode).
@@ -42,7 +42,7 @@
                   END.
                   
                   ELSE IF FRAME-FIELD = "HonTitle" THEN DO:
-                     RUN h-tmscodes(INPUT "Customer",    /* TableName */
+                     RUN Help/h-tmscodes(INPUT "Customer",    /* TableName */
                                           "Title",      /* FieldName */
                                           "CustCare",   /* GroupCode */
                                     OUTPUT lcCode).
@@ -56,7 +56,7 @@
                   ELSE IF FRAME-FIELD = "lcCustZipCode" THEN DO:
                      ASSIGN si-recid = ?
                             siirto   = "".
-                     RUN h-postcode.
+                     RUN Help/h-postcode.
                      /* several rows with same zipcode */
                      IF si-recid NE ? THEN DO:
                         DISPLAY siirto @ lcCustZipCode WITH FRAME lis.
@@ -82,7 +82,7 @@
                   END.
                   
                   ehto = 9.
-                  RUN ufkey.
+                  RUN Syst/ufkey.
                   NEXT. 
               END.
 

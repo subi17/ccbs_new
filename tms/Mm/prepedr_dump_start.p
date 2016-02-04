@@ -65,7 +65,7 @@ PROCEDURE pStartDump:
    IF RETURN-VALUE BEGINS "ERROR" THEN 
       RETURN RETURN-VALUE.
  
-   RUN prepedr_dump.p (icDumpID,
+   RUN Mm/prepedr_dump.p (icDumpID,
                        icFile,
                        icDumpMode,
                        idLastDump,

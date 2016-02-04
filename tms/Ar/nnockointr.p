@@ -252,7 +252,7 @@ ELSE DO:
                      Invoice.DueDate < x_PayDate
                   BY Invoice.DueDate:
 
-               RUN invbal (Invoice.InvNum,OUTPUT paybal).
+               RUN Ar/invbal (Invoice.InvNum,OUTPUT paybal).
                IF paybal <= 0 THEN NEXT.
 
                InvNum = Invoice.InvNum.

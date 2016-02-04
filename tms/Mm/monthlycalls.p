@@ -19,7 +19,7 @@ DEFINE VARIABLE period  AS INTEGER NO-UNDO.
 period = YEAR(TODAY - 5) * 100 + MONTH(TODAY - 5).
    
    fELog("MONTHLY","MonthlyCallDumpStarted").
-   run monthlycalldump(period).
+   RUN Mm/monthlycalldump(period).
    fELog("MONTHLY","MonthlyCallDumpStopped").
 
 quit.

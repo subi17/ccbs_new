@@ -75,7 +75,7 @@ repeat trans:
       END.
    end.
       
-   RUN creafat.p (mobsub.CustNum,
+   RUN Mc/creafat.p (mobsub.CustNum,
                mobsub.MsSeq,
                "BONO8CP",
                ?, /* amount */

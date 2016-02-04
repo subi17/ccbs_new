@@ -131,7 +131,7 @@ if not avail Currency OR defcurr = ? OR defcurr = "" THEN DO:
 END.
 
 DEF VAR pHandle   AS handle NO-UNDO.
-RUN lamupers persistent set pHandle.
+RUN Inv/lamupers persistent set pHandle.
 
 PUT SCREEN ROW 22 COL 1 FILL(" ",60).
 PUT SCREEN ROW 23 COL 1 FILL(" ",60).
@@ -195,11 +195,11 @@ WITH
    title color value (ctc) " INVOICE GROUP DATA " COLOR value(cfc)
    OVERLAY centered ROW 15 FRAME lCustNum.
 
-cfc = "sel". RUN ufcolor. ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ccc = cfc.
 view FRAME taka. PAUSE 0 no-message.
 
-cfc = "lis". RUN ufcolor.
-ehto = 9. RUN ufkey.
+cfc = "lis". RUN Syst/ufcolor.
+ehto = 9. RUN Syst/ufkey.
 
 ASSIGN
 atpvm2 = date(month(TODAY),1,year(TODAY)) - 1
@@ -255,7 +255,7 @@ toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, RETURN:
       IF kysy_rajat THEN DO:
          /* We ask the limits */
-         ehto = 9. RUN ufkey.
+         ehto = 9. RUN Syst/ufkey.
          UPDATE
             InvGroup
             liInvCode
@@ -341,7 +341,7 @@ toimi:
                END.
 
                ELSE IF FRAME-FIELD = "ciperiod" THEN DO:
-                  RUN uperch(INPUT FRAME rajat ciperiod,output i).
+                  RUN Syst/uperch(INPUT FRAME rajat ciperiod,output i).
                   IF i > 0 THEN NEXT.
 
                END.
@@ -361,7 +361,7 @@ toimi:
       ASSIGN ufk = 0 ufk[1] = 132 ufk[2] = 0
                      ufk[4] = 0 ufk[5] = 795
                      ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      RUN Syst/ufkey.
       IF toimi = 1 THEN DO:
          kysy_rajat = TRUE.
          NEXT toimi.
@@ -492,7 +492,7 @@ END.
 /* Calculate bundle first month fee */
 FOR EACH ttInvCust:
 
-   RUN bundle_first_month_fee.p(atpvm1,
+   RUN Mm/bundle_first_month_fee.p(atpvm1,
                                 atpvm2,
                                 ttInvCust.CustNr,
                                 0,
@@ -510,7 +510,7 @@ FOR EACH ttInvCust:
 
    /* If customer has DSS active then calculate Bundle fee */
    /* based on the DSS total consumption                   */
-   RUN dss_bundle_first_month_fee.p(atpvm1,
+   RUN Mm/dss_bundle_first_month_fee.p(atpvm1,
                                     atpvm2,
                                     ttInvCust.CustNr,
                                     0,

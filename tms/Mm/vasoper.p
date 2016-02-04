@@ -22,7 +22,7 @@ if llDoEvent THEN DO:
     RUN StarEventInitialize(lhVASOper).
                     
     ON F12 ANYWHERE DO:
-        run eventview2.p(lhVASOper).
+        RUN Mc/eventview2.p(lhVASOper).
     END.
 END.
                                     
@@ -104,7 +104,7 @@ form /* seek VOName */
     COLOR VALUE(cfc) NO-labels overlay FRAME f2.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -132,12 +132,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a VASOper  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        ehto = 9. RUN Syst/ufkey.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -215,7 +215,7 @@ BROWSE:
         ufk[1]= 35  ufk[2]= 30 ufk[3]= 0  ufk[4]= 585
         ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = false.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -353,8 +353,8 @@ BROWSE:
 
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = true.
        CLEAR FRAME f1.
        SET OperID WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -376,8 +376,8 @@ BROWSE:
      /* Search by col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = true.
        CLEAR FRAME F2.
        SET VOName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -397,8 +397,8 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:  /* add */
         RUN local-find-this (false).
-        run vasbdest.p(input vasoper.operid).
-        run ufkey.
+        RUN Mm/vasbdest.p(input vasoper.operid).
+        RUN Syst/ufkey.
      END.
 
 
@@ -475,8 +475,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
        DISPLAY VASOper.OperID.
        
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhVASOper).

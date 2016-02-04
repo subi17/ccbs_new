@@ -23,7 +23,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhCounter).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCounter).
+      RUN Mc/eventview2(lhCounter).
    END.
 
 END.
@@ -99,7 +99,7 @@ FUNCTION fCTName RETURNS LOGIC
 
 END FUNCTION.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -174,7 +174,7 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.
         
       END.
 
@@ -312,8 +312,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE liCType WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -412,7 +412,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCounter).
 
        ASSIGN ac-hdr = " COUNTER " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -537,7 +537,7 @@ PROCEDURE local-UPDATE-record.
    REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
       ehto = 9.
-      RUN ufkey.
+      RUN Syst/ufkey.
    
       DISP Counter.CounterAmt .
 

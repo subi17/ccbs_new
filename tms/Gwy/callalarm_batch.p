@@ -33,9 +33,9 @@ END.
 
 /* SMSC nodes 1-2 and 3-4 use different protocols */
 IF liNode EQ 1 OR liNode EQ 2 THEN
-   RUN smscgwy_smpp PERSISTENT SET lhSMSC.
+   RUN Gwy/smscgwy_smpp PERSISTENT SET lhSMSC.
 ELSE IF liNode EQ 3 OR liNode EQ 4 THEN
-   RUN smscgwy_smpp PERSISTENT SET lhSMSC.
+   RUN Gwy/smscgwy_smpp PERSISTENT SET lhSMSC.
 ELSE QUIT.
 
 RUN pInitialize IN lhSMSC (liNode).

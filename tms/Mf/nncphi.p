@@ -54,7 +54,7 @@ form /*  search WITH FIELD Date */
             with row 4 col 2 title color value(ctc) " FIND Date "
                 COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST MedHist
@@ -126,7 +126,7 @@ BROWSE:
         ufk[1]= 2120  ufk[2]= 28 ufk[3]= 0 ufk[4]= 0
         ufk[5]= 0  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -315,9 +315,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        Ident = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE Ident WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        if Ident <>  "" THEN DO:
@@ -338,9 +338,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.
        Date = ?.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
        UPDATE Date WITH FRAME haku-f2.
        HIDE FRAME haku-f2 no-pause.
        IF Date <> ? THEN DO:

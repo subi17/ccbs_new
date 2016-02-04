@@ -50,7 +50,7 @@ for each msrequest no-lock where
          exclusive-lock.
       blimit.fromts = 20100801.   
 
-      run cli_rate.p (msrequest.cli,
+      RUN Rate/cli_rate.p (msrequest.cli,
                       8/1/10,
                       8/31/10,
                       true).

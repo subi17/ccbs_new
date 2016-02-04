@@ -1392,7 +1392,7 @@ PROCEDURE pLimitAction:
                    TIME > 75300 /* 20:55 */ THEN lcSMSTxt = "".
             END.
 
-            RUN barrengine (TMCounter.MsSeq,
+            RUN Mm/barrengine (TMCounter.MsSeq,
                             ttLimits.ActionParam + "=1",
                             "5",                /* source  */
                             "TMQueue",          /* creator */

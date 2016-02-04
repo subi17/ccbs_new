@@ -32,7 +32,7 @@
   Version ......: yoigo
   -------------------------------------------------------------------------- */
 
- RUN nntuyp_run (?,"update-mode-general").
+ RUN Mc/nntuyp_run (?,"update-mode-general").
 
 
 
