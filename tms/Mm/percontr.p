@@ -610,20 +610,6 @@ PROCEDURE pContractActivation:
 
                RELEASE DCCLI.
             END.
-            FOR EACH DiscountPlan NO-LOCK WHERE
-                     DiscountPlan.Brand = gcBrand AND
-                    (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
-                     DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
-                EACH DPMember NO-LOCK WHERE
-                     DPMember.DPId      = DiscountPlan.DPId AND
-                     DPMember.HostTable = "MobSub" AND
-                     DPMember.KeyValue  = STRING(MsRequest.MsSeq) AND
-                     DPMember.ValidTo >= ldaResidualFee AND
-                     DPMember.ValidTo <= fLastDayOfMonth(ldaResidualFee) AND
-                     DPMember.ValidTo >= DPMember.ValidFrom:
-                ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
-            END.
-               
             FIND FIRST FMItem NO-LOCK WHERE
                        FMITem.Brand = gcBrand AND
                        FMItem.Feemodel = DayCampaign.FeeModel AND
@@ -635,17 +621,33 @@ PROCEDURE pContractActivation:
                RETURN.
             END.
             
-            IF MSRequest.ReqSource NE
+            IF MSRequest.ReqSource EQ
                {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN DO:
-               ASSIGN
-                  ldeResidualFeeDisc = ldeFeeAmount
-                  ldeFeeAmount = TRUNC(ldeFeeAmount / FMItem.FFItemQty,2).
-            END.
-            ELSE DO:
+               
                ASSIGN
                   ldeResidualFeeDisc = 0
                   ldeFeeAmount = TRUNC(MsRequest.ReqDParam2 / FMItem.FFItemQty,
                                        2).
+            END.
+            ELSE DO:
+               
+               FOR EACH DiscountPlan NO-LOCK WHERE
+                        DiscountPlan.Brand = gcBrand AND
+                       (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
+                        DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
+                   EACH DPMember NO-LOCK WHERE
+                        DPMember.DPId      = DiscountPlan.DPId AND
+                        DPMember.HostTable = "MobSub" AND
+                        DPMember.KeyValue  = STRING(MsRequest.MsSeq) AND
+                        DPMember.ValidTo >= ldaResidualFee AND
+                        DPMember.ValidTo <= fLastDayOfMonth(ldaResidualFee) AND
+                        DPMember.ValidTo >= DPMember.ValidFrom:
+                   ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
+               END.
+               
+               ASSIGN
+                  ldeResidualFeeDisc = ldeFeeAmount
+                  ldeFeeAmount = TRUNC(ldeFeeAmount / FMItem.FFItemQty,2).
             END.
 
             IF ldeFeeAmount <= 0 THEN DO:
@@ -2121,7 +2123,7 @@ PROCEDURE pContractTermination:
                  DCCLI.Brand         = gcBrand              AND
                  DCCLI.DCEvent       = lcDCEvent            AND
                  DCCLI.MsSeq         = MsRequest.MsSeq      AND
-                (IF DCCLI.DCEvent BEGINS "PAYTERM" THEN
+                (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
                     DCCLI.PerContractID = MsRequest.ReqIParam3 
                  ELSE TRUE)                                 AND  
                  DCCLI.ValidTo      >= ldtActDate           AND
@@ -2341,7 +2343,7 @@ PROCEDURE pContractTermination:
             FMItem.FromDate <= FixedFee.BegDate AND
             FMItem.ToDate   >= FixedFee.BegDate:
       
-      IF FixedFee.CalcObj BEGINS "PAYTERM"  AND
+      IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} AND
          FixedFee.SourceKey NE STRING(DCCLI.PerContractID) THEN NEXT.   
 
       /* If last month is usage based and bundle termination is   */
@@ -3221,7 +3223,7 @@ PROCEDURE pContractReactivation:
       FIND FIRST DCCLI WHERE DCCLI.Brand         = gcBrand              AND
                              DCCLI.DCEvent       = lcDCEvent            AND
                              DCCLI.MsSeq         = MsRequest.MsSeq      AND
-                             (IF DCCLI.DCEvent BEGINS "PAYTERM" THEN
+                             (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
                                  DCCLI.PerContractID = MsRequest.ReqIParam3 
                               ELSE TRUE)                                AND  
                              DCCLI.ValidTo      <= ldtActDate NO-LOCK NO-ERROR.
@@ -3265,7 +3267,7 @@ PROCEDURE pContractReactivation:
              FixedFee.HostTable = "MobSub"  AND
              FixedFee.KeyValue  = STRING(MsRequest.MsSeq) AND
              FixedFee.CalcObj   = DayCampaign.DCEvent AND
-             (IF FixedFee.CalcObj BEGINS "PAYTERM"  THEN
+             (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
               FixedFee.SourceTable = "DCCLI" AND
               FixedFee.SourceKey = STRING(DCCLI.PerContractID)
               ELSE TRUE) AND
@@ -3548,7 +3550,7 @@ PROCEDURE pContractReactivation:
                  DCCLI.Brand         = gcBrand              AND
                  DCCLI.DCEvent       = lcDCEvent            AND
                  DCCLI.MsSeq         = MsRequest.MsSeq      AND
-                 (IF DCCLI.DCEvent BEGINS "PAYTERM" THEN
+                 (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
                      DCCLI.PerContractID = MsRequest.ReqIParam3 
                   ELSE TRUE)                                AND  
                  DCCLI.ValidTo      <= ldtActDate EXCLUSIVE-LOCK NO-ERROR.

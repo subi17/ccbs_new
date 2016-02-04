@@ -379,7 +379,7 @@ PROCEDURE pRevertRenewalOrder:
                                                  FALSE,
                                                  "",
                                                  0,
-                                                 (IF bDCCLI.DCEvent BEGINS "PAYTERM" 
+                                                 (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} 
                                                   THEN bDCCLI.PerContractID
                                                   ELSE 0),
                                                  OUTPUT lcError).
