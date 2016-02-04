@@ -533,8 +533,7 @@ PROCEDURE pContractActivation:
          END.         
 
          /* Q25 creation validation */
-         IF MsRequest.ReqCParam3 EQ "RVTERM12" AND
-            MsRequest.ReqSource NE {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN DO:
+         IF MsRequest.ReqCParam3 EQ "RVTERM12" THEN DO:
 
             FIND bQ25SingleFee NO-LOCK USE-INDEX Custnum WHERE
                  bQ25SingleFee.Brand       = gcBrand AND
@@ -554,7 +553,8 @@ PROCEDURE pContractActivation:
 
             /* If Quota 25 is already billed then create a 
                "credit note" with equivalent amount. */
-            IF AVAIL bQ25SingleFee THEN DO:
+            IF AVAIL bQ25SingleFee AND
+               MsRequest.ReqSource NE {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN DO:
                IF bQ25SingleFee.Billed EQ TRUE AND
                   NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
                                      Invoice.Invnum = bQ25SingleFee.Invnum AND
