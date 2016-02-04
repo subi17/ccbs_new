@@ -205,7 +205,8 @@ PROCEDURE pCreateFile:
          FixedFeeTF.CancelStatus = "SENT"
          FixedFeeTF.CancelDate = TODAY
          FixedFeeTF.CancelFile = icFileName
-         FixedFeeTF.BankDate = ldaBankDate WHEN FixedFeeTF.BankDate EQ ?.
+         FixedFeeTF.BankDate = ldaBankDate WHEN FixedFeeTF.BankDate EQ ?
+         FixedFeeTF.OrderId = Fixedfee.OrderId WHEN FixedFeeTF.OrderId EQ ?.
    END.
    
    lcSummary = SUBST("total: &1, sent &2, errors: &3",
@@ -260,7 +261,8 @@ PROCEDURE pPrintLine:
                      lcTotalAmount FORMAT "X(11)"
    /*MES-OPERAC*/    STRING(MONTH(idaBankDate),"99") FORMAT "X(2)"
    /*ANO-OPERAC*/    STRING(YEAR(idaBankDate),"9999") FORMAT "X(4)"
-   /*NUM-PEDIDO*/    STRING(FixedFee.OrderId) FORMAT "X(8)".
+   /*NUM-PEDIDO*/    STRING(FixedFee.OrderId) FORMAT "X(8)"
+   /*COD-FPAGO*/     "0212" FORMAT "X(4)".
    
    PUT STREAM sout CONTROL CHR(13) CHR(10).
 END.
