@@ -71,7 +71,7 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcQ25Struct = validate_request(pcQ25Struct,"username!,msseq!,per_contract_id!,contract_id").
+lcQ25Struct = validate_request(pcQ25Struct,"username!,msseq!,per_contract_id!,q25_contract_id").
 IF lcQ25Struct EQ ? THEN RETURN.
 
 ASSIGN
@@ -240,7 +240,7 @@ IF lcSMSTxt > "" THEN DO:
                           lower(entry(month(ldaMonth24Date),{&MONTHS_ES})))
       lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaMonth24Date)))
       lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
-            STRING(ROUND(SingleFee.Amt / 12, 2))).
+            STRING(TRUNC(SingleFee.Amt / 12, 2))).
 
    fMakeSchedSMS2(MobSub.CustNum,
                   MobSub.CLI,
