@@ -117,16 +117,15 @@ FOR EACH TermReturn use-index orderid NO-LOCK WHERE
                   lcValue = "DETAILED".
             END.
             WHEN "#Q25Amount" THEN DO:
-               FIND FIRST MobSub NO-LOCK WHERE
-                          MobSub.Brand = gcBrand AND
-                          MobSub.CLI   = TermReturn.MSISDN NO-ERROR.
-               IF AVAILABLE MobSub THEN DO:
-                  FIND SingleFee USE-INDEX Custnum WHERE
+               FIND FIRST Order NO-LOCK WHERE
+                          Order.Brand   = gcBrand AND
+                          Order.OrderId = TermReturn.OrderId NO-ERROR.
+               IF AVAILABLE Order THEN DO:
+                  FIND SingleFee WHERE
                        SingleFee.Brand       = gcBrand AND
-                       SingleFee.Custnum     = MobSub.CustNum AND
                        SingleFee.HostTable   = "Mobsub" AND
-                       SingleFee.KeyValue    = STRING(MobSub.MsSeq) AND
-                       SingleFee.OrderId     = TermReturn.OrderId AND
+                       SingleFee.KeyValue    = STRING(Order.MsSeq) AND
+                       SingleFee.OrderId     = Order.OrderId AND
                        SingleFee.CalcObj     = "RVTERM" NO-LOCK NO-ERROR.
                   IF AVAIL SingleFee THEN lcValue = STRING(SingleFee.Amt).
                   ELSE lcValue = "".
