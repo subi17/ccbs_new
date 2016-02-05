@@ -153,7 +153,8 @@ ELSE DO: /* Cancel Quota 25 Extension */
    CASE pcAction:
    WHEN "remove" THEN ASSIGN
       lcAction = "term"
-      llCreateFees = TRUE.
+      llCreateFees = TRUE
+      ldePeriodTo = fMakeTS().
    WHEN "cancel" THEN DO: 
       IF ADD-INTERVAL(TODAY, -5, "months") >= DCCLI.ValidFrom THEN
          RETURN appl_err("Installment is older than 5 months").
