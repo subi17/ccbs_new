@@ -38,8 +38,8 @@ DEFINE VARIABLE llTimeOut   AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE lcLogFile   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liNagios    AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcURL       AS CHARACTER NO-UNDO.
-DEFINE VARIABLE clsNagios   AS nagios    NO-UNDO.
-DEFINE VARIABLE clsTimeDate AS timedate  NO-UNDO.
+DEFINE VARIABLE clsNagios   AS Class.nagios    NO-UNDO.
+DEFINE VARIABLE clsTimeDate AS Class.timedate  NO-UNDO.
 
 ASSIGN
    lcURL     = fCParamC4(gcBrand,"SOG","URL_Read")
@@ -72,7 +72,7 @@ WITH
    NO-LABEL 10 DOWN TITLE lcStatus  CENTERED ROW 8
 FRAME frmMain.
 
-clsNagios = NEW nagios().
+clsNagios = NEW Class.nagios().
 
 RUN pUpdateQueue.
 

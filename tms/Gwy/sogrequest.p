@@ -39,8 +39,8 @@ DEFINE VARIABLE lcNagios      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE ocResult      AS CHAR      NO-UNDO.
 DEFINE VARIABLE ocError       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcURL         AS CHARACTER NO-UNDO.
-DEFINE VARIABLE clsNagios     AS nagios    NO-UNDO.
-DEFINE VARIABLE clsTimeDate   AS timedate  NO-UNDO.
+DEFINE VARIABLE clsNagios     AS Class.nagios    NO-UNDO.
+DEFINE VARIABLE clsTimeDate   AS Class.timedate  NO-UNDO.
 DEFINE VARIABLE liTime        AS INTEGER   NO-UNDO.
 DEFINE VARIABLE llTime        AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE lhSocket      AS HANDLE NO-UNDO.
@@ -63,8 +63,8 @@ DEFINE BUFFER xxSolog  FOR Solog.
 DEFINE STREAM sLog.
 DEFINE STREAM sLogFile.
 
-clsNagios   = NEW nagios().
-clsTimeDate = NEW timedate().
+clsNagios   = NEW Class.nagios().
+clsTimeDate = NEW Class.timedate().
 
 ASSIGN
    lcLogPath   = fCParamC4(gcBrand,"SOG","LogDirectory")

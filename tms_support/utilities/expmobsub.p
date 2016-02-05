@@ -153,13 +153,13 @@ END.
 DEFINE BUFFER bufSIM FOR SIM.
 
 DEFINE VARIABLE lcMnpTime AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE classTS   AS timedate       NO-UNDO.
+DEFINE VARIABLE classTS   AS Class.timedate       NO-UNDO.
 
 DEFINE BUFFER bufOrder  FOR Order.
 DEFINE BUFFER bufOrder2 FOR Order.
 
 FUNCTION fIsDextraCapable RETURN LOGICAL (INPUT piOrderId AS INTEGER):
-   classTS = NEW timedate().
+   classTS = NEW Class.timedate().
 
    FIND bufOrder WHERE bufOrder.Brand = "1" AND 
                        bufOrder.Orderid = piOrderId NO-LOCK
