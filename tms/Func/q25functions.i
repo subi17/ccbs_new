@@ -44,8 +44,8 @@ IF lcQ25SpoolDir = "" OR lcQ25SpoolDir = ? THEN lcQ25SpoolDir = "/tmp/".
    or national holiday. Check if there are such days left or do we have to
    sent rest of messages right now. 19th day is last possible sending date.
    */
-FUNCTION fIsLastDayToSend RETURNS LOGICAL (INPUT idaDate AS DATE):
-   DO WHILE idaDate < DATE(MONTH(idaDate),19,YEAR(idaDate)).
+FUNCTION fIsLastDayToSend RETURNS LOGICAL (INPUT idaDate AS DATE, INPUT iiLastDay AS INT):
+   DO WHILE idaDate < DATE(MONTH(idaDate),iiLastDay,YEAR(idaDate)).
       IF fChkDueDate(idaDate + 1) = idaDate + 1 THEN
          RETURN FALSE. /* there is at least one sending day left */
       idaDate = idaDate + 1.
@@ -152,10 +152,12 @@ END FUNCTION.  /* furl-encode */
    solving which messages should be sent in specified date. Goal is sent two
    messages in each day weekday after 6th until all messages of month is sent.
    */
-FUNCTION fCountNormalWeekday RETURNS INTEGER (INPUT idaDate AS DATE):
+FUNCTION fCountNormalWeekday RETURNS INTEGER (INPUT idaDate AS DATE,
+                                              INPUT iiStartDay AS INT):
    DEF VAR lcCount AS INT NO-UNDO.
    DEF VAR ldaTempDate AS DATE NO-UNDO.
-   ldaTempDate = DATE(MONTH(idaDate),6,YEAR(idaDate)).
+
+   ldaTempDate = DATE(MONTH(idaDate), iiStartDay, YEAR(idaDate)).
    DO WHILE ldaTempDate <= idaDate:
       IF fChkDueDate(ldaTempDate) EQ ldaTempDate THEN
          lcCount = lcCount + 1.
@@ -206,7 +208,7 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    END.
    ELSE IF iiPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
    /* Q25 Month 24 20th day extension made */  
-      lcAmount = STRING(ROUND(idAmount / 12,2),"->>>>>>9.99").
+      lcAmount = STRING(TRUNC(idAmount / 12,2),"->>>>>>9.99").
       lcAmount = LEFT-TRIM(lcAmount).
       lcAmount = REPLACE(lcAmount,".",",").                  
       lcSMSMessage = fGetSMSTxt("Q25FinalFeeMsgChosenExt",
