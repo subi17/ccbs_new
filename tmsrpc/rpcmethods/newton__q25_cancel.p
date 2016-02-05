@@ -161,29 +161,29 @@ ELSE DO: /* Cancel Quota 25 Extension */
       ASSIGN
          lcAction = "canc"
          llCreateFees = FALSE.
-   FIND FixedFee NO-LOCK USE-INDEX CustNum WHERE
-        FixedFee.Brand     = gcBrand   AND
-        FixedFee.CustNum   = MobSub.CustNum AND
-        FixedFee.HostTable = "MobSub"  AND
-        FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
-        FixedFee.CalcObj   = DCCLI.DCEvent AND
-        FixedFee.SourceTable = "DCCLI" AND
-        FixedFee.SourceKey = STRING(DCCLI.PerContractId) NO-ERROR.   
-   FOR EACH FFItem OF FixedFee NO-LOCK USE-INDEX FFNum:
-      IF FFItem.Billed = TRUE AND
-         CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
-                         Invoice.Brand   = gcBrand AND
-                         Invoice.InvNum  = FFItem.InvNum AND
-                         Invoice.InvType = 1 NO-LOCK) THEN NEXT.
-      liLastUnBilledPeriod = FFItem.BillPeriod.
-      LEAVE.
-   END.
+      FIND FixedFee NO-LOCK USE-INDEX CustNum WHERE
+           FixedFee.Brand     = gcBrand   AND
+           FixedFee.CustNum   = MobSub.CustNum AND
+           FixedFee.HostTable = "MobSub"  AND
+           FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
+           FixedFee.CalcObj   = DCCLI.DCEvent AND
+           FixedFee.SourceTable = "DCCLI" AND
+           FixedFee.SourceKey = STRING(DCCLI.PerContractId) NO-ERROR.   
+      FOR EACH FFItem OF FixedFee NO-LOCK USE-INDEX FFNum:
+         IF FFItem.Billed = TRUE AND
+            CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
+                            Invoice.Brand   = gcBrand AND
+                            Invoice.InvNum  = FFItem.InvNum AND
+                            Invoice.InvType = 1 NO-LOCK) THEN NEXT.
+         liLastUnBilledPeriod = FFItem.BillPeriod.
+         LEAVE.
+      END.
 
-   IF liLastUnBilledPeriod = 0 THEN
-      liLastUnBilledPeriod = FixedFee.BegPeriod.
+      IF liLastUnBilledPeriod = 0 THEN
+         liLastUnBilledPeriod = FixedFee.BegPeriod.
 
-   ldaLastUnBilledDate = fPer2Date(liLastUnBilledPeriod,0) - 1.
-   ldePeriodTo = fMake2Dt(ldaLastUnBilledDate,86399).
+      ldaLastUnBilledDate = fPer2Date(liLastUnBilledPeriod,0) - 1.
+      ldePeriodTo = fMake2Dt(ldaLastUnBilledDate,86399).
 
    END.
    OTHERWISE RETURN appl_err("Incorrect action").
