@@ -28,6 +28,7 @@ gcBrand = "1".
 {tmsconst.i}
 {msreqfunc.i} /* fReqStatus */
 {fmakemsreq.i}
+{coinv.i}
 
 /* top_struct */
 DEF VAR top_struct        AS CHARACTER NO-UNDO.
@@ -54,6 +55,9 @@ DEF VAR liLoop           AS INT NO-UNDO.
 DEF VAR liReqStatus      AS INT NO-UNDO. 
 DEF VAR lcAction         AS CHARACTER NO-UNDO.
 DEF VAR llCreateFees     AS LOGICAL NO-UNDO.
+DEF VAR liLastUnBilledPeriod AS INT NO-UNDO.
+DEF VAR ldaLastUnBilledDate AS DATE NO-UNDO.
+DEF VAR ldePeriodTo AS DEC NO-UNDO.
 
 /* common validation */
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
@@ -156,6 +160,30 @@ ELSE DO: /* Cancel Quota 25 Extension */
       ASSIGN
          lcAction = "canc"
          llCreateFees = FALSE.
+   FIND FixedFee NO-LOCK USE-INDEX CustNum WHERE
+        FixedFee.Brand     = gcBrand   AND
+        FixedFee.CustNum   = MobSub.CustNum AND
+        FixedFee.HostTable = "MobSub"  AND
+        FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
+        FixedFee.CalcObj   = DCCLI.DCEvent AND
+        FixedFee.SourceTable = "DCCLI" AND
+        FixedFee.SourceKey = STRING(DCCLI.PerContractId) NO-ERROR.   
+   FOR EACH FFItem OF FixedFee NO-LOCK USE-INDEX FFNum:
+      IF FFItem.Billed = TRUE AND
+         CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
+                         Invoice.Brand   = gcBrand AND
+                         Invoice.InvNum  = FFItem.InvNum AND
+                         Invoice.InvType = 1 NO-LOCK) THEN NEXT.
+      liLastUnBilledPeriod = FFItem.BillPeriod.
+      LEAVE.
+   END.
+
+   IF liLastUnBilledPeriod = 0 THEN
+      liLastUnBilledPeriod = FixedFee.BegPeriod.
+
+   ldaLastUnBilledDate = fPer2Date(liLastUnBilledPeriod,0) - 1.
+   ldePeriodTo = fMake2Dt(ldaLastUnBilledDate,86399).
+
    END.
    OTHERWISE RETURN appl_err("Incorrect action").
    END. 
@@ -163,7 +191,7 @@ ELSE DO: /* Cancel Quota 25 Extension */
    liCreated = fPCActionRequest(MobSub.MsSeq,
       "RVTERM12",
       lcAction,
-      fMakeTS(),
+      ldePeriodTo,
       llCreateFees, /* create fees */
       {&REQUEST_SOURCE_NEWTON},
       "",
