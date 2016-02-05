@@ -429,14 +429,19 @@ PROCEDURE pTerminate:
             DCCLI.ValidTo >= TODAY:
          
       DCCLI.TermDate = ?.
+
+      FIND FIRST DayCampaign NO-LOCK WHERE
+                 DayCampaign.Brand = gcBrand AND
+                 DayCampaign.DcEvent = DCCLI.DcEvent NO-ERROR.
    
       CREATE ttContract.
       ASSIGN
          ttContract.DCEvent   = DCCLI.DCEvent
          ttContract.CreateFee = DCCLI.CreateFee
-         ttContract.PerContID = IF ttContract.DCEvent BEGINS "PAYTERM" THEN  
-                                   DCCLI.PerContractID 
-                                ELSE 0.
+         ttContract.PerContID = (IF AVAIL DayCampaign AND
+                                   DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}
+                                THEN DCCLI.PerContractID 
+                                ELSE 0).
 
       /* Reset the flag if leasing installment contract is being terminated */
       IF DCCLI.DCEvent BEGINS "PAYTERM" AND
