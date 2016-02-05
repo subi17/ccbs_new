@@ -388,7 +388,7 @@ FUNCTION fGenerateMessage RETURNS CHAR
 /*Doc list is created from matrix in type1(initial info of the case) notificatoins. 
 In other notifications only A&C (pending&error) cases are sent to identify missing docs*/
    lcDocList = fDocListByOrder(Order.Orderid, icNotifCaseId).
-   DO i = 1 TO NUM-ENTRIES(lcDocList, {&DMS_DOCLIST_SEP}) BY 2:
+   DO i = 1 TO NUM-ENTRIES(lcDocList, {&DMS_DOCLIST_SEP}) BY 3:
       lcDocNotifEntry = fDoc2Msg(ENTRY(i,lcDocList,{&DMS_DOCLIST_SEP}),
                                  ENTRY(i + 1,lcDocList,{&DMS_DOCLIST_SEP}),
                                  ENTRY(i + 2,lcDocList,{&DMS_DOCLIST_SEP})).
