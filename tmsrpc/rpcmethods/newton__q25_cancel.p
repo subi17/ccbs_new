@@ -22,13 +22,13 @@
     AC2: Create a memo in TMS
 */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{timestamp.i}
-{tmsconst.i}
-{msreqfunc.i} /* fReqStatus */
-{fmakemsreq.i}
-{coinv.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/msreqfunc.i} /* fReqStatus */
+{Func/fmakemsreq.i}
+{Func/coinv.i}
 
 /* top_struct */
 DEF VAR top_struct        AS CHARACTER NO-UNDO.
