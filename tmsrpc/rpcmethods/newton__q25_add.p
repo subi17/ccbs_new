@@ -208,7 +208,7 @@ IF AVAIL MsRequest THEN DO:
    ELSE DO:   
       Msrequest.UserCode = "POS_" + MsRequest.Usercode.
       MsRequest.ReqCparam4 = lcQ25ContractId.
-      MsRequest.ReqCparam6 = lcQ25ContractId. /*For findinf entry in DMS usage*/
+      /* MsRequest.ReqCparam6 = lcQ25ContractId. For findinf entry in DMS usage */
    END.
 END.
 RELEASE MsRequest.
