@@ -585,8 +585,6 @@ PROCEDURE pContractActivation:
                END.
                ldaResidualFee = fInt2Date(bQ25SingleFee.Concerns[1],0).
                ldeFeeAmount = bQ25SingleFee.Amt.
-               /* map q25 fee to original residual fee */
-               liOrderId = bQ25SingleFee.OrderId.
 
                /* Find original installment contract */   
                FIND FIRST DCCLI NO-LOCK WHERE
@@ -941,6 +939,10 @@ PROCEDURE pContractActivation:
       IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN ASSIGN
          liOrderid = fGetInstallmentOrderId(msrequest.msrequest)
          lcReqSource = ";" + MsRequest.Reqsource. 
+               
+      /* map q25 fee to original residual fee */
+      IF AVAIL bQ25SingleFee THEN
+         liOrderId = bQ25SingleFee.OrderId.
 
       RUN creasfee.p (MsOwner.CustNum,
                     (IF (lcDCEvent = {&DSS} + "_UPSELL" OR
