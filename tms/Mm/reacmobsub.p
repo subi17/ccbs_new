@@ -400,9 +400,10 @@ DO TRANSACTION:
 
              CREATE ttContract.
              ASSIGN ttContract.DCEvent   = bSubMsRequest.ReqCParam3
-                    ttContract.PerContID = (IF AVAIL DayCampaign AND
-                                                     DayCampaign.DCEvent EQ {&DCTYPE_INSTALLMENT}
-                                            THEN bSubMsRequest.ReqIParam3 ELSE 0).
+                    ttContract.PerContID =
+                        (IF AVAIL DayCampaign AND
+                                  DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}
+                         THEN bSubMsRequest.ReqIParam3 ELSE 0).
              
              FIND FIRST MsRequest WHERE
                 MsRequest.MsRequest = bSubMsRequest.MsRequest NO-LOCK NO-ERROR.
@@ -418,9 +419,10 @@ DO TRANSACTION:
 
              CREATE ttContract.
              ASSIGN ttContract.DCEvent = bSubMsRequest.ReqCParam3
-                    ttContract.PerContID = (IF AVAIL DayCampaign AND
-                                                     DayCampaign.DCEvent EQ {&DCTYPE_INSTALLMENT}
-                                            THEN bSubMsRequest.ReqIParam3 ELSE 0).
+                    ttContract.PerContID = 
+                        (IF AVAIL DayCampaign AND
+                                  DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}
+                         THEN bSubMsRequest.ReqIParam3 ELSE 0).
           END. /* ELSE IF bSubMsRequest.ReqStatus = {&REQUEST_STATUS_DONE} */
           
        END. /* IF bSubMsRequest.ReqType = {&REQTYPE_CONTRACT_TERMINATION} */
