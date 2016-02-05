@@ -156,11 +156,14 @@ ELSE DO: /* Cancel Quota 25 Extension */
       llCreateFees = TRUE
       ldePeriodTo = fMakeTS().
    WHEN "cancel" THEN DO: 
+
       IF ADD-INTERVAL(TODAY, -5, "months") >= DCCLI.ValidFrom THEN
          RETURN appl_err("Installment is older than 5 months").
+
       ASSIGN
          lcAction = "canc"
          llCreateFees = FALSE.
+
       FIND FixedFee NO-LOCK USE-INDEX CustNum WHERE
            FixedFee.Brand     = gcBrand   AND
            FixedFee.CustNum   = MobSub.CustNum AND
@@ -169,6 +172,10 @@ ELSE DO: /* Cancel Quota 25 Extension */
            FixedFee.CalcObj   = DCCLI.DCEvent AND
            FixedFee.SourceTable = "DCCLI" AND
            FixedFee.SourceKey = STRING(DCCLI.PerContractId) NO-ERROR.   
+   
+      IF NOT AVAIL FixedFee THEN 
+         RETURN appl_err("Q25 contract fee not found").
+
       FOR EACH FFItem OF FixedFee NO-LOCK USE-INDEX FFNum:
          IF FFItem.Billed = TRUE AND
             CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
