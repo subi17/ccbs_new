@@ -88,6 +88,8 @@ FORM
        lcHostTable NO-LABEL FORMAT "X(30)" SKIP
     DPMember.KeyValue    COLON 18 FORMAT "X(12)"
        lcMember NO-LABEL FORMAT "X(35)" SKIP
+    DPMember.OrderId  COLON 18
+      LABEL "Order ID"
     lcDPRuleID  COLON 18 
        FORMAT "X(16)" 
        LABEL "Discount Plan" 
