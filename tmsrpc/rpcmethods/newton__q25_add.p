@@ -54,6 +54,8 @@ DEF VAR ldeSMSStamp AS DEC NO-UNDO.
 DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
 
 DEF VAR lcQ25ContractId AS CHAR NO-UNDO.
+DEF VAR lcOrigKatun AS CHAR NO-UNDO.
+
 
 /* common validation */
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
@@ -101,8 +103,6 @@ IF pcmemoStruct > "" THEN DO:
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
-
-katun = "VISTA_" + lcusername.
 
 FIND FIRST MobSub NO-LOCK WHERE
            MobSub.MsSeq = limsseq NO-ERROR.
@@ -180,6 +180,13 @@ IF SingleFee.OrderId > 0 THEN DO:
       RETURN appl_err("Already returned terminal").
 END.
 
+lcOrigKatun = katun.
+/*YPR-3256*/
+IF lcQ25ContractId EQ "" THEN
+   katun = "VISTA_" + lcUsername.
+ELSE 
+   katun = "POS_" + lcUsername.
+
 liCreated = fPCActionRequest(
    MobSub.MsSeq,
    "RVTERM12",
@@ -195,25 +202,20 @@ liCreated = fPCActionRequest(
    DCCLI.PerContractId, /* Periodical Contract-ID */
    OUTPUT lcResult).   
    
-IF liCreated = 0 THEN
+IF liCreated = 0 THEN DO:
+   katun = lcOrigKatun.
    RETURN appl_err(SUBST("Q25 extension request failed: &1",
                          lcResult)).
-/*YPR-3256*/
+END.
+
 
 FIND FIRST MSRequest WHERE
            MSRequest.MSrequest EQ liCreated EXCLUSIVE-LOCK NO-ERROR.
 IF AVAIL MsRequest THEN DO:
-   IF lcQ25ContractId EQ "" THEN 
-      Msrequest.UserCode = "VISTA_" + MsRequest.Usercode.
-   ELSE DO:   
-      Msrequest.UserCode = "POS_" + MsRequest.Usercode.
-      MsRequest.ReqCparam4 = lcQ25ContractId.
-      /* MsRequest.ReqCparam6 = lcQ25ContractId. For findinf entry in DMS usage */
-   END.
+   MsRequest.ReqCparam4 = lcQ25ContractId.
+   /* MsRequest.ReqCparam6 = lcQ25ContractId. For findinf entry in DMS usage */
 END.
 RELEASE MsRequest.
-
-/*YPR-3256 ends*/
 
 CASE SingleFee.BillCode:
    WHEN "RVTERM1EF" THEN
@@ -266,6 +268,7 @@ IF lcmemo_title > "" THEN DO:
        Memo.CustNum   = MobSub.CustNum.
 END. /* IF lcmemo_title > "" AND lcmemo_content > "" THEN DO: */
 
+katun = lcOrigKatun.
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
