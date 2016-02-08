@@ -3269,8 +3269,9 @@ PROCEDURE pContractReactivation:
                   FixedFee.FinancedResult EQ {&TF_STATUS_SENT_TO_BANK}) THEN DO:
             FOR FIRST FixedFeeTF EXCLUSIVE-LOCK WHERE
                       FixedFeeTF.FFNum = FixedFee.FFNum:
-               IF FixedFeeTF.CancelStatus EQ "NEW" THEN
-                  FixedFeeTF.CancelStatus = "".
+               IF FixedFeeTF.CancelStatus EQ "NEW" THEN ASSIGN
+                  FixedFeeTF.CancelStatus = ""
+                  FixedFeeTF.CancelReason = "".
                ELSE IF FixedFeeTF.CancelStatus NE "" THEN ASSIGN
                   FixedFee.FinancedResult = {&TF_STATUS_YOIGO_REACTIVATION_FBB}
                   llUpdateResidualFeeCode = TRUE.
