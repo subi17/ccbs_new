@@ -1,0 +1,22 @@
+ADD FIELD "ContractID" OF "TermReturn" AS character
+  FORMAT "x(12)"
+  INITIAL ""  
+  COLUMN-LABEL "ContractId"
+  LABEL "Contract ID"  
+  HELP "Contract ID"
+  ORDER 120
+
+ADD FIELD "ReturnChannel" OF "TermReturn" AS character
+  FORMAT "x(16)"
+  INITIAL ""  
+  COLUMN-LABEL "RetChannel"
+  LABEL "RetChannel"  
+  HELP "Return Channel"
+  ORDER 130
+
+  
+ADD INDEX "ReturnTS" ON "TermReturn"
+  AREA "Sta_Index_1"
+  INDEX-FIELD "ReturnTS" DESCENDING
+ 
+

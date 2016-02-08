@@ -135,7 +135,7 @@ END.
 RELEASE SubsTerminal.
 
 /*IMEI change needs request because Document Management reads IMEI changes
-vrom MsRequest.*/
+from MsRequest.*/
 IF LOOKUP("imei",lcStruct) > 0 THEN DO:
 
    fCreateRequest({&REQTYPE_IMEI_CHANGE}, /* heat balance query request */
