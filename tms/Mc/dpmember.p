@@ -702,6 +702,7 @@ PROCEDURE local-UPDATE-record:
          DPMember.HostTable
          DPMember.KeyValue
          lcMember
+         DPMember.OrderId
          lcDPRuleID 
          DPMember.DPId        
          DiscountPlan.DPName WHEN AVAILABLE DiscountPlan
