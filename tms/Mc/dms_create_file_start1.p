@@ -95,14 +95,15 @@ END.
 
 /*Execute read operation and assign new period end time to actionlog.*/
 ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60).
-
-RUN dms_create_docfile.p(SUBST("&1,&2,&3,&4,&5,&6",
+/* Case type numbers:            1, 2, 3, 4, 5, 6, 9, 10 */
+RUN dms_create_docfile.p(SUBST("&1,&2,&3,&4,&5,&6,&7,&8",
                           {&DMS_CASE_TYPE_ID_ORDER_ACT},
                           {&DMS_CASE_TYPE_ID_ORDER_RESTUDY},
                           {&DMS_CASE_TYPE_ID_COMPANY},
                           {&DMS_CASE_TYPE_ID_ORDER_VFR},
                           {&DMS_CASE_TYPE_ID_DIRECT_CH},
-                          {&DMS_CASE_TYPE_ID_CANCEL}),
+                          {&DMS_CASE_TYPE_ID_CANCEL},
+                          {&DMS_CASE_TYPE_ID_Q25_TERM_RETURN}),
                        ldCollPeriodStartTS, 
                        ldCollPeriodEndTS, lcCaseFile, lcLogFile1).
 /* Move the file to Transfer directory */

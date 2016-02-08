@@ -536,6 +536,19 @@ FUNCTION fCountIMEIModifications RETURN CHAR
    RETURN STRING(liCount).
 END.
 
+FUNCTION fGetQ25Extension RETURNS CHAR
+   (iiOrderId AS INT):
+   DEF BUFFER bOA FOR Orderaction.
+   FIND FIRST bOA WHERE
+              bOA.Brand EQ gcBrand AND
+              bOA.ORderID EQ iiOrderID AND
+              bOA.Itemtype EQ "Q25Extension" NO-ERROR.
+   IF AVAIL bOA THEN RETURN bOA.ItemKey.
+   ELSE RETURN "".
+
+
+END.
+
 /*Order activation*/
 /*Function generates order documentation*/
 FUNCTION fCreateDocumentCase1 RETURNS CHAR
@@ -581,7 +594,9 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    /**/
    fGetSegment(Order.OrderID)       + lcDelim +
    /*Terminal Type: The value can be Simonly, Handset, Financed Handset.*/
-   fGetTerminalFinanceType(iiOrderId).
+   fGetTerminalFinanceType(iiOrderId) + lcDelim +
+   /*q25Extension YPR-3269*/
+   fGetQ25Extension(iiOrderId).
 
    /*Document type,DocStatusCode,RevisionComment*/
    lcDocListEntries = "".
@@ -1278,6 +1293,95 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
 
 END.
 
+FUNCTION fGetContractIdFromOrder RETURNS CHAR
+   (iiOrderID AS INT):
+   FIND FIRST Order WHERE
+              Order.Brand EQ "1" AND
+              Order.OrderID EQ iiOrderID NO-LOCK NO-ERROR.
+   IF AVAIL Order THEN  RETURN Order.Contractid.
+   ELSE RETURN "".
+END.
+
+/*q25 Returned Terminal casefile*/
+FUNCTION fCreateDocumentCase9  RETURNS CHAR
+   (idStartTS AS DECIMAL,
+   idEndTS AS DECIMAL):
+   DEF VAR lcContractID AS CHAR NO-UNDO.
+   DEF VAR lcCasefileRow   AS CHAR NO-UNDO.   
+   FOR EACH TermReturn NO-LOCK WHERE
+            TermReturn.ReturnTS < idEndTS AND
+            TermReturn.ReturnTS >= idStartTS:
+      lcContractID = fGetContractIdFromOrder(TermReturn.OrderID).
+      IF lcContractID EQ "" THEN NEXT.
+       /*ContractID*/
+
+         lcCaseFileRow = lcContractID + lcDelim +
+                         /*Salesman*/
+                         TermReturn.Salesman + lcDelim +
+                         /*MSisDN*/
+                         TermReturn.MSISDN + lcDelim +
+                         /*Terminal Request Date*/
+                         STRING(TermReturn.ReturnTS) .
+
+   END.
+END.
+/*q25 case file 10 Q25 extensions*/
+FUNCTION fCreateDocumentCase10 RETURNS CHAR
+   (idStartTS AS DECIMAL,
+    idEndTS AS DECIMAL):
+   DEF VAR lcDocListEntries AS CHAR NO-UNDO.
+   DEF VAR lcCaseTypeId     AS CHAR NO-UNDO.
+   DEF VAR lcCreateDMS      AS CHAR NO-UNDO.
+   DEF VAR lcCasefileRow    AS CHAR NO-UNDO.
+   DEF VAR lcUsr            AS CHAR NO-UNDO.
+   
+   FOR EACH MsRequest NO-LOCK WHERE
+            MsRequest.Brand EQ gcBrand AND
+            MsRequest.ReqStatus EQ 2 AND
+            MsRequest.UpdateStamp > idStartTS AND
+            MsRequest.UpdateStamp < idEndTS AND
+            MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION}  /*8*/
+            AND
+            MsRequest.ReqCparam6 NE "" AND 
+            MsRequest.UpdateStamp <= MsRequest.DoneStamp:
+       
+      /*Document type,DocStatusCode,RevisionComment*/
+      ASSIGN 
+      lcCaseTypeID   = '10'
+      lcDocListEntries = "" 
+      lcCaseFileRow =
+                      lcCaseTypeID                    + lcDelim +
+                      /*Contract_ID*/
+                      STRING(MsRequest.ReqCparam6)    + lcDelim +
+                      /*SFID*/
+                      lcUsr                           + lcDelim +
+                      /*MSISDN*/
+                      STRING(MsRequest.CLI)           + lcDelim +
+                      /*Q25 Extension_Request_date*/
+                      STRING(MsRequest.CreStamp).
+
+      OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
+      PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
+      OUTPUT STREAM sOutFile CLOSE.
+
+      fLogLine(lcCaseFileRow,"").
+      lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
+                               lcCaseTypeID,
+                               MsRequest.ReqCparam6,
+                               {&DMS_HOST_TABLE_MSREQ},
+                               MsRequest.MsRequest,
+                               lcInitStatus,/*StatusCode*/
+                               lcDMSStatusDesc,
+                               "",
+                               0,
+                               lcDocListEntries /*DocList*/,
+                               {&DMS_DOCLIST_SEP}).      
+   END.
+   RETURN "".
+
+END.
+
+
 FUNCTION fCreateDocumentRows RETURNS CHAR
  (icCaseID as CHAR):
    DEF VAR lcStatus AS CHAR NO-UNDO.
@@ -1327,6 +1431,15 @@ FUNCTION fCreateDocumentRows RETURNS CHAR
             IF lcStatus NE "" THEN fLogLine("",lcStatus).
          END.
       END.
+      WHEN {&DMS_CASE_TYPE_ID_Q25_TERM_RETURN} THEN DO:
+         /*From MsRequest*/
+         lcStatus = fCreateDocumentCase9(idPeriodStart, idPeriodEnd).
+      END.
+      WHEN {&DMS_CASE_TYPE_ID_Q25_STE} THEN DO:
+         /*From MsRequest*/
+         lcStatus = fCreateDocumentCase10(idPeriodStart, idPeriodEnd).
+      END.
+
    END. /*Case*/
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
    PUT STREAM sOutFile UNFORMATTED "" SKIP.
