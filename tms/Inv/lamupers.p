@@ -3160,7 +3160,8 @@ PROCEDURE pDiscount:
                           ttIR.ToDate    = ldaDiscValidTo AND
                           ttIR.VatIncl   = lCustVat AND
                           ttIR.RowType   = 9 AND 
-                          ttIR.AgrCust   = iiAgrCust NO-ERROR.
+                          ttIR.AgrCust   = iiAgrCust AND
+                          ttIR.OrderId   = ttDiscounts.OrderId NO-ERROR.
 
                IF NOT AVAILABLE ttIR THEN DO:
                   CREATE ttIR.
