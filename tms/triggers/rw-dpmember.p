@@ -11,7 +11,7 @@ IF NEW(DPMember) THEN DO:
       Common.RepLog.KeyValue  = STRING(DPMember.DPId) + CHR(255) +
                                 DPMember.HostTable    + CHR(255) +
                                 DPMember.KeyValue     + CHR(255) +
-                                STRING(DPMember.ValidTo)            
+                                STRING(DPMember.ValidFrom)            
       Common.RepLog.EventTS   = DATETIME(TODAY,MTIME).
 END. /* IF NEW(DPMember) THEN DO: */
 ELSE DO:
@@ -24,6 +24,6 @@ ELSE DO:
       Common.RepLog.KeyValue  = STRING(Oldbuf.DPId) + CHR(255) +
                                 Oldbuf.HostTable    + CHR(255) +
                                 Oldbuf.KeyValue     + CHR(255) +
-                                STRING(Oldbuf.ValidTo)
+                                STRING(Oldbuf.ValidFrom)
       Common.RepLog.EventTS   = DATETIME(TODAY,MTIME).
 END. /* ELSE DO: */

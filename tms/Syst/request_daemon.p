@@ -10,15 +10,17 @@
 {commpaa.i}
 ASSIGN
    gcBrand = "1"
-   katun   = "".
+   katun   = "Cron".
    
 {timestamp.i}
 {log.i}
 {cparam2.i}
 
-/******** Main start *********/
+DEF VAR llHandled AS LOG NO-UNDO INIT FALSE. 
+DEF VAR lcProgram AS CHAR NO-UNDO. 
 
-FOR EACH RequestType WHERE 
+/******** Main start *********/
+FOR EACH RequestType NO-LOCK WHERE 
          RequestType.Brand = gcBrand AND 
          RequestType.Mode  = "Batch" AND
          RequestType.InUse:
@@ -68,12 +70,29 @@ FOR EACH RequestType WHERE
          END.
       END.
 
-      FIND MsRequest NO-LOCK WHERE 
-           MsRequest.Brand     EQ gcBrand               AND
-           MsRequest.ReqType   EQ RequestType.ReqType   AND 
-           MsRequest.ReqStatus EQ RequestStatus.ReqStat NO-ERROR.                 
-      IF AVAIL MsRequest THEN 
-         RUN VALUE(RequestType.Program + ".p")(MsRequest.MsRequest).
+      FOR EACH MsRequest NO-LOCK WHERE 
+               MsRequest.Brand     EQ gcBrand               AND
+               MsRequest.ReqType   EQ RequestType.ReqType   AND 
+               MsRequest.ReqStatus EQ RequestStatus.ReqStat AND
+               MsRequest.ActStamp <= fMakeTS()
+            BY MsRequest.ActStamp 
+            BY MsRequest.MsRequest:
+
+         IF RequestStatus.Program > "" THEN lcProgram = RequestStatus.Program.
+         ELSE lcProgram = RequestType.Program.
+   
+         IF SEARCH(lcProgram + ".r") = ? THEN DO:
+            IF SEARCH(lcProgram + ".p") = ? THEN DO:
+               fLogError(SUBST("ERROR:Module &1 not found", lcProgram)).
+               LEAVE.
+            END.
+         END.
+
+         RUN VALUE(lcProgram + ".p")(MsRequest.MsRequest).
+         IF RETURN-VALUE BEGINS "ERROR" THEN NEXT.
+         llHandled = TRUE.
+         LEAVE.
+      END.
          
       /* close status level log */  
       IF RequestStatus.LogOn THEN DO:
@@ -84,13 +103,16 @@ FOR EACH RequestType WHERE
       IF RequestType.LogOn THEN DO:
          fSetLogFileName(RequestType.LogFile).
       END.
-                        
+
+      IF llHandled THEN LEAVE.
    END.
 
    /* close type level log */  
    IF RequestType.LogOn THEN DO:
       fCloseLog().
    END.
+      
+   IF llHandled THEN LEAVE.
 
 END.         
  

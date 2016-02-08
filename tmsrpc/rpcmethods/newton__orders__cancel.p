@@ -67,14 +67,20 @@ ELSE IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN DO:
                  MsRequest.ReqType    = {&REQTYPE_AFTER_SALES_ORDER} AND
                  MsRequest.ReqIParam1 = Order.OrderId NO-LOCK NO-ERROR.
 
-      IF AVAIL MsRequest AND
-         CAN-FIND(FIRST bSubMsRequest WHERE
+      IF AVAIL MsRequest THEN
+         FOR EACH bSubMsRequest NO-LOCK WHERE
             bSubMsRequest.OrigRequest = MsRequest.MsRequest AND
            (bSubMsRequest.ReqType     = {&REQTYPE_CONTRACT_ACTIVATION} OR
-            bSubMsRequest.ReqType     = {&REQTYPE_CONTRACT_TERMINATION}) 
-           AND
-           LOOKUP(STRING(bSubMsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0)
-         THEN RETURN appl_err("After sales request is ongoing").
+            bSubMsRequest.ReqType     = {&REQTYPE_CONTRACT_TERMINATION}) AND
+           LOOKUP(STRING(bSubMsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0:
+
+            /* pending q25 extension will be cancelled in the handing phase */
+            IF bSubMsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+               bSubMsRequest.ReqStatus EQ 0 AND
+               bSubMsRequest.ReqCparam3 EQ "RVTERM12" THEN NEXT.
+
+            RETURN appl_err("After sales request is ongoing").
+         END.
 
       RUN pCancelRenewalOrder(OUTPUT liReq).
 
