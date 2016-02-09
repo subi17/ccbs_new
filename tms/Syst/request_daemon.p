@@ -55,21 +55,6 @@ FOR EACH RequestType NO-LOCK WHERE
    FOR EACH RequestStatus OF RequestType NO-LOCK WHERE
             RequestStatus.InUse:
 
-       /* logging on status level */
-      IF RequestStatus.LogOn THEN DO:
-
-         IF RequestStatus.LogFile > "" AND RequestStatus.LogEntry > "" 
-         THEN DO:
-            fSetLogFileName(RequestStatus.LogFile).
-            fSetLogEntryTypes(RequestStatus.LogEntry).
-            fSetLogTreshold(INTEGER(RequestStatus.LogThreshold)).      
-      
-            IF RequestStatus.LogClear THEN DO:
-               fClearLog().
-            END.
-         END.
-      END.
-
       FOR EACH MsRequest NO-LOCK WHERE 
                MsRequest.Brand     EQ gcBrand               AND
                MsRequest.ReqType   EQ RequestType.ReqType   AND 
@@ -94,16 +79,6 @@ FOR EACH RequestType NO-LOCK WHERE
          LEAVE.
       END.
          
-      /* close status level log */  
-      IF RequestStatus.LogOn THEN DO:
-         fCloseLog().
-      END.
-
-      /* type level log back on */
-      IF RequestType.LogOn THEN DO:
-         fSetLogFileName(RequestType.LogFile).
-      END.
-
       IF llHandled THEN LEAVE.
    END.
 
