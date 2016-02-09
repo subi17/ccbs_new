@@ -1369,7 +1369,7 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
             AND
             MsRequest.ReqCparam6 NE "" AND 
             MsRequest.UpdateStamp <= MsRequest.DoneStamp:
-       
+      IF NOT MsRequest.UserCode BEGINS "POS_" THEN NEXT.
       /*Document type,DocStatusCode,RevisionComment*/
       ASSIGN 
       lcCaseTypeID   = '10'
