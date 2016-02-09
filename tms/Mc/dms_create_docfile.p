@@ -1306,22 +1306,47 @@ END.
 FUNCTION fCreateDocumentCase9  RETURNS CHAR
    (idStartTS AS DECIMAL,
    idEndTS AS DECIMAL):
-   DEF VAR lcContractID AS CHAR NO-UNDO.
-   DEF VAR lcCasefileRow   AS CHAR NO-UNDO.   
+   DEF VAR lcContractID   AS CHAR NO-UNDO.
+   DEF VAR lcCasefileRow  AS CHAR NO-UNDO.   
+   DEF VAR lcCaseTypeId   AS CHAR NO-UNDO.
+   DEF VAR lcDocListEntries AS CHAR NO-UNDO.
+   DEF VAR lcCreateDMS AS CHAR NO-UNDO.
+
    FOR EACH TermReturn NO-LOCK WHERE
             TermReturn.ReturnTS < idEndTS AND
             TermReturn.ReturnTS >= idStartTS:
       lcContractID = fGetContractIdFromOrder(TermReturn.OrderID).
       IF lcContractID EQ "" THEN NEXT.
        /*ContractID*/
-
-         lcCaseFileRow = lcContractID + lcDelim +
+      ASSIGN
+         lcCaseTypeId = "9"
+         lcCaseFileRow = lcCaseTypeId + lcDelim +
+                         /*ContractId*/
+                         lcContractID + lcDelim +
                          /*Salesman*/
                          TermReturn.Salesman + lcDelim +
                          /*MSisDN*/
                          TermReturn.MSISDN + lcDelim +
                          /*Terminal Request Date*/
                          STRING(TermReturn.ReturnTS) .
+      fLogLine(lcCaseFileRow,"").                      
+      lcDocListEntries = "".
+
+      OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
+      PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
+      OUTPUT STREAM sOutFile CLOSE.
+
+      lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
+                               lcCaseTypeID,
+                               MsRequest.ReqCparam6,
+                               {&DMS_HOST_TABLE_MSREQ},
+                               MsRequest.MsRequest,
+                               lcInitStatus,/*StatusCode*/
+                               lcDMSStatusDesc,
+                               "",
+                               0,
+                               lcDocListEntries /*DocList*/,
+                               {&DMS_DOCLIST_SEP}).
 
    END.
 END.
