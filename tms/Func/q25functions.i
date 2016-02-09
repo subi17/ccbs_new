@@ -29,6 +29,7 @@ DEF VAR liQ25Logging AS INT NO-UNDO.
 DEF VAR lcQ25LogDir          AS CHAR NO-UNDO.
 DEF VAR lcQ25SpoolDir        AS CHAR NO-UNDO.
 DEF VAR lcQ25LogFile         AS CHAR NO-UNDO.
+DEF VAR ldnewAmount AS DEC NO-UNDO.
 
 DEF STREAM Sout.
 
@@ -505,10 +506,19 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          /* Some logging about SMSs to be send. */
          IF liPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
             /* Q25 Month 24 20th day extension made */
+            FIND FIRST FixedFee WHERE
+                       FixedFee.Brand = gcBrand AND
+                       FixedFee.HostTable = "MobSub" AND
+                       FixedFee.KeyValue = STRING(DCCLI.MsSeq) AND
+                       FixedFee.BillCode BEGINS "RVTERM" AND
+                       FixedFee.OrderID = SingleFee.OrderID AND
+                       FixedFee.InUse. 
+
+            
             lcLogText = "Send SMS Q25 Chosen: " +
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" + 
                         STRING(DCCLI.MsSeq) + "|" + 
-                        STRING(ROUND(SingleFee.amt / 12,2)).
+                        STRING(TRUNC(FixedFee.amt,2)).
          END.
          ELSE DO:
             lcLogText = "Send SMS: " +
