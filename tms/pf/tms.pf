@@ -1,11 +1,11 @@
 -db /db1/common/common
 -db /db1/ordercanal/ordercanal
 -db /db1/mobile/mobile
--db /db1/mcdr15q2/mcdr15q2 -ld mcdr
--db /db1/mcdrdtl15q2/mcdrdtl15q2 -ld mcdrdtl
+-db /db1/mcdr16q1/mcdr16q1 -ld mcdr
+-db /db1/mcdrdtl16q1/mcdrdtl16q1 -ld mcdrdtl
 -db /db1/star/star
--db /db1/prepcdr15q2/prepcdr15q2 -ld prepcdr
--db /db1/roamcdr15q2/roamcdr15q2 -ld roamcdr
+-db /db1/prepcdr16q1/prepcdr16q1 -ld prepcdr
+-db /db1/roamcdr16q1/roamcdr16q1 -ld roamcdr
 -db /db1/fraudcdr10/fraudcdr10 -ld fraudcdr
 -db /db1/counter/counter -ld counter
 -db /db1/reratelog/reratelog -ld reratelog
