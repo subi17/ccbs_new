@@ -40,6 +40,7 @@
        subscription_limit;string;Subscription limit
        subscription_act_limit;string;Subscription activation limit
        invoice_target;string;all_grouped/all_split/customized
+       self_employed;boolean; is customer self employed
  * @company_contact title;string;
                     fname;string;
                     lname;string;
@@ -76,6 +77,7 @@ DEF VAR liMobsubActLimit AS INTEGER NO-UNDO.
 DEF VAR lcDType AS CHAR NO-UNDO.
 DEF VAR lcCType AS CHAR NO-UNDO.
 DEF VAR llOrdersAllowed AS LOGICAL NO-UNDO INITIAL TRUE.
+DEF VAR llSelfEmployed AS LOGICAL NO-UNDO INITIAL FALSE.
 DEF VAR lcInvoiceTarget AS CHAR NO-UNDO. 
 DEF VAR liSubCount AS INT NO-UNDO. 
 DEF VAR liGroupCount AS INT NO-UNDO. 
@@ -252,6 +254,11 @@ lcInvoiceTarget = fGetCustomerCurrentGrouping(Customer.Custnum,
                                               output liGroupCount,
                                               output liSubCount).
 add_string(top_struct,"invoice_target",lcInvoiceTarget).
+
+/* Check if customer is self employed based on customer category */
+IF (Customer.Category EQ "40" OR Customer.Category EQ "41") THEN
+   llSelfEmployed = TRUE.
+add_boolean(top_struct,"self_employed",llSelfEmployed).
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
