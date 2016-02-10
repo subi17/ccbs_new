@@ -1390,7 +1390,6 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
       PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
       OUTPUT STREAM sOutFile CLOSE.
 
-      fLogLine(lcCaseFileRow,"").
       lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                                lcCaseTypeID,
                                MsRequest.ReqCparam6,
