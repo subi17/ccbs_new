@@ -345,6 +345,7 @@ PROCEDURE pPeriodicalContract:
                                             bOfferItem.Amount,
                                             ldaDiscountStartDate,
                                             bOfferItem.Periods,
+                                            0, /* OrderId */
                                             OUTPUT lcResult).
 
          IF liRequest NE 0 THEN 
@@ -454,6 +455,7 @@ PROCEDURE pDiscountPlanMember:
                                       OfferItem.Amount,
                                       TODAY,
                                       OfferItem.Periods,
+                                      0, /* OrderId */
                                       OUTPUT lcErrorReason).
 
    IF liRequest NE 0 THEN 
