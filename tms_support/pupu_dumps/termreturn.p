@@ -75,7 +75,9 @@ FOR EACH TermReturn NO-LOCK:
        fNotNull(TermReturn.Salesman)               lcDel
        fNotNull(TermReturn.TerminalType)           lcDel
        fNotNull(TermReturn.EnvelopeNumber)         lcDel
-       fNotNull(STRING(TermReturn.ReturnTS))       SKIP.
+       fNotNull(STRING(TermReturn.ReturnTS))       lcDel      
+       fNotNull(TermReturn.ReturnChannel)          lcDel
+       fNotNull(TermReturn.ContractID)             SKIP.
 END.
 
 OUTPUT STREAM slog CLOSE.

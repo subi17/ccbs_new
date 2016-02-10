@@ -11,6 +11,7 @@
            salesman;string;mandatory
            terminal_type;string;mandatory
            envelope_number;string;optional
+           q25_contract_id;string;optional
 
  * @output success;boolean
  */
@@ -54,9 +55,10 @@ DEF VAR ldReturnTS       AS DEC    NO-UNDO.
 DEF VAR lcResult         AS CHAR   NO-UNDO.
 DEF VAR liRequest        AS INT    NO-UNDO.
 DEF VAR lcMemo           AS CHAR   NO-UNDO.
-DEF VAR ldaMonth22 AS DATE NO-UNDO. 
-DEF VAR ldeMonth22 AS DEC NO-UNDO. 
-DEF VAR llRenewalOrder AS LOG NO-UNDO. 
+DEF VAR ldaMonth22       AS DATE   NO-UNDO. 
+DEF VAR ldeMonth22       AS DEC    NO-UNDO. 
+DEF VAR llRenewalOrder   AS LOG    NO-UNDO. 
+DEF VAR lcQ25ContractID  AS CHAR   NO-UNDO.
 
 DEF BUFFER bDCCLI FOR DCCLI.
 DEF BUFFER bOrder FOR Order.
@@ -65,7 +67,7 @@ IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcStruct = validate_request(pcStruct, "imei!,orderid!,bill_code!,msisdn!,device_start,device_screen,salesman!,terminal_type!,envelope_number").
+lcStruct = validate_request(pcStruct, "imei!,orderid!,bill_code!,msisdn!,device_start,device_screen,salesman!,terminal_type!,envelope_number,q25_contract_id").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
@@ -73,11 +75,16 @@ ASSIGN
    liOrderId         = get_pos_int(pcStruct,"orderid")
    lcBillCode        = get_string(pcStruct,"bill_code")
    lcMSISDN          = get_string(pcStruct,"msisdn")
-   llDeviceStart     = get_bool(pcStruct,"device_start") WHEN LOOKUP("device_start", lcStruct) > 0
-   llDeviceScreen    = get_bool(pcStruct,"device_screen") WHEN LOOKUP("device_screen", lcStruct) > 0
+   llDeviceStart     = get_bool(pcStruct,"device_start") WHEN 
+                       LOOKUP("device_start", lcStruct) > 0
+   llDeviceScreen    = get_bool(pcStruct,"device_screen") WHEN 
+                       LOOKUP("device_screen", lcStruct) > 0
    lcSalesman        = get_string(pcStruct,"salesman")
    lcTerminalType    = get_string(pcStruct,"terminal_type")
-   lcEnvelopeNumber  = get_string(pcStruct,"envelope_number") WHEN LOOKUP("envelope_number", lcStruct) > 0
+   lcEnvelopeNumber  = get_string(pcStruct,"envelope_number") WHEN
+                       LOOKUP("envelope_number", lcStruct) > 0
+   lcQ25ContractId   = get_string(pcStruct,"q25_contract_id") WHEN
+                       LOOKUP("q25_contract_id", lcStruct) > 0  
    ldReturnTS        = fMakeTS().
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -213,6 +220,7 @@ IF (llDeviceStart AND llDeviceScreen) OR
                                      SingleFee.Amt,
                                      fPer2Date(SingleFee.BillPeriod,0),
                                      1,
+                                     SingleFee.OrderId, /* Q25 OrderId */
                                      OUTPUT lcResult).
 
    IF liRequest NE 0 THEN
@@ -252,6 +260,7 @@ ASSIGN TermReturn.IMEI           = lcIMEI
        TermReturn.Salesman       = lcSalesman
        TermReturn.TerminalType   = lcTerminalType
        TermReturn.EnvelopeNumber = lcEnvelopeNumber
+       TermReturn.ContractId     = lcQ25ContractId
        TermReturn.ReturnTS       = ldReturnTS.
 
 IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhTermReturn).

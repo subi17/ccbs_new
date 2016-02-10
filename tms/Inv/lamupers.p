@@ -202,7 +202,8 @@ DEF TEMP-TABLE ttDiscounts NO-UNDO
    FIELD MsSeq      AS INT
    FIELD MinBase    AS DEC
    FIELD MaxAmount  AS DEC
-   FIELD Used       AS DEC 
+   FIELD Used       AS DEC
+   FIELD OrderId    AS INT
    INDEX MsSeq MsSeq. 
 
 DEF TEMP-TABLE ttDPTarget NO-UNDO
@@ -818,33 +819,36 @@ FUNCTION fCombineInvRows RETURNS LOGIC:
          IF ttIR.Todate < ttInvSplit.SplitDate THEN
             FIND FIRST bttIR WHERE
                        bttIR.BillCode = ttIR.BillCode AND
-                       bttIR.CLI      = ttIR.CLI AND
-                       bttIR.CCN      = 0 AND
+                       bttIR.CLI      = ttIR.CLI      AND
+                       bttIR.CCN      = 0             AND
                        bttIR.Period   = ttIR.Period   AND
                        bttIR.VatIncl  = ttIR.VatIncl  AND
                        bttIR.RowType  = ttIR.RowType  AND
                        bttIR.AgrCust  = ttIR.AgrCust  AND
-                       bttIR.Todate   < ttInvSplit.SplitDate NO-ERROR.
+                       bttIR.Todate   < ttInvSplit.SplitDate AND
+                       bttIR.OrderId  = ttIR.OrderId NO-ERROR.
          ELSE
             FIND FIRST bttIR WHERE
                        bttIR.BillCode = ttIR.BillCode AND
-                       bttIR.CLI      = ttIR.CLI AND
-                       bttIR.CCN      = 0 AND
+                       bttIR.CLI      = ttIR.CLI      AND
+                       bttIR.CCN      = 0             AND
                        bttIR.Period   = ttIR.Period   AND
                        bttIR.VatIncl  = ttIR.VatIncl  AND
                        bttIR.RowType  = ttIR.RowType  AND
                        bttIR.AgrCust  = ttIR.AgrCust  AND
-                       bttIR.Todate  >= ttInvSplit.SplitDate NO-ERROR.
+                       bttIR.Todate  >= ttInvSplit.SplitDate AND
+                       bttIR.OrderId  = ttIR.OrderId NO-ERROR.
       END.
       ELSE 
          FIND FIRST bttIR WHERE
                     bttIR.BillCode = ttIR.BillCode AND
-                    bttIR.CLI      = ttIR.CLI AND
-                    bttIR.CCN      = 0 AND
+                    bttIR.CLI      = ttIR.CLI      AND
+                    bttIR.CCN      = 0             AND
                     bttIR.Period   = ttIR.Period   AND
                     bttIR.VatIncl  = ttIR.VatIncl  AND
                     bttIR.RowType  = ttIR.RowType  AND
-                    bttIR.AgrCust  = ttIR.AgrCust NO-ERROR.
+                    bttIR.AgrCust  = ttIR.AgrCust  AND
+                    bttIR.OrderId  = ttIR.OrderId NO-ERROR.
 
       IF AVAIL bttIR THEN DO:
          ASSIGN
@@ -993,10 +997,11 @@ FUNCTION fGetDiscounts RETURNS LOGIC
          ttDiscounts.Unit        = DiscountPlan.DPUnit
          ttDiscounts.MinBase     = DiscountPlan.MinBaseAmount
          ttDiscounts.MaxAmount   = DiscountPlan.MaxAmount
-         ttDiscounts.FromDate = DPMember.ValidFrom
-         ttDiscounts.ToDate   = DPMember.ValidTo
-         ttDiscounts.Amount   = DPMember.DiscValue
-         ttDiscounts.MsSeq    = iiMsSeq.
+         ttDiscounts.FromDate    = DPMember.ValidFrom
+         ttDiscounts.ToDate      = DPMember.ValidTo
+         ttDiscounts.Amount      = DPMember.DiscValue
+         ttDiscounts.OrderId     = DPMember.OrderId
+         ttDiscounts.MsSeq       = iiMsSeq.
       
       IF ttDiscounts.Amount = 0 THEN DO:
          FIND FIRST DPRate WHERE 
@@ -3155,7 +3160,8 @@ PROCEDURE pDiscount:
                           ttIR.ToDate    = ldaDiscValidTo AND
                           ttIR.VatIncl   = lCustVat AND
                           ttIR.RowType   = 9 AND 
-                          ttIR.AgrCust   = iiAgrCust NO-ERROR.
+                          ttIR.AgrCust   = iiAgrCust AND
+                          ttIR.OrderId   = ttDiscounts.OrderId NO-ERROR.
 
                IF NOT AVAILABLE ttIR THEN DO:
                   CREATE ttIR.
@@ -3170,7 +3176,8 @@ PROCEDURE pDiscount:
                      ttIR.AgrCust   = iiAgrCust
                      ttIR.RowType   = 9
                      ttIR.VatIncl   = lCustVat
-                     ttIR.TaxClass  = BillItem.TaxClass.
+                     ttIR.TaxClass  = BillItem.TaxClass
+                     ttIR.OrderId   = ttDiscounts.OrderId.
                END.
          
                ASSIGN

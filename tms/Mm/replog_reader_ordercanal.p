@@ -1009,7 +1009,9 @@ PROCEDURE pHandleTermReturn:
                            fNotNull(TermReturn.Salesman)                + lcDel +
                            fNotNull(TermReturn.TerminalType)            + lcDel +
                            fNotNull(TermReturn.EnvelopeNumber)          + lcDel +
-                           fNotNull(STRING(TermReturn.ReturnTS)).
+                           fNotNull(STRING(TermReturn.ReturnTS))        + lcDel +
+                           fNotNull(TermReturn.ReturnChannel)           + lcDel +
+                           fNotNull(TermReturn.ContractID).
                fWriteMessage(lcMessage).
             END.
             ELSE DO:
