@@ -9,6 +9,7 @@ newton__q25_add.p
 * @q25_struct     username;string;mandatory;person who requests the change
                   msseq;int;mandatory;subscription id
                   per_contract_id;int;mandatory;installment contract id (related to q25)
+                  q25_contract_id;string;optional;Contract ID
 
 * @memo_struct    title;string;mandatory
                   content;string;mandatory
@@ -16,14 +17,6 @@ newton__q25_add.p
 * @output         boolean;true
 */
 
-/*
-   19.08.2015 hugo.lujan YPR-2516 [Q25] - TMS - TMSRPC changes related
-   to Vista/VFR
-    AC1: Create new TMSRPC to perform following actions:
-    Create - Create Quota 25 extension request in TMS
-    AC2: Create a memo in TMS
-    AC3: Send an SMS to customer if he selects Quota 25 extension
-*/
 
 {xmlrpc/xmlrpc_access.i}
 {commpaa.i}
@@ -60,6 +53,10 @@ DEF VAR ldContractActivTS AS DECIMAL NO-UNDO.
 DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
 DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
 
+DEF VAR lcQ25ContractId AS CHAR NO-UNDO.
+DEF VAR lcOrigKatun AS CHAR NO-UNDO.
+
+
 /* common validation */
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 top_struct = get_struct(param_toplevel_id, "0").
@@ -76,7 +73,7 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcQ25Struct = validate_request(pcQ25Struct,"username!,msseq!,per_contract_id!").
+lcQ25Struct = validate_request(pcQ25Struct,"username!,msseq!,per_contract_id!,q25_contract_id").
 IF lcQ25Struct EQ ? THEN RETURN.
 
 ASSIGN
@@ -86,7 +83,10 @@ ASSIGN
       WHEN LOOKUP("msseq", lcQ25Struct) > 0
     /* Quota 25 installment contract id */
    liper_contract_id = get_int(pcQ25Struct, "per_contract_id")      
-      WHEN LOOKUP("per_contract_id", lcQ25Struct) > 0.
+      WHEN LOOKUP("per_contract_id", lcQ25Struct) > 0
+   /*Contract ID*/   
+   lcQ25ContractId = get_string(pcQ25Struct, "q25_contract_id")      
+      WHEN LOOKUP("q25_contract_id", lcQ25Struct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
       
@@ -103,8 +103,6 @@ IF pcmemoStruct > "" THEN DO:
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
-
-katun = "VISTA_" + lcusername.
 
 FIND FIRST MobSub NO-LOCK WHERE
            MobSub.MsSeq = limsseq NO-ERROR.
@@ -182,6 +180,13 @@ IF SingleFee.OrderId > 0 THEN DO:
       RETURN appl_err("Already returned terminal").
 END.
 
+lcOrigKatun = katun.
+/*YPR-3256*/
+IF lcQ25ContractId EQ "" THEN
+   katun = "VISTA_" + lcUsername.
+ELSE 
+   katun = "POS_" + lcUsername.
+
 liCreated = fPCActionRequest(
    MobSub.MsSeq,
    "RVTERM12",
@@ -197,9 +202,20 @@ liCreated = fPCActionRequest(
    DCCLI.PerContractId, /* Periodical Contract-ID */
    OUTPUT lcResult).   
    
-IF liCreated = 0 THEN
+IF liCreated = 0 THEN DO:
+   katun = lcOrigKatun.
    RETURN appl_err(SUBST("Q25 extension request failed: &1",
                          lcResult)).
+END.
+
+
+FIND FIRST MSRequest WHERE
+           MSRequest.MSrequest EQ liCreated EXCLUSIVE-LOCK NO-ERROR.
+IF AVAIL MsRequest THEN DO:
+   MsRequest.ReqCparam4 = lcQ25ContractId.
+   /* MsRequest.ReqCparam6 = lcQ25ContractId. For findinf entry in DMS usage */
+END.
+RELEASE MsRequest.
 
 CASE SingleFee.BillCode:
    WHEN "RVTERM1EF" THEN
@@ -252,6 +268,7 @@ IF lcmemo_title > "" THEN DO:
        Memo.CustNum   = MobSub.CustNum.
 END. /* IF lcmemo_title > "" AND lcmemo_content > "" THEN DO: */
 
+katun = lcOrigKatun.
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:

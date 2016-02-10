@@ -1089,6 +1089,7 @@ PROCEDURE pContractActivation:
                                ldeResidualFeeDisc,
                                ldaResidualFee,
                                1,
+                               bQ25SingleFee.OrderId, /* Q25 OrderId */
                                OUTPUT lcError).
          /* write possible error to an order memo */
          IF lcError > "" THEN
