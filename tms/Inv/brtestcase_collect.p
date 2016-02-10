@@ -1543,7 +1543,7 @@ PROCEDURE pInitializeMergeAnalysis:
       NO-LOCK.
  
    FOR LAST FuncRunResult NO-LOCK WHERE
-            FuncRunResult.FRExecID    = FuncRunExec.FeedFromExecSeq AND
+            FuncRunResult.FRExecID    = FuncRunExec.FRExecID AND
             FuncRunResult.FRResultSeq = FuncRunProcess.ProcSeq     
          BY FuncRunResult.ResultOrder:
 
