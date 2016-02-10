@@ -51,9 +51,11 @@ ELSE
 
 execution:
 DO:
-   /* Message sending is going to start 10.2.2016. This can be deleted 
-      if refactoring/corrections is made after SMS sending released */
-   IF ldaExecuteDate LE 2/9/16 THEN
+   /* Message sending is going to start 7.3.2016. This can be deleted 
+      if refactoring/corrections is made after SMS sending released 
+      Q22 and Q23 messages are send during 15th - last day of the month, Q24 
+      messages during 6th - 19th day*/
+   IF ldaExecuteDate LE 3/6/16 THEN
          LEAVE execution.
    /* No sending first 5 days of month, no sending at Saturday or Sunday. */
    ELSE IF DAY(ldaExecuteDate) LE 5 THEN
@@ -72,17 +74,16 @@ DO:
          before 20th need to send all rest of day messages.
 
          fCheckDates function resolves last day of month. */
-       IF (MONTH(ldaExecuteDate) = 2 AND YEAR(ldaExecuteDate) = 2016) THEN
-          /* In February 2016 sending starts at 10th day. 
-             This can be refactored away on March. */
-          liSendingStartDay = 10.
-       ELSE
-          liSendingStartDay = 6. /* usually start sending at 6th day earliest */
-       liWeekdayCount = fCountNormalWeekday(ldaExecuteDate, liSendingStartDay).
+       
        /* sending days for Q22 and Q23 */
-       liStartDay = (liWeekdayCount * 2) - 1. 
-       liEndDay = (liWeekdaycount * 2).
+       liSendingStartDay = 15. /* start sending at 15th day earliest */
+       liWeekdayCount = fCountNormalWeekday(ldaExecuteDate, liSendingStartDay).
+       liStartDay = (liWeekdayCount * 3) - 2. 
+       liEndDay = (liWeekdaycount * 3).
+       
        /* Sending days for Q24 */
+       liSendingStartDay = 6.
+       liWeekdayCount = fCountNormalWeekday(ldaExecuteDate, liSendingStartDay).
        liStartDay24M = (liWeekdayCount * 3) - 2.
        liEndDay24M = (liWeekdaycount * 3).
    END.
