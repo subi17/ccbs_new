@@ -2,7 +2,7 @@
 /*common*/
 ADD FIELD "OrderId" OF "DPMember" AS integer
   DESCRIPTION "Order sequence number"
-  FORMAT ">>>>>>>>9"
+  FORMAT "->>>>>>>>9"
   INITIAL "0"
   COLUMN-LABEL "OrderId"  
   LABEL "OrderId"
