@@ -508,6 +508,7 @@ PROCEDURE pUpdateSubscription:
         BillTarg.BillTarget = liBillTarg NO-ERROR.
 
    IF NOT AVAILABLE BillTarg THEN liBillTarg = 0.
+   /* Check configuration error with Rateplan and Priceplan */
    ELSE IF BillTarg.RatePlan NE CLIType.PricePlan THEN liBillTarg = -1.
 
    IF liBillTarg <= 0 THEN DO:
@@ -520,13 +521,17 @@ PROCEDURE pUpdateSubscription:
       END.
    
       IF liBillTarg <= 0 THEN DO:
-      
+         
          IF liBillTarg < 0 THEN DO:
             FIND LAST BillTarg WHERE BillTarg.CustNum = Mobsub.CustNum         
                NO-LOCK NO-ERROR.
-         
-            IF AVAILABLE BillTarg 
-            THEN liBillTarg = BillTarg.BillTarget + 1.
+            /* Create new billtarget for this case. 
+               Error can be corrected afterwards YTS-8271 */
+            IF AVAILABLE BillTarg THEN DO:
+               IF BillTarg.BillTarget < 1000 THEN
+                   liBillTarg = 1000.
+               ELSE liBillTarg = BillTarg.BillTarget + 1.
+            END.
             ELSE liBillTarg = 1.
          END.
          ELSE liBillTarg = CLIType.BillTarget.
