@@ -744,10 +744,10 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
       /*Document type, Type desc,DocStatusCode,RevisionComment*/
       lcDocListEntries = lcDocListEntries +
                          ENTRY(liCount,lcRequiredDocs) + {&DMS_DOCLIST_SEP} +
-                         {&DMS_DOCLIST_SEP} + /*filled only by DMS responses*/
+                         "" + {&DMS_DOCLIST_SEP} + /*filled only by DMS resp*/
                          lcDMSDOCStatus + {&DMS_DOCLIST_SEP} +
                          "".
-      IF liCount NE NUM-ENTRIES(lcRequiredDocs, {&DMS_DOCLIST_SEP})
+      IF liCount NE NUM-ENTRIES(lcRequiredDocs )
          THEN lcDocListEntries = lcDocListEntries + {&DMS_DOCLIST_SEP}.
    END.
 
