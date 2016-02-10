@@ -41,6 +41,7 @@
        subscription_act_limit;string;Subscription activation limit
        invoice_target;string;all_grouped/all_split/customized
        self_employed;boolean; is customer self employed
+       profession;string; customer profession
  * @company_contact title;string;
                     fname;string;
                     lname;string;
@@ -259,6 +260,8 @@ add_string(top_struct,"invoice_target",lcInvoiceTarget).
 IF (Customer.Category EQ "40" OR Customer.Category EQ "41") THEN
    llSelfEmployed = TRUE.
 add_boolean(top_struct,"self_employed",llSelfEmployed).
+add_string(top_struct, "profession", Customer.Profession).
+add_string(top_struct, "site_name", Customer.CompanyName).
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
