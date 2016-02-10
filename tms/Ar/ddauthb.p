@@ -17,7 +17,7 @@ ASSIGN gcBrand = "1"
 {Syst/utumaa.i "new"}
 {Func/cparam2.i}
 {Ar/ddtrans.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 
 ASSIGN tuni1 = "nnsvlu"
        tuni2 = "".

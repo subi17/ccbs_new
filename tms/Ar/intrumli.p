@@ -20,7 +20,7 @@
 {Syst/commali.i}                      
 {Func/cparam2.i}
 {Func/ftransdir.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 
 DEF VAR ok        AS LO  NO-UNDO FORMAT "Yes/No".
 DEF VAR exPaymFile AS C   NO-UNDO FORMAT "x(50)".

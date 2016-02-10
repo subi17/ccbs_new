@@ -14,7 +14,7 @@ ASSIGN
    katun   = "Cron".
    
 {Func/cparam2.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/ftransdir.i}
 
 DEF VAR liCount       AS INT  NO-UNDO. 

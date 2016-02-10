@@ -272,7 +272,7 @@ IF LOOKUP("id_code", lcStruct) GT 0 THEN DO:
    FIND CURRENT MobSub EXCLUSIVE-LOCK.
 
    IF llDoEvent THEN DO:
-      {lib/eventlog.i}
+      {Func/lib/eventlog.i}
       DEFINE VARIABLE lhMobSub AS HANDLE NO-UNDO.
       lhMobSub = BUFFER MobSub:HANDLE.
       RUN StarEventInitialize(lhMobSub).

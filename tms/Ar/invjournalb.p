@@ -19,7 +19,7 @@ ASSIGN
 {Ar/invjournal.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 
 DEF VAR lcFile     AS CHAR NO-UNDO.
 DEF VAR lcBaseFile AS CHAR NO-UNDO.

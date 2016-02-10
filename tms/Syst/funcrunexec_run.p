@@ -9,7 +9,7 @@
 
 {Syst/commali.i}
 {Func/timestamp.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 
 DEF INPUT PARAMETER iiFRExecID AS INT  NO-UNDO.
 DEF INPUT PARAMETER icHost     AS CHAR NO-UNDO.

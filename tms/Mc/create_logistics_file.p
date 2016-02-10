@@ -19,7 +19,7 @@ gcBrand = "1".
 {Func/fwebuser.i}
 {Func/transname.i}
 {Func/ftaxdata.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/log.i}
 {Func/ftransdir.i}
 {Func/tmsparam4.i}

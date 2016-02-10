@@ -24,7 +24,7 @@ ASSIGN gcBrand = "1"
 {Ar/paymfile.i}
 {Ar/paymtrans.i}
 {Func/farplog.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/timestamp.i}
 
 DEF TEMP-TABLE ttFiles NO-UNDO

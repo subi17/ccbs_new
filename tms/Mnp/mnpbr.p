@@ -25,7 +25,7 @@ DEFINE INPUT PARAMETER piMNPType AS INTEGER NO-UNDO.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMNPProcess AS HANDLE NO-UNDO.
    lhMNPProcess = BUFFER MNPProcess:HANDLE.

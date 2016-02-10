@@ -9,7 +9,7 @@ gcBrand = "1".
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-      {lib/eventlog.i}
+      {Func/lib/eventlog.i}
 END.
 
 DEFINE VARIABLE llSimulate AS LOGICAL NO-UNDO.

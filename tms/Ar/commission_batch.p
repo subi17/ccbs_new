@@ -14,7 +14,7 @@ ASSIGN
    gcBrand = "1" 
    katun   = "Cron".
        
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 
 DEF VAR liChecked AS INT  NO-UNDO.
 DEF VAR liDone    AS INT  NO-UNDO.

@@ -5,7 +5,7 @@
 ASSIGN 
    gcBrand = "1"
    katun = "cron".
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/cparam2.i}
 {Func/date.i}
 

@@ -48,7 +48,7 @@ DEF NEW SHARED VAR scUser AS CHAR NO-UNDO.
 scUser = "Newton".
 &GLOBAL-DEFINE STAR_EVENT_USER scUser
 
-{lib/eventlog.i}
+{Func/lib/eventlog.i}
 DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
 /* Eventlog definition end */
 

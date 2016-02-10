@@ -145,7 +145,7 @@ END.
 /* create FeeModel */
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEF VAR lhFeeModel AS HANDLE NO-UNDO.
    lhFeeModel = BUFFER FeeModel:HANDLE.
    RUN StarEventInitialize(lhFeeModel).

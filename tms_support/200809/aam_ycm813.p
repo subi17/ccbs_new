@@ -3,7 +3,7 @@ katun = "ari".
 
 &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-{lib/eventlog.i}
+{Func/lib/eventlog.i}
 
 def buffer bctservel for ctservel.
 def buffer bservel for servel.

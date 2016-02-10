@@ -10,7 +10,7 @@
 {Syst/commali.i}
 {Syst/tmsconst.i}
 {Func/timestamp.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 
 DEF INPUT  PARAMETER iiFRQueueID     AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiFRQScheduleID AS INT  NO-UNDO.

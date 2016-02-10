@@ -14,7 +14,7 @@
 
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
-    {lib/eventlog.i}
+    {Func/lib/eventlog.i}
         
     DEF VAR lhVAService AS HANDLE NO-UNDO.
     lhVAService = BUFFER VAService:HANDLE.

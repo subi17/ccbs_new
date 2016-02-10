@@ -16,7 +16,7 @@ ASSIGN gcBrand = "1"
        
 {Func/cparam2.i}
 {Func/ftransdir.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/timestamp.i}
 
 DEF INPUT PARAMETER icFileType AS CHAR NO-UNDO.

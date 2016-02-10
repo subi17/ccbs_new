@@ -18,7 +18,7 @@
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhOrderAccessory AS HANDLE NO-UNDO.
    lhOrderAccessory = BUFFER OrderAccessory:HANDLE.

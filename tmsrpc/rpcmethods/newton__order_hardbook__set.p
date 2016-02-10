@@ -16,7 +16,7 @@ katun = "NewtonRPC".
 gcBrand = "1".
 {Syst/tmsconst.i}
 &GLOBAL-DEFINE STAR_EVENT_USER katun 
-{lib/eventlog.i}
+{Func/lib/eventlog.i}
 
 DEF VAR pcStruct    AS CHAR NO-UNDO.
 DEF VAR lcStruct    AS CHAR NO-UNDO.

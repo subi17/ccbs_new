@@ -88,7 +88,7 @@ katun = pcUserName.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER pcUsername 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEF VAR lhFMItem AS HANDLE NO-UNDO.
    lhFMItem = BUFFER FMItem:HANDLE.
    RUN StarEventInitialize(lhFMItem).

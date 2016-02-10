@@ -8,7 +8,7 @@
    VERSION.......: M2.0
 ------------------------------------------------------ */
 {Syst/commpaa.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/timestamp.i}
 
 gcbrand = "1".

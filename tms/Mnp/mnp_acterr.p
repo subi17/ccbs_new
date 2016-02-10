@@ -11,7 +11,7 @@
 {Syst/commali.i}
 {Func/date.i}
 {Func/cparam2.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.

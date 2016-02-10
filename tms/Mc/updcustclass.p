@@ -15,7 +15,7 @@ DEF INPUT PARAMETER invDate   AS DA NO-UNDO.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhxxcustomer AS HANDLE NO-UNDO.
    lhxxcustomer = BUFFER customer:HANDLE.

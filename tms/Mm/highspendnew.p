@@ -20,7 +20,7 @@
 ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fmakemsreq.i}

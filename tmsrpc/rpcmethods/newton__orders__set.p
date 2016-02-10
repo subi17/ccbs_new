@@ -56,7 +56,7 @@ katun = pcUserName.
 gcbrand = "1".
 {Syst/tmsconst.i}
 &GLOBAL-DEFINE STAR_EVENT_USER katun 
-{lib/eventlog.i}
+{Func/lib/eventlog.i}
 
 /* validate order struct */
 lcOrderFields = validate_request(pcOrderStruct,"risk_code,imei,icc").

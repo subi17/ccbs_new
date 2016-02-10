@@ -14,7 +14,7 @@ ASSIGN
    gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/dms.i}
 
 DEF VAR lcIncDir        AS CHAR NO-UNDO.

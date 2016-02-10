@@ -23,7 +23,7 @@
 IF llDoEvent THEN DO:
    &GLOBAl-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSIMBatch AS HANDLE NO-UNDO.
    lhSIMBatch = BUFFER SIMBatch:HANDLE.

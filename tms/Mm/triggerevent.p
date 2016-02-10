@@ -19,7 +19,7 @@ DEF INPUT PARAMETER    icTriggerConfID AS CHAR NO-UNDO.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTriggerEvent AS HANDLE NO-UNDO.
    lhTriggerEvent = BUFFER TriggerEvent:HANDLE.

@@ -12,7 +12,7 @@ ASSIGN gcBrand = "1"
        katun   = "Cron".
        
 {Func/cparam2.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/timestamp.i}
 
 DEF VAR lcFile      AS CHAR NO-UNDO.

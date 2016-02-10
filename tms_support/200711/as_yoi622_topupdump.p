@@ -12,7 +12,7 @@
 katun = "cron".
 gcbrand = "1".
 
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/date.i}
 {Func/timestamp.i}
 {Func/cparam.i2}

@@ -3,7 +3,7 @@
 gcbrand = "1".
 katun = "cron".
 
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 
 def var period  as int    no-undo.
 DEF VAR liQty   AS INT    NO-UNDO.

@@ -10,7 +10,7 @@
 
 &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-{lib/eventlog.i}
+{Func/lib/eventlog.i}
 
 DEFINE VAR itable  LIKE Eventlog.TableName NO-UNDO.
 DEFINE VAR ikey    LIKE Eventlog.Key       NO-UNDO.

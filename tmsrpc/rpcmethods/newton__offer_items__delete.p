@@ -48,7 +48,7 @@ FIND CURRENT OfferItem EXCLUSIVE-LOCK.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER pcUsername 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEF VAR lhOfferItem AS HANDLE NO-UNDO.
    lhOfferItem = BUFFER OfferItem:HANDLE.
    RUN StarEventInitialize(lhOfferItem).

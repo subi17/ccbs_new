@@ -69,7 +69,7 @@ IF ABS(ldePercentageTotal - 100) > 0.001 THEN RETURN
          
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER pcUsername 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEF VAR lhMNPRetPlatform AS HANDLE NO-UNDO.
    lhMNPRetPlatform = BUFFER MNPRetPlatform:HANDLE.
 END.

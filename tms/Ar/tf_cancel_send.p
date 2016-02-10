@@ -12,7 +12,7 @@
 {Func/cparam2.i}
 {Func/date.i}
 {Syst/tmsconst.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/ftransdir.i}
 {Func/msreqfunc.i}
 

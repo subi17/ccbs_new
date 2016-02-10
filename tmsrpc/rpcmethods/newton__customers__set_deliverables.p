@@ -87,7 +87,7 @@ IF pcInvoiceGrouping NE "" AND
 
 {Syst/eventval.i}
 &GLOBAL-DEFINE STAR_EVENT_USER katun   
-{lib/eventlog.i}
+{Func/lib/eventlog.i}
 DEF VAR lhCustomer AS HANDLE NO-UNDO. 
 lhCustomer = BUFFER Customer:HANDLE.
 

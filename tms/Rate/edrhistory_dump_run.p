@@ -11,7 +11,7 @@
 {Syst/dumpfile_run.i}
 {Func/timestamp.i}
 {Syst/tmsconst.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/direct_dbconnect.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.

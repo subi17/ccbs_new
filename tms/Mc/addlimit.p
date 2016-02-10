@@ -14,7 +14,7 @@
 {Syst/eventval.i}
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
-    {lib/eventlog.i}
+    {Func/lib/eventlog.i}
 
     DEF VAR lhAddCustLimit AS HANDLE NO-UNDO.
     lhAddCustLimit = BUFFER AddCustLimit:HANDLE.

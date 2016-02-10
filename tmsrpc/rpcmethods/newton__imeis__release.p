@@ -63,7 +63,7 @@ gcBrand = "1".
    
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEF VAR lhOrderAccessory AS HANDLE NO-UNDO.
    lhOrderAccessory = BUFFER OrderAccessory:HANDLE.
    RUN StarEventInitialize(lhOrderAccessory).

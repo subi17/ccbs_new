@@ -14,7 +14,7 @@
 gcbrand = "1".
 katun = "cron".
 
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 
 /* delete old counters */
 RUN Syst/tmcdelete (TODAY).

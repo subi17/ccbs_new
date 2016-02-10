@@ -18,7 +18,7 @@
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhKillMS AS HANDLE NO-UNDO.
    lhKillMS = BUFFER KillMS:HANDLE.

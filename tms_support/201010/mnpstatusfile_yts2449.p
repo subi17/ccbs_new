@@ -13,7 +13,7 @@ gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Syst/eventval.i}
 {Func/email.i}
 {Func/timestamp.i}
@@ -22,7 +22,7 @@ gcBrand = "1".
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMNPProcess AS HANDLE NO-UNDO.
    lhMNPProcess = BUFFER MNPProcess:HANDLE.

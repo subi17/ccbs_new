@@ -13,7 +13,7 @@
 {Syst/eventval.i}
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
-    {lib/eventlog.i}
+    {Func/lib/eventlog.i}
 
     DEF VAR lhMobError AS HANDLE NO-UNDO.
     lhMobError = BUFFER MobError:HANDLE.

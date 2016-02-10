@@ -14,7 +14,7 @@ gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/email.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Inv/fusioninvoice.i}
 
 DEF VAR lcProcessedFile AS CHAR NO-UNDO.

@@ -70,7 +70,7 @@ DEF TEMP-TABLE ttRequest NO-UNDO
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSubSer AS HANDLE NO-UNDO.
    lhSubSer = BUFFER SubSer:HANDLE.

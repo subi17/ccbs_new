@@ -29,7 +29,7 @@
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustGroup AS HANDLE NO-UNDO.
    lhCustGroup = BUFFER CustGroup:HANDLE.

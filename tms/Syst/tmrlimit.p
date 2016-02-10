@@ -17,7 +17,7 @@
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTMRLimit AS HANDLE NO-UNDO.
    lhTMRLimit = BUFFER TMRLimit:HANDLE.

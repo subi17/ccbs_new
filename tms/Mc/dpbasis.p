@@ -21,7 +21,7 @@
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhDPBasis AS HANDLE NO-UNDO.
    lhDPBasis = BUFFER DPBasis:HANDLE.

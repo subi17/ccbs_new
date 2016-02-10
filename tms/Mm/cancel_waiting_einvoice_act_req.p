@@ -25,7 +25,7 @@ DEF VAR lhCustomer     AS HANDLE NO-UNDO.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
    RUN StarEventInitialize(lhCustomer).
 END. /* IF llDoEvent THEN DO: */

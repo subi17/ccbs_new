@@ -17,7 +17,7 @@ DEF INPUT PARAMETER     RZItem-code AS CHAR NO-UNDO.
 
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
-    {lib/eventlog.i}
+    {Func/lib/eventlog.i}
     
     DEF VAR lhRZItem AS HANDLE NO-UNDO.
     lhRZItem = BUFFER RZItem:HANDLE.

@@ -15,7 +15,7 @@ ASSIGN
 {Func/timestamp.i}
 {Func/log.i}
 {Func/cparam2.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Syst/host.i}
 
 DEF VAR liLoop               AS INT  NO-UNDO.

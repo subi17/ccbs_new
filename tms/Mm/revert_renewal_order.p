@@ -75,7 +75,7 @@ fSplitTS(bMsRequest.ActStamp,OUTPUT ldaRenewalDate,OUTPUT liRenewalTime).
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 FUNCTION fCollectActivationFees RETURNS LOGICAL (

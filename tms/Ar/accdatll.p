@@ -23,7 +23,7 @@
 
 {Syst/commali.i}
 {Syst/utumaa.i "new"}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/cparam2.i}
 {Func/timestamp.i}
 

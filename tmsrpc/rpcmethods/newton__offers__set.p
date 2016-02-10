@@ -130,7 +130,7 @@ IF NOT llEqual THEN DO:
 
    IF llDoEvent THEN DO:
       &GLOBAL-DEFINE STAR_EVENT_USER katun 
-      {lib/eventlog.i}
+      {Func/lib/eventlog.i}
       DEF VAR lhOffer AS HANDLE NO-UNDO.
       lhOffer = BUFFER Offer:HANDLE.
       RUN StarEventInitialize(lhOffer).

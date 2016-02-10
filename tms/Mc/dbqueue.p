@@ -16,7 +16,7 @@
 --------------------------------------------------------------*/
 
 {Syst/commpaa.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 
 FUNCTION fAmIUp RETURNS INT
   (INPUT type AS INT, INPUT val AS INT).

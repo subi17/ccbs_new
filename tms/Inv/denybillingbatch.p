@@ -7,7 +7,7 @@
 katun = "Cron".
 gcBrand = "1".
 {Func/cparam2.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/ftransdir.i}
 {Syst/eventval.i}
 

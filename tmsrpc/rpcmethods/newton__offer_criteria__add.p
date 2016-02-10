@@ -77,7 +77,7 @@ END.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER pcUsername 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEF VAR lhOfferCriteria AS HANDLE NO-UNDO.
    lhOfferCriteria = BUFFER OfferCriteria:HANDLE.
    RUN StarEventInitialize(lhOfferCriteria).

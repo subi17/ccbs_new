@@ -39,7 +39,7 @@ IF TRIM(pcUserName) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER pcUsername
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    lhInvText = BUFFER InvText:HANDLE.
    lhRepText = BUFFER RepText:HANDLE.
    RUN StarEventInitialize(lhInvText).

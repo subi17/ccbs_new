@@ -17,7 +17,7 @@ ASSIGN gcBrand = "1"
 {Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Inv/printdoc1tt.i}
 {Func/email.i}
 

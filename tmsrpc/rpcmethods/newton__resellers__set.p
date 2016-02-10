@@ -111,7 +111,7 @@ END.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEF VAR lhReseller AS HANDLE NO-UNDO.
    DEF VAR lhResellerTF AS HANDLE NO-UNDO.
    lhReseller = BUFFER Reseller:HANDLE.

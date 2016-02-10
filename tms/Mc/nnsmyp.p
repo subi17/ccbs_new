@@ -28,7 +28,7 @@
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSalesman AS HANDLE NO-UNDO.
    lhSalesman = BUFFER Salesman:HANDLE.

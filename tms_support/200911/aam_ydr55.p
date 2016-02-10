@@ -3,7 +3,7 @@ katun = "ari".
 
 &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-{lib/eventlog.i}
+{Func/lib/eventlog.i}
 
 DEFINE VARIABLE lhBillItem AS HANDLE NO-UNDO.
 lhBillItem = BUFFER BillItem:HANDLE.

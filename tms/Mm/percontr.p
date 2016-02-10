@@ -47,7 +47,7 @@ DEF BUFFER bOrigRequest FOR MsRequest.
 
 IF llDoEvent THEN DO:
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFatime AS HANDLE NO-UNDO.
    lhFatime = BUFFER Fatime:HANDLE.

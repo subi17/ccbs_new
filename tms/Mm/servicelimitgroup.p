@@ -39,7 +39,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
       
    DEFINE VARIABLE lhServiceLimitGroup AS HANDLE NO-UNDO.
    lhServiceLimitGroup = BUFFER ServiceLimitGroup:HANDLE.

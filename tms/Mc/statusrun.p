@@ -3,7 +3,7 @@
 gcbrand = "1".
 katun = "cron".
 
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 
 fELog("STAT","CdrCountStarted").
 RUN cdrcntdump.

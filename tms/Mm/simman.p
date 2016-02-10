@@ -21,7 +21,7 @@
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSimMan AS HANDLE NO-UNDO.
    lhSimMan = BUFFER SimMan:HANDLE.

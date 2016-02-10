@@ -14,7 +14,7 @@ gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/tsformat.i}
 {Func/ftransdir.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 
 DEF VAR lcProcessedFile AS CHAR NO-UNDO.
 DEF VAR lcIncDir AS CHAR NO-UNDO. 

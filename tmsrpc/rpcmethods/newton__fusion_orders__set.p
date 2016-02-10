@@ -59,7 +59,7 @@ gcbrand = "1".
 &GLOBAL-DEFINE STAR_EVENT_USER katun 
 
 IF llDoEvent THEN DO:
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 /* check order exist */

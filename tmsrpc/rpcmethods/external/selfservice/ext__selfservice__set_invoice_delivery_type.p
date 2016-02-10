@@ -64,7 +64,7 @@ katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun   
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
 END.
 

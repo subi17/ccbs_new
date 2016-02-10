@@ -45,7 +45,7 @@ IF llDoEvent THEN
 DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhUserGrp AS HANDLE NO-UNDO.
    lhUserGrp = BUFFER UserGrp:HANDLE.

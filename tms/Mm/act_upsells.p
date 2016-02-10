@@ -14,7 +14,7 @@ gcBrand = "1".
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Func/timestamp.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/fmakemsreq.i}
 {Mm/fbundle.i}
 {Func/mdub.i}

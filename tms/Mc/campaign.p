@@ -19,7 +19,7 @@
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCampaign AS HANDLE NO-UNDO.
    lhCampaign = BUFFER Campaign:HANDLE.

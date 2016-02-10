@@ -6,7 +6,7 @@ gcBrand = "1".
 {Func/flimitreq.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/fcustdata.i}
 
 &SCOPED-DEFINE STAT_00 "00" /* Threshold successfully updated */

@@ -90,7 +90,7 @@ END.
 {Syst/eventval.i}
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER pcUsername 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEF VAR lhSubsTerminal AS HANDLE NO-UNDO.
    lhSubsTerminal = BUFFER SubsTerminal:HANDLE.
    RUN StarEventInitialize(lhSubsTerminal).

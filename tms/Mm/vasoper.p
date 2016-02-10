@@ -15,7 +15,7 @@
 
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
-    {lib/eventlog.i}
+    {Func/lib/eventlog.i}
         
     DEF VAR lhVASOper AS HANDLE NO-UNDO.
     lhVASOper = BUFFER VASOper:HANDLE.

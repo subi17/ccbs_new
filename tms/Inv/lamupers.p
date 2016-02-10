@@ -17,7 +17,7 @@
 {Syst/eventval.i}
 {Func/fduedate.i}
 {Func/fsubser.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/finvnum.i}
 {Func/ftaxdata.i}
 {Func/log.i}
@@ -31,7 +31,7 @@
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSingleFee AS HANDLE NO-UNDO.
    lhSingleFee = BUFFER SingleFee:HANDLE.

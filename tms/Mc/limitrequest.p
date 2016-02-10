@@ -17,7 +17,7 @@
 
 IF llDoEvent THEN DO:
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    
    DEFINE VARIABLE lhLimit     AS HANDLE    NO-UNDO.
    

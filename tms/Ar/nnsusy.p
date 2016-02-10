@@ -203,7 +203,7 @@ IF llDoEvent THEN
 DO FOR Payment:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPayment AS HANDLE NO-UNDO.
    lhPayment = BUFFER Payment:HANDLE.

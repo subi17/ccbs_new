@@ -111,7 +111,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER pcUsername 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEF VAR lhMNPRetentionRule AS HANDLE NO-UNDO.
    lhMNPRetentionRule = BUFFER MNPRetentionRule:HANDLE.
 END.

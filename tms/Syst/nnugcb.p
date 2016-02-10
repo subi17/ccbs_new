@@ -36,7 +36,7 @@ def var memb         as lo format "*/" NO-UNDO.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhUgMember AS HANDLE NO-UNDO.
    lhUgMember = BUFFER UgMember:HANDLE.

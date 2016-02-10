@@ -6,7 +6,7 @@ katun = "cron".
 gcBrand = "1".
 
 {Func/direct_dbconnect.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 
 DEF VAR ldaPrevPeriod AS DATE NO-UNDO.
 

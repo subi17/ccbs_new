@@ -60,7 +60,7 @@ gcbrand = "1".
 {Syst/tmsconst.i}
 &GLOBAL-DEFINE STAR_EVENT_USER katun 
 {Syst/eventval.i}
-{lib/eventlog.i}
+{Func/lib/eventlog.i}
 {Func/order.i}
 {Func/fmakemsreq.i}
 {Func/msreqfunc.i}

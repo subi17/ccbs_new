@@ -13,7 +13,7 @@ ASSIGN
    gcBrand = "1" 
    katun   = "Cron".
        
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/timestamp.i}
 
 DEF TEMP-TABLE ttStatus NO-UNDO

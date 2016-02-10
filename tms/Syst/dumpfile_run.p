@@ -13,7 +13,7 @@
 {Func/transname.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Syst/dumpfile_run.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.

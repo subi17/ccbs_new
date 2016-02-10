@@ -9,7 +9,7 @@ gcBrand = "1".
 {Func/ftaxdata.i}
 {Func/ftopup.i}
 
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}

@@ -93,7 +93,7 @@ DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
    {Func/create_eventlog.i}
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhttMSISDN AS HANDLE NO-UNDO.
    lhttMSISDN = BUFFER MSISDN:HANDLE.

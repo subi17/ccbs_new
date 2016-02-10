@@ -190,7 +190,7 @@ END.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
    
 IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:

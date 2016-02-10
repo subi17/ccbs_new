@@ -37,7 +37,7 @@ DEF VAR ldeSMSStamp AS DEC NO-UNDO.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.

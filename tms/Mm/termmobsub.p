@@ -38,7 +38,7 @@ DEFINE INPUT PARAMETER icType   AS CHAR NO-UNDO.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTermMobsub AS HANDLE NO-UNDO.
    lhTermMobsub = BUFFER TermMobsub:HANDLE.

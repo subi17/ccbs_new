@@ -9,7 +9,7 @@
 ASSIGN 
    gcBrand = "1"
    katun = "cron".
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Inv/old_unbilled_events.i}
 
 DEF VAR liEvents     AS INT  NO-UNDO.

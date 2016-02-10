@@ -12,7 +12,7 @@
 gcbrand = "1".
 katun = "cron".
 
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 
 DEFINE VARIABLE period  AS INTEGER NO-UNDO.
 

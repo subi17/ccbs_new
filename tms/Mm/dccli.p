@@ -22,7 +22,7 @@
 
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
-    {lib/eventlog.i}
+    {Func/lib/eventlog.i}
         
     DEF VAR lhDCCLI AS HANDLE NO-UNDO.
     lhDCCLI = BUFFER DCCLI:HANDLE.

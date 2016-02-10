@@ -7,7 +7,7 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
        
 DEF VAR liQty   AS INT    NO-UNDO.
 DEF VAR liDel   AS INT    NO-UNDO. 

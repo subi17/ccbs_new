@@ -19,7 +19,7 @@ DEFINE BUFFER bMsRequest     FOR MsRequest.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 def stream sbak.

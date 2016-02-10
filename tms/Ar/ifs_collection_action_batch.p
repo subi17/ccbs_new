@@ -13,7 +13,7 @@ ASSIGN gcBrand = "1"
        katun   = "Cron".
        
 {Func/cparam2.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 
 DEF VAR liCnt       AS INT  NO-UNDO.
 DEF VAR lcIFSFile   AS CHAR NO-UNDO.

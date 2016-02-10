@@ -14,7 +14,7 @@ gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/date.i}
 {Syst/eventval.i}
 {Func/msreqfunc.i}
@@ -22,7 +22,7 @@ gcBrand = "1".
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEFINE VARIABLE lhOrderFusion AS HANDLE NO-UNDO.
    lhOrderFusion = BUFFER OrderFusion:HANDLE.
    RUN StarEventInitialize(lhOrderFusion).

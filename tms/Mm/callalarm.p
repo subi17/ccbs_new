@@ -30,7 +30,7 @@ DEF  INPUT PARAMETER    icCli     AS CHAR No-UNDO.
 {Func/timestamp.i}
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun
-    {lib/eventlog.i}
+    {Func/lib/eventlog.i}
 
     DEF VAR lhCallAlarm AS HANDLE NO-UNDO.
     lhCallAlarm = BUFFER CallAlarm:HANDLE.

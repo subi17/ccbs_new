@@ -24,7 +24,7 @@ DEF  INPUT PARAMETER   servcom  AS C No-UNDO.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSubserpara AS HANDLE NO-UNDO.
    lhSubserpara = BUFFER Subserpara:HANDLE.

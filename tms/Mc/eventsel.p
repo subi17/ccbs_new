@@ -30,7 +30,7 @@
 
 &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-{lib/eventlog.i}
+{Func/lib/eventlog.i}
 
 DEF INPUT PARAMETER icTableName AS CHAR NO-UNDO. 
 DEF INPUT PARAMETER icKey       AS CHAR NO-UNDO. 

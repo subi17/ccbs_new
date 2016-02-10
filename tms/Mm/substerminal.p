@@ -17,7 +17,7 @@
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSubsTerminal AS HANDLE NO-UNDO.
    lhSubsTerminal = BUFFER SubsTerminal:HANDLE.

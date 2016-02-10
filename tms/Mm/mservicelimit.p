@@ -21,7 +21,7 @@ DEF  INPUT PARAMETER  iiSlSeq    AS INT            NO-UNDO.
 IF llDoEvent THEN DO :
    &GLOBAL-DEFINE STAR_EVENT_USER katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
       
    DEFINE VARIABLE lhFixedFee AS HANDLE NO-UNDO.
    DEF VAR lhMServiceLimit AS HANDLE NO-UNDO. 

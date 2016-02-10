@@ -72,7 +72,7 @@ IF AVAIL Reseller THEN
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
    DEF VAR lhReseller AS HANDLE NO-UNDO.
    lhReseller = BUFFER Reseller:HANDLE.
    RUN StarEventInitialize(lhReseller).

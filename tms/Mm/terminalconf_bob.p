@@ -14,7 +14,7 @@ gcBrand = "1".
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Func/timestamp.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Syst/eventval.i}
 
 /* files and dirs */
@@ -41,7 +41,7 @@ DEF STREAM sLog.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTerminalConf AS HANDLE NO-UNDO.
    lhTerminalConf = BUFFER TerminalConf:HANDLE.

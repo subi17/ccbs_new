@@ -22,7 +22,7 @@ DEF BUFFER bItemValue FOR TMRItemValue.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTMRule AS HANDLE NO-UNDO.
    lhTMRule = BUFFER TMRule:HANDLE.

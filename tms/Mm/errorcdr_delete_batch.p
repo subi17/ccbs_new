@@ -5,7 +5,7 @@
 gcBrand = "1".
 katun = "cron".
 
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/direct_dbconnect.i}
 
 DEF VAR ldaFromDate AS DATE NO-UNDO.

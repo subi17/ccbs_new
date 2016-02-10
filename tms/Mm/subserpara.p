@@ -31,7 +31,7 @@ DEF INPUT        PARAMETER icServCom AS CHAR NO-UNDO.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhttSubserPara AS HANDLE NO-UNDO.
    lhttSubserPara = BUFFER ttSubserPara:HANDLE.

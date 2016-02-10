@@ -16,7 +16,7 @@
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhBRTestCriteria AS HANDLE NO-UNDO.
    lhBRTestCriteria = BUFFER BRTestCriteria:HANDLE.

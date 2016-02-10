@@ -13,7 +13,7 @@ gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/cparam2.i}
 {Func/date.i}
 {Func/fgettxt.i}

@@ -78,7 +78,7 @@ IF MNPOperation.ErrorHandled EQ ({&MNP_ERRORHANDLED_NO}) THEN DO:
 
    IF llDoEvent THEN DO:
       &GLOBAL-DEFINE STAR_EVENT_USER katun 
-      {lib/eventlog.i}
+      {Func/lib/eventlog.i}
       DEF VAR lhMNPOperation AS HANDLE NO-UNDO.
       lhMNPOperation = BUFFER MNPOperation:HANDLE.
       RUN StarEventInitialize(lhMNPOperation).

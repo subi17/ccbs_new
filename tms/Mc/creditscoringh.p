@@ -33,7 +33,7 @@ DEFINE BUFFER lbOrder FOR Order.
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER "CreditScoring"
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
    lhOrder = BUFFER bOrder:HANDLE.

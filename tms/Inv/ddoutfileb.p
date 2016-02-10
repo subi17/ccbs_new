@@ -15,7 +15,7 @@ ASSIGN gcBrand = "1"
        katun   = "csb19b".
        
 {Func/cparam2.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 
 DEF VAR liCount    AS INT  NO-UNDO.
 DEF VAR liFiles    AS INT  NO-UNDO.

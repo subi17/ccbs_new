@@ -19,7 +19,7 @@
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhRerateLog AS HANDLE NO-UNDO.
    lhRerateLog = BUFFER RerateLog:HANDLE.

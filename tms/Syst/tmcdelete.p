@@ -8,7 +8,7 @@
 ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/lib/eventlog.i}
+{Syst/eventlog.i}
 {Func/timestamp.i}
 
 DEF INPUT PARAMETER idtBreakDate AS DATE NO-UNDO.
