@@ -10,7 +10,7 @@
 
 {Syst/commali.i}
 {Func/msisdn.i}
-{Func/func.i}
+{Func/func.p}
    
 DEF /* NEW */ shared VAR siirto AS CHAR.
 

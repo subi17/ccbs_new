@@ -16,7 +16,7 @@
 
 {Syst/commali.i}
 {Func/msisdn.i}
-{Func/func.i}
+{Func/func.p}
 
 DEFINE TEMP-TABLE ttCall LIKE MobCDR.
 

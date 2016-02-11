@@ -20,7 +20,7 @@
 
 {Syst/commali.i}  
 {Func/msisdn.i}
-{Func/func.i}
+{Func/func.p}
 {Func/callquery.i}
 
 DEF  TEMP-TABLE ttCall NO-UNDO LIKE  Mobcdr

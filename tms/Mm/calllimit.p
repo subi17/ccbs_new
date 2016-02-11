@@ -16,7 +16,7 @@
 {Syst/commali.i}
 {Func/fsubser.i}
 {Syst/eventval.i}
-{Func/func.i}
+{Func/func.p}
 
 if llDoEvent THEN DO:
     &GLOBAL-DEFINE STAR_EVENT_USER katun

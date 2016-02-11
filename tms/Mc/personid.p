@@ -14,7 +14,7 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Customer'}
 {Syst/eventval.i}
-{Func/func.i}
+{Func/func.p}
 
 
 DEFINE INPUT PARAMETER  icCriteria AS C NO-UNDO.

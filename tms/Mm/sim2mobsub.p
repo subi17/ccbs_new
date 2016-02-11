@@ -8,7 +8,7 @@
   VERSION ......: TF
   ---------------------------------------------------------------------- */
 {Syst/commali.i} 
-{Func/func.i}
+{Func/func.p}
 {Func/fgettxt.i}
 
 DEF INPUT  PARAMETER   msseq  AS INT . 

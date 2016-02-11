@@ -19,7 +19,7 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'imsi'}
 {Syst/eventval.i} 
-{Func/func.i}
+{Func/func.p}
 
 DEF INPUT PARAMETER ICC LIKE SIM.ICC NO-UNDO.
 

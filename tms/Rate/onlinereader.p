@@ -10,7 +10,7 @@
 ------------------------------------------------------------------------ */
    
 {Syst/commali.i}
-{Func/func.i}
+{Func/func.p}
 {Func/email.i}
 {Func/cparam2.i}
 {Mm/cdrvar.i}

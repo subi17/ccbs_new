@@ -15,7 +15,7 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 {Syst/commali.i}
-{Func/func.i}
+{Func/func.p}
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:

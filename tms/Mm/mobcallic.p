@@ -12,7 +12,7 @@
 {Func/msisdn.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'mobcdr'}
-{Func/func.i}
+{Func/func.p}
 
 DEF INPUT PARAMETER  CustNum AS INT NO-UNDO.
 

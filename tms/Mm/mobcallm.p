@@ -17,7 +17,7 @@
 
 {Syst/commali.i}
 {Func/msisdn.i}
-{Func/func.i} 
+{Func/func.p} 
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MobCDR'} 
 {Func/feventlog.i}

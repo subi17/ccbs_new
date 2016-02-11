@@ -31,7 +31,7 @@
 
 {Syst/commali.i} 
 {Syst/tmsconst.i}
-{Func/func.i}
+{Func/func.p}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'OrdStat'}
 {Syst/eventval.i}

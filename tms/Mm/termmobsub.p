@@ -21,7 +21,7 @@ DEFINE INPUT PARAMETER icType   AS CHAR NO-UNDO.
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Customer'}
-{Func/func.i}
+{Func/func.p}
 {Func/timestamp.i}
 {Func/msisdn.i}
 {Mf/errors.i}
