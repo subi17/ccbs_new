@@ -38,8 +38,8 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhTermReturn).
 END.
 
-DEF VAR pcStruct    AS CHAR NO-UNDO.
-DEF VAR lcStruct    AS CHAR NO-UNDO.
+DEF VAR top_struct    AS CHAR NO-UNDO.
+DEF VAR top_struct_fields    AS CHAR NO-UNDO.
 
 DEF VAR lhBuff           AS HANDLE NO-UNDO.
 DEF VAR lcIMEI           AS CHAR   NO-UNDO.
@@ -59,35 +59,78 @@ DEF VAR ldaMonth22       AS DATE   NO-UNDO.
 DEF VAR ldeMonth22       AS DEC    NO-UNDO. 
 DEF VAR llRenewalOrder   AS LOG    NO-UNDO. 
 DEF VAR lcQ25ContractID  AS CHAR   NO-UNDO.
+DEF VAR lcReturnChannel  AS CHAR   NO-UNDO.
+
+DEF VAR pcQ25Struct       AS CHARACTER NO-UNDO. /* Quota 25 input struct */
+DEF VAR lcQ25Struct       AS CHARACTER NO-UNDO.
+
+/* memo_struct */
+DEF VAR lcmemo_title       AS CHARACTER NO-UNDO. /* Memo Title */
+DEF VAR lcmemo_content     AS CHARACTER NO-UNDO. /* Memo Content */
+DEF VAR pcmemoStruct       AS CHARACTER NO-UNDO. /* Memo input struct */
+DEF VAR lcmemoStruct       AS CHARACTER NO-UNDO.
 
 DEF BUFFER bDCCLI FOR DCCLI.
 DEF BUFFER bOrder FOR Order.
 
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
-pcStruct = get_struct(param_toplevel_id, "0").
+top_struct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcStruct = validate_request(pcStruct, "imei!,orderid!,bill_code!,msisdn!,device_start,device_screen,salesman!,terminal_type!,envelope_number,q25_contract_id").
-IF gi_xmlrpc_error NE 0 THEN RETURN.
+top_struct_fields = validate_request(top_struct,
+   "q25_struct!,memo_struct").
+IF top_struct_fields EQ ? THEN RETURN.
 
 ASSIGN
-   lcIMEI            = get_string(pcStruct,"imei")
-   liOrderId         = get_pos_int(pcStruct,"orderid")
-   lcBillCode        = get_string(pcStruct,"bill_code")
-   lcMSISDN          = get_string(pcStruct,"msisdn")
-   llDeviceStart     = get_bool(pcStruct,"device_start") WHEN 
-                       LOOKUP("device_start", lcStruct) > 0
-   llDeviceScreen    = get_bool(pcStruct,"device_screen") WHEN 
-                       LOOKUP("device_screen", lcStruct) > 0
-   lcSalesman        = get_string(pcStruct,"salesman")
-   lcTerminalType    = get_string(pcStruct,"terminal_type")
-   lcEnvelopeNumber  = get_string(pcStruct,"envelope_number") WHEN
-                       LOOKUP("envelope_number", lcStruct) > 0
-   lcQ25ContractId   = get_string(pcStruct,"q25_contract_id") WHEN
-                       LOOKUP("q25_contract_id", lcStruct) > 0  
-   ldReturnTS        = fMakeTS().
+   pcQ25Struct  = get_struct(top_struct, "q25_struct")
+   pcmemoStruct = get_struct(top_struct, "memo_struct") WHEN
+      LOOKUP("memo_struct", top_struct_fields) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+lcQ25Struct = validate_request(pcQ25Struct, "imei,orderid!,bill_code,msisdn!,device_start,device_screen,salesman!,terminal_type,envelope_number,q25_contract_id").
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+IF lcQ25Struct EQ ? THEN RETURN.
+
+ASSIGN
+   liOrderId         = get_pos_int(pcQ25Struct,"orderid")
+   lcMSISDN          = get_string(pcQ25Struct,"msisdn")
+   llDeviceStart     = get_bool(pcQ25Struct,"device_start") WHEN 
+                       LOOKUP("device_start", lcQ25Struct) > 0
+   llDeviceScreen    = get_bool(pcQ25Struct,"device_screen") WHEN 
+                       LOOKUP("device_screen", lcQ25Struct) > 0
+   lcSalesman        = get_string(pcQ25Struct,"salesman")
+   lcEnvelopeNumber  = get_string(pcQ25Struct,"envelope_number") WHEN
+                       LOOKUP("envelope_number", lcQ25Struct) > 0
+   lcQ25ContractId   = get_string(pcQ25Struct,"q25_contract_id") WHEN
+                       LOOKUP("q25_contract_id", lcQ25Struct) > 0  
+   lcIMEI            = get_string(pcQ25Struct,"imei") WHEN
+                       LOOKUP("imei", lcQ25Struct) > 0  
+   lcBillCode        = get_string(pcQ25Struct,"bill_code") WHEN
+                       LOOKUP("bill_code", lcQ25Struct) > 0  
+   lcTerminalType    = get_string(pcQ25Struct,"terminal_type") WHEN
+                       LOOKUP("terminal_type", lcQ25Struct) > 0  
+   lcReturnChannel   = get_string(pcQ25Struct,"return_channel")                 
+   ldReturnTS        = fMakeTS().
+
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+IF pcmemoStruct > "" THEN DO:
+
+   lcmemoStruct = validate_request(pcmemoStruct, "title!,content!").
+   IF lcmemoStruct EQ ? THEN RETURN.
+
+   ASSIGN
+      lcmemo_title = get_string(pcmemoStruct, "title")
+         WHEN LOOKUP("title", lcmemoStruct) > 0
+      lcmemo_content = get_string(pcmemoStruct, "content")
+         WHEN LOOKUP("content", lcmemoStruct) > 0.
+
+   IF gi_xmlrpc_error NE 0 THEN RETURN.
+END.
+
+
 
 IF LENGTH(lcIMEI,"CHARACTER") NE 15 THEN
    RETURN appl_err("IMEI code doesn't contain 15 characters").
