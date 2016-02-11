@@ -63,6 +63,7 @@
  */
 {xmlrpc/xmlrpc_access.i}
 {tmsconst.i}
+{timestamp.i}
 
 /* Input parameters */
 DEF VAR piCustNum AS INT NO-UNDO.
@@ -287,6 +288,11 @@ DEFINE VARIABLE lcOrgId AS CHARACTER NO-UNDO.
 DEF VAR lcCustIdType AS CHAR NO-UNDO.
 DEF VAR llDefaultSubsLimit AS LOG NO-UNDO.
 DEF VAR lcNewEmailAdd AS CHAR NO-UNDO.
+DEF VAR ldate AS DATE NO-UNDO.
+DEF VAR litime AS INT NO-UNDO. 
+DEF VAR ldePrepStcTs AS DEC NO-UNDO. 
+DEF VAR llBankAcctChange AS LOG NO-UNDO. 
+DEF VAR lcBankAccount AS CHAR NO-UNDO. 
 
 IF Customer.CustIdType = "CIF" THEN 
    lcOrgId = lcCustomerData[LOOKUP("company_id", lcDataFields)].
@@ -428,7 +434,6 @@ IF llCustomerChanged THEN DO:
         customer.coname = lcCustomerData[LOOKUP("coname", lcDataFields)]
         customer.language = LOOKUP(lcCustomerData[LOOKUP("language", lcDataFields)], {&languages})
         customer.nationality = lcCustomerData[LOOKUP("nationality", lcDataFields)]
-        customer.BankAcct = lcCustomerData[LOOKUP("bankaccount", lcDataFields)]
         customer.SMSNumber = lcCustomerData[LOOKUP("sms_number", lcDataFields)]
         customer.Phone = lcCustomerData[LOOKUP("phone_number", lcDataFields)]
         customer.CustIdType = lcCustomerData[LOOKUP("id_type", lcDataFields)]
@@ -444,9 +449,37 @@ IF llCustomerChanged THEN DO:
         customer.foundationDate = ldFoundationDate 
         customer.BirthDay = ldBirthDay
         customer.InvoiceTargetRule = liInvoiceTargetRule
-        customer.ChargeType = liChargeType
-    .
-
+        customer.ChargeType = liChargeType.
+        
+    /* Added check for BankAccount change, YDR-1811
+      It's not allowed if customer has active PostPaid subscription OR
+      last termination date(of stc to prepaid) is less than 40 days. 
+      
+      Also checking of BankAccount lenght. It can be empty (0) length too */
+    fSplitTS(fmakeTS(), ldate, litime).
+    ldate = ldate - 40.
+    ldePrepStcTs = fHMS2TS(ldate, "00:00:00").
+    lcBankAccount = TRIM(lcCustomerData[LOOKUP("bankaccount", lcDataFields)]).
+    
+    IF CAN-FIND( FIRST MobSub NO-LOCK WHERE Mobsub.Brand = gcBrand AND 
+       MobSub.CustNum = piCustNum AND NOT Mobsub.PayType) OR
+       CAN-FIND( FIRST MsRequest NO-LOCK WHERE MsRequest.Brand = gcBrand AND
+       MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+       MsRequest.ReqStatus = {&REQUEST_STATUS_DONE} AND
+       MsRequest.ActStamp > ldePrepStcTs AND
+       MsRequest.ReqCParam1 BEGINS "CONT" AND
+       MsRequest.ReqCParam2 BEGINS "TARJ") AND
+       MsRequest.CustNum = piCustNum THEN
+         RETURN appl_err("La cuenta bancaria no puede estar en blanco").
+    ELSE DO:
+      IF LENGTH(lcBankAccount) = 0 OR LENGTH(lcBankAccount) = 24 THEN DO:
+         customer.BankAcct = lcBankAccount.
+         llBankAcctChange = TRUE.
+      END.
+      ELSE
+         RETURN appl_err("La cuenta bancaria no puede estar en blanco").
+    END.
+    
     /* Electronic Invoice Project */
     lcNewEmailAdd = lcCustomerData[LOOKUP("email", lcDataFields)].
 
@@ -459,6 +492,7 @@ IF llCustomerChanged THEN DO:
                              "customer's invoice delivery type is EMAIL").
 
           /* Cancel Ongoing Email Activation Request and create new */
+         
           IF fPendingEmailActRequest(INPUT Customer.Custnum) THEN
              fCancelPendingEmailActRequest(
                                 INPUT Customer.Custnum,
@@ -634,8 +668,9 @@ IF gc_xmlrpc_error NE "" THEN
 ELSE
     add_boolean(response_toplevel_id, "", TRUE).
 
-
-IF pcMemoTitle NE "" THEN DO:
+/* YDR-1811 - Memo adding in a case of bank account was changed */
+IF pcMemoTitle NE "" OR
+   llBankAcctChange THEN DO:
 
    CREATE Memo.
    ASSIGN
@@ -645,9 +680,18 @@ IF pcMemoTitle NE "" THEN DO:
        Memo.KeyValue  = STRING(Customer.Custnum)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
        Memo.CreUser   = katun
-       Memo.MemoTitle = pcMemoTitle
-       Memo.MemoText  = pcMemoContent
        Memo.CustNum   = Customer.Custnum.
+   IF llBankAcctChange THEN
+      ASSIGN
+         Memo.MemoTitle = "Cambio de cuenta"
+         Memo.MemoText  = "Solicitado por el cliente: NÂº de " +
+                        "cuenta: " + Customer.BankAcct + " --> " +
+                        IF lcBankAccount > "" THEN lcBankAccount ELSE
+                        "blank".
+   ELSE 
+      ASSIGN
+       Memo.MemoTitle = pcMemoTitle
+       Memo.MemoText  = pcMemoContent.
 END.
 
 FINALLY:
