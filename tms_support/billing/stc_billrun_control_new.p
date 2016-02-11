@@ -267,7 +267,7 @@ IF NOT SESSION:BATCH THEN DO:
       lcDetFile = fModifyFileName(lcDetFile,ldtInputDate,"USER")
       lcErrors = fModifyFileName(lcErrors,ldtInputDate,"USER")
       lcMail = fModifyFileName(lcMail,ldtInputDate,"USER")
-      ldBeginStamp = fHMS2TS(ldtInputDate,"0")
+      ldBeginStamp = fHMS2TS(ldtInputDate,"00:00:00")
       ldEndStamp = fHMS2TS(ldtInputDate,"23:59:59").
 END.
 ELSE DO:
@@ -279,7 +279,7 @@ ELSE DO:
       lcDetFile = fModifyFileName(lcDetFile,TODAY,"CRON")
       lcErrors = fModifyFileName(lcErrors,TODAY,"CRON")
       lcMail = fModifyFileName(lcMail,TODAY,"CRON")
-      ldBeginStamp = fHMS2TS(DATE(MONTH(Today),1,YEAR(TODAY)),"")
+      ldBeginStamp = fHMS2TS(DATE(MONTH(Today),1,YEAR(TODAY)),"00:00:00")
       ldEndStamp = fMakeTS().
 END.
 
