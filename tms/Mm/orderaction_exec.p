@@ -382,9 +382,12 @@ PROCEDURE pQ25Extension:
    DEF VAR ldaPerDate AS DATE NO-UNDO. 
    DEF VAR lcTFBank AS CHAR NO-UNDO.
    DEF VAR lcOrigKatun AS CHAR NO-UNDO.
+   DEF VAR ldeDiscount AS DEC NO-UNDO. 
+   DEF VAR ldeQ25ExtAmount AS DEC NO-UNDO. 
 
    DEF BUFFER SingleFee FOR SingleFee.
    DEF BUFFER MsRequest FOR MsRequest.
+   DEF BUFFER bOrderAction FOR OrderAction.
    
    ASSIGN
       ldaPerDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
@@ -477,20 +480,35 @@ PROCEDURE pQ25Extension:
 
       IF lcSMSTxt > "" THEN DO:
 
-         ASSIGN
-            lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
-                                lower(entry(month(ldaDate),{&MONTHS_ES})))
-            lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaDate)))
-            lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
-                  STRING(TRUNC(SingleFee.Amt / 12, 2))).
+         ldeQ25ExtAmount = SingleFee.Amt.
+         FIND FIRST bOrderAction NO-LOCK WHERE
+                    bOrderAction.Brand = Order.Brand AND
+                    bOrderAction.OrderId = Order.OrderId AND
+                    bOrderAction.ItemType = "Q25Extension" NO-ERROR.
 
-         fMakeSchedSMS2(MobSub.CustNum,
-                        MobSub.CLI,
-                        {&SMSTYPE_CONTRACT_ACTIVATION},
-                        lcSMSTxt,
-                        ldeSMSStamp,
-                        "Yoigo info",
-                        "").
+         IF AVAIL bOrderAction THEN DO:
+            ldeDiscount = DEC(bOrderAction.ItemKey) NO-ERROR.
+            IF ldeDiscount NE ? THEN
+               ldeQ25ExtAmount = ldeQ25ExtAmount - ldeDiscount.
+         END.
+
+         IF ldeQ25ExtAmount > 0 THEN DO:
+
+            ASSIGN
+               lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
+                                   lower(entry(month(ldaDate),{&MONTHS_ES})))
+               lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaDate)))
+               lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
+                     STRING(TRUNC(ldeQ25ExtAmount / 12, 2))).
+
+            fMakeSchedSMS2(MobSub.CustNum,
+                           MobSub.CLI,
+                           {&SMSTYPE_CONTRACT_ACTIVATION},
+                           lcSMSTxt,
+                           ldeSMSStamp,
+                           "Yoigo info",
+                           "").
+         END.
       END.
 
    END.
@@ -502,6 +520,7 @@ PROCEDURE pQ25Discount:
    DEF VAR liPercontractId AS INT NO-UNDO. 
    DEF VAR ldeDiscount AS DEC NO-UNDO. 
    DEF VAR lcResult AS CHAR NO-UNDO. 
+   DEF VAR lcDiscountPlan AS CHAR NO-UNDO.  
 
    liPercontractId = INT(OrderAction.ItemParam) NO-ERROR.
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
@@ -529,8 +548,15 @@ PROCEDURE pQ25Discount:
                          Invoice.InvType = 99) THEN
       RETURN "ERROR:Q25 discount creation failed (residual fee is billed)".
 
+   IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                     OrderAction.Brand = Order.Brand AND
+                     OrderAction.OrderId = Order.OrderId AND
+                     OrderAction.ItemType = "Q25Extension") THEN
+      lcDiscountPlan = "RVTERMDT4DISC".
+   ELSE lcDiscountPlan = "RVTERMDT1DISC".
+
    fAddDiscountPlanMember(MobSub.MsSeq,
-                         "RVTERMDT1DISC", 
+                         lcDiscountPlan, 
                          ldeDiscount,
                          fPer2Date(SingleFee.BillPeriod,0),
                          1,
