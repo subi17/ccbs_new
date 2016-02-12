@@ -598,6 +598,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR liSubLimit AS INT NO-UNDO. 
    DEF VAR liSubs AS INT NO-UNDO. 
    DEF VAR liDelType  AS INT NO-UNDO.
+   DEF VAR liActLimit AS INT NO-UNDO.
+   DEF VAR liActs AS INT NO-UNDO.
 
    data[LOOKUP("country", gcCustomerStructStringFields)] = "ES".
    data[LOOKUP("nationality", gcCustomerStructStringFields)] = "ES".
@@ -675,7 +677,9 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          1,
          OUTPUT lcFError,
          OUTPUT liSubLimit,
-         OUTPUT liSubs) THEN .
+         OUTPUT liSubs,
+         OUTPUT liSubLimit,
+         OUTPUT liActs) THEN .
 
       CASE lcdelivery_channel:
          WHEN "PAPER" THEN liDelType = {&INV_DEL_TYPE_PAPER}.

@@ -82,6 +82,10 @@ DEF VAR llSelfEmployed AS LOGICAL NO-UNDO INITIAL FALSE.
 DEF VAR lcInvoiceTarget AS CHAR NO-UNDO. 
 DEF VAR liSubCount AS INT NO-UNDO. 
 DEF VAR liGroupCount AS INT NO-UNDO. 
+DEF VAR lcReason AS CHAR NO-UNDO.
+DEF VAR liSubLimit AS INTEGER NO-UNDO.
+DEF VAR lisubs AS INTEGER NO-UNDO.
+DEF VAR llLimitNotReached AS LOGICAL NO-UNDO.
 
 top_array = validate_request(param_toplevel_id, "int,[string]").
 
@@ -100,6 +104,7 @@ gcBrand = "1".
 {tmsconst.i}
 {barrfunc.i}
 {invoicetarget.i}
+{orderchk.i}
 
 IF pcCLI NE "" THEN DO:
    
@@ -262,6 +267,27 @@ IF (Customer.Category EQ "40" OR Customer.Category EQ "41") THEN
 add_boolean(top_struct,"self_employed",llSelfEmployed).
 add_string(top_struct, "profession", Customer.Profession).
 add_string(top_struct, "site_name", Customer.CompanyName).
+
+llLimitNotReached = fSubscriptionLimitCheck(
+   Customer.orgId,
+   Customer.custidType,
+   llSelfEmployed,
+   1,
+   OUTPUT lcReason,
+   OUTPUT liSubLimit,
+   OUTPUT lisubs,
+   OUTPUT liActLimit,
+   OUTPUT liacts).
+
+IF liSubs >= liSubLimit THEN
+   add_boolean(top_struct,"subscription_limit_reached",TRUE).
+ELSE
+   add_boolean(top_struct,"subscription_limit_reached",FALSE).
+
+IF liActs >= liActLimit THEN
+   add_boolean(top_struct,"activation_limit_reached",TRUE).
+ELSE
+   add_boolean(top_struct,"activation_limit_reached",FALSE).
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.

@@ -31,6 +31,8 @@ DEF VAR lcReturnStruct   AS CHAR NO-UNDO.
 DEF VAR liSubLimit       AS INT  NO-UNDO.
 DEF VAR lisubs           AS INT NO-UNDO. 
 DEF VAR lcAddLineAllowed AS CHAR NO-UNDO. 
+DEF VAR liActLimit       AS INT  NO-UNDO.
+DEF VAR liacts           AS INT NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,string,boolean,int") EQ ?
    THEN RETURN.
@@ -49,7 +51,9 @@ llOrderAllowed = fSubscriptionLimitCheck(
    piOrders,
    OUTPUT lcReason,
    OUTPUT liSubLimit,
-   OUTPUT lisubs).
+   OUTPUT lisubs,
+   OUTPUT liActLimit,
+   OUTPUT liActs).
 
 FOR FIRST Customer WHERE
           Customer.Brand = gcBrand AND
