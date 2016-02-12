@@ -178,6 +178,11 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    DEF VAR lcEncryptedMSISDN AS CHAR NO-UNDO.
    DEF VAR lcPassPhrase      AS CHAR NO-UNDO.
    DEF VAR lcAmount          AS CHAR NO-UNDO.
+   
+   lcAmount = STRING(idAmount,"->>>>>>9.99").
+   lcAmount = LEFT-TRIM(lcAmount).
+   lcAmount = REPLACE(lcAmount,".",",").
+   
    IF iiPhase = {&Q25_MONTH_22} OR
       iiPhase = {&Q25_MONTH_23} THEN DO:
       /* Q25 reminder month 22 or 23 */
@@ -198,9 +203,6 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    END.
    ELSE IF iiPhase = {&Q25_MONTH_24_FINAL_MSG} THEN DO:
    /* Q25 month 24 after 20th day no decision */
-      lcAmount = STRING(idAmount,"->>>>>>9.99").
-      lcAmount = LEFT-TRIM(lcAmount).
-      lcAmount = REPLACE(lcAmount,".",",").
       lcSMSMessage = fGetSMSTxt("Q25FinalFeeMsgNoDecision",
                                 TODAY,
                                 1,
@@ -209,9 +211,6 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    END.
    ELSE IF iiPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
    /* Q25 Month 24 20th day extension made */  
-      lcAmount = STRING(TRUNC(idAmount / 12,2),"->>>>>>9.99").
-      lcAmount = LEFT-TRIM(lcAmount).
-      lcAmount = REPLACE(lcAmount,".",",").                  
       lcSMSMessage = fGetSMSTxt("Q25FinalFeeMsgChosenExt",
                                 TODAY,
                                 1,
@@ -298,6 +297,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
    DEF VAR liCalcPauseValue  AS INT NO-UNDO.
    DEF VAR liPhase           AS INT NO-UNDO.
    DEF VAR liPendingReq      AS INT NO-UNDO.
+   DEF VAR ldAmount          AS INT NO-UNDO.
 
    IF idaStartDate = ? OR idaEndDate = ? THEN
       RETURN 0.
@@ -323,12 +323,13 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
 
       IF NOT SingleFee.OrderId NE 0 THEN NEXT.
       liPhase = iiPhase.
+      ldAmount = SingleFee.amt.
       FIND FIRST Mobsub NO-LOCK WHERE
                  Mobsub.MsSeq = INT(SingleFee.KeyValue) NO-ERROR.
       IF NOT AVAIL Mobsub THEN DO:
          lcLogText = "Mobsub not found: " +
                      STRING(liPhase) + "|" + STRING(SingleFee.KeyValue) 
-                     + "|" + STRING(SingleFee.amt).
+                     + "|" + STRING(ldAmount).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
          NEXT.
       END.
@@ -340,7 +341,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          lcLogText = "Residual fee Billed: " +
                         STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
                         STRING(Mobsub.MsSeq) + "|" +
-                        STRING(SingleFee.amt).
+                        STRING(ldAmount).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
          NEXT. /* "Residual fee billed". */
       END.
@@ -360,7 +361,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          lcLogText = "NO DCCLI FOUND " +
                         STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
                         STRING(Mobsub.MsSeq) + "|" +
-                        STRING(SingleFee.amt).
+                        STRING(ldAmount).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
          NEXT.
       END.
@@ -369,7 +370,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          lcLogText = "DCCLI Terminated: " +
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
-                        STRING(SingleFee.amt).
+                        STRING(ldAmount).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
          NEXT. /* terminated, SMS should not be send. */
       END.
@@ -391,17 +392,18 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             lcLogText = "Device returned " +
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
-                        STRING(SingleFee.amt).
+                        STRING(ldAmount).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
             NEXT.
              
-            END.
+         END.
             
-         IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
-                  DCCLI.Brand   EQ gcBrand AND
-                  DCCLI.DCEvent EQ "RVTERM12" AND
-                  DCCLI.MsSeq   EQ Mobsub.MsSeq AND
-                  DCCLI.ValidTo >= TODAY) THEN DO:
+         FIND FIRST DCCLI NO-LOCK WHERE
+                    DCCLI.Brand   EQ gcBrand AND
+                    DCCLI.DCEvent EQ "RVTERM12" AND
+                    DCCLI.MsSeq   EQ Mobsub.MsSeq AND
+                    DCCLI.ValidTo >= TODAY NO-ERROR.
+         IF AVAIL DCCLI THEN DO:
             /* Q25 Extension already active */
             IF liPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO: 
             /* Q25 month 22-24 */
@@ -411,7 +413,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                lcLogText = "Q25 already done: " +
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
-                        STRING(SingleFee.amt).
+                        STRING(ldAmount).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
                NEXT.
             END.
@@ -419,6 +421,16 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                /* 21st day and customer have decided to take Quota 25
                   extension. Send message with final payment / 12. */
                liPhase = {&Q25_MONTH_24_CHOSEN}.
+               FIND FIRST FixedFee WHERE 
+                          FixedFee.Brand EQ gcBrand AND
+                          FixedFee.HostTable EQ "MobSub" AND
+                          FixedFee.KeyValue EQ STRING(DCCLI.MsSeq) AND
+                          FixedFee.SourceTable EQ "DCCLI" AND
+                          FixedFee.SourceKey EQ STRING(DCCLI.PerContractID)
+                          NO-LOCK NO-ERROR.
+               IF AVAIL FixedFee THEN
+                  ldAmount = FixedFee.amt.
+               
          END.
 
          ELSE IF CAN-FIND(FIRST Order NO-LOCK WHERE
@@ -431,7 +443,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             lcLogText = "Renewal done: " +
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
-                        STRING(SingleFee.amt).
+                        STRING(ldAmount).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
             NEXT.
          END.
@@ -447,7 +459,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             lcLogText = "Pending Q25 Request: " +
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
-                        STRING(SingleFee.amt).
+                        STRING(ldAmount).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
             NEXT.
          END.
@@ -473,13 +485,13 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             lcLogText = "SMS Already created: " +
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
-                        STRING(SingleFee.amt).         
+                        STRING(ldAmount).         
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
             NEXT.
          END.
          ELSE DO:
             lcSMSMessage = fgetQ25SMSMessage(liphase, DCCLI.ValidTo + 1, 
-                                             SingleFee.amt, DCCLI.CLI).
+                                             ldAmount, DCCLI.CLI).
             /* Send SMS */
             fCreateSMS(SingleFee.CustNum,
                        DCCLI.Cli,
@@ -512,7 +524,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                        FixedFee.KeyValue EQ STRING(DCCLI.MsSeq) AND
                        FixedFee.BillCode BEGINS "RVTERM" AND
                        FixedFee.OrderID EQ SingleFee.OrderID AND
-                       FixedFee.FeeModel EQ "RVTERM12"
+                       FixedFee.FeeModel EQ "RVTERM12" AND
                        FixedFee.InUse NO-LOCK NO-ERROR.
 
             
@@ -525,7 +537,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             lcLogText = "Send SMS: " +
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
-                        STRING(SingleFee.amt).
+                        STRING(ldAmount).
          END.   
          fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
       END.
