@@ -507,12 +507,13 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          IF liPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
             /* Q25 Month 24 20th day extension made */
             FIND FIRST FixedFee WHERE
-                       FixedFee.Brand = gcBrand AND
-                       FixedFee.HostTable = "MobSub" AND
-                       FixedFee.KeyValue = STRING(DCCLI.MsSeq) AND
+                       FixedFee.Brand EQ gcBrand AND
+                       FixedFee.HostTable EQ "MobSub" AND
+                       FixedFee.KeyValue EQ STRING(DCCLI.MsSeq) AND
                        FixedFee.BillCode BEGINS "RVTERM" AND
-                       FixedFee.OrderID = SingleFee.OrderID AND
-                       FixedFee.InUse. 
+                       FixedFee.OrderID EQ SingleFee.OrderID AND
+                       FixedFee.FeeModel EQ "RVTERM12"
+                       FixedFee.InUse NO-LOCK NO-ERROR.
 
             
             lcLogText = "Send SMS Q25 Chosen: " +
