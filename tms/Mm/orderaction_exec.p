@@ -484,7 +484,7 @@ PROCEDURE pQ25Extension:
          FIND FIRST bOrderAction NO-LOCK WHERE
                     bOrderAction.Brand = Order.Brand AND
                     bOrderAction.OrderId = Order.OrderId AND
-                    bOrderAction.ItemType = "Q25Extension" NO-ERROR.
+                    bOrderAction.ItemType = "Q25Discount" NO-ERROR.
 
          IF AVAIL bOrderAction THEN DO:
             ldeDiscount = DEC(bOrderAction.ItemKey) NO-ERROR.
