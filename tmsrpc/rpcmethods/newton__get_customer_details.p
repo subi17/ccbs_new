@@ -86,6 +86,8 @@ DEF VAR lcReason AS CHAR NO-UNDO.
 DEF VAR liSubLimit AS INTEGER NO-UNDO.
 DEF VAR lisubs AS INTEGER NO-UNDO.
 DEF VAR llLimitNotReached AS LOGICAL NO-UNDO.
+DEF VAR liActLimit AS INTEGER NO-UNDO.
+DEF VAR liacts AS INTEGER NO-UNDO.
 
 top_array = validate_request(param_toplevel_id, "int,[string]").
 
