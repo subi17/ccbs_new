@@ -99,6 +99,7 @@
                   \[person|company\]id;string;optional;id of the owner
                   id_type;string;optional;NIF,NIE,CIF or Passport
                   profession;string;optional;
+                  customer_data_retrieved;mandatory;
  * @address_data  fname;string;optional;
                   lname;string;optional;
                   lname2;string;optional;
@@ -1198,7 +1199,8 @@ gcCustomerStructFields = "birthday," +
                          "longitude," +
                          "profession," +
                          "kiala_code," + 
-                         "ups_hours".
+                         "ups_hours," +
+                         "customer_data_retrieved".
 
 /* note: check that data variable has correct EXTENT value */
 gcCustomerStructStringFields = "city," +
@@ -1229,7 +1231,8 @@ gcCustomerStructStringFields = "city," +
                                "longitude," +
                                "profession," + 
                                "kiala_code," +
-                               "ups_hours".
+                               "ups_hours," +
+                               "customer_data_retrieved".
 
 /* common validation */
 /* YBP-513 */
