@@ -2221,9 +2221,8 @@ IF INDEX(Order.OrderChannel, "pos") EQ 0 THEN DO:
    END.
    ELSE IF Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}    /*41*/  OR
            Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2}    /*42*/  OR
-           Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}    /*43*/  OR 
-           Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW}    /*20*/  OR
-           Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP}    /*21*/  THEN DO: 
+           Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}    /*43*/  
+           THEN DO: 
       RUN sendorderreq.p(liOrderId, OrderCustomer.email, OUTPUT lcError). 
    END.
 END.
