@@ -482,7 +482,7 @@ PROCEDURE pQ25Extension:
                                 lower(entry(month(ldaDate),{&MONTHS_ES})))
             lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaDate)))
             lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
-                  STRING(ROUND(SingleFee.Amt / 12, 2))).
+                  STRING(TRUNC(SingleFee.Amt / 12, 2))).
 
          fMakeSchedSMS2(MobSub.CustNum,
                         MobSub.CLI,
