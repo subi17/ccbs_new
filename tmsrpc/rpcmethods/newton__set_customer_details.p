@@ -61,9 +61,11 @@
  *
  * Note: Address data is updated using RPC newton__set_customer_address.p
  */
+{commali.i}
 {xmlrpc/xmlrpc_access.i}
 {tmsconst.i}
 {timestamp.i}
+{fbankdata.i}
 
 /* Input parameters */
 DEF VAR piCustNum AS INT NO-UNDO.
@@ -456,20 +458,9 @@ IF llCustomerChanged THEN DO:
       last termination date(of stc to prepaid) is less than 40 days. 
       
       Also checking of BankAccount lenght. It can be empty (0) length too */
-    fSplitTS(fmakeTS(), ldate, litime).
-    ldate = ldate - 40.
-    ldePrepStcTs = fHMS2TS(ldate, "00:00:00").
     lcBankAccount = TRIM(lcCustomerData[LOOKUP("bankaccount", lcDataFields)]).
     
-    IF CAN-FIND( FIRST MobSub NO-LOCK WHERE Mobsub.Brand = gcBrand AND 
-       MobSub.CustNum = piCustNum AND NOT Mobsub.PayType) OR
-       CAN-FIND( FIRST MsRequest NO-LOCK WHERE MsRequest.Brand = gcBrand AND
-       MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-       MsRequest.ReqStatus = {&REQUEST_STATUS_DONE} AND
-       MsRequest.ActStamp > ldePrepStcTs AND
-       MsRequest.ReqCParam1 BEGINS "CONT" AND
-       MsRequest.ReqCParam2 BEGINS "TARJ") AND
-       MsRequest.CustNum = piCustNum THEN
+    IF NOT fChkBankAccChange(Customer.CustNum) THEN 
          RETURN appl_err("La cuenta bancaria no puede estar en blanco").
     ELSE DO:
       IF LENGTH(lcBankAccount) = 0 OR LENGTH(lcBankAccount) = 24 THEN DO:
@@ -477,7 +468,7 @@ IF llCustomerChanged THEN DO:
          llBankAcctChange = TRUE.
       END.
       ELSE
-         RETURN appl_err("La cuenta bancaria no puede estar en blanco").
+         RETURN appl_err("Incorrect bank account length").
     END.
     
     /* Electronic Invoice Project */
@@ -684,7 +675,7 @@ IF pcMemoTitle NE "" OR
    IF llBankAcctChange THEN
       ASSIGN
          Memo.MemoTitle = "Cambio de cuenta"
-         Memo.MemoText  = "Solicitado por el cliente: NÂº de " +
+         Memo.MemoText  = "Solicitado por el cliente: Nº de " +
                         "cuenta: " + Customer.BankAcct + " --> " +
                         IF lcBankAccount > "" THEN lcBankAccount ELSE
                         "blank".
