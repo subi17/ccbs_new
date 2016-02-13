@@ -99,7 +99,7 @@
                   \[person|company\]id;string;optional;id of the owner
                   id_type;string;optional;NIF,NIE,CIF or Passport
                   profession;string;optional;
-                  customer_data_retrieved;mandatory;
+                  customer_data_retrieved;boolean;optional;
  * @address_data  fname;string;optional;
                   lname;string;optional;
                   lname2;string;optional;
