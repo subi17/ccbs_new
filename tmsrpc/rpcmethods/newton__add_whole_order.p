@@ -301,6 +301,7 @@ DEF VAR piDeliveryType AS INT NO-UNDO.
 DEF VAR piDeliverySecure AS INT NO-UNDO. 
 DEF VAR plKeepInstallment AS LOG NO-UNDO. 
 DEF VAR pcUpsHours AS CHAR NO-UNDO. 
+DEF VAR plCustDataRetr AS LOGICAL NO-UNDO.
 
 /* Real Order Inspection parameters */
 DEF VAR pcROIresult      AS CHAR NO-UNDO.
@@ -334,6 +335,7 @@ DEF VAR lcBundleCLITypes       AS CHAR NO-UNDO.
 DEF VAR lcRenoveSMSText        AS CHAR NO-UNDO. 
 DEF VAR lcSTCSMSText           AS CHAR NO-UNDO. 
 DEF VAR lcOfferSMSText         AS CHAR NO-UNDO. 
+DEF VAR lcOrderSMSText         AS CHAR NO-UNDO.
 DEF VAR ldeSMSStamp            AS DEC  NO-UNDO. 
 DEF VAR lcMobileNumber         AS CHAR NO-UNDO. 
    
@@ -639,6 +641,10 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          liLanguage = LOOKUP(get_string(pcStructId, lcField),
                                  "es_ES,es_CA,es_EU,es_GA,en").
       END. /* IF lcField EQ "language" ... */
+      ELSE IF lcField EQ "customer_data_retrieved" THEN
+      DO:
+         plCustDataRetr = get_bool(pcStructId, lcField).
+      END.
       ELSE IF liFieldIndex EQ 0 THEN
          lcFError = SUBST("Unknown data field `&1`", lcField).
       ELSE
@@ -2182,6 +2188,28 @@ IF Order.OrderType EQ {&ORDER_TYPE_STC} AND
                   ldeSMSStamp,
                   "22622",
                   "").
+END.
+
+/* YPR-3317 */
+IF plCustdataRetr THEN DO:
+   lcOrderSMSText = fGetSMSTxt(
+                     "IdentifiedCustOrder",
+                     TODAY,
+                     (IF AVAIL Customer
+                      THEN Customer.Language
+                      ELSE 1),
+                      OUTPUT ldeSMSStamp).
+
+   IF lcOrderSMSText > "" THEN DO:
+      lcOrderSMSText = REPLACE(lcOrderSMSText, "#CLI", Order.CLI). 
+      fMakeSchedSMS2(Order.CustNum,
+                     Order.CLI,
+                     {&SMSTYPE_INFO},
+                     lcOrderSMSText,
+                     ldeSMSStamp,
+                     "622",
+                     "").
+   END. 
 END.
 
 /* should overwrite any roi status */
