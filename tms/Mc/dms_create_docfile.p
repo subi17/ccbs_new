@@ -551,6 +551,16 @@ FUNCTION fGetQ25Extension RETURNS CHAR
 
 END.
 
+FUNCTION fGetContractIdFromOrder RETURNS CHAR
+   (iiOrderID AS INT):
+   DEF BUFFER bOrder FOR Order.
+   FIND FIRST bOrder WHERE
+              bOrder.Brand EQ gcBrand AND
+              bOrder.OrderID EQ iiOrderID NO-LOCK NO-ERROR.
+   IF AVAIL bOrder THEN  RETURN bOrder.Contractid.
+   ELSE RETURN "".
+END.
+
 /*Order activation*/
 /*Function generates order documentation*/
 FUNCTION fCreateDocumentCase1 RETURNS CHAR
@@ -1295,16 +1305,6 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
 
 END.
 
-FUNCTION fGetContractIdFromOrder RETURNS CHAR
-   (iiOrderID AS INT):
-   DEF BUFFER bOrder FOR Order.
-   FIND FIRST bOrder WHERE
-              bOrder.Brand EQ gcBrand AND
-              bOrder.OrderID EQ iiOrderID NO-LOCK NO-ERROR.
-   IF AVAIL bOrder THEN  RETURN bOrder.Contractid.
-   ELSE RETURN "".
-END.
-
 /*q25 Returned Terminal casefile*/
 FUNCTION fCreateDocumentCase9  RETURNS CHAR
    (idStartTS AS DECIMAL,
@@ -1384,8 +1384,10 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
                       /*MSISDN*/
                       STRING(MsRequest.CLI)           + lcDelim +
                       /*Q25 Extension_Request_date*/
-                      STRING(MsRequest.CreStamp).
-
+                      STRING(MsRequest.CreStamp)      + lcDelim +
+                      /*Q25 Extension bank*/
+                      STRING(Msrequest.ReqCparam5).
+                      
       OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
       PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
       OUTPUT STREAM sOutFile CLOSE.

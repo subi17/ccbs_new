@@ -4,7 +4,7 @@ external_selfservice__q25_add.p
 
 * @input    msisdn;string;mandatory
 
-* @output         boolean;true
+* @output   boolean;true
 */
 
 {xmlrpc/xmlrpc_access.i}
@@ -16,6 +16,7 @@ gcBrand = "1".
 {fmakemsreq.i}
 {fsendsms.i}
 {fexternalapi.i}
+{q25functions.i}
 
 /* top_struct */
 DEF VAR top_struct        AS CHARACTER NO-UNDO.
@@ -161,6 +162,14 @@ liCreated = fPCActionRequest(
 IF liCreated = 0 THEN
    RETURN appl_err(SUBST("Q25 extension request failed: &1",
                          lcResult)).
+
+/*YPR-3268:ac3*/
+FIND FIRST MSRequest WHERE
+           MSRequest.MSrequest EQ liCreated EXCLUSIVE-LOCK NO-ERROR.
+IF AVAIL MsRequest THEN DO:
+   MsRequest.ReqCparam5 = fBankByBillCode(SingleFee.BillCode).
+END.
+RELEASE MsRequest.
 
 CASE SingleFee.BillCode:
    WHEN "RVTERM1EF" THEN

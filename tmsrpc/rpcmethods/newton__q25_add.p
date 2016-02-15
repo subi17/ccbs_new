@@ -25,6 +25,7 @@ gcBrand = "1".
 {tmsconst.i}
 {fmakemsreq.i}
 {fsendsms.i}
+{q25functions.i}
 
 /* top_struct */
 DEF VAR top_struct        AS CHARACTER NO-UNDO.
@@ -187,6 +188,7 @@ IF lcQ25ContractId EQ "" THEN
 ELSE 
    katun = "POS_" + lcUsername.
 
+/*Request for Q25 extension*/
 liCreated = fPCActionRequest(
    MobSub.MsSeq,
    "RVTERM12",
@@ -212,8 +214,9 @@ END.
 FIND FIRST MSRequest WHERE
            MSRequest.MSrequest EQ liCreated EXCLUSIVE-LOCK NO-ERROR.
 IF AVAIL MsRequest THEN DO:
-   MsRequest.ReqCparam4 = lcQ25ContractId.
-   /* MsRequest.ReqCparam6 = lcQ25ContractId. For findinf entry in DMS usage */
+   MsRequest.ReqCparam4 = lcQ25ContractId. /*For dump*/
+   MsRequest.ReqCparam6 = lcQ25ContractId. /*For finding entry in DMS usage */
+   MsRequest.ReqCparam5 = fBankByBillCode(SingleFee.BillCode). 
 END.
 RELEASE MsRequest.
 
