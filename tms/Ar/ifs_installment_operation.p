@@ -630,7 +630,7 @@ PROCEDURE pCollectACC:
                   FixedFee.HostTable = "MobSub" AND
                   FixedFee.KeyValue  = STRING(bmsowner.MsSeq) AND
                   FixedFee.FeeModel  = DayCampaign.FeeModel AND
-                  FixedFee.BegDate   = ldaACCDate AND
+                  FixedFee.BegDate  >= ldaACCDate AND
                   FixedFee.SourceTable = "DCCLI" AND
                   FixedFee.SourceKey = STRING(DCCLI.PerContractID):
             
