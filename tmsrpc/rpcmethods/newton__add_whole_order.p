@@ -1173,7 +1173,8 @@ gcOrderStructFields = "billing_data," +
                       "send_offer," +
                       "resignation_period," +
                       "tarj7_promo," +
-                      "keep_installment".
+                      "keep_installment" +
+                      "multiorder".
 
 gcCustomerStructFields = "birthday," +
                          "city!," +
@@ -1215,7 +1216,8 @@ gcCustomerStructFields = "birthday," +
                          "profession," +
                          "kiala_code," + 
                          "ups_hours," +
-                         "customer_data_retrieved".
+                         "customer_data_retrieved" +
+                         "identified_cust_sms_number".
 
 /* note: check that data variable has correct EXTENT value */
 gcCustomerStructStringFields = "city," +
@@ -1247,7 +1249,8 @@ gcCustomerStructStringFields = "city," +
                                "profession," + 
                                "kiala_code," +
                                "ups_hours," +
-                               "customer_data_retrieved".
+                               "customer_data_retrieved" +
+                               "identified_cust_sms_number".
 
 /* common validation */
 /* YBP-513 */
