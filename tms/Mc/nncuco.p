@@ -143,7 +143,7 @@ form
     lcTarget              COLUMN-LABEL "Target"        FORMAT "X(8)"
     FixedFee.KeyValue     COLUMN-LABEL "TargetID"      FORMAT "X(8)" 
     FixedFee.BillCode     COLUMN-LABEL "Billing Item"  FORMAT "X(16)"
-    FixedFee.Amt          column-label "Amount"
+    FixedFee.Amt          column-label "Amount"        FORMAT "9.999"
     FixedFee.BegPeriod    column-label "From"
     FixedFee.EndPeriod    COLUMN-LABEL "To"
     FixedFee.BillMethod   column-label "BM"            format "9" 

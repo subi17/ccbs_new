@@ -1173,7 +1173,7 @@ gcOrderStructFields = "billing_data," +
                       "send_offer," +
                       "resignation_period," +
                       "tarj7_promo," +
-                      "keep_installment" +
+                      "keep_installment," +
                       "multiorder".
 
 gcCustomerStructFields = "birthday," +
