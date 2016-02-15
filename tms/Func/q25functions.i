@@ -269,7 +269,7 @@ FUNCTION fCalculateMaxPauseValue RETURN INTEGER
    ldTimeLeft = (ldEndTime - fMakeTS()) * 100000.
    IF iiToBeSend = 0 THEN RETURN 0. /* no messages left, no pause needed and
                                        do not divide by zero */
-   RETURN INT(ldTimeLeft / iiToBeSend). 
+   RETURN INT(TRUNC(ldTimeLeft / iiToBeSend,0)). 
 END.
 
 /* SMS message generating and sending for Q25. */
