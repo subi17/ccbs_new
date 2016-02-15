@@ -675,7 +675,7 @@ IF pcMemoTitle NE "" OR
    IF llBankAcctChange THEN
       ASSIGN
          Memo.MemoTitle = "Cambio de cuenta"
-         Memo.MemoText  = "Solicitado por el cliente: NÂº de " +
+         Memo.MemoText  = "Solicitado por el cliente: Nº de " +
                         "cuenta: " + Customer.BankAcct + " --> " +
                         IF lcBankAccount > "" THEN lcBankAccount ELSE
                         "blank".
