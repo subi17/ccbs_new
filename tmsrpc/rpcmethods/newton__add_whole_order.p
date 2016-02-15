@@ -64,7 +64,8 @@
                send_offer;boolean;optional;
                resignation_period;boolean;optional;
                tarj7_promo;boolean;optional;
-               keep_installment;boolean;optional   
+               keep_installment;boolean;optional;
+               multiorder;boolean;optional;
  * @customer_data fname;string;optional;
                   lname;string;optional;
                   lname2;string;optional;
@@ -100,6 +101,7 @@
                   id_type;string;optional;NIF,NIE,CIF or Passport
                   profession;string;optional;
                   customer_data_retrieved;boolean;optional;
+                  identified_cust_sms_number;string;optional;
  * @address_data  fname;string;optional;
                   lname;string;optional;
                   lname2;string;optional;
@@ -302,6 +304,8 @@ DEF VAR piDeliverySecure AS INT NO-UNDO.
 DEF VAR plKeepInstallment AS LOG NO-UNDO. 
 DEF VAR pcUpsHours AS CHAR NO-UNDO. 
 DEF VAR plCustDataRetr AS LOGICAL NO-UNDO.
+DEF VAR pcIdentifiedSmsNumber AS CHAR NO-UNDO.
+DEF VAR plMultiOrder AS LOGICAL NO-UNDO.
 
 /* Real Order Inspection parameters */
 DEF VAR pcROIresult      AS CHAR NO-UNDO.
@@ -554,7 +558,8 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
 
    IF LOOKUP('keep_installment', lcOrderStruct) GT 0 THEN
       plKeepInstallment = get_bool(pcOrderStruct,"keep_installment").
-
+   IF LOOKUP('multiorder', lcOrderStruct) GT 0 THEN
+         plMultiOrder = get_bool(pcOrderStruct,"multiorder").
    llROIClose = (pcROIresult EQ "risk" AND LOOKUP(pcROIlevel,"7,8") > 0).
 
    RETURN TRUE.
@@ -644,6 +649,10 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       ELSE IF lcField EQ "customer_data_retrieved" THEN
       DO:
          plCustDataRetr = get_bool(pcStructId, lcField).
+      END.
+      ELSE IF lcField EQ "identified_cust_sms_number" THEN
+         DO:
+             pcIdentifiedSmsNumber = get_string(pcStructId, lcField).
       END.
       ELSE IF liFieldIndex EQ 0 THEN
          lcFError = SUBST("Unknown data field `&1`", lcField).
@@ -2191,7 +2200,9 @@ IF Order.OrderType EQ {&ORDER_TYPE_STC} AND
 END.
 
 /* YPR-3317 */
-IF plCustdataRetr THEN DO:
+IF plCustdataRetr AND NOT plMultiOrder THEN DO:
+   IF pcIdentifiedSmsNumber EQ "" THEN
+      RETURN appl_err(SUBST("Identified customer SMS number missing.")).
    lcOrderSMSText = fGetSMSTxt(
                      "IdentifiedCustOrder",
                      TODAY,
@@ -2203,7 +2214,7 @@ IF plCustdataRetr THEN DO:
    IF lcOrderSMSText > "" THEN DO:
       lcOrderSMSText = REPLACE(lcOrderSMSText, "#CLI", Order.CLI). 
       fMakeSchedSMS2(Order.CustNum,
-                     Order.CLI,
+                     pcIdentifiedSmsNumber,
                      {&SMSTYPE_INFO},
                      lcOrderSMSText,
                      ldeSMSStamp,
