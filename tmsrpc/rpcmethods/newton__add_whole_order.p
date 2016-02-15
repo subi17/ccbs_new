@@ -1216,7 +1216,7 @@ gcCustomerStructFields = "birthday," +
                          "profession," +
                          "kiala_code," + 
                          "ups_hours," +
-                         "customer_data_retrieved" +
+                         "customer_data_retrieved," +
                          "identified_cust_sms_number".
 
 /* note: check that data variable has correct EXTENT value */
@@ -1249,7 +1249,7 @@ gcCustomerStructStringFields = "city," +
                                "profession," + 
                                "kiala_code," +
                                "ups_hours," +
-                               "customer_data_retrieved" +
+                               "customer_data_retrieved," +
                                "identified_cust_sms_number".
 
 /* common validation */
