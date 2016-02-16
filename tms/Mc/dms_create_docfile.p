@@ -551,15 +551,19 @@ FUNCTION fGetQ25Extension RETURNS CHAR
 
 END.
 
-FUNCTION fGetContractIdFromOrder RETURNS CHAR
+/*
+
+FUNCTION fGetQ25BankByOrder RETURNS CHAR
    (iiOrderID AS INT):
-   DEF BUFFER bOrder FOR Order.
-   FIND FIRST bOrder WHERE
-              bOrder.Brand EQ gcBrand AND
-              bOrder.OrderID EQ iiOrderID NO-LOCK NO-ERROR.
+   DEF BUFFER bSF FOR SingleFee.
+   FIND FIRST bSF WHERE
+              bSF.Brand EQ gcBrand AND
+              bSF.OrderID EQ iiOrderID NO-LOCK NO-ERROR.
    IF AVAIL bOrder THEN  RETURN bOrder.Contractid.
    ELSE RETURN "".
 END.
+*/
+
 
 /*Order activation*/
 /*Function generates order documentation*/
@@ -572,6 +576,8 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    DEF VAR lcCreateDMS     AS CHAR NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
+   DEF VAR lcBank AS CHAR NO-UNDO.
+   DEF VAR lcQ25Extension AS CHAR NO-UNDO.
 
    lcCaseTypeId = "1".
 
@@ -580,7 +586,11 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
               Order.OrderID EQ iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN
       RETURN "1:Order not available" + STRING(iiOrderId).
-
+   
+   lcq25Extension = fGetQ25Extension(iiOrderId).
+   IF lcQ25Extension NE "" THEN DO:
+      lcBank = "Draft".
+   END.
    lcCaseFileRow =  
    lcCaseTypeID                    + lcDelim + 
    /*Order_OD*/
@@ -602,13 +612,15 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    /*Previous tariff*/
    fGetPrevTariff(BUFFER Order) + lcDelim +
    /**/
-   STRING(Order.OrderType)          + lcDelim +
+   STRING(Order.OrderType)         + lcDelim +
    /**/
-   fGetSegment(Order.OrderID)       + lcDelim +
+   fGetSegment(Order.OrderID)      + lcDelim +
    /*Terminal Type: The value can be Simonly, Handset, Financed Handset.*/
    fGetTerminalFinanceType(iiOrderId) + lcDelim +
    /*q25Extension YPR-3269*/
-   fGetQ25Extension(iiOrderId).
+   lcQ25Extension                  + lcDelim +
+   /* Q25 Extension bank */ 
+   lcBank .
 
    /*Document type,DocStatusCode,RevisionComment*/
    lcDocListEntries = "".
@@ -1309,24 +1321,27 @@ END.
 FUNCTION fCreateDocumentCase9  RETURNS CHAR
    (idStartTS AS DECIMAL,
    idEndTS AS DECIMAL):
-   DEF VAR lcContractID   AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow  AS CHAR NO-UNDO.   
    DEF VAR lcCaseTypeId   AS CHAR NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCreateDMS AS CHAR NO-UNDO.
 
    FOR EACH TermReturn NO-LOCK WHERE
-            TermReturn.ReturnTS < idEndTS AND
-            TermReturn.ReturnTS >= idStartTS:
-      lcContractID = fGetContractIdFromOrder(TermReturn.OrderID).
-      IF lcContractID EQ "" THEN NEXT.
+           (TermReturn.ReturnTS < idEndTS AND
+            TermReturn.ReturnTS >= idStartTS) AND
+          ((TermReturn.DeviceScreen = TRUE AND
+            TermReturn.DeviceStart = TRUE) OR
+           (TermReturn.DeviceScreen = ? AND
+            TermReturn.DeviceStart  = ?)) AND
+            TermReturn.ContractID NE "" :
+
        /*ContractID*/
       ASSIGN
          lcCaseTypeId = "9"
          lcDocListEntries = ""
          lcCaseFileRow = lcCaseTypeId + lcDelim +
                          /*ContractId*/
-                         lcContractID + lcDelim +
+                         TermReturn.ContractID + lcDelim +
                          /*Salesman*/
                          TermReturn.Salesman + lcDelim +
                          /*MSisDN*/
