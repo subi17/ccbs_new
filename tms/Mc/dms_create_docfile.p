@@ -1355,9 +1355,9 @@ FUNCTION fCreateDocumentCase9  RETURNS CHAR
 
       lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                                lcCaseTypeID,
-                               MsRequest.ReqCparam6,
-                               {&DMS_HOST_TABLE_MSREQ},
-                               MsRequest.MsRequest,
+                               TermReturn.ContractID,
+                               {&DMS_HOST_TABLE_ORDER},
+                               TermReturn.OrderId,
                                lcInitStatus,/*StatusCode*/
                                lcDMSStatusDesc,
                                "",
