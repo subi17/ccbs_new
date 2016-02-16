@@ -75,24 +75,22 @@ FUNCTION fGetChannel RETURNS CHAR
     OUTPUT ocOrderType AS CHAR):
 
    DEF BUFFER Order FOR Order.
-   DEF BUFFER bOrder FOR Order.
       
    IF ibFixedFee.OrderId > 0 THEN DO:
       FIND FIRST Order NO-LOCK WHERE
                  Order.Brand = gcBrand AND
                  Order.OrderId = ibFixedFee.OrderId NO-ERROR.
    END.
-   ELSE DO:
-      RELEASE Order.
-      FOR EACH bOrder NO-LOCK WHERE
-               bOrder.Msseq = INT(ibFixedFee.KeyValue) AND
-               bOrder.OrderType <= 2 AND 
-               bOrder.StatusCode = {&ORDER_STATUS_DELIVERED} 
-               BY bOrder.CrStamp DESC:
-         FIND Order NO-LOCK WHERE ROWID(Order) = ROWID(bOrder) NO-ERROR.
+   ELSE IF FixedFee.BillCode EQ "PAYTERM" THEN DO:
+      FOR EACH Order NO-LOCK WHERE
+               Order.Msseq = INT(ibFixedFee.KeyValue) AND
+               Order.OrderType <= 2 AND 
+               Order.StatusCode = {&ORDER_STATUS_DELIVERED} 
+               BY Order.CrStamp DESC:
          LEAVE.
       END.
    END.
+   ELSE RELEASE Order.
 
    IF AVAIL Order THEN DO:
       IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN
@@ -630,7 +628,7 @@ PROCEDURE pCollectACC:
                   FixedFee.HostTable = "MobSub" AND
                   FixedFee.KeyValue  = STRING(bmsowner.MsSeq) AND
                   FixedFee.FeeModel  = DayCampaign.FeeModel AND
-                  FixedFee.BegDate  >= ldaACCDate AND
+                  FixedFee.BegDate   = ldaACCDate AND
                   FixedFee.SourceTable = "DCCLI" AND
                   FixedFee.SourceKey = STRING(DCCLI.PerContractID):
             
