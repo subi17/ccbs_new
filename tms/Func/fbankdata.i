@@ -6,6 +6,7 @@
                     16.11.06/aam fCheckBankAcc for Spain
    
 */
+{commali.i}
 {timestamp.i}
 {tmsconst.i}
 {date.i}  
