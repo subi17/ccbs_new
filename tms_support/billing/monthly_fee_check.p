@@ -415,25 +415,36 @@ FOR EACH MobSub NO-LOCK WHERE
 
 END.
 
-FOR EACH TermMobSub NO-LOCK WHERE 
-         TermMobSub.Brand = gcBrand:             
-  FIND FIRST CLIType NO-LOCK WHERE 
-             CLIType.CLIType = TermMobSub.CLIType NO-ERROR.
-  
-  lcBundle = "".
+FOR EACH MsRequest NO-LOCK WHERE
+         MsRequest.Brand     = gcBrand AND 
+         MsRequest.ReqType   = 18      AND 
+         MsRequest.ReqStatus = 2       AND 
+         MsRequest.ActStamp >= ldeFromStamp:
 
-  IF TermMobSub.TariffBundle EQ "" AND
-     CLIType.BaseBundle      EQ "" THEN NEXT.
+   FIND FIRST TermMobSub NO-LOCK WHERE 
+              TermMobSub.Brand = gcBrand AND 
+              TermMobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
 
-  IF TermMobSub.TariffBundle <> "" THEN 
-     lcBundle = TermMobSub.TariffBundle. 
-  ELSE IF CLIType.BaseBundle <> "" THEN
-     lcBundle = CLIType.BaseBundle.
-  
-  RUN pBundleCheck(TermMobSub.MsSeq,
-                   TermMobSub.CustNum,
-                   TermMobSub.CLI,
-                   lcBundle).
+   FIND FIRST CLIType NO-LOCK WHERE 
+              CLIType.CLIType = TermMobSub.CLIType NO-ERROR.
+     
+   lcBundle = "".
+
+   IF NOT AVAIL TermMobSub OR 
+      NOT AVAIL CLIType    THEN NEXT.
+
+   IF TermMobSub.TariffBundle EQ "" AND
+      CLIType.BaseBundle      EQ "" THEN NEXT.
+
+   IF TermMobSub.TariffBundle <> "" THEN 
+      lcBundle = TermMobSub.TariffBundle. 
+   ELSE IF CLIType.BaseBundle <> "" THEN
+      lcBundle = CLIType.BaseBundle.
+     
+   RUN pBundleCheck(TermMobSub.MsSeq,
+                    TermMobSub.CustNum,
+                    TermMobSub.CLI,
+                    lcBundle).
 
 END.
 
