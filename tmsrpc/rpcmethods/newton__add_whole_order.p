@@ -793,7 +793,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             OrderCustomer.Address = OrderCustomer.Address + " " + OrderCustomer.AddressCompl .
 
          IF liDelType > 0 THEN OrderCustomer.DelType = liDelType.
-
+         OrderCustomer.CustomerDataRetrieved = plCustdataRetr.
+         OrderCustomer.MSISDNForIdentification = pcIdentifiedSmsNumber.
    END.
 
 
@@ -955,6 +956,7 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
       Order.MsSeq = (IF LOOKUP(pcNumberType,"new,mnp") > 0 
                      THEN NEXT-VALUE(MobSub)
                      ELSE MobSub.MsSeq).
+      Order.Multiorder = plMultiOrder.               
       
 END.
 
