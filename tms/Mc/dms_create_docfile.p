@@ -15,6 +15,7 @@
 {timestamp.i}
 {offer.i}
 {dms.i}
+{q25functions.i}
 
 DEF INPUT PARAMETER icCases AS CHAR. /*List of reported cases*/
 DEF INPUT PARAMETER idPeriodStart AS DEC. /*reporting period strat*/
@@ -547,11 +548,9 @@ FUNCTION fGetQ25Extension RETURNS CHAR
               bOA.Itemtype EQ "Q25Extension" NO-ERROR.
    IF AVAIL bOA THEN RETURN bOA.ItemKey.
    ELSE RETURN "".
-
-
 END.
 
-/*
+
 
 FUNCTION fGetQ25BankByOrder RETURNS CHAR
    (iiOrderID AS INT):
@@ -559,10 +558,11 @@ FUNCTION fGetQ25BankByOrder RETURNS CHAR
    FIND FIRST bSF WHERE
               bSF.Brand EQ gcBrand AND
               bSF.OrderID EQ iiOrderID NO-LOCK NO-ERROR.
-   IF AVAIL bOrder THEN  RETURN bOrder.Contractid.
+   IF AVAIL bSF THEN 
+      RETURN fBankByBillCode(bSF.BillCode).
    ELSE RETURN "".
 END.
-*/
+
 
 
 /*Order activation*/
@@ -1366,6 +1366,7 @@ FUNCTION fCreateDocumentCase9  RETURNS CHAR
                                {&DMS_DOCLIST_SEP}).
       fLogLine(lcCaseFileRow,lcCreateDMS).
    END.
+   RETURN "".  
 END.
 /*q25 case file 10 Q25 extensions*/
 FUNCTION fCreateDocumentCase10 RETURNS CHAR
