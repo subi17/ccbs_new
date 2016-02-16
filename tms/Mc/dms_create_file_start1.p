@@ -103,7 +103,8 @@ RUN dms_create_docfile.p(SUBST("&1,&2,&3,&4,&5,&6,&7,&8",
                           {&DMS_CASE_TYPE_ID_ORDER_VFR},
                           {&DMS_CASE_TYPE_ID_DIRECT_CH},
                           {&DMS_CASE_TYPE_ID_CANCEL},
-                          {&DMS_CASE_TYPE_ID_Q25_TERM_RETURN}),
+                          {&DMS_CASE_TYPE_ID_Q25_TERM_RETURN},
+                          {&DMS_CASE_TYPE_ID_Q25_STE}),
                        ldCollPeriodStartTS, 
                        ldCollPeriodEndTS, lcCaseFile, lcLogFile1).
 /* Move the file to Transfer directory */
