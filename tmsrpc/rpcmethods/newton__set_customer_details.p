@@ -61,8 +61,9 @@
  *
  * Note: Address data is updated using RPC newton__set_customer_address.p
  */
-{commali.i}
 {xmlrpc/xmlrpc_access.i}
+{commpaa.i}
+gcBrand = "1".
 {tmsconst.i}
 {timestamp.i}
 {fbankdata.i}
@@ -115,9 +116,7 @@ WHERE customer.custnum = piCustNum
 IF NOT AVAILABLE Customer THEN
     RETURN appl_err(SUBST("Customer for &1 not found", piCustNum)).
 
-{commpaa.i}
 katun = "VISTA_" + scUser.
-gcBrand = "1".
 
 /* Local variables */
 DEF VAR lcstruct AS CHAR NO-UNDO.
