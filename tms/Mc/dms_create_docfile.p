@@ -1379,12 +1379,13 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
    FOR EACH MsRequest NO-LOCK WHERE
             MsRequest.Brand EQ gcBrand AND
             MsRequest.ReqStatus EQ 2 AND
-            MsRequest.UpdateStamp > idStartTS AND
-            MsRequest.UpdateStamp < idEndTS AND
+            MsRequest.ActStamp > idStartTS AND
+            MsRequest.ActStamp < idEndTS AND
             MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION}  /*8*/
             AND
             MsRequest.ReqCparam6 NE "" AND 
-            MsRequest.UpdateStamp <= MsRequest.DoneStamp:
+            MsRequest.UpdateStamp <= MsRequest.DoneStamp AND
+            MsRequest.ReqCparam3 EQ "RVTERM12":
       IF NOT MsRequest.UserCode BEGINS "POS_" THEN NEXT.
       /*Document type,DocStatusCode,RevisionComment*/
       ASSIGN 
@@ -1399,7 +1400,7 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
                       /*MSISDN*/
                       STRING(MsRequest.CLI)           + lcDelim +
                       /*Q25 Extension_Request_date*/
-                      STRING(MsRequest.CreStamp)      + lcDelim +
+                      STRING(MsRequest.ActStamp)      + lcDelim +
                       /*Q25 Extension bank*/
                       STRING(Msrequest.ReqCparam5).
                       
