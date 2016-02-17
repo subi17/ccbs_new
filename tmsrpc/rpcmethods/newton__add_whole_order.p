@@ -793,8 +793,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             OrderCustomer.Address = OrderCustomer.Address + " " + OrderCustomer.AddressCompl .
 
          IF liDelType > 0 THEN OrderCustomer.DelType = liDelType.
-         OrderCustomer.CustomerDataRetrieved = plCustdataRetr.
-         OrderCustomer.MSISDNForIdentification = pcIdentifiedSmsNumber.
+         OrderCustomer.CustDataRetr = plCustdataRetr.
+         OrderCustomer.MSISDNForIdent = pcIdentifiedSmsNumber.
    END.
 
 
