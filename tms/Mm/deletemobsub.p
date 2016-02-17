@@ -85,7 +85,9 @@ FIND FIRST MSRequest WHERE
            MSRequest.MSRequest = iiMSRequest
 NO-LOCK NO-ERROR.
 
-IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 18 THEN RETURN "ERROR".
+IF NOT AVAILABLE MsRequest OR 
+   MsRequest.ReqType NE {&REQTYPE_SUBSCRIPTION_TERMINATION} 
+   THEN RETURN "ERROR".
 
 IF llDoEvent THEN DO:
 
@@ -260,35 +262,35 @@ PROCEDURE pTerminate:
    /* cancel existing periodical contract termination requests */
    FOR EACH MSRequest EXCLUSIVE-LOCK WHERE
             MSRequest.MsSeq EQ liMsSeq AND
-            MSRequest.ReqType EQ 9 AND
+            MSRequest.ReqType EQ {&REQTYPE_CONTRACT_TERMINATION} AND
             LOOKUP(STRING(MsRequest.ReqStatus),"2,4,9,99") = 0 :
                   
             CASE MSRequest.ReqStatus:
-                 WHEN 0 THEN fReqStatus(4,"").
-                 WHEN 3 THEN fReqStatus(9,"").
+                 WHEN 0 THEN fReqStatus(4,"Cancelled by subs. termination").
+                 WHEN 3 THEN fReqStatus(9,"Handled by subs. termination").
             END.
    END.
 
    /* Cancel existing periodical contract activation requests */
    FOR EACH MSRequest EXCLUSIVE-LOCK WHERE
             MSRequest.MsSeq EQ liMsSeq AND
-            MSRequest.ReqType EQ 8 AND
+            MSRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
             LOOKUP(STRING(MsRequest.ReqStatus),"2,4,9,99") = 0 :
                   
             CASE MSRequest.ReqStatus:
-                 WHEN 0 THEN fReqStatus(4,"").
-                 WHEN 3 THEN fReqStatus(9,"").
+                 WHEN 0 THEN fReqStatus(4,"Cancelled by subs. termination").
+                 WHEN 3 THEN fReqStatus(9,"Handled by subs. termination").
             END. /* CASE MSRequest.ReqStatus: */
    END. /* FOR EACH MSRequest EXCLUSIVE-LOCK WHERE */
 
    /* Update Request Change status */
    FOR EACH MSRequest EXCLUSIVE-LOCK WHERE
       MSRequest.MsSeq EQ Mobsub.MsSeq AND
-      MSRequest.ReqType EQ 1:
+      MSRequest.ReqType EQ {&REQTYPE_SERVICE_CHANGE}:
 
       CASE MSRequest.ReqStatus:
-      WHEN 0 THEN fReqStatus(4,"").
-      WHEN 3 THEN fReqStatus(9,"").
+      WHEN 0 THEN fReqStatus(4,"Cancelled by subs. termination").
+      WHEN 3 THEN fReqStatus(9,"Handled by subs. termination").
       END.
 
    END.
@@ -559,7 +561,7 @@ PROCEDURE pTerminate:
    /* Update Subscription type change status */
    FOR EACH MSRequest EXCLUSIVE-LOCK WHERE
       MSRequest.MsSeq EQ Mobsub.MsSeq AND
-      MSRequest.ReqType EQ 0:
+      MSRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}:
 
       CASE MSRequest.ReqStatus:
       WHEN 0 THEN fReqStatus(4,"Cancelled by subs. termination").
@@ -573,7 +575,7 @@ PROCEDURE pTerminate:
    /* Update ICC Change status */
    FOR EACH MSRequest EXCLUSIVE-LOCK WHERE
       MSRequest.MsSeq EQ Mobsub.MsSeq AND
-      MSRequest.ReqType EQ 15:
+      MSRequest.ReqType EQ {&REQTYPE_ICC_CHANGE}:
    
       CASE MSRequest.ReqStatus:
       WHEN 0  THEN fReqStatus(4,"Cancelled by subs. termination").
@@ -587,7 +589,7 @@ PROCEDURE pTerminate:
    /* Update MSISDN Change status */
    FOR EACH MSRequest EXCLUSIVE-LOCK WHERE 
       MSRequest.MsSeq EQ Mobsub.MsSeq AND
-      MSRequest.ReqType EQ 19: 
+      MSRequest.ReqType EQ {&REQTYPE_MSISDN_CHANGE}: 
    
       CASE MSRequest.ReqStatus:
       WHEN 0 THEN fReqStatus(4,"Cancelled by subs. termination").
@@ -596,7 +598,7 @@ PROCEDURE pTerminate:
 
    END.
 
-   /* Update MSISDN Change status */
+   /* Update Bundle Change status */
    FOR EACH MSRequest EXCLUSIVE-LOCK WHERE 
       MSRequest.MsSeq EQ Mobsub.MsSeq AND
       MSRequest.ReqType EQ {&REQTYPE_BUNDLE_CHANGE}: 
@@ -607,7 +609,19 @@ PROCEDURE pTerminate:
       END.
 
    END.
-   
+
+   /* Update ACC status */
+   FOR EACH MSRequest EXCLUSIVE-LOCK WHERE
+      MSRequest.MsSeq EQ Mobsub.MsSeq AND
+      MSRequest.ReqType EQ {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}:
+
+      CASE MSRequest.ReqStatus:
+      WHEN 0 THEN fReqStatus(4,"Cancelled by subs. termination").
+      WHEN 8 THEN fReqStatus(4,"Cancelled by subs. termination").
+      WHEN 19 THEN fReqStatus(4,"Cancelled by subs. termination").
+      END.
+   END.
+
    /* Quota 25 q25 - YPR-2521 */
    FOR EACH MSRequest NO-LOCK WHERE  
             MSRequest.MsSeq      EQ Mobsub.MsSeq AND
