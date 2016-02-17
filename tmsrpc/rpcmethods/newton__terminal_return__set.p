@@ -1,17 +1,24 @@
 /**
  * Update returned terminals
  *
- * @input  struct;
-           imei;string;mandatory
-           orderid;integer;mandatory
-           bill_code;string;mandatory
-           msisdn;string;mandatory
-           device_start;boolean;optional
-           device_screen;boolean;optional
-           salesman;string;mandatory
-           terminal_type;string;mandatory
-           envelope_number;string;optional
-           q25_contract_id;string;optional
+ * @input   struct;mandatory
+            q25_struct;struct;mandatory
+            memo_struct;struct;optional
+
+ * @q25_struct   imei;string;optional
+                 orderid;integer;mandatory
+                 bill_code;string;optional
+                 msisdn;string;mandatory
+                 device_start;boolean;optional
+                 device_screen;boolean;optional
+                 salesman;string;mandatory
+                 terminal_type;string;optional
+                 envelope_number;string;optional
+                 q25_contract_id;string;optional
+                 return_channel;string;mandatory
+
+ * @memo_struct  title;string;mandatory
+                 content;string;mandatory
 
  * @output success;boolean
  */
@@ -54,12 +61,15 @@ DEF VAR lcEnvelopeNumber AS CHAR   NO-UNDO.
 DEF VAR ldReturnTS       AS DEC    NO-UNDO.
 DEF VAR lcResult         AS CHAR   NO-UNDO.
 DEF VAR liRequest        AS INT    NO-UNDO.
-DEF VAR lcMemo           AS CHAR   NO-UNDO.
+DEF VAR lcMemoTitle      AS CHAR   NO-UNDO.
+DEF VAR lcMemoText       AS CHAR   NO-UNDO.
 DEF VAR ldaMonth22       AS DATE   NO-UNDO. 
 DEF VAR ldeMonth22       AS DEC    NO-UNDO. 
 DEF VAR llRenewalOrder   AS LOG    NO-UNDO. 
 DEF VAR lcQ25ContractID  AS CHAR   NO-UNDO.
 DEF VAR lcReturnChannel  AS CHAR   NO-UNDO.
+DEF VAR llTermAccepted   AS LOG    NO-UNDO.
+DEF VAR llCreateMemo     AS LOG    NO-UNDO.
 
 DEF VAR pcQ25Struct       AS CHARACTER NO-UNDO. /* Quota 25 input struct */
 DEF VAR lcQ25Struct       AS CHARACTER NO-UNDO.
@@ -88,49 +98,65 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcQ25Struct = validate_request(pcQ25Struct, "imei,orderid!,bill_code,msisdn!,device_start,device_screen,salesman!,terminal_type,envelope_number,q25_contract_id").
+lcQ25Struct = validate_request(pcQ25Struct, 
+   "imei,orderid!,bill_code,msisdn!,device_start,device_screen,salesman!,terminal_type,envelope_number,q25_contract_id,return_channel!").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF lcQ25Struct EQ ? THEN RETURN.
 
 ASSIGN
+   lcIMEI            = get_string(pcQ25Struct,"imei") WHEN
+                       LOOKUP("imei", lcQ25Struct) > 0
    liOrderId         = get_pos_int(pcQ25Struct,"orderid")
+   lcBillCode        = get_string(pcQ25Struct,"bill_code") WHEN
+                       LOOKUP("bill_code", lcQ25Struct) > 0
    lcMSISDN          = get_string(pcQ25Struct,"msisdn")
    llDeviceStart     = get_bool(pcQ25Struct,"device_start") WHEN 
                        LOOKUP("device_start", lcQ25Struct) > 0
    llDeviceScreen    = get_bool(pcQ25Struct,"device_screen") WHEN 
                        LOOKUP("device_screen", lcQ25Struct) > 0
    lcSalesman        = get_string(pcQ25Struct,"salesman")
+   lcTerminalType    = get_string(pcQ25Struct,"terminal_type") WHEN
+                       LOOKUP("terminal_type", lcQ25Struct) > 0
    lcEnvelopeNumber  = get_string(pcQ25Struct,"envelope_number") WHEN
                        LOOKUP("envelope_number", lcQ25Struct) > 0
    lcQ25ContractId   = get_string(pcQ25Struct,"q25_contract_id") WHEN
                        LOOKUP("q25_contract_id", lcQ25Struct) > 0  
-   lcIMEI            = get_string(pcQ25Struct,"imei") WHEN
-                       LOOKUP("imei", lcQ25Struct) > 0  
-   lcBillCode        = get_string(pcQ25Struct,"bill_code") WHEN
-                       LOOKUP("bill_code", lcQ25Struct) > 0  
-   lcTerminalType    = get_string(pcQ25Struct,"terminal_type") WHEN
-                       LOOKUP("terminal_type", lcQ25Struct) > 0  
    lcReturnChannel   = get_string(pcQ25Struct,"return_channel")                 
    ldReturnTS        = fMakeTS().
 
-
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF pcmemoStruct > "" THEN DO:
+IF lcReturnChannel = "Newton" THEN DO:
 
-   lcmemoStruct = validate_request(pcmemoStruct, "title!,content!").
-   IF lcmemoStruct EQ ? THEN RETURN.
+   FOR EACH SubsTerminal NO-LOCK WHERE
+            SubsTerminal.OrderId = liOrderId AND
+            SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE}
+            BY OrderId DESC:
+      LEAVE.
+   END.
 
-   ASSIGN
-      lcmemo_title = get_string(pcmemoStruct, "title")
-         WHEN LOOKUP("title", lcmemoStruct) > 0
-      lcmemo_content = get_string(pcmemoStruct, "content")
-         WHEN LOOKUP("content", lcmemoStruct) > 0.
+   IF NOT AVAILABLE SubsTerminal THEN 
+      RETURN appl_err("Terminal is not available").
 
-   IF gi_xmlrpc_error NE 0 THEN RETURN.
-END.
+   ASSIGN lcIMEI         = SubsTerminal.IMEI
+          lcBillCode     = SubsTerminal.BillCode
+          lcTerminalType = "A".
 
+   IF pcmemoStruct > "" THEN DO:
 
+      lcmemoStruct = validate_request(pcmemoStruct, "title!,content!").
+      IF lcmemoStruct EQ ? THEN RETURN.
+
+      ASSIGN
+         lcmemo_title = get_string(pcmemoStruct, "title")
+            WHEN LOOKUP("title", lcmemoStruct) > 0
+         lcmemo_content = get_string(pcmemoStruct, "content")
+            WHEN LOOKUP("content", lcmemoStruct) > 0.
+
+      IF gi_xmlrpc_error NE 0 THEN RETURN.
+   END.
+
+END. /* IF lcReturnChannel = "Newton" THEN DO: */
 
 IF LENGTH(lcIMEI,"CHARACTER") NE 15 THEN
    RETURN appl_err("IMEI code doesn't contain 15 characters").
@@ -156,14 +182,19 @@ IF AVAIL TermReturn AND
          TermReturn.DeviceScreen   = llDeviceScreen AND
          TermReturn.Salesman       = lcSalesman AND
          TermReturn.TerminalType   = lcTerminalType AND
-         TermReturn.EnvelopeNumber = lcEnvelopeNumber THEN DO:
+         TermReturn.EnvelopeNumber = lcEnvelopeNumber AND
+         TermReturn.ContractId     = lcQ25ContractId AND
+         TermReturn.ReturnChannel  = lcReturnChannel THEN DO:
    add_boolean(response_toplevel_id, "", true).
    RETURN.
 END.
 
+ASSIGN llTermAccepted = FALSE
+       llCreateMemo   = FALSE.
+
 IF (llDeviceStart AND llDeviceScreen) OR
    (llDeviceStart = ? AND llDeviceScreen = ?) THEN DO:
-   
+
    FIND MobSub NO-LOCK WHERE
         MobSub.MsSeq = Order.MsSeq NO-ERROR.
    IF NOT AVAILABLE MobSub THEN
@@ -269,7 +300,6 @@ IF (llDeviceStart AND llDeviceScreen) OR
    IF liRequest NE 0 THEN
       RETURN appl_err("ERROR:Discount creation failed; " + lcResult).
 
-
    FOR EACH DiscountPlan NO-LOCK WHERE
             DiscountPlan.Brand = gcBrand AND
            (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
@@ -291,6 +321,8 @@ IF (llDeviceStart AND llDeviceScreen) OR
       MsRequest.ReqStatus EQ {&REQUEST_STATUS_NEW} THEN
       fReqStatus(4,"Cancelled by Terminal Return").
 
+   llTermAccepted = TRUE.
+
 END. /* IF llDeviceStart AND llDeviceScreen THEN DO: */
 
 CREATE TermReturn.
@@ -304,22 +336,33 @@ ASSIGN TermReturn.IMEI           = lcIMEI
        TermReturn.TerminalType   = lcTerminalType
        TermReturn.EnvelopeNumber = lcEnvelopeNumber
        TermReturn.ContractId     = lcQ25ContractId
+       TermReturn.ReturnChannel  = lcReturnChannel
        TermReturn.ReturnTS       = ldReturnTS.
 
 IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhTermReturn).
 
+IF lcReturnChannel = "Newton" THEN DO:
+   ASSIGN lcMemoTitle  = lcmemo_title
+          lcMemoText   = lcmemo_content
+          llCreateMemo = TRUE WHEN llTermAccepted.
+END.
+ELSE DO:
+   llCreateMemo = TRUE.
+   IF llTermAccepted THEN ASSIGN 
+      lcMemoTitle = "Devolución en tienda aceptada"
+      lcMemoText  = lcResult.
+   ELSE ASSIGN 
+      lcMemoTitle = "Devolución en tienda denegada"
+      lcMemoText  = lcResult.
+END.
 
-IF (llDeviceStart AND llDeviceScreen) OR
-   (llDeviceStart = ? AND llDeviceScreen = ?) 
-THEN lcMemo = "Devolución en tienda aceptada".
-ELSE lcMemo = "Devolución en tienda denegada".
-
-DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "MobSub",
-                 STRING(Order.MsSeq),
-                 Order.CustNum,
-                 lcMemo,
-                 lcResult).
+IF llCreateMemo THEN
+   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                    "MobSub",
+                    STRING(Order.MsSeq),
+                    Order.CustNum,
+                    lcMemoTitle,
+                    lcMemoText).
 
 RELEASE TermReturn.
 
