@@ -459,7 +459,8 @@ IF llCustomerChanged THEN DO:
       Also checking of BankAccount lenght. It can be empty (0) length too */
     lcBankAccount = TRIM(lcCustomerData[LOOKUP("bankaccount", lcDataFields)]).
     
-    IF NOT fChkBankAccChange(Customer.CustNum) THEN 
+    IF LENGTH(lcBankAccount) = 0 AND 
+       NOT fChkBankAccChange(Customer.CustNum) THEN
          RETURN appl_err("La cuenta bancaria no puede estar en blanco").
     ELSE DO:
       IF LENGTH(lcBankAccount) = 0 OR LENGTH(lcBankAccount) = 24 THEN DO:
