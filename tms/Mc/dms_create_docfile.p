@@ -553,17 +553,19 @@ END.
 
 
 FUNCTION fGetQ25BankByOrder RETURNS CHAR
-   (iiOrderID AS INT):
-   DEF BUFFER bSF FOR SingleFee.
-   FIND FIRST bSF WHERE
-              bSF.Brand EQ gcBrand AND
-              bSF.OrderID EQ iiOrderID NO-LOCK NO-ERROR.
-   IF AVAIL bSF THEN 
-      RETURN fBankByBillCode(bSF.BillCode).
-   ELSE RETURN "".
+   (BUFFER Order FOR Order):
+   DEF BUFFER bMsR FOR MsRequest.
+   FIND FIRST bMsR WHERE
+              bMsR.Brand EQ "1" AND
+              bMsR.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+              bMsR.CLI EQ Order.CLI AND
+              bMsR.ReqIparam1 EQ Order.OrderID
+              NO-LOCK NO-ERROR.
+   IF AVAIL bMsR THEN
+      RETURN bMsR.ReqCparam5.
+   ELSE RETURN "*oopena*".
+
 END.
-
-
 
 /*Order activation*/
 /*Function generates order documentation*/
@@ -589,7 +591,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    
    lcq25Extension = fGetQ25Extension(iiOrderId).
    IF lcQ25Extension NE "" THEN DO:
-      lcBank = "Draft".
+      lcBank = fGetQ25BankByOrder(BUFFER Order).
    END.
    lcCaseFileRow =  
    lcCaseTypeID                    + lcDelim + 
