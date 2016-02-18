@@ -1259,6 +1259,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    DEF VAR lcCancellationType AS CHAR NO-UNDO.
    DEF VAR lcPrevStatus AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
+   DEF VAR lcQ25ContractID AS CHAR NO-UNDO.
 
    ASSIGN
       lcCaseTypeId    = "6"
@@ -1295,7 +1296,8 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    /*Cancellation type*/
    lcCancellationType              + lcDelim +
    /*Q25 Extension cancelled (if extension is cancelled */
-   "".
+   lcQ25ContractID.
+
    /*Document type,DocStatusCode,RevisionComment*/
    lcDocListEntries = "".
 
