@@ -100,7 +100,7 @@
                   \[person|company\]id;string;optional;id of the owner
                   id_type;string;optional;NIF,NIE,CIF or Passport
                   profession;string;optional;
-                  customer_data_retrieved;boolean;optional;
+                  retrieved;boolean;optional;
                   identified_cust_sms_number;string;optional;
  * @address_data  fname;string;optional;
                   lname;string;optional;
@@ -646,7 +646,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          liLanguage = LOOKUP(get_string(pcStructId, lcField),
                                  "es_ES,es_CA,es_EU,es_GA,en").
       END. /* IF lcField EQ "language" ... */
-      ELSE IF lcField EQ "customer_data_retrieved" THEN
+      ELSE IF lcField EQ "retrieved" THEN
       DO:
          plCustDataRetr = get_bool(pcStructId, lcField).
       END.
@@ -1220,7 +1220,7 @@ gcCustomerStructFields = "birthday," +
                          "profession," +
                          "kiala_code," + 
                          "ups_hours," +
-                         "customer_data_retrieved," +
+                         "retrieved," +
                          "identified_cust_sms_number".
 
 /* note: check that data variable has correct EXTENT value */
@@ -1253,7 +1253,7 @@ gcCustomerStructStringFields = "city," +
                                "profession," + 
                                "kiala_code," +
                                "ups_hours," +
-                               "customer_data_retrieved," +
+                               "retrieved," +
                                "identified_cust_sms_number".
 
 /* common validation */
