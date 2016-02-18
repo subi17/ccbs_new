@@ -13,14 +13,19 @@ DEF VAR ldtSTCDate   AS DATE    NO-UNDO.
 DEF VAR llgMNPDate   AS LOG     NO-UNDO.
 DEF VAR llgSTCDate   AS LOG     NO-UNDO.
 DEF VAR lcLogDir     AS CHAR    NO-UNDO.
+DEF VAR lcToday      AS CHAR    NO-UNDO. 
 
 DEFINE BUFFER bMNPRequest FOR MsRequest.
 
 DEFINE STREAM strout.
 
 ASSIGN 
+   lcToday    = STRING(YEAR(TODAY),"9999") +
+                STRING(MONTH(TODAY),"99")  +
+                STRING(DAY(TODAY),"99")
    lcTodayStamp = fMake2DT(TODAY,0)
-   lcLogDir     = fCParam("CancelSTC","LogDir").
+   lcLogDir     = fCParam("CancelSTC","LogDir")
+   lcLogDir     = lcLogDir + "CancelStcReq_MNP_" + lcToday + ".log".
 
 OUTPUT STREAM strout TO VALUE(lcLogDir).
 
