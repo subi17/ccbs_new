@@ -1,0 +1,1 @@
+{triggers/hpddelete_generic.i OrderCustomer ORDERCUSTOMER Ordercanal OrderId RowType}
