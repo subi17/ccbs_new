@@ -781,20 +781,22 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.OutEMailMarketing  = (LOOKUP("Email", lcMarkOut, "|") NE 0)
          OrderCustomer.OutPostMarketing   = (LOOKUP("Post", lcMarkOut, "|") NE 0)
          OrderCustomer.OutBankMarketing   = (LOOKUP("Bank", lcMarkOut, "|") NE 0)
-         OrderCustomer.OperAllMarketing   = lcMarketing NE "".
+         OrderCustomer.OperAllMarketing   = lcMarketing NE ""
          OrderCustomer.ExtInvRef          = 
-            data[LOOKUP("invoice_ref", gcCustomerStructStringFields)].
+            data[LOOKUP("invoice_ref", gcCustomerStructStringFields)]
  
-         OrderCustomer.Address = OrderCustomer.Street .
+         OrderCustomer.Address = OrderCustomer.Street 
+         OrderCustomer.CustDataRetr = plCustdataRetr
+         OrderCustomer.MSISDNForIdent = pcIdentifiedSmsNumber.
+
          IF OrderCustomer.BuildingNum NE "" THEN 
             OrderCustomer.Address = OrderCustomer.Address + " " +
-                                    OrderCustomer.BuildingNum .         
+                                    OrderCustomer.BuildingNum.         
          IF OrderCustomer.AddressCompl NE "" THEN 
-            OrderCustomer.Address = OrderCustomer.Address + " " + OrderCustomer.AddressCompl .
+            OrderCustomer.Address = OrderCustomer.Address + " " + 
+                                    OrderCustomer.AddressCompl. 
 
          IF liDelType > 0 THEN OrderCustomer.DelType = liDelType.
-         OrderCustomer.CustDataRetr = plCustdataRetr.
-         OrderCustomer.MSISDNForIdent = pcIdentifiedSmsNumber.
    END.
 
 

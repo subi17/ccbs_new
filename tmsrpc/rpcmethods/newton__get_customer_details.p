@@ -42,6 +42,7 @@
        invoice_target;string;all_grouped/all_split/customized
        self_employed;boolean; is customer self employed
        profession;string; customer profession
+       site_name;string; employer company
  * @company_contact title;string;
                     fname;string;
                     lname;string;
