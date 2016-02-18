@@ -71,7 +71,7 @@ ELSE ldFromStamp = 20150101. /*Full dump*/
 
 OUTPUT STREAM sFile TO VALUE(icFile).
 
-FOR EACH TermReturn use-index orderid NO-LOCK WHERE
+FOR EACH TermReturn NO-LOCK WHERE
          TermReturn.ReturnTS >= ldFromStamp
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:
