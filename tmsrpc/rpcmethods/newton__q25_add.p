@@ -52,6 +52,7 @@ DEF VAR ldaMonth24Date    AS DATE NO-UNDO.
 DEF VAR ldContractActivTS AS DECIMAL NO-UNDO.
 DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
 DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
+DEF VAR ldeFeeAmount AS DEC NO-UNDO. 
 
 DEF VAR lcQ25ContractId AS CHAR NO-UNDO.
 DEF VAR lcOrigKatun AS CHAR NO-UNDO.
@@ -237,20 +238,38 @@ END CASE.
 
 IF lcSMSTxt > "" THEN DO:
 
-   ASSIGN
-      lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
-                          lower(entry(month(ldaMonth24Date),{&MONTHS_ES})))
-      lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaMonth24Date)))
-      lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
-            STRING(TRUNC(SingleFee.Amt / 12, 2))).
+   ldeFeeAmount = SingleFee.Amt.
+   
+   FOR EACH DiscountPlan NO-LOCK WHERE
+            DiscountPlan.Brand = gcBrand AND
+           (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
+            DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
+       EACH DPMember NO-LOCK WHERE
+            DPMember.DpID       = DiscountPlan.DpId AND
+            DPMember.HostTable  = "MobSub" AND
+            DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
+            DPMember.ValidFrom  = fPer2Date(SingleFee.BillPeriod,0) AND
+            DPMember.ValidTo   >= DPMember.ValidFrom:
+      ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
+   END.
 
-   fMakeSchedSMS2(MobSub.CustNum,
-                  MobSub.CLI,
-                  {&SMSTYPE_CONTRACT_ACTIVATION},
-                  lcSMSTxt,
-                  ldeSMSStamp,
-                  "Yoigo info",
-                  "").
+   IF ldeFeeAmount > 0 THEN DO:
+
+      ASSIGN
+         lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
+                             lower(entry(month(ldaMonth24Date),{&MONTHS_ES})))
+         lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaMonth24Date)))
+         lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
+               STRING(TRUNC(ldeFeeAmount / 12, 2))).
+
+      fMakeSchedSMS2(MobSub.CustNum,
+                     MobSub.CLI,
+                     {&SMSTYPE_CONTRACT_ACTIVATION},
+                     lcSMSTxt,
+                     ldeSMSStamp,
+                     "Yoigo info",
+                     "").
+   END.
 END.
 
 IF lcmemo_title > "" THEN DO:

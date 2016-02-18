@@ -613,7 +613,7 @@ PROCEDURE pContractActivation:
 
             ASSIGN
                ldeResidualFeeDisc = ldeFeeAmount
-               ldeFeeAmount = ROUND(ldeFeeAmount / FMItem.FFItemQty,2)
+               ldeFeeAmount = TRUNC(ldeFeeAmount / FMItem.FFItemQty,2)
                /* map q25 fee to original residual fee */
                liOrderId = bQ25SingleFee.OrderId.
 
