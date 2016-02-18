@@ -565,6 +565,20 @@ FUNCTION fGetQ25BankByOrder RETURNS CHAR
 
 END.
 
+FUNCTION fFindQ25CAncellation RETURNS CHAR
+   (BUFFER Order FOR Order):
+   DEF BUFFER ActReq FOR Msrequest.
+   DEF BUFFER TermReq FOR Msrequest.
+   DEF VAR lcQ25ContractID AS CHAR NO-UNDO.
+
+   IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN RETURN "".
+   /*TODO: add cancellation search.*/
+   /*IF FOUND cancellation, then call following.*/
+   lcQ25ContractID = fGetQ25Extension(Order.OrderID).
+   RETURN lcQ25ContractID.
+END.
+
+
 /*Order activation*/
 /*Function generates order documentation*/
 FUNCTION fCreateDocumentCase1 RETURNS CHAR
@@ -1277,6 +1291,8 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
                                              idPeriodStart, 
                                              idPeriodEnd,
                                              OUTPUT ldeCAncellationTime).
+   lcQ25ContractID = fFindQ25CAncellation(BUFFER Order).
+
    lcCaseFileRow =
    lcCaseTypeID                    + lcDelim +
    /*Order_ID*/
