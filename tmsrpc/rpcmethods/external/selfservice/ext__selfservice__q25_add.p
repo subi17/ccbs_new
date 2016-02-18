@@ -32,6 +32,7 @@ DEF VAR ldaMonth22Date    AS DATE NO-UNDO.
 DEF VAR ldaMonth24Date    AS DATE NO-UNDO.
 DEF VAR ldaQ25PeriodStartDate  AS DATE NO-UNDO.
 DEF VAR ldaQ25PeriodEndDate    AS DATE NO-UNDO.
+DEF VAR ldeFeeAmount      AS DEC NO-UNDO. 
 
 /* Contract activation timestamp */
 DEF VAR ldContractActivTS AS DECIMAL NO-UNDO.
@@ -190,21 +191,39 @@ CASE SingleFee.BillCode:
 END CASE.
 
 IF lcSMSTxt > "" THEN DO:
+   
+   ldeFeeAmount = SingleFee.Amt.
+   
+   FOR EACH DiscountPlan NO-LOCK WHERE
+            DiscountPlan.Brand = gcBrand AND
+           (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
+            DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
+       EACH DPMember NO-LOCK WHERE
+            DPMember.DpID       = DiscountPlan.DpId AND
+            DPMember.HostTable  = "MobSub" AND
+            DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
+            DPMember.ValidFrom  = fPer2Date(SingleFee.BillPeriod,0) AND
+            DPMember.ValidTo   >= DPMember.ValidFrom:
+      ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
+   END.
 
-   ASSIGN
-      lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
-                          lower(entry(month(ldaMonth24Date),{&MONTHS_ES})))
-      lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaMonth24Date)))
-      lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
-            STRING(ROUND(SingleFee.Amt / 12, 2))).
+   IF ldeFeeAmount > 0 THEN DO:
 
-   fMakeSchedSMS2(MobSub.CustNum,
-                  MobSub.CLI,
-                  {&SMSTYPE_CONTRACT_ACTIVATION},
-                  lcSMSTxt,
-                  ldeSMSStamp,
-                  "Yoigo info",
-                  "").
+        ASSIGN
+           lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
+                               lower(entry(month(ldaMonth24Date),{&MONTHS_ES})))
+           lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaMonth24Date)))
+           lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
+                 STRING(TRUNC(ldeFeeAmount / 12, 2))).
+
+        fMakeSchedSMS2(MobSub.CustNum,
+                       MobSub.CLI,
+                       {&SMSTYPE_CONTRACT_ACTIVATION},
+                       lcSMSTxt,
+                       ldeSMSStamp,
+                       "Yoigo info",
+                       "").
+   END.
 END.
 
 lcMemoTitle = "By customer's request (" + fgetAppDetailedUserId(
@@ -219,6 +238,7 @@ DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
                  "Mobsub",                             /* MemoType */
                  fgetAppDetailedUserId(INPUT lcApplicationId,
                                        INPUT Mobsub.CLI)).
+
 
 /* Adding the details into Main struct */
 top_struct = add_struct(response_toplevel_id, "").
