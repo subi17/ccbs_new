@@ -550,8 +550,6 @@ PROCEDURE pHandleCustomer:
    DEFINE VARIABLE liSubActLimit        AS INTEGER   NO-UNDO.
    DEFINE VARIABLE llDefSubLimit        AS LOGICAL   NO-UNDO.
    DEFINE VARIABLE llDefSubActLimit     AS LOGICAL   NO-UNDO.
-   DEFINE VARIABLE llSubLimitReached    AS LOGICAL   NO-UNDO.
-   DEFINE VARIABLE llSubActLimitReached AS LOGICAL   NO-UNDO.
    DEFINE VARIABLE liSubCount           AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liActOrderCount      AS INTEGER   NO-UNDO.
    DEFINE VARIABLE ldaOrderDate         AS DATE      NO-UNDO. 
@@ -570,8 +568,6 @@ PROCEDURE pHandleCustomer:
                       lcEmployer             = ""
                       liSubLimit             = 0
                       liSubActLimit          = 0
-                      llSubLimitReached      = FALSE
-                      llSubActLimitReached   = FALSE
                       liSubCount             = 0
                       liActOrderCount        = 0.
 
@@ -626,9 +622,6 @@ PROCEDURE pHandleCustomer:
                   liSubCount = liSubCount + 1.
                END.
 
-               IF liSubCount >= liSubLimit THEN llSubLimitReached = TRUE. 
-               IF liActOrderCount >= liSubActLimit THEN llSubActLimitReached = TRUE.
-
                lcMessage = lcMessage                                + lcDel +
                            fNotNull(STRING(Customer.CustNum))       + lcDel +
                            fNotNull(Customer.CustId)                + lcDel +
@@ -657,9 +650,7 @@ PROCEDURE pHandleCustomer:
                            fNotNull(fDateToString(Customer.FoundationDate))   + lcDel +
                            fNotNull(Customer.AuthCustId)                      + lcDel +
                            fNotNull(Customer.AuthCustIdType)                  + lcDel +
-                           fNotNull(lcEmployer)                               + lcDel +
-                           fNotNull(STRING(llSubLimitReached))                + lcDel +
-                           fNotNull(STRING(llSubActLimitReached)).
+                           fNotNull(lcEmployer).
 
                fWriteMessage(lcMessage).
             END.

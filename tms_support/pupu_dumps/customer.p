@@ -13,8 +13,6 @@ DEFINE VARIABLE liSubLimit           AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liSubActLimit        AS INTEGER   NO-UNDO.
 DEFINE VARIABLE llDefSubLimit        AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE llDefSubActLimit     AS LOGICAL   NO-UNDO.
-DEFINE VARIABLE llSubLimitReached    AS LOGICAL   NO-UNDO.
-DEFINE VARIABLE llSubActLimitReached AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE liSubCount           AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liActOrderCount      AS INTEGER   NO-UNDO.
 DEFINE VARIABLE ldaOrderDate         AS DATE      NO-UNDO.
@@ -63,8 +61,6 @@ FOR EACH Customer WHERE
           lcEmployer             = "" 
           liSubLimit             = 0
           liSubActLimit          = 0
-          llSubLimitReached      = FALSE
-          llSubActLimitReached   = FALSE
           liSubCount             = 0
           liActOrderCount        = 0. 
 
@@ -119,9 +115,6 @@ FOR EACH Customer WHERE
       liSubCount = liSubCount + 1.
    END.
 
-   IF liSubCount >= liSubLimit THEN llSubLimitReached = TRUE.
-   IF liActOrderCount >= liSubActLimit THEN llSubActLimitReached = TRUE.
-
    ASSIGN liEvents  = liEvents + 1
           lcMessage = "Customer"                               + lcDel +
                       "CREATE"                                 + lcDel +
@@ -155,9 +148,7 @@ FOR EACH Customer WHERE
                       fNotNull(STRING(Customer.FoundationDate))  + lcDel +
                       fNotNull(Customer.AuthCustId)              + lcDel +
                       fNotNull(Customer.AuthCustIdType)          + lcDel +
-                      fNotNull(lcEmployer)                       + lcDel +
-                      fNotNull(STRING(llSubLimitReached))        + lcDel +
-                      fNotNull(STRING(llSubActLimitReached)).
+                      fNotNull(lcEmployer).
 
    IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN DO:
       PAUSE 0.
