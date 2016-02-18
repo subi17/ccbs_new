@@ -7,9 +7,23 @@ DEFINE VARIABLE ldtTimeStamp AS DATETIME  NO-UNDO.
 DEFINE VARIABLE liEvents     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcMessage    AS CHARACTER NO-UNDO.
 
+DEFINE VARIABLE llSelfEmployed       AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE lcEmployer           AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liSubLimit           AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liSubActLimit        AS INTEGER   NO-UNDO.
+DEFINE VARIABLE llDefSubLimit        AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE llDefSubActLimit     AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE llSubLimitReached    AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE llSubActLimitReached AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE liSubCount           AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liActOrderCount      AS INTEGER   NO-UNDO.
+DEFINE VARIABLE ldaOrderDate         AS DATE      NO-UNDO.
+
 {cparam2.i}
 {timestamp.i}
 {ftransdir.i}
+{fcustdata.i}
+{tmsconst.i}
 
 DEFINE STREAM slog.
 
@@ -45,6 +59,69 @@ OUTPUT STREAM slog TO VALUE(lcLogFile).
 FOR EACH Customer WHERE
          Customer.Brand = gcBrand NO-LOCK:
 
+   ASSIGN llSelfEmployed         = FALSE
+          lcEmployer             = "" 
+          liSubLimit             = 0
+          liSubActLimit          = 0
+          llSubLimitReached      = FALSE
+          llSubActLimitReached   = FALSE
+          liSubCount             = 0
+          liActOrderCount        = 0. 
+
+   FIND FIRST CustCat NO-LOCK WHERE
+              CustCat.Brand = gcBrand AND
+              CustCat.Category = Customer.Category NO-ERROR.
+   IF AVAILABLE CustCat THEN llSelfEmployed = CustCat.SelfEmployed.
+
+   IF Customer.CustIDType = "passport" THEN llSelfEmployed = FALSE.
+
+   IF Customer.CustIDType NE "CIF" AND
+      Customer.Profession > "" THEN lcEmployer = Customer.CompanyName.
+
+   liSubLimit = fGetMobsubLimit(INPUT Customer.Custnum,
+                                INPUT Customer.Category,
+                                OUTPUT llDefSubLimit).
+
+   liSubActLimit = fGetMobsubActLimit(INPUT Customer.Custnum,
+                                      INPUT Customer.Category,
+                                      OUTPUT llDefSubActLimit).
+
+   FOR EACH OrderCustomer NO-LOCK WHERE
+            OrderCustomer.Brand      EQ gcBrand AND
+            OrderCustomer.CustIdType EQ Customer.CustIdType AND
+            OrderCustomer.CustId     EQ Customer.OrgId AND
+            OrderCustomer.RowType    EQ 1,
+       EACH Order NO-LOCK WHERE
+            Order.Brand              EQ gcBrand AND
+            Order.orderid            EQ OrderCustomer.Orderid AND
+            Order.OrderType          NE {&ORDER_TYPE_RENEWAL} AND
+            Order.OrderType          NE {&ORDER_TYPE_STC} AND
+            Order.SalesMan NE "GIFT":
+
+      IF LOOKUP(STRING(Order.statuscode),{&ORDER_CLOSE_STATUSES}) EQ 0
+      THEN DO:
+         IF Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} THEN DO:
+            fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+            IF INTERVAL(TODAY, ldaOrderDate, "months") >= 24 THEN NEXT.
+         END.
+         liActOrderCount = liActOrderCount + 1.
+      END.
+
+      IF LOOKUP(STRING(Order.statuscode),{&ORDER_INACTIVE_STATUSES}) EQ 0 THEN
+         liSubCount = liSubCount + 1.
+
+   END.
+
+   FOR EACH Mobsub NO-LOCK WHERE
+            MobSub.Brand    EQ gcBrand AND
+            Mobsub.AgrCust  EQ Customer.CustNum AND
+            MobSub.SalesMan NE "GIFT":
+      liSubCount = liSubCount + 1.
+   END.
+
+   IF liSubCount >= liSubLimit THEN llSubLimitReached = TRUE.
+   IF liActOrderCount >= liSubActLimit THEN llSubActLimitReached = TRUE.
+
    ASSIGN liEvents  = liEvents + 1
           lcMessage = "Customer"                               + lcDel +
                       "CREATE"                                 + lcDel +
@@ -70,7 +147,17 @@ FOR EACH Customer WHERE
                       fNotNull(Customer.Email)                 + lcDel +
                       fNotNull(Customer.Phone)                 + lcDel +
                       fNotNull(Customer.SMSNumber)             + lcDel +
-                      fNotNull(Customer.BankAcct).
+                      fNotNull(Customer.BankAcct)              + lcDel +
+                      /*YPR-3204*/
+                      fNotNull(Customer.HonTitle)                + lcDel +
+                      fNotNull(STRING(Customer.Birthday))        + lcDel +
+                      fNotNull(STRING(llSelfEmployed))           + lcDel +
+                      fNotNull(STRING(Customer.FoundationDate))  + lcDel +
+                      fNotNull(Customer.AuthCustId)              + lcDel +
+                      fNotNull(Customer.AuthCustIdType)          + lcDel +
+                      fNotNull(lcEmployer)                       + lcDel +
+                      fNotNull(STRING(llSubLimitReached))        + lcDel +
+                      fNotNull(STRING(llSubActLimitReached)).
 
    IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN DO:
       PAUSE 0.
@@ -94,3 +181,4 @@ IF NOT SESSION:BATCH THEN
 
 /* Move the report to Transfer directory */
 fMove2TransDir(lcLogFile, ".txt", lcOutDir).
+
