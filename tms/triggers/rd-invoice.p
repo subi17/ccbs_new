@@ -1,13 +1,22 @@
 TRIGGER PROCEDURE FOR REPLICATION-DELETE OF Invoice.
 
-/* Only require for Service Invoice */
+{HPD/HPDConst.i}
 
-IF Invoice.InvType = 1 THEN DO:
-   CREATE Common.RepLog.
-   ASSIGN
-      Common.RepLog.RecordId  = RECID(Invoice)
-      Common.RepLog.TableName = "Invoice"
-      Common.RepLog.EventType = "DELETE"
-      Common.RepLog.KeyValue  = STRING(Invoice.InvNum)
-      Common.RepLog.EventTS   = DATETIME(TODAY,MTIME).
-END. /* IF Invoice.InvType = 1 THEN DO: */
+&IF {&INVOICE_DELETE_TRIGGER_ACTIVE} &THEN
+
+IF NEW Invoice
+THEN RETURN.
+
+/* Only require for Service Invoice */
+IF Invoice.InvType NE 1
+THEN RETURN.
+
+CREATE Common.RepLog.
+ASSIGN
+   Common.RepLog.TableName = "Invoice"
+   Common.RepLog.EventType = "DELETE"
+   Common.RepLog.EventTime = NOW
+   Common.RepLog.KeyValue  = STRING(Invoice.InvNum)
+   .
+
+&ENDIF

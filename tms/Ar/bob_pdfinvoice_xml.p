@@ -249,7 +249,7 @@ DEF VAR llgHandled   AS LOG  NO-UNDO.
                       "~"type~""             + "~:" + "~"" + lcType           + "~"" + "," +
                       "~"process~""          + "~:" + "~"" + lcProcess        + "~"" + "~}".
 
-   IF lMsgPublisher:send_longmessage(lcMessage) THEN
+   IF lMsgPublisher:send_message(lcMessage) THEN
       llgHandled = TRUE.
    ELSE DO:
       llgHandled = FALSE.
