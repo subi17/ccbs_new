@@ -550,8 +550,6 @@ FUNCTION fGetQ25Extension RETURNS CHAR
    ELSE RETURN "".
 END.
 
-
-
 FUNCTION fGetQ25BankByOrder RETURNS CHAR
    (BUFFER Order FOR Order):
    DEF BUFFER bMsR FOR MsRequest.
@@ -559,8 +557,7 @@ FUNCTION fGetQ25BankByOrder RETURNS CHAR
               bMsR.Brand EQ "1" AND
               bMsR.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
               bMsR.CLI EQ Order.CLI AND
-              bMsR.ReqIparam1 EQ Order.OrderID AND
-              bMsR.ReqStatus EQ 2
+              bMsR.ReqIparam1 EQ Order.OrderID 
               NO-LOCK NO-ERROR.
    IF AVAIL bMsR THEN
       RETURN bMsR.ReqCparam5.
@@ -1298,8 +1295,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    /*Cancellation type*/
    lcCancellationType              + lcDelim +
    /*Q25 Extension cancelled (if extension is cancelled */
-   ""   
-   .
+   "".
    /*Document type,DocStatusCode,RevisionComment*/
    lcDocListEntries = "".
 
