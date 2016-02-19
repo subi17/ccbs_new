@@ -168,7 +168,7 @@ IF liCreated = 0 THEN
 FIND FIRST MSRequest WHERE
            MSRequest.MSrequest EQ liCreated EXCLUSIVE-LOCK NO-ERROR.
 IF AVAIL MsRequest THEN DO:
-   MsRequest.ReqCparam5 = fBankByBillCode(SingleFee.BillCode).
+   MsRequest.ReqCparam1 = fBankByBillCode(SingleFee.BillCode).
 END.
 RELEASE MsRequest.
 

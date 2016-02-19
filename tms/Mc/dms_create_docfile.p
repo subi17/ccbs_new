@@ -560,7 +560,7 @@ FUNCTION fGetQ25BankByOrder RETURNS CHAR
               bMsR.ReqIparam1 EQ Order.OrderID 
               NO-LOCK NO-ERROR.
    IF AVAIL bMsR THEN
-      RETURN bMsR.ReqCparam5.
+      RETURN bMsR.ReqCparam1.
    ELSE RETURN "".
 
 END.
@@ -1423,7 +1423,7 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
                       /*Q25 Extension_Request_date*/
                       STRING(MsRequest.ActStamp)      + lcDelim +
                       /*Q25 Extension bank*/
-                      STRING(Msrequest.ReqCparam5).
+                      STRING(Msrequest.ReqCparam1).
                       
       OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
       PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.

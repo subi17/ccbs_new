@@ -217,7 +217,7 @@ FIND FIRST MSRequest WHERE
 IF AVAIL MsRequest THEN DO:
    MsRequest.ReqCparam4 = lcQ25ContractId. /*For dump*/
    MsRequest.ReqCparam6 = lcQ25ContractId. /*For finding entry in DMS usage */
-   MsRequest.ReqCparam5 = fBankByBillCode(SingleFee.BillCode). 
+   MsRequest.ReqCparam1 = fBankByBillCode(SingleFee.BillCode). 
 END.
 RELEASE MsRequest.
 
