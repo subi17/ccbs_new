@@ -528,7 +528,7 @@ PROCEDURE pCloseQ25Discount:
             FALSE,
             "",
             0, /* payterm residual fee */
-            0,
+            DCCLI.PercontractId,
             OUTPUT lcResult).
 
          IF liRequest EQ 0 THEN
