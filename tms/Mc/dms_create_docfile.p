@@ -1367,7 +1367,7 @@ FUNCTION fCreateDocumentCase9  RETURNS CHAR
                          /*MSisDN*/
                          TermReturn.MSISDN + lcDelim +
                          /*Terminal Request Date*/
-                         STRING(TermReturn.ReturnTS) .
+                         fPrintDate(TermReturn.ReturnTS) .
 
       OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
       PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
@@ -1421,7 +1421,7 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
                       /*MSISDN*/
                       STRING(MsRequest.CLI)           + lcDelim +
                       /*Q25 Extension_Request_date*/
-                      STRING(MsRequest.ActStamp)      + lcDelim +
+                      fPrintDate(MsRequest.ActStamp)      + lcDelim +
                       /*Q25 Extension bank*/
                       STRING(Msrequest.ReqCparam1).
                       
