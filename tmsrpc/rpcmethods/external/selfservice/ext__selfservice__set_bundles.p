@@ -3,7 +3,7 @@
  *
  * @input  transaction_id;string;mandatory;transaction id
            msisdn;string;mandatory;subscription msisdn number
-           bundle_id;string;mandatory;bundle id (eg: BONO Contracts/DSS, Bono VoIP) 
+           bundle_id;string;mandatory;bundle id (eg: BONO Contracts/DSS) 
            bundle_status;string;mandatory;status value (on,off) 
  * @output     struct;mandatory;response struct
  * @response   transaction_id;string;transaction id
