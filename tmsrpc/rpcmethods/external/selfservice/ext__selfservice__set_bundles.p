@@ -3,7 +3,7 @@
  *
  * @input  transaction_id;string;mandatory;transaction id
            msisdn;string;mandatory;subscription msisdn number
-           bundle_id;string;mandatory;bundle id (eg: BONO Contracts/DSS, Bono VoIP) 
+           bundle_id;string;mandatory;bundle id (eg: BONO Contracts/DSS) 
            bundle_status;string;mandatory;status value (on,off) 
  * @output     struct;mandatory;response struct
  * @response   transaction_id;string;transaction id
@@ -106,7 +106,7 @@ FIND FIRST DayCampaign NO-LOCK WHERE
 IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
 
 /* currently we support only manual activation/termination for MDUB and MDUB2 */
-IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") = 0 AND
+IF LOOKUP(pcBundleId,lcBONOContracts) = 0 AND
    pcBundleId <> {&DSS}
 THEN RETURN appl_err("Incorrect Bundle Id").
 
@@ -144,12 +144,6 @@ CASE pcActionValue :
             RETURN appl_err("Bundle termination is not allowed since " +
                             "subscription has ongoing BTC with upgrade upsell").
       END. /* IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO: */
-      ELSE IF pcBundleId = "BONO_VOIP" THEN DO:
-         IF fGetActiveSpecificBundle(Mobsub.MsSeq,
-                                     ldNextMonthActStamp,
-                                     pcBundleId) = "" THEN
-            RETURN appl_err("Bundle termination is not allowed").
-      END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
       /* Customer level - As of now DSS only */
       ELSE DO:
          IF NOT fIsDSSActive(Mobsub.Custnum,ldeActStamp) THEN
@@ -180,10 +174,6 @@ CASE pcActionValue :
          IF NOT fServPackagesActive() THEN
             RETURN appl_err("Bundle activation is not allowed").
       END. /* IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO: */
-      ELSE IF pcBundleId = "BONO_VOIP" THEN DO:
-         IF NOT fIsBonoVoIPAllowed(Mobsub.MsSeq,ldeActStamp) THEN 
-            RETURN appl_err("Bundle activation is not allowed").
-      END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
       /* Customer level - As of now DSS only */
       ELSE DO:
          IF pcBundleId = {&DSS} THEN
