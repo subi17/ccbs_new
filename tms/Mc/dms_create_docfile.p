@@ -37,12 +37,14 @@ DEF VAR lcDMSDOCStatus AS CHAR NO-UNDO.
 lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 
 DEF TEMP-TABLE ttOrderList NO-UNDO
-   FIELD OrderID AS INT
-   FIELD CaseID AS CHAR
-   FIELD Direct AS LOGICAL
+   FIELD OrderID   AS INT
+   FIELD CaseID    AS CHAR
+   FIELD Direct    AS LOGICAL
+   FIELD MsRequest AS INT
 INDEX OrderID OrderID
 INDEX CaseID CaseID
-INDEX Direct Direct.
+INDEX Direct Direct
+INDEX MsRequest MsRequest.
 
 ASSIGN
    lcInitStatus    = {&DMS_INIT_STATUS_SENT}
@@ -90,6 +92,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
    DEF VAR liStampTypeCount AS INT NO-UNDO.
    DEF VAR lcStampTypes AS CHAR NO-UNDO.
    DEF VAR lcCancelTypeList AS CHAR NO-UNDO.
+   DEF VAR liMsRequest AS INT NO-UNDO.
 
    llgOrderSeek = FALSE.
    llgDirectNeeded = FALSE.
@@ -248,10 +251,10 @@ FUNCTION fMakeTempTable RETURNS CHAR
             DELETE ttOrderList.
             NEXT.
          END.
-         ELSE DO:
-            liAddId = MsRequest.ReqIparam1.
-            lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
-         END.
+         ELSE ASSIGN
+            liAddId     = MsRequest.ReqIparam1
+            lcCase      = {&DMS_CASE_TYPE_ID_CANCEL}
+            liMsRequest = MsRequest.MsRequest.
       END.
       ELSE IF  MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
                MsRequest.ReqCparam3 EQ "11" THEN DO:
@@ -267,10 +270,10 @@ FUNCTION fMakeTempTable RETURNS CHAR
                DELETE ttOrderList.
                NEXT.
             END.
-            ELSE DO:
-               liAddId = Order.OrderId.
-               lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
-            END.
+            ELSE ASSIGN
+               liAddId     = Order.OrderId
+               lcCase      = {&DMS_CASE_TYPE_ID_CANCEL}
+               liMsRequest = MsRequest.MsRequest.
          END.
          ELSE NEXT.
       END.
@@ -292,8 +295,9 @@ FUNCTION fMakeTempTable RETURNS CHAR
 
       IF AVAIL DMS THEN DO TRANS:
          CREATE ttOrderList.
-         ASSIGN ttOrderList.OrderID = liAddId
-                ttOrderList.CaseID = lcCase.
+         ASSIGN ttOrderList.OrderID    = liAddId
+                ttOrderList.CaseID     = lcCase
+                ttOrderList.MsRequest  = liMsRequest.
       END.
    END. /*Msrequest search*/
 
@@ -541,11 +545,11 @@ END.
 
 FUNCTION fGetQ25Extension RETURNS CHAR
    (iiOrderId AS INT):
-   DEF BUFFER bOA FOR Orderaction.
+   DEF BUFFER bOA FOR OrderAction.
    FIND FIRST bOA WHERE
               bOA.Brand EQ gcBrand AND
-              bOA.ORderID EQ iiOrderID AND
-              bOA.Itemtype EQ "Q25Extension" NO-ERROR.
+              bOA.OrderID EQ iiOrderID AND
+              bOA.ItemType EQ "Q25Extension" NO-ERROR.
    IF AVAIL bOA THEN RETURN bOA.ItemKey.
    ELSE RETURN "".
 END.
@@ -557,7 +561,7 @@ FUNCTION fGetQ25BankByOrder RETURNS CHAR
               bMsR.Brand EQ "1" AND
               bMsR.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
               bMsR.CLI EQ Order.CLI AND
-              bMsR.ReqIparam1 EQ Order.OrderID 
+              bMsR.ReqIParam1 EQ Order.OrderID 
               NO-LOCK NO-ERROR.
    IF AVAIL bMsR THEN
       RETURN bMsR.ReqCparam1.
@@ -565,19 +569,44 @@ FUNCTION fGetQ25BankByOrder RETURNS CHAR
 
 END.
 
-FUNCTION fFindQ25CAncellation RETURNS CHAR
-   (BUFFER Order FOR Order):
-   DEF BUFFER ActReq FOR Msrequest.
-   DEF BUFFER TermReq FOR Msrequest.
-   DEF VAR lcQ25ContractID AS CHAR NO-UNDO.
+FUNCTION fFindQ25Cancellation RETURNS CHAR
+   (BUFFER Order FOR Order,
+    INPUT iiMsRequest AS INT):
+   
+   DEF BUFFER bMsRequest FOR MsRequest.
 
    IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN RETURN "".
-   /*TODO: add cancellation search.*/
-   /*IF FOUND cancellation, then call following.*/
-   lcQ25ContractID = fGetQ25Extension(Order.OrderID).
-   RETURN lcQ25ContractID.
-END.
 
+   FIND FIRST OrderAction NO-LOCK WHERE
+              OrderAction.Brand    EQ gcBrand AND
+              OrderAction.OrderId  EQ Order.OrderId AND
+              OrderAction.ItemType EQ "Q25Discount" NO-ERROR.
+
+   IF NOT AVAILABLE OrderAction THEN RETURN "".
+
+   /* before deadline */
+   FIND FIRST bMsRequest NO-LOCK WHERE
+              bMsRequest.MsSeq      = Order.MsSeq AND
+              bMsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND
+              bMsRequest.ReqStatus  = {&REQUEST_STATUS_CANCELLED} AND
+              bMsRequest.ReqCParam3 = "RVTERM12" AND
+              bMsRequest.reqiparam3 = INT(OrderAction.ItemParam) AND
+              INDEX(bMsRequest.Memo, STRING(Order.OrderID)) > 0 NO-ERROR.
+   IF AVAILABLE bMsRequest THEN RETURN bMsRequest.ReqCParam4.
+
+   /* after deadline */
+   FIND FIRST bMsRequest NO-LOCK WHERE
+              bMsRequest.MsSeq       = Order.MsSeq AND
+              bMsRequest.ReqType     = {&REQTYPE_CONTRACT_TERMINATION} AND
+              bMsRequest.ReqStatus  NE {&REQUEST_STATUS_CANCELLED} AND
+              bMsRequest.ReqSource   = {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} AND
+              bMsRequest.ReqCParam2  = "term" AND
+              bMsRequest.ReqCparam3  = "RVTERM12" AND
+              bMsRequest.MsRequest   = iiMsRequest NO-ERROR.
+   IF AVAILABLE bMsRequest THEN RETURN bMsRequest.ReqCParam4.
+   
+   RETURN "".
+END.
 
 /*Order activation*/
 /*Function generates order documentation*/
@@ -1265,7 +1294,8 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
 END.
 
 FUNCTION fCreateDocumentCase6 RETURNS CHAR
-   (iiOrderId AS INT):
+   (iiOrderId AS INT,
+    iiMsRequest AS INT):
    DEF VAR lcCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCreateDMS     AS CHAR NO-UNDO.
@@ -1291,7 +1321,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
                                              idPeriodStart, 
                                              idPeriodEnd,
                                              OUTPUT ldeCAncellationTime).
-   lcQ25ContractID = fFindQ25CAncellation(BUFFER Order).
+   lcQ25ContractID = fFindQ25Cancellation(BUFFER Order, iiMsRequest).
 
    lcCaseFileRow =
    lcCaseTypeID                    + lcDelim +
@@ -1493,7 +1523,7 @@ FUNCTION fCreateDocumentRows RETURNS CHAR
          /*From Order*/
          FOR EACH ttOrderList WHERE
                   ttOrderList.CaseID EQ {&DMS_CASE_TYPE_ID_CANCEL}:
-            lcStatus = fCreateDocumentCase6(ttOrderList.OrderID).
+            lcStatus = fCreateDocumentCase6(ttOrderList.OrderID,ttOrderList.MsRequest).
             IF lcStatus NE "" THEN fLogLine("",lcStatus).
          END.
       END.
