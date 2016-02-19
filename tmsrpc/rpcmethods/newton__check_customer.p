@@ -125,6 +125,16 @@ add_int(lcReturnStruct, 'subscription_limit', liSubLimit).
 IF NOT llOrderAllowed THEN add_string(lcReturnStruct, 'reason',lcReason).
 add_string(lcReturnStruct, 'additional_line_allowed', lcAddLineAllowed).
 
+IF liSubs >= liSubLimit THEN
+   add_boolean(lcReturnStruct,"subscription_limit_reached",TRUE).
+ELSE
+   add_boolean(lcReturnStruct,"subscription_limit_reached",FALSE).
+IF liActs >= liActLimit THEN
+   add_boolean(lcReturnStruct,"activation_limit_reached",TRUE).
+ELSE
+   add_boolean(lcReturnStruct,"activation_limit_reached",FALSE).
+
+
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.
