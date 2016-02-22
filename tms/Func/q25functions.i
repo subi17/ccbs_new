@@ -299,6 +299,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
    DEF VAR liPendingReq      AS INT NO-UNDO.
    DEF VAR ldAmount          AS INT NO-UNDO.
 
+   DEF BUFFER bDCCLI         FOR DCCLI.
+
    IF idaStartDate = ? OR idaEndDate = ? THEN
       RETURN 0.
 
@@ -398,12 +400,12 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
              
          END.
             
-         FIND FIRST DCCLI NO-LOCK WHERE
-                    DCCLI.Brand   EQ gcBrand AND
-                    DCCLI.DCEvent EQ "RVTERM12" AND
-                    DCCLI.MsSeq   EQ Mobsub.MsSeq AND
-                    DCCLI.ValidTo >= TODAY NO-ERROR.
-         IF AVAIL DCCLI THEN DO:
+         FIND FIRST bDCCLI NO-LOCK WHERE
+                    bDCCLI.Brand   EQ gcBrand AND
+                    bDCCLI.DCEvent EQ "RVTERM12" AND
+                    bDCCLI.MsSeq   EQ Mobsub.MsSeq AND
+                    bDCCLI.ValidTo >= TODAY NO-ERROR.
+         IF AVAIL bDCCLI THEN DO:
             /* Q25 Extension already active */
             IF liPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO: 
             /* Q25 month 22-24 */
@@ -411,8 +413,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                   customers who have already chosen quota 25 extension */
                liQ25DoneCount = liQ25DoneCount + 1.
                lcLogText = "Q25 already done: " +
-                        STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
-                        STRING(DCCLI.MsSeq) + "|" +
+                        STRING(liPhase) + "|" + STRING(bDCCLI.CLI) + "|" +
+                        STRING(bDCCLI.MsSeq) + "|" +
                         STRING(ldAmount).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
                NEXT.
@@ -424,9 +426,9 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                FIND FIRST FixedFee WHERE 
                           FixedFee.Brand EQ gcBrand AND
                           FixedFee.HostTable EQ "MobSub" AND
-                          FixedFee.KeyValue EQ STRING(DCCLI.MsSeq) AND
+                          FixedFee.KeyValue EQ STRING(bDCCLI.MsSeq) AND
                           FixedFee.SourceTable EQ "DCCLI" AND
-                          FixedFee.SourceKey EQ STRING(DCCLI.PerContractID)
+                          FixedFee.SourceKey EQ STRING(bDCCLI.PerContractID)
                           NO-LOCK NO-ERROR.
                IF AVAIL FixedFee THEN
                   ldAmount = FixedFee.amt.
