@@ -297,7 +297,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
    DEF VAR liCalcPauseValue  AS INT NO-UNDO.
    DEF VAR liPhase           AS INT NO-UNDO.
    DEF VAR liPendingReq      AS INT NO-UNDO.
-   DEF VAR ldAmount          AS INT NO-UNDO.
+   DEF VAR ldAmount          AS DEC NO-UNDO.
 
    DEF BUFFER bDCCLI         FOR DCCLI.
 
