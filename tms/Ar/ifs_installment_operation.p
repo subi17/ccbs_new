@@ -74,8 +74,44 @@ FUNCTION fGetChannel RETURNS CHAR
    (BUFFER ibFixedFee FOR FixedFee,
     OUTPUT ocOrderType AS CHAR):
 
+   DEF VAR ldeActTS AS DEC NO-UNDO. 
+
    DEF BUFFER Order FOR Order.
+   DEF BUFFER DCCLI FOR DCCLI.
+   DEF BUFFER MsRequest FOR MsRequest.
       
+   IF ibFixedFee.BillCode EQ "RVTERM" THEN DO:
+      ocOrderType = "R".
+      
+      FIND FIRST dccli NO-LOCK where
+                 dccli.percontractid = int(fixedfee.sourcekey) and
+                 dccli.msseq = int(fixedfee.keyvalue) NO-ERROR.
+      IF NOT AVAIL DCCLI THEN RETURN "".
+
+      ldeActTS = fmake2dt(MIN(dccli.contractdate,dccli.validfrom), 86399).
+      
+      FIND msrequest NO-LOCK where
+           msrequest.msseq = dccli.msseq and
+           msrequest.reqtype = 8 and
+           msrequest.reqstatus = 2 and
+           msrequest.reqcparam3 = dccli.dcevent and
+          (msrequest.reqcparam2 eq "act" or
+           msrequest.reqcparam2 eq "recreate") and
+           msrequest.actstamp >= TRUNC(ldeActTS,0)  AND
+           msrequest.actstamp <= ldeActTS  NO-ERROR.
+      
+      IF NOT AVAIL msrequest THEN RETURN "".
+
+      IF msrequest.usercode BEGINS "VISTA_" OR
+         msrequest.usercode BEGINS "505_" OR
+         msrequest.usercode BEGINS "601_" OR
+         msrequest.usercode BEGINS "RENEWAL" THEN RETURN "D".
+      ELSE IF msrequest.usercode BEGINS "POS_" OR
+         msrequest.usercode BEGINS "RENEWAL_POS" THEN RETURN "I".
+      ELSE RETURN "".
+      
+   END.
+   
    IF ibFixedFee.OrderId > 0 THEN DO:
       FIND FIRST Order NO-LOCK WHERE
                  Order.Brand = gcBrand AND
