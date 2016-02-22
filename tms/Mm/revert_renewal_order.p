@@ -498,7 +498,7 @@ PROCEDURE pCloseQ25Discount:
       FIND MsRequest NO-LOCK WHERE
            MsRequest.MSRequest = bmsrequest.MSRequest.
 
-      fReqStatus(4,"Cancelled by renewal cancellation").
+      fReqStatus(4,SUBST("Cancelled by renewal cancellation, orderid: &1", MsRequest.ReqIParam1)).
       
       FIND FIRST MsRequest WHERE
                  MsRequest.MsRequest = iiMsRequest  NO-LOCK NO-ERROR.

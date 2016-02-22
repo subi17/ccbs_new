@@ -11,6 +11,8 @@
 {tmsconst.i}
 {fdss.i}
 {dpmember.i}
+{q25functions.i}
+
 
 DEF INPUT  PARAMETER iiMsSeq       AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiOrderId     AS INT  NO-UNDO.
@@ -458,6 +460,7 @@ PROCEDURE pQ25Extension:
       IF AVAIL MsRequest THEN ASSIGN
          MsRequest.ReqIparam1 = Order.OrderId
          MsRequest.ReqCparam4 = OrderAction.ItemKey.
+         MsRequest.ReqCparam6 = fBankByBillCode(SingleFee.BillCode).
       RELEASE MsRequest.
 
       CASE SingleFee.BillCode:
