@@ -441,8 +441,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          /* Renewal / Renuvo done */
             liNotSendCount = liNotSendCount + 1.
             lcLogText = "Renewal done: " +
-                        STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
-                        STRING(DCCLI.MsSeq) + "|" +
+                        STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
+                        STRING(Mobsub.MsSeq) + "|" +
                         STRING(ldAmount).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
             NEXT.
@@ -457,8 +457,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             /* Pending/ongoing Q25 request */
             liPendingReq = liPendingReq + 1.
             lcLogText = "Pending Q25 Request: " +
-                        STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
-                        STRING(DCCLI.MsSeq) + "|" +
+                        STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
+                        STRING(Mobsub.MsSeq) + "|" +
                         STRING(ldAmount).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
             NEXT.
