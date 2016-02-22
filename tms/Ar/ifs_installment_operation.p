@@ -108,7 +108,7 @@ FUNCTION fGetChannel RETURNS CHAR
          msrequest.usercode BEGINS "RENEWAL" THEN RETURN "D".
       ELSE IF msrequest.usercode BEGINS "POS_" OR
          msrequest.usercode BEGINS "RENEWAL_POS" THEN RETURN "I".
-      ELSE RETURN "".
+      ELSE RETURN "D".
       
    END.
    
