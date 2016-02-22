@@ -64,7 +64,8 @@
                send_offer;boolean;optional;
                resignation_period;boolean;optional;
                tarj7_promo;boolean;optional;
-               keep_installment;boolean;optional   
+               keep_installment;boolean;optional;
+               multiorder;boolean;optional;
  * @customer_data fname;string;optional;
                   lname;string;optional;
                   lname2;string;optional;
@@ -99,6 +100,8 @@
                   \[person|company\]id;string;optional;id of the owner
                   id_type;string;optional;NIF,NIE,CIF or Passport
                   profession;string;optional;
+                  retrieved;boolean;optional;
+                  identified_cust_sms_number;string;optional;
  * @address_data  fname;string;optional;
                   lname;string;optional;
                   lname2;string;optional;
@@ -300,6 +303,9 @@ DEF VAR piDeliveryType AS INT NO-UNDO.
 DEF VAR piDeliverySecure AS INT NO-UNDO. 
 DEF VAR plKeepInstallment AS LOG NO-UNDO. 
 DEF VAR pcUpsHours AS CHAR NO-UNDO. 
+DEF VAR plCustDataRetr AS LOGICAL NO-UNDO.
+DEF VAR pcIdentifiedSmsNumber AS CHAR NO-UNDO.
+DEF VAR plMultiOrder AS LOGICAL NO-UNDO.
 
 /* Real Order Inspection parameters */
 DEF VAR pcROIresult      AS CHAR NO-UNDO.
@@ -333,6 +339,7 @@ DEF VAR lcBundleCLITypes       AS CHAR NO-UNDO.
 DEF VAR lcRenoveSMSText        AS CHAR NO-UNDO. 
 DEF VAR lcSTCSMSText           AS CHAR NO-UNDO. 
 DEF VAR lcOfferSMSText         AS CHAR NO-UNDO. 
+DEF VAR lcOrderSMSText         AS CHAR NO-UNDO.
 DEF VAR ldeSMSStamp            AS DEC  NO-UNDO. 
 DEF VAR lcMobileNumber         AS CHAR NO-UNDO. 
    
@@ -551,7 +558,8 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
 
    IF LOOKUP('keep_installment', lcOrderStruct) GT 0 THEN
       plKeepInstallment = get_bool(pcOrderStruct,"keep_installment").
-
+   IF LOOKUP('multiorder', lcOrderStruct) GT 0 THEN
+         plMultiOrder = get_bool(pcOrderStruct,"multiorder").
    llROIClose = (pcROIresult EQ "risk" AND LOOKUP(pcROIlevel,"7,8") > 0).
 
    RETURN TRUE.
@@ -598,6 +606,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR liSubLimit AS INT NO-UNDO. 
    DEF VAR liSubs AS INT NO-UNDO. 
    DEF VAR liDelType  AS INT NO-UNDO.
+   DEF VAR liActLimit AS INT NO-UNDO.
+   DEF VAR liActs AS INT NO-UNDO.
 
    data[LOOKUP("country", gcCustomerStructStringFields)] = "ES".
    data[LOOKUP("nationality", gcCustomerStructStringFields)] = "ES".
@@ -636,6 +646,14 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          liLanguage = LOOKUP(get_string(pcStructId, lcField),
                                  "es_ES,es_CA,es_EU,es_GA,en").
       END. /* IF lcField EQ "language" ... */
+      ELSE IF lcField EQ "retrieved" THEN
+      DO:
+         plCustDataRetr = get_bool(pcStructId, lcField).
+      END.
+      ELSE IF lcField EQ "identified_cust_sms_number" THEN
+         DO:
+             pcIdentifiedSmsNumber = get_string(pcStructId, lcField).
+      END.
       ELSE IF liFieldIndex EQ 0 THEN
          lcFError = SUBST("Unknown data field `&1`", lcField).
       ELSE
@@ -675,7 +693,9 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          1,
          OUTPUT lcFError,
          OUTPUT liSubLimit,
-         OUTPUT liSubs) THEN .
+         OUTPUT liSubs,
+         OUTPUT liSubLimit,
+         OUTPUT liActs) THEN .
 
       CASE lcdelivery_channel:
          WHEN "PAPER" THEN liDelType = {&INV_DEL_TYPE_PAPER}.
@@ -761,19 +781,22 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.OutEMailMarketing  = (LOOKUP("Email", lcMarkOut, "|") NE 0)
          OrderCustomer.OutPostMarketing   = (LOOKUP("Post", lcMarkOut, "|") NE 0)
          OrderCustomer.OutBankMarketing   = (LOOKUP("Bank", lcMarkOut, "|") NE 0)
-         OrderCustomer.OperAllMarketing   = lcMarketing NE "".
+         OrderCustomer.OperAllMarketing   = lcMarketing NE ""
          OrderCustomer.ExtInvRef          = 
-            data[LOOKUP("invoice_ref", gcCustomerStructStringFields)].
+            data[LOOKUP("invoice_ref", gcCustomerStructStringFields)]
  
-         OrderCustomer.Address = OrderCustomer.Street .
+         OrderCustomer.Address = OrderCustomer.Street 
+         OrderCustomer.CustDataRetr = plCustdataRetr
+         OrderCustomer.MSISDNForIdent = pcIdentifiedSmsNumber.
+
          IF OrderCustomer.BuildingNum NE "" THEN 
             OrderCustomer.Address = OrderCustomer.Address + " " +
-                                    OrderCustomer.BuildingNum .         
+                                    OrderCustomer.BuildingNum.         
          IF OrderCustomer.AddressCompl NE "" THEN 
-            OrderCustomer.Address = OrderCustomer.Address + " " + OrderCustomer.AddressCompl .
+            OrderCustomer.Address = OrderCustomer.Address + " " + 
+                                    OrderCustomer.AddressCompl. 
 
          IF liDelType > 0 THEN OrderCustomer.DelType = liDelType.
-
    END.
 
 
@@ -935,6 +958,7 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
       Order.MsSeq = (IF LOOKUP(pcNumberType,"new,mnp") > 0 
                      THEN NEXT-VALUE(MobSub)
                      ELSE MobSub.MsSeq).
+      Order.Multiorder = plMultiOrder.               
       
 END.
 
@@ -1153,7 +1177,8 @@ gcOrderStructFields = "billing_data," +
                       "send_offer," +
                       "resignation_period," +
                       "tarj7_promo," +
-                      "keep_installment".
+                      "keep_installment," +
+                      "multiorder".
 
 gcCustomerStructFields = "birthday," +
                          "city!," +
@@ -1194,7 +1219,9 @@ gcCustomerStructFields = "birthday," +
                          "longitude," +
                          "profession," +
                          "kiala_code," + 
-                         "ups_hours".
+                         "ups_hours," +
+                         "retrieved," +
+                         "identified_cust_sms_number".
 
 /* note: check that data variable has correct EXTENT value */
 gcCustomerStructStringFields = "city," +
@@ -1225,7 +1252,9 @@ gcCustomerStructStringFields = "city," +
                                "longitude," +
                                "profession," + 
                                "kiala_code," +
-                               "ups_hours".
+                               "ups_hours," +
+                               "retrieved," +
+                               "identified_cust_sms_number".
 
 /* common validation */
 /* YBP-513 */
@@ -2175,6 +2204,30 @@ IF Order.OrderType EQ {&ORDER_TYPE_STC} AND
                   ldeSMSStamp,
                   "22622",
                   "").
+END.
+
+/* YPR-3317 */
+IF plCustdataRetr AND NOT plMultiOrder THEN DO:
+   IF pcIdentifiedSmsNumber EQ "" THEN
+      RETURN appl_err(SUBST("Identified customer SMS number missing.")).
+   lcOrderSMSText = fGetSMSTxt(
+                     "IdentifiedCustOrder",
+                     TODAY,
+                     (IF AVAIL Customer
+                      THEN Customer.Language
+                      ELSE 1),
+                      OUTPUT ldeSMSStamp).
+
+   IF lcOrderSMSText > "" THEN DO:
+      lcOrderSMSText = REPLACE(lcOrderSMSText, "#CLI", Order.CLI). 
+      fMakeSchedSMS2(Order.CustNum,
+                     pcIdentifiedSmsNumber,
+                     {&SMSTYPE_INFO},
+                     lcOrderSMSText,
+                     ldeSMSStamp,
+                     "622",
+                     "").
+   END. 
 END.
 
 /* should overwrite any roi status */
