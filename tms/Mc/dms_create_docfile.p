@@ -564,7 +564,7 @@ FUNCTION fGetQ25BankByOrder RETURNS CHAR
               bMsR.ReqIParam1 EQ Order.OrderID 
               NO-LOCK NO-ERROR.
    IF AVAIL bMsR THEN
-      RETURN bMsR.ReqCparam6./*Bank, not ContractID for this type.*/
+      RETURN bMsR.ReqCparam6. /*Bank, not ContractID for this type.*/
    ELSE RETURN "".
 
 END.
