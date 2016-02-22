@@ -216,8 +216,8 @@ FIND FIRST MSRequest WHERE
            MSRequest.MSrequest EQ liCreated EXCLUSIVE-LOCK NO-ERROR.
 IF AVAIL MsRequest THEN DO:
    MsRequest.ReqCparam4 = lcQ25ContractId. /*For dump*/
-   MsRequest.ReqCparam6 = lcQ25ContractId. /*For finding entry in DMS usage */
-   MsRequest.ReqCparam1 = fBankByBillCode(SingleFee.BillCode). 
+   /*For this request type (8) the field is used for Bank, not ContractID.*/
+   MsRequest.ReqCparam6 = fBankByBillCode(SingleFee.BillCode). /*ybu-5247*/
 END.
 RELEASE MsRequest.
 

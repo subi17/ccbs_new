@@ -168,7 +168,8 @@ IF liCreated = 0 THEN
 FIND FIRST MSRequest WHERE
            MSRequest.MSrequest EQ liCreated EXCLUSIVE-LOCK NO-ERROR.
 IF AVAIL MsRequest THEN DO:
-   MsRequest.ReqCparam1 = fBankByBillCode(SingleFee.BillCode).
+   /*YBU-5247: For this reqtype this is not reserved for ContractID*/
+   MsRequest.ReqCparam6 = fBankByBillCode(SingleFee.BillCode).
 END.
 RELEASE MsRequest.
 
