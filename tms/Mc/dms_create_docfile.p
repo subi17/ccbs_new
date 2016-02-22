@@ -580,7 +580,7 @@ FUNCTION fFindQ25Cancellation RETURNS CHAR
    FIND FIRST OrderAction NO-LOCK WHERE
               OrderAction.Brand    EQ gcBrand AND
               OrderAction.OrderId  EQ Order.OrderId AND
-              OrderAction.ItemType EQ "Q25Discount" NO-ERROR.
+              OrderAction.ItemType EQ "Q25Extension" NO-ERROR.
 
    IF NOT AVAILABLE OrderAction THEN RETURN "".
 
