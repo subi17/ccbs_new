@@ -24,6 +24,7 @@ DEFINE VARIABLE lcFFItemKey AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcEventlogDetails AS CHARACTER NO-UNDO.
 DEFINE BUFFER beventlog FOR eventlog.
 DEFINE VARIABLE ldeTerminated AS DEC NO-UNDO. 
+DEF VAR lcBundleOutputFile AS CHAR NO-UNDO. 
 
 IF DAY(TODAY) = 1 THEN
    ldaToDate = fLastDayOfMOnth(TODAY - 1).
@@ -35,7 +36,9 @@ ldaFromDate = DATE(MONTH(ldaToDate),1,YEAR(ldaToDate)).
 ldeFromStamp = fMake2DT(ldaFromDate,0).
 liPeriod = YEAR(ldaFromDate) * 100 + MONTH(ldaFromDate).
 
-lcOutputFile = "/apps/yoigo/tms_support/billing/monthly_fee_check_" + STRING(liPeriod) + ".txt".
+ASSIGN 
+   lcOutputFile = "/apps/yoigo/tms_support/billing/monthly_fee_check_" + STRING(liPeriod) + ".txt"
+   lcBundleOutputFile = "/apps/yoigo/tms_support/billing/monthly_fee_check_bundle_" + STRING(liPeriod) + ".txt".
 
 UPDATE 
    lcOutputFile FORMAT "x(60)" LABEL "Output" skip(1)
@@ -47,10 +50,16 @@ if lcOutputFile eq "" or lcOutputFile eq ? then quit.
 disp "running.." with frame fcontrolrep.
 
 def stream sout.
+def STREAM strout.
+
 output stream sout to value(lcOutputFile).
+OUTPUT STREAM strout to value(lcBundleOutputFile).
 
 put stream sout unformatted 
       "CUSTNUM|MSSEQ|MSISDN|CONTRACT|CONTRACT_FROM|CONTRACT_TO|MSREQUEST_CREATE_FEES|DELETE_FIXEDFEE_EVENTLOG|DELETE_FFITEM_EVENTLOG|EVENTLOG_DETAIL|TERMINATION_TIME" skip.
+
+put STREAM strout unformatted 
+    "CUSTNUM|MsSEQ|MSISDN|TariffBundle/BaseBundle" SKIP.
 
 looppi:
 FOR EACH daycampaign where
@@ -198,6 +207,11 @@ DEFINE TEMP-TABLE ttServicelimit NO-UNDO
 FIELD groupcode AS char
 INDEX groupcode IS PRIMARY UNIQUE groupcode. 
 
+define temp-table ttSubDetails no-undo 
+   field MsSeq as int
+   field CLI   as char
+   field Bundle as char. 
+
 looppi2:
 FOR EACH servicelimit NO-LOCK,
    first daycampaign NO-LOCK where
@@ -252,17 +266,47 @@ FOR EACH servicelimit NO-LOCK,
       
       FIND FIRST mobsub where
                  mobsub.msseq = mservicelimit.msseq NO-LOCK no-error.
+
+
       IF NOT AVAIL mobsub then do:
          FIND FIRST termmobsub where
                     termmobsub.msseq = mservicelimit.msseq NO-LOCK no-error.
+         
+         FIND FIRST CliType WHERE 
+                    CliType.CLitype = termmobsub.CLIType NO-LOCK no-error.
+         
          assign liCustnum = termmobsub.custnum
                 lcCli = termmobsub.cli.
+
          FIND FIRST msowner NO-LOCK WHERE
                     msowner.msseq = termmobsub.msseq USE-INDEX msseq.
          ldeTerminated = msowner.tsend.
+
+         CREATE ttSubDetails.
+         assign ttSubDetails.msseq  = termmobsub.MsSeq 
+                ttSubDetails.cli    = termmobsub.CLI
+                ttSubDetails.Bundle = IF termmobsub.TariffBundle <> "" THEN 
+                                         termmobsub.TariffBundle
+                                      ELSE IF CLIType.BaseBundle <> "" THEN 
+                                              CLIType.BaseBundle
+                                      ELSE "".
       end.     
-      else assign liCustnum = mobsub.custnum
-              lcCli = mobsub.cli.
+      else DO: 
+         assign liCustnum = mobsub.custnum
+                lcCli = mobsub.cli.
+      
+         FIND FIRST CliType WHERE 
+                    CliType.CLitype = MobSub.CLIType NO-LOCK no-error.
+         
+         CREATE ttSubDetails.
+         assign ttSubDetails.msseq  = MobSub.MsSeq 
+                ttSubDetails.cli    = MobSub.CLI
+                ttSubDetails.Bundle = IF MobSub.TariffBundle <> "" THEN 
+                                         MobSub.TariffBundle
+                                      ELSE IF CLIType.BaseBundle <> "" THEN 
+                                              CLIType.BaseBundle
+                                      ELSE "".
+      END.
 
       find first fixedfee where
                  fixedfee.brand = gcBrand and
@@ -344,5 +388,90 @@ FOR EACH servicelimit NO-LOCK,
    END.
 END.
 
+DEF VAR lcBundle AS CHAR NO-UNDO. 
+DEF VAR liBundleCount AS INT NO-UNDO. 
+
+liBundleCount = 0.
+
+FOR EACH MobSub NO-LOCK WHERE 
+         MobSub.Brand = gcBrand:             
+  FIND FIRST CLIType NO-LOCK WHERE 
+             CLIType.CLIType = MobSub.CLIType NO-ERROR.
+  
+  lcBundle = "".
+
+  IF MobSub.TariffBundle EQ "" AND
+     CLIType.BaseBundle  EQ "" THEN NEXT.
+
+  IF MobSub.TariffBundle <> "" THEN 
+     lcBundle = MobSub.TariffBundle. 
+  ELSE IF CLIType.BaseBundle <> "" THEN
+     lcBundle = CLIType.BaseBundle.
+  
+  RUN pBundleCheck(MobSub.MsSeq,
+                   MobSub.CustNum,
+                   MobSub.CLI,
+                   lcBundle).
+
+END.
+
+FOR EACH MsRequest NO-LOCK WHERE
+         MsRequest.Brand     = gcBrand AND 
+         MsRequest.ReqType   = 18      AND 
+         MsRequest.ReqStatus = 2       AND 
+         MsRequest.ActStamp >= ldeFromStamp:
+
+   FIND FIRST TermMobSub NO-LOCK WHERE 
+              TermMobSub.Brand = gcBrand AND 
+              TermMobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
+
+   FIND FIRST CLIType NO-LOCK WHERE 
+              CLIType.CLIType = TermMobSub.CLIType NO-ERROR.
+     
+   lcBundle = "".
+
+   IF NOT AVAIL TermMobSub OR 
+      NOT AVAIL CLIType    THEN NEXT.
+
+   IF TermMobSub.TariffBundle EQ "" AND
+      CLIType.BaseBundle      EQ "" THEN NEXT.
+
+   IF TermMobSub.TariffBundle <> "" THEN 
+      lcBundle = TermMobSub.TariffBundle. 
+   ELSE IF CLIType.BaseBundle <> "" THEN
+      lcBundle = CLIType.BaseBundle.
+     
+   RUN pBundleCheck(TermMobSub.MsSeq,
+                    TermMobSub.CustNum,
+                    TermMobSub.CLI,
+                    lcBundle).
+
+END.
+
+PROCEDURE pBundleCheck:
+define INPUT parameter iiMsSeq   as integer   no-undo.
+define INPUT parameter iiCustNum AS integer   no-undo.
+define INPUT parameter icCLI     as character no-undo.
+define INPUT parameter icBundle  as character no-undo.
+
+  IF NOT CAN-FIND(FIRST ttSubDetails WHERE 
+                        ttSubDetails.MsSeq  EQ iiMsSeq   AND 
+                        ttSubDetails.Bundle EQ icBundle) THEN DO:
+     put STREAM strout unformatted 
+        iiCustNum "|"
+        iiMsSeq   "|"
+        icCLI     "|"
+        lcBundle  SKIP.
+
+     liBundleCount = liBundleCount + 1.
+
+  END.                      
+
+END PROCEDURE.
+
 output stream sout close.
+OUTPUT STREAM strout CLOSE.
+
 MESSAGE "Done," liCount "missing contracts found" VIEW-AS ALERT-BOX.
+
+MESSAGE "Bundle tariff Count : " liBundleCount VIEW-AS ALERT-BOX.
