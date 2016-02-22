@@ -379,7 +379,7 @@ PROCEDURE pRevertRenewalOrder:
                                                  FALSE,
                                                  "",
                                                  0,
-                                                 (IF bDCCLI.DCEvent BEGINS "PAYTERM" 
+                                                 (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} 
                                                   THEN bDCCLI.PerContractID
                                                   ELSE 0),
                                                  OUTPUT lcError).
@@ -528,7 +528,7 @@ PROCEDURE pCloseQ25Discount:
             FALSE,
             "",
             0, /* payterm residual fee */
-            0,
+            DCCLI.PercontractId,
             OUTPUT lcResult).
 
          IF liRequest EQ 0 THEN

@@ -206,7 +206,7 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    END.
    ELSE IF iiPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
    /* Q25 Month 24 20th day extension made */  
-      lcAmount = STRING(ROUND(idAmount / 12,2),"->>>>>>9.99").
+      lcAmount = STRING(TRUNC(idAmount / 12,2),"->>>>>>9.99").
       lcAmount = LEFT-TRIM(lcAmount).
       lcAmount = REPLACE(lcAmount,".",",").                  
       lcSMSMessage = fGetSMSTxt("Q25FinalFeeMsgChosenExt",
@@ -318,7 +318,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             SingleFee.CalcObj     = "RVTERM" AND
             SingleFee.BillPeriod  = liPeriod NO-LOCK:
 
-      IF NOT SingleFee.OrderId NE 0 THEN NEXT.
+      IF SingleFee.OrderId <= 0 THEN NEXT.
       liPhase = iiPhase.
       FIND FIRST Mobsub NO-LOCK WHERE
                  Mobsub.MsSeq = INT(SingleFee.KeyValue) NO-ERROR.

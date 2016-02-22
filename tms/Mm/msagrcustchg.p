@@ -1113,7 +1113,8 @@ PROCEDURE pMsCustMove:
                 bFixedFee.CustNum = iiNewInvCust
                 bFixedFee.BegDate = ldtFeeDate
                 bFixedFee.FinancedResult = {&TF_STATUS_YOIGO} 
-                  WHEN bFixedFee.BillCode BEGINS "PAYTERM".
+                  WHEN bFixedFee.BillCode BEGINS "PAYTERM" OR
+                       bFixedFee.BillCode EQ "RVTERM".
                 
          FOR EACH FFItem OF FixedFee EXCLUSIVE-LOCK WHERE
                   FFItem.Billed      = FALSE AND

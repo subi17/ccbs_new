@@ -1208,7 +1208,10 @@ PROCEDURE pCloseContracts:
       
    FOR EACH DCCLI NO-LOCK WHERE
             DCCLI.MsSeq   = iiMsSeq  AND
-            DCCLI.ValidTo >= idaActDate:
+            DCCLI.ValidTo >= idaActDate,
+      FIRST DayCampaign NO-LOCK WHERE
+            DayCampaign.Brand = gcBrand AND
+            DayCampaign.DCEvent = DCCLI.DCevent:
 
       /* pending termination request */
       IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
@@ -1218,7 +1221,7 @@ PROCEDURE pCloseContracts:
                         LOOKUP(STRING(MsRequest.ReqStatus),
                                 {&REQ_INACTIVE_STATUSES}) = 0 AND
                         MsRequest.ActStamp <= ldeActStamp AND
-                        (IF DCCLI.DCEvent BEGINS "PAYTERM"
+                        (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}
                          THEN MsRequest.ReqIParam3 = DCCLI.PerContractId
                          ELSE TRUE)) THEN NEXT.
 
@@ -1227,7 +1230,7 @@ PROCEDURE pCloseContracts:
                        DCCLI.DCEvent.
                               
       lcContIDList   = lcContIDList + (IF lcContIDList > "" THEN "," ELSE "") +
-                       (IF DCCLI.DCEvent BEGINS "PAYTERM"
+                       (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}
                         THEN STRING(DCCLI.PerContractID)
                         ELSE STRING(0)).
 
@@ -1247,7 +1250,12 @@ PROCEDURE pCloseContracts:
 
       ASSIGN lcContract   = ENTRY(liCount,lcContractList).
 
-      IF lcContract BEGINS "PAYTERM" THEN 
+      FIND FIRST DayCampaign NO-LOCK WHERE
+                 DayCampaign.Brand = gcBrand AND
+                 DayCampaign.DCEvent = lcContract NO-ERROR.
+
+      IF AVAIL DayCampaign AND
+               DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN 
          liContractID = INT(ENTRY(liCount,lcContIDList)). 
 
       IF (lcContract EQ "BONO_VOIP" AND
@@ -1292,8 +1300,9 @@ PROCEDURE pCloseContracts:
                                          "PMDUBDeActSTC" ELSE ""), 
                                            /* SMS for PMDUB STC Deactivation */
                                         0,
-                                        IF lcContract BEGINS "PAYTERM" THEN liContractID 
-                                        ELSE 0,
+                                        (IF AVAIL DayCampaign AND
+                                                  DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} 
+                                        THEN liContractID ELSE 0),
                                         OUTPUT lcError).
          IF liTerminate = 0 THEN
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
