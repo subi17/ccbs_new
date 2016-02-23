@@ -1429,13 +1429,12 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
    
    FOR EACH MsRequest NO-LOCK WHERE
             MsRequest.Brand EQ gcBrand AND
-            MsRequest.ReqStatus EQ 2 AND
-            MsRequest.ActStamp > idStartTS AND
-            MsRequest.ActStamp < idEndTS AND
+            MsRequest.ReqStatus NE {&REQUEST_STATUS_CANCELLED} AND
+            MsRequest.CreStamp > idStartTS AND
+            MsRequest.CreStamp < idEndTS AND
             MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION}  /*8*/
             AND
             MsRequest.ReqCparam6 NE "" AND 
-            MsRequest.UpdateStamp <= MsRequest.DoneStamp AND
             MsRequest.ReqCparam3 EQ "RVTERM12":
       IF NOT MsRequest.UserCode BEGINS "POS_" THEN NEXT.
       /*Document type,DocStatusCode,RevisionComment*/
@@ -1453,7 +1452,7 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
                       /*Q25 Extension_Request_date*/
                       fPrintDate(MsRequest.ActStamp)      + lcDelim +
                       /*Q25 Extension bank*/
-                      STRING(Msrequest.ReqCparam1).
+                      STRING(Msrequest.ReqCparam6).
                       
       OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
       PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
