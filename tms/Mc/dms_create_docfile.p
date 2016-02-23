@@ -1452,7 +1452,7 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
                       /*Q25 Extension_Request_date*/
                       fPrintDate(MsRequest.ActStamp)      + lcDelim +
                       /*Q25 Extension bank*/
-                      STRING(Msrequest.ReqCparam1).
+                      STRING(Msrequest.ReqCparam6).
                       
       OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
       PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
