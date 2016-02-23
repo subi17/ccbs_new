@@ -327,9 +327,10 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
       liPhase = iiPhase.
       ldAmount = SingleFee.amt.
       FIND FIRST Mobsub NO-LOCK WHERE
-                 Mobsub.MsSeq = INT(SingleFee.KeyValue) NO-ERROR.
+                 Mobsub.MsSeq = INT(SingleFee.KeyValue) AND
+                 Mobsub.Paytype = FALSE NO-ERROR.
       IF NOT AVAIL Mobsub THEN DO:
-         lcLogText = "Mobsub not found: " +
+         lcLogText = "Mobsub not found or prepaid: " +
                      STRING(liPhase) + "|" + STRING(SingleFee.KeyValue) 
                      + "|" + STRING(ldAmount).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).

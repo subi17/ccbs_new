@@ -304,6 +304,6 @@ PROCEDURE pGetQ25Text:
       ocText = REPLACE(ocText,"#DD",STRING(DAY(ldaTo),"99")) 
       ocText = REPLACE(ocText,"#MM",STRING(MONTH(ldaTo),"99"))
       ocText = REPLACE(ocText,"#Q25LINK",lcQ25Link).
-
+   /* comment added for getting correct fileencoding (latin1 ñ) */
 END PROCEDURE.
 
