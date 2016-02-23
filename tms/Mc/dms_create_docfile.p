@@ -1429,7 +1429,7 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
    
    FOR EACH MsRequest NO-LOCK WHERE
             MsRequest.Brand EQ gcBrand AND
-            MsRequest.ReqStatus EQ 2 AND
+            MsRequest.ReqStatus NE {&REQUEST_STATUS_CANCELLED} AND
             MsRequest.ActStamp > idStartTS AND
             MsRequest.ActStamp < idEndTS AND
             MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION}  /*8*/
