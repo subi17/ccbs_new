@@ -113,7 +113,9 @@ IF TODAY LT ldaBonoVoipRemovalDate AND
    LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") = 0 AND
    pcBundleId <> {&DSS}
 THEN RETURN appl_err("Incorrect Bundle Id").
-ELSE IF LOOKUP(pcBundleId,lcBONOContracts) = 0 AND pcBundleId <> {&DSS}
+ELSE IF TODAY GE ldaBonoVoipRemovalDate AND 
+        LOOKUP(pcBundleId,lcBONOContracts) = 0 AND
+        pcBundleId <> {&DSS}
    THEN RETURN appl_err("Incorrect Bundle Id").
 
 /* Check if subscription type is not compatible with bundle */
@@ -158,6 +160,10 @@ CASE pcActionValue :
             RETURN appl_err("Bundle termination is not allowed").
       END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
       /* Customer level - As of now DSS only */
+      ELSE IF TODAY GE ldaBonoVoipRemovalDate AND
+              pcBundleId = "BONO_VOIP" THEN DO:
+         RETURN appl_err("Bundle termination is not allowed").
+      END. 
       ELSE DO:
          IF NOT fIsDSSActive(Mobsub.Custnum,ldeActStamp) THEN
             RETURN appl_err("Bundle termination is not allowed").
@@ -193,6 +199,10 @@ CASE pcActionValue :
             RETURN appl_err("Bundle activation is not allowed").
       END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
       /* Customer level - As of now DSS only */
+      ELSE IF TODAY GE ldaBonoVoipRemovalDate AND
+              pcBundleId = "BONO_VOIP" THEN DO:
+         RETURN appl_err("Bundle activation is not allowed").
+      END.
       ELSE DO:
          IF pcBundleId = {&DSS} THEN
             RETURN appl_err("DSS activation is not allowed").
