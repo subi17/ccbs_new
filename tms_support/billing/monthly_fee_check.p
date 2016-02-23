@@ -210,7 +210,8 @@ INDEX groupcode IS PRIMARY UNIQUE groupcode.
 define temp-table ttSubDetails no-undo 
    field MsSeq as int
    field CLI   as char
-   field Bundle as char. 
+   field Bundle as char
+   INDEX MsSeq MsSeq. 
 
 looppi2:
 FOR EACH servicelimit NO-LOCK,
@@ -388,20 +389,27 @@ FOR EACH servicelimit NO-LOCK,
    END.
 END.
 
-DEF VAR lcBundle AS CHAR NO-UNDO. 
-DEF VAR liBundleCount AS INT NO-UNDO. 
+DEF VAR lcBundleBasedCLITypes AS CHAR NO-UNDO.  
+DEF VAR lcBundle              AS CHAR NO-UNDO. 
+DEF VAR liBundleCount         AS INT  NO-UNDO. 
 
-liBundleCount = 0.
+ASSIGN liBundleCount = 0
+       lcBundleBasedCLITypes = fCParam("Bundles","BUNDLE_BASED_CLITYPES").
 
 FOR EACH MobSub NO-LOCK WHERE 
          MobSub.Brand = gcBrand:             
   FIND FIRST CLIType NO-LOCK WHERE 
              CLIType.CLIType = MobSub.CLIType NO-ERROR.
   
+  IF NOT AVAIL CLIType THEN NEXT.
+
   lcBundle = "".
 
   IF MobSub.TariffBundle EQ "" AND
      CLIType.BaseBundle  EQ "" THEN NEXT.
+
+  IF LOOKUP(CLIType.CLIType,lcBundleBasedCLITypes) > 0 AND 
+     MobSub.TariffBundle EQ ""                         THEN NEXT. 
 
   IF MobSub.TariffBundle <> "" THEN 
      lcBundle = MobSub.TariffBundle. 
@@ -422,7 +430,6 @@ FOR EACH MsRequest NO-LOCK WHERE
          MsRequest.ActStamp >= ldeFromStamp:
 
    FIND FIRST TermMobSub NO-LOCK WHERE 
-              TermMobSub.Brand = gcBrand AND 
               TermMobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
 
    FIND FIRST CLIType NO-LOCK WHERE 
