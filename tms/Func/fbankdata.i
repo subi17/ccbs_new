@@ -371,6 +371,8 @@ FUNCTION fChkBankAccChange RETURNS LOGICAL
    (iiCustNum AS INT).
    DEF VAR ldeDate AS DEC NO-UNDO.
 
+   DEF BUFFER MsRequest FOR MsRequest.
+
    /* any postpaid subscriptions */
    IF CAN-FIND (FIRST mobsub WHERE mobsub.Brand = gcBrand AND
                                    mobsub.custnum = iiCustNum AND
@@ -386,10 +388,9 @@ FUNCTION fChkBankAccChange RETURNS LOGICAL
                             MsRequest.ActStamp > ldeDate AND
                             MsRequest.ReqStatus = 2 NO-LOCK:
       IF CAN-FIND (FIRST msOwner WHERE
-                         msOwner.Brand = gcBrand AND
-                         msOwner.CLI = MsRequest.CLI AND
-                         msOwner.tsEnd > ldeDate AND
                          msOwner.MsSeq = MsRequest.MsSeq AND
+                         msOwner.Custnum = iiCustNum AND
+                         msOwner.tsEnd > ldeDate AND
                          msOwner.paytype = FALSE NO-LOCK) THEN
          RETURN FALSE.
    END.

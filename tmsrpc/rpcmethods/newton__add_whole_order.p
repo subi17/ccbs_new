@@ -1252,9 +1252,7 @@ gcCustomerStructStringFields = "city," +
                                "longitude," +
                                "profession," + 
                                "kiala_code," +
-                               "ups_hours," +
-                               "retrieved," +
-                               "identified_cust_sms_number".
+                               "ups_hours".
 
 /* common validation */
 /* YBP-513 */
