@@ -32,6 +32,7 @@ DEF VAR liTestStartDay           AS CHAR NO-UNDO.
 DEF VAR liTestEndDay             AS CHAR NO-UNDO.
 DEF VAR ldaExecuteDate           AS DATE NO-UNDO.
 DEF VAR liWeekdayCount           AS INT  NO-UNDO.
+DEF VAR liSendingStartDay        AS INT  NO-UNDO.
 
 /* for testing and logging support */
 ASSIGN lcTestStartDay = fCParam("Q25","Q25TestStart")
@@ -50,16 +51,12 @@ ELSE
 
 execution:
 DO:
-   /* January 2016 messages will be sent during 20.1. - 30.1. after that this 
-      can be removed because later on messages will be send between 1st and
-      15th day of month. */
-   IF ldaExecuteDate LE 2/5/16 THEN
+   /* Message sending is going to start 7.3.2016. This can be deleted 
+      if refactoring/corrections is made after SMS sending released 
+      Q22 and Q23 messages are send during 15th - last day of the month, Q24 
+      messages during 6th - 19th day*/
+   IF ldaExecuteDate LE 3/6/16 THEN
          LEAVE execution.
-/*   ELSE IF ldaExecuteDate GT 2/5/16 AND
-      ldaExecuteDate LT 1/31/16 THEN DO:
-      liStartDay = ((DAY(ldaExecuteDate) - 19) * 3) - 2.
-      liEndDay = ((DAY(ldaExecuteDate) - 19) * 3).
-   END. */
    /* No sending first 5 days of month, no sending at Saturday or Sunday. */
    ELSE IF DAY(ldaExecuteDate) LE 5 THEN
       LEAVE execution. /* Messages will be sent after 5th day of month */   
@@ -78,11 +75,15 @@ DO:
 
          fCheckDates function resolves last day of month. */
        
-       liWeekdayCount = fCountNormalWeekday(ldaExecuteDate).       
        /* sending days for Q22 and Q23 */
-       liStartDay = (liWeekdayCount * 2) - 1. 
-       liEndDay = (liWeekdaycount * 2).
+       liSendingStartDay = 15. /* start sending at 15th day earliest */
+       liWeekdayCount = fCountNormalWeekday(ldaExecuteDate, liSendingStartDay).
+       liStartDay = (liWeekdayCount * 3) - 2. 
+       liEndDay = (liWeekdaycount * 3).
+       
        /* Sending days for Q24 */
+       liSendingStartDay = 6.
+       liWeekdayCount = fCountNormalWeekday(ldaExecuteDate, liSendingStartDay).
        liStartDay24M = (liWeekdayCount * 3) - 2.
        liEndDay24M = (liWeekdaycount * 3).
    END.
@@ -96,13 +97,26 @@ DO:
    /* Month 24 0 month perm contract to go */
    fGetStartEndDates({&Q25_MONTH_24}, liStartDay24M, liEndDay24M,
                      OUTPUT ldaStartDateMonth24, OUTPUT ldaEndDateMonth24).
+   /* at month 22 and 23 messages are needed to sent during month. Last day is 
+      last weekday of the month. */
+  IF fisLastDayToSend(ldaExecuteDate,
+                      DAY(fLastDayOfMonth(ldaExecuteDate))) THEN DO:
+     ldaEndDateMonth22 = DATE(MONTH(ldaEndDateMonth22),
+                              DAY(fLastDayOfMonth(ldaEndDateMonth22)),
+                              YEAR(ldaEndDateMonth22)).
+     ldaEndDateMonth23 = DATE(MONTH(ldaEndDateMonth23),
+                              DAY(fLastDayOfMonth(ldaEndDateMonth23)),
+                              YEAR(ldaEndDateMonth23)).                         
+   
+   END.
    /* at month 24 all messages are needed to be send before 20th day.
       If there is national holidays during 6th and 20th day, might be
-      needed to send some extra messages at the end. */
-   IF fisLastDayToSend(ldaExecuteDate) THEN
+      needed to send some extra messages at the end. 19th day is last. */
+   IF fisLastDayToSend(ldaExecuteDate, 19) THEN
       ldaEndDateMonth24 = DATE(MONTH(ldaEndDateMonth24),
                                DAY(fLastDayOfMonth(ldaEndDateMonth24)),
                                YEAR(ldaEndDateMonth24)).
+                               
    /* TESTING SUPPORT 
       Start and end date manipulation */
    IF ldaExecuteDate EQ TODAY AND lcTestStartDay NE ? AND 

@@ -6,10 +6,11 @@
                     16.11.06/aam fCheckBankAcc for Spain
    
 */
-
+{commali.i}
 {timestamp.i}
 {tmsconst.i}
-   
+{date.i}  
+
 /* convert into data form */
 FUNCTION fBankAcc2Data RETURNS CHARACTER
    (icBankAcc AS CHAR).
@@ -363,3 +364,46 @@ FUNCTION fCalcSepaBankAcc RETURNS CHARACTER
    RETURN lcIbanFinal.
 
 END FUNCTION.
+
+/* Bank account is not allowed to change empty if postpaid subscriptions or
+less than 40 days from latest postpaid termination / STC" */
+FUNCTION fChkBankAccChange RETURNS LOGICAL
+   (iiCustNum AS INT).
+   DEF VAR ldeDate AS DEC NO-UNDO.
+
+   DEF BUFFER MsRequest FOR MsRequest.
+
+   /* any postpaid subscriptions */
+   IF CAN-FIND (FIRST mobsub WHERE mobsub.Brand = gcBrand AND
+                                   mobsub.custnum = iiCustNum AND
+                                   mobsub.paytype = FALSE NO-LOCK) THEN
+      RETURN FALSE.
+
+   ldeDate = fDate2TS(TODAY - 40).
+
+   /* is terminated postpaid subscription during last 40 days */
+   FOR EACH MsRequest WHERE MsRequest.Brand = gcBrand AND
+                            MsRequest.Reqtype = 18 AND
+                            MsRequest.CustNum = iiCustNum AND
+                            MsRequest.ActStamp > ldeDate AND
+                            MsRequest.ReqStatus = 2 NO-LOCK:
+      IF CAN-FIND (FIRST msOwner WHERE
+                         msOwner.MsSeq = MsRequest.MsSeq AND
+                         msOwner.Custnum = iiCustNum AND
+                         msOwner.tsEnd > ldeDate AND
+                         msOwner.paytype = FALSE NO-LOCK) THEN
+         RETURN FALSE.
+   END.
+   /* is STC from postpaid done during last 40 days */
+   IF CAN-FIND (FIRST MsRequest WHERE MsRequest.Brand = gcBrand AND
+                                      MsRequest.Reqtype = 0 AND
+                                      MsRequest.CustNum = iiCustNum AND
+                                      MsRequest.ActStamp > ldeDate AND
+                                      MsRequest.ReqStatus = 2 AND
+                                      MsRequest.ReqCParam1 BEGINS "CONT"
+                                      NO-LOCK) THEN
+      RETURN FALSE.
+   /* otherwise account can be changed empty */
+   RETURN TRUE.
+END FUNCTION.
+
