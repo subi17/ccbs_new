@@ -81,13 +81,13 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
     piOrders AS INT,
     OUTPUT ocReason AS CHAR,
     OUTPUT oiSubLimit AS INT,
-    OUTPUT oiSubCount AS INT):
+    OUTPUT oiSubCount AS INT,
+    OUTPUT oiSubActLimit AS INT,
+    OUTPUT oiActOrderCount AS INT):
 
    /* no sole trader passport custcat available */
    IF pcIdType = "passport" THEN plSelfEmployed = FALSE.
 
-   DEF VAR liSubActLimit   AS INT NO-UNDO. 
-   DEF VAR liActOrderCount AS INT NO-UNDO.
    DEF VAR ldaOrderDate AS DATE NO-UNDO. 
 
    DEF BUFFER OrderCustomer FOR OrderCustomer.
@@ -116,7 +116,8 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
               fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
               IF INTERVAL(TODAY, ldaOrderDate, "months") >= 24 THEN NEXT.
            END.
-           liActOrderCount = liActOrderCount + 1.
+           oiActOrderCount = oiActOrderCount + 1.
+
         END.
         
         IF LOOKUP(STRING(Order.statuscode),{&ORDER_INACTIVE_STATUSES}) EQ 0 THEN
@@ -126,7 +127,7 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    
    /* used with multisim orders */
    IF piOrders > 1 THEN
-      liActOrderCount = liActOrderCount + (piOrders - 1).
+      oiActOrderCount = oiActOrderCount + (piOrders - 1).
 
    FOR EACH Customer NO-LOCK
    WHERE Customer.Brand           EQ gcBrand
@@ -153,7 +154,8 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
                                        INPUT {&LIMIT_TYPE_SUBQTY},
                                        INPUT pcIdType,
                                        INPUT plSelfEmployed).
-       liSubActLimit = fCheckSubsLimit(INPUT Customer.Custnum,
+       oiSubActLimit = fCheckSubsLimit(INPUT Customer.Custnum,
+
                                        INPUT {&LIMIT_TYPE_SUBACTQTY},
                                        INPUT pcIdType,
                                        INPUT plSelfEmployed).
@@ -171,10 +173,10 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
                  CustCat.SelfEmployed = plSelfEmployed NO-LOCK NO-ERROR. 
       IF AVAIL CustCat THEN
          ASSIGN oiSubLimit    = CustCat.MobSubLimit
-                liSubActLimit = CustCat.ActivationLimit.
+                oiSubActLimit = CustCat.ActivationLimit.
    END.
    
-   IF oiSubCount >= oiSubLimit OR liActOrderCount >= liSubActLimit THEN DO:
+   IF oiSubCount >= oiSubLimit OR oiActOrderCount >= oiSubActLimit THEN DO:
       ocReason = "subscription limit". 
       RETURN FALSE.
    END.
