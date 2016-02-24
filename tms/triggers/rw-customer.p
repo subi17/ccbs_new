@@ -33,6 +33,11 @@ ELSE DO:
       Phone
       SMSNumber
       BankAcct
+      HonTitle
+      Birthday
+      FoundationDate
+      AuthCustId
+      AuthCustIdType
    TO Oldbuf SAVE RESULT IN llResult.
 
    IF NOT llResult THEN DO:

@@ -129,7 +129,8 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsRequest).
    CASE pcReqType:
       WHEN "subscription_type" THEN
-         IF fChkReqStatusChange(4) EQ TRUE THEN DO:
+         IF fChkReqStatusChange(4) EQ TRUE AND 
+            MsRequest.ActStamp > fMakeTs() THEN DO:
             /* cancel possible renewal pos stc order */
             FIND FIRST Order WHERE
                Order.MsSeq = MsRequest.MsSeq AND

@@ -39,6 +39,7 @@ p=s.newton.add_whole_order(
                  'customer_data':{'city':'Madrid',
                  'street':'100011',
                  'zip':'28600',
-                 'person_id':'old'}})
+                 'person_id':'old',
+                 'customer_data_retrieved':bool(1)}})
 
 print_results(p)
