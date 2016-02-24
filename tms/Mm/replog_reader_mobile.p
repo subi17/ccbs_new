@@ -478,8 +478,7 @@ PROCEDURE pHandleMsRequest:
               RECID(MsRequest) = RepLog.RecordId NO-ERROR.
 
          IF AVAIL MsRequest THEN DO:
-            IF LOOKUP(MsRequest.ReqSource,{&REQUEST_SOURCES_HPD}) > 0 AND
-               LOOKUP(STRING(MsRequest.ReqType),{&REQTYPES_HPD}) > 0
+            IF LOOKUP(STRING(MsRequest.ReqType),{&REQTYPES_HPD}) > 0
             THEN DO:
                lcMessage = lcMessage + lcDel +
                            fNotNull(STRING(MsRequest.MsRequest)) + lcDel +

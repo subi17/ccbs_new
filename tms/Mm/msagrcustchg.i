@@ -154,7 +154,9 @@ PROCEDURE pCheckTargetCustomerForACC:
    
    DEF VAR lcBarrStatus AS CHARACTER NO-UNDO. 
    DEF VAR liSubLimit AS INT NO-UNDO. 
-   DEF VAR lisubs AS INT NO-UNDO. 
+   DEF VAR lisubs AS INT NO-UNDO.
+   DEF VAR liActLimit AS INT NO-UNDO.
+   DEF VAR liActs AS INT NO-UNDO.
    
    IF iiNewCustnum = 0 THEN RETURN "".
 
@@ -181,7 +183,9 @@ PROCEDURE pCheckTargetCustomerForACC:
                                   1,
                                   OUTPUT ocMessage,
                                   OUTPUT liSubLimit,
-                                  OUTPUT liSubs) THEN DO:
+                                  OUTPUT liSubs,
+                                  OUTPUT liActLimit,
+                                  OUTPUT liActs) THEN DO:
       ocMessage = "Subscription limit exceeded".
       RETURN "ERROR".
    END. /* IF AVAILABLE bACCNewCust AND */
