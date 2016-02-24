@@ -1,0 +1,21 @@
+ADD FIELD "Multiorder" OF "Order" AS logical
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "Multiorder"
+  COLUMN-LABEL "Multiorder"
+  ORDER 1170
+
+ADD FIELD "CustDataRetr" OF "OrderCustomer" AS logical
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "Customer data Retrieved"
+  COLUMN-LABEL "CustDataRetr"
+  ORDER 1010
+
+ADD FIELD "MSISDNForIdent" OF "OrderCustomer" AS Character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "MSISDN For Identification"
+  COLUMN-LABEL "MSISDNForIdent"
+  ORDER 1020
+

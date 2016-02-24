@@ -7,6 +7,7 @@
 * @q25_struct  username;string;mandatory;person who requests the change
                msseq;int;mandatory;subscription id
                per_contract_id;int;mandatory;installment contract id (related to q25)
+               action;string;mandatory
 * @memo_struct title;string;mandatory
                content;string;mandatory
 * @output      boolean;true
@@ -27,6 +28,7 @@ gcBrand = "1".
 {tmsconst.i}
 {msreqfunc.i} /* fReqStatus */
 {fmakemsreq.i}
+{coinv.i}
 
 /* top_struct */
 DEF VAR top_struct        AS CHARACTER NO-UNDO.
@@ -45,11 +47,17 @@ DEF VAR lcmemo_content     AS CHARACTER NO-UNDO. /* Memo Content */
 DEF VAR pcmemoStruct       AS CHARACTER NO-UNDO. /* Memo input struct */
 DEF VAR lcmemoStruct       AS CHARACTER NO-UNDO.
 
+DEF VAR pcAction           AS CHARACTER NO-UNDO.
+
 DEF VAR liCreated        AS INTEGER   NO-UNDO.
 DEF VAR lcResult         AS CHARACTER NO-UNDO.
-DEF VAR liLoop AS INT NO-UNDO. 
-DEF VAR liReqStatus AS INT NO-UNDO. 
-
+DEF VAR liLoop           AS INT NO-UNDO. 
+DEF VAR liReqStatus      AS INT NO-UNDO. 
+DEF VAR lcAction         AS CHARACTER NO-UNDO.
+DEF VAR llCreateFees     AS LOGICAL NO-UNDO.
+DEF VAR liLastUnBilledPeriod AS INT NO-UNDO.
+DEF VAR ldaLastUnBilledDate AS DATE NO-UNDO.
+DEF VAR ldePeriodTo AS DEC NO-UNDO.
 
 /* common validation */
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
@@ -67,7 +75,7 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcQ25Struct = validate_request(pcQ25Struct,"username!,msseq!,per_contract_id!").
+lcQ25Struct = validate_request(pcQ25Struct,"username!,msseq!,per_contract_id!,action!").
 IF lcQ25Struct EQ ? THEN RETURN.
 
 ASSIGN
@@ -77,7 +85,9 @@ ASSIGN
       WHEN LOOKUP("msseq", lcQ25Struct) > 0
     /* Quota 25 installment contract id */
    liper_contract_id = get_int(pcQ25Struct, "per_contract_id")      
-      WHEN LOOKUP("per_contract_id", lcQ25Struct) > 0.
+      WHEN LOOKUP("per_contract_id", lcQ25Struct) > 0
+   pcAction     = get_string(pcQ25Struct, "action")
+      WHEN LOOKUP("action", lcQ25Struct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
       
@@ -139,23 +149,71 @@ ELSE DO: /* Cancel Quota 25 Extension */
 
    IF DCCLI.TermDate NE ? THEN 
       RETURN appl_err("Q25 contract terminated").
-      
+
+   CASE pcAction:
+   WHEN "remove" THEN ASSIGN
+      lcAction = "term"
+      llCreateFees = TRUE
+      ldePeriodTo = fMakeTS().
+   WHEN "cancel" THEN DO: 
+
+      IF ADD-INTERVAL(TODAY, -5, "months") >= DCCLI.ValidFrom THEN
+         RETURN appl_err("Installment is older than 5 months").
+
+      ASSIGN
+         lcAction = "canc"
+         llCreateFees = FALSE.
+
+      FIND FixedFee NO-LOCK USE-INDEX CustNum WHERE
+           FixedFee.Brand     = gcBrand   AND
+           FixedFee.CustNum   = MobSub.CustNum AND
+           FixedFee.HostTable = "MobSub"  AND
+           FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
+           FixedFee.CalcObj   = DCCLI.DCEvent AND
+           FixedFee.SourceTable = "DCCLI" AND
+           FixedFee.SourceKey = STRING(DCCLI.PerContractId) NO-ERROR.   
+   
+      IF NOT AVAIL FixedFee THEN 
+         RETURN appl_err("Q25 contract fee not found").
+
+      FOR EACH FFItem OF FixedFee NO-LOCK USE-INDEX FFNum:
+         IF FFItem.Billed = TRUE AND
+            CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
+                            Invoice.Brand   = gcBrand AND
+                            Invoice.InvNum  = FFItem.InvNum AND
+                            Invoice.InvType = 1 NO-LOCK) THEN NEXT.
+         liLastUnBilledPeriod = FFItem.BillPeriod.
+         LEAVE.
+      END.
+
+      IF liLastUnBilledPeriod = 0 THEN
+         liLastUnBilledPeriod = FixedFee.BegPeriod.
+
+      ldaLastUnBilledDate = fPer2Date(liLastUnBilledPeriod,0) - 1.
+      ldePeriodTo = fMake2Dt(ldaLastUnBilledDate,86399).
+
+   END.
+   OTHERWISE RETURN appl_err("Incorrect action").
+   END. 
+
    liCreated = fPCActionRequest(MobSub.MsSeq,
       "RVTERM12",
-      "term",
-      fMakeTS(),
-      TRUE, /* create fees */
+      lcAction,
+      ldePeriodTo,
+      llCreateFees, /* create fees */
       {&REQUEST_SOURCE_NEWTON},
       "",
       0,
       FALSE,
       "",
       0, /* payterm residual fee */
-      0,
+      DCCLI.PerContractId,
       OUTPUT lcResult).
 
       IF liCreated EQ 0 THEN
-         RETURN appl_err("ERROR:Q25 Unable to cancel Quota 25 extension request").
+         RETURN appl_err("ERROR:Q25 Unable to " + LC(pcAction) + " remove " + 
+                         "Quota 25 extension request").
+
 END. /* Cancel Quota 25 Extension */   
 
 /* Create a memo in TMS */

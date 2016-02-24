@@ -195,7 +195,8 @@ PROCEDURE pGetQ25Text:
    DEF OUTPUT PARAMETER ocText      AS CHAR NO-UNDO.
    
    DEF VAR liQ25Qty    AS INT  NO-UNDO.
-   DEF VAR liFees      AS INT  NO-UNDO.
+   DEF VAR liInstMonth AS INT  NO-UNDO.
+   DEF VAR ldaInstDate AS DATE NO-UNDO. 
    DEF VAR liMonth     AS INT  NO-UNDO.
    DEF VAR lcCLI       AS CHAR NO-UNDO.
    DEF VAR ldaTo       AS DATE NO-UNDO.
@@ -203,6 +204,7 @@ PROCEDURE pGetQ25Text:
    DEF VAR liInvPeriod AS INT  NO-UNDO.
    DEF VAR liMaxPeriod AS INT  NO-UNDO.
    DEF VAR lcQ25Link   AS CHAR NO-UNDO.
+   DEF VAR lcTempSubj  AS CHAR NO-UNDO.
    
    DEF BUFFER bExtension FOR DCCLI.
 
@@ -232,7 +234,6 @@ PROCEDURE pGetQ25Text:
       FIRST DCCLI NO-LOCK WHERE
             DCCLI.PerContractId = INT(SingleFee.SourceKey) AND
             DCCLI.MsSeq   = INT(SingleFee.KeyValue) AND
-            DCCLI.DCEvent = SingleFee.CalcObj AND
             /* not yet terminated */
             DCCLI.TermDate = ? AND
             /* renewal not done */
@@ -258,21 +259,14 @@ PROCEDURE pGetQ25Text:
         (TermReturn.DeviceScreen OR TermReturn.DeviceScreen = ?) AND
         (TermReturn.DeviceStart OR TermReturn.DeviceStart = ?) THEN NEXT.
       
-      liFees = 0.
       /* which month is this */
-      FOR FIRST FixedFee NO-LOCK WHERE
-                FixedFee.Brand = gcBrand AND
-                FixedFee.HostTable = "MobSub" AND
-                FixedFee.KeyValue = SingleFee.KeyValue AND
-                FixedFee.BillCode BEGINS "PAYTERM" AND
-                FixedFee.SourceKey = SingleFee.SourceKey AND
-                FixedFee.InUse AND
-                FixedFee.EndPer >= liInvPeriod,
-           EACH FFItem OF FixedFee NO-LOCK WHERE
-                FFItem.BillPeriod > liInvPeriod:
-         liFees = liFees + 1.       
-      END.        
-      IF liFees = 0 OR liFees > 3 THEN NEXT.      
+      ldaInstDate = DCCLI.ValidTo.
+      DO liInstMonth = 24 TO 22 BY -1:
+         IF MONTH(ldaInstDate) = MONTH(idaInvDate) AND
+            YEAR(ldaInstDate) = YEAR(idaInvDate) THEN LEAVE.
+         ldaInstDate = ADD-INTERVAL(ldaInstDate,-1,"month").
+      END.
+      IF liInstMonth <= 21 THEN NEXT. 
       
       /* msisdn is used only if there is one subscription in q25 */
       ASSIGN 
@@ -280,9 +274,10 @@ PROCEDURE pGetQ25Text:
          liQ25Qty = liQ25Qty + 1.
 
       /* text according to the oldest */
-      IF 25 - liFees > liMonth THEN ASSIGN
+      IF liInstMonth > liMonth OR 
+        (liInstMonth = liMonth AND DCCLI.ValidTo < ldaTo) THEN ASSIGN
          ldaTo = DCCLI.ValidTo
-         liMonth = 25 - liFees.
+         liMonth = liInstMonth.
    END.          
 
    IF ldaTo = ? THEN RETURN.
@@ -290,10 +285,12 @@ PROCEDURE pGetQ25Text:
    IF liMonth = 24 THEN lcTextID = "EMailInvoiceQ25Final".
    ELSE lcTextID = "EMailInvoiceQ25Prior".
 
+   /* YBU-5266 Subject is received from original einvoice,
+      lcTempSubj prevents overwriting. Not needed elsewhere */
    ocText = fGetEmailText("EMAIL",
                           lcTextID,
                           iiLanguage,
-                          OUTPUT xMailSubj).
+                          OUTPUT lcTempSubj).
 
    IF liQ25Qty > 1 THEN lcCLI = "".
    lcQ25Link = fGenerateQ25Link(lcCLI).
@@ -304,6 +301,6 @@ PROCEDURE pGetQ25Text:
       ocText = REPLACE(ocText,"#DD",STRING(DAY(ldaTo),"99")) 
       ocText = REPLACE(ocText,"#MM",STRING(MONTH(ldaTo),"99"))
       ocText = REPLACE(ocText,"#Q25LINK",lcQ25Link).
-
+   /* comment added for getting correct fileencoding (latin1 ñ) */
 END PROCEDURE.
 

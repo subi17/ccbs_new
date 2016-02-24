@@ -60,6 +60,11 @@ DEF SHARED VAR katun     AS CHAR.
 
 
 
+/*  duplicate functions commented out so far:
+FUNCTION fDateFmt RETURNS CHAR
+FUNCTION fAddCent RETURNS INTEGER
+ These can be found from date.i file as well.
+ This occured when YDR-1811 date.i was added.
 
 /* FUNCTION FOR converting Date FORMAT */
 FUNCTION fDateFmt RETURNS CHAR
@@ -183,7 +188,7 @@ FUNCTION fAddCent RETURNS INTEGER
    RETURN ret + yyy.
 
 END.   
-
+*/
 &ENDIF
 FUNCTION fSec2C RETURNS CHAR
   (INPUT tme AS INT, INPUT hformat AS CHAR).    
