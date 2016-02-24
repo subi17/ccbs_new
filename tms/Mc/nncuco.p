@@ -142,7 +142,7 @@ DEF BUFFER bBillItem FOR BillItem.
 form                                                          
     lcTarget              COLUMN-LABEL "Target"        FORMAT "X(8)"
     FixedFee.KeyValue     COLUMN-LABEL "TargetID"      FORMAT "X(8)" 
-    FixedFee.BillCode     COLUMN-LABEL "Billing Item"  FORMAT "X(16)"
+    FixedFee.BillCode     COLUMN-LABEL "Billing Item"  FORMAT "X(15)"
     FixedFee.Amt          column-label "Amount"
     FixedFee.BegPeriod    column-label "From"
     FixedFee.EndPeriod    COLUMN-LABEL "To"

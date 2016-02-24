@@ -91,7 +91,9 @@ FOR FIRST FMItem NO-LOCK WHERE
           FMItem.BillCode   = bCloseFee.BillCode AND
           FMItem.BillMethod = FALSE:
 
-   ASSIGN ldeOriginalFee = FMItem.Amount
+   ASSIGN ldeOriginalFee = (IF FMItem.Amount NE 0
+                            THEN FMItem.Amount
+                            ELSE bCloseFee.Amt)
           liBrokenRental = FMItem.BrokenRental.
 
    IF FMItem.BrokenRental = 1 AND icGroupCode = "" THEN DO:

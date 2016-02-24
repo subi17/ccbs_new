@@ -204,6 +204,7 @@ PROCEDURE pGetQ25Text:
    DEF VAR liInvPeriod AS INT  NO-UNDO.
    DEF VAR liMaxPeriod AS INT  NO-UNDO.
    DEF VAR lcQ25Link   AS CHAR NO-UNDO.
+   DEF VAR lcTempSubj  AS CHAR NO-UNDO.
    
    DEF BUFFER bExtension FOR DCCLI.
 
@@ -284,10 +285,12 @@ PROCEDURE pGetQ25Text:
    IF liMonth = 24 THEN lcTextID = "EMailInvoiceQ25Final".
    ELSE lcTextID = "EMailInvoiceQ25Prior".
 
+   /* YBU-5266 Subject is received from original einvoice,
+      lcTempSubj prevents overwriting. Not needed elsewhere */
    ocText = fGetEmailText("EMAIL",
                           lcTextID,
                           iiLanguage,
-                          OUTPUT xMailSubj).
+                          OUTPUT lcTempSubj).
 
    IF liQ25Qty > 1 THEN lcCLI = "".
    lcQ25Link = fGenerateQ25Link(lcCLI).
@@ -298,6 +301,6 @@ PROCEDURE pGetQ25Text:
       ocText = REPLACE(ocText,"#DD",STRING(DAY(ldaTo),"99")) 
       ocText = REPLACE(ocText,"#MM",STRING(MONTH(ldaTo),"99"))
       ocText = REPLACE(ocText,"#Q25LINK",lcQ25Link).
-
+   /* comment added for getting correct fileencoding (latin1 ñ) */
 END PROCEDURE.
 

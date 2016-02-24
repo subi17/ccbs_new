@@ -379,7 +379,7 @@ PROCEDURE pRevertRenewalOrder:
                                                  FALSE,
                                                  "",
                                                  0,
-                                                 (IF bDCCLI.DCEvent BEGINS "PAYTERM" 
+                                                 (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} 
                                                   THEN bDCCLI.PerContractID
                                                   ELSE 0),
                                                  OUTPUT lcError).
@@ -498,7 +498,7 @@ PROCEDURE pCloseQ25Discount:
       FIND MsRequest NO-LOCK WHERE
            MsRequest.MSRequest = bmsrequest.MSRequest.
 
-      fReqStatus(4,"Cancelled by renewal cancellation").
+      fReqStatus(4,SUBST("Cancelled by renewal cancellation, orderid: &1", MsRequest.ReqIParam1)).
       
       FIND FIRST MsRequest WHERE
                  MsRequest.MsRequest = iiMsRequest  NO-LOCK NO-ERROR.
@@ -528,7 +528,7 @@ PROCEDURE pCloseQ25Discount:
             FALSE,
             "",
             0, /* payterm residual fee */
-            0,
+            DCCLI.PercontractId,
             OUTPUT lcResult).
 
          IF liRequest EQ 0 THEN

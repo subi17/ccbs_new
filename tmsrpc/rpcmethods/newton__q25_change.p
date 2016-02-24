@@ -1,5 +1,5 @@
 /**
-newton__change_q25.p
+newton__q25_change.p
 * Change Quota 25 extension amount in TMS
 
 * @input    struct;mandatory
@@ -69,12 +69,9 @@ IF lcQ25Struct EQ ? THEN RETURN.
 
 ASSIGN
    lcusername = get_string(pcQ25Struct, "username")
-      WHEN LOOKUP("username", lcQ25Struct) > 0
    limsseq = get_int(pcQ25Struct, "msseq")
-      WHEN LOOKUP("msseq", lcQ25Struct) > 0
     /* Quota 25 installment contract id */
    liper_contract_id = get_int(pcQ25Struct, "per_contract_id")      
-      WHEN LOOKUP("per_contract_id", lcQ25Struct) > 0 
    pdeQ25NewAmt = get_double(pcQ25Struct, "new_amount").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -86,9 +83,7 @@ IF pcmemoStruct > "" THEN DO:
    
    ASSIGN
       lcmemo_title = get_string(pcmemoStruct, "title")
-         WHEN LOOKUP("title", lcmemoStruct) > 0
-      lcmemo_content = get_string(pcmemoStruct, "content")
-         WHEN LOOKUP("content", lcmemoStruct) > 0.
+      lcmemo_content = get_string(pcmemoStruct, "content").
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
@@ -97,8 +92,11 @@ katun = "VISTA_" + lcusername.
 IF TRIM(katun) EQ "VISTA_" THEN
    RETURN appl_err("username is empty").
 
-   FIND FIRST MobSub WHERE
-              MobSub.MsSeq = liMsSeq NO-LOCK NO-ERROR.
+IF pdeQ25NewAmt <= 0 THEN
+   RETURN appl_err("incorrect new_amount value").
+
+FIND FIRST MobSub WHERE
+           MobSub.MsSeq = liMsSeq NO-LOCK NO-ERROR.
            
 IF NOT AVAILABLE MobSub THEN
    RETURN appl_err("Subscription not found").
@@ -111,11 +109,6 @@ FIND FIRST DayCampaign NO-LOCK WHERE
            DayCampaign.ValidTo >= TODAY NO-ERROR.
 IF NOT AVAIL DayCampaign THEN
    RETURN appl_err("New Q25 contract type is not valid").
-
-FIND FIRST Customer NO-LOCK WHERE
-           Customer.Custnum = MobSub.Custnum NO-ERROR.
-IF NOT AVAILABLE Customer THEN
-   RETURN appl_err("Customer not found").
 
 /* Find original Q25 contract */   
 FIND FIRST DCCLI NO-LOCK WHERE
@@ -130,7 +123,10 @@ IF NOT AVAIL DCCLI THEN
 
 IF DCCLI.TermDate NE ? THEN
    RETURN appl_err("Q25 contract terminated").
-   
+
+IF ADD-INTERVAL(TODAY, -5, "months") >= DCCLI.ValidFrom THEN
+   RETURN appl_err("Q25 is older than 5 months").
+
 liCreated = fInstallmentChangeRequest(MobSub.MsSeq,
                                       DCCLI.DCEvent, /* old contract */
                                       DayCampaign.DCEvent, /* new contract */

@@ -4,7 +4,7 @@ external_selfservice__q25_add.p
 
 * @input    msisdn;string;mandatory
 
-* @output         boolean;true
+* @output   boolean;true
 */
 
 {xmlrpc/xmlrpc_access.i}
@@ -16,6 +16,7 @@ gcBrand = "1".
 {fmakemsreq.i}
 {fsendsms.i}
 {fexternalapi.i}
+{q25functions.i}
 
 /* top_struct */
 DEF VAR top_struct        AS CHARACTER NO-UNDO.
@@ -31,6 +32,7 @@ DEF VAR ldaMonth22Date    AS DATE NO-UNDO.
 DEF VAR ldaMonth24Date    AS DATE NO-UNDO.
 DEF VAR ldaQ25PeriodStartDate  AS DATE NO-UNDO.
 DEF VAR ldaQ25PeriodEndDate    AS DATE NO-UNDO.
+DEF VAR ldeFeeAmount      AS DEC NO-UNDO. 
 
 /* Contract activation timestamp */
 DEF VAR ldContractActivTS AS DECIMAL NO-UNDO.
@@ -38,7 +40,6 @@ DEF VAR ldeSMSStamp AS DEC NO-UNDO.
 DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
 DEF VAR lcApplicationId  AS CHAR NO-UNDO.
 DEF VAR lcAppEndUserId   AS CHAR NO-UNDO.
-DEF VAR lcMemoTitle      AS CHAR NO-UNDO.
 
 /* common validation */
 IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
@@ -50,7 +51,8 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
        lcAppEndUserId  = gbAuthLog.EndUserId.
 
-katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
+katun = fgetAppUserId(INPUT lcApplicationId, 
+                      INPUT lcAppEndUserId).
 
 FIND FIRST MobSub NO-LOCK WHERE
            Mobsub.brand = gcBrand AND
@@ -162,6 +164,15 @@ IF liCreated = 0 THEN
    RETURN appl_err(SUBST("Q25 extension request failed: &1",
                          lcResult)).
 
+/*YPR-3268:ac3*/
+FIND FIRST MSRequest WHERE
+           MSRequest.MSrequest EQ liCreated EXCLUSIVE-LOCK NO-ERROR.
+IF AVAIL MsRequest THEN DO:
+   /*YBU-5247: For this reqtype this is not reserved for ContractID*/
+   MsRequest.ReqCparam6 = fBankByBillCode(SingleFee.BillCode).
+END.
+RELEASE MsRequest.
+
 CASE SingleFee.BillCode:
    WHEN "RVTERM1EF" THEN
       lcSMSTxt = fGetSMSTxt("Q25ExtensionUNOE",
@@ -181,35 +192,55 @@ CASE SingleFee.BillCode:
 END CASE.
 
 IF lcSMSTxt > "" THEN DO:
+   
+   ldeFeeAmount = SingleFee.Amt.
+   
+   FOR EACH DiscountPlan NO-LOCK WHERE
+            DiscountPlan.Brand = gcBrand AND
+           (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
+            DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
+       EACH DPMember NO-LOCK WHERE
+            DPMember.DpID       = DiscountPlan.DpId AND
+            DPMember.HostTable  = "MobSub" AND
+            DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
+            DPMember.ValidFrom  = fPer2Date(SingleFee.BillPeriod,0) AND
+            DPMember.ValidTo   >= DPMember.ValidFrom:
+      ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
+   END.
 
-   ASSIGN
-      lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
-                          lower(entry(month(ldaMonth24Date),{&MONTHS_ES})))
-      lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaMonth24Date)))
-      lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
-            STRING(TRUNC(SingleFee.Amt / 12, 2))).
+   IF ldeFeeAmount > 0 THEN DO:
 
-   fMakeSchedSMS2(MobSub.CustNum,
-                  MobSub.CLI,
-                  {&SMSTYPE_CONTRACT_ACTIVATION},
-                  lcSMSTxt,
-                  ldeSMSStamp,
-                  "Yoigo info",
-                  "").
+      ASSIGN
+         lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
+                             lower(entry(month(ldaMonth24Date),{&MONTHS_ES})))
+         lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaMonth24Date)))
+         lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
+               STRING(TRUNC(ldeFeeAmount / 12, 2))).
+
+      fMakeSchedSMS2(MobSub.CustNum,
+                     MobSub.CLI,
+                     {&SMSTYPE_CONTRACT_ACTIVATION},
+                     lcSMSTxt,
+                     ldeSMSStamp,
+                     "Yoigo info",
+                     "").
+   END.
 END.
 
-lcMemoTitle = "By customer's request (" + fgetAppDetailedUserId(
-              INPUT lcApplicationId, INPUT Mobsub.CLI) + ")".
+CREATE Memo.
+ASSIGN
+   Memo.CreStamp  = {&nowTS}
+   Memo.Brand     = gcBrand
+   Memo.HostTable = "MobSub"
+   Memo.KeyValue  = STRING(Mobsub.MSSeq)
+   Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
+   Memo.CreUser   = katun 
+   Memo.MemoTitle = "By customer's request (Self Service)"
+   Memo.MemoText  = "Q25 extension request"
+   Memo.CustNum   = MobSub.Custnum
+   Memo.Source    = "Self Service".
 
-DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                 "MobSub",                             /* HostTable */
-                 STRING(Mobsub.MsSeq),                 /* KeyValue  */
-                 MobSub.CustNum,                       /* CustNum */
-                 lcMemoTitle,                          /* MemoTitle */
-                 "Q25 add extension request",          /* MemoText */
-                 "Mobsub",                             /* MemoType */
-                 fgetAppDetailedUserId(INPUT lcApplicationId,
-                                       INPUT Mobsub.CLI)).
+
 
 /* Adding the details into Main struct */
 top_struct = add_struct(response_toplevel_id, "").
@@ -217,7 +248,5 @@ add_string(top_struct, "transaction_id", pcTransId).
 add_boolean(top_struct, "result", True).
 
 FINALLY:
-   /* Store the transaction id */
-   gbAuthLog.TransactionId = pcTransId.
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
 END.

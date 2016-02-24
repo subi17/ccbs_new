@@ -76,7 +76,6 @@ PROCEDURE pInstallmentContractChange:
    DEF VAR ldaFirstDayOfLastMonth AS DATE NO-UNDO.
    DEF VAR ldaLastDayOfLastMonth  AS DATE NO-UNDO.
    DEF VAR ldaLastUnBilledDate    AS DATE NO-UNDO.
-   DEF VAR liPercontrId           AS INT  NO-UNDO.
 
    FIND FIRST DayCampaign WHERE 
               DayCampaign.Brand   = gcBrand AND
@@ -144,13 +143,6 @@ PROCEDURE pInstallmentContractChange:
       ldaLastDayOfLastMonth = fLastDayOfMonth(ldaFirstDayOfLastMonth)
       ldPeriodTo = fMake2Dt(ldaLastDayOfLastMonth,86399).
    
-   /* Q25 contract change */
-   IF MsRequest.ReqCparam1 = "RVTERM12" AND
-      MsRequest.ReqCparam2 = "RVTERM12" THEN
-      liPercontrId = DCCLI.PerContractId.
-   ELSE
-      liPercontrId = 0.
-
    /* Terminate current payterm contract */
    liTermReq = fPCActionRequest(MobSub.MsSeq,
                                 DCCLI.DCEvent,
@@ -181,7 +173,7 @@ PROCEDURE pInstallmentContractChange:
                                TRUE,
                                "",
                                MsRequest.ReqDParam2, /* residual fee */
-                               liPercontrId,
+                               DCCLI.PerContractId,
                                OUTPUT lcError).
    IF liActReq = 0 OR liActReq = ? THEN
        UNDO, RETURN "ERROR:New Installment Contract termination request " +
