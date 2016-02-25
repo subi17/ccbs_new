@@ -1426,22 +1426,26 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
    DEF VAR lcCaseTypeId     AS CHAR NO-UNDO.
    DEF VAR lcCreateDMS      AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow    AS CHAR NO-UNDO.
-   
-   FOR EACH MsRequest NO-LOCK WHERE
+
+   DEFINE VARIABLE i AS INTEGER NO-UNDO.
+   DEFINE VARIABLE liStat AS INTEGER NO-UNDO.
+
+   do i = 1 to NUM-ENTRIES({&REQ_ONGOING_STATUSES}):
+      liStat = INT(ENTRY(i,{&REQ_ONGOING_STATUSES})).
+      FOR EACH MsRequest NO-LOCK WHERE
             MsRequest.Brand EQ gcBrand AND
-            MsRequest.ReqStatus NE {&REQUEST_STATUS_CANCELLED} AND
-            MsRequest.CreStamp > idStartTS AND
+            MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+            MsRequest.ReqStatus eq liStat AND
+            MsRequest.ActStamp >= idStartTS AND
+            MsRequest.CreStamp >= idStartTS AND
             MsRequest.CreStamp < idEndTS AND
-            MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION}  /*8*/
-            AND
-            MsRequest.ReqCparam6 NE "" AND 
             MsRequest.ReqCparam3 EQ "RVTERM12":
-      IF NOT MsRequest.UserCode BEGINS "POS_" THEN NEXT.
-      /*Document type,DocStatusCode,RevisionComment*/
-      ASSIGN 
-      lcCaseTypeID   = '10'
-      lcDocListEntries = "" 
-      lcCaseFileRow =
+         IF NOT MsRequest.UserCode BEGINS "POS_" THEN NEXT.
+         /*Document type,DocStatusCode,RevisionComment*/
+         ASSIGN
+         lcCaseTypeID   = '10'
+         lcDocListEntries = ""
+         lcCaseFileRow =
                       lcCaseTypeID                    + lcDelim +
                       /*Contract_ID*/
                       STRING(MsRequest.ReqCparam4)    + lcDelim +
@@ -1453,24 +1457,26 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
                       fPrintDate(MsRequest.ActStamp)      + lcDelim +
                       /*Q25 Extension bank*/
                       STRING(Msrequest.ReqCparam6).
-                      
-      OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
-      PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
-      OUTPUT STREAM sOutFile CLOSE.
 
-      lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
-                               lcCaseTypeID,
-                               MsRequest.ReqCparam6,
-                               {&DMS_HOST_TABLE_MSREQ},
-                               MsRequest.MsRequest,
-                               lcInitStatus,/*StatusCode*/
-                               lcDMSStatusDesc,
-                               "",
-                               0,
-                               lcDocListEntries /*DocList*/,
-                               {&DMS_DOCLIST_SEP}).            
-     fLogLine(lcCaseFileRow,lcCreateDMS).
+                     
+         OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
+         PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
+         OUTPUT STREAM sOutFile CLOSE.
 
+         lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
+                                  lcCaseTypeID,
+                                  MsRequest.ReqCparam6,
+                                  {&DMS_HOST_TABLE_MSREQ},
+                                  MsRequest.MsRequest,
+                                  lcInitStatus,/*StatusCode*/
+                                  lcDMSStatusDesc,
+                                  "",
+                                  0,
+                                  lcDocListEntries /*DocList*/,
+                                  {&DMS_DOCLIST_SEP}).            
+        fLogLine(lcCaseFileRow,lcCreateDMS).
+
+      END.
    END.
    RETURN "".
 
