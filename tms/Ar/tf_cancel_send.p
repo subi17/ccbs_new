@@ -36,6 +36,7 @@ DEF VAR lcLogDir AS CHAR NO-UNDO.
 DEF VAR lcProcessedFile AS CHAR NO-UNDO. 
 DEF VAR liErrors AS INT NO-UNDO. 
 DEF VAR liOk AS INT NO-UNDO. 
+DEF VAR ldaOrderDate AS DATE NO-UNDO.
 
 ASSIGN
    lcRootDir = fCParam("TermFinance","CanOutRoot")
@@ -161,6 +162,7 @@ PROCEDURE pCreateFile:
 
             IF AVAIL Order AND FixedFee.OrderId > 0 THEN DO:
                fTS2Date(Order.CrStamp, OUTPUT ldaBankDate).
+               ldaOrderDate = ldaBankDate.
                IF INDEX(Order.OrderChannel, "POS") = 0 THEN
                         ldaBankDate = ldaBankDate + 16.
                IF DAY(ldaBankDate) >= 25 THEN 
@@ -252,7 +254,47 @@ PROCEDURE pPrintLine:
    DEF INPUT PARAM icBank AS CHAR NO-UNDO. 
 
    DEF VAR lcTotalAmount AS CHAR NO-UNDO. 
+   DEF VAR lcCodFpago AS CHAR NO-UNDO.
+   DEF VAR ldeRVPerc AS DEC NO-UNDO.
+   DEF VAR ldeRVAmt AS DEC NO-UNDO.
+
    lcTotalAmount = REPLACE(REPLACE(TRIM(STRING(ideTotalAmount,"->>>>>>>9.99")),",",""),".","").
+   
+   IF Fixedfee.feemodel EQ "RVTERM12" THEN
+      lcCodFpago = "0212".
+   ELSE DO:
+      FIND FIRST SingleFee NO-LOCK WHERE
+                 SingleFee.Brand = gcBrand AND
+                 SingleFee.Custnum = FixedFee.Custnum AND
+                 SingleFee.HostTable = FixedFee.HostTable AND
+                 SingleFee.KeyValue = Fixedfee.KeyValue AND
+                 SingleFee.SourceKey = FixedFee.SourceKey AND
+                 SingleFee.SourceTable = FixedFee.SourceTable AND
+                 SingleFee.CalcObj = "RVTERM" AND
+                 SingleFee.Amt > 0 NO-ERROR.
+
+      IF AVAIL SingleFee THEN DO:
+         ASSIGN
+            ldeRVPerc = TRUNC(SingleFee.Amt /
+                             (ideTotalAmount + SingleFee.Amt) * 100 + 
+                              0.05,1)
+            ldeRVAmt = SingleFee.Amt.
+         FIND FIRST TFConf NO-LOCK WHERE
+                    TFConf.RVPercentage = ldeRVPerc AND
+                    TFConf.ValidTo >= ldaOrderDate AND
+                    TFConf.ValidFrom <= ldaOrderDate NO-ERROR.
+
+         IF AVAIL TFConf THEN DO:
+
+         ASSIGN
+            lcCodFpago = TFConf.PaytermCode WHEN TFConf.RVPercentage NE 0
+            lcCodFpago = TFConf.ResidualCode.
+         END.
+      END.
+
+
+      
+   END.
 
    PUT STREAM sout 
    /*COD-CDNITR*/    UPPER(FixedFeeTF.OrgId) FORMAT "X(9)"
