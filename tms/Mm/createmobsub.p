@@ -83,6 +83,7 @@ DEF BUFFER lbOrder     FOR Order.
 DEF BUFFER lbMobSub    FOR MobSub.
 DEF BUFFER lbOrderCustomer FOR OrderCustomer.
 DEFINE BUFFER lbMobSubAD1 FOR MobSub.
+DEF BUFFER bTerMsRequest FOR MsRequest.
 
 FIND FIRST MSRequest WHERE 
            MSRequest.MSrequest = iiMSrequest
@@ -588,26 +589,42 @@ IF NOT MobSub.PayType THEN DO:
       FIND FIRST lbMobSub WHERE
                  lbMobSub.MsSeq = liDSSPriMsSeq NO-LOCK NO-ERROR.
       IF AVAIL lbMobSub THEN DO:
-         liRequest = fDSSRequest(lbMobSub.MsSeq,
-                              lbMobSub.CustNum,
-                              "CREATE",
-                              "",
-                              "DSS2",
-                              fSecOffSet(MobSub.ActivationTS,180),
-                              {&REQUEST_SOURCE_SUBSCRIPTION_CREATION},
-                              "",
-                              TRUE, /* create fees */
-                              0,
-                              FALSE,
-                              OUTPUT lcResult).
-         IF liRequest = 0 THEN
-            /* write possible error to a memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
-                          STRING(MobSub.MsSeq),
-                          MobSub.Custnum,
-                          "DSS2 activation failed",
-                          lcResult).
+         /* Functionality changed to deny DSS2 creation if 
+               there is DSS2 termination request. YTS-8140 */
+         FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
+                    bTerMsRequest.Brand = gcBrand AND
+                    bTerMsRequest.ReqType = 83 AND
+                    bTerMsRequest.Custnum = MsRequest.Custnum AND
+                    bTerMsRequest.ReqCParam3 BEGINS "DSS" AND
+                    bTerMsRequest.ReqCParam1 = "DELETE" AND
+                   LOOKUP(STRING(bTerMsRequest.ReqStatus),
+                          {&REQ_INACTIVE_STATUSES} + ",3") = 0 NO-ERROR.
+         IF AVAIL bTerMsRequest AND 
+                  bTerMsRequest.ReqStatus = {&REQUEST_STATUS_NEW} AND
+                  MsRequest.ReqCParam3 = "DSS2" THEN
+               fReqStatus(4,"DSS term request cancelled to keep DSS alive").
+         IF NOT AVAIL bTerMsRequest THEN DO:
+            liRequest = fDSSRequest(lbMobSub.MsSeq,
+                                 lbMobSub.CustNum,
+                                 "CREATE",
+                                 "",
+                                 "DSS2",
+                                 fSecOffSet(MobSub.ActivationTS,180),
+                                 {&REQUEST_SOURCE_SUBSCRIPTION_CREATION},
+                                 "",
+                                 TRUE, /* create fees */
+                                 0,
+                                 FALSE,
+                                 OUTPUT lcResult).
+            IF liRequest = 0 THEN
+               /* write possible error to a memo */
+               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                             "MobSub",
+                             STRING(MobSub.MsSeq),
+                             MobSub.Custnum,
+                             "DSS2 activation failed",
+                                lcResult).
+         END.
       END.
    END.
 END.

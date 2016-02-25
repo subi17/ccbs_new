@@ -220,7 +220,7 @@ PROCEDURE pFinalize:
    END. /* IF MsRequest.ReqCparam1 = "CREATE" THEN DO: */
 
    /* Activate DSS2 if new criteria match */
-   IF MsRequest.ReqCparam3 = {&DSS} AND
+   IF MsRequest.ReqCparam3 BEGINS {&DSS} AND
       MsRequest.ReqCparam1 = "DELETE" AND
       fIsDSS2Allowed(MsRequest.CustNum,0,fMakeTS(),
                      OUTPUT liDSSPriMsSeq,OUTPUT lcResult) AND
