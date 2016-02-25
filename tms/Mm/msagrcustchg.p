@@ -1792,7 +1792,10 @@ PROCEDURE pHandleAdditionalLines:
       
    DEF VAR ldeActStamp AS DEC NO-UNDO. 
    DEF VAR ldaACCDate AS DATE NO-UNDO. 
-   DEF VAR liTime AS INT NO-UNDO. 
+   DEF VAR liTime AS INT NO-UNDO.
+   DEF VAR liActLimit AS INT NO-UNDO.
+   DEF VAR liActs AS INT NO-UNDO.
+
    
    DEF BUFFER MobSub FOR MobSub.
    DEF BUFFER bMobSub FOR MobSub.
@@ -1830,7 +1833,9 @@ PROCEDURE pHandleAdditionalLines:
                                           1,
                                           OUTPUT lcInfo,
                                           OUTPUT liSubLimit,
-                                          OUTPUT liSubs).
+                                          OUTPUT liSubs,
+                                          OUTPUT liActLimit,
+                                          OUTPUT liActs).
    
    IF llIsACCAllowed THEN DO:
 
