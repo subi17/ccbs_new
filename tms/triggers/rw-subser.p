@@ -1,6 +1,6 @@
 TRIGGER PROCEDURE FOR REPLICATION-WRITE OF SubSer OLD BUFFER oldSubSer.
 
-{tmsconst.i}
+{Syst/tmsconst.i}
 {HPD/HPDConst.i}
 
 &IF {&SUBSER_WRITE_TRIGGER_ACTIVE} &THEN
@@ -12,13 +12,20 @@ THEN RETURN.
 
 CREATE Mobile.RepLog.
 ASSIGN
-   Mobile.RepLog.RowID     = STRING(ROWID(SubSer))
    Mobile.RepLog.TableName = "SubSer"
    Mobile.RepLog.EventType = (IF NEW(SubSer)
                                THEN "CREATE"
+                               ELSE IF LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) = 0
+                               THEN "DELETE"
                                ELSE "MODIFY")
    Mobile.RepLog.EventTime = NOW
    .
+
+IF Mobile.RepLog.EventType = "DELETE" 
+THEN Mobile.RepLog.KeyValue = STRING(SubSer.MsSeq) + {&HPDKeyDelimiter} +
+                              SubSer.ServCom + {&HPDKeyDelimiter} +
+                              STRING(SubSer.SSDate)
+ELSE Mobile.RepLog.RowID    = STRING(ROWID(SubSer)).
 
 IF NOT NEW(SubSer)
 THEN DO: 
