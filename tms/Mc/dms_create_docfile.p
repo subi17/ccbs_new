@@ -608,6 +608,20 @@ FUNCTION fFindQ25Cancellation RETURNS CHAR
    RETURN "".
 END.
 
+/*function removes channel name from salesmanID.
+For example */
+FUNCTION fCutChannel RETURNS CHAR
+   (icSalesman AS CHAR):
+   DEF VAR i AS INT NO-UNDO.
+   i = INDEX(icSalesman, "_").
+   IF i > 0 THEN
+      RETURN SUBSTRING(icSalesman, i + 1).
+
+  RETURN icSalesman.
+
+END.
+
+
 /*Order activation*/
 /*Function generates order documentation*/
 FUNCTION fCreateDocumentCase1 RETURNS CHAR
@@ -1446,11 +1460,11 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
                       /*Contract_ID*/
                       STRING(MsRequest.ReqCparam4)    + lcDelim +
                       /*SFID*/
-                      STRING(MsRequest.UserCode)      + lcDelim +
+                      fCutChannel(MsRequest.UserCode) + lcDelim +
                       /*MSISDN*/
                       STRING(MsRequest.CLI)           + lcDelim +
                       /*Q25 Extension_Request_date*/
-                      fPrintDate(MsRequest.ActStamp)      + lcDelim +
+                      fPrintDate(MsRequest.ActStamp)  + lcDelim +
                       /*Q25 Extension bank*/
                       STRING(Msrequest.ReqCparam6).
                       
