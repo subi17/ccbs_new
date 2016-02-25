@@ -37,6 +37,7 @@ DEF VAR lcProcessedFile AS CHAR NO-UNDO.
 DEF VAR liErrors AS INT NO-UNDO. 
 DEF VAR liOk AS INT NO-UNDO. 
 DEF VAR ldaOrderDate AS DATE NO-UNDO.
+DEF VAR lcCodFpago AS CHAR NO-UNDO.
 
 ASSIGN
    lcRootDir = fCParam("TermFinance","CanOutRoot")
@@ -202,7 +203,7 @@ PROCEDURE pCreateFile:
          RUN pPrintLine(FixedFeeTF.ResidualAmount,
                         ldaBankDate,
                         icBank).
-
+      IF lcCodFpago EQ "" THEN NEXT. 
       ASSIGN
          FixedFeeTF.CancelStatus = "SENT"
          FixedFeeTF.CancelDate = TODAY
@@ -254,7 +255,6 @@ PROCEDURE pPrintLine:
    DEF INPUT PARAM icBank AS CHAR NO-UNDO. 
 
    DEF VAR lcTotalAmount AS CHAR NO-UNDO. 
-   DEF VAR lcCodFpago AS CHAR NO-UNDO.
    DEF VAR ldeRVPerc AS DEC NO-UNDO.
    DEF VAR ldeRVAmt AS DEC NO-UNDO.
 
@@ -290,6 +290,10 @@ PROCEDURE pPrintLine:
             lcCodFpago = TFConf.PaytermCode WHEN TFConf.RVPercentage NE 0
             lcCodFpago = TFConf.ResidualCode.
          END.
+         ELSE DO:
+            fLogLine(FIxedFee.OrderId, 
+                     "ERROR:Terminal financing configuration not found").
+         END.
       END.
 
 
@@ -304,7 +308,7 @@ PROCEDURE pPrintLine:
    /*MES-OPERAC*/    STRING(MONTH(idaBankDate),"99") FORMAT "X(2)"
    /*ANO-OPERAC*/    STRING(YEAR(idaBankDate),"9999") FORMAT "X(4)"
    /*NUM-PEDIDO*/    STRING(FixedFee.OrderId) FORMAT "X(8)"
-   /*COD-FPAGO*/     "0212" FORMAT "X(4)".
+   /*COD-FPAGO*/     lcCodFpago FORMAT "X(4)".
    
    PUT STREAM sout CONTROL CHR(13) CHR(10).
 END.
