@@ -181,8 +181,12 @@ FOR EACH FusionInvoice EXCLUSIVE-LOCK WHERE
       lcEmailAddress = Customer.Email.
    END.
    /* Telefonica only customer */
-   ELSE lcEmailAddress = FusionInvoice.Email.
- 
+   ELSE DO:
+      /* YOT-4340 Stop sending Fusion Emails invoice for customer 
+         with only fix part*/
+      FusionInvoice.DeliveryState = {&FI_DELIVERY_STATE_CANCELLED}.
+      NEXT.
+   END.
    IF lcEmailAddress EQ ? OR lcEmailAddress EQ "" THEN DO:
       fLog(FusionInvoice.FuInvNum,"ERROR:Email address not defined").
       NEXT.
