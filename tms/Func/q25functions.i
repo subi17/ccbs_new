@@ -239,6 +239,19 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
     INPUT iiLogLevel AS INT,
     INPUT iilogPhase AS INT).
    DEF VAR lcQ25LogType AS CHAR NO-UNDO. 
+   /* Requested customer log writings. YPR-3446 */
+   IF iiLogLevel EQ {&Q25_LOGGING_CUST_LOGS} THEN DO:
+      lcQ25LogFile = lcQ25SpoolDir + "events_" +
+                  STRING(YEAR(TODAY)) +
+                  STRING(MONTH(TODAY),"99") +
+                  STRING(DAY(TODAY),"99") + ".cvt".
+      OUTPUT STREAM Sout TO VALUE(lcQ25LogFile) APPEND.
+      PUT STREAM Sout UNFORMATTED
+         icLogText SKIP.
+      OUTPUT STREAM Sout CLOSE. 
+      RETURN TRUE.
+   END.
+   /* Own internal log writings */
    IF liQ25Logging >= iiLogLevel THEN DO:
       /* Make Monthly log file */
       IF iilogPhase LT {&Q25_MONTH_24_FINAL_MSG} THEN
@@ -277,7 +290,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
    (INPUT idaStartDate AS DATE,
     INPUT idaEndDate AS DATE,
     INPUT iiphase AS INT,
-    INPUT ilsendMsgs AS LOGICAL,
+    INPUT iiExecType AS INT,
     INPUT-OUTPUT oitotalCountLeft AS INT):
    /* Data collection function for Q25. To be launched by cron execution
       on 1.-15. day of month at morning time at least one hour before 10:00 */
@@ -298,7 +311,9 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
    DEF VAR liPhase           AS INT NO-UNDO.
    DEF VAR liPendingReq      AS INT NO-UNDO.
    DEF VAR ldAmount          AS DEC NO-UNDO.
-
+   DEF VAR lcTemplateName    AS CHAR NO-UNDO.
+   DEF VAR liLogType         AS INT NO-UNDO.  
+ 
    DEF BUFFER bDCCLI         FOR DCCLI.
 
    IF idaStartDate = ? OR idaEndDate = ? THEN
@@ -470,9 +485,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
       END.
       liCount = liCount + 1. /* Full q25 count in Month */
    
-      /* Create table for sending messages in the second phase started
-         by separate cron execution for each hour 10:00 - 21:00 */
-      IF(ilSendMsgs) THEN DO:
+      IF(iiExecType EQ {&Q25_EXEC_TYPE_SMS_SENDING}) THEN DO:
          oiTotalCountLeft = oiTotalcountLeft - 1.
          FIND FIRST SMSMessage WHERE SMSMessage.msseq = DCCLI.MsSeq AND
                                      SMSMessage.CreStamp > fDate2TS(TODAY) AND
@@ -526,17 +539,33 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(DCCLI.MsSeq).
          END.
          ELSE DO:
-            lcLogText = "Send SMS: " +
-                        STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
-                        STRING(DCCLI.MsSeq) + "|" +
-                        STRING(ldAmount).
+            IF liPhase EQ {&Q25_MONTH_22} OR liPhase EQ {&Q25_MONTH_23} THEN
+               lcTemplateName = "Q25ReminderMonth22and23".
+            ELSE IF liPhase EQ {&Q25_MONTH_24} THEN
+               lcTemplateName = "Q25ReminderMonth24".
+            ELSE IF liPhase EQ {&Q25_MONTH_24_FINAL_MSG} THEN
+               lcTemplateName = "Q25FinalFeeMsgNoDecision".
+            ELSE
+               lcTemplateName = "Error: Q25_Phase".
+            IF (iiExecType EQ {&Q25_EXEC_TYPE_CUST_LOG_GENERATION}) AND
+               lcTemplateName BEGINS "Q25" THEN DO:
+               lcLogText = DCCLI.CLI + ";" + STRING(TODAY) + ";" +
+                           lcTemplateName.
+               liLogType = {&Q25_LOGGING_CUST_LOGS}.
+            END.
+            ELSE
+               liLogType = {&Q25_LOGGING_DETAILED}.
+               lcLogText = "Send SMS: " +
+                           STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
+                           STRING(DCCLI.MsSeq) + "|" +
+                           STRING(ldAmount) + "|" + lcTemplateName.
          END.   
-         fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
+         fQ25LogWriting(lcLogText, liLogType, liphase).
       END.
    END.
    /* Logging about amount of situations for testting purposes. */
    /* If ilSendMsgs is False, logging of calculated values to be done */
-   IF NOT(ilSendMsgs) THEN DO:
+   IF (iiExecType EQ {&Q25_EXEC_TYPE_CALCULATION}) THEN DO:
       lcLogText = STRING(iiPhase) + "|".
       IF idaStartDate NE ? THEN
          lcLogText = lcLogText + "S:" + STRING(idaStartDate) + "|".
