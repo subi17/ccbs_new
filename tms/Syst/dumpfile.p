@@ -80,6 +80,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
 
 FORM
     DumpFile.Brand          COLON 20
+    DumpFile.BatchID        COLON 60
     DumpFile.DumpID         COLON 20
     DumpFile.DumpName       COLON 20
     DumpFile.Active         COLON 20
@@ -93,8 +94,8 @@ FORM
     DumpFile.EmptyFile      COLON 20 
     DumpFile.DecimalPoint   COLON 60 
     DumpFile.ModFromEventLog COLON 20 
-    DumpFile.ModFromField    COLON 20 FORMAT "X(24)"
-    DumpFile.AllowReplica    COLON 60  SKIP(1)
+    DumpFile.AllowReplica    COLON 60
+    DumpFile.ModFromField VIEW-AS EDITOR SIZE 60 BY 2 SKIP
     DumpFile.Description VIEW-AS EDITOR SIZE 60 BY 3
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(cfc)
@@ -686,6 +687,7 @@ PROCEDURE local-UPDATE-record:
 
       DISP 
          DumpFile.Brand          
+         DumpFile.BatchID
          DumpFile.DumpID        
          DumpFile.DumpName
          DumpFile.Active          
@@ -699,8 +701,8 @@ PROCEDURE local-UPDATE-record:
          DumpFile.DecimalPoint       
          DumpFile.EmptyFile
          DumpFile.ModFromEventLog
-         DumpFile.ModFromField
          DumpFile.AllowReplica
+         DumpFile.ModFromField
          DumpFile.Description   
       WITH FRAME lis.
 
@@ -729,6 +731,7 @@ PROCEDURE local-UPDATE-record:
          RUN ufkey.
    
          UPDATE
+            DumpFile.BatchID
             DumpFile.Active          
             DumpFile.FileCategory
             DumpFile.MainTable           
@@ -736,12 +739,12 @@ PROCEDURE local-UPDATE-record:
             DumpFile.SpoolDir         
             DumpFile.TransDir       
             DumpFile.DumpFormat
-            DumpFile.EmptyFile
-            DumpFile.ModFromEventLog
-            DumpFile.ModFromField
             DumpFile.DumpDelimiter        
+            DumpFile.EmptyFile
             DumpFile.DecimalPoint       
+            DumpFile.ModFromEventLog
             DumpFile.AllowReplica
+            DumpFile.ModFromField
             DumpFile.Description
          WITH FRAME lis EDITING:
  
