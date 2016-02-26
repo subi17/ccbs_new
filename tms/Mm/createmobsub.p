@@ -599,10 +599,6 @@ IF NOT MobSub.PayType THEN DO:
                     bTerMsRequest.ReqCParam1 = "DELETE" AND
                    LOOKUP(STRING(bTerMsRequest.ReqStatus),
                           {&REQ_INACTIVE_STATUSES} + ",3") = 0 NO-ERROR.
-         IF AVAIL bTerMsRequest AND 
-                  bTerMsRequest.ReqStatus = {&REQUEST_STATUS_NEW} AND
-                  MsRequest.ReqCParam3 = "DSS2" THEN
-               fReqStatus(4,"DSS term request cancelled to keep DSS alive").
          IF NOT AVAIL bTerMsRequest THEN DO:
             liRequest = fDSSRequest(lbMobSub.MsSeq,
                                  lbMobSub.CustNum,
