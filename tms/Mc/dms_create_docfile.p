@@ -1468,7 +1468,7 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
                       /*MSISDN*/
                       STRING(MsRequest.CLI)           + lcDelim +
                       /*Q25 Extension_Request_date*/
-                      fPrintDate(MsRequest.ActStamp)  + lcDelim +
+                      fPrintDate(MsRequest.CreStamp)      + lcDelim +
                       /*Q25 Extension bank*/
                       STRING(Msrequest.ReqCparam6).
 
