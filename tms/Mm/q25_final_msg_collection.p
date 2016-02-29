@@ -58,29 +58,33 @@ liSendDay = 21.  /* First possible sending day if not weekend or national
 ldaTempDate = DATE(MONTH(ldaExecuteDate),liSendDay,YEAR(ldaExecuteDate)).
 ldaTempDate = fChkDueDate(ldaTempDate). /* find normal weekday */
 liSendDay = DAY(ldaTempDate). /* Add found day number here */
-                    
-IF (DAY(ldaExecuteDate) = liSendDay) AND 
-    fGetStartEndDates({&Q25_MONTH_24}, liStartDay, liEndDay, 
-    OUTPUT ldaStartDateMonth24, OUTPUT ldaEndDateMonth24) THEN DO:
-   /* Generate customer logs (liRunMode = 0) or calculate cases and some 
-      internal logs (liRunMode = 1) */
-   liTotalCount = fGenerateQ25SMSMessages(ldaStartDateMonth24, 
-                                         ldaEndDateMonth24, 
-                                         {&Q25_MONTH_24_FINAL_MSG}, liRunMode, 
-                                         INPUT-OUTPUT liTempCount).
-   IF liRunMode EQ 0 THEN RETURN. /* Logs created, no need to continue */
-   fQ25LogWriting(STRING(fMakeTS()) + "Start final MESSAGE sending. " + 
-                  STRING(liTotalCount) + " messages to be send.",
-                  {&Q25_LOGGING_COUNTERS}, {&Q25_MONTH_24_FINAL_MSG},
-                  liRunMode).
-   /* Send actual SMS Messages */
-   fGenerateQ25SMSMessages(ldaStartDateMonth24, ldaEndDateMonth24, 
-                          {&Q25_MONTH_24_FINAL_MSG}, 
-                          {&Q25_EXEC_TYPE_SMS_SENDING},
-                          INPUT-OUTPUT liTotalCount).
-   fQ25LogWriting("END FINAL MESSAGE SENDING. " + STRING(liTotalCount) +
-                  " messages left.", {&Q25_LOGGING_COUNTERS}, 
-                  {&Q25_MONTH_24_FINAL_MSG}, liRunMode).
-   IF lcQ25SpoolDir NE lcQ25LogDir AND lcQ25LogFile > "" THEN
-      fMove2TransDir(lcQ25SpoolDir + lcQ25LogFile + "final", "", lcQ25LogDir).
-END.
+
+Execution:
+DO:
+   IF (DAY(ldaExecuteDate) = liSendDay) AND 
+       fGetStartEndDates({&Q25_MONTH_24}, liStartDay, liEndDay, 
+       OUTPUT ldaStartDateMonth24, OUTPUT ldaEndDateMonth24) THEN DO:
+      /* Generate customer logs (liRunMode = 0) or calculate cases and some 
+         internal logs (liRunMode = 1) */
+      liTotalCount = fGenerateQ25SMSMessages(ldaStartDateMonth24, 
+                                            ldaEndDateMonth24, 
+                                            {&Q25_MONTH_24_FINAL_MSG}, liRunMode, 
+                                            INPUT-OUTPUT liTempCount).
+      IF liRunMode EQ 0 THEN LEAVE Execution. /* Logs created, no need to continue */
+      fQ25LogWriting(STRING(fMakeTS()) + "Start final MESSAGE sending. " + 
+                     STRING(liTotalCount) + " messages to be send.",
+                     {&Q25_LOGGING_COUNTERS}, {&Q25_MONTH_24_FINAL_MSG},
+                     liRunMode).
+      /* Send actual SMS Messages */
+      fGenerateQ25SMSMessages(ldaStartDateMonth24, ldaEndDateMonth24, 
+                             {&Q25_MONTH_24_FINAL_MSG}, 
+                             {&Q25_EXEC_TYPE_SMS_SENDING},
+                             INPUT-OUTPUT liTotalCount).
+      fQ25LogWriting("END FINAL MESSAGE SENDING. " + STRING(liTotalCount) +
+                     " messages left.", {&Q25_LOGGING_COUNTERS}, 
+                     {&Q25_MONTH_24_FINAL_MSG}, liRunMode).
+      IF lcQ25SpoolDir NE lcQ25LogDir AND lcQ25LogFile > "" THEN
+         fMove2TransDir(lcQ25SpoolDir + lcQ25LogFile + "final", "", 
+                        lcQ25LogDir).
+   END.
+END.   
