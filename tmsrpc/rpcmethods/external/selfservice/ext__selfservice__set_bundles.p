@@ -3,7 +3,7 @@
  *
  * @input  transaction_id;string;mandatory;transaction id
            msisdn;string;mandatory;subscription msisdn number
-           bundle_id;string;mandatory;bundle id (eg: BONO Contracts/DSS, Bono VoIP) 
+           bundle_id;string;mandatory;bundle id (eg: BONO Contracts/DSS) 
            bundle_status;string;mandatory;status value (on,off) 
  * @output     struct;mandatory;response struct
  * @response   transaction_id;string;transaction id
@@ -64,6 +64,7 @@ DEF VAR lcApplicationId        AS CHAR NO-UNDO.
 DEF VAR lcAppEndUserId         AS CHAR NO-UNDO.
 DEF VAR lcOnOff                AS CHAR NO-UNDO.
 DEF VAR secondsFromPrevious    AS INT  NO-UNDO.
+DEF VAR ldaBonoVoipRemovalDate AS DATE NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,string,string,string") EQ ? THEN RETURN.
 
@@ -81,6 +82,8 @@ IF NOT fchkTMSCodeValues(gbAuthLog.UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
 katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
+
+ldaBonoVoipRemovalDate   = DATE(fCParamC("BonoVoipRemovalDate")).
 
 FIND FIRST MobSub  WHERE 
            MobSub.CLI = pcCLI NO-LOCK NO-ERROR.
@@ -106,9 +109,14 @@ FIND FIRST DayCampaign NO-LOCK WHERE
 IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
 
 /* currently we support only manual activation/termination for MDUB and MDUB2 */
-IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") = 0 AND
+IF TODAY LT ldaBonoVoipRemovalDate AND 
+   LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") = 0 AND
    pcBundleId <> {&DSS}
 THEN RETURN appl_err("Incorrect Bundle Id").
+ELSE IF TODAY GE ldaBonoVoipRemovalDate AND 
+        LOOKUP(pcBundleId,lcBONOContracts) = 0 AND
+        pcBundleId <> {&DSS}
+   THEN RETURN appl_err("Incorrect Bundle Id").
 
 /* Check if subscription type is not compatible with bundle */
 IF fMatrixAnalyse(gcBrand,
@@ -144,13 +152,18 @@ CASE pcActionValue :
             RETURN appl_err("Bundle termination is not allowed since " +
                             "subscription has ongoing BTC with upgrade upsell").
       END. /* IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO: */
-      ELSE IF pcBundleId = "BONO_VOIP" THEN DO:
+      ELSE IF TODAY LT ldaBonoVoipRemovalDate AND 
+              pcBundleId = "BONO_VOIP" THEN DO:
          IF fGetActiveSpecificBundle(Mobsub.MsSeq,
                                      ldNextMonthActStamp,
                                      pcBundleId) = "" THEN
             RETURN appl_err("Bundle termination is not allowed").
       END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
       /* Customer level - As of now DSS only */
+      ELSE IF TODAY GE ldaBonoVoipRemovalDate AND
+              pcBundleId = "BONO_VOIP" THEN DO:
+         RETURN appl_err("Bundle termination is not allowed").
+      END. 
       ELSE DO:
          IF NOT fIsDSSActive(Mobsub.Custnum,ldeActStamp) THEN
             RETURN appl_err("Bundle termination is not allowed").
@@ -180,11 +193,16 @@ CASE pcActionValue :
          IF NOT fServPackagesActive() THEN
             RETURN appl_err("Bundle activation is not allowed").
       END. /* IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO: */
-      ELSE IF pcBundleId = "BONO_VOIP" THEN DO:
+      ELSE IF TODAY LT ldaBonoVoipRemovalDate AND 
+              pcBundleId = "BONO_VOIP" THEN DO:
          IF NOT fIsBonoVoIPAllowed(Mobsub.MsSeq,ldeActStamp) THEN 
             RETURN appl_err("Bundle activation is not allowed").
       END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
       /* Customer level - As of now DSS only */
+      ELSE IF TODAY GE ldaBonoVoipRemovalDate AND
+              pcBundleId = "BONO_VOIP" THEN DO:
+         RETURN appl_err("Bundle activation is not allowed").
+      END.
       ELSE DO:
          IF pcBundleId = {&DSS} THEN
             RETURN appl_err("DSS activation is not allowed").
