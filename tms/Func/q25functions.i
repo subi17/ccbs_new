@@ -283,6 +283,20 @@ FUNCTION fCalculateMaxPauseValue RETURN INTEGER
    RETURN INT(TRUNC(ldTimeLeft / iiToBeSend,0)). 
 END.
 
+/* Template filename for customer logfiles */
+FUNCTION fgetTemplateName RETURN CHARACTER
+   (INPUT iiPhase AS INT).
+   IF iiPhase EQ {&Q25_MONTH_22} OR iiPhase EQ {&Q25_MONTH_23} THEN
+      RETURN "Q25ReminderMonth22and23".
+   ELSE IF iiPhase EQ {&Q25_MONTH_24} THEN
+      RETURN "Q25ReminderMonth24".
+   ELSE IF iiPhase EQ {&Q25_MONTH_24_FINAL_MSG} THEN
+      RETURN "Q25FinalFeeMsgNoDecision".
+   ELSE 
+      RETURN "Error: Q25_Phase".
+END.
+
+
 /* SMS message generating and sending for Q25. */
 FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER 
    (INPUT idaStartDate AS DATE,
@@ -531,32 +545,30 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
       ELSE DO:
          /* Some logging about SMSs to be send. */
          IF liPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
-            /* Q25 Month 24 20th day extension made */
-            lcLogText = "Send SMS Q25 Chosen: " +
+            /* Q25 Month 24 20th day extension made, write only internal log */
+            
+            IF (iiExecType NE {&Q25_EXEC_TYPE_CUST_LOG_GENERATION}) THEN DO:
+               liLogType = {&Q25_LOGGING_DETAILED}.
+               lcLogText = "Send SMS Q25 Chosen: " +
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" + 
                         STRING(DCCLI.MsSeq).
+            END.
          END.
          ELSE DO:
-            IF liPhase EQ {&Q25_MONTH_22} OR liPhase EQ {&Q25_MONTH_23} THEN
-               lcTemplateName = "Q25ReminderMonth22and23".
-            ELSE IF liPhase EQ {&Q25_MONTH_24} THEN
-               lcTemplateName = "Q25ReminderMonth24".
-            ELSE IF liPhase EQ {&Q25_MONTH_24_FINAL_MSG} THEN
-               lcTemplateName = "Q25FinalFeeMsgNoDecision".
-            ELSE
-               lcTemplateName = "Error: Q25_Phase".
+            fgetTemplateName(liPhase).  
             IF (iiExecType EQ {&Q25_EXEC_TYPE_CUST_LOG_GENERATION}) AND
                lcTemplateName BEGINS "Q25" THEN DO:
                lcLogText = DCCLI.CLI + ";" + STRING(TODAY) + ";" +
                            lcTemplateName.
                liLogType = {&Q25_LOGGING_CUST_LOGS}.
             END.
-            ELSE
+            ELSE DO:
                liLogType = {&Q25_LOGGING_DETAILED}.
                lcLogText = "Send SMS: " +
                            STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                            STRING(DCCLI.MsSeq) + "|" +
                            STRING(ldAmount) + "|" + lcTemplateName.
+            END.
          END.   
          fQ25LogWriting(lcLogText, liLogType, liphase).
       END.

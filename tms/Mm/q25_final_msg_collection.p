@@ -70,7 +70,7 @@ IF (DAY(ldaExecuteDate) = liSendDay) AND
                                          ldaEndDateMonth24, 
                                          {&Q25_MONTH_24_FINAL_MSG}, liRunMode, 
                                          INPUT-OUTPUT liTempCount).
-   IF liRunMode EQ 0 THEN LEAVE. /* Logs created, no need to continue */
+   IF liRunMode EQ 0 THEN RETURN. /* Logs created, no need to continue */
    fQ25LogWriting(STRING(fMakeTS()) + "Start final MESSAGE sending. " + 
                   STRING(liTotalCount) + " messages to be send.",
                   {&Q25_LOGGING_COUNTERS}, {&Q25_MONTH_24_FINAL_MSG}).
