@@ -7,8 +7,8 @@ TRIGGER PROCEDURE FOR REPLICATION-DELETE OF Invoice.
 IF NEW Invoice
 THEN RETURN.
 
-/* Only require for Service Invoice */
-IF Invoice.InvType NE 1
+/* Only require for printed Service Invoice */
+IF Invoice.InvCfg[1] OR Invoice.InvType NE 1
 THEN RETURN.
 
 CREATE Common.RepLog.

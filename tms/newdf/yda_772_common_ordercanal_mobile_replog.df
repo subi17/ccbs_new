@@ -1,0 +1,80 @@
+ADD TABLE "RepLog"
+  AREA "CDF_Data"
+  DESCRIPTION "This is the replication log table for replicating the record"
+  DUMP-NAME "replog"
+
+ADD FIELD "RowID" OF "RepLog" AS character 
+  DESCRIPTION "RowID in character format"
+  FORMAT "x(18)"
+  INITIAL ""
+  LABEL "RowID"
+  POSITION 2
+  MAX-WIDTH 36
+  COLUMN-LABEL "RowID"
+  ORDER 10
+
+ADD FIELD "KeyValue" OF "RepLog" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "KeyValue"
+  POSITION 3
+  MAX-WIDTH 60
+  COLUMN-LABEL "KeyValue"
+  ORDER 20
+
+ADD FIELD "TableName" OF "RepLog" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Table name"
+  POSITION 4
+  MAX-WIDTH 30
+  COLUMN-LABEL "TableName"
+  ORDER 30
+
+ADD FIELD "EventType" OF "RepLog" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "Event type"
+  POSITION 5
+  MAX-WIDTH 12
+  COLUMN-LABEL "EventType"
+  ORDER 40
+
+ADD FIELD "EventTime" OF "RepLog" AS datetime-tz 
+  FORMAT "99-99-9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL "?"
+  LABEL "Event time"
+  POSITION 6
+  MAX-WIDTH 12
+  COLUMN-LABEL "EventTime"
+  ORDER 50
+
+ADD FIELD "SendTime" OF "RepLog" AS datetime-tz 
+  FORMAT "99-99-9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL "?"
+  LABEL "Send time"
+  POSITION 7
+  MAX-WIDTH 12
+  COLUMN-LABEL "SendTime"
+  ORDER 60
+
+ADD FIELD "SendCount" OF "RepLog" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "Send count"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "SendCount"
+  ORDER 70
+
+ADD INDEX "SendTime" ON "RepLog" 
+  AREA "CDF_Index"
+  PRIMARY
+  INDEX-FIELD "SendTime" ASCENDING
+  INDEX-FIELD "EventTime" ASCENDING
+
+.
+PSC
+cpstream=iso8859-1
+.
+0000002000

@@ -13,6 +13,8 @@ USING HPD.DumpTimeBasedConnect.
 USING HPD.HPDTime.
 USING HPD.DumpBase.
 
+{Syst/tmsconst.i}
+
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS HPD.CDRDump FINAL INHERITS DumpHandlerWithQuery:
@@ -97,8 +99,17 @@ CLASS HPD.CDRDump FINAL INHERITS DumpHandlerWithQuery:
                           THEN lhMainTable::DCEvent
                           ELSE IF lhMainTable::BillCode = "PREMDUB"
                           THEN "PMDUB"
-                          ELSE IF lhMainTable::CLIType = "TARJ7" AND lhMainTable::Charge = 0
+                          ELSE IF lhMainTable::CLIType = "TARJ7"  AND
+                                  lhMainTable::Charge = 0
                           THEN "TARJ7"
+                          ELSE IF lhMainTable::CLIType = "TARJ9"  AND
+                                  lhMainTable::EventType = "CALL" AND
+                                  lhMainTable::Accumulator > 0
+                          THEN "TARJ9"
+                          ELSE IF lhMainTable::CLIType = "TARJ9"  AND
+                                  lhMainTable::Charge = 0         AND
+                                  LOOKUP(lhMainTable::GsmBnr,{&YOIGO_FREE_NUMBERS}) = 0
+                          THEN "TARJ9"
                           ELSE "".
          /*
          WHEN "DateStTimeStart"

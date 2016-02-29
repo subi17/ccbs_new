@@ -4,9 +4,10 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF Invoice OLD BUFFER oldInvoice.
 
 &IF {&INVOICE_WRITE_TRIGGER_ACTIVE} &THEN
 
-/* If this is a new invoice and invoice type is not Service Invoice,
+/* If this is a new invoice and
+   invoice is not printed or invoice type is not Service Invoice,
    we won't send the information */ 
-IF NEW(Invoice) AND Invoice.InvType NE 1
+IF NEW(Invoice) AND ( Invoice.InvCfg[1] OR Invoice.InvType NE 1 )
 THEN RETURN.
 
 CREATE Common.RepLog.
@@ -14,7 +15,7 @@ ASSIGN
    Common.RepLog.TableName = "Invoice"
    Common.RepLog.EventType = (IF NEW(Invoice)
                                THEN "CREATE"
-                               ELSE IF Invoice.InvType NE 1
+                               ELSE IF Invoice.InvCfg[1] OR Invoice.InvType NE 1
                                THEN "DELETE"
                                ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
