@@ -50,8 +50,6 @@ ELSE
 
 
 /* Month 24 21st day*/
-fQ25LogWriting("START FINAL MESSAGE SENDING", {&Q25_LOGGING_COUNTERS},
-               {&Q25_MONTH_24_FINAL_MSG}).
 
 liSendDay = 21.  /* First possible sending day if not weekend or national 
                     holiday. Sending is done at first possible normal weekday 
@@ -73,7 +71,8 @@ IF (DAY(ldaExecuteDate) = liSendDay) AND
    IF liRunMode EQ 0 THEN RETURN. /* Logs created, no need to continue */
    fQ25LogWriting(STRING(fMakeTS()) + "Start final MESSAGE sending. " + 
                   STRING(liTotalCount) + " messages to be send.",
-                  {&Q25_LOGGING_COUNTERS}, {&Q25_MONTH_24_FINAL_MSG}).
+                  {&Q25_LOGGING_COUNTERS}, {&Q25_MONTH_24_FINAL_MSG},
+                  liRunMode).
    /* Send actual SMS Messages */
    fGenerateQ25SMSMessages(ldaStartDateMonth24, ldaEndDateMonth24, 
                           {&Q25_MONTH_24_FINAL_MSG}, 
@@ -81,7 +80,7 @@ IF (DAY(ldaExecuteDate) = liSendDay) AND
                           INPUT-OUTPUT liTotalCount).
    fQ25LogWriting("END FINAL MESSAGE SENDING. " + STRING(liTotalCount) +
                   " messages left.", {&Q25_LOGGING_COUNTERS}, 
-                  {&Q25_MONTH_24_FINAL_MSG}).
+                  {&Q25_MONTH_24_FINAL_MSG}, liRunMode).
    IF lcQ25SpoolDir NE lcQ25LogDir AND lcQ25LogFile > "" THEN
       fMove2TransDir(lcQ25SpoolDir + lcQ25LogFile + "final", "", lcQ25LogDir).
 END.

@@ -173,7 +173,7 @@ DO:
    IF ldaStartDateMonth24 NE ? AND ldaEndDateMonth24 NE ? THEN
       lcLogText = lcLogtext + "24:" + STRING(ldaStartDateMonth24) + "|" + 
                   STRING(ldaEndDateMonth24).
-   fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, 0).
+   fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, 0, liRunMode).
 
    /* Actual SMS creation and sending */
    IF ldaStartDateMonth22 NE ? AND ldaEndDateMonth22 NE ? THEN
@@ -194,7 +194,7 @@ DO:
                              INPUT-OUTPUT liTotalCount).
    fQ25LogWriting("FINISH: Total " + STRING(liTempCount) + " messages. " +
                   STRING(liTotalCount) + " messages left to send.",
-                  {&Q25_LOGGING_COUNTERS}, 0).
+                  {&Q25_LOGGING_COUNTERS}, 0, liRunMode).
    IF lcQ25SpoolDir NE lcQ25LogDir AND lcQ25LogFile > "" THEN
       fMove2TransDir(lcQ25SpoolDir + lcQ25LogFile + "reminder", "", lcQ25LogDir).
 END.
