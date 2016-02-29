@@ -22,6 +22,11 @@ DEF VAR ldaEndDateMonth24   AS DATE NO-UNDO.
 DEF VAR liSendDay         AS INT NO-UNDO.
 DEF VAR ldaTempDate       AS DATE NO-UNDO.
 DEF VAR ldaExecuteDate    AS DATE NO-UNDO.
+DEF VAR liRunMode         AS INT NO-UNDO.
+
+liRunMode = INT(SESSION:PARAMETER). /* get crontab parameter, if this is
+                                       logging run (0) for making log file or
+                                                                              actual SMS sending (1) */
 
 /* each month as planned */
 ASSIGN
@@ -59,15 +64,20 @@ liSendDay = DAY(ldaTempDate). /* Add found day number here */
 IF (DAY(ldaExecuteDate) = liSendDay) AND 
     fGetStartEndDates({&Q25_MONTH_24}, liStartDay, liEndDay, 
     OUTPUT ldaStartDateMonth24, OUTPUT ldaEndDateMonth24) THEN DO:
+   /* Generate customer logs (liRunMode = 0) or calculate cases and some 
+      internal logs (liRunMode = 1) */
    liTotalCount = fGenerateQ25SMSMessages(ldaStartDateMonth24, 
                                          ldaEndDateMonth24, 
-                                         {&Q25_MONTH_24_FINAL_MSG}, FALSE, 
+                                         {&Q25_MONTH_24_FINAL_MSG}, liRunMode, 
                                          INPUT-OUTPUT liTempCount).
+   IF liRunMode EQ 0 THEN LEAVE. /* Logs created, no need to continue */
    fQ25LogWriting(STRING(fMakeTS()) + "Start final MESSAGE sending. " + 
                   STRING(liTotalCount) + " messages to be send.",
                   {&Q25_LOGGING_COUNTERS}, {&Q25_MONTH_24_FINAL_MSG}).
+   /* Send actual SMS Messages */
    fGenerateQ25SMSMessages(ldaStartDateMonth24, ldaEndDateMonth24, 
-                          {&Q25_MONTH_24_FINAL_MSG}, TRUE,
+                          {&Q25_MONTH_24_FINAL_MSG}, 
+                          {&Q25_EXEC_TYPE_SMS_SENDING},
                           INPUT-OUTPUT liTotalCount).
    fQ25LogWriting("END FINAL MESSAGE SENDING. " + STRING(liTotalCount) +
                   " messages left.", {&Q25_LOGGING_COUNTERS}, 

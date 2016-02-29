@@ -242,9 +242,7 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
    /* Requested customer log writings. YPR-3446 */
    IF iiLogLevel EQ {&Q25_LOGGING_CUST_LOGS} THEN DO:
       lcQ25LogFile = lcQ25SpoolDir + "events_" +
-                  STRING(YEAR(TODAY)) +
-                  STRING(MONTH(TODAY),"99") +
-                  STRING(DAY(TODAY),"99") + ".cvt".
+                     (REPLACE(STRING(fMakeTS()),".","_")) + ".cvt".
       OUTPUT STREAM Sout TO VALUE(lcQ25LogFile) APPEND.
       PUT STREAM Sout UNFORMATTED
          icLogText SKIP.
