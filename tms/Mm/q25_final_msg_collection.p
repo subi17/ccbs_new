@@ -84,7 +84,6 @@ DO:
                      " messages left.", {&Q25_LOGGING_COUNTERS}, 
                      {&Q25_MONTH_24_FINAL_MSG}, liRunMode).
       IF lcQ25SpoolDir NE lcQ25LogDir AND lcQ25LogFile > "" THEN
-         fMove2TransDir(lcQ25SpoolDir + lcQ25LogFile + "final", "", 
-                        lcQ25LogDir).
+         fMove2TransDir(lcQ25LogFile,"",lcQ25LogDir).
    END.
 END.   

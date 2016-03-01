@@ -159,8 +159,10 @@ DO:
                   fGenerateQ25SMSMessages(ldaStartDateMonth24, 
                       ldaEndDateMonth24, {&Q25_MONTH_24}, liRunMode, 
                       INPUT-OUTPUT liTempCount).
-   IF liRunmode EQ 0 THEN LEAVE execution. /* logs created, can leave here */ 
-
+   IF liRunmode EQ 0 THEN DO:
+      fMove2TransDir(lcQ25LogFile, "", lcQ25DWHLogDir).
+      LEAVE execution. /* DWH logs created, can leave here */ 
+   END.
    liTempCount = liTotalCount. /* for logging purposes */
 
    lcLogText = "START|" + STRING(liStartDay) + "|" + STRING(liEndDay) + "|".
@@ -196,5 +198,5 @@ DO:
                   STRING(liTotalCount) + " messages left to send.",
                   {&Q25_LOGGING_COUNTERS}, 0, liRunMode).
    IF lcQ25SpoolDir NE lcQ25LogDir AND lcQ25LogFile > "" THEN
-      fMove2TransDir(lcQ25SpoolDir + lcQ25LogFile + "reminder", "", lcQ25LogDir).
+      fMove2TransDir(lcQ25LogFile, "", lcQ25LogDir).
 END.

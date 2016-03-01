@@ -29,7 +29,9 @@ DEF VAR liQ25Logging AS INT NO-UNDO.
 DEF VAR lcQ25LogDir          AS CHAR NO-UNDO.
 DEF VAR lcQ25SpoolDir        AS CHAR NO-UNDO.
 DEF VAR lcQ25LogFile         AS CHAR NO-UNDO.
+DEF VAR lcQ25DWHLogDir      AS CHAR NO-UNDO.
 DEF VAR ldnewAmount AS DEC NO-UNDO.
+
 
 DEF STREAM Sout.
 
@@ -37,6 +39,7 @@ ASSIGN liQ25Logging = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg,
                                                      2 = count, 3 = all */
        lcQ25LogDir     = fCParam("Q25","Q25ReminderLogDir")
        lcQ25SpoolDir   = fCParam("Q25","Q25ReminderLogSpoolDir").
+       lcQ25DWHLogDir  = fCParam("Q25","Q25DWHLogDir").
                   
 IF lcQ25LogDir = "" OR lcQ25LogDir = ? THEN lcQ25LogDir = "/tmp/".
 IF lcQ25SpoolDir = "" OR lcQ25SpoolDir = ? THEN lcQ25SpoolDir = "/tmp/".
