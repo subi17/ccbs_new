@@ -70,7 +70,10 @@ DO:
                                             ldaEndDateMonth24, 
                                             {&Q25_MONTH_24_FINAL_MSG}, liRunMode, 
                                             INPUT-OUTPUT liTempCount).
-      IF liRunMode EQ 0 THEN LEAVE Execution. /* Logs created, no need to continue */
+      IF liRunMode EQ 0 THEN DO:
+         fMove2TransDir(lcQ25LogFile, "", lcQ25DWHLogDir).
+         LEAVE Execution. /* DWH logs created, no need to continue */
+      END.
       fQ25LogWriting(STRING(fMakeTS()) + "Start final MESSAGE sending. " + 
                      STRING(liTotalCount) + " messages to be send.",
                      {&Q25_LOGGING_COUNTERS}, {&Q25_MONTH_24_FINAL_MSG},
@@ -86,4 +89,4 @@ DO:
       IF lcQ25SpoolDir NE lcQ25LogDir AND lcQ25LogFile > "" THEN
          fMove2TransDir(lcQ25LogFile,"",lcQ25LogDir).
    END.
-END.   
+END.
