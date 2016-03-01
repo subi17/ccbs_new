@@ -35,6 +35,12 @@ ADD SEQUENCE "SMSSeq"
   CYCLE-ON-LIMIT no
   MIN-VAL 0
 
+ADD SEQUENCE "DMS"
+  INITIAL 1
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 1
+
 ADD TABLE "Barring"
   AREA "Sta_Data_128"
   LABEL "Barring"
@@ -422,6 +428,26 @@ ADD FIELD "DeliStamp" OF "CallAlarm" AS decimal
   DECIMALS 5
   ORDER 150
 
+ADD FIELD "MsSeq" OF "CallAlarm" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MsSeq"
+  POSITION 17
+  MAX-WIDTH 4
+  COLUMN-LABEL "MsSeq"
+  HELP "Subscription ID"
+  ORDER 160
+
+ADD FIELD "OrderId" OF "CallAlarm" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  POSITION 18
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrderId"
+  HELP "Order ID"
+  ORDER 170
+
 ADD INDEX "CustNo" ON "CallAlarm" 
   AREA "Sta_Index_1"
   PRIMARY
@@ -451,6 +477,10 @@ ADD INDEX "Delistat" ON "CallAlarm"
   INDEX-FIELD "DeliStat" ASCENDING 
   INDEX-FIELD "Delitype" ASCENDING 
   INDEX-FIELD "CustNo" ASCENDING 
+
+ADD INDEX "MsSeq" ON "CallAlarm" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "MsSeq" ASCENDING 
 
 ADD INDEX "TimeStamp" ON "CallAlarm" 
   AREA "Sta_Index_1"
@@ -597,7 +627,7 @@ ADD FIELD "PenaltyFee" OF "CLIType" AS character
   ORDER 130
 
 ADD FIELD "ContrType" OF "CLIType" AS integer 
-  FORMAT ">9"
+  FORMAT "9"
   INITIAL "1"
   LABEL "Contract Type"
   POSITION 15
@@ -717,7 +747,7 @@ ADD FIELD "CommercialFee" OF "CLIType" AS decimal
 
 ADD FIELD "LineType" OF "CLIType" AS integer 
   FORMAT "9"
-  INITIAL "0"
+  INITIAL "1"
   LABEL "Line Type"
   POSITION 27
   MAX-WIDTH 4
@@ -771,6 +801,216 @@ ADD INDEX "Clitype" ON "CLIType"
 ADD INDEX "CliType_s" ON "CLIType" 
   AREA "Sta_Index_2"
   INDEX-FIELD "Clitype" ASCENDING 
+
+ADD TABLE "DMS"
+  AREA "Sta_Data_128"
+  LABEL "Document mgmt case"
+  DESCRIPTION "Document management case"
+  DUMP-NAME "dms"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-dms.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-dms.p" CRC "?" 
+
+ADD FIELD "HostID" OF "DMS" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "Host ID"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "TMS source ID"
+  ORDER 10
+
+ADD FIELD "HostTable" OF "DMS" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Host Table"
+  POSITION 3
+  MAX-WIDTH 24
+  HELP "TMS Table Information"
+  ORDER 20
+
+ADD FIELD "DMSID" OF "DMS" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "DMSID"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "DMS ID"
+  ORDER 30
+
+ADD FIELD "DmsExternalID" OF "DMS" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "ID in DMS"
+  POSITION 5
+  MAX-WIDTH 24
+  HELP "ID from external DMS system"
+  ORDER 40
+
+ADD FIELD "StatusCode" OF "DMS" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Status Code"
+  POSITION 6
+  MAX-WIDTH 24
+  HELP "Status Code"
+  ORDER 50
+
+ADD FIELD "StatusDesc" OF "DMS" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Status Description"
+  POSITION 7
+  MAX-WIDTH 40
+  HELP "Status Description"
+  ORDER 60
+
+ADD FIELD "StatusTS" OF "DMS" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Time Stamp"
+  POSITION 8
+  MAX-WIDTH 20
+  COLUMN-LABEL "StatusTS"
+  HELP "Status Time Stamp"
+  DECIMALS 5
+  ORDER 70
+
+ADD FIELD "CaseTypeID" OF "DMS" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Case Type"
+  POSITION 9
+  MAX-WIDTH 16
+  HELP "Case Type ID"
+  ORDER 80
+
+ADD FIELD "ContractID" OF "DMS" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "ContractID"
+  POSITION 10
+  MAX-WIDTH 16
+  HELP "ContractID"
+  ORDER 90
+
+ADD FIELD "OrderStatus" OF "DMS" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "OrderStatus"
+  POSITION 11
+  MAX-WIDTH 16
+  HELP "Order Status in TMS"
+  ORDER 100
+
+ADD FIELD "DMSStatusTS" OF "DMS" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "DMS Status TS"
+  POSITION 12
+  MAX-WIDTH 20
+  COLUMN-LABEL "DMSStatusTS"
+  HELP "DMS Time Stamp"
+  DECIMALS 5
+  ORDER 110
+
+ADD INDEX "DMSID" ON "DMS" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "DMSID" ASCENDING 
+
+ADD INDEX "Host" ON "DMS" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "HostID" ASCENDING 
+  INDEX-FIELD "StatusTS" DESCENDING 
+
+ADD INDEX "StatusTS" ON "DMS" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "StatusTS" DESCENDING 
+
+ADD TABLE "DMSDOC"
+  AREA "Sta_Data_128"
+  LABEL "Document"
+  DESCRIPTION "DMS Document"
+  DUMP-NAME "dmsdoc"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-dmsdoc.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-dmsdoc.p" CRC "?" 
+
+ADD FIELD "DMSID" OF "DMSDOC" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "DMSID"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "DMS ID"
+  ORDER 10
+
+ADD FIELD "DocTypeID" OF "DMSDOC" AS character 
+  FORMAT "X(2)"
+  INITIAL ""
+  LABEL "Document Type"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Document Type ID"
+  ORDER 20
+
+ADD FIELD "DocStatusCode" OF "DMSDOC" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Document Status"
+  POSITION 4
+  MAX-WIDTH 16
+  HELP "Document Status Code"
+  ORDER 30
+
+ADD FIELD "DocTypeDesc" OF "DMSDOC" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Doc Type Desc"
+  POSITION 5
+  MAX-WIDTH 40
+  HELP "Document Type Description"
+  ORDER 35
+
+ADD FIELD "DocRevComment" OF "DMSDOC" AS character 
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Doc Revision Comment"
+  POSITION 6
+  MAX-WIDTH 60
+  HELP "Document Revision Comment"
+  ORDER 45
+
+ADD FIELD "DocStatusTS" OF "DMSDOC" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Time Stamp"
+  POSITION 7
+  MAX-WIDTH 20
+  COLUMN-LABEL "DocStatusTS"
+  HELP "Document Status Time Stamp"
+  DECIMALS 5
+  ORDER 50
+
+ADD FIELD "DMSStatusTS" OF "DMSDOC" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "DMS Time Stamp"
+  POSITION 8
+  MAX-WIDTH 20
+  COLUMN-LABEL "DMSStatusTS"
+  HELP "DMS Time Stamp"
+  DECIMALS 5
+  ORDER 60
+
+ADD INDEX "DMSID" ON "DMSDOC" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "DMSID" ASCENDING 
+
+ADD INDEX "StatusTS" ON "DMSDOC" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "DocStatusTS" DESCENDING 
 
 ADD TABLE "FinBank"
   AREA "Sta_Data_256"
@@ -1048,6 +1288,16 @@ ADD FIELD "TariffActDate" OF "MobSub" AS date
   MAX-WIDTH 4
   COLUMN-LABEL "TariffActDate"
   ORDER 880
+
+ADD FIELD "TariffActTS" OF "MobSub" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "TariffActTS"
+  POSITION 37
+  MAX-WIDTH 15
+  COLUMN-LABEL "TariffActTS"
+  HELP "Tariff activation time stamp"
+  ORDER 890
 
 ADD FIELD "CliType" OF "MobSub" AS character 
   FORMAT "x(8)"
@@ -2624,6 +2874,15 @@ ADD FIELD "RoiLevel" OF "Order" AS integer
   COLUMN-LABEL "ROILevel"
   ORDER 1160
 
+ADD FIELD "Multiorder" OF "Order" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "Multiorder"
+  POSITION 106
+  MAX-WIDTH 1
+  COLUMN-LABEL "Multiorder"
+  ORDER 1170
+
 ADD INDEX "OrderID" ON "Order" 
   AREA "Sta_Index_1"
   UNIQUE
@@ -2731,6 +2990,7 @@ ADD INDEX "StOrderID" ON "Order"
 ADD TABLE "OrderAccessory"
   AREA "Sta_Data_32"
   DUMP-NAME "orderacc"
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-orderaccessory.p" CRC "?" 
 
 ADD FIELD "OrderId" OF "OrderAccessory" AS integer 
   DESCRIPTION "Order sequence number"
@@ -3497,24 +3757,42 @@ ADD FIELD "Profession" OF "OrderCustomer" AS character
   COLUMN-LABEL "Profession"
   ORDER 980
 
-ADD FIELD "KialaCode" OF "OrderCustomer" AS character 
-  FORMAT "x(5)"
-  INITIAL ""
-  LABEL "Kiala Code"
-  POSITION 60
-  MAX-WIDTH 10
-  COLUMN-LABEL "KialaCode"
-  ORDER 1000
-
 ADD FIELD "OutBankMarketing" OF "OrderCustomer" AS logical 
   FORMAT "Yes/No"
   INITIAL "No"
   LABEL "OutBankMarketing"
-  POSITION 61
+  POSITION 60
   MAX-WIDTH 1
   COLUMN-LABEL "OutBankMarketing"
   HELP "3rd Party Bank Marketing"
   ORDER 990
+
+ADD FIELD "KialaCode" OF "OrderCustomer" AS character 
+  FORMAT "x(5)"
+  INITIAL ""
+  LABEL "Kiala Code"
+  POSITION 61
+  MAX-WIDTH 10
+  COLUMN-LABEL "KialaCode"
+  ORDER 1000
+
+ADD FIELD "MSISDNForIdent" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "MSISDN For Identification"
+  POSITION 62
+  MAX-WIDTH 24
+  COLUMN-LABEL "MSISDNForIdent"
+  ORDER 1020
+
+ADD FIELD "CustDataRetr" OF "OrderCustomer" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "Customer data Retrieved"
+  POSITION 63
+  MAX-WIDTH 1
+  COLUMN-LABEL "CustDataRetr"
+  ORDER 1010
 
 ADD INDEX "OrderId" ON "OrderCustomer" 
   AREA "Sta_Index_1"
@@ -4383,8 +4661,106 @@ ADD INDEX "Source" ON "PrePaidRequest"
   INDEX-FIELD "Source" ASCENDING 
   INDEX-FIELD "TSRequest" DESCENDING 
 
+ADD TABLE "Q25MESSAGING"
+  AREA "Sta_Data_128"
+  LABEL "Q25 Messaging"
+  DESCRIPTION "Q25 messages to be send"
+  DUMP-NAME "q25messaging"
+
+ADD FIELD "SendDate" OF "Q25MESSAGING" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Send Date"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "Target date of executing and sending Q25 messages"
+  ORDER 10
+
+ADD FIELD "isSent" OF "Q25MESSAGING" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "isSent"
+  POSITION 3
+  MAX-WIDTH 1
+  HELP "Prevent same message to be sent twice"
+  ORDER 20
+
+ADD FIELD "MsSeq" OF "Q25MESSAGING" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "SubSeq"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Sequence for a Subscription"
+  ORDER 30
+
+ADD FIELD "CLI" OF "Q25MESSAGING" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "A-Sub No."
+  POSITION 5
+  MAX-WIDTH 32
+  HELP "Customer's A-subscriber Number"
+  ORDER 40
+
+ADD FIELD "CustNum" OF "Q25MESSAGING" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "CustNumber"
+  POSITION 6
+  MAX-WIDTH 4
+  HELP "Customer who owns CLI Series"
+  ORDER 50
+
+ADD FIELD "OrderId" OF "Q25MESSAGING" AS integer 
+  FORMAT "->>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  POSITION 7
+  MAX-WIDTH 4
+  HELP "Order iD"
+  ORDER 60
+
+ADD FIELD "Phase" OF "Q25MESSAGING" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Phase"
+  POSITION 8
+  MAX-WIDTH 4
+  HELP "Phase about which message is needed to send"
+  ORDER 70
+
+ADD FIELD "ValidTo" OF "Q25MESSAGING" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid to"
+  POSITION 9
+  MAX-WIDTH 4
+  HELP "Q25 instalment valid to date"
+  ORDER 80
+
+ADD FIELD "Amt" OF "Q25MESSAGING" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Amt"
+  POSITION 10
+  MAX-WIDTH 15
+  HELP "Q25 amount"
+  ORDER 90
+
+ADD INDEX "IsSent" ON "Q25MESSAGING" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "isSent" DESCENDING 
+  INDEX-FIELD "SendDate" DESCENDING 
+
+ADD INDEX "MsSeq" ON "Q25MESSAGING" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "SendDate" DESCENDING 
+
 ADD TABLE "RepLog"
-  AREA "CDF_Data"
+  AREA "Sta_Data_128"
   LABEL "Replication Log"
   DESCRIPTION "This is the replication log table for replicating the record"
   DUMP-NAME "replog"
@@ -4436,22 +4812,31 @@ ADD FIELD "CreatedTS" OF "RepLog" AS decimal
   DECIMALS 5
   ORDER 50
 
+ADD FIELD "ExtraParamValue" OF "RepLog" AS character 
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Extra Parameter Values"
+  POSITION 7
+  MAX-WIDTH 40
+  COLUMN-LABEL "ParamValue"
+  ORDER 61
+
 ADD FIELD "EventTS" OF "RepLog" AS datetime 
   FORMAT "99-99-9999 HH:MM:SS.SSS"
   INITIAL ?
   LABEL "EventTS"
-  POSITION 7
+  POSITION 8
   MAX-WIDTH 8
   COLUMN-LABEL "EventTS"
   ORDER 60
 
 ADD INDEX "CreatedTS" ON "RepLog" 
-  AREA "CDF_Index"
+  AREA "Sta_Index_1"
   PRIMARY
   INDEX-FIELD "CreatedTS" ASCENDING 
 
 ADD INDEX "EventTS" ON "RepLog" 
-  AREA "CDF_Index"
+  AREA "Sta_Index_1"
   INDEX-FIELD "EventTS" ASCENDING 
 
 ADD TABLE "Salesman"
@@ -4734,11 +5119,11 @@ ADD FIELD "Delitype" OF "SMSMessage" AS integer
   ORDER 50
 
 ADD FIELD "DeliMsg" OF "SMSMessage" AS character 
-  FORMAT "x(65)"
+  FORMAT "x(55)"
   INITIAL ""
   LABEL "DeliMsg"
   POSITION 7
-  MAX-WIDTH 510
+  MAX-WIDTH 110
   COLUMN-LABEL "DeliMsg"
   HELP "Delivery message"
   ORDER 60
@@ -5057,6 +5442,134 @@ ADD INDEX "BillCode" ON "TerminalStock"
   AREA "Sta_Index_1"
   PRIMARY
   INDEX-FIELD "BillCode" ASCENDING 
+
+ADD TABLE "TermReturn"
+  AREA "Sta_Data_32"
+  LABEL "Returned terminals"
+  DUMP-NAME "TermReturn"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-termreturn.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-termreturn.p" CRC "?" 
+
+ADD FIELD "IMEI" OF "TermReturn" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "IMEI"
+  POSITION 2
+  MAX-WIDTH 24
+  COLUMN-LABEL "IMEI"
+  ORDER 10
+
+ADD FIELD "OrderId" OF "TermReturn" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrderId"
+  ORDER 20
+
+ADD FIELD "BillCode" OF "TermReturn" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Terminal Billing Code"
+  POSITION 4
+  MAX-WIDTH 32
+  COLUMN-LABEL "BillCode"
+  ORDER 30
+
+ADD FIELD "DeviceStart" OF "TermReturn" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Device Start"
+  POSITION 5
+  MAX-WIDTH 1
+  COLUMN-LABEL "DeviceStart"
+  ORDER 40
+
+ADD FIELD "DeviceScreen" OF "TermReturn" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Device Screen"
+  POSITION 6
+  MAX-WIDTH 1
+  COLUMN-LABEL "DeviceScreen"
+  ORDER 50
+
+ADD FIELD "ReturnChannel" OF "TermReturn" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Return Channel"
+  POSITION 7
+  MAX-WIDTH 32
+  COLUMN-LABEL "ReturnChannel"
+  ORDER 60
+
+ADD FIELD "ReturnTS" OF "TermReturn" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Return Time Stamp"
+  POSITION 8
+  MAX-WIDTH 20
+  COLUMN-LABEL "ReturnTS"
+  DECIMALS 5
+  ORDER 70
+
+ADD FIELD "MSISDN" OF "TermReturn" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "MSISDN"
+  POSITION 9
+  MAX-WIDTH 24
+  COLUMN-LABEL "MSISDN"
+  ORDER 80
+
+ADD FIELD "Salesman" OF "TermReturn" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Salesman"
+  POSITION 10
+  MAX-WIDTH 16
+  COLUMN-LABEL "Salesman"
+  ORDER 90
+
+ADD FIELD "TerminalType" OF "TermReturn" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Terminal Type"
+  POSITION 11
+  MAX-WIDTH 16
+  COLUMN-LABEL "TerminalType"
+  ORDER 100
+
+ADD FIELD "EnvelopeNumber" OF "TermReturn" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Envelope Number"
+  POSITION 12
+  MAX-WIDTH 24
+  COLUMN-LABEL "EnvelopeNumber"
+  ORDER 110
+
+ADD FIELD "ContractID" OF "TermReturn" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Contract ID"
+  POSITION 13
+  MAX-WIDTH 24
+  COLUMN-LABEL "ContractId"
+  HELP "Contract ID"
+  ORDER 120
+
+ADD INDEX "OrderId" ON "TermReturn" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "OrderId" ASCENDING 
+  INDEX-FIELD "ReturnTS" DESCENDING 
+
+ADD INDEX "ReturnTS" ON "TermReturn" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "ReturnTS" DESCENDING 
 
 ADD TABLE "TMSParam"
   AREA "Sta_Data_128"
@@ -5403,7 +5916,7 @@ ADD FIELD "TopupSchemeRowID" OF "TopupSchemeRow" AS integer
 ADD FIELD "DisplayAmount" OF "TopupSchemeRow" AS decimal 
   FORMAT "-zzz,zz9.99"
   INITIAL "0"
-  LABEL "DisplayAmount"
+  LABEL "Display Amount"
   POSITION 11
   MAX-WIDTH 15
   COLUMN-LABEL "DisplayAmount"
@@ -5666,19 +6179,7 @@ ADD INDEX "UserCode" ON "WebSession"
 UPDATE INDEX "Delistat" OF "CallAlarm"
   BUFFER-POOL "Alternate"
 
-UPDATE TABLE "MobSub"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "CLI" OF "MobSub"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "CustNum" OF "MobSub"
-  BUFFER-POOL "Alternate"
-
 UPDATE INDEX "MsSeq" OF "MobSub"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "POS" OF "MSISDN"
   BUFFER-POOL "Alternate"
 
 UPDATE INDEX "OrderID" OF "Order"
@@ -5689,4 +6190,4 @@ PSC
 bufpool=yes
 cpstream=1252
 .
-0000117107
+0000127378
