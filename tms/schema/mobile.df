@@ -3386,7 +3386,7 @@ ADD FIELD "MandateId" OF "MSOwner" AS character
   POSITION 19
   MAX-WIDTH 70
   COLUMN-LABEL "MandateID"
-  HELP "Mandate ID for CSB19.14 file"
+  HELP "MandateID of Customer"
   ORDER 330
 
 ADD FIELD "MandateDate" OF "MSOwner" AS date 
@@ -3396,7 +3396,7 @@ ADD FIELD "MandateDate" OF "MSOwner" AS date
   POSITION 20
   MAX-WIDTH 4
   COLUMN-LABEL "MandateDate"
-  HELP "Mandate ID creation date"
+  HELP "Mandate creation date"
   ORDER 340
 
 ADD FIELD "TariffBundle" OF "MSOwner" AS character 
@@ -4036,6 +4036,16 @@ ADD FIELD "ReqIParam5" OF "MSRequest" AS integer
   HELP "Integer parameter 5"
   ORDER 370
 
+ADD FIELD "ReqCParam6" OF "MSRequest" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Char Parameter 6"
+  POSITION 39
+  MAX-WIDTH 60
+  COLUMN-LABEL "CParam6"
+  HELP "Character parameter 6"
+  ORDER 380
+
 ADD INDEX "MsRequest" ON "MSRequest" 
   AREA "Sta_Index_3"
   UNIQUE
@@ -4248,7 +4258,7 @@ ADD INDEX "ReqID" ON "PGRequest"
   INDEX-FIELD "ReqID" ASCENDING 
 
 ADD TABLE "RepLog"
-  AREA "CDF_Data"
+  AREA "Sta_Data_128"
   LABEL "Replication Log"
   DESCRIPTION "This is the replication log table for replicating the record"
   DUMP-NAME "replog"
@@ -4310,12 +4320,12 @@ ADD FIELD "EventTS" OF "RepLog" AS datetime
   ORDER 60
 
 ADD INDEX "CreatedTS" ON "RepLog" 
-  AREA "CDF_Index"
+  AREA "Sta_Index_1"
   PRIMARY
   INDEX-FIELD "CreatedTS" ASCENDING 
 
 ADD INDEX "EventTS" ON "RepLog" 
-  AREA "CDF_Index"
+  AREA "Sta_Index_1"
   INDEX-FIELD "EventTS" ASCENDING 
 
 ADD TABLE "RoamBDest"
@@ -8177,15 +8187,9 @@ UPDATE INDEX "InvCust" OF "MSOwner"
 UPDATE INDEX "MsSeq" OF "MSOwner"
   BUFFER-POOL "Alternate"
 
-UPDATE INDEX "PriceList" OF "RoamTariff"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "MsSeq" OF "TMCounter"
-  BUFFER-POOL "Alternate"
-
 .
 PSC
 bufpool=yes
 cpstream=1252
 .
-0000165135
+0000165209
