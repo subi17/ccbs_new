@@ -9,27 +9,12 @@ FOR FIRST DumpFile FIELDS (Brand DumpName ConfigParam) NO-LOCK WHERE
       
 END.
 
-DEFINE VARIABLE ldeFromStamp AS DECIMAL NO-UNDO.
-DEFINE VARIABLE ldeToStamp   AS DECIMAL NO-UNDO.
-
-ASSIGN
-   ldeFromStamp = ServiceLCounter.Period * 100 + 1.
-   ldeToStamp   = (ServiceLCounter.Period + 1) * 100.
-   .
-   
 BUNDLELOOP:
 DO lii = 1 TO NUM-ENTRIES(lcBundles):
    FOR
-      FIRST ServiceLimit FIELDS (SlSeq GroupCode DialType) NO-LOCK WHERE
-         ServiceLimit.GroupCode = ENTRY(lii, lcBundles) AND
-         ServiceLimit.DialType  = 7,
-      FIRST MServiceLimit FIELDS (MsSeq SlSeq DialType EndTS FromTs) NO-LOCK WHERE
-         MServiceLimit.MsSeq    = ServiceLCounter.MsSeq AND
-         MServiceLimit.DialType = 7                     AND
-         MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
-         MServiceLimit.EndTS   >= ldeFromStamp          AND
-         MServiceLimit.FromTS   < ldeToStamp:
-
+      FIRST ServiceLimit FIELDS (SlSeq GroupCode) NO-LOCK WHERE
+         ServiceLimit.SlSeq     = ServiceLCounter.SlSeq AND
+         ServiceLimit.GroupCode = ENTRY(lii, lcBundles):
       llShouldBeInHPD = TRUE.
       LEAVE BUNDLELOOP.
    END.
