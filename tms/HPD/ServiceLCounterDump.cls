@@ -84,9 +84,6 @@ CLASS HPD.ServiceLCounterDump FINAL INHERITS DumpHandler:
          liNumEntries = NUM-ENTRIES(lcBundles)
          .
 
-         MServiceLimit.EndTS   >= ldeFromStamp          AND
-         MServiceLimit.FromTS   < ldeToStamp:
-
       DO WITH FRAME fQty:
          
          PERIODLOOP:
