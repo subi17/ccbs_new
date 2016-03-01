@@ -9,10 +9,6 @@
   CHANGED ......: 
   ------------------------------------------------------------------------*/
 
-
-/* Function to check that calculated days exist in used month (if month
-   have 31 days, then 15th day should send SMS for days 29-31. February
-   could contain 28 or 29 days and so on.) */
 {commali.i}
 {timestamp.i}
 {cparam2.i}
@@ -44,7 +40,9 @@ ASSIGN liQ25Logging = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg,
 IF lcQ25LogDir = "" OR lcQ25LogDir = ? THEN lcQ25LogDir = "/tmp/".
 IF lcQ25SpoolDir = "" OR lcQ25SpoolDir = ? THEN lcQ25SpoolDir = "/tmp/".
 
-/* Q24 Messages are needed to send before 20th day of month. No sending weekend
+/* Function to check if there is available weekdays for SMS sending after
+   specified day.
+   Q24 Messages are needed to send before 20th day of month. No sending weekend
    or national holiday. Check if there are such days left or do we have to
    sent rest of messages right now. 19th day is last possible sending date.
    */
@@ -152,9 +150,10 @@ Variables: lcUnSafe, lcReserved
 END FUNCTION.  /* furl-encode */
 
 /* Calculate count of normal week day (no weekend ot national holiday) from
-   sixth day (sms sending start date) until specified date. This is used for
-   solving which messages should be sent in specified date. Goal is sent two
-   messages in each day weekday after 6th until all messages of month is sent.
+   given day (sms sending start date) until specified date. This is used for
+   solving which messages should be sent in specified date. Goal is sent three
+   messages in each day weekday starting at 6th/16th until all messages of 
+   month is sent.
    */
 FUNCTION fCountNormalWeekday RETURNS INTEGER (INPUT idaDate AS DATE,
                                               INPUT iiStartDay AS INT):
@@ -236,7 +235,7 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    RETURN lcSMSMessage.
 END FUNCTION.
 
-/* Logs for testing */
+/* Logs writings for testing and DWH */
 FUNCTION fQ25LogWriting RETURNS LOGICAL
    (INPUT iclogText AS CHAR,
     INPUT iiLogLevel AS INT,

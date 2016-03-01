@@ -42,9 +42,9 @@ ASSIGN lcTestStartDay = fCParam("Q25","Q25TestStart")
                                                       2 = all */
        lcExecuteDate  = fCParam("Q25","Q25TestExecDate"). /* manipulated exec 
                                                             date */
-liRunMode = INT(SESSION:PARAMETER). /* get crontab parameter, if this is 
+liRunMode = INT(SESSION:PARAMETER). /* get crontab input parameter, if this is 
                                        logging run (0) for making log file or 
-                                       actual SMS sending (1) */
+                                       actual SMS calculation/sending (1) */
 
 /* For testing usage possibility to manipulate execution date. In actual 
    use parameter should be empty, so ELSE branch (TODAY) value is used. */
@@ -67,15 +67,16 @@ DO:
    ELSE IF fChkDueDate(ldaExecuteDate) NE ldaExecuteDate THEN
       LEAVE execution. /* no sending weekend and national holiday */
    ELSE DO:
-      /* Other months collection is made during Q22 and Q23weekdays after 
-         5th day of month. Handled two days cases in each of these days. 
+      /* Other months collection is made during Q22 and Q23 weekdays starting 
+         at 16th day of month. Handled three days cases in each of these days. 
          No message sending at weekend and national holidays. 
-         At 1st valid weekday after 5th day contracts with validto date 1, 2, 
-         2nd day valid to dates 3,4 and so on. 
+         At 1st valid weekday after 15th day contracts with validto date 1, 2, 
+         3 and 2nd day valid to dates 4, 5, 6 and so on. 
          
          Q24 all messages are needed to send before 20th day. So sending three
          days messages an each weekday. If national holidays, last weekday
-         before 20th need to send all rest of day messages.
+         before 20th need to send all rest of day messages. Message sending 
+         is done weekdays during 6th - 19th day of the month.
 
          fCheckDates function resolves last day of month. */
        
@@ -145,7 +146,7 @@ DO:
    END.
    /* If lirunmode = 0 then make only customer log writing else continue and 
       Check first how many SMS is needed to send today, with third param value
-      FALSE no actual sending, just calculation and log generation for testing
+      0 and 1 no actual sending, just calculation and log generation for testing
       and checking purposes. 
       Defined run Modes (from crontab parameter):
       &GLOBAL-DEFINE Q25_EXEC_TYPE_CUST_LOG_GENERATION 0
@@ -177,19 +178,19 @@ DO:
                   STRING(ldaEndDateMonth24).
    fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, 0, liRunMode).
 
-   /* Actual SMS creation and sending */
+   /* Actual SMS creation and sending done here. Month 22, 2 months left */
    IF ldaStartDateMonth22 NE ? AND ldaEndDateMonth22 NE ? THEN
       fGenerateQ25SMSMessages(ldaStartDateMonth22, ldaEndDateMonth22, 
                              {&Q25_MONTH_22}, {&Q25_EXEC_TYPE_SMS_SENDING}, 
                              INPUT-OUTPUT liTotalCount).
 
-   /* Month 23 1 month perm contract to go */
+   /* Month 23, 1 month perm contract left */
    IF ldaStartDateMonth23 NE ? AND ldaEndDateMonth23 NE ? THEN
       fGenerateQ25SMSMessages(ldaStartDateMonth23, ldaEndDateMonth23, 
                              {&Q25_MONTH_23}, {&Q25_EXEC_TYPE_SMS_SENDING}, 
                              INPUT-OUTPUT liTotalCount).
 
-   /* Month 24 0 month perm contract to go */
+   /* Month 24, 0 month perm contract left */
    IF ldaStartDateMonth24 NE ? AND ldaEndDateMonth24 NE ? THEN
       fGenerateQ25SMSMessages(ldaStartDateMonth24, ldaEndDateMonth24, 
                              {&Q25_MONTH_24}, {&Q25_EXEC_TYPE_SMS_SENDING}, 
