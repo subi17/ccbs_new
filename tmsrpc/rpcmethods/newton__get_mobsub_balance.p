@@ -85,6 +85,7 @@ DEF VAR ldaFromDate AS DATE NO-UNDO.
 DEF VAR liLoop AS INT NO-UNDO.
 DEF VAR lcDiscounts AS CHAR NO-UNDO.
 DEF VAR ldDiscountAmt AS DEC NO-UNDO.
+DEF VAR llExtFound AS LOGICAL NO-UNDO.
 
 DEF BUFFER bMsRequest FOR MSRequest.
 
@@ -378,6 +379,7 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
 
       ldaItemFromDate = fInt2Date(SingleFee.Concerns[1],0).
       ldDiscountAmt = 0.
+      llExtFound = FALSE.
 
       /* YPR-3507 Q25 consumption Vista visibility */
       IF SingleFee.Billcode BEGINS "RVTERM" AND
@@ -396,8 +398,9 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
                                  liLoop AND
                               MsRequest.ReqCParam3 EQ "RVTERM12" AND
                               MsRequest.ReqIParam3 EQ INT(SingleFee.sourcekey)) 
-               THEN NEXT.
+               THEN llExtFound = TRUE.
          END.
+         IF llExtFound THEN NEXT.
          lcDiscounts = "RVTERMDT1DISC,RVTERMDT3DISC,RVTERMDT4DISC".
          DiscountsLoop:
          DO liLoop = 1 TO NUM-ENTRIES(lcDiscounts): 
