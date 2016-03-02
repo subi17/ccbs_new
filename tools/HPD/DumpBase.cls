@@ -12,6 +12,7 @@ USING Progress.Lang.*.
 USING HPD.DumpHandler.
 
 {HPD/HPDConst.i}
+{HPD/HPDEnvironment.i}
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
@@ -40,7 +41,7 @@ CLASS HPD.DumpBase:
       FIELD Delim       AS CHARACTER
       FIELD FieldHandle AS HANDLE
       FIELD ExtentPos   AS INTEGER
-      FIELD DoQuote     AS LOGICAL
+      FIELD DoQuote     AS LOGICAL INITIAL NO
       INDEX OrderNum OrderNum.
    
 	
@@ -70,7 +71,12 @@ CLASS HPD.DumpBase:
       ELSE lcKeyDelimiter = {&HPDKeyDelimiter}.
 
       mCreateDumpSchema().
-      
+
+      &IF DEFINED(OLD_HEADER_VERSION) &THEN
+         /* Delete version information */
+         mDeleteDumpPosition(12).
+      &ENDIF
+
    END CONSTRUCTOR.
    
 
@@ -151,7 +157,7 @@ CLASS HPD.DumpBase:
 
          CREATE ttDumpElement.
          ASSIGN
-            ttDumpElement.OrderNum   = DFField.OrderNbr + 5
+            ttDumpElement.OrderNum   = DFField.OrderNbr + 10
             ttDumpElement.TableName  = DFField.DFTable WHEN ((NOT lcDFField BEGINS "@") AND
                                                              (NOT lcDFField BEGINS "#"))
             ttDumpElement.FieldName  = IF lcDFField BEGINS "@"
@@ -200,7 +206,48 @@ CLASS HPD.DumpBase:
    END METHOD.
 
 
-   METHOD PUBLIC VOID mUpdateDumpSchema
+   /* The mModifyDumpHeaderPosOrder is only used when we need to support older type
+      header formats */
+   METHOD PROTECTED VOID mModifyDumpHeaderPosOrder
+      ( iiFromOrderNbr AS INTEGER,
+        iiToOrderNbr   AS INTEGER ):
+
+      FIND FIRST ttDumpElement WHERE
+         ttDumpElement.OrderNum = iiToOrderNbr
+      NO-ERROR.
+
+      IF AVAILABLE ttDumpElement
+      THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot modify header position order as the new position is not empty.", 1).
+
+      FIND FIRST ttDumpElement WHERE
+         ttDumpElement.OrderNum = iiFromOrderNbr
+      NO-ERROR.
+
+      IF NOT AVAILABLE ttDumpElement
+      THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot modify header position order as the old position doesn't exist.", 1).
+
+      ttDumpElement.OrderNum = iiToOrderNbr.
+
+   END METHOD.
+
+   /* The mDeletePostion is only used when we need to support older type
+      header formats */
+   METHOD PRIVATE VOID mDeleteDumpPosition
+      ( iiOrderNbr AS INTEGER ):
+
+      FIND FIRST ttDumpElement WHERE
+         ttDumpElement.OrderNum = iiOrderNbr
+      NO-ERROR.
+
+      IF NOT AVAILABLE ttDumpElement
+      THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot delete position order as it doesn't exist.", 1).
+
+      DELETE ttDumpElement.
+
+   END METHOD.
+
+
+   METHOD PUBLIC VOID mUpdateDumpHeader
       (iiOrderNbr  AS INTEGER,
        icFieldName AS CHARACTER,
        icElemValue AS CHARACTER):

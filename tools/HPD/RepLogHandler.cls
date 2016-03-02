@@ -263,7 +263,6 @@ CLASS HPD.RepLogHandler FINAL:
          ASSIGN
             lcMessage = SUBSTITUTE(lcMessage,ENTRY(1,lcTail,{&HPDDumpDelimiter}))
             ENTRY(1,lcTail,{&HPDDumpDelimiter}) = ""
-            ENTRY(2,lcTail,{&HPDDumpDelimiter}) = ""
             lcTail = LEFT-TRIM(lcTail,{&HPDDumpDelimiter})
             .
          &ENDIF

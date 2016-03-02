@@ -69,32 +69,40 @@ CLASS HPD.DumpFile INHERITS DumpBase:
       IF LOCKED lbDumpFile
       THEN RETURN ERROR NEW Progress.Lang.AppError("Dumpfile (DumpID=" + STRING(iiDumpID) + ") is locked.", 1).      
       
-      DEFINE VARIABLE liSchemaOrder AS INTEGER NO-UNDO.
-
       ASSIGN
          objHPDTime = NEW HPDTime()
          objHPDTime:CurrLocalTZTime = NOW
          llAllowEmptyFile = lbDumpFile.EmptyFile
          .
 
-      &IF "{&HPD_ENVIRONMENT}" = "Salt"
-      &THEN
-      liSchemaOrder = 0.
-      &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
-      &THEN
-      mUpdateDumpSchema(1,"","").
-      mUpdateDumpSchema(2,"","").
-      liSchemaOrder = 2.
-      &ELSE
-      RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
-      &ENDIF
-
       /* Lets populate the header elements that
          are needed for offline dumps */
-      mUpdateDumpSchema(1 + liSchemaOrder,"",lbDumpFile.MainTable).
-      mUpdateDumpSchema(2 + liSchemaOrder,"","CREATE").
-      mUpdateDumpSchema(3 + liSchemaOrder,"",objHPDTime:CurrUTCTime).
-            
+      &IF "{&HPD_ENVIRONMENT}" = "Salt"
+      &THEN
+         mUpdateDumpHeader(1,"",lbDumpFile.MainTable).
+         mUpdateDumpHeader(2,"","CREATE").
+         mUpdateDumpHeader(3,"",objHPDTime:CurrUTCTime).
+      &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
+      &THEN
+         mUpdateDumpHeader(1,"","").
+         mUpdateDumpHeader(2,"","").
+         mUpdateDumpHeader(3,"",lbDumpFile.MainTable).
+         mUpdateDumpHeader(4,"","CREATE").
+
+         &IF DEFINED(OLD_HEADER_VERSION) &THEN
+            /* RECID contains an empty value */
+            mUpdateDumpHeader(5,"","").
+            /* Change keyvalue from position 11 to position 6 */
+            mModifyDumpHeaderPosOrder(11, 6).
+            /* Convert datetime-tz to datetime and put it to position 7 */
+            mUpdateDumpHeader(7,"",STRING(DATETIME(DATE(objHPDTime:CurrLocalTZTime),MTIME(objHPDTime:CurrLocalTZTime)))).
+         &ELSE
+            mUpdateDumpHeader(5,"",ISO-DATE(objHPDTime:CurrLocalTZTime)).
+         &ENDIF
+      &ELSE
+         RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
+      &ENDIF
+
       IF icFile <> ""
       THEN ASSIGN
               llAllowMove = FALSE
