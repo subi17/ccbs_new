@@ -73,79 +73,83 @@ CLASS HPD.ServiceLCounterDump FINAL INHERITS DumpHandler:
       DEFINE VARIABLE liEndPeriod   AS INTEGER   NO-UNDO.
       DEFINE VARIABLE liPeriod      AS INTEGER   NO-UNDO.
       DEFINE VARIABLE lcBundles     AS CHARACTER NO-UNDO.
-      DEFINE VARIABLE lcBundle      AS CHARACTER NO-UNDO.
-      DEFINE VARIABLE liNumEntries  AS INTEGER   NO-UNDO.
       DEFINE VARIABLE liCount       AS INTEGER   NO-UNDO.
       
       ASSIGN
          liPeriod     = INTEGER(TRUNCATE(objDumpTB:ldeFromTS / 100, 0))
          liEndPeriod  = INTEGER(TRUNCATE(objDumpTB:ldeToTS / 100, 0))
          lcBundles    = objDumpTB:mGetConfigParam()
-         liNumEntries = NUM-ENTRIES(lcBundles)
          .
 
       DO WITH FRAME fQty:
-         
-         PERIODLOOP:
-         DO WHILE liPeriod <= liEndPeriod ON QUIT UNDO, RETRY PERIODLOOP ON STOP UNDO, RETRY PERIODLOOP:
 
-            ASSIGN
-               ldeFromStamp = liPeriod * 100 + 1
-               ldeToStamp   = (liPeriod + 1) * 100.
+         /* Dump ServiceLCounter for mentioned bundles */
+         BUNDLELOOP:
+         DO liCount = 1 TO NUM-ENTRIES(lcBundles):
 
-            /* Dump ServiceLCounter for mentioned bundles */
-            DO liCount = 1 TO liNumEntries:
+            FOR
+               FIRST ServiceLimit FIELDS (GroupCode DialType SlSeq) NO-LOCK WHERE
+                  ServiceLimit.GroupCode = ENTRY(liCount,lcBundles) AND
+                  ServiceLimit.DialType  = 7:
 
-               lcBundle = ENTRY(liCount,lcBundles).
+               DO WHILE liPeriod <= liEndPeriod:
 
-               FOR
-                  FIRST ServiceLimit FIELDS (GroupCode DialType SlSeq) NO-LOCK WHERE
-                     ServiceLimit.GroupCode = lcBundle AND
-                     ServiceLimit.DialType  = 7,
-                  EACH MServiceLimit FIELDS (SlSeq DialType EndTS) NO-LOCK WHERE
-                     MServiceLimit.SlSeq    = ServiceLimit.SlSeq AND
-                     MServiceLimit.DialType = 7                  AND
-                     MServiceLimit.EndTS   >= ldeFromStamp       AND
-                     MServiceLimit.FromTS   < ldeToStamp:
+                  FOR
+                     EACH lbServiceLCounter NO-LOCK WHERE
+                        lbServiceLCounter.CustNum = 0                   AND
+                        lbServiceLCounter.Period  = liPeriod            AND
+                        lbServiceLCounter.SlSeq   = ServiceLimit.SlSeq
+                     ON QUIT UNDO, RETRY
+                     ON STOP UNDO, RETRY:
 
-                  IF MServiceLimit.CustNum > 0
-                  THEN
-                  FIND FIRST lbServiceLCounter NO-LOCK WHERE
-                     lbServiceLCounter.CustNum = MServiceLimit.CustNum AND
-                     lbServiceLCounter.Period  = liPeriod AND
-                     lbServiceLCounter.SlSeq   = MServiceLimit.SlSeq
-                  NO-ERROR.
-                  ELSE
-                  FIND FIRST lbServiceLCounter NO-LOCK WHERE
-                     lbServiceLCounter.MsSeq  = MServiceLimit.MsSeq AND
-                     lbServiceLCounter.Period = liPeriod AND
-                     lbServiceLCounter.SlSeq  = MServiceLimit.SlSeq
-                  NO-ERROR.
+                     IF RETRY THEN DO:
+                        llInterrupted = TRUE.
+                        LEAVE BUNDLELOOP.
+                     END.
 
-                  IF RETRY THEN DO:
-                     llInterrupted = TRUE.
-                     LEAVE PERIODLOOP.
+                     liEvents = liEvents + 1.
+
+                     objDumpTB:mWriteALine().
+
+                     IF NOT SESSION:BATCH AND liEvents MOD 100 = 0
+                     THEN DO:
+                        PAUSE 0.
+                        DISPLAY liEvents LABEL "Consumption Counter"
+                           WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
+                           TITLE " Collecting " FRAME fQty.
+                     END.
                   END.
 
-                  IF NOT AVAIL lbServiceLCounter THEN NEXT.
+                  FOR
+                     EACH lbServiceLCounter NO-LOCK WHERE
+                        lbServiceLCounter.MsSeq   = 0                   AND
+                        lbServiceLCounter.Period  = liPeriod            AND
+                        lbServiceLCounter.SlSeq   = ServiceLimit.SlSeq
+                     ON QUIT UNDO, RETRY
+                     ON STOP UNDO, RETRY:
 
-                  liEvents = liEvents + 1.
+                     IF RETRY THEN DO:
+                        llInterrupted = TRUE.
+                        LEAVE BUNDLELOOP.
+                     END.
 
-                  objDumpTB:mWriteALine().
+                     liEvents = liEvents + 1.
 
-                  IF NOT SESSION:BATCH AND liEvents MOD 100 = 0
-                  THEN DO:
-                     PAUSE 0.
-                     DISPLAY liEvents LABEL "Consumption Counter" 
-                        WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
-                        TITLE " Collecting " FRAME fQty.
+                     objDumpTB:mWriteALine().
+
+                     IF NOT SESSION:BATCH AND liEvents MOD 100 = 0
+                     THEN DO:
+                        PAUSE 0.
+                        DISPLAY liEvents LABEL "Consumption Counter"
+                           WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
+                           TITLE " Collecting " FRAME fQty.
+                     END.
                   END.
+
+                  liPeriod = HPDTime:mNextPeriod(liPeriod).
 
                END.
             END.
-
-            liPeriod = HPDTime:mNextPeriod(liPeriod).
-
          END.
 
          IF NOT SESSION:BATCH
