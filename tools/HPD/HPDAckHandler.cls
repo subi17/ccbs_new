@@ -83,7 +83,7 @@ CLASS HPD.HPDAckHandler:
       &ELSE      
       RETURN ERROR NEW Progress.Lang.AppError("Unknown HPD environment", 1).
       &ENDIF
-      
+
       CREATE BUFFER lhDBConfig FOR TABLE lcTableName.
       
       llFound = lhDBConfig:FIND-FIRST("WHERE " + lcLogicalFieldName + " = " + QUOTER(lcDB), NO-LOCK) NO-ERROR.
@@ -137,7 +137,12 @@ CLASS HPD.HPDAckHandler:
    
    METHOD PUBLIC LOGICAL mDelete
       ( icROWID AS CHARACTER,
-        idttzEventTime AS DATETIME-TZ ):
+        &IF DEFINED(OLD_HEADER_VERSION)
+        &THEN
+        idttzEventTime AS DATETIME
+        &ELSE
+        idttzEventTime AS DATETIME-TZ
+        &ENDIF):
 
       llFound = lhRepLogTable:FIND-BY-ROWID(TO-ROWID(icROWID), EXCLUSIVE-LOCK, NO-WAIT) NO-ERROR.
       
@@ -153,7 +158,13 @@ CLASS HPD.HPDAckHandler:
          RETURN FALSE.
       END.
 
+      &IF DEFINED(OLD_HEADER_VERSION)
+      &THEN
+      IF DATETIME(DATE(lhRepLogTable::EventTime),MTIME(lhRepLogTable::EventTime)) NE idttzEventTime      
+      &ELSE
       IF lhRepLogTable::EventTime NE idttzEventTime
+      &ENDIF
+
       THEN DO:
          LOG-MANAGER:WRITE-MESSAGE("Eventtime mismatch. ROWID=" + icROWID +
                                    " Replog eventtime=" +
