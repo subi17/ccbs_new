@@ -435,10 +435,11 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
                           DPMember.ValidFrom LE  ldaTempDate AND
                           DPMemBer.ValidTo GE ldaTempDate
                           NO-LOCK NO-ERROR.
-               IF AVAIL DPMember THEN 
+               IF AVAIL DPMember THEN DO: 
                   /* only one discount should be found */
                   ldDiscountAmt = ldDiscountAmt + DPMember.discValue.
                   LEAVE DiscountsLoop.
+               END.
             END.
          END.
       END.   
