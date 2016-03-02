@@ -382,12 +382,18 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
       IF SingleFee.Billcode BEGINS "RVTERM" AND
          SingleFee.CalcObj EQ "RVTERM" AND
          SingleFee.SourceTable = "DCCLI" THEN DO:
+         ASSIGN         
+            lcYear = SUBSTRING(STRING(liperiod),1,4)
+            lcMonth = SUBSTRING(STRING(liPeriod),5,4)
+            /* get last date during period (dpmember is validfrom
+            begining of the month and validto end of the specific                           month.*/
+            ldaTempDate = fLastDayOfMonth(DATE(INT(lcMonth),1, INT(lcYear))).
          FIND FIRST DiscountPlan WHERE Discountplan.dpruleid EQ "RVTERMDT3DISC"
             NO-LOCK NO-ERROR.
          IF AVAIL DiscountPlan THEN DO:
             ASSIGN
-               lcYear = SUBSTRING(STRING(liperiod),0,4)
-               lcMonth = SUBSTRING(STRING(liPeriod),0,4).
+               lcYear = SUBSTRING(STRING(liperiod),1,4)
+               lcMonth = SUBSTRING(STRING(liPeriod),5,4).
                /* get any date during period (dpmember is validfrom begining
                   of the month and validto end of the specific month.*/
                ldaTempDate = DATE(INT(lcMonth),15,INT(lcYear)).
@@ -428,14 +434,6 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
                                              ENTRY(liLoop,lcDiscounts) 
                                              NO-LOCK NO-ERROR.
                IF AVAIL DiscountPlan THEN DO:
-                  ASSIGN
-                     lcYear = SUBSTRING(STRING(liperiod),1,4)
-                     lcMonth = SUBSTRING(STRING(liPeriod),5,4).
-                     /* get last date during period (dpmember is validfrom 
-                        begining of the month and validto end of the specific 
-                        month.*/
-                     ldaTempDate = fLastDayOfMonth(DATE(INT(lcMonth),
-                                                   1, INT(lcYear))).
                   FIND FIRST DPMember WHERE
                              DPMember.DPId EQ Discountplan.DPId AND
                              DPMember.HostTable EQ "MobSub" AND
