@@ -80,7 +80,8 @@ DEF VAR ldaItemToDate AS DATE NO-UNDO.
 DEF VAR ldeTotalDataBundleLimit AS DEC NO-UNDO.
 DEF VAR lcYear AS CHAR NO-UNDO.
 DEF VAR lcMonth AS CHAR No-UNDO.
-DEF VAR ldaTempDate AS DATE NO-UNDO.
+DEF VAR ldaToDate AS DATE NO-UNDO.
+DEF VAR ldaFromDate AS DATE NO-UNDO.
 DEF VAR liLoop AS INT NO-UNDO.
 DEF VAR lcDiscounts AS CHAR NO-UNDO.
 DEF VAR ldDiscountAmt AS DEC NO-UNDO.
@@ -383,44 +384,21 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
          SingleFee.CalcObj EQ "RVTERM" AND
          SingleFee.SourceTable = "DCCLI" THEN DO:
          ASSIGN         
-            lcYear = SUBSTRING(STRING(liperiod),1,4)
-            lcMonth = SUBSTRING(STRING(liPeriod),5,2)
-            /* get last date during period (dpmember is validfrom
-            begining of the month and validto end of the specific                           month.*/
-            ldaTempDate = fLastDayOfMonth(DATE(INT(lcMonth),1, INT(lcYear))).
-         FIND FIRST DiscountPlan WHERE Discountplan.dpruleid EQ "RVTERMDT3DISC"
-            NO-LOCK NO-ERROR.
-         IF AVAIL DiscountPlan THEN DO:
-            FIND FIRST DPMember WHERE 
-                       DPMember.DPId EQ Discountplan.DPId AND
-                       DPMember.HostTable EQ "MobSub" AND
-                       DPMember.KeyValue EQ SingleFee.KeyValue AND
-                       DPMember.OrderId EQ SingleFee.orderId AND
-                       DPMember.ValidFrom LE  ldaTempDate AND
-                       DPMemBer.ValidTo GE ldaTempDate
-                       NO-LOCK NO-ERROR.
-            IF AVAIL DPMember THEN NEXT.                           
+            ldaToDate = date(month(today) + 1,1,year(today)) - 1
+            ldaFromDate = date(month(ldaToDate),1,year(ldaToDate)).
+
+         DO liLoop = 0 to 2 by 2: 
+            IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                              MsRequest.msSeq EQ mobsub.msseq AND
+                              MsRequest.reqtype EQ
+                                 {&REQTYPE_CONTRACT_ACTIVATION} AND
+                              MsRequest.reqStatus EQ
+                                 liLoop AND
+                              MsRequest.ReqCParam3 EQ "RVTERM12" AND
+                              MsRequest.ReqIParam3 EQ INT(SingleFee.sourcekey)) 
+               THEN NEXT.
          END.
-         IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                           MsRequest.msSeq EQ mobsub.msseq AND
-                           MsRequest.reqtype EQ
-                              {&REQTYPE_CONTRACT_ACTIVATION} AND
-                           MsRequest.reqStatus EQ
-                              {&REQUEST_STATUS_DONE} AND
-                           MsRequest.ReqCParam3 EQ "RVTERM12" AND
-                           MsRequest.ReqIParam3 EQ INT(SingleFee.sourcekey)) 
-            THEN NEXT.
-         ELSE IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                                MsRequest.msSeq EQ mobsub.msseq AND
-                                MsRequest.reqtype EQ
-                                   {&REQTYPE_CONTRACT_ACTIVATION} AND
-                                MsRequest.reqStatus EQ
-                                   {&REQUEST_STATUS_NEW} AND
-                                MsRequest.ReqCParam3 EQ "RVTERM12" AND
-                                MsRequest.ReqIParam3 EQ 
-                                   INT(SingleFee.sourcekey)) 
-            THEN NEXT.
-         lcDiscounts = "RVTERMDT1DISC,RVTERMDT4DISC".
+         lcDiscounts = "RVTERMDT1DISC,RVTERMDT3DISC,RVTERMDT4DISC".
          DiscountsLoop:
          DO liLoop = 1 TO NUM-ENTRIES(lcDiscounts): 
             FIND FIRST DiscountPlan WHERE Discountplan.dpruleid EQ 
@@ -432,13 +410,12 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
                           DPMember.HostTable EQ "MobSub" AND
                           DPMember.KeyValue EQ SingleFee.KeyValue AND
                           DPMember.OrderId EQ SingleFee.orderId AND
-                          DPMember.ValidFrom LE  ldaTempDate AND
-                          DPMemBer.ValidTo GE ldaTempDate
+                          DPMember.ValidFrom LE  ldaFromDate AND
+                          DPMemBer.ValidTo GE ldaToDate
                           NO-LOCK NO-ERROR.
                IF AVAIL DPMember THEN DO: 
                   /* only one discount should be found */
                   ldDiscountAmt = ldDiscountAmt + DPMember.discValue.
-                  LEAVE DiscountsLoop.
                END.
             END.
          END.
@@ -451,11 +428,13 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
                  ttMsOwner.ToDate   >= ldaItemFromDate NO-LOCK NO-ERROR.
       IF AVAIL ttMsOwner THEN
          fCollectBalance(ttMsOwner.CLIType,ttMsOwner.TariffBundle,
-                         SingleFee.BillCode,SingleFee.Amt - ldDiscountAmt,
+                         SingleFee.BillCode,
+                         MAX(SingleFee.Amt - ldDiscountAmt,0),
                          "balance").
       ELSE
          fCollectBalance(MobSub.CLIType,MobSub.TariffBundle,
-                         SingleFee.BillCode,SingleFee.Amt - ldDiscountAmt,
+                         SingleFee.BillCode,
+                         MAX(SingleFee.Amt - ldDiscountAmt,0),
                          "balance").
    END.
 
