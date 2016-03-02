@@ -395,31 +395,47 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
                        DPMember.DPId EQ Discountplan.DPId AND
                        DPMember.HostTable EQ "MobSub" AND
                        DPMember.KeyValue EQ SingleFee.KeyValue AND
+                       DPMember.OrderId EQ SingleFee.orderId AND
                        DPMember.ValidFrom LE  ldaTempDate AND
                        DPMemBer.ValidTo GE ldaTempDate
                        NO-LOCK NO-ERROR.
             IF AVAIL DPMember THEN NEXT.                           
          END.
-         FIND FIRST DCCLI NO-LOCK WHERE
-                    DCCLI.Brand   EQ gcBrand AND
-                    DCCLI.DCEvent EQ "RVTERM12" AND
-                    DCCLI.MsSeq   EQ INT(SingleFee.KeyValue) AND
-                    DCCLI.ValidTo >= TODAY NO-ERROR.
-         IF AVAIL DCCLI THEN NEXT. /* Q25 extension found, not include */
+         IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                           MsRequest.msSeq EQ mobsub.msseq AND
+                           MsRequest.reqtype EQ
+                              {&REQTYPE_CONTRACT_ACTIVATION} AND
+                           MsRequest.reqStatus EQ
+                              {&REQUEST_STATUS_DONE} AND
+                           MsRequest.ReqCParam3 EQ "RVTERM12" AND
+                           MsRequest.ReqIParam3 EQ INT(SingleFee.sourcekey)) 
+            THEN NEXT.
+         ELSE IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                                MsRequest.msSeq EQ mobsub.msseq AND
+                                MsRequest.reqtype EQ
+                                   {&REQTYPE_CONTRACT_ACTIVATION} AND
+                                MsRequest.reqStatus EQ
+                                   {&REQUEST_STATUS_NEW} AND
+                                MsRequest.ReqCParam3 EQ "RVTERM12" AND
+                                MsRequest.ReqIParam3 EQ 
+                                   INT(SingleFee.sourcekey)) 
+            THEN NEXT.
          ELSE DO:
             lcDiscounts = "RVTERMDT1DISC,RVTERMDT4DISC".
+            DiscountsLoop:
             DO liLoop = 1 TO NUM-ENTRIES(lcDiscounts): 
                FIND FIRST DiscountPlan WHERE Discountplan.dpruleid EQ 
                                              ENTRY(liLoop,lcDiscounts) 
                                              NO-LOCK NO-ERROR.
                IF AVAIL DiscountPlan THEN DO:
                   ASSIGN
-                     lcYear = SUBSTRING(STRING(liperiod),0,4)
-                     lcMonth = SUBSTRING(STRING(liPeriod),0,4).
-                     /* get any date during period (dpmember is validfrom 
+                     lcYear = SUBSTRING(STRING(liperiod),1,4)
+                     lcMonth = SUBSTRING(STRING(liPeriod),5,4).
+                     /* get last date during period (dpmember is validfrom 
                         begining of the month and validto end of the specific 
                         month.*/
-                     ldaTempDate = DATE(INT(lcMonth),15,INT(lcYear)).
+                     ldaTempDate = fLastDayOfMonth(DATE(INT(lcMonth),
+                                                   1, INT(lcYear))).
                   FIND FIRST DPMember WHERE
                              DPMember.DPId EQ Discountplan.DPId AND
                              DPMember.HostTable EQ "MobSub" AND
@@ -428,7 +444,9 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
                              DPMemBer.ValidTo GE ldaTempDate
                              NO-LOCK NO-ERROR.
                   IF AVAIL DPMember THEN 
+                     /* only one discount should be found */
                      ldDiscountAmt = ldDiscountAmt + DPMember.discValue.
+                     LEAVE DiscountsLoop.
                END.
             END.
          END.
