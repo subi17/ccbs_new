@@ -437,6 +437,7 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
                           DPMember.DPId EQ Discountplan.DPId AND
                           DPMember.HostTable EQ "MobSub" AND
                           DPMember.KeyValue EQ SingleFee.KeyValue AND
+                          DPMember.OrderId EQ SingleFee.orderId AND
                           DPMember.ValidFrom LE  ldaTempDate AND
                           DPMemBer.ValidTo GE ldaTempDate
                           NO-LOCK NO-ERROR.
