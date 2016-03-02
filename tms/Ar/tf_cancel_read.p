@@ -52,6 +52,7 @@ DEFINE TEMP-TABLE ttTFCancel NO-UNDO
    FIELD CancelAmt AS DEC
    FIELD ErrorCode AS CHAR
    FIELD OrderId AS INT
+   FIELD CodFPago AS CHAR
 INDEX linenum IS PRIMARY linenum.
 
 ASSIGN
@@ -156,7 +157,8 @@ PROCEDURE pReadFileData:
    DEF VAR lcOrgId AS CHAR NO-UNDO. 
    DEF VAR liMonth AS INT NO-UNDO. 
    DEF VAR liYear AS INT NO-UNDO. 
-   DEF VAR liOrderId AS INT NO-UNDO. 
+   DEF VAR liOrderId AS INT NO-UNDO.
+   DEF VAR lcCodFPago AS CHAR NO-UNDO.
    DEF VAR lcErrorCode AS CHAR NO-UNDO. 
    DEF VAR ldeCancelAmt AS DEC NO-UNDO. 
 
@@ -188,6 +190,7 @@ PROCEDURE pReadFileData:
          liMonth     = int(substring(lcLine,25,2))
          liYear      = int(substring(lcLine,27,4))
          liOrderId   = int(substring(lcLine,31,8))
+         lcCodFPago  = trim(substring(lcLine,39,4))
          ldeCancelAmt = ldeCancelAmt / 100.0
          lcErrorCode = substring(lcLine,167,2)
          NO-ERROR.
@@ -216,7 +219,8 @@ PROCEDURE pReadFileData:
          ttTFCancel.BankYear = liYear
          ttTFCancel.OrderId = liOrderId
          ttTFCancel.CancelAmt = ldeCancelAmt
-         ttTFCancel.ErrorCode = lcErrorCode.
+         ttTFCancel.ErrorCode = lcErrorCode
+         ttTFCancel.CodFPago = lcCodFPago.
    END.
   
 END PROCEDURE. 
