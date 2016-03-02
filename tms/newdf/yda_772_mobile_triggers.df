@@ -3,6 +3,6 @@ TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-imsi.p" CRC "?"
 
 .
 PSC
-cpstream=iso8859-1
+cpstream=1252
 .
 0000000225

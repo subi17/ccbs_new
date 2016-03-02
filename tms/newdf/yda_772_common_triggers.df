@@ -29,6 +29,6 @@ TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-servicelcounter.p" CRC 
 
 .
 PSC
-cpstream=iso8859-1
+cpstream=1252
 .
 0000000225

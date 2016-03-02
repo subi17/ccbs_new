@@ -1,3 +1,5 @@
+DROP TABLE "RepLog"
+
 ADD TABLE "RepLog"
   AREA "CDF_Data"
   DESCRIPTION "This is the replication log table for replicating the record"
@@ -75,6 +77,6 @@ ADD INDEX "SendTime" ON "RepLog"
 
 .
 PSC
-cpstream=iso8859-1
+cpstream=1252
 .
 0000002000

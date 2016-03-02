@@ -75,8 +75,8 @@ CLASS HPD.RepLogHandler FINAL:
 
          /* Handler code for any error condition. */
          CATCH anyErrorObject AS Progress.Lang.Error:
-            /* If no parameter set then no ack is used */
-            llUseAck = NO.
+            /* If no parameter set then assume no ack is expected */
+            llUseAck = ?.
          END CATCH.
 
       END.
@@ -100,13 +100,16 @@ CLASS HPD.RepLogHandler FINAL:
 
       CREATE QUERY lhRepLogQuery.
       lhRepLogQuery:SET-BUFFERS(lhRepLogTable).
+
+      IF llUseAck
+      THEN lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK WHERE SendTime = ? USE-INDEX SendTime MAX-ROWS &2",lcRepLogTableName, STRING(liTransactionSize))).
       
       &IF "{&HPD_ENVIRONMENT}" = "Salt"
       &THEN
-      lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK USE-INDEX UTCTime MAX-ROWS &2",lcRepLogTableName, STRING(liTransactionSize))).
+      ELSE lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK USE-INDEX UTCTime MAX-ROWS &2",lcRepLogTableName, STRING(liTransactionSize))).
       &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
       &THEN
-      lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK WHERE SendTime = ? USE-INDEX SendTime MAX-ROWS &2",lcRepLogTableName, STRING(liTransactionSize))).
+      ELSE lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK WHERE SendTime = ? USE-INDEX SendTime MAX-ROWS &2",lcRepLogTableName, STRING(liTransactionSize))).
       &ELSE
       RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
       &ENDIF
@@ -208,29 +211,41 @@ CLASS HPD.RepLogHandler FINAL:
       THEN RETURN ERROR NEW Progress.Lang.AppError("Handler object for table " + lhRepLogTable::TableName +
                                                    " has been lost", 1).
 
-      lcMessage = &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
-                  &THEN
-                  (
-                    IF llUseAck
+      lcMessage = ( IF llUseAck = ?
+                    THEN ""
+                    ELSE IF llUseAck = YES
                     THEN lhRepLogTable:DBNAME + {&HPDDumpDelimiter} +
                          STRING(lhRepLogTable:ROWID) + {&HPDDumpDelimiter}
-                    ELSE {&HPDDumpDelimiter} + {&HPDDumpDelimiter}
-                  ) +
-                  &ENDIF
+                    ELSE {&HPDDumpDelimiter} + {&HPDDumpDelimiter} ) +
                   lhRepLogTable::TableName + {&HPDDumpDelimiter} +
                   lhRepLogTable::EventType + {&HPDDumpDelimiter} +
+
                   &IF "{&HPD_ENVIRONMENT}" = "Salt"
                   &THEN
-                  ISO-DATE(lhRepLogTable::UTCTime).
+                     ISO-DATE(lhRepLogTable::UTCTime).
                   &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
                   &THEN
-                  ISO-DATE(lhRepLogTable::EventTime).
+                     &IF DEFINED(OLD_HEADER_VERSION) &THEN
+                     {&HPDDumpDelimiter} + "&1" + {&HPDDumpDelimiter} +
+                     STRING(DATETIME(DATE(lhRepLogTable::EventTime),MTIME(lhRepLogTable::EventTime))).
+                     &ELSE
+                     ISO-DATE(lhRepLogTable::EventTime).
+                     &ENDIF
                   &ENDIF
 
       IF lhRepLogTable::EventType = "DELETE"
-      THEN lcMessage = lcMessage + {&HPDDumpDelimiter} +
-                       lhRepLogTable::KeyValue + {&HPDDumpDelimiter} +
-                       ttDumpHandler.VersionNumber.
+      THEN
+      &IF DEFINED(OLD_HEADER_VERSION) &THEN
+         lcMessage = SUBSTITUTE(lcMessage, ( IF INDEX({&HPDDumpDelimiter},lhRepLogTable::KeyValue) = 0
+                                             THEN lhRepLogTable::KeyValue
+                                             ELSE QUOTER(lhRepLogTable::KeyValue) ) ).
+      &ELSE
+         lcMessage = lcMessage + {&HPDDumpDelimiter} +
+                     ( IF INDEX({&HPDDumpDelimiter},lhRepLogTable::KeyValue) = 0
+                       THEN lhRepLogTable::KeyValue
+                       ELSE QUOTER(lhRepLogTable::KeyValue) ) +
+                     {&HPDDumpDelimiter} + ttDumpHandler.VersionNumber.
+      &ENDIF
       ELSE DO:
          lcTail = CAST(ttDumpHandler.objHandler, DumpHandler):mProcessRepLog(lhRepLogTable::RowID).
 
@@ -243,6 +258,16 @@ CLASS HPD.RepLogHandler FINAL:
                             THEN "?" ELSE lhRepLogTable::RowID)).
             RETURN FALSE.
          END.
+
+         &IF DEFINED(OLD_HEADER_VERSION) &THEN
+         ASSIGN
+            lcMessage = SUBSTITUTE(lcMessage,ENTRY(1,lcTail,{&HPDDumpDelimiter}))
+            ENTRY(1,lcTail,{&HPDDumpDelimiter}) = ""
+            ENTRY(2,lcTail,{&HPDDumpDelimiter}) = ""
+            lcTail = LEFT-TRIM(lcTail,{&HPDDumpDelimiter})
+            .
+         &ENDIF
+
          lcMessage = lcMessage + {&HPDDumpDelimiter} + lcTail.
       END.
 
@@ -332,14 +357,11 @@ CLASS HPD.RepLogHandler FINAL:
             (there will be a duplicate send next time) */         
          IF lhRepLogTable:LOCKED
          THEN mLog(2, "ERROR", SUBSTITUTE("Replog ROWID='&1' locked", STRING(lhRepLogTable:ROWID))).
-         &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
-         &THEN
          ELSE IF llUseAck
          THEN ASSIGN
                  lhRepLogTable::SendTime  = NOW
                  lhRepLogTable::SendCount = lhRepLogTable::SendCount + 1
                  .
-         &ENDIF
          ELSE lhRepLogTable:BUFFER-DELETE().
          
       END.
@@ -352,7 +374,7 @@ CLASS HPD.RepLogHandler FINAL:
 
 
    METHOD PRIVATE VOID mCleanReplogAllOK
-      ( iiAmount AS INTEGER ):         
+      ( iiAmount AS INTEGER ):
 
       DEFINE VARIABLE llOK AS LOGICAL NO-UNDO.
 
@@ -376,14 +398,11 @@ CLASS HPD.RepLogHandler FINAL:
             (there will be a duplicate send next time) */         
          IF lhRepLogTable:LOCKED
          THEN mLog(2, "ERROR", SUBSTITUTE("Replog ROWID='&1' locked", STRING(lhRepLogTable:ROWID))).
-         &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
-         &THEN
          ELSE IF llUseAck
          THEN ASSIGN
                  lhRepLogTable::SendTime  = NOW
                  lhRepLogTable::SendCount = lhRepLogTable::SendCount + 1
                  .
-         &ENDIF
          ELSE lhRepLogTable:BUFFER-DELETE().
          
       END.
@@ -407,12 +426,9 @@ CLASS HPD.RepLogHandler FINAL:
 
    METHOD PUBLIC LOGICAL mIsEmpty():         
       
-      &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
-      &THEN
-      llFound = lhRepLogTable:FIND-FIRST("WHERE SendTime = ?", NO-LOCK) NO-ERROR.
-      &ELSE
-      llFound = lhRepLogTable:FIND-FIRST("", NO-LOCK) NO-ERROR.
-      &ENDIF
+      IF llUseAck
+      THEN llFound = lhRepLogTable:FIND-FIRST("WHERE SendTime = ?", NO-LOCK) NO-ERROR.
+      ELSE llFound = lhRepLogTable:FIND-FIRST("", NO-LOCK) NO-ERROR.
       
       RETURN NOT llFound.
             
