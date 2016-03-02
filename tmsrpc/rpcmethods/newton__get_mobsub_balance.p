@@ -426,26 +426,24 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
                                 MsRequest.ReqIParam3 EQ 
                                    INT(SingleFee.sourcekey)) 
             THEN NEXT.
-         ELSE DO:
-            lcDiscounts = "RVTERMDT1DISC,RVTERMDT4DISC".
-            DiscountsLoop:
-            DO liLoop = 1 TO NUM-ENTRIES(lcDiscounts): 
-               FIND FIRST DiscountPlan WHERE Discountplan.dpruleid EQ 
-                                             ENTRY(liLoop,lcDiscounts) 
-                                             NO-LOCK NO-ERROR.
-               IF AVAIL DiscountPlan THEN DO:
-                  FIND FIRST DPMember WHERE
-                             DPMember.DPId EQ Discountplan.DPId AND
-                             DPMember.HostTable EQ "MobSub" AND
-                             DPMember.KeyValue EQ SingleFee.KeyValue AND
-                             DPMember.ValidFrom LE  ldaTempDate AND
-                             DPMemBer.ValidTo GE ldaTempDate
-                             NO-LOCK NO-ERROR.
-                  IF AVAIL DPMember THEN 
-                     /* only one discount should be found */
-                     ldDiscountAmt = ldDiscountAmt + DPMember.discValue.
-                     LEAVE DiscountsLoop.
-               END.
+         lcDiscounts = "RVTERMDT1DISC,RVTERMDT4DISC".
+         DiscountsLoop:
+         DO liLoop = 1 TO NUM-ENTRIES(lcDiscounts): 
+            FIND FIRST DiscountPlan WHERE Discountplan.dpruleid EQ 
+                                          ENTRY(liLoop,lcDiscounts) 
+                                          NO-LOCK NO-ERROR.
+            IF AVAIL DiscountPlan THEN DO:
+               FIND FIRST DPMember WHERE
+                          DPMember.DPId EQ Discountplan.DPId AND
+                          DPMember.HostTable EQ "MobSub" AND
+                          DPMember.KeyValue EQ SingleFee.KeyValue AND
+                          DPMember.ValidFrom LE  ldaTempDate AND
+                          DPMemBer.ValidTo GE ldaTempDate
+                          NO-LOCK NO-ERROR.
+               IF AVAIL DPMember THEN 
+                  /* only one discount should be found */
+                  ldDiscountAmt = ldDiscountAmt + DPMember.discValue.
+                  LEAVE DiscountsLoop.
             END.
          END.
       END.   
