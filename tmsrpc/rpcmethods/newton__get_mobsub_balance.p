@@ -423,7 +423,8 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
             END.
          END.
       END.   
-
+      /* 0 row is not needed to show */
+      IF (SingleFee.Amt - ldDiscountAmt EQ 0) THEN NEXT.
       FIND FIRST ttMsOwner WHERE
                  ttMsOwner.CustNum   = MobSub.CustNum AND
                  ttMsOwner.MsSeq     = MobSub.MsSeq AND
@@ -432,12 +433,12 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
       IF AVAIL ttMsOwner THEN
          fCollectBalance(ttMsOwner.CLIType,ttMsOwner.TariffBundle,
                          SingleFee.BillCode,
-                         MAX(SingleFee.Amt - ldDiscountAmt,0),
+                         SingleFee.Amt - ldDiscountAmt,
                          "balance").
       ELSE
          fCollectBalance(MobSub.CLIType,MobSub.TariffBundle,
                          SingleFee.BillCode,
-                         MAX(SingleFee.Amt - ldDiscountAmt,0),
+                         SingleFee.Amt - ldDiscountAmt,
                          "balance").
    END.
 
