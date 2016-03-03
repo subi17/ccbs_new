@@ -25,6 +25,7 @@ CLASS HPD.RepLogHandler FINAL:
       FIELD TableName     AS CHARACTER
       FIELD objHandler    AS CLASS Progress.Lang.Object /*HPD.DumpHandler*/
       FIELD VersionNumber AS CHARACTER
+      FIELD QuoteKeyValue AS LOGICAL
       INDEX TableName IS PRIMARY UNIQUE TableName
       .   
 
@@ -155,7 +156,8 @@ CLASS HPD.RepLogHandler FINAL:
    
       FIND FIRST DFField NO-LOCK WHERE
          DFField.DumpID   = iiDumpID AND
-         DFField.OrderNbr = 2
+         DFField.OrderNbr = 2        AND
+         DFField.DFField  = "@Version"
       NO-ERROR.
       
       IF AVAILABLE DFField AND DFField.DFLabel > ""
@@ -163,6 +165,22 @@ CLASS HPD.RepLogHandler FINAL:
       
       RETURN "1".
    
+   END METHOD.
+
+
+   METHOD PRIVATE LOGICAL mQuoteKeyValue
+      ( iiDumpID AS INTEGER ):
+
+      FIND FIRST DFField NO-LOCK WHERE
+         DFField.DumpID   = iiDumpID AND
+         DFField.OrderNbr = 1
+      NO-ERROR.
+
+      IF AVAILABLE DFField AND DFField.DFField BEGINS "¤"
+      THEN RETURN TRUE.
+
+      RETURN FALSE.
+
    END METHOD.
 
 
@@ -178,8 +196,9 @@ CLASS HPD.RepLogHandler FINAL:
          ttDumpHandler.objHandler = DYNAMIC-NEW DumpFile.LinkKey(DumpFile.DumpID).
          
          ASSIGN
-            ttDumpHandler.TableName  = DumpFile.MainTable
+            ttDumpHandler.TableName     = DumpFile.MainTable
             ttDumpHandler.VersionNumber = mGetVersionNumber(DumpFile.DumpID)
+            ttDumpHandler.QuoteKeyValue = mQuoteKeyValue(DumpFile.DumpID)
             llFoundHandler = TRUE
             .
       END.
@@ -236,14 +255,14 @@ CLASS HPD.RepLogHandler FINAL:
       IF lhRepLogTable::EventType = "DELETE"
       THEN
       &IF DEFINED(OLD_HEADER_VERSION) &THEN
-         lcMessage = SUBSTITUTE(lcMessage, ( IF INDEX({&HPDDumpDelimiter},lhRepLogTable::KeyValue) = 0
-                                             THEN lhRepLogTable::KeyValue
-                                             ELSE QUOTER(lhRepLogTable::KeyValue) ) ).
+         lcMessage = SUBSTITUTE(lcMessage, ( IF ttDumpHandler.QuoteKeyValue
+                                             THEN QUOTER(lhRepLogTable::KeyValue)
+                                             ELSE lhRepLogTable::KeyValue ) ).
       &ELSE
          lcMessage = lcMessage + {&HPDDumpDelimiter} +
-                     ( IF INDEX({&HPDDumpDelimiter},lhRepLogTable::KeyValue) = 0
-                       THEN lhRepLogTable::KeyValue
-                       ELSE QUOTER(lhRepLogTable::KeyValue) ) +
+                     ( IF ttDumpHandler.QuoteKeyValue
+                       THEN QUOTER(lhRepLogTable::KeyValue)
+                       ELSE lhRepLogTable::KeyValue ) +
                      {&HPDDumpDelimiter} + ttDumpHandler.VersionNumber.
       &ENDIF
       ELSE DO:
