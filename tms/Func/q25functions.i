@@ -562,12 +562,12 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          END.
       END.
       ELSE DO:
+         liLogType = {&Q25_LOGGING_DETAILED}.
          /* Some logging about SMSs to be send. */
          IF liPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
             /* Q25 Month 24 20th day extension made, write only internal log */
             
             IF (iiExecType NE {&Q25_EXEC_TYPE_CUST_LOG_GENERATION}) THEN DO:
-               liLogType = {&Q25_LOGGING_DETAILED}.
                lcLogText = "Send SMS Q25 Chosen: " +
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" + 
                         STRING(DCCLI.MsSeq).
@@ -582,7 +582,6 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                liLogType = {&Q25_LOGGING_CUST_LOGS}.
             END.
             ELSE DO:
-               liLogType = {&Q25_LOGGING_DETAILED}.
                lcLogText = "Send SMS: " +
                            STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                            STRING(DCCLI.MsSeq) + "|" +
