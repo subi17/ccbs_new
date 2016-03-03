@@ -3,12 +3,45 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF MsRequest OLD BUFFER oldMsRequest.
 {tmsconst.i}
 {HPD/HPDConst.i}
 
+DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
+
+FUNCTION fCreateMsReqStatisticQ RETURNS LOGICAL
+   (iiReqType   AS INTEGER,
+    iiReqStatus AS INTEGER,
+    iiAmount    AS INTEGER):
+
+   CREATE MsReqStatisticQ.
+   ASSIGN
+      MsReqStatisticQ.ReqType       = iiReqType
+      MsReqStatisticQ.ReqStatus     = iiReqStatus
+      MsReqStatisticQ.ReqStatUpdate = iiAmount
+      .
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+IF NEW(MsRequest)
+THEN fCreateMsReqStatisticQ(MsRequest.ReqType, MsRequest.ReqStatus, 1).
+ELSE DO:
+   BUFFER-COMPARE MsRequest USING
+      ReqStatus
+      ReqType
+   TO oldMsRequest SAVE RESULT IN llSameValues.
+
+   IF NOT llSameValues
+   THEN ASSIGN
+           fCreateMsReqStatisticQ(oldMsRequest.ReqType, oldMsRequest.ReqStatus, -1)
+           fCreateMsReqStatisticQ(MsRequest.ReqType, MsRequest.ReqStatus, 1)
+           .
+END.
+
 &IF {&MSREQUEST_WRITE_TRIGGER_ACTIVE} &THEN
 
 /* If this is a new MsRequest and MsRequest requestsource is not hpd source
    or request type is not hpd req type we won't send the information */
 IF NEW(MsRequest) AND
-   ( ( MsRequest.ReqSource > AND LOOKUP(MsRequest.ReqSource,{&REQUEST_SOURCES_HPD}) = 0 ) OR
+   ( ( MsRequest.ReqSource > "" AND LOOKUP(MsRequest.ReqSource,{&REQUEST_SOURCES_HPD}) = 0 ) OR
      LOOKUP(STRING(MsRequest.ReqType),{&REQTYPES_HPD}) EQ 0 )
 THEN RETURN.
 
@@ -28,11 +61,8 @@ IF Mobile.RepLog.EventType = "DELETE"
 THEN Mobile.RepLog.KeyValue = STRING(MsRequest.MsRequest).
 ELSE Mobile.RepLog.RowID    = STRING(ROWID(MsRequest)).
 
-
 IF NOT NEW(MsRequest)
-THEN DO: 
-   DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
-
+THEN DO:
    BUFFER-COMPARE MsRequest USING
       MsRequest
    TO oldMsRequest SAVE RESULT IN llSameValues.

@@ -22,7 +22,7 @@ FOR Order FIELDS (Brand OrderID) NO-LOCK WHERE
 
    CREATE Common.RepLog.
    ASSIGN
-      Common.RepLog.RowID     = STRING(ROWID(Order)).
+      Common.RepLog.RowID     = STRING(ROWID(Order))
       Common.RepLog.TableName = "Order"
       Common.RepLog.EventType = "MODIFY"
       Common.RepLog.EventTime = NOW

@@ -21,7 +21,7 @@ FOR Order FIELDS (Brand OrderID) NO-LOCK WHERE
 
    CREATE Ordercanal.RepLog.
    ASSIGN
-      Ordercanal.RepLog.RowID     = STRING(ROWID(Order)).
+      Ordercanal.RepLog.RowID     = STRING(ROWID(Order))
       Ordercanal.RepLog.TableName = "Order"
       Ordercanal.RepLog.EventType = "MODIFY"
       Ordercanal.RepLog.EventTime = NOW

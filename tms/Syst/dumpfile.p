@@ -94,8 +94,8 @@ FORM
     DumpFile.EmptyFile      COLON 20 
     DumpFile.DecimalPoint   COLON 60 
     DumpFile.ModFromEventLog COLON 20 
-    DumpFile.AllowReplica    COLON 60
-    DumpFile.ModFromField VIEW-AS EDITOR SIZE 60 BY 2 SKIP
+    DumpFile.ModFromField    COLON 20 FORMAT "X(24)"
+    DumpFile.AllowReplica    COLON 60  SKIP(1)
     DumpFile.Description VIEW-AS EDITOR SIZE 60 BY 3
 WITH  OVERLAY ROW 1 centered
     COLOR VALUE(cfc)
@@ -701,8 +701,8 @@ PROCEDURE local-UPDATE-record:
          DumpFile.DecimalPoint       
          DumpFile.EmptyFile
          DumpFile.ModFromEventLog
-         DumpFile.AllowReplica
          DumpFile.ModFromField
+         DumpFile.AllowReplica
          DumpFile.Description   
       WITH FRAME lis.
 
@@ -743,8 +743,8 @@ PROCEDURE local-UPDATE-record:
             DumpFile.EmptyFile
             DumpFile.DecimalPoint       
             DumpFile.ModFromEventLog
-            DumpFile.AllowReplica
             DumpFile.ModFromField
+            DumpFile.AllowReplica
             DumpFile.Description
          WITH FRAME lis EDITING:
  

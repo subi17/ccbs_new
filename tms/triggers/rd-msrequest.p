@@ -3,12 +3,19 @@ TRIGGER PROCEDURE FOR REPLICATION-DELETE OF MsRequest.
 {HPD/HPDConst.i}
 {Syst/tmsconst.i}
 
-&IF {&MSREQUEST_DELETE_TRIGGER_ACTIVE} &THEN
-
 IF NEW MsRequest
 THEN RETURN.
 
-IF ( MsRequest.ReqSource > AND LOOKUP(MsRequest.ReqSource,{&REQUEST_SOURCES_HPD}) = 0 ) OR
+CREATE MsReqStatisticQ.
+ASSIGN
+   MsReqStatisticQ.ReqType       = MsRequest.ReqType
+   MsReqStatisticQ.ReqStatus     = MsRequest.ReqStatus
+   MsReqStatisticQ.ReqStatUpdate = -1
+   .
+
+&IF {&MSREQUEST_DELETE_TRIGGER_ACTIVE} &THEN
+
+IF ( MsRequest.ReqSource > "" AND LOOKUP(MsRequest.ReqSource,{&REQUEST_SOURCES_HPD}) = 0 ) OR
    LOOKUP(STRING(MsRequest.ReqType),{&REQTYPES_HPD}) EQ 0
 THEN RETURN.
 
