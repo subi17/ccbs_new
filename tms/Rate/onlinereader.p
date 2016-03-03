@@ -34,6 +34,7 @@
 {rating_double_check.i}
 {premiumnumber.i}
 {create_eventlog.i}
+{cdr_online.i}
 
 def INPUT PARAMETER    pvmlog      as lo   no-undo FORMAT "Yes/No" init true.
 def INPUT PARAMETER    ticfile     as char FORMAT "x(30)" no-undo.
@@ -423,7 +424,7 @@ DO WHILE TRUE  WITH FRAME CLOG:
       
    liPause = 60.
    
-   if bOL then call cdr iiPort lipause "callrec".
+   if bOL then callrec = readOnline (iiPort , lipause).
    else do:
       import stream cdrfiles UNFORMATTED callrec  no-error.
 
