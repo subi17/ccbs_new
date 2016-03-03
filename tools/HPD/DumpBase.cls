@@ -387,12 +387,14 @@ CLASS HPD.DumpBase:
                   THEN lcValue = TRIM(STRING(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos),"->>>>>>>>>>>>>>>>>>>>>>9.9<<<<<<<<<")) NO-ERROR.
                   WHEN "INTEGER" OR WHEN "INT64"
                   THEN lcValue = TRIM(STRING(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos),"->>>>>>>>>>>>>>>>>>>>>>9")) NO-ERROR.
-                  WHEN "DATE" OR WHEN "DATETIME" OR WHEN "DATETIME-TZ"
-                  &IF DEFINED(DO_NOT_USE_ISODATE_FORMAT) &THEN
+                  &IF DEFINED(DO_NOT_USE_ISODATE_DATE_FORMAT) &THEN
+                  WHEN "DATE"
                   THEN lcValue = STRING(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos)) NO-ERROR.
                   &ELSE
-                  THEN lcValue = ISO-DATE(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos)) NO-ERROR.
+                  WHEN "DATE" OR
                   &ENDIF
+                  WHEN "DATETIME" OR WHEN "DATETIME-TZ"
+                  THEN lcValue = ISO-DATE(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos)) NO-ERROR.
                   WHEN "LOGICAL"
                   THEN lcValue = IF ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos) THEN "yes" ELSE "no" NO-ERROR.
                   OTHERWISE lcValue = STRING(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos)) NO-ERROR.
