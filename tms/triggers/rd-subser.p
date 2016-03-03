@@ -16,9 +16,7 @@ ASSIGN
    Mobile.RepLog.TableName = "SubSer"
    Mobile.RepLog.EventType = "DELETE"
    Mobile.RepLog.EventTime = NOW
-   Mobile.RepLog.KeyValue  = STRING(SubSer.MsSeq) + {&HPDKeyDelimiter} +
-                             SubSer.ServCom + {&HPDKeyDelimiter} +
-                             STRING(SubSer.SSDate)
+   Mobile.RepLog.KeyValue  = {HPD/keyvalue.i SubSer . {&HPDKeyDelimiter} MsSeq ServCom SSDate}
    .
 
 &ENDIF

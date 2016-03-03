@@ -22,9 +22,7 @@ ASSIGN
    .
 
 IF Mobile.RepLog.EventType = "DELETE" 
-THEN Mobile.RepLog.KeyValue = STRING(SubSer.MsSeq) + {&HPDKeyDelimiter} +
-                              SubSer.ServCom + {&HPDKeyDelimiter} +
-                              STRING(SubSer.SSDate).
+THEN Mobile.RepLog.KeyValue = {HPD/keyvalue.i SubSer . {&HPDKeyDelimiter} MsSeq ServCom SSDate}.
 ELSE Mobile.RepLog.RowID    = STRING(ROWID(SubSer)).
 
 IF NOT NEW(SubSer)
@@ -43,9 +41,7 @@ THEN DO:
          Mobile.RepLog.TableName = "SubSer"
          Mobile.RepLog.EventType = "DELETE"
          Mobile.RepLog.EventTime = NOW
-         Mobile.RepLog.KeyValue  = STRING(oldSubSer.MsSeq) + {&HPDKeyDelimiter} +
-                                   oldSubSer.ServCom + {&HPDKeyDelimiter} +
-                                   STRING(oldSubSer.SSDate)
+         Mobile.RepLog.KeyValue  = {HPD/keyvalue.i oldSubSer . {&HPDKeyDelimiter} MsSeq ServCom SSDate}
          .
    END.
 END.
