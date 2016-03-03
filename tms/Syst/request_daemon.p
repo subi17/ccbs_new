@@ -16,8 +16,9 @@ ASSIGN
 {log.i}
 {cparam2.i}
 
-DEF VAR llHandled AS LOG NO-UNDO INIT FALSE. 
-DEF VAR lcProgram AS CHAR NO-UNDO. 
+DEF VAR llHandled  AS LOG  NO-UNDO INIT FALSE. 
+DEF VAR lcProgram  AS CHAR NO-UNDO. 
+DEF VAR llgRequest AS LOG  NO-UNDO. 
 
 /******** Main start *********/
 FOR EACH RequestType NO-LOCK WHERE 
@@ -25,18 +26,21 @@ FOR EACH RequestType NO-LOCK WHERE
          RequestType.Mode  = "Batch" AND
          RequestType.InUse:
 
-   FIND FIRST RequestStatus NO-LOCK WHERE
-              RequestStatus.Brand   EQ gcBrand             AND
-              RequestStatus.ReqType EQ RequestType.ReqType NO-ERROR.
+   llgRequest = FALSE.
 
-   IF AVAIL RequestStatus THEN
-      FIND MsRequest NO-LOCK WHERE
-           MsRequest.Brand     EQ gcBrand               AND
-           MsRequest.ReqType   EQ RequestType.ReqType   AND
-           MsRequest.ReqStatus EQ RequestStatus.ReqStat AND
-           MsRequest.ActStamp  <= fMakeTS()             NO-ERROR.
+   FOR EACH RequestStatus OF RequestType NO-LOCK WHERE
+            RequestStatus.InUse: 
 
-   IF NOT AVAILABLE MsRequest THEN NEXT.
+      IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                        MsRequest.Brand     EQ gcBrand               AND
+                        MsRequest.ReqType   EQ RequestType.ReqType   AND
+                        MsRequest.ReqStatus EQ RequestStatus.ReqStat AND
+                        MsRequest.ActStamp  <= fMakeTS())            THEN 
+         llgRequest = TRUE.                  
+
+   END.
+
+   IF NOT llgRequest THEN NEXT. 
 
    /* logging on type level */
    IF RequestType.LogOn THEN DO:
