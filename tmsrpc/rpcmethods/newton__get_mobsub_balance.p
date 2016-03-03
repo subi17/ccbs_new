@@ -424,7 +424,7 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
          END.
       END.   
       /* 0 row is not needed to show */
-      IF (SingleFee.Amt - ldDiscountAmt EQ 0) THEN NEXT.
+      IF (SingleFee.Amt - ldDiscountAmt LE 0) THEN NEXT.
       FIND FIRST ttMsOwner WHERE
                  ttMsOwner.CustNum   = MobSub.CustNum AND
                  ttMsOwner.MsSeq     = MobSub.MsSeq AND
