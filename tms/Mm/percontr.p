@@ -1719,7 +1719,8 @@ PROCEDURE pContractTermination:
 
    DEF VAR llFMFee AS LOG  NO-UNDO. 
    DEF VAR liDSSMsSeq AS INT NO-UNDO. 
-   DEF VAR ldaMonth22 AS DATE NO-UNDO. 
+   DEF VAR ldaMonth22 AS DATE NO-UNDO.
+   DEF VAR ldaMonth22Inst AS DATE NO-UNDO. 
 
    DEF BUFFER bLimit        FOR MServiceLimit.
    DEF BUFFER bMsRequest    FOR MsRequest.
@@ -1728,6 +1729,7 @@ PROCEDURE pContractTermination:
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bMServiceLPool   FOR MServiceLPool.
+   DEF BUFFER bDCCLI           FOR DCCLI.
 
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
@@ -2240,10 +2242,24 @@ PROCEDURE pContractTermination:
             ldaMonth22  = ADD-INTERVAL(ldtOrigValidFrom, 22, "months").
             ldaMonth22  = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
 
-            IF ldtActDate >= ldaMonth22 THEN
+            FIND LAST bDCCLI USE-INDEX DCEvent NO-LOCK WHERE
+                      bDCCLI.Brand      = gcBrand AND
+                      bDCCLI.DCEvent    BEGINS "PAYTERM" AND
+                      bDCCLI.MsSeq      = MsRequest.MsSeq AND
+                      bDCCLI.ValidFrom  <  TODAY NO-ERROR.
+            IF AVAILABLE bDCCLI THEN DO:
+
+               ldaMonth22Inst = ADD-INTERVAL(bDCCLI.ValidFrom, 22, "months").
+               ldaMonth22Inst = DATE(MONTH(ldaMonth22Inst),1,YEAR(ldaMonth22Inst)).
+
+               IF bDCCLI.ValidTo >= ldaMonth22Inst THEN
+                  llCreatePenaltyFee = FALSE.
+            END.
+            ELSE IF ldtActDate >= ldaMonth22 THEN
                llCreatePenaltyFee = FALSE.
+            ELSE llCreatePenaltyFee = TRUE.
          END.
-            
+
       END.
       ELSE ASSIGN 
          llCreatePenaltyFee = TRUE
