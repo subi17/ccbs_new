@@ -416,7 +416,8 @@ PROCEDURE pPeriodicalContract:
             END.
 
             /* YPR-2515 */
-            ldaMonth22  = ADD-INTERVAL(bDCCLI.ContractDate, 22, "months").
+            ldaMonth22  = ADD-INTERVAL(MIN(bDCCLI.ContractDate,
+                                           bDCCLI.ValidFrom), 22, "months").
             ldaMonth22  = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
 
             IF AVAIL Order AND

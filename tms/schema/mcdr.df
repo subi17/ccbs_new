@@ -717,6 +717,16 @@ ADD FIELD "ReadTime" OF "MobCDR" AS integer
   COLUMN-LABEL "ReadTime"
   ORDER 2540
 
+ADD FIELD "Accumulator" OF "MobCDR" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Accumulator"
+  POSITION 206
+  MAX-WIDTH 4
+  COLUMN-LABEL "Accumulator"
+  HELP "Accumulator value"
+  ORDER 2550
+
 ADD INDEX "Date" ON "MobCDR" 
   AREA "Dyn_Index1"
   PRIMARY
@@ -758,18 +768,13 @@ ADD INDEX "invseq" ON "MobCDR"
 ADD INDEX "ReadDate" ON "MobCDR" 
   AREA "Dyn_Index1"
   INDEX-FIELD "ReadDate" DESCENDING 
-  INDEX-FIELD "ReadTime" DESCENDING 
 
 ADD INDEX "spocmt" ON "MobCDR" 
   AREA "Dyn_Index4"
   INDEX-FIELD "SPOcmt" ASCENDING 
 
-UPDATE INDEX "invseq" OF "MobCDR"
-  BUFFER-POOL "Alternate"
-
 .
 PSC
-bufpool=yes
 cpstream=1252
 .
-0000014980
+0000015087

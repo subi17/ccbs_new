@@ -472,7 +472,7 @@ ADD INDEX "ASCType" ON "AccessSchema"
   INDEX-FIELD "AScType" ASCENDING 
 
 ADD TABLE "AccessSchemaRule"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   LABEL "Access Schema Rule"
   DUMP-NAME "accesssc"
   FILE-MISC26 ""
@@ -519,13 +519,13 @@ ADD FIELD "Action" OF "AccessSchemaRule" AS integer
   MANDATORY
 
 ADD INDEX "AccessSchemaSeq" ON "AccessSchemaRule" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   PRIMARY
   INDEX-FIELD "AccessSchemaSeq" ASCENDING 
   INDEX-FIELD "AccessSchemaRuleSeq" ASCENDING 
 
 ADD INDEX "AccessSchemaRuleSeq" ON "AccessSchemaRule" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   UNIQUE
   INDEX-FIELD "AccessSchemaRuleSeq" ASCENDING 
 
@@ -1052,6 +1052,97 @@ ADD INDEX "CLIType" ON "AFGroup"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CLIType" ASCENDING 
 
+ADD TABLE "AMQMsg"
+  AREA "Sta_Data_128"
+  LABEL "Active MQ Messages"
+  DESCRIPTION "Active MQ Messages"
+  DUMP-NAME "amqmsg"
+
+ADD FIELD "MQName" OF "AMQMsg" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "MQ Name"
+  POSITION 2
+  MAX-WIDTH 30
+  COLUMN-LABEL "MQ Name"
+  HELP "Message Queue Name"
+  ORDER 10
+
+ADD FIELD "MsgContent" OF "AMQMsg" AS character 
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Message"
+  POSITION 3
+  MAX-WIDTH 60
+  COLUMN-LABEL "Message"
+  HELP "Message"
+  ORDER 20
+
+ADD FIELD "StatusCode" OF "AMQMsg" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Status"
+  POSITION 4
+  MAX-WIDTH 16
+  COLUMN-LABEL "Status"
+  HELP "Status"
+  ORDER 30
+
+ADD FIELD "Usage" OF "AMQMsg" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Usage"
+  POSITION 5
+  MAX-WIDTH 16
+  COLUMN-LABEL "Usage"
+  HELP "Additional usage information"
+  ORDER 40
+
+ADD FIELD "ConfFile" OF "AMQMsg" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Conf File"
+  POSITION 6
+  MAX-WIDTH 16
+  COLUMN-LABEL "Conf File"
+  HELP "Configuration File"
+  ORDER 50
+
+ADD FIELD "InsertTS" OF "AMQMsg" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Creation Time"
+  POSITION 7
+  MAX-WIDTH 15
+  COLUMN-LABEL "InsertTS"
+  HELP "Creation Time"
+  ORDER 60
+
+ADD FIELD "ResendCount" OF "AMQMsg" AS integer 
+  FORMAT "zzzzzzz9"
+  INITIAL "0"
+  LABEL "Counter"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Counter"
+  HELP "Resending counter"
+  ORDER 70
+
+ADD INDEX "MQName" ON "AMQMsg" 
+  AREA "Dyn_Index_1"
+  PRIMARY
+  INDEX-FIELD "MQName" ASCENDING 
+  INDEX-FIELD "InsertTS" ASCENDING 
+  INDEX-FIELD "StatusCode" ASCENDING 
+
+ADD INDEX "InsertTS" ON "AMQMsg" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "InsertTS" ASCENDING 
+
+ADD INDEX "StatusCode" ON "AMQMsg" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "StatusCode" ASCENDING 
+
 ADD TABLE "ASubType"
   AREA "Sta_Data_256"
   LABEL "ASub Type"
@@ -1083,6 +1174,112 @@ ADD INDEX "ASubType" ON "ASubType"
   UNIQUE
   PRIMARY
   INDEX-FIELD "ASubType" ASCENDING 
+
+ADD TABLE "AuthLog"
+  AREA "Sta_Data_128"
+  LABEL "AuthLog"
+  DESCRIPTION "3rd party user authentication log"
+  DUMP-NAME "authlog"
+
+ADD FIELD "Username" OF "AuthLog" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Username"
+  POSITION 2
+  MAX-WIDTH 40
+  COLUMN-LABEL "Username"
+  ORDER 10
+
+ADD FIELD "IP" OF "AuthLog" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "IP Address"
+  POSITION 3
+  MAX-WIDTH 32
+  COLUMN-LABEL "IP Address"
+  ORDER 20
+
+ADD FIELD "EndUserID" OF "AuthLog" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "EndUserID"
+  POSITION 4
+  MAX-WIDTH 80
+  COLUMN-LABEL "EndUserID"
+  ORDER 30
+
+ADD FIELD "UserAgent" OF "AuthLog" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "UserAgent"
+  POSITION 5
+  MAX-WIDTH 80
+  COLUMN-LABEL "UserAgent"
+  ORDER 40
+
+ADD FIELD "MethodName" OF "AuthLog" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "MethodName"
+  POSITION 6
+  MAX-WIDTH 80
+  COLUMN-LABEL "MethodName"
+  ORDER 50
+
+ADD FIELD "ErrorMsg" OF "AuthLog" AS character 
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "ErrorMsg"
+  POSITION 7
+  MAX-WIDTH 120
+  COLUMN-LABEL "ErrorMsg"
+  ORDER 60
+
+ADD FIELD "TimeStamp" OF "AuthLog" AS datetime 
+  FORMAT "99-99-9999 HH:MM:SS"
+  INITIAL ?
+  LABEL "TimeStamp"
+  POSITION 8
+  MAX-WIDTH 8
+  COLUMN-LABEL "TimeStamp"
+  ORDER 70
+
+ADD FIELD "ResponseTS" OF "AuthLog" AS datetime 
+  FORMAT "99-99-9999 HH:MM:SS"
+  INITIAL ?
+  LABEL "ResponseTS"
+  POSITION 9
+  MAX-WIDTH 8
+  COLUMN-LABEL "ResponseTS"
+  ORDER 80
+
+ADD FIELD "ErrorCode" OF "AuthLog" AS integer 
+  FORMAT "->>>>9"
+  INITIAL "0"
+  LABEL "ErrorCode"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "ErrorCode"
+  HELP "XML-RPC framework error code"
+  ORDER 90
+
+ADD FIELD "TransactionID" OF "AuthLog" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "TransactionID"
+  POSITION 11
+  MAX-WIDTH 30
+  HELP "Transaction ID"
+  ORDER 100
+
+ADD INDEX "TimeStamp" ON "AuthLog" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "TimeStamp" DESCENDING 
+
+ADD INDEX "Username" ON "AuthLog" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Username" ASCENDING 
 
 ADD TABLE "AuthUser"
   AREA "Sta_Data_64"
@@ -1126,10 +1323,10 @@ ADD INDEX "Username" ON "AuthUser"
   INDEX-FIELD "Username" ASCENDING 
 
 ADD TABLE "Bank"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   LABEL "xxBank"
   DESCRIPTION "xxBank"
-  DUMP-NAME "xxBank-------1"
+  DUMP-NAME "xxBank"
 
 ADD FIELD "BankOffice" OF "Bank" AS character 
   FORMAT "x(4)"
@@ -1223,7 +1420,7 @@ ADD FIELD "FileDate" OF "Bank" AS date
   ORDER 1020
 
 ADD INDEX "BankId" ON "Bank" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BankId" ASCENDING 
@@ -1343,6 +1540,27 @@ ADD FIELD "BIC" OF "BankAccount" AS character
   HELP "BIC code"
   ORDER 110
 
+ADD FIELD "BankCodes" OF "BankAccount" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "BankCodes"
+  POSITION 13
+  MAX-WIDTH 60
+  COLUMN-LABEL "BankCodes"
+  HELP "Bank codes"
+  ORDER 120
+
+ADD FIELD "DDAllocation" OF "BankAccount" AS decimal 
+  FORMAT "Z9.99"
+  INITIAL "0"
+  LABEL "DDAllocation"
+  POSITION 14
+  MAX-WIDTH 17
+  COLUMN-LABEL "DDAllocation"
+  HELP "Direct debit allocation value"
+  DECIMALS 2
+  ORDER 130
+
 ADD INDEX "UnitBank" ON "BankAccount" 
   AREA "Sta_Index_2"
   UNIQUE
@@ -1357,7 +1575,7 @@ ADD INDEX "AccNum" ON "BankAccount"
   INDEX-FIELD "BankAccount" ASCENDING 
 
 ADD TABLE "BankIdCode"
-  AREA "Sta_Data_64"
+  AREA "Sta_Data_32"
   LABEL "BankIdCodes"
   DESCRIPTION "Bank identifier Code"
   DUMP-NAME "BankIdCode"
@@ -1383,11 +1601,11 @@ ADD FIELD "BankCode" OF "BankIdCode" AS character
   ORDER 20
 
 ADD FIELD "BankName" OF "BankIdCode" AS character 
-  FORMAT "X(60)"
+  FORMAT "X(100)"
   INITIAL ""
   LABEL "BankName"
   POSITION 4
-  MAX-WIDTH 120
+  MAX-WIDTH 200
   COLUMN-LABEL "BankName"
   HELP "Bank Name"
   ORDER 30
@@ -2971,7 +3189,7 @@ ADD INDEX "BRTestQueueID" ON "BRTestCriteria"
   INDEX-FIELD "CriteriaField" ASCENDING 
 
 ADD TABLE "BRTestQResult"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   LABEL "BR Test Queue Result"
   DESCRIPTION "Billrun test queue result"
   DUMP-NAME "brtestqresult"
@@ -3018,18 +3236,18 @@ ADD FIELD "UserCode" OF "BRTestQResult" AS character
   MANDATORY
 
 ADD INDEX "BRTestQResultID" ON "BRTestQResult" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_1"
   UNIQUE
   PRIMARY
   INDEX-FIELD "BRTestQResultID" ASCENDING 
 
 ADD INDEX "BRTestQueueID" ON "BRTestQResult" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_1"
   INDEX-FIELD "BRTestQueueID" ASCENDING 
   INDEX-FIELD "TestRunStamp" DESCENDING 
 
 ADD TABLE "BRTestQResultRow"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   LABEL "BR Test Queue Result Row"
   DESCRIPTION "Billrun test queue result row"
   DUMP-NAME "brtestqresultrow"
@@ -3125,22 +3343,22 @@ ADD FIELD "InvNum" OF "BRTestQResultRow" AS integer
   ORDER 100
 
 ADD INDEX "QResultRowID" ON "BRTestQResultRow" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_1"
   UNIQUE
   PRIMARY
   INDEX-FIELD "QResultRowID" ASCENDING 
 
 ADD INDEX "BRTestQResultID" ON "BRTestQResultRow" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_1"
   INDEX-FIELD "BRTestQResultID" ASCENDING 
   INDEX-FIELD "BRTestQRowID" ASCENDING 
 
 ADD INDEX "BRTestQRowID" ON "BRTestQResultRow" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_1"
   INDEX-FIELD "BRTestQRowID" ASCENDING 
 
 ADD TABLE "BRTestQRow"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   LABEL "BR Test Queue Row"
   DESCRIPTION "Billrun test queue row"
   DUMP-NAME "brtestqrow"
@@ -3195,22 +3413,22 @@ ADD FIELD "Active" OF "BRTestQRow" AS logical
   ORDER 50
 
 ADD INDEX "BRTestQRowID" ON "BRTestQRow" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_1"
   UNIQUE
   PRIMARY
   INDEX-FIELD "BRTestQRowID" ASCENDING 
 
 ADD INDEX "BRTestCaseID" ON "BRTestQRow" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_1"
   INDEX-FIELD "BRTestCaseID" ASCENDING 
 
 ADD INDEX "BRTestQueueID" ON "BRTestQRow" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_1"
   INDEX-FIELD "BRTestQueueID" ASCENDING 
   INDEX-FIELD "BRTestCaseID" ASCENDING 
 
 ADD TABLE "BRTestQueue"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   LABEL "BR Test Queue"
   DESCRIPTION "Billrun test queue"
   DUMP-NAME "brtestqueue"
@@ -3263,13 +3481,13 @@ ADD FIELD "ResultEMail" OF "BRTestQueue" AS character
   ORDER 50
 
 ADD INDEX "BRTestQueueID" ON "BRTestQueue" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_1"
   UNIQUE
   PRIMARY
   INDEX-FIELD "BRTestQueueID" ASCENDING 
 
 ADD INDEX "Description" ON "BRTestQueue" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_1"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Description" ASCENDING 
 
@@ -4019,7 +4237,7 @@ ADD INDEX "CDRType" ON "CDRCounter"
   INDEX-FIELD "ImportDate" DESCENDING 
 
 ADD TABLE "CDRError"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   LABEL "Error codes for Rating"
   DESCRIPTION "CDR error numbers"
   DUMP-NAME "cdrerror"
@@ -4056,16 +4274,90 @@ ADD FIELD "Memo" OF "CDRError" AS character
   ORDER 30
 
 ADD INDEX "CDRError" ON "CDRError" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   UNIQUE
   PRIMARY
   INDEX-FIELD "CDRError" ASCENDING 
 
 ADD INDEX "CEName" ON "CDRError" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   UNIQUE
   INDEX-FIELD "CEName" ASCENDING 
   INDEX-FIELD "CDRError" ASCENDING 
+
+ADD TABLE "CDRStreamCounter"
+  AREA "Dyn_Data_128"
+  LABEL "CDR Stream Counter"
+  DESCRIPTION "CDR Stream Counter"
+  DUMP-NAME "cdrstreamcounter"
+
+ADD FIELD "Brand" OF "CDRStreamCounter" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  HELP "Code of brand"
+  ORDER 10
+
+ADD FIELD "ImportDate" OF "CDRStreamCounter" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Import Date"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Import"
+  HELP "Import date"
+  ORDER 20
+
+ADD FIELD "MSCID" OF "CDRStreamCounter" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "MSCID"
+  POSITION 4
+  MAX-WIDTH 16
+  HELP "Mobile switching center"
+  ORDER 30
+
+ADD FIELD "OnlineStream" OF "CDRStreamCounter" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Online Stream"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Stream"
+  HELP "Stream from which CDR was read"
+  ORDER 40
+
+ADD FIELD "CounterType" OF "CDRStreamCounter" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Counter Type"
+  POSITION 6
+  MAX-WIDTH 16
+  COLUMN-LABEL "Type"
+  HELP "Counter type"
+  ORDER 50
+
+ADD FIELD "CDRQty" OF "CDRStreamCounter" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Quantity"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Qty"
+  HELP "CDR quantity"
+  ORDER 60
+
+ADD INDEX "ImportDate" ON "CDRStreamCounter" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "ImportDate" ASCENDING 
+  INDEX-FIELD "CounterType" ASCENDING 
+  INDEX-FIELD "MSCID" ASCENDING 
+  INDEX-FIELD "OnlineStream" ASCENDING 
 
 ADD TABLE "cfoSer"
   AREA "Sta_Data_256"
@@ -5831,7 +6123,7 @@ ADD INDEX "TargType" ON "CoTarg"
   INDEX-FIELD "CoTarg" ASCENDING 
 
 ADD TABLE "Counter"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   LABEL "Counter"
   DESCRIPTION "Counter"
   DUMP-NAME "counter"
@@ -5913,13 +6205,13 @@ ADD FIELD "CounterSeq" OF "Counter" AS integer
   ORDER 80
 
 ADD INDEX "CounterSeq" ON "Counter" 
-  AREA "Sta_Index_4"
+  AREA "Dyn_Index_1"
   UNIQUE
   PRIMARY
   INDEX-FIELD "CounterSeq" ASCENDING 
 
 ADD INDEX "HostTable" ON "Counter" 
-  AREA "Sta_Index_4"
+  AREA "Dyn_Index_1"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "HostTable" ASCENDING 
   INDEX-FIELD "KeyValue" ASCENDING 
@@ -5927,7 +6219,7 @@ ADD INDEX "HostTable" ON "Counter"
   INDEX-FIELD "EndStamp" DESCENDING 
 
 ADD TABLE "Country"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   LABEL "Countries"
   DESCRIPTION "Country codes (ISO) and names
 "
@@ -5964,13 +6256,13 @@ ADD FIELD "FraudGroup" OF "Country" AS character
   ORDER 30
 
 ADD INDEX "Country" ON "Country" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Country" ASCENDING 
 
 ADD INDEX "CoName" ON "Country" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   INDEX-FIELD "CoName" ASCENDING 
 
 ADD TABLE "CreditCard"
@@ -6321,7 +6613,7 @@ ADD INDEX "PersonId" ON "CreditRate"
   INDEX-FIELD "CrStamp" DESCENDING 
 
 ADD TABLE "CurRate"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   LABEL "Exchange Rates"
   DESCRIPTION "Currency exchange rates"
   DUMP-NAME "currate"
@@ -6358,14 +6650,14 @@ ADD FIELD "RateDate" OF "CurRate" AS date
   ORDER 40
 
 ADD INDEX "Currency" ON "CurRate" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Currency" ASCENDING 
   INDEX-FIELD "RateDate" DESCENDING 
 
 ADD INDEX "RateDate" ON "CurRate" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   INDEX-FIELD "RateDate" DESCENDING 
   INDEX-FIELD "Currency" ASCENDING 
 
@@ -6830,6 +7122,8 @@ ADD TABLE "CustContact"
   LABEL "CustContact"
   DESCRIPTION "CustContact"
   DUMP-NAME "custcontact"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-custcontact.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-custcontact.p" CRC "?" 
 
 ADD FIELD "CustNum" OF "CustContact" AS integer 
   FORMAT ">>>>>>>>9"
@@ -7112,6 +7406,15 @@ ADD FIELD "AddressCodM" OF "CustContact" AS character
   COLUMN-LABEL "CodM"
   HELP "CodM in address validation"
   ORDER 310
+
+ADD FIELD "BirthDay" OF "CustContact" AS date 
+  FORMAT "99.99.99"
+  INITIAL ?
+  LABEL "BirthDay"
+  POSITION 30
+  MAX-WIDTH 4
+  COLUMN-LABEL "BirthDay"
+  ORDER 350
 
 ADD INDEX "CustContact" ON "CustContact" 
   AREA "Sta_Index_1"
@@ -8658,6 +8961,26 @@ ADD FIELD "OutMarkBank" OF "Customer" AS logical
   COLUMN-LABEL "OutMarkBank"
   HELP "3rd Party Bank Marketing"
   ORDER 1560
+
+ADD FIELD "AuthCustIdType" OF "Customer" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "AuthCustIdType"
+  POSITION 123
+  MAX-WIDTH 16
+  COLUMN-LABEL "AuthCustIdType"
+  HELP "Authorization Cistomer ID Type"
+  ORDER 1570
+
+ADD FIELD "AuthCustId" OF "Customer" AS character 
+  FORMAT "x(11)"
+  INITIAL ""
+  LABEL "AuthCustId"
+  POSITION 124
+  MAX-WIDTH 22
+  COLUMN-LABEL "AuthCustId"
+  HELP "Authorization Customer ID"
+  ORDER 1580
 
 ADD INDEX "CustNum_s" ON "Customer" 
   AREA "Sta_Index_1"
@@ -10334,7 +10657,7 @@ ADD INDEX "ValidFrom" ON "DPConf"
   INDEX-FIELD "ValidFrom" DESCENDING 
 
 ADD TABLE "DPMember"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   LABEL "Discount Plan Member"
   DUMP-NAME "dpmember"
   TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-dpmember.p" CRC "?" 
@@ -10402,15 +10725,25 @@ ADD FIELD "ValidTo" OF "DPMember" AS date
   HELP "Effective to date"
   ORDER 60
 
+ADD FIELD "OrderId" OF "DPMember" AS integer 
+  DESCRIPTION "Order sequence number"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrderId"
+  ORDER 70
+
 ADD INDEX "DPId" ON "DPMember" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_1"
   PRIMARY
   INDEX-FIELD "DPId" ASCENDING 
   INDEX-FIELD "HostTable" ASCENDING 
   INDEX-FIELD "KeyValue" ASCENDING 
 
 ADD INDEX "DPHostKey" ON "DPMember" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_1"
   INDEX-FIELD "HostTable" ASCENDING 
   INDEX-FIELD "KeyValue" ASCENDING 
 
@@ -12972,7 +13305,7 @@ ADD FIELD "SourceKey" OF "FixedFee" AS character
 
 ADD FIELD "CalcAmt" OF "FixedFee" AS decimal 
   FORMAT "->>>,>>9.99"
-  INITIAL ?
+  INITIAL "0"
   LABEL "Calculated Amount"
   POSITION 33
   MAX-WIDTH 17
@@ -13041,7 +13374,7 @@ ADD INDEX "FFNum" ON "FixedFee"
   INDEX-FIELD "FFNum" ASCENDING 
 
 ADD INDEX "FinancedResult" ON "FixedFee" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_1"
   INDEX-FIELD "FinancedResult" ASCENDING 
 
 ADD INDEX "HostTable" ON "FixedFee" 
@@ -13049,10 +13382,6 @@ ADD INDEX "HostTable" ON "FixedFee"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "HostTable" ASCENDING 
   INDEX-FIELD "KeyValue" ASCENDING ABBREVIATED 
-
-ADD INDEX "IFSstatus" ON "FixedFee" 
-  AREA "Sta_Index_4"
-  INDEX-FIELD "IFSStatus" ASCENDING 
 
 ADD INDEX "used" ON "FixedFee" 
   AREA "Sta_Index_1"
@@ -13200,6 +13529,15 @@ ADD FIELD "CancelFile" OF "FixedFeeTF" AS character
   MAX-WIDTH 60
   COLUMN-LABEL "CancelFile"
   ORDER 150
+
+ADD FIELD "OrderId" OF "FixedFeeTF" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  POSITION 16
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrderId"
+  ORDER 160
 
 ADD INDEX "FFNum" ON "FixedFeeTF" 
   AREA "Sta_Index_4"
@@ -15125,7 +15463,7 @@ ADD INDEX "HiUsageStatus" ON "HighUsage"
   INDEX-FIELD "CrStamp" DESCENDING 
 
 ADD TABLE "HiUsageKat"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   DUMP-NAME "hiusagek"
 
 ADD FIELD "Category" OF "HiUsageKat" AS character 
@@ -15190,13 +15528,13 @@ ADD FIELD "CustClass" OF "HiUsageKat" AS integer
   ORDER 60
 
 ADD INDEX "Category" ON "HiUsageKat" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_2"
   UNIQUE
   PRIMARY
   INDEX-FIELD "CustClass" ASCENDING 
 
 ADD TABLE "HiUsageLimit"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   DUMP-NAME "hiusagel"
 
 ADD FIELD "Category" OF "HiUsageLimit" AS character 
@@ -15231,14 +15569,14 @@ ADD FIELD "Limit" OF "HiUsageLimit" AS integer
   ORDER 30
 
 ADD INDEX "Category" ON "HiUsageLimit" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_2"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Category" ASCENDING 
   INDEX-FIELD "BillCode" ASCENDING 
 
 ADD INDEX "BillCode" ON "HiUsageLimit" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_2"
   INDEX-FIELD "BillCode" ASCENDING 
   INDEX-FIELD "Limit" DESCENDING 
 
@@ -15306,7 +15644,7 @@ ADD INDEX "Holiday" ON "Holiday"
   INDEX-FIELD "Holiday" ASCENDING 
 
 ADD TABLE "IGInvNum"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   LABEL "InvGroup Invoice Nbr"
   DESCRIPTION "Invoice group invoice number sequences
 "
@@ -15380,7 +15718,7 @@ ADD FIELD "FromDate" OF "IGInvNum" AS date
   ORDER 60
 
 ADD INDEX "InvGroup" ON "IGInvNum" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -15389,7 +15727,7 @@ ADD INDEX "InvGroup" ON "IGInvNum"
   INDEX-FIELD "FromDate" DESCENDING 
 
 ADD TABLE "IGVoucher"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   LABEL "InvGroup Invoice Nbr"
   DESCRIPTION "Invoice group invoice number sequences
 "
@@ -15463,7 +15801,7 @@ ADD FIELD "FromDate" OF "IGVoucher" AS date
   ORDER 60
 
 ADD INDEX "InvGroup" ON "IGVoucher" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_2"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -17246,9 +17584,9 @@ ADD FIELD "AgrCust" OF "Invoice" AS integer
   ORDER 1440
 
 ADD FIELD "ClaimStatus" OF "Invoice" AS character 
-  FORMAT "X(8)"
+  FORMAT "x(8)"
   INITIAL ""
-  LABEL "Claim Status"
+  LABEL "ClaimStatus"
   POSITION 99
   MAX-WIDTH 16
   COLUMN-LABEL "ClaimStatus"
@@ -17262,7 +17600,7 @@ ADD FIELD "MandateId" OF "Invoice" AS character
   POSITION 100
   MAX-WIDTH 70
   COLUMN-LABEL "MandateId"
-  HELP "Mandate ID for CSB19.14 file"
+  HELP "Mandate ID for CSB19 file"
   ORDER 1460
 
 ADD INDEX "InvNum_s" ON "Invoice" 
@@ -18009,7 +18347,7 @@ ADD INDEX "State" ON "InvRunLog"
   INDEX-FIELD "State" ASCENDING 
 
 ADD TABLE "InvSect"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   LABEL "Invoice sections"
   DUMP-NAME "invsect"
 
@@ -18064,14 +18402,14 @@ ADD FIELD "Brand" OF "InvSect" AS character
   ORDER 50
 
 ADD INDEX "InvSect" ON "InvSect" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_2"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "InvSect" ASCENDING 
 
 ADD INDEX "ISName" ON "InvSect" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_2"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "ISName" ASCENDING 
@@ -18692,7 +19030,7 @@ ADD INDEX "TxtType" ON "ITSendLog"
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD TABLE "Language"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   LABEL "Language"
   DESCRIPTION "Language"
   DUMP-NAME "language"
@@ -18718,13 +19056,13 @@ ADD FIELD "LangName" OF "Language" AS character
   ORDER 20
 
 ADD INDEX "Language" ON "Language" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_2"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Language" ASCENDING 
 
 ADD INDEX "LangName" ON "Language" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_2"
   UNIQUE
   INDEX-FIELD "LangName" ASCENDING 
   INDEX-FIELD "Language" ASCENDING 
@@ -20260,7 +20598,7 @@ ADD FIELD "XMLRequest" OF "MNPOperation" AS clob
   LOB-SIZE 1M
   CLOB-CODEPAGE "utf-8"
   CLOB-COLLATION "basic"
-  CLOB-TYPE 1
+  CLOB-TYPE 2
   COLUMN-LABEL "XMLRequest"
   HELP "XML request message"
   ORDER 100
@@ -20275,7 +20613,7 @@ ADD FIELD "XMLResponse" OF "MNPOperation" AS clob
   LOB-SIZE 1M
   CLOB-CODEPAGE "utf-8"
   CLOB-COLLATION "basic"
-  CLOB-TYPE 1
+  CLOB-TYPE 2
   COLUMN-LABEL "XML Response"
   HELP "XML response message"
   ORDER 110
@@ -20898,7 +21236,7 @@ ADD FIELD "RawMessage" OF "MNPXml" AS clob
   LOB-SIZE 1M
   CLOB-CODEPAGE "utf-8"
   CLOB-COLLATION "basic"
-  CLOB-TYPE 1
+  CLOB-TYPE 2
   ORDER 20
 
 ADD INDEX "XMLSeq" ON "MNPXml" 
@@ -21161,7 +21499,7 @@ ADD INDEX "CustNum" ON "MServiceLPool"
   INDEX-FIELD "EndTS" DESCENDING 
 
 ADD TABLE "MsReqFuncItem"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   DUMP-NAME "MsReqFuncItem"
 
 ADD FIELD "ItemId" OF "MsReqFuncItem" AS character 
@@ -21215,12 +21553,12 @@ ADD FIELD "CParam" OF "MsReqFuncItem" AS character
   ORDER 50
 
 ADD INDEX "ItemId" ON "MsReqFuncItem" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_1"
   PRIMARY
   INDEX-FIELD "ItemId" ASCENDING 
 
 ADD TABLE "MsReqStatFunc"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   DUMP-NAME "MsReqStatFunc"
 
 ADD FIELD "ReqType" OF "MsReqStatFunc" AS integer 
@@ -21254,10 +21592,116 @@ ADD FIELD "FuncGroup" OF "MsReqStatFunc" AS character
   ORDER 30
 
 ADD INDEX "ReqType" ON "MsReqStatFunc" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_1"
   PRIMARY
   INDEX-FIELD "ReqType" ASCENDING 
   INDEX-FIELD "ReqStatus" ASCENDING 
+
+ADD TABLE "MsReqStatistic"
+  AREA "Sta_Data_256"
+  DUMP-NAME "MsReqStatistic"
+
+ADD FIELD "ReqType" OF "MsReqStatistic" AS integer 
+  DESCRIPTION "Request type"
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "Request type"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Type"
+  HELP "Request type"
+  ORDER 10
+
+ADD FIELD "ReqStatus" OF "MsReqStatistic" AS integer 
+  DESCRIPTION "Available status of MsRequest"
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "MsRequest Status"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "RequestStatus"
+  HELP "Request status"
+  ORDER 20
+
+ADD FIELD "ReqStatusCount" OF "MsReqStatistic" AS integer 
+  DESCRIPTION "The number of msrequests per reqtype and reqstatus"
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "MsRequest Status Count"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "ReqStatusCount"
+  HELP "Count of statuses"
+  ORDER 30
+
+ADD FIELD "Brand" OF "MsReqStatistic" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 5
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 40
+
+ADD INDEX "ReqType" ON "MsReqStatistic" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "ReqType" ASCENDING 
+  INDEX-FIELD "ReqStatus" ASCENDING 
+
+ADD TABLE "MsReqStatisticQ"
+  AREA "Sta_Data_32"
+  DUMP-NAME "MsReqStatisticQ"
+
+ADD FIELD "Brand" OF "MsReqStatisticQ" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 2
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 10
+
+ADD FIELD "ReqType" OF "MsReqStatisticQ" AS integer 
+  DESCRIPTION "MsRequest type"
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "MsRequest type"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Type Of MsRequest"
+  ORDER 20
+
+ADD FIELD "ReqStatus" OF "MsReqStatisticQ" AS integer 
+  DESCRIPTION "MsRequest status"
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "MsRequest Status"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "ReqStat"
+  HELP "Status Code"
+  ORDER 30
+
+ADD FIELD "ReqStatUpdate" OF "MsReqStatisticQ" AS integer 
+  DESCRIPTION "MsRequest status count update"
+  FORMAT "-9"
+  INITIAL "0"
+  LABEL "Update Count"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Update"
+  HELP "Update status count"
+  ORDER 40
+
+ADD INDEX "Brand" ON "MsReqStatisticQ" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
 
 ADD TABLE "MthCall"
   AREA "Sta_Data_256"
@@ -21499,7 +21943,7 @@ ADD INDEX "NtName" ON "Nationality"
   INDEX-FIELD "NtName" ASCENDING 
 
 ADD TABLE "OFItem"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   DUMP-NAME "ofitem"
 
 ADD FIELD "OFID" OF "OFItem" AS integer 
@@ -21531,12 +21975,12 @@ ADD FIELD "StatusCode" OF "OFItem" AS character
   ORDER 20
 
 ADD INDEX "OFID" ON "OFItem" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_1"
   PRIMARY
   INDEX-FIELD "OFID" ASCENDING 
 
 ADD INDEX "StatusCode" ON "OFItem" 
-  AREA "Sta_Index_4"
+  AREA "Sta_Index_1"
   INDEX-FIELD "StatusCode" ASCENDING 
   INDEX-FIELD "OFID" ASCENDING 
 
@@ -24793,7 +25237,7 @@ ADD INDEX "LimitTo" ON "ProgLimit"
   INDEX-FIELD "ValidFrom" ASCENDING 
 
 ADD TABLE "RateCCN"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   DUMP-NAME "rateccn"
 
 ADD FIELD "BDest" OF "RateCCN" AS character 
@@ -24859,7 +25303,7 @@ ADD FIELD "BdestID" OF "RateCCN" AS integer
   ORDER 60
 
 ADD INDEX "BDest" ON "RateCCN" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -24868,12 +25312,12 @@ ADD INDEX "BDest" ON "RateCCN"
   INDEX-FIELD "DialType" ASCENDING 
 
 ADD INDEX "BDestID" ON "RateCCN" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   INDEX-FIELD "BdestID" ASCENDING 
   INDEX-FIELD "DialType" ASCENDING 
 
 ADD INDEX "CCN" ON "RateCCN" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BDest" ASCENDING 
   INDEX-FIELD "CCN" ASCENDING 
@@ -24945,7 +25389,7 @@ ADD INDEX "RPName" ON "RatePlan"
   INDEX-FIELD "RPName" ASCENDING 
 
 ADD TABLE "RatePref"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   DUMP-NAME "ratepref"
 
 ADD FIELD "Prefix" OF "RatePref" AS character 
@@ -24999,7 +25443,7 @@ ADD FIELD "Brand" OF "RatePref" AS character
   ORDER 50
 
 ADD INDEX "Prefix" ON "RatePref" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -25007,7 +25451,7 @@ ADD INDEX "Prefix" ON "RatePref"
   INDEX-FIELD "DialType" ASCENDING 
 
 ADD INDEX "DialType" ON "RatePref" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "DialType" ASCENDING 
   INDEX-FIELD "Prefix" ASCENDING 
@@ -25063,7 +25507,7 @@ ADD INDEX "RgName" ON "Region"
   INDEX-FIELD "RgName" ASCENDING 
 
 ADD TABLE "RepLog"
-  AREA "CDF_Data"
+  AREA "Sta_Data_128"
   LABEL "Replication Log"
   DESCRIPTION "This is the replication log table for replicating the record"
   DUMP-NAME "replog"
@@ -25125,12 +25569,12 @@ ADD FIELD "EventTS" OF "RepLog" AS datetime
   ORDER 60
 
 ADD INDEX "CreatedTS" ON "RepLog" 
-  AREA "CDF_Index"
+  AREA "Sta_Index_1"
   PRIMARY
   INDEX-FIELD "CreatedTS" ASCENDING 
 
 ADD INDEX "EventTS" ON "RepLog" 
-  AREA "CDF_Index"
+  AREA "Sta_Index_1"
   INDEX-FIELD "EventTS" ASCENDING 
 
 ADD TABLE "ReportConf"
@@ -26061,6 +26505,16 @@ ADD FIELD "LogClear" OF "RequestType" AS logical
   HELP "Clear log on each round"
   ORDER 120
 
+ADD FIELD "Mode" OF "RequestType" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Mode"
+  POSITION 14
+  MAX-WIDTH 16
+  COLUMN-LABEL "Mode"
+  HELP "Mode for executing requests"
+  ORDER 130
+
 ADD INDEX "ReqType" ON "RequestType" 
   AREA "Sta_Index_2"
   UNIQUE
@@ -26799,7 +27253,7 @@ ADD FIELD "MSID" OF "ServiceLCounter" AS integer
   ORDER 110
 
 ADD INDEX "MSSeq" ON "ServiceLCounter" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Data_256"
   PRIMARY
   INDEX-FIELD "MsSeq" ASCENDING 
   INDEX-FIELD "Period" DESCENDING 
@@ -28081,7 +28535,7 @@ ADD INDEX "MsSeq" ON "SubInvoice"
   INDEX-FIELD "MsSeq" ASCENDING 
 
 ADD TABLE "TableToken"
-  AREA "Sta_Data_2_256"
+  AREA "Sta_Data_256"
   DUMP-NAME "TableTok"
 
 ADD FIELD "tablename" OF "TableToken" AS character 
@@ -28103,7 +28557,7 @@ ADD FIELD "tokencode" OF "TableToken" AS character
   ORDER 20
 
 ADD INDEX "tablename" ON "TableToken" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   PRIMARY
   INDEX-FIELD "tablename" ASCENDING 
 
@@ -28884,13 +29338,9 @@ ADD FIELD "ValidTo" OF "TerminalConf" AS date
   ORDER 40
 
 ADD INDEX "TerminalCode" ON "TerminalConf" 
-  AREA "Sta_Index_3"
+  AREA "Sta_Index_2"
   PRIMARY
   INDEX-FIELD "TerminalCode" ASCENDING 
-  INDEX-FIELD "ValidTo" DESCENDING 
-
-ADD INDEX "ValidTo" ON "TerminalConf" 
-  AREA "Sta_Index_3"
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD TABLE "TFConf"
@@ -32210,406 +32660,10 @@ ADD INDEX "CustNum_s" ON "WInvSession"
   AREA "Sta_Index_2"
   INDEX-FIELD "CustNum" ASCENDING 
 
-ADD TABLE "xCDRStreamCounter"
-  AREA "Dyn_Data_128"
-  LABEL "CDR Stream Counter"
-  DESCRIPTION "CDR Stream Counter"
-  DUMP-NAME "cdrstreamcounter"
-
-ADD FIELD "Brand" OF "xCDRStreamCounter" AS character 
-  FORMAT "x(8)"
-  INITIAL ""
-  LABEL "Brand"
-  POSITION 2
-  MAX-WIDTH 16
-  HELP "Code of brand"
-  ORDER 10
-
-ADD FIELD "ImportDate" OF "xCDRStreamCounter" AS date 
-  FORMAT "99-99-99"
-  INITIAL ?
-  LABEL "Import Date"
-  POSITION 3
-  MAX-WIDTH 4
-  COLUMN-LABEL "Import"
-  HELP "Import date"
-  ORDER 20
-
-ADD FIELD "MSCID" OF "xCDRStreamCounter" AS character 
-  FORMAT "x(8)"
-  INITIAL ""
-  LABEL "MSCID"
-  POSITION 4
-  MAX-WIDTH 16
-  HELP "Mobile switching center"
-  ORDER 30
-
-ADD FIELD "OnlineStream" OF "xCDRStreamCounter" AS integer 
-  FORMAT ">>9"
-  INITIAL "0"
-  LABEL "Online Stream"
-  POSITION 5
-  MAX-WIDTH 4
-  COLUMN-LABEL "Stream"
-  HELP "Stream from which CDR was read"
-  ORDER 40
-
-ADD FIELD "CounterType" OF "xCDRStreamCounter" AS character 
-  FORMAT "x(8)"
-  INITIAL ""
-  LABEL "Counter Type"
-  POSITION 6
-  MAX-WIDTH 16
-  COLUMN-LABEL "Type"
-  HELP "Counter type"
-  ORDER 50
-
-ADD FIELD "CDRQty" OF "xCDRStreamCounter" AS integer 
-  FORMAT ">>>>>>>>>9"
-  INITIAL "0"
-  LABEL "Quantity"
-  POSITION 7
-  MAX-WIDTH 4
-  COLUMN-LABEL "Qty"
-  HELP "CDR quantity"
-  ORDER 60
-
-ADD INDEX "ImportDate" ON "xCDRStreamCounter" 
-  AREA "Dyn_Index_1"
-  UNIQUE
-  PRIMARY
-  INDEX-FIELD "Brand" ASCENDING 
-  INDEX-FIELD "ImportDate" ASCENDING 
-  INDEX-FIELD "CounterType" ASCENDING 
-  INDEX-FIELD "MSCID" ASCENDING 
-  INDEX-FIELD "OnlineStream" ASCENDING 
-
-ADD TABLE "xMsReqStatistic"
-  AREA "Sta_Data_256"
-  DUMP-NAME "MsReqStatistic"
-
-ADD FIELD "ReqType" OF "xMsReqStatistic" AS integer 
-  DESCRIPTION "Request type"
-  FORMAT "zz9"
-  INITIAL "0"
-  LABEL "Request type"
-  POSITION 2
-  MAX-WIDTH 4
-  COLUMN-LABEL "Type"
-  HELP "Request type"
-  ORDER 10
-
-ADD FIELD "ReqStatus" OF "xMsReqStatistic" AS integer 
-  DESCRIPTION "Available status of MsRequest"
-  FORMAT "zz9"
-  INITIAL "0"
-  LABEL "MsRequest Status"
-  POSITION 3
-  MAX-WIDTH 4
-  COLUMN-LABEL "RequestStatus"
-  HELP "Request status"
-  ORDER 20
-
-ADD FIELD "ReqStatusCount" OF "xMsReqStatistic" AS integer 
-  DESCRIPTION "The number of msrequests per reqtype and reqstatus"
-  FORMAT ">>>>>>>>>9"
-  INITIAL "0"
-  LABEL "MsRequest Status Count"
-  POSITION 4
-  MAX-WIDTH 4
-  COLUMN-LABEL "ReqStatusCount"
-  HELP "Count of statuses"
-  ORDER 30
-
-ADD FIELD "Brand" OF "xMsReqStatistic" AS character 
-  FORMAT "x(8)"
-  INITIAL ""
-  LABEL "Brand"
-  POSITION 5
-  MAX-WIDTH 16
-  COLUMN-LABEL "Brand"
-  HELP "Code Of Brand"
-  ORDER 40
-
-ADD INDEX "ReqType" ON "xMsReqStatistic" 
-  AREA "Sta_Index_1"
-  UNIQUE
-  PRIMARY
-  INDEX-FIELD "Brand" ASCENDING 
-  INDEX-FIELD "ReqType" ASCENDING 
-  INDEX-FIELD "ReqStatus" ASCENDING 
-
-ADD TABLE "xxAuthLog"
-  AREA "Sta_Data_128"
-  LABEL "AuthLog"
-  DESCRIPTION "3rd party user authentication log"
-  DUMP-NAME "authlogx"
-
-ADD FIELD "Username" OF "xxAuthLog" AS character 
-  FORMAT "x(20)"
-  INITIAL ""
-  LABEL "Username"
-  POSITION 2
-  MAX-WIDTH 40
-  COLUMN-LABEL "Username"
-  ORDER 10
-
-ADD FIELD "IP" OF "xxAuthLog" AS character 
-  FORMAT "x(16)"
-  INITIAL ""
-  LABEL "IP Address"
-  POSITION 3
-  MAX-WIDTH 32
-  COLUMN-LABEL "IP Address"
-  ORDER 20
-
-ADD FIELD "EndUserID" OF "xxAuthLog" AS character 
-  FORMAT "x(40)"
-  INITIAL ""
-  LABEL "EndUserID"
-  POSITION 4
-  MAX-WIDTH 80
-  COLUMN-LABEL "EndUserID"
-  ORDER 30
-
-ADD FIELD "UserAgent" OF "xxAuthLog" AS character 
-  FORMAT "x(40)"
-  INITIAL ""
-  LABEL "UserAgent"
-  POSITION 5
-  MAX-WIDTH 80
-  COLUMN-LABEL "UserAgent"
-  ORDER 40
-
-ADD FIELD "MethodName" OF "xxAuthLog" AS character 
-  FORMAT "x(40)"
-  INITIAL ""
-  LABEL "MethodName"
-  POSITION 6
-  MAX-WIDTH 80
-  COLUMN-LABEL "MethodName"
-  ORDER 50
-
-ADD FIELD "ErrorMsg" OF "xxAuthLog" AS character 
-  FORMAT "x(60)"
-  INITIAL ""
-  LABEL "ErrorMsg"
-  POSITION 7
-  MAX-WIDTH 120
-  COLUMN-LABEL "ErrorMsg"
-  ORDER 60
-
-ADD FIELD "TimeStamp" OF "xxAuthLog" AS datetime 
-  FORMAT "99-99-9999 HH:MM:SS"
-  INITIAL ?
-  LABEL "TimeStamp"
-  POSITION 8
-  MAX-WIDTH 8
-  COLUMN-LABEL "TimeStamp"
-  ORDER 70
-
-ADD FIELD "ResponseTS" OF "xxAuthLog" AS datetime 
-  FORMAT "99-99-9999 HH:MM:SS"
-  INITIAL ?
-  LABEL "ResponseTS"
-  POSITION 9
-  MAX-WIDTH 8
-  COLUMN-LABEL "ResponseTS"
-  ORDER 80
-
-ADD FIELD "ErrorCode" OF "xxAuthLog" AS integer 
-  FORMAT "->>>>9"
-  INITIAL "0"
-  LABEL "ErrorCode"
-  POSITION 10
-  MAX-WIDTH 4
-  COLUMN-LABEL "ErrorCode"
-  HELP "XML-RPC framework error code"
-  ORDER 90
-
-ADD FIELD "TransactionID" OF "xxAuthLog" AS character 
-  FORMAT "x(15)"
-  INITIAL ""
-  LABEL "TransactionID"
-  POSITION 11
-  MAX-WIDTH 30
-  HELP "Transaction ID"
-  ORDER 100
-
-ADD INDEX "TimeStamp" ON "xxAuthLog" 
-  AREA "Sta_Index_2"
-  PRIMARY
-  INDEX-FIELD "TimeStamp" DESCENDING 
-
-ADD INDEX "Username" ON "xxAuthLog" 
-  AREA "Sta_Index_2"
-  INDEX-FIELD "Username" ASCENDING 
-
-ADD TABLE "xxMsReqStatisticQ"
-  AREA "Sta_Data_32"
-  DUMP-NAME "MsReqStatisticQ"
-
-ADD FIELD "Brand" OF "xxMsReqStatisticQ" AS character 
-  FORMAT "x(8)"
-  INITIAL ""
-  LABEL "Brand"
-  POSITION 2
-  MAX-WIDTH 16
-  COLUMN-LABEL "Brand"
-  HELP "Code Of Brand"
-  ORDER 10
-
-ADD FIELD "ReqType" OF "xxMsReqStatisticQ" AS integer 
-  DESCRIPTION "MsRequest type"
-  FORMAT "zz9"
-  INITIAL "0"
-  LABEL "MsRequest type"
-  POSITION 3
-  MAX-WIDTH 4
-  HELP "Type Of MsRequest"
-  ORDER 20
-
-ADD FIELD "ReqStatus" OF "xxMsReqStatisticQ" AS integer 
-  DESCRIPTION "MsRequest status"
-  FORMAT "zz9"
-  INITIAL "0"
-  LABEL "MsRequest Status"
-  POSITION 4
-  MAX-WIDTH 4
-  COLUMN-LABEL "ReqStat"
-  HELP "Status Code"
-  ORDER 30
-
-ADD FIELD "ReqStatUpdate" OF "xxMsReqStatisticQ" AS integer 
-  DESCRIPTION "MsRequest status count update"
-  FORMAT "-9"
-  INITIAL "0"
-  LABEL "Update Count"
-  POSITION 5
-  MAX-WIDTH 4
-  COLUMN-LABEL "Update"
-  HELP "Update status count"
-  ORDER 40
-
-ADD INDEX "Brand" ON "xxMsReqStatisticQ" 
-  AREA "Sta_Index_1"
-  PRIMARY
-  INDEX-FIELD "Brand" ASCENDING 
-
-ADD TABLE "xxyBank"
-  AREA "Sta_Data_256"
-  LABEL "xxBank"
-  DESCRIPTION "xxBank"
-  DUMP-NAME "xxBank"
-
-ADD FIELD "BankOffice" OF "xxyBank" AS character 
-  FORMAT "x(4)"
-  INITIAL ""
-  LABEL "Office"
-  POSITION 3
-  MAX-WIDTH 80
-  COLUMN-LABEL "Office"
-  HELP "Bank's name"
-  ORDER 20
-  MANDATORY
-
-ADD FIELD "ZipCode" OF "xxyBank" AS character 
-  FORMAT "x(5)"
-  INITIAL ""
-  LABEL "Zip"
-  POSITION 4
-  MAX-WIDTH 4
-  COLUMN-LABEL "Zip"
-  HELP "ZIP code"
-  ORDER 30
-
-ADD FIELD "City" OF "xxyBank" AS character 
-  FORMAT "x(16)"
-  INITIAL ""
-  LABEL "City"
-  POSITION 5
-  MAX-WIDTH 32
-  COLUMN-LABEL "City"
-  HELP "Location city"
-  ORDER 40
-
-ADD FIELD "Address" OF "xxyBank" AS character 
-  FORMAT "x(20)"
-  INITIAL ""
-  LABEL "Street"
-  POSITION 6
-  MAX-WIDTH 40
-  COLUMN-LABEL "Street"
-  HELP "Street address"
-  ORDER 50
-
-ADD FIELD "BankId" OF "xxyBank" AS character 
-  FORMAT "X(4)"
-  INITIAL ""
-  LABEL "BankId"
-  POSITION 7
-  MAX-WIDTH 18
-  COLUMN-LABEL "BankId"
-  HELP "Identification code for bank"
-  ORDER 980
-
-ADD FIELD "Brand" OF "xxyBank" AS character 
-  FORMAT "x(8)"
-  INITIAL ""
-  LABEL "Brand"
-  POSITION 8
-  MAX-WIDTH 16
-  COLUMN-LABEL "Brand"
-  HELP "Code Of Brand"
-  ORDER 990
-
-ADD FIELD "Name2" OF "xxyBank" AS character 
-  FORMAT "x(20)"
-  INITIAL ""
-  LABEL "Name2"
-  POSITION 9
-  MAX-WIDTH 80
-  COLUMN-LABEL "Name2"
-  HELP "Bank's name"
-  ORDER 1010
-
-ADD FIELD "Name" OF "xxyBank" AS character 
-  FORMAT "x(20)"
-  INITIAL ""
-  LABEL "Name"
-  POSITION 10
-  MAX-WIDTH 80
-  COLUMN-LABEL "Name"
-  HELP "Bank's name"
-  ORDER 1000
-
-ADD FIELD "FileDate" OF "xxyBank" AS date 
-  FORMAT "99-99-99"
-  INITIAL ?
-  LABEL "File Date"
-  POSITION 11
-  MAX-WIDTH 4
-  COLUMN-LABEL "Date"
-  HELP "Date of the file from which data was read"
-  ORDER 1020
-
-ADD INDEX "BankId" ON "xxyBank" 
-  AREA "Sta_Index_2"
-  PRIMARY
-  INDEX-FIELD "Brand" ASCENDING 
-  INDEX-FIELD "BankId" ASCENDING 
-  INDEX-FIELD "BankOffice" ASCENDING 
-
-UPDATE TABLE "BDest"
-  BUFFER-POOL "Alternate"
-
 UPDATE TABLE "BillItem"
   BUFFER-POOL "Alternate"
 
 UPDATE INDEX "CustNum" OF "BillTarget"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "CustCat"
   BUFFER-POOL "Alternate"
 
 UPDATE TABLE "Customer"
@@ -32624,61 +32678,10 @@ UPDATE INDEX "CustNum_s" OF "Customer"
 UPDATE INDEX "InvCust" OF "Customer"
   BUFFER-POOL "Alternate"
 
-UPDATE INDEX "FFNum" OF "FFItem"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "InvSeq"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "InvSeq" OF "InvSeq"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "MsSeq" OF "InvSeq"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "IPRange"
-  BUFFER-POOL "Alternate"
-
 UPDATE TABLE "MServiceLimit"
   BUFFER-POOL "Alternate"
 
-UPDATE TABLE "MXItem"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "MXSeq" OF "MXItem"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "PListConf"
-  BUFFER-POOL "Alternate"
-
 UPDATE TABLE "ProgLimit"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "Region"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "RepText"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "MSSeq" OF "SaldoCounter"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "ServiceLimit"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "ServiceLimitGroup"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "ServiceLimitTarget"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "SLGAnalyse"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "Tariff"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "VATCode"
   BUFFER-POOL "Alternate"
 
 .
@@ -32686,4 +32689,4 @@ PSC
 bufpool=yes
 cpstream=1252
 .
-0000665841
+0000666140

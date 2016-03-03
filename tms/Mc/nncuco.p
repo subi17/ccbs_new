@@ -142,7 +142,7 @@ DEF BUFFER bBillItem FOR BillItem.
 form                                                          
     lcTarget              COLUMN-LABEL "Target"        FORMAT "X(8)"
     FixedFee.KeyValue     COLUMN-LABEL "TargetID"      FORMAT "X(8)" 
-    FixedFee.BillCode     COLUMN-LABEL "Billing Item"  FORMAT "X(16)"
+    FixedFee.BillCode     COLUMN-LABEL "Billing Item"  FORMAT "X(15)"
     FixedFee.Amt          column-label "Amount"
     FixedFee.BegPeriod    column-label "From"
     FixedFee.EndPeriod    COLUMN-LABEL "To"
@@ -255,7 +255,8 @@ FORM
    FixedFeeTF.BankRespDate COLON 20  SKIP
    FixedFeeTF.Amount       COLON 20  SKIP         
    FixedFeeTF.ResidualAmount COLON 20  SKIP
-   FixedFeeTF.OrgId        COLON 20   SKIP(1)
+   FixedFeeTF.OrderID      COLON 20   SKIP
+   FixedFeeTF.OrgId        COLON 20   SKIP
    FixedFeeTF.CancelStatus COLON 20 FORMAT "x(10)"   SKIP 
    FixedFeeTF.CancelReason COLON 20 FORMAT "x(10)"   SKIP 
    FixedfeeTF.CancelResp   COLON 20 SKIP
@@ -1175,6 +1176,7 @@ repeat WITH FRAME sel:
                FixedFeeTF.BankRespDate 
                FixedFeeTF.BankResult   
                FixedFeeTF.CancelDate   
+               FixedFeeTF.OrderId
                FixedFeeTF.OrgId        
                FixedFeeTF.ResidualAmount
                FixedFeeTF.Amount            
