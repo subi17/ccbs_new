@@ -411,8 +411,9 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
                           DPMember.HostTable EQ "MobSub" AND
                           DPMember.KeyValue EQ SingleFee.KeyValue AND
                           DPMember.OrderId EQ SingleFee.orderId AND
-                          DPMember.ValidFrom LE  ldaFromDate AND
-                          DPMemBer.ValidTo GE ldaToDate
+                          DPMember.ValidFrom LE ldaToDate AND
+                          DPMemBer.ValidTo GE ldaFromDate AND
+                          DPMemBer.ValidTo GE DPMember.ValidFrom
                           NO-LOCK NO-ERROR.
                IF AVAIL DPMember THEN DO: 
                   /* only one discount should be found */
