@@ -1,1 +1,1 @@
-{triggers/hpddelete_generic.i CustContact CUSTCONTACT CustNum CustType}
+{triggers/hpddelete_generic.i CustContact CUSTCONTACT Common CustNum CustType}

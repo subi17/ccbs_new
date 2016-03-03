@@ -810,7 +810,7 @@ PROCEDURE pTriggerEvents:
    DEF VAR ldTermDate                 AS DATE NO-UNDO.
    DEF VAR liTermTime                 AS INT  NO-UNDO.
    DEF VAR ldeStartStamp              AS DEC  NO-UNDO.
-   DEF VAR ldtTimeStamp               AS DATETIME NO-UNDO.
+   DEF VAR ldtTimeStamp               AS DATETIME-TZ NO-UNDO.
    DEF VAR lcReqChar                  AS CHAR NO-UNDO.
    DEF VAR lcDel2                     AS CHAR NO-UNDO.
    DEF VAR lcServList                 AS CHAR NO-UNDO.
@@ -822,7 +822,7 @@ PROCEDURE pTriggerEvents:
 
    ASSIGN ldStartDate   = DATE(MONTH(ldTermDate),1,YEAR(ldTermDate))
           ldeStartStamp = fMake2Dt(ldStartDate,0)
-          ldtTimeStamp  = DATETIME(TODAY,MTIME) + 15000
+          ldtTimeStamp  = ADD-INTERVAL(NOW, 15, "seconds")
           lcServList    = {&HPD_SERVICES}
           liNumEntries  = NUM-ENTRIES(lcServList)
           lcDel2        = CHR(255).
@@ -841,11 +841,10 @@ PROCEDURE pTriggerEvents:
 
       CREATE Common.RepLog.
       ASSIGN
-         Common.RepLog.RecordId  = RECID(MServiceLimit)
+         Common.RepLog.RowID  = STRING(ROWID(MServiceLimit))
          Common.RepLog.TableName = "MServiceLimit"
          Common.RepLog.EventType = "MODIFY"
-         Common.RepLog.KeyValue  = STRING(MServiceLimit.MSID)
-         Common.RepLog.EventTS   = ldtTimeStamp.
+         Common.RepLog.EventTime = ldtTimeStamp.
 
       RELEASE Common.RepLog.
  
@@ -865,13 +864,10 @@ PROCEDURE pTriggerEvents:
 
       CREATE Common.RepLog.
       ASSIGN
-         Common.RepLog.RecordId  = RECID(MServiceLPool)
+         Common.RepLog.RowID     = STRING(ROWID(MServiceLPool))
          Common.RepLog.TableName = "MServiceLPool"
          Common.RepLog.EventType = "MODIFY"
-         Common.RepLog.KeyValue  = STRING(MServiceLPool.MsSeq) + lcDel2 +
-                                   STRING(MServiceLPool.SLSeq) + lcDel2 +
-                                   STRING(MServiceLPool.EndTS)
-         Common.RepLog.EventTS   = ldtTimeStamp.
+         Common.RepLog.EventTime = ldtTimeStamp.
 
       RELEASE Common.RepLog.
  
@@ -883,11 +879,10 @@ PROCEDURE pTriggerEvents:
 
       CREATE Mobile.RepLog.
       ASSIGN
-         Mobile.RepLog.RecordId  = RECID(DCCLI)
+         Mobile.RepLog.RowID     = STRING(ROWID(DCCLI))
          Mobile.RepLog.TableName = "DCCLI"
          Mobile.RepLog.EventType = "MODIFY"
-         Mobile.RepLog.KeyValue  = STRING(DCCLI.PerContractID)
-         Mobile.RepLog.EventTS   = ldtTimeStamp.
+         Mobile.RepLog.EventTime = ldtTimeStamp.
 
       RELEASE Mobile.RepLog.
 
@@ -903,13 +898,10 @@ PROCEDURE pTriggerEvents:
 
          CREATE Mobile.RepLog.
          ASSIGN
-            Mobile.RepLog.RecordId  = RECID(SubSer)
+            Mobile.RepLog.RowID     = STRING(ROWID(SubSer))
             Mobile.RepLog.TableName = "SubSer"
             Mobile.RepLog.EventType = "MODIFY"
-            Mobile.RepLog.KeyValue  = STRING(SubSer.MsSeq) + lcDel2 +
-                                      SubSer.ServCom       + lcDel2 +
-                                      STRING(SubSer.SSDate)
-            Mobile.RepLog.EventTS   = ldtTimeStamp.
+            Mobile.RepLog.EventTime = ldtTimeStamp.
 
          RELEASE Mobile.RepLog.
 

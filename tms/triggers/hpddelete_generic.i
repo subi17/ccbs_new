@@ -26,35 +26,35 @@ ASSIGN
                           &ENDIF
                           &IF '{5}' NE ''
                           &THEN
-                          + {&HPDKeyDelimiter} + STRING(1}.{5})
+                          + {&HPDKeyDelimiter} + STRING({1}.{5})
                           &ENDIF
                           &IF '{6}' NE ''
                           &THEN
-                          + {&HPDKeyDelimiter} + STRING(1}.{6})
+                          + {&HPDKeyDelimiter} + STRING({1}.{6})
                           &ENDIF
                           &IF '{7}' NE ''
                           &THEN
-                          + {&HPDKeyDelimiter} + STRING(1}.{7})
+                          + {&HPDKeyDelimiter} + STRING({1}.{7})
                           &ENDIF
                           &IF '{8}' NE ''
                           &THEN
-                          + {&HPDKeyDelimiter} + STRING(1}.{8})
+                          + {&HPDKeyDelimiter} + STRING({1}.{8})
                           &ENDIF
                           &IF '{9}' NE ''
                           &THEN
-                          + {&HPDKeyDelimiter} + STRING(1}.{9})
+                          + {&HPDKeyDelimiter} + STRING({1}.{9})
                           &ENDIF
                           &IF '{10}' NE ''
                           &THEN
-                          + {&HPDKeyDelimiter} + STRING(1}.{10})
+                          + {&HPDKeyDelimiter} + STRING({1}.{10})
                           &ENDIF
                           &IF '{11}' NE ''
                           &THEN
-                          + {&HPDKeyDelimiter} + STRING(1}.{11})
+                          + {&HPDKeyDelimiter} + STRING({1}.{11})
                           &ENDIF
                           &IF '{12}' NE ''
                           &THEN
-                          + {&HPDKeyDelimiter} + STRING(1}.{12})
+                          + {&HPDKeyDelimiter} + STRING({1}.{12})
                           &ENDIF
    .
 

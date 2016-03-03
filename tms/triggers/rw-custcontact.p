@@ -1,1 +1,1 @@
-{triggers/hpdwrite_generic.i CustContact CUSTCONTACT CustNum CustType}
+{triggers/hpdwrite_generic.i CustContact CUSTCONTACT Common CustNum CustType}

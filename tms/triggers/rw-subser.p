@@ -24,7 +24,7 @@ ASSIGN
 IF Mobile.RepLog.EventType = "DELETE" 
 THEN Mobile.RepLog.KeyValue = STRING(SubSer.MsSeq) + {&HPDKeyDelimiter} +
                               SubSer.ServCom + {&HPDKeyDelimiter} +
-                              STRING(SubSer.SSDate)
+                              STRING(SubSer.SSDate).
 ELSE Mobile.RepLog.RowID    = STRING(ROWID(SubSer)).
 
 IF NOT NEW(SubSer)
