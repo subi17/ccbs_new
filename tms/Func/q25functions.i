@@ -21,6 +21,7 @@
 DEF VAR lcTestStartDay AS CHAR NO-UNDO.
 DEF VAR lcTestEndDay AS CHAR NO-UNDO.
 DEF VAR lcExecuteDate AS CHAR NO-UNDO.
+DEF VAR ldaExecuteDate AS DATE NO-UNDO.
 DEF VAR liQ25Logging AS INT NO-UNDO.
 DEF VAR lcQ25LogDir          AS CHAR NO-UNDO.
 DEF VAR lcQ25SpoolDir        AS CHAR NO-UNDO.
@@ -577,7 +578,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             lcTemplateName = fgetTemplateName(liPhase).  
             IF (iiExecType EQ {&Q25_EXEC_TYPE_CUST_LOG_GENERATION}) AND
                lcTemplateName BEGINS "Q25" THEN DO:
-               lcLogText = DCCLI.CLI + ";" + STRING(TODAY) + ";" +
+               lcLogText = DCCLI.CLI + ";" + STRING(ldaExecuteDate) + ";" +
                            lcTemplateName.
                liLogType = {&Q25_LOGGING_CUST_LOGS}.
             END.

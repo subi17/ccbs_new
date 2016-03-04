@@ -30,7 +30,6 @@ DEF VAR liTempCount              AS INT  NO-UNDO.
 DEF VAR lcLogText                AS CHAR NO-UNDO.
 DEF VAR liTestStartDay           AS CHAR NO-UNDO.
 DEF VAR liTestEndDay             AS CHAR NO-UNDO.
-DEF VAR ldaExecuteDate           AS DATE NO-UNDO.
 DEF VAR liWeekdayCount           AS INT  NO-UNDO.
 DEF VAR liSendingStartDay        AS INT  NO-UNDO.
 DEF VAR liRunMode                AS INT  NO-UNDO.

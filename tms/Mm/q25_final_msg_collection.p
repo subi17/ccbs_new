@@ -21,7 +21,6 @@ DEF VAR ldaStartDateMonth24 AS DATE NO-UNDO.
 DEF VAR ldaEndDateMonth24   AS DATE NO-UNDO.
 DEF VAR liSendDay         AS INT NO-UNDO.
 DEF VAR ldaTempDate       AS DATE NO-UNDO.
-DEF VAR ldaExecuteDate    AS DATE NO-UNDO.
 DEF VAR liRunMode         AS INT NO-UNDO.
 
 liRunMode = INT(SESSION:PARAMETER). /* get crontab input parameter, if this is
