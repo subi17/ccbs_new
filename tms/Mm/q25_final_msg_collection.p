@@ -23,7 +23,7 @@ DEF VAR liSendDay         AS INT NO-UNDO.
 DEF VAR ldaTempDate       AS DATE NO-UNDO.
 DEF VAR liRunMode         AS INT NO-UNDO.
 
-liRunMode = INT(SESSION:PARAMETER). /* get crontab input parameter, if this is
+liRunMode = INT(SESSION:PARAMETER).  /*get crontab input parameter, if this is
                                        logging run (0) for making log file or
                                        actual SMS calculation/sending (1) */
 
