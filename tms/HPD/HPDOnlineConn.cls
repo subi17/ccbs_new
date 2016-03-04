@@ -178,7 +178,7 @@ CLASS HPD.HPDOnlineConn INHERITS HPD.HPDOnline:
          THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot connect to " + lcDBLogicalName + " database located in " + lcDBPath, 1).
 
          IF LOG-MANAGER:LOGFILE-NAME <> ?
-         THEN LOG-MANAGER:WRITE-MESSAGE("Connected database " + DBConf.Name, "INFO").
+         THEN LOG-MANAGER:WRITE-MESSAGE("Connected database " + lcDBLogicalName, "INFO").
 
          lcLastDB = lcDBLogicalName.
 
