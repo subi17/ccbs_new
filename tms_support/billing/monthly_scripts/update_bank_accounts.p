@@ -23,8 +23,8 @@ END.
 def stream sread.
 def stream slog.
 
-input stream sread from "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4186.csv".
-output stream slog to "/apps/yoigo/tms_support/billing/monthly_scripts/logs/yot_4186.log".
+input stream sread from "logs/yot_4252.csv".
+output stream slog to "logs/yot_4252.log".
    
 def var lcline as char no-undo.
 def var licust as int no-undo.
@@ -76,8 +76,16 @@ repeat trans:
       RUN StarEventSetOldBuffer(lhCustomer).
       customer.bankacc = lcnewbank.
       RUN StarEventMakeModifyEvent(lhCustomer).
+
+      /* Write memo */
+      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                 "customer",
+                 STRING(Customer.CustNum),
+                 Customer.CustNum,
+                 "Cuenta EVO caducada",
+                 "Cuenta EVO caducada. Actualización masiva comunicada por EVO: " + lcoldbank + " -> " + lcnewbank ).
+
       release customer.
-      
       lcresult = "Updated".
    end.    
    

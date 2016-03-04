@@ -40,6 +40,7 @@
 {terminal_financing.i}
 {ordercancel.i}
 {fprepaidfee.i}
+{fcreditreq.i}
 
 DEF BUFFER bPendRequest FOR MsRequest.
 DEF BUFFER bOrigRequest FOR MsRequest.
@@ -269,12 +270,14 @@ PROCEDURE pContractActivation:
    DEF VAR liConCount        AS INT  NO-UNDO.
    DEF VAR ldeFeeAmount AS DEC NO-UNDO INIT ?.
    DEF VAR ldeResidualFeeDisc AS DEC NO-UNDO. 
-   DEF VAR ldaResidualFee AS DATE NO-UNDO. 
+   DEF VAR ldaResidualFee AS DATE NO-UNDO.
+   DEF VAR llQ25CreditNote AS LOG NO-UNDO. 
                     
    /* DSS related variables */
    DEF VAR lcResult      AS CHAR NO-UNDO.
    
    DEF BUFFER bOrigReq   FOR MsRequest.
+   DEF BUFFER bQ25SingleFee FOR SingleFee.
    
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
@@ -531,64 +534,7 @@ PROCEDURE pContractActivation:
 
          /* Q25 creation validation */
          IF MsRequest.ReqCParam3 EQ "RVTERM12" THEN DO:
-
-            FIND SingleFee NO-LOCK USE-INDEX Custnum WHERE
-                 SingleFee.Brand       = gcBrand AND
-                 SingleFee.Custnum     = MsOwner.CustNum AND
-                 SingleFee.HostTable   = "Mobsub" AND
-                 SingleFee.KeyValue    = STRING(MsOwner.MsSeq) AND
-                 SingleFee.SourceTable = "DCCLI" AND
-                 SingleFee.SourceKey   = STRING(MsRequest.ReqIParam3) AND
-                 SingleFee.CalcObj     = "RVTERM" NO-ERROR.
-
-            IF NOT AVAIL SingleFee THEN DO:
-               fReqError("Residual fee not found").
-               RETURN.
-            END.
-
-            IF SingleFee.Billed EQ TRUE AND
-               NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
-                                  Invoice.Invnum = SingleFee.Invnum AND
-                                  Invoice.InvType = 99) THEN DO:
-               fReqError("Residual fee already billed").
-               RETURN.
-            END.
-
-            /* Find original installment contract */   
-            FIND FIRST DCCLI NO-LOCK WHERE
-                       DCCLI.Brand   = gcBrand AND
-                       DCCLI.DCEvent BEGINS "PAYTERM" AND
-                       DCCLI.MsSeq   = MsRequest.MsSeq AND 
-                       DCCLI.PerContractId = MsRequest.ReqIParam3 NO-ERROR.
-
-            IF NOT AVAIL DCCLI THEN DO:
-               fReqError("Installment contract not found").
-               RETURN.
-            END.
-
-            IF DCCLI.TermDate NE ? THEN DO:
-               fReqError("Installment contract terminated").
-               RETURN.
-            END.
-
-            RELEASE DCCLI.
-
-            ldaResidualFee = fInt2Date(SingleFee.Concerns[1],0).
-            ldeFeeAmount = SingleFee.Amt.
-
-            FOR FIRST DiscountPlan NO-LOCK WHERE
-                      DiscountPlan.Brand = gcBrand AND
-                      DiscountPlan.DPRuleID = "RVTERMDT1DISC",
-                 EACH DPMember NO-LOCK WHERE
-                      DPMember.DPId      = DiscountPlan.DPId AND
-                      DPMember.HostTable = "MobSub" AND
-                      DPMember.KeyValue  = STRING(MsRequest.MsSeq) AND
-                      DPMember.ValidTo >= ldaResidualFee AND
-                      DPMember.ValidTo <= fLastDayOfMonth(ldaResidualFee) AND
-                      DPMember.ValidTo >= DPMember.ValidFrom:
-                 ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
-            END.
-               
+            
             FIND FIRST FMItem NO-LOCK WHERE
                        FMITem.Brand = gcBrand AND
                        FMItem.Feemodel = DayCampaign.FeeModel AND
@@ -599,12 +545,84 @@ PROCEDURE pContractActivation:
                fReqError("RVTERM12 fee model not found").
                RETURN.
             END.
+            
+            IF MSRequest.ReqSource EQ
+               {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN DO:
+               
+               ASSIGN
+                  ldeResidualFeeDisc = 0
+                  ldeFeeAmount = TRUNC(MsRequest.ReqDParam2 / FMItem.FFItemQty,
+                                       2).
+            END.
+            ELSE DO:
+               
+               FIND bQ25SingleFee NO-LOCK USE-INDEX Custnum WHERE
+                    bQ25SingleFee.Brand       = gcBrand AND
+                    bQ25SingleFee.Custnum     = MsOwner.CustNum AND
+                    bQ25SingleFee.HostTable   = "Mobsub" AND
+                    bQ25SingleFee.KeyValue    = STRING(MsOwner.MsSeq) AND
+                    bQ25SingleFee.SourceTable = "DCCLI" AND
+                    bQ25SingleFee.SourceKey   = STRING(MsRequest.ReqIParam3) AND
+                    bQ25SingleFee.CalcObj     = "RVTERM" NO-ERROR.
 
-            ASSIGN
-               ldeResidualFeeDisc = ldeFeeAmount
-               ldeFeeAmount = ROUND(ldeFeeAmount / FMItem.FFItemQty,2)
-               /* map q25 fee to original residual fee */
-               liOrderId = SingleFee.OrderId.
+               IF NOT AVAIL bQ25SingleFee THEN DO:
+                  fReqError("Residual fee not found").
+                  RETURN.
+               END.
+
+               /* If Quota 25 is already billed then create a 
+               "credit note" with equivalent amount. */
+               IF bQ25SingleFee.Billed EQ TRUE AND
+                  NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
+                                     Invoice.Invnum = bQ25SingleFee.Invnum AND
+                                     Invoice.InvType = 99) THEN DO:
+                  IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_NEWTON} THEN
+                     llQ25CreditNote = TRUE.
+                  ELSE DO:
+                     fReqError("Residual fee already billed").
+                     RETURN.
+                  END.
+               END.
+               ldaResidualFee = fInt2Date(bQ25SingleFee.Concerns[1],0).
+               ldeFeeAmount = bQ25SingleFee.Amt.
+
+               /* Find original installment contract */   
+               FIND FIRST DCCLI NO-LOCK WHERE
+                          DCCLI.Brand   = gcBrand AND
+                          DCCLI.DCEvent BEGINS "PAYTERM" AND
+                          DCCLI.MsSeq   = MsRequest.MsSeq AND 
+                          DCCLI.PerContractId = MsRequest.ReqIParam3 NO-ERROR.
+
+               IF NOT AVAIL DCCLI THEN DO:
+                  fReqError("Installment contract not found").
+                  RETURN.
+               END.
+
+               IF DCCLI.TermDate NE ? THEN DO:
+                  fReqError("Installment contract terminated").
+                  RETURN.
+               END.
+
+               RELEASE DCCLI.
+               
+               FOR EACH DiscountPlan NO-LOCK WHERE
+                        DiscountPlan.Brand = gcBrand AND
+                       (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
+                        DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
+                   EACH DPMember NO-LOCK WHERE
+                        DPMember.DPId      = DiscountPlan.DPId AND
+                        DPMember.HostTable = "MobSub" AND
+                        DPMember.KeyValue  = STRING(MsRequest.MsSeq) AND
+                        DPMember.ValidTo >= ldaResidualFee AND
+                        DPMember.ValidTo <= fLastDayOfMonth(ldaResidualFee) AND
+                        DPMember.ValidTo >= DPMember.ValidFrom:
+                   ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
+               END.
+               
+               ASSIGN
+                  ldeResidualFeeDisc = ldeFeeAmount
+                  ldeFeeAmount = TRUNC(ldeFeeAmount / FMItem.FFItemQty,2).
+            END.
 
             IF ldeFeeAmount <= 0 THEN DO:
                fReqError("Zero or negative quota 25 extension amount").
@@ -918,9 +936,13 @@ PROCEDURE pContractActivation:
    IF MsRequest.CreateFees AND
       (DayCampaign.FeeModel > "" OR MsRequest.ReqCparam5 > "") THEN DO:
 
-      IF lcDCEvent BEGINS "PAYTERM" THEN ASSIGN
-         liOrderid = fGetPaytermOrderId(msrequest.msrequest)
+      IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN ASSIGN
+         liOrderid = fGetInstallmentOrderId(msrequest.msrequest)
          lcReqSource = ";" + MsRequest.Reqsource. 
+               
+      /* map q25 fee to original residual fee */
+      IF AVAIL bQ25SingleFee THEN
+         liOrderId = bQ25SingleFee.OrderId.
 
       RUN creasfee.p (MsOwner.CustNum,
                     (IF (lcDCEvent = {&DSS} + "_UPSELL" OR
@@ -952,7 +974,9 @@ PROCEDURE pContractActivation:
       ELSE IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} AND
          DayCampaign.DCEvent BEGINS "PAYTERM" AND
          AVAIL DCCLI AND
-         MsRequest.ReqDParam2 > 0 THEN DO:
+         MsRequest.ReqDParam2 > 0 AND 
+         MsRequest.ReqSource NE {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE}
+         THEN DO:
 
          RUN creasfee.p(MsOwner.CustNum,
                        MsOwner.MsSeq,
@@ -980,6 +1004,51 @@ PROCEDURE pContractActivation:
 
       END.
       ELSE IF lcDCEvent EQ "RVTERM12" AND
+         AVAIL bQ25SingleFee AND
+         llQ25CreditNote EQ TRUE THEN DO:
+
+         ASSIGN
+           lcError = ""
+           liRequest = 0.
+
+         FOR FIRST Invoice NO-LOCK WHERE
+                   Invoice.InvNum = bQ25SingleFee.InvNum AND
+                   Invoice.InvType = 1,
+             FIRST SubInvoice NO-LOCK WHERE
+                   Subinvoice.InvNum = Invoice.InvNum AND
+                   Subinvoice.MsSeq = MsOwner.MsSeq,
+              EACH InvRow NO-LOCK WHERE
+                   InvRow.InvNum = Invoice.InvNum AND
+                   InvRow.SubInvNum = SubInvoice.SubInvNum AND
+                   InvRow.BillCode = bQ25SingleFee.BillCode AND
+                   InvRow.CreditInvNum = 0 AND
+                   InvRow.Amt >= bQ25SingleFee.Amt:
+            
+            IF InvRow.OrderId > 0 AND
+               bQ25SingleFee.OrderID > 0 AND
+               InvRow.OrderId NE bQ25SingleFee.OrderId THEN NEXT.
+         
+            liRequest = fFullCreditNote(Invoice.InvNum,
+                                    STRING(SubInvoice.SubInvNum),
+                                    "InvRow=" + STRING(InvRow.InvRowNum) + "|" +
+                                    "InvRowAmt=" + STRING(MIN(InvRow.Amt,
+                                                       bQ25SingleFee.Amt)),
+                                    "Correct",
+                                    "2013",
+                                    "",
+                                    OUTPUT lcError).
+            LEAVE.
+         END.
+            
+         IF liRequest = 0 THEN
+            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                             "MobSub",
+                             STRING(MsRequest.MsRequest),
+                             MsRequest.Custnum,
+                             "CREDIT NOTE CREATION FAILED",
+                             "ERROR:" + lcError). 
+      END. 
+      ELSE IF lcDCEvent EQ "RVTERM12" AND
          ldeResidualFeeDisc > 0 THEN DO:
 
          fAddDiscountPlanMember(MsOwner.MsSeq,
@@ -987,6 +1056,7 @@ PROCEDURE pContractActivation:
                                ldeResidualFeeDisc,
                                ldaResidualFee,
                                1,
+                               bQ25SingleFee.OrderId, /* Q25 OrderId */
                                OUTPUT lcError).
          /* write possible error to an order memo */
          IF lcError > "" THEN
@@ -2019,7 +2089,7 @@ PROCEDURE pContractTermination:
                  DCCLI.Brand         = gcBrand              AND
                  DCCLI.DCEvent       = lcDCEvent            AND
                  DCCLI.MsSeq         = MsRequest.MsSeq      AND
-                (IF DCCLI.DCEvent BEGINS "PAYTERM" THEN
+                (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
                     DCCLI.PerContractID = MsRequest.ReqIParam3 
                  ELSE TRUE)                                 AND  
                  DCCLI.ValidTo      >= ldtActDate           AND
@@ -2211,8 +2281,7 @@ PROCEDURE pContractTermination:
    END.
       
    llCancelInstallment = (lcTerminationType EQ "canc" AND
-                          DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} AND
-                          DayCampaign.DCEvent BEGINS "PAYTERM").
+                          DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}).
    llCancelOrder =
       (MsRequest.ReqSource = {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} AND
        DCCLI.ValidTo < DCCLI.ValidFrom)
@@ -2240,7 +2309,7 @@ PROCEDURE pContractTermination:
             FMItem.FromDate <= FixedFee.BegDate AND
             FMItem.ToDate   >= FixedFee.BegDate:
       
-      IF FixedFee.CalcObj BEGINS "PAYTERM"  AND
+      IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} AND
          FixedFee.SourceKey NE STRING(DCCLI.PerContractID) THEN NEXT.   
 
       /* If last month is usage based and bundle termination is   */
@@ -2357,7 +2426,8 @@ PROCEDURE pContractTermination:
             from order cancellation then delete single fee
             otherwise update the billing period */
          IF llCancelOrder OR llCancelInstallment OR
-            MsRequest.ReqSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN DO:
+            MsRequest.ReqSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE}
+            THEN DO:
             
             IF llDoEvent THEN
                RUN StarEventMakeDeleteEventWithMemo(
@@ -3119,7 +3189,7 @@ PROCEDURE pContractReactivation:
       FIND FIRST DCCLI WHERE DCCLI.Brand         = gcBrand              AND
                              DCCLI.DCEvent       = lcDCEvent            AND
                              DCCLI.MsSeq         = MsRequest.MsSeq      AND
-                             (IF DCCLI.DCEvent BEGINS "PAYTERM" THEN
+                             (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
                                  DCCLI.PerContractID = MsRequest.ReqIParam3 
                               ELSE TRUE)                                AND  
                              DCCLI.ValidTo      <= ldtActDate NO-LOCK NO-ERROR.
@@ -3163,7 +3233,7 @@ PROCEDURE pContractReactivation:
              FixedFee.HostTable = "MobSub"  AND
              FixedFee.KeyValue  = STRING(MsRequest.MsSeq) AND
              FixedFee.CalcObj   = DayCampaign.DCEvent AND
-             (IF FixedFee.CalcObj BEGINS "PAYTERM"  THEN
+             (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
               FixedFee.SourceTable = "DCCLI" AND
               FixedFee.SourceKey = STRING(DCCLI.PerContractID)
               ELSE TRUE) AND
@@ -3200,8 +3270,9 @@ PROCEDURE pContractReactivation:
                   FixedFee.FinancedResult EQ {&TF_STATUS_SENT_TO_BANK}) THEN DO:
             FOR FIRST FixedFeeTF EXCLUSIVE-LOCK WHERE
                       FixedFeeTF.FFNum = FixedFee.FFNum:
-               IF FixedFeeTF.CancelStatus EQ "NEW" THEN
-                  FixedFeeTF.CancelStatus = "".
+               IF FixedFeeTF.CancelStatus EQ "NEW" THEN ASSIGN
+                  FixedFeeTF.CancelStatus = ""
+                  FixedFeeTF.CancelReason = "".
                ELSE IF FixedFeeTF.CancelStatus NE "" THEN ASSIGN
                   FixedFee.FinancedResult = {&TF_STATUS_YOIGO_REACTIVATION_FBB}
                   llUpdateResidualFeeCode = TRUE.
@@ -3446,7 +3517,7 @@ PROCEDURE pContractReactivation:
                  DCCLI.Brand         = gcBrand              AND
                  DCCLI.DCEvent       = lcDCEvent            AND
                  DCCLI.MsSeq         = MsRequest.MsSeq      AND
-                 (IF DCCLI.DCEvent BEGINS "PAYTERM" THEN
+                 (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
                      DCCLI.PerContractID = MsRequest.ReqIParam3 
                   ELSE TRUE)                                AND  
                  DCCLI.ValidTo      <= ldtActDate EXCLUSIVE-LOCK NO-ERROR.

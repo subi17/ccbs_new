@@ -43,7 +43,7 @@ ASSIGN
    lcProcDir  = fCParam("DMS","TMS_ProcDir")
    lcSpoolDir = fCParam("DMS","TMS_SpoolDir")
    lcLogDir   = fCParam("DMS","TMS_LogDir")
-   lcSep      = "|".
+   lcSep      = {&DMS_FILE_SEP}.
 
 DEF STREAM sIn.
 DEF STREAM sFile.
@@ -242,39 +242,60 @@ PROCEDURE pUpdateDMS:
                             "",
                             ldStatusTS,
                             lcDocList,
-                            ";").
+                            {&DMS_DOCLIST_SEP}).
 
-   lcDeposit = fFindDeposit(lcDocList, ";").                         
+   lcDeposit = fFindDeposit(lcDocList, {&DMS_DOCLIST_SEP}).                         
    lcErr = fSendChangeInformation(lcStatusCode, 
                                   liOrderId, 
                                   lcDeposit, 
-                                  lcDocList,
-                                  ";",
+                                  {&DMS_DOCLIST_SEP},
                                   "casef_reader",
                                   lcMsg).
 
    fLogMsg("Msg : " + lcMsg + " #Status: " + lcErr).
-
    IF lcUpdateDMS <> "OK" THEN RETURN "ERROR:" + lcUpdateDMS + ":UPDATE".
    ELSE IF (lcCaseTypeID = {&DMS_CASE_TYPE_ID_ORDER_RESTUDY} OR
             lcCaseTypeID = {&DMS_CASE_TYPE_ID_COMPANY}) THEN DO:
       CASE lcStatusCode:
          WHEN "E" THEN DO:
-            IF NOT ((Order.StatusCode = "20" OR Order.StatusCode = "21") AND
-                     Order.PayType = FALSE) THEN
+            IF ((Order.StatusCode = "20" OR Order.StatusCode = "21") AND
+                 Order.PayType = True) OR Order.StatusCode = "44" THEN
                RUN orderhold.p(liOrderId, "RELEASE_BATCH").
          END.
-         WHEN "J" THEN RUN closeorder.p(liOrderId, TRUE).
-         WHEN "F" THEN RUN orderbyfraud.p(liOrderId, TRUE,
+         WHEN "J" THEN RUN closeorder.p(liOrderId, TRUE). /*status is checked in closeorder.p */
+         WHEN "F" THEN DO:
+            IF Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} /*44*/ OR
+               Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} /*20*/ OR
+               Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} /*21*/ OR
+               Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} /*33*/
+            THEN
+               RUN orderbyfraud.p(liOrderId, TRUE,
                                            {&ORDER_STATUS_CLOSED_BY_FRAUD}).
+            ELSE fLogLine(lcStatusCode + " Incorrect data from DMS: " +
+                            Order.StatusCode + " cannot be moved to " +
+                            {&ORDER_STATUS_CLOSED_BY_FRAUD}).
+         END.
          WHEN "N" OR
-         WHEN "G" THEN RUN orderbyfraud.p(liOrderId, TRUE,
+         WHEN "G" THEN DO:
+            IF Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} /*44*/ OR
+               Order.StatusCode EQ {&ORDER_STATUS_COMPANY_NEW} /*20*/ OR
+               Order.StatusCode EQ {&ORDER_STATUS_COMPANY_MNP} /*21*/ OR
+               Order.StatusCode EQ {&ORDER_STATUS_RENEWAL_STC_COMPANY} /*33*/
+            THEN
+               RUN orderbyfraud.p(liOrderId, TRUE,
                                            {&ORDER_STATUS_AUTO_CLOSED}).
+            ELSE fLogLine(lcStatusCode + " Incorrect data from DMS: " +
+                            Order.StatusCode + " cannot be moved to " +
+                            {&ORDER_STATUS_AUTO_CLOSED}).
+         END.
       END CASE.
    END.
 
    IF RETURN-VALUE > "" THEN RETURN "ERROR:" + RETURN-VALUE.
    
    RETURN "OK".
+
+
+
 
 END PROCEDURE.

@@ -9,6 +9,7 @@ newton__q25_add.p
 * @q25_struct     username;string;mandatory;person who requests the change
                   msseq;int;mandatory;subscription id
                   per_contract_id;int;mandatory;installment contract id (related to q25)
+                  q25_contract_id;string;optional;Contract ID
 
 * @memo_struct    title;string;mandatory
                   content;string;mandatory
@@ -16,14 +17,6 @@ newton__q25_add.p
 * @output         boolean;true
 */
 
-/*
-   19.08.2015 hugo.lujan YPR-2516 [Q25] - TMS - TMSRPC changes related
-   to Vista/VFR
-    AC1: Create new TMSRPC to perform following actions:
-    Create - Create Quota 25 extension request in TMS
-    AC2: Create a memo in TMS
-    AC3: Send an SMS to customer if he selects Quota 25 extension
-*/
 
 {xmlrpc/xmlrpc_access.i}
 {commpaa.i}
@@ -32,6 +25,7 @@ gcBrand = "1".
 {tmsconst.i}
 {fmakemsreq.i}
 {fsendsms.i}
+{q25functions.i}
 
 /* top_struct */
 DEF VAR top_struct        AS CHARACTER NO-UNDO.
@@ -59,6 +53,11 @@ DEF VAR ldaMonth24Date    AS DATE NO-UNDO.
 DEF VAR ldContractActivTS AS DECIMAL NO-UNDO.
 DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
 DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
+DEF VAR ldeFeeAmount AS DEC NO-UNDO. 
+
+DEF VAR lcQ25ContractId AS CHAR NO-UNDO.
+DEF VAR lcOrigKatun AS CHAR NO-UNDO.
+
 
 /* common validation */
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
@@ -76,7 +75,7 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcQ25Struct = validate_request(pcQ25Struct,"username!,msseq!,per_contract_id!").
+lcQ25Struct = validate_request(pcQ25Struct,"username!,msseq!,per_contract_id!,q25_contract_id").
 IF lcQ25Struct EQ ? THEN RETURN.
 
 ASSIGN
@@ -86,7 +85,10 @@ ASSIGN
       WHEN LOOKUP("msseq", lcQ25Struct) > 0
     /* Quota 25 installment contract id */
    liper_contract_id = get_int(pcQ25Struct, "per_contract_id")      
-      WHEN LOOKUP("per_contract_id", lcQ25Struct) > 0.
+      WHEN LOOKUP("per_contract_id", lcQ25Struct) > 0
+   /*Contract ID*/   
+   lcQ25ContractId = get_string(pcQ25Struct, "q25_contract_id")      
+      WHEN LOOKUP("q25_contract_id", lcQ25Struct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
       
@@ -103,8 +105,6 @@ IF pcmemoStruct > "" THEN DO:
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
-
-katun = "VISTA_" + lcusername.
 
 FIND FIRST MobSub NO-LOCK WHERE
            MobSub.MsSeq = limsseq NO-ERROR.
@@ -142,12 +142,6 @@ FIND SingleFee USE-INDEX Custnum WHERE
 IF NOT AVAIL SingleFee THEN
    RETURN appl_err("Residual fee not found").
 
-IF SingleFee.Billed AND 
-   NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
-                      Invoice.Invnum = SingleFee.InvNum aND
-                      Invoice.InvType = 99) THEN 
-   RETURN appl_err("Residual fee billed").
-
 ASSIGN   
    ldaMonth22Date    = ADD-INTERVAL(DCCLI.ValidFrom, 22, 'months':U)
    ldaMonth22Date    = DATE(MONTH(ldaMonth22Date),1,YEAR(ldaMonth22Date))
@@ -177,6 +171,25 @@ IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                   DCCLI.ValidTo >= TODAY) THEN
    RETURN appl_err("Q25 extension already active").
 
+IF SingleFee.OrderId > 0 THEN DO:
+
+   FIND FIRST TermReturn NO-LOCK WHERE
+              TermReturn.OrderId = SingleFee.OrderId NO-ERROR.
+
+   IF AVAIL TermReturn AND 
+          ((TermReturn.DeviceScreen = TRUE AND TermReturn.DeviceStart  = TRUE) OR 
+           (TermReturn.DeviceScreen = ?    AND TermReturn.DeviceStart  = ?)) THEN
+      RETURN appl_err("Already returned terminal").
+END.
+
+lcOrigKatun = katun.
+/*YPR-3256*/
+IF lcQ25ContractId EQ "" THEN
+   katun = "VISTA_" + lcUsername.
+ELSE 
+   katun = "POS_" + lcUsername.
+
+/*Request for Q25 extension*/
 liCreated = fPCActionRequest(
    MobSub.MsSeq,
    "RVTERM12",
@@ -192,31 +205,74 @@ liCreated = fPCActionRequest(
    DCCLI.PerContractId, /* Periodical Contract-ID */
    OUTPUT lcResult).   
    
-IF liCreated = 0 THEN
+IF liCreated = 0 THEN DO:
+   katun = lcOrigKatun.
    RETURN appl_err(SUBST("Q25 extension request failed: &1",
                          lcResult)).
+END.
 
-lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
-                      TODAY,
-                      Customer.Language,
-                      OUTPUT ldeSMSStamp).
+
+FIND FIRST MSRequest WHERE
+           MSRequest.MSrequest EQ liCreated EXCLUSIVE-LOCK NO-ERROR.
+IF AVAIL MsRequest THEN DO:
+   MsRequest.ReqCparam4 = lcQ25ContractId. /*For dump*/
+   /*For this request type (8) the field is used for Bank, not ContractID.*/
+   MsRequest.ReqCparam6 = fBankByBillCode(SingleFee.BillCode). /*ybu-5247*/
+END.
+RELEASE MsRequest.
+
+CASE SingleFee.BillCode:
+   WHEN "RVTERM1EF" THEN
+      lcSMSTxt = fGetSMSTxt("Q25ExtensionUNOE",
+                            TODAY,
+                            Customer.Language,
+                            OUTPUT ldeSMSStamp).
+   WHEN "RVTERMBSF" THEN
+      lcSMSTxt = fGetSMSTxt("Q25ExtensionSabadell",
+                            TODAY,
+                            Customer.Language,
+                            OUTPUT ldeSMSStamp).
+   OTHERWISE 
+      lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
+                            TODAY,
+                            Customer.Language,
+                            OUTPUT ldeSMSStamp).
+END CASE.
 
 IF lcSMSTxt > "" THEN DO:
 
-   ASSIGN
-      lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
-                          lower(entry(month(ldaMonth24Date),{&MONTHS_ES})))
-      lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaMonth24Date)))
-      lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
-            STRING(ROUND(SingleFee.Amt / 12, 2))).
+   ldeFeeAmount = SingleFee.Amt.
+   
+   FOR EACH DiscountPlan NO-LOCK WHERE
+            DiscountPlan.Brand = gcBrand AND
+           (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
+            DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
+       EACH DPMember NO-LOCK WHERE
+            DPMember.DpID       = DiscountPlan.DpId AND
+            DPMember.HostTable  = "MobSub" AND
+            DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
+            DPMember.ValidFrom  = fPer2Date(SingleFee.BillPeriod,0) AND
+            DPMember.ValidTo   >= DPMember.ValidFrom:
+      ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
+   END.
 
-   fMakeSchedSMS2(MobSub.CustNum,
-                  MobSub.CLI,
-                  {&SMSTYPE_CONTRACT_ACTIVATION},
-                  lcSMSTxt,
-                  ldeSMSStamp,
-                  "Yoigo info",
-                  "").
+   IF ldeFeeAmount > 0 THEN DO:
+
+      ASSIGN
+         lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
+                             lower(entry(month(ldaMonth24Date),{&MONTHS_ES})))
+         lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaMonth24Date)))
+         lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
+               STRING(TRUNC(ldeFeeAmount / 12, 2))).
+
+      fMakeSchedSMS2(MobSub.CustNum,
+                     MobSub.CLI,
+                     {&SMSTYPE_CONTRACT_ACTIVATION},
+                     lcSMSTxt,
+                     ldeSMSStamp,
+                     "Yoigo info",
+                     "").
+   END.
 END.
 
 IF lcmemo_title > "" THEN DO:
@@ -234,6 +290,7 @@ IF lcmemo_title > "" THEN DO:
        Memo.CustNum   = MobSub.CustNum.
 END. /* IF lcmemo_title > "" AND lcmemo_content > "" THEN DO: */
 
+katun = lcOrigKatun.
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:

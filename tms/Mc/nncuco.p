@@ -142,7 +142,7 @@ DEF BUFFER bBillItem FOR BillItem.
 form                                                          
     lcTarget              COLUMN-LABEL "Target"        FORMAT "X(8)"
     FixedFee.KeyValue     COLUMN-LABEL "TargetID"      FORMAT "X(8)" 
-    FixedFee.BillCode     COLUMN-LABEL "Billing Item"  FORMAT "X(16)"
+    FixedFee.BillCode     COLUMN-LABEL "Billing Item"  FORMAT "X(15)"
     FixedFee.Amt          column-label "Amount"
     FixedFee.BegPeriod    column-label "From"
     FixedFee.EndPeriod    COLUMN-LABEL "To"
@@ -255,7 +255,8 @@ FORM
    FixedFeeTF.BankRespDate COLON 20  SKIP
    FixedFeeTF.Amount       COLON 20  SKIP         
    FixedFeeTF.ResidualAmount COLON 20  SKIP
-   FixedFeeTF.OrgId        COLON 20   SKIP(1)
+   FixedFeeTF.OrderID      COLON 20   SKIP
+   FixedFeeTF.OrgId        COLON 20   SKIP
    FixedFeeTF.CancelStatus COLON 20 FORMAT "x(10)"   SKIP 
    FixedFeeTF.CancelReason COLON 20 FORMAT "x(10)"   SKIP 
    FixedfeeTF.CancelResp   COLON 20 SKIP
@@ -1175,6 +1176,7 @@ repeat WITH FRAME sel:
                FixedFeeTF.BankRespDate 
                FixedFeeTF.BankResult   
                FixedFeeTF.CancelDate   
+               FixedFeeTF.OrderId
                FixedFeeTF.OrgId        
                FixedFeeTF.ResidualAmount
                FixedFeeTF.Amount            
@@ -1199,10 +1201,11 @@ repeat WITH FRAME sel:
           FixedFee.EndPeriod      WHEN amt-nonbilled > 0
           FixedFee.BillMethod     WHEN amt-nonbilled > 0
           FixedFee.Contract       WHEN amt-nonbilled > 0
+          FixedFee.FinancedResult WHEN amt-nonbilled > 0 AND 
+                                       (FixedFee.BillCode BEGINS "PAYTERM" OR
+                                        FixedFee.BillCode BEGINS "RVTERM")
           FixedFee.InUse
           FixedFee.VATIncl        WHEN amt-nonbilled > 0
-          FixedFee.FinancedResult WHEN amt-nonbilled > 0 AND 
-                                       FixedFee.BillCode BEGINS "PAYTERM"
           WITH FRAME lis EDITING:
 
             READKEY.
@@ -1217,7 +1220,8 @@ repeat WITH FRAME sel:
 
                IF FRAME-FIELD EQ "FinancedResult" THEN DO:
                   IF (INPUT FixedFee.FinancedResult NE 
-                            FixedFee.FinancedResult) THEN DO:
+                            FixedFee.FinancedResult) AND
+                     INPUT FixedFee.FinancedResult > "" THEN DO:
                      IF LOOKUP((INPUT FixedFee.FinancedResult),
                                {&TF_STATUSES_MANUAL}) = 0 OR
                         (INPUT FixedFee.FinancedResult = "B99" AND

@@ -39,6 +39,7 @@ FUNCTION fAddDiscountPlanMember RETURNS INTEGER
     INPUT idDiscountAmt     AS DEC,
     INPUT idaFromDate       AS DATE,
     INPUT iiDiscountPeriods AS INT,
+    INPUT iiOrderId         AS INT,
     OUTPUT ocError          AS CHAR):
 
    DEF VAR ldValidTo AS DATE NO-UNDO.
@@ -89,7 +90,8 @@ FUNCTION fAddDiscountPlanMember RETURNS INTEGER
          DPMember.KeyValue  = STRING(MobSub.MsSeq) 
          DPMember.ValidFrom = idaFromDate
          DPMember.ValidTo   = ldValidTo
-         DPMember.DiscValue = idDiscountAmt.
+         DPMember.DiscValue = idDiscountAmt
+         DPMember.OrderId   = iiOrderId.
    END. /* IF idDiscountAmt > 0 THEN DO: */
 
    RETURN 0.

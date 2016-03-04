@@ -508,6 +508,7 @@ PROCEDURE pUpdateSubscription:
         BillTarg.BillTarget = liBillTarg NO-ERROR.
 
    IF NOT AVAILABLE BillTarg THEN liBillTarg = 0.
+   /* Check configuration error with Rateplan and Priceplan */
    ELSE IF BillTarg.RatePlan NE CLIType.PricePlan THEN liBillTarg = -1.
 
    IF liBillTarg <= 0 THEN DO:
@@ -520,13 +521,17 @@ PROCEDURE pUpdateSubscription:
       END.
    
       IF liBillTarg <= 0 THEN DO:
-      
+         
          IF liBillTarg < 0 THEN DO:
             FIND LAST BillTarg WHERE BillTarg.CustNum = Mobsub.CustNum         
                NO-LOCK NO-ERROR.
-         
-            IF AVAILABLE BillTarg 
-            THEN liBillTarg = BillTarg.BillTarget + 1.
+            /* Create new billtarget for this case. 
+               Error can be corrected afterwards YTS-8271 */
+            IF AVAILABLE BillTarg THEN DO:
+               IF BillTarg.BillTarget < 1000 THEN
+                   liBillTarg = 1000.
+               ELSE liBillTarg = BillTarg.BillTarget + 1.
+            END.
             ELSE liBillTarg = 1.
          END.
          ELSE liBillTarg = CLIType.BillTarget.
@@ -697,6 +702,8 @@ PROCEDURE pFinalize:
    DEF VAR liCustnum       AS INT  NO-UNDO. 
    DEF VAR ldEndStamp      AS DEC  NO-UNDO.
    DEF VAR ldBegStamp      AS DEC  NO-UNDO.
+   DEF VAR ldeNow          AS DEC  NO-UNDO.
+   DEF VAR lcResult        AS CHAR NO-UNDO.
 
    DEF VAR lcError               AS CHAR NO-UNDO.
    DEF VAR lcMultiLineSubsType   AS CHAR NO-UNDO.
@@ -705,7 +712,7 @@ PROCEDURE pFinalize:
    DEF VAR lcDataBundleCLITypes  AS CHAR NO-UNDO.
 
    DEF BUFFER bSubRequest FOR MsRequest.
-   
+   DEF BUFFER DataContractReq FOR MsRequest. 
    /* now when billtarget has been updated new fees can be created */
 
    llRerate = FALSE.
@@ -724,7 +731,8 @@ PROCEDURE pFinalize:
       ldBegStamp = MsOwner.TSBeg
       ldEndStamp = fSecOffSet(MsOwner.TsBeg,-1)
       /* some time has already passed from subscription update */
-      llRerate   = TRUE.
+      llRerate   = TRUE
+      ldeNow     = fMakeTS().
          
    fSplitTS(MsOwner.TsBeg,
             OUTPUT ldaNewBeginDate,
@@ -806,6 +814,52 @@ PROCEDURE pFinalize:
            "STC_" + (IF Mobsub.PayType THEN "PREPAID" ELSE "POSTPAID"),
            MsRequest.MsRequest, 
            OUTPUT liChargeReqId) NO-ERROR.
+
+   /* YTS-8159 */
+    IF bOldType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID} AND
+       bOldType.CLIType EQ "TARJ6"                    AND
+       CLIType.PayType  EQ {&CLITYPE_PAYTYPE_PREPAID} AND
+       LOOKUP(CLIType.CLIType,"TARJ7,TARJ9") > 0      THEN DO:
+
+       FIND FIRST ServiceLimit NO-LOCK WHERE
+                  ServiceLimit.Groupcode EQ CLIType.CLIType AND
+                  ServiceLimit.DialType  EQ 7               NO-ERROR.
+
+       IF AVAIL ServiceLimit AND
+          NOT CAN-FIND(FIRST DataContractReq NO-LOCK WHERE
+                             DataContractReq.MsSeq      = MobSub.MsSeq                   AND
+                             DataContractReq.ActStamp  >= ldeActStamp                    AND
+                             DataContractReq.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND
+                             DataContractReq.ReqCparam3 = CLIType.CLIType)               AND
+          NOT CAN-FIND(FIRST MServiceLimit NO-LOCK WHERE
+                             MServiceLimit.MsSeq    = MobSub.MsSeq          AND
+                             MServiceLimit.SLSeq    = ServiceLimit.SlSeq    AND
+                             MserviceLimit.DialType = ServiceLimit.DialType AND
+                             MserviceLimit.EndTS   >= ldeNow                AND
+                             MserviceLimit.FromTs  <= ldeNow) THEN DO:
+
+          liRequest = fServiceRequest(MobSub.MsSeq,
+                                      "SHAPER",
+                                      1,
+                                      "DEFAULT",
+                                      ldeNow,
+                                      "",
+                                      FALSE,
+                                      FALSE,
+                                      "",
+                                      {&REQUEST_SOURCE_STC},
+                                      MsRequest.MsRequest,
+                                      FALSE,
+                                      OUTPUT lcResult).
+          IF liRequest = 0 THEN
+            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                       "MobSub",
+                       STRING(MobSub.MsSeq),
+                       MobSub.CustNum,
+                       "ERROR:DEFAULT SHAPER request creation failed",
+                       lcResult).
+       END.
+    END.
 
    /* run rerate (needed especially with saldo-services) */
    IF llReRate THEN DO:
@@ -1154,7 +1208,10 @@ PROCEDURE pCloseContracts:
       
    FOR EACH DCCLI NO-LOCK WHERE
             DCCLI.MsSeq   = iiMsSeq  AND
-            DCCLI.ValidTo >= idaActDate:
+            DCCLI.ValidTo >= idaActDate,
+      FIRST DayCampaign NO-LOCK WHERE
+            DayCampaign.Brand = gcBrand AND
+            DayCampaign.DCEvent = DCCLI.DCevent:
 
       /* pending termination request */
       IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
@@ -1164,7 +1221,7 @@ PROCEDURE pCloseContracts:
                         LOOKUP(STRING(MsRequest.ReqStatus),
                                 {&REQ_INACTIVE_STATUSES}) = 0 AND
                         MsRequest.ActStamp <= ldeActStamp AND
-                        (IF DCCLI.DCEvent BEGINS "PAYTERM"
+                        (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}
                          THEN MsRequest.ReqIParam3 = DCCLI.PerContractId
                          ELSE TRUE)) THEN NEXT.
 
@@ -1173,7 +1230,7 @@ PROCEDURE pCloseContracts:
                        DCCLI.DCEvent.
                               
       lcContIDList   = lcContIDList + (IF lcContIDList > "" THEN "," ELSE "") +
-                       (IF DCCLI.DCEvent BEGINS "PAYTERM"
+                       (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}
                         THEN STRING(DCCLI.PerContractID)
                         ELSE STRING(0)).
 
@@ -1193,7 +1250,12 @@ PROCEDURE pCloseContracts:
 
       ASSIGN lcContract   = ENTRY(liCount,lcContractList).
 
-      IF lcContract BEGINS "PAYTERM" THEN 
+      FIND FIRST DayCampaign NO-LOCK WHERE
+                 DayCampaign.Brand = gcBrand AND
+                 DayCampaign.DCEvent = lcContract NO-ERROR.
+
+      IF AVAIL DayCampaign AND
+               DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN 
          liContractID = INT(ENTRY(liCount,lcContIDList)). 
 
       IF (lcContract EQ "BONO_VOIP" AND
@@ -1238,8 +1300,9 @@ PROCEDURE pCloseContracts:
                                          "PMDUBDeActSTC" ELSE ""), 
                                            /* SMS for PMDUB STC Deactivation */
                                         0,
-                                        IF lcContract BEGINS "PAYTERM" THEN liContractID 
-                                        ELSE 0,
+                                        (IF AVAIL DayCampaign AND
+                                                  DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} 
+                                        THEN liContractID ELSE 0),
                                         OUTPUT lcError).
          IF liTerminate = 0 THEN
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,

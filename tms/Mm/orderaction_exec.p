@@ -11,6 +11,8 @@
 {tmsconst.i}
 {fdss.i}
 {dpmember.i}
+{q25functions.i}
+
 
 DEF INPUT  PARAMETER iiMsSeq       AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiOrderId     AS INT  NO-UNDO.
@@ -378,10 +380,24 @@ PROCEDURE pQ25Extension:
    DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
    DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
 
+   DEF VAR liPeriod AS INT NO-UNDO. 
+   DEF VAR ldaPerDate AS DATE NO-UNDO. 
+   DEF VAR lcTFBank AS CHAR NO-UNDO.
+   DEF VAR lcOrigKatun AS CHAR NO-UNDO.
+   DEF VAR ldeDiscount AS DEC NO-UNDO. 
+   DEF VAR ldeQ25ExtAmount AS DEC NO-UNDO. 
+
    DEF BUFFER SingleFee FOR SingleFee.
    DEF BUFFER MsRequest FOR MsRequest.
+   DEF BUFFER bOrderAction FOR OrderAction.
    
-   liPercontractId = INT(OrderAction.ItemKey) NO-ERROR.
+   ASSIGN
+      ldaPerDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
+      liPeriod = YEAR(ldaPerDate) * 100 + MONTH(ldaPerDate)
+      lcTFBank = ""
+      liPercontractId = INT(OrderAction.ItemParam).
+      lcOrigKatun = katun.
+
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
       RETURN "ERROR: incorrect contract id".
 
@@ -396,6 +412,17 @@ PROCEDURE pQ25Extension:
    
    IF NOT AVAIL SingleFee THEN
       RETURN "ERROR: residual fee not found".
+   
+   IF SingleFee.OrderId > 0 THEN DO:
+
+      FIND FIRST TermReturn NO-LOCK WHERE
+                 TermReturn.OrderId = SingleFee.OrderId NO-ERROR.
+
+      IF AVAIL TermReturn AND 
+         ((TermReturn.DeviceScreen = TRUE AND TermReturn.DeviceStart  = TRUE) OR
+          (TermReturn.DeviceScreen = ? AND TermReturn.DeviceStart  = ?))
+         THEN RETURN "ERROR: already returned terminal".
+   END.
 
    ldaDate = fPer2Date(SingleFee.BillPeriod,0).
    ldaDate = DATE(MONTH(ldaDate),21,YEAR(ldaDate)).
@@ -405,6 +432,9 @@ PROCEDURE pQ25Extension:
    ELSE ASSIGN
       ldeContractActStamp = fSecOffset(fMakeTS(),5)
       ldaDate = TODAY.
+
+   IF Order.OrderType = {&ORDER_TYPE_RENEWAL} THEN
+      katun = Order.OrderChannel + "_" + Order.Salesman.
 
    liRequest = fPCActionRequest(MobSub.MsSeq,
                              "RVTERM12",
@@ -419,40 +449,72 @@ PROCEDURE pQ25Extension:
                              0,
                              liPercontractId,
                              OUTPUT lcResult).
+
+   katun = lcOrigKatun.
  
    IF liRequest = 0 THEN 
       RETURN "ERROR:Periodical contract not created; " + lcResult.
    ELSE DO:
-      FIND FIRST msrequest EXCLUSIVE-LOCK WHERE
-                 msrequest.msrequest = lirequest NO-ERROR.
-      IF AVAIL msrequest THEN ASSIGN
-         msrequest.ReqIparam1 = Order.OrderId.
-      RELEASE msrequest.
+      FIND FIRST MsRequest EXCLUSIVE-LOCK WHERE
+                 MsRequest.MsRequest = liRequest NO-ERROR.
+      IF AVAIL MsRequest THEN ASSIGN
+         MsRequest.ReqIparam1 = Order.OrderId
+         MsRequest.ReqCparam4 = OrderAction.ItemKey.
+         MsRequest.ReqCparam6 = fBankByBillCode(SingleFee.BillCode).
+      RELEASE MsRequest.
 
-      lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
-                            TODAY,
-                            Customer.Language,
-                            OUTPUT ldeSMSStamp).
+      CASE SingleFee.BillCode:
+         WHEN "RVTERM1EF" THEN
+            lcSMSTxt = fGetSMSTxt("Q25ExtensionUNOE",
+                                  TODAY,
+                                  Customer.Language,
+                                  OUTPUT ldeSMSStamp).
+         WHEN "RVTERMBSF" THEN
+            lcSMSTxt = fGetSMSTxt("Q25ExtensionSabadell",
+                                  TODAY,
+                                  Customer.Language,
+                                  OUTPUT ldeSMSStamp).
+         OTHERWISE 
+            lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
+                                  TODAY,
+                                  Customer.Language,
+                                  OUTPUT ldeSMSStamp).
+      END CASE.
 
       IF lcSMSTxt > "" THEN DO:
 
-         ASSIGN
-            lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
-                                lower(entry(month(ldaDate),{&MONTHS_ES})))
-            lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaDate)))
-            lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
-                  STRING(ROUND(SingleFee.Amt / 12, 2))).
+         ldeQ25ExtAmount = SingleFee.Amt.
+         FIND FIRST bOrderAction NO-LOCK WHERE
+                    bOrderAction.Brand = Order.Brand AND
+                    bOrderAction.OrderId = Order.OrderId AND
+                    bOrderAction.ItemType = "Q25Discount" NO-ERROR.
 
-         fMakeSchedSMS2(MobSub.CustNum,
-                        MobSub.CLI,
-                        {&SMSTYPE_CONTRACT_ACTIVATION},
-                        lcSMSTxt,
-                        ldeSMSStamp,
-                        "Yoigo info",
-                        "").
+         IF AVAIL bOrderAction THEN DO:
+            ldeDiscount = DEC(bOrderAction.ItemKey) NO-ERROR.
+            IF ldeDiscount NE ? THEN
+               ldeQ25ExtAmount = ldeQ25ExtAmount - ldeDiscount.
+         END.
+
+         IF ldeQ25ExtAmount > 0 THEN DO:
+
+            ASSIGN
+               lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
+                                   lower(entry(month(ldaDate),{&MONTHS_ES})))
+               lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaDate)))
+               lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
+                     STRING(TRUNC(ldeQ25ExtAmount / 12, 2))).
+
+            fMakeSchedSMS2(MobSub.CustNum,
+                           MobSub.CLI,
+                           {&SMSTYPE_CONTRACT_ACTIVATION},
+                           lcSMSTxt,
+                           ldeSMSStamp,
+                           "Yoigo info",
+                           "").
+         END.
       END.
+
    END.
-      
 
 END PROCEDURE.
 
@@ -461,12 +523,13 @@ PROCEDURE pQ25Discount:
    DEF VAR liPercontractId AS INT NO-UNDO. 
    DEF VAR ldeDiscount AS DEC NO-UNDO. 
    DEF VAR lcResult AS CHAR NO-UNDO. 
+   DEF VAR lcDiscountPlan AS CHAR NO-UNDO. 
 
-   liPercontractId = INT(OrderAction.ItemKey) NO-ERROR.
+   liPercontractId = INT(OrderAction.ItemParam) NO-ERROR.
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
       RETURN "ERROR:Q25 discount creation failed (incorrect contract id)".
                                             
-   ldeDiscount = DEC(OrderAction.ItemParam) NO-ERROR.
+   ldeDiscount = DEC(OrderAction.ItemKey) NO-ERROR.
    IF ERROR-STATUS:ERROR OR ldeDiscount EQ 0 THEN 
       RETURN "ERROR:Q25 discount creation failed (incorrect discount amount)".
 
@@ -482,11 +545,25 @@ PROCEDURE pQ25Discount:
    IF NOT AVAIL SingleFee THEN
       RETURN "ERROR:Q25 discount creation failed (residual fee not found)".
 
+   IF SingleFee.Billed AND 
+      NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
+                         Invoice.InvNum = SingleFee.Invnum AND
+                         Invoice.InvType = 99) THEN
+      RETURN "ERROR:Q25 discount creation failed (residual fee is billed)".
+
+   IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                     OrderAction.Brand = Order.Brand AND
+                     OrderAction.OrderId = Order.OrderId AND
+                     OrderAction.ItemType = "Q25Extension") THEN
+      lcDiscountPlan = "RVTERMDT4DISC".
+   ELSE lcDiscountPlan = "RVTERMDT1DISC".
+
    fAddDiscountPlanMember(MobSub.MsSeq,
-                         "RVTERMDT1DISC", 
+                         lcDiscountPlan, 
                          ldeDiscount,
                          fPer2Date(SingleFee.BillPeriod,0),
                          1,
+                         SingleFee.OrderId, /* Q25 OrderId */
                          OUTPUT lcResult).
    RETURN lcResult.
 

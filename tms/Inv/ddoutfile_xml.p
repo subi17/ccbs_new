@@ -23,7 +23,6 @@
 {customer_address.i}
 {funcrunprocess_update.i}
 {fbankdata.i}
-{func.i}
 {fsepa.i}
 
 /* invoices TO be printed */

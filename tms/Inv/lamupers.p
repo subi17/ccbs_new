@@ -202,7 +202,8 @@ DEF TEMP-TABLE ttDiscounts NO-UNDO
    FIELD MsSeq      AS INT
    FIELD MinBase    AS DEC
    FIELD MaxAmount  AS DEC
-   FIELD Used       AS DEC 
+   FIELD Used       AS DEC
+   FIELD OrderId    AS INT
    INDEX MsSeq MsSeq. 
 
 DEF TEMP-TABLE ttDPTarget NO-UNDO
@@ -818,33 +819,36 @@ FUNCTION fCombineInvRows RETURNS LOGIC:
          IF ttIR.Todate < ttInvSplit.SplitDate THEN
             FIND FIRST bttIR WHERE
                        bttIR.BillCode = ttIR.BillCode AND
-                       bttIR.CLI      = ttIR.CLI AND
-                       bttIR.CCN      = 0 AND
+                       bttIR.CLI      = ttIR.CLI      AND
+                       bttIR.CCN      = 0             AND
                        bttIR.Period   = ttIR.Period   AND
                        bttIR.VatIncl  = ttIR.VatIncl  AND
                        bttIR.RowType  = ttIR.RowType  AND
                        bttIR.AgrCust  = ttIR.AgrCust  AND
-                       bttIR.Todate   < ttInvSplit.SplitDate NO-ERROR.
+                       bttIR.Todate   < ttInvSplit.SplitDate AND
+                       bttIR.OrderId  = ttIR.OrderId NO-ERROR.
          ELSE
             FIND FIRST bttIR WHERE
                        bttIR.BillCode = ttIR.BillCode AND
-                       bttIR.CLI      = ttIR.CLI AND
-                       bttIR.CCN      = 0 AND
+                       bttIR.CLI      = ttIR.CLI      AND
+                       bttIR.CCN      = 0             AND
                        bttIR.Period   = ttIR.Period   AND
                        bttIR.VatIncl  = ttIR.VatIncl  AND
                        bttIR.RowType  = ttIR.RowType  AND
                        bttIR.AgrCust  = ttIR.AgrCust  AND
-                       bttIR.Todate  >= ttInvSplit.SplitDate NO-ERROR.
+                       bttIR.Todate  >= ttInvSplit.SplitDate AND
+                       bttIR.OrderId  = ttIR.OrderId NO-ERROR.
       END.
       ELSE 
          FIND FIRST bttIR WHERE
                     bttIR.BillCode = ttIR.BillCode AND
-                    bttIR.CLI      = ttIR.CLI AND
-                    bttIR.CCN      = 0 AND
+                    bttIR.CLI      = ttIR.CLI      AND
+                    bttIR.CCN      = 0             AND
                     bttIR.Period   = ttIR.Period   AND
                     bttIR.VatIncl  = ttIR.VatIncl  AND
                     bttIR.RowType  = ttIR.RowType  AND
-                    bttIR.AgrCust  = ttIR.AgrCust NO-ERROR.
+                    bttIR.AgrCust  = ttIR.AgrCust  AND
+                    bttIR.OrderId  = ttIR.OrderId NO-ERROR.
 
       IF AVAIL bttIR THEN DO:
          ASSIGN
@@ -993,10 +997,11 @@ FUNCTION fGetDiscounts RETURNS LOGIC
          ttDiscounts.Unit        = DiscountPlan.DPUnit
          ttDiscounts.MinBase     = DiscountPlan.MinBaseAmount
          ttDiscounts.MaxAmount   = DiscountPlan.MaxAmount
-         ttDiscounts.FromDate = DPMember.ValidFrom
-         ttDiscounts.ToDate   = DPMember.ValidTo
-         ttDiscounts.Amount   = DPMember.DiscValue
-         ttDiscounts.MsSeq    = iiMsSeq.
+         ttDiscounts.FromDate    = DPMember.ValidFrom
+         ttDiscounts.ToDate      = DPMember.ValidTo
+         ttDiscounts.Amount      = DPMember.DiscValue
+         ttDiscounts.OrderId     = DPMember.OrderId
+         ttDiscounts.MsSeq       = iiMsSeq.
       
       IF ttDiscounts.Amount = 0 THEN DO:
          FIND FIRST DPRate WHERE 
@@ -2126,13 +2131,14 @@ PROCEDURE pFixedFee:
          IF liRowPeriod > 999999 THEN 
             liRowPeriod = TRUNCATE(liRowPeriod / 100,0).
          
-         /* change payterm billcode if the contract is financed by bank */
-         IF FixedFee.BillCode EQ "PAYTERM" AND
+         /* change payterm/rvterm billcodes if the contract is financed 
+            by bank */
+         IF LOOKUP(FixedFee.BillCode,"PAYTERM,RVTERM") > 0 AND
             LOOKUP(FixedFee.FinancedResult,{&TF_STATUSES_BANK}) > 0 THEN DO:
             IF FixedFee.TFBank = "0081" THEN
-               FFItem.BillCode = "PAYTERMBS".
+               FFItem.BillCode = FFItem.BillCode + "BS".
             ELSE
-               FFItem.BillCode = "PAYTERM1E".
+               FFItem.BillCode = FFItem.BillCode + "1E".
          END.
           
          FIND FIRST ttIR WHERE
@@ -2269,9 +2275,9 @@ PROCEDURE pSingleFee:
       IF liRowPeriod > 999999 THEN 
          liRowPeriod = TRUNCATE(liRowPeriod / 100,0).
 
-      /* change PAYTERMEND billcode if original terminated contract is
-         financed by bank */
-      IF SingleFee.BillCode EQ "PAYTERMEND" AND
+      /* change PAYTERMEND and RVTERMEND billcodes if original terminated 
+         contract is financed by bank */
+      IF LOOKUP(SingleFee.BillCode,"PAYTERMEND,RVTERMEND") > 0 AND
          SingleFee.SourceTable = "FixedFee" THEN DO:
          
          ASSIGN
@@ -2285,9 +2291,9 @@ PROCEDURE pSingleFee:
             IF AVAIL FixedFee AND 
                LOOKUP(FixedFee.FinancedResult,{&TF_STATUSES_BANK}) > 0 THEN DO:
                IF FixedFee.TFBank = "0081" THEN
-                  SingleFee.BillCode = "PAYTERMENDBS".
+                  SingleFee.BillCode = SingleFee.BillCode + "BS".
                ELSE
-                  SingleFee.BillCode = "PAYTERMEND1E".
+                  SingleFee.BillCode = SingleFee.BillCode + "1E".
             END.
          END.
       END.
@@ -3154,7 +3160,8 @@ PROCEDURE pDiscount:
                           ttIR.ToDate    = ldaDiscValidTo AND
                           ttIR.VatIncl   = lCustVat AND
                           ttIR.RowType   = 9 AND 
-                          ttIR.AgrCust   = iiAgrCust NO-ERROR.
+                          ttIR.AgrCust   = iiAgrCust AND
+                          ttIR.OrderId   = ttDiscounts.OrderId NO-ERROR.
 
                IF NOT AVAILABLE ttIR THEN DO:
                   CREATE ttIR.
@@ -3169,7 +3176,8 @@ PROCEDURE pDiscount:
                      ttIR.AgrCust   = iiAgrCust
                      ttIR.RowType   = 9
                      ttIR.VatIncl   = lCustVat
-                     ttIR.TaxClass  = BillItem.TaxClass.
+                     ttIR.TaxClass  = BillItem.TaxClass
+                     ttIR.OrderId   = ttDiscounts.OrderId.
                END.
          
                ASSIGN

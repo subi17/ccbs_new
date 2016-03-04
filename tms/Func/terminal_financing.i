@@ -98,40 +98,59 @@ END FUNCTION. /* FUNCTION fSendeInvoiceRequest */
    
 
 FUNCTION fOrderContainsFinancedTerminal RETURNS CHAR
-   (INPUT iiOrderId AS INT):
+   (INPUT iiOrderId  AS INT,
+    INPUT icDCEvent AS CHAR):
 
    DEF BUFFER Order FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
-
-   FOR FIRST Order NO-LOCK WHERE
-             Order.Brand  = gcBrand AND
-             Order.OrderID = iiOrderId,
-       FIRST OrderCustomer NO-LOCK WHERE
-             OrderCustomer.Brand = gcBrand AND
-             OrderCustomer.Order = iiOrderId AND
-             OrderCustomer.RowType = 1:
-   
-      IF NOT OrderCustomer.Profession > "" THEN RETURN  {&TF_STATUS_YOIGO}.
-      IF LOOKUP(OrderCustomer.CustIdType,"NIF,NIE") = 0 THEN
-         RETURN {&TF_STATUS_YOIGO}.
       
-      IF CAN-FIND(FIRST OfferItem NO-LOCK WHERE
-                        OfferItem.Brand       = gcBrand        AND
-                        OfferItem.Offer       = Order.Offer    AND
-                        OfferItem.ItemType    = "PerContract"  AND
-                        OfferItem.ItemKey BEGINS "PAYTERM"     AND
-                        OfferItem.EndStamp   >= Order.CrStamp  AND
-                        OfferItem.BeginStamp <= Order.CrStamp) THEN DO:
-         RETURN (IF INDEX(Order.OrderChannel,"POS") > 0
-                 THEN {&TF_STATUS_WAITING_SENDING}
-                 ELSE {&TF_STATUS_HOLD_SENDING}).
+   FIND Order NO-LOCK WHERE
+        Order.Brand  = gcBrand AND
+        Order.OrderID = iiOrderId NO-ERROR.
+   IF NOT AVAIL Order THEN
+      RETURN {&TF_STATUS_YOIGO}.
+
+   IF icDCEvent = "RVTERM12" THEN DO:
+
+      IF CAN-FIND(FIRST SingleFee WHERE
+                        SingleFee.Brand       = gcBrand AND
+                        SingleFee.Custnum     = Order.CustNum AND
+                        SingleFee.HostTable   = "MobSub" AND
+                        SingleFee.KeyValue    = STRING(Order.MsSeq) AND
+                        SingleFee.OrderId     = iiOrderId AND
+                        LOOKUP(SingleFee.BillCode,
+                               {&TF_BANK_RVTERM_BILLCODES}) > 0) THEN
+         RETURN {&TF_STATUS_WAITING_SENDING}.
+   END.
+   ELSE IF icDCEvent BEGINS "PAYTERM" THEN DO:
+   
+      FOR FIRST OrderCustomer NO-LOCK WHERE
+                OrderCustomer.Brand = gcBrand AND
+                OrderCustomer.Order = iiOrderId AND
+                OrderCustomer.RowType = 1:
+      
+         IF NOT OrderCustomer.Profession > "" THEN RETURN  {&TF_STATUS_YOIGO}.
+         IF LOOKUP(OrderCustomer.CustIdType,"NIF,NIE") = 0 THEN
+            RETURN {&TF_STATUS_YOIGO}.
+
+         IF CAN-FIND(FIRST OfferItem NO-LOCK WHERE
+                           OfferItem.Brand       = gcBrand        AND
+                           OfferItem.Offer       = Order.Offer    AND
+                           OfferItem.ItemType    = "PerContract"  AND
+                           OfferItem.ItemKey BEGINS "PAYTERM"     AND
+                           OfferItem.EndStamp   >= Order.CrStamp  AND
+                           OfferItem.BeginStamp <= Order.CrStamp) THEN DO:
+            RETURN (IF INDEX(Order.OrderChannel,"POS") > 0
+                    THEN {&TF_STATUS_WAITING_SENDING}
+                    ELSE {&TF_STATUS_HOLD_SENDING}).
+         END.
       END.
    END.
 
    RETURN {&TF_STATUS_YOIGO}.
 END.
 
-FUNCTION fGetPaytermOrderId RETURNS INT
+FUNCTION fGetInstallmentOrderId RETURNS INT
    (INPUT iiMsRequest AS INT):
 
    DEF BUFFER MsRequest FOR MsRequest.
@@ -177,9 +196,21 @@ FUNCTION fGetPaytermOrderId RETURNS INT
       end.
 
       /* installment contract change */
-      WHEN "24" then do:
-         if msrequest.reqIparam2 > 0 then do:
+      WHEN {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} then do:
+           
+         IF msrequest.reqiparam3 > 0 THEN
+            for first fixedfee NO-LOCK where
+                      fixedfee.brand = gcBrand and
+                      fixedfee.custnum = msrequest.custnum and
+                      fixedfee.hosttable = "MobSub" and
+                      fixedfee.keyvalue = string(msrequest.msseq) and
+                      fixedfee.sourcetable = "DCCLI" and
+                      fixedfee.sourcekey = string(msrequest.reqiparam3):
+               return fixedfee.orderid.
+            END.
 
+         if msrequest.reqIparam2 > 0 then do:
+               
             find bmsrequest NO-LOCK WHERE
                  bmsrequest.msrequest = msrequest.reqiparam2 and
                  bmsrequest.reqtype = 9 and

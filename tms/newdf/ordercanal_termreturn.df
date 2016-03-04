@@ -1,0 +1,110 @@
+ADD TABLE "TermReturn"
+  AREA "Sta_Data_32"
+  LABEL "Returned terminals"
+  DUMP-NAME "TermReturn"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-termreturn.p" CRC "?"
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-termreturn.p" CRC "?"
+
+ADD FIELD "IMEI" OF "TermReturn" AS character
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "IMEI"
+  POSITION 2
+  MAX-WIDTH 24
+  COLUMN-LABEL "IMEI"
+  ORDER 10
+
+ADD FIELD "OrderId" OF "TermReturn" AS integer
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrderId"
+  ORDER 20
+
+ADD FIELD "BillCode" OF "TermReturn" AS character
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Terminal Billing Code"
+  POSITION 4
+  MAX-WIDTH 32
+  COLUMN-LABEL "BillCode"
+  ORDER 30
+
+ADD FIELD "DeviceStart" OF "TermReturn" AS logical
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Device Start"
+  POSITION 5
+  MAX-WIDTH 1
+  COLUMN-LABEL "DeviceStart"
+  ORDER 40
+
+ADD FIELD "DeviceScreen" OF "TermReturn" AS logical
+  FORMAT "Yes/No"
+  INITIAL "no"
+  LABEL "Device Screen"
+  POSITION 6
+  MAX-WIDTH 1
+  COLUMN-LABEL "DeviceScreen"
+  ORDER 50
+
+ADD FIELD "ReturnTS" OF "TermReturn" AS decimal
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Return Time Stamp"
+  POSITION 8
+  MAX-WIDTH 20
+  COLUMN-LABEL "ReturnTS"
+  DECIMALS 5
+  ORDER 70
+
+ADD FIELD "MSISDN" OF "TermReturn" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "MSISDN"
+  POSITION 9
+  MAX-WIDTH 24
+  COLUMN-LABEL "MSISDN"
+  ORDER 80
+
+ADD FIELD "Salesman" OF "TermReturn" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Salesman"
+  POSITION 10
+  MAX-WIDTH 16
+  COLUMN-LABEL "Salesman"
+  ORDER 90
+
+ADD FIELD "TerminalType" OF "TermReturn" AS character
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Terminal Type"
+  POSITION 11
+  MAX-WIDTH 16
+  COLUMN-LABEL "TerminalType"
+  ORDER 100
+
+ADD FIELD "EnvelopeNumber" OF "TermReturn" AS character
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Envelope Number"
+  POSITION 12
+  MAX-WIDTH 24
+  COLUMN-LABEL "EnvelopeNumber"
+  ORDER 110
+
+ADD INDEX "OrderId" ON "TermReturn"
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "OrderId" ASCENDING
+  INDEX-FIELD "ReturnTS" DESCENDING
+
+.
+PSC
+cpstream=1252
+.
+0000002340
