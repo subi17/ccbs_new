@@ -91,7 +91,7 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
          WHEN "TermLeasAmt"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE RETURN ldeTermLeasAmt.
+              ELSE RETURN STRING(ldeTermLeasAmt,"->>>>>>>>>>>>>>>>>>>>>>9.9<<<<<<<<<").
          WHEN "OnlySimAmt"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
@@ -137,7 +137,7 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
             OfferItem.EndStamp     >= lbOrder.CrStamp  AND
             OfferItem.BeginStamp   <= lbOrder.CrStamp,
          FIRST TopupScheme NO-LOCK WHERE
-            TopupScheme.Brand       = gcBrand AND
+            TopupScheme.Brand       = "1"              AND
             TopupScheme.TopupScheme = OfferItem.ItemKey:
          
          RETURN TopupScheme.TopupScheme.
