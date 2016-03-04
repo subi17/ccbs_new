@@ -185,7 +185,7 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
          OrderTimeStamp.OrderId = lbOrder.OrderId AND
          OrderTimeStamp.RowType = iiType:
             
-         RETURN STRING(OrderTimeStamp.Timestamp)
+         RETURN STRING(OrderTimeStamp.Timestamp).
       END.
       
       RETURN "".

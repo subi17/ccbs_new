@@ -83,7 +83,7 @@ CLASS HPD.MobSubDump FINAL INHERITS DumpHandler:
 
    METHOD PRIVATE VOID mFindMsOwner():
 
-      FIND FIRST lbMsOwner NO-LOCK USE-INDEX USE-INDEX MsSeq WHERE
+      FIND FIRST lbMsOwner NO-LOCK USE-INDEX MsSeq WHERE
          lbMsOwner.MsSeq        =  lbMobSub.MsSeq   AND
          ( lbMsOwner.CLIType      NE lbMobSub.CLIType OR
            lbMsOwner.TariffBundle NE lbMobSub.TariffBundle )

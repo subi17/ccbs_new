@@ -88,8 +88,6 @@ CLASS HPD.PaymentDump FINAL INHERITS DumpHandler:
             THEN LEAVE.
    
             IF lbPayment.InvDate     <  06/01/2013          OR
-               lbPayment.ImportDate  <  ldaFromDate         OR
-               lbPayment.ImportDate  >  ldaToDate           OR
                lbPayment.ImportStamp <  objDumpTB:ldeFromTS OR
                lbPayment.ImportStamp >= objDumpTB:ldeToTS
             THEN NEXT.

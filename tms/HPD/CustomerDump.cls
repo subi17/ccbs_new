@@ -27,7 +27,7 @@ CLASS HPD.CustomerDump FINAL INHERITS GenericDump:
       FOR
          FIRST CustCat FIELDS (Brand Category SelfEmployed) NO-LOCK WHERE
             CustCat.Brand    = "1" AND
-            CustCat.Category = lhMainTable::Category
+            CustCat.Category = lhMainTable::Category:
          RETURN CustCat.SelfEmployed.
       END.
 

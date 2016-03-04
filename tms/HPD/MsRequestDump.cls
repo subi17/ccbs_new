@@ -1,5 +1,6 @@
 USING Progress.Lang.*.
 USING HPD.DumpHandler.
+USING HPD.DumpTimeBased.
 USING HPD.DumpBase.
 
 {HPD/HPDConst.i}

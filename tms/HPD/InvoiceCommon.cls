@@ -21,7 +21,7 @@ CLASS HPD.InvoiceCommon INHERITS DumpHandler:
          WHEN "InstallmentFee"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE RETURN ldeInstallmentFee.
+              ELSE RETURN STRING(ldeInstallmentFee,"->>>>>>>>>>>>>>>>>>>>>>9.9<<<<<<<<<").
          OTHERWISE RETURN "".
       END CASE.
    

@@ -12,6 +12,8 @@
 
 USING Progress.Lang.*.
 
+{HPD/HPDEnvironment.i}
+
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS HPD.DumpHandler ABSTRACT:  
@@ -80,17 +82,24 @@ CLASS HPD.DumpHandler ABSTRACT:
       (icType       AS CHARACTER,
        icInternalID AS CHARACTER):
 
-      FIND FIRST ExternalID USE-INDEX Type_InternalID_ExternalID NO-LOCK WHERE
-         ExternalID.Type       = icType AND
-         ExternalID.InternalID = icInternalID AND
-         ExternalID.ExtSource  = "CM"
-      NO-ERROR.
-      
-      IF AVAILABLE ExternalID
-      THEN RETURN ExternalID.ExternalID.
-      
-      RETURN "".         
-         
+      &IF "{&HPD_ENVIRONMENT}" = "Yoigo"
+      &THEN
+      &ELSEIF "{&HPD_ENVIRONMENT}" = "Salt"
+      &THEN
+         FIND FIRST ExternalID USE-INDEX Type_InternalID_ExternalID NO-LOCK WHERE
+            ExternalID.Type       = icType AND
+            ExternalID.InternalID = icInternalID AND
+            ExternalID.ExtSource  = "CM"
+         NO-ERROR.
+
+         IF AVAILABLE ExternalID
+         THEN RETURN ExternalID.ExternalID.
+      &ELSE
+         RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
+      &ENDIF
+
+      RETURN "".
+
    END METHOD.
 
 END CLASS.
