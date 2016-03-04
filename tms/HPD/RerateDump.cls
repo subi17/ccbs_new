@@ -61,7 +61,7 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
             /* Convert datetime-tz to datetime and put it to position 7 */
             objDumpBase2:mUpdateDumpHeader(7,"",STRING(DATETIME(DATE(CAST(objDumpBase, DumpTimeBased):objHPDTime:CurrLocalTZTime)),MTIME(CAST(objDumpBase, DumpTimeBased):objHPDTime:CurrLocalTZTime))).
          &ELSE
-            objDumpBase2:mUpdateDumpHeader(5,"", CAST(objDumpBase, DumpTimeBased):objHPDTime:CurrLocalTZTime).
+            objDumpBase2:mUpdateDumpHeader(5,"", ISO-DATE(CAST(objDumpBase, DumpTimeBased):objHPDTime:CurrLocalTZTime)).
          &ENDIF
 
          objDumpBase2:mVerifyDumpFileData().

@@ -193,7 +193,7 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
    END METHOD.
 
 
-   METHOD PRIVATE VOID mFindAdditionalTables:
+   METHOD PRIVATE VOID mFindAdditionalTables():
       
       FIND FIRST lbOrderAccessory NO-LOCK WHERE
          lbOrderAccessory.Brand        = "1"                    AND

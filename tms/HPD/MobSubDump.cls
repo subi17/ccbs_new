@@ -68,12 +68,12 @@ CLASS HPD.MobSubDump FINAL INHERITS DumpHandler:
          WHEN "TariffBundle"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE CASE lhMainTable::TariffBundle:
+              ELSE CASE lbMobSub.TariffBundle:
                       WHEN "CONTDATA" THEN RETURN "CONTRD1".
                       WHEN "CONTD2"   THEN RETURN "CONTRD2".
                       WHEN "CONTD3"   THEN RETURN "CONTRD3".
                       WHEN "CONTD4"   THEN RETURN "CONTRD4".
-                      OTHERWISE            RETURN lhMainTable::TariffBundle.
+                      OTHERWISE            RETURN lbMobSub.TariffBundle.
                    END CASE.
          OTHERWISE RETURN "".         
       END CASE.

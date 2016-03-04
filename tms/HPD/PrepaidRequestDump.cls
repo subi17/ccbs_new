@@ -1,6 +1,7 @@
 USING Progress.Lang.*.
 USING HPD.DumpHandler.
 USING HPD.DumpBase.
+USING HPD.DumpTimeBased.
 
 {HPD/HPDConst.i}
 
@@ -59,6 +60,8 @@ CLASS HPD.PrepaidRequestDump FINAL INHERITS DumpHandler:
 
    
    METHOD PRIVATE CHARACTER mPopulatePPStatuses():
+      
+      DEFINE VARIABLE lcReturnValue AS CHARACTER NO-UNDO.
       
       FOR
          EACH TMSCodes NO-LOCK WHERE
