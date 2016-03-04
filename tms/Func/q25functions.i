@@ -248,7 +248,7 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
       /* Only cust level logs are needed to be written here  */
       IF iiLogLevel EQ {&Q25_LOGGING_CUST_LOGS} THEN DO: 
          lcQ25LogFile = lcQ25SpoolDir + "events_" +
-                        (REPLACE(STRING(fMakeTS()),".","_")) + ".cvt".
+                        (REPLACE(STRING(fMakeTS()),".","_")) + ".csv".
          OUTPUT STREAM Sout TO VALUE(lcQ25LogFile) APPEND.
          PUT STREAM Sout UNFORMATTED
             icLogText SKIP.
