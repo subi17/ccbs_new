@@ -31,8 +31,8 @@ ELSE DO:
 
    IF NOT llSameValues
    THEN ASSIGN
-           fCreateMsReqStatisticQ(oldMsRequest.ReqType, oldMsRequest.ReqStatus, -1)
-           fCreateMsReqStatisticQ(MsRequest.ReqType, MsRequest.ReqStatus, 1)
+           llSameValues = fCreateMsReqStatisticQ(oldMsRequest.ReqType, oldMsRequest.ReqStatus, -1)
+           llSameValues = fCreateMsReqStatisticQ(MsRequest.ReqType, MsRequest.ReqStatus, 1)
            .
 END.
 
