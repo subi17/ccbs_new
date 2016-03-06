@@ -69,10 +69,16 @@ END.
 RUN pInitialize.
 
 IF NOT RETURN-VALUE BEGINS "ERROR" THEN 
-   RUN pAnalyse.
+   RUN pAnalyse(INPUT TABLE ttResult,
+                INPUT iiFRProcessID,
+                INPUT idaInvDate,
+                INPUT iiInvType,
+                INPUT iiUpdateInterval).
 
 IF NOT RETURN-VALUE BEGINS "ERROR" THEN
-   RUN pSaveResults.
+   RUN pSaveResults(INPUT TABLE ttResult,
+                    INPUT iiFRExecID,
+                    INPUT iiBRTestQueueID).
    
 IF NOT SESSION:BATCH THEN 
    HIDE FRAME fQty NO-PAUSE.
@@ -159,6 +165,11 @@ PROCEDURE pInitialize:
 END PROCEDURE.
 
 PROCEDURE pAnalyse:
+DEFINE INPUT PARAMETER TABLE FOR ttResult. 
+DEFINE INPUT PARAMETER iiFRProcessID    AS INT  NO-UNDO.
+DEFINE INPUT PARAMETER idaInvDate       AS DATE NO-UNDO.
+DEFINE INPUT PARAMETER iiInvType        AS INT  NO-UNDO.
+DEFINE INPUT PARAMETER iiUpdateInterval AS INT  NO-UNDO.
 
    DEF VAR liMatch  AS INT  NO-UNDO.
    DEF VAR ldRowAmt AS DEC  NO-UNDO.
@@ -245,6 +256,9 @@ PROCEDURE pAnalyse:
 END PROCEDURE.
 
 PROCEDURE pSaveResults:
+DEFINE INPUT PARAMETER TABLE FOR ttResult. 
+DEFINE INPUT PARAMETER iiFRExecID      AS INT NO-UNDO.
+DEFINE INPUT PARAMETER iiBRTestQueueID AS INT NO-UNDO. 
 
    DEF VAR liResultID    AS INT  NO-UNDO.
    DEF VAR ldResultStamp AS DEC  NO-UNDO.
