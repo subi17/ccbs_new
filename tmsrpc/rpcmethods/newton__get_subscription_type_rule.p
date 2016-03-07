@@ -307,13 +307,6 @@ FUNCTION fGetReferenceTariff RETURNS CHARACTER
          lcCLIType = MsOwner.TariffBundle.
    END.
 
-   IF bufMsRequest.ReqSource = {&REQUEST_SOURCE_RENEWAL} THEN DO:
-      IF MobSub.TariffBundle <> "" THEN 
-         lcCLIType = MobSub.TariffBundle.
-      ELSE 
-         lcCLIType = MobSub.CLIType.
-   END.
-
    RETURN lcCLIType.
 END FUNCTION.
 
