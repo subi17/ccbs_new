@@ -290,7 +290,7 @@ PROCEDURE pPrintLine:
          ASSIGN
             lcCodFpago = TFConf.PaytermCode WHEN TFConf.RVPercentage NE 0.
          END.
-
+      END.
    END.
 
    PUT STREAM sout 
