@@ -244,27 +244,15 @@ CLASS HPD.RepLogHandler FINAL:
                      ISO-DATE(lhRepLogTable::UTCTime).
                   &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
                   &THEN
-                     &IF DEFINED(OLD_HEADER_VERSION) &THEN
-                     {&HPDDumpDelimiter} + "&1" + {&HPDDumpDelimiter} +
-                     STRING(DATETIME(DATE(lhRepLogTable::EventTime),MTIME(lhRepLogTable::EventTime))).
-                     &ELSE
                      ISO-DATE(lhRepLogTable::EventTime).
-                     &ENDIF
                   &ENDIF
 
       IF lhRepLogTable::EventType = "DELETE"
-      THEN
-      &IF DEFINED(OLD_HEADER_VERSION) &THEN
-         lcMessage = SUBSTITUTE(lcMessage, ( IF ttDumpHandler.QuoteKeyValue
-                                             THEN QUOTER(lhRepLogTable::KeyValue)
-                                             ELSE lhRepLogTable::KeyValue ) ).
-      &ELSE
-         lcMessage = lcMessage + {&HPDDumpDelimiter} +
+      THEN lcMessage = lcMessage + {&HPDDumpDelimiter} +
                      ( IF ttDumpHandler.QuoteKeyValue
                        THEN QUOTER(lhRepLogTable::KeyValue)
                        ELSE lhRepLogTable::KeyValue ) +
                      {&HPDDumpDelimiter} + ttDumpHandler.VersionNumber.
-      &ENDIF
       ELSE DO:
          lcTail = CAST(ttDumpHandler.objHandler, DumpHandler):mProcessRepLog(lhRepLogTable::RowID).
 
@@ -277,14 +265,6 @@ CLASS HPD.RepLogHandler FINAL:
                             THEN "?" ELSE lhRepLogTable::RowID)).
             RETURN FALSE.
          END.
-
-         &IF DEFINED(OLD_HEADER_VERSION) &THEN
-         ASSIGN
-            lcMessage = SUBSTITUTE(lcMessage,ENTRY(1,lcTail,{&HPDDumpDelimiter}))
-            ENTRY(1,lcTail,{&HPDDumpDelimiter}) = ""
-            lcTail = LEFT-TRIM(lcTail,{&HPDDumpDelimiter})
-            .
-         &ENDIF
 
          lcMessage = lcMessage + {&HPDDumpDelimiter} + lcTail.
       END.

@@ -2,8 +2,6 @@ USING Progress.Lang.*.
 USING dotr.Stomp.*.
 USING dotr.Stomp.Interface.*.
 
-{HPD/HPDEnvironment.i}
-
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS HPD.HPDAckReader ABSTRACT
@@ -30,11 +28,7 @@ CLASS HPD.HPDAckReader ABSTRACT
    DEFINE PROTECTED TEMP-TABLE ttResponse NO-UNDO SERIALIZE-NAME ""
       FIELD DBId      AS CHARACTER   SERIALIZE-NAME "dbid"
       FIELD KeyValue  AS CHARACTER   SERIALIZE-NAME "keyid"
-      &IF DEFINED(OLD_HEADER_VERSION) &THEN
-      FIELD EventTime AS DATETIME    SERIALIZE-NAME "time"
-      &ELSE
       FIELD EventTime AS DATETIME-TZ SERIALIZE-NAME "time"
-      &ENDIF
       INDEX DBid IS PRIMARY DBId
       .
 

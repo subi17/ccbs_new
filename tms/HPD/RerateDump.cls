@@ -5,9 +5,6 @@ USING HPD.HPDTime.
 USING HPD.HPDCommon.
 USING HPD.DumpBase.
 
-{Syst/tmsconst.i}
-{HPD/HPDEnvironment.i}
-
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
@@ -37,8 +34,8 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
       objDumpBase:mUseTable(lhMainTable).
       objDumpBase:mUseTable(lhBuffer[1]).
 
-      objDumpBase:mUpdateDumpHeader(3,"",lcTableName).
-      objDumpBase:mUpdateDumpHeader(4,"","MODIFY").
+      objDumpBase:mUpdateDumpHeader(1,"",lcTableName).
+      objDumpBase:mUpdateDumpHeader(2,"","MODIFY").
 
       objDumpBase:mVerifyDumpFileData().
 
@@ -48,21 +45,9 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
          objDumpBase2:mUseTable(lhMainTable).
          objDumpBase2:mUseTable(lhBuffer[2]).
 
-         objDumpBase2:mUpdateDumpHeader(1,"","").
-         objDumpBase2:mUpdateDumpHeader(2,"","").
-         objDumpBase2:mUpdateDumpHeader(3,"",lcTableName).
-         objDumpBase2:mUpdateDumpHeader(4,"","MODIFY").
-
-         &IF DEFINED(OLD_HEADER_VERSION) &THEN
-            /* RECID contains an empty value */
-            objDumpBase2:mUpdateDumpHeader(5,"","").
-            /* Change keyvalue from position 11 to position 6 */
-            objDumpBase2:mModifyDumpHeaderPosOrder(11, 6).
-            /* Convert datetime-tz to datetime and put it to position 7 */
-            objDumpBase2:mUpdateDumpHeader(7,"",STRING(DATETIME(DATE(CAST(objDumpBase, DumpTimeBased):objHPDTime:CurrLocalTZTime)),MTIME(CAST(objDumpBase, DumpTimeBased):objHPDTime:CurrLocalTZTime))).
-         &ELSE
-            objDumpBase2:mUpdateDumpHeader(5,"", ISO-DATE(CAST(objDumpBase, DumpTimeBased):objHPDTime:CurrLocalTZTime)).
-         &ENDIF
+         objDumpBase2:mUpdateDumpHeader(1,"",lcTableName).
+         objDumpBase2:mUpdateDumpHeader(2,"","MODIFY").
+         objDumpBase2:mUpdateDumpHeader(3,"", ISO-DATE(CAST(objDumpBase, DumpTimeBased):objHPDTime:CurrLocalTZTime)).
 
          objDumpBase2:mVerifyDumpFileData().
       END.

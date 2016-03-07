@@ -72,11 +72,6 @@ CLASS HPD.DumpBase:
 
       mCreateDumpSchema().
 
-      &IF DEFINED(OLD_HEADER_VERSION) &THEN
-         /* Delete version information */
-         mDeleteDumpPosition(12).
-      &ENDIF
-
    END CONSTRUCTOR.
    
 
