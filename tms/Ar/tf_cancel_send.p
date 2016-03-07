@@ -259,40 +259,61 @@ PROCEDURE pPrintLine:
    DEF VAR ldeRVAmt AS DEC NO-UNDO.
 
    lcTotalAmount = REPLACE(REPLACE(TRIM(STRING(ideTotalAmount,"->>>>>>>9.99")),",",""),".","").
-   
-   IF Fixedfee.feemodel EQ "RVTERM12" THEN
-      lcCodFpago = "0212".
-   ELSE DO:
-      FIND FIRST SingleFee NO-LOCK WHERE
-                 SingleFee.Brand = gcBrand AND
-                 SingleFee.Custnum = FixedFee.Custnum AND
-                 SingleFee.HostTable = FixedFee.HostTable AND
-                 SingleFee.KeyValue = Fixedfee.KeyValue AND
-                 SingleFee.SourceKey = FixedFee.SourceKey AND
-                 SingleFee.SourceTable = FixedFee.SourceTable AND
-                 SingleFee.CalcObj = "RVTERM" AND
-                 SingleFee.Amt > 0 NO-ERROR.
 
-      IF AVAIL SingleFee THEN DO:
-         ASSIGN
-            ldeRVPerc = TRUNC(SingleFee.Amt /
-                             (ideTotalAmount + SingleFee.Amt) * 100 + 
-                              0.05,1)
-            ldeRVAmt = SingleFee.Amt.
-         FIND FIRST TFConf NO-LOCK WHERE
-                    TFConf.RVPercentage = ldeRVPerc AND
-                    TFConf.ValidTo >= ldaOrderDate AND
-                    TFConf.ValidFrom <= ldaOrderDate NO-ERROR.
+   IF FixedFee.BillCode EQ "RVTERM" THEN
+      FIND FIRST FMItem NO-LOCK WHERE
+                 FMItem.Brand     = gcBrand AND
+                 FMItem.FeeModel  = FixedFee.FeeModel AND
+                 FMItem.ToDate   >= FixedFee.BegDate AND
+                 FMItem.FromDate <= FixedFee.BegDate NO-ERROR.
+   ELSE
+      FIND FIRST FMItem NO-LOCK WHERE
+                 FMItem.Brand     = gcBrand AND
+                 FMItem.FeeModel  = FixedFee.FeeModel AND
+                 FMItem.ToDate   >= ldaOrderDate AND
+                 FMItem.FromDate <= ldaOrderDate NO-ERROR.
+   IF NOT AVAIL FMItem THEN DO:
+      fLogLine(Order.OrderID,
+         SUBST("SYSTEM_ERROR:FeeModel not defined for &1",FixedFee.CalcObj)).
+      FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
+      RETURN.
+   END.
 
-         IF AVAIL TFConf THEN DO:
+   CASE FMItem.FFItemQty:
+      WHEN 12 THEN lcCodFpago = "0212". /* Q25 Extension */
+      OTHERWISE DO:
+         FIND FIRST SingleFee NO-LOCK WHERE
+                    SingleFee.Brand = gcBrand AND
+                    SingleFee.Custnum = FixedFee.Custnum AND
+                    SingleFee.HostTable = FixedFee.HostTable AND
+                    SingleFee.KeyValue = Fixedfee.KeyValue AND
+                    SingleFee.SourceKey = FixedFee.SourceKey AND
+                    SingleFee.SourceTable = FixedFee.SourceTable AND
+                    SingleFee.CalcObj = "RVTERM" AND
+                    SingleFee.Amt > 0 NO-ERROR.
 
-         ASSIGN
-            lcCodFpago = TFConf.PaytermCode WHEN TFConf.RVPercentage NE 0
-            lcCodFpago = TFConf.ResidualCode.
-         END.
-         ELSE DO:
-            fLogLine(FIxedFee.OrderId, 
-                     "ERROR:Terminal financing configuration not found").
+         IF AVAIL SingleFee THEN DO:
+            ASSIGN
+               ldeRVPerc = TRUNC(SingleFee.Amt /
+                                (ideTotalAmount + SingleFee.Amt) * 100 + 
+                                 0.05,1)
+               ldeRVAmt = SingleFee.Amt.
+            FIND FIRST TFConf NO-LOCK WHERE
+                       TFConf.RVPercentage = ldeRVPerc AND
+                       TFConf.ValidTo >= ldaOrderDate AND
+                       TFConf.ValidFrom <= ldaOrderDate NO-ERROR.
+
+            IF AVAIL TFConf THEN DO:
+
+            ASSIGN
+               lcCodFpago = TFConf.PaytermCode WHEN TFConf.RVPercentage NE 0
+               lcCodFpago = TFConf.ResidualCode.
+            END.
+            ELSE DO:
+               fLogLine(FIxedFee.OrderId, 
+                        "ERROR:Terminal financing configuration not found").
+               RETURN.
+            END.
          END.
       END.
 
