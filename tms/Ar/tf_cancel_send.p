@@ -265,19 +265,21 @@ PROCEDURE pPrintLine:
       lcCodFpago = "0212".
    ELSE DO:
       FIND FIRST Order WHERE Order.brand = gcBrand AND
-                             Order.OrderId = FixedFeeTF.OrderId.
-      fTS2Date(Order.CrStamp, OUTPUT ldaOrderCrDate).
-      IF ldaOrderCrDate >= 5/1/2015 THEN
-          lcCodFpago = "0034".
-      ELSE
-         lcCodFpago = "0024".
-      IF FixedFee.BillCode BEGINS "PAYTERM" AND
-         FixedFeeTF.ResidualAmount > 0 THEN DO:
-         ASSIGN
-            ldeRVPerc = TRUNC(FixedFeeTF.residualAmount /
-                        (FixedFeeTF.amount + FixedFeeTF.residualAmount) * 100 + 0.05,1)
-            ldeRVAmt = FixedFeeTF.residualAmount.         
-      END.
+                             Order.OrderId = FixedFeeTF.OrderId NO-ERROR.
+      IF AVAIL Order THEN DO:
+         fTS2Date(Order.CrStamp, OUTPUT ldaOrderCrDate).
+         IF ldaOrderCrDate >= 5/1/2015 THEN
+             lcCodFpago = "0034".
+         ELSE
+            lcCodFpago = "0024".
+         IF FixedFee.BillCode BEGINS "PAYTERM" AND
+            FixedFeeTF.ResidualAmount > 0 THEN DO:
+            ASSIGN
+               ldeRVPerc = TRUNC(FixedFeeTF.residualAmount /
+                           (FixedFeeTF.amount + 
+                            FixedFeeTF.residualAmount) * 100 + 0.05,1)
+               ldeRVAmt = FixedFeeTF.residualAmount.         
+         END.
          FIND FIRST TFConf NO-LOCK WHERE
                     TFConf.RVPercentage = ldeRVPerc AND
                     TFConf.ValidTo >= ldaOrderDate AND
