@@ -541,8 +541,7 @@ DO TRANSACTION:
          fPCActionRequest(MobSub.MsSeq,
                        ttContract.DCEvent,
                        "reactivate",
-                       (IF ttContract.DCEvent EQ "BONO_VOIP" THEN
-                        fSecOffSet(ldCurrTS,180) ELSE ldCurrTS),
+                       ldCurrTS,
                        TRUE,             /* create fees */
                        {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION},
                        "",
