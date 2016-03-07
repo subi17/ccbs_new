@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# This daemon polls the common.replog table and sends one HPD message
+# for each record of the table. The record will be deleted immediately
+# after it is sent
+#
+
+DAEMON=HPD.HPDOnline
+INSTANCE=Ordercanal
+DATABASES="common ordercanal"
+cd $(dirname $0)/..
+. scripts/daemon.sh
