@@ -36,7 +36,6 @@ DEF VAR lcLogDir AS CHAR NO-UNDO.
 DEF VAR lcProcessedFile AS CHAR NO-UNDO. 
 DEF VAR liErrors AS INT NO-UNDO. 
 DEF VAR liOk AS INT NO-UNDO. 
-DEF VAR ldaOrderDate AS DATE NO-UNDO.
 DEF VAR lcCodFpago AS CHAR NO-UNDO.
 
 ASSIGN
@@ -163,7 +162,6 @@ PROCEDURE pCreateFile:
 
             IF AVAIL Order AND FixedFee.OrderId > 0 THEN DO:
                fTS2Date(Order.CrStamp, OUTPUT ldaBankDate).
-               ldaOrderDate = ldaBankDate.
                IF INDEX(Order.OrderChannel, "POS") = 0 THEN
                         ldaBankDate = ldaBankDate + 16.
                IF DAY(ldaBankDate) >= 25 THEN 
@@ -257,7 +255,7 @@ PROCEDURE pPrintLine:
    DEF VAR lcTotalAmount AS CHAR NO-UNDO. 
    DEF VAR ldeRVPerc AS DEC NO-UNDO.
    DEF VAR ldeRVAmt AS DEC NO-UNDO.
-   DEF VAR ldaOrderCrDate AS DATE NO-UNDO.
+   DEF VAR ldaOrderDate AS DATE NO-UNDO.
 
    lcTotalAmount = REPLACE(REPLACE(TRIM(STRING(ideTotalAmount,"->>>>>>>9.99")),",",""),".","").
 
@@ -267,8 +265,8 @@ PROCEDURE pPrintLine:
       FIND FIRST Order WHERE Order.brand = gcBrand AND
                              Order.OrderId = FixedFeeTF.OrderId NO-ERROR.
       IF AVAIL Order THEN DO:
-         fTS2Date(Order.CrStamp, OUTPUT ldaOrderCrDate).
-         IF ldaOrderCrDate >= 5/1/2015 THEN
+         fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+         IF ldaOrderDate >= 5/1/2015 THEN
              lcCodFpago = "0034".
          ELSE
             lcCodFpago = "0024".
