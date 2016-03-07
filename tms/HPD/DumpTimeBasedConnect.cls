@@ -97,7 +97,8 @@ CLASS HPD.DumpTimeBasedConnect INHERITS DumpTimeBased:
 
       CREATE BUFFER lhDBConfig FOR TABLE lcDBConfigTable.
       CREATE QUERY lhDBConfQuery.
-      lhDBConfQuery:QUERY-PREPARE(SUBSTITUTE(lcQuery, lcDBConfigTable, lbDumpFile.MainTable)).
+      lhDBConfQuery:SET-BUFFERS(lhDBConfig).
+      lhDBConfQuery:QUERY-PREPARE(SUBSTITUTE(lcQuery, lcDBConfigTable, QUOTER(lbDumpFile.MainTable))).
       lhDBConfQuery:QUERY-OPEN().
       
    END METHOD.

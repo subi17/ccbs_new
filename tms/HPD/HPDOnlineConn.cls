@@ -22,16 +22,6 @@ CLASS HPD.HPDOnlineConn INHERITS HPD.HPDOnline:
    
    DEFINE PRIVATE VARIABLE lhDBConfig          AS HANDLE          NO-UNDO.
    DEFINE PRIVATE VARIABLE lhDBConfQuery       AS HANDLE          NO-UNDO.
-     
-   CONSTRUCTOR PUBLIC HPDOnlineConn( ):
-      
-      SUPER().
-
-      mCheckTableAndPeriod().
-      
-      mSetDBConfigQuery().
-
-   END CONSTRUCTOR.
 
 
    METHOD PRIVATE VOID mCheckTableAndPeriod():
@@ -80,8 +70,9 @@ CLASS HPD.HPDOnlineConn INHERITS HPD.HPDOnline:
       &ENDIF
 
       CREATE BUFFER lhDBConfig FOR TABLE lcDBConfigTable.      
-      CREATE QUERY lhDBConfQuery.      
-      lhDBConfQuery:QUERY-PREPARE(SUBSTITUTE(lcQuery, lcDBConfigTable, lcInstance)).
+      CREATE QUERY lhDBConfQuery.
+      lhDBConfQuery:SET-BUFFERS(lhDBConfig).
+      lhDBConfQuery:QUERY-PREPARE(SUBSTITUTE(lcQuery, lcDBConfigTable, QUOTER(lcInstance))).
       
    END METHOD.
    
@@ -203,7 +194,13 @@ CLASS HPD.HPDOnlineConn INHERITS HPD.HPDOnline:
 
 
    METHOD OVERRIDE PUBLIC VOID setUp ():
+
+      lcInstance = REPLACE(lDaemonName, THIS-OBJECT:GetClass():TypeName, "").
+
+      mCheckTableAndPeriod().
       
+      mSetDBConfigQuery().
+
       mCheckConnection().
       
    END METHOD.

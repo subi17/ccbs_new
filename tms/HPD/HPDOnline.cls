@@ -19,10 +19,7 @@ CLASS HPD.HPDOnline INHERITS gearbox.daemons.Daemon:
    
    CONSTRUCTOR PUBLIC HPDOnline( ):
 
-      ASSIGN
-         lcInstance = REPLACE(lDaemonName, THIS-OBJECT:GetClass():TypeName, "")
-         ldaLastCheckingDate = TODAY
-         .
+      ldaLastCheckingDate = TODAY.
 
       IF LOG-MANAGER:LOGGING-LEVEL < 2 AND LOG-MANAGER:LOGFILE-NAME <> ?
       THEN LOG-MANAGER:WRITE-MESSAGE("Daemon started", "INFO").
@@ -32,6 +29,7 @@ CLASS HPD.HPDOnline INHERITS gearbox.daemons.Daemon:
 
    METHOD OVERRIDE PUBLIC VOID setUp ():
 
+      lcInstance = REPLACE(lDaemonName, THIS-OBJECT:GetClass():TypeName, "").
       objRepLogHandler = NEW HPD.RepLogHandler(lcInstance).
 
    END METHOD.

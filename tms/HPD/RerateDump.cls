@@ -99,10 +99,13 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
 
       CREATE BUFFER lhDBConfig FOR TABLE lcDBConfigTable.
       CREATE QUERY lhDBConfQuery.
-      lhDBConfQuery:QUERY-PREPARE(SUBSTITUTE(lcQuery, lcDBConfigTable, lcTableName)).
-      
+
+      lhDBConfQuery:SET-BUFFERS(lhDBConfig).
+
+      lhDBConfQuery:QUERY-PREPARE(SUBSTITUTE(lcQuery, lcDBConfigTable, QUOTER(lcTableName))).
+
       lhDBConfQuery:QUERY-OPEN().
-      
+
       DO WHILE TRUE:
          
          llOK = lhDBConfQuery:GET-NEXT(NO-LOCK).

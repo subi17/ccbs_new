@@ -45,7 +45,7 @@ case "$1" in
       echo "$DAEMONNAME is already running with pid $pid" >&2
       exit 2
     else
-      nohup start_daemon.sh $DAEMON $INSTANCE $LOGGINGLEVEL $DATABASES &>/dev/null &
+      ./script/start_daemon.sh $DAEMON $INSTANCE $LOGGINGLEVEL $DATABASES
 #      nohup pike daemon $DAEMON $INSTANCE -- $DATABASES $LOGGINGLEVEL $EXTRAPARAM &>/dev/null &
       sleep 1
       if ! test -f $PIDFILE; then

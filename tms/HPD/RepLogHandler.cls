@@ -52,11 +52,6 @@ CLASS HPD.RepLogHandler FINAL:
          lcDataBase        = icDB
          lcRepLogTableName = lcDataBase + ".RepLog"
          .
-      
-      CREATE BUFFER lhRepLogTable FOR TABLE lcRepLogTableName.               
-      
-      IF NOT mPopulateDumpHandlers()
-      THEN RETURN ERROR NEW Progress.Lang.AppError("No tables defined to online HPD interface for database " + lcDataBase, 1).
 
       DO ON ERROR UNDO, THROW:
 
@@ -84,15 +79,20 @@ CLASS HPD.RepLogHandler FINAL:
 
       DO ON ERROR UNDO, THROW:
 
-         liTransactionSize = Syst.Parameters:geti("HPD.Queue.TransactSize", "HPD.Interface").
+         liTransactionSize = Syst.Parameters:geti("HPD.Queue" + lcDataBase + ".TransactSize", "HPD.Interface").
 
          /* Handler code for any error condition. */
          CATCH anyErrorObject AS Progress.Lang.Error:
-            Syst.Parameters:seti("HPD.Queue.TransactSize", "HPD.Interface", 10000).
-            liTransactionSize = Syst.Parameters:geti("HPD.Queue.TransactSize", "HPD.Interface").
+            Syst.Parameters:seti("HPD.Queue" + lcDataBase + ".TransactSize", "HPD.Interface", 10000).
+            liTransactionSize = Syst.Parameters:geti("HPD.Queue" + lcDataBase + ".TransactSize", "HPD.Interface").
          END CATCH.
 
       END.
+
+      CREATE BUFFER lhRepLogTable FOR TABLE lcRepLogTableName.
+
+      IF NOT mPopulateDumpHandlers()
+      THEN RETURN ERROR NEW Progress.Lang.AppError("No tables defined to online HPD interface for database " + lcDataBase, 1).
 
       objMsgPublisher = NEW Gwy.MqPublisher("HPD.Queue" +
                                             IF llUseSeparateQueue
@@ -190,7 +190,8 @@ CLASS HPD.RepLogHandler FINAL:
 
       FOR EACH DumpFile NO-LOCK WHERE
          DumpFile.FileCategory = "HPD" AND
-         DumpFile.SideTables = lcDataBase:
+         DumpFile.SideTables = lcDataBase
+         ON ERROR UNDO, THROW:
             
          CREATE ttDumpHandler.
          ttDumpHandler.objHandler = DYNAMIC-NEW DumpFile.LinkKey(DumpFile.DumpID).

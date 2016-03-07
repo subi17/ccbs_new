@@ -7,6 +7,6 @@
 
 DAEMON=HPD.HPDOnline
 INSTANCE=Common
-DATABASES="common"
+DATABASES="common ordercanal"
 cd $(dirname $0)/..
-. scripts/daemon.sh
+. script/daemon.sh
