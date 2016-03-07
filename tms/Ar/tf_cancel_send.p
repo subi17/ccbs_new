@@ -281,7 +281,23 @@ PROCEDURE pPrintLine:
 
    CASE FMItem.FFItemQty:
       WHEN 12 THEN lcCodFpago = "0212". /* Q25 Extension */
+      WHEN 18 THEN  lcCodFpago = "0018".
+      WHEN 24 THEN DO:
+         /* YTS-6873: Own code for non-residual fee cass */
+         IF ldaOrderDate >= 5/1/2015 THEN
+            lcCodFpago = "0034".
+         ELSE
+            lcCodFpago = "0024".
+      END.
       OTHERWISE DO:
+         fLogLine(Order.OrderID,
+            SUBST("SYSTEM_ERROR:Unsupported PAYTERM contract length &1",fmitem.FFItemQty)).
+         FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
+         RETURN.
+      END.
+  END. 
+  IF NOT FixedFee.BillCode BEGINS "PAYTERM" THEN RELEASE SingleFee.
+      ELSE
          FIND FIRST SingleFee NO-LOCK WHERE
                     SingleFee.Brand = gcBrand AND
                     SingleFee.Custnum = FixedFee.Custnum AND
@@ -292,34 +308,28 @@ PROCEDURE pPrintLine:
                     SingleFee.CalcObj = "RVTERM" AND
                     SingleFee.Amt > 0 NO-ERROR.
 
-         IF AVAIL SingleFee THEN DO:
-            ASSIGN
-               ldeRVPerc = TRUNC(SingleFee.Amt /
-                                (ideTotalAmount + SingleFee.Amt) * 100 + 
-                                 0.05,1)
-               ldeRVAmt = SingleFee.Amt.
-            FIND FIRST TFConf NO-LOCK WHERE
-                       TFConf.RVPercentage = ldeRVPerc AND
-                       TFConf.ValidTo >= ldaOrderDate AND
-                       TFConf.ValidFrom <= ldaOrderDate NO-ERROR.
+      IF AVAIL SingleFee THEN DO:
+         ASSIGN
+            ldeRVPerc = TRUNC(SingleFee.Amt /
+                             (ideTotalAmount + SingleFee.Amt) * 100 + 
+                              0.05,1)
+            ldeRVAmt = SingleFee.Amt.
+         FIND FIRST TFConf NO-LOCK WHERE
+                    TFConf.RVPercentage = ldeRVPerc AND
+                    TFConf.ValidTo >= ldaOrderDate AND
+                    TFConf.ValidFrom <= ldaOrderDate NO-ERROR.
 
-            IF AVAIL TFConf THEN DO:
+         IF AVAIL TFConf THEN DO:
 
-            ASSIGN
-               lcCodFpago = TFConf.PaytermCode WHEN TFConf.RVPercentage NE 0
-               lcCodFpago = TFConf.ResidualCode.
-            END.
-            ELSE DO:
-               fLogLine(FIxedFee.OrderId, 
-                        "ERROR:Terminal financing configuration not found").
-               RETURN.
-            END.
+         ASSIGN
+            lcCodFpago = TFConf.PaytermCode WHEN TFConf.RVPercentage NE 0.
+         END.
+         ELSE DO:
+            fLogLine(FIxedFee.OrderId, 
+                     "ERROR:Terminal financing configuration not found").
+            RETURN.
          END.
       END.
-
-
-      
-   END.
 
    PUT STREAM sout 
    /*COD-CDNITR*/    UPPER(FixedFeeTF.OrgId) FORMAT "X(9)"
