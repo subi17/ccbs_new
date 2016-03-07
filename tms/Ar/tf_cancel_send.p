@@ -273,7 +273,7 @@ PROCEDURE pPrintLine:
                  FMItem.ToDate   >= ldaOrderDate AND
                  FMItem.FromDate <= ldaOrderDate NO-ERROR.
    IF NOT AVAIL FMItem THEN DO:
-      fLogLine(Order.OrderID,
+      fLogLine(FixedFee.OrderID,
          SUBST("SYSTEM_ERROR:FeeModel not defined for &1",FixedFee.CalcObj)).
       FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
       RETURN.
@@ -290,7 +290,7 @@ PROCEDURE pPrintLine:
             lcCodFpago = "0024".
       END.
       OTHERWISE DO:
-         fLogLine(Order.OrderID,
+         fLogLine(Fixedfee.OrderID,
             SUBST("SYSTEM_ERROR:Unsupported PAYTERM contract length &1",fmitem.FFItemQty)).
          FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.
          RETURN.
