@@ -69,16 +69,16 @@ END.
 RUN pInitialize.
 
 IF NOT RETURN-VALUE BEGINS "ERROR" THEN 
-   RUN pAnalyse(INPUT TABLE ttResult,
-                INPUT iiFRProcessID,
-                INPUT idaInvDate,
-                INPUT iiInvType,
-                INPUT iiUpdateInterval).
+   RUN pAnalyseAnalysis(INPUT TABLE ttResult,
+                        INPUT iiFRProcessID,
+                        INPUT idaInvDate,
+                        INPUT iiInvType,
+                        INPUT iiUpdateInterval).
 
 IF NOT RETURN-VALUE BEGINS "ERROR" THEN
-   RUN pSaveResults(INPUT TABLE ttResult,
-                    INPUT iiFRExecID,
-                    INPUT iiBRTestQueueID).
+   RUN pSaveAnalysisResults(INPUT TABLE ttResult,
+                            INPUT iiFRExecID,
+                            INPUT iiBRTestQueueID).
    
 IF NOT SESSION:BATCH THEN 
    HIDE FRAME fQty NO-PAUSE.
@@ -87,6 +87,7 @@ RETURN RETURN-VALUE.
 
 /***** Main end ******/
 
+{funcrun_analysis_results.i}
 
 PROCEDURE pInitialize:
 

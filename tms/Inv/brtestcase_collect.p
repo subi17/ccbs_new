@@ -212,6 +212,7 @@ RETURN RETURN-VALUE.
 
 /***** Main end ******/
 
+{funcrun_analysis_results.i}
 
 PROCEDURE pInitialize:
 
@@ -270,9 +271,6 @@ PROCEDURE pInitialize:
 
    RUN lamupers.p PERSISTENT SET lhHandle.
 
-   IF VALID-HANDLE(lhAnalysisHandle) AND ilgMergeAnalysis THEN 
-      RUN brtestresult_analysis.p PERSISTENT SET lhAnalysisHandle.
-     
    RETURN "". 
       
 END PROCEDURE.
@@ -567,15 +565,15 @@ PROCEDURE pCollect:
           /* Analysis for Created Invoice */
           RUN pInitializeMergeAnalysis.
           
-          RUN pAnalyse IN lhAnalysisHandle (INPUT TABLE ttResult,
-                                            iiFRProcessID,
-                                            idaInvDate,
-                                            iiInvType,
-                                            iiUpdateInterval).
+          RUN pAnalyseAnalysis (INPUT TABLE ttResult,
+                                iiFRProcessID,
+                                idaInvDate,
+                                iiInvType,
+                                iiUpdateInterval).
           
-          RUN pSaveResults IN lhAnalysisHandle (INPUT TABLE ttResult,
-                                                iiFRExecID,
-                                                iiBRTestQueueID).
+          RUN pSaveAnalysisResults (INPUT TABLE ttResult,
+                                    iiFRExecID,
+                                    iiBRTestQueueID).
       END.
                 
       IF iiUpdateInterval > 0 AND oiPicked MOD iiUpdateInterval = 0 
@@ -595,15 +593,15 @@ PROCEDURE pCollect:
           
       IF CAN-FIND(FIRST ttResult NO-LOCK) THEN DO:
       
-         RUN pAnalyse IN lhAnalysisHandle (INPUT TABLE ttResult,
-                                           iiFRProcessID,
-                                           idaInvDate,
-                                           iiInvType,
-                                           iiUpdateInterval).
+         RUN pAnalyseAnalysis (INPUT TABLE ttResult,
+                               iiFRProcessID,
+                               idaInvDate,
+                               iiInvType,
+                               iiUpdateInterval).
           
-         RUN pSaveResults IN lhAnalysisHandle (INPUT TABLE ttResult,
-                                               iiFRExecID,
-                                               iiBRTestQueueID).
+         RUN pSaveAnalysisResults (INPUT TABLE ttResult,
+                                   iiFRExecID,
+                                   iiBRTestQueueID).
       END.   
    END.   
        
