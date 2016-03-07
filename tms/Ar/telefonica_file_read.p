@@ -454,6 +454,10 @@ PROCEDURE pAnalyzeTelefonicaInvoices:
                   bttTF.BaseServiceMF = ldeProductMFSum + ldeFiberMFSum 
                   bttTF.OtherMF = ldeMonthlyFeesSum - 
                                           ldeProductMFSum - ldeFiberMFSum.
+               WHEN "AG000000583317" OR WHEN "AG000000583318" THEN ASSIGN
+                  bttTF.ProductCode = "SKIPPED: fixed line only product"
+                  bttTF.ValidationEnvio = "2"
+                  bttTF.ValidationProceso = "4".
                OTHERWISE ASSIGN
                   bttTF.ProductCode = "ERROR, incorrect product code"
                   bttTF.ValidationEnvio = "2"
@@ -586,7 +590,8 @@ PROCEDURE pStoreData:
 
    FOR EACH ttTF NO-LOCK :
 
-      IF ttTF.ProductCode BEGINS "ERROR" THEN NEXT.
+      IF ttTF.ProductCode BEGINS "ERROR" OR 
+         ttTF.ProductCode BEGINS "SKIPPED" THEN NEXT.
       
       liTFId = liTFId + 1.
       CREATE FusionInvoice.
