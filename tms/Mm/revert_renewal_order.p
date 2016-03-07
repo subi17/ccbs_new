@@ -545,9 +545,12 @@ PROCEDURE pCloseQ25Discount:
                  dpmember.dpid = DiscountPlan.DpId AND
                  dpmember.hosttable = "mobsub" AND
                  dpmember.keyvalue = string(mobsub.msseq) AND
-                 dpmember.validfrom = fPer2Date(SingleFee.BillPeriod,0) AND
                  dpmember.validto >= dpmember.validfrom AND
-                 dpmember.discvalue = ldeDiscount NO-ERROR.
+                 dpmember.discvalue = ldeDiscount AND
+             (IF dpmember.orderid > 0 THEN 
+                 dpmember.OrderID EQ SingleFee.OrderID
+            ELSE dpmember.validfrom EQ fPer2Date(SingleFee.BillPeriod,0))
+      NO-ERROR.
       IF AVAIL dpmember THEN LEAVE.
    END.
    
