@@ -256,14 +256,18 @@ PROCEDURE pPrintLine:
    DEF VAR ldeRVPerc AS DEC NO-UNDO.
    DEF VAR ldeRVAmt AS DEC NO-UNDO.
    DEF VAR ldaOrderDate AS DATE NO-UNDO.
+   DEF VAR liOrderId AS IN NO-UNDO.
 
    lcTotalAmount = REPLACE(REPLACE(TRIM(STRING(ideTotalAmount,"->>>>>>>9.99")),",",""),".","").
-
+   IF FixedFeeTF.OrderId EQ ? THEN
+      liOrderId = FixedFee.OrderId.
+   ELSE
+      liOrderId = FixedFeeTF.OrderId.
    IF FixedFee.BillCode EQ "RVTERM" THEN
       lcCodFpago = "0212".
    ELSE DO:
       FIND FIRST Order WHERE Order.brand = gcBrand AND
-                             Order.OrderId = FixedFeeTF.OrderId NO-ERROR.
+                             Order.OrderId = liOrderId NO-ERROR.
       IF AVAIL Order THEN DO:
          fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
          IF ldaOrderDate >= 5/1/2015 THEN
