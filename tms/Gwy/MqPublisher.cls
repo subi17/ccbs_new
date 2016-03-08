@@ -62,8 +62,8 @@ CLASS Gwy.MqPublisher:
       
       ASSIGN
          lcHostName  = Parameters:getc(icConfigurationPrefix + ".ip")
-         liPort      = Parameters:geti(icConfigurationPrefix + ".liPort")
-         liTimeOut   = Parameters:geti(icConfigurationPrefix + ".liTimeOut")
+         liPort      = Parameters:geti(icConfigurationPrefix + ".Port")
+         liTimeOut   = Parameters:geti(icConfigurationPrefix + ".TimeOut")
          lcQueueName = Parameters:getc(icConfigurationPrefix + ".Name")
          .
       
