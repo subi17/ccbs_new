@@ -20,7 +20,7 @@ CLASS HPD.HPDAckDaemon INHERITS gearbox.daemons.Daemon:
       DEFINE VARIABLE lcInstance AS CHARACTER NO-UNDO.
       ASSIGN
          lcInstance = REPLACE(lDaemonName, THIS-OBJECT:GetClass():TypeName, "")
-         lcSingleReplogDBList = Syst.Parameters:getc("HPDAck", "SingleReplogDB")
+         lcSingleReplogDBList = Syst.Parameters:getc("HPD.Ack.SingleReplogDB", "HPD.Interface")
          .   
       
       IF LOOKUP(lcInstance,lcSingleReplogDBList) > 0

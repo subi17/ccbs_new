@@ -10,6 +10,8 @@ CLASS HPD.HPDAckReader ABSTRACT
    DEFINE PRIVATE VARIABLE lcHostName             AS CHARACTER      NO-UNDO.
    DEFINE PRIVATE VARIABLE liPortNumber           AS INTEGER        NO-UNDO.
    DEFINE PRIVATE VARIABLE lcQueueName            AS CHARACTER      NO-UNDO.
+   DEFINE PRIVATE VARIABLE lcUserName             AS CHARACTER      NO-UNDO.
+   DEFINE PRIVATE VARIABLE lcPassword             AS CHARACTER      NO-UNDO.
 
    DEFINE PRIVATE VARIABLE loStompConfig          AS StompConfig    NO-UNDO.
    DEFINE PRIVATE VARIABLE loStompClient          AS StompClient    NO-UNDO.
@@ -39,14 +41,28 @@ CLASS HPD.HPDAckReader ABSTRACT
 
    CONSTRUCTOR PROTECTED HPDAckReader (icDB AS CHARACTER):
 
+      DO ON ERROR UNDO, THROW:
+         lcUserName = Syst.Parameters:getc("HPD.Ack.UserName", "HPD.Interface").
+         CATCH anyErrorObject AS Progress.Lang.Error:
+            lcUserName = ?.
+         END CATCH.
+      END.
+
+      DO ON ERROR UNDO, THROW:
+         lcPassword = Syst.Parameters:getc("HPD.Ack.Password", "HPD.Interface").
+         CATCH anyErrorObject AS Progress.Lang.Error:
+            lcPassword = ?.
+         END CATCH.
+      END.
+
       ASSIGN
-         lcHostName           = Syst.Parameters:getc("HPDAck", "HPDAckHostName")
-         liPortNumber         = Syst.Parameters:geti("HPDAck", "HPDAckPortNumber")
-         lcQueueName          = Syst.Parameters:getc("HPDAck", "HPDAckQueue" + icDB)
-         liAckBatch           = Syst.Parameters:geti("HPDAck", "HPDAckBatchSize")
-         liCheckWaitMinutes   = Syst.Parameters:geti("HPDAck", "HPDAckCheckWaitMin")
-         liMaxLockedLoopCount = Syst.Parameters:geti("HPDAck", "HPDAckMaxLockedLoop")
-         lcExportDir          = Syst.Parameters:getc("HPDAck", "HPDAckExportDir")
+         lcHostName           = Syst.Parameters:getc("HPD.Ack.HostName", "HPD.Interface")
+         liPortNumber         = Syst.Parameters:geti("HPD.Ack.PortNumber", "HPD.Interface")
+         lcQueueName          = Syst.Parameters:getc("HPD.Ack.Queue" + icDB, "HPD.Interface")
+         liAckBatch           = Syst.Parameters:geti("HPD.Ack.BatchSize", "HPD.Interface")
+         liCheckWaitMinutes   = Syst.Parameters:geti("HPD.Ack.CheckWaitMin", "HPD.Interface")
+         liMaxLockedLoopCount = Syst.Parameters:geti("HPD.Ack.MaxLockedLoop", "HPD.Interface")
+         lcExportDir          = Syst.Parameters:getc("HPD.Ack.ExportDir", "HPD.Interface")
          ldtzNextCheckTime    = NOW
          .
 
@@ -99,6 +115,8 @@ CLASS HPD.HPDAckReader ABSTRACT
       ASSIGN
          loStompConfig:StompServer         = lcHostName
          loStompConfig:StompPort           = STRING(liPortNumber)
+         loStompConfig:login               = lcUserName
+         loStompConfig:passcode            = lcPassword
          loStompConfig:LargeMessageSupport = NO
          .
 
@@ -166,7 +184,9 @@ CLASS HPD.HPDAckReader ABSTRACT
 
       IF ioStompMessage:Body = ""
       THEN DO:
-         mLogMsg("Empty Body", "INFO").
+         IF ioStompMessage:HEADER BEGINS "CONNECTED"
+         THEN mLogMsg(ioStompMessage:HEADER, "INFO").
+         ELSE mLogMsg("Empty Body", "INFO").
          RETURN.
       END. 
 
