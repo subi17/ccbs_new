@@ -1,27 +1,26 @@
 USING Progress.Lang.*.
-USING HPD.GenericDump.
+USING HPD.DumpHandler.
 USING HPD.HPDCommon.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
-CLASS HPD.InvRowDump FINAL INHERITS GenericDump:
+CLASS HPD.InvRowDump FINAL INHERITS DumpHandler:
+
+   DEFINE PRIVATE BUFFER lbInvRow     FOR InvRow.
+   DEFINE PRIVATE BUFFER lbInvoice    FOR Invoice.
+   DEFINE PRIVATE BUFFER lbSubInvoice FOR SubInvoice.
 
 
    CONSTRUCTOR PUBLIC InvRowDump
       (iiDumpID AS INTEGER):
-               
-      SUPER(iiDumpID).
-      
-   END CONSTRUCTOR.
 
-   
-   CONSTRUCTOR PUBLIC InvRowDump
-      (iiDumpID    AS INTEGER,
-       icFile      AS CHARACTER):
-      
-      SUPER(iiDumpID, icFile).
-      
-   END CONSTRUCTOR.    
+      objDumpBase = NEW DumpBase(iiDumpID, THIS-OBJECT).
+      objDumpBase:mUseTable(BUFFER lbInvRow:HANDLE).
+      objDumpBase:mUseTable(BUFFER lbInvoice:HANDLE).
+      objDumpBase:mUseTable(BUFFER lbSubInvoice:HANDLE).
+      objDumpBase:mVerifyDumpFileData().
+
+   END CONSTRUCTOR.
 
 
    METHOD PUBLIC OVERRIDE CHARACTER mSpecialHandling
@@ -49,6 +48,34 @@ CLASS HPD.InvRowDump FINAL INHERITS GenericDump:
          
       END CASE.
    
+   END METHOD.
+
+
+   METHOD OVERRIDE PUBLIC CHARACTER mProcessRepLog
+      (INPUT icRowID AS CHARACTER):
+
+      FIND lbInvRow NO-LOCK WHERE
+         ROWID(lbInvRow) = TO-ROWID(icRowID)
+      NO-ERROR.
+
+      IF AVAILABLE lbInvRow
+      THEN DO:
+
+         FIND lbInvoice NO-LOCK WHERE
+            lbInvoice.InvNum = lbInvRow.InvNum
+         NO-ERROR.
+
+         FIND lbSubInvoice NO-LOCK WHERE
+            lbSubInvoice.InvNum    = lbInvRow.InvNum AND
+            lbSubInvoice.SubInvNum = lbInvRow.SubInvNum
+         NO-ERROR.
+
+         RETURN objDumpBase:mGetData().
+
+      END.
+
+      RETURN "".
+
    END METHOD.
 
 END CLASS.

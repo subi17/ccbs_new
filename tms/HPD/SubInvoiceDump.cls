@@ -19,7 +19,7 @@ CLASS HPD.SubInvoiceDump FINAL INHERITS InvoiceCommon:
    CONSTRUCTOR PUBLIC SubInvoiceDump
       (iiDumpID AS INTEGER):
       
-      objDumpBase = NEW DumpBase(iiDumpID, THIS-OBJECT).      
+      objDumpBase = NEW DumpBase(iiDumpID, THIS-OBJECT).
       objDumpBase:mUseTable(BUFFER lbSubInvoice:HANDLE).
       objDumpBase:mUseTable(BUFFER lbMsOwner:HANDLE).
       objDumpBase:mVerifyDumpFileData().
@@ -92,6 +92,6 @@ CLASS HPD.SubInvoiceDump FINAL INHERITS InvoiceCommon:
             
       RETURN "". 
          
-   END METHOD.    
+   END METHOD.
 
 END CLASS.
