@@ -70,7 +70,7 @@ DO:
                                             {&Q25_MONTH_24_FINAL_MSG}, liRunMode, 
                                             INPUT-OUTPUT liTempCount).
       IF liRunMode EQ 0 THEN DO:
-         fMove2TransDir(lcQ25LogFile, "", lcQ25DWHLogDir).
+         fMove2TransDir(lcQ25DWHLogFile, "", lcQ25DWHLogDir).
          LEAVE Execution. /* DWH logs created, no need to continue */
       END.
       fQ25LogWriting(STRING(fMakeTS()) + "Start final MESSAGE sending. " + 

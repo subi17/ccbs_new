@@ -26,6 +26,7 @@ DEF VAR liQ25Logging AS INT NO-UNDO.
 DEF VAR lcQ25LogDir          AS CHAR NO-UNDO.
 DEF VAR lcQ25SpoolDir        AS CHAR NO-UNDO.
 DEF VAR lcQ25LogFile         AS CHAR NO-UNDO.
+DEF VAR lcQ25DWHLogFile         AS CHAR NO-UNDO.
 DEF VAR lcQ25DWHLogDir      AS CHAR NO-UNDO.
 DEF VAR ldnewAmount AS DEC NO-UNDO.
 
@@ -247,9 +248,9 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
    IF iiExecType EQ {&Q25_EXEC_TYPE_CUST_LOG_GENERATION} THEN DO:
       /* Only cust level logs are needed to be written here  */
       IF iiLogLevel EQ {&Q25_LOGGING_CUST_LOGS} THEN DO: 
-         lcQ25LogFile = lcQ25SpoolDir + "events_" +
+         lcQ25DWHLogFile = lcQ25SpoolDir + "events_" +
                         (REPLACE(STRING(fMakeTS()),".","_")) + ".csv".
-         OUTPUT STREAM Sout TO VALUE(lcQ25LogFile) APPEND.
+         OUTPUT STREAM Sout TO VALUE(lcQ25DWHLogFile) APPEND.
          PUT STREAM Sout UNFORMATTED
             icLogText SKIP.
          OUTPUT STREAM Sout CLOSE. 
@@ -387,14 +388,15 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                                        iiExecType).
          NEXT. /* "Residual fee billed". */
       END.
-
+      
       FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
               DCCLI.PerContractId = INT(SingleFee.sourcekey) AND
               DCCLI.Brand   = gcBrand AND
               DCCLI.DCEvent BEGINS "PAYTERM" AND
               DCCLI.MsSeq   = Mobsub.MsSeq AND
-              DCCLI.ValidTo >= idaStartDate AND
-              DCCLI.ValidTo <= idaEndDate NO-ERROR.
+              DCCLI.ValidTo >= DATE(MONTH(idaEndDate),1,
+                                    YEAR(idaEndDate)) - 1 AND
+              DCCLI.ValidTo <= fLastDayOfMonth(idaEndDate) NO-ERROR.
 
       IF NOT AVAIL DCCLI THEN DO:
          /* No DCCLI for example between start and end date, singlefee is for
@@ -406,6 +408,20 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(ldAmount).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
                                        iiExecType).
+         NEXT.
+      END.
+
+      FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
+              DCCLI.PerContractId = INT(SingleFee.sourcekey) AND
+              DCCLI.Brand   = gcBrand AND
+              DCCLI.DCEvent BEGINS "PAYTERM" AND
+              DCCLI.MsSeq   = Mobsub.MsSeq AND
+              DCCLI.ValidTo >= idaStartDate AND
+              DCCLI.ValidTo <= idaEndDate NO-ERROR.
+
+      IF NOT AVAIL DCCLI THEN DO:
+         /* No DCCLI for example between start and end date, singlefee is for
+            whole month */
          NEXT.
       END.
       ELSE IF DCCLI.TermDate NE ? THEN DO:
