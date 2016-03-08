@@ -20,12 +20,12 @@ FOR Order FIELDS (Brand OrderID) NO-LOCK WHERE
    Order.Brand   = "1"                         AND
    Order.OrderID = MNPProcess.OrderID:
 
-   CREATE Common.RepLog.
+   CREATE Ordercanal.RepLog.
    ASSIGN
-      Common.RepLog.RowID     = STRING(ROWID(Order))
-      Common.RepLog.TableName = "Order"
-      Common.RepLog.EventType = "MODIFY"
-      Common.RepLog.EventTime = NOW
+      Ordercanal.RepLog.RowID     = STRING(ROWID(Order))
+      Ordercanal.RepLog.TableName = "Order"
+      Ordercanal.RepLog.EventType = "MODIFY"
+      Ordercanal.RepLog.EventTime = NOW
       .
 END.
 
