@@ -1,0 +1,7 @@
+#!/bin/bash
+
+DAEMON=HPD.HPDAckDaemon
+INSTANCE=Ordercanal
+DATABASES="ordercanal"
+cd $(dirname $0)/..
+. script/daemon.sh

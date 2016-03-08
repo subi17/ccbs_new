@@ -1,0 +1,7 @@
+#!/bin/bash
+
+DAEMON=HPD.HPDAckDaemon
+INSTANCE=Mobile
+DATABASES="mobile ordercanal"
+cd $(dirname $0)/..
+. script/daemon.sh

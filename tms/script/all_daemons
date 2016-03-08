@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-COMMANDS="hpd_common hpd_mobile hpd_ordercanal"
+COMMANDS="hpd_common hpd_mobile hpd_ordercanal hpdack_common hpdack_mobile hpdack_ordercanal"
 
 if [ ! $LOGNAME = root ]
 then
