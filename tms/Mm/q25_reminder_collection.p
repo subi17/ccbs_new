@@ -160,7 +160,7 @@ DO:
                       ldaEndDateMonth24, {&Q25_MONTH_24}, liRunMode, 
                       INPUT-OUTPUT liTempCount).
    IF liRunmode EQ 0 THEN DO:
-      fMove2TransDir(lcQ25LogFile, "", lcQ25DWHLogDir).
+      fMove2TransDir(lcQ25DWHLogFile, "", lcQ25DWHLogDir).
       LEAVE execution. /* DWH logs created, can leave here */ 
    END.
    liTempCount = liTotalCount. /* for logging purposes */
