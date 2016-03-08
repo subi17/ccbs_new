@@ -176,7 +176,7 @@ CLASS HPD.RepLogHandler FINAL:
          DFField.OrderNbr = 1
       NO-ERROR.
 
-      IF AVAILABLE DFField AND DFField.DFField BEGINS "¤"
+      IF AVAILABLE DFField AND DFField.DFField BEGINS "~""
       THEN RETURN TRUE.
 
       RETURN FALSE.

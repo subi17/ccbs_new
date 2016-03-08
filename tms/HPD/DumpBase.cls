@@ -140,7 +140,7 @@ CLASS HPD.DumpBase:
          DFField.FromDate <= TODAY
          BY DFField.OrderNbr:
 
-         IF DFField.DFField BEGINS "¤"
+         IF DFField.DFField BEGINS "~""
          THEN ASSIGN
                 lcDFField = SUBSTRING(DFField.DFField, 2)
                 llQuote   = YES
