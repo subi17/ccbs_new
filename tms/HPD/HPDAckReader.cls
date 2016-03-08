@@ -94,10 +94,10 @@ CLASS HPD.HPDAckReader ABSTRACT
 
    METHOD PRIVATE VOID mCloseSession():
       
-      loStompClient:UnSubscribeFromQueue(lcQueueName) NO-ERROR.
+      IF VALID-HANDLE(lhWaitForProcedure)
+      THEN DELETE OBJECT lhWaitForProcedure.
       
-      IF VALID-OBJECT(loStompClient)
-      THEN DELETE OBJECT loStompClient.
+      mDisConnect().
       
       IF VALID-OBJECT(loStompConfig)
       THEN DELETE OBJECT loStompConfig.
@@ -119,6 +119,17 @@ CLASS HPD.HPDAckReader ABSTRACT
          loStompConfig:passcode            = lcPassword
          loStompConfig:LargeMessageSupport = NO
          .
+
+   END METHOD.
+
+
+   METHOD PRIVATE VOID mDisConnect():
+
+      IF VALID-OBJECT(loStompClient)
+      THEN DO:
+         loStompClient:UnSubscribeFromQueue(lcQueueName) NO-ERROR.
+         DELETE OBJECT loStompClient.
+      END.
 
    END METHOD.
 
@@ -155,6 +166,7 @@ CLASS HPD.HPDAckReader ABSTRACT
       
       IF llDisconnected
       THEN DO:
+         mDisConnect().
          mLogMsg("Socket disconnected, retry after 10 seconds","ERROR").
          PAUSE 10 NO-MESSAGE.
          llDisconnected = FALSE.
