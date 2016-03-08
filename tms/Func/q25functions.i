@@ -388,14 +388,15 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                                        iiExecType).
          NEXT. /* "Residual fee billed". */
       END.
-
+      
       FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
               DCCLI.PerContractId = INT(SingleFee.sourcekey) AND
               DCCLI.Brand   = gcBrand AND
               DCCLI.DCEvent BEGINS "PAYTERM" AND
               DCCLI.MsSeq   = Mobsub.MsSeq AND
-              DCCLI.ValidTo >= idaStartDate AND
-              DCCLI.ValidTo <= idaEndDate NO-ERROR.
+              DCCLI.ValidTo >= DATE(MONTH(idaEndDate),1,
+                                    YEAR(idaEndDate)) - 1 AND
+              DCCLI.ValidTo <= fLastDayOfMonth(idaEndDate) NO-ERROR.
 
       IF NOT AVAIL DCCLI THEN DO:
          /* No DCCLI for example between start and end date, singlefee is for
@@ -407,6 +408,20 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(ldAmount).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
                                        iiExecType).
+         NEXT.
+      END.
+
+      FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
+              DCCLI.PerContractId = INT(SingleFee.sourcekey) AND
+              DCCLI.Brand   = gcBrand AND
+              DCCLI.DCEvent BEGINS "PAYTERM" AND
+              DCCLI.MsSeq   = Mobsub.MsSeq AND
+              DCCLI.ValidTo >= idaStartDate AND
+              DCCLI.ValidTo <= idaEndDate NO-ERROR.
+
+      IF NOT AVAIL DCCLI THEN DO:
+         /* No DCCLI for example between start and end date, singlefee is for
+            whole month */
          NEXT.
       END.
       ELSE IF DCCLI.TermDate NE ? THEN DO:
