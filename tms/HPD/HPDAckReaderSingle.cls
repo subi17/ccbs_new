@@ -18,6 +18,8 @@ CLASS HPD.HPDAckReaderSingle INHERITS HPD.HPDAckReader:
 
    DESTRUCTOR PUBLIC HPDAckReaderSingle():
 
+      mAckReplog().
+
       IF VALID-OBJECT(loHPDActHandler)
       THEN DELETE OBJECT loHPDActHandler.
 

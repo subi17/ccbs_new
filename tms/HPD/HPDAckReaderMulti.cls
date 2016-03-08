@@ -20,6 +20,8 @@ CLASS HPD.HPDAckReaderMulti INHERITS HPD.HPDAckReader:
 
    DESTRUCTOR PUBLIC HPDAckReaderMulti():
 
+      mAckReplog().
+
       FOR EACH ttAckHandler:
 
          IF VALID-OBJECT(ttAckHandler.objHandler)
