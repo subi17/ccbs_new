@@ -201,7 +201,6 @@ PROCEDURE pCreateFile:
          RUN pPrintLine(FixedFeeTF.ResidualAmount,
                         ldaBankDate,
                         icBank).
-      IF lcCodFpago EQ "" THEN NEXT. 
       ASSIGN
          FixedFeeTF.CancelStatus = "SENT"
          FixedFeeTF.CancelDate = TODAY
