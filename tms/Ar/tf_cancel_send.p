@@ -280,16 +280,13 @@ PROCEDURE pPrintLine:
                            (FixedFeeTF.amount + 
                             FixedFeeTF.residualAmount) * 100 + 0.05,1)
                ldeRVAmt = FixedFeeTF.residualAmount.         
-         END.
-         FIND FIRST TFConf NO-LOCK WHERE
-                    TFConf.RVPercentage = ldeRVPerc AND
-                    TFConf.ValidTo >= ldaOrderDate AND
-                    TFConf.ValidFrom <= ldaOrderDate NO-ERROR.
-
-         IF AVAIL TFConf THEN DO:
-
-         ASSIGN
-            lcCodFpago = TFConf.PaytermCode WHEN TFConf.RVPercentage NE 0.
+            FIND FIRST TFConf NO-LOCK WHERE
+                       TFConf.RVPercentage = ldeRVPerc AND
+                       TFConf.ValidTo >= ldaOrderDate AND
+                       TFConf.ValidFrom <= ldaOrderDate NO-ERROR.
+            IF AVAIL TFConf THEN
+               ASSIGN
+                  lcCodFpago = TFConf.PaytermCode WHEN TFConf.RVPercentage NE 0.
          END.
       END.
    END.
