@@ -36,15 +36,15 @@ CLASS HPD.InvRowDump FINAL INHERITS DumpHandler:
          WHEN "Amt"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE RETURN STRING(ROUND(lhMainTable::Amt,2)).
+              ELSE RETURN STRING(ROUND(lbInvRow.Amt,2)).
          WHEN "VATAmt"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE RETURN STRING(HPDCommon:mVATAmt(lhMainTable::Amt, lhMainTable::VATPerc)).
+              ELSE RETURN STRING(HPDCommon:mVATAmt(lbInvRow.Amt, lbInvRow.VATPerc)).
          WHEN "TotalAmt"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE RETURN STRING(ROUND(lhMainTable::Amt + HPDCommon:mVATAmt(lhMainTable::Amt, lhMainTable::VATPerc),2)).
+              ELSE RETURN STRING(ROUND(lbInvRow.Amt + HPDCommon:mVATAmt(lbInvRow.Amt, lbInvRow.VATPerc),2)).
          OTHERWISE RETURN "".          
          
       END CASE.

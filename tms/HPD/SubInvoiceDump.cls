@@ -21,6 +21,7 @@ CLASS HPD.SubInvoiceDump FINAL INHERITS InvoiceCommon:
       
       objDumpBase = NEW DumpBase(iiDumpID, THIS-OBJECT).
       objDumpBase:mUseTable(BUFFER lbSubInvoice:HANDLE).
+      objDumpBase:mUseTable(BUFFER lbInvoice:HANDLE).
       objDumpBase:mUseTable(BUFFER lbMsOwner:HANDLE).
       objDumpBase:mVerifyDumpFileData().
                
