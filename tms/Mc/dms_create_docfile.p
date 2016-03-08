@@ -580,7 +580,7 @@ FUNCTION fFindQ25Cancellation RETURNS CHAR
    FIND FIRST OrderAction NO-LOCK WHERE
               OrderAction.Brand    EQ gcBrand AND
               OrderAction.OrderId  EQ Order.OrderId AND
-              OrderAction.ItemType EQ "Q25Extension" NO-ERROR.
+              OrderAction.ItemType EQ "Q25Discount" NO-ERROR.
 
    IF NOT AVAILABLE OrderAction THEN RETURN "".
 
@@ -595,16 +595,18 @@ FUNCTION fFindQ25Cancellation RETURNS CHAR
    IF AVAILABLE bMsRequest THEN RETURN bMsRequest.ReqCParam4.
 
    /* after deadline */
-   FIND FIRST bMsRequest NO-LOCK WHERE
-              bMsRequest.MsSeq       = Order.MsSeq AND
-              bMsRequest.ReqType     = {&REQTYPE_CONTRACT_TERMINATION} AND
-              bMsRequest.ReqStatus  NE {&REQUEST_STATUS_CANCELLED} AND
-              bMsRequest.ReqSource   = {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} AND
-              bMsRequest.ReqCParam2  = "term" AND
-              bMsRequest.ReqCparam3  = "RVTERM12" AND
-              bMsRequest.MsRequest   = iiMsRequest NO-ERROR.
-   IF AVAILABLE bMsRequest THEN RETURN bMsRequest.ReqCParam4.
-   
+   IF iiMsRequest > 0 THEN DO:
+      FIND FIRST bMsRequest NO-LOCK WHERE
+                 bMsRequest.OrigRequest = iiMsRequest AND
+                 bMsRequest.MsSeq       = Order.MsSeq AND
+                 bMsRequest.ReqStatus  NE {&REQUEST_STATUS_CANCELLED} AND
+                 bMsRequest.ReqType     = {&REQTYPE_CONTRACT_TERMINATION} AND
+                 bMsRequest.ReqSource   = 
+                                    {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} AND
+                 bMsRequest.ReqCParam2  = "term" AND
+                 bMsRequest.ReqCparam3  = "RVTERM12" NO-ERROR.
+      IF AVAILABLE bMsRequest THEN RETURN bMsRequest.ReqCParam4.
+   END.
    RETURN "".
 END.
 
@@ -1440,12 +1442,14 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
    DEF VAR lcCaseTypeId     AS CHAR NO-UNDO.
    DEF VAR lcCreateDMS      AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow    AS CHAR NO-UNDO.
+   DEF VAR lcStatuses AS CHAR NO-UNDO.
 
    DEFINE VARIABLE i AS INTEGER NO-UNDO.
    DEFINE VARIABLE liStat AS INTEGER NO-UNDO.
 
-   do i = 1 to NUM-ENTRIES({&REQ_ONGOING_STATUSES}):
-      liStat = INT(ENTRY(i,{&REQ_ONGOING_STATUSES})).
+   lcStatuses = {&REQ_ONGOING_STATUSES} + ",2".
+   do i = 1 to NUM-ENTRIES(lcStatuses):
+      liStat = INT(ENTRY(i,lcStatuses)).
       FOR EACH MsRequest NO-LOCK WHERE
             MsRequest.Brand EQ gcBrand AND
             MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
