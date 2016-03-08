@@ -84,7 +84,7 @@ CLASS Gwy.MqPublisher:
 
    METHOD PUBLIC LOG send_longmessage ( iMessage AS LONGCHAR ):
       DEF VAR lMessage     AS CLASS TextMessage NO-UNDO.
-      DEF VAR lcUTFMessage AS CHAR NO-UNDO.
+      DEF VAR lcUTFMessage AS LONGCHAR NO-UNDO.
 
       lcUTFMessage = CODEPAGE-CONVERT(iMessage, "utf-8", SESSION:CHARSET).
 
