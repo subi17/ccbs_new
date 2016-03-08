@@ -386,22 +386,20 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
          SingleFee.CalcObj EQ "RVTERM" AND
          SingleFee.SourceTable = "DCCLI" THEN DO:
          ASSIGN         
-            ldaToDate = date(month(today) + 1,1,year(today)) - 1
+            ldaToDate = fLastDayOfMonth(TODAY)
             ldaFromDate = date(month(ldaToDate),1,year(ldaToDate)).
 
-         DO liLoop = 0 to 2 by 2: 
-            IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                              MsRequest.msSeq EQ mobsub.msseq AND
-                              MsRequest.reqtype EQ
-                                 {&REQTYPE_CONTRACT_ACTIVATION} AND
-                              MsRequest.reqStatus EQ
-                                 liLoop AND
-                              MsRequest.ReqCParam3 EQ "RVTERM12" AND
-                              MsRequest.ReqIParam3 EQ INT(SingleFee.sourcekey)) 
-               THEN llExtFound = TRUE.
-         END.
+         IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                           MsRequest.msSeq EQ mobsub.msseq AND
+                           MsRequest.reqtype EQ
+                              {&REQTYPE_CONTRACT_ACTIVATION} AND
+                           MsRequest.reqStatus EQ
+                              {&REQUEST_STATUS_NEW} AND
+                           MsRequest.ReqCParam3 EQ "RVTERM12" AND
+                           MsRequest.ReqIParam3 EQ INT(SingleFee.sourcekey)) 
+            THEN llExtFound = TRUE. /* ongoin request found */
          IF llExtFound THEN NEXT.
-         lcDiscounts = "RVTERMDT1DISC,RVTERMDT3DISC,RVTERMDT4DISC".
+         lcDiscounts = "RVTERMDT1DISC,RVTERMDT2DISC,RVTERMDT3DISC,RVTERMDT4DISC".
          DiscountsLoop:
          DO liLoop = 1 TO NUM-ENTRIES(lcDiscounts): 
             FIND FIRST DiscountPlan WHERE Discountplan.dpruleid EQ 
@@ -413,8 +411,9 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
                           DPMember.HostTable EQ "MobSub" AND
                           DPMember.KeyValue EQ SingleFee.KeyValue AND
                           DPMember.OrderId EQ SingleFee.orderId AND
-                          DPMember.ValidFrom LE  ldaFromDate AND
-                          DPMemBer.ValidTo GE ldaToDate
+                          DPMember.ValidFrom LE ldaToDate AND
+                          DPMemBer.ValidTo GE ldaFromDate AND
+                          DPMemBer.ValidTo GE DPMember.ValidFrom
                           NO-LOCK NO-ERROR.
                IF AVAIL DPMember THEN DO: 
                   /* only one discount should be found */
