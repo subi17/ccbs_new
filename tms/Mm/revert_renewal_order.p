@@ -537,21 +537,23 @@ PROCEDURE pCloseQ25Discount:
       END.
    END.
    
+   DISCOUNT_LOOP:
    FOR EACH DiscountPlan NO-LOCK WHERE
             DiscountPlan.Brand = gcBrand AND
      LOOKUP(DiscountPlan.DPRuleID,"RVTERMDT1DISC,RVTERMDT4DISC") > 0:
 
-      FIND FIRST dpmember NO-LOCK WHERE
-                 dpmember.dpid = DiscountPlan.DpId AND
-                 dpmember.hosttable = "mobsub" AND
-                 dpmember.keyvalue = string(mobsub.msseq) AND
-                 dpmember.validto >= dpmember.validfrom AND
-                 dpmember.discvalue = ldeDiscount AND
-             (IF dpmember.orderid > 0 THEN 
-                 dpmember.OrderID EQ SingleFee.OrderID
-            ELSE dpmember.validfrom EQ fPer2Date(SingleFee.BillPeriod,0))
-      NO-ERROR.
-      IF AVAIL dpmember THEN LEAVE.
+      FOR EACH dpmember NO-LOCK WHERE
+               dpmember.dpid = DiscountPlan.DpId AND
+               dpmember.hosttable = "mobsub" AND
+               dpmember.keyvalue = string(mobsub.msseq) AND
+               dpmember.validto >= dpmember.validfrom AND
+               dpmember.discvalue = ldeDiscount:
+
+         IF (dpmember.orderid > 0 AND
+             dpmember.OrderID EQ SingleFee.OrderID) OR
+             dpmember.validfrom EQ fPer2Date(SingleFee.BillPeriod,0)
+            THEN LEAVE DISCOUNT_LOOP.
+      END.
    END.
    
    IF NOT AVAILABLE dpmember THEN RETURN "".
