@@ -647,7 +647,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
       RETURN "1:Order not available" + STRING(iiOrderId).
    
    lcq25Extension = fGetQ25Extension(iiOrderId).
-   IF lcQ25Extension NE "" THEN DO:
+   IF lcQ25Extension NE "" AND Order.Orderchannel BEGINS "renewal_pos" THEN DO:
       lcBank = fGetQ25BankByOrder(BUFFER Order).
    END.
    lcCaseFileRow =  
