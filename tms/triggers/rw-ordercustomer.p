@@ -1,6 +1,3 @@
-{triggers/hpdwrite_generic.i OrderCustomer ORDERCUSTOMER Ordercanal OrderId RowType}
-
-
 TRIGGER PROCEDURE FOR REPLICATION-WRITE OF OrderCustomer OLD BUFFER oldOrderCustomer.
 
 {HPD/HPDConst.i}
@@ -27,12 +24,12 @@ THEN DO:
 
    IF NOT llSameValues
    THEN DO:
-      CREATE billing.RepLog.
+      CREATE Ordercanal.RepLog.
       ASSIGN
-         billing.RepLog.TableName = "OrderCustomer"
-         billing.RepLog.EventType = "DELETE"
-         billing.RepLog.EventTime = NOW
-         billing.RepLog.KeyValue  = {HPD/keyvalue.i oldOrderCustomer . {&HPDKeyDelimiter} OrderId RowType}
+         Ordercanal.RepLog.TableName = "OrderCustomer"
+         Ordercanal.RepLog.EventType = "DELETE"
+         Ordercanal.RepLog.EventTime = NOW
+         Ordercanal.RepLog.KeyValue  = {HPD/keyvalue.i oldOrderCustomer . {&HPDKeyDelimiter} OrderId RowType}
          .
    END.
 
