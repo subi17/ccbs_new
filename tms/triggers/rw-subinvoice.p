@@ -46,12 +46,12 @@ THEN DO:
    
    IF NOT llSameValues
    THEN DO:
-      CREATE billing.RepLog.
+      CREATE Common.RepLog.
       ASSIGN
-         billing.RepLog.TableName = "SubInvoice"
-         billing.RepLog.EventType = "DELETE"
-         billing.RepLog.EventTime = NOW
-         billing.RepLog.KeyValue  = {HPD/keyvalue.i oldSubInvoice . {&HPDKeyDelimiter} InvNum SubInvNum}
+         Common.RepLog.TableName = "SubInvoice"
+         Common.RepLog.EventType = "DELETE"
+         Common.RepLog.EventTime = NOW
+         Common.RepLog.KeyValue  = {HPD/keyvalue.i oldSubInvoice . {&HPDKeyDelimiter} InvNum SubInvNum}
          .
    END.
 END.

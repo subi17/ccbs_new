@@ -22,6 +22,7 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
    DEFINE PRIVATE BUFFER lbOrder          FOR Order.
    DEFINE PRIVATE BUFFER lbOrderAccessory FOR OrderAccessory.
    DEFINE PRIVATE BUFFER lbOrderPayment   FOR OrderPayment.
+   DEFINE PRIVATE BUFFER lbOrderCustomer  FOR OrderCustomer.
    DEFINE PRIVATE BUFFER lbMNPProcess     FOR MNPProcess.
    
    DEFINE PRIVATE VARIABLE ldeTermLeasAmt AS DECIMAL NO-UNDO.
@@ -33,6 +34,7 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
       objDumpBase:mUseTable(BUFFER lbOrder:HANDLE).
       objDumpBase:mUseTable(BUFFER lbOrderAccessory:HANDLE).
       objDumpBase:mUseTable(BUFFER lbOrderPayment:HANDLE).
+      objDumpBase:mUseTable(BUFFER lbOrderCustomer:HANDLE).
       objDumpBase:mUseTable(BUFFER lbMNPProcess:HANDLE).
       objDumpBase:mVerifyDumpFileData().
       
@@ -47,6 +49,7 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
       objDumpBase:mUseTable(BUFFER lbOrder:HANDLE).
       objDumpBase:mUseTable(BUFFER lbOrderAccessory:HANDLE).
       objDumpBase:mUseTable(BUFFER lbOrderPayment:HANDLE).
+      objDumpBase:mUseTable(BUFFER lbOrderCustomer:HANDLE).
       objDumpBase:mUseTable(BUFFER lbMNPProcess:HANDLE).
       objDumpBase:mVerifyDumpFileData().
 
@@ -114,7 +117,7 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
                OfferItem.ItemType    = "BillItem"       AND
                OfferItem.EndStamp   >= lbOrder.CrStamp  AND
                OfferItem.BeginStamp <= lbOrder.CrStamp,
-         FIRST BillItem NO-LOCK WHERE
+         FIRST BillItem FIELDS (Brand BillCode BIGroup) NO-LOCK WHERE
                BillItem.Brand    = "1"                  AND
                BillItem.BillCode = OfferItem.ItemKey    AND
                BillItem.BIGroup  = "9":
@@ -136,7 +139,7 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
             OfferItem.ItemType      = "TopUp"          AND
             OfferItem.EndStamp     >= lbOrder.CrStamp  AND
             OfferItem.BeginStamp   <= lbOrder.CrStamp,
-         FIRST TopupScheme NO-LOCK WHERE
+         FIRST TopupScheme FIELDS (Brand TopupScheme) NO-LOCK WHERE
             TopupScheme.Brand       = "1"              AND
             TopupScheme.TopupScheme = OfferItem.ItemKey:
          
@@ -205,7 +208,13 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
          lbOrderPayment.Brand          = "1"                    AND
          lbOrderPayment.OrderId        = lbOrder.OrderId 
       NO-ERROR.         
-   
+
+      FIND FIRST lbOrderCustomer NO-LOCK WHERE
+         lbOrderCustomer.Brand          = "1"                    AND
+         lbOrderCustomer.OrderId        = lbOrder.OrderId        AND
+         lbOrderCustomer.RowType        = 1
+      NO-ERROR.
+
       RELEASE lbMNPProcess.
       FOR
          EACH lbMNPProcess NO-LOCK WHERE
