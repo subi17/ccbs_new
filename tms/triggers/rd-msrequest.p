@@ -6,12 +6,9 @@ TRIGGER PROCEDURE FOR REPLICATION-DELETE OF MsRequest.
 IF NEW MsRequest
 THEN RETURN.
 
-CREATE MsReqStatisticQ.
-ASSIGN
-   MsReqStatisticQ.ReqType       = MsRequest.ReqType
-   MsReqStatisticQ.ReqStatus     = MsRequest.ReqStatus
-   MsReqStatisticQ.ReqStatUpdate = -1
-   .
+{triggers/msreqcounter.i}
+
+fCreateMsReqCounter(MsRequest.ReqType, MsRequest.ReqStatus, -1).
 
 &IF {&MSREQUEST_DELETE_TRIGGER_ACTIVE} &THEN
 

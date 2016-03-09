@@ -2,27 +2,10 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF MsRequest OLD BUFFER oldMsRequest.
 
 {tmsconst.i}
 {HPD/HPDConst.i}
-
-DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
-
-FUNCTION fCreateMsReqStatisticQ RETURNS LOGICAL
-   (iiReqType   AS INTEGER,
-    iiReqStatus AS INTEGER,
-    iiAmount    AS INTEGER):
-
-   CREATE MsReqStatisticQ.
-   ASSIGN
-      MsReqStatisticQ.ReqType       = iiReqType
-      MsReqStatisticQ.ReqStatus     = iiReqStatus
-      MsReqStatisticQ.ReqStatUpdate = iiAmount
-      .
-
-   RETURN FALSE.
-
-END FUNCTION.
+{triggers/msreqcounter.i}
 
 IF NEW(MsRequest)
-THEN fCreateMsReqStatisticQ(MsRequest.ReqType, MsRequest.ReqStatus, 1).
+THEN fCreateMsReqCounter(MsRequest.ReqType, MsRequest.ReqStatus, 1).
 ELSE DO:
    BUFFER-COMPARE MsRequest USING
       ReqStatus
@@ -31,8 +14,8 @@ ELSE DO:
 
    IF NOT llSameValues
    THEN ASSIGN
-           llSameValues = fCreateMsReqStatisticQ(oldMsRequest.ReqType, oldMsRequest.ReqStatus, -1)
-           llSameValues = fCreateMsReqStatisticQ(MsRequest.ReqType, MsRequest.ReqStatus, 1)
+           llSameValues = fCreateMsReqCounter(oldMsRequest.ReqType, oldMsRequest.ReqStatus, -1)
+           llSameValues = fCreateMsReqCounter(MsRequest.ReqType, MsRequest.ReqStatus, 1)
            .
 END.
 
