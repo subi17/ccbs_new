@@ -1720,7 +1720,6 @@ PROCEDURE pContractTermination:
    DEF VAR llFMFee AS LOG  NO-UNDO. 
    DEF VAR liDSSMsSeq AS INT NO-UNDO. 
    DEF VAR ldaMonth22 AS DATE NO-UNDO.
-   DEF VAR ldaMonth22Inst AS DATE NO-UNDO. 
 
    DEF BUFFER bLimit        FOR MServiceLimit.
    DEF BUFFER bMsRequest    FOR MsRequest.
@@ -2238,27 +2237,31 @@ PROCEDURE pContractTermination:
 
          /* YPR-2515 */
          IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_RENEWAL} THEN DO:
-            
-            ldaMonth22  = ADD-INTERVAL(ldtOrigValidFrom, 22, "months").
-            ldaMonth22  = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
 
-            FIND LAST bDCCLI USE-INDEX DCEvent NO-LOCK WHERE
-                      bDCCLI.Brand      = gcBrand AND
-                      bDCCLI.DCEvent    BEGINS "PAYTERM" AND
-                      bDCCLI.MsSeq      = MsRequest.MsSeq AND
-                      bDCCLI.ValidFrom  <  TODAY NO-ERROR.
-            IF AVAILABLE bDCCLI THEN DO:
+            FOR EACH bDCCLI NO-LOCK WHERE
+                     bDCCLI.MsSeq = MsRequest.MsSeq AND
+                     bDCCLI.DCEvent BEGINS "PAYTERM" AND
+                     bDCCLI.ValidFrom < TODAY:
 
-               ldaMonth22Inst = ADD-INTERVAL(bDCCLI.ValidFrom, 22, "months").
-               ldaMonth22Inst = DATE(MONTH(ldaMonth22Inst),1,YEAR(ldaMonth22Inst)).
+               ldaMonth22 = ADD-INTERVAL(bDCCLI.ValidFrom, 22, "months").
+               ldaMonth22 = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
 
-               IF bDCCLI.ValidTo >= ldaMonth22Inst THEN
+               IF bDCCLI.ValidTo >= ldaMonth22 THEN DO:
+                  llCreatePenaltyFee = FALSE.
+                  LEAVE.
+               END.
+            END.
+
+            IF NOT AVAILABLE bDCCLI THEN DO:
+
+               ldaMonth22  = ADD-INTERVAL(ldtOrigValidFrom, 22, "months").
+               ldaMonth22  = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
+
+               IF ldtActDate >= ldaMonth22 THEN
                   llCreatePenaltyFee = FALSE.
             END.
-            ELSE IF ldtActDate >= ldaMonth22 THEN
-               llCreatePenaltyFee = FALSE.
-            ELSE llCreatePenaltyFee = TRUE.
-         END.
+
+         END. /* IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_RENEWAL} THEN DO: */
 
       END.
       ELSE ASSIGN 
