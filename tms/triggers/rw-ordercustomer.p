@@ -47,7 +47,7 @@ THEN DO:
    IF llSameValues
    THEN RETURN.
 
-   IF oldOrderAccessory.OrderID <> OrderAccessory.OrderID
+   IF oldOrderCustomer.OrderID <> OrderCustomer.OrderID
    THEN
    FOR Order FIELDS (Brand OrderID) NO-LOCK WHERE
       Order.Brand   = "1"                         AND
