@@ -326,6 +326,8 @@ FOR EACH FixedFee NO-LOCK WHERE
          IF NOT fUpdateFuncRunProgress(liFRProcessID,liMoved) THEN
             RETURN "ERROR:Stopped".
       END.
+
+      IF lcRunMode NE "Production" THEN LEAVE.
    END.   
       
    PUT STREAM sout2 UNFORMATTED
