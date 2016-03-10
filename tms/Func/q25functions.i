@@ -9,10 +9,6 @@
   CHANGED ......: 
   ------------------------------------------------------------------------*/
 
-
-/* Function to check that calculated days exist in used month (if month
-   have 31 days, then 15th day should send SMS for days 29-31. February
-   could contain 28 or 29 days and so on.) */
 {commali.i}
 {timestamp.i}
 {cparam2.i}
@@ -25,11 +21,15 @@
 DEF VAR lcTestStartDay AS CHAR NO-UNDO.
 DEF VAR lcTestEndDay AS CHAR NO-UNDO.
 DEF VAR lcExecuteDate AS CHAR NO-UNDO.
+DEF VAR ldaExecuteDate AS DATE NO-UNDO.
 DEF VAR liQ25Logging AS INT NO-UNDO.
 DEF VAR lcQ25LogDir          AS CHAR NO-UNDO.
 DEF VAR lcQ25SpoolDir        AS CHAR NO-UNDO.
 DEF VAR lcQ25LogFile         AS CHAR NO-UNDO.
+DEF VAR lcQ25DWHLogFile         AS CHAR NO-UNDO.
+DEF VAR lcQ25DWHLogDir      AS CHAR NO-UNDO.
 DEF VAR ldnewAmount AS DEC NO-UNDO.
+
 
 DEF STREAM Sout.
 
@@ -37,11 +37,14 @@ ASSIGN liQ25Logging = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg,
                                                      2 = count, 3 = all */
        lcQ25LogDir     = fCParam("Q25","Q25ReminderLogDir")
        lcQ25SpoolDir   = fCParam("Q25","Q25ReminderLogSpoolDir").
+       lcQ25DWHLogDir  = fCParam("Q25","Q25DWHLogDir").
                   
 IF lcQ25LogDir = "" OR lcQ25LogDir = ? THEN lcQ25LogDir = "/tmp/".
 IF lcQ25SpoolDir = "" OR lcQ25SpoolDir = ? THEN lcQ25SpoolDir = "/tmp/".
 
-/* Q24 Messages are needed to send before 20th day of month. No sending weekend
+/* Function to check if there is available weekdays for SMS sending after
+   specified day.
+   Q24 Messages are needed to send before 20th day of month. No sending weekend
    or national holiday. Check if there are such days left or do we have to
    sent rest of messages right now. 19th day is last possible sending date.
    */
@@ -149,9 +152,10 @@ Variables: lcUnSafe, lcReserved
 END FUNCTION.  /* furl-encode */
 
 /* Calculate count of normal week day (no weekend ot national holiday) from
-   sixth day (sms sending start date) until specified date. This is used for
-   solving which messages should be sent in specified date. Goal is sent two
-   messages in each day weekday after 6th until all messages of month is sent.
+   given day (sms sending start date) until specified date. This is used for
+   solving which messages should be sent in specified date. Goal is sent three
+   messages in each day weekday starting at 6th/16th until all messages of 
+   month is sent.
    */
 FUNCTION fCountNormalWeekday RETURNS INTEGER (INPUT idaDate AS DATE,
                                               INPUT iiStartDay AS INT):
@@ -233,27 +237,45 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    RETURN lcSMSMessage.
 END FUNCTION.
 
-/* Logs for testing */
+/* Logs writings for testing and DWH */
 FUNCTION fQ25LogWriting RETURNS LOGICAL
    (INPUT iclogText AS CHAR,
     INPUT iiLogLevel AS INT,
-    INPUT iilogPhase AS INT).
+    INPUT iilogPhase AS INT,
+    INPUT iiExecType AS INT).
    DEF VAR lcQ25LogType AS CHAR NO-UNDO. 
-   IF liQ25Logging >= iiLogLevel THEN DO:
-      /* Make Monthly log file */
-      IF iilogPhase LT {&Q25_MONTH_24_FINAL_MSG} THEN
-         lcQ25LogType = "reminder".
-      ELSE
-         lcQ25LogType = "final".
-      lcQ25LogFile = lcQ25SpoolDir + "Q25_sms_message_logs_" +
-                  lcQ25logType +
-                  STRING(YEAR(TODAY)) +
-                  STRING(MONTH(TODAY),"99") +
-                  STRING(DAY(TODAY),"99") + ".txt".
-      OUTPUT STREAM Sout TO VALUE(lcQ25LogFile) APPEND.
-      PUT STREAM Sout UNFORMATTED
-         STRING(fMakeTS()) + "|" + icLogText SKIP.
-      OUTPUT STREAM Sout CLOSE.
+   /* Requested customer log writings. YPR-3446 */
+   IF iiExecType EQ {&Q25_EXEC_TYPE_CUST_LOG_GENERATION} THEN DO:
+      /* Only cust level logs are needed to be written here  */
+      IF iiLogLevel EQ {&Q25_LOGGING_CUST_LOGS} THEN DO: 
+         lcQ25DWHLogFile = lcQ25SpoolDir + "events_" +
+                        (REPLACE(STRING(fMakeTS()),".","_")) + ".csv".
+         OUTPUT STREAM Sout TO VALUE(lcQ25DWHLogFile) APPEND.
+         PUT STREAM Sout UNFORMATTED
+            icLogText SKIP.
+         OUTPUT STREAM Sout CLOSE. 
+         RETURN TRUE.
+      END.
+      ELSE RETURN TRUE. /* no other than cust logs needed at this phase */
+   END.
+   ELSE DO:
+      /* Own internal log writings */
+      IF liQ25Logging >= iiLogLevel THEN DO:
+         /* Make Monthly log file */
+         IF iilogPhase LT {&Q25_MONTH_24_FINAL_MSG} THEN
+            lcQ25LogType = "reminder".
+         ELSE
+            lcQ25LogType = "final".
+         lcQ25LogFile = lcQ25SpoolDir + "Q25_sms_message_logs_" +
+                     lcQ25logType +
+                     STRING(YEAR(TODAY)) +
+                     STRING(MONTH(TODAY),"99") +
+                     STRING(DAY(TODAY),"99") + ".txt".
+         OUTPUT STREAM Sout TO VALUE(lcQ25LogFile) APPEND.
+         PUT STREAM Sout UNFORMATTED
+            STRING(fMakeTS()) + "|" + icLogText SKIP.
+         OUTPUT STREAM Sout CLOSE.
+      END.
    END.
 END.
 
@@ -272,12 +294,26 @@ FUNCTION fCalculateMaxPauseValue RETURN INTEGER
    RETURN INT(TRUNC(ldTimeLeft / iiToBeSend,0)). 
 END.
 
+/* Template filename for customer logfiles */
+FUNCTION fgetTemplateName RETURN CHARACTER
+   (INPUT iiPhase AS INT).
+   IF iiPhase EQ {&Q25_MONTH_22} OR iiPhase EQ {&Q25_MONTH_23} THEN
+      RETURN "Q25ReminderMonth22and23".
+   ELSE IF iiPhase EQ {&Q25_MONTH_24} THEN
+      RETURN "Q25ReminderMonth24".
+   ELSE IF iiPhase EQ {&Q25_MONTH_24_FINAL_MSG} THEN
+      RETURN "Q25FinalFeeMsgNoDecision".
+   ELSE 
+      RETURN "Error: Q25_Phase".
+END.
+
+
 /* SMS message generating and sending for Q25. */
 FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER 
    (INPUT idaStartDate AS DATE,
     INPUT idaEndDate AS DATE,
     INPUT iiphase AS INT,
-    INPUT ilsendMsgs AS LOGICAL,
+    INPUT iiExecType AS INT,
     INPUT-OUTPUT oitotalCountLeft AS INT):
    /* Data collection function for Q25. To be launched by cron execution
       on 1.-15. day of month at morning time at least one hour before 10:00 */
@@ -298,7 +334,9 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
    DEF VAR liPhase           AS INT NO-UNDO.
    DEF VAR liPendingReq      AS INT NO-UNDO.
    DEF VAR ldAmount          AS DEC NO-UNDO.
-
+   DEF VAR lcTemplateName    AS CHAR NO-UNDO.
+   DEF VAR liLogType         AS INT NO-UNDO.  
+ 
    DEF BUFFER bDCCLI         FOR DCCLI.
 
    IF idaStartDate = ? OR idaEndDate = ? THEN
@@ -333,7 +371,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          lcLogText = "Mobsub not found or prepaid: " +
                      STRING(liPhase) + "|" + STRING(SingleFee.KeyValue) 
                      + "|" + STRING(ldAmount).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
+                           iiExecType).
          NEXT.
       END.
       IF SingleFee.Billed AND
@@ -345,8 +384,31 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
                         STRING(Mobsub.MsSeq) + "|" +
                         STRING(ldAmount).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
+                                       iiExecType).
          NEXT. /* "Residual fee billed". */
+      END.
+      
+      FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
+              DCCLI.PerContractId = INT(SingleFee.sourcekey) AND
+              DCCLI.Brand   = gcBrand AND
+              DCCLI.DCEvent BEGINS "PAYTERM" AND
+              DCCLI.MsSeq   = Mobsub.MsSeq AND
+              DCCLI.ValidTo >= DATE(MONTH(idaEndDate),1,
+                                    YEAR(idaEndDate)) - 1 AND
+              DCCLI.ValidTo <= fLastDayOfMonth(idaEndDate) NO-ERROR.
+
+      IF NOT AVAIL DCCLI THEN DO:
+         /* No DCCLI for example between start and end date, singlefee is for
+            whole month or no DCCLI for some error case (?). */
+         liNotDCCLICount = liNotDCCLICount + 1.
+         lcLogText = "NO DCCLI FOUND " +
+                        STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
+                        STRING(Mobsub.MsSeq) + "|" +
+                        STRING(ldAmount).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
+                                       iiExecType).
+         NEXT.
       END.
 
       FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
@@ -359,13 +421,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
 
       IF NOT AVAIL DCCLI THEN DO:
          /* No DCCLI for example between start and end date, singlefee is for
-            whole month or no DCCLI for some error case (?). */
-         liNotDCCLICount = liNotDCCLICount + 1.
-         lcLogText = "NO DCCLI FOUND " +
-                        STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
-                        STRING(Mobsub.MsSeq) + "|" +
-                        STRING(ldAmount).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
+            whole month */
          NEXT.
       END.
       ELSE IF DCCLI.TermDate NE ? THEN DO:
@@ -374,7 +430,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
                         STRING(ldAmount).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
+                                       iiExecType).
          NEXT. /* terminated, SMS should not be send. */
       END.
       ELSE DO:
@@ -396,7 +453,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
                         STRING(ldAmount).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
+                                       iiExecType).
             NEXT.
              
          END.
@@ -417,7 +475,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(liPhase) + "|" + STRING(bDCCLI.CLI) + "|" +
                         STRING(bDCCLI.MsSeq) + "|" +
                         STRING(ldAmount).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
+                                       iiExecType).
                NEXT.
             END.
             ELSE
@@ -447,7 +506,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
                         STRING(Mobsub.MsSeq) + "|" +
                         STRING(ldAmount).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
+                                       iiExecType).
             NEXT.
          END.
          ELSE IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE 
@@ -463,16 +523,15 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
                         STRING(Mobsub.MsSeq) + "|" +
                         STRING(ldAmount).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
+                                       iiExecType).
             NEXT.
          END.
                                  
       END.
       liCount = liCount + 1. /* Full q25 count in Month */
    
-      /* Create table for sending messages in the second phase started
-         by separate cron execution for each hour 10:00 - 21:00 */
-      IF(ilSendMsgs) THEN DO:
+      IF(iiExecType EQ {&Q25_EXEC_TYPE_SMS_SENDING}) THEN DO:
          oiTotalCountLeft = oiTotalcountLeft - 1.
          FIND FIRST SMSMessage WHERE SMSMessage.msseq = DCCLI.MsSeq AND
                                      SMSMessage.CreStamp > fDate2TS(TODAY) AND
@@ -489,7 +548,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq) + "|" +
                         STRING(ldAmount).         
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
+                                       iiExecType).
             NEXT.
          END.
          ELSE DO:
@@ -506,7 +566,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             liSentCount = liSentCount + 1.
             lcLogText = STRING(liphase) + "|" + STRING(DCCLI.CLI) + "|" +
                         STRING(DCCLI.MsSeq).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_SENT_MSGS}, liphase).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_SENT_MSGS}, liphase,
+                                       iiExecType).
             PAUSE liPauseValue.
             /* Decrease pause time if needed, check after each 50 sent SMS */
             IF (oiTotalCountLeft MODULO 50 = 0) AND 
@@ -518,25 +579,39 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          END.
       END.
       ELSE DO:
+         liLogType = {&Q25_LOGGING_DETAILED}.
          /* Some logging about SMSs to be send. */
          IF liPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
-            /* Q25 Month 24 20th day extension made */
-            lcLogText = "Send SMS Q25 Chosen: " +
+            /* Q25 Month 24 20th day extension made, write only internal log */
+            
+            IF (iiExecType NE {&Q25_EXEC_TYPE_CUST_LOG_GENERATION}) THEN DO:
+               lcLogText = "Send SMS Q25 Chosen: " +
                         STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" + 
                         STRING(DCCLI.MsSeq).
+            END.
          END.
          ELSE DO:
-            lcLogText = "Send SMS: " +
-                        STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
-                        STRING(DCCLI.MsSeq) + "|" +
-                        STRING(ldAmount).
+            lcTemplateName = fgetTemplateName(liPhase).  
+            IF (iiExecType EQ {&Q25_EXEC_TYPE_CUST_LOG_GENERATION}) AND
+               lcTemplateName BEGINS "Q25" THEN DO:
+               lcLogText = DCCLI.CLI + ";" + STRING(ldaExecuteDate) + ";" +
+                           lcTemplateName.
+               liLogType = {&Q25_LOGGING_CUST_LOGS}.
+            END.
+            ELSE DO:
+               lcLogText = "Send SMS: " +
+                           STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
+                           STRING(DCCLI.MsSeq) + "|" +
+                           STRING(ldAmount) + "|" + lcTemplateName.
+            END.
          END.   
-         fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase).
+         fQ25LogWriting(lcLogText, liLogType, liphase,
+                        iiExecType).
       END.
    END.
    /* Logging about amount of situations for testting purposes. */
    /* If ilSendMsgs is False, logging of calculated values to be done */
-   IF NOT(ilSendMsgs) THEN DO:
+   IF (iiExecType EQ {&Q25_EXEC_TYPE_CALCULATION}) THEN DO:
       lcLogText = STRING(iiPhase) + "|".
       IF idaStartDate NE ? THEN
          lcLogText = lcLogText + "S:" + STRING(idaStartDate) + "|".
@@ -546,7 +621,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          "|" + STRING(liBilledCount) + "|" + STRING(liNotDCCLICount) + "|" +
          STRING(liReturnedDevices) + "|" + STRING(liQ25DoneCount) + 
          "|" + STRING(liPendingReq) + "|" + STRING(etime / 1000).
-      fQ25LogWriting(lcLogText, {&Q25_LOGGING_COUNTERS}, liphase).
+      fQ25LogWriting(lcLogText, {&Q25_LOGGING_COUNTERS}, liphase,
+                     iiExecType).
       RETURN liCount.
    END.
    RETURN oiTotalCountLeft.

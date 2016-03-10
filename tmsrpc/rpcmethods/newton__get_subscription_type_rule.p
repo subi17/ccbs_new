@@ -193,24 +193,13 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL:
 
    DEF VAR liCount AS INT NO-UNDO.
 
-   /* This code has to be removed AND below given code
-      has to be uncommented WITH istc prepaid option 
-      to be visible in vista */
-
-   IF ldaSTCDates[1] = ldaSTCDates[2] OR
-      MobSub.PayType = TRUE OR CLIType.PayType = 2 OR
-      NOT lliSTCAllowed THEN
-      liCount = 2.
-   ELSE
-      liCount = 1. 
-
-   /* IF (NOT(MobSub.PayType = FALSE OR CLIType.PayType = 1)  OR
+   IF (NOT(MobSub.PayType = FALSE OR CLIType.PayType = 1)  OR
        NOT(MobSub.PayType = TRUE  OR CLIType.PayType = 2)) AND
           ldaSTCDates[1] <> ldaSTCDates[2]                 AND
           lliSTCAllowed                                    THEN
       liCount = 1.
    ELSE
-      liCount = 2. */
+      liCount = 2. 
 
    sub_struct = add_struct(response_toplevel_id, "").
    penalty_array = add_array(sub_struct,"penalties").
@@ -305,13 +294,6 @@ FUNCTION fGetReferenceTariff RETURNS CHARACTER
 
       IF MsOwner.TariffBundle <> "" THEN 
          lcCLIType = MsOwner.TariffBundle.
-   END.
-
-   IF bufMsRequest.ReqSource = {&REQUEST_SOURCE_RENEWAL} THEN DO:
-      IF MobSub.TariffBundle <> "" THEN 
-         lcCLIType = MobSub.TariffBundle.
-      ELSE 
-         lcCLIType = MobSub.CLIType.
    END.
 
    RETURN lcCLIType.
