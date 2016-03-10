@@ -13,7 +13,7 @@ ASSIGN
    Common.RepLog.TableName = "Limit"
    Common.RepLog.EventType = "DELETE"
    Common.RepLog.EventTime = NOW
-   Common.RepLog.KeyValue  = {HPD/keyvalue.i Limit . {&HPDKeyDelimiter} CustNum MsSeq LimitType ValidTo}
+   Common.RepLog.KeyValue  = {HPD/keyvalue.i Limit . {&HPDKeyDelimiter} CustNum MsSeq LimitType ToDate}
    .
 
 &ENDIF
