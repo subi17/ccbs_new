@@ -119,7 +119,7 @@ REPEAT:
          Limit.LimitType = {&LIMIT_TYPE_Q25_DISCOUNT}
          Limit.ValueType = 1
          Limit.FromDate  = TODAY
-         Limit.ToDate    = 12/31/2049
+         Limit.ToDate    = ldaValidTo
          Limit.DefValue  = FALSE.
 
       RELEASE Limit.
