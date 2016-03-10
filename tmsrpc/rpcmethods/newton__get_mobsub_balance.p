@@ -78,6 +78,7 @@ DEF VAR lcTariffBundle   AS CHAR NO-UNDO.
 DEF VAR ldaItemFromDate AS DATE NO-UNDO.
 DEF VAR ldaItemToDate AS DATE NO-UNDO.
 DEF VAR ldeTotalDataBundleLimit AS DEC NO-UNDO.
+DEF VAR ldeCDRts AS DEC NO-UNDO.
 DEF VAR lcYear AS CHAR NO-UNDO.
 DEF VAR lcMonth AS CHAR No-UNDO.
 DEF VAR ldaToDate AS DATE NO-UNDO.
@@ -213,7 +214,15 @@ FOR EACH ttCDR NO-LOCK WHERE
          ttMsOwner.MsSeq     = ttCDR.MsSeq   AND
          ttMsOwner.FromDate <= ttCDR.DateSt  AND
          ttMsOwner.ToDate   >= ttCDR.DateSt NO-LOCK:
-         
+
+   IF ttMsOwner.PayType EQ TRUE THEN DO:
+      ldeCDRts = fMake2Dt(ttCDR.DateSt,ttCDR.TimeStart).
+
+      IF NOT ttMsOwner.PeriodFrom <= ldeCDRts AND 
+             ttMsOwner.PeriodTo   >= ldeCDRts THEN
+      NEXT.       
+   END.
+ 
    fCollectBalance(ttMsOwner.CLIType,
                    ttMsOwner.TariffBundle,
                    ttCDR.BillCode,
