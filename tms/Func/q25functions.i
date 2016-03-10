@@ -639,3 +639,26 @@ FUNCTION fBankByBillCode RETURNS CHAR
    RETURN "".
 END.
 
+FUNCTION getQ25phase RETURNS INT
+   (INPUT iimsseq AS INT,
+    INPUT iiCustNum AS INT):
+DEF VAR liLoop AS INT NO-UNDO.
+DEF VAR liPeriod AS INT NO-UNDO.
+
+DO liLoop = 0 TO 2:
+   /* set needed period */
+   liPeriod = YEAR(TODAY) * 100 + MONTH(ADD-INTERVAL(DCCLI.ValidFrom,
+                                                     liLoop, 'months':U)).
+   FIND FIRST SingleFee USE-INDEX BillCode WHERE
+              SingleFee.Brand       EQ gcBrand AND
+              SingleFee.Billcode    BEGINS "RVTERM" AND
+              SingleFee.CustNum     EQ iiCustNum AND
+              SingleFee.HostTable   EQ "Mobsub" AND
+              SingleFee.SourceTable EQ "DCCLI" AND
+              SingleFee.CalcObj     EQ "RVTERM" AND
+              SingleFee.Keyvalue    EQ STRING(iimsseq) AND
+              SingleFee.BillPeriod  EQ liPeriod NO-LOCK:
+   IF AVAIL THEN
+      RETURN liLoop.
+END.
+RETURN 99. /* Not Q25 phase M22-M24 customer */
