@@ -874,7 +874,15 @@ DO TRANS:
                            ttDuration.FromDate <= ttCall.DateSt) THEN 
             liCCN = 61.
       END.
- 
+
+      /* YDR-1853 */
+      IF ttCall.Spocmt = 63 AND ttCall.BillDur <= 20 THEN 
+         ASSIGN lidialtype = 20
+                liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).
+      ELSE IF ttCall.Spocmt = 63 AND ttCall.BillDur > 20 THEN 
+         ASSIGN lidialtype = 21
+                liCCN      = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype). 
+
       ASSIGN
          c_time      = ttCall.timestart
          x-time      = ttCall.timestart + ttCall.billdur

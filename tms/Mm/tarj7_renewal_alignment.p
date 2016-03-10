@@ -81,8 +81,10 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
                                        OUTPUT liCurrentServiceClass,
                                        OUTPUT lcError).
 
-         IF INDEX(lcError,"ERR:Unable to Connect") = 0 THEN LEAVE.
-         ELSE PAUSE 3 NO-MESSAGE.
+         IF INDEX(lcError,"ERR:Unable to Connect") = 0 AND
+            INDEX(lcError,"ERR:Took too long to Connect") = 0 AND
+            INDEX(lcError,"ERR:No response") = 0 THEN LEAVE.
+         ELSE IF liRetry < 3 THEN PAUSE 5 NO-MESSAGE.
       END.
 
       if lcError > "" THEN DO:
@@ -140,8 +142,10 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
                                                            ELSE 309, /* SC temp */
                                ldaExpDate,
                                OUTPUT lcerror).
-         IF INDEX(lcError,"ERR:Unable to Connect") = 0 THEN LEAVE.
-         ELSE PAUSE 3 NO-MESSAGE.
+         IF INDEX(lcError,"ERR:Unable to Connect") = 0 AND
+            INDEX(lcError,"ERR:Took too long to Connect") = 0 AND
+            INDEX(lcError,"ERR:No response") = 0 THEN LEAVE.
+         ELSE IF liRetry < 3 THEN PAUSE 5 NO-MESSAGE.
       END.
 
       PUT STREAM sout UNFORMATTED

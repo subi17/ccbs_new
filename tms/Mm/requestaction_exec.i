@@ -59,17 +59,8 @@ FUNCTION fGetPerContractActivation RETURNS DEC
       LOOKUP(bActRequest.ReqCparam2,lcReqParam2) > 0
    NO-LOCK USE-INDEX MsSeq NO-ERROR.
 
-   IF AVAIL bActRequest THEN DO: 
+   IF AVAIL bActRequest THEN  
       ldActivated = bActRequest.DoneStamp.
-      
-      /* YDR-2046 */
-      /* If we have any renewal order THEN before STC clitye is 
-         considered as reference tariff */
-        
-      IF bActRequest.ReqSource = {&REQUEST_SOURCE_RENEWAL} THEN 
-         ldActivated = fMake2Dt(idaEventDate - 1,86399).
-
-   END. 
 
    RETURN ldActivated. 
 
