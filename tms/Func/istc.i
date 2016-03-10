@@ -15,6 +15,7 @@ DEF TEMP-TABLE ttMsOwner NO-UNDO
    FIELD PeriodTo         AS DEC
    FIELD FromDate         AS DATE
    FIELD ToDate           AS DATE
+   FIELD PayType          AS LOG
    INDEX MsSeqCust CustNum MsSeq ToDate DESC.
 
 FUNCTION fGetISTCDate RETURNS DATE
@@ -99,13 +100,13 @@ FUNCTION fGetMsOwnerTempTable RETURNS LOG (INPUT iiInvCust           AS INT,
                 ttMsOwner.PeriodFrom = ldePeriodFrom
                 ttMsOwner.PeriodTo   = ldePeriodTo
                 ttMsOwner.FromDate   = idaFromDate
-                ttMsOwner.ToDate     = idaToDate.
+                ttMsOwner.ToDate     = idaToDate
+                ttMsOwner.PayType    = bMsOwner.PayType.
 
          FIND FIRST bbMSOwner WHERE 
                     bbMSOwner.MsSeq    = bMsOwner.MsSeq AND
                     bbMsOwner.TsBeg   >= ldePeriodFrom  AND
                     bbMsOwner.TsBeg   <= ldePeriodTo    AND
-                    bbMsOwner.PayType  = FALSE          AND
                     bbMSOwner.CLIEvent BEGINS "iS" NO-LOCK NO-ERROR.
          IF AVAIL bbMSOwner THEN DO:
 
