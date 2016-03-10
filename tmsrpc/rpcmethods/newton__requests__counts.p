@@ -11,17 +11,21 @@ DEFINE VARIABLE resp_reqtype    AS CHARACTER NO-UNDO.
 
 resp_reqtypes = add_struct(response_toplevel_id, "").
 
-FOR EACH MsReqStatistic NO-LOCK USE-INDEX ReqType
-   BREAK BY MsReqStatistic.ReqType BY MsReqStatistic.ReqStatus:
-   
-   IF FIRST-OF(MsReqStatistic.ReqType) THEN
-      resp_reqtype = add_struct(resp_reqtypes, STRING(MsReqStatistic.ReqType)).
+FOR EACH MsReqCounter NO-LOCK USE-INDEX ReqType
+   BREAK BY MsReqCounter.ReqType BY MsReqCounter.ReqStatus:
+
+   ACCUMULATE MsReqCounter.ReqStatusCount (SUB-TOTAL BY MsReqCounter.ReqStatus).
+
+   IF FIRST-OF(MsReqCounter.ReqType) THEN
+      resp_reqtype = add_struct(resp_reqtypes, STRING(MsReqCounter.ReqType)).
   
-   /* Calculation is not 100% accurate. Prevent negative values */
+  /* Calculation is not 100% accurate. Prevent negative values */
+  IF LAST-OF(MsReqCounter.ReqStatus)
+  THEN
    add_int(
       resp_reqtype,
-      STRING(MsReqStatistic.ReqStatus),
-      (IF MsReqStatistic.ReqStatusCount > 0 THEN 
-          MsReqStatistic.ReqStatusCount ELSE 0)).
+      STRING(MsReqCounter.ReqStatus),
+      (IF (ACCUM SUB-TOTAL BY MsReqCounter.ReqStatus MsReqCounter.ReqStatusCount) > 0 THEN
+          (ACCUM SUB-TOTAL BY MsReqCounter.ReqStatus MsReqCounter.ReqStatusCount) ELSE 0)).
 
 END.

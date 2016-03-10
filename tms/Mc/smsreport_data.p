@@ -423,7 +423,7 @@ END FUNCTION.
 fRepSales(today - 1).
 fRepSales(today).
 
-DEFINE VARIABLE lcStatues AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcStatuses AS CHARACTER NO-UNDO.
 
 lcStatuses = "req_&1_new,req_&1_underwork,req_&1_done,req_&1_rejected," +
              "req_&1_cancelled,req_&1_pending_hlr,req_&1_pending_hlr_done,,," +
