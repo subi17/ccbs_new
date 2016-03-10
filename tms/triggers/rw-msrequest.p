@@ -4,6 +4,8 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF MsRequest OLD BUFFER oldMsRequest.
 {HPD/HPDConst.i}
 {triggers/msreqcounter.i}
 
+DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
+
 IF NEW(MsRequest)
 THEN fCreateMsReqCounter(MsRequest.ReqType, MsRequest.ReqStatus, 1).
 ELSE DO:
