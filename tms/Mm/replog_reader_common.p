@@ -1231,3 +1231,59 @@ PROCEDURE pHandleDPTarget:
    END CATCH.
 
 END PROCEDURE.
+
+PROCEDURE pHandleLimit:
+
+   DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
+
+   DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcHostTable       AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcKeyValue        AS CHARACTER NO-UNDO.
+
+   IF AVAIL Common.RepLog THEN DO:
+
+      lcMessage = fCommonMessage().
+
+      CASE RepLog.EventType:
+         WHEN "CREATE" OR WHEN "MODIFY" THEN DO:
+            FIND FIRST Limit WHERE
+                       RECID(Limit) = RepLog.RecordId NO-LOCK NO-ERROR.
+
+            IF Limit.LimitType = {&LIMIT_TYPE_Q25_DISCOUNT} THEN
+               ASSIGN lcHostTable = "MobSub"
+                      lcKeyValue  = Limit.MsSeq.
+
+            IF AVAIL Limit THEN DO:
+               lcMessage = lcMessage                        + lcDel +
+                           fNotNull(lcHostTable)            + lcDel +
+                           fNotNull(lcKeyValue)             + lcDel +
+                           fNotNull(STRING(Limit.LimitAmt)) + lcDel +
+                           fNotNull(STRING(Limit.FromDate)) + lcDel +
+                           fNotNull(STRING(Limit.ToDate)).
+               fWriteMessage(lcMessage).
+            END.
+            ELSE DO:
+               olHandled = TRUE.
+               fWriteMessage(lcMessage).
+               RETURN.
+            END.
+         END.
+         WHEN "DELETE" THEN fWriteMessage(lcMessage).
+         OTHERWISE RETURN.
+      END CASE.
+
+      IF lMsgPublisher:send_message(lcMessage) THEN
+         olHandled = TRUE.
+      ELSE DO:
+         olHandled = FALSE.
+         IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
+            LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
+      END.
+   END.
+
+   CATCH anyError AS Progress.Lang.Error:
+      olHandled = FALSE.
+      LOG-MANAGER:WRITE-MESSAGE("Message failed was recovered: " + lcMessage,"DEBUG").
+   END CATCH.
+
+END PROCEDURE.
