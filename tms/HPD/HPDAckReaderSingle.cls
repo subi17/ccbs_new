@@ -30,7 +30,7 @@ CLASS HPD.HPDAckReaderSingle INHERITS HPD.HPDAckReader:
 
       DEFINE VARIABLE liLoopCount AS INTEGER NO-UNDO.
       
-      DO WHILE TRUE TRANSACTION: 
+      DO WHILE TRUE TRANSACTION ON ERROR UNDO, THROW:
 
          FOR EACH ttResponse:
             
