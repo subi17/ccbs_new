@@ -162,7 +162,7 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
               THEN RETURN "OK".
               ELSE RETURN lhBuffer[liCurrentDB]::MSCID + objDumpBase:lcKeyDelimiter +
                           STRING(lhBuffer[liCurrentDB]::DtlSeq) + objDumpBase:lcKeyDelimiter +
-                          ISO-DATE(lhBuffer[liCurrentDB]::DateSt).
+                          STRING(lhBuffer[liCurrentDB]::DateSt).
          WHEN "DataInDataOut"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
