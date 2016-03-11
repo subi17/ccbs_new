@@ -29,12 +29,6 @@ CLASS HPD.RepLogHandler FINAL:
       INDEX TableName IS PRIMARY UNIQUE TableName
       .   
 
-   DEFINE PRIVATE TEMP-TABLE ttRepLog NO-UNDO
-      FIELD RepLogRowID  AS ROWID
-      FIELD DeleteRepLog AS LOGICAL
-      INDEX RepLogRowID IS PRIMARY RepLogRowID
-      .
-            
    DEFINE PRIVATE VARIABLE lcDataBase               AS CHARACTER   NO-UNDO.
    DEFINE PRIVATE VARIABLE lcMessage                AS CHARACTER   NO-UNDO.
    DEFINE PRIVATE VARIABLE lcTail                   AS CHARACTER   NO-UNDO.
@@ -42,7 +36,7 @@ CLASS HPD.RepLogHandler FINAL:
    DEFINE PRIVATE VARIABLE liTransactionSize        AS INTEGER     NO-UNDO.
    DEFINE PRIVATE VARIABLE llUseSeparateQueue       AS LOGICAL     NO-UNDO.
    DEFINE PRIVATE VARIABLE llUseAck                 AS LOGICAL     NO-UNDO.
-   DEFINE PRIVATE VARIABLE ldttzPublisherValidUntil AS DATETIME-TZ NO-UNDO.
+
 
    CONSTRUCTOR PUBLIC RepLogHandler
       ( icDB AS CHARACTER ):
@@ -219,8 +213,13 @@ CLASS HPD.RepLogHandler FINAL:
    END METHOD.
 
 
-   /* Returns TRUE if send failed and otherwise FALSE */
-   METHOD PRIVATE LOGICAL mSendRepLog2MQ():
+   /*
+      Returns
+      1: If send was successful
+      2: If send failed
+      3: If replog record refers to non existing record
+   */
+   METHOD PRIVATE INTEGER mSendRepLog2MQ():
 
       FIND ttDumpHandler WHERE ttDumpHandler.TableName = lhRepLogTable::TableName NO-ERROR.
 
@@ -265,7 +264,7 @@ CLASS HPD.RepLogHandler FINAL:
                             "couldn't find a record where ROWID='&1'",
                             IF lhRepLogTable::RowID = ?
                             THEN "?" ELSE lhRepLogTable::RowID)).
-            RETURN ?.
+            RETURN 3.
          END.
 
          lcMessage = lcMessage + {&HPDDumpDelimiter} + lcTail.
@@ -274,157 +273,85 @@ CLASS HPD.RepLogHandler FINAL:
       IF NOT objMsgPublisher:send_message(lcMessage)
       THEN DO:
          mLog(2, "INFO", "Failed to send message: " + lcMessage).
-         RETURN FALSE.
+         RETURN 2.
       END.
 
-      mLog(3, "DEBUG", "Send message: " + lcMessage).
+      mLog(3, "DEBUG", "Send OK").
 
-      RETURN TRUE.
+      RETURN 1.
 
    END METHOD.
 
 
-   METHOD PRIVATE INTEGER mSendBatch():         
-      
-      DEFINE VARIABLE lii  AS INTEGER NO-UNDO.
-      DEFINE VARIABLE llOK AS LOGICAL NO-UNDO.
-      
-      lhRepLogQuery:QUERY-OPEN().
+   METHOD PUBLIC VOID mProcess():
 
-      DO WHILE TRUE:
+      DEFINE VARIABLE liCount     AS INTEGER NO-UNDO.
+      DEFINE VARIABLE llOK        AS LOGICAL NO-UNDO.
+      DEFINE VARIABLE llReconnect AS LOGICAL NO-UNDO INITIAL FALSE.
 
-         llOK = lhRepLogQuery:GET-NEXT(NO-LOCK).
+      DO TRANSACTION ON ERROR UNDO, THROW:
 
-         IF llOK = ?
-         THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot process query", 1).
+         lhRepLogQuery:QUERY-OPEN().
 
-         /* No more records, or query is not open */
-         IF NOT llOK
-         THEN LEAVE.
+         DO WHILE TRUE ON ERROR UNDO, THROW:
 
-         lii = lii + 1.
+            llOK = lhRepLogQuery:GET-NEXT(EXCLUSIVE-LOCK, NO-WAIT).
 
-         llOK = mSendRepLog2MQ().
+            IF llOK = ?
+            THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot process query", 1).
 
-         IF NOT llOK
-         THEN DO:
-            CREATE ttRepLog.
-            ASSIGN
-               ttReplog.RepLogRowID  = lhRepLogTable:ROWID
-               ttReplog.DeleteRepLog = (llOK = ?)
-               .
+            /* No more records, or query is not open */
+            IF NOT llOK
+            THEN LEAVE.
 
-            IF llOK = FALSE AND NOT objMsgPublisher:mReConnect()
-            THEN RETURN ERROR NEW Progress.Lang.AppError("MQ publisher cannot connect to server!", 1).
+            /* If for some reason RepLog table is locked then we must skip it */
+            IF lhRepLogTable:LOCKED
+            THEN NEXT.
+
+            CASE mSendRepLog2MQ():
+
+               WHEN 2
+               THEN DO:
+                  /* If message was failed to send then we must leave
+                     the transaction and try to reconnect */
+                  lhRepLogTable:BUFFER-RELEASE().
+                  llReconnect = TRUE.
+                  LEAVE.
+               END.
+
+               WHEN 1
+               THEN DO:
+                  IF llUseAck
+                  THEN DO:
+                     ASSIGN
+                        lhRepLogTable::SendTime  = NOW
+                        lhRepLogTable::SendCount = lhRepLogTable::SendCount + 1
+                        .
+                     lhRepLogTable:BUFFER-RELEASE().
+                  END.
+                  ELSE lhRepLogTable:BUFFER-DELETE().
+               END.
+
+               WHEN 3
+               THEN lhRepLogTable:BUFFER-DELETE().
+
+               OTHERWISE LEAVE.
+
+            END CASE.
 
          END.
 
-      END.
-
-      RETURN lii.
-      
-      FINALLY:      
-         lhRepLogQuery:QUERY-CLOSE().
-      END FINALLY. 
-            
-   END METHOD.
-      
-
-   METHOD PRIVATE VOID mCleanReplog
-      ( iiAmount AS INTEGER ):         
-
-      DEFINE VARIABLE llOK AS LOGICAL NO-UNDO.      
-
-      lhRepLogQuery:QUERY-OPEN().
-
-      DO WHILE iiAmount > 0 TRANSACTION:
-         
-         ASSIGN
-            iiAmount = iiAmount - 1
-            llOK     = lhRepLogQuery:GET-NEXT(NO-LOCK)
-            .
-
-         IF llOK = ?
-         THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot process query", 1).
-
-         /* No more records, or query is not open */
-         IF NOT llOK
-         THEN LEAVE.
-
-         /*
-            If ttRepLog is available then there has been a problem
-            while sending or fetching the replog data.
-
-            If it is failed to fetch we will delete the RepLog record.
-            If it is failed to send we won't touch the RepLog record.
-         */
-         FIND FIRST ttRepLog USE-INDEX RepLogRowID WHERE
-            ttRepLog.RepLogRowID = lhRepLogTable:ROWID
-         NO-ERROR.
-
-         IF NOT ttRepLog.DeleteRepLog
-         THEN NEXT.
-
-         lhRepLogQuery:GET-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
-         
-         /* If for some reason RepLog table is locked then skip it
-            (there will be a duplicate send next time) */         
-         IF lhRepLogTable:LOCKED
-         THEN mLog(2, "ERROR", SUBSTITUTE("Replog ROWID='&1' locked", STRING(lhRepLogTable:ROWID))).
-         ELSE IF llUseAck AND NOT ttRepLog.DeleteRepLog
-         THEN ASSIGN
-                 lhRepLogTable::SendTime  = NOW
-                 lhRepLogTable::SendCount = lhRepLogTable::SendCount + 1
-                 .
-         ELSE lhRepLogTable:BUFFER-DELETE().
+         FINALLY:
+            lhRepLogQuery:QUERY-CLOSE().
+         END FINALLY.
 
       END.
 
       FINALLY:
-         lhRepLogQuery:QUERY-CLOSE().
+         IF llReconnect AND NOT objMsgPublisher:mReConnect()
+         THEN RETURN ERROR NEW Progress.Lang.AppError("MQ publisher cannot connect to server!", 1).
       END FINALLY.
-            
-   END METHOD.
 
-
-   METHOD PRIVATE VOID mCleanReplogAllOK
-      ( iiAmount AS INTEGER ):
-
-      DEFINE VARIABLE llOK AS LOGICAL NO-UNDO.
-
-      lhRepLogQuery:QUERY-OPEN().
-      
-      DO WHILE iiAmount > 0 TRANSACTION:
-         
-         ASSIGN
-            iiAmount = iiAmount - 1
-            llOK     = lhRepLogQuery:GET-NEXT(EXCLUSIVE-LOCK, NO-WAIT)
-            .
-
-         IF llOK = ?
-         THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot process query", 1).
-
-         /* No more records, or query is not open */
-         IF NOT llOK
-         THEN LEAVE.
-
-         /* If for some reason RepLog table is locked then skip it
-            (there will be a duplicate send next time) */         
-         IF lhRepLogTable:LOCKED
-         THEN mLog(2, "ERROR", SUBSTITUTE("Replog ROWID='&1' locked", STRING(lhRepLogTable:ROWID))).
-         ELSE IF llUseAck
-         THEN ASSIGN
-                 lhRepLogTable::SendTime  = NOW
-                 lhRepLogTable::SendCount = lhRepLogTable::SendCount + 1
-                 .
-         ELSE lhRepLogTable:BUFFER-DELETE().
-         
-      END.
-
-      FINALLY:
-         lhRepLogQuery:QUERY-CLOSE().
-      END FINALLY.
-            
    END METHOD.
 
 
@@ -438,34 +365,14 @@ CLASS HPD.RepLogHandler FINAL:
    END METHOD.
 
 
-   METHOD PUBLIC LOGICAL mIsEmpty():         
-      
+   METHOD PUBLIC LOGICAL mIsEmpty():
+
       IF llUseAck
       THEN llFound = lhRepLogTable:FIND-FIRST("WHERE SendTime = ?", NO-LOCK) NO-ERROR.
       ELSE llFound = lhRepLogTable:FIND-FIRST("", NO-LOCK) NO-ERROR.
-      
+
       RETURN NOT llFound.
-            
+
    END METHOD.
 
-
-   METHOD PUBLIC VOID mProcess():         
-
-      DEFINE VARIABLE lii  AS INTEGER NO-UNDO.
-
-      lii = mSendBatch().
-      
-      IF lii = 0
-      THEN RETURN.
-      
-      IF CAN-FIND(FIRST ttRepLog)
-      THEN mCleanReplog(lii).
-      ELSE mCleanReplogAllOK(lii).
-      
-      FINALLY:
-         EMPTY TEMP-TABLE ttRepLog.      
-      END FINALLY.
-      
-   END METHOD.   
-   
 END CLASS.

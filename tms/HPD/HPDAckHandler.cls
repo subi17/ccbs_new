@@ -187,41 +187,45 @@ CLASS HPD.HPDAckHandler:
 
       ldtzLast = ADD-INTERVAL(NOW, liRetryMinutes * (-1), "minutes").
 
-      lhRepLogQuery:QUERY-OPEN().
+      DO TRANSACTION ON ERROR UNDO, THROW:
 
-      DO WHILE TRUE TRANSACTION:
+         lhRepLogQuery:QUERY-OPEN().
 
-         llOK = lhRepLogQuery:GET-NEXT(EXCLUSIVE-LOCK, NO-WAIT).
+         DO WHILE TRUE ON ERROR UNDO, THROW:
 
-         IF llOK = ?
-         THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot process query", 1).
+            llOK = lhRepLogQuery:GET-NEXT(EXCLUSIVE-LOCK, NO-WAIT).
+
+            IF llOK = ?
+            THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot process query", 1).
          
-         /* No more records, or query is not open */
-         IF NOT llOK
-         THEN LEAVE.
+            /* No more records, or query is not open */
+            IF NOT llOK
+            THEN LEAVE.
 
-         /* If for some reason RepLog table is locked then skip it */         
-         IF lhRepLogTable:LOCKED
-         THEN NEXT.
+            /* If for some reason RepLog table is locked then skip it */
+            IF lhRepLogTable:LOCKED
+            THEN NEXT.
          
-         IF lhRepLogTable::SendTime = ? OR lhRepLogTable::SendTime > ldtzLast
-         THEN LEAVE.
+            IF lhRepLogTable::SendTime = ? OR lhRepLogTable::SendTime > ldtzLast
+            THEN LEAVE.
          
-         IF lhRepLogTable::SendCount >= liMaxSendCount
-         THEN DO:
-            LOG-MANAGER:WRITE-MESSAGE("Max retries reached. ROWID=" + STRING(lhRepLogTable:ROWID), "INFO").            
-            mExportReplog("max_retries_reached").
-            lhRepLogTable:BUFFER-DELETE().
-            NEXT.
+            IF lhRepLogTable::SendCount >= liMaxSendCount
+            THEN DO:
+               LOG-MANAGER:WRITE-MESSAGE("Max retries reached. ROWID=" + STRING(lhRepLogTable:ROWID), "INFO").
+               mExportReplog("max_retries_reached").
+               lhRepLogTable:BUFFER-DELETE().
+               NEXT.
+            END.
+         
+            lhRepLogTable::SendTime  = ?.
+
          END.
-         
-         lhRepLogTable::SendTime  = ?.
+
+         FINALLY:
+            lhRepLogQuery:QUERY-CLOSE().
+         END FINALLY.
 
       END.
-
-      FINALLY:
-         lhRepLogQuery:QUERY-CLOSE().
-      END FINALLY.
 
    END METHOD.
 

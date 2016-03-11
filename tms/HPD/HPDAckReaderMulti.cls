@@ -60,7 +60,7 @@ CLASS HPD.HPDAckReaderMulti INHERITS HPD.HPDAckReader:
       DEFINE VARIABLE loHPDAckHandler AS HPD.HPDAckHandler NO-UNDO.
       DEFINE VARIABLE liLoopCount     AS INTEGER           NO-UNDO.
       
-      DO WHILE TRUE TRANSACTION: 
+      DO WHILE TRUE TRANSACTION ON ERROR UNDO, THROW:
 
          FOR
             EACH ttResponse
