@@ -83,9 +83,13 @@ CLASS HPD.CDRDump FINAL INHERITS DumpHandlerWithQuery:
          WHEN "KeyValue"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE RETURN lhMainTable::MSCID + objDumpBase:lcKeyDelimiter +
+              ELSE RETURN {HPD/keyvalue.i lhMainTable :: objDumpBase:lcKeyDelimiter MSCID DtlSeq DateSt}.
+         WHEN "EDRKeyValue"
+         THEN IF ilCheckOnly
+              THEN RETURN "OK".
+              ELSE RETURN "FEES" + objDumpBase:lcKeyDelimiter +
                           STRING(lhMainTable::DtlSeq) + objDumpBase:lcKeyDelimiter +
-                          ISO-DATE(lhMainTable::DateSt).
+                          STRING(lhMainTable::DateSt).
          WHEN "DataInDataOut"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
