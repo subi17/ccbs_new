@@ -30,7 +30,8 @@ CLASS HPD.RepLogHandler FINAL:
       .   
 
    DEFINE PRIVATE TEMP-TABLE ttRepLog NO-UNDO
-      FIELD RepLogRowID AS ROWID
+      FIELD RepLogRowID  AS ROWID
+      FIELD DeleteRepLog AS LOGICAL
       INDEX RepLogRowID IS PRIMARY RepLogRowID
       .
             
@@ -264,7 +265,7 @@ CLASS HPD.RepLogHandler FINAL:
                             "couldn't find a record where ROWID='&1'",
                             IF lhRepLogTable::RowID = ?
                             THEN "?" ELSE lhRepLogTable::RowID)).
-            RETURN FALSE.
+            RETURN ?.
          END.
 
          lcMessage = lcMessage + {&HPDDumpDelimiter} + lcTail.
@@ -273,12 +274,12 @@ CLASS HPD.RepLogHandler FINAL:
       IF NOT objMsgPublisher:send_message(lcMessage)
       THEN DO:
          mLog(2, "INFO", "Failed to send message: " + lcMessage).
-         RETURN TRUE.
+         RETURN FALSE.
       END.
 
       mLog(3, "DEBUG", "Send message: " + lcMessage).
 
-      RETURN FALSE.
+      RETURN TRUE.
 
    END METHOD.
 
@@ -303,14 +304,20 @@ CLASS HPD.RepLogHandler FINAL:
 
          lii = lii + 1.
 
-         IF mSendRepLog2MQ()
+         llOK = mSendRepLog2MQ().
+
+         IF NOT llOK
          THEN DO:
             CREATE ttRepLog.
-            ttReplog.RepLogRowID = lhRepLogTable:ROWID.   
+            ASSIGN
+               ttReplog.RepLogRowID  = lhRepLogTable:ROWID
+               ttReplog.DeleteRepLog = (llOK = ?)
+               .
+
+            IF llOK = FALSE AND NOT objMsgPublisher:mReConnect()
+            THEN RETURN ERROR NEW Progress.Lang.AppError("MQ publisher cannot connect to server!", 1).
+
          END.
-         
-         ELSE IF NOT objMsgPublisher:mReConnect()
-         THEN RETURN ERROR NEW Progress.Lang.AppError("MQ publisher cannot connect to server!", 1).
 
       END.
 
@@ -339,30 +346,38 @@ CLASS HPD.RepLogHandler FINAL:
 
          IF llOK = ?
          THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot process query", 1).
-         
+
          /* No more records, or query is not open */
          IF NOT llOK
          THEN LEAVE.
 
-         /* If ttRepLog is available then there has been a problem
-            while sending the replog data and it is not
-            allowed to delete the RepLog record. */         
-         IF CAN-FIND(FIRST ttRepLog WHERE ttRepLog.RepLogRowID = lhRepLogTable:ROWID USE-INDEX RepLogRowID)
+         /*
+            If ttRepLog is available then there has been a problem
+            while sending or fetching the replog data.
+
+            If it is failed to fetch we will delete the RepLog record.
+            If it is failed to send we won't touch the RepLog record.
+         */
+         FIND FIRST ttRepLog USE-INDEX RepLogRowID WHERE
+            ttRepLog.RepLogRowID = lhRepLogTable:ROWID
+         NO-ERROR.
+
+         IF NOT ttRepLog.DeleteRepLog
          THEN NEXT.
-         
+
          lhRepLogQuery:GET-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
          
          /* If for some reason RepLog table is locked then skip it
             (there will be a duplicate send next time) */         
          IF lhRepLogTable:LOCKED
          THEN mLog(2, "ERROR", SUBSTITUTE("Replog ROWID='&1' locked", STRING(lhRepLogTable:ROWID))).
-         ELSE IF llUseAck
+         ELSE IF llUseAck AND NOT ttRepLog.DeleteRepLog
          THEN ASSIGN
                  lhRepLogTable::SendTime  = NOW
                  lhRepLogTable::SendCount = lhRepLogTable::SendCount + 1
                  .
          ELSE lhRepLogTable:BUFFER-DELETE().
-         
+
       END.
 
       FINALLY:
@@ -388,7 +403,7 @@ CLASS HPD.RepLogHandler FINAL:
 
          IF llOK = ?
          THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot process query", 1).
-         
+
          /* No more records, or query is not open */
          IF NOT llOK
          THEN LEAVE.
