@@ -205,7 +205,7 @@ PROCEDURE pTransOnError:
 END PROCEDURE. 
 
 PROCEDURE pSendActiveMQMessage:
-DEFINE INPUT PARAMETER lcInvoiceDetails AS CHAR NO-UNDO. 
+DEFINE INPUT PARAMETER lcInvoiceDetails AS LONGCHAR NO-UNDO. 
 
 DEF VAR lcPDFOutput  AS CHAR NO-UNDO INITIAL "". 
 DEF VAR llgRecursive AS CHAR NO-UNDO INITIAL "".
@@ -241,7 +241,7 @@ DEF VAR llgHandled   AS LOG  NO-UNDO.
          LOG-MANAGER:WRITE-MESSAGE("ActiveMQ Publisher handle not found","ERROR").
    END.
 
-   lcMessage = "~{" + "~"invoices~""         + "~:" + "~[" + lcInvoiceDetails + "~]" + "," +
+   lcInvoiceDetails = "~{" + "~"invoices~""         + "~:" + "~[" + lcInvoiceDetails + "~]" + "," +
                       "~"output_file_name~"" + "~:" + "~"" + lcPDFOutput      + "~"" + "," +
                       "~"recursive~""        + "~:" +        llgRecursive            + "," +
                       "~"multi_file~""       + "~:" +        llgMultiFile            + "," +
@@ -249,7 +249,7 @@ DEF VAR llgHandled   AS LOG  NO-UNDO.
                       "~"type~""             + "~:" + "~"" + lcType           + "~"" + "," +
                       "~"process~""          + "~:" + "~"" + lcProcess        + "~"" + "~}".
 
-   IF lMsgPublisher:send_message(lcMessage) THEN
+   IF lMsgPublisher:send_message(lcInvoiceDetails) THEN
       llgHandled = TRUE.
    ELSE DO:
       llgHandled = FALSE.

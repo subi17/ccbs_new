@@ -16,15 +16,32 @@ ASSIGN
 {log.i}
 {cparam2.i}
 
-DEF VAR llHandled AS LOG NO-UNDO INIT FALSE. 
-DEF VAR lcProgram AS CHAR NO-UNDO. 
+DEF VAR llHandled  AS LOG  NO-UNDO INIT FALSE. 
+DEF VAR lcProgram  AS CHAR NO-UNDO. 
+DEF VAR llgRequest AS LOG  NO-UNDO. 
 
 /******** Main start *********/
 FOR EACH RequestType NO-LOCK WHERE 
          RequestType.Brand = gcBrand AND 
          RequestType.Mode  = "Batch" AND
          RequestType.InUse:
-   
+
+   llgRequest = FALSE.
+
+   FOR EACH RequestStatus OF RequestType NO-LOCK WHERE
+            RequestStatus.InUse: 
+
+      IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                        MsRequest.Brand     EQ gcBrand               AND
+                        MsRequest.ReqType   EQ RequestType.ReqType   AND
+                        MsRequest.ReqStatus EQ RequestStatus.ReqStat AND
+                        MsRequest.ActStamp  <= fMakeTS())            THEN 
+         llgRequest = TRUE.                  
+
+   END.
+
+   IF NOT llgRequest THEN NEXT. 
+
    /* logging on type level */
    IF RequestType.LogOn THEN DO:
 
@@ -41,21 +58,6 @@ FOR EACH RequestType NO-LOCK WHERE
    
    FOR EACH RequestStatus OF RequestType NO-LOCK WHERE
             RequestStatus.InUse:
-
-       /* logging on status level */
-      IF RequestStatus.LogOn THEN DO:
-
-         IF RequestStatus.LogFile > "" AND RequestStatus.LogEntry > "" 
-         THEN DO:
-            fSetLogFileName(RequestStatus.LogFile).
-            fSetLogEntryTypes(RequestStatus.LogEntry).
-            fSetLogTreshold(INTEGER(RequestStatus.LogThreshold)).      
-      
-            IF RequestStatus.LogClear THEN DO:
-               fClearLog().
-            END.
-         END.
-      END.
 
       FOR EACH MsRequest NO-LOCK WHERE 
                MsRequest.Brand     EQ gcBrand               AND
@@ -81,16 +83,6 @@ FOR EACH RequestType NO-LOCK WHERE
          LEAVE.
       END.
          
-      /* close status level log */  
-      IF RequestStatus.LogOn THEN DO:
-         fCloseLog().
-      END.
-
-      /* type level log back on */
-      IF RequestType.LogOn THEN DO:
-         fSetLogFileName(RequestType.LogFile).
-      END.
-
       IF llHandled THEN LEAVE.
    END.
 

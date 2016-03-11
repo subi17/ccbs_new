@@ -78,6 +78,7 @@ DEF VAR lcTariffBundle   AS CHAR NO-UNDO.
 DEF VAR ldaItemFromDate AS DATE NO-UNDO.
 DEF VAR ldaItemToDate AS DATE NO-UNDO.
 DEF VAR ldeTotalDataBundleLimit AS DEC NO-UNDO.
+DEF VAR ldeCDRts AS DEC NO-UNDO.
 DEF VAR lcYear AS CHAR NO-UNDO.
 DEF VAR lcMonth AS CHAR No-UNDO.
 DEF VAR ldaToDate AS DATE NO-UNDO.
@@ -213,7 +214,15 @@ FOR EACH ttCDR NO-LOCK WHERE
          ttMsOwner.MsSeq     = ttCDR.MsSeq   AND
          ttMsOwner.FromDate <= ttCDR.DateSt  AND
          ttMsOwner.ToDate   >= ttCDR.DateSt NO-LOCK:
-         
+
+   IF ttMsOwner.PayType EQ TRUE THEN DO:
+      ldeCDRts = fMake2Dt(ttCDR.DateSt,ttCDR.TimeStart).
+
+      IF NOT ttMsOwner.PeriodFrom <= ldeCDRts AND 
+             ttMsOwner.PeriodTo   >= ldeCDRts THEN
+      NEXT.       
+   END.
+ 
    fCollectBalance(ttMsOwner.CLIType,
                    ttMsOwner.TariffBundle,
                    ttCDR.BillCode,
@@ -386,22 +395,20 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
          SingleFee.CalcObj EQ "RVTERM" AND
          SingleFee.SourceTable = "DCCLI" THEN DO:
          ASSIGN         
-            ldaToDate = date(month(today) + 1,1,year(today)) - 1
+            ldaToDate = fLastDayOfMonth(TODAY)
             ldaFromDate = date(month(ldaToDate),1,year(ldaToDate)).
 
-         DO liLoop = 0 to 2 by 2: 
-            IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                              MsRequest.msSeq EQ mobsub.msseq AND
-                              MsRequest.reqtype EQ
-                                 {&REQTYPE_CONTRACT_ACTIVATION} AND
-                              MsRequest.reqStatus EQ
-                                 liLoop AND
-                              MsRequest.ReqCParam3 EQ "RVTERM12" AND
-                              MsRequest.ReqIParam3 EQ INT(SingleFee.sourcekey)) 
-               THEN llExtFound = TRUE.
-         END.
+         IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                           MsRequest.msSeq EQ mobsub.msseq AND
+                           MsRequest.reqtype EQ
+                              {&REQTYPE_CONTRACT_ACTIVATION} AND
+                           MsRequest.reqStatus EQ
+                              {&REQUEST_STATUS_NEW} AND
+                           MsRequest.ReqCParam3 EQ "RVTERM12" AND
+                           MsRequest.ReqIParam3 EQ INT(SingleFee.sourcekey)) 
+            THEN llExtFound = TRUE. /* ongoin request found */
          IF llExtFound THEN NEXT.
-         lcDiscounts = "RVTERMDT1DISC,RVTERMDT3DISC,RVTERMDT4DISC".
+         lcDiscounts = "RVTERMDT1DISC,RVTERMDT2DISC,RVTERMDT3DISC,RVTERMDT4DISC".
          DiscountsLoop:
          DO liLoop = 1 TO NUM-ENTRIES(lcDiscounts): 
             FIND FIRST DiscountPlan WHERE Discountplan.dpruleid EQ 
@@ -413,8 +420,9 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
                           DPMember.HostTable EQ "MobSub" AND
                           DPMember.KeyValue EQ SingleFee.KeyValue AND
                           DPMember.OrderId EQ SingleFee.orderId AND
-                          DPMember.ValidFrom LE  ldaFromDate AND
-                          DPMemBer.ValidTo GE ldaToDate
+                          DPMember.ValidFrom LE ldaToDate AND
+                          DPMemBer.ValidTo GE ldaFromDate AND
+                          DPMemBer.ValidTo GE DPMember.ValidFrom
                           NO-LOCK NO-ERROR.
                IF AVAIL DPMember THEN DO: 
                   /* only one discount should be found */
