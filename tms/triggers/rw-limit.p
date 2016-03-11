@@ -28,7 +28,7 @@ THEN DO:
    DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
       
    BUFFER-COMPARE Limit USING
-      CustNum MsSeq LimitType ValidTo
+      CustNum MsSeq LimitType ToDate
    TO oldLimit SAVE RESULT IN llSameValues.
    
    IF NOT llSameValues
