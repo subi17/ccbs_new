@@ -1,1 +1,1 @@
-{triggers/hpdwrite_generic.i MServiceLPool MSERVICELPOOL Common MsSeq SLSeq EndTS}
+{triggers/hpdwrite_generic.i MServiceLPool MSERVICELPOOL Common MsSeq SLSeq FromTS}

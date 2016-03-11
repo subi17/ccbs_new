@@ -30,7 +30,7 @@ CLASS HPD.MServiceLimitDump FINAL INHERITS GenericDump:
          WHEN "KeyValue"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE RETURN {HPD/keyvalue.i lhMainTable :: objDumpBase:lcKeyDelimiter MsSeq DialType SLSeq EndTS}.
+              ELSE RETURN {HPD/keyvalue.i lhMainTable :: objDumpBase:lcKeyDelimiter MSID}.
          OTHERWISE RETURN "".         
       END CASE.
 

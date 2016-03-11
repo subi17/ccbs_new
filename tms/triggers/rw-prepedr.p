@@ -22,9 +22,7 @@ ASSIGN
    .
 
 IF mcdr.RepLog.EventType  = "DELETE"
-THEN mcdr.RepLog.KeyValue = "FEES" + {&HPDKeyDelimiter} +
-                            STRING(PrepEDR.DtlSeq) + {&HPDKeyDelimiter} +
-                            STRING(PrepEDR.DateSt)
+THEN mcdr.RepLog.KeyValue = {HPD/keyvalue.i PrepEDR . {&HPDKeyDelimiter} MsSeq DtlSeq DateSt}.
 ELSE mcdr.RepLog.RowID    = STRING(ROWID(PrepEDR)).
    
 IF NOT NEW(PrepEDR)
@@ -44,9 +42,7 @@ THEN DO:
          mcdr.RepLog.TableName = "PrepEDR"
          mcdr.RepLog.EventType = "DELETE"
          mcdr.RepLog.EventTime = NOW
-         mcdr.RepLog.KeyValue  = "FEES" + {&HPDKeyDelimiter} +
-                                 STRING(oldPrepEDR.DtlSeq) + {&HPDKeyDelimiter} +
-                                 STRING(oldPrepEDR.DateSt)
+         mcdr.RepLog.KeyValue  = {HPD/keyvalue.i oldPrepEDR . {&HPDKeyDelimiter} MsSeq DtlSeq DateSt}
          .
    END.
 END.

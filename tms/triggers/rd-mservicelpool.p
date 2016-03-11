@@ -1,1 +1,1 @@
-{triggers/hpddelete_generic.i MServiceLPool MSERVICELPOOL Common MsSeq SLSeq EndTS}
+{triggers/hpddelete_generic.i MServiceLPool MSERVICELPOOL Common MsSeq SLSeq FromTS}

@@ -1,1 +1,1 @@
-{triggers/hpddelete_generic.i MServiceLimit MSERVICELIMIT Common MsSeq DialType SLSeq EndTS}
+{triggers/hpddelete_generic.i MServiceLimit MSERVICELIMIT Common MSID}

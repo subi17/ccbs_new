@@ -1,1 +1,1 @@
-{triggers/hpdwrite_generic.i MServiceLimit MSERVICELIMIT Common MsSeq DialType SLSeq EndTS}
+{triggers/hpdwrite_generic.i MServiceLimit MSERVICELIMIT Common MSID}
