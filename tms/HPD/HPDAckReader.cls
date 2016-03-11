@@ -66,7 +66,7 @@ CLASS HPD.HPDAckReader ABSTRACT
          ldtzNextCheckTime    = NOW
          .
 
-      mlogMsg(SUBSTITUTE("SETTINGS: hostname=&1, port=&2, queueName=&1",
+      mlogMsg(SUBSTITUTE("SETTINGS: hostname=&1, port=&2, queueName=&3",
                          lcHostName,
                          STRING(liPortNumber),
                          lcQueueName), "INIT").
