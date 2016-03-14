@@ -261,7 +261,7 @@ CLASS HPD.RepLogHandler FINAL:
          THEN DO:
             mLog(2, "INFO",
                  SUBSTITUTE("While processing message: " + lcMessage + 
-                            "couldn't find a record where ROWID='&1'",
+                            " couldn't find a record where ROWID='&1'",
                             IF lhRepLogTable::RowID = ?
                             THEN "?" ELSE lhRepLogTable::RowID)).
             RETURN 3.
