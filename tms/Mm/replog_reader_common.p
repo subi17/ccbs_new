@@ -1215,7 +1215,7 @@ PROCEDURE pHandleDPTarget:
          WHEN "DELETE" THEN fWriteMessage(lcMessage).
          OTHERWISE RETURN.
       END CASE.
-FI61 1045 3500 9261 25
+
       IF lMsgPublisher:send_message(lcMessage) THEN
          olHandled = TRUE.
       ELSE DO:
