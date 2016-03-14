@@ -2240,7 +2240,7 @@ PROCEDURE pContractTermination:
             ldaMonth22  = ADD-INTERVAL(ldtOrigValidFrom, 22, "months").
             ldaMonth22  = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
 
-            IF ldtActDate >= ldaMonth22 THEN
+            IF ldtActDate + 1 >= ldaMonth22 THEN
                llCreatePenaltyFee = FALSE.
          END.
             
