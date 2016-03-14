@@ -45,6 +45,10 @@ ASSIGN liQ25Logging = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg,
 IF lcQ25LogDir = "" OR lcQ25LogDir = ? THEN lcQ25LogDir = "/tmp/".
 IF lcQ25SpoolDir = "" OR lcQ25SpoolDir = ? THEN lcQ25SpoolDir = "/tmp/".
 
+lcQ25DWHLogFile = lcQ25SpoolDir + "events_" +
+                  (REPLACE(STRING(fMakeTS()),".","_")) + ".csv".
+
+
 /* Function to check if there is available weekdays for SMS sending after
    specified day.
    Q24 Messages are needed to send before 20th day of month. No sending weekend
@@ -251,8 +255,6 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
    IF iiExecType EQ {&Q25_EXEC_TYPE_CUST_LOG_GENERATION} THEN DO:
       /* Only cust level logs are needed to be written here  */
       IF iiLogLevel EQ {&Q25_LOGGING_CUST_LOGS} THEN DO: 
-         lcQ25DWHLogFile = lcQ25SpoolDir + "events_" +
-                        (REPLACE(STRING(fMakeTS()),".","_")) + ".csv".
          OUTPUT STREAM Sout TO VALUE(lcQ25DWHLogFile) APPEND.
          PUT STREAM Sout UNFORMATTED
             icLogText SKIP.
