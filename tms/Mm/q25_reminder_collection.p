@@ -33,6 +33,13 @@ DEF VAR liTestEndDay             AS CHAR NO-UNDO.
 DEF VAR liWeekdayCount           AS INT  NO-UNDO.
 DEF VAR liSendingStartDay        AS INT  NO-UNDO.
 DEF VAR liRunMode                AS INT  NO-UNDO.
+DEF VAR liQ22Q23SendingStartDay  AS INT  NO-UNDO.
+DEF VAR liQ22Q23SendingEndDay    AS INT  NO-UNDO.
+DEF VAR liQ24SendingStartDay     AS INT  NO-UNDO.
+DEF VAR liQ24SendingEndDay       AS INT  NO-UNDO.
+DEF VAR liQ22Q23PerDayCount         AS INT  NO-UNDO.
+DEF VAR liQ24PerDayCount            AS INT  NO-UNDO.
+
 
 /* for testing and logging support */
 ASSIGN lcTestStartDay = fCParam("Q25","Q25TestStart")
@@ -41,6 +48,14 @@ ASSIGN lcTestStartDay = fCParam("Q25","Q25TestStart")
                                                       2 = all */
        lcExecuteDate  = fCParam("Q25","Q25TestExecDate"). /* manipulated exec 
                                                             date */
+       liQ22Q23SendingStartDay = fCParamI("Q2223SendStart").
+       liQ22Q23SendingEndDay = fCParamI("Q2223SendEnd").
+       liQ24SendingStartDay = fCParamI("Q24SendStart").
+       liQ24SendingEndDay = fCParamI("Q24SendEnd").
+       liQ22Q23PerDayCount = fCParamI("Q2223PerDayCount").
+       liQ24PerDayCount = fCParamI("Q24PerDayCount").
+
+
 liRunMode = INT(SESSION:PARAMETER). /* get crontab input parameter, if this is 
                                        logging run (0) for making log file or 
                                        actual SMS calculation/sending (1) */
@@ -80,16 +95,18 @@ DO:
          fCheckDates function resolves last day of month. */
        
        /* sending days for Q22 and Q23 */
-       liSendingStartDay = 15. /* start sending at 15th day earliest */
+       liSendingStartDay = liQ22Q23SendingStartDay. 
        liWeekdayCount = fCountNormalWeekday(ldaExecuteDate, liSendingStartDay).
-       liStartDay = (liWeekdayCount * 3) - 2. 
-       liEndDay = (liWeekdaycount * 3).
+       liStartDay = (liWeekdayCount * liQ22Q23PerDayCount) - 
+                    (liQ22Q23PerDayCount - 1).
+       liEndDay = (liWeekdaycount * liQ22Q23PerDayCount).
        
        /* Sending days for Q24 */
-       liSendingStartDay = 6.
+       liSendingStartDay = liQ24SendingStartDay.
        liWeekdayCount = fCountNormalWeekday(ldaExecuteDate, liSendingStartDay).
-       liStartDay24M = (liWeekdayCount * 3) - 2.
-       liEndDay24M = (liWeekdaycount * 3).
+       liStartDay24M = (liWeekdayCount * liQ24PerDayCount) - 
+                       (liQ24PerDayCount - 1).
+       liEndDay24M = (liWeekdaycount * liQ24PerDayCount).
    END.
 
    /* Month 22, 2 months perm contract to go */
@@ -103,20 +120,22 @@ DO:
                      OUTPUT ldaStartDateMonth24, OUTPUT ldaEndDateMonth24).
    /* at month 22 and 23 messages are needed to sent during month. Last day is 
       last weekday of the month. */
-  IF fisLastDayToSend(ldaExecuteDate,
-                      DAY(fLastDayOfMonth(ldaExecuteDate))) THEN DO:
-     ldaEndDateMonth22 = DATE(MONTH(ldaEndDateMonth22),
-                              DAY(fLastDayOfMonth(ldaEndDateMonth22)),
-                              YEAR(ldaEndDateMonth22)).
-     ldaEndDateMonth23 = DATE(MONTH(ldaEndDateMonth23),
-                              DAY(fLastDayOfMonth(ldaEndDateMonth23)),
-                              YEAR(ldaEndDateMonth23)).                         
-   
+   /* Check that if last day parameter is bigger than last day of month, use
+      last day of the month */
+   IF (liQ22Q23SendingEndDay > DAY(fLastDayOfMonth(ldaExecuteDate))) THEN
+      liQ22Q23SendingEndDay = DAY(fLastDayOfMonth(ldaExecuteDate)).
+   IF fisLastDayToSend(ldaExecuteDate, liQ22Q23SendingEndDay) THEN DO:
+      ldaEndDateMonth22 = DATE(MONTH(ldaEndDateMonth22),
+                               DAY(fLastDayOfMonth(ldaEndDateMonth22)),
+                               YEAR(ldaEndDateMonth22)).
+      ldaEndDateMonth23 = DATE(MONTH(ldaEndDateMonth23),
+                               DAY(fLastDayOfMonth(ldaEndDateMonth23)),
+                               YEAR(ldaEndDateMonth23)).
    END.
    /* at month 24 all messages are needed to be send before 20th day.
       If there is national holidays during 6th and 20th day, might be
       needed to send some extra messages at the end. 19th day is last. */
-   IF fisLastDayToSend(ldaExecuteDate, 19) THEN
+   IF fisLastDayToSend(ldaExecuteDate, liQ24SendingEndDay) THEN
       ldaEndDateMonth24 = DATE(MONTH(ldaEndDateMonth24),
                                DAY(fLastDayOfMonth(ldaEndDateMonth24)),
                                YEAR(ldaEndDateMonth24)).
