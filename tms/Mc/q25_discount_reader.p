@@ -113,7 +113,6 @@ REPEAT:
       CREATE Limit.
       ASSIGN
          Limit.Brand     = gcBrand
-         Limit.CustNum   = MobSub.CustNum
          Limit.MsSeq     = MobSub.MsSeq
          Limit.LimitAmt  = ldLimitAmt
          Limit.LimitType = {&LIMIT_TYPE_Q25_DISCOUNT}

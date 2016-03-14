@@ -1215,7 +1215,7 @@ PROCEDURE pHandleDPTarget:
          WHEN "DELETE" THEN fWriteMessage(lcMessage).
          OTHERWISE RETURN.
       END CASE.
-
+FI61 1045 3500 9261 25
       IF lMsgPublisher:send_message(lcMessage) THEN
          olHandled = TRUE.
       ELSE DO:
@@ -1237,9 +1237,7 @@ PROCEDURE pHandleLimit:
    DEFINE OUTPUT PARAMETER olHandled AS LOGICAL   NO-UNDO.
 
    DEFINE VARIABLE lcMessage         AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE lcHostTable       AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE lcKeyValue        AS CHARACTER NO-UNDO.
-
+   
    IF AVAIL Common.RepLog THEN DO:
 
       lcMessage = fCommonMessage().
@@ -1249,16 +1247,13 @@ PROCEDURE pHandleLimit:
             FIND FIRST Limit WHERE
                        RECID(Limit) = RepLog.RecordId NO-LOCK NO-ERROR.
 
-            IF Limit.LimitType = {&LIMIT_TYPE_Q25_DISCOUNT} THEN
-               ASSIGN lcHostTable = "MobSub"
-                      lcKeyValue  = Limit.MsSeq.
-
             IF AVAIL Limit THEN DO:
-               lcMessage = lcMessage                        + lcDel +
-                           fNotNull(lcHostTable)            + lcDel +
-                           fNotNull(lcKeyValue)             + lcDel +
-                           fNotNull(STRING(Limit.LimitAmt)) + lcDel +
-                           fNotNull(STRING(Limit.FromDate)) + lcDel +
+               lcMessage = lcMessage                           + lcDel +
+                           fNotNull(STRING(Limit.LimitType))   + lcDel +
+                           fNotNull(STRING(Limit.MsSeq))       + lcDel +
+                           fNotNull(STRING(Limit.CustNum))     + lcDel +
+                           fNotNull(STRING(Limit.LimitAmt))    + lcDel +
+                           fNotNull(STRING(Limit.FromDate))    + lcDel +
                            fNotNull(STRING(Limit.ToDate)).
                fWriteMessage(lcMessage).
             END.
