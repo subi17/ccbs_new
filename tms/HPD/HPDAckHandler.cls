@@ -218,6 +218,7 @@ CLASS HPD.HPDAckHandler:
             END.
          
             lhRepLogTable::SendTime  = ?.
+            lhRepLogTable::BUFFER-RELEASE().
 
          END.
 
