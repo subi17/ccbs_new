@@ -6,6 +6,7 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF OrderCustomer OLD BUFFER oldOrderCust
 
 CREATE Ordercanal.RepLog.
 ASSIGN
+   Ordercanal.RepLog.RowID     = STRING(ROWID(OrderCustomer))
    Ordercanal.RepLog.TableName = "OrderCustomer"
    Ordercanal.RepLog.EventType = (IF NEW(OrderCustomer)
                                   THEN "CREATE"
