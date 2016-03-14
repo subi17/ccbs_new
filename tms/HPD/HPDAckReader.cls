@@ -19,10 +19,12 @@ CLASS HPD.HPDAckReader ABSTRACT
    DEFINE PRIVATE VARIABLE lhWaitForProcedure     AS HANDLE         NO-UNDO.
    DEFINE PRIVATE VARIABLE llDisconnected AS LOGICAL INITIAL FALSE  NO-UNDO.
    DEFINE PRIVATE VARIABLE liAckBatch             AS INTEGER        NO-UNDO.
-   DEFINE PRIVATE VARIABLE lcExportDir            AS CHARACTER NO-UNDO.
+   DEFINE PRIVATE VARIABLE liAckTimeLimit         AS INTEGER        NO-UNDO.
+   DEFINE PRIVATE VARIABLE liLastAck              AS INTEGER        NO-UNDO.
+   DEFINE PRIVATE VARIABLE lcExportDir            AS CHARACTER      NO-UNDO.
 
    DEFINE PROTECTED VARIABLE liAckCount           AS INTEGER        NO-UNDO.
-   DEFINE PROTECTED VARIABLE lcJSON AS LONGCHAR INITIAL '~{"":&1~}' NO-UNDO.
+   DEFINE PROTECTED VARIABLE lcJSON AS LONGCHAR INITIAL '~{"":[&1]~}' NO-UNDO.
    DEFINE PROTECTED VARIABLE ldtzNextCheckTime    AS DATETIME-TZ    NO-UNDO.
    DEFINE PROTECTED VARIABLE liCheckWaitMinutes   AS INTEGER        NO-UNDO.
    DEFINE PROTECTED VARIABLE liMaxLockedLoopCount AS INTEGER        NO-UNDO.
@@ -52,6 +54,13 @@ CLASS HPD.HPDAckReader ABSTRACT
          lcPassword = Syst.Parameters:getc("HPD.Ack.Password", "HPD.Interface").
          CATCH anyErrorObject AS Progress.Lang.Error:
             lcPassword = ?.
+         END CATCH.
+      END.
+
+      DO ON ERROR UNDO, THROW:
+         liAckTimeLimit = Syst.Parameters:geti("HPD.Ack.AckTimeLimit", "HPD.Interface").
+         CATCH anyErrorObject AS Progress.Lang.Error:
+            liAckTimeLimit = 10.
          END CATCH.
       END.
 
@@ -108,6 +117,18 @@ CLASS HPD.HPDAckReader ABSTRACT
    END METHOD.
 
 
+   METHOD PRIVATE VOID mCreateLog
+      ( ilLogLevel AS INTEGER,
+        iMessage   AS CHARACTER,
+        iLogType   AS CHARACTER ):
+
+      IF LOG-MANAGER:LOGFILE-NAME <> ? AND
+         LOG-MANAGER:LOGGING-LEVEL GE ilLogLevel
+      THEN LOG-MANAGER:WRITE-MESSAGE(iMessage, iLogType).
+
+   END METHOD.
+
+
    METHOD PRIVATE VOID mConfig ():
 
       loStompConfig = dotr.Stomp.StompConfig:DEFAULT.
@@ -143,9 +164,23 @@ CLASS HPD.HPDAckReader ABSTRACT
    END METHOD.
 
 
+   METHOD PRIVATE LOGICAL mAckTimePassed():
+
+      DEFINE VARIABLE liNow AS INTEGER NO-UNDO.
+
+      liNow = TIME.
+
+      IF liNow < liLastAck
+      THEN RETURN (liNow + 86399 - liLastAck) >= liAckTimeLimit.
+
+      RETURN (liNow - liLastAck ) >= liAckTimeLimit.
+
+   END METHOD.
+
+
    METHOD PUBLIC VOID mProcess():
         
-      IF liAckCount > liAckBatch
+      IF liAckCount >= liAckBatch OR mAckTimePassed()
       THEN mAckReplog().
       
       IF NOW > ldtzNextCheckTime
@@ -207,6 +242,8 @@ CLASS HPD.HPDAckReader ABSTRACT
          llDisconnected = TRUE.
          RETURN.
       END.
+
+      mCreateLog(4, SUBSTITUTE("Got body: &1", ioStompMessage:Body), "DEBUG").
    
       lcHeader = REPLACE(ioStompMessage:HEADER,"~n"," ").
       
@@ -271,7 +308,10 @@ CLASS HPD.HPDAckReader ABSTRACT
       THEN mLogLocked().
       
       FINALLY:
-         liAckCount = 0.
+         ASSIGN
+            liLastAck  = TIME
+            liAckCount = 0
+            .
          DATASET ldsAckDS:EMPTY-DATASET().   
       END FINALLY.
       
