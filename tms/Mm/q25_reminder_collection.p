@@ -75,9 +75,6 @@ DO:
       messages during 6th - 19th day*/
    IF ldaExecuteDate LE 3/6/16 THEN
          LEAVE execution.
-   /* No sending first 5 days of month, no sending at Saturday or Sunday. */
-   ELSE IF DAY(ldaExecuteDate) LE 5 THEN
-      LEAVE execution. /* Messages will be sent after 5th day of month */   
    ELSE IF fChkDueDate(ldaExecuteDate) NE ldaExecuteDate THEN
       LEAVE execution. /* no sending weekend and national holiday */
    ELSE DO:
@@ -95,18 +92,26 @@ DO:
          fCheckDates function resolves last day of month. */
        
        /* sending days for Q22 and Q23 */
-       liSendingStartDay = liQ22Q23SendingStartDay. 
-       liWeekdayCount = fCountNormalWeekday(ldaExecuteDate, liSendingStartDay).
-       liStartDay = (liWeekdayCount * liQ22Q23PerDayCount) - 
-                    (liQ22Q23PerDayCount - 1).
-       liEndDay = (liWeekdaycount * liQ22Q23PerDayCount).
+       IF DAY(ldaExecuteDate) GE liQ22Q23SendingStartDay AND
+          DAY(ldaExecuteDate) LE liQ22Q23SendingEndDay THEN DO:
+          liSendingStartDay = liQ22Q23SendingStartDay. 
+          liWeekdayCount = fCountNormalWeekday(ldaExecuteDate, 
+                                               liSendingStartDay).
+          liStartDay = (liWeekdayCount * liQ22Q23PerDayCount) - 
+                       (liQ22Q23PerDayCount - 1).
+          liEndDay = (liWeekdaycount * liQ22Q23PerDayCount).
+       END.
        
        /* Sending days for Q24 */
-       liSendingStartDay = liQ24SendingStartDay.
-       liWeekdayCount = fCountNormalWeekday(ldaExecuteDate, liSendingStartDay).
-       liStartDay24M = (liWeekdayCount * liQ24PerDayCount) - 
-                       (liQ24PerDayCount - 1).
-       liEndDay24M = (liWeekdaycount * liQ24PerDayCount).
+       IF DAY(ldaExecuteDate) GE liQ24SendingStartDay AND
+          DAY(ldaExecuteDate) LE liQ24SendingEndDay THEN DO:
+          liSendingStartDay = liQ24SendingStartDay.
+          liWeekdayCount = fCountNormalWeekday(ldaExecuteDate, 
+                                               liSendingStartDay).
+          liStartDay24M = (liWeekdayCount * liQ24PerDayCount) - 
+                          (liQ24PerDayCount - 1).
+          liEndDay24M = (liWeekdaycount * liQ24PerDayCount).
+       END.
    END.
 
    /* Month 22, 2 months perm contract to go */
