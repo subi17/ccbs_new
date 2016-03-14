@@ -89,11 +89,6 @@ REPEAT:
              ldLimitAmt = DEC(ENTRY(2,lcLine,lcSep))
              ldaValidTo = DATE(ENTRY(3,lcLine,lcSep)).
 
-      IF ERROR-STATUS:ERROR THEN DO:
-         fError("Incorrect input data format").
-         NEXT.
-      END.
-
       FIND FIRST MobSub NO-LOCK WHERE
                  MobSub.Brand = gcBrand AND
                  MobSub.CLI = lcMSISDN NO-ERROR.
