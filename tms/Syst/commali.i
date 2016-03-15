@@ -12,7 +12,7 @@
 &IF "{&SKIP_FUNC_I}" NE "YES" 
 &THEN
    def shared var ghFunc1 as handle.
-   if not valid-handle(ghFunc1) then run func.i persistent set ghFunc1.
+   if not valid-handle(ghFunc1) then run Func/func.p persistent set ghFunc1.
 &ENDIF
 
 
