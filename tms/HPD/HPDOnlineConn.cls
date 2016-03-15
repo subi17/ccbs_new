@@ -162,9 +162,17 @@ CLASS HPD.HPDOnlineConn INHERITS HPD.HPDOnline:
             IF LOG-MANAGER:LOGFILE-NAME <> ?
             THEN LOG-MANAGER:WRITE-MESSAGE("Disconnected database " + lcDBLogicalName, "INFO").
          END.
-                  
+
+         &IF "{&HPD_ENVIRONMENT}" = "Salt"
+         &THEN
          CONNECT VALUE(lcDBPath + " -ld " + lcDBLogicalName) NO-ERROR.
-                  
+         &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
+         &THEN
+         CONNECT VALUE(lcDBPath + "/" + lcDBLogicalName) NO-ERROR.
+         &ELSE
+         RETURN ERROR NEW Progress.Lang.AppError("Unknown HPD environment", 1).
+         &ENDIF
+
          IF ERROR-STATUS:ERROR = TRUE
          THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot connect to " + lcDBLogicalName + " database located in " + lcDBPath, 1).
 

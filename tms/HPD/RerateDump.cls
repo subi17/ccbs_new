@@ -124,7 +124,7 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
          IF CONNECTED(lcBufferDB[lii])
          THEN DISCONNECT VALUE(lcBufferDB[lii]).
 
-         CONNECT VALUE(lhDBConfig::DirectConnect + " -ld " + lcBufferDB[lii]) NO-ERROR.
+         CONNECT VALUE(lhDBConfig::DirectConnect + "/" + lcBufferDB[lii]) NO-ERROR.
 
          IF ERROR-STATUS:ERROR = TRUE
          THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot connect to " + lcBufferDB[lii] + " database located in " + lhDBConfig::DirectConnect, 1).

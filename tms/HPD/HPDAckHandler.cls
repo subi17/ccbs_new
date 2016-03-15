@@ -102,7 +102,15 @@ CLASS HPD.HPDAckHandler:
          lcPathFieldValue    = lhDBConfig:BUFFER-FIELD(lcPathFieldName):BUFFER-VALUE()
          .
 
+      &IF "{&HPD_ENVIRONMENT}" = "Salt"
+      &THEN
       CONNECT VALUE(lcPathFieldValue + " -ld " + lcLogicalFieldValue) NO-ERROR.
+      &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
+      &THEN
+      CONNECT VALUE(lcPathFieldValue + "/" + lcLogicalFieldValue) NO-ERROR.
+      &ELSE
+      RETURN ERROR NEW Progress.Lang.AppError("Unknown HPD environment", 1).
+      &ENDIF
 
       IF ERROR-STATUS:ERROR = TRUE
       THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot connect to database " + lcDB, 1).                 
