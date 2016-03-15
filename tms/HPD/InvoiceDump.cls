@@ -46,11 +46,14 @@ CLASS HPD.InvoiceDump FINAL INHERITS InvoiceCommon:
 
       objDumpSubInvoice = NEW DumpFile(HPDCommon:mGetDumpID("HPD_SubInvoice"), THIS-OBJECT).
       objDumpSubInvoice:mUseTable(BUFFER lbSubInvoice:HANDLE).
+      objDumpSubInvoice:mUseTable(BUFFER lbInvoice:HANDLE).
       objDumpSubInvoice:mUseTable(BUFFER lbMsOwner:HANDLE).
       objDumpSubInvoice:mVerifyDumpFileData().
 
       objDumpInvRow     = NEW DumpFile(HPDCommon:mGetDumpID("HPD_InvRow"), THIS-OBJECT).
       objDumpInvRow:mUseTable(BUFFER lbInvRow:HANDLE).
+      objDumpInvRow:mUseTable(BUFFER lbInvoice:HANDLE).
+      objDumpInvRow:mUseTable(BUFFER lbSubInvoice:HANDLE).
       objDumpInvRow:mVerifyDumpFileData().
       
       mProcessTimeBased(INPUT CAST(objDumpBase, DumpTimeBased)).
