@@ -152,7 +152,7 @@ DO i = 1 TO 5:
                                 "CampRow","CRowType",STRING(i)) + ",".
 END.
 
-lcHelpProg = "nnplse,h-dplan,h-fatgroup,h-bevent,h-bevent".
+lcHelpProg = "Help/nnplse.p,Help/h-dplan.p,Help/h-fatgroup.p,Help/h-bevent.p,Help/h-bevent.p".
 
 FIND Campaign WHERE 
      Campaign.Brand    = gcBrand AND

@@ -128,10 +128,10 @@ FOR EACH ttFiles:
 
    /* type of payment file */
    CASE ttFiles.ConvMod:
-   WHEN "nnocko"     THEN liFileType = 1.
-   WHEN "nnockott"   THEN liFileType = 2.
-   WHEN "nnockointr" OR
-   WHEN "nnockoakf"  THEN liFileType = 3.
+   WHEN "Ar/nnocko.p"     THEN liFileType = 1.
+   WHEN "Ar/nnockott.p"   THEN liFileType = 2.
+   WHEN "Ar/nnockointr.p" OR
+   WHEN "Ar/nnockoakf.p"  THEN liFileType = 3.
    OTHERWISE liFileType = 0.
    END CASE. 
    

@@ -8,7 +8,7 @@ DEFINE TEMP-TABLE ttUCIP NO-UNDO
    FIELD ttFormat AS CHARACTER
    FIELD ttValue  AS CHARACTER.
 
-DEFINE VARIABLE lcTCPModule  AS CHARACTER NO-UNDO INITIAL "tcpgwy" . 
+DEFINE VARIABLE lcTCPModule  AS CHARACTER NO-UNDO INITIAL "Gwy/tcpgwy.p" . 
 
 FIND FIRST TMSParam where
            TMSParam.Brand      = gcBrand AND 

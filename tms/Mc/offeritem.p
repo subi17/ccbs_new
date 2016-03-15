@@ -836,12 +836,12 @@ PROCEDURE local-UPDATE-record:
                ELSE IF LOOKUP(FRAME-FIELD,"ItemKey") > 0 THEN DO:
                   
                   CASE INPUT FRAME lis OfferItem.ItemType:
-                  WHEN "BillItem"    THEN lcHelp = "nntuse".
-                  WHEN "FATime"      THEN lcHelp = "h-fatgroup".
-                  WHEN "Topup"       THEN lcHelp = "topupscheme".
-                  WHEN "PerContract" THEN lcHelp = "h-daycamp".
-                  WHEN "ServicePackage" THEN lcHelp = "h-servpa".
-                  WHEN "DiscountPlan" THEN lcHelp = "h-discountplan".
+                  WHEN "BillItem"    THEN lcHelp = "Help/nntuse.p".
+                  WHEN "FATime"      THEN lcHelp = "Help/h-fatgroup.p".
+                  WHEN "Topup"       THEN lcHelp = "Mm/topupscheme.p".
+                  WHEN "PerContract" THEN lcHelp = "Help/h-daycamp.p".
+                  WHEN "ServicePackage" THEN lcHelp = "Help/h-servpa.p".
+                  WHEN "DiscountPlan" THEN lcHelp = "Help/h-discountplan.p".
                   OTHERWISE lcHelp = "".
                   END CASE.
                   

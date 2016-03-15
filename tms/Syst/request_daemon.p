@@ -68,14 +68,13 @@ FOR EACH RequestType NO-LOCK WHERE
          IF RequestStatus.Program > "" THEN lcProgram = RequestStatus.Program.
          ELSE lcProgram = RequestType.Program.
    
-         IF SEARCH(lcProgram + ".r") = ? THEN DO:
-            IF SEARCH(lcProgram + ".p") = ? THEN DO:
-               fLogError(SUBST("ERROR:Module &1 not found", lcProgram)).
-               LEAVE.
-            END.
+         IF SEARCH(lcProgram) = ?
+         THEN DO:
+            fLogError(SUBST("ERROR:Module &1 not found", lcProgram)).
+            LEAVE.
          END.
 
-         RUN VALUE(lcProgram + ".p")(MsRequest.MsRequest).
+         RUN VALUE(lcProgram)(MsRequest.MsRequest).
          IF RETURN-VALUE BEGINS "ERROR" THEN NEXT.
          llHandled = TRUE.
          LEAVE.

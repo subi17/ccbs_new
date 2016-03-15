@@ -6,7 +6,7 @@
 {Gwy/airnodes.i}
 
 DEFINE INPUT PARAMETER pcCLI AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcTCPModule  AS CHARACTER NO-UNDO INITIAL "tcpgwy" . 
+DEFINE VARIABLE lcTCPModule  AS CHARACTER NO-UNDO INITIAL "Gwy/tcpgwy.p" . 
 
 /* this used in staging to set mock tcp handler */
 FIND FIRST TMSParam where

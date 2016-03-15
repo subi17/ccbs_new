@@ -40,7 +40,7 @@ DEFINE INPUT PARAMETER pcCheck    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcResponse  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcProcedure AS CHARACTER NO-UNDO. 
 
-lcProcedure = "tcpgwy_fake_" + pcURL .
+lcProcedure = "test/fake/tcpgwy_fake_" + pcURL .
 
 RUN VALUE(lcProcedure) (pcRequest) NO-ERROR.
 lcResponse = RETURN-VALUE.

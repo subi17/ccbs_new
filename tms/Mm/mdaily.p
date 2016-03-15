@@ -44,15 +44,15 @@ END.
 fELog("DAILY","CallDumpStarted").
 
 RUN pCallDump ("MobCDR",
-               "calldump.p",
+               "Mm/calldump.p",
                TODAY - 1).
 
 RUN pCallDump ("PrepCDR",
-               "calldump_prepaid.p",
+               "Mm/calldump_prepaid.p",
                TODAY - 1).
                 
 RUN pCallDump ("MobCDR,ErrorCDR",
-               "error_calldump.p",
+               "Mm/error_calldump.p",
                TODAY - 1).
  
 fELog("DAILY","CallDumpStopped").

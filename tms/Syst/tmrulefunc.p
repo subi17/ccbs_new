@@ -349,7 +349,7 @@ PROCEDURE pInitMenu.
       a config table needed */
    IF fTokenRights(katun,"SYST") = "RW" THEN DO:
       CREATE ttMenu.
-      ASSIGN ttMenu.Module   = "tmrlimitupd"
+      ASSIGN ttMenu.Module   = "Syst/tmrlimitupd.p"
              ttMenu.ModParam = "1"
              ttMenu.MenuText = "Update changed default limits to customers"
              liFrame         = liFrame + 1.

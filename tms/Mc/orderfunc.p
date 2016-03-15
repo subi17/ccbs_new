@@ -47,12 +47,12 @@ DO i = 1 TO 2:
             OrderFunction.OFID = OFItem.OFID:
 
       IF AVAIL Order AND
-               OrderFunction.OfModule EQ "orderinctrl,iiOrderId,1" AND
+               OrderFunction.OfModule EQ "Mc/orderinctrl.p,iiOrderId,1" AND
                (INDEX(Order.OrderChannel,"pos") > 0 OR
                 Order.OrderType > 2) THEN NEXT.
 
       IF AVAIL Order AND Order.DeliverySecure EQ 1 AND
-               OrderFunction.OfModule EQ "orderinctrl,iiOrderId,0" THEN NEXT.
+               OrderFunction.OfModule EQ "Mc/orderinctrl.p,iiOrderId,0" THEN NEXT.
       
       CREATE ttBrowser.     
       ASSIGN
@@ -340,53 +340,53 @@ REPEAT WITH FRAME sel:
         
            lcModule = ENTRY(1,ttbrowser.ofmodule,",").
            
-           IF lcModule = "prinoinf" THEN DO:
-              RUN Mc/prinoinf (INPUT 0,iiOrderID,FALSE,OUTPUT lcError).           
+           IF lcModule = "Mc/prinoinf.p" THEN DO:
+              RUN Mc/prinoinf.p (INPUT 0,iiOrderID,FALSE,OUTPUT lcError).           
 
               IF lcError > "" THEN MESSAGE
               lcerror
               VIEW-AS ALERT-BOX.
            END.
-           ELSE IF lcModule = "orderhold" THEN DO:
+           ELSE IF lcModule = "Mc/orderhold.p" THEN DO:
               lcAction = "".
               lcAction = ENTRY(3,ttbrowser.ofmodule,",") NO-ERROR.
               RUN VALUE(lcModule) (iiOrderid, lcAction).
 
            END.
-           ELSE IF lcModule = "credithold" THEN DO:
+           ELSE IF lcModule = "Mc/credithold.p" THEN DO:
               llTrue = ilTrue =
                 (STRING(ENTRY(3,ttbrowser.ofmodule,",")) = "TRUE").
 
               RUN VALUE(lcModule) (iiOrderid, llTrue).
            END.
            
-           ELSE IF lcModule = "Eventsel" THEN DO:
-              RUN Mc/eventsel("Order", Order.Brand + CHR(255) + STRING(Order.OrderID)).
+           ELSE IF lcModule = "Eventsel" OR lcModule = "Mc/eventsel.p" THEN DO:
+              RUN Mc/eventsel.p("Order", Order.Brand + CHR(255) + STRING(Order.OrderID)).
            END.
 
-           ELSE IF lcModule = "nnasla" THEN DO:
-              RUN Mc/nnasla(0,Order.OrderID).
+           ELSE IF lcModule = "nnasla" OR lcModule = "Mc/nnasla.p" THEN DO:
+              RUN Mc/nnasla.p(0,Order.OrderID).
            END. 
            
-           ELSE IF lcModule = "mnpbr" THEN DO:
-              RUN Mnp/mnpbr(Order.OrderId,0,0).
+           ELSE IF lcModule = "mnpbr" OR lcModule = "Mnp/mnpbr.p" THEN DO:
+              RUN Mnp/mnpbr.p(Order.OrderId,0,0).
            END. 
            
-           ELSE IF lcModule = "offer" THEN DO:
+           ELSE IF lcModule = "offer" OR lcModule = "Mc/offer.p" THEN DO:
               IF Order.Offer NE "" THEN RUN Mc/offer.p(Order.Offer,FALSE).
            END. 
            
-           ELSE IF lcModule = "orderinctrl" THEN DO:
+           ELSE IF lcModule = "Mc/orderinctrl.p" THEN DO:
               IF TRIM(ENTRY(3,ttbrowser.ofmodule,",")) EQ "1"
               THEN RUN VALUE(lcModule) (iiOrderid, 1, FALSE).
               ELSE RUN VALUE(lcModule) (iiOrderid, 0, FALSE).
            END.
            
-           ELSE IF lookup(lcModule,"closeorder,orderneeddoc") > 0 THEN DO:
+           ELSE IF lookup(lcModule,"Mc/closeorder.p,Mc/orderneeddoc.p") > 0 THEN DO:
               RUN VALUE(lcModule) (iiOrderid,FALSE).
            END. 
 
-           ELSE IF lcModule = "orderbyfraud" THEN DO:
+           ELSE IF lcModule = "Mc/orderbyfraud.p" THEN DO:
               RUN VALUE(lcModule) (iiOrderid,FALSE,{&ORDER_STATUS_CLOSED_BY_FRAUD}).
            END.
 
@@ -394,11 +394,11 @@ REPEAT WITH FRAME sel:
               RUN VALUE(lcModule) (iiOrderid).
            END.
 
-           ELSE IF lcModule = "dpmember" THEN DO:
+           ELSE IF lcModule = "Mc/dpmember.p" THEN DO:
               RUN VALUE(lcModule) (0,"MobSub",Order.MsSeq).
            END.
 
-           ELSE IF lcModule = "dms" THEN DO:
+           ELSE IF lcModule = "dms" OR lcModule = "Mc/dms.p" THEN DO:
               RUN Mc/dms.p(Order.OrderId,Order.ContractID).
            END.
 

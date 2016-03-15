@@ -318,11 +318,11 @@ DO liCnt = 1 TO liItemQty:
    
    /* F9 help program for update screen */
    CASE lcItemField[liCnt]:
-   WHEN "RateCCN"  THEN lcItemHelp[liCnt] = "nnmase".
-   WHEN "BillCode" THEN lcItemHelp[liCnt] = "nntuse".
-   WHEN "BDest"    THEN lcItemHelp[liCnt] = "nnbtse".
+   WHEN "RateCCN"  THEN lcItemHelp[liCnt] = "Help/nnmase.p".
+   WHEN "BillCode" THEN lcItemHelp[liCnt] = "Help/nntuse.p".
+   WHEN "BDest"    THEN lcItemHelp[liCnt] = "Mc/nnbtse.p".
    WHEN "SpoCMT"   THEN lcItemHelp[liCnt] = "".
-   WHEN "CustNum"  THEN lcItemHelp[liCnt] = "nnasel".
+   WHEN "CustNum"  THEN lcItemHelp[liCnt] = "Mc/nnasel.p".
    END CASE.
    
 END.

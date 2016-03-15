@@ -34,7 +34,7 @@ IF moduli = 4 THEN moduli = 5.
 
 IF moduli > 7 THEN RETURN. 
 
-rap_moduli = "nnpura" + STRING(moduli).
+rap_moduli = "Inv/nnpura" + STRING(moduli).
 
       /* Laitetaan memoryin nykyisen tehosteen sivuarvot */
       ASSIGN

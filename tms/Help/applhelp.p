@@ -399,54 +399,54 @@ ELSE DO: /* Mobile-related tables ... */
 
  hmod = ?.  /* default: unknown FIELD */
 
- if lookup(frame-field,"discplan") > 0                then hmod = "h-dplan".
+ if lookup(frame-field,"discplan") > 0                then hmod = "Help/h-dplan".
  else if lookup(frame-field,"rateplan,PNPRatePlan,priceplan") > 0 
-                                                      then hmod = "h-rplan". 
- else if lookup(frame-field,"PNPGroup") > 0           then hmod = "hpnpgrp".
- else if lookup(frame-field,"mancode") > 0            then hmod = "h-simman".
+                                                      then hmod = "Help/h-rplan". 
+ else if lookup(frame-field,"PNPGroup") > 0           then hmod = "Help/hpnpgrp".
+ else if lookup(frame-field,"mancode") > 0            then hmod = "Help/h-simman".
  else if lookup(frame-field,"simstat,new-simstat") > 0
-                                                      then hmod = "h-simstat".
+                                                      then hmod = "Help/h-simstat".
  else if lookup(frame-field,"statuscode,simstat,simstat1,simstat2") > 0  
-                                                      then hmod = "h-msstat".
- else if lookup(frame-field,"simart") > 0             then hmod = "h-simart".
- else if lookup(frame-field,"beacap") > 0             then hmod = "h-beacap".
+                                                      then hmod = "Help/h-msstat".
+ else if lookup(frame-field,"simart") > 0             then hmod = "Help/h-simart".
+ else if lookup(frame-field,"beacap") > 0             then hmod = "Help/h-beacap".
  else if lookup(frame-field,"Stock,stock1,stock2,stobal") > 0   
-                                                      then hmod = "h-stock".
- else if lookup(frame-field,"servel") > 0             then hmod = "h-servic".
+                                                      then hmod = "Help/h-stock".
+ else if lookup(frame-field,"servel") > 0             then hmod = "Help/h-servic".
  else if lookup(frame-field,"servpac,servicepack,def-sp-code") > 0 OR
-         INDEX(FRAME-FIELD,"ServPac") > 0             then hmod = "h-servpa".
- else if index(frame-field,"country") > 0            then hmod = "h-count".
+         INDEX(FRAME-FIELD,"ServPac") > 0             then hmod = "Help/h-servpa".
+ else if index(frame-field,"country") > 0            then hmod = "Help/h-count".
  else if lookup(frame-field,"mccode,mccode1,mccode2") > 0   
-                                                      then hmod = "h-msclas".
+                                                      then hmod = "Help/h-msclas".
  else if lookup(frame-field,"icc,icc1,icc2,new-icc") > 0       
-                                                      then hmod = "h-sim".
- else if index(frame-field,"servcom") > 0             then hmod = "h-servco".
+                                                      then hmod = "Help/h-sim".
+ else if index(frame-field,"servcom") > 0             then hmod = "Help/h-servco".
  else if lookup(frame-field,"bservcom") > 0   
-                                                      then hmod = "h-servcob".
+                                                      then hmod = "Help/h-servcob".
 
  else if lookup(frame-field,"cli,cli1,cli2,new-cli,new-cli-end,xcli,lowlimit,hilimit") > 0 
-                                                      then hmod = "h-msisdn".
- else if lookup(frame-field,"discgroup") > 0          then hmod = "h-discgrp".
+                                                      then hmod = "Help/h-msisdn".
+ else if lookup(frame-field,"discgroup") > 0          then hmod = "Help/h-discgrp".
  else if lookup(frame-field,"moberror,errorcode,moberror1,moberror2") > 0   
-                                                      then hmod = "h-mrerr".
+                                                      then hmod = "Help/h-mrerr".
  else if lookup(frame-field,"penaltyfee") > 0 or
-         index(frame-field,"feemodel") > 0            then hmod = "h-bevent".
- else if lookup(frame-field,"invsect") > 0            then hmod = "h-invsect".
- else if lookup(frame-field,"epgroup") > 0            then hmod = "h-epgrp".
- else if lookup(frame-field,"vatcode") > 0            then hmod = "h-vatcode".
- else if lookup(frame-field,"billtype") > 0           then hmod = "h-obity". 
- else if index (frame-field,"CLItype") > 0            then hmod = "h-mobtype". 
- else if lookup(frame-field,"templnum") > 0           then hmod = "h-custemp".
- else if lookup(frame-field,"Product") > 0            then hmod = "h-product".
- else if lookup(frame-field,"ProdPack") >0            then hmod = "h-prodpack".
+         index(frame-field,"feemodel") > 0            then hmod = "Help/h-bevent".
+ else if lookup(frame-field,"invsect") > 0            then hmod = "Help/h-invsect".
+ else if lookup(frame-field,"epgroup") > 0            then hmod = "Help/h-epgrp".
+ else if lookup(frame-field,"vatcode") > 0            then hmod = "Help/h-vatcode".
+ else if lookup(frame-field,"billtype") > 0           then hmod = "Help/h-obity". 
+ else if index (frame-field,"CLItype") > 0            then hmod = "Help/h-mobtype". 
+ else if lookup(frame-field,"templnum") > 0           then hmod = "Help/h-custemp".
+ else if lookup(frame-field,"Product") > 0            then hmod = "Help/h-product".
+ else if lookup(frame-field,"ProdPack") >0            then hmod = "Help/h-prodpack".
  else if lookup(frame-field,"Fatgroup,fatgrp,ftgrp") >0 or
-      index(frame-field,"FatGroup") > 0               then hmod = "h-fatgroup".
- else if lookup(frame-field,"paraname") >0     then hmod = "h-pdpid".
- else if lookup(frame-field,"msstatus") > 0    then hmod = "h-mobsubstatus".
- else if index(frame-field,"servicelimit") > 0 then hmod = "h-servlimitgrp".
- else if index(frame-field,"plmn") > 0         then hmod = "h-roamoper".
- else if index(frame-field,"RoamGroup") > 0    then hmod = "h-roamgroup".
- ELSE IF INDEX(FRAME-FIELD,"ReqStat") > 0      THEN hmod = "h-reqstat".
+      index(frame-field,"FatGroup") > 0               then hmod = "Help/h-fatgroup".
+ else if lookup(frame-field,"paraname") >0     then hmod = "Help/h-pdpid".
+ else if lookup(frame-field,"msstatus") > 0    then hmod = "Help/h-mobsubstatus".
+ else if index(frame-field,"servicelimit") > 0 then hmod = "Help/h-servlimitgrp".
+ else if index(frame-field,"plmn") > 0         then hmod = "Help/h-roamoper".
+ else if index(frame-field,"RoamGroup") > 0    then hmod = "Help/h-roamgroup".
+ ELSE IF INDEX(FRAME-FIELD,"ReqStat") > 0      THEN hmod = "Help/h-reqstat".
 
  if hmod ne "" AND hmod NE ? THEN DO:
     RUN VALUE(hmod).
@@ -480,7 +480,7 @@ ehto = save-ehto.
 DO i = 1 TO 9:
    ufk[i] = save-ufk[i].
 END.
-PAUSE 0.   /* KJÄH KJÄH */
+PAUSE 0.   /* KJï¿½H KJï¿½H */
 RUN Syst/ufkey.p.
 PAUSE 0.
 
