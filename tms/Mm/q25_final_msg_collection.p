@@ -37,9 +37,9 @@ ASSIGN lcTestStartDay = fCParam("Q25","Q25TestStart")
        lcTestEndDay   = fCParam("Q25","Q25TestEnd")
        liQ25Logging   = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = count,
                                                       2 = all */
-       lcExecuteDate  = fCParam("Q25","Q25TestExecDate"). /* manipulated exec
+       lcExecuteDate  = fCParam("Q25","Q25TestExecDate") /* manipulated exec
                                                             date */
-
+       liFinalMsgSendDay = fCParamI("Q25FinalMsgSendDay").
 /* For testing usage possibility to manipulate execution date. In actual
    use parameter should be empty, so ELSE branch (TODAY) value is used. */
 IF lcExecuteDate NE ? AND lcExecuteDate GT "" THEN
@@ -50,9 +50,10 @@ ELSE
 
 /* Month 24 21st day*/
 
-liSendDay = 21.  /* First possible sending day if not weekend or national 
-                    holiday. Sending is done at first possible normal weekday 
-                    in each month. (if 21. is saturday, send messages on 23.)*/
+liSendDay = liFinalMsgSendDay. 
+/* First possible sending day if not weekend or national holiday. Sending is 
+   done at first possible normal weekday in each month. (if 16. is saturday, 
+   send messages on 18.)*/
 
 ldaTempDate = DATE(MONTH(ldaExecuteDate),liSendDay,YEAR(ldaExecuteDate)).
 ldaTempDate = fChkDueDate(ldaTempDate). /* find normal weekday */

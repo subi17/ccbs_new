@@ -468,23 +468,24 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                     bDCCLI.ValidTo >= TODAY NO-ERROR.
          IF AVAIL bDCCLI THEN DO:
             /* Q25 Extension already active */
-            IF liPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO: 
+            /* IF liPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO: 
+               removed YPR-3609 */
             /* Q25 month 22-24 */
                /* before 21st day of month 24, no message needed for
                   customers who have already chosen quota 25 extension */
-               liQ25DoneCount = liQ25DoneCount + 1.
-               lcLogText = "Q25 already done: " +
+            liQ25DoneCount = liQ25DoneCount + 1.
+            lcLogText = "Q25 already done: " +
                         STRING(liPhase) + "|" + STRING(bDCCLI.CLI) + "|" +
                         STRING(bDCCLI.MsSeq) + "|" +
                         STRING(ldAmount).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
                                        iiExecType).
-               NEXT.
-            END.
-            ELSE
+            NEXT.
+            /* END. 
+            ELSE  removed YPR-3609 */
                /* 21st day and customer have decided to take Quota 25
                   extension. Send message with final payment / 12. */
-               liPhase = {&Q25_MONTH_24_CHOSEN}.
+            /*   liPhase = {&Q25_MONTH_24_CHOSEN}.
                FIND FIRST FixedFee WHERE 
                           FixedFee.Brand EQ gcBrand AND
                           FixedFee.HostTable EQ "MobSub" AND
@@ -493,7 +494,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                           FixedFee.SourceKey EQ STRING(bDCCLI.PerContractID)
                           NO-LOCK NO-ERROR.
                IF AVAIL FixedFee THEN
-                  ldAmount = FixedFee.amt.
+                  ldAmount = FixedFee.amt. */
                
          END.
 
