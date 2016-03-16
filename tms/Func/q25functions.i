@@ -29,15 +29,16 @@ DEF VAR lcQ25LogFile         AS CHAR NO-UNDO.
 DEF VAR lcQ25DWHLogFile         AS CHAR NO-UNDO.
 DEF VAR lcQ25DWHLogDir      AS CHAR NO-UNDO.
 DEF VAR ldnewAmount AS DEC NO-UNDO.
-
+DEF VAR lcSendingEndTime AS CHAR NO-UNDO.
 
 DEF STREAM Sout.
 
 ASSIGN liQ25Logging = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg, 
                                                      2 = count, 3 = all */
        lcQ25LogDir     = fCParam("Q25","Q25ReminderLogDir")
-       lcQ25SpoolDir   = fCParam("Q25","Q25ReminderLogSpoolDir").
-       lcQ25DWHLogDir  = fCParam("Q25","Q25DWHLogDir").
+       lcQ25SpoolDir   = fCParam("Q25","Q25ReminderLogSpoolDir")
+       lcQ25DWHLogDir  = fCParam("Q25","Q25DWHLogDir")
+       lcSendingEndTime = fCParam("Q25","Q25SendingEndTime").
                   
 IF lcQ25LogDir = "" OR lcQ25LogDir = ? THEN lcQ25LogDir = "/tmp/".
 IF lcQ25SpoolDir = "" OR lcQ25SpoolDir = ? THEN lcQ25SpoolDir = "/tmp/".
@@ -282,14 +283,12 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
 END.
 
 /* Function to calculate dynamically pause value between message sending. 
-   To ensure all messages will be sent before 22:00, for safety reason
-   calculation is made to 21:45 so there will be time to send last messages
-   for sure before 22:00 */
+   To ensure all messages will be sent before defined end time. */
 FUNCTION fCalculateMaxPauseValue RETURN INTEGER
    (INPUT iiToBeSend AS INT).
    DEF VAR ldEndTime AS DEC NO-UNDO.
    DEF VAR ldTimeLeft AS DEC NO-UNDO.
-   ldEndTime = fHMS2TS(TODAY, "21:45:00").
+   ldEndTime = fHMS2TS(TODAY, lcSendingEndTime).
    ldTimeLeft = (ldEndTime - fMakeTS()) * 100000.
    IF iiToBeSend = 0 THEN RETURN 0. /* no messages left, no pause needed and
                                        do not divide by zero */
