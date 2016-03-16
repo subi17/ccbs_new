@@ -16,6 +16,7 @@
 {callquery.i}
 {ftaxdata.i}
 {fbundle.i}
+{q25functions.i}
 
 &GLOBAL-DEFINE INSTALLMENT_DISCOUNT_BILLCODES "DISCPAYTERMDIR,DISCPAYTERMINDIR"
 
@@ -126,6 +127,7 @@ DEF TEMP-TABLE ttSub NO-UNDO
    FIELD OldCTName       AS CHAR
    FIELD TariffActDate   AS CHAR
    FIELD MessageType     AS CHAR
+   FIELD Q25Phase        AS INT
    INDEX CLI CLI.
    
 DEF TEMP-TABLE ttCLIType NO-UNDO
@@ -597,6 +599,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
    DEF VAR llRVFinancedByBank AS LOG  NO-UNDO.
    DEF VAR llDeletettRow      AS LOG  NO-UNDO.
    DEF VAR liRowOrder         AS INT  NO-UNDO.
+   DEF VAR liQ25Phase         AS INT  NO-UNDO.
 
    DEF BUFFER UserCustomer    FOR Customer.
    DEF BUFFER bServiceLimit   FOR ServiceLimit.
@@ -892,7 +895,16 @@ PROCEDURE pGetSubInvoiceHeaderData:
          ELSE IF 
             LOOKUP(ttRow.RowBillCode,{&TF_BANK_UNOE_RVTERM_BILLCODES}) > 0 OR
             LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_RVTERM_BILLCODES}) > 0
-         THEN llRVFinancedByBank = TRUE.   
+         THEN llRVFinancedByBank = TRUE.
+         /* if already found subscription in q24 phase, no need to search 
+            further. Otherwise check if this subscription is on some Q22-Q24
+            phase and no actions done. 0 means q24, 1 q23 and 2 q22, 99 some
+            other phase or no q25. */
+         IF (ttinvoice.q25Phase GT 0) THEN DO:
+            liQ25Phase = getQ25Phase(SubInvoice.msseq, subinvoice.custnum).
+            IF (liQ25Phase LT ttinvoice.q25Phase) THEN 
+               ttinvoice.q25Phase = liQ25Phase.         
+         END.
       END.
 
       /* subtotals are wanted as headers, so calculate them here and make
