@@ -86,8 +86,14 @@ REPEAT:
       END.
 
       ASSIGN lcMSISDN   = ENTRY(1,lcLine,lcSep)
-             ldLimitAmt = DEC(ENTRY(2,lcLine,lcSep))
-             ldaValidTo = DATE(ENTRY(3,lcLine,lcSep)).
+             ldLimitAmt = DECIMAL(REPLACE(ENTRY(2,lcLine,lcSep),",","."))
+             ldaValidTo = DATE(ENTRY(3,lcLine,lcSep))
+             NO-ERROR.
+
+      IF ERROR-STATUS:ERROR THEN DO:
+         fError("Wrong file format").
+         NEXT.
+      END.
 
       FIND FIRST MobSub NO-LOCK WHERE
                  MobSub.Brand = gcBrand AND
@@ -129,3 +135,4 @@ REPEAT:
 END.
 
 INPUT STREAM sFile CLOSE.
+
