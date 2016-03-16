@@ -377,22 +377,6 @@ FUNCTION fGetTerminalFinanceType RETURNS CHAR
    RETURN "Simonly".
 END.
 
-
-FUNCTION fGetHandset RETURNS CHAR
-   (iiOrderId AS INT,
-   icImei AS CHAR):
-   DEF BUFFER bOAcc FOR OrderAccessory.
-   FIND FIRST bOAcc NO-LOCK WHERE
-              bOAcc.Brand EQ gcBrand AND
-              bOAcc.OrderId EQ iiOrderId AND
-              bOAcc.Imei EQ icImei NO-ERROR.
-   IF AVAIL bOAcc THEN 
-      RETURN STRING(bOAcc.Manufacturer) + " " +
-             STRING(bOAcc.Model)        + " " +
-             STRING(bOAcc.ModelColor).
-   RETURN "".             
-END.   
-
 FUNCTION fGetCancellationInfo RETURNS CHAR
    (iiMsSeq AS INT,
     icStatus AS CHAR,
@@ -527,9 +511,9 @@ FUNCTION fGetPrevTariff RETURNS CHAR
    
 END.   
 
-
 FUNCTION fCountIMEIModifications RETURN CHAR
-   (iiMsSeq AS INT):
+   (iiMsSeq AS INT,
+    idTime  AS DECIMAL):
    DEF BUFFER bMsrequest FOR MsRequest.
    DEF VAR liCount AS INT NO-UNDO.
    FOR EACH bMsRequest NO-LOCK WHERE
@@ -537,7 +521,8 @@ FUNCTION fCountIMEIModifications RETURN CHAR
             bMsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} AND
             bMsRequest.ReqStatus EQ 2 AND
             bMsRequest.ReqCparam6 NE "" AND
-            bMsRequest.UpdateStamp <= bMsRequest.DoneStamp :
+            bMsRequest.UpdateStamp <= bMsRequest.DoneStamp AND
+            bMsRequest.UpdateStamp <= idTime:
       liCount = liCount + 1.
    END.
    RETURN STRING(liCount).
@@ -623,6 +608,30 @@ FUNCTION fCutChannel RETURNS CHAR
 
 END.
 
+FUNCTION fGetPermanencyAndHandset RETURNS CHAR
+   (icList AS CHAR,
+    OUTPUT ocNewHS AS CHAR,
+    OUTPUT ocPrevHS AS CHAR,
+    OUTPUT ocNewP AS CHAR,
+    OUTPUT ocPrevP AS CHAR):
+   DEF VAR i AS INT NO-UNDO.
+   DEF VAR lcEntryContent AS CHAR NO-UNDO.
+
+   DO i = 1 TO NUM-ENTRIES(icList, {&DMS_REQ_FIELD_SEP}):
+       lcEntryContent = ENTRY(i,icList,{&DMS_REQ_FIELD_SEP}).
+       /*Content format: FieldName CHAR(255) FieldValue*/
+      CASE ENTRY(1,lcEntryContent,{&DMS_REQ_VAL_SEP}):
+         WHEN "NewHS" THEN
+            ocNewHS = ENTRY(2,lcEntryContent,{&DMS_REQ_VAL_SEP}).
+         WHEN "PrevHS" THEN
+            ocPrevHS = ENTRY(2,lcEntryContent,{&DMS_REQ_VAL_SEP}).
+         WHEN "NewPerm" THEN
+            ocNewP = ENTRY(2,lcEntryContent,{&DMS_REQ_VAL_SEP}).
+         WHEN "PrevPerm" THEN
+            ocPrevP = ENTRY(2,lcEntryContent,{&DMS_REQ_VAL_SEP}).
+      END.
+   END.
+END.
 
 /*Order activation*/
 /*Function generates order documentation*/
@@ -1045,9 +1054,12 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
    DEF VAR liMonths AS INT NO-UNDO.
    DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
-   DEF VAR lcModel   AS CHAR NO-UNDO.
-   DEF VAR ldePermanencyAmount AS DECIMAL.
-   DEF VAR liPermancyLength AS INT.
+   DEF VAR lcNewHandset AS CHAR NO-UNDO.
+   DEF VAR lcPrevHandset AS CHAR NO-UNDO.
+   DEF VAR lcNewPermanency AS CHAR NO-UNDO.
+   DEF VAR lcPrevPermanency AS CHAR NO-UNDO.
+  
+
    ASSIGN
       lcICCCaseTypeID   = '4d'
       lcACCCaseTypeID   = '4c'
@@ -1174,15 +1186,16 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                fLogLine(lcCaseFileRow,"Order not found " + lcCaseTypeId).
                NEXT.
             END. 
-            lcModel = fGetTerminalData(MsRequest.ReqIparam1).
             ldeInstallment = fGetOfferDeferredPayment(Order.Offer,
                                                        Order.CrStamp,
                                                        OUTPUT ldeMonthlyFee,
                                                        OUTPUT liMonths,
                                                        OUTPUT ldeFinalFee).
-               RUN offer_penaltyfee.p(Order.OrderID,
-                                      OUTPUT liPermancyLength,
-                                      OUTPUT ldePermanencyAmount).
+            fGetPermanencyAndHandset(MsRequest.ReqCparam5,
+                                     OUTPUT lcNewHandset,
+                                     OUTPUT lcPrevHandset,
+                                     OUTPUT lcNewPermanency,
+                                     OUTPUT lcPrevPermanency).
             /**/ 
             lcCaseFileRow =  
             lcCaseTypeId                                    + lcDelim + 
@@ -1199,28 +1212,28 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*Modification date*/ 
             fPrintDate(MsRequest.UpdateStamp)               + lcDelim + 
             /*Modification number*/ 
-            fCountIMEIModifications(MsRequest.MsSeq)        + lcDelim + 
+            fCountIMEIModifications(MsRequest.MsSeq,
+                                    Msrequest.UpdateStamp)  + lcDelim + 
             /*New IMEI*/ 
             STRING(MsRequest.ReqCparam2)                    + lcDelim + 
             /*New Handset*/ 
-            STRING(lcModel)                                 + lcDelim + 
+            STRING(lcNewHandset)                            + lcDelim + 
             /*New Installment*/ 
             STRING(ldeInstallment)                          + lcDelim + 
             /*New Residual value*/ 
             STRING(ldeFinalFee)                             + lcDelim + 
             /*New Permanency*/ 
-            STRING(ldePermanencyAmount)                     + lcDelim + 
+            STRING(lcNewPermanency)                         + lcDelim + 
             /*Previous IMEI*/ 
             STRING(MsRequest.ReqCparam1)                    + lcDelim + 
             /*Previous Handset*/ 
-            fGetHandset(MsRequest.ReqIparam1,
-                                MsRequest.ReqCparam1)       + lcDelim + 
+            STRING(lcPrevHandset)                           + lcDelim + 
             /*Previous Installment*/ 
             STRING(ldeInstallment)                          + lcDelim + 
             /*Previous Residual value*/ 
             STRING(ldeFinalFee)                             + lcDelim + 
             /*Previous Permanency*/  
-            STRING(ldePermanencyAmount). 
+            STRING(lcPrevPermanency). 
 
          END. 
       END. 
