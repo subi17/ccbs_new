@@ -26,15 +26,13 @@ DEF VAR lcStruct AS CHAR NO-UNDO.
 DEF VAR liCustnum AS INT NO-UNDO.
 DEF VAR plSimChecked AS LOGICAL NO-UNDO. 
 DEF VAr pcIMEI AS CHAR NO-UNDO INITIAL "".
-DEF VAR pcContractID AS CHAR NO-UNDO.
-DEF VAR pcChannel AS CHAR NO-UNDO.
 DEF VAR lcOldIMEI AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 
 pcId     = get_string(param_toplevel_id, "0").
 pcStruct = get_struct(param_toplevel_id, "1").
-lcstruct = validate_struct(pcStruct, "username!,reason,sim_lock_code_viewable,imei,contract_id,channel").
+lcstruct = validate_struct(pcStruct, "username!,reason,sim_lock_code_viewable,imei").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -50,13 +48,6 @@ IF LOOKUP("imei",lcStruct) > 0 THEN DO:
    IF LENGTH(pcIMEI,"CHARACTER") NE 15 THEN 
     RETURN appl_err("IMEI code doesn't contain 15 characters").
 END.
-
-ASSIGN
-pcContractID = get_string(pcStruct,"contract_id") 
-   WHEN LOOKUP("contract_id", lcstruct) > 0
-pcChannel = get_string(pcStruct,"channel")
-   WHEN LOOKUP("channel", lcstruct) > 0.
-
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -144,11 +135,6 @@ IF LOOKUP("imei",lcStruct) > 0 THEN DO:
                   FALSE, /* create fees */
                   FALSE). /* send sms */
 
-   /*empty contract_id if it is not from VFR*/
-   IF pcChannel NE {&DMS_VFR_REQUEST} THEN
-      pcContractId = "".
-   /*In IMEI change external system needs Original order orderid.*/
-   ELSE pcContractID = Order.Contractid.
    ASSIGN
       bCreaReq.msseq = Order.msseq
       bCreaReq.custnum = Order.custnum
@@ -156,7 +142,6 @@ IF LOOKUP("imei",lcStruct) > 0 THEN DO:
       bCreaReq.reqcparam1 = lcOldIMEI 
       bCreaReq.reqcparam2 = pcIMEI /*new IMEI*/
       bCreaReq.reqcparam3 = Order.Offer
-      bCreaReq.reqcparam6 = pcContractId
       bCreaReq.reqiparam1 = Order.OrderId
       bCreaReq.ReqSource  = {&REQUEST_SOURCE_NEWTON}.
 
