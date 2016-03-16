@@ -29,15 +29,16 @@ DEF VAR lcQ25LogFile         AS CHAR NO-UNDO.
 DEF VAR lcQ25DWHLogFile         AS CHAR NO-UNDO.
 DEF VAR lcQ25DWHLogDir      AS CHAR NO-UNDO.
 DEF VAR ldnewAmount AS DEC NO-UNDO.
-
+DEF VAR lcSendingEndTime AS CHAR NO-UNDO.
 
 DEF STREAM Sout.
 
 ASSIGN liQ25Logging = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg, 
                                                      2 = count, 3 = all */
        lcQ25LogDir     = fCParam("Q25","Q25ReminderLogDir")
-       lcQ25SpoolDir   = fCParam("Q25","Q25ReminderLogSpoolDir").
-       lcQ25DWHLogDir  = fCParam("Q25","Q25DWHLogDir").
+       lcQ25SpoolDir   = fCParam("Q25","Q25ReminderLogSpoolDir")
+       lcQ25DWHLogDir  = fCParam("Q25","Q25DWHLogDir")
+       lcSendingEndTime = fCParam("Q25","Q25SendingEndTime").
                   
 IF lcQ25LogDir = "" OR lcQ25LogDir = ? THEN lcQ25LogDir = "/tmp/".
 IF lcQ25SpoolDir = "" OR lcQ25SpoolDir = ? THEN lcQ25SpoolDir = "/tmp/".
@@ -282,14 +283,12 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
 END.
 
 /* Function to calculate dynamically pause value between message sending. 
-   To ensure all messages will be sent before 22:00, for safety reason
-   calculation is made to 21:45 so there will be time to send last messages
-   for sure before 22:00 */
+   To ensure all messages will be sent before defined end time. */
 FUNCTION fCalculateMaxPauseValue RETURN INTEGER
    (INPUT iiToBeSend AS INT).
    DEF VAR ldEndTime AS DEC NO-UNDO.
    DEF VAR ldTimeLeft AS DEC NO-UNDO.
-   ldEndTime = fHMS2TS(TODAY, "21:45:00").
+   ldEndTime = fHMS2TS(TODAY, lcSendingEndTime).
    ldTimeLeft = (ldEndTime - fMakeTS()) * 100000.
    IF iiToBeSend = 0 THEN RETURN 0. /* no messages left, no pause needed and
                                        do not divide by zero */
@@ -468,23 +467,24 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                     bDCCLI.ValidTo >= TODAY NO-ERROR.
          IF AVAIL bDCCLI THEN DO:
             /* Q25 Extension already active */
-            IF liPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO: 
+            /* IF liPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO: 
+               removed YPR-3609 */
             /* Q25 month 22-24 */
                /* before 21st day of month 24, no message needed for
                   customers who have already chosen quota 25 extension */
-               liQ25DoneCount = liQ25DoneCount + 1.
-               lcLogText = "Q25 already done: " +
+            liQ25DoneCount = liQ25DoneCount + 1.
+            lcLogText = "Q25 already done: " +
                         STRING(liPhase) + "|" + STRING(bDCCLI.CLI) + "|" +
                         STRING(bDCCLI.MsSeq) + "|" +
                         STRING(ldAmount).
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
                                        iiExecType).
-               NEXT.
-            END.
-            ELSE
+            NEXT.
+            /* END. 
+            ELSE  removed YPR-3609 */
                /* 21st day and customer have decided to take Quota 25
                   extension. Send message with final payment / 12. */
-               liPhase = {&Q25_MONTH_24_CHOSEN}.
+            /*   liPhase = {&Q25_MONTH_24_CHOSEN}.
                FIND FIRST FixedFee WHERE 
                           FixedFee.Brand EQ gcBrand AND
                           FixedFee.HostTable EQ "MobSub" AND
@@ -493,7 +493,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                           FixedFee.SourceKey EQ STRING(bDCCLI.PerContractID)
                           NO-LOCK NO-ERROR.
                IF AVAIL FixedFee THEN
-                  ldAmount = FixedFee.amt.
+                  ldAmount = FixedFee.amt. */
                
          END.
 
