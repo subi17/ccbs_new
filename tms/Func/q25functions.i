@@ -33,14 +33,16 @@ DEF VAR liNotSendCount    AS INT NO-UNDO.
 DEF VAR liReturnedDevices AS INT NO-UNDO.
 DEF VAR liQ25DoneCount    AS INT NO-UNDO.
 DEF VAR liPendingReq      AS INT NO-UNDO.
+DEF VAR lcSendingEndTime AS CHAR NO-UNDO.
 
 DEF STREAM Sout.
 
 ASSIGN liQ25Logging = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg, 
                                                      2 = count, 3 = all */
        lcQ25LogDir     = fCParam("Q25","Q25ReminderLogDir")
-       lcQ25SpoolDir   = fCParam("Q25","Q25ReminderLogSpoolDir").
-       lcQ25DWHLogDir  = fCParam("Q25","Q25DWHLogDir").
+       lcQ25SpoolDir   = fCParam("Q25","Q25ReminderLogSpoolDir")
+       lcQ25DWHLogDir  = fCParam("Q25","Q25DWHLogDir")
+       lcSendingEndTime = fCParam("Q25","Q25SendingEndTime").
                   
 IF lcQ25LogDir = "" OR lcQ25LogDir = ? THEN lcQ25LogDir = "/tmp/".
 IF lcQ25SpoolDir = "" OR lcQ25SpoolDir = ? THEN lcQ25SpoolDir = "/tmp/".
@@ -285,14 +287,12 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
 END.
 
 /* Function to calculate dynamically pause value between message sending. 
-   To ensure all messages will be sent before 22:00, for safety reason
-   calculation is made to 21:45 so there will be time to send last messages
-   for sure before 22:00 */
+   To ensure all messages will be sent before defined end time. */
 FUNCTION fCalculateMaxPauseValue RETURN INTEGER
    (INPUT iiToBeSend AS INT).
    DEF VAR ldEndTime AS DEC NO-UNDO.
    DEF VAR ldTimeLeft AS DEC NO-UNDO.
-   ldEndTime = fHMS2TS(TODAY, "21:45:00").
+   ldEndTime = fHMS2TS(TODAY, lcSendingEndTime).
    ldTimeLeft = (ldEndTime - fMakeTS()) * 100000.
    IF iiToBeSend = 0 THEN RETURN 0. /* no messages left, no pause needed and
                                        do not divide by zero */
@@ -361,7 +361,7 @@ FUNCTION isQ25ExtensionDone RETURNS LOGICAL
               bDCCLI.MsSeq   EQ iiMsseq AND
               bDCCLI.ValidTo >= TODAY NO-ERROR.
    IF AVAIL bDCCLI THEN DO:
-      IF iiPhase EQ {&Q25_MONTH_24_FINAL_MSG} THEN DO:
+      /*IF iiPhase EQ {&Q25_MONTH_24_FINAL_MSG} THEN DO:
          FIND FIRST FixedFee WHERE
                     FixedFee.Brand EQ gcBrand AND
                     FixedFee.HostTable EQ "MobSub" AND
@@ -371,7 +371,7 @@ FUNCTION isQ25ExtensionDone RETURNS LOGICAL
                     NO-LOCK NO-ERROR.
          IF AVAIL FixedFee THEN
             odAmount = FixedFee.amt.
-      END.
+      END. removed YPR-3609 */
       RETURN TRUE.
    END.
    ELSE
@@ -454,7 +454,7 @@ FUNCTION isQ25PerContractEnded RETURNS LOGICAL
 
       IF isQ25ExtensionDone(iiMsSeq, oiPhase, idAmount) THEN DO:
          /* Q25 Extension already active */
-         IF oiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO:
+         /* IF oiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO: */
          /* Q25 month 22-24 */
             /* before 21st day of month 24, no message needed for
                customers who have already chosen quota 25 extension */
@@ -464,11 +464,11 @@ FUNCTION isQ25PerContractEnded RETURNS LOGICAL
                      STRING(iiMsSeq) + "|" +
                      STRING(idAmount).
             RETURN TRUE.
-         END.
-         ELSE
+         /*END.
+         ELSE */
             /* 21st day and customer have decided to take Quota 25
                extension. Send message with final payment / 12. */
-            oiPhase = {&Q25_MONTH_24_CHOSEN}.
+         /*   oiPhase = {&Q25_MONTH_24_CHOSEN}. removed YPR-3609 */
       END.
       ELSE IF isQ25RenewalDone(iiMsSeq, DCCLI.ValidFrom) THEN DO: 
       /* Renewal / Renuvo done */
