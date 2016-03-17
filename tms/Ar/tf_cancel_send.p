@@ -258,7 +258,8 @@ PROCEDURE pPrintLine:
    DEF VAR liOrderId AS IN NO-UNDO.
 
    lcTotalAmount = REPLACE(REPLACE(TRIM(STRING(ideTotalAmount,"->>>>>>>9.99")),",",""),".","").
-   IF FixedFeeTF.OrderId EQ ? THEN
+   IF FixedFeeTF.OrderId EQ ? OR
+      FixedFeeTF.OrderId EQ 0 THEN
       liOrderId = FixedFee.OrderId.
    ELSE
       liOrderId = FixedFeeTF.OrderId.
