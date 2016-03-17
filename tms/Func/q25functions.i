@@ -720,7 +720,7 @@ FUNCTION getQ25phase RETURNS INT
    /* Loop through Q25 phases starting on nearest to end (Month 24) */
    DO liLoop = {&Q25_MONTH_24} TO {&Q25_MONTH_22}:
       /* set needed period */
-      liPeriod = YEAR(TODAY) * 100 + MONTH(ADD-INTERVAL(DCCLI.ValidFrom,
+      liPeriod = YEAR(TODAY) * 100 + MONTH(ADD-INTERVAL(TODAY,
                                                         liLoop, 'months':U)).
       FOR EACH SingleFee USE-INDEX BillCode WHERE
                SingleFee.Brand       EQ gcBrand AND
@@ -735,8 +735,9 @@ FUNCTION getQ25phase RETURNS INT
          ASSIGN
             liPhase = liLoop
             ldAmount = SingleFee.amt
-            ldaStartDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
-            ldaEndDate = fLastDayOfMonth(TODAY).
+            ldaStartDate = DATE(MONTH(ADD-INTERVAL(TODAY, liLoop, 'months':U)),
+                           1,YEAR(TODAY)) - 1
+            ldaEndDate = fLastDayOfMonth(ldaStartDate + 1).
          IF isPostpaidMobsubReleased(iiMsSeq) OR
             isSingleFeeBilled() OR
             isQ25PerContractEnded(INT(SingleFee.sourcekey), iiMsSeq,
