@@ -68,7 +68,7 @@ CLASS HPD.PrepaidRequestDump FINAL INHERITS DumpHandler:
             TMSCodes.TableName = "Prepaidrequest" AND
             TMSCodes.FieldName = "PPStatus":
       
-         lcReturnValue = (IF lcReturnValue = "" THEN "" ELSE ",") + TMSCodes.CodeValue.
+         lcReturnValue = lcReturnValue + (IF lcReturnValue = "" THEN "" ELSE ",") + TMSCodes.CodeValue.
                
       END.
 
