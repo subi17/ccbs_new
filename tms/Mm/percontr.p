@@ -1500,7 +1500,7 @@ PROCEDURE pFinalize:
                                    "MobSub",
                                    STRING(MsOwner.MsSeq),
                                    MsOwner.Custnum,
-                                   "DSS2 activation failed",
+                                   "DSS2 activation failed in percontr handling",
                                    lcError).
             END.
          END. /* IF NOT fIsDSSActive(MsOwner.CustNum,ldCurrTS) AND */ 

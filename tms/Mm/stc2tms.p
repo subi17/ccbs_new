@@ -1640,7 +1640,7 @@ PROCEDURE pUpdateDSSAccount:
                                    "MobSub",
                                    STRING(MobSub.MsSeq),
                                    MobSub.Custnum,
-                                   "DSS2 activation failed",
+                                   "DSS2 activation failed in STC",
                                    lcError).
             END.
          END.

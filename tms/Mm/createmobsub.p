@@ -618,7 +618,7 @@ IF NOT MobSub.PayType THEN DO:
                              "MobSub",
                              STRING(MobSub.MsSeq),
                              MobSub.Custnum,
-                             "DSS2 activation failed",
+                             "DSS2 activation failed in Mobsub creation",
                                 lcResult).
          END.
       END.

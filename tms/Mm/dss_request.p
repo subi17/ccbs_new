@@ -219,7 +219,8 @@ PROCEDURE pFinalize:
       END. /* DO liCount = 1 to liNumEntries: */
    END. /* IF MsRequest.ReqCparam1 = "CREATE" THEN DO: */
 
-   /* Activate DSS2 if new criteria match */
+   /* Activate DSS2 if new criteria match 
+      YTS-8140: To extend DELETE request matching also for DSS2 */
    IF MsRequest.ReqCparam3 BEGINS {&DSS} AND
       MsRequest.ReqCparam1 = "DELETE" AND
       fIsDSS2Allowed(MsRequest.CustNum,0,fMakeTS(),
@@ -248,7 +249,7 @@ PROCEDURE pFinalize:
                              "MobSub",
                              STRING(MsRequest.MsSeq),
                              MsRequest.Custnum,
-                             "DSS2 activation failed",
+                             "DSS2 activation failed in DSS handling",
                              lcResult).
          ELSE DO:
             /* Link New activation with old DSS termination */
