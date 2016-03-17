@@ -29,28 +29,45 @@ CLASS HPD.RepLogHandler FINAL:
       INDEX TableName IS PRIMARY UNIQUE TableName
       .   
 
-   DEFINE PRIVATE VARIABLE lcDataBase               AS CHARACTER   NO-UNDO.
-   DEFINE PRIVATE VARIABLE lcMessage                AS CHARACTER   NO-UNDO.
-   DEFINE PRIVATE VARIABLE lcTail                   AS CHARACTER   NO-UNDO.
-   DEFINE PRIVATE VARIABLE llFound                  AS LOGICAL     NO-UNDO.
-   DEFINE PRIVATE VARIABLE liTransactionSize        AS INTEGER     NO-UNDO.
-   DEFINE PRIVATE VARIABLE llUseSeparateQueue       AS LOGICAL     NO-UNDO.
-   DEFINE PRIVATE VARIABLE llUseAck                 AS LOGICAL     NO-UNDO.
+   DEFINE PRIVATE VARIABLE lcQueueName        AS CHARACTER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE lcRepLogTable      AS CHARACTER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE lcMessage          AS CHARACTER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE lcTail             AS CHARACTER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE llFound            AS LOGICAL     NO-UNDO.
+   DEFINE PRIVATE VARIABLE liTransactionSize  AS INTEGER     NO-UNDO.
+   DEFINE PRIVATE VARIABLE llUseSeparateQueue AS LOGICAL     NO-UNDO.
+   DEFINE PRIVATE VARIABLE llUseAck           AS LOGICAL     NO-UNDO.
 
 
    CONSTRUCTOR PUBLIC RepLogHandler
-      ( icDB AS CHARACTER ):
+      (icDB        AS CHARACTER,
+       icQueueName AS CHARACTER):
 
-      DEFINE VARIABLE lcRepLogTableName AS CHARACTER  NO-UNDO.
+      mInitialize(icDB + ".RepLog", icQueueName).
+
+   END CONSTRUCTOR.
+
+
+   CONSTRUCTOR PUBLIC RepLogHandler
+      (icDB AS CHARACTER):
+
+      mInitialize(icDB + ".RepLog", icDB).
+
+   END CONSTRUCTOR.
+
+
+   METHOD PRIVATE VOID mInitialize
+      (icRepLogTable AS CHARACTER,
+       icQueueName   AS CHARACTER):
 
       ASSIGN
-         lcDataBase        = icDB
-         lcRepLogTableName = lcDataBase + ".RepLog"
+         lcRepLogTable = icRepLogTable
+         lcQueueName   = icQueueName
          .
 
       DO ON ERROR UNDO, THROW:
 
-         llUseSeparateQueue = Syst.Parameters:geti("HPD.Queue" + lcDataBase + ".Separate", "HPD.Interface") = 1.
+         llUseSeparateQueue = Syst.Parameters:geti("HPD.Queue" + lcQueueName + ".Separate", "HPD.Interface") = 1.
 
          /* Handler code for any error condition. */
          CATCH anyErrorObject AS Progress.Lang.Error:
@@ -62,7 +79,7 @@ CLASS HPD.RepLogHandler FINAL:
 
       DO ON ERROR UNDO, THROW:
 
-         llUseAck = Syst.Parameters:geti("HPD.Queue" + lcDataBase + ".Ack", "HPD.Interface") = 1.
+         llUseAck = Syst.Parameters:geti("HPD.Queue" + lcQueueName + ".Ack", "HPD.Interface") = 1.
 
          /* Handler code for any error condition. */
          CATCH anyErrorObject AS Progress.Lang.Error:
@@ -74,43 +91,43 @@ CLASS HPD.RepLogHandler FINAL:
 
       DO ON ERROR UNDO, THROW:
 
-         liTransactionSize = Syst.Parameters:geti("HPD.Queue" + lcDataBase + ".TransactSize", "HPD.Interface").
+         liTransactionSize = Syst.Parameters:geti("HPD.Queue" + lcQueueName + ".TransactSize", "HPD.Interface").
 
          /* Handler code for any error condition. */
          CATCH anyErrorObject AS Progress.Lang.Error:
-            Syst.Parameters:seti("HPD.Queue" + lcDataBase + ".TransactSize", "HPD.Interface", 10000).
-            liTransactionSize = Syst.Parameters:geti("HPD.Queue" + lcDataBase + ".TransactSize", "HPD.Interface").
+            Syst.Parameters:seti("HPD.Queue" + lcQueueName + ".TransactSize", "HPD.Interface", 10000).
+            liTransactionSize = Syst.Parameters:geti("HPD.Queue" + lcQueueName + ".TransactSize", "HPD.Interface").
          END CATCH.
 
       END.
 
-      CREATE BUFFER lhRepLogTable FOR TABLE lcRepLogTableName.
+      CREATE BUFFER lhRepLogTable FOR TABLE lcRepLogTable.
 
       IF NOT mPopulateDumpHandlers()
-      THEN RETURN ERROR NEW Progress.Lang.AppError("No tables defined to online HPD interface for database " + lcDataBase, 1).
+      THEN RETURN ERROR NEW Progress.Lang.AppError("No tables defined to online HPD interface for database " + lcQueueName, 1).
 
       objMsgPublisher = NEW Gwy.MqPublisher("HPD.Queue" +
                                             IF llUseSeparateQueue
-                                            THEN lcDataBase
+                                            THEN lcQueueName
                                             ELSE "").
 
       CREATE QUERY lhRepLogQuery.
       lhRepLogQuery:SET-BUFFERS(lhRepLogTable).
 
       IF llUseAck
-      THEN lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK WHERE SendTime = ? USE-INDEX SendTime MAX-ROWS &2",lcRepLogTableName, STRING(liTransactionSize))).
+      THEN lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK WHERE SendTime = ? USE-INDEX SendTime MAX-ROWS &2",lcRepLogTable, STRING(liTransactionSize))).
       
       &IF "{&HPD_ENVIRONMENT}" = "Salt"
       &THEN
-      ELSE lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK USE-INDEX UTCTime MAX-ROWS &2",lcRepLogTableName, STRING(liTransactionSize))).
+      ELSE lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK USE-INDEX UTCTime MAX-ROWS &2",lcRepLogTable, STRING(liTransactionSize))).
       &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
       &THEN
-      ELSE lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK WHERE SendTime = ? USE-INDEX SendTime MAX-ROWS &2",lcRepLogTableName, STRING(liTransactionSize))).
+      ELSE lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK WHERE SendTime = ? USE-INDEX SendTime MAX-ROWS &2",lcRepLogTable, STRING(liTransactionSize))).
       &ELSE
       RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
       &ENDIF
 
-   END CONSTRUCTOR.
+   END METHOD.
 
 
    METHOD PRIVATE VOID mPurgeDumpHandlers():
@@ -185,7 +202,7 @@ CLASS HPD.RepLogHandler FINAL:
 
       FOR EACH DumpFile NO-LOCK WHERE
          DumpFile.FileCategory = "HPD" AND
-         DumpFile.SideTables = lcDataBase
+         DumpFile.SideTables = lcQueueName
          ON ERROR UNDO, THROW:
             
          CREATE ttDumpHandler.
@@ -224,7 +241,7 @@ CLASS HPD.RepLogHandler FINAL:
       FIND ttDumpHandler WHERE ttDumpHandler.TableName = lhRepLogTable::TableName NO-ERROR.
 
       IF NOT AVAILABLE ttDumpHandler
-      THEN RETURN ERROR NEW Progress.Lang.AppError(lcDataBase + ".RepLog cannot handle table " +
+      THEN RETURN ERROR NEW Progress.Lang.AppError("Queue " + lcQueueName + " cannot handle table " +
                                                    lhRepLogTable::TableName, 1).
 
       IF NOT VALID-OBJECT(ttDumpHandler.objHandler)
@@ -360,7 +377,7 @@ CLASS HPD.RepLogHandler FINAL:
       mPurgeDumpHandlers().
 
       IF NOT mPopulateDumpHandlers()
-      THEN RETURN ERROR NEW Progress.Lang.AppError("No tables defined to online HPD interface for database " + lcDataBase, 1).
+      THEN RETURN ERROR NEW Progress.Lang.AppError("No tables defined to online HPD interface for queue " + lcQueueName, 1).
 
    END METHOD.
 

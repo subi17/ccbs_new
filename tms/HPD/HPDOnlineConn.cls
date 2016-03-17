@@ -10,6 +10,7 @@
   ----------------------------------------------------------------------*/
 
 USING Progress.Lang.*.
+USING HPD.HPDCommon.
 
 {HPD/HPDEnvironment.i}
 
@@ -168,6 +169,40 @@ CLASS HPD.HPDOnlineConn INHERITS HPD.HPDOnline:
          CONNECT VALUE(lcDBPath + " -ld " + lcDBLogicalName) NO-ERROR.
          &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
          &THEN
+         /* In test and stage environment we cannot use DBConfig values
+            as the databases are located differently. This code
+            allows to connect to the test databases */
+         IF NOT HPDCommon:mDBExist(lcDBPath + "/" + lcDBLogicalName)
+         THEN DO:
+            IF llCurrent
+            THEN DO:
+               CASE lcInstance:
+
+                  WHEN "MobCDR"
+                  THEN ASSIGN
+                          lcDBPath        = "/db1/mcdr"
+                          lcDBLogicalName = "mcdr"
+                          .
+                  WHEN "PrepCDR"
+                  THEN ASSIGN
+                          lcDBPath        = "/db1/prepcdr"
+                          lcDBLogicalName = "prepcdr"
+                          .
+                  WHEN "PrepEDR"
+                  THEN ASSIGN
+                          lcDBPath        = "/db1/prepedr"
+                          lcDBLogicalName = "prepedr"
+                          .
+                  OTHERWISE RETURN ERROR NEW Progress.Lang.AppError("Instance " + lcInstance + " is not supported", 1).
+
+               END CASE.
+
+               IF NOT HPDCommon:mDBExist(lcDBPath + "/" + lcDBLogicalName)
+               THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot find " + lcDBLogicalName + " database located in " + lcDBPath, 1).
+            END.
+            ELSE RETURN ERROR NEW Progress.Lang.AppError("Cannot find " + lcDBLogicalName + " database located in " + lcDBPath, 1).
+         END.
+
          CONNECT VALUE(lcDBPath + "/" + lcDBLogicalName) NO-ERROR.
          &ELSE
          RETURN ERROR NEW Progress.Lang.AppError("Unknown HPD environment", 1).
@@ -181,7 +216,7 @@ CLASS HPD.HPDOnlineConn INHERITS HPD.HPDOnline:
 
          lcLastDB = lcDBLogicalName.
 
-         objRepLogHandler = NEW HPD.RepLogHandler(lcInstance).
+         objRepLogHandler = NEW HPD.RepLogHandler(lcDBLogicalName, lcInstance).
 
          RETURN TRUE.
       END.

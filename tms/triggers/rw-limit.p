@@ -20,7 +20,7 @@ ASSIGN
    .
 
 IF Common.RepLog.EventType = "DELETE" 
-THEN Common.RepLog.KeyValue = {HPD/keyvalue.i Limit . {&HPDKeyDelimiter} CustNum MsSeq LimitType ToDate}.
+THEN Common.RepLog.KeyValue = {HPD/keyvalue.i Limit . {&HPDKeyDelimiter} CustNum MsSeq LimitType FromDate}.
 ELSE Common.RepLog.RowID    = STRING(ROWID(Limit)).
 
 IF NOT NEW(Limit)
@@ -38,7 +38,7 @@ THEN DO:
          Common.RepLog.TableName = "Limit"
          Common.RepLog.EventType = "DELETE"
          Common.RepLog.EventTime = NOW
-         Common.RepLog.KeyValue  = {HPD/keyvalue.i oldLimit . {&HPDKeyDelimiter} CustNum MsSeq LimitType ToDate}
+         Common.RepLog.KeyValue  = {HPD/keyvalue.i oldLimit . {&HPDKeyDelimiter} CustNum MsSeq LimitType FromDate}
          .
    END.
 END.

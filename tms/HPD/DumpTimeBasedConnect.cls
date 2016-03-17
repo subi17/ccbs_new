@@ -12,6 +12,7 @@ USING Progress.Lang.*.
 USING HPD.DumpTimeBased.
 USING HPD.DumpHandler.
 USING HPD.HPDTime.
+USING HPD.HPDCommon.
 
 {HPD/HPDEnvironment.i}
 
@@ -138,6 +139,36 @@ CLASS HPD.DumpTimeBasedConnect INHERITS DumpTimeBased:
             lcDBPath        = lhDBConfig::DirectConnect
             lcDBLogicalName = lhDBConfig::DBConnName
             .
+
+         /* In test and stage environment we cannot use DBConfig values
+            as the databases are located differently. This code
+            allows to connect to the test databases */
+         IF NOT HPDCommon:mDBExist(lcDBPath + "/" + lcDBLogicalName)
+         THEN DO:
+            CASE lbDumpFile.MainTable:
+
+               WHEN "MobCDR"
+               THEN ASSIGN
+                       lcDBPath        = "/db1/mcdr"
+                       lcDBLogicalName = "mcdr"
+                       .
+               WHEN "PrepCDR"
+               THEN ASSIGN
+                       lcDBPath        = "/db1/prepcdr"
+                       lcDBLogicalName = "prepcdr"
+                       .
+               WHEN "PrepEDR"
+               THEN ASSIGN
+                       lcDBPath        = "/db1/prepedr"
+                       lcDBLogicalName = "prepedr"
+                       .
+               OTHERWISE RETURN ERROR NEW Progress.Lang.AppError("Connection information to table name  " + lbDumpFile.MainTable + " is not known", 1).                          
+
+            END CASE.
+
+            IF NOT HPDCommon:mDBExist(lcDBPath + "/" + lcDBLogicalName)
+            THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot find " + lcDBLogicalName + " database located in " + lcDBPath, 1).
+         END.
          &ELSE
          RETURN ERROR NEW Progress.Lang.AppError("Unknown HPD environment", 1).
          &ENDIF
