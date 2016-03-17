@@ -494,7 +494,6 @@ PROCEDURE pGetInvoiceHeaderData:
    DEF VAR liOrder AS INT NO-UNDO. 
   
    DEF BUFFER bReq FOR Msrequest.
-   DEF BUFFER bttRow FOR ttRow.
 
    EMPTY TEMP-TABLE ttGraph.
    
