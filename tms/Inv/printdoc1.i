@@ -127,7 +127,6 @@ DEF TEMP-TABLE ttSub NO-UNDO
    FIELD OldCTName       AS CHAR
    FIELD TariffActDate   AS CHAR
    FIELD MessageType     AS CHAR
-   FIELD Q25Phase        AS INT
    INDEX CLI CLI.
    
 DEF TEMP-TABLE ttCLIType NO-UNDO
