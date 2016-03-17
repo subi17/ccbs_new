@@ -28,6 +28,19 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
 
       mConnectToTwoLatest().
 
+      /* If no db could found then we might have test or stage env.
+         Lets try to connect test or stage mobcdr database... */
+      IF NOT VALID-HANDLE(lhBuffer[1])
+      THEN DO:
+         lhBuffer[1] = mConnectDBAndGiveBuffer("/db1/mcdr",
+                                               "mcdr",
+                                               lcTableName).
+         IF NOT VALID-HANDLE(lhBuffer[1])
+         THEN RETURN ERROR NEW Progress.Lang.AppError("Couldn't found any suitable MobCDR database", 1).
+
+         lcBufferDB[1] = "mcdr".
+      END.
+
       lhMainTable = BUFFER lbEDRHistory:HANDLE.
       
       objDumpBase = NEW DumpTimeBased(iiDumpID, icFile, THIS-OBJECT).
@@ -73,12 +86,37 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
          IF VALID-HANDLE(lhBuffer[lii])
          THEN DELETE OBJECT lhBuffer[lii].
 
-         IF CONNECTED(lcBufferDB[lii])
+         IF lcBufferDB[lii] > "" AND CONNECTED(lcBufferDB[lii])
          THEN DISCONNECT VALUE(lcBufferDB[lii]).
 
       END.  
 
    END DESTRUCTOR.   
+
+
+   METHOD PRIVATE HANDLE mConnectDBAndGiveBuffer
+      ( icDBPath        AS CHARACTER,
+        icDBName        AS CHARACTER,
+        icTableName     AS CHARACTER ):
+
+      DEFINE VARIABLE lhBuffer AS HANDLE NO-UNDO.
+
+      IF NOT HPDCommon:mDBExist(icDBPath + "/" + icDBName)
+      THEN RETURN ?.
+
+      IF CONNECTED(icDBName)
+      THEN DISCONNECT VALUE(icDBName).
+
+      CONNECT VALUE(icDBPath + "/" + icDBName) NO-ERROR.
+
+      IF ERROR-STATUS:ERROR = TRUE
+      THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot connect to database " + icDBName + " located on directory " + icDBPath, 1).
+
+      CREATE BUFFER lhBuffer FOR TABLE icDBName + "." + icTableName.
+
+      RETURN lhBuffer.
+
+   END METHOD.
 
 
    METHOD PRIVATE VOID mConnectToTwoLatest():
@@ -106,7 +144,7 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
 
       lhDBConfQuery:QUERY-OPEN().
 
-      DO WHILE TRUE:
+      DO WHILE TRUE ON ERROR UNDO, THROW:
          
          llOK = lhDBConfQuery:GET-NEXT(NO-LOCK).
 
@@ -117,19 +155,16 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
          IF NOT llOK
          THEN LEAVE.
          
-         lii = lii + 1.
+         ASSIGN
+            lii           = lii + 1
+            lhBuffer[lii] = mConnectDBAndGiveBuffer(lhDBConfig::DirectConnect,
+                                                    lhDBConfig::DBConnName,
+                                                    lcTableName).
+
+         IF NOT VALID-HANDLE(lhBuffer[lii])
+         THEN RETURN.
 
          lcBufferDB[lii] = lhDBConfig::DBConnName.
-
-         IF CONNECTED(lcBufferDB[lii])
-         THEN DISCONNECT VALUE(lcBufferDB[lii]).
-
-         CONNECT VALUE(lhDBConfig::DirectConnect + "/" + lcBufferDB[lii]) NO-ERROR.
-
-         IF ERROR-STATUS:ERROR = TRUE
-         THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot connect to " + lcBufferDB[lii] + " database located in " + lhDBConfig::DirectConnect, 1).
-         
-         CREATE BUFFER lhBuffer[lii] FOR TABLE lcBufferDB[lii] + "." + lcTableName.
 
          IF lii >= 2
          THEN LEAVE.

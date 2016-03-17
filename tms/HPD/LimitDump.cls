@@ -30,7 +30,7 @@ CLASS HPD.LimitDump FINAL INHERITS GenericDump:
          WHEN "KeyValue"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE RETURN {HPD/keyvalue.i lhMainTable :: objDumpBase:lcKeyDelimiter CustNum MsSeq LimitType ValidTo}.
+              ELSE RETURN {HPD/keyvalue.i lhMainTable :: objDumpBase:lcKeyDelimiter CustNum MsSeq LimitType FromDate}.
          OTHERWISE RETURN "".
       END CASE.
 
