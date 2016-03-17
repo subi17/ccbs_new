@@ -13,7 +13,7 @@ IF NEW(Limit) THEN DO:
       Common.RepLog.KeyValue  = STRING(Limit.CustNum)    + CHR(255) +
                                 STRING(Limit.MsSeq)      + CHR(255) +
                                 STRING(Limit.LimitType)  + CHR(255) +
-                                STRING(Limit.ToDate)
+                                STRING(Limit.FromDate)
       Common.RepLog.EventTS   = DATETIME(TODAY,MTIME).
 END.
 ELSE DO:
@@ -25,6 +25,6 @@ ELSE DO:
       Common.RepLog.KeyValue  = STRING(OldBuf.CustNum)   + CHR(255) +
                                 STRING(Oldbuf.MsSeq)     + CHR(255) +
                                 STRING(Oldbuf.LimitType) + CHR(255) +
-                                STRING(Oldbuf.ToDate)
+                                STRING(Oldbuf.FromDate)
       Common.RepLog.EventTS   = DATETIME(TODAY,MTIME).
 END.

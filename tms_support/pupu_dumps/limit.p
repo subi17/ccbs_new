@@ -54,7 +54,7 @@ FOR EACH Limit NO-LOCK WHERE
        fNotNull(STRING(Limit.CustNum)         + CHR(255) +
                 STRING(Limit.MsSeq)           + CHR(255) +
                 STRING(Limit.LimitType)       + CHR(255) +
-                STRING(Limit.ToDate))           lcDel
+                STRING(Limit.FromDate))         lcDel
        fNotNull(STRING(ldtTimeStamp))           lcDel
        fNotNull(STRING(Limit.LimitType))        lcDel
        fNotNull(STRING(Limit.MsSeq))            lcDel
