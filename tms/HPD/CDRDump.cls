@@ -24,11 +24,40 @@ CLASS HPD.CDRDump FINAL INHERITS DumpHandlerWithQuery:
          RETURN "FOR EACH &1 NO-LOCK USE-INDEX ReadDate WHERE " +
                 "&1.ReadDate >= &2 AND " +
                 "&1.ReadDate <= &3 AND " +
-                "&1.ReadTime >= &4 AND " +
-                "&1.ReadTime <  &5 AND " +
-                "&1.ErrorCode = 0".   
+                "&1.ErrorCode = 0".
       END GET.
-      
+
+
+   DEFINE PRIVATE PROPERTY lcFirstDayQuery AS CHARACTER NO-UNDO
+      GET:
+         RETURN "FOR EACH &1 NO-LOCK USE-INDEX ReadDate WHERE " +
+                "&1.ReadDate = &2 AND " +
+                "&1.ReadTime >= &3 AND " +
+                "&1.ErrorCode = 0".
+      END GET.
+
+
+   DEFINE PRIVATE PROPERTY lcLastDayQuery AS CHARACTER NO-UNDO
+      GET:
+         RETURN "FOR EACH &1 NO-LOCK USE-INDEX ReadDate WHERE " +
+                "&1.ReadDate = &2 AND " +
+                "&1.ReadTime < &3 AND " +
+                "&1.ErrorCode = 0".
+      END GET.
+
+
+   DEFINE PRIVATE PROPERTY lcOneDayQuery AS CHARACTER NO-UNDO
+      GET:
+         RETURN "FOR EACH &1 NO-LOCK USE-INDEX ReadDate WHERE " +
+                "&1.ReadDate = &2 AND " +
+                "&1.ReadTime >= &3 AND " +
+                "&1.ReadTime <  &4 AND " +
+                "&1.ErrorCode = 0".
+      END GET.
+
+
+   DEFINE PRIVATE VARIABLE objDTBC AS CLASS DumpTimeBasedConnect NO-UNDO.
+
       
    CONSTRUCTOR PUBLIC CDRDump
       (iiDumpID AS INTEGER):
@@ -53,19 +82,22 @@ CLASS HPD.CDRDump FINAL INHERITS DumpHandlerWithQuery:
       SUPER(iiDumpID).
 
       objDumpBase = NEW DumpTimeBasedConnect(iiDumpID, icFile, THIS-OBJECT).
+      objDTBC     = CAST(objDumpBase, DumpTimeBasedConnect).
 
-      DO WHILE CAST(objDumpBase, DumpTimeBasedConnect):mConnectMore():
+      DO WHILE objDTBC:mConnectMore() ON ERROR UNDO, THROW:
 
          CREATE BUFFER lhMainTable FOR TABLE lcTableName.
-         
+
          objDumpBase:mUseTable(lhMainTable).
          objDumpBase:mVerifyDumpFileData().
-         
-         mProcessCDR(INPUT CAST(objDumpBase, DumpTimeBasedConnect)).
-         
-         IF VALID-HANDLE(lhMainTable)
-         THEN DELETE OBJECT lhMainTable.        
-         
+
+         mProcessCDR().
+
+         FINALLY:
+            IF VALID-HANDLE(lhMainTable)
+            THEN DELETE OBJECT lhMainTable.
+         END FINALLY.
+
       END.
       
       /* If there has been problems we won't be here... */ 
@@ -135,47 +167,78 @@ CLASS HPD.CDRDump FINAL INHERITS DumpHandlerWithQuery:
    
    END METHOD.
 
-   
-   METHOD PRIVATE VOID mProcessCDR
-      (INPUT objDumpTBC AS CLASS DumpTimeBasedConnect):
+
+   METHOD PRIVATE VOID mProcessCDR():
 
       DEFINE VARIABLE ldaFromDate AS DATE    NO-UNDO.
-      DEFINE VARIABLE ldaFromTime AS INTEGER NO-UNDO.
+      DEFINE VARIABLE liFromTime  AS INTEGER NO-UNDO.
       DEFINE VARIABLE ldaToDate   AS DATE    NO-UNDO.
-      DEFINE VARIABLE ldaToTime   AS INTEGER NO-UNDO.
+      DEFINE VARIABLE liToTime    AS INTEGER NO-UNDO.
 
       ASSIGN
-         ldaFromDate = HPDTime:mMake2Date(objDumpTBC:ldeFromTS)
-         ldaFromTime = HPDTime:mMake2Time(objDumpTBC:ldeFromTS)
-         ldaToDate   = HPDTime:mMake2Date(objDumpTBC:ldeToTS)
-         ldaToTime   = HPDTime:mMake2Time(objDumpTBC:ldeToTS)
+         ldaFromDate = HPDTime:mMake2Date(objDTBC:ldeFromTS)
+         liFromTime  = HPDTime:mMake2Time(objDTBC:ldeFromTS)
+         ldaToDate   = HPDTime:mMake2Date(objDTBC:ldeToTS)
+         liToTime    = HPDTime:mMake2Time(objDTBC:ldeToTS)
          .
-                
+
       lhQuery:SET-BUFFERS(lhMainTable).
-      lhQuery:QUERY-PREPARE(SUBSTITUTE(lcQuery,
-                                       lcTableName,
-                                       STRING(ldaFromDate),
-                                       STRING(ldaToDate),
-                                       ldaFromTime,
-                                       ldaToTime)).
+
+      IF ldaFromDate NE ldaToDate
+      THEN DO:
+         /* Process first the first day */
+         mProcessQuery(SUBSTITUTE(lcFirstDayQuery,lcTableName,STRING(ldaFromDate),STRING(liFromTime))).
+
+         /* Then process days in the middle */
+         IF NOT llInterrupted
+         THEN mProcessQuery(SUBSTITUTE(lcQuery,lcTableName,STRING(ldaFromDate + 1),STRING(ldaToDate - 1))).
+
+         /* At last process the last day */
+         IF NOT llInterrupted
+         THEN mProcessQuery(SUBSTITUTE(lcLastDayQuery,lcTableName,STRING(ldaToDate),STRING(liToTime))).
+
+      END.
+
+      /* We need to process only one day as from and to date are the same date */
+      ELSE mProcessQuery(SUBSTITUTE(lcOneDayQuery,lcTableName,STRING(ldaFromDate),STRING(liFromTime),STRING(liToTime))).
+
+   END METHOD.
+
+
+   METHOD PRIVATE VOID mProcessQuery
+      (icQuery AS CHARACTER):
+
+      DEFINE VARIABLE llOK AS LOGICAL NO-UNDO.
+
+      lhQuery:QUERY-PREPARE(icQuery).
 
       lhQuery:QUERY-OPEN().   
-   
+
       REPEAT
          ON QUIT UNDO, RETRY
-         ON STOP UNDO, RETRY:
+         ON STOP UNDO, RETRY
+         ON ERROR UNDO, THROW:
    
          IF RETRY THEN DO:
             llInterrupted = TRUE.
             LEAVE.
          END.           
          
-         lhQuery:GET-NEXT().
-         IF lhQuery:QUERY-OFF-END THEN LEAVE.
+         llOK = lhQuery:GET-NEXT().
+
+         IF llOK = ?
+         THEN DO:
+            llInterrupted = TRUE.
+            RETURN ERROR NEW Progress.Lang.AppError("Cannot process query", 1).
+         END.
+
+         /* No more records, or query is not open */
+         IF NOT llOK
+         THEN LEAVE.
 
          liEvents = liEvents + 1.
          
-         objDumpTBC:mWriteALine().
+         objDTBC:mWriteALine().
 
          IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN 
          DO:
