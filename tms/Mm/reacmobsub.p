@@ -495,9 +495,11 @@ DO TRANSACTION:
 
    FOR EACH ttContract:
 
-      /* Don't reactivate TARJ7 and TARJ9 service periodical contract */
+      /* Don't reactivate TARJ7 and TARJ9 service periodical contract 
+         Don't reactivate BONO_VOIP YPR-3458 */
       IF ttContract.DCEvent = "TARJ7" OR
-         ttContract.DCEvent = "TARJ9" THEN NEXT.
+         ttContract.DCEvent = "TARJ9" OR
+         ttContract.DCEvent = "BONO_VOIP" THEN NEXT.
 
       FIND FIRST DayCampaign WHERE
                  DayCampaign.Brand   = gcBrand AND
@@ -539,8 +541,7 @@ DO TRANSACTION:
          fPCActionRequest(MobSub.MsSeq,
                        ttContract.DCEvent,
                        "reactivate",
-                       (IF ttContract.DCEvent EQ "BONO_VOIP" THEN
-                        fSecOffSet(ldCurrTS,180) ELSE ldCurrTS),
+                       ldCurrTS,
                        TRUE,             /* create fees */
                        {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION},
                        "",
