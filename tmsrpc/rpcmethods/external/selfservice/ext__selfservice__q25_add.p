@@ -212,7 +212,8 @@ IF lcSMSTxt > "" THEN DO:
 
       ASSIGN
          lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
-                             lower(entry(month(ldaMonth24Date),{&MONTHS_ES})))
+                             lower(entry(month(ADD-INTERVAL(ldaMonth24Date, 1,
+                             'months':U)),{&MONTHS_ES})))
          lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaMonth24Date)))
          lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
                STRING(TRUNC(ldeFeeAmount / 12, 2))).
