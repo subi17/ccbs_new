@@ -499,6 +499,7 @@ PROCEDURE pQ25Extension:
 
             ASSIGN
                /* Payment start at next month Q25 + 1 */
+               ldaDate = DATE(MONTH(ldaDate),1,YEAR(ldaDate))
                ldaDate = ADD-INTERVAL(ldaDate, 1, 'months':U)
                lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
                                    lower(entry(month(ldaDate),{&MONTHS_ES})))
