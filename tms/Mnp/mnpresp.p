@@ -48,6 +48,7 @@ DEFINE VARIABLE ldeSMSStamp  AS DECIMAL NO-UNDO.
 DEFINE STREAM sNagios.
 
 DEF BUFFER messagebuf for mnpoperation.
+DEF BUFFER bMNPProcess for MNPProcess.
 
 FORM
    SKIP(1)
@@ -192,8 +193,10 @@ PROCEDURE pHandleQueue:
    DEFINE VARIABLE lcPDFFolder AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcCancelProposalRefCode AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcSMS AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE liMNPProCount AS INT NO-UNDO. 
+   DEFINE VARIABLE liRespLength AS INT NO-UNDO. 
+   DEFINE VARIABLE lcNewOper    AS CHAR NO-UNDO. 
 
-   
    FIND MessageBuf WHERE
         RECID(MessageBuf) = pRecId
    EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
@@ -369,6 +372,42 @@ PROCEDURE pHandleQueue:
 
                LEAVE.
             END.
+
+            /* YDR-2147 */
+            /* Resend MNP IN request to Nodal Center automatically 
+               In case received response is WITH rejected case by 
+               providing new operator code */
+            IF lcResponseCode EQ "AREC ENUME" THEN DO:
+               
+               ASSIGN liMNPProCount = 0
+                      liRespLength  = 0
+                      lcNewOper     = "". 
+               
+               /* Need to check Status code validation 
+                  has to be added OR not */
+               FOR EACH bMNPProcess NO-LOCK WHERE 
+                        bMNPProcess.OrderID    = Order.OrderID  AND
+                        bMNPProcess.MNPType    = {&MNP_TYPE_IN}:
+                  liMNPProCount = liMNPProCount + 1. 
+               END.         
+
+               IF liMNPProCount = 1 THEN DO:
+                  ASSIGN 
+                     liRespLength   = LENGTH(lcResponseDesc) 
+                     lcNewOper      = SUBSTRING(lcResponseDesc,liRespLength - 3,liRespLength).
+                 
+                  IF CAN-FIND(FIRST MNPOperator NO-LOCK WHERE
+                                    MNPOperator.Brand    = gcBrand          AND
+                                    MNPOperator.OperName = TRIM(lcNewOper)) THEN DO: 
+                     Order.CurrOper = lcNewOper.        
+                  
+                     RUN mnprequestnc.p (Order.OrderID).
+                  END.
+                  ELSE 
+                     fLogError("New Operator code not OK: " + lcNewOper).
+               END.
+            END.
+
          END.
          /* YOT-3421 CONF COEST case automatic handling */
          ELSE IF MessageBuf.MessageType =
