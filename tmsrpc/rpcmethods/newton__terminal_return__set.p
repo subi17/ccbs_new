@@ -59,6 +59,7 @@ DEF VAR ldaMonth22       AS DATE   NO-UNDO.
 DEF VAR ldeMonth22       AS DEC    NO-UNDO. 
 DEF VAR llRenewalOrder   AS LOG    NO-UNDO. 
 DEF VAR lcQ25ContractID  AS CHAR   NO-UNDO.
+DEF VAR lcOrigKatun      AS CHAR   NO-UNDO.
 
 DEF BUFFER bDCCLI FOR DCCLI.
 DEF BUFFER bOrder FOR Order.
@@ -271,12 +272,17 @@ IF (llDeviceStart AND llDeviceScreen) OR
 THEN lcMemo = "Devolución en tienda aceptada".
 ELSE lcMemo = "Devolución en tienda denegada".
 
+lcOrigKatun = katun.
+katun =  "VISTA_" + lcSalesman.
+
 DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                  "MobSub",
                  STRING(Order.MsSeq),
                  Order.CustNum,
                  lcMemo,
                  lcResult).
+
+katun = lcOrigKatun.
 
 RELEASE TermReturn.
 
