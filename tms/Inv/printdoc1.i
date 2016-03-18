@@ -872,16 +872,19 @@ PROCEDURE pGetSubInvoiceHeaderData:
                  ttRow.RowBillCode BEGINS "RVTERM") THEN NEXT.
          /* if Q25 discounts exist, these and original q25 fee are not 
             needed to print */
-         FOR EACH bttRow WHERE 
-                  bttRow.SubInvNum = ttRow.SubInvNum AND
-                  bttrow.RowCode BEGINS "10":
-            IF bttRow.RowBillCode EQ "RVTERMDT2DISC" OR
-               bttRow.RowBillCode EQ "RVTERMDT4DISC" THEN DO:
+         IF ttRow.RowBillCode EQ "RVTERMDTEQ25" OR
+            ttRow.RowBillCode EQ "RVTERMDTTD" THEN DO:
+            FIND FIRST bttRow NO-LOCK WHERE
+                       bttrow.RowCode BEGINS "33" AND
+                       bttRow.SubInvNum = SubInvoice.SubInvNum AND
+                       bttRow.RowBillCode NE ttRow.RowBillCode AND
+                       bttrow.rowamt EQ (ttrow.rowamt * -1) NO-ERROR.
+            IF AVAIL bttRow THEN DO:
                DELETE bttRow.
-               llDeletettrow = TRUE.
+               DELETE ttRow.
+               NEXT.
             END.
          END.
-         IF llDeletettRow THEN DELETE ttrow.
          ASSIGN
             ttSub.InstallmentAmt = ttSub.InstallmentAmt + ttRow.RowAmt.
 
