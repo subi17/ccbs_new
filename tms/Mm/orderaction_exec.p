@@ -498,6 +498,8 @@ PROCEDURE pQ25Extension:
          IF ldeQ25ExtAmount > 0 THEN DO:
 
             ASSIGN
+               /* Payment start at next month Q25 + 1 */
+               ldaDate = ADD-INTERVAL(ldaDate, 1, 'months':U)
                lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
                                    lower(entry(month(ldaDate),{&MONTHS_ES})))
                lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaDate)))
