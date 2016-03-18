@@ -1184,8 +1184,9 @@ PROCEDURE pFinalize:
    DEF VAR ldaCont15PromoEnd         AS DATE NO-UNDO. 
    DEF VAR ldaOrderDate AS DATE NO-UNDO. 
 
-   DEF BUFFER bMsRequest   FOR MsRequest.
-   DEF BUFFER bMobSub      FOR MobSub.
+   DEF BUFFER bMsRequest    FOR MsRequest.
+   DEF BUFFER bTerMsRequest FOR MsRequest.
+   DEF BUFFER bMobSub       FOR MobSub.
 
    /* check that subrequests really are ok */
    IF fGetSubRequestState(MsRequest.MsRequest) NE 2 THEN DO:
@@ -1470,26 +1471,38 @@ PROCEDURE pFinalize:
             fIsDSS2Allowed(MsOwner.CustNum,0,ldCurrTS,
                            OUTPUT liDSSMsSeq,OUTPUT lcError) THEN DO:
 
-            liRequest = fDSSRequest(MsOwner.MsSeq,
-                                    MsOwner.CustNum,
-                                    "CREATE",
-                                    "",
-                                    "DSS2",
-                                    fSecOffSet(ldCurrTS,180),
-                                    MsRequest.ReqSource,
-                                    "",
-                                    TRUE, /* create fees */
-                                    MsRequest.MsRequest,
-                                    FALSE,
-                                    OUTPUT lcError).
-            IF liRequest = 0 THEN
-               /* write possible error to a memo */
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "MobSub",
-                                STRING(MsOwner.MsSeq),
-                                MsOwner.Custnum,
-                                "DSS2 activation failed",
-                                lcError).
+            /* Functionality changed to deny DSS2 creation if 
+                  there is DSS2 termination request. YTS-8140 */
+            FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
+                       bTerMsRequest.Brand = gcBrand AND
+                       bTerMsRequest.ReqType = 83 AND
+                       bTerMsRequest.Custnum = MsRequest.Custnum AND
+                       bTerMsRequest.ReqCParam3 BEGINS "DSS" AND
+                       bTerMsRequest.ReqCParam1 = "DELETE" AND
+                      LOOKUP(STRING(bTerMsRequest.ReqStatus),
+                             {&REQ_INACTIVE_STATUSES} + ",3") = 0 NO-ERROR.
+            IF NOT AVAIL bTerMsRequest THEN DO:
+               liRequest = fDSSRequest(MsOwner.MsSeq,
+                                       MsOwner.CustNum,
+                                       "CREATE",
+                                       "",
+                                       "DSS2",
+                                       fSecOffSet(ldCurrTS,180),
+                                       MsRequest.ReqSource,
+                                       "",
+                                       TRUE, /* create fees */
+                                       MsRequest.MsRequest,
+                                       FALSE,
+                                       OUTPUT lcError).
+               IF liRequest = 0 THEN
+                  /* write possible error to a memo */
+                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                   "MobSub",
+                                   STRING(MsOwner.MsSeq),
+                                   MsOwner.Custnum,
+                                   "DSS2 activation failed in percontr handling",
+                                   lcError).
+            END.
          END. /* IF NOT fIsDSSActive(MsOwner.CustNum,ldCurrTS) AND */ 
          ELSE IF fOngoingDSSTerm(MsOwner.CustNum,ldeLastDayofMonthStamp) AND
                  fIsDSS2Allowed(MsOwner.CustNum,0,ldCurrTS,
