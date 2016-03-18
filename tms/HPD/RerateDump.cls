@@ -263,6 +263,7 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
    
    END METHOD.
 
+
    METHOD PRIVATE VOID mProcessEDRHistory():
 
       DEFINE VARIABLE ldaFromDate AS DATE    NO-UNDO.
@@ -284,8 +285,8 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
          /* Process first the first day */
          mProcessQuery(SUBSTITUTE(lcFirstDayQuery,lcTableName,STRING(ldaFromDate),STRING(liFromTime))).
 
-         /* Then process days in the middle */
-         IF NOT llInterrupted
+         /* Then process days in the middle if the days are not sequential */
+         IF (NOT llInterrupted) AND ldaFromDate + 1 NE ldaToDate
          THEN mProcessQuery(SUBSTITUTE(lcQuery,lcTableName,STRING(ldaFromDate + 1),STRING(ldaToDate - 1))).
 
          /* At last process the last day */
