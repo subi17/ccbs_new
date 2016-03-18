@@ -1,5 +1,5 @@
 USING Progress.Lang.*.
-USING HPD.DumpHandler.
+USING HPD.DumpHandlerWithQuery.
 USING HPD.DumpTimeBased.
 USING HPD.HPDTime.
 USING HPD.HPDCommon.
@@ -7,24 +7,76 @@ USING HPD.DumpBase.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
-CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
+CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
 
-   DEFINE PRIVATE VARIABLE lhDBConfig    AS HANDLE             NO-UNDO.
-   DEFINE PRIVATE VARIABLE lhDBConfQuery AS HANDLE             NO-UNDO.
-   DEFINE PRIVATE VARIABLE lcBufferDB    AS CHARACTER EXTENT 2 NO-UNDO.
-   DEFINE PRIVATE VARIABLE lhBuffer      AS HANDLE    EXTENT 2 NO-UNDO.
-   DEFINE PRIVATE VARIABLE objDumpBase2  AS CLASS HPD.DumpBase NO-UNDO.
-   DEFINE PRIVATE VARIABLE lcTableName   AS CHARACTER          NO-UNDO.
-   DEFINE PRIVATE VARIABLE liCurrentDB   AS INTEGER            NO-UNDO.
+   DEFINE PROTECTED OVERRIDE PROPERTY lcQuery AS CHARACTER NO-UNDO
+      GET:
+         RETURN "FOR EACH &1 NO-LOCK USE-INDEX UpdateDate WHERE " +
+                "&1.Brand       = '1' AND " +
+                "&1.UpdateDate >= &2 AND " +
+                "&1.UpdateDate <= &3".
+      END GET.
 
-   DEFINE PRIVATE BUFFER lbEDRHistory     FOR EDRHistory.
+
+   DEFINE PRIVATE PROPERTY lcFirstDayQuery AS CHARACTER NO-UNDO
+      GET:
+         RETURN "FOR EACH &1 NO-LOCK USE-INDEX UpdateDate WHERE " +
+                "&1.Brand       = '1' AND " +
+                "&1.UpdateDate = &2 AND " +
+                "&1.UpdateTime >= &3".
+      END GET.
+
+
+   DEFINE PRIVATE PROPERTY lcLastDayQuery AS CHARACTER NO-UNDO
+      GET:
+         RETURN "FOR EACH &1 NO-LOCK USE-INDEX UpdateDate WHERE " +
+                "&1.Brand       = '1' AND " +
+                "&1.UpdateDate = &2 AND " +
+                "&1.UpdateTime < &3".
+      END GET.
+
+
+   DEFINE PRIVATE PROPERTY lcOneDayQuery AS CHARACTER NO-UNDO
+      GET:
+         RETURN "FOR EACH &1 NO-LOCK USE-INDEX UpdateDate WHERE " +
+                "&1.Brand       = '1' AND " +
+                "&1.UpdateDate = &2 AND " +
+                "&1.UpdateTime >= &3 AND " +
+                "&1.UpdateTime <  &4".
+      END GET.
+
+
+   DEFINE PRIVATE PROPERTY lcMobCDRQuery AS CHARACTER NO-UNDO
+      GET:
+         RETURN "WHERE " +
+                "CLI       = &1 AND " +
+                "DateSt    = &2 AND " +
+                "TimeStart = &3 AND " +
+                "DtlSeq    = &4".
+      END GET.
+
+
+   DEFINE PRIVATE VARIABLE lhDBConfig    AS HANDLE              NO-UNDO.
+   DEFINE PRIVATE VARIABLE lhDBConfQuery AS HANDLE              NO-UNDO.
+   DEFINE PRIVATE VARIABLE lcBufferDB    AS CHARACTER EXTENT 2  NO-UNDO.
+   DEFINE PRIVATE VARIABLE lhBuffer      AS HANDLE    EXTENT 2  NO-UNDO.
+   DEFINE PRIVATE VARIABLE objDumpBase2  AS CLASS DumpBase      NO-UNDO.
+   DEFINE PRIVATE VARIABLE lcMobCDRTable AS CHARACTER           NO-UNDO.
+   DEFINE PRIVATE VARIABLE liCurrentDB   AS INTEGER             NO-UNDO.
+   DEFINE PRIVATE VARIABLE liBufferCount AS INTEGER             NO-UNDO.
+   DEFINE PRIVATE VARIABLE objDTB        AS CLASS DumpTimeBased NO-UNDO.
 
 
    CONSTRUCTOR PUBLIC RerateDump
       (iiDumpID    AS INTEGER,
        icFile      AS CHARACTER):
 
-      lcTableName = "MobCDR".
+      SUPER(iiDumpID).
+
+      /* Note: DumpHandler destructor is deleting the lhMainTable object */
+      CREATE BUFFER lhMainTable FOR TABLE lcTableName.
+
+      lcMobCDRTable = "MobCDR".
 
       mConnectToTwoLatest().
 
@@ -34,38 +86,41 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
       THEN DO:
          lhBuffer[1] = mConnectDBAndGiveBuffer("/db1/mcdr",
                                                "mcdr",
-                                               lcTableName).
+                                               lcMobCDRTable).
          IF NOT VALID-HANDLE(lhBuffer[1])
          THEN RETURN ERROR NEW Progress.Lang.AppError("Couldn't found any suitable MobCDR database", 1).
 
          lcBufferDB[1] = "mcdr".
       END.
-
-      lhMainTable = BUFFER lbEDRHistory:HANDLE.
       
+      liBufferCount = liBufferCount + 1.
+
       objDumpBase = NEW DumpTimeBased(iiDumpID, icFile, THIS-OBJECT).
       objDumpBase:mUseTable(lhMainTable).
       objDumpBase:mUseTable(lhBuffer[1]).
 
-      objDumpBase:mUpdateDumpHeader(1,"",lcTableName).
+      objDumpBase:mUpdateDumpHeader(1,"",lcMobCDRTable).
       objDumpBase:mUpdateDumpHeader(2,"","MODIFY").
 
       objDumpBase:mVerifyDumpFileData().
 
       IF VALID-HANDLE(lhBuffer[2])
       THEN DO:
+         liBufferCount = liBufferCount + 1.
          objDumpBase2 = NEW DumpBase(iiDumpID, THIS-OBJECT).
          objDumpBase2:mUseTable(lhMainTable).
          objDumpBase2:mUseTable(lhBuffer[2]).
 
-         objDumpBase2:mUpdateDumpHeader(1,"",lcTableName).
+         objDumpBase2:mUpdateDumpHeader(1,"",lcMobCDRTable).
          objDumpBase2:mUpdateDumpHeader(2,"","MODIFY").
          objDumpBase2:mUpdateDumpHeader(3,"", ISO-DATE(CAST(objDumpBase, DumpTimeBased):objHPDTime:CurrLocalTZTime)).
 
          objDumpBase2:mVerifyDumpFileData().
       END.
 
-      mProcessCDR(INPUT CAST(objDumpBase, DumpTimeBased)).
+      objDTB = CAST(objDumpBase, DumpTimeBased).
+
+      mProcessEDRHistory().
       
       /* If there has been problems we won't be here... */ 
       IF llInterrupted = FALSE
@@ -89,7 +144,7 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
          IF lcBufferDB[lii] > "" AND CONNECTED(lcBufferDB[lii])
          THEN DISCONNECT VALUE(lcBufferDB[lii]).
 
-      END.  
+      END.
 
    END DESTRUCTOR.   
 
@@ -140,7 +195,7 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
 
       lhDBConfQuery:SET-BUFFERS(lhDBConfig).
 
-      lhDBConfQuery:QUERY-PREPARE(SUBSTITUTE(lcQuery, lcDBConfigTable, QUOTER(lcTableName))).
+      lhDBConfQuery:QUERY-PREPARE(SUBSTITUTE(lcQuery, lcDBConfigTable, QUOTER(lcMobCDRTable))).
 
       lhDBConfQuery:QUERY-OPEN().
 
@@ -159,7 +214,7 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
             lii           = lii + 1
             lhBuffer[lii] = mConnectDBAndGiveBuffer(lhDBConfig::DirectConnect,
                                                     lhDBConfig::DBConnName,
-                                                    lcTableName).
+                                                    lcMobCDRTable).
 
          IF NOT VALID-HANDLE(lhBuffer[lii])
          THEN RETURN.
@@ -208,60 +263,93 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
    
    END METHOD.
 
-   
-   METHOD PRIVATE VOID mProcessCDR
-      (INPUT objDumpTBC AS CLASS DumpTimeBased):
+   METHOD PRIVATE VOID mProcessEDRHistory():
 
-      DEFINE VARIABLE ldaFromDate AS DATE      NO-UNDO.
-      DEFINE VARIABLE ldaFromTime AS INTEGER   NO-UNDO.
-      DEFINE VARIABLE ldaToDate   AS DATE      NO-UNDO.
-      DEFINE VARIABLE ldaToTime   AS INTEGER   NO-UNDO.
-      DEFINE VARIABLE llFound     AS LOGICAL   NO-UNDO.
-      DEFINE VARIABLE lcQuery     AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE ldaFromDate AS DATE    NO-UNDO.
+      DEFINE VARIABLE liFromTime  AS INTEGER NO-UNDO.
+      DEFINE VARIABLE ldaToDate   AS DATE    NO-UNDO.
+      DEFINE VARIABLE liToTime    AS INTEGER NO-UNDO.
 
       ASSIGN
-         ldaFromDate = HPDTime:mMake2Date(objDumpTBC:ldeFromTS)
-         ldaFromTime = HPDTime:mMake2Time(objDumpTBC:ldeFromTS)
-         ldaToDate   = HPDTime:mMake2Date(objDumpTBC:ldeToTS)
-         ldaToTime   = HPDTime:mMake2Time(objDumpTBC:ldeToTS)
-         lcQuery     = "WHERE CLI       = &1 AND " +
-                             "DateSt    = &2 AND " +
-                             "TimeStart = &3 AND " +
-                             "DtlSeq    = &4"
+         ldaFromDate = HPDTime:mMake2Date(objDTB:ldeFromTS)
+         liFromTime  = HPDTime:mMake2Time(objDTB:ldeFromTS)
+         ldaToDate   = HPDTime:mMake2Date(objDTB:ldeToTS)
+         liToTime    = HPDTime:mMake2Time(objDTB:ldeToTS)
          .
 
-      FOR EACH lbEDRHistory FIELDS (Brand UpdateDate UpdateTime CLI DateSt TimeStart DtlSeq) NO-LOCK WHERE
-         lbEDRHistory.Brand       = "1"         AND
-         lbEDRHistory.UpdateDate >= ldaFromDate AND
-         lbEDRHistory.UpdateDate <= ldaToDate   AND
-         lbEDRHistory.UpdateTime >= ldaFromTime AND
-         lbEDRHistory.UpdateTime <= ldaToTime
+      lhQuery:SET-BUFFERS(lhMainTable).
+
+      IF ldaFromDate NE ldaToDate
+      THEN DO:
+         /* Process first the first day */
+         mProcessQuery(SUBSTITUTE(lcFirstDayQuery,lcTableName,STRING(ldaFromDate),STRING(liFromTime))).
+
+         /* Then process days in the middle */
+         IF NOT llInterrupted
+         THEN mProcessQuery(SUBSTITUTE(lcQuery,lcTableName,STRING(ldaFromDate + 1),STRING(ldaToDate - 1))).
+
+         /* At last process the last day */
+         IF NOT llInterrupted
+         THEN mProcessQuery(SUBSTITUTE(lcLastDayQuery,lcTableName,STRING(ldaToDate),STRING(liToTime))).
+
+      END.
+
+      /* We need to process only one day as from and to date are the same date */
+      ELSE mProcessQuery(SUBSTITUTE(lcOneDayQuery,lcTableName,STRING(ldaFromDate),STRING(liFromTime),STRING(liToTime))).
+
+   END METHOD.
+
+
+   METHOD PRIVATE VOID mProcessQuery
+      (INPUT icQuery AS CHARACTER):
+
+      DEFINE VARIABLE llOK AS LOGICAL NO-UNDO.
+
+      lhQuery:QUERY-PREPARE(icQuery).
+
+      lhQuery:QUERY-OPEN().
+
+      REPEAT
          ON QUIT UNDO, RETRY
-         ON STOP UNDO, RETRY:
+         ON STOP UNDO, RETRY
+         ON ERROR UNDO, THROW:
 
          IF RETRY THEN DO:
             llInterrupted = TRUE.
             LEAVE.
          END.
-         
-         DO liCurrentDB = 1 TO 2:
-            llFound = lhBuffer[liCurrentDB]:FIND-FIRST(SUBSTITUTE(lcQuery,
-                                                          QUOTER(lbEDRHistory.CLI),
-                                                          lbEDRHistory.DateSt,
-                                                          lbEDRHistory.TimeStart,
-                                                          lbEDRHistory.DtlSeq), NO-LOCK) NO-ERROR.
-            IF llFound
+
+         llOK = lhQuery:GET-NEXT().
+
+         IF llOK = ?
+         THEN DO:
+            llInterrupted = TRUE.
+            RETURN ERROR NEW Progress.Lang.AppError("Cannot process query", 1).
+         END.
+
+         /* No more records, or query is not open */
+         IF NOT llOK
+         THEN LEAVE.
+
+         DO liCurrentDB = 1 TO liBufferCount:
+
+            llOK = lhBuffer[liCurrentDB]:FIND-FIRST(SUBSTITUTE(lcMobCDRQuery,
+                                                               QUOTER(lhMainTable::CLI),
+                                                               lhMainTable::DateSt,
+                                                               lhMainTable::TimeStart,
+                                                               lhMainTable::DtlSeq), NO-LOCK) NO-ERROR.
+            IF llOK
             THEN DO:
                liEvents = liEvents + 1.
 
                IF liCurrentDB = 1
-               THEN objDumpTBC:mWriteALine().
-               ELSE objDumpTBC:mWriteALine(objDumpBase2:mGetData()).
+               THEN objDTB:mWriteALine().
+               ELSE objDTB:mWriteALine(objDumpBase2:mGetData()).
                
                LEAVE.
             END.
          END.
-         
+
          IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN 
          DO:
             PAUSE 0.
@@ -274,6 +362,10 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandler:
 
       IF NOT SESSION:BATCH
       THEN HIDE FRAME fQty NO-PAUSE.
+
+      FINALLY:
+         lhQuery:QUERY-CLOSE().
+      END FINALLY.
 
    END METHOD.
 
