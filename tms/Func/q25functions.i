@@ -651,10 +651,11 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             lcTemplateName = fgetTemplateName(liPhase).  
             IF (iiExecType EQ {&Q25_EXEC_TYPE_CUST_LOG_GENERATION}) AND
                lcTemplateName BEGINS "Q25" THEN DO:
-               ASSIGN
-                  lcLogText = DCCLI.CLI + ";" + STRING(ldaExecuteDate) + ";" +
-                              lcTemplateName
-                  liLogType = {&Q25_LOGGING_CUST_LOGS}.
+            ASSIGN   
+               lcLogText = DCCLI.CLI + ";" + 
+                           STRING(ldaExecuteDate,"99/99/9999") + ";" +
+                           lcTemplateName
+               liLogType = {&Q25_LOGGING_CUST_LOGS}.
             END.
             ELSE DO:
                lcLogText = "Send SMS: " +
