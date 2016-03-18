@@ -178,7 +178,6 @@ FUNCTION fCountNormalWeekday RETURNS INTEGER (INPUT idaDate AS DATE,
          lcCount = lcCount + 1.
       ldaTempDate = ldaTempdate + 1.
    END.
-
    RETURN lccount.
 END.
 
@@ -317,10 +316,9 @@ FUNCTION isPostpaidMobsubReleased RETURNS LOGICAL
    FIND FIRST Mobsub NO-LOCK WHERE
               Mobsub.MsSeq = iiMsSeq AND
               Mobsub.Paytype = FALSE NO-ERROR.
-   IF NOT AVAIL Mobsub THEN DO:
-      RETURN TRUE.
-   END.
-   RETURN FALSE.
+   IF NOT AVAIL Mobsub THEN RETURN TRUE.
+   ELSE
+      RETURN FALSE.
 END.
 
 FUNCTION isSingleFeeBilled RETURNS LOGICAL
@@ -328,10 +326,9 @@ FUNCTION isSingleFeeBilled RETURNS LOGICAL
    IF SingleFee.Billed AND
       NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
                          Invoice.Invnum = SingleFee.InvNum aND
-                         Invoice.InvType = 99) THEN DO:
-      RETURN TRUE.
-   END.
-   RETURN FALSE.
+                         Invoice.InvType = 99) THEN RETURN TRUE.
+   ELSE
+      RETURN FALSE.
 END.
 
 FUNCTION isQ25TerminalReturned RETURNS LOGICAL
@@ -340,14 +337,13 @@ FUNCTION isQ25TerminalReturned RETURNS LOGICAL
               TermReturn.OrderId EQ iiOrderId NO-LOCK NO-ERROR.
 
    IF AVAIL TermReturn AND
-       ((TermReturn.DeviceScreen = TRUE AND
-         TermReturn.DeviceStart = TRUE) OR
-        (TermReturn.DeviceScreen = ? AND
-         TermReturn.DeviceStart  = ?)) THEN DO:
+      ((TermReturn.DeviceScreen = TRUE AND
+        TermReturn.DeviceStart = TRUE) OR
+       (TermReturn.DeviceScreen = ? AND
+        TermReturn.DeviceStart  = ?)) THEN RETURN TRUE. 
       /* Accepted return of device */
-      RETURN TRUE.
-   END.
-   RETURN FALSE.
+   ELSE
+      RETURN FALSE.
 END.
 
 FUNCTION isQ25ExtensionDone RETURNS LOGICAL
@@ -581,8 +577,8 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
       END.
 
       IF isQ25PerContractEnded(liPerContrId, liMsSeq, SingleFee.orderid, 
-         idaStartDate, idaEndDate, ldAmount, liPhase, lcLogText) THEN DO:
-      
+                               idaStartDate, idaEndDate, ldAmount, liPhase, 
+                               lcLogText) THEN DO:
          IF lcLogText > "" THEN
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
                            iiExecType).
