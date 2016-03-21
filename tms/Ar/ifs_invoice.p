@@ -838,18 +838,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
          ELSE IF ttRow.BillCode = "RVTERMBSF" THEN
             ttRow.BankCode = {&TF_BANK_SABADELL}.
       END.
-      /* YOT-4132 billing code conversion for Credit Notes */
-      IF lcInvoiceType = "15" THEN DO:
-         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set1) > 0 THEN DO:
-            ASSIGN ttRow.BillCode = lcbillcodes_to_set1.
-         END.
-         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set2) > 0 THEN DO:
-            ASSIGN ttRow.BillCode = lcbillcodes_to_set2.
-         END.
-         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set3) > 0 THEN DO:
-            ASSIGN ttRow.BillCode = lcbillcodes_to_set3.
-         END.
-      END. /* IF lcInvoiceType = "15" THEN DO: */
+
    END.
    
    /* sales invoice installment handling, YDR-328 */
@@ -909,6 +898,19 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
    FOR EACH ttRow
    BY ttRow.ItemId
    BY ttRow.Amt:
+
+      /* YOT-4132 billing code conversion for Credit Notes */
+      IF lcInvoiceType = "15" THEN DO:
+         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set1) > 0 THEN DO:
+            ASSIGN ttRow.BillCode = lcbillcodes_to_set1.
+         END.
+         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set2) > 0 THEN DO:
+            ASSIGN ttRow.BillCode = lcbillcodes_to_set2.
+         END.
+         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set3) > 0 THEN DO:
+            ASSIGN ttRow.BillCode = lcbillcodes_to_set3.
+         END.
+      END. /* IF lcInvoiceType = "15" THEN DO: */
 
       liRowID = liRowID + 1.
       fPrintPosting().
