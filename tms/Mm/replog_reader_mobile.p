@@ -216,7 +216,8 @@ PROCEDURE pHandleDCCLI:
                            fDateToString(DCCLI.ValidTo)          + lcDel +
                            fDateToString(DCCLI.ValidToOrig)      + lcDel + 
                            fDateToString(DCCLI.RenewalDate)      + lcDel + 
-                           fNotNull(STRING(DCCLI.Amount)).
+                           fNotNull(STRING(DCCLI.Amount))        + lcDel +
+                           fDateToString(DCCLI.TermDate).
 
                fWriteMessage(lcMessage).
             END.
