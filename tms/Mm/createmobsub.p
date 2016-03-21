@@ -590,11 +590,12 @@ IF NOT MobSub.PayType THEN DO:
                  lbMobSub.MsSeq = liDSSPriMsSeq NO-LOCK NO-ERROR.
       IF AVAIL lbMobSub THEN DO:
          /* Functionality changed to deny DSS2 creation if 
-               there is DSS2 termination request. YTS-8140 */
+               there is DSS2 termination request. YTS-8140 
+              used lbMobSub.Custnum cause of ACC */
          FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
                     bTerMsRequest.Brand = gcBrand AND
                     bTerMsRequest.ReqType = 83 AND
-                    bTerMsRequest.Custnum = MsRequest.Custnum AND
+                    bTerMsRequest.Custnum = lbMobSub.Custnum AND
                     bTerMsRequest.ReqCParam3 BEGINS "DSS" AND
                     bTerMsRequest.ReqCParam1 = "DELETE" AND
                    LOOKUP(STRING(bTerMsRequest.ReqStatus),
