@@ -23,6 +23,14 @@ DEF INPUT  PARAMETER icEventFields AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiEvents      AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 
+/* YOT-4132 Translate the billing items to dump file in case a credit note is created */
+DEF VAR lcbillcodes_from_set1 AS CHAR NO-UNDO INIT "PAYTERM,PAYTERM18,PAYTERM1E,PAYTERM24,PAYTERMBS,PAYTERMEND,PAYTERMEND1E,PAYTERMENDBS".
+DEF VAR lcbillcodes_to_set1   AS CHAR NO-UNDO INIT "CNPAYTERM".
+DEF VAR lcbillcodes_from_set2 AS CHAR NO-UNDO INIT "RVTERM1EF,RVTERMBSF,RVTERMF".
+DEF VAR lcbillcodes_to_set2   AS CHAR NO-UNDO INIT "CNRV".
+DEF VAR lcbillcodes_from_set3 AS CHAR NO-UNDO INIT "RVTERM,RVTERM1E,RVTERMBS,RVTERMEND,RVTERMEND1E,RVTERMENDBS".
+DEF VAR lcbillcodes_to_set3   AS CHAR NO-UNDO INIT "CNRVTERM".
+
 DEF VAR liCnt         AS INT    NO-UNDO.
 DEF VAR ldVATTot      AS DEC    NO-UNDO.
 DEF VAR ldVATAmt      AS DEC    NO-UNDO.
@@ -136,6 +144,26 @@ FUNCTION fDate2String RETURNS CHAR
    
 END FUNCTION.
 
+/* Function to handle YOT-4132 billing code conversion */
+FUNCTION fConvertBillCode RETURNS LOGIC:
+
+   IF lcInvoiceType = "15" THEN DO: /* Credit invoices */
+      IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set1) > 0 THEN DO:
+         ASSIGN ttRow.BillCode = lcbillcodes_to_set1.
+         RETURN TRUE.
+      END.
+      IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set2) > 0 THEN DO:
+         ASSIGN ttRow.BillCode = lcbillcodes_to_set2.
+         RETURN TRUE.
+      END.
+      IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set3) > 0 THEN DO:
+         ASSIGN ttRow.BillCode = lcbillcodes_to_set3.
+         RETURN TRUE.
+      END.
+   END. /* IF lcInvoiceType = "15" THEN DO: */
+   RETURN FALSE.
+       
+END FUNCTION.
 
 FUNCTION fPrintHeader RETURNS LOGIC:
 
@@ -831,6 +859,8 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
          ELSE IF ttRow.BillCode = "RVTERMBSF" THEN
             ttRow.BankCode = {&TF_BANK_SABADELL}.
        END.
+      /* YOT-4132 billing code conversion for Credit Notes */
+      fConvertBillCode().
    END.
    
    /* sales invoice installment handling, YDR-328 */
@@ -892,7 +922,6 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
    BY ttRow.Amt:
 
       liRowID = liRowID + 1.
-
       fPrintPosting().
    END.   
 
