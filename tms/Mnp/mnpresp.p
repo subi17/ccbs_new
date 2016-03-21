@@ -370,42 +370,43 @@ PROCEDURE pHandleQueue:
                                Order.OrderId).
                END.
 
-               LEAVE.
-            END.
-
-            /* YDR-2147 */
-            /* Resend MNP IN request to Nodal Center automatically 
-               In case received response is WITH rejected case by 
-               providing new operator code */
-            IF lcResponseCode EQ "AREC ENUME" THEN DO:
-               
-               ASSIGN liMNPProCount = 0
-                      liRespLength  = 0
-                      lcNewOper     = "". 
-               
-               /* Need to check Status code validation 
-                  has to be added OR not */
-               FOR EACH bMNPProcess NO-LOCK WHERE 
-                        bMNPProcess.OrderID    = Order.OrderID  AND
-                        bMNPProcess.MNPType    = {&MNP_TYPE_IN}:
-                  liMNPProCount = liMNPProCount + 1. 
-               END.         
-
-               IF liMNPProCount = 1 THEN DO:
-                  ASSIGN 
-                     liRespLength   = LENGTH(lcResponseDesc) 
-                     lcNewOper      = SUBSTRING(lcResponseDesc,liRespLength - 3,liRespLength).
-                 
-                  IF CAN-FIND(FIRST MNPOperator NO-LOCK WHERE
-                                    MNPOperator.Brand    = gcBrand          AND
-                                    MNPOperator.OperName = TRIM(lcNewOper)) THEN DO: 
-                     Order.CurrOper = lcNewOper.        
+               /* YDR-2147 */
+               /* Resend MNP IN request to Nodal Center automatically 
+                  In case received response is WITH rejected case by 
+                  providing new operator code */
+               IF lcResponseCode EQ "AREC ENUME" AND 
+                  lcResponseDesc MATCHES "El MSISDN * no pertenece al operador donante *, pertenece al operador *" THEN DO:
                   
-                     RUN mnprequestnc.p (Order.OrderID).
+                  ASSIGN liMNPProCount = 0
+                         liRespLength  = 0
+                         lcNewOper     = "". 
+                  
+                  /* Need to check Status code validation 
+                     has to be added OR not */
+                  FOR EACH bMNPProcess NO-LOCK WHERE 
+                           bMNPProcess.OrderID    = Order.OrderID  AND
+                           bMNPProcess.MNPType    = {&MNP_TYPE_IN}:
+                     liMNPProCount = liMNPProCount + 1. 
+                  END.         
+
+                  IF liMNPProCount = 1 THEN DO:
+                     ASSIGN 
+                        liRespLength   = LENGTH(lcResponseDesc) 
+                        lcNewOper      = SUBSTRING(lcResponseDesc,liRespLength - 3,liRespLength).
+                    
+                     IF CAN-FIND(FIRST MNPOperator NO-LOCK WHERE
+                                       MNPOperator.Brand    = gcBrand          AND
+                                       MNPOperator.OperName = TRIM(lcNewOper)) THEN DO: 
+                        Order.CurrOper = lcNewOper.        
+                     
+                        RUN mnprequestnc.p (Order.OrderID).
+                     END.
+                     ELSE 
+                        fLogError("New Operator code not OK: " + lcNewOper).
                   END.
-                  ELSE 
-                     fLogError("New Operator code not OK: " + lcNewOper).
                END.
+               
+               LEAVE.
             END.
 
          END.
