@@ -30,6 +30,7 @@ katun = "MNP".
 {orderchk.i}
 {main_add_lines.i}
 {fgettxt.i}
+{create_eventlog.i}
 
 DEFINE VARIABLE liLoop       AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTime       AS CHARACTER NO-UNDO.
@@ -196,7 +197,8 @@ PROCEDURE pHandleQueue:
    DEFINE VARIABLE liMNPProCount AS INT NO-UNDO. 
    DEFINE VARIABLE liRespLength AS INT NO-UNDO. 
    DEFINE VARIABLE lcNewOper    AS CHAR NO-UNDO. 
-
+   DEFINE VARIABLE lcOldOper    AS CHAR NO-UNDO. 
+   
    FIND MessageBuf WHERE
         RECID(MessageBuf) = pRecId
    EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
@@ -392,14 +394,23 @@ PROCEDURE pHandleQueue:
                   IF liMNPProCount = 1 THEN DO:
                      ASSIGN 
                         liRespLength   = LENGTH(lcResponseDesc) 
-                        lcNewOper      = SUBSTRING(lcResponseDesc,liRespLength - 3,liRespLength).
+                        lcNewOper      = SUBSTRING(lcResponseDesc,liRespLength - 2,liRespLength).
                     
                      IF CAN-FIND(FIRST MNPOperator NO-LOCK WHERE
                                        MNPOperator.Brand    = gcBrand          AND
-                                       MNPOperator.OperName = TRIM(lcNewOper)) THEN DO: 
-                        Order.CurrOper = lcNewOper.        
-                     
+                                       MNPOperator.OperCode = TRIM(lcNewOper)) THEN DO: 
+                        ASSIGN 
+                           lcOldOper      = Order.CurrOper
+                           Order.CurrOper = lcNewOper.        
+                        
+                        fSetOrderStatus(Order.OrderId,"3").
+
                         RUN mnprequestnc.p (Order.OrderID).
+
+                        fMakeCreateEvent((BUFFER Order:HANDLE),
+                                          lcOldOper + "," + lcNewOper,
+                                          katun,
+                                          "MNP Resent request").
                      END.
                      ELSE 
                         fLogError("New Operator code not OK: " + lcNewOper).
