@@ -740,5 +740,5 @@ FUNCTION getQ25phase RETURNS INT
             RETURN liLoop.
       END.
    END.
-   RETURN 99. /* Not Q25 phase M22-M24 customer */
+   RETURN {&Q25_NOT_ACTION_PHASE}. /* Not Q25 phase M22-M24 customer */
 END.
