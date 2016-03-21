@@ -144,27 +144,6 @@ FUNCTION fDate2String RETURNS CHAR
    
 END FUNCTION.
 
-/* Function to handle YOT-4132 billing code conversion */
-FUNCTION fConvertBillCode RETURNS LOGIC:
-
-   IF lcInvoiceType = "15" THEN DO: /* Credit invoices */
-      IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set1) > 0 THEN DO:
-         ASSIGN ttRow.BillCode = lcbillcodes_to_set1.
-         RETURN TRUE.
-      END.
-      IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set2) > 0 THEN DO:
-         ASSIGN ttRow.BillCode = lcbillcodes_to_set2.
-         RETURN TRUE.
-      END.
-      IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set3) > 0 THEN DO:
-         ASSIGN ttRow.BillCode = lcbillcodes_to_set3.
-         RETURN TRUE.
-      END.
-   END. /* IF lcInvoiceType = "15" THEN DO: */
-   RETURN FALSE.
-       
-END FUNCTION.
-
 FUNCTION fPrintHeader RETURNS LOGIC:
 
    PUT STREAM sLog UNFORMATTED 
@@ -858,9 +837,19 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
             ttRow.BankCode = {&TF_BANK_UNOE}.
          ELSE IF ttRow.BillCode = "RVTERMBSF" THEN
             ttRow.BankCode = {&TF_BANK_SABADELL}.
-       END.
+      END.
       /* YOT-4132 billing code conversion for Credit Notes */
-      fConvertBillCode().
+      IF lcInvoiceType = "15" THEN DO:
+         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set1) > 0 THEN DO:
+            ASSIGN ttRow.BillCode = lcbillcodes_to_set1.
+         END.
+         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set2) > 0 THEN DO:
+            ASSIGN ttRow.BillCode = lcbillcodes_to_set2.
+         END.
+         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set3) > 0 THEN DO:
+            ASSIGN ttRow.BillCode = lcbillcodes_to_set3.
+         END.
+      END. /* IF lcInvoiceType = "15" THEN DO: */
    END.
    
    /* sales invoice installment handling, YDR-328 */
