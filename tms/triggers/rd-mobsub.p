@@ -1,1 +1,1 @@
-{triggers/hpdwrite_generic.i MobSub MOBSUB Ordercanal MsSeq}
+{triggers/hpddelete_generic.i MobSub MOBSUB Ordercanal MsSeq}
