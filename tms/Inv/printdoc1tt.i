@@ -11,6 +11,7 @@ DEF TEMP-TABLE ttInvoice NO-UNDO
    FIELD PenaltyAmt AS DEC
    FIELD PostPoned       AS LOG
    FIELD InstallmentDiscAmt AS DEC
+   FIELD Q25Phase AS INT INIT 99
    INDEX InvNum IS UNIQUE InvNum
    INDEX ZipCode ZipCode InvNum.
 
