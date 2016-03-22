@@ -1679,7 +1679,8 @@ PROCEDURE pUpdateDSSAccount:
                              bTerMsRequest.ReqCParam1 = "DELETE" AND
                             LOOKUP(STRING(bTerMsRequest.ReqStatus),
                                    {&REQ_INACTIVE_STATUSES} + ",3") = 0 NO-ERROR.
-                  IF NOT AVAIL bTerMsRequest THEN DO:
+                  IF NOT AVAIL bTerMsRequest OR
+                     bTerMsRequest.ActStamp > fMakeTS() THEN DO:
                      RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
                                            INPUT Mobsub.CLI,
                                            INPUT Mobsub.CustNum,
@@ -1917,7 +1918,8 @@ PROCEDURE pUpdateDSSAccount:
                        bTerMsRequest.ReqCParam1 = "DELETE" AND
                       LOOKUP(STRING(bTerMsRequest.ReqStatus),
                              {&REQ_INACTIVE_STATUSES} + ",3") = 0 NO-ERROR.
-            IF NOT AVAIL bTerMsRequest THEN DO:
+            IF NOT AVAIL bTerMsRequest OR
+               bTerMsRequest.ActStamp > fMakeTS() THEN DO:
                RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
                                      INPUT Mobsub.CLI,
                                      INPUT Mobsub.CustNum,
