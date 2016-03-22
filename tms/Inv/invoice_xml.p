@@ -647,6 +647,13 @@ PROCEDURE pInvoice2XML:
          lhXML:WRITE-DATA-ELEMENT("CustomRowType","PostponedPayment").
          lhXML:END-ELEMENT("CustomRow").
       END.
+   
+      IF ttInvoice.q25Phase LT 99 THEN DO:
+         lhXML:START-ELEMENT("CustomRow").
+         lhXML:WRITE-DATA-ELEMENT("CustomRowType",ENTRY(ttInvoice.q25Phase + 1,
+                                  "Q25Month24,Q25Month23,Q25Month22")).
+         lhXML:END-ELEMENT("CustomRow").
+      END.      
 
       /* subscription level */
       RUN pSubInvoice2XML. 
