@@ -529,30 +529,40 @@ FUNCTION fCountIMEIModifications RETURN CHAR
 END.
 
 FUNCTION fGetQ25Extension RETURNS CHAR
-   (iiOrderId AS INT):
+   (iiOrderId AS INT,
+    OUTPUT ocItem AS CHAR):
    DEF BUFFER bOA FOR OrderAction.
    FIND FIRST bOA WHERE
               bOA.Brand EQ gcBrand AND
               bOA.OrderID EQ iiOrderID AND
               bOA.ItemType EQ "Q25Extension" NO-ERROR.
-   IF AVAIL bOA THEN RETURN bOA.ItemKey.
+   IF AVAIL bOA THEN DO:
+      ocItem = bOa.ItemParam. /*itemparam -> singlefee.sourcekey.*/
+      RETURN bOA.ItemKey. 
+   END.
    ELSE RETURN "".
 END.
 
+
+/*key from orderaction*/
 FUNCTION fGetQ25BankByOrder RETURNS CHAR
-   (BUFFER Order FOR Order):
-   DEF BUFFER bMsR FOR MsRequest.
-   FIND FIRST bMsR WHERE
-              bMsR.Brand EQ "1" AND
-              bMsR.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
-              bMsR.CLI EQ Order.CLI AND
-              bMsR.ReqIParam1 EQ Order.OrderID 
-              NO-LOCK NO-ERROR.
-   IF AVAIL bMsR THEN
-      RETURN bMsR.ReqCparam6. /*Bank, not ContractID for this type.*/
-   ELSE RETURN "".
-
+   (BUFFER Order FOR Order,
+    icSourceKey AS CHAR):
+FIND SingleFee USE-INDEX Custnum WHERE
+   SingleFee.Brand = gcBrand AND
+   SingleFee.Custnum = Order.CustNum AND
+   SingleFee.HostTable = "Mobsub" AND
+   SingleFee.KeyValue = STRING(Order.MsSeq) AND
+   SingleFee.SourceTable = "DCCLI" AND
+   SingleFee.SourceKey = icSourceKey AND
+   SingleFee.CalcObj = "RVTERM" NO-LOCK NO-ERROR.
+   IF AVAIL Singlefee THEN DO:
+      RETURN fBankByBillCode(SingleFee.BillCode).
+   END.
+   ELSE
+   RETURN "".
 END.
+
 
 FUNCTION fFindQ25Cancellation RETURNS CHAR
    (BUFFER Order FOR Order,
@@ -646,6 +656,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
    DEF VAR lcBank AS CHAR NO-UNDO.
    DEF VAR lcQ25Extension AS CHAR NO-UNDO.
+   DEF VAR lcItem AS CHAR NO-UNDO.
 
    lcCaseTypeId = "1".
 
@@ -655,9 +666,9 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    IF NOT AVAIL Order THEN
       RETURN "1:Order not available" + STRING(iiOrderId).
    
-   lcq25Extension = fGetQ25Extension(iiOrderId).
-   IF lcQ25Extension NE "" THEN DO:
-      lcBank = fGetQ25BankByOrder(BUFFER Order).
+   lcq25Extension = fGetQ25Extension(iiOrderId, lcItem).
+   IF lcQ25Extension NE "" AND Order.Orderchannel BEGINS "renewal_pos" THEN DO:
+      lcBank = fGetQ25BankByOrder(BUFFER Order, lcItem).
    END.
    lcCaseFileRow =  
    lcCaseTypeID                    + lcDelim + 
