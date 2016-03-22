@@ -352,8 +352,10 @@ PROCEDURE pHandleQueue:
                   IF lcResponseCode EQ "RECH_IDENT" THEN lcSMS = "MNPIdentDirect".
                   ELSE lcSMS = "MNPReject".
                END.
-               ELSE IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 THEN 
-                  IF lcResponseCode EQ "RECH_ICCID" THEN lcSMS = "MNPIccidPOS".
+               ELSE IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 THEN DO:
+                  IF lcResponseCode EQ "AREC ENUME" THEN lcSMS = "MNPEnumePOS".
+                  ELSE IF lcResponseCode EQ "RECH_ICCID" THEN lcSMS = "MNPIccidPOS".
+               END.
 
 
                /* YDR-2147 */
@@ -385,7 +387,13 @@ PROCEDURE pHandleQueue:
                     
                      FIND MNPOperator NO-LOCK WHERE
                           MNPOperator.Brand    = gcBrand         AND
-                          MNPOperator.OperCode = TRIM(lcNewOper) NO-ERROR.
+                          MNPOperator.OperCode = TRIM(lcNewOper) AND
+                          MNPOperator.Active   = TRUE NO-ERROR.
+                     
+                     IF NOT AVAIL MNPOperator THEN 
+                        FIND MNPOperator NO-LOCK WHERE
+                             MNPOperator.Brand    = gcBrand         AND
+                             MNPOperator.OperCode = TRIM(lcNewOper) NO-ERROR.
 
                      IF AVAIL MNPOperator THEN llgMNPOperName = TRUE.
                      ELSE DO:
@@ -414,12 +422,12 @@ PROCEDURE pHandleQueue:
                         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrder).
                         
                         fSetOrderStatus(Order.OrderId,"3").
+                        
+                        lcSMS = "".
                      END.
                      ELSE 
                         fLogError("New Operator code not OK: " + lcNewOper).
                   END.
-                  ELSE 
-                     lcSMS = "MNPEnumePOS".
                END.
                
                IF lcSMS > "" THEN DO:
