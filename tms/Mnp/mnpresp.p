@@ -48,6 +48,7 @@ DEFINE VARIABLE ldeSMSStamp  AS DECIMAL NO-UNDO.
 DEFINE STREAM sNagios.
 
 DEF BUFFER messagebuf for mnpoperation.
+DEF BUFFER bMNPProcess for MNPProcess.
 
 FORM
    SKIP(1)
@@ -192,8 +193,12 @@ PROCEDURE pHandleQueue:
    DEFINE VARIABLE lcPDFFolder AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcCancelProposalRefCode AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcSMS AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE liMNPProCount AS INT NO-UNDO. 
+   DEFINE VARIABLE liRespLength AS INT NO-UNDO. 
+   DEFINE VARIABLE lcNewOper    AS CHAR NO-UNDO. 
+   DEFINE VARIABLE llgMNPOperName  AS LOG NO-UNDO. 
+   DEFINE VARIABLE llgMNPOperBrand AS LOG NO-UNDO. 
 
-   
    FIND MessageBuf WHERE
         RECID(MessageBuf) = pRecId
    EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
@@ -352,6 +357,79 @@ PROCEDURE pHandleQueue:
                   ELSE IF lcResponseCode EQ "RECH_ICCID" THEN lcSMS = "MNPIccidPOS".
                END.
 
+
+               /* YDR-2147 */
+               /* Resend MNP IN request to Nodal Center automatically 
+                  In case received response is WITH rejected case by 
+                  providing new operator code */
+               IF lcResponseCode EQ "AREC ENUME" THEN DO: 
+                  
+                  ASSIGN liMNPProCount   = 0
+                         liRespLength    = 0
+                         lcNewOper       = ""
+                         llgMNPOperName  = FALSE
+                         llgMNPOperBrand = FALSE. 
+                  
+                  /* Need to check Status code validation 
+                     has to be added OR not */
+                  FOR EACH bMNPProcess NO-LOCK WHERE 
+                           bMNPProcess.OrderID    = Order.OrderID  AND
+                           bMNPProcess.MNPType    = {&MNP_TYPE_IN}:
+                     liMNPProCount = liMNPProCount + 1. 
+                  END.         
+
+                  IF liMNPProCount = 1 AND 
+                     lcResponseDesc MATCHES "El MSISDN * no pertenece al operador donante *, pertenece al operador *" THEN DO:
+                     
+                     ASSIGN 
+                        liRespLength   = LENGTH(lcResponseDesc) 
+                        lcNewOper      = SUBSTRING(lcResponseDesc,liRespLength - 2,liRespLength).
+                    
+                     FIND MNPOperator NO-LOCK WHERE
+                          MNPOperator.Brand    = gcBrand         AND
+                          MNPOperator.OperCode = TRIM(lcNewOper) AND
+                          MNPOperator.Active   = TRUE NO-ERROR.
+                     
+                     IF NOT AVAIL MNPOperator THEN 
+                        FIND MNPOperator NO-LOCK WHERE
+                             MNPOperator.Brand    = gcBrand         AND
+                             MNPOperator.OperCode = TRIM(lcNewOper) NO-ERROR.
+
+                     IF AVAIL MNPOperator THEN llgMNPOperName = TRUE.
+                     ELSE DO:
+                        FIND FIRST MNPOperator NO-LOCK WHERE
+                                   MNPOperator.Brand    = gcBrand         AND
+                                   MNPOperator.OperCode = TRIM(lcNewOper) NO-ERROR.
+                        IF AVAIL MNPOperator AND 
+                                 MNPOperator.OperBrand > "" THEN 
+                           llgMNPOperBrand = TRUE.         
+                        ELSE llgMNPOperName = TRUE. 
+                     END.
+
+                     IF AVAIL MNPOperator THEN DO:
+                        IF llDoEvent THEN DO:
+                           DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
+                           lhOrder = BUFFER Order:HANDLE.
+                           RUN StarEventInitialize(lhOrder).
+                           RUN StarEventSetOldBuffer(lhOrder).
+                        END.
+                        
+                        IF llgMNPOperBrand THEN 
+                           Order.CurrOper = MNPOperator.OperBrand. 
+                        ELSE IF llgMNPOperName THEN  
+                           Order.CurrOper = MNPOperator.OperName.        
+
+                        IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrder).
+                        
+                        fSetOrderStatus(Order.OrderId,"3").
+                        
+                        lcSMS = "".
+                     END.
+                     ELSE 
+                        fLogError("New Operator code not OK: " + lcNewOper).
+                  END.
+               END.
+               
                IF lcSMS > "" THEN DO:
                   IF AVAIL OrderCustomer THEN
                      liLang = INT(OrderCustomer.Language) NO-ERROR.
@@ -366,9 +444,11 @@ PROCEDURE pHandleQueue:
                                "800622111",
                                Order.OrderId).
                END.
-
+               
                LEAVE.
+
             END.
+
          END.
          /* YOT-3421 CONF COEST case automatic handling */
          ELSE IF MessageBuf.MessageType =

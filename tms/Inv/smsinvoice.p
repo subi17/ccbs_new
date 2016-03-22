@@ -129,16 +129,15 @@ FOR EACH Invoice WHERE
       liPauseTime = liTime2Pause - (liStopTime - liStartTime).
       IF liPauseTime > liTime2Pause THEN liPauseTime = liTime2Pause.       
       
-      /* If is too late, schedule to start next morning */
-      IF (lNowSeconds > lEndSeconds) THEN
+      /* If is too late (or early after midnight), create message now 
+         but assing sending time later according to pause time */
+      IF (lNowSeconds > lEndSeconds) OR (lNowSeconds < lIniSeconds) THEN
       DO:
-         liPauseTime = ({&MIDNIGHT-SECONDS} - lNowSeconds) + lIniSeconds.
-      END.
-      ELSE
-      /* If is too early, schedule to start when window opens */
-      IF (lNowSeconds < lIniSeconds) THEN
-      DO:
-         liPauseTime = lIniSeconds - lNowSeconds.
+         lIniSeconds = lIniSeconds + liPauseTime.
+         IF lIniSeconds >= lEndSeconds THEN
+         ASSIGN /* 9:00-22:00 */
+            lIniSeconds = 32400
+            lEndSeconds = 86399.
       END.
       
       PAUSE liPauseTime NO-MESSAGE.
