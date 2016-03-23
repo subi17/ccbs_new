@@ -878,6 +878,8 @@ PROCEDURE pGetSubInvoiceHeaderData:
                        bttrow.RowCode BEGINS "33" AND
                        bttRow.SubInvNum = SubInvoice.SubInvNum AND
                        bttRow.RowBillCode NE ttRow.RowBillCode AND
+                       LOOKUP(bttRow.RowBillCode, 
+                              {&TF_BANK_RVTERM_BILLCODES} + ",RVTERMF") GT 0 AND
                        bttrow.rowamt EQ (ttrow.rowamt * -1) NO-ERROR.
             IF AVAIL bttRow THEN DO:
                DELETE bttRow.
