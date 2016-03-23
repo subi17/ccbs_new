@@ -7,10 +7,11 @@
   CHANGED ......: 
   Version ......: yoigo
   ---------------------------------------------------------------------- */
-{commali.i}
-{dftimetable.i}
+{Syst/commali.i}
+{Syst/dftimetable_event.i}
 
-DEF INPUT PARAMETER irTimeTable AS RECID NO-UNDO.
+DEF INPUT PARAMETER iRowID           AS ROWID NO-UNDO.
+DEF INPUT PARAMETER ilOnlyOnWorkDays AS LOG   NO-UNDO.
 
 DEF VAR xrecid       AS RECID                           init ?.
 DEF VAR FIRSTrow     AS INT                    NO-UNDO  init 0.
@@ -34,15 +35,6 @@ DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
 DEF VAR lcWeekDay AS CHAR NO-UNDO.
 DEF VAR lcTime    AS CHAR NO-UNDO.
 DEF VAR lcDays    AS CHAR NO-UNDO.
-DEF VAR ldaEndDate  AS DATE NO-UNDO.
-DEF VAR ldaFromDate AS DATE NO-UNDO. 
-
-DEF TEMP-TABLE ttEvent NO-UNDO
-   FIELD EventDate AS DATE
-   FIELD EventDay  AS INT
-   FIELD EventTime AS INT
-   INDEX EventDate EventDate EventDay EventTime.
-   
 
 form
     ttEvent.EventDate FORMAT "99-99-99" COLUMN-LABEL "Date"
@@ -52,34 +44,16 @@ form
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
     COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "  TIMETABLE  "  FRAME sel.
 
+fDoEventListForOne(TODAY,
+                   TIME,
+                   ADD-INTERVAL(TODAY, 2,"months"),
+                   iRowID,
+                   ilOnlyOnWorkDays).
 
-FIND DFTimeTable WHERE RECID(DFTimeTable) = irTimeTable NO-LOCK NO-ERROR.
-IF NOT AVAILABLE DFTimeTable THEN RETURN "ERROR:Unknown timetable".
-
-
-ASSIGN 
-   ldaEndDate =  ADD-INTERVAL(TODAY, 2,"months")
-   ldaFromDate = TODAY.
-
-fAnalyseTimeTable(ldaFromDate,ldaEndDate).
-
-FOR EACH ttDays,
-    EACH ttTimes:
-
-   CREATE ttEvent.
-    
-   IF ttDays.MonthDay NE ? THEN ASSIGN
-      ttEvent.EventDate = ttDays.MonthDay
-      ttEvent.EventDay  = WEEKDAY(ttDays.MonthDay).
-
-   ttEvent.EventTime = ttTimes.DumpTime.
-END.    
-
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". run Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 lcDays = "Sun,Mon,Tues,Wednes,Thurs,Fri,Satur".
-
 
 RUN local-find-first.
 
@@ -150,13 +124,13 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttEvent.EventDay ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttEvent.EventDay {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttEvent.EventDay WITH FRAME sel.
       END.
 

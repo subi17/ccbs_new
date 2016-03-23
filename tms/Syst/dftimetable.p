@@ -731,7 +731,8 @@ PROCEDURE local-UPDATE-record:
       END.
          
       ELSE IF toimi = 3 THEN DO:
-         RUN dftimetable_sim (RECID(DFTimeTable)).
+         RUN Syst/dftimetable_sim.p(ROWID(DFTimeTable),
+                                    FALSE).
       END.
       
       ELSE IF toimi = 8 THEN LEAVE.

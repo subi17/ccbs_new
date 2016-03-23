@@ -18,8 +18,7 @@ ASSIGN
    gcBrand = "1".
 {eventval.i}
 {create_eventlog.i}
-{timestamp.i}
-{scheduled_dumps.i}
+{Syst/dftimetable_event.i}
 
 
 DEF VAR ldeDumpTime AS DECIMAL NO-UNDO. 
@@ -46,12 +45,14 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 resp_array = add_array(response_toplevel_id, "").
 
-fSplitTS(fmakeTS(),ldate,litime).
-/* Search by ID */
-fDumpEventList(TODAY + 62,TODAY, liDumpId).
+fDoEventList(TODAY,
+             TIME,
+             TODAY + 62,
+             liDumpId,
+             "TMS,TRACK,Cassandra,HPD",
+             NO).
+
 FOR EACH ttEvent NO-LOCK:
-   IF ttEvent.EventDate = ldate AND
-      ttEvent.EventTime < litime THEN NEXT.
    RUN pAddResultsArray.
 END.
 

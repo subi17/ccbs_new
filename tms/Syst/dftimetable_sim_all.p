@@ -8,7 +8,7 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 {commali.i}
-{scheduled_dumps.i}
+{Syst/dftimetable_event.i}
 
 DEF VAR xrecid       AS RECID                           init ?.
 DEF VAR FIRSTrow     AS INT                    NO-UNDO  init 0.
@@ -57,7 +57,12 @@ ASSIGN
    ldaEndDate =  ADD-INTERVAL(TODAY, 2,"months")
    ldaFromDate = TODAY.
 
-fDumpEventList(ldaEndDate, ldaFromDate, liAllDumpIds).
+fDoEventList(TODAY,
+             TIME,
+             ADD-INTERVAL(TODAY, 2,"months"),
+             liAllDumpIds,
+             "",
+             NO).
 
 RUN local-find-first.
 
