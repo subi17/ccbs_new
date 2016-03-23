@@ -32,7 +32,7 @@ CLASS HPD.InvRowDump FINAL INHERITS DumpHandler:
          WHEN "InvRowKey"
          THEN IF ilCheckOnly
               THEN RETURN "OK".            
-              ELSE RETURN {HPD/keyvalue.i lhMainTable :: objDumpBase:lcKeyDelimiter InvNum SubInvNum InvRowNum}. 
+              ELSE RETURN {HPD/keyvalue.i lbInvRow . objDumpBase:lcKeyDelimiter InvNum SubInvNum InvRowNum}.
          WHEN "Amt"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
