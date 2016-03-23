@@ -598,6 +598,9 @@ PROCEDURE pGetSubInvoiceHeaderData:
    DEF VAR llDeletettRow      AS LOG  NO-UNDO.
    DEF VAR liRowOrder         AS INT  NO-UNDO.
    DEF VAR liQ25Phase         AS INT  NO-UNDO.
+   DEF VAR lcRecIdList        AS CHAR NO-UNDO.
+   DEF VAR ldTempDiscountAmt  AS DEC  NO-UNDO.
+   DEF VAR liLoop             AS INT  NO-UNDO.
 
    DEF BUFFER UserCustomer    FOR Customer.
    DEF BUFFER bServiceLimit   FOR ServiceLimit.
@@ -856,6 +859,43 @@ PROCEDURE pGetSubInvoiceHeaderData:
          llRVFinancedByBank = FALSE.
 
       /* is call itemization printed */
+         
+      /* if Q25 discounts exist, these and original q25 fee are not 
+         needed to print */
+      FIND FIRST ttRow WHERE
+                 ttRow.SubInvNum = SubInvoice.SubInvNum AND
+                 ttRow.RowCode BEGINS "33" AND
+                 ttRow.rowbillcode EQ "RVTERMDTEQ25" NO-LOCK NO-ERROR.
+     
+      IF AVAIL ttRow THEN DO:
+         ASSIGN 
+            lcRecidList = ""         
+            ldTempDiscountAmt = ttrow.rowamt.
+         DO liLoop = 1 TO NUM-ENTRIES({&Q25_RVTERM_RENEWAL_DISCOUNTS}):
+            FIND FIRST ttRow WHERE
+                       ttRow.SubInvNum = SubInvoice.SubInvNum AND
+                       ttRow.RowCode BEGINS "33" AND
+                       ttRow.rowbillcode EQ ENTRY(liLoop, 
+                                            {&Q25_RVTERM_RENEWAL_DISCOUNTS})
+                       NO-LOCK NO-ERROR. 
+            IF AVAIL ttRow THEN 
+               ASSIGN 
+                  ldTempDiscountAmt = ldTempDiscountAmt + ttrow.rowamt
+                  lcRecidList = lcRecidList + "," + STRING(RECID(ttRow)).
+         END.
+         FOR EACH bttRow NO-LOCK WHERE
+                  bttrow.RowCode BEGINS "33" AND
+                  bttRow.SubInvNum = SubInvoice.SubInvNum AND
+                  LOOKUP(bttRow.RowBillCode, 
+                     {&TF_BANK_RVTERM_BILLCODES} + ",RVTERMF") GT 0 AND
+                  bttRow.rowamt EQ ldTempDiscountAmt * -1:
+            DELETE bttRow.
+            lcRecidList = LEFT-TRIM(lcRecidList,",").
+            /* remove also discounts based on stored RECIDs */
+            
+            NEXT.
+         END.         
+      END.
       ttSub.CallSpec = fCallSpecDuring(SubInvoice.MsSeq,Invoice.InvDate).
 
       /* ttRows contains combined invrows => no need to check duplicates */
@@ -870,23 +910,6 @@ PROCEDURE pGetSubInvoiceHeaderData:
                   
          IF NOT (ttRow.RowBillCode BEGINS "PAYTERM" OR
                  ttRow.RowBillCode BEGINS "RVTERM") THEN NEXT.
-         /* if Q25 discounts exist, these and original q25 fee are not 
-            needed to print */
-         IF ttRow.RowBillCode EQ "RVTERMDTEQ25" OR
-            ttRow.RowBillCode EQ "RVTERMDTTD" THEN DO:
-            FIND FIRST bttRow NO-LOCK WHERE
-                       bttrow.RowCode BEGINS "33" AND
-                       bttRow.SubInvNum = SubInvoice.SubInvNum AND
-                       bttRow.RowBillCode NE ttRow.RowBillCode AND
-                       LOOKUP(bttRow.RowBillCode, 
-                              {&TF_BANK_RVTERM_BILLCODES} + ",RVTERMF") GT 0 AND
-                       bttrow.rowamt EQ (ttrow.rowamt * -1) NO-ERROR.
-            IF AVAIL bttRow THEN DO:
-               DELETE bttRow.
-               DELETE ttRow.
-               NEXT.
-            END.
-         END.
          ASSIGN
             ttSub.InstallmentAmt = ttSub.InstallmentAmt + ttRow.RowAmt.
 
