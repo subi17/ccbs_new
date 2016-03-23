@@ -61,7 +61,7 @@ CLASS Class.nagios:
          IF lcMonitorDir = ? THEN lcMonitorDir = "/tmp".
       END.
 
-      classTD = NEW timedate().
+      classTD = NEW Class.timedate().
 
    END CONSTRUCTOR.
 
