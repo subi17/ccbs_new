@@ -898,7 +898,6 @@ PROCEDURE pGetSubInvoiceHeaderData:
                IF AVAIL ttRow THEN 
                   DELETE ttRow.
             END.
-            NEXT.
          END.         
       END.
       ttSub.CallSpec = fCallSpecDuring(SubInvoice.MsSeq,Invoice.InvDate).
