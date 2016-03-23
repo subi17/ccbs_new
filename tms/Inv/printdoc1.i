@@ -893,7 +893,8 @@ PROCEDURE pGetSubInvoiceHeaderData:
             lcRecidList = LEFT-TRIM(lcRecidList,",").
             /* remove also discounts based on stored RECIDs */
             DO liLoop = 1 to NUM-ENTRIES(lcRecidList):
-               FIND ttRow WHERE RECID(ttRow) EQ INT(ENTRY(liLoop,lcRecidList)).
+               FIND ttRow WHERE RECID(ttRow) EQ INT(ENTRY(liLoop,lcRecidList))
+                  NO-LOCK NO-ERROR.
                IF AVAIL ttRow THEN 
                   DELETE ttRow.
             END.
