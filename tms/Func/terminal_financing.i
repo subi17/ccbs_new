@@ -218,8 +218,19 @@ FUNCTION fGetPaytermOrderId RETURNS INT
          END.
          ELSE RETURN 0.
       END.
+
+      WHEN {&REQUEST_SOURCE_NEWTON} THEN DO:
+         IF MsRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} AND
+            MsRequest.ReqIParam1 > 0 THEN DO:
+            FIND FIRST Order NO-LOCK WHERE
+                       Order.Brand = gcBrand AND
+                       Order.OrderId = MsRequest.ReqIParam1 NO-ERROR.
+            IF AVAILABLE Order THEN RETURN Order.OrderId.
+         END.
+         RETURN 0.
+      END.
       /*  not originating from order */
-      OTHERWISE RETURN -1. /*  WHEN "4" OR WHEN "5" OR WHEN "6" */ 
+      OTHERWISE RETURN -1. /*  WHEN "4" OR WHEN "5" */ 
       
    END CASE.
 
