@@ -3,9 +3,9 @@ USING HPD.GenericDump.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
-CLASS HPD.DMSDocDump FINAL INHERITS GenericDump:
+CLASS HPD.DMSDump FINAL INHERITS GenericDump:
   
-   CONSTRUCTOR PUBLIC DMSDocDump
+   CONSTRUCTOR PUBLIC DMSDump
       (iiDumpID AS INTEGER):
                
       SUPER(iiDumpID).
@@ -13,7 +13,7 @@ CLASS HPD.DMSDocDump FINAL INHERITS GenericDump:
    END CONSTRUCTOR.
 
    
-   CONSTRUCTOR PUBLIC DMSDocDump
+   CONSTRUCTOR PUBLIC DMSDump
       (iiDumpID    AS INTEGER,
        icFile      AS CHARACTER):
       
@@ -27,10 +27,6 @@ CLASS HPD.DMSDocDump FINAL INHERITS GenericDump:
        ilCheckOnly AS LOGICAL):
    
       CASE icField:
-         WHEN "KeyValue"
-         THEN IF ilCheckOnly
-              THEN RETURN "OK".
-              ELSE RETURN {HPD/keyvalue.i lhMainTable :: objDumpBase:lcKeyDelimiter DMSID DocTypeID DocStatusTS}.
          WHEN "DMSStatusTS"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
