@@ -46,7 +46,7 @@ FUNCTION fDumpEventList RETURNS LOG
     INPUT ldaFromDate AS DATE,
     INPUT dumpId AS INT).
 
-   DEF VAR lcOmittedDumps AS CHAR NO-UNDO INIT "TMS,TRACK,Cassandra".
+   DEF VAR lcOmittedDumps AS CHAR NO-UNDO INIT "TMS,TRACK,Cassandra,HPD".
    /* Make ttEvent for only certain DumpID */
    IF dumpId = 0 THEN DO:
       FOR EACH DFTimeTable NO-LOCK,
