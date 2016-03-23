@@ -1,10 +1,10 @@
 
-CLASS Nagios:
+CLASS Class.nagios:
 
    DEFINE VARIABLE lcOperator AS CHARACTER     NO-UNDO.
    DEFINE VARIABLE lcServer   AS CHARACTER     NO-UNDO.
    DEFINE VARIABLE liOffSet   AS INTEGER       NO-UNDO.
-   DEFINE VARIABLE classTD    AS timedate      NO-UNDO.
+   DEFINE VARIABLE classTD    AS CLASS Class.timedate      NO-UNDO.
    DEFINE VARIABLE lcURL      AS CHARACTER     NO-UNDO.
    /* SER-8026 change */
    DEF VAR lcMonitorMethod AS CHAR NO-UNDO.
