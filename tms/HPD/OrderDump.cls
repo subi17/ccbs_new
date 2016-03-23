@@ -94,7 +94,7 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
          WHEN "TermLeasAmt"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE RETURN STRING(ldeTermLeasAmt,"->>>>>>>>>>>>>>>>>>>>>>9.9<<<<<<<<<").
+              ELSE RETURN TRIM(STRING(ldeTermLeasAmt,"->>>>>>>>>>>>>>>>>>>>>>9.9<<<<<<<<<")).
          WHEN "OnlySimAmt"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
