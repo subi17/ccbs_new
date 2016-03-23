@@ -715,13 +715,13 @@ FUNCTION getQ25phase RETURNS INT
                                                         liLoop, 'months':U)).
       FOR EACH SingleFee USE-INDEX BillCode WHERE
                SingleFee.Brand       EQ gcBrand AND
-               SingleFee.Billcode    BEGINS "RVTERM" AND
                SingleFee.CustNum     EQ iiCustNum AND
                SingleFee.HostTable   EQ "Mobsub" AND
+               SingleFee.Keyvalue    EQ STRING(iimsseq) AND
+               SingleFee.BillPeriod  EQ liPeriod AND
                SingleFee.SourceTable EQ "DCCLI" AND
                SingleFee.CalcObj     EQ "RVTERM" AND
-               SingleFee.Keyvalue    EQ STRING(iimsseq) AND
-               SingleFee.BillPeriod  EQ liPeriod NO-LOCK:
+               SingleFee.Billcode    BEGINS "RVTERM" NO-LOCK:
          IF SingleFee.OrderId <= 0 THEN NEXT.
          ASSIGN
             liPhase = liLoop
