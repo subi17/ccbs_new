@@ -48,7 +48,7 @@ CLASS HPD.SubSerDump FINAL INHERITS DumpHandler:
          WHEN "KeyValue"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE RETURN {HPD/keyvalue.i lbSubSer :: objDumpBase:lcKeyDelimiter MsSeq ServCom SSDate}.
+              ELSE RETURN {HPD/keyvalue.i lbSubSer . objDumpBase:lcKeyDelimiter MsSeq ServCom SSDate}.
          OTHERWISE RETURN "".         
       END CASE.
 
