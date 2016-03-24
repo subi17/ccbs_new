@@ -36,7 +36,7 @@ THEN RETURN.
 
 IF NOT NEW(MServiceLimit) AND
    (MServiceLimit.MsSeq   <> oldMServiceLimit.MsSeq OR
-    MServiceLimit.SlSeq   <> oldMServiceLimit.SlSeq
+    MServiceLimit.SlSeq   <> oldMServiceLimit.SlSeq OR
     MServiceLimit.CustNum <> oldMServiceLimit.CustNum)
 THEN llWasOnHPD = fCheckHPDStatus(oldMServiceLimit.MsSeq,
                                   oldMServiceLimit.SlSeq,

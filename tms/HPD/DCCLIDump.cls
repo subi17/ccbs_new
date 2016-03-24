@@ -61,7 +61,7 @@ CLASS HPD.DCCLIDump FINAL INHERITS DumpHandler:
 
       DEFINE VARIABLE ldaFromDate AS DATE NO-UNDO.
       
-      ldeFromDate = DATE(MONTH(TODAY),1,YEAR(TODAY)).   
+      ldaFromDate = DATE(MONTH(TODAY),1,YEAR(TODAY)).   
 
       FOR
          EACH MobSub FIELDS (MsSeq) NO-LOCK,
@@ -70,7 +70,7 @@ CLASS HPD.DCCLIDump FINAL INHERITS DumpHandler:
          ON QUIT UNDO, RETRY
          ON STOP UNDO, RETRY:
 
-         IF lbDCCLI.ValidTo < ldeFromDate
+         IF lbDCCLI.ValidTo < ldaFromDate
          THEN NEXT.
 
          liEvents = liEvents + 1.

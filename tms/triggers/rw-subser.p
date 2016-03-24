@@ -22,7 +22,7 @@ END.
 
 llMobSubIsAvailable = fCheckMobSub(SubSer.MsSeq).
 
-IF NEW(SubSer) AND llMobIsSubAvailable = FALSE
+IF NEW(SubSer) AND llMobSubIsAvailable = FALSE
 THEN RETURN.
 
 IF (NOT NEW(SubSer)) AND SubSer.MsSeq <> oldSubSer.MsSeq
