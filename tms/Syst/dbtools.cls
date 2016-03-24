@@ -1,4 +1,4 @@
-CLASS Syst.DbTools:
+CLASS Syst.dbtools:
 
    METHOD PUBLIC CHARACTER FindDB
      (INPUT pcFileName AS CHARACTER):
