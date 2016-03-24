@@ -4,32 +4,7 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF MServiceLPool OLD BUFFER oldMServiceL
 
 &IF {&MSERVICELPOOL_WRITE_TRIGGER_ACTIVE} &THEN
 
-DEFINE VARIABLE llMobSubIsAvailable AS LOGICAL INITIAL FALSE NO-UNDO.
-DEFINE VARIABLE llMobSubWasAvailable AS LOGICAL INITIAL FALSE NO-UNDO.
-
-FUNCTION fCheckMobSub RETURNS LOGICAL
-   (iiMsSeq AS INTEGER):
-
-   FOR FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
-      MobSub.MsSeq = iiMsSeq:
-      RETURN TRUE.
-   END.
-
-   RETURN FALSE.
-
-END.
-
-llMobSubIsAvailable = fCheckMobSub(MServiceLPool.MsSeq).
-
-IF NEW(MServiceLPool) AND llMobSubIsAvailable = FALSE
-THEN RETURN.
-
-IF (NOT NEW(MServiceLPool)) AND MServiceLPool.MsSeq <> oldMServiceLPool.MsSeq
-THEN llMobSubWasAvailable = fCheckMobSub(oldMServiceLPool.MsSeq).
-ELSE llMobSubWasAvailable = llMobSubIsAvailable.
-
-IF llMobSubIsAvailable = FALSE AND llMobSubWasAvailable = FALSE
-THEN RETURN.
+{triggers/check_mobsub.i MServiceLPool MsSeq}
 
 DEFINE BUFFER lbMServiceLPool FOR MServiceLPool.
 

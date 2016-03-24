@@ -5,36 +5,24 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF SubSer OLD BUFFER oldSubSer.
 
 &IF {&SUBSER_WRITE_TRIGGER_ACTIVE} &THEN
 
-DEFINE VARIABLE llMobSubIsAvailable AS LOGICAL INITIAL FALSE NO-UNDO.
-DEFINE VARIABLE llMobSubWasAvailable AS LOGICAL INITIAL FALSE NO-UNDO.
+{triggers/check_mobsub.i SubSer MsSeq}
 
-FUNCTION fCheckMobSub RETURNS LOGICAL
-   (iiMsSeq AS INTEGER):
+DEFINE VARIABLE llIsHPDService  AS LOGICAL INITIAL FALSE NO-UNDO.
+DEFINE VARIABLE llWasHPDService AS LOGICAL INITIAL FALSE NO-UNDO.
 
-   FOR FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
-      MobSub.MsSeq = iiMsSeq:
-      RETURN TRUE.
-   END.
-
-   RETURN FALSE.
-
-END.
-
-llMobSubIsAvailable = fCheckMobSub(SubSer.MsSeq).
-
-IF NEW(SubSer) AND llMobSubIsAvailable = FALSE
-THEN RETURN.
-
-IF (NOT NEW(SubSer)) AND SubSer.MsSeq <> oldSubSer.MsSeq
-THEN llMobSubWasAvailable = fCheckMobSub(oldSubSer.MsSeq).
-ELSE llMobSubWasAvailable = llMobSubIsAvailable.
-
-IF llMobSubIsAvailable = FALSE AND llMobSubWasAvailable = FALSE
-THEN RETURN.
+IF LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) > 0
+THEN llIsHPDService = TRUE.
 
 /* If this is a new SubSer and SubSer servcom is not hpd service,
    we won't send the information */ 
-IF NEW(SubSer) AND LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) = 0
+IF NEW(SubSer) AND llIsHPDService = FALSE
+THEN RETURN.
+
+IF NOT NEW(SubSer) AND oldSubSer.ServCom <> SubSer.ServCom
+THEN llWasHPDService = LOOKUP(oldSubSer.ServCom,{&HPD_SERVICES}) > 0.
+ELSE llWasHPDService = llIsHPDService.
+
+IF llWasHPDService = FALSE AND llIsHPDService = FALSE
 THEN RETURN.
 
 DEFINE BUFFER lbSubSer FOR SubSer.
@@ -53,10 +41,10 @@ CREATE Mobile.RepLog.
 ASSIGN
    Mobile.RepLog.TableName = "SubSer"
    Mobile.RepLog.EventType = (IF NEW(SubSer)
-                               THEN "CREATE"
-                               ELSE IF LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) = 0 OR (llMobSubWasAvailable AND llMobSubIsAvailable = FALSE)
-                               THEN "DELETE"
-                               ELSE "MODIFY")
+                              THEN "CREATE"
+                              ELSE IF llWasHPDService AND llMobSubWasAvailable AND (llIsHPDService = FALSE OR llMobSubIsAvailable = FALSE)
+                              THEN "DELETE"
+                              ELSE "MODIFY")
    Mobile.RepLog.EventTime = NOW
    .
 
