@@ -8,6 +8,18 @@ TRIGGER PROCEDURE FOR REPLICATION-DELETE OF SubSer.
 IF NEW SubSer
 THEN RETURN.
 
+DEFINE BUFFER lbSubSer FOR SubSer.
+
+/* We will send only the newest one */
+FOR
+   FIRST lbSubSer FIELDS (MsSeq ServCom SSDate) NO-LOCK USE-INDEX ServCom WHERE
+      lbSubSer.MsSeq   = SubSer.MsSeq  AND
+      lbSubSer.ServCom = SubSer.ServCom:
+
+   IF lbSubSer.SSDate > SubSer.SSDate
+   THEN RETURN.
+END.
+
 IF LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) = 0
 THEN RETURN.
 

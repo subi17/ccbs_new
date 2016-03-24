@@ -9,15 +9,13 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS HPD.SubSerDump FINAL INHERITS DumpHandler:
 
-   DEFINE PRIVATE BUFFER lbSubSer     FOR SubSer.
+   DEFINE PRIVATE BUFFER lbSubSer FOR SubSer.
   
    CONSTRUCTOR PUBLIC SubSerDump
       (iiDumpID AS INTEGER):
                
-      lhMainTable = BUFFER lbSubSer:HANDLE.
-      
       objDumpBase = NEW DumpBase(iiDumpID, THIS-OBJECT).      
-      objDumpBase:mUseTable(lhMainTable).
+      objDumpBase:mUseTable(BUFFER lbSubSer:HANDLE).
       objDumpBase:mVerifyDumpFileData().
       
    END CONSTRUCTOR.
@@ -55,33 +53,70 @@ CLASS HPD.SubSerDump FINAL INHERITS DumpHandler:
    END METHOD.
 
 
+   METHOD OVERRIDE PUBLIC CHARACTER mProcessRepLog
+      (INPUT icRowID AS CHARACTER):
+
+      FIND lbSubSer NO-LOCK WHERE
+         ROWID(lbSubSer) = TO-ROWID(icRowID)
+      NO-ERROR.
+
+      IF AVAILABLE lbSubSer
+      THEN
+      FOR
+         FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
+            MobSub.MsSeq = lbSubSer.MsSeq:
+         RETURN objDumpBase:mGetData().
+      END.
+
+      RETURN "".
+
+   END METHOD.
+
+
    METHOD PRIVATE VOID mProcessFullDump
       (INPUT objDumpFile AS CLASS DumpFile):
-   
-      FOR EACH lbSubSer NO-LOCK
-         ON QUIT UNDO, RETRY
-         ON STOP UNDO, RETRY:
-   
-         IF RETRY THEN DO:
-            llInterrupted = TRUE.
-            LEAVE.
-         END.            
 
-         IF LOOKUP(lbSubSer.ServCom,{&HPD_SERVICES}) = 0
-         THEN NEXT.
-            
-         liEvents = liEvents + 1.
+      DEFINE VARIABLE lcServComs   AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE lcServCom    AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE liNumEntries AS INTEGER   NO-UNDO.
 
-         objDumpFile:mWriteALine().
+      ASSIGN
+         lcServComs = {&HPD_SERVICES}
+         liNumEntries = NUM-ENTRIES(lcServComs).
+
+      FOR
+         EACH MobSub FIELDS (MsSeq) NO-LOCK:
+
+         DO liCount = 1 TO liNumEntries:
+
+            lcServCom = ENTRY(liCount,lcServComs).
+
+            FOR
+               FIRST lbSubSer NO-LOCK WHERE
+                  lbSubSer.MsSeq   = MobSub.MsSeq AND
+                  lbSubSer.ServCom = lcServCom
+               ON QUIT UNDO, RETRY
+               ON STOP UNDO, RETRY:
+   
+               IF RETRY THEN DO:
+                  llInterrupted = TRUE.
+                  LEAVE.
+               END.
+
+               liEvents = liEvents + 1.
+
+               objDumpFile:mWriteALine().
          
-         IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN 
-         DO:
-            PAUSE 0.
-            DISPLAY liEvents LABEL "SubSer Counter" 
-               WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
-               TITLE " Collecting " FRAME fQty.
-         END.         
-   
+               IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN
+               DO:
+                  PAUSE 0.
+                  DISPLAY liEvents LABEL "SubSer Counter"
+                     WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
+                     TITLE " Collecting " FRAME fQty.
+               END.
+            END.
+         END.
+
       END.
       
       IF NOT SESSION:BATCH THEN 

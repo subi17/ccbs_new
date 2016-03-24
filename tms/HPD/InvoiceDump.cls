@@ -89,6 +89,13 @@ CLASS HPD.InvoiceDump FINAL INHERITS InvoiceCommon:
          THEN IF ilCheckOnly
               THEN RETURN "OK".            
               ELSE RETURN {HPD/keyvalue.i lbInvRow . objDumpInvRow:lcKeyDelimiter InvNum SubInvNum InvRowNum}. 
+         /* Because HPD has integer format, we can't use decimal
+            and need to convert to integer.
+            This is a bad solution and we should use decimal. */
+         WHEN "Qty"
+         THEN IF ilCheckOnly
+              THEN RETURN "OK".
+              ELSE RETURN STRING(INTEGER(lbInvRow.Qty)).
          WHEN "Amt"
          THEN IF ilCheckOnly
               THEN RETURN "OK".

@@ -5,17 +5,36 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF SubSer OLD BUFFER oldSubSer.
 
 &IF {&SUBSER_WRITE_TRIGGER_ACTIVE} &THEN
 
+DEFINE VARIABLE llMobSubAvailable AS LOGICAL INITIAL FALSE NO-UNDO.
+
+FOR FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
+   MobSub.MsSeq = SubSer.MsSeq:
+   llMobSubAvailable = TRUE.
+END.
+
 /* If this is a new SubSer and SubSer servcom is not hpd service,
    we won't send the information */ 
-IF NEW(SubSer) AND LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) = 0
+IF NEW(SubSer) AND ( LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) = 0 OR llMobSubAvailable = FALSE )
 THEN RETURN.
+
+DEFINE BUFFER lbSubSer FOR SubSer.
+
+/* We will send only the newest one */
+FOR
+   FIRST lbSubSer FIELDS (MsSeq ServCom SSDate) NO-LOCK USE-INDEX ServCom WHERE
+      lbSubSer.MsSeq   = SubSer.MsSeq  AND
+      lbSubSer.ServCom = SubSer.ServCom:
+
+   IF lbSubSer.SSDate > SubSer.SSDate
+   THEN RETURN.
+END.
 
 CREATE Mobile.RepLog.
 ASSIGN
    Mobile.RepLog.TableName = "SubSer"
    Mobile.RepLog.EventType = (IF NEW(SubSer)
                                THEN "CREATE"
-                               ELSE IF LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) = 0
+                               ELSE IF LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) = 0 OR llMobSubAvailable = FALSE
                                THEN "DELETE"
                                ELSE "MODIFY")
    Mobile.RepLog.EventTime = NOW
