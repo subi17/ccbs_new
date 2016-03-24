@@ -82,7 +82,7 @@ CLASS HPD.MServiceLimitDump FINAL INHERITS DumpHandler:
 
       DEFINE VARIABLE ldeEndStamp AS DECIMAL NO-UNDO.
       
-      ldeEndStamp = YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + 1.   
+      ldeEndStamp = YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + 1.
    
       FOR
          EACH lbMServiceLimit NO-LOCK
