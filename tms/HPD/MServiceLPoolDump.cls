@@ -76,7 +76,7 @@ CLASS HPD.MServiceLPoolDump FINAL INHERITS DumpHandler:
 
       DEFINE VARIABLE ldeEndStamp AS DECIMAL NO-UNDO.
       
-      ldeEndStamp = YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + DAY(TODAY).  
+      ldeEndStamp = YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + 1.
 
       /* We will dump only the newest ones */
       FOR
