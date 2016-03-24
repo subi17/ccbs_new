@@ -4,14 +4,31 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF MServiceLPool OLD BUFFER oldMServiceL
 
 &IF {&MSERVICELPOOL_WRITE_TRIGGER_ACTIVE} &THEN
 
-DEFINE VARIABLE llMobSubAvailable AS LOGICAL INITIAL FALSE NO-UNDO.
+DEFINE VARIABLE llMobSubIsAvailable AS LOGICAL INITIAL FALSE NO-UNDO.
+DEFINE VARIABLE llMobSubWasAvailable AS LOGICAL INITIAL FALSE NO-UNDO.
 
-FOR FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
-   MobSub.MsSeq = MServiceLPool.MsSeq:
-   llMobSubAvailable = TRUE.
+FUNCTION fCheckMobSub RETURNS LOGICAL
+   (iiMsSeq AS INTEGER):
+
+   FOR FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
+      MobSub.MsSeq = iiMsSeq:
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
 END.
 
-IF NEW(MServiceLPool) AND llMobSubAvailable = FALSE
+llMobSubIsAvailable = fCheckMobSub(MServiceLPool.MsSeq).
+
+IF NEW(MServiceLPool) AND llMobIsSubAvailable = FALSE
+THEN RETURN.
+
+IF (NOT NEW(MServiceLPool)) AND MServiceLPool.MsSeq <> oldMServiceLPool.MsSeq
+THEN llMobSubWasAvailable = fCheckMobSub(oldMServiceLPool.MsSeq).
+ELSE llMobSubWasAvailable = llMobSubIsAvailable.
+
+IF llMobSubIsAvailable = FALSE AND llMobSubWasAvailable = FALSE
 THEN RETURN.
 
 DEFINE BUFFER lbMServiceLPool FOR MServiceLPool.
@@ -31,7 +48,7 @@ ASSIGN
    Common.RepLog.TableName = "MServiceLPool"
    Common.RepLog.EventType = (IF NEW(MServiceLPool)
                               THEN "CREATE"
-                              ELSE IF llMobSubAvailable = FALSE
+                              ELSE IF llMobSubWasAvailable AND llMobIsSubAvailable = FALSE
                               THEN "DELETE"
                               ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
