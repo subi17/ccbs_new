@@ -1,5 +1,3 @@
-{triggers/hpdwrite_generic.i DCCLI DCCLI Mobile PerContractID}
-
 TRIGGER PROCEDURE FOR REPLICATION-WRITE OF DCCLI OLD BUFFER oldDCCLI.
 
 {HPD/HPDConst.i}

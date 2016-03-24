@@ -21,7 +21,7 @@ END.
 
 llMobSubIsAvailable = fCheckMobSub(MServiceLPool.MsSeq).
 
-IF NEW(MServiceLPool) AND llMobIsSubAvailable = FALSE
+IF NEW(MServiceLPool) AND llMobSubIsAvailable = FALSE
 THEN RETURN.
 
 IF (NOT NEW(MServiceLPool)) AND MServiceLPool.MsSeq <> oldMServiceLPool.MsSeq
