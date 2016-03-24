@@ -135,8 +135,11 @@ FOR EACH DumpFile NO-LOCK WHERE
             DFTimeTable.FromDate <= ldaDumpDate:
         
       IF DFTimeTable.UseReplica NE llReplica THEN NEXT.
-      
-      fAnalyseTimeTable(TODAY - 30,TODAY).
+
+      IF CAN-FIND(FIRST ttDump WHERE 
+                        ttDump.DumpID   = DumpFile.DumpID AND
+                        ttDump.DumpMode = DFTimeTable.DumpMode)
+      THEN NEXT.
 
       IF DFTimeTable.LastRun > 0 THEN DO:
          fSplitTS(DFTimeTable.LastRun,
@@ -154,68 +157,34 @@ FOR EACH DumpFile NO-LOCK WHERE
          IF ldaOngoing = ldaDumpDate THEN NEXT.
       END.
 
-
-   idaGoalDate = the date to where we are trying to find run time
-   iiGoalTime  = the most suitable dump time (this is the limit and the dump time cannot exceed this)
-   idaLastRunDay = the day when the dump was last in run
-   iiLastTime    = the time when the dump was last in run
-   icValidDays     = DFTimeTable.DumpDay
-   icValidWeekDays = DFTimeTable.DumpWeekDay
-   icValidTimes = DFTimeTable.DumpTime
-   ilOnlyWorkDays = Is on value TRUE if only working days are allowed     
-*/
-
       liDumpTime = fMaxSuitableRunTime(ldaDumpDate,
                                        liCurrent,
                                        ldaLastRun,
-                                       
-      )
-
-FUNCTION fMaxSuitableRunTime RETURNS INTEGER
-   (idaGoalDate     AS DATE,
-    iiGoalTime      AS INTEGER,
-    idaLastRunDay   AS DATE,
-    iiLastTime      AS INTEGER, 
-    icValidDays     AS CHARACTER,
-    icValidWeekDays AS CHARACTER,
-    icValidTimes    AS CHARACTER,
-    ilOnlyWorkDays  AS LOGICAL):
-
+                                       liLastRun,
+                                       DFTimeTable.DumpDay,
+                                       DFTimeTable.DumpWeekDay,
+                                       DFTimeTable.DumpTime,
+                                       NO).
       
-      /* month level */
-      FIND FIRST ttDays WHERE ttDays.MonthDay = ldaDumpDate NO-ERROR.
-
-      IF NOT AVAILABLE ttDays THEN NEXT.   
-          
-
-      FOR EACH ttTimes WHERE 
-               ttTimes.DumpTime <= liCurrent
-      BY ttTimes.DumpTime DESC:
-               
-         IF ldaLastRun = ldaDumpDate AND liLastRun >= ttTimes.DumpTime THEN
-            NEXT.
-
-         IF CAN-FIND(FIRST ttDump WHERE 
-                           ttDump.DumpID   = DumpFile.DumpID AND
-                           ttDump.DumpMode = DFTimeTable.DumpMode)
-         THEN NEXT.
+      IF liDumpTime = ?
+      THEN NEXT.
          
-         CREATE ttDump.
-         ASSIGN
-            ttDump.DumpID      = DumpFile.DumpID 
-            ttDump.DumpName    = DumpFile.DumpName
-            ttDump.DumpMode    = DFTimeTable.DumpMode
-            ttDump.TTRecid     = RECID(DFTimeTable)
-            ttDump.DumpTime    = ttTimes.DumpTime
-            ttDump.FileNameTag = DFTimeTable.FileNameTag
-            ttDump.Replication = llReplica.
+      CREATE ttDump.
+      ASSIGN
+         ttDump.DumpID      = DumpFile.DumpID 
+         ttDump.DumpName    = DumpFile.DumpName
+         ttDump.DumpMode    = DFTimeTable.DumpMode
+         ttDump.TTRecid     = RECID(DFTimeTable)
+         ttDump.DumpTime    = ttTimes.DumpTime
+         ttDump.FileNameTag = DFTimeTable.FileNameTag
+         ttDump.Replication = llReplica.
          
-         /* mark as picked, in case next cron run starts before this
-            is handled */
-         IF NOT llQuery THEN DO:   
-            fMarkTimeTable(ttDump.TTRecid,"pick").
-         END.   
-      END.
+      /* mark as picked, in case next cron run starts before this
+         is handled */
+      IF NOT llQuery THEN DO:   
+         fMarkTimeTable(ttDump.TTRecid,"pick").
+      END.   
+
    END.         
    
    /* if there are more than one entries for the same dumpid and time, and 
