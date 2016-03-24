@@ -5,16 +5,36 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF SubSer OLD BUFFER oldSubSer.
 
 &IF {&SUBSER_WRITE_TRIGGER_ACTIVE} &THEN
 
-DEFINE VARIABLE llMobSubAvailable AS LOGICAL INITIAL FALSE NO-UNDO.
+DEFINE VARIABLE llMobSubIsAvailable AS LOGICAL INITIAL FALSE NO-UNDO.
+DEFINE VARIABLE llMobSubWasAvailable AS LOGICAL INITIAL FALSE NO-UNDO.
 
-FOR FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
-   MobSub.MsSeq = SubSer.MsSeq:
-   llMobSubAvailable = TRUE.
+FUNCTION fCheckMobSub RETURNS LOGICAL
+   (iiMsSeq AS INTEGER):
+
+   FOR FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
+      MobSub.MsSeq = iiMsSeq:
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
 END.
+
+llMobSubIsAvailable = fCheckMobSub(SubSer.MsSeq).
+
+IF NEW(SubSer) AND llMobIsSubAvailable = FALSE
+THEN RETURN.
+
+IF (NOT NEW(SubSer)) AND SubSer.MsSeq <> oldSubSer.MsSeq
+THEN llMobSubWasAvailable = fCheckMobSub(oldSubSer.MsSeq).
+ELSE llMobSubWasAvailable = llMobSubIsAvailable.
+
+IF llMobSubIsAvailable = FALSE AND llMobSubWasAvailable = FALSE
+THEN RETURN.
 
 /* If this is a new SubSer and SubSer servcom is not hpd service,
    we won't send the information */ 
-IF NEW(SubSer) AND ( LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) = 0 OR llMobSubAvailable = FALSE )
+IF NEW(SubSer) AND LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) = 0
 THEN RETURN.
 
 DEFINE BUFFER lbSubSer FOR SubSer.
@@ -34,7 +54,7 @@ ASSIGN
    Mobile.RepLog.TableName = "SubSer"
    Mobile.RepLog.EventType = (IF NEW(SubSer)
                                THEN "CREATE"
-                               ELSE IF LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) = 0 OR llMobSubAvailable = FALSE
+                               ELSE IF LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) = 0 OR (llMobSubWasAvailable AND llMobSubIsAvailable = FALSE)
                                THEN "DELETE"
                                ELSE "MODIFY")
    Mobile.RepLog.EventTime = NOW

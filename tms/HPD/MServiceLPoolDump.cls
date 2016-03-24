@@ -74,6 +74,10 @@ CLASS HPD.MServiceLPoolDump FINAL INHERITS DumpHandler:
    METHOD PRIVATE VOID mProcessFullDump
       (INPUT objDumpFile AS CLASS DumpFile):
 
+      DEFINE VARIABLE ldeEndStamp AS DECIMAL NO-UNDO.
+      
+      ldeEndStamp = YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + DAY(TODAY).  
+
       /* We will dump only the newest ones */
       FOR
          EACH MobSub FIELDS (MsSeq) NO-LOCK,
@@ -88,7 +92,7 @@ CLASS HPD.MServiceLPoolDump FINAL INHERITS DumpHandler:
             LEAVE.
          END.
 
-         IF FIRST-OF(lbMServiceLPool.SlSeq)
+         IF FIRST-OF(lbMServiceLPool.SlSeq) AND lbMServiceLPool.EndTS >= ldeEndStamp
          THEN DO:
             liEvents = liEvents + 1.
 
