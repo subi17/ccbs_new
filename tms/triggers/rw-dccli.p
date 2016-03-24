@@ -4,32 +4,7 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF DCCLI OLD BUFFER oldDCCLI.
 
 &IF {&DCCLI_WRITE_TRIGGER_ACTIVE} &THEN
 
-DEFINE VARIABLE llMobSubIsAvailable AS LOGICAL INITIAL FALSE NO-UNDO.
-DEFINE VARIABLE llMobSubWasAvailable AS LOGICAL INITIAL FALSE NO-UNDO.
-
-FUNCTION fCheckMobSub RETURNS LOGICAL
-   (iiMsSeq AS INTEGER):
-
-   FOR FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
-      MobSub.MsSeq = iiMsSeq:
-      RETURN TRUE.
-   END.
-
-   RETURN FALSE.
-
-END.
-
-llMobSubIsAvailable = fCheckMobSub(DCCLI.MsSeq).
-
-IF NEW(DCCLI) AND llMobSubIsAvailable = FALSE
-THEN RETURN.
-
-IF (NOT NEW(DCCLI)) AND DCCLI.MsSeq <> oldDCCLI.MsSeq
-THEN llMobSubWasAvailable = fCheckMobSub(oldDCCLI.MsSeq).
-ELSE llMobSubWasAvailable = llMobSubIsAvailable.
-
-IF llMobSubIsAvailable = FALSE AND llMobSubWasAvailable = FALSE
-THEN RETURN.
+{triggers/check_mobsub.i DCCLI MsSeq}
 
 CREATE Mobile.RepLog.
 ASSIGN
@@ -43,7 +18,7 @@ ASSIGN
    .
 
 IF Mobile.RepLog.EventType = "DELETE" 
-THEN Mobile.RepLog.KeyValue = STRING(DCCLI.PerContractID).
+THEN Mobile.RepLog.KeyValue = {HPD/keyvalue.i DCCLI . {&HPDKeyDelimiter} PerContractID}.
 ELSE Mobile.RepLog.RowID    = STRING(ROWID(DCCLI)).
 
 IF NOT NEW(DCCLI)
@@ -61,7 +36,7 @@ THEN DO:
          Mobile.RepLog.TableName = "DCCLI"
          Mobile.RepLog.EventType = "DELETE"
          Mobile.RepLog.EventTime = NOW
-         Mobile.RepLog.KeyValue  = STRING(oldDCCLI.PerContractID)
+         Mobile.RepLog.KeyValue  = {HPD/keyvalue.i oldDCCLI . {&HPDKeyDelimiter} PerContractID}
          .
    END.
 END.
