@@ -81,9 +81,11 @@ CLASS HPD.MServiceLPoolDump FINAL INHERITS DumpHandler:
       /* We will dump only the newest ones */
       FOR
          EACH MobSub FIELDS (MsSeq) NO-LOCK,
-         EACH lbMServiceLPool WHERE
+         EACH lbMServiceLPool NO-LOCK WHERE
             lbMServiceLPool.MsSeq  = MobSub.MsSeq
-         BREAK BY lbMServiceLPool.SlSeq
+         BREAK
+            BY lbMServiceLPool.MsSeq
+            BY lbMServiceLPool.SlSeq
          ON QUIT UNDO, RETRY
          ON STOP UNDO, RETRY:
 
