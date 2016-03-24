@@ -68,8 +68,6 @@ CLASS HPD.LimitDump FINAL INHERITS DumpHandler:
          END.            
             
          liEvents = liEvents + 1.
-      
-         mFindMsOwner().
 
          objDumpFile:mWriteALine().
          
