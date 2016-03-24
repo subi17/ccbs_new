@@ -21,7 +21,7 @@ END.
 
 llMobSubIsAvailable = fCheckMobSub(DCCLI.MsSeq).
 
-IF NEW(DCCLI) AND llMobIsSubAvailable = FALSE
+IF NEW(DCCLI) AND llMobSubIsAvailable = FALSE
 THEN RETURN.
 
 IF (NOT NEW(DCCLI)) AND DCCLI.MsSeq <> oldDCCLI.MsSeq
