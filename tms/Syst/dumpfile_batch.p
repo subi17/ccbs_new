@@ -153,6 +153,34 @@ FOR EACH DumpFile NO-LOCK WHERE
          /* another run that started today is still active */
          IF ldaOngoing = ldaDumpDate THEN NEXT.
       END.
+
+
+   idaGoalDate = the date to where we are trying to find run time
+   iiGoalTime  = the most suitable dump time (this is the limit and the dump time cannot exceed this)
+   idaLastRunDay = the day when the dump was last in run
+   iiLastTime    = the time when the dump was last in run
+   icValidDays     = DFTimeTable.DumpDay
+   icValidWeekDays = DFTimeTable.DumpWeekDay
+   icValidTimes = DFTimeTable.DumpTime
+   ilOnlyWorkDays = Is on value TRUE if only working days are allowed     
+*/
+
+      liDumpTime = fMaxSuitableRunTime(ldaDumpDate,
+                                       liCurrent,
+                                       ldaLastRun,
+                                       
+      )
+
+FUNCTION fMaxSuitableRunTime RETURNS INTEGER
+   (idaGoalDate     AS DATE,
+    iiGoalTime      AS INTEGER,
+    idaLastRunDay   AS DATE,
+    iiLastTime      AS INTEGER, 
+    icValidDays     AS CHARACTER,
+    icValidWeekDays AS CHARACTER,
+    icValidTimes    AS CHARACTER,
+    ilOnlyWorkDays  AS LOGICAL):
+
       
       /* month level */
       FIND FIRST ttDays WHERE ttDays.MonthDay = ldaDumpDate NO-ERROR.
