@@ -51,7 +51,7 @@ THEN DO:
    DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
 
    BUFFER-COMPARE DCCLI USING
-      CustNum MsSeq SLSeq
+      PerContractID
    TO oldDCCLI SAVE RESULT IN llSameValues.
 
    IF NOT llSameValues
