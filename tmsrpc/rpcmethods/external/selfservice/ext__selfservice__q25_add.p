@@ -228,21 +228,6 @@ IF lcSMSTxt > "" THEN DO:
    END.
 END.
 
-CREATE Memo.
-ASSIGN
-   Memo.CreStamp  = {&nowTS}
-   Memo.Brand     = gcBrand
-   Memo.HostTable = "MobSub"
-   Memo.KeyValue  = STRING(Mobsub.MSSeq)
-   Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-   Memo.CreUser   = katun 
-   Memo.MemoTitle = "By customer's request (Self Service)"
-   Memo.MemoText  = "Q25 extension request"
-   Memo.CustNum   = MobSub.Custnum
-   Memo.Source    = "Self Service".
-
-
-
 /* Adding the details into Main struct */
 top_struct = add_struct(response_toplevel_id, "").
 add_string(top_struct, "transaction_id", pcTransId).
