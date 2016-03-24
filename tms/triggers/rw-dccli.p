@@ -36,7 +36,7 @@ ASSIGN
    Mobile.RepLog.TableName = "DCCLI"
    Mobile.RepLog.EventType = (IF NEW(DCCLI)
                               THEN "CREATE"
-                              ELSE IF llMobSubWasAvailable AND llMobIsSubAvailable = FALSE
+                              ELSE IF llMobSubWasAvailable AND llMobSubIsAvailable = FALSE
                               THEN "DELETE"
                               ELSE "MODIFY")
    Mobile.RepLog.EventTime = NOW
