@@ -82,7 +82,7 @@ CLASS HPD.MServiceLimitDump FINAL INHERITS DumpHandler:
 
       DEFINE VARIABLE ldeEndStamp AS DECIMAL NO-UNDO.
       
-      ldeEndStamp = YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + DAY(TODAY).   
+      ldeEndStamp = YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + 1.   
    
       FOR
          EACH lbMServiceLimit NO-LOCK
@@ -108,7 +108,7 @@ CLASS HPD.MServiceLimitDump FINAL INHERITS DumpHandler:
               NOT CAN-FIND(FIRST Customer NO-LOCK WHERE Customer.CustNum = lbMServiceLimit.CustNum) )
          THEN NEXT.
          
-         ELSE IF MServiceLimit.CustNum > 0
+         ELSE IF lbMServiceLimit.CustNum > 0
          THEN NEXT.
 
          IF NOT CAN-FIND(FIRST MobSub NO-LOCK WHERE MobSub.MsSeq = lbMServiceLimit.MsSeq)
