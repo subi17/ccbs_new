@@ -48,7 +48,7 @@ ASSIGN
    Common.RepLog.TableName = "MServiceLPool"
    Common.RepLog.EventType = (IF NEW(MServiceLPool)
                               THEN "CREATE"
-                              ELSE IF llMobSubWasAvailable AND llMobIsSubAvailable = FALSE
+                              ELSE IF llMobSubWasAvailable AND llMobSubIsAvailable = FALSE
                               THEN "DELETE"
                               ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
