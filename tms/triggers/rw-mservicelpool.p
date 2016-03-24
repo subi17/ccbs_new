@@ -4,6 +4,16 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF MServiceLPool OLD BUFFER oldMServiceL
 
 &IF {&MSERVICELPOOL_WRITE_TRIGGER_ACTIVE} &THEN
 
+DEFINE VARIABLE llMobSubAvailable AS LOGICAL INITIAL FALSE NO-UNDO.
+
+FOR FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
+   MobSub.MsSeq = MServiceLPool.MsSeq:
+   llMobSubAvailable = TRUE.
+END.
+
+IF NEW(MServiceLPool) AND llMobSubAvailable = FALSE
+THEN RETURN.
+
 DEFINE BUFFER lbMServiceLPool FOR MServiceLPool.
 
 /* We will send only the newest one */
@@ -18,13 +28,18 @@ END.
 
 CREATE Common.RepLog.
 ASSIGN
-   Common.RepLog.RowID     = STRING(ROWID(MServiceLPool))
    Common.RepLog.TableName = "MServiceLPool"
    Common.RepLog.EventType = (IF NEW(MServiceLPool)
-                               THEN "CREATE"
-                               ELSE "MODIFY")
+                              THEN "CREATE"
+                              ELSE IF llMobSubAvailable = FALSE
+                              THEN "DELETE"
+                              ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
    .
+
+IF Common.RepLog.EventType = "DELETE" 
+THEN Common.RepLog.KeyValue = {HPD/keyvalue.i MServiceLPool . {&HPDKeyDelimiter} CustNum MsSeq SLSeq EndTS}
+ELSE Common.RepLog.RowID    = STRING(ROWID(MServiceLPool)).
 
 IF NOT NEW(MServiceLPool)
 THEN DO:
