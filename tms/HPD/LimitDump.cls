@@ -1,5 +1,7 @@
 USING Progress.Lang.*.
 USING HPD.DumpHandler.
+USING HPD.DumpBase.
+USING HPD.DumpFile.
 
 {Syst/tmsconst.i}
 
