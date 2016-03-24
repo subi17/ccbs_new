@@ -38,7 +38,7 @@ ASSIGN
    .
 
 IF Common.RepLog.EventType = "DELETE" 
-THEN Common.RepLog.KeyValue = {HPD/keyvalue.i MServiceLPool . {&HPDKeyDelimiter} CustNum MsSeq SLSeq EndTS}
+THEN Common.RepLog.KeyValue = {HPD/keyvalue.i MServiceLPool . {&HPDKeyDelimiter} CustNum MsSeq SLSeq EndTS}.
 ELSE Common.RepLog.RowID    = STRING(ROWID(MServiceLPool)).
 
 IF NOT NEW(MServiceLPool)
