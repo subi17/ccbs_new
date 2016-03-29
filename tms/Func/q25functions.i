@@ -34,15 +34,25 @@ DEF VAR liReturnedDevices AS INT NO-UNDO.
 DEF VAR liQ25DoneCount    AS INT NO-UNDO.
 DEF VAR liPendingReq      AS INT NO-UNDO.
 DEF VAR lcSendingEndTime AS CHAR NO-UNDO.
+DEF VAR lclcHRLPOutDir AS CHAR NO-UNDO.
+DEF VAR lcHRLPListInDir AS CHAR NO-UNDO.
+DEF VAR lcHrlpRemRedirDir AS CHAR NO-UNDO.
+DEF VAR lcHRLPLogDir AS CHAR NO-UNDO.
 
 DEF STREAM Sout.
+DEF STREAM SHRLP.
 
 ASSIGN liQ25Logging = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg, 
                                                      2 = count, 3 = all */
        lcQ25LogDir     = fCParam("Q25","Q25ReminderLogDir")
        lcQ25SpoolDir   = fCParam("Q25","Q25ReminderLogSpoolDir")
        lcQ25DWHLogDir  = fCParam("Q25","Q25DWHLogDir")
-       lcSendingEndTime = fCParam("Q25","Q25SendingEndTime").
+       lcSendingEndTime = fCParam("Q25","Q25SendingEndTime")
+
+       lcHRLPOutDir = fCParam("HRLP","HRLPOutDir")
+       lcHRLPListInDir = fCParam("HRLP","HRLPListInDir")
+       lcHrlpRemRedirDir = fCParam("HRLP","HrlpRemRedirDir")
+       lcHRLPLogDir = fCParam("HRLP","HRLPLogDir").
                   
 IF lcQ25LogDir = "" OR lcQ25LogDir = ? THEN lcQ25LogDir = "/tmp/".
 IF lcQ25SpoolDir = "" OR lcQ25SpoolDir = ? THEN lcQ25SpoolDir = "/tmp/".
@@ -50,6 +60,11 @@ IF lcQ25SpoolDir = "" OR lcQ25SpoolDir = ? THEN lcQ25SpoolDir = "/tmp/".
 lcQ25DWHLogFile = lcQ25SpoolDir + "events_" +
                   (REPLACE(STRING(fMakeTS()),".","_")) + ".csv".
 
+IF lcHRLPOutDir EQ "" OR lcHRLPOutDir EQ ? THEN lcHRLPOutDir = "/tmp/".
+IF lcHRLPListInDir EQ "" OR lcHRLPListInDir EQ ? THEN lcHRLPlistInDir = "/tmp/".
+IF lcHRLPRemRedirDirDir EQ "" OR lcHRLPRemRedirDirDir EQ ? THEN 
+   lcHRLPRemRedirDirDir = "/tmp/".
+IF lcHRLPLogDir EQ "" OR lcHRLPLogDir EQ ? THEN lcHRLPLogDir = "/tmp/".
 
 /* Function to check if there is available weekdays for SMS sending after
    specified day.
@@ -251,6 +266,7 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
     INPUT iilogPhase AS INT,
     INPUT iiExecType AS INT).
    DEF VAR lcQ25LogType AS CHAR NO-UNDO. 
+   DEF VAR lcHRLPLogFile AS CHAR NO-UNDO.
    /* Requested customer log writings. YPR-3446 */
    IF iiExecType EQ {&Q25_EXEC_TYPE_CUST_LOG_GENERATION} THEN DO:
       /* Only cust level logs are needed to be written here  */
@@ -262,6 +278,21 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
          RETURN TRUE.
       END.
       ELSE RETURN TRUE. /* no other than cust logs needed at this phase */
+   END.
+   ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_HRLP_UNIV} THEN DO:
+      lcHRLPLogFile = lcHRLPOutDir + "IFS_Q25HR_UNIVERSE_" + 
+                      (SUBSTRING(STRING(fMakeTS()),8) + ".LOG".
+
+   END.
+   ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_HRLP_ACT} THEN DO:
+      lcHRLPLogFile = lcHRLPOutDir + "IFS_Q25HR_ACTIVE_" + 
+                      (SUBSTRING(STRING(fMakeTS()),8) + ".LOG".
+
+   END.
+   ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_HRLP_REL} THEN DO:
+      lcHRLPLogFile = lcHRLPOutDir + "IFS_Q25HR_RELEASE_" + 
+                      (SUBSTRING(STRING(fMakeTS()),8) + ".LOG".
+
    END.
    ELSE DO:
       /* Own internal log writings */
@@ -742,3 +773,99 @@ FUNCTION getQ25phase RETURNS INT
    END.
    RETURN {&Q25_NOT_ACTION_PHASE}. /* Not Q25 phase M22-M24 customer */
 END.
+
+/* SMS message generating and sending for Q25. */
+FUNCTION fGenerateQ25List RETURNS INTEGER 
+   (INPUT iiPhase   AS INT):
+
+   DEF VAR liPeriod AS INT NO-UNDO.
+   DEF VAR ldaEndDate AS DATE NO-UNDO.
+   DEF VAR ldaStartDate AS DATE NO-UNDO.
+   DEF VAR liMsSeq AS INT NO-UNDO.
+   DEF VAR liPerContrId AS INT NO-UNDO.
+   DEF VAR ldAmount AS DECIMAL NO-UNDO.
+
+   ASSIGN
+      ldaStartDate = DATE(MONTH(TODAY), 1, YEAR(TODAY)) - 1
+      ldaEndDate = fLastDayOfMonth(TODAY)
+      liPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
+
+   FOR EACH SingleFee USE-INDEX BillCode WHERE
+            SingleFee.Brand       = gcBrand AND
+            SingleFee.Billcode BEGINS "RVTERM" AND
+            SingleFee.HostTable   = "Mobsub" AND
+            SingleFee.SourceTable = "DCCLI" AND
+            SingleFee.CalcObj     = "RVTERM" AND
+            SingleFee.BillPeriod  = liPeriod NO-LOCK:
+      IF SingleFee.OrderId <= 0 THEN NEXT.
+      ASSIGN
+         ldAmount = Singlefee.Amt
+         liMsseq = INT(SingleFee.KeyValue)
+         liPerContrId = INT(SingleFee.sourcekey).
+
+      IF isPostpaidMobsubReleased(liMsSeq) THEN DO:
+         lcLogText = "Q25 Mobsub not found or prepaid: " +
+                     STRING(liPhase) + "|" + STRING(liMsSeq).
+         fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, iiphase,
+                        {&Q25_EXEC_TYPE_HRLP}).
+         NEXT.
+      END.
+      IF isSingleFeeBilled() THEN DO:
+         lcLogText = "Q25 Residual fee Billed: " +
+                        STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
+                        STRING(Mobsub.MsSeq).
+         fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, iiphase,
+                        {&Q25_EXEC_TYPE_HRLP}).
+         NEXT. /* "Residual fee billed". */
+      END.
+      
+      /* Check that ending perContract founds during month. */
+      ldaEndDate =  ADD-INTERVAL(TODAY, iiPhase, 'months':U).
+      FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
+              DCCLI.PerContractId = liPerContrId AND
+              DCCLI.Brand   = gcBrand AND
+              DCCLI.DCEvent BEGINS "PAYTERM" AND
+              DCCLI.MsSeq   = Mobsub.MsSeq AND
+              DCCLI.ValidTo >= DATE(MONTH(ldaEndDate),1,
+                                    YEAR(ldaEndDate)) - 1 AND
+              DCCLI.ValidTo <= fLastDayOfMonth(ldaEndDate) NO-ERROR.
+
+      IF NOT AVAIL DCCLI THEN DO:
+         lcLogText = "Q25 NO DCCLI FOUND " +
+                        STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
+                        STRING(Mobsub.MsSeq).
+         fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
+                        {&Q25_EXEC_TYPE_HRLP})).
+         NEXT.
+      END.
+      
+      /*Function checks also Extension, TermReturn and Renewal*/
+      IF isQ25PerContractEnded(liPerContrId, liMsSeq, SingleFee.orderid, 
+                               ldaStartDate, ldaEndDate, ldAmount, liPhase, 
+                               lcLogText) THEN DO:
+         IF lcLogText > "" THEN
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
+                            {&Q25_EXEC_TYPE_HRLP})).
+         NEXT.
+      END.
+
+      /*verifications done, write data to IFS file*/
+      lcLogText = STRING(MobSub.CustNum) + lcHRLPDelim + /*Custnumber*/
+                  STRING(Mobsub.CLI)     + lcHRLPDelim + /*MSISDN*/     
+                  STRING(liPeriod)       + lcHRLPDelim + /*Q25 nomth*/     
+                  STRING("")          + lcHRLPDelim + /*installment value*/
+                  STRING(ldAmount).                      /*Q25 value*/
+
+      lcQ25DWHLogFile = lcHRLPOutDir + "IFS_Q25HR_ACTIVE_" +
+                        (SUBSTRING(STRING(fMakeTS()),8) + ".DAT".
+
+
+
+       OUTPUT STREAM SHRLP TO VALUE(lcHRLPOutFile) APPEND.
+       PUT STREAM SHRLP UNFORMATTED lcLogText.
+       OUTPUT STREAM Sout CLOSE.
+
+   END.
+END FUNCTION.
+
+
