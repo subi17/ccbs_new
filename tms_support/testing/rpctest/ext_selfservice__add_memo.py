@@ -15,6 +15,6 @@ if len(sys.argv) < 2: instruction()
 else:
    var1 = sys.argv[1]
 
-q=s.ext.selfservice.q25_add('508', var1, "Test Title", "Test Content", "Service")
+q=s.ext.selfservice.add_memo('508', var1, "Test Title", "Test Content", "Service")
 print_results(q)
 
