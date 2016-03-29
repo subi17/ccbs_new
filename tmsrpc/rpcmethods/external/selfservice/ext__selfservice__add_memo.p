@@ -13,7 +13,6 @@
 {xmlrpc/xmlrpc_access.i}
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 {commpaa.i}
-katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId.
 gcBrand = "1".
 {tmsconst.i}
 {fexternalapi.i}
@@ -29,6 +28,7 @@ DEF VAR lcAppEndUserId      AS CHAR NO-UNDO.
 
 DEF VAR top_struct      AS CHAR NO-UNDO.
 
+IF validate_request(param_toplevel_id, "string!,string!,string!,string!,string!") EQ ? THEN RETURN.
 
 ASSIGN pcTransId     = get_string(param_toplevel_id, "0")
        pcMSISDN      = get_string(param_toplevel_id,"1")
@@ -44,18 +44,9 @@ ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
 IF NOT fchkTMSCodeValues(gbAuthLog.UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
 
-
-/* Adding the details into Main struct */
-top_struct = add_struct(response_toplevel_id, "").
-add_string(top_struct, "transaction_id", pcTransId).
-add_boolean(top_struct, "result", True).
-
-
-IF pcMemoTitle EQ "" THEN RETURN appl_err("Memo title is empty").
-IF pcMemoContent EQ "" THEN RETURN appl_err("Memo text is empty").
-IF pcMemoType EQ "" THEN RETURN appl_err("Memo type is empty").
+katun = fgetAppUserId(INPUT lcApplicationId,
+                      INPUT lcAppEndUserId).
 
 FIND FIRST mobsub NO-LOCK WHERE
            mobsub.cli EQ pcMSISDN NO-ERROR.
@@ -69,6 +60,13 @@ DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
                  pcMemoType,                           /* MemoType */
                  fgetAppDetailedUserId(INPUT lcApplicationId,
                                       INPUT Mobsub.CLI)).
+
+/* Adding the details into Main struct */
+top_struct = add_struct(response_toplevel_id, "").
+add_string(top_struct, "transaction_id", pcTransId).
+add_boolean(top_struct, "result", True).
+
+
 
 FINALLY:
    /* Store the transaction id */
