@@ -142,12 +142,12 @@ END.
 
 /* others */
 ELSE DO:
-
+      
    FIND FIRST DCCLI WHERE
               DCCLI.Brand         = gcBrand     AND
               DCCLI.DCEvent       = icDCEvent   AND
               DCCLI.MSSeq         = iiMsSeq     AND 
-             (IF icDCEvent BEGINS "PAYTERM" THEN 
+             (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN 
                  DCCLI.PerContractId = iiPerContID
               ELSE TRUE)                        NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DCCLI THEN DO:
@@ -278,7 +278,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                             IF ldtTermDate = TODAY
                             THEN TIME
                             ELSE 86399).
-                            
+
       liCreated = fPCActionRequest(MobSub.MsSeq,
                                    icDCEvent,
                                    "term",
@@ -290,9 +290,9 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                                    FALSE,
                                    "",
                                    0,
-                                   IF icDCEvent BEGINS "PAYTERM" 
-                                      THEN iiPerContID
-                                   ELSE 0,
+                                   (IF AVAIL DayCampaign AND
+                                     DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}
+                                     THEN iiPerContID ELSE 0),
                                    OUTPUT lcError).
 
       IF liCreated > 0 THEN DO:

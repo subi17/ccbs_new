@@ -628,6 +628,7 @@ IF Customer.CustIDType NE "CIF" THEN HIDE
 
 END FUNCTION. 
 
+
 FUNCTION fDispVATUsage RETURNS LOGICAL
    (iiVATUsage AS INT).
    
@@ -2363,7 +2364,7 @@ PROCEDURE local-update-fin:
                      MESSAGE "Unknown invoice target rule"
                      VIEW-AS ALERT-BOX ERROR.
                      NEXT.
-                  END.   
+                  END.
                END.
 
                ELSE IF FRAME-FIELD = "lcBankAcc" THEN DO:
@@ -2373,6 +2374,12 @@ PROCEDURE local-update-fin:
                         VIEW-AS ALERT-BOX ERROR.
                         NEXT.
                      END.
+                  END.
+                  ELSE IF NOT fChkBankAccChange(INPUT Customer.CustNum)
+                  THEN DO:
+                     MESSAGE "Bank account can not remain empty"
+                     VIEW-AS ALERT-BOX ERROR.
+                     NEXT.
                   END.
                END.
             END.
@@ -2461,7 +2468,27 @@ PROCEDURE local-update-fin:
                Customer.Currency WHEN Customer.CustNum < 1000.
 
          
-            IF NOT llDDBank THEN Customer.BankAcc = lcBankAcc. 
+            IF NOT llDDBank THEN DO:
+
+               CREATE Memo.
+               ASSIGN
+                  Memo.CreStamp  = fMakeTS()
+                  Memo.Brand     = gcBrand
+                  Memo.Custnum   = Customer.CustNum
+                  Memo.HostTable = "Customer"
+                  Memo.KeyValue  = STRING(Customer.CustNum)
+                  Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
+                  Memo.CreUser   = katun
+                  Memo.MemoTitle = "Cambio de cuenta"
+                  Memo.MemoText  = "Solicitado por el cliente: Nº de " +
+                                   "cuenta: " + Customer.BankAcc + " --> " +
+                                   IF lcBankAcc > "" THEN lcBankAcc ELSE
+                                   "blank".
+
+               Customer.BankAcc = lcBankAcc.
+
+
+            END.
             IF llDoEvent THEN RUN StarEventMakeModifyEvent ( lhCustomer ).
         
          END.

@@ -232,6 +232,7 @@ FUNCTION fFillCustomerStruct RETURNS LOGICAL
    ELSE 
       add_string(pcStruct,"street",fToUTF8(OrderCustomer.Address)).
 
+   add_boolean(pcStruct,"retrieved",OrderCustomer.custDataRetr).
    RETURN TRUE.
 
 END.

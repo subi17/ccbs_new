@@ -150,7 +150,7 @@ FUNCTION fOrderContainsFinancedTerminal RETURNS CHAR
    RETURN {&TF_STATUS_YOIGO}.
 END.
 
-FUNCTION fGetPaytermOrderId RETURNS INT
+FUNCTION fGetInstallmentOrderId RETURNS INT
    (INPUT iiMsRequest AS INT):
 
    DEF BUFFER MsRequest FOR MsRequest.
@@ -196,9 +196,21 @@ FUNCTION fGetPaytermOrderId RETURNS INT
       end.
 
       /* installment contract change */
-      WHEN "24" then do:
-         if msrequest.reqIparam2 > 0 then do:
+      WHEN {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} then do:
+           
+         IF msrequest.reqiparam3 > 0 THEN
+            for first fixedfee NO-LOCK where
+                      fixedfee.brand = gcBrand and
+                      fixedfee.custnum = msrequest.custnum and
+                      fixedfee.hosttable = "MobSub" and
+                      fixedfee.keyvalue = string(msrequest.msseq) and
+                      fixedfee.sourcetable = "DCCLI" and
+                      fixedfee.sourcekey = string(msrequest.reqiparam3):
+               return fixedfee.orderid.
+            END.
 
+         if msrequest.reqIparam2 > 0 then do:
+               
             find bmsrequest NO-LOCK WHERE
                  bmsrequest.msrequest = msrequest.reqiparam2 and
                  bmsrequest.reqtype = 9 and

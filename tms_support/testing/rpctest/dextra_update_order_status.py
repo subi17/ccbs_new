@@ -5,20 +5,22 @@ from show_results import *
 
 # Definition
 s = xmlrpclib.ServerProxy(address)
-
-fdate = xmlrpclib.DateTime(datetime.datetime.now().timetuple())
+mydatetime = datetime.datetime.now() + datetime.timedelta(days=-21)
+fdate = xmlrpclib.DateTime(mydatetime.timetuple())
+# Basic setup:
+# fdate = xmlrpclib.DateTime(datetime.datetime.now().timetuple())
 
 # Definition
 s = xmlrpclib.ServerProxy(address, transport=p)
 def instruction():
    print "Missing parameter: OrderId LogisticStatus"
-   print "Example: python dextra_update_order_status.py 70003913 2"
+   print "Example: python dextra_update_order_status.py 70003913 12"
    sys.exit()
 
 if len(sys.argv) < 2: instruction()
 else:
    var1 = sys.argv[1]
-   var2 = sys.argv[2]
+   var2 = int(sys.argv[2])
 
 q = s.dextra.update_order_status(
    {

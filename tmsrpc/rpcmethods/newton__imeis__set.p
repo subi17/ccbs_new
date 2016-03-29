@@ -6,9 +6,13 @@
            offer_id;string;mandatory;offer id
            username;string;mandatory;vista user
            update_imei_only;string;optional;if true then only imei is changed (offer/contracts will not be updated)
+           prev_handset;string;mandatory; previous handset
+           new_handset;string;mandatory; new handset
+           prev_permanency;string;mandatory; previous permanency amount
+           new_permanency;string;mandatory; new permanency amount
  * @output boolean;true
  */
-
+{tmsconst.i}
 {xmlrpc/xmlrpc_access.i}
 
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
@@ -20,8 +24,6 @@ DEF VAR pcUserName AS CHARACTER NO-UNDO.
 DEF VAR piOrderId AS INTEGER NO-UNDO. 
 DEF VAR pcIMEI AS CHAR NO-UNDO. 
 DEF VAR pcOfferId AS CHAR NO-UNDO.
-DEF VAR pcContractID AS CHAR NO-UNDO.
-DEF VAR pcChannel AS CHAR NO-UNDO.
 DEF VAR liTermOfferItemID AS INTEGER NO-UNDO.
 DEF VAR lcCurrentContract AS CHARACTER NO-UNDO.
 DEF VAR ldaCurrentContractBegin AS DATE NO-UNDO.
@@ -32,12 +34,17 @@ DEF VAR i AS INTEGER NO-UNDO.
 DEF VAR lcOldIMEI AS CHARACTER NO-UNDO. 
 DEF VAR lcStruct AS CHAR NO-UNDO. 
 DEF VAR llUpdateImeiOnly AS LOG NO-UNDO. 
+DEF VAR pcNewPermanency AS CHAR NO-UNDO.
+DEF VAR pcPrevPermanency AS CHAR NO-UNDO.
+DEF VAR pcNewHandset AS CHAR NO-UNDO.
+DEF VAR pcPrevHandset AS CHAR NO-UNDO.
+DEF VAR lcHandsetAndPermanencyList AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
  
-lcStruct = validate_request(pcStruct,"order_id!,imei!,offer_id!,username!,update_imei_only,contract_id,pc_channel").
+lcStruct = validate_request(pcStruct,"order_id!,imei!,offer_id!,username!,update_imei_only,prev_handset!,new_handset!,prev_permanency_amount!,new_permanency_amount!").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
@@ -45,12 +52,13 @@ ASSIGN
    pcIMEI = get_string(pcStruct,"imei")
    pcOfferId = get_string(pcStruct,"offer_id")
    pcUserName = get_string(pcStruct,"username")
+   pcNewPermanency = get_string(pcStruct,"new_permanency_amount")
+   pcNewHandset = get_string(pcStruct,"new_handset")
+   pcPrevPermanency = get_string(pcStruct,"prev_permanency_amount")
+   pcPrevHandset = get_string(pcStruct,"prev_handset")
+
    llUpdateImeiOnly = get_bool(pcStruct,"update_imei_only") WHEN
-      LOOKUP("update_imei_only",lcStruct) > 0
-    pcContractID = get_string(pcStruct,"contract_id") 
-      WHEN LOOKUP("contract_id", lcstruct) > 0
-   pcChannel = get_string(pcStruct,"channel")
-               WHEN LOOKUP("channel", lcstruct) > 0.
+      LOOKUP("update_imei_only",lcStruct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -397,8 +405,17 @@ ELSE DO:
       FIND CURRENT Order NO-LOCK.
    END.
 END.
+/*YTS-8279 Fill permanency and phone model information to request for
+  casefile creation*/
+/* Format: NewPermamency CHAR255 VALUE|NewDeviceModel CHAR255 VALUE|
+   PrevPermanency CHAR255 VALUE |PrevDevicemodel CHAR255 VALUE*/
+lcHandsetAndPermanencyList = 
+   "NewPerm"  + {&DMS_REQ_VAL_SEP} + pcNewPermanency  + {&DMS_REQ_FIELD_SEP} +
+   "NewHS"    + {&DMS_REQ_VAL_SEP} + pcNewHandset     + {&DMS_REQ_FIELD_SEP} +
+   "PrevPerm" + {&DMS_REQ_VAL_SEP} + pcPrevPermanency + {&DMS_REQ_FIELD_SEP} +
+   "PrevHS"   + {&DMS_REQ_VAL_SEP} + pcPrevHandset.
 
-fCreateRequest({&REQTYPE_IMEI_CHANGE}, /* heat balance query request */
+fCreateRequest({&REQTYPE_IMEI_CHANGE}, /* request type*/
                0 , /* chgstamp */
                "", /* creator */
                FALSE, /* create fees */
@@ -413,6 +430,7 @@ ASSIGN
    bCreaReq.reqcparam1 = lcOldIMEI
    bCreaReq.reqcparam2 = pcIMEI
    bCreaReq.reqcparam3 = pcOfferId
+   bCreaReq.reqcparam5 = lcHandsetAndPermanencyList /*YTS-8279*/
    bCreaReq.reqcparam6 = Order.Contractid /*YTS-7939, take from order*/
    bCreaReq.reqiparam1 = Order.OrderId
    bCreaReq.ReqSource  = {&REQUEST_SOURCE_NEWTON}.

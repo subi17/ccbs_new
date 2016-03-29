@@ -132,7 +132,7 @@ FUNCTION fGenerateQ25Link RETURNS CHAR (INPUT icCLI AS CHAR):
                                    lcSaltKey).
       /* convert some special characters to url encoding (at least '+' char
          could cause problems at later phases. */
-      lcEncryptedCLI = fUrlEncode(lcEncryptedCLI, "default").
+      lcEncryptedCLI = fUrlEncode(lcEncryptedCLI, "query").
    END.
    
    lcQ25Link = REPLACE(lcQ25Link,"#CLI",lcEncryptedCLI).

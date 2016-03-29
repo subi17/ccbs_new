@@ -25,6 +25,7 @@ gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/fsendsms.i}
+{Func/q25functions.i}
 
 /* top_struct */
 DEF VAR top_struct        AS CHARACTER NO-UNDO.
@@ -188,6 +189,7 @@ IF lcQ25ContractId EQ "" THEN
 ELSE 
    katun = "POS_" + lcUsername.
 
+/*Request for Q25 extension*/
 liCreated = fPCActionRequest(
    MobSub.MsSeq,
    "RVTERM12",
@@ -213,8 +215,9 @@ END.
 FIND FIRST MSRequest WHERE
            MSRequest.MSrequest EQ liCreated EXCLUSIVE-LOCK NO-ERROR.
 IF AVAIL MsRequest THEN DO:
-   MsRequest.ReqCparam4 = lcQ25ContractId.
-   /* MsRequest.ReqCparam6 = lcQ25ContractId. For findinf entry in DMS usage */
+   MsRequest.ReqCparam4 = lcQ25ContractId. /*For dump*/
+   /*For this request type (8) the field is used for Bank, not ContractID.*/
+   MsRequest.ReqCparam6 = fBankByBillCode(SingleFee.BillCode). /*ybu-5247*/
 END.
 RELEASE MsRequest.
 
@@ -256,8 +259,10 @@ IF lcSMSTxt > "" THEN DO:
    IF ldeFeeAmount > 0 THEN DO:
 
       ASSIGN
+         /* first payment is done next month to Q25 */
          lcSMSTxt = REPLACE(lcSMSTxt,"#MONTHNAME",
-                             lower(entry(month(ldaMonth24Date),{&MONTHS_ES})))
+                             lower(entry(month(ADD-INTERVAL(ldaMonth24Date, 1,
+                             'months':U)),{&MONTHS_ES})))
          lcSMSTxt = REPLACE(lcSMSTxt,"#YEAR", STRING(YEAR(ldaMonth24Date)))
          lcSMSTxt = REPLACE(lcSMSTxt,"#AMOUNT",
                STRING(TRUNC(ldeFeeAmount / 12, 2))).

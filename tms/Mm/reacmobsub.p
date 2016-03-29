@@ -393,11 +393,17 @@ DO TRANSACTION:
 
           ELSE IF bSubMsRequest.ReqStatus = {&REQUEST_STATUS_SUB_REQUEST_DONE}
           THEN DO:
+
+             FIND FIRST DayCampaign NO-LOCK WHERE
+                        DayCampaign.Brand = gcBrand AND
+                        DayCampaign.DCevent = bSubMsRequest.ReqCparam3 NO-ERROR.
+
              CREATE ttContract.
              ASSIGN ttContract.DCEvent   = bSubMsRequest.ReqCParam3
-                    ttContract.PerContID = IF ttContract.DCEvent BEGINS "PAYTERM" THEN 
-                                              bSubMsRequest.ReqIParam3 
-                                           ELSE 0.
+                    ttContract.PerContID =
+                        (IF AVAIL DayCampaign AND
+                                  DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}
+                         THEN bSubMsRequest.ReqIParam3 ELSE 0).
              
              FIND FIRST MsRequest WHERE
                 MsRequest.MsRequest = bSubMsRequest.MsRequest NO-LOCK NO-ERROR.
@@ -406,11 +412,17 @@ DO TRANSACTION:
           
           ELSE IF bSubMsRequest.ReqStatus = {&REQUEST_STATUS_DONE}      
           THEN DO:
+             
+             FIND FIRST DayCampaign NO-LOCK WHERE
+                        DayCampaign.Brand = gcBrand AND
+                        DayCampaign.DCevent = bSubMsRequest.ReqCparam3 NO-ERROR.
+
              CREATE ttContract.
              ASSIGN ttContract.DCEvent = bSubMsRequest.ReqCParam3
-                    ttContract.PerContID = IF ttContract.DCEvent BEGINS "PAYTERM" THEN
-                                              bSubMsRequest.ReqIParam3
-                                           ELSE 0.
+                    ttContract.PerContID = 
+                        (IF AVAIL DayCampaign AND
+                                  DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}
+                         THEN bSubMsRequest.ReqIParam3 ELSE 0).
           END. /* ELSE IF bSubMsRequest.ReqStatus = {&REQUEST_STATUS_DONE} */
           
        END. /* IF bSubMsRequest.ReqType = {&REQTYPE_CONTRACT_TERMINATION} */
@@ -483,9 +495,11 @@ DO TRANSACTION:
 
    FOR EACH ttContract:
 
-      /* Don't reactivate TARJ7 and TARJ9 service periodical contract */
+      /* Don't reactivate TARJ7 and TARJ9 service periodical contract 
+         Don't reactivate BONO_VOIP YPR-3458 */
       IF ttContract.DCEvent = "TARJ7" OR
-         ttContract.DCEvent = "TARJ9" THEN NEXT.
+         ttContract.DCEvent = "TARJ9" OR
+         ttContract.DCEvent = "BONO_VOIP" THEN NEXT.
 
       FIND FIRST DayCampaign WHERE
                  DayCampaign.Brand   = gcBrand AND
@@ -527,8 +541,7 @@ DO TRANSACTION:
          fPCActionRequest(MobSub.MsSeq,
                        ttContract.DCEvent,
                        "reactivate",
-                       (IF ttContract.DCEvent EQ "BONO_VOIP" THEN
-                        fSecOffSet(ldCurrTS,180) ELSE ldCurrTS),
+                       ldCurrTS,
                        TRUE,             /* create fees */
                        {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION},
                        "",

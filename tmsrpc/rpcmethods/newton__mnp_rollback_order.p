@@ -51,6 +51,8 @@ DEF VAR liCounter            AS INT   NO-UNDO.
 DEF VAR llSubLimitChecked    AS LOG   NO-UNDO.
 DEF VAR lcError              AS CHAR  NO-UNDO.
 DEF VAR lisubs               AS INT   NO-UNDO.
+DEF VAR liActs               AS INT   NO-UNDO.
+DEF VAR liActLimit           AS INT   NO-UNDO.
 
 DEF TEMP-TABLE ttMNPRollback NO-UNDO
    FIELD MsSeq            AS INT
@@ -198,7 +200,9 @@ IF NOT fSubscriptionLimitCheck(pcPersonId,
                                liCounter,
                                OUTPUT lcError,
                                OUTPUT liCounter,
-                               OUTPUT liSubs)
+                               OUTPUT liSubs,
+                               OUTPUT liActLimit,
+                               OUTPUT liActs)
    AND lcError NE "subscription limit" THEN
    RETURN appl_err(lcError).
 

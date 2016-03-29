@@ -78,6 +78,15 @@ DEF VAR lcTariffBundle   AS CHAR NO-UNDO.
 DEF VAR ldaItemFromDate AS DATE NO-UNDO.
 DEF VAR ldaItemToDate AS DATE NO-UNDO.
 DEF VAR ldeTotalDataBundleLimit AS DEC NO-UNDO.
+DEF VAR ldeCDRts AS DEC NO-UNDO.
+DEF VAR lcYear AS CHAR NO-UNDO.
+DEF VAR lcMonth AS CHAR No-UNDO.
+DEF VAR ldaToDate AS DATE NO-UNDO.
+DEF VAR ldaFromDate AS DATE NO-UNDO.
+DEF VAR liLoop AS INT NO-UNDO.
+DEF VAR lcDiscounts AS CHAR NO-UNDO.
+DEF VAR ldDiscountAmt AS DEC NO-UNDO.
+DEF VAR llExtFound AS LOGICAL NO-UNDO.
 
 DEF BUFFER bMsRequest FOR MSRequest.
 
@@ -205,7 +214,15 @@ FOR EACH ttCDR NO-LOCK WHERE
          ttMsOwner.MsSeq     = ttCDR.MsSeq   AND
          ttMsOwner.FromDate <= ttCDR.DateSt  AND
          ttMsOwner.ToDate   >= ttCDR.DateSt NO-LOCK:
-         
+
+   IF ttMsOwner.PayType EQ TRUE THEN DO:
+      ldeCDRts = fMake2Dt(ttCDR.DateSt,ttCDR.TimeStart).
+
+      IF NOT ttMsOwner.PeriodFrom <= ldeCDRts AND 
+             ttMsOwner.PeriodTo   >= ldeCDRts THEN
+      NEXT.       
+   END.
+ 
    fCollectBalance(ttMsOwner.CLIType,
                    ttMsOwner.TariffBundle,
                    ttCDR.BillCode,
@@ -370,7 +387,52 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
             SingleFee.BillPeriod = liPeriod NO-LOCK:
 
       ldaItemFromDate = fInt2Date(SingleFee.Concerns[1],0).
+      ldDiscountAmt = 0.
+      llExtFound = FALSE.
 
+      /* YPR-3507 Q25 consumption Vista visibility */
+      IF SingleFee.Billcode BEGINS "RVTERM" AND
+         SingleFee.CalcObj EQ "RVTERM" AND
+         SingleFee.SourceTable = "DCCLI" THEN DO:
+         ASSIGN         
+            ldaToDate = fLastDayOfMonth(TODAY)
+            ldaFromDate = date(month(ldaToDate),1,year(ldaToDate)).
+
+         IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                           MsRequest.msSeq EQ mobsub.msseq AND
+                           MsRequest.reqtype EQ
+                              {&REQTYPE_CONTRACT_ACTIVATION} AND
+                           MsRequest.reqStatus EQ
+                              {&REQUEST_STATUS_NEW} AND
+                           MsRequest.ReqCParam3 EQ "RVTERM12" AND
+                           MsRequest.ReqIParam3 EQ INT(SingleFee.sourcekey)) 
+            THEN llExtFound = TRUE. /* ongoin request found */
+         IF llExtFound THEN NEXT.
+         lcDiscounts = "RVTERMDT1DISC,RVTERMDT2DISC,RVTERMDT3DISC,RVTERMDT4DISC".
+         DiscountsLoop:
+         DO liLoop = 1 TO NUM-ENTRIES(lcDiscounts): 
+            FIND FIRST DiscountPlan WHERE Discountplan.dpruleid EQ 
+                                          ENTRY(liLoop,lcDiscounts) 
+                                          NO-LOCK NO-ERROR.
+            IF AVAIL DiscountPlan THEN DO:
+               FIND FIRST DPMember WHERE
+                          DPMember.DPId EQ Discountplan.DPId AND
+                          DPMember.HostTable EQ "MobSub" AND
+                          DPMember.KeyValue EQ SingleFee.KeyValue AND
+                          DPMember.OrderId EQ SingleFee.orderId AND
+                          DPMember.ValidFrom LE ldaToDate AND
+                          DPMemBer.ValidTo GE ldaFromDate AND
+                          DPMemBer.ValidTo GE DPMember.ValidFrom
+                          NO-LOCK NO-ERROR.
+               IF AVAIL DPMember THEN DO: 
+                  /* only one discount should be found */
+                  ldDiscountAmt = ldDiscountAmt + DPMember.discValue.
+               END.
+            END.
+         END.
+      END.   
+      /* 0 row is not needed to show */
+      IF (SingleFee.Amt - ldDiscountAmt LE 0) THEN NEXT.
       FIND FIRST ttMsOwner WHERE
                  ttMsOwner.CustNum   = MobSub.CustNum AND
                  ttMsOwner.MsSeq     = MobSub.MsSeq AND
@@ -378,10 +440,14 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
                  ttMsOwner.ToDate   >= ldaItemFromDate NO-LOCK NO-ERROR.
       IF AVAIL ttMsOwner THEN
          fCollectBalance(ttMsOwner.CLIType,ttMsOwner.TariffBundle,
-                         SingleFee.BillCode,SingleFee.Amt,"balance").
+                         SingleFee.BillCode,
+                         SingleFee.Amt - ldDiscountAmt,
+                         "balance").
       ELSE
          fCollectBalance(MobSub.CLIType,MobSub.TariffBundle,
-                         SingleFee.BillCode,SingleFee.Amt,"balance").
+                         SingleFee.BillCode,
+                         SingleFee.Amt - ldDiscountAmt,
+                         "balance").
    END.
 
 END. /* IF NOT MobSub.PayType THEN DO: */

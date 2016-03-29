@@ -508,6 +508,7 @@ PROCEDURE pUpdateSubscription:
         BillTarg.BillTarget = liBillTarg NO-ERROR.
 
    IF NOT AVAILABLE BillTarg THEN liBillTarg = 0.
+   /* Check configuration error with Rateplan and Priceplan */
    ELSE IF BillTarg.RatePlan NE CLIType.PricePlan THEN liBillTarg = -1.
 
    IF liBillTarg <= 0 THEN DO:
@@ -520,13 +521,17 @@ PROCEDURE pUpdateSubscription:
       END.
    
       IF liBillTarg <= 0 THEN DO:
-      
+         
          IF liBillTarg < 0 THEN DO:
             FIND LAST BillTarg WHERE BillTarg.CustNum = Mobsub.CustNum         
                NO-LOCK NO-ERROR.
-         
-            IF AVAILABLE BillTarg 
-            THEN liBillTarg = BillTarg.BillTarget + 1.
+            /* Create new billtarget for this case. 
+               Error can be corrected afterwards YTS-8271 */
+            IF AVAILABLE BillTarg THEN DO:
+               IF BillTarg.BillTarget < 1000 THEN
+                   liBillTarg = 1000.
+               ELSE liBillTarg = BillTarg.BillTarget + 1.
+            END.
             ELSE liBillTarg = 1.
          END.
          ELSE liBillTarg = CLIType.BillTarget.
@@ -1203,7 +1208,10 @@ PROCEDURE pCloseContracts:
       
    FOR EACH DCCLI NO-LOCK WHERE
             DCCLI.MsSeq   = iiMsSeq  AND
-            DCCLI.ValidTo >= idaActDate:
+            DCCLI.ValidTo >= idaActDate,
+      FIRST DayCampaign NO-LOCK WHERE
+            DayCampaign.Brand = gcBrand AND
+            DayCampaign.DCEvent = DCCLI.DCevent:
 
       /* pending termination request */
       IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
@@ -1213,7 +1221,7 @@ PROCEDURE pCloseContracts:
                         LOOKUP(STRING(MsRequest.ReqStatus),
                                 {&REQ_INACTIVE_STATUSES}) = 0 AND
                         MsRequest.ActStamp <= ldeActStamp AND
-                        (IF DCCLI.DCEvent BEGINS "PAYTERM"
+                        (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}
                          THEN MsRequest.ReqIParam3 = DCCLI.PerContractId
                          ELSE TRUE)) THEN NEXT.
 
@@ -1222,7 +1230,7 @@ PROCEDURE pCloseContracts:
                        DCCLI.DCEvent.
                               
       lcContIDList   = lcContIDList + (IF lcContIDList > "" THEN "," ELSE "") +
-                       (IF DCCLI.DCEvent BEGINS "PAYTERM"
+                       (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}
                         THEN STRING(DCCLI.PerContractID)
                         ELSE STRING(0)).
 
@@ -1242,7 +1250,12 @@ PROCEDURE pCloseContracts:
 
       ASSIGN lcContract   = ENTRY(liCount,lcContractList).
 
-      IF lcContract BEGINS "PAYTERM" THEN 
+      FIND FIRST DayCampaign NO-LOCK WHERE
+                 DayCampaign.Brand = gcBrand AND
+                 DayCampaign.DCEvent = lcContract NO-ERROR.
+
+      IF AVAIL DayCampaign AND
+               DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN 
          liContractID = INT(ENTRY(liCount,lcContIDList)). 
 
       IF (lcContract EQ "BONO_VOIP" AND
@@ -1287,8 +1300,9 @@ PROCEDURE pCloseContracts:
                                          "PMDUBDeActSTC" ELSE ""), 
                                            /* SMS for PMDUB STC Deactivation */
                                         0,
-                                        IF lcContract BEGINS "PAYTERM" THEN liContractID 
-                                        ELSE 0,
+                                        (IF AVAIL DayCampaign AND
+                                                  DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} 
+                                        THEN liContractID ELSE 0),
                                         OUTPUT lcError).
          IF liTerminate = 0 THEN
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -1569,6 +1583,7 @@ PROCEDURE pUpdateDSSAccount:
    DEF VAR ldeLastDayEndStamp        AS DEC  NO-UNDO.
 
    DEF BUFFER bMobSub  FOR MobSub.
+   DEF BUFFER bTerMsRequest FOR MsRequest.
 
    /* end old bundles to the end of previous tariff period */
    ASSIGN ldEndDate   = idActDate - 1
@@ -1596,26 +1611,39 @@ PROCEDURE pUpdateDSSAccount:
          FIND FIRST bMobSub WHERE
                     bMobSub.MsSeq = liDSSMsSeq NO-LOCK NO-ERROR.
          IF AVAIL bMobSub THEN DO:
-            liRequest = fDSSRequest(bMobSub.MsSeq,
-                                    bMobSub.CustNum,
-                                    "CREATE",
-                                    "",
-                                    "DSS2",
-                                    ideActStamp,
-                                    {&REQUEST_SOURCE_STC},
-                                    "",
-                                    TRUE, /* create fees */
-                                    iiMainRequest,
-                                    FALSE,
-                                    OUTPUT lcError).
-            IF liRequest = 0 THEN
-               /* write possible error to a memo */
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "MobSub",
-                                STRING(MobSub.MsSeq),
-                                MobSub.Custnum,
-                                "DSS2 activation failed",
-                                lcError).
+            /* Functionality changed to deny DSS2 creation if 
+                  there is DSS2 termination request. YTS-8140 
+               used bMobSub.Custnum cause of ACC */
+            FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
+                       bTerMsRequest.Brand = gcBrand AND
+                       bTerMsRequest.ReqType = 83 AND
+                       bTerMsRequest.Custnum = bMobSub.Custnum AND
+                       bTerMsRequest.ReqCParam3 BEGINS "DSS" AND
+                       bTerMsRequest.ReqCParam1 = "DELETE" AND
+                      LOOKUP(STRING(bTerMsRequest.ReqStatus),
+                             {&REQ_INACTIVE_STATUSES} + ",3") = 0 NO-ERROR.
+            IF NOT AVAIL bTerMsRequest THEN DO:
+               liRequest = fDSSRequest(bMobSub.MsSeq,
+                                       bMobSub.CustNum,
+                                       "CREATE",
+                                       "",
+                                       "DSS2",
+                                       ideActStamp,
+                                       {&REQUEST_SOURCE_STC},
+                                       "",
+                                       TRUE, /* create fees */
+                                       iiMainRequest,
+                                       FALSE,
+                                       OUTPUT lcError).
+               IF liRequest = 0 THEN
+                  /* write possible error to a memo */
+                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                   "MobSub",
+                                   STRING(MobSub.MsSeq),
+                                   MobSub.Custnum,
+                                   "DSS2 activation failed in STC",
+                                   lcError).
+            END.
          END.
       END.
 
@@ -1640,37 +1668,51 @@ PROCEDURE pUpdateDSSAccount:
                /* If new postpaid subs. type compatible with DSS2 */
                IF LOOKUP(bOldType.CLIType,lcAllowedDSS2SubsType) = 0 AND
                   LOOKUP(CLIType.CLIType,lcAllowedDSS2SubsType)  > 0 THEN DO:
-                  RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
-                                        INPUT Mobsub.CLI,
-                                        INPUT Mobsub.CustNum,
-                                        INPUT "ADD",
-                                        INPUT "",        /* Optional param list */
-                                        INPUT iiMainRequest,
-                                        INPUT ideActStamp,
-                                        INPUT {&REQUEST_SOURCE_STC},
-                                        INPUT lcBundleId).
+                  /* Functionality changed to deny DSS2 adding if 
+                        there is DSS2 termination request. YTS-8140 
+                      used Mobsub.Custnum cause of ACC */
+                  FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
+                             bTerMsRequest.Brand = gcBrand AND
+                             bTerMsRequest.ReqType = 83 AND
+                             bTerMsRequest.Custnum = Mobsub.Custnum AND
+                             bTerMsRequest.ReqCParam3 BEGINS "DSS" AND
+                             bTerMsRequest.ReqCParam1 = "DELETE" AND
+                            LOOKUP(STRING(bTerMsRequest.ReqStatus),
+                                   {&REQ_INACTIVE_STATUSES} + ",3") = 0 NO-ERROR.
+                  IF NOT AVAIL bTerMsRequest OR
+                     bTerMsRequest.ActStamp > fMakeTS() THEN DO:
+                     RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
+                                           INPUT Mobsub.CLI,
+                                           INPUT Mobsub.CustNum,
+                                           INPUT "ADD",
+                                           INPUT "",        /* Optional param list */
+                                           INPUT iiMainRequest,
+                                           INPUT ideActStamp,
+                                           INPUT {&REQUEST_SOURCE_STC},
+                                           INPUT lcBundleId).
 
-                  /* Add the limit if bono is transferable */
-                  ldeDataBundleLimit = fGetActiveBonoLimit(INPUT MobSub.MsSeq,
-                                                           INPUT ideActStamp).
-                  IF ldeDataBundleLimit > 0 THEN DO:
-                     ldeDSSLimit = 0.
-                     RUN pUpdateDSSLimit(INPUT MobSub.CustNum,
-                                         INPUT "UPDATE",
-                                         INPUT ldeDataBundleLimit,
-                                         INPUT 0,
-                                         INPUT ideActStamp,
-                                         OUTPUT ldeDSSLimit).
+                     /* Add the limit if bono is transferable */
+                     ldeDataBundleLimit = fGetActiveBonoLimit(INPUT MobSub.MsSeq,
+                                                              INPUT ideActStamp).
+                     IF ldeDataBundleLimit > 0 THEN DO:
+                        ldeDSSLimit = 0.
+                        RUN pUpdateDSSLimit(INPUT MobSub.CustNum,
+                                            INPUT "UPDATE",
+                                            INPUT ldeDataBundleLimit,
+                                            INPUT 0,
+                                            INPUT ideActStamp,
+                                            OUTPUT ldeDSSLimit).
 
-                     RUN pUpdateDSSNetworkLimit(INPUT Mobsub.MsSeq,
-                                                INPUT MobSub.CustNum,
-                                                INPUT ldeDSSLimit,
-                                                INPUT "LIMIT",
-                                                INPUT FALSE,
-                                                INPUT iiMainRequest,
-                                                INPUT ideActStamp,
-                                                INPUT {&REQUEST_SOURCE_STC},
-                                                INPUT lcBundleId).
+                        RUN pUpdateDSSNetworkLimit(INPUT Mobsub.MsSeq,
+                                                   INPUT MobSub.CustNum,
+                                                   INPUT ldeDSSLimit,
+                                                   INPUT "LIMIT",
+                                                   INPUT FALSE,
+                                                   INPUT iiMainRequest,
+                                                   INPUT ideActStamp,
+                                                   INPUT {&REQUEST_SOURCE_STC},
+                                                   INPUT lcBundleId).
+                     END.
                   END.
                END.
             END.
@@ -1865,15 +1907,29 @@ PROCEDURE pUpdateDSSAccount:
             IF lcBundleId = "DSS2" AND
                LOOKUP(CLIType.CLIType,lcAllowedDSS2SubsType) = 0 THEN RETURN.
 
-            RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
-                                  INPUT Mobsub.CLI,
-                                  INPUT Mobsub.CustNum,
-                                  INPUT "ADD",
-                                  INPUT "",        /* Optional param list */
-                                  INPUT iiMainRequest,
-                                  INPUT ideActStamp,
-                                  INPUT {&REQUEST_SOURCE_STC},
-                                  INPUT lcBundleId).
+            /* Functionality changed to deny DSS2 adding if 
+                  there is DSS2 termination request. YTS-8140 
+                used Mobsub.Custnum cause of ACC */
+            FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
+                       bTerMsRequest.Brand = gcBrand AND
+                       bTerMsRequest.ReqType = 83 AND
+                       bTerMsRequest.Custnum = Mobsub.Custnum AND
+                       bTerMsRequest.ReqCParam3 BEGINS "DSS" AND
+                       bTerMsRequest.ReqCParam1 = "DELETE" AND
+                      LOOKUP(STRING(bTerMsRequest.ReqStatus),
+                             {&REQ_INACTIVE_STATUSES} + ",3") = 0 NO-ERROR.
+            IF NOT AVAIL bTerMsRequest OR
+               bTerMsRequest.ActStamp > fMakeTS() THEN DO:
+               RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
+                                     INPUT Mobsub.CLI,
+                                     INPUT Mobsub.CustNum,
+                                     INPUT "ADD",
+                                     INPUT "",        /* Optional param list */
+                                     INPUT iiMainRequest,
+                                     INPUT ideActStamp,
+                                     INPUT {&REQUEST_SOURCE_STC},
+                                     INPUT lcBundleId).
+            END.
          END.
          /* Prepaid to prepaid - no change */
          ELSE RETURN.

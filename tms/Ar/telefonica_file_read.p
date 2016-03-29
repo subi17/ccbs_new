@@ -455,7 +455,12 @@ PROCEDURE pAnalyzeTelefonicaInvoices:
                   bttTF.OtherMF = ldeMonthlyFeesSum - 
                                           ldeProductMFSum - ldeFiberMFSum.
                OTHERWISE ASSIGN
-                  bttTF.ProductCode = "ERROR, incorrect product code"
+                  bttTF.ProductCode =
+                     (IF ttTF.ProductCode EQ "AG000000583317" OR 
+                         ttTF.ProductCode EQ "AG000000583318" THEN
+                         "ERROR, fixed line only product"
+                      ELSE SUBST("ERROR, incorrect product code &1",
+                                 ttTF.ProductCode))
                   bttTF.ValidationEnvio = "2"
                   bttTF.ValidationProceso = "4"
                   liNumErr = liNumErr + 1.

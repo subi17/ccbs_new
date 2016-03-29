@@ -31,6 +31,8 @@ DEF VAR lcReturnStruct   AS CHAR NO-UNDO.
 DEF VAR liSubLimit       AS INT  NO-UNDO.
 DEF VAR lisubs           AS INT NO-UNDO. 
 DEF VAR lcAddLineAllowed AS CHAR NO-UNDO. 
+DEF VAR liActLimit       AS INT  NO-UNDO.
+DEF VAR liacts           AS INT NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,string,boolean,int") EQ ?
    THEN RETURN.
@@ -49,7 +51,9 @@ llOrderAllowed = fSubscriptionLimitCheck(
    piOrders,
    OUTPUT lcReason,
    OUTPUT liSubLimit,
-   OUTPUT lisubs).
+   OUTPUT lisubs,
+   OUTPUT liActLimit,
+   OUTPUT liActs).
 
 FOR FIRST Customer WHERE
           Customer.Brand = gcBrand AND
@@ -120,6 +124,16 @@ add_boolean(lcReturnStruct, 'order_allowed', llOrderAllowed).
 add_int(lcReturnStruct, 'subscription_limit', liSubLimit).
 IF NOT llOrderAllowed THEN add_string(lcReturnStruct, 'reason',lcReason).
 add_string(lcReturnStruct, 'additional_line_allowed', lcAddLineAllowed).
+
+IF liSubs >= liSubLimit THEN
+   add_boolean(lcReturnStruct,"subscription_limit_reached",TRUE).
+ELSE
+   add_boolean(lcReturnStruct,"subscription_limit_reached",FALSE).
+IF liActs >= liActLimit THEN
+   add_boolean(lcReturnStruct,"activation_limit_reached",TRUE).
+ELSE
+   add_boolean(lcReturnStruct,"activation_limit_reached",FALSE).
+
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.

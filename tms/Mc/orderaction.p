@@ -73,6 +73,7 @@ FORM
        lcType COLON 41 FORMAT "X(30)" NO-LABEL SKIP
     OrderAction.ItemKey  COLON 20 FORMAT "x(15)"  
        lcItemName COLON 41 NO-LABEL FORMAT "X(30)" SKIP
+    OrderAction.ItemParam COLON 20
 WITH  OVERLAY ROW 3 centered
     COLOR VALUE(cfc)
     TITLE COLOR VALUE(ctc) ac-hdr 
@@ -531,6 +532,7 @@ PROCEDURE local-UPDATE-record:
          OrderAction.ItemKey        
          lcType
          lcItemName
+         OrderAction.ItemParam
       WITH FRAME lis.
 
       IF NOT NEW OrderAction THEN DO:

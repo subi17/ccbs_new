@@ -675,6 +675,16 @@ ADD FIELD "ReadTime" OF "PrepCDR" AS integer
   COLUMN-LABEL "ReadTime"
   ORDER 2500
 
+ADD FIELD "Accumulator" OF "PrepCDR" AS integer 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Accumulator"
+  POSITION 203
+  MAX-WIDTH 4
+  COLUMN-LABEL "Accumulator"
+  HELP "Accumulator value"
+  ORDER 2510
+
 ADD INDEX "Date" ON "PrepCDR" 
   AREA "Dyn_Index1"
   PRIMARY
@@ -716,7 +726,6 @@ ADD INDEX "invseq" ON "PrepCDR"
 ADD INDEX "ReadDate" ON "PrepCDR" 
   AREA "Dyn_Index1"
   INDEX-FIELD "ReadDate" DESCENDING 
-  INDEX-FIELD "ReadTime" DESCENDING 
 
 ADD INDEX "spocmt" ON "PrepCDR" 
   AREA "Dyn_Index5"
@@ -726,4 +735,4 @@ ADD INDEX "spocmt" ON "PrepCDR"
 PSC
 cpstream=1252
 .
-0000014149
+0000014318

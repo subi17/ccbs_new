@@ -142,7 +142,7 @@ PROCEDURE pInstallmentContractChange:
    ASSIGN
       ldaLastDayOfLastMonth = fLastDayOfMonth(ldaFirstDayOfLastMonth)
       ldPeriodTo = fMake2Dt(ldaLastDayOfLastMonth,86399).
-
+   
    /* Terminate current payterm contract */
    liTermReq = fPCActionRequest(MobSub.MsSeq,
                                 DCCLI.DCEvent,
@@ -173,7 +173,7 @@ PROCEDURE pInstallmentContractChange:
                                TRUE,
                                "",
                                MsRequest.ReqDParam2, /* residual fee */
-                               0,
+                               DCCLI.PerContractId,
                                OUTPUT lcError).
    IF liActReq = 0 OR liActReq = ? THEN
        UNDO, RETURN "ERROR:New Installment Contract termination request " +

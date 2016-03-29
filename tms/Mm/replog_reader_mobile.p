@@ -216,7 +216,8 @@ PROCEDURE pHandleDCCLI:
                            fDateToString(DCCLI.ValidTo)          + lcDel +
                            fDateToString(DCCLI.ValidToOrig)      + lcDel + 
                            fDateToString(DCCLI.RenewalDate)      + lcDel + 
-                           fNotNull(STRING(DCCLI.Amount)).
+                           fNotNull(STRING(DCCLI.Amount))        + lcDel +
+                           fDateToString(DCCLI.TermDate).
 
                fWriteMessage(lcMessage).
             END.
@@ -478,8 +479,7 @@ PROCEDURE pHandleMsRequest:
               RECID(MsRequest) = RepLog.RecordId NO-ERROR.
 
          IF AVAIL MsRequest THEN DO:
-            IF LOOKUP(MsRequest.ReqSource,{&REQUEST_SOURCES_HPD}) > 0 AND
-               LOOKUP(STRING(MsRequest.ReqType),{&REQTYPES_HPD}) > 0
+            IF LOOKUP(STRING(MsRequest.ReqType),{&REQTYPES_HPD}) > 0
             THEN DO:
                lcMessage = lcMessage + lcDel +
                            fNotNull(STRING(MsRequest.MsRequest)) + lcDel +

@@ -17,7 +17,7 @@ gcBrand = "1".
 
 DEF INPUT PARAM iiOrderId AS INT NO-UNDO.
 DEF INPUT PARAM icEmailAddress AS CHAR NO-UNDO.
-DEF OUTPUT PARAM lcErrFile AS CHAR NO-UNDO.
+DEF OUTPUT PARAM ocErrFile AS CHAR NO-UNDO.
 
 DEF VAR lcRootDir    AS CHAR NO-UNDO.
 DEF VAR lcEmailFile  AS CHAR NO-UNDO.
@@ -58,70 +58,26 @@ FIND FIRST OrderCustomer WHERE OrderCustomer.Brand = gcBrand AND
                                OrderCustomer.OrderId = iiOrderId AND
                                OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
-/* INT(OrderCustomer.Language). decided with Gonzalo that only
-                   Spain is supported at the moment
-
-IF liLanguage = 5 THEN DO:
-   IF (OrderCustomer.CustIdType EQ "CIF") AND 
-      (Order.Ordertype = {&ORDER_TYPE_NEW}) THEN
-      RUN Func/parse_tags.p (lcRootDir + "conf_email_company_new_en.html",
-                lcEmailFile, iiOrderId, 2, 
-                icEmailAddress, OUTPUT lcErrFile). /*2=conf mes*/
-   ELSE IF (OrderCustomer.CustIdType EQ "CIF") AND 
-           (Order.Ordertype = {&ORDER_TYPE_MNP})
-      THEN RUN Func/parse_tags.p (lcRootDir + 
-                     "conf_email_company_mnp_en.html",
-                     lcEmailFile, iiOrderId, 2, 
-                     icEmailAddress, OUTPUT lcErrFile). /*2=conf mes*/
-   ELSE IF Order.Ordertype = {&ORDER_TYPE_NEW} THEN
-      RUN Func/parse_tags.p (lcRootDir + "conf_email_new_en.html",
-                lcEmailFile, iiOrderId, 2, 
-                icEmailAddress, OUTPUT lcErrFile). /* 2 = conf mes */
-   ELSE IF Order.Ordertype = {&ORDER_TYPE_MNP} THEN
-      RUN Func/parse_tags.p (lcRootDir + "conf_email_mnp_en.html",
-                lcEmailFile, iiOrderId, 2, 
-                icEmailAddress, OUTPUT lcErrFile). /* 2 = conf mes */
-   /* fusion STC needs propably own template. TODO later 
-   ELSE IF (Order.Ordertype = {&ORDER_TYPE_STC}  AND
-            Order.OrderChannel BEGINS "fusion") THEN /* new fusion order */
-      RUN Func/parse_tags.p (lcRootDir + "conf_email_new_en.html",
-                lcEmailFile, iiOrderId, 2, OUTPUT lcErrFile). /* 2 = conf mes */
-
-   */
-   ELSE lcErrFile = "Not supported type in order " + " " + 
-                    STRING(Order.Ordertype) + " " + STRING(iiOrderId).
-END.*/
-/*ELSE DO:*/ /*Spanish*/
-   IF (OrderCustomer.CustIdType EQ "CIF") AND 
-      (Order.Ordertype = {&ORDER_TYPE_NEW}) THEN
-      RUN Func/parse_tags.p (lcRootDir + "conf_email_company_new_es.html",
-                lcEmailFile, iiOrderId, 2, 
-                icEmailAddress, OUTPUT lcErrFile). /*2=conf mes*/
-   ELSE IF (OrderCustomer.CustIdType EQ "CIF") AND 
-           (Order.Ordertype = {&ORDER_TYPE_MNP})
-      THEN RUN Func/parse_tags.p (lcRootDir + 
-                     "conf_email_company_mnp_es.html",
-                     lcEmailFile, iiOrderId, 2, 
-                     icEmailAddress, OUTPUT lcErrFile). /*2=conf mes*/  
+   IF Ordercustomer.CustIdType EQ "CIF" THEN .
    ELSE IF Order.Ordertype = {&ORDER_TYPE_NEW} THEN
        RUN Func/parse_tags.p (lcRootDir + "conf_email_new_es.html",
                  lcEmailFile, iiOrderId, 2, 
-                 icEmailAddress, OUTPUT lcErrFile). /* 2 = conf mes */
+                 icEmailAddress, OUTPUT ocErrFile). /* 2 = conf mes */
    ELSE IF Order.Ordertype = {&ORDER_TYPE_MNP} THEN
        RUN Func/parse_tags.p (lcRootDir + "conf_email_mnp_es.html",
                  lcEmailFile, iiOrderId, 2, 
-                 icEmailAddress, OUTPUT lcErrFile). /* 2 = conf mes */
+                 icEmailAddress, OUTPUT ocErrFile). /* 2 = conf mes */
    /* fusion STC needs propably own template. TODO later
    ELSE IF (Order.Ordertype = {&ORDER_TYPE_STC} AND 
             Order.OrderChannel BEGINS "fusion") THEN  /* new fusion order */
           RUN Func/parse_tags.p (lcRootDir + "conf_email_new_es.html",
                            lcEmailFile, iiOrderId, 2, OUTPUT lcErrFile). /* 2 = conf mes */
    */
-   ELSE lcErrFile = "Not supported type in order " + " " + 
+   ELSE ocErrFile = "Not supported type in order " + " " + 
                     STRING(Order.Ordertype) + " " + STRING(iiOrderId).
 /*END.*/
 
-IF lcErrFile > "" OR PROGRAM-NAME(2) BEGINS "Test" THEN .
+IF ocErrFile > "" OR PROGRAM-NAME(2) BEGINS "Test" THEN .
 ELSE
    fTxtSendLog(6).
 

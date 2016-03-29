@@ -76,8 +76,16 @@ repeat trans:
       RUN StarEventSetOldBuffer(lhCustomer).
       customer.bankacc = lcnewbank.
       RUN StarEventMakeModifyEvent(lhCustomer).
+
+      /* Write memo */
+      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                 "customer",
+                 STRING(Customer.CustNum),
+                 Customer.CustNum,
+                 "Cuenta EVO caducada",
+                 "Cuenta EVO caducada. Actualización masiva comunicada por EVO: " + lcoldbank + " -> " + lcnewbank ).
+
       release customer.
-      
       lcresult = "Updated".
    end.    
    

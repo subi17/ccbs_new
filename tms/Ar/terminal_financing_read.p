@@ -21,6 +21,7 @@ gcBrand = "1".
 &GLOBAL-DEFINE TF_PAYTERM_CODES "0018,0024,0034,0125,0127,0129,0131,0225,0227,0229,0231"
 &GLOBAL-DEFINE TF_PAYTERM_WITH_RESIDUAL "0125,0127,0129,0131,0225,0227,0229,0231"
 &GLOBAL-DEFINE TF_RESIDUAL_CODES "0126,0128,0130,0132,0226,0228,0230,0232,N/A"
+&GLOBAL-DEFINE TF_Q25_EXTENSION_CODES "0212"
 
 DEF VAR lcProcessedFile AS CHAR NO-UNDO.
 DEF VAR lcIncDir AS CHAR NO-UNDO. 
@@ -77,6 +78,7 @@ DEFINE TEMP-TABLE ttTFPayment
    FIELD ResidualAmt AS DEC
    FIELD ResidualCode AS CHAR
    FIELD ResidualResult AS CHAR
+   FIELD FFBillCode AS CHAR
 INDEX linenum IS PRIMARY linenum 
 INDEX lineid lineid. 
 
@@ -267,7 +269,8 @@ PROCEDURE pReadFileData:
       END.
       
       /* normal row */
-      IF LOOKUP(lcPaymentCode,{&TF_PAYTERM_CODES}) > 0 THEN DO:
+      IF LOOKUP(lcPaymentCode,{&TF_PAYTERM_CODES}) > 0 OR
+         LOOKUP(lcPaymentCode,{&TF_Q25_EXTENSION_CODES}) > 0 THEN DO:
 
          CREATE ttTFPayment.
          ASSIGN
@@ -278,6 +281,11 @@ PROCEDURE pReadFileData:
             ttTFPayment.PaytermAmt = ldeTotalAmount
             ttTFPayment.PaymentCode = lcPaymentCode
             ttTFPayment.FinancedResult = lcFinancedResult.
+         
+         IF LOOKUP(lcPaymentCode,{&TF_Q25_EXTENSION_CODES}) > 0 THEN
+            ttTFPayment.FFBillCode = "RVTERM".
+         ELSE 
+            ttTFPayment.FFBillCode = "PAYTERM".
       END.
       /* residual fee row */
       ELSE IF LOOKUP(lcPaymentCode,{&TF_RESIDUAL_CODES}) > 0 THEN DO:
@@ -294,7 +302,8 @@ PROCEDURE pReadFileData:
          ASSIGN
             ttTFPayment.ResidualAmt    = ldeTotalAmount
             ttTFPayment.ResidualCode   = lcPaymentCode
-            ttTFPayment.ResidualResult = lcFinancedResult.
+            ttTFPayment.ResidualResult = lcFinancedResult
+            ttTFPayment.FFBillCode     = "PAYTERM".
       END. 
       ELSE DO:
          fWriteLog(lcLine,SUBST("ERROR:Unsupported payment method &1", 
@@ -337,7 +346,7 @@ PROCEDURE pProcessData:
            FixedFee.Custnum = Order.Custnum AND
            FixedFee.HostTable = "MobSub" AND
            FixedFee.KeyValue = STRING(Order.MsSeq) AND
-           FixedFee.BillCode = "PAYTERM" AND
+           FixedFee.BillCode = ttTFPayment.FFBillCode AND
            FixedFee.OrderId = Order.OrderID AND 
            FixedFee.FinancedResult = {&TF_STATUS_SENT_TO_BANK} NO-ERROR.
 
@@ -347,7 +356,7 @@ PROCEDURE pProcessData:
            FixedFee.Custnum = Order.Custnum AND
            FixedFee.HostTable = "MobSub" AND
            FixedFee.KeyValue = STRING(Order.MsSeq) AND
-           FixedFee.BillCode = "PAYTERM" AND
+           FixedFee.BillCode = ttTFPayment.FFBillCode AND
            FixedFee.OrderId = Order.OrderID NO-ERROR.
 
       
@@ -423,7 +432,8 @@ PROCEDURE pProcessData:
       END.
       ELSE RELEASE bResidualFee.
       
-      IF ttTFPayment.FinancedResult EQ {&TF_STATUS_BANK} THEN DO:
+      IF ttTFPayment.FinancedResult EQ {&TF_STATUS_BANK} AND
+         FixedFee.BillCode NE "RVTERM" THEN DO:
       
          IF LOOKUP(FixedFee.TFBank,{&TF_BANK_CODES}) = 0 THEN DO:
             fWriteLog(ttTFPayment.content,
@@ -540,9 +550,8 @@ PROCEDURE pProcessData:
                                       FixedFeeTF.CancelStatus EQ "NEW" AND
                                       ttTFPayment.FinancedResult NE "00".
 
-      RELEASE FixedFee.
-      
-      IF INDEX(Order.OrderChannel,"pos") > 0 THEN
+      IF INDEX(Order.OrderChannel,"pos") > 0 AND 
+         FixedFee.BillCode NE "RVTERM" THEN
       FOR FIRST OrderTimeStamp NO-LOCK WHERE
                 OrderTimeStamp.Brand = gcBrand AND
                 OrderTimeStamp.OrderId = Order.OrderId AND
@@ -557,6 +566,8 @@ PROCEDURE pProcessData:
             ldaFromDate = ldaDate WHEN ldaDate < ldaFromDate
             ldaToDate = ldaDate WHEN ldaDate > ldaToDate.
       END.
+      
+      RELEASE FixedFee.
       
    END.
 

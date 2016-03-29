@@ -379,7 +379,7 @@ PROCEDURE pRevertRenewalOrder:
                                                  FALSE,
                                                  "",
                                                  0,
-                                                 (IF bDCCLI.DCEvent BEGINS "PAYTERM" 
+                                                 (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} 
                                                   THEN bDCCLI.PerContractID
                                                   ELSE 0),
                                                  OUTPUT lcError).
@@ -498,7 +498,7 @@ PROCEDURE pCloseQ25Discount:
       FIND MsRequest NO-LOCK WHERE
            MsRequest.MSRequest = bmsrequest.MSRequest.
 
-      fReqStatus(4,"Cancelled by renewal cancellation").
+      fReqStatus(4,SUBST("Cancelled by renewal cancellation, orderid: &1", MsRequest.ReqIParam1)).
       
       FIND FIRST MsRequest WHERE
                  MsRequest.MsRequest = iiMsRequest  NO-LOCK NO-ERROR.
@@ -528,7 +528,7 @@ PROCEDURE pCloseQ25Discount:
             FALSE,
             "",
             0, /* payterm residual fee */
-            0,
+            DCCLI.PercontractId,
             OUTPUT lcResult).
 
          IF liRequest EQ 0 THEN
@@ -537,18 +537,23 @@ PROCEDURE pCloseQ25Discount:
       END.
    END.
    
+   DISCOUNT_LOOP:
    FOR EACH DiscountPlan NO-LOCK WHERE
             DiscountPlan.Brand = gcBrand AND
      LOOKUP(DiscountPlan.DPRuleID,"RVTERMDT1DISC,RVTERMDT4DISC") > 0:
 
-      FIND FIRST dpmember NO-LOCK WHERE
-                 dpmember.dpid = DiscountPlan.DpId AND
-                 dpmember.hosttable = "mobsub" AND
-                 dpmember.keyvalue = string(mobsub.msseq) AND
-                 dpmember.validfrom = fPer2Date(SingleFee.BillPeriod,0) AND
-                 dpmember.validto >= dpmember.validfrom AND
-                 dpmember.discvalue = ldeDiscount NO-ERROR.
-      IF AVAIL dpmember THEN LEAVE.
+      FOR EACH dpmember NO-LOCK WHERE
+               dpmember.dpid = DiscountPlan.DpId AND
+               dpmember.hosttable = "mobsub" AND
+               dpmember.keyvalue = string(mobsub.msseq) AND
+               dpmember.validto >= dpmember.validfrom AND
+               dpmember.discvalue = ldeDiscount:
+
+         IF (dpmember.orderid > 0 AND
+             dpmember.OrderID EQ SingleFee.OrderID) OR
+             dpmember.validfrom EQ fPer2Date(SingleFee.BillPeriod,0)
+            THEN LEAVE DISCOUNT_LOOP.
+      END.
    END.
    
    IF NOT AVAILABLE dpmember THEN RETURN "".
@@ -569,7 +574,7 @@ PROCEDURE pCloseQ25Discount:
       FIND FIRST invrow NO-LOCK WHERE
                  invrow.InvNum    EQ subInvoice.InvNum AND
                  invrow.SubInvNum EQ subInvoice.SubInvNum AND
-          LOOKUP(invrow.BillCode,"RVTERMDTRW,RVTERMDTEQ25") > 0  NO-ERROR.
+          LOOKUP(invrow.BillCode,"RVTERMDTRW,RVTERMDTTD") > 0  NO-ERROR.
       
       IF NOT AVAILABLE invrow THEN RETURN "".
         

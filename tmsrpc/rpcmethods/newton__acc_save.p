@@ -71,7 +71,8 @@ DEF VAR lcCode AS CHARACTER NO-UNDO.
 DEF VAR liSubLimit AS INT NO-UNDO. 
 DEF VAR liSubs AS INT NO-UNDO. 
 DEF VAR lcDMSInfo AS CHAR NO-UNDO.
-
+DEF VAR liActLimit AS INT NO-UNDO.
+DEF VAR liActs AS INT NO-UNDO.
 
 
 DEF BUFFER bOriginalCustomer FOR Customer.
@@ -248,7 +249,9 @@ IF NOT fSubscriptionLimitCheck(INPUT ttCustomer.OrgId,
                                1,
                                OUTPUT lcError,
                                OUTPUT liSubLimit,
-                               OUTPUT liSubs) THEN
+                               OUTPUT liSubs,
+                               OUTPUT liActLimit,
+                               OUTPUT liActs) THEN
    RETURN appl_err("Subscription limit exceeded").
 
 lcCode = fCreateAccDataParam(

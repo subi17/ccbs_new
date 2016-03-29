@@ -410,24 +410,26 @@ PROCEDURE pPeriodicalContract:
                   bDCCLI.MsSeq   = liMsSeq AND
                   bDCCLI.ValidTo > ldaTermDate NO-LOCK:
 
-            IF bDCCLI.TermDate NE ? THEN DO:
-               liRequest = 1. /* to prevent error memo creation */
-               NEXT.
-            END.
+            IF bDCCLI.TermDate NE ? THEN NEXT.
 
             /* YPR-2515 */
-            ldaMonth22  = ADD-INTERVAL(bDCCLI.ContractDate, 22, "months").
+            ldaMonth22  = ADD-INTERVAL(MIN(bDCCLI.ContractDate,
+                                           bDCCLI.ValidFrom), 22, "months").
             ldaMonth22  = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
 
             IF AVAIL Order AND
                      Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
-               ldaTermDate >= ldaMonth22 THEN DO:
+               ldaReqDate >= ldaMonth22 THEN DO:
+
+               liFFCount = 0.
                
+               /* assumes that possible installment activation request
+                  has not been yet created from the same order */
                FOR EACH DCCLI NO-LOCK WHERE
                         DCCLI.Brand      = gcBrand         AND
                         DCCLI.MsSeq      = MsRequest.MsSeq AND
-                        DCCLI.ValidTo   >= ldaTermDate     AND
-                        DCCLI.ValidFrom <= ldaTermDate     AND 
+                        DCCLI.ValidTo   >= ldaReqDate     AND
+                        DCCLI.ValidFrom <= ldaReqDate     AND 
                         DCCLI.DCEvent   BEGINS "PAYTERM":
                    liFFCount = liFFCount + 1.             
                END.             
@@ -441,10 +443,7 @@ PROCEDURE pPeriodicalContract:
                                  OfferItem.ItemKey BEGINS "PAYTERM") THEN
                   liFFCount = liFFCount + 1.
 
-               IF NOT liFFCount > 2 THEN DO:
-                  liRequest = 1. /* to prevent error memo creation */
-                  NEXT.
-               END.
+               IF liFFCount <= 2 THEN NEXT.
             END.
 
             llFound = TRUE.

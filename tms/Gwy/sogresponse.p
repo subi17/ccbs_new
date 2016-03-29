@@ -329,6 +329,9 @@ PROCEDURE pSoLog:
    NO-ERROR.
 
    IF liSoLog > 0 THEN DO:
+
+      /* YTS-8530, EYOIGO-43 */
+      IF liSoLog <= 1000000 THEN RETURN "SKIPPED".
       
       FIND FIRST SoLog WHERE
                  SoLog.SoLog = liSoLog

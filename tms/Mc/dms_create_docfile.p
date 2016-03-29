@@ -15,6 +15,7 @@
 {Func/timestamp.i}
 {Mc/offer.i}
 {Func/dms.i}
+{Func/q25functions.i}
 
 DEF INPUT PARAMETER icCases AS CHAR. /*List of reported cases*/
 DEF INPUT PARAMETER idPeriodStart AS DEC. /*reporting period strat*/
@@ -36,12 +37,14 @@ DEF VAR lcDMSDOCStatus AS CHAR NO-UNDO.
 lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 
 DEF TEMP-TABLE ttOrderList NO-UNDO
-   FIELD OrderID AS INT
-   FIELD CaseID AS CHAR
-   FIELD Direct AS LOGICAL
+   FIELD OrderID   AS INT
+   FIELD CaseID    AS CHAR
+   FIELD Direct    AS LOGICAL
+   FIELD MsRequest AS INT
 INDEX OrderID OrderID
 INDEX CaseID CaseID
-INDEX Direct Direct.
+INDEX Direct Direct
+INDEX MsRequest MsRequest.
 
 ASSIGN
    lcInitStatus    = {&DMS_INIT_STATUS_SENT}
@@ -89,6 +92,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
    DEF VAR liStampTypeCount AS INT NO-UNDO.
    DEF VAR lcStampTypes AS CHAR NO-UNDO.
    DEF VAR lcCancelTypeList AS CHAR NO-UNDO.
+   DEF VAR liMsRequest AS INT NO-UNDO.
 
    llgOrderSeek = FALSE.
    llgDirectNeeded = FALSE.
@@ -247,10 +251,10 @@ FUNCTION fMakeTempTable RETURNS CHAR
             DELETE ttOrderList.
             NEXT.
          END.
-         ELSE DO:
-            liAddId = MsRequest.ReqIparam1.
-            lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
-         END.
+         ELSE ASSIGN
+            liAddId     = MsRequest.ReqIparam1
+            lcCase      = {&DMS_CASE_TYPE_ID_CANCEL}
+            liMsRequest = MsRequest.MsRequest.
       END.
       ELSE IF  MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
                MsRequest.ReqCparam3 EQ "11" THEN DO:
@@ -266,10 +270,10 @@ FUNCTION fMakeTempTable RETURNS CHAR
                DELETE ttOrderList.
                NEXT.
             END.
-            ELSE DO:
-               liAddId = Order.OrderId.
-               lcCase = {&DMS_CASE_TYPE_ID_CANCEL}.
-            END.
+            ELSE ASSIGN
+               liAddId     = Order.OrderId
+               lcCase      = {&DMS_CASE_TYPE_ID_CANCEL}
+               liMsRequest = MsRequest.MsRequest.
          END.
          ELSE NEXT.
       END.
@@ -291,8 +295,9 @@ FUNCTION fMakeTempTable RETURNS CHAR
 
       IF AVAIL DMS THEN DO TRANS:
          CREATE ttOrderList.
-         ASSIGN ttOrderList.OrderID = liAddId
-                ttOrderList.CaseID = lcCase.
+         ASSIGN ttOrderList.OrderID    = liAddId
+                ttOrderList.CaseID     = lcCase
+                ttOrderList.MsRequest  = liMsRequest.
       END.
    END. /*Msrequest search*/
 
@@ -326,14 +331,15 @@ END.
 
 FUNCTION fGetSegment RETURNS CHAR
    (iiOrderID AS INT):
-   FIND FIRST OrderCustomer NO-LOCK  WHERE
-              OrderCustomer.Brand EQ gcBrand AND
-              OrderCustomer.OrderID EQ iiOrderID AND
-              Ordercustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+   DEF BUFFER bOC FOR Ordercustomer.
+   FIND FIRST bOC NO-LOCK  WHERE
+              bOC.Brand EQ gcBrand AND
+              bOC.OrderID EQ iiOrderID AND
+              bOC.RowType EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
               NO-ERROR.
-   IF AVAIL OrderCustomer THEN DO:
-      IF OrderCustomer.CustIdType EQ "CIF" THEN RETURN "Company".
-      ELSE IF OrderCustomer.SelfEmployed EQ TRUE THEN RETURN "Self-employed".
+   IF AVAIL bOC THEN DO:
+      IF bOC.CustIdType EQ "CIF" THEN RETURN "Company".
+      ELSE IF bOC.SelfEmployed EQ TRUE THEN RETURN "Self-employed".
       ELSE RETURN "Consumer".
    END.
    ELSE RETURN "-".
@@ -343,6 +349,7 @@ END.
 FUNCTION fGetTerminalFinanceType RETURNS CHAR
    (iiOrderID AS INT):
    DEF BUFFER bOrder FOR Order.
+   DEF BUFFER bOA FOR OrderAccessory.
    DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
    DEF VAR ldeMonthlyFee  AS DECIMAL NO-UNDO.
    DEF VAR liMonths AS INT NO-UNDO.
@@ -353,11 +360,11 @@ FUNCTION fGetTerminalFinanceType RETURNS CHAR
               bOrder.OrderId EQ iiOrderId NO-ERROR.
    IF NOT AVAIL bOrder THEN RETURN "".
 
-   FIND FIRST OrderAccessory NO-LOCK  WHERE
-              OrderAccessory.Brand EQ gcBrand AND
-              OrderAccessory.OrderID EQ iiOrderID AND
-              Orderaccessory.TerminalType EQ {&TERMINAL_TYPE_PHONE} NO-ERROR.
-   IF AVAIL OrderAccessory THEN DO:
+   FIND FIRST bOA NO-LOCK  WHERE
+              bOA.Brand EQ gcBrand AND
+              bOA.OrderID EQ iiOrderID AND
+              bOA.TerminalType EQ {&TERMINAL_TYPE_PHONE} NO-ERROR.
+   IF AVAIL bOA THEN DO:
 
       ldeInstallment = fGetOfferDeferredPayment(bOrder.Offer,
                                                 bOrder.CrStamp,
@@ -370,29 +377,13 @@ FUNCTION fGetTerminalFinanceType RETURNS CHAR
    RETURN "Simonly".
 END.
 
-
-FUNCTION fGetHandset RETURNS CHAR
-   (iiOrderId AS INT,
-   icImei AS CHAR):
-   DEF BUFFER bOAcc FOR OrderAccessory.
-   FIND FIRST bOAcc NO-LOCK WHERE
-              bOAcc.Brand EQ gcBrand AND
-              bOAcc.OrderId EQ iiOrderId AND
-              bOAcc.Imei EQ icImei NO-ERROR.
-   IF AVAIL bOAcc THEN 
-      RETURN STRING(bOAcc.Manufacturer) + " " +
-             STRING(bOAcc.Model)        + " " +
-             STRING(bOAcc.ModelColor).
-   RETURN "".             
-END.   
-
 FUNCTION fGetCancellationInfo RETURNS CHAR
    (iiMsSeq AS INT,
     icStatus AS CHAR,
     idStartTS AS DECIMAL,
     idEndTS AS DECIMAL,
    OUTPUT odeTime AS DECIMAL):
-
+   DEF BUFFER bMsRequest FOR MsRequest.
    DEF VAR liRt AS INT NO-UNDO.
    DEF VAR liReqTypeCount AS INT NO-UNDO.
    DEF VAR lcReqTypes AS CHAR NO-UNDO.
@@ -402,23 +393,23 @@ FUNCTION fGetCancellationInfo RETURNS CHAR
                 STRING({&REQTYPE_REVERT_RENEWAL_ORDER} ).
    DO liReqTypeCount = 1 TO NUM-ENTRIES (lcReqTypes):
       liRT = INT(ENTRY(liReqTypeCount,lcReqTypes)).
-      FIND FIRST MsRequest NO-LOCK WHERE
-                 MsRequest.Brand EQ gcBrand AND
-                 MsRequest.ReqStatus EQ 2 AND
-                 MsRequest.UpdateStamp > idStartTS AND
-                 MsRequest.UpdateStamp < idEndTS AND
-                 MsRequest.ReqType EQ liRt AND
-                 Msrequest.MsSeq EQ iiMsSeq AND
-                 MsRequest.UpdateStamp <= MsRequest.DoneStamp NO-ERROR.
+      FIND FIRST bMsRequest NO-LOCK WHERE
+                 bMsRequest.Brand EQ gcBrand AND
+                 bMsRequest.ReqStatus EQ 2 AND
+                 bMsRequest.UpdateStamp > idStartTS AND
+                 bMsRequest.UpdateStamp < idEndTS AND
+                 bMsRequest.ReqType EQ liRt AND
+                 bMsrequest.MsSeq EQ iiMsSeq AND
+                 bMsRequest.UpdateStamp <= bMsRequest.DoneStamp NO-ERROR.
 
-      IF AVAIL MsRequest THEN DO:
-         IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-            MsRequest.ReqCparam3 EQ "11" THEN DO:
-            odeTime = MsRequest.CreStamp.
+      IF AVAIL bMsRequest THEN DO:
+         IF bMsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+            bMsRequest.ReqCparam3 EQ "11" THEN DO:
+            odeTime = bMsRequest.CreStamp.
             RETURN "POS Order Cancellation".
          END.
-         ELSE IF MsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} THEN DO:
-            odeTime = MsRequest.CreStamp.
+         ELSE IF bMsRequest.ReqType EQ {&REQTYPE_REVERT_RENEWAL_ORDER} THEN DO:
+            odeTime = bMsRequest.CreStamp.
             RETURN "Order Cancellation".
          END.
       END.
@@ -520,9 +511,9 @@ FUNCTION fGetPrevTariff RETURNS CHAR
    
 END.   
 
-
 FUNCTION fCountIMEIModifications RETURN CHAR
-   (iiMsSeq AS INT):
+   (iiMsSeq AS INT,
+    idTime  AS DECIMAL):
    DEF BUFFER bMsrequest FOR MsRequest.
    DEF VAR liCount AS INT NO-UNDO.
    FOR EACH bMsRequest NO-LOCK WHERE
@@ -530,10 +521,126 @@ FUNCTION fCountIMEIModifications RETURN CHAR
             bMsRequest.ReqType EQ {&REQTYPE_IMEI_CHANGE} AND
             bMsRequest.ReqStatus EQ 2 AND
             bMsRequest.ReqCparam6 NE "" AND
-            bMsRequest.UpdateStamp <= bMsRequest.DoneStamp :
+            bMsRequest.UpdateStamp <= bMsRequest.DoneStamp AND
+            bMsRequest.UpdateStamp <= idTime:
       liCount = liCount + 1.
    END.
    RETURN STRING(liCount).
+END.
+
+FUNCTION fGetQ25Extension RETURNS CHAR
+   (iiOrderId AS INT,
+    OUTPUT ocItem AS CHAR):
+   DEF BUFFER bOA FOR OrderAction.
+   FIND FIRST bOA WHERE
+              bOA.Brand EQ gcBrand AND
+              bOA.OrderID EQ iiOrderID AND
+              bOA.ItemType EQ "Q25Extension" NO-ERROR.
+   IF AVAIL bOA THEN DO:
+      ocItem = bOa.ItemParam. /*itemparam -> singlefee.sourcekey.*/
+      RETURN bOA.ItemKey. 
+   END.
+   ELSE RETURN "".
+END.
+
+
+/*key from orderaction*/
+FUNCTION fGetQ25BankByOrder RETURNS CHAR
+   (BUFFER Order FOR Order,
+    icSourceKey AS CHAR):
+FIND SingleFee USE-INDEX Custnum WHERE
+   SingleFee.Brand = gcBrand AND
+   SingleFee.Custnum = Order.CustNum AND
+   SingleFee.HostTable = "Mobsub" AND
+   SingleFee.KeyValue = STRING(Order.MsSeq) AND
+   SingleFee.SourceTable = "DCCLI" AND
+   SingleFee.SourceKey = icSourceKey AND
+   SingleFee.CalcObj = "RVTERM" NO-LOCK NO-ERROR.
+   IF AVAIL Singlefee THEN DO:
+      RETURN fBankByBillCode(SingleFee.BillCode).
+   END.
+   ELSE
+   RETURN "".
+END.
+
+
+FUNCTION fFindQ25Cancellation RETURNS CHAR
+   (BUFFER Order FOR Order,
+    INPUT iiMsRequest AS INT):
+   
+   DEF BUFFER bMsRequest FOR MsRequest.
+
+   IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN RETURN "".
+
+   FIND FIRST OrderAction NO-LOCK WHERE
+              OrderAction.Brand    EQ gcBrand AND
+              OrderAction.OrderId  EQ Order.OrderId AND
+              OrderAction.ItemType EQ "Q25Discount" NO-ERROR.
+
+   IF NOT AVAILABLE OrderAction THEN RETURN "".
+
+   /* before deadline */
+   FIND FIRST bMsRequest NO-LOCK WHERE
+              bMsRequest.MsSeq      = Order.MsSeq AND
+              bMsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND
+              bMsRequest.ReqStatus  = {&REQUEST_STATUS_CANCELLED} AND
+              bMsRequest.ReqCParam3 = "RVTERM12" AND
+              bMsRequest.reqiparam3 = INT(OrderAction.ItemParam) AND
+              INDEX(bMsRequest.Memo, STRING(Order.OrderID)) > 0 NO-ERROR.
+   IF AVAILABLE bMsRequest THEN RETURN bMsRequest.ReqCParam4.
+
+   /* after deadline */
+   IF iiMsRequest > 0 THEN DO:
+      FIND FIRST bMsRequest NO-LOCK WHERE
+                 bMsRequest.OrigRequest = iiMsRequest AND
+                 bMsRequest.MsSeq       = Order.MsSeq AND
+                 bMsRequest.ReqStatus  NE {&REQUEST_STATUS_CANCELLED} AND
+                 bMsRequest.ReqType     = {&REQTYPE_CONTRACT_TERMINATION} AND
+                 bMsRequest.ReqSource   = 
+                                    {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} AND
+                 bMsRequest.ReqCParam2  = "term" AND
+                 bMsRequest.ReqCparam3  = "RVTERM12" NO-ERROR.
+      IF AVAILABLE bMsRequest THEN RETURN bMsRequest.ReqCParam4.
+   END.
+   RETURN "".
+END.
+
+/*function removes channel name from salesmanID.
+For example */
+FUNCTION fCutChannel RETURNS CHAR
+   (icSalesman AS CHAR):
+   DEF VAR i AS INT NO-UNDO.
+   i = INDEX(icSalesman, "_").
+   IF i > 0 THEN
+      RETURN SUBSTRING(icSalesman, i + 1).
+
+  RETURN icSalesman.
+
+END.
+
+FUNCTION fGetPermanencyAndHandset RETURNS CHAR
+   (icList AS CHAR,
+    OUTPUT ocNewHS AS CHAR,
+    OUTPUT ocPrevHS AS CHAR,
+    OUTPUT ocNewP AS CHAR,
+    OUTPUT ocPrevP AS CHAR):
+   DEF VAR i AS INT NO-UNDO.
+   DEF VAR lcEntryContent AS CHAR NO-UNDO.
+
+   DO i = 1 TO NUM-ENTRIES(icList, {&DMS_REQ_FIELD_SEP}):
+       lcEntryContent = ENTRY(i,icList,{&DMS_REQ_FIELD_SEP}).
+       /*Content format: FieldName CHAR(255) FieldValue*/
+      CASE ENTRY(1,lcEntryContent,{&DMS_REQ_VAL_SEP}):
+         WHEN "NewHS" THEN
+            ocNewHS = ENTRY(2,lcEntryContent,{&DMS_REQ_VAL_SEP}).
+         WHEN "PrevHS" THEN
+            ocPrevHS = ENTRY(2,lcEntryContent,{&DMS_REQ_VAL_SEP}).
+         WHEN "NewPerm" THEN
+            ocNewP = ENTRY(2,lcEntryContent,{&DMS_REQ_VAL_SEP}).
+         WHEN "PrevPerm" THEN
+            ocPrevP = ENTRY(2,lcEntryContent,{&DMS_REQ_VAL_SEP}).
+      END.
+   END.
 END.
 
 /*Order activation*/
@@ -547,6 +654,9 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    DEF VAR lcCreateDMS     AS CHAR NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
+   DEF VAR lcBank AS CHAR NO-UNDO.
+   DEF VAR lcQ25Extension AS CHAR NO-UNDO.
+   DEF VAR lcItem AS CHAR NO-UNDO.
 
    lcCaseTypeId = "1".
 
@@ -555,7 +665,11 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
               Order.OrderID EQ iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN
       RETURN "1:Order not available" + STRING(iiOrderId).
-
+   
+   lcq25Extension = fGetQ25Extension(iiOrderId, lcItem).
+   IF lcQ25Extension NE "" AND Order.Orderchannel BEGINS "renewal_pos" THEN DO:
+      lcBank = fGetQ25BankByOrder(BUFFER Order, lcItem).
+   END.
    lcCaseFileRow =  
    lcCaseTypeID                    + lcDelim + 
    /*Order_OD*/
@@ -577,11 +691,15 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    /*Previous tariff*/
    fGetPrevTariff(BUFFER Order) + lcDelim +
    /**/
-   STRING(Order.OrderType)          + lcDelim +
+   STRING(Order.OrderType)         + lcDelim +
    /**/
-   fGetSegment(Order.OrderID)       + lcDelim +
+   fGetSegment(Order.OrderID)      + lcDelim +
    /*Terminal Type: The value can be Simonly, Handset, Financed Handset.*/
-   fGetTerminalFinanceType(iiOrderId).
+   fGetTerminalFinanceType(iiOrderId) + lcDelim +
+   /*q25Extension YPR-3269*/
+   lcQ25Extension                  + lcDelim +
+   /* Q25 Extension bank */ 
+   lcBank .
 
    /*Document type,DocStatusCode,RevisionComment*/
    lcDocListEntries = "".
@@ -589,7 +707,6 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
    OUTPUT STREAM sOutFile CLOSE.
-   fLogLine(lcCaseFileRow,"").
    lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                             lcCaseTypeID,
                             Order.ContractID,
@@ -601,6 +718,7 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             {&DMS_DOCLIST_SEP}).
+   fLogLine(lcCaseFileRow,lcCreateDMS).                         
    RETURN "".                         
 END.   
 
@@ -755,7 +873,6 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
    OUTPUT STREAM sOutFile CLOSE.
 
-   fLogLine(lcCaseFileRow,"").
    lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                             lcCaseTypeID,
                             Order.ContractID,
@@ -767,7 +884,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             {&DMS_DOCLIST_SEP}).
-
+   fLogLine(lcCaseFileRow,lcCreateDMS).
    lcErr = fSendChangeInformation("", 
                                   Order.OrderId, 
                                   "", 
@@ -905,7 +1022,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
    OUTPUT STREAM sOutFile CLOSE.
-   fLogLine(lcCaseFileRow,"").
+
    lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                             lcCaseTypeID,
                             Order.ContractID,
@@ -917,6 +1034,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             {&DMS_DOCLIST_SEP}).
+   fLogLine(lcCaseFileRow,lcCreateDMS).
    lcErr = fSendChangeInformation("", 
                                   Order.OrderId, 
                                   "", 
@@ -947,9 +1065,12 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
    DEF VAR liMonths AS INT NO-UNDO.
    DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
-   DEF VAR lcModel   AS CHAR NO-UNDO.
-   DEF VAR ldePermanencyAmount AS DECIMAL.
-   DEF VAR liPermancyLength AS INT.
+   DEF VAR lcNewHandset AS CHAR NO-UNDO.
+   DEF VAR lcPrevHandset AS CHAR NO-UNDO.
+   DEF VAR lcNewPermanency AS CHAR NO-UNDO.
+   DEF VAR lcPrevPermanency AS CHAR NO-UNDO.
+  
+
    ASSIGN
       lcICCCaseTypeID   = '4d'
       lcACCCaseTypeID   = '4c'
@@ -1076,15 +1197,16 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                fLogLine(lcCaseFileRow,"Order not found " + lcCaseTypeId).
                NEXT.
             END. 
-            lcModel = fGetTerminalData(MsRequest.ReqIparam1).
             ldeInstallment = fGetOfferDeferredPayment(Order.Offer,
                                                        Order.CrStamp,
                                                        OUTPUT ldeMonthlyFee,
                                                        OUTPUT liMonths,
                                                        OUTPUT ldeFinalFee).
-               RUN Mc/offer_penaltyfee.p(Order.OrderID,
-                                      OUTPUT liPermancyLength,
-                                      OUTPUT ldePermanencyAmount).
+            fGetPermanencyAndHandset(MsRequest.ReqCparam5,
+                                     OUTPUT lcNewHandset,
+                                     OUTPUT lcPrevHandset,
+                                     OUTPUT lcNewPermanency,
+                                     OUTPUT lcPrevPermanency).
             /**/ 
             lcCaseFileRow =  
             lcCaseTypeId                                    + lcDelim + 
@@ -1101,28 +1223,28 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             /*Modification date*/ 
             fPrintDate(MsRequest.UpdateStamp)               + lcDelim + 
             /*Modification number*/ 
-            fCountIMEIModifications(MsRequest.MsSeq)        + lcDelim + 
+            fCountIMEIModifications(MsRequest.MsSeq,
+                                    Msrequest.UpdateStamp)  + lcDelim + 
             /*New IMEI*/ 
             STRING(MsRequest.ReqCparam2)                    + lcDelim + 
             /*New Handset*/ 
-            STRING(lcModel)                                 + lcDelim + 
+            STRING(lcNewHandset)                            + lcDelim + 
             /*New Installment*/ 
             STRING(ldeInstallment)                          + lcDelim + 
             /*New Residual value*/ 
             STRING(ldeFinalFee)                             + lcDelim + 
             /*New Permanency*/ 
-            STRING(ldePermanencyAmount)                     + lcDelim + 
+            STRING(lcNewPermanency)                         + lcDelim + 
             /*Previous IMEI*/ 
             STRING(MsRequest.ReqCparam1)                    + lcDelim + 
             /*Previous Handset*/ 
-            fGetHandset(MsRequest.ReqIparam1,
-                                MsRequest.ReqCparam1)       + lcDelim + 
+            STRING(lcPrevHandset)                           + lcDelim + 
             /*Previous Installment*/ 
             STRING(ldeInstallment)                          + lcDelim + 
             /*Previous Residual value*/ 
             STRING(ldeFinalFee)                             + lcDelim + 
             /*Previous Permanency*/  
-            STRING(ldePermanencyAmount). 
+            STRING(lcPrevPermanency). 
 
          END. 
       END. 
@@ -1133,7 +1255,6 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
       PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
       OUTPUT STREAM sOutFile CLOSE.
 
-      fLogLine(lcCaseFileRow,"").
       lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                                lcCaseTypeID,
                                MsRequest.ReqCparam6,
@@ -1145,6 +1266,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
                                0,
                                lcDocListEntries /*DocList*/,
                                {&DMS_DOCLIST_SEP}).      
+      fLogLine(lcCaseFileRow,lcCreateDMS).
    END.
    RETURN "".
 
@@ -1195,7 +1317,6 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
    OUTPUT STREAM sOutFile CLOSE.
 
-   fLogLine(lcCaseFileRow,"").
    lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                             lcCaseTypeID,
                             Order.ContractID,
@@ -1207,12 +1328,14 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             {&DMS_DOCLIST_SEP}).
+   fLogLine(lcCaseFileRow,lcCreateDMS).
    RETURN "".
 
 END.
 
 FUNCTION fCreateDocumentCase6 RETURNS CHAR
-   (iiOrderId AS INT):
+   (iiOrderId AS INT,
+    iiMsRequest AS INT):
    DEF VAR lcCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCreateDMS     AS CHAR NO-UNDO.
@@ -1220,6 +1343,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    DEF VAR lcCancellationType AS CHAR NO-UNDO.
    DEF VAR lcPrevStatus AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
+   DEF VAR lcQ25ContractID AS CHAR NO-UNDO.
 
    ASSIGN
       lcCaseTypeId    = "6"
@@ -1237,6 +1361,8 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
                                              idPeriodStart, 
                                              idPeriodEnd,
                                              OUTPUT ldeCAncellationTime).
+   lcQ25ContractID = fFindQ25Cancellation(BUFFER Order, iiMsRequest).
+
    lcCaseFileRow =
    lcCaseTypeID                    + lcDelim +
    /*Order_ID*/
@@ -1254,7 +1380,10 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    /*Cancellation date*/
    fPrintDate(ldeCancellationTime) + lcDelim + 
    /*Cancellation type*/
-   lcCancellationType.
+   lcCancellationType              + lcDelim +
+   /*Q25 Extension cancelled (if extension is cancelled */
+   lcQ25ContractID.
+
    /*Document type,DocStatusCode,RevisionComment*/
    lcDocListEntries = "".
 
@@ -1262,7 +1391,6 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
    OUTPUT STREAM sOutFile CLOSE.
 
-   fLogLine(lcCaseFileRow,"").
    lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
                             lcCaseTypeID,
                             Order.ContractID,
@@ -1274,9 +1402,128 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
                             0,
                             lcDocListEntries /*DocList*/,
                             {&DMS_DOCLIST_SEP}).
+   fLogLine(lcCaseFileRow,lcCreateDMS).
    RETURN "".
 
 END.
+
+/*q25 Returned Terminal casefile*/
+FUNCTION fCreateDocumentCase9  RETURNS CHAR
+   (idStartTS AS DECIMAL,
+   idEndTS AS DECIMAL):
+   DEF VAR lcCasefileRow  AS CHAR NO-UNDO.   
+   DEF VAR lcCaseTypeId   AS CHAR NO-UNDO.
+   DEF VAR lcDocListEntries AS CHAR NO-UNDO.
+   DEF VAR lcCreateDMS AS CHAR NO-UNDO.
+
+   FOR EACH TermReturn NO-LOCK WHERE
+           (TermReturn.ReturnTS < idEndTS AND
+            TermReturn.ReturnTS >= idStartTS) AND
+          ((TermReturn.DeviceScreen = TRUE AND
+            TermReturn.DeviceStart = TRUE) OR
+           (TermReturn.DeviceScreen = ? AND
+            TermReturn.DeviceStart  = ?)) AND
+            TermReturn.ContractID NE "" :
+
+       /*ContractID*/
+      ASSIGN
+         lcCaseTypeId = "9"
+         lcDocListEntries = ""
+         lcCaseFileRow = lcCaseTypeId + lcDelim +
+                         /*ContractId*/
+                         TermReturn.ContractID + lcDelim +
+                         /*Salesman*/
+                         TermReturn.Salesman + lcDelim +
+                         /*MSisDN*/
+                         TermReturn.MSISDN + lcDelim +
+                         /*Terminal Request Date*/
+                         fPrintDate(TermReturn.ReturnTS) .
+
+      OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
+      PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
+      OUTPUT STREAM sOutFile CLOSE.
+
+      lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
+                               lcCaseTypeID,
+                               TermReturn.ContractID,
+                               {&DMS_HOST_TABLE_ORDER},
+                               TermReturn.OrderId,
+                               lcInitStatus,/*StatusCode*/
+                               lcDMSStatusDesc,
+                               "",
+                               0,
+                               lcDocListEntries /*DocList*/,
+                               {&DMS_DOCLIST_SEP}).
+      fLogLine(lcCaseFileRow,lcCreateDMS).
+   END.
+   RETURN "".  
+END.
+/*q25 case file 10 Q25 extensions*/
+FUNCTION fCreateDocumentCase10 RETURNS CHAR
+   (idStartTS AS DECIMAL,
+    idEndTS AS DECIMAL):
+   DEF VAR lcDocListEntries AS CHAR NO-UNDO.
+   DEF VAR lcCaseTypeId     AS CHAR NO-UNDO.
+   DEF VAR lcCreateDMS      AS CHAR NO-UNDO.
+   DEF VAR lcCasefileRow    AS CHAR NO-UNDO.
+   DEF VAR lcStatuses AS CHAR NO-UNDO.
+
+   DEFINE VARIABLE i AS INTEGER NO-UNDO.
+   DEFINE VARIABLE liStat AS INTEGER NO-UNDO.
+
+   lcStatuses = {&REQ_ONGOING_STATUSES} + ",2".
+   do i = 1 to NUM-ENTRIES(lcStatuses):
+      liStat = INT(ENTRY(i,lcStatuses)).
+      FOR EACH MsRequest NO-LOCK WHERE
+            MsRequest.Brand EQ gcBrand AND
+            MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+            MsRequest.ReqStatus eq liStat AND
+            MsRequest.ActStamp >= idStartTS AND
+            MsRequest.CreStamp >= idStartTS AND
+            MsRequest.CreStamp < idEndTS AND
+            MsRequest.ReqCparam3 EQ "RVTERM12":
+         IF NOT MsRequest.UserCode BEGINS "POS_" THEN NEXT.
+         /*Document type,DocStatusCode,RevisionComment*/
+         ASSIGN
+         lcCaseTypeID   = '10'
+         lcDocListEntries = ""
+         lcCaseFileRow =
+                      lcCaseTypeID                    + lcDelim +
+                      /*Contract_ID*/
+                      STRING(MsRequest.ReqCparam4)    + lcDelim +
+                      /*SFID*/
+                      fCutChannel(MsRequest.UserCode) + lcDelim +
+                      /*MSISDN*/
+                      STRING(MsRequest.CLI)           + lcDelim +
+                      /*Q25 Extension_Request_date*/
+                      fPrintDate(MsRequest.CreStamp)      + lcDelim +
+                      /*Q25 Extension bank*/
+                      STRING(Msrequest.ReqCparam6).
+
+                     
+         OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
+         PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
+         OUTPUT STREAM sOutFile CLOSE.
+
+         lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
+                                  lcCaseTypeID,
+                                  MsRequest.ReqCparam4,
+                                  {&DMS_HOST_TABLE_MSREQ},
+                                  MsRequest.MsRequest,
+                                  lcInitStatus,/*StatusCode*/
+                                  lcDMSStatusDesc,
+                                  "",
+                                  0,
+                                  lcDocListEntries /*DocList*/,
+                                  {&DMS_DOCLIST_SEP}).            
+        fLogLine(lcCaseFileRow,lcCreateDMS).
+
+      END.
+   END.
+   RETURN "".
+
+END.
+
 
 FUNCTION fCreateDocumentRows RETURNS CHAR
  (icCaseID as CHAR):
@@ -1323,10 +1570,19 @@ FUNCTION fCreateDocumentRows RETURNS CHAR
          /*From Order*/
          FOR EACH ttOrderList WHERE
                   ttOrderList.CaseID EQ {&DMS_CASE_TYPE_ID_CANCEL}:
-            lcStatus = fCreateDocumentCase6(ttOrderList.OrderID).
+            lcStatus = fCreateDocumentCase6(ttOrderList.OrderID,ttOrderList.MsRequest).
             IF lcStatus NE "" THEN fLogLine("",lcStatus).
          END.
       END.
+      WHEN {&DMS_CASE_TYPE_ID_Q25_TERM_RETURN} THEN DO:
+         /*From MsRequest*/
+         lcStatus = fCreateDocumentCase9(idPeriodStart, idPeriodEnd).
+      END.
+      WHEN {&DMS_CASE_TYPE_ID_Q25_STE} THEN DO:
+         /*From MsRequest*/
+         lcStatus = fCreateDocumentCase10(idPeriodStart, idPeriodEnd).
+      END.
+
    END. /*Case*/
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
    PUT STREAM sOutFile UNFORMATTED "" SKIP.

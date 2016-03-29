@@ -40,6 +40,9 @@
        subscription_limit;string;Subscription limit
        subscription_act_limit;string;Subscription activation limit
        invoice_target;string;all_grouped/all_split/customized
+       self_employed;boolean; is customer self employed
+       profession;string; customer profession
+       site_name;string; employer company
  * @company_contact title;string;
                     fname;string;
                     lname;string;
@@ -76,9 +79,16 @@ DEF VAR liMobsubActLimit AS INTEGER NO-UNDO.
 DEF VAR lcDType AS CHAR NO-UNDO.
 DEF VAR lcCType AS CHAR NO-UNDO.
 DEF VAR llOrdersAllowed AS LOGICAL NO-UNDO INITIAL TRUE.
+DEF VAR llSelfEmployed AS LOGICAL NO-UNDO INITIAL FALSE.
 DEF VAR lcInvoiceTarget AS CHAR NO-UNDO. 
 DEF VAR liSubCount AS INT NO-UNDO. 
 DEF VAR liGroupCount AS INT NO-UNDO. 
+DEF VAR lcReason AS CHAR NO-UNDO.
+DEF VAR liSubLimit AS INTEGER NO-UNDO.
+DEF VAR lisubs AS INTEGER NO-UNDO.
+DEF VAR llLimitNotReached AS LOGICAL NO-UNDO.
+DEF VAR liActLimit AS INTEGER NO-UNDO.
+DEF VAR liacts AS INTEGER NO-UNDO.
 
 top_array = validate_request(param_toplevel_id, "int,[string]").
 
@@ -97,6 +107,7 @@ gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/barrfunc.i}
 {Mc/invoicetarget.i}
+{Func/orderchk.i}
 
 IF pcCLI NE "" THEN DO:
    
@@ -252,6 +263,34 @@ lcInvoiceTarget = fGetCustomerCurrentGrouping(Customer.Custnum,
                                               output liGroupCount,
                                               output liSubCount).
 add_string(top_struct,"invoice_target",lcInvoiceTarget).
+
+/* Check if customer is self employed based on customer category */
+IF (Customer.Category EQ "40" OR Customer.Category EQ "41") THEN
+   llSelfEmployed = TRUE.
+add_boolean(top_struct,"self_employed",llSelfEmployed).
+add_string(top_struct, "profession", Customer.Profession).
+add_string(top_struct, "site_name", Customer.CompanyName).
+
+llLimitNotReached = fSubscriptionLimitCheck(
+   Customer.orgId,
+   Customer.custidType,
+   llSelfEmployed,
+   1,
+   OUTPUT lcReason,
+   OUTPUT liSubLimit,
+   OUTPUT lisubs,
+   OUTPUT liActLimit,
+   OUTPUT liacts).
+
+IF liSubs >= liSubLimit THEN
+   add_boolean(top_struct,"subscription_limit_reached",TRUE).
+ELSE
+   add_boolean(top_struct,"subscription_limit_reached",FALSE).
+
+IF liActs >= liActLimit THEN
+   add_boolean(top_struct,"activation_limit_reached",TRUE).
+ELSE
+   add_boolean(top_struct,"activation_limit_reached",FALSE).
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
