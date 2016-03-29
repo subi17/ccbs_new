@@ -2,6 +2,7 @@ USING Progress.Lang.*.
 USING HPD.DumpHandler.
 USING HPD.DumpBase.
 USING HPD.DumpFile.
+USING HPD.HPDTime.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
