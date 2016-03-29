@@ -91,7 +91,7 @@ CLASS HPD.DPMemberDump FINAL INHERITS DumpHandler:
             lbDPMember.HostTable = "MobSub" AND
             lbDPMember.ValidTo  >= ldaValidTo
          BREAK
-            BY lbDBMember.KeyValue
+            BY lbDPMember.KeyValue
          ON QUIT UNDO, RETRY
          ON STOP UNDO, RETRY:
 
