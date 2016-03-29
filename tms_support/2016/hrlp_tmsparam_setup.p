@@ -30,58 +30,41 @@ FUNCTION fCreateEntryC RETURNS CHAR
 END.
 
 DEF VAR lcRet AS CHAR NO-UNDO.
+/*Directory for outgoing*/
+lcRet = fCreateEntryC("HRLPOutDir", /*param code*/
+              "HRLP",              /*param group*/
+              "Dir for outgoing HRLP file",  /*param name*/ 
+              "NOT_KNOWN_YET"). /*actual parameter value*/
 
-lcRet = fCreateEntryC("hrlp_outgoing_dir", /*param code*/
-              "hrlp",              /*param group*/
+if LcRet NE "" THEN 
+   MESSAGE lcRet VIEW-AS ALERT-BOX .
+
+/*Directory for incoming list*/
+lcRet = fCreateEntryC("HRLPListInDir", /*param code*/
+              "HRLP",              /*param group*/
+              "Dir for incoming HRLP file",  /*param name*/
+              "NOT_KNOWN_YET"). /*actual parameter value*/
+
+if LcRet NE "" THEN
+   MESSAGE lcRet VIEW-AS ALERT-BOX.
+
+/*For removing redirection*/ 
+lcRet = fCreateEntryC("HrlpRemRedirDir", /*param code*/
+              "HRLP",              /*param group*/
+              "Dir for HRLP redir removalfile",  /*param name*/
+              "NOT_KNOWN_YET"). /*actual parameter value*/
+
+if LcRet NE "" THEN
+   MESSAGE lcRet VIEW-AS ALERT-BOX.
+
+/*Directory for HRLP logs*/
+lcRet = fCreateEntryC("HRLPLogDir", /*param code*/
+              "HRLP",              /*param group*/
               "Dir for HRLP file, TMS to IFS",  /*param name*/ 
               "NOT_KNOWN_YET"). /*actual parameter value*/
 
 if LcRet NE "" THEN 
    MESSAGE lcRet VIEW-AS ALERT-BOX .
 
-
-lcRet = fCreateEntryC("hrlp_incoming_list_dir", /*param code*/
-              "hrlp",              /*param group*/
-              "Dir for HRLP FILE, IFS to TMS",  /*param name*/
-              "NOT_KNOWN_YET"). /*actual parameter value*/
-
-if LcRet NE "" THEN
-   MESSAGE lcRet VIEW-AS ALERT-BOX.
-
- 
-lcRet = fCreateEntryC("hrlp_incoming_remove_redirection_dir", /*param code*/
-              "hrlp",              /*param group*/
-              "Dir for HRLP FILE, IFS to TMS",  /*param name*/
-              "NOT_KNOWN_YET"). /*actual parameter value*/
-
-if LcRet NE "" THEN
-   MESSAGE lcRet VIEW-AS ALERT-BOX.
-
- 
-lcRet = fCreateEntryC("hrlp_logs_outgoing_dir", /*param code*/
-              "hrlp",              /*param group*/
-              "Dir for HRLP file, TMS to IFS",  /*param name*/ 
-              "NOT_KNOWN_YET"). /*actual parameter value*/
-
-if LcRet NE "" THEN 
-   MESSAGE lcRet VIEW-AS ALERT-BOX .
-
-
-lcRet = fCreateEntryC("hrlp_logs_incoming_list_dir", /*param code*/
-              "hrlp",              /*param group*/
-              "Dir for HRLP FILE, IFS to TMS",  /*param name*/
-              "NOT_KNOWN_YET"). /*actual parameter value*/
-
-if LcRet NE "" THEN
-   MESSAGE lcRet VIEW-AS ALERT-BOX.
-
- 
-lcRet = fCreateEntryC("hrlp_logs_incoming_remove_redirection_dir", /*param code*/
-              "hrlp",              /*param group*/
-              "Dir for HRLP FILE, IFS to TMS",  /*param name*/
-              "NOT_KNOWN_YET"). /*actual parameter value*/
-
-if LcRet NE "" THEN
-   MESSAGE lcRet VIEW-AS ALERT-BOX.
 
  
