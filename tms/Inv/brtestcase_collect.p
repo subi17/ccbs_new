@@ -30,7 +30,9 @@ DEF INPUT  PARAMETER iiInvType        AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiFRProcessID    AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiFRExecID       AS INT  NO-UNDO. 
 DEF INPUT  PARAMETER iiUpdateInterval AS INT  NO-UNDO.
+DEF INPUT  PARAMETER ilgMergeAnalysis AS LOG  NO-UNDO.
 DEF OUTPUT PARAMETER oiPicked         AS INT  NO-UNDO.
+DEF OUTPUT PARAMETER oiAnalysed       AS INT  NO-UNDO.
 
 DEF VAR liCheck   AS INT  NO-UNDO.
 DEF VAR lhCDR     AS HANDLE NO-UNDO. 
@@ -41,6 +43,8 @@ DEF VAR ldaOldEventDate  AS DATE NO-UNDO.
 DEF VAR liOldEventPeriod AS INT  NO-UNDO.
 DEF VAR lcBillRun        AS CHAR NO-UNDO.
 DEF VAR lhHandle  AS HANDLE NO-UNDO.
+DEF VAR liCustCnt AS INT  NO-UNDO INITIAL 0.
+DEF VAR liBatch   AS INT  NO-UNDO INIT 1.
 
 DEF TEMP-TABLE ttCase NO-UNDO
    FIELD BRTestCaseID AS INT
@@ -80,6 +84,29 @@ DEF TEMP-TABLE ttPickCust NO-UNDO
    FIELD InvCreated AS LOG
    INDEX InvCust InvCust
    INDEX InvCreated InvCreated.
+
+DEF TEMP-TABLE bttPickCust NO-UNDO 
+   LIKE ttPickCust.
+
+DEF TEMP-TABLE ttResult NO-UNDO
+   FIELD InvCust AS INT
+   FIELD MsSeq   AS INT
+   FIELD InvNum  AS INT
+   FIELD ExtInvID AS CHAR
+   FIELD BRTestCaseID AS INT
+   FIELD ResultValue AS DEC
+   FIELD TestResult AS CHAR
+   INDEX BRTestCaseID BRTestCaseID InvCust MsSeq.
+
+DEF TEMP-TABLE ttNoEntriesResult NO-UNDO
+   FIELD InvCust AS INT
+   FIELD MsSeq   AS INT
+   FIELD InvNum  AS INT
+   FIELD ExtInvID AS CHAR
+   FIELD BRTestCaseID AS INT
+   FIELD ResultValue AS DEC
+   FIELD TestResult AS CHAR
+   INDEX BRTestCaseID BRTestCaseID InvCust MsSeq.
 
 DEF TEMP-TABLE ttServiceLimit NO-UNDO
    LIKE ServiceLimit. 
@@ -138,6 +165,22 @@ FUNCTION fGetEventDates RETURNS LOGIC
    
 END FUNCTION.    
 
+FUNCTION fErrorLog RETURNS LOGIC
+   (iiCustNum AS INT,
+    icError   AS CHAR):
+
+   DO TRANS:
+      CREATE ErrorLog.
+      ASSIGN ErrorLog.Brand     = gcBrand
+             ErrorLog.ActionID  = "BRANALYSIS"
+             ErrorLog.TableName = "BRTestCase"
+             ErrorLog.KeyValue  = STRING(iiCustNum)
+             ErrorLog.ErrorMsg  = icError
+             ErrorLog.UserCode  = katun.
+             ErrorLog.ActionTS  = fMakeTS().
+   END.
+
+END FUNCTION.
 
 /***** Main start *****/
 
@@ -154,7 +197,8 @@ IF NOT RETURN-VALUE BEGINS "ERROR" THEN
 IF VALID-HANDLE(lhHandle) THEN 
     RUN pUpdInvGroup in lhHandle.
 
-IF NOT RETURN-VALUE BEGINS "ERROR" THEN
+IF NOT RETURN-VALUE BEGINS "ERROR" AND 
+   NOT ilgMergeAnalysis            THEN
    RUN pSaveResults.
    
 IF NOT SESSION:BATCH THEN 
@@ -423,7 +467,7 @@ PROCEDURE pCollect:
    DEF VAR llMatch     AS LOG  NO-UNDO.
    DEF VAR liLoop      AS INT  NO-UNDO. 
    DEF VAR llCreateInv AS LOG  NO-UNDO.
-   
+  
    GetSubscription:
    FOR EACH MsOwner NO-LOCK WHERE
             MsOwner.PayType = FALSE
@@ -502,9 +546,43 @@ PROCEDURE pCollect:
       END.
       
       /* create invoice immediately */
-      IF LAST-OF(MsOwner.InvCust) AND llCreateInv THEN
+      IF LAST-OF(MsOwner.InvCust) AND llCreateInv THEN DO:
          RUN pCreateInvoice(MsOwner.InvCust).
-      
+     
+         IF ilgMergeAnalysis THEN DO:
+
+            FOR FIRST ttPickCust NO-LOCK WHERE 
+                      ttPickCust.InvCust = MsOwner.InvCust:
+               CREATE bttPickCust.
+               BUFFER-COPY ttPickCust to bttPickCust.
+       
+               FOR EACH bttPickCust NO-LOCK:
+
+                  RUN pPickedSaveResult(bttPickCust.InvCust,
+                                        bttPickCust.CaseList,
+                                        bttPickCust.ErrorMsg).
+               END.
+            
+               EMPTY TEMP-TABLE bttPickCust.
+
+            END.
+
+            /* Analysis for Created Invoice */
+            RUN pInitializeMergeAnalysis.
+
+            RUN pAnalyseAnalysis (INPUT TABLE ttResult,
+                                  iiFRProcessID,
+                                  idaInvDate,
+                                  iiInvType,
+                                  iiUpdateInterval).
+
+            RUN pSaveAnalysisResults (INPUT TABLE ttResult,
+                                      iiFRExecID,
+                                      iiBRTestQueueID). 
+         END.
+     
+      END.
+
       IF iiUpdateInterval > 0 AND oiPicked MOD iiUpdateInterval = 0 
       THEN DO:
          IF NOT fUpdateFuncRunProgress(iiFRProcessID,oiPicked) THEN
@@ -512,9 +590,49 @@ PROCEDURE pCollect:
       END.   
       
    END.
-   
+  
+   /* IF no entires cases were found then create the results */
+
+   IF ilgMergeAnalysis AND
+   CAN-FIND(FIRST ttNoEntriesResult NO-LOCK) THEN DO:
+
+      RUN pResultNoEntries.
+
+      IF CAN-FIND(FIRST ttResult NO-LOCK) THEN DO:
+
+         RUN pAnalyseAnalysis (INPUT TABLE ttResult,
+                               iiFRProcessID,
+                               idaInvDate,
+                               iiInvType,
+                               iiUpdateInterval).
+
+         RUN pSaveAnalysisResults (INPUT TABLE ttResult,
+                                   iiFRExecID,
+                                   iiBRTestQueueID).
+      END.
+   END.
+ 
    RETURN "".
    
+END PROCEDURE.
+
+PROCEDURE pPickedSaveResult:
+DEFINE INPUT PARAMETER liInvoiceCust AS INTEGER   NO-UNDO.    
+DEFINE INPUT PARAMETER lcCharParam   AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER lcErrorMsg    AS CHARACTER NO-UNDO.
+
+CREATE FuncRunResult.
+ASSIGN 
+    FuncRunResult.FRProcessID = iiFRProcessID
+    FuncRunResult.FRExecID    = iiFRExecID
+    FuncRunResult.FRResultSeq = liBatch
+    FuncRunResult.IntParam    = liInvoiceCust
+    liCustCnt                 = liCustCnt + 1
+    FuncRunResult.ResultOrder = liCustCnt
+    FuncRunResult.CharParam   = lcCharParam + 
+        (IF lcErrorMsg > "" THEN ",ERROR:" + lcErrorMsg
+         ELSE "").
+
 END PROCEDURE.
 
 PROCEDURE pCheckCLIType:
@@ -1372,10 +1490,6 @@ END PROCEDURE.
 
 PROCEDURE pSaveResults:
 
-   DEF VAR liCustCnt AS INT  NO-UNDO. 
-   DEF VAR liRunQty  AS INT  NO-UNDO.
-   DEF VAR liBatch   AS INT  NO-UNDO INIT 1.
-   
    FOR EACH ttPickCust TRANS:
 
       CREATE FuncRunResult.
@@ -1394,4 +1508,98 @@ PROCEDURE pSaveResults:
    
 END PROCEDURE.
 
+PROCEDURE pResultNoEntries:
 
+DEF VAR liTestQty AS INT NO-UNDO.
+
+   EMPTY TEMP-TABLE ttResult.
+
+   /* are there cases with no entries */
+   FOR FIRST BRTestQueue NO-LOCK WHERE
+             BRTestQueue.BRTestQueueID = iiBRTestQueueID,
+        EACH BRTestQRow OF BRTestQueue NO-LOCK WHERE
+             BRTestQRow.Active = TRUE:
+
+      liTestQty = 0.
+      FOR EACH ttNoEntriesResult WHERE
+               ttNoEntriesResult.BRTestCaseID = BRTestQRow.BRTestCaseID:
+         liTestQty = liTestQty + 1.
+      END.
+
+      IF liTestQty < BRTestQRow.CaseQty THEN DO:
+         CREATE ttResult.
+         ASSIGN
+            ttResult.InvCust = 0
+            ttResult.MsSeq   = 0
+            ttResult.BRTestCaseID = BRTestQRow.BRTestCaseID
+            ttResult.TestResult = STRING(BRTestQRow.CaseQty - liTestQty) +
+                                  " cases were not found".
+      END.
+   END.
+
+END PROCEDURE.
+
+PROCEDURE pInitializeMergeAnalysis:
+
+   DEF VAR liLoop     AS INT  NO-UNDO.
+   DEF VAR liInvCust  AS INT  NO-UNDO.
+   DEF VAR liMsSeq    AS INT  NO-UNDO.
+   DEF VAR liTestCase AS INT  NO-UNDO.
+   DEF VAR liTestQty  AS INT  NO-UNDO.
+
+   EMPTY TEMP-TABLE ttResult.
+
+   FIND FIRST FuncRunProcess WHERE FuncRunProcess.FRProcessID = iiFRProcessID
+      NO-LOCK.
+   FIND FIRST FuncRunExec WHERE FuncRunExec.FRExecID = iiFRExecID
+      NO-LOCK.
+
+   FOR LAST FuncRunResult NO-LOCK WHERE
+            FuncRunResult.FRExecID    = FuncRunExec.FRExecID AND
+            FuncRunResult.FRResultSeq = FuncRunProcess.ProcSeq
+         BY FuncRunResult.ResultOrder:
+
+      DO liLoop = 1 TO NUM-ENTRIES(FuncRunResult.CharParam):
+
+         ASSIGN
+            liInvCust  = FuncRunResult.IntParam
+            liMsSeq    =
+               INT(ENTRY(1,ENTRY(liLoop,FuncRunResult.CharParam),":"))
+            liTestCase =
+               INT(ENTRY(2,ENTRY(liLoop,FuncRunResult.CharParam),":"))
+            NO-ERROR.
+         IF ERROR-STATUS:ERROR THEN DO:
+            fErrorLog(FuncRunResult.IntParam,
+                      "ERROR:Invalid result from collection; " +
+                       ENTRY(liLoop,FuncRunResult.CharParam)   +
+                      ", customer " + STRING(FuncRunResult.IntParam)).
+            NEXT.
+         END.
+
+         CREATE ttResult.
+         ASSIGN
+            ttResult.InvCust      = liInvCust
+            ttResult.MsSeq        = liMsSeq
+            ttResult.BRTestCaseID = liTestCase.
+
+         /* For no entires results */
+         FIND FIRST ttNoEntriesResult NO-LOCK WHERE
+                    ttNoEntriesResult.InvCust      = liInvCust  AND
+                    ttNoEntriesResult.MsSeq        = liMsSeq    AND
+                    ttNoEntriesResult.BRTestCaseID = liTestCase NO-ERROR.
+         IF NOT AVAILABLE ttNoEntriesResult THEN DO:
+            CREATE ttNoEntriesResult.
+            ASSIGN
+               ttNoEntriesResult.InvCust      = liInvCust
+               ttNoEntriesResult.MsSeq        = liMsSeq
+               ttNoEntriesResult.BRTestCaseID = liTestCase.
+         END.
+
+      END.
+   END.
+
+   RETURN "".
+
+END PROCEDURE.
+
+{funcrun_analysis_results.i}
