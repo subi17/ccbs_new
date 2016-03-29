@@ -962,7 +962,7 @@ PROCEDURE pGetInvoiceRowData:
 
          FOR EACH InvRow NO-LOCK WHERE
                   InvRow.Invnum = SubInvoice.InvNum AND
-                  InvRow.SubInvNum = SubInvoice.InvNum AND
+                  InvRow.SubInvNum = SubInvoice.SubInvNum AND
                   InvRow.VatPerc = 0 AND
                   InvRow.Amt EQ (ldeQ25DiscAmt * -1) AND
                   LOOKUP(InvRow.BillCode, 
