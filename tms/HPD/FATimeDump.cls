@@ -5,14 +5,14 @@ USING HPD.DumpFile.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
-CLASS HPD.DPMemberDump FINAL INHERITS DumpHandler:
+CLASS HPD.FATimeDump FINAL INHERITS DumpHandler:
   
-   DEFINE PRIVATE BUFFER lbDPMember FOR DPMember.
+   DEFINE PRIVATE BUFFER lbFATime FOR FATime.
   
-   CONSTRUCTOR PUBLIC DPMemberDump
+   CONSTRUCTOR PUBLIC FATimeDump
       (iiDumpID AS INTEGER):
 
-      lhMainTable = BUFFER lbDPMember:HANDLE.
+      lhMainTable = BUFFER lbFATime:HANDLE.
       
       objDumpBase = NEW DumpBase(iiDumpID, THIS-OBJECT).
       objDumpBase:mUseTable(lhMainTable).
@@ -21,12 +21,12 @@ CLASS HPD.DPMemberDump FINAL INHERITS DumpHandler:
    END CONSTRUCTOR.
 
 
-   CONSTRUCTOR PUBLIC DPMemberDump
+   CONSTRUCTOR PUBLIC FATimeDump
       (iiDumpID    AS INTEGER,
        icFile      AS CHARACTER):
 
       objDumpBase = NEW DumpFile(iiDumpID, icFile, THIS-OBJECT).
-      objDumpBase:mUseTable(BUFFER lbDPMember:HANDLE).
+      objDumpBase:mUseTable(BUFFER lbFATime:HANDLE).
       objDumpBase:mVerifyDumpFileData().
 
       mProcessFullDump(INPUT CAST(objDumpBase, DumpFile)).
@@ -35,22 +35,7 @@ CLASS HPD.DPMemberDump FINAL INHERITS DumpHandler:
       IF llInterrupted = FALSE
       THEN llAllOK = TRUE.
       
-   END CONSTRUCTOR. 
-
-
-   METHOD PUBLIC OVERRIDE CHARACTER mSpecialHandling
-      (icField     AS CHARACTER,
-       ilCheckOnly AS LOGICAL):
-   
-      CASE icField:
-         WHEN "KeyValue"
-         THEN IF ilCheckOnly
-              THEN RETURN "OK".
-              ELSE RETURN {HPD/keyvalue.i lbDPMember . objDumpBase:lcKeyDelimiter DPId HostTable KeyValue ValidFrom}.
-         OTHERWISE RETURN "".         
-      END CASE.
-
-   END METHOD.
+   END CONSTRUCTOR.
 
 
    METHOD PRIVATE LOGICAL mSkipMsSeq
@@ -80,17 +65,8 @@ CLASS HPD.DPMemberDump FINAL INHERITS DumpHandler:
    METHOD PRIVATE VOID mProcessFullDump
       (INPUT objDumpFile AS CLASS DumpFile):
 
-      DEFINE VARIABLE ldaValidTo AS DATE    NO-UNDO.
-      DEFINE VARIABLE llSkip     AS LOGICAL NO-UNDO.
-      
-      ldaValidTo = ADD-INTERVAL(TODAY, -6, "MONTHS").
-
       FOR
-         EACH lbDPMember NO-LOCK WHERE
-            lbDPMember.HostTable = "MobSub" AND
-            lbDPMember.ValidTo  >= ldaValidTo
-         BREAK
-            BY lbDBMember.KeyValue
+         EACH lbFATime NO-LOCK
          ON QUIT UNDO, RETRY
          ON STOP UNDO, RETRY:
 
@@ -99,10 +75,7 @@ CLASS HPD.DPMemberDump FINAL INHERITS DumpHandler:
             LEAVE.
          END.
          
-         IF FIRST-OF(lbDPMember.KeyValue)
-         THEN llSKIP = mSkipMsSeq(INTEGER(lbDPMember.KeyValue)).
-
-         IF llSkip
+         IF mSkipMsSeq(lbFATime.MsSeq)
          THEN NEXT.
                   
          liEvents = liEvents + 1.
@@ -112,7 +85,7 @@ CLASS HPD.DPMemberDump FINAL INHERITS DumpHandler:
          IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN 
          DO:
             PAUSE 0.
-            DISPLAY liEvents LABEL "DPMember Counter" 
+            DISPLAY liEvents LABEL "FATime Counter" 
                WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
                TITLE " Collecting " FRAME fQty.
          END.      
