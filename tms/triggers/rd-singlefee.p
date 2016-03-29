@@ -4,7 +4,7 @@ TRIGGER PROCEDURE FOR REPLICATION-DELETE OF SingleFee.
 
 &IF {&SINGLEFEE_DELETE_TRIGGER_ACTIVE} &THEN
 
-IF NEW SingleFee
+IF NEW SingleFee OR SingleFee.Concerns[1] = 0 OR SingleFee.Concerns[1] = ?
 THEN RETURN.
 
 IF SingleFee.HostTable NE "MobSub"
