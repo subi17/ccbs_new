@@ -65,7 +65,7 @@ CLASS HPD.LimitDump FINAL INHERITS DumpHandler:
          IF RETRY THEN DO:
             llInterrupted = TRUE.
             LEAVE.
-         END.            
+         END.
             
          liEvents = liEvents + 1.
 
