@@ -77,6 +77,14 @@ CLASS HPD.SingleFeeDump FINAL INHERITS DumpHandler:
          ON QUIT UNDO, RETRY
          ON STOP UNDO, RETRY:
 
+         IF RETRY THEN DO:
+            llInterrupted = TRUE.
+            LEAVE.
+         END.
+
+         IF lbSingleFee.Concerns[1] = 0 OR lbSingleFee.Concerns[1] = ?
+         THEN NEXT.
+
          liEvents = liEvents + 1.
 
          objDumpFile:mWriteALine().

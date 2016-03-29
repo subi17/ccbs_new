@@ -77,6 +77,11 @@ CLASS HPD.FixedFeeDump FINAL INHERITS DumpHandler:
          ON QUIT UNDO, RETRY
          ON STOP UNDO, RETRY:
 
+         IF RETRY THEN DO:
+            llInterrupted = TRUE.
+            LEAVE.
+         END.
+
          liEvents = liEvents + 1.
 
          objDumpFile:mWriteALine().

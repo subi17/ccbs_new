@@ -8,6 +8,9 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF SingleFee OLD BUFFER oldSingleFee.
 IF SingleFee.HostTable NE "MobSub"
 THEN RETURN.
 
+IF NEW(SingleFee) AND SingleFee.Concerns[1] = 0 OR SingleFee.Concerns[1] = ?
+THEN RETURN.
+
 {triggers/check_mobsub.i SingleFee KeyValue}
 
 CREATE Common.RepLog.
@@ -15,7 +18,7 @@ ASSIGN
    Common.RepLog.TableName = "SingleFee"
    Common.RepLog.EventType = (IF NEW(SingleFee)
                               THEN "CREATE"
-                              ELSE IF llMobSubWasAvailable AND llMobSubIsAvailable = FALSE
+                              ELSE IF llMobSubWasAvailable AND (llMobSubIsAvailable = FALSE OR SingleFee.Concerns[1] = 0 OR SingleFee.Concerns[1] = ?)
                               THEN "DELETE"
                               ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
