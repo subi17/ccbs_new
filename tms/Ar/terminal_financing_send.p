@@ -223,6 +223,13 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
          lcFUC[1] = "332577626" 
          lcFUC[2] = "332577683".
    END.
+   /* YTS-8634 */
+   ELSE IF Order.Reseller EQ "" AND 
+           FixedFee.BillCode EQ "RVTERM" THEN DO:
+      ASSIGN
+         lcFUC[1] = "323841452" 
+         lcFUC[2] = "332296599".
+   END.
    /* indirect channels */
    ELSE IF LOOKUP(Order.Reseller,lcResellers) > 0 THEN DO:
 
