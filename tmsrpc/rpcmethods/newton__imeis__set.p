@@ -12,7 +12,7 @@
            new_permanency;string;mandatory; new permanency amount
  * @output boolean;true
  */
-{tmsconst.i}
+{Syst/tmsconst.i}
 {xmlrpc/xmlrpc_access.i}
 
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
