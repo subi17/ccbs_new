@@ -774,6 +774,20 @@ FUNCTION getQ25phase RETURNS INT
    RETURN {&Q25_NOT_ACTION_PHASE}. /* Not Q25 phase M22-M24 customer */
 END.
 
+FUNCTION fGetMonthlyFee RETURNS DECIMAL
+   (iiPerContractId AS INT,
+    iiMsSeq AS INT):
+         FIND FIRST FixedFee WHERE
+                    FixedFee.Brand EQ gcBrand AND
+                    FixedFee.HostTable EQ "MobSub" AND
+                    FixedFee.KeyValue EQ STRING(iiMsseq) AND
+                    FixedFee.SourceTable EQ "DCCLI" AND
+                    FixedFee.SourceKey EQ STRING(iiPerContractID)
+                    NO-LOCK NO-ERROR.
+         IF AVAIL FixedFee THEN RETURN FixedFee.amt.
+   RETURN -1.
+END.
+
 /* SMS message generating and sending for Q25. */
 FUNCTION fGenerateQ25List RETURNS INTEGER 
    (INPUT iiPhase   AS INT):
@@ -784,6 +798,8 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
    DEF VAR liMsSeq AS INT NO-UNDO.
    DEF VAR liPerContrId AS INT NO-UNDO.
    DEF VAR ldAmount AS DECIMAL NO-UNDO.
+   DEF VAR ldMonthlyFee AS DECIMAL NO-UNDO.
+   DEF VAR lcHRLPDelim AS CHAR NO-UNDO.
 
    ASSIGN
       ldaStartDate = DATE(MONTH(TODAY), 1, YEAR(TODAY)) - 1
@@ -819,26 +835,6 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
          NEXT. /* "Residual fee billed". */
       END.
       
-      /* Check that ending perContract founds during month. */
-      ldaEndDate =  ADD-INTERVAL(TODAY, iiPhase, 'months':U).
-      FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
-              DCCLI.PerContractId = liPerContrId AND
-              DCCLI.Brand   = gcBrand AND
-              DCCLI.DCEvent BEGINS "PAYTERM" AND
-              DCCLI.MsSeq   = Mobsub.MsSeq AND
-              DCCLI.ValidTo >= DATE(MONTH(ldaEndDate),1,
-                                    YEAR(ldaEndDate)) - 1 AND
-              DCCLI.ValidTo <= fLastDayOfMonth(ldaEndDate) NO-ERROR.
-
-      IF NOT AVAIL DCCLI THEN DO:
-         lcLogText = "Q25 NO DCCLI FOUND " +
-                        STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
-                        STRING(Mobsub.MsSeq).
-         fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
-                        {&Q25_EXEC_TYPE_HRLP})).
-         NEXT.
-      END.
-      
       /*Function checks also Extension, TermReturn and Renewal*/
       IF isQ25PerContractEnded(liPerContrId, liMsSeq, SingleFee.orderid, 
                                ldaStartDate, ldaEndDate, ldAmount, liPhase, 
@@ -849,17 +845,18 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
          NEXT.
       END.
 
+      ldMonthlyFee = fGetMonthlyFee(liPerContrId,liMsSeq).
+
       /*verifications done, write data to IFS file*/
+      lcHRLPDelim = {&Q25_HRLP_DELIM}.
       lcLogText = STRING(MobSub.CustNum) + lcHRLPDelim + /*Custnumber*/
                   STRING(Mobsub.CLI)     + lcHRLPDelim + /*MSISDN*/     
                   STRING(liPeriod)       + lcHRLPDelim + /*Q25 nomth*/     
-                  STRING("")          + lcHRLPDelim + /*installment value*/
+                  STRING(ldMonthlyFee)   + lcHRLPDelim + /*installment value*/
                   STRING(ldAmount).                      /*Q25 value*/
 
       lcQ25DWHLogFile = lcHRLPOutDir + "IFS_Q25HR_ACTIVE_" +
                         (SUBSTRING(STRING(fMakeTS()),8) + ".DAT".
-
-
 
        OUTPUT STREAM SHRLP TO VALUE(lcHRLPOutFile) APPEND.
        PUT STREAM SHRLP UNFORMATTED lcLogText.
