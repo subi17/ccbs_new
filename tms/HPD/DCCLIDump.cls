@@ -72,7 +72,7 @@ CLASS HPD.DCCLIDump FINAL INHERITS DumpHandler:
          llFound = TRUE.
          
          IF FixedFee.SourceKey NE icPerContractID
-         RETURN TRUE.
+         THEN RETURN TRUE.
 
       END.
       
