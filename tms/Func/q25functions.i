@@ -713,7 +713,7 @@ FUNCTION getQ25phase RETURNS INT
       /* set needed period */
       liPeriod = YEAR(TODAY) * 100 + MONTH(ADD-INTERVAL(TODAY,
                                                         liLoop, 'months':U)).
-      FOR EACH SingleFee USE-INDEX BillCode WHERE
+      FOR EACH SingleFee WHERE
                SingleFee.Brand       EQ gcBrand AND
                SingleFee.CustNum     EQ iiCustNum AND
                SingleFee.HostTable   EQ "Mobsub" AND
