@@ -8,6 +8,9 @@
 ---------------------------------------------------------------------- */
 {tmsconst.i}
 {q25functions.i}
+{ftransdir.i}
+{eventlog.i}
+{fmakemsreq.i}
 
 DEF VAR lcProcessedFile AS CHAR NO-UNDO.
 DEF VAR lcIncDir AS CHAR NO-UNDO.
@@ -19,6 +22,10 @@ DEF VAR lcLogDir AS CHAR NO-UNDO.
 DEF VAR lcLogSpoolDir AS CHAR NO-UNDO.
 DEF VAR lcLogOutDir AS CHAR NO-UNDO.
 DEF VAR lcSummary AS CHAR NO-UNDO.
+DEF VAR lcTableName AS CHAR NO-UNDO.
+DEF VAR lcActionID AS CHAR NO-UNDO.
+DEF VAR ldCurrentTimeTS AS DEC NO-UNDO.
+DEF VAR lcErrorLog AS CHAR NO-UNDO.
 
 DEF STREAM sin.
 DEF STREAM sFile.
@@ -77,24 +84,16 @@ REPEAT:
 
       IF fCheckFileNameChars(lcFileName) EQ FALSE THEN NEXT.
 
-      IF NOT lcFileName BEGINS "yoigocan" AND
-         NOT lcFileName BEGINS "yoigoanu" THEN NEXT.
+      /*IF NOT lcFileName BEGINS "yoigocan" AND
+         NOT lcFileName BEGINS "yoigoanu" THEN NEXT.*/
 
       INPUT STREAM sin FROM VALUE(lcInputFile).
    END.
    ELSE NEXT.
 
-   ASSIGN
-      liNumErr = 0
-      liNumOK = 0
-      lcTFBank = ""
-      lcErrorLog = lcLogSpoolDir + lcFileName + ".LOG".
+   lcErrorLog = lcLogSpoolDir + lcFileName + ".LOG".
 
    IF SESSION:BATCH THEN fBatchLog("START", lcInputFile).
-
-   lcTFBank = (IF INDEX(lcFileName,"SABADELL") > 0
-               THEN {&TF_BANK_SABADELL}
-               ELSE {&TF_BANK_UNOE}).
 
    OUTPUT STREAM sLog TO VALUE(lcErrorLog) append.
 
@@ -103,11 +102,10 @@ REPEAT:
               STRING(TODAY,"99.99.99") " "
               STRING(TIME,"hh:mm:ss") SKIP.
 
-   EMPTY TEMP-TABLE ttTFCancel.
-
    RUN pReadFileData.
-   INPUT STREAM sin CLOSE.
 
+   PUT STREAM sLog UNFORMATTED lcSummary SKIP.
+   OUTPUT STREAM sLog CLOSE.
    fMove2TransDir(lcErrorLog, "", lcLogOutDir).
    lcProcessedFile = fMove2TransDir(lcInputFile, "", lcIncProcDir).
    IF SESSION:BATCH AND lcProcessedFile NE "" THEN
@@ -132,16 +130,54 @@ REPEAT:
 
 END.
 
+INPUT STREAM sin CLOSE.
+
+PROCEDURE pMakeProdigyRequest:
+   DEF INPUT PARAM iiMsSeq AS INT NO-UNDO.
+   DEF INPUT-OUTPUT PARAM ocLine AS CHAR NO-UNDO.
+   DEF VAR liReq AS INT NO-UNDO.
+   DEF VAR lcError AS CHAR NO-UNDO.
+   /* Create subrequests (set mandataory and orig request) */
+   liReq = fServiceRequest (iiMsSeq,
+                            "LP",
+                            0,
+                            "",
+                            0, /*fSecOffSet(ideActTime,liDelay),*/
+                            "",                /* SalesMan */
+                            FALSE,             /* Set fees */
+                            FALSE,             /* SMS */
+                            "",
+                            "",
+                            0,
+                            FALSE,
+                            OUTPUT lcError).
+
+   /* Creation of subrequests failed, "fail" master request too */
+   IF liReq = 0 OR liReq = ? THEN DO:
+      fReqStatus(3,"ServiceRequest failure: " + lcError).
+      
+      RETURN.
+   END.
+
+END.
+
+
 PROCEDURE pReadFileData:
 
    DEF VAR lcLine AS CHAR NO-UNDO.
    DEF VAR lcOrgId AS CHAR NO-UNDO.
-   DEF VAR liMonth AS INT NO-UNDO.
    DEF VAR liYear AS INT NO-UNDO.
    DEF VAR lcErrorCode AS CHAR NO-UNDO.
    DEF VAR ldeCancelAmt AS DEC NO-UNDO.
-
+   DEF VAR liCustNum AS INT NO-UNDO.
+   DEF VAR liMsSeq AS INT NO-UNDO.
+   DEF VAR liPeriod AS INT NO-UNDO.
+   DEF VAR lcPeriod AS char NO-UNDO.
    DEF VAR liLineNum AS INT NO-UNDO.
+   DEF VAR ldAmount AS DEC NO-UNDO.
+   DEF VAR liMonth AS INT NO-UNDO.
+   DEF VAR ldaStartDate AS DATE NO-UNDO.
+   DEF VAR ldaEndDate AS DATE NO-UNDO.
 
    FILE_LINE:
    REPEAT TRANS:
@@ -159,10 +195,12 @@ PROCEDURE pReadFileData:
          liCustNum = int(entry(1,lcline,";"))
          limsseq = int(entry(2,lcline,";"))
          liPeriod = int(entry(3,lcline,";"))
+         lcPeriod = entry(3,lcline,";")
+         liMonth = INT(SUBSTRING(lcPeriod,5,2)).
       
       FIND FIRST SingleFee USE-INDEX BillCode WHERE
                  SingleFee.Brand       EQ gcBrand AND
-                 SingleFee.CustNum     EQ iiCustNum AND
+                 SingleFee.CustNum     EQ liCustNum AND
                  SingleFee.HostTable   EQ "Mobsub" AND
                  SingleFee.Keyvalue    EQ STRING(limsseq) AND
                  SingleFee.BillPeriod  EQ liPeriod AND
@@ -173,26 +211,44 @@ PROCEDURE pReadFileData:
          IF SingleFee.OrderId <= 0 THEN NEXT.   
          IF fisPostpaidMobsubReleased(liMsSeq) THEN DO:
             /* log mobsub released */
+            PUT STREAM sLog UNFORMATTED
+               lcLine +  " Error released." SKIP.
             NEXT.
          END.
 
-         IF fisQ25RenewalDone(liMsSeq, /* from */) THEN DO:
-            /*log renewal done */
-            NEXT.
-         END.
-
-         IF fisQ25ExtensionDone(liMsSeq, 0) THEN DO:
+         IF fisQ25ExtensionDone(liMsSeq, 0, ldAmount) THEN DO:
             /* log extension done */
+            PUT STREAM sLog UNFORMATTED
+               lcLine +  " Error: extension done." SKIP.
             NEXT.
          END.
 
-         IF fisQ25TerminalReturned(/* SingleFee.orderId */) THEN DO:
+         IF fisQ25TerminalReturned(SingleFee.orderId) THEN DO:
             /* log terminal returned */
+            PUT STREAM sLog UNFORMATTED
+               lcLine +  " Error: terminal returned." SKIP.
             NEXT.
          END.
+         FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
+                    DCCLI.PerContractId = INT(Singlefee.sourcekey) AND
+                    DCCLI.Brand   = gcBrand AND
+                    DCCLI.DCEvent BEGINS "PAYTERM" AND
+                    DCCLI.MsSeq   = liMsseq AND
+                    DCCLI.ValidTo >= ldaStartDate AND
+                    DCCLI.ValidTo <= ldaEndDate NO-ERROR.
+         IF fisQ25RenewalDone(liMsSeq, DCCLI.Validfrom) THEN DO:
+            /*log renewal done */
+            PUT STREAM sLog UNFORMATTED
+               lcLine +  " Error: renewal done." SKIP.
+            NEXT.
+         END.
+
 
          /* check barring */
 
+
+
       END.
+   END.
 
 END PROCEDURE.

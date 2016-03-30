@@ -38,6 +38,9 @@ DEF VAR lclcHRLPOutDir AS CHAR NO-UNDO.
 DEF VAR lcHRLPListInDir AS CHAR NO-UNDO.
 DEF VAR lcHrlpRemRedirDir AS CHAR NO-UNDO.
 DEF VAR lcHRLPLogDir AS CHAR NO-UNDO.
+DEF VAR lcHRLPOutDir AS CHAR NO-UNDO.
+DEF VAR lcHRLPOutFile AS CHAR NO-UNDO.
+DEF VAR lcHRLPRemRedirDirDir AS CHAR NO-UNDO.
 
 DEF STREAM Sout.
 DEF STREAM SHRLP.
@@ -281,17 +284,17 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
    END.
    ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_HRLP_UNIV} THEN DO:
       lcHRLPLogFile = lcHRLPOutDir + "IFS_Q25HR_UNIVERSE_" + 
-                      (SUBSTRING(STRING(fMakeTS()),8) + ".LOG".
+                      (SUBSTRING(STRING(fMakeTS()),1,8)) + ".LOG".
 
    END.
    ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_HRLP_ACT} THEN DO:
       lcHRLPLogFile = lcHRLPOutDir + "IFS_Q25HR_ACTIVE_" + 
-                      (SUBSTRING(STRING(fMakeTS()),8) + ".LOG".
+                      (SUBSTRING(STRING(fMakeTS()),1,8)) + ".LOG".
 
    END.
    ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_HRLP_REL} THEN DO:
       lcHRLPLogFile = lcHRLPOutDir + "IFS_Q25HR_RELEASE_" + 
-                      (SUBSTRING(STRING(fMakeTS()),8) + ".LOG".
+                      (SUBSTRING(STRING(fMakeTS()),1,8)) + ".LOG".
 
    END.
    ELSE DO:
@@ -342,7 +345,7 @@ FUNCTION fgetTemplateName RETURN CHARACTER
       RETURN "Error: Q25_Phase".
 END.
 
-FUNCTION isPostpaidMobsubReleased RETURNS LOGICAL
+FUNCTION fisPostpaidMobsubReleased RETURNS LOGICAL
    (INPUT iiMsSeq AS INT):
    FIND FIRST Mobsub NO-LOCK WHERE
               Mobsub.MsSeq = iiMsSeq AND
@@ -352,7 +355,7 @@ FUNCTION isPostpaidMobsubReleased RETURNS LOGICAL
       RETURN FALSE.
 END.
 
-FUNCTION isSingleFeeBilled RETURNS LOGICAL
+FUNCTION fisSingleFeeBilled RETURNS LOGICAL
    ():
    IF SingleFee.Billed AND
       NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
@@ -362,7 +365,7 @@ FUNCTION isSingleFeeBilled RETURNS LOGICAL
       RETURN FALSE.
 END.
 
-FUNCTION isQ25TerminalReturned RETURNS LOGICAL
+FUNCTION fisQ25TerminalReturned RETURNS LOGICAL
    (INPUT iiOrderId AS INT):
    FIND FIRST TermReturn WHERE
               TermReturn.OrderId EQ iiOrderId NO-LOCK NO-ERROR.
@@ -377,7 +380,7 @@ FUNCTION isQ25TerminalReturned RETURNS LOGICAL
       RETURN FALSE.
 END.
 
-FUNCTION isQ25ExtensionDone RETURNS LOGICAL
+FUNCTION fisQ25ExtensionDone RETURNS LOGICAL
    (INPUT iiMsSeq AS INT,
     INPUT iiphase AS INT,
     INPUT-OUTPUT odAmount AS DEC):
@@ -402,7 +405,7 @@ FUNCTION isQ25ExtensionDone RETURNS LOGICAL
    RETURN FALSE.
 END.
 
-FUNCTION isQ25PendingRequest RETURNS LOGICAL
+FUNCTION fisQ25PendingRequest RETURNS LOGICAL
    (INPUT iiMsSeq AS INT,
     INPUT iireqType AS INT):
    DEF VAR liLoop AS INT.
@@ -417,7 +420,7 @@ FUNCTION isQ25PendingRequest RETURNS LOGICAL
    RETURN FALSE.
 END.
 
-FUNCTION isQ25RenewalDone RETURNS LOGICAL
+FUNCTION fisQ25RenewalDone RETURNS LOGICAL
    (INPUT iiMsSeq AS INT,
     INPUT idaFromDate AS DATE):
    DEF VAR ldaMonth22Date AS DATE NO-UNDO.
@@ -434,7 +437,7 @@ FUNCTION isQ25RenewalDone RETURNS LOGICAL
    RETURN FALSE.
 END.
 
-FUNCTION isQ25PerContractEnded RETURNS LOGICAL
+FUNCTION fisQ25PerContractEnded RETURNS LOGICAL
    (INPUT iiPercontrId AS INT,
     INPUT iiMsseq AS INT,
     INPUT iiOrderId AS INT,
@@ -464,7 +467,7 @@ FUNCTION isQ25PerContractEnded RETURNS LOGICAL
       RETURN TRUE.
    END.
    ELSE DO:
-      IF isQ25TerminalReturned(iiOrderId) THEN DO:
+      IF fisQ25TerminalReturned(iiOrderId) THEN DO:
          ASSIGN liReturnedDevices = liReturnedDevices + 1
                 ocLogText = "Q25 Device returned " +
                 STRING(DCCLI.MsSeq) + "|" +
@@ -472,7 +475,7 @@ FUNCTION isQ25PerContractEnded RETURNS LOGICAL
          RETURN TRUE.
       END.
 
-      IF isQ25ExtensionDone(iiMsSeq, oiPhase, idAmount) THEN DO:
+      IF fisQ25ExtensionDone(iiMsSeq, oiPhase, idAmount) THEN DO:
          /* Q25 Extension already active */
          /* IF oiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO: */
          /* Q25 month 22-24 */
@@ -489,7 +492,7 @@ FUNCTION isQ25PerContractEnded RETURNS LOGICAL
                extension. Send message with final payment / 12. */
          /*   oiPhase = {&Q25_MONTH_24_CHOSEN}. removed YPR-3609 */
       END.
-      ELSE IF isQ25RenewalDone(iiMsSeq, DCCLI.ValidFrom) THEN DO: 
+      ELSE IF fisQ25RenewalDone(iiMsSeq, DCCLI.ValidFrom) THEN DO: 
       /* Renewal / Renuvo done */
          ocLogText = "Q25 Renewal done: " +
                      STRING(oiPhase) + "|" + STRING(DCCLI.CLI) + "|" +
@@ -497,7 +500,7 @@ FUNCTION isQ25PerContractEnded RETURNS LOGICAL
                      STRING(idAmount).
          RETURN TRUE.
       END.
-      ELSE IF isQ25PendingRequest(iiMsSeq, {&REQTYPE_CONTRACT_ACTIVATION})
+      ELSE IF fisQ25PendingRequest(iiMsSeq, {&REQTYPE_CONTRACT_ACTIVATION})
       THEN DO:
          /* Pending/ongoing Q25 request */
          ASSIGN
@@ -566,7 +569,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          ldAmount = SingleFee.amt
          liMsseq = INT(SingleFee.KeyValue)
          liPerContrId = INT(SingleFee.sourcekey).
-      IF isPostpaidMobsubReleased(liMsSeq) THEN DO:
+      IF fisPostpaidMobsubReleased(liMsSeq) THEN DO:
          lcLogText = "Q25 Mobsub not found or prepaid: " +
                      STRING(liPhase) + "|" + STRING(liMsSeq) 
                      + "|" + STRING(ldAmount).
@@ -574,7 +577,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         iiExecType).
          NEXT.
       END.
-      IF isSingleFeeBilled() THEN DO:
+      IF fisSingleFeeBilled() THEN DO:
          ASSIGN
             liBilledCount = liBilledCount + 1
             lcLogText = "Q25 Residual fee Billed: " +
@@ -607,7 +610,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          NEXT.
       END.
 
-      IF isQ25PerContractEnded(liPerContrId, liMsSeq, SingleFee.orderid, 
+      IF fisQ25PerContractEnded(liPerContrId, liMsSeq, SingleFee.orderid, 
                                idaStartDate, idaEndDate, ldAmount, liPhase, 
                                lcLogText) THEN DO:
          IF lcLogText > "" THEN
@@ -760,9 +763,9 @@ FUNCTION getQ25phase RETURNS INT
             ldaStartDate = DATE(MONTH(ADD-INTERVAL(TODAY, liLoop, 'months':U)),
                            1,YEAR(TODAY)) - 1
             ldaEndDate = fLastDayOfMonth(ldaStartDate + 1).
-         IF isPostpaidMobsubReleased(iiMsSeq) OR
-            isSingleFeeBilled() OR
-            isQ25PerContractEnded(INT(SingleFee.sourcekey), iiMsSeq,
+         IF fisPostpaidMobsubReleased(iiMsSeq) OR
+            fisSingleFeeBilled() OR
+            fisQ25PerContractEnded(INT(SingleFee.sourcekey), iiMsSeq,
                                   SingleFee.orderid, ldaStartDate,
                                   ldaEndDate, ldAmount, liPhase,
                                   lcLogText) THEN 
@@ -800,6 +803,7 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
    DEF VAR ldAmount AS DECIMAL NO-UNDO.
    DEF VAR ldMonthlyFee AS DECIMAL NO-UNDO.
    DEF VAR lcHRLPDelim AS CHAR NO-UNDO.
+   DEF VAR lcLogText AS CHAR NO-UNDO.
 
    ASSIGN
       ldaStartDate = DATE(MONTH(TODAY), 1, YEAR(TODAY)) - 1
@@ -819,29 +823,29 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
          liMsseq = INT(SingleFee.KeyValue)
          liPerContrId = INT(SingleFee.sourcekey).
 
-      IF isPostpaidMobsubReleased(liMsSeq) THEN DO:
+      IF fisPostpaidMobsubReleased(liMsSeq) THEN DO:
          lcLogText = "Q25 Mobsub not found or prepaid: " +
-                     STRING(liPhase) + "|" + STRING(liMsSeq).
+                     STRING(iiPhase) + "|" + STRING(liMsSeq).
          fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, iiphase,
-                        {&Q25_EXEC_TYPE_HRLP}).
+                        {&Q25_EXEC_TYPE_HRLP_UNIV}).
          NEXT.
       END.
-      IF isSingleFeeBilled() THEN DO:
+      IF fisSingleFeeBilled() THEN DO:
          lcLogText = "Q25 Residual fee Billed: " +
-                        STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
+                        STRING(iiPhase) + "|" + STRING(Mobsub.CLI) + "|" +
                         STRING(Mobsub.MsSeq).
          fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, iiphase,
-                        {&Q25_EXEC_TYPE_HRLP}).
+                        {&Q25_EXEC_TYPE_HRLP_UNIV}).
          NEXT. /* "Residual fee billed". */
       END.
       
       /*Function checks also Extension, TermReturn and Renewal*/
-      IF isQ25PerContractEnded(liPerContrId, liMsSeq, SingleFee.orderid, 
-                               ldaStartDate, ldaEndDate, ldAmount, liPhase, 
+      IF fisQ25PerContractEnded(liPerContrId, liMsSeq, SingleFee.orderid, 
+                               ldaStartDate, ldaEndDate, ldAmount, iiPhase, 
                                lcLogText) THEN DO:
          IF lcLogText > "" THEN
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
-                            {&Q25_EXEC_TYPE_HRLP})).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, iiphase,
+                            {&Q25_EXEC_TYPE_HRLP_UNIV}).
          NEXT.
       END.
 
@@ -856,7 +860,7 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
                   STRING(ldAmount).                      /*Q25 value*/
 
       lcQ25DWHLogFile = lcHRLPOutDir + "IFS_Q25HR_ACTIVE_" +
-                        (SUBSTRING(STRING(fMakeTS()),8) + ".DAT".
+                        (SUBSTRING(STRING(fMakeTS()),1,8)) + ".DAT".
 
        OUTPUT STREAM SHRLP TO VALUE(lcHRLPOutFile) APPEND.
        PUT STREAM SHRLP UNFORMATTED lcLogText.
