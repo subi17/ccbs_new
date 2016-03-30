@@ -423,51 +423,36 @@ END FUNCTION.
 fRepSales(today - 1).
 fRepSales(today).
 
+DEFINE VARIABLE lcStatuses AS CHARACTER NO-UNDO.
+
+lcStatuses = "req_&1_new,req_&1_underwork,req_&1_done,req_&1_rejected," +
+             "req_&1_cancelled,req_&1_pending_hlr,req_&1_pending_hlr_done,,," +
+             "req_&1_handled".
+
+
+
 /* 4 & 5*/
-FOR EACH MsReqStatistic NO-LOCK WHERE
-   MsReqStatistic.Brand   = gcBrand AND
-   MsReqStatistic.Reqtype = 1:
-   CASE MsReqStatistic.ReqStatus:
-      WHEN 0 THEN 
-         fReportInt("req_service_new", fFixNeg(MsReqStatistic.ReqStatusCount)).
-      WHEN 1 THEN 
-         fReportInt("req_service_underwork", fFixNeg(MsReqStatistic.ReqStatusCount)).
-      WHEN 2 THEN 
-         fReportInt("req_service_done", fFixNeg(MsReqStatistic.ReqStatusCount)).
-      WHEN 3 THEN 
-         fReportInt("req_service_rejected", fFixNeg(MsReqStatistic.ReqStatusCount)).
-      WHEN 4 THEN 
-         fReportInt("req_service_cancelled", fFixNeg(MsReqStatistic.ReqStatusCount)).
-      WHEN 5 THEN 
-         fReportInt("req_service_pending_hlr", fFixNeg(MsReqStatistic.ReqStatusCount)).
-      WHEN 6 THEN 
-         fReportInt("req_service_pending_hlr_done", fFixNeg(MsReqStatistic.ReqStatusCount)).
-      WHEN 9 THEN 
-         fReportInt("req_service_handled", fFixNeg(MsReqStatistic.ReqStatusCount)).
-   END.
+FOR
+   EACH MsReqCounter NO-LOCK WHERE
+      MsReqCounter.Reqtype = 1
+   BREAK BY MsReqCounter.ReqStatus:
+
+   ACCUMULATE MsReqCounter.ReqStatusCount (SUB-TOTAL BY MsReqCounter.ReqStatus).
+
+   IF LAST-OF(MsReqCounter.ReqStatus) AND ENTRY(MsReqCounter.ReqStatus + 1,lcStatuses) > ""
+   THEN fReportInt(SUBSTITUTE(ENTRY(MsReqCounter.ReqStatus + 1,lcStatuses),"service"), fFixNeg((ACCUM SUB-TOTAL BY MsReqCounter.ReqStatus MsReqCounter.ReqStatusCount))).
 END.
 
-FOR EACH MsReqStatistic NO-LOCK WHERE
-   MsReqStatistic.Brand   = gcBrand AND
-   MsReqStatistic.Reqtype = 13:
-   CASE MsReqStatistic.ReqStatus:
-      WHEN 0 THEN 
-         fReportInt("req_sub_new", fFixNeg(MsReqStatistic.ReqStatusCount)).
-      WHEN 1 THEN 
-         fReportInt("req_sub_underwork", fFixNeg(MsReqStatistic.ReqStatusCount)).
-      WHEN 2 THEN 
-         fReportInt("req_sub_done", fFixNeg(MsReqStatistic.ReqStatusCount)).
-      WHEN 3 THEN 
-         fReportInt("req_sub_rejected", fFixNeg(MsReqStatistic.ReqStatusCount)).
-      WHEN 4 THEN 
-         fReportInt("req_sub_cancelled", fFixNeg(MsReqStatistic.ReqStatusCount)).
-      WHEN 5 THEN 
-         fReportInt("req_sub_pending_hlr", fFixNeg(MsReqStatistic.ReqStatusCount)).
-      WHEN 6 THEN 
-         fReportInt("req_sub_pending_hlr_done", fFixNeg(MsReqStatistic.ReqStatusCount)).
-      WHEN 9 THEN 
-         fReportInt("req_sub_handled", fFixNeg(MsReqStatistic.ReqStatusCount)).
-   END.
+
+FOR
+   EACH MsReqCounter NO-LOCK WHERE
+      MsReqCounter.Reqtype = 13
+   BREAK BY MsReqCounter.ReqStatus:
+
+   ACCUMULATE MsReqCounter.ReqStatusCount (SUB-TOTAL BY MsReqCounter.ReqStatus).
+
+   IF LAST-OF(MsReqCounter.ReqStatus) AND ENTRY(MsReqCounter.ReqStatus + 1,lcStatuses) > ""
+   THEN fReportInt(SUBSTITUTE(ENTRY(MsReqCounter.ReqStatus + 1,lcStatuses),"sub"), fFixNeg((ACCUM SUB-TOTAL BY MsReqCounter.ReqStatus MsReqCounter.ReqStatusCount))).
 END.
 
 /* 6 not exists */
