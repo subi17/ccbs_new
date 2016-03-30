@@ -388,16 +388,16 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW temp-event.ttdate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW temp-event.ttdate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) temp-event.ttdate WITH FRAME sel.
       END.
 
       ELSE  IF order = 2 THEN DO:
-        CHOOSE ROW temp-event.ttuser ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW temp-event.ttuser {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) temp-event.ttuser WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
-        CHOOSE ROW temp-event.tttable ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW temp-event.tttable {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) temp-event.tttable WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

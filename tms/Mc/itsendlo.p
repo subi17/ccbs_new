@@ -235,17 +235,17 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ITSendLog.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ITSendLog.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ITSendLog.CustNum WITH FRAME sel.
       END.
 
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ITSendLog.InvNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ITSendLog.InvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ITSendLog.InvNum WITH FRAME sel.
       END.
 
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW ITSendLog.RepType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ITSendLog.RepType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ITSendLog.RepType WITH FRAME sel.
       END.
 

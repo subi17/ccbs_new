@@ -194,7 +194,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW lcLimit ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW lcLimit {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) lcLimit WITH FRAME sel.
       END.
       

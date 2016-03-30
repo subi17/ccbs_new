@@ -337,11 +337,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW InvGroup.InvGroup ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW InvGroup.InvGroup {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) InvGroup.InvGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW InvGroup.IGName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW InvGroup.IGName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) InvGroup.IGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

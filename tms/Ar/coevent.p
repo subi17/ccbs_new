@@ -206,15 +206,15 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CoEvent.Salesman ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoEvent.Salesman {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoEvent.Salesman WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CoEvent.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoEvent.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoEvent.CustNum WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
-        CHOOSE ROW CoEvent.PaymDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoEvent.PaymDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoEvent.PaymDate WITH FRAME sel.
       END.
 

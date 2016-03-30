@@ -221,11 +221,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttCustomer.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttCustomer.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttCustomer.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW ttCustomer.CustName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttCustomer.CustName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttCustomer.CustName WITH FRAME sel.
       END.
 

@@ -196,7 +196,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row msseq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row msseq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) msseq WITH FRAME sel.
       END.
       

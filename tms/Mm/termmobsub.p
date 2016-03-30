@@ -271,19 +271,19 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TermMobsub.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TermMobsub.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TermMobsub.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW TermMobsub.MsSeq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TermMobsub.MsSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TermMobsub.MsSeq WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW TermMobsub.AgrCust ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TermMobsub.AgrCust {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TermMobsub.AgrCust WITH FRAME sel.
       END.
       IF order = 4 THEN DO:
-        CHOOSE ROW TermMobsub.MSStatus ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TermMobsub.MSStatus {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TermMobsub.MSStatus WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

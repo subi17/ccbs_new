@@ -87,7 +87,7 @@ BROWSE:
       repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW ServiceLimitGroup.GroupCode ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW ServiceLimitGroup.GroupCode {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) ServiceLimitGroup.GroupCode WITH FRAME sel.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.

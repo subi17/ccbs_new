@@ -219,11 +219,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW PNPList.PNPGroup ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW PNPList.PNPGroup {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) PNPList.PNPGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW PNPList.BDestFrom ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW PNPList.BDestFrom {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) PNPList.BDestFrom WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

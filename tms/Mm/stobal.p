@@ -269,11 +269,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW StoBal.StoBal ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW StoBal.StoBal {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) StoBal.StoBal WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW StoBal.SimArt ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW StoBal.SimArt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) StoBal.SimArt WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

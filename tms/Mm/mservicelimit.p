@@ -260,11 +260,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW lccli ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW lccli {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) lccli WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW mservicelimit.DialType ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW mservicelimit.DialType {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) lccli WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

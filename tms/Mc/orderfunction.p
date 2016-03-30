@@ -202,11 +202,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW OrderFunction.OFID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW OrderFunction.OFID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) OrderFunction.OFID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW OrderFunction.OFName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW OrderFunction.OFName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) OrderFunction.OFName WITH FRAME sel.
       END.
 

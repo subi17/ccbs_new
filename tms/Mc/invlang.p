@@ -318,7 +318,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW RepText.TextType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW RepText.TextType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) RepText.TextType WITH FRAME sel.
       END.
 

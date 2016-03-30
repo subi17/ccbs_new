@@ -233,7 +233,7 @@ BROWSE:
       
       
       IF order = 1 THEN DO:
-        CHOOSE ROW DCCounter.dcdate ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW DCCounter.dcdate {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) DCCounter.dcdate WITH FRAME sel.
       END. 
       nap = keylabel(LASTKEY).

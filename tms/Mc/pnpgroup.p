@@ -284,15 +284,15 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW PNPGroup.PNPGroup ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW PNPGroup.PNPGroup {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) PNPGroup.PNPGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW PNPGroup.Name ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW PNPGroup.Name {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) PNPGroup.Name WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW PNPGroup.CCN ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW PNPGroup.CCN {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) PNPGroup.PNPGroup WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

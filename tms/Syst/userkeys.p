@@ -210,11 +210,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW userkeys.usercode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW userkeys.usercode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) userkeys.usercode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW userkeys.keytype ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW userkeys.keytype {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) userkeys.keytype WITH FRAME sel.
       END.
 

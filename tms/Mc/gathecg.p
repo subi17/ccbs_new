@@ -161,9 +161,9 @@ BROWSE:
     ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.
       END.
       HIDE MESSAGE no-pause. IF order = 1 THEN
-    CHOOSE ROW CustGroup.CustGroup ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW CustGroup.CustGroup {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 2 THEN
-    CHOOSE ROW CustGroup.CGName ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW CustGroup.CGName {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY value(ccc)
       CustGroup.CustGroup CustGroup.CreUser  CustGroup.CGName
       WITH FRAME sel.

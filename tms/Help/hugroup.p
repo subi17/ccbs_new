@@ -87,7 +87,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row usergrp.usergroup ;(uchoose.i;) no-error with frame sel.
+         choose row usergrp.usergroup {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) usergrp.usergroup with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

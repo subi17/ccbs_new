@@ -214,15 +214,15 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Eventlog.EventDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Eventlog.EventDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Eventlog.EventDate WITH FRAME sel.
       END.
       ELSE  IF order = 2 THEN DO:
-        CHOOSE ROW Eventlog.UserCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Eventlog.UserCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Eventlog.UserCode WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
-        CHOOSE ROW Eventlog.TableName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Eventlog.TableName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Eventlog.TableName WITH FRAME sel.
       END.
 

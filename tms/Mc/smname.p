@@ -216,11 +216,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW username.usercode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW username.usercode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) username.usercode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW lcname ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW lcname {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) lcname WITH FRAME sel.
       END.
 

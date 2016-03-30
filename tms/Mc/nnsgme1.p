@@ -305,11 +305,11 @@ SELAUS:
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-   CHOOSE ROW SMGMember.Salesman ;(uchoose.i;) no-error WITH FRAME sel.
+   CHOOSE ROW SMGMember.Salesman {Syst/uchoose.i} no-error WITH FRAME sel.
    COLOR DISPLAY value(ccc) SMGMember.Salesman WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
-   CHOOSE ROW SMGMember.SmName ;(uchoose.i;) no-error WITH FRAME sel.
+   CHOOSE ROW SMGMember.SmName {Syst/uchoose.i} no-error WITH FRAME sel.
    COLOR DISPLAY value(ccc) SMGmember.SmName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

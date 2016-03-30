@@ -87,7 +87,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row MSStat.StatusCode ;(uchoose.i;) no-error with frame sel.
+         choose row MSStat.StatusCode {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) MSStat.StatusCode with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

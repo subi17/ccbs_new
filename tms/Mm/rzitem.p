@@ -272,11 +272,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row RZItem.PLMNCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row RZItem.PLMNCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RZItem.PLMNCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row RZItem.CountryPrefix ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row RZItem.CountryPrefix {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RZItem.CountryPrefix WITH FRAME sel.
       END.
       

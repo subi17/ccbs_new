@@ -244,12 +244,12 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TriggerItem.TriggerConfID ;(uchoose.i;) NO-ERROR WITH 
+        CHOOSE ROW TriggerItem.TriggerConfID {Syst/uchoose.i} NO-ERROR WITH 
         FRAME sel.
         COLOR DISPLAY VALUE(ccc) TriggerItem.TriggerConfID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW TriggerItem.InvCust ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TriggerItem.InvCust {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TriggerItem.InvCust WITH FRAME sel.
       END.
 

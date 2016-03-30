@@ -231,11 +231,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW PLMN.PLMN ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW PLMN.PLMN {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PLMN.PLMN WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW PLMN.CommName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW PLMN.CommName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PLMN.CommName WITH FRAME sel.
       END.
 

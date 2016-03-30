@@ -237,15 +237,15 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttCall.DateSt ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttCall.DateSt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttCall.DateSt WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ttCall.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttCall.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttCall.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW ttCall.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttCall.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttCall.CLI WITH FRAME sel.
       END.
 

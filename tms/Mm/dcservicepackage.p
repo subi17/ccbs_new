@@ -288,7 +288,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DCServicePackage.ServPac ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW DCServicePackage.ServPac {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DCServicePackage.ServPac WITH FRAME sel.
       END.

@@ -90,7 +90,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row ServPac.ServPac ;(uchoose.i;) no-error with frame sel.
+         choose row ServPac.ServPac {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) ServPac.ServPac with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

@@ -248,11 +248,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row discplan.DiscPlan ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row discplan.DiscPlan {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) discplan.DiscPlan WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row discplan.DPName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row discplan.DPName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) discplan.DPName WITH FRAME sel.
       END.
       IF rtab[FRAME-line] = ? THEN NEXT.

@@ -630,7 +630,7 @@ repeat WITH FRAME sel:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW FixedFee.KeyValue ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW FixedFee.KeyValue {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) FixedFee.KeyValue WITH FRAME sel.
       END.
 

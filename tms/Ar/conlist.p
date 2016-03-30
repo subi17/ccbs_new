@@ -385,11 +385,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW Contact.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Contact.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Contact.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW Contact.CustBal ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Contact.CustBal {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Contact.CustBal WITH FRAME sel.
       END.
 

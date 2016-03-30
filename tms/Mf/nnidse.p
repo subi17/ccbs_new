@@ -99,7 +99,7 @@ BROWSE:
       repeat WITH FRAME tlse ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW Exchange.Ident ;(uchoose.i;) no-error WITH FRAME tlse.
+         CHOOSE ROW Exchange.Ident {Syst/uchoose.i} no-error WITH FRAME tlse.
          COLOR DISPLAY value(ccc) Exchange.Ident WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.

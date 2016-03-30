@@ -217,11 +217,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW OFItem.OFID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW OFItem.OFID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) OFItem.OFID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW OFItem.StatusCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW OFItem.StatusCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) OFItem.StatusCode WITH FRAME sel.
       END.
 

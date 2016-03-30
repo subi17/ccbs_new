@@ -89,7 +89,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row Stock.Stock ;(uchoose.i;) no-error with frame sel.
+         choose row Stock.Stock {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) Stock.Stock with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

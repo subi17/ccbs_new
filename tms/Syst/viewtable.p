@@ -186,11 +186,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttName WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ttTableField.ttValue ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttTableField.ttValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttTableField.ttValue WITH FRAME sel.
       END.
 

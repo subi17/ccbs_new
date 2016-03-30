@@ -137,7 +137,7 @@ BROWSE:
       repeat with frame tlse on endkey undo, return:
 
          hide message no-pause.
-         choose row UserGrp.UserGroup ;(uchoose.i;) no-error with frame tlse.
+         choose row UserGrp.UserGroup {Syst/uchoose.i} no-error with frame tlse.
          color display value(ccc) UserGrp.UserGroup with frame tlse.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

@@ -312,19 +312,19 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW Trunk.ExCode ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Trunk.ExCode {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Trunk.ExCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Trunk.OpCode ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Trunk.OpCode {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Trunk.OpCode WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        CHOOSE ROW Trunk.?? ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Trunk.?? {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Trunk.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW Trunk.??  ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Trunk.??  {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Trunk.? WITH FRAME sel.
       END.
 */

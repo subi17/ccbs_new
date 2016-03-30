@@ -319,15 +319,15 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CoShare.TargType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoShare.TargType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoShare.TargType WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CoShare.CoTarg ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoShare.CoTarg {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoShare.CoTarg WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW CoShare.RsLevel ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoShare.RsLevel {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoShare.RsLevel WITH FRAME sel.
       END.
 

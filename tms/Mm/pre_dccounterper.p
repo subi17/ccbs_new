@@ -134,11 +134,11 @@ BROWSE:
       
       
       IF order = 1 THEN DO:
-        CHOOSE ROW liPeriod ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW liPeriod {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) liPeriod WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW PPInvSeq.FromDate ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW PPInvSeq.FromDate {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) PPInvSeq.FromDate WITH FRAME sel.
       END.
 

@@ -171,11 +171,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
-         CHOOSE ROW Operator.Operator ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Operator.Operator {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Operator.Operator WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
-         CHOOSE ROW Operator.OperName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Operator.OperName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Operator.OperName WITH FRAME sel.
       END.
 

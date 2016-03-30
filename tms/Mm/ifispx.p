@@ -284,12 +284,12 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN 
       DO:
-         CHOOSE ROW IFiSpx.ManCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW IFiSpx.ManCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) IFiSpx.ManCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN 
       DO:
-         CHOOSE ROW IFiSpx.ManCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW IFiSpx.ManCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) IFiSpx.ManCode WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

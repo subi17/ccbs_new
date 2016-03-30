@@ -252,11 +252,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW RatePref.Prefix ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW RatePref.Prefix {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RatePref.Prefix WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW RatePref.DialType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW RatePref.DialType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RatePref.DialType WITH FRAME sel.
       END.
 

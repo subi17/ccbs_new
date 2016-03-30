@@ -192,7 +192,7 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW CustPNPGroup.PnpGroup ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW CustPNPGroup.PnpGroup {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) CustPNPGroup.PnpGroup WITH FRAME sel.
       END.
 

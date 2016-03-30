@@ -230,11 +230,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW BarringConf.BarringGroup ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW BarringConf.BarringGroup {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BarringConf.BarringGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW BarringConf.BarringCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW BarringConf.BarringCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BarringConf.BarringCode WITH FRAME sel.
       END.
 

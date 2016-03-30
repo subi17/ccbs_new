@@ -286,19 +286,19 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW VATCode.VATCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW VATCode.VATCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) VATCode.VATCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW VATCode.VATPerc ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW VATCode.VATPerc {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) VATCode.VATPerc WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW VATCode.TaxZone ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW VATCode.TaxZone {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) VATCode.TaxZone WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW VATCode.TaxClass  ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW VATCode.TaxClass  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) VATCode.TaxClass WITH FRAME sel.
       END.
 

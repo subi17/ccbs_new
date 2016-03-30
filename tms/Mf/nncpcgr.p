@@ -268,19 +268,19 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW MedTrunk.Ident ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedTrunk.Ident {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedTrunk.Ident WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MedTrunk.TrName ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedTrunk.TrName {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedTrunk.TrName WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        CHOOSE ROW MedTrunk.?? ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedTrunk.?? {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedTrunk.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW MedTrunk.??  ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedTrunk.??  {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedTrunk.? WITH FRAME sel.
       END.
 */

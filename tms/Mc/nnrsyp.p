@@ -250,11 +250,11 @@ BROWSE:
 
       hide message no-pause.
       if order = 1 then do:
-        choose row Reseller.Reseller ;(uchoose.i;) no-error with frame sel.
+        choose row Reseller.Reseller {Syst/uchoose.i} no-error with frame sel.
         color display value(ccc) Reseller.Reseller with frame sel.
       end.
       else if order = 2 then do:
-        choose row Reseller.RsName ;(uchoose.i;) no-error with frame sel.
+        choose row Reseller.RsName {Syst/uchoose.i} no-error with frame sel.
         color display value(ccc) Reseller.RsName with frame sel.
       end.
       if rtab[frame-line] = ? then next.

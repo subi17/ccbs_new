@@ -225,11 +225,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttSoLog.SoLog ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttSoLog.SoLog {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttSoLog.SoLog WITH FRAME sel.
       END.
       IF order = 2 THEN DO:
-        CHOOSE ROW xstat ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW xstat {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) xstat WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

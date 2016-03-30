@@ -708,19 +708,19 @@ BROWSE:
 
       IF iiOrderID = 0 THEN DO:
          IF order = 1 OR ORDER = 5 THEN DO:
-            CHOOSE ROW lcStamp ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+            CHOOSE ROW lcStamp {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
             COLOR DISPLAY VALUE(ccc) lcStamp WITH FRAME sel.
          END.
          ELSE IF order = 2 OR Order = 7 THEN DO:
-            CHOOSE ROW Order.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+            CHOOSE ROW Order.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
             COLOR DISPLAY VALUE(ccc) Order.CLI WITH FRAME sel.
          END.
          ELSE IF order = 3 OR Order = 6 THEN DO:
-            CHOOSE ROW Order.ContractID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+            CHOOSE ROW Order.ContractID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
             COLOR DISPLAY VALUE(ccc) Order.ContractID WITH FRAME sel.
          END.
          IF order = 4 THEN DO:
-            CHOOSE ROW Order.OrderId ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+            CHOOSE ROW Order.OrderId {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
             COLOR DISPLAY VALUE(ccc) Order.OrderId WITH FRAME sel.
          END.
       END.

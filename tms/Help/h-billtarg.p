@@ -92,7 +92,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row BillTarg.BillTarg ;(uchoose.i;) no-error with frame sel.
+         choose row BillTarg.BillTarg {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) BillTarg.BillTarg with frame sel.
 
          nap = keylabel(lastkey).

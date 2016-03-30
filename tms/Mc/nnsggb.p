@@ -173,11 +173,11 @@ SELAUS:
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-   CHOOSE ROW SMGroup.SmGroup ;(uchoose.i;) no-error WITH FRAME sel.
+   CHOOSE ROW SMGroup.SmGroup {Syst/uchoose.i} no-error WITH FRAME sel.
    COLOR DISPLAY value(ccc) SMGroup.SmGroup WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
-   CHOOSE ROW SMGroup.SGName ;(uchoose.i;) no-error WITH FRAME sel.
+   CHOOSE ROW SMGroup.SGName {Syst/uchoose.i} no-error WITH FRAME sel.
    COLOR DISPLAY value(ccc) SMGroup.SGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

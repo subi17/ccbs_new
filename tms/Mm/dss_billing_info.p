@@ -201,11 +201,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttDSSInfo.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttDSSInfo.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttDSSInfo.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW ttDSSInfo.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttDSSInfo.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttDSSInfo.CLI WITH FRAME sel.
       END.
 

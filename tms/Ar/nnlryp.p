@@ -249,7 +249,7 @@ BROWSE:
       END.
 
       HIDE MESSAGE no-pause.
-      CHOOSE ROW InvRow.BillCode ;(uchoose.i;) no-error WITH FRAME sel.
+      CHOOSE ROW InvRow.BillCode {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY value(ccc) InvRow.BillCode WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:

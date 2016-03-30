@@ -258,11 +258,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW CCN.CCN ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW CCN.CCN {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) CCN.CCN WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW CCN.CCNName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW CCN.CCNName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) CCN.CCNName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

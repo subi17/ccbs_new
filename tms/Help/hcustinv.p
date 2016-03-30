@@ -142,7 +142,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW Invoice.InvNum ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Invoice.InvNum {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Invoice.InvNum WITH FRAME sel.
       END.
 

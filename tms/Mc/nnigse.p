@@ -98,7 +98,7 @@ BROWSE:
       repeat WITH FRAME tlse ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW InvGroup.InvGroup ;(uchoose.i;) no-error WITH FRAME tlse.
+         CHOOSE ROW InvGroup.InvGroup {Syst/uchoose.i} no-error WITH FRAME tlse.
          COLOR DISPLAY value(ccc) InvGroup.InvGroup WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.

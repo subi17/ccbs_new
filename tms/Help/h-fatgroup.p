@@ -112,7 +112,7 @@ repeat:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row FATGroup.FTGrp ;(uchoose.i;) no-error with frame sel.
+         choose row FATGroup.FTGrp {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) FATGroup.FTGrp with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

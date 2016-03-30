@@ -219,7 +219,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttField.FieldName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttField.FieldName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttField.FieldName WITH FRAME sel.
       END.
 

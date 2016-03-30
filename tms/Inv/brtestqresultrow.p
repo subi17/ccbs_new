@@ -216,7 +216,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW BRTestQResultRow.QResultRowID ;(uchoose.i;) 
+        CHOOSE ROW BRTestQResultRow.QResultRowID {Syst/uchoose.i} 
            NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BRTestQResultRow.QResultRowID 
            WITH FRAME sel.

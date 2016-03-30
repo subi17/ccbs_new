@@ -121,7 +121,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row ttCredItem.CredDate ;(uchoose.i;) no-error with frame sel.
+         choose row ttCredItem.CredDate {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) ttCredItem.CredDate with frame sel.
 
          nap = keylabel(lastkey).

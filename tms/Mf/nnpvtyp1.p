@@ -148,7 +148,7 @@ BROWSE:
       END.
 
       HIDE MESSAGE NO-PAUSE.
-         CHOOSE ROW nnpvti.pt-tuno ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW nnpvti.pt-tuno {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) nnpvti.pt-tuno WITH FRAME sel.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 

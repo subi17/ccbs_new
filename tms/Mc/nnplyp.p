@@ -366,11 +366,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW PriceList.PriceList ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW PriceList.PriceList {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) PriceList.PriceList WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW PriceList.PLName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW PriceList.PLName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) PriceList.PLName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

@@ -151,7 +151,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Bank.BankId ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Bank.BankId {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Bank.BankId WITH FRAME sel.
       END.
       

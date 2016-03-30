@@ -143,7 +143,7 @@ BROWSE:
       repeat WITH FRAME tlse ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW CCN.CCNName ;(uchoose.i;) no-error WITH FRAME tlse.
+         CHOOSE ROW CCN.CCNName {Syst/uchoose.i} no-error WITH FRAME tlse.
          COLOR DISPLAY value(ccc) CCN.CCNName WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.

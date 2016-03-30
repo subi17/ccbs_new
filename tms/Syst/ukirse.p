@@ -77,7 +77,7 @@ BROWSE:
       repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE.
-         CHOOSE ROW TMSPrinter.PrinterId ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW TMSPrinter.PrinterId {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) TMSPrinter.PrinterId WITH FRAME sel.
 
          if frame-value = " " AND rtab[FRAME-LINE] = ? THEN NEXT.

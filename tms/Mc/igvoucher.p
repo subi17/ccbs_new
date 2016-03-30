@@ -282,7 +282,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW IGVoucher.PaymType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW IGVoucher.PaymType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) IGVoucher.PaymType WITH FRAME sel.
       END.
 

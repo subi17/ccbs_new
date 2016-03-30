@@ -217,15 +217,15 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row PrepCDR.ErrorCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row PrepCDR.ErrorCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PrepCDR.ErrorCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row PrepCDR.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row PrepCDR.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PrepCDR.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        choose row PrepCDR.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row PrepCDR.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PrepCDR.CLI WITH FRAME sel.
       END.
       IF rtab[FRAME-line] = ? THEN NEXT.

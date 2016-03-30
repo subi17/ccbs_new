@@ -218,7 +218,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW EventLogConf.TableName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW EventLogConf.TableName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) EventLogConf.TableName WITH FRAME sel.
       END.
 

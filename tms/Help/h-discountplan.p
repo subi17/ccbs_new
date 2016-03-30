@@ -93,7 +93,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row DiscountPlan.DPRuleId ;(uchoose.i;) no-error with frame sel.
+         choose row DiscountPlan.DPRuleId {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) DiscountPlan.DPRuleId with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

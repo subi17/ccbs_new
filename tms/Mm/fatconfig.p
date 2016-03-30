@@ -276,7 +276,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW FATConfig.ConfType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FATConfig.ConfType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FATConfig.ConfType WITH FRAME sel.
       END.
 

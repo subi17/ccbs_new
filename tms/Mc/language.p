@@ -227,11 +227,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Language.Language ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Language.Language {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Language.Language WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Language.LangName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Language.LangName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Language.LangName WITH FRAME sel.
       END.
 

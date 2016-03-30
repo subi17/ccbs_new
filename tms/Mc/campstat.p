@@ -241,19 +241,19 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CampStat.Campaign ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CampStat.Campaign {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CampStat.Campaign WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CampStat.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CampStat.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CampStat.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW CampStat.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CampStat.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CampStat.CLI WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW CampStat.CampDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CampStat.CampDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CampStat.CampDate WITH FRAME sel.
       END.
 

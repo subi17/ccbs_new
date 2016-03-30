@@ -111,7 +111,7 @@ BROWSE:
       repeat WITH FRAME tlse ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW PriceList.PriceList ;(uchoose.i;) no-error WITH FRAME tlse.
+         CHOOSE ROW PriceList.PriceList {Syst/uchoose.i} no-error WITH FRAME tlse.
          COLOR DISPLAY value(ccc) PriceList.PriceList WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.

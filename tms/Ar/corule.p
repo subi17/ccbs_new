@@ -462,11 +462,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CoRule.CoRuleID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoRule.CoRuleID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoRule.CoRuleID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CoRule.RuleDesc ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoRule.RuleDesc {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoRule.RuleDesc WITH FRAME sel.
       END.
 

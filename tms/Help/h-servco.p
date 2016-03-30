@@ -99,7 +99,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row ServCom.ServCom ;(uchoose.i;) no-error with frame sel.
+         choose row ServCom.ServCom {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) ServCom.ServCom with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

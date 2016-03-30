@@ -73,7 +73,7 @@ BROWSE:
       repeat WITH FRAME kase ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE.
-         CHOOSE ROW  bank.bankid ;(uchoose.i;) no-error WITH FRAME kase.
+         CHOOSE ROW  bank.bankid {Syst/uchoose.i} no-error WITH FRAME kase.
          COLOR DISPLAY value(ccc)  bank.bankid WITH FRAME kase.
 
          if frame-value = " " AND rtab[FRAME-LINE] = ? THEN NEXT.

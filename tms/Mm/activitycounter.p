@@ -179,7 +179,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ActivityCounter.ACDate ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW ActivityCounter.ACDate {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ActivityCounter.ACDate WITH FRAME sel.
       END.

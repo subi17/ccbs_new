@@ -142,7 +142,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW SLCounterItem.SLCItem ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SLCounterItem.SLCItem {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SLCounterItem.SLCItem WITH FRAME sel.
       END.
 

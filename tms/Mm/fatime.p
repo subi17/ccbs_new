@@ -435,15 +435,15 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW FATime.custnum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FATime.custnum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FATime.custnum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW FATime.cli ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FATime.cli {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FATime.cli WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
-        CHOOSE ROW liTransPeriod ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW liTransPeriod {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) liTransPeriod WITH FRAME sel.
       END.
 

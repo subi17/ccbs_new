@@ -276,7 +276,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW BDestConfItem.RateCCN ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW BDestConfItem.RateCCN {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BDestConfItem.RateCCN WITH FRAME sel.
       END.

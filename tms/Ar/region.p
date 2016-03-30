@@ -243,11 +243,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Region.Region ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Region.Region {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Region.Region WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Region.RgName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Region.RgName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Region.RgName WITH FRAME sel.
       END.
 

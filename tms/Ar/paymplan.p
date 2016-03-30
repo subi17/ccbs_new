@@ -535,15 +535,15 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF liAutoRun = 0 THEN DO:
          IF order = 1 THEN DO:
-           CHOOSE ROW PaymPlan.PPDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+           CHOOSE ROW PaymPlan.PPDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
            COLOR DISPLAY VALUE(ccc) PaymPlan.PPDate WITH FRAME sel.
          END.
          ELSE IF order = 2 THEN DO:
-           CHOOSE ROW PaymPlan.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+           CHOOSE ROW PaymPlan.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
            COLOR DISPLAY VALUE(ccc) PaymPlan.CustNum WITH FRAME sel.
          END.
          ELSE IF order = 3 THEN DO:
-           CHOOSE ROW lcStatus ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+           CHOOSE ROW lcStatus {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
            COLOR DISPLAY VALUE(ccc) lcStatus WITH FRAME sel.
          END.
 

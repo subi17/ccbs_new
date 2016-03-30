@@ -466,7 +466,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TMRItemValue.FromDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMRItemValue.FromDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMRItemValue.FromDate WITH FRAME sel.
       END.
 

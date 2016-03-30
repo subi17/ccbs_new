@@ -173,15 +173,15 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CoTarg.COTarg ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoTarg.COTarg {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoTarg.COTarg WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CoTarg.CoTarg ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoTarg.CoTarg {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoTarg.CoTarg WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW CoTarg.CommStatus ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CoTarg.CommStatus {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CoTarg.CommStatus WITH FRAME sel.
       END.
 

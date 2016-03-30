@@ -146,11 +146,11 @@ BROWSE:
          ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.
       END.
       HIDE MESSAGE no-pause. IF order = 1 THEN
-         CHOOSE ROW TMSUser.UserCode ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW TMSUser.UserCode {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 2 THEN
-         CHOOSE ROW TMSUser.UserNum ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW TMSUser.UserNum {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 3 THEN
-         CHOOSE ROW TMSUser.UserName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW TMSUser.UserName {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY value(ccc)
       TMSUser.UserCode TMSUser.UserNum TMSUser.UserName WITH FRAME sel.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

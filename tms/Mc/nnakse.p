@@ -85,7 +85,7 @@ BROWSE:
       repeat WITH FRAME tlse ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW CustCat.Category ;(uchoose.i;) no-error WITH FRAME tlse.
+         CHOOSE ROW CustCat.Category {Syst/uchoose.i} no-error WITH FRAME tlse.
          COLOR DISPLAY value(ccc) CustCat.Category WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.

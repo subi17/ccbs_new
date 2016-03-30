@@ -164,11 +164,11 @@ print-line:
       END.
 
       HIDE MESSAGE no-pause. IF order = 1 THEN
-    CHOOSE ROW Customer.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW Customer.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 2 THEN
-    CHOOSE ROW Customer.SearchName ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW Customer.SearchName {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 3 THEN
-    CHOOSE ROW Customer.CustName ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW Customer.CustName {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY value(ccc)
       Customer.CustNum Customer.SearchName Customer.CustName
       WITH FRAME sel.

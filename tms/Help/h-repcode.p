@@ -113,7 +113,7 @@ repeat:
      repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW ttRepCode.RepCode ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW ttRepCode.RepCode {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) ttRepCode.RepCode WITH FRAME sel.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.

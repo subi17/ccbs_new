@@ -305,11 +305,11 @@ SELAUS:
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-        CHOOSE ROW UGMember.UserGroup ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW UGMember.UserGroup {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) UGMember.UserGroup WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
-        CHOOSE ROW UserGrp.UGName ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW UserGrp.UGName {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) UserGrp.UGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

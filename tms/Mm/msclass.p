@@ -263,11 +263,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MSClass.McCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MSClass.McCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MSClass.McCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MSClass.McName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MSClass.McName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MSClass.McName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

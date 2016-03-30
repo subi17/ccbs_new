@@ -134,7 +134,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttEvent.EventDay ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttEvent.EventDay {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttEvent.EventDay WITH FRAME sel.
       END.
 

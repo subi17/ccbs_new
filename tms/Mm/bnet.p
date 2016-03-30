@@ -214,11 +214,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row bnet.BnetCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row bnet.BnetCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) bnet.BnetCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row bnet.BnetName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row bnet.BnetName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) bnet.BnetName WITH FRAME sel.
       END.
 

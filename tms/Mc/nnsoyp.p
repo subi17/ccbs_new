@@ -225,11 +225,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW Salesoffice.SalesOffice ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Salesoffice.SalesOffice {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Salesoffice.SalesOffice WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Salesoffice.SOName ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Salesoffice.SOName {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Salesoffice.SOName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

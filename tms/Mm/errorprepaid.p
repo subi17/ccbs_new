@@ -221,11 +221,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row MobError.MobError ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row MobError.MobError {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MobError.MobError WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row MobError.MEName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row MobError.MEName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MobError.MEName WITH FRAME sel.
       END.
 

@@ -246,7 +246,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW PrintHouseConf.PrintHouse ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW PrintHouseConf.PrintHouse {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PrintHouseConf.PrintHouse WITH FRAME sel.
       END.

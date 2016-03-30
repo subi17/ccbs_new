@@ -171,7 +171,7 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-         CHOOSE ROW CLI.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW CLI.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) CLI.CLI WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

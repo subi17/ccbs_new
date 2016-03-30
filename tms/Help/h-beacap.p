@@ -90,7 +90,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row BeaCap.BeaCap ;(uchoose.i;) no-error with frame sel.
+         choose row BeaCap.BeaCap {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) BeaCap.BeaCap with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

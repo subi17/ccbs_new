@@ -398,7 +398,7 @@ REPEAT WITH FRAME sel:
       
       IF NOT llDivBatches THEN DO:
          IF order = 1 THEN DO:
-            CHOOSE ROW PPBatch.PPBatch ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+            CHOOSE ROW PPBatch.PPBatch {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
             COLOR DISPLAY VALUE(ccc) PPBatch.PPBatch WITH FRAME sel.
          END.
       

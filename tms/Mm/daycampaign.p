@@ -353,11 +353,11 @@ repeat WITH FRAME sel:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW DayCampaign.DCEvent ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW DayCampaign.DCEvent {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) DayCampaign.DCEvent WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW DayCampaign.DCEvent ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW DayCampaign.DCEvent {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) DayCampaign.DCEvent WITH FRAME sel.
       END.
 

@@ -169,11 +169,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
-         CHOOSE ROW AreaCode.AreaCode ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW AreaCode.AreaCode {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) AreaCode.AreaCode WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
-         CHOOSE ROW AreaCode.AreaName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW AreaCode.AreaName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) AreaCode.AreaName WITH FRAME sel.
       END.
 

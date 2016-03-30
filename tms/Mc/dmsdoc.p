@@ -137,7 +137,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttDocs.DocTypeID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttDocs.DocTypeID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttDocs.DocTypeID WITH FRAME sel.
       END.
 

@@ -168,7 +168,7 @@ BROWSE:
       END.
 
       HIDE MESSAGE NO-PAUSE.
-      CHOOSE ROW CLI.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+      CHOOSE ROW CLI.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       IF AVAIL CLI THEN COLOR DISPLAY value(ccc) 
          CLI.CLI 
          CLI.Ref

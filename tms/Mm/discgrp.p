@@ -223,11 +223,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DiscGroup.DiscGroup ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DiscGroup.DiscGroup {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DiscGroup.DiscGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW DiscGroup.DGName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DiscGroup.DGName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DiscGroup.DGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

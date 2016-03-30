@@ -163,7 +163,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TMSCodes.CodeValue ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMSCodes.CodeValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMSCodes.CodeValue WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

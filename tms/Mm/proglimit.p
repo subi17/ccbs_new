@@ -236,11 +236,11 @@ repeat WITH FRAME sel:
       HIDE MESSAGE no-pause.
 
       IF order = 1 THEN DO:
-        CHOOSE ROW ProgLimit.LimitFrom ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW ProgLimit.LimitFrom {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) ProgLimit.validfrom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ProgLimit.LimitFrom ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW ProgLimit.LimitFrom {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) ProgLimit.validto WITH FRAME sel.
       END.
 

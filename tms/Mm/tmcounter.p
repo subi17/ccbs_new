@@ -200,17 +200,17 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttTMCounter.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttTMCounter.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttTMCounter.CustNum WITH FRAME sel.
       END.
       
       IF order = 2 THEN DO:
-         CHOOSE ROW ttTMCounter.MsSeq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttTMCounter.MsSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttTMCounter.MsSeq WITH FRAME sel.
       END.
       
       IF order = 3 THEN DO:
-         CHOOSE ROW lcValue ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW lcValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) lcValue WITH FRAME sel.
       END.
       

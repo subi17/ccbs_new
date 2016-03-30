@@ -348,15 +348,15 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW BillItem.BillCode ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW BillItem.BillCode {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) BillItem.BillCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW BillItem.BIName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW BillItem.BIName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) BillItem.BIName WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-         CHOOSE ROW BillItem.BIGroup ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW BillItem.BIGroup {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) BillItem.BIGroup WITH FRAME sel.
       END.
 

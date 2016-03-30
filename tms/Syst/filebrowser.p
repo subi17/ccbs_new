@@ -120,7 +120,7 @@ REPEAT WITH FRAME sel:
 
       IF order = 1 THEN DO:
 
-        CHOOSE ROW ttFiles.FileName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttFiles.FileName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       
         COLOR DISPLAY VALUE(ccc) ttFiles.FileName WITH FRAME sel.
 

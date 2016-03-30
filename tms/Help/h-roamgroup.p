@@ -97,7 +97,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row RoamGroup.RoamGroup ;(uchoose.i;) no-error with frame sel.
+         choose row RoamGroup.RoamGroup {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) RoamGroup.RoamGroup with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

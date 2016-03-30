@@ -226,15 +226,15 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MobCDR.DateSt ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MobCDR.DateSt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MobCDR.DateSt WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MobCDR.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MobCDR.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MobCDR.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW MobCDR.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MobCDR.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MobCDR.CLI WITH FRAME sel.
       END.
 

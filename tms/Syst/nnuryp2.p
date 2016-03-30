@@ -245,11 +245,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-        CHOOSE ROW UserRight.MenuClass ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW UserRight.MenuClass {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) UserRight.MenuClass WITH FRAME sel.
       END.
       ELSE IF jarj = 1 THEN DO:
-        CHOOSE ROW UserRight.MenuClass ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW UserRight.MenuClass {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) UserRight.MenuClass WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

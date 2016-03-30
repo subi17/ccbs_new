@@ -174,7 +174,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttSubserPara.servcom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttSubserPara.servcom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttSubserPara.servcom WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

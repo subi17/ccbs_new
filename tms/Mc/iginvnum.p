@@ -281,7 +281,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW IgInvNum.InvType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW IgInvNum.InvType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) IgInvNum.InvType WITH FRAME sel.
       END.
 

@@ -227,11 +227,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW VASBdest.Bdest ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW VASBdest.Bdest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) VASBdest.Bdest WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW VASBdest.OperID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW VASBdest.OperID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) VASBdest.OperID WITH FRAME sel.
       END.
 

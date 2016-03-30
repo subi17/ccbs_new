@@ -91,7 +91,7 @@ REPEAT with frame sel:
    REPEAT with frame sel on endkey undo, retuRN:
 
       hide message no-pause.
-      choose row lcKey ;(uchoose.i;) no-error with frame sel.
+      choose row lcKey {Syst/uchoose.i} no-error with frame sel.
       color display value(ccc) lcKey with frame sel.
 
       nap = keylabel(lastkey).

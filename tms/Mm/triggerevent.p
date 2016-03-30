@@ -306,11 +306,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TriggerEvent.TriggerConfID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TriggerEvent.TriggerConfID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TriggerEvent.TriggerConfID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW TriggerEvent.EventSource ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TriggerEvent.EventSource {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TriggerEvent.EventSource WITH FRAME sel.
       END.
 

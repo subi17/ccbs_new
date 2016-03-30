@@ -263,7 +263,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ReportConfRow.RowType ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW ReportConfRow.RowType {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ReportConfRow.RowType WITH FRAME sel.
       END.

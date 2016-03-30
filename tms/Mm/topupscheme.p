@@ -280,7 +280,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TopupScheme.TopupScheme ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW TopupScheme.TopupScheme {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TopupScheme.TopupScheme WITH FRAME sel.
       END.

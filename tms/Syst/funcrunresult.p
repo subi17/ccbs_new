@@ -178,7 +178,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW FuncRunResult.FRProcessID ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW FuncRunResult.FRProcessID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FuncRunResult.FRProcessID WITH FRAME sel.
       END.

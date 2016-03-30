@@ -203,11 +203,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row RoamZone.RoamZone ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row RoamZone.RoamZone {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RoamZone.RoamZone WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row RoamZone.RZName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row RoamZone.RZName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RoamZone.RZName WITH FRAME sel.
       END.
       

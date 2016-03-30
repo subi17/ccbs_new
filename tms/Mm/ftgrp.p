@@ -290,19 +290,19 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE. 
       IF order = 1 THEN DO:
-        CHOOSE ROW FATGroup.FTgrp ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FATGroup.FTgrp {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FATGroup.FTgrp WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW FATGroup.FtgName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FATGroup.FtgName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FATGroup.FtgName WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW FATGroup.FatType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FATGroup.FatType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FATGroup.FatType WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW FATGroup.Priority  ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FATGroup.Priority  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FATGroup.Priority WITH FRAME sel.
       END.
 

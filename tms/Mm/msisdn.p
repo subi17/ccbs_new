@@ -409,11 +409,11 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       CASE ORDER:
         WHEN 1 THEN
-           choose row ttMSISDN.CLI   ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+           choose row ttMSISDN.CLI   {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         when 2 THEN
-           choose row ttMSISDN.CustNum  ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+           choose row ttMSISDN.CustNum  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         WHEN 3 THEN
-           choose row ttMSISDN.StatusCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+           choose row ttMSISDN.StatusCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
 
       END.
 

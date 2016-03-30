@@ -97,7 +97,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row Salesman.Salesman ;(uchoose.i;) no-error with frame sel.
+         choose row Salesman.Salesman {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) Salesman.Salesman with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

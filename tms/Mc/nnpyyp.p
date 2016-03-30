@@ -207,11 +207,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW NatHoliday.Holiday ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW NatHoliday.Holiday {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) NatHoliday.Holiday WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW NatHoliday.HName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW NatHoliday.HName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) NatHoliday.HName WITH FRAME sel.
       END.
 

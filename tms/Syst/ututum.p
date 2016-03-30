@@ -277,7 +277,7 @@ BROWSE:
       END.
 
       HIDE MESSAGE no-pause.
-      CHOOSE ROW TMSRepCfg.UserCode ;(uchoose.i;) no-error WITH FRAME sel.
+      CHOOSE ROW TMSRepCfg.UserCode {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY value(ccc) TMSRepCfg.UserCode WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:

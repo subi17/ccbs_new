@@ -90,7 +90,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row SIMStat.SimStat ;(uchoose.i;) no-error with frame sel.
+         choose row SIMStat.SimStat {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) SIMStat.SimStat with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

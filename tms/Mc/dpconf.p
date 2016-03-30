@@ -342,7 +342,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DPConf.ValidFrom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DPConf.ValidFrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DPConf.ValidFrom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:

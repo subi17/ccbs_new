@@ -222,11 +222,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW BeaCap.BeaCap ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW BeaCap.BeaCap {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BeaCap.BeaCap WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW BeaCap.BcName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW BeaCap.BcName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BeaCap.BcName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

@@ -109,7 +109,7 @@ repeat:
      repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW ttMobsub.MsSeq ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW ttMobsub.MsSeq {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) ttMobsub.MsSeq WITH FRAME sel.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.

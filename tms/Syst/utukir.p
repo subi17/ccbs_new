@@ -235,7 +235,7 @@ BROWSE:
       END.
 
       HIDE MESSAGE no-pause.
-      CHOOSE ROW TMSPrinter.PrinterId ;(uchoose.i;) no-error WITH FRAME sel.
+      CHOOSE ROW TMSPrinter.PrinterId {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY value(ccc) TMSPrinter.PrinterId WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:

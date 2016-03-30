@@ -308,11 +308,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW BItemGroup.BIGroup ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW BItemGroup.BIGroup {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) BItemGroup.BIGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW BItemGroup.BIGName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW BItemGroup.BIGName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) BItemGroup.BIGName WITH FRAME sel.
       END.
 

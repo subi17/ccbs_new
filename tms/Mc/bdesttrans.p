@@ -228,12 +228,12 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW bdesttrans.translatenumber ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW bdesttrans.translatenumber {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) bdesttrans.translatenumber WITH FRAME sel.
       END.
       /*
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW bdesttrans.CoName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW bdesttrans.CoName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) bdesttrans.CoName WITH FRAME sel.
       END.*/
 

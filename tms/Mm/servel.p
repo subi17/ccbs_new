@@ -322,11 +322,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ServEl.ServPac ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ServEl.ServPac {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ServEl.ServPac WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ServEl.ServCom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ServEl.ServCom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ServEl.ServCom WITH FRAME sel.
       END.
 

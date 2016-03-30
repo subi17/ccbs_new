@@ -88,7 +88,7 @@ BROWSE:
       repeat with frame sel on endkey undo, return:
 
          hide message no-pause.
-         choose row prodpack.ProdPack ;(uchoose.i;) no-error with frame sel.
+         choose row prodpack.ProdPack {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) prodpack.ProdPack with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

@@ -73,7 +73,7 @@ BROWSE:
       repeat WITH FRAME kase ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE.
-         CHOOSE ROW  brand.brand ;(uchoose.i;) no-error WITH FRAME kase.
+         CHOOSE ROW  brand.brand {Syst/uchoose.i} no-error WITH FRAME kase.
          COLOR DISPLAY value(ccc)  brand.brand WITH FRAME kase.
 
          if frame-value = " " AND rtab[FRAME-LINE] = ? THEN NEXT.

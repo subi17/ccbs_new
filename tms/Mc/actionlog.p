@@ -250,11 +250,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ActionLog.ActionID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ActionLog.ActionID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ActionLog.ActionID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ActionLog.TableName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ActionLog.TableName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ActionLog.TableName WITH FRAME sel.
       END.
 

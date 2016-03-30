@@ -237,11 +237,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ProdPack.ProdPack ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ProdPack.ProdPack {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ProdPack.ProdPack WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ProdPack.PPName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ProdPack.PPName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ProdPack.PPName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

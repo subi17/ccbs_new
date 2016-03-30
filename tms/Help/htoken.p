@@ -88,7 +88,7 @@ BROWSE:
       repeat with frame sel on endkey undo, return:
 
          hide message no-pause.
-         choose row token.tokencode ;(uchoose.i;) no-error with frame sel.
+         choose row token.tokencode {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) token.tokencode with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

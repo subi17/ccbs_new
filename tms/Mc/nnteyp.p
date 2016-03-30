@@ -269,15 +269,15 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW HdrText.te-nro ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW HdrText.te-nro {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) HdrText.te-nro WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW HdrText.te-kie  ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW HdrText.te-kie  {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) HdrText.te-kie  WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-         CHOOSE ROW HdrText.te-text ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW HdrText.te-text {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) HdrText.te-text WITH FRAME sel.
       END.
 

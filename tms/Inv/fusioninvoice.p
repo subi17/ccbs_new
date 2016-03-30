@@ -215,19 +215,19 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW FusionInvoice.FuInvNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FusionInvoice.FuInvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FusionInvoice.FuInvNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW FusionInvoice.Invdate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FusionInvoice.Invdate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FusionInvoice.Invdate WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW FusionInvoice.CustomerID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FusionInvoice.CustomerID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FusionInvoice.CustomerID WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW FusionInvoice.Custnum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FusionInvoice.Custnum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FusionInvoice.Custnum WITH FRAME sel.
       END.
 

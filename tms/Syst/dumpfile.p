@@ -303,7 +303,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DumpFile.DumpName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DumpFile.DumpName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DumpFile.DumpName WITH FRAME sel.
       END.
 

@@ -225,7 +225,7 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
 
       IF order = 1 THEN DO:
-        CHOOSE ROW StoBal.SimArt ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW StoBal.SimArt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) StoBal.SimArt WITH FRAME sel.
       END.
 

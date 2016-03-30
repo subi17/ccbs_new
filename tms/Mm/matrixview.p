@@ -294,7 +294,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttMatrix.Val[1] ;(uchoose.i;) 
+        CHOOSE ROW ttMatrix.Val[1] {Syst/uchoose.i} 
         NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttMatrix.Val WITH FRAME sel.
       END.

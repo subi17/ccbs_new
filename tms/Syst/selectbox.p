@@ -131,7 +131,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttOptions.Name ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttOptions.Name {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttOptions.Name WITH FRAME sel.
       END.
       

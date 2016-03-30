@@ -257,7 +257,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW BDestConf.BDCGroup ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW BDestConf.BDCGroup {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BDestConf.BDCGroup WITH FRAME sel.
       END.

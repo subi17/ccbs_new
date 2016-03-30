@@ -87,7 +87,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row DiscPlan.DiscPlan ;(uchoose.i;) no-error with frame sel.
+         choose row DiscPlan.DiscPlan {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) DiscPlan.DiscPlan with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

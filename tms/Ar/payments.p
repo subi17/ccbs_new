@@ -377,19 +377,19 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Payment.ExtVoucher ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Payment.ExtVoucher {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Payment.ExtVoucher WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Payment.ExtInvID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Payment.ExtInvID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Payment.ExtInvID WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW Payment.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Payment.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Payment.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW Payment.PaymSrc  ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Payment.PaymSrc  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Payment.PaymSrc WITH FRAME sel.
       END.
 

@@ -291,7 +291,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW BRTestCriteria.BRTestCriteriaID ;(uchoose.i;) 
+        CHOOSE ROW BRTestCriteria.BRTestCriteriaID {Syst/uchoose.i} 
            NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BRTestCriteria.BRTestCriteriaID 
            WITH FRAME sel.

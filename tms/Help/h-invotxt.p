@@ -102,7 +102,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row InvText.TxtTitle ;(uchoose.i;) no-error with frame sel.
+         choose row InvText.TxtTitle {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) 
          InvText.TxtTitle with frame sel.
 

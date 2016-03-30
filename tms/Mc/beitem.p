@@ -360,11 +360,11 @@ END PROCEDURE.
 PROCEDURE choose-row: 
 
  IF order = 1 THEN DO:
-        CHOOSE ROW FMItem.PriceList ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FMItem.PriceList {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FMItem.PriceList WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW FMItem.BillCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FMItem.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FMItem.BillCode WITH FRAME sel.
       END.
 

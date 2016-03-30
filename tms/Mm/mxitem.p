@@ -216,11 +216,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MXItem.MXSeq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MXItem.MXSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MXItem.MXSeq WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MXItem.MXName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MXItem.MXName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MXItem.MXName WITH FRAME sel.
       END.
 

@@ -297,11 +297,11 @@ SELAUS:
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-   CHOOSE ROW UGMember.UserCode ;(uchoose.i;) no-error WITH FRAME sel.
+   CHOOSE ROW UGMember.UserCode {Syst/uchoose.i} no-error WITH FRAME sel.
    COLOR DISPLAY value(ccc) UGMember.UserCode WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
-   CHOOSE ROW UGMember.UserName ;(uchoose.i;) no-error WITH FRAME sel.
+   CHOOSE ROW UGMember.UserName {Syst/uchoose.i} no-error WITH FRAME sel.
    COLOR DISPLAY value(ccc) UGMember.UserName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

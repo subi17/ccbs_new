@@ -175,11 +175,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
-         CHOOSE ROW Trunk.TrunkCode ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Trunk.TrunkCode {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Trunk.TrunkCode WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
-         CHOOSE ROW Trunk.TrunkName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Trunk.TrunkName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Trunk.TrunkName WITH FRAME sel.
       END.
 

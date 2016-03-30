@@ -247,7 +247,7 @@ REPEAT WITH FRAME sel:
       END.
             
       IF order = 1 THEN DO:
-        CHOOSE ROW FuncRunProcess.ProcSeq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FuncRunProcess.ProcSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FuncRunProcess.ProcSeq WITH FRAME sel.
       END.
 

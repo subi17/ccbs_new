@@ -102,11 +102,11 @@ BROWSE:
 
          hide message no-pause.
          if order = 1 THEN DO:
-         choose row PNPGroup.PNPGroup ;(uchoose.i;) no-error with frame sel.
+         choose row PNPGroup.PNPGroup {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) PNPGroup.PNPGroup with frame sel.
          END.
          if order = 2 THEN DO:
-         choose row PNPGroup.Name ;(uchoose.i;) no-error with frame sel.
+         choose row PNPGroup.Name {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) PNPGroup.Name with frame sel.
          END.
 

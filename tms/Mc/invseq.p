@@ -171,15 +171,15 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW InvSeq.InvSeq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW InvSeq.InvSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) InvSeq.InvSeq WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW InvSeq.InvNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW InvSeq.InvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) InvSeq.InvNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW InvSeq.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW InvSeq.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) InvSeq.CustNum WITH FRAME sel.
       END.
 

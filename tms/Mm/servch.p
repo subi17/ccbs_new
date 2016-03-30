@@ -160,11 +160,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttService.ServCom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttService.ServCom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttService.ServCom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ttService.ScName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttService.ScName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttService.ScName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

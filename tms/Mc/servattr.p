@@ -243,11 +243,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ServAttr.ServAttr ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ServAttr.ServAttr {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ServAttr.ServAttr WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ServAttr.SAName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ServAttr.SAName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ServAttr.SAName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

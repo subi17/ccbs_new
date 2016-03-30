@@ -368,11 +368,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW CustCat.Category ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW CustCat.Category {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) CustCat.Category WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW CustCat.CatName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW CustCat.CatName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) CustCat.CatName WITH FRAME sel.
       END.
 

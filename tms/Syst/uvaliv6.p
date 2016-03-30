@@ -398,15 +398,15 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW MenuTree.Level ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW MenuTree.Level {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) MenuTree.Level WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW MenuTree.Module ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW MenuTree.Module {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) MenuTree.Module WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-         CHOOSE ROW MenuTree.MenuId ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW MenuTree.MenuId {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) MenuTree.MenuId WITH FRAME sel.
       END.
 

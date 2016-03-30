@@ -184,11 +184,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DMarketing.DirMark ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DMarketing.DirMark {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DMarketing.DirMark WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW DMarketing.DirMarkName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DMarketing.DirMarkName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DMarketing.DirMarkName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

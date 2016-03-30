@@ -183,7 +183,7 @@ BROWSE:
       END.
 
       HIDE MESSAGE no-pause.
-      CHOOSE ROW ttCLISer.CLIFrom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+      CHOOSE ROW ttCLISer.CLIFrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       COLOR DISPLAY value(ccc) ttCLISer.CLIFrom WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? THEN DO:

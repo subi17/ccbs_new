@@ -244,11 +244,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CustTemp.TemplNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CustTemp.TemplNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CustTemp.TemplNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CustTemp.TemplName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CustTemp.TemplName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CustTemp.TemplName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

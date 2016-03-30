@@ -246,7 +246,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CTServAttr.ServAttr ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CTServAttr.ServAttr {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CTServAttr.ServAttr WITH FRAME sel.
       END.
 

@@ -153,7 +153,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW wtoken.tokencode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW wtoken.tokencode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) wtoken.tokencode WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

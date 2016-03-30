@@ -194,7 +194,7 @@ END PROCEDURE.
 PROCEDURE choose-row:
 
  IF order = 1 THEN DO:
-        CHOOSE ROW FMItem.BillCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FMItem.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FMItem.BillCode WITH FRAME sel.
       END.
 END PROCEDURE.

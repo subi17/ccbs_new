@@ -110,7 +110,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row TMSCodes.CodeValue ;(uchoose.i;) no-error with frame sel.
+         choose row TMSCodes.CodeValue {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) TMSCodes.CodeValue with frame sel.
 
          nap = keylabel(lastkey).

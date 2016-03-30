@@ -275,7 +275,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW OfferCriteria.CriteriaType ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW OfferCriteria.CriteriaType {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) OfferCriteria.CriteriaType WITH FRAME sel.
       END.

@@ -181,11 +181,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttName WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ttCallDetail.ttValue ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttCallDetail.ttValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttCallDetail.ttValue WITH FRAME sel.
       END.
 

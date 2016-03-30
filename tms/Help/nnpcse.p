@@ -138,7 +138,7 @@ BROWSE:
       repeat WITH FRAME tlse ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW MenuClass.MenuClass ;(uchoose.i;) no-error WITH FRAME tlse.
+         CHOOSE ROW MenuClass.MenuClass {Syst/uchoose.i} no-error WITH FRAME tlse.
          COLOR DISPLAY value(ccc) MenuClass.MenuClass WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.

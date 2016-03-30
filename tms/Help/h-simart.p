@@ -88,7 +88,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row SimArt.SimArt ;(uchoose.i;) no-error with frame sel.
+         choose row SimArt.SimArt {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) SimArt.SimArt with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

@@ -134,7 +134,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row Paiva.Paiva ;(uchoose.i;) no-error with frame sel.
+         choose row Paiva.Paiva {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) Paiva.Paiva with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

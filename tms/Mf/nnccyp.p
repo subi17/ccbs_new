@@ -226,19 +226,19 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW ClosedCust.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW ClosedCust.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) ClosedCust.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ClosedCust.Date ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW ClosedCust.Date {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) ClosedCust.Date WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        CHOOSE ROW ClosedCust.?? ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW ClosedCust.?? {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) ClosedCust.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW ClosedCust.??  ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW ClosedCust.??  {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) ClosedCust.? WITH FRAME sel.
       END.
 */

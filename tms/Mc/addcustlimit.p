@@ -203,7 +203,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row AddCustLimit.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row AddCustLimit.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) AddCustLimit.CustNum WITH FRAME sel.
       END.
 

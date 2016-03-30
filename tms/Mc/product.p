@@ -208,11 +208,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Product.Product ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Product.Product {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Product.Product WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Product.ProdName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Product.ProdName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Product.ProdName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

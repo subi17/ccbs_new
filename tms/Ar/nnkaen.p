@@ -279,7 +279,7 @@ rival:      repeat ON ENDKEY UNDO rival, LEAVE rival WITH FRAME rival:
                MESSAGE
                "Choose printing order, press ENTER !".
                READKEY PAUSE 0.
-               CHOOSE ROW valik ;(uchoose.i;) no-error.
+               CHOOSE ROW valik {Syst/uchoose.i} no-error.
                COLOR DISPLAY value(ccc) valik WITH FRAME rival.
                i = FRAME-LINE.
                HIDE MESSAGE no-pause.

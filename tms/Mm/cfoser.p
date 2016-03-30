@@ -237,11 +237,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CFOSer.CLIFrom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CFOSer.CLIFrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CFOSer.CLIFrom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CFOSer.CLIFrom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CFOSer.CLIFrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CFOSer.CLIFrom WITH FRAME sel.
       END.
 

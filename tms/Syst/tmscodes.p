@@ -235,11 +235,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TMSCodes.Tablename ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMSCodes.Tablename {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMSCodes.Tablename WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW TMSCodes.CodeGroup ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMSCodes.CodeGroup {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMSCodes.CodeGroup WITH FRAME sel.
       END.
 

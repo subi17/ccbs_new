@@ -249,19 +249,19 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Presel.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Presel.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Presel.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Presel.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Presel.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Presel.CLI WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        CHOOSE ROW Presel.?? ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Presel.?? {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Presel.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW Presel.??  ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Presel.??  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Presel.? WITH FRAME sel.
       END.
 */

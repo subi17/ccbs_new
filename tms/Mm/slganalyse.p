@@ -249,11 +249,11 @@ repeat WITH FRAME sel:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW SLGAnalyse.CliType ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW SLGAnalyse.CliType {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) SLGAnalyse.CliType WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW SLGAnalyse.BillCode ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW SLGAnalyse.BillCode {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) SLGAnalyse.CliType WITH FRAME sel.
       END.
 

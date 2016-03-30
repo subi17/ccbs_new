@@ -205,11 +205,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW SIMStat.SIMStat ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SIMStat.SIMStat {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SIMStat.SIMStat WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW SIMStat.SSName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SIMStat.SSName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SIMStat.SSName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

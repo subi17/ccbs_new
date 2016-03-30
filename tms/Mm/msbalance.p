@@ -258,7 +258,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MsBalance.MsSeq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MsBalance.MsSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MsBalance.MsSeq WITH FRAME sel.
       END.
 

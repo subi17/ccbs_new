@@ -311,11 +311,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW AccPeriod.Period ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW AccPeriod.Period {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) AccPeriod.Period WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW AccPeriod.FromDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW AccPeriod.FromDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) AccPeriod.FromDate WITH FRAME sel.
       END.
 

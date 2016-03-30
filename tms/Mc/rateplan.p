@@ -232,11 +232,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row RatePlan.RatePlan ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row RatePlan.RatePlan {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RatePlan.RatePlan WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row RatePlan.RPName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row RatePlan.RPName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RatePlan.RPName WITH FRAME sel.
       END.
 

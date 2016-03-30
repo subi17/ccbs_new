@@ -189,15 +189,15 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW Invoice.InvNum ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Invoice.InvNum {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Invoice.InvNum WITH FRAME sel.
       END.
       IF order = 2 THEN DO:
-         CHOOSE ROW Invoice.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Invoice.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Invoice.CustNum WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
-         CHOOSE ROW Invoice.InvDate ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Invoice.InvDate {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Invoice.InvDate WITH FRAME sel.
       END.
 

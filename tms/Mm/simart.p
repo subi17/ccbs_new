@@ -241,11 +241,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW SimArt.SimArt ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SimArt.SimArt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SimArt.SimArt WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW SimArt.SAName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SimArt.SAName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SimArt.SAName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

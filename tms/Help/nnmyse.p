@@ -181,11 +181,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
-         CHOOSE ROW Salesman.Salesman ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Salesman.Salesman {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Salesman.Salesman WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
-         CHOOSE ROW Salesman.SmName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Salesman.SmName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Salesman.SmName WITH FRAME sel.
       END.
 

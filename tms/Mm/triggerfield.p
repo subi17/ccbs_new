@@ -207,11 +207,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TriggerField.TriggerConfID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TriggerField.TriggerConfID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TriggerField.TriggerConfID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW TriggerField.TableName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TriggerField.TableName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TriggerField.TableName WITH FRAME sel.
       END.
 

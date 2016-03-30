@@ -165,7 +165,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Subserpara.servcom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Subserpara.servcom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Subserpara.servcom WITH FRAME sel.
       END.
 

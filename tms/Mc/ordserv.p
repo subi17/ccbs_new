@@ -242,7 +242,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW OrderService.Service ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW OrderService.Service {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) OrderService.Service WITH FRAME sel.
       END.
 

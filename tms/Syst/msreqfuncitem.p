@@ -215,7 +215,7 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       
       IF order = 1 THEN DO:
-         CHOOSE ROW MsReqFuncItem.ItemDesc ;(uchoose.i;) 
+         CHOOSE ROW MsReqFuncItem.ItemDesc {Syst/uchoose.i} 
          NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) MsReqFuncItem.ItemDesc WITH FRAME sel.
       END.

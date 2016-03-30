@@ -263,7 +263,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW FuncRunConfig.ConfName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FuncRunConfig.ConfName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FuncRunConfig.ConfName WITH FRAME sel.
       END.
 

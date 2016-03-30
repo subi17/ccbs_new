@@ -229,7 +229,7 @@ BROWSE:
 
       hide message no-pause.
       if order = 1 then do:
-         choose row PListConf.RatePlan ;(uchoose.i;) no-error with frame sel.
+         choose row PListConf.RatePlan {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) PListConf.RatePlan with frame sel.
       end.
       if rtab[frame-line] = ? then next.

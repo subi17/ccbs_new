@@ -228,11 +228,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW BillType.BillType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW BillType.BillType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BillType.BillType WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW BillType.BTName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW BillType.BTName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BillType.BTName WITH FRAME sel.
       END.
 

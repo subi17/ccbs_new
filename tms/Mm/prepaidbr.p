@@ -234,23 +234,23 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW prepcdr.DateSt ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW prepcdr.DateSt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) prepcdr.DateSt WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW prepcdr.BillCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW prepcdr.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) prepcdr.BillCode WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW prepcdr.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW prepcdr.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) prepcdr.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW prepcdr.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW prepcdr.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) prepcdr.CLI WITH FRAME sel.
       END.
       ELSE IF order = 5 THEN DO:
-        CHOOSE ROW prepcdr.GsmBnr  ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW prepcdr.GsmBnr  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) prepcdr.GsmBnr WITH FRAME sel.
       END.
 

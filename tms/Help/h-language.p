@@ -88,7 +88,7 @@ BROWSE:
       repeat with frame sel on endkey undo, return:
 
          hide message no-pause.
-         choose row Language.Language ;(uchoose.i;) no-error with frame sel.
+         choose row Language.Language {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) Language.Language with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

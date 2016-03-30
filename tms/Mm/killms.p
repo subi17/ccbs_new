@@ -276,15 +276,15 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW KillMs.KillDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW KillMs.KillDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) KillMs.KillDate WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW KillMs.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW KillMs.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) KillMs.CLI WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
-        CHOOSE ROW xstat ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW xstat {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) xstat WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

@@ -247,11 +247,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Stock.Stock ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Stock.Stock {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Stock.Stock WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Stock.StoName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Stock.StoName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Stock.StoName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

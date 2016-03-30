@@ -129,9 +129,9 @@ BROWSE:
     ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.
       END.
       HIDE MESSAGE no-pause. IF order = 1 THEN
-    CHOOSE ROW SubserPara.msseq ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW SubserPara.msseq {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 2 THEN
-    CHOOSE ROW SubserPara.ParaValue ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW SubserPara.ParaValue {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY value(ccc)
       SubserPara.msseq   SubserPara.ParaValue
       WITH FRAME sel.

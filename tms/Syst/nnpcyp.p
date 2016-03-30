@@ -215,11 +215,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-        CHOOSE ROW MenuClass.MenuClass ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MenuClass.MenuClass {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MenuClass.MenuClass WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
-        CHOOSE ROW MenuClass.MCName ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MenuClass.MCName {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MenuClass.MCName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

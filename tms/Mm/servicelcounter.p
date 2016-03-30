@@ -220,7 +220,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row ldaFromDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row ldaFromDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ldaFromDate WITH FRAME sel.
       END.
       

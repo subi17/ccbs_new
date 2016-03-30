@@ -220,11 +220,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row VASOper.OperID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row VASOper.OperID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) VASOper.OperID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row VASOper.VOName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row VASOper.VOName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) VASOper.VOName WITH FRAME sel.
       END.
       

@@ -151,7 +151,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttFile.FName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttFile.FName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttFile.FName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

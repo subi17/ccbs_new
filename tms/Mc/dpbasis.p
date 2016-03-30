@@ -378,7 +378,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW targName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW targName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) targName WITH FRAME sel.
       END.
 

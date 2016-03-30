@@ -222,7 +222,7 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
 
       IF order = 1 THEN DO:
-        CHOOSE ROW StoBal.StoBal ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW StoBal.StoBal {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) StoBal.StoBal WITH FRAME sel.
       END.
 

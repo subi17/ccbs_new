@@ -90,7 +90,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row MSClass.McCode ;(uchoose.i;) no-error with frame sel.
+         choose row MSClass.McCode {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) MSClass.McCode with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

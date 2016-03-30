@@ -90,7 +90,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row VATCode.VatCode ;(uchoose.i;) no-error with frame sel.
+         choose row VATCode.VatCode {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) VATCode.VatCode with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

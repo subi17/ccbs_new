@@ -230,19 +230,19 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW rsoper.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW rsoper.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) rsoper.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW rsoper.Operator ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW rsoper.Operator {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) rsoper.Operator WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        CHOOSE ROW rsoper.?? ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW rsoper.?? {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) rsoper.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW rsoper.??  ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW rsoper.??  {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) rsoper.? WITH FRAME sel.
       END.
 */

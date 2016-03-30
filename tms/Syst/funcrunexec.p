@@ -315,7 +315,7 @@ REPEAT WITH FRAME sel:
       END.
        
       IF order = 1 THEN DO:
-        CHOOSE ROW FuncRunExec.FRExecID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FuncRunExec.FRExecID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FuncRunExec.FRExecID WITH FRAME sel.
       END.
 

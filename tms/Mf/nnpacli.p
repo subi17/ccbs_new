@@ -216,19 +216,19 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW CLIPref.Pref ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW CLIPref.Pref {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) CLIPref.Pref WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CLIPref.CLI ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW CLIPref.CLI {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) CLIPref.CLI WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        CHOOSE ROW CLIPref.?? ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW CLIPref.?? {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) CLIPref.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW CLIPref.??  ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW CLIPref.??  {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) CLIPref.? WITH FRAME sel.
       END.
 */

@@ -253,11 +253,11 @@ SELAUS:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW CustGroup.CustGroup ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW CustGroup.CustGroup {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) CustGroup.CustGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CustGroup.CGName ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW CustGroup.CGName {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) CustGroup.CGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

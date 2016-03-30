@@ -369,7 +369,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TMRule.Name ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMRule.Name {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMRule.Name WITH FRAME sel.
       END.
 

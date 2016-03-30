@@ -234,11 +234,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Service.Service ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Service.Service {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Service.Service WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Service.SEName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Service.SEName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Service.SEName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

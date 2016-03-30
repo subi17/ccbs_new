@@ -221,11 +221,11 @@ BROWSE:
       END.
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MSLog.MSseq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MSLog.MSseq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MSLog.MSseq WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MSLog.LogType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MSLog.LogType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MSLog.LogType WITH FRAME sel.
       END.
 

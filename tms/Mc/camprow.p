@@ -333,7 +333,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CampRow.CRowType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CampRow.CRowType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CampRow.CRowType WITH FRAME sel.
       END.
 

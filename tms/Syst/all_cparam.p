@@ -289,15 +289,15 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 2 THEN DO:
-        CHOOSE ROW TMSParam.ParamCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMSParam.ParamCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMSParam.ParamCode WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
-        CHOOSE ROW TMSParam.ParamGroup ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMSParam.ParamGroup {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMSParam.ParamGroup WITH FRAME sel.
       END.
     IF order = 3 THEN DO:
-        CHOOSE ROW TMSParam.ParamName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMSParam.ParamName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMSParam.ParamName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

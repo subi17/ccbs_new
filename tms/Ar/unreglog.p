@@ -157,11 +157,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW UnregLog.AccDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW UnregLog.AccDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) UnregLog.AccDate WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW UnregLog.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW UnregLog.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) UnregLog.CustNum WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

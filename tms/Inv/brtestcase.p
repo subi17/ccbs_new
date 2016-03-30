@@ -313,12 +313,12 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW BRTestCase.BRTestCaseID ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW BRTestCase.BRTestCaseID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BRTestCase.BRTestCaseID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW BRTestCase.Description ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW BRTestCase.Description {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BRTestCase.Description WITH FRAME sel.
       END.

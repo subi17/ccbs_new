@@ -102,7 +102,7 @@ repeat:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row DayCampaign.DCEvent ;(uchoose.i;) no-error with frame sel.
+         choose row DayCampaign.DCEvent {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) DayCampaign.DCEvent with frame sel.
 
          nap = keylabel(lastkey).

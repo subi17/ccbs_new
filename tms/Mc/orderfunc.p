@@ -185,11 +185,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttBrowser.OFName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttBrowser.OFName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttBrowser.OFName WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW ttBrowser.OFName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttBrowser.OFName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttBrowser.OFName WITH FRAME sel.
       END.
 

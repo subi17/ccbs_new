@@ -253,11 +253,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW RateCCN.DialType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW RateCCN.DialType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RateCCN.DialType WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW RateCCN.CCN ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW RateCCN.CCN {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RateCCN.CCN WITH FRAME sel.
       END.
 

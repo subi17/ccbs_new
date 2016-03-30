@@ -206,11 +206,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW EDRHistory.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW EDRHistory.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) EDRHistory.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW EDRHistory.UpdateDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW EDRHistory.UpdateDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) EDRHistory.UpdateDate WITH FRAME sel.
       END.
 

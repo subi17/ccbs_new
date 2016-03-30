@@ -210,11 +210,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MNPOperator.Opername ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MNPOperator.Opername {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MNPOperator.Opername WITH FRAME sel.
       END.
       IF order = 2 THEN DO:
-        CHOOSE ROW MNPOperator.OperCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MNPOperator.OperCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MNPOperator.OperCode WITH FRAME sel.
       END.
       

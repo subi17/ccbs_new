@@ -214,7 +214,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TaxClass.TaxClass ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TaxClass.TaxClass {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TaxClass.TaxClass WITH FRAME sel.
       END.
 

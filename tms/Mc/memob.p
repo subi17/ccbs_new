@@ -261,11 +261,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW memo.MemoTitle ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW memo.MemoTitle {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) memo.MemoTitle WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW memo.CreUser ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW memo.CreUser {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) memo.CreUser WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

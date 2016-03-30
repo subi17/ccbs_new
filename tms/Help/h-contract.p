@@ -97,7 +97,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row Contract.FromDate ;(uchoose.i;) no-error with frame sel.
+         choose row Contract.FromDate {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) Contract.FromDate with frame sel.
 
          nap = keylabel(lastkey).

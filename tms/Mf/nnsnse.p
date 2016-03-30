@@ -166,11 +166,11 @@ selaus:
 
       HIDE MESSAGE no-pause.
       IF jarj = 2 THEN DO:
-         CHOOSE ROW AreaPlan.TrafficArea ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW AreaPlan.TrafficArea {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) AreaPlan.TrafficArea WITH FRAME sel.
       END.
       ELSE IF jarj = 1 THEN DO:
-         CHOOSE ROW AreaPlan.AreaName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW AreaPlan.AreaName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) AreaPlan.AreaName WITH FRAME sel.
       END.
 

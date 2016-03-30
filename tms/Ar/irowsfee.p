@@ -233,7 +233,7 @@ BROWSE:
 
       hide message no-pause.
       if order = 1 then do:
-        choose row SingleFee.BillPeriod ;(uchoose.i;) no-error with frame sel.
+        choose row SingleFee.BillPeriod {Syst/uchoose.i} no-error with frame sel.
         color display value(ccc) SingleFee.BillPeriod with frame sel.
       end.
 

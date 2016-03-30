@@ -172,7 +172,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttSLG.CliType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttSLG.CliType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttSLG.CliType WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

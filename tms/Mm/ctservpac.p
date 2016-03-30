@@ -290,7 +290,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CTServPac.ServPac ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CTServPac.ServPac {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CTServPac.ServPac WITH FRAME sel.
       END.
 

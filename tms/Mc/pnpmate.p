@@ -222,11 +222,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW pnplist.cli ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW pnplist.cli {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) pnplist.cli WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW pnplist.cli ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW pnplist.cli {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) pnplist.cli WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

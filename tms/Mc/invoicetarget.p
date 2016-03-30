@@ -299,7 +299,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW InvoiceTarget.InvoiceTargetID ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW InvoiceTarget.InvoiceTargetID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) InvoiceTarget.InvoiceTargetID WITH FRAME sel.
       END.

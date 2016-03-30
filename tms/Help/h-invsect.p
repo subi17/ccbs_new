@@ -90,7 +90,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row invsect.InvSect ;(uchoose.i;) no-error with frame sel.
+         choose row invsect.InvSect {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) invsect.InvSect with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

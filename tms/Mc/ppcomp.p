@@ -232,7 +232,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW PPItem.Product ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW PPItem.Product {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PPItem.Product WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

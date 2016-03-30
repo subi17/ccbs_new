@@ -88,7 +88,7 @@ BROWSE:
       repeat with frame sel on endkey undo, return:
 
          hide message no-pause.
-         choose row product.Product ;(uchoose.i;) no-error with frame sel.
+         choose row product.Product {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) product.Product with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

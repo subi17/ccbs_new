@@ -92,7 +92,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row ServAttr.servattr ;(uchoose.i;) no-error with frame sel.
+         choose row ServAttr.servattr {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) ServAttr.servattr with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

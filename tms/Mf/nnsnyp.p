@@ -227,19 +227,19 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW NumPlan.AreaCode ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW NumPlan.AreaCode {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) NumPlan.AreaCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW NumPlan.Operator ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW NumPlan.Operator {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) NumPlan.Operator WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        CHOOSE ROW NumPlan.?? ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW NumPlan.?? {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) NumPlan.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW NumPlan.??  ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW NumPlan.??  {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) NumPlan.? WITH FRAME sel.
       END.
 */

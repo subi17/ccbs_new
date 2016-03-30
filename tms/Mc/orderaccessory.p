@@ -295,7 +295,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttAccessory.ProductCode ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW ttAccessory.ProductCode {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttAccessory.ProductCode WITH FRAME sel.
       END.

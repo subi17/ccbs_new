@@ -303,7 +303,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DCServiceAttribute.ServAttr ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW DCServiceAttribute.ServAttr {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DCServiceAttribute.ServAttr WITH FRAME sel.
       END.

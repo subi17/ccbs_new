@@ -384,11 +384,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MSRange.CLIFrom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MSRange.CLIFrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MSRange.CLIFrom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MSRange.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MSRange.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MSRange.CustNum WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

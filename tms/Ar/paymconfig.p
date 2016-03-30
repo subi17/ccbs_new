@@ -338,11 +338,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW PaymConfig.PaymType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW PaymConfig.PaymType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PaymConfig.PaymType WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW PaymConfig.PaymSrc ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW PaymConfig.PaymSrc {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PaymConfig.PaymSrc WITH FRAME sel.
       END.
 

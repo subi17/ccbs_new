@@ -117,7 +117,7 @@ BROWSE:
       END.
 
       HIDE MESSAGE no-pause.
-      CHOOSE ROW PrintCodes.EffName ;(uchoose.i;) no-error WITH FRAME sel.
+      CHOOSE ROW PrintCodes.EffName {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY normal PrintCodes.EffName WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:

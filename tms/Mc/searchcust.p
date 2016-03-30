@@ -210,7 +210,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row ttCustomer.CustNum ;(uchoose.i;) no-error with frame sel.
+         choose row ttCustomer.CustNum {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) ttCustomer.CustNum with frame sel.
 
          nap = keylabel(lastkey).

@@ -251,15 +251,15 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Campaign.Campaign ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Campaign.Campaign {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Campaign.Campaign WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Campaign.CaName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Campaign.CaName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Campaign.CaName WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW Campaign.ToDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Campaign.ToDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Campaign.ToDate WITH FRAME sel.
       END.
 

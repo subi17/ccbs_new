@@ -602,7 +602,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW PrePaidRequest.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW PrePaidRequest.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PrePaidRequest.CLI WITH FRAME sel.
       END.
 

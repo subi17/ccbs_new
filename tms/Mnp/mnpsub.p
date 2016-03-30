@@ -166,11 +166,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW mnpsub.cli ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW mnpsub.cli {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
 /*        COLOR DISPLAY VALUE(ccc) mnpsub.cli WITH FRAME sel.*/
       END.
 /*      IF order = 2 THEN DO:
-        CHOOSE ROW mnpsub.Ratezone ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW mnpsub.Ratezone {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) mnpsub.Ratezone WITH FRAME sel.
       END. */
       

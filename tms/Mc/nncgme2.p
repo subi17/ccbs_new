@@ -338,11 +338,11 @@ SELAUS:
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-        CHOOSE ROW CGMember.CustGroup ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW CGMember.CustGroup {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) CGMember.CustGroup WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
-        CHOOSE ROW CustGroup.CGName ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW CustGroup.CGName {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) CustGroup.CGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

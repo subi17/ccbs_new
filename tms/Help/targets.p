@@ -74,7 +74,7 @@ BROWSE:
       repeat WITH FRAME kase ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE.
-         CHOOSE ROW  t-target.target ;(uchoose.i;) no-error WITH FRAME kase.
+         CHOOSE ROW  t-target.target {Syst/uchoose.i} no-error WITH FRAME kase.
          COLOR DISPLAY value(ccc)  t-target.target WITH FRAME kase.
 
          if frame-value = " " AND rtab[FRAME-LINE] = ? THEN NEXT.

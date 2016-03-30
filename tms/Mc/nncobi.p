@@ -223,7 +223,7 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW FFItem.BillPeriod ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW FFItem.BillPeriod {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) FFItem.BillPeriod WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

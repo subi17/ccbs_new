@@ -190,11 +190,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
-         CHOOSE ROW BDest.BDest ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW BDest.BDest {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) BDest.BDest WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
-         CHOOSE ROW BDest.BDName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW BDest.BDName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) BDest.BDName WITH FRAME sel.
       END.
 

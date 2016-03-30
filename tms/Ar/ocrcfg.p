@@ -233,11 +233,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW PaymCfg.PaymCfg ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW PaymCfg.PaymCfg {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PaymCfg.PaymCfg WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW PaymCfg.Origin ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW PaymCfg.Origin {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PaymCfg.Origin WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

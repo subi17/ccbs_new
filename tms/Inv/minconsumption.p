@@ -160,7 +160,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MinConsumption.MsSeq ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW MinConsumption.MsSeq {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MinConsumption.MsSeq WITH FRAME sel.
       END.

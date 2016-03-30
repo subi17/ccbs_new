@@ -209,11 +209,11 @@ add-new:
        PAUSE 0 no-message.
 
        IF order = 1 THEN DO:
-          CHOOSE ROW MenuNum ;(uchoose.i;) no-error WITH FRAME sel.
+          CHOOSE ROW MenuNum {Syst/uchoose.i} no-error WITH FRAME sel.
           COLOR DISPLAY value(ccc) MenuNum WITH FRAME sel.
        END.
        ELSE DO:
-          CHOOSE ROW MenuText ;(uchoose.i;)    no-error WITH FRAME sel.
+          CHOOSE ROW MenuText {Syst/uchoose.i}    no-error WITH FRAME sel.
           COLOR DISPLAY value(ccc) MenuText WITH FRAME sel.
        END.
 

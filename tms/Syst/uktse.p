@@ -80,7 +80,7 @@ BROWSE:
       repeat WITH FRAME kase ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE.
-         CHOOSE ROW TMSUser.UserCode ;(uchoose.i;) no-error WITH FRAME kase.
+         CHOOSE ROW TMSUser.UserCode {Syst/uchoose.i} no-error WITH FRAME kase.
          COLOR DISPLAY value(ccc) TMSUser.UserCode WITH FRAME kase.
 
          if frame-value = " " AND rtab[FRAME-LINE] = ? THEN NEXT.

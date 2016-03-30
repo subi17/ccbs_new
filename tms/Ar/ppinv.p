@@ -276,7 +276,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW PPInv.InvNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW PPInv.InvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PPInv.InvNum WITH FRAME sel.
       END.
 

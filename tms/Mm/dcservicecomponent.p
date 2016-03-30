@@ -292,7 +292,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DCServiceComponent.ServCom ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW DCServiceComponent.ServCom {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DCServiceComponent.ServCom WITH FRAME sel.
       END.

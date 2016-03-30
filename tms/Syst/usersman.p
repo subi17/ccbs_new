@@ -245,7 +245,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row UserSman.Brand ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row UserSman.Brand {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) UserSman.Brand WITH FRAME sel.
       END.
 

@@ -247,7 +247,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DFField.DFField ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DFField.DFField {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DFField.DFField WITH FRAME sel.
       END.
 

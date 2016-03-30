@@ -219,11 +219,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MSStat.StatusCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MSStat.StatusCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MSStat.StatusCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MSStat.StatusName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MSStat.StatusName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MSStat.StatusName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

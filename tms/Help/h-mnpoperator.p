@@ -133,12 +133,12 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW MNPOperator.OperName ;(uchoose.i;) NO-ERROR 
+         CHOOSE ROW MNPOperator.OperName {Syst/uchoose.i} NO-ERROR 
             WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) MNPOperator.OperName WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW MNPOperator.OperCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW MNPOperator.OperCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) MNPOperator.OperCode WITH FRAME sel.
       END.
 

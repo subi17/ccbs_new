@@ -297,19 +297,19 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttQRow.BRTestQRowID ;(uchoose.i;) 
+        CHOOSE ROW ttQRow.BRTestQRowID {Syst/uchoose.i} 
            NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttQRow.BRTestQRowID 
            WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ttQRow.BRTestCaseID ;(uchoose.i;) 
+        CHOOSE ROW ttQRow.BRTestCaseID {Syst/uchoose.i} 
            NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttQRow.BRTestCaseID 
            WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW ttQRow.CaseDescription ;(uchoose.i;) 
+        CHOOSE ROW ttQRow.CaseDescription {Syst/uchoose.i} 
            NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttQRow.CaseDescription 
            WITH FRAME sel.

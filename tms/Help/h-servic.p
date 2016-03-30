@@ -90,7 +90,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row Service.Service ;(uchoose.i;) no-error with frame sel.
+         choose row Service.Service {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) Service.Service with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

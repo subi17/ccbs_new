@@ -202,7 +202,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW OrderAction.ItemType ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW OrderAction.ItemType {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) OrderAction.ItemType WITH FRAME sel. 
       END.

@@ -144,7 +144,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW wCustGroup.CustGroup ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW wCustGroup.CustGroup {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) wCustGroup.CustGroup WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

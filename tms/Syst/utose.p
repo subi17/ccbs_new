@@ -197,11 +197,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW MenuTree.MenuId ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW MenuTree.MenuId {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) MenuTree.MenuId WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW MenuTree.MenuTitle ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW MenuTree.MenuTitle {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) MenuTree.MenuTitle WITH FRAME sel.
       END.
 

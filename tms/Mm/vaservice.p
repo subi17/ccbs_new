@@ -227,11 +227,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row VAService.BDest ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row VAService.BDest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) VAService.BDest WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row VAService.ServiceName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row VAService.ServiceName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) VAService.ServiceName WITH FRAME sel.
       END.
       

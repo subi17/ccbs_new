@@ -179,7 +179,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CDRStreamCounter.ImportDate ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW CDRStreamCounter.ImportDate {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CDRStreamCounter.ImportDate WITH FRAME sel.
       END.

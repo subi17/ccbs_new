@@ -813,7 +813,7 @@ print-line:
       end.
 
       hide message no-pause.
-      choose row Invoice.ExtInvID ;(uchoose.i;) no-error with frame sel.
+      choose row Invoice.ExtInvID {Syst/uchoose.i} no-error with frame sel.
       color DISPlay value(ccc) Invoice.ExtInvID with frame sel.
 
       assign nap = keylabel(lastkey).

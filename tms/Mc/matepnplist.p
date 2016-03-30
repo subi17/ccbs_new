@@ -231,7 +231,7 @@ print-line:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW pnplist.cli ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW pnplist.cli {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) pnplist.cli WITH FRAME sel.
       END.
       

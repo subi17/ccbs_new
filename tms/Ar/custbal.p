@@ -202,7 +202,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttCustBal.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttCustBal.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttCustBal.CLI WITH FRAME sel.
       END.
 

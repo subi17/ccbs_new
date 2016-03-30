@@ -88,7 +88,7 @@ print-line:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row TaxZone.TaxZone ;(uchoose.i;) no-error with frame sel.
+         choose row TaxZone.TaxZone {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) TaxZone.TaxZone with frame sel.
 
          nap = keylabel(lastkey).

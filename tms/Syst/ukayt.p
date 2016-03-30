@@ -331,16 +331,16 @@ add-new:
        PAUSE 0 no-message.
 
        IF order = 1 THEN DO:
-          CHOOSE ROW TMSUser.UserCode ;(uchoose.i;) no-error WITH FRAME sel.
+          CHOOSE ROW TMSUser.UserCode {Syst/uchoose.i} no-error WITH FRAME sel.
           COLOR DISPLAY value(ccc) TMSUser.UserCode WITH FRAME sel.
        END.
        IF order = 2 THEN DO:
-          CHOOSE ROW TMSUser.UserName ;(uchoose.i;)
+          CHOOSE ROW TMSUser.UserName {Syst/uchoose.i}
              no-error WITH FRAME sel.
           COLOR DISPLAY value(ccc) TMSUser.UserName WITH FRAME sel.
        END.
        IF order = 3 THEN DO:
-          CHOOSE ROW TMSUser.ForeignID ;(uchoose.i;)
+          CHOOSE ROW TMSUser.ForeignID {Syst/uchoose.i}
              no-error WITH FRAME sel.
           COLOR DISPLAY value(ccc) TMSUser.ForeignID WITH FRAME sel.
        END.

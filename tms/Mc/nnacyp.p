@@ -280,11 +280,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW Account.AccNum ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Account.AccNum {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Account.AccNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Account.AccName ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Account.AccName {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Account.AccName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

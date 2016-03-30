@@ -144,7 +144,7 @@ BROWSE:
       repeat WITH FRAME tlse ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW CustGroup.CustGroup ;(uchoose.i;) no-error WITH FRAME tlse.
+         CHOOSE ROW CustGroup.CustGroup {Syst/uchoose.i} no-error WITH FRAME tlse.
          COLOR DISPLAY value(ccc) CustGroup.CustGroup WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.

@@ -289,7 +289,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW RequestParam.ParamField ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW RequestParam.ParamField {Syst/uchoose.i} NO-ERROR 
           WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RequestParam.ParamField WITH FRAME sel.
       END.

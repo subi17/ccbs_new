@@ -218,12 +218,12 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TerminalConf.TerminalCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TerminalConf.TerminalCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TerminalConf.TerminalCode WITH FRAME sel.
       END.
       /*
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW TerminalConf.CoName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TerminalConf.CoName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TerminalConf.CoName WITH FRAME sel.
       END.
       */

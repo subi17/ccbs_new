@@ -265,7 +265,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW FuncRunQSchedule.FRQScheduleID ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW FuncRunQSchedule.FRQScheduleID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FuncRunQSchedule.FRQScheduleID 
            WITH FRAME sel.

@@ -257,19 +257,19 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW AreaCode.TrafficArea ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW AreaCode.TrafficArea {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) AreaCode.TrafficArea WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW AreaCode.AreaCode ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW AreaCode.AreaCode {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) AreaCode.AreaCode WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
-         CHOOSE ROW AreaCode.AreaName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW AreaCode.AreaName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) AreaCode.AreaName WITH FRAME sel.
       END.
    /* ELSE IF order = 4 THEN DO:
-         CHOOSE ROW AreaCode.??  ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW AreaCode.??  {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) AreaCode.? WITH FRAME sel.
       END.
 */

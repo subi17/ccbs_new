@@ -180,7 +180,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Counter.CounterType ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW Counter.CounterType {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Counter.CounterType WITH FRAME sel.
       END.

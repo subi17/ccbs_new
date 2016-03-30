@@ -187,7 +187,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW FuncRunExecLog.FRExecID ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW FuncRunExecLog.FRExecID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FuncRunExecLog.FRExecID WITH FRAME sel.
       END.

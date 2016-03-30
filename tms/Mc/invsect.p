@@ -241,11 +241,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW InvSect.InvSect ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW InvSect.InvSect {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) InvSect.InvSect WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW InvSect.ISName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW InvSect.ISName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) InvSect.ISName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

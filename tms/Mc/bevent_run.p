@@ -236,11 +236,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW FeeModel.FeeModel ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FeeModel.FeeModel {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FeeModel.FeeModel WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW FeeModel.FeeName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FeeModel.FeeName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FeeModel.FeeName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

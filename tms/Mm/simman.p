@@ -215,11 +215,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW SimMan.Mancode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SimMan.Mancode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SimMan.Mancode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW SimMan.ManName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SimMan.ManName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SimMan.ManName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

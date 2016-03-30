@@ -217,15 +217,15 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row lcExtInvID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row lcExtInvID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) lcExtInvID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row ClaimHist.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row ClaimHist.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ClaimHist.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        choose row ClaimHist.ClaimDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row ClaimHist.ClaimDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ClaimHist.ClaimDate WITH FRAME sel.
       END.
 

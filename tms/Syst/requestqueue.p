@@ -248,7 +248,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW RequestQueue.Queue ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW RequestQueue.Queue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) RequestQueue.Queue WITH FRAME sel.
       END.
 

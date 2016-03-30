@@ -255,16 +255,16 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row msowner.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row msowner.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) msowner.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row msowner.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row msowner.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) msowner.CLI WITH FRAME sel.
       END.
 
       IF order = 3 THEN DO:
-        choose row msowner.Imsi ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row msowner.Imsi {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) msowner.Imsi WITH FRAME sel.
       END.
       IF rtab[FRAME-line] = ? THEN NEXT.

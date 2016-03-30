@@ -97,7 +97,7 @@ repeat:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row ServEl.ServPac ;(uchoose.i;) no-error with frame sel.
+         choose row ServEl.ServPac {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) ServEl.ServPac with frame sel.
 
          nap = keylabel(lastkey).

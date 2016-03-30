@@ -140,7 +140,7 @@ BROWSE:
       repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW Salesoffice.SalesOffice ;(uchoose.i;) no-error 
+         CHOOSE ROW Salesoffice.SalesOffice {Syst/uchoose.i} no-error 
          WITH FRAME sel.
          COLOR DISPLAY value(ccc) Salesoffice.SalesOffice WITH FRAME sel.
 

@@ -235,7 +235,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ReportConf.ReportID ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW ReportConf.ReportID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ReportConf.ReportID WITH FRAME sel.
       END.

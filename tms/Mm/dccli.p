@@ -269,11 +269,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row DCCLI.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row DCCLI.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DCCLI.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row DCCLI.DCEvent ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row DCCLI.DCEvent {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DCCLI.DCEvent WITH FRAME sel.
       END.
       

@@ -229,11 +229,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MSISDNNumber.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MSISDNNumber.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MSISDNNumber.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MSISDNNumber.MSISDNType ;(uchoose.i;) 
+        CHOOSE ROW MSISDNNumber.MSISDNType {Syst/uchoose.i} 
         NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MSISDNNumber.MSISDNType WITH FRAME sel.
       END.

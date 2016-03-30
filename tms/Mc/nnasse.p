@@ -1217,13 +1217,13 @@ repeat WITH FRAME sel:
       IF iiCustnum = 0 THEN DO:
          HIDE MESSAGE no-pause. 
          IF order = 1 THEN
-            CHOOSE ROW Customer.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
+            CHOOSE ROW Customer.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
          ELSE IF order = 2 THEN
-            CHOOSE ROW lcCustName ;(uchoose.i;) no-error WITH FRAME sel.
+            CHOOSE ROW lcCustName {Syst/uchoose.i} no-error WITH FRAME sel.
          ELSE IF order = 3 THEN
-            CHOOSE ROW Customer.ZipCode ;(uchoose.i;) no-error WITH FRAME sel.
+            CHOOSE ROW Customer.ZipCode {Syst/uchoose.i} no-error WITH FRAME sel.
          ELSE IF order = 4 THEN
-            CHOOSE ROW Customer.OrgId ;(uchoose.i;) no-error WITH FRAME sel.
+            CHOOSE ROW Customer.OrgId {Syst/uchoose.i} no-error WITH FRAME sel.
        
          COLOR DISPLAY value(ccc) 
          Customer.CustNum Customer.ZipCode

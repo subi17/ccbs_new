@@ -248,11 +248,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW IMEIRegister.IMEI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW IMEIRegister.IMEI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) IMEIRegister.IMEI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW IMEIRegister.BillCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW IMEIRegister.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) IMEIRegister.BillCode WITH FRAME sel.
       END.
 

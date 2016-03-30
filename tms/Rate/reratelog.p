@@ -214,15 +214,15 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW RerateLog.InvCust ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW RerateLog.InvCust {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) RerateLog.InvCust WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW RerateLog.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW RerateLog.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) RerateLog.CLI WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-         CHOOSE ROW RerateLog.StartDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW RerateLog.StartDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) RerateLog.StartDate WITH FRAME sel.
       END.
 

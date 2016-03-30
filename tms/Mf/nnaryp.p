@@ -217,19 +217,19 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-    CHOOSE ROW AreaPair.NeigArea ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW AreaPair.NeigArea {Syst/uchoose.i} no-error WITH FRAME sel.
     COLOR DISPLAY value(ccc) AreaPair.NeigArea WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-    CHOOSE ROW AreaPair.NeigArea ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW AreaPair.NeigArea {Syst/uchoose.i} no-error WITH FRAME sel.
     COLOR DISPLAY value(ccc) AreaPair.NeigArea WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-    CHOOSE ROW AreaPair.?? ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW AreaPair.?? {Syst/uchoose.i} no-error WITH FRAME sel.
     COLOR DISPLAY value(ccc) AreaPair.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-    CHOOSE ROW AreaPair.??  ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW AreaPair.??  {Syst/uchoose.i} no-error WITH FRAME sel.
     COLOR DISPLAY value(ccc) AreaPair.? WITH FRAME sel.
       END.
 */

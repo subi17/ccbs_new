@@ -148,15 +148,15 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW PostCode.ZipCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW PostCode.ZipCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) PostCode.ZipCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW PostCode.PostOffice ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW PostCode.PostOffice {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) PostCode.PostOffice WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-         CHOOSE ROW PostCode.Region ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW PostCode.Region {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) PostCode.Region WITH FRAME sel.
       END.
 

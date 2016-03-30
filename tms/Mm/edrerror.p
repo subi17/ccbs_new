@@ -169,11 +169,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row ttEDRError.MobError ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row ttEDRError.MobError {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttEDRError.MobError WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row ttEDRError.MEName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row ttEDRError.MEName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttEDRError.MEName WITH FRAME sel.
       END.
 

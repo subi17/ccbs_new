@@ -237,7 +237,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW FATGMember.FTGMember ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW FATGMember.FTGMember {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) FATGMember.FTGrp WITH FRAME sel.
       END.
 

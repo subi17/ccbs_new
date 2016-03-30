@@ -205,16 +205,16 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MNPProcess.FormRequest ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MNPProcess.FormRequest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MNPProcess.FormRequest WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MNPProcess.PortRequest ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MNPProcess.PortRequest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MNPProcess.PortRequest WITH FRAME sel.
       END.
 
       IF order = 3 THEN DO:
-        CHOOSE ROW MNPProcess.StatusCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MNPProcess.StatusCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MNPProcess.StatusCode WITH FRAME sel.
       END.
 

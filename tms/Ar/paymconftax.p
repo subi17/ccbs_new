@@ -252,7 +252,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW PaymConfTax.TaxZone ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW PaymConfTax.TaxZone {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PaymConfTax.TaxZone WITH FRAME sel.
       END.
 

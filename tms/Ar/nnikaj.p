@@ -260,7 +260,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
                message
                "Choose printing order, press ENTER !".
                readkey pause 0.
-               choose row valik ;(uchoose.i;) no-error.
+               choose row valik {Syst/uchoose.i} no-error.
                color display value(ccc) valik with frame rival.
                i = frame-line.
                hide message no-pause.

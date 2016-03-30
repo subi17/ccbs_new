@@ -222,11 +222,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Country.Country ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Country.Country {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Country.Country WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Country.CoName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Country.CoName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Country.CoName WITH FRAME sel.
       END.
 

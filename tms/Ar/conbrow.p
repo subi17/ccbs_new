@@ -183,7 +183,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttContact.ConDate ;(uchoose.i;) NO-ERROR
+        CHOOSE ROW ttContact.ConDate {Syst/uchoose.i} NO-ERROR
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttContact.ConDate WITH FRAME sel.
       END.

@@ -240,11 +240,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TCC.TCC ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TCC.TCC {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TCC.TCC WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW TCC.TCCName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TCC.TCCName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TCC.TCCName WITH FRAME sel.
       END.
 

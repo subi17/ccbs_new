@@ -341,23 +341,23 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW Contract.Contract ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Contract.Contract {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Contract.Contract WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW Contract.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Contract.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Contract.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-         CHOOSE ROW Contract.Salesman ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Contract.Salesman {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Contract.Salesman WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-         CHOOSE ROW Contract.FromDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Contract.FromDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Contract.FromDate WITH FRAME sel.
       END.
       ELSE IF order = 5 THEN DO:
-         CHOOSE ROW Contract.ToDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Contract.ToDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Contract.ToDate WITH FRAME sel.
       END.
 

@@ -197,7 +197,7 @@ REPEAT WITH FRAME sel:
       END.
 
       HIDE MESSAGE NO-PAUSE.
-      CHOOSE ROW DumpLog.DumpId ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+      CHOOSE ROW DumpLog.DumpId {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       COLOR DISPLAY VALUE(ccc) DumpLog.DumpId WITH FRAME sel.
 
       nap = keylabel(LASTKEY).

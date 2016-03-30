@@ -297,15 +297,15 @@ BROWSE:
 
       hide message no-pause.
       if order = 1 then do:
-        choose row Salesman.Reseller ;(uchoose.i;) no-error with frame sel.
+        choose row Salesman.Reseller {Syst/uchoose.i} no-error with frame sel.
         color display value(ccc) Salesman.Reseller with frame sel.
       end.
       else if order = 2 then do:
-        choose row Salesman.SmName ;(uchoose.i;) no-error with frame sel.
+        choose row Salesman.SmName {Syst/uchoose.i} no-error with frame sel.
         color display value(ccc) Salesman.SmName with frame sel.
       end.
       else if order = 3 then do:
-        choose row Salesman.Salesman ;(uchoose.i;) no-error with frame sel.
+        choose row Salesman.Salesman {Syst/uchoose.i} no-error with frame sel.
         color display value(ccc) Salesman.Salesman with frame sel.
       end.
 

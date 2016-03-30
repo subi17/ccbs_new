@@ -663,11 +663,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW FixedFee.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW FixedFee.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) FixedFee.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW FixedFee.BillCode ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW FixedFee.BillCode {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) FixedFee.BillCode WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

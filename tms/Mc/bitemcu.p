@@ -481,11 +481,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW SingleFee.KeyValue ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SingleFee.KeyValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SingleFee.KeyValue WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW SingleFee.BillPeriod ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SingleFee.BillPeriod {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SingleFee.BillPeriod WITH FRAME sel.
       END.
 

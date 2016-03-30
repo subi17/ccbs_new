@@ -234,11 +234,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DialType.DialType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DialType.DialType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DialType.DialType WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW DialType.DTName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW DialType.DTName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) DialType.DTName WITH FRAME sel.
       END.
 

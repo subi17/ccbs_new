@@ -486,15 +486,15 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN 
-         CHOOSE ROW UnregPaym.PaymDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW UnregPaym.PaymDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       ELSE IF order = 2 THEN
-         CHOOSE ROW UnregPaym.CustName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW UnregPaym.CustName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       ELSE IF order = 3 THEN
-         CHOOSE ROW UnregPaym.PaidAmt ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW UnregPaym.PaidAmt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       ELSE IF order = 4 THEN
-         CHOOSE ROW UnregPaym.RefNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW UnregPaym.RefNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       ELSE IF order = 5 THEN
-         CHOOSE ROW UnregPaym.BankAcc ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW UnregPaym.BankAcc {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       COLOR DISPLAY VALUE(ccc) 
       UnregPaym.PaymDate UnregPaym.CustName UnregPaym.PaidAmt 
       UnregPaym.RefNum UnregPaym.BankAcc

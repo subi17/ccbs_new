@@ -279,16 +279,16 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row CallAlarm.CustNO ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row CallAlarm.CustNO {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CallAlarm.CustNO WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row CallAlarm.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row CallAlarm.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CallAlarm.CLI WITH FRAME sel.
       END.
 
       ELSE IF order = 3 THEN DO:
-        choose row CallAlarm.actstamp ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row CallAlarm.actstamp {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CallAlarm.actstamp WITH FRAME sel.
       END.
       IF rtab[FRAME-line] = ? THEN NEXT.

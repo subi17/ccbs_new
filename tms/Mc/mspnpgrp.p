@@ -266,7 +266,7 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW PNPGroup.PNPGroup ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW PNPGroup.PNPGroup {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) PNPGroup.PNPGroup WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

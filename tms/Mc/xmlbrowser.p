@@ -118,7 +118,7 @@ REPEAT WITH FRAME sel:
 
       IF order = 1 THEN DO:
 
-        CHOOSE ROW ttXMLSchema.xml ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttXMLSchema.xml {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       
         COLOR DISPLAY VALUE(ccc) ttXMLSchema.xml WITH FRAME sel.
 

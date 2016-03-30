@@ -327,19 +327,19 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Mobsub.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Mobsub.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Mobsub.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Mobsub.MsSeq  ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Mobsub.MsSeq  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Mobsub.MsSeq WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW Mobsub.AgrCust ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Mobsub.AgrCust {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Mobsub.AgrCust WITH FRAME sel.
       END.
       IF order = 4 THEN DO:
-        CHOOSE ROW Mobsub.MSStatus ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Mobsub.MSStatus {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Mobsub.MSStatus WITH FRAME sel.
       END.
 

@@ -229,11 +229,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW Currency.Currency ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Currency.Currency {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Currency.Currency WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Currency.CurrName ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW Currency.CurrName {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) Currency.CurrName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

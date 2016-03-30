@@ -205,7 +205,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW iprange.NetworkAddress ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW iprange.NetworkAddress {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) iprange.NetworkAddress WITH FRAME sel.
       END.
       

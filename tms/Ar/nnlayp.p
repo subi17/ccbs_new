@@ -283,19 +283,19 @@ repeat WITH FRAME sel:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW Invoice.ExtInvID ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Invoice.ExtInvID {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Invoice.ExtInvID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW Invoice.InvDate ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Invoice.InvDate {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Invoice.InvDate WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-         CHOOSE ROW Invoice.CustNum  ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Invoice.CustNum  {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Invoice.CustNum  WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-         CHOOSE ROW Invoice.InvAmt ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Invoice.InvAmt {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Invoice.InvAmt WITH FRAME sel.
       END.
        IF rtab[FRAME-LINE] = ? THEN NEXT.

@@ -131,19 +131,19 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW MedHist.Ident ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedHist.Ident {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedHist.Ident WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MedHist.Date ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedHist.Date {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedHist.Date WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        CHOOSE ROW MedHist.?? ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedHist.?? {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedHist.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW MedHist.??  ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedHist.??  {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedHist.? WITH FRAME sel.
       END.
 */

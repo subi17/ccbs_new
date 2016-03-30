@@ -134,12 +134,12 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW Nationality.Nationality ;(uchoose.i;) NO-ERROR 
+         CHOOSE ROW Nationality.Nationality {Syst/uchoose.i} NO-ERROR 
             WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Nationality.Nationality WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW Nationality.NtName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Nationality.NtName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) Nationality.NtName WITH FRAME sel.
       END.
 

@@ -441,11 +441,11 @@ repeat WITH FRAME sel:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW Tariff.PriceList ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Tariff.PriceList {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) Tariff.PriceList WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW Tariff.CCN ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW Tariff.CCN {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY value(ccc) Tariff.CCN WITH FRAME sel.
       END.
       

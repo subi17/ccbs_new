@@ -239,7 +239,7 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW CustPNPGroup.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW CustPNPGroup.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) CustPNPGroup.CustNum WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

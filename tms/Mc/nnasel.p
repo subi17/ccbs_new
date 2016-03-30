@@ -216,19 +216,19 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW Customer.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Customer.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Customer.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW Customer.SearchName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Customer.SearchName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Customer.SearchName WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-         CHOOSE ROW Customer.CustName ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Customer.CustName {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Customer.CustName WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-         CHOOSE ROW Customer.OrgId ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW Customer.OrgId {Syst/uchoose.i} no-error WITH FRAME sel.
          COLOR DISPLAY value(ccc) Customer.OrgId WITH FRAME sel.
       END.
 

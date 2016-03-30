@@ -209,7 +209,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW tabletoken.tablename ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW tabletoken.tablename {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) tabletoken.tablename WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

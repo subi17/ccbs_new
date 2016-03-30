@@ -211,19 +211,19 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row PreselErr.PSError ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row PreselErr.PSError {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PreselErr.PSError WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row PreselErr.PSEName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row PreselErr.PSEName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PreselErr.PSEName WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        choose row PreselErr.?? ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row PreselErr.?? {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PreselErr.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        choose row PreselErr.??  ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row PreselErr.??  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) PreselErr.? WITH FRAME sel.
       END.
 */

@@ -313,7 +313,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW SIM.ICC ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SIM.ICC {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SIM.ICC WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

@@ -207,7 +207,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttPaymVouch.Brand ;(uchoose.i;) NO-ERROR
+        CHOOSE ROW ttPaymVouch.Brand {Syst/uchoose.i} NO-ERROR
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttPaymVouch.Brand WITH FRAME sel.
       END.

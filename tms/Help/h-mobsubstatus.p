@@ -105,7 +105,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row ttStatus.StatusCode ;(uchoose.i;) no-error with frame sel.
+         choose row ttStatus.StatusCode {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) ttStatus.StatusCode with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

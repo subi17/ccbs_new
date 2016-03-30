@@ -87,7 +87,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row RatePlan.RatePlan ;(uchoose.i;) no-error with frame sel.
+         choose row RatePlan.RatePlan {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) RatePlan.RatePlan with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

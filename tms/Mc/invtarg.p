@@ -253,7 +253,7 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW BillTarget.BillTarget ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW BillTarget.BillTarget {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) BillTarget.BillTarget WITH FRAME sel.
       END.
 

@@ -304,19 +304,19 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW MthCall.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MthCall.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MthCall.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MthCall.Month ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MthCall.Month {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MthCall.Month WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
-        CHOOSE ROW MthCall.CloseDate ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MthCall.CloseDate {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MthCall.CloseDate WITH FRAME sel.
       END.
 /*    ELSE IF order = 4 THEN DO:
-        CHOOSE ROW MthCall.??  ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MthCall.??  {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MthCall.? WITH FRAME sel.
       END.
 */

@@ -234,7 +234,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttTerminal.BillCode ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW ttTerminal.BillCode {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttTerminal.BillCode WITH FRAME sel.
       END.

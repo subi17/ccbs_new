@@ -266,11 +266,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW CurRate.Currency ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW CurRate.Currency {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) CurRate.Currency WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CurRate.RateDate ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW CurRate.RateDate {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) CurRate.RateDate WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

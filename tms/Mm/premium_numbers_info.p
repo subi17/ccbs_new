@@ -275,7 +275,7 @@ IF must-add THEN DO:  /* Add a PremiumNumber */
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW PremiumNumber.BNumberPreFix ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW PremiumNumber.BNumberPreFix {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) PremiumNumber.BNumberPreFix WITH FRAME sel.
       END.
 

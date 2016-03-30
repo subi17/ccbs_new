@@ -239,11 +239,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CustClass.CustClass ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CustClass.CustClass {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CustClass.CustClass WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CustClass.CCName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CustClass.CCName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CustClass.CCName WITH FRAME sel.
       END.
 

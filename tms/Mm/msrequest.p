@@ -445,15 +445,15 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MsRequest.MsRequest ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MsRequest.MsRequest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MsRequest.MsRequest WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MsRequest.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MsRequest.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MsRequest.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW MsRequest.ReqStatus ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MsRequest.ReqStatus {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MsRequest.ReqStatus WITH FRAME sel.
       END.
 

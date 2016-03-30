@@ -247,19 +247,19 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW MedSect.Type ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedSect.Type {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedSect.Type WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MedSect.Name ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedSect.Name {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedSect.Name WITH FRAME sel.
       END.
   /*  IF order = 3 THEN DO:
-        CHOOSE ROW MedSect.?? ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedSect.?? {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedSect.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW MedSect.??  ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedSect.??  {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedSect.? WITH FRAME sel.
       END.
 */

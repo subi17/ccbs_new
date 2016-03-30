@@ -153,13 +153,13 @@ BROWSE:
     ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.
       END.
       HIDE MESSAGE no-pause. IF order = 1 THEN
-    CHOOSE ROW Salesman.Salesman ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW Salesman.Salesman {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 3 THEN
-    CHOOSE ROW Salesman.SalesOffice ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW Salesman.SalesOffice {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 2 THEN
-    CHOOSE ROW Salesman.SmName ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW Salesman.SmName {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 4 THEN
-    CHOOSE ROW Salesman.Salesman ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW Salesman.Salesman {Syst/uchoose.i} no-error WITH FRAME sel.
       COLOR DISPLAY value(ccc)
       Salesman.Salesman Salesman.Salesman Salesman.SalesOffice Salesman.SmName
       WITH FRAME sel.

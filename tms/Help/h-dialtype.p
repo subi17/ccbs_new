@@ -88,7 +88,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row DialType.DialType ;(uchoose.i;) no-error with frame sel.
+         choose row DialType.DialType {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) DialType.DialType with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

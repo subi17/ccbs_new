@@ -243,11 +243,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MobError.MobError ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MobError.MobError {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MobError.MobError WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MobError.MEName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MobError.MEName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MobError.MEName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

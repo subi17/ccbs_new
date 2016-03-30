@@ -162,11 +162,11 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW MthCall.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MthCall.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MthCall.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MthCall.Month ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MthCall.Month {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MthCall.Month WITH FRAME sel.
       END.
 

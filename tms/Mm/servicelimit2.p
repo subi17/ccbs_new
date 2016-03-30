@@ -329,11 +329,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ServiceLimit.GroupCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ServiceLimit.GroupCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ServiceLimit.GroupCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ServiceLimit.SLCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ServiceLimit.SLCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ServiceLimit.SLCode WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.

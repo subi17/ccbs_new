@@ -256,19 +256,19 @@ BROWSE:
       END.
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW SOLog.SOLog ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SOLog.SOLog {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SOLog.SOLog WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW SOLog.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SOLog.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SOLog.CLI WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
-        CHOOSE ROW xstat ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW xstat {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) xstat WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW SOLog.TimeSlotTMS  ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW SOLog.TimeSlotTMS  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) SOLog.TimeSlotTMS WITH FRAME sel.
       END.
 

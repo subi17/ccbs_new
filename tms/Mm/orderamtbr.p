@@ -194,11 +194,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttData.CodeValue ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttData.CodeValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttData.CodeValue WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW ttData.CodeName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+         CHOOSE ROW ttData.CodeName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
          COLOR DISPLAY VALUE(ccc) ttData.CodeName WITH FRAME sel.
       END.
 

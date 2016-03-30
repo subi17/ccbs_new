@@ -95,7 +95,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row ttable.ValueId ;(uchoose.i;) no-error with frame sel.
+         choose row ttable.ValueId {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) ttable.ValueId with frame sel.
 
          nap = keylabel(lastkey).

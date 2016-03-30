@@ -285,11 +285,11 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW invoicetargetgroup.itgroupid ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW invoicetargetgroup.itgroupid {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) invoicetargetgroup.itgroupid WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW invoicetargetgroup.custnum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW invoicetargetgroup.custnum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) invoicetargetgroup.custnum WITH FRAME sel.
       END.
 

@@ -90,7 +90,7 @@ repeat:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row ServAttr.ServCom ;(uchoose.i;) no-error with frame sel.
+         choose row ServAttr.ServCom {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) ServAttr.ServCom with frame sel.
 
          nap = keylabel(lastkey).

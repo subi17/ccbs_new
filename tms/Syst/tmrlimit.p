@@ -307,7 +307,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TMRLimit.FromDate ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW TMRLimit.FromDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) TMRLimit.FromDate WITH FRAME sel.
       END.
 

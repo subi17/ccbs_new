@@ -212,11 +212,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Limit.Custnum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Limit.Custnum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Limit.Custnum WITH FRAME sel.
       END.
       IF order = 2 THEN DO:
-        CHOOSE ROW Limit.MsSeq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW Limit.MsSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) Limit.MsSeq WITH FRAME sel.
       END.
       

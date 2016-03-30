@@ -178,7 +178,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttTable.TableName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW ttTable.TableName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) ttTable.TableName WITH FRAME sel.
       END.
 

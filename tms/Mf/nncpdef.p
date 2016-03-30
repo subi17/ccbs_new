@@ -250,19 +250,19 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW MedDefTrunk.Ident ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedDefTrunk.Ident {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedDefTrunk.Ident WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MedDefTrunk.DefName ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedDefTrunk.DefName {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedDefTrunk.DefName WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        CHOOSE ROW MedDefTrunk.?? ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedDefTrunk.?? {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedDefTrunk.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW MedDefTrunk.??  ;(uchoose.i;) no-error WITH FRAME sel.
+        CHOOSE ROW MedDefTrunk.??  {Syst/uchoose.i} no-error WITH FRAME sel.
         COLOR DISPLAY value(ccc) MedDefTrunk.? WITH FRAME sel.
       END.
 */

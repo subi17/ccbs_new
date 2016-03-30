@@ -230,15 +230,15 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MNPCal.OrderChannel ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MNPCal.OrderChannel {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MNPCal.OrderChannel WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MNPCal.Region ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MNPCal.Region {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MNPCal.Region WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW MNPCal.MessageType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW MNPCal.MessageType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) MNPCal.MessageType WITH FRAME sel.
       END.
       

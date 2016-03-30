@@ -97,7 +97,7 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row Country.Country ;(uchoose.i;) no-error with frame sel.
+         choose row Country.Country {Syst/uchoose.i} no-error with frame sel.
          color display value(ccc) Country.Country with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.

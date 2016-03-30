@@ -203,7 +203,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW OrderTopup.Amount ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW OrderTopup.Amount {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) OrderTopup.Amount WITH FRAME sel.
       END.
 

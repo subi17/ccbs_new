@@ -250,11 +250,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row CallLimit.CustNo ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row CallLimit.CustNo {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CallLimit.CustNo WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row CallLimit.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        choose row CallLimit.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CallLimit.CLI WITH FRAME sel.
       END.
 

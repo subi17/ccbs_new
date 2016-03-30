@@ -368,11 +368,11 @@ BROWSE:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CLIType.CLIType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CLIType.CLIType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CLIType.CLIType WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CLIType.CLIName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
+        CHOOSE ROW CLIType.CLIName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) CLIType.CLIName WITH FRAME sel.
       END.
 
