@@ -494,7 +494,7 @@ PROCEDURE pGetInvoiceHeaderData:
    DEF VAR liOrder AS INT NO-UNDO. 
   
    DEF BUFFER bReq FOR Msrequest.
-
+ 
    EMPTY TEMP-TABLE ttGraph.
    
    ASSIGN 
@@ -595,8 +595,6 @@ PROCEDURE pGetSubInvoiceHeaderData:
    DEF VAR lcGroupCode        AS CHAR NO-UNDO.
    DEF VAR llPTFinancedByBank AS LOG  NO-UNDO.
    DEF VAR llRVFinancedByBank AS LOG  NO-UNDO.
-   DEF VAR llDeletettRow      AS LOG  NO-UNDO.
-   DEF VAR liRowOrder         AS INT  NO-UNDO.
    DEF VAR liQ25Phase         AS INT  NO-UNDO.
 
    DEF BUFFER UserCustomer    FOR Customer.
@@ -863,28 +861,14 @@ PROCEDURE pGetSubInvoiceHeaderData:
                ttRow.SubInvNum = SubInvoice.SubInvNum AND
                ttRow.RowCode BEGINS "33" AND
                ttRow.RowType = "":
-         llDeletettrow = FALSE.
+
          IF ttRow.RowBillCode EQ "TERMPERIOD" AND
             ttRow.RowVatAmt EQ 0 THEN
             ttSub.PenaltyAmt = ttSub.PenaltyAmt + ttRow.RowAmt.
                   
          IF NOT (ttRow.RowBillCode BEGINS "PAYTERM" OR
                  ttRow.RowBillCode BEGINS "RVTERM") THEN NEXT.
-         /* if Q25 discounts exist, these and original q25 fee are not 
-            needed to print */
-         IF ttRow.RowBillCode EQ "RVTERMDTEQ25" OR
-            ttRow.RowBillCode EQ "RVTERMDTTD" THEN DO:
-            FIND FIRST bttRow NO-LOCK WHERE
-                       bttrow.RowCode BEGINS "33" AND
-                       bttRow.SubInvNum = SubInvoice.SubInvNum AND
-                       bttRow.RowBillCode NE ttRow.RowBillCode AND
-                       bttrow.rowamt EQ (ttrow.rowamt * -1) NO-ERROR.
-            IF AVAIL bttRow THEN DO:
-               DELETE bttRow.
-               DELETE ttRow.
-               NEXT.
-            END.
-         END.
+            
          ASSIGN
             ttSub.InstallmentAmt = ttSub.InstallmentAmt + ttRow.RowAmt.
 
@@ -901,51 +885,14 @@ PROCEDURE pGetSubInvoiceHeaderData:
             further. Otherwise check if this subscription is on some Q22-Q24
             phase and no actions done. 0 means q24, 1 q23 and 2 q22, 99 some
             other phase or no q25. */
+            /* temporarily rollbacked */
+         /*
          IF (ttinvoice.q25Phase GT 0) THEN DO:
             liQ25Phase = getQ25Phase(SubInvoice.msseq, subinvoice.custnum).
             IF (liQ25Phase LT ttinvoice.q25Phase) THEN 
                ttinvoice.q25Phase = liQ25Phase.         
          END.
-      END.
-
-      /* subtotals are wanted as headers, so calculate them here and make
-         rows out of them */
-      FOR EACH ttRow WHERE ttRow.SubInvNum = SubInvoice.SubInvNum
-      BREAK BY ttRow.RowGroup
-            BY ttRow.RowOrder:
-
-         IF FIRST-OF(ttRow.RowGroup) THEN liRowOrder = ttRow.RowOrder.
-
-         ACCUMULATE
-            ttRow.RowQty    (TOTAL BY ttRow.RowGroup)
-            ttRow.RowDur    (TOTAL BY ttRow.RowGroup)
-            ttRow.RowData   (TOTAL BY ttRow.RowGroup)
-            ttRow.RowAmtExclVat (TOTAL BY ttRow.RowGroup)
-            ttRow.RowVatAmt (TOTAL BY ttRow.RowGroup)
-            ttRow.RowAmt    (TOTAL BY ttRow.RowGroup).
-
-         IF LAST-OF(ttRow.RowGroup) THEN DO:
-            CREATE bttRow.
-            ASSIGN
-               bttRow.SubInvNum = ttRow.SubInvNum
-               bttRow.RowGroup  = ttRow.RowGroup
-               bttRow.GroupOrder = ttRow.GroupOrder
-               bttRow.RowType   = "SubTotal"
-               /* position as first of the group */
-               bttRow.RowOrder  = liRowOrder - 1
-               bttRow.RowName   = fLocalItemName("BItemGroup",
-                                                 ttRow.RowGroup,
-                                                 liLanguage,
-                                                 Invoice.ToDate)
-               bttRow.RowQty    = (ACCUM TOTAL BY ttRow.RowGroup ttRow.RowQty)
-               bttRow.RowDur    = (ACCUM TOTAL BY ttRow.RowGroup ttRow.RowDur)
-               bttRow.RowData   = (ACCUM TOTAL BY ttRow.RowGroup ttRow.RowData)
-               bttRow.RowAmtExclVat =
-                  (ACCUM TOTAL BY ttRow.RowGroup ttRow.RowAmtExclVat)
-               bttRow.RowVatAmt =
-                  (ACCUM TOTAL BY ttRow.RowGroup ttRow.RowVatAmt)
-               bttRow.RowAmt    = (ACCUM TOTAL BY ttRow.RowGroup ttRow.RowAmt).
-         END.
+         */
       END.
 
       IF ttSub.InstallmentAmt > 0 THEN
@@ -976,6 +923,8 @@ PROCEDURE pGetInvoiceRowData:
    DEF VAR ldAmtExclVat AS DEC  NO-UNDO.
    DEF VAR lcRowCode    AS CHAR NO-UNDO. 
    DEF VAR lcRowName    AS CHAR NO-UNDO. 
+   DEF VAR lcExcludedRows AS CHAR NO-UNDO.
+   DEF VAR ldeQ25DiscAmt  AS DEC  NO-UNDO.
 
    EMPTY TEMP-TABLE ttRow.
    
@@ -984,8 +933,47 @@ PROCEDURE pGetInvoiceRowData:
       ASSIGN
          ldVatTot   = 0
          liRowOrder = 0.
+         lcExcludedRows = "".
+
       DO liVatCnt = 1 TO 5:
          ldVatTot = ldVatTot + SubInvoice.VatAmount[liVatCnt].
+      END.
+         
+      /* if Q25 extension is done (= RVTERMDTEQ25 is billed),
+         the originnl q25 fee and related disounts should not be printed.
+         YPR-3532 */
+      IF CAN-FIND(FIRST InvRow NO-LOCK WHERE
+                        InvRow.Invnum = SubInvoice.InvNum AND
+                        InvRow.SubInvNum = SubInvoice.SubInvNum AND
+                        InvRow.BillCode EQ "RVTERMDTEQ25" AND
+                        InvRow.VatPerc = 0) THEN DO:
+
+         ldeQ25DiscAmt = 0.
+
+         FOR EACH InvRow NO-LOCK WHERE
+                  InvRow.InvNum = SubInvoice.InvNum AND
+                  InvRow.SubInvNum = SubInvoice.SubInvNum AND
+                  InvRow.VatPerc = 0 AND
+                  LOOKUP(InvRow.BillCode, 
+                         {&Q25_RVTERM_RENEWAL_DISCOUNTS}) > 0:
+            ASSIGN 
+               ldeQ25DiscAmt = ldeQ25DiscAmt + InvRow.Amt
+               lcExcludedRows = lcExcludedRows + "," + STRING(ROWID(InvRow)).
+         END.
+
+         lcExcludedRows = LEFT-TRIM(lcExcludedRows,",").
+
+         FOR EACH InvRow NO-LOCK WHERE
+                  InvRow.Invnum = SubInvoice.InvNum AND
+                  InvRow.SubInvNum = SubInvoice.SubInvNum AND
+                  InvRow.VatPerc = 0 AND
+                  InvRow.Amt EQ (ldeQ25DiscAmt * -1) AND
+                  LOOKUP(InvRow.BillCode, 
+                     {&TF_BANK_RVTERM_BILLCODES} + ",RVTERMF") > 0:
+            lcExcludedRows = lcExcludedRows + "," + STRING(ROWID(InvRow)).
+            LEAVE.
+         END.         
+         IF NOT AVAIL InvRow THEN lcExcludedRows = "".
       END.
 
       /* handle rows in percentage order so that total tax amounts
@@ -1002,15 +990,22 @@ PROCEDURE pGetInvoiceRowData:
       BREAK BY InvRow.VatPerc
             BY ABS(InvRow.Amt):
             
-         ASSIGN ldVatAmt   = 0
+         ASSIGN ldVatAmt = 0.
+         
+         IF BillItem.BIGroup = "33" THEN DO:
+
+            IF lcExcludedRows > "" AND
+               LOOKUP(STRING((ROWID(InvRow))),lcExcludedRows) > 0 THEN NEXT.
+
+            IF InvRow.BillCode BEGINS "PAYTERM" OR
+               InvRow.BillCode BEGINS "RVTERM" THEN
+               ttInvoice.InstallmentAmt = ttInvoice.InstallmentAmt + InvRow.Amt.
+         END.
+         
+         IF InvRow.RowType EQ 9 AND
+            LOOKUP(InvRow.BillCode, {&INSTALLMENT_DISCOUNT_BILLCODES}) > 0 THEN
             ttInvoice.InstallmentDiscAmt = ttInvoice.InstallmentDiscAmt + 
-                                           InvRow.Amt WHEN InvRow.RowType EQ 9 AND
-                                           LOOKUP(InvRow.BillCode, 
-                                                  {&INSTALLMENT_DISCOUNT_BILLCODES}) > 0.
-         IF BillItem.BIGroup = "33" AND
-            (InvRow.BillCode BEGINS "PAYTERM" OR
-             InvRow.BillCode BEGINS "RVTERM") THEN
-            ttInvoice.InstallmentAmt = ttInvoice.InstallmentAmt + InvRow.Amt.
+                                           InvRow.Amt.
 
          /* separate tax from row amount */
          IF InvRow.VATPerc > 0 AND InvRow.Amt NE 0 THEN DO:
@@ -1069,6 +1064,46 @@ PROCEDURE pGetInvoiceRowData:
             ttRow.RowBillCode   = BillItem.BillCode
             ttRow.RowName       = lcRowName
             ttRow.RowToDate     = InvRow.ToDate.
+      END.
+
+      /* subtotals are wanted as headers, so calculate them here and make
+         rows out of them */
+      FOR EACH ttRow WHERE ttRow.SubInvNum = SubInvoice.SubInvNum
+      BREAK BY ttRow.RowGroup
+            BY ttRow.RowOrder:
+      
+         IF FIRST-OF(ttRow.RowGroup) THEN liRowOrder = ttRow.RowOrder.
+
+         ACCUMULATE 
+            ttRow.RowQty    (TOTAL BY ttRow.RowGroup)
+            ttRow.RowDur    (TOTAL BY ttRow.RowGroup)
+            ttRow.RowData   (TOTAL BY ttRow.RowGroup)
+            ttRow.RowAmtExclVat (TOTAL BY ttRow.RowGroup)
+            ttRow.RowVatAmt (TOTAL BY ttRow.RowGroup)
+            ttRow.RowAmt    (TOTAL BY ttRow.RowGroup).
+            
+         IF LAST-OF(ttRow.RowGroup) THEN DO:
+            CREATE bttRow.
+            ASSIGN 
+               bttRow.SubInvNum = ttRow.SubInvNum
+               bttRow.RowGroup  = ttRow.RowGroup
+               bttRow.GroupOrder = ttRow.GroupOrder
+               bttRow.RowType   = "SubTotal"
+               /* position as first of the group */
+               bttRow.RowOrder  = liRowOrder - 1
+               bttRow.RowName   = fLocalItemName("BItemGroup",
+                                                 ttRow.RowGroup,
+                                                 liLanguage,
+                                                 Invoice.ToDate)
+               bttRow.RowQty    = (ACCUM TOTAL BY ttRow.RowGroup ttRow.RowQty)
+               bttRow.RowDur    = (ACCUM TOTAL BY ttRow.RowGroup ttRow.RowDur)
+               bttRow.RowData   = (ACCUM TOTAL BY ttRow.RowGroup ttRow.RowData)
+               bttRow.RowAmtExclVat = 
+                  (ACCUM TOTAL BY ttRow.RowGroup ttRow.RowAmtExclVat)
+               bttRow.RowVatAmt = 
+                  (ACCUM TOTAL BY ttRow.RowGroup ttRow.RowVatAmt)
+               bttRow.RowAmt    = (ACCUM TOTAL BY ttRow.RowGroup ttRow.RowAmt).
+         END.
       END.
 
    END.
