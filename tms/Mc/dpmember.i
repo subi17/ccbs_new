@@ -7,6 +7,7 @@
 {commali.i}
 {date.i}
 {eventval.i}
+{cparam2.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -47,10 +48,17 @@ FUNCTION fAddDiscountPlanMember RETURNS INTEGER
    DEF BUFFER MobSub FOR MobSub.
    DEF BUFFER DiscountPlan FOR DiscountPlan.
    DEF BUFFER DPMember FOR DPMember.
+   DEF BUFFER Order    FOR Order.
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    IF NOT AVAILABLE MobSub THEN DO:
       ocError = "ERROR: Subscription not available".
+      RETURN 1.
+   END.
+
+   FIND FIRST Order WHERE Order.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
+   IF NOT AVAILABLE Order THEN DO:
+      ocError = "ERROR: Order not available".
       RETURN 1.
    END.
 
@@ -77,8 +85,17 @@ FUNCTION fAddDiscountPlanMember RETURNS INTEGER
 
    IF idDiscountAmt > 0 THEN DO:
       IF ldValidTo EQ ? THEN DO:
-         IF DiscountPlan.dprule EQ "BONO6WEBDISC" THEN
-            ldValidTo = 12/31/16.
+         IF DiscountPlan.dprule EQ "BONO6WEBDISC" THEN DO:
+            /* YDR-2160 */
+            /* There would be some orders created during x-mas campaign (YPR-3083)
+               are still exsisting in queue AND released now OR later, so validTo
+               for x-mas campaign orders has not be modified OR removed */
+            IF Order.CrStamp >= fCParamDe("AprilPromotionFromDate") AND
+               Order.CrStamp <= fCParamDe("AprilPromotionToDate")   THEN
+               DPMember.ValidTo = ADD-INTERVAL(MobSub.ActivationDate,3,"months"). /* YDR-2160 */
+            ELSE
+               DPMember.ValidTo = 12/31/16. /* YPR-3083 */
+         END.   
          ELSE
             ldValidTo = 12/31/49.
 
