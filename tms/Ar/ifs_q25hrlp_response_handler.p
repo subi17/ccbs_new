@@ -11,6 +11,7 @@
 {ftransdir.i}
 {eventlog.i}
 {fmakemsreq.i}
+{barrfunc.i}
 
 DEF VAR lcProcessedFile AS CHAR NO-UNDO.
 DEF VAR lcIncDir AS CHAR NO-UNDO.
@@ -137,12 +138,13 @@ PROCEDURE pMakeProdigyRequest:
    DEF INPUT-OUTPUT PARAM ocLine AS CHAR NO-UNDO.
    DEF VAR liReq AS INT NO-UNDO.
    DEF VAR lcError AS CHAR NO-UNDO.
+
    /* Create subrequests (set mandataory and orig request) */
    liReq = fServiceRequest (iiMsSeq,
                             "LP",
-                            0,
-                            "",
-                            0, /*fSecOffSet(ideActTime,liDelay),*/
+                            1,
+                            "REDIRECTION_HIGHRISKCUSTOMER_1",
+                            fSecOffSet(fMakeTS(),5),
                             "",                /* SalesMan */
                             FALSE,             /* Set fees */
                             FALSE,             /* SMS */
@@ -155,9 +157,10 @@ PROCEDURE pMakeProdigyRequest:
    /* Creation of subrequests failed, "fail" master request too */
    IF liReq = 0 OR liReq = ? THEN DO:
       fReqStatus(3,"ServiceRequest failure: " + lcError).
-      
+      ocLine = ocLine + " Error: ServiceRequest failure". 
       RETURN.
    END.
+   ocLine = ocLine + " OK".
 
 END.
 
@@ -245,8 +248,15 @@ PROCEDURE pReadFileData:
 
 
          /* check barring */
+         IF fGetBarringStatus("Debt_HOTLP", 
+                              liMsSeq) NE {&BARR_STATUS_INACTIVE} AND
+            fGetBarringStatus("Debt_LP", 
+                              liMsSeq) NE {&BARR_STATUS_INACTIVE} THEN NEXT.
 
-
+         RUN pMakeProdigyRequest(liMsSeq, lcLine).
+            PUT STREAM sLog UNFORMATTED
+               lcLine SKIP.
+            NEXT.
 
       END.
    END.
