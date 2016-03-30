@@ -885,11 +885,14 @@ PROCEDURE pGetSubInvoiceHeaderData:
             further. Otherwise check if this subscription is on some Q22-Q24
             phase and no actions done. 0 means q24, 1 q23 and 2 q22, 99 some
             other phase or no q25. */
+            /* temporarily rollbacked */
+         /*
          IF (ttinvoice.q25Phase GT 0) THEN DO:
             liQ25Phase = getQ25Phase(SubInvoice.msseq, subinvoice.custnum).
             IF (liQ25Phase LT ttinvoice.q25Phase) THEN 
                ttinvoice.q25Phase = liQ25Phase.         
          END.
+         */
       END.
 
       IF ttSub.InstallmentAmt > 0 THEN
