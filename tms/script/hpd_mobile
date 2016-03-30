@@ -6,6 +6,7 @@
 
 DAEMON=HPD.HPDOnline
 INSTANCE=Mobile
+LOGLEVEL=4
 DATABASES="common mobile ordercanal"
 cd $(dirname $0)/..
 . script/daemon.sh

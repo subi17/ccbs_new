@@ -2,6 +2,7 @@
 
 DAEMON=HPD.HPDAckDaemon
 INSTANCE=Ordercanal
+LOGLEVEL=4
 DATABASES="ordercanal common"
 cd $(dirname $0)/..
 . script/daemon.sh

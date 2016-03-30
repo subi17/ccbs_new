@@ -2,6 +2,7 @@
 
 DAEMON=HPD.HPDAckDaemon
 INSTANCE=Mobile
+LOGLEVEL=4
 DATABASES="mobile ordercanal common"
 cd $(dirname $0)/..
 . script/daemon.sh
