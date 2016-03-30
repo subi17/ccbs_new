@@ -92,9 +92,9 @@ FUNCTION fAddDiscountPlanMember RETURNS INTEGER
                for x-mas campaign orders has not be modified OR removed */
             IF Order.CrStamp >= fCParamDe("AprilPromotionFromDate") AND
                Order.CrStamp <= fCParamDe("AprilPromotionToDate")   THEN
-               DPMember.ValidTo = ADD-INTERVAL(MobSub.ActivationDate,3,"months"). /* YDR-2160 */
+               ldValidTo = ADD-INTERVAL(MobSub.ActivationDate,3,"months"). /* YDR-2160 */
             ELSE
-               DPMember.ValidTo = 12/31/16. /* YPR-3083 */
+               ldValidTo = 12/31/16. /* YPR-3083 */
          END.   
          ELSE
             ldValidTo = 12/31/49.
