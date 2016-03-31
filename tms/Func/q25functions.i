@@ -274,19 +274,30 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
       ELSE RETURN TRUE. /* no other than cust logs needed at this phase */
    END.
    ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_HRLP_UNIV} THEN DO:
-      lcHRLPLogFile = lcHRLPOutDir + "IFS_Q25HR_UNIVERSE_" + 
+      lcHRLPLogFile = lcHRLPSpoolDir + "IFS_Q25HR_UNIVERSE_" + 
                       (SUBSTRING(STRING(fMakeTS()),1,8)) + ".LOG".
+      OUTPUT STREAM Sout TO VALUE(lcHRLPLogFile) APPEND.
+      PUT STREAM Sout UNFORMATTED
+         icLogText SKIP.
+      OUTPUT STREAM Sout CLOSE.
 
    END.
    ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_HRLP_ACT} THEN DO:
-      lcHRLPLogFile = lcHRLPOutDir + "IFS_Q25HR_ACTIVE_" + 
+      lcHRLPLogFile = lcHRLPSpoolDir + "IFS_Q25HR_ACTIVE_" + 
                       (SUBSTRING(STRING(fMakeTS()),1,8)) + ".LOG".
+      OUTPUT STREAM Sout TO VALUE(lcHRLPLogFile) APPEND.
+      PUT STREAM Sout UNFORMATTED
+         icLogText SKIP.
+      OUTPUT STREAM Sout CLOSE.
 
    END.
    ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_HRLP_REL} THEN DO:
-      lcHRLPLogFile = lcHRLPOutDir + "IFS_Q25HR_RELEASE_" + 
+      lcHRLPLogFile = lcHRLPSpoolDir + "IFS_Q25HR_RELEASE_" + 
                       (SUBSTRING(STRING(fMakeTS()),1,8)) + ".LOG".
-
+      OUTPUT STREAM Sout TO VALUE(lcHRLPLogFile) APPEND.
+      PUT STREAM Sout UNFORMATTED
+         icLogText SKIP.
+      OUTPUT STREAM Sout CLOSE.
    END.
    ELSE DO:
       /* Own internal log writings */
@@ -780,6 +791,8 @@ FUNCTION fInitHRLPParameters RETURNS CHAR
       lcHRLPListInDir = fCParam("HRLP","HRLPListInDir")
       lcHrlpRemRedirDir = fCParam("HRLP","HrlpRemRedirDir")
       lcHRLPLogDir = fCParam("HRLP","HRLPLogDir")
+      lcHRLPSpoolDir = fCParam("HRLP","HRLPSpoolDir")
+      lcHRLPProcDir = fCParam("HRLP","HRLPProcDir")
       lcHRLPTestMSISDN = fCParam("HRLP","HRLPTestMSISDN")
       liHRLPTestLevel = fCParamI("HRLPTestLevel").
  
@@ -880,19 +893,21 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
       lcHRLPDelim = {&Q25_HRLP_DELIM}.
       lcLogText = STRING(MobSub.CustNum) + lcHRLPDelim + /*Custnumber*/
                   STRING(Mobsub.CLI)     + lcHRLPDelim + /*MSISDN*/
-                  STRING(ldaEndDate + 1) + lcHRLPDelim + /*Q25 month*/
+                  STRING(liPeriod)       + lcHRLPDelim + /*Q25 month*/
                   STRING(ldMonthlyFee)   + lcHRLPDelim + /*installment value*/
                   STRING(ldAmount)       + lcHRLPDelim + /*Q25 value*/
                   STRING(lcLPLink).                      /*LP Link*/
 
-      lcQ25DWHLogFile = lcHRLPOutDir + "IFS_Q25HR_ACTIVE_" +
-                        (SUBSTRING(STRING(fMakeTS()),1,8)) + ".DAT".
+      lcHRLPOutFile = lcHRLPSpoolDir + "IFS_Q25HR_ACTIVE_" +
+                      (SUBSTRING(STRING(fMakeTS()),1,8)) + ".DAT".
 
        OUTPUT STREAM SHRLP TO VALUE(lcHRLPOutFile) APPEND.
        PUT STREAM SHRLP UNFORMATTED lcLogText.
        OUTPUT STREAM Sout CLOSE.
 
    END.
+   fMove2TransDir(lcErrorLog, "", lcHRLPLogDir).
+   fMove2TransDir(lcHRLPOutFile, "", lcHRLPOutFile).
 END FUNCTION.
 
 
