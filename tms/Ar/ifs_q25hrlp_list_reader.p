@@ -21,7 +21,6 @@ DEF VAR lcFileName AS CHAR NO-UNDO.
 DEF VAR lcInputFile AS CHAR NO-UNDO.
 DEF VAR lcLogDir AS CHAR NO-UNDO.
 DEF VAR lcLogOutDir AS CHAR NO-UNDO.
-DEF VAR lcSummary AS CHAR NO-UNDO.
 DEF VAR lcTableName AS CHAR NO-UNDO.
 DEF VAR lcActionID AS CHAR NO-UNDO.
 DEF VAR ldCurrentTimeTS AS DEC NO-UNDO.
@@ -107,7 +106,6 @@ REPEAT:
 
    RUN pReadFileData.
 
-   PUT STREAM sLog UNFORMATTED lcSummary SKIP.
    OUTPUT STREAM sLog CLOSE.
    fMove2TransDir(lcErrorLog, "", lcHRLPLogDir).
    lcProcessedFile = fMove2TransDir(lcInputFile, "", lcHRLPProcDir).
@@ -172,6 +170,7 @@ PROCEDURE pReadFileData:
    DEF VAR ldeCancelAmt AS DEC NO-UNDO.
    DEF VAR liCustNum AS INT NO-UNDO.
    DEF VAR liMsSeq AS INT NO-UNDO.
+   DEF VAR liMsisdn AS INT NO-UNDO.
    DEF VAR liPeriod AS INT NO-UNDO.
    DEF VAR lcPeriod AS char NO-UNDO.
    DEF VAR liLineNum AS INT NO-UNDO.
@@ -195,7 +194,7 @@ PROCEDURE pReadFileData:
 
       assign
          liCustNum = int(entry(1,lcline,";"))
-         limsseq = int(entry(2,lcline,";"))
+         liMsisdn = int(entry(2,lcline,";"))
          liPeriod = int(entry(3,lcline,";"))
          lcPeriod = entry(3,lcline,";")
          liYear = INT(SUBSTRING(lcPeriod,1,4))
@@ -203,11 +202,18 @@ PROCEDURE pReadFileData:
          ldaStartDate = DATE(liMonth, 1, liYear) - 1
          ldaEndDate = fLastDayOfMonth(ldaStartdate + 1).
       
+      IF fisPostpaidMobsubReleased(liMsSeq) THEN DO:
+         /* log mobsub released */
+         PUT STREAM sLog UNFORMATTED
+            lcLine +  " Error released." SKIP.
+         NEXT.
+      END.
+ 
       FIND FIRST SingleFee USE-INDEX BillCode WHERE
                  SingleFee.Brand       EQ gcBrand AND
                  SingleFee.CustNum     EQ liCustNum AND
                  SingleFee.HostTable   EQ "Mobsub" AND
-                 SingleFee.Keyvalue    EQ STRING(limsseq) AND
+                 SingleFee.Keyvalue    EQ STRING(Mobsub.msseq) AND
                  SingleFee.BillPeriod  EQ liPeriod AND
                  SingleFee.Billcode    BEGINS "RVTERM" AND
                  SingleFee.SourceTable EQ "DCCLI" AND
