@@ -41,6 +41,8 @@ DEF VAR lcHRLPLogDir AS CHAR NO-UNDO.
 DEF VAR lcHRLPOutDir AS CHAR NO-UNDO.
 DEF VAR lcHRLPOutFile AS CHAR NO-UNDO.
 DEF VAR lcHRLPRemRedirDirDir AS CHAR NO-UNDO.
+DEF VAR lcHRLPTestMSISDN AS CHAR NO-UNDO. /*List of numbers accepted in test*/
+DEF VAR liHRLPTestLevel AS INT NO-UNDO.
 DEF VAR lcLandingPageLink AS CHAR NO-UNDO.
 DEF VAR lcPassPhrase AS CHAR NO-UNDO.
 
@@ -53,12 +55,6 @@ ASSIGN liQ25Logging = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg,
        lcQ25SpoolDir   = fCParam("Q25","Q25ReminderLogSpoolDir")
        lcQ25DWHLogDir  = fCParam("Q25","Q25DWHLogDir")
        lcSendingEndTime = fCParam("Q25","Q25SendingEndTime")
-
-       lcHRLPOutDir = fCParam("HRLP","HRLPOutDir")
-       lcHRLPListInDir = fCParam("HRLP","HRLPListInDir")
-       lcHrlpRemRedirDir = fCParam("HRLP","HrlpRemRedirDir")
-       lcHRLPLogDir = fCParam("HRLP","HRLPLogDir")
-       lcLandingPageLink = fCParam("HRLP","HRLPLandingpage")
        lcPassPhrase = fCParam("Q25","Q25PassPhrase").
 
 IF lcPassPhrase = "" OR lcPassPhrase = ? THEN lcPassPhrase = {&Q25_PASSPHRASE}.
@@ -68,11 +64,6 @@ IF lcQ25SpoolDir = "" OR lcQ25SpoolDir = ? THEN lcQ25SpoolDir = "/tmp/".
 lcQ25DWHLogFile = lcQ25SpoolDir + "events_" +
                   (REPLACE(STRING(fMakeTS()),".","_")) + ".csv".
 
-IF lcHRLPOutDir EQ "" OR lcHRLPOutDir EQ ? THEN lcHRLPOutDir = "/tmp/".
-IF lcHRLPListInDir EQ "" OR lcHRLPListInDir EQ ? THEN lcHRLPlistInDir = "/tmp/".
-IF lcHRLPRemRedirDirDir EQ "" OR lcHRLPRemRedirDirDir EQ ? THEN 
-   lcHRLPRemRedirDirDir = "/tmp/".
-IF lcHRLPLogDir EQ "" OR lcHRLPLogDir EQ ? THEN lcHRLPLogDir = "/tmp/".
 
 /* Function to check if there is available weekdays for SMS sending after
    specified day.
@@ -776,6 +767,30 @@ FUNCTION getQ25phase RETURNS INT
    END.
    RETURN {&Q25_NOT_ACTION_PHASE}. /* Not Q25 phase M22-M24 customer */
 END.
+
+/*Function makes HRLP parametr initializations.
+This must be called in programs that are handling HRLP related data.*/
+FUNCTION fInitHRLPParameters RETURNS CHAR
+   ():
+   ASSIGN
+
+      lcLandingPageLink = fCParam("HRLP","HRLPLandingpage")
+      lcPassPhrase = fCParam("Q25","Q25PassPhrase")
+      lcHRLPOutDir = fCParam("HRLP","HRLPOutDir")
+      lcHRLPListInDir = fCParam("HRLP","HRLPListInDir")
+      lcHrlpRemRedirDir = fCParam("HRLP","HrlpRemRedirDir")
+      lcHRLPLogDir = fCParam("HRLP","HRLPLogDir")
+      lcHRLPTestMSISDN = fCParam("HRLP","HRLPTestMSISDN")
+      liHRLPTestLevel = fCParamI("HRLPTestLevel").
+ 
+   IF lcHRLPOutDir EQ "" OR lcHRLPOutDir EQ ? THEN lcHRLPOutDir = "/tmp/".
+   IF lcHRLPListInDir EQ "" OR lcHRLPListInDir EQ ? THEN lcHRLPlistInDir = "/tmp/".
+  IF lcHRLPRemRedirDirDir EQ "" OR lcHRLPRemRedirDirDir EQ ? THEN
+    lcHRLPRemRedirDirDir = "/tmp/".
+   IF lcHRLPLogDir EQ "" OR lcHRLPLogDir EQ ? THEN lcHRLPLogDir = "/tmp/".
+
+
+END.   
 
 FUNCTION fGetMonthlyFee RETURNS DECIMAL
    (iiPerContractId AS INT,

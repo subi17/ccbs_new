@@ -96,6 +96,12 @@ lcRet = fCreateEntryI("HRLPTestLevel", /*param code*/
               "HRLP feature test level",  /*param name*/ 
               {&Q25_HRLP_NO_TEST}). /*actual parameter value*/
 
+/*List of subscriptions accepted in test*/
+lcRet = fCreateEntryC("HRLPTestMSISDN", /*param code*/
+              "HRLP",              /*param group*/
+              "Test MSISDN list",  /*param name*/ 
+              ""). /*actual parameter value*/
+
 
 
 if LcRet NE "" THEN 
