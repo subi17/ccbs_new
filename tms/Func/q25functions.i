@@ -17,6 +17,7 @@
 {smsmessage.i}
 {aes_encrypt.i}
 {fduedate.i}
+{ftransdir.i}
 
 DEF VAR lcTestStartDay AS CHAR NO-UNDO.
 DEF VAR lcTestEndDay AS CHAR NO-UNDO.
@@ -38,8 +39,11 @@ DEF VAR lclcHRLPOutDir AS CHAR NO-UNDO.
 DEF VAR lcHRLPListInDir AS CHAR NO-UNDO.
 DEF VAR lcHrlpRemRedirDir AS CHAR NO-UNDO.
 DEF VAR lcHRLPLogDir AS CHAR NO-UNDO.
+DEF VAR lcHRLPSpoolDir AS CHAR NO-UNDO.
+DEF VAR lcHRLPProcDir AS CHAR NO-UNDO.
 DEF VAR lcHRLPOutDir AS CHAR NO-UNDO.
 DEF VAR lcHRLPOutFile AS CHAR NO-UNDO.
+DEF VAR lcHRLPLogFile AS CHAR NO-UNDO.
 DEF VAR lcHRLPRemRedirDirDir AS CHAR NO-UNDO.
 DEF VAR lcHRLPTestMSISDN AS CHAR NO-UNDO. /*List of numbers accepted in test*/
 DEF VAR liHRLPTestLevel AS INT NO-UNDO.
@@ -260,7 +264,6 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
     INPUT iilogPhase AS INT,
     INPUT iiExecType AS INT).
    DEF VAR lcQ25LogType AS CHAR NO-UNDO. 
-   DEF VAR lcHRLPLogFile AS CHAR NO-UNDO.
    /* Requested customer log writings. YPR-3446 */
    IF iiExecType EQ {&Q25_EXEC_TYPE_CUST_LOG_GENERATION} THEN DO:
       /* Only cust level logs are needed to be written here  */
@@ -906,8 +909,8 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
        OUTPUT STREAM Sout CLOSE.
 
    END.
-   fMove2TransDir(lcErrorLog, "", lcHRLPLogDir).
-   fMove2TransDir(lcHRLPOutFile, "", lcHRLPOutFile).
+   fMove2TransDir(lcHRLPLogFile, "", lcHRLPLogDir).
+   fMove2TransDir(lcHRLPOutFile, "", lcHRLPOutDir).
 END FUNCTION.
 
 
