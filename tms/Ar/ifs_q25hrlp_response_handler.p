@@ -169,7 +169,6 @@ PROCEDURE pReadFileData:
 
    DEF VAR lcLine AS CHAR NO-UNDO.
    DEF VAR lcOrgId AS CHAR NO-UNDO.
-   DEF VAR liYear AS INT NO-UNDO.
    DEF VAR lcErrorCode AS CHAR NO-UNDO.
    DEF VAR ldeCancelAmt AS DEC NO-UNDO.
    DEF VAR liCustNum AS INT NO-UNDO.
@@ -179,6 +178,7 @@ PROCEDURE pReadFileData:
    DEF VAR liLineNum AS INT NO-UNDO.
    DEF VAR ldAmount AS DEC NO-UNDO.
    DEF VAR liMonth AS INT NO-UNDO.
+   DEF VAR liYear AS INT NO-UNDO.
    DEF VAR ldaStartDate AS DATE NO-UNDO.
    DEF VAR ldaEndDate AS DATE NO-UNDO.
 
@@ -199,7 +199,10 @@ PROCEDURE pReadFileData:
          limsseq = int(entry(2,lcline,";"))
          liPeriod = int(entry(3,lcline,";"))
          lcPeriod = entry(3,lcline,";")
-         liMonth = INT(SUBSTRING(lcPeriod,5,2)).
+         liYear = INT(SUBSTRING(lcPeriod,1,4))
+         liMonth = INT(SUBSTRING(lcPeriod,5,2))
+         ldaStartDate = DATE(liMonth, 1, liYear) - 1
+         ldaEndDate = fLastDayOfMonth(ldaStartdate + 1).
       
       FIND FIRST SingleFee USE-INDEX BillCode WHERE
                  SingleFee.Brand       EQ gcBrand AND
@@ -247,12 +250,20 @@ PROCEDURE pReadFileData:
          END.
 
 
-         /* check barring */
+         /* check barring statuses */
          IF fGetBarringStatus("Debt_HOTLP", 
-                              liMsSeq) NE {&BARR_STATUS_INACTIVE} AND
-            fGetBarringStatus("Debt_LP", 
-                              liMsSeq) NE {&BARR_STATUS_INACTIVE} THEN NEXT.
-
+                              liMsSeq) NE {&BARR_STATUS_INACTIVE} THEN DO:
+            PUT STREAM sLog UNFORMATTED
+               lcLine +  " Error: Debt_HOTLP barring status." SKIP.
+            NEXT.
+         END.
+         
+         IF fGetBarringStatus("Debt_LP", 
+                              liMsSeq) NE {&BARR_STATUS_INACTIVE} THEN DO:
+            PUT STREAM sLog UNFORMATTED
+               lcLine +  " Error: Debr_LP barring status." SKIP.
+            NEXT.
+         END.
          RUN pMakeProdigyRequest(liMsSeq, lcLine).
             PUT STREAM sLog UNFORMATTED
                lcLine SKIP.
