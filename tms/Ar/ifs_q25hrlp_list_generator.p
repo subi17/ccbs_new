@@ -8,6 +8,6 @@
 ---------------------------------------------------------------------- */
 {tmsconst.i}
 {q25functions.i}
-
+fInitHRLPParameters().
 fGenerateQ25List({&Q25_MONTH_24}).
 

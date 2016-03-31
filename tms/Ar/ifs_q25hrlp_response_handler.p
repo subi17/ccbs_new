@@ -72,7 +72,10 @@ DO TRANS:
    END.
 END.
 
-/*Kari, add file reading functionality here*/
+/*File handling logic starts*/
+
+fInitHRLPParameters().
+
 /* File reading and parsing */
 INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcIncDir).
 REPEAT:
@@ -87,9 +90,6 @@ REPEAT:
 
       /*Accept only activation files*/
       IF NOT lcFileName BEGINS "IFS_Q25HR_ACTIVE_" THEN NEXT.
-
-      /*IF NOT lcFileName BEGINS "yoigocan" AND
-         NOT lcFileName BEGINS "yoigoanu" THEN NEXT.*/
 
       INPUT STREAM sin FROM VALUE(lcInputFile).
    END.
