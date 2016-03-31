@@ -85,6 +85,9 @@ REPEAT:
 
       IF fCheckFileNameChars(lcFileName) EQ FALSE THEN NEXT.
 
+      /*Accept only activation files*/
+      IF NOT lcFileName BEGINS "IFS_Q25HR_ACTIVE_" THEN NEXT.
+
       /*IF NOT lcFileName BEGINS "yoigocan" AND
          NOT lcFileName BEGINS "yoigoanu" THEN NEXT.*/
 
