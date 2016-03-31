@@ -58,11 +58,18 @@ FUNCTION fCreateEntryI RETURNS CHAR
 END.
 
 DEF VAR lcRet AS CHAR NO-UNDO.
+/*Directory for spooling*/
+lcRet = fCreateEntryC("HRLPSpoolDir", /*param code*/
+              "HRLP",              /*param group*/
+              "Spool ir for HRLP file",  /*param name*/ 
+              "/store/riftp/dumpfiles/hrlp/spool"). /*actual parameter value*/
+
 /*Directory for outgoing*/
 lcRet = fCreateEntryC("HRLPOutDir", /*param code*/
               "HRLP",              /*param group*/
               "Dir for outgoing HRLP file",  /*param name*/ 
-              "NOT_KNOWN_YET"). /*actual parameter value*/
+              "/store/riftp/dumpfiles/hrlp/outgoing"). /*actual parameter value*/
+
 
 if LcRet NE "" THEN 
    MESSAGE lcRet VIEW-AS ALERT-BOX .
@@ -71,7 +78,7 @@ if LcRet NE "" THEN
 lcRet = fCreateEntryC("HRLPListInDir", /*param code*/
               "HRLP",              /*param group*/
               "Dir for incoming HRLP file",  /*param name*/
-              "NOT_KNOWN_YET"). /*actual parameter value*/
+              "/store/riftp/dumpfiles/hrlp/incoming"). /*actual parameter value*/
 
 if LcRet NE "" THEN
    MESSAGE lcRet VIEW-AS ALERT-BOX.
@@ -80,7 +87,7 @@ if LcRet NE "" THEN
 lcRet = fCreateEntryC("HrlpRemRedirDir", /*param code*/
               "HRLP",              /*param group*/
               "Dir for HRLP redir removal file",  /*param name*/
-              "NOT_KNOWN_YET"). /*actual parameter value*/
+              "/store/riftp/dumpfiles/hrlp/incoming"). /*actual parameter value*/
 
 if LcRet NE "" THEN
    MESSAGE lcRet VIEW-AS ALERT-BOX.
@@ -88,8 +95,14 @@ if LcRet NE "" THEN
 /*Directory for HRLP logs*/
 lcRet = fCreateEntryC("HRLPLogDir", /*param code*/
               "HRLP",              /*param group*/
-              "Dir for HRLP file, TMS to IFS",  /*param name*/ 
-              "NOT_KNOWN_YET"). /*actual parameter value*/
+              "Dir for HRLP related logs",  /*param name*/ 
+              "/store/riftp/dumpfiles/hrlp/log"). /*actual parameter value*/
+
+/*Directory for processed HRLP files*/
+lcRet = fCreateEntryC("HRLProcDir", /*param code*/
+              "HRLP",              /*param group*/
+              "Dir for processed HRLP files",  /*param name*/ 
+              "/store/riftp/dumpfiles/hrlp/log"). /*actual parameter value*/
 
 lcRet = fCreateEntryI("HRLPTestLevel", /*param code*/
               "HRLP",              /*param group*/
