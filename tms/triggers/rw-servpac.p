@@ -7,6 +7,9 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF ServPac OLD BUFFER oldServPac.
 IF NEW(ServPac) AND ServPac.Brand NE "1"
 THEN RETURN.
 
+IF NOT NEW(ServPac) AND oldServPac.Brand NE "1" AND ServPac.Brand NE "1"
+THEN RETURN.
+
 /* If this is an old cdr which is changed to error status
    will will send it as delete type */
 CREATE mobile.RepLog.
@@ -14,7 +17,7 @@ ASSIGN
    mobile.RepLog.TableName = "ServPac"
    mobile.RepLog.EventType = (IF NEW(ServPac)
                             THEN "CREATE"
-                            ELSE IF ServPac.Brand NE "1"
+                            ELSE IF ServPac.Brand NE "1" AND oldServPac.Brand = "1"
                             THEN "DELETE"
                             ELSE "MODIFY") 
    mobile.RepLog.EventTime = NOW

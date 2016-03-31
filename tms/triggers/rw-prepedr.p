@@ -8,6 +8,10 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF PrepEDR OLD BUFFER oldPrepEDR.
 IF NEW(PrepEDR) AND PrepEDR.ErrorCode > 0
 THEN RETURN.
 
+/* If this is an error prepedr, we won't send the data */ 
+IF NOT NEW(PrepEDR) AND PrepEDR.ErrorCode > 0 AND oldPrepEDR.ErrorCode > 0
+THEN RETURN.
+
 /* If this is an old cdr which is changed to error status
    will will send it as delete type */
 CREATE mcdr.RepLog.
@@ -15,7 +19,7 @@ ASSIGN
    mcdr.RepLog.TableName = "PrepEDR"
    mcdr.RepLog.EventType = (IF NEW(PrepEDR)
                             THEN "CREATE"
-                            ELSE IF PrepEDR.ErrorCode > 0
+                            ELSE IF PrepEDR.ErrorCode > 0 AND oldPrepEDR.ErrorCode = 0
                             THEN "DELETE"
                             ELSE "MODIFY") 
    mcdr.RepLog.EventTime = NOW

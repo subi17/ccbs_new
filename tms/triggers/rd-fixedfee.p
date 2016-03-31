@@ -10,6 +10,9 @@ THEN RETURN.
 IF FixedFee.HostTable NE "MobSub"
 THEN RETURN.
 
+IF NOT CAN-FIND(FIRST MobSub NO-LOCK WHERE MobSub.MsSeq = INTEGER(FixedFee.KeyValue))
+THEN RETURN.
+
 CREATE Common.RepLog.
 ASSIGN
    Common.RepLog.TableName = "FixedFee"

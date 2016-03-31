@@ -8,6 +8,10 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF MobCDR OLD BUFFER oldMobCDR.
 IF NEW(MobCDR) AND MobCDR.ErrorCode > 0
 THEN RETURN.
 
+/* If this is an error cdr, we won't send the data */ 
+IF NOT NEW(MobCDR) AND MobCDR.ErrorCode > 0 AND oldMobCDR.ErrorCode > 0
+THEN RETURN.
+
 /* If this is an old cdr which is changed to error status
    will will send it as delete type */
 CREATE mcdr.RepLog.
@@ -15,7 +19,7 @@ ASSIGN
    mcdr.RepLog.TableName = "MobCDR"
    mcdr.RepLog.EventType = (IF NEW(MobCDR)
                             THEN "CREATE"
-                            ELSE IF MobCDR.ErrorCode > 0
+                            ELSE IF MobCDR.ErrorCode > 0 AND oldMobCDR.ErrorCode = 0
                             THEN "DELETE"
                             ELSE "MODIFY") 
    mcdr.RepLog.EventTime = NOW

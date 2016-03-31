@@ -7,30 +7,12 @@ TRIGGER PROCEDURE FOR REPLICATION-DELETE OF DCCLI.
 IF NEW DCCLI
 THEN RETURN.
 
-IF DCCLI.Brand NE "1"
-THEN RETURN.
+{triggers/dccli.i}
 
 DEFINE VARIABLE llFixedFeeOK AS LOGICAL INITIAL TRUE NO-UNDO.
 
 IF DCCLI.DCEvent = "RVTERM12"
-THEN DO:      
-   llFixedFeeOK = FALSE.
-   FOR
-      EACH FixedFee FIELDS (Brand HostTable KeyValue SourceTable SourceKey) NO-LOCK WHERE
-         FixedFee.Brand       = "1"                 AND
-         FixedFee.HostTable   = "MobSub"            AND
-         FixedFee.KeyValue    = STRING(DCCLI.MSSeq) AND
-         FixedFee.SourceTable = "DCCLI":
-            
-      llFixedFeeOK = TRUE.
-      
-      IF FixedFee.SourceKey NE STRING(DCCLI.PerContractID)
-      THEN DO:
-         llFixedFeeOK = FALSE.
-         LEAVE.
-      END.
-   END.
-END.
+THEN llFixedFeeOK = fCheckFixedFee(STRING(DCCLI.MSSeq), STRING(DCCLI.PerContractID)). 
 
 IF NOT llFixedFeeOK
 THEN RETURN.

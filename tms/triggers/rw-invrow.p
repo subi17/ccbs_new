@@ -8,7 +8,7 @@ DEFINE VARIABLE llInvoiceInHPD AS LOGICAL INITIAL FALSE NO-UNDO.
 
 FOR FIRST Invoice FIELDS (InvNum InvType InvCfg[1]) NO-LOCK WHERE
    Invoice.InvNum = InvRow.InvNum AND
-   Invoice.InvType = 1                AND
+   Invoice.InvType = 1            AND
    InvCfg[1]       = FALSE:
    
    llInvoiceInHPD = TRUE.
@@ -16,24 +16,18 @@ FOR FIRST Invoice FIELDS (InvNum InvType InvCfg[1]) NO-LOCK WHERE
 END.
 
 /* We won't send new InvRow if invoice is not in HPD */
-IF NEW(InvRow) AND NOT llInvoiceInHPD
+IF NOT llInvoiceInHPD
 THEN RETURN.
 
 CREATE Common.RepLog.
 ASSIGN
+   Common.RepLog.RowID     = STRING(ROWID(InvRow))
    Common.RepLog.TableName = "InvRow"
    Common.RepLog.EventType = (IF NEW(InvRow)
                               THEN "CREATE"
-                              ELSE IF NOT llInvoiceInHPD
-                              THEN "DELETE"
                               ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
    .
-
-IF Common.RepLog.EventType = "DELETE" 
-THEN Common.RepLog.KeyValue = {HPD/keyvalue.i InvRow . {&HPDKeyDelimiter} InvNum SubInvNum InvRowNum}
-ELSE Common.RepLog.RowID    = STRING(ROWID(InvRow)).
-
 
 IF NOT NEW(InvRow)
 THEN DO:   

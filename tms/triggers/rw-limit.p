@@ -8,12 +8,15 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF Limit OLD BUFFER oldLimit.
 IF NEW(Limit) AND Limit.LimitType NE {&LIMIT_TYPE_Q25_DISCOUNT}
 THEN RETURN.
 
+IF NOT NEW(Limit) AND Limit.LimitType NE {&LIMIT_TYPE_Q25_DISCOUNT} AND oldLimit.LimitType NE {&LIMIT_TYPE_Q25_DISCOUNT}
+THEN RETURN.
+
 CREATE Common.RepLog.
 ASSIGN
    Common.RepLog.TableName = "Limit"
    Common.RepLog.EventType = (IF NEW(Limit)
                                THEN "CREATE"
-                               ELSE IF Limit.LimitType NE {&LIMIT_TYPE_Q25_DISCOUNT}
+                               ELSE IF Limit.LimitType NE {&LIMIT_TYPE_Q25_DISCOUNT} AND oldLimit.LimitType = {&LIMIT_TYPE_Q25_DISCOUNT}
                                THEN "DELETE"
                                ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
