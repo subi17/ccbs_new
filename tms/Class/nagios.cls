@@ -11,7 +11,7 @@ CLASS Class.nagios:
    DEF VAR lcMonitorDir    AS CHAR NO-UNDO.
    DEF STREAM sNagios.
 
-   CONSTRUCTOR PUBLIC Nagios():
+   CONSTRUCTOR PUBLIC nagios():
 
       /* nagios URL */
       FIND FIRST TMSParam WHERE
@@ -65,7 +65,7 @@ CLASS Class.nagios:
 
    END CONSTRUCTOR.
 
-   DESTRUCTOR PUBLIC Nagios():
+   DESTRUCTOR PUBLIC nagios():
 
       IF VALID-OBJECT(classTD) THEN DELETE OBJECT(classTD).
 
