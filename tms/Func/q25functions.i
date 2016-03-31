@@ -43,6 +43,8 @@ DEF VAR lcHRLPOutFile AS CHAR NO-UNDO.
 DEF VAR lcHRLPRemRedirDirDir AS CHAR NO-UNDO.
 DEF VAR lcHRLPTestMSISDN AS CHAR NO-UNDO. /*List of numbers accepted in test*/
 DEF VAR liHRLPTestLevel AS INT NO-UNDO.
+DEF VAR lcLandingPageLink AS CHAR NO-UNDO.
+DEF VAR lcPassPhrase AS CHAR NO-UNDO.
 
 DEF STREAM Sout.
 DEF STREAM SHRLP.
@@ -52,19 +54,16 @@ ASSIGN liQ25Logging = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg,
        lcQ25LogDir     = fCParam("Q25","Q25ReminderLogDir")
        lcQ25SpoolDir   = fCParam("Q25","Q25ReminderLogSpoolDir")
        lcQ25DWHLogDir  = fCParam("Q25","Q25DWHLogDir")
-       lcSendingEndTime = fCParam("Q25","Q25SendingEndTime").
-                  
+       lcSendingEndTime = fCParam("Q25","Q25SendingEndTime")
+       lcPassPhrase = fCParam("Q25","Q25PassPhrase").
+
+IF lcPassPhrase = "" OR lcPassPhrase = ? THEN lcPassPhrase = {&Q25_PASSPHRASE}.
 IF lcQ25LogDir = "" OR lcQ25LogDir = ? THEN lcQ25LogDir = "/tmp/".
 IF lcQ25SpoolDir = "" OR lcQ25SpoolDir = ? THEN lcQ25SpoolDir = "/tmp/".
 
 lcQ25DWHLogFile = lcQ25SpoolDir + "events_" +
                   (REPLACE(STRING(fMakeTS()),".","_")) + ".csv".
 
-IF lcHRLPOutDir EQ "" OR lcHRLPOutDir EQ ? THEN lcHRLPOutDir = "/tmp/".
-IF lcHRLPListInDir EQ "" OR lcHRLPListInDir EQ ? THEN lcHRLPlistInDir = "/tmp/".
-IF lcHRLPRemRedirDirDir EQ "" OR lcHRLPRemRedirDirDir EQ ? THEN 
-   lcHRLPRemRedirDirDir = "/tmp/".
-IF lcHRLPLogDir EQ "" OR lcHRLPLogDir EQ ? THEN lcHRLPLogDir = "/tmp/".
 
 /* Function to check if there is available weekdays for SMS sending after
    specified day.
@@ -204,7 +203,6 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    DEF VAR lcSMSMessage      AS CHAR NO-UNDO.
    DEF VAR ldReqStamp        AS DEC  NO-UNDO.
    DEF VAR lcEncryptedMSISDN AS CHAR NO-UNDO.
-   DEF VAR lcPassPhrase      AS CHAR NO-UNDO.
    DEF VAR lcAmount          AS CHAR NO-UNDO.
    
    ASSIGN
@@ -244,10 +242,6 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    END.
    IF iiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO:
    /* Month 22-24 */
-      /* Encrypted MSISDN added to messages sent during 22 to 24 month */
-      lcPassPhrase = fCParam("Q25","Q25PassPhrase").
-      IF lcPassPhrase = "" OR lcPassPhrase = ? THEN 
-         lcPassPhrase = {&Q25_PASSPHRASE}.
       ASSIGN
          lcEncryptedMSISDN = encrypt_data(icCli,
                              {&ENCRYPTION_METHOD}, lcPassPhrase)
@@ -779,13 +773,23 @@ This must be called in programs that are handling HRLP related data.*/
 FUNCTION fInitHRLPParameters RETURNS CHAR
    ():
    ASSIGN
+
+      lcLandingPageLink = fCParam("HRLP","HRLPLandingpage")
+      lcPassPhrase = fCParam("Q25","Q25PassPhrase")
       lcHRLPOutDir = fCParam("HRLP","HRLPOutDir")
       lcHRLPListInDir = fCParam("HRLP","HRLPListInDir")
       lcHrlpRemRedirDir = fCParam("HRLP","HrlpRemRedirDir")
       lcHRLPLogDir = fCParam("HRLP","HRLPLogDir")
       lcHRLPTestMSISDN = fCParam("HRLP","HRLPTestMSISDN")
       liHRLPTestLevel = fCParamI("HRLPTestLevel").
-   
+ 
+   IF lcHRLPOutDir EQ "" OR lcHRLPOutDir EQ ? THEN lcHRLPOutDir = "/tmp/".
+   IF lcHRLPListInDir EQ "" OR lcHRLPListInDir EQ ? THEN lcHRLPlistInDir = "/tmp/".
+  IF lcHRLPRemRedirDirDir EQ "" OR lcHRLPRemRedirDirDir EQ ? THEN
+    lcHRLPRemRedirDirDir = "/tmp/".
+   IF lcHRLPLogDir EQ "" OR lcHRLPLogDir EQ ? THEN lcHRLPLogDir = "/tmp/".
+
+
 END.   
 
 FUNCTION fGetMonthlyFee RETURNS DECIMAL
@@ -815,6 +819,8 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
    DEF VAR ldMonthlyFee AS DECIMAL NO-UNDO.
    DEF VAR lcHRLPDelim AS CHAR NO-UNDO.
    DEF VAR lcLogText AS CHAR NO-UNDO.
+   DEF VAR lcEncryptedMSISDN AS CHAR NO-UNDO.
+   DEF VAR lcLPLink AS CHAR NO-UNDO.
 
    ASSIGN
       ldaStartDate = DATE(MONTH(TODAY), 1, YEAR(TODAY)) - 1
@@ -860,15 +866,24 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
          NEXT.
       END.
 
-      ldMonthlyFee = fGetMonthlyFee(liPerContrId,liMsSeq).
+      ASSIGN
+         lcEncryptedMSISDN = encrypt_data(MobSub.CLI,
+                             {&ENCRYPTION_METHOD}, lcPassPhrase)
+      /* convert some special characters to url encoding (at least '+' char
+         could cause problems at later phases. */
+         lcEncryptedMSISDN = fUrlEncode(lcEncryptedMSISDN, "query")
+         lcLPLink = REPLACE(lcLandingpageLink, "#MSISDN", lcEncryptedMSISDN)
+         ldMonthlyFee = fGetMonthlyFee(liPerContrId,liMsSeq).     
+
 
       /*verifications done, write data to IFS file*/
       lcHRLPDelim = {&Q25_HRLP_DELIM}.
       lcLogText = STRING(MobSub.CustNum) + lcHRLPDelim + /*Custnumber*/
-                  STRING(Mobsub.CLI)     + lcHRLPDelim + /*MSISDN*/     
-                  STRING(liPeriod)       + lcHRLPDelim + /*Q25 nomth*/     
+                  STRING(Mobsub.CLI)     + lcHRLPDelim + /*MSISDN*/
+                  STRING(liPeriod)       + lcHRLPDelim + /*Q25 month*/
                   STRING(ldMonthlyFee)   + lcHRLPDelim + /*installment value*/
-                  STRING(ldAmount).                      /*Q25 value*/
+                  STRING(ldAmount)       + lcHRLPDelim + /*Q25 value*/
+                  STRING(lcLPLink).                      /*LP Link*/
 
       lcQ25DWHLogFile = lcHRLPOutDir + "IFS_Q25HR_ACTIVE_" +
                         (SUBSTRING(STRING(fMakeTS()),1,8)) + ".DAT".
