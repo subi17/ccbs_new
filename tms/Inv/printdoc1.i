@@ -320,14 +320,14 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
    DEF VAR llFooter               AS LOG  NO-UNDO.
    DEF VAR ldTAE                  AS DEC  NO-UNDO.
    
-   /* PAYTERM values to pos. 1-3, footer 1
-      RVTERM  values to pos. 4-6, footer 2
+   /* PAYTERM values to pos. 4-6, footer 1
+      RVTERM  values to pos. 1-3, footer 2
    */
    IF icBillCode BEGINS "PAYTERM" THEN ASSIGN
-      liAmtPos = 1
+      liAmtPos = 4
       liFtrPos = 1.
    ELSE ASSIGN
-      liAmtPos = 4
+      liAmtPos = 1
       liFtrPos = 2. 
 
    liFFCount = liAmtPos. 
@@ -406,7 +406,18 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
                ttSub.TFBankBeforeAmt[liFFCount] = ttSub.TFBankBeforeAmt[liFFCount] +
                                                   SingleFee.Amt.
            
-            ELSE IF SingleFee.InvNum = Invoice.InvNum AND SingleFee.Billed THEN ASSIGN
+            ELSE IF SingleFee.InvNum = Invoice.InvNum AND SingleFee.Billed
+                    /* TEMP FIX:
+                       Q25 fee should not be included if it's filtered out
+                       due to Q25 extension.
+                       But this doesn't work if the subinvoice contains
+                       more than one Q25 invoice row */
+                    AND CAN-FIND(  
+                    FIRST ttRow NO-LOCK WHERE
+                          ttRow.SubInvNum = SubInvoice.SubInvNum AND
+                          ttRow.RowCode BEGINS "33" AND
+                          LOOKUP(ttRow.RowBillCode,
+                          {&TF_BANK_RVTERM_BILLCODES} + ",RVTERMF") > 0) THEN
                ttSub.TFBankBeforeAmt[liFFCount] = ttSub.TFBankBeforeAmt[liFFCount] +
                                                   SingleFee.Amt.
      
