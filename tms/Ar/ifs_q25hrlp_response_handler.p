@@ -32,10 +32,10 @@ DEF STREAM sin.
 DEF STREAM sFile.
 DEF STREAM sLog.
 
-lcTableName = "HRLP".
-lcActionID = {&Q25_HRLP_RESP_READER}.
-ldCurrentTimeTS = fMakeTS().
-
+ASSIGN 
+   lcTableName = "HRLP"
+   lcActionID = {&Q25_HRLP_RESP_READER}
+   ldCurrentTimeTS = fMakeTS().
 
 DO TRANS:
 
