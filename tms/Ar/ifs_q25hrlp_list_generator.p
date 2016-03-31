@@ -6,6 +6,8 @@
   CREATED ......: 29.3.2016
   Version ......: yoigo
 ---------------------------------------------------------------------- */
+{commpaa.i}
+gcbrand = "1".
 {tmsconst.i}
 {q25functions.i}
 fInitHRLPParameters().
