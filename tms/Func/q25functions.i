@@ -843,6 +843,8 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
       ldaEndDate = fLastDayOfMonth(TODAY)
       liPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
 
+   lcHRLPOutFile = lcHRLPSpoolDir + "IFS_Q25HR_ACTIVE_" +
+                   (SUBSTRING(STRING(fMakeTS()),1,8)) + ".DAT".
    FOR EACH SingleFee USE-INDEX BillCode WHERE
             SingleFee.Brand       = gcBrand AND
             SingleFee.Billcode BEGINS "RVTERM" AND
@@ -901,12 +903,9 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
                   STRING(ldAmount)       + lcHRLPDelim + /*Q25 value*/
                   STRING(lcLPLink).                      /*LP Link*/
 
-      lcHRLPOutFile = lcHRLPSpoolDir + "IFS_Q25HR_ACTIVE_" +
-                      (SUBSTRING(STRING(fMakeTS()),1,8)) + ".DAT".
-
        OUTPUT STREAM SHRLP TO VALUE(lcHRLPOutFile) APPEND.
-       PUT STREAM SHRLP UNFORMATTED lcLogText.
-       OUTPUT STREAM Sout CLOSE.
+       PUT STREAM SHRLP UNFORMATTED lcLogText SKIP.
+       OUTPUT STREAM SHRLP CLOSE.
 
    END.
    fMove2TransDir(lcHRLPLogFile, "", lcHRLPLogDir).
