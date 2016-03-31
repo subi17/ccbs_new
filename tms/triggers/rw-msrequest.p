@@ -23,26 +23,32 @@ END.
 
 &IF {&MSREQUEST_WRITE_TRIGGER_ACTIVE} &THEN
 
-DEFINE VARIABLE llShouldNotBeOnHPD AS LOGICAL NO-UNDO.
+DEFINE VARIABLE llShouldBeOnHPD AS LOGICAL NO-UNDO.
+DEFINE VARIABLE llIsOnHPD          AS LOGICAL NO-UNDO.
 
-llShouldNotBeOnHPD = ( ( MsRequest.ReqSource > "" AND LOOKUP(MsRequest.ReqSource,{&REQUEST_SOURCES_HPD}) = 0 ) OR
-                  LOOKUP(STRING(MsRequest.ReqType),{&REQTYPES_HPD}) = 0 ).
+llShouldBeOnHPD = LOOKUP(MsRequest.ReqSource,{&REQUEST_SOURCES_HPD}) > 0 AND
+                  LOOKUP(STRING(MsRequest.ReqType),{&REQTYPES_HPD}) > 0.
 
 /* If this is a new MsRequest and MsRequest requestsource is not hpd source
    or request type is not hpd req type we won't send the information */
 IF NEW(MsRequest) AND
-   llShouldNotBeOnHPD
+   NOT llShouldBeOnHPD
 THEN RETURN.
 
+IF NOT NEW(MsRequest)
+THEN llIsOnHPD = LOOKUP(oldMsRequest.ReqSource,{&REQUEST_SOURCES_HPD}) > 0 AND
+                 LOOKUP(STRING(oldMsRequest.ReqType),{&REQTYPES_HPD}) > 0.
+
+IF llIsOnHPD = FALSE AND llShouldBeOnHPD = FALSE
+THEN RETURN.
 
 CREATE Mobile.RepLog.
 ASSIGN
    Mobile.RepLog.TableName = "MsRequest"
    Mobile.RepLog.EventType = (IF NEW(MsRequest)
                               THEN "CREATE"
-                              ELSE IF LOOKUP(oldMsRequest.ReqSource,{&REQUEST_SOURCES_HPD}) > 0 AND
-                                      LOOKUP(STRING(oldMsRequest.ReqType),{&REQTYPES_HPD}) > 0  AND
-                                      llShouldNotBeOnHPD
+                              ELSE IF llIsOnHPD AND
+                                      NOT llShouldBeOnHPD
                               THEN "DELETE"
                               ELSE "MODIFY")
    Mobile.RepLog.EventTime = NOW

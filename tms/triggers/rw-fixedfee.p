@@ -5,7 +5,10 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF FixedFee OLD BUFFER oldFixedFee.
 &IF {&FIXEDFEE_WRITE_TRIGGER_ACTIVE} &THEN
 
 /* If hosttable is not mobsub, we won't send the information */ 
-IF FixedFee.HostTable NE "MobSub"
+IF NEW (FixedFee) AND FixedFee.HostTable NE "MobSub"
+THEN RETURN.
+
+IF NOT NEW(FixedFee) AND FixedFee.HostTable NE "MobSub" AND oldFixedFee.HostTable NE "MobSub"
 THEN RETURN.
 
 {triggers/check_mobsub.i FixedFee KeyValue}
@@ -15,7 +18,8 @@ ASSIGN
    Common.RepLog.TableName = "FixedFee"
    Common.RepLog.EventType = (IF NEW(FixedFee)
                               THEN "CREATE"
-                              ELSE IF llMobSubWasAvailable AND llMobSubIsAvailable = FALSE
+                              ELSE IF (llMobSubWasAvailable AND llMobSubIsAvailable = FALSE) OR
+                                      (FixedFee.HostTable NE "MobSub" AND oldFixedFee.HostTable = "MobSub")
                               THEN "DELETE"
                               ELSE "MODIFY")
    Common.RepLog.EventTime = NOW

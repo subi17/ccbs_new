@@ -16,7 +16,7 @@ FOR FIRST Invoice FIELDS (InvNum InvType InvCfg[1]) NO-LOCK WHERE
 END.
 
 /* We won't send new subinvoice if invoice is not in HPD */
-IF NEW(SubInvoice) AND NOT llInvoiceInHPD
+IF NOT llInvoiceInHPD
 THEN RETURN.
 
 CREATE Common.RepLog.
@@ -24,8 +24,6 @@ ASSIGN
    Common.RepLog.TableName = "SubInvoice"
    Common.RepLog.EventType = (IF NEW(SubInvoice)
                                THEN "CREATE"
-                               ELSE IF NOT llInvoiceInHPD
-                               THEN "DELETE"
                                ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
    .
