@@ -14,13 +14,10 @@
 {barrfunc.i}
 
 DEF VAR lcProcessedFile AS CHAR NO-UNDO.
-DEF VAR lcIncDir AS CHAR NO-UNDO.
-DEF VAR lcIncProcDir AS CHAR NO-UNDO.
 DEF VAR lcRootDir AS CHAR NO-UNDO.
 DEF VAR lcFileName AS CHAR NO-UNDO.
 DEF VAR lcInputFile AS CHAR NO-UNDO.
 DEF VAR lcLogDir AS CHAR NO-UNDO.
-DEF VAR lcLogSpoolDir AS CHAR NO-UNDO.
 DEF VAR lcLogOutDir AS CHAR NO-UNDO.
 DEF VAR lcSummary AS CHAR NO-UNDO.
 DEF VAR lcTableName AS CHAR NO-UNDO.
@@ -77,12 +74,12 @@ END.
 fInitHRLPParameters().
 
 /* File reading and parsing */
-INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcIncDir).
+INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcHRLPListInDir).
 REPEAT:
 
    IMPORT STREAM sFile UNFORMATTED lcFileName.
 
-   lcInputFile = lcIncDir + lcFileName.
+   lcInputFile = lcHRLPListInDir + lcFileName.
 
    IF SEARCH(lcInputFile) NE ? THEN DO:
 
@@ -95,7 +92,7 @@ REPEAT:
    END.
    ELSE NEXT.
 
-   lcErrorLog = lcLogSpoolDir + lcFileName + ".LOG".
+   lcErrorLog = lcHRLPSpoolDir + lcFileName + ".LOG".
 
    IF SESSION:BATCH THEN fBatchLog("START", lcInputFile).
 
@@ -110,13 +107,10 @@ REPEAT:
 
    PUT STREAM sLog UNFORMATTED lcSummary SKIP.
    OUTPUT STREAM sLog CLOSE.
-   fMove2TransDir(lcErrorLog, "", lcLogOutDir).
-   lcProcessedFile = fMove2TransDir(lcInputFile, "", lcIncProcDir).
+   fMove2TransDir(lcErrorLog, "", lcHRLPLogDir).
+   lcProcessedFile = fMove2TransDir(lcInputFile, "", lcHRLPProcDir).
    IF SESSION:BATCH AND lcProcessedFile NE "" THEN
       fBatchLog("FINISH", lcProcessedFile).
-
-
-
 
    DO TRANS:
       FIND FIRST ActionLog WHERE
