@@ -224,12 +224,6 @@ PROCEDURE pReadFileData:
                  SingleFee.CalcObj     EQ "RVTERM" NO-LOCK NO-ERROR.
       IF AVAIL SingleFee THEN DO:
          IF SingleFee.OrderId <= 0 THEN NEXT.   
-         IF fisPostpaidMobsubReleased(liMsSeq) THEN DO:
-            /* log mobsub released */
-            PUT STREAM sLog UNFORMATTED
-               lcLine +  " Error released." SKIP.
-            NEXT.
-         END.
 
          IF fisQ25ExtensionDone(liMsSeq, 0, ldAmount) THEN DO:
             /* log extension done */
@@ -273,7 +267,7 @@ PROCEDURE pReadFileData:
                lcLine +  " Error: Debr_LP barring status." SKIP.
             NEXT.
          END.
-         RUN pMakeProdigyRequest(liMsSeq, lcLine).
+         RUN pMakeProdigyRequest(liMsSeq, INPUT-OUTPUT lcLine).
             PUT STREAM sLog UNFORMATTED
                lcLine SKIP.
             NEXT.
