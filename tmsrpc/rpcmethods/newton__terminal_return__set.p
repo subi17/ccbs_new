@@ -1,4 +1,4 @@
-/**
+/* *
  * Update returned terminals
  *
  * @input  struct;
@@ -14,6 +14,7 @@
            q25_contract_id;string;optional
 
  * @output success;boolean
+ 
  */
 
 /* YPR-2747 */
@@ -269,8 +270,8 @@ IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhTermReturn).
 
 IF (llDeviceStart AND llDeviceScreen) OR
    (llDeviceStart = ? AND llDeviceScreen = ?) 
-THEN lcMemo = "DevoluciÃ³n en tienda aceptada".
-ELSE lcMemo = "DevoluciÃ³n en tienda denegada".
+THEN lcMemo = "Devolución en tienda aceptada".
+ELSE lcMemo = "Devolución en tienda denegada".
 
 lcOrigKatun = katun.
 katun =  "VISTA_" + lcSalesman.
