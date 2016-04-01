@@ -154,11 +154,11 @@ PROCEDURE pMakeProdigyRequest:
    /* Creation of subrequests failed, "fail" master request too */
    IF liReq = 0 OR liReq = ? THEN DO:
       fReqStatus(3,"ServiceRequest failure: " + lcError).
-      ocLine = ocLine + {Q25_HRLP_DELIM} + 
+      ocLine = ocLine + {&Q25_HRLP_DELIM} + 
                "Error: Remove serviceRequest failure". 
       RETURN.
    END.
-   ocLine = ocLine + {Q25_HRLP_DELIM} + "Remove successfull".
+   ocLine = ocLine + {&Q25_HRLP_DELIM} + "Remove successfull".
 
 END.
 
@@ -210,7 +210,7 @@ PROCEDURE pReadFileData:
       IF NOT AVAIL Mobsub THEN DO:
          /* log mobsub released */
          PUT STREAM sLog UNFORMATTED
-            lcLine + {Q25_HRLP_DELIM} +  "Error released." SKIP.
+            lcLine + {&Q25_HRLP_DELIM} +  "Error released." SKIP.
          NEXT.
       END.
      
@@ -232,7 +232,7 @@ PROCEDURE pReadFileData:
          IF fGetBarringStatus("Debt_HOTLP", 
                               liMsSeq) NE {&BARR_STATUS_INACTIVE} THEN DO:
             PUT STREAM sLog UNFORMATTED
-               lcLine + {Q25_HRLP_DELIM} +  
+               lcLine + {&Q25_HRLP_DELIM} +  
                "Error: Debt_HOTLP barring status." SKIP.
             NEXT.
          END.
@@ -240,7 +240,7 @@ PROCEDURE pReadFileData:
          IF fGetBarringStatus("Debt_LP", 
                               liMsSeq) NE {&BARR_STATUS_INACTIVE} THEN DO:
             PUT STREAM sLog UNFORMATTED
-               lcLine + {Q25_HRLP_DELIM} + 
+               lcLine + {&Q25_HRLP_DELIM} + 
                " Error: Debr_LP barring status." SKIP.
             NEXT.
          END.
