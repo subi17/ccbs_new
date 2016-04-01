@@ -212,7 +212,9 @@ PROCEDURE pReadFileData:
             lcLine +  " Error released." SKIP.
          NEXT.
       END.
- 
+     
+      liMsSeq = Mobsub.MsSeq.
+
       FIND FIRST SingleFee USE-INDEX BillCode WHERE
                  SingleFee.Brand       EQ gcBrand AND
                  SingleFee.CustNum     EQ liCustNum AND
