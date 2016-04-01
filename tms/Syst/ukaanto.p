@@ -69,6 +69,7 @@ input close.
 def temp-table wmodule no-undo
     field wsname  as c   /* name without path */
     field wlname  as c
+    FIELD compiledir AS c
     
     index wsname as primary
        wsname.
@@ -131,8 +132,14 @@ if opsys = "unix" then do:
          if not avail wmodule then do:
             create wmodule.
             assign 
-               wmodule.wsname = shortname
-               wmodule.wlname = line.
+               wmodule.wsname     = shortname
+               wmodule.wlname     = line
+               wmodule.compiledir = IF LENGTH(shortname) > 4 AND
+                                       R-INDEX(shortname,"/") > 0 AND
+                                       SUBSTRING(shortname,LENGTH(shortname) - 3) = ".cls"
+                                    THEN SUBSTRING(shortname,1,R-INDEX(shortname,"/") - 1)
+                                    ELSE rpath
+               .
          end.
 
       end.
@@ -148,8 +155,9 @@ output stream excel to value(lclogfile).
 for each wmodule by wsname with frame log:
 
   assign
-     alku   = time
-     moduli = wmodule.wlname.
+     alku    = time
+     moduli  = wmodule.wlname
+     .
   
   display 
      wmodule.wsname         
@@ -160,10 +168,10 @@ for each wmodule by wsname with frame log:
   
   bOk = true.
 
-  compile value(moduli) save into value(rpath)
+  compile value(moduli) save into value(wmodule.compiledir)
     listing value("/tmp/compile.tmp") no-error.
   
-  input through value("grep \"0 Procedure\" " + "/tmp/compile.tmp").
+  input through value("grep ~"0 Procedure~" " + "/tmp/compile.tmp").
   repeat:
      import unformatted row0.
   end.
