@@ -17,3 +17,16 @@ FUNCTION fCheckHPDStatus RETURNS LOGICAL
    
    RETURN FALSE.
 END.
+
+/* We will send only the newest one */
+DEFINE BUFFER lbMServiceLimit FOR MServiceLimit.
+
+FOR
+   FIRST lbMServiceLimit FIELDS (MsSeq DialType SLSeq EndTS) NO-LOCK USE-INDEX msseq WHERE
+      lbMServiceLimit.MsSeq    = MServiceLPool.MsSeq    AND
+      lbMServiceLimit.DialType = MServiceLPool.DialType AND
+      lbMServiceLimit.SlSeq    = MServiceLPool.SlSeq:
+
+   IF lbMServiceLimit.EndTS > MServiceLPool.EndTS
+   THEN RETURN.
+END.
