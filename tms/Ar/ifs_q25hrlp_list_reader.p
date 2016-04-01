@@ -111,70 +111,23 @@ REPEAT:
    fMove2TransDir(lcInputFile, "", lcHRLPProcDir).
    IF SESSION:BATCH AND lcInputFile NE "" THEN
       fBatchLog("FINISH", lcInputFile).
+END.
 
-   DO TRANS:
-      FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     EQ  gcBrand        AND
-                 ActionLog.ActionID  EQ  lcActionID     AND
-                 ActionLog.TableName EQ  lcTableName    AND
-                 ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
-      EXCLUSIVE-LOCK NO-ERROR.
+DO TRANS:
+   FIND FIRST ActionLog WHERE
+              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.ActionID  EQ  lcActionID     AND
+              ActionLog.TableName EQ  lcTableName    AND
+              ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
+   EXCLUSIVE-LOCK NO-ERROR.
 
-      IF AVAIL ActionLog THEN DO:
-         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
-      END.
-      RELEASE ActionLog.
+   IF AVAIL ActionLog THEN DO:
+      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
    END.
-
+   RELEASE ActionLog.
 END.
 
 INPUT STREAM sin CLOSE.
-
-PROCEDURE pMakeProdigyRequest:
-   DEF INPUT PARAM iiMsSeq AS INT NO-UNDO.
-   DEF INPUT PARAM iiCustNum AS INT NO-UNDO.
-   DEF INPUT-OUTPUT PARAM ocLine AS CHAR NO-UNDO.
-   DEF VAR liReq AS INT NO-UNDO.
-   DEF VAR lcError AS CHAR NO-UNDO.
-   DEF VAR lcMemoTitle AS CHAR NO-UNDO.
-   DEF VAR lcMemoText AS CHAR NO-UNDO.
-
-   /* Create subrequests (set mandataory and orig request) */
-   liReq = fServiceRequest (iiMsSeq,
-                            "LP",
-                            1,
-                            "REDIRECTION_HIGHRISKCUSTOMER_1",
-                            fSecOffSet(fMakeTS(),5),
-                            "",                /* SalesMan */
-                            FALSE,             /* Set fees */
-                            FALSE,             /* SMS */
-                            "",
-                            "",
-                            0,
-                            FALSE,
-                            OUTPUT lcError).
-
-   /* Creation of subrequests failed, "fail" master request too */
-   IF liReq = 0 OR liReq = ? THEN DO:
-      fReqStatus(3,"ServiceRequest failure: " + lcError).
-      ocLine = ocLine + {&Q25_HRLP_DELIM} + "Error: ServiceRequest failure". 
-      RETURN.
-   END.
-   ELSE DO:
-      ocLine = ocLine + {&Q25_HRLP_DELIM} + "Activation success".
-      lcMemoTitle = "LP Riesgo Pago Final".
-      lcMemotext = "Redirección a LP Pago Final Riesgo activada".
-      DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                 "Mobsub",
-                 STRING(iiMsSeq),
-                 iiCustNum,
-                 lcMemoTitle,
-                 lcMemoText,
-                 "Service",  /* memo type */
-                 "IFS").     /* creator */
-   END.
-END.
-
 
 PROCEDURE pReadFileData:
 

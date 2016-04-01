@@ -112,21 +112,22 @@ REPEAT:
    IF SESSION:BATCH AND lcInputFile NE "" THEN
       fBatchLog("FINISH", lcInputFile).
 
-   DO TRANS:
-      FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     EQ  gcBrand        AND
-                 ActionLog.ActionID  EQ  lcActionID     AND
-                 ActionLog.TableName EQ  lcTableName    AND
-                 ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
-      EXCLUSIVE-LOCK NO-ERROR.
-
-      IF AVAIL ActionLog THEN DO:
-         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
-      END.
-      RELEASE ActionLog.
-   END.
-
 END.
+
+DO TRANS:
+   FIND FIRST ActionLog WHERE
+              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.ActionID  EQ  lcActionID     AND
+              ActionLog.TableName EQ  lcTableName    AND
+              ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
+   EXCLUSIVE-LOCK NO-ERROR.
+
+   IF AVAIL ActionLog THEN DO:
+      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}.
+   END.
+   RELEASE ActionLog.
+END.
+
 
 INPUT STREAM sin CLOSE.
 
