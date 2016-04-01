@@ -154,10 +154,10 @@ PROCEDURE pMakeProdigyRequest:
    /* Creation of subrequests failed, "fail" master request too */
    IF liReq = 0 OR liReq = ? THEN DO:
       fReqStatus(3,"ServiceRequest failure: " + lcError).
-      ocLine = ocLine + " Error: ServiceRequest failure". 
+      ocLine = ocLine + {&Q25_HRLP_DELIM} + "Error: ServiceRequest failure". 
       RETURN.
    END.
-   ocLine = ocLine + " OK".
+   ocLine = ocLine + {&Q25_HRLP_DELIM} + "OK".
 
 END.
 
@@ -209,7 +209,7 @@ PROCEDURE pReadFileData:
       IF NOT AVAIL Mobsub THEN DO:
          /* log mobsub released */
          PUT STREAM sLog UNFORMATTED
-            lcLine +  " Error released." SKIP.
+            lcLine + {&Q25_HRLP_DELIM} + "Error released." SKIP.
          NEXT.
       END.
      
@@ -230,14 +230,14 @@ PROCEDURE pReadFileData:
          IF fisQ25ExtensionDone(liMsSeq, 0, ldAmount) THEN DO:
             /* log extension done */
             PUT STREAM sLog UNFORMATTED
-               lcLine +  " Error: extension done." SKIP.
+               lcLine + {&Q25_HRLP_DELIM} +  "Error: extension done." SKIP.
             NEXT.
          END.
 
          IF fisQ25TerminalReturned(SingleFee.orderId) THEN DO:
             /* log terminal returned */
             PUT STREAM sLog UNFORMATTED
-               lcLine +  " Error: terminal returned." SKIP.
+               lcLine + {&Q25_HRLP_DELIM} + "Error: terminal returned." SKIP.
             NEXT.
          END.
          FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
@@ -250,7 +250,7 @@ PROCEDURE pReadFileData:
          IF fisQ25RenewalDone(liMsSeq, DCCLI.Validfrom) THEN DO:
             /*log renewal done */
             PUT STREAM sLog UNFORMATTED
-               lcLine +  " Error: renewal done." SKIP.
+               lcLine + {&Q25_HRLP_DELIM} + "Error: renewal done." SKIP.
             NEXT.
          END.
 
@@ -259,14 +259,16 @@ PROCEDURE pReadFileData:
          IF fGetBarringStatus("Debt_HOTLP", 
                               liMsSeq) NE {&BARR_STATUS_INACTIVE} THEN DO:
             PUT STREAM sLog UNFORMATTED
-               lcLine +  " Error: Debt_HOTLP barring status." SKIP.
+               lcLine + {&Q25_HRLP_DELIM} + 
+               "Error: Debt_HOTLP barring status." SKIP.
             NEXT.
          END.
          
          IF fGetBarringStatus("Debt_LP", 
                               liMsSeq) NE {&BARR_STATUS_INACTIVE} THEN DO:
             PUT STREAM sLog UNFORMATTED
-               lcLine +  " Error: Debr_LP barring status." SKIP.
+               lcLine + {&Q25_HRLP_DELIM} + 
+               "Error: Debr_LP barring status." SKIP.
             NEXT.
          END.
          RUN pMakeProdigyRequest(liMsSeq, INPUT-OUTPUT lcLine).
