@@ -103,15 +103,15 @@ CLASS HPD.MServiceLimitDump FINAL INHERITS DumpHandler:
          IF lbMServiceLimit.EndTS < ldeEndStamp
          THEN NEXT.
 
+         IF NOT CAN-FIND(FIRST MobSub NO-LOCK WHERE MobSub.MsSeq = lbMServiceLimit.MsSeq)
+         THEN NEXT.
+
          IF lcGroupCode BEGINS "DSS" AND
             ( lbMServiceLimit.CustNum = 0 OR lbMServiceLimit.CustNum = ? OR  
               NOT CAN-FIND(FIRST Customer NO-LOCK WHERE Customer.CustNum = lbMServiceLimit.CustNum) )
          THEN NEXT.
          
          ELSE IF lbMServiceLimit.CustNum > 0
-         THEN NEXT.
-
-         IF NOT CAN-FIND(FIRST MobSub NO-LOCK WHERE MobSub.MsSeq = lbMServiceLimit.MsSeq)
          THEN NEXT.
          
          liEvents = liEvents + 1.
