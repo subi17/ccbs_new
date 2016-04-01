@@ -946,7 +946,7 @@ FUNCTION fMakeProdigyRequest RETURNS LOGICAL
       RETURN FALSE.
    END.
    ELSE DO:
-      ocLine = ocLine + {&Q25_HRLP_DELIM} + "Activation success".
+      ocLine = ocLine + {&Q25_HRLP_DELIM} + "Success".
       lcMemoTitle = "LP Riesgo Pago Final".
       IF icCommand BEGINS "REDIRECTION" THEN
          lcMemotext = "Redirección a LP Pago Final Riesgo activada".
