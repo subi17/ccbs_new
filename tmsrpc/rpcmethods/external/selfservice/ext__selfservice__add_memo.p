@@ -50,7 +50,7 @@ katun = fgetAppUserId(INPUT lcApplicationId,
 
 FIND FIRST mobsub NO-LOCK WHERE
            mobsub.cli EQ pcMSISDN NO-ERROR.
-IF NOT AVAIL mobsub THEN RETURN appl_err("Mobile subscription not found").           
+IF NOT AVAIL mobsub THEN RETURN appl_err("Subscription not found").           
 DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
                  "MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */

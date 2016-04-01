@@ -99,7 +99,7 @@ lcRet = fCreateEntryC("HRLPLogDir", /*param code*/
               "/store/riftp/dumpfiles/hrilp/log/"). /*actual parameter value*/
 
 /*Directory for processed HRLP files*/
-lcRet = fCreateEntryC("HRLProcDir", /*param code*/
+lcRet = fCreateEntryC("HRLPProcDir", /*param code*/
               "HRLP",              /*param group*/
               "Dir for processed HRLP files",  /*param name*/ 
               "/store/riftp/dumpfiles/hrilp/processed/"). /*actual parameter value*/

@@ -108,9 +108,9 @@ REPEAT:
 
    OUTPUT STREAM sLog CLOSE.
    fMove2TransDir(lcErrorLog, "", lcHRLPLogDir).
-   lcProcessedFile = fMove2TransDir(lcInputFile, "", lcHRLPProcDir).
-   IF SESSION:BATCH AND lcProcessedFile NE "" THEN
-      fBatchLog("FINISH", lcProcessedFile).
+   fMove2TransDir(lcInputFile, "", lcHRLPProcDir).
+   IF SESSION:BATCH AND lcInputFile NE "" THEN
+      fBatchLog("FINISH", lcInputFile).
 
    DO TRANS:
       FIND FIRST ActionLog WHERE
@@ -170,7 +170,7 @@ PROCEDURE pReadFileData:
    DEF VAR ldeCancelAmt AS DEC NO-UNDO.
    DEF VAR liCustNum AS INT NO-UNDO.
    DEF VAR liMsSeq AS INT NO-UNDO.
-   DEF VAR liMsisdn AS INT NO-UNDO.
+   DEF VAR lcMsisdn AS CHAR NO-UNDO.
    DEF VAR liPeriod AS INT NO-UNDO.
    DEF VAR lcPeriod AS char NO-UNDO.
    DEF VAR liLineNum AS INT NO-UNDO.
@@ -194,7 +194,7 @@ PROCEDURE pReadFileData:
 
       assign
          liCustNum = int(entry(1,lcline,";"))
-         liMsisdn = int(entry(2,lcline,";"))
+         lcMsisdn = entry(2,lcline,";")
          liPeriod = int(entry(3,lcline,";"))
          lcPeriod = entry(3,lcline,";")
          liYear = INT(SUBSTRING(lcPeriod,1,4))
@@ -202,7 +202,11 @@ PROCEDURE pReadFileData:
          ldaStartDate = DATE(liMonth, 1, liYear) - 1
          ldaEndDate = fLastDayOfMonth(ldaStartdate + 1).
       
-      IF fisPostpaidMobsubReleased(liMsSeq) THEN DO:
+      FIND FIRST MobSub NO-LOCK WHERE 
+                 MobSub.brand EQ "1" AND
+                 MobSub.Cli EQ lcMsisdn AND
+                 Mobsub.Paytype EQ FALSE NO-ERROR.
+      IF NOT AVAIL Mobsub THEN DO:
          /* log mobsub released */
          PUT STREAM sLog UNFORMATTED
             lcLine +  " Error released." SKIP.
