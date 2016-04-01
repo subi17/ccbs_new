@@ -132,9 +132,12 @@ INPUT STREAM sin CLOSE.
 
 PROCEDURE pMakeProdigyRequest:
    DEF INPUT PARAM iiMsSeq AS INT NO-UNDO.
+   DEF INPUT PARAM iiCustNum AS INT NO-UNDO.
    DEF INPUT-OUTPUT PARAM ocLine AS CHAR NO-UNDO.
    DEF VAR liReq AS INT NO-UNDO.
    DEF VAR lcError AS CHAR NO-UNDO.
+   DEF VAR lcMemoTitle AS CHAR NO-UNDO.
+   DEF VAR lcMemoText AS CHAR NO-UNDO.
 
    /* Create subrequests (set mandataory and orig request) */
    liReq = fServiceRequest (iiMsSeq,
@@ -157,8 +160,19 @@ PROCEDURE pMakeProdigyRequest:
       ocLine = ocLine + {&Q25_HRLP_DELIM} + "Error: ServiceRequest failure". 
       RETURN.
    END.
-   ocLine = ocLine + {&Q25_HRLP_DELIM} + "OK".
-
+   ELSE DO:
+      ocLine = ocLine + {&Q25_HRLP_DELIM} + "Activation success".
+      lcMemoTitle = "LP Riesgo Pago Final".
+      lcMemotext = "Redirección a LP Pago Final Riesgo activada".
+      DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
+                 "Mobsub",
+                 STRING(iiMsSeq),
+                 iiCustNum,
+                 lcMemoTitle,
+                 lcMemoText,
+                 "Service",  /* memo type */
+                 "IFS").     /* creator */
+   END.
 END.
 
 
@@ -271,10 +285,12 @@ PROCEDURE pReadFileData:
                "Error: Debr_LP barring status." SKIP.
             NEXT.
          END.
-         RUN pMakeProdigyRequest(liMsSeq, INPUT-OUTPUT lcLine).
-            PUT STREAM sLog UNFORMATTED
-               lcLine SKIP.
-            NEXT.
+         fMakeProdigyRequest(liMsSeq, liCustNum, 
+                             "REDIRECTION_HIGHRISKCUSTOMER_1",
+                             INPUT-OUTPUT lcLine).
+         PUT STREAM sLog UNFORMATTED
+            lcLine SKIP.
+         NEXT.
 
       END.
    END.

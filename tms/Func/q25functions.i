@@ -18,6 +18,8 @@
 {aes_encrypt.i}
 {fduedate.i}
 {ftransdir.i}
+{fmakemsreq.i}
+
 
 DEF VAR lcTestStartDay AS CHAR NO-UNDO.
 DEF VAR lcTestEndDay AS CHAR NO-UNDO.
@@ -912,4 +914,57 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
    fMove2TransDir(lcHRLPOutFile, "", lcHRLPOutDir).
 END FUNCTION.
 
+FUNCTION fMakeProdigyRequest RETURNS LOGICAL
+   (INPUT iiMsSeq   AS INT,
+    INPUT iiCustNum AS INT,
+    INPUT icCommand AS CHAR,
+    INPUT-OUTPUT ocLine AS CHAR):
+   DEF VAR liReq AS INT NO-UNDO.
+   DEF VAR lcError AS CHAR NO-UNDO.
+   DEF VAR lcMemoTitle AS CHAR NO-UNDO.
+   DEF VAR lcMemoText AS CHAR NO-UNDO.
+   DEF VAR lcResult AS CHAR NO-UNDO.   
+   /* Create subrequests (set mandataory and orig request) */
+   liReq = fServiceRequest (iiMsSeq,
+                            "LP",
+                            1,
+                            icCommand,
+                            fSecOffSet(fMakeTS(),5),
+                            "",                /* SalesMan */
+                            FALSE,             /* Set fees */
+                            FALSE,             /* SMS */
+                            "",
+                            "",
+                            0,
+                            FALSE,
+                            OUTPUT lcError).
+
+   /* Creation of subrequests failed, "fail" master request too */
+   IF liReq = 0 OR liReq = ? THEN DO:
+      fReqStatus(3,"ServiceRequest failure: " + lcError).
+      ocLine = ocLine + {&Q25_HRLP_DELIM} + "Error: ServiceRequest failure".
+      RETURN FALSE.
+   END.
+   ELSE DO:
+      ocLine = ocLine + {&Q25_HRLP_DELIM} + "Activation success".
+      lcMemoTitle = "LP Riesgo Pago Final".
+      IF icCommand BEGINS "REDIRECTION" THEN
+         lcMemotext = "Redirección a LP Pago Final Riesgo activada".
+      ELSE IF icCommand EQ "REMOVE" THEN
+         lcMemotext = "IFS elimina la LP Riesgo Pago Final sin que el " +
+                      "cliente la haya visto".
+      ELSE
+         lcMemotext = "Unknown redirection command". /* should not ever 
+                                                        come here */
+      DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
+                 "Mobsub",
+                 STRING(iiMsSeq),
+                 iiCustNum,
+                 lcMemoTitle,
+                 lcMemoText,
+                 "Service",  /* memo type */
+                 "IFS").     /* creator */
+   END.
+   RETURN TRUE.
+END.    
 

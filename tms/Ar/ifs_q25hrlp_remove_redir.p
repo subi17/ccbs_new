@@ -130,39 +130,6 @@ END.
 
 INPUT STREAM sin CLOSE.
 
-PROCEDURE pMakeProdigyRequest:
-   DEF INPUT PARAM iiMsSeq AS INT NO-UNDO.
-   DEF INPUT-OUTPUT PARAM ocLine AS CHAR NO-UNDO.
-   DEF VAR liReq AS INT NO-UNDO.
-   DEF VAR lcError AS CHAR NO-UNDO.
-
-   /* Create subrequests (set mandataory and orig request) */
-   liReq = fServiceRequest (iiMsSeq,
-                            "LP",
-                            1,
-                            "REMOVE",
-                            fSecOffSet(fMakeTS(),5),
-                            "",                /* SalesMan */
-                            FALSE,             /* Set fees */
-                            FALSE,             /* SMS */
-                            "",
-                            "",
-                            0,
-                            FALSE,
-                            OUTPUT lcError).
-
-   /* Creation of subrequests failed, "fail" master request too */
-   IF liReq = 0 OR liReq = ? THEN DO:
-      fReqStatus(3,"ServiceRequest failure: " + lcError).
-      ocLine = ocLine + {&Q25_HRLP_DELIM} + 
-               "Error: Remove serviceRequest failure". 
-      RETURN.
-   END.
-   ocLine = ocLine + {&Q25_HRLP_DELIM} + "Remove successfull".
-
-END.
-
-
 PROCEDURE pReadFileData:
 
    DEF VAR lcLine AS CHAR NO-UNDO.
@@ -244,10 +211,11 @@ PROCEDURE pReadFileData:
                " Error: Debr_LP barring status." SKIP.
             NEXT.
          END.
-         RUN pMakeProdigyRequest(liMsSeq, INPUT-OUTPUT lcLine).
-            PUT STREAM sLog UNFORMATTED
-               lcLine SKIP.
-            NEXT.
+         fMakeProdigyRequest(liMsSeq, liCustNum, "REMOVE", 
+         INPUT-OUTPUT lcLine).
+         PUT STREAM sLog UNFORMATTED
+            lcLine SKIP.
+         NEXT.
 
       END.
    END.
