@@ -116,9 +116,9 @@ lcRet = fCreateEntryI("HRLPTestLevel", /*param code*/
               {&Q25_HRLP_NO_TEST}). /*actual parameter value*/
 
 /*List of subscriptions accepted in test*/
-lcRet = fCreateEntryC("HRLPTestMSISDN", /*param code*/
+lcRet = fCreateEntryC("HRLPTestMSSeq", /*param code*/
               "HRLP",              /*param group*/
-              "Test MSISDN list",  /*param name*/ 
+              "Test MSSeq list",  /*param name*/ 
               ""). /*actual parameter value*/
 
 

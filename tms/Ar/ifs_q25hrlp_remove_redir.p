@@ -184,40 +184,48 @@ PROCEDURE pReadFileData:
      
       liMsSeq = Mobsub.MsSeq.
 
-      FIND FIRST SingleFee USE-INDEX BillCode WHERE
-                 SingleFee.Brand       EQ gcBrand AND
-                 SingleFee.CustNum     EQ liCustNum AND
-                 SingleFee.HostTable   EQ "Mobsub" AND
-                 SingleFee.Keyvalue    EQ STRING(Mobsub.msseq) AND
-                 SingleFee.BillPeriod  EQ liPeriod AND
-                 SingleFee.Billcode    BEGINS "RVTERM" AND
-                 SingleFee.SourceTable EQ "DCCLI" AND
-                 SingleFee.CalcObj     EQ "RVTERM" NO-LOCK NO-ERROR.
-      IF AVAIL SingleFee THEN DO:
-         IF SingleFee.OrderId <= 0 THEN NEXT.   
-
-         /* check barring statuses */
-         IF fGetBarringStatus("Debt_HOTLP", 
-                              liMsSeq) NE {&BARR_STATUS_INACTIVE} THEN DO:
-            PUT STREAM sLog UNFORMATTED
-               lcLine + {&Q25_HRLP_DELIM} +  
-               "Error: Debt_HOTLP barring status." SKIP.
-            NEXT.
-         END.
-         
-         IF fGetBarringStatus("Debt_LP", 
-                              liMsSeq) NE {&BARR_STATUS_INACTIVE} THEN DO:
-            PUT STREAM sLog UNFORMATTED
-               lcLine + {&Q25_HRLP_DELIM} + 
-               " Error: Debr_LP barring status." SKIP.
-            NEXT.
-         END.
-         fMakeProdigyRequest(liMsSeq, liCustNum, "REMOVE", 
-         INPUT-OUTPUT lcLine).
+      IF liHRLPTestLevel EQ {&Q25_HRLP_FULL_TEST} THEN DO:
+         fMakeProdigyRequest(liMsSeq, liCustNum, "REMOVE",
+                             INPUT-OUTPUT lcLine).
          PUT STREAM sLog UNFORMATTED
-            lcLine SKIP.
-         NEXT.
-
+            lcLine + " TEST" SKIP.
+      END.
+      ELSE DO:
+         FIND FIRST SingleFee USE-INDEX BillCode WHERE
+                    SingleFee.Brand       EQ gcBrand AND
+                    SingleFee.CustNum     EQ liCustNum AND
+                    SingleFee.HostTable   EQ "Mobsub" AND
+                    SingleFee.Keyvalue    EQ STRING(Mobsub.msseq) AND
+                    SingleFee.BillPeriod  EQ liPeriod AND
+                    SingleFee.Billcode    BEGINS "RVTERM" AND
+                    SingleFee.SourceTable EQ "DCCLI" AND
+                    SingleFee.CalcObj     EQ "RVTERM" NO-LOCK NO-ERROR.
+         IF AVAIL SingleFee THEN DO:
+            IF SingleFee.OrderId <= 0 THEN NEXT.   
+            IF (liHRLPTestLevel EQ {&Q25_HRLP_ONLY_PROV_TEST}) AND
+               (LOOKUP(STRING(liMsSeq),lcHRLPTestMSSeq,{&Q25_HRLP_DELIM}) EQ 0)
+               THEN NEXT.
+            /* check barring statuses */
+            IF fGetBarringStatus("Debt_HOTLP", 
+                                 liMsSeq) NE {&BARR_STATUS_INACTIVE} THEN DO:
+               PUT STREAM sLog UNFORMATTED
+                  lcLine + {&Q25_HRLP_DELIM} +  
+                  "Error: Debt_HOTLP barring status." SKIP.
+               NEXT.
+            END.
+            
+            IF fGetBarringStatus("Debt_LP", 
+                                 liMsSeq) NE {&BARR_STATUS_INACTIVE} THEN DO:
+               PUT STREAM sLog UNFORMATTED
+                  lcLine + {&Q25_HRLP_DELIM} + 
+                  " Error: Debr_LP barring status." SKIP.
+               NEXT.
+            END.
+            fMakeProdigyRequest(liMsSeq, liCustNum, "REMOVE", 
+            INPUT-OUTPUT lcLine).
+            PUT STREAM sLog UNFORMATTED
+               lcLine SKIP.
+         END.
       END.
    END.
 
