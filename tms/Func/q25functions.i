@@ -879,8 +879,8 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
       ldaEndDate = fLastDayOfMonth(TODAY)
       liPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
 
-   lcHRLPOutFile = lcHRLPSpoolDir + "IFS_Q25HR_ACTIVE_" +
-                   (SUBSTRING(STRING(fMakeTS()),1,8)) + ".DAT".
+   lcHRLPOutFile = lcHRLPSpoolDir + "IFS_Q25HR_UNIVERSE_" +
+                   REPLACE(STRING(fMakeTS()),".","_") +  ".DAT".
    IF liHRLPTestLevel EQ {&Q25_HRLP_FULL_TEST} THEN DO:
    /* Testing with non Q25 subscriber. Need to generate list file
       with hardcoded values so it looks like Q25 case */
