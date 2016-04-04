@@ -884,7 +884,7 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
    IF liHRLPTestLevel EQ {&Q25_HRLP_FULL_TEST} THEN DO:
    /* Testing with non Q25 subscriber. Need to generate list file
       with hardcoded values so it looks like Q25 case */
-      DO liLoop = 1 TO NUM-ENTRIES(lcHRLPTestMSSeq,{&Q25_HRLP_DELIM}): 
+      DO liLoop = 1 TO NUM-ENTRIES(lcHRLPTestMSSeq): 
          FIND FIRST MobSub NO-LOCK WHERE
                     Mobsub.MsSeq = INT(ENTRY(liLoop, lcHRLPTestMSSeq)) NO-ERROR.
          IF AVAIL MobSub THEN
@@ -910,7 +910,7 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
             liPerContrId = INT(SingleFee.sourcekey).
          /* If test ongoing, SKIP any other subscriptions that listed ones */
          IF (liHRLPTestLevel EQ {&Q25_HRLP_ONLY_PROV_TEST}) AND
-            (LOOKUP(STRING(liMsSeq),lcHRLPTestMSSeq,{&Q25_HRLP_DELIM}) EQ 0) 
+            (LOOKUP(STRING(liMsSeq),lcHRLPTestMSSeq) EQ 0) 
             THEN NEXT.
          IF fisPostpaidMobsubReleased(liMsSeq) THEN DO:
             lcLogText = "Q25 Mobsub not found or prepaid: " +

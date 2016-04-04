@@ -203,7 +203,7 @@ PROCEDURE pReadFileData:
          IF AVAIL SingleFee THEN DO:
             IF SingleFee.OrderId <= 0 THEN NEXT.   
             IF (liHRLPTestLevel EQ {&Q25_HRLP_ONLY_PROV_TEST}) AND
-               (LOOKUP(STRING(liMsSeq),lcHRLPTestMSSeq,{&Q25_HRLP_DELIM}) EQ 0)
+               (LOOKUP(STRING(liMsSeq),lcHRLPTestMSSeq) EQ 0)
                THEN NEXT.
             /* check barring statuses */
             IF fGetBarringStatus("Debt_HOTLP", 
