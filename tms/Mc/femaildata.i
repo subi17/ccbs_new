@@ -1804,6 +1804,7 @@ PROCEDURE pGetCTNAME:
       DEFINE VARIABLE ldiOrderDate AS INT  NO-UNDO.
       DEFINE VARIABLE llgOrderDate AS LOG  NO-UNDO.
       DEFINE VARIABLE lcMFText     AS CHAR No-UNDO.
+      DEFINE VARIABLE llgEmailText AS LOG  NO-UNDO. 
 
       llgOrderDate = fSplitTS(Order.CrStamp,
                               OUTPUT ldtOrderDate,
@@ -1860,24 +1861,39 @@ PROCEDURE pGetCTNAME:
                   DiscountPlan.DPRuleId = "BONO6WEBDISC" NO-ERROR.
 
        IF AVAIL DiscountPlan THEN DO:
+
+          llgEmailText = FALSE.
+           
           FIND FIRST DPMember WHERE
                      DPMember.DPId = DiscountPlan.DPId AND
                      DPMember.hosttable = "MobSub" AND
                      DPMember.keyValue = STRING(order.msseq)  AND
                      DPMember.validFrom <= ldtOrderDate AND
                      DPMember.validTo >= ldtOrderDate NO-LOCK NO-ERROR.
-          IF AVAIL DPMember THEN DO:          
-             lcMFText = lcMFText + "<br/>1 GB/mes gratis hasta dic. 2016".
-          END.
+          
+          IF AVAIL DPMember THEN    
+             llgEmailText = TRUE.   
           ELSE DO:
              FIND FIRST Orderaction NO-LOCK where
                         Orderaction.brand = gcBrand AND
                         orderaction.orderid = order.orderid AND
                         orderaction.itemtype = "discount" AND
                         orderaction.itemkey = STRING(DiscountPlan.DPID) NO-ERROR.
-              IF AVAIL orderaction THEN
-                lcMFText = lcMFText + "<br/>1 GB/mes gratis hasta dic. 2016". 
-          END.          
+              IF AVAIL orderaction THEN    
+                 llgEmailText = TRUE.
+          END.
+
+          IF llgEmailText THEN DO:
+             /* YDR-2160 */
+             /* There would be some orders created during x-mas campaign (YPR-3083)
+                are still exsisting in queue AND released now OR later, so email 
+                text for x-mas campaign orders has not be modified OR removed */
+             IF Order.CrStamp >= fCParamDe("AprilPromotionFromDate") AND
+                Order.CrStamp <= fCParamDe("AprilPromotionToDate")   THEN 
+                lcMFText = lcMFText + "<br/>1 GB/mes extra gratis durante 3 meses". /* YDR-2160 */
+             ELSE 
+                lcMFText = lcMFText + "<br/>1 GB/mes gratis hasta dic. 2016". /* YPR-3083 */
+          END.
        END.
     
        IF ldeMFWithTax > 0 THEN
