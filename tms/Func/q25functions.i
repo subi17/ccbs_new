@@ -900,7 +900,7 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
       lcHRLPDelim = {&Q25_HRLP_DELIM}.
       lcLogText = STRING(MobSub.CustNum) + lcHRLPDelim + /*Custnumber*/
                   STRING(Mobsub.CLI)     + lcHRLPDelim + /*MSISDN*/
-                  STRING(liPeriod)       + lcHRLPDelim + /*Q25 month*/
+                  STRING(DATE(ldaEndDate + 1)) + lcHRLPDelim + /*Q25 month*/
                   STRING(ldMonthlyFee)   + lcHRLPDelim + /*installment value*/
                   STRING(ldAmount)       + lcHRLPDelim + /*Q25 value*/
                   STRING(lcLPLink).                      /*LP Link*/
