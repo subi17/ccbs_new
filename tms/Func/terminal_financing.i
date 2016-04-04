@@ -118,8 +118,10 @@ FUNCTION fOrderContainsFinancedTerminal RETURNS CHAR
                         SingleFee.HostTable   = "MobSub" AND
                         SingleFee.KeyValue    = STRING(Order.MsSeq) AND
                         SingleFee.OrderId     = iiOrderId AND
-                        LOOKUP(SingleFee.BillCode,
-                               {&TF_BANK_RVTERM_BILLCODES}) > 0) THEN
+                        SingleFee.BillCode    = "RVTERM1EF") THEN
+                     /* YPR-3565 */
+                     /* LOOKUP(SingleFee.BillCode,
+                               {&TF_BANK_RVTERM_BILLCODES}) > 0) THEN */
          RETURN {&TF_STATUS_WAITING_SENDING}.
    END.
    ELSE IF icDCEvent BEGINS "PAYTERM" THEN DO:
