@@ -167,7 +167,7 @@ PROCEDURE pReadFileData:
                     MONTH(DATE(lcDate) - 1)
          liYear = YEAR(DATE(lcDate))
          liMonth = MONTH(DATE(lcDate))
-         ldaStartDate = DATE(liMonth, 1, liYear) - 1
+         ldaStartDate = DATE(liMonth - 1, 1, liYear) - 1
          ldaEndDate = DATE(lcDate).
       
       FIND FIRST MobSub NO-LOCK WHERE 
