@@ -28,7 +28,7 @@ DEF VAR lcAppEndUserId      AS CHAR NO-UNDO.
 
 DEF VAR top_struct      AS CHAR NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string!,string!,string!,string!,string!") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string,string,string,string") EQ ? THEN RETURN.
 
 ASSIGN pcTransId     = get_string(param_toplevel_id, "0")
        pcMSISDN      = get_string(param_toplevel_id,"1")
