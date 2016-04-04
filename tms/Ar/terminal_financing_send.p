@@ -223,6 +223,13 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
          lcFUC[1] = "332577626" 
          lcFUC[2] = "332577683".
    END.
+   /* YTS-8634 */
+   ELSE IF Order.Reseller EQ "" AND 
+           FixedFee.BillCode EQ "RVTERM" THEN DO:
+      ASSIGN
+         lcFUC[1] = "323841452" 
+         lcFUC[2] = "332296599".
+   END.
    /* indirect channels */
    ELSE IF LOOKUP(Order.Reseller,lcResellers) > 0 THEN DO:
 
@@ -418,12 +425,12 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    
    IF liFFItemCount NE FMItem.FFItemQty OR 
       (FixedFee.BillCode BEGINS "PAYTERM" AND
-       INT(ldeFFItemAmount) NE INT(fmitem.FFItemQty * fmitem.Amount)) THEN DO:
+       ROUND(ldeFFItemAmount,2) NE ROUND(fmitem.FFItemQty * fmitem.Amount,2)) THEN DO:
       FixedFee.FinancedResult = {&TF_STATUS_YOIGO_FF_CHANGED}.
       NEXT ORDER_LOOP.
    END.
 
-   ldeTotalAmount = ROUND(fmitem.FFItemQty * fmitem.Amount,2).
+   ldeTotalAmount = ROUND(ldeFFItemAmount,2).
 
    IF LENGTH(ttOrderCustomer.BankCode) EQ 24 THEN 
       lcBankCode = SUBSTRING(ttOrderCustomer.BankCode,5).

@@ -363,9 +363,19 @@ PROCEDURE pDiscountPlan:
                                        DiscountPlan.ValidPeriods)
          DPMember.DiscValue = DPRate.DiscValue.
    END.
-   IF DiscountPlan.dprule EQ "BONO6WEBDISC" THEN /* YPR-3083 */
-      DPMember.ValidTo = 12/31/16.
-
+   
+   IF DiscountPlan.dprule EQ "BONO6WEBDISC" THEN DO: /* YPR-3083 */
+      /* YDR-2160 */
+      /* There would be some orders created during x-mas campaign (YPR-3083)
+         are still exsisting in queue AND released now OR later, so validTo
+         for x-mas campaign orders has not be modified OR removed */
+      IF Order.CrStamp >= fCParamDe("AprilPromotionFromDate") AND 
+         Order.CrStamp <= fCParamDe("AprilPromotionToDate")   THEN 
+         DPMember.ValidTo = ADD-INTERVAL(MobSub.ActivationDate,3,"months"). /* YDR-2160 */
+      ELSE    
+         DPMember.ValidTo = 12/31/16. /* YPR-3083 */
+   END.
+   
    RETURN "".
 
 END PROCEDURE.
@@ -469,11 +479,12 @@ PROCEDURE pQ25Extension:
                                   TODAY,
                                   Customer.Language,
                                   OUTPUT ldeSMSStamp).
-         WHEN "RVTERMBSF" THEN
+         /* YPR-3565 */
+         /* WHEN "RVTERMBSF" THEN
             lcSMSTxt = fGetSMSTxt("Q25ExtensionSabadell",
                                   TODAY,
                                   Customer.Language,
-                                  OUTPUT ldeSMSStamp).
+                                  OUTPUT ldeSMSStamp). */
          OTHERWISE 
             lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
                                   TODAY,
