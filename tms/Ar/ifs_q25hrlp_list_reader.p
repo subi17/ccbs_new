@@ -139,7 +139,7 @@ PROCEDURE pReadFileData:
    DEF VAR liMsSeq AS INT NO-UNDO.
    DEF VAR lcMsisdn AS CHAR NO-UNDO.
    DEF VAR liPeriod AS INT NO-UNDO.
-   DEF VAR lcPeriod AS char NO-UNDO.
+   DEF VAR lcDate AS char NO-UNDO.
    DEF VAR liLineNum AS INT NO-UNDO.
    DEF VAR ldAmount AS DEC NO-UNDO.
    DEF VAR liMonth AS INT NO-UNDO.
@@ -162,12 +162,13 @@ PROCEDURE pReadFileData:
       assign
          liCustNum = int(entry(1,lcline,";"))
          lcMsisdn = entry(2,lcline,";")
-         liPeriod = int(entry(3,lcline,";"))
-         lcPeriod = entry(3,lcline,";")
-         liYear = INT(SUBSTRING(lcPeriod,1,4))
-         liMonth = INT(SUBSTRING(lcPeriod,5,2))
+         lcDate = entry(3,lcline,";")
+         liPeriod = YEAR(DATE(lcDate) - 1) * 100 +
+                    MONTH(DATE(lcDate) - 1)
+         liYear = YEAR(DATE(lcDate))
+         liMonth = MONTH(DATE(lcDate))
          ldaStartDate = DATE(liMonth, 1, liYear) - 1
-         ldaEndDate = fLastDayOfMonth(ldaStartdate + 1).
+         ldaEndDate = DATE(lcDate).
       
       FIND FIRST MobSub NO-LOCK WHERE 
                  MobSub.brand EQ "1" AND
