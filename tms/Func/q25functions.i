@@ -42,7 +42,7 @@ DEF VAR lcHRLPListInDir AS CHAR NO-UNDO.
 DEF VAR lcHrlpRemRedirDir AS CHAR NO-UNDO.
 DEF VAR lcHRLPLogDir AS CHAR NO-UNDO.
 DEF VAR lcHRLPSpoolDir AS CHAR NO-UNDO.
-DEF VAR lcHRLPProcDir AS CHAR NO-UNDO.
+DEF VAR lcHRLPInProcDir AS CHAR NO-UNDO.
 DEF VAR lcHRLPOutDir AS CHAR NO-UNDO.
 DEF VAR lcHRLPOutFile AS CHAR NO-UNDO.
 DEF VAR lcHRLPLogFile AS CHAR NO-UNDO.
@@ -797,7 +797,7 @@ FUNCTION fInitHRLPParameters RETURNS CHAR
       lcHrlpRemRedirDir = fCParam("HRLP","HrlpRemRedirDir")
       lcHRLPLogDir = fCParam("HRLP","HRLPLogDir")
       lcHRLPSpoolDir = fCParam("HRLP","HRLPSpoolDir")
-      lcHRLPProcDir = fCParam("HRLP","HRLPProcDir")
+      lcHRLPInProcDir = fCParam("HRLP","HRLPInProcDir")
       lcHRLPTestMSSeq = fCParam("HRLP","HRLPTestMSSeq")
       liHRLPTestLevel = fCParamI("HRLPTestLevel").
  

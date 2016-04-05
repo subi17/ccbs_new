@@ -113,15 +113,6 @@ lcRet = fCreateEntryC("HRLPInProcDir", /*param code*/
 if LcRet NE "" THEN
    MESSAGE lcRet VIEW-AS ALERT-BOX.
 
-/*Directory for processed out HRLP files*/
-lcRet = fCreateEntryC("HRLPOutProcDir", /*param code*/
-              "HRLP",              /*param group*/
-              "Dir for processed HRLP files",  /*param name*/
-              "/store/riftp/dumpfiles/hrilp/outgoing/processed/"). /*actual parameter value*/
-
-if LcRet NE "" THEN
-   MESSAGE lcRet VIEW-AS ALERT-BOX.
-
 /* lcLandingpageLink */
 lcRet = fCreateEntryC("HRLPLandingpage", /*param code*/
               "HRLP",              /*param group*/

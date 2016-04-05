@@ -108,7 +108,7 @@ REPEAT:
 
    OUTPUT STREAM sLog CLOSE.
    fMove2TransDir(lcErrorLog, "", lcHRLPLogDir).
-   fMove2TransDir(lcInputFile, "", lcHRLPProcDir).
+   fMove2TransDir(lcInputFile, "", lcHRLPInProcDir).
    IF SESSION:BATCH AND lcInputFile NE "" THEN
       fBatchLog("FINISH", lcInputFile).
 END.
