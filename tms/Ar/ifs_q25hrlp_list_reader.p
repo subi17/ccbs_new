@@ -258,6 +258,9 @@ PROCEDURE pReadFileData:
             PUT STREAM sLog UNFORMATTED
                lcLine SKIP.
          END.
+         ELSE
+            PUT STREAM sLog UNFORMATTED
+               lcLine + {&Q25_HRLP_DELIM} + "No Q25 Fee found" SKIP.
       END.
    END.
 
