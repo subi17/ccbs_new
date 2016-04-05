@@ -182,7 +182,8 @@ PROCEDURE pReadFileData:
       END.
      
       liMsSeq = Mobsub.MsSeq.
-      IF liHRLPTestLevel EQ {&Q25_HRLP_FULL_TEST} THEN DO:
+      IF (liHRLPTestLevel EQ {&Q25_HRLP_FULL_TEST} AND 
+         LOOKUP(STRING(liMsSeq),lcHRLPTestMSSeq) GT 0) THEN DO:
          fMakeProdigyRequest(liMsSeq, liCustNum, 
                              "REDIRECTION_HIGHRISKCUSTOMER_1",
                              INPUT-OUTPUT lcLine).
@@ -202,8 +203,11 @@ PROCEDURE pReadFileData:
          IF AVAIL SingleFee THEN DO:
             IF SingleFee.OrderId <= 0 THEN NEXT.   
             IF (liHRLPTestLevel EQ {&Q25_HRLP_ONLY_PROV_TEST}) AND
-               (LOOKUP(STRING(liMsSeq),lcHRLPTestMSSeq) EQ 0)
-               THEN NEXT. 
+               (LOOKUP(STRING(liMsSeq),lcHRLPTestMSSeq) EQ 0) THEN DO:
+               MESSAGE "MsSeq is not in test list: " + STRING(liMsSeq) VIEW-AS 
+                       ALERT-BOX.
+               QUIT.
+            END.
             IF fisQ25ExtensionDone(liMsSeq, 0, ldAmount) THEN DO:
                /* log extension done */
                PUT STREAM sLog UNFORMATTED

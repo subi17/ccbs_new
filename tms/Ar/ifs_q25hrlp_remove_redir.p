@@ -184,7 +184,8 @@ PROCEDURE pReadFileData:
      
       liMsSeq = Mobsub.MsSeq.
 
-      IF liHRLPTestLevel EQ {&Q25_HRLP_FULL_TEST} THEN DO:
+      IF (liHRLPTestLevel EQ {&Q25_HRLP_FULL_TEST} AND 
+      LOOKUP(STRING(liMsSeq),lcHRLPTestMSSeq) GT 0) THEN DO:
          fMakeProdigyRequest(liMsSeq, liCustNum, "REMOVE",
                              INPUT-OUTPUT lcLine).
          PUT STREAM sLog UNFORMATTED
@@ -203,8 +204,11 @@ PROCEDURE pReadFileData:
          IF AVAIL SingleFee THEN DO:
             IF SingleFee.OrderId <= 0 THEN NEXT.   
             IF (liHRLPTestLevel EQ {&Q25_HRLP_ONLY_PROV_TEST}) AND
-               (LOOKUP(STRING(liMsSeq),lcHRLPTestMSSeq) EQ 0)
-               THEN NEXT.
+               (LOOKUP(STRING(liMsSeq),lcHRLPTestMSSeq) EQ 0) THEN DO:
+               MESSAGE "MsSeq is not in test list: " + STRING(liMsSeq) VIEW-AS
+                       ALERT-BOX.
+               QUIT.
+            END.
             /* check barring statuses */
             IF fGetBarringStatus("Debt_HOTLP", 
                                  liMsSeq) NE {&BARR_STATUS_INACTIVE} THEN DO:
