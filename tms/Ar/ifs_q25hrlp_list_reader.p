@@ -35,6 +35,8 @@ ASSIGN
    lcActionID = {&Q25_HRLP_RESP_READER}
    ldCurrentTimeTS = fMakeTS().
 
+fInitHRLPParameters().
+
 DO TRANS:
 
    FIND FIRST ActionLog WHERE
@@ -60,7 +62,7 @@ DO TRANS:
       RELEASE ActionLog.
       RETURN. /*No reporting in first time.*/
    END.
-   ELSE DO:
+   ELSE IF (liHRLPTestLevel EQ {&Q25_HRLP_NO_TEST}) THEN DO:
       ASSIGN
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
          ActionLog.UserCode     = katun
@@ -71,9 +73,6 @@ DO TRANS:
 END.
 
 /*File handling logic starts*/
-
-fInitHRLPParameters().
-
 /* File reading and parsing */
 INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcHRLPListInDir).
 REPEAT:
