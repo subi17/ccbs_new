@@ -10,7 +10,6 @@ THEN RETURN.
 {triggers/mservicelimit.i}
 
 IF NOT fCheckHPDStatus(MServiceLimit.MsSeq,
-                       MServiceLimit.SlSeq,
                        MServiceLimit.CustNum)
 THEN RETURN.
 
