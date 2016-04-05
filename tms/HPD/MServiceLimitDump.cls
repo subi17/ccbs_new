@@ -75,6 +75,18 @@ CLASS HPD.MServiceLimitDump FINAL INHERITS DumpHandler:
    END METHOD.
 
 
+   METHOD PRIVATE mCheckHPDStatus LOGICAL
+      (iiMSSeq AS INTEGER,
+       iiCustNum AS INTEGER):
+
+      IF iiCustNum > 0
+      THEN RETURN CAN-FIND(FIRST Customer NO-LOCK WHERE Customer.CustNum = iiCustNum).
+
+      RETURN CAN-FIND(FIRST MobSub NO-LOCK WHERE MobSub.MsSeq = iiMsSeq).
+
+   END METHOD.
+
+
    METHOD PRIVATE VOID mProcessFullDump
       (INPUT objDumpFile AS CLASS DumpFile):
 
@@ -103,15 +115,7 @@ CLASS HPD.MServiceLimitDump FINAL INHERITS DumpHandler:
          IF lbMServiceLimit.EndTS < ldeEndStamp
          THEN NEXT.
 
-         IF NOT CAN-FIND(FIRST MobSub NO-LOCK WHERE MobSub.MsSeq = lbMServiceLimit.MsSeq)
-         THEN NEXT.
-
-         IF lcGroupCode BEGINS "DSS" AND
-            ( lbMServiceLimit.CustNum = 0 OR lbMServiceLimit.CustNum = ? OR  
-              NOT CAN-FIND(FIRST Customer NO-LOCK WHERE Customer.CustNum = lbMServiceLimit.CustNum) )
-         THEN NEXT.
-         
-         ELSE IF lbMServiceLimit.CustNum > 0
+         IF NOT mCheckHPDStatus(lbMServiceLimit.MsSeq, lbMServiceLimit.CustNum)
          THEN NEXT.
          
          liEvents = liEvents + 1.

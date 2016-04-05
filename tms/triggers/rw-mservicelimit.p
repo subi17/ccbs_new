@@ -10,7 +10,6 @@ DEFINE VARIABLE llShouldBeOnHPD   AS LOGICAL INITIAL FALSE NO-UNDO.
 DEFINE VARIABLE llWasOnHPD        AS LOGICAL INITIAL FALSE NO-UNDO.
 
 llShouldBeOnHPD = fCheckHPDStatus(MServiceLimit.MsSeq,
-                                  MServiceLimit.SlSeq,
                                   MServiceLimit.CustNum).
 
 IF NEW(MServiceLimit) AND llShouldBeOnHPD = FALSE
@@ -18,10 +17,8 @@ THEN RETURN.
 
 IF NOT NEW(MServiceLimit) AND
    (MServiceLimit.MsSeq   <> oldMServiceLimit.MsSeq OR
-    MServiceLimit.SlSeq   <> oldMServiceLimit.SlSeq OR
     MServiceLimit.CustNum <> oldMServiceLimit.CustNum)
 THEN llWasOnHPD = fCheckHPDStatus(oldMServiceLimit.MsSeq,
-                                  oldMServiceLimit.SlSeq,
                                   oldMServiceLimit.CustNum).
 ELSE llWasOnHPD = llShouldBeOnHPD.
 
