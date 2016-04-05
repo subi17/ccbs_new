@@ -99,7 +99,7 @@ if LcRet NE "" THEN
 lcRet = fCreateEntryC("HRLPLogDir", /*param code*/
               "HRLP",              /*param group*/
               "Dir for HRLP related logs",  /*param name*/ 
-              "/store/riftp/dumpfiles/hrilp/log/"). /*actual parameter value*/
+              "/store/riftp/dumpfiles/hrilp/logs/"). /*actual parameter value*/
 
 if LcRet NE "" THEN
    MESSAGE lcRet VIEW-AS ALERT-BOX.
