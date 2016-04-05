@@ -288,6 +288,10 @@ PROCEDURE pPeriodicalContract:
    
    /* termination */
    WHEN 2 OR WHEN 11 THEN DO:
+      
+      /* YTS-8673 */
+      IF RequestAction.ReqType = 46 AND
+         ttAction.ActionKey = "RVTERM12" THEN RETURN.
 
       fSplitTS(idTermStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
       
