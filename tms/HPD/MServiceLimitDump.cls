@@ -75,7 +75,7 @@ CLASS HPD.MServiceLimitDump FINAL INHERITS DumpHandler:
    END METHOD.
 
 
-   METHOD PRIVATE mCheckHPDStatus LOGICAL
+   METHOD PRIVATE LOGICAL mCheckHPDStatus
       (iiMSSeq AS INTEGER,
        iiCustNum AS INTEGER):
 
