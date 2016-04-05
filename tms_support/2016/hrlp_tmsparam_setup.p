@@ -64,11 +64,14 @@ lcRet = fCreateEntryC("HRLPSpoolDir", /*param code*/
               "Spool ir for HRLP file",  /*param name*/ 
               "/store/riftp/dumpfiles/hrilp/spool/"). /*actual parameter value*/
 
+if LcRet NE "" THEN
+   MESSAGE lcRet VIEW-AS ALERT-BOX.
+
 /*Directory for outgoing*/
 lcRet = fCreateEntryC("HRLPOutDir", /*param code*/
               "HRLP",              /*param group*/
               "Dir for outgoing HRLP file",  /*param name*/ 
-              "/store/riftp/dumpfiles/hrilp/outgoing/"). /*actual parameter value*/
+              "/store/riftp/dumpfiles/hrilp/outgoing/outgoing/"). /*actual parameter value*/
 
 
 if LcRet NE "" THEN 
@@ -78,7 +81,7 @@ if LcRet NE "" THEN
 lcRet = fCreateEntryC("HRLPListInDir", /*param code*/
               "HRLP",              /*param group*/
               "Dir for incoming HRLP file",  /*param name*/
-              "/store/riftp/dumpfiles/hrilp/incoming/"). /*actual parameter value*/
+              "/store/riftp/dumpfiles/hrilp/incoming/incoming/"). /*actual parameter value*/
 
 if LcRet NE "" THEN
    MESSAGE lcRet VIEW-AS ALERT-BOX.
@@ -87,7 +90,7 @@ if LcRet NE "" THEN
 lcRet = fCreateEntryC("HrlpRemRedirDir", /*param code*/
               "HRLP",              /*param group*/
               "Dir for HRLP redir removal file",  /*param name*/
-              "/store/riftp/dumpfiles/hrilp/incoming/"). /*actual parameter value*/
+              "/store/riftp/dumpfiles/hrilp/incoming/incoming/"). /*actual parameter value*/
 
 if LcRet NE "" THEN
    MESSAGE lcRet VIEW-AS ALERT-BOX.
@@ -98,16 +101,35 @@ lcRet = fCreateEntryC("HRLPLogDir", /*param code*/
               "Dir for HRLP related logs",  /*param name*/ 
               "/store/riftp/dumpfiles/hrilp/log/"). /*actual parameter value*/
 
-/*Directory for processed HRLP files*/
-lcRet = fCreateEntryC("HRLPProcDir", /*param code*/
+if LcRet NE "" THEN
+   MESSAGE lcRet VIEW-AS ALERT-BOX.
+
+/*Directory for processed in HRLP files*/
+lcRet = fCreateEntryC("HRLPInProcDir", /*param code*/
               "HRLP",              /*param group*/
               "Dir for processed HRLP files",  /*param name*/ 
-              "/store/riftp/dumpfiles/hrilp/processed/"). /*actual parameter value*/
+              "/store/riftp/dumpfiles/hrilp/incoming/processed/"). /*actual parameter value*/
+
+if LcRet NE "" THEN
+   MESSAGE lcRet VIEW-AS ALERT-BOX.
+
+/*Directory for processed out HRLP files*/
+lcRet = fCreateEntryC("HRLPOutProcDir", /*param code*/
+              "HRLP",              /*param group*/
+              "Dir for processed HRLP files",  /*param name*/
+              "/store/riftp/dumpfiles/hrilp/outgoing/processed/"). /*actual parameter value*/
+
+if LcRet NE "" THEN
+   MESSAGE lcRet VIEW-AS ALERT-BOX.
+
 /* lcLandingpageLink */
 lcRet = fCreateEntryC("HRLPLandingpage", /*param code*/
               "HRLP",              /*param group*/
               "Link to HR landing page",  /*param name*/
-              "yoigo.com/#MSISDN"). /*actual parameter value*/
+              "https://pago-final.yoigo.com/?msisdn=#MSISDN"). /*actual parameter value*/
+
+if LcRet NE "" THEN
+   MESSAGE lcRet VIEW-AS ALERT-BOX.
 
 
 lcRet = fCreateEntryI("HRLPTestLevel", /*param code*/
@@ -115,13 +137,14 @@ lcRet = fCreateEntryI("HRLPTestLevel", /*param code*/
               "HRLP feature test level",  /*param name*/ 
               {&Q25_HRLP_NO_TEST}). /*actual parameter value*/
 
+if LcRet NE "" THEN
+   MESSAGE lcRet VIEW-AS ALERT-BOX.
+
 /*List of subscriptions accepted in test*/
 lcRet = fCreateEntryC("HRLPTestMSSeq", /*param code*/
               "HRLP",              /*param group*/
               "Test MSSeq list",  /*param name*/ 
               ""). /*actual parameter value*/
-
-
 
 if LcRet NE "" THEN 
    MESSAGE lcRet VIEW-AS ALERT-BOX .
