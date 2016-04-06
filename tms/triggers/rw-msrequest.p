@@ -14,8 +14,8 @@ ELSE DO:
 
    IF NOT llResult
    THEN ASSIGN
-           llSameValues = fCreateMsReqCounter(Oldbuf.ReqType, Oldbuf.ReqStatus, -1)
-           llSameValues = fCreateMsReqCounter(MsRequest.ReqType, MsRequest.ReqStatus, 1)
+           llResult = fCreateMsReqCounter(Oldbuf.ReqType, Oldbuf.ReqStatus, -1)
+           llResult = fCreateMsReqCounter(MsRequest.ReqType, MsRequest.ReqStatus, 1)
            .
 END.
 
