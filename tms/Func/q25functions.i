@@ -17,6 +17,9 @@
 {smsmessage.i}
 {aes_encrypt.i}
 {fduedate.i}
+{ftransdir.i}
+{fmakemsreq.i}
+
 
 DEF VAR lcTestStartDay AS CHAR NO-UNDO.
 DEF VAR lcTestEndDay AS CHAR NO-UNDO.
@@ -34,16 +37,33 @@ DEF VAR liReturnedDevices AS INT NO-UNDO.
 DEF VAR liQ25DoneCount    AS INT NO-UNDO.
 DEF VAR liPendingReq      AS INT NO-UNDO.
 DEF VAR lcSendingEndTime AS CHAR NO-UNDO.
+DEF VAR lclcHRLPOutDir AS CHAR NO-UNDO.
+DEF VAR lcHRLPListInDir AS CHAR NO-UNDO.
+DEF VAR lcHrlpRemRedirDir AS CHAR NO-UNDO.
+DEF VAR lcHRLPLogDir AS CHAR NO-UNDO.
+DEF VAR lcHRLPSpoolDir AS CHAR NO-UNDO.
+DEF VAR lcHRLPInProcDir AS CHAR NO-UNDO.
+DEF VAR lcHRLPOutDir AS CHAR NO-UNDO.
+DEF VAR lcHRLPOutFile AS CHAR NO-UNDO.
+DEF VAR lcHRLPLogFile AS CHAR NO-UNDO.
+DEF VAR lcHRLPRemRedirDirDir AS CHAR NO-UNDO.
+DEF VAR lcHRLPTestMSSeq AS CHAR NO-UNDO. /*List of numbers accepted in test*/
+DEF VAR liHRLPTestLevel AS INT NO-UNDO.
+DEF VAR lcLandingPageLink AS CHAR NO-UNDO.
+DEF VAR lcPassPhrase AS CHAR NO-UNDO.
 
 DEF STREAM Sout.
+DEF STREAM SHRLP.
 
 ASSIGN liQ25Logging = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg, 
                                                      2 = count, 3 = all */
        lcQ25LogDir     = fCParam("Q25","Q25ReminderLogDir")
        lcQ25SpoolDir   = fCParam("Q25","Q25ReminderLogSpoolDir")
        lcQ25DWHLogDir  = fCParam("Q25","Q25DWHLogDir")
-       lcSendingEndTime = fCParam("Q25","Q25SendingEndTime").
-                  
+       lcSendingEndTime = fCParam("Q25","Q25SendingEndTime")
+       lcPassPhrase = fCParam("Q25","Q25PassPhrase").
+
+IF lcPassPhrase = "" OR lcPassPhrase = ? THEN lcPassPhrase = {&Q25_PASSPHRASE}.
 IF lcQ25LogDir = "" OR lcQ25LogDir = ? THEN lcQ25LogDir = "/tmp/".
 IF lcQ25SpoolDir = "" OR lcQ25SpoolDir = ? THEN lcQ25SpoolDir = "/tmp/".
 
@@ -189,7 +209,6 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    DEF VAR lcSMSMessage      AS CHAR NO-UNDO.
    DEF VAR ldReqStamp        AS DEC  NO-UNDO.
    DEF VAR lcEncryptedMSISDN AS CHAR NO-UNDO.
-   DEF VAR lcPassPhrase      AS CHAR NO-UNDO.
    DEF VAR lcAmount          AS CHAR NO-UNDO.
    
    ASSIGN
@@ -229,10 +248,6 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
    END.
    IF iiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO:
    /* Month 22-24 */
-      /* Encrypted MSISDN added to messages sent during 22 to 24 month */
-      lcPassPhrase = fCParam("Q25","Q25PassPhrase").
-      IF lcPassPhrase = "" OR lcPassPhrase = ? THEN 
-         lcPassPhrase = {&Q25_PASSPHRASE}.
       ASSIGN
          lcEncryptedMSISDN = encrypt_data(icCli,
                              {&ENCRYPTION_METHOD}, lcPassPhrase)
@@ -262,6 +277,32 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
          RETURN TRUE.
       END.
       ELSE RETURN TRUE. /* no other than cust logs needed at this phase */
+   END.
+   ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_HRLP_UNIV} THEN DO:
+      lcHRLPLogFile = lcHRLPSpoolDir + "IFS_Q25HR_UNIVERSE_" + 
+                      (SUBSTRING(STRING(fMakeTS()),1,8)) + ".LOG".
+      OUTPUT STREAM Sout TO VALUE(lcHRLPLogFile) APPEND.
+      PUT STREAM Sout UNFORMATTED
+         icLogText SKIP.
+      OUTPUT STREAM Sout CLOSE.
+
+   END.
+   ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_HRLP_ACT} THEN DO:
+      lcHRLPLogFile = lcHRLPSpoolDir + "IFS_Q25HR_ACTIVE_" + 
+                      (SUBSTRING(STRING(fMakeTS()),1,8)) + ".LOG".
+      OUTPUT STREAM Sout TO VALUE(lcHRLPLogFile) APPEND.
+      PUT STREAM Sout UNFORMATTED
+         icLogText SKIP.
+      OUTPUT STREAM Sout CLOSE.
+
+   END.
+   ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_HRLP_REL} THEN DO:
+      lcHRLPLogFile = lcHRLPSpoolDir + "IFS_Q25HR_RELEASE_" + 
+                      (SUBSTRING(STRING(fMakeTS()),1,8)) + ".LOG".
+      OUTPUT STREAM Sout TO VALUE(lcHRLPLogFile) APPEND.
+      PUT STREAM Sout UNFORMATTED
+         icLogText SKIP.
+      OUTPUT STREAM Sout CLOSE.
    END.
    ELSE DO:
       /* Own internal log writings */
@@ -311,7 +352,7 @@ FUNCTION fgetTemplateName RETURN CHARACTER
       RETURN "Error: Q25_Phase".
 END.
 
-FUNCTION isPostpaidMobsubReleased RETURNS LOGICAL
+FUNCTION fisPostpaidMobsubReleased RETURNS LOGICAL
    (INPUT iiMsSeq AS INT):
    FIND FIRST Mobsub NO-LOCK WHERE
               Mobsub.MsSeq = iiMsSeq AND
@@ -321,7 +362,7 @@ FUNCTION isPostpaidMobsubReleased RETURNS LOGICAL
       RETURN FALSE.
 END.
 
-FUNCTION isSingleFeeBilled RETURNS LOGICAL
+FUNCTION fisSingleFeeBilled RETURNS LOGICAL
    ():
    IF SingleFee.Billed AND
       NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
@@ -331,7 +372,7 @@ FUNCTION isSingleFeeBilled RETURNS LOGICAL
       RETURN FALSE.
 END.
 
-FUNCTION isQ25TerminalReturned RETURNS LOGICAL
+FUNCTION fisQ25TerminalReturned RETURNS LOGICAL
    (INPUT iiOrderId AS INT):
    FIND FIRST TermReturn WHERE
               TermReturn.OrderId EQ iiOrderId NO-LOCK NO-ERROR.
@@ -346,7 +387,7 @@ FUNCTION isQ25TerminalReturned RETURNS LOGICAL
       RETURN FALSE.
 END.
 
-FUNCTION isQ25ExtensionDone RETURNS LOGICAL
+FUNCTION fisQ25ExtensionDone RETURNS LOGICAL
    (INPUT iiMsSeq AS INT,
     INPUT iiphase AS INT,
     INPUT-OUTPUT odAmount AS DEC):
@@ -371,7 +412,7 @@ FUNCTION isQ25ExtensionDone RETURNS LOGICAL
    RETURN FALSE.
 END.
 
-FUNCTION isQ25PendingRequest RETURNS LOGICAL
+FUNCTION fisQ25PendingRequest RETURNS LOGICAL
    (INPUT iiMsSeq AS INT,
     INPUT iireqType AS INT):
    DEF VAR liLoop AS INT.
@@ -386,7 +427,7 @@ FUNCTION isQ25PendingRequest RETURNS LOGICAL
    RETURN FALSE.
 END.
 
-FUNCTION isQ25RenewalDone RETURNS LOGICAL
+FUNCTION fisQ25RenewalDone RETURNS LOGICAL
    (INPUT iiMsSeq AS INT,
     INPUT idaFromDate AS DATE):
    DEF VAR ldaMonth22Date AS DATE NO-UNDO.
@@ -403,7 +444,7 @@ FUNCTION isQ25RenewalDone RETURNS LOGICAL
    RETURN FALSE.
 END.
 
-FUNCTION isQ25PerContractEnded RETURNS LOGICAL
+FUNCTION fisQ25PerContractEnded RETURNS LOGICAL
    (INPUT iiPercontrId AS INT,
     INPUT iiMsseq AS INT,
     INPUT iiOrderId AS INT,
@@ -433,7 +474,7 @@ FUNCTION isQ25PerContractEnded RETURNS LOGICAL
       RETURN TRUE.
    END.
    ELSE DO:
-      IF isQ25TerminalReturned(iiOrderId) THEN DO:
+      IF fisQ25TerminalReturned(iiOrderId) THEN DO:
          ASSIGN liReturnedDevices = liReturnedDevices + 1
                 ocLogText = "Q25 Device returned " +
                 STRING(DCCLI.MsSeq) + "|" +
@@ -441,7 +482,7 @@ FUNCTION isQ25PerContractEnded RETURNS LOGICAL
          RETURN TRUE.
       END.
 
-      IF isQ25ExtensionDone(iiMsSeq, oiPhase, idAmount) THEN DO:
+      IF fisQ25ExtensionDone(iiMsSeq, oiPhase, idAmount) THEN DO:
          /* Q25 Extension already active */
          /* IF oiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO: */
          /* Q25 month 22-24 */
@@ -458,7 +499,7 @@ FUNCTION isQ25PerContractEnded RETURNS LOGICAL
                extension. Send message with final payment / 12. */
          /*   oiPhase = {&Q25_MONTH_24_CHOSEN}. removed YPR-3609 */
       END.
-      ELSE IF isQ25RenewalDone(iiMsSeq, DCCLI.ValidFrom) THEN DO: 
+      ELSE IF fisQ25RenewalDone(iiMsSeq, DCCLI.ValidFrom) THEN DO: 
       /* Renewal / Renuvo done */
          ocLogText = "Q25 Renewal done: " +
                      STRING(oiPhase) + "|" + STRING(DCCLI.CLI) + "|" +
@@ -466,7 +507,7 @@ FUNCTION isQ25PerContractEnded RETURNS LOGICAL
                      STRING(idAmount).
          RETURN TRUE.
       END.
-      ELSE IF isQ25PendingRequest(iiMsSeq, {&REQTYPE_CONTRACT_ACTIVATION})
+      ELSE IF fisQ25PendingRequest(iiMsSeq, {&REQTYPE_CONTRACT_ACTIVATION})
       THEN DO:
          /* Pending/ongoing Q25 request */
          ASSIGN
@@ -535,7 +576,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          ldAmount = SingleFee.amt
          liMsseq = INT(SingleFee.KeyValue)
          liPerContrId = INT(SingleFee.sourcekey).
-      IF isPostpaidMobsubReleased(liMsSeq) THEN DO:
+      IF fisPostpaidMobsubReleased(liMsSeq) THEN DO:
          lcLogText = "Q25 Mobsub not found or prepaid: " +
                      STRING(liPhase) + "|" + STRING(liMsSeq) 
                      + "|" + STRING(ldAmount).
@@ -543,7 +584,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                         iiExecType).
          NEXT.
       END.
-      IF isSingleFeeBilled() THEN DO:
+      IF fisSingleFeeBilled() THEN DO:
          ASSIGN
             liBilledCount = liBilledCount + 1
             lcLogText = "Q25 Residual fee Billed: " +
@@ -576,7 +617,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          NEXT.
       END.
 
-      IF isQ25PerContractEnded(liPerContrId, liMsSeq, SingleFee.orderid, 
+      IF fisQ25PerContractEnded(liPerContrId, liMsSeq, SingleFee.orderid, 
                                idaStartDate, idaEndDate, ldAmount, liPhase, 
                                lcLogText) THEN DO:
          IF lcLogText > "" THEN
@@ -729,9 +770,9 @@ FUNCTION getQ25phase RETURNS INT
             ldaStartDate = DATE(MONTH(ADD-INTERVAL(TODAY, liLoop, 'months':U)),
                            1,YEAR(TODAY)) - 1
             ldaEndDate = fLastDayOfMonth(ldaStartDate + 1).
-         IF isPostpaidMobsubReleased(iiMsSeq) OR
-            isSingleFeeBilled() OR
-            isQ25PerContractEnded(INT(SingleFee.sourcekey), iiMsSeq,
+         IF fisPostpaidMobsubReleased(iiMsSeq) OR
+            fisSingleFeeBilled() OR
+            fisQ25PerContractEnded(INT(SingleFee.sourcekey), iiMsSeq,
                                   SingleFee.orderid, ldaStartDate,
                                   ldaEndDate, ldAmount, liPhase,
                                   lcLogText) THEN 
@@ -742,3 +783,220 @@ FUNCTION getQ25phase RETURNS INT
    END.
    RETURN {&Q25_NOT_ACTION_PHASE}. /* Not Q25 phase M22-M24 customer */
 END.
+
+/*Function makes HRLP parametr initializations.
+This must be called in programs that are handling HRLP related data.*/
+FUNCTION fInitHRLPParameters RETURNS CHAR
+   ():
+   ASSIGN
+
+      lcLandingPageLink = fCParam("HRLP","HRLPLandingpage")
+      lcPassPhrase = fCParam("Q25","Q25PassPhrase")
+      lcHRLPOutDir = fCParam("HRLP","HRLPOutDir")
+      lcHRLPListInDir = fCParam("HRLP","HRLPListInDir")
+      lcHrlpRemRedirDir = fCParam("HRLP","HrlpRemRedirDir")
+      lcHRLPLogDir = fCParam("HRLP","HRLPLogDir")
+      lcHRLPSpoolDir = fCParam("HRLP","HRLPSpoolDir")
+      lcHRLPInProcDir = fCParam("HRLP","HRLPInProcDir")
+      lcHRLPTestMSSeq = fCParam("HRLP","HRLPTestMSSeq")
+      liHRLPTestLevel = fCParamI("HRLPTestLevel").
+ 
+   IF lcHRLPOutDir EQ "" OR lcHRLPOutDir EQ ? THEN lcHRLPOutDir = "/tmp/".
+   IF lcHRLPListInDir EQ "" OR lcHRLPListInDir EQ ? THEN lcHRLPlistInDir = "/tmp/".
+  IF lcHRLPRemRedirDirDir EQ "" OR lcHRLPRemRedirDirDir EQ ? THEN
+    lcHRLPRemRedirDirDir = "/tmp/".
+   IF lcHRLPLogDir EQ "" OR lcHRLPLogDir EQ ? THEN lcHRLPLogDir = "/tmp/".
+
+
+END.   
+
+FUNCTION fGetMonthlyFee RETURNS DECIMAL
+   (iiPerContractId AS INT,
+    iiMsSeq AS INT):
+         FIND FIRST FixedFee WHERE
+                    FixedFee.Brand EQ gcBrand AND
+                    FixedFee.HostTable EQ "MobSub" AND
+                    FixedFee.KeyValue EQ STRING(iiMsseq) AND
+                    FixedFee.SourceTable EQ "DCCLI" AND
+                    FixedFee.SourceKey EQ STRING(iiPerContractID) AND
+                    FixedFee.BillCode BEGINS "PAYTERM"
+                    NO-LOCK NO-ERROR.
+         IF AVAIL FixedFee THEN RETURN FixedFee.amt.
+   RETURN -1.
+END.
+
+FUNCTION fWriteIFSData RETURNS LOGICAL
+   (INPUT icCli AS CHAR,
+    INPUT iiCustNum AS INT,
+    INPUT idaQ25Date AS DATE,
+    INPUT idMonthlyFee AS DEC,
+    INPUT idQ25Amount AS DEC):
+   DEF VAR lcHRLPDelim AS CHAR NO-UNDO.
+   DEF VAR lcLogText AS CHAR NO-UNDO.
+   DEF VAR lcEncryptedMSISDN AS CHAR NO-UNDO.
+   DEF VAR lcLPLink AS CHAR NO-UNDO.
+   ASSIGN
+      lcEncryptedMSISDN = encrypt_data(MobSub.CLI,
+                          {&ENCRYPTION_METHOD}, lcPassPhrase)
+   /* convert some special characters to url encoding (at least '+' char
+      could cause problems at later phases. */
+      lcEncryptedMSISDN = fUrlEncode(lcEncryptedMSISDN, "query")
+      lcLPLink = REPLACE(lcLandingpageLink, "#MSISDN", lcEncryptedMSISDN)
+
+   /*verifications done, write data to IFS file*/
+      lcHRLPDelim = {&Q25_HRLP_DELIM}
+      lcLogText = STRING(iiCustNum)      + lcHRLPDelim + /*Custnumber*/
+                  STRING(icCli)          + lcHRLPDelim + /*MSISDN*/
+                  STRING(idaQ25Date)      + lcHRLPDelim + /*Q25 month*/
+                  STRING(idMonthlyFee)   + lcHRLPDelim + /*installment value*/
+                  STRING(idQ25Amount)       + lcHRLPDelim + /*Q25 value*/
+                  STRING(lcLPLink).                      /*LP Link*/
+
+    OUTPUT STREAM SHRLP TO VALUE(lcHRLPOutFile) APPEND.
+    PUT STREAM SHRLP UNFORMATTED lcLogText SKIP.
+    OUTPUT STREAM SHRLP CLOSE.
+END.
+
+/* SMS message generating and sending for Q25. */
+FUNCTION fGenerateQ25List RETURNS INTEGER 
+   (INPUT iiPhase   AS INT):
+
+   DEF VAR liPeriod AS INT NO-UNDO.
+   DEF VAR ldaEndDate AS DATE NO-UNDO.
+   DEF VAR ldaStartDate AS DATE NO-UNDO.
+   DEF VAR liMsSeq AS INT NO-UNDO.
+   DEF VAR liPerContrId AS INT NO-UNDO.
+   DEF VAR ldAmount AS DECIMAL NO-UNDO.
+   DEF VAR ldMonthlyFee AS DECIMAL NO-UNDO.
+   DEF VAR lcHRLPDelim AS CHAR NO-UNDO.
+   DEF VAR lcLogText AS CHAR NO-UNDO.
+   DEF VAR lcEncryptedMSISDN AS CHAR NO-UNDO.
+   DEF VAR lcLPLink AS CHAR NO-UNDO.
+   DEF VAR liLoop AS INT NO-UNDO.
+
+   ASSIGN
+      ldaStartDate = DATE(MONTH(TODAY), 1, YEAR(TODAY)) - 1
+      ldaEndDate = fLastDayOfMonth(TODAY)
+      liPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
+
+   lcHRLPOutFile = lcHRLPSpoolDir + "IFS_Q25HR_UNIVERSE_" +
+                   REPLACE(STRING(fMakeTS()),".","_") +  ".DAT".
+   IF liHRLPTestLevel EQ {&Q25_HRLP_FULL_TEST} THEN DO:
+   /* Testing with non Q25 subscriber. Need to generate list file
+      with hardcoded values so it looks like Q25 case */
+      DO liLoop = 1 TO NUM-ENTRIES(lcHRLPTestMSSeq): 
+         FIND FIRST MobSub NO-LOCK WHERE
+                    Mobsub.MsSeq = INT(ENTRY(liLoop, lcHRLPTestMSSeq)) NO-ERROR.
+         IF AVAIL MobSub THEN
+            fWriteIFSData(Mobsub.CLI, MobSub.CustNum, DATE(ldaEndDate + 1),
+                          12.21, 121.21).
+      END.
+   END.   
+   ELSE DO:
+      /* Normal functionality or testlevel = 1 (testing with real Q25
+         Subscriptions. If testing is ongoing, only listed subscriptions
+         will be included to file. */
+      FOR EACH SingleFee USE-INDEX BillCode WHERE
+               SingleFee.Brand       = gcBrand AND
+               SingleFee.Billcode BEGINS "RVTERM" AND
+               SingleFee.HostTable   = "Mobsub" AND
+               SingleFee.SourceTable = "DCCLI" AND
+               SingleFee.CalcObj     = "RVTERM" AND
+               SingleFee.BillPeriod  = liPeriod NO-LOCK:
+         IF SingleFee.OrderId <= 0 THEN NEXT.
+         ASSIGN
+            ldAmount = Singlefee.Amt
+            liMsseq = INT(SingleFee.KeyValue)
+            liPerContrId = INT(SingleFee.sourcekey).
+         /* If test ongoing, SKIP any other subscriptions that listed ones */
+         IF (liHRLPTestLevel EQ {&Q25_HRLP_ONLY_PROV_TEST}) AND
+            (LOOKUP(STRING(liMsSeq),lcHRLPTestMSSeq) EQ 0) 
+            THEN NEXT.
+         IF fisPostpaidMobsubReleased(liMsSeq) THEN DO:
+            lcLogText = "Q25 Mobsub not found or prepaid: " +
+                        STRING(iiPhase) + "|" + STRING(liMsSeq).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, iiphase,
+                           {&Q25_EXEC_TYPE_HRLP_UNIV}).
+            NEXT.
+         END.
+         IF fisSingleFeeBilled() THEN DO:
+            lcLogText = "Q25 Residual fee Billed: " +
+                           STRING(iiPhase) + "|" + STRING(Mobsub.CLI) + "|" +
+                           STRING(Mobsub.MsSeq).
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, iiphase,
+                           {&Q25_EXEC_TYPE_HRLP_UNIV}).
+            NEXT. /* "Residual fee billed". */
+         END.
+         
+         /*Function checks also Extension, TermReturn and Renewal*/
+         IF fisQ25PerContractEnded(liPerContrId, liMsSeq, SingleFee.orderid, 
+                                  ldaStartDate, ldaEndDate, ldAmount, iiPhase, 
+                                  lcLogText) THEN DO:
+            IF lcLogText > "" THEN
+               fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, iiphase,
+                               {&Q25_EXEC_TYPE_HRLP_UNIV}).
+            NEXT.
+         END.
+         
+         fWriteIFSData(Mobsub.CLI, MobSub.CustNum, DATE(ldaEndDate + 1),
+                       fGetMonthlyFee(liPerContrId,liMsSeq), ldAmount).
+      END.
+   END.
+   fMove2TransDir(lcHRLPLogFile, "", lcHRLPLogDir).
+   fMove2TransDir(lcHRLPOutFile, "", lcHRLPOutDir).
+END FUNCTION.
+
+FUNCTION fMakeProdigyRequest RETURNS LOGICAL
+   (INPUT iiMsSeq   AS INT,
+    INPUT iiCustNum AS INT,
+    INPUT icCommand AS CHAR,
+    INPUT-OUTPUT ocLine AS CHAR):
+   DEF VAR liReq AS INT NO-UNDO.
+   DEF VAR lcError AS CHAR NO-UNDO.
+   DEF VAR lcMemoTitle AS CHAR NO-UNDO.
+   DEF VAR lcMemoText AS CHAR NO-UNDO.
+   DEF VAR lcResult AS CHAR NO-UNDO.   
+   /* Create subrequests (set mandataory and orig request) */
+   liReq = fServiceRequest (iiMsSeq,
+                            "LP",
+                            1,
+                            icCommand,
+                            fSecOffSet(fMakeTS(),5),
+                            "",                /* SalesMan */
+                            FALSE,             /* Set fees */
+                            FALSE,             /* SMS */
+                            "",
+                            "",
+                            0,
+                            FALSE,
+                            OUTPUT lcError).
+
+   /* Creation of subrequests failed, "fail" master request too */
+   IF liReq = 0 OR liReq = ? THEN DO:
+      fReqStatus(3,"ServiceRequest failure: " + lcError).
+      ocLine = ocLine + {&Q25_HRLP_DELIM} + "Error: ServiceRequest failure".
+      RETURN FALSE.
+   END.
+   ELSE DO:
+      ocLine = ocLine + {&Q25_HRLP_DELIM} + icCommand + " Sent successfully".
+      lcMemoTitle = "LP Riesgo Pago Final".
+      IF icCommand BEGINS "REDIRECTION" THEN
+         lcMemotext = "Redirección a LP Pago Final Riesgo activada".
+      ELSE IF icCommand EQ "REMOVE" THEN
+         lcMemotext = "IFS elimina la LP Riesgo Pago Final sin que el " +
+                      "cliente la haya visto".
+      ELSE
+         lcMemotext = "Unknown redirection command". /* should not ever 
+                                                        come here */
+      DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
+                 "Mobsub",
+                 STRING(iiMsSeq),
+                 iiCustNum,
+                 lcMemoTitle,
+                 lcMemoText,
+                 "Service",  /* memo type */
+                 "IFS").     /* creator */
+   END.
+   RETURN TRUE.
+END.    
+
