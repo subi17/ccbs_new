@@ -70,7 +70,10 @@ CLASS HPD.HPDAckReaderMulti INHERITS HPD.HPDAckReader:
             IF FIRST-OF(ttResponse.DBId)
             THEN loHPDAckHandler = mGetHandler(ttResponse.DBId).
    
-            IF loHPDAckHandler:mDelete(ttResponse.KeyValue, ttResponse.EventTime)
+            IF loHPDAckHandler:mDelete(ttResponse.KeyValue,
+                                       ttResponse.EventTime,
+                                       ttResponse.ErrorCode,
+                                       ttResponse.ErrorText)
             THEN DO:
                DELETE ttResponse.
                liAckCount = liAckCount - 1.
