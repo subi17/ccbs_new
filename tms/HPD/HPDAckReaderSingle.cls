@@ -4,14 +4,14 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS HPD.HPDAckReaderSingle INHERITS HPD.HPDAckReader:
 
-   DEFINE VARIABLE loHPDActHandler AS HPD.HPDAckHandler NO-UNDO.
+   DEFINE VARIABLE loHPDAckHandler AS HPD.HPDAckHandler NO-UNDO.
 
    CONSTRUCTOR PUBLIC HPDAckReaderSingle
       ( icDB AS CHARACTER ):
 
       SUPER(icDB).
 
-      loHPDActHandler = NEW HPD.HPDAckHandler(icDB).
+      loHPDAckHandler = NEW HPD.HPDAckHandler(icDB).
 
    END CONSTRUCTOR.
 
@@ -20,8 +20,8 @@ CLASS HPD.HPDAckReaderSingle INHERITS HPD.HPDAckReader:
 
       mAckReplog().
 
-      IF VALID-OBJECT(loHPDActHandler)
-      THEN DELETE OBJECT loHPDActHandler.
+      IF VALID-OBJECT(loHPDAckHandler)
+      THEN DELETE OBJECT loHPDAckHandler.
 
    END DESTRUCTOR.
 
@@ -34,7 +34,10 @@ CLASS HPD.HPDAckReaderSingle INHERITS HPD.HPDAckReader:
 
          FOR EACH ttResponse:
             
-            IF loHPDActHandler:mDelete(ttResponse.KeyValue, ttResponse.EventTime)
+            IF loHPDAckHandler:mDelete(ttResponse.KeyValue,
+                                       ttResponse.EventTime,
+                                       ttResponse.ErrorCode,
+                                       ttResponse.ErrorText)
             THEN DO:
                DELETE ttResponse.
                liAckCount = liAckCount - 1.            
@@ -59,11 +62,11 @@ CLASS HPD.HPDAckReaderSingle INHERITS HPD.HPDAckReader:
    METHOD PROTECTED OVERRIDE VOID mCheckReplog():
 
       mAckReplog().
-      
-      loHPDActHandler:mProcessWaitingReplog().
+
+      loHPDAckHandler:mProcessWaitingReplog().
       
       SUPER:mCheckReplog().
-      
-   END METHOD.   
-    
+
+   END METHOD.
+
 END CLASS.

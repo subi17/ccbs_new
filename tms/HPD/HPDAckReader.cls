@@ -33,6 +33,8 @@ CLASS HPD.HPDAckReader ABSTRACT
       FIELD DBId      AS CHARACTER   SERIALIZE-NAME "dbid"
       FIELD KeyValue  AS CHARACTER   SERIALIZE-NAME "keyid"
       FIELD EventTime AS DATETIME-TZ SERIALIZE-NAME "time"
+      FIELD ErrorCode AS INTEGER     SERIALIZE-NAME "errorcode"
+      FIELD ErrorText AS CHARACTER   SERIALIZE-NAME "errormessage"
       INDEX DBid IS PRIMARY DBId
       .
 

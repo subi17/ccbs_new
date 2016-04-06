@@ -131,7 +131,8 @@ CLASS HPD.HPDAckHandler:
 
 
    METHOD PRIVATE VOID mExportReplog
-      ( icType AS CHARACTER ):
+      ( icType      AS CHARACTER,
+        icError     AS CHARACTER ):
       
       DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO.
       
@@ -141,7 +142,10 @@ CLASS HPD.HPDAckHandler:
          VALUE(lcExportDir + "/" + icType + "_" + lcDB + "_" +
                STRING(DAY(TODAY),"99") + STRING(MONTH(TODAY),"99") +
                STRING(YEAR(TODAY),"9999") + ".log") APPEND.
-      
+
+      IF icError > "" AND SEEK(strexp) = 0
+      THEN PUT STREAM strexp UNFORMATTED icError SKIP.
+
       PUT STREAM strexp UNFORMATTED lcLine SKIP.       
    
       FINALLY:
@@ -153,20 +157,20 @@ CLASS HPD.HPDAckHandler:
    
    METHOD PUBLIC LOGICAL mDelete
       ( icROWID AS CHARACTER,
-        idttzEventTime AS DATETIME-TZ):
+        idttzEventTime AS DATETIME-TZ,
+        iiErrorCode AS INTEGER,
+        icError AS CHARACTER):
 
       llFound = lhRepLogTable:FIND-BY-ROWID(TO-ROWID(icROWID), EXCLUSIVE-LOCK, NO-WAIT) NO-ERROR.
       
       IF NOT llFound
       THEN DO:
-         IF NOT lhRepLogTable:LOCKED
-         THEN DO:
-            LOG-MANAGER:WRITE-MESSAGE("Cannot find replog record. ROWID=" + icROWID +
-                                      " EventTime=" + STRING(idttzEventTime), "INFO").
-            RETURN TRUE.
-         END.
-         
-         RETURN FALSE.
+         IF lhRepLogTable:LOCKED
+         THEN RETURN FALSE.
+
+         LOG-MANAGER:WRITE-MESSAGE("Cannot find replog record. ROWID=" + icROWID +
+                                   " EventTime=" + STRING(idttzEventTime), "INFO").
+         RETURN TRUE.
       END.
 
       IF lhRepLogTable::EventTime NE idttzEventTime
@@ -176,11 +180,21 @@ CLASS HPD.HPDAckHandler:
                                    STRING(lhRepLogTable::EventTime) +
                                    " ACK message eventtime=" +
                                    STRING(idttzEventTime), "INFO").
-         mExportReplog("eventtime_mismatch").
+         mExportReplog("eventtime_mismatch", "").
          
          RETURN TRUE.     
       END.
-   
+
+      IF icError > ""
+      THEN DO:
+         LOG-MANAGER:WRITE-MESSAGE("HPD Ack message returns an error. ROWID=" + icROWID +
+                                   " Replog eventtime=" +
+                                   STRING(lhRepLogTable::EventTime) +
+                                   " ACK message eventtime=" +
+                                   STRING(idttzEventTime) + " error=" + icError, "INFO").
+         mExportReplog("error_" + STRING(iiErrorCode), icError).
+      END.
+
       lhRepLogTable:BUFFER-DELETE().
       
       RETURN TRUE.      
@@ -220,7 +234,7 @@ CLASS HPD.HPDAckHandler:
             IF lhRepLogTable::SendCount >= liMaxSendCount
             THEN DO:
                LOG-MANAGER:WRITE-MESSAGE("Max retries reached. ROWID=" + STRING(lhRepLogTable:ROWID), "INFO").
-               mExportReplog("max_retries_reached").
+               mExportReplog("max_retries_reached", "").
                lhRepLogTable:BUFFER-DELETE().
                NEXT.
             END.
