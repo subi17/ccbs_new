@@ -140,5 +140,10 @@ lcRet = fCreateEntryC("HRLPTestMSSeq", /*param code*/
 if LcRet NE "" THEN 
    MESSAGE lcRet VIEW-AS ALERT-BOX .
 
-
+/* add 509 prefix */
+FIND FIRST TMSCodes WHERE TMSCodes.tablename Eq "AppIdPrefix" NO-ERROR.
+IF AVAIL TMSCodes THEN DO:
+   IF LOOKUP("509",TmsCodes.configValue) EQ 0 THEN
+   TMSCodes.configvalue = TMSCodes.configvalue + ",509".
+END.
  
