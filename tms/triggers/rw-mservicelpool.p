@@ -6,17 +6,7 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF MServiceLPool OLD BUFFER oldMServiceL
 
 {triggers/check_mobsub.i MServiceLPool MsSeq}
 
-DEFINE BUFFER lbMServiceLPool FOR MServiceLPool.
-
-/* We will send only the newest one */
-FOR
-   FIRST lbMServiceLPool FIELDS (MsSeq SLSeq EndTS) NO-LOCK USE-INDEX MsSeq WHERE
-      lbMServiceLPool.MsSeq = MServiceLPool.MsSeq  AND
-      lbMServiceLPool.SlSeq = MServiceLPool.SlSeq:
-
-   IF lbMServiceLPool.EndTS > MServiceLPool.EndTS
-   THEN RETURN.
-END.
+{triggers/mservicelpool.i}
 
 CREATE Common.RepLog.
 ASSIGN

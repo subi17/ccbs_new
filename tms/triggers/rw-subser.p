@@ -25,17 +25,7 @@ ELSE llWasHPDService = llIsHPDService.
 IF llWasHPDService = FALSE AND llIsHPDService = FALSE
 THEN RETURN.
 
-DEFINE BUFFER lbSubSer FOR SubSer.
-
-/* We will send only the newest one */
-FOR
-   FIRST lbSubSer FIELDS (MsSeq ServCom SSDate) NO-LOCK USE-INDEX ServCom WHERE
-      lbSubSer.MsSeq   = SubSer.MsSeq  AND
-      lbSubSer.ServCom = SubSer.ServCom:
-
-   IF lbSubSer.SSDate > SubSer.SSDate
-   THEN RETURN.
-END.
+{triggers/subser.i}
 
 CREATE Mobile.RepLog.
 ASSIGN
