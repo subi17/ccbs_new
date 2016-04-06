@@ -1,5 +1,12 @@
 TRIGGER PROCEDURE FOR REPLICATION-DELETE OF MsRequest.
 
+IF NEW MsRequest
+THEN RETURN.
+
+{triggers/msreqcounter.i}
+
+fCreateMsReqCounter(MsRequest.ReqType, MsRequest.ReqStatus, -1).
+
 CREATE Mobile.RepLog.
 ASSIGN
    Mobile.RepLog.RecordId  = RECID(MsRequest)
