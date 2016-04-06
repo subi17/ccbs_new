@@ -629,21 +629,6 @@ FUNCTION fBuildBarringCommand RETURNS LOG
 
          WHEN "LP" OR 
          WHEN "BPSUB" THEN DO:
-            /*HRLP service removing*/
-            IF BarringConf.BarringCode EQ "Debt_LP" THEN DO:
-               FIND FIRST SubSer WHERE SubSer.ServCom EQ "LP" AND
-                          SubSer.MsSeq   EQ MsRequest.MsSeq AND
-                          SubSer.SsDate <= TODAY AND
-                          SubSer.SsParam EQ "REDIRECTION_HIGHRISKCUSTOMER_1"
-               NO-LOCK NO-ERROR.
-               IF AVAIL SubSer THEN DO:
-                  CREATE ttProvCommand.
-                  ASSIGN ttProvCommand.Component = BarringConf.NWComponent
-                         ttProvCommand.ComponentValue = 0
-                         ttProvCommand.ComponentParam = "Remove".
-               END.
-            END.
-
             IF LOOKUP(ttMergedBarring.NWStatus, "ACTIVE") > 0
                THEN DO:
                
@@ -691,21 +676,6 @@ FUNCTION fBuildBarringCommand RETURNS LOG
          
          END.
          WHEN "HOTLINE" THEN DO:
-            /*HRLP service removing*/
-            IF BarringConf.BarringCode EQ "Debt_HOTLP" THEN DO:
-               FIND FIRST SubSer WHERE SubSer.ServCom EQ "LP" AND
-                          SubSer.MsSeq   EQ MsRequest.MsSeq AND
-                          SubSer.SsDate <= TODAY AND
-                          SubSer.SsParam EQ "REDIRECTION_HIGHRISKCUSTOMER_1"
-               NO-LOCK NO-ERROR.
-               IF AVAIL SubSer THEN DO:
-                  CREATE ttProvCommand.
-                  ASSIGN ttProvCommand.Component = BarringConf.NWComponent
-                         ttProvCommand.ComponentValue = 0
-                         ttProvCommand.ComponentParam = "Remove".
-               END.
-            END.
-
 
             IF LOOKUP(ttMergedBarring.NWStatus,"ACTIVE") > 0 THEN DO:
                
