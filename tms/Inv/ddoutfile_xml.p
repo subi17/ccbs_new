@@ -757,7 +757,7 @@ PROCEDURE pFinalize:
    ASSIGN
       lcFinalFile = "".
 
-   lcXsdFile = SEARCH("pain.008.001.02.xsd").
+   lcXsdFile = SEARCH("Inv/pain.008.001.02.xsd").
 
    IF ilCSBValidate AND
       lcXsdFile NE ? THEN DO:
