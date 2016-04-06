@@ -176,10 +176,7 @@ PROCEDURE pReadFileData:
          pause 0.
       END.
 
-      IF (lcTFBank EQ {&TF_BANK_SABADELL} AND
-          LENGTH(lcLine) NE 210) OR
-         (lcTFBank EQ {&TF_BANK_UNOE} AND
-          LENGTH(lcLine) NE 202) THEN DO:
+      IF LENGTH(lcLine) NE 210 THEN DO:
          fWriteLog(lcLine,"ERROR:Incorrect line length").
          NEXT FILE_LINE.
       END.
