@@ -37,7 +37,7 @@ ASSIGN
    .
 
 IF Common.RepLog.EventType = "DELETE" 
-THEN Common.RepLog.KeyValue = {HPD/keyvalue.i MServiceLimit . {&HPDKeyDelimiter} MsSeq DialType SLSeq EndTS}.
+THEN Common.RepLog.KeyValue = {HPD/keyvalue.i MServiceLimit . {&HPDKeyDelimiter} CustNum MsSeq MSID}.
 ELSE Common.RepLog.RowID    = STRING(ROWID(MServiceLimit)).
 
 IF NOT NEW(MServiceLimit)
@@ -55,7 +55,7 @@ THEN DO:
          Common.RepLog.TableName = "MServiceLimit"
          Common.RepLog.EventType = "DELETE"
          Common.RepLog.EventTime = NOW
-         Common.RepLog.KeyValue  = {HPD/keyvalue.i oldMServiceLimit . {&HPDKeyDelimiter} MsSeq DialType SLSeq EndTS}
+         Common.RepLog.KeyValue  = {HPD/keyvalue.i oldMServiceLimit . {&HPDKeyDelimiter} CustNum MsSeq MSID}
          .
    END.
 END.
