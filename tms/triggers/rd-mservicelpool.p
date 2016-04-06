@@ -7,17 +7,7 @@ TRIGGER PROCEDURE FOR REPLICATION-DELETE OF MServiceLPool.
 IF NEW MServiceLPool
 THEN RETURN.
 
-DEFINE BUFFER lbMServiceLPool FOR MServiceLPool.
-
-/* We will send delete only the newest one */
-FOR
-   FIRST lbMServiceLPool FIELDS (MsSeq SLSeq EndTS) NO-LOCK USE-INDEX MsSeq WHERE
-      lbMServiceLPool.MsSeq = MServiceLPool.MsSeq  AND
-      lbMServiceLPool.SlSeq = MServiceLPool.SlSeq:
-
-   IF lbMServiceLPool.EndTS > MServiceLPool.EndTS
-   THEN RETURN.
-END.
+{triggers/mservicelpool.i}
 
 CREATE Common.RepLog.
 ASSIGN

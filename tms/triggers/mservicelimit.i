@@ -17,6 +17,7 @@ FOR
       lbMServiceLimit.DialType = MServiceLimit.DialType AND
       lbMServiceLimit.SlSeq    = MServiceLimit.SlSeq:
 
-   IF lbMServiceLimit.EndTS > MServiceLimit.EndTS
+   IF ROWID(lbMServiceLimit) NE ROWID(MServiceLimit) AND
+      lbMServiceLimit.EndTS > MServiceLimit.EndTS
    THEN RETURN.
 END.
