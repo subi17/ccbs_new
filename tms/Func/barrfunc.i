@@ -31,7 +31,8 @@ DEFINE TEMP-TABLE ttProvCommand NO-UNDO
    FIELD ComponentValue AS INT
    FIELD ComponentParam AS CHAR 
    FIELD BarringCmd AS CHAR
-   FIELD FixedValue AS LOG.
+   FIELD FixedValue AS LOG
+   FIELD DropService AS CHAR.
 
 FUNCTION fGetActiveBarrings RETURNS CHAR
    (iiMsSeq AS INTEGER):
@@ -676,7 +677,6 @@ FUNCTION fBuildBarringCommand RETURNS LOG
          
          END.
          WHEN "HOTLINE" THEN DO:
-
             IF LOOKUP(ttMergedBarring.NWStatus,"ACTIVE") > 0 THEN DO:
                
                IF NOT AVAIL ttProvCommand THEN DO:

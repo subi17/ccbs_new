@@ -27,7 +27,8 @@ DEF VAR liMasterRequest AS INT  NO-UNDO.
 DEF VAR ldActStamp      AS DEC  NO-UNDO.
 DEF VAR ldaActDate      AS DATE NO-UNDO.
 DEF VAR liTime          AS INT  NO-UNDO.
-
+DEF VAR liRemHRLPReq    AS INT  NO-UNDO.
+DEF VAR liLinkReq       AS INT  NO-UNDO.
 /*For servicerequest handling */
 DEF BUFFER bMsRequest FOR MsRequest. 
 /* For Checking mandatory unbarring */
@@ -211,7 +212,27 @@ PROCEDURE pNew:
    END.
 
    FOR EACH ttProvCommand:
-     
+      liRemHRLPReq = 0.
+      IF ttProvCommand.DropService EQ "HRLP" THEN DO:
+         liRemHRLPReq =  fServiceRequest (MobSub.MsSeq,
+                                  "LP",
+                                  1,
+                                  "REMOVE",
+                                  fSecOffSet(ideActTime,5), /* 5 sec delay */
+                                  "",                /* SalesMan */
+                                  FALSE,             /* Set fees */
+                                  FALSE,             /* SMS */
+                                  "",
+                                  "",
+                                  0,
+                                  FALSE,
+                                 OUTPUT lcError).
+         IF liRemHRLPReq = 0 OR liRemHRLPReq = ? THEN DO:
+            fReqStatus(3,"ServiceRequest failure: " + lcError).
+            RETURN.
+         END.
+ 
+      END.
       /* extra request to reset barring status before hotline activation */
       liUnbarrReq = 0.
       IF ttProvCommand.BarringCmd NE "" THEN DO: 
@@ -266,11 +287,25 @@ PROCEDURE pNew:
          fReqStatus(3,"ServiceRequest failure: " + lcError).
          RETURN.
       END.
-      ELSE IF liUnbarrReq > 0 THEN DO:
+      /*Link HRLP request to original*/
+      IF liRemHRLPReq > 0 THEN DO:
+         FIND bMsRequest WHERE
+              bMsRequest.MsRequest = liRemHRLPReq NO-ERROR.
+         IF AVAIL bMsRequest THEN ASSIGN
+            bMsRequest.OrigRequest = liReq
+            bMsRequest.Mandatory = 1.
+         RELEASE bMsRequest.
+      END.
+      /*Decide if unbarr is linked directly lireq of HRLP req*/
+      IF liRemHRLPReq > 0 THEN liLinkReq = liRemHRLPReq.
+      ELSE liLinkReq = liReq.
+      
+      /*directly linked to orig request*/
+      IF liUnbarrReq > 0 THEN DO:
          FIND bMsRequest WHERE
               bMsRequest.MsRequest = liUnbarrReq NO-ERROR.
          IF AVAIL bMsRequest THEN ASSIGN
-            bMsRequest.OrigRequest = liReq
+            bMsRequest.OrigRequest = liLinkReq.
             bMsRequest.Mandatory = 1.
          RELEASE bMsRequest.
       END.
