@@ -57,14 +57,14 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 resp_struct = add_struct(response_toplevel_id, "").
 
-FIND MsReqStatistic NO-LOCK USE-INDEX ReqType
-   WHERE MsReqStatistic.Brand EQ gcBrand AND
-         MsReqStatistic.ReqType EQ piType AND
-         MsReqStatistic.ReqStatus EQ piStatus NO-ERROR.
-IF AVAIL MsReqStatistic THEN
-   add_int(resp_struct, "total", MsReqStatistic.ReqStatusCount).
-ELSE
-   add_int(resp_struct, "total", 0).
+FOR
+   EACH MsReqCounter NO-LOCK WHERE
+      MsReqCounter.ReqType   = piType AND
+      MsReqCounter.ReqStatus = piStatus:
+   ACCUMULATE MsReqCounter.ReqStatusCount (TOTAL).
+END.
+
+add_int(resp_struct, "total", (ACCUM TOTAL MsReqCounter.ReqStatusCount)).
 
 request_array = add_array(resp_struct, "requests").
 

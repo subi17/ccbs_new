@@ -1,6 +1,23 @@
 TRIGGER PROCEDURE FOR REPLICATION-WRITE OF MsRequest OLD BUFFER Oldbuf.
 
+{triggers/msreqcounter.i}
+
 DEF VAR llResult AS LOG NO-UNDO.
+
+IF NEW(MsRequest)
+THEN fCreateMsReqCounter(MsRequest.ReqType, MsRequest.ReqStatus, 1).
+ELSE DO:
+   BUFFER-COMPARE MsRequest USING
+      ReqStatus
+      ReqType
+   TO Oldbuf SAVE RESULT IN llResult.
+
+   IF NOT llResult
+   THEN ASSIGN
+           llResult = fCreateMsReqCounter(Oldbuf.ReqType, Oldbuf.ReqStatus, -1)
+           llResult = fCreateMsReqCounter(MsRequest.ReqType, MsRequest.ReqStatus, 1)
+           .
+END.
 
 IF NEW(MsRequest) THEN DO:
    CREATE Mobile.RepLog.
