@@ -20,10 +20,10 @@ DEF VAR lcRoamingTUSId AS CHAR NO-UNDO INITIAL "504".
 DEF VAR lcBonoIPLUpgId AS CHAR NO-UNDO INITIAL "505".
 DEF VAR lcEBMId AS CHAR NO-UNDO INITIAL "506".
 DEF VAR lcCollectionId AS CHAR NO-UNDO INITIAL "507".
+DEF VAR lcHRLPId AS CHAR NO-UNDO INITIAL "509".
+DEF VAR lcCCGWId AS CHAR NO-UNDO INITIAL "650".
 DEF VAR lcCTCId AS CHAR NO-UNDO INITIAL "680".
 DEF VAR lcIFSId AS CHAR NO-UNDO INITIAL "701".
-
-DEF VAR lcCCGWId AS CHAR NO-UNDO INITIAL "650".
 
 
 /* Check certain TMSCode existence */
@@ -98,6 +98,8 @@ FUNCTION fgetAppDetailedUserId RETURNS CHARACTER(INPUT icAppId     AS CHARACTER,
         lcUserId = "Landing Page" + "_" + icAppUserId.
     ELSE IF LOOKUP(icAppId,lcIFSId) > 0 THEN
         lcUserId = "IFS" + "_" + icAppUserId.
+    ELSE IF LOOKUP(icAppId,lcHRLPId) > 0 THEN
+        lcUserId = icAppId + "_" + icAppUserId.
     ELSE lcUserId = "SelfService" + "_" + icAppUserId.
 
     RETURN lcUserId.
