@@ -263,8 +263,8 @@ IF lcMinConsFatime = ? THEN lcMinConsFatime = "".
 
 &IF "{&InitPersistent}" NE "NO" AND "{&EDRHandling}" = "NO" 
 &THEN
-DEF VAR clsInvRowCounter AS billrun_invrowcounter NO-UNDO.
-clsInvRowCounter = NEW billrun_invrowcounter(gcBrand).
+DEF VAR clsInvRowCounter AS Inv.billrun_invrowcounter NO-UNDO.
+clsInvRowCounter = NEW Inv.billrun_invrowcounter(gcBrand).
 &ENDIF
 
 &IF "{&InitPersistent}" = "NO"

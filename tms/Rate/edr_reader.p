@@ -15,6 +15,7 @@
 {cparam2.i}
 {edr_reader.i}
 {log.i}
+{cdr_online.i}
 
 def INPUT PARAMETER    icFileName  as char FORMAT "x(30)" no-undo.
 DEF INPUT PARAMETER    iiPort      AS INT  NO-UNDO.
@@ -138,7 +139,7 @@ DO WHILE TRUE WITH FRAME clog:
       lcCDRType = ""
       lcVersion = "".
 
-   IF llOL THEN CALL cdr iiPort liPause "callrec".
+   if llOl then callrec = readOnline (iiPort , lipause).
    ELSE DO:
 
       import stream sCDR UNFORMATTED callrec NO-ERROR.
