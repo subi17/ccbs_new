@@ -1,17 +1,17 @@
 
-CLASS Nagios:
+CLASS Class.nagios:
 
    DEFINE VARIABLE lcOperator AS CHARACTER     NO-UNDO.
    DEFINE VARIABLE lcServer   AS CHARACTER     NO-UNDO.
    DEFINE VARIABLE liOffSet   AS INTEGER       NO-UNDO.
-   DEFINE VARIABLE classTD    AS timedate      NO-UNDO.
+   DEFINE VARIABLE classTD    AS CLASS Class.timedate      NO-UNDO.
    DEFINE VARIABLE lcURL      AS CHARACTER     NO-UNDO.
    /* SER-8026 change */
    DEF VAR lcMonitorMethod AS CHAR NO-UNDO.
    DEF VAR lcMonitorDir    AS CHAR NO-UNDO.
    DEF STREAM sNagios.
 
-   CONSTRUCTOR PUBLIC Nagios():
+   CONSTRUCTOR PUBLIC nagios():
 
       /* nagios URL */
       FIND FIRST TMSParam WHERE
@@ -61,11 +61,11 @@ CLASS Nagios:
          IF lcMonitorDir = ? THEN lcMonitorDir = "/tmp".
       END.
 
-      classTD = NEW timedate().
+      classTD = NEW Class.timedate().
 
    END CONSTRUCTOR.
 
-   DESTRUCTOR PUBLIC Nagios():
+   DESTRUCTOR PUBLIC nagios():
 
       IF VALID-OBJECT(classTD) THEN DELETE OBJECT(classTD).
 
