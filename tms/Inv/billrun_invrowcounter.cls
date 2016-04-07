@@ -1,5 +1,5 @@
 
-CLASS billrun_invrowcounter:
+CLASS Inv.billrun_invrowcounter:
 
    {lamupers_temptable.i &ttReference = "REFERENCE-ONLY"}
    {tmsconst.i}

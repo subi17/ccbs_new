@@ -1,0 +1,61 @@
+ADD TABLE "MsReqCounter"
+  AREA "Sta_Data_64"
+  DUMP-NAME "MsReqCounter"
+
+ADD FIELD "ReqType" OF "MsReqCounter" AS integer 
+  DESCRIPTION "Request type"
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "Request type"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Type"
+  HELP "Request type"
+  ORDER 10
+
+ADD FIELD "ReqStatus" OF "MsReqCounter" AS integer 
+  DESCRIPTION "Available status of MsRequest"
+  FORMAT "zz9"
+  INITIAL "0"
+  LABEL "MsRequest Status"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "RequestStatus"
+  HELP "Request status"
+  ORDER 20
+
+ADD FIELD "ReqStatusCount" OF "MsReqCounter" AS integer 
+  DESCRIPTION "The number of msrequests per reqtype and reqstatus"
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "MsRequest Status Count"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "ReqStatusCount"
+  HELP "Count of statuses"
+  ORDER 30
+
+ADD FIELD "TransNbr" OF "MsReqCounter" AS integer 
+  DESCRIPTION "The transaction number"
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Transaction number"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "TransNbr"
+  HELP "Transaction number"
+  ORDER 40
+
+ADD INDEX "ReqType" ON "MsReqCounter" 
+  AREA "Sta_Index_3"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "ReqType" ASCENDING 
+  INDEX-FIELD "ReqStatus" ASCENDING 
+  INDEX-FIELD "TransNbr" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000001210
