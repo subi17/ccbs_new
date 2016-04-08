@@ -746,8 +746,8 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
          NEXT InvoiceLoop.                   
       END.
 
-      IF SUBSTRING(STRING(InvRow.SlsAcc),1,1) = "7" OR
-         InvRow.SlsAcc = 60722114 THEN ASSIGN
+      IF LOOKUP(SUBSTRING(STRING(InvRow.SlsAcc),1,1),"6,7") > 0 THEN 
+      ASSIGN
          ttRow.CostCentre = BillItem.CostCentre
          ttRow.PayType    = ttSub.PayType
          ttRow.Segment    = lcSegment
