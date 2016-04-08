@@ -10,7 +10,8 @@ THEN RETURN.
 {triggers/mservicelimit.i}
 
 IF NOT fCheckHPDStatus(MServiceLimit.MsSeq,
-                       MServiceLimit.CustNum)
+                       MServiceLimit.CustNum,
+                       MServiceLimit.EndTS)
 THEN RETURN.
 
 CREATE Common.RepLog.

@@ -2034,8 +2034,9 @@ PROCEDURE pContractTermination:
          /* a new limit to last month */
          IF llRelativeLast THEN DO:
             CREATE bLimit.
-            BUFFER-COPY MServiceLimit EXCEPT EndTS TO bLimit.
-            ASSIGN 
+            BUFFER-COPY MServiceLimit EXCEPT EndTS MSID TO bLimit.
+            ASSIGN
+               bLimit.MSID   = NEXT-VALUE(mServiceLimit)
                bLimit.FromTS = fSecOffSet(ldNewEndStamp,1)
                ldNewEndStamp = ldEndStamp.
 
