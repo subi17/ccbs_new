@@ -3,7 +3,7 @@ FUNCTION fCheckHPDStatus RETURNS LOGICAL
     iiCustNum AS INTEGER,
     ideEndTS  AS DECIMAL):
 
-   IF ideEndTSS < YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + 1
+   IF ideEndTS < YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + 1
    THEN RETURN FALSE.
 
    IF iiCustNum > 0
@@ -11,21 +11,3 @@ FUNCTION fCheckHPDStatus RETURNS LOGICAL
 
    RETURN CAN-FIND(FIRST MobSub NO-LOCK WHERE MobSub.MsSeq = iiMsSeq).
 END.
-
-
-
-/*
-/* We will send only the newest one */
-DEFINE BUFFER lbMServiceLimit FOR MServiceLimit.
-
-FOR
-   FIRST lbMServiceLimit FIELDS (MsSeq DialType SLSeq EndTS) NO-LOCK USE-INDEX msseq WHERE
-      lbMServiceLimit.MsSeq    = MServiceLimit.MsSeq    AND
-      lbMServiceLimit.DialType = MServiceLimit.DialType AND
-      lbMServiceLimit.SlSeq    = MServiceLimit.SlSeq:
-
-   IF ROWID(lbMServiceLimit) NE ROWID(MServiceLimit) AND
-      lbMServiceLimit.EndTS > MServiceLimit.EndTS
-   THEN RETURN.
-END.
-*/
