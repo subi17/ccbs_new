@@ -85,9 +85,6 @@ DEF TEMP-TABLE ttPickCust NO-UNDO
    INDEX InvCust InvCust
    INDEX InvCreated InvCreated.
 
-DEF TEMP-TABLE bttPickCust NO-UNDO 
-   LIKE ttPickCust.
-
 DEF TEMP-TABLE ttResult NO-UNDO
    FIELD InvCust AS INT
    FIELD MsSeq   AS INT
@@ -551,21 +548,9 @@ PROCEDURE pCollect:
      
          IF ilgMergeAnalysis THEN DO:
 
-            FOR FIRST ttPickCust NO-LOCK WHERE 
-                      ttPickCust.InvCust = MsOwner.InvCust:
-               CREATE bttPickCust.
-               BUFFER-COPY ttPickCust to bttPickCust.
-       
-               FOR EACH bttPickCust NO-LOCK:
-
-                  RUN pPickedSaveResult(bttPickCust.InvCust,
-                                        bttPickCust.CaseList,
-                                        bttPickCust.ErrorMsg).
-               END.
-            
-               EMPTY TEMP-TABLE bttPickCust.
-
-            END.
+            RUN pPickedSaveResult(ttPickCust.InvCust,
+                                  ttPickCust.CaseList,
+                                  ttPickCust.ErrorMsg).
 
             /* Analysis for Created Invoice */
             RUN pInitializeMergeAnalysis.
