@@ -46,7 +46,7 @@ CLASS HPD.MServiceLimitDump FINAL INHERITS DumpHandler:
          WHEN "KeyValue"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE RETURN {HPD/keyvalue.i lbMServiceLimit . objDumpBase:lcKeyDelimiter CustNum MsSeq MSID}.
+              ELSE RETURN {HPD/keyvalue.i lbMServiceLimit . objDumpBase:lcKeyDelimiter MSID}.
          WHEN "CustNum"
          THEN IF ilCheckOnly
               THEN RETURN "OK".

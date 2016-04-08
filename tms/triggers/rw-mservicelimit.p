@@ -10,16 +10,19 @@ DEFINE VARIABLE llShouldBeOnHPD   AS LOGICAL INITIAL FALSE NO-UNDO.
 DEFINE VARIABLE llWasOnHPD        AS LOGICAL INITIAL FALSE NO-UNDO.
 
 llShouldBeOnHPD = fCheckHPDStatus(MServiceLimit.MsSeq,
-                                  MServiceLimit.CustNum).
+                                  MServiceLimit.CustNum,
+                                  MServiceLimit.EndTS).
 
 IF NEW(MServiceLimit) AND llShouldBeOnHPD = FALSE
 THEN RETURN.
 
 IF NOT NEW(MServiceLimit) AND
    (MServiceLimit.MsSeq   <> oldMServiceLimit.MsSeq OR
-    MServiceLimit.CustNum <> oldMServiceLimit.CustNum)
+    MServiceLimit.CustNum <> oldMServiceLimit.CustNum OR
+    MServiceLimit.EndTS   <> oldMServiceLimit.EndTS)
 THEN llWasOnHPD = fCheckHPDStatus(oldMServiceLimit.MsSeq,
-                                  oldMServiceLimit.CustNum).
+                                  oldMServiceLimit.CustNum,
+                                  oldMServiceLimit.EndTS).
 ELSE llWasOnHPD = llShouldBeOnHPD.
 
 IF llWasOnHPD = FALSE AND llShouldBeOnHPD = FALSE
@@ -37,7 +40,7 @@ ASSIGN
    .
 
 IF Common.RepLog.EventType = "DELETE" 
-THEN Common.RepLog.KeyValue = {HPD/keyvalue.i MServiceLimit . {&HPDKeyDelimiter} CustNum MsSeq MSID}.
+THEN Common.RepLog.KeyValue = {HPD/keyvalue.i MServiceLimit . {&HPDKeyDelimiter} MSID}.
 ELSE Common.RepLog.RowID    = STRING(ROWID(MServiceLimit)).
 
 IF NOT NEW(MServiceLimit)
@@ -45,7 +48,7 @@ THEN DO:
    DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
 
    BUFFER-COMPARE MServiceLimit USING
-      MsSeq DialType SLSeq EndTS
+      MSID
    TO oldMServiceLimit SAVE RESULT IN llSameValues.
 
    IF NOT llSameValues
@@ -55,7 +58,7 @@ THEN DO:
          Common.RepLog.TableName = "MServiceLimit"
          Common.RepLog.EventType = "DELETE"
          Common.RepLog.EventTime = NOW
-         Common.RepLog.KeyValue  = {HPD/keyvalue.i oldMServiceLimit . {&HPDKeyDelimiter} CustNum MsSeq MSID}
+         Common.RepLog.KeyValue  = {HPD/keyvalue.i oldMServiceLimit . {&HPDKeyDelimiter} MSID}
          .
    END.
 END.

@@ -10,7 +10,8 @@ THEN RETURN.
 {triggers/mservicelimit.i}
 
 IF NOT fCheckHPDStatus(MServiceLimit.MsSeq,
-                       MServiceLimit.CustNum)
+                       MServiceLimit.CustNum,
+                       MServiceLimit.EndTS)
 THEN RETURN.
 
 CREATE Common.RepLog.
@@ -18,7 +19,7 @@ ASSIGN
    Common.RepLog.TableName = "MServiceLimit"
    Common.RepLog.EventType = "DELETE"
    Common.RepLog.EventTime = NOW
-   Common.RepLog.KeyValue  = {HPD/keyvalue.i MServiceLimit . {&HPDKeyDelimiter} MsSeq DialType SLSeq EndTS}
+   Common.RepLog.KeyValue  = {HPD/keyvalue.i MServiceLimit . {&HPDKeyDelimiter} MSID}
    .
 
 &ENDIF
