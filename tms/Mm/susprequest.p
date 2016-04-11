@@ -101,9 +101,8 @@ PROCEDURE pMain:
                RUN pNew(MsRequest.ReqCParam1,
                         ldaActDate,
                         ldActStamp).
-               IF RETURN-VALUE BEGINS "Error" THEN 
+               IF INDEX(RETURN-VALUE, "Error") > 0 THEN
                    fReqStatus(3, RETURN-VALUE).
-
                RETURN.
             END.
             WHEN 3 THEN DO:
@@ -116,9 +115,14 @@ PROCEDURE pMain:
          END.
       END.
       /* No mandatory requests, handle immediately */
-      ELSE RUN pNew(MsRequest.ReqCParam1, 
-                    ldaActDate,
-                    ldActStamp).
+      ELSE DO TRANS:
+         RUN pNew(MsRequest.ReqCParam1, 
+                  ldaActDate,
+                  ldActStamp).
+         IF INDEX(RETURN-VALUE, "Error") > 0 THEN
+            fReqStatus(3, RETURN-VALUE).
+         RETURN.
+      END.              
    END.
    WHEN 7 OR WHEN 8 THEN RUN pDone.
 
@@ -127,20 +131,20 @@ PROCEDURE pMain:
 END PROCEDURE.
 
 PROCEDURE pNew:
-    
+
    DEFINE INPUT PARAMETER icBarrings AS CHARACTER NO-UNDO.
    DEFINE INPUT PARAMETER idtDate    AS DATE      NO-UNDO.
    DEFINE INPUT PARAMETER ideActTime AS DECIMAL   NO-UNDO.
-      
-   DEF VAR lcError AS CHAR NO-UNDO. 
+
+   DEF VAR lcError AS CHAR NO-UNDO.
    DEF VAR liReq AS INT  NO-UNDO.
-   DEF VAR lcFinalMask AS CHAR NO-UNDO. 
-   DEF VAR liUnbarrReq AS INT NO-UNDO. 
-   DEF VAR liDelay AS INT NO-UNDO. 
+   DEF VAR lcFinalMask AS CHAR NO-UNDO.
+   DEF VAR liUnbarrReq AS INT NO-UNDO.
+   DEF VAR liDelay AS INT NO-UNDO.
 
    IF idtDate = TODAY THEN ideActTime = fMakeTS().
    ELSE ideActTime = fMake2Dt(idtDate,10800).
-   
+
    /* Assign master request (35) to 1 */
    IF NOT fReqStatus(1,"") THEN RETURN.
 
@@ -178,28 +182,28 @@ PROCEDURE pNew:
                         OUTPUT lcError).
 
    FOR EACH ttProvCommand:
-   
+
       FIND ServCom NO-LOCK WHERE
            ServCom.Brand   = gcBrand AND
            ServCom.ServCom = ttProvCommand.component NO-ERROR.
-      
+
       IF NOT AVAILABLE ServCom THEN DO:
          fReqError("SYSTEM ERROR:BARRING service not defined").
          RETURN.
-      END. 
-      
+      END.
+
       FIND FIRST CTServEl NO-LOCK WHERE
                  CTServEl.Brand     = gcBrand   AND
                  CTServEl.ServCom   = ServCom.ServCom AND
                  CTServEl.CLIType   = MobSub.CLIType AND
                  CTServEl.FromDate <= TODAY NO-ERROR.
-      
+
       IF NOT AVAIL CTServEl THEN DO:
          fReqError("SYSTEM ERROR:BARRING service not defined for " +
             MobSub.CLIType).
          RETURN.
-      END. 
-   
+      END.
+
       lcError = fChkRequest(MobSub.MsSeq,
                             1,
                             CTServEl.ServCom,
@@ -214,60 +218,17 @@ PROCEDURE pNew:
    END.
 
    FOR EACH ttProvCommand:
-      liRemHRLPReq = 0.
-      IF ttProvCommand.DropService EQ "HRLP" THEN DO:
-         liRemHRLPReq =  fServiceRequest (MobSub.MsSeq,
-                                  "LP",
-                                  1,
-                                  "REMOVE",
-                                  fSecOffSet(ideActTime,5), /* 5 sec delay */
-                                  "",                /* SalesMan */
-                                  FALSE,             /* Set fees */
-                                  FALSE,             /* SMS */
-                                  "",
-                                  "",
-                                  0,
-                                  FALSE,
-                                 OUTPUT lcError).
-         IF liRemHRLPReq = 0 OR liRemHRLPReq = ? THEN DO:
-            fReqStatus(3,"ServiceRequest failure: " + lcError).
-            RETURN.
-         END.
- 
-      END.
-      /* extra request to reset barring status before hotline activation */
-      liUnbarrReq = 0.
-      IF ttProvCommand.BarringCmd NE "" THEN DO: 
-         
-         /* Create subrequests (set mandataory and orig request) */ 
-         liUnbarrReq = fServiceRequest (MobSub.MsSeq,
-                                  "BARRING",
-                                  1,
-                                  ttProvCommand.BarringCmd,
-                                  fSecOffSet(ideActTime,5), /* 5 sec delay */ 
-                                  "",                /* SalesMan */
-                                  FALSE,             /* Set fees */
-                                  FALSE,             /* SMS */
-                                  "",
-                                  "",
-                                  0,
-                                  FALSE,
-                                 OUTPUT lcError).
-         IF liUnbarrReq = 0 OR liUnbarrReq = ? THEN DO:
-            UNDO, RETURN SUBST("ERROR:ServiceRequest failure: &1", lcError).
-         END.
-      END.
-   
+  
       /* a quick fix to send provisioning commands in correct order */
       IF MobSub.CLIType EQ "CONTM2" AND
          MsRequest.ReqCParam1 EQ "#REFRESH" AND
          ttProvCommand.Component NE "HOTLINE" AND
-         CAN-FIND(FIRST ttProvCommand WHERE 
+         CAN-FIND(FIRST ttProvCommand WHERE
                         ttProvCommand.Component EQ "HOTLINE") THEN
           liDelay = 10.
       ELSE liDelay = 5.
 
-      /* Create subrequests (set mandataory and orig request) */ 
+      /* Create subrequests (set mandataory and orig request) */
       liReq = fServiceRequest (MobSub.MsSeq,
                                ttProvCommand.Component,
                                (IF ttProvCommand.ComponentParam NE "" THEN 1
@@ -282,45 +243,65 @@ PROCEDURE pNew:
                                liMasterRequest,
                                TRUE,
                                OUTPUT lcError).
-      
+
       /* Creation of subrequests failed, "fail" master request too */
       IF liReq = 0 OR liReq = ? THEN DO:
-         fReqStatus(3,"ServiceRequest failure: " + lcError).
-         RETURN.
+         UNDO, RETURN SUBST("ERROR:ServiceRequest failure: &1", lcError).
       END.
-      /*Link HRLP request to original*/
-      IF liRemHRLPReq > 0 THEN DO:
-         FIND bMsRequest WHERE
-              bMsRequest.MsRequest = liRemHRLPReq NO-ERROR.
-         IF AVAIL bMsRequest THEN ASSIGN
-            bMsRequest.OrigRequest = liReq
-            bMsRequest.Mandatory = 1.
-         RELEASE bMsRequest.
+
+      /* extra request to reset barring status before hotline activation */
+      liUnbarrReq = 0.
+      IF ttProvCommand.BarringCmd NE "" THEN DO:
+
+         /* Create subrequests (set mandataory and orig request) */
+         liUnbarrReq = fServiceRequest (MobSub.MsSeq,
+                                  "BARRING",
+                                  1,
+                                  ttProvCommand.BarringCmd,
+                                  fSecOffSet(ideActTime,5), /* 5 sec delay */
+                                  "",                /* SalesMan */
+                                  FALSE,             /* Set fees */
+                                  FALSE,             /* SMS */
+                                  "",
+                                  "",
+                                  liReq,
+                                  TRUE,
+                                 OUTPUT lcError).
+         IF liUnbarrReq = 0 OR liUnbarrReq = ? THEN DO:
+            UNDO, RETURN SUBST("ERROR:ServiceRequest failure: &1", lcError).
+         END.         
       END.
-      /*Decide if unbarr is linked directly lireq of HRLP req*/
-      IF liRemHRLPReq > 0 THEN liLinkReq = liRemHRLPReq.
-      ELSE liLinkReq = liReq.
       
-      /*directly linked to orig request*/
-      IF liUnbarrReq > 0 THEN DO:
-         FIND bMsRequest WHERE
-              bMsRequest.MsRequest = liUnbarrReq NO-ERROR.
-         IF AVAIL bMsRequest THEN ASSIGN
-            bMsRequest.OrigRequest = liLinkReq.
-            bMsRequest.Mandatory = 1.
-         RELEASE bMsRequest.
+      
+      liRemHRLPReq = 0.
+      IF ttProvCommand.DropService EQ "HRLP" THEN DO:
+         liRemHRLPReq =  fServiceRequest (MobSub.MsSeq,
+                                  "LP",
+                                  1,
+                                  "REMOVE",
+                                  fSecOffSet(ideActTime,5), /* 5 sec delay */
+                                  "",                /* SalesMan */
+                                  FALSE,             /* Set fees */
+                                  FALSE,             /* SMS */
+                                  "",
+                                  "",
+                                  liReq,
+                                  TRUE,
+                                 OUTPUT lcError).
+         IF liRemHRLPReq = 0 OR liRemHRLPReq = ? THEN DO:
+            UNDO, RETURN SUBST("ERROR:ServiceRequest failure: &1", lcError).
+         END.
       END.
    END.
 
    FIND CURRENT MsRequest EXCLUSIVE-LOCK.
    ASSIGN
       MsRequest.ReqCParam5 = lcFinalMask.
-   
+
    IF liReq > 0 THEN fReqStatus(7,""). /* wait provisioning sub requests */
    ELSE fReqStatus(8,""). /* provisioning not required */
 
 END PROCEDURE.
- 
 
 PROCEDURE pDone.
  

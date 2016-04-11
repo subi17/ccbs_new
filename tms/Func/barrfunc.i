@@ -547,6 +547,21 @@ FUNCTION fMergeMasks RETURNS CHAR
    RETURN lcMergedMask.
 END.
 
+FUNCTION fGetComponentInfo RETURNS CHAR
+   (INPUT icBarrCode AS CHAR,
+   OUTPUT ocComponentValue AS CHAR,
+   OUTPUT ocActParam AS CHAR):
+
+   FIND FIRST BarringConf NO-LOCK WHERE
+              BarringConf.BarringCode EQ icBarrcode NO-ERROR.
+   IF AVAIL BarringConf THEN DO:
+      ocComponentValue = BarringConf.NWComponent.
+      ocActParam = BarringConf.NWActParam. 
+      RETURN "".
+   END.
+   RETURN "Conf not found".
+END.   
+
 FUNCTION fBuildBarringCommand RETURNS LOG
    (INPUT icCLIType AS CHAR,
     INPUT icReqSource AS CHAR,
@@ -558,7 +573,11 @@ FUNCTION fBuildBarringCommand RETURNS LOG
    DEF BUFFER bHotLineBarring FOR ttMergedBarring.
    DEF BUFFER bttMergedBarring FOR ttMergedBarring.
    DEF BUFFER bBarringConf FOR BarringConf.
-            
+   DEF VAR lcComponent AS CHAR NO-UNDO.
+   DEF VAR lcComponentParam AS CHAR NO-UNDO.
+   DEF VAR lcHotlList AS CHAR NO-UNDO.
+   DEF VAR lcHotl AS CHAR NO-UNDO.   
+
    FIND FIRST bHotLineBarring WHERE
        LOOKUP(bHotLineBarring.BarrCode,"Debt_HOTLP,Debt_HOTL") > 0 AND
        LOOKUP(bHotLineBarring.NWStatus,"ACTIVE,EXISTING") > 0
@@ -832,16 +851,23 @@ FUNCTION fBuildBarringCommand RETURNS LOG
    END.
 
    /*Check if HRLP redirecction must be removed.*/
-   FIND FIRST ttProvCommand WHERE 
-              ttProvCommand.ComponentValue EQ 1 AND
-              (ttProvCommand.ComponentParam EQ "1,HOTTYPE=HOTLP" AND
-               ttProvCommand.Component EQ "HOTLINE") OR
-               ttProvCommand.Component EQ "LP"). /*vain debt_hotlp, ei debt_hotl */
+   /*Blocked: Debt_LP (Component LP) - Only one with LP component
+              Debt_HOTLP (Read component data from config)*/
+   lcHotlList = "LP,Debt_HOTLP".
+   do i = 1 to NUM-ENTRIES(lcHotlList):
+      lcHotl = ENTRY(i,lcHotlList).
+      fGetComponentInfo(lcHotl, lcComponent, lcComponentParam).
+      FIND FIRST ttProvCommand WHERE 
+                 ttProvCommand.ComponentValue EQ 1 AND
+                 ttProvCommand.ComponentParam EQ lcComponentParam AND
+                 ttProvCommand.Component EQ lcComponent NO-ERROR.
                
-   IF AVAIL ttProvCommand THEN
-      ttProvCommand.DropService = "HRLP".
+      IF AVAIL ttProvCommand THEN DO:
+         ttProvCommand.DropService = "HRLP".
+         RETURN TRUE.
+      END.
+   END.   
    RETURN TRUE.
-
 END.
 
 /* Merge new barring commands with existing barrings */
