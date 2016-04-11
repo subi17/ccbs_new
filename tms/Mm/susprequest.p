@@ -96,11 +96,13 @@ PROCEDURE pMain:
 
          CASE bMsReq.ReqStat:
 
-            WHEN 2 THEN DO:
+            WHEN 2 THEN DO TRANS:
                /* Mandatory unbarring complete, run pending */
                RUN pNew(MsRequest.ReqCParam1,
                         ldaActDate,
                         ldActStamp).
+               IF RETURN-VALUE BEGINS "Error" THEN 
+                   fReqStatus(3, RETURN-VALUE).
 
                RETURN.
             END.
@@ -252,8 +254,7 @@ PROCEDURE pNew:
                                   FALSE,
                                  OUTPUT lcError).
          IF liUnbarrReq = 0 OR liUnbarrReq = ? THEN DO:
-            fReqStatus(3,"ServiceRequest failure: " + lcError).
-            RETURN.
+            UNDO, RETURN SUBST("ERROR:ServiceRequest failure: &1", lcError).
          END.
       END.
    

@@ -831,6 +831,15 @@ FUNCTION fBuildBarringCommand RETURNS LOG
       ocFinalMask = fMergeMasks(BarringConf.Mask, ocFinalMask).
    END.
 
+   /*Check if HRLP redirecction must be removed.*/
+   FIND FIRST ttProvCommand WHERE 
+              ttProvCommand.ComponentValue EQ 1 AND
+              (ttProvCommand.ComponentParam EQ "1,HOTTYPE=HOTLP" AND
+               ttProvCommand.Component EQ "HOTLINE") OR
+               ttProvCommand.Component EQ "LP"). /*vain debt_hotlp, ei debt_hotl */
+               
+   IF AVAIL ttProvCommand THEN
+      ttProvCommand.DropService = "HRLP".
    RETURN TRUE.
 
 END.
