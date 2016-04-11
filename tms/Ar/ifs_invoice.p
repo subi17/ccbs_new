@@ -910,6 +910,28 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
          IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set3) > 0 THEN DO:
             ASSIGN ttRow.BillCode = lcbillcodes_to_set3.
          END.
+         /* If change was done then get other values from billing item */
+         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_to_set1 + "," +
+                                          lcbillcodes_to_set2 + "," +
+                                          lcbillcodes_to_set3) > 0 THEN DO:
+            FIND FIRST BillItem WHERE
+                       BillItem.Brand    = gcBrand AND
+                       BillItem.BillCode = ttRow.BillCode NO-LOCK NO-ERROR.
+                       
+            IF AVAILABLE BillItem THEN DO:
+               ASSIGN ttRow.SlsAcc = BillItem.AccNum /* Only used account number currently */
+                      ttRow.CostCentre = BillItem.CostCentre.
+
+               IF NOT llSalesInv AND BillItem.SAPRid > "" THEN
+                  ASSIGN
+                     ttRow.Operator    = "010"
+                     ttRow.ProductCode = BillItem.SAPRid. 
+            END.
+            ELSE DO:
+               fError(ttRow.BillCode + ": missing").
+            END.
+            
+         END.
       END. /* IF lcInvoiceType = "15" THEN DO: */
 
       liRowID = liRowID + 1.
