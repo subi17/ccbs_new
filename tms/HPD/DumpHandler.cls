@@ -57,7 +57,16 @@ CLASS HPD.DumpHandler ABSTRACT:
       THEN DELETE OBJECT lhMainTable.      
       
    END DESTRUCTOR.
-   
+
+
+   METHOD PROTECTED VOID mLog
+      ( iiLogLevel   AS INTEGER,
+        icLogType    AS CHARACTER, /* ERROR, INFO, DEBUG, ... */
+        icLogMessage AS CHARACTER ):
+      IF LOG-MANAGER:LOGGING-LEVEL GE iiLogLevel
+      THEN LOG-MANAGER:WRITE-MESSAGE(icLogMessage, icLogType).
+   END METHOD.
+
    
    METHOD PROTECTED CHARACTER mCode2Value
       (icTableName AS CHARACTER,

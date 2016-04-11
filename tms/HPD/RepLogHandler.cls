@@ -274,17 +274,18 @@ CLASS HPD.RepLogHandler FINAL:
       ELSE DO:
          lcTail = CAST(ttDumpHandler.objHandler, DumpHandler):mProcessRepLog(lhRepLogTable::RowID).
 
-         IF lcTail = ""
-         THEN DO:
-            mLog(2, "INFO",
-                 SUBSTITUTE("While processing message: " + lcMessage + 
-                            " couldn't find a record where ROWID='&1'",
-                            IF lhRepLogTable::RowID = ?
-                            THEN "?" ELSE lhRepLogTable::RowID)).
+         IF lcTail > ""
+         THEN lcMessage = lcMessage + {&HPDDumpDelimiter} + lcTail.
+
+         ELSE DO:
+            IF lcTail = ""
+            THEN mLog(2, "INFO",
+                      SUBSTITUTE("While processing message: " + lcMessage +
+                                 " couldn't find a record where ROWID='&1'",
+                                 IF lhRepLogTable::RowID = ?
+                                 THEN "?" ELSE lhRepLogTable::RowID)).
             RETURN 3.
          END.
-
-         lcMessage = lcMessage + {&HPDDumpDelimiter} + lcTail.
       END.
 
       IF NOT objMsgPublisher:send_message(lcMessage)

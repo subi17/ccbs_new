@@ -12,10 +12,8 @@ CLASS HPD.MServiceLimitDump FINAL INHERITS DumpHandler:
    CONSTRUCTOR PUBLIC MServiceLimitDump
       (iiDumpID AS INTEGER):
 
-      lhMainTable = BUFFER lbMServiceLimit:HANDLE.
-
       objDumpBase = NEW DumpBase(iiDumpID, THIS-OBJECT).
-      objDumpBase:mUseTable(lhMaintable).
+      objDumpBase:mUseTable(BUFFER lbMServiceLimit:HANDLE).
       objDumpBase:mVerifyDumpFileData().
       
    END CONSTRUCTOR.
@@ -53,6 +51,27 @@ CLASS HPD.MServiceLimitDump FINAL INHERITS DumpHandler:
               ELSE RETURN IF lbMServiceLimit.CustNum = ? THEN "0" ELSE STRING(lbMServiceLimit.CustNum).         
          OTHERWISE RETURN "".         
       END CASE.
+
+   END METHOD.
+
+
+   METHOD OVERRIDE PUBLIC CHARACTER mProcessRepLog
+      (INPUT icRowID AS CHARACTER):
+
+      FIND lbMServiceLimit NO-LOCK WHERE
+         ROWID(lbMServiceLimit) = TO-ROWID(icRowID)
+      NO-ERROR.
+
+      IF NOT AVAILABLE lbMServiceLimit
+      THEN RETURN "".
+
+      IF lbMServiceLimit.MSID = 0 OR lbMServiceLimit.MSID = ?
+      THEN DO:
+         mLog(1,"INFO","MServiceLimit was ignored as the field MSID has zero value. ROWID=" + icRowID).
+         RETURN ?.
+      END.
+
+      RETURN objDumpBase:mGetData().
 
    END METHOD.
 

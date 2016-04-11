@@ -7,6 +7,9 @@ TRIGGER PROCEDURE FOR REPLICATION-DELETE OF MServiceLimit.
 IF NEW MServiceLimit
 THEN RETURN.
 
+IF MServiceLimit.MSID = 0 OR MServiceLimit.MSID = ?
+THEN RETURN.
+
 {triggers/mservicelimit.i}
 
 IF NOT fCheckHPDStatus(MServiceLimit.MsSeq,
