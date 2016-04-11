@@ -320,6 +320,8 @@ END PROCEDURE.
 
 PROCEDURE pDiscountPlan:
 
+   DEFINE VARIABLE ldate AS DATE NO-UNDO.
+
    FIND FIRST DiscountPlan NO-LOCK WHERE
               DiscountPlan.DPId = INT(OrderAction.ItemKey) NO-ERROR.
    IF NOT AVAIL DiscountPlan THEN 
@@ -363,15 +365,20 @@ PROCEDURE pDiscountPlan:
                                        DiscountPlan.ValidPeriods)
          DPMember.DiscValue = DPRate.DiscValue.
    END.
-   
+
+
    IF DiscountPlan.dprule EQ "BONO6WEBDISC" THEN DO: /* YPR-3083 */
       /* YDR-2160 */
       /* There would be some orders created during x-mas campaign (YPR-3083)
          are still exsisting in queue AND released now OR later, so validTo
          for x-mas campaign orders has not be modified OR removed */
-      IF Order.CrStamp >= fCParamDe("AprilPromotionFromDate") AND 
-         Order.CrStamp <= fCParamDe("AprilPromotionToDate")   THEN 
-         DPMember.ValidTo = ADD-INTERVAL(MobSub.ActivationDate,3,"months"). /* YDR-2160 */
+      
+      IF Order.CrStamp       >= fCParamDe("AprilPromotionFromDate") AND 
+         Order.CrStamp       <= fCParamDe("AprilPromotionToDate")   THEN 
+      ASSIGN 
+            ldate              = fLastDayOfMonth(MobSub.ActivationDate)
+            DPMember.ValidFrom = MobSub.ActivationDate
+            DPMember.ValidTo   = ADD-INTERVAL(ldate,2,"months"). /* YDR-2160 */
       ELSE    
          DPMember.ValidTo = 12/31/16. /* YPR-3083 */
    END.
