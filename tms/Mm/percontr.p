@@ -1733,7 +1733,7 @@ PROCEDURE pContractTermination:
 
    DEF VAR llFMFee AS LOG  NO-UNDO. 
    DEF VAR liDSSMsSeq AS INT NO-UNDO. 
-   DEF VAR ldaMonth22 AS DATE NO-UNDO. 
+   DEF VAR ldaMonth22 AS DATE NO-UNDO.
 
    DEF BUFFER bLimit        FOR MServiceLimit.
    DEF BUFFER bMsRequest    FOR MsRequest.
@@ -1742,6 +1742,7 @@ PROCEDURE pContractTermination:
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bMServiceLPool   FOR MServiceLPool.
+   DEF BUFFER bDCCLI           FOR DCCLI.
 
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
@@ -2250,14 +2251,32 @@ PROCEDURE pContractTermination:
 
          /* YPR-2515 */
          IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_RENEWAL} THEN DO:
-            
-            ldaMonth22  = ADD-INTERVAL(ldtOrigValidFrom, 22, "months").
-            ldaMonth22  = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
 
-            IF ldtActDate + 1 >= ldaMonth22 THEN
-               llCreatePenaltyFee = FALSE.
-         END.
-            
+            FOR EACH bDCCLI NO-LOCK WHERE
+                     bDCCLI.MsSeq = MsRequest.MsSeq AND
+                     bDCCLI.DCEvent BEGINS "PAYTERM" AND
+                     bDCCLI.ValidFrom < TODAY:
+
+               ldaMonth22 = ADD-INTERVAL(bDCCLI.ValidFrom, 22, "months").
+               ldaMonth22 = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
+
+               IF bDCCLI.ValidTo >= ldaMonth22 THEN DO:
+                  llCreatePenaltyFee = FALSE.
+                  LEAVE.
+               END.
+            END.
+
+            IF NOT AVAILABLE bDCCLI THEN DO:
+
+               ldaMonth22  = ADD-INTERVAL(ldtOrigValidFrom, 22, "months").
+               ldaMonth22  = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
+
+               IF ldtActDate >= ldaMonth22 THEN
+                  llCreatePenaltyFee = FALSE.
+            END.
+
+         END. /* IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_RENEWAL} THEN DO: */
+
       END.
       ELSE ASSIGN 
          llCreatePenaltyFee = TRUE
