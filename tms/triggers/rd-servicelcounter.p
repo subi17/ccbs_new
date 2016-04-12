@@ -7,7 +7,8 @@ TRIGGER PROCEDURE FOR REPLICATION-DELETE OF ServiceLCounter.
 IF NEW ServiceLCounter
 THEN RETURN.
 
-{triggers/servicelcounter.i}
+LOOKUP(STRING(ServiceLCounter.SlSeq),"{&DSS_SLSEQS}") = 0
+THEN RETURN.
 
 CREATE Common.RepLog.
 ASSIGN
