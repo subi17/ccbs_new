@@ -19,9 +19,13 @@
 "Account" "AccType" "Accounts" "26" "Invoice rejection income" "" "" 1
 "account" "AccType" "Accounts" "3" "Unregistered Account receivable" "" "" 1
 "account" "AccType" "Accounts" "4" "Payment" "" "" 1
+"Account" "AccType" "Accounts" "43" "Discount Extension over Q25" "" "" 1
 "account" "AccType" "Accounts" "5" "TAX" "" "" 1
 "account" "AccType" "Accounts" "6" "Overpayment" "" "" 1
+"Account" "AccType" "Accounts" "60" "Q25 discount" "" "" 1
 "account" "AccType" "Accounts" "7" "Deposit" "" "" 1
+"Account" "AccType" "Accounts" "70" "Q25 discount" "" "" 1
+"Account" "AccType" "Accounts" "79" "Charge any type of discount over Q25" "" "" 1
 "account" "AccType" "Accounts" "8" "Rounding" "" "" 1
 "account" "AccType" "Accounts" "9" "Discounts" "" "" 1
 "ActionLog" "ActionStatus" "Log" "0" "Active" "" "" 1
@@ -29,7 +33,7 @@
 "ActionLog" "ActionStatus" "Log" "2" "Ended succesfully" "" "" 1
 "ActionLog" "ActionStatus" "Log" "3" "Logged" "" "" 1
 "ActionLog" "ActionStatus" "Log" "5" "Cancelled" "" "" 1
-"AppIdPrefix" "ApplicationId" "ExternalAPI" "selfService" "Transaction Ids for particular application" "" "601,602,501,502,503,504,505,506,650,507,701" 1
+"AppIdPrefix" "ApplicationId" "ExternalAPI" "selfService" "Transaction Ids for particular application" "" "601,602,501,502,503,504,505,506,650,507,701,509" 1
 "Barring" "BarringGroup" "" "ATC" "" "" "20" 0
 "Barring" "BarringGroup" "" "Collections" "" "" "30" 0
 "Barring" "BarringGroup" "" "Customer" "" "" "10" 0
@@ -622,6 +626,8 @@
 "InvText" "Keyvalue" "EMAIL" "AGREE" "Agreement" "" "" 1
 "InvText" "KeyValue" "EKIRJE" "CLimit" "EKIRJE" "" "" 1
 "InvText" "KeyValue" "EKIRJE" "EKIRJE" "EKIRJE" "" "" 1
+"invtext" "keyvalue" "EMAIL" "EMailInvoiceQ25Final" "EMail invoice for Q25 Final message" "" "" 1
+"invtext" "keyvalue" "EMAIL" "EMailInvoiceQ25Prior" "EMail invoice for Q25 Prior message" "" "" 1
 "invtext" "keyvalue" "EMAIL" "FusionEmail" "Fusion summary email" "" "" 1
 "invtext" "keyvalue" "EMAIL" "GetConsultID" "Get Consult Contract ID" "" "" 1
 "invtext" "keyvalue" "EMAIL" "GetMultiConsultID" "Get Multiple Consult Contract Id" "" "" 1
@@ -968,6 +974,7 @@
 "Order" "OrderChannel" "Order" "Fusion_Telesales" "Fusion Telesales" "" "" 1
 "Order" "OrderChannel" "Order" "POS" "Point of sales" "" "" 1
 "Order" "OrderChannel" "Order" "Renewal" "Renewals" "" "" 1
+"Order" "OrderChannel" "Order" "Renewal_CTC" "Renewal CTC" "" "" 1
 "Order" "OrderChannel" "Order" "Renewal_POS" "Renewal through POS" "" "" 1
 "Order" "OrderChannel" "Order" "Renewal_POS_STC" "Renewal + STC through POS" "" "" 1
 "Order" "OrderChannel" "Order" "Renewal_telesales" "Renewal through telesales" "" "" 1
@@ -1004,8 +1011,8 @@
 "Order" "StatusCode" "Orders" "75" "MNP Retention" "" "" 1
 "Order" "StatusCode" "Orders" "76" "Pending main line order" "" "" 1
 "Order" "StatusCode" "Orders" "77" "Pending fixed line order" "" "" 1
-"Order" "StatusCode" "Orders" "8" "CLOSED BY FRAUD" "" "" 1
-"Order" "StatusCode" "Orders" "9" "AUTO CLOSED" "" "" 1
+"Order" "StatusCode" "Orders" "8" "CLOSED BY YOIGO" "" "" 1
+"Order" "StatusCode" "Orders" "9" "CLOSED AFTER DEADLINE" "" "" 1
 "Order" "StatusCode" "Orders" "99" "MNP SIM Only" "" "" 1
 "Order" "Tupas" "Orders" "0" "default value" "" "" 1
 "Order" "Tupas" "Orders" "2" "Unknown (Not Identified)" "" "" 1
@@ -1312,6 +1319,8 @@
 "requem" "9,0,1,2,3,4,7,9" "SubsLMenu" "1" "Periodical contract termination" "" "" 1
 "requem" "90,0,1,2,3,4,9" "SubsLMenu" "1" "Fusion invoice email" "" "" 1
 "requem" "91,0,1,2,3,4" "SubsLMenu" "1" "Bank termination/cancellation file" "" "" 1
+"requem" "92,0,1,2,3" "SubsLMenu" "1" "Publish invoices to Newton AND HPD" "" "" 1
+"requem" "93,0,1,2,3" "SubsLMenu" "1" "Publish invoices to IFS" "" "" 1
 "RequestAction" "Action" "Request" "1" "Create" "" "" 1
 "RequestAction" "Action" "Request" "11" "Term-PenaltyFee" "" "" 1
 "RequestAction" "Action" "Request" "12" "Init-Terminate" "" "" 1
