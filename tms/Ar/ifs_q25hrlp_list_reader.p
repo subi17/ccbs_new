@@ -190,7 +190,7 @@ PROCEDURE pReadFileData:
             lcLine + " TEST" SKIP.
       END.
       ELSE DO:
-         FIND FIRST SingleFee USE-INDEX BillCode WHERE
+         FIND FIRST SingleFee WHERE
                     SingleFee.Brand       EQ gcBrand AND
                     SingleFee.CustNum     EQ liCustNum AND
                     SingleFee.HostTable   EQ "Mobsub" AND
