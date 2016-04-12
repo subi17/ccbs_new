@@ -577,6 +577,7 @@ FUNCTION fBuildBarringCommand RETURNS LOG
    DEF VAR lcComponentParam AS CHAR NO-UNDO.
    DEF VAR lcHotlList AS CHAR NO-UNDO.
    DEF VAR lcHotl AS CHAR NO-UNDO.   
+   DEF VAR lcErr AS CHAR NO-UNDO.
 
    FIND FIRST bHotLineBarring WHERE
        LOOKUP(bHotLineBarring.BarrCode,"Debt_HOTLP,Debt_HOTL") > 0 AND
@@ -853,19 +854,21 @@ FUNCTION fBuildBarringCommand RETURNS LOG
    /*Check if HRLP redirecction must be removed.*/
    /*Blocked: Debt_LP (Component LP) - Only one with LP component
               Debt_HOTLP (Read component data from config)*/
-   lcHotlList = "LP,Debt_HOTLP".
+   lcHotlList = "Debt_LP,Debt_HOTLP".
    do i = 1 to NUM-ENTRIES(lcHotlList):
       lcHotl = ENTRY(i,lcHotlList).
-      fGetComponentInfo(lcHotl, lcComponent, lcComponentParam).
-      FIND FIRST ttProvCommand WHERE 
-                 ttProvCommand.ComponentValue EQ 1 AND
-                 ttProvCommand.ComponentParam EQ lcComponentParam AND
-                 ttProvCommand.Component EQ lcComponent NO-ERROR.
+      lcErr = fGetComponentInfo(lcHotl, lcComponent, lcComponentParam).
+      IF lcErr EQ "" THEN DO: 
+         FIND FIRST ttProvCommand WHERE 
+                    ttProvCommand.ComponentValue EQ 1 AND
+                    ttProvCommand.ComponentParam EQ lcComponentParam AND
+                    ttProvCommand.Component EQ lcComponent NO-ERROR.
                
-      IF AVAIL ttProvCommand THEN DO:
-         ttProvCommand.DropService = "HRLP".
-         RETURN TRUE.
-      END.
+         IF AVAIL ttProvCommand THEN DO:
+            ttProvCommand.DropService = "HRLP".
+            RETURN TRUE.
+         END.
+      END.      
    END.   
    RETURN TRUE.
 END.

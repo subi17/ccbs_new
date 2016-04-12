@@ -275,22 +275,29 @@ PROCEDURE pNew:
       
       liRemHRLPReq = 0.
       IF ttProvCommand.DropService EQ "HRLP" THEN DO:
-         liRemHRLPReq =  fServiceRequest (MobSub.MsSeq,
-                                  "LP",
-                                  1,
-                                  "REMOVE",
-                                  fSecOffSet(ideActTime,5), /* 5 sec delay */
-                                  "",                /* SalesMan */
-                                  FALSE,             /* Set fees */
-                                  FALSE,             /* SMS */
-                                  "",
-                                  "",
-                                  liReq,
-                                  TRUE,
-                                 OUTPUT lcError).
-         IF liRemHRLPReq = 0 OR liRemHRLPReq = ? THEN DO:
-            UNDO, RETURN SUBST("ERROR:ServiceRequest failure: &1", lcError).
-         END.
+         FIND FIRST SubSer NO-LOCK WHERE
+                    SubSer.MsSeq EQ Mobsub.MsSeq AND
+                    SubSer.ServCom EQ "LP" AND
+                    SubSer.SSParam EQ "REDIRECTION_HIGHRISKCUSTOMER_1" 
+                    NO-ERROR.
+         IF AVAIL SubSer THEN DO:
+            liRemHRLPReq =  fServiceRequest (MobSub.MsSeq,
+                                     "LP",
+                                     1,
+                                     "REMOVE",
+                                     fSecOffSet(ideActTime,5), /* 5 sec delay */
+                                     "",                /* SalesMan */
+                                     FALSE,             /* Set fees */
+                                     FALSE,             /* SMS */
+                                     "",
+                                     "",
+                                     liReq,
+                                     TRUE,
+                                    OUTPUT lcError).
+            IF liRemHRLPReq = 0 OR liRemHRLPReq = ? THEN DO:
+               UNDO, RETURN SUBST("ERROR:ServiceRequest failure: &1", lcError).
+            END.
+         END.   
       END.
    END.
 
