@@ -8,7 +8,9 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF SingleFee OLD BUFFER oldSingleFee.
 IF NEW(SingleFee) AND (SingleFee.Concerns[1] = 0 OR SingleFee.Concerns[1] = ? OR SingleFee.HostTable NE "MobSub") 
 THEN RETURN.
 
-IF NOT NEW(SingleFee) AND SingleFee.HostTable NE "MobSub" AND oldSingleFee.HostTable NE "MobSub"
+IF NOT NEW(SingleFee) AND
+   ( ( SingleFee.HostTable NE "MobSub" AND oldSingleFee.HostTable NE "MobSub" ) OR
+     NOT ( SingleFee.Concerns[1] > 0 AND oldSingleFee.Concerns[1] > 0 ) )
 THEN RETURN.
 
 {triggers/check_mobsub.i SingleFee KeyValue}
