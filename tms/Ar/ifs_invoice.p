@@ -23,6 +23,14 @@ DEF INPUT  PARAMETER icEventFields AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiEvents      AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 
+/* YOT-4132 Translate the billing items to dump file in case a credit note is created */
+DEF VAR lcbillcodes_from_set1 AS CHAR NO-UNDO INIT "PAYTERM,PAYTERM18,PAYTERM1E,PAYTERM24,PAYTERMBS,PAYTERMEND,PAYTERMEND1E,PAYTERMENDBS".
+DEF VAR lcbillcodes_to_set1   AS CHAR NO-UNDO INIT "CNPAYTERM".
+DEF VAR lcbillcodes_from_set2 AS CHAR NO-UNDO INIT "RVTERM1EF,RVTERMBSF,RVTERMF".
+DEF VAR lcbillcodes_to_set2   AS CHAR NO-UNDO INIT "CNRV".
+DEF VAR lcbillcodes_from_set3 AS CHAR NO-UNDO INIT "RVTERM,RVTERM1E,RVTERMBS,RVTERMEND,RVTERMEND1E,RVTERMENDBS".
+DEF VAR lcbillcodes_to_set3   AS CHAR NO-UNDO INIT "CNRVTERM".
+
 DEF VAR liCnt         AS INT    NO-UNDO.
 DEF VAR ldVATTot      AS DEC    NO-UNDO.
 DEF VAR ldVATAmt      AS DEC    NO-UNDO.
@@ -135,7 +143,6 @@ FUNCTION fDate2String RETURNS CHAR
           STRING(DAY(idaDate),"99").
    
 END FUNCTION.
-
 
 FUNCTION fPrintHeader RETURNS LOGIC:
 
@@ -830,7 +837,8 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
             ttRow.BankCode = {&TF_BANK_UNOE}.
          ELSE IF ttRow.BillCode = "RVTERMBSF" THEN
             ttRow.BankCode = {&TF_BANK_SABADELL}.
-       END.
+      END.
+
    END.
    
    /* sales invoice installment handling, YDR-328 */
@@ -891,8 +899,42 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
    BY ttRow.ItemId
    BY ttRow.Amt:
 
-      liRowID = liRowID + 1.
+      /* YOT-4132 billing code conversion for Credit Notes */
+      IF lcInvoiceType = "15" THEN DO:
+         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set1) > 0 THEN DO:
+            ASSIGN ttRow.BillCode = lcbillcodes_to_set1.
+         END.
+         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set2) > 0 THEN DO:
+            ASSIGN ttRow.BillCode = lcbillcodes_to_set2.
+         END.
+         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set3) > 0 THEN DO:
+            ASSIGN ttRow.BillCode = lcbillcodes_to_set3.
+         END.
+         /* If change was done then get other values from billing item */
+         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_to_set1 + "," +
+                                          lcbillcodes_to_set2 + "," +
+                                          lcbillcodes_to_set3) > 0 THEN DO:
+            FIND FIRST BillItem WHERE
+                       BillItem.Brand    = gcBrand AND
+                       BillItem.BillCode = ttRow.BillCode NO-LOCK NO-ERROR.
+                       
+            IF AVAILABLE BillItem THEN DO:
+               ASSIGN ttRow.SlsAcc = BillItem.AccNum /* Only used account number currently */
+                      ttRow.CostCentre = BillItem.CostCentre.
 
+               IF NOT llSalesInv AND BillItem.SAPRid > "" THEN
+                  ASSIGN
+                     ttRow.Operator    = "010"
+                     ttRow.ProductCode = BillItem.SAPRid. 
+            END.
+            ELSE DO:
+               fError(ttRow.BillCode + ": missing").
+            END.
+            
+         END.
+      END. /* IF lcInvoiceType = "15" THEN DO: */
+
+      liRowID = liRowID + 1.
       fPrintPosting().
    END.   
 
