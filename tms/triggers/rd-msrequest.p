@@ -13,7 +13,8 @@ fCreateMsReqCounter(MsRequest.ReqType, MsRequest.ReqStatus, -1).
 &IF {&MSREQUEST_DELETE_TRIGGER_ACTIVE} &THEN
 
 IF ( MsRequest.ReqSource > "" AND LOOKUP(MsRequest.ReqSource,{&REQUEST_SOURCES_HPD}) = 0 ) OR
-   LOOKUP(STRING(MsRequest.ReqType),{&REQTYPES_HPD}) = 0
+   LOOKUP(STRING(MsRequest.ReqType),{&REQTYPES_HPD}) = 0 OR
+   LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + "," + {&REQ_ONGOING_STATUSES}) = 0
 THEN RETURN.
 
 CREATE Mobile.RepLog.
