@@ -1,4 +1,4 @@
-/**
+/* *
  * Update returned terminals
  *
  * @input  struct;
@@ -14,6 +14,7 @@
            q25_contract_id;string;optional
 
  * @output success;boolean
+ 
  */
 
 /* YPR-2747 */
@@ -59,6 +60,7 @@ DEF VAR ldaMonth22       AS DATE   NO-UNDO.
 DEF VAR ldeMonth22       AS DEC    NO-UNDO. 
 DEF VAR llRenewalOrder   AS LOG    NO-UNDO. 
 DEF VAR lcQ25ContractID  AS CHAR   NO-UNDO.
+DEF VAR lcOrigKatun      AS CHAR   NO-UNDO.
 
 DEF BUFFER bDCCLI FOR DCCLI.
 DEF BUFFER bOrder FOR Order.
@@ -268,8 +270,11 @@ IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhTermReturn).
 
 IF (llDeviceStart AND llDeviceScreen) OR
    (llDeviceStart = ? AND llDeviceScreen = ?) 
-THEN lcMemo = "DevoluciÃ³n en tienda aceptada".
-ELSE lcMemo = "DevoluciÃ³n en tienda denegada".
+THEN lcMemo = "Devolución en tienda aceptada".
+ELSE lcMemo = "Devolución en tienda denegada".
+
+lcOrigKatun = katun.
+katun =  "VISTA_" + lcSalesman.
 
 DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                  "MobSub",
@@ -277,6 +282,8 @@ DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                  Order.CustNum,
                  lcMemo,
                  lcResult).
+
+katun = lcOrigKatun.
 
 RELEASE TermReturn.
 
