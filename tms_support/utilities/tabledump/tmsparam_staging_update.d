@@ -56,3 +56,6 @@
 "Charges" "OutDir" "C" 0 0 "/store/riftp/charges/outgoing/outgoing/" ? "" "" "" "" "" "" "" "" "" "" "Outgoing directory" no "1"
 "Charges" "OutSpoolDir" "C" 0 0 "/store/riftp/charges/outgoing/spool/" ? "" "" "" "" "" "" "" "" "" "" "Outgoing spool directory" no "1"
 "FuncRun" "FRDaemonInterval" "I" 60 0 "" ? "" "" "" "" "" "" "" "" "" "" "Interval between loops" no "1"
+"HPD.Interface" "HPD.QueueCommon.Password" "C" 0 0 "HdTkFa8-O2mMljJW!aBSEu" ? "" "" "" "" "" "" "" "" "" "" "" no "1"
+"HPD.Interface" "HPD.QueueMobile.Password" "C" 0 0 "HdTkFa8-O2mMljJW!aBSEu" ? "" "" "" "" "" "" "" "" "" "" "" no "1"
+"HPD.Interface" "HPD.QueueOrdercanal.Password" "C" 0 0 "HdTkFa8-O2mMljJW!aBSEu" ? "" "" "" "" "" "" "" "" "" "" "" no "1"
