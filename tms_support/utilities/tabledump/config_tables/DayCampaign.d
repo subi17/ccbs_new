@@ -37,8 +37,8 @@
 "CONTS26" 01/05/14 0 31/12/49 "" 0 "" "" "La Infinita 2 GB" 0 0 "1" "1" 1 1 0 0 "CONTS26MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1
 "CONTS30" 01/05/12 0 31/12/49 "" 0 "" "" "La Infinita 30" 0 0 "1" "1" 1 1 0 0 "CONTS30MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1
 "CONTS32" 01/05/14 0 31/12/49 "" 0 "" "" "La Infinita 4 GB" 0 0 "1" "1" 1 1 0 0 "CONTS32MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1
-"CONTS35" 01/09/13 0 31/12/49 "" 0 "" "" "La Infinita 35" 0 0 "1" "1" 1 1 0 0 "CONTS35MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1
-"CONTS39" 01/09/12 0 31/12/49 "" 0 "" "" "La Infinita 39" 0 0 "1" "1" 1 1 0 0 "CONTS39MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1
+"CONTS35" 01/09/13 0 08/03/16 "" 0 "" "" "La Infinita 35" 0 0 "1" "1" 1 1 0 0 "CONTS35MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1
+"CONTS39" 01/09/12 0 08/03/16 "" 0 "" "" "La Infinita 39" 0 0 "1" "1" 1 1 0 0 "CONTS39MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1
 "CONTSF10" 01/10/13 0 31/12/49 "" 0 "" "" "FUSIÓN FIBRA INFINITA A LO YOIGO" 0 0 "1" "1" 1 1 0 0 "CONTSF10MF" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 1
 "CONTSF14" 01/10/13 0 31/12/49 "" 0 "" "" "FUSIÓN INFINITA A LO YOIGO" 0 0 "1" "1" 1 1 0 0 "CONTSF14MF" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 1
 "DATA200_UPSELL" 01/06/15 4 31/12/49 "" 0 "" "" "200 MB upsell" 93 0 "1" "6" 1 2 1 0 "DATA200MFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0
