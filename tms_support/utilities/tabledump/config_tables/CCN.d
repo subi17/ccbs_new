@@ -70,6 +70,7 @@
 160 "Somalia" 160 "1"
 200 "Voice IP International" 0 "1"
 241 "Cuba" 241 "1"
+631 "80x special numbers" 0 "1"
 641 "Cuba - Mobile" 641 "1"
 722 "Korea, PDR (North) - Mobile" 722 "1"
 801 "Roaming EU-Int" 0 "1"
