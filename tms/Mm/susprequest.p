@@ -146,7 +146,7 @@ PROCEDURE pNew:
    ELSE ideActTime = fMake2Dt(idtDate,10800).
 
    /* Assign master request (35) to 1 */
-   IF NOT fReqStatus(1,"") THEN RETURN.
+   IF NOT fReqStatus(1,"") THEN RETURN "".
 
    IF icBarrings BEGINS "#REFRESH" THEN DO:
 
@@ -161,7 +161,7 @@ PROCEDURE pNew:
                           OUTPUT TABLE ttBarringCmd,
                           OUTPUT lcError) EQ FALSE THEN DO:
          fReqError(lcError).
-         RETURN.
+         RETURN "".
       END.
 
       IF fMergeBarrings(MobSub.MsSeq,
@@ -170,7 +170,7 @@ PROCEDURE pNew:
                         OUTPUT lcError) EQ FALSE THEN DO:
           MESSAGE lcError VIEW-AS ALERT-BOX.
          fReqError(lcError).
-         RETURN.
+         RETURN "".
       END.
    END.
 
@@ -189,7 +189,7 @@ PROCEDURE pNew:
 
       IF NOT AVAILABLE ServCom THEN DO:
          fReqError("SYSTEM ERROR:BARRING service not defined").
-         RETURN.
+         RETURN "".
       END.
 
       FIND FIRST CTServEl NO-LOCK WHERE
@@ -201,7 +201,7 @@ PROCEDURE pNew:
       IF NOT AVAIL CTServEl THEN DO:
          fReqError("SYSTEM ERROR:BARRING service not defined for " +
             MobSub.CLIType).
-         RETURN.
+         RETURN "".
       END.
 
       lcError = fChkRequest(MobSub.MsSeq,
@@ -212,7 +212,7 @@ PROCEDURE pNew:
          fReqStatus(3,SUBST("Barring component &1: &2",
                              CTServEl.ServCom,
                              lcError)).
-         RETURN.
+         RETURN "".
       END.
 
    END.
