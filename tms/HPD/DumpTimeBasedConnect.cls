@@ -107,6 +107,9 @@ CLASS HPD.DumpTimeBasedConnect INHERITS DumpTimeBased:
 
    METHOD PUBLIC LOGICAL mConnectMore():
 
+      IF CONNECTED(lcDBLogicalName)
+      THEN DISCONNECT VALUE(lcDBLogicalName).
+
       DEFINE VARIABLE llOK     AS LOGICAL   NO-UNDO.
       DEFINE VARIABLE lcDBPath AS CHARACTER NO-UNDO.
 
