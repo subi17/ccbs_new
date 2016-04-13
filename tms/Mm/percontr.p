@@ -2255,24 +2255,21 @@ PROCEDURE pContractTermination:
             FOR EACH bDCCLI NO-LOCK WHERE
                      bDCCLI.MsSeq = MsRequest.MsSeq AND
                      bDCCLI.DCEvent BEGINS "PAYTERM" AND
-                     bDCCLI.ValidFrom < TODAY:
+                     bDCCLI.ValidFrom < ldtActDate:
 
+               IF bDCCLI.TermDate NE ? THEN NEXT.
+
+               /* filter out expired installments */
+               IF bDCCLI.ValidTo < DATE(MONTH(ldtActDate + 1), 1, 
+                                        YEAR(ldtActDate + 1)) THEN NEXT.
+                                        
                ldaMonth22 = ADD-INTERVAL(bDCCLI.ValidFrom, 22, "months").
                ldaMonth22 = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
 
-               IF bDCCLI.ValidTo >= ldaMonth22 THEN DO:
+               IF ldtActDate + 1 >= ldaMonth22 THEN DO:
                   llCreatePenaltyFee = FALSE.
                   LEAVE.
                END.
-            END.
-
-            IF NOT AVAILABLE bDCCLI THEN DO:
-
-               ldaMonth22  = ADD-INTERVAL(ldtOrigValidFrom, 22, "months").
-               ldaMonth22  = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
-
-               IF ldtActDate >= ldaMonth22 THEN
-                  llCreatePenaltyFee = FALSE.
             END.
 
          END. /* IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_RENEWAL} THEN DO: */
