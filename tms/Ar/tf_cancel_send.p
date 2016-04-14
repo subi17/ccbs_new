@@ -196,11 +196,13 @@ PROCEDURE pCreateFile:
 
       RUN pPrintLine(FixedFeeTF.Amount, 
                      ldaBankDate,
-                     icBank).
+                     icBank,
+                     FALSE). /* payterm fee */
       IF FixedFeeTF.ResidualAmount > 0 THEN
          RUN pPrintLine(FixedFeeTF.ResidualAmount,
                         ldaBankDate,
-                        icBank).
+                        icBank,
+                        TRUE). /* Residual fee */
       ASSIGN
          FixedFeeTF.CancelStatus = "SENT"
          FixedFeeTF.CancelDate = TODAY
@@ -249,7 +251,8 @@ PROCEDURE pPrintLine:
    
    DEF INPUT PARAM ideTotalAmount AS DEC NO-UNDO. 
    DEF INPUT PARAM idaBankDate AS DATE NO-UNDO.
-   DEF INPUT PARAM icBank AS CHAR NO-UNDO. 
+   DEF INPUT PARAM icBank AS CHAR NO-UNDO.
+   DEF INPUT PARAM ilResidualFee AS LOG NO-UNDO.
 
    DEF VAR lcTotalAmount AS CHAR NO-UNDO. 
    DEF VAR ldeRVPerc AS DEC NO-UNDO.
@@ -285,9 +288,12 @@ PROCEDURE pPrintLine:
                        TFConf.RVPercentage = ldeRVPerc AND
                        TFConf.ValidTo >= ldaOrderDate AND
                        TFConf.ValidFrom <= ldaOrderDate NO-ERROR.
-            IF AVAIL TFConf THEN
-               ASSIGN
-                  lcCodFpago = TFConf.PaytermCode WHEN TFConf.RVPercentage NE 0.
+            IF AVAIL TFConf AND TFConf.RVPercentage NE 0 THEN DO:
+               IF ilResidualFee THEN /* get code for Residual fee */
+                  lcCodFpago = TFConf.ResidualCode.
+               ELSE /* get code for payterm */
+                  lcCodFpago = TFConf.PaytermCode.
+            END.
          END.
       END.
    END.
