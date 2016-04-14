@@ -856,19 +856,34 @@ FUNCTION fBuildBarringCommand RETURNS LOG
               Debt_HOTLP (Read component data from config)*/
    lcHotlList = "Debt_LP,Debt_HOTLP".
    do i = 1 to NUM-ENTRIES(lcHotlList):
+      /*Special handling for CONTM2 needs*/
       lcHotl = ENTRY(i,lcHotlList).
-      lcErr = fGetComponentInfo(lcHotl, lcComponent, lcComponentParam).
-      IF lcErr EQ "" THEN DO: 
-         FIND FIRST ttProvCommand WHERE 
+      IF icCLIType EQ "CONTM2" AND lcHotl EQ "Debt_HOTLP" THEN DO:
+         FIND FIRST ttProvCommand WHERE
                     ttProvCommand.ComponentValue EQ 1 AND
-                    ttProvCommand.ComponentParam EQ lcComponentParam AND
-                    ttProvCommand.Component EQ lcComponent NO-ERROR.
-               
+                    ttProvCommand.ComponentParam EQ "HOTL=0,HOTTYPE=HOTLP_SOLO" AND                   
+                    ttProvCommand.Component EQ "HOTLINE" NO-ERROR.
          IF AVAIL ttProvCommand THEN DO:
             ttProvCommand.DropService = "HRLP".
             RETURN TRUE.
-         END.
-      END.      
+         END. 
+      END. 
+      ELSE DO:
+         lcErr = fGetComponentInfo(lcHotl, 
+                                   OUTPUT lcComponent, 
+                                   OUTPUT lcComponentParam).
+         IF lcErr EQ "" THEN DO: 
+            FIND FIRST ttProvCommand WHERE 
+                       ttProvCommand.ComponentValue EQ 1 AND
+                       ttProvCommand.ComponentParam EQ lcComponentParam AND
+                       ttProvCommand.Component EQ lcComponent NO-ERROR.
+               
+            IF AVAIL ttProvCommand THEN DO:
+               ttProvCommand.DropService = "HRLP".
+               RETURN TRUE.
+            END.
+         END.      
+      END.   
    END.   
    RETURN TRUE.
 END.

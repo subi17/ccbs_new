@@ -277,14 +277,13 @@ PROCEDURE pNew:
       IF ttProvCommand.DropService EQ "HRLP" THEN DO:
          FIND FIRST SubSer NO-LOCK WHERE
                     SubSer.MsSeq EQ Mobsub.MsSeq AND
-                    SubSer.ServCom EQ "LP" AND
-                    SubSer.SSParam EQ "REDIRECTION_HIGHRISKCUSTOMER_1" 
-                    NO-ERROR.
-         IF AVAIL SubSer THEN DO:
+                    SubSer.ServCom EQ "LP" NO-ERROR.
+         IF AVAIL SubSer AND SubSer.SSParam EQ "REDIRECTION_HIGHRISKCUSTOMER_1"
+         THEN DO:
             liRemHRLPReq =  fServiceRequest (MobSub.MsSeq,
                                      "LP",
                                      1,
-                                     "REMOVE",
+                                     "remove",
                                      fSecOffSet(ideActTime,5), /* 5 sec delay */
                                      "",                /* SalesMan */
                                      FALSE,             /* Set fees */
