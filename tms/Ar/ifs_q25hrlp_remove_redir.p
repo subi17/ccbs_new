@@ -184,7 +184,7 @@ PROCEDURE pReadFileData:
 
       IF (liHRLPTestLevel EQ {&Q25_HRLP_FULL_TEST} AND 
       LOOKUP(STRING(liMsSeq),lcHRLPTestMSSeq) GT 0) THEN DO:
-         fMakeProdigyRequest(liMsSeq, liCustNum, "REMOVE",
+         fMakeProdigyRequest(liMsSeq, liCustNum, "remove",
                              INPUT-OUTPUT lcLine).
          PUT STREAM sLog UNFORMATTED
             lcLine + " TEST" SKIP.
@@ -223,7 +223,7 @@ PROCEDURE pReadFileData:
                   " Error: Debr_LP barring status." SKIP.
                NEXT.
             END.
-            fMakeProdigyRequest(liMsSeq, liCustNum, "REMOVE", 
+            fMakeProdigyRequest(liMsSeq, liCustNum, "remove", 
             INPUT-OUTPUT lcLine).
             PUT STREAM sLog UNFORMATTED
                lcLine SKIP.
