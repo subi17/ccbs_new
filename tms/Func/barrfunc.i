@@ -861,7 +861,7 @@ FUNCTION fBuildBarringCommand RETURNS LOG
       IF icCLIType EQ "CONTM2" AND lcHotl EQ "Debt_HOTLP" THEN DO:
          FIND FIRST ttProvCommand WHERE
                     ttProvCommand.ComponentValue EQ 1 AND
-                    ttProvCommand.ComponentParam EQ "HOTL=0,HOTTYPE=HOTLP_SOLO" AND                   
+                    ttProvCommand.ComponentParam EQ "HOTL=1,HOTTYPE=HOTLP_SOLO" AND
                     ttProvCommand.Component EQ "HOTLINE" NO-ERROR.
          IF AVAIL ttProvCommand THEN DO:
             ttProvCommand.DropService = "HRLP".
