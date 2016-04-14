@@ -288,8 +288,9 @@ PROCEDURE pPrintLine:
                        TFConf.RVPercentage = ldeRVPerc AND
                        TFConf.ValidTo >= ldaOrderDate AND
                        TFConf.ValidFrom <= ldaOrderDate NO-ERROR.
-            IF AVAIL TFConf AND TFConf.RVPercentage NE 0 THEN DO:
-               IF ilResidualFee THEN /* get code for Residual fee */
+            IF AVAIL TFConf THEN DO:
+               IF ilResidualFee AND TFConf.RVPercentage NE 0 THEN 
+                  /* get code for Residual fee */
                   lcCodFpago = TFConf.ResidualCode.
                ELSE /* get code for payterm */
                   lcCodFpago = TFConf.PaytermCode.
