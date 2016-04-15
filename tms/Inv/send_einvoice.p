@@ -37,8 +37,8 @@ DEF VAR lcMonitor               AS CHAR NO-UNDO.
 DEF VAR liLoop                  AS INT  NO-UNDO. 
 DEF VAR lcName                  AS CHAR NO-UNDO. 
 DEF VAR lcMonthName             AS CHAR NO-UNDO. 
-DEF VAR lcQ25Note               AS CHAR NO-UNDO. 
-
+DEF VAR lcMiYoigoLink           AS CHAR NO-UNDO.
+/* DEF VAR lcQ25Note               AS CHAR NO-UNDO. Removed by YOT-4050 */
 
 DEF STREAM sEmail.
 
@@ -71,7 +71,8 @@ ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        liMonth       = MONTH(ldaDateFrom)
        xMailFrom     = fCparam("EI","EmailFromAddress")
        lcEmailFile   = fCparam("EI","EmailPDFFile")
-       lcTransDir    = fCParam("EI","PDFMailArcDir").
+       lcTransDir    = fCParam("EI","PDFMailArcDir")
+       lcMiYoigoLink = fCparam("URL","MiYoigoInvoiceURL").
 
 INVOICE_LOOP:
 FOR EACH Invoice WHERE
@@ -124,18 +125,19 @@ FOR EACH Invoice WHERE
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#MONTH",lcMonthName)
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#YEAR",STRING(YEAR(Invoice.ToDate)))
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#LINK",lcEmailPDFLink)
+          lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#MiYoigoLINK",lcMiYoigoLink)
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#EMAIL",xMailFrom)
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#AMOUNT", 
           REPLACE(TRIM(STRING(Invoice.InvAmt,"->>>>>>9.99")),".",lcSep))
           xMailAddr = Customer.Email.
 
-   /* additional text for q25 cases */
-   RUN pGetQ25Text(Invoice.InvNum,
+   /* additional text for q25 cases. Commented out by YOT-4050 */
+/*   RUN pGetQ25Text(Invoice.InvNum,
                    Invoice.CustNum,
                    Invoice.InvDate,
                    Customer.Language,
                    OUTPUT lcQ25Note).
-   lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#Q25NOTE",lcQ25Note).
+   lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#Q25NOTE",lcQ25Note). */
 
    OUTPUT STREAM sEmail TO VALUE(lcLatestEmailFile).
    PUT STREAM sEmail UNFORMATTED xMailSubj SKIP(1).
