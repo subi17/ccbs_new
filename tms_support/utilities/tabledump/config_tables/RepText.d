@@ -2721,6 +2721,81 @@
 1 "" 3 "Alcatel ONETOUCH PIXI 3" 0 "G0000247" "1" 01/12/15 31/12/49
 1 "" 4 "Alcatel ONETOUCH PIXI 3" 0 "G0000247" "1" 01/12/15 31/12/49
 1 "" 5 "Alcatel ONETOUCH PIXI 3" 0 "G0000247" "1" 01/12/15 31/12/49
+1 "" 1 "Samsung Galaxy A3 2016" 0 "G0000248" "1" 28/01/16 31/12/49
+1 "" 2 "Samsung Galaxy A3 2016" 0 "G0000248" "1" 28/01/16 31/12/49
+1 "" 3 "Samsung Galaxy A3 2016" 0 "G0000248" "1" 28/01/16 31/12/49
+1 "" 4 "Samsung Galaxy A3 2016" 0 "G0000248" "1" 28/01/16 31/12/49
+1 "" 5 "Samsung Galaxy A3 2016" 0 "G0000248" "1" 28/01/16 31/12/49
+1 "" 1 "Samsung Galaxy A5 2016" 0 "G0000249" "1" 28/01/16 31/12/49
+1 "" 2 "Samsung Galaxy A5 2016" 0 "G0000249" "1" 28/01/16 31/12/49
+1 "" 3 "Samsung Galaxy A5 2016" 0 "G0000249" "1" 28/01/16 31/12/49
+1 "" 4 "Samsung Galaxy A5 2016" 0 "G0000249" "1" 28/01/16 31/12/49
+1 "" 5 "Samsung Galaxy A5 2016" 0 "G0000249" "1" 28/01/16 31/12/49
+1 "" 1 "ZTE Blade A452" 0 "G0000250" "1" 28/01/16 31/12/49
+1 "" 2 "ZTE Blade A452" 0 "G0000250" "1" 28/01/16 31/12/49
+1 "" 3 "ZTE Blade A452" 0 "G0000250" "1" 28/01/16 31/12/49
+1 "" 4 "ZTE Blade A452" 0 "G0000250" "1" 28/01/16 31/12/49
+1 "" 5 "ZTE Blade A452" 0 "G0000250" "1" 28/01/16 31/12/49
+1 "" 1 "Samsung Galaxy S7" 0 "G0000251" "1" 19/02/16 31/12/49
+1 "" 2 "Samsung Galaxy S7" 0 "G0000251" "1" 19/02/16 31/12/49
+1 "" 3 "Samsung Galaxy S7" 0 "G0000251" "1" 19/02/16 31/12/49
+1 "" 4 "Samsung Galaxy S7" 0 "G0000251" "1" 19/02/16 31/12/49
+1 "" 5 "Samsung Galaxy S7" 0 "G0000251" "1" 19/02/16 31/12/49
+1 "" 1 "Samsung Galaxy S7 edge" 0 "G0000252" "1" 19/02/16 31/12/49
+1 "" 2 "Samsung Galaxy S7 edge" 0 "G0000252" "1" 19/02/16 31/12/49
+1 "" 3 "Samsung Galaxy S7 edge" 0 "G0000252" "1" 19/02/16 31/12/49
+1 "" 4 "Samsung Galaxy S7 edge" 0 "G0000252" "1" 19/02/16 31/12/49
+1 "" 5 "Samsung Galaxy S7 edge" 0 "G0000252" "1" 19/02/16 31/12/49
+1 "" 1 "Huawei E3372H-153" 0 "G0000253" "1" 22/02/16 31/12/49
+1 "" 2 "Huawei E3372H-153" 0 "G0000253" "1" 22/02/16 31/12/49
+1 "" 3 "Huawei E3372H-153" 0 "G0000253" "1" 22/02/16 31/12/49
+1 "" 4 "Huawei E3372H-153" 0 "G0000253" "1" 22/02/16 31/12/49
+1 "" 5 "Huawei E3372H-153" 0 "G0000253" "1" 22/02/16 31/12/49
+1 "" 1 "ALCATEL ONETOUCH POP 3 (5) 4G" 0 "G0000254" "1" 25/02/16 31/12/49
+1 "" 2 "ALCATEL ONETOUCH POP 3 (5) 4G" 0 "G0000254" "1" 25/02/16 31/12/49
+1 "" 3 "ALCATEL ONETOUCH POP 3 (5) 4G" 0 "G0000254" "1" 25/02/16 31/12/49
+1 "" 4 "ALCATEL ONETOUCH POP 3 (5) 4G" 0 "G0000254" "1" 25/02/16 31/12/49
+1 "" 5 "ALCATEL ONETOUCH POP 3 (5) 4G" 0 "G0000254" "1" 25/02/16 31/12/49
+1 "" 1 "ALCATEL ONETOUCH POP 3 (55) 4G" 0 "G0000255" "1" 25/02/16 31/12/49
+1 "" 2 "ALCATEL ONETOUCH POP 3 (55) 4G" 0 "G0000255" "1" 25/02/16 31/12/49
+1 "" 3 "ALCATEL ONETOUCH POP 3 (55) 4G" 0 "G0000255" "1" 25/02/16 31/12/49
+1 "" 4 "ALCATEL ONETOUCH POP 3 (55) 4G" 0 "G0000255" "1" 25/02/16 31/12/49
+1 "" 5 "ALCATEL ONETOUCH POP 3 (55) 4G" 0 "G0000255" "1" 25/02/16 31/12/49
+1 "" 1 "Honor 5x Gris" 0 "G0000256" "1" 25/02/16 31/12/49
+1 "" 2 "Honor 5x Gris" 0 "G0000256" "1" 25/02/16 31/12/49
+1 "" 3 "Honor 5x Gris" 0 "G0000256" "1" 25/02/16 31/12/49
+1 "" 4 "Honor 5x Gris" 0 "G0000256" "1" 25/02/16 31/12/49
+1 "" 5 "Honor 5x Gris" 0 "G0000256" "1" 25/02/16 31/12/49
+1 "" 1 "Samsung Galaxy J3" 0 "G0000257" "1" 25/02/16 31/12/49
+1 "" 2 "Samsung Galaxy J3" 0 "G0000257" "1" 25/02/16 31/12/49
+1 "" 3 "Samsung Galaxy J3" 0 "G0000257" "1" 25/02/16 31/12/49
+1 "" 4 "Samsung Galaxy J3" 0 "G0000257" "1" 25/02/16 31/12/49
+1 "" 5 "Samsung Galaxy J3" 0 "G0000257" "1" 25/02/16 31/12/49
+1 "" 1 "Sony Xperia M5" 0 "G0000258" "1" 25/02/16 31/12/49
+1 "" 2 "Sony Xperia M5" 0 "G0000258" "1" 25/02/16 31/12/49
+1 "" 3 "Sony Xperia M5" 0 "G0000258" "1" 25/02/16 31/12/49
+1 "" 4 "Sony Xperia M5" 0 "G0000258" "1" 25/02/16 31/12/49
+1 "" 5 "Sony Xperia M5" 0 "G0000258" "1" 25/02/16 31/12/49
+1 "" 1 "Bq Aquaris M5.5 16GB/2GB" 0 "G0000259" "1" 26/02/16 31/12/49
+1 "" 2 "Bq Aquaris M5.5 16GB/2GB" 0 "G0000259" "1" 26/02/16 31/12/49
+1 "" 3 "Bq Aquaris M5.5 16GB/2GB" 0 "G0000259" "1" 26/02/16 31/12/49
+1 "" 4 "Bq Aquaris M5.5 16GB/2GB" 0 "G0000259" "1" 26/02/16 31/12/49
+1 "" 5 "Bq Aquaris M5.5 16GB/2GB" 0 "G0000259" "1" 26/02/16 31/12/49
+1 "" 1 "HTC Desire 530 Sprinkle" 0 "G0000260" "1" 29/03/16 31/12/49
+1 "" 2 "HTC Desire 530 Sprinkle" 0 "G0000260" "1" 29/03/16 31/12/49
+1 "" 3 "HTC Desire 530 Sprinkle" 0 "G0000260" "1" 29/03/16 31/12/49
+1 "" 4 "HTC Desire 530 Sprinkle" 0 "G0000260" "1" 29/03/16 31/12/49
+1 "" 5 "HTC Desire 530 Sprinkle" 0 "G0000260" "1" 29/03/16 31/12/49
+1 "" 1 "LG G5" 0 "G0000261" "1" 29/03/16 31/12/49
+1 "" 2 "LG G5" 0 "G0000261" "1" 29/03/16 31/12/49
+1 "" 3 "LG G5" 0 "G0000261" "1" 29/03/16 31/12/49
+1 "" 4 "LG G5" 0 "G0000261" "1" 29/03/16 31/12/49
+1 "" 5 "LG G5" 0 "G0000261" "1" 29/03/16 31/12/49
+1 "" 1 "iPhone SE" 0 "G0000262" "1" 06/04/16 31/12/49
+1 "" 2 "iPhone SE" 0 "G0000262" "1" 06/04/16 31/12/49
+1 "" 3 "iPhone SE" 0 "G0000262" "1" 06/04/16 31/12/49
+1 "" 4 "iPhone SE" 0 "G0000262" "1" 06/04/16 31/12/49
+1 "" 5 "iPhone SE" 0 "G0000262" "1" 06/04/16 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -4148,6 +4223,11 @@
 1 "" 3 "LG G4 Blanco" 0 "P030LG4W2" "1" 27/11/15 31/12/49
 1 "" 4 "LG G4 Blanco" 0 "P030LG4W2" "1" 27/11/15 31/12/49
 1 "" 5 "LG G4 White" 0 "P030LG4W2" "1" 27/11/15 31/12/49
+1 "" 1 "LG G5 Titán" 0 "P030LG5N2" "1" 21/03/16 31/12/49
+1 "" 2 "LG G5 Titán" 0 "P030LG5N2" "1" 21/03/16 31/12/49
+1 "" 3 "LG G5 Titán" 0 "P030LG5N2" "1" 21/03/16 31/12/49
+1 "" 4 "LG G5 Titán" 0 "P030LG5N2" "1" 21/03/16 31/12/49
+1 "" 5 "LG G5 Titan" 0 "P030LG5N2" "1" 21/03/16 31/12/49
 1 "" 1 "Google Nexus 5 Negro" 0 "P030NE5N2" "1" 29/01/14 31/12/49
 1 "" 2 "Google Nexus 5 Negro" 0 "P030NE5N2" "1" 29/01/14 31/12/49
 1 "" 3 "Google Nexus 5 Negro" 0 "P030NE5N2" "1" 29/01/14 31/12/49
@@ -4283,16 +4363,16 @@
 1 "" 3 "Samsung STAR II Blanco" 0 "P034526W2" "1" 26/01/12 31/12/49
 1 "" 4 "Samsung STAR II Blanco" 0 "P034526W2" "1" 26/01/12 31/12/49
 1 "" 5 "Samsung STAR II White" 0 "P034526W2" "1" 26/01/12 31/12/49
-1 "" 1 "Samsung Galaxy S6 edge + Dorado" 0 "P0346EPD2" "1" 25/08/15 31/12/49
+1 "" 1 "Samsung Galaxy S6 edge + 32 GB Dorado" 0 "P0346EPD2" "1" 25/08/15 31/12/49
 1 "" 2 "Samsung Galaxy S6 Edge + Dorado" 0 "P0346EPD2" "1" 25/08/15 31/12/49
 1 "" 3 "Samsung Galaxy S6 Edge + Dorado" 0 "P0346EPD2" "1" 25/08/15 31/12/49
 1 "" 4 "Samsung Galaxy S6 Edge + Dorado" 0 "P0346EPD2" "1" 25/08/15 31/12/49
-1 "" 5 "Samsung Galaxy S6 edge + Gold" 0 "P0346EPD2" "1" 25/08/15 31/12/49
-1 "" 1 "Samsung Galaxy S6 edge + Negro" 0 "P0346EPN2" "1" 25/08/15 31/12/49
+1 "" 5 "Samsung Galaxy S6 edge + 32 GB Gold" 0 "P0346EPD2" "1" 25/08/15 31/12/49
+1 "" 1 "Samsung Galaxy S6 edge + 32 GB Negro" 0 "P0346EPN2" "1" 25/08/15 31/12/49
 1 "" 2 "Samsung Galaxy S6 Edge + Negro" 0 "P0346EPN2" "1" 25/08/15 31/12/49
 1 "" 3 "Samsung Galaxy S6 Edge + Negro" 0 "P0346EPN2" "1" 25/08/15 31/12/49
 1 "" 4 "Samsung Galaxy S6 Edge + Negro" 0 "P0346EPN2" "1" 25/08/15 31/12/49
-1 "" 5 "Samsung Galaxy S6 edge + Black" 0 "P0346EPN2" "1" 25/08/15 31/12/49
+1 "" 5 "Samsung Galaxy S6 edge + 32 GB Black" 0 "P0346EPN2" "1" 25/08/15 31/12/49
 1 "" 1 "Samsung WAVE M Negro" 0 "P034725N2" "1" 26/01/12 31/12/49
 1 "" 2 "Samsung WAVE M Negro" 0 "P034725N2" "1" 26/01/12 31/12/49
 1 "" 3 "Samsung WAVE M Negro" 0 "P034725N2" "1" 26/01/12 31/12/49
@@ -4313,6 +4393,16 @@
 1 "" 3 "Samsung Galaxy Ace 3 Blanco" 0 "P034727W2" "1" 25/09/13 31/12/49
 1 "" 4 "Samsung Galaxy Ace 3 Blanco" 0 "P034727W2" "1" 25/09/13 31/12/49
 1 "" 5 "Samsung Galaxy Ace 3 White" 0 "P034727W2" "1" 25/09/13 31/12/49
+1 "" 1 "Samsung Galaxy S7 edge Dorado con regalo Gear VR" 0 "P0347EGDP" "1" 19/02/16 31/12/49
+1 "" 2 "Samsung Galaxy S7 edge Dorado con regalo gafas Gear" 0 "P0347EGDP" "1" 19/02/16 31/12/49
+1 "" 3 "Samsung Galaxy S7 edge Dorado con regalo gafas Gear" 0 "P0347EGDP" "1" 19/02/16 31/12/49
+1 "" 4 "Samsung Galaxy S7 edge Dorado con regalo gafas Gear" 0 "P0347EGDP" "1" 19/02/16 31/12/49
+1 "" 5 "Samsung Galaxy S7 edge Gold with Gear VR" 0 "P0347EGDP" "1" 19/02/16 31/12/49
+1 "" 1 "Samsung Galaxy S7 edge Negro con regalo Gear VR" 0 "P0347EGNP" "1" 19/02/16 31/12/49
+1 "" 2 "Samsung Galaxy S7 edge Negro con regalo gafas Gear" 0 "P0347EGNP" "1" 19/02/16 31/12/49
+1 "" 3 "Samsung Galaxy S7 edge Negro con regalo gafas Gear" 0 "P0347EGNP" "1" 19/02/16 31/12/49
+1 "" 4 "Samsung Galaxy S7 edge Negro con regalo gafas Gear" 0 "P0347EGNP" "1" 19/02/16 31/12/49
+1 "" 5 "Samsung Galaxy S7 edge Black with Gear VR" 0 "P0347EGNP" "1" 19/02/16 31/12/49
 1 "" 1 "Samsung Galaxy Note 10.1 Blanca" 0 "P034801W2" "1" 28/11/12 31/12/49
 1 "" 2 "Samsung Galaxy Note 10.1 Blanca" 0 "P034801W2" "1" 28/11/12 31/12/49
 1 "" 3 "Samsung Galaxy Note 10.1 Blanca" 0 "P034801W2" "1" 28/11/12 31/12/49
@@ -4423,6 +4513,21 @@
 1 "" 3 "Samsung GalaxyS4 mini Blanco con fundas de regalo" 0 "P0349PYW2" "1" 25/11/13 31/12/49
 1 "" 4 "Samsung GalaxyS4 mini Blanco con fundas de regalo" 0 "P0349PYW2" "1" 25/11/13 31/12/49
 1 "" 5 "Samsung Galaxy S4 mini Blanco with covers" 0 "P0349PYW2" "1" 25/11/13 31/12/49
+1 "" 1 "Samsung Galaxy A3 2016 Oro" 0 "P034A36D2" "1" 25/01/16 31/12/49
+1 "" 2 "Samsung Galaxy A3 2016 Oro" 0 "P034A36D2" "1" 25/01/16 31/12/49
+1 "" 3 "Samsung Galaxy A3 2016 Oro" 0 "P034A36D2" "1" 25/01/16 31/12/49
+1 "" 4 "Samsung Galaxy A3 2016 Oro" 0 "P034A36D2" "1" 25/01/16 31/12/49
+1 "" 5 "Samsung Galaxy A3 2016 Gold" 0 "P034A36D2" "1" 25/01/16 31/12/49
+1 "" 1 "Samsung Galaxy A3 2016 Negro" 0 "P034A36N2" "1" 25/01/16 31/12/49
+1 "" 2 "Samsung Galaxy A3 2016 Negro" 0 "P034A36N2" "1" 25/01/16 31/12/49
+1 "" 3 "Samsung Galaxy A3 2016 Negro" 0 "P034A36N2" "1" 25/01/16 31/12/49
+1 "" 4 "Samsung Galaxy A3 2016 Negro" 0 "P034A36N2" "1" 25/01/16 31/12/49
+1 "" 5 "Samsung Galaxy A3 2016 Black" 0 "P034A36N2" "1" 25/01/16 31/12/49
+1 "" 1 "Samsung Galaxy A3 2016 Oro Rosa" 0 "P034A36R2" "1" 19/02/16 31/12/49
+1 "" 2 "Samsung Galaxy A3 2016 Oro Rosa" 0 "P034A36R2" "1" 19/02/16 31/12/49
+1 "" 3 "Samsung Galaxy A3 2016 Oro Rosa" 0 "P034A36R2" "1" 19/02/16 31/12/49
+1 "" 4 "Samsung Galaxy A3 2016 Oro Rosa" 0 "P034A36R2" "1" 19/02/16 31/12/49
+1 "" 5 "Samsung Galaxy A3 2016 Rose Gold" 0 "P034A36R2" "1" 19/02/16 31/12/49
 1 "" 1 "Samsung Galaxy A5 2016 Oro" 0 "P034A56D2" "1" 19/01/16 31/12/49
 1 "" 2 "Samsung Galaxy A5 2016 Oro" 0 "P034A56D2" "1" 19/01/16 31/12/49
 1 "" 3 "Samsung Galaxy A5 2016 Oro" 0 "P034A56D2" "1" 19/01/16 31/12/49
@@ -4433,6 +4538,11 @@
 1 "" 3 "Samsung Galaxy A5 2016 Negro" 0 "P034A56N2" "1" 19/01/16 31/12/49
 1 "" 4 "Samsung Galaxy A5 2016 Negro" 0 "P034A56N2" "1" 19/01/16 31/12/49
 1 "" 5 "Samsung Galaxy A5 2016 Black" 0 "P034A56N2" "1" 19/01/16 31/12/49
+1 "" 1 "Samsung Galaxy A5 2016 Oro Rosa" 0 "P034A56R2" "1" 19/02/16 31/12/49
+1 "" 2 "Samsung Galaxy A5 2016 Oro Rosa" 0 "P034A56R2" "1" 19/02/16 31/12/49
+1 "" 3 "Samsung Galaxy A5 2016 Oro Rosa" 0 "P034A56R2" "1" 19/02/16 31/12/49
+1 "" 4 "Samsung Galaxy A5 2016 Oro Rosa" 0 "P034A56R2" "1" 19/02/16 31/12/49
+1 "" 5 "Samsung Galaxy A5 2016 Rose Gold" 0 "P034A56R2" "1" 19/02/16 31/12/49
 1 "" 1 "Samsung SGH B130 Blanco" 0 "P034B13G2" "1" 27/10/08 31/12/54
 1 "" 5 "Samsung SGH B130 White" 0 "P034B13G2" "1" 27/10/08 31/12/54
 1 "" 1 "Samsung SGH B130 Blanco" 0 "P034B13G3" "1" 29/10/08 31/12/54
@@ -4500,16 +4610,16 @@
 1 "" 3 "Samsung Galaxy Alpha Blanco" 0 "P034G85W2" "1" 24/09/14 31/12/49
 1 "" 4 "Samsung Galaxy Alpha Blanco" 0 "P034G85W2" "1" 24/09/14 31/12/49
 1 "" 5 "Samsung Galaxy Alpha White" 0 "P034G85W2" "1" 24/09/14 31/12/49
-1 "" 1 "Samsung Galaxy A3 2016 Oro" 0 "P034GA3D2" "1" 18/01/16 31/12/49
+1 "" 1 "Samsung Galaxy A3 Oro" 0 "P034GA3D2" "1" 18/01/16 31/12/49
 1 "" 2 "Samsung Galaxy A3 2016 Oro" 0 "P034GA3D2" "1" 18/01/16 31/12/49
 1 "" 3 "Samsung Galaxy A3 2016 Oro" 0 "P034GA3D2" "1" 18/01/16 31/12/49
 1 "" 4 "Samsung Galaxy A3 2016 Oro" 0 "P034GA3D2" "1" 18/01/16 31/12/49
-1 "" 5 "Samsung Galaxy A3 2016 Gold" 0 "P034GA3D2" "1" 18/01/16 31/12/49
-1 "" 1 "Samsung Galaxy A3 2016 Negro" 0 "P034GA3N2" "1" 18/01/16 31/12/49
+1 "" 5 "Samsung Galaxy A3 Gold" 0 "P034GA3D2" "1" 18/01/16 31/12/49
+1 "" 1 "Samsung Galaxy A3 Negro" 0 "P034GA3N2" "1" 18/01/16 31/12/49
 1 "" 2 "Samsung Galaxy A3 2016 Negro" 0 "P034GA3N2" "1" 18/01/16 31/12/49
 1 "" 3 "Samsung Galaxy A3 2016 Negro" 0 "P034GA3N2" "1" 18/01/16 31/12/49
 1 "" 4 "Samsung Galaxy A3 2016 Negro" 0 "P034GA3N2" "1" 18/01/16 31/12/49
-1 "" 5 "Samsung Galaxy A3 2016 Black" 0 "P034GA3N2" "1" 18/01/16 31/12/49
+1 "" 5 "Samsung Galaxy A3 Black" 0 "P034GA3N2" "1" 18/01/16 31/12/49
 1 "" 1 "Samsung Galaxy A5 Negro" 0 "P034GA5N2" "1" 27/01/15 31/12/49
 1 "" 2 "Samsung Galaxy A5 Negro" 0 "P034GA5N2" "1" 27/01/15 31/12/49
 1 "" 3 "Samsung Galaxy A5 Negro" 0 "P034GA5N2" "1" 27/01/15 31/12/49
@@ -4565,6 +4675,21 @@
 1 "" 3 "Samsung Galaxy J1 Blanco" 0 "P034GJ1W2" "1" 02/03/15 31/12/49
 1 "" 4 "Samsung Galaxy J1 Blanco" 0 "P034GJ1W2" "1" 02/03/15 31/12/49
 1 "" 5 "Samsung Galaxy J1 White" 0 "P034GJ1W2" "1" 02/03/15 31/12/49
+1 "" 1 "Samsung Galaxy J3 Dorado" 0 "P034GJ3D2" "1" 22/02/16 31/12/49
+1 "" 2 "Samsung Galaxy J3 Dorado" 0 "P034GJ3D2" "1" 22/02/16 31/12/49
+1 "" 3 "Samsung Galaxy J3 Dorado" 0 "P034GJ3D2" "1" 22/02/16 31/12/49
+1 "" 4 "Samsung Galaxy J3 Dorado" 0 "P034GJ3D2" "1" 22/02/16 31/12/49
+1 "" 5 "Samsung Galaxy J3 Gold" 0 "P034GJ3D2" "1" 22/02/16 31/12/49
+1 "" 1 "Samsung Galaxy J3 Negro" 0 "P034GJ3N2" "1" 22/02/16 31/12/49
+1 "" 2 "Samsung Galaxy J3 Negro" 0 "P034GJ3N2" "1" 22/02/16 31/12/49
+1 "" 3 "Samsung Galaxy J3 Negro" 0 "P034GJ3N2" "1" 22/02/16 31/12/49
+1 "" 4 "Samsung Galaxy J3 Negro" 0 "P034GJ3N2" "1" 22/02/16 31/12/49
+1 "" 5 "Samsung Galaxy J3 Black" 0 "P034GJ3N2" "1" 22/02/16 31/12/49
+1 "" 1 "Samsung Galaxy J3 Blanco" 0 "P034GJ3W2" "1" 22/02/16 31/12/49
+1 "" 2 "Samsung Galaxy J3 Blanco" 0 "P034GJ3W2" "1" 22/02/16 31/12/49
+1 "" 3 "Samsung Galaxy J3 Blanco" 0 "P034GJ3W2" "1" 22/02/16 31/12/49
+1 "" 4 "Samsung Galaxy J3 Blanco" 0 "P034GJ3W2" "1" 22/02/16 31/12/49
+1 "" 5 "Samsung Galaxy J3 White" 0 "P034GJ3W2" "1" 22/02/16 31/12/49
 1 "" 1 "Samsung Galaxy J5 Dorado" 0 "P034GJ5D2" "1" 24/08/15 31/12/49
 1 "" 2 "Samsung Galaxy J5 Dorado" 0 "P034GJ5D2" "1" 24/08/15 31/12/49
 1 "" 3 "Samsung Galaxy J5 Dorado" 0 "P034GJ5D2" "1" 24/08/15 31/12/49
@@ -4630,21 +4755,31 @@
 1 "" 3 "Samsung Galaxy S5 Blanco" 0 "P034GS5W2" "1" 09/04/14 31/12/49
 1 "" 4 "Samsung Galaxy S5 Blanco" 0 "P034GS5W2" "1" 09/04/14 31/12/49
 1 "" 5 "Samsung Galaxy S5 White" 0 "P034GS5W2" "1" 09/04/14 31/12/49
-1 "" 1 "Samsung Galaxy S6 Dorado" 0 "P034GS6D2" "1" 29/04/15 31/12/49
+1 "" 1 "Samsung Galaxy S6 32 GB Dorado" 0 "P034GS6D2" "1" 29/04/15 31/12/49
 1 "" 2 "Samsung Galaxy S6 Dorado" 0 "P034GS6D2" "1" 29/04/15 31/12/49
 1 "" 3 "Samsung Galaxy S6 Dorado" 0 "P034GS6D2" "1" 29/04/15 31/12/49
 1 "" 4 "Samsung Galaxy S6 Dorado" 0 "P034GS6D2" "1" 29/04/15 31/12/49
-1 "" 5 "Samsung Galaxy S6 Gold" 0 "P034GS6D2" "1" 29/04/15 31/12/49
-1 "" 1 "Samsung Galaxy S6 Negro" 0 "P034GS6N2" "1" 26/03/15 31/12/49
+1 "" 5 "Samsung Galaxy S6 32 GB Gold" 0 "P034GS6D2" "1" 29/04/15 31/12/49
+1 "" 1 "Samsung Galaxy S6 32 GB Negro" 0 "P034GS6N2" "1" 26/03/15 31/12/49
 1 "" 2 "Samsung Galaxy S6 Negro" 0 "P034GS6N2" "1" 26/03/15 31/12/49
 1 "" 3 "Samsung Galaxy S6 Negro" 0 "P034GS6N2" "1" 26/03/15 31/12/49
 1 "" 4 "Samsung Galaxy S6 Negro" 0 "P034GS6N2" "1" 26/03/15 31/12/49
-1 "" 5 "Samsung Galaxy S6 Black" 0 "P034GS6N2" "1" 26/03/15 31/12/49
-1 "" 1 "Samsung Galaxy S6 Blanco" 0 "P034GS6W2" "1" 24/03/15 31/12/49
+1 "" 5 "Samsung Galaxy S6 32 GB Black" 0 "P034GS6N2" "1" 26/03/15 31/12/49
+1 "" 1 "Samsung Galaxy S6 32 GB Blanco" 0 "P034GS6W2" "1" 24/03/15 31/12/49
 1 "" 2 "Samsung Galaxy S6 Blanco" 0 "P034GS6W2" "1" 24/03/15 31/12/49
 1 "" 3 "Samsung Galaxy S6 Blanco" 0 "P034GS6W2" "1" 24/03/15 31/12/49
 1 "" 4 "Samsung Galaxy S6 Blanco" 0 "P034GS6W2" "1" 24/03/15 31/12/49
-1 "" 5 "Samsung Galaxy S6 White" 0 "P034GS6W2" "1" 24/03/15 31/12/49
+1 "" 5 "Samsung Galaxy S6 32 GB White" 0 "P034GS6W2" "1" 24/03/15 31/12/49
+1 "" 1 "Samsung Galaxy S7 Dorado" 0 "P034GS7D2" "1" 19/02/16 31/12/49
+1 "" 2 "Samsung Galaxy S7 Dorado" 0 "P034GS7D2" "1" 19/02/16 31/12/49
+1 "" 3 "Samsung Galaxy S7 Dorado" 0 "P034GS7D2" "1" 19/02/16 31/12/49
+1 "" 4 "Samsung Galaxy S7 Dorado" 0 "P034GS7D2" "1" 19/02/16 31/12/49
+1 "" 5 "Samsung Galaxy S7 Gold" 0 "P034GS7D2" "1" 19/02/16 31/12/49
+1 "" 1 "Samsung Galaxy S7 Negro" 0 "P034GS7N2" "1" 19/02/16 31/12/49
+1 "" 2 "Samsung Galaxy S7 Negro" 0 "P034GS7N2" "1" 19/02/16 31/12/49
+1 "" 3 "Samsung Galaxy S7 Negro" 0 "P034GS7N2" "1" 19/02/16 31/12/49
+1 "" 4 "Samsung Galaxy S7 Negro" 0 "P034GS7N2" "1" 19/02/16 31/12/49
+1 "" 5 "Samsung Galaxy S7 Black" 0 "P034GS7N2" "1" 19/02/16 31/12/49
 1 "" 1 "Samsung Galaxy S SCL White Edition" 0 "P034GSSW2" "1" 25/04/11 31/12/49
 1 "" 2 "Samsung Galaxy S SCL White Edition" 0 "P034GSSW2" "1" 25/04/11 31/12/49
 1 "" 3 "Samsung Galaxy S SCL White Edition" 0 "P034GSSW2" "1" 25/04/11 31/12/49
@@ -4826,26 +4961,26 @@
 1 "" 3 "Samsung Galaxy Ace 2 Blanco" 0 "P034S58W2" "1" 08/08/12 31/12/49
 1 "" 4 "Samsung Galaxy Ace 2 Blanco" 0 "P034S58W2" "1" 08/08/12 31/12/49
 1 "" 5 "Samsung Galaxy Ace 2 White" 0 "P034S58W2" "1" 08/08/12 31/12/49
-1 "" 1 "Samsung Galaxy S6 Edge Dorado" 0 "P034S6ED2" "1" 29/05/15 31/12/49
+1 "" 1 "Samsung Galaxy S6 Edge 32 GB Dorado" 0 "P034S6ED2" "1" 29/05/15 31/12/49
 1 "" 2 "Samsung Galaxy S6 Edge Dorado" 0 "P034S6ED2" "1" 29/05/15 31/12/49
 1 "" 3 "Samsung Galaxy S6 Edge Dorado" 0 "P034S6ED2" "1" 29/05/15 31/12/49
 1 "" 4 "Samsung Galaxy S6 Edge Dorado" 0 "P034S6ED2" "1" 29/05/15 31/12/49
-1 "" 5 "Samsung Galaxy S6 Edge Gold" 0 "P034S6ED2" "1" 29/05/15 31/12/49
-1 "" 1 "Samsung Galaxy S6 Edge Negro" 0 "P034S6EN2" "1" 26/03/15 31/12/49
+1 "" 5 "Samsung Galaxy S6 Edge 32 GB Gold" 0 "P034S6ED2" "1" 29/05/15 31/12/49
+1 "" 1 "Samsung Galaxy S6 Edge 32 GB Negro" 0 "P034S6EN2" "1" 26/03/15 31/12/49
 1 "" 2 "Samsung Galaxy S6 Edge Negro" 0 "P034S6EN2" "1" 26/03/15 31/12/49
 1 "" 3 "Samsung Galaxy S6 Edge Negro" 0 "P034S6EN2" "1" 26/03/15 31/12/49
 1 "" 4 "Samsung Galaxy S6 Edge Negro" 0 "P034S6EN2" "1" 26/03/15 31/12/49
-1 "" 5 "Samsung Galaxy S6 Edge Black" 0 "P034S6EN2" "1" 26/03/15 31/12/49
-1 "" 1 "Samsung Galaxy S6 Edge Verde" 0 "P034S6EV2" "1" 24/04/15 31/12/49
+1 "" 5 "Samsung Galaxy S6 Edge 32 GB Black" 0 "P034S6EN2" "1" 26/03/15 31/12/49
+1 "" 1 "Samsung Galaxy S6 Edge 32 GB Verde" 0 "P034S6EV2" "1" 24/04/15 31/12/49
 1 "" 2 "Samsung Galaxy S6 Edge Verde" 0 "P034S6EV2" "1" 24/04/15 31/12/49
 1 "" 3 "Samsung Galaxy S6 Edge Verde" 0 "P034S6EV2" "1" 24/04/15 31/12/49
 1 "" 4 "Samsung Galaxy S6 Edge Verde" 0 "P034S6EV2" "1" 24/04/15 31/12/49
-1 "" 5 "Samsung Galaxy S6 Edge Green" 0 "P034S6EV2" "1" 24/04/15 31/12/49
-1 "" 1 "Samsung Galaxy S6 Edge Blanco" 0 "P034S6EW2" "1" 26/03/15 31/12/49
+1 "" 5 "Samsung Galaxy S6 Edge 32 GB Green" 0 "P034S6EV2" "1" 24/04/15 31/12/49
+1 "" 1 "Samsung Galaxy S6 Edge 32 GB Blanco" 0 "P034S6EW2" "1" 26/03/15 31/12/49
 1 "" 2 "Samsung Galaxy S6 Edge Blanco" 0 "P034S6EW2" "1" 26/03/15 31/12/49
 1 "" 3 "Samsung Galaxy S6 Edge Blanco" 0 "P034S6EW2" "1" 26/03/15 31/12/49
 1 "" 4 "Samsung Galaxy S6 Edge Blanco" 0 "P034S6EW2" "1" 26/03/15 31/12/49
-1 "" 5 "Samsung Galaxy S6 Edge White" 0 "P034S6EW2" "1" 26/03/15 31/12/49
+1 "" 5 "Samsung Galaxy S6 Edge 32 GB White" 0 "P034S6EW2" "1" 26/03/15 31/12/49
 1 "" 1 "Samsung Galaxy Trend Negro" 0 "P034S75N2" "1" 26/06/13 31/12/49
 1 "" 2 "Samsung Galaxy Trend Negro" 0 "P034S75N2" "1" 26/06/13 31/12/49
 1 "" 3 "Samsung Galaxy Trend Negro" 0 "P034S75N2" "1" 26/06/13 31/12/49
@@ -4861,6 +4996,26 @@
 1 "" 3 "Samsung Galaxy Trend Blanco" 0 "P034S75W2" "1" 26/06/13 31/12/49
 1 "" 4 "Samsung Galaxy Trend Blanco" 0 "P034S75W2" "1" 26/06/13 31/12/49
 1 "" 5 "Samsung Galaxy Trend White" 0 "P034S75W2" "1" 26/06/13 31/12/49
+1 "" 1 "Samsung Galaxy S7 edge Dorado" 0 "P034S7ED2" "1" 19/02/16 31/12/49
+1 "" 2 "Samsung Galaxy S7 edge Dorado" 0 "P034S7ED2" "1" 19/02/16 31/12/49
+1 "" 3 "Samsung Galaxy S7 edge Dorado" 0 "P034S7ED2" "1" 19/02/16 31/12/49
+1 "" 4 "Samsung Galaxy S7 edge Dorado" 0 "P034S7ED2" "1" 19/02/16 31/12/49
+1 "" 5 "Samsung Galaxy S7 edge Gold" 0 "P034S7ED2" "1" 19/02/16 31/12/49
+1 "" 1 "Samsung Galaxy S7 edge Negro" 0 "P034S7EN2" "1" 19/02/16 31/12/49
+1 "" 2 "Samsung Galaxy S7 edge Negro" 0 "P034S7EN2" "1" 19/02/16 31/12/49
+1 "" 3 "Samsung Galaxy S7 edge Negro" 0 "P034S7EN2" "1" 19/02/16 31/12/49
+1 "" 4 "Samsung Galaxy S7 edge Negro" 0 "P034S7EN2" "1" 19/02/16 31/12/49
+1 "" 5 "Samsung Galaxy S7 edge Black" 0 "P034S7EN2" "1" 19/02/16 31/12/49
+1 "" 1 "Samsung Galaxy S7 Dorado con regalo Gear VR" 0 "P034S7GDP" "1" 19/02/16 31/12/49
+1 "" 2 "Samsung Galaxy S7 Dorado con regalo gafas Gear" 0 "P034S7GDP" "1" 19/02/16 31/12/49
+1 "" 3 "Samsung Galaxy S7 Dorado con regalo gafas Gear" 0 "P034S7GDP" "1" 19/02/16 31/12/49
+1 "" 4 "Samsung Galaxy S7 Dorado con regalo gafas Gear" 0 "P034S7GDP" "1" 19/02/16 31/12/49
+1 "" 5 "Samsung Galaxy S7 Gold with Gear VR" 0 "P034S7GDP" "1" 19/02/16 31/12/49
+1 "" 1 "Samsung Galaxy S7 Negro con regalo Gear VR" 0 "P034S7GNP" "1" 19/02/16 31/12/49
+1 "" 2 "Samsung Galaxy S7 Negro con regalo gafas Gear" 0 "P034S7GNP" "1" 19/02/16 31/12/49
+1 "" 3 "Samsung Galaxy S7 Negro con regalo gafas Gear" 0 "P034S7GNP" "1" 19/02/16 31/12/49
+1 "" 4 "Samsung Galaxy S7 Negro con regalo gafas Gear" 0 "P034S7GNP" "1" 19/02/16 31/12/49
+1 "" 5 "Samsung Galaxy S7 Black with Gear VR" 0 "P034S7GNP" "1" 19/02/16 31/12/49
 1 "" 1 "Samsung Galaxy Trend Blanco" 0 "P034S7YW1" "1" 15/07/13 31/12/49
 1 "" 2 "Samsung Galaxy Trend Blanco" 0 "P034S7YW1" "1" 15/07/13 31/12/49
 1 "" 3 "Samsung Galaxy Trend Blanco" 0 "P034S7YW1" "1" 15/07/13 31/12/49
@@ -5023,6 +5178,16 @@
 1 "" 3 "Sony Xperia M2 Blanco" 0 "P037XM2W2" "1" 26/06/14 31/12/49
 1 "" 4 "Sony Xperia M2 Blanco" 0 "P037XM2W2" "1" 26/06/14 31/12/49
 1 "" 5 "Sony Xperia M2 White" 0 "P037XM2W2" "1" 26/06/14 31/12/49
+1 "" 1 "Sony Xperia M5 Negro" 0 "P037XM5N2" "1" 22/02/16 31/12/49
+1 "" 2 "Sony Xperia M5 Negro" 0 "P037XM5N2" "1" 22/02/16 31/12/49
+1 "" 3 "Sony Xperia M5 Negro" 0 "P037XM5N2" "1" 22/02/16 31/12/49
+1 "" 4 "Sony Xperia M5 Negro" 0 "P037XM5N2" "1" 22/02/16 31/12/49
+1 "" 5 "Sony Xperia M5 Black" 0 "P037XM5N2" "1" 22/02/16 31/12/49
+1 "" 1 "Sony Xperia M5 Blanco" 0 "P037XM5W2" "1" 22/02/16 31/12/49
+1 "" 2 "Sony Xperia M5 Blanco" 0 "P037XM5W2" "1" 22/02/16 31/12/49
+1 "" 3 "Sony Xperia M5 Blanco" 0 "P037XM5W2" "1" 22/02/16 31/12/49
+1 "" 4 "Sony Xperia M5 Blanco" 0 "P037XM5W2" "1" 22/02/16 31/12/49
+1 "" 5 "Sony Xperia M5 White" 0 "P037XM5W2" "1" 22/02/16 31/12/49
 1 "" 1 "Sony Xperia Z1 Negro" 0 "P037XP1N2" "1" 26/09/13 31/12/49
 1 "" 2 "Sony Xperia Z1 Negro" 0 "P037XP1N2" "1" 26/09/13 31/12/49
 1 "" 3 "Sony Xperia Z1 Negro" 0 "P037XP1N2" "1" 26/09/13 31/12/49
@@ -5257,12 +5422,12 @@
 1 "" 2 "Sony Xperia Z5 Negro con Sony Smartband 2 Negra" 0 "P037Z5RN2" "1" 07/01/16 31/12/49
 1 "" 3 "Sony Xperia Z5 Negro con Sony Smartband 2 Negra" 0 "P037Z5RN2" "1" 07/01/16 31/12/49
 1 "" 4 "Sony Xperia Z5 Negro con Sony Smartband 2 Negra" 0 "P037Z5RN2" "1" 07/01/16 31/12/49
-1 "" 5 "Sony Xperia Z5 Negro with Sony Smartband 2 Black" 0 "P037Z5RN2" "1" 07/01/16 31/12/49
+1 "" 5 "Sony Xperia Z5 Black with Sony Smartband 2 Black" 0 "P037Z5RN2" "1" 07/01/16 31/12/49
 1 "" 1 "Sony Xperia Z5 Blanco con Sony Smartband 2 Negra" 0 "P037Z5RW2" "1" 07/01/16 31/12/49
 1 "" 2 "Sony Xperia Z5 Blanco con Sony Smartband 2 Negra" 0 "P037Z5RW2" "1" 07/01/16 31/12/49
 1 "" 3 "Sony Xperia Z5 Blanco con Sony Smartband 2 Negra" 0 "P037Z5RW2" "1" 07/01/16 31/12/49
 1 "" 4 "Sony Xperia Z5 Blanco con Sony Smartband 2 Negra" 0 "P037Z5RW2" "1" 07/01/16 31/12/49
-1 "" 5 "Sony Xperia Z5 Blanco with Sony Smartband 2 Black" 0 "P037Z5RW2" "1" 07/01/16 31/12/49
+1 "" 5 "Sony Xperia Z5 White with Sony Smartband 2 Black" 0 "P037Z5RW2" "1" 07/01/16 31/12/49
 1 "" 1 "Sony Xperia Z5 Negro con Reloj Smartwatch 3 Classic Negro" 0 "P037Z5SN2" "1" 19/11/15 31/12/49
 1 "" 2 "Sony Xperia Z5 Negro con Reloj Smartwatch 3 Classic Negro" 0 "P037Z5SN2" "1" 19/11/15 31/12/49
 1 "" 3 "Sony Xperia Z5 Negro con Reloj Smartwatch 3 Classic Negro" 0 "P037Z5SN2" "1" 19/11/15 31/12/49
@@ -5379,6 +5544,16 @@
 1 "" 4 "Módem USB Huawei E1752c Negro" 0 "P043E17N2" "1" 23/09/10 31/12/49
 1 "" 5 "Módem USB Huawei E1752c Black" 0 "P043E17N2" "1" 23/09/10 31/12/49
 1 "" 5 "Modem USB Huawei E220" 0 "P043E22B1" "1" 24/06/09 31/12/49
+1 "" 1 "Módem Huawei E3372H-153 Negro" 0 "P043E2HN2" "1" 08/02/16 31/12/49
+1 "" 2 "Módem Huawei E3372H-153 Negro" 0 "P043E2HN2" "1" 08/02/16 31/12/49
+1 "" 3 "Módem Huawei E3372H-153 Negro" 0 "P043E2HN2" "1" 08/02/16 31/12/49
+1 "" 4 "Módem Huawei E3372H-153 Negro" 0 "P043E2HN2" "1" 08/02/16 31/12/49
+1 "" 5 "Modem Huawei E3372H-153 Black" 0 "P043E2HN2" "1" 08/02/16 31/12/49
+1 "" 1 "Módem Huawei E3372H-153 Blanco" 0 "P043E2HW2" "1" 08/02/16 31/12/49
+1 "" 2 "Módem Huawei E3372H-153 Blanco" 0 "P043E2HW2" "1" 08/02/16 31/12/49
+1 "" 3 "Módem Huawei E3372H-153 Blanco" 0 "P043E2HW2" "1" 08/02/16 31/12/49
+1 "" 4 "Módem Huawei E3372H-153 Blanco" 0 "P043E2HW2" "1" 08/02/16 31/12/49
+1 "" 5 "Modem Huawei E3372H-153 White" 0 "P043E2HW2" "1" 08/02/16 31/12/49
 1 "" 1 "Módem usb Huawei E3372S-153 Negro" 0 "P043E33N2" "1" 01/09/14 31/12/49
 1 "" 2 "Módem usb Huawei E3372S-153 Negro" 0 "P043E33N2" "1" 01/09/14 31/12/49
 1 "" 3 "Módem usb Huawei E3372S-153 Negro" 0 "P043E33N2" "1" 01/09/14 31/12/49
@@ -5489,26 +5664,26 @@
 1 "" 3 "Huawei G7105 Blanco" 0 "P043G75W2" "1" 30/11/11 31/12/49
 1 "" 4 "Huawei G7105 Blanco" 0 "P043G75W2" "1" 30/11/11 31/12/49
 1 "" 5 "Huawei G7105 White" 0 "P043G75W2" "1" 30/11/11 31/12/49
-1 "" 1 "Huawei G8 Blanco-Champán con Talkband B2 Negro" 0 "P043G8RD2" "1" 19/11/15 31/12/49
+1 "" 1 "Huawei GX8 Blanco-Champán con Talkband B2 Negro" 0 "P043G8RD2" "1" 19/11/15 31/12/49
 1 "" 2 "Huawei G8 Blanco-Champán con Reloj Smartband B2 Negro" 0 "P043G8RD2" "1" 19/11/15 31/12/49
 1 "" 3 "Huawei G8 Blanco-Champán con Reloj Smartband B2 Negro" 0 "P043G8RD2" "1" 19/11/15 31/12/49
 1 "" 4 "Huawei G8 Blanco-Champán con Reloj Smartband B2 Negro" 0 "P043G8RD2" "1" 19/11/15 31/12/49
-1 "" 5 "Huawei G8 White-Champagne with Talktband B2 Black" 0 "P043G8RD2" "1" 19/11/15 31/12/49
-1 "" 1 "Huawei G8 Gris con Reloj Talkand B2 Negro" 0 "P043G8RG2" "1" 19/11/15 31/12/49
+1 "" 5 "Huawei GX8 White-Champagne with Talktband B2 Black" 0 "P043G8RD2" "1" 19/11/15 31/12/49
+1 "" 1 "Huawei GX8 Gris con Talkband B2 Negro" 0 "P043G8RG2" "1" 19/11/15 31/12/49
 1 "" 2 "Huawei G8 Gris con Reloj Smartband B2 Negro" 0 "P043G8RG2" "1" 19/11/15 31/12/49
 1 "" 3 "Huawei G8 Gris con Reloj Smartband B2 Negro" 0 "P043G8RG2" "1" 19/11/15 31/12/49
 1 "" 4 "Huawei G8 Gris con Reloj Smartband B2 Negro" 0 "P043G8RG2" "1" 19/11/15 31/12/49
-1 "" 5 "Huawei G8 Grey with Talkband B2 Black" 0 "P043G8RG2" "1" 19/11/15 31/12/49
-1 "" 1 "Huawei G8 Blanco-Champán" 0 "P043HG8D2" "1" 25/09/15 31/12/49
+1 "" 5 "Huawei GX8 Grey with Talkband B2 Black" 0 "P043G8RG2" "1" 19/11/15 31/12/49
+1 "" 1 "Huawei GX8 Blanco-Champán" 0 "P043HG8D2" "1" 25/09/15 31/12/49
 1 "" 2 "Huawei G8 Blanco-Champán" 0 "P043HG8D2" "1" 25/09/15 31/12/49
 1 "" 3 "Huawei G8 Blanco-Champán" 0 "P043HG8D2" "1" 25/09/15 31/12/49
 1 "" 4 "Huawei G8 Blanco-Champán" 0 "P043HG8D2" "1" 25/09/15 31/12/49
-1 "" 5 "Huawei G8 White" 0 "P043HG8D2" "1" 25/09/15 31/12/49
-1 "" 1 "Huawei G8 Gris" 0 "P043HG8G2" "1" 25/09/15 31/12/49
+1 "" 5 "Huawei GX8 White" 0 "P043HG8D2" "1" 25/09/15 31/12/49
+1 "" 1 "Huawei GX8 Gris" 0 "P043HG8G2" "1" 25/09/15 31/12/49
 1 "" 2 "Huawei G8 Gris" 0 "P043HG8G2" "1" 25/09/15 31/12/49
 1 "" 3 "Huawei G8 Gris" 0 "P043HG8G2" "1" 25/09/15 31/12/49
 1 "" 4 "Huawei G8 Gris" 0 "P043HG8G2" "1" 25/09/15 31/12/49
-1 "" 5 "Huawei G8 Grey" 0 "P043HG8G2" "1" 25/09/15 31/12/49
+1 "" 5 "Huawei GX8 Grey" 0 "P043HG8G2" "1" 25/09/15 31/12/49
 1 "" 1 "Huawei P8 Gris" 0 "P043HP8S2" "1" 22/04/15 31/12/49
 1 "" 2 "Huawei P8 Gris" 0 "P043HP8S2" "1" 22/04/15 31/12/49
 1 "" 3 "Huawei P8 Gris" 0 "P043HP8S2" "1" 22/04/15 31/12/49
@@ -5529,7 +5704,7 @@
 1 "" 3 "Huawei P1 XL Negro" 0 "P043P1XN2" "1" 24/09/12 31/12/49
 1 "" 4 "Huawei P1 XL Negro" 0 "P043P1XN2" "1" 24/09/12 31/12/49
 1 "" 5 "Huawei P1 XL Black" 0 "P043P1XN2" "1" 24/09/12 31/12/49
-1 "" 1 "Huawei P8 Champan" 0 "P043P8GD2" "1" 06/07/15 31/12/49
+1 "" 1 "Huawei P8 Champán" 0 "P043P8GD2" "1" 06/07/15 31/12/49
 1 "" 2 "Huawei P8 Champan" 0 "P043P8GD2" "1" 06/07/15 31/12/49
 1 "" 3 "Huawei P8 Champan" 0 "P043P8GD2" "1" 06/07/15 31/12/49
 1 "" 4 "Huawei P8 Champan" 0 "P043P8GD2" "1" 06/07/15 31/12/49
@@ -5653,6 +5828,16 @@
 1 "" 3 "Huawei Y635 Blanco" 0 "P043Y65W2" "1" 26/03/15 31/12/49
 1 "" 4 "Huawei Y635 Blanco" 0 "P043Y65W2" "1" 26/03/15 31/12/49
 1 "" 5 "Huawei Y635 White" 0 "P043Y65W2" "1" 26/03/15 31/12/49
+1 "" 1 "Honor 5x Gris" 0 "P044HX5G2" "1" 22/02/16 31/12/49
+1 "" 2 "Honor 5x Gris" 0 "P044HX5G2" "1" 22/02/16 31/12/49
+1 "" 3 "Honor 5x Gris" 0 "P044HX5G2" "1" 22/02/16 31/12/49
+1 "" 4 "Honor 5x Gris" 0 "P044HX5G2" "1" 22/02/16 31/12/49
+1 "" 5 "Honor 5x Grey" 0 "P044HX5G2" "1" 22/02/16 31/12/49
+1 "" 1 "Honor 5x Blanco" 0 "P044HX5W2" "1" 22/02/16 31/12/49
+1 "" 2 "Honor 5x Blanco" 0 "P044HX5W2" "1" 22/02/16 31/12/49
+1 "" 3 "Honor 5x Blanco" 0 "P044HX5W2" "1" 22/02/16 31/12/49
+1 "" 4 "Honor 5x Blanco" 0 "P044HX5W2" "1" 22/02/16 31/12/49
+1 "" 5 "Honor 5x White" 0 "P044HX5W2" "1" 22/02/16 31/12/49
 1 "" 1 "ALCATEL 1030 Turquesa" 0 "P045103Q2" "1" 02/09/13 31/12/49
 1 "" 2 "Alcatel 1030 Turquesa" 0 "P045103Q2" "1" 02/09/13 31/12/49
 1 "" 3 "Alcatel 1030 Turquesa" 0 "P045103Q2" "1" 02/09/13 31/12/49
@@ -5723,6 +5908,16 @@
 1 "" 3 "Alcatel One Touch 292 Negro" 0 "P045292N2" "1" 22/03/12 31/12/49
 1 "" 4 "Alcatel One Touch 292 Negro" 0 "P045292N2" "1" 22/03/12 31/12/49
 1 "" 5 "ALCATEL ONETOUCH 292 Black" 0 "P045292N2" "1" 22/03/12 31/12/49
+1 "" 1 "ALCATEL ONETOUCH POP 3 (5.5) 4G Oro" 0 "P045355D2" "1" 22/02/16 31/12/49
+1 "" 2 "ALCATEL ONETOUCH POP 3(5.5) 4G Oro" 0 "P045355D2" "1" 22/02/16 31/12/49
+1 "" 3 "ALCATEL ONETOUCH POP 3(5.5) 4G Oro" 0 "P045355D2" "1" 22/02/16 31/12/49
+1 "" 4 "ALCATEL ONETOUCH POP 3(5.5) 4G Oro" 0 "P045355D2" "1" 22/02/16 31/12/49
+1 "" 5 "ALCATEL ONETOUCH POP 3 (5.5) 4G Gold" 0 "P045355D2" "1" 22/02/16 31/12/49
+1 "" 1 "ALCATEL ONETOUCH POP 3 (5.5) 4G Plata" 0 "P045355S2" "1" 25/02/16 31/12/49
+1 "" 2 "ALCATEL ONETOUCH POP 3(5.5) 4G Plata" 0 "P045355S2" "1" 25/02/16 31/12/49
+1 "" 3 "ALCATEL ONETOUCH POP 3(5.5) 4G Plata" 0 "P045355S2" "1" 25/02/16 31/12/49
+1 "" 4 "ALCATEL ONETOUCH POP 3(5.5) 4G Plata" 0 "P045355S2" "1" 25/02/16 31/12/49
+1 "" 5 "ALCATEL ONETOUCH POP 3 (5.5) 4G Silver" 0 "P045355S2" "1" 25/02/16 31/12/49
 1 "" 1 "ALCATEL ONETOUCH X’POP Negro" 0 "P045403N2" "1" 24/04/13 31/12/49
 1 "" 2 "Alcatel One Touch X’POP Negro" 0 "P045403N2" "1" 24/04/13 31/12/49
 1 "" 3 "Alcatel One Touch X’POP Negro" 0 "P045403N2" "1" 24/04/13 31/12/49
@@ -5893,6 +6088,16 @@
 1 "" 3 "Alcatel Onetouch Pixi 3 (4.5) Blanco" 0 "P045P34W2" "1" 02/12/15 31/12/49
 1 "" 4 "Alcatel Onetouch Pixi 3 (4.5) Blanco" 0 "P045P34W2" "1" 02/12/15 31/12/49
 1 "" 5 "Alcatel ONETOUCH PIXI 3 (4.5) White" 0 "P045P34W2" "1" 02/12/15 31/12/49
+1 "" 1 "ALCATEL ONETOUCH POP 3 (5) 4G Oro" 0 "P045P35D2" "1" 25/02/16 31/12/49
+1 "" 2 "ALCATEL ONETOUCH POP 3 (5) 4G Oro" 0 "P045P35D2" "1" 25/02/16 31/12/49
+1 "" 3 "ALCATEL ONETOUCH POP 3 (5) 4G Oro" 0 "P045P35D2" "1" 25/02/16 31/12/49
+1 "" 4 "ALCATEL ONETOUCH POP 3 (5) 4G Oro" 0 "P045P35D2" "1" 25/02/16 31/12/49
+1 "" 5 "ALCATEL ONETOUCH POP 3 (5) 4G Gold" 0 "P045P35D2" "1" 25/02/16 31/12/49
+1 "" 1 "ALCATEL ONETOUCH POP 3 (5) 4G Plata" 0 "P045P35S2" "1" 22/02/16 31/12/49
+1 "" 2 "ALCATEL ONETOUCH POP 3 (5) 4G Plata" 0 "P045P35S2" "1" 22/02/16 31/12/49
+1 "" 3 "ALCATEL ONETOUCH POP 3 (5) 4G Plata" 0 "P045P35S2" "1" 22/02/16 31/12/49
+1 "" 4 "ALCATEL ONETOUCH POP 3 (5) 4G Plata" 0 "P045P35S2" "1" 22/02/16 31/12/49
+1 "" 5 "ALCATEL ONETOUCH POP 3 (5) 4G Silver" 0 "P045P35S2" "1" 22/02/16 31/12/49
 1 "" 1 "Alcatel ONETOUCH POP 3 (5) Dorado" 0 "P045P3SD2" "1" 25/08/15 31/12/49
 1 "" 2 "Alcatel ONETOUCH POP 3 Dorado" 0 "P045P3SD2" "1" 25/08/15 31/12/49
 1 "" 3 "Alcatel ONETOUCH POP 3 Dorado" 0 "P045P3SD2" "1" 25/08/15 31/12/49
@@ -6254,6 +6459,11 @@
 1 "" 3 "HTC Desire 310 Azul" 0 "P086310A2" "1" 25/04/14 31/12/49
 1 "" 4 "HTC Desire 310 Azul" 0 "P086310A2" "1" 25/04/14 31/12/49
 1 "" 5 "HTC Desire 310 Blue" 0 "P086310A2" "1" 25/04/14 31/12/49
+1 "" 1 "HTC Desire 530 Sprinkle White" 0 "P086530W2" "1" 21/03/16 31/12/49
+1 "" 2 "HTC Desire 530 Spinkle White" 0 "P086530W2" "1" 21/03/16 31/12/49
+1 "" 3 "HTC Desire 530 Spinkle White" 0 "P086530W2" "1" 21/03/16 31/12/49
+1 "" 4 "HTC Desire 530 Spinkle White" 0 "P086530W2" "1" 21/03/16 31/12/49
+1 "" 5 "HTC Desire 530 Sprinkle White" 0 "P086530W2" "1" 21/03/16 31/12/49
 1 "" 1 "HTC Desire 601 Blanco" 0 "P086601W2" "1" 26/09/13 31/12/49
 1 "" 2 "HTC Desire 601 Blanco" 0 "P086601W2" "1" 26/09/13 31/12/49
 1 "" 3 "HTC Desire 601 Blanco" 0 "P086601W2" "1" 26/09/13 31/12/49
@@ -6754,6 +6964,46 @@
 1 "" 3 "iPhone 5s 16 GB Gris" 0 "P097S56S2" "1" 23/10/13 31/12/49
 1 "" 4 "iPhone 5s 16 GB Gris" 0 "P097S56S2" "1" 23/10/13 31/12/49
 1 "" 5 "iPhone 5s 16 GB Grey" 0 "P097S56S2" "1" 23/10/13 31/12/49
+1 "" 1 "iPhone SE 16 GB Oro" 0 "P097SE1D2" "1" 05/04/16 31/12/49
+1 "" 2 "iPhone SE 16 GB Oro" 0 "P097SE1D2" "1" 05/04/16 31/12/49
+1 "" 3 "iPhone SE 16 GB Oro" 0 "P097SE1D2" "1" 05/04/16 31/12/49
+1 "" 4 "iPhone SE 16 GB Oro" 0 "P097SE1D2" "1" 05/04/16 31/12/49
+1 "" 5 "iPhone SE 16 GB Gold" 0 "P097SE1D2" "1" 05/04/16 31/12/49
+1 "" 1 "iPhone SE 16 GB Gris" 0 "P097SE1G2" "1" 05/04/16 31/12/49
+1 "" 2 "iPhone SE 16 GB Gris" 0 "P097SE1G2" "1" 05/04/16 31/12/49
+1 "" 3 "iPhone SE 16 GB Gris" 0 "P097SE1G2" "1" 05/04/16 31/12/49
+1 "" 4 "iPhone SE 16 GB Gris" 0 "P097SE1G2" "1" 05/04/16 31/12/49
+1 "" 5 "iPhone SE 16 GB Space Grey" 0 "P097SE1G2" "1" 05/04/16 31/12/49
+1 "" 1 "iPhone SE 16 GB Oro rosa" 0 "P097SE1R2" "1" 05/04/16 31/12/49
+1 "" 2 "iPhone SE 16 GB Oro rosa" 0 "P097SE1R2" "1" 05/04/16 31/12/49
+1 "" 3 "iPhone SE 16 GB Oro rosa" 0 "P097SE1R2" "1" 05/04/16 31/12/49
+1 "" 4 "iPhone SE 16 GB Oro rosa" 0 "P097SE1R2" "1" 05/04/16 31/12/49
+1 "" 5 "iPhone SE 16 GB Rose Gold" 0 "P097SE1R2" "1" 05/04/16 31/12/49
+1 "" 1 "iPhone SE 16 GB Plata" 0 "P097SE1S2" "1" 05/04/16 31/12/49
+1 "" 2 "iPhone SE 16 GB Plata" 0 "P097SE1S2" "1" 05/04/16 31/12/49
+1 "" 3 "iPhone SE 16 GB Plata" 0 "P097SE1S2" "1" 05/04/16 31/12/49
+1 "" 4 "iPhone SE 16 GB Plata" 0 "P097SE1S2" "1" 05/04/16 31/12/49
+1 "" 5 "iPhone SE 16 GB Silver" 0 "P097SE1S2" "1" 05/04/16 31/12/49
+1 "" 1 "iPhone SE 64 GB Oro" 0 "P097SE6D2" "1" 05/04/16 31/12/49
+1 "" 2 "iPhone SE 64 GB Oro" 0 "P097SE6D2" "1" 05/04/16 31/12/49
+1 "" 3 "iPhone SE 64 GB Oro" 0 "P097SE6D2" "1" 05/04/16 31/12/49
+1 "" 4 "iPhone SE 64 GB Oro" 0 "P097SE6D2" "1" 05/04/16 31/12/49
+1 "" 5 "iPhone SE 64 GB Gold" 0 "P097SE6D2" "1" 05/04/16 31/12/49
+1 "" 1 "iPhone SE 64 GB Gris" 0 "P097SE6G2" "1" 05/04/16 31/12/49
+1 "" 2 "iPhone SE 64 GB Gris" 0 "P097SE6G2" "1" 05/04/16 31/12/49
+1 "" 3 "iPhone SE 64 GB Gris" 0 "P097SE6G2" "1" 05/04/16 31/12/49
+1 "" 4 "iPhone SE 64 GB Gris" 0 "P097SE6G2" "1" 05/04/16 31/12/49
+1 "" 5 "iPhone SE 64 GB Space Grey" 0 "P097SE6G2" "1" 05/04/16 31/12/49
+1 "" 1 "iPhone SE 64 GB Oro rosa" 0 "P097SE6R2" "1" 05/04/16 31/12/49
+1 "" 2 "iPhone SE 64 GB Oro rosa" 0 "P097SE6R2" "1" 05/04/16 31/12/49
+1 "" 3 "iPhone SE 64 GB Oro rosa" 0 "P097SE6R2" "1" 05/04/16 31/12/49
+1 "" 4 "iPhone SE 64 GB Oro rosa" 0 "P097SE6R2" "1" 05/04/16 31/12/49
+1 "" 5 "iPhone SE 64 GB Rose Gold" 0 "P097SE6R2" "1" 05/04/16 31/12/49
+1 "" 1 "iPhone SE 64 GB Plata" 0 "P097SE6S2" "1" 05/04/16 31/12/49
+1 "" 2 "iPhone SE 64 GB Plata" 0 "P097SE6S2" "1" 05/04/16 31/12/49
+1 "" 3 "iPhone SE 64 GB Plata" 0 "P097SE6S2" "1" 05/04/16 31/12/49
+1 "" 4 "iPhone SE 64 GB Plata" 0 "P097SE6S2" "1" 05/04/16 31/12/49
+1 "" 5 "iPhone SE 64 GB Silver" 0 "P097SE6S2" "1" 05/04/16 31/12/49
 1 "" 1 "iPhone 6s Plus 128 GB Oro" 0 "P097SP1D2" "1" 29/09/15 31/12/49
 1 "" 2 "iPhone 6s Plus 128 GB Oro" 0 "P097SP1D2" "1" 29/09/15 31/12/49
 1 "" 3 "iPhone 6s Plus 128 GB Oro" 0 "P097SP1D2" "1" 29/09/15 31/12/49
@@ -7360,6 +7610,14 @@
 1 "" 3 "Deskontua oparitan" 0 "RETFAT" "1" 01/06/11 31/03/12
 1 "" 5 "Promo discount" 0 "RETFAT" "1" 01/04/12 31/12/49
 1 "" 5 "Gift discount" 0 "RETFAT" "1" 01/06/11 31/03/12
+1 "" 1 "Cuota Pago a Plazos del Pago Final" 0 "RVTERM" "1" 01/11/15 31/12/49
+1 "" 2 "Quota Pagament a Terminis del Pagament Final" 0 "RVTERM" "1" 01/11/15 31/12/49
+1 "" 3 "Azken ordainketako epekako ordainketako kuota" 0 "RVTERM" "1" 01/11/15 31/12/49
+1 "" 5 "Monthly instalments on final cost" 0 "RVTERM" "1" 01/11/15 31/12/49
+1 "" 1 "Cuota Pago a Plazos UNO-E del Pago Final" 0 "RVTERM1E" "1" 01/11/15 31/12/49
+1 "" 2 "Quota Pagament a Terminis UNO-E del Pagament Final" 0 "RVTERM1E" "1" 01/11/15 31/12/49
+1 "" 3 "Azken ordainketako UNO-E epe. ordainketako kuota" 0 "RVTERM1E" "1" 01/11/15 31/12/49
+1 "" 5 "Monthly UNO-E instalments on final cost" 0 "RVTERM1E" "1" 01/11/15 31/12/49
 1 "" 1 "Pago Final" 0 "RVTERM1EF" "1" 01/02/14 31/12/49
 1 "" 2 "Pagament Final" 0 "RVTERM1EF" "1" 01/02/14 31/12/49
 1 "" 3 "Azken ordainketa" 0 "RVTERM1EF" "1" 01/02/14 31/12/49
@@ -7368,6 +7626,10 @@
 1 "" 2 "Abonament Pagament Final per devolució del mòbil" 0 "RVTERM1EFD" "1" 01/02/14 31/12/49
 1 "" 3 "Azken ordainketaren itzulera mugikorra itzultzeagatik" 0 "RVTERM1EFD" "1" 01/02/14 31/12/49
 1 "" 5 "Meeting the final payment by returning the mobile" 0 "RVTERM1EFD" "1" 01/02/14 31/12/49
+1 "" 1 "Cuota Pago a Plazos Banco Sabadell del Pago Final" 0 "RVTERMBS" "1" 01/11/15 31/12/49
+1 "" 2 "Quota Pagament a Term. Banc Sabadell de Pag. Final" 0 "RVTERMBS" "1" 01/11/15 31/12/49
+1 "" 3 "Azken ordainketako B. Sabadell epe. ordain. kuota" 0 "RVTERMBS" "1" 01/11/15 31/12/49
+1 "" 5 "Monthly Banco Sabadell instalments on final cost" 0 "RVTERMBS" "1" 01/11/15 31/12/49
 1 "" 1 "Pago Final" 0 "RVTERMBSF" "1" 01/05/14 31/12/49
 1 "" 2 "Pagament Final" 0 "RVTERMBSF" "1" 01/05/14 31/12/49
 1 "" 3 "Azken ordainketa" 0 "RVTERMBSF" "1" 01/05/14 31/12/49
@@ -7389,9 +7651,21 @@
 1 "" 3 "Azken ordainketako deskontua." 0 "RVTERMDTTD" "1" 27/11/15 31/12/49
 1 "" 5 "Discount on Final Payment" 0 "RVTERMDTTD" "1" 27/11/15 31/12/49
 1 "" 1 "Descuento del Pago Final por devolver móvil." 0 "RVTERMDTTR" "1" 27/11/15 31/12/49
-1 "" 2 "Descompte del Pagament Final per retornar el mòbil." 0 "RVTERMDTTR" "1" 27/11/15 31/12/49
-1 "" 3 "Azken ordainketako deskontua mobila itzultzeagatik." 0 "RVTERMDTTR" "1" 27/11/15 31/12/49
+1 "" 2 "Descompte del Pagament Final per tornar el mòbil" 0 "RVTERMDTTR" "1" 27/11/15 31/12/49
+1 "" 3 "Azken ordainketako deskontua mobila itzultzeagatik" 0 "RVTERMDTTR" "1" 27/11/15 31/12/49
 1 "" 5 "Discount on Final Payment for returning mobile" 0 "RVTERMDTTR" "1" 27/11/15 31/12/49
+1 "" 1 "Cuotas pendientes Pago a Plazos del Pago Final" 0 "RVTERMEND" "1" 01/11/15 31/12/49
+1 "" 2 "Quotes pendents Pagament a Term. de Pagament Final" 0 "RVTERMEND" "1" 01/11/15 31/12/49
+1 "" 3 "Azken ordainketako epe. ordain. kuota ordaingabeak" 0 "RVTERMEND" "1" 01/11/15 31/12/49
+1 "" 5 "Monthly instalments left on final cost" 0 "RVTERMEND" "1" 01/11/15 31/12/49
+1 "" 1 "Cuotas pdtes. Pago a Plazos UNO-E del Pago Final" 0 "RVTERMEND1E" "1" 01/11/15 31/12/49
+1 "" 2 "Quotes pendents Pagam. a Term. UNO-E de Pag. Final" 0 "RVTERMEND1E" "1" 01/11/15 31/12/49
+1 "" 3 "Az. ordainketako UNO-E epe. ordain. kuo. ordaingb" 0 "RVTERMEND1E" "1" 01/11/15 31/12/49
+1 "" 5 "Monthly UNO-E instalments left on final cost" 0 "RVTERMEND1E" "1" 01/11/15 31/12/49
+1 "" 1 "Cuotas pdtes. Pago a Plazos B.Sabad. de Pago Final" 0 "RVTERMENDBS" "1" 01/11/15 31/12/49
+1 "" 2 "Quot. pend. Pag. a Term. B. Sabadell de Pag. Final" 0 "RVTERMENDBS" "1" 01/11/15 31/12/49
+1 "" 3 "Az. ordainketako B.Sabad. ep. ordain kuo. ordaingb" 0 "RVTERMENDBS" "1" 01/11/15 31/12/49
+1 "" 5 "Monthly B. Sabadell instalments left on final cost" 0 "RVTERMENDBS" "1" 01/11/15 31/12/49
 1 "" 1 "Pago Final" 0 "RVTERMF" "1" 01/02/14 31/12/49
 1 "" 2 "Pagament Final" 0 "RVTERMF" "1" 01/02/14 31/12/49
 1 "" 3 "Azken ordainketa" 0 "RVTERMF" "1" 01/02/14 31/12/49
@@ -10390,9 +10664,9 @@
 32 "" 5 "Yoigo info: We are not going to charge in the next Bono the Mb you haven't used this month but we recommend you to have 8E the last day of the month to renew it" 0 "381" "1" 24/10/12 31/12/49
 32 "" 5 "Yoigo info:We are not going to charge the next month the Mb that you havent used but we recommend you to have 8E at the end of the day to renew it automatically" 0 "383" "1" 24/10/12 31/12/49
 32 "" 5 "Yoigo info: We will deliver your order to the address you gave within the next 72h. If you have any problem with the delivery call 1707 and press 2." 0 "385" "1" 01/11/12 31/12/49
-32 "" 5 "Yoigo info: Sorry, we were unable to deliver your order. Call 902113300 within 15 days to arrange when it suits you for us to deliver it." 0 "387" "1" 01/11/12 31/12/49
-32 "" 5 "Yoigo info: #NAME, we have been unable to deliver your order and it will be at your post office for a maximum of 15 days. For Incidents call 1707 and press 2" 0 "389" "1" 01/11/12 31/12/49
-32 "" 5 "Yoigo info: Sorry, we were unable to deliver your order. Call 902101010 within 15 days to arrange when it suits you for us to deliver it." 0 "391" "1" 01/11/12 31/12/49
+32 "" 5 "Yoigo info: Sorry, we have been unable to deliver your order. For indicents call 1707 and press 2 and we will see how to solve it." 0 "387" "1" 01/11/12 31/12/49
+32 "" 5 "Yoigo info: #NAME, we have been unable to deliver your order. For indicents call 1707 and press 2 and we will see how to solve it." 0 "389" "1" 01/11/12 31/12/49
+32 "" 5 "Yoigo info: Sorry, we have been unable to deliver your order. For indicents call 1707 and press 2 and we will see how to solve it." 0 "391" "1" 01/11/12 31/12/49
 32 "" 5 "Yoigo info: Gosh, you didn't collect the order we sent you. Call 902113300 within 15 days for us to send it again." 0 "393" "1" 01/11/12 31/12/49
 32 "" 5 "Yoigo info: Gosh, you didn't collect your order either at the address you gave us or at the post office. Call 1707 and press 2." 0 "395" "1" 01/11/12 31/12/49
 32 "" 5 "Yoigo info: Gosh, you didn't collect your order when we sent it. Call 902101010 within 15 days for us to send it again." 0 "397" "1" 01/11/12 31/12/49
@@ -10410,7 +10684,7 @@
 32 "" 5 "Yoigo info: This line will be cancelled on #DATE because you ported out the last main line you had. You can keep it if you change its tariff before that date." 0 "433" "1" 05/09/13 31/12/49
 32 "" 5 "Yoigo info: This line will be cancelled next #DATE. If you want to keep it, change urgently its tariff." 0 "434" "1" 05/09/13 31/12/49
 32 "" 5 "Yoigo info: Done, in 10 minutes aprox. you will have your high speed Internet bundle activated." 0 "435" "1" 05/09/13 31/12/49
-32 "" 5 "Yoigo info: If you want to increase your monthly Internet quota you can buy a monthly data bundle here: http://mas.yoigo.com/megas" 0 "437" "1" 05/09/13 31/12/49
+32 "" 5 "Yoigo info: If you need more MB for high-speed browsing, please visit http://masmegas.yoigo.com where we explain how you can purchase a data top-up." 0 "437" "1" 05/09/13 31/12/49
 32 "" 5 "Yoigo info: If you want another Bono with more capacity or to increase your high speed Internet quota only for this month, click here http://mas.yoigo.com/megas" 0 "444" "1" 05/09/13 31/12/49
 32 "" 5 "Yoigo info: If you want to increase 1 GB of high speed during this month for 6 euros, go to http://mas.yoigo.com/megas" 0 "445" "1" 05/09/13 31/12/49
 32 "" 5 "Yoigo info: You are about to reach your high speed Internet monthly data limit for this month." 0 "446" "1" 05/09/13 31/12/49

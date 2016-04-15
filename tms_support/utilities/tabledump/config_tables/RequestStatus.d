@@ -69,3 +69,5 @@
 "1" 89 0 "" yes "" "" 0 no no
 "1" 90 0 "" yes "" "" 0 no no
 "1" 91 0 "" yes "" "" 0 no no
+"1" 92 0 "publish_invoice" yes "DB.Connects,4GLTrace:1" "/scratch/log/requester/reqstat92.log" 1048576 yes no
+"1" 93 0 "publish_ifs" yes "DB.Connects,4GLTrace:1" "/scratch/log/requester/reqstat93.log" 1048576 yes no
