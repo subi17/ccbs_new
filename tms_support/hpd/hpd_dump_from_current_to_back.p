@@ -20,7 +20,7 @@ DEFINE VARIABLE gcLogDir AS CHARACTER INITIAL "/scratch/log/hpd" NO-UNDO.
       REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING
       60 days to one file
    
-      /opt/local/bin/xfear -batch tms_support/hpd/hpd_dump_from_current_to_back.p 240,1.3.2015,1.1.2016
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 240,1.3.2015,1.1.2016
 
 
    Payment:
@@ -28,7 +28,7 @@ DEFINE VARIABLE gcLogDir AS CHARACTER INITIAL "/scratch/log/hpd" NO-UNDO.
       REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING
       60 days to one file
 
-      /opt/local/bin/xfear -batch tms_support/hpd/hpd_dump_from_current_to_back.p 244,1.3.2015,1.1.2016
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 244,1.3.2015,1.1.2016
       
 
    MsRequest:
@@ -36,7 +36,7 @@ DEFINE VARIABLE gcLogDir AS CHARACTER INITIAL "/scratch/log/hpd" NO-UNDO.
       REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING 
       30 days to one file            
    
-      /opt/local/bin/xfear -batch tms_support/hpd/hpd_dump_from_current_to_back.p 221,1.10.2015,2.3.2016
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 221,1.10.2015,2.3.2016
 
 
    PrePaidRequest:
@@ -44,7 +44,7 @@ DEFINE VARIABLE gcLogDir AS CHARACTER INITIAL "/scratch/log/hpd" NO-UNDO.
       REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING 
       30 days to one file            
    
-      /opt/local/bin/xfear -batch tms_support/hpd/hpd_dump_from_current_to_back.p 228,1.10.2015,2.3.2016
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 228,1.10.2015,2.3.2016
 
 
    PrepCDR:
@@ -52,7 +52,7 @@ DEFINE VARIABLE gcLogDir AS CHARACTER INITIAL "/scratch/log/hpd" NO-UNDO.
       REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING 
       1 day to one file            
    
-      /opt/local/bin/xfear -batch tms_support/hpd/hpd_dump_from_current_to_back.p 229,65,1
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 229,65,1
 
 
    PrepEDR:
@@ -60,7 +60,7 @@ DEFINE VARIABLE gcLogDir AS CHARACTER INITIAL "/scratch/log/hpd" NO-UNDO.
       REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING 
       1 day to one file            
    
-      /opt/local/bin/xfear -batch tms_support/hpd/hpd_dump_from_current_to_back.p 230,65,1
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 230,65,1
 
 
    MobCDR:
@@ -68,7 +68,7 @@ DEFINE VARIABLE gcLogDir AS CHARACTER INITIAL "/scratch/log/hpd" NO-UNDO.
       REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING 
       1 day to one file            
    
-      /opt/local/bin/xfear -batch tms_support/hpd/hpd_dump_from_current_to_back.p 219,65,1
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 219,65,1
 
 */
 
@@ -101,7 +101,7 @@ FUNCTION fGiveDate RETURNS DATE
    DEFINE VARIABLE ldaReturnDate AS DATE    NO-UNDO.
    
    ASSIGN
-      lii = INTEGER(ENTRY(2,gcSessionParam))
+      lii = INTEGER(icParam)
       NO-ERROR.
 
    IF ERROR-STATUS:ERROR
@@ -273,7 +273,7 @@ PROCEDURE pProcess:
       
       fLog("Started processing date range " + STRING(ldaDate) + " - " + STRING(ldaDate + giDaysPerFile)).
       
-      RUN Syst/hpd_filedump.p(giDumpID,"","",0,"","",OUTPUT liEvents, OUTPUT llInterrupted).
+      RUN HPD/hpd_filedump.p(giDumpID,"","",0,"","",OUTPUT liEvents, OUTPUT llInterrupted).
       
       IF llInterrupted
       THEN DO:
