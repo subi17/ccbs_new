@@ -982,7 +982,7 @@ FUNCTION fMakeProdigyRequest RETURNS LOGICAL
       lcMemoTitle = "LP Riesgo Pago Final".
       IF icCommand BEGINS "REDIRECTION" THEN
          lcMemotext = "Redirección a LP Pago Final Riesgo activada".
-      ELSE IF icCommand EQ "REMOVE" THEN
+      ELSE IF icCommand EQ "remove" THEN
          lcMemotext = "IFS elimina la LP Riesgo Pago Final sin que el " +
                       "cliente la haya visto".
       ELSE
