@@ -195,7 +195,7 @@ FOR EACH MobSub NO-LOCK WHERE
    IF pcPayTerm > "" THEN DO:
       IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                             DCCLI.MsSeq    = MobSub.MsSeq AND
-                            LOOKUP(DCCLI.DCEvent,pcPayTerm) > 0
+                            LOOKUP(DCCLI.DCEvent,pcPayTerm) > 0 AND
                             DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB.
    END.
    ELSE DO:
