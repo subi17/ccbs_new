@@ -578,6 +578,7 @@ FUNCTION fBuildBarringCommand RETURNS LOG
    DEF VAR lcHotlList AS CHAR NO-UNDO.
    DEF VAR lcHotl AS CHAR NO-UNDO.   
    DEF VAR lcErr AS CHAR NO-UNDO.
+   DEF VAR liHLC AS INT NO-UNDO.
 
    FIND FIRST bHotLineBarring WHERE
        LOOKUP(bHotLineBarring.BarrCode,"Debt_HOTLP,Debt_HOTL") > 0 AND
@@ -855,9 +856,9 @@ FUNCTION fBuildBarringCommand RETURNS LOG
    /*Blocked: Debt_LP (Component LP) - Only one with LP component
               Debt_HOTLP (Read component data from config)*/
    lcHotlList = "Debt_LP,Debt_HOTLP".
-   do i = 1 to NUM-ENTRIES(lcHotlList):
+   do liHLC = 1 to NUM-ENTRIES(lcHotlList):
       /*Special handling for CONTM2 needs*/
-      lcHotl = ENTRY(i,lcHotlList).
+      lcHotl = ENTRY(liHLC,lcHotlList).
       IF icCLIType EQ "CONTM2" AND lcHotl EQ "Debt_HOTLP" THEN DO:
          FIND FIRST ttProvCommand WHERE
                     ttProvCommand.ComponentValue EQ 1 AND
