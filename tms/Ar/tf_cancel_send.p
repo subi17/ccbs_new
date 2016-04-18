@@ -36,7 +36,6 @@ DEF VAR lcLogDir AS CHAR NO-UNDO.
 DEF VAR lcProcessedFile AS CHAR NO-UNDO. 
 DEF VAR liErrors AS INT NO-UNDO. 
 DEF VAR liOk AS INT NO-UNDO. 
-DEF VAR lcCodFpago AS CHAR NO-UNDO.
 
 ASSIGN
    lcRootDir = fCParam("TermFinance","CanOutRoot")
@@ -198,11 +197,19 @@ PROCEDURE pCreateFile:
                      ldaBankDate,
                      icBank,
                      FALSE). /* payterm fee */
+      IF RETURN-VALUE BEGINS "ERROR:" THEN DO:
+         fLogLine(FixedFeeTF.OrderId, RETURN-VALUE).
+         NEXT.
+      END.
       IF FixedFeeTF.ResidualAmount > 0 THEN
          RUN pPrintLine(FixedFeeTF.ResidualAmount,
                         ldaBankDate,
                         icBank,
                         TRUE). /* Residual fee */
+         IF RETURN-VALUE BEGINS "ERROR:" THEN DO:
+            fLogLine(FixedFeeTF.OrderId, RETURN-VALUE).
+            NEXT.
+         END.
       ASSIGN
          FixedFeeTF.CancelStatus = "SENT"
          FixedFeeTF.CancelDate = TODAY
@@ -259,6 +266,7 @@ PROCEDURE pPrintLine:
    DEF VAR ldeRVAmt AS DEC NO-UNDO.
    DEF VAR ldaOrderDate AS DATE NO-UNDO.
    DEF VAR liOrderId AS IN NO-UNDO.
+   DEF VAR lcCodFpago AS CHAR NO-UNDO.
 
    lcTotalAmount = REPLACE(REPLACE(TRIM(STRING(ideTotalAmount,"->>>>>>>9.99")),",",""),".","").
    IF FixedFeeTF.OrderId EQ ? OR
@@ -289,14 +297,18 @@ PROCEDURE pPrintLine:
                        TFConf.ValidTo >= ldaOrderDate AND
                        TFConf.ValidFrom <= ldaOrderDate NO-ERROR.
             IF AVAIL TFConf THEN DO:
-               IF ilResidualFee AND TFConf.RVPercentage NE 0 THEN 
+               IF ilResidualFee THEN 
                   /* get code for Residual fee */
                   lcCodFpago = TFConf.ResidualCode.
-               ELSE /* get code for payterm */
+               ELSE IF TFConf.RVPercentage NE 0 THEN /* get code for payterm */
                   lcCodFpago = TFConf.PaytermCode.
             END.
          END.
       END.
+      ELSE
+         RETURN SUBST("ERROR: Order &1 not found.",
+                      liOrderId).
+
    END.
 
    PUT STREAM sout 
@@ -310,4 +322,5 @@ PROCEDURE pPrintLine:
    /*COD-FPAGO*/     lcCodFpago FORMAT "X(4)".
    
    PUT STREAM sout CONTROL CHR(13) CHR(10).
+   RETURN "".
 END.
