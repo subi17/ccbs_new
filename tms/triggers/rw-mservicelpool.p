@@ -4,16 +4,36 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF MServiceLPool OLD BUFFER oldMServiceL
 
 &IF {&MSERVICELPOOL_WRITE_TRIGGER_ACTIVE} &THEN
 
-{triggers/check_mobsub.i MServiceLPool MsSeq}
+{triggers/mservicelimit.i}
 
-{triggers/mservicelpool.i}
+DEFINE VARIABLE llShouldBeOnHPD   AS LOGICAL INITIAL FALSE NO-UNDO.
+DEFINE VARIABLE llWasOnHPD        AS LOGICAL INITIAL FALSE NO-UNDO.
+
+llShouldBeOnHPD = fCheckHPDStatus(MServiceLPool.MsSeq,
+                                  MServiceLPool.CustNum,
+                                  MServiceLPool.EndTS).
+
+IF NEW(MServiceLPool) AND llShouldBeOnHPD = FALSE
+THEN RETURN.
+
+IF NOT NEW(MServiceLPool) AND
+   (MServiceLPool.MsSeq   <> oldMServiceLPool.MsSeq OR
+    MServiceLPool.CustNum <> oldMServiceLPool.CustNum OR
+    MServiceLPool.EndTS   <> oldMServiceLPool.EndTS)
+THEN llWasOnHPD = fCheckHPDStatus(oldMServiceLPool.MsSeq,
+                                  oldMServiceLPool.CustNum,
+                                  oldMServiceLPool.EndTS).
+ELSE llWasOnHPD = llShouldBeOnHPD.
+
+IF llWasOnHPD = FALSE AND llShouldBeOnHPD = FALSE
+THEN RETURN.
 
 CREATE Common.RepLog.
 ASSIGN
    Common.RepLog.TableName = "MServiceLPool"
    Common.RepLog.EventType = (IF NEW(MServiceLPool)
                               THEN "CREATE"
-                              ELSE IF llMobSubWasAvailable AND llMobSubIsAvailable = FALSE
+                              ELSE IF llWasOnHPD = TRUE AND llShouldBeOnHPD = FALSE
                               THEN "DELETE"
                               ELSE "MODIFY")
    Common.RepLog.EventTime = NOW
@@ -28,7 +48,7 @@ THEN DO:
    DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
 
    BUFFER-COMPARE MServiceLPool USING
-      CustNum MsSeq SLSeq
+      CustNum MsSeq SLSeq EndTS
    TO oldMServiceLPool SAVE RESULT IN llSameValues.
 
    IF NOT llSameValues

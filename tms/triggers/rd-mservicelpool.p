@@ -7,7 +7,12 @@ TRIGGER PROCEDURE FOR REPLICATION-DELETE OF MServiceLPool.
 IF NEW MServiceLPool
 THEN RETURN.
 
-{triggers/mservicelpool.i}
+{triggers/mservicelimit.i}
+
+IF NOT fCheckHPDStatus(MServiceLPool.MsSeq,
+                       MServiceLPool.CustNum,
+                       MServiceLPool.EndTS)
+THEN RETURN.
 
 CREATE Common.RepLog.
 ASSIGN
