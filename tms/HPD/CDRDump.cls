@@ -175,6 +175,9 @@ CLASS HPD.CDRDump FINAL INHERITS DumpHandlerWithQuery:
       DEFINE VARIABLE ldaToDate   AS DATE    NO-UNDO.
       DEFINE VARIABLE liToTime    AS INTEGER NO-UNDO.
 
+      IF objDTBC:ldeToTS > HPDTime:mSecOffSet(mMake2DT(TODAY,TIME), -10)
+      THEN objDTBC:ldeToTS = HPDTime:mSecOffSet(objDTBC:ldeToTS, -10).
+
       ASSIGN
          ldaFromDate = HPDTime:mMake2Date(objDTBC:ldeFromTS)
          liFromTime  = HPDTime:mMake2Time(objDTBC:ldeFromTS)

@@ -91,9 +91,8 @@ CLASS HPD.MServiceLimitDump FINAL INHERITS DumpHandler:
    METHOD PRIVATE VOID mProcessFullDump
       (INPUT objDumpFile AS CLASS DumpFile):
 
-      DEFINE VARIABLE lcGroupCode AS CHARACTER NO-UNDO.
-
       DEFINE VARIABLE ldeEndStamp AS DECIMAL NO-UNDO.
+      DEFINE VARIABLE llSkip      AS LOGICAL NO-UNDO.
       
       ldeEndStamp = YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + 1.
    
@@ -104,17 +103,16 @@ CLASS HPD.MServiceLimitDump FINAL INHERITS DumpHandler:
          ON STOP UNDO, RETRY:
 
          IF FIRST-OF(lbMServiceLimit.SlSeq)
-         THEN DO:
-            lcGroupCode = "".
-            FOR
-               FIRST ServiceLimit FIELDS (SlSeq GroupCode) NO-LOCK WHERE
-                  ServiceLimit.SlSeq = lbMServiceLimit.SlSeq:
-               lcGroupCode = ServiceLimit.GroupCode.
-            END.
-         END.
+         THEN llSkip = FALSE.
+
+         IF llSkip
+         THEN NEXT.
 
          IF lbMServiceLimit.EndTS < ldeEndStamp
-         THEN NEXT.
+         THEN DO:
+            llSkip = TRUE.
+            NEXT.
+         END.
 
          IF NOT mCheckHPDStatus(lbMServiceLimit.MsSeq, lbMServiceLimit.CustNum)
          THEN NEXT.
