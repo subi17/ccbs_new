@@ -24,6 +24,11 @@ CLASS HPD.InvoiceDump FINAL INHERITS InvoiceCommon:
   
    DEFINE PRIVATE BUFFER lbInvRow     FOR InvRow.
 
+   DEFINE PRIVATE TEMP-TABLE ttBillItem NO-UNDO
+      FIELD BillCode AS CHARACTER
+      INDEX BillCode IS PRIMARY UNIQUE BillCode
+      .
+
    CONSTRUCTOR PUBLIC InvoiceDump
       (iiDumpID AS INTEGER):
       
@@ -72,6 +77,8 @@ CLASS HPD.InvoiceDump FINAL INHERITS InvoiceCommon:
 
       IF VALID-OBJECT(objDumpSubInvoice)
       THEN DELETE OBJECT objDumpSubInvoice.
+
+      EMPTY TEMP-TABLE ttBillItem.
       
    END DESTRUCTOR.   
    
@@ -114,24 +121,40 @@ CLASS HPD.InvoiceDump FINAL INHERITS InvoiceCommon:
    END METHOD.
 
 
+   METHOD PRIVATE VOID mPopulateBillItem():
+
+      FOR EACH BillItem FIELDS (Brand BIGroup BillCode) NO-LOCK WHERE
+         BillItem.Brand   = "1"   AND
+         BillItem.BIGroup = "33":
+
+         CREATE ttBillItem.
+         ttBillItem.BillCode = BillItem.BillCode.
+      END.
+
+   END METHOD.
+
+
    METHOD PRIVATE VOID mProcessTimeBased
       (INPUT objDumpTB AS CLASS DumpTimeBased):
          
       DEFINE VARIABLE ldaFromDate      AS DATE NO-UNDO.
+      DEFINE VARIABLE ldaToDate        AS DATE NO-UNDO.
       DEFINE VARIABLE ldaISTCDate      AS DATE NO-UNDO.
       DEFINE VARIABLE ldaMaxInvRowDate AS DATE NO-UNDO.
 
-      ldaFromDate = HPDTime:mMake2Date(objDumpTB:ldeFromTS).
+      ASSIGN
+         ldaFromDate = HPDTime:mMake2Date(objDumpTB:ldeFromTS)
+         ldaToDate   = HPDTime:mMake2Date(objDumpTB:ldeToTS)
+         .
+
+      mPopulateBillItem().
 
       FOR
          EACH lbInvoice NO-LOCK USE-INDEX InvType WHERE
             lbInvoice.Brand     = "1"                 AND
             lbInvoice.InvType   = 1                   AND
             lbInvoice.InvDate  >= ldaFromDate         AND
-            lbInvoice.ChgStamp >= objDumpTB:ldeFromTS AND
-            lbInvoice.ChgStamp  < objDumpTB:ldeToTS,
-         FIRST Customer FIELDS (CustNum) NO-LOCK WHERE
-            Customer.CustNum = lbInvoice.CustNum
+            lbInvoice.InvDate   < ldaToDate
          ON QUIT UNDO, RETRY
          ON STOP UNDO, RETRY:
 
@@ -148,7 +171,8 @@ CLASS HPD.InvoiceDump FINAL INHERITS InvoiceCommon:
          /* Lets write a line for invoice to csv */
          objDumpTB:mWriteALine().
          
-         FOR EACH lbSubInvoice OF lbInvoice NO-LOCK:
+         FOR EACH lbSubInvoice NO-LOCK WHERE
+            lbSubInvoice.InvNum = lbInvoice.InvNum:
             
             ASSIGN
                ldaMaxInvRowDate  = 1/1/2000
@@ -158,16 +182,11 @@ CLASS HPD.InvoiceDump FINAL INHERITS InvoiceCommon:
                                                 lbInvoice.Todate).
 
             FOR EACH lbInvRow NO-LOCK WHERE
-               lbInvRow.InvNum = lbInvoice.InvNum           AND 
+               lbInvRow.InvNum    = lbInvoice.InvNum        AND
                lbInvRow.SubInvNum = lbSubInvoice.SubInvNum:
 
-               FOR FIRST BillItem FIELDS (Brand BillCode BIGroup) NO-LOCK WHERE
-                  BillItem.Brand    = "1"               AND
-                  BillItem.BillCode = lbInvRow.BillCode AND
-                  BillItem.BIGroup = "33":
-
-                  ldeInstallmentFee = ldeInstallmentFee + lbInvRow.Amt.
-               END.
+               IF CAN-FIND(ttBillItem NO-LOCK WHERE ttBillItem.BillCode = lbInvRow.BillCode)
+               THEN ldeInstallmentFee = ldeInstallmentFee + lbInvRow.Amt.
 
                IF ldaISTCDate NE ? AND
                   ldaMaxInvRowDate < lbInvRow.ToDate
