@@ -71,14 +71,15 @@ CLASS HPD.ServiceLCounterDump FINAL INHERITS DumpHandler:
       (INPUT objDumpTB AS CLASS DumpTimeBased):
 
       DEFINE VARIABLE liEndPeriod   AS INTEGER   NO-UNDO.
+      DEFINE VARIABLE liBeginPeriod AS INTEGER   NO-UNDO.
       DEFINE VARIABLE liPeriod      AS INTEGER   NO-UNDO.
       DEFINE VARIABLE lcBundles     AS CHARACTER NO-UNDO.
       DEFINE VARIABLE liCount       AS INTEGER   NO-UNDO.
       
       ASSIGN
-         liPeriod     = INTEGER(TRUNCATE(objDumpTB:ldeFromTS / 100, 0))
-         liEndPeriod  = INTEGER(TRUNCATE(objDumpTB:ldeToTS / 100, 0))
-         lcBundles    = objDumpTB:mGetConfigParam()
+         liBeginPeriod = INTEGER(TRUNCATE(objDumpTB:ldeFromTS / 100, 0))
+         liEndPeriod   = INTEGER(TRUNCATE(objDumpTB:ldeToTS / 100, 0))
+         lcBundles     = objDumpTB:mGetConfigParam()
          .
 
       DO WITH FRAME fQty:
@@ -91,6 +92,8 @@ CLASS HPD.ServiceLCounterDump FINAL INHERITS DumpHandler:
                FIRST ServiceLimit FIELDS (GroupCode DialType SlSeq) NO-LOCK WHERE
                   ServiceLimit.GroupCode = ENTRY(liCount,lcBundles) AND
                   ServiceLimit.DialType  = 7:
+
+               liPeriod = liBeginPeriod.
 
                DO WHILE liPeriod <= liEndPeriod:
 
