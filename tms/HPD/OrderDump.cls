@@ -127,12 +127,15 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
 
             WHEN "BillItem"
             THEN DO:
-               IF lcOnlySimAmt = "" AND
-                  CAN-FIND(FIRST BillItem NO-LOCK WHERE
-                              BillItem.Brand    = "1"               AND
-                              BillItem.BillCode = OfferItem.ItemKey AND
-                              BillItem.BIGroup  = "9")
-               THEN lcOnlySimAmt = STRING(OfferItem.Amount).
+               IF lcOnlySimAmt = ""
+               THEN
+               FOR FIRST BillItem FIELDS (Brand BillCode BIGroup) NO-LOCK WHERE
+                  BillItem.Brand    = "1"               AND
+                  BillItem.BillCode = OfferItem.ItemKey AND
+                  BillItem.BIGroup  = "9":
+
+                  lcOnlySimAmt = STRING(OfferItem.Amount).
+               END.
             END.
             WHEN "TopUp"
             THEN DO:
