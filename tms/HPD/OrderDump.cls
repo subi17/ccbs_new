@@ -113,7 +113,7 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
          ldeTermLeasAmt = 0
          .
 
-      IF lbOffer.Offer = "" OR lbOffer.Offer = ?
+      IF lbOrder.Offer = "" OR lbOrder.Offer = ?
       THEN RETURN.
 
       FOR
