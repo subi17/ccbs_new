@@ -246,7 +246,7 @@ PROCEDURE pNew:
 
       /* Creation of subrequests failed, "fail" master request too */
       IF liReq = 0 OR liReq = ? THEN DO:
-         UNDO, RETURN SUBST("ERROR:ServiceRequest failure: &1", lcError).
+         UNDO, RETURN SUBST("ERROR:Base ServiceRequest failure: &1", lcError).
       END.
 
       /* extra request to reset barring status before hotline activation */
@@ -268,7 +268,8 @@ PROCEDURE pNew:
                                   TRUE,
                                  OUTPUT lcError).
          IF liUnbarrReq = 0 OR liUnbarrReq = ? THEN DO:
-            UNDO, RETURN SUBST("ERROR:ServiceRequest failure: &1", lcError).
+            UNDO, RETURN SUBST("ERROR:Unbarr ServiceRequest failure: &1", 
+                                lcError).
          END.         
       END.
       
@@ -280,21 +281,21 @@ PROCEDURE pNew:
                     SubSer.ServCom EQ "LP" NO-ERROR.
          IF AVAIL SubSer AND SubSer.SSParam EQ "REDIRECTION_HIGHRISKCUSTOMER_1"
          THEN DO:
-            liRemHRLPReq =  fServiceRequest (MobSub.MsSeq,
+            liRemHRLPReq =  fServiceRequestCreate (MobSub.MsSeq,
                                      "LP",
                                      1,
                                      "remove",
-                                     fSecOffSet(ideActTime,5), /* 5 sec delay */
+                                     fSecOffSet(ideActTime,2), /* 2 sec delay, 
+                                                must be before LP activation*/
                                      "",                /* SalesMan */
                                      FALSE,             /* Set fees */
                                      FALSE,             /* SMS */
                                      "",
                                      "",
                                      liReq,
-                                     TRUE,
-                                    OUTPUT lcError).
+                                     TRUE).
             IF liRemHRLPReq = 0 OR liRemHRLPReq = ? THEN DO:
-               UNDO, RETURN SUBST("ERROR:ServiceRequest failure: &1", lcError).
+               UNDO, RETURN SUBST("ERROR:HRLP ServiceRequest failure").
             END.
          END.   
       END.
