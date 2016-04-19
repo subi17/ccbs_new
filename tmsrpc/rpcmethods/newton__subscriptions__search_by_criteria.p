@@ -13,6 +13,7 @@
           order_date                date    - optional
           order_status              boolean - optional
           order_type                string  - optional
+          eligible_renewal          boolean - optional
  * Integers are described here:
           offset                    integer - mandatory
           limit_of_subscriptions    integer - mandatory
@@ -49,22 +50,23 @@ DEF VAR lcstruct       AS CHAR NO-UNDO.
 DEF VAR lcOtherBundle  AS CHAR NO-UNDO.
 DEF VAR lcSegmentCode  AS CHAR NO-UNDO.
 DEF VAR liCount        AS INT  NO-UNDO.
-DEF VAR liNumberOfBundles AS INT  NO-UNDO.
-DEF VAR liNumberOfSubs AS INT NO-UNDO     INIT 0.
-DEF VAR liNumberLimit  AS INT NO-UNDO     INIT 0.
-DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
-DEF VAR ldtOrderDate     AS DATE NO-UNDO. 
-DEF VAR liOrderTime      AS INT  NO-UNDO. 
-DEF VAR liLoopBegTime    AS INT  NO-UNDO.
-DEF VAR liLoopEndTime    AS INT  NO-UNDO. 
-DEF VAR liLoopCount      AS INT  NO-UNDO. 
-DEF VAR plgOrderStatus   AS LOG  NO-UNDO.
+DEF VAR liNumberOfBundles 	AS INT  NO-UNDO.
+DEF VAR liNumberOfSubs 		AS INT  NO-UNDO INIT 0.
+DEF VAR liNumberLimit  		AS INT  NO-UNDO INIT 0.
+DEF VAR lcBundleCLITypes 	AS CHAR NO-UNDO.
+DEF VAR ldtOrderDate     	AS DATE NO-UNDO. 
+DEF VAR liOrderTime      	AS INT  NO-UNDO. 
+DEF VAR liLoopBegTime    	AS INT  NO-UNDO.
+DEF VAR liLoopEndTime    	AS INT  NO-UNDO. 
+DEF VAR liLoopCount      	AS INT  NO-UNDO. 
+DEF VAR plgOrderStatus     AS LOG  NO-UNDO.
+DEF VAR plgEligibleRenewal AS LOG  NO-UNDO INIT ?.
 
 IF validate_request(param_toplevel_id, "struct,int,int") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
 lcstruct = validate_struct(pcStruct,
-   "subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,serv_code,order_date,order_status,order_type").
+   "subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,serv_code,order_date,order_status,order_type,eligible_renewal").
 
 ASSIGN
    pcCliType      = get_string(pcStruct, "subscription_type")
@@ -93,7 +95,9 @@ ASSIGN
    plgOrderStatus = get_bool(pcStruct, "order_status")
       WHEN LOOKUP("order_status", lcStruct) > 0
    pcOrderType    = get_string(pcStruct, "ordert_type")
-   	WHEN LOOKUP("order_type", lcStruct) > 0.
+   	WHEN LOOKUP("order_type", lcStruct) > 0
+   plgEligibleRenewal = get_bool(pcStruct,"eligible_renewal")
+   	WHEN LOOKUP("eligible_renewal", lcStruct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -182,6 +186,11 @@ FOR EACH MobSub NO-LOCK WHERE
       lcDataBundles = fGetCurrentSpecificBundle(MobSub.MsSeq,"BONO").
       IF pcDataBundleId <> lcDataBundles THEN NEXT EACH_MOBSUB.
    END. /* IF pcDataBundleId > "" THEN DO: */
+
+   	/* Eligible for renewal order */
+   IF plgEligibleRenewal <> ? THEN DO:
+   	/* TODO */
+   END.
 
       /* Segmentation offer */
    IF pcSegmentOffer > ""  THEN DO:
