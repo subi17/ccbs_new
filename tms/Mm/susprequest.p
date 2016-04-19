@@ -227,7 +227,11 @@ PROCEDURE pNew:
                         ttProvCommand.Component EQ "HOTLINE") THEN
           liDelay = 10.
       ELSE liDelay = 5.
-
+      
+      /*YPR-3866: ensure that HRLP redirection removal is done before
+      anothe LP activation*/
+      IF ttProvCommand.DropService EQ "HRLP" THEN liDelay = liDelay + 5.
+      
       /* Create subrequests (set mandataory and orig request) */
       liReq = fServiceRequest (MobSub.MsSeq,
                                ttProvCommand.Component,
@@ -285,7 +289,7 @@ PROCEDURE pNew:
                                      "LP",
                                      1,
                                      "remove",
-                                     fSecOffSet(ideActTime,2), /* 2 sec delay, 
+                                     fSecOffSet(ideActTime,5), /* 5 sec delay, 
                                                 must be before LP activation*/
                                      "",                /* SalesMan */
                                      FALSE,             /* Set fees */
