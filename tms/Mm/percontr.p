@@ -3604,6 +3604,22 @@ PROCEDURE pContractReactivation:
             ldeLimitAmt = MServiceLimit.InclAmt.
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMServiceLimit).
 
+         FOR EACH MServiceLPool WHERE
+                  MServiceLPool.MsSeq  = MServiceLimit.MsSeq AND
+                  MServiceLPool.SlSeq  = MServiceLimit.SlSeq AND
+                  MServiceLPool.EndTS >= YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + 1 NO-LOCK:
+
+            CREATE Common.RepLog.
+            ASSIGN
+               Common.RepLog.RowID     = STRING(ROWID(MServiceLPool))
+               Common.RepLog.TableName = "MServiceLPool"
+               Common.RepLog.EventType = "MODIFY"
+               Common.RepLog.EventTime = NOW.
+
+            RELEASE Common.RepLog.
+       
+         END. /* FOR EACH MServiceLPool WHERE */         
+
       END. /* FOR EACH MServiceLimit EXCLUSIVE-LOCK WHERE */
    END. /* IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 */
 
