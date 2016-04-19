@@ -13,22 +13,22 @@ DEFINE VARIABLE gcLogDir AS CHARACTER INITIAL "/scratch/log/hpd" NO-UNDO.
    DumpFile.ModCollModule value.      
 
    NOTE: The values on the following examples are written when
-         the full dump was started on 14.4.2016
+         the full dump was started on 21.4.2016
 
    Invoice:
-      FIRST RUN DUMP FROM DATE 1.3.2016 NORMALLY. THEN RUN THIS.
+      FIRST RUN DUMP FROM DATE 1.4.2016 NORMALLY. THEN RUN THIS.
       REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING
-      60 days to one file
+      30 days to one file
    
-      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 240,1.3.2015,1.1.2016
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 240,1.3.2015,2.3.2016
 
 
    Payment:
-      FIRST RUN DUMP FROM DATE 1.3.2016 NORMALLY. THEN RUN THIS.
+      FIRST RUN DUMP FROM DATE 1.4.2016 NORMALLY. THEN RUN THIS.
       REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING
-      60 days to one file
+      30 days to one file
 
-      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 244,1.3.2015,1.1.2016
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 244,1.3.2015,2.3.2016
       
 
    MsRequest:
@@ -45,6 +45,14 @@ DEFINE VARIABLE gcLogDir AS CHARACTER INITIAL "/scratch/log/hpd" NO-UNDO.
       30 days to one file            
    
       /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 228,1.10.2015,2.3.2016
+
+
+   Order:
+      FIRST RUN DUMP FROM DATE 1.5.2015 NORMALLY. THEN RUN THIS.
+      REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING 
+      365 days to one file   
+   
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 223,1.12.2006,1.5.2014
 
 
    PrepCDR:
