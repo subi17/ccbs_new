@@ -1003,72 +1003,74 @@ PROCEDURE pContractActivation:
          ELSE DCCLI.Amount = MsRequest.ReqDParam2.
 
       END.
-      ELSE IF lcDCEvent EQ "RVTERM12" AND
-         AVAIL bQ25SingleFee AND
-         llQ25CreditNote EQ TRUE THEN DO:
+      ELSE IF lcDCEvent EQ "RVTERM12" THEN DO:
+         IF AVAIL bQ25SingleFee AND
+            llQ25CreditNote EQ TRUE THEN DO:
 
-         /* Adding Q25 Installment residual fee YTS-8721 */
-         ASSIGN
-           lcError = ""
-           liRequest = 0
-           DCCLI.Amount = MsRequest.ReqDParam2.
+            ASSIGN
+              lcError = ""
+              liRequest = 0.
 
-         FOR FIRST Invoice NO-LOCK WHERE
-                   Invoice.InvNum = bQ25SingleFee.InvNum AND
-                   Invoice.InvType = 1,
-             FIRST SubInvoice NO-LOCK WHERE
-                   Subinvoice.InvNum = Invoice.InvNum AND
-                   Subinvoice.MsSeq = MsOwner.MsSeq,
-              EACH InvRow NO-LOCK WHERE
-                   InvRow.InvNum = Invoice.InvNum AND
-                   InvRow.SubInvNum = SubInvoice.SubInvNum AND
-                   InvRow.BillCode = bQ25SingleFee.BillCode AND
-                   InvRow.CreditInvNum = 0 AND
-                   InvRow.Amt >= bQ25SingleFee.Amt:
+            FOR FIRST Invoice NO-LOCK WHERE
+                      Invoice.InvNum = bQ25SingleFee.InvNum AND
+                      Invoice.InvType = 1,
+                FIRST SubInvoice NO-LOCK WHERE
+                      Subinvoice.InvNum = Invoice.InvNum AND
+                      Subinvoice.MsSeq = MsOwner.MsSeq,
+                 EACH InvRow NO-LOCK WHERE
+                      InvRow.InvNum = Invoice.InvNum AND
+                      InvRow.SubInvNum = SubInvoice.SubInvNum AND
+                      InvRow.BillCode = bQ25SingleFee.BillCode AND
+                      InvRow.CreditInvNum = 0 AND
+                      InvRow.Amt >= bQ25SingleFee.Amt:
+               
+               IF InvRow.OrderId > 0 AND
+                  bQ25SingleFee.OrderID > 0 AND
+                  InvRow.OrderId NE bQ25SingleFee.OrderId THEN NEXT.
             
-            IF InvRow.OrderId > 0 AND
-               bQ25SingleFee.OrderID > 0 AND
-               InvRow.OrderId NE bQ25SingleFee.OrderId THEN NEXT.
+               liRequest = fFullCreditNote(Invoice.InvNum,
+                                       STRING(SubInvoice.SubInvNum),
+                                       "InvRow=" + STRING(InvRow.InvRowNum) + "|" +
+                                       "InvRowAmt=" + STRING(MIN(InvRow.Amt,
+                                                          bQ25SingleFee.Amt)),
+                                       "Correct",
+                                       "2013",
+                                       "",
+                                       OUTPUT lcError).
+               LEAVE.
+            END.
+               
+            IF liRequest = 0 THEN
+               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                "MobSub",
+                                STRING(MsRequest.MsRequest),
+                                MsRequest.Custnum,
+                                "CREDIT NOTE CREATION FAILED",
+                                "ERROR:" + lcError). 
+         END. /* IF AVAIL bQ25SingleFee AND */
+         IF ldeResidualFeeDisc > 0 THEN DO:
+            fAddDiscountPlanMember(MsOwner.MsSeq,
+                                  "RVTERMDT2DISC", 
+                                  ldeResidualFeeDisc,
+                                  ldaResidualFee,
+                                  1,
+                                  bQ25SingleFee.OrderId, /* Q25 OrderId */
+                                  OUTPUT lcError).
+            /* write possible error to an order memo */
+            IF lcError > "" THEN
+               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                "MobSub",
+                                STRING(MsOwner.MsSeq),
+                                MsOwner.CustNum,
+                                "RVTERMDT2 discount creation failed",
+                                lcError).
+         END. /* IF ldeResidualFeeDisc > 0 THEN DO: */
          
-            liRequest = fFullCreditNote(Invoice.InvNum,
-                                    STRING(SubInvoice.SubInvNum),
-                                    "InvRow=" + STRING(InvRow.InvRowNum) + "|" +
-                                    "InvRowAmt=" + STRING(MIN(InvRow.Amt,
-                                                       bQ25SingleFee.Amt)),
-                                    "Correct",
-                                    "2013",
-                                    "",
-                                    OUTPUT lcError).
-            LEAVE.
-         END.
-            
-         IF liRequest = 0 THEN
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
-                             STRING(MsRequest.MsRequest),
-                             MsRequest.Custnum,
-                             "CREDIT NOTE CREATION FAILED",
-                             "ERROR:" + lcError). 
-      END. 
-      ELSE IF lcDCEvent EQ "RVTERM12" AND
-         ldeResidualFeeDisc > 0 THEN DO:
-
-         fAddDiscountPlanMember(MsOwner.MsSeq,
-                               "RVTERMDT2DISC", 
-                               ldeResidualFeeDisc,
-                               ldaResidualFee,
-                               1,
-                               bQ25SingleFee.OrderId, /* Q25 OrderId */
-                               OUTPUT lcError).
-         /* write possible error to an order memo */
-         IF lcError > "" THEN
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
-                             STRING(MsOwner.MsSeq),
-                             MsOwner.CustNum,
-                             "RVTERMDT2 discount creation failed",
-                             lcError).
-      END.
+         /* Adding Q25 Installment residual fee YTS-8721 */
+         IF AVAIL bQ25SingleFee THEN
+            DCCLI.Amount = MsRequest.ReqDParam2.
+          
+      END. /* ELSE IF lcDCEvent EQ "RVTERM12" THEN DO: */
       
    END.
    
