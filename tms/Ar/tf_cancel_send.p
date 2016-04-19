@@ -318,9 +318,12 @@ PROCEDURE pPrintLine:
                      lcTotalAmount FORMAT "X(11)"
    /*MES-OPERAC*/    STRING(MONTH(idaBankDate),"99") FORMAT "X(2)"
    /*ANO-OPERAC*/    STRING(YEAR(idaBankDate),"9999") FORMAT "X(4)"
-   /*NUM-PEDIDO*/    STRING(FixedFee.OrderId) FORMAT "X(8)"
-   /*COD-FPAGO*/     lcCodFpago FORMAT "X(4)".
+   /*NUM-PEDIDO*/    STRING(FixedFee.OrderId) FORMAT "X(8)".
    
+   IF FixedFeeTF.TFBank EQ {&TF_BANK_UNOE} THEN /* YTS-8764 */
+      PUT STREAM sout
+      /*COD-FPAGO*/  lcCodFpago FORMAT "X(4)".
+
    PUT STREAM sout CONTROL CHR(13) CHR(10).
    RETURN "".
 END.
