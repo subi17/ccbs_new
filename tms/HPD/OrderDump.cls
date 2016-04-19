@@ -123,7 +123,7 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
             OfferItem.EndStamp   >= lbOrder.CrStamp  AND
             OfferItem.BeginStamp <= lbOrder.CrStamp:
 
-         CASE OfferItem.ItemType
+         CASE OfferItem.ItemType:
 
             WHEN "BillItem"
             THEN DO:
