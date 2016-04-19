@@ -1007,9 +1007,11 @@ PROCEDURE pContractActivation:
          AVAIL bQ25SingleFee AND
          llQ25CreditNote EQ TRUE THEN DO:
 
+         /* Adding Q25 Installment residual fee YTS-8721 */
          ASSIGN
            lcError = ""
-           liRequest = 0.
+           liRequest = 0
+           DCCLI.Amount = MsRequest.ReqDParam2.
 
          FOR FIRST Invoice NO-LOCK WHERE
                    Invoice.InvNum = bQ25SingleFee.InvNum AND
