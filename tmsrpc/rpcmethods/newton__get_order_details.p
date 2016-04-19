@@ -273,6 +273,7 @@ FOR EACH MnpProcess NO-LOCK
       IF AVAIL MsRequest AND MsRequest.ActStamp EQ MNPSub.PortingTime THEN llPortTimeIsProp = FALSE.
       ELSE llPortTimeIsProp = TRUE.
       add_boolean(gcStructMnp, "proposal_porting_time", llPortTimeIsProp).
+      add_date_or_time(gcStructMnp, "requested_porting_time", Order.PortingDate, 0).
    END.
 
    gcArrayMnpMessages = add_array(gcStructMnp, "mnpmessages").
