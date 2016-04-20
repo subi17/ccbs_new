@@ -18,12 +18,12 @@ CLASS HPD.CustomerDump FINAL INHERITS GenericDump:
    CONSTRUCTOR PUBLIC CustomerDump
       (iiDumpID    AS INTEGER,
        icFile      AS CHARACTER):
-      
-      SUPER(iiDumpID, icFile).
-      
+
       /* When doing full dump this will speed up
          things a tiny bit */
       mGetSelfEmpCategories().
+
+      SUPER(iiDumpID, icFile).
 
    END CONSTRUCTOR.    
 
