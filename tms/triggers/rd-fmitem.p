@@ -1,1 +1,1 @@
-{triggers/hpddelete_generic.i FMItem FMITEM Common FeeModel}
+{triggers/hpddelete_generic.i FMItem FMITEM Common FeeModel PriceList BillCode FromDate}

@@ -30,7 +30,7 @@ CLASS HPD.FMItemDump FINAL INHERITS GenericDump:
          WHEN "KeyValue"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE RETURN {HPD/keyvalue.i lhMainTable :: objDumpBase:lcKeyDelimiter FeeModel}.
+              ELSE RETURN {HPD/keyvalue.i lhMainTable :: objDumpBase:lcKeyDelimiter FeeModel PriceList BillCode FromDate}.
          OTHERWISE RETURN "".         
       END CASE.
 
