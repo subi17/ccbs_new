@@ -69,14 +69,14 @@ END.
 RUN pInitialize.
 
 IF NOT RETURN-VALUE BEGINS "ERROR" THEN 
-   RUN pAnalyseAnalysis(INPUT TABLE ttResult,
+   RUN pAnalyseAnalysis(INPUT TABLE ttResult BY-REFERENCE,
                         INPUT iiFRProcessID,
                         INPUT idaInvDate,
                         INPUT iiInvType,
                         INPUT iiUpdateInterval).
 
 IF NOT RETURN-VALUE BEGINS "ERROR" THEN
-   RUN pSaveAnalysisResults(INPUT TABLE ttResult,
+   RUN pSaveAnalysisResults(INPUT TABLE ttResult BY-REFERENCE,
                             INPUT iiFRExecID,
                             INPUT iiBRTestQueueID).
    
