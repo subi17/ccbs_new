@@ -52,9 +52,30 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
     icCorrId AS CHAR, /*Correlation ID*/
     idtPDate AS DATETIME, /*Purchase date*/
     ideAmount AS DECIMAL): /*Amount*/
+   DEF BUFFER bMobsub FOR MobSub.
 
    DEF VAR lcResponse AS CHAR NO-UNDO.
    lcResponse = {&GB_RESP_OK}.
+   
+   FIND FIRST bMobSub NO-LOCK WHERE
+              bMobSub.Brand EQ "1" AND
+              bMobSub.CLI EQ icMSISDN NO-ERROR.
+   IF NOT AVAIL bMobSub THEN RETURN {&GB_RESP_NO_SUBS}.           
 
+   lcFatGroup = fGetFatGroup(icMSISDN).
+   liFromPeriod = fGetPeriod(idtPDate).
+   
+   mobsub
+     
+   RUN creafat (MobSub.CustNum, /*OK*/
+                MobSub.MsSeq, /*OK*/
+                DCCLI.DCEvent, /*NOK*/
+                ideAmount,   /* amount */ /*OK*/
+                0,   /* %  */
+                ?,
+                liFatPeriod,
+                999999,
+                OUTPUT lcReqChar).
 
+   RETURN lcResponse.
 END.
