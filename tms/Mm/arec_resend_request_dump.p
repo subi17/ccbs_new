@@ -55,6 +55,54 @@ DEFINE TEMP-TABLE ttDumpData NO-UNDO
    FIELD NewOperator   AS CHARACTER
    FIELD ProcTimeStamp AS CHARACTER.
 
+FUNCTION fDumpArecRejections RETURNS LOGICAL 
+   (INPUT ldDumpDate AS DATE,
+    INPUT lcDumpTime AS CHAR):
+
+   FOR EACH EventLog NO-LOCK WHERE 
+            EventLog.EventDate  = ldDumpDate AND
+            EventLog.EventTime >= lcDumpTime AND
+            EventLog.TableName  = "Order":
+
+      ASSIGN
+         liOrderID   = 0
+         lcFieldName = ""
+         ldeEventTS  = 0
+         liOrderID   = INT(ENTRY(2, EventLog.key,CHR(255))) 
+         lcFieldName = ENTRY(1, EventLog.Datavalues,CHR(255))
+         ldeEventTS  = fHMS2TS(EventLog.EventDate,EventLog.EventTime) NO-ERROR.  
+            
+      IF EventLog.UserCode = "MNP"      AND 
+         lcFieldName       = "CurrOper" THEN DO:
+          
+         FIND FIRST MNPProcess NO-LOCK WHERE 
+                    MNPProcess.OrderID    = liOrderID      AND 
+                    MNPProcess.MNPType    = {&MNP_TYPE_IN} AND 
+                    MNPProcess.CreatedTS <= ldeEventTS     NO-ERROR.
+
+         FIND FIRST Order NO-LOCK WHERE 
+                    Order.Brand   = gcBrand   AND 
+                    Order.OrderID = liOrderID NO-ERROR.
+
+         IF NOT AVAIL MNPProcess OR 
+            NOT AVAIL Order      THEN NEXT.
+
+         CREATE ttDumpData.
+         ASSIGN
+            ttDumpData.MSISDN        = Order.CLI
+            ttDumpData.ARECTimeStamp = STRING(MNPProcess.CreatedTS) 
+            ttDumpData.ARECType      = MNPProcess.StatusReason
+            ttDumpData.WrongOperator = ENTRY(2, EventLog.Datavalues,CHR(255)) 
+            ttDumpData.NewOperator   = ENTRY(3, EventLog.Datavalues,CHR(255))
+            ttDumpData.ProcTimeStamp = STRING(ldeEventTS). 
+      END.
+
+   END.
+
+END FUNCTION.    
+
+/***** Main Start *****/
+
 FIND FIRST DumpFile NO-LOCK WHERE 
            DumpFile.DumpID = iiDumpID NO-ERROR.
 
@@ -81,52 +129,20 @@ EMPTY TEMP-TABLE ttDumpData.
 
 IF icDumpMode EQ "Full" THEN 
    idLastDump = 20160322.0000.
-   
-fSplitTS(idLastDump, 
-         OUTPUT ldaDumpDate, 
-         OUTPUT liDumpTime).
 
-lcDumpEventTime = STRING(liDumpTime,"HH:MM:SS").
+REPEAT:
+   fSplitTS(idLastDump, 
+            OUTPUT ldaDumpDate, 
+            OUTPUT liDumpTime).
+ 
+   lcDumpEventTime = STRING(liDumpTime,"HH:MM:SS").
 
-FOR EACH EventLog NO-LOCK WHERE 
-         EventLog.EventDate >= ldaDumpDate     AND
-         EventLog.EventDate <= TODAY           AND 
-         EventLog.EventTime >= lcDumpEventTime AND
-         EventLog.TableName  = "Order":
+   fDumpArecRejections(ldaDumpDate,
+                       lcDumpEventTime).
 
-   ASSIGN
-      liOrderID   = 0
-      lcFieldName = ""
-      ldeEventTS  = 0
-      liOrderID   = INT(ENTRY(2, EventLog.key,CHR(255))) 
-      lcFieldName = ENTRY(1, EventLog.Datavalues,CHR(255))
-      ldeEventTS  = fHMS2TS(EventLog.EventDate,EventLog.EventTime) NO-ERROR.  
-         
-   IF EventLog.UserCode = "MNP"      AND 
-      lcFieldName       = "CurrOper" THEN DO:
-       
-      FIND FIRST MNPProcess NO-LOCK WHERE 
-                 MNPProcess.OrderID    = liOrderID      AND 
-                 MNPProcess.MNPType    = {&MNP_TYPE_IN} AND 
-                 MNPProcess.CreatedTS <= ldeEventTS     NO-ERROR.
+   ldaDumpDate = ldaDumpDate + 1. 
 
-      FIND FIRST Order NO-LOCK WHERE 
-                 Order.Brand   = gcBrand   AND 
-                 Order.OrderID = liOrderID NO-ERROR.
-
-      IF NOT AVAIL MNPProcess OR 
-         NOT AVAIL Order      THEN NEXT.
-
-      CREATE ttDumpData.
-      ASSIGN
-         ttDumpData.MSISDN        = Order.CLI
-         ttDumpData.ARECTimeStamp = STRING(MNPProcess.CreatedTS) 
-         ttDumpData.ARECType      = MNPProcess.StatusReason
-         ttDumpData.WrongOperator = ENTRY(2, EventLog.Datavalues,CHR(255)) 
-         ttDumpData.NewOperator   = ENTRY(3, EventLog.Datavalues,CHR(255))
-         ttDumpData.ProcTimeStamp = STRING(ldeEventTS). 
-   END.
-
+   IF ldaDumpDate EQ TODAY THEN LEAVE.
 END.
 
 FOR EACH ttDumpData NO-LOCK:
@@ -141,33 +157,4 @@ END.
 
 OUTPUT STREAM sFile CLOSE.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/**** MAIN End ****/
