@@ -1,0 +1,51 @@
+#!/bin/bash 
+
+COMMANDS="hpd_common hpd_mobile hpd_ordercanal hpdack_common hpdack_mobile hpdack_ordercanal"
+
+if [ ! $LOGNAME = root ]
+then
+    echo Please use account "root"
+    exit
+fi
+
+
+case x$1 in
+xstart)
+	ACTION=$1 ;;
+xstop)
+	ACTION=$1 ;;
+xstatus)
+	ACTION=$1 ;;
+xlist)
+	ACTION=$1 ;;
+*)
+	echo usage "[start|stop|status|list]"
+	exit ;;
+esac
+
+case  $ACTION in
+list)
+    for COMMAND in $COMMANDS
+    do
+	echo $COMMAND
+    done ;;
+stop)
+    for COMMAND in $COMMANDS
+    do
+        echo $COMMAND $ACTION ... backgroup
+        ./$COMMAND $ACTION &
+    done
+    echo Waiting
+    wait   
+#    ./stopdaemons.sh
+    echo Done        
+    ;;
+*)
+    for COMMAND in $COMMANDS
+    do
+	echo
+        echo $COMMAND $ACTION
+	./$COMMAND $ACTION
+    done
+    echo ;;
+esac

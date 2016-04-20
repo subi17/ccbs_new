@@ -1,0 +1,13 @@
+FUNCTION fCheckHPDStatus RETURNS LOGICAL
+   (iiMSSeq   AS INTEGER,
+    iiCustNum AS INTEGER,
+    ideEndTS  AS DECIMAL):
+
+   IF ideEndTS < YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + 1
+   THEN RETURN FALSE.
+
+   IF iiCustNum > 0
+   THEN RETURN CAN-FIND(FIRST Customer NO-LOCK WHERE Customer.CustNum = iiCustNum).
+
+   RETURN CAN-FIND(FIRST MobSub NO-LOCK WHERE MobSub.MsSeq = iiMsSeq).
+END.

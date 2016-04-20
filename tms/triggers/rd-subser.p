@@ -1,16 +1,24 @@
 TRIGGER PROCEDURE FOR REPLICATION-DELETE OF SubSer.
 
-{tmsconst.i}
+{HPD/HPDConst.i}
+{Syst/tmsconst.i}
 
-IF LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) > 0
-THEN DO:
+&IF {&SUBSER_DELETE_TRIGGER_ACTIVE} &THEN
 
-   CREATE Mobile.RepLog.
-   ASSIGN
-      Mobile.RepLog.RecordId  = RECID(SubSer)
-      Mobile.RepLog.TableName = "SubSer"
-      Mobile.RepLog.EventType = "DELETE"
-      Mobile.RepLog.KeyValue  = STRING(SubSer.MsSeq) + CHR(255) + SubSer.ServCom +
-                                CHR(255) + STRING(SubSer.SSDate).
-      Mobile.RepLog.EventTS   = DATETIME(TODAY,MTIME).
-END.
+IF NEW SubSer
+THEN RETURN.
+
+{triggers/subser.i}
+
+IF LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) = 0
+THEN RETURN.
+
+CREATE Mobile.RepLog.
+ASSIGN
+   Mobile.RepLog.TableName = "SubSer"
+   Mobile.RepLog.EventType = "DELETE"
+   Mobile.RepLog.EventTime = NOW
+   Mobile.RepLog.KeyValue  = {HPD/keyvalue.i SubSer . {&HPDKeyDelimiter} MsSeq ServCom SSDate}
+   .
+
+&ENDIF

@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# This daemon polls the mobile.replog table and sends one HPD message
+# for each record of the table.
+#
+
+DAEMON=HPD.HPDOnline
+INSTANCE=Mobile
+LOGLEVEL=4
+DATABASES="common mobile ordercanal"
+cd $(dirname $0)/..
+. script/daemon.sh
