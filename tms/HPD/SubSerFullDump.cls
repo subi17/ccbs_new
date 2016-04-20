@@ -81,6 +81,8 @@ CLASS HPD.SubSerFullDump FINAL INHERITS DumpHandler:
       DEFINE VARIABLE liNumEntries  AS INTEGER   NO-UNDO.
       DEFINE VARIABLE liCount       AS INTEGER   NO-UNDO.
       DEFINE VARIABLE lcConfigParam AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE liMsSeqFrom   AS INTEGER   NO-UNDO.
+      DEFINE VARIABLE liMsSeqTo     AS INTEGER   NO-UNDO.
 
       ASSIGN
          lcServComs    = {&HPD_SERVICES}
