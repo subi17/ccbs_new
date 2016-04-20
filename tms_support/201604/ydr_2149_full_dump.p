@@ -17,7 +17,7 @@ ASSIGN
                 STRING(DAY(TODAY),"99")
    lcDumpFile = REPLACE(lcDumpFile,"YYYYMMDD",lcDate).              
 
-OUTPUT STREAM strout TO "DWH_Modified_AREC_rejections_YYYYMMDD.txt".
+OUTPUT STREAM strout TO VALUE(lcDumpFile).
 
 FIND FIRST DumpFile NO-LOCK WHERE 
            DumpFile.Brand    = gcBrand AND 
