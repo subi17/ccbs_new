@@ -34,10 +34,10 @@ FUNCTION fInitGBParameters RETURNS CHAR
    ():
    ASSIGN
 
-      lcGBOutDir = fCParam("GBILLING","HRLPOutDir")
-      lcGBInDir = fCParam("GBILLING","HRLPListInDir")
-      lcGBLogDir = fCParam("GBILLING","HRLPLogDir")
-      lcGBSpoolDir = fCParam("GBILLING","HRLPSpoolDir").
+      lcGBOutDir = fCParam("GBILLING","GBOutDir")
+      lcGBInDir = fCParam("GBILLING","GBListInDir")
+      lcGBLogDir = fCParam("GBILLING","GBLogDir")
+      lcGBSpoolDir = fCParam("GBILLING","GBSpoolDir").
 
  
    IF lcGBOutDir  EQ "" OR lcGBOutDir EQ ? THEN lcGBOutDir = "/tmp/".
