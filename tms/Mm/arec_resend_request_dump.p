@@ -62,7 +62,14 @@ FUNCTION fDumpArecRejections RETURNS LOGICAL
    FOR EACH EventLog NO-LOCK WHERE 
             EventLog.EventDate  = ldDumpDate AND
             EventLog.EventTime >= lcDumpTime AND
-            EventLog.TableName  = "Order":
+            EventLog.TableName  = "Order"
+      ON QUIT UNDO, RETRY
+      ON STOP UNDO, RETRY:
+
+      IF RETRY THEN DO:
+         olInterrupted = TRUE. 
+         LEAVE.
+      END.
 
       ASSIGN
          liOrderID   = 0
@@ -153,6 +160,8 @@ FOR EACH ttDumpData NO-LOCK:
       ttDumpData.WrongOperator lcDelimiter
       ttDumpData.NewOperator   lcDelimiter
       ttDumpData.ProcTimeStamp SKIP.
+
+   oiEvents = oiEvents + 1.    
 END.
 
 OUTPUT STREAM sFile CLOSE.
