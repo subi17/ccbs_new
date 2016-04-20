@@ -32,7 +32,6 @@ DEF VAR liFRExecID       AS INT  NO-UNDO.
 DEF VAR lcRunMode        AS CHAR NO-UNDO.
 DEF VAR liUpdateInterval AS INT  NO-UNDO.
 DEF VAR llMergeAnalysis  AS LOG  NO-UNDO.
-DEF VAR liAnalysisCnt    AS INT  NO-UNDO.
 
 /****** Main start ********/
 
@@ -83,8 +82,7 @@ RUN brtestcase_collect.p(liBRTestQueueID,
                          liFRExecID,
                          liUpdateInterval,
                          llMergeAnalysis,
-                         OUTPUT liCaseCnt, 
-                         OUTPUT liAnalysisCnt). /* How should we handle the analysis count part */
+                         OUTPUT liCaseCnt).
 
 IF RETURN-VALUE BEGINS "ERROR" THEN DO:
    RUN pCancelFuncRunProcess(liFRProcessID,RETURN-VALUE).

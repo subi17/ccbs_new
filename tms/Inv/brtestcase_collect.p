@@ -32,7 +32,6 @@ DEF INPUT  PARAMETER iiFRExecID       AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiUpdateInterval AS INT  NO-UNDO.
 DEF INPUT  PARAMETER ilgMergeAnalysis AS LOG  NO-UNDO.
 DEF OUTPUT PARAMETER oiPicked         AS INT  NO-UNDO.
-DEF OUTPUT PARAMETER oiAnalysed       AS INT  NO-UNDO.
 
 DEF VAR liCheck   AS INT  NO-UNDO.
 DEF VAR lhCDR     AS HANDLE NO-UNDO. 
@@ -45,6 +44,7 @@ DEF VAR lcBillRun        AS CHAR NO-UNDO.
 DEF VAR lhHandle  AS HANDLE NO-UNDO.
 DEF VAR liCustCnt AS INT  NO-UNDO INITIAL 0.
 DEF VAR liBatch   AS INT  NO-UNDO INIT 1.
+DEF VAR oiAnalysed AS INT NO-UNDO INIT 0. 
 
 DEF TEMP-TABLE ttCase NO-UNDO
    FIELD BRTestCaseID AS INT
@@ -555,13 +555,13 @@ PROCEDURE pCollect:
             /* Analysis for Created Invoice */
             RUN pInitializeMergeAnalysis.
 
-            RUN pAnalyseAnalysis (INPUT TABLE ttResult,
+            RUN pAnalyseAnalysis (INPUT TABLE ttResult BY-REFERENCE,
                                   iiFRProcessID,
                                   idaInvDate,
                                   iiInvType,
                                   iiUpdateInterval).
 
-            RUN pSaveAnalysisResults (INPUT TABLE ttResult,
+            RUN pSaveAnalysisResults (INPUT TABLE ttResult BY-REFERENCE,
                                       iiFRExecID,
                                       iiBRTestQueueID). 
          END.
@@ -578,23 +578,14 @@ PROCEDURE pCollect:
   
    /* IF no entires cases were found then create the results */
 
-   IF ilgMergeAnalysis AND
-   CAN-FIND(FIRST ttNoEntriesResult NO-LOCK) THEN DO:
+   IF ilgMergeAnalysis THEN DO:
 
       RUN pResultNoEntries.
 
-      IF CAN-FIND(FIRST ttResult NO-LOCK) THEN DO:
-
-         RUN pAnalyseAnalysis (INPUT TABLE ttResult,
-                               iiFRProcessID,
-                               idaInvDate,
-                               iiInvType,
-                               iiUpdateInterval).
-
-         RUN pSaveAnalysisResults (INPUT TABLE ttResult,
+      IF CAN-FIND(FIRST ttResult NO-LOCK) THEN 
+         RUN pSaveAnalysisResults (INPUT TABLE ttResult BY-REFERENCE,
                                    iiFRExecID,
                                    iiBRTestQueueID).
-      END.
    END.
  
    RETURN "".
