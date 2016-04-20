@@ -63,7 +63,7 @@ PROCEDURE pStart:
       RETURN.
    END.
 
-   LOG-MANAGER:WRITE-MESSAGE("Completed the dump. " + STRING(HandlerObj:liEvents) + " was dumped.", "INFO").
+   LOG-MANAGER:WRITE-MESSAGE("Completed the dump. " + STRING(HandlerObj:liEvents) + " rows was dumped.", "INFO").
    
 
    CATCH apperrorobj AS Progress.Lang.AppError:
