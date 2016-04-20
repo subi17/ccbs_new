@@ -1032,9 +1032,7 @@ PROCEDURE pContractActivation:
       ELSE IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} AND
          DayCampaign.DCEvent BEGINS "PAYTERM" AND
          AVAIL DCCLI AND
-         MsRequest.ReqDParam2 > 0 AND 
-         MsRequest.ReqSource NE {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE}
-         THEN DO:
+         MsRequest.ReqDParam2 > 0 THEN DO:
 
          RUN creasfee.p(MsOwner.CustNum,
                        MsOwner.MsSeq,

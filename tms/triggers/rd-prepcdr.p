@@ -16,7 +16,7 @@ ASSIGN
    mcdr.RepLog.TableName = "PrepCDR"
    mcdr.RepLog.EventType = "DELETE"
    mcdr.RepLog.EventTime = NOW
-   mcdr.RepLog.KeyValue  = {HPD/keyvalue.i PrepCDR . {&HPDKeyDelimiter} MSCID DtlSeq DateSt} 
+   mcdr.RepLog.KeyValue  = {HPD/keyvalue.i PrepCDR . {&HPDKeyDelimiter} MsSeq DtlSeq DateSt} 
    .
 
 &ENDIF
