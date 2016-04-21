@@ -46,14 +46,23 @@ FUNCTION fInitGBParameters RETURNS CHAR
    IF lcGBSpoolDir  EQ "" OR lcGBSpoolDir EQ ? THEN lcGBSpoolDir = "/tmp/".
 
 END.   
-    
+
+
+FUNCTION fGetPeriod RETURNS INT
+   (idtDate AS DATETIME):
+   DEF VAR liPeriod AS INT NO-UNDO.
+   liPeriod = YEAR(idtDate) * 100 + MONTH(idtDate).
+
+   RETURN liPeriod.
+END.
+
 FUNCTION fProcessPostpaidEntry RETURNS CHAR
    (icMSISDN AS CHAR, /*MSISDN*/
     icCorrId AS CHAR, /*Correlation ID*/
     idtPDate AS DATETIME, /*Purchase date*/
     ideAmount AS DECIMAL): /*Amount*/
-   DEF BUFFER bMobsub FOR MobSub.
 
+   DEF BUFFER bMobsub FOR MobSub.
    DEF VAR lcResponse AS CHAR NO-UNDO.
    lcResponse = {&GB_RESP_OK}.
    
@@ -62,20 +71,17 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
               bMobSub.CLI EQ icMSISDN NO-ERROR.
    IF NOT AVAIL bMobSub THEN RETURN {&GB_RESP_NO_SUBS}.           
 
-   lcFatGroup = fGetFatGroup(icMSISDN).
-   liFromPeriod = fGetPeriod(idtPDate).
-   
-   mobsub
-     
-   RUN creafat (MobSub.CustNum, /*OK*/
-                MobSub.MsSeq, /*OK*/
-                DCCLI.DCEvent, /*NOK*/
-                ideAmount,   /* amount */ /*OK*/
-                0,   /* %  */
-                ?,
-                liFatPeriod,
-                999999,
-                OUTPUT lcReqChar).
+   RUN creafat (MobSub.CustNum, /* custnum */
+                MobSub.MsSeq, /* msseq */
+                "DRAFT_GBFAT", /*NOK*/
+                ideAmount,   /* amount */ 
+                0,   /* percentage  */
+                ?,   /* vat included already */
+                fGetPeriod(idtPDate), /*period*/
+                999999, /*tp period, no limoit now*/
+                OUTPUT lcResponse). /* error */
 
    RETURN lcResponse.
 END.
+
+
