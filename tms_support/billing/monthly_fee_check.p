@@ -25,20 +25,20 @@ DEFINE VARIABLE lcEventlogDetails  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE ldeTerminated      AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE lcBundleOutputFile AS CHARACTER NO-UNDO. 
 
-DEFINE BUFFER beventlog FOR eventlog.
-
 DEFINE TEMP-TABLE ttServicelimit NO-UNDO
-FIELD groupcode AS char
-INDEX groupcode IS PRIMARY UNIQUE groupcode. 
+   FIELD groupcode AS char
+   INDEX groupcode IS PRIMARY UNIQUE groupcode. 
 
-define temp-table ttSubDetails no-undo 
-   field MsSeq  as int
-   field CLI    as char
-   field Bundle as char
+DEFINE TEMP-TABLE ttSubDetails NO-UNDO
+   FIELD MsSeq  AS INT
+   FIELD CLI    AS CHAR
+   FIELD Bundle AS CHAR
    INDEX MsSeq MsSeq. 
 
-def stream sout.
-def STREAM strout.
+DEFINE BUFFER beventlog FOR eventlog.
+
+DEF STREAM sout.
+DEF STREAM strout.
 
 IF DAY(TODAY) = 1 THEN
    ldaToDate = fLastDayOfMOnth(TODAY - 1).
@@ -70,7 +70,7 @@ put stream sout unformatted
       "CUSTNUM|MSSEQ|MSISDN|CONTRACT|CONTRACT_FROM|CONTRACT_TO|MSREQUEST_CREATE_FEES|DELETE_FIXEDFEE_EVENTLOG|DELETE_FFITEM_EVENTLOG|EVENTLOG_DETAIL|TERMINATION_TIME" skip.
 
 put STREAM strout unformatted 
-    "CUSTNUM|MsSEQ|MSISDN|CLIType|TariffBundle/BaseBundle" SKIP.
+    "CUSTNUM|MsSEQ|MSISDN|TariffBundle/BaseBundle" SKIP.
 
 looppi:
 FOR EACH daycampaign where
@@ -228,35 +228,34 @@ end.
 
 looppi2:
 FOR EACH servicelimit NO-LOCK,
-   first daycampaign NO-LOCK where
-         daycampaign.brand   = "1" and
-         daycampaign.dcevent = servicelimit.groupcode:
+    FIRST daycampaign NO-LOCK WHERE
+          daycampaign.brand   = "1" and
+          daycampaign.dcevent = servicelimit.groupcode:
 
    if daycampaign.feemodel eq "" then next.
-   
    if daycampaign.dcevent begins "dss" then next.
 
    FIND FIRST fmitem NO-LOCK where
               fmitem.brand = "1" and
               fmitem.feemodel = daycampaign.feemodel and
               fmitem.todate > today no-error.
-   
+
    if fmitem.billmethod then next.
-   
    if fmitem.billtype eq "NF" then next. /* no fee (prepaid) */
 
    FIND FIRST ttServicelimit NO-LOCK where
               ttServicelimit.groupcode  = servicelimit.groupcode no-error.
-   
+
    IF AVAIL ttServicelimit then next.
-   
+
    create ttServicelimit.
-   assign ttServicelimit.groupcode = daycampaign.dcevent.
+   assign
+      ttServicelimit.groupcode = servicelimit.groupcode.
 
    FOR EACH mservicelimit where
             mservicelimit.slseq    = servicelimit.slseq    and
             mservicelimit.dialtype = servicelimit.dialtype and
-            mservicelimit.endts   >= ldeFromStamp          NO-LOCK:
+            mservicelimit.endts   >= ldeFromStamp NO-LOCK:
 
       if mservicelimit.endts < mservicelimit.fromts then next.
       
@@ -325,83 +324,84 @@ FOR EACH servicelimit NO-LOCK,
                                       ELSE "".
       END.
 
-      find first fixedfee where
+      FIND FIRST fixedfee NO-LOCK WHERE
                  fixedfee.brand      = gcBrand                     and
                  fixedfee.hosttable  = "mobsub"                    and
                  fixedfee.custnum    = liCustnum                   and
                  fixedfee.keyvalue   = string(mservicelimit.msseq) and
                  fixedfee.CalcObj    = servicelimit.groupcode      and
-                 fixedfee.endperiod >= liContractPeriod
-      NO-LOCK no-error.
+                 fixedfee.endperiod >= liContractPeriod            NO-ERROR.
 
-      IF AVAIL fixedfee then do:
-         FIND FIRST ffitem where
-               ffitem.FFNum      = fixedfee.ffnum and
-               ffitem.billperiod = liPeriod NO-LOCK no-error.
+      IF AVAIL fixedfee THEN DO:
+         FIND FIRST ffitem WHERE
+                    ffitem.FFNum      = fixedfee.ffnum   AND
+                    ffitem.billperiod = liPeriod NO-LOCK NO-ERROR.
       
-         IF AVAIL ffitem then do:
-            if (ffitem.billed          and ffitem.invnum = 0) or
-               (ffitem.billed eq false and ffitem.invnum > 0) then do:
+         IF AVAIL ffitem THEN DO:
+            IF (ffitem.billed          AND ffitem.invnum = 0) OR
+               (ffitem.billed eq false and ffitem.invnum > 0) THEN DO:
                put stream sout unformatted 
                   liCustnum "|" mservicelimit.msseq "|"
                    "ERROR:FFItem billed and invoice not found (or vice versa)"
                skip.
-            end.
-            else if ffitem.invnum > 0 and 
-               not can-find(first invoice where
-                                  invoice.invnum = ffitem.invnum) then do:
+            END.
+            ELSE IF ffitem.invnum > 0 AND
+                 NOT CAN-FIND(FIRST invoice WHERE
+                                    invoice.invnum = ffitem.invnum) THEN DO:
                put stream sout unformatted 
                   liCustnum "|" mservicelimit.msseq "|"
                    "ERROR:FFItem invoice not found" skip.
-            end.
+            END.
 
-            next.
-         end.
-      end.
+            NEXT.
+         END.
+      END.
       
       IF AVAIL fixedfee THEN
          lcFFItemKey = string(fixedfee.FFNum) + CHR(255) + string(liPeriod).
 
-      FIND FIRST msrequest where
-                 msrequest.msseq      = mservicelimit.msseq    and
-                 msrequest.reqtype    = 8                      and
-                 msrequest.reqstatus  = 2                      and
-                 msrequest.reqcparam3 = servicelimit.groupcode and
-                 msrequest.actstamp   = mservicelimit.fromts   NO-LOCK no-error.
+      FIND FIRST msrequest NO-LOCK WHERE
+                 msrequest.msseq      = mservicelimit.msseq    AND
+                 msrequest.reqtype    = 8                      AND 
+                 msrequest.reqstatus  = 2                      AND
+                 msrequest.reqcparam3 = servicelimit.groupcode AND
+                 msrequest.actstamp   = mservicelimit.fromts   NO-ERROR.
    
-      lcKey = "1"               + CHR(255) + 
-              string(liCustnum) + CHR(255) + 
-              "MobSub"          + CHR(255) + 
-              string(mservicelimit.msseq). 
+      lcKey = "1"      + CHR(255) + string(liCustnum) + CHR(255) + 
+              "MobSub" + CHR(255) + string(mservicelimit.msseq). 
       
-      FIND FIRST eventlog where
-                 eventlog.tablename = "FixedFee" and
-                 eventlog.key begins lcKey       and
-                 eventlog.action    = "delete"   NO-LOCK no-error.
+      FIND FIRST eventlog NO-LOCK WHERE
+                 eventlog.tablename = "FixedFee" AND 
+                 eventlog.key       begins lcKey AND 
+                 eventlog.action    = "delete"   NO-ERROR.
+
       IF AVAIL eventlog THEN
          lcEventlogDetails = eventlog.usercode + "-" + STRING(eventlog.eventdate).
       ELSE IF lcFFItemKey > "" THEN DO:
-         FIND FIRST beventlog where
-                    beventlog.tablename = "FFItem"   and
-                    beventlog.key begins lcFFItemKey and
-                    beventlog.action    = "delete"   NO-LOCK no-error.
+         FIND FIRST beventlog NO-LOCK WHERE
+                    beventlog.tablename = "FFItem"         AND 
+                    beventlog.key       begins lcFFItemKey AND 
+                    beventlog.action    = "delete"         NO-ERROR.
          IF AVAIL beventlog THEN
             lcEventlogDetails = beventlog.usercode + "-" + STRING(beventlog.eventdate).
       END.
       
-      put stream sout unformatted 
-         liCustnum                                 "|"
-         mservicelimit.msseq                       "|" 
-         lcCli                                     "|"
-         servicelimit.groupcode                    "|"
-         mservicelimit.fromts                      "|"
-         mservicelimit.endts                       "|"
-         (if avail msrequest then
-          string(msrequest.createfees) else "N/A") "|"
-         avail(eventlog)                           "|"
-         avail(beventlog)                          "|"
-         lcEventlogDetails                         "|"
-         (IF ldeTerminated > 0 THEN fts2hms(ldeTerminated) ELSE "") skip.
+      PUT STREAM sout UNFORMATTED
+         liCustnum                        "|"
+         mservicelimit.msseq              "|" 
+         lcCli                            "|"
+         servicelimit.groupcode           "|"
+         mservicelimit.fromts             "|"
+         mservicelimit.endts              "|"
+        (if avail msrequest then
+             string(msrequest.createfees) 
+         else "N/A")                      "|"
+         avail(eventlog)                  "|"
+         avail(beventlog)                 "|"
+         lcEventlogDetails                "|"
+        (IF ldeTerminated > 0 THEN 
+            fts2hms(ldeTerminated) 
+         ELSE "")                         SKIP.
    
       liCount = liCount + 1.
    END.
@@ -437,7 +437,6 @@ FOR EACH MobSub NO-LOCK WHERE
   RUN pBundleCheck(MobSub.MsSeq,
                    MobSub.CustNum,
                    MobSub.CLI,
-                   MobSub.CLIType,
                    lcBundle).
 
 END.
@@ -470,7 +469,6 @@ FOR EACH MsRequest NO-LOCK WHERE
    RUN pBundleCheck(TermMobSub.MsSeq,
                     TermMobSub.CustNum,
                     TermMobSub.CLI,
-                    TermMobSub.CLIType,
                     lcBundle).
 
 END.
@@ -479,21 +477,37 @@ PROCEDURE pBundleCheck:
 define INPUT parameter iiMsSeq   as integer   no-undo.
 define INPUT parameter iiCustNum AS integer   no-undo.
 define INPUT parameter icCLI     as character no-undo.
-define INPUT parameter icCLIType as character no-undo.
 define INPUT parameter icBundle  as character no-undo.
+
+DEF VAR llgAvailable AS LOGICAL NO-UNDO. 
 
   IF NOT CAN-FIND(FIRST ttSubDetails WHERE 
                         ttSubDetails.MsSeq  EQ iiMsSeq   AND 
                         ttSubDetails.Bundle EQ icBundle) THEN DO:
-     put STREAM strout unformatted 
-        iiCustNum "|"
-        iiMsSeq   "|"
-        icCLI     "|"
-        icCLIType "|"
-        lcBundle  SKIP.
+     
+     llgAvailable = FALSE.
 
-     liBundleCount = liBundleCount + 1.
+     /* Double check in mservicelimit */
+     FOR EACH mservicelimit NO-LOCK WHERE 
+              mservicelimit.MsSeq = iiMsSeq:
+        
+        FIND FIRST servicelimit NO-LOCK WHERE 
+                   servicelimit.slseq     = mservicelimit.slseq    AND 
+                   servicelimit.dialtype  = mservicelimit.dialtype AND 
+                   servicelimit.groupcode = icBundle               NO-ERROR.
+        IF AVAIL servicelimit THEN 
+           llgAvailable = TRUE.
+     END.         
+     
+     IF NOT llgAvailable THEN DO:
+        put STREAM strout unformatted 
+           iiCustNum "|"
+           iiMsSeq   "|"
+           icCLI     "|"
+           lcBundle  SKIP.
 
+        liBundleCount = liBundleCount + 1.
+     END.
   END.                      
 
 END PROCEDURE.
