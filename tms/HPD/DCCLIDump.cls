@@ -90,7 +90,7 @@ CLASS HPD.DCCLIDump FINAL INHERITS DumpHandler:
 
       FOR
          EACH MobSub FIELDS (MsSeq) NO-LOCK,
-         FIRST lbDCCLI NO-LOCK USE-INDEX MSSeq WHERE
+         EACH lbDCCLI NO-LOCK USE-INDEX MSSeq WHERE
             lbDCCLI.MsSeq  = MobSub.MsSeq   
          ON QUIT UNDO, RETRY
          ON STOP UNDO, RETRY:
