@@ -44,10 +44,12 @@ DEF VAR liDumpTime      AS INT  NO-UNDO.
 DEF VAR lcFieldName     AS CHAR NO-UNDO. 
 DEF VAR ldeEventTS      AS DEC  NO-UNDO.
 DEF VAR liOrderID       AS INT  NO-UNDO. 
+DEF VAR ldtLastDump     AS DATE NO-UNDO.
 
 DEF STREAM sFile.
 
 DEFINE TEMP-TABLE ttDumpData NO-UNDO
+   FIELD OrderID       AS CHARACTER
    FIELD MSISDN        AS CHARACTER
    FIELD ARECTimeStamp AS CHARACTER
    FIELD ARECType      AS CHARACTER
@@ -96,6 +98,7 @@ FUNCTION fDumpArecRejections RETURNS LOGICAL
 
          CREATE ttDumpData.
          ASSIGN
+            ttDumpData.OrderID       = STRING(Order.OrderID)
             ttDumpData.MSISDN        = Order.CLI
             ttDumpData.ARECTimeStamp = STRING(MNPProcess.CreatedTS) 
             ttDumpData.ARECType      = MNPProcess.StatusReason
@@ -137,6 +140,7 @@ EMPTY TEMP-TABLE ttDumpData.
 IF icDumpMode EQ "Full" THEN 
    idLastDump = 20160322.0000.
 
+
 REPEAT:
    fSplitTS(idLastDump, 
             OUTPUT ldaDumpDate, 
@@ -150,10 +154,18 @@ REPEAT:
    ldaDumpDate = ldaDumpDate + 1. 
 
    IF ldaDumpDate EQ TODAY THEN LEAVE.
+
+   IF icDumpMode EQ "Full" THEN 
+      ASSIGN 
+         ldtLastDump = ldaDumpDate + 1
+         idLastDump  = DECIMAL(STRING(YEAR(ldtLastDump),"9999") +
+                               STRING(MONTH(ldtLastDump),"99")  +
+                               STRING(DAY(ldtLastDump),"99")). 
 END.
 
 FOR EACH ttDumpData NO-LOCK:
    PUT STREAM sFile UNFORMATTED
+      ttDumpData.OrderID       lcDelimiter
       ttDumpData.MSISDN        lcDelimiter
       ttDumpData.ARECTimeStamp lcDelimiter
       ttDumpData.ARECType      lcDelimiter
