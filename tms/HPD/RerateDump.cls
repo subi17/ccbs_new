@@ -101,6 +101,7 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
 
       objDumpBase:mUpdateDumpHeader(1,"",lcMobCDRTable).
       objDumpBase:mUpdateDumpHeader(2,"","MODIFY").
+      objDumpBase:mUpdateDumpHeader(3,"","DELETE").
 
       objDumpBase:mVerifyDumpFileData().
 
@@ -113,7 +114,8 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
 
          objDumpBase2:mUpdateDumpHeader(1,"",lcMobCDRTable).
          objDumpBase2:mUpdateDumpHeader(2,"","MODIFY").
-         objDumpBase2:mUpdateDumpHeader(3,"", ISO-DATE(CAST(objDumpBase, DumpTimeBased):objHPDTime:CurrLocalTZTime)).
+         objDumpBase2:mUpdateDumpHeader(3,"","DELETE").
+         objDumpBase2:mUpdateDumpHeader(4,"", ISO-DATE(CAST(objDumpBase, DumpTimeBased):objHPDTime:CurrLocalTZTime)).
 
          objDumpBase2:mVerifyDumpFileData().
       END.
@@ -344,8 +346,8 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
                liEvents = liEvents + 1.
 
                IF liCurrentDB = 1
-               THEN objDTB:mWriteALine().
-               ELSE objDTB:mWriteALine(objDumpBase2:mGetData()).
+               THEN objDTB:mWriteALine(lhBuffer[liCurrentDB]::ErrorCode = 0 THEN 3 ELSE 2).
+               ELSE objDTB:mWriteALine(objDumpBase2:mGetData(lhBuffer[liCurrentDB]::ErrorCode = 0 THEN 3 ELSE 2)).
                
                LEAVE.
             END.
