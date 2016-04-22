@@ -61,24 +61,16 @@ DO TRANS:
       RELEASE ActionLog.
       RETURN. /*No reporting in first time.*/
    END.
-   ELSE IF (liHRLPTestLevel EQ {&GB_NO_TEST}) THEN DO:
-      ASSIGN
-         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = katun
-         ActionLog.ActionTS     = ldCurrentTimeTS.
-
-      RELEASE Actionlog.
-   END.
 END.
 
 /*File handling logic starts*/
 /* File reading and parsing */
-INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcHRLPListInDir).
+INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcGBInDir).
 REPEAT:
 
    IMPORT STREAM sFile UNFORMATTED lcFileName.
 
-   lcInputFile = lcHRLPListInDir + lcFileName.
+   lcInputFile = lcGBInDir + lcFileName.
 
    IF SEARCH(lcInputFile) NE ? THEN DO:
 
@@ -91,7 +83,7 @@ REPEAT:
    END.
    ELSE NEXT.
 
-   lcErrorLog = lcHRLPSpoolDir + lcFileName + ".LOG".
+   lcErrorLog = lcGBSpoolDir + lcFileName + ".LOG".
 
    IF SESSION:BATCH THEN fBatchLog("START", lcInputFile).
 
@@ -105,8 +97,8 @@ REPEAT:
    RUN pReadFileData.
 
    OUTPUT STREAM sLog CLOSE.
-   fMove2TransDir(lcErrorLog, "", lcHRLPLogDir).
-   fMove2TransDir(lcInputFile, "", lcHRLPInProcDir).
+   fMove2TransDir(lcErrorLog, "", lcGBLogDir).
+   fMove2TransDir(lcInputFile, "", lcGBInDir).
    IF SESSION:BATCH AND lcInputFile NE "" THEN
       fBatchLog("FINISH", lcInputFile).
 END.
@@ -126,6 +118,7 @@ DO TRANS:
 END.
 
 INPUT STREAM sin CLOSE.
+
 
 PROCEDURE pReadFileData:
 
@@ -154,6 +147,8 @@ PROCEDURE pReadFileData:
          ldtDateTime = DATETIME(entry(3,lcline,";"))
          ldeAmount = DECIMAL(entry(2,lcline,";")).
       
+
+
       fProcessPostPaidEntry(lcMSISDN,
                             lcCorrId,
                             ldtDateTime,
