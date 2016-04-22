@@ -346,8 +346,8 @@ CLASS HPD.RerateDump FINAL INHERITS DumpHandlerWithQuery:
                liEvents = liEvents + 1.
 
                IF liCurrentDB = 1
-               THEN objDTB:mWriteALine(lhBuffer[liCurrentDB]::ErrorCode = 0 THEN 3 ELSE 2).
-               ELSE objDTB:mWriteALine(objDumpBase2:mGetData(lhBuffer[liCurrentDB]::ErrorCode = 0 THEN 3 ELSE 2)).
+               THEN objDTB:mWriteALine(IF lhBuffer[liCurrentDB]::ErrorCode = 0 THEN 3 ELSE 2).
+               ELSE objDTB:mWriteALine(objDumpBase2:mGetData(IF lhBuffer[liCurrentDB]::ErrorCode = 0 THEN 3 ELSE 2)).
                
                LEAVE.
             END.
