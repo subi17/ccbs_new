@@ -98,7 +98,8 @@ REPEAT:
 
    OUTPUT STREAM sLog CLOSE.
    fMove2TransDir(lcErrorLog, "", lcGBLogDir).
-   fMove2TransDir(lcInputFile, "", lcGBInDir).
+   fMove2TransDir(lcResponseFile, "", lcGBOutDir).
+   fMove2TransDir(lcInputFile, "", lcGBProcessedDir).
    IF SESSION:BATCH AND lcInputFile NE "" THEN
       fBatchLog("FINISH", lcInputFile).
 END.
@@ -137,7 +138,7 @@ PROCEDURE pReadFileData:
       liLineNum = liLineNum + 1.
 
       IF NOT SESSION:BATCH AND liLineNum MOD 10 = 0 THEN DO:
-         disp "Reading data.. " lcFilename liLineNum with frame a.
+         disp "Reading data. " lcFilename liLineNum with frame a.
          pause 0.
       END.
 
@@ -149,11 +150,13 @@ PROCEDURE pReadFileData:
       
 
 
-      fProcessPostPaidEntry(lcMSISDN,
-                            lcCorrId,
-                            ldtDateTime,
-                            ldeAmount).
-                            
+      lcErr = fProcessGBEntry(lcMSISDN,
+                              lcCorrId,
+                              ldtDateTime,
+                              ldeAmount).
+      lcOutLine = lcLine + ";" + lcErr.
+      
+
    END.
 
 END PROCEDURE.
