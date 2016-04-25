@@ -56,31 +56,6 @@ CLASS HPD.DCCLIDump FINAL INHERITS DumpHandler:
    END METHOD.
 
 
-   METHOD PRIVATE LOGICAL mFixedFeeMismatch
-      (icMsSeq AS CHARACTER,
-       icPerContractID AS CHARACTER):
-      
-      DEFINE VARIABLE llFound AS LOGICAL INITIAL FALSE NO-UNDO.
-      
-      FOR
-         EACH FixedFee FIELDS (Brand HostTable KeyValue SourceTable SourceKey) NO-LOCK WHERE
-            FixedFee.Brand       = "1"             AND
-            FixedFee.HostTable   = "MobSub"        AND
-            FixedFee.KeyValue    = icMSSeq         AND
-            FixedFee.SourceTable = "DCCLI":
-               
-         llFound = TRUE.
-         
-         IF FixedFee.SourceKey NE icPerContractID
-         THEN RETURN TRUE.
-
-      END.
-      
-      RETURN NOT llFound.
-      
-   END METHOD.
-
-
    METHOD PRIVATE VOID mProcessFullDump
       (INPUT objDumpFile AS CLASS DumpFile):
 
@@ -95,10 +70,6 @@ CLASS HPD.DCCLIDump FINAL INHERITS DumpHandler:
             lbDCCLI.ValidTo >= ldaFromDate
          ON QUIT UNDO, RETRY
          ON STOP UNDO, RETRY:
-
-         IF lbDCCLI.DCEvent = "RVTERM12" AND
-            mFixedFeeMismatch(STRING(lbDCCLI.MsSeq), STRING(lbDCCLI.PerContractID))
-         THEN NEXT.
 
          liEvents = liEvents + 1.
 
