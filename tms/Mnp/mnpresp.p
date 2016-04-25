@@ -357,6 +357,14 @@ PROCEDURE pHandleQueue:
                   ELSE IF lcResponseCode EQ "RECH_ICCID" THEN lcSMS = "MNPIccidPOS".
                END.
 
+               liMNPProCount = 0.
+               
+               /* Count no of MNP Process request sent */
+               FOR EACH bMNPProcess NO-LOCK WHERE 
+                        bMNPProcess.OrderID    = Order.OrderID  AND
+                        bMNPProcess.MNPType    = {&MNP_TYPE_IN}:
+                  liMNPProCount = liMNPProCount + 1. 
+               END.         
 
                /* YDR-2147 */
                /* Resend MNP IN request to Nodal Center automatically 
@@ -364,19 +372,10 @@ PROCEDURE pHandleQueue:
                   providing new operator code */
                IF lcResponseCode EQ "AREC ENUME" THEN DO: 
                   
-                  ASSIGN liMNPProCount   = 0
-                         liRespLength    = 0
+                  ASSIGN liRespLength    = 0
                          lcNewOper       = ""
                          llgMNPOperName  = FALSE
                          llgMNPOperBrand = FALSE. 
-                  
-                  /* Need to check Status code validation 
-                     has to be added OR not */
-                  FOR EACH bMNPProcess NO-LOCK WHERE 
-                           bMNPProcess.OrderID    = Order.OrderID  AND
-                           bMNPProcess.MNPType    = {&MNP_TYPE_IN}:
-                     liMNPProCount = liMNPProCount + 1. 
-                  END.         
 
                   IF liMNPProCount = 1 AND 
                      lcResponseDesc MATCHES "El MSISDN * no pertenece al operador donante *, pertenece al operador *" THEN DO:
@@ -429,7 +428,11 @@ PROCEDURE pHandleQueue:
                         fLogError("New Operator code not OK: " + lcNewOper).
                   END.
                END.
-               
+              
+               IF lcResponseCode EQ "AREC CUPO1" AND 
+                  liMNPProCount = 1              THEN 
+                  fSetOrderStatus(Order.OrderId,"3").
+
                IF lcSMS > "" THEN DO:
                   IF AVAIL OrderCustomer THEN
                      liLang = INT(OrderCustomer.Language) NO-ERROR.
