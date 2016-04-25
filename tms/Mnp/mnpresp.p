@@ -328,7 +328,7 @@ PROCEDURE pHandleQueue:
 
          IF MessageBuf.MessageType = 
             "crearSolicitudIndividualAltaPortabilidadMovil" AND
-            LOOKUP(lcResponseCode,"AREC ENUME,AREC FORMA,AREC EXIST") > 0
+            LOOKUP(lcResponseCode,"AREC ENUME,AREC FORMA,AREC EXIST,AREC CUPO1") > 0
             THEN DO:
             
             IF lcResponseCode NE "AREC EXIST" OR 
@@ -428,10 +428,28 @@ PROCEDURE pHandleQueue:
                         fLogError("New Operator code not OK: " + lcNewOper).
                   END.
                END.
-              
+             
+               /* YDR-2183 */
+               /* Relaunching the MNP IN request, if response xml from 
+                  Nodal Center recieves error message AREC CUPO1.
+                  This request has to be relaunched irrespecitve of 
+                  Error message recieved in response xml */
                IF lcResponseCode EQ "AREC CUPO1" AND 
-                  liMNPProCount = 1              THEN 
+                  liMNPProCount = 1              THEN DO: 
+                  
+                  IF llDoEvent THEN DO:
+                     DEFINE VARIABLE llhOrder AS HANDLE NO-UNDO.
+                     llhOrder = BUFFER Order:HANDLE.
+                     RUN StarEventInitialize(llhOrder).
+                     RUN StarEventSetOldBuffer(llhOrder).
+                  END.
+                  
                   fSetOrderStatus(Order.OrderId,"3").
+
+                  IF llDoEvent THEN 
+                     RUN StarEventMakeModifyEvent(llhOrder).
+
+               END.
 
                IF lcSMS > "" THEN DO:
                   IF AVAIL OrderCustomer THEN
