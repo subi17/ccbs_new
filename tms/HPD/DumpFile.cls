@@ -112,12 +112,9 @@ CLASS HPD.DumpFile INHERITS DumpBase:
       
       IF AVAILABLE lbDumpFile
       THEN DO:
-      
-         IF lbDumpFile.ModFromEventLog = NO AND lbDumpFile.Active = YES
-         THEN lbDumpFile.Active = NO.
-            
-         FIND CURRENT lbDumpFile NO-LOCK.            
-         
+         mInactivateDump(NO).
+
+         FIND CURRENT lbDumpFile NO-LOCK.
       END.
       
       DEFINE VARIABLE llEmptyFile AS LOGICAL NO-UNDO.
@@ -141,6 +138,23 @@ CLASS HPD.DumpFile INHERITS DumpBase:
                      VALUE(lbDumpFile.TransDir + "/" + ENTRY(NUM-ENTRIES(lcFile,"/"),lcFile,"/")).
                            
    END DESTRUCTOR.
+
+
+   METHOD PUBLIC VOID mInactivateDump
+      ( ilForce AS LOGICAL ):
+
+      IF AVAILABLE lbDumpFile AND lbDumpFile.Active = YES
+      THEN DO:
+         IF ilForce
+         THEN ASSIGN
+                 lbDumpFile.ModFromEventLog = NO
+                 lbDumpFile.Active          = NO
+                 .
+         ELSE IF lbDumpFile.ModFromEventLog = NO
+         THEN lbDumpFile.Active = NO.
+      END.
+
+   END METHOD.
 
 
    METHOD PUBLIC VOID mWriteALine(): 

@@ -78,14 +78,23 @@ CLASS HPD.MsRequestDump FINAL INHERITS DumpHandler:
       DEFINE VARIABLE lcReqStatuses AS CHARACTER NO-UNDO.
       DEFINE VARIABLE liReqStatus   AS INTEGER   NO-UNDO.
       DEFINE VARIABLE lii           AS INTEGER   NO-UNDO.
+      DEFINE VARIABLE ldeToTsTemp   AS DECIMAL   NO-UNDO.
 
-      lcReqStatuses = {&REQ_INACTIVE_STATUSES} + "," + {&REQ_ONGOING_STATUSES}.
+      ASSIGN
+         lcReqStatuses = {&REQ_INACTIVE_STATUSES} + "," + {&REQ_ONGOING_STATUSES}
+         ldeToTsTemp   = objDumpTB:ldeToTS
+         .
 
       /* If ldeToTS is set to current moment we need process
-         also future AckStamp values */
-      IF objDumpTB:ldeToTS = HPDTime:mMake2DT(DATE(objDumpTB:objHPDTime:CurrLocalTZTime),
+         also future AckStamp values. After that a dump
+         must be inactivated as otherwise we would get
+         a massive dump every time from current moment to the future */
+      IF ldeToTsTemp = HPDTime:mMake2DT(DATE(objDumpTB:objHPDTime:CurrLocalTZTime),
                              INTEGER(TRUNCATE(MTIME(objDumpTB:objHPDTime:CurrLocalTZTime) / 1000, 0)))
-      THEN objDumpTB:ldeToTS = 100000000.
+      THEN DO:
+         ldeToTsTemp = 21000101.
+         objDumpTB:mInactivateDump(YES).
+      END.
 
       DO lii = 1 TO NUM-ENTRIES(lcReqStatuses):
          
@@ -96,7 +105,7 @@ CLASS HPD.MsRequestDump FINAL INHERITS DumpHandler:
                lbMsRequest.Brand     = "1"                 AND
                lbMsRequest.ReqStatus = liReqStatus         AND
                lbMsRequest.ActStamp >= objDumpTB:ldeFromTS AND
-               lbMsRequest.ActStamp  < objDumpTB:ldeToTS
+               lbMsRequest.ActStamp  < ldeToTsTemp
             ON QUIT UNDO, RETRY
             ON STOP UNDO, RETRY:
 
