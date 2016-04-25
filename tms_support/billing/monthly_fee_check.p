@@ -489,7 +489,8 @@ DEF VAR llgAvailable AS LOGICAL NO-UNDO.
 
      /* Double check in mservicelimit */
      FOR EACH mservicelimit NO-LOCK WHERE 
-              mservicelimit.MsSeq = iiMsSeq:
+              mservicelimit.MsSeq  = iiMsSeq AND
+              mservicelimit.endts >= ldeFromStamp:
         
         FIND FIRST servicelimit NO-LOCK WHERE 
                    servicelimit.slseq     = mservicelimit.slseq    AND 
