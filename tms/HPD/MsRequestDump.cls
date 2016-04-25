@@ -2,6 +2,7 @@ USING Progress.Lang.*.
 USING HPD.DumpHandler.
 USING HPD.DumpTimeBased.
 USING HPD.DumpBase.
+USING HPD.HPDTime.
 
 {HPD/HPDConst.i}
 {Syst/tmsconst.i}
@@ -79,6 +80,12 @@ CLASS HPD.MsRequestDump FINAL INHERITS DumpHandler:
       DEFINE VARIABLE lii           AS INTEGER   NO-UNDO.
 
       lcReqStatuses = {&REQ_INACTIVE_STATUSES} + "," + {&REQ_ONGOING_STATUSES}.
+
+      /* If ldeToTS is set to current moment we need process
+         also future AckStamp values */
+      IF objDumpTB:ldeToTS = HPDTime:mMake2DT(DATE(objDumpTB:objHPDTime:CurrLocalTZTime),
+                             INTEGER(TRUNCATE(MTIME(objDumpTB:objHPDTime:CurrLocalTZTime) / 1000, 0)))
+      THEN objDumpTB:ldeToTS = 100000000.
 
       DO lii = 1 TO NUM-ENTRIES(lcReqStatuses):
          
