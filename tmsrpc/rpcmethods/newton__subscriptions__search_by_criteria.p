@@ -94,7 +94,7 @@ ASSIGN
       WHEN LOOKUP("order_date", lcStruct) > 0
    plgOrderStatus = get_bool(pcStruct, "order_status")
       WHEN LOOKUP("order_status", lcStruct) > 0
-   pcOrderType    = get_string(pcStruct, "ordert_type")
+   pcOrderType    = get_string(pcStruct, "order_type")
    	WHEN LOOKUP("order_type", lcStruct) > 0
    plgEligibleRenewal = get_bool(pcStruct,"eligible_renewal")
    	WHEN LOOKUP("eligible_renewal", lcStruct) > 0.
