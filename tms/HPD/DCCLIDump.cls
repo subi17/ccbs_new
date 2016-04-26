@@ -56,51 +56,20 @@ CLASS HPD.DCCLIDump FINAL INHERITS DumpHandler:
    END METHOD.
 
 
-   METHOD PRIVATE LOGICAL mFixedFeeMismatch
-      (icMsSeq AS CHARACTER,
-       icPerContractID AS CHARACTER):
-      
-      DEFINE VARIABLE llFound AS LOGICAL INITIAL FALSE NO-UNDO.
-      
-      FOR
-         EACH FixedFee FIELDS (Brand HostTable KeyValue SourceTable SourceKey) NO-LOCK WHERE
-            FixedFee.Brand       = "1"             AND
-            FixedFee.HostTable   = "MobSub"        AND
-            FixedFee.KeyValue    = icMSSeq         AND
-            FixedFee.SourceTable = "DCCLI":
-               
-         llFound = TRUE.
-         
-         IF FixedFee.SourceKey NE icPerContractID
-         THEN RETURN TRUE.
-
-      END.
-      
-      RETURN NOT llFound.
-      
-   END METHOD.
-
-
    METHOD PRIVATE VOID mProcessFullDump
       (INPUT objDumpFile AS CLASS DumpFile):
 
       DEFINE VARIABLE ldaFromDate AS DATE NO-UNDO.
-      
-      ldaFromDate = DATE(MONTH(TODAY),1,YEAR(TODAY)).   
+
+      ldaFromDate = ADD-INTERVAL(DATE(MONTH(TODAY),1,YEAR(TODAY)), -6, "months").
 
       FOR
          EACH MobSub FIELDS (MsSeq) NO-LOCK,
-         FIRST lbDCCLI NO-LOCK USE-INDEX MSSeq WHERE
-            lbDCCLI.MsSeq  = MobSub.MsSeq   
+         EACH lbDCCLI NO-LOCK USE-INDEX MSSeq WHERE
+            lbDCCLI.MsSeq   = MobSub.MsSeq AND
+            lbDCCLI.ValidTo >= ldaFromDate
          ON QUIT UNDO, RETRY
          ON STOP UNDO, RETRY:
-
-         IF lbDCCLI.ValidTo < ldaFromDate
-         THEN NEXT.
-         
-         IF lbDCCLI.DCEvent = "RVTERM12" AND
-            mFixedFeeMismatch(STRING(lbDCCLI.MsSeq), STRING(lbDCCLI.PerContractID))
-         THEN NEXT.
 
          liEvents = liEvents + 1.
 
@@ -112,8 +81,8 @@ CLASS HPD.DCCLIDump FINAL INHERITS DumpHandler:
             DISPLAY liEvents LABEL "DCCLI Counter" 
                WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
                TITLE " Collecting " FRAME fQty.
-         END.      
-         
+         END.
+
       END.
 
       IF NOT SESSION:BATCH THEN

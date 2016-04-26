@@ -62,9 +62,13 @@ CLASS HPD.FixedFeeDump FINAL INHERITS DumpHandler:
    METHOD PRIVATE VOID mProcessFullDump
       (INPUT objDumpFile AS CLASS DumpFile):
 
-      DEFINE VARIABLE liPeriod  AS INTEGER NO-UNDO.
-      
-      liPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
+      DEFINE VARIABLE ldaDate  AS DATE    NO-UNDO.
+      DEFINE VARIABLE liPeriod AS INTEGER NO-UNDO.
+
+      ASSIGN
+         ldaDate = ADD-INTERVAL(DATE(MONTH(TODAY),1,YEAR(TODAY)), -6, "months")
+         liPeriod = YEAR(ldaDate) * 100 + MONTH(ldaDate)
+         .
 
       FOR
          EACH MobSub FIELDS (Brand MsSeq CustNum) NO-LOCK,
@@ -86,14 +90,14 @@ CLASS HPD.FixedFeeDump FINAL INHERITS DumpHandler:
 
          objDumpFile:mWriteALine().
 
-         IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN 
+         IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN
          DO:
             PAUSE 0.
-            DISPLAY liEvents LABEL "FixedFee Counter" 
+            DISPLAY liEvents LABEL "FixedFee Counter"
                WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
                TITLE " Collecting " FRAME fQty.
          END.      
-         
+
       END.
 
       IF NOT SESSION:BATCH THEN
