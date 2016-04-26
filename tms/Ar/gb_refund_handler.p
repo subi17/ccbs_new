@@ -14,7 +14,7 @@ gcbrand = "1".
 {eventlog.i}
 {gbilling.i}
 
-DEF VAR lcProcessedFile AS CHAR NO-UNDO.
+DEF VAR lcResponseFile AS CHAR NO-UNDO.
 DEF VAR lcRootDir AS CHAR NO-UNDO.
 DEF VAR lcFileName AS CHAR NO-UNDO.
 DEF VAR lcInputFile AS CHAR NO-UNDO.
@@ -28,6 +28,7 @@ DEF VAR lcErrorLog AS CHAR NO-UNDO.
 DEF STREAM sin.
 DEF STREAM sFile.
 DEF STREAM sLog.
+DEF STREAM sResponse.
 
 ASSIGN 
    lcTableName = {&GB_ACTION_GROUP_NAME}
@@ -88,6 +89,7 @@ REPEAT:
    IF SESSION:BATCH THEN fBatchLog("START", lcInputFile).
 
    OUTPUT STREAM sLog TO VALUE(lcErrorLog) append.
+   OUTPUT STREAM sResponse TO VALUE(lcResponseFile) append.
 
    PUT STREAM sLog UNFORMATTED
               lcFilename  " "
@@ -125,10 +127,13 @@ PROCEDURE pReadFileData:
 
    DEF VAR liLineNum AS INT.
    DEF VAR lcLine AS CHAR NO-UNDO.
+   DEF VAR lcOutLine AS CHAR NO-UNDO.
    DEF VAR lcMSISDN AS CHAR NO-UNDO.
    DEF VAR lcCorrId AS CHAR NO-UNDO.
    DEF VAR ldtDateTime AS DATETIME NO-UNDO.
    DEF VAR ldeAmount AS DECIMAL NO-UNDO. 
+   DEF VAR lcErr AS CHAR NO-UNDO.
+   DEF VAR llgPayType AS LOGICAL.
 
    FILE_LINE:
    REPEAT TRANS:
@@ -147,14 +152,21 @@ PROCEDURE pReadFileData:
          lcCorrId = entry(2,lcline,";")
          ldtDateTime = DATETIME(entry(3,lcline,";"))
          ldeAmount = DECIMAL(entry(2,lcline,";")).
+         IF entry(4,lcLine,";") EQ "POSTPAID" THEN
+            llgPayType = FALSE.
+         ELSE
+            llgPayType = TRUE.
       
 
 
       lcErr = fProcessGBEntry(lcMSISDN,
                               lcCorrId,
                               ldtDateTime,
-                              ldeAmount).
+                              ldeAmount,
+                              llgPayType).
       lcOutLine = lcLine + ";" + lcErr.
+
+
       
 
    END.

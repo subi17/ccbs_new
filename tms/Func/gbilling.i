@@ -161,6 +161,6 @@ FUNCTION fProcessGBEntry RETURNS CHAR
                                          BUFFER bMobSub).
       
    END.
-   IF lcErr NE "" THEN lcResponse = lcResponse + ";" + lcErr.
+   IF lcErr NE {&GB_RESP_OK} THEN lcResponse = lcResponse + ";" + lcErr.
    RETURN lcResponse.
 END.
