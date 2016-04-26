@@ -449,6 +449,8 @@ PROCEDURE pHandleQueue:
                   IF llDoEvent THEN 
                      RUN StarEventMakeModifyEvent(llhOrder).
 
+                  lcSMS = "".
+
                END.
 
                IF lcSMS > "" THEN DO:
