@@ -16,7 +16,7 @@
 {callquery.i}
 {ftaxdata.i}
 {fbundle.i}
-{q25functions_test.i}
+{q25functions.i}
 
 &GLOBAL-DEFINE INSTALLMENT_DISCOUNT_BILLCODES "DISCPAYTERMDIR,DISCPAYTERMINDIR"
 
