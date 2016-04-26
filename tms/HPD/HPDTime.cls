@@ -109,6 +109,27 @@ CLASS HPD.HPDTime FINAL:
    END METHOD.
 
 
+   METHOD PUBLIC STATIC INTEGER mPreviousPeriod
+      (iiPeriod AS INTEGER):
+
+      DEFINE VARIABLE liYY AS INTEGER NO-UNDO.
+      DEFINE VARIABLE liMM AS INTEGER NO-UNDO.
+
+      ASSIGN
+         liYY = TRUNCATE(iiPeriod / 100,0)
+         liMM = (iiPeriod MOD 100) - 1
+         .
+
+      IF liMM  = 0
+      THEN ASSIGN
+             liYY = liYY - 1
+             liMM = 12
+             .
+      RETURN (liYY * 100 + liMM).
+
+   END METHOD.
+
+
    METHOD PUBLIC STATIC DATE mLastDayOfMonth
       (idaDate AS DATE):
 
@@ -158,7 +179,34 @@ CLASS HPD.HPDTime FINAL:
       RETURN ldaDate.         
       
    END METHOD.
-   
+
+
+   METHOD PUBLIC STATIC DECIMAL mSecOffSet
+      (INPUT ideTS    AS DECIMAL,
+       INPUT iiOffSet AS INTEGER):
+
+      DEFINE VARIABLE ldaDate AS DATE    NO-UNDO.
+      DEFINE VARIABLE liTime  AS INTEGER NO-UNDO.
+
+      ASSIGN
+         ldaDate = mMake2Date(ideTS)
+         liTime  = mMake2Time(ideTS)
+         .
+
+      IF ldaDate = ? OR liTime = ?
+      THEN RETURN ?.
+
+      IF liTime + iiOffSet > 86399
+      THEN RETURN mMake2DT(ldaDate + 1, (liTime + iiOffSet) MOD 86400).
+
+      IF liTime + iiOffSet < 0
+      THEN RETURN mMake2DT(ldaDate - 1, 86400 + (liTime + iiOffSet)).
+
+      RETURN mMake2DT(ldaDate, liTime + iiOffSet).
+
+   END METHOD.
+
+
    METHOD PUBLIC STATIC CHARACTER mTS2DateHMS
       (INPUT ldeTS AS DECIMAL):
          

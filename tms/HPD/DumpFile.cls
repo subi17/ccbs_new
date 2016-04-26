@@ -82,10 +82,10 @@ CLASS HPD.DumpFile INHERITS DumpBase:
          are needed for offline dumps */
       &IF "{&HPD_ENVIRONMENT}" = "Salt"
       &THEN
-         mUpdateDumpHeader(3,"",objHPDTime:CurrUTCTime).
+         mUpdateDumpHeader(4,"",objHPDTime:CurrUTCTime).
       &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
       &THEN
-         mUpdateDumpHeader(3,"",ISO-DATE(objHPDTime:CurrLocalTZTime)).
+         mUpdateDumpHeader(4,"",ISO-DATE(objHPDTime:CurrLocalTZTime)).
       &ELSE
          RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
       &ENDIF
@@ -112,12 +112,9 @@ CLASS HPD.DumpFile INHERITS DumpBase:
       
       IF AVAILABLE lbDumpFile
       THEN DO:
-      
-         IF lbDumpFile.ModFromEventLog = NO AND lbDumpFile.Active = YES
-         THEN lbDumpFile.Active = NO.
-            
-         FIND CURRENT lbDumpFile NO-LOCK.            
-         
+         mInactivateDump(NO).
+
+         FIND CURRENT lbDumpFile NO-LOCK.
       END.
       
       DEFINE VARIABLE llEmptyFile AS LOGICAL NO-UNDO.
@@ -143,17 +140,42 @@ CLASS HPD.DumpFile INHERITS DumpBase:
    END DESTRUCTOR.
 
 
-   METHOD PUBLIC VOID mWriteALine(): 
-   
-      PUT STREAM str UNFORMATTED mGetData() SKIP.
-   
+   METHOD PUBLIC VOID mInactivateDump
+      ( ilForce AS LOGICAL ):
+
+      IF AVAILABLE lbDumpFile AND lbDumpFile.Active = YES
+      THEN DO:
+         IF ilForce
+         THEN ASSIGN
+                 lbDumpFile.ModFromEventLog = NO
+                 lbDumpFile.Active          = NO
+                 .
+         ELSE IF lbDumpFile.ModFromEventLog = NO
+         THEN lbDumpFile.Active = NO.
+      END.
+
    END METHOD.
-   
+
+
+   METHOD PUBLIC VOID mWriteALine(): 
+
+      PUT STREAM str UNFORMATTED mGetData() SKIP.
+
+   END METHOD.
+
 
    METHOD PUBLIC VOID mWriteALine
       (icLine AS CHARACTER):
 
       PUT STREAM str UNFORMATTED icLine SKIP.
+
+   END METHOD.
+
+
+   METHOD PUBLIC VOID mWriteALine
+      (iiOrderNumToSkip AS INTEGER):
+
+      PUT STREAM str UNFORMATTED mGetData(iiOrderNumToSkip) SKIP.
 
    END METHOD.
 

@@ -12,8 +12,10 @@ CLASS HPD.MServiceLPoolDump FINAL INHERITS DumpHandler:
    CONSTRUCTOR PUBLIC MServiceLPoolDump
       (iiDumpID AS INTEGER):
 
+      lhMainTable = BUFFER lbMServiceLPool:HANDLE.
+
       objDumpBase = NEW DumpBase(iiDumpID, THIS-OBJECT).
-      objDumpBase:mUseTable(BUFFER lbMServiceLPool:HANDLE).
+      objDumpBase:mUseTable(lhMainTable).
       objDumpBase:mVerifyDumpFileData().
       
    END CONSTRUCTOR.
@@ -44,29 +46,9 @@ CLASS HPD.MServiceLPoolDump FINAL INHERITS DumpHandler:
          WHEN "KeyValue"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE RETURN {HPD/keyvalue.i lbMServiceLPool . objDumpBase:lcKeyDelimiter MsSeq SLSeq EndTS}.
+              ELSE RETURN {HPD/keyvalue.i lbMServiceLPool . objDumpBase:lcKeyDelimiter CustNum MsSeq SLSeq EndTS}.
          OTHERWISE RETURN "".         
       END CASE.
-
-   END METHOD.
-
-
-   METHOD OVERRIDE PUBLIC CHARACTER mProcessRepLog
-      (INPUT icRowID AS CHARACTER):
-
-      FIND lbMServiceLPool NO-LOCK WHERE
-         ROWID(lbMServiceLPool) = TO-ROWID(icRowID)
-      NO-ERROR.
-
-      IF AVAILABLE lbMServiceLPool
-      THEN
-      FOR
-         FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
-            MobSub.MsSeq = lbMServiceLPool.MsSeq:
-         RETURN objDumpBase:mGetData().
-      END.
-
-      RETURN "".
 
    END METHOD.
 
@@ -75,43 +57,108 @@ CLASS HPD.MServiceLPoolDump FINAL INHERITS DumpHandler:
       (INPUT objDumpFile AS CLASS DumpFile):
 
       DEFINE VARIABLE ldeEndStamp AS DECIMAL NO-UNDO.
-      
+      DEFINE VARIABLE llSkip      AS LOGICAL NO-UNDO.
+
       ldeEndStamp = YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + 1.
 
-      /* We will dump only the newest ones */
-      FOR
-         EACH MobSub FIELDS (MsSeq) NO-LOCK,
-         EACH lbMServiceLPool NO-LOCK WHERE
-            lbMServiceLPool.MsSeq  = MobSub.MsSeq
-         BREAK
-            BY lbMServiceLPool.MsSeq
-            BY lbMServiceLPool.SlSeq
-         ON QUIT UNDO, RETRY
-         ON STOP UNDO, RETRY:
+      DO WITH FRAME fQty:
 
-         IF RETRY THEN DO:
-            llInterrupted = TRUE.
-            LEAVE.
-         END.
+         /* Dump subscription's MServiceLPools */
+         FOR
+            EACH lbMServiceLPool NO-LOCK USE-INDEX MSSeq
+            BREAK
+               BY lbMServiceLPool.MsSeq
+               BY lbMServiceLPool.SlSeq
+            ON QUIT UNDO, RETRY
+            ON STOP UNDO, RETRY:
 
-         IF FIRST-OF(lbMServiceLPool.SlSeq) AND lbMServiceLPool.EndTS >= ldeEndStamp
-         THEN DO:
+            IF RETRY THEN DO:
+               llInterrupted = TRUE.
+               LEAVE.
+            END.
+
+            IF FIRST-OF(lbMServiceLPool.MsSeq)
+            THEN DO:
+               IF CAN-FIND(FIRST MobSub NO-LOCK WHERE MobSub.MsSeq = lbMServiceLPool.MsSeq)
+               THEN llSkip = FALSE.
+               ELSE llSkip = TRUE.
+            END.
+
+            IF llSkip
+            THEN NEXT.
+
+            IF FIRST-OF(lbMServiceLPool.SlSeq)
+            THEN llSkip = FALSE.
+
+            IF lbMServiceLPool.EndTS < ldeEndStamp
+            THEN DO:
+               llSkip = TRUE.
+               NEXT.
+            END.
+
             liEvents = liEvents + 1.
 
             objDumpFile:mWriteALine().
 
-            IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN 
+            IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN
             DO:
                PAUSE 0.
-               DISPLAY liEvents LABEL "MServiceLPool Counter" 
+               DISPLAY liEvents LABEL "MServiceLPool Counter"
                   WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
                   TITLE " Collecting " FRAME fQty.
             END.
          END.
-      END.
 
-      IF NOT SESSION:BATCH THEN
-         HIDE FRAME fQty NO-PAUSE.
+         /* Dump customer's MServiceLPools */
+         FOR
+            EACH lbMServiceLPool NO-LOCK USE-INDEX CustNum
+            BREAK
+               BY lbMServiceLPool.CustNum
+               BY lbMServiceLPool.SlSeq
+            ON QUIT UNDO, RETRY
+            ON STOP UNDO, RETRY:
+
+            IF RETRY THEN DO:
+               llInterrupted = TRUE.
+               LEAVE.
+            END.
+
+            IF FIRST-OF(lbMServiceLPool.CustNum)
+            THEN DO:
+               IF CAN-FIND(FIRST Customer NO-LOCK WHERE Customer.CustNum = lbMServiceLPool.CustNum)
+               THEN llSkip = FALSE.
+               ELSE llSkip = TRUE.
+            END.
+
+            IF llSkip
+            THEN NEXT.
+
+            IF FIRST-OF(lbMServiceLPool.SlSeq)
+            THEN llSkip = FALSE.
+
+            IF lbMServiceLPool.EndTS < ldeEndStamp
+            THEN DO:
+               llSkip = TRUE.
+               NEXT.
+            END.
+
+            liEvents = liEvents + 1.
+
+            objDumpFile:mWriteALine().
+
+            IF NOT SESSION:BATCH AND liEvents MOD 100 = 0 THEN
+            DO:
+               PAUSE 0.
+               DISPLAY liEvents LABEL "MServiceLPool Counter"
+                  WITH OVERLAY ROW 10 CENTERED SIDE-LABELS
+                  TITLE " Collecting " FRAME fQty.
+            END.
+         END.
+
+         IF NOT SESSION:BATCH THEN
+            HIDE FRAME fQty NO-PAUSE.
+
+      END.
 
    END METHOD.
 

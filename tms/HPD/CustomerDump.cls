@@ -4,6 +4,8 @@ USING HPD.GenericDump.
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS HPD.CustomerDump FINAL INHERITS GenericDump:
+
+/*   DEFINE PRIVATE VARIABLE lcSelfEmpCategories AS CHARACTER NO-UNDO. */
   
    CONSTRUCTOR PUBLIC CustomerDump
       (iiDumpID AS INTEGER):
@@ -16,11 +18,31 @@ CLASS HPD.CustomerDump FINAL INHERITS GenericDump:
    CONSTRUCTOR PUBLIC CustomerDump
       (iiDumpID    AS INTEGER,
        icFile      AS CHARACTER):
-      
+
+/*
+      /* When doing full dump this will speed up
+         things a tiny bit */
+      mGetSelfEmpCategories().
+*/
       SUPER(iiDumpID, icFile).
-      
+
    END CONSTRUCTOR.    
 
+/*
+   METHOD PRIVATE VOID mGetSelfEmpCategories():
+
+      FOR
+         EACH CustCat FIELDS (Brand Category SelfEmployed) NO-LOCK WHERE
+            CustCat.Brand        = "1" AND
+            CustCat.SelfEmployed = TRUE:
+
+         lcSelfEmpCategories = lcSelfEmpCategories +
+                               (IF lcSelfEmpCategories = "" THEN "" ELSE ",") +
+                               CustCat.Category.
+      END.
+
+   END METHOD.
+*/
 
    METHOD PRIVATE LOGICAL mSelfEmployed():
 
@@ -52,8 +74,12 @@ CLASS HPD.CustomerDump FINAL INHERITS GenericDump:
               THEN RETURN "OK".
               ELSE RETURN IF lhMainTable::CustIDType = "passport"
                           THEN "no"
-                          ELSE STRING(mSelfEmployed()).                          
-         OTHERWISE RETURN "".         
+                          /*
+                          ELSE IF lcSelfEmpCategories > ""
+                          THEN STRING(LOOKUP(lhMainTable::Category, lcSelfEmpCategories) > 0)
+                          */
+                          ELSE STRING(mSelfEmployed()).
+         OTHERWISE RETURN "".
       END CASE.
 
    END METHOD.

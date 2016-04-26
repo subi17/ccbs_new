@@ -406,6 +406,65 @@ CLASS HPD.DumpBase:
    
       RETURN lcReturnValue.
 
-   END METHOD.   
+   END METHOD.
+
+
+   METHOD PUBLIC CHARACTER mGetData
+      ( iiOrderNumToSkip AS INTEGER ):
+
+      DEFINE VARIABLE lcValue       AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE lcReturnValue AS CHARACTER NO-UNDO.         
+
+      FOR EACH ttDumpElement:
+         
+         IF ttDumpElement.OrderNum = iiOrderNumToSkip
+         THEN NEXT.
+         
+         IF ttDumpElement.FieldName = ""
+         THEN lcValue = ttDumpElement.ElemValue.
+         
+         ELSE IF ttDumpElement.TableName = ""
+         THEN lcValue = objHandler:mSpecialHandling(ttDumpElement.FieldName, NO).
+         
+         ELSE DO:
+   
+            /* There is specific format that we need to use */
+            IF ttDumpElement.ElemFormat <> ""
+            THEN lcValue = TRIM(STRING(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos), ttDumpElement.ElemFormat)) NO-ERROR.
+            
+            /* We are using default formats */
+            ELSE CASE ttDumpElement.FieldHandle:DATA-TYPE:
+                  
+                  WHEN "CHARACTER"
+                  THEN lcValue = ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos) NO-ERROR.
+                  WHEN "DECIMAL"
+                  THEN lcValue = TRIM(STRING(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos),"->>>>>>>>>>>>>>>>>>>>>>9.9<<<<<<<<<")) NO-ERROR.
+                  WHEN "INTEGER" OR WHEN "INT64"
+                  THEN lcValue = TRIM(STRING(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos),"->>>>>>>>>>>>>>>>>>>>>>9")) NO-ERROR.
+                  &IF DEFINED(DO_NOT_USE_ISODATE_DATE_FORMAT) &THEN
+                  WHEN "DATE"
+                  THEN lcValue = STRING(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos)) NO-ERROR.
+                  &ELSE
+                  WHEN "DATE" OR
+                  &ENDIF
+                  WHEN "DATETIME" OR WHEN "DATETIME-TZ"
+                  THEN lcValue = ISO-DATE(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos)) NO-ERROR.
+                  WHEN "LOGICAL"
+                  THEN lcValue = IF ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos) THEN "yes" ELSE "no" NO-ERROR.
+                  OTHERWISE lcValue = STRING(ttDumpElement.FieldHandle:BUFFER-VALUE(ttDumpElement.ExtentPos)) NO-ERROR.
+                  
+            END CASE.
+         END.
+
+         IF ttDumpElement.DoQuote AND lcValue NE ""
+         THEN lcValue = QUOTER(lcValue).
+
+         lcReturnValue =  lcReturnValue + (IF lcValue = ? THEN "" ELSE lcValue) + ttDumpElement.Delim.
+   
+      END.
+   
+      RETURN lcReturnValue.
+
+   END METHOD.
    
 END CLASS.

@@ -7,7 +7,7 @@ TERM=xterm
 export RPATH
 PROPATH=$RPATH,$TMSPATH
 
-for dir in tms/Ar tms/Func tms/Gwy tms/Help tms/Inv tms/Mc tms/Mf tms/Mm tms/Mnp tms/Rate tms/Syst tms/triggers tms/templates tools tools/stompAdapter
+for dir in tms tms/Ar tms/Func tms/Gwy tms/Help tms/Inv tms/Mc tms/Mf tms/Mm tms/Mnp tms/Rate tms/Syst tms/triggers tms/templates tools tools/stompAdapter
 do
    PROPATH=$PROPATH,$TMSPATH/$dir
 done
