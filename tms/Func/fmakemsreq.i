@@ -377,7 +377,8 @@ FUNCTION fServiceRequestCreate RETURNS INTEGER
                               icCreator,
                               icSource,
                               iiOrigRequest,
-                              ilMandatory).
+                              ilMandatory,
+                              OUTPUT lcChildren).
                               
       IF lcChildren > "" THEN DO:
          FIND bCreaReq WHERE bCreaReq.MsRequest = liThisReq EXCLUSIVE-LOCK.
