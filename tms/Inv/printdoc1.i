@@ -16,7 +16,7 @@
 {callquery.i}
 {ftaxdata.i}
 {fbundle.i}
-{q25functions.i}
+{q25functions_test.i}
 
 &GLOBAL-DEFINE INSTALLMENT_DISCOUNT_BILLCODES "DISCPAYTERMDIR,DISCPAYTERMINDIR"
 
@@ -319,11 +319,16 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
    DEF VAR liFtrPos               AS INT  NO-UNDO.
    DEF VAR llFooter               AS LOG  NO-UNDO.
    DEF VAR ldTAE                  AS DEC  NO-UNDO.
+   DEF VAR liPeriodFrom AS INT NO-UNDO. 
+   DEF VAR liPeriodTo AS INT NO-UNDO. 
+   DEF VAR lcLogText AS CHAR NO-UNDO. 
+   DEF VAR liPhase AS INT NO-UNDO init 99.
+               
    
    /* PAYTERM values to pos. 4-6, footer 1
       RVTERM  values to pos. 1-3, footer 2
    */
-   IF icBillCode BEGINS "PAYTERM" THEN ASSIGN
+   IF icBillCode EQ "PAYTERM" THEN ASSIGN
       liAmtPos = 4
       liFtrPos = 1.
    ELSE ASSIGN
@@ -337,23 +342,23 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
             FixedFee.CustNum    = Invoice.CustNum            AND
             FixedFee.HostTable  = "MobSub"                   AND
             FixedFee.KeyValue   = STRING(SubInvoice.MsSeq)   AND
-            FixedFee.BillCode BEGINS icBillCode              AND
+            FixedFee.BillCode   = icBillCode              AND
+            FixedFee.EndPeriod >= liPeriod                   AND
      LOOKUP(FixedFee.FinancedResult,{&TF_STATUSES_BANK}) > 0 AND
             FixedFee.TFBank    <> ""                         AND
-            FixedFee.BegDate   <= Invoice.Todate             AND
-            FixedFee.EndPeriod >= liPeriod BY FixedFee.BegDate:
+            FixedFee.BegDate   <= Invoice.Todate BY FixedFee.BegDate:
       
       IF liFFCount > liAmtPos + 2 THEN LEAVE.
             
       IF FixedFee.TFBank = {&TF_BANK_UNOE} THEN
          ASSIGN lcTFRVTermBillCode    = "RVTERM1EF" 
-                                        WHEN icBillCode BEGINS "PAYTERM"
+                                        WHEN icBillCode EQ "PAYTERM"
                 liFooterConf1         = 536
                 liFooterConf2         = 557
                 lcTFPayTermEndBillCode = icBillCode + "END1E".
       ELSE IF FixedFee.TFBank = {&TF_BANK_SABADELL} THEN
          ASSIGN lcTFRVTermBillCode    = "RVTERMBSF"
-                                        WHEN icBillCode BEGINS "PAYTERM"
+                                        WHEN icBillCode EQ "PAYTERM"
                 liFooterConf1         = 558
                 liFooterConf2         = 559
                 lcTFPayTermEndBillCode = icBillCode + "ENDBS".
@@ -400,12 +405,37 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
                                 (ldeTotalAmount + SingleFee.Amt) * 100 + 0.05,1).
             END.
          
-            IF NOT SingleFee.Billed THEN ASSIGN
+            IF NOT SingleFee.Billed THEN DO:
+   
+               ASSIGN
+                  liPeriodFrom = YEAR(TODAY) * 100 + MONTH(TODAY)
+                  liPeriodTo = fper2peradd(liPeriodFrom,2).
+
+               IF ttInvoice.q25Phase > 0 AND
+                  SingleFee.OrderId > 0 AND
+                  SingleFee.BillPeriod <= liPeriodTo AND
+                  SingleFee.BillPeriod >= liPeriodFrom THEN DO:
+               
+                  IF SingleFee.BillPeriod EQ liPeriodFrom THEN 
+                     liphase = {&Q25_MONTH_24}.
+                  ELSE IF SingleFee.BillPeriod EQ liPeriodTo THEN
+                     liphase = {&Q25_MONTH_22}.
+                  ELSE liphase = {&Q25_MONTH_23}.
+
+                  IF liphase < ttInvoice.q25Phase AND
+                     fisQ25ExtensionAllowed(BUFFER SingleFee, 
+                                            liPhase,
+                                            OUTPUT lcLogText) THEN 
+                     ttinvoice.q25Phase = liPhase.  
+               END. 
+            
+
+               ASSIGN
                ttSub.TFBankAfterAmt[liFFCount]  = ttSub.TFBankAfterAmt[liFFCount] +
                                                   SingleFee.Amt
                ttSub.TFBankBeforeAmt[liFFCount] = ttSub.TFBankBeforeAmt[liFFCount] +
                                                   SingleFee.Amt.
-           
+            END. 
             ELSE IF SingleFee.InvNum = Invoice.InvNum AND SingleFee.Billed
                     /* TEMP FIX:
                        Q25 fee should not be included if it's filtered out
@@ -881,13 +911,14 @@ PROCEDURE pGetSubInvoiceHeaderData:
             phase and no actions done. 0 means q24, 1 q23 and 2 q22, 99 some
             other phase or no q25. */
             /* temporarily rollbacked */
-         /*
-         IF (ttinvoice.q25Phase GT 0) THEN DO:
+        /* 
+         IF ttinvoice.q25Phase GT 0 AND
+            LOOKUP(ttRow.RowBillCode,"PAYTERM,PAYTERM1E,PAYTERMBS") > 0 THEN DO:
             liQ25Phase = getQ25Phase(SubInvoice.msseq, subinvoice.custnum).
             IF (liQ25Phase LT ttinvoice.q25Phase) THEN 
                ttinvoice.q25Phase = liQ25Phase.         
          END.
-         */
+        */ 
       END.
 
       IF ttSub.InstallmentAmt > 0 THEN

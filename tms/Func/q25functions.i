@@ -19,6 +19,7 @@
 {fduedate.i}
 {ftransdir.i}
 {fmakemsreq.i}
+{coinv.i}
 
 
 DEF VAR lcTestStartDay AS CHAR NO-UNDO.
@@ -33,9 +34,6 @@ DEF VAR lcQ25DWHLogFile         AS CHAR NO-UNDO.
 DEF VAR lcQ25DWHLogDir      AS CHAR NO-UNDO.
 DEF VAR ldnewAmount AS DEC NO-UNDO.
 DEF VAR liNotSendCount    AS INT NO-UNDO.
-DEF VAR liReturnedDevices AS INT NO-UNDO.
-DEF VAR liQ25DoneCount    AS INT NO-UNDO.
-DEF VAR liPendingReq      AS INT NO-UNDO.
 DEF VAR lcSendingEndTime AS CHAR NO-UNDO.
 DEF VAR lclcHRLPOutDir AS CHAR NO-UNDO.
 DEF VAR lcHRLPListInDir AS CHAR NO-UNDO.
@@ -352,26 +350,6 @@ FUNCTION fgetTemplateName RETURN CHARACTER
       RETURN "Error: Q25_Phase".
 END.
 
-FUNCTION fisPostpaidMobsubReleased RETURNS LOGICAL
-   (INPUT iiMsSeq AS INT):
-   FIND FIRST Mobsub NO-LOCK WHERE
-              Mobsub.MsSeq = iiMsSeq AND
-              Mobsub.Paytype = FALSE NO-ERROR.
-   IF NOT AVAIL Mobsub THEN RETURN TRUE.
-   ELSE
-      RETURN FALSE.
-END.
-
-FUNCTION fisSingleFeeBilled RETURNS LOGICAL
-   ():
-   IF SingleFee.Billed AND
-      NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
-                         Invoice.Invnum = SingleFee.InvNum aND
-                         Invoice.InvType = 99) THEN RETURN TRUE.
-   ELSE
-      RETURN FALSE.
-END.
-
 FUNCTION fisQ25TerminalReturned RETURNS LOGICAL
    (INPUT iiOrderId AS INT):
    FIND FIRST TermReturn WHERE
@@ -388,39 +366,33 @@ FUNCTION fisQ25TerminalReturned RETURNS LOGICAL
 END.
 
 FUNCTION fisQ25ExtensionDone RETURNS LOGICAL
-   (INPUT iiMsSeq AS INT,
-    INPUT iiphase AS INT,
-    INPUT-OUTPUT odAmount AS DEC):
+   (INPUT iiMsSeq AS INT):
+
    DEF BUFFER bDCCLI FOR DCCLI.
+
    FIND FIRST bDCCLI NO-LOCK WHERE
               bDCCLI.Brand   EQ gcBrand AND
               bDCCLI.DCEvent EQ "RVTERM12" AND
               bDCCLI.MsSeq   EQ iiMsseq AND
               bDCCLI.ValidTo >= TODAY NO-ERROR.
-   IF AVAIL bDCCLI THEN RETURN TRUE.
-      /*IF iiPhase EQ {&Q25_MONTH_24_FINAL_MSG} THEN DO:
-         FIND FIRST FixedFee WHERE
-                    FixedFee.Brand EQ gcBrand AND
-                    FixedFee.HostTable EQ "MobSub" AND
-                    FixedFee.KeyValue EQ STRING(iiMsseq) AND
-                    FixedFee.SourceTable EQ "DCCLI" AND
-                    FixedFee.SourceKey EQ STRING(bDCCLI.PerContractID)
-                    NO-LOCK NO-ERROR.
-         IF AVAIL FixedFee THEN
-            odAmount = FixedFee.amt.
-      END. removed YPR-3609 */
-   RETURN FALSE.
+   RETURN (AVAIL bDCCLI).
+
 END.
 
 FUNCTION fisQ25PendingRequest RETURNS LOGICAL
-   (INPUT iiMsSeq AS INT,
-    INPUT iireqType AS INT):
+   (INPUT iiMsSeq AS INT):
+
    DEF VAR liLoop AS INT.
-   DO LiLoop = {&REQUEST_STATUS_NEW} TO {&REQUEST_STATUS_UNDER_WORK}:
+   DEF VAR liReqStatus AS INT NO-UNDO. 
+
+   DO liLoop = 1 TO NUM-ENTRIES({&REQ_ONGOING_STATUSES}):
+
+      liReqStatus = INT(ENTRY(liLoop,({&REQ_ONGOING_STATUSES}))).
+
       IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
                         MsRequest.msSeq EQ iimsseq AND
-                        MsRequest.reqtype EQ iiReqType AND
-                        MsRequest.reqStatus EQ liLoop AND
+                        MsRequest.reqtype EQ 8 AND
+                        MsRequest.ReqStatus = liReqStatus AND
                         MsRequest.ReqCParam3 EQ "RVTERM12") THEN
          RETURN TRUE.
    END.
@@ -430,95 +402,116 @@ END.
 FUNCTION fisQ25RenewalDone RETURNS LOGICAL
    (INPUT iiMsSeq AS INT,
     INPUT idaFromDate AS DATE):
+
    DEF VAR ldaMonth22Date AS DATE NO-UNDO.
+   DEF BUFFER Order FOR Order.
+
    /* calculate first day of the month 22, Renewal have to be after 
       that date to be considered Q25 action */
    ASSIGN
       ldaMonth22Date = ADD-INTERVAL(idaFromDate, 22, 'months':U)
       ldaMonth22Date = DATE(MONTH(ldaMonth22Date),1,YEAR(ldaMonth22Date)).   
-   IF CAN-FIND(FIRST Order NO-LOCK WHERE
-                     Order.MsSeq = iiMsseq AND
-                     Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
-                     Order.CrStamp > fHMS2TS(ldaMonth22Date, "00:00:00")) 
-       THEN RETURN TRUE. /* Renewal / Renuvo done */
+
+   FOR EACH Order NO-LOCK WHERE
+            Order.MsSeq = iiMsseq AND
+            Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
+            Order.CrStamp > fHMS2TS(ldaMonth22Date, "00:00:00"):
+
+       IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                         MsRequest.MsSeq = Order.MsSeq AND
+                         MsRequest.ReqType = 49 AND
+                         MsRequest.ReqIParam1 EQ Order.OrderId) THEN NEXT.
+
+       RETURN TRUE. /* Renewal / Renuvo done */
+   END.
+
    RETURN FALSE.
 END.
 
-FUNCTION fisQ25PerContractEnded RETURNS LOGICAL
-   (INPUT iiPercontrId AS INT,
-    INPUT iiMsseq AS INT,
-    INPUT iiOrderId AS INT,
-    INPUT idaStartDate AS DATE,
-    INPUT idaEndDate AS DATE,
-    INPUT-OUTPUT idAmount AS DEC,
-    INPUT-OUTPUT oiPhase AS INT,
+FUNCTION fisQ25ExtensionAllowed RETURNS LOGICAL
+   (BUFFER Singlefee FOR SingleFee,
+    INPUT iiPhase AS INT,
     OUTPUT ocLogText AS CHAR):
-   ocLogText = "".
-   FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
-              DCCLI.PerContractId = iiPercontrId AND
-              DCCLI.Brand   = gcBrand AND
-              DCCLI.DCEvent BEGINS "PAYTERM" AND
-              DCCLI.MsSeq   = iiMsseq AND
-              DCCLI.ValidTo >= idaStartDate AND
-              DCCLI.ValidTo <= idaEndDate NO-ERROR.
 
-   IF NOT AVAIL DCCLI THEN RETURN TRUE.
+   DEF VAR liMsSeq AS INT NO-UNDO. 
+   DEF VAR liPerContrId AS INT NO-UNDO. 
+   DEF VAR ldaQ25Period AS DATE NO-UNDO.
+
+   DEF BUFFER Mobsub FOR Mobsub.
+   DEF BUFFER DCCLI FOR DCCLI.
+
+   IF SingleFee.SourceTable NE "DCCLI" THEN RETURN FALSE.
+   IF SingleFee.HostTable NE "MobSub" THEN RETURN FALSE.
+
+   ASSIGN
+      liMsSeq = INT(SingleFee.KeyValue)
+      liPerContrId = INT(SingleFee.SourceKey) NO-ERROR.
+
+   IF ERROR-STATUS:ERROR THEN RETURN FALSE.
+    
+   ldaQ25Period = fPer2Date(SingleFee.BillPeriod, 0).
+
+   FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
+              DCCLI.PerContractId = liPerContrId AND
+              DCCLI.MsSeq = liMsseq AND
+              DCCLI.DCEvent BEGINS "PAYTERM" NO-ERROR.
+
+   IF NOT AVAIL DCCLI THEN DO:
+      ocLogText = "Q25 NO DCCLI FOUND".
+      RETURN FALSE.
+   END.
+   
    /* No DCCLI for example between start and end date, singlefee is for
       whole month or no DCCLI for some error case (?). */
-   ELSE IF DCCLI.TermDate NE ? THEN DO:
+   IF DCCLI.TermDate NE ? THEN DO:
       ASSIGN
-         liNotSendCount = liNotSendCount + 1
-         ocLogText = "Q25 DCCLI Terminated: " +
-                     STRING(DCCLI.MsSeq) + "|" +
-                     STRING(idAmount).
-      RETURN TRUE.
+         ocLogText = "Q25 DCCLI Terminated".
+      RETURN FALSE.
    END.
-   ELSE DO:
-      IF fisQ25TerminalReturned(iiOrderId) THEN DO:
-         ASSIGN liReturnedDevices = liReturnedDevices + 1
-                ocLogText = "Q25 Device returned " +
-                STRING(DCCLI.MsSeq) + "|" +
-                STRING(idAmount).
-         RETURN TRUE.
-      END.
 
-      IF fisQ25ExtensionDone(iiMsSeq, oiPhase, idAmount) THEN DO:
-         /* Q25 Extension already active */
-         /* IF oiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO: */
-         /* Q25 month 22-24 */
-            /* before 21st day of month 24, no message needed for
-               customers who have already chosen quota 25 extension */
-            ASSIGN liQ25DoneCount = liQ25DoneCount + 1
-                   ocLogText = "Q25 already done: " +
-                               STRING(oiPhase) + "|" + STRING(DCCLI.CLI) + 
-                               "|" + STRING(iiMsSeq) + "|" + STRING(idAmount).
-            RETURN TRUE.
-         /*END.
-         ELSE */
-            /* 21st day and customer have decided to take Quota 25
-               extension. Send message with final payment / 12. */
-         /*   oiPhase = {&Q25_MONTH_24_CHOSEN}. removed YPR-3609 */
-      END.
-      ELSE IF fisQ25RenewalDone(iiMsSeq, DCCLI.ValidFrom) THEN DO: 
-      /* Renewal / Renuvo done */
-         ocLogText = "Q25 Renewal done: " +
-                     STRING(oiPhase) + "|" + STRING(DCCLI.CLI) + "|" +
-                     STRING(iiMsSeq) + "|" +
-                     STRING(idAmount).
-         RETURN TRUE.
-      END.
-      ELSE IF fisQ25PendingRequest(iiMsSeq, {&REQTYPE_CONTRACT_ACTIVATION})
-      THEN DO:
-         /* Pending/ongoing Q25 request */
-         ASSIGN
-            liPendingReq = liPendingReq + 1
-            ocLogText = "Q25 Pending Request: " +
-                        STRING(oiPhase) + "|" + STRING(DCCLI.CLI) + "|" +
-                        STRING(iiMsSeq) + "|" + STRING(idAmount).
-         RETURN TRUE.
-      END.
+   FIND FIRST Mobsub NO-LOCK WHERE
+              Mobsub.MsSeq = liMsseq AND
+              Mobsub.Paytype = FALSE NO-ERROR.
+   IF NOT AVAIL Mobsub THEN DO:
+      ocLogText = "Q25 Mobsub not found or prepaid".
+      RETURN FALSE.
    END.
-   RETURN FALSE.
+            
+   IF SingleFee.Billed AND
+      NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
+                         Invoice.Invnum = SingleFee.InvNum aND
+                         Invoice.InvType = 99) THEN DO:
+      ocLogText = "Q25 Residual fee Billed".
+      RETURN FALSE.
+   END.
+
+   IF fisQ25TerminalReturned(SingleFee.OrderId) THEN DO:
+      ocLogText = "Q25 Device returned".
+      RETURN FALSE.
+   END.
+
+   IF fisQ25ExtensionDone(liMsseq) THEN DO:
+      ocLogText = "Q25 already done".
+      RETURN FALSE.
+   END.
+
+   IF fisQ25RenewalDone(liMsseq, DCCLI.ValidFrom) THEN DO: 
+      ocLogText = "Q25 Renewal done".
+      RETURN FALSE.
+   END.
+   
+   IF fisQ25PendingRequest(liMsseq) THEN DO:
+      ocLogText = "Q25 Pending Request".
+      RETURN FALSE.
+   END.
+   
+   IF NOT (DCCLI.ValidTo >= ldaQ25Period - 1 AND
+           DCCLI.ValidTo <= fLastDayOfMonth(ldaQ25Period)) THEN DO:
+      ocLogText = "Q25 billperiod and installment end date differ".
+      RETURN FALSE.
+   END.
+
+   RETURN TRUE.
 END.
 
 /* SMS message generating and sending for Q25. */
@@ -532,22 +525,17 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
       on 1.-15. day of month at morning time at least one hour before 10:00 */
    DEF VAR liCount           AS INT  NO-UNDO.   
    DEF VAR liPeriod          AS INT NO-UNDO.
-   DEF VAR liBilledCount     AS INT NO-UNDO.
-   DEF VAR liNotDCCLICount   AS INT NO-UNDO.
-   DEF VAR liAlreadyCreated  AS INT NO-UNDO.
-   DEF VAR ldaMonth22Date    AS DATE NO-UNDO.
    DEF VAR lcSMSMessage      AS CHAR NO-UNDO.
    DEF VAR liSentCount       AS INT NO-UNDO.
    DEF VAR lcLogText         AS CHAR NO-UNDO.
    DEF VAR liPauseValue      AS INT NO-UNDO.
    DEF VAR liCalcPauseValue  AS INT NO-UNDO.
-   DEF VAR liPhase           AS INT NO-UNDO.
    DEF VAR ldAmount          AS DEC NO-UNDO.
    DEF VAR lcTemplateName    AS CHAR NO-UNDO.
    DEF VAR liLogType         AS INT NO-UNDO.  
-   DEF VAR liMsSeq           AS INT NO-UNDO.
-   DEF VAR liPercontrId      AS INT NO-UNDO.
-   DEF BUFFER bDCCLI         FOR DCCLI.
+
+   DEF BUFFER DCCLI  FOR DCCLI.
+   DEF BUFFER Mobsub FOR Mobsub.
 
    IF idaStartDate = ? OR idaEndDate = ? THEN
       RETURN 0.
@@ -563,65 +551,47 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
       for example contract ends 29.2.2016, singlefee is in 201603 */
    IF DAY(idaStartDate) = 1 THEN
       idaStartDate = idaStartDate - 1.
+
    FOR EACH SingleFee USE-INDEX BillCode WHERE
             SingleFee.Brand       = gcBrand AND
             SingleFee.Billcode BEGINS "RVTERM" AND
             SingleFee.HostTable   = "Mobsub" AND
             SingleFee.SourceTable = "DCCLI" AND
             SingleFee.CalcObj     = "RVTERM" AND
-            SingleFee.BillPeriod  = liPeriod NO-LOCK:
+            SingleFee.BillPeriod  = liPeriod NO-LOCK :
+
       IF SingleFee.OrderId <= 0 THEN NEXT.
-      ASSIGN
-         liPhase = iiPhase
-         ldAmount = SingleFee.amt
-         liMsseq = INT(SingleFee.KeyValue)
-         liPerContrId = INT(SingleFee.sourcekey).
-      IF fisPostpaidMobsubReleased(liMsSeq) THEN DO:
-         lcLogText = "Q25 Mobsub not found or prepaid: " +
-                     STRING(liPhase) + "|" + STRING(liMsSeq) 
-                     + "|" + STRING(ldAmount).
-         fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
+      
+      FIND FIRST Mobsub NO-LOCK WHERE
+                 Mobsub.MsSeq = INT(SingleFee.KeyValue) NO-ERROR.
+            
+      IF NOT AVAIL Mobsub THEN DO:
+         fQ25LogWriting("Q25 Mobsub not found or prepaid: 0|" + 
+                        string(SingleFee.keyvalue) + "|" + 
+                        string(SingleFee.amt),
+                        {&Q25_LOGGING_DETAILED}, iiphase,
                         iiExecType).
          NEXT.
-      END.
-      IF fisSingleFeeBilled() THEN DO:
-         ASSIGN
-            liBilledCount = liBilledCount + 1
-            lcLogText = "Q25 Residual fee Billed: " +
-                        STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
-                        STRING(Mobsub.MsSeq) + "|" +
-                        STRING(ldAmount).
-         fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
-                        iiExecType).
-         NEXT. /* "Residual fee billed". */
       END.
       
-      /* Check that ending perContract founds during month. */
-      FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
-              DCCLI.PerContractId = liPerContrId AND
-              DCCLI.Brand   = gcBrand AND
-              DCCLI.DCEvent BEGINS "PAYTERM" AND
-              DCCLI.MsSeq   = Mobsub.MsSeq AND
-              DCCLI.ValidTo >= DATE(MONTH(idaEndDate),1,
-                                    YEAR(idaEndDate)) - 1 AND
-              DCCLI.ValidTo <= fLastDayOfMonth(idaEndDate) NO-ERROR.
+      FIND FIRST DCCLI NO-LOCK WHERE
+                 DCCLI.PerContractID = INT(SingleFee.sourcekey) AND
+                 DCCLI.MsSeq = Mobsub.MsSeq AND 
+                 DCCLI.DCEvent BEGINS "PAYTERM" NO-ERROR.
+      IF NOT AVAIL DCCLI THEN NEXT. 
+      
+      IF NOT fisQ25ExtensionAllowed(BUFFER SingleFee,
+                                    iiphase, 
+                                    OUTPUT lcLogText) THEN DO:
 
-      IF NOT AVAIL DCCLI THEN DO:
-         ASSIGN
-            liNotDCCLICount = liNotDCCLICount + 1
-            lcLogText = "Q25 NO DCCLI FOUND " +
-                        STRING(liPhase) + "|" + STRING(Mobsub.CLI) + "|" +
-                        STRING(Mobsub.MsSeq) + "|" + STRING(ldAmount).
-         fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
-                        iiExecType).
-         NEXT.
-      END.
-
-      IF fisQ25PerContractEnded(liPerContrId, liMsSeq, SingleFee.orderid, 
-                               idaStartDate, idaEndDate, ldAmount, liPhase, 
-                               lcLogText) THEN DO:
          IF lcLogText > "" THEN
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
+            lcLogText = lcLogText + ": " + 
+                        STRING(iiphase) + "|" +
+                        STRING(Mobsub.CLI) + "|" +
+                        STRING(MobSub.MsSeq) + "|" + 
+                        STRING(SingleFee.Amt).
+                        
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, iiphase,
                            iiExecType).
          NEXT.
       END.
@@ -630,10 +600,11 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
    
       IF(iiExecType EQ {&Q25_EXEC_TYPE_SMS_SENDING}) THEN DO:
          oiTotalCountLeft = oiTotalcountLeft - 1.
-         FIND FIRST SMSMessage WHERE SMSMessage.msseq = DCCLI.MsSeq AND
-                                     SMSMessage.CreStamp > fDate2TS(TODAY) AND
-                                     SMSMessage.SMSType = {&SMS_TYPE_Q25}
-                                     NO-LOCK NO-ERROR.
+
+         FIND FIRST SMSMessage NO-LOCK WHERE 
+                    SMSMessage.msseq = MobSub.MsSeq AND
+                    SMSMessage.CreStamp > fDate2TS(TODAY) AND
+                    SMSMessage.SMSType = {&SMS_TYPE_Q25} NO-ERROR.
          
          IF AVAIL SMSMessage AND (lcTestStartDay = "" OR 
                                   lcTestStartDay = ?) THEN DO:
@@ -641,20 +612,19 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                for this subscriber. If teststartday is defined testing ongoing
                and SMS messaging allowed. */
             ASSIGN
-               liAlreadyCreated = liAlreadyCreated + 1
                lcLogText = "SMS Already created: " +
-                           STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
-                           STRING(DCCLI.MsSeq) + "|" + STRING(ldAmount).         
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, liphase,
+                           STRING(iiphase) + "|" + STRING(Mobsub.CLI) + "|" +
+                           STRING(Mobsub.MsSeq) + "|" + STRING(ldAmount).         
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, iiphase,
                                        iiExecType).
             NEXT.
          END.
          ELSE DO:
-            lcSMSMessage = fgetQ25SMSMessage(liphase, DCCLI.ValidTo + 1, 
-                                             ldAmount, DCCLI.CLI).
+            lcSMSMessage = fgetQ25SMSMessage(iiphase, DCCLI.ValidTo + 1, 
+                                             ldAmount, MobSub.CLI).
             /* Send SMS */
             fCreateSMS(SingleFee.CustNum,
-                       DCCLI.Cli,
+                       MobSub.Cli,
                        DCCLI.MsSeq,
                        SingleFee.OrderId,
                        lcSMSMessage,
@@ -662,9 +632,9 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                        {&SMS_TYPE_Q25}).
             ASSIGN
                liSentCount = liSentCount + 1
-               lcLogText = STRING(liphase) + "|" + STRING(DCCLI.CLI) + "|" +
+               lcLogText = STRING(iiphase) + "|" + STRING(MobSub.CLI) + "|" +
                         STRING(DCCLI.MsSeq).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_SENT_MSGS}, liphase,
+            fQ25LogWriting(lcLogText, {&Q25_LOGGING_SENT_MSGS}, iiphase,
                            iiExecType).
             PAUSE liPauseValue.
             /* Decrease pause time if needed, check after each 50 sent SMS */
@@ -679,33 +649,33 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
       ELSE DO:
          liLogType = {&Q25_LOGGING_DETAILED}.
          /* Some logging about SMSs to be send. */
-         IF liPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
+         IF iiphase = {&Q25_MONTH_24_CHOSEN} THEN DO:
             /* Q25 Month 24 20th day extension made, write only internal log */
             
             IF (iiExecType NE {&Q25_EXEC_TYPE_CUST_LOG_GENERATION}) THEN DO:
                lcLogText = "Send SMS Q25 Chosen: " +
-                        STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" + 
+                        STRING(iiphase) + "|" + STRING(MobSub.CLI) + "|" + 
                         STRING(DCCLI.MsSeq).
             END.
          END.
          ELSE DO:
-            lcTemplateName = fgetTemplateName(liPhase).  
+            lcTemplateName = fgetTemplateName(iiphase).  
             IF (iiExecType EQ {&Q25_EXEC_TYPE_CUST_LOG_GENERATION}) AND
                lcTemplateName BEGINS "Q25" THEN DO:
             ASSIGN   
-               lcLogText = DCCLI.CLI + ";" + 
+               lcLogText = MobSub.CLI + ";" + 
                            STRING(ldaExecuteDate,"99/99/9999") + ";" +
                            lcTemplateName
                liLogType = {&Q25_LOGGING_CUST_LOGS}.
             END.
             ELSE DO:
                lcLogText = "Send SMS: " +
-                           STRING(liPhase) + "|" + STRING(DCCLI.CLI) + "|" +
+                           STRING(iiphase) + "|" + STRING(MobSub.CLI) + "|" +
                            STRING(DCCLI.MsSeq) + "|" +
                            STRING(ldAmount) + "|" + lcTemplateName.
             END.
          END.   
-         fQ25LogWriting(lcLogText, liLogType, liphase,
+         fQ25LogWriting(lcLogText, liLogType, iiphase,
                         iiExecType).
       END.
    END.
@@ -717,11 +687,9 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
          lcLogText = lcLogText + "S:" + STRING(idaStartDate) + "|".
       IF idaEndDate NE ? THEN
          lcLogText = lcLogText + "E:" + STRING(idaEnddate) + "|".
-      lcLogText = lcLogText + STRING(liCount) + "|" + STRING(liNotSendCount) + 
-         "|" + STRING(liBilledCount) + "|" + STRING(liNotDCCLICount) + "|" +
-         STRING(liReturnedDevices) + "|" + STRING(liQ25DoneCount) + 
-         "|" + STRING(liPendingReq) + "|" + STRING(etime / 1000).
-      fQ25LogWriting(lcLogText, {&Q25_LOGGING_COUNTERS}, liphase,
+      lcLogText = lcLogText + STRING(liCount) + 
+         "|" + STRING(etime / 1000).
+      fQ25LogWriting(lcLogText, {&Q25_LOGGING_COUNTERS}, iiphase,
                      iiExecType).
       RETURN liCount.
    END.
@@ -742,19 +710,17 @@ END.
 FUNCTION getQ25phase RETURNS INT
    (INPUT iimsseq AS INT,
     INPUT iiCustNum AS INT):
-   DEF VAR liLoop AS INT NO-UNDO.
+
    DEF VAR liPhase AS INT NO-UNDO.
    DEF VAR liPeriod AS INT NO-UNDO.
-   DEF VAR ldAmount AS DEC NO-UNDO.
-   DEF VAR ldaStartDate AS DATE NO-UNDO.
-   DEF VAR ldaEndDate AS DATE NO-UNDO.
    DEF VAR lcLogText AS CHAR NO-UNDO.
+
    /* Loop through Q25 phases starting on nearest to end (Month 24) */
-   DO liLoop = {&Q25_MONTH_24} TO {&Q25_MONTH_22}:
+   DO liPhase = {&Q25_MONTH_24} TO {&Q25_MONTH_22}:
       /* set needed period */
       liPeriod = YEAR(TODAY) * 100 + MONTH(ADD-INTERVAL(TODAY,
-                                                        liLoop, 'months':U)).
-      FOR EACH SingleFee WHERE
+                                           liPhase, 'months':U)).
+      FOR EACH SingleFee NO-LOCK WHERE
                SingleFee.Brand       EQ gcBrand AND
                SingleFee.CustNum     EQ iiCustNum AND
                SingleFee.HostTable   EQ "Mobsub" AND
@@ -762,23 +728,18 @@ FUNCTION getQ25phase RETURNS INT
                SingleFee.BillPeriod  EQ liPeriod AND
                SingleFee.SourceTable EQ "DCCLI" AND
                SingleFee.CalcObj     EQ "RVTERM" AND
-               SingleFee.Billcode    BEGINS "RVTERM" NO-LOCK:
+               SingleFee.Billcode    BEGINS "RVTERM":
+
          IF SingleFee.OrderId <= 0 THEN NEXT.
+
          ASSIGN
-            liPhase = liLoop
-            ldAmount = SingleFee.amt
-            ldaStartDate = DATE(MONTH(ADD-INTERVAL(TODAY, liLoop, 'months':U)),
-                           1,YEAR(TODAY)) - 1
-            ldaEndDate = fLastDayOfMonth(ldaStartDate + 1).
-         IF fisPostpaidMobsubReleased(iiMsSeq) OR
-            fisSingleFeeBilled() OR
-            fisQ25PerContractEnded(INT(SingleFee.sourcekey), iiMsSeq,
-                                  SingleFee.orderid, ldaStartDate,
-                                  ldaEndDate, ldAmount, liPhase,
-                                  lcLogText) THEN 
+            liPhase = liPhase.
+
+         IF NOT fisQ25ExtensionAllowed(BUFFER SingleFee,
+                                       liPhase,
+                                       lcLogText) THEN 
             NEXT.
-         ELSE
-            RETURN liLoop.
+         RETURN liPhase.
       END.
    END.
    RETURN {&Q25_NOT_ACTION_PHASE}. /* Not Q25 phase M22-M24 customer */
@@ -858,12 +819,10 @@ FUNCTION fWriteIFSData RETURNS LOGICAL
 END.
 
 /* SMS message generating and sending for Q25. */
-FUNCTION fGenerateQ25List RETURNS INTEGER 
-   (INPUT iiPhase   AS INT):
+FUNCTION fGenerateQ25List RETURNS INTEGER:
 
    DEF VAR liPeriod AS INT NO-UNDO.
    DEF VAR ldaEndDate AS DATE NO-UNDO.
-   DEF VAR ldaStartDate AS DATE NO-UNDO.
    DEF VAR liMsSeq AS INT NO-UNDO.
    DEF VAR liPerContrId AS INT NO-UNDO.
    DEF VAR ldAmount AS DECIMAL NO-UNDO.
@@ -875,7 +834,6 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
    DEF VAR liLoop AS INT NO-UNDO.
 
    ASSIGN
-      ldaStartDate = DATE(MONTH(TODAY), 1, YEAR(TODAY)) - 1
       ldaEndDate = fLastDayOfMonth(TODAY)
       liPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
 
@@ -912,28 +870,13 @@ FUNCTION fGenerateQ25List RETURNS INTEGER
          IF (liHRLPTestLevel EQ {&Q25_HRLP_ONLY_PROV_TEST}) AND
             (LOOKUP(STRING(liMsSeq),lcHRLPTestMSSeq) EQ 0) 
             THEN NEXT.
-         IF fisPostpaidMobsubReleased(liMsSeq) THEN DO:
-            lcLogText = "Q25 Mobsub not found or prepaid: " +
-                        STRING(iiPhase) + "|" + STRING(liMsSeq).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, iiphase,
-                           {&Q25_EXEC_TYPE_HRLP_UNIV}).
-            NEXT.
-         END.
-         IF fisSingleFeeBilled() THEN DO:
-            lcLogText = "Q25 Residual fee Billed: " +
-                           STRING(iiPhase) + "|" + STRING(Mobsub.CLI) + "|" +
-                           STRING(Mobsub.MsSeq).
-            fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, iiphase,
-                           {&Q25_EXEC_TYPE_HRLP_UNIV}).
-            NEXT. /* "Residual fee billed". */
-         END.
          
          /*Function checks also Extension, TermReturn and Renewal*/
-         IF fisQ25PerContractEnded(liPerContrId, liMsSeq, SingleFee.orderid, 
-                                  ldaStartDate, ldaEndDate, ldAmount, iiPhase, 
-                                  lcLogText) THEN DO:
+         IF NOT fisQ25ExtensionAllowed(BUFFER SingleFee, 
+                                   {&Q25_MONTH_24}, 
+                                   lcLogText) THEN DO:
             IF lcLogText > "" THEN
-               fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, iiphase,
+               fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, {&Q25_MONTH_24},
                                {&Q25_EXEC_TYPE_HRLP_UNIV}).
             NEXT.
          END.
