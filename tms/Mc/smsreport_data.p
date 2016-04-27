@@ -434,7 +434,8 @@ lcStatuses = "req_&1_new,req_&1_underwork,req_&1_done,req_&1_rejected," +
 /* 4 & 5*/
 FOR
    EACH MsReqCounter NO-LOCK WHERE
-      MsReqCounter.Reqtype = 1
+      MsReqCounter.Reqtype = 1 AND
+      MsReqCounter.ReqStatus <= 9
    BREAK BY MsReqCounter.ReqStatus:
 
    ACCUMULATE MsReqCounter.ReqStatusCount (SUB-TOTAL BY MsReqCounter.ReqStatus).
@@ -446,7 +447,8 @@ END.
 
 FOR
    EACH MsReqCounter NO-LOCK WHERE
-      MsReqCounter.Reqtype = 13
+      MsReqCounter.Reqtype = 13 AND
+      MsReqCounter.ReqStatus <= 9
    BREAK BY MsReqCounter.ReqStatus:
 
    ACCUMULATE MsReqCounter.ReqStatusCount (SUB-TOTAL BY MsReqCounter.ReqStatus).
