@@ -15,6 +15,8 @@ CLASS HPD.HPDAckHandler:
    DEFINE PRIVATE VARIABLE liRetryMinutes   AS INTEGER   NO-UNDO.
    DEFINE PRIVATE VARIABLE liMaxSendCount   AS INTEGER   NO-UNDO.
    DEFINE PRIVATE VARIABLE llConnectionDone AS LOGICAL INITIAL NO NO-UNDO.
+   DEFINE PRIVATE VARIABLE lcRepLogQuery    AS CHARACTER NO-UNDO.
+
 
    DEFINE PRIVATE STREAM strexp.
 
@@ -26,6 +28,7 @@ CLASS HPD.HPDAckHandler:
          lcExportDir    = Syst.Parameters:getc("HPD.Ack.ExportDir", "HPD.Interface")
          lcDB           = icDB
          lcTableName    = lcDB + ".RepLog"
+         lcRepLogQuery  = "FOR EACH " + lcTableName + " NO-LOCK USE-INDEX SendTime WHERE SendTime <= &1"
          . 
       
       IF NOT CONNECTED(lcDB)
@@ -35,8 +38,6 @@ CLASS HPD.HPDAckHandler:
       
       CREATE QUERY lhRepLogQuery.
       lhRepLogQuery:SET-BUFFERS(lhRepLogTable).
-      lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK USE-INDEX SendTime",
-                                             lcTableName)).
         
    END CONSTRUCTOR.
 
@@ -205,9 +206,11 @@ CLASS HPD.HPDAckHandler:
    METHOD PUBLIC VOID mProcessWaitingReplog():
 
       DEFINE VARIABLE llOK     AS LOGICAL     NO-UNDO.
-      DEFINE VARIABLE ldtzLast AS DATETIME-TZ NO-UNDO.
 
-      ldtzLast = ADD-INTERVAL(NOW, liRetryMinutes * (-1), "minutes").
+      llOK = lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE(lcRepLogQuery, ISO-DATE(ADD-INTERVAL(NOW, liRetryMinutes * (-1), "minutes")))).
+
+      IF llOK = FALSE
+      THEN RETURN ERROR NEW Progress.Lang.AppError("Query prepare failed for replog query", 1).
 
       DO TRANSACTION ON ERROR UNDO, THROW:
 
@@ -227,10 +230,7 @@ CLASS HPD.HPDAckHandler:
             /* If for some reason RepLog table is locked then skip it */
             IF lhRepLogTable:LOCKED
             THEN NEXT.
-         
-            IF lhRepLogTable::SendTime = ? OR lhRepLogTable::SendTime > ldtzLast
-            THEN LEAVE.
-         
+
             IF lhRepLogTable::SendCount >= liMaxSendCount
             THEN DO:
                LOG-MANAGER:WRITE-MESSAGE("Max retries reached. ROWID=" + STRING(lhRepLogTable:ROWID), "INFO").
@@ -238,9 +238,8 @@ CLASS HPD.HPDAckHandler:
                lhRepLogTable:BUFFER-DELETE().
                NEXT.
             END.
-         
+
             lhRepLogTable::SendTime  = ?.
-            lhRepLogTable:BUFFER-RELEASE().
 
          END.
 
