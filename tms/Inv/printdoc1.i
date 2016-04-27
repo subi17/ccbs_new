@@ -287,6 +287,10 @@ FUNCTION fLocalCCName RETURNS CHARACTER:
    /* ServiceName for Premium Number */
    ELSE IF ttCall.BIGroup = "6" THEN
       lcCCName = ttCall.ServiceName.
+   /* ServiceName for Google Billing */
+   ELSE IF ttCall.BIGroup = {&BITEM_GRP_GB} THEN
+      lcCCName = ttCall.ServiceName.
+
 
    /* ccn for others or if roaming country was not found */
    IF lcCCName = "" THEN 

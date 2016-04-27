@@ -9,7 +9,7 @@
 {printdoc1.i}
 {funcrunprocess_update.i}
 {host.i}
-
+{tmsconst.i}
 /* invoices TO be printed */
 DEFINE INPUT-OUTPUT PARAMETER TABLE FOR ttInvoice.
 DEFINE INPUT  PARAMETER idaInvDate    AS DATE NO-UNDO. 
@@ -52,7 +52,9 @@ DEF VAR lcTarBatchFile AS CHAR   NO-UNDO.
 DEF VAR liFRExecID     AS INT    NO-UNDO.
 DEF VAR llReplica      AS LOG    NO-UNDO.
 DEF VAR liInitialOrderID AS INT  NO-UNDO.
-       
+DEF VAR lcGBBillCodes AS CHAR    NO-UNDO.
+
+
 DEF STREAM sRead.
 
 
