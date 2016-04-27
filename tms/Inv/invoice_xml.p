@@ -292,6 +292,14 @@ PROCEDURE pInitialize:
    END.
    lcPremiumBillCodes = SUBSTRING(lcPremiumBillCodes,2).
 
+   /*Google billing YPR-3919*/
+   FOR EACH BillItem where
+            BillItem.Brand EQ gcBrand AND
+            BillItem.BIGroup EQ {&BITEM_GRP_GB} NO-LOCK: 
+      lcGBBillCodes = lcGBBillCodes +  "," + BillItem.Billcode.
+   END.
+   lcGBBillCodes = SUBSTRING(lcGBBillCodes,2).
+
    IF iiFrProcessID > 0 THEN
    FOR FIRST FuncRunProcess NO-LOCK WHERE
              FuncRunProcess.FrProcessID = iiFrProcessID:
@@ -683,6 +691,8 @@ PROCEDURE pSubInvoice2XML:
    DEF VAR llPremiumNumberText    AS LOG  NO-UNDO.
    DEF VAR lcBIGroupName          AS CHAR NO-UNDO. 
    DEF VAR liTFCount              AS INT  NO-UNDO.
+   DEF VAR llGBText               AS LOG  NO-UNDO.
+
     
    lhXML:START-ELEMENT("Contract").
 
@@ -863,6 +873,12 @@ PROCEDURE pSubInvoice2XML:
          IF NOT llPremiumNumberText AND
             LOOKUP(ttCall.BillCode,lcPremiumBillCodes) > 0 THEN
             llPremiumNumberText = TRUE.
+
+         /* Turn ON flag if call is belong to Premium */
+         IF NOT llGBText AND
+            LOOKUP(ttCall.BillCode,lcGBBillCodes) > 0 THEN
+            llGBText = TRUE.
+
 
          FIND FIRST ttCLIType WHERE
                     ttCLIType.CLI    = SubInvoice.CLI AND
