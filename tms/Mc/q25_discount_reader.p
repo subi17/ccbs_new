@@ -80,6 +80,8 @@ REPEAT:
 
       IMPORT STREAM sIn UNFORMATTED lcLine.
 
+      IF lcLine EQ "" THEN NEXT.
+
       IF NUM-ENTRIES(lcLine,lcSep) NE 3 THEN DO:
          fError("Incorrect input data format").
          NEXT.

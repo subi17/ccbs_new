@@ -3529,8 +3529,8 @@ PROCEDURE pContractReactivation:
                              MsRequest.UserCode,
                              "ContractActivation",
                              FixedFee.OrderId, /* order id */
-                             "FixedFee",
-                             STRING(FixedFee.FFNum),
+                             FixedFee.SourceTable,
+                             FixedFee.SourceKey,
                              OUTPUT lcReqChar).
 
                IF lcReqChar BEGINS "ERROR:" OR lcReqChar BEGINS "0" THEN
