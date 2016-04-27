@@ -424,7 +424,6 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
 
                   IF liphase < ttInvoice.q25Phase AND
                      fisQ25ExtensionAllowed(BUFFER SingleFee, 
-                                            liPhase,
                                             OUTPUT lcLogText) THEN 
                      ttinvoice.q25Phase = liPhase.  
                END. 
