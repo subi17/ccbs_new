@@ -530,7 +530,6 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
    DEF VAR lcLogText         AS CHAR NO-UNDO.
    DEF VAR liPauseValue      AS INT NO-UNDO.
    DEF VAR liCalcPauseValue  AS INT NO-UNDO.
-   DEF VAR ldAmount          AS DEC NO-UNDO.
    DEF VAR lcTemplateName    AS CHAR NO-UNDO.
    DEF VAR liLogType         AS INT NO-UNDO.  
 
@@ -600,14 +599,14 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             ASSIGN
                lcLogText = "SMS Already created: " +
                            STRING(iiphase) + "|" + STRING(Mobsub.CLI) + "|" +
-                           STRING(Mobsub.MsSeq) + "|" + STRING(ldAmount).         
+                           STRING(Mobsub.MsSeq) + "|" + STRING(SingleFee.Amt).         
             fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, iiphase,
                                        iiExecType).
             NEXT.
          END.
          ELSE DO:
             lcSMSMessage = fgetQ25SMSMessage(iiphase, SingleFee.BillPeriod, 
-                                             ldAmount, MobSub.CLI).
+                                             SingleFee.Amt, MobSub.CLI).
             /* Send SMS */
             fCreateSMS(SingleFee.CustNum,
                        MobSub.Cli,
@@ -658,7 +657,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
                lcLogText = "Send SMS: " +
                            STRING(iiphase) + "|" + STRING(MobSub.CLI) + "|" +
                            STRING(MobSub.MsSeq) + "|" +
-                           STRING(ldAmount) + "|" + lcTemplateName.
+                           STRING(SingleFee.Amt) + "|" + lcTemplateName.
             END.
          END.   
          fQ25LogWriting(lcLogText, liLogType, iiphase,
