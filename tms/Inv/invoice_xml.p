@@ -692,6 +692,7 @@ PROCEDURE pSubInvoice2XML:
    DEF VAR lcBIGroupName          AS CHAR NO-UNDO. 
    DEF VAR liTFCount              AS INT  NO-UNDO.
    DEF VAR llGBText               AS LOG  NO-UNDO.
+   DEF VAR lcFooterNotice         AS CHAR NO-UNDO.
 
     
    lhXML:START-ELEMENT("Contract").
@@ -996,6 +997,20 @@ PROCEDURE pSubInvoice2XML:
    ELSE IF llPremiumNumberText THEN
         lhXML:WRITE-DATA-ELEMENT("FooterNotice",fHeadTxt(528,liLanguage)).
    ELSE lhXML:WRITE-DATA-ELEMENT("FooterNotice","").
+   
+   /*Google billing footer will be added if there are GB entreis*/
+   lcFooterNotice = "".
+   IF llPremiumNumberText THEN DO:
+      IF lcFooterNotice NE "" THEN
+         lcFooterNotice = lcFooterNotice + "&#xA;".
+      lcFooterNotice = lcFooterNotice + fHeadTxt(528,liLanguage).
+   END.
+   IF llGBText THEN DO:
+      IF lcFooterNotice NE "" THEN 
+         lcFooterNotice = lcFooterNotice + "&#xA;".
+      lcFooterNotice = lcFooterNotice + fHeadTxt(527,liLanguage).
+   END.
+   lhXML:WRITE-DATA-ELEMENT("FooterNotice", lcFooterNotice).
 
    lhXML:END-ELEMENT("Contract").
 
