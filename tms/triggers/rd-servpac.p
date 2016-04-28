@@ -1,9 +1,21 @@
 TRIGGER PROCEDURE FOR REPLICATION-DELETE OF ServPac.
 
-CREATE Mobile.RepLog.
+{HPD/HPDConst.i}
+
+&IF {&SERVPAC_DELETE_TRIGGER_ACTIVE} &THEN
+
+IF NEW ServPac
+THEN RETURN.
+
+IF ServPac.Brand NE "1"
+THEN RETURN.
+
+CREATE mobile.RepLog.
 ASSIGN
-   Mobile.RepLog.RecordId  = RECID(ServPac)
-   Mobile.RepLog.TableName = "ServPac"
-   Mobile.RepLog.EventType = "DELETE"
-   Mobile.RepLog.KeyValue  = ServPac.ServPac
-   Mobile.RepLog.EventTS   = DATETIME(TODAY,MTIME).
+   mobile.RepLog.TableName = "ServPac"
+   mobile.RepLog.EventType = "DELETE"
+   mobile.RepLog.EventTime = NOW
+   mobile.RepLog.KeyValue  = {HPD/keyvalue.i ServPac . {&HPDKeyDelimiter} ServPac} 
+   .
+
+&ENDIF

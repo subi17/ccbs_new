@@ -790,9 +790,7 @@ DO TRANSACTION:
    END. /* IF AVAIL MobSub AND MobSub.MultiSIMId > 0 AND */
 
    /* HPD - Trigger some extra events to Cassandra */
-   RUN pTriggerEvents(INPUT MobSub.MsSeq,
-                      INPUT MobSub.CLIType,
-                      INPUT ldeTermStamp).
+   RUN pTriggerEvents(INPUT MobSub.MsSeq).
 
 END. /* DO TRANSACTION: */
 
@@ -804,95 +802,18 @@ END PROCEDURE.
 PROCEDURE pTriggerEvents:
 
    DEF INPUT PARAMETER iiMsSeq        AS INT  NO-UNDO.
-   DEF INPUT PARAMETER icCLIType      AS CHAR NO-UNDO.
-   DEF INPUT PARAMETER ideTermStamp   AS DEC  NO-UNDO.
 
-   DEF VAR ldStartDate                AS DATE NO-UNDO.
-   DEF VAR ldTermDate                 AS DATE NO-UNDO.
-   DEF VAR liTermTime                 AS INT  NO-UNDO.
-   DEF VAR ldeStartStamp              AS DEC  NO-UNDO.
-   DEF VAR ldtTimeStamp               AS DATETIME NO-UNDO.
-   DEF VAR lcReqChar                  AS CHAR NO-UNDO.
-   DEF VAR lcDel2                     AS CHAR NO-UNDO.
+   DEF VAR ldtTimeStamp               AS DATETIME-TZ NO-UNDO.
    DEF VAR lcServList                 AS CHAR NO-UNDO.
    DEF VAR lcServCom                  AS CHAR NO-UNDO.
    DEF VAR liCount                    AS INT  NO-UNDO.
    DEF VAR liNumEntries               AS INT  NO-UNDO.
 
-   fSplitTS(ideTermStamp,OUTPUT ldTermDate,OUTPUT liTermTime).
-
-   ASSIGN ldStartDate   = DATE(MONTH(ldTermDate),1,YEAR(ldTermDate))
-          ldeStartStamp = fMake2Dt(ldStartDate,0)
-          ldtTimeStamp  = DATETIME(TODAY,MTIME) + 15000
-          lcServList    = {&HPD_SERVICES}
-          liNumEntries  = NUM-ENTRIES(lcServList)
-          lcDel2        = CHR(255).
-
-   FOR EACH MServiceLimit WHERE
-            MServiceLimit.MsSeq  = iiMsSeq AND
-            MServiceLimit.EndTS >= ldeStartStamp NO-LOCK,
-      FIRST ServiceLimit WHERE
-            ServiceLimit.SlSeq = MServiceLimit.SlSeq NO-LOCK:
-
-      IF fMatrixAnalyse(gcBrand,
-                        "PERCONTR",
-                        "PerContract;SubsTypeTo",
-                        ServiceLimit.GroupCode + ";" + icCLIType,
-                        OUTPUT lcReqChar) NE 1 THEN NEXT.
-
-      CREATE Common.RepLog.
-      ASSIGN
-         Common.RepLog.RecordId  = RECID(MServiceLimit)
-         Common.RepLog.TableName = "MServiceLimit"
-         Common.RepLog.EventType = "MODIFY"
-         Common.RepLog.KeyValue  = STRING(MServiceLimit.MSID)
-         Common.RepLog.EventTS   = ldtTimeStamp.
-
-      RELEASE Common.RepLog.
- 
-   END. /* FOR EACH MServiceLimit WHERE */
-
-   FOR EACH MServiceLPool WHERE
-            MServiceLPool.MsSeq  = iiMsSeq AND
-            MServiceLPool.EndTS >= ldeStartStamp NO-LOCK,
-      FIRST ServiceLimit WHERE
-            ServiceLimit.SlSeq = MServiceLPool.SlSeq NO-LOCK:
-
-      IF fMatrixAnalyse(gcBrand,
-                        "PERCONTR",
-                        "PerContract;SubsTypeTo",
-                        ServiceLimit.GroupCode + ";" + icCLIType,
-                        OUTPUT lcReqChar) NE 1 THEN NEXT.
-
-      CREATE Common.RepLog.
-      ASSIGN
-         Common.RepLog.RecordId  = RECID(MServiceLPool)
-         Common.RepLog.TableName = "MServiceLPool"
-         Common.RepLog.EventType = "MODIFY"
-         Common.RepLog.KeyValue  = STRING(MServiceLPool.MsSeq) + lcDel2 +
-                                   STRING(MServiceLPool.SLSeq) + lcDel2 +
-                                   STRING(MServiceLPool.EndTS)
-         Common.RepLog.EventTS   = ldtTimeStamp.
-
-      RELEASE Common.RepLog.
- 
-   END. /* FOR EACH MServiceLPool WHERE */
-
-   FOR EACH DCCLI WHERE
-            DCCLI.MsSeq    = iiMsSeq AND
-            DCCLI.ValidTo >= ldStartDate NO-LOCK:
-
-      CREATE Mobile.RepLog.
-      ASSIGN
-         Mobile.RepLog.RecordId  = RECID(DCCLI)
-         Mobile.RepLog.TableName = "DCCLI"
-         Mobile.RepLog.EventType = "MODIFY"
-         Mobile.RepLog.KeyValue  = STRING(DCCLI.PerContractID)
-         Mobile.RepLog.EventTS   = ldtTimeStamp.
-
-      RELEASE Mobile.RepLog.
-
-   END. /* FOR EACH DCCLI WHERE */
+   ASSIGN
+      ldtTimeStamp  = ADD-INTERVAL(NOW, 15, "seconds")
+      lcServList    = {&HPD_SERVICES}
+      liNumEntries  = NUM-ENTRIES(lcServList)
+      .
 
    DO liCount = 1 TO liNumEntries:
 
@@ -904,13 +825,10 @@ PROCEDURE pTriggerEvents:
 
          CREATE Mobile.RepLog.
          ASSIGN
-            Mobile.RepLog.RecordId  = RECID(SubSer)
+            Mobile.RepLog.RowID     = STRING(ROWID(SubSer))
             Mobile.RepLog.TableName = "SubSer"
             Mobile.RepLog.EventType = "MODIFY"
-            Mobile.RepLog.KeyValue  = STRING(SubSer.MsSeq) + lcDel2 +
-                                      SubSer.ServCom       + lcDel2 +
-                                      STRING(SubSer.SSDate)
-            Mobile.RepLog.EventTS   = ldtTimeStamp.
+            Mobile.RepLog.EventTime = NOW.
 
          RELEASE Mobile.RepLog.
 

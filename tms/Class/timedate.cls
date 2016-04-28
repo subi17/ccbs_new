@@ -1,5 +1,5 @@
    
-CLASS Class.TimeDate:
+CLASS Class.timedate:
    
    METHOD PUBLIC DECIMAL MakeTS():
    

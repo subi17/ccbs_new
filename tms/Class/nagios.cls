@@ -1,5 +1,5 @@
 
-CLASS Class.Nagios:
+CLASS Class.nagios:
 
    DEFINE VARIABLE lcOperator AS CHARACTER     NO-UNDO.
    DEFINE VARIABLE lcServer   AS CHARACTER     NO-UNDO.
@@ -11,7 +11,7 @@ CLASS Class.Nagios:
    DEF VAR lcMonitorDir    AS CHAR NO-UNDO.
    DEF STREAM sNagios.
 
-   CONSTRUCTOR PUBLIC Nagios():
+   CONSTRUCTOR PUBLIC nagios():
 
       /* nagios URL */
       FIND FIRST TMSParam WHERE
@@ -65,7 +65,7 @@ CLASS Class.Nagios:
 
    END CONSTRUCTOR.
 
-   DESTRUCTOR PUBLIC Nagios():
+   DESTRUCTOR PUBLIC nagios():
 
       IF VALID-OBJECT(classTD) THEN DELETE OBJECT(classTD).
 

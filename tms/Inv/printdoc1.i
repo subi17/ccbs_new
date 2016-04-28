@@ -540,22 +540,6 @@ PROCEDURE pGetInvoiceHeaderData:
       RETURN "ERROR".
    END.
 
-   /* check penalty fees; only 1 fee per invoice allowed (for now) */
-   FOR EACH InvRow OF Invoice NO-LOCK WHERE
-            InvRow.RowType = 4 AND
-            InvRow.Amt NE 0 AND
-            InvRow.BillCode = "TERMPERIOD"
-   BREAK BY InvRow.SubInvNum:
-      IF FIRST-OF(InvRow.SubInvNum) THEN liPCnt = 0.
-      liPCnt = liPCnt + 1.
-      IF LAST-OF(InvRow.SubInvNum) AND liPCnt > 1 THEN DO:
-         fErrLine("More than 1 penalty fee for " + InvRow.CLI).
-         RETURN "ERROR".
-      END.
-      IF InvRow.VatPerc = 0 THEN
-         ttInvoice.PenaltyAmt = ttInvoice.PenaltyAmt + InvRow.Amt.
-   END.
-
    /* Total consumption of 6 last invoices */
    ASSIGN
       ldaInvoiceFrom = invoice.todate - (32 * 5)
@@ -1000,7 +984,14 @@ PROCEDURE pGetInvoiceRowData:
                BItemGroup.BIGroup = BillItem.BIGroup
       BREAK BY InvRow.VatPerc
             BY ABS(InvRow.Amt):
-            
+
+         /* Term Penalty amount counted in the same for each loop */
+         IF InvRow.RowType = 4 AND
+            InvRow.Amt NE 0 AND
+            InvRow.BillCode = "TERMPERIOD" AND
+            InvRow.VatPerc = 0 THEN
+            ttInvoice.PenaltyAmt = ttInvoice.PenaltyAmt + InvRow.Amt.
+
          ASSIGN ldVatAmt = 0.
          
          IF BillItem.BIGroup = "33" THEN DO:

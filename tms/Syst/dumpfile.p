@@ -80,6 +80,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
 
 FORM
     DumpFile.Brand          COLON 20
+    DumpFile.BatchID        COLON 60
     DumpFile.DumpID         COLON 20
     DumpFile.DumpName       COLON 20
     DumpFile.Active         COLON 20
@@ -686,6 +687,7 @@ PROCEDURE local-UPDATE-record:
 
       DISP 
          DumpFile.Brand          
+         DumpFile.BatchID
          DumpFile.DumpID        
          DumpFile.DumpName
          DumpFile.Active          
@@ -729,6 +731,7 @@ PROCEDURE local-UPDATE-record:
          RUN Syst/ufkey.
    
          UPDATE
+            DumpFile.BatchID
             DumpFile.Active          
             DumpFile.FileCategory
             DumpFile.MainTable           
@@ -736,11 +739,11 @@ PROCEDURE local-UPDATE-record:
             DumpFile.SpoolDir         
             DumpFile.TransDir       
             DumpFile.DumpFormat
+            DumpFile.DumpDelimiter        
             DumpFile.EmptyFile
+            DumpFile.DecimalPoint       
             DumpFile.ModFromEventLog
             DumpFile.ModFromField
-            DumpFile.DumpDelimiter        
-            DumpFile.DecimalPoint       
             DumpFile.AllowReplica
             DumpFile.Description
          WITH FRAME lis EDITING:

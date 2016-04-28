@@ -672,6 +672,8 @@ FUNCTION fBuildBarringCommand RETURNS LOG
             
             IF LOOKUP(ttMergedBarring.NWStatus,"ACTIVE") > 0 THEN 
                ocFinalMask = fMergeMasks(BarringConf.Mask, ocFinalMask).
+         
+         
          END.
          WHEN "HOTLINE" THEN DO:
 

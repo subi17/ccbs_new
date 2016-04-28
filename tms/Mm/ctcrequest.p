@@ -143,6 +143,7 @@ END.
 IF liCreditCheck EQ 1 AND
    liReq = 0 AND /* check that bank request with credit scoring was not created */
    MsRequest.ReqSource NE {&REQUEST_SOURCE_NEWTON} AND
+   MsRequest.ReqSource NE {&REQUEST_SOURCE_EXTERNAL_API} AND
    MsRequest.ReqSource NE {&REQUEST_SOURCE_FUSION_ORDER}
    THEN DO:
 

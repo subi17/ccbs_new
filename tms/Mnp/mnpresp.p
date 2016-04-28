@@ -328,7 +328,7 @@ PROCEDURE pHandleQueue:
 
          IF MessageBuf.MessageType = 
             "crearSolicitudIndividualAltaPortabilidadMovil" AND
-            LOOKUP(lcResponseCode,"AREC ENUME,AREC FORMA,AREC EXIST") > 0
+            LOOKUP(lcResponseCode,"AREC ENUME,AREC FORMA,AREC EXIST,AREC CUPO1") > 0
             THEN DO:
             
             IF lcResponseCode NE "AREC EXIST" OR 
@@ -357,6 +357,14 @@ PROCEDURE pHandleQueue:
                   ELSE IF lcResponseCode EQ "RECH_ICCID" THEN lcSMS = "MNPIccidPOS".
                END.
 
+               liMNPProCount = 0.
+               
+               /* Count no of MNP Process request sent */
+               FOR EACH bMNPProcess NO-LOCK WHERE 
+                        bMNPProcess.OrderID    = Order.OrderID  AND
+                        bMNPProcess.MNPType    = {&MNP_TYPE_IN}:
+                  liMNPProCount = liMNPProCount + 1. 
+               END.         
 
                /* YDR-2147 */
                /* Resend MNP IN request to Nodal Center automatically 
@@ -364,19 +372,10 @@ PROCEDURE pHandleQueue:
                   providing new operator code */
                IF lcResponseCode EQ "AREC ENUME" THEN DO: 
                   
-                  ASSIGN liMNPProCount   = 0
-                         liRespLength    = 0
+                  ASSIGN liRespLength    = 0
                          lcNewOper       = ""
                          llgMNPOperName  = FALSE
                          llgMNPOperBrand = FALSE. 
-                  
-                  /* Need to check Status code validation 
-                     has to be added OR not */
-                  FOR EACH bMNPProcess NO-LOCK WHERE 
-                           bMNPProcess.OrderID    = Order.OrderID  AND
-                           bMNPProcess.MNPType    = {&MNP_TYPE_IN}:
-                     liMNPProCount = liMNPProCount + 1. 
-                  END.         
 
                   IF liMNPProCount = 1 AND 
                      lcResponseDesc MATCHES "El MSISDN * no pertenece al operador donante *, pertenece al operador *" THEN DO:
@@ -429,7 +428,31 @@ PROCEDURE pHandleQueue:
                         fLogError("New Operator code not OK: " + lcNewOper).
                   END.
                END.
-               
+             
+               /* YDR-2183 */
+               /* Relaunching the MNP IN request, if response xml from 
+                  Nodal Center recieves error message AREC CUPO1.
+                  This request has to be relaunched irrespecitve of 
+                  Error message recieved in response xml */
+               IF lcResponseCode EQ "AREC CUPO1" AND 
+                  liMNPProCount = 1              THEN DO: 
+                  
+                  IF llDoEvent THEN DO:
+                     DEFINE VARIABLE llhOrder AS HANDLE NO-UNDO.
+                     llhOrder = BUFFER Order:HANDLE.
+                     RUN StarEventInitialize(llhOrder).
+                     RUN StarEventSetOldBuffer(llhOrder).
+                  END.
+                  
+                  fSetOrderStatus(Order.OrderId,"3").
+
+                  IF llDoEvent THEN 
+                     RUN StarEventMakeModifyEvent(llhOrder).
+
+                  lcSMS = "".
+
+               END.
+
                IF lcSMS > "" THEN DO:
                   IF AVAIL OrderCustomer THEN
                      liLang = INT(OrderCustomer.Language) NO-ERROR.

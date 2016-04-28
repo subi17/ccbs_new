@@ -35,6 +35,8 @@ DEF VAR lcNow       AS CHAR NO-UNDO.
 DEF VAR ldaDumpDate AS DATE NO-UNDO.
 DEF VAR ldaOngoing  AS DATE NO-UNDO.
 DEF VAR liOngoing   AS INT  NO-UNDO.
+DEF VAR liBatchID   AS INT  NO-UNDO.
+DEF VAR lcSesParam  AS CHAR NO-UNDO.
 
 DEFINE VARIABLE  llReplica AS LOGICAL NO-UNDO.
 
@@ -77,26 +79,43 @@ END FUNCTION.
 
 ASSIGN
    liCurrent   = TIME
-   ldaDumpDate = TODAY.
+   ldaDumpDate = TODAY
+   lcSesParam  = SESSION:PARAMETER
+   .
+
+/* Extract batch ID from session parameter if any */
+IF ENTRY(1,lcSesParam) BEGINS "batchid="
+THEN DO:
+   liBatchID = INTEGER(ENTRY(2,ENTRY(1,lcSesParam),"=")) NO-ERROR.
+   IF ERROR-STATUS:ERROR = TRUE
+   THEN DO:
+      ERROR-STATUS:ERROR = FALSE.
+      liBatchID = 0.
+   END.
+
+   IF NUM-ENTRIES(lcSesParam) > 1
+   THEN lcSesParam = SUBSTRING(lcSesParam,INDEX(lcSesParam,",") + 1).
+   ELSE lcSesParam = "".
+END.
 
 /* only do a query of what runs are due */
-IF ENTRY(1,SESSION:PARAMETER) = "query" THEN DO:
+IF ENTRY(1,lcSesParam) = "query" THEN DO:
    llQuery = TRUE.
    
-   IF NUM-ENTRIES(SESSION:PARAMETER) > 1 THEN DO:
-      liCnt = INTEGER(ENTRY(2,SESSION:PARAMETER)) NO-ERROR.
+   IF NUM-ENTRIES(lcSesParam) > 1 THEN DO:
+      liCnt = INTEGER(ENTRY(2,lcSesParam)) NO-ERROR.
       ldaDumpDate = ldaDumpDate + liCnt.
    END.
-   IF NUM-ENTRIES(SESSION:PARAMETER) > 2 THEN DO:
-      liCnt = INTEGER(ENTRY(3,SESSION:PARAMETER)) NO-ERROR.
+   IF NUM-ENTRIES(lcSesParam) > 2 THEN DO:
+      liCnt = INTEGER(ENTRY(3,lcSesParam)) NO-ERROR.
       liCurrent = liCurrent + liCnt * 3600.
    END.
 END.   
 
-ELSE IF SESSION:PARAMETER > "" THEN QUIT.
+ELSE IF lcSesParam > "" THEN QUIT.
 
 IF NOT llQuery THEN DO:
-   fELog("DUMPFILE","started").
+   fELog("DUMPFILE" + (IF liBatchID = 0 THEN "" ELSE "_" + STRING(liBatchID)),"started").
 END.
 
 llReplica = fIsThisReplica().
@@ -104,7 +123,10 @@ llReplica = fIsThisReplica().
 FOR EACH DumpFile NO-LOCK WHERE
          DumpFile.Brand  = gcBrand AND
          DumpFile.Active = TRUE:
-   
+
+   IF liBatchID > 0 AND DumpFile.BatchID <> liBatchID
+   THEN NEXT.
+
    /* analyse time table definitions and check if any are due now */      
    FOR EACH DFTimeTable NO-LOCK WHERE
             DFTimeTable.Brand     = gcBrand         AND
@@ -112,8 +134,7 @@ FOR EACH DumpFile NO-LOCK WHERE
             DFTimeTable.ToDate   >= ldaDumpDate     AND
             DFTimeTable.FromDate <= ldaDumpDate:
         
-      IF (DFTimeTable.UseReplica AND NOT llReplica) OR  
-         (NOT DFTimeTable.UseReplica AND llReplica) THEN NEXT.         
+      IF DFTimeTable.UseReplica NE llReplica THEN NEXT.
       
       fAnalyseTimeTable(TODAY - 30,TODAY).
 
@@ -255,8 +276,8 @@ BY ttDump.DumpTime:
    fMarkTimeTable(ttDump.TTRecid,"done").
 END.
 
-fELog("DUMPFILE","stopped,Dumps:" + STRING(liFiles) + 
-                ",Rows:" + STRING(liDumped)).
+fELog("DUMPFILE" + (IF liBatchID = 0 THEN "" ELSE "_" + STRING(liBatchID)),"stopped,Dumps:" +
+      STRING(liFiles) + ",Rows:" + STRING(liDumped)).
 
 QUIT.
 

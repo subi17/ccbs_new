@@ -1,0 +1,1 @@
+{triggers/hpddelete_generic.i OrderDelivery ORDERDELIVERY Ordercanal OrderId LOTimeStamp}

@@ -20,7 +20,7 @@ CLASS Syst.dbtools:
          CREATE BUFFER lhTable FOR TABLE lcDB + "._File".
 
          lcQuery = "FOR EACH " + lcDB + "._File WHERE " +
-                   "_File._File-Name = \"" + pcFileName + "\"".
+                   "_File._File-Name = ~"" + pcFileName + "~"".
  
          lhQuery:SET-BUFFERS(lhTable).
          lhQuery:QUERY-PREPARE(lcQuery).

@@ -34,4 +34,4 @@
 "IRCBilledSplit" 31 1 "Split invoices for billed invrowcounter check" "" "" "/opt/local/bin/xfear -bg_batch funcrun_invrowcounter_billed_split.p tms.pf #PARAM" 100 "1" yes
 "TerminalFinanceMove" 32 1 "Move terminal financing first month fees without answer from the bank to the future (out of the billing)" "sergey.strizhov@qvantel.com,toni.valve@qvantel.com" "00358406487542,00358407670038,00358400591125" "/opt/local/bin/xfear -bg_batch funcrun_terminal_financing_move.p tms.pf #PARAM" 100 "1" yes
 "PrintXMLNoPaper" 33 25 "Print non-paper invoices to xml files" "sergey.strizhov@qvantel.com,toni.valve@qvantel.com" "00358406487542,00358407670038,00358400591125" "/opt/local/bin/xfear -bg_batch funcrun_print_invoice.p tms#HOST.pf #PARAM" 100 "1" yes
-"FRInvXMLTarReport" 34 1 "Generates the greentext log file regarding invoice xml tar file report" "" "" "/opt/local/bin/xfear -bg_batch funcrun_invoice_xml_tar_report.p tms.pf #PARAM" 1000 "1" yes
+"FRInvXMLTarReport" 34 1 "Generates the log file regarding invoice xml tar file report" "" "" "/opt/local/bin/xfear -bg_batch funcrun_invoice_xml_tar_report.p tms.pf #PARAM" 1000 "1" yes
