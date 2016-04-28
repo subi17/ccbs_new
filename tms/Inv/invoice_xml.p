@@ -988,16 +988,6 @@ PROCEDURE pSubInvoice2XML:
 
    END.     
 
-   /* Add Footer Text */
-   /* Note: If Invoice Date is earlier than 1st of Jan then   */
-   /* always return OLD Premium Text otherwise check if there */
-   /* is any Premium call then return NEW Premium Text        */
-   IF Invoice.InvDate < 01/01/2012 THEN
-      lhXML:WRITE-DATA-ELEMENT("FooterNotice",fHeadTxt(527,liLanguage)).
-   ELSE IF llPremiumNumberText THEN
-        lhXML:WRITE-DATA-ELEMENT("FooterNotice",fHeadTxt(528,liLanguage)).
-   ELSE lhXML:WRITE-DATA-ELEMENT("FooterNotice","").
-   
    /*Google billing footer will be added if there are GB entreis*/
    lcFooterNotice = "".
    IF llPremiumNumberText THEN DO:
