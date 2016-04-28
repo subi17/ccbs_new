@@ -6,14 +6,14 @@
   CREATED ......: 29.3.2016
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 gcbrand = "1".
-{tmsconst.i}
-{q25functions.i}
-{ftransdir.i}
-{eventlog.i}
-{fmakemsreq.i}
-{barrfunc.i}
+{Syst/tmsconst.i}
+{Func/q25functions.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
+{Func/fmakemsreq.i}
+{Func/barrfunc.i}
 
 DEF VAR lcProcessedFile AS CHAR NO-UNDO.
 DEF VAR lcRootDir AS CHAR NO-UNDO.

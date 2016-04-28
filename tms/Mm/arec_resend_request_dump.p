@@ -20,13 +20,13 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "Qvantel".
 gcBrand = "1".
 
-{tmsconst.i}
-{timestamp.i}
-{dumpfile_run.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Syst/dumpfile_run.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
