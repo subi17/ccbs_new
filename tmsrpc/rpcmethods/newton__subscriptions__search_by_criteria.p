@@ -158,19 +158,19 @@ FOR EACH MobSub NO-LOCK WHERE
    END.
 
    IF pcOrderType > "" THEN DO:
-		IF pcOrderType = "sim" AND
-			CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
-								SubsTerminal.Brand = gcBrand AND
-								SubsTerminal.MsSeq = MobSub.MsSeq AND
-								SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
-								THEN NEXT EACH_MOBSUB.
-		ELSE IF pcOrderType = "terminal" AND
-			NOT CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
-					   			 SubsTerminal.Brand = gcBrand AND
-									 SubsTerminal.OrderId = MobSub.MsSeq AND
-									 SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
-									 THEN NEXT EACH_MOBSUB.
-		ELSE NEXT EACH_MOBSUB.
+      IF pcOrderType = "sim" AND
+         CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
+                        SubsTerminal.Brand = gcBrand AND
+                        SubsTerminal.MsSeq = MobSub.MsSeq AND
+                        SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
+                        THEN NEXT EACH_MOBSUB.
+      ELSE IF pcOrderType = "terminal" AND
+         NOT CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
+                            SubsTerminal.Brand = gcBrand AND
+                            SubsTerminal.MsSeq = MobSub.MsSeq AND
+                            SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
+                            THEN NEXT EACH_MOBSUB.
+      ELSE NEXT EACH_MOBSUB.
    END.
    
       /* Subscription type */
@@ -183,9 +183,9 @@ FOR EACH MobSub NO-LOCK WHERE
       IF pcDataBundleId <> lcDataBundles THEN NEXT EACH_MOBSUB.
    END. /* IF pcDataBundleId > "" THEN DO: */
 
-   	/* Eligible for renewal order */
+   /* Eligible for renewal order */
    IF plgEligibleRenewal <> ? THEN DO:
-   	/* TODO */
+   /* TODO */
    END.
 
       /* Segmentation offer */
