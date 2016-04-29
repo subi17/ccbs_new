@@ -157,24 +157,20 @@ FOR EACH MobSub NO-LOCK WHERE
       END.          
    END.
 
-   IF pcOrderType <> "" THEN DO:
-   	FOR EACH Order NO-LOCK WHERE
-   				Order.MsSeq = Mobsub.MsSeq
-   		  	BY Order.CrStamp DESC:
-   		IF pcOrderType = "sim" AND
-   			CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
-   								SubsTerminal.Brand = gcBrand AND
-   								SubsTerminal.OrderId = Order.OrderId AND
-   								SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
-   								THEN NEXT EACH_MOBSUB.
-   		ELSE IF pcOrderType = "terminal" AND
-   			NOT CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
-   					   			 SubsTerminal.Brand = gcBrand AND
-   									 SubsTerminal.OrderId = Order.OrderId AND
-   									 SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
-   									 THEN NEXT EACH_MOBSUB.
-   		ELSE NEXT EACH_MOBSUB.
-   	END.
+   IF pcOrderType > "" THEN DO:
+		IF pcOrderType = "sim" AND
+			CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
+								SubsTerminal.Brand = gcBrand AND
+								SubsTerminal.MsSeq = MobSub.MsSeq AND
+								SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
+								THEN NEXT EACH_MOBSUB.
+		ELSE IF pcOrderType = "terminal" AND
+			NOT CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
+					   			 SubsTerminal.Brand = gcBrand AND
+									 SubsTerminal.OrderId = MobSub.MsSeq AND
+									 SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
+									 THEN NEXT EACH_MOBSUB.
+		ELSE NEXT EACH_MOBSUB.
    END.
    
       /* Subscription type */
