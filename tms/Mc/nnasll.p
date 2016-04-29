@@ -117,7 +117,7 @@ WITH
    width 90 NO-LABEL no-box FRAME sivuots.
 
 form
-   {nnasse.f}
+   {Mc/nnasse.f}
 WITH no-box side-labels FRAME perus.
 
 ASSIGN sl = 0 rl = 0.

@@ -145,7 +145,7 @@ FUNCTION fGenerateTriggerItem RETURN LOG
         ldeLastSecond = YEAR(ldaDate) * 10000 + MONTH(ldaDate) * 100 + 1.
 
      FOR EACH ServiceLimit NO-LOCK WHERE
-              {dss_search.i ServiceLimit.GroupCode},
+              {Func/dss_search.i ServiceLimit.GroupCode},
          FIRST MServiceLimit NO-LOCK WHERE
                MServiceLimit.CustNum = iiInvCust AND
                MServiceLimit.DialType = ServiceLimit.DialType AND

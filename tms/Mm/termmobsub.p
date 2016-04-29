@@ -100,7 +100,7 @@ DEF VAR lcSaldoFatime AS C  NO-UNDO.
 ASSIGN lcSaldoFatime = fCParamC("SaldoAgreementAccount")
        lcDCEvent     = fCParamC("PerContractID").
 
-{termmobsub.frm}
+{Mm/termmobsub.frm}
 
 form
     TermMobsub.CLI         COLUMN-LABEL "MSISDN" FORMAT "X(10)"

@@ -32,7 +32,7 @@
 
 {Syst/commali.i}
 {Syst/country.i}
-{invsta2.frm}
+{Mf/invsta2.frm}
 
 DEF VAR exdir     AS c  NO-UNDO.
 DEF VAR exname-i  AS c  NO-UNDO.

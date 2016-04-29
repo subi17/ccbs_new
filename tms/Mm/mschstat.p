@@ -63,7 +63,7 @@ DEF VAR lcMNP         AS CHARACTER NO-UNDO.
 DEF BUFFER AgrCustomer FOR Customer.
 DEF BUFFER InvCustomer FOR Customer.
 DEF BUFFER UserCustomer FOR Customer.
-{mobsub.frm}
+{Mm/mobsub.frm}
 
 form 
 SKIP(3)

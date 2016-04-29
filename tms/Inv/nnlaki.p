@@ -260,7 +260,7 @@ form
 with title color value(ctc) " INVOICE CRITERIA " side-labels
 COLOR value(cfc) ROW 3 centered OVERLAY FRAME rajat.
 
-{invsta.frm}
+{Inv/invsta.frm}
 
 
 FUNCTION fLineHead RETURNS LOGICAL.

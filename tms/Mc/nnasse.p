@@ -391,7 +391,7 @@ WITH width 80 OVERLAY ROW liFrmRow scroll 1 liFrmDown DOWN
        string(pvm,"99-99-99") + " " FRAME sel.
 
 form 
-   {nnasse.frm}
+   {Mc/nnasse.frm}
 WITH centered OVERLAY ROW 1 WIDTH 80
      side-labels TITLE fr-header FRAME lis.
 

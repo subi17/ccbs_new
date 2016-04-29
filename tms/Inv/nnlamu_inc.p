@@ -82,7 +82,7 @@ DEF VAR ldTotal    AS DEC  NO-UNDO.
 
 {Func/tmsparam.i oh-tuasno  RETURN}. unknown = TMSParam.IntVal.
 
-{lamupers.p NEW}
+{Inv/lamupers.p NEW}
 
 IF NOT ilSilent THEN DO:
 

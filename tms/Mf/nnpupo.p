@@ -47,7 +47,7 @@ form skip(1)
 with overlay title " W A R N I N G !!! " ROW 6 centered
    NO-LABELS FRAME BeSure.
 
-{pwd.i00}
+{Syst/pwd.i00}
 
 PAUSE 0 no-message.
 ehto = 9. RUN Syst/ufkey.

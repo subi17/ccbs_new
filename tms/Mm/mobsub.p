@@ -150,7 +150,7 @@ FUNCTION fIsPermittedModule RETURNS LOGICAL
    END.
 END FUNCTION. 
 
-{mobsub.frm}                           
+{Mm/mobsub.frm}
 
 form
     Mobsub.CLI              COLUMN-LABEL "MSISDN" 
