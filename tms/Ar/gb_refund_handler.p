@@ -148,11 +148,11 @@ PROCEDURE pReadFileData:
       END.
 
       assign
-         lcMSISDN = entry(1,lcline,";")
-         lcCorrId = entry(2,lcline,";")
-         ldtDateTime = DATETIME(entry(3,lcline,";"))
-         ldeAmount = DECIMAL(entry(2,lcline,";")).
-         IF entry(4,lcLine,";") EQ "POSTPAID" THEN
+         lcMSISDN = entry(5,lcline,";")
+         lcCorrId = entry(9,lcline,";")
+         ldtDateTime = DATETIME(entry(1,lcline,";"))
+         ldeAmount = DECIMAL(entry(8,lcline,";")).
+         IF entry(6,lcLine,";") EQ "POSTPAID" THEN
             llgPayType = FALSE.
          ELSE
             llgPayType = TRUE.
