@@ -26,7 +26,9 @@ lcRootDir = SEARCH("do_not_remove_templatefolder.txt").
 lcRootDir = REPLACE(lcrootDir, "do_not_remove_templatefolder.txt", "").
 */
 lcrootDir = "/apps/yoigo/tms/templates/".
-lcEmailFile = fCParam("Printing","MailPrintFile") + "_" + STRING(TODAY,"999999") + "_" + STRING(TIME) + "_req.html".
+lcEmailFile = fCParam("Printing","MailPrintFile") + "_" + STRING(iiOrderId) +
+              "_" + STRING(TODAY,"999999") + "_" + STRING(TIME) + 
+              "_req.html".
 
 FIND Order WHERE
   Order.Brand   = gcBrand  AND
