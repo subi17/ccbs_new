@@ -149,7 +149,7 @@ PROCEDURE pReadFileData:
 
       assign
          lcMSISDN = entry(5,lcline,";")
-         lcCorrId = entry(9,lcline,";")
+         lcCorrId = entry(3,lcline,";")
          ldtDateTime = DATETIME(entry(1,lcline,";"))
          ldeAmount = DECIMAL(entry(8,lcline,";")).
          IF entry(6,lcLine,";") EQ "POSTPAID" THEN
