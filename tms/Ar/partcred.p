@@ -234,7 +234,7 @@ REPEAT WITH FRAME sel:
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW InvRow.BillCode {uchoose.i &ulos = "cursor-up cursor-down"}
+        CHOOSE ROW InvRow.BillCode {Syst/uchoose.i &ulos = "cursor-up cursor-down"}
         NO-ERROR WITH FRAME sel.
         COLOR DISPLAY VALUE(ccc) InvRow.BillCode WITH FRAME sel.
       END.
