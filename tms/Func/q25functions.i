@@ -435,6 +435,8 @@ FUNCTION fisQ25ExtensionAllowed RETURNS LOGICAL
    DEF VAR liMsSeq AS INT NO-UNDO. 
    DEF VAR liPerContrId AS INT NO-UNDO. 
    DEF VAR ldaQ25Period AS DATE NO-UNDO.
+   DEF VAR ldaMonth22Date AS DATE NO-UNDO. 
+   DEF VAR liMonth22Period AS INT NO-UNDO. 
 
    DEF BUFFER Mobsub FOR Mobsub.
    DEF BUFFER DCCLI FOR DCCLI.
@@ -448,6 +450,14 @@ FUNCTION fisQ25ExtensionAllowed RETURNS LOGICAL
       liPerContrId = INT(SingleFee.SourceKey) NO-ERROR.
 
    IF ERROR-STATUS:ERROR THEN RETURN FALSE.
+   
+   FIND FIRST Mobsub NO-LOCK WHERE
+              Mobsub.MsSeq = liMsseq AND
+              Mobsub.Paytype = FALSE NO-ERROR.
+   IF NOT AVAIL Mobsub THEN DO:
+      ocLogText = "Q25 Mobsub not found or prepaid".
+      RETURN FALSE.
+   END.
     
    ldaQ25Period = fPer2Date(SingleFee.BillPeriod, 0).
 
@@ -460,7 +470,7 @@ FUNCTION fisQ25ExtensionAllowed RETURNS LOGICAL
       ocLogText = "Q25 NO DCCLI FOUND".
       RETURN FALSE.
    END.
-   
+
    /* No DCCLI for example between start and end date, singlefee is for
       whole month or no DCCLI for some error case (?). */
    IF DCCLI.TermDate NE ? THEN DO:
@@ -469,14 +479,15 @@ FUNCTION fisQ25ExtensionAllowed RETURNS LOGICAL
       RETURN FALSE.
    END.
 
-   FIND FIRST Mobsub NO-LOCK WHERE
-              Mobsub.MsSeq = liMsseq AND
-              Mobsub.Paytype = FALSE NO-ERROR.
-   IF NOT AVAIL Mobsub THEN DO:
-      ocLogText = "Q25 Mobsub not found or prepaid".
+   ASSIGN
+      ldaMonth22Date = ADD-INTERVAL(DCCLI.ValidFrom, 22, 'months':U)
+      liMonth22Period = YEAR(ldaMonth22Date) * 100 + MONTH(ldaMonth22Date).
+   
+   IF Singlefee.BillPeriod < liMonth22Period THEN DO:
+      ocLogText = "Q25 billing period is less than 22th installment period".
       RETURN FALSE.
    END.
-            
+
    IF SingleFee.Billed AND
       NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
                          Invoice.Invnum = SingleFee.InvNum aND
@@ -551,7 +562,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
    IF DAY(idaStartDate) = 1 THEN
       idaStartDate = idaStartDate - 1.
 
-   FOR EACH SingleFee NO-LOCK WHERE
+   FOR EACH SingleFee NO-LOCK USE-INDEX BillCode WHERE
             SingleFee.Brand       = gcBrand AND
             SingleFee.Billcode BEGINS "RVTERM" AND
             SingleFee.HostTable   = "Mobsub" AND

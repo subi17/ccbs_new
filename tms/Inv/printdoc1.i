@@ -344,10 +344,47 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
             FixedFee.KeyValue   = STRING(SubInvoice.MsSeq)   AND
             FixedFee.BillCode   = icBillCode              AND
             FixedFee.EndPeriod >= liPeriod                   AND
-     LOOKUP(FixedFee.FinancedResult,{&TF_STATUSES_BANK}) > 0 AND
             FixedFee.TFBank    <> ""                         AND
             FixedFee.BegDate   <= Invoice.Todate BY FixedFee.BegDate:
       
+      FIND FIRST SingleFee NO-LOCK WHERE
+                 SingleFee.Brand       = gcBrand              AND
+                 SingleFee.Custnum     = FixedFee.Custnum     AND
+                 SingleFee.HostTable   = FixedFee.HostTable   AND
+                 SingleFee.KeyValue    = Fixedfee.KeyValue    AND
+                 SingleFee.SourceKey   = FixedFee.SourceKey   AND
+                 SingleFee.SourceTable = FixedFee.SourceTable AND
+          LOOKUP(SingleFee.BillCode,{&TF_RVTERM_BILLCODES}) > 0 NO-ERROR.
+
+      /* Q25 M22-M24 picture */
+      IF AVAIL SingleFee AND
+         NOT SingleFee.Billed THEN DO:
+
+         ASSIGN
+            liPeriodFrom = YEAR(Invoice.InvDate) * 100 + 
+                           MONTH(Invoice.InvDate)
+            liPeriodTo = fper2peradd(liPeriodFrom,2).
+
+         IF ttInvoice.q25Phase > 0 AND
+            SingleFee.OrderId > 0 AND
+            SingleFee.BillPeriod <= liPeriodTo AND
+            SingleFee.BillPeriod >= liPeriodFrom THEN DO:
+         
+            IF SingleFee.BillPeriod EQ liPeriodFrom THEN 
+               liphase = {&Q25_MONTH_24}.
+            ELSE IF SingleFee.BillPeriod EQ liPeriodTo THEN
+               liphase = {&Q25_MONTH_22}.
+            ELSE liphase = {&Q25_MONTH_23}.
+
+            IF liphase < ttInvoice.q25Phase AND
+               fisQ25ExtensionAllowed(BUFFER SingleFee, 
+                                      OUTPUT lcLogText) THEN 
+               ttinvoice.q25Phase = liPhase.  
+         END. 
+      END.
+     
+      /* Footer text for bank financed installments */
+      IF LOOKUP(FixedFee.FinancedResult,{&TF_STATUSES_BANK}) = 0 THEN NEXT.
       IF liFFCount > liAmtPos + 2 THEN LEAVE.
             
       IF FixedFee.TFBank = {&TF_BANK_UNOE} THEN
@@ -382,16 +419,9 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
              llPenaltyFound                   = FALSE.
    
       /* Find the correct TAE value */
-      IF lcTFRVTermBillCode > "" THEN
-      FOR FIRST SingleFee NO-LOCK WHERE
-                SingleFee.Brand       = gcBrand              AND
-                SingleFee.Custnum     = FixedFee.Custnum     AND
-                SingleFee.HostTable   = FixedFee.HostTable   AND
-                SingleFee.KeyValue    = Fixedfee.KeyValue    AND
-                SingleFee.SourceKey   = FixedFee.SourceKey   AND
-                SingleFee.SourceTable = FixedFee.SourceTable AND
-                SingleFee.BillCode    = lcTFRVTermBillCode:
-
+      IF AVAIL SingleFee AND
+               SingleFee.BillCode EQ lcTFRVTermBillCode THEN DO:
+               
             FOR FIRST DayCampaign NO-LOCK WHERE
                       DayCampaign.Brand = gcBrand AND
                       DayCampaign.DCEvent = FixedFee.CalcObj,
@@ -405,36 +435,12 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
                                 (ldeTotalAmount + SingleFee.Amt) * 100 + 0.05,1).
             END.
          
-            IF NOT SingleFee.Billed THEN DO:
-   
-               ASSIGN
-                  liPeriodFrom = YEAR(TODAY) * 100 + MONTH(TODAY)
-                  liPeriodTo = fper2peradd(liPeriodFrom,2).
-
-               IF ttInvoice.q25Phase > 0 AND
-                  SingleFee.OrderId > 0 AND
-                  SingleFee.BillPeriod <= liPeriodTo AND
-                  SingleFee.BillPeriod >= liPeriodFrom THEN DO:
-               
-                  IF SingleFee.BillPeriod EQ liPeriodFrom THEN 
-                     liphase = {&Q25_MONTH_24}.
-                  ELSE IF SingleFee.BillPeriod EQ liPeriodTo THEN
-                     liphase = {&Q25_MONTH_22}.
-                  ELSE liphase = {&Q25_MONTH_23}.
-
-                  IF liphase < ttInvoice.q25Phase AND
-                     fisQ25ExtensionAllowed(BUFFER SingleFee, 
-                                            OUTPUT lcLogText) THEN 
-                     ttinvoice.q25Phase = liPhase.  
-               END. 
-            
-
-               ASSIGN
+            IF NOT SingleFee.Billed THEN ASSIGN
                ttSub.TFBankAfterAmt[liFFCount]  = ttSub.TFBankAfterAmt[liFFCount] +
                                                   SingleFee.Amt
                ttSub.TFBankBeforeAmt[liFFCount] = ttSub.TFBankBeforeAmt[liFFCount] +
                                                   SingleFee.Amt.
-            END. 
+           
             ELSE IF SingleFee.InvNum = Invoice.InvNum AND SingleFee.Billed
                     /* TEMP FIX:
                        Q25 fee should not be included if it's filtered out
@@ -446,7 +452,7 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
                           ttRow.SubInvNum = SubInvoice.SubInvNum AND
                           ttRow.RowCode BEGINS "33" AND
                           LOOKUP(ttRow.RowBillCode,
-                          {&TF_BANK_RVTERM_BILLCODES} + ",RVTERMF") > 0) THEN
+                          {&TF_RVTERM_BILLCODES}) > 0) THEN
                ttSub.TFBankBeforeAmt[liFFCount] = ttSub.TFBankBeforeAmt[liFFCount] +
                                                   SingleFee.Amt.
      
@@ -898,26 +904,15 @@ PROCEDURE pGetSubInvoiceHeaderData:
 
          IF (LOOKUP(ttRow.RowBillCode,{&TF_BANK_RVTERM_BILLCODES})           > 0) OR
             (LOOKUP(ttRow.RowBillCode,{&TF_BANK_UNOE_PAYTERM_BILLCODES})     > 0) OR 
-            (LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_PAYTERM_BILLCODES}) > 0) THEN 
+            (LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_PAYTERM_BILLCODES}) > 0) OR
+            /* included due to Q25 picture check */
+            ttRow.RowBillCode EQ "PAYTERM" THEN 
             llPTFinancedByBank = TRUE.
             
          ELSE IF 
             LOOKUP(ttRow.RowBillCode,{&TF_BANK_UNOE_RVTERM_BILLCODES}) > 0 OR
             LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_RVTERM_BILLCODES}) > 0
          THEN llRVFinancedByBank = TRUE.
-         /* if already found subscription in q24 phase, no need to search 
-            further. Otherwise check if this subscription is on some Q22-Q24
-            phase and no actions done. 0 means q24, 1 q23 and 2 q22, 99 some
-            other phase or no q25. */
-            /* temporarily rollbacked */
-        /* 
-         IF ttinvoice.q25Phase GT 0 AND
-            LOOKUP(ttRow.RowBillCode,"PAYTERM,PAYTERM1E,PAYTERMBS") > 0 THEN DO:
-            liQ25Phase = getQ25Phase(SubInvoice.msseq, subinvoice.custnum).
-            IF (liQ25Phase LT ttinvoice.q25Phase) THEN 
-               ttinvoice.q25Phase = liQ25Phase.         
-         END.
-        */ 
       END.
 
       IF ttSub.InstallmentAmt > 0 THEN
@@ -993,8 +988,7 @@ PROCEDURE pGetInvoiceRowData:
                   InvRow.SubInvNum = SubInvoice.SubInvNum AND
                   InvRow.VatPerc = 0 AND
                   InvRow.Amt EQ (ldeQ25DiscAmt * -1) AND
-                  LOOKUP(InvRow.BillCode, 
-                     {&TF_BANK_RVTERM_BILLCODES} + ",RVTERMF") > 0:
+                  LOOKUP(InvRow.BillCode, {&TF_RVTERM_BILLCODES}) > 0:
             lcExcludedRows = lcExcludedRows + "," + STRING(ROWID(InvRow)).
             LEAVE.
          END.         
