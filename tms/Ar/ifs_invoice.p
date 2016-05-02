@@ -709,28 +709,6 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
          NEXT InvoiceLoop.
       END.   
 
-      /* YDR-427 - Special rule for PAYTERMEND/RVTERMEND */
-      IF LOOKUP(BillItem.BillCode,"PAYTERMEND,RVTERMEND") > 0 THEN
-         FOR EACH DayCampaign WHERE
-                  DayCampaign.Brand = gcBrand AND
-                  DayCampaign.DCType = {&DCTYPE_INSTALLMENT} AND
-                  DayCampaign.TermFeeModel NE "" AND
-                  DayCampaign.TermFeeCalc > 0 NO-LOCK,
-            FIRST DCCLI WHERE
-                  DCCLI.Brand    = gcBrand             AND
-                  DCCLI.DCEvent  = DayCampaign.DCEvent AND
-                  DCCLI.MsSeq    = ttRow.MsSeq         AND
-                  DCCLI.ValidTo  = InvRow.ToDate NO-LOCK,
-            FIRST FMItem NO-LOCK WHERE
-                  FMItem.Brand = gcBrand AND
-                  FMItem.FeeModel = DayCampaign.FeeModel:
-
-            IF ttRow.AmtExclVat = FMItem.Amount THEN 
-               ttRow.BillCode = FMItem.BillCode.
-
-            LEAVE.
-         END. /* FOR EACH DayCampaign WHERE */
-
       IF llSalesInv THEN DO:
          IF LOOKUP(STRING(InvRow.SlsAcc),lcSkipSlsCode) > 0 THEN
             ttRow.ProductCode = "".
