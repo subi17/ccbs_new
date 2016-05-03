@@ -443,7 +443,9 @@ FUNCTION fisQ25ExtensionAllowed RETURNS LOGICAL
 
    IF SingleFee.SourceTable NE "DCCLI" THEN RETURN FALSE.
    IF SingleFee.HostTable NE "MobSub" THEN RETURN FALSE.
+   IF SingleFee.CalcObj NE "RVTERM" THEN RETURN FALSE.
    IF SingleFee.OrderID EQ 0 THEN RETURN FALSE.
+   IF SingleFee.Amt <= 0 THEN RETURN FALSE.
 
    ASSIGN
       liMsSeq = INT(SingleFee.KeyValue)
@@ -701,42 +703,6 @@ FUNCTION fBankByBillCode RETURNS CHAR
       WHEN "RVTERMF" THEN RETURN "Yoigo".
    END CASE.
    RETURN "".
-END.
-
-FUNCTION getQ25phase RETURNS INT
-   (INPUT iimsseq AS INT,
-    INPUT iiCustNum AS INT):
-
-   DEF VAR liPhase AS INT NO-UNDO.
-   DEF VAR liPeriod AS INT NO-UNDO.
-   DEF VAR lcLogText AS CHAR NO-UNDO.
-   DEF VAR ldaDate AS DATE NO-UNDO. 
-
-   /* Loop through Q25 phases starting on nearest to end (Month 24) */
-   DO liPhase = {&Q25_MONTH_24} TO {&Q25_MONTH_22}:
-      /* set needed period */
-      ASSIGN
-         ldaDate = ADD-INTERVAL(TODAY, liPhase, 'months':U)
-         liPeriod = YEAR(ldaDate) * 100 + MONTH(ldaDate).
-
-      FOR EACH SingleFee NO-LOCK WHERE
-               SingleFee.Brand       EQ gcBrand AND
-               SingleFee.CustNum     EQ iiCustNum AND
-               SingleFee.HostTable   EQ "Mobsub" AND
-               SingleFee.Keyvalue    EQ STRING(iimsseq) AND
-               SingleFee.BillPeriod  EQ liPeriod AND
-               SingleFee.SourceTable EQ "DCCLI" AND
-               SingleFee.CalcObj     EQ "RVTERM" AND
-               SingleFee.Billcode    BEGINS "RVTERM" AND
-               SingleFee.OrderId > 0:
-
-         IF NOT fisQ25ExtensionAllowed(BUFFER SingleFee,
-                                       lcLogText) THEN NEXT.
-
-         RETURN liPhase.
-      END.
-   END.
-   RETURN {&Q25_NOT_ACTION_PHASE}. /* Not Q25 phase M22-M24 customer */
 END.
 
 /*Function makes HRLP parametr initializations.

@@ -29,7 +29,6 @@ DEF VAR lcLastError AS CHAR  NO-UNDO.
 DEF VAR lcTransDir  AS CHAR  NO-UNDO.
 DEF VAR lcFileExt   AS CHAR  NO-UNDO.
 DEF VAR liPCnt      AS INT   NO-UNDO.
-DEF VAR lcMessage   AS CHAR  NO-UNDO. 
 DEF VAR llgPostPay  AS LOG   NO-UNDO.
 DEF VAR lcErrFile   AS CHAR  NO-UNDO. 
 DEF VAR lcConfDir   AS CHAR  NO-UNDO. 
@@ -40,7 +39,6 @@ DEF VAR lcNonCombinedData AS CHAR  NO-UNDO.
 DEF VAR ldFromPer   AS DEC   NO-UNDO.
 DEF VAR ldInvoiceFromPer AS DEC   NO-UNDO.
 DEF VAR ldToPer     AS DEC   NO-UNDO.
-DEF VAR liPeriod    AS INT   NO-UNDO.
 DEF VAR ldEventTS   AS DEC   NO-UNDO.
 DEF VAR llInterrupt AS LOG   NO-UNDO.
 DEF VAR lcCurrency    AS CHAR NO-UNDO. 
@@ -54,7 +52,6 @@ DEF VAR lcTipoName    AS CHAR NO-UNDO.
 DEF VAR lcCTName      AS CHAR NO-UNDO.
 DEF VAR tthCDR         AS HANDLE NO-UNDO.
 DEF VAR lcBundleCLITypes  AS CHAR NO-UNDO.
-DEF VAR ldtInvToDate      AS DATE NO-UNDO.
 
 DEF TEMP-TABLE ttCall NO-UNDO LIKE MobCDR
    FIELD CDRTable      AS CHAR
@@ -184,20 +181,6 @@ FUNCTION fErrLine RETURNS LOGICAL
 
 END FUNCTION.
 
-FUNCTION fDispDecimal RETURNS CHARACTER
-   (idAmt AS DEC):
-        
-   RETURN TRIM(STRING(idAmt,"->>>,>>>,>>9.99")).
-   
-END FUNCTION.
-
-FUNCTION fDispDecimal3 RETURNS CHARACTER
-   (idAmt AS DEC):
-   
-   RETURN TRIM(STRING(idAmt,"->>>,>>>,>>9.999")).
-   
-END FUNCTION.
-
 FUNCTION fDispXMLDecimal RETURNS CHARACTER
    (idAmt AS DEC):
    
@@ -305,25 +288,32 @@ END FUNCTION.
 FUNCTION fTFBankFooterText RETURNS LOGICAL
    (icBillCode AS CHAR):
 
-   DEF VAR lcTFRVTermBillCode   AS CHAR NO-UNDO.
+   DEF VAR lcTFRVTermBillCode   AS CHAR NO-UNDO. 
    DEF VAR liFooterConf1        AS INT  NO-UNDO.
    DEF VAR liFooterConf2        AS INT  NO-UNDO.
    DEF VAR ldeRVPerc            AS DEC  NO-UNDO. 
    DEF VAR ldeTotalAmount       AS DEC  NO-UNDO. 
    DEF VAR ldaOrderDate         AS DATE NO-UNDO. 
-   DEF VAR lcTFPayTermEndBillCode AS CHAR NO-UNDO.
-   DEF VAR liFFCount              AS INT  NO-UNDO. 
-   DEF VAR lcPaytermEndCodes      AS CHAR NO-UNDO. 
-   DEF VAR llPenaltyFound         AS LOG  NO-UNDO. 
-   DEF VAR liAmtPos               AS INT  NO-UNDO.
-   DEF VAR liFtrPos               AS INT  NO-UNDO.
-   DEF VAR llFooter               AS LOG  NO-UNDO.
-   DEF VAR ldTAE                  AS DEC  NO-UNDO.
-   DEF VAR liPeriodFrom AS INT NO-UNDO. 
-   DEF VAR liPeriodTo AS INT NO-UNDO. 
-   DEF VAR lcLogText AS CHAR NO-UNDO. 
-   DEF VAR liPhase AS INT NO-UNDO init 99.
-               
+   DEF VAR lcPenaltyBillCode    AS CHAR NO-UNDO.
+   DEF VAR liFFCount            AS INT  NO-UNDO. 
+   DEF VAR lcPaytermEndCodes    AS CHAR NO-UNDO. 
+   DEF VAR liAmtPos             AS INT  NO-UNDO.
+   DEF VAR liFtrPos             AS INT  NO-UNDO.
+   DEF VAR ldTAE                AS DEC  NO-UNDO.
+   DEF VAR liPeriodFrom         AS INT NO-UNDO. 
+   DEF VAR liPeriodTo           AS INT NO-UNDO. 
+   DEF VAR lcLogText            AS CHAR NO-UNDO. 
+   DEF VAR liPhase              AS INT NO-UNDO.
+   DEF VAR ldtInvToDate         AS DATE NO-UNDO.
+   DEF VAR liPeriod             AS INT NO-UNDO.
+
+   DEF BUFFER bPenaltySingleFee FOR SingleFee.
+   DEF BUFFER bQ25SingleFee FOR SingleFee.
+      
+   /* 1 month reduced due to possible Q25 fee */
+   ASSIGN
+      ldtInvToDate = ADD-INTERVAL(Invoice.ToDate, -1, "months") 
+      liPeriod    = YEAR(ldtInvToDate) * 100 + MONTH(ldtInvToDate).
    
    /* PAYTERM values to pos. 4-6, footer 1
       RVTERM  values to pos. 1-3, footer 2
@@ -344,66 +334,70 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
             FixedFee.KeyValue   = STRING(SubInvoice.MsSeq)   AND
             FixedFee.BillCode   = icBillCode              AND
             FixedFee.EndPeriod >= liPeriod                   AND
-            FixedFee.TFBank    <> ""                         AND
             FixedFee.BegDate   <= Invoice.Todate BY FixedFee.BegDate:
       
-      FIND FIRST SingleFee NO-LOCK WHERE
-                 SingleFee.Brand       = gcBrand              AND
-                 SingleFee.Custnum     = FixedFee.Custnum     AND
-                 SingleFee.HostTable   = FixedFee.HostTable   AND
-                 SingleFee.KeyValue    = Fixedfee.KeyValue    AND
-                 SingleFee.SourceKey   = FixedFee.SourceKey   AND
-                 SingleFee.SourceTable = FixedFee.SourceTable AND
-          LOOKUP(SingleFee.BillCode,{&TF_RVTERM_BILLCODES}) > 0 NO-ERROR.
+      IF FixedFee.BillCode EQ "PAYTERM" THEN
+         FIND FIRST bQ25SingleFee NO-LOCK WHERE
+                    bQ25SingleFee.Brand       = gcBrand              AND
+                    bQ25SingleFee.Custnum     = FixedFee.Custnum     AND
+                    bQ25SingleFee.HostTable   = FixedFee.HostTable   AND
+                    bQ25SingleFee.KeyValue    = Fixedfee.KeyValue    AND
+                    bQ25SingleFee.SourceKey   = FixedFee.SourceKey   AND
+                    bQ25SingleFee.SourceTable = FixedFee.SourceTable AND
+                    bQ25SingleFee.SourceTable = FixedFee.SourceTable AND
+                    bQ25SingleFee.CalcObj     = "RVTERM"             AND
+             LOOKUP(bQ25SingleFee.BillCode,{&TF_RVTERM_BILLCODES}) > 0 NO-ERROR.
+      ELSE RELEASE bQ25SingleFee.
 
       /* Q25 M22-M24 picture */
-      IF AVAIL SingleFee AND
-         NOT SingleFee.Billed THEN DO:
+      IF AVAIL bQ25SingleFee AND
+         NOT bQ25SingleFee.Billed AND
+         ttInvoice.q25Phase > 0 THEN DO:
 
          ASSIGN
             liPeriodFrom = YEAR(Invoice.InvDate) * 100 + 
                            MONTH(Invoice.InvDate)
             liPeriodTo = fper2peradd(liPeriodFrom,2).
 
-         IF ttInvoice.q25Phase > 0 AND
-            SingleFee.OrderId > 0 AND
-            SingleFee.BillPeriod <= liPeriodTo AND
-            SingleFee.BillPeriod >= liPeriodFrom THEN DO:
+         IF bQ25SingleFee.BillPeriod <= liPeriodTo AND
+            bQ25SingleFee.BillPeriod >= liPeriodFrom THEN DO:
          
-            IF SingleFee.BillPeriod EQ liPeriodFrom THEN 
+            IF bQ25SingleFee.BillPeriod EQ liPeriodFrom THEN 
                liphase = {&Q25_MONTH_24}.
-            ELSE IF SingleFee.BillPeriod EQ liPeriodTo THEN
+            ELSE IF bQ25SingleFee.BillPeriod EQ liPeriodTo THEN
                liphase = {&Q25_MONTH_22}.
             ELSE liphase = {&Q25_MONTH_23}.
 
             IF liphase < ttInvoice.q25Phase AND
-               fisQ25ExtensionAllowed(BUFFER SingleFee, 
+               fisQ25ExtensionAllowed(BUFFER bQ25SingleFee, 
                                       OUTPUT lcLogText) THEN 
                ttinvoice.q25Phase = liPhase.  
          END. 
       END.
      
-      /* Footer text for bank financed installments */
+      /* Footer text for financed by bank installments */
       IF LOOKUP(FixedFee.FinancedResult,{&TF_STATUSES_BANK}) = 0 THEN NEXT.
       IF liFFCount > liAmtPos + 2 THEN LEAVE.
             
       IF FixedFee.TFBank = {&TF_BANK_UNOE} THEN
          ASSIGN lcTFRVTermBillCode    = "RVTERM1EF" 
-                                        WHEN icBillCode EQ "PAYTERM"
                 liFooterConf1         = 536
                 liFooterConf2         = 557
-                lcTFPayTermEndBillCode = icBillCode + "END1E".
+                lcPenaltyBillCode     = FixedFee.BillCode + "END1E".
       ELSE IF FixedFee.TFBank = {&TF_BANK_SABADELL} THEN
          ASSIGN lcTFRVTermBillCode    = "RVTERMBSF"
-                                        WHEN icBillCode EQ "PAYTERM"
                 liFooterConf1         = 558
                 liFooterConf2         = 559
-                lcTFPayTermEndBillCode = icBillCode + "ENDBS".
+                lcPenaltyBillCode     = FixedFee.BillCode + "ENDBS".
       ELSE NEXT.
+
+      IF AVAIL bQ25SingleFee AND
+               bQ25SingleFee.BillCode NE lcTFRVTermBillCode THEN
+         RELEASE bQ25SingleFee.
       
       FOR EACH FFItem NO-LOCK WHERE
                FFItem.FFNum = FixedFee.FFNum AND
-               FFItem.BillCode BEGINS icBillCode:
+               FFItem.BillCode BEGINS FixedFee.BillCode:
             
          IF NOT FFItem.Billed THEN ASSIGN
             ttSub.TFBankAfterAmt[liFFCount]  = ttSub.TFBankAfterAmt[liFFCount] +
@@ -414,100 +408,90 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
       END.
             
       ASSIGN ttSub.TFBankBeforeAmt[liFFCount] = ttSub.TFBankBeforeAmt[liFFCount] +
-                                                ttSub.TFBankAfterAmt[liFFCount]
-             ldeRVPerc                        = 0
-             llPenaltyFound                   = FALSE.
+                                                ttSub.TFBankAfterAmt[liFFCount].
    
-      /* Find the correct TAE value */
-      IF AVAIL SingleFee AND
-               SingleFee.BillCode EQ lcTFRVTermBillCode THEN DO:
-               
-            FOR FIRST DayCampaign NO-LOCK WHERE
-                      DayCampaign.Brand = gcBrand AND
-                      DayCampaign.DCEvent = FixedFee.CalcObj,
-               FIRST FMItem NO-LOCK WHERE
-                     FMItem.Brand     = gcBrand              AND
-                     FMItem.FeeModel  = DayCampaign.FeeModel AND
-                     FMItem.ToDate   >= FixedFee.BegDate    AND
-                     FMItem.FromDate <= FixedFee.BegDate:
-               ldeTotalAmount = ROUND(fmitem.FFItemQty * fmitem.Amount,2).
-               ldeRVPerc      = TRUNC(SingleFee.Amt /
-                                (ldeTotalAmount + SingleFee.Amt) * 100 + 0.05,1).
-            END.
-         
-            IF NOT SingleFee.Billed THEN ASSIGN
-               ttSub.TFBankAfterAmt[liFFCount]  = ttSub.TFBankAfterAmt[liFFCount] +
-                                                  SingleFee.Amt
-               ttSub.TFBankBeforeAmt[liFFCount] = ttSub.TFBankBeforeAmt[liFFCount] +
-                                                  SingleFee.Amt.
-           
-            ELSE IF SingleFee.InvNum = Invoice.InvNum AND SingleFee.Billed
-                    /* TEMP FIX:
-                       Q25 fee should not be included if it's filtered out
-                       due to Q25 extension.
-                       But this doesn't work if the subinvoice contains
-                       more than one Q25 invoice row */
-                    AND CAN-FIND(  
-                    FIRST ttRow NO-LOCK WHERE
-                          ttRow.SubInvNum = SubInvoice.SubInvNum AND
-                          ttRow.RowCode BEGINS "33" AND
-                          LOOKUP(ttRow.RowBillCode,
-                          {&TF_RVTERM_BILLCODES}) > 0) THEN
-               ttSub.TFBankBeforeAmt[liFFCount] = ttSub.TFBankBeforeAmt[liFFCount] +
-                                                  SingleFee.Amt.
-     
+      IF AVAIL bQ25SingleFee THEN DO:
+          
+         IF NOT bQ25SingleFee.Billed THEN ASSIGN
+            ttSub.TFBankAfterAmt[liFFCount]  = ttSub.TFBankAfterAmt[liFFCount] +
+                                               bQ25SingleFee.Amt
+            ttSub.TFBankBeforeAmt[liFFCount] = ttSub.TFBankBeforeAmt[liFFCount] +
+                                               bQ25SingleFee.Amt.
+        
+         ELSE IF bQ25SingleFee.InvNum = Invoice.InvNum AND bQ25SingleFee.Billed
+                 /* Q25 fee should be excluded if it's filtered out
+                    due to Q25 extension.
+                    TODO: This doesn't work if the subinvoice contains
+                    more than one Q25 invoice row for the same period */
+                 AND CAN-FIND(  
+                 FIRST ttRow NO-LOCK WHERE
+                       ttRow.SubInvNum = SubInvoice.SubInvNum AND
+                       ttRow.RowCode BEGINS "33" AND
+                       LOOKUP(ttRow.RowBillCode,
+                       {&TF_RVTERM_BILLCODES}) > 0) THEN
+            ttSub.TFBankBeforeAmt[liFFCount] = ttSub.TFBankBeforeAmt[liFFCount] +
+                                               bQ25SingleFee.Amt.
       END. 
         
-      FOR FIRST SingleFee NO-LOCK WHERE
-                SingleFee.Brand       = gcBrand              AND
-                SingleFee.Custnum     = FixedFee.Custnum     AND
-                SingleFee.HostTable   = FixedFee.HostTable   AND
-                SingleFee.KeyValue    = Fixedfee.KeyValue    AND
-                SingleFee.SourceTable = "FixedFee" AND
-                SingleFee.SourceKey   = STRING(FixedFee.FFNUM) AND
-                SingleFee.BillCode    BEGINS icBillCode + "END":
+      FOR FIRST bPenaltySingleFee NO-LOCK WHERE
+                bPenaltySingleFee.Brand       = gcBrand              AND
+                bPenaltySingleFee.Custnum     = FixedFee.Custnum     AND
+                bPenaltySingleFee.HostTable   = FixedFee.HostTable   AND
+                bPenaltySingleFee.KeyValue    = Fixedfee.KeyValue    AND
+                bPenaltySingleFee.SourceTable = "FixedFee" AND
+                bPenaltySingleFee.SourceKey   = STRING(FixedFee.FFNUM) AND
+                bPenaltySingleFee.BillCode    = lcPenaltyBillCode:
          
-            IF NOT SingleFee.Billed THEN ASSIGN
-               ttSub.TFBankAfterAmt[liFFCount]  = ttSub.TFBankAfterAmt[liFFCount] +
-                                                  SingleFee.Amt
-               ttSub.TFBankBeforeAmt[liFFCount] = ttSub.TFBankBeforeAmt[liFFCount] +
-                                                  SingleFee.Amt.
-           
-            ELSE IF SingleFee.InvNum = Invoice.InvNum AND SingleFee.Billed THEN ASSIGN
-               ttSub.TFBankBeforeAmt[liFFCount] = ttSub.TFBankBeforeAmt[liFFCount] +
-                                                  SingleFee.Amt
-               llPenaltyFound = TRUE.
+         IF NOT bPenaltySingleFee.Billed THEN ASSIGN
+            ttSub.TFBankAfterAmt[liFFCount]  = ttSub.TFBankAfterAmt[liFFCount] +
+                                               bPenaltySingleFee.Amt
+            ttSub.TFBankBeforeAmt[liFFCount] = ttSub.TFBankBeforeAmt[liFFCount] +
+                                               bPenaltySingleFee.Amt.
+        
+         ELSE IF bPenaltySingleFee.InvNum = Invoice.InvNum AND 
+                 bPenaltySingleFee.Billed THEN ASSIGN
+            ttSub.TFBankBeforeAmt[liFFCount] = ttSub.TFBankBeforeAmt[liFFCount] +
+                                               bPenaltySingleFee.Amt.
       END. 
-
+      
       IF ttSub.TFBankBeforeAmt[liFFCount] EQ 0 THEN NEXT.
               
-      IF FixedFee.OrderId > 0 THEN DO:
-         FIND FIRST Order NO-LOCK WHERE
-                    Order.Brand = gcBrand AND
-                    Order.OrderId = FixedFee.OrderID NO-ERROR.
-         IF AVAIL Order THEN fTS2Date(Order.CrStamp, 
-                                      OUTPUT ldaOrderDate).
-         ELSE ldaOrderDate = FixedFee.BegDate.
-      END.
-      ELSE ldaOrderDate = FixedFee.BegDate.
-    
-      ASSIGN 
-         llFooter = FALSE
-         ldTAE    = 0.
+      ldTAE = ?.
          
-      IF icBillCode BEGINS "PAYTERM" THEN DO: 
+      IF FixedFee.BillCode EQ "RVTERM" THEN ldTAE = 0.
+      ELSE IF AVAIL bQ25SingleFee THEN DO: 
+
+         ldeRVPerc = 0.
+         FOR FIRST FMItem NO-LOCK WHERE
+                   FMItem.Brand     = gcBrand            AND
+                   FMItem.FeeModel  = FixedFee.FeeModel  AND
+                   FMItem.ToDate   >= FixedFee.BegDate   AND
+                   FMItem.FromDate <= FixedFee.BegDate:
+            ldeTotalAmount = ROUND(fmitem.FFItemQty * fmitem.Amount,2).
+            ldeRVPerc = TRUNC(bQ25SingleFee.Amt /
+                       (ldeTotalAmount + bQ25SingleFee.Amt) * 100 + 0.05,1).
+         END.
+      
+         ldaOrderDate = FixedFee.BegDate.
+
+         IF FixedFee.OrderId > 0 THEN DO:
+            FIND FIRST Order NO-LOCK WHERE
+                       Order.Brand = gcBrand AND
+                       Order.OrderId = FixedFee.OrderID NO-ERROR.
+            IF AVAIL Order THEN fTS2Date(Order.CrStamp, 
+                                         OUTPUT ldaOrderDate).
+         END.
+    
          FIND FIRST TFConf NO-LOCK WHERE
                     TFConf.RVPercentage = ldeRVPerc    AND
                     TFConf.ValidTo     >= ldaOrderDate AND
                     TFConf.ValidFrom   <= ldaOrderDate NO-ERROR.
        
          IF AVAIL TFConf THEN ASSIGN 
-            llFooter = TRUE
-            ldTAE    = TFConf.TAE.
+            ldTAE = TFConf.TAE.
       END.
-      ELSE llFooter = TRUE.
       
-      IF llFooter THEN ASSIGN
+      IF ldTAE NE ? THEN ASSIGN
          ttSub.TFBankFooterText[liFtrPos] = ttSub.TFBankFooterText[liFtrPos] + 
                                  (IF ttSub.TFBankFooterText[liFtrPos] > ""
                                   THEN CHR(10) ELSE "") +
@@ -516,13 +500,13 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
             REPLACE(ttSub.TFBankFooterText[liFtrPos],"#TAE",
                        REPLACE(fDispXMLDecimal(ldTAE),".",",")).
           
-      IF llPenaltyFound AND 
-         LOOKUP(lcTFPayTermEndBillCode,lcPaytermEndCodes) = 0 THEN ASSIGN
+      IF AVAIL bPenaltySingleFee AND 
+         LOOKUP(bPenaltySingleFee.BillCode,lcPaytermEndCodes) = 0 THEN ASSIGN
          ttSub.TFBankFooterText[liFtrPos] = ttSub.TFBankFooterText[liFtrPos] + 
                                  (IF ttSub.TFBankFooterText[liFtrPos] > ""
                                   THEN CHR(10) ELSE "") +
                                  fHeadTxt(liFooterConf2,liLanguage)
-         lcPaytermEndCodes = lcPaytermEndCodes + "," + lcTFPayTermEndBillCode.
+         lcPaytermEndCodes = lcPaytermEndCodes + "," + lcPenaltyBillCode.
       
       liFFCount = liFFCount + 1.
      
@@ -539,8 +523,6 @@ PROCEDURE pGetInvoiceHeaderData:
    DEF VAR lcGraphGroup AS CHAR NO-UNDO.
    DEF VAR liOrder AS INT NO-UNDO. 
   
-   DEF BUFFER bReq FOR Msrequest.
- 
    EMPTY TEMP-TABLE ttGraph.
    
    ASSIGN 
@@ -552,9 +534,7 @@ PROCEDURE pGetInvoiceHeaderData:
                              THEN Invoice.FirstCall
                              ELSE Invoice.FromDate,0)
       ldInvoiceFromPer = fMake2Dt(Invoice.FromDate,0)
-      ldToPer     = fMake2DT(Invoice.ToDate,86399)
-      ldtInvToDate = ADD-INTERVAL(Invoice.ToDate, -1, "months") 
-      liPeriod    = YEAR(ldtInvToDate) * 100 + MONTH(ldtInvToDate).
+      ldToPer     = fMake2DT(Invoice.ToDate,86399).
 
    /* get customer names, payment terms etc. */
    fSetCustData().
