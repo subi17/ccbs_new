@@ -455,7 +455,11 @@ DO WHILE TRUE:
          IF NOT AVAIL TMQueue THEN NEXT.
 
          RUN pAnalyseQueueRow.
-         IF RETURN-VALUE BEGINS "UNDO" THEN UNDO InvSeqLoop, NEXT InvSeqLoop. 
+
+         IF RETURN-VALUE BEGINS "UNDO" THEN DO:
+            ldQty = ldQty - 1. /* to prevent eternal looping */
+            UNDO InvSeqLoop, NEXT InvSeqLoop. 
+         END.
       END.  
    END.
     
