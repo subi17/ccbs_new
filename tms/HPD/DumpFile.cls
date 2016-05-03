@@ -134,9 +134,10 @@ CLASS HPD.DumpFile INHERITS DumpBase:
          We check that lbDumpFile exists (although it should always in
          this situation) */
       ELSE IF llAllowMove AND AVAILABLE lbDumpFile
-      THEN OS-RENAME VALUE(lcFile)
-                     VALUE(lbDumpFile.TransDir + "/" + ENTRY(NUM-ENTRIES(lcFile,"/"),lcFile,"/")).
-                           
+      THEN OS-COMMAND SILENT VALUE("cp -f " + lcFile + " " + lbDumpFile.TransDir + "/" +
+                                   ENTRY(NUM-ENTRIES(lcFile,"/"),lcFile,"/") + " && " +
+                                   "rm -f " + lcFile).
+
    END DESTRUCTOR.
 
 
