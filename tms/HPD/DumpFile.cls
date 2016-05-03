@@ -136,6 +136,8 @@ CLASS HPD.DumpFile INHERITS DumpBase:
       ELSE IF llAllowMove AND AVAILABLE lbDumpFile
       THEN OS-COMMAND SILENT VALUE("cp -f " + lcFile + " " + lbDumpFile.TransDir + "/" +
                                    ENTRY(NUM-ENTRIES(lcFile,"/"),lcFile,"/") + " && " +
+                                   "touch -r " + lcFile + " " + lbDumpFile.TransDir + "/" +
+                                   ENTRY(NUM-ENTRIES(lcFile,"/"),lcFile,"/") + " && " +
                                    "rm -f " + lcFile).
 
    END DESTRUCTOR.
