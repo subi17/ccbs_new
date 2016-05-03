@@ -934,7 +934,7 @@ DO TRANS:
          /* PRERATED POSTPAID TICKETS */ 
          IF TTCall.PPFlag = 0 THEN DO:
             IF LOOKUP(STRING(ttCall.SpoCMT),"72,73,78," + 
-                       {&BITEM_GRP_GB}) > 0 THEN 
+                       {&GB_CCN}) > 0 THEN 
                bPrice = ttCall.ccharge.
          END.
          
