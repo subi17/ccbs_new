@@ -840,6 +840,10 @@ FUNCTION fGenerateQ25List RETURNS INTEGER:
             NEXT.
          END.
          
+         FIND FIRST MobSub NO-LOCK WHERE
+                    MobSub.MsSeq  = INT(SingleFee.KeyValue) NO-ERROR.
+         IF NOT AVAIL MobSub THEN NEXT.
+
          fWriteIFSData(Mobsub.CLI, MobSub.CustNum, DATE(ldaEndDate + 1),
                        fGetMonthlyFee(liPerContrId,liMsSeq), ldAmount).
       END.
