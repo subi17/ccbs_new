@@ -568,7 +568,7 @@ DO TRANS:
                 ttCall.gsmbnr   = lcSubsInfo.
       ELSE IF ttCall.spocmt = 72 OR 
               ttCall.spocmt = 73 OR 
-              ttCall.spocmt = INT({&GB_CCN}) THEN DO: 
+              ttCall.spocmt = {&GB_CCN} THEN DO: 
          
          ttCall.gsmbnr = lcSubsInfo.
          
@@ -934,7 +934,7 @@ DO TRANS:
          /* PRERATED POSTPAID TICKETS */ 
          IF TTCall.PPFlag = 0 THEN DO:
             IF LOOKUP(STRING(ttCall.SpoCMT),"72,73,78," + 
-                       {&GB_CCN}) > 0 THEN 
+                       STRING({&GB_CCN})) > 0 THEN 
                bPrice = ttCall.ccharge.
          END.
          
