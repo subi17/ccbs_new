@@ -422,7 +422,8 @@
          END.   
          
          /* PRERATED TICKET */
-         IF LOOKUP(STRING(ttCall.SpoCMT),"72,73,78") > 0 THEN 
+         IF LOOKUP(STRING(ttCall.SpoCMT),"72,73,78," +
+                   STRING({&GB_CCN})) > 0 THEN
             bPrice = ttCall.ccharge.
            
          ASSIGN               
