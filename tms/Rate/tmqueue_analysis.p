@@ -69,6 +69,9 @@ DEF VAR liPremiumFraudPostSeq AS INT NO-UNDO.
 DEF VAR liPremiumFraudPreSeq AS INT NO-UNDO.
 DEF VAR ldeAmount AS DEC NO-UNDO. 
 DEF VAR lcCONTFVoice100 AS CHAR NO-UNDO.
+DEF VAR ldeTotalLimit   AS DEC NO-UNDO.
+DEF VAR ldeMonthBegin   AS DEC NO-UNDO.
+DEF VAR ldeMonthEnd     AS DEC NO-UNDO.
 
 DEF TEMP-TABLE ttRule NO-UNDO
    LIKE TMRule
@@ -688,7 +691,22 @@ PROCEDURE pAnalyseQueueRow:
 
                   END.
                   ELSE ldaFrom = ttPeriod.PeriodBegin.
+                  
+                  ASSIGN 
+                     ldeMonthBegin = 0
+                     ldeMonthEnd   = 0
+                     ldeTotalLimit = 0
+                     ldeMonthBegin = fMake2Dt(ldaFrom,0)
+                     ldeMonthEnd   = fMake2Dt(ttPeriod.PeriodEnd,86399).
 
+                  /* YDR-2109 Get Total fraud Limit Counter value for 
+                     New Bundles, upsells and roaming upsells */
+                  IF ttRule.TMRuleSeq EQ liTotalTrafficFraudSeq THEN 
+                     fGetTotalBundleUsage (TMQueue.MsSeq,
+                                           TMQueue.CustNum,
+                                           ldeMonthBegin,
+                                           ldeMonthEnd,
+                                           OUTPUT ldeTotalLimit).
                   CREATE TMCounter.
                   ASSIGN
                      TMCounter.MsSeq     = TMQueue.MsSeq WHEN 
@@ -696,7 +714,8 @@ PROCEDURE pAnalyseQueueRow:
                      TMCounter.CustNum   = TMQueue.CustNum
                      TMCounter.TMRuleSeq = ttRule.TMRuleSeq
                      TMCounter.FromDate  = ldaFrom
-                     TMCounter.ToDate    = ttPeriod.PeriodEnd.
+                     TMCounter.ToDate    = ttPeriod.PeriodEnd
+                     TMCounter.Amount    = ldeTotalLimit.
                END.      
                   
                IF TMCounter.FromDate > TMQueue.DateSt THEN LEAVE ItemLevel.
