@@ -1626,12 +1626,19 @@ PROCEDURE pFinalize:
 
    IF MsRequest.ReqType = 8 AND
       LOOKUP(DayCampaign.DCType,"1,4,6") > 0 AND
-      MONTH(ldtActDate) <= MONTH(TODAY) THEN
+      MONTH(ldtActDate) <= MONTH(TODAY) THEN DO:
+      
+      /* YDR-2109 Creating or Updating Fraud Limit Counter for 
+         New Bundles, upsells and roaming upsells */
+      RUN FraudCounterLimit (MsOwner.MsSeq,
+                             DayCampaign.DCEvent,
+                             MsOwner.CustNum).
       
       RUN pUpdateTMCounterLimit(
          MsOwner.MSSeq,
          (IF DayCampaign.DCEvent EQ "UPGRADE_UPSELL" THEN
             MsRequest.ReqCParam5 ELSE DayCampaign.DcEvent)).
+   END.
 
    IF (LOOKUP(DayCampaign.DCEvent,lcPostpaidDataBundles) > 0 OR
        LOOKUP(DayCampaign.DCEvent,lcALLPostpaidUPSELLBundles) > 0 OR
