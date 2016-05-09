@@ -746,6 +746,9 @@ PROCEDURE pSubInvoice2XML:
 
          /* row, billing item level */
          lhXML:START-ELEMENT("RowDetail").
+         IF ttRow.RowBillCode BEGINS "GOOGLE" THEN 
+            lhXML:INSERT-ATTRIBUTE("Type", ttRow.RowBillCode).
+         
          IF ttRow.RowType > "" THEN DO:
             lhXML:INSERT-ATTRIBUTE("Type",ttRow.RowType).
             lhXML:INSERT-ATTRIBUTE("BillingItemGroupID",ttRow.RowGroup).
