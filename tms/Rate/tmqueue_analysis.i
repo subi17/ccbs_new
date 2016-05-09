@@ -20,19 +20,6 @@ DEFINE TEMP-TABLE ttServiceLimit NO-UNDO
    FIELD GroupCode AS CHAR
    INDEX MsSeq MsSeq.
 
-DEF BUFFER bDayCampaign   FOR DayCampaign.
-DEF BUFFER bServiceLimit  FOR ServiceLimit.
-DEF BUFFER bMServiceLimit FOR MServiceLimit.
-DEF BUFFER bMServiceLPool FOR MserviceLPool.
-DEF BUFFER bFixedFee      FOR FixedFee.
-DEF BUFFER bSingleFee     FOR SingleFee.
-DEF BUFFER bFMItem        FOR FMItem.
-DEF BUFFER bFFItem        FOR FFItem.
-
-DEF VAR liContractPeriod AS INT  NO-UNDO. 
-DEF VAR ldaContractDate  AS DATE NO-UNDO.
-DEF VAR liContractTime   AS INT  NO-UNDO.
-DEF VAR llgBundle        AS LOG  NO-UNDO. 
 
 ASSIGN
    lcBaseContracts = fCParamC("TMQueueBaseContract")
@@ -305,11 +292,25 @@ END.
 
 FUNCTION fGetTotalBundleUsage RETURN LOGICAL
    (INPUT  iiMsSeq       AS INT,
+    INPUT  icDCEvent     AS CHAR,
     INPUT  iiCustNum     AS INT,
     INPUT  ldeMonthBegin AS DEC,
     INPUT  ldeMonthEnd   AS DEC,
     OUTPUT ldeTotalLimit AS DEC):
 
+   DEF BUFFER bDayCampaign   FOR DayCampaign.
+   DEF BUFFER bServiceLimit  FOR ServiceLimit.
+   DEF BUFFER bMServiceLimit FOR MServiceLimit.
+   DEF BUFFER bFixedFee      FOR FixedFee.
+   DEF BUFFER bSingleFee     FOR SingleFee.
+   DEF BUFFER bFMItem        FOR FMItem.
+   DEF BUFFER bFFItem        FOR FFItem.
+
+   DEF VAR liContractPeriod AS INT  NO-UNDO. 
+   DEF VAR ldaContractDate  AS DATE NO-UNDO.
+   DEF VAR liContractTime   AS INT  NO-UNDO.
+   DEF VAR llgBundle        AS LOG  NO-UNDO. 
+   
    EMPTY TEMP-TABLE ttServiceLimit.
 
    ASSIGN 
@@ -322,6 +323,9 @@ FUNCTION fGetTotalBundleUsage RETURN LOGICAL
             bMServiceLimit.EndTS  >= ldeMonthBegin AND 
             bMServiceLimit.FromTS <= ldeMonthEnd:
    
+      /* Skip DSS contracts */
+      IF bMservicelimit.CustNum > 0 THEN NEXT.
+
       FIND FIRST bServiceLimit NO-LOCK WHERE
                  bServiceLimit.SlSeq    = bMServiceLimit.SlSeq    AND
                  bServiceLimit.dialtype = bMServiceLimit.dialtype NO-ERROR.
@@ -337,29 +341,29 @@ FUNCTION fGetTotalBundleUsage RETURN LOGICAL
       END.
       ELSE NEXT.
 
+      IF icDCEvent NE "" AND 
+         bServiceLimit.GroupCode NE icDCEvent THEN NEXT.
+
       FIND FIRST bDayCampaign NO-LOCK WHERE 
                  bDayCampaign.Brand   = gcBrand                 AND 
                  bDayCampaign.DCEvent = bServiceLimit.GroupCode NO-ERROR.
       
-      IF NOT AVAIL bDayCampaign THEN RETURN llgBundle.
+      IF NOT AVAIL bDayCampaign THEN NEXT.
 
       FIND FIRST bFMItem NO-LOCK WHERE  
-                 bFMItem.Brand    = gcBrand               AND       
-                 bFMItem.FeeModel = bDayCampaign.FeeModel AND
-                 bFMItem.ToDate   > TODAY                 NO-ERROR.
+                 bFMItem.Brand     = gcBrand               AND       
+                 bFMItem.FeeModel  = bDayCampaign.FeeModel AND
+                 bFMItem.ToDate   >= TODAY                 AND 
+                 bFMItem.FromDate <= TODAY                 NO-ERROR.
      
-      IF NOT AVAIL bFMItem THEN RETURN llgBundle.
+      IF NOT AVAIL bFMItem THEN NEXT.
 
       /* Skip Prepaid fee */
       IF bFMItem.BillType EQ "NF" THEN NEXT.
       
-      fsplitts(bMServicelimit.FromTS,
-               OUTPUT ldaContractDate,
-               OUTPUT liContractTime).
-
-      liContractPeriod = YEAR(ldaContractDate) * 100 + MONTH(ldaContractDate).
-
-      IF bFMItem.BillType EQ "MF" THEN DO: 
+      liContractPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
+ 
+      IF NOT bFMItem.BillMethod THEN DO: 
          FIND FIRST bFixedFee NO-LOCK WHERE
                     bFixedFee.Brand      = gcBrand                      AND 
                     bFixedFee.HostTable  = "MobSub"                     AND 
@@ -380,113 +384,23 @@ FUNCTION fGetTotalBundleUsage RETURN LOGICAL
          END.           
       END.
       
-      IF bFMItem.BillType EQ "TR" THEN DO:
-         FOR EACH bMServiceLPool NO-LOCK WHERE
-                  bMServiceLPool.MsSeq   = bMServiceLimit.MsSeq and
-                  bMServiceLPool.SlSeq   = bMServiceLimit.SlSeq and
-                  bMServiceLPool.EndTS  <= bMserviceLimit.EndTS and
-                  bMserviceLPool.FromTs >= bMserviceLimit.FromTS:
+      IF bFMItem.BillMethod THEN DO:
+         FOR EACH bSingleFee NO-LOCK WHERE
+                  bSingleFee.Brand      = gcBrand                      AND
+                  bSingleFee.Custnum    = iiCustnum                    AND
+                  bSingleFee.HostTable  = "MobSub"                     AND
+                  bSingleFee.KeyValue   = STRING(bMServiceLimit.MsSeq) AND
+                  bSingleFee.CalcObj    = bServicelimit.SLCode         AND
+                  bSingleFee.BillPeriod = liContractPeriod:             
+            ASSIGN
+               ldeTotalLimit = ldeTotalLimit + bSingleFee.Amt
+               llgBundle     = TRUE.
 
-            FIND FIRST bSingleFee NO-LOCK WHERE
-                       bSingleFee.Brand      = gcBrand                      AND
-                       bSingleFee.Custnum    = iiCustnum                    AND
-                       bSingleFee.HostTable  = "MobSub"                     AND
-                       bSingleFee.KeyValue   = STRING(bMServiceLimit.MsSeq) AND
-                       bSingleFee.CalcObj    = bServicelimit.SLCode         AND
-                       bSingleFee.BillPeriod = liContractPeriod             NO-ERROR.
-            IF AVAIL bSingleFee THEN 
-               ASSIGN
-                  ldeTotalLimit = ldeTotalLimit + bSingleFee.Amt
-                  llgBundle     = TRUE.
+            IF icDCEvent NE "" THEN LEAVE.      
          END.
       END.
 
    END.
-
-   RETURN llgBundle.
-
-END FUNCTION.
-
-FUNCTION fGetBundleUsage RETURN LOGICAL
-   (INPUT  iiMsSeq       AS INT,
-    INPUT  icDCEvent     AS CHAR,
-    INPUT  iiCustNum     AS INT,
-    INPUT  ldeMonthBegin AS DEC,
-    INPUT  ldeMonthEnd   AS DEC,
-    OUTPUT ldeTotalLimit AS DEC):
-
-   ASSIGN 
-      liContractTime   = 0
-      liContractPeriod = 0
-      llgBundle        = FALSE.
-
-   FIND FIRST bDayCampaign NO-LOCK WHERE 
-              bDayCampaign.Brand   = gcBrand   AND 
-              bDayCampaign.DCEvent = icDCEvent NO-ERROR.
-   
-   IF NOT AVAIL bDayCampaign THEN RETURN llgBundle.
-
-   FIND FIRST bFMItem NO-LOCK WHERE  
-              bFMItem.Brand    = gcBrand               AND       
-              bFMItem.FeeModel = bDayCampaign.FeeModel AND
-              bFMItem.ToDate   > TODAY                 NO-ERROR.
-
-   IF NOT AVAIL bFMItem THEN RETURN llgBundle.
-   
-   /* Skip Prepaid fee */
-   IF bFMItem.BillType EQ "NF" THEN NEXT.
-
-   FOR FIRST bServiceLimit NO-LOCK WHERE
-             bServiceLimit.GroupCode EQ icDCEvent,
-       FIRST bMServiceLimit NO-LOCK WHERE
-             bMServiceLimit.MsSeq    = iiMsSeq                AND
-             bMServiceLimit.DialType = bServiceLimit.DialType AND
-             bMServiceLimit.SlSeq    = bServiceLimit.SlSeq    AND
-             bMServiceLimit.EndTS   >= ldeMonthBegin          AND 
-             bMServiceLimit.FromTS  <= ldeMonthEnd:
-   
-      fsplitts(bMServicelimit.FromTS,
-               OUTPUT ldaContractDate,
-               OUTPUT liContractTime).
-
-      liContractPeriod = YEAR(ldaContractDate) * 100 + MONTH(ldaContractDate).
-
-      IF bFMItem.BillType EQ "MF" THEN DO: 
-         FIND FIRST bFixedFee NO-LOCK WHERE
-                    bFixedFee.Brand      = gcBrand                      AND 
-                    bFixedFee.HostTable  = "MobSub"                     AND 
-                    bFixedFee.CustNum    = iiCustnum                    AND
-                    bFixedFee.KeyValue   = STRING(bMServicelimit.MsSeq) AND 
-                    bFixedFee.CalcObj    = bServiceLimit.Groupcode      AND
-                    bFixedFee.EndPeriod >= liContractPeriod             NO-ERROR.
-
-         IF AVAIL bFixedFee THEN DO:  
-            FIND FIRST bFFItem NO-LOCK WHERE 
-                       bFFItem.FFNum      = bFixedFee.FFNum  AND 
-                       bFFItem.BillPeriod = liContractPeriod NO-ERROR.
-       
-            IF AVAIL bFFItem THEN 
-               ASSIGN 
-                  ldeTotalLimit = bFFItem.Amt
-                  llgBundle     = TRUE.
-         END.           
-      END.
-
-      IF bFMItem.BillType EQ "TR" THEN DO:
-         FIND FIRST bSingleFee NO-LOCK WHERE
-                    bSingleFee.Brand      = gcBrand                      AND
-                    bSingleFee.Custnum    = iiCustnum                    AND
-                    bSingleFee.HostTable  = "MobSub"                     AND
-                    bSingleFee.KeyValue   = STRING(bMServiceLimit.MsSeq) AND
-                    bSingleFee.CalcObj    = bServicelimit.SLCode         AND 
-                    bSingleFee.BillPeriod = liContractPeriod             NO-ERROR.
-        IF AVAIL bSingleFee THEN
-           ASSIGN
-              ldeTotalLimit = bSingleFee.Amt
-              llgBundle     = TRUE. 
-      END.
-
-   END. /* FOR EACH bServiceLimit WHERE */
 
    RETURN llgBundle.
 
@@ -678,7 +592,7 @@ PROCEDURE pFraudCounterLimit:
 
    IF liFraudSeq = ? OR liFraudSeq = 0 THEN RETURN.
 
-   FIND FIRST TMCounter NO-LOCK WHERE
+   FIND FIRST TMCounter EXCLUSIVE-LOCK WHERE
               TMCounter.MsSeq     = iiMsSeq     AND 
               TMCounter.TMRuleSeq = liFraudSeq  AND
               TMCounter.FromDate  = ldaFirstDay AND
@@ -686,27 +600,30 @@ PROCEDURE pFraudCounterLimit:
 
    IF NOT AVAIL TMCounter THEN DO:
        fGetTotalBundleUsage (iiMsSeq,
+                             "",
                              iiCustNum,
                              ldeMonthBegin,
                              ldeMonthEnd,
                              OUTPUT ldeTotalLimit).
-       CREATE TMCounter.
-       ASSIGN 
-          TMCounter.MsSeq     = iiMsSeq 
-          TMCounter.CustNum   = iiCustNum
-          TMCounter.TMRuleSeq = liFraudSeq
-          TMCounter.FromDate  = ldaFirstDay
-          TMCounter.ToDate    = ldaLastDay
-          TMCounter.Amount    = ldeTotalLimit
-          TMCounter.DecValue  = ldeTotalLimit. 
+       IF ldeTotalLimit > 0 THEN DO:   
+          CREATE TMCounter.
+          ASSIGN 
+             TMCounter.MsSeq     = iiMsSeq 
+             TMCounter.CustNum   = iiCustNum
+             TMCounter.TMRuleSeq = liFraudSeq
+             TMCounter.FromDate  = ldaFirstDay
+             TMCounter.ToDate    = ldaLastDay
+             TMCounter.Amount    = ldeTotalLimit
+             TMCounter.DecValue  = ldeTotalLimit. 
+       END.      
    END.
    ELSE DO:
-      fGetBundleUsage (iiMsSeq,
-                       icDCEvent,
-                       iiCustNum,
-                       ldeMonthBegin,
-                       ldeMonthEnd,
-                       OUTPUT ldeTotalLimit).
+      fGetTotalBundleUsage(iiMsSeq,
+                           icDCEvent,
+                           iiCustNum,
+                           ldeMonthBegin,
+                           ldeMonthEnd,
+                           OUTPUT ldeTotalLimit).
       ASSIGN
          TMCounter.Amount = TMCounter.Amount + ldeTotalLimit.
 
