@@ -701,7 +701,9 @@ PROCEDURE pAnalyseQueueRow:
 
                   /* YDR-2109 Get Total fraud Limit Counter value for 
                      New Bundles, upsells and roaming upsells */
-                  IF ttRule.TMRuleSeq EQ liTotalTrafficFraudSeq THEN 
+                  IF ttRule.TMRuleSeq EQ liTotalTrafficFraudSeq AND 
+                     YEAR(TMQueue.DateST)  = YEAR(TODAY)        AND 
+                     MONTH(TMQueue.DateST) = MONTH(TODAY)       THEN 
                      fGetTotalBundleUsage (TMQueue.MsSeq,
                                            "",
                                            TMQueue.CustNum,

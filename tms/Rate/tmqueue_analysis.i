@@ -310,7 +310,9 @@ FUNCTION fGetTotalBundleUsage RETURN LOGICAL
    DEF VAR ldaContractDate  AS DATE NO-UNDO.
    DEF VAR liContractTime   AS INT  NO-UNDO.
    DEF VAR llgBundle        AS LOG  NO-UNDO. 
-   
+   DEF VAR ldeFirstSecofDay AS DEC  NO-UNDO.
+   DEF VAR ldeLastSecofDay  AS DEC  NO-UNDO.
+
    EMPTY TEMP-TABLE ttServiceLimit.
 
    ASSIGN 
@@ -344,6 +346,29 @@ FUNCTION fGetTotalBundleUsage RETURN LOGICAL
       IF icDCEvent NE "" AND 
          bServiceLimit.GroupCode NE icDCEvent THEN NEXT.
 
+      ASSIGN 
+         ldeFirstSecofDay = fMake2Dt(TODAY,0)
+         ldeLastSecofDay  = fMake2Dt(TODAY,86399).
+
+      /* pending STC request */
+      IF CAN-FIND(FIRST MsRequest NO-LOCK USE-INDEX MsActStamp WHERE
+                        MsRequest.MsSeq      = iiMsSeq                             AND
+                        MsRequest.ActStamp   = ldeFirstSecofDay                    AND
+                        MsRequest.ReqType    = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+                        LOOKUP(STRING(MsRequest.ReqStatus),
+                                {&REQ_INACTIVE_STATUSES}) = 0)                     THEN
+         NEXT. 
+      
+      /* pending termination request */
+      IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                        MsRequest.MsSeq      = iiMsSeq                         AND
+                        MsRequest.ReqType    = {&REQTYPE_CONTRACT_TERMINATION} AND
+                        MsRequest.ReqCParam3 = bServiceLimit.GroupCode         AND
+                        LOOKUP(STRING(MsRequest.ReqStatus),
+                                {&REQ_INACTIVE_STATUSES}) = 0                  AND
+                        MsRequest.ActStamp <= ldeLastSecofDay)                 THEN
+         NEXT. 
+      
       FIND FIRST bDayCampaign NO-LOCK WHERE 
                  bDayCampaign.Brand   = gcBrand                 AND 
                  bDayCampaign.DCEvent = bServiceLimit.GroupCode NO-ERROR.
@@ -595,7 +620,7 @@ PROCEDURE pFraudCounterLimit:
    FIND FIRST TMCounter EXCLUSIVE-LOCK WHERE
               TMCounter.MsSeq     = iiMsSeq     AND 
               TMCounter.TMRuleSeq = liFraudSeq  AND
-              TMCounter.FromDate  = ldaFirstDay AND
+              TMCounter.FromDate <= TODAY       AND
               TMCounter.ToDate    = ldaLastDay  NO-ERROR.
 
    IF NOT AVAIL TMCounter THEN DO:
