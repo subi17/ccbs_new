@@ -32,7 +32,7 @@ FUNCTION fFullCreditNoteRequest RETURNS INTEGER
    ocResult = fChkRequest(iiCustNum,
                           22,
                           STRING(iiInvNum),
-                          icCreator).
+                          pcSubInvoices).
 
    IF ocResult > "" THEN RETURN 0.                       
 
