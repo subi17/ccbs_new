@@ -1099,7 +1099,7 @@ PROCEDURE pContractActivation:
          IF liRequest = 0 THEN
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                              "MobSub",
-                             STRING(MsRequest.MsRequest),
+                             STRING(MsRequest.MsSeq),
                              MsRequest.Custnum,
                              "CREDIT NOTE CREATION FAILED",
                              "ERROR:" + lcError). 
@@ -3529,8 +3529,8 @@ PROCEDURE pContractReactivation:
                              MsRequest.UserCode,
                              "ContractActivation",
                              FixedFee.OrderId, /* order id */
-                             "FixedFee",
-                             STRING(FixedFee.FFNum),
+                             FixedFee.SourceTable,
+                             FixedFee.SourceKey,
                              OUTPUT lcReqChar).
 
                IF lcReqChar BEGINS "ERROR:" OR lcReqChar BEGINS "0" THEN

@@ -877,10 +877,8 @@ FUNCTION fMakeProdigyRequest RETURNS LOGICAL
                             FALSE,
                             OUTPUT lcError).
 
-   /* Creation of subrequests failed, "fail" master request too */
    IF liReq = 0 OR liReq = ? THEN DO:
-      fReqStatus(3,"ServiceRequest failure: " + lcError).
-      ocLine = ocLine + {&Q25_HRLP_DELIM} + "Error: ServiceRequest failure".
+      ocLine = ocLine + {&Q25_HRLP_DELIM} + "Error: ServiceRequest failure " + lcError.
       RETURN FALSE.
    END.
    ELSE DO:

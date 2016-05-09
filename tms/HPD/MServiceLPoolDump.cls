@@ -58,8 +58,14 @@ CLASS HPD.MServiceLPoolDump FINAL INHERITS DumpHandler:
 
       DEFINE VARIABLE ldeEndStamp AS DECIMAL NO-UNDO.
       DEFINE VARIABLE llSkip      AS LOGICAL NO-UNDO.
+      DEFINE VARIABLE ldaPickFrom AS DATE    NO-UNDO.
 
-      ldeEndStamp = YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + 1.
+      /* prepaid packet can be active also in the previous month */
+      ASSIGN
+         ldaPickFrom = ADD-INTERVAL(TODAY, -1, "months")
+         ldeEndStamp = YEAR(ldaPickFrom) * 10000 +
+                       MONTH(ldaPickFrom) * 100 +
+                       DAY(ldaPickFrom).
 
       DO WITH FRAME fQty:
 
@@ -79,22 +85,15 @@ CLASS HPD.MServiceLPoolDump FINAL INHERITS DumpHandler:
 
             IF FIRST-OF(lbMServiceLPool.MsSeq)
             THEN DO:
-               IF CAN-FIND(FIRST MobSub NO-LOCK WHERE MobSub.MsSeq = lbMServiceLPool.MsSeq)
+               IF CAN-FIND(FIRST MobSub NO-LOCK WHERE
+                                 MobSub.MsSeq = lbMServiceLPool.MsSeq)
                THEN llSkip = FALSE.
                ELSE llSkip = TRUE.
             END.
 
-            IF llSkip
-            THEN NEXT.
+            IF llSkip THEN NEXT.
 
-            IF FIRST-OF(lbMServiceLPool.SlSeq)
-            THEN llSkip = FALSE.
-
-            IF lbMServiceLPool.EndTS < ldeEndStamp
-            THEN DO:
-               llSkip = TRUE.
-               NEXT.
-            END.
+            IF lbMServiceLPool.EndTS < ldeEndStamp THEN NEXT.
 
             liEvents = liEvents + 1.
 
@@ -125,22 +124,15 @@ CLASS HPD.MServiceLPoolDump FINAL INHERITS DumpHandler:
 
             IF FIRST-OF(lbMServiceLPool.CustNum)
             THEN DO:
-               IF CAN-FIND(FIRST Customer NO-LOCK WHERE Customer.CustNum = lbMServiceLPool.CustNum)
+               IF CAN-FIND(FIRST Customer NO-LOCK WHERE
+                                 Customer.CustNum = lbMServiceLPool.CustNum)
                THEN llSkip = FALSE.
                ELSE llSkip = TRUE.
             END.
 
-            IF llSkip
-            THEN NEXT.
+            IF llSkip THEN NEXT.
 
-            IF FIRST-OF(lbMServiceLPool.SlSeq)
-            THEN llSkip = FALSE.
-
-            IF lbMServiceLPool.EndTS < ldeEndStamp
-            THEN DO:
-               llSkip = TRUE.
-               NEXT.
-            END.
+            IF lbMServiceLPool.EndTS < ldeEndStamp THEN NEXT.
 
             liEvents = liEvents + 1.
 

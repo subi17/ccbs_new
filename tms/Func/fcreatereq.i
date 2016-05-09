@@ -111,7 +111,8 @@ FUNCTION fChkRequest RETURNS CHARACTER
                                      iiReqType).
       ELSE DO:
          CASE iiReqType:
-         WHEN 22 OR WHEN 23 THEN 
+         WHEN 22 THEN llExist = FALSE. 
+         WHEN 23 THEN 
             llExist = CAN-FIND(FIRST MsRequest USE-INDEX CustNum WHERE
                                 MsRequest.Brand      = gcBrand   AND
                                 MsRequest.ReqType    = iiReqType AND
