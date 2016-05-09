@@ -1630,7 +1630,7 @@ PROCEDURE pFinalize:
       
       /* YDR-2109 Creating or Updating Fraud Limit Counter for 
          New Bundles, upsells and roaming upsells */
-      RUN FraudCounterLimit (MsOwner.MsSeq,
+      RUN pFraudCounterLimit (MsOwner.MsSeq,
                              DayCampaign.DCEvent,
                              MsOwner.CustNum).
       

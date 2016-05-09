@@ -347,7 +347,9 @@ FUNCTION fGetTotalBundleUsage RETURN LOGICAL
                  bFMItem.Brand    = gcBrand               AND       
                  bFMItem.FeeModel = bDayCampaign.FeeModel AND
                  bFMItem.ToDate   > TODAY                 NO-ERROR.
-      
+     
+      IF NOT AVAIL bFMItem THEN RETURN llgBundle.
+
       /* Skip Prepaid fee */
       IF bFMItem.BillType EQ "NF" THEN NEXT.
       
@@ -429,6 +431,8 @@ FUNCTION fGetBundleUsage RETURN LOGICAL
               bFMItem.FeeModel = bDayCampaign.FeeModel AND
               bFMItem.ToDate   > TODAY                 NO-ERROR.
 
+   IF NOT AVAIL bFMItem THEN RETURN llgBundle.
+   
    /* Skip Prepaid fee */
    IF bFMItem.BillType EQ "NF" THEN NEXT.
 
