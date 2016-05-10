@@ -78,23 +78,19 @@ REPEAT:
       IF fCheckFileNameChars(lcFileName) EQ FALSE THEN NEXT.
 
       /*Accept only activation files*/
-      IF NOT lcFileName BEGINS "XXXX" THEN NEXT.
+      IF NOT lcFileName BEGINS "yoigo_" THEN NEXT.
 
       INPUT STREAM sin FROM VALUE(lcInputFile).
    END.
    ELSE NEXT.
 
    lcErrorLog = lcGBSpoolDir + lcFileName + ".LOG".
+   lcResponseFile = lcGBSpoolDir + "response_" + lcFileName.
 
    IF SESSION:BATCH THEN fBatchLog("START", lcInputFile).
 
    OUTPUT STREAM sLog TO VALUE(lcErrorLog) append.
    OUTPUT STREAM sResponse TO VALUE(lcResponseFile) append.
-
-   PUT STREAM sLog UNFORMATTED
-              lcFilename  " "
-              STRING(TODAY,"99.99.99") " "
-              STRING(TIME,"hh:mm:ss") SKIP.
 
    RUN pReadFileData.
 
@@ -130,7 +126,7 @@ PROCEDURE pReadFileData:
    DEF VAR lcOutLine AS CHAR NO-UNDO.
    DEF VAR lcMSISDN AS CHAR NO-UNDO.
    DEF VAR lcCorrId AS CHAR NO-UNDO.
-   DEF VAR ldtDateTime AS DATETIME NO-UNDO.
+   DEF VAR lcPeriod AS CHAR NO-UNDO.
    DEF VAR ldeAmount AS DECIMAL NO-UNDO. 
    DEF VAR lcErr AS CHAR NO-UNDO.
    DEF VAR llgPayType AS LOGICAL.
@@ -150,7 +146,7 @@ PROCEDURE pReadFileData:
       assign
          lcMSISDN = entry(5,lcline,";")
          lcCorrId = entry(3,lcline,";")
-         ldtDateTime = DATETIME(entry(1,lcline,";"))
+         lcPeriod = REPLACE(SUBSTRING(entry(1,lcline,";"),1,7),"-","")
          ldeAmount = DECIMAL(entry(8,lcline,";")).
          IF entry(6,lcLine,";") EQ "POSTPAID" THEN
             llgPayType = FALSE.
@@ -161,11 +157,12 @@ PROCEDURE pReadFileData:
 
       lcErr = fProcessGBEntry(lcMSISDN,
                               lcCorrId,
-                              ldtDateTime,
+                              lcPeriod,
                               ldeAmount,
                               llgPayType).
       lcOutLine = lcLine + ";" + lcErr.
 
+      PUT STREAM sLog UNFORMATTED lcFilename + ";" + lcOutLine SKIP.
 
       
 

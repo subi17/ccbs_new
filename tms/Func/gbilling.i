@@ -48,33 +48,23 @@ FUNCTION fInitGBParameters RETURNS CHAR
 
 END.   
 
-
-FUNCTION fGetPeriod RETURNS INT
-   (idtDate AS DATETIME):
-   DEF VAR liPeriod AS INT NO-UNDO.
-   liPeriod = YEAR(idtDate) * 100 + MONTH(idtDate).
-
-   RETURN liPeriod.
-END.
-
-
 FUNCTION fProcessPostpaidEntry RETURNS CHAR
    (icMSISDN AS CHAR, /*MSISDN*/
     icCorrId AS CHAR, /*Correlation ID*/
-    idtPDate AS DATETIME, /*Purchase date*/
+    icPeriod AS CHAR, /*period info*/
     ideAmount AS DECIMAL,
     BUFFER bMobSub FOR MobSub): /*Amount*/
 
    DEF VAR lcResponse AS CHAR NO-UNDO.
    lcResponse = {&GB_RESP_OK}.
    
-   RUN creafat (MobSub.CustNum, /* custnum */
-                MobSub.MsSeq, /* msseq */
-                "DRAFT_GBFAT", /*NOK*/
+   RUN creafat (bMobSub.CustNum, /* custnum */
+                bMobSub.MsSeq, /* msseq */
+                "GOOGLEVASFAT", /*NOK*/
                 ideAmount,   /* amount */ 
                 0,   /* percentage  */
                 ?,   /* vat included already */
-                fGetPeriod(idtPDate), /*period*/
+                icPeriod, /*period*/
                 999999, /*tp period, no limoit now*/
                 OUTPUT lcResponse). /* error */
    IF lcResponse NE "" THEN DO:
@@ -87,7 +77,6 @@ END.
 FUNCTION fProcessPrepaidEntry RETURNS CHAR
    (icMSISDN AS CHAR, /*MSISDN*/
     icCorrId AS CHAR, /*Correlation ID*/
-    idtPDate AS DATETIME, /*Purchase date*/
     ideAmount AS DECIMAL, /*Amount*/
     BUFFER bMsOwner FOR MsOwner):
 
@@ -123,7 +112,7 @@ END.
 FUNCTION fProcessGBEntry RETURNS CHAR
    (icMSISDN AS CHAR, /*MSISDN*/
     icCorrId AS CHAR, /*Correlation ID*/
-    idtPDate AS DATETIME, /*Purchase date*/
+    icPeriod AS CHAR, /*Purchase date*/
     ideAmount AS DECIMAL, /*Amount*/
     ilgPayType AS LOGICAL): /*p*/
    DEF BUFFER bMobsub FOR MobSub.
@@ -149,14 +138,13 @@ FUNCTION fProcessGBEntry RETURNS CHAR
    IF bMsOwner.paytype THEN DO:
       lcResponse = fProcessPrepaidEntry(icMSISDN, 
                                         icCorrId, 
-                                        idtPDate, 
                                         ideAmount,
                                         BUFFER bMsOwner).
    END.
    ELSE DO:
       lcResponse = fProcessPostpaidEntry(icMSISDN, 
                                          icCorrId, 
-                                         idtPDate, 
+                                         icPeriod, 
                                          ideAmount,
                                          BUFFER bMobSub).
       
