@@ -354,7 +354,8 @@ FUNCTION fGetTotalBundleUsage RETURN LOGICAL
       IF CAN-FIND(FIRST MsRequest NO-LOCK USE-INDEX MsActStamp WHERE
                         MsRequest.MsSeq      = iiMsSeq                             AND
                         MsRequest.ActStamp   = ldeFirstSecofDay                    AND
-                        MsRequest.ReqType    = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+                       (MsRequest.ReqType    = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR 
+                        MsRequest.ReqType    = {&REQTYPE_BUNDLE_CHANGE})           AND
                         LOOKUP(STRING(MsRequest.ReqStatus),
                                 {&REQ_INACTIVE_STATUSES}) = 0)                     THEN
          NEXT. 
