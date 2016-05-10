@@ -573,7 +573,7 @@ DO TRANS:
       END.   
 
       ELSE IF ttCall.spocmt = {&GB_CCN} THEN DO:   
-         ttCall.gsmbnr = "".
+         ttCall.gsmbnr = {&GB_B_NBR}.
       END.    
       
       ELSE IF ttCall.spocmt = 71 OR

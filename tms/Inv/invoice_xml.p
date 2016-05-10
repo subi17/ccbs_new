@@ -935,7 +935,10 @@ PROCEDURE pSubInvoice2XML:
             lhXML:INSERT-ATTRIBUTE("Time",
                                    RIGHT-TRIM(STRING(ttCall.TimeSt,
                                                      "hh:mm"))).
-            lhXML:INSERT-ATTRIBUTE("Destination",ttCall.GsmBnr).
+            IF ttCall.GsmBnr EQ {&GB_B_NBR} THEN
+               lhXML:INSERT-ATTRIBUTE("Destination","").
+            ELSE
+               lhXML:INSERT-ATTRIBUTE("Destination",ttCall.GsmBnr).
             lhXML:INSERT-ATTRIBUTE("BillingItem",lcBIName).
 
             lcTipoName = fLocalCCName().
