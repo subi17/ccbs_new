@@ -140,7 +140,6 @@ PROCEDURE pReadFileData:
    DEF VAR liPeriod AS INT NO-UNDO.
    DEF VAR lcDate AS char NO-UNDO.
    DEF VAR liLineNum AS INT NO-UNDO.
-   DEF VAR ldAmount AS DEC NO-UNDO.
    DEF VAR liMonth AS INT NO-UNDO.
    DEF VAR liYear AS INT NO-UNDO.
    DEF VAR ldaStartDate AS DATE NO-UNDO.
@@ -207,7 +206,7 @@ PROCEDURE pReadFileData:
                        ALERT-BOX.
                QUIT.
             END.
-            IF fisQ25ExtensionDone(liMsSeq, 0, ldAmount) THEN DO:
+            IF fisQ25ExtensionDone(liMsSeq) THEN DO:
                /* log extension done */
                PUT STREAM sLog UNFORMATTED
                   lcLine + {&Q25_HRLP_DELIM} +  "Error: extension done." SKIP.
