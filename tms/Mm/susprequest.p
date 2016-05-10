@@ -243,7 +243,7 @@ PROCEDURE pNew:
                                FALSE,             /* Set fees */
                                FALSE,             /* SMS */
                                "",
-                               "",
+                               {&REQUEST_SOURCE_BARRING},
                                liMasterRequest,
                                TRUE,
                                OUTPUT lcError).
@@ -267,7 +267,7 @@ PROCEDURE pNew:
                                   FALSE,             /* Set fees */
                                   FALSE,             /* SMS */
                                   "",
-                                  "",
+                                  {&REQUEST_SOURCE_BARRING},
                                   liReq,
                                   TRUE,
                                  OUTPUT lcError).
@@ -285,7 +285,7 @@ PROCEDURE pNew:
                     SubSer.ServCom EQ "LP" NO-ERROR.
          IF AVAIL SubSer AND SubSer.SSParam EQ "REDIRECTION_HIGHRISKCUSTOMER_1"
          THEN DO:
-            liRemHRLPReq =  fServiceRequestCreate (MobSub.MsSeq,
+            liRemHRLPReq =  fServiceRequest (MobSub.MsSeq,
                                      "LP",
                                      1,
                                      "remove",
@@ -295,9 +295,10 @@ PROCEDURE pNew:
                                      FALSE,             /* Set fees */
                                      FALSE,             /* SMS */
                                      "",
-                                     "",
+                                     {&REQUEST_SOURCE_BARRING},
                                      liReq,
-                                     TRUE).
+                                     TRUE,
+                                     OUTPUT lcError).
             IF liRemHRLPReq = 0 OR liRemHRLPReq = ? THEN DO:
                UNDO, RETURN SUBST("ERROR:HRLP ServiceRequest failure").
             END.

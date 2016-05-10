@@ -313,10 +313,8 @@ FUNCTION fServiceActStamp RETURNS DECIMAL
 END FUNCTION.
 
 
-/* activate / close a service (component) 
-Note: do not use this directly in normal casess.
--In general scenarion parallel requests are not allowed.*/
-FUNCTION fServiceRequestCreate RETURNS INTEGER
+/* activate / close a service (component) */
+FUNCTION fServiceRequest RETURNS INTEGER
    (INPUT  iiMsSeq      AS INT,
     INPUT  icServCom    AS CHAR,
     INPUT  iiValue      AS INT,
@@ -328,11 +326,23 @@ FUNCTION fServiceRequestCreate RETURNS INTEGER
     INPUT  icCreator    AS CHAR,   /* who made the request */
     INPUT  icSource     AS CHAR,
     INPUT  iiOrigRequest AS INT,
-    INPUT  ilMandatory  AS LOG).
+    INPUT  ilMandatory  AS LOG,
+    OUTPUT ocResult     AS CHAR).
 
    DEF VAR liOldValue AS INT  NO-UNDO.
    DEF VAR lcChildren AS CHAR NO-UNDO.
    DEF VAR liThisReq  AS INT  NO-UNDO.
+   
+   IF NOT (icServCom EQ "LP" AND
+      icParam EQ "remove" AND
+      icSource EQ {&REQUEST_SOURCE_BARRING}) THEN DO:
+
+      ocResult = fChkRequest(iiMsSeq,
+                             1,
+                             icServCom,
+                             icCreator).
+      IF ocResult > "" THEN RETURN 0.                       
+   END.
 
    /* set activation time if caller has not determined it */
    IF idChgStamp = ? OR idChgStamp = 0 THEN DO:
@@ -388,49 +398,6 @@ FUNCTION fServiceRequestCreate RETURNS INTEGER
    END.
 
    RETURN liThisReq.
-             
-END FUNCTION.
- 
-
-/* activate / close a service (component) */
-FUNCTION fServiceRequest RETURNS INTEGER
-   (INPUT  iiMsSeq      AS INT,
-    INPUT  icServCom    AS CHAR,
-    INPUT  iiValue      AS INT,
-    INPUT  icParam      AS CHAR,
-    INPUT  idChgStamp   AS DEC,
-    INPUT  icSalesman   AS CHAR,
-    INPUT  ilCreateFees AS LOG,
-    INPUT  ilSendSMS    AS LOG,
-    INPUT  icCreator    AS CHAR,   /* who made the request */
-    INPUT  icSource     AS CHAR,
-    INPUT  iiOrigRequest AS INT,
-    INPUT  ilMandatory  AS LOG,
-    OUTPUT ocResult     AS CHAR).
-
-   DEF VAR liOldValue AS INT  NO-UNDO.
-   DEF VAR lcChildren AS CHAR NO-UNDO.
-   DEF VAR liThisReq  AS INT  NO-UNDO.
-   
-   ocResult = fChkRequest(iiMsSeq,
-                          1,
-                          icServCom,
-                          icCreator).
-   IF ocResult > "" THEN RETURN 0.                       
-
-   
-   RETURN fServiceRequestCreate(iiMsSeq,
-                                 icServCom,
-                                 iiValue,
-                                 icParam,
-                                 idChgStamp,
-                                 icSalesman,
-                                 ilCreateFees,
-                                 ilSendSMS,
-                                 icCreator,
-                                 icSource,
-                                 iiOrigRequest,
-                                 ilMandatory).
              
 END FUNCTION.
  
