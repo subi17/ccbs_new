@@ -567,11 +567,13 @@ DO TRANS:
          ASSIGN ttCall.CLI      = lcOrigAddress
                 ttCall.gsmbnr   = lcSubsInfo.
       ELSE IF ttCall.spocmt = 72 OR 
-              ttCall.spocmt = 73 OR 
-              ttCall.spocmt = {&GB_CCN} THEN DO: 
+              ttCall.spocmt = 73 THEN DO: 
          
          ttCall.gsmbnr = lcSubsInfo.
-         
+      END.   
+
+      ELSE IF ttCall.spocmt = {&GB_CCN} THEN DO:   
+         ttCall.gsmbnr = "".
       END.    
       
       ELSE IF ttCall.spocmt = 71 OR
