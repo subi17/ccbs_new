@@ -312,7 +312,7 @@ PROCEDURE pNew:
 
    IF liReq > 0 THEN fReqStatus(7,""). /* wait provisioning sub requests */
    ELSE fReqStatus(8,""). /* provisioning not required */
-
+   RETURN "".
 END PROCEDURE.
 
 PROCEDURE pDone.
