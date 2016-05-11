@@ -53,7 +53,8 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
     icCorrId AS CHAR, /*Correlation ID*/
     icPeriod AS CHAR, /*period info*/
     ideAmount AS DECIMAL,
-    BUFFER bMobSub FOR MobSub): /*Amount*/
+    BUFFER bMobSub FOR MobSub, /*Amount*/
+    OUTPUT ocErrInfo AS CHAR):
 
    DEF VAR lcResponse AS CHAR NO-UNDO.
    lcResponse = {&GB_RESP_OK}.
@@ -68,6 +69,7 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
                 999999, /*tp period, no limoit now*/
                 OUTPUT lcResponse). /* error */
    IF lcResponse NE "" THEN DO:
+      ocErrInfo = lcResponse.
       lcResponse = {&GB_POSTPAID_FAT_FAILURE}.
    END.
    RETURN lcResponse.
@@ -114,7 +116,9 @@ FUNCTION fProcessGBEntry RETURNS CHAR
     icCorrId AS CHAR, /*Correlation ID*/
     icPeriod AS CHAR, /*Purchase date*/
     ideAmount AS DECIMAL, /*Amount*/
-    ilgPayType AS LOGICAL): /*p*/
+    ilgPayType AS LOGICAL, /*p*/
+    OUTPUT ocErrInfo AS CHAR):
+
    DEF BUFFER bMobsub FOR MobSub.
    DEF BUFFER bMsOwner FOR MsOwner.
    DEF VAR lcResponse AS CHAR NO-UNDO.
@@ -146,7 +150,8 @@ FUNCTION fProcessGBEntry RETURNS CHAR
                                          icCorrId, 
                                          icPeriod, 
                                          ideAmount,
-                                         BUFFER bMobSub).
+                                         BUFFER bMobSub,
+                                         OUTPUT ocErrInfo).                                   
       
    END.
    IF lcErr NE {&GB_RESP_OK} THEN lcResponse = lcResponse + ";" + lcErr.

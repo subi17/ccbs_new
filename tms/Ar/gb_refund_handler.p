@@ -30,6 +30,21 @@ DEF STREAM sFile.
 DEF STREAM sLog.
 DEF STREAM sResponse.
 
+
+
+
+FUNCTION fGenerateFileName RETURNS CHAR
+   (INPUT icInFN AS CHAR,
+    INPUT icType AS CHAR):
+   DEF VAR liFileNumberStart AS INT NO-UNDO.
+   DEF VAR lcTemp AS CHAR NO-UNDO.
+   liFileNumberStart = R-INDEX(icInFN, "_") + 1.
+   lcTemp = SUBSTRING(icInFN, liFileNumberStart).
+
+   RETURN REPLACE(icInFN, lcTemp, icType + ".csv").
+END.
+
+
 ASSIGN 
    lcTableName = {&GB_ACTION_GROUP_NAME}
    lcActionID = {&GB_REFUND_HANDLER}
@@ -78,14 +93,14 @@ REPEAT:
       IF fCheckFileNameChars(lcFileName) EQ FALSE THEN NEXT.
 
       /*Accept only activation files*/
-      IF NOT lcFileName BEGINS "yoigo_" THEN NEXT.
+      IF NOT lcFileName BEGINS "es_yoigo-" THEN NEXT.
 
       INPUT STREAM sin FROM VALUE(lcInputFile).
    END.
    ELSE NEXT.
 
-   lcErrorLog = lcGBSpoolDir + lcFileName + ".LOG".
-   lcResponseFile = lcGBSpoolDir + "response_" + lcFileName.
+   lcErrorLog = lcGBSpoolDir + fGenerateFileName(lcFileName, "log").
+   lcResponseFile = lcGBSpoolDir + fGenerateFileName(lcFileName, "result").
 
    IF SESSION:BATCH THEN fBatchLog("START", lcInputFile).
 
@@ -95,8 +110,6 @@ REPEAT:
    RUN pReadFileData.
 
    OUTPUT STREAM sLog CLOSE.
-   fMove2TransDir(lcErrorLog, "", lcGBLogDir).
-   fMove2TransDir(lcResponseFile, "", lcGBOutDir).
    fMove2TransDir(lcInputFile, "", lcGBProcessedDir).
    IF SESSION:BATCH AND lcInputFile NE "" THEN
       fBatchLog("FINISH", lcInputFile).
@@ -124,11 +137,13 @@ PROCEDURE pReadFileData:
    DEF VAR liLineNum AS INT.
    DEF VAR lcLine AS CHAR NO-UNDO.
    DEF VAR lcOutLine AS CHAR NO-UNDO.
+   DEF VAR lcLogLine AS CHAR NO-UNDO.
    DEF VAR lcMSISDN AS CHAR NO-UNDO.
    DEF VAR lcCorrId AS CHAR NO-UNDO.
    DEF VAR lcPeriod AS CHAR NO-UNDO.
    DEF VAR ldeAmount AS DECIMAL NO-UNDO. 
    DEF VAR lcErr AS CHAR NO-UNDO.
+   DEF VAR lcErrInfo AS CHAR NO-UNDO.
    DEF VAR llgPayType AS LOGICAL.
 
    FILE_LINE:
@@ -159,11 +174,12 @@ PROCEDURE pReadFileData:
                               lcCorrId,
                               lcPeriod,
                               ldeAmount,
-                              llgPayType).
+                              llgPayType,
+                              lcErrInfo).
       lcOutLine = lcLine + ";" + lcErr.
-
-      PUT STREAM sLog UNFORMATTED lcFilename + ";" + lcOutLine SKIP.
-
+      lcLogLine = lcFilename + ";" + lcOutLine + ";" + lcErrInfo. 
+      PUT STREAM sLog UNFORMATTED  lcLogLine SKIP.
+      PUT STREAM sResponse UNFORMATTED  lcOutLine SKIP.
       
 
    END.
