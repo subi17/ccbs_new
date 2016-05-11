@@ -460,6 +460,9 @@ FOR FIRST ServiceLimit NO-LOCK WHERE
          MServiceLimit.SLSeq = ServiceLimit.SLSeq AND
          MServiceLimit.EndTS  >= ldPeriodFrom AND
          MServiceLimit.EndTs <= ldPeriodTo:
+
+   /* filter out base bundle (activated from consumption). YTS-7114 */
+   IF INT(MServiceLimit.FromTs) EQ MServiceLimit.FromTS THEN NEXT.
     
    liRoamUpsellCount = liRoamUpsellCount + 1.
 
