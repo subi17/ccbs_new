@@ -166,6 +166,7 @@ PROCEDURE pBobCheckUpsell:
    DEF VAR lcDssId            AS CHAR NO-UNDO. 
    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO. 
    DEF VAR lcUpSellList          AS CHAR NO-UNDO. 
+   DEF VAR lcMemoTitle           AS CHAR NO-UNDO. 
 
    IF NUM-ENTRIES(pcLine,lcSep) <> 2 THEN
       RETURN "ERROR:Wrong file format".
@@ -195,7 +196,7 @@ PROCEDURE pBobCheckUpsell:
          lcUpsell = "DSS_UPSELL".
       ELSE IF lcUpsell EQ "DATA200_UPSELL" THEN 
          lcUpsell = "DSS200_UPSELL".
-      ELSE IF lcUpsell NE "DSS_UPSELL"    OR 
+      ELSE IF lcUpsell NE "DSS_UPSELL"    AND 
               lcUpsell NE "DSS200_UPSELL" THEN
          RETURN "ERROR:Upsell is not DSS compatible".
    END.
@@ -205,6 +206,7 @@ PROCEDURE pBobCheckUpsell:
       
       IF lcUpsell NE "DSS2_UPSELL"    AND
          lcUpsell NE "DATA6_UPSELL"   AND 
+         lcUpsell NE "DSS200_UPSELL"  AND
          lcUpsell NE "DATA200_UPSELL" THEN
         RETURN "ERROR:Upsell is not DSS2 compatible".
       
@@ -214,7 +216,7 @@ PROCEDURE pBobCheckUpsell:
          ELSE IF lcUpsell EQ "DATA200_UPSELL" THEN 
             lcUpsell = "DSS200_UPSELL".
       END.
-      ELSE IF lcUpsell NE "DATA6_UPSELL"   OR 
+      ELSE IF lcUpsell NE "DATA6_UPSELL"   AND 
               lcUpsell NE "DATA200_UPSELL" THEN 
          RETURN "ERROR:Subscription is not DSS2 compatible".
    END.
@@ -230,12 +232,25 @@ PROCEDURE pBobCheckUpsell:
 
    IF lcError <> "" THEN
       RETURN lcError.
+
+   lcMemoTitle = "".
+
+   /* YDR-2212 New memo text is been added */
+   CASE lcUpsell:
+      WHEN "DSS_UPSELL" THEN 
+         lcMemoTitle = "Data Sharing Service Upsell".
+      WHEN "DSS2_UPSELL" THEN 
+         lcMemoTitle = "Data Sharing 2 Service Upsell".
+      WHEN "DSS200_UPSELL" THEN
+         lcMemoTitle = "DSS 200 MB upsell".
+   END CASE.
+      
    lcMemoText = "Ampliación " +  lcUpsell + " - Activar".
    DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
                     "MobSub",                             /* HostTable */
                     STRING(Mobsub.MsSeq),                 /* KeyValue  */
                     MobSub.CustNum,                       /* CustNum   */
-                    lcUpsell,                             /* MemoTitle */
+                    lcMemoTitle,                          /* MemoTitle */
                     lcMemoText,                           /* MemoText  */
                     "Service",                            /* MemoType  */
                     katun + "_" + Mobsub.Cli).
