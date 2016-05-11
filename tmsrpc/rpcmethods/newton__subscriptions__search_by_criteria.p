@@ -19,12 +19,12 @@
           limit_of_subscriptions    integer - mandatory
   */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
 katun = "Newton".
-{tmsconst.i}
-{fbundle.i}
-{fdss.i}
+{Syst/tmsconst.i}
+{Mm/fbundle.i}
+{Func/fdss.i}
 
 /* Input parameters */
 DEF VAR pcCliType      AS CHAR NO-UNDO.
@@ -158,19 +158,23 @@ FOR EACH MobSub NO-LOCK WHERE
    END.
 
    IF pcOrderType > "" THEN DO:
-      IF pcOrderType = "sim" AND
-         CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
-                        SubsTerminal.Brand = gcBrand AND
-                        SubsTerminal.MsSeq = MobSub.MsSeq AND
-                        SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
-                        THEN NEXT EACH_MOBSUB.
-      ELSE IF pcOrderType = "terminal" AND
-         NOT CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
-                            SubsTerminal.Brand = gcBrand AND
-                            SubsTerminal.MsSeq = MobSub.MsSeq AND
-                            SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
-                            THEN NEXT EACH_MOBSUB.
-      ELSE NEXT EACH_MOBSUB.
+   	CASE pcOrderType:
+         WHEN "sim" THEN DO:
+           IF CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
+		                       SubsTerminal.Brand = gcBrand AND
+		                       SubsTerminal.MsSeq = MobSub.MsSeq AND
+		                       SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
+		                       THEN NEXT EACH_MOBSUB.
+         END.
+         WHEN "terminal" THEN DO:
+           IF NOT CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
+		                           SubsTerminal.Brand = gcBrand AND
+		                           SubsTerminal.MsSeq = MobSub.MsSeq AND
+		                           SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
+		                           THEN NEXT EACH_MOBSUB.
+         END.
+         OTHERWISE NEXT EACH_MOBSUB.
+      END CASE.
    END.
    
       /* Subscription type */
