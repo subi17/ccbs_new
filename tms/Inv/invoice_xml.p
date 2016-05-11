@@ -564,7 +564,20 @@ PROCEDURE pInvoice2XML:
                                              ttInvoice.InstallmentDiscAmt)).
       lhXML:END-ELEMENT("AdditionalAmount").
       lhXML:END-ELEMENT("AdditionalDetail").
-      
+
+      /*Google Billing*/
+      FIND FIRST ttRow WHERE
+                 ttRow.RowCode BEGINS 44 AND
+                 ttRow.RowBillCode EQ "GOOGLEVAS" NO-ERROR.
+      IF AVAIL ttRow THEN DO: 
+            lhXML:START-ELEMENT("AdditionalDetail").
+            lhXML:START-ELEMENT("AdditionalAmount").
+            lhXML:INSERT-ATTRIBUTE("Header", ttRow.RowBillCode).
+            lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttRow.RowAmt)).
+            lhXML:END-ELEMENT("AdditionalAmount").
+            lhXML:END-ELEMENT("AdditionalDetail").
+         END.
+      END.      
       /* AmountExclTaxAndInstallment, TotalAmountExclInstallment  */
       /* As per requirement, Discount Amt value has to be added to Installment Amt.
          But Discound Amt is negative value, so it is subtracted to InstallmentAmt value */
