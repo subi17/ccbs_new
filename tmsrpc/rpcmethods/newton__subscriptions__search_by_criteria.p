@@ -202,10 +202,25 @@ FOR EACH MobSub NO-LOCK WHERE
    
       /* PAYTERMX */
    IF pcPayTerm > "" THEN DO:
-      IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
-                            DCCLI.MsSeq    = MobSub.MsSeq AND
-                            LOOKUP(DCCLI.DCEvent,pcPayTerm) > 0 AND
-                            DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB.
+   	IF pcPayTerm = "Q25" THEN DO:
+   		IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
+	                            DCCLI.MsSeq    = MobSub.MsSeq AND
+	                            DCCLI.DCEvent  BEGINS "RVTERM" AND
+	                            DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB.
+   	END.
+   	ELSE IF LOOKUP(pcPayTerm,"Q25") > 0 THEN DO:
+   		IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
+	                            DCCLI.MsSeq    = MobSub.MsSeq AND
+	                           (DCCLI.DCEvent  = pcPayTerm OR
+	                            DCCLI.DCEvent  BEGINS "RVTERM") AND
+	                            DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB.
+   	END.    
+   	ELSE DO:
+   		IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
+	                            DCCLI.MsSeq    = MobSub.MsSeq AND
+	                            DCCLI.DCEvent  = pcPayTerm AND
+	                            DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB.
+   	END.
    END.
    ELSE DO:
    	IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
