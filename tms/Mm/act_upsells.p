@@ -165,16 +165,18 @@ PROCEDURE pBobCheckUpsell:
    DEF VAR lcError            AS CHAR NO-UNDO.
    DEF VAR lcDssId            AS CHAR NO-UNDO. 
    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO. 
+   DEF VAR lcUpSellList          AS CHAR NO-UNDO. 
 
    IF NUM-ENTRIES(pcLine,lcSep) <> 2 THEN
       RETURN "ERROR:Wrong file format".
 
    ASSIGN
       lcCLI          = TRIM(ENTRY(1,pcLine,lcSep))
-      lcUpsell       = TRIM(ENTRY(2,pcLine,lcSep)).
+      lcUpsell       = TRIM(ENTRY(2,pcLine,lcSep))
+      lcUpSellList   = "DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL,DSS200_UPSELL,DATA200_UPSELL".
 
    IF lcUpsell = ? OR 
-      LOOKUP(lcUpsell,"DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL") = 0 THEN
+      LOOKUP(lcUpsell,lcUpSellList) = 0 THEN
       RETURN "ERROR: invalid or missing upsell".
 
    lcUpsell = UPPER(lcUpsell).
@@ -191,33 +193,41 @@ PROCEDURE pBobCheckUpsell:
    IF lcDssId EQ "DSS" THEN DO:
       IF lcUpsell EQ "DATA6_UPSELL" THEN
          lcUpsell = "DSS_UPSELL".
-      ELSE IF lcUpsell NE "DSS_UPSELL" THEN
+      ELSE IF lcUpsell EQ "DATA200_UPSELL" THEN 
+         lcUpsell = "DSS200_UPSELL".
+      ELSE IF lcUpsell NE "DSS_UPSELL"    OR 
+              lcUpsell NE "DSS200_UPSELL" THEN
          RETURN "ERROR:Upsell is not DSS compatible".
    END.
    ELSE IF lcDssId EQ "DSS2" THEN DO:
       
       lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
       
-      IF lcUpsell NE "DSS2_UPSELL" AND
-         lcUpsell NE "DATA6_UPSELL" THEN
-         RETURN "ERROR:Upsell is not DSS2 compatible".
+      IF lcUpsell NE "DSS2_UPSELL"    AND
+         lcUpsell NE "DATA6_UPSELL"   AND 
+         lcUpsell NE "DATA200_UPSELL" THEN
+        RETURN "ERROR:Upsell is not DSS2 compatible".
       
       IF LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0 THEN DO:
          IF lcUpsell EQ "DATA6_UPSELL" THEN
             lcUpsell = "DSS2_UPSELL".
-         
+         ELSE IF lcUpsell EQ "DATA200_UPSELL" THEN 
+            lcUpsell = "DSS200_UPSELL".
       END.
-      ELSE IF lcUpsell NE "DATA6_UPSELL" THEN 
+      ELSE IF lcUpsell NE "DATA6_UPSELL"   OR 
+              lcUpsell NE "DATA200_UPSELL" THEN 
          RETURN "ERROR:Subscription is not DSS2 compatible".
-
    END.
 
-   fCreateUpsellBundle(MobSub.MsSeq,
-                       lcUpsell,
-                       {&REQUEST_SOURCE_YOIGO_TOOL},
-                       fMakeTS(),
-                       OUTPUT liRequest,
-                       OUTPUT lcError). 
+   IF lcDssId NE "" THEN 
+      fCreateUpsellBundle(MobSub.MsSeq,
+                          lcUpsell,
+                          {&REQUEST_SOURCE_YOIGO_TOOL},
+                          fMakeTS(),
+                          OUTPUT liRequest,
+                          OUTPUT lcError). 
+   ELSE RETURN "ERROR: DSS is not active for this subscription".
+
    IF lcError <> "" THEN
       RETURN lcError.
    lcMemoText = "Ampliación " +  lcUpsell + " - Activar".
