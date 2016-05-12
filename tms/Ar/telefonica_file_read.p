@@ -403,7 +403,9 @@ PROCEDURE pCollectFusionInvoices:
             ttTF.MsSeq = SubInvoice.MsSeq
             ttTF.ValidatedEmail = (Invoice.DelType EQ {&INV_DEL_TYPE_FUSION_EMAIL})
             ttTF.Email = Customer.Email
-            ttTF.MTaxableIncome = Invoice.AmtExclVAT - ttTF.MTermFinancing
+            ttTF.MTaxableIncome = Invoice.AmtExclVAT - 
+                                  ttTF.MTermFinancing - 
+                                  ttTF.MPermPenalty
             ttTF.MVatAmt = Invoice.VatAmt
             ttTF.MTotalInvoice = Invoice.InvAmt - ttTF.MTermFinancing
             ttTF.MInvAmt = Invoice.InvAmt.
