@@ -245,6 +245,10 @@ PROCEDURE pBobCheckUpsell:
          lcMemoTitle = "Data Sharing 2 Service Upsell".
       WHEN "DSS200_UPSELL" THEN
          lcMemoTitle = "DSS 200 MB upsell".
+      WHEN "DATA6_UPSELL" THEN 
+         lcMemoTitle = "Ampliación 1,5 GB".
+      WHEN "DATA200_UPSELL" THEN 
+         lcMemoTitle = "DATA 200 MB upsell". 
    END CASE.
       
    lcMemoText = "Ampliación " +  lcUpsell + " - Activar".
