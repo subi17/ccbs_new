@@ -190,6 +190,10 @@ PROCEDURE pBobCheckUpsell:
       RETURN "ERROR:TARJ contract or Invalid MSISDN".
       
    lcDssId = fGetActiveDSSId(MobSub.CustNum,fMakeTS()).
+ 
+   IF lcDssID EQ "" AND 
+      lcUpsell BEGINS "DSS" THEN 
+   RETURN "ERROR: DSS is not active for this subscription".
 
    IF lcDssId EQ "DSS" THEN DO:
       IF lcUpsell EQ "DATA6_UPSELL" THEN
@@ -221,14 +225,12 @@ PROCEDURE pBobCheckUpsell:
          RETURN "ERROR:Subscription is not DSS2 compatible".
    END.
 
-   IF lcDssId NE "" THEN 
-      fCreateUpsellBundle(MobSub.MsSeq,
-                          lcUpsell,
-                          {&REQUEST_SOURCE_YOIGO_TOOL},
-                          fMakeTS(),
-                          OUTPUT liRequest,
-                          OUTPUT lcError). 
-   ELSE RETURN "ERROR: DSS is not active for this subscription".
+   fCreateUpsellBundle(MobSub.MsSeq,
+                       lcUpsell,
+                       {&REQUEST_SOURCE_YOIGO_TOOL},
+                       fMakeTS(),
+                       OUTPUT liRequest,
+                       OUTPUT lcError). 
 
    IF lcError <> "" THEN
       RETURN lcError.
