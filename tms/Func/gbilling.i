@@ -57,7 +57,6 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
     OUTPUT ocErrInfo AS CHAR):
 
    DEF VAR lcResponse AS CHAR NO-UNDO.
-   lcResponse = {&GB_RESP_OK}.
    
    RUN creafat (bMobSub.CustNum, /* custnum */
                 bMobSub.MsSeq, /* msseq */
@@ -68,10 +67,13 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
                 icPeriod, /*period*/
                 999999, /*tp period, no limoit now*/
                 OUTPUT lcResponse). /* error */
+   lcresponse = TRIM(lcResponse).             
    IF lcResponse NE "" THEN DO:
       ocErrInfo = lcResponse.
       lcResponse = {&GB_POSTPAID_FAT_FAILURE}.
    END.
+   ELSE
+      lcResponse = {&GB_RESP_OK}.
    RETURN lcResponse.
 END.
 
