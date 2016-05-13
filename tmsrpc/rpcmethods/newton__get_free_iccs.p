@@ -15,7 +15,7 @@ DEF VAR top_array AS CHAR NO-UNDO.
 DEF VAR result_array AS CHAR NO-UNDO. 
 DEF VAR piTotal AS INT NO-UNDO INIT 12.
 DEF VAR liSIMCount AS INT NO-UNDO EXTENT 3.
-DEF VAR lcTypes AS CHAR NO-UNDO init "micro,nano,plug_in". 
+DEF VAR lcTypes AS CHAR NO-UNDO init "micro,nano,plug_in,universal". 
 DEF VAR liType AS INT NO-UNDO.
 DEF VAR liLimit AS INT NO-UNDO. 
 
