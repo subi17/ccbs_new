@@ -305,12 +305,8 @@ IF (llDeviceStart AND llDeviceScreen) OR
       END.
 
       IF liRequest = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
-                          STRING(MsRequest.MsSeq),
-                          MsRequest.Custnum,
-                          "CREDIT NOTE CREATION FAILED",
-                          "ERROR:" + lcError).
+         RETURN appl_err("ERROR:Credit Note Creation Failed; " + lcError).
+
    END.
    ELSE DO:
       liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
