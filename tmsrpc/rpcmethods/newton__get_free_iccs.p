@@ -25,8 +25,8 @@ IF NUM-ENTRIES(top_array) EQ 1 THEN
    piTotal = get_pos_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 then RETURN.
  
-if piTotal < 3 then piTotal = 3.
-liLimit = int(piTotal / 3).
+if piTotal < 4 then piTotal = 4.
+liLimit = int(piTotal / 4).
 
 IF piTotal > 500 THEN RETURN appl_err("Max. 500 ICCs is allowed"). 
 
