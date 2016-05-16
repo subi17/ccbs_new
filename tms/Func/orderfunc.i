@@ -36,6 +36,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF VAR llHardBook AS LOGICAL NO-UNDO INIT FALSE.
 
    DEF BUFFER OrderPayment FOR OrderPayment.
+   DEF BUFFER MsRequest FOR MsRequest.
    DEF BUFFER CLIType FOR CLIType.
 
    ORDER_TRANS:
@@ -103,6 +104,22 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                         ActionLog.KeyValue  = STRING(bfOrder.OrderId)
                         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}.
                   END. /* FOR FIRST OrderPayment NO-LOCK WHERE */
+
+               /* YTS-8312 */
+               IF bfOrder.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
+                  bfOrder.ICC > "" AND
+                  NOT bfOrder.OrderChannel BEGINS "Renewal_POS" AND
+                  bfOrder.Logistics EQ "" THEN DO:
+                  FIND MsRequest NO-LOCK WHERE
+                       MsRequest.MsSeq = bfOrder.MsSeq AND
+                       MsRequest.Reqtype = 15 AND
+                       MsRequest.ReqStatus = 19 AND
+                       MsRequest.ReqCParam2 = bfOrder.ICC AND
+                       MsRequest.ReqSource = {&REQUEST_SOURCE_ICC_CHANGE_AUTO} 
+                       NO-ERROR.
+                  IF AVAIL MsRequest THEN
+                     fReqStatus(4, "Cancelled by order closing").
+               END.
 
                /* close secondary multisim order */
                IF bfOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY} THEN DO:
