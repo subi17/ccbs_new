@@ -1020,13 +1020,17 @@ PROCEDURE pSubInvoice2XML:
    /*Google billing footer will be added if there are GB entreis*/
    lcFooterNotice = "".
    IF llPremiumNumberText THEN DO:
-      lcFooterNotice =  fHeadTxt(573,liLanguage).
+      IF lcFooterNotice NE "" THEN
+         lcFooterNotice = lcFooterNotice + CHR(10) + CHR(13).
+      lcFooterNotice = lcFooterNotice +  fHeadTxt(573,liLanguage).
       lhXML:WRITE-DATA-ELEMENT("FooterNotice", lcFooterNotice).
    END.
    IF llGBText THEN DO:
-      lcFooterNotice = fHeadTxt(574,liLanguage).
-      lhXML:WRITE-DATA-ELEMENT("FooterNotice", lcFooterNotice).
+       IF lcFooterNotice NE "" THEN
+          lcFooterNotice = lcFooterNotice + CHR(10) + CHR(13).
+      lcFooterNotice = lcFooterNotice + fHeadTxt(574,liLanguage).
    END.
+   lhXML:WRITE-DATA-ELEMENT("FooterNotice", lcFooterNotice).
 
    lhXML:END-ELEMENT("Contract").
 

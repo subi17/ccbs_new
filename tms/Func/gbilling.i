@@ -138,10 +138,10 @@ FUNCTION fProcessGBEntry RETURNS CHAR
               bMsOwner.CLI EQ icMSISDN NO-LOCK NO-ERROR.
 
    IF NOT AVAIL bMsOwner THEN RETURN {&GB_RESP_NO_SUBS}.
-   IF bMsOwner.PayType NE ilgPayType THEN 
+   IF bMobsub.PayType NE ilgPayType THEN 
       lcErr = {&GB_INCORRECT_PAYTYPE}.
 
-   IF bMsOwner.paytype THEN DO:
+   IF bMobSub.paytype THEN DO:
       lcResponse = fProcessPrepaidEntry(icMSISDN, 
                                         icCorrId, 
                                         ideAmount,
