@@ -1,5 +1,7 @@
 DEF TEMP-TABLE ttBillItem NO-UNDO LIKE BillItem.
 DEF TEMP-TABLE ttIfispx NO-UNDO LIKE ifiSpx.
+DEF TEMP-TABLE ttTMSCodes NO-UNDO LIKE TMSCodes.
+DEF TEMP-TABLE ttTMSParam NO-UNDO LIKE TMSParam.
 DEF BUFFER bifiSpx FOR ifiSpx.
 
 FIND FIRST BillItem WHERE
@@ -73,5 +75,67 @@ END.
 
 FOR EACH ifiSpx:
    DISP ifiSpx.
+END.
+
+FIND FIRST TMSCodes WHERE
+           TMSCodes.tablename EQ "IFiSpx" AND
+           TMSCodes.FieldName EQ "SIMArt" AND
+           TMSCodes.codevalue EQ "43" NO-LOCK NO-ERROR.
+IF NOT AVAIL TMSCodes THEN DO:           
+   FIND FIRST TMSCodes WHERE 
+              TMSCodes.tablename EQ "IFiSpx" AND
+              TMSCodes.FieldName EQ "SIMArt" NO-ERROR.
+   BUFFER-COPY TMSCodes TO ttTMSCodes.
+   ASSIGN
+      ttTMSCodes.codename = "Universal SIM"
+      ttTMSCodes.codevalue = "18"
+      ttTMSCodes.configValue = "Universal".
+   CREATE TMSCodes.
+   BUFFER-COPY ttTMSCodes TO TMSCodes.
+
+   ttTMSCodes.codevalue = "23".
+   CREATE TMSCodes.
+   BUFFER-COPY ttTMSCodes TO TMSCodes.
+
+   ttTMSCodes.codevalue = "33".
+   CREATE TMSCodes.
+   BUFFER-COPY ttTMSCodes TO TMSCodes.
+
+   ttTMSCodes.codevalue = "43".
+   CREATE TMSCodes.
+   BUFFER-COPY ttTMSCodes TO TMSCodes.
+
+   DELETE ttTMSCodes.
+
+END.
+
+FIND FIRST TMSParam WHERE 
+           TMSParam.brand EQ "1" AND
+           TMSParam.paramgroup EQ "SIM" AND
+           TMSParam.paramcode EQ "ICC_G&D_00004" NO-LOCK NO-ERROR.
+IF NOT AVAIL TMSParam THEN DO:
+   FIND FIRST TMSParam WHERE
+              TMSParam.brand EQ "1" AND
+              TMSParam.paramgroup EQ "SIM" AND
+              TMSParam.paramcode EQ "ICC_G&D_00003" NO-LOCK NO-ERROR.
+   BUFFER-COPY TMSParam TO ttTMSParam.
+   
+   ttTMSParam.paramCode = "ICC_G&D_00004".
+   CREATE TMSParam.
+   BUFFER-COPY ttTMSParam TO TMSParam.
+
+   ttTMSParam.paramCode = "ICC_Gemalto_00004".
+   CREATE TMSParam.
+   BUFFER-COPY ttTMSParam TO TMSParam.
+
+   ttTMSParam.paramCode = "ICC_MORPHO_00004".
+   CREATE TMSParam.
+   BUFFER-COPY ttTMSParam TO TMSParam.
+  
+   ttTMSParam.paramCode = "ICC_OBERHTUR_00004".
+   CREATE TMSParam.
+   BUFFER-COPY ttTMSParam TO TMSParam.
+ 
+   DELETE ttTMSParam.
 END.
 
