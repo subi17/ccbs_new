@@ -80,6 +80,7 @@ END.
 
 FUNCTION fProcessPrepaidEntry RETURNS CHAR
    (icMSISDN AS CHAR, /*MSISDN*/
+    iiMsSeq AS INT, /*MsSeq*/
     icCorrId AS CHAR, /*Correlation ID*/
     ideAmount AS DECIMAL, /*Amount*/
     BUFFER bMsOwner FOR MsOwner):
@@ -97,8 +98,8 @@ FUNCTION fProcessPrepaidEntry RETURNS CHAR
    IF AVAIL bCustomer THEN lcTaxZone = fRegionTaxZone(bCustomer.Region).
    ELSE lcTaxZone = "1".
 
-   liRequest = fCreateTopUpRequest(MobSub.MsSeq,     /* msseq */
-                                   MobSub.Cli,       /* cli */
+   liRequest = fCreateTopUpRequest(iiMsSeq,          /* msseq */
+                                   icMSISDN,         /* cli */
                                    "RefillTRequest", /* function */
                                    "GBRefund",       /* source*/ 
                                    "RefillTRequest", /* request*/
@@ -142,7 +143,8 @@ FUNCTION fProcessGBEntry RETURNS CHAR
       lcErr = {&GB_INCORRECT_PAYTYPE}.
 
    IF bMobSub.paytype THEN DO:
-      lcResponse = fProcessPrepaidEntry(icMSISDN, 
+      lcResponse = fProcessPrepaidEntry(icMSISDN,
+                                        bMobSub.MsSeq,
                                         icCorrId, 
                                         ideAmount,
                                         BUFFER bMsOwner).
