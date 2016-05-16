@@ -1023,7 +1023,6 @@ PROCEDURE pSubInvoice2XML:
       IF lcFooterNotice NE "" THEN
          lcFooterNotice = lcFooterNotice + CHR(10) + CHR(13).
       lcFooterNotice = lcFooterNotice +  fHeadTxt(573,liLanguage).
-      lhXML:WRITE-DATA-ELEMENT("FooterNotice", lcFooterNotice).
    END.
    IF llGBText THEN DO:
        IF lcFooterNotice NE "" THEN
