@@ -44,6 +44,7 @@ FUNCTION fGenerateFileName RETURNS CHAR
    RETURN REPLACE(icInFN, lcTemp, icType + ".csv").
 END.
 
+SESSION:NUMERIC-FORMAT = "EUROPEAN".
 
 ASSIGN 
    lcTableName = {&GB_ACTION_GROUP_NAME}
