@@ -431,9 +431,11 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
    DEF VAR lcMainSMS AS CHAR NO-UNDO. 
          
    DEFINE BUFFER MsRequest FOR MsRequest.     
+   DEFINE BUFFER bMsRequest FOR MsRequest.     
    DEFINE BUFFER MobSub    FOR MobSub.
    DEFINE BUFFER lbMobSub  FOR MobSub.
    DEFINE BUFFER CLIType   FOR CLIType.
+   DEFINE BUFFER bCLIType  FOR CLIType.
 
    FIND MsRequest NO-LOCK WHERE 
         MsRequest.Brand     = gcBrand     AND 
@@ -469,6 +471,38 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
       
       /* check main line existence */
       IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} THEN DO:
+         
+         FOR EACH bMsRequest NO-LOCK WHERE
+                  bMsRequest.MsSeq = lbMobSub.msseq AND
+                  bMsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+                  bMsRequest.ActStamp <= fMakeTS() AND
+          LOOKUP(STRING(bMsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
+            FIRST bCLIType NO-LOCK WHERE
+                  bCLIType.Brand = gcBrand AND
+                  bCLIType.CLIType = (IF bMsRequest.ReqCParam5 > ""
+                                     THEN bMsRequest.ReqCParam5
+                                     ELSE bMsRequest.ReqCParam2):
+            IF bCLIType.LineType NE {&CLITYPE_LINETYPE_MAIN} THEN NEXT.
+         END.
+
+         FOR EACH bMsRequest NO-LOCK WHERE
+                  bMsRequest.MsSeq = lbMobSub.MsSeq AND
+                  bMsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
+                  bMsRequest.ActStamp <= fMakeTS() AND
+          LOOKUP(STRING(bMsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
+            FIRST bCLIType NO-LOCK WHERE
+                  bCLIType.Brand = gcBrand AND
+                  bCLIType.CLIType = bMsRequest.ReqCParam2:
+            IF bCLIType.LineType NE {&CLITYPE_LINETYPE_MAIN} THEN NEXT.
+         END.
+
+         IF CAN-FIND (FIRST bMsRequest WHERE
+                bMsRequest.MsSeq = lbMobSub.MsSeq AND
+                bMsRequest.ActStamp <= fMakeTS() AND
+                MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+                LOOKUP(STRING(bMsRequest.ReqStatus),
+                       {&REQ_INACTIVE_STATUSES}) = 0) THEN NEXT.
+
          EMPTY TEMP-TABLE tt_AdditionalSIM NO-ERROR.
          RETURN FALSE.
       END.
