@@ -390,7 +390,7 @@ PROCEDURE pReadDCCLI :
       RUN pReadMobSub.
       /* YTS-8721: Add total MF of RVTERM contract into dump */
       IF ttContract.Contract BEGINS "RVTERM" THEN
-         RUN pCheckMFTotalRVTERM.
+         RUN pCountTotSumofRVTERM.
       RUN pReadDayCampaign.
        
 END PROCEDURE.
@@ -510,20 +510,23 @@ PROCEDURE pWriteContract:
 
 END PROCEDURE.
 
-PROCEDURE pCheckMFTotalRVTERM:
+PROCEDURE pCountTotSumofRVTERM:
+   /* YTS-8721, current total sum of RVTERM contract.
+     This is needed because of manual removal of FixedFees */
+
+   DEF VAR liMFItems AS INT NO-UNDO. 
    
-   /* 
-      Add total amount of RVTERM12 contract Monthly Fee 
-      into Periodical Contract dump.
-   */
-   FIND FixedFee NO-LOCK WHERE
-        FixedFee.Brand = "1" AND
-        FixedFee.CustNum = ttContract.AgrCust AND
-        FixedFee.HostTable = "Mobsub" AND
-        FixedFee.KeyValue = STRING(ttContract.MsSeq) AND
-        FixedFee.EndPeriod >= (YEAR(TODAY) * 100) + MONTH(TODAY) AND
-        FixedFee.Billcode BEGINS "RVTERM" NO-ERROR.
-   IF AVAIL FixedFee THEN
-      ttContract.Amount = 12 * FixedFee.Amt.
+   FOR EACH FixedFee NO-LOCK WHERE
+            FixedFee.Brand = "1" AND
+            FixedFee.HostTable = "Mobsub" AND
+            FixedFee.KeyValue = STRING(ttContract.MsSeq) AND
+            FixedFee.SourceTable = "DCCLI" AND
+            FixedFee.SourceKey = STRING(DCCLI.PerContractID),
+       EACH FFItem NO-LOCK WHERE
+            FFItem.FFNum = FixedFee.FFNum:
+
+      liMFItems = liMFItems + 1.
+   END.
+   ttContract.Amount = liMFItems * FixedFee.Amt.
 
 END PROCEDURE

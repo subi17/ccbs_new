@@ -1065,13 +1065,7 @@ PROCEDURE pContractActivation:
                                 "RVTERMDT2 discount creation failed",
                                 lcError).
          END. /* IF ldeResidualFeeDisc > 0 THEN DO: */
-         
-         /* Adding Q25 Installment residual fee YTS-8721 */
-         IF AVAIL bQ25SingleFee THEN
-            DCCLI.Amount = MsRequest.ReqDParam2.
-          
       END. /* ELSE IF lcDCEvent EQ "RVTERM12" THEN DO: */
-      
    END.
    
    /* Temporary FAT creation for BONO_VOIP. YDA-173 */
