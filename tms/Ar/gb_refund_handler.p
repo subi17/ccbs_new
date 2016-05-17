@@ -72,12 +72,13 @@ DO TRANS:
          ActionLog.Brand        = gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
-         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
+         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
          ActionLog.UserCode     = katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
-      RELEASE ActionLog.
-      RETURN. /*No reporting in first time.*/
    END.
+   ELSE  ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}.
+
+   RELEASE ActionLog.
 END.
 
 /*File handling logic starts*/
