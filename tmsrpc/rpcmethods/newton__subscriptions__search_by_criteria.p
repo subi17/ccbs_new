@@ -50,15 +50,15 @@ DEF VAR lcstruct       AS CHAR NO-UNDO.
 DEF VAR lcOtherBundle  AS CHAR NO-UNDO.
 DEF VAR lcSegmentCode  AS CHAR NO-UNDO.
 DEF VAR liCount        AS INT  NO-UNDO.
-DEF VAR liNumberOfBundles 	AS INT  NO-UNDO.
-DEF VAR liNumberOfSubs 		AS INT  NO-UNDO INIT 0.
-DEF VAR liNumberLimit  		AS INT  NO-UNDO INIT 0.
-DEF VAR lcBundleCLITypes 	AS CHAR NO-UNDO.
-DEF VAR ldtOrderDate     	AS DATE NO-UNDO. 
-DEF VAR liOrderTime      	AS INT  NO-UNDO. 
-DEF VAR liLoopBegTime    	AS INT  NO-UNDO.
-DEF VAR liLoopEndTime    	AS INT  NO-UNDO. 
-DEF VAR liLoopCount      	AS INT  NO-UNDO. 
+DEF VAR liNumberOfBundles  AS INT  NO-UNDO.
+DEF VAR liNumberOfSubs     AS INT  NO-UNDO INIT 0.
+DEF VAR liNumberLimit      AS INT  NO-UNDO INIT 0.
+DEF VAR lcBundleCLITypes   AS CHAR NO-UNDO.
+DEF VAR ldtOrderDate       AS DATE NO-UNDO. 
+DEF VAR liOrderTime        AS INT  NO-UNDO. 
+DEF VAR liLoopBegTime      AS INT  NO-UNDO.
+DEF VAR liLoopEndTime      AS INT  NO-UNDO. 
+DEF VAR liLoopCount        AS INT  NO-UNDO. 
 DEF VAR plgOrderStatus     AS LOG  NO-UNDO.
 DEF VAR plgEligibleRenewal AS LOG  NO-UNDO INIT ?.
 
@@ -70,7 +70,7 @@ lcstruct = validate_struct(pcStruct,
 
 ASSIGN
    pcCliType      = get_string(pcStruct, "subscription_type")
-   	WHEN LOOKUP("subscription_type", lcStruct) > 0
+      WHEN LOOKUP("subscription_type", lcStruct) > 0
    piOffset       = get_int(param_toplevel_id, "1")
    piSubsLimit    = get_int(param_toplevel_id, "2")
    lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
@@ -95,9 +95,9 @@ ASSIGN
    plgOrderStatus = get_bool(pcStruct, "order_status")
       WHEN LOOKUP("order_status", lcStruct) > 0
    pcOrderType    = get_string(pcStruct, "order_type")
-   	WHEN LOOKUP("order_type", lcStruct) > 0
+      WHEN LOOKUP("order_type", lcStruct) > 0
    plgEligibleRenewal = get_bool(pcStruct,"eligible_renewal")
-   	WHEN LOOKUP("eligible_renewal", lcStruct) > 0.
+      WHEN LOOKUP("eligible_renewal", lcStruct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -135,7 +135,7 @@ FOR EACH MobSub NO-LOCK WHERE
    IF pdtInputDate <> ? THEN DO: 
       FOR EACH Order NO-LOCK WHERE 
                Order.MsSeq  EQ MobSub.MsSeq AND
-               LOOKUP(Order.StatusCode, {&ORDER_CLOSE_STATUSES}) = 0  
+               LOOKUP(Order.StatusCode, {&ORDER_CLOSE_STATUSES}) = 0
            BY Order.CrStamp DESC:
        
           fSplitTS(Order.CrStamp, 
@@ -149,7 +149,7 @@ FOR EACH MobSub NO-LOCK WHERE
    
    IF plgOrderStatus THEN DO: 
       FOR EACH Order NO-LOCK WHERE 
-               Order.MsSeq  EQ MobSub.MsSeq                   
+               Order.MsSeq  EQ MobSub.MsSeq
            BY Order.CrStamp DESC:
        
          IF NOT Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} THEN
@@ -158,20 +158,20 @@ FOR EACH MobSub NO-LOCK WHERE
    END.
 
    IF pcOrderType > "" THEN DO:
-   	CASE pcOrderType:
+      CASE pcOrderType:
          WHEN "sim" THEN DO:
            IF CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
-		                       SubsTerminal.Brand = gcBrand AND
-		                       SubsTerminal.MsSeq = MobSub.MsSeq AND
-		                       SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
-		                       THEN NEXT EACH_MOBSUB.
+                             SubsTerminal.Brand = gcBrand AND
+                             SubsTerminal.MsSeq = MobSub.MsSeq AND
+                             SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
+                             THEN NEXT EACH_MOBSUB.
          END.
          WHEN "terminal" THEN DO:
            IF NOT CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
-		                           SubsTerminal.Brand = gcBrand AND
-		                           SubsTerminal.MsSeq = MobSub.MsSeq AND
-		                           SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
-		                           THEN NEXT EACH_MOBSUB.
+                                 SubsTerminal.Brand = gcBrand AND
+                                 SubsTerminal.MsSeq = MobSub.MsSeq AND
+                                 SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
+                                 THEN NEXT EACH_MOBSUB.
          END.
          OTHERWISE NEXT EACH_MOBSUB.
       END CASE.
@@ -202,28 +202,28 @@ FOR EACH MobSub NO-LOCK WHERE
    
       /* PAYTERMX */
    IF pcPayTerm > "" THEN DO:
-   	IF pcPayTerm = "Q25" THEN DO:
-   		IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
-	                            DCCLI.MsSeq    = MobSub.MsSeq AND
-	                            DCCLI.DCEvent  BEGINS "RVTERM" AND
-	                            DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB.
-   	END.
-   	ELSE IF LOOKUP(pcPayTerm,"Q25") > 0 THEN DO:
-   		IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
-	                            DCCLI.MsSeq    = MobSub.MsSeq AND
-	                           (DCCLI.DCEvent  = pcPayTerm OR
-	                            DCCLI.DCEvent  BEGINS "RVTERM") AND
-	                            DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB.
-   	END.    
-   	ELSE DO:
-   		IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
-	                            DCCLI.MsSeq    = MobSub.MsSeq AND
-	                            DCCLI.DCEvent  = pcPayTerm AND
-	                            DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB.
-   	END.
+      IF pcPayTerm = "Q25" THEN DO:
+         IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
+                               DCCLI.MsSeq    = MobSub.MsSeq AND
+                               DCCLI.DCEvent  BEGINS "RVTERM" AND
+                               DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB.
+      END.
+      ELSE IF LOOKUP(pcPayTerm,"Q25") > 0 THEN DO:
+         IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
+                               DCCLI.MsSeq    = MobSub.MsSeq AND
+                              (DCCLI.DCEvent  = pcPayTerm OR
+                               DCCLI.DCEvent  BEGINS "RVTERM") AND
+                               DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB.
+      END.
+      ELSE DO:
+         IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
+                               DCCLI.MsSeq    = MobSub.MsSeq AND
+                               DCCLI.DCEvent  = pcPayTerm AND
+                               DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB.
+      END.
    END.
    ELSE DO:
-   	IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
+      IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                             DCCLI.MsSeq    = MobSub.MsSeq AND
                             DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB.
    END.
@@ -250,7 +250,7 @@ FOR EACH MobSub NO-LOCK WHERE
       IF liCount = 0 THEN NEXT EACH_MOBSUB.
    END.
    ELSE DO:
-   	FOR EACH DCCLI NO-LOCK WHERE
+      FOR EACH DCCLI NO-LOCK WHERE
                DCCLI.MsSeq      = MobSub.MsSeq AND
                DCCLI.ValidFrom <= TODAY        AND
                DCCLI.ValidTo   >= TODAY        AND
@@ -313,6 +313,3 @@ END. /* FOR EACH MobSub NO-LOCK WHERE */
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.
-
-
-
