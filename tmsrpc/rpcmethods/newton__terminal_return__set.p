@@ -37,6 +37,7 @@ gcBrand = "1".
 {dpmember.i}
 {coinv.i}
 {msreqfunc.i}
+{fcreditreq.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -72,6 +73,7 @@ DEF VAR lcOrigKatun      AS CHAR   NO-UNDO.
 DEF VAR lcReturnChannel  AS CHAR   NO-UNDO.
 DEF VAR llTermAccepted   AS LOG    NO-UNDO.
 DEF VAR llCreateMemo     AS LOG    NO-UNDO.
+DEF VAR lcError          AS CHAR NO-UNDO.
 
 DEF VAR pcQ25Struct       AS CHARACTER NO-UNDO. /* Quota 25 input struct */
 DEF VAR lcQ25Struct       AS CHARACTER NO-UNDO.
@@ -193,12 +195,6 @@ IF (llDeviceStart AND llDeviceScreen) OR
    IF NOT AVAILABLE SingleFee THEN
       RETURN appl_err("Residual fee not found").
    
-   IF SingleFee.Billed AND
-      NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
-                         Invoice.InvNum = SingleFee.InvNum AND
-                         Invoice.InvType = {&INV_TYPE_TEST}) THEN
-      RETURN appl_err("Residual fee already billed").
-
    IF SingleFee.SourceTable NE "DCCLI" THEN
       RETURN appl_err("Residual fee is not linked with installment contract").
       
@@ -271,32 +267,75 @@ IF (llDeviceStart AND llDeviceScreen) OR
          RETURN appl_err("Pending Q25 extension without renewal order").
    END.
    
-   liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
-                                     "RVTERMDT3DISC",
-                                     SingleFee.Amt,
-                                     fPer2Date(SingleFee.BillPeriod,0),
-                                     1,
-                                     SingleFee.OrderId, /* Q25 OrderId */
-                                     OUTPUT lcResult).
+   /* If Quota 25 is already billed then create a "credit note" with equivalent amount.
+      But if Quota 25 is not billed then create a discount (RVTERMDT3) equivalent to 
+      Quota 25 fee with same period date. */
+   IF SingleFee.Billed AND
+      NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
+                         Invoice.InvNum = SingleFee.InvNum AND
+                         Invoice.InvType = {&INV_TYPE_TEST}) THEN DO:
 
-   IF liRequest NE 0 THEN
-      RETURN appl_err("ERROR:Discount creation failed; " + lcResult).
+      FOR FIRST Invoice NO-LOCK WHERE
+                Invoice.InvNum = SingleFee.InvNum AND
+                Invoice.InvType = 1,
+          FIRST SubInvoice NO-LOCK WHERE
+                Subinvoice.InvNum = Invoice.InvNum AND
+                Subinvoice.MsSeq = MobSub.MsSeq,
+           EACH InvRow NO-LOCK WHERE
+                InvRow.InvNum = Invoice.InvNum AND
+                InvRow.SubInvNum = SubInvoice.SubInvNum AND
+                InvRow.BillCode = SingleFee.BillCode AND
+                InvRow.CreditInvNum = 0 AND
+                InvRow.Amt >= SingleFee.Amt:
+         
+         IF InvRow.OrderId > 0 AND
+            SingleFee.OrderID > 0 AND
+            InvRow.OrderId NE SingleFee.OrderId THEN NEXT.
+      
+         liRequest = fFullCreditNote(Invoice.InvNum,
+                                 STRING(SubInvoice.SubInvNum),
+                                 "InvRow="    + STRING(InvRow.InvRowNum) + "|" +
+                                 "InvRowAmt=" + STRING(MIN(InvRow.Amt,
+                                                   SingleFee.Amt)),
+                                 "Correct",
+                                 "2013",
+                                 "",
+                                 OUTPUT lcError).
+         LEAVE.
+      END.
 
-   FOR EACH DiscountPlan NO-LOCK WHERE
-            DiscountPlan.Brand = gcBrand AND
-           (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
-            DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
-       EACH DPMember NO-LOCK WHERE
-            DPMember.DpID       = DiscountPlan.DpId AND
-            DPMember.HostTable  = "MobSub" AND
-            DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
-            DPMember.ValidFrom  = fPer2Date(SingleFee.BillPeriod,0) AND
-            DPMember.ValidTo   >= DPMember.ValidFrom:
+      IF liRequest = 0 THEN
+         RETURN appl_err("ERROR:Credit Note Creation Failed; " + lcError).
 
-      fCloseDiscount(DiscountPlan.DPRuleId,
-                     MobSub.MsSeq,
-                     DPMember.ValidFrom - 1,
-                     FALSE). /* clean event logs */
+   END.
+   ELSE DO:
+      liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
+                                        "RVTERMDT3DISC",
+                                        SingleFee.Amt,
+                                        fPer2Date(SingleFee.BillPeriod,0),
+                                        1,
+                                        SingleFee.OrderId, /* Q25 OrderId */
+                                        OUTPUT lcResult).
+
+      IF liRequest NE 0 THEN
+         RETURN appl_err("ERROR:Discount creation failed; " + lcResult).
+
+      FOR EACH DiscountPlan NO-LOCK WHERE
+               DiscountPlan.Brand = gcBrand AND
+              (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
+               DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
+          EACH DPMember NO-LOCK WHERE
+               DPMember.DpID       = DiscountPlan.DpId AND
+               DPMember.HostTable  = "MobSub" AND
+               DPMember.KeyValue   = STRING(MobSub.MsSeq) AND
+               DPMember.ValidFrom  = fPer2Date(SingleFee.BillPeriod,0) AND
+               DPMember.ValidTo   >= DPMember.ValidFrom:
+
+         fCloseDiscount(DiscountPlan.DPRuleId,
+                        MobSub.MsSeq,
+                        DPMember.ValidFrom - 1,
+                        FALSE). /* clean event logs */
+      END.
    END.
 
    IF AVAILABLE MsRequest AND

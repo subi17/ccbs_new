@@ -24,6 +24,7 @@ DEFINE VARIABLE liPeriod AS INTEGER NO-UNDO.
 DEFINE VARIABLE liPeriodOld AS INTEGER NO-UNDO. 
 DEFINE VARIABLE ldaPeriodNext AS DATE NO-UNDO. 
 DEFINE VARIABLE liPeriodNext AS INTEGER NO-UNDO. 
+DEF BUFFER bFixedFee FOR FixedFee.
 
 ldaPeriod = today.
 
@@ -54,7 +55,7 @@ fOR EACH fixedfee NO-LOCK where
 
    release bsinglefee.
 
-   FIND FIRST ffitem of fixedfee NO-LOCK no-error.
+   FIND FIRST ffitem of fixedfee USE-INDEX FFNum NO-LOCK no-error.
    
    if avail ffitem and ffitem.billperiod < liPeriod then next.
    if fixedfee.begperiod < liPeriodOld then next.
@@ -119,9 +120,9 @@ fOR EACH fixedfee NO-LOCK where
          (if avail(ffitem) then string(ffitem.amt) ELSE "N/A") "|"
          (if avail(singlefee) then string(singlefee.amt) else "N/A") "|" 
          fixedfee.begperiod "|"
-         (if avail ffitem then ffitem.billperiod else "N/A") "|"
+         (if avail ffitem then string(ffitem.billperiod) else "N/A") "|"
          (avail msrequest) "|"
-         (if avail limit then limit.limitamt else 0) "|"
+         (if avail limit then string(limit.limitamt) else "0") "|"
          "ERROR:order id not mapped" skip.
          j = j + 1.
       next.
@@ -130,6 +131,7 @@ fOR EACH fixedfee NO-LOCK where
    FIND FIRST bsinglefee NO-LOCK where
               bsinglefee.brand = "1" and
               bsinglefee.hosttable = "mobsub" and
+              bsinglefee.custnum  = fixedfee.custnum and
               bsinglefee.keyvalue = fixedfee.keyvalue and
               bsinglefee.billcode = "PAYTERMEND"  and
               bsinglefee.sourcetable = "fixedfee" and
@@ -202,7 +204,15 @@ fOR EACH fixedfee NO-LOCK where
    
    if fixedfee.endperiod < liPeriodNext and
       fixedfee.endperiod >= fixedfee.begperiod and 
-      not avail bsinglefee then do:
+      not avail bsinglefee AND
+      not can-find(first bfixedfee NO-LOCK where
+                         bfixedfee.brand = fixedfee.brand and
+                         bfixedfee.hosttable = fixedfee.hosttable and
+                         bfixedfee.keyvalue = fixedfee.keyvalue and
+                         bfixedfee.sourcetable = fixedfee.sourcetable and
+                         bfixedfee.sourcekey = fixedfee.sourcekey and
+                         bfixedfee.billcode = fixedfee.billcode and
+                         bfixedfee.endperiod > fixedfee.endperiod) then do:
    
       put stream sout unformatted
          fixedfee.orderid "|"
