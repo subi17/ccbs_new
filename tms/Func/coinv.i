@@ -1,3 +1,7 @@
+&IF "{&COINV_I}" NE "YES"
+&THEN
+&GLOBAL-DEFINE COINV_I YES
+
 /* CONTRACT INVOIDE INCLUDE File WITH Period & Date FUNCTIONS 
    NOTICE !!!: works only within 12 MONTH periods 
    
@@ -163,6 +167,4 @@ FUNCTION fInt2Date RETURNS Date
    RETURN per1.
 END. /* FUNCTION */
 
-
-
-
+&ENDIF
