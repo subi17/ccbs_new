@@ -16,7 +16,7 @@
            
 */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 gcBrand = "1".
 {Func/timestamp.i}

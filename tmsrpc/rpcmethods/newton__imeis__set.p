@@ -13,7 +13,7 @@
  * @output boolean;true
  */
 {Syst/tmsconst.i}
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
 

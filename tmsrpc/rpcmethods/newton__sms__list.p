@@ -8,7 +8,7 @@
  * @output struct;array of callalarm rowid 
 */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/tmsconst.i}
 
 DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".

@@ -6,7 +6,7 @@
  * @output  success;boolean
  */
 
-{xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1} 
+{fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1} 
 
 /* Input parameters */
 DEF VAR piReference AS INT NO-UNDO.

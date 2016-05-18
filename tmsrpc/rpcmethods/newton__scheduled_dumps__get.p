@@ -12,7 +12,7 @@
            timestamp;timestamp;when dump should be run
 */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 ASSIGN
    gcBrand = "1".

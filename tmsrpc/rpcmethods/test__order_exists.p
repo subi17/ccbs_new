@@ -7,7 +7,7 @@
  *
  */
 
-{xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
+{fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 
 
 

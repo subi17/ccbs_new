@@ -24,7 +24,7 @@
  * @installment;array of installment structs;two fields insidde struct
  * @installment;struct per_contract_id;int;installment periodical contract id
 */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
 katun = "NewtonRPC".

@@ -1,4 +1,4 @@
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Func/matrix.i}
 
 DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".

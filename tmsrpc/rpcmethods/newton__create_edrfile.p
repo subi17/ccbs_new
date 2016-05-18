@@ -7,7 +7,7 @@
             ldaDateTime;datetime;mandatory;Date&time for generated data
  * @output success;boolean
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Mnp/mnpoutchk.i}
 {Syst/commpaa.i}
 katun = "Newton".

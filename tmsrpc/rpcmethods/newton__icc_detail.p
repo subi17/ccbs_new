@@ -7,7 +7,7 @@
             sim_status;int;mandatory
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 /* Input parameters */
 DEF VAR pcIcc AS CHAR NO-UNDO.

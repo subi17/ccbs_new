@@ -12,7 +12,7 @@
 {Func/cparam2.i}
 {Func/msreqfunc.i}
 {Syst/tmsconst.i}
-{xmlrpc/xmlrpc_client.i}
+{fcgi_agent/xmlrpc/xmlrpc_client.i}
 {Func/forderstamp.i}
 
 DEFINE INPUT PARAMETER iiMSrequest AS INT NO-UNDO.

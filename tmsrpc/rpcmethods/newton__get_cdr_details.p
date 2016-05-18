@@ -10,7 +10,7 @@
                 reason;string;optional;reason why query is done
  * @output      cdr_datastruct;struct;contains needed CDR information as specified above ruby stub implementation
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Func/transname.i}
 {Rate/rate_roamzone.i}
 {Syst/tmsconst.i}

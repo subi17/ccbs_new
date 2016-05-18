@@ -16,7 +16,7 @@
  * @output offer_item;struct; 
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEFINE VARIABLE pcId AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liId AS INTEGER NO-UNDO. 

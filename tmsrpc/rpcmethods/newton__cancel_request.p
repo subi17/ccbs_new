@@ -16,7 +16,7 @@
                 bundle_termination;Bundle/Contract Termination
  */
 
-{xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
+{fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/tmsconst.i}
 
 

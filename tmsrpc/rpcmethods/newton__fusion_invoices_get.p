@@ -33,7 +33,7 @@
        permanency_penalty;double;mandatory;Permanency penalty fees
        total_to_pay;double;mandatory;Total to pay
 */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
 katun = "NewtonRPC".

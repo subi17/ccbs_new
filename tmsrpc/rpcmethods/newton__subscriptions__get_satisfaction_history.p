@@ -10,7 +10,7 @@
             additional_info;string;optional; additional info if exist 
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 {Syst/tmsconst.i}
 {rpcmethods/fpindicator.i}

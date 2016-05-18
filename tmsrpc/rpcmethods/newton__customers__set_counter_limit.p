@@ -9,7 +9,7 @@
 
 */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 
 DEFINE VARIABLE piCustNum AS INTEGER NO-UNDO. 

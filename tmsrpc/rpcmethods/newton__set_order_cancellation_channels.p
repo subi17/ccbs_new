@@ -6,7 +6,7 @@
  * @output     boolean;true
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEF VAR pcOrderChannel   AS CHAR NO-UNDO.
 DEF VAR pcCancelChannel  AS CHAR NO-UNDO.

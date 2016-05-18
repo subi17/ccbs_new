@@ -7,7 +7,7 @@
  * @output status;int;Change status (0=failure, 1=Success)
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Func/tmsparam4.i}
 {Syst/commpaa.i}
 katun = "Newton".

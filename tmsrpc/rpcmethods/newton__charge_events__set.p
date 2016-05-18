@@ -8,7 +8,7 @@
                      amount;double;optional; 
 */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 
 DEFINE VARIABLE pcId          AS CHARACTER NO-UNDO.

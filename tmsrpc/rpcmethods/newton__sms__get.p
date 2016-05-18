@@ -15,7 +15,7 @@
         sender;string;mandatory;sms sender number
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcId AS CHAR NO-UNDO. 

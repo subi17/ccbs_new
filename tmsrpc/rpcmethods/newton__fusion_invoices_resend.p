@@ -5,7 +5,7 @@
           username;string;mandatory;Newton username
  * @output boolean;mandatory;True
 */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
 katun = "NewtonRPC".

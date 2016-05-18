@@ -6,7 +6,7 @@ DEFINE OUTPUT PARAMETER pcAnswerCodes AS CHARACTER NO-UNDO.
 
 /* output through cat. */
 
-{xmlrpc/xmlrpc_client.i}
+{fcgi_agent/xmlrpc/xmlrpc_client.i}
 {Syst/commali.i}
 {Func/timestamp.i}
 {Func/date.i}

@@ -8,7 +8,7 @@
  *
  */
 
-{xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
+{fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/tmsconst.i}
 
 DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO INIT "1".

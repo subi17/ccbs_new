@@ -6,7 +6,7 @@
  * @output success;boolean;TRUE if the Memo was found with the identifier
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEFINE VARIABLE piMemoSeq  AS INTEGER NO-UNDO. 
 DEFINE VARIABLE piPriority AS INTEGER NO-UNDO. 

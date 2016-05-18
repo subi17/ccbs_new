@@ -9,7 +9,7 @@
 
  * @output      success;boolean;Result status of saving SMS
 */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 {Syst/tmsconst.i}
 gcBrand = "1".

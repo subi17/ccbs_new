@@ -17,7 +17,7 @@
    @ret_struct id;string;offer item id
 */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 gcBrand = "1".
 {Syst/eventval.i}

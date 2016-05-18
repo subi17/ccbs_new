@@ -14,7 +14,7 @@
           user_euro_limit;decimal;optional; euro monthly limit 
   * @output
 */
- {xmlrpc/xmlrpc_access.i}
+ {fcgi_agent/xmlrpc/xmlrpc_access.i}
  /* Input parameters */
  DEFINE VARIABLE piMsSeq AS INTEGER NO-UNDO. 
  DEFINE VARIABLE pcUserName AS CHARACTER NO-UNDO. 

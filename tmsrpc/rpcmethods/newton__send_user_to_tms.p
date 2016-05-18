@@ -7,7 +7,7 @@
  *          
  * @output  result;boolean;true/false
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 /* Dependencies ... */
 

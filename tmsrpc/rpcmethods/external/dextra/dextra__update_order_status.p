@@ -31,7 +31,7 @@
  
 */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEF VAR top_struct AS CHAR NO-UNDO.
 DEF VAR lcTopStruct AS CHAR NO-UNDO.
 DEF VAR liResult AS INT INITIAL 0 NO-UNDO.

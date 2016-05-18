@@ -42,7 +42,7 @@
                 invoice;int;0 = no memos, 1 = at least one memo
                 service;int;0 = no memos, 1 = at least one memo
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".

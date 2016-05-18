@@ -6,7 +6,7 @@
                 tariff_bundle;string;mandatory;
                 status_code;int;mandatory;(0=Inactive,1=active,2=retired)
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEF VAR gcBrand AS CHAR NO-UNDO.
 DEF VAR katun   AS CHAR NO-UNDO.

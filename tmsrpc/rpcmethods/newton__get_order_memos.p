@@ -14,7 +14,7 @@
            content;str;content of the Memo
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEFINE VARIABLE piOrderId AS INTEGER NO-UNDO. 
 DEFINE VARIABLE pcType    AS CHARACTER NO-UNDO. 

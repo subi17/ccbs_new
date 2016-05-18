@@ -14,7 +14,7 @@
                4;SMS template Does not exist
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 {Syst/commpaa.i}
 ASSIGN katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId

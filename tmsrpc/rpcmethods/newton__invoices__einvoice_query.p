@@ -8,7 +8,7 @@
                string;mandatory;hash keys
  * @output     int;mandatory;invoice number
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
 ASSIGN gcBrand = "1"

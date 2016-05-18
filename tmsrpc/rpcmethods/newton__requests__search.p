@@ -17,7 +17,7 @@
             type;int;request type
             status;int;request status
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEFINE VARIABLE gcBrand AS CHARACTER INIT "1" NO-UNDO. 
 DEFINE VARIABLE katun AS CHARACTER NO-UNDO. 

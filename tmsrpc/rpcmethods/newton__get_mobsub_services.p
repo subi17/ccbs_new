@@ -7,7 +7,7 @@
             value;string/int;Status of the service (on/off)
             params;struct;Optionally additional information
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 katun    = "NewtonAd".
 gcBrand  = "1".

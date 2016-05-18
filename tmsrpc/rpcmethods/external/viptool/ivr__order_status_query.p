@@ -11,7 +11,7 @@
                 logistic_status;int;logistic status
  * @Exceptions  1;Order not found
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/tmsconst.i}
 
 /* Input parameters */

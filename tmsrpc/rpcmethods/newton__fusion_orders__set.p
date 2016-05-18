@@ -13,7 +13,7 @@
  * @output string;empty=ok,any other text means that order fusion status change has bee failed
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEF VAR lhBuff AS HANDLE NO-UNDO.
 DEF VAR pcOrderStruct AS CHARACTER NO-UNDO.

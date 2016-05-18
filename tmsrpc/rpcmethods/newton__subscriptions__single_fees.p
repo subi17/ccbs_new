@@ -11,7 +11,7 @@
               period;int;
               billed_on_invoice;int;invoice number
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 /* Input parameters */
 DEFINE VARIABLE piMsSeq     AS INTEGER   NO-UNDO.

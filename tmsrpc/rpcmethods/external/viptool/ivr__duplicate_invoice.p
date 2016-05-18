@@ -13,7 +13,7 @@
                 7;Customer was not found
                 8;Function not allowed due to existing requests
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 
 /* Input parameters */

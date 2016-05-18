@@ -15,7 +15,7 @@
                  name;string;full name of the owner
                  message;string;optional message (preactivated subs). 
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
 katun = "Newton".

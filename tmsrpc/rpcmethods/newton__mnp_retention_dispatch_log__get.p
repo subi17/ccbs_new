@@ -11,7 +11,7 @@
            name;string;Platform name
 */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Func/timestamp.i}
 
 DEF VAR resp_struct AS CHARACTER NO-UNDO. 

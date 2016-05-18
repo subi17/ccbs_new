@@ -4,7 +4,7 @@
  * @input  int;mandatory;subscription ID (main line msseq)
  * @output string;mandatory;HAS_ADDITIONAL_LINES, OK
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 gcBrand = "1".
 {Func/cparam2.i}

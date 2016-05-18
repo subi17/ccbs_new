@@ -10,7 +10,7 @@
                3;Change request could not be created
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 {Syst/commpaa.i}

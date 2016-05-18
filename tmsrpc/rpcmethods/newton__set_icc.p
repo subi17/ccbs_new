@@ -9,7 +9,7 @@
             reason;mandatory; reason of change
  * @output success;boolean
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Mnp/mnpoutchk.i}
 
 DEF VAR liReq AS INTEGER NO-UNDO.

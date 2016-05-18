@@ -26,7 +26,7 @@
                13;Activation date can't be other than 1st day of month
                14;Multiple immediate STC is not allowed in same month due to business rules!
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 
 {Syst/commpaa.i}

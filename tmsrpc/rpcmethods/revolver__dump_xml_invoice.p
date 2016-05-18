@@ -8,7 +8,7 @@
  * @changes FabianKreutz;11/2009;created
  */
 
-{xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1} 
+{fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1} 
 
 {Syst/commpaa.i}
 gcBrand = "1".

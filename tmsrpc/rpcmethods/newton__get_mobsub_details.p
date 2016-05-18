@@ -49,7 +49,7 @@
                 final_fee;double;residual amount final payment
                 per_contract_id;int;unique contract id 
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {rpcmethods/get_memos.i}
 {Func/msisdn_prefix.i}
 

@@ -32,7 +32,7 @@
                 19;LANG service is already active with same language
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 {Syst/commpaa.i}
 katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId.

@@ -29,7 +29,7 @@
             mark_email_3rd;boolean;optional
  * @output success;boolean
  */
-{xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
+{fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 
 {Syst/commpaa.i}
 gcBrand = "1".

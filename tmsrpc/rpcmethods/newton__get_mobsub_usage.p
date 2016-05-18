@@ -22,7 +22,7 @@
               voice_bdest_limit;int;mandatory;monthly voice bundle bdest limit
               voice_bdest_usage;int;mandatory;count of monthly used bdests
  */
-{xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
+{fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/commpaa.i}
 gcBrand = "1".
 {Func/callquery.i}

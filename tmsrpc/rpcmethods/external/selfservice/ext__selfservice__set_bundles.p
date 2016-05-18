@@ -24,7 +24,7 @@
 
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Func/matrix.i}
 
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.

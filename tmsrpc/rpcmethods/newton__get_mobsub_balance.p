@@ -14,7 +14,7 @@
               balance;double;mandatory;Billing item monthly balance
               balance_day;double;optional;Billing item daily balance (used with TARJ6)
  */
-{xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
+{fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/commpaa.i}
 gcBrand = "1".
 {Func/callquery.i}

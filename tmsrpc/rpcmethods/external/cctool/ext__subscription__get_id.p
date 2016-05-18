@@ -4,7 +4,7 @@
  * @input       msisdn;string;mandatry;msisdn of subscription
  * @output      id;int;subscription id
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 /* Input parameters */
 DEF VAR pcCLI AS CHAR NO-UNDO.

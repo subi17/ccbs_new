@@ -7,7 +7,7 @@
 
  * @output      success;boolean;Result status of sending test SMS
 */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 {Func/fsendsms.i}
 {Syst/tmsconst.i}

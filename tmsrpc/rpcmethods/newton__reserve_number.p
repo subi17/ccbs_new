@@ -3,7 +3,7 @@
           reserve;bool;should be true when called 1st time false otherwise 
  * @output success;boolean;true or error
  */
-{xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
+{fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 
 /* Input parameters */
 DEF VAR pcCli AS CHAR NO-UNDO.

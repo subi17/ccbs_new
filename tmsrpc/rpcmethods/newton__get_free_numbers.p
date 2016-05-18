@@ -4,7 +4,7 @@
  * @input search_key;string;optional;
  * @output numbers;array of strings
  */
-{xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
+{fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/tmsconst.i}
 
 /* Input parameters */

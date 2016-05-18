@@ -21,7 +21,7 @@
                 used;double;how much FAT amount is used
                 period;date;period (year, month) of FAT
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Func/date.i}
 DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 

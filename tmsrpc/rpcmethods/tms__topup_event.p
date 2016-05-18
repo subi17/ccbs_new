@@ -27,7 +27,7 @@
  * @returncode 0;OK
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO INIT "1".
 {Func/date.i}
 {Func/xmlfunction.i}

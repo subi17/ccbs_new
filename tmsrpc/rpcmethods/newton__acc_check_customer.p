@@ -36,7 +36,7 @@
             city_code;string;
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEF VAR gcBrand   AS CHAR NO-UNDO INIT "1".
 {Func/fcustdata.i}
 {Syst/tmsconst.i}

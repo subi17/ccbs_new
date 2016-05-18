@@ -5,7 +5,7 @@
  * @output      id;int;subscription id
  * @Exceptions  1;Subscription not found
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 /* Input parameters */
 DEF VAR pcCLI AS CHAR NO-UNDO.

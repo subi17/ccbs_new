@@ -8,7 +8,7 @@
            invoice_link;string;mandatory;link to fusion invoice (newton.fusion_invoices_get)
 */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
 katun = "NewtonRPC".

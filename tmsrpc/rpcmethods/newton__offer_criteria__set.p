@@ -14,7 +14,7 @@
  * @result id;string;offer criteria id
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
 DEF VAR pcUsername AS CHAR NO-UNDO.

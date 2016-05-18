@@ -4,7 +4,7 @@
  * @input ids;array of string;mandatory;file names
  * @output data;array of base64;mnp pdf messages
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEF VAR lcPDFStruct AS CHARACTER NO-UNDO.
 DEF VAR pcId AS CHAR NO-UNDO.

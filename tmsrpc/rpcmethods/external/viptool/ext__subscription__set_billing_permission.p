@@ -7,7 +7,7 @@
  * @Exceptions  1;Subscription not found
                 2;Unknown status code
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.

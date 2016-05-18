@@ -9,7 +9,7 @@
   Version ......:
   ---------------------------------------------------------------------- */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEFINE VARIABLE pcUsername  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcError     AS CHARACTER NO-UNDO.

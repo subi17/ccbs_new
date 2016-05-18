@@ -18,7 +18,7 @@
            important;int;
 */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {rpcmethods/get_memos.i}
 
 /* Input parameters */

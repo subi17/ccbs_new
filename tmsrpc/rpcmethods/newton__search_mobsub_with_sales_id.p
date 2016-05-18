@@ -15,7 +15,7 @@
                  data_bundle_id;string;mandatory;data bundle id
                  notification;boolean;optional;e.g. pending icc change
  */
-{xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
+{fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {rpcmethods/json_key.i}
 {Syst/commpaa.i}
 gcBrand = "1".

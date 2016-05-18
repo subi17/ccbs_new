@@ -18,7 +18,7 @@
                   userid;string;mandatory;salesman
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 /* Input parameters */
 DEF VAR pcInput      AS CHAR NO-UNDO.

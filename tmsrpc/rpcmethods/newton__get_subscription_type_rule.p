@@ -17,7 +17,7 @@
    * fetch Quota 25 refinance remaining amount and
    * add into total penalty fee.
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
 katun = "Newton".

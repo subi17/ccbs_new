@@ -49,7 +49,7 @@
       error_description;string;error description
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
 {Syst/tmsconst.i}

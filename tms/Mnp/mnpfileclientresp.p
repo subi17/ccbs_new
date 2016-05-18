@@ -14,7 +14,7 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Mnp/mnpcontingency.i}
 {Func/log.i}
-{xmlrpc/xmlrpc_client.i}
+{fcgi_agent/xmlrpc/xmlrpc_client.i}
 
 DEFINE VARIABLE lcError AS CHAR NO-UNDO. 
 

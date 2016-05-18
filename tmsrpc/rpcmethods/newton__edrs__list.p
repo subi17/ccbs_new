@@ -9,7 +9,7 @@
                balance_after;double;mandatory;prepaid account balance after charge in euros
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 ASSIGN
    katun = "NewtonRPC"

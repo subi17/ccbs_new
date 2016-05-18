@@ -15,7 +15,7 @@
                     b) content;string;mandatory
   Output .......: success;boolean
 ---------------------------------------------------------------------- */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 gcBrand = "1".
 {Func/cparam2.i}

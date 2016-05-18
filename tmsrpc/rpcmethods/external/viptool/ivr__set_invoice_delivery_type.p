@@ -18,7 +18,7 @@
                7;Invoice Delivery Type to Email can not be changed since customer does not have email address
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 
 /* Input parameters */

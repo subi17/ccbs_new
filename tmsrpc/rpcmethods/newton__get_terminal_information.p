@@ -8,7 +8,7 @@
                   valid_to;datetime;valid to
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEFINE VARIABLE resp_array     AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcResultStruct AS CHARACTER NO-UNDO.

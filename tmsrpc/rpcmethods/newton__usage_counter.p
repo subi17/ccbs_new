@@ -10,7 +10,7 @@
                unit_type;string;type of value
                limit_;double;limit_x
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.

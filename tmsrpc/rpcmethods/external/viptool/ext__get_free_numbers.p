@@ -6,7 +6,7 @@
  * @Exceptions  1;Input Channel should be: VIP
 
  */
-{xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
+{fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/tmsconst.i}
 
 /* Input parameters */

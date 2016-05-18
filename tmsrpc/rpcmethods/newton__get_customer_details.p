@@ -59,7 +59,7 @@
                     id_type;string;
                     person_idr;string;
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 
 /* Input parameters */

@@ -5,7 +5,7 @@
  * @output struct;array of offer ids
 */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 

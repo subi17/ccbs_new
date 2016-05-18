@@ -11,7 +11,7 @@
 */   
 
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 /* &GLOBAL-DEFINE SKIP_FUNC_I YES */
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 

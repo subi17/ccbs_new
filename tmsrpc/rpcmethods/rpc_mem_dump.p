@@ -1,4 +1,4 @@
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE VARIABLE hBuffer    AS HANDLE     NO-UNDO.
 
 DEF STREAM sout.

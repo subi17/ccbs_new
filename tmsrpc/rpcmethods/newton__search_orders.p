@@ -15,7 +15,7 @@
                  lname;string;last name of the order customer
  */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 DEFINE VARIABLE pcSearchString AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE pcSearchType   AS CHARACTER NO-UNDO. 

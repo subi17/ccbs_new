@@ -5,7 +5,7 @@
  * @output      int;previous month consumption in cents
  * @Exceptions  1;Subscription not found
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
 
 /* Input parameters */

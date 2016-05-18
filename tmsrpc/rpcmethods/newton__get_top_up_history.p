@@ -17,7 +17,7 @@
   8 th element: Operation number (string)
   9 th element: Entity name (string)
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Func/tsformat.i}
 /* Input parameters */
 DEFINE VARIABLE piMsSeq     AS INTEGER   NO-UNDO.

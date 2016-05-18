@@ -12,7 +12,7 @@
              discount_monthly_limit;double;mandatory;Discount amount monthly limit
   * @output ret;boolean; Return value
 */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 gcbrand = "1".
 {Mc/dpmember.i}

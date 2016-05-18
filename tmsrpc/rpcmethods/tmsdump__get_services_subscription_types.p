@@ -1,7 +1,7 @@
 /**
  * Return relationship  services <-> subscription_types for xfera
  */
-{xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
+{fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 
 IF NOT get_paramcount(param_toplevel_id) EQ 0 THEN
     RETURN param_err("Unexpected parameters").

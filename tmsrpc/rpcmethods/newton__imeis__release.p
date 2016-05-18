@@ -8,7 +8,7 @@
     imei_status;int;mandatory;0 = IMEI_STATUS_UNKNOWN ja 3 = IMEI_STATUS_RELEASED
  * @output boolean;true
 */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/tmsconst.i}
 
 DEFINE VARIABLE pcArray AS CHARACTER NO-UNDO. 

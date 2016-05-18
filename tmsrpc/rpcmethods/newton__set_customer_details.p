@@ -61,7 +61,7 @@
  *
  * Note: Address data is updated using RPC newton__set_customer_address.p
  */
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 gcBrand = "1".
 {Syst/tmsconst.i}
