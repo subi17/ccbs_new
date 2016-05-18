@@ -364,7 +364,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    add_string(lcInvStruct,"delivery_type", STRING(Invoice.DelType) + " " + lcDType).
    add_string(lcInvStruct,"direct_debt_status", lcDDState).
-   add_boolean(lcInvStruct,"display_invoice",Invoice.WInvDisp).
+   add_boolean(lcInvStruct,"display_invoice",Invoice.WInvDisp AND Invoice.InvCfg[1]).
    add_datetime(lcInvStruct,"due_date",Invoice.DueDate).
 
 
