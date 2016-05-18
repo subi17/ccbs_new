@@ -109,6 +109,27 @@ CLASS HPD.HPDTime FINAL:
    END METHOD.
 
 
+   METHOD PUBLIC STATIC INTEGER mPreviousPeriod
+      (iiPeriod AS INTEGER):
+
+      DEFINE VARIABLE liYY AS INTEGER NO-UNDO.
+      DEFINE VARIABLE liMM AS INTEGER NO-UNDO.
+
+      ASSIGN
+         liYY = TRUNCATE(iiPeriod / 100,0)
+         liMM = (iiPeriod MOD 100) - 1
+         .
+
+      IF liMM  = 0
+      THEN ASSIGN
+             liYY = liYY - 1
+             liMM = 12
+             .
+      RETURN (liYY * 100 + liMM).
+
+   END METHOD.
+
+
    METHOD PUBLIC STATIC DATE mLastDayOfMonth
       (idaDate AS DATE):
 

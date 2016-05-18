@@ -86,6 +86,7 @@ FUNCTION fChkRequest RETURNS CHARACTER
    DEF VAR llExist AS LOG NO-UNDO.
    DEF VAR liLoop  AS INT NO-UNDO. 
    DEF VAR licount AS INT NO-UNDO.
+   DEF BUFFER bCheckMsRequest FOR MsRequest.
    licount = NUM-ENTRIES({&REQ_ONGOING_STATUSES}).
    
    IF LOOKUP(STRING(iiReqType),{&REQ_CUST_REQUESTS}) = 0 THEN DO:
@@ -111,14 +112,34 @@ FUNCTION fChkRequest RETURNS CHARACTER
                                      iiReqType).
       ELSE DO:
          CASE iiReqType:
-         WHEN 22 OR WHEN 23 THEN 
-            llExist = CAN-FIND(FIRST MsRequest USE-INDEX CustNum WHERE
-                                MsRequest.Brand      = gcBrand   AND
-                                MsRequest.ReqType    = iiReqType AND
-                                MsRequest.CustNum    = iiTarget  AND
-                                MsRequest.ReqIParam1 = INTEGER(icParam) AND
-                                LOOKUP(STRING(MsRequest.ReqStatus),"2,4,9,99") = 0).
+         WHEN 22 OR WHEN 23 THEN DO:
 
+            PENDING_CREDIT_NOTES:
+            FOR EACH bCheckMsRequest NO-LOCK USE-INDEX Custnum where
+                     bCheckMsRequest.Brand      = gcBrand   AND
+                     bCheckMsRequest.ReqType    = iiReqType AND
+                     bCheckMsRequest.CustNum    = iiTarget  AND
+                     bCheckMsRequest.ReqIParam1 = INTEGER(icParam) AND
+                     LOOKUP(STRING(bCheckMsRequest.ReqStatus),"2,4,9,99") = 0:
+               
+               IF icExtraParam EQ "" OR
+                  bCheckMsRequest.ReqCparam4 EQ "" THEN DO:
+                  llExist = TRUE.
+                  LEAVE PENDING_CREDIT_NOTES.
+               END.
+               /* Allow parallel subinvoice specific credit notes. YTS-8744 */
+               ELSE DO:
+                  DO liLoop = 1 TO NUM-ENTRIES(icExtraParam):
+                     IF LOOKUP(ENTRY(liLoop, icExtraParam),
+                               bCheckMsRequest.ReqCparam4) > 0 THEN DO:
+                        llExist = TRUE.
+                        LEAVE PENDING_CREDIT_NOTES.
+                     END.
+                  END.  
+               END.
+            END.
+
+         END.
          WHEN 8 THEN DO:
 
             IF icExtraParam = "999" THEN LEAVE skip-MsRequest.

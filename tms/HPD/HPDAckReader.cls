@@ -22,6 +22,7 @@ CLASS HPD.HPDAckReader ABSTRACT
    DEFINE PRIVATE VARIABLE liAckTimeLimit         AS INTEGER        NO-UNDO.
    DEFINE PRIVATE VARIABLE liLastAck              AS INTEGER        NO-UNDO.
    DEFINE PRIVATE VARIABLE lcExportDir            AS CHARACTER      NO-UNDO.
+   DEFINE PRIVATE VARIABLE lhSocketHandle         AS HANDLE         NO-UNDO.
 
    DEFINE PROTECTED VARIABLE liAckCount           AS INTEGER        NO-UNDO.
    DEFINE PROTECTED VARIABLE lcJSON AS LONGCHAR INITIAL '~{"":[&1]~}' NO-UNDO.
@@ -148,6 +149,8 @@ CLASS HPD.HPDAckReader ABSTRACT
 
    METHOD PRIVATE VOID mDisConnect():
 
+      lhSocketHandle = ?.
+
       IF VALID-OBJECT(loStompClient)
       THEN DO:
          loStompClient:UnSubscribeFromQueue(lcQueueName) NO-ERROR.
@@ -162,6 +165,7 @@ CLASS HPD.HPDAckReader ABSTRACT
       loStompClient = NEW dotr.Stomp.StompClient(loStompConfig).      
       loStompClient:SUBSCRIBE(THIS-OBJECT).
       loStompClient:subscribeToQueueACK(lcQueueName,"client-individual").
+      lhSocketHandle = loStompClient:SocketHandle.
 
    END METHOD.
 
@@ -193,14 +197,9 @@ CLASS HPD.HPDAckReader ABSTRACT
       
       IF NOT VALID-OBJECT(loStompClient)
       THEN mConnect().
-      
-      /* IMPORTANT: This will allow events to be triggered, otherwise 
-         READ-RESPONSE wont be triggered and no processing. */
-      IF NOT VALID-HANDLE(lhWaitForProcedure)
-      THEN RUN Gwy/waitfor.p PERSISTENT SET lhWaitForProcedure.
-      
-      RUN runWaitForStatement IN lhWaitForProcedure.  
-      
+
+      WAIT-FOR READ-RESPONSE OF lhSocketHandle PAUSE 10.
+
       IF llDisconnected
       THEN DO:
          mDisConnect().

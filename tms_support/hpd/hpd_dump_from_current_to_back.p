@@ -5,79 +5,81 @@ DEFINE VARIABLE gcLogDir AS CHARACTER INITIAL "/scratch/log/hpd" NO-UNDO.
    DumpFile.FullCollModule (Collect All in the UI) has a correct value
    how many days per a file there should (normally a value between 1 to 30).
 
-   After the dump is complete check the log file. Look a line:
-      
-   Before starting the run DumpFile.ModCollModule has a value...
-   
-   You should set the value from this line to the new
-   DumpFile.ModCollModule value.      
+   REMEMEBER TO VERIFY THAT THE ONGOING DIRECTORY IS CORRECT IN DUMPFILE RECORDS     
 
    NOTE: The values on the following examples are written when
          the full dump was started on 21.4.2016
 
    Invoice:
-      FIRST RUN DUMP FROM DATE 1.4.2016 NORMALLY. THEN RUN THIS.
-      REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING
       30 days to one file
-   
-      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 240,1.3.2015,2.3.2016
+
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 240,1.3.2015,1.4.2016
 
 
    Payment:
-      FIRST RUN DUMP FROM DATE 1.4.2016 NORMALLY. THEN RUN THIS.
-      REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING
       30 days to one file
 
-      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 244,1.3.2015,2.3.2016
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 244,1.3.2015,1.4.2016
       
+      After the dump is complete check the log file.
+      There is a line telling to set a new DumpFile.ModCollModule value.
+      Do the change and set "Check EventLog" to value Yes  
 
    MsRequest:
-      FIRST RUN DUMP FROM DATE 1.4.2016 NORMALLY. THEN RUN THIS.
-      REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING 
       30 days to one file            
    
-      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 221,1.10.2015,2.3.2016
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 221,1.10.2015,1.4.2016
+
+      After the dump is complete check the log file.
+      There is a line telling to set a new DumpFile.ModCollModule value.
+      Do the change and set "Check EventLog" to value Yes  
 
 
    PrePaidRequest:
-      FIRST RUN DUMP FROM DATE 1.4.2016 NORMALLY. THEN RUN THIS.
-      REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING 
       30 days to one file            
    
-      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 228,1.10.2015,2.3.2016
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 228,1.10.2015,1.4.2016
+
+      After the dump is complete check the log file.
+      There is a line telling to set a new DumpFile.ModCollModule value.
+      Do the change and set "Check EventLog" to value Yes  
 
 
    Order:
-      FIRST RUN DUMP FROM DATE 1.5.2015 NORMALLY. THEN RUN THIS.
-      REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING 
       365 days to one file   
    
-      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 223,1.12.2006,1.5.2014
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 223,1.12.2006,1.5.2015
 
 
    PrepCDR:
-      FIRST RUN DUMP FOR TODAY DATE NORMALLY. THEN RUN THIS.
-      REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING 
       1 day to one file            
    
-      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 229,65,1
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 329,64,0
 
+      After the dump is started check the log file.
+      There is a line telling to set a new DumpFile.ModCollModule value.
+      Do the change to dumpid 229 and activate the dump (set "Check EventLog" to value Yes if not already set)  
+      Verify also that the batchid is suitable.
 
    PrepEDR:
-      FIRST RUN DUMP FOR TODAY DATE NORMALLY. THEN RUN THIS.
-      REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING 
-      1 day to one file            
+      7 days to one file
    
-      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 230,65,1
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 230,64,6
 
+      After the dump is completed check the log file.
+      There is a line telling to set a new DumpFile.ModCollModule value.
+      Do the change and activate the dump (set "Check EventLog" to value Yes if not already set).
+      Verify also that the batchid is suitable.
 
    MobCDR:
-      FIRST RUN DUMP FOR TODAY DATE NORMALLY. THEN RUN THIS.
-      REMEMEBER TO CHANGE DUMP ONGOING DIRECTORY TO CORRECT ONE BEFORE DUMPING 
       1 day to one file            
    
-      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 219,65,1
+      /opt/local/bin/xfear -batch /apps/yoigo/tms_support/hpd/hpd_dump_from_current_to_back.p tms.pf 319,64,0
 
+      After the dump is started check the log file.
+      There is a line telling to set a new DumpFile.ModCollModule value.
+      Do the change to dumpid 219 and activate the dump (set "Check EventLog" to value Yes if not already set)  
+      Verify also that the batchid is suitable.
 */
 
 {Syst/commpaa.i}
@@ -245,12 +247,16 @@ END FUNCTION.
 
 
 FUNCTION fUpdateDumpFromDate RETURNS LOGICAL
-   (iiDumpID AS INTEGER,
-    idaDate  AS DATE):
+   (iiDumpID  AS INTEGER,
+    idaDate   AS DATE,
+    ilLogTime AS LOGICAL):
      
    DO TRANSACTION:
    
       FIND DumpFile EXCLUSIVE-LOCK WHERE DumpFile.DumpID = iiDumpID.
+      
+      IF ilLogTime
+      THEN fLog("After the run set DumpFile.ModCollModule to value " + DumpFile.ModCollModule).
       
       DumpFile.ModCollModule = fTS2DateHMS(fMake2DT(idaDate,0)).
       
@@ -268,12 +274,13 @@ PROCEDURE pProcess:
    DEFINE VARIABLE llStop        AS LOGICAL  INITIAL FALSE  NO-UNDO.
    DEFINE VARIABLE liEvents      AS INTEGER                 NO-UNDO.
    DEFINE VARIABLE llInterrupted AS LOGICAL  INITIAL FALSE  NO-UNDO.
+   DEFINE VARIABLE llLogTime    AS LOGICAL   INITIAL TRUE   NO-UNDO.
    
    ldaDate = gdaStartDate.
 
-   fLog("The run will process time range " + STRING(gdaFirstOccurance) + " - " + STRING(ldaDate)).
+   fLog("The run will process time range " + STRING(gdaFirstOccurance) + " - " + STRING(ldaDate + giDaysPerFile)).
 
-   fUpdateDumpFromDate(giDumpID, ldaDate).
+   fUpdateDumpFromDate(giDumpID, ldaDate, NO).
    
    DO WHILE TRUE:
       
@@ -297,7 +304,9 @@ PROCEDURE pProcess:
             
       ldaDate = ldaDate - giDaysPerFile.
       
-      fUpdateDumpFromDate(giDumpId, ldaDate).
+      fUpdateDumpFromDate(giDumpId, ldaDate, llLogTime).
+      
+      llLogTime = FALSE.
       
       IF ldaDate <= gdaFirstOccurance
       THEN llStop = TRUE.
@@ -334,7 +343,5 @@ THEN DO:
    fLog("DumpFile.FullCollModule has incorrect or not supported value").
    RETURN.         
 END.
-
-fLog("Before starting the run DumpFile.ModCollModule has a value " + DumpFile.ModCollModule).
 
 RUN pProcess.

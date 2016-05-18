@@ -340,13 +340,10 @@ CLASS HPD.RepLogHandler FINAL:
                WHEN 1
                THEN DO:
                   IF llUseAck
-                  THEN DO:
-                     ASSIGN
-                        lhRepLogTable::SendTime  = NOW
-                        lhRepLogTable::SendCount = lhRepLogTable::SendCount + 1
-                        .
-                     lhRepLogTable:BUFFER-RELEASE().
-                  END.
+                  THEN ASSIGN
+                          lhRepLogTable::SendTime  = NOW
+                          lhRepLogTable::SendCount = lhRepLogTable::SendCount + 1
+                          .
                   ELSE lhRepLogTable:BUFFER-DELETE().
                END.
 
