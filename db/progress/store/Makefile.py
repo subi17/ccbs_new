@@ -1,0 +1,418 @@
+from pike import *
+from socket import gethostname, getservbyname
+from os import getcwd
+import os, sys
+from subprocess import Popen, PIPE
+import tempfile
+import shutil
+import time
+
+# NOTE: This file is also used by tms/test/db
+relpath = '../../..'
+exec(open(relpath + '/etc/make_site.py').read())
+
+########################## Configuration #############################
+
+# Configure database location (on different partitions/remote hosts)
+# for production servers. All databases not found in this dictionary
+# will be assumed/created in the current directory
+db_locations = {
+#   'myhost': {'db_one': '/data/one/db',
+#              'remote_db': 'otherhost:/data/two/db'},
+#   'otherhost': {'db_one': myhost:/data/one/db',
+#                 'db_two': '/data/two/db'}
+}
+db_processes = {
+#   'db_one': ['sql', 'biw', 'wdog', (4, 'apw')]
+}
+process_name = {'biw': 'Before-Image writer',
+                'apw': 'Asynchronous page writer',
+                'wdog': 'user watchdog',
+                'sql': 'SQL server'}
+
+blocksize = 8
+
+# Additional commandline parameters for database startup
+# These are added in production mode only
+db_startup_options = {
+#    'db_one': ['-spin 5000']
+}
+
+# Note that -ServerType SQL is automatically added later
+sql_startup_options = {
+#    'db_one': ['-spin 5000']
+}
+
+# All .pf files that are used by the clients. You need to define
+# producing target functions below for each added file. Check all_pf!
+main_pf_files = ['all.pf']
+
+########################## Implementation #############################
+
+try:
+    getservbyname('%s_%s%s' % (appname, databases[0], service_suffix), 'tcp')
+    db_by_unix_socket = False
+except:
+    db_by_unix_socket = True
+
+initialize_dependencies = list(main_pf_files)
+if environment == 'development':
+    initialize_dependencies += ['create', 'start', 'migrate', 'fixtures']
+else:
+    initialize_dependencies += ['relink_migcache']
+
+
+
+def db_full_path(db_name, suffix='.db', host=None):
+    locs = {}
+    if environment != 'development':
+        host = host or gethostname()
+        assert host in db_locations, 'Db locations not configured for this host'
+        locs = db_locations[host]
+    return '%s/%s%s' % (locs.get(db_name, getcwd()), db_name, suffix)
+
+
+@target(initialize_dependencies)
+def initialize(*a): pass
+
+@target
+def relink_migcache(*a):
+    os.rmdir(migcache_dir)
+    migcache_real = os.path.abspath(work_dir + '/../var/migrations')
+    if not os.path.exists(migcache_real):
+        os.mkdir(migcache_real)
+    os.symlink(migcache_real, migcache_dir)
+
+
+@target([db_full_path(x) for x in parameters or databases])
+def create(match, deps): pass
+
+
+@file_target([r'\1/\2.st'])
+def database_file(match, deps, db_dir, db_name):
+    '''([-_/a-zA-Z0-9.]+)/([_a-zA-Z0-9]+)\.db'''
+    print('Creating database %s...' % db_name)
+    callgrep([dlc + '/bin/prostrct', 'create', match[:-3],
+                                 '-blocksize', str(blocksize * 1024)],
+            ['Procopy session begin', 'Formatting extents:',
+             'size +area name +path name', '^$',
+             '/(bi|db|ix)/%s(_\d+)?\.[dba]\d+ 00:00:00' % db_name])
+    for emptydb in ['%s/prolang/%s/empty%d.db' % (dlc, x, blocksize) \
+                    for x in ('utf', 'eng')]:
+        if os.path.exists(emptydb):
+            callgrep([dlc + '/bin/procopy', '-s', emptydb, match],
+                    ['\(6715\)$', '\(6718\)$', '\(451\)$',
+                     '0 Percent complete.', '^$',
+                     '\(6720\)$', '\(6722\)$', '\(1365\)$', '\(334\)$'])
+            break
+    else:
+        raise StandardError('No empty db template found')
+
+@file_target
+def structure_file(match, deps, db_dir, db_name):
+    '''([-_/a-zA-Z0-9.]+)/([_a-zA-Z0-9]+)\.st'''
+    fd = open(match, 'w')
+    if environment == 'development':
+        _ = lambda x: fd.write(x % getcwd() + '\n#\n')
+        _('b %s/bi')
+        _('d "Schema Area" %s/db')
+        for size in (64, 128, 256):
+            _('d "Sta_Data_%d",%d %%s/db' % (size, size))
+        _('d "Sta_Index_64",64 %s/ix')
+        for dir in ['bi', 'db', 'ix']:
+            if not os.path.exists(dir): os.mkdir(dir)
+    else:
+        basedir = os.path.dirname(db_full_path(db_name))
+        referred_dirs = []
+        for line in open(work_dir + '/db/progress/migrations/%s.st' % db_name):
+            fd.write(line.replace('BASEDIR', basedir))
+            # TODO create directories mentioned in .st file
+    fd.close()
+        
+
+@target
+def remote_database_file(match, deps, host, db_dir, db_name):
+    '''([a-zA-Z]+):([-_/a-zA-Z0-9]+)/([_a-zA-Z0-9]+).db'''
+    print('Remote creation of database %s in %s on %s not implemented' % \
+            (db_name, db_dir, host))
+
+
+def write_pf_file(filename, databases, logical_names={}):
+    fd = open(filename, 'wt')
+    fd.write('-h %d\n' % len(databases))
+    for db in databases:
+        name_map = ' -ld %s' % logical_names[db] if db in logical_names else ''
+        fd.write('-pf %s/%s.pf%s\n' % (getcwd(), db, name_map))
+    fd.close()
+
+@target(['%s.pf' % x for x in databases])
+def all_pf(match, deps):
+    '''all\.pf'''
+    write_pf_file(match, databases)
+
+
+@target(r'\1.pf')
+def startup_parameter_file(match, deps, db_name):
+    '''([_a-zA-Z0-9]+)_startup\.pf'''
+    path = db_full_path(db_name, '').split(':')
+    if len(path) > 1:
+        return False
+    path = path[0]
+    fd = open(match, 'wt')
+    fd.write('-pf %s/etc/pf/formats.pf\n' % work_dir)
+    if environment == 'production':
+        fd.write('-db %s\n' % path)
+        if not db_by_unix_socket:
+            fd.write('-H %s\n' % gethostname())
+            fd.write('-S %s_%s%s\n' % (appname, db_name, service_suffix))
+        for option in db_startup_options.get(db_name, []):
+            fd.write(option + '\n')
+    else:
+        fd.write('-db %s\n' % path)
+    fd.close()
+    if environment == 'production' and db_name in sql_startup_options:
+        fd = open(db_name + '_sql_startup.pf', 'wt')
+        fd.write('-pf %s/etc/pf/formats.pf\n' % work_dir)
+        fd.write('-db %s\n' % path)
+        fd.write('-H %s\n' % gethostname())
+        fd.write('-S %s_%s_sql%s\n' % (appname, db_name, service_suffix))
+        fd.write('-ServerType SQL\n')
+        for option in sql_startup_options.get(db_name, []):
+            fd.write(option + '\n')
+        fd.close()
+
+@target
+def connect_parameter_file(match, deps, db_name):
+    '''([_a-zA-Z0-9]+)\.pf'''
+    path = db_full_path(db_name, '').split(':')
+    fd = open(db_name + '.pf', 'wt')
+    if len(path) > 1:
+        fd.write('-db %s\n' % path[1])
+        fd.write('-H %s\n' % path[0])
+        fd.write('-S %s_%s%s\n' % (appname, db_name, service_suffix))
+    else:
+        fd.write('-db %s\n' % path[0])
+    fd.close()
+
+db_running_msg = True
+
+@target(['%s_startup.pf' % x for x in parameters or databases])
+def start(match, deps):
+    for db in parameters or databases:
+        path = db_full_path(db, '.lk')
+        if path.find(':') > -1:
+            print('Skipping remote database %s' % db)
+        elif os.path.exists(path):
+            if db_running_msg:
+                print('Database %s is already running' % db)
+        else:
+            print('Starting database %s...' % db)
+            ec = callgrep([dlc + '/bin/proserve', '-pf', db + '_startup.pf'],
+                     ['^OpenEdge Release'] +
+                        ['\(%d\)$' % x for x in [333, 5326, 7161, 13547]])
+            if ec == 0 and environment == 'production':
+                start_db_processes(db)
+
+def start_db_processes(db):
+    for ii in db_processes.get(db, []):
+        if isinstance(ii, tuple):
+            process, amount = ii
+        else:
+            process, amount = ii, 1
+        name = process_name[process]
+        article = 'an' if name[0].lower() in 'aeiou' else 'a'
+        if process == 'sql':
+            print('  adding {0} {1}...'.format(article, name))
+            callgrep([dlc + '/bin/proserve', '-pf', db + '_sql_startup.pf'],
+                     [])
+        else:
+            for _num in range(amount):
+                print('  adding {0} {1}...'.format(article, name))
+                callgrep([dlc + '/bin/pro' + process, db_full_path(db)], [])
+
+
+@target(['%s.pf' % x for x in parameters or databases])
+def stop(match, deps):
+    for db in parameters or databases:
+        path = db_full_path(db, '.lk')
+        if path.find(':') > -1:
+            print('Skipping remote database %s' % db)
+        elif not os.path.exists(path):
+            print('Database %s is not running' % db)
+        else:
+            print('Stopping database %s...' % db)
+            callgrep([dlc + '/bin/proshut', '-by', '-pf', db + '.pf'],
+                    ['Shutdown is executing'])
+
+
+@target(['stop'])
+def clean(match, deps):
+    for db in parameters or databases:
+        path = os.path.dirname(db_full_path(db))
+        if path.find(':') > -1:
+            print('Cannot clean remote database %s' % db)
+            continue
+        sys.stderr.write("Press enter if you want to remove database %s. " % db)
+        sys.stderr.flush()
+        try:
+            sys.stdin.readline()
+        except KeyboardInterrupt:
+            print('')
+            raise PikeException('Database NOT removed')
+        s = (path, db)
+        for file in glob('%s/%s.*' % s) + ['%s/%s_startup.pf' % s] + \
+                    glob('%s/bi/%s.*' % s) + glob('%s/db/%s.*' % s) + \
+                    glob('%s/db/%s_*' % s) + glob('%s/ix/%s_*' % s) + \
+                    glob('migrations/*_%s_*' % db):
+            if os.path.exists(file):
+                os.unlink(file)
+        print('Database %s deleted' % db)
+
+
+# Migrations
+
+migrations_dir = os.path.join(work_dir, 'db', 'progress', 'migrations')
+migcache_dir   = 'migrations'
+if not os.path.exists(migcache_dir): os.mkdir(migcache_dir)
+avail_migrations = sorted((x.group(1), int(x.group(2))) \
+                     for x in [re.match(r'^((\d+)_.*)\.py$', y) \
+                               for y in os.listdir(migrations_dir)] if x)
+def done_migrations():
+    return sorted(x[:-3] for x in os.listdir(migcache_dir) if x.endswith('.py'))
+
+from gearbox.migrations.mig2df import *
+
+def a2t_from_database(database):
+    script = 'gearbox/migrations/dump_areas'
+    if os.path.exists('{0}/tools/{1}.r'.format(work_dir, script)):
+        os.unlink('{0}/tools/{1}.r'.format(work_dir, script))
+    x = Popen(mpro + ['-pf', '{0}.pf'.format(database),
+                 '-b', '-p', script + '.p'], stdout=PIPE)
+    if x.wait() != 0:
+        print(x.stdout.read())
+        raise PikeException('Unable to read schema data from '
+                            'database {0}'.format(database))
+    return split_a2t_data((x.decode('utf-8') for x in x.stdout.readlines()))
+
+
+def _migrate(migration_file, direction, a2t_data):
+    assert os.access(migcache_dir, os.W_OK), \
+           'Migration-cache directory is not writable'
+
+    df_file, database = mig2df(migration_file, direction,
+                               a2t_data, a2t_from_database, environment)
+
+    pfile = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+')
+    pfile.write('SESSION:SUPPRESS-WARNINGS = TRUE.\n')
+    pfile.write('SESSION:NUMERIC-FORMAT = "American".\n')
+    pfile.write('RUN prodict/load_df("{0},,").\n'.format(df_file.name))
+    pfile.flush()
+
+    callgrep(mpro + ['-pf', database + '.pf', '-b', '-p', pfile.name], [])
+
+    error_file = database + '.e'
+    if os.path.exists(error_file):
+        error = open(error_file).read().replace('\n\n', '\n')
+        os.unlink(error_file)
+        raise PikeException('Migration %s failed:\n%s' % \
+                            (os.path.basename(migration_file), error))
+
+    if direction == 'up':
+        shutil.copyfile(migration_file,
+                        'migrations/' + os.path.basename(migration_file))
+    else:
+        os.unlink(migration_file)
+    log_line = '%s %s %-4s' % (time.strftime('%FT%T'), os.environ['USER'], direction)
+    open('migrations/' + os.path.basename(migration_file) + '.history', 'a').write(log_line)
+
+@target
+def migrate(match, deps):
+    version = int(parameters[0]) if parameters else 99999
+    done_migs = done_migrations()
+
+    to_downgrade = [m for m in done_migs \
+                    if not m in (x[0] for x in avail_migrations)]
+    to_upgrade = []
+    for name, number in avail_migrations:
+        if number > version:
+            if name in done_migs:
+                to_downgrade.append(name)
+        else:
+            if not name in done_migs:
+                to_upgrade.append(name)
+
+    a2t_cache = {}
+    for mig in reversed(sorted(to_downgrade)):
+        _migrate(migcache_dir + '/' + mig + '.py', 'down', a2t_cache)
+    for mig in sorted(to_upgrade):
+        _migrate(migrations_dir + '/' + mig + '.py', 'up', a2t_cache)
+    if environment == 'development':
+        require('cache>dicts')
+
+@target
+def status(match, deps):
+    done_migs = done_migrations()
+    for name, number in avail_migrations:
+        if name in done_migs:
+            print('%-40s: Done' % name.replace('_', ' '))
+        else:
+            print('%-40s: Not yet' % name.replace('_', ' '))
+    for name in [m for m in done_migs \
+                   if not m in (x[0] for x in avail_migrations)]:
+        print('%-40s: Orphaned' % name.replace('_', ' '))
+
+@target
+def history(match, deps):
+    data = []
+    for file in os.listdir(migcache_dir):
+        if file.endswith('.py.done') \
+        or file.endswith('.py.gone') \
+        or file.endswith('.history'):
+            number = file.split('_', 1)[0]
+            data += ['%s %s' % (x.strip(), number) \
+                     for x in open('migrations/' + file).readlines()]
+    data.sort()
+    if len(parameters) == 1 and parameters[0].isdigit():
+        tail = -1 * int(parameters[0])
+    else:
+        tail = -20
+    if tail < 0:
+        print('... %d more' % (len(data) + tail))
+        data = data[tail:]
+    print('\n'.join(data))
+    
+
+@target
+def upgrade(match, deps):
+    global parameters
+    assert len(parameters) == 1, 'which migration to upgrade?'
+    mig = parameters[0]
+    assert os.path.exists(mig), 'migration not found'
+    assert os.path.basename(mig)[:-3] not in done_migrations(), 'migration already up'
+    parameters = []
+    _migrate(mig, 'up', {})
+    if environment == 'development':
+        require('cache>dicts')
+
+@target
+def downgrade(match, deps):
+    global parameters
+    assert len(parameters) == 1, 'which migration to downgrade?'
+    mig = os.path.basename(parameters[0])
+    assert os.path.exists(migcache_dir + '/' + mig), 'migration not found'
+    assert mig[:-3] in done_migrations(), 'migration not up'
+    parameters = []
+    _migrate(migcache_dir + '/' + mig, 'down', {})
+    if environment == 'development':
+        require('cache>dicts')
+
+
+# Fixture loading (initial setup-fixtures)
+
+@target
+def fixtures(*a):
+    print('Loading fixtures...')
+    callgrep(mpro + ['-pf', 'all.pf',
+                 '-param', 'fix_dir=%s/db/progress/fixtures' % work_dir,
+                 '-b', '-p', 'gearbox/fixtures/load_fixtures.r'], [])
+

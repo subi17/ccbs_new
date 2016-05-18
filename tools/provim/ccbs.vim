@@ -1,4 +1,5 @@
 set shiftwidth=3
+set tabstop=3
 set expandtab
 set ignorecase
 set foldmethod=syntax
@@ -11,7 +12,10 @@ set suffixes+=.r
 "*******************************+
 " Table description with Shift-K
 "*******************************+
-execute "set keywordprg=make\\\ -C\\\ " . ccbspath . "/tools/docgen/tbldesc"
+function! Print_tabledesc()
+    execute "! pike -C " . g:ccbspath . "/tools/docgen/tbldesc <cWORD>"
+endfunction
+nmap K :call Print_tabledesc()<enter>
 
 "*************************
 " Omni-expansion CTRL-X o
@@ -74,7 +78,7 @@ set efm=%Z**\ %f\ Could\ not\ understand\ line\ %l.\ (%.%#),
        \%-ACompiling\ %.%#,
        \%EThere\ is\ %m.\ (1423)
 
-set makeprg=make\ %<.r
+execute "set makeprg=pike\\ -C\\ " . g:ccbspath . "/tms\\ %:p:s?" . g:ccbspath . "/tms/??"
 
 nmap <F2> :make<enter><enter>
 
@@ -83,7 +87,8 @@ nmap <F2> :make<enter><enter>
 "***********************+
 
 function! Print_magic()
-    execute "! make -C " . g:ccbspath . "/tools/docgen/magicnum <cWORD>"
+    execute "! pike -C " . g:ccbspath . "/tools/docgen/magicnum <cWORD>"
 endfunction
 
-nmap <F4> :call Print_magic()<enter>
+" TDC does not have TmsCodes
+" nmap <F4> :call Print_magic()<enter>
