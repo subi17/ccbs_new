@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# This daemon polls the ordercanal.replog table and sends one HPD message
+# for each record of the table.
+#
+
+DAEMON=HPD.HPDOnline
+INSTANCE=Ordercanal
+LOGLEVEL=4
+DATABASES="common ordercanal mobile"
+cd $(dirname $0)/..
+. script/daemon.sh

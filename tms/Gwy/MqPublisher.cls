@@ -225,8 +225,7 @@ CLASS Gwy.MqPublisher:
       IF NOT mConnectAndValidate()
       THEN RETURN FALSE.
 
-      mCreateLog(4, SUBSTITUTE("Sending message: &1", 
-                       SUBSTRING(iclMessage,1,30000)), "DEBUG").
+      mCreateLog(4, SUBSTITUTE("Sending message: &1", SUBSTRING(iclMessage,1,30000)), "DEBUG").
       
       objTextMessage = CAST(objSession:createTextMessage(iclMessage), TextMessage).
       objTextMessage:JMSDeliveryMode = "true".
@@ -259,8 +258,7 @@ CLASS Gwy.MqPublisher:
       IF NOT mConnectAndValidate()
       THEN RETURN FALSE.
       
-      mCreateLog(4, SUBSTITUTE("Sending message: &1...", 
-                        SUBSTRING(iclMessage,1,30000)), "DEBUG").
+      mCreateLog(4, SUBSTITUTE("Sending message: &1", SUBSTRING(iclMessage,1,30000)), "DEBUG").
 
       objTextMessage = CAST(objSession:createTextMessage(iclMessage), TextMessage).
       

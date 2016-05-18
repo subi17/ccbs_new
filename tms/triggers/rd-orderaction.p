@@ -1,0 +1,1 @@
+{triggers/hpddelete_generic.i OrderAction ORDERACTION Ordercanal OrderId ItemType ItemKey}

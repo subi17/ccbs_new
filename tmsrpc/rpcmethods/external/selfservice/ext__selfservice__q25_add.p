@@ -40,7 +40,6 @@ DEF VAR ldeSMSStamp AS DEC NO-UNDO.
 DEF VAR lcSMSTxt AS CHAR NO-UNDO. 
 DEF VAR lcApplicationId  AS CHAR NO-UNDO.
 DEF VAR lcAppEndUserId   AS CHAR NO-UNDO.
-
 /* common validation */
 IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
 
@@ -51,8 +50,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
        lcAppEndUserId  = gbAuthLog.EndUserId.
 
-katun = fgetAppUserId(INPUT lcApplicationId, 
-                      INPUT lcAppEndUserId).
+katun = lcApplicationId + "_" + gbAuthLog.EndUserId.  /* YTS-8221 fixed back */
 
 FIND FIRST MobSub NO-LOCK WHERE
            Mobsub.brand = gcBrand AND
@@ -151,7 +149,7 @@ liCreated = fPCActionRequest(
    "act",
    ldContractActivTS,
    TRUE, /* create fees */
-   {&REQUEST_SOURCE_NEWTON},
+   {&REQUEST_SOURCE_EXTERNAL_API},
    "",
    0,
    FALSE,
@@ -159,7 +157,7 @@ liCreated = fPCActionRequest(
    0, /* payterm residual fee */
    DCCLI.PerContractId, /* Periodical Contract-ID */
    OUTPUT lcResult).   
-   
+
 IF liCreated = 0 THEN
    RETURN appl_err(SUBST("Q25 extension request failed: &1",
                          lcResult)).

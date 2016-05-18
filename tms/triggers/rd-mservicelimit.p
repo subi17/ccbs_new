@@ -1,9 +1,28 @@
 TRIGGER PROCEDURE FOR REPLICATION-DELETE OF MServiceLimit.
 
+{HPD/HPDConst.i}
+
+&IF {&MSERVICELIMIT_DELETE_TRIGGER_ACTIVE} &THEN
+
+IF NEW MServiceLimit
+THEN RETURN.
+
+IF MServiceLimit.MSID = 0 OR MServiceLimit.MSID = ?
+THEN RETURN.
+
+{triggers/mservicelimit.i}
+
+IF NOT fCheckHPDStatus(MServiceLimit.MsSeq,
+                       MServiceLimit.CustNum,
+                       MServiceLimit.EndTS)
+THEN RETURN.
+
 CREATE Common.RepLog.
 ASSIGN
-   Common.RepLog.RecordId  = RECID(MServiceLimit)
    Common.RepLog.TableName = "MServiceLimit"
    Common.RepLog.EventType = "DELETE"
-   Common.RepLog.KeyValue  = STRING(MServiceLimit.MSID)
-   Common.RepLog.EventTS   = DATETIME(TODAY,MTIME).
+   Common.RepLog.EventTime = NOW
+   Common.RepLog.KeyValue  = {HPD/keyvalue.i MServiceLimit . {&HPDKeyDelimiter} MSID}
+   .
+
+&ENDIF

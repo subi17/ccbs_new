@@ -1,0 +1,1 @@
+{triggers/hpddelete_generic.i Customer CUSTOMER Common CustNum}

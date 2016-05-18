@@ -79,13 +79,16 @@ REPEAT:
 
       IMPORT STREAM sIn UNFORMATTED lcLine.
 
+      IF lcLine EQ "" THEN NEXT.
+
       IF NUM-ENTRIES(lcLine,lcSep) NE 2 THEN DO:
          fError("Incorrect input data format").
          NEXT.
       END.
 
       ASSIGN liCustNum  = INT(ENTRY(1,lcLine,lcSep))
-             ldLimitAmt = DEC(REPLACE(ENTRY(2,lcLine,lcSep),",",".")).
+             ldLimitAmt = DEC(REPLACE(ENTRY(2,lcLine,lcSep),",","."))
+             NO-ERROR.
 
       IF ERROR-STATUS:ERROR THEN DO:
          fError("Incorrect input data format").
