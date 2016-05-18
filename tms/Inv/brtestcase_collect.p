@@ -1578,4 +1578,4 @@ PROCEDURE pInitializeMergeAnalysis:
 
 END PROCEDURE.
 
-{funcrun_analysis_results.i}
+{Inv/funcrun_analysis_results.i}

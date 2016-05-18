@@ -87,7 +87,7 @@ RETURN RETURN-VALUE.
 
 /***** Main end ******/
 
-{funcrun_analysis_results.i}
+{Inv/funcrun_analysis_results.i}
 
 PROCEDURE pInitialize:
 
