@@ -7,8 +7,10 @@
 import subprocess
 
 def get_distribution_name():
-    proc = subprocess.Popen(['hg', 'branch'], stdout=subprocess.PIPE)
-    branch = proc.communicate()[0].strip().decode('utf-8')
+    proc1 = subprocess.Popen(['git', 'branch'], stdout=subprocess.PIPE)
+    proc2 = subprocess.Popen(['awk', '/^\\*/{print $2}'], stdin=proc1.stdout, stdout=subprocess.PIPE)
+    branch = proc2.communicate()[0].strip().decode('utf-8')
+    branch = branch.replace(' ', '_').replace(':', '_')
     if branch != 'default':
         return '%s-%s-%s' % (appname, appversion, branch)
     else:
