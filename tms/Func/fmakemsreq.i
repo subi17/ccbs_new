@@ -333,11 +333,16 @@ FUNCTION fServiceRequest RETURNS INTEGER
    DEF VAR lcChildren AS CHAR NO-UNDO.
    DEF VAR liThisReq  AS INT  NO-UNDO.
    
-   ocResult = fChkRequest(iiMsSeq,
-                          1,
-                          icServCom,
-                          icCreator).
-   IF ocResult > "" THEN RETURN 0.                       
+   IF NOT (icServCom EQ "LP" AND
+      icParam EQ "remove" AND
+      icSource EQ {&REQUEST_SOURCE_BARRING}) THEN DO:
+
+      ocResult = fChkRequest(iiMsSeq,
+                             1,
+                             icServCom,
+                             icCreator).
+      IF ocResult > "" THEN RETURN 0.                       
+   END.
 
    /* set activation time if caller has not determined it */
    IF idChgStamp = ? OR idChgStamp = 0 THEN DO:

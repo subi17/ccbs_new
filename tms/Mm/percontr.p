@@ -42,6 +42,64 @@
 {fprepaidfee.i}
 {fcreditreq.i}
 
+FUNCTION fUpdateServicelCounterMSID RETURNS LOGICAL
+   ( iiCustNum AS INTEGER,
+     iiMsSeq   AS INTEGER,
+     iiSlSeq   AS INTEGER,
+     iiPeriod  AS INTEGER,
+     iiOldMSID AS INTEGER,
+     iiNewMSID AS INTEGER):
+
+   IF iiOldMSID = 0 OR iiOldMSID = ?
+   THEN RETURN TRUE.
+
+   DEFINE VARIABLE liQty AS INTEGER NO-UNDO.
+
+   DEFINE BUFFER ServiceLCounter FOR ServiceLCounter.
+
+   DO WHILE TRUE:
+
+      IF iiCustNum > 0 THEN
+         FIND FIRST ServiceLCounter WHERE
+                    ServiceLCounter.Custnum = iiCustNum AND
+                    ServiceLCounter.Period  = iiPeriod  AND
+                    ServiceLCounter.SLseq   = iiSlSeq   AND
+                    ServiceLCounter.MSID    = iiOldMSID
+              EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+      ELSE
+         FIND FIRST ServiceLCounter WHERE
+                    ServiceLCounter.Msseq   = iiMsSeq   AND
+                    ServiceLCounter.Period  = iiPeriod  AND
+                    serviceLCounter.SLseq   = iiSlSeq   AND
+                    ServiceLCounter.MSID    = iiOldMSID
+              EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+
+      liQty = liQty + 1.
+
+      IF liQty > 30
+      THEN RETURN FALSE.
+
+      IF LOCKED(ServiceLCounter)
+      THEN DO:
+         PAUSE 1 NO-MESSAGE.
+         NEXT.
+      END.
+
+      IF NOT AVAILABLE ServiceLCounter
+      THEN LEAVE.
+
+      ServiceLCounter.MSID = iiNewMSID.
+
+      RELEASE ServiceLCounter.
+
+      LEAVE.
+
+  END.
+
+  RETURN TRUE.
+
+END FUNCTION.
+
 DEF BUFFER bPendRequest FOR MsRequest.
 DEF BUFFER bOrigRequest FOR MsRequest.
 
@@ -974,9 +1032,7 @@ PROCEDURE pContractActivation:
       ELSE IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} AND
          DayCampaign.DCEvent BEGINS "PAYTERM" AND
          AVAIL DCCLI AND
-         MsRequest.ReqDParam2 > 0 AND 
-         MsRequest.ReqSource NE {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE}
-         THEN DO:
+         MsRequest.ReqDParam2 > 0 THEN DO:
 
          RUN creasfee.p(MsOwner.CustNum,
                        MsOwner.MsSeq,
@@ -1043,7 +1099,7 @@ PROCEDURE pContractActivation:
          IF liRequest = 0 THEN
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                              "MobSub",
-                             STRING(MsRequest.MsRequest),
+                             STRING(MsRequest.MsSeq),
                              MsRequest.Custnum,
                              "CREDIT NOTE CREATION FAILED",
                              "ERROR:" + lcError). 
@@ -2035,8 +2091,9 @@ PROCEDURE pContractTermination:
          /* a new limit to last month */
          IF llRelativeLast THEN DO:
             CREATE bLimit.
-            BUFFER-COPY MServiceLimit EXCEPT EndTS TO bLimit.
-            ASSIGN 
+            BUFFER-COPY MServiceLimit EXCEPT EndTS MSID TO bLimit.
+            ASSIGN
+               bLimit.MSID   = NEXT-VALUE(mServiceLimit)
                bLimit.FromTS = fSecOffSet(ldNewEndStamp,1)
                ldNewEndStamp = ldEndStamp.
 
@@ -2066,6 +2123,13 @@ PROCEDURE pContractTermination:
                              "",
                              katun,
                              "").
+
+            fUpdateServicelCounterMSID(bLimit.CustNum,
+                                       bLimit.MSSeq,
+                                       bLimit.SlSeq,
+                                       INTEGER(TRUNCATE(bLimit.FromTS / 100,0)),
+                                       MServiceLimit.MSID,
+                                       bLimit.MSID).
          END.
       END.
 
@@ -3465,8 +3529,8 @@ PROCEDURE pContractReactivation:
                              MsRequest.UserCode,
                              "ContractActivation",
                              FixedFee.OrderId, /* order id */
-                             "FixedFee",
-                             STRING(FixedFee.FFNum),
+                             FixedFee.SourceTable,
+                             FixedFee.SourceKey,
                              OUTPUT lcReqChar).
 
                IF lcReqChar BEGINS "ERROR:" OR lcReqChar BEGINS "0" THEN
@@ -3537,6 +3601,22 @@ PROCEDURE pContractReactivation:
          IF MServiceLimit.DialType = {&DIAL_TYPE_GPRS} THEN
             ldeLimitAmt = MServiceLimit.InclAmt.
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMServiceLimit).
+
+         FOR EACH MServiceLPool WHERE
+                  MServiceLPool.MsSeq  = MServiceLimit.MsSeq AND
+                  MServiceLPool.SlSeq  = MServiceLimit.SlSeq AND
+                  MServiceLPool.EndTS >= YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + 1 NO-LOCK:
+
+            CREATE Common.RepLog.
+            ASSIGN
+               Common.RepLog.RowID     = STRING(ROWID(MServiceLPool))
+               Common.RepLog.TableName = "MServiceLPool"
+               Common.RepLog.EventType = "MODIFY"
+               Common.RepLog.EventTime = NOW.
+
+            RELEASE Common.RepLog.
+       
+         END. /* FOR EACH MServiceLPool WHERE */         
 
       END. /* FOR EACH MServiceLimit EXCLUSIVE-LOCK WHERE */
    END. /* IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 */
