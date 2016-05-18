@@ -526,7 +526,7 @@ PROCEDURE pCountTotSumofRVTERM:
             FFItem.FFNum = FixedFee.FFNum:
 
       liMFItems = liMFItems + 1.
+      ttContract.Amount = ttContract.Amount + FixedFee.Amt.
    END.
-   ttContract.Amount = liMFItems * FixedFee.Amt.
 
 END PROCEDURE
