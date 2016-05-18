@@ -30,8 +30,8 @@ DEF VAR liCaseCnt        AS INT  NO-UNDO.
 DEF VAR liFRProcessID    AS INT  NO-UNDO.
 DEF VAR liFRExecID       AS INT  NO-UNDO.
 DEF VAR lcRunMode        AS CHAR NO-UNDO.
-DEF VAR liUpdateInterval AS INT NO-UNDO.
-
+DEF VAR liUpdateInterval AS INT  NO-UNDO.
+DEF VAR llMergeAnalysis  AS LOG  NO-UNDO.
 
 /****** Main start ********/
 
@@ -48,12 +48,13 @@ RUN pGetFuncRunProcessParameters(liFRProcessID).
 
 ASSIGN 
    liBRTestQueueID = fSetFuncRunIntParameter(1)
-   ldaPeriodBeg = fSetFuncRunDateParameter(2)
-   ldaPeriodEnd = fSetFuncRunDateParameter(3)
-   liFeePeriod  = fSetFuncRunIntParameter(4)
-   ldaInvDate   = fSetFuncRunDateParameter(5)
-   ldaDueDate   = fSetFuncRunDateParameter(6)
-   liInvType    = {&INV_TYPE_TEST}.
+   ldaPeriodBeg    = fSetFuncRunDateParameter(2)
+   ldaPeriodEnd    = fSetFuncRunDateParameter(3)
+   liFeePeriod     = fSetFuncRunIntParameter(4)
+   ldaInvDate      = fSetFuncRunDateParameter(5)
+   ldaDueDate      = fSetFuncRunDateParameter(6)
+   llMergeAnalysis = fSetFuncRunLogParameter(7)
+   liInvType       = {&INV_TYPE_TEST}.
 
 IF ldaDueDate NE ? THEN DO:
    IF ldaDueDate < ldaInvDate THEN 
@@ -80,6 +81,7 @@ RUN Inv/brtestcase_collect.p(liBRTestQueueID,
                          liFRProcessID,
                          liFRExecID,
                          liUpdateInterval,
+                         llMergeAnalysis,
                          OUTPUT liCaseCnt).
 
 IF RETURN-VALUE BEGINS "ERROR" THEN DO:

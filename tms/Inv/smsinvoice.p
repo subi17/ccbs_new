@@ -158,7 +158,8 @@ FOR EACH Invoice WHERE
    
       FIND FIRST MobSub WHERE
                  MobSub.MsSeq = SubInvoice.MsSeq NO-LOCK NO-ERROR.
-      IF NOT AVAIL MobSub THEN NEXT SUBINVOICE_LOOP.
+      IF NOT AVAIL MobSub OR 
+         MobSub.CustNum NE Invoice.CustNum THEN NEXT SUBINVOICE_LOOP.
 
       lcSMSReplacedText = REPLACE(lcSMSTextOriginal,"#AMOUNT", 
          REPLACE(TRIM(STRING(Invoice.InvAmt, "->>>>>>9.99")),".", lcSep)).

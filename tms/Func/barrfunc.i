@@ -31,7 +31,8 @@ DEFINE TEMP-TABLE ttProvCommand NO-UNDO
    FIELD ComponentValue AS INT
    FIELD ComponentParam AS CHAR 
    FIELD BarringCmd AS CHAR
-   FIELD FixedValue AS LOG.
+   FIELD FixedValue AS LOG
+   FIELD DropService AS CHAR.
 
 FUNCTION fGetActiveBarrings RETURNS CHAR
    (iiMsSeq AS INTEGER):
@@ -546,6 +547,21 @@ FUNCTION fMergeMasks RETURNS CHAR
    RETURN lcMergedMask.
 END.
 
+FUNCTION fGetComponentInfo RETURNS CHAR
+   (INPUT icBarrCode AS CHAR,
+   OUTPUT ocComponentValue AS CHAR,
+   OUTPUT ocActParam AS CHAR):
+
+   FIND FIRST BarringConf NO-LOCK WHERE
+              BarringConf.BarringCode EQ icBarrcode NO-ERROR.
+   IF AVAIL BarringConf THEN DO:
+      ocComponentValue = BarringConf.NWComponent.
+      ocActParam = BarringConf.NWActParam. 
+      RETURN "".
+   END.
+   RETURN "Conf not found".
+END.   
+
 FUNCTION fBuildBarringCommand RETURNS LOG
    (INPUT icCLIType AS CHAR,
     INPUT icReqSource AS CHAR,
@@ -557,7 +573,13 @@ FUNCTION fBuildBarringCommand RETURNS LOG
    DEF BUFFER bHotLineBarring FOR ttMergedBarring.
    DEF BUFFER bttMergedBarring FOR ttMergedBarring.
    DEF BUFFER bBarringConf FOR BarringConf.
-            
+   DEF VAR lcComponent AS CHAR NO-UNDO.
+   DEF VAR lcComponentParam AS CHAR NO-UNDO.
+   DEF VAR lcHotlList AS CHAR NO-UNDO.
+   DEF VAR lcHotl AS CHAR NO-UNDO.   
+   DEF VAR lcErr AS CHAR NO-UNDO.
+   DEF VAR liHLC AS INT NO-UNDO.
+
    FIND FIRST bHotLineBarring WHERE
        LOOKUP(bHotLineBarring.BarrCode,"Debt_HOTLP,Debt_HOTL") > 0 AND
        LOOKUP(bHotLineBarring.NWStatus,"ACTIVE,EXISTING") > 0
@@ -676,7 +698,6 @@ FUNCTION fBuildBarringCommand RETURNS LOG
          
          END.
          WHEN "HOTLINE" THEN DO:
-
             IF LOOKUP(ttMergedBarring.NWStatus,"ACTIVE") > 0 THEN DO:
                
                IF NOT AVAIL ttProvCommand THEN DO:
@@ -831,8 +852,41 @@ FUNCTION fBuildBarringCommand RETURNS LOG
       ocFinalMask = fMergeMasks(BarringConf.Mask, ocFinalMask).
    END.
 
+   /*Check if HRLP redirecction must be removed.*/
+   /*Blocked: Debt_LP (Component LP) - Only one with LP component
+              Debt_HOTLP (Read component data from config)*/
+   lcHotlList = "Debt_LP,Debt_HOTLP".
+   do liHLC = 1 to NUM-ENTRIES(lcHotlList):
+      /*Special handling for CONTM2 needs*/
+      lcHotl = ENTRY(liHLC,lcHotlList).
+      IF icCLIType EQ "CONTM2" AND lcHotl EQ "Debt_HOTLP" THEN DO:
+         FIND FIRST ttProvCommand WHERE
+                    ttProvCommand.ComponentValue EQ 1 AND
+                    ttProvCommand.ComponentParam EQ "HOTL=1,HOTTYPE=HOTLP_SOLO" AND
+                    ttProvCommand.Component EQ "HOTLINE" NO-ERROR.
+         IF AVAIL ttProvCommand THEN DO:
+            ttProvCommand.DropService = "HRLP".
+            RETURN TRUE.
+         END. 
+      END. 
+      ELSE DO:
+         lcErr = fGetComponentInfo(lcHotl, 
+                                   OUTPUT lcComponent, 
+                                   OUTPUT lcComponentParam).
+         IF lcErr EQ "" THEN DO: 
+            FIND FIRST ttProvCommand WHERE 
+                       ttProvCommand.ComponentValue EQ 1 AND
+                       ttProvCommand.ComponentParam EQ lcComponentParam AND
+                       ttProvCommand.Component EQ lcComponent NO-ERROR.
+               
+            IF AVAIL ttProvCommand THEN DO:
+               ttProvCommand.DropService = "HRLP".
+               RETURN TRUE.
+            END.
+         END.      
+      END.   
+   END.   
    RETURN TRUE.
-
 END.
 
 /* Merge new barring commands with existing barrings */

@@ -11,5 +11,4 @@ gcbrand = "1".
 {Syst/tmsconst.i}
 {Func/q25functions.i}
 fInitHRLPParameters().
-fGenerateQ25List({&Q25_MONTH_24}).
-
+fGenerateQ25List().
