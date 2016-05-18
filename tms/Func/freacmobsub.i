@@ -25,6 +25,7 @@ FUNCTION freacprecheck RETURNS CHARACTER
    DEFINE VARIABLE liReacDays   AS INTEGER  NO-UNDO.
 
    DEFINE VARIABLE llPrimaryActive         AS LOGICAL   NO-UNDO.
+   DEFINE VARIABLE liReactMsseq            AS INTEGER   NO-UNDO.
 
    IF icUserName = "" OR icUserName = ? THEN
       RETURN "Username is empty".
@@ -106,11 +107,23 @@ FUNCTION freacprecheck RETURNS CHARACTER
          llPrimaryActive = TRUE.
          LEAVE.
       END. /* FOR EACH bMobSub WHERE */
-
-      IF NOT llPrimaryActive THEN
-         RETURN "Additional line reactivation is not allowed " +
-                "since main line is not active".
-
+      IF NOT llPrimaryActive THEN DO:
+         ASSIGN liReactMsseq = fCParamI("ReactMsseq").
+         IF btermmobsub.msseq EQ liReactMsseq THEN DO:    /* Bypass this one MsSeq only once */
+            /* Remove value from Cparam */
+            FIND FIRST TMSParam EXCLUSIVE-LOCK WHERE
+                       TMSParam.Brand     = gcBrand AND
+                       TMSParam.ParamCode = "ReactMsseq" NO-ERROR.
+            IF AVAILABLE TMSParam THEN DO:
+               ASSIGN TMSParam.IntVal = -1.
+               RELEASE TMSParam.
+            END.
+         END.
+         ELSE DO: /* In normal case return error */
+            RETURN "Additional line reactivation is not allowed " +
+                   "since main line is not active".
+         END.
+      END.
    END.
 
 END FUNCTION. /* FUNCTION freacprecheck RETURNS CHARACTER */

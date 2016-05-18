@@ -60,7 +60,7 @@ DO TRANS:
          ActionLog.UserCode     = katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
-      RETURN. /*No reporting in first time.*/
+      QUIT. /*No reporting in first time.*/
    END.
    ELSE IF (liHRLPTestLevel EQ {&Q25_HRLP_NO_TEST}) THEN DO:
       ASSIGN
@@ -140,7 +140,6 @@ PROCEDURE pReadFileData:
    DEF VAR liPeriod AS INT NO-UNDO.
    DEF VAR lcDate AS char NO-UNDO.
    DEF VAR liLineNum AS INT NO-UNDO.
-   DEF VAR ldAmount AS DEC NO-UNDO.
    DEF VAR liMonth AS INT NO-UNDO.
    DEF VAR liYear AS INT NO-UNDO.
    DEF VAR ldaStartDate AS DATE NO-UNDO.
@@ -190,7 +189,7 @@ PROCEDURE pReadFileData:
             lcLine + " TEST" SKIP.
       END.
       ELSE DO:
-         FIND FIRST SingleFee USE-INDEX BillCode WHERE
+         FIND FIRST SingleFee WHERE
                     SingleFee.Brand       EQ gcBrand AND
                     SingleFee.CustNum     EQ liCustNum AND
                     SingleFee.HostTable   EQ "Mobsub" AND
@@ -207,7 +206,7 @@ PROCEDURE pReadFileData:
                        ALERT-BOX.
                QUIT.
             END.
-            IF fisQ25ExtensionDone(liMsSeq, 0, ldAmount) THEN DO:
+            IF fisQ25ExtensionDone(liMsSeq) THEN DO:
                /* log extension done */
                PUT STREAM sLog UNFORMATTED
                   lcLine + {&Q25_HRLP_DELIM} +  "Error: extension done." SKIP.

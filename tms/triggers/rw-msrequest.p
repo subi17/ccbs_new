@@ -1,8 +1,10 @@
-TRIGGER PROCEDURE FOR REPLICATION-WRITE OF MsRequest OLD BUFFER Oldbuf.
+TRIGGER PROCEDURE FOR REPLICATION-WRITE OF MsRequest OLD BUFFER oldMsRequest.
 
+{Syst/tmsconst.i}
+{HPD/HPDConst.i}
 {triggers/msreqcounter.i}
 
-DEF VAR llResult AS LOG NO-UNDO.
+DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
 
 IF NEW(MsRequest)
 THEN fCreateMsReqCounter(MsRequest.ReqType, MsRequest.ReqStatus, 1).
@@ -10,61 +12,73 @@ ELSE DO:
    BUFFER-COMPARE MsRequest USING
       ReqStatus
       ReqType
-   TO Oldbuf SAVE RESULT IN llResult.
+   TO oldMsRequest SAVE RESULT IN llSameValues.
 
-   IF NOT llResult
+   IF NOT llSameValues
    THEN ASSIGN
-           llResult = fCreateMsReqCounter(Oldbuf.ReqType, Oldbuf.ReqStatus, -1)
-           llResult = fCreateMsReqCounter(MsRequest.ReqType, MsRequest.ReqStatus, 1)
+           llSameValues = fCreateMsReqCounter(oldMsRequest.ReqType, oldMsRequest.ReqStatus, -1)
+           llSameValues = fCreateMsReqCounter(MsRequest.ReqType, MsRequest.ReqStatus, 1)
            .
 END.
 
-IF NEW(MsRequest) THEN DO:
-   CREATE Mobile.RepLog.
-   ASSIGN
-      Mobile.RepLog.RecordId  = RECID(MsRequest)
-      Mobile.RepLog.TableName = "MsRequest"
-      Mobile.RepLog.EventType = "CREATE"
-      Mobile.RepLog.KeyValue  = STRING(MsRequest.MsRequest) + CHR(255) + 
-                                STRING(MsRequest.ReqType) + CHR(255) + 
-                                STRING(MsRequest.ReqStatus)
-      Mobile.RepLog.EventTS   = DATETIME(TODAY,MTIME).
-END. /* IF NEW(MsRequest) THEN DO: */
-ELSE DO:
-   BUFFER-COMPARE MsRequest USING
-      ReqStatus 
-      DoneStamp 
-      MsRequest
-      MsSeq
-      CLI
-      CustNum
-      ReqType
-      UserCode
-      ReqSource 
-      CreStamp
-      ActStamp
-      ReqCParam1
-      ReqCParam2
-      ReqCParam3
-      ReqCParam4
-      ReqCParam5
-      ReqIParam1
-      ReqIParam2
-      ReqIParam3
-      ReqIParam4
-      ReqDParam1
-      TO Oldbuf SAVE RESULT IN llResult.
+&IF {&MSREQUEST_WRITE_TRIGGER_ACTIVE} &THEN
 
-   IF NOT llResult THEN DO:
+DEFINE VARIABLE llShouldBeOnHPD AS LOGICAL NO-UNDO.
+DEFINE VARIABLE llIsOnHPD          AS LOGICAL NO-UNDO.
+
+llShouldBeOnHPD = LOOKUP(MsRequest.ReqSource,{&REQUEST_SOURCES_HPD}) > 0 AND
+                  LOOKUP(STRING(MsRequest.ReqType),{&REQTYPES_HPD})  > 0 AND
+                  LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + "," + {&REQ_ONGOING_STATUSES}) > 0
+                  .
+
+/* If this is a new MsRequest and MsRequest requestsource is not hpd source
+   or request type is not hpd req type we won't send the information */
+IF NEW(MsRequest) AND
+   NOT llShouldBeOnHPD
+THEN RETURN.
+
+IF NOT NEW(MsRequest)
+THEN llIsOnHPD = LOOKUP(oldMsRequest.ReqSource,{&REQUEST_SOURCES_HPD}) > 0 AND
+                 LOOKUP(STRING(oldMsRequest.ReqType),{&REQTYPES_HPD})  > 0 AND
+                 LOOKUP(STRING(oldMsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + "," + {&REQ_ONGOING_STATUSES}) > 0
+                 .
+
+IF llIsOnHPD = FALSE AND llShouldBeOnHPD = FALSE
+THEN RETURN.
+
+CREATE Mobile.RepLog.
+ASSIGN
+   Mobile.RepLog.TableName = "MsRequest"
+   Mobile.RepLog.EventType = (IF NEW(MsRequest)
+                              THEN "CREATE"
+                              ELSE IF llIsOnHPD AND
+                                      NOT llShouldBeOnHPD
+                              THEN "DELETE"
+                              ELSE "MODIFY")
+   Mobile.RepLog.EventTime = NOW
+   .
+
+IF Mobile.RepLog.EventType = "DELETE" 
+THEN Mobile.RepLog.KeyValue = STRING(MsRequest.MsRequest).
+ELSE Mobile.RepLog.RowID    = STRING(ROWID(MsRequest)).
+
+IF NOT NEW(MsRequest)
+THEN DO:
+   BUFFER-COMPARE MsRequest USING
+      MsRequest
+   TO oldMsRequest SAVE RESULT IN llSameValues.
+   
+   IF NOT llSameValues
+   THEN DO:  
+     
       CREATE Mobile.RepLog.
       ASSIGN
-         Mobile.RepLog.RecordId  = RECID(MsRequest)
          Mobile.RepLog.TableName = "MsRequest"
-         Mobile.RepLog.EventType = "MODIFY"
-         Mobile.RepLog.KeyValue  = STRING(Oldbuf.MsRequest) + CHR(255) + 
-                                   STRING(Oldbuf.ReqType) + CHR(255) + 
-                                   STRING(Oldbuf.ReqStatus) + CHR(255) + 
-                                   STRING(Msrequest.ReqStatus)
-         Mobile.RepLog.EventTS   = DATETIME(TODAY,MTIME).
-   END. /* IF NOT llResult THEN DO: */
-END. /* ELSE DO: */
+         Mobile.RepLog.EventType = "DELETE"
+         Mobile.RepLog.EventTime = NOW
+         Mobile.RepLog.KeyValue  = STRING(oldMsRequest.MsRequest)
+         .
+   END.
+END.
+
+&ENDIF

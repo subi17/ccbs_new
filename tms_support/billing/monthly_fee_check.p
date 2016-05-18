@@ -5,26 +5,40 @@ gcBrand = "1".
 {cparam2.i}
 {timestamp.i}
 
-DEFINE VARIABLE lcOutputFile AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liCount AS INTEGER NO-UNDO. 
-DEFINE VARIABLE i AS INTEGER NO-UNDO. 
-DEFINE VARIABLE lcKey AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE liCustnum AS INTEGER NO-UNDO. 
-DEFINE VARIABLE ldeActStamp AS DECIMAL NO-UNDO. 
-DEFINE VARIABLE liPeriod AS INTEGER NO-UNDO. 
-DEFINE VARIABLE ldaFromDate  AS DATE NO-UNDO.
-DEFINE VARIABLE ldaToDate    AS DATE NO-UNDO.
-DEFINE VARIABLE ldeFromStamp AS DECIMAL NO-UNDO.
-DEFINE VARIABLE ldaContractDate AS DATE NO-UNDO. 
-DEFINE VARIABLE liContractTime AS INTEGER NO-UNDO. 
-DEFINE VARIABLE liContractPeriod AS INTEGER NO-UNDO. 
-DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO format "x(10)". 
-DEFINE VARIABLE lcDataContracts AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcFFItemKey AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcEventlogDetails AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcOutputFile       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liCount            AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE i                  AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE lcKey              AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE liCustnum          AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE ldeActStamp        AS DECIMAL   NO-UNDO. 
+DEFINE VARIABLE liPeriod           AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE ldaFromDate        AS DATE      NO-UNDO.
+DEFINE VARIABLE ldaToDate          AS DATE      NO-UNDO.
+DEFINE VARIABLE ldeFromStamp       AS DECIMAL   NO-UNDO.
+DEFINE VARIABLE ldaContractDate    AS DATE      NO-UNDO. 
+DEFINE VARIABLE liContractTime     AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE liContractPeriod   AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE lcCli              AS CHARACTER NO-UNDO format "x(10)". 
+DEFINE VARIABLE lcDataContracts    AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcFFItemKey        AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcEventlogDetails  AS CHARACTER NO-UNDO.
+DEFINE VARIABLE ldeTerminated      AS DECIMAL   NO-UNDO. 
+DEFINE VARIABLE lcBundleOutputFile AS CHARACTER NO-UNDO. 
+
+DEFINE TEMP-TABLE ttServicelimit NO-UNDO
+   FIELD groupcode AS char
+   INDEX groupcode IS PRIMARY UNIQUE groupcode. 
+
+DEFINE TEMP-TABLE ttSubDetails NO-UNDO
+   FIELD MsSeq  AS INT
+   FIELD CLI    AS CHAR
+   FIELD Bundle AS CHAR
+   INDEX MsSeq MsSeq. 
+
 DEFINE BUFFER beventlog FOR eventlog.
-DEFINE VARIABLE ldeTerminated AS DEC NO-UNDO. 
-DEF VAR lcBundleOutputFile AS CHAR NO-UNDO. 
+
+DEF STREAM sout.
+DEF STREAM strout.
 
 IF DAY(TODAY) = 1 THEN
    ldaToDate = fLastDayOfMOnth(TODAY - 1).
@@ -33,8 +47,8 @@ ELSE
 
 ldaFromDate = DATE(MONTH(ldaToDate),1,YEAR(ldaToDate)).
 
-ldeFromStamp = fMake2DT(ldaFromDate,0).
-liPeriod = YEAR(ldaFromDate) * 100 + MONTH(ldaFromDate).
+ASSIGN ldeFromStamp = fMake2DT(ldaFromDate,0)
+       liPeriod     = YEAR(ldaFromDate) * 100 + MONTH(ldaFromDate).
 
 ASSIGN 
    lcOutputFile = "/apps/yoigo/tms_support/billing/monthly_fee_check_" + STRING(liPeriod) + ".txt"
@@ -49,11 +63,8 @@ if lcOutputFile eq "" or lcOutputFile eq ? then quit.
 
 disp "running.." with frame fcontrolrep.
 
-def stream sout.
-def STREAM strout.
-
-output stream sout to value(lcOutputFile).
-OUTPUT STREAM strout to value(lcBundleOutputFile).
+OUTPUT STREAM sout   TO value(lcOutputFile).
+OUTPUT STREAM strout TO value(lcBundleOutputFile).
 
 put stream sout unformatted 
       "CUSTNUM|MSSEQ|MSISDN|CONTRACT|CONTRACT_FROM|CONTRACT_TO|MSREQUEST_CREATE_FEES|DELETE_FIXEDFEE_EVENTLOG|DELETE_FFITEM_EVENTLOG|EVENTLOG_DETAIL|TERMINATION_TIME" skip.
@@ -66,68 +77,75 @@ FOR EACH daycampaign where
          daycampaign.brand = gcBrand AND
          daycampaign.dcevent begins "PAYTERM" NO-LOCK,
     EACH dccli where
-         dccli.brand  = gcBrand and
-         dccli.dcevent = daycampaign.dcevent and
+         dccli.brand    = gcBrand             and
+         dccli.dcevent  = daycampaign.dcevent and
          dccli.validto >= ldaFromDate NO-LOCK:
    
    i = i + 1.
+
    if i mod 1000 = 0 then do:
-      disp i label "checked" liCount label "found" dccli.dcevent column-label "contract".
+      disp i                    label "checked" 
+           liCount              label "found" 
+           dccli.dcevent column-label "contract".
       pause 0.
    end.
 
    ASSIGN
       lcEventlogDetails = ""
-      lcFFItemKey = ""
-      ldeTerminated = 0.
+      lcFFItemKey       = ""
+      ldeTerminated     = 0.
 
    release beventlog.
    
    FIND FIRST mobsub where
               mobsub.msseq = dccli.msseq NO-LOCK no-error.
+
    IF NOT AVAIL mobsub then do:
       FIND FIRST termmobsub where
                  termmobsub.msseq = dccli.msseq NO-LOCK no-error.
       liCustnum = termmobsub.custnum.
+      
       FIND FIRST msowner NO-LOCK WHERE
                  msowner.msseq = termmobsub.msseq USE-INDEX msseq.
       ldeTerminated = msowner.tsend.
-   end.     
-   else liCustnum = mobsub.custnum.
+   END.     
+   ELSE liCustnum = mobsub.custnum.
          
    FIND FIRST fixedfee where
-              fixedfee.brand = gcBrand and
-              fixedfee.custnum = liCustnum and
-              fixedfee.hosttable = "mobsub" and
-              fixedfee.keyvalue = string(dccli.msseq) and
-              fixedfee.calcobj = dccli.dcevent and
-              fixedfee.begdate >= dccli.validfrom
+              fixedfee.brand     = gcBrand             and
+              fixedfee.custnum   = liCustnum           and
+              fixedfee.hosttable = "mobsub"            and
+              fixedfee.keyvalue  = string(dccli.msseq) and
+              fixedfee.calcobj   = dccli.dcevent       and
+              fixedfee.begdate  >= dccli.validfrom
    NO-LOCK no-error.
    
    IF AVAIL fixedfee then do:
       FIND FIRST ffitem where
-                 ffitem.FFNum = fixedfee.ffnum and
+                 ffitem.FFNum      = fixedfee.ffnum and
                  ffitem.billperiod = liPeriod NO-LOCK no-error.
       IF AVAIL ffitem then do:
-         if (ffitem.billed and ffitem.invnum = 0) or
-             (ffitem.billed eq false and ffitem.invnum > 0) then do:
+         if (ffitem.billed eq true  and ffitem.invnum = 0) or
+            (ffitem.billed eq false and ffitem.invnum > 0) then do:
             put stream sout unformatted 
-                liCustnum "|" dccli.msseq "|"
-             dccli.dcevent "|"
-             dccli.validfrom "|"
-             dccli.validto "|"
+                liCustnum       "|" 
+                dccli.msseq     "|"
+                dccli.dcevent   "|"
+                dccli.validfrom "|"
+                dccli.validto   "|"
                 "ERROR:FFItem billed and invoice not found (or vice versa)"
-             skip.
+            skip.
          end.
          else if ffitem.invnum > 0 and 
-          not can-find(first invoice where
-                             invoice.invnum = ffitem.invnum) then do:
+              not can-find(first invoice where
+                                 invoice.invnum = ffitem.invnum) then do:
             put stream sout unformatted 
-             liCustnum "|" dccli.msseq "|"
-             dccli.dcevent "|"
-             dccli.validfrom "|"
-             dccli.validto "|"
-             "ERROR:FFItem invoice not found" skip.
+               liCustnum       "|" 
+               dccli.msseq     "|"
+               dccli.dcevent   "|"
+               dccli.validfrom "|"
+               dccli.validto   "|"
+               "ERROR:FFItem invoice not found" skip.
          end.
 
          next.
@@ -135,19 +153,20 @@ FOR EACH daycampaign where
    
       if dccli.amount > 0 then do:
          FIND FIRST SingleFee NO-LOCK WHERE
-                    SingleFee.Brand = gcBrand AND
-                    SingleFee.Custnum = mobsub.Custnum AND
-                    SingleFee.HostTable = "mobsub" AND
-                    SingleFee.KeyValue = string(mobsub.msseq) AND
-                    SingleFee.SourceKey = STRING(dccli.PerContractID) AND
-                    SingleFee.SourceTable = "DCCLI" AND
-                    SingleFee.CalcObj = "RVTERM" NO-ERROR.
+                    SingleFee.Brand       = gcBrand                     AND
+                    SingleFee.Custnum     = liCustnum                   AND
+                    SingleFee.HostTable   = "mobsub"                    AND
+                    SingleFee.KeyValue    = string(dccli.msseq)         AND
+                    SingleFee.SourceKey   = STRING(dccli.PerContractID) AND
+                    SingleFee.SourceTable = "DCCLI"                     AND
+                    SingleFee.CalcObj     = "RVTERM" NO-ERROR.
          IF NOT AVAIL SingleFee then do:
             put stream sout unformatted 
-                liCustnum "|" dccli.msseq "|"
-                dccli.dcevent "|"
+                liCustnum       "|" 
+                dccli.msseq     "|"
+                dccli.dcevent   "|"
                 dccli.validfrom "|"
-                dccli.validto "|"
+                dccli.validto   "|"
                 "ERROR:Residual singlefee not found"
              skip.
          end.
@@ -155,69 +174,63 @@ FOR EACH daycampaign where
 
    END.
 
-   ASSIGN lcKey = "1" + CHR(255) + string(liCustnum) + CHR(255) +
-          "MobSub" + CHR(255) + string(dccli.msseq)
+   ASSIGN lcKey = "1"      + CHR(255) + string(liCustnum) + CHR(255) +
+                  "MobSub" + CHR(255) + string(dccli.msseq)
           ldeActStamp = fmake2dt(dccli.validfrom, 0).
 
    IF AVAIL fixedfee THEN
       lcFFItemKey = string(fixedfee.FFNum) + CHR(255) + string(liPeriod).
 
    FIND FIRST msrequest where
-              msrequest.msseq = dccli.msseq and
-              msrequest.reqtype = 8 and
-              msrequest.reqstatus = 2 and
+              msrequest.msseq      = dccli.msseq   and
+              msrequest.reqtype    = 8             and
+              msrequest.reqstatus  = 2             and
               msrequest.reqcparam3 = dccli.dcevent and
-              msrequest.actstamp >= ldeActStamp NO-LOCK.
+              msrequest.actstamp  >= ldeActStamp NO-LOCK.
 
    FIND FIRST eventlog where
               eventlog.tablename = "FixedFee" and
-              eventlog.key begins lcKey and
-              eventlog.action = "delete" NO-LOCK no-error.
+              eventlog.key begins lcKey       and
+              eventlog.action    = "delete"   NO-LOCK no-error.
+   
    IF AVAIL eventlog THEN
       lcEventlogDetails = eventlog.usercode + "-" + STRING(eventlog.eventdate).
    ELSE IF lcFFItemKey > "" THEN DO:
       FIND FIRST beventlog where
-                 beventlog.tablename = "FFItem" and
+                 beventlog.tablename = "FFItem"   and
                  beventlog.key begins lcFFItemKey and
-                 beventlog.action = "delete" NO-LOCK no-error.
+                 beventlog.action    = "delete"   NO-LOCK no-error.
       IF NOT AVAIL beventlog AND
-         AVAIL fixedfee AND fixedfee.endperiod < liPeriod THEN NEXT.
+             AVAIL fixedfee  AND 
+             fixedfee.endperiod < liPeriod THEN NEXT.
       ELSE IF AVAIL beventlog THEN
          lcEventlogDetails = beventlog.usercode + "-" + STRING(beventlog.eventdate).
    END.
    
    liCount = liCount + 1.
+
    put stream sout unformatted 
-      liCustnum "|"
-      dccli.msseq "|" 
-      dccli.cli "|" 
-      dccli.dcevent "|" 
-      dccli.validfrom "|"
-      dccli.validto "|"
+      liCustnum                                 "|"
+      dccli.msseq                               "|" 
+      dccli.cli                                 "|" 
+      dccli.dcevent                             "|" 
+      dccli.validfrom                           "|"
+      dccli.validto                             "|"
       (if avail msrequest then
        string(msrequest.createfees) else "N/A") "|"
-      avail(eventlog) "|"
-      avail(beventlog) "|"
-      lcEventlogDetails "|"
+      avail(eventlog)                           "|"
+      avail(beventlog)                          "|"
+      lcEventlogDetails                         "|"
       (IF ldeTerminated > 0 THEN fts2hms(ldeTerminated) ELSE "") skip.
 
 end.
 
-DEFINE TEMP-TABLE ttServicelimit NO-UNDO
-FIELD groupcode AS char
-INDEX groupcode IS PRIMARY UNIQUE groupcode. 
-
-define temp-table ttSubDetails no-undo 
-   field MsSeq as int
-   field CLI   as char
-   field Bundle as char
-   INDEX MsSeq MsSeq. 
 
 looppi2:
 FOR EACH servicelimit NO-LOCK,
-   first daycampaign NO-LOCK where
-         daycampaign.brand = "1" and
-         daycampaign.dcevent = servicelimit.groupcode:
+    FIRST daycampaign NO-LOCK WHERE
+          daycampaign.brand   = "1" and
+          daycampaign.dcevent = servicelimit.groupcode:
 
    if daycampaign.feemodel eq "" then next.
    if daycampaign.dcevent begins "dss" then next.
@@ -226,20 +239,23 @@ FOR EACH servicelimit NO-LOCK,
               fmitem.brand = "1" and
               fmitem.feemodel = daycampaign.feemodel and
               fmitem.todate > today no-error.
+
    if fmitem.billmethod then next.
    if fmitem.billtype eq "NF" then next. /* no fee (prepaid) */
 
    FIND FIRST ttServicelimit NO-LOCK where
               ttServicelimit.groupcode  = servicelimit.groupcode no-error.
+
    IF AVAIL ttServicelimit then next.
+
    create ttServicelimit.
    assign
-      ttServicelimit.groupcode = daycampaign.dcevent.
+      ttServicelimit.groupcode = servicelimit.groupcode.
 
    FOR EACH mservicelimit where
-            mservicelimit.slseq = servicelimit.slseq and
+            mservicelimit.slseq    = servicelimit.slseq    and
             mservicelimit.dialtype = servicelimit.dialtype and
-            mservicelimit.endts >= ldeFromStamp NO-LOCK:
+            mservicelimit.endts   >= ldeFromStamp NO-LOCK:
 
       if mservicelimit.endts < mservicelimit.fromts then next.
       
@@ -253,9 +269,9 @@ FOR EACH servicelimit NO-LOCK,
       end.
 
       ASSIGN
-         lcFFItemKey = ""
+         lcFFItemKey       = ""
          lcEventlogDetails = ""
-         ldeTerminated = 0.
+         ldeTerminated     = 0.
    
       release beventlog.
        
@@ -267,7 +283,6 @@ FOR EACH servicelimit NO-LOCK,
       
       FIND FIRST mobsub where
                  mobsub.msseq = mservicelimit.msseq NO-LOCK no-error.
-
 
       IF NOT AVAIL mobsub then do:
          FIND FIRST termmobsub where
@@ -309,81 +324,84 @@ FOR EACH servicelimit NO-LOCK,
                                       ELSE "".
       END.
 
-      find first fixedfee where
-                 fixedfee.brand = gcBrand and
-                 fixedfee.hosttable = "mobsub" and
-                 fixedfee.custnum = liCustnum and
-                 fixedfee.keyvalue = string(mservicelimit.msseq) and
-                 fixedfee.CalcObj = servicelimit.groupcode and
-                 fixedfee.endperiod >= liContractPeriod
-      NO-LOCK no-error.
+      FIND FIRST fixedfee NO-LOCK WHERE
+                 fixedfee.brand      = gcBrand                     and
+                 fixedfee.hosttable  = "mobsub"                    and
+                 fixedfee.custnum    = liCustnum                   and
+                 fixedfee.keyvalue   = string(mservicelimit.msseq) and
+                 fixedfee.CalcObj    = servicelimit.groupcode      and
+                 fixedfee.endperiod >= liContractPeriod            NO-ERROR.
 
-      IF AVAIL fixedfee then do:
-         FIND FIRST ffitem where
-               ffitem.FFNum = fixedfee.ffnum and
-               ffitem.billperiod = liPeriod NO-LOCK no-error.
+      IF AVAIL fixedfee THEN DO:
+         FIND FIRST ffitem WHERE
+                    ffitem.FFNum      = fixedfee.ffnum   AND
+                    ffitem.billperiod = liPeriod NO-LOCK NO-ERROR.
       
-         IF AVAIL ffitem then do:
-            if (ffitem.billed and ffitem.invnum = 0) or
-               (ffitem.billed eq false and ffitem.invnum > 0) then do:
+         IF AVAIL ffitem THEN DO:
+            IF (ffitem.billed          AND ffitem.invnum = 0) OR
+               (ffitem.billed eq false and ffitem.invnum > 0) THEN DO:
                put stream sout unformatted 
                   liCustnum "|" mservicelimit.msseq "|"
                    "ERROR:FFItem billed and invoice not found (or vice versa)"
                skip.
-            end.
-            else if ffitem.invnum > 0 and 
-               not can-find(first invoice where
-                                  invoice.invnum = ffitem.invnum) then do:
+            END.
+            ELSE IF ffitem.invnum > 0 AND
+                 NOT CAN-FIND(FIRST invoice WHERE
+                                    invoice.invnum = ffitem.invnum) THEN DO:
                put stream sout unformatted 
                   liCustnum "|" mservicelimit.msseq "|"
                    "ERROR:FFItem invoice not found" skip.
-            end.
+            END.
 
-            next.
-         end.
-      end.
+            NEXT.
+         END.
+      END.
       
       IF AVAIL fixedfee THEN
          lcFFItemKey = string(fixedfee.FFNum) + CHR(255) + string(liPeriod).
 
-      FIND FIRST msrequest where
-                 msrequest.msseq = mservicelimit.msseq and
-                 msrequest.reqtype = 8 and
-                 msrequest.reqstatus = 2 and
-                 msrequest.reqcparam3 = servicelimit.groupcode and
-                 msrequest.actstamp = mservicelimit.fromts NO-LOCK no-error.
+      FIND FIRST msrequest NO-LOCK WHERE
+                 msrequest.msseq      = mservicelimit.msseq    AND
+                 msrequest.reqtype    = 8                      AND 
+                 msrequest.reqstatus  = 2                      AND
+                 msrequest.reqcparam3 = servicelimit.groupcode AND
+                 msrequest.actstamp   = mservicelimit.fromts   NO-ERROR.
    
-      lcKey = "1" + CHR(255) + string(liCustnum) + CHR(255) + "MobSub" + 
-              CHR(255) + string(mservicelimit.msseq). 
+      lcKey = "1"      + CHR(255) + string(liCustnum) + CHR(255) + 
+              "MobSub" + CHR(255) + string(mservicelimit.msseq). 
       
-      FIND FIRST eventlog where
-                 eventlog.tablename = "FixedFee" and
-                 eventlog.key begins lcKey and
-                 eventlog.action = "delete" NO-LOCK no-error.
+      FIND FIRST eventlog NO-LOCK WHERE
+                 eventlog.tablename = "FixedFee" AND 
+                 eventlog.key       begins lcKey AND 
+                 eventlog.action    = "delete"   NO-ERROR.
+
       IF AVAIL eventlog THEN
          lcEventlogDetails = eventlog.usercode + "-" + STRING(eventlog.eventdate).
       ELSE IF lcFFItemKey > "" THEN DO:
-         FIND FIRST beventlog where
-                    beventlog.tablename = "FFItem" and
-                    beventlog.key begins lcFFItemKey and
-                    beventlog.action = "delete" NO-LOCK no-error.
+         FIND FIRST beventlog NO-LOCK WHERE
+                    beventlog.tablename = "FFItem"         AND 
+                    beventlog.key       begins lcFFItemKey AND 
+                    beventlog.action    = "delete"         NO-ERROR.
          IF AVAIL beventlog THEN
             lcEventlogDetails = beventlog.usercode + "-" + STRING(beventlog.eventdate).
       END.
       
-      put stream sout unformatted 
-         liCustnum "|"
-         mservicelimit.msseq "|" 
-         lcCli "|"
-         servicelimit.groupcode "|"
-         mservicelimit.fromts "|"
-         mservicelimit.endts "|"
-         (if avail msrequest then
-          string(msrequest.createfees) else "N/A") "|"
-         avail(eventlog) "|"
-         avail(beventlog) "|"
-         lcEventlogDetails "|"
-         (IF ldeTerminated > 0 THEN fts2hms(ldeTerminated) ELSE "") skip.
+      PUT STREAM sout UNFORMATTED
+         liCustnum                        "|"
+         mservicelimit.msseq              "|" 
+         lcCli                            "|"
+         servicelimit.groupcode           "|"
+         mservicelimit.fromts             "|"
+         mservicelimit.endts              "|"
+        (if avail msrequest then
+             string(msrequest.createfees) 
+         else "N/A")                      "|"
+         avail(eventlog)                  "|"
+         avail(beventlog)                 "|"
+         lcEventlogDetails                "|"
+        (IF ldeTerminated > 0 THEN 
+            fts2hms(ldeTerminated) 
+         ELSE "")                         SKIP.
    
       liCount = liCount + 1.
    END.
@@ -461,17 +479,36 @@ define INPUT parameter iiCustNum AS integer   no-undo.
 define INPUT parameter icCLI     as character no-undo.
 define INPUT parameter icBundle  as character no-undo.
 
+DEF VAR llgAvailable AS LOGICAL NO-UNDO. 
+
   IF NOT CAN-FIND(FIRST ttSubDetails WHERE 
                         ttSubDetails.MsSeq  EQ iiMsSeq   AND 
                         ttSubDetails.Bundle EQ icBundle) THEN DO:
-     put STREAM strout unformatted 
-        iiCustNum "|"
-        iiMsSeq   "|"
-        icCLI     "|"
-        lcBundle  SKIP.
+     
+     llgAvailable = FALSE.
 
-     liBundleCount = liBundleCount + 1.
+     /* Double check in mservicelimit */
+     FOR EACH mservicelimit NO-LOCK WHERE 
+              mservicelimit.MsSeq  = iiMsSeq AND
+              mservicelimit.endts >= ldeFromStamp:
+        
+        FIND FIRST servicelimit NO-LOCK WHERE 
+                   servicelimit.slseq     = mservicelimit.slseq    AND 
+                   servicelimit.dialtype  = mservicelimit.dialtype AND 
+                   servicelimit.groupcode = icBundle               NO-ERROR.
+        IF AVAIL servicelimit THEN 
+           llgAvailable = TRUE.
+     END.         
+     
+     IF NOT llgAvailable THEN DO:
+        put STREAM strout unformatted 
+           iiCustNum "|"
+           iiMsSeq   "|"
+           icCLI     "|"
+           lcBundle  SKIP.
 
+        liBundleCount = liBundleCount + 1.
+     END.
   END.                      
 
 END PROCEDURE.
