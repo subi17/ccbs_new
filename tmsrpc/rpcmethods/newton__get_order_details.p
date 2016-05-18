@@ -206,6 +206,10 @@ add_string(top_struct,"risk_code",Order.RiskCode).
 add_int(top_struct,"delivery_type", Order.DeliveryType).
 add_int(top_struct,"delivery_secure", Order.DeliverySecure).
 
+IF Order.PortingDate NE ? THEN
+   add_date_or_time(top_struct, "requested_porting_time", Order.PortingDate, 0).
+ELSE add_string(top_struct, "requested_porting_time", "").
+
 IF Order.OrderChannel BEGINS "RENEWAL_POS" AND
    Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND
    CAN-FIND(FIRST MsRequest WHERE

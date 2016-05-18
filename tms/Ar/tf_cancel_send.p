@@ -36,7 +36,6 @@ DEF VAR lcLogDir AS CHAR NO-UNDO.
 DEF VAR lcProcessedFile AS CHAR NO-UNDO. 
 DEF VAR liErrors AS INT NO-UNDO. 
 DEF VAR liOk AS INT NO-UNDO. 
-DEF VAR lcCodFpago AS CHAR NO-UNDO.
 
 ASSIGN
    lcRootDir = fCParam("TermFinance","CanOutRoot")
@@ -196,11 +195,21 @@ PROCEDURE pCreateFile:
 
       RUN pPrintLine(FixedFeeTF.Amount, 
                      ldaBankDate,
-                     icBank).
+                     icBank,
+                     FALSE). /* payterm fee */
+      IF RETURN-VALUE BEGINS "ERROR:" THEN DO:
+         fLogLine(FixedFeeTF.OrderId, RETURN-VALUE).
+         NEXT.
+      END.
       IF FixedFeeTF.ResidualAmount > 0 THEN
          RUN pPrintLine(FixedFeeTF.ResidualAmount,
                         ldaBankDate,
-                        icBank).
+                        icBank,
+                        TRUE). /* Residual fee */
+         IF RETURN-VALUE BEGINS "ERROR:" THEN DO:
+            fLogLine(FixedFeeTF.OrderId, RETURN-VALUE).
+            NEXT.
+         END.
       ASSIGN
          FixedFeeTF.CancelStatus = "SENT"
          FixedFeeTF.CancelDate = TODAY
@@ -249,13 +258,15 @@ PROCEDURE pPrintLine:
    
    DEF INPUT PARAM ideTotalAmount AS DEC NO-UNDO. 
    DEF INPUT PARAM idaBankDate AS DATE NO-UNDO.
-   DEF INPUT PARAM icBank AS CHAR NO-UNDO. 
+   DEF INPUT PARAM icBank AS CHAR NO-UNDO.
+   DEF INPUT PARAM ilResidualFee AS LOG NO-UNDO.
 
    DEF VAR lcTotalAmount AS CHAR NO-UNDO. 
    DEF VAR ldeRVPerc AS DEC NO-UNDO.
    DEF VAR ldeRVAmt AS DEC NO-UNDO.
    DEF VAR ldaOrderDate AS DATE NO-UNDO.
    DEF VAR liOrderId AS IN NO-UNDO.
+   DEF VAR lcCodFpago AS CHAR NO-UNDO.
 
    lcTotalAmount = REPLACE(REPLACE(TRIM(STRING(ideTotalAmount,"->>>>>>>9.99")),",",""),".","").
    IF FixedFeeTF.OrderId EQ ? OR
@@ -285,11 +296,19 @@ PROCEDURE pPrintLine:
                        TFConf.RVPercentage = ldeRVPerc AND
                        TFConf.ValidTo >= ldaOrderDate AND
                        TFConf.ValidFrom <= ldaOrderDate NO-ERROR.
-            IF AVAIL TFConf THEN
-               ASSIGN
-                  lcCodFpago = TFConf.PaytermCode WHEN TFConf.RVPercentage NE 0.
+            IF AVAIL TFConf THEN DO:
+               IF ilResidualFee THEN 
+                  /* get code for Residual fee */
+                  lcCodFpago = TFConf.ResidualCode.
+               ELSE IF TFConf.RVPercentage NE 0 THEN /* get code for payterm */
+                  lcCodFpago = TFConf.PaytermCode.
+            END.
          END.
       END.
+      ELSE
+         RETURN SUBST("ERROR: Order &1 not found.",
+                      liOrderId).
+
    END.
 
    PUT STREAM sout 
@@ -299,8 +318,12 @@ PROCEDURE pPrintLine:
                      lcTotalAmount FORMAT "X(11)"
    /*MES-OPERAC*/    STRING(MONTH(idaBankDate),"99") FORMAT "X(2)"
    /*ANO-OPERAC*/    STRING(YEAR(idaBankDate),"9999") FORMAT "X(4)"
-   /*NUM-PEDIDO*/    STRING(FixedFee.OrderId) FORMAT "X(8)"
-   /*COD-FPAGO*/     lcCodFpago FORMAT "X(4)".
+   /*NUM-PEDIDO*/    STRING(FixedFee.OrderId) FORMAT "X(8)".
    
+   IF FixedFeeTF.TFBank EQ {&TF_BANK_UNOE} THEN /* YTS-8764 */
+      PUT STREAM sout
+      /*COD-FPAGO*/  lcCodFpago FORMAT "X(4)".
+
    PUT STREAM sout CONTROL CHR(13) CHR(10).
+   RETURN "".
 END.

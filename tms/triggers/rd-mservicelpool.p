@@ -1,19 +1,25 @@
 TRIGGER PROCEDURE FOR REPLICATION-DELETE OF MServiceLPool.
 
+{HPD/HPDConst.i}
+
+&IF {&MSERVICELPOOL_DELETE_TRIGGER_ACTIVE} &THEN
+
+IF NEW MServiceLPool
+THEN RETURN.
+
+{triggers/mservicelimit.i}
+
+IF NOT fCheckHPDStatus(MServiceLPool.MsSeq,
+                       MServiceLPool.CustNum,
+                       MServiceLPool.EndTS)
+THEN RETURN.
+
 CREATE Common.RepLog.
 ASSIGN
-   Common.RepLog.RecordId  = RECID(MServiceLPool)
+   Common.RepLog.TableName = "MServiceLPool"
    Common.RepLog.EventType = "DELETE"
-   Common.RepLog.EventTS   = DATETIME(TODAY,MTIME).
+   Common.RepLog.EventTime = NOW
+   Common.RepLog.KeyValue  = {HPD/keyvalue.i MServiceLPool . {&HPDKeyDelimiter} CustNum MsSeq SLSeq EndTS}
+   .
 
-IF MServiceLPool.CustNum > 0 THEN
-   ASSIGN Common.RepLog.TableName = "CustomerMServiceLPool"
-          Common.RepLog.KeyValue  = STRING(MServiceLPool.CustNum) + CHR(255) +
-                                    STRING(MServiceLPool.SLSeq)   + CHR(255) +
-                                    STRING(MServiceLPool.FromTS).
-ELSE
-   ASSIGN Common.RepLog.TableName = "MServiceLPool"
-          Common.RepLog.KeyValue  = STRING(MServiceLPool.MsSeq) + CHR(255) +
-                                    STRING(MServiceLPool.SLSeq) + CHR(255) +
-                                    STRING(MServiceLPool.FromTS).
-
+&ENDIF
