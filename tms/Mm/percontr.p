@@ -3250,10 +3250,6 @@ PROCEDURE pContractReactivation:
       RETURN.
    END.
 
-   IF DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE} OR
-      DayCampaign.DCType = {&DCTYPE_BUNDLE} THEN
-      lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS").
-
    /* predetermined length */  
    IF DayCampaign.DurType = 2 OR DayCampaign.DurType = 3 THEN DO:
       IF DayCampaign.DurMonths = 0 AND
@@ -3452,8 +3448,10 @@ PROCEDURE pContractReactivation:
             END. /* IF AVAILABLE FFItem AND NOT FFItem.BILLED THEN DO: */
          END. /* IF DAY(FixedFee.BegPeriod) > 1 AND FMItem.FirstMonthBR = 0 */
          
-         IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} AND
-            FixedFee.BillCode EQ "PAYTERM" THEN DO:
+         /* Remove singlefees created in termination */
+         IF (MsRequest.ReqSource EQ {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} OR
+             MsRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION}) AND
+             FixedFee.BillCode EQ "PAYTERM" THEN DO:
 
             FIND FIRST SingleFee USE-INDEX Custnum WHERE
                        SingleFee.Brand = gcBrand AND
@@ -3473,8 +3471,10 @@ PROCEDURE pContractReactivation:
                IF llDoEvent THEN
                   RUN StarEventMakeDeleteEventWithMemo(
                      (BUFFER SingleFee:HANDLE),
-                     MsRequest.UserCode,
-                     "RevertRenewalOrder").
+                      MsRequest.UserCode,
+                     (IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} 
+                      THEN "RevertRenewalOrder"
+                      ELSE "SubscriptionReactivation")).
                DELETE SingleFee.
             END.
           END.
@@ -3637,7 +3637,9 @@ PROCEDURE pContractReactivation:
          RETURN.
       END. /* IF NOT AVAILABLE DCCLI THEN DO: */
 
-      IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} AND
+      /* Remove singlefees created in termination */
+      IF (MsRequest.ReqSource EQ {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} OR
+          MsRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION}) AND
          DCCLI.DCEvent BEGINS "TERM" THEN DO:
 
             FIND FIRST SingleFee USE-INDEX Custnum WHERE
@@ -3658,7 +3660,9 @@ PROCEDURE pContractReactivation:
                RUN StarEventMakeDeleteEventWithMemo(
                   (BUFFER SingleFee:HANDLE),
                   MsRequest.UserCode,
-                  "RevertRenewalOrder").
+                 (IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} 
+                  THEN "RevertRenewalOrder"
+                  ELSE "SubscriptionReactivation")).
             DELETE SingleFee.
          END.
 
@@ -3694,6 +3698,10 @@ PROCEDURE pContractReactivation:
    MsRequest.ReqDtParam1 = ldtFromDate.
 
    fReqStatus(IF llSubRequest THEN 7 ELSE 8,""). 
+
+   IF DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE} OR
+      DayCampaign.DCType = {&DCTYPE_BUNDLE} THEN
+      lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS").
 
    /* Update DSS Limit if postpaid data bundle is being added to DSS group */ 
    IF LOOKUP(lcDCEvent,lcPostpaidDataBundles) > 0 THEN DO:
