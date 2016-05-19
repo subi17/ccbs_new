@@ -476,7 +476,9 @@
                                                         ttCall.DateSt).
       END. /* IF ttCall.MSCID <> "CCGW" THEN DO: */
       ELSE IF ttCall.spocmt EQ {&GB_CCN} THEN DO:
-         ttCall.ServiceName = "Google". /*  YPR-3890 */
+         ASSIGN
+            ttCall.ServiceName = {&GB_B_NBR} /*  YPR-3890 */
+            ttCall.gsmbnr = {&GB_B_NBR}.
       END.
 
       IF ttCall.ErrorCode = 0 THEN 
