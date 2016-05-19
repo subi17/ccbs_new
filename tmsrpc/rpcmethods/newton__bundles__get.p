@@ -159,7 +159,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    ELSE IF LOOKUP(DayCampaign.DCType,"6,8") > 0 THEN
       lcBundleType = "upsell".
    ELSE IF LOOKUP(DayCampaign.DCType,lcPromotionBundles) > 0 THEN 
-      lcBundleType = "promotion".
+      lcBundleType = "promotional".
    ELSE lcBundleType = "service".
 
    IF lcCLIType > "" THEN DO:
