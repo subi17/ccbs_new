@@ -517,7 +517,8 @@ PROCEDURE pCountTotSumofRVTERM:
 
    /* Reset to zero is needed, since default 
       DCCLI.Amount (?) is not valid value for decimal */
-   ttContract.Amount = 0.
+   IF ttContract.Amount EQ ? THEN
+      ttContract.Amount = 0.
    FOR EACH FixedFee NO-LOCK WHERE
             FixedFee.Brand = "1" AND
             FixedFee.HostTable = "Mobsub" AND
