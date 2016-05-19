@@ -53,6 +53,7 @@ DEF VAR lcVoIPBaseContracts AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
 DEF VAR lcAllVoIPNativeBundles AS CHAR NO-UNDO.
 DEF VAR llVoIPCompatible   AS LOG NO-UNDO.
+DEF VAR lcPromotionBundles AS CHAR NO-UNDO. 
 
 {cparam2.i}
 {tmsconst.i}
@@ -66,8 +67,8 @@ ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
        lcCONTSFContracts = fCParamC("CONTSF_CONTRACTS")
        lcVoIPBaseContracts = fCParamC("BONO_VOIP_BASE_BUNDLES")
        lcAllVoIPNativeBundles = fCParamC("NATIVE_VOIP_BASE_BUNDLES")
-       lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
-
+       lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
+       lcPromotionBundles    = fCParamC("PROMOTION_BUNDLES").
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
@@ -157,6 +158,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
              lcCLIType = "CONTSF".
    ELSE IF LOOKUP(DayCampaign.DCType,"6,8") > 0 THEN
       lcBundleType = "upsell".
+   ELSE IF LOOKUP(DayCampaign.DCType,lcPromotionBundles) > 0 THEN 
+      lcBundleType = "promotion".
    ELSE lcBundleType = "service".
 
    IF lcCLIType > "" THEN DO:
