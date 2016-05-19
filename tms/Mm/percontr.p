@@ -3186,6 +3186,7 @@ PROCEDURE pContractReactivation:
    DEF VAR liRequest         AS INT NO-UNDO.
    DEF VAR lcResult          AS CHAR NO-UNDO.
    DEF VAR liReacPeriod      AS INT NO-UNDO.
+   DEF VAR ldateDccli        AS DATE  NO-UNDO.
    DEF VAR llUpdateResidualFeeCode AS LOG NO-UNDO. 
 
    DEF BUFFER bMsRequest FOR MsRequest.
@@ -3642,13 +3643,16 @@ PROCEDURE pContractReactivation:
           MsRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION}) AND
          DCCLI.DCEvent BEGINS "TERM" THEN DO:
 
+         IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION} THEN 
+            ldateDccli = ADD-INTERVAL(DCCLI.ValidTo, 1, "months").
+         ELSE ldateDccli = DCCLI.ValidTo.
             FIND FIRST SingleFee USE-INDEX Custnum WHERE
                        SingleFee.Brand = gcBrand AND
                        SingleFee.Custnum = MsRequest.CustNum AND
                        SingleFee.HostTable = "Mobsub" AND
                        SingleFee.KeyValue = STRING(MsRequest.MsSeq) AND
                        SingleFee.BillCode = "TERMPERIOD" AND
-                       SingleFee.BillPeriod = YEAR(DCCLI.ValidTo) * 100 + MONTH(DCCLI.ValidTo)
+                       SingleFee.BillPeriod = YEAR(ldateDccli) * 100 + MONTH(ldateDccli)
             EXCLUSIVE-LOCK NO-ERROR.
       
          IF AVAIL SingleFee AND
