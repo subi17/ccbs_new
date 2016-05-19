@@ -573,6 +573,16 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
             SingleFee.BillPeriod  = liPeriod AND
             SingleFee.OrderId > 0:
       
+      /* Send the SMS only for specific installments end date range */
+      FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
+                 DCCLI.PerContractId = INT(SingleFee.SourceKey) AND
+                 DCCLI.Brand   = gcBrand AND
+                 DCCLI.DCEvent BEGINS "PAYTERM" AND
+                 DCCLI.MsSeq   = INT(SingleFee.KeyValue) AND
+                 DCCLI.ValidTo >= idaStartDate AND
+                 DCCLI.ValidTo <= idaEndDate NO-ERROR.
+      IF NOT AVAIL DCCLI THEN NEXT.
+      
       FIND FIRST Mobsub NO-LOCK WHERE
                  Mobsub.MsSeq = INT(SingleFee.KeyValue) NO-ERROR.
             
