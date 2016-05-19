@@ -457,6 +457,7 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
    IF NOT AVAIL CLIType OR 
                 CLIType.LineType NE {&CLITYPE_LINETYPE_MAIN} THEN RETURN FALSE.
    
+   MOBSUB_LOOP:
    FOR EACH lbMobSub NO-LOCK WHERE
             lbMobSub.Brand   = gcBrand        AND
             lbMobSub.InvCust = Mobsub.CustNum AND
@@ -482,7 +483,8 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
                   bCLIType.CLIType = (IF bMsRequest.ReqCParam5 > ""
                                      THEN bMsRequest.ReqCParam5
                                      ELSE bMsRequest.ReqCParam2):
-            IF bCLIType.LineType NE {&CLITYPE_LINETYPE_MAIN} THEN NEXT.
+            IF bCLIType.LineType NE {&CLITYPE_LINETYPE_MAIN} THEN
+               NEXT MOBSUB_LOOP.
          END.
 
          FOR EACH bMsRequest NO-LOCK WHERE
@@ -493,7 +495,8 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
             FIRST bCLIType NO-LOCK WHERE
                   bCLIType.Brand = gcBrand AND
                   bCLIType.CLIType = bMsRequest.ReqCParam2:
-            IF bCLIType.LineType NE {&CLITYPE_LINETYPE_MAIN} THEN NEXT.
+            IF bCLIType.LineType NE {&CLITYPE_LINETYPE_MAIN} THEN
+               NEXT MOBSUB_LOOP.
          END.
 
          IF CAN-FIND (FIRST bMsRequest WHERE
@@ -501,7 +504,7 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
                 bMsRequest.ActStamp <= fMakeTS() AND
                 MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
                 LOOKUP(STRING(bMsRequest.ReqStatus),
-                       {&REQ_INACTIVE_STATUSES}) = 0) THEN NEXT.
+                       {&REQ_INACTIVE_STATUSES}) = 0) THEN NEXT MOBSUB_LOOP.
 
          EMPTY TEMP-TABLE tt_AdditionalSIM NO-ERROR.
          RETURN FALSE.
