@@ -25,21 +25,16 @@ DEF VAR lcGBLogDir AS CHAR NO-UNDO.
 DEF VAR lcGBSpoolDir AS CHAR NO-UNDO.
 DEF VAR lcGBProcessedDir AS CHAR NO-UNDO.
 
-
-
 DEF STREAM Sout.
-
 
 FUNCTION fInitGBParameters RETURNS CHAR
    ():
    ASSIGN
-
       lcGBOutDir = fCParam("GBILLING","GBOutDir")
       lcGBInDir = fCParam("GBILLING","GBInDir")
       lcGBProcessedDir = fCParam("GBILLING","GBProcDir")
       lcGBLogDir = fCParam("GBILLING","GBLogDir")
       lcGBSpoolDir = fCParam("GBILLING","GBSpoolDir").
-
  
    IF lcGBOutDir  EQ "" OR lcGBOutDir EQ ? THEN lcGBOutDir = "/tmp/".
    IF lcGBInDir  EQ "" OR lcGBInDir EQ ? THEN lcGBInDir = "/tmp/".
@@ -77,7 +72,6 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
    RETURN lcResponse.
 END.
 
-
 FUNCTION fProcessPrepaidEntry RETURNS CHAR
    (icMSISDN AS CHAR, /*MSISDN*/
     iiMsSeq AS INT, /*MsSeq*/
@@ -97,7 +91,7 @@ FUNCTION fProcessPrepaidEntry RETURNS CHAR
               bCustomer.Custnum EQ bMsOwner.InvCust NO-LOCK NO-ERROR.
    IF AVAIL bCustomer THEN lcTaxZone = fRegionTaxZone(bCustomer.Region).
    ELSE lcTaxZone = "1".
-
+   
    liRequest = fCreateTopUpRequest(iiMsSeq,          /* msseq */
                                    icMSISDN,         /* cli */
                                    "RefillTRequest", /* function */
@@ -107,7 +101,7 @@ FUNCTION fProcessPrepaidEntry RETURNS CHAR
                                    "Cron script",    /* reference */
                                    lcTaxzone,        /* taxzone */
                                    0,                /* actstamp */
-                                   ideAmount,        /* topupamount*/
+                                   ideAmount * 100,  /* topupamount*/
                                    0.0).             /* vatamount*/
 
    IF liRequest EQ 0 OR liRequest EQ ? THEN RETURN {&GB_RESP_REQUEST_ERROR}.
