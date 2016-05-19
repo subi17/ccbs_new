@@ -475,6 +475,9 @@
             ttCall.ServiceName = fGetPremiumServiceName(ttCall.GsmBnr,
                                                         ttCall.DateSt).
       END. /* IF ttCall.MSCID <> "CCGW" THEN DO: */
+      ELSE IF ttCall.spocmt EQ {&GB_CCN} THEN DO:
+         ttCall.ServiceName = "Google". /*  YPR-3890 */
+      END.
 
       IF ttCall.ErrorCode = 0 THEN 
          ttCall.invseq = fInvSeq(ttCall.AgrCust,
