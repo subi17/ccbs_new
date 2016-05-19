@@ -988,6 +988,9 @@ DO TRANS:
             ttCall.ServiceName = fGetPremiumServiceName(ttCall.GsmBnr,
                                                         ttCall.DateSt).
       END. /* IF ttCall.MSCID <> "CCGW" THEN DO: */
+      ELSE IF ttCall.spocmt EQ {&GB_CCN} THEN DO:
+         ttCall.ServiceName = "Google".         
+      END.
 
       IF ttCall.mscid EQ "NRTRDE" THEN ttCall.InvSeq = 0.
       ELSE IF ttCall.ErrorCode = 0 THEN 
