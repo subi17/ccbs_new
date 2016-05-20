@@ -367,7 +367,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    END.
    
    CASE FMItem.FFItemQty:
-      WHEN 12 THEN lcPayTermType[1] = "0212".
+      WHEN 12 THEN lcPayTermType[1] = "6666".  /* Temporary change with YOT-4474 from 0212 to 6666 */
       WHEN 18 THEN lcPayTermType[1] = "0018".
       WHEN 24 THEN DO:
          /* YTS-6873: Own code for non-residual fee cass */
