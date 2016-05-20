@@ -3151,7 +3151,8 @@ PROCEDURE pDiscount:
                IF liDiscPeriod EQ liSplitPeriod AND i EQ 1
                THEN ldaDiscValidTo   = ttInvSplit.SplitDate - 1.
                ELSE ldaDiscValidTo   = (IF AVAIL ttInvSplit AND /* YTS-7265 */
-                                          liDiscPeriod EQ liToPeriod
+                                           liSplitPeriod EQ -1 AND
+                                           liDiscPeriod EQ liToPeriod
                                         THEN MIN(ldaValidTo,ttDiscounts.ToDate)
                                         ELSE ldaValidTo).
                
