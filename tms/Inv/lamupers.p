@@ -3152,7 +3152,7 @@ PROCEDURE pDiscount:
                THEN ldaDiscValidTo   = ttInvSplit.SplitDate - 1.
                ELSE ldaDiscValidTo   = (IF AVAIL ttInvSplit AND /* YTS-7265 */
                                           liDiscPeriod EQ liToPeriod
-                                        THEN ttDiscounts.ToDate
+                                        THEN MIN(ldaValidTo,ttDiscounts.ToDate)
                                         ELSE ldaValidTo).
                
                FIND FIRST ttIR WHERE 
