@@ -55,6 +55,7 @@ if not os.path.exists(relpath + '/etc/site.py'):
     fd.write("%-14s = '%s'\n" % ('work_dir', os.path.abspath(relpath)))
     fd.write("%-14s = '%s'\n" % ('environment', environment))
     fd.write("%-14s = '%s'\n" % ('service_suffix', service_suffix))
+    fd.write("ENV%-11s = '%s'\n" % ("['TERM']", 'xterm'))
     if environment == 'development' and os.environ.get('PROCFG'):
         fd.write("ENV%-11s = '%s'\n" % ("['PROCFG']", os.environ['PROCFG']))
     fd.write("\nexec(open(work_dir + '/etc/config.py').read())\n")
@@ -66,18 +67,19 @@ os.environ['display_banner'] = 'no'
 os.environ['PROTERMCAP'] = work_dir + '/etc/protermcap'
 if environment == 'development':
     os.environ['PROPATH'] = ','.join(['%s/%s' % (work_dir, x) \
-                                      for x in modules + ['tools']]) # + ',.'
+                      for x in modules + ['tools', 'tools/stompAdapter']]) + ',.'
 else:
     def modgen():
         for mod in modules:
             yield '{0}/{0}.pl'.format(mod)
             yield mod
         yield 'tools'
+        yield 'tools/stompAdapter'
     os.environ['PROPATH'] = ','.join(['%s/%s' % (work_dir, x) \
                               for x in modgen()]) + ',.'
 sys.path.insert(0, work_dir + '/tools')
 
-if not 'skip_srcpkg_check' in locals():
+if not 'skip_srcpkg_check' in locals() and os.path.exists(relpath + '/srcpkg'):
     srcpkg_need_update = []
     for src in os.listdir(relpath + '/srcpkg'):
         if not src.endswith('.tar'): continue

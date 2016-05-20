@@ -12,6 +12,6 @@ databases      = ['common', 'ordercanal', 'mobile', 'counter', 'star', 'mcdr', '
 #rpc_conf       = {'port': 4001, 'run_as': None}
 rpcs           = {'newton': '/fcgiproxy_xfera'}
 rpc_conf       = {'port': 3000, 'run_as': None}
-www_realm      = 'yes'
+wwwrealm       = 'yes'
 ENV['DLC']     = dlc
 ENV['display_banner'] = 'no'
