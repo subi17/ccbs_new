@@ -2,7 +2,55 @@ DEF TEMP-TABLE ttBillItem NO-UNDO LIKE BillItem.
 DEF TEMP-TABLE ttIfispx NO-UNDO LIKE ifiSpx.
 DEF TEMP-TABLE ttTMSCodes NO-UNDO LIKE TMSCodes.
 DEF TEMP-TABLE ttTMSParam NO-UNDO LIKE TMSParam.
+DEF TEMP-TABLE ttRepText NO-UNDO LIKE RepText.
 DEF BUFFER bifiSpx FOR ifiSpx.
+
+DEF VAR lcTrans_prep_L1 AS CHAR NO-UNDO INIT "Yoigo Tarjeta".
+DEF VAR lcTrans_prep_L2 AS CHAR NO-UNDO INIT "Yoigo Tarjeta".
+DEF VAR lcTrans_prep_L3 AS CHAR NO-UNDO INIT "Yoigo Tarjeta".
+DEF VAR lcTrans_prep_L5 AS CHAR NO-UNDO INIT "Yoigo Pay as you go".
+DEF VAR lcTrans_post_L1 AS CHAR NO-UNDO INIT "Yoigo Contrato".
+DEF VAR lcTrans_post_L2 AS CHAR NO-UNDO INIT "Yoigo Contrato".
+DEF VAR lcTrans_post_L3 AS CHAR NO-UNDO INIT "Yoigo Contrato".
+DEF VAR lcTrans_post_L5 AS CHAR NO-UNDO INIT "Yoigo Pay monthly".
+DEF VAR llError AS LOGICAL NO-UNDO.
+DEF VAR ldaVAlidFrom AS DATE NO-UNDO INIT 05/20/2016.
+DEF VAR liUpdateMode AS INT NO-UNDO INIT 1.
+
+FUNCTION fcreateRepText RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
+                                           INPUT icDCEvent AS CHAR,
+                                           INPUT icTransText AS CHAR,
+                                           INPUT idaValidFrom AS DATE,
+                                           INPUT iiLanguage AS INT,
+                                           INPUT iiUpdateMode AS INT):
+   FIND FIRST RepText WHERE
+              RepText.LinkCode EQ icBaseDCEvent AND
+              RepText.Language EQ iiLanguage AND
+              RepText.ToDate > TODAY NO-ERROR.
+   IF NOT AVAIL RepText THEN DO:
+      MESSAGE "RepText not found / " + STRING(iiLanguage) VIEW-AS ALERT-BOX.
+      RETURN FALSE.
+   END.
+
+   CREATE ttRepText.
+   BUFFER-COPY RepText TO ttRepText.
+   /*Set correct values to new entry*/
+   ttRepText.LinkCode = icDCEvent.
+   ttRepText.RepText = icTransText.
+   ttRepText.FromDate = idaValidFrom.
+
+   DISPLAY ttRepText with frame a.
+   pause 0.
+   IF iiUpdateMode NE 0 THEN DO:
+      CREATE RepText.
+      BUFFER-COPY ttRepText TO RepText.
+      DELETE ttRepText. /*ror safety reasons*/
+   END.
+   IF AVAIL RepText THEN RELEASE RepText.
+   RETURN TRUE.
+END FUNCTION.
+
+
 
 FIND FIRST BillItem WHERE
            BillItem.brand EQ "1" AND
@@ -19,6 +67,16 @@ IF NOT AVAIL BillItem THEN DO:
 
       CREATE BillItem.
       BUFFER-COPY ttBillItem TO BillItem.
+      llError = fcreateRepText("TS00000M1", "TS00000U1", 
+                               lcTrans_prep_L1, ldaVAlidFrom, 1, liUpdateMode).
+      llError = fcreateRepText("TS00000M1", "TS00000U1", 
+                               lcTrans_prep_L2, ldaVAlidFrom, 2, liUpdateMode).
+      llError = fcreateRepText("TS00000M1", "TS00000U1", 
+                               lcTrans_prep_L3, ldaVAlidFrom, 3, liUpdateMode).
+      llError = fcreateRepText("TS00000M1", "TS00000U1", 
+                               lcTrans_prep_L5, ldaVAlidFrom, 5, liUpdateMode).
+ 
+
       DELETE ttBillItem.
    END.
 END.
@@ -38,6 +96,14 @@ IF NOT AVAIL BillItem THEN DO:
 
       CREATE BillItem.
       BUFFER-COPY ttBillItem TO BillItem.
+      llError = fcreateRepText("TS00000M3", "TS00000U3",
+                               lcTrans_post_L1, ldaVAlidFrom, 1, liUpdateMode).
+      llError = fcreateRepText("TS00000M3", "TS00000U3",
+                               lcTrans_post_L2, ldaVAlidFrom, 2, liUpdateMode).
+      llError = fcreateRepText("TS00000M3", "TS00000U3",
+                               lcTrans_post_L3, ldaVAlidFrom, 3, liUpdateMode).
+      llError = fcreateRepText("TS00000M3", "TS00000U3",
+                               lcTrans_post_L5, ldaVAlidFrom, 5, liUpdateMode).
       DELETE ttBillItem.
    END.
 END.
@@ -138,4 +204,5 @@ IF NOT AVAIL TMSParam THEN DO:
  
    DELETE ttTMSParam.
 END.
+
 
