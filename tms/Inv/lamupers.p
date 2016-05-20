@@ -3002,9 +3002,9 @@ PROCEDURE pDiscount:
    
       FIND FIRST ttInvSplit WHERE
                  ttInvSplit.AgrCust  = iiAgrCust AND
-                 ttInvSplit.MsSeq    = iiMsSeq AND 
-                 ttInvSplit.CLIEvent = "iSS" NO-ERROR.
-      IF AVAIL ttInvSplit THEN
+                 ttInvSplit.MsSeq    = iiMsSeq NO-ERROR.
+      IF AVAIL ttInvSplit AND
+               ttInvSplit.CLIEvent EQ "iSS" THEN
          liSplitPeriod = YEAR(ttInvSplit.SplitDate) * 100 + 
                          MONTH(ttInvSplit.SplitDate).
       ELSE liSplitPeriod = -1. /* no split */
@@ -3150,7 +3150,10 @@ PROCEDURE pDiscount:
 
                IF liDiscPeriod EQ liSplitPeriod AND i EQ 1
                THEN ldaDiscValidTo   = ttInvSplit.SplitDate - 1.
-               ELSE ldaDiscValidTo   = ldaValidTo.
+               ELSE ldaDiscValidTo   = (IF AVAIL ttInvSplit AND /* YTS-7265 */
+                                          liDiscPeriod EQ liToPeriod
+                                        THEN ttDiscounts.ToDate
+                                        ELSE ldaValidTo).
                
                FIND FIRST ttIR WHERE 
                           ttIR.BillCode  = ttDiscounts.BillCode AND
@@ -3185,7 +3188,6 @@ PROCEDURE pDiscount:
                   ttIR.dNet        = ttIR.dNet   - ldDiscount[i]
                   ttIR.dgross      = ttIR.dGross - ldDiscount[i]
                   ttIR.FromDate    = MIN(ttIR.FromDate,ldaValidFrom)
-                  ttIR.ToDate      = MAX(ttIR.ToDate,ldaDiscValidTo)
                   ldDivide         = ldDiscount[i]
                   llDiscUsed       = TRUE.
 
