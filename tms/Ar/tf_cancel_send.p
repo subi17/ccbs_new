@@ -275,7 +275,7 @@ PROCEDURE pPrintLine:
    ELSE
       liOrderId = FixedFeeTF.OrderId.
    IF FixedFee.BillCode EQ "RVTERM" THEN
-      lcCodFpago = "0212".
+      lcCodFpago = "6666". /* Temporary change with YOT-4474 from 0212 to 6666 */
    ELSE DO:
       FIND FIRST Order WHERE Order.brand = gcBrand AND
                              Order.OrderId = liOrderId NO-ERROR.
