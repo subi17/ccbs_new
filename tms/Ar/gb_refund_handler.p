@@ -44,8 +44,6 @@ FUNCTION fGenerateFileName RETURNS CHAR
    RETURN REPLACE(icInFN, lcTemp, icType + ".csv").
 END.
 
-SESSION:NUMERIC-FORMAT = "EUROPEAN".
-
 ASSIGN 
    lcTableName = {&GB_ACTION_GROUP_NAME}
    lcActionID = {&GB_REFUND_HANDLER}
@@ -143,9 +141,11 @@ PROCEDURE pReadFileData:
    DEF VAR lcMSISDN AS CHAR NO-UNDO.
    DEF VAR lcCorrId AS CHAR NO-UNDO.
    DEF VAR lcPeriod AS CHAR NO-UNDO.
+   DEF VAR lcAmount AS CHAR NO-UNDO.
    DEF VAR ldeAmount AS DECIMAL NO-UNDO. 
    DEF VAR lcErr AS CHAR NO-UNDO.
    DEF VAR lcErrInfo AS CHAR NO-UNDO.
+   DEF VAR lcOrigNumericFormat AS CHAR NO-UNDO.
    DEF VAR llgPayType AS LOGICAL.
 
    FILE_LINE:
@@ -164,13 +164,30 @@ PROCEDURE pReadFileData:
          lcMSISDN = entry(5,lcline,";")
          lcCorrId = entry(3,lcline,";")
          lcPeriod = REPLACE(SUBSTRING(entry(1,lcline,";"),1,7),"-","")
-         ldeAmount = DECIMAL(entry(8,lcline,";")).
+         lcAmount = entry(8,lcline,";").
          IF entry(6,lcLine,";") EQ "POSTPAID" THEN
             llgPayType = FALSE.
          ELSE
             llgPayType = TRUE.
       
+      /* Check used numeric format at first row amount value and
+         store original value for changing it back after handling 
+         even thought it would not be nessessary because session 
+         will end after this refund run. */
+      IF lcOrigNumericFormat EQ "" THEN
+         lcOrigNumericFormat = SESSION:NUMERIC-FORMAT.
 
+      /* Check amount numeric format each time to ensure corrent
+         handling of decimal value. (it was not sure which is
+         reveived value numeric format in different cases prepaid /
+         postpaid. If we can count on that numeric format remains 
+         same for whole file, this could be also added under storing
+         original value if. */
+      IF INDEX(lcAmount, ".") > 0 THEN
+         SESSION:NUMERIC-FORMAT = "AMERICAN".
+      ELSE SESSION:NUMERIC-FORMAT = "EUROPEAN".        
+
+      ldeAmount = DECIMAL(lcAmount).
 
       lcErr = fProcessGBEntry(lcMSISDN,
                               lcCorrId,
@@ -185,5 +202,6 @@ PROCEDURE pReadFileData:
       
 
    END.
+   SESSION:NUMERIC-FORMAT = lcOrigNumericFormat.
 
 END PROCEDURE.
