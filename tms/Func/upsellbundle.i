@@ -162,6 +162,11 @@ FUNCTION fGetUpSellCount RETURNS INT
                     MServiceLimit.EndTS <= ldeMonthEnd AND
                     MServiceLimit.EndTS > ldeMonthBegin AND
                     MServiceLimit.FromTs >= ldeMonthBegin:
+              
+              /* YTS-7114 */
+              IF icDCEvent EQ "HSPA_ROAM_EU" AND
+                 INT(MServiceLimit.FromTS) EQ MServiceLimit.FromTS THEN NEXT.
+
               liUpSellCount = liUpSellCount + 1.
            END.
         END.
