@@ -44,7 +44,6 @@ DEF VAR lcCONTSContracts   AS CHAR NO-UNDO.
 DEF VAR lcCONTSFContracts  AS CHAR NO-UNDO.
 DEF VAR lcCLIType          AS CHAR NO-UNDO.
 DEF VAR lcBundleType       AS CHAR NO-UNDO.
-DEF VAR liPayType          AS INT  NO-UNDO.
 DEF VAR ldeFee             AS DEC  NO-UNDO.
 DEF VAR liLineType         AS INT  NO-UNDO.
 DEF VAR llDss2Compatible   AS LOG NO-UNDO. 
@@ -95,31 +94,20 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    add_string(lcResultStruct,"name", DayCampaign.DCName).
    add_int(lcResultStruct,"status", DayCampaign.StatusCode).
 
-   IF DayCampaign.FeeModel > "" THEN DO:
-      liPayType = 1.
-
-      /* temporary quick fix YTS-7421 */
-      IF LOOKUP(DayCampaign.DCEvent,
-               "PMDUB,PMDUB_UPSELL,TARJ7,TARJ7_UPSELL,TARJ9,TARJ_UPSELL") > 0
-      THEN liPayType = 2.
-
+   IF DayCampaign.PayType = 1 THEN DO:
       FIND FIRST FMItem NO-LOCK WHERE
-                 FMItem.Brand = gcBrand AND
+                 FMItem.Brand    = gcBrand              AND
                  FMItem.FeeModel = DayCampaign.FeeModel AND
-                 FMItem.ToDate  >= TODAY NO-ERROR.
+                 FMItem.ToDate  >= TODAY                NO-ERROR.
       IF AVAIL FMItem THEN ldeFee = FMItem.Amount.
-   END. /* IF DayCampaign.FeeModel > "" THEN DO: */
-   ELSE DO:
-      liPayType = 2.
-
-      IF DayCampaign.DCEvent = "PMDUB" OR 
-       DayCampaign.DCEvent = "PMDUB_UPSELL" OR
-       DayCampaign.DCEvent = {&TARJ_UPSELL} OR
-       DayCampaign.DCEvent = "TARJ7_UPSELL" THEN
-       ldeFee = fgetPrepaidFeeAmount(DayCampaign.DCEvent, TODAY).
+   END.
+   ELSE IF DayCampaign.PayType = 2 THEN DO:
+      IF DayCampaign.DCEvent = "PMDUB"        OR 
+         DayCampaign.DCEvent = "PMDUB_UPSELL" OR
+         DayCampaign.DCEvent = {&TARJ_UPSELL} OR
+         DayCampaign.DCEvent = "TARJ7_UPSELL" THEN
+         ldeFee = fgetPrepaidFeeAmount(DayCampaign.DCEvent, TODAY).
       ELSE ldeFee = 0.
-
-      IF DayCampaign.DCEvent = "HSPA_ROAM_EU" THEN liPayType = 0.
    END.
 
    IF LOOKUP(DayCampaign.DCType,"1,4,6,8") > 0 THEN DO:
@@ -184,7 +172,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    add_string(lcResultStruct,"bundle_type", lcBundleType).
    add_string(lcResultStruct,"subscription_type_id", lcCLIType).
-   add_int(lcResultStruct,"pay_type", liPayType).
+   add_int(lcResultStruct,"pay_type", DayCampaign.PayType).
    add_double(lcResultStruct,"monthly_cost", ldeFee).
    add_int(lcResultStruct,"line_type", liLineType).
    add_int(lcResultStruct,"fixed_line_type", liFixedLineType).
