@@ -118,7 +118,8 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                        MsRequest.ReqSource = {&REQUEST_SOURCE_ICC_CHANGE_AUTO} 
                        NO-ERROR.
                   IF AVAIL MsRequest THEN
-                     fReqStatus(4, "Cancelled by order closing").
+                     fChangeReqStatus(MsRequest.MsRequest,
+                                      4, "Cancelled by order closing").
                END.
 
                /* close secondary multisim order */
