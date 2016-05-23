@@ -93,22 +93,14 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    add_string(lcResultStruct, "id", DayCampaign.DCEvent).
    add_string(lcResultStruct,"name", DayCampaign.DCName).
    add_int(lcResultStruct,"status", DayCampaign.StatusCode).
-
-   IF DayCampaign.PayType = 1 THEN DO:
-      FIND FIRST FMItem NO-LOCK WHERE
-                 FMItem.Brand    = gcBrand              AND
-                 FMItem.FeeModel = DayCampaign.FeeModel AND
-                 FMItem.ToDate  >= TODAY                NO-ERROR.
-      IF AVAIL FMItem THEN ldeFee = FMItem.Amount.
-   END.
-   ELSE IF DayCampaign.PayType = 2 THEN DO:
-      IF DayCampaign.DCEvent = "PMDUB"        OR 
-         DayCampaign.DCEvent = "PMDUB_UPSELL" OR
-         DayCampaign.DCEvent = {&TARJ_UPSELL} OR
-         DayCampaign.DCEvent = "TARJ7_UPSELL" THEN
-         ldeFee = fgetPrepaidFeeAmount(DayCampaign.DCEvent, TODAY).
-      ELSE ldeFee = 0.
-   END.
+   
+   FIND FIRST FMItem NO-LOCK WHERE
+              FMItem.Brand     = gcBrand              AND
+              FMItem.FeeModel  = DayCampaign.FeeModel AND
+              FMItem.ToDate   >= TODAY                AND 
+              FMItem.FromDate <= TODAY                NO-ERROR.
+   IF AVAIL FMItem THEN ldeFee = FMItem.Amount. 
+   ELSE ldeFee = 0.
 
    IF LOOKUP(DayCampaign.DCType,"1,4,6,8") > 0 THEN DO:
       FOR EACH ServiceLimit WHERE
