@@ -133,6 +133,7 @@ IF NOT AVAIL ifispx THEN DO:
             ifispx.version EQ "00003":
       BUFFER-COPY ifiSpx TO ttifiSpx.
       ttifiSpx.version = "00004".
+      ttifiSpx.simart = "Universal".
       CREATE bifiSpx.
       BUFFER-COPY ttifiSpx TO bifiSpx.
       DELETE ttifiSpx.
