@@ -84,7 +84,7 @@ WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1
 
 form                              
    DayCampaign.DCEvent       COLON 23 FORMAT "X(20)" 
-   DayCampaign.PayType       COLON 50 SKIP
+   DayCampaign.PayType       SKIP
    DayCampaign.DCName        COLON 23 FORMAT "X(40)" SKIP
    DayCampaign.ValidFrom     COLON 23 format 99-99-9999 LABEL "Valid" 
       "-"
