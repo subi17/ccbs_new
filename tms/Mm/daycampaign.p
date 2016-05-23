@@ -83,7 +83,8 @@ WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1
    FRAME sel.
 
 form                              
-   DayCampaign.DCEvent       COLON 23 FORMAT "X(20)" SKIP
+   DayCampaign.DCEvent       COLON 23 FORMAT "X(20)" 
+   DayCampaign.PayType       COLON 50 SKIP
    DayCampaign.DCName        COLON 23 FORMAT "X(40)" SKIP
    DayCampaign.ValidFrom     COLON 23 format 99-99-9999 LABEL "Valid" 
       "-"
@@ -773,7 +774,8 @@ PROCEDURE LOCAL-UPDATE-RECORD.
                  ccn.ccn   = DayCampaign.ccn NO-LOCK NO-ERROR.
 
       DISP 
-         DayCampaign.DCEvent 
+         DayCampaign.DCEvent
+         DayCampaign.PayType
          DayCampaign.DCName 
          DayCampaign.StatusCode
          DayCampaign.DCType
@@ -857,6 +859,7 @@ PROCEDURE pUpdate:
     
       UPDATE 
          DayCampaign.DCEvent WHEN ilNew
+         DayCampaign.PayType
          DayCampaign.DCName 
          DayCampaign.ValidFrom
          DayCampaign.ValidTo
