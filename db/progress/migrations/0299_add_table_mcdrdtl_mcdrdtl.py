@@ -125,7 +125,7 @@ class AddTableMCDRDtl(Migration):
         t.column('SPOOper', 'character', format="x(8)", initial="", max_width=16, label="Operator", column_label="Operator", position=168, order=860, help="SPO-operator")
         t.column('SPOSeqno', 'integer', format=">>>,>>9", initial="0", max_width=4, label="SeqNo", column_label="SeqNo", position=169, order=870, help="spo Sequence number")
         t.column('SPOlis', 'character', format="x(8)", initial="", max_width=16, label="SpoOther", column_label="SpoOther", position=171, order=890, help="Others SPO serveices")
-        t.column('sposij', 'character', format="x(1)", initial="", max_width=2, label="Location", column_label="Location", position=173, order=910, help="Location (D=lähi, M=muu)")
+        t.column('sposij', 'character', format="x(1)", initial="", max_width=2, label="Location", column_label="Location", position=173, order=910, help="Location (D=local, M=other)")
         t.column('orgfee', 'decimal', format=">>,>>9.99", decimals=5, initial="0", max_width=20, label="OrgFee", column_label="OrgFee", position=174, order=930, help="Originating fee  (calltype/puhlaji)")
         t.column('mstype', 'character', format="x(8)", max_width=16, label="MType", column_label="Mtype", position=175, order=940, help="Type Of Mobsub (connection type)")
         t.column('DataVol', 'integer', format=">>>>>>9", max_width=4, label="Data Vol", column_label="Data Vol", position=176, order=2020, help="Data Volume")
