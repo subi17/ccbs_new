@@ -178,6 +178,7 @@
 93 "PerContract" "CONT9"
 93 "PerContract" "DATA6"
 93 "PerContract" "MDUB4"
+93 "PerContract" "FREE100MINUTES"
 93 "PerContract" "DATA7"
 93 "SubsTypeTo" "CONT9"
 95 "PerContract" "DATA6"
