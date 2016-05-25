@@ -167,8 +167,12 @@ PROCEDURE pSendSMS:
 
    DEFINE VARIABLE ldReqStamp             AS DECIMAL   NO-UNDO.
    DEFINE VARIABLE liSMSType              AS INTEGER   NO-UNDO.
+   DEF VAR lcMessage AS CHAR NO-UNDO. 
 
    DEFINE BUFFER bMobSub    FOR MobSub.
+   DEFINE BUFFER MsRequest  FOR MsRequest.
+   
+   IF NOT icSMSText > "" THEN RETURN.
 
    FIND FIRST bMobSub WHERE
               bMobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
@@ -177,32 +181,42 @@ PROCEDURE pSendSMS:
    FIND FIRST Customer OF bMobSub NO-LOCK NO-ERROR.
    IF NOT AVAILABLE Customer THEN RETURN.
 
-   IF NOT icSMSText > "" THEN RETURN.
-
    /* send SMS */
-   icSMSText = fGetSMSTxt(icSMSText,
+   lcMessage = fGetSMSTxt(icSMSText,
                           TODAY,
                           Customer.Language,
                           OUTPUT ldReqStamp).
 
-   IF iiMsRequest > 0 AND icSMSText > "" THEN
-      icSMSText = fReplaceTags(INPUT iiMsRequest,
-                               INPUT icSMSText,
+   IF NOT lcMessage > "" THEN RETURN.
+
+   IF iiMsRequest > 0 THEN DO:
+
+      FIND FIRST MsRequest NO-LOCK WHERE
+                 MsRequest.MsRequest = iiMsRequest NO-ERROR.
+      IF NOT AVAIL MsRequest THEN RETURN.
+
+      /* YTS-8342 */
+      IF icSMSText EQ "STC_Requested" AND
+        (MsRequest.ReqSource EQ {&REQUEST_SOURCE_MAIN_LINE_DEACTIVATION} OR
+         MsRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION})
+      THEN ldReqStamp = fGetSmsTS().
+
+      lcMessage = fReplaceTags(INPUT iiMsRequest,
+                               INPUT lcMessage,
                                INPUT icExtraParams,
                                OUTPUT liSMSType).
+      IF NOT lcMessage > "" THEN RETURN.
+   END.
 
    IF iiSMSType = ? THEN iiSMSType = liSMSType.
 
-   IF icSMSText > "" THEN DO:
-
-     fMakeSchedSMS2(bMobSub.CustNum,
-                    bMobSub.CLI,
-                    iiSMSType,
-                    icSMSText,
-                    ldReqStamp,
-                    icSender,
-                    "").
-   END. /* IF icSMSText > "" THEN DO: */
+   fMakeSchedSMS2(bMobSub.CustNum,
+                  bMobSub.CLI,
+                  iiSMSType,
+                  lcMessage,
+                  ldReqStamp,
+                  icSender,
+                  "").
 
 END PROCEDURE. /* PROCEDURE pSendSMS: */
 
