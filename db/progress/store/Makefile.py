@@ -117,8 +117,8 @@ def structure_file(match, deps, db_dir, db_name):
         _('b %s/bi')
         _('d "Schema Area" %s/db')
         for size in (64, 128, 256):
-            _('d "Sta_Data_%d",%d %%s/db' % (size, size))
-        _('d "Sta_Index_64",64 %s/ix')
+            _('d "Sta_Data_%d",%d;8 %%s/db' % (size, size))
+        _('d "Sta_Index_64",64;8 %s/ix')
         for dir in ['bi', 'db', 'ix']:
             if not os.path.exists(dir): os.mkdir(dir)
     else:
