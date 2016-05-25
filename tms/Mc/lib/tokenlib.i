@@ -12,7 +12,7 @@ DEFINE VARIABLE ghTokenLib AS HANDLE     NO-UNDO.
 ghTokenLib = SESSION:FIRST-PROCEDURE.
 REPEAT:
     IF NOT VALID-HANDLE(ghTokenLib) THEN LEAVE.
-    IF ghTokenLib:FILE-NAME MATCHES '*lib/tokenlib*' THEN LEAVE.
+    IF ghTokenLib:FILE-NAME MATCHES '*tokenlib*' THEN LEAVE.
     ghTokenLib = ghTokenLib:NEXT-SIBLING.
 END.                                     
 

@@ -64,6 +64,7 @@
 "Bdest" "BdestType" "Analysis" "1" "International" "" "" 1
 "BDest" "BDestType" "Analysis" "11" "Short numbers" "" "" 1
 "BDest" "BdestType" "Analysis" "2" "Freephone" "" "" 1
+"BDest" "BDestType" "Analysis" "23" "SPECSERV" "" "" 1
 "Bdest" "BDestType" "Analysis" "24" "Gambling service number" "" "" 1
 "BDest" "BDestType" "Analysis" "4" "Fixed line" "" "" 1
 "Bdest" "BdestType" "Analysis" "5" "Mobile" "" "" 1
@@ -385,6 +386,7 @@
 "DumpFile" "FileCategory" "DumpFile" "Cassandra" "Cassandra" "" "" 1
 "DumpFile" "FileCategory" "DumpFile" "DWH" "Data warehouse" "Files including data and/or reports used in Data warehouse" "" 1
 "DumpFile" "FileCategory" "DumpFile" "HIS" "High Spender" "High spender reports" "" 1
+"DumpFile" "FileCategory" "DumpFile" "HPD" "High performance database" "Files including data used in HPD" "" 1
 "DumpFile" "FileCategory" "DumpFile" "IFS" "IFS" "" "" 1
 "DumpFile" "FileCategory" "DumpFile" "INV" "Billing" "Files including data and/or reports considering billing" "" 1
 "DumpFile" "FileCategory" "DumpFile" "LOG" "Logistic" "Files including data and/or reports to Logistic company" "" 1
@@ -926,6 +928,7 @@
 "OfferItem" "ItemType" "Offer" "FATime" "FATime group" "" "" 1
 "OfferItem" "ItemType" "Offer" "OptionalBundleItem" "Optional Bundle Item" "" "" 1
 "OfferItem" "ItemType" "Offer" "PerContract" "Periodical contract" "" "" 1
+"OfferItem" "ItemType" "Offer" "PromotionalBundleItem" "Promotional bundle items" "" "" 1
 "OfferItem" "ItemType" "Offer" "ServicePackage" "Service Package" "" "" 1
 "OfferItem" "ItemType" "Offer" "Topup" "Topup scheme" "" "" 1
 "OPLog" "EventType" "AR" "1" "Overpayment" "" "" 1
@@ -1313,7 +1316,7 @@
 "requem" "84,0,1,2,3,4,5,6,7,8,9,19" "SubsLMenu" "1" "Activate Email Invoice" "" "" 1
 "requem" "85,0,1,2,3,4,5,6,7,8,9" "SubsLMenu" "1" "Send Email Invoice" "" "" 1
 "requem" "86,0,1,2,3,4,9" "SubsLMenu" "1" "Email Sending" "" "" 1
-"requem" "87,0,1,2,3,9" "SubsLMenu" "1" "Logistics" "" "" 1
+"requem" "87,0,1,2,3,4,9" "SubsLMenu" "1" "Logistics" "" "" 1
 "requem" "88,0,1,2,3,4,6,7,8,9" "SubsLMenu" "1" "Installment Contract Change" "" "" 1
 "requem" "89,0,1,2,3,4" "SubsLMenu" "1" "Terminal Financing Bank File" "" "" 1
 "requem" "9,0,1,2,3,4,7,9" "SubsLMenu" "1" "Periodical contract termination" "" "" 1
