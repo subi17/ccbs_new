@@ -122,8 +122,12 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
       Order.MsSeq           = ttMNPRollback.MsSeq
       Order.CustNum         = Customer.CustNum.
 
-   IF Customer.CustIdType = "CIF" THEN
+   IF Customer.CustIdType = "CIF" THEN DO:
+      ASSIGN
+         Order.OrdererId       = Customer.AuthCustId
+         Order.OrdererIdType   = Customer.AuthCustIdType.
       fHandleCorporateCustomer().
+   END.
 
 END. /* FUNCTION fCreateOrder RETURNS LOGICAL: */
 

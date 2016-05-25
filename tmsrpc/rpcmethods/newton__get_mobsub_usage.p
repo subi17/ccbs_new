@@ -137,7 +137,8 @@ ASSIGN
    liPeriod       = YEAR(TODAY) * 100 + MONTH(TODAY)
    ldPeriodFrom   = fMake2Dt(first_of_month,0)
    ldPeriodTo     = fMake2Dt(ldaLastDay,86399)
-   ldeCurrentTS   = fMakeTS().
+   ldeCurrentTS   = fMakeTS()
+   liDayPeriod    = YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + DAY(TODAY).
 
 first_level_struct = add_struct(response_toplevel_id, "").
    
@@ -458,29 +459,24 @@ FOR FIRST ServiceLimit NO-LOCK WHERE
          MServiceLimit.MsSeq   = MobSub.MsSeq AND
          MServiceLimit.DialType = ServiceLimit.DialType AND 
          MServiceLimit.SLSeq = ServiceLimit.SLSeq AND
-         MServiceLimit.EndTS  >= ldPeriodFrom AND
-         MServiceLimit.EndTs <= ldPeriodTo:
+         MServiceLimit.EndTS  >= ldeCurrentTS AND
+         MServiceLimit.FromTs <= ldeCurrentTS AND
+         MServiceLimit.EndTS >= MServiceLimit.FromTS:
+
+   FIND FIRST ServiceLCounter NO-LOCK WHERE
+              ServiceLCounter.MsSeq  = MServiceLimit.MsSeq  AND
+              ServiceLCounter.Period = liDayPeriod AND
+              ServiceLCounter.SlSeq  = MServiceLimit.SlSeq  AND
+              ServiceLCounter.MSID   = MServiceLimit.MSID NO-ERROR.
+   IF AVAIL ServiceLCounter THEN
+       ldeRoamBundleUsage = ldeRoamBundleUsage + 
+                            (ServiceLCounter.Amt / 1024 / 1024).
+   
+   /* filter out base bundle (activated from consumption). YTS-7114 */
+   IF INT(MServiceLimit.FromTs) EQ MServiceLimit.FromTS THEN NEXT.
     
    liRoamUpsellCount = liRoamUpsellCount + 1.
 
-   IF MServiceLimit.EndTS >= ldeCurrentTS AND
-      MServiceLimit.FromTS <= ldeCurrentTS AND
-      MServiceLimit.FromTS > ldePackageFromTS THEN DO:
-   
-      fSplitTS(MServiceLimit.FromTS, OUTPUT ldaDate, OUTPUT liTime).
-        
-      ASSIGN
-         liDayPeriod = liPeriod * 100 + DAY(ldaDate)
-         ldePackageFromTS = MServiceLimit.FromTS.
-
-      FIND FIRST ServiceLCounter NO-LOCK WHERE
-                 ServiceLCounter.MsSeq  = MServiceLimit.MsSeq  AND
-                 ServiceLCounter.SlSeq  = MServiceLimit.SlSeq  AND
-                 ServiceLCounter.Period = liDayPeriod AND
-                 ServiceLCounter.MSID   = MServiceLimit.MSID NO-ERROR.
-       IF AVAIL ServiceLCounter THEN ASSIGN
-          ldeRoamBundleUsage = (ServiceLCounter.Amt / 1024 / 1024).
-   END.
 END.
 
 /* Return all data/voice bundles limit and usage */
