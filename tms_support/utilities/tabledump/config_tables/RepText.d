@@ -565,6 +565,10 @@
 1 "" 5 "Discount for complaint" 0 "CN006" "1" 01/04/12 31/12/49
 1 "" 5 "Compensation" 0 "CN006" "1" 01/01/06 31/03/12
 1 "" 5 "Compensation discount TopUp" 0 "CN066" "1" 01/01/06 31/12/49
+1 "" 1 "Cuota Pago a Plazos" 0 "CNPAYTERM" "1" 13/04/16 31/12/49
+1 "" 2 "Quota Pagament a Terminis" 0 "CNPAYTERM" "1" 13/04/16 31/12/49
+1 "" 3 "Epekako ordainketako kuota" 0 "CNPAYTERM" "1" 13/04/16 31/12/49
+1 "" 5 "Installment" 0 "CNPAYTERM" "1" 13/04/16 31/12/49
 1 "" 1 "Traspaso de saldo de Tarjeta a Contrato" 0 "CNPREPOST" "1" 01/10/10 31/12/49
 1 "" 2 "Traspàs de saldo de Targeta a Contracte" 0 "CNPREPOST" "1" 01/04/12 31/12/49
 1 "" 2 "Traspàs de saldo de Targeta a Contracte" 0 "CNPREPOST" "1" 01/10/10 31/10/10
@@ -572,6 +576,14 @@
 1 "" 3 "Saldoa Txarteletik Kontratura aldatzea" 0 "CNPREPOST" "1" 01/10/10 31/03/12
 1 "" 5 "Transfer Pay as you Go balance to Contract" 0 "CNPREPOST" "1" 01/04/12 31/12/49
 1 "" 5 "Transfer balance from Card to Contract" 0 "CNPREPOST" "1" 01/10/10 31/03/12
+1 "" 1 "Pago Final" 0 "CNRV" "1" 13/04/16 31/12/49
+1 "" 2 "Pagament Final" 0 "CNRV" "1" 13/04/16 31/12/49
+1 "" 3 "Azken ordainketa" 0 "CNRV" "1" 13/04/16 31/12/49
+1 "" 5 "Final Payment" 0 "CNRV" "1" 13/04/16 31/12/49
+1 "" 1 "Pago Final" 0 "CNRVTERM" "1" 13/04/16 31/12/49
+1 "" 2 "Pagament Final" 0 "CNRVTERM" "1" 13/04/16 31/12/49
+1 "" 3 "Azken ordainketa" 0 "CNRVTERM" "1" 13/04/16 31/12/49
+1 "" 5 "Final Payment" 0 "CNRVTERM" "1" 13/04/16 31/12/49
 1 "" 1 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 31/12/49
 1 "" 2 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 31/12/49
 1 "" 3 "Compensación UNO-E" 0 "COMPCF" "1" 29/10/13 31/12/49
@@ -1557,6 +1569,10 @@
 1 "" 3 "Voz Tarifa Plana" 0 "FLATVOICE" "1" 01/12/11 31/03/12
 1 "" 5 "Within Flat Rate" 0 "FLATVOICE" "1" 01/04/12 31/12/49
 1 "" 5 "Voz Tarifa Plana" 0 "FLATVOICE" "1" 01/12/11 31/03/12
+1 "" 1 "En 100 min" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
+1 "" 2 "En 100 min" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
+1 "" 3 "100 minutuan" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
+1 "" 5 "ln 100 min" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
 1 "" 1 "Pruebas" 0 "G0000" "1" 22/12/11 31/12/49
 1 "" 2 "Pruebas" 0 "G0000" "1" 22/12/11 31/12/49
 1 "" 3 "Pruebas" 0 "G0000" "1" 22/12/11 31/12/49
@@ -2381,11 +2397,11 @@
 1 "" 3 "Alcatel ONETOUCH POP D5" 0 "G0000179" "1" 29/08/14 31/12/49
 1 "" 4 "Alcatel ONETOUCH POP D5" 0 "G0000179" "1" 29/08/14 31/12/49
 1 "" 5 "Alcatel ONETOUCH POP D5" 0 "G0000179" "1" 29/08/14 31/12/49
-1 "" 1 "Huawei E3372s-153" 0 "G0000180" "1" 29/08/14 31/12/49
+1 "" 1 "Módem Huawei E3372S-153" 0 "G0000180" "1" 29/08/14 31/12/49
 1 "" 2 "Huawei E3372s-153" 0 "G0000180" "1" 29/08/14 31/12/49
 1 "" 3 "Huawei E3372s-153" 0 "G0000180" "1" 29/08/14 31/12/49
 1 "" 4 "Huawei E3372s-153" 0 "G0000180" "1" 29/08/14 31/12/49
-1 "" 5 "Huawei E3372s-153" 0 "G0000180" "1" 29/08/14 31/12/49
+1 "" 5 "Módem Huawei E3372S-153" 0 "G0000180" "1" 29/08/14 31/12/49
 1 "" 1 "iPhone 6" 0 "G0000181" "1" 24/09/14 31/12/49
 1 "" 2 "iPhone 6" 0 "G0000181" "1" 24/09/14 31/12/49
 1 "" 3 "iPhone 6" 0 "G0000181" "1" 24/09/14 31/12/49
@@ -2626,11 +2642,11 @@
 1 "" 3 "Samsung Galaxy S6 Edge +" 0 "G0000228" "1" 28/08/15 31/12/49
 1 "" 4 "Samsung Galaxy S6 Edge +" 0 "G0000228" "1" 28/08/15 31/12/49
 1 "" 5 "Samsung Galaxy S6 Edge +" 0 "G0000228" "1" 28/08/15 31/12/49
-1 "" 1 "Alcatel ONETOUCH POP 3" 0 "G0000229" "1" 28/08/15 31/12/49
+1 "" 1 "Alcatel POP 3 (5)" 0 "G0000229" "1" 28/08/15 31/12/49
 1 "" 2 "Alcatel ONETOUCH POP 3" 0 "G0000229" "1" 28/08/15 31/12/49
 1 "" 3 "Alcatel ONETOUCH POP 3" 0 "G0000229" "1" 28/08/15 31/12/49
 1 "" 4 "Alcatel ONETOUCH POP 3" 0 "G0000229" "1" 28/08/15 31/12/49
-1 "" 5 "Alcatel ONETOUCH POP 3" 0 "G0000229" "1" 28/08/15 31/12/49
+1 "" 5 "Alcatel POP 3 (5)" 0 "G0000229" "1" 28/08/15 31/12/49
 1 "" 1 "Moto G 3a Generación" 0 "G0000230" "1" 28/08/15 31/12/49
 1 "" 2 "Moto G 3a" 0 "G0000230" "1" 28/08/15 31/12/49
 1 "" 3 "Moto G 3a" 0 "G0000230" "1" 28/08/15 31/12/49
@@ -2661,11 +2677,11 @@
 1 "" 3 "LG Wine Smart" 0 "G0000235" "1" 30/09/15 31/12/49
 1 "" 4 "LG Wine Smart" 0 "G0000235" "1" 30/09/15 31/12/49
 1 "" 5 "LG Wine Smart" 0 "G0000235" "1" 30/09/15 31/12/49
-1 "" 1 "Huawei G8" 0 "G0000236" "1" 30/09/15 31/12/49
+1 "" 1 "Huawei GX8" 0 "G0000236" "1" 30/09/15 31/12/49
 1 "" 2 "Huawei G8" 0 "G0000236" "1" 30/09/15 31/12/49
 1 "" 3 "Huawei G8" 0 "G0000236" "1" 30/09/15 31/12/49
 1 "" 4 "Huawei G8" 0 "G0000236" "1" 30/09/15 31/12/49
-1 "" 5 "Huawei G8" 0 "G0000236" "1" 30/09/15 31/12/49
+1 "" 5 "Huawei GX8" 0 "G0000236" "1" 30/09/15 31/12/49
 1 "" 1 "iPhone 6s" 0 "G0000237" "1" 30/09/15 31/12/49
 1 "" 2 "iPhone 6s" 0 "G0000237" "1" 30/09/15 31/12/49
 1 "" 3 "iPhone 6s" 0 "G0000237" "1" 30/09/15 31/12/49
@@ -2676,21 +2692,21 @@
 1 "" 3 "iPhone 6s Plus" 0 "G0000238" "1" 30/09/15 31/12/49
 1 "" 4 "iPhone 6s Plus" 0 "G0000238" "1" 30/09/15 31/12/49
 1 "" 5 "iPhone 6s Plus" 0 "G0000238" "1" 30/09/15 31/12/49
-1 "" 1 "BQ Aquaris A45" 0 "G0000239" "1" 28/10/15 31/12/49
+1 "" 1 "BQ Aquaris A4.5" 0 "G0000239" "1" 28/10/15 31/12/49
 1 "" 2 "BQ Aquaris A45" 0 "G0000239" "1" 28/10/15 31/12/49
 1 "" 3 "BQ Aquaris A45" 0 "G0000239" "1" 28/10/15 31/12/49
 1 "" 4 "BQ Aquaris A45" 0 "G0000239" "1" 28/10/15 31/12/49
-1 "" 5 "BQ Aquaris A45" 0 "G0000239" "1" 28/10/15 31/12/49
-1 "" 1 "Alcatel Onetouch Go Play con Onetouch Go Watch" 0 "G0000240" "1" 30/11/15 31/12/49
+1 "" 5 "BQ Aquaris A4.5" 0 "G0000239" "1" 28/10/15 31/12/49
+1 "" 1 "Alcatel Go Play con Go Watch" 0 "G0000240" "1" 30/11/15 31/12/49
 1 "" 2 "Alcatel Onetouch Go Play con Onetouch Go Watch" 0 "G0000240" "1" 30/11/15 31/12/49
 1 "" 3 "Alcatel Onetouch Go Play con Onetouch Go Watch" 0 "G0000240" "1" 30/11/15 31/12/49
 1 "" 4 "Alcatel Onetouch Go Play con Onetouch Go Watch" 0 "G0000240" "1" 30/11/15 31/12/49
-1 "" 5 "Alcatel Onetouch Go Play con Onetouch Go Watch" 0 "G0000240" "1" 30/11/15 31/12/49
-1 "" 1 "LG Leon 4G" 0 "G0000241" "1" 30/11/15 31/12/49
+1 "" 5 "Alcatel Go Play with Go Watch" 0 "G0000240" "1" 30/11/15 31/12/49
+1 "" 1 "LG Lion 4G" 0 "G0000241" "1" 30/11/15 31/12/49
 1 "" 2 "LG Leon 4G" 0 "G0000241" "1" 30/11/15 31/12/49
 1 "" 3 "LG Leon 4G" 0 "G0000241" "1" 30/11/15 31/12/49
 1 "" 4 "LG Leon 4G" 0 "G0000241" "1" 30/11/15 31/12/49
-1 "" 5 "LG Leon 4G" 0 "G0000241" "1" 30/11/15 31/12/49
+1 "" 5 "LG Lion 4G" 0 "G0000241" "1" 30/11/15 31/12/49
 1 "" 1 "Microsoft Lumia 550" 0 "G0000242" "1" 30/11/15 31/12/49
 1 "" 2 "Microsoft Lumia 550" 0 "G0000242" "1" 30/11/15 31/12/49
 1 "" 3 "Microsoft Lumia 550" 0 "G0000242" "1" 30/11/15 31/12/49
@@ -2716,11 +2732,11 @@
 1 "" 3 "ZTE Blade V6" 0 "G0000246" "1" 30/11/15 31/12/49
 1 "" 4 "ZTE Blade V6" 0 "G0000246" "1" 30/11/15 31/12/49
 1 "" 5 "ZTE Blade V6" 0 "G0000246" "1" 30/11/15 31/12/49
-1 "" 1 "Alcatel ONETOUCH PIXI 3" 0 "G0000247" "1" 01/12/15 31/12/49
+1 "" 1 "Alcatel PIXI 3" 0 "G0000247" "1" 01/12/15 31/12/49
 1 "" 2 "Alcatel ONETOUCH PIXI 3" 0 "G0000247" "1" 01/12/15 31/12/49
 1 "" 3 "Alcatel ONETOUCH PIXI 3" 0 "G0000247" "1" 01/12/15 31/12/49
 1 "" 4 "Alcatel ONETOUCH PIXI 3" 0 "G0000247" "1" 01/12/15 31/12/49
-1 "" 5 "Alcatel ONETOUCH PIXI 3" 0 "G0000247" "1" 01/12/15 31/12/49
+1 "" 5 "Alcatel PIXI 3" 0 "G0000247" "1" 01/12/15 31/12/49
 1 "" 1 "Samsung Galaxy A3 2016" 0 "G0000248" "1" 28/01/16 31/12/49
 1 "" 2 "Samsung Galaxy A3 2016" 0 "G0000248" "1" 28/01/16 31/12/49
 1 "" 3 "Samsung Galaxy A3 2016" 0 "G0000248" "1" 28/01/16 31/12/49
@@ -2746,21 +2762,21 @@
 1 "" 3 "Samsung Galaxy S7 edge" 0 "G0000252" "1" 19/02/16 31/12/49
 1 "" 4 "Samsung Galaxy S7 edge" 0 "G0000252" "1" 19/02/16 31/12/49
 1 "" 5 "Samsung Galaxy S7 edge" 0 "G0000252" "1" 19/02/16 31/12/49
-1 "" 1 "Huawei E3372H-153" 0 "G0000253" "1" 22/02/16 31/12/49
+1 "" 1 "Módem Huawei E3372H-153" 0 "G0000253" "1" 22/02/16 31/12/49
 1 "" 2 "Huawei E3372H-153" 0 "G0000253" "1" 22/02/16 31/12/49
 1 "" 3 "Huawei E3372H-153" 0 "G0000253" "1" 22/02/16 31/12/49
 1 "" 4 "Huawei E3372H-153" 0 "G0000253" "1" 22/02/16 31/12/49
-1 "" 5 "Huawei E3372H-153" 0 "G0000253" "1" 22/02/16 31/12/49
-1 "" 1 "ALCATEL ONETOUCH POP 3 (5) 4G" 0 "G0000254" "1" 25/02/16 31/12/49
+1 "" 5 "Módem Huawei E3372H-153" 0 "G0000253" "1" 22/02/16 31/12/49
+1 "" 1 "ALCATEL POP 3 (5) 4G" 0 "G0000254" "1" 25/02/16 31/12/49
 1 "" 2 "ALCATEL ONETOUCH POP 3 (5) 4G" 0 "G0000254" "1" 25/02/16 31/12/49
 1 "" 3 "ALCATEL ONETOUCH POP 3 (5) 4G" 0 "G0000254" "1" 25/02/16 31/12/49
 1 "" 4 "ALCATEL ONETOUCH POP 3 (5) 4G" 0 "G0000254" "1" 25/02/16 31/12/49
-1 "" 5 "ALCATEL ONETOUCH POP 3 (5) 4G" 0 "G0000254" "1" 25/02/16 31/12/49
-1 "" 1 "ALCATEL ONETOUCH POP 3 (55) 4G" 0 "G0000255" "1" 25/02/16 31/12/49
+1 "" 5 "ALCATEL POP 3 (5) 4G" 0 "G0000254" "1" 25/02/16 31/12/49
+1 "" 1 "ALCATEL POP 3 (5.5) 4G" 0 "G0000255" "1" 25/02/16 31/12/49
 1 "" 2 "ALCATEL ONETOUCH POP 3 (55) 4G" 0 "G0000255" "1" 25/02/16 31/12/49
 1 "" 3 "ALCATEL ONETOUCH POP 3 (55) 4G" 0 "G0000255" "1" 25/02/16 31/12/49
 1 "" 4 "ALCATEL ONETOUCH POP 3 (55) 4G" 0 "G0000255" "1" 25/02/16 31/12/49
-1 "" 5 "ALCATEL ONETOUCH POP 3 (55) 4G" 0 "G0000255" "1" 25/02/16 31/12/49
+1 "" 5 "ALCATEL POP 3 (5.5) 4G" 0 "G0000255" "1" 25/02/16 31/12/49
 1 "" 1 "Honor 5x Gris" 0 "G0000256" "1" 25/02/16 31/12/49
 1 "" 2 "Honor 5x Gris" 0 "G0000256" "1" 25/02/16 31/12/49
 1 "" 3 "Honor 5x Gris" 0 "G0000256" "1" 25/02/16 31/12/49
@@ -2796,6 +2812,116 @@
 1 "" 3 "iPhone SE" 0 "G0000262" "1" 06/04/16 31/12/49
 1 "" 4 "iPhone SE" 0 "G0000262" "1" 06/04/16 31/12/49
 1 "" 5 "iPhone SE" 0 "G0000262" "1" 06/04/16 31/12/49
+1 "" 1 "Huawei P9" 0 "G0000263" "1" 20/04/16 31/12/49
+1 "" 2 "Huawei P9" 0 "G0000263" "1" 20/04/16 31/12/49
+1 "" 3 "Huawei P9" 0 "G0000263" "1" 20/04/16 31/12/49
+1 "" 4 "Huawei P9" 0 "G0000263" "1" 20/04/16 31/12/49
+1 "" 5 "Huawei P9" 0 "G0000263" "1" 20/04/16 31/12/49
+1 "" 1 "iPhone 6S Plus 16GB" 0 "G0000264" "1" 06/05/16 31/12/49
+1 "" 2 "iPhone 6S Plus 16GB" 0 "G0000264" "1" 06/05/16 31/12/49
+1 "" 3 "iPhone 6S Plus 16GB" 0 "G0000264" "1" 06/05/16 31/12/49
+1 "" 4 "iPhone 6S Plus 16GB" 0 "G0000264" "1" 06/05/16 31/12/49
+1 "" 5 "iPhone 6S Plus 16GB" 0 "G0000264" "1" 06/05/16 31/12/49
+1 "" 1 "iPhone 6s Plus 64 GB" 0 "G0000265" "1" 06/05/16 31/12/49
+1 "" 2 "iPhone 6s Plus 64 GB" 0 "G0000265" "1" 06/05/16 31/12/49
+1 "" 3 "iPhone 6s Plus 64 GB" 0 "G0000265" "1" 06/05/16 31/12/49
+1 "" 4 "iPhone 6s Plus 64 GB" 0 "G0000265" "1" 06/05/16 31/12/49
+1 "" 5 "iPhone 6s Plus 64 GB" 0 "G0000265" "1" 06/05/16 31/12/49
+1 "" 1 "Huawei P9 Lite" 0 "G0000266" "1" 28/04/16 31/12/49
+1 "" 2 "Huawei P9 Lite" 0 "G0000266" "1" 28/04/16 31/12/49
+1 "" 3 "Huawei P9 Lite" 0 "G0000266" "1" 28/04/16 31/12/49
+1 "" 4 "Huawei P9 Lite" 0 "G0000266" "1" 28/04/16 31/12/49
+1 "" 5 "Huawei P9 Lite" 0 "G0000266" "1" 28/04/16 31/12/49
+1 "" 1 "iPhone 6s Plus 128 GB" 0 "G0000267" "1" 10/05/16 31/12/49
+1 "" 2 "iPhone 6s Plus 128 GB" 0 "G0000267" "1" 10/05/16 31/12/49
+1 "" 3 "iPhone 6s Plus 128 GB" 0 "G0000267" "1" 10/05/16 31/12/49
+1 "" 4 "iPhone 6s Plus 128 GB" 0 "G0000267" "1" 10/05/16 31/12/49
+1 "" 5 "iPhone 6s Plus 128 GB" 0 "G0000267" "1" 10/05/16 31/12/49
+1 "" 1 "iPhone 6s 16 GB" 0 "G0000268" "1" 10/05/16 31/12/49
+1 "" 2 "iPhone 6s 16 GB" 0 "G0000268" "1" 10/05/16 31/12/49
+1 "" 3 "iPhone 6s 16 GB" 0 "G0000268" "1" 10/05/16 31/12/49
+1 "" 4 "iPhone 6s 16 GB" 0 "G0000268" "1" 10/05/16 31/12/49
+1 "" 5 "iPhone 6s 16 GB" 0 "G0000268" "1" 10/05/16 31/12/49
+1 "" 1 "iPhone 6s 64 GB" 0 "G0000269" "1" 10/05/16 31/12/49
+1 "" 2 "iPhone 6s 64 GB" 0 "G0000269" "1" 10/05/16 31/12/49
+1 "" 3 "iPhone 6s 64 GB" 0 "G0000269" "1" 10/05/16 31/12/49
+1 "" 4 "iPhone 6s 64 GB" 0 "G0000269" "1" 10/05/16 31/12/49
+1 "" 5 "iPhone 6s 64 GB" 0 "G0000269" "1" 10/05/16 31/12/49
+1 "" 1 "iPhone 6s 128 GB" 0 "G0000270" "1" 10/05/16 31/12/49
+1 "" 2 "iPhone 6s 128 GB" 0 "G0000270" "1" 10/05/16 31/12/49
+1 "" 3 "iPhone 6s 128 GB" 0 "G0000270" "1" 10/05/16 31/12/49
+1 "" 4 "iPhone 6s 128 GB" 0 "G0000270" "1" 10/05/16 31/12/49
+1 "" 5 "iPhone 6s 128 GB" 0 "G0000270" "1" 10/05/16 31/12/49
+1 "" 1 "iPhone 6 16 GB" 0 "G0000271" "1" 10/05/16 31/12/49
+1 "" 2 "iPhone 6 16 GB" 0 "G0000271" "1" 10/05/16 31/12/49
+1 "" 3 "iPhone 6 16 GB" 0 "G0000271" "1" 10/05/16 31/12/49
+1 "" 4 "iPhone 6 16 GB" 0 "G0000271" "1" 10/05/16 31/12/49
+1 "" 5 "iPhone 6 16 GB" 0 "G0000271" "1" 10/05/16 31/12/49
+1 "" 1 "iPhone 6 64 GB" 0 "G0000272" "1" 10/05/16 31/12/49
+1 "" 2 "iPhone 6 64 GB" 0 "G0000272" "1" 10/05/16 31/12/49
+1 "" 3 "iPhone 6 64 GB" 0 "G0000272" "1" 10/05/16 31/12/49
+1 "" 4 "iPhone 6 64 GB" 0 "G0000272" "1" 10/05/16 31/12/49
+1 "" 5 "iPhone 6 64 GB" 0 "G0000272" "1" 10/05/16 31/12/49
+1 "" 1 "iPhone 6 128 GB" 0 "G0000273" "1" 10/05/16 31/12/49
+1 "" 2 "iPhone 6 128 GB" 0 "G0000273" "1" 10/05/16 31/12/49
+1 "" 3 "iPhone 6 128 GB" 0 "G0000273" "1" 10/05/16 31/12/49
+1 "" 4 "iPhone 6 128 GB" 0 "G0000273" "1" 10/05/16 31/12/49
+1 "" 5 "iPhone 6 128 GB" 0 "G0000273" "1" 10/05/16 31/12/49
+1 "" 1 "iPhone 6 Plus 16 GB" 0 "G0000274" "1" 10/05/16 31/12/49
+1 "" 2 "iPhone 6 Plus 16 GB" 0 "G0000274" "1" 10/05/16 31/12/49
+1 "" 3 "iPhone 6 Plus 16 GB" 0 "G0000274" "1" 10/05/16 31/12/49
+1 "" 4 "iPhone 6 Plus 16 GB" 0 "G0000274" "1" 10/05/16 31/12/49
+1 "" 5 "iPhone 6 Plus 16 GB" 0 "G0000274" "1" 10/05/16 31/12/49
+1 "" 1 "iPhone 6 Plus 64 GB" 0 "G0000275" "1" 10/05/16 31/12/49
+1 "" 2 "iPhone 6 Plus 64 GB" 0 "G0000275" "1" 10/05/16 31/12/49
+1 "" 3 "iPhone 6 Plus 64 GB" 0 "G0000275" "1" 10/05/16 31/12/49
+1 "" 4 "iPhone 6 Plus 64 GB" 0 "G0000275" "1" 10/05/16 31/12/49
+1 "" 5 "iPhone 6 Plus 64 GB" 0 "G0000275" "1" 10/05/16 31/12/49
+1 "" 1 "iPhone 6 Plus 128 GB" 0 "G0000276" "1" 10/05/16 31/12/49
+1 "" 2 "iPhone 6 Plus 128 GB" 0 "G0000276" "1" 10/05/16 31/12/49
+1 "" 3 "iPhone 6 Plus 128 GB" 0 "G0000276" "1" 10/05/16 31/12/49
+1 "" 4 "iPhone 6 Plus 128 GB" 0 "G0000276" "1" 10/05/16 31/12/49
+1 "" 5 "iPhone 6 Plus 128 GB" 0 "G0000276" "1" 10/05/16 31/12/49
+1 "" 1 "iPhone SE 16 GB" 0 "G0000277" "1" 10/05/16 31/12/49
+1 "" 2 "iPhone SE 16 GB" 0 "G0000277" "1" 10/05/16 31/12/49
+1 "" 3 "iPhone SE 16 GB" 0 "G0000277" "1" 10/05/16 31/12/49
+1 "" 4 "iPhone SE 16 GB" 0 "G0000277" "1" 10/05/16 31/12/49
+1 "" 5 "iPhone SE 16 GB" 0 "G0000277" "1" 10/05/16 31/12/49
+1 "" 1 "iPhone SE 64 GB" 0 "G0000278" "1" 10/05/16 31/12/49
+1 "" 2 "iPhone SE 64 GB" 0 "G0000278" "1" 10/05/16 31/12/49
+1 "" 3 "iPhone SE 64 GB" 0 "G0000278" "1" 10/05/16 31/12/49
+1 "" 4 "iPhone SE 64 GB" 0 "G0000278" "1" 10/05/16 31/12/49
+1 "" 5 "iPhone SE 64 GB" 0 "G0000278" "1" 10/05/16 31/12/49
+1 "" 1 "iPhone 5s 16 GB" 0 "G0000279" "1" 11/05/16 31/12/49
+1 "" 2 "iPhone 5s 16 GB" 0 "G0000279" "1" 11/05/16 31/12/49
+1 "" 3 "iPhone 5s 16 GB" 0 "G0000279" "1" 11/05/16 31/12/49
+1 "" 4 "iPhone 5s 16 GB" 0 "G0000279" "1" 11/05/16 31/12/49
+1 "" 5 "iPhone 5s 16 GB" 0 "G0000279" "1" 11/05/16 31/12/49
+1 "" 1 "Samsung Galaxy J5 2016" 0 "G0000280" "1" 24/05/16 31/12/49
+1 "" 2 "Samsung Galaxy J5 2016" 0 "G0000280" "1" 24/05/16 31/12/49
+1 "" 3 "Samsung Galaxy J5 2016" 0 "G0000280" "1" 24/05/16 31/12/49
+1 "" 4 "Samsung Galaxy J5 2016" 0 "G0000280" "1" 24/05/16 31/12/49
+1 "" 5 "Samsung Galaxy J5 2016" 0 "G0000280" "1" 24/05/16 31/12/49
+1 "" 1 "Samsung Galaxy J7 2016" 0 "G0000281" "1" 24/05/16 31/12/49
+1 "" 2 "Samsung Galaxy J7 2016" 0 "G0000281" "1" 24/05/16 31/12/49
+1 "" 3 "Samsung Galaxy J7 2016" 0 "G0000281" "1" 24/05/16 31/12/49
+1 "" 4 "Samsung Galaxy J7 2016" 0 "G0000281" "1" 24/05/16 31/12/49
+1 "" 5 "Samsung Galaxy J7 2016" 0 "G0000281" "1" 24/05/16 31/12/49
+1 "" 1 "LG K8" 0 "G0000282" "1" 24/05/16 31/12/49
+1 "" 2 "LG K8" 0 "G0000282" "1" 24/05/16 31/12/49
+1 "" 3 "LG K8" 0 "G0000282" "1" 24/05/16 31/12/49
+1 "" 4 "LG K8" 0 "G0000282" "1" 24/05/16 31/12/49
+1 "" 5 "LG K8" 0 "G0000282" "1" 24/05/16 31/12/49
+1 "" 1 "Alcatel POP 4 (5)" 0 "G0000283" "1" 24/05/16 31/12/49
+1 "" 2 "Alcatel POP 4 (5)" 0 "G0000283" "1" 24/05/16 31/12/49
+1 "" 3 "Alcatel POP 4 (5)" 0 "G0000283" "1" 24/05/16 31/12/49
+1 "" 4 "Alcatel POP 4 (5)" 0 "G0000283" "1" 24/05/16 31/12/49
+1 "" 5 "Alcatel POP 4 (5)" 0 "G0000283" "1" 24/05/16 31/12/49
+1 "" 1 "HTC 10" 0 "G0000284" "1" 24/05/16 31/12/49
+1 "" 2 "HTC 10" 0 "G0000284" "1" 24/05/16 31/12/49
+1 "" 3 "HTC 10" 0 "G0000284" "1" 24/05/16 31/12/49
+1 "" 4 "HTC 10" 0 "G0000284" "1" 24/05/16 31/12/49
+1 "" 5 "HTC 10" 0 "G0000284" "1" 24/05/16 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -2841,6 +2967,16 @@
 1 "" 3 "Terminal" 0 "HANDSET" "1" 24/06/09 31/12/49
 1 "" 4 "Terminal" 0 "HANDSET" "1" 24/06/09 31/12/49
 1 "" 5 "Terminal" 0 "HANDSET" "1" 24/06/09 31/12/49
+1 "" 1 "prueba iPhone 6S Plus 16GB rojo" 0 "IDDDDDDD1" "1" 20/05/16 31/12/49
+1 "" 2 "prueba iPhone 6S Plus 16GB rojo" 0 "IDDDDDDD1" "1" 20/05/16 31/12/49
+1 "" 3 "prueba iPhone 6S Plus 16GB rojo" 0 "IDDDDDDD1" "1" 20/05/16 31/12/49
+1 "" 4 "prueba iPhone 6S Plus 16GB rojo" 0 "IDDDDDDD1" "1" 20/05/16 31/12/49
+1 "" 5 "prueba iPhone 6S Plus 16GB" 0 "IDDDDDDD1" "1" 20/05/16 31/12/49
+1 "" 1 "prueba iPhone 6S Plus 16GB amarillo" 0 "IDDDDDDD2" "1" 20/05/16 31/12/49
+1 "" 2 "prueba iPhone 6S Plus 16GB amarillo" 0 "IDDDDDDD2" "1" 20/05/16 31/12/49
+1 "" 3 "prueba iPhone 6S Plus 16GB amarillo" 0 "IDDDDDDD2" "1" 20/05/16 31/12/49
+1 "" 4 "prueba iPhone 6S Plus 16GB amarillo" 0 "IDDDDDDD2" "1" 20/05/16 31/12/49
+1 "" 5 "prueba iPhone 6S Plus 16GB amarillo" 0 "IDDDDDDD2" "1" 20/05/16 31/12/49
 1 "" 1 "Compensación por problema en red" 0 "INC_DISC" "1" 01/12/14 31/12/49
 1 "" 2 "Compensació per problema a la xarxa" 0 "INC_DISC" "1" 01/12/14 31/12/49
 1 "" 3 "Sareko arazoengatiko ordaina" 0 "INC_DISC" "1" 01/12/14 31/12/49
@@ -4065,6 +4201,11 @@
 1 "" 3 "LG G3s Blanco" 0 "P030G3SW2" "1" 11/08/14 31/12/49
 1 "" 4 "LG G3s Blanco" 0 "P030G3SW2" "1" 11/08/14 31/12/49
 1 "" 5 "LG G3 S White" 0 "P030G3SW2" "1" 11/08/14 31/12/49
+1 "" 1 "LG G5 Titán con batería recargable de regalo" 0 "P030G5BNP" "1" 03/05/16 31/12/49
+1 "" 2 "LG G5 Titán con batería recargable de regalo" 0 "P030G5BNP" "1" 03/05/16 31/12/49
+1 "" 3 "LG G5 Titán con batería recargable de regalo" 0 "P030G5BNP" "1" 03/05/16 31/12/49
+1 "" 4 "LG G5 Titán con batería recargable de regalo" 0 "P030G5BNP" "1" 03/05/16 31/12/49
+1 "" 5 "LG G5 Titan with rechargable battery gift" 0 "P030G5BNP" "1" 03/05/16 31/12/49
 1 "" 1 "LG GB250 Azul y blanco" 0 "P030GB252" "1" 23/09/09 31/12/49
 1 "" 2 "LG GB250 Azul y blanco" 0 "P030GB252" "1" 23/09/09 31/12/49
 1 "" 3 "LG GB250 Azul y blanco" 0 "P030GB252" "1" 23/09/09 31/12/49
@@ -4228,6 +4369,11 @@
 1 "" 3 "LG G5 Titán" 0 "P030LG5N2" "1" 21/03/16 31/12/49
 1 "" 4 "LG G5 Titán" 0 "P030LG5N2" "1" 21/03/16 31/12/49
 1 "" 5 "LG G5 Titan" 0 "P030LG5N2" "1" 21/03/16 31/12/49
+1 "" 1 "LG K8 Azul" 0 "P030LK8A2" "1" 23/05/16 31/12/49
+1 "" 2 "LG K8 Azul" 0 "P030LK8A2" "1" 23/05/16 31/12/49
+1 "" 3 "LG K8 Azul" 0 "P030LK8A2" "1" 23/05/16 31/12/49
+1 "" 4 "LG K8 Azul" 0 "P030LK8A2" "1" 23/05/16 31/12/49
+1 "" 5 "LG K8 Indigo Blue" 0 "P030LK8A2" "1" 23/05/16 31/12/49
 1 "" 1 "Google Nexus 5 Negro" 0 "P030NE5N2" "1" 29/01/14 31/12/49
 1 "" 2 "Google Nexus 5 Negro" 0 "P030NE5N2" "1" 29/01/14 31/12/49
 1 "" 3 "Google Nexus 5 Negro" 0 "P030NE5N2" "1" 29/01/14 31/12/49
@@ -4839,6 +4985,36 @@
 1 "" 5 "Samsung J400 Blue" 0 "P034J40A2" "1" 25/02/09 31/12/49
 1 "" 1 "Samsung J400 Azul" 0 "P034J40A3" "1" 25/02/09 31/12/49
 1 "" 5 "Samsung J400 Blue" 0 "P034J40A3" "1" 25/02/09 31/12/49
+1 "" 1 "Samsung Galaxy J5 2016 Dorado" 0 "P034J56D2" "1" 25/05/16 31/12/49
+1 "" 2 "Samsung Galaxy J5 2016 Dorado" 0 "P034J56D2" "1" 25/05/16 31/12/49
+1 "" 3 "Samsung Galaxy J5 2016 Dorado" 0 "P034J56D2" "1" 25/05/16 31/12/49
+1 "" 4 "Samsung Galaxy J5 2016 Dorado" 0 "P034J56D2" "1" 25/05/16 31/12/49
+1 "" 5 "Samsung Galaxy J5 2016 Gold" 0 "P034J56D2" "1" 25/05/16 31/12/49
+1 "" 1 "Samsung Galaxy J5 2016 Negro" 0 "P034J56N2" "1" 23/05/16 31/12/49
+1 "" 2 "Samsung Galaxy J5 2016 Negro" 0 "P034J56N2" "1" 23/05/16 31/12/49
+1 "" 3 "Samsung Galaxy J5 2016 Negro" 0 "P034J56N2" "1" 23/05/16 31/12/49
+1 "" 4 "Samsung Galaxy J5 2016 Negro" 0 "P034J56N2" "1" 23/05/16 31/12/49
+1 "" 5 "Samsung Galaxy J5 2016 Black" 0 "P034J56N2" "1" 23/05/16 31/12/49
+1 "" 1 "Samsung Galaxy J5 2016 Blanco" 0 "P034J56W2" "1" 23/05/16 31/12/49
+1 "" 2 "Samsung Galaxy J5 2016 Blanco" 0 "P034J56W2" "1" 23/05/16 31/12/49
+1 "" 3 "Samsung Galaxy J5 2016 Blanco" 0 "P034J56W2" "1" 23/05/16 31/12/49
+1 "" 4 "Samsung Galaxy J5 2016 Blanco" 0 "P034J56W2" "1" 23/05/16 31/12/49
+1 "" 5 "Samsung Galaxy J5 2016 White" 0 "P034J56W2" "1" 23/05/16 31/12/49
+1 "" 1 "Samsung Galaxy J7 2016 Dorado" 0 "P034J76D2" "1" 23/05/16 31/12/49
+1 "" 2 "Samsung Galaxy J7 2016 Dorado" 0 "P034J76D2" "1" 23/05/16 31/12/49
+1 "" 3 "Samsung Galaxy J7 2016 Dorado" 0 "P034J76D2" "1" 23/05/16 31/12/49
+1 "" 4 "Samsung Galaxy J7 2016 Dorado" 0 "P034J76D2" "1" 23/05/16 31/12/49
+1 "" 5 "Samsung Galaxy J7 2016 Gold" 0 "P034J76D2" "1" 23/05/16 31/12/49
+1 "" 1 "Samsung Galaxy J7 2016 Negro" 0 "P034J76N2" "1" 23/05/16 31/12/49
+1 "" 2 "Samsung Galaxy J7 2016 Negro" 0 "P034J76N2" "1" 23/05/16 31/12/49
+1 "" 3 "Samsung Galaxy J7 2016 Negro" 0 "P034J76N2" "1" 23/05/16 31/12/49
+1 "" 4 "Samsung Galaxy J7 2016 Negro" 0 "P034J76N2" "1" 23/05/16 31/12/49
+1 "" 5 "Samsung Galaxy J7 2016 Black" 0 "P034J76N2" "1" 23/05/16 31/12/49
+1 "" 1 "Samsung Galaxy J7 2016 Blanco" 0 "P034J76W2" "1" 23/05/16 31/12/49
+1 "" 2 "Samsung Galaxy J7 2016 Blanco" 0 "P034J76W2" "1" 23/05/16 31/12/49
+1 "" 3 "Samsung Galaxy J7 2016 Blanco" 0 "P034J76W2" "1" 23/05/16 31/12/49
+1 "" 4 "Samsung Galaxy J7 2016 Blanco" 0 "P034J76W2" "1" 23/05/16 31/12/49
+1 "" 5 "Samsung Galaxy J7 2016 White" 0 "P034J76W2" "1" 23/05/16 31/12/49
 1 "" 1 "Samsung SGH J800 Azul" 0 "P034J80A2" "1" 28/07/09 31/12/49
 1 "" 5 "Samsung SGH J800 Blue" 0 "P034J80A2" "1" 28/07/09 31/12/49
 1 "" 1 "Samsung SGH J800 Morado" 0 "P034J80P2" "1" 28/07/09 31/12/49
@@ -5372,7 +5548,7 @@
 1 "" 2 "Sony Xperia Z3 Blanco" 0 "P037XZ3W2" "1" 24/09/14 31/12/49
 1 "" 3 "Sony Xperia Z3 Blanco" 0 "P037XZ3W2" "1" 24/09/14 31/12/49
 1 "" 4 "Sony Xperia Z3 Blanco" 0 "P037XZ3W2" "1" 24/09/14 31/12/49
-1 "" 5 "Sony Xperia Z3 Blanco" 0 "P037XZ3W2" "1" 24/09/14 31/12/49
+1 "" 5 "Sony Xperia Z3 White" 0 "P037XZ3W2" "1" 24/09/14 31/12/49
 1 "" 1 "Sony Xperia Z5 Negro" 0 "P037XZ5N2" "1" 25/09/15 31/12/49
 1 "" 2 "Sony Xperia Z5 Negro" 0 "P037XZ5N2" "1" 25/09/15 31/12/49
 1 "" 3 "Sony Xperia Z5 Negro" 0 "P037XZ5N2" "1" 25/09/15 31/12/49
@@ -5513,6 +5689,16 @@
 1 "" 3 "Huawei P8 Lite Blanco con Reloj Smartband B2 Negro" 0 "P0438LRW2" "1" 19/11/15 31/12/49
 1 "" 4 "Huawei P8 Lite Blanco con Reloj Smartband B2 Negro" 0 "P0438LRW2" "1" 19/11/15 31/12/49
 1 "" 5 "Huawei P8 Lite White with Talkband B2 Black" 0 "P0438LRW2" "1" 19/11/15 31/12/49
+1 "" 1 "Huawei P9 Lite Negro con palo selfie" 0 "P0439LPNP" "1" 27/04/16 31/12/49
+1 "" 2 "Huawei P9 Lite Negro con palo selfie" 0 "P0439LPNP" "1" 27/04/16 31/12/49
+1 "" 3 "Huawei P9 Lite Negro con palo selfie" 0 "P0439LPNP" "1" 27/04/16 31/12/49
+1 "" 4 "Huawei P9 Lite Negro con palo selfie" 0 "P0439LPNP" "1" 27/04/16 31/12/49
+1 "" 5 "Huawei P9 Lite Black with selfie stick" 0 "P0439LPNP" "1" 27/04/16 31/12/49
+1 "" 1 "Huawei P9 Lite Blanco con palo selfie" 0 "P0439LPWP" "1" 27/04/16 31/12/49
+1 "" 2 "Huawei P9 Lite Blanco con palo selfie" 0 "P0439LPWP" "1" 27/04/16 31/12/49
+1 "" 3 "Huawei P9 Lite Blanco con palo selfie" 0 "P0439LPWP" "1" 27/04/16 31/12/49
+1 "" 4 "Huawei P9 Lite Blanco con palo selfie" 0 "P0439LPWP" "1" 27/04/16 31/12/49
+1 "" 5 "Huawei P9 Lite White with selfie stick" 0 "P0439LPWP" "1" 27/04/16 31/12/49
 1 "" 1 "Huawei Ascend G7 Negro" 0 "P043AG7N2" "1" 28/10/14 31/12/49
 1 "" 2 "Huawei Ascend G7 Negro" 0 "P043AG7N2" "1" 28/10/14 31/12/49
 1 "" 3 "Huawei Ascend G7 Negro" 0 "P043AG7N2" "1" 28/10/14 31/12/49
@@ -5689,6 +5875,16 @@
 1 "" 3 "Huawei P8 Gris" 0 "P043HP8S2" "1" 22/04/15 31/12/49
 1 "" 4 "Huawei P8 Gris" 0 "P043HP8S2" "1" 22/04/15 31/12/49
 1 "" 5 "Huawei P8 Grey" 0 "P043HP8S2" "1" 22/04/15 31/12/49
+1 "" 1 "Huawei P9 Gris Titanio" 0 "P043HP9N2" "1" 19/04/16 31/12/49
+1 "" 2 "Huawei P9 Negro" 0 "P043HP9N2" "1" 19/04/16 31/12/49
+1 "" 3 "Huawei P9 Negro" 0 "P043HP9N2" "1" 19/04/16 31/12/49
+1 "" 4 "Huawei P9 Negro" 0 "P043HP9N2" "1" 19/04/16 31/12/49
+1 "" 5 "Huawei P9 Titanium Grey" 0 "P043HP9N2" "1" 19/04/16 31/12/49
+1 "" 1 "Huawei P9 Plata" 0 "P043HP9W2" "1" 19/04/16 31/12/49
+1 "" 2 "Huawei P9 Blanco" 0 "P043HP9W2" "1" 19/04/16 31/12/49
+1 "" 3 "Huawei P9 Blanco" 0 "P043HP9W2" "1" 19/04/16 31/12/49
+1 "" 4 "Huawei P9 Blanco" 0 "P043HP9W2" "1" 19/04/16 31/12/49
+1 "" 5 "Huawei P9 Silver" 0 "P043HP9W2" "1" 19/04/16 31/12/49
 1 "" 1 "Huawei Y6 Negro" 0 "P043HY6N2" "1" 25/09/15 31/12/49
 1 "" 2 "Huawei Y6 Negro" 0 "P043HY6N2" "1" 25/09/15 31/12/49
 1 "" 3 "Huawei Y6 Negro" 0 "P043HY6N2" "1" 25/09/15 31/12/49
@@ -5729,6 +5925,26 @@
 1 "" 3 "Huawei P8 Gris con Reloj Smartband B2 Negro" 0 "P043P8RG2" "1" 19/11/15 31/12/49
 1 "" 4 "Huawei P8 Gris con Reloj Smartband B2 Negro" 0 "P043P8RG2" "1" 19/11/15 31/12/49
 1 "" 5 "Huawei P8 Grey with Talkband B2 Black" 0 "P043P8RG2" "1" 19/11/15 31/12/49
+1 "" 1 "Huawei P9 Gris Titanio con altavoz" 0 "P043P9ANP" "1" 19/04/16 31/12/49
+1 "" 2 "Huawei P9 Negro con altavoz" 0 "P043P9ANP" "1" 19/04/16 31/12/49
+1 "" 3 "Huawei P9 Negro con altavoz" 0 "P043P9ANP" "1" 19/04/16 31/12/49
+1 "" 4 "Huawei P9 Negro con altavoz" 0 "P043P9ANP" "1" 19/04/16 31/12/49
+1 "" 5 "Huawei P9 Titanium Grey with Speaker" 0 "P043P9ANP" "1" 19/04/16 31/12/49
+1 "" 1 "Huawei P9 Plata con altavoz" 0 "P043P9AWP" "1" 19/04/16 31/12/49
+1 "" 2 "Huawei P9 Blanco con altavoz" 0 "P043P9AWP" "1" 19/04/16 31/12/49
+1 "" 3 "Huawei P9 Blanco con altavoz" 0 "P043P9AWP" "1" 19/04/16 31/12/49
+1 "" 4 "Huawei P9 Blanco con altavoz" 0 "P043P9AWP" "1" 19/04/16 31/12/49
+1 "" 5 "Huawei P9 Silver with Speaker" 0 "P043P9AWP" "1" 19/04/16 31/12/49
+1 "" 1 "Huawei P9 Lite Negro" 0 "P043P9LN2" "1" 27/04/16 31/12/49
+1 "" 2 "Huawei P9 Lite Negro" 0 "P043P9LN2" "1" 27/04/16 31/12/49
+1 "" 3 "Huawei P9 Lite Negro" 0 "P043P9LN2" "1" 27/04/16 31/12/49
+1 "" 4 "Huawei P9 Lite Negro" 0 "P043P9LN2" "1" 27/04/16 31/12/49
+1 "" 5 "Huawei P9 Lite Black" 0 "P043P9LN2" "1" 27/04/16 31/12/49
+1 "" 1 "Huawei P9 Lite Blanco" 0 "P043P9LW2" "1" 27/04/16 31/12/49
+1 "" 2 "Huawei P9 Lite Blanco" 0 "P043P9LW2" "1" 27/04/16 31/12/49
+1 "" 3 "Huawei P9 Lite Blanco" 0 "P043P9LW2" "1" 27/04/16 31/12/49
+1 "" 4 "Huawei P9 Lite Blanco" 0 "P043P9LW2" "1" 27/04/16 31/12/49
+1 "" 5 "Huawei P9 Lite White" 0 "P043P9LW2" "1" 27/04/16 31/12/49
 1 "" 1 "Huawei Ascend P LTE 2 Negro" 0 "P043PL2N2" "1" 26/06/13 31/12/49
 1 "" 2 "Huawei Ascend P LTE 2 Negro" 0 "P043PL2N2" "1" 26/06/13 31/12/49
 1 "" 3 "Huawei Ascend P LTE 2 Negro" 0 "P043PL2N2" "1" 26/06/13 31/12/49
@@ -5848,16 +6064,16 @@
 1 "" 3 "Alcatel 1030 Gris" 0 "P045103S2" "1" 02/09/13 31/12/49
 1 "" 4 "Alcatel 1030 Gris" 0 "P045103S2" "1" 02/09/13 31/12/49
 1 "" 5 "ALCATEL 1030 Grey" 0 "P045103S2" "1" 02/09/13 31/12/49
-1 "" 1 "ALCATEL ONETOUCH 1035 Gris" 0 "P045135G2" "1" 27/01/15 31/12/49
+1 "" 1 "ALCATEL 1035 Gris" 0 "P045135G2" "1" 27/01/15 31/12/49
 1 "" 2 "ALCATEL ONETOUCH 1035 Gris" 0 "P045135G2" "1" 27/01/15 31/12/49
 1 "" 3 "ALCATEL ONETOUCH 1035 Gris" 0 "P045135G2" "1" 27/01/15 31/12/49
 1 "" 4 "ALCATEL ONETOUCH 1035 Gris" 0 "P045135G2" "1" 27/01/15 31/12/49
-1 "" 5 "ALCATEL ONETOUCH 1035 Grey" 0 "P045135G2" "1" 27/01/15 31/12/49
-1 "" 1 "ALCATEL ONETOUCH 1035 Blanco" 0 "P045135W2" "1" 27/01/15 31/12/49
+1 "" 5 "ALCATEL 1035 Grey" 0 "P045135G2" "1" 27/01/15 31/12/49
+1 "" 1 "ALCATEL 1035 Blanco" 0 "P045135W2" "1" 27/01/15 31/12/49
 1 "" 2 "ALCATEL ONETOUCH 1035 Blanco" 0 "P045135W2" "1" 27/01/15 31/12/49
 1 "" 3 "ALCATEL ONETOUCH 1035 Blanco" 0 "P045135W2" "1" 27/01/15 31/12/49
 1 "" 4 "ALCATEL ONETOUCH 1035 Blanco" 0 "P045135W2" "1" 27/01/15 31/12/49
-1 "" 5 "ALCATEL ONETOUCH 1035 White" 0 "P045135W2" "1" 27/01/15 31/12/49
+1 "" 5 "ALCATEL 1035 White" 0 "P045135W2" "1" 27/01/15 31/12/49
 1 "" 1 "ALCATEL 2000 Negro" 0 "P045200N2" "1" 25/09/13 31/12/49
 1 "" 2 "Alcatel 2000 Negro" 0 "P045200N2" "1" 25/09/13 31/12/49
 1 "" 3 "Alcatel 2000 Negro" 0 "P045200N2" "1" 25/09/13 31/12/49
@@ -5868,16 +6084,16 @@
 1 "" 3 "Alcatel 2000 Blanco" 0 "P045200W2" "1" 25/09/13 31/12/49
 1 "" 4 "Alcatel 2000 Blanco" 0 "P045200W2" "1" 25/09/13 31/12/49
 1 "" 5 "ALCATEL 2000 White" 0 "P045200W2" "1" 25/09/13 31/12/49
-1 "" 1 "ALCATEL ONETOUCH 2004G Negro" 0 "P045204N2" "1" 27/01/15 31/12/49
+1 "" 1 "ALCATEL 2004G Negro" 0 "P045204N2" "1" 27/01/15 31/12/49
 1 "" 2 "ALCATEL ONETOUCH 2004G Negro" 0 "P045204N2" "1" 27/01/15 31/12/49
 1 "" 3 "ALCATEL ONETOUCH 2004G Negro" 0 "P045204N2" "1" 27/01/15 31/12/49
 1 "" 4 "ALCATEL ONETOUCH 2004G Negro" 0 "P045204N2" "1" 27/01/15 31/12/49
-1 "" 5 "ALCATEL ONETOUCH 2004G Black" 0 "P045204N2" "1" 27/01/15 31/12/49
-1 "" 1 "ALCATEL ONETOUCH 2004G Blanco" 0 "P045204W2" "1" 27/01/15 31/12/49
+1 "" 5 "ALCATEL 2004G Black" 0 "P045204N2" "1" 27/01/15 31/12/49
+1 "" 1 "ALCATEL 2004G Blanco" 0 "P045204W2" "1" 27/01/15 31/12/49
 1 "" 2 "ALCATEL ONETOUCH 2004G Blanco" 0 "P045204W2" "1" 27/01/15 31/12/49
 1 "" 3 "ALCATEL ONETOUCH 2004G Blanco" 0 "P045204W2" "1" 27/01/15 31/12/49
 1 "" 4 "ALCATEL ONETOUCH 2004G Blanco" 0 "P045204W2" "1" 27/01/15 31/12/49
-1 "" 5 "ALCATEL ONETOUCH 2004G Blanco" 0 "P045204W2" "1" 27/01/15 31/12/49
+1 "" 5 "ALCATEL 2004G Blanco" 0 "P045204W2" "1" 27/01/15 31/12/49
 1 "" 1 "Alcatel  One Touch 223 Azul" 0 "P045223A2" "1" 25/10/10 31/12/49
 1 "" 2 "Alcatel OT-223 Azul" 0 "P045223A2" "1" 25/10/10 31/12/49
 1 "" 3 "Alcatel OT-223 Azul" 0 "P045223A2" "1" 25/10/10 31/12/49
@@ -5898,36 +6114,36 @@
 1 "" 3 "Alcatel One Touch 282 Senior Blanco" 0 "P04528SW2" "1" 27/11/12 31/12/49
 1 "" 4 "Alcatel One Touch 282 Senior Blanco" 0 "P04528SW2" "1" 27/11/12 31/12/49
 1 "" 5 "Alcatel One Touch 282 Senior White" 0 "P04528SW2" "1" 27/11/12 31/12/49
-1 "" 1 "ALCATEL ONETOUCH 292 Blanco" 0 "P045292B2" "1" 22/03/12 31/12/49
+1 "" 1 "ALCATEL 292 Blanco" 0 "P045292B2" "1" 22/03/12 31/12/49
 1 "" 2 "Alcatel One Touch 292 Blanco" 0 "P045292B2" "1" 22/03/12 31/12/49
 1 "" 3 "Alcatel One Touch 292 Blanco" 0 "P045292B2" "1" 22/03/12 31/12/49
 1 "" 4 "Alcatel One Touch 292 Blanco" 0 "P045292B2" "1" 22/03/12 31/12/49
-1 "" 5 "ALCATEL ONETOUCH 292 White" 0 "P045292B2" "1" 22/03/12 31/12/49
-1 "" 1 "ALCATEL ONETOUCH 292 Negro" 0 "P045292N2" "1" 22/03/12 31/12/49
+1 "" 5 "ALCATEL 292 White" 0 "P045292B2" "1" 22/03/12 31/12/49
+1 "" 1 "ALCATEL 292 Negro" 0 "P045292N2" "1" 22/03/12 31/12/49
 1 "" 2 "Alcatel One Touch 292 Negro" 0 "P045292N2" "1" 22/03/12 31/12/49
 1 "" 3 "Alcatel One Touch 292 Negro" 0 "P045292N2" "1" 22/03/12 31/12/49
 1 "" 4 "Alcatel One Touch 292 Negro" 0 "P045292N2" "1" 22/03/12 31/12/49
-1 "" 5 "ALCATEL ONETOUCH 292 Black" 0 "P045292N2" "1" 22/03/12 31/12/49
-1 "" 1 "ALCATEL ONETOUCH POP 3 (5.5) 4G Oro" 0 "P045355D2" "1" 22/02/16 31/12/49
+1 "" 5 "ALCATEL 292 Black" 0 "P045292N2" "1" 22/03/12 31/12/49
+1 "" 1 "ALCATEL POP 3 (5.5) 4G Oro" 0 "P045355D2" "1" 22/02/16 31/12/49
 1 "" 2 "ALCATEL ONETOUCH POP 3(5.5) 4G Oro" 0 "P045355D2" "1" 22/02/16 31/12/49
 1 "" 3 "ALCATEL ONETOUCH POP 3(5.5) 4G Oro" 0 "P045355D2" "1" 22/02/16 31/12/49
 1 "" 4 "ALCATEL ONETOUCH POP 3(5.5) 4G Oro" 0 "P045355D2" "1" 22/02/16 31/12/49
-1 "" 5 "ALCATEL ONETOUCH POP 3 (5.5) 4G Gold" 0 "P045355D2" "1" 22/02/16 31/12/49
-1 "" 1 "ALCATEL ONETOUCH POP 3 (5.5) 4G Plata" 0 "P045355S2" "1" 25/02/16 31/12/49
+1 "" 5 "ALCATEL POP 3 (5.5) 4G Gold" 0 "P045355D2" "1" 22/02/16 31/12/49
+1 "" 1 "ALCATEL POP 3 (5.5) 4G Plata" 0 "P045355S2" "1" 25/02/16 31/12/49
 1 "" 2 "ALCATEL ONETOUCH POP 3(5.5) 4G Plata" 0 "P045355S2" "1" 25/02/16 31/12/49
 1 "" 3 "ALCATEL ONETOUCH POP 3(5.5) 4G Plata" 0 "P045355S2" "1" 25/02/16 31/12/49
 1 "" 4 "ALCATEL ONETOUCH POP 3(5.5) 4G Plata" 0 "P045355S2" "1" 25/02/16 31/12/49
-1 "" 5 "ALCATEL ONETOUCH POP 3 (5.5) 4G Silver" 0 "P045355S2" "1" 25/02/16 31/12/49
-1 "" 1 "ALCATEL ONETOUCH X’POP Negro" 0 "P045403N2" "1" 24/04/13 31/12/49
+1 "" 5 "ALCATEL POP 3 (5.5) 4G Silver" 0 "P045355S2" "1" 25/02/16 31/12/49
+1 "" 1 "ALCATEL X’POP Negro" 0 "P045403N2" "1" 24/04/13 31/12/49
 1 "" 2 "Alcatel One Touch X’POP Negro" 0 "P045403N2" "1" 24/04/13 31/12/49
 1 "" 3 "Alcatel One Touch X’POP Negro" 0 "P045403N2" "1" 24/04/13 31/12/49
 1 "" 4 "Alcatel One Touch X’POP Negro" 0 "P045403N2" "1" 24/04/13 31/12/49
-1 "" 5 "ALCATEL ONETOUCH X’POP Black" 0 "P045403N2" "1" 24/04/13 31/12/49
-1 "" 1 "ALCATEL ONETOUCH X’POP Blanco" 0 "P045403W2" "1" 12/09/13 31/12/49
+1 "" 5 "ALCATEL X’POP Black" 0 "P045403N2" "1" 24/04/13 31/12/49
+1 "" 1 "ALCATEL X’POP Blanco" 0 "P045403W2" "1" 12/09/13 31/12/49
 1 "" 2 "Alcatel One Touch X’POP Blanco" 0 "P045403W2" "1" 12/09/13 31/12/49
 1 "" 3 "Alcatel One Touch X’POP Blanco" 0 "P045403W2" "1" 12/09/13 31/12/49
 1 "" 4 "Alcatel One Touch X’POP Blanco" 0 "P045403W2" "1" 12/09/13 31/12/49
-1 "" 5 "ALCATEL ONETOUCH X’POP White" 0 "P045403W2" "1" 12/09/13 31/12/49
+1 "" 5 "ALCATEL X’POP White" 0 "P045403W2" "1" 12/09/13 31/12/49
 1 "" 1 "Módem USB Alcatel One Touch X520D Azul" 0 "P045520A2" "1" 22/03/12 31/12/49
 1 "" 2 "Módem USB Alcatel One Touch X520D Azul" 0 "P045520A2" "1" 22/03/12 31/12/49
 1 "" 3 "Módem USB Alcatel One Touch X520D Azul" 0 "P045520A2" "1" 22/03/12 31/12/49
@@ -5938,11 +6154,11 @@
 1 "" 3 "Módem USB Alcatel One Touch X520D Azul" 0 "P045520A3" "1" 07/12/12 31/12/49
 1 "" 4 "Módem USB Alcatel One Touch X520D Azul" 0 "P045520A3" "1" 07/12/12 31/12/49
 1 "" 5 "Módem USB Alcatel One Touch X520D Blue" 0 "P045520A3" "1" 07/12/12 31/12/49
-1 "" 1 "ALCATEL ONETOUCH Idol Ultra Negro" 0 "P045603N2" "1" 24/04/13 31/12/49
+1 "" 1 "ALCATEL Idol Ultra Negro" 0 "P045603N2" "1" 24/04/13 31/12/49
 1 "" 2 "Alcatel One Touch Idol Ultra Negro" 0 "P045603N2" "1" 24/04/13 31/12/49
 1 "" 3 "Alcatel One Touch Idol Ultra Negro" 0 "P045603N2" "1" 24/04/13 31/12/49
 1 "" 4 "Alcatel One Touch Idol Ultra Negro" 0 "P045603N2" "1" 24/04/13 31/12/49
-1 "" 5 "ALCATEL ONETOUCH Idol Ultra Black" 0 "P045603N2" "1" 24/04/13 31/12/49
+1 "" 5 "ALCATEL Idol Ultra Black" 0 "P045603N2" "1" 24/04/13 31/12/49
 1 "" 1 "Alcatel One Touch 606 Rosa" 0 "P045606P2" "1" 23/12/10 31/12/49
 1 "" 2 "Alcatel OT-606 One Touch CHAT Rosa" 0 "P045606P2" "1" 23/12/10 31/12/49
 1 "" 3 "Alcatel OT-606 One Touch CHAT Rosa" 0 "P045606P2" "1" 23/12/10 31/12/49
@@ -5998,11 +6214,11 @@
 1 "" 3 "Alcatel One Touch 983 Negro" 0 "P045983N2" "1" 29/10/12 31/12/49
 1 "" 4 "Alcatel One Touch 983 Negro" 0 "P045983N2" "1" 29/10/12 31/12/49
 1 "" 5 "Alcatel One Touch 983 Black" 0 "P045983N2" "1" 29/10/12 31/12/49
-1 "" 1 "ALCATEL ONETOUCH 983 Rojo" 0 "P045983R2" "1" 15/01/13 31/12/49
+1 "" 1 "ALCATEL 983 Rojo" 0 "P045983R2" "1" 15/01/13 31/12/49
 1 "" 2 "Alcatel One Touch 983 Rojo" 0 "P045983R2" "1" 15/01/13 31/12/49
 1 "" 3 "Alcatel One Touch 983 Rojo" 0 "P045983R2" "1" 15/01/13 31/12/49
 1 "" 4 "Alcatel One Touch 983 Rojo" 0 "P045983R2" "1" 15/01/13 31/12/49
-1 "" 5 "ALCATEL ONETOUCH 983 Red" 0 "P045983R2" "1" 15/01/13 31/12/49
+1 "" 5 "ALCATEL 983 Red" 0 "P045983R2" "1" 15/01/13 31/12/49
 1 "" 1 "Alcatel One Touch 991 Blanco" 0 "P045991B2" "1" 24/05/12 31/12/49
 1 "" 2 "Alcatel One Touch 991 Blanco" 0 "P045991B2" "1" 24/05/12 31/12/49
 1 "" 3 "Alcatel One Touch 991 Blanco" 0 "P045991B2" "1" 24/05/12 31/12/49
@@ -6013,111 +6229,121 @@
 1 "" 3 "Alcatel One Touch 991 Morado" 0 "P045991M2" "1" 10/07/12 31/12/49
 1 "" 4 "Alcatel One Touch 991 Morado" 0 "P045991M2" "1" 10/07/12 31/12/49
 1 "" 5 "Alcatel One Touch 991 Purple" 0 "P045991M2" "1" 10/07/12 31/12/49
-1 "" 1 "Alcatel ONETOUCH POP C3 Rosa con carcasa" 0 "P045C3FP2" "1" 07/01/15 31/12/49
+1 "" 1 "Alcatel POP C3 Rosa con carcasa" 0 "P045C3FP2" "1" 07/01/15 31/12/49
 1 "" 2 "Alcatel ONETOUCH POP C3 Rosa" 0 "P045C3FP2" "1" 07/01/15 31/12/49
 1 "" 3 "Alcatel ONETOUCH POP C3 Rosa" 0 "P045C3FP2" "1" 07/01/15 31/12/49
 1 "" 4 "Alcatel ONETOUCH POP C3 Rosa" 0 "P045C3FP2" "1" 07/01/15 31/12/49
-1 "" 5 "Alcatel ONETOUCH POP C3 Pink with case" 0 "P045C3FP2" "1" 07/01/15 31/12/49
-1 "" 1 "Alcatel ONETOUCH POP C3 Rosa" 0 "P045C3SP2" "1" 21/02/14 31/12/49
+1 "" 5 "Alcatel POP C3 Pink with case" 0 "P045C3FP2" "1" 07/01/15 31/12/49
+1 "" 1 "Alcatel POP C3 Rosa" 0 "P045C3SP2" "1" 21/02/14 31/12/49
 1 "" 2 "Alcatel ONETOUCH POP C3 Rosa" 0 "P045C3SP2" "1" 21/02/14 31/12/49
 1 "" 3 "Alcatel ONETOUCH POP C3 Rosa" 0 "P045C3SP2" "1" 21/02/14 31/12/49
 1 "" 4 "Alcatel ONETOUCH POP C3 Rosa" 0 "P045C3SP2" "1" 21/02/14 31/12/49
-1 "" 5 "Alcatel ONETOUCH POP C3 Pink" 0 "P045C3SP2" "1" 21/02/14 31/12/49
-1 "" 1 "Alcatel ONETOUCH POP C3 Blanco" 0 "P045C3SW2" "1" 21/02/14 31/12/49
+1 "" 5 "Alcatel POP C3 Pink" 0 "P045C3SP2" "1" 21/02/14 31/12/49
+1 "" 1 "Alcatel POP C3 Blanco" 0 "P045C3SW2" "1" 21/02/14 31/12/49
 1 "" 2 "Alcatel ONETOUCH POP C3 Blanco" 0 "P045C3SW2" "1" 21/02/14 31/12/49
 1 "" 3 "Alcatel ONETOUCH POP C3 Blanco" 0 "P045C3SW2" "1" 21/02/14 31/12/49
 1 "" 4 "Alcatel ONETOUCH POP C3 Blanco" 0 "P045C3SW2" "1" 21/02/14 31/12/49
-1 "" 5 "Alcatel ONETOUCH POP C3 White" 0 "P045C3SW2" "1" 21/02/14 31/12/49
-1 "" 1 "Alcatel ONETOUCH POP C7 Negro" 0 "P045C7SN2" "1" 26/06/14 31/12/49
+1 "" 5 "Alcatel POP C3 White" 0 "P045C3SW2" "1" 21/02/14 31/12/49
+1 "" 1 "Alcatel POP C7 Negro" 0 "P045C7SN2" "1" 26/06/14 31/12/49
 1 "" 2 "Alcatel ONETOUCH POP C7 Negro" 0 "P045C7SN2" "1" 26/06/14 31/12/49
 1 "" 3 "Alcatel ONETOUCH POP C7 Negro" 0 "P045C7SN2" "1" 26/06/14 31/12/49
 1 "" 4 "Alcatel ONETOUCH POP C7 Negro" 0 "P045C7SN2" "1" 26/06/14 31/12/49
-1 "" 5 "Alcatel ONETOUCH POP C7 Black" 0 "P045C7SN2" "1" 26/06/14 31/12/49
-1 "" 1 "Alcatel ONETOUCH POP C7 Blanco" 0 "P045C7SW2" "1" 26/06/14 31/12/49
+1 "" 5 "Alcatel POP C7 Black" 0 "P045C7SN2" "1" 26/06/14 31/12/49
+1 "" 1 "Alcatel POP C7 Blanco" 0 "P045C7SW2" "1" 26/06/14 31/12/49
 1 "" 2 "Alcatel ONETOUCH POP C7 Blanco" 0 "P045C7SW2" "1" 26/06/14 31/12/49
 1 "" 3 "Alcatel ONETOUCH POP C7 Blanco" 0 "P045C7SW2" "1" 26/06/14 31/12/49
 1 "" 4 "Alcatel ONETOUCH POP C7 Blanco" 0 "P045C7SW2" "1" 26/06/14 31/12/49
-1 "" 5 "Alcatel ONETOUCH POP C7 White" 0 "P045C7SW2" "1" 26/06/14 31/12/49
-1 "" 1 "Alcatel ONETOUCH POP D5 Blanco" 0 "P045D5SW2" "1" 11/08/14 31/12/49
+1 "" 5 "Alcatel POP C7 White" 0 "P045C7SW2" "1" 26/06/14 31/12/49
+1 "" 1 "Alcatel POP D5 Blanco" 0 "P045D5SW2" "1" 11/08/14 31/12/49
 1 "" 2 "Alcatel ONETOUCH POP D5 Blanco" 0 "P045D5SW2" "1" 11/08/14 31/12/49
 1 "" 3 "Alcatel ONETOUCH POP D5 Blanco" 0 "P045D5SW2" "1" 11/08/14 31/12/49
 1 "" 4 "Alcatel ONETOUCH POP D5 Blanco" 0 "P045D5SW2" "1" 11/08/14 31/12/49
-1 "" 5 "Alcatel ONETOUCH POP D5 White" 0 "P045D5SW2" "1" 11/08/14 31/12/49
-1 "" 1 "Alcatel ONETOUCH Go Play Blanco-Azul con ONETOUCH Go Watch Blanco" 0 "P045GPWW2" "1" 19/11/15 31/12/49
+1 "" 5 "Alcatel POP D5 White" 0 "P045D5SW2" "1" 11/08/14 31/12/49
+1 "" 1 "Alcatel Go Play Blanco-Azul con Go Watch Blanco" 0 "P045GPWW2" "1" 19/11/15 31/12/49
 1 "" 2 "Alcatel Onetouch Go Play Blanco y Azul con Onetouch Go Watch Blanco" 0 "P045GPWW2" "1" 19/11/15 31/12/49
 1 "" 3 "Alcatel Onetouch Go Play Blanco y Azul con Onetouch Go Watch Blanco" 0 "P045GPWW2" "1" 19/11/15 31/12/49
 1 "" 4 "Alcatel Onetouch Go Play Blanco y Azul con Onetouch Go Watch Blanco" 0 "P045GPWW2" "1" 19/11/15 31/12/49
-1 "" 5 "Alcatel ONETOUCH Go Play White-Blue with ONETOUCH Go Watch White" 0 "P045GPWW2" "1" 19/11/15 31/12/49
-1 "" 1 "Alcatel Onetouch Idol 3 (5.5) Gris" 0 "P045ID3S2" "1" 27/05/15 31/12/49
+1 "" 5 "Alcatel Go Play White-Blue with Go Watch White" 0 "P045GPWW2" "1" 19/11/15 31/12/49
+1 "" 1 "Alcatel Idol 3 (5.5) Gris" 0 "P045ID3S2" "1" 27/05/15 31/12/49
 1 "" 2 "Alcatel Onetouch Idol 3 (5.5) Gris" 0 "P045ID3S2" "1" 27/05/15 31/12/49
 1 "" 3 "Alcatel Onetouch Idol 3 (5.5) Gris" 0 "P045ID3S2" "1" 27/05/15 31/12/49
 1 "" 4 "Alcatel Onetouch Idol 3 (5.5) Gris" 0 "P045ID3S2" "1" 27/05/15 31/12/49
-1 "" 5 "Alcatel Onetouch Idol 3 (5.5) Grey" 0 "P045ID3S2" "1" 27/05/15 31/12/49
-1 "" 1 "ALCATEL ONETOUCH Idol Mini Rosa" 0 "P045IDMP2" "1" 25/11/13 31/12/49
+1 "" 5 "Alcatel Idol 3 (5.5) Grey" 0 "P045ID3S2" "1" 27/05/15 31/12/49
+1 "" 1 "ALCATEL Idol Mini Rosa" 0 "P045IDMP2" "1" 25/11/13 31/12/49
 1 "" 2 "Alcatel One Touch Idol Mini Rosa" 0 "P045IDMP2" "1" 25/11/13 31/12/49
 1 "" 3 "Alcatel One Touch Idol Mini Rosa" 0 "P045IDMP2" "1" 25/11/13 31/12/49
 1 "" 4 "Alcatel One Touch Idol Mini Rosa" 0 "P045IDMP2" "1" 25/11/13 31/12/49
-1 "" 5 "ALCATE ONETOUCH Idol Mini Pink" 0 "P045IDMP2" "1" 25/11/13 31/12/49
-1 "" 1 "ALCATE ONETOUCH Idol Mini Gris" 0 "P045IDMS2" "1" 25/11/13 31/12/49
+1 "" 5 "ALCATEL Idol Mini Pink" 0 "P045IDMP2" "1" 25/11/13 31/12/49
+1 "" 1 "ALCATEL Idol Mini Gris" 0 "P045IDMS2" "1" 25/11/13 31/12/49
 1 "" 2 "Alcatel One Touch Idol Mini Gris" 0 "P045IDMS2" "1" 25/11/13 31/12/49
 1 "" 3 "Alcatel One Touch Idol Mini Gris" 0 "P045IDMS2" "1" 25/11/13 31/12/49
 1 "" 4 "Alcatel One Touch Idol Mini Gris" 0 "P045IDMS2" "1" 25/11/13 31/12/49
-1 "" 5 "ALCATE ONETOUCH Idol Mini Grey" 0 "P045IDMS2" "1" 25/11/13 31/12/49
-1 "" 1 "ALCATEL ONETOUCH Idol S Gris" 0 "P045IDSS2" "1" 28/10/13 31/12/49
+1 "" 5 "ALCATEL Idol Mini Grey" 0 "P045IDMS2" "1" 25/11/13 31/12/49
+1 "" 1 "ALCATEL Idol S Gris" 0 "P045IDSS2" "1" 28/10/13 31/12/49
 1 "" 2 "Alcatel One Touch Idol S Gris" 0 "P045IDSS2" "1" 28/10/13 31/12/49
 1 "" 3 "Alcatel One Touch Idol S Gris" 0 "P045IDSS2" "1" 28/10/13 31/12/49
 1 "" 4 "Alcatel One Touch Idol S Gris" 0 "P045IDSS2" "1" 28/10/13 31/12/49
-1 "" 5 "ALCATEL ONETOUCH Idol S Grey" 0 "P045IDSS2" "1" 28/10/13 31/12/49
-1 "" 1 "Alcatel ONETOUCH POP UP Negro" 0 "P045OPUN2" "1" 19/01/16 31/12/49
+1 "" 5 "ALCATEL Idol S Grey" 0 "P045IDSS2" "1" 28/10/13 31/12/49
+1 "" 1 "Alcatel POP UP Negro" 0 "P045OPUN2" "1" 19/01/16 31/12/49
 1 "" 2 "Alcatel One Touch Pop Up Negro" 0 "P045OPUN2" "1" 19/01/16 31/12/49
 1 "" 3 "Alcatel One Touch Pop Up Negro" 0 "P045OPUN2" "1" 19/01/16 31/12/49
 1 "" 4 "Alcatel One Touch Pop Up Negro" 0 "P045OPUN2" "1" 19/01/16 31/12/49
-1 "" 5 "Alcatel ONETOUCH POP UP Black" 0 "P045OPUN2" "1" 19/01/16 31/12/49
-1 "" 1 "Alcatel ONETOUCH POP UP Blanco" 0 "P045OPUW2" "1" 19/01/16 31/12/49
+1 "" 5 "Alcatel POP UP Black" 0 "P045OPUN2" "1" 19/01/16 31/12/49
+1 "" 1 "Alcatel POP UP Blanco" 0 "P045OPUW2" "1" 19/01/16 31/12/49
 1 "" 2 "Alcatel One Touch Pop Up Blanco" 0 "P045OPUW2" "1" 19/01/16 31/12/49
 1 "" 3 "Alcatel One Touch Pop Up Blanco" 0 "P045OPUW2" "1" 19/01/16 31/12/49
 1 "" 4 "Alcatel One Touch Pop Up Blanco" 0 "P045OPUW2" "1" 19/01/16 31/12/49
-1 "" 5 "Alcatel ONETOUCH POP UP White" 0 "P045OPUW2" "1" 19/01/16 31/12/49
-1 "" 1 "Alcatel ONETOUCH PIXI 3 (4.5) Negro" 0 "P045P34N2" "1" 02/12/15 31/12/49
+1 "" 5 "Alcatel POP UP White" 0 "P045OPUW2" "1" 19/01/16 31/12/49
+1 "" 1 "Alcatel PIXI 3 (4.5) Negro" 0 "P045P34N2" "1" 02/12/15 31/12/49
 1 "" 2 "Alcatel Onetouch Pixi 3 (4.5) Negro" 0 "P045P34N2" "1" 02/12/15 31/12/49
 1 "" 3 "Alcatel Onetouch Pixi 3 (4.5) Negro" 0 "P045P34N2" "1" 02/12/15 31/12/49
 1 "" 4 "Alcatel Onetouch Pixi 3 (4.5) Negro" 0 "P045P34N2" "1" 02/12/15 31/12/49
-1 "" 5 "Alcatel ONETOUCH PIXI 3 (4.5) Black" 0 "P045P34N2" "1" 02/12/15 31/12/49
-1 "" 1 "Alcatel ONETOUCH PIXI 3 (4.5) Blanco" 0 "P045P34W2" "1" 02/12/15 31/12/49
+1 "" 5 "Alcatel PIXI 3 (4.5) Black" 0 "P045P34N2" "1" 02/12/15 31/12/49
+1 "" 1 "Alcatel PIXI 3 (4.5) Blanco" 0 "P045P34W2" "1" 02/12/15 31/12/49
 1 "" 2 "Alcatel Onetouch Pixi 3 (4.5) Blanco" 0 "P045P34W2" "1" 02/12/15 31/12/49
 1 "" 3 "Alcatel Onetouch Pixi 3 (4.5) Blanco" 0 "P045P34W2" "1" 02/12/15 31/12/49
 1 "" 4 "Alcatel Onetouch Pixi 3 (4.5) Blanco" 0 "P045P34W2" "1" 02/12/15 31/12/49
-1 "" 5 "Alcatel ONETOUCH PIXI 3 (4.5) White" 0 "P045P34W2" "1" 02/12/15 31/12/49
-1 "" 1 "ALCATEL ONETOUCH POP 3 (5) 4G Oro" 0 "P045P35D2" "1" 25/02/16 31/12/49
+1 "" 5 "Alcatel PIXI 3 (4.5) White" 0 "P045P34W2" "1" 02/12/15 31/12/49
+1 "" 1 "ALCATEL POP 3 (5) 4G Oro" 0 "P045P35D2" "1" 25/02/16 31/12/49
 1 "" 2 "ALCATEL ONETOUCH POP 3 (5) 4G Oro" 0 "P045P35D2" "1" 25/02/16 31/12/49
 1 "" 3 "ALCATEL ONETOUCH POP 3 (5) 4G Oro" 0 "P045P35D2" "1" 25/02/16 31/12/49
 1 "" 4 "ALCATEL ONETOUCH POP 3 (5) 4G Oro" 0 "P045P35D2" "1" 25/02/16 31/12/49
-1 "" 5 "ALCATEL ONETOUCH POP 3 (5) 4G Gold" 0 "P045P35D2" "1" 25/02/16 31/12/49
-1 "" 1 "ALCATEL ONETOUCH POP 3 (5) 4G Plata" 0 "P045P35S2" "1" 22/02/16 31/12/49
+1 "" 5 "ALCATEL POP 3 (5) 4G Gold" 0 "P045P35D2" "1" 25/02/16 31/12/49
+1 "" 1 "ALCATEL POP 3 (5) 4G Plata" 0 "P045P35S2" "1" 22/02/16 31/12/49
 1 "" 2 "ALCATEL ONETOUCH POP 3 (5) 4G Plata" 0 "P045P35S2" "1" 22/02/16 31/12/49
 1 "" 3 "ALCATEL ONETOUCH POP 3 (5) 4G Plata" 0 "P045P35S2" "1" 22/02/16 31/12/49
 1 "" 4 "ALCATEL ONETOUCH POP 3 (5) 4G Plata" 0 "P045P35S2" "1" 22/02/16 31/12/49
-1 "" 5 "ALCATEL ONETOUCH POP 3 (5) 4G Silver" 0 "P045P35S2" "1" 22/02/16 31/12/49
-1 "" 1 "Alcatel ONETOUCH POP 3 (5) Dorado" 0 "P045P3SD2" "1" 25/08/15 31/12/49
+1 "" 5 "ALCATEL POP 3 (5) 4G Silver" 0 "P045P35S2" "1" 22/02/16 31/12/49
+1 "" 1 "Alcatel POP 3 (5) Dorado" 0 "P045P3SD2" "1" 25/08/15 31/12/49
 1 "" 2 "Alcatel ONETOUCH POP 3 Dorado" 0 "P045P3SD2" "1" 25/08/15 31/12/49
 1 "" 3 "Alcatel ONETOUCH POP 3 Dorado" 0 "P045P3SD2" "1" 25/08/15 31/12/49
 1 "" 4 "Alcatel ONETOUCH POP 3 Dorado" 0 "P045P3SD2" "1" 25/08/15 31/12/49
-1 "" 5 "Alcatel ONETOUCH POP 3 (5) Soft Gold" 0 "P045P3SD2" "1" 25/08/15 31/12/49
-1 "" 1 "Alcatel ONETOUCH POP 3 (5) Plata" 0 "P045P3SP2" "1" 25/08/15 31/12/49
+1 "" 5 "Alcatel POP 3 (5) Soft Gold" 0 "P045P3SD2" "1" 25/08/15 31/12/49
+1 "" 1 "Alcatel POP 3 (5) Plata" 0 "P045P3SP2" "1" 25/08/15 31/12/49
 1 "" 2 "Alcatel ONETOUCH POP 3 Plata" 0 "P045P3SP2" "1" 25/08/15 31/12/49
 1 "" 3 "Alcatel ONETOUCH POP 3 Plata" 0 "P045P3SP2" "1" 25/08/15 31/12/49
 1 "" 4 "Alcatel ONETOUCH POP 3 Plata" 0 "P045P3SP2" "1" 25/08/15 31/12/49
-1 "" 5 "Alcatel ONETOUCH POP 3 (5) Soft Silver" 0 "P045P3SP2" "1" 25/08/15 31/12/49
-1 "" 1 "Alcatel OneTouch POP S7 Azul" 0 "P045PS7A2" "1" 02/03/15 31/12/49
+1 "" 5 "Alcatel POP 3 (5) Soft Silver" 0 "P045P3SP2" "1" 25/08/15 31/12/49
+1 "" 1 "Alcatel POP 4 (5) Gris" 0 "P045P45G2" "1" 23/05/16 31/12/49
+1 "" 2 "Alcatel POP 4 (5) Gris" 0 "P045P45G2" "1" 23/05/16 31/12/49
+1 "" 3 "Alcatel POP 4 (5) Gris" 0 "P045P45G2" "1" 23/05/16 31/12/49
+1 "" 4 "Alcatel POP 4 (5) Gris" 0 "P045P45G2" "1" 23/05/16 31/12/49
+1 "" 5 "Alcatel POP 4 (5) Grey" 0 "P045P45G2" "1" 23/05/16 31/12/49
+1 "" 1 "Alcatel POP 4 (5) Blanco" 0 "P045P45W2" "1" 23/05/16 31/12/49
+1 "" 2 "Alcatel POP 4 (5) Blanco" 0 "P045P45W2" "1" 23/05/16 31/12/49
+1 "" 3 "Alcatel POP 4 (5) Blanco" 0 "P045P45W2" "1" 23/05/16 31/12/49
+1 "" 4 "Alcatel POP 4 (5) Blanco" 0 "P045P45W2" "1" 23/05/16 31/12/49
+1 "" 5 "Alcatel POP 4 (5) White" 0 "P045P45W2" "1" 23/05/16 31/12/49
+1 "" 1 "Alcatel POP S7 Azul" 0 "P045PS7A2" "1" 02/03/15 31/12/49
 1 "" 2 "Alcatel OneTouch POP S7 Azul" 0 "P045PS7A2" "1" 02/03/15 31/12/49
 1 "" 3 "Alcatel OneTouch POP S7 Azul" 0 "P045PS7A2" "1" 02/03/15 31/12/49
 1 "" 4 "Alcatel OneTouch POP S7 Azul" 0 "P045PS7A2" "1" 02/03/15 31/12/49
-1 "" 5 "Alcatel OneTouch POP S7  Azul" 0 "P045PS7A2" "1" 02/03/15 31/12/49
-1 "" 1 "Alcatel OneTouch POP S7 Blanco" 0 "P045PS7W2" "1" 02/03/15 31/12/49
+1 "" 5 "Alcatel POP S7  Azul" 0 "P045PS7A2" "1" 02/03/15 31/12/49
+1 "" 1 "Alcatel POP S7 Blanco" 0 "P045PS7W2" "1" 02/03/15 31/12/49
 1 "" 2 "Alcatel OneTouch POP S7 Blanco" 0 "P045PS7W2" "1" 02/03/15 31/12/49
 1 "" 3 "Alcatel OneTouch POP S7 Blanco" 0 "P045PS7W2" "1" 02/03/15 31/12/49
 1 "" 4 "Alcatel OneTouch POP S7 Blanco" 0 "P045PS7W2" "1" 02/03/15 31/12/49
-1 "" 5 "Alcatel OneTouch POP S7  White" 0 "P045PS7W2" "1" 02/03/15 31/12/49
+1 "" 5 "Alcatel POP S7  White" 0 "P045PS7W2" "1" 02/03/15 31/12/49
 1 "" 1 "Alcatel S210 Blanco" 0 "P045S21B2" "1" 02/10/08 31/12/54
 1 "" 5 "Alcatel S210 White" 0 "P045S21B2" "1" 02/10/08 31/12/08
 1 "" 1 "Alcatel S210 Negro" 0 "P045S21N2" "1" 02/10/08 31/12/54
@@ -6129,16 +6355,16 @@
 1 "" 3 "Alcatel One Touch SCRIBE HD Blanco" 0 "P045SHDW2" "1" 28/05/13 31/12/49
 1 "" 4 "Alcatel One Touch SCRIBE HD Blanco" 0 "P045SHDW2" "1" 28/05/13 31/12/49
 1 "" 5 "Alcatel One Touch SCRIBE HD White" 0 "P045SHDW2" "1" 28/05/13 31/12/49
-1 "" 1 "ALCATEL ONETOUCH S’POP Negro" 0 "P045SPON2" "1" 28/05/13 31/12/49
+1 "" 1 "ALCATEL S’POP Negro" 0 "P045SPON2" "1" 28/05/13 31/12/49
 1 "" 2 "Alcatel One Touch S’POP Negro" 0 "P045SPON2" "1" 28/05/13 31/12/49
 1 "" 3 "Alcatel One Touch S’POP Negro" 0 "P045SPON2" "1" 28/05/13 31/12/49
 1 "" 4 "Alcatel One Touch S’POP Negro" 0 "P045SPON2" "1" 28/05/13 31/12/49
-1 "" 5 "ALCATEL ONETOUCH S’POP Black" 0 "P045SPON2" "1" 28/05/13 31/12/49
-1 "" 1 "ALCATEL ONETOUCH S’POP Blanco" 0 "P045SPOW2" "1" 28/05/13 31/12/49
+1 "" 5 "ALCATEL S’POP Black" 0 "P045SPON2" "1" 28/05/13 31/12/49
+1 "" 1 "ALCATEL S’POP Blanco" 0 "P045SPOW2" "1" 28/05/13 31/12/49
 1 "" 2 "Alcatel One Touch S’POP Blanco" 0 "P045SPOW2" "1" 28/05/13 31/12/49
 1 "" 3 "Alcatel One Touch S’POP Blanco" 0 "P045SPOW2" "1" 28/05/13 31/12/49
 1 "" 4 "Alcatel One Touch S’POP Blanco" 0 "P045SPOW2" "1" 28/05/13 31/12/49
-1 "" 5 "ALCATEL ONETOUCH S’POP White" 0 "P045SPOW2" "1" 28/05/13 31/12/49
+1 "" 5 "ALCATEL S’POP White" 0 "P045SPOW2" "1" 28/05/13 31/12/49
 1 "" 1 "Modem MiFi USB Alcatel ONE TOUCH LINK W800 4G" 0 "P045W80N2" "1" 26/06/13 31/12/49
 1 "" 2 "Modem MiFi USB Alcatel ONE TOUCH LINK W800 4G" 0 "P045W80N2" "1" 26/06/13 31/12/49
 1 "" 3 "Modem MiFi USB Alcatel ONE TOUCH LINK W800 4G" 0 "P045W80N2" "1" 26/06/13 31/12/49
@@ -6519,6 +6745,11 @@
 1 "" 3 "HTC Explorer Azul" 0 "P086EXPA2" "1" 26/01/12 31/12/49
 1 "" 4 "HTC Explorer Azul" 0 "P086EXPA2" "1" 26/01/12 31/12/49
 1 "" 5 "HTC Explorer Blue" 0 "P086EXPA2" "1" 26/01/12 31/12/49
+1 "" 1 "HTC 10 Gris Carbón" 0 "P086H10G2" "1" 23/05/16 31/12/49
+1 "" 2 "HTC 10 Gris Carbón" 0 "P086H10G2" "1" 23/05/16 31/12/49
+1 "" 3 "HTC 10 Gris Carbón" 0 "P086H10G2" "1" 23/05/16 31/12/49
+1 "" 4 "HTC 10 Gris Carbón" 0 "P086H10G2" "1" 23/05/16 31/12/49
+1 "" 5 "HTC 10 Carbon Grey" 0 "P086H10G2" "1" 23/05/16 31/12/49
 1 "" 1 "HTC One M9 Plata oro" 0 "P086OM9O2" "1" 22/06/15 31/12/49
 1 "" 2 "HTC One M9 Plata oro" 0 "P086OM9O2" "1" 22/06/15 31/12/49
 1 "" 3 "HTC One M9 Plata oro" 0 "P086OM9O2" "1" 22/06/15 31/12/49
@@ -7715,6 +7946,16 @@
 1 "" 2 "De Text Premium" 0 "SMSPNOVAT" "1" 01/04/14 31/12/49
 1 "" 3 "Premium testu-mezuak" 0 "SMSPNOVAT" "1" 01/04/14 31/12/49
 1 "" 5 "Premium Text" 0 "SMSPNOVAT" "1" 01/04/14 31/12/49
+1 "" 1 "Samsung S7 rojo" 0 "SNNNNNNN1" "1" 20/05/16 31/12/49
+1 "" 2 "Samsung S7 rojo" 0 "SNNNNNNN1" "1" 20/05/16 31/12/49
+1 "" 3 "Samsung S7 rojo" 0 "SNNNNNNN1" "1" 20/05/16 31/12/49
+1 "" 4 "Samsung S7 rojo" 0 "SNNNNNNN1" "1" 20/05/16 31/12/49
+1 "" 5 "Samsung S7 rojo" 0 "SNNNNNNN1" "1" 20/05/16 31/12/49
+1 "" 1 "Samsung S7 amarillo" 0 "SNNNNNNN2" "1" 20/05/16 31/12/49
+1 "" 2 "Samsung S7 amarillo" 0 "SNNNNNNN2" "1" 20/05/16 31/12/49
+1 "" 3 "Samsung S7 amarillo" 0 "SNNNNNNN2" "1" 20/05/16 31/12/49
+1 "" 4 "Samsung S7 amarillo" 0 "SNNNNNNN2" "1" 20/05/16 31/12/49
+1 "" 5 "Samsung S7 amarillo" 0 "SNNNNNNN2" "1" 20/05/16 31/12/49
 1 "" 1 "Promo" 0 "SPOTIFYCPACT" "1" 01/07/12 31/12/49
 1 "" 2 "Promo" 0 "SPOTIFYCPACT" "1" 01/07/12 31/12/49
 1 "" 3 "Promo" 0 "SPOTIFYCPACT" "1" 01/07/12 31/12/49
@@ -7731,21 +7972,26 @@
 1 "" 3 "Iraupen-konpromisoa ez betetzea" 0 "STERMPERIOD" "1" 01/07/12 30/09/12
 1 "" 5 "Early termination of La Infinita contract period" 0 "STERMPERIOD" "1" 01/10/12 31/12/49
 1 "" 5 "Failure to comply with Minimum Contract Period" 0 "STERMPERIOD" "1" 01/07/12 30/09/12
-1 "" 1 "Huawei P8 Lite" 0 "SUMIDERO" "1" 31/01/12 31/12/49
+1 "" 1 "Pruebas Yoigo iPhone" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 2 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 3 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 4 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
-1 "" 5 "Huawei P8 Lite" 0 "SUMIDERO" "1" 31/01/12 31/12/49
+1 "" 5 "Pruebas Yoigo iPhone" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 1 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
 1 "" 2 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
 1 "" 3 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
 1 "" 4 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
 1 "" 5 "sumi" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
-1 "" 1 "Sony Xperia Z5 Premium" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
+1 "" 1 "PRUEBA iPHONE" 0 "SUMIDEROIPHONE" "1" 23/05/16 31/12/49
+1 "" 2 "SUMIDERO IPHONE" 0 "SUMIDEROIPHONE" "1" 23/05/16 31/12/49
+1 "" 3 "SUMIDERO IPHONE" 0 "SUMIDEROIPHONE" "1" 23/05/16 31/12/49
+1 "" 4 "SUMIDERO IPHONE" 0 "SUMIDEROIPHONE" "1" 23/05/16 31/12/49
+1 "" 5 "PRUEBA IPHONE" 0 "SUMIDEROIPHONE" "1" 23/05/16 31/12/49
+1 "" 1 "PRUEBA SAMSUNG S7" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
 1 "" 2 "Huawei P8 Lite" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
 1 "" 3 "Huawei P8 Lite" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
 1 "" 4 "Huawei P8 Lite" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
-1 "" 5 "Sony Xperia Z5 Premium" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
+1 "" 5 "PRUEBA SAMSUNG S7" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
 1 "" 1 "Incumplimiento de Permanencia" 0 "TERMPERIOD" "1" 01/04/12 31/12/49
 1 "" 1 "Penalización" 0 "TERMPERIOD" "1" 01/01/06 31/03/12
 1 "" 2 "Incompliment de Permanència" 0 "TERMPERIOD" "1" 01/04/12 31/12/49
@@ -10643,8 +10889,7 @@
 32 "" 5 "Yoigo info: If you want another Bono with more capacity or just to increase this month the MB of high speed internet, then click here http://mas.yoigo.com/megas" 0 "314" "1" 23/03/12 31/12/49
 32 "" 2 "Yoigo info: Pots veure la teva factura electronica a https://miyoigo.yoigo.com/. El #DATE et cobrarem l'import de la teva ultima factura: #AMOUNT euros." 0 "327" "1" 01/04/12 31/12/49
 32 "" 3 "Yoigo informazioa: #DATE an zure azken fakturaren zenbatekoa kobratuko dizugu: #AMOUNT euros. Faktura elektronikoa https://miyoigo.yoigo.com/ gunean ikus dezakezu." 0 "327" "1" 01/04/12 20/11/12
-32 "" 5 "Yoigo info: On #DATE we will charge the amount of your last invoice: 
-#AMOUNT euros. You can see your electronic invoice at https://miyoigo.yoigo.com/." 0 "327" "1" 01/04/12 20/11/12
+32 "" 5 "Yoigo info: Your bill is now ready. The amount is #AMOUNT and we'll debityou on #DATE. Look at your electronic bill in the Mi Yoigo app or atmiyoigo.yoigo.com" 0 "327" "1" 01/04/12 20/11/12
 32 "" 5 "Yoigo Info: Your porting out is already cancelled. In some days you will receive your handset. Remember that it has to be picked up by you and show your I.D." 0 "338" "1" 01/06/12 20/11/12
 32 "" 5 "Yoigo Info: your porting out could not be cancelled and we cancelled your renuevo order. If any doubt call for free #SMSSENDER " 0 "343" "1" 04/06/12 31/12/49
 32 "" 5 "Yoigo adver: Activate now your Bono Spotify Premium, the first three months free. To activate or more info visit https://spotify.yoigo.com. Not+adver 622" 0 "351" "1" 03/07/12 20/11/12
@@ -10658,12 +10903,12 @@
 32 "" 5 "Yoigo Info: Don't have enough balance to get automatically your Bono 8 next month. If you want to get it, recharge and be sure to have 8E the 1st of next month" 0 "369" "1" 26/09/12 31/12/49
 32 "" 5 "Yoigo Info: You don´t have enough balance to renew Bono 8 next month automatically. If you want to renew, recharge and be sure to have 8E the 1st of next month" 0 "371" "1" 26/09/12 31/12/49
 32 "" 5 "Yoigo Info: You already may continue using Internet in the EU or associated." 0 "373" "1" 10/10/12 31/12/49
-32 "" 5 "Yoigo Info: The 50 MB to continue navigation in EU or associated country couldn't be activated. Call free to +34633800800 and we will activate them." 0 "375" "1" 10/10/12 31/12/49
-32 "" 5 "Yoigo Info: You had 50MB Internet in UE or associated country today. If you expend them during the same day, you will be able to request more." 0 "377" "1" 10/10/12 31/12/49
+32 "" 5 "Yoigo Info: The 100 MB to continue navigation in EU or associated country couldn't be activated. Call free to +34633800800 and we will activate them." 0 "375" "1" 10/10/12 31/12/49
+32 "" 5 "Yoigo Info: You had 100MB Internet in UE or associated country today. If you expend them during the same day, you will be able to request more." 0 "377" "1" 10/10/12 31/12/49
 32 "" 5 "Yoigo Info: We are currently activating Internet for the European Union or associated countries.  You could use it very soon." 0 "379" "1" 10/10/12 31/12/49
 32 "" 5 "Yoigo info: We are not going to charge in the next Bono the Mb you haven't used this month but we recommend you to have 8E the last day of the month to renew it" 0 "381" "1" 24/10/12 31/12/49
 32 "" 5 "Yoigo info:We are not going to charge the next month the Mb that you havent used but we recommend you to have 8E at the end of the day to renew it automatically" 0 "383" "1" 24/10/12 31/12/49
-32 "" 5 "Yoigo info: We will deliver your order to the address you gave within the next 72h. If you have any problem with the delivery call 1707 and press 2." 0 "385" "1" 01/11/12 31/12/49
+32 "" 5 "Yoigo info: Hello. We will shortly provide you more information about your delivery." 0 "385" "1" 01/11/12 31/12/49
 32 "" 5 "Yoigo info: Sorry, we have been unable to deliver your order. For indicents call 1707 and press 2 and we will see how to solve it." 0 "387" "1" 01/11/12 31/12/49
 32 "" 5 "Yoigo info: #NAME, we have been unable to deliver your order. For indicents call 1707 and press 2 and we will see how to solve it." 0 "389" "1" 01/11/12 31/12/49
 32 "" 5 "Yoigo info: Sorry, we have been unable to deliver your order. For indicents call 1707 and press 2 and we will see how to solve it." 0 "391" "1" 01/11/12 31/12/49
@@ -10698,6 +10943,6 @@
 32 "" 5 "Yoigo Info: Your change to #CLITYPE will be executed the #DATE. If you did not request it, call 622. +info www.yoigo.com" 0 "474" "1" 05/02/14 31/12/49
 32 "" 1 "Yoigo info: You have requested the cancellation of Bono 1 GB. From 1st of the next month will not be active." 0 "476" "1" 01/05/14 31/12/49
 32 "" 5 "Yoigo info: You have spent more than 40 euros in Premium serv. To continue using these services replies this message with SI. If you do not want, reply NO." 0 "477" "1" 01/09/14 31/12/49
-32 "" 5 "Yoigo info: We will deliver the order the closest Post Office to the address you gave us in the next 72 h. If you had any problem with the delivery please call 1707 and click 2" 0 "478" "1" 10/12/14 31/12/49
+32 "" 5 "Yoigo info: We will shortly provide you more information about your delivery." 0 "478" "1" 10/12/14 31/12/49
 32 "" 5 "Yoigo info: You have used 100% of the minutes included in your tariff. From now on the price will be 0 cents/min plus call set up of 18,15 cents. IVA incl." 0 "479" "1" 01/01/15 31/12/49
 32 "" 5 "Yoigo info: You have called to more than 100 different destinations. From now on and until the end of the month 0 cent/min + 18,15 cent. call set up. IVA incl." 0 "480" "1" 01/01/15 31/12/49
