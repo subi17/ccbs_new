@@ -20,6 +20,7 @@
 43000000 "Account receivable Postpaid" "" "" "" "" "" 0 1 "1"
 43000001 "Advance payments" "" "" "" "" "" 0 19 "1"
 43001000 "Accounts receivable Prepaid" "" "" "" "" "" 0 1 "1"
+43002004 "Credit note for the installment" "" "" "" "" "" 0 43 "1"
 43002008 "Discount Extension over Q25" "" "" "" "" "" 0 43 "1"
 43008889 "Installment" "" "" "" "" "" 0 12 "1"
 43434343 "Overpayments" "" "" "" "" "" 0 6 "1"
