@@ -73,11 +73,6 @@ DEF BUFFER bOldTariff FOR CLIType.
 DEF TEMP-TABLE ttContract NO-UNDO
     FIELD DCEvent AS CHAR.
 
-DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
-    FIELD MsSeq    AS INT
-    FIELD CustNum  AS INT
-    FIELD CLI      AS CHAR.
-    
 FUNCTION fMakeValidTS RETURNS DECIMAL:
 
    DEF VAR ldeCurrentTS AS DE NO-UNDO FORMAT "99999999.99999".
@@ -257,8 +252,6 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
    RUN pUpdateSubscription.
 
    IF MobSub.MultiSIMID > 0 THEN RUN pMultiSimSTC (INPUT ldtActDate).
-
-   /* TODO: for old cases (code can be removed later) */
    ELSE IF bOldTariff.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
            bNewTariff.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN
       fAdditionalLineSTC(MsRequest.Msrequest,
@@ -2059,100 +2052,6 @@ PROCEDURE pMultiSimSTC:
    FIND CURRENT Mobsub NO-LOCK NO-ERROR.
 
 END PROCEDURE. 
-
-PROCEDURE pTermAdditionalSim:
-
-   DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
-   DEF INPUT PARAMETER idtActDate  AS DATE NO-UNDO.
-   DEF INPUT PARAM iiNewLineType AS INT NO-UNDO. 
-
-   DEF VAR liQuarTime              AS INT  NO-UNDO.
-   DEF VAR liSimStat               AS INT  NO-UNDO.
-   DEF VAR liMSISDNStat            AS INT  NO-UNDO.
-   DEF VAR liRequest               AS INT  NO-UNDO.
-   DEF VAR ldaSecSIMTermDate       AS DATE NO-UNDO.
-   DEF VAR ldeSecSIMTermStamp      AS DEC  NO-UNDO.
-   DEF VAR lcError                 AS CHAR NO-UNDO. 
-
-   DEF BUFFER lbMobSub    FOR Mobsub.
-   DEF BUFFER bMsRequest  FOR MsRequest.
-   DEF BUFFER CLIType FOR CLIType.
-
-   EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
-
-   FIND FIRST bMsRequest No-LOCK WHERE 
-              bMsRequest.Brand     = gcBrand     AND 
-              bMsRequest.MsRequest = iiMsRequest No-ERROR.
-
-   IF NOT AVAILABLE bMsRequest OR 
-      NOT AVAILABLE MobSub     THEN RETURN.
-
-   IF iiNewLineType EQ {&CLITYPE_LINETYPE_MAIN} THEN RETURN.
-
-   /* Delete same Subscription if there is not anymore */
-   IF iiNewLineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
-      CREATE ttAdditionalSIM.
-      ASSIGN ttAdditionalSIM.MsSeq   = MobSub.MsSeq
-             ttAdditionalSIM.CustNum = MobSub.CustNum
-             ttAdditionalSIM.CLI     = MobSub.CLI.
-   END.
-
-   FOR EACH lbMobSub NO-LOCK WHERE
-            lbMobSub.Brand   = gcBrand AND
-            lbMobSub.InvCust = Mobsub.CustNum AND
-            lbMobSub.PayType = FALSE AND
-            lbMobSub.MsSeq NE Mobsub.MsSeq,
-      FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
-            CLIType.CLIType = (IF lbMobSub.TariffBundle > ""
-                               THEN lbMobSub.TariffBundle
-                               ELSE lbMobSub.CLiType) AND
-            CLiType.LineType > 0:
-         
-      IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} AND
-         fHasPendingSTCToNonMainLine(
-               lbMobSub.MsSeq,
-               bMsRequest.ActStamp) THEN NEXT.
-
-      /* check main line existence */
-      IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
-         fHasPendingSTCToMainLine(lbMobSub.MsSeq) THEN DO:
-
-         EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
-         RETURN.
-      END.
-      
-      IF fHasPendingRequests
-         (lbMobSub.MsSeq,
-          lbMobSub.CLI,
-          CLIType.LineType) THEN NEXT.
-      
-      CREATE ttAdditionalSIM.
-      ASSIGN ttAdditionalSIM.MsSeq   = lbMobSub.MsSeq
-             ttAdditionalSIM.CustNum = lbMobSub.CustNum
-             ttAdditionalSIM.CLI     = lbMobSub.CLI.
-
-   END. /* FOR EACH lbMobSub WHERE */
-
-   IF NOT CAN-FIND(FIRST ttAdditionalSIM) THEN RETURN.
-
-   FOR EACH ttAdditionalSIM NO-LOCK:
-
-      fTermAdditionalSim(ttAdditionalSIM.Msseq,
-                         ttAdditionalSIM.CLI,
-                         ttAdditionalSIM.CustNum,
-                         {&SUBSCRIPTION_TERM_REASON_ADDITIONALSIM},
-                         idtActDate,
-                         {&REQUEST_SOURCE_STC},
-                         iiMsRequest,
-                         OUTPUT lcError).
-
-   END. /* FOR EACH ttAdditionalSIM */
-   
-   EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
-
-END PROCEDURE.
-   
 
 PROCEDURE pCONTM2BarringReset:
 
