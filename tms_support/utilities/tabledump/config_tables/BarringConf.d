@@ -11,7 +11,7 @@
 "Customer" "C_BRIAP" "1001000100000" "501,502,601,602" "active" "" "BARRING" "1021000" "0" 0 70 260 "C_BRIAP"
 "Collections" "Debt_Hotl" "0001001000100" "701" "active" "Postpaid" "HOTLINE" "1,HOTTYPE=HOTL" "0,HOTTYPE=HOTL" 0 20 20 "D_HOTL"
 "Collections" "Debt_HOTLP" "0001000000001" "701" "active" "Postpaid" "HOTLINE" "1,HOTTYPE=HOTLP" "0,HOTTYPE=HOTLP" 0 40 10 "D_HOTLP"
-"Collections" "Debt_LP" "0000000000010" "507,701" "active" "" "LP" "REDIRECTION_COLLECTION_1" "LP=remove" 0 30 40 "LP"
+"Collections" "Debt_LP" "0000000000010" "507,701" "active" "" "LP" "REDIRECTION_COLLECTION_1" "remove" 0 30 40 "LP"
 "Collections" "Debt_Restricted" "1011011000000" "701" "active" "" "BARRING" "1011011" "0" 0 10 30 "D_REST"
 "Customer" "Internet" "0000001000000" "501,502,601,602" "active" "" "BARRING" "0000001" "0" 0 50 170 "NAM"
 "Risk Limits" "Limits_International_off" "0000000100000" "" "active" "" "BARRING" "0020000" "0" 0 20 140 ""
