@@ -29,7 +29,8 @@ DEF /* NEW */ shared VAR siirto AS CHAR.
 
 DEF INPUT PARAM iiBDestID AS INT NO-UNDO.
 
-DEF VAR bdesttrans  LIKE bdesttrans.translatenumber  NO-UNDO.
+DEF VAR lcBdest      LIKE bdesttrans.Bdest            NO-UNDO.
+DEF VAR bdesttrans   LIKE bdesttrans.translatenumber  NO-UNDO.
 DEF VAR xrecid       AS RECID                           init ?.
 DEF VAR FIRSTrow     AS INT                    NO-UNDO  init 0.
 DEF VAR FrmRow       AS INT                    NO-UNDO  init 1.
@@ -95,7 +96,8 @@ FIND FIRST bdesttrans WHERE
 IF AVAILABLE bdesttrans THEN ASSIGN
    Memory       = recid(bdesttrans)
    must-print   = TRUE
-   must-add     = FALSE.
+   must-add     = FALSE
+   lcBdest      = bdesttrans.Bdest.
 ELSE DO:
    /* IF lcRight NE "RW" THEN DO: */
       MESSAGE "No BDest translations available !" VIEW-AS ALERT-BOX.
@@ -366,7 +368,9 @@ BROWSE:
        SET bdesttrans WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF bdesttrans ENTERED THEN DO:
-          FIND FIRST bdesttrans WHERE bdesttrans.translatenumber >= bdesttrans
+          FIND FIRST bdesttrans WHERE
+                     bdesttrans.Bdest = lcBdest AND
+                     bdesttrans.translatenumber >= bdesttrans
           /* srule */ NO-LOCK NO-ERROR.
           IF NOT AVAILABLE bdesttrans THEN DO:
              BELL.

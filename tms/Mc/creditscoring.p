@@ -438,7 +438,7 @@ DO:
    lcOfferId    =  fConvertCharacter(lcOfferId).
    lcSubsType    =  fConvertCharacter(lcSubsType).
    lcKindOfNumber =  fConvertCharacter(lcKindOfNumber).
-   lcOldOperator =  fConvertCharacter(lcOldOperator).
+   lcOldOperator =  fConvertCharacter(SUBSTRING(lcOldOperator,1,16)).
    lcOldPaymType =  fConvertCharacter(lcOldPaymType).
    lcMNPMSISDN   =  fConvertCharacter(lcMNPMSISDN).
    lcPayTerm     =  fConvertCharacter(lcPayTerm).

@@ -388,6 +388,10 @@ PROCEDURE pReadDCCLI :
              ttContract.Amount  = DCCLI.Amount.
 
       RUN pReadMobSub.
+      /* YTS-8721: Add total MF of RVTERM contract into dump */
+      IF ttContract.Contract BEGINS "RVTERM" THEN DO:
+         RUN pCountTotSumofRVTERM.
+      END.
       RUN pReadDayCampaign.
        
 END PROCEDURE.
@@ -507,3 +511,22 @@ PROCEDURE pWriteContract:
 
 END PROCEDURE.
 
+PROCEDURE pCountTotSumofRVTERM:
+   /* YTS-8721, current total sum of RVTERM contract.
+     This is needed because of manual removal of FixedFees */
+
+   /* Reset to zero is needed, since default 
+      DCCLI.Amount (?) is not valid value for decimal */
+   IF ttContract.Amount EQ ? THEN
+      ttContract.Amount = 0.
+   FOR EACH FixedFee NO-LOCK WHERE
+            FixedFee.Brand = "1" AND
+            FixedFee.HostTable = "Mobsub" AND
+            FixedFee.KeyValue = STRING(ttContract.MsSeq) AND
+            FixedFee.SourceTable = "DCCLI" AND
+            FixedFee.SourceKey = STRING(DCCLI.PerContractID),
+       EACH FFItem NO-LOCK WHERE
+            FFItem.FFNum = FixedFee.FFNum:
+      ttContract.Amount = ttContract.Amount + FFItem.Amt.
+   END.
+END PROCEDURE

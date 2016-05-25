@@ -80,6 +80,7 @@
 23 "Integer" "Fee Period" 4 "#RUNMONTH"
 23 "Date" "Invoice Date" 5 "#RUNDATE"
 23 "Date" "Due Date" 6 ""
+23 "Logical" "MergeAnalysis" 7 "FALSE"
 24 "Integer" "Test queue id" 1 ""
 24 "Date" "Invoice date" 2 "#RUNDATE"
 24 "Integer" "Invoice type" 3 "99"
