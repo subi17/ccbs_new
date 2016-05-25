@@ -400,7 +400,7 @@
 "MARM1" "Maroc Telecom" "Morocco" "MA" "" "212"
 "MARMT" "Medi Telecom" "Morocco" "MA" "" "212"
 "MCOM1" "Monaco Telecom" "MONACO" "MC" "" "377"
-"MCOM2" "1" "MONACO" "MC" "" "377"
+"MCOM2" "Monaco Telecom" "MONACO" "MC" "" "377"
 "MDAMC" "Moldcell" "Moldova" "MD" "" "373"
 "MDAVX" "Voxtel S.A" "Moldova" "MD" "" "373"
 "MDGCO" "Madacom" "Madagascar" "MG" "" "261"
