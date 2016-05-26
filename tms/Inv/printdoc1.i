@@ -874,13 +874,13 @@ PROCEDURE pGetSubInvoiceHeaderData:
       /*Google billing*/
       FIND FIRST ttRow WHERE
                  ttRow.SubInvNum = SubInvoice.SubInvNum AND
-                 ttRow.RowCode BEGINS "44".
+                 ttRow.RowCode BEGINS "44" NO-ERROR.
       IF AVAIL ttRow THEN
          ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
                  
       FIND FIRST ttRow WHERE
                  ttRow.SubInvNum = SubInvoice.SubInvNum AND
-                 ttRow.RowCode BEGINS "45".
+                 ttRow.RowCode BEGINS "45" NO-ERROR.
       IF AVAIL ttRow THEN
          ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
 
