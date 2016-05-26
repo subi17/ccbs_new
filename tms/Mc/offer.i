@@ -234,7 +234,8 @@ FUNCTION fGetOfferItemName RETURN CHARACTER
       IF AVAILABLE TopupScheme THEN
          lcItemName = TopupScheme.Description.
    END.                                            
-   WHEN "PerContract" THEN DO:
+   WHEN "PerContract"           OR 
+   WHEN "PromotionalBundleItem" THEN DO:
       FIND FIRST DayCampaign WHERE
                  DayCampaign.Brand   = gcBrand AND
                  DayCampaign.DCEvent = pcOfferItemValue NO-LOCK NO-ERROR.
