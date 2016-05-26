@@ -1,0 +1,7 @@
+ADD FIELD "PayType" OF "DayCampaign" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "PaymentType"
+  COLUMN-LABEL "PayType"
+  HELP "Payment type"
+  ORDER 380
