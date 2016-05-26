@@ -105,7 +105,8 @@ FOR EACH OfferItem NO-LOCK WHERE
    CASE OfferItem.ItemType:
    WHEN "Topup"          THEN RUN pTopup.
    WHEN "FATime"         THEN RUN pFatime.
-   WHEN "PerContract"    THEN RUN pPeriodicalContract.
+   WHEN "PerContract" OR WHEN "PromotionalBundleItem"  
+                         THEN RUN pPeriodicalContract.
    WHEN "ServicePackage" THEN RUN pServicePackage.
    WHEN "DiscountPlan"   THEN RUN pDiscountPlanMember.
    WHEN "BundleItem"     THEN DO:
