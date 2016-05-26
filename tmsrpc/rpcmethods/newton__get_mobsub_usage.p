@@ -584,8 +584,9 @@ DO liLoop = 1 TO 3:
       END. /* IF MServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN DO: */
 
       /* Return Voice BDestination limit/usage */
-      IF ((ServiceLimit.GroupCode BEGINS "CONTF" OR
-           ServiceLimit.GroupCode = "VOICE100") AND
+      IF ((ServiceLimit.GroupCode BEGINS "CONTF"       OR
+           ServiceLimit.GroupCode = "VOICE100"         OR 
+           ServiceLimit.GroupCode = "FREE100MINUTES")  AND
            ServiceLimit.DialType = {&DIAL_TYPE_VOICE}) OR
            ServiceLimit.DialType = 0 THEN DO:
          IF ServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN
