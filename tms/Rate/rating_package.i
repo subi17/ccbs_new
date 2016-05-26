@@ -198,7 +198,8 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
          IF liDialtype = 12 AND
             (lcSLGroup BEGINS "CONTF" OR
              lcSLGroup = "VOICE3000"  OR
-             lcSLGroup = "VOICE100")
+             lcSLGroup = "VOICE100"   OR 
+             lcSLGroup = "FREE100MINUTES") 
          THEN liDialtype = 4.
          
          ELSE IF (lcSLGroup BEGINS "CONTS" OR
