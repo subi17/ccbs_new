@@ -124,6 +124,7 @@ DEF TEMP-TABLE ttSub NO-UNDO
    FIELD OldCTName       AS CHAR
    FIELD TariffActDate   AS CHAR
    FIELD MessageType     AS CHAR
+   FIELD GBValue         AS DEC
    INDEX CLI CLI.
    
 DEF TEMP-TABLE ttCLIType NO-UNDO
@@ -870,6 +871,19 @@ PROCEDURE pGetSubInvoiceHeaderData:
       /* is call itemization printed */
       ttSub.CallSpec = fCallSpecDuring(SubInvoice.MsSeq,Invoice.InvDate).
 
+      /*Google billing*/
+      FIND FIRST ttRow WHERE
+                 ttRow.SubInvNum = SubInvoice.SubInvNum AND
+                 ttRow.RowCode BEGINS "44".
+      IF AVAIL ttRow THEN
+         ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
+                 
+      FIND FIRST ttRow WHERE
+                 ttRow.SubInvNum = SubInvoice.SubInvNum AND
+                 ttRow.RowCode BEGINS "45".
+      IF AVAIL ttRow THEN
+         ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
+
       /* ttRows contains combined invrows => no need to check duplicates */
       FOR EACH ttRow WHERE
                ttRow.SubInvNum = SubInvoice.SubInvNum AND
@@ -1001,6 +1015,9 @@ PROCEDURE pGetInvoiceRowData:
             ttInvoice.PenaltyAmt = ttInvoice.PenaltyAmt + InvRow.Amt.
 
          ASSIGN ldVatAmt = 0.
+
+         IF BillItem.BillCode BEGINS "GOOGLE" THEN
+            ttInvoice.GBValue = ttInvoice.GBValue + InvRow.Amt.
          
          IF BillItem.BIGroup = "33" THEN DO:
 

@@ -598,7 +598,8 @@ PROCEDURE pInvoice2XML:
                              Invoice.AmtExclVat
                              - ttInvoice.InstallmentAmt
                              - ttInvoice.PenaltyAmt
-                             - ttInvoice.InstallmentDiscAmt)).  
+                             - ttInvoice.InstallmentDiscAmt
+                             - ttInvoice.GBValue)).  
       lhXML:END-ELEMENT("AdditionalAmount").
       lhXML:END-ELEMENT("AdditionalDetail").
       
@@ -610,7 +611,8 @@ PROCEDURE pInvoice2XML:
                                 Invoice.InvAmt
                                 - ttInvoice.InstallmentAmt
                                 - ttInvoice.PenaltyAmt
-                                - ttInvoice.InstallmentDiscAmt)).
+                                - ttInvoice.InstallmentDiscAmt
+                                - ttInvoice.GBValue)).
          lhXML:END-ELEMENT("AdditionalAmount").
          lhXML:END-ELEMENT("AdditionalDetail").
       END.
@@ -852,7 +854,8 @@ PROCEDURE pSubInvoice2XML:
       lhXML:WRITE-CHARACTERS(fDispXMLDecimal(SubInvoice.AmtExclVat - 
                                              ttSub.InstallmentAmt  -
                                              ttSub.PenaltyAmt      -
-                                             ttSub.InstallmentDiscAmt)).
+                                             ttSub.InstallmentDiscAmt -
+                                             ttSub.GBValue)).
 
       lhXML:END-ELEMENT("AdditionalAmount").
      
@@ -862,7 +865,7 @@ PROCEDURE pSubInvoice2XML:
              lhXML:START-ELEMENT("AdditionalAmount").
              lhXML:INSERT-ATTRIBUTE("Header","PendingInstallmentAmountBeforeInvoice").
              lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttSub.TFBankBeforeAmt[liTFCount])).
-             lhXML:END-ELEMENT("AdditionalAmount").
+             lhXML:END-ELEMENT("AdditionalAmountn").
 
              lhXML:START-ELEMENT("AdditionalAmount").
              lhXML:INSERT-ATTRIBUTE("Header","PendingInstallmentAmountAfterInvoice").
