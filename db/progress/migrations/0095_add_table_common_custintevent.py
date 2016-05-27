@@ -7,9 +7,9 @@ class AddTableCustIntEvent(Migration):
     def up(self):
         t = self.table('CustIntEvent', area="Sta_Data_64", label="Customer's Interest Events", dump_name="custinte", desc="Customer's interest events")
         t.column('InvNum', 'integer', format="zzzzzzz9", initial="0", max_width=4, label="InvoiceNo", column_label="InvoiceNo", position=2, order=8, help="Consecutive Invoicenumber, 1 ... 99999999")
-        t.column('InvDate', 'date', format="99-99-99", max_width=4, label="InvoiceDate", column_label="InvoiceDate", position=4, order=30, help="Invoice's date")
-        t.column('DueDate', 'date', format="99-99-99", max_width=4, label="InvoiDueDate", column_label="InvoiDueDate", position=5, order=40, help="Invoice's dueday")
-        t.column('PaymDate', 'date', format="99-99-99", max_width=4, label="PayDay", column_label="PayDay", position=6, order=50, help="Day when invoice was paid")
+        t.column('InvDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="InvoiceDate", column_label="InvoiceDate", position=4, order=30, help="Invoice's date")
+        t.column('DueDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="InvoiDueDate", column_label="InvoiDueDate", position=5, order=40, help="Invoice's dueday")
+        t.column('PaymDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="PayDay", column_label="PayDay", position=6, order=50, help="Day when invoice was paid")
         t.column('LateDays', 'integer', format="ZZZ9", initial="0", max_width=4, label="Delay Days", column_label="Delay Days", position=7, order=60, help="How many days the payment was late")
         t.column('Amt', 'decimal', format="ZZZZZ9.99-", decimals=2, initial="0", max_width=17, label="Interest", column_label="Interest", position=8, order=70, help="Total interest, calculated due to delayed payment")
         t.column('InvAmt', 'decimal', format="ZZZZZZ9.99-", decimals=2, initial="0", max_width=17, label="InvoiceTot", column_label="InvTot", position=9, order=80, help="Invoice's total amount")

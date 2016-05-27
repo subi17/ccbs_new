@@ -6,7 +6,7 @@ class AddTableReseller(Migration):
 
     def up(self):
         t = self.table('Reseller', area="Sta_Data_128", label="Resellers", dump_name="reseller", desc="Resellers")
-        t.column('Reseller', 'character', format="x(8)", initial="", max_width=16, label="Code", column_label="Code", position=2, order=10, help="""An unique code for a reseller; maximum 8 characters""")
+        t.column('Reseller', 'character', format="x(8)", initial="", max_width=16, label="Code", column_label="Code", position=2, order=10, help="\"An unique code for a reseller; maximum 8 characters\"")
         t.column('RsName', 'character', format="x(30)", initial="", max_width=60, label="Name", column_label="Name", position=3, order=20, help="Reseller's name")
         t.column('Salesman', 'character', format="x(8)", initial="", max_width=16, label="Salesman", column_label="Salesman", position=4, order=30, help="Code of that salesman who is responsible of this reseller")
         t.column('CommPerc', 'decimal', format="z9.9", decimals=2, initial="0", max_width=17, label="Com%", column_label="Com%", position=5, order=40, help="Amount of Reseller's Commission (%)")

@@ -17,7 +17,7 @@ class AddTableOrderFusion(Migration):
         t.column('FixedStatus', 'character', format="x(15)", initial="", max_width=30, label="Fixed Status", column_label="FixedStatus", position=10, order=90, description="Fixed line order status code")
         t.column('FixedSubStatus', 'character', format="x(15)", initial="", max_width=30, label="Fixed Sub-status", column_label="FixedSubStatus", position=11, order=100, description="Fixed line order sub-status code")
         t.column('ExternalTicket', 'character', format="x(15)", initial="", max_width=30, label="External Ticket", column_label="ExternalTicket", position=12, order=110, description="External order ticket number")
-        t.column('OrderDate', 'date', format="99-99-9999", max_width=4, label="OrderDate", column_label="OrderDate", position=13, order=120, description="Order date")
+        t.column('OrderDate', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="OrderDate", column_label="OrderDate", position=13, order=120, description="Order date")
         t.column('Salesman', 'character', format="x(8)", initial="", max_width=16, label="Salesman", column_label="Salesman", position=14, order=130)
         t.column('FixedMNPTime', 'character', format="x(16)", initial="", max_width=32, label="Fixed MNP Time", column_label="FixedMNPTime", position=15, order=140, description="Fixed line MNP time")
         t.column('CustomerType', 'character', format="x(12)", initial="", max_width=24, label="Customer Type", column_label="CustomerType", position=16, order=150, description="Fixed line customer type")

@@ -21,7 +21,7 @@ class AddTableMSOwner(Migration):
         t.column('PayType', 'logical', format="PrePaid/PostPaid", initial="FALSE", help="PayType", max_width=1, label="PayType", column_label="PayType", position=18, order=320, description='''
 ''')
         t.column('MandateId', 'character', format="X(35)", initial="", max_width=70, label="Mandate Id", column_label="MandateID", position=19, order=330, help="Mandate ID for CSB19.14 file")
-        t.column('MandateDate', 'date', format="99-99-99", max_width=4, label="Mandate Date", column_label="MandateDate", position=20, order=340, help="Mandate ID creation date")
+        t.column('MandateDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Mandate Date", column_label="MandateDate", position=20, order=340, help="Mandate ID creation date")
         t.column('TariffBundle', 'character', format="x(10)", initial="", max_width=20, label="Tariff Bundle", column_label="TariffBundle", position=21, order=350)
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="BrCode", column_label="BrCode", position=24, order=230, help="Code Of Brand")
         t.column('Contract', 'character', format="x(8)", initial="", max_width=16, label="ContractID", column_label="ContrID", position=25, order=240, help="Contract ID")

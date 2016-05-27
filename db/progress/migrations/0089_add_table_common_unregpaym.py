@@ -6,8 +6,8 @@ class AddTableUnregPaym(Migration):
 
     def up(self):
         t = self.table('UnregPaym', area="Sta_Data_32", label="Unregistered Payments", dump_name="unregpay", desc="Unregistered payments")
-        t.column('AccDate', 'date', format="99.99.9999", max_width=4, label="Book day", column_label="Book day", position=2, order=10, help="Bookkeeping day")
-        t.column('PaymDate', 'date', format="99.99.9999", max_width=4, label="Payment day", column_label="Payment day", position=3, order=20, help="Date of invoice payment")
+        t.column('AccDate', 'date', format="99.99.9999", initial=self.unknown, max_width=4, label="Book day", column_label="Book day", position=2, order=10, help="Bookkeeping day")
+        t.column('PaymDate', 'date', format="99.99.9999", initial=self.unknown, max_width=4, label="Payment day", column_label="Payment day", position=3, order=20, help="Date of invoice payment")
         t.column('RefNum', 'character', format="x(20)", initial="", max_width=40, label="Ref.Num.", column_label="Ref.Num.", position=4, order=30, help="Reference Number")
         t.column('InvNum', 'character', format="x(8)", initial="0", max_width=16, label="Inv.Num.", column_label="Inv.Num.", position=5, order=40, help="Invoice's number")
         t.column('ArchiveId', 'character', format="x(16)", initial="", max_width=32, label="Arch.ID", column_label="Arch.ID", position=6, order=50, help="Archive ID")

@@ -15,8 +15,8 @@ class AddTableusername(Migration):
         t.column('helpEditor', 'logical', format="yes/no", initial="no", max_width=1, label="Help Editor", position=9, order=80, help="Help Editor")
         t.column('menulanguage', 'character', format="X(8)", initial="eng", max_width=16, label="Menu language", position=10, order=90, help="User's menu language")
         t.column('usergroups', 'character', format="X(50)", initial="", max_width=80, label="UserGroups", position=11, order=100, help="Comma separed list of user groups")
-        t.column('durationbegin', 'date', format="99.99.99", max_width=4, label="Begin", position=12, order=110, help="Duration begin")
-        t.column('durationend', 'date', format="99.99.99", max_width=4, label="End", position=13, order=120, help="Duration end")
+        t.column('durationbegin', 'date', format="99.99.99", initial=self.unknown, max_width=4, label="Begin", position=12, order=110, help="Duration begin")
+        t.column('durationend', 'date', format="99.99.99", initial=self.unknown, max_width=4, label="End", position=13, order=120, help="Duration end")
         t.index('usercode', [['usercode']], area="Sta_Index_2", primary=True, unique=True)
         t.index('username', [['name']], area="Sta_Index_2")
 

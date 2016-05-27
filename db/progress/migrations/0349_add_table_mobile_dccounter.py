@@ -7,7 +7,7 @@ class AddTableDCCounter(Migration):
     def up(self):
         t = self.table('DCCounter', area="Sta_Data_128", dump_name="dccounte")
         t.column('DCEvent', 'character', format="x(12)", initial="", max_width=24, label="Periodical Term", column_label="Term", position=2, order=10, help="ID of periodical term")
-        t.column('DCDate', 'date', format="99-99-9999", max_width=4, label="Date", column_label="Date", position=3, order=20, help="Day of the daily campaign")
+        t.column('DCDate', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="Date", column_label="Date", position=3, order=20, help="Day of the daily campaign")
         t.column('MSSeq', 'integer', mandatory=True, format=">>>>>>>9", initial="0", max_width=4, label="Subscription ID", column_label="Sub.ID", position=4, order=30, help="Sequence for a subscription")
         t.column('Amount', 'decimal', format=">>9.99999", decimals=5, initial="0", max_width=20, label="Amount", column_label="Amount", position=5, order=41, help="Used amount")
         t.column('MaxCharge', 'decimal', format="->>,>>9.999", decimals=3, initial="0", max_width=18, label="Max. Charge", column_label="MaxCharge", position=6, order=50, help="Max. charge")

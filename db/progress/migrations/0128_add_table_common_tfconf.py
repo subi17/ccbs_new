@@ -12,8 +12,8 @@ class AddTableTFConf(Migration):
         t.column('TAE', 'decimal', format=">>9.99", decimals=2, initial="0", max_width=17, label="TAE", position=5, order=40)
         t.column('PaytermCode', 'character', format="X(5)", initial="", max_width=10, label="PaytermCode", position=6, order=50)
         t.column('ResidualCode', 'character', format="X(5)", initial="", max_width=10, label="ResidualCode", position=7, order=60)
-        t.column('ValidFrom', 'date', format="99-99-9999", max_width=4, label="Valid From", column_label="ValidFrom", position=8, order=70, help="Date when configuration becomes active")
-        t.column('ValidTo', 'date', format="99-99-9999", max_width=4, label="Valid To", column_label="ValidTo", position=9, order=80, help="Date after configuration becomes inactive")
+        t.column('ValidFrom', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="Valid From", column_label="ValidFrom", position=8, order=70, help="Date when configuration becomes active")
+        t.column('ValidTo', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="Valid To", column_label="ValidTo", position=9, order=80, help="Date after configuration becomes inactive")
         t.index('TFConfID', [['TFConfId']], area="Sta_Index_2", primary=True, unique=True)
         t.index('RVPercentage', [['RVPercentage'], ['ValidTo', 'DESC']], area="Sta_Index_2")
 

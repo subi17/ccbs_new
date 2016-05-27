@@ -6,7 +6,7 @@ class AddTableFixCDR(Migration):
 
     def up(self):
         t = self.table('FixCDR', area="Sta_Data_256", label="FixCDR", dump_name="fixcdr", desc="Call Detail Records")
-        t.column('Date', 'date', format="99-99-99", max_width=4, label="CallDate", column_label="CallDate", position=2, order=10, help="Call's date")
+        t.column('Date', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="CallDate", column_label="CallDate", position=2, order=10, help="Call's date")
         t.column('TimeStart', 'integer', format="zzzz9", initial="0", max_width=4, label="Begin", column_label="Begin", position=3, order=20, help="Call started at")
         t.column('TimeEnd', 'integer', format="zzzz9", initial="0", max_width=4, label="End", column_label="End", position=4, order=30, help="Call ended")
         t.column('Duration', 'integer', format="zzzz9", initial="0", max_width=4, label="Durat", column_label="Durat", position=5, order=40, help="Calls duration (sec)")
@@ -50,8 +50,8 @@ class AddTableFixCDR(Migration):
         t.column('TSIn', 'integer', format=">9", initial="0", max_width=4, label="TS In", column_label="TS In", position=60, order=560, help="TS in")
         t.column('PCMOut', 'integer', format=">>>9", initial="0", max_width=4, label="PCB Out", column_label="PCB Out", position=61, order=570, help="PCB out")
         t.column('TSOut', 'integer', format=">9", initial="0", max_width=4, label="TS Out", column_label="TS Out", position=62, order=580, help="TS out")
-        t.column('OperSent', 'logical', format="Yes/No", max_width=1, position=63, order=590, help="Is this call sent to invoicing operator ?")
-        t.column('CSubType', 'integer', format=">9", max_width=4, label="C-Type", column_label="C-Type", position=64, order=600, help="C-subscriber type")
+        t.column('OperSent', 'logical', format="Yes/No", initial=self.unknown, max_width=1, position=63, order=590, help="Is this call sent to invoicing operator ?")
+        t.column('CSubType', 'integer', format=">9", initial=self.unknown, max_width=4, label="C-Type", column_label="C-Type", position=64, order=600, help="C-subscriber type")
         t.column('InvSeq', 'integer', format=">>>>>>9", initial="0", max_width=4, label="InvSeq", column_label="InvSeq", position=65, order=610, help="Invoice sequence")
         t.column('BillTarget', 'integer', format=">9", initial="0", max_width=4, label="Billing Target", column_label="Bill.Targ", position=66, order=620, help="Customer's billing target")
         t.column('CurrUnit', 'logical', format="Full/Sub", initial="?", max_width=1, label="CurrUnit", column_label="CurrUnit", position=67, order=70, help="Currency FULL (1) or SUB (1/100)")

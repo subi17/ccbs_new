@@ -7,7 +7,7 @@ class AddTableCreditCard(Migration):
     def up(self):
         t = self.table('CreditCard', area="Sta_Data_256", label="Credit Card", dump_name="creditca", desc='''Credit card information.
 
-Please check NetGiro method "CardInfo"''')
+Please check NetGiro method \'CardInfo\'''')
         t.column('CardNumber', 'character', format="X(17)", initial="", max_width=34, label="CardNumber", position=3, order=30, help="A String that defines the cardnumber.")
         t.column('ExpDate', 'character', format="X(7)", initial="", max_width=14, label="Expiration date", position=4, order=40, help="A String that defines the exp date of the card, format mm-yyyy")
         t.column('CardType', 'character', format="X(8)", initial="", max_width=16, label="CardType", position=5, order=50, help="A String that defines the type of the card.")

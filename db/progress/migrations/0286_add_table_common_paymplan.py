@@ -8,7 +8,7 @@ class AddTablePaymPlan(Migration):
         t = self.table('PaymPlan', area="Sta_Data_128", label="Payment Plan", dump_name="paymplan", desc="Payment plan for unpaid invoices")
         t.column('PPlanID', 'integer', format=">>>>>>>9", initial="0", help="Payment plan ID", max_width=4, label="Payment Plan ID", column_label="PP ID", position=2, order=10, description="sequence pplan")
         t.column('CustNum', 'integer', mandatory=True, format=">>>>>>>9", initial="0", max_width=4, label="Customer", column_label="Cust", position=3, order=20, help="Customer's number")
-        t.column('PPDate', 'date', format="99-99-99", max_width=4, label="Creation Date", column_label="Date", position=4, order=30, help="Date when payment plan was done")
+        t.column('PPDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Creation Date", column_label="Date", position=4, order=30, help="Date when payment plan was done")
         t.column('Amount', 'decimal', format="->>>>>>9.99", decimals=2, initial="0", max_width=17, label="Amount", position=5, order=40, help="Total debt of invoices that belong to payment plan")
         t.column('BankDays', 'integer', format=">>9", initial="0", max_width=4, label="Bank Days", column_label="BankDays", position=6, order=50, help="Bank days, that will be waited after due date for payment")
         t.column('PPStatus', 'integer', format="9", initial="0", help="Status of payment plan", max_width=4, label="Status", position=7, order=60, description="e.g. sent, accepted, cancelled, paid")

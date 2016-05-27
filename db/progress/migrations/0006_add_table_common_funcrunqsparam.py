@@ -10,7 +10,7 @@ class AddTableFuncRunQSParam(Migration):
         t.column('FRQRowSeq', 'integer', format=">>>>>9", initial="0", max_width=4, label="Row Sequence", column_label="Row", position=3, order=20, help="Row sequence (order)")
         t.column('FRQScheduleID', 'integer', format=">>>>>>>>9", initial="0", max_width=4, label="Queue Timing ID", column_label="Timing", position=4, order=30, help="Unique ID for scheduling row")
         t.column('CharParam', 'character', format="x(20)", initial="", max_width=40, label="Character Parameter", column_label="Char", position=5, order=50, help="Default value for character parameter")
-        t.column('DateParam', 'date', format="99-99-9999", max_width=4, label="Date Parameter", column_label="Date", position=6, order=60, help="Default value for date parameter")
+        t.column('DateParam', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="Date Parameter", column_label="Date", position=6, order=60, help="Default value for date parameter")
         t.column('DecParam', 'decimal', format="->>>>>>>9.99", decimals=2, initial="0", max_width=17, label="Decimal Parameter", column_label="Dec", position=7, order=70, help="Default value for decimal parameter")
         t.column('IntParam', 'integer', format="->>>>>>>9", initial="0", max_width=4, label="Integer Parameter", column_label="Int", position=8, order=80, help="Default value for integer parameter")
         t.column('LogParam', 'logical', format="Yes/No", initial="no", max_width=1, label="Logical Parameter", column_label="Logic", position=9, order=90, help="Default value for logical parameter")

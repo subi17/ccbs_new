@@ -16,7 +16,7 @@ class AddTableM2MQueue(Migration):
         t.column('Response', 'character', format="x(8)", initial="", max_width=16, label="Response", column_label="Response", position=14, order=130, help="Response/error message")
         t.column('ReqStatus', 'integer', format=">>9", initial="999", max_width=4, label="Status", column_label="Status", position=15, order=140)
         t.column('Command', 'character', format="x(4)", initial="", max_width=8, label="Command", column_label="Command", position=18, order=160)
-        t.column('UserDate', 'date', format="99-99-99", max_width=4, label="UserDate", column_label="UsedDate", position=21, order=220, help="User / handling date")
+        t.column('UserDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="UserDate", column_label="UsedDate", position=21, order=220, help="User / handling date")
         t.column('ReqType', 'integer', format=">9", initial="0", max_width=4, label="Req.Type", column_label="Req.Type", position=22, order=230, help="Type of request (f.ex in or out)")
         t.column('RequestId', 'character', format="x(12)", initial="", max_width=24, label="RequestId", column_label="RequestId", position=23, order=240)
         t.column('NumDetails', 'integer', format=">>>9", initial="0", max_width=4, label="NumDetails", column_label="NumDetails", position=24, order=270, help="Nr. of details (amount)")

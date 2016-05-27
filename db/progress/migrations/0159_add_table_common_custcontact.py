@@ -34,7 +34,7 @@ class AddTableCustContact(Migration):
         t.column('AddressCodP', 'character', format="X(8)", initial="", max_width=16, label="Address CodP", column_label="CodP", position=27, order=290, help="CodP in address validation")
         t.column('DirMarkPost', 'logical', format="yes/no", initial="no", max_width=1, label="Direct Marketing Via Post", column_label="Dir.Mark.Post", position=28, order=200, help="Direct marketing using post")
         t.column('AddressCodM', 'character', format="X(8)", initial="", max_width=16, label="Address CodM", column_label="CodM", position=29, order=310, help="CodM in address validation")
-        t.column('BirthDay', 'date', format="99.99.99", max_width=4, label="BirthDay", column_label="BirthDay", position=30, order=350)
+        t.column('BirthDay', 'date', format="99.99.99", initial=self.unknown, max_width=4, label="BirthDay", column_label="BirthDay", position=30, order=350)
         t.index('CustContact', [['Brand'], ['CustNum'], ['CustType']], area="Sta_Index_1", primary=True, unique=True)
 
     def down(self):

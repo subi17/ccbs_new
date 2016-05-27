@@ -14,8 +14,8 @@ class AddTableVATCode(Migration):
         t.column('TaxClass', 'character', format="x(8)", initial="", help="Tax class", max_width=16, label="Tax Class", column_label="Class", position=8, order=60, description='''
 
 ''')
-        t.column('ToDate', 'date', format="99-99-99", max_width=4, label="Valid To", column_label="To", position=9, order=80, help="Date when VAT expires")
-        t.column('FromDate', 'date', format="99-99-99", max_width=4, label="Valid From", column_label="From", position=10, order=70, help="Date when VAT becomes effective")
+        t.column('ToDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Valid To", column_label="To", position=9, order=80, help="Date when VAT expires")
+        t.column('FromDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Valid From", column_label="From", position=10, order=70, help="Date when VAT becomes effective")
         t.index('VatCode', [['VATCode']], area="Sta_Index_2", primary=True, unique=True)
         t.index('TaxClass', [['TaxClass'], ['TaxZone'], ['ToDate', 'DESC']], area="Sta_Index_2")
         t.index('TaxZone', [['TaxZone'], ['TaxClass'], ['ToDate', 'DESC']], area="Sta_Index_2")

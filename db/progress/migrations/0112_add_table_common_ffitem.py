@@ -7,7 +7,7 @@ class AddTableFFItem(Migration):
     def up(self):
         t = self.table('FFItem', area="Sta_Data_64", label="Contract's Billing Periods", dump_name="ffitem", desc="Monthly item (one billable transaction) of a contract fee")
         t.column('FFNum', 'integer', format="zzzzzzz9", initial="0", max_width=4, label="Contract", column_label="Contract", position=2, order=10, help="Consecutive number (sequence) of contract")
-        t.column('FFItemNum', 'integer', format="zzzzzzzz9", initial="0", max_width=4, label="ItemNo", column_label="ItemNo", position=3, order=20, help="""Individual """"invisible"""" sequence for this item""")
+        t.column('FFItemNum', 'integer', format="zzzzzzzz9", initial="0", max_width=4, label="ItemNo", column_label="ItemNo", position=3, order=20, help="\"Individual \"\"invisible\"\" sequence for this item\"")
         t.column('BillPeriod', 'integer', format="999999", initial="0", max_width=4, label="Period", column_label="Period", position=4, order=30, help="Period YYYYMM (month when a service shall be BILLED)")
         t.column('Amt', 'decimal', format="->>>,>>9.99", decimals=2, initial="0", max_width=17, label="Amount", column_label="Amount", position=5, order=40, help="Payable Contract Payment per bill")
         t.column('OwnCost', 'decimal', format="->>>,>>9.99", decimals=2, initial="0", help="Our own costs per bill", max_width=17, label="Our costs", column_label="Our costs", position=6, order=50, description="Our own costs per bill")

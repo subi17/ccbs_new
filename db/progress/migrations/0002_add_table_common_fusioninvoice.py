@@ -7,7 +7,7 @@ class AddTableFusionInvoice(Migration):
     def up(self):
         t = self.table('FusionInvoice', area="Dyn_Data_32", label="FusionInvoice", dump_name="fusioninvoice", desc="FusionInvoice")
         t.column('FuInvNum', 'integer', format="zzzzzzz9", initial="0", max_width=4, label="FuInvNo", column_label="FuInvNo", position=2, order=10, help="Consecutive Fusion Invoice Number, 1 ... 99999999")
-        t.column('InvDate', 'date', format="99-99-9999", max_width=4, label="InvDate", column_label="InvDate", position=3, order=20, help="Invoice date")
+        t.column('InvDate', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="InvDate", column_label="InvDate", position=3, order=20, help="Invoice date")
         t.column('CustNum', 'integer', format=">>>>>>>>9", initial="0", max_width=4, label="Customer", column_label="Customer", position=4, order=30, help="Mobile customer number")
         t.column('MsSeq', 'integer', format="->,>>>,>>9", initial="0", max_width=4, label="MsSeq", column_label="MsSeq", position=5, order=40, help="Link to mobsub-table")
         t.column('InvNum', 'integer', format="zzzzzzz9", initial="0", max_width=4, label="InvNo", column_label="InvNo", position=6, order=50, help="Mobile Invoice Number")

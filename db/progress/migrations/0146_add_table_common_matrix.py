@@ -11,7 +11,7 @@ class AddTableMatrix(Migration):
         t.column('Prior', 'integer', format=">>9", initial="0", help="Matrix Prior", max_width=32, label="Prior", column_label="Prior", position=4, order=60, description="Matrix Prior")
         t.column('MXKey', 'character', format="x(8)", initial="", help="Matrix key", max_width=32, label="MXKey", column_label="MXKey", position=5, order=30, description="Matrix Key")
         t.column('MXSeq', 'integer', format=">>>>>>>>9", initial="0", help="Matrix Sequence", max_width=32, label="MXSeq", column_label="MXSeq", position=6, order=40, description="Matrix Key")
-        t.column('MXRes', 'integer', format=">9", help="Matrix Response", max_width=32, label="MXRes", column_label="MXRes", position=7, order=50, description="Matrix Response")
+        t.column('MXRes', 'integer', format=">9", initial=self.unknown, help="Matrix Response", max_width=32, label="MXRes", column_label="MXRes", position=7, order=50, description="Matrix Response")
         t.index('Brand', [['Brand'], ['MXKey'], ['Prior']], area="Sta_Index_1", primary=True)
 
     def down(self):

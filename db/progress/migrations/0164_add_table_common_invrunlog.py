@@ -9,7 +9,7 @@ class AddTableInvRunLog(Migration):
         t.column('UserCode', 'character', format="x(8)", initial="", max_width=16, label="User ID", column_label="User ID", position=2, order=30, help="Who started this run")
         t.column('InvCode', 'integer', format="99", initial="0", max_width=4, label="Invoice Code", column_label="Invoice Code", position=3, order=40, help="Code for week / day of a month for used invoice run (99)")
         t.column('State', 'integer', format="9", initial="0", max_width=4, label="State", column_label="State", position=4, order=50, help="State (0=not ran,1=running,2=ran)")
-        t.column('Date', 'date', format="99-99-99", max_width=4, label="Date", column_label="Date", position=5, order=60, help="Date when ran")
+        t.column('Date', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Date", column_label="Date", position=5, order=60, help="Date when ran")
         t.column('BillDurat', 'integer', format=">>>>>9", initial="0", max_width=4, label="Duration", column_label="Duration", position=6, order=70, help="Duration of run")
         t.column('InvQty', 'integer', format=">>>>>>9", initial="0", max_width=4, label="AmtInv", column_label="AmtInv", position=7, order=80, help="How many invoices was created")
         t.column('InvAmt', 'decimal', format=">>>>>>>9.99", decimals=2, initial="0", max_width=17, label="ValInv", column_label="ValInv", position=8, order=90, help="Value of created invoices")

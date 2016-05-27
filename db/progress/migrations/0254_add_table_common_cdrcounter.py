@@ -8,7 +8,7 @@ class AddTableCDRCounter(Migration):
         t = self.table('CDRCounter', area="Dyn_Data_128", label="CDR Counter", dump_name="cdrcount", desc="Counters for CDR import")
         t.column('CDRType', 'integer', format=">>>>9", initial="0", help="CDR type", max_width=4, label="CDR Type", column_label="Type", position=2, order=10, description='''
 ''')
-        t.column('ImportDate', 'date', format="99-99-99", max_width=4, label="Import Date", column_label="Import", position=3, order=20, help="Import date")
+        t.column('ImportDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Import Date", column_label="Import", position=3, order=20, help="Import date")
         t.column('Qty', 'integer', format=">>>>>>>9", initial="0", help="Quantity", max_width=4, label="Quantity", column_label="Qty", position=4, order=30, description='''
 
 

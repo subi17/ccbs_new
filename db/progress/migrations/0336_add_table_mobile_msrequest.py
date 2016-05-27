@@ -35,8 +35,8 @@ class AddTableMSRequest(Migration):
         t.column('OrigRequest', 'integer', format=">>>>>>>>9", initial="0", max_width=4, label="Original Request ID", column_label="Orig.ID", position=28, order=270, help="ID of the original (father) request")
         t.column('ReqSource', 'character', format="x(8)", initial="", max_width=16, label="Source", position=29, order=280, help="Request source (orderer)")
         t.column('ReqIParam4', 'integer', format="->>>>>>>9", initial="0", max_width=4, label="Integer Parameter 4", column_label="IntParam4", position=30, order=300, help="Integer parameter 4")
-        t.column('ReqDtParam1', 'date', format="99-99-99", max_width=4, label="Date parameter 1", column_label="DateParam1", position=31, order=310, help="Date parameter 1")
-        t.column('ReqDtParam2', 'date', format="99-99-99", max_width=4, label="Date parameter 2", column_label="DateParam2", position=32, order=320, help="Date parameter 2")
+        t.column('ReqDtParam1', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Date parameter 1", column_label="DateParam1", position=31, order=310, help="Date parameter 1")
+        t.column('ReqDtParam2', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Date parameter 2", column_label="DateParam2", position=32, order=320, help="Date parameter 2")
         t.column('ReqIParam3', 'integer', format="->>>>>>>9", initial="0", max_width=4, label="Integer Parameter 3", column_label="IntParam3", position=33, order=290, help="Integer parameter 3")
         t.column('Mandatory', 'integer', format="9", initial="0", help="This request must be handled before father request can continue", max_width=4, label="Mandatory", column_label="Mand.", position=34, order=330, description='''
 

@@ -13,7 +13,7 @@ class AddTableTMSPrinter(Migration):
         t.column('PageWidth', 'integer', format="ZZ9", initial="0", max_width=4, label="PageWidth", column_label="PageWidht", position=6, order=50, help="Default line width on printer ")
         t.column('LogCode', 'character', format="X(100)", initial="", max_width=1010, label="Logical code", extent=5, position=7, order=60, help="Logical name for printer")
         t.column('DeviceCode', 'character', format="X(100)", initial="", max_width=1010, label="Physical code", extent=5, position=8, order=70, help="Physical device")
-        t.column('UseScript', 'logical', format="yes/no", initial="no", help="Use Unix scripts in output command", max_width=1, label="Use scripts", column_label="Scripts", position=9, order=80, description="If true  then ""output through"" is used ")
+        t.column('UseScript', 'logical', format="yes/no", initial="no", help="Use Unix scripts in output command", max_width=1, label="Use scripts", column_label="Scripts", position=9, order=80, description="If true  then \"output through\" is used ")
         t.index('PrinterId', [['PrinterId', 'ABBREVIATED']], area="Sta_Index_2", primary=True, unique=True)
 
     def down(self):

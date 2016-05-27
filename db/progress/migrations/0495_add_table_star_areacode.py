@@ -10,7 +10,7 @@ class AddTableAreaCode(Migration):
         t.column('AreaCode', 'character', format="x(4)", initial="", max_width=8, label="AreaCode", column_label="AreaCode", position=3, order=20, help="Area Code")
         t.column('POI', 'logical', format="Yes/No", initial="no", max_width=1, label="AP", column_label="AP", position=4, order=30, help="Is there an point of interconnection in this area")
         t.column('AreaName', 'character', format="x(30)", initial="", max_width=60, label="Place/City", column_label="Place/City", position=5, order=40, help="Name of place/city")
-        t.column('Local', 'logical', format="Yes/No", initial="no", max_width=1, label="Local Segment", column_label="Local Segment", position=6, order=50, help="""Shall calls from/to this area treated as """"local segment"""" Y/N""")
+        t.column('Local', 'logical', format="Yes/No", initial="no", max_width=1, label="Local Segment", column_label="Local Segment", position=6, order=50, help="\"Shall calls from/to this area treated as \"\"local segment\"\" Y/N\"")
         t.column('TrunkCode', 'character', format="x(8)", initial="", max_width=16, label="CGR", column_label="CGR", position=7, order=60, help="Circuit Group Code for this ICP (point of interconnection)")
         t.index('AreaCode', [['AreaCode']], area="Sta_Index_2", primary=True, unique=True)
         t.index('AreaName', [['AreaName'], ['AreaCode']], area="Sta_Index_2")

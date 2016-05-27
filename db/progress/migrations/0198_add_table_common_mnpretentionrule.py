@@ -14,8 +14,8 @@ class AddTableMNPRetentionRule(Migration):
         t.column('PenaltyLeft', 'decimal', format="->>>>>>9.99999", decimals=5, initial="0", max_width=20, label="PenaltyLeft", position=7, order=60, help="Penalty amount in euros remaining")
         t.column('ConsumptionAverage', 'decimal', format="->>>>>>9.99999", decimals=5, initial="0", max_width=20, label="Amount", position=8, order=70, help="Average amount of last X invoices")
         t.column('SMSText', 'character', format="x(60)", initial="", max_width=120, label="SMSText", position=9, order=80, help="SMS template text")
-        t.column('FromDate', 'date', format="99-99-99", max_width=4, label="To", position=10, order=90, help="Date when rule expires")
-        t.column('ToDate', 'date', format="99-99-99", max_width=4, label="To", position=11, order=100, help="Date when rule begins")
+        t.column('FromDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="To", position=10, order=90, help="Date when rule expires")
+        t.column('ToDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="To", position=11, order=100, help="Date when rule begins")
         t.index('RetentionRuleID', [['RetentionRuleID']], area="Sta_Index_2", primary=True, unique=True)
         t.index('ToDate', [['Brand'], ['ToDate', 'DESC']], area="Sta_Index_2")
 

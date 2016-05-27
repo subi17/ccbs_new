@@ -7,7 +7,7 @@ class AddTablePGRequest(Migration):
     def up(self):
         t = self.table('PGRequest', area="Sta_Data_256", dump_name="pgrequest")
         t.column('ReqID', 'character', format="x(10)", initial="", max_width=20, label="Request ID", column_label="Request ID", position=2, order=10, description="Unique ID for request")
-        t.column('ReqDate', 'date', format="99-99-9999", max_width=4, label="Request Date", column_label="RequestDate", position=3, order=20, description="Date when this request has been placed")
+        t.column('ReqDate', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="Request Date", column_label="RequestDate", position=3, order=20, description="Date when this request has been placed")
         t.column('CLI', 'character', format="x(11)", initial="", max_width=22, label="MSISDN", column_label="MSISDN", position=4, order=30, description="MSISDN number (633xxxxxx)")
         t.column('DNI', 'character', format="x(10)", initial="", max_width=20, label="Personal ID", position=5, order=40, description="NIF, NIE, Passport (nif=12345678X nie=X1234567X Passport: 1234567890)")
         t.column('CDRReqMonth', 'character', format="x(6)", initial="000000", max_width=12, label="CDR Request Month", column_label="CDR Request Month", position=6, order=50, description="Requested CDR month e.g. 200707")

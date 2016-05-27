@@ -7,7 +7,7 @@ class AddTableUnregLog(Migration):
     def up(self):
         t = self.table('UnregLog', area="Sta_Data_128", label="Unreg. payment log", dump_name="unreglog", desc="Log for unregistered payment handling")
         t.column('UrSeq', 'integer', format="->,>>>,>>9", initial="0", max_width=4, position=2, order=10, help="Sequence")
-        t.column('AccDate', 'date', format="99.99.9999", max_width=4, label="Book day", column_label="Book day", position=3, order=20, help="Bookkeeping day")
+        t.column('AccDate', 'date', format="99.99.9999", initial=self.unknown, max_width=4, label="Book day", column_label="Book day", position=3, order=20, help="Bookkeeping day")
         t.column('Voucher', 'integer', format="ZZZZZZ9", initial="0", max_width=4, label="VoucherNo", column_label="VoucherNo", position=4, order=30, help="Consecutive recipt number of payment")
         t.column('CustNum', 'integer', format=">>>>>>>>9", initial="0", max_width=4, label="Customer", column_label="Customer", position=5, order=40, help="Customer's number")
         t.column('Amount', 'decimal', format="z,zzz,zz9.99-", decimals=2, initial="0", max_width=17, label="Amount", position=7, order=60, help="Amount of payment")

@@ -6,10 +6,10 @@ class AddTableTMRLimit(Migration):
 
     def up(self):
         t = self.table('TMRLimit', area="Sta_Data_128", label="TM Rule Limit", dump_name="tmrlimit", desc="TM rule limit")
-        t.column('FromDate', 'date', format="99-99-99", max_width=4, label="From", position=2, order=40, help="Date when rule becomes effective")
+        t.column('FromDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="From", position=2, order=40, help="Date when rule becomes effective")
         t.column('TMRuleSeq', 'integer', format=">>>>>>>>9", initial="0", help="Rule ID", max_width=4, label="Rule Sequence", column_label="Seq", position=3, order=20, description='''
 ''')
-        t.column('ToDate', 'date', format="99-99-99", max_width=4, label="To", position=4, order=50, help="Date when rule expires")
+        t.column('ToDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="To", position=4, order=50, help="Date when rule expires")
         t.column('LimitID', 'integer', format=">>9", initial="0", max_width=4, label="Limit ID", column_label="ID", position=5, order=60, help="Limit ID")
         t.column('ValueType', 'integer', format=">9", initial="0", max_width=4, label="Value Type", column_label="Type", position=6, order=70, help="Type of limit value")
         t.column('LimitAmt', 'decimal', format="->>>>>>9.99", decimals=2, initial="0", max_width=17, label="Limit Amount", column_label="Amount", position=7, order=80, help="Limit amount")

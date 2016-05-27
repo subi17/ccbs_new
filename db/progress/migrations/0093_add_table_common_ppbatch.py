@@ -9,7 +9,7 @@ class AddTablePPBatch(Migration):
 ''')
         t.column('PPlanID', 'integer', format=">>>>>>>9", initial="0", max_width=4, label="Payment Plan ID", column_label="PP ID", position=2, order=10, help="Payment plan ID")
         t.column('PPBatch', 'integer', format=">9", initial="0", max_width=4, label="Batch", position=3, order=20, help="Batch number")
-        t.column('DueDate', 'date', format="99-99-99", max_width=4, label="Due Date", column_label="DueDate", position=4, order=30, help="Batche's due date")
+        t.column('DueDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Due Date", column_label="DueDate", position=4, order=30, help="Batche's due date")
         t.column('Amount', 'decimal', format="->>>>>>9.99", decimals=2, initial="0", max_width=17, label="Amount", position=5, order=40, help="Amount of batch")
         t.column('BatchFee', 'decimal', format="->>>>>9.99", decimals=2, initial="0", max_width=17, label="Batch Fee", column_label="Fee", position=6, order=50, help="Batch fee")
         t.column('PBStatus', 'integer', format="9", initial="0", help="Status of batch", max_width=4, label="Status", position=7, order=60, description="e.g. unpaid, partly paid, paid")

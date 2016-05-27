@@ -11,7 +11,7 @@ class AddTableTopUpQueue(Migration):
         t.column('CLI', 'character', format="x(8)", initial="", max_width=16, position=4, order=30)
         t.column('TopUpAmt', 'decimal', format="->>,>>9.99", decimals=2, initial="0", max_width=17, position=5, order=40)
         t.column('VatAmt', 'decimal', format="->>,>>9.99", decimals=2, initial="0", max_width=17, position=6, order=50)
-        t.column('Date', 'date', format="99/99/99", max_width=4, position=7, order=60)
+        t.column('Date', 'date', format="99/99/99", initial=self.unknown, max_width=4, position=7, order=60)
         t.column('Source', 'character', format="x(8)", initial="", max_width=16, position=8, order=70)
         t.index('State', [['State']], area="Sta_Index_2", primary=True)
 

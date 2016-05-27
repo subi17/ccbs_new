@@ -7,8 +7,8 @@ class AddTableInvText(Migration):
     def up(self):
         t = self.table('InvText', area="Sta_Data_32", label="Invoice Texts", dump_name="invtext", desc="Texts to be printed to invoices")
         t.column('ITNum', 'integer', format=">>>>>>9", initial="0", max_width=4, label="Seq", column_label="Seq", position=2, order=10, help="Internal sequenco no. of an Invoice Text element")
-        t.column('FromDate', 'date', format="99-99-99", max_width=4, label="From Date", column_label="From", position=3, order=20, help="First effective date")
-        t.column('ToDate', 'date', format="99-99-99", max_width=4, label="To Date", column_label="To", position=4, order=30, help="Last effective date")
+        t.column('FromDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="From Date", column_label="From", position=3, order=20, help="First effective date")
+        t.column('ToDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="To Date", column_label="To", position=4, order=30, help="Last effective date")
         t.column('Target', 'character', format="x(16)", initial="", help="Target into which this text element belongs to", max_width=32, label="Target", column_label="Target", position=5, order=40, description="One of pre-defined targets (hard-coded by programmer)")
         t.column('KeyValue', 'character', mandatory=True, format="x(16)", initial="", help="Unique value of hosting record", max_width=32, label="KeyValue", column_label="KeyValue", position=6, order=50, description="Key value of hosting rec converted into formatted string expression")
         t.column('Position', 'integer', format="9", initial="1", max_width=4, label="Pos", column_label="Pos", position=7, order=60, help="Position on invoice 1:InvStart 2:InvEnd 3:SectStart 4:SectEnd")

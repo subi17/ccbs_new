@@ -7,7 +7,7 @@ class AddTableEDRHistory(Migration):
     def up(self):
         t = self.table('EDRHistory', area="Sta_Data_64", label="EDRHistory", dump_name="edrhistory")
         t.column('CLI', 'character', format="x(12)", initial="", max_width=22, label="MSISDN", column_label="MSISDN", position=2, order=10, help="MSISDN")
-        t.column('DateSt', 'date', format="99-99-99", max_width=4, label="Event Date", column_label="Date", position=3, order=20, help="Event date")
+        t.column('DateSt', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Event Date", column_label="Date", position=3, order=20, help="Event date")
         t.column('TimeStart', 'integer', format=">>>>9", initial="0", max_width=4, label="Start Time", column_label="Time", position=4, order=30, help="Starting time")
         t.column('DtlSeq', 'integer', format=">>>>>>9", initial="0", max_width=4, label="Stream Sequence", column_label="Stream Seq.", position=5, order=40, help="Daily stream sequence")
         t.column('ErrorCode', 'integer', format=">>>>9", initial="0", max_width=4, label="Error Code", column_label="Error", position=6, order=50, help="Error code")
@@ -17,7 +17,7 @@ class AddTableEDRHistory(Migration):
         t.column('DCEvent', 'character', format="x(12)", initial="", max_width=24, label="Rating Package", column_label="Package", position=10, order=90, help="Rating package (periodical contract)")
         t.column('TariffNum', 'integer', format=">>>>>>>>>9", initial="0", max_width=4, label="Tariff ID", column_label="Tariff", position=11, order=100, help="Tariff ID")
         t.column('Amount', 'decimal', format=">>>>>>9.99", decimals=5, initial="0", max_width=20, label="Amount", column_label="Amt", position=12, order=110, help="Amount")
-        t.column('UpdateDate', 'date', format="99-99-99", max_width=4, label="Update Date", column_label="Upd.Date", position=13, order=120, help="Update date")
+        t.column('UpdateDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Update Date", column_label="Upd.Date", position=13, order=120, help="Update date")
         t.column('UpdateTime', 'integer', format=">>>>9", initial="0", max_width=4, label="Update Time", column_label="Upd.Time", position=14, order=130, help="Update time")
         t.column('UpdateSource', 'character', format="x(20)", initial="", max_width=40, label="Update Source", column_label="Source", position=15, order=140, help="Source of update")
         t.column('MsSeq', 'integer', format=">>>>>>>9", initial="0", max_width=4, label="Subscription ID", column_label="Subscr.ID", position=16, order=150, help="Subscription ID")

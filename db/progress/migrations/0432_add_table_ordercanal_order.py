@@ -55,7 +55,7 @@ class AddTableOrder(Migration):
         t.column('Referee', 'character', format="x(16)", initial="", max_width=32, label="Referee", column_label="Ref", position=66, order=650, help="Referee's CLI")
         t.column('PortingTime', 'decimal', format="99.99", decimals=2, initial="0", max_width=17, label="PortingTime", column_label="PortingTime", position=67, order=660, help="PortingTime")
         t.column('FeeModel', 'character', format="x(8)", initial="", max_width=16, label="BEvent", column_label="FeeModel", position=68, order=670, help="An unique code for a Billing Event")
-        t.column('PortingDate', 'date', format="99-99-99", max_width=4, label="PortingDate", column_label="PortingDate", position=69, order=640, help="Porting date")
+        t.column('PortingDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="PortingDate", column_label="PortingDate", position=69, order=640, help="Porting date")
         t.column('PayType', 'logical', format="PrePaid/PostPaid", initial="no", help="PayType", max_width=1, label="PayType", column_label="PayType", position=87, order=840, description='''
 
 ''')

@@ -7,8 +7,8 @@ class AddTableDayCampaign(Migration):
     def up(self):
         t = self.table('DayCampaign', area="Sta_Data_256", table_trigger=[{'crc': '?', 'procedure': 'rd-daycampaign.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-daycampaign.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="daycampa")
         t.column('DCEvent', 'character', format="x(12)", initial="", max_width=24, label="Periodical Term", column_label="ID", position=2, order=10, help="ID of periodical term")
-        t.column('ValidFrom', 'date', format="99-99-9999", max_width=4, label="Valid From", column_label="From", position=4, order=30, help="Valid from")
-        t.column('ValidTo', 'date', format="99-99-9999", max_width=4, label="Valid To", column_label="To", position=5, order=41, help="Valid to")
+        t.column('ValidFrom', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="Valid From", column_label="From", position=4, order=30, help="Valid from")
+        t.column('ValidTo', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="Valid To", column_label="To", position=5, order=41, help="Valid to")
         t.column('BillCode', 'character', format="x(16)", initial="", max_width=32, label="Billing Item", column_label="BillCode", position=6, order=50, help="Billing item code")
         t.column('MaxChargeIncl', 'decimal', format="->>,>>9.999", decimals=3, initial="0", max_width=18, label="Max. Charge Incl. VAT", column_label="MaxIncl", position=7, order=60, help="Maximum charge including VAT")
         t.column('DCTarget', 'character', format="x(12)", initial="", max_width=24, label="Target", column_label="Target", position=8, order=70, help="Target (allowed billing item)")

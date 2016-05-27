@@ -7,8 +7,8 @@ class AddTableTMRule(Migration):
     def up(self):
         t = self.table('TMRule', area="Sta_Data_128", label="TM Rule", dump_name="tmrule", desc="Ticket management rule")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", position=2, order=10, help="Code Of Brand")
-        t.column('FromDate', 'date', format="99-99-99", max_width=4, label="From", position=3, order=40, help="Date when rule becomes effective")
-        t.column('ToDate', 'date', format="99-99-99", max_width=4, label="To", position=4, order=50, help="Date when rule expires")
+        t.column('FromDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="From", position=3, order=40, help="Date when rule becomes effective")
+        t.column('ToDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="To", position=4, order=50, help="Date when rule expires")
         t.column('TMRuleSeq', 'integer', format=">>>>>>>>9", initial="0", help="Rule ID", max_width=4, label="Rule Sequence", column_label="Seq", position=5, order=20, description='''
 ''')
         t.column('CounterItems', 'character', format="x(40)", initial="", max_width=80, label="Counter Items", column_label="Items", position=6, order=60, help="Items that are used in counter collection")

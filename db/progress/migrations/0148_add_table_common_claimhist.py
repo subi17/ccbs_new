@@ -7,7 +7,7 @@ class AddTableClaimHist(Migration):
     def up(self):
         t = self.table('ClaimHist', area="Sta_Data_128", label="Claiming history", dump_name="claimhis", desc="Claiming history of invoice")
         t.column('InvNum', 'integer', format="zzzzzzz9", initial="0", max_width=4, label="InvNo", column_label="InvNo", position=2, order=10, help="Invoice Number")
-        t.column('ClaimDate', 'date', format="99-99-99", max_width=4, label="Claiming Date", column_label="Date", position=3, order=20, help="Claiming date")
+        t.column('ClaimDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Claiming Date", column_label="Date", position=3, order=20, help="Claiming date")
         t.column('Claim', 'integer', format=">>9", initial="0", help="Claim number", max_width=4, label="Claim nbr", column_label="Claim", position=4, order=30, description="How many times have been claimed")
         t.column('Memo', 'character', format="x(30)", initial="", max_width=60, label="Info", position=5, order=40, help="Info")
         t.column('Handler', 'character', format="x(20)", initial="", max_width=40, label="Handler", position=6, order=50, help="User id of the claim event handler")

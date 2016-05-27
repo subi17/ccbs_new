@@ -17,7 +17,7 @@ class AddTableCustBal(Migration):
         t.column('Interest', 'decimal', format="->>>>>>9.99", decimals=2, initial="0", max_width=17, label="Interest Debt", column_label="Interest", position=7, order=60, help="Customer's interest debt")
         t.column('PaymMethod', 'integer', format="->>>9", initial="0", max_width=4, label="MethOfPaym", column_label="MethOfPaym", position=8, order=70, help="Customer's payment behavior (days +/- dueday)")
         t.column('PaymQty', 'integer', format=">>>>9", initial="0", help="Qty of customer's payments", max_width=4, label="Qty of Payments", column_label="PaymQty", position=9, order=80, description="Used in calculating payment behaviour")
-        t.column('LatestPaym', 'date', format="99-99-99", max_width=4, label="Latest Payment", column_label="LastPaymDay", position=10, order=90, help="Customer's latest payment date")
+        t.column('LatestPaym', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Latest Payment", column_label="LastPaymDay", position=10, order=90, help="Customer's latest payment date")
         t.column('LatestInv', 'integer', format="999999", initial="0", max_width=4, label="InvPeriod", column_label="InvPer", position=11, order=100, help="Period of latest invoice")
         t.column('CLI', 'character', format="x(15)", initial="", max_width=30, label="MSISDN", position=12, order=110, help="MSISDN")
         t.column('Refund', 'decimal', format="->>>>>>9.99", decimals=2, initial="0", max_width=17, label="Refund", position=13, order=120, help="Refund balance")

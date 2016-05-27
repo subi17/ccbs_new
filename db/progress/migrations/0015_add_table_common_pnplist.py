@@ -15,8 +15,8 @@ class AddTablePNPList(Migration):
         t.column('CLI', 'character', format="x(12)", initial="", max_width=24, label="CLI", column_label="CLI", position=8, order=70, help="CLI number")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", column_label="Brand", position=9, order=80, help="Code Of Brand")
         t.column('DialTypeUsed', 'logical', format="X/", initial="NO", max_width=60, label="Dialling Types Used", column_label="DT", extent=15, position=10, order=90, help="Dialling types used")
-        t.column('FromDate', 'date', format="99-99-99", max_width=4, label="From Date", column_label="From", position=11, order=100, help="First effective date")
-        t.column('ToDate', 'date', format="99-99-99", max_width=4, label="To Date", column_label="To", position=12, order=110, help="Last effective date")
+        t.column('FromDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="From Date", column_label="From", position=11, order=100, help="First effective date")
+        t.column('ToDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="To Date", column_label="To", position=12, order=110, help="Last effective date")
         t.column('MSSeq', 'integer', format=">>>>>>>9", initial="0", help="Subscription ID", max_width=4, label="Subscription ID", column_label="Subscr.", position=13, order=120, description='''
 
 ''')

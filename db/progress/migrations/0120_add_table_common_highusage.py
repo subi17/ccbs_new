@@ -15,7 +15,7 @@ class AddTableHighUsage(Migration):
         t.column('CrStamp', 'decimal', format="99999999.99999", decimals=5, initial="0", help="When was the order created", max_width=20, label="Created", column_label="Created", position=8, order=70, description="Create timestamp")
         t.column('ChStamp', 'decimal', format="99999999.99999", decimals=5, initial="0", help="When was the order changed", max_width=20, label="Change", column_label="Change", position=9, order=80, description="Change timestamp")
         t.column('Category', 'character', format="x(4)", initial="", max_width=8, label="Cat", column_label="Cat", position=10, order=90, help="Category code")
-        t.column('Date', 'date', format="99-99-99", max_width=4, label="Date", column_label="Date", position=11, order=100, help="Date when last updated")
+        t.column('Date', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Date", column_label="Date", position=11, order=100, help="Date when last updated")
         t.column('date%', 'decimal', format=">>>>9.99-", decimals=2, initial="0", max_width=17, label="Date%", column_label="Date%", position=12, order=110)
         t.column('DateGrow', 'decimal', format="->>,>>9.99", decimals=2, initial="0", max_width=17, label="DateGrow", column_label="DateGrow", position=13, order=120)
         t.column('launch', 'character', format="x(8)", initial="", max_width=16, label="Launch", column_label="Launch", position=14, order=130, help="Launch")

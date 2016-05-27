@@ -10,7 +10,7 @@ class AddTableWInvSession(Migration):
         t.column('LastAction', 'integer', format="->,>>>,>>9", initial="0", max_width=4, label="Last action time", column_label="Action", position=4, order=30, help="Time stamp for last action made")
         t.column('WsAdd', 'character', format="X(8)", initial="", max_width=16, label="Additional", position=5, order=40, help="Additional")
         t.column('WsAddInt', 'integer', format="->,>>>,>>9", initial="0", max_width=4, label="Additional int", position=6, order=50, help="Additional int")
-        t.column('ActionDate', 'date', format="99-99-9999", max_width=4, label="Action Date", column_label="Date", position=7, order=60, help="Date when last action occurred")
+        t.column('ActionDate', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="Action Date", column_label="Date", position=7, order=60, help="Date when last action occurred")
         t.column('SessionId', 'character', format="X(50)", initial="", max_width=100, label="SessionId", column_label="Id", position=8, case_sensitive=True, order=10, help="SessionId")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", column_label="Brand", position=9, order=70, help="Code Of Brand")
         t.index('SessionId', [['Brand'], ['SessionId']], area="Sta_Index_2", primary=True, unique=True)

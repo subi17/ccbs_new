@@ -18,7 +18,7 @@ class AddTableOrderAccessory(Migration):
         t.column('Manufacturer', 'character', format="x(30)", initial="", max_width=60, label="Manufacturer", column_label="Manufacturer", position=12, order=110, help="Terminal manufacturer")
         t.column('SIMLockCode', 'character', format="x(20)", initial="", max_width=40, label="SIM Lock Code", position=13, order=120)
         t.column('TerminalType', 'integer', format=">9", initial="0", max_width=4, label="Terminal Type", column_label="Term.Type", position=14, order=130, help="Type of terminal")
-        t.column('IMEIReleased', 'date', format="99-99-99", max_width=4, label="IMEIReleased", column_label="IMEIReleased", position=15, order=150, help="Date when IMEI was released")
+        t.column('IMEIReleased', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="IMEIReleased", column_label="IMEIReleased", position=15, order=150, help="Date when IMEI was released")
         t.column('IMEIStatus', 'integer', format=">9", initial="0", max_width=4, label="IMEI Status", column_label="IMEIStat", position=16, order=140, help="Status of IMEI")
         t.column('HardBookState', 'character', format="x(10)", initial="", max_width=20, label="Hard Book State", column_label="HardBookState", position=17, order=180, help="State of hard booking")
         t.column('HardBook', 'integer', format="9", initial="0", max_width=4, label="Hard Book", column_label="HardBook", position=18, order=170, help="Is the terminal hard booked")

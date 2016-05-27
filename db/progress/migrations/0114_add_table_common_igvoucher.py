@@ -18,7 +18,7 @@ class AddTableIGVoucher(Migration):
 
 ''')
         t.column('SeqPrefix', 'character', format="x(8)", initial="", max_width=16, label="Sequence Prefix", column_label="Prefix", position=6, order=50, help="Sequence prefix")
-        t.column('FromDate', 'date', format="99-99-99", max_width=4, label="Valid From", column_label="From", position=7, order=60, help="Date when sequence becomes effective")
+        t.column('FromDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Valid From", column_label="From", position=7, order=60, help="Date when sequence becomes effective")
         t.index('InvGroup', [['Brand'], ['InvGroup'], ['PaymType'], ['FromDate', 'DESC']], area="Sta_Index_4", primary=True, unique=True)
 
     def down(self):

@@ -7,8 +7,8 @@ class AddTableInvAttach(Migration):
     def up(self):
         t = self.table('InvAttach', area="Sta_Data_256", label="Invoice Attachments", dump_name="invattac", desc="Attachment definitions for EPL printing of invoices")
         t.column('CustNum', 'integer', format=">>>>>>>>9", initial="0", max_width=4, label="Customer", column_label="Cust", position=2, order=10, help="Customer number")
-        t.column('FromDate', 'date', format="99-99-99", max_width=4, label="Valid From", column_label="From", position=3, order=20, help="Valid from")
-        t.column('ToDate', 'date', format="99-99-99", max_width=4, label="Valid To", column_label="To", position=4, order=30, help="Valid to")
+        t.column('FromDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Valid From", column_label="From", position=3, order=20, help="Valid from")
+        t.column('ToDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Valid To", column_label="To", position=4, order=30, help="Valid to")
         t.column('Attach1', 'integer', format=">", initial="0", max_width=4, label="Attachment 1", column_label="Att1", position=5, order=40, help="Attachment 1")
         t.column('Attach2', 'integer', format=">", initial="0", max_width=4, label="Attachment 2", column_label="Att2", position=6, order=50, help="Attachment 2")
         t.column('Attach3', 'integer', format=">", initial="0", max_width=4, label="Attachment 3", column_label="Att3", position=7, order=60, help="Attachment 3")

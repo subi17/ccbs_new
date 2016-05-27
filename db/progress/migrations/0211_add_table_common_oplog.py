@@ -7,7 +7,7 @@ class AddTableOPLog(Migration):
     def up(self):
         t = self.table('OPLog', area="Sta_Data_128", label="Overpayment Transaction", dump_name="oplog", desc="Overpayment Transaction Log")
         t.column('CustNum', 'integer', mandatory=True, format="ZZZZZZZZ9", initial="0", max_width=4, label="CustNo", column_label="CustNo", position=2, order=10, help="Customer's number")
-        t.column('EventDate', 'date', format="99-99-99", max_width=4, label="Date", column_label="Date", position=3, order=20, help="Date of transaction/event")
+        t.column('EventDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Date", column_label="Date", position=3, order=20, help="Date of transaction/event")
         t.column('UserCode', 'character', format="x(8)", initial="", max_width=16, label="User", column_label="User", position=4, order=30, help="Id of the TMS User")
         t.column('EventType', 'integer', format="9", initial="0", max_width=4, label="Type", column_label="Type", position=5, order=40, help="Transaction Type Code")
         t.column('InvNum', 'integer', format="zzzzzzz9", initial="0", max_width=4, label="InvNo", column_label="InvNo", position=6, order=50, help="Number of Associated Invoice")

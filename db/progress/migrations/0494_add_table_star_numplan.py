@@ -10,7 +10,7 @@ class AddTableNumPlan(Migration):
         t.column('Prefix', 'character', format="x(6)", initial="", max_width=12, label="Series", column_label="Series", position=3, order=20, help="1 - 4 firsts numbers in phonenumber after the areacode")
         t.column('Operator', 'character', mandatory=True, format="x(8)", initial="", max_width=16, label="Operator", column_label="Operator", position=4, order=30, help="Operator code, 1 - 8 characters")
         t.column('State', 'character', format="x(16)", initial="", max_width=32, label="Status", column_label="Status", position=5, order=40, help="Status of number series")
-        t.column('NumLength', 'integer', format="z9", initial="0", max_width=4, label="Length", column_label="Length", position=6, order=50, help="""Total length of tel. number (without first """"0"""")""")
+        t.column('NumLength', 'integer', format="z9", initial="0", max_width=4, label="Length", column_label="Length", position=6, order=50, help="\"Total length of tel. number (without first \"\"0\"\")\"")
         t.index('Prefix', [['Prefix']], area="Sta_Index_2", primary=True, unique=True)
         t.index('AreaCode', [['AreaCode'], ['Prefix']], area="Sta_Index_2")
         t.index('Operator', [['Operator'], ['AreaCode'], ['Prefix']], area="Sta_Index_2", unique=True)
