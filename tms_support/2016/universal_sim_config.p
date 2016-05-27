@@ -206,4 +206,18 @@ IF NOT AVAIL TMSParam THEN DO:
    DELETE ttTMSParam.
 END.
 
+FIND FIRST SimStat WHERE
+           Simstat.SimStat EQ 70 NO-ERROR.
+IF NOT AVAIL SimStat THEN DO:
+   CREATE SimStat.
+   ASSIGN SimStat.Simstat = 70
+          SimStat.SSName = "Inactive old sims". 
+END.
 
+FIND FIRST SimStat WHERE
+           Simstat.SimStat EQ 71 NO-ERROR.
+IF NOT AVAIL SimStat THEN DO:
+   CREATE SimStat.
+   ASSIGN SimStat.Simstat = 71
+          SimStat.SSName = "Inactiva USim".
+END.
