@@ -211,7 +211,7 @@ FIND FIRST SimStat WHERE
 IF NOT AVAIL SimStat THEN DO:
    CREATE SimStat.
    ASSIGN SimStat.Simstat = 70
-          SimStat.SSName = "Inactive old sims". 
+          SimStat.SSName = "Universal SIM". 
 END.
 
 FIND FIRST SimStat WHERE
@@ -219,5 +219,5 @@ FIND FIRST SimStat WHERE
 IF NOT AVAIL SimStat THEN DO:
    CREATE SimStat.
    ASSIGN SimStat.Simstat = 71
-          SimStat.SSName = "Inactiva USim".
+          SimStat.SSName = "Direct SIMS".
 END.
