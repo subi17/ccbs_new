@@ -141,63 +141,70 @@
                /* find the SIM Type other than Renewal POS order if required */
                IF Order.ICC = "" AND
                   NOT Order.OrderChannel BEGINS "Renewal_POS" THEN DO:
-                  /* YBP-589 */ 
-                  FIND FIRST OrderCustomer WHERE
-                             OrderCustomer.Brand = gcBrand AND
-                             OrderCustomer.OrderId = Order.OrderId AND
-                             OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
                   
-                  RELEASE SIM.
-
-                  /* YBP-591 */ 
-                  SEARCHSIM:
-                  REPEAT:
+                  FIND FIRST OrderAction WHERE
+                             OrderAction.Brand    = gcBrand AND
+                             OrderAction.OrderId  = Order.OrderId AND
+                             OrderAction.ItemType = "SIMType" NO-LOCK NO-ERROR.
+                  IF AVAIL OrderAction AND OrderAction.ItemKey > "" THEN DO:
                      /* YBP-589 */ 
-                     /* determine correct ICC stock */
-                     lcStock = "NEW".
+                     FIND FIRST OrderCustomer WHERE
+                                OrderCustomer.Brand = gcBrand AND
+                                OrderCustomer.OrderId = Order.OrderId AND
+                                OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+                     
+                     RELEASE SIM.
 
-                     lcStock = fSearchStock(lcStock,OrderCustomer.ZipCode).
+                     /* YBP-591 */ 
+                     SEARCHSIM:
+                     REPEAT:
+                        /* YBP-589 */ 
+                        /* determine correct ICC stock */
+                        lcStock = "NEW".
 
-                     FOR EACH bSIM USE-index simstat WHERE
-                              bSIM.Brand   = gcBrand  AND
-                              bSIM.Stock   = lcStock  AND
-                              bSIM.simstat = 1        AND
-                              bSIM.SimArt  = "universal" NO-LOCK:
+                        lcStock = fSearchStock(lcStock,OrderCustomer.ZipCode).
 
-                        IF bSIM.MsSeq > 0 THEN DO:
-                           FIND FIRST bOldOrder WHERE
-                                      bOldOrder.MsSeq = bSIM.MsSeq
-                                NO-LOCK USE-INDEX MsSeq NO-ERROR.
-                           IF AVAIL bOldOrder AND
-                              fOffSet(bOldOrder.CrStamp, 24 * 7) > fMakeTS()
-                           THEN NEXT.
+                        FOR EACH bSIM USE-index simstat WHERE
+                                 bSIM.Brand   = gcBrand  AND
+                                 bSIM.Stock   = lcStock  AND
+                                 bSIM.simstat = 1        AND
+                                 bSIM.SimArt  = "universal" NO-LOCK:
+
+                           IF bSIM.MsSeq > 0 THEN DO:
+                              FIND FIRST bOldOrder WHERE
+                                         bOldOrder.MsSeq = bSIM.MsSeq
+                                   NO-LOCK USE-INDEX MsSeq NO-ERROR.
+                              IF AVAIL bOldOrder AND
+                                 fOffSet(bOldOrder.CrStamp, 24 * 7) > fMakeTS()
+                              THEN NEXT.
+                           END.
+
+                           FIND SIM WHERE
+                                ROWID(SIM) = ROWID(bSIM)
+                                EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+                           LEAVE.
                         END.
 
-                        FIND SIM WHERE
-                             ROWID(SIM) = ROWID(bSIM)
-                             EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
-                        LEAVE.
+                        IF LOCKED(SIM) THEN DO:
+                           PAUSE 5.
+                           NEXT.
+                        END.
+
+                        ELSE IF NOT LOCKED(SIM) AND AVAIL SIM
+                        THEN LEAVE SEARCHSIM.
+
+                        /* no free sims available */
+                        ELSE IF NOT AVAILABLE SIM THEN LEAVE SEARCHSIM.
                      END.
 
-                     IF LOCKED(SIM) THEN DO:
-                        PAUSE 5.
-                        NEXT.
-                     END.
+                     /* free sim was not available */
+                     IF NOT AVAILABLE SIM THEN NEXT {1}.
 
-                     ELSE IF NOT LOCKED(SIM) AND AVAIL SIM
-                     THEN LEAVE SEARCHSIM.
+                     /* YBP-592 */ 
+                     SIM.SimStat = 13. /* Reserved for ICC change */
 
-                     /* no free sims available */
-                     ELSE IF NOT AVAILABLE SIM THEN LEAVE SEARCHSIM.
-                  END.
-
-                  /* free sim was not available */
-                  IF NOT AVAILABLE SIM THEN NEXT {1}.
-
-                  /* YBP-592 */ 
-                  SIM.SimStat = 13. /* Reserved for ICC change */
-
-                  IF Order.ICC = "" THEN Order.ICC = SIM.ICC.
+                     IF Order.ICC = "" THEN Order.ICC = SIM.ICC.
+                  END. /* IF AVAIL OrderAction THEN DO: */
                END. /* IF Order.ICC = "" AND */
                
                /* YBP-593 */ 
