@@ -508,7 +508,7 @@ PROCEDURE pHeader:
             ttCreditCheck.ttFormat = "string".
         WHEN 25 THEN ASSIGN 
             ttCreditCheck.ttName   = "mnp_previous_operator"
-            ttCreditCheck.ttValue  = lcOldOperator
+            ttCreditCheck.ttValue  = SUBSTRING(lcOldOperator,1,16)
             ttCreditCheck.ttFormat = "string".
         WHEN 26 THEN ASSIGN 
             ttCreditCheck.ttName   = "mnp_previous_payment_type"

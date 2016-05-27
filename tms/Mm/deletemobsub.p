@@ -53,11 +53,6 @@ DEF TEMP-TABLE ttContract NO-UNDO
    FIELD CreateFee AS LOG
    FIELD ActTS     AS DEC.
 
-DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
-    FIELD MsSeq    AS INT
-    FIELD CustNum  AS INT
-    FIELD CLI      AS CHAR.
-
 FUNCTION fLocalMemo RETURNS LOGIC
    (icHostTable AS CHAR,
     icKey       AS CHAR,
@@ -308,7 +303,6 @@ PROCEDURE pTerminate:
    ASSIGN ldeActStamp = 0
           ldeActStamp = fHMS2TS(TODAY + 1,"").
 
-   /* TODO: for old cases (code can be removed later) */
    fAdditionalLineSTC(iiMSRequest,
                      ldeActStamp,
                      "DELETE").
@@ -1109,105 +1103,3 @@ PROCEDURE pMultiSIMTermination:
    END.
    
 END PROCEDURE. 
-
-PROCEDURE pTermAdditionalSim:
-
-   DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
-   DEF INPUT PARAMETER idtActDate  AS DATE NO-UNDO.
-
-   DEF VAR liQuarTime              AS INT  NO-UNDO.
-   DEF VAR liSimStat               AS INT  NO-UNDO.
-   DEF VAR liMSISDNStat            AS INT  NO-UNDO.
-   DEF VAR liRequest               AS INT  NO-UNDO.
-   DEF VAR ldeSecSIMTermStamp      AS DEC  NO-UNDO.
-   DEF VAR ldeSMSStamp             AS DEC  NO-UNDO. 
-   DEF VAR ldaSecSIMTermDate       AS DATE NO-UNDO.
-   DEF VAR lcError                 AS CHAR NO-UNDO. 
-
-   DEF BUFFER lbMobSub    FOR Mobsub.
-
-   EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
-
-   IF NOT AVAIL Mobsub THEN RETURN.
-
-   FIND FIRST CLIType NO-LOCK WHERE
-              CLIType.Brand = gcBrand AND
-              CLIType.CLIType = MobSub.TariffBundle NO-ERROR.
-   IF NOT AVAIL CLIType OR 
-                CLIType.LineType NE {&CLITYPE_LINETYPE_MAIN} THEN RETURN.
-
-   FOR EACH lbMobSub NO-LOCK WHERE
-            lbMobSub.Brand   = gcBrand AND
-            lbMobSub.InvCust = Mobsub.CustNum AND
-            lbMobSub.PayType = FALSE AND
-            lbMobSub.MsSeq  NE Mobsub.MsSeq,
-      FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
-            CLIType.CLIType = (IF lbMobSub.TariffBundle > "" 
-                               THEN lbMobSub.TariffBundle
-                               ELSE lbMobSub.CLIType) AND
-            CLIType.LineType > 0:
-      
-      /* check main line existence */
-      IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} THEN DO:
-         EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
-         RETURN.
-      END.
-
-      /* check main line existence */
-      IF CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
-         CREATE ttAdditionalSIM.
-         ASSIGN ttAdditionalSIM.MsSeq   = lbMobSub.MsSeq
-                ttAdditionalSIM.CustNum = lbMobSub.CustNum
-                ttAdditionalSIM.CLI     = lbMobSub.CLI.
-      END.
-
-   END. /* FOR EACH lbMobSub WHERE */
-
-   ASSIGN ldaSecSIMTermDate  = ADD-INTERVAL(idtActDate,1,"months")
-          ldaSecSIMTermDate  = fLastDayOfMonth(ldaSecSIMTermDate)
-          ldeSecSIMTermStamp = fMake2Dt(ldaSecSIMTermDate,86399)
-          lcSMSText          = "".
-
-   IF lcTermReason = "2" THEN DO:
-      FIND Customer NO-LOCK WHERE
-           Customer.Custnum = MobSub.Custnum NO-ERROR.
-
-      lcSMSText = fGetSMSTxt("AdditionalSIMTermRem1",
-                             TODAY,
-                             (IF AVAIL Customer
-                             THEN Customer.Language ELSE 1),
-                             OUTPUT ldeSMSStamp).
-      lcSMSText = REPLACE(lcSMSText,"#DATE",STRING(ldaSecSIMTermDate)).
-   END. /* IF lcTermReason = "2" THEN DO: */
-
-   FOR EACH ttAdditionalSIM NO-LOCK:
-
-      /* If there is no ongoing STC/termination request for secondary line */
-      IF fHasPendingRequests
-         (ttAdditionalSIM.MsSeq,
-          ttAdditionalSIM.CLI,
-          {&CLITYPE_LINETYPE_ADDITIONAL}) THEN NEXT.
-
-      fTermAdditionalSim(ttAdditionalSIM.Msseq,
-                         ttAdditionalSIM.CLI,
-                         ttAdditionalSIM.CustNum,
-                         {&SUBSCRIPTION_TERM_REASON_ADDITIONALSIM},
-                         idtActDate,
-                         {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
-                         iiMsRequest,
-                         OUTPUT lcError).
-                         
-      IF lcError = "" AND lcSMSText > "" THEN
-         fMakeSchedSMS2(ttAdditionalSIM.CustNum,
-                        ttAdditionalSIM.CLI,
-                        11, /* service change */
-                        lcSMSText,
-                        ldeSMSStamp,
-                        "22622",
-                        "").
-   END. /* FOR EACH ttAdditionalSIM */
-   
-   EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
-
-END PROCEDURE.
