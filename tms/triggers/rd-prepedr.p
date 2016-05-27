@@ -17,8 +17,8 @@ ASSIGN
    mcdr.RepLog.EventType = "DELETE"
    mcdr.RepLog.EventTime = NOW
    mcdr.RepLog.KeyValue  = "FEES" + {&HPDKeyDelimiter} +
-                           STRING(PrepEDR.DtlSeq) + {&HPDKeyDelimiter} +
-                           STRING(PrepEDR.DateSt)
+                           SUBSTITUTE("&1",PrepEDR.DtlSeq) + {&HPDKeyDelimiter} +
+                           SUBSTITUTE("&1",PrepEDR.DateSt)
    .
 
 &ENDIF
