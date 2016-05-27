@@ -109,10 +109,11 @@ PROCEDURE pDSSContract:
                   MServiceLimit.MsSeq    = MsRequest.MsSeq AND
                   MServiceLimit.DialType = ServiceLimit.DialType AND
                   MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
-                  MServiceLimit.Custnum NE MsRequest.Custnum AND
-                  MServiceLimit.EndTS   >= 99999999.99999:
+                  MServiceLimit.EndTS    = 99999999.99999 AND
+                  MServiceLimit.Custnum NE MsRequest.Custnum:
 
             FIND FIRST bMsRequest NO-LOCK WHERE
+                       bMsRequest.Brand = gcBrand AND
                        bMsRequest.ReqType = 83 AND
                        bMsRequest.Custnum = MServiceLimit.Custnum AND
                        bMsRequest.ReqCParam3 = MsRequest.ReqCParam3 AND
