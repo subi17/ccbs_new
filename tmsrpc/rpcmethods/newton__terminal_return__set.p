@@ -287,10 +287,12 @@ IF (llDeviceStart AND llDeviceScreen) OR
                 InvRow.InvNum = Invoice.InvNum AND
                 InvRow.SubInvNum = SubInvoice.SubInvNum AND
                (InvRow.BillCode = SingleFee.BillCode OR
-                LOOKUP(invrow.BillCode,"RVTERMDTRW,RVTERMDTTR,RVTERMDTTD") > 0) AND
-                InvRow.CreditInvNum = 0 AND
-                InvRow.Amt >= SingleFee.Amt:
+                LOOKUP(InvRow.BillCode,"RVTERMDTRW,RVTERMDTTR,RVTERMDTTD") > 0) AND
+                InvRow.CreditInvNum = 0:
          
+         IF InvRow.BillCode = SingleFee.BillCode AND
+            InvRow.Amt >= SingleFee.Amt THEN NEXT.
+
          IF InvRow.OrderId > 0 AND
             SingleFee.OrderID > 0 AND
             InvRow.OrderId NE SingleFee.OrderId THEN NEXT.
@@ -306,19 +308,25 @@ IF (llDeviceStart AND llDeviceScreen) OR
       ASSIGN lcSubInvNums    = TRIM(lcSubInvNums,",")
              lcInvRowDetails = TRIM(lcInvRowDetails,",").
 
-      IF lcSubInvNums = "" THEN RETURN "ERROR:Invoice is already credited".
+      IF lcSubInvNums = "" THEN
+            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                             "MobSub",
+                             STRING(MsRequest.MsSeq),
+                             MsRequest.Custnum,
+                             "CREDIT NOTE CREATION FAILED",
+                             "ERROR:Invoice is already credited").
+      ELSE DO:
+         liRequest = fFullCreditNote(Invoice.InvNum,
+                                     lcSubInvNums,
+                                     lcInvRowDetails,
+                                     "Correct",
+                                     "2013",
+                                     "",
+                                     OUTPUT lcError).
 
-      liRequest = fFullCreditNote(Invoice.InvNum,
-                                  lcSubInvNums,
-                                  lcInvRowDetails,
-                                  "Correct",
-                                  "2013",
-                                  "",
-                                  OUTPUT lcError).
-
-      IF liRequest = 0 THEN
-         RETURN appl_err("ERROR:Credit Note Creation Failed; " + lcError).
-
+         IF liRequest = 0 THEN
+            RETURN appl_err("ERROR:Credit Note Creation Failed; " + lcError).
+      END.
    END.
    ELSE DO:
       liRequest = fAddDiscountPlanMember(MobSub.MsSeq,

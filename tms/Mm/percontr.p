@@ -1082,6 +1082,9 @@ PROCEDURE pContractActivation:
                    LOOKUP(invrow.BillCode,"RVTERMDTRW,RVTERMDTTR,RVTERMDTTD") > 0) AND
                    InvRow.CreditInvNum = 0 AND
                    InvRow.Amt >= bQ25SingleFee.Amt:
+
+            IF InvRow.BillCode = bQ25SingleFee.BillCode AND
+               InvRow.Amt >= bQ25SingleFee.Amt THEN NEXT.
             
             IF InvRow.OrderId > 0 AND
                bQ25SingleFee.OrderID > 0 AND
@@ -1098,23 +1101,30 @@ PROCEDURE pContractActivation:
          ASSIGN lcSubInvNums    = TRIM(lcSubInvNums,",")
                 lcInvRowDetails = TRIM(lcInvRowDetails,",").
 
-         IF lcSubInvNums = "" THEN RETURN "ERROR:Invoice is already credited".
-
-         liRequest = fFullCreditNote(Invoice.InvNum,
-                                     lcSubInvNums,
-                                     lcInvRowDetails,
-                                     "Correct",
-                                     "2013",
-                                     "",
-                                     OUTPUT lcError).
-            
-         IF liRequest = 0 THEN
+         IF lcSubInvNums = "" THEN
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                              "MobSub",
                              STRING(MsRequest.MsSeq),
                              MsRequest.Custnum,
                              "CREDIT NOTE CREATION FAILED",
-                             "ERROR:" + lcError). 
+                             "ERROR:Invoice is already credited").
+         ELSE DO:
+            liRequest = fFullCreditNote(Invoice.InvNum,
+                                        lcSubInvNums,
+                                        lcInvRowDetails,
+                                        "Correct",
+                                        "2013",
+                                        "",
+                                        OUTPUT lcError).
+               
+            IF liRequest = 0 THEN
+               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                "MobSub",
+                                STRING(MsRequest.MsSeq),
+                                MsRequest.Custnum,
+                                "CREDIT NOTE CREATION FAILED",
+                                "ERROR:" + lcError). 
+         END.
       END. 
       ELSE IF lcDCEvent EQ "RVTERM12" AND
          ldeResidualFeeDisc > 0 THEN DO:
