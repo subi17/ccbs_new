@@ -1080,8 +1080,7 @@ PROCEDURE pContractActivation:
                    InvRow.SubInvNum = SubInvoice.SubInvNum AND
                   (InvRow.BillCode = bQ25SingleFee.BillCode OR
                    LOOKUP(invrow.BillCode,"RVTERMDTRW,RVTERMDTTR,RVTERMDTTD") > 0) AND
-                   InvRow.CreditInvNum = 0 AND
-                   InvRow.Amt >= bQ25SingleFee.Amt:
+                   InvRow.CreditInvNum = 0:
 
             IF InvRow.BillCode = bQ25SingleFee.BillCode AND
                InvRow.Amt >= bQ25SingleFee.Amt THEN NEXT.
