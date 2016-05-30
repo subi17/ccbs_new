@@ -138,10 +138,10 @@ FOR EACH DayCampaign NO-LOCK WHERE
       NOT fIsBonoVoIPAllowed(Mobsub.MsSeq, ldeCurrTS) THEN NEXT.
    
    add_string(lcResultArray,"", DayCampaign.DCEvent + "|" + STRING(Mobsub.MsSeq) ).
-   IF LOOKUP(DayCampaign.BundleUpsell,lcDayCampBundleUpsells) = 0 THEN DO:
+   DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
+      IF LOOKUP(ENTRY(liUpsellCount,DayCampaign.BundleUpsell),lcDayCampBundleUpsells) = 0 THEN DO:
       lcDayCampBundleUpsells = TRIM(lcDayCampBundleUpsells + "," + DayCampaign.BundleUpsell,",").
 
-      DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
          add_string(lcResultArray,"", 
                     ENTRY(liUpsellCount,DayCampaign.BundleUpsell) 
                     + "|" + STRING(Mobsub.MsSeq)).
