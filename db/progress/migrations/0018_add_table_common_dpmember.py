@@ -5,7 +5,7 @@ class AddTableDPMember(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('DPMember', area="Sta_Data_2_256", label="Discount Plan Member", table_trigger=[{'crc': '?', 'procedure': 'rd-dpmember.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-dpmember.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="dpmember")
+        t = self.table('DPMember', area="Sta_Data_2_256", label="Discount Plan Member", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-dpmember.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-dpmember.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="dpmember")
         t.column('DPId', 'integer', mandatory=True, format="zzzzzzz9", initial="0", max_width=4, label="Discount Plan Id", column_label="PlanId", position=2, order=10, help="Discount Plan Id")
         t.column('HostTable', 'character', format="x(12)", initial="", max_width=24, label="Host Table", column_label="Host Table", position=3, order=20, help="Name of the host table")
         t.column('KeyValue', 'character', format="x(12)", initial="", max_width=24, label="Key Value", column_label="Key Value", position=4, order=30, help="Key value")

@@ -5,7 +5,7 @@ class AddTableOrderPayment(Migration):
     database = "ordercanal"
 
     def up(self):
-        t = self.table('OrderPayment', area="Sta_Data_32", table_trigger=[{'crc': '?', 'procedure': 'rd-orderpayment.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-orderpayment.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="orderpay")
+        t = self.table('OrderPayment', area="Sta_Data_32", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-orderpayment.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-orderpayment.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="orderpay")
         t.column('OrderId', 'integer', mandatory=True, format=">>>>>>>>9", initial="0", max_width=4, label="OrderId", column_label="OrderId", position=2, order=10, description="Order sequence number")
         t.column('Method', 'integer', format=">>9", initial="0", max_width=4, label="Method", column_label="Method", position=3, order=20)
         t.column('CCName', 'character', format="x(20)", initial="", max_width=40, label="CreditCard Name", column_label="CreditCard Name", position=4, order=30)

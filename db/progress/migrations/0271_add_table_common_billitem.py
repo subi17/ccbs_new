@@ -5,7 +5,7 @@ class AddTableBillItem(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('BillItem', area="Sta_Data_64", label="Billing Items", table_trigger=[{'crc': '?', 'procedure': 'rd-billitem.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-billitem.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="billitem", desc="Billing items")
+        t = self.table('BillItem', area="Sta_Data_64", label="Billing Items", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-billitem.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-billitem.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="billitem", desc="Billing items")
         t.column('BillCode', 'character', format="x(16)", initial="", max_width=32, label="Billing Item", column_label="BillItem", position=2, order=10, help="Billing item code, max 16 characters")
         t.column('BIName', 'character', format="x(30)", initial="", max_width=60, label="Bill.Item Name", column_label="BI Name", position=3, order=20, help="Billing item's name")
         t.column('AccNum', 'integer', format=">>>>>9", initial="0", max_width=4, label="Account", column_label="Account", position=4, order=30, help="Account number")

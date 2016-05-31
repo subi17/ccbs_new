@@ -5,7 +5,7 @@ class AddTableCustContact(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('CustContact', area="Sta_Data_32", label="CustContact", table_trigger=[{'crc': '?', 'procedure': 'rd-custcontact.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-custcontact.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="custcontact", desc="CustContact")
+        t = self.table('CustContact', area="Sta_Data_32", label="CustContact", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-custcontact.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-custcontact.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="custcontact", desc="CustContact")
         t.column('CustNum', 'integer', mandatory=True, format=">>>>>>>>9", initial="0", max_width=4, label="CustContact", column_label="CustContact", position=2, order=10, help="CustContact's number")
         t.column('CustType', 'integer', mandatory=True, format=">>9", initial="0", max_width=4, label="CustType", column_label="CustType", position=3, order=20, help="Contact customer type")
         t.column('CustName', 'character', format="x(30)", initial="", max_width=60, label="CustContact's name", column_label="CustContact's name", position=4, order=30, help="CustContact's name")

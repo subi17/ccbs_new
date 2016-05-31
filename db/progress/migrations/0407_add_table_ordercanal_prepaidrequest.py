@@ -5,7 +5,7 @@ class AddTablePrePaidRequest(Migration):
     database = "ordercanal"
 
     def up(self):
-        t = self.table('PrePaidRequest', area="Sta_Data_32", table_trigger=[{'crc': '?', 'procedure': 'rd-prepaidrequest.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-prepaidrequest.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="prepaidr")
+        t = self.table('PrePaidRequest', area="Sta_Data_32", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-prepaidrequest.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-prepaidrequest.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="prepaidr")
         t.column('PPRequest', 'integer', format=">>>>>>>9", initial="0", max_width=4, label="PPRequest", column_label="PPRequest", position=2, order=10)
         t.column('CLI', 'character', format="x(8)", initial="", max_width=16, label="CLI", column_label="CLI", position=3, order=20)
         t.column('Request', 'character', format="x(8)", initial="", max_width=16, label="Request", column_label="Request", position=4, order=31)

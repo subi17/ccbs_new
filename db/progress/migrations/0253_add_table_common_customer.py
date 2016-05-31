@@ -5,7 +5,7 @@ class AddTableCustomer(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('Customer', area="Sta_Data_32", label="Customer", table_trigger=[{'crc': '?', 'procedure': 'rd-customer.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-customer.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="custome1", desc="Customer")
+        t = self.table('Customer', area="Sta_Data_32", label="Customer", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-customer.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-customer.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="custome1", desc="Customer")
         t.column('CustNum', 'integer', mandatory=True, format=">>>>>>>>9", initial="0", max_width=4, label="Customer", column_label="Customer", position=2, order=10, help="Customer's number")
         t.column('CustName', 'character', format="x(30)", initial="", max_width=60, label="Customer's name", column_label="Customer's name", position=3, order=70, help="Customer's name")
         t.column('COName', 'character', format="x(30)", initial="", max_width=60, label="Addt'l name", column_label="Addt'l name", position=4, order=120, help="Additional name of a customer")

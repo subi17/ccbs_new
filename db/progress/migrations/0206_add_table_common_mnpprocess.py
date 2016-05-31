@@ -5,7 +5,7 @@ class AddTableMNPProcess(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('MNPProcess', area="Sta_Data_64", table_trigger=[{'crc': '?', 'procedure': 'rd-mnpprocess.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-mnpprocess.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="mnpproce")
+        t = self.table('MNPProcess', area="Sta_Data_64", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-mnpprocess.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-mnpprocess.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="mnpproce")
         t.column('OrderId', 'integer', format="->,>>>,>>9", initial="0", max_width=4, position=2, order=10)
         t.column('FormRequest', 'character', format="x(12)", initial="", max_width=16, position=3, order=20)
         t.column('PortRequest', 'character', format="x(24)", initial="", max_width=16, position=4, order=30)

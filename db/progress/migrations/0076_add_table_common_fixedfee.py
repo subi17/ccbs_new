@@ -5,7 +5,7 @@ class AddTableFixedFee(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('FixedFee', area="Sta_Data_32", label="Constant / Contract Fees", table_trigger=[{'crc': '?', 'procedure': 'rd-fixedfee.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-fixedfee.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="fixedfee", desc="Constant / contract fees")
+        t = self.table('FixedFee', area="Sta_Data_32", label="Constant / Contract Fees", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-fixedfee.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-fixedfee.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="fixedfee", desc="Constant / contract fees")
         t.column('CustNum', 'integer', mandatory=True, format=">>>>>>>>9", initial="0", max_width=4, label="Customer", column_label="Customer", position=2, order=20, help="Customer number")
         t.column('BillCode', 'character', format="x(6)", initial="", max_width=12, label="Product", column_label="Product", position=3, order=30, help="Product code")
         t.column('Memo', 'character', format="x(60)", initial="", max_width=610, label="MemoExp", column_label="MemoExp", extent=5, position=4, order=40, help="Explanation text for the invoice")

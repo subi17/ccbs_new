@@ -5,7 +5,7 @@ class AddTableBarring(Migration):
     database = "ordercanal"
 
     def up(self):
-        t = self.table('Barring', area="Sta_Data_128", label="Barring", table_trigger=[{'crc': '?', 'procedure': 'rd-barring.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-barring.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="barring", desc="Barring information")
+        t = self.table('Barring', area="Sta_Data_128", label="Barring", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-barring.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-barring.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="barring", desc="Barring information")
         t.column('MsSeq', 'integer', format="zzzzzzz9", initial="0", max_width=4, label="SubSeq", column_label="MsSeq", position=2, order=10, help="Subscription ID")
         t.column('BarringCode', 'character', format="x(25)", initial="", max_width=50, label="Barring", column_label="BarringCode", position=3, order=20, help="Barring name")
         t.column('BarringStatus', 'character', format="x(8)", initial="", max_width=16, label="Barring Status", column_label="BarringStatus", position=4, order=30, help="Activity for status")

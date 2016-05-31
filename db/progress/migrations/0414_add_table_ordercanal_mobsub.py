@@ -5,7 +5,7 @@ class AddTableMobSub(Migration):
     database = "ordercanal"
 
     def up(self):
-        t = self.table('MobSub', area="Sta_Data_32", label="Mobile Subscriber", table_trigger=[{'crc': '?', 'procedure': 'rd-mobsub.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-mobsub.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="mobsub-1", desc="Mobile Subscription")
+        t = self.table('MobSub', area="Sta_Data_32", label="Mobile Subscriber", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-mobsub.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-mobsub.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="mobsub-1", desc="Mobile Subscription")
         t.column('MsSeq', 'integer', mandatory=True, format=">>>>>>>9", initial="0", max_width=4, label="SubSeq", column_label="SubSeq", position=2, order=10, help="Sequence for a Subscription")
         t.column('CustNum', 'integer', mandatory=True, format=">>>>>>>>9", initial="0", max_width=4, label="Customer", column_label="Customer", position=3, order=20, help="Customer's number")
         t.column('CLI', 'character', format="X(11)", initial="", max_width=22, label="MSISDN", column_label="MSISDN No", position=5, order=40, help="MSISDN Subscriber No")

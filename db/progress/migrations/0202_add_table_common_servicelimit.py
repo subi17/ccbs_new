@@ -5,7 +5,7 @@ class AddTableServiceLimit(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('ServiceLimit', area="Sta_Data_64", table_trigger=[{'crc': '?', 'procedure': 'rd-servicelimit.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-servicelimit.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="service1")
+        t = self.table('ServiceLimit', area="Sta_Data_64", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-servicelimit.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-servicelimit.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="service1")
         t.column('WebDisp', 'integer', format="9", initial="1", max_width=4, label="Web", column_label="Web", position=9, order=110, help="Web")
         t.column('GroupCode', 'character', format="x(16)", initial="", max_width=32, label="GroupCode", column_label="Group Code", position=10, order=90, help="Group Code of Servicelimit")
         t.column('ToTS', 'decimal', format="99999999.99999", decimals=5, initial="0", max_width=20, label="ToTimestamp", column_label="ToTimestamp", position=11, order=80, help="to timestamp")

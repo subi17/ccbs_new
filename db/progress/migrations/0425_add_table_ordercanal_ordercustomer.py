@@ -5,7 +5,7 @@ class AddTableOrderCustomer(Migration):
     database = "ordercanal"
 
     def up(self):
-        t = self.table('OrderCustomer', area="Sta_Data_32", table_trigger=[{'crc': '?', 'procedure': 'rd-ordercustomer.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-ordercustomer.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="ordercus")
+        t = self.table('OrderCustomer', area="Sta_Data_32", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-ordercustomer.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-ordercustomer.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="ordercus")
         t.column('RowType', 'integer', format=">>9", initial="0", max_width=4, label="RowType", column_label="RowType", position=2, order=10, help="Order customer type")
         t.column('Address', 'character', format="x(30)", initial="", max_width=60, label="Address", column_label="Address", position=3, order=50, help="Customer's mailing address (street, p.o. box)")
         t.column('BirthDay', 'date', format="99.99.99", initial=self.unknown, max_width=4, label="BirthDay", column_label="BirthDay", position=4, order=100)

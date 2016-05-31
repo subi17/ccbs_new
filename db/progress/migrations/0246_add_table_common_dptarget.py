@@ -5,7 +5,7 @@ class AddTableDPTarget(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('DPTarget', area="Sta_Data_128", label="Discount Plan Target", table_trigger=[{'crc': '?', 'procedure': 'rd-dptarget.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-dptarget.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="dptarget")
+        t = self.table('DPTarget', area="Sta_Data_128", label="Discount Plan Target", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-dptarget.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-dptarget.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="dptarget")
         t.column('DPId', 'integer', mandatory=True, format=">>>>>>>9", initial="0", max_width=4, label="Discount Plan Id", column_label="PlanId", position=2, order=10, help="Discount Plan Id")
         t.column('ValidFrom', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="Valid From", column_label="From", position=4, order=30, help="Effective from date")
         t.column('ValidTo', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="Valid To", column_label="To", position=5, order=40, help="Effective to date")

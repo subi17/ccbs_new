@@ -5,7 +5,7 @@ class AddTableInvoice(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('Invoice', area="Dyn_Data_32", label="Invoice", table_trigger=[{'crc': '?', 'procedure': 'rd-invoice.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-invoice.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="invoice", desc="Invoice")
+        t = self.table('Invoice', area="Dyn_Data_32", label="Invoice", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-invoice.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-invoice.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="invoice", desc="Invoice")
         t.column('InvNum', 'integer', format="zzzzzzz9", initial="0", max_width=4, label="InvNo", column_label="InvNo", position=2, order=10, help="Consecutive Invoice Number, 1 ... 99999999")
         t.column('InvDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="InvDate", column_label="InvDate", position=3, order=20, help="Invoice's date")
         t.column('CustNum', 'integer', format=">>>>>>>>9", initial="0", max_width=4, label="Customer", column_label="Customer", position=4, order=30, help="Customer being billed")

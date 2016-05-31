@@ -5,7 +5,7 @@ class AddTableFATGroup(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('FATGroup', area="Sta_Data_64", label="FAT Group", table_trigger=[{'crc': '?', 'procedure': 'rd-fatgroup.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-fatgroup.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="fatgroup", desc="FAT Group for products")
+        t = self.table('FATGroup', area="Sta_Data_64", label="FAT Group", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-fatgroup.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-fatgroup.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="fatgroup", desc="FAT Group for products")
         t.column('FtGrp', 'character', format="x(8)", initial="", max_width=16, label="FatGroup", column_label="FtGrp", position=2, order=10, help="Fat Group (for products)")
         t.column('FtgName', 'character', format="x(30)", initial="", max_width=60, label="Name", position=3, order=20, help="Group name")
         t.column('InvMemo', 'character', format="x(60)", initial="", max_width=610, label="Invoice Text", column_label="Inv.Txt", extent=5, position=4, order=30, help="Text to invoice")

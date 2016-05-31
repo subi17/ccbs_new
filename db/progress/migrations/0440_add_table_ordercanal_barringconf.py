@@ -5,7 +5,7 @@ class AddTableBarringConf(Migration):
     database = "ordercanal"
 
     def up(self):
-        t = self.table('BarringConf', area="Sta_Data_128", label="Barring Configuration", table_trigger=[{'crc': '?', 'procedure': 'rd-barringconf.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-barringconf.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="barringconf", desc="Barring Configuration")
+        t = self.table('BarringConf', area="Sta_Data_128", label="Barring Configuration", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-barringconf.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-barringconf.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="barringconf", desc="Barring Configuration")
         t.column('BarringGroup', 'character', format="X(25)", initial="", max_width=50, label="Barring group", column_label="BarringGroup", position=2, order=10, help="Barring group")
         t.column('BarringCode', 'character', format="X(25)", initial="", max_width=50, label="Barring Name", column_label="BarringCode", position=3, order=20, help="Barring Name")
         t.column('Mask', 'character', format="X(15)", initial="", max_width=30, label="Limited Services", column_label="Mask", position=4, order=30, help="Bit mask of limited services")

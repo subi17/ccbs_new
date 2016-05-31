@@ -5,7 +5,7 @@ class AddTableMServiceLPool(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('MServiceLPool', area="Sta_Data_128", table_trigger=[{'crc': '?', 'procedure': 'rd-mservicelpool.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-mservicelpool.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="mservicelpool")
+        t = self.table('MServiceLPool', area="Sta_Data_128", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-mservicelpool.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-mservicelpool.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="mservicelpool")
         t.column('SLSeq', 'integer', format=">>>>>>9", initial="0", max_width=4, label="SLSeq", column_label="SLseq", position=2, order=10, help="Sequence for Servicelimit")
         t.column('MsSeq', 'integer', format=">>>>>>>9", initial="0", max_width=4, label="Mobsub Sequence", column_label="MsSeq", position=3, order=20, help="Link to mobsub-table")
         t.column('LimitAmt', 'decimal', format=">>>>>>>>>>>>9.999", decimals=3, initial="0", max_width=18, label="Limit Amount", column_label="LimitAmt", position=4, order=30)

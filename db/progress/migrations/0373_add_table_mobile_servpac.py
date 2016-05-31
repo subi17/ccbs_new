@@ -5,7 +5,7 @@ class AddTableServPac(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('ServPac', area="Sta_Data_128", label="SerPac", table_trigger=[{'crc': '?', 'procedure': 'rd-servpac.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-servpac.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="servpac", desc='''
+        t = self.table('ServPac', area="Sta_Data_128", label="SerPac", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-servpac.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-servpac.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="servpac", desc='''
 ''')
         t.column('ServPac', 'character', format="x(12)", initial="", max_width=24, label="Service Package", column_label="ServPack", position=2, order=10, help="Service Package Code")
         t.column('SPName', 'character', format="x(40)", initial="", max_width=80, label="Service Pack Name", column_label="Name", position=3, order=20, help="Name of Service Package")

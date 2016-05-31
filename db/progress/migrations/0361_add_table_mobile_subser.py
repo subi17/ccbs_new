@@ -5,7 +5,7 @@ class AddTableSubSer(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('SubSer', area="Sta_Data_128", table_trigger=[{'crc': '?', 'procedure': 'rd-subser.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-subser.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="subser", desc='''Services of mobile subscribers
+        t = self.table('SubSer', area="Sta_Data_128", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-subser.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-subser.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="subser", desc='''Services of mobile subscribers
 ''')
         t.column('MsSeq', 'integer', mandatory=True, format=">>>>>>>9", initial="0", max_width=4, label="SubSeq", column_label="SubSeq", position=2, order=10, help="Sequence for a Subscription")
         t.column('ServPac', 'character', format="x(8)", initial="", max_width=16, label="ServPackage", column_label="ServPack", position=3, order=20, help="Code of ServPack")

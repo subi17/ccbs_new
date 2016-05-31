@@ -5,7 +5,7 @@ class AddTableFMItem(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('FMItem', area="Sta_Data_64", label="Billing Event Items", table_trigger=[{'crc': '?', 'procedure': 'rd-fmitem.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-fmitem.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="bcitem", desc="List of billable items of a single 'billing event'")
+        t = self.table('FMItem', area="Sta_Data_64", label="Billing Event Items", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-fmitem.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-fmitem.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="bcitem", desc="List of billable items of a single 'billing event'")
         t.column('FeeModel', 'character', format="x(8)", initial="", max_width=16, label="BEvent", column_label="BEvent", position=2, order=10, help="An unique code for a Billing Event")
         t.column('PriceList', 'character', format="x(8)", initial="", max_width=16, label="Price List", column_label="Price List", position=3, order=20, help="Code (identifier) for a Price List")
         t.column('BillCode', 'character', format="x(16)", initial="", max_width=32, label="Product", column_label="Product", position=4, order=30, help="Product code")

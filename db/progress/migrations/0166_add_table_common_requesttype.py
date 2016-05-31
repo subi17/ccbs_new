@@ -5,7 +5,7 @@ class AddTableRequestType(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('RequestType', area="Sta_Data_64", label="Request configuration", table_trigger=[{'crc': '?', 'procedure': 'rd-requesttype.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-requesttype.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="requesttype", desc="Request type configuration")
+        t = self.table('RequestType', area="Sta_Data_64", label="Request configuration", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-requesttype.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-requesttype.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="requesttype", desc="Request type configuration")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", position=2, order=10, help="Code of brand")
         t.column('ReqType', 'integer', format=">>9", initial="0", max_width=4, label="Request Type", column_label="Type", position=3, order=20, description="Request type")
         t.column('ReqName', 'character', format="x(30)", initial="", max_width=60, label="Name", position=4, order=30, help="Description of request type")

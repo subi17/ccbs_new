@@ -5,7 +5,7 @@ class AddTableDayCampaign(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('DayCampaign', area="Sta_Data_256", table_trigger=[{'crc': '?', 'procedure': 'rd-daycampaign.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-daycampaign.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="daycampa")
+        t = self.table('DayCampaign', area="Sta_Data_256", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-daycampaign.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-daycampaign.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="daycampa")
         t.column('DCEvent', 'character', format="x(12)", initial="", max_width=24, label="Periodical Term", column_label="ID", position=2, order=10, help="ID of periodical term")
         t.column('ValidFrom', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="Valid From", column_label="From", position=4, order=30, help="Valid from")
         t.column('ValidTo', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="Valid To", column_label="To", position=5, order=41, help="Valid to")

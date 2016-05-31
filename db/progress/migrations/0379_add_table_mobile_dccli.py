@@ -5,7 +5,7 @@ class AddTableDCCli(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('DCCli', area="Sta_Data_128", table_trigger=[{'crc': '?', 'procedure': 'rd-dccli.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-dccli.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="dccli")
+        t = self.table('DCCli', area="Sta_Data_128", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-dccli.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-dccli.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="dccli")
         t.column('MSSeq', 'integer', mandatory=True, format=">>>>>>>9", initial="0", max_width=4, label="Subscription ID", column_label="Sub.ID", position=3, order=20, help="Sequence for a subscription")
         t.column('ValidFrom', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="Valid From", column_label="From", position=4, order=30, help="Valid from")
         t.column('ValidTo', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="Valid To", column_label="To", position=5, order=40, help="Valid to")

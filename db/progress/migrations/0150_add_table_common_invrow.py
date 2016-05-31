@@ -5,7 +5,7 @@ class AddTableInvRow(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('InvRow', area="Dyn_Data_64", label="Invoice Rows", table_trigger=[{'crc': '?', 'procedure': 'rd-invrow.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-invrow.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="invrow", desc="Invoice rows")
+        t = self.table('InvRow', area="Dyn_Data_64", label="Invoice Rows", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-invrow.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-invrow.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="invrow", desc="Invoice rows")
         t.column('InvNum', 'integer', format="zzzzzzz9", initial="0", max_width=4, label="InvoiceNo", column_label="InvoiceNo", position=2, order=10, help="Consecutive Invoice Number, 1 ... 99999999")
         t.column('BillCode', 'character', format="x(16)", initial="", max_width=32, label="Product", column_label="Product", position=3, order=20, help="Product number")
         t.column('GrossAmt', 'decimal', format="-zzzzz9.999", decimals=3, initial="0", max_width=18, label="TotBrutto", column_label="TotBrutto", position=4, order=30, help="Total amount by product exl. discount")

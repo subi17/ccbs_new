@@ -5,7 +5,7 @@ class AddTableMSRequest(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('MSRequest', area="Sta_Data_64", label="MobSub Requests", table_trigger=[{'crc': '?', 'procedure': 'rd-msrequest.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-msrequest.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="msreques", desc='''MobSub related action requests
+        t = self.table('MSRequest', area="Sta_Data_64", label="MobSub Requests", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-msrequest.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-msrequest.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="msreques", desc='''MobSub related action requests
 ''')
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", column_label="Brand", position=2, order=10, help="Code Of Brand")
         t.column('MsSeq', 'integer', mandatory=True, format=">>>>>>>9", initial="0", max_width=4, label="MobSub Sequence", column_label="SubSeq", position=3, order=20, help="Sequence for a subscription")

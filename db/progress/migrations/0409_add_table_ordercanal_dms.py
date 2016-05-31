@@ -5,7 +5,7 @@ class AddTableDMS(Migration):
     database = "ordercanal"
 
     def up(self):
-        t = self.table('DMS', area="Sta_Data_128", label="Document mgmt case", table_trigger=[{'crc': '?', 'procedure': 'rd-dms.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-dms.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="dms", desc="Document management case")
+        t = self.table('DMS', area="Sta_Data_128", label="Document mgmt case", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-dms.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-dms.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="dms", desc="Document management case")
         t.column('HostID', 'integer', format="zzzzzzz9", initial="0", max_width=4, label="Host ID", position=2, order=10, help="TMS source ID")
         t.column('HostTable', 'character', format="X(12)", initial="", max_width=24, label="Host Table", position=3, order=20, help="TMS Table Information")
         t.column('DMSID', 'integer', format="zzzzzzz9", initial="0", max_width=4, label="DMSID", position=4, order=30, help="DMS ID")

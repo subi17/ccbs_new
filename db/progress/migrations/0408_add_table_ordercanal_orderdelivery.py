@@ -5,7 +5,7 @@ class AddTableOrderDelivery(Migration):
     database = "ordercanal"
 
     def up(self):
-        t = self.table('OrderDelivery', area="Sta_Data_32", table_trigger=[{'crc': '?', 'procedure': 'rd-orderdelivery.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-orderdelivery.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="orderdelivery")
+        t = self.table('OrderDelivery', area="Sta_Data_32", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-orderdelivery.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-orderdelivery.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="orderdelivery")
         t.column('OrderId', 'integer', format=">>>>>>>>9", initial="0", help="Order sequence number", max_width=4, label="OrderId", column_label="OrderId", position=2, order=10, description="Order sequence number")
         t.column('LOId', 'integer', format=">>9", initial="0", max_width=4, label="LOId", column_label="LOId", position=3, order=20, help="Logistic operator ID")
         t.column('LOTimeStamp', 'datetime', format="99-99-9999 HH:MM:SS", initial=self.unknown, max_width=8, label="LOTimeStamp", column_label="LOTimeStamp", position=4, order=30, help="Date and time when the LO order status has changed")

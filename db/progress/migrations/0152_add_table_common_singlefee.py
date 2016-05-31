@@ -5,7 +5,7 @@ class AddTableSingleFee(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('SingleFee', area="Sta_Data_32", label="Single Fee", table_trigger=[{'crc': '?', 'procedure': 'rd-singlefee.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-singlefee.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="singlefe", desc="Single billable fee")
+        t = self.table('SingleFee', area="Sta_Data_32", label="Single Fee", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-singlefee.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-singlefee.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="singlefe", desc="Single billable fee")
         t.column('FMItemId', 'integer', format="zzzzzzzz9", initial="0", max_width=4, label="ItemNo", column_label="ItemNo", position=2, order=10, help="\"Individual \"\"invisible\"\" sequence for this item\"")
         t.column('BillPeriod', 'integer', format="999999", initial="0", max_width=4, label="Period", column_label="Period", position=3, order=20, help="Period YYYYMM (month when this item shall be BILLED)")
         t.column('Amt', 'decimal', format="->,>>>,>>9.99", decimals=2, initial="0", max_width=17, label="Amount", column_label="Amount", position=4, order=30, help="Payable Amount ex VAT")

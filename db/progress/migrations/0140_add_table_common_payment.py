@@ -5,7 +5,7 @@ class AddTablePayment(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('Payment', area="Dyn_Data_32", label="Payments", table_trigger=[{'crc': '?', 'procedure': 'rd-payment.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-payment.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="payment", desc="Payments")
+        t = self.table('Payment', area="Dyn_Data_32", label="Payments", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-payment.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-payment.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="payment", desc="Payments")
         t.column('InvNum', 'integer', format="zzzzzzz9", initial="0", max_width=4, label="InvoiceNo", column_label="InvoiceNo", position=2, order=30, help="Invoice's number")
         t.column('CustName', 'character', format="x(30)", initial="", max_width=60, label="CustName", column_label="Customer name", position=3, order=20, help="Customer's name")
         t.column('InvAmt', 'decimal', format=">>>>>>9.99-", decimals=2, initial="0", max_width=17, label="Invoice Amount", column_label="Invoice Amt", position=4, order=40, help="Invoice's amount (payable)")

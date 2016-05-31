@@ -5,7 +5,7 @@ class AddTableIMSI(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('IMSI', area="Sta_Data_64", table_trigger=[{'crc': '?', 'procedure': 'rd-imsi.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-imsi.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="imsi", desc='''IMSI number
+        t = self.table('IMSI', area="Sta_Data_64", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-imsi.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-imsi.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="imsi", desc='''IMSI number
 ''')
         t.column('IMSI', 'character', format="x(18)", initial="", max_width=36, label="IMSI Number", column_label="IMSI Number", position=2, order=10, help="IMSI Number")
         t.column('ICC', 'character', format="x(24)", initial="", max_width=48, label="Serial no.", column_label="Serial no. (ICC)", position=3, order=20, help="Serial no. (ICC) of an individual SIM card")

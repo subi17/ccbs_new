@@ -5,7 +5,7 @@ class AddTableSubsTerminal(Migration):
     database = "ordercanal"
 
     def up(self):
-        t = self.table('SubsTerminal', area="Sta_Data_64", label="Subscription Terminal", table_trigger=[{'crc': '?', 'procedure': 'rd-substerminal.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-substerminal.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="substerminal", desc="Terminal of a subscription")
+        t = self.table('SubsTerminal', area="Sta_Data_64", label="Subscription Terminal", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-substerminal.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-substerminal.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="substerminal", desc="Terminal of a subscription")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", position=2, order=10, help="Code of brand")
         t.column('MSSeq', 'integer', format=">>>>>>>9", initial="0", max_width=4, label="Subscription ID", column_label="Subs.ID", position=3, order=20, help="Subscription ID")
         t.column('OrderId', 'integer', mandatory=True, format=">>>>>>>>9", initial="0", max_width=4, label="Order ID", column_label="Order", position=4, order=30, help="Order ID")

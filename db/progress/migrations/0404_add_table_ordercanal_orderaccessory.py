@@ -5,7 +5,7 @@ class AddTableOrderAccessory(Migration):
     database = "ordercanal"
 
     def up(self):
-        t = self.table('OrderAccessory', area="Sta_Data_32", table_trigger=[{'crc': '?', 'procedure': 'rd-orderaccessory.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-orderaccessory.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="orderacc")
+        t = self.table('OrderAccessory', area="Sta_Data_32", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-orderaccessory.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-orderaccessory.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="orderacc")
         t.column('OrderId', 'integer', mandatory=True, format=">>>>>>>>9", initial="0", max_width=4, label="OrderId", column_label="OrderId", position=2, order=10, description="Order sequence number")
         t.column('Amount', 'decimal', format=">>>>9.99", decimals=2, initial="0", max_width=17, label="Amount", column_label="Amount", position=3, order=20)
         t.column('VatAmount', 'decimal', format=">>>>9.99", decimals=2, initial="0", max_width=17, label="VatAmount", column_label="VatAmount", position=4, order=40)

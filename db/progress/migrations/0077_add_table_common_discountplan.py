@@ -5,7 +5,7 @@ class AddTableDiscountPlan(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('DiscountPlan', area="Sta_Data_64", label="Discount Plans", table_trigger=[{'crc': '?', 'procedure': 'rd-discountplan.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-discountplan.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="discountplan")
+        t = self.table('DiscountPlan', area="Sta_Data_64", label="Discount Plans", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-discountplan.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-discountplan.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="discountplan")
         t.column('Brand', 'character', format="x(12)", initial="", max_width=24, label="Brand", column_label="Brand", position=2, order=10, help="Brand")
         t.column('DPId', 'integer', mandatory=True, format=">>>>>>>9", initial="0", max_width=4, label="Discount Plan Id", column_label="PlanId", position=3, order=20, help="Discount plan Id")
         t.column('Subject', 'character', format="x(32)", initial="", max_width=64, label="Determinative Subject", column_label="Subject", position=4, order=30, help="Discount plan subject")

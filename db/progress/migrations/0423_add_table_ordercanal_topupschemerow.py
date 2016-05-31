@@ -5,7 +5,7 @@ class AddTableTopupSchemeRow(Migration):
     database = "ordercanal"
 
     def up(self):
-        t = self.table('TopupSchemeRow', area="Sta_Data_128", label="Topup Scheme Row", table_trigger=[{'crc': '?', 'procedure': 'rd-topupschemerow.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-topupschemerow.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="topupschemerow", desc="Topup scheme row")
+        t = self.table('TopupSchemeRow', area="Sta_Data_128", label="Topup Scheme Row", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-topupschemerow.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-topupschemerow.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="topupschemerow", desc="Topup scheme row")
         t.column('Amount', 'decimal', format="->>>>>>9.99", decimals=2, initial="0", max_width=17, label="Topup Amount", column_label="Amount", position=2, order=30, help="Topup amount")
         t.column('BillCode', 'character', format="x(16)", initial="", max_width=32, label="Billing Item", column_label="Bill.Item", position=3, order=40, help="Billing item")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", position=4, order=10, help="Code of brand")

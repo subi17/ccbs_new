@@ -5,7 +5,7 @@ class AddTableOrder(Migration):
     database = "ordercanal"
 
     def up(self):
-        t = self.table('Order', area="Sta_Data_32", table_trigger=[{'crc': '?', 'procedure': 'rd-order.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-order.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="order")
+        t = self.table('Order', area="Sta_Data_32", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-order.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-order.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="order")
         t.column('OrderId', 'integer', mandatory=True, format=">>>>>>>>9", initial="0", max_width=4, label="OrderId", column_label="OrderId", position=2, order=10, description="Order sequence number")
         t.column('CustNum', 'integer', format=">>>>>>>>9", initial="0", help="Reference customer number", max_width=4, label="CustNum", column_label="CustNum", position=3, order=20, description="Reference customer number")
         t.column('Source', 'character', format="x(8)", initial="", help="Source of order", max_width=16, label="Source", column_label="Source", position=9, order=90, description="Source of order")

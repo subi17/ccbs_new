@@ -5,7 +5,7 @@ class AddTableServiceLCounter(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('ServiceLCounter', area="Sta_Data_128", table_trigger=[{'crc': '?', 'procedure': 'rd-servicelcounter.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-servicelcounter.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="servcou1")
+        t = self.table('ServiceLCounter', area="Sta_Data_128", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-servicelcounter.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-servicelcounter.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="servcou1")
         t.column('invseq', 'integer', format=">>>>>>>>>>9", initial="0", max_width=4, position=2, order=10)
         t.column('Amt', 'decimal', format=">>>>>>>>>>>>9.999", decimals=3, initial="0", max_width=18, position=5, order=40)
         t.column('MsSeq', 'integer', format="->,>>>,>>9", initial="0", max_width=4, label="Mobsub", column_label="Msub", position=6, order=5, help="Link to mobsub-table")

@@ -5,7 +5,7 @@ class AddTableDMSDOC(Migration):
     database = "ordercanal"
 
     def up(self):
-        t = self.table('DMSDOC', area="Sta_Data_128", label="Document", table_trigger=[{'crc': '?', 'procedure': 'rd-dmsdoc.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-dmsdoc.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="dmsdoc", desc="DMS Document")
+        t = self.table('DMSDOC', area="Sta_Data_128", label="Document", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-dmsdoc.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-dmsdoc.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="dmsdoc", desc="DMS Document")
         t.column('DMSID', 'integer', format="zzzzzzz9", initial="0", max_width=4, label="DMSID", position=2, order=10, help="DMS ID")
         t.column('DocTypeID', 'character', format="X(2)", initial="", max_width=4, label="Document Type", position=3, order=20, help="Document Type ID")
         t.column('DocStatusCode', 'character', format="X(8)", initial="", max_width=16, label="Document Status", position=4, order=30, help="Document Status Code")

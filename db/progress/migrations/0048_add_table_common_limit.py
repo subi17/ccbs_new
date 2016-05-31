@@ -5,7 +5,7 @@ class AddTableLimit(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('Limit', area="Sta_Data_256", label="Limit", table_trigger=[{'crc': '?', 'procedure': 'rd-limit.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-limit.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="limit", desc="Limits for customer and subscription")
+        t = self.table('Limit', area="Sta_Data_256", label="Limit", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-limit.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-limit.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="limit", desc="Limits for customer and subscription")
         t.column('CustNum', 'integer', mandatory=True, format=">>>>>>>9", initial="0", max_width=4, label="Customer", column_label="Cust", position=2, order=10, help="Customer number")
         t.column('MsSeq', 'integer', format=">>>>>>>>9", initial="0", max_width=4, label="Subscription ID", column_label="MobSub", position=3, order=20, help="Mobile subscription ID")
         t.column('FromDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="From", position=4, order=50, help="Date when rule becomes effective")

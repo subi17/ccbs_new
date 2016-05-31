@@ -5,7 +5,7 @@ class AddTableTermReturn(Migration):
     database = "ordercanal"
 
     def up(self):
-        t = self.table('TermReturn', area="Sta_Data_32", label="Returned terminals", table_trigger=[{'crc': '?', 'procedure': 'rd-termreturn.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-termreturn.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="TermReturn")
+        t = self.table('TermReturn', area="Sta_Data_32", label="Returned terminals", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-termreturn.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-termreturn.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="TermReturn")
         t.column('IMEI', 'character', format="X(12)", initial="", max_width=24, label="IMEI", column_label="IMEI", position=2, order=10)
         t.column('OrderId', 'integer', format=">>>>>>>>9", initial="0", max_width=4, label="OrderId", column_label="OrderId", position=3, order=20)
         t.column('BillCode', 'character', format="x(16)", initial="", max_width=32, label="Terminal Billing Code", column_label="BillCode", position=4, order=30)

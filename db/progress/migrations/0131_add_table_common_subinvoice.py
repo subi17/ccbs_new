@@ -5,7 +5,7 @@ class AddTableSubInvoice(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('SubInvoice', area="Dyn_Data_32", label="Sub Invoice", table_trigger=[{'crc': '?', 'procedure': 'rd-subinvoice.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-subinvoice.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="subinvoice", desc="Subinvoice within a combined invoice")
+        t = self.table('SubInvoice', area="Dyn_Data_32", label="Sub Invoice", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-subinvoice.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-subinvoice.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="subinvoice", desc="Subinvoice within a combined invoice")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, column_label="Brand", position=2, order=10, help="Code Of Brand")
         t.column('InvNum', 'integer', format="zzzzzzz9", initial="0", max_width=4, label="Invoice Number", column_label="Invoice", position=3, order=20, help="Invoice number")
         t.column('SubInvNum', 'integer', format=">>9", initial="0", max_width=4, label="SubInvoice Number", column_label="SubInv", position=4, order=30, help="Sequential nbr of the subinvoice within the combined invoice")

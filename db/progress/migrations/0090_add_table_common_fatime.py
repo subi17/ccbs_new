@@ -5,7 +5,7 @@ class AddTableFATime(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('FATime', area="Sta_Data_64", label="Free Air Time", table_trigger=[{'crc': '?', 'procedure': 'rd-fatime.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'rw-fatime.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="fatime", desc="Free air time (or free qty or free sum)")
+        t = self.table('FATime', area="Sta_Data_64", label="Free Air Time", table_trigger=[{'crc': '?', 'procedure': 'triggers/rd-fatime.p', 'override_proc': True, 'event': 'REPLICATION-DELETE'}, {'crc': '?', 'procedure': 'triggers/rw-fatime.p', 'override_proc': True, 'event': 'REPLICATION-WRITE'}], dump_name="fatime", desc="Free air time (or free qty or free sum)")
         t.column('FATNum', 'integer', format=">>>>>>9", initial="0", max_width=4, label="FatId", position=2, order=10, help="Unique id for fat-definition")
         t.column('Period', 'integer', format="999999", initial="0", max_width=4, label="Period", position=3, order=20, help="Period when the free air time is to be used")
         t.column('MsSeq', 'integer', format="->,>>>,>>9", initial="0", max_width=4, label="Mobsub", column_label="Msub", position=4, order=30, help="Link to mobsub-table")
