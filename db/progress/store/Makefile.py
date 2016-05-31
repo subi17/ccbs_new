@@ -413,6 +413,6 @@ def downgrade(match, deps):
 def fixtures(*a):
     print('Loading fixtures...')
     callgrep(mpro + ['-pf', 'all.pf',
-                 '-param', 'fix_dir=%s/db/progress/fixtures' % work_dir,
+                 '-param', 'fix_dir=%s/db/progress/fixtures,bulk=yes' % work_dir,
                  '-b', '-p', 'gearbox/fixtures/load_fixtures.r'], [])
 
