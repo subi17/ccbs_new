@@ -9,11 +9,11 @@ import glob
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
 if environment == 'development':
-    open('misc/version.i', 'wt').write(appversion)
+    open('Mc/version.i', 'wt').write(appversion)
 
 myself = os.path.basename(os.getcwd())
 
-nonp_source = ['scripts/' + x for x in os.listdir('scripts')]
+nonp_source = ['script/' + x for x in os.listdir('script')]
 skip_timelog = False
 show_file = False
 
