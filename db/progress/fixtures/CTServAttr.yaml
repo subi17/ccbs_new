@@ -1,0 +1,4876 @@
+CTServAttr1: CTServAttr
+  CTServEl: 50
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr2: CTServAttr
+  CTServEl: 50
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr3: CTServAttr
+  CTServEl: 51
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr4: CTServAttr
+  CTServEl: 60
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2006-11-01
+
+CTServAttr5: CTServAttr
+  CTServEl: 60
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2006-11-01
+
+CTServAttr6: CTServAttr
+  CTServEl: 60
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2006-11-01
+
+CTServAttr7: CTServAttr
+  CTServEl: 60
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2006-11-01
+
+CTServAttr8: CTServAttr
+  CTServEl: 60
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2006-11-01
+
+CTServAttr9: CTServAttr
+  CTServEl: 60
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2006-11-01
+
+CTServAttr10: CTServAttr
+  CTServEl: 74
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr11: CTServAttr
+  CTServEl: 74
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr12: CTServAttr
+  CTServEl: 75
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr13: CTServAttr
+  CTServEl: 80
+  ServAttr: "LANG"
+  DefValue: "0"
+  FromDate: 2006-11-01
+
+CTServAttr14: CTServAttr
+  CTServEl: 83
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2006-11-01
+
+CTServAttr15: CTServAttr
+  CTServEl: 83
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2006-11-01
+
+CTServAttr16: CTServAttr
+  CTServEl: 83
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2006-11-01
+
+CTServAttr17: CTServAttr
+  CTServEl: 83
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2006-11-01
+
+CTServAttr18: CTServAttr
+  CTServEl: 83
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2006-11-01
+
+CTServAttr19: CTServAttr
+  CTServEl: 83
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2006-11-01
+
+CTServAttr20: CTServAttr
+  CTServEl: 90
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr21: CTServAttr
+  CTServEl: 90
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr22: CTServAttr
+  CTServEl: 90
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr23: CTServAttr
+  CTServEl: 90
+  ServAttr: "SchedTime"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr24: CTServAttr
+  CTServEl: 94
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr25: CTServAttr
+  CTServEl: 94
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr26: CTServAttr
+  CTServEl: 95
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr27: CTServAttr
+  CTServEl: 100
+  ServAttr: "LANG"
+  DefValue: "0"
+  FromDate: 2006-11-01
+
+CTServAttr28: CTServAttr
+  CTServEl: 103
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2006-11-01
+
+CTServAttr29: CTServAttr
+  CTServEl: 103
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2006-11-01
+
+CTServAttr30: CTServAttr
+  CTServEl: 103
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2006-11-01
+
+CTServAttr31: CTServAttr
+  CTServEl: 103
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2006-11-01
+
+CTServAttr32: CTServAttr
+  CTServEl: 103
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2006-11-01
+
+CTServAttr33: CTServAttr
+  CTServEl: 103
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2006-11-01
+
+CTServAttr34: CTServAttr
+  CTServEl: 110
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr35: CTServAttr
+  CTServEl: 110
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr36: CTServAttr
+  CTServEl: 110
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr37: CTServAttr
+  CTServEl: 110
+  ServAttr: "SchedTime"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr38: CTServAttr
+  CTServEl: 114
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr39: CTServAttr
+  CTServEl: 114
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr40: CTServAttr
+  CTServEl: 115
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr41: CTServAttr
+  CTServEl: 120
+  ServAttr: "LANG"
+  DefValue: "0"
+  FromDate: 2006-11-01
+
+CTServAttr42: CTServAttr
+  CTServEl: 123
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2006-11-01
+
+CTServAttr43: CTServAttr
+  CTServEl: 123
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2006-11-01
+
+CTServAttr44: CTServAttr
+  CTServEl: 123
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2006-11-01
+
+CTServAttr45: CTServAttr
+  CTServEl: 123
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2006-11-01
+
+CTServAttr46: CTServAttr
+  CTServEl: 123
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2006-11-01
+
+CTServAttr47: CTServAttr
+  CTServEl: 123
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2006-11-01
+
+CTServAttr48: CTServAttr
+  CTServEl: 130
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr49: CTServAttr
+  CTServEl: 130
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr50: CTServAttr
+  CTServEl: 130
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr51: CTServAttr
+  CTServEl: 130
+  ServAttr: "SchedTime"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr52: CTServAttr
+  CTServEl: 220
+  ServAttr: "LANG"
+  DefValue: "0"
+  FromDate: 2006-11-01
+
+CTServAttr53: CTServAttr
+  CTServEl: 389
+  ServAttr: "LANG"
+  DefValue: "0"
+  FromDate: 2006-11-01
+
+CTServAttr54: CTServAttr
+  CTServEl: 434
+  ServAttr: "LANG"
+  DefValue: "0"
+  FromDate: 2006-11-01
+
+CTServAttr55: CTServAttr
+  CTServEl: 442
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr56: CTServAttr
+  CTServEl: 442
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr57: CTServAttr
+  CTServEl: 442
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr58: CTServAttr
+  CTServEl: 442
+  ServAttr: "SchedTime"
+  ChgAllowed: FALSE
+  FromDate: 2006-11-01
+
+CTServAttr59: CTServAttr
+  CTServEl: 647
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2007-06-12
+
+CTServAttr60: CTServAttr
+  CTServEl: 647
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2007-06-12
+
+CTServAttr61: CTServAttr
+  CTServEl: 648
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2007-06-12
+
+CTServAttr62: CTServAttr
+  CTServEl: 656
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2007-06-12
+
+CTServAttr63: CTServAttr
+  CTServEl: 659
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2007-06-12
+
+CTServAttr64: CTServAttr
+  CTServEl: 659
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2007-06-12
+
+CTServAttr65: CTServAttr
+  CTServEl: 659
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2007-06-12
+
+CTServAttr66: CTServAttr
+  CTServEl: 659
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2007-06-12
+
+CTServAttr67: CTServAttr
+  CTServEl: 659
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2007-06-12
+
+CTServAttr68: CTServAttr
+  CTServEl: 659
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2007-06-12
+
+CTServAttr69: CTServAttr
+  CTServEl: 668
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2007-06-12
+
+CTServAttr70: CTServAttr
+  CTServEl: 668
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2007-06-12
+
+CTServAttr71: CTServAttr
+  CTServEl: 668
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2007-06-12
+
+CTServAttr72: CTServAttr
+  CTServEl: 668
+  ServAttr: "SchedTime"
+  ChgAllowed: FALSE
+  FromDate: 2007-06-12
+
+CTServAttr73: CTServAttr
+  CTServEl: 673
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2007-06-12
+
+CTServAttr74: CTServAttr
+  CTServEl: 673
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2007-06-12
+
+CTServAttr75: CTServAttr
+  CTServEl: 674
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2007-06-12
+
+CTServAttr76: CTServAttr
+  CTServEl: 682
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2007-06-12
+
+CTServAttr77: CTServAttr
+  CTServEl: 685
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2007-06-12
+
+CTServAttr78: CTServAttr
+  CTServEl: 685
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2007-06-12
+
+CTServAttr79: CTServAttr
+  CTServEl: 685
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2007-06-12
+
+CTServAttr80: CTServAttr
+  CTServEl: 685
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2007-06-12
+
+CTServAttr81: CTServAttr
+  CTServEl: 685
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2007-06-12
+
+CTServAttr82: CTServAttr
+  CTServEl: 685
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2007-06-12
+
+CTServAttr83: CTServAttr
+  CTServEl: 694
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2007-06-12
+
+CTServAttr84: CTServAttr
+  CTServEl: 694
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2007-06-12
+
+CTServAttr85: CTServAttr
+  CTServEl: 694
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2007-06-12
+
+CTServAttr86: CTServAttr
+  CTServEl: 694
+  ServAttr: "SchedTime"
+  ChgAllowed: FALSE
+  FromDate: 2007-06-12
+
+CTServAttr87: CTServAttr
+  CTServEl: 696
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr88: CTServAttr
+  CTServEl: 696
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr89: CTServAttr
+  CTServEl: 697
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr90: CTServAttr
+  CTServEl: 697
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2007-09-01
+
+CTServAttr91: CTServAttr
+  CTServEl: 697
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr92: CTServAttr
+  CTServEl: 697
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr93: CTServAttr
+  CTServEl: 697
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr94: CTServAttr
+  CTServEl: 697
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2007-07-01
+
+CTServAttr95: CTServAttr
+  CTServEl: 697
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2007-09-01
+
+CTServAttr96: CTServAttr
+  CTServEl: 697
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2007-09-01
+
+CTServAttr97: CTServAttr
+  CTServEl: 697
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr98: CTServAttr
+  CTServEl: 697
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr99: CTServAttr
+  CTServEl: 697
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr100: CTServAttr
+  CTServEl: 697
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2007-09-01
+
+CTServAttr101: CTServAttr
+  CTServEl: 697
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr102: CTServAttr
+  CTServEl: 697
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr103: CTServAttr
+  CTServEl: 697
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr104: CTServAttr
+  CTServEl: 697
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr105: CTServAttr
+  CTServEl: 698
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr106: CTServAttr
+  CTServEl: 698
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr107: CTServAttr
+  CTServEl: 699
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr108: CTServAttr
+  CTServEl: 699
+  ServAttr: "ChgMonthFee"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2008-09-01
+
+CTServAttr109: CTServAttr
+  CTServEl: 699
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr110: CTServAttr
+  CTServEl: 699
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr111: CTServAttr
+  CTServEl: 699
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr112: CTServAttr
+  CTServEl: 699
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2007-07-01
+
+CTServAttr113: CTServAttr
+  CTServEl: 699
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr114: CTServAttr
+  CTServEl: 699
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr115: CTServAttr
+  CTServEl: 699
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr116: CTServAttr
+  CTServEl: 699
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr117: CTServAttr
+  CTServEl: 699
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr118: CTServAttr
+  CTServEl: 699
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr119: CTServAttr
+  CTServEl: 699
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr120: CTServAttr
+  CTServEl: 700
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr121: CTServAttr
+  CTServEl: 700
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr122: CTServAttr
+  CTServEl: 701
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr123: CTServAttr
+  CTServEl: 701
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr124: CTServAttr
+  CTServEl: 701
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr125: CTServAttr
+  CTServEl: 701
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr126: CTServAttr
+  CTServEl: 701
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2007-07-01
+
+CTServAttr127: CTServAttr
+  CTServEl: 701
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr128: CTServAttr
+  CTServEl: 701
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr129: CTServAttr
+  CTServEl: 701
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr130: CTServAttr
+  CTServEl: 701
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr131: CTServAttr
+  CTServEl: 701
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr132: CTServAttr
+  CTServEl: 701
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr133: CTServAttr
+  CTServEl: 701
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr134: CTServAttr
+  CTServEl: 702
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr135: CTServAttr
+  CTServEl: 702
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr136: CTServAttr
+  CTServEl: 703
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr137: CTServAttr
+  CTServEl: 703
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr138: CTServAttr
+  CTServEl: 703
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr139: CTServAttr
+  CTServEl: 703
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr140: CTServAttr
+  CTServEl: 703
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2007-07-01
+
+CTServAttr141: CTServAttr
+  CTServEl: 703
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr142: CTServAttr
+  CTServEl: 703
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr143: CTServAttr
+  CTServEl: 703
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr144: CTServAttr
+  CTServEl: 703
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr145: CTServAttr
+  CTServEl: 703
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr146: CTServAttr
+  CTServEl: 703
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2007-07-01
+
+CTServAttr147: CTServAttr
+  CTServEl: 703
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2007-07-01
+
+CTServAttr148: CTServAttr
+  CTServEl: 1079
+  ServAttr: "LANG"
+  DefValue: "0"
+  FromDate: 2008-06-01
+
+CTServAttr149: CTServAttr
+  CTServEl: 1088
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2008-06-01
+
+CTServAttr150: CTServAttr
+  CTServEl: 1088
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2008-06-01
+
+CTServAttr151: CTServAttr
+  CTServEl: 1088
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2008-06-01
+
+CTServAttr152: CTServAttr
+  CTServEl: 1088
+  ServAttr: "SchedTime"
+  ChgAllowed: FALSE
+  FromDate: 2008-06-01
+
+CTServAttr153: CTServAttr
+  CTServEl: 1114
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr154: CTServAttr
+  CTServEl: 1114
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr155: CTServAttr
+  CTServEl: 1114
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr156: CTServAttr
+  CTServEl: 1114
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr157: CTServAttr
+  CTServEl: 1114
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2008-06-01
+
+CTServAttr158: CTServAttr
+  CTServEl: 1114
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2008-06-01
+
+CTServAttr159: CTServAttr
+  CTServEl: 1114
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr160: CTServAttr
+  CTServEl: 1114
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr161: CTServAttr
+  CTServEl: 1114
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr162: CTServAttr
+  CTServEl: 1114
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2008-06-01
+
+CTServAttr163: CTServAttr
+  CTServEl: 1114
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr164: CTServAttr
+  CTServEl: 1114
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr165: CTServAttr
+  CTServEl: 1114
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2008-06-01
+
+CTServAttr166: CTServAttr
+  CTServEl: 1114
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr167: CTServAttr
+  CTServEl: 1114
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2008-06-01
+
+CTServAttr168: CTServAttr
+  CTServEl: 1114
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr169: CTServAttr
+  CTServEl: 1299
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2008-09-12
+
+CTServAttr170: CTServAttr
+  CTServEl: 1299
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2008-09-12
+
+CTServAttr171: CTServAttr
+  CTServEl: 1300
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2008-09-12
+
+CTServAttr172: CTServAttr
+  CTServEl: 1308
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2008-09-12
+
+CTServAttr173: CTServAttr
+  CTServEl: 1311
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2008-09-12
+
+CTServAttr174: CTServAttr
+  CTServEl: 1311
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2008-09-12
+
+CTServAttr175: CTServAttr
+  CTServEl: 1311
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2008-09-12
+
+CTServAttr176: CTServAttr
+  CTServEl: 1311
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2008-09-12
+
+CTServAttr177: CTServAttr
+  CTServEl: 1311
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2008-09-12
+
+CTServAttr178: CTServAttr
+  CTServEl: 1311
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2008-09-12
+
+CTServAttr179: CTServAttr
+  CTServEl: 1351
+  ServAttr: "LANG"
+  DefValue: "0"
+  FromDate: 2008-09-01
+
+CTServAttr180: CTServAttr
+  CTServEl: 1524
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr181: CTServAttr
+  CTServEl: 1524
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr182: CTServAttr
+  CTServEl: 1524
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr183: CTServAttr
+  CTServEl: 1524
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2008-09-01
+
+CTServAttr184: CTServAttr
+  CTServEl: 1524
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2008-09-01
+
+CTServAttr185: CTServAttr
+  CTServEl: 1524
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr186: CTServAttr
+  CTServEl: 1524
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2008-09-01
+
+CTServAttr187: CTServAttr
+  CTServEl: 1524
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr188: CTServAttr
+  CTServEl: 1524
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2008-09-01
+
+CTServAttr189: CTServAttr
+  CTServEl: 1524
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr190: CTServAttr
+  CTServEl: 1524
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2008-09-01
+
+CTServAttr191: CTServAttr
+  CTServEl: 1524
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr192: CTServAttr
+  CTServEl: 1609
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2008-09-01
+
+CTServAttr193: CTServAttr
+  CTServEl: 1609
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2008-09-01
+
+CTServAttr194: CTServAttr
+  CTServEl: 1610
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2008-09-01
+
+CTServAttr195: CTServAttr
+  CTServEl: 1620
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2008-09-01
+
+CTServAttr196: CTServAttr
+  CTServEl: 1627
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2008-09-01
+
+CTServAttr197: CTServAttr
+  CTServEl: 1627
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2008-09-01
+
+CTServAttr198: CTServAttr
+  CTServEl: 1627
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr199: CTServAttr
+  CTServEl: 1627
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr200: CTServAttr
+  CTServEl: 1627
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2008-09-01
+
+CTServAttr201: CTServAttr
+  CTServEl: 1627
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr202: CTServAttr
+  CTServEl: 1666
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr203: CTServAttr
+  CTServEl: 1666
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr204: CTServAttr
+  CTServEl: 1666
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr205: CTServAttr
+  CTServEl: 1666
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr206: CTServAttr
+  CTServEl: 1666
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2008-09-01
+
+CTServAttr207: CTServAttr
+  CTServEl: 1666
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2008-09-01
+
+CTServAttr208: CTServAttr
+  CTServEl: 1666
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr209: CTServAttr
+  CTServEl: 1666
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr210: CTServAttr
+  CTServEl: 1666
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr211: CTServAttr
+  CTServEl: 1666
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2008-09-01
+
+CTServAttr212: CTServAttr
+  CTServEl: 1666
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr213: CTServAttr
+  CTServEl: 1666
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr214: CTServAttr
+  CTServEl: 1666
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2008-09-01
+
+CTServAttr215: CTServAttr
+  CTServEl: 1666
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr216: CTServAttr
+  CTServEl: 1666
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2008-09-01
+
+CTServAttr217: CTServAttr
+  CTServEl: 1666
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2008-09-01
+
+CTServAttr218: CTServAttr
+  CTServEl: 1786
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2009-04-01
+
+CTServAttr219: CTServAttr
+  CTServEl: 1786
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2009-04-01
+
+CTServAttr220: CTServAttr
+  CTServEl: 1786
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2009-04-01
+
+CTServAttr221: CTServAttr
+  CTServEl: 1786
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2009-04-01
+
+CTServAttr222: CTServAttr
+  CTServEl: 1786
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2009-04-01
+
+CTServAttr223: CTServAttr
+  CTServEl: 1786
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2009-04-01
+
+CTServAttr224: CTServAttr
+  CTServEl: 1786
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2009-04-01
+
+CTServAttr225: CTServAttr
+  CTServEl: 1786
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2009-04-01
+
+CTServAttr226: CTServAttr
+  CTServEl: 1786
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2009-04-01
+
+CTServAttr227: CTServAttr
+  CTServEl: 1786
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2009-04-01
+
+CTServAttr228: CTServAttr
+  CTServEl: 1786
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2009-04-01
+
+CTServAttr229: CTServAttr
+  CTServEl: 1786
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2009-04-01
+
+CTServAttr230: CTServAttr
+  CTServEl: 1973
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2009-11-01
+
+CTServAttr231: CTServAttr
+  CTServEl: 1973
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2009-11-01
+
+CTServAttr232: CTServAttr
+  CTServEl: 1974
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2009-11-01
+
+CTServAttr233: CTServAttr
+  CTServEl: 1982
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2009-11-01
+
+CTServAttr234: CTServAttr
+  CTServEl: 1985
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2009-11-01
+
+CTServAttr235: CTServAttr
+  CTServEl: 1985
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2009-11-01
+
+CTServAttr236: CTServAttr
+  CTServEl: 1985
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2009-11-01
+
+CTServAttr237: CTServAttr
+  CTServEl: 1985
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2009-11-01
+
+CTServAttr238: CTServAttr
+  CTServEl: 1985
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2009-11-01
+
+CTServAttr239: CTServAttr
+  CTServEl: 1985
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2009-11-01
+
+CTServAttr240: CTServAttr
+  CTServEl: 2017
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2009-11-01
+
+CTServAttr241: CTServAttr
+  CTServEl: 2017
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2009-11-01
+
+CTServAttr242: CTServAttr
+  CTServEl: 2017
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2009-11-01
+
+CTServAttr243: CTServAttr
+  CTServEl: 2017
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2009-11-01
+
+CTServAttr244: CTServAttr
+  CTServEl: 2017
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2009-11-01
+
+CTServAttr245: CTServAttr
+  CTServEl: 2017
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2009-11-01
+
+CTServAttr246: CTServAttr
+  CTServEl: 2017
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2009-11-01
+
+CTServAttr247: CTServAttr
+  CTServEl: 2017
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2009-11-01
+
+CTServAttr248: CTServAttr
+  CTServEl: 2017
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2009-11-01
+
+CTServAttr249: CTServAttr
+  CTServEl: 2017
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2009-11-01
+
+CTServAttr250: CTServAttr
+  CTServEl: 2017
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2009-11-01
+
+CTServAttr251: CTServAttr
+  CTServEl: 2017
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2009-11-01
+
+CTServAttr252: CTServAttr
+  CTServEl: 2017
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2009-11-01
+
+CTServAttr253: CTServAttr
+  CTServEl: 2017
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2009-11-01
+
+CTServAttr254: CTServAttr
+  CTServEl: 2017
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2009-11-01
+
+CTServAttr255: CTServAttr
+  CTServEl: 2017
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2009-11-01
+
+CTServAttr256: CTServAttr
+  CTServEl: 2086
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2009-12-01
+
+CTServAttr257: CTServAttr
+  CTServEl: 2086
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2009-12-01
+
+CTServAttr258: CTServAttr
+  CTServEl: 2087
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2009-12-01
+
+CTServAttr259: CTServAttr
+  CTServEl: 2095
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2009-12-01
+
+CTServAttr260: CTServAttr
+  CTServEl: 2098
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2009-12-01
+
+CTServAttr261: CTServAttr
+  CTServEl: 2098
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2009-12-01
+
+CTServAttr262: CTServAttr
+  CTServEl: 2098
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2009-12-01
+
+CTServAttr263: CTServAttr
+  CTServEl: 2098
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2009-12-01
+
+CTServAttr264: CTServAttr
+  CTServEl: 2098
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2009-12-01
+
+CTServAttr265: CTServAttr
+  CTServEl: 2098
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2009-12-01
+
+CTServAttr266: CTServAttr
+  CTServEl: 2132
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2009-12-01
+
+CTServAttr267: CTServAttr
+  CTServEl: 2132
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2009-12-01
+
+CTServAttr268: CTServAttr
+  CTServEl: 2132
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2009-12-01
+
+CTServAttr269: CTServAttr
+  CTServEl: 2132
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2009-12-01
+
+CTServAttr270: CTServAttr
+  CTServEl: 2132
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2009-12-01
+
+CTServAttr271: CTServAttr
+  CTServEl: 2132
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2009-12-01
+
+CTServAttr272: CTServAttr
+  CTServEl: 2132
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2009-12-01
+
+CTServAttr273: CTServAttr
+  CTServEl: 2132
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2009-12-01
+
+CTServAttr274: CTServAttr
+  CTServEl: 2132
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2009-12-01
+
+CTServAttr275: CTServAttr
+  CTServEl: 2132
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2009-12-01
+
+CTServAttr276: CTServAttr
+  CTServEl: 2132
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2009-12-01
+
+CTServAttr277: CTServAttr
+  CTServEl: 2132
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2009-12-01
+
+CTServAttr278: CTServAttr
+  CTServEl: 2132
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2009-12-01
+
+CTServAttr279: CTServAttr
+  CTServEl: 2132
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2009-12-01
+
+CTServAttr280: CTServAttr
+  CTServEl: 2132
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2009-12-01
+
+CTServAttr281: CTServAttr
+  CTServEl: 2132
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2009-12-01
+
+CTServAttr282: CTServAttr
+  CTServEl: 2255
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2011-05-01
+
+CTServAttr283: CTServAttr
+  CTServEl: 2255
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2011-05-01
+
+CTServAttr284: CTServAttr
+  CTServEl: 2256
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2011-05-01
+
+CTServAttr285: CTServAttr
+  CTServEl: 2266
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2011-05-01
+
+CTServAttr286: CTServAttr
+  CTServEl: 2269
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2011-05-01
+
+CTServAttr287: CTServAttr
+  CTServEl: 2269
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2011-05-01
+
+CTServAttr288: CTServAttr
+  CTServEl: 2269
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2011-05-01
+
+CTServAttr289: CTServAttr
+  CTServEl: 2269
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2011-05-01
+
+CTServAttr290: CTServAttr
+  CTServEl: 2269
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2011-05-01
+
+CTServAttr291: CTServAttr
+  CTServEl: 2269
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2011-05-01
+
+CTServAttr292: CTServAttr
+  CTServEl: 2305
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2011-05-01
+
+CTServAttr293: CTServAttr
+  CTServEl: 2305
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2011-05-01
+
+CTServAttr294: CTServAttr
+  CTServEl: 2305
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2011-05-01
+
+CTServAttr295: CTServAttr
+  CTServEl: 2305
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2011-05-01
+
+CTServAttr296: CTServAttr
+  CTServEl: 2305
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2011-05-01
+
+CTServAttr297: CTServAttr
+  CTServEl: 2305
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2011-05-01
+
+CTServAttr298: CTServAttr
+  CTServEl: 2305
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2011-05-01
+
+CTServAttr299: CTServAttr
+  CTServEl: 2305
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2011-05-01
+
+CTServAttr300: CTServAttr
+  CTServEl: 2305
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2011-05-01
+
+CTServAttr301: CTServAttr
+  CTServEl: 2305
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2011-05-01
+
+CTServAttr302: CTServAttr
+  CTServEl: 2305
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2011-05-01
+
+CTServAttr303: CTServAttr
+  CTServEl: 2305
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2011-05-01
+
+CTServAttr304: CTServAttr
+  CTServEl: 2305
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2011-05-01
+
+CTServAttr305: CTServAttr
+  CTServEl: 2305
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2011-05-01
+
+CTServAttr306: CTServAttr
+  CTServEl: 2305
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2011-05-01
+
+CTServAttr307: CTServAttr
+  CTServEl: 2305
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2011-05-01
+
+CTServAttr308: CTServAttr
+  CTServEl: 2394
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2008-06-01
+
+CTServAttr309: CTServAttr
+  CTServEl: 2394
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2008-06-01
+
+CTServAttr310: CTServAttr
+  CTServEl: 2395
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2008-06-01
+
+CTServAttr311: CTServAttr
+  CTServEl: 2404
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2008-06-01
+
+CTServAttr312: CTServAttr
+  CTServEl: 2407
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2008-06-01
+
+CTServAttr313: CTServAttr
+  CTServEl: 2407
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2008-06-01
+
+CTServAttr314: CTServAttr
+  CTServEl: 2407
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr315: CTServAttr
+  CTServEl: 2407
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr316: CTServAttr
+  CTServEl: 2407
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2008-06-01
+
+CTServAttr317: CTServAttr
+  CTServEl: 2407
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr318: CTServAttr
+  CTServEl: 2444
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr319: CTServAttr
+  CTServEl: 2444
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr320: CTServAttr
+  CTServEl: 2444
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr321: CTServAttr
+  CTServEl: 2444
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr322: CTServAttr
+  CTServEl: 2444
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2008-06-01
+
+CTServAttr323: CTServAttr
+  CTServEl: 2444
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2008-06-01
+
+CTServAttr324: CTServAttr
+  CTServEl: 2444
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr325: CTServAttr
+  CTServEl: 2444
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr326: CTServAttr
+  CTServEl: 2444
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr327: CTServAttr
+  CTServEl: 2444
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2008-06-01
+
+CTServAttr328: CTServAttr
+  CTServEl: 2444
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr329: CTServAttr
+  CTServEl: 2444
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr330: CTServAttr
+  CTServEl: 2444
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2008-06-01
+
+CTServAttr331: CTServAttr
+  CTServEl: 2444
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr332: CTServAttr
+  CTServEl: 2444
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2008-06-01
+
+CTServAttr333: CTServAttr
+  CTServEl: 2444
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2008-06-01
+
+CTServAttr334: CTServAttr
+  CTServEl: 2527
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2011-12-01
+
+CTServAttr335: CTServAttr
+  CTServEl: 2527
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2011-12-01
+
+CTServAttr336: CTServAttr
+  CTServEl: 2528
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2011-12-01
+
+CTServAttr337: CTServAttr
+  CTServEl: 2538
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2011-12-01
+
+CTServAttr338: CTServAttr
+  CTServEl: 2541
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2011-12-01
+
+CTServAttr339: CTServAttr
+  CTServEl: 2541
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2011-12-01
+
+CTServAttr340: CTServAttr
+  CTServEl: 2541
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr341: CTServAttr
+  CTServEl: 2541
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr342: CTServAttr
+  CTServEl: 2541
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2011-12-01
+
+CTServAttr343: CTServAttr
+  CTServEl: 2541
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr344: CTServAttr
+  CTServEl: 2578
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr345: CTServAttr
+  CTServEl: 2578
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr346: CTServAttr
+  CTServEl: 2578
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr347: CTServAttr
+  CTServEl: 2578
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr348: CTServAttr
+  CTServEl: 2578
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2011-12-01
+
+CTServAttr349: CTServAttr
+  CTServEl: 2578
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2011-12-01
+
+CTServAttr350: CTServAttr
+  CTServEl: 2578
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr351: CTServAttr
+  CTServEl: 2578
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr352: CTServAttr
+  CTServEl: 2578
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr353: CTServAttr
+  CTServEl: 2578
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2011-12-01
+
+CTServAttr354: CTServAttr
+  CTServEl: 2578
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr355: CTServAttr
+  CTServEl: 2578
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr356: CTServAttr
+  CTServEl: 2578
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2011-12-01
+
+CTServAttr357: CTServAttr
+  CTServEl: 2578
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr358: CTServAttr
+  CTServEl: 2578
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2011-12-01
+
+CTServAttr359: CTServAttr
+  CTServEl: 2578
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr360: CTServAttr
+  CTServEl: 2690
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr361: CTServAttr
+  CTServEl: 2690
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr362: CTServAttr
+  CTServEl: 2690
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr363: CTServAttr
+  CTServEl: 2690
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2011-12-01
+
+CTServAttr364: CTServAttr
+  CTServEl: 2690
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2011-12-01
+
+CTServAttr365: CTServAttr
+  CTServEl: 2690
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr366: CTServAttr
+  CTServEl: 2690
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2011-12-01
+
+CTServAttr367: CTServAttr
+  CTServEl: 2690
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr368: CTServAttr
+  CTServEl: 2690
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2011-12-01
+
+CTServAttr369: CTServAttr
+  CTServEl: 2690
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr370: CTServAttr
+  CTServEl: 2690
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2011-12-01
+
+CTServAttr371: CTServAttr
+  CTServEl: 2690
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2011-12-01
+
+CTServAttr372: CTServAttr
+  CTServEl: 2759
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2012-05-01
+
+CTServAttr373: CTServAttr
+  CTServEl: 2759
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2012-05-01
+
+CTServAttr374: CTServAttr
+  CTServEl: 2760
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2012-05-01
+
+CTServAttr375: CTServAttr
+  CTServEl: 2770
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2012-05-01
+
+CTServAttr376: CTServAttr
+  CTServEl: 2773
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2012-05-01
+
+CTServAttr377: CTServAttr
+  CTServEl: 2773
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2012-05-01
+
+CTServAttr378: CTServAttr
+  CTServEl: 2773
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr379: CTServAttr
+  CTServEl: 2773
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr380: CTServAttr
+  CTServEl: 2773
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2012-05-01
+
+CTServAttr381: CTServAttr
+  CTServEl: 2773
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr382: CTServAttr
+  CTServEl: 2810
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr383: CTServAttr
+  CTServEl: 2810
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr384: CTServAttr
+  CTServEl: 2810
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr385: CTServAttr
+  CTServEl: 2810
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr386: CTServAttr
+  CTServEl: 2810
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2012-05-01
+
+CTServAttr387: CTServAttr
+  CTServEl: 2810
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2012-05-01
+
+CTServAttr388: CTServAttr
+  CTServEl: 2810
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr389: CTServAttr
+  CTServEl: 2810
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr390: CTServAttr
+  CTServEl: 2810
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr391: CTServAttr
+  CTServEl: 2810
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2012-05-01
+
+CTServAttr392: CTServAttr
+  CTServEl: 2810
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr393: CTServAttr
+  CTServEl: 2810
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr394: CTServAttr
+  CTServEl: 2810
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2012-05-01
+
+CTServAttr395: CTServAttr
+  CTServEl: 2810
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr396: CTServAttr
+  CTServEl: 2810
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2012-05-01
+
+CTServAttr397: CTServAttr
+  CTServEl: 2810
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr398: CTServAttr
+  CTServEl: 2879
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2012-05-01
+
+CTServAttr399: CTServAttr
+  CTServEl: 2879
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2012-05-01
+
+CTServAttr400: CTServAttr
+  CTServEl: 2880
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2012-05-01
+
+CTServAttr401: CTServAttr
+  CTServEl: 2890
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2012-05-01
+
+CTServAttr402: CTServAttr
+  CTServEl: 2893
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2012-05-01
+
+CTServAttr403: CTServAttr
+  CTServEl: 2893
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2012-05-01
+
+CTServAttr404: CTServAttr
+  CTServEl: 2893
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr405: CTServAttr
+  CTServEl: 2893
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr406: CTServAttr
+  CTServEl: 2893
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2012-05-01
+
+CTServAttr407: CTServAttr
+  CTServEl: 2893
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr408: CTServAttr
+  CTServEl: 2931
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr409: CTServAttr
+  CTServEl: 2931
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr410: CTServAttr
+  CTServEl: 2931
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr411: CTServAttr
+  CTServEl: 2931
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr412: CTServAttr
+  CTServEl: 2931
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2012-05-01
+
+CTServAttr413: CTServAttr
+  CTServEl: 2931
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2012-05-01
+
+CTServAttr414: CTServAttr
+  CTServEl: 2931
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr415: CTServAttr
+  CTServEl: 2931
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr416: CTServAttr
+  CTServEl: 2931
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr417: CTServAttr
+  CTServEl: 2931
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2012-05-01
+
+CTServAttr418: CTServAttr
+  CTServEl: 2931
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr419: CTServAttr
+  CTServEl: 2931
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr420: CTServAttr
+  CTServEl: 2931
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2012-05-01
+
+CTServAttr421: CTServAttr
+  CTServEl: 2931
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr422: CTServAttr
+  CTServEl: 2931
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2012-05-01
+
+CTServAttr423: CTServAttr
+  CTServEl: 2931
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2012-05-01
+
+CTServAttr424: CTServAttr
+  CTServEl: 3015
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr425: CTServAttr
+  CTServEl: 3015
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr426: CTServAttr
+  CTServEl: 3016
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr427: CTServAttr
+  CTServEl: 3026
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2012-12-01
+
+CTServAttr428: CTServAttr
+  CTServEl: 3029
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2012-12-01
+
+CTServAttr429: CTServAttr
+  CTServEl: 3029
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2012-12-01
+
+CTServAttr430: CTServAttr
+  CTServEl: 3029
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr431: CTServAttr
+  CTServEl: 3029
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr432: CTServAttr
+  CTServEl: 3029
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2012-12-01
+
+CTServAttr433: CTServAttr
+  CTServEl: 3029
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr434: CTServAttr
+  CTServEl: 3067
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr435: CTServAttr
+  CTServEl: 3067
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr436: CTServAttr
+  CTServEl: 3067
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr437: CTServAttr
+  CTServEl: 3067
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr438: CTServAttr
+  CTServEl: 3067
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr439: CTServAttr
+  CTServEl: 3067
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2012-12-01
+
+CTServAttr440: CTServAttr
+  CTServEl: 3067
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr441: CTServAttr
+  CTServEl: 3067
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr442: CTServAttr
+  CTServEl: 3067
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr443: CTServAttr
+  CTServEl: 3067
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr444: CTServAttr
+  CTServEl: 3067
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr445: CTServAttr
+  CTServEl: 3067
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr446: CTServAttr
+  CTServEl: 3067
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr447: CTServAttr
+  CTServEl: 3067
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr448: CTServAttr
+  CTServEl: 3067
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr449: CTServAttr
+  CTServEl: 3067
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr450: CTServAttr
+  CTServEl: 3184
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr451: CTServAttr
+  CTServEl: 3184
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr452: CTServAttr
+  CTServEl: 3184
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr453: CTServAttr
+  CTServEl: 3184
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr454: CTServAttr
+  CTServEl: 3184
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2012-12-01
+
+CTServAttr455: CTServAttr
+  CTServEl: 3184
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr456: CTServAttr
+  CTServEl: 3184
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr457: CTServAttr
+  CTServEl: 3184
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr458: CTServAttr
+  CTServEl: 3184
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr459: CTServAttr
+  CTServEl: 3184
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr460: CTServAttr
+  CTServEl: 3184
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr461: CTServAttr
+  CTServEl: 3184
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr462: CTServAttr
+  CTServEl: 3253
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr463: CTServAttr
+  CTServEl: 3253
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr464: CTServAttr
+  CTServEl: 3254
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr465: CTServAttr
+  CTServEl: 3264
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2012-12-01
+
+CTServAttr466: CTServAttr
+  CTServEl: 3267
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2012-12-01
+
+CTServAttr467: CTServAttr
+  CTServEl: 3267
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2012-12-01
+
+CTServAttr468: CTServAttr
+  CTServEl: 3267
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr469: CTServAttr
+  CTServEl: 3267
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr470: CTServAttr
+  CTServEl: 3267
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2012-12-01
+
+CTServAttr471: CTServAttr
+  CTServEl: 3267
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr472: CTServAttr
+  CTServEl: 3305
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr473: CTServAttr
+  CTServEl: 3305
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr474: CTServAttr
+  CTServEl: 3305
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr475: CTServAttr
+  CTServEl: 3305
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr476: CTServAttr
+  CTServEl: 3305
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr477: CTServAttr
+  CTServEl: 3305
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2012-12-01
+
+CTServAttr478: CTServAttr
+  CTServEl: 3305
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr479: CTServAttr
+  CTServEl: 3305
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr480: CTServAttr
+  CTServEl: 3305
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr481: CTServAttr
+  CTServEl: 3305
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr482: CTServAttr
+  CTServEl: 3305
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr483: CTServAttr
+  CTServEl: 3305
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr484: CTServAttr
+  CTServEl: 3305
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr485: CTServAttr
+  CTServEl: 3305
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr486: CTServAttr
+  CTServEl: 3305
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr487: CTServAttr
+  CTServEl: 3305
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr488: CTServAttr
+  CTServEl: 3379
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr489: CTServAttr
+  CTServEl: 3379
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr490: CTServAttr
+  CTServEl: 3380
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr491: CTServAttr
+  CTServEl: 3390
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2012-12-01
+
+CTServAttr492: CTServAttr
+  CTServEl: 3393
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2012-12-01
+
+CTServAttr493: CTServAttr
+  CTServEl: 3393
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2012-12-01
+
+CTServAttr494: CTServAttr
+  CTServEl: 3393
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr495: CTServAttr
+  CTServEl: 3393
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr496: CTServAttr
+  CTServEl: 3393
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2012-12-01
+
+CTServAttr497: CTServAttr
+  CTServEl: 3393
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr498: CTServAttr
+  CTServEl: 3431
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr499: CTServAttr
+  CTServEl: 3431
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr500: CTServAttr
+  CTServEl: 3431
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr501: CTServAttr
+  CTServEl: 3431
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr502: CTServAttr
+  CTServEl: 3431
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr503: CTServAttr
+  CTServEl: 3431
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2012-12-01
+
+CTServAttr504: CTServAttr
+  CTServEl: 3431
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr505: CTServAttr
+  CTServEl: 3431
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr506: CTServAttr
+  CTServEl: 3431
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr507: CTServAttr
+  CTServEl: 3431
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr508: CTServAttr
+  CTServEl: 3431
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr509: CTServAttr
+  CTServEl: 3431
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr510: CTServAttr
+  CTServEl: 3431
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr511: CTServAttr
+  CTServEl: 3431
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr512: CTServAttr
+  CTServEl: 3431
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2012-12-01
+
+CTServAttr513: CTServAttr
+  CTServEl: 3431
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2012-12-01
+
+CTServAttr514: CTServAttr
+  CTServEl: 3988
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2013-09-01
+
+CTServAttr515: CTServAttr
+  CTServEl: 3988
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2013-09-01
+
+CTServAttr516: CTServAttr
+  CTServEl: 3989
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2013-09-01
+
+CTServAttr517: CTServAttr
+  CTServEl: 3999
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2013-09-01
+
+CTServAttr518: CTServAttr
+  CTServEl: 4002
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2013-09-01
+
+CTServAttr519: CTServAttr
+  CTServEl: 4002
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2013-09-01
+
+CTServAttr520: CTServAttr
+  CTServEl: 4002
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2013-09-01
+
+CTServAttr521: CTServAttr
+  CTServEl: 4002
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2013-09-01
+
+CTServAttr522: CTServAttr
+  CTServEl: 4002
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2013-09-01
+
+CTServAttr523: CTServAttr
+  CTServEl: 4002
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2013-09-01
+
+CTServAttr524: CTServAttr
+  CTServEl: 4025
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2013-09-01
+
+CTServAttr525: CTServAttr
+  CTServEl: 4025
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2013-09-01
+
+CTServAttr526: CTServAttr
+  CTServEl: 4025
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2013-09-01
+
+CTServAttr527: CTServAttr
+  CTServEl: 4025
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2013-09-01
+
+CTServAttr528: CTServAttr
+  CTServEl: 4025
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2013-09-01
+
+CTServAttr529: CTServAttr
+  CTServEl: 4025
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2013-09-01
+
+CTServAttr530: CTServAttr
+  CTServEl: 4025
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2013-09-01
+
+CTServAttr531: CTServAttr
+  CTServEl: 4025
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2013-09-01
+
+CTServAttr532: CTServAttr
+  CTServEl: 4025
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2013-09-01
+
+CTServAttr533: CTServAttr
+  CTServEl: 4025
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2013-09-01
+
+CTServAttr534: CTServAttr
+  CTServEl: 4025
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2013-09-01
+
+CTServAttr535: CTServAttr
+  CTServEl: 4025
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2013-09-01
+
+CTServAttr536: CTServAttr
+  CTServEl: 4025
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2013-09-01
+
+CTServAttr537: CTServAttr
+  CTServEl: 4025
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2013-09-01
+
+CTServAttr538: CTServAttr
+  CTServEl: 4025
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2013-09-01
+
+CTServAttr539: CTServAttr
+  CTServEl: 4025
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2013-09-01
+
+CTServAttr540: CTServAttr
+  CTServEl: 4048
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2013-10-01
+
+CTServAttr541: CTServAttr
+  CTServEl: 4048
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2013-10-01
+
+CTServAttr542: CTServAttr
+  CTServEl: 4049
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2013-10-01
+
+CTServAttr543: CTServAttr
+  CTServEl: 4059
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2013-10-01
+
+CTServAttr544: CTServAttr
+  CTServEl: 4062
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2013-10-01
+
+CTServAttr545: CTServAttr
+  CTServEl: 4062
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2013-10-01
+
+CTServAttr546: CTServAttr
+  CTServEl: 4062
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr547: CTServAttr
+  CTServEl: 4062
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr548: CTServAttr
+  CTServEl: 4062
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2013-10-01
+
+CTServAttr549: CTServAttr
+  CTServEl: 4062
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr550: CTServAttr
+  CTServEl: 4085
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr551: CTServAttr
+  CTServEl: 4085
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr552: CTServAttr
+  CTServEl: 4085
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr553: CTServAttr
+  CTServEl: 4085
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr554: CTServAttr
+  CTServEl: 4085
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2013-10-01
+
+CTServAttr555: CTServAttr
+  CTServEl: 4085
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2013-10-01
+
+CTServAttr556: CTServAttr
+  CTServEl: 4085
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr557: CTServAttr
+  CTServEl: 4085
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr558: CTServAttr
+  CTServEl: 4085
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr559: CTServAttr
+  CTServEl: 4085
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2013-10-01
+
+CTServAttr560: CTServAttr
+  CTServEl: 4085
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr561: CTServAttr
+  CTServEl: 4085
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr562: CTServAttr
+  CTServEl: 4085
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2013-10-01
+
+CTServAttr563: CTServAttr
+  CTServEl: 4085
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr564: CTServAttr
+  CTServEl: 4085
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2013-10-01
+
+CTServAttr565: CTServAttr
+  CTServEl: 4085
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr566: CTServAttr
+  CTServEl: 4107
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2013-10-01
+
+CTServAttr567: CTServAttr
+  CTServEl: 4107
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2013-10-01
+
+CTServAttr568: CTServAttr
+  CTServEl: 4108
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2013-10-01
+
+CTServAttr569: CTServAttr
+  CTServEl: 4118
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2013-10-01
+
+CTServAttr570: CTServAttr
+  CTServEl: 4121
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2013-10-01
+
+CTServAttr571: CTServAttr
+  CTServEl: 4121
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2013-10-01
+
+CTServAttr572: CTServAttr
+  CTServEl: 4121
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr573: CTServAttr
+  CTServEl: 4121
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr574: CTServAttr
+  CTServEl: 4121
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2013-10-01
+
+CTServAttr575: CTServAttr
+  CTServEl: 4121
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr576: CTServAttr
+  CTServEl: 4144
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr577: CTServAttr
+  CTServEl: 4144
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr578: CTServAttr
+  CTServEl: 4144
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr579: CTServAttr
+  CTServEl: 4144
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr580: CTServAttr
+  CTServEl: 4144
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2013-10-01
+
+CTServAttr581: CTServAttr
+  CTServEl: 4144
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2013-10-01
+
+CTServAttr582: CTServAttr
+  CTServEl: 4144
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr583: CTServAttr
+  CTServEl: 4144
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr584: CTServAttr
+  CTServEl: 4144
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr585: CTServAttr
+  CTServEl: 4144
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2013-10-01
+
+CTServAttr586: CTServAttr
+  CTServEl: 4144
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr587: CTServAttr
+  CTServEl: 4144
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr588: CTServAttr
+  CTServEl: 4144
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2013-10-01
+
+CTServAttr589: CTServAttr
+  CTServEl: 4144
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr590: CTServAttr
+  CTServEl: 4144
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2013-10-01
+
+CTServAttr591: CTServAttr
+  CTServEl: 4144
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2013-10-01
+
+CTServAttr592: CTServAttr
+  CTServEl: 4195
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2013-11-01
+
+CTServAttr593: CTServAttr
+  CTServEl: 4195
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2013-11-01
+
+CTServAttr594: CTServAttr
+  CTServEl: 4195
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2013-11-01
+
+CTServAttr595: CTServAttr
+  CTServEl: 4195
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2013-11-01
+
+CTServAttr596: CTServAttr
+  CTServEl: 4195
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2013-11-01
+
+CTServAttr597: CTServAttr
+  CTServEl: 4195
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2013-11-01
+
+CTServAttr598: CTServAttr
+  CTServEl: 4195
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2013-11-01
+
+CTServAttr599: CTServAttr
+  CTServEl: 4195
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2013-11-01
+
+CTServAttr600: CTServAttr
+  CTServEl: 4195
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2013-11-01
+
+CTServAttr601: CTServAttr
+  CTServEl: 4195
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2013-11-01
+
+CTServAttr602: CTServAttr
+  CTServEl: 4195
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2013-11-01
+
+CTServAttr603: CTServAttr
+  CTServEl: 4195
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2013-11-01
+
+CTServAttr604: CTServAttr
+  CTServEl: 4245
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2013-11-01
+
+CTServAttr605: CTServAttr
+  CTServEl: 4245
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2013-11-01
+
+CTServAttr606: CTServAttr
+  CTServEl: 4245
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2013-11-01
+
+CTServAttr607: CTServAttr
+  CTServEl: 4245
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2013-11-01
+
+CTServAttr608: CTServAttr
+  CTServEl: 4245
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2013-11-01
+
+CTServAttr609: CTServAttr
+  CTServEl: 4245
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2013-11-01
+
+CTServAttr610: CTServAttr
+  CTServEl: 4245
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2013-11-01
+
+CTServAttr611: CTServAttr
+  CTServEl: 4245
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2013-11-01
+
+CTServAttr612: CTServAttr
+  CTServEl: 4245
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2013-11-01
+
+CTServAttr613: CTServAttr
+  CTServEl: 4245
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2013-11-01
+
+CTServAttr614: CTServAttr
+  CTServEl: 4245
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2013-11-01
+
+CTServAttr615: CTServAttr
+  CTServEl: 4245
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2013-11-01
+
+CTServAttr616: CTServAttr
+  CTServEl: 4267
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2014-05-01
+
+CTServAttr617: CTServAttr
+  CTServEl: 4267
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2014-05-01
+
+CTServAttr618: CTServAttr
+  CTServEl: 4268
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2014-05-01
+
+CTServAttr619: CTServAttr
+  CTServEl: 4278
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2014-05-01
+
+CTServAttr620: CTServAttr
+  CTServEl: 4281
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2014-05-01
+
+CTServAttr621: CTServAttr
+  CTServEl: 4281
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2014-05-01
+
+CTServAttr622: CTServAttr
+  CTServEl: 4281
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2014-05-01
+
+CTServAttr623: CTServAttr
+  CTServEl: 4281
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2014-05-01
+
+CTServAttr624: CTServAttr
+  CTServEl: 4281
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2014-05-01
+
+CTServAttr625: CTServAttr
+  CTServEl: 4281
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2014-05-01
+
+CTServAttr626: CTServAttr
+  CTServEl: 4305
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2014-05-01
+
+CTServAttr627: CTServAttr
+  CTServEl: 4305
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2014-05-01
+
+CTServAttr628: CTServAttr
+  CTServEl: 4305
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2014-05-01
+
+CTServAttr629: CTServAttr
+  CTServEl: 4305
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2014-05-01
+
+CTServAttr630: CTServAttr
+  CTServEl: 4305
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2014-05-01
+
+CTServAttr631: CTServAttr
+  CTServEl: 4305
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2014-05-01
+
+CTServAttr632: CTServAttr
+  CTServEl: 4305
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2014-05-01
+
+CTServAttr633: CTServAttr
+  CTServEl: 4305
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2014-05-01
+
+CTServAttr634: CTServAttr
+  CTServEl: 4305
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2014-05-01
+
+CTServAttr635: CTServAttr
+  CTServEl: 4305
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2014-05-01
+
+CTServAttr636: CTServAttr
+  CTServEl: 4305
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2014-05-01
+
+CTServAttr637: CTServAttr
+  CTServEl: 4305
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2014-05-01
+
+CTServAttr638: CTServAttr
+  CTServEl: 4305
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2014-05-01
+
+CTServAttr639: CTServAttr
+  CTServEl: 4305
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2014-05-01
+
+CTServAttr640: CTServAttr
+  CTServEl: 4305
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2014-05-01
+
+CTServAttr641: CTServAttr
+  CTServEl: 4305
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2014-05-01
+
+CTServAttr642: CTServAttr
+  CTServEl: 4423
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2014-10-01
+
+CTServAttr643: CTServAttr
+  CTServEl: 4423
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2014-10-01
+
+CTServAttr644: CTServAttr
+  CTServEl: 4424
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2014-10-01
+
+CTServAttr645: CTServAttr
+  CTServEl: 4434
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2014-10-01
+
+CTServAttr646: CTServAttr
+  CTServEl: 4437
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2014-10-01
+
+CTServAttr647: CTServAttr
+  CTServEl: 4437
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2014-10-01
+
+CTServAttr648: CTServAttr
+  CTServEl: 4437
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2014-10-01
+
+CTServAttr649: CTServAttr
+  CTServEl: 4437
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2014-10-01
+
+CTServAttr650: CTServAttr
+  CTServEl: 4437
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2014-10-01
+
+CTServAttr651: CTServAttr
+  CTServEl: 4437
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2014-10-01
+
+CTServAttr652: CTServAttr
+  CTServEl: 4463
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2014-10-01
+
+CTServAttr653: CTServAttr
+  CTServEl: 4463
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2014-10-01
+
+CTServAttr654: CTServAttr
+  CTServEl: 4463
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2014-10-01
+
+CTServAttr655: CTServAttr
+  CTServEl: 4463
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2014-10-01
+
+CTServAttr656: CTServAttr
+  CTServEl: 4463
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2014-10-01
+
+CTServAttr657: CTServAttr
+  CTServEl: 4463
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2014-10-01
+
+CTServAttr658: CTServAttr
+  CTServEl: 4463
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2014-10-01
+
+CTServAttr659: CTServAttr
+  CTServEl: 4463
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2014-10-01
+
+CTServAttr660: CTServAttr
+  CTServEl: 4463
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2014-10-01
+
+CTServAttr661: CTServAttr
+  CTServEl: 4463
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2014-10-01
+
+CTServAttr662: CTServAttr
+  CTServEl: 4463
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2014-10-01
+
+CTServAttr663: CTServAttr
+  CTServEl: 4463
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2014-10-01
+
+CTServAttr664: CTServAttr
+  CTServEl: 4463
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2014-10-01
+
+CTServAttr665: CTServAttr
+  CTServEl: 4463
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2014-10-01
+
+CTServAttr666: CTServAttr
+  CTServEl: 4463
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2014-10-01
+
+CTServAttr667: CTServAttr
+  CTServEl: 4463
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2014-10-01
+
+CTServAttr668: CTServAttr
+  CTServEl: 4512
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2015-03-04
+
+CTServAttr669: CTServAttr
+  CTServEl: 4512
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2015-03-04
+
+CTServAttr670: CTServAttr
+  CTServEl: 4513
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2015-03-04
+
+CTServAttr671: CTServAttr
+  CTServEl: 4523
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2015-03-04
+
+CTServAttr672: CTServAttr
+  CTServEl: 4526
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2015-03-04
+
+CTServAttr673: CTServAttr
+  CTServEl: 4526
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2015-03-04
+
+CTServAttr674: CTServAttr
+  CTServEl: 4526
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2015-03-04
+
+CTServAttr675: CTServAttr
+  CTServEl: 4526
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2015-03-04
+
+CTServAttr676: CTServAttr
+  CTServEl: 4526
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2015-03-04
+
+CTServAttr677: CTServAttr
+  CTServEl: 4526
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2015-03-04
+
+CTServAttr678: CTServAttr
+  CTServEl: 4551
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2015-03-04
+
+CTServAttr679: CTServAttr
+  CTServEl: 4551
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2015-03-04
+
+CTServAttr680: CTServAttr
+  CTServEl: 4551
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2015-03-04
+
+CTServAttr681: CTServAttr
+  CTServEl: 4551
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2015-03-04
+
+CTServAttr682: CTServAttr
+  CTServEl: 4551
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2015-03-04
+
+CTServAttr683: CTServAttr
+  CTServEl: 4551
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2015-03-04
+
+CTServAttr684: CTServAttr
+  CTServEl: 4551
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2015-03-04
+
+CTServAttr685: CTServAttr
+  CTServEl: 4551
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2015-03-04
+
+CTServAttr686: CTServAttr
+  CTServEl: 4551
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2015-03-04
+
+CTServAttr687: CTServAttr
+  CTServEl: 4551
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2015-03-04
+
+CTServAttr688: CTServAttr
+  CTServEl: 4551
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2015-03-04
+
+CTServAttr689: CTServAttr
+  CTServEl: 4551
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2015-03-04
+
+CTServAttr690: CTServAttr
+  CTServEl: 4551
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2015-03-04
+
+CTServAttr691: CTServAttr
+  CTServEl: 4551
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2015-03-04
+
+CTServAttr692: CTServAttr
+  CTServEl: 4551
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2015-03-04
+
+CTServAttr693: CTServAttr
+  CTServEl: 4551
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2015-03-04
+
+CTServAttr694: CTServAttr
+  CTServEl: 4717
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2015-05-29
+
+CTServAttr695: CTServAttr
+  CTServEl: 4717
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2015-05-29
+
+CTServAttr696: CTServAttr
+  CTServEl: 4717
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2015-05-29
+
+CTServAttr697: CTServAttr
+  CTServEl: 4717
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2015-05-29
+
+CTServAttr698: CTServAttr
+  CTServEl: 4717
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2015-05-29
+
+CTServAttr699: CTServAttr
+  CTServEl: 4717
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2015-05-29
+
+CTServAttr700: CTServAttr
+  CTServEl: 4717
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2015-05-29
+
+CTServAttr701: CTServAttr
+  CTServEl: 4717
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2015-05-29
+
+CTServAttr702: CTServAttr
+  CTServEl: 4717
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2015-05-29
+
+CTServAttr703: CTServAttr
+  CTServEl: 4717
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2015-05-29
+
+CTServAttr704: CTServAttr
+  CTServEl: 4717
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2015-05-29
+
+CTServAttr705: CTServAttr
+  CTServEl: 4717
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2015-05-29
+
+CTServAttr706: CTServAttr
+  CTServEl: 4744
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2015-08-12
+
+CTServAttr707: CTServAttr
+  CTServEl: 4744
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2015-08-12
+
+CTServAttr708: CTServAttr
+  CTServEl: 4745
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2015-08-12
+
+CTServAttr709: CTServAttr
+  CTServEl: 4755
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2015-08-12
+
+CTServAttr710: CTServAttr
+  CTServEl: 4758
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2015-08-12
+
+CTServAttr711: CTServAttr
+  CTServEl: 4758
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2015-08-12
+
+CTServAttr712: CTServAttr
+  CTServEl: 4758
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr713: CTServAttr
+  CTServEl: 4758
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr714: CTServAttr
+  CTServEl: 4758
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2015-08-12
+
+CTServAttr715: CTServAttr
+  CTServEl: 4758
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr716: CTServAttr
+  CTServEl: 4767
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr717: CTServAttr
+  CTServEl: 4767
+  ServAttr: "ChgMonthFee"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2015-08-12
+
+CTServAttr718: CTServAttr
+  CTServEl: 4767
+  ServAttr: "CIF"
+  DefValue: "0"
+  FromDate: 2015-08-12
+
+CTServAttr719: CTServAttr
+  CTServEl: 4767
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr720: CTServAttr
+  CTServEl: 4767
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr721: CTServAttr
+  CTServEl: 4767
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2015-08-12
+
+CTServAttr722: CTServAttr
+  CTServEl: 4767
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2015-08-12
+
+CTServAttr723: CTServAttr
+  CTServEl: 4767
+  ServAttr: "NIE"
+  DefValue: "0"
+  FromDate: 2015-08-12
+
+CTServAttr724: CTServAttr
+  CTServEl: 4767
+  ServAttr: "NIF"
+  DefValue: "0"
+  FromDate: 2015-08-12
+
+CTServAttr725: CTServAttr
+  CTServEl: 4767
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr726: CTServAttr
+  CTServEl: 4767
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2015-08-12
+
+CTServAttr727: CTServAttr
+  CTServEl: 4767
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr728: CTServAttr
+  CTServEl: 4767
+  ServAttr: "PassPort"
+  DefValue: "0"
+  FromDate: 2015-08-12
+
+CTServAttr729: CTServAttr
+  CTServEl: 4767
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2015-08-12
+
+CTServAttr730: CTServAttr
+  CTServEl: 4767
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr731: CTServAttr
+  CTServEl: 4767
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2015-08-12
+
+CTServAttr732: CTServAttr
+  CTServEl: 4767
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr733: CTServAttr
+  CTServEl: 4784
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2015-08-12
+
+CTServAttr734: CTServAttr
+  CTServEl: 4784
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2015-08-12
+
+CTServAttr735: CTServAttr
+  CTServEl: 4787
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr736: CTServAttr
+  CTServEl: 4787
+  ServAttr: "ChgMonthFee"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2015-08-12
+
+CTServAttr737: CTServAttr
+  CTServEl: 4787
+  ServAttr: "CIF"
+  DefValue: "0"
+  FromDate: 2015-08-12
+
+CTServAttr738: CTServAttr
+  CTServEl: 4787
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr739: CTServAttr
+  CTServEl: 4787
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr740: CTServAttr
+  CTServEl: 4787
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2015-08-12
+
+CTServAttr741: CTServAttr
+  CTServEl: 4787
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2015-08-12
+
+CTServAttr742: CTServAttr
+  CTServEl: 4787
+  ServAttr: "NIE"
+  DefValue: "0"
+  FromDate: 2015-08-12
+
+CTServAttr743: CTServAttr
+  CTServEl: 4787
+  ServAttr: "NIF"
+  DefValue: "0"
+  FromDate: 2015-08-12
+
+CTServAttr744: CTServAttr
+  CTServEl: 4787
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr745: CTServAttr
+  CTServEl: 4787
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2015-08-12
+
+CTServAttr746: CTServAttr
+  CTServEl: 4787
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr747: CTServAttr
+  CTServEl: 4787
+  ServAttr: "PassPort"
+  DefValue: "0"
+  FromDate: 2015-08-12
+
+CTServAttr748: CTServAttr
+  CTServEl: 4787
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2015-08-12
+
+CTServAttr749: CTServAttr
+  CTServEl: 4787
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr750: CTServAttr
+  CTServEl: 4787
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2015-08-12
+
+CTServAttr751: CTServAttr
+  CTServEl: 4787
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2015-08-12
+
+CTServAttr752: CTServAttr
+  CTServEl: 10000904
+  ServAttr: "Invoice Attach"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2011-01-01
+
+CTServAttr753: CTServAttr
+  CTServEl: 10000904
+  ServAttr: "ReportCode"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2011-01-01
+
+CTServAttr754: CTServAttr
+  CTServEl: 10000905
+  ServAttr: "Not allowed"
+  ChgAllowed: FALSE
+  FromDate: 2011-01-01
+
+CTServAttr755: CTServAttr
+  CTServEl: 10000915
+  ServAttr: "MMSLanguage"
+  DefValue: "2"
+  FromDate: 2011-01-01
+
+CTServAttr756: CTServAttr
+  CTServEl: 10000918
+  ServAttr: "ADDRESS"
+  DefValue: "F"
+  FromDate: 2011-01-01
+
+CTServAttr757: CTServAttr
+  CTServEl: 10000918
+  ServAttr: "CD"
+  DefValue: "0"
+  FromDate: 2011-01-01
+
+CTServAttr758: CTServAttr
+  CTServEl: 10000918
+  ServAttr: "DA"
+  DefValue: "1"
+  FromDate: 2011-01-01
+
+CTServAttr759: CTServAttr
+  CTServEl: 10000918
+  ServAttr: "ED"
+  DefValue: "1"
+  FromDate: 2011-01-01
+
+CTServAttr760: CTServAttr
+  CTServEl: 10000918
+  ServAttr: "PR"
+  DefValue: "0"
+  FromDate: 2011-01-01
+
+CTServAttr761: CTServAttr
+  CTServEl: 10000918
+  ServAttr: "SEX"
+  DefValue: "1"
+  FromDate: 2011-01-01
+
+CTServAttr762: CTServAttr
+  CTServEl: 10000954
+  ServAttr: "BankAccount"
+  DefValue: "1"
+  FromDate: 2011-01-01
+
+CTServAttr763: CTServAttr
+  CTServEl: 10000954
+  ServAttr: "CIF"
+  DefValue: "1"
+  FromDate: 2011-01-01
+
+CTServAttr764: CTServAttr
+  CTServEl: 10000954
+  ServAttr: "CreditCheck"
+  DefValue: "1"
+  FromDate: 2011-01-01
+
+CTServAttr765: CTServAttr
+  CTServEl: 10000954
+  ServAttr: "FailedRequest"
+  DefValue: "1"
+  FromDate: 2011-01-01
+
+CTServAttr766: CTServAttr
+  CTServEl: 10000954
+  ServAttr: "FreePerYear"
+  DefValue: "4"
+  ChgAllowed: FALSE
+  FromDate: 2011-01-01
+
+CTServAttr767: CTServAttr
+  CTServEl: 10000954
+  ServAttr: "MobsubInDays"
+  DefValue: "30"
+  FromDate: 2011-01-01
+
+CTServAttr768: CTServAttr
+  CTServEl: 10000954
+  ServAttr: "NIE"
+  DefValue: "1"
+  FromDate: 2011-01-01
+
+CTServAttr769: CTServAttr
+  CTServEl: 10000954
+  ServAttr: "NIF"
+  DefValue: "1"
+  FromDate: 2011-01-01
+
+CTServAttr770: CTServAttr
+  CTServEl: 10000954
+  ServAttr: "OngoingMNP"
+  DefValue: "1"
+  FromDate: 2011-01-01
+
+CTServAttr771: CTServAttr
+  CTServEl: 10000954
+  ServAttr: "OnLastDay"
+  DefValue: "0"
+  ChgAllowed: FALSE
+  FromDate: 2011-01-01
+
+CTServAttr772: CTServAttr
+  CTServEl: 10000954
+  ServAttr: "OperatorBarr"
+  DefValue: "1"
+  FromDate: 2011-01-01
+
+CTServAttr773: CTServAttr
+  CTServEl: 10000954
+  ServAttr: "PassPort"
+  DefValue: "1"
+  FromDate: 2011-01-01
+
+CTServAttr774: CTServAttr
+  CTServEl: 10000954
+  ServAttr: "PerMonth"
+  DefValue: "1"
+  ChgAllowed: FALSE
+  FromDate: 2011-01-01
+
+CTServAttr775: CTServAttr
+  CTServEl: 10000954
+  ServAttr: "SchedDate"
+  DefValue: "1"
+  FromDate: 2011-01-01
+
+CTServAttr776: CTServAttr
+  CTServEl: 10000954
+  ServAttr: "SchedTime"
+  DefValue: "00.00"
+  ChgAllowed: FALSE
+  FromDate: 2011-01-01
+
+CTServAttr777: CTServAttr
+  CTServEl: 10000954
+  ServAttr: "TiePeriod"
+  DefValue: "1"
+  FromDate: 2011-01-01
+

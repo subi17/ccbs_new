@@ -1,0 +1,73 @@
+MsReqFuncItem1: MsReqFuncItem
+  ItemId: "1"
+  ItemDesc: "Cancel request (set status to 4)"
+  Module: "chmsreqst"
+  IParam: 4
+
+MsReqFuncItem2: MsReqFuncItem
+  ItemId: "10"
+  ItemDesc: "Bypass sub-request(set status to 8)"
+  Module: "chmsreqst"
+  IParam: 8
+
+MsReqFuncItem3: MsReqFuncItem
+  ItemId: "11"
+  ItemDesc: "Change refund type and accept"
+  Module: "chgrefundtype"
+  IParam: 15
+
+MsReqFuncItem4: MsReqFuncItem
+  ItemId: "12"
+  ItemDesc: "Change refund payment date"
+  Module: "chgrefundate"
+  IParam: 16
+
+MsReqFuncItem5: MsReqFuncItem
+  ItemId: "13"
+  ItemDesc: "Change charge type"
+  Module: "chgchargetype"
+
+MsReqFuncItem6: MsReqFuncItem
+  ItemId: "14"
+  ItemDesc: "Reset activation"
+  Module: "stc_nw_act"
+  IParam: 5
+
+MsReqFuncItem7: MsReqFuncItem
+  ItemId: "2"
+  ItemDesc: "Reset request (set status to 0)"
+  Module: "chmsreqst"
+
+MsReqFuncItem8: MsReqFuncItem
+  ItemId: "3"
+  ItemDesc: "Handle request (set status to 9)"
+  Module: "chmsreqst"
+  IParam: 9
+
+MsReqFuncItem9: MsReqFuncItem
+  ItemId: "4"
+  ItemDesc: "Bypass network (Set status to 6)"
+  Module: "chmsreqst"
+  IParam: 6
+
+MsReqFuncItem10: MsReqFuncItem
+  ItemId: "5"
+  ItemDesc: "Approve request (set status to 15)"
+  Module: "chmsreqst"
+  IParam: 15
+
+MsReqFuncItem11: MsReqFuncItem
+  ItemId: "6"
+  ItemDesc: "Run immediately"
+  Module: "runreqnow"
+
+MsReqFuncItem12: MsReqFuncItem
+  ItemId: "7"
+  ItemDesc: "Approve ICC change for handling"
+  Module: "chmsreqst"
+
+MsReqFuncItem13: MsReqFuncItem
+  ItemId: "8"
+  ItemDesc: "Approve ACC handling"
+  Module: "chmsreqst"
+

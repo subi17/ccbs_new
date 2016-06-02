@@ -1,0 +1,780 @@
+RZItem1: RZItem
+  PlmnCode: "AUTCA"
+  CountryPrefix: "43"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem2: RZItem
+  PlmnCode: "AUTHU"
+  CountryPrefix: "43"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem3: RZItem
+  PlmnCode: "AUTMM"
+  CountryPrefix: "43"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem4: RZItem
+  PlmnCode: "AUTPT"
+  CountryPrefix: "43"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem5: RZItem
+  PlmnCode: "AUTTR"
+  CountryPrefix: "43"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem6: RZItem
+  PlmnCode: "BELKO"
+  CountryPrefix: "32"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem7: RZItem
+  PlmnCode: "BELMO"
+  CountryPrefix: "32"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem8: RZItem
+  PlmnCode: "BELTB"
+  CountryPrefix: "32"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem9: RZItem
+  PlmnCode: "BGR01"
+  CountryPrefix: "359"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem10: RZItem
+  PlmnCode: "BGRCM"
+  CountryPrefix: "359"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem11: RZItem
+  PlmnCode: "BGRVA"
+  CountryPrefix: "359"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem12: RZItem
+  PlmnCode: "CYPCT"
+  CountryPrefix: "357"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem13: RZItem
+  PlmnCode: "CYPPT"
+  CountryPrefix: "357"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem14: RZItem
+  PlmnCode: "CYPSC"
+  CountryPrefix: "357"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem15: RZItem
+  PlmnCode: "CZECM"
+  CountryPrefix: "420"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem16: RZItem
+  PlmnCode: "CZEET"
+  CountryPrefix: "420"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem17: RZItem
+  PlmnCode: "CZERM"
+  CountryPrefix: "420"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem18: RZItem
+  PlmnCode: "DEUD1"
+  CountryPrefix: "49"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem19: RZItem
+  PlmnCode: "DEUD2"
+  CountryPrefix: "49"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem20: RZItem
+  PlmnCode: "DEUE1"
+  CountryPrefix: "49"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem21: RZItem
+  PlmnCode: "DEUE2"
+  CountryPrefix: "49"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem22: RZItem
+  PlmnCode: "DEUO2"
+  CountryPrefix: "49"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem23: RZItem
+  PlmnCode: "DEUV1"
+  CountryPrefix: "49"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem24: RZItem
+  PlmnCode: "DNKDM"
+  CountryPrefix: "45"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem25: RZItem
+  PlmnCode: "DNKHU"
+  CountryPrefix: "45"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem26: RZItem
+  PlmnCode: "DNKIA"
+  CountryPrefix: "45"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem27: RZItem
+  PlmnCode: "DNKMX"
+  CountryPrefix: "45"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem28: RZItem
+  PlmnCode: "DNKTD"
+  CountryPrefix: "45"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem29: RZItem
+  PlmnCode: "ESPAT"
+  CountryPrefix: "34"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem30: RZItem
+  PlmnCode: "ESPRT"
+  CountryPrefix: "34"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem31: RZItem
+  PlmnCode: "ESPTE"
+  CountryPrefix: "34"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem32: RZItem
+  PlmnCode: "ESPVV"
+  CountryPrefix: "34"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem33: RZItem
+  PlmnCode: "ESPXF"
+  CountryPrefix: "34"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem34: RZItem
+  PlmnCode: "ESTEM"
+  CountryPrefix: "372"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem35: RZItem
+  PlmnCode: "ESTRB"
+  CountryPrefix: "372"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem36: RZItem
+  PlmnCode: "ESTRE"
+  CountryPrefix: "372"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem37: RZItem
+  PlmnCode: "FIN2G"
+  CountryPrefix: "358"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem38: RZItem
+  PlmnCode: "FINAM"
+  CountryPrefix: "358"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem39: RZItem
+  PlmnCode: "FINRL"
+  CountryPrefix: "358"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem40: RZItem
+  PlmnCode: "FINTA"
+  CountryPrefix: "358"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem41: RZItem
+  PlmnCode: "FINTF"
+  CountryPrefix: "358"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem42: RZItem
+  PlmnCode: "FINV1"
+  CountryPrefix: "358"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem43: RZItem
+  PlmnCode: "FRAF1"
+  CountryPrefix: "33"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem44: RZItem
+  PlmnCode: "FRAF2"
+  CountryPrefix: "33"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem45: RZItem
+  PlmnCode: "FRAF3"
+  CountryPrefix: "33"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem46: RZItem
+  PlmnCode: "FRAF4"
+  CountryPrefix: "594"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem47: RZItem
+  PlmnCode: "FRAFM"
+  CountryPrefix: "33"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem48: RZItem
+  PlmnCode: "FRARE"
+  CountryPrefix: "262"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem49: RZItem
+  PlmnCode: "FRATK"
+  CountryPrefix: "689"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem50: RZItem
+  PlmnCode: "GBRCN"
+  CountryPrefix: "44"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem51: RZItem
+  PlmnCode: "GBRGT"
+  CountryPrefix: "44"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem52: RZItem
+  PlmnCode: "GBRHU"
+  CountryPrefix: "44"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem53: RZItem
+  PlmnCode: "GBRJT"
+  CountryPrefix: "44"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem54: RZItem
+  PlmnCode: "GBRME"
+  CountryPrefix: "44"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem55: RZItem
+  PlmnCode: "GBRMT"
+  CountryPrefix: "44"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem56: RZItem
+  PlmnCode: "GBROR"
+  CountryPrefix: "44"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem57: RZItem
+  PlmnCode: "GBRVF"
+  CountryPrefix: "44"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem58: RZItem
+  PlmnCode: "GIBGT"
+  CountryPrefix: "350"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem59: RZItem
+  PlmnCode: "GRCCO"
+  CountryPrefix: "30"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem60: RZItem
+  PlmnCode: "GRCPF"
+  CountryPrefix: "30"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem61: RZItem
+  PlmnCode: "GRCSH"
+  CountryPrefix: "30"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem62: RZItem
+  PlmnCode: "HRVCN"
+  CountryPrefix: "385"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem63: RZItem
+  PlmnCode: "HRVT2"
+  CountryPrefix: "385"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem64: RZItem
+  PlmnCode: "HRVVI"
+  CountryPrefix: "385"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem65: RZItem
+  PlmnCode: "HUNH1"
+  CountryPrefix: "36"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem66: RZItem
+  PlmnCode: "HUNH2"
+  CountryPrefix: "36"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem67: RZItem
+  PlmnCode: "HUNVR"
+  CountryPrefix: "36"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem68: RZItem
+  PlmnCode: "IRLDF"
+  CountryPrefix: "353"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem69: RZItem
+  PlmnCode: "IRLEC"
+  CountryPrefix: "353"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem70: RZItem
+  PlmnCode: "IRLH3"
+  CountryPrefix: "353"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem71: RZItem
+  PlmnCode: "IRLLT"
+  CountryPrefix: "353"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem72: RZItem
+  PlmnCode: "IRLME"
+  CountryPrefix: "353"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem73: RZItem
+  PlmnCode: "ISLNO"
+  CountryPrefix: "354"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem74: RZItem
+  PlmnCode: "ISLOC"
+  CountryPrefix: "354"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem75: RZItem
+  PlmnCode: "ISLPS"
+  CountryPrefix: "354"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem76: RZItem
+  PlmnCode: "ISLTL"
+  CountryPrefix: "354"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem77: RZItem
+  PlmnCode: "ISLVW"
+  CountryPrefix: "354"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem78: RZItem
+  PlmnCode: "ITAH3"
+  CountryPrefix: "39"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem79: RZItem
+  PlmnCode: "ITAOM"
+  CountryPrefix: "39"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem80: RZItem
+  PlmnCode: "ITASI"
+  CountryPrefix: "39"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem81: RZItem
+  PlmnCode: "ITAWI"
+  CountryPrefix: "39"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem82: RZItem
+  PlmnCode: "LIEMK"
+  CountryPrefix: "423"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem83: RZItem
+  PlmnCode: "LIETG"
+  CountryPrefix: "423"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem84: RZItem
+  PlmnCode: "LIEVE"
+  CountryPrefix: "423"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem85: RZItem
+  PlmnCode: "LTU03"
+  CountryPrefix: "370"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem86: RZItem
+  PlmnCode: "LTUMT"
+  CountryPrefix: "370"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem87: RZItem
+  PlmnCode: "LTUOM"
+  CountryPrefix: "370"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem88: RZItem
+  PlmnCode: "LUXPT"
+  CountryPrefix: "352"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem89: RZItem
+  PlmnCode: "LUXTG"
+  CountryPrefix: "352"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem90: RZItem
+  PlmnCode: "LUXVM"
+  CountryPrefix: "352"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem91: RZItem
+  PlmnCode: "LVABC"
+  CountryPrefix: "371"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem92: RZItem
+  PlmnCode: "LVABT"
+  CountryPrefix: "371"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem93: RZItem
+  PlmnCode: "LVALM"
+  CountryPrefix: "371"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem94: RZItem
+  PlmnCode: "MLTGO"
+  CountryPrefix: "356"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem95: RZItem
+  PlmnCode: "MLTTL"
+  CountryPrefix: "356"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem96: RZItem
+  PlmnCode: "NLDDT"
+  CountryPrefix: "31"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem97: RZItem
+  PlmnCode: "NLDLT"
+  CountryPrefix: "31"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem98: RZItem
+  PlmnCode: "NLDPN"
+  CountryPrefix: "31"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem99: RZItem
+  PlmnCode: "NLDPT"
+  CountryPrefix: "31"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem100: RZItem
+  PlmnCode: "NLDTM"
+  CountryPrefix: "31"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem101: RZItem
+  PlmnCode: "NORNC"
+  CountryPrefix: "47"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem102: RZItem
+  PlmnCode: "NORNN"
+  CountryPrefix: "47"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem103: RZItem
+  PlmnCode: "NORT3"
+  CountryPrefix: "47"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem104: RZItem
+  PlmnCode: "NORTM"
+  CountryPrefix: "47"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem105: RZItem
+  PlmnCode: "POL02"
+  CountryPrefix: "48"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem106: RZItem
+  PlmnCode: "POL03"
+  CountryPrefix: "48"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem107: RZItem
+  PlmnCode: "POLKM"
+  CountryPrefix: "48"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem108: RZItem
+  PlmnCode: "POLP4"
+  CountryPrefix: "48"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem109: RZItem
+  PlmnCode: "POLWL"
+  CountryPrefix: "48"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem110: RZItem
+  PlmnCode: "PRTOP"
+  CountryPrefix: "351"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem111: RZItem
+  PlmnCode: "PRTTL"
+  CountryPrefix: "351"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem112: RZItem
+  PlmnCode: "PRTTM"
+  CountryPrefix: "351"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem113: RZItem
+  PlmnCode: "REU02"
+  CountryPrefix: "262"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem114: RZItem
+  PlmnCode: "REUOT"
+  CountryPrefix: "262"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem115: RZItem
+  PlmnCode: "ROMCS"
+  CountryPrefix: "40"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem116: RZItem
+  PlmnCode: "ROMMF"
+  CountryPrefix: "40"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem117: RZItem
+  PlmnCode: "ROMMR"
+  CountryPrefix: "40"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem118: RZItem
+  PlmnCode: "SMOSM"
+  CountryPrefix: "378"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem119: RZItem
+  PlmnCode: "SVKET"
+  CountryPrefix: "421"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem120: RZItem
+  PlmnCode: "SVKGT"
+  CountryPrefix: "421"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem121: RZItem
+  PlmnCode: "SVKO2"
+  CountryPrefix: "421"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem122: RZItem
+  PlmnCode: "SVNMT"
+  CountryPrefix: "386"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem123: RZItem
+  PlmnCode: "SVNSM"
+  CountryPrefix: "386"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem124: RZItem
+  PlmnCode: "SVNVG"
+  CountryPrefix: "386"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem125: RZItem
+  PlmnCode: "SWEEP"
+  CountryPrefix: "46"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem126: RZItem
+  PlmnCode: "SWEHU"
+  CountryPrefix: "46"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem127: RZItem
+  PlmnCode: "SWEIQ"
+  CountryPrefix: "46"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem128: RZItem
+  PlmnCode: "SWESM"
+  CountryPrefix: "46"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem129: RZItem
+  PlmnCode: "SWESP"
+  CountryPrefix: "46"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+
+RZItem130: RZItem
+  PlmnCode: "SWETR"
+  CountryPrefix: "46"
+  RoamZone: "ROAM_EU"
+  DialType: 4
+

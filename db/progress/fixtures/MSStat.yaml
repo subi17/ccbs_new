@@ -1,0 +1,80 @@
+MSStat1: MSStat
+  StatusCode: 0
+  StatusName: ""
+
+MSStat2: MSStat
+  StatusCode: 1
+  StatusName: "Available"
+
+MSStat3: MSStat
+  StatusCode: 2
+  StatusName: "Reserved"
+
+MSStat4: MSStat
+  StatusCode: 3
+  StatusName: "In use, Assigned to subscription"
+
+MSStat5: MSStat
+  StatusCode: 4
+  StatusName: "Quarantine"
+
+MSStat6: MSStat
+  StatusCode: 5
+  StatusName: "Barred"
+
+MSStat7: MSStat
+  StatusCode: 6
+  StatusName: "MNP outported (own MSISDN range)"
+
+MSStat8: MSStat
+  StatusCode: 7
+  StatusName: "Waiting Rescue"
+
+MSStat9: MSStat
+  StatusCode: 10
+  StatusName: "MNP import cancelled (Other oper.MSISDN)"
+
+MSStat10: MSStat
+  StatusCode: 11
+  StatusName: "Waiting return to original operator"
+
+MSStat11: MSStat
+  StatusCode: 12
+  StatusName: "Returned to original operator"
+
+MSStat12: MSStat
+  StatusCode: 13
+  StatusName: "MNP outported (Other operator's MSISDN)"
+
+MSStat13: MSStat
+  StatusCode: 14
+  StatusName: "Return notice sent"
+
+MSStat14: MSStat
+  StatusCode: 15
+  StatusName: "Returned from other operator"
+
+MSStat15: MSStat
+  StatusCode: 21
+  StatusName: "Available, not send to Vista"
+
+MSStat16: MSStat
+  StatusCode: 22
+  StatusName: "In Use, Assigned to Order"
+
+MSStat17: MSStat
+  StatusCode: 24
+  StatusName: "Failed MNP"
+
+MSStat18: MSStat
+  StatusCode: 25
+  StatusName: "Waiting Outporting"
+
+MSStat19: MSStat
+  StatusCode: 26
+  StatusName: "Waiting Terminating"
+
+MSStat20: MSStat
+  StatusCode: 27
+  StatusName: "Process ongoing"
+

@@ -1,0 +1,514 @@
+DiscountPlan1: DiscountPlan
+  Brand: "1"
+  DPId: 20
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 2
+  BillCode: "BONO6DISC"
+  ValidFrom: 2014-10-15
+  ValidTo: 2049-12-31
+  DPRuleId: "BONO6DISC"
+  DPName: "Bono 1 GB discount"
+  SubjectType: "All "
+
+DiscountPlan2: DiscountPlan
+  Brand: "1"
+  DPId: 31
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 2
+  BillCode: "BONO6WEBDISC"
+  ValidFrom: 2015-11-24
+  ValidTo: 2016-12-31
+  DPRuleId: "BONO6WEBDISC"
+  DPName: "Bono 1 GB discount web"
+  SubjectType: "All "
+
+DiscountPlan3: DiscountPlan
+  Brand: "1"
+  DPId: 2
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 2
+  BillCode: "BONO8DISC"
+  ValidFrom: 2012-10-16
+  ValidTo: 2049-12-31
+  DPRuleId: "BONO8DISC"
+  DPName: "Discount of the monthly fee of La Del Cero"
+  SubjectType: "All "
+  ValidPeriods: 2
+
+DiscountPlan4: DiscountPlan
+  Brand: "1"
+  DPId: 3
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 2
+  BillCode: "BONO9DISC"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  DPRuleId: "BONO9DISC"
+  DPName: "Bono 9 discount"
+  SubjectType: "All "
+  ValidPeriods: 2
+
+DiscountPlan5: DiscountPlan
+  Brand: "1"
+  DPId: 23
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "CONT15DISC"
+  ValidFrom: 2015-03-01
+  ValidTo: 2049-12-31
+  DPRuleId: "CONT15DISC"
+  DPName: "Discount MF La del Cero 5GB"
+  SubjectType: "List"
+  ValidPeriods: 6
+
+DiscountPlan6: DiscountPlan
+  Brand: "1"
+  DPId: 28
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "CONT23DISC"
+  ValidFrom: 2015-08-12
+  ValidTo: 2049-12-31
+  DPRuleId: "CONT23DISC"
+  DPName: "Discount Promo La Sinfín 8GB"
+  SubjectType: "List"
+  ValidPeriods: 6
+
+DiscountPlan7: DiscountPlan
+  Brand: "1"
+  DPId: 29
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  ProcessStopper: TRUE 
+  BillCode: "CONT23DISCTELE"
+  ValidFrom: 2015-09-01
+  ValidTo: 2049-12-31
+  DPRuleId: "CONT23DISCTELE"
+  DPName: "Discount Promo La Sinfín 8GB PROMO TELESALES"
+  SubjectType: "List"
+
+DiscountPlan8: DiscountPlan
+  Brand: "1"
+  DPId: 24
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "CONT24DISC"
+  ValidFrom: 2015-03-01
+  ValidTo: 2049-12-31
+  DPRuleId: "CONT24DISC"
+  DPName: "Discount March Promo La Sinfín"
+  SubjectType: "List"
+  ValidPeriods: 6
+
+DiscountPlan9: DiscountPlan
+  Brand: "1"
+  DPId: 4
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 2
+  BillCode: "CONT8DISC"
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  DPRuleId: "CONT8DISC"
+  DPName: "Discount MF La del Uno and La del Cero 1.2GB"
+  SubjectType: "All "
+
+DiscountPlan10: DiscountPlan
+  Brand: "1"
+  DPId: 25
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "CONT9DISC"
+  ValidFrom: 2015-03-01
+  ValidTo: 2049-12-31
+  DPRuleId: "CONT9DISC"
+  DPName: "Discount MF La del Cero 1.2GB"
+  SubjectType: "List"
+  ValidPeriods: 6
+
+DiscountPlan11: DiscountPlan
+  Brand: "1"
+  DPId: 27
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 2
+  BillCode: "CONT9RETDISC"
+  ValidFrom: 2015-05-01
+  ValidTo: 2049-12-31
+  DPRuleId: "CONT9RETDISC"
+  DPName: "Retention Discount MF La del Cero 1.2GB"
+  SubjectType: "List"
+
+DiscountPlan12: DiscountPlan
+  Brand: "1"
+  DPId: 30
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 2
+  BillCode: "CONTF8RETDISC"
+  ValidFrom: 2015-10-01
+  ValidTo: 2049-12-31
+  DPRuleId: "CONTF8RETDISC"
+  DPName: "Discount retention La Plana 1.2GB"
+  SubjectType: "List"
+
+DiscountPlan13: DiscountPlan
+  Brand: "1"
+  DPId: 14
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 2
+  BillCode: "CONTM2DISC"
+  ValidFrom: 2014-04-01
+  ValidTo: 2049-12-31
+  DPRuleId: "CONTM2DISC"
+  DPName: "SIM SOLO INTERNET discount"
+  SubjectType: "List"
+  ValidPeriods: 24
+
+DiscountPlan14: DiscountPlan
+  Brand: "1"
+  DPId: 9
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 2
+  BillCode: "CONTS20DISC"
+  ValidFrom: 2013-12-01
+  ValidTo: 2049-12-31
+  DPRuleId: "CONTS20DISC"
+  DPName: "Discount Monthly Fee Infinita 20"
+  SubjectType: "List"
+
+DiscountPlan15: DiscountPlan
+  Brand: "1"
+  DPId: 16
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "CONTS21DISC"
+  ValidFrom: 2014-06-01
+  ValidTo: 2049-12-31
+  DPRuleId: "CONTS21DISC"
+  DPName: "Discount La Infinita 600MB"
+  SubjectType: "List"
+  ValidPeriods: 6
+
+DiscountPlan16: DiscountPlan
+  Brand: "1"
+  DPId: 10
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 2
+  BillCode: "CONTS25DISC"
+  ValidFrom: 2013-12-01
+  ValidTo: 2049-12-31
+  DPRuleId: "CONTS25DISC"
+  DPName: "Discount Monthly Fee Infinita 25"
+  SubjectType: "List"
+
+DiscountPlan17: DiscountPlan
+  Brand: "1"
+  DPId: 17
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "CONTS26DISC"
+  ValidFrom: 2014-06-01
+  ValidTo: 2049-12-31
+  DPRuleId: "CONTS26DISC"
+  DPName: "Discount La Infinita 2GB"
+  SubjectType: "List"
+  ValidPeriods: 4
+
+DiscountPlan18: DiscountPlan
+  Brand: "1"
+  DPId: 7
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "CONTS30DISC"
+  ValidFrom: 2013-06-01
+  ValidTo: 2049-12-31
+  DPRuleId: "CONTS30DISC"
+  DPName: "Infinita 30 Discount"
+  SubjectType: "List"
+  MaxAmount: 5
+  ValidPeriods: 180
+
+DiscountPlan19: DiscountPlan
+  Brand: "1"
+  DPId: 18
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "CONTS32DISC"
+  ValidFrom: 2014-06-01
+  ValidTo: 2049-12-31
+  DPRuleId: "CONTS32DISC"
+  DPName: "Discount La infinita 4 GB"
+  SubjectType: "List"
+  ValidPeriods: 4
+
+DiscountPlan20: DiscountPlan
+  Brand: "1"
+  DPId: 8
+  Subject: "Contract Target"
+  TargetType: "All "
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "DISCOUNT10"
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  DPRuleId: "DISCOUNT10"
+  DPName: "Discount 10 percent"
+  SubjectType: "All "
+
+DiscountPlan21: DiscountPlan
+  Brand: "1"
+  DPId: 21
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 3
+  BillCode: "INC_DISC"
+  ValidFrom: 2014-12-01
+  ValidTo: 2049-12-31
+  DPRuleId: "INC_DISC"
+  DPName: "Descuento Incidencia red"
+  SubjectType: "All "
+  CCDisplay: 1
+  ValidPeriods: 1
+
+DiscountPlan22: DiscountPlan
+  Brand: "1"
+  DPId: 19
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "INTLCALLDISC"
+  ValidFrom: 2014-07-01
+  ValidTo: 2049-12-31
+  DPRuleId: "INTLCALLDISC"
+  DPName: "Discount international Calls"
+  SubjectType: "All "
+
+DiscountPlan23: DiscountPlan
+  Brand: "1"
+  DPId: 11
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "LRDISC"
+  ValidFrom: 2014-02-01
+  ValidTo: 2049-12-31
+  DPRuleId: "LRDISC"
+  DPName: "Loyalty & retention discount"
+  SubjectType: "All "
+  ValidPeriods: 6
+
+DiscountPlan24: DiscountPlan
+  Brand: "1"
+  DPId: 5
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "DISCPAYTERMDIR"
+  ValidFrom: 2013-02-01
+  ValidTo: 2049-12-31
+  DPRuleId: "PAYTERMDISCDIR"
+  DPName: "Payterm discount direct channel"
+  SubjectType: "All "
+  ValidPeriods: 1
+
+DiscountPlan25: DiscountPlan
+  Brand: "1"
+  DPId: 6
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "DISCPAYTERMINDIR"
+  ValidFrom: 2013-02-01
+  ValidTo: 2049-12-31
+  DPRuleId: "PAYTERMDISCINDIR"
+  DPName: "Payterm discount indirect channel"
+  SubjectType: "All "
+  ValidPeriods: 1
+
+DiscountPlan26: DiscountPlan
+  Brand: "1"
+  DPId: 26
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 2
+  BillCode: "REJECT_FEE_DISC"
+  ValidFrom: 2015-03-01
+  ValidTo: 2049-12-31
+  DPRuleId: "REJECT_FEE_DISC"
+  DPName: "Rejection fee discount"
+  SubjectType: "All "
+  ValidPeriods: 1
+
+DiscountPlan27: DiscountPlan
+  Brand: "1"
+  DPId: 1
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  Priority: 2
+  BillCode: "RETDISC"
+  ValidFrom: 2012-10-11
+  ValidTo: 2049-12-31
+  DPRuleId: "RETDISC"
+  DPName: "Gift Discount"
+  SubjectType: "All "
+  ValidPeriods: 6
+
+DiscountPlan28: DiscountPlan
+  Brand: "1"
+  DPId: 12
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "RVTERM1EFD"
+  ValidFrom: 2014-03-01
+  ValidTo: 2049-12-31
+  DPRuleId: "RVTERM1EFD"
+  DPName: "Residual Value Uno-e Discount"
+  SubjectType: "All "
+  ValidPeriods: 1
+
+DiscountPlan29: DiscountPlan
+  Brand: "1"
+  DPId: 15
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "RVTERMBSFD"
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  DPRuleId: "RVTERMBSFD"
+  DPName: "Residual Value Banco Sabadell Discount"
+  SubjectType: "All "
+  ValidPeriods: 1
+
+DiscountPlan30: DiscountPlan
+  Brand: "1"
+  DPId: 32
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  BillCode: "RVTERMDTRW"
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+  DPRuleId: "RVTERMDT1DISC"
+  DPName: "Discount over Quota 25 from renewal channel"
+  SubjectType: "All "
+  ValidPeriods: 1
+
+DiscountPlan31: DiscountPlan
+  Brand: "1"
+  DPId: 33
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  BillCode: "RVTERMDTEQ25"
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+  DPRuleId: "RVTERMDT2DISC"
+  DPName: "Discount over Quota 25 refinance"
+  SubjectType: "All "
+  ValidPeriods: 1
+
+DiscountPlan32: DiscountPlan
+  Brand: "1"
+  DPId: 34
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  BillCode: "RVTERMDTTR"
+  ValidFrom: 2015-11-25
+  ValidTo: 2049-12-31
+  DPRuleId: "RVTERMDT3DISC"
+  DPName: "Terminal return discount over Quota 25"
+  SubjectType: "All "
+  ValidPeriods: 1
+
+DiscountPlan33: DiscountPlan
+  Brand: "1"
+  DPId: 35
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Fixed"
+  BillCode: "RVTERMDTTD"
+  ValidFrom: 2015-11-01
+  ValidTo: 2049-12-31
+  DPRuleId: "RVTERMDT4DISC"
+  DPName: "Discount over Quota 25 from renewal channel"
+  SubjectType: "All "
+  ValidPeriods: 1
+
+DiscountPlan34: DiscountPlan
+  Brand: "1"
+  DPId: 13
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 2
+  BillCode: "RVTERMFD"
+  ValidFrom: 2014-03-01
+  ValidTo: 2049-12-31
+  DPRuleId: "RVTERMFD"
+  DPName: "Residual Value Yoigo discount"
+  SubjectType: "All "
+  ValidPeriods: 1
+
+DiscountPlan35: DiscountPlan
+  Brand: "1"
+  DPId: 22
+  Subject: "Contract Target"
+  TargetType: "List"
+  DPUnit: "Percentage"
+  Priority: 1
+  BillCode: "TariffMarchDISC"
+  ValidFrom: 2015-03-04
+  ValidTo: 2015-04-08
+  DPRuleId: "TariffMarchDISC"
+  DPName: "Discount March Promo"
+  SubjectType: "List"
+  ValidPeriods: 6
+

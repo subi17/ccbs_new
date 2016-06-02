@@ -1,0 +1,893 @@
+FuncRunParam1: FuncRunParam
+  FRConfigID: 1
+  ParamType: "Date"
+  ParamName: "Period From"
+  ParamSeq: 1
+  DefaultValue: "#PREVBEGIN"
+
+FuncRunParam2: FuncRunParam
+  FRConfigID: 1
+  ParamType: "Date"
+  ParamName: "Period To"
+  ParamSeq: 2
+  DefaultValue: "#PREVEND"
+
+FuncRunParam3: FuncRunParam
+  FRConfigID: 1
+  ParamType: "Integer"
+  ParamName: "Qty Of Split Groups"
+  ParamSeq: 3
+  DefaultValue: "15"
+
+FuncRunParam4: FuncRunParam
+  FRConfigID: 1
+  ParamType: "Integer"
+  ParamName: "Test customer qty"
+  ParamSeq: 4
+  DefaultValue: "0"
+
+FuncRunParam5: FuncRunParam
+  FRConfigID: 1
+  ParamType: "Integer"
+  ParamName: "Test cust. pick mode"
+  ParamSeq: 5
+  DefaultValue: "0"
+
+FuncRunParam6: FuncRunParam
+  FRConfigID: 1
+  ParamType: "Character"
+  ParamName: "Customer list"
+  ParamSeq: 6
+
+FuncRunParam7: FuncRunParam
+  FRConfigID: 2
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam8: FuncRunParam
+  FRConfigID: 2
+  ParamType: "Date"
+  ParamName: "IberPay Due Date"
+  ParamSeq: 2
+
+FuncRunParam9: FuncRunParam
+  FRConfigID: 2
+  ParamType: "Date"
+  ParamName: "Period From"
+  ParamSeq: 3
+  DefaultValue: "#PREVBEGIN"
+
+FuncRunParam10: FuncRunParam
+  FRConfigID: 2
+  ParamType: "Date"
+  ParamName: "Period To"
+  ParamSeq: 4
+  DefaultValue: "#PREVEND"
+
+FuncRunParam11: FuncRunParam
+  FRConfigID: 2
+  ParamType: "Integer"
+  ParamName: "Fee Period"
+  ParamSeq: 5
+  DefaultValue: "#PREVMONTH"
+
+FuncRunParam12: FuncRunParam
+  FRConfigID: 2
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 6
+  DefaultValue: "1"
+
+FuncRunParam13: FuncRunParam
+  FRConfigID: 2
+  ParamType: "Date"
+  ParamName: "Fusion due date"
+  ParamSeq: 7
+
+FuncRunParam14: FuncRunParam
+  FRConfigID: 2
+  ParamType: "Date"
+  ParamName: "EBA Due Date"
+  ParamSeq: 8
+
+FuncRunParam15: FuncRunParam
+  FRConfigID: 3
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam16: FuncRunParam
+  FRConfigID: 3
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 2
+  DefaultValue: "1"
+
+FuncRunParam17: FuncRunParam
+  FRConfigID: 4
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam18: FuncRunParam
+  FRConfigID: 4
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 2
+  DefaultValue: "1"
+
+FuncRunParam19: FuncRunParam
+  FRConfigID: 4
+  ParamType: "Character"
+  ParamName: "File Type"
+  ParamSeq: 3
+  DefaultValue: "DOC1"
+
+FuncRunParam20: FuncRunParam
+  FRConfigID: 5
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam21: FuncRunParam
+  FRConfigID: 5
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 2
+  DefaultValue: "1"
+
+FuncRunParam22: FuncRunParam
+  FRConfigID: 5
+  ParamType: "Character"
+  ParamName: "Print House"
+  ParamSeq: 3
+  DefaultValue: "MEYDIS"
+
+FuncRunParam23: FuncRunParam
+  FRConfigID: 5
+  ParamType: "Character"
+  ParamName: "File Type"
+  ParamSeq: 4
+  DefaultValue: "MRPRINT"
+
+FuncRunParam24: FuncRunParam
+  FRConfigID: 5
+  ParamType: "Integer"
+  ParamName: "Qty Of Split Groups"
+  ParamSeq: 5
+  DefaultValue: "20"
+
+FuncRunParam25: FuncRunParam
+  FRConfigID: 5
+  ParamType: "Logical"
+  ParamName: "Only unprinted inv."
+  ParamSeq: 6
+  DefaultValue: "YES"
+
+FuncRunParam26: FuncRunParam
+  FRConfigID: 5
+  ParamType: "Integer"
+  ParamName: "Use replica server"
+  ParamSeq: 7
+  DefaultValue: "1"
+
+FuncRunParam27: FuncRunParam
+  FRConfigID: 5
+  ParamType: "Logical"
+  ParamName: "Check numbering gaps"
+  ParamSeq: 8
+  DefaultValue: "True"
+
+FuncRunParam28: FuncRunParam
+  FRConfigID: 6
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam29: FuncRunParam
+  FRConfigID: 6
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 2
+  DefaultValue: "1"
+
+FuncRunParam30: FuncRunParam
+  FRConfigID: 6
+  ParamType: "Character"
+  ParamName: "File Type"
+  ParamSeq: 3
+  DefaultValue: "XMLSEP"
+
+FuncRunParam31: FuncRunParam
+  FRConfigID: 6
+  ParamType: "Logical"
+  ParamName: "Create tar file"
+  ParamSeq: 4
+  DefaultValue: "YES"
+
+FuncRunParam32: FuncRunParam
+  FRConfigID: 6
+  ParamType: "Logical"
+  ParamName: "Create PDF files"
+  ParamSeq: 5
+  DefaultValue: "No"
+
+FuncRunParam33: FuncRunParam
+  FRConfigID: 7
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam34: FuncRunParam
+  FRConfigID: 7
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 2
+  DefaultValue: "1"
+
+FuncRunParam35: FuncRunParam
+  FRConfigID: 7
+  ParamType: "Logical"
+  ParamName: "Split To Banks"
+  ParamSeq: 3
+  DefaultValue: "YES"
+
+FuncRunParam36: FuncRunParam
+  FRConfigID: 7
+  ParamType: "Logical"
+  ParamName: "SchemaValidation"
+  ParamSeq: 4
+  DefaultValue: "YES"
+
+FuncRunParam37: FuncRunParam
+  FRConfigID: 7
+  ParamType: "Character"
+  ParamName: "InputFileDirectory"
+  ParamSeq: 5
+
+FuncRunParam38: FuncRunParam
+  FRConfigID: 8
+  ParamType: "Date"
+  ParamName: "Invoice Date (BR)"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam39: FuncRunParam
+  FRConfigID: 8
+  ParamType: "Integer"
+  ParamName: "Invoice Type (BR)"
+  ParamSeq: 2
+  DefaultValue: "1"
+
+FuncRunParam40: FuncRunParam
+  FRConfigID: 8
+  ParamType: "Logical"
+  ParamName: "Invoice Details (BR)"
+  ParamSeq: 3
+  DefaultValue: "No"
+
+FuncRunParam41: FuncRunParam
+  FRConfigID: 8
+  ParamType: "Integer"
+  ParamName: "Billing Period (US)"
+  ParamSeq: 4
+  DefaultValue: "#PREVMONTH"
+
+FuncRunParam42: FuncRunParam
+  FRConfigID: 8
+  ParamType: "Date"
+  ParamName: "Inv. Date From (US)"
+  ParamSeq: 5
+  DefaultValue: "#RUNBEGIN"
+
+FuncRunParam43: FuncRunParam
+  FRConfigID: 8
+  ParamType: "Date"
+  ParamName: "Inv. Date To (US)"
+  ParamSeq: 6
+  DefaultValue: "#RUNEND"
+
+FuncRunParam44: FuncRunParam
+  FRConfigID: 8
+  ParamType: "Logical"
+  ParamName: "Subscr. Details (US)"
+  ParamSeq: 7
+  DefaultValue: "Yes"
+
+FuncRunParam45: FuncRunParam
+  FRConfigID: 8
+  ParamType: "Logical"
+  ParamName: "Print US report"
+  ParamSeq: 8
+  DefaultValue: "Yes"
+
+FuncRunParam46: FuncRunParam
+  FRConfigID: 9
+  ParamType: "Date"
+  ParamName: "Invoice Date (BR)"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam47: FuncRunParam
+  FRConfigID: 9
+  ParamType: "Integer"
+  ParamName: "Invoice Type (BR)"
+  ParamSeq: 2
+  DefaultValue: "1"
+
+FuncRunParam48: FuncRunParam
+  FRConfigID: 9
+  ParamType: "Logical"
+  ParamName: "Invoice Details (BR)"
+  ParamSeq: 3
+  DefaultValue: "Yes"
+
+FuncRunParam49: FuncRunParam
+  FRConfigID: 9
+  ParamType: "Integer"
+  ParamName: "Billing Period (US)"
+  ParamSeq: 4
+  DefaultValue: "#PREVMONTH"
+
+FuncRunParam50: FuncRunParam
+  FRConfigID: 9
+  ParamType: "Date"
+  ParamName: "Inv. Date From (US)"
+  ParamSeq: 5
+  DefaultValue: "#RUNBEGIN"
+
+FuncRunParam51: FuncRunParam
+  FRConfigID: 9
+  ParamType: "Date"
+  ParamName: "Inv. Date To (US)"
+  ParamSeq: 6
+  DefaultValue: "#RUNEND"
+
+FuncRunParam52: FuncRunParam
+  FRConfigID: 9
+  ParamType: "Logical"
+  ParamName: "Subscr. Details (US)"
+  ParamSeq: 7
+  DefaultValue: "Yes"
+
+FuncRunParam53: FuncRunParam
+  FRConfigID: 9
+  ParamType: "Logical"
+  ParamName: "Print US report"
+  ParamSeq: 8
+  DefaultValue: "Yes"
+
+FuncRunParam54: FuncRunParam
+  FRConfigID: 10
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam55: FuncRunParam
+  FRConfigID: 10
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 2
+  DefaultValue: "1"
+
+FuncRunParam56: FuncRunParam
+  FRConfigID: 12
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam57: FuncRunParam
+  FRConfigID: 13
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam58: FuncRunParam
+  FRConfigID: 13
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 2
+  DefaultValue: "1"
+
+FuncRunParam59: FuncRunParam
+  FRConfigID: 13
+  ParamType: "Integer"
+  ParamName: "Interval (minutes)"
+  ParamSeq: 3
+  DefaultValue: "60"
+
+FuncRunParam60: FuncRunParam
+  FRConfigID: 14
+  ParamType: "Date"
+  ParamName: "Period From"
+  ParamSeq: 1
+  DefaultValue: "#PREVBEGIN"
+
+FuncRunParam61: FuncRunParam
+  FRConfigID: 14
+  ParamType: "Date"
+  ParamName: "Period To"
+  ParamSeq: 2
+  DefaultValue: "#PREVEND"
+
+FuncRunParam62: FuncRunParam
+  FRConfigID: 14
+  ParamType: "Character"
+  ParamName: "Customer list"
+  ParamSeq: 3
+
+FuncRunParam63: FuncRunParam
+  FRConfigID: 15
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam64: FuncRunParam
+  FRConfigID: 15
+  ParamType: "Date"
+  ParamName: "Due Date"
+  ParamSeq: 2
+
+FuncRunParam65: FuncRunParam
+  FRConfigID: 15
+  ParamType: "Date"
+  ParamName: "Period From"
+  ParamSeq: 3
+  DefaultValue: "#PREVBEGIN"
+
+FuncRunParam66: FuncRunParam
+  FRConfigID: 15
+  ParamType: "Date"
+  ParamName: "Period To"
+  ParamSeq: 4
+  DefaultValue: "#PREVEND"
+
+FuncRunParam67: FuncRunParam
+  FRConfigID: 15
+  ParamType: "Integer"
+  ParamName: "Fee Period"
+  ParamSeq: 5
+  DefaultValue: "#PREVMONTH"
+
+FuncRunParam68: FuncRunParam
+  FRConfigID: 15
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 6
+  DefaultValue: "99"
+
+FuncRunParam69: FuncRunParam
+  FRConfigID: 16
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 1
+  DefaultValue: "1"
+
+FuncRunParam70: FuncRunParam
+  FRConfigID: 16
+  ParamType: "Integer"
+  ParamName: "BillingPeriod"
+  ParamSeq: 2
+  DefaultValue: "#PREVMONTH"
+
+FuncRunParam71: FuncRunParam
+  FRConfigID: 17
+  ParamType: "Integer"
+  ParamName: "BillingPeriod"
+  ParamSeq: 1
+  DefaultValue: "#PREVMONTH"
+
+FuncRunParam72: FuncRunParam
+  FRConfigID: 18
+  ParamType: "Date"
+  ParamName: "CDR Read Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam73: FuncRunParam
+  FRConfigID: 22
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam74: FuncRunParam
+  FRConfigID: 22
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 2
+  DefaultValue: "1"
+
+FuncRunParam75: FuncRunParam
+  FRConfigID: 22
+  ParamType: "Character"
+  ParamName: "File Type"
+  ParamSeq: 3
+  DefaultValue: "XMLSEP"
+
+FuncRunParam76: FuncRunParam
+  FRConfigID: 22
+  ParamType: "Logical"
+  ParamName: "Create tar file"
+  ParamSeq: 4
+  DefaultValue: "YES"
+
+FuncRunParam77: FuncRunParam
+  FRConfigID: 23
+  ParamType: "Integer"
+  ParamName: "Test Queue ID"
+  ParamSeq: 1
+
+FuncRunParam78: FuncRunParam
+  FRConfigID: 23
+  ParamType: "Date"
+  ParamName: "Period From"
+  ParamSeq: 2
+  DefaultValue: "#RUNBEGIN"
+
+FuncRunParam79: FuncRunParam
+  FRConfigID: 23
+  ParamType: "Date"
+  ParamName: "Period To"
+  ParamSeq: 3
+  DefaultValue: "#RUNEND"
+
+FuncRunParam80: FuncRunParam
+  FRConfigID: 23
+  ParamType: "Integer"
+  ParamName: "Fee Period"
+  ParamSeq: 4
+  DefaultValue: "#RUNMONTH"
+
+FuncRunParam81: FuncRunParam
+  FRConfigID: 23
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 5
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam82: FuncRunParam
+  FRConfigID: 23
+  ParamType: "Date"
+  ParamName: "Due Date"
+  ParamSeq: 6
+
+FuncRunParam83: FuncRunParam
+  FRConfigID: 23
+  ParamType: "Logical"
+  ParamName: "MergeAnalysis"
+  ParamSeq: 7
+  DefaultValue: "FALSE"
+
+FuncRunParam84: FuncRunParam
+  FRConfigID: 24
+  ParamType: "Integer"
+  ParamName: "Test queue id"
+  ParamSeq: 1
+
+FuncRunParam85: FuncRunParam
+  FRConfigID: 24
+  ParamType: "Date"
+  ParamName: "Invoice date"
+  ParamSeq: 2
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam86: FuncRunParam
+  FRConfigID: 24
+  ParamType: "Integer"
+  ParamName: "Invoice type"
+  ParamSeq: 3
+  DefaultValue: "99"
+
+FuncRunParam87: FuncRunParam
+  FRConfigID: 25
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 1
+  DefaultValue: "1"
+
+FuncRunParam88: FuncRunParam
+  FRConfigID: 25
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 2
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam89: FuncRunParam
+  FRConfigID: 25
+  ParamType: "Integer"
+  ParamName: "Delivery State"
+  ParamSeq: 3
+  DefaultValue: "1"
+
+FuncRunParam90: FuncRunParam
+  FRConfigID: 26
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 1
+  DefaultValue: "1"
+
+FuncRunParam91: FuncRunParam
+  FRConfigID: 26
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 2
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam92: FuncRunParam
+  FRConfigID: 26
+  ParamType: "Integer"
+  ParamName: "Delivery State"
+  ParamSeq: 3
+  DefaultValue: "1"
+
+FuncRunParam93: FuncRunParam
+  FRConfigID: 27
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam94: FuncRunParam
+  FRConfigID: 27
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 2
+  DefaultValue: "1"
+
+FuncRunParam95: FuncRunParam
+  FRConfigID: 27
+  ParamType: "Character"
+  ParamName: "Print House"
+  ParamSeq: 3
+  DefaultValue: "IMPULSO,MEYDIS"
+
+FuncRunParam96: FuncRunParam
+  FRConfigID: 27
+  ParamType: "Character"
+  ParamName: "File Type"
+  ParamSeq: 4
+  DefaultValue: "MRPRINT"
+
+FuncRunParam97: FuncRunParam
+  FRConfigID: 27
+  ParamType: "Integer"
+  ParamName: "Qty Of Split Groups"
+  ParamSeq: 5
+  DefaultValue: "25"
+
+FuncRunParam98: FuncRunParam
+  FRConfigID: 27
+  ParamType: "Logical"
+  ParamName: "Only unprinted inv."
+  ParamSeq: 6
+  DefaultValue: "NO"
+
+FuncRunParam99: FuncRunParam
+  FRConfigID: 27
+  ParamType: "Integer"
+  ParamName: "Use replica server"
+  ParamSeq: 7
+  DefaultValue: "1"
+
+FuncRunParam100: FuncRunParam
+  FRConfigID: 28
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam101: FuncRunParam
+  FRConfigID: 28
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 2
+  DefaultValue: "1"
+
+FuncRunParam102: FuncRunParam
+  FRConfigID: 28
+  ParamType: "Character"
+  ParamName: "Print House"
+  ParamSeq: 3
+  DefaultValue: "NOPAPER"
+
+FuncRunParam103: FuncRunParam
+  FRConfigID: 28
+  ParamType: "Character"
+  ParamName: "File Type"
+  ParamSeq: 4
+  DefaultValue: "MRPRINT"
+
+FuncRunParam104: FuncRunParam
+  FRConfigID: 28
+  ParamType: "Integer"
+  ParamName: "Qty Of Split Groups"
+  ParamSeq: 5
+  DefaultValue: "15"
+
+FuncRunParam105: FuncRunParam
+  FRConfigID: 28
+  ParamType: "Logical"
+  ParamName: "Only unprinted inv."
+  ParamSeq: 6
+  DefaultValue: "NO"
+
+FuncRunParam106: FuncRunParam
+  FRConfigID: 28
+  ParamType: "Integer"
+  ParamName: "Use replica server"
+  ParamSeq: 7
+  DefaultValue: "1"
+
+FuncRunParam107: FuncRunParam
+  FRConfigID: 29
+  ParamType: "Integer"
+  ParamName: "Qty Of Split Groups"
+  ParamSeq: 1
+  DefaultValue: "15"
+
+FuncRunParam108: FuncRunParam
+  FRConfigID: 29
+  ParamType: "Integer"
+  ParamName: "Use Replica Server"
+  ParamSeq: 2
+  DefaultValue: "1"
+
+FuncRunParam109: FuncRunParam
+  FRConfigID: 30
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam110: FuncRunParam
+  FRConfigID: 30
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 2
+  DefaultValue: "1"
+
+FuncRunParam111: FuncRunParam
+  FRConfigID: 30
+  ParamType: "Character"
+  ParamName: "Print House"
+  ParamSeq: 3
+  DefaultValue: "NOPAPER"
+
+FuncRunParam112: FuncRunParam
+  FRConfigID: 30
+  ParamType: "Character"
+  ParamName: "File Type"
+  ParamSeq: 4
+  DefaultValue: "MRPRINT"
+
+FuncRunParam113: FuncRunParam
+  FRConfigID: 30
+  ParamType: "Integer"
+  ParamName: "Qty Of Split Groups"
+  ParamSeq: 5
+  DefaultValue: "20"
+
+FuncRunParam114: FuncRunParam
+  FRConfigID: 30
+  ParamType: "Logical"
+  ParamName: "Only unprinted inv."
+  ParamSeq: 6
+  DefaultValue: "YES"
+
+FuncRunParam115: FuncRunParam
+  FRConfigID: 30
+  ParamType: "Integer"
+  ParamName: "Use replica server"
+  ParamSeq: 7
+  DefaultValue: "1"
+
+FuncRunParam116: FuncRunParam
+  FRConfigID: 30
+  ParamType: "Logical"
+  ParamName: "Check numbering gaps"
+  ParamSeq: 8
+  DefaultValue: "True"
+
+FuncRunParam117: FuncRunParam
+  FRConfigID: 31
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam118: FuncRunParam
+  FRConfigID: 31
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 2
+  DefaultValue: "1"
+
+FuncRunParam119: FuncRunParam
+  FRConfigID: 31
+  ParamType: "Integer"
+  ParamName: "Qty Of Split Groups"
+  ParamSeq: 3
+  DefaultValue: "15"
+
+FuncRunParam120: FuncRunParam
+  FRConfigID: 31
+  ParamType: "Integer"
+  ParamName: "Use Replica Server"
+  ParamSeq: 4
+  DefaultValue: "1"
+
+FuncRunParam121: FuncRunParam
+  FRConfigID: 32
+  ParamType: "Date"
+  ParamName: "Period"
+  ParamSeq: 1
+  DefaultValue: "#PREVEND"
+
+FuncRunParam122: FuncRunParam
+  FRConfigID: 33
+  ParamType: "Date"
+  ParamName: "Invoice Date"
+  ParamSeq: 1
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam123: FuncRunParam
+  FRConfigID: 33
+  ParamType: "Integer"
+  ParamName: "Invoice Type"
+  ParamSeq: 2
+  DefaultValue: "1"
+
+FuncRunParam124: FuncRunParam
+  FRConfigID: 33
+  ParamType: "Character"
+  ParamName: "File Type"
+  ParamSeq: 3
+  DefaultValue: "XMLSEP"
+
+FuncRunParam125: FuncRunParam
+  FRConfigID: 33
+  ParamType: "Logical"
+  ParamName: "Create tar file"
+  ParamSeq: 4
+  DefaultValue: "NO"
+
+FuncRunParam126: FuncRunParam
+  FRConfigID: 33
+  ParamType: "Logical"
+  ParamName: "Create PDF Files"
+  ParamSeq: 5
+  DefaultValue: "No"
+
+FuncRunParam127: FuncRunParam
+  FRConfigID: 34
+  ParamType: "Character"
+  ParamName: "Print House"
+  ParamSeq: 1
+  DefaultValue: "MEYDIS"
+
+FuncRunParam128: FuncRunParam
+  FRConfigID: 34
+  ParamType: "DATE"
+  ParamName: "Invoice Date"
+  ParamSeq: 2
+  DefaultValue: "#RUNDATE"
+
+FuncRunParam129: FuncRunParam
+  FRConfigID: 34
+  ParamType: "Integer"
+  ParamName: "Queue ID"
+  ParamSeq: 3
+  DefaultValue: "3"
+

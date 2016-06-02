@@ -1,0 +1,88 @@
+CoRule1: CoRule
+  coFrom: 2008-11-01
+  coTo: 2049-12-31
+  coNoInst: 4
+  CoRuleID: 1
+  CommPoint: 2
+  AmtBilled: 20
+  QtyPaidInv: 1
+  RuleDesc: "MGM Postpaid"
+  Brand: "1"
+  BasisType: 3
+  OpenDays: 60
+  RuleType: 2
+  FtGrp: "MGMPOST"
+  PayType: 1
+  AllowedDNI: "NIF,NIE,Passport"
+  CreationSMS: "MGMRefereeCre"
+  ActivationSMS: "MGMRefereeAct"
+  CommAmount: 20
+  MaxPendingDays: 365
+  Priority: 20
+
+CoRule2: CoRule
+  coFrom: 2008-11-01
+  coTo: 2049-12-31
+  coNoInst: 4
+  CoRuleID: 2
+  CommPoint: 2
+  AmtBilled: 20
+  QtyPaidInv: 1
+  RuleDesc: "MGM Prepaid"
+  Brand: "1"
+  BasisType: 3
+  OpenDays: 60
+  RuleType: 2
+  PayType: 2
+  AllowedDNI: "NIF,NIE,Passport"
+  PPReqPrefix: "990"
+  PPSource: "COMM"
+  CreationSMS: "MGMRefereeCre"
+  ActivationSMS: "MGMRefereeAct"
+  CommAmount: 20
+  MaxPendingDays: 365
+  Priority: 20
+
+CoRule3: CoRule
+  coFrom: 2008-11-01
+  coTo: 2049-12-31
+  coNoInst: 1
+  CoRuleID: 3
+  CommPoint: 2
+  AmtBilled: 20
+  QtyPaidInv: 1
+  RuleDesc: "MGM Postpaid"
+  Brand: "1"
+  BasisType: 3
+  OpenDays: 60
+  RuleType: 3
+  FtGrp: "MGMPOST"
+  PayType: 1
+  AllowedDNI: "NIF,NIE,Passport"
+  ActivationSMS: "MGMPromotedAct"
+  CommAmount: 5
+  MaxPendingDays: 365
+  Priority: 20
+
+CoRule4: CoRule
+  coFrom: 2008-11-01
+  coTo: 2049-12-31
+  coNoInst: 1
+  CoRuleID: 4
+  CommPoint: 2
+  AmtBilled: 20
+  QtyPaidInv: 1
+  RuleDesc: "MGM Prepaid"
+  Brand: "1"
+  BasisType: 3
+  OpenDays: 60
+  RuleType: 3
+  PayType: 2
+  AllowedDNI: "NIF,NIE,Passport"
+  PPReqPrefix: "990"
+  PPSource: "COMM"
+  ActivationSMS: "MGMPromotedAct"
+  CommAmount: 5
+  MaxPendingDays: 365
+  Priority: 20
+

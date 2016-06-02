@@ -1,0 +1,892 @@
+TMRLimit1: TMRLimit
+  TMRuleSeq: 1
+  FromDate: 2008-11-12
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 50
+  Action: 35
+  SMSText: "PREMIUMFRAUD1"
+  MaxValue: 1000
+  ActionParam: "Limits_TotalPremium_Off"
+
+TMRLimit2: TMRLimit
+  TMRuleSeq: 1
+  FromDate: 2008-05-01
+  ToDate: 2008-11-11
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 70
+  Action: 35
+  SMSText: "PREMIUMFRAUD1"
+  MaxValue: 1000
+  ActionParam: "Y_HURP"
+
+TMRLimit3: TMRLimit
+  TMRuleSeq: 1
+  FromDate: 2008-11-12
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 75
+  Action: 35
+  SMSText: "PREMIUMFRAUD2"
+  MaxValue: 5000
+  ActionParam: "Limits_Restricted"
+
+TMRLimit4: TMRLimit
+  TMRuleSeq: 1
+  FromDate: 2008-05-01
+  ToDate: 2008-11-11
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 100
+  Action: 35
+  SMSText: "PREMIUMFRAUD2"
+  MaxValue: 1000
+  ActionParam: "Y_REST"
+
+TMRLimit5: TMRLimit
+  TMRuleSeq: 2
+  FromDate: 2009-03-01
+  ToDate: 2010-03-02
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 3072
+  Action: 30
+  SMSText: "DATALIMIT1"
+
+TMRLimit6: TMRLimit
+  TMRuleSeq: 2
+  FromDate: 2008-06-09
+  ToDate: 2009-02-28
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 1024
+  Action: 30
+  SMSText: "DATALIMIT1"
+
+TMRLimit7: TMRLimit
+  TMRuleSeq: 2
+  FromDate: 2009-03-01
+  ToDate: 2011-02-14
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 6072
+  Action: 30
+  SMSText: "DATALIMIT2"
+
+TMRLimit8: TMRLimit
+  TMRuleSeq: 2
+  FromDate: 2008-06-09
+  ToDate: 2009-02-28
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 4024
+  Action: 35
+  SMSText: "DATALIMIT2"
+  ActionParam: "Y_DATA"
+
+TMRLimit9: TMRLimit
+  TMRuleSeq: 3
+  FromDate: 2008-11-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 80
+  Action: 30
+  SMSText: "TOTALTRAFFIC1"
+  MaxValue: 5000
+
+TMRLimit10: TMRLimit
+  TMRuleSeq: 3
+  FromDate: 2008-11-01
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 120
+  Action: 35
+  SMSText: "TOTALTRAFFIC2"
+  MaxValue: 5000
+  ActionParam: "Limits_Restricted"
+
+TMRLimit11: TMRLimit
+  TMRuleSeq: 4
+  FromDate: 2008-10-13
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 50
+  Action: 35
+  SMSText: "INTERNATFRAUD1"
+  MaxValue: 999
+  ActionParam: "Limits_International_off"
+
+TMRLimit12: TMRLimit
+  TMRuleSeq: 4
+  FromDate: 2008-11-12
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 75
+  Action: 35
+  SMSText: "INTERNATFRAUD2"
+  MaxValue: 1000
+  ActionParam: "Limits_Restricted"
+
+TMRLimit13: TMRLimit
+  TMRuleSeq: 4
+  FromDate: 2008-10-13
+  ToDate: 2008-11-11
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 60
+  Action: 35
+  MaxValue: 999
+  ActionParam: "Y_SARC"
+
+TMRLimit14: TMRLimit
+  TMRuleSeq: 5
+  FromDate: 2009-11-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 3
+  Action: 30
+  SMSText: "TopupReminder"
+  MaxValue: 100
+
+TMRLimit15: TMRLimit
+  TMRuleSeq: 6
+  FromDate: 2009-11-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 1
+  Action: 30
+  SMSText: "TopupReminder"
+  MaxValue: 100
+
+TMRLimit16: TMRLimit
+  TMRuleSeq: 7
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 80
+  Action: 30
+  SMSText: "FRONTLIMIT1"
+  MaxValue: 5000
+
+TMRLimit17: TMRLimit
+  TMRuleSeq: 7
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 120
+  Action: 35
+  SMSText: "FRONTLIMIT2"
+  MaxValue: 5000
+  ActionParam: "Limits_Roaming_off"
+
+TMRLimit18: TMRLimit
+  TMRuleSeq: 8
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 50
+  Action: 30
+  SMSText: "FRONTLIMIT1"
+  MaxValue: 999
+
+TMRLimit19: TMRLimit
+  TMRuleSeq: 8
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 60
+  Action: 35
+  SMSText: "FRONTLIMIT2"
+  MaxValue: 999
+  ActionParam: "Limits_Roaming_off"
+
+TMRLimit20: TMRLimit
+  TMRuleSeq: 9
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 25
+  Action: 30
+  SMSText: "FRONTLIMIT1"
+  MaxValue: 999
+
+TMRLimit21: TMRLimit
+  TMRuleSeq: 9
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 35
+  Action: 35
+  SMSText: "FRONTLIMIT2"
+  MaxValue: 999
+  ActionParam: "Limits_Roaming_off"
+
+TMRLimit22: TMRLimit
+  TMRuleSeq: 10
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 2
+  Action: 30
+  SMSText: "FRONTLIMIT1"
+  MaxValue: 999
+
+TMRLimit23: TMRLimit
+  TMRuleSeq: 10
+  FromDate: 2010-10-06
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 4
+  Action: 35
+  SMSText: "FRONTLIMIT2"
+  MaxValue: 999
+  ActionParam: "Limits_Roaming_off"
+
+TMRLimit24: TMRLimit
+  TMRuleSeq: 11
+  FromDate: 2010-12-09
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 2920
+  Action: 30
+  SMSText: "UpsellIPL25HSDPA,UpsellIPLLimit"
+  MaxValue: 10000
+
+TMRLimit25: TMRLimit
+  TMRuleSeq: 11
+  FromDate: 2010-11-24
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 3890
+  Action: 30
+  SMSText: "UpsellIPL25HSDPA,UpsellIPLLimit"
+  MaxValue: 10000
+
+TMRLimit26: TMRLimit
+  TMRuleSeq: 11
+  FromDate: 2010-11-24
+  ToDate: 2049-12-31
+  LimitID: 3
+  ValueType: 1
+  LimitAmt: 4864
+  Action: 30
+  SMSText: "UpsellIPL25HSDPA,UpsellIPLLimit"
+  MaxValue: 10000
+
+TMRLimit27: TMRLimit
+  TMRuleSeq: 12
+  FromDate: 2010-12-09
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 475
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUBLimit"
+  MaxValue: 10000
+
+TMRLimit28: TMRLimit
+  TMRuleSeq: 12
+  FromDate: 2010-11-24
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 760
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUBLimit"
+  MaxValue: 10000
+
+TMRLimit29: TMRLimit
+  TMRuleSeq: 12
+  FromDate: 2010-11-24
+  ToDate: 2049-12-31
+  LimitID: 3
+  ValueType: 1
+  LimitAmt: 1045
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUBLimit"
+  MaxValue: 10000
+
+TMRLimit30: TMRLimit
+  TMRuleSeq: 13
+  FromDate: 2010-12-09
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 9728
+  Action: 30
+  SMSText: "UpsellIPL35HSDPA,UpsellIPLLimit"
+  MaxValue: 10000
+
+TMRLimit31: TMRLimit
+  TMRuleSeq: 13
+  FromDate: 2010-11-24
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 10701
+  Action: 30
+  SMSText: "UpsellIPL35HSDPA,UpsellIPLLimit"
+  MaxValue: 100000
+
+TMRLimit32: TMRLimit
+  TMRuleSeq: 13
+  FromDate: 2010-11-24
+  ToDate: 2049-12-31
+  LimitID: 3
+  ValueType: 1
+  LimitAmt: 11674
+  Action: 30
+  SMSText: "UpsellIPL35HSDPA,UpsellIPLLimit"
+  MaxValue: 100000
+
+TMRLimit33: TMRLimit
+  TMRuleSeq: 14
+  FromDate: 2012-05-28
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 2
+  LimitPerc: 95
+  Action: 30
+  SMSText: "UpsellHSDPA,DubLimit"
+
+TMRLimit34: TMRLimit
+  TMRuleSeq: 14
+  FromDate: 2011-02-23
+  ToDate: 2012-05-27
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 475
+  Action: 30
+  SMSText: "UpsellHSDPA,DubLimit"
+  MaxValue: 9999999
+
+TMRLimit35: TMRLimit
+  TMRuleSeq: 15
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 450
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUBLimit"
+  MaxValue: 9999999
+
+TMRLimit36: TMRLimit
+  TMRuleSeq: 15
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 735
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUBLimit"
+  MaxValue: 9999999
+
+TMRLimit37: TMRLimit
+  TMRuleSeq: 15
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  LimitID: 3
+  ValueType: 1
+  LimitAmt: 1020
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUBLimit"
+  MaxValue: 9999999
+
+TMRLimit38: TMRLimit
+  TMRuleSeq: 16
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 975
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB2Limit"
+  MaxValue: 9999999
+
+TMRLimit39: TMRLimit
+  TMRuleSeq: 16
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 1945
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB2Limit"
+  MaxValue: 9999999
+
+TMRLimit40: TMRLimit
+  TMRuleSeq: 16
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  LimitID: 3
+  ValueType: 1
+  LimitAmt: 2918
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB2Limit"
+  MaxValue: 9999999
+
+TMRLimit41: TMRLimit
+  TMRuleSeq: 17
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 950
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB2Limit"
+  MaxValue: 9999999
+
+TMRLimit42: TMRLimit
+  TMRuleSeq: 17
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 1920
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB2Limit"
+  MaxValue: 9999999
+
+TMRLimit43: TMRLimit
+  TMRuleSeq: 17
+  FromDate: 2011-02-23
+  ToDate: 2049-12-31
+  LimitID: 3
+  ValueType: 1
+  LimitAmt: 2895
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB2Limit"
+  MaxValue: 9999999
+
+TMRLimit44: TMRLimit
+  TMRuleSeq: 18
+  FromDate: 2012-05-28
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 2
+  LimitPerc: 95
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellPMDUBLimit"
+
+TMRLimit45: TMRLimit
+  TMRuleSeq: 18
+  FromDate: 2011-06-01
+  ToDate: 2012-05-27
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 475
+  Action: 30
+  SMSText: "UpsellPMDUBHSDPA,UpsellPMDUBLimit"
+  MaxValue: 500
+
+TMRLimit46: TMRLimit
+  TMRuleSeq: 18
+  FromDate: 2011-06-01
+  ToDate: 2012-05-27
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 760
+  Action: 30
+  SMSText: "UpsellPMDUBHSDPA,UpsellPMDUBLimit"
+  MaxValue: 800
+
+TMRLimit47: TMRLimit
+  TMRuleSeq: 18
+  FromDate: 2011-06-01
+  ToDate: 2012-05-27
+  LimitID: 3
+  ValueType: 1
+  LimitAmt: 1045
+  Action: 30
+  SMSText: "UpsellPMDUBHSDPA,UpsellPMDUBLimit"
+  MaxValue: 1100
+  MinValue: 300
+
+TMRLimit48: TMRLimit
+  TMRuleSeq: 19
+  FromDate: 2011-09-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 475
+  Action: 30
+  SMSText: "UpsellIPL8HSDPA,UpsellIPL8Limit"
+  MaxValue: 10000
+
+TMRLimit49: TMRLimit
+  TMRuleSeq: 19
+  FromDate: 2011-09-01
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 760
+  Action: 30
+  SMSText: "UpsellIPL8HSDPA,UpsellIPL8Limit"
+  MaxValue: 10000
+
+TMRLimit50: TMRLimit
+  TMRuleSeq: 19
+  FromDate: 2011-09-01
+  ToDate: 2049-12-31
+  LimitID: 3
+  ValueType: 1
+  LimitAmt: 1045
+  Action: 30
+  SMSText: "UpsellIPL8HSDPA,UpsellIPL8Limit"
+  MaxValue: 10000
+
+TMRLimit51: TMRLimit
+  TMRuleSeq: 20
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 2920
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB3Limit"
+  MaxValue: 10000
+
+TMRLimit52: TMRLimit
+  TMRuleSeq: 20
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 3890
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB3Limit"
+  MaxValue: 10000
+
+TMRLimit53: TMRLimit
+  TMRuleSeq: 20
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  LimitID: 3
+  ValueType: 1
+  LimitAmt: 4864
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB3Limit"
+  MaxValue: 10000
+
+TMRLimit54: TMRLimit
+  TMRuleSeq: 21
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 9728
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB4Limit"
+  MaxValue: 20000
+
+TMRLimit55: TMRLimit
+  TMRuleSeq: 21
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 10700
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB4Limit"
+  MaxValue: 20000
+
+TMRLimit56: TMRLimit
+  TMRuleSeq: 21
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  LimitID: 3
+  ValueType: 1
+  LimitAmt: 11675
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB4Limit"
+  MaxValue: 20000
+
+TMRLimit57: TMRLimit
+  TMRuleSeq: 22
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 2895
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB3Limit"
+  MaxValue: 10000
+
+TMRLimit58: TMRLimit
+  TMRuleSeq: 22
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 3865
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB3Limit"
+  MaxValue: 10000
+
+TMRLimit59: TMRLimit
+  TMRuleSeq: 22
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  LimitID: 3
+  ValueType: 1
+  LimitAmt: 4840
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB3Limit"
+  MaxValue: 10000
+
+TMRLimit60: TMRLimit
+  TMRuleSeq: 23
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 9680
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB4Limit"
+  MaxValue: 20000
+
+TMRLimit61: TMRLimit
+  TMRuleSeq: 23
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 11620
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB4Limit"
+  MaxValue: 20000
+
+TMRLimit62: TMRLimit
+  TMRuleSeq: 23
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  LimitID: 3
+  ValueType: 1
+  LimitAmt: 13570
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellMDUB4Limit"
+  MaxValue: 20000
+
+TMRLimit63: TMRLimit
+  TMRuleSeq: 24
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 2
+  LimitPerc: 95
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellDSSLimit"
+
+TMRLimit64: TMRLimit
+  TMRuleSeq: 25
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 975
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellIPLLimit"
+  MaxValue: 9999999
+
+TMRLimit65: TMRLimit
+  TMRuleSeq: 25
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 1
+  LimitAmt: 1945
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellIPLLimit"
+  MaxValue: 9999999
+
+TMRLimit66: TMRLimit
+  TMRuleSeq: 25
+  FromDate: 2011-11-01
+  ToDate: 2049-12-31
+  LimitID: 3
+  ValueType: 1
+  LimitAmt: 2918
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellIPLLimit"
+  MaxValue: 9999999
+
+TMRLimit67: TMRLimit
+  TMRuleSeq: 26
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 2
+  LimitPerc: 80
+  Action: 30
+  SMSText: "UpsellCONTFVoice1"
+  MaxValue: 100
+
+TMRLimit68: TMRLimit
+  TMRuleSeq: 26
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+  LimitID: 2
+  ValueType: 2
+  LimitPerc: 100
+  Action: 30
+  SMSText: "UpsellCONTFVoice2"
+  MaxValue: 100
+
+TMRLimit69: TMRLimit
+  TMRuleSeq: 27
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 342
+  Action: 30
+  SMSText: "UpsellHSDPA,DUBLimit"
+  MaxValue: 10000
+
+TMRLimit70: TMRLimit
+  TMRuleSeq: 28
+  FromDate: 2011-12-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 1168
+  Action: 30
+  SMSText: "UpsellHSDPA,DUBLimit"
+  MaxValue: 10000
+
+TMRLimit71: TMRLimit
+  TMRuleSeq: 29
+  FromDate: 2012-02-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 143
+  Action: 30
+  SMSText: "UpsellHSDPA,DUBLimit"
+  MaxValue: 10000
+
+TMRLimit72: TMRLimit
+  TMRuleSeq: 30
+  FromDate: 2012-02-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 570
+  Action: 30
+  SMSText: "UpsellHSDPA,DUBLimit"
+  MaxValue: 10000
+
+TMRLimit73: TMRLimit
+  TMRuleSeq: 31
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 2
+  LimitPerc: 95
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellIPLLimit"
+
+TMRLimit74: TMRLimit
+  TMRuleSeq: 32
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 2
+  LimitPerc: 95
+  Action: 30
+  SMSText: "UpsellHSDPA,DUBLimit"
+
+TMRLimit75: TMRLimit
+  TMRuleSeq: 33
+  FromDate: 2012-04-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 2
+  LimitPerc: 95
+  Action: 30
+  SMSText: "UpsellHSDPA,UpsellBonoLimit"
+
+TMRLimit76: TMRLimit
+  TMRuleSeq: 34
+  FromDate: 2012-08-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 300
+  Action: 30
+  SMSText: "300_VoiceBDest"
+
+TMRLimit77: TMRLimit
+  TMRuleSeq: 35
+  FromDate: 2012-08-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 100
+  Action: 30
+  SMSText: "100_VoiceBDest"
+
+TMRLimit78: TMRLimit
+  TMRuleSeq: 38
+  FromDate: 2012-12-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 3000
+  Action: 30
+  SMSText: "VOICE3000Limit"
+  MaxValue: 3000
+
+TMRLimit79: TMRLimit
+  TMRuleSeq: 39
+  FromDate: 2014-09-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 1000
+  Action: 35
+  SMSText: "PREMIUMFRAUD3"
+  MaxValue: 1000
+  ActionParam: "Y_HURP_P"
+
+TMRLimit80: TMRLimit
+  TMRuleSeq: 40
+  FromDate: 2015-01-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 2
+  LimitPerc: 100
+  Action: 30
+  SMSText: "VOICE100Limit"
+  MaxValue: 100
+
+TMRLimit81: TMRLimit
+  TMRuleSeq: 41
+  FromDate: 2015-01-01
+  ToDate: 2049-12-31
+  LimitID: 1
+  ValueType: 1
+  LimitAmt: 100
+  Action: 30
+  SMSText: "100_Voice100BDest"
+
