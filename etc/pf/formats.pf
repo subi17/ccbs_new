@@ -1,6 +1,6 @@
--cpinternal ISO8859-1
--cpstream ISO8859-1
--cpcoll Basic
+-cpinternal 1252
+-cpstream 1252
+-cpcoll Finnish
 -cpcase Basic
 -d dmy
 -numsep 44
