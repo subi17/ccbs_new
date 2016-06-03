@@ -1083,7 +1083,7 @@ PROCEDURE pContractActivation:
                    InvRow.CreditInvNum = 0:
 
             IF InvRow.BillCode = bQ25SingleFee.BillCode AND
-               InvRow.Amt >= bQ25SingleFee.Amt THEN NEXT.
+               InvRow.Amt <= bQ25SingleFee.Amt THEN NEXT.
             
             IF InvRow.OrderId > 0 AND
                bQ25SingleFee.OrderID > 0 AND
