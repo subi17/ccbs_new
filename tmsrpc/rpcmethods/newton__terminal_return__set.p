@@ -291,7 +291,7 @@ IF (llDeviceStart AND llDeviceScreen) OR
                 InvRow.CreditInvNum = 0:
          
          IF InvRow.BillCode = SingleFee.BillCode AND
-            InvRow.Amt >= SingleFee.Amt THEN NEXT.
+            InvRow.Amt < SingleFee.Amt THEN NEXT.
 
          IF InvRow.OrderId > 0 AND
             SingleFee.OrderID > 0 AND
