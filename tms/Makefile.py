@@ -121,7 +121,7 @@ def stop(*a):
 def build(*a):
     if len(parameters) != 1:
         raise PikeException('Expected build_dir as parameter')
-    open('misc/version.i', 'wt').write(appversion)
+    open('Mc/version.i', 'wt').write(appversion)
     build_dir = parameters[0]
     for file in nonp_source + ['Makefile.py']:
         mkdir_p(os.path.dirname(os.path.join(build_dir, file)))
@@ -165,7 +165,7 @@ def hotfix(*a):
     if branch != 'default' and not branch.endswith('-hotfix'):
         inst_dir += '-' + branch
     print('Hot-fixing ' + inst_dir)
-    open('misc/version.i', 'wt').write(appversion)
+    open('Mc/version.i', 'wt').write(appversion)
     require('code.pl')
     write_dirstate(inst_dir + '/var/log/hotfix.log')
     os.rename(myself + '.pl', os.path.join(inst_dir, myself, myself + '.pl'))
