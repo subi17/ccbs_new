@@ -10,7 +10,7 @@
 /* Input parameters */
 DEF VAR pcCLI AS CHAR NO-UNDO.
 DEF VAR gcBrand AS CHARACTER NO-UNDO INIT "1".
-DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
+DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcCLI = get_string(param_toplevel_id, "0").
@@ -21,7 +21,7 @@ FIND FIRST mobsub NO-LOCK WHERE
 IF NOT AVAILABLE mobsub THEN
    RETURN appl_err("Subscription not found").
 
-IF gbAuthLog.UserName = "viptool" THEN DO:
+IF ghAuthLog::UserName = "viptool" THEN DO:
 {vip_check.i}
 END.
 

@@ -12,7 +12,7 @@
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
 DEF VAR piBillingPermission AS INT NO-UNDO.
-DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
+DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 IF validate_request(param_toplevel_id, "int,int") EQ ? THEN RETURN.
 piMsSeq = get_int(param_toplevel_id, "0").
@@ -32,12 +32,12 @@ IF NOT AVAIL TMSCodes THEN
     RETURN appl_err(SUBST("Unknown status code: &1", piBillingPermission)).
 
 {Syst/commpaa.i}
-katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId.
+katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/flimitreq.i}
 
-IF gbAuthLog.UserName = "viptool" THEN DO:
+IF ghAuthLog::UserName = "viptool" THEN DO:
 {vip_check.i}
 END.
 

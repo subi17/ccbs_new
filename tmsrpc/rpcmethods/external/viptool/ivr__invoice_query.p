@@ -13,7 +13,7 @@
                 3;Invoice includes multiple subscriptions
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
+DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 /* Input parameters */
 DEF VAR pcMSISDN AS CHAR NO-UNDO.
@@ -21,7 +21,7 @@ DEF VAR piMaxCount AS INT NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "IVR_" + gbAuthLog.EndUserId.
+   katun = "IVR_" + ghAuthLog::EndUserId.
    gcBrand = "1".
 
 {Syst/tmsconst.i}

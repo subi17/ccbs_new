@@ -23,7 +23,7 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
+DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 /* Input parameters */
 DEF VAR pcMSISDN       AS CHAR NO-UNDO.
@@ -38,7 +38,7 @@ DEF VAR lcApplicationId AS CHAR NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId
+   katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
    gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/timestamp.i}
@@ -57,10 +57,10 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcApplicationId = substring(pcTransId,1,3).
 
-IF NOT fchkTMSCodeValues(gbAuthLog.UserName, lcApplicationId) THEN
+IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
+katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun   
@@ -150,7 +150,7 @@ add_boolean(top_struct, "result", True).
 
 FINALLY:
    /* Store the transaction id */
-   gbAuthLog.TransactionId = pcTransId.
+   ghAuthLog::TransactionId = pcTransId.
 
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
 END.

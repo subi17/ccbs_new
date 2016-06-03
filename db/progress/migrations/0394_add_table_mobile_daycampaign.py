@@ -38,6 +38,7 @@ class AddTableDayCampaign(Migration):
         t.column('BundleUpsell', 'character', format="x(12)", initial="", max_width=24, label="Bundle Upsell", column_label="Upsell", position=30, order=320)
         t.column('StatusCode', 'integer', format="9", initial="1", max_width=4, label="Status", column_label="Status", position=31, order=310)
         t.column('DSSPriority', 'integer', format=">9", initial="0", max_width=4, label="DSSPriority", column_label="DSSPriority", position=32, order=330, help="DSS first month fee calculation priority")
+        t.column('PayType', 'integer', format="9", initial="0", max_width=4, label="PaymentType", column_label="PayType", position=33, order=380, help="Payment type")
         t.index('DCEvent', [['Brand'], ['DCEvent']], area="Sta_Index_3", primary=True, unique=True)
         t.index('DCType', [['Brand'], ['DCType']], area="Sta_Index_3")
 

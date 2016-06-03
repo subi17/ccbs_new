@@ -17,9 +17,9 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
+DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-ASSIGN katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId
+ASSIGN katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
        gcBrand = "1".
 {Func/fexternalapi.i}
 {Syst/tmsconst.i}
@@ -48,10 +48,10 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcApplicationId = substring(pcTransId,1,3).
 
-IF NOT fchkTMSCodeValues(gbAuthLog.UserName, lcApplicationId) THEN
+IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
+katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 FIND FIRST Order WHERE
            Order.Brand   = gcBrand   AND
@@ -105,7 +105,7 @@ ASSIGN
     Memo.HostTable = "MNPProcess"
     Memo.KeyValue  = STRING(MNPProcess.MNPSeq)
     Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-    Memo.CreUser   = gbAuthLog.EndUserId
+    Memo.CreUser   = ghAuthLog::EndUserId
     Memo.MemoTitle = "By customer's request (Self Service)"
     Memo.MemoText  = "MNP process with request id " + MNPProcess.FormRequest +
                      " was successfully cancelled"
@@ -118,7 +118,7 @@ ASSIGN
    Memo.HostTable = "Order"
    Memo.KeyValue  = STRING(MNPProcess.OrderId)
    Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-   Memo.CreUser   = gbAuthLog.EndUserId
+   Memo.CreUser   = ghAuthLog::EndUserId
    Memo.MemoTitle = "By customer's request (Self Service)"
    Memo.MemoText  = "MNP process with request id " + MNPProcess.FormRequest +
                     " was successfully cancelled"
@@ -132,7 +132,7 @@ add_boolean(top_struct, "result", True).
 
 FINALLY:
    /* Store the transaction id */
-   gbAuthLog.TransactionId = pcTransId.
+   ghAuthLog::TransactionId = pcTransId.
 
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
 END.

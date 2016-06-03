@@ -9,7 +9,7 @@
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
-DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
+DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piMsSeq = get_int(param_toplevel_id, "0").
@@ -21,12 +21,12 @@ IF NOT AVAILABLE mobsub THEN
    RETURN appl_err("Subscription not found").
 
 {Syst/commpaa.i}
-katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId.
+katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/flimitreq.i}
 
-IF gbAuthLog.UserName = "viptool" THEN DO:
+IF ghAuthLog::UserName = "viptool" THEN DO:
 {vip_check.i}
 END.
 

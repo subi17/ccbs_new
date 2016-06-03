@@ -41,9 +41,9 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
+DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId.
+katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 gcBrand = "1".
 {Func/timestamp.i}
 {Syst/tmsconst.i}
@@ -89,7 +89,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcAppId = substring(pcTransId,1,3).
 
-IF NOT fchkTMSCodeValues(gbAuthLog.UserName,lcAppId) THEN
+IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcAppId) THEN
    RETURN appl_err("Application Id does not match").
 
 FIND FIRST Mobsub NO-LOCK WHERE
@@ -254,7 +254,7 @@ END. /* FOR EACH DCCLI NO-LOCK WHERE */
 
 FINALLY:
    /* Store the transaction id */
-   gbAuthLog.TransactionId = pcTransId.
+   ghAuthLog::TransactionId = pcTransId.
 
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
 END.

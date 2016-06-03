@@ -27,9 +27,9 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Func/matrix.i}
 
-DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
+DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId.
+katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 gcBrand = "1".
 {Func/mdub.i}
 {Syst/tmsconst.i}
@@ -76,12 +76,12 @@ ASSIGN pcTransId = get_string(param_toplevel_id, "0")
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
-       lcAppEndUserId  = gbAuthLog.EndUserId.
+       lcAppEndUserId  = ghAuthLog::EndUserId.
 
-IF NOT fchkTMSCodeValues(gbAuthLog.UserName,lcApplicationId) THEN
+IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
+katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 ldaBonoVoipRemovalDate   = DATE(fCParamC("BonoVoipRemovalDate")).
 
@@ -332,7 +332,7 @@ DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
 
 FINALLY:
    /* Store the transaction id */
-   gbAuthLog.TransactionId = pcTransId.
+   ghAuthLog::TransactionId = pcTransId.
 
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.
