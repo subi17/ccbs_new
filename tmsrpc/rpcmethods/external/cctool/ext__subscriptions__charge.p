@@ -13,10 +13,10 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 /* &GLOBAL-DEFINE SKIP_FUNC_I YES */
-DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
+DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 {Syst/commpaa.i}
-katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId.
+katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fcustpl.i}

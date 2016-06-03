@@ -16,10 +16,10 @@
 
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
+DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 ASSIGN gcBrand = "1"
-       katun = gbAuthLog.UserName + "_" + gbAuthLog.EndUserId.
+       katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 {Func/fexternalapi.i}
 {Func/cparam2.i}
 
@@ -47,10 +47,10 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcApplicationId = substring(pcTransId,1,3).
 
-IF NOT fchkTMSCodeValues(gbAuthLog.UserName, lcApplicationId) THEN
+IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
        
-katun = lcApplicationId + "_" + gbAuthLog.EndUserId.
+katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 lcMiYoigoURL = fCParam("URL","MiYoigoURL").
 IF lcMiYoigoURL = "" OR lcMiYoigoURL = ? THEN
@@ -95,7 +95,7 @@ add_string(top_struct, "pdf_link", lcResult).
 
 FINALLY:
    /* Store the transaction id */
-   gbAuthLog.TransactionId = pcTransId.
+   ghAuthLog::TransactionId = pcTransId.
 
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.

@@ -6,14 +6,14 @@
  * @Exceptions  1;Subscription not found
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
+DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 /* Input parameters */
 DEF VAR pcMSISDN AS CHAR NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "IVR_" + gbAuthLog.EndUserId.
+   katun = "IVR_" + ghAuthLog::EndUserId.
    gcBrand = "1".
 
 {Syst/tmsconst.i}

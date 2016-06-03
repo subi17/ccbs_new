@@ -12,7 +12,7 @@
                 result;boolean;True
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEFINE SHARED BUFFER gbAuthLog FOR AuthLog.
+DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 gcBrand = "1".
 {Syst/tmsconst.i}
@@ -42,9 +42,9 @@ ASSIGN pcTransId     = get_string(param_toplevel_id, "0")
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
-       lcAppEndUserId  = gbAuthLog.EndUserId.
+       lcAppEndUserId  = ghAuthLog::EndUserId.
 
-IF NOT fchkTMSCodeValues(gbAuthLog.UserName,lcApplicationId) THEN
+IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
 
@@ -81,7 +81,7 @@ add_boolean(top_struct, "result", True).
 
 FINALLY:
    /* Store the transaction id */
-   gbAuthLog.TransactionId = pcTransId.
+   ghAuthLog::TransactionId = pcTransId.
 
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.
