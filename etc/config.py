@@ -13,5 +13,7 @@ databases      = ['common', 'ordercanal', 'mobile', 'counter', 'star', 'mcdr', '
 rpcs           = {'newton': '/fcgiproxy_xfera'}
 rpc_conf       = {'port': 3000, 'run_as': None}
 wwwrealm       = 'yes'
+client_timezone = 'local'
+server_timezone = 'local'
 ENV['DLC']     = dlc
 ENV['display_banner'] = 'no'
