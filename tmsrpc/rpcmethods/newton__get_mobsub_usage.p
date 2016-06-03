@@ -178,7 +178,21 @@ IF MobSub.CliType = "TARJ7" OR MobSub.CliType = "TARJ9" THEN DO:
                           PrepEDR.SuccessCode = 1 AND
                           PrepEDR.CLIType     = MobSub.CliType AND
                           PrepEDR.ErrorCode   = 0 NO-ERROR.
-               IF AVAIL PrepEDR THEN liPrepRenewal = PrepEDR.TimeStart.
+               /* YTS-9086 - Added counter reset check */
+               IF AVAIL PrepEDR AND
+                  ldaPrepRenewal NE ldaActDate THEN DO:
+                  FIND FIRST MsRequest NO-LOCK WHERE
+                             MsRequest.MsSeq = PrepEDR.MsSeq AND
+                             MsRequest.ReqType = {&REQTYPE_SERVICE_CHANGE} AND
+                             MsRequest.ReqStatus = {&REQUEST_STATUS_DONE} AND
+                             MsRequest.ActStamp >= fHMS2TS(TODAY,"00:00:00") AND
+                             MsRequest.ReqCParam2 = "LADEL1_PRE_PLUS_RESET"
+                             NO-ERROR.
+                  IF AVAIL MsRequest THEN
+                     liPrepRenewal = MsRequest.ActStamp.
+                  ELSE
+                     liPrepRenewal = PrepEDR.TimeStart.
+               END.
             END.
          END.
 
