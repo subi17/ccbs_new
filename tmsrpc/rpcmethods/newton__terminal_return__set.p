@@ -310,7 +310,7 @@ IF (llDeviceStart AND llDeviceScreen) OR
       ASSIGN lcSubInvNums    = TRIM(lcSubInvNums,",")
              lcInvRowDetails = TRIM(lcInvRowDetails,",").
 
-      IF lcSubInvNums = "" OR ldeTotalRowAmt <= 0 THEN
+      IF lcSubInvNums = "" OR ldeTotalRowAmt < 0 THEN
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                              "MobSub",
                              STRING(MsRequest.MsSeq),
