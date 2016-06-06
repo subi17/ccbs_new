@@ -332,6 +332,7 @@ PROCEDURE pContractActivation:
    DEF VAR llQ25CreditNote AS LOG NO-UNDO. 
    DEF VAR lcSubInvNums    AS CHAR NO-UNDO.
    DEF VAR lcInvRowDetails AS CHAR NO-UNDO.
+   DEF VAR ldeTotalRowAmt  AS DEC NO-UNDO.
                     
    /* DSS related variables */
    DEF VAR lcResult      AS CHAR NO-UNDO.
@@ -1093,14 +1094,15 @@ PROCEDURE pContractActivation:
                                      LOOKUP(STRING(SubInvoice.SubInvNum), lcSubInvNums) = 0    
                    lcInvRowDetails = lcInvRowDetails + "," +
                                      "InvRow="       + STRING(InvRow.InvRowNum) + "|" +
-                                     "InvRowAmt="    + STRING(InvRow.Amt).
+                                     "InvRowAmt="    + STRING(InvRow.Amt)
+                   ldeTotalRowAmt  = ldeTotalRowAmt + InvRow.Amt.
 
          END.
 
          ASSIGN lcSubInvNums    = TRIM(lcSubInvNums,",")
                 lcInvRowDetails = TRIM(lcInvRowDetails,",").
 
-         IF lcSubInvNums = "" THEN
+         IF lcSubInvNums = "" OR ldeTotalRowAmt <= 0 THEN
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                              "MobSub",
                              STRING(MsRequest.MsSeq),
