@@ -189,7 +189,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    /* check BONO contracts and customer level bundle status */
    IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") > 0 OR
       LOOKUP(pcBundleId,{&DSS_BUNDLES}) > 0 OR 
-      (MobSub.CLIType = "CONT15" AND pcBundleId = "VOICE100") THEN DO:
+      (MobSub.CLIType = "CONT15" AND pcBundleId = "VOICE100") OR
+      (MobSub.CLIType = "CONT9" AND pcBundleId = "FREE100MINUTES") THEN DO:
        liStatus = fGetMDUBStatus(pcBundleId, OUTPUT ldeActivationTS).
        add_int(lcResultStruct,"value",liStatus).
        add_string(lcResultStruct, "pending_bundle", pcBTCBundleId).
