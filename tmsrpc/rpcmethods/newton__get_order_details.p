@@ -207,7 +207,7 @@ FOR EACH bMsRequest NO-LOCK WHERE
          bMsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND
          bMsRequest.ReqStatus  = 0 AND
          bMsRequest.Reqcparam3 = "RVTERM12":
-   lcExtensionContracts = lcExtensionContracts + "," + MsRequest.ReqCparam4.
+   lcExtensionContracts = lcExtensionContracts + "," + bMsRequest.ReqCparam4.
 END.
 FOR EACH DCCLI NO-LOCK WHERE
          DCCLI.Brand    = gcBrand AND
@@ -217,10 +217,10 @@ FOR EACH DCCLI NO-LOCK WHERE
     FIRST bMsRequest NO-LOCK WHERE
           bMsRequest.MsSeq      = DCCLI.MsSeq AND
           bMsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND
-          LOOKUP(STRING(MsRequest.ReqStat),"2,9") > 0 AND
+          LOOKUP(STRING(bMsRequest.ReqStat),"2,9") > 0 AND
           bMsRequest.ReqIParam3 = DCCLI.PerContractID AND
           bMsRequest.Reqcparam3 = "RVTERM12":
-   lcExtensionContracts = lcExtensionContracts + "," + MsRequest.ReqCparam4.
+   lcExtensionContracts = lcExtensionContracts + "," + bMsRequest.ReqCparam4.
 END.
 IF lcExtensionContracts <> "" THEN
    lcExtensionContracts = TRIM(lcExtensionContracts,",").
