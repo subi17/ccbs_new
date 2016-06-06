@@ -108,6 +108,9 @@ DEF VAR lcData200Bundle AS CHAR NO-UNDO.
 DEF VAR lcUpsellId AS CHAR NO-UNDO. 
 DEF VAR liCount AS INT NO-UNDO.
 DEF VAR llAccumulatorFound AS LOG NO-UNDO.
+DEF VAR liRstTime AS INT NO-UNDO. 
+DEF VAR ldaRstDate AS DATE NO-UNDO. 
+
 DEF BUFFER bServiceLimit FOR ServiceLimit.
 
 DEF TEMP-TABLE ttCDR NO-UNDO LIKE MobCDR.
@@ -174,16 +177,22 @@ IF MobSub.CliType = "TARJ7" OR MobSub.CliType = "TARJ9" THEN DO:
                ldaPrepRenewal EQ fLastDayOfMonth(ldaPrepRenewal) THEN DO:
                /* YTS-9086 - TARJ7 does not have voice bundle thus only TARJ9 check. 
                   TMS Counter reset request used for period start time. */
+
+               RELEASE MsRequest.
+
                IF MobSub.CliType = "TARJ9" THEN DO:
                   FIND FIRST MsRequest NO-LOCK WHERE
                              MsRequest.MsSeq = MobSub.MsSeq AND
+                             MsRequest.ActStamp >= fHMS2TS(ldaPrepRenewal,"00:00:00") AND
+                             MsRequest.ActStamp <= fHMS2TS(ldaPrepRenewal,"23:59:59") AND
                              MsRequest.ReqType = {&REQTYPE_SERVICE_CHANGE} AND
                              MsRequest.ReqStatus <= {&REQUEST_STATUS_DONE} AND
-                             MsRequest.ActStamp >= fHMS2TS(ldaPrepRenewal,"00:00:00") AND
                              MsRequest.ReqCParam2 = "LADEL1_PRE_PLUS_RESET"
                              NO-ERROR.
-                  IF AVAIL MsRequest THEN
-                     liPrepRenewal = INT(ENTRY(2,STRING(MsRequest.ActStamp),".")).
+                  IF AVAIL MsRequest THEN DO:
+                     fSplitTS(MsRequest.ActStamp,OUTPUT ldaRstDate, OUTPUT liRstTime).
+                     liPrepRenewal = liRstTime.
+                  END.
                END.
                IF NOT AVAIL MsRequest THEN DO:
                   /* PrepEDR charge moment used for period start time. */
