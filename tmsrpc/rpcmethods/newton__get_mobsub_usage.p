@@ -172,27 +172,31 @@ IF MobSub.CliType = "TARJ7" OR MobSub.CliType = "TARJ9" THEN DO:
                
             IF DAY(ldaPrepRenewal) EQ DAY(ldaActDate) OR
                ldaPrepRenewal EQ fLastDayOfMonth(ldaPrepRenewal) THEN DO:
-               FIND FIRST PrepEDR NO-LOCK WHERE
-                          PrepEDR.MsSeq       = MobSub.Msseq AND
-                          PrepEDR.DateST      = ldaPrepRenewal AND
-                          PrepEDR.SuccessCode = 1 AND
-                          PrepEDR.CLIType     = MobSub.CliType AND
-                          PrepEDR.ErrorCode   = 0 NO-ERROR.
-               /* YTS-9086 - Added counter reset check */
-               IF AVAIL PrepEDR THEN
-                  liPrepRenewal = PrepEDR.TimeStart.
-               ELSE DO:
+               /* YTS-9086 - TARJ7 does not have voice bundle thus only TARJ9 check. 
+                  TMS Counter reset request used for period start time. */
+               IF MobSub.CliType = "TARJ9" THEN DO:
                   FIND FIRST MsRequest NO-LOCK WHERE
                              MsRequest.MsSeq = MobSub.MsSeq AND
                              MsRequest.ReqType = {&REQTYPE_SERVICE_CHANGE} AND
                              MsRequest.ReqStatus <= {&REQUEST_STATUS_DONE} AND
-                             MsRequest.ActStamp >= fHMS2TS(TODAY,"00:00:00") AND
+                             MsRequest.ActStamp >= fHMS2TS(ldaPrepRenewal,"00:00:00") AND
                              MsRequest.ReqCParam2 = "LADEL1_PRE_PLUS_RESET"
                              NO-ERROR.
                   IF AVAIL MsRequest THEN
                      liPrepRenewal = INT(ENTRY(2,STRING(MsRequest.ActStamp),".")).
-               END. /* ELSE DO: -- IF NOT AVAIL PrepEDR */
-            END.
+               END.
+               IF NOT AVAIL MsRequest THEN DO:
+                  /* PrepEDR charge moment used for period start time. */
+                  FIND FIRST PrepEDR NO-LOCK WHERE
+                             PrepEDR.MsSeq       = MobSub.Msseq AND
+                             PrepEDR.DateST      = ldaPrepRenewal AND
+                             PrepEDR.SuccessCode = 1 AND
+                             PrepEDR.CLIType     = MobSub.CliType AND
+                             PrepEDR.ErrorCode   = 0 NO-ERROR.
+                  IF AVAIL PrepEDR THEN
+                     liPrepRenewal = PrepEDR.TimeStart.
+               END. 
+            END. /* IF DAY(ldaPrepRenewal) EQ DAY(ldaActDate) OR */
          END.
 
          IF MServiceLimit.DialType = {&DIAL_TYPE_GPRS} THEN DO:
