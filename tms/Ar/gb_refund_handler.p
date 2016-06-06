@@ -24,6 +24,7 @@ DEF VAR lcTableName AS CHAR NO-UNDO.
 DEF VAR lcActionID AS CHAR NO-UNDO.
 DEF VAR ldCurrentTimeTS AS DEC NO-UNDO.
 DEF VAR lcErrorLog AS CHAR NO-UNDO.
+DEF VAR lcCurrentPeriod AS CHAR NO-UNDO. /*period when program is started*/
 
 DEF STREAM sin.
 DEF STREAM sFile.
@@ -45,6 +46,7 @@ FUNCTION fGenerateFileName RETURNS CHAR
 END.
 
 ASSIGN 
+   lcCurrentPeriod = SUBSTRING(STRING(fMakeTS()),1,6)
    lcTableName = {&GB_ACTION_GROUP_NAME}
    lcActionID = {&GB_REFUND_HANDLER}
    ldCurrentTimeTS = fMakeTS().
@@ -192,6 +194,7 @@ PROCEDURE pReadFileData:
       lcErr = fProcessGBEntry(lcMSISDN,
                               lcCorrId,
                               lcPeriod,
+                              lcCurrentPeriod,
                               ldeAmount,
                               llgPayType,
                               lcErrInfo).

@@ -47,29 +47,36 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
    (icMSISDN AS CHAR, /*MSISDN*/
     icCorrId AS CHAR, /*Correlation ID*/
     icPeriod AS CHAR, /*period info*/
+    icCurrentPeriod AS CHAR, /*Period of program starting moment*/
     ideAmount AS DECIMAL,
     BUFFER bMobSub FOR MobSub, /*Amount*/
     OUTPUT ocErrInfo AS CHAR):
 
    DEF VAR lcResponse AS CHAR NO-UNDO.
    
-   RUN creafat (bMobSub.CustNum, /* custnum */
-                bMobSub.MsSeq, /* msseq */
-                "GOOGLEVASFAT", /*NOK*/
-                ideAmount,   /* amount */ 
-                0,   /* percentage  */
-                ?,   /* vat included already */
-                icPeriod, /*period*/
-                999999, /*tp period, no limoit now*/
-                OUTPUT lcResponse). /* error */
-   lcresponse = TRIM(lcResponse).             
-   IF lcResponse NE "" THEN DO:
-      ocErrInfo = lcResponse.
-      lcResponse = {&GB_POSTPAID_FAT_FAILURE}.
+   IF icPeriod EQ icCurrentPeriod THEN DO:
+
+      RUN creafat (bMobSub.CustNum, /* custnum */
+                   bMobSub.MsSeq, /* msseq */
+                   "GOOGLEVASFAT", /*NOK*/
+                   ideAmount,   /* amount */ 
+                   0,   /* percentage  */
+                   ?,   /* vat included already */
+                   icPeriod, /*period*/
+                   999999, /*tp period, no limoit now*/
+                   OUTPUT lcResponse). /* error */
+      lcresponse = TRIM(lcResponse).             
+      IF lcResponse NE "" THEN DO:
+         ocErrInfo = lcResponse.
+         lcResponse = {&GB_POSTPAID_FAT_FAILURE}.
+      END.
+      ELSE
+         lcResponse = {&GB_RESP_OK}.
+      RETURN lcResponse.
    END.
-   ELSE
-      lcResponse = {&GB_RESP_OK}.
-   RETURN lcResponse.
+   ELSE DO:
+      /*different perios, needs special handling*/
+   END.
 END.
 
 FUNCTION fProcessPrepaidEntry RETURNS CHAR
@@ -112,6 +119,7 @@ FUNCTION fProcessGBEntry RETURNS CHAR
    (icMSISDN AS CHAR, /*MSISDN*/
     icCorrId AS CHAR, /*Correlation ID*/
     icPeriod AS CHAR, /*Purchase date*/
+    icCurrentPeriod AS CHAR, /*Period of "NOW"*/
     ideAmount AS DECIMAL, /*Amount*/
     ilgPayType AS LOGICAL, /*p*/
     OUTPUT ocErrInfo AS CHAR):
@@ -147,6 +155,7 @@ FUNCTION fProcessGBEntry RETURNS CHAR
       lcResponse = fProcessPostpaidEntry(icMSISDN, 
                                          icCorrId, 
                                          icPeriod, 
+                                         icCurrentPeriod,
                                          ideAmount,
                                          BUFFER bMobSub,
                                          OUTPUT ocErrInfo).                                   
