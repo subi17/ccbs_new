@@ -183,9 +183,9 @@ IF MobSub.CliType = "TARJ7" OR MobSub.CliType = "TARJ9" THEN DO:
                   liPrepRenewal = PrepEDR.TimeStart.
                ELSE DO:
                   FIND FIRST MsRequest NO-LOCK WHERE
-                             MsRequest.Brand = "1" AND
+                             MsRequest.MsSeq = MobSub.MsSeq AND
                              MsRequest.ReqType = {&REQTYPE_SERVICE_CHANGE} AND
-                             MsRequest.CLI = Mobsub.CLI AND
+                             MsRequest.ReqStatus <= {&REQUEST_STATUS_DONE} AND
                              MsRequest.ActStamp >= fHMS2TS(TODAY,"00:00:00") AND
                              MsRequest.ReqCParam2 = "LADEL1_PRE_PLUS_RESET"
                              NO-ERROR.
