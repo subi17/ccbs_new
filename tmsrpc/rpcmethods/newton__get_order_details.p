@@ -218,7 +218,6 @@ FOR EACH DCCLI NO-LOCK WHERE
           bMsRequest.MsSeq      = DCCLI.MsSeq AND
           bMsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND
           LOOKUP(STRING(bMsRequest.ReqStat),"2,9") > 0 AND
-          bMsRequest.ReqIParam3 = DCCLI.PerContractID AND
           bMsRequest.Reqcparam3 = "RVTERM12":
    lcExtensionContracts = lcExtensionContracts + "," + bMsRequest.ReqCparam4.
 END.
