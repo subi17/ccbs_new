@@ -3024,20 +3024,11 @@ PROCEDURE pActivateServicePackage:
    DEF OUTPUT PARAMETER olSubRequest      AS LOG  NO-UNDO.
       
    DEF VAR liService     AS INT  NO-UNDO.
-   DEF VAR llCopyOnlyNew AS LOG  NO-UNDO.
    
    DEF BUFFER bMemoRequest FOR MsRequest.
    
    ASSIGN
-      olSubRequest  = FALSE
-      llCopyOnlyNew = ?.  /* copy all, forced */
-   
-   /* if this request has waited for another request to finish then 
-      activate only those services that haven't already been activated 
-      with the same value */
-   IF MsRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} AND 
-      MsRequest.ReqIParam2 > 0 THEN 
-      llCopyOnlyNew = FALSE.
+      olSubRequest  = FALSE.
    
    /* service packages that need to be activated */
    FOR EACH DCServicePackage NO-LOCK WHERE
@@ -3051,7 +3042,7 @@ PROCEDURE pActivateServicePackage:
                        icDCEvent,
                        iiMSSeq,
                        idaActivationDate,
-                       llCopyOnlyNew, 
+                       ?,      /* copy all, forced */
                        FALSE,  /* create fees */
                        TRUE,   /* solog (provisioning) */
                        MsRequest.MsRequest,
