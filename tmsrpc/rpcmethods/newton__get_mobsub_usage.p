@@ -181,7 +181,7 @@ IF MobSub.CliType = "TARJ7" OR MobSub.CliType = "TARJ9" THEN DO:
                RELEASE MsRequest.
 
                IF MobSub.CliType = "TARJ9" THEN DO:
-                  FIND FIRST MsRequest NO-LOCK WHERE
+                  FIND FIRST MsRequest NO-LOCK USE-INDEX MsActStamp WHERE
                              MsRequest.MsSeq = MobSub.MsSeq AND
                              MsRequest.ActStamp >= fHMS2TS(ldaPrepRenewal,"00:00:00") AND
                              MsRequest.ActStamp <= fHMS2TS(ldaPrepRenewal,"23:59:59") AND
