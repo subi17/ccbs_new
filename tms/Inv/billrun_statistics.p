@@ -268,7 +268,7 @@ IF CAN-FIND(FIRST ErrorLog NO-LOCK WHERE
                   ErrorLog.ActionTS > ldeFrom AND
                   ErrorLog.ActionTS < ldeTo) THEN DO:
 
-   PUT STREAM sLog SKIP(1) "Error Logs (Custnum/Error)" SKIP
+   PUT STREAM sLog SKIP(2) "Error Logs (Custnum/Error)" SKIP
                            "--------------------------" SKIP.
 
    FOR EACH ErrorLog NO-LOCK WHERE
