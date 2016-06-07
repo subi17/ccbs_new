@@ -173,39 +173,34 @@ IF MobSub.CliType = "TARJ7" OR MobSub.CliType = "TARJ9" THEN DO:
                                        DAY(ldaActDate),
                                        YEAR(TODAY)).
                
-            IF DAY(ldaPrepRenewal) EQ DAY(ldaActDate) OR
-               ldaPrepRenewal EQ fLastDayOfMonth(ldaPrepRenewal) THEN DO:
-               /* YTS-9086 - TARJ7 does not have voice bundle thus only TARJ9 check. 
-                  TMS Counter reset request used for period start time. */
-
-               RELEASE MsRequest.
-
-               IF MobSub.CliType = "TARJ9" THEN DO:
-                  FIND FIRST MsRequest NO-LOCK USE-INDEX MsActStamp WHERE
-                             MsRequest.MsSeq = MobSub.MsSeq AND
-                             MsRequest.ActStamp >= fHMS2TS(ldaPrepRenewal,"00:00:00") AND
-                             MsRequest.ActStamp <= fHMS2TS(ldaPrepRenewal,"23:59:59") AND
-                             MsRequest.ReqType = {&REQTYPE_SERVICE_CHANGE} AND
-                             MsRequest.ReqStatus <= {&REQUEST_STATUS_DONE} AND
-                             MsRequest.ReqCParam2 = "LADEL1_PRE_PLUS_RESET"
-                             NO-ERROR.
-                  IF AVAIL MsRequest THEN DO:
-                     fSplitTS(MsRequest.ActStamp,OUTPUT ldaRstDate, OUTPUT liRstTime).
-                     liPrepRenewal = liRstTime.
-                  END.
+            /* YTS-9086 - TARJ7 does not have voice bundle thus only TARJ9 check. 
+               TMS Counter reset request used for period start time. */
+            RELEASE MsRequest.
+            IF MobSub.CliType = "TARJ9" THEN DO:
+               FIND FIRST MsRequest NO-LOCK USE-INDEX MsActStamp WHERE
+                          MsRequest.MsSeq = MobSub.MsSeq AND
+                          MsRequest.ActStamp >= fHMS2TS(ldaPrepRenewal,"00:00:00") AND
+                          MsRequest.ActStamp <= fHMS2TS(ldaPrepRenewal,"23:59:59") AND
+                          MsRequest.ReqType = {&REQTYPE_SERVICE_CHANGE} AND
+                          MsRequest.ReqStatus <= {&REQUEST_STATUS_DONE} AND
+                          MsRequest.ReqCParam2 = "LADEL1_PRE_PLUS_RESET"
+                          NO-ERROR.
+               IF AVAIL MsRequest THEN DO:
+                  fSplitTS(MsRequest.ActStamp,OUTPUT ldaRstDate, OUTPUT liRstTime).
+                  liPrepRenewal = liRstTime.
                END.
-               IF NOT AVAIL MsRequest THEN DO:
-                  /* PrepEDR charge moment used for period start time. */
-                  FIND FIRST PrepEDR NO-LOCK WHERE
-                             PrepEDR.MsSeq       = MobSub.Msseq AND
-                             PrepEDR.DateST      = ldaPrepRenewal AND
-                             PrepEDR.SuccessCode = 1 AND
-                             PrepEDR.CLIType     = MobSub.CliType AND
-                             PrepEDR.ErrorCode   = 0 NO-ERROR.
-                  IF AVAIL PrepEDR THEN
-                     liPrepRenewal = PrepEDR.TimeStart.
-               END. 
-            END. /* IF DAY(ldaPrepRenewal) EQ DAY(ldaActDate) OR */
+            END.
+            IF NOT AVAIL MsRequest THEN DO:
+               /* PrepEDR charge moment used for period start time. */
+               FIND FIRST PrepEDR NO-LOCK WHERE
+                          PrepEDR.MsSeq       = MobSub.Msseq AND
+                          PrepEDR.DateST      = ldaPrepRenewal AND
+                          PrepEDR.SuccessCode = 1 AND
+                          PrepEDR.CLIType     = MobSub.CliType AND
+                          PrepEDR.ErrorCode   = 0 NO-ERROR.
+               IF AVAIL PrepEDR THEN
+                  liPrepRenewal = PrepEDR.TimeStart.
+            END. 
          END.
 
          IF MServiceLimit.DialType = {&DIAL_TYPE_GPRS} THEN DO:
