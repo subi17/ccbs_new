@@ -21,9 +21,7 @@ DEF VAR liQty      AS INT  NO-UNDO.
 DEF VAR ldaDate    AS DATE NO-UNDO.
 DEF VAR liTime     AS INT  NO-UNDO.
 DEF VAR liHour     AS INT  NO-UNDO.
-DEF VAR llCDRs     AS LOG  NO-UNDO.
 DEF VAR liSubs     AS INT  NO-UNDO.
-DEF VAR liCDRQty   AS INT  NO-UNDO.
 DEF VAR liSubQty   AS INT  NO-UNDO.
 DEF VAR ldStart    AS DEC  NO-UNDO.
 DEF VAR ldEnd      AS DEC  NO-UNDO.
@@ -33,18 +31,18 @@ DEF VAR liDays     AS INT  NO-UNDO.
 DEF VAR lcDur      AS CHAR NO-UNDO.
 DEF VAR liDur      AS INT  NO-UNDO.
 DEF VAR liTotInv   AS INT  NO-UNDO.
-DEF VAR liTotCDR   AS INT  NO-UNDO.
 DEF VAR liTotSub   AS INT  NO-UNDO.
 DEF VAR ldAbsHour  AS DEC  NO-UNDO EXTENT 35.
 DEF VAR lcFile     AS CHAR NO-UNDO.
 DEF VAR lcTransDir AS CHAR NO-UNDO.
+DEF VAR ldeFrom AS DEC NO-UNDO. 
+DEF VAR ldeTo AS DEC NO-UNDO. 
 
 DEF TEMP-TABLE ttHourStat NO-UNDO
    FIELD ttDay  AS INT 
    FIELD ttHour AS INT COLUMN-LABEL "Hour" FORMAT ">9"
    FIELD StartStamp AS DEC 
    FIELD InvQty AS INT COLUMN-LABEL "Invoices" 
-   FIELD CDRQty AS INT COLUMN-LABEL "CDRs"
    FIELD SubQty AS INT 
    INDEX ttHour ttDay ttHour
    INDEX StartStamp StartStamp.
@@ -54,7 +52,6 @@ DEF TEMP-TABLE ttBillRun NO-UNDO
    FIELD ttHour AS INT
    FIELD BillRun AS CHAR
    FIELD InvQty AS INT
-   FIELD CDRQty AS INT
    FIELD SubQty AS INT
    INDEX ttHour ttDay ttHour BillRun.
 
@@ -63,7 +60,6 @@ DEF TEMP-TABLE ttCumulative NO-UNDO
    FIELD ttHour AS INT
    FIELD StartStamp AS DEC 
    FIELD InvQty AS INT
-   FIELD CDRQty AS INT
    FIELD SubQty AS INT
    INDEX ttHour ttDay ttHour.
 
@@ -85,8 +81,7 @@ lcFile = REPLACE(lcFile,"#IDATE",STRING(YEAR(idaInvDate),"9999") +
                                  STRING(DAY(idaInvDate),"99")).
 
 ASSIGN 
-   ldStart = 99999999
-   llCDRs  = TRUE.
+   ldStart = 99999999.
 
 FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
          Invoice.Brand   = "1" AND
@@ -135,14 +130,6 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
 
     oiInvQty = oiInvQty + 1.
 
-    IF llCDRs THEN DO:
-       liCnt = 0.
-       FOR EACH InvRow OF Invoice NO-LOCK WHERE
-                InvRow.RowType = 2:
-           liCnt = liCnt + InvRow.Qty.
-       END.
-    END.
-      
     fSplitTS(Invoice.ChgStamp,
              OUTPUT ldaDate,
              OUTPUT liTime).
@@ -164,7 +151,6 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
     
     ASSIGN
        ttHourStat.InvQty = ttHourStat.InvQty + 1
-       ttHourStat.CDRQty = ttHourStat.CDRQty + liCnt
        ttHourStat.SubQty = ttHourStat.SubQty + liSubs
        liHour        = ttHourStat.ttHour.
 
@@ -181,11 +167,9 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
     END.
     ASSIGN
        ttBillRun.InvQty = ttBillRun.InvQty + 1
-       ttBillRun.CDRQty = ttBillRun.CDRQty + liCnt
        ttBillRun.SubQty = ttBillRun.SubQty + liSubs.
     
     ASSIGN
-       liCDRQty = liCDRQty + liCnt
        liSubQty = liSubQty + liSubs.
 
     liQty = liQty + 1.
@@ -211,8 +195,7 @@ FOR EACH ttHourStat:
     
    DISPLAY STREAM sLog 
       ttHourStat.ttHour
-      ttHourStat.InvQty
-      ttHourStat.CDRQty FORMAT ">>>,>>>,>>9".
+      ttHourStat.InvQty.
    
    liCnt = 0.
    FOR EACH ttBillRun WHERE           
@@ -222,20 +205,13 @@ FOR EACH ttHourStat:
    END.
    
    DISP STREAM sLog 
-      ttHourStat.CDRQty / ttHourStat.InvQty 
-         COLUMN-LABEL "CDRs/inv"
-         FORMAT ">>,>>>,>>9"
       liCnt COLUMN-LABEL "Runs"
       ttHourStat.InvQty / liCnt 
          COLUMN-LABEL "Inv./run"
-         FORMAT ">>>>>>9"
-      ttHourStat.CDRQty / liCnt             
-         COLUMN-LABEL "CDRs/run"
-         FORMAT ">>>,>>>,>>9".
+         FORMAT ">>>>>>9".
 
    ASSIGN 
       liTotInv = liTotInv + ttHourStat.InvQty
-      liTotCDR = liTotCDR + ttHourStat.CDRQty
       liTotSub = liTotSub + ttHourStat.SubQty.
       
    CREATE ttCumulative.
@@ -244,7 +220,6 @@ FOR EACH ttHourStat:
       ttCumulative.StartStamp = ttHourStat.StartStamp
       ttCumulative.ttHour = ttHourStat.ttHour
       ttCumulative.InvQty = liTotInv
-      ttCumulative.CDRQty = liTotCDR
       ttCumulative.SubQty = liTotSub.
 END.
 
@@ -266,7 +241,6 @@ PUT STREAM sLog UNFORMATTED
    SKIP(1)
    "Invoice qty: "      TRIM(STRING(oiInvQty,">>>,>>>,>>9")) SKIP 
    "Subscription qty: " TRIM(STRING(liSubQty,">>>,>>>,>>9")) SKIP
-   "CDR qty: "          TRIM(STRING(liCDRQty,">>>,>>>,>>9")) SKIP
    "Duration: "         lcDur
    SKIP(1).
 
@@ -281,12 +255,37 @@ FOR EACH ttCumulative:
          FORMAT ">>>,>>>,>>9"
       ttCumulative.SubQty  
          COLUMN-LABEL "Cumul. Subscr.Qty"
-         FORMAT ">>>,>>>,>>9"
-      ttCumulative.CDRQty   
-         COLUMN-LABEL "Cumul. CDR Qty"
-         FORMAT ">,>>>,>>>,>>9".
+         FORMAT ">>>,>>>,>>9".
 END.      
-                                  
+
+ASSIGN
+   ldeFrom = fMake2Dt(idaInvDate, 0).
+   ldeTo   = fMake2Dt(idaInvDate + 1,0).
+
+IF CAN-FIND(FIRST ErrorLog NO-LOCK WHERE
+                  ErrorLog.Brand = gcBrand AND
+                  ErrorLog.ActionId = "BRUN" AND
+                  ErrorLog.ActionTS > ldeFrom AND
+                  ErrorLog.ActionTS < ldeTo) THEN DO:
+
+   PUT STREAM sLog SKIP(1) "Error Logs (Custnum/Error)" SKIP
+                           "--------------------------" SKIP.
+
+   FOR EACH ErrorLog NO-LOCK WHERE
+            ErrorLog.Brand = gcBrand AND
+            ErrorLog.ActionId = "BRUN" AND
+            ErrorLog.ActionTS > ldeFrom AND
+            ErrorLog.ActionTS < ldeTo:
+
+      IF ErrorLog.ErrorMsg BEGINS "Temporary MandateId generation" THEN NEXT.
+
+      PUT STREAM slog UNFORMATTED
+         ErrorLog.KeyValue CHR(9)
+         ErrorLog.ErrorMsg SKIP(1).
+
+   END.
+END.
+
 OUTPUT STREAM sLog CLOSE.
 
 
