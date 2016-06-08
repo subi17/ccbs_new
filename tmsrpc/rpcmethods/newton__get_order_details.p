@@ -203,10 +203,19 @@ IF lcTermReturnContracts <> "" THEN
 
 /* extension_contracts - Array of extension contract ids associated with Order */
 FOR EACH bMsRequest NO-LOCK WHERE
-         bMsRequest.MsSeq      = Order.MsSeq AND
-         bMsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND
-         bMsRequest.ReqStatus  = 0 AND
-         bMsRequest.Reqcparam3 = "RVTERM12":
+         bMsRequest.MsSeq        = Order.MsSeq AND
+         bMsRequest.ReqType      = {&REQTYPE_CONTRACT_ACTIVATION} AND
+         bMsRequest.ReqStatus    = 0 AND
+         bMsRequest.Reqcparam3   = "RVTERM12",
+    FIRST SingleFee NO-LOCK USE-INDEX Custnum WHERE
+          SingleFee.Brand        = gcBrand AND
+          SingleFee.Custnum      = Order.CustNum AND
+          SingleFee.HostTable    = "Mobsub" AND
+          SingleFee.KeyValue     = STRING(Order.MsSeq) AND
+          SingleFee.SourceTable  = "DCCLI" AND
+          SingleFee.SourceKey    = STRING(bMsRequest.ReqIParam3) AND
+          SingleFee.CalcObj      = "RVTERM" AND
+          SingleFee.OrderId      = Order.OrderId:
    lcExtensionContracts = lcExtensionContracts + "," + bMsRequest.ReqCparam4.
 END.
 FOR EACH DCCLI NO-LOCK WHERE
@@ -214,11 +223,22 @@ FOR EACH DCCLI NO-LOCK WHERE
          DCCLI.DCEvent  = "RVTERM12" AND
          DCCLI.MsSeq    = Order.MsSeq AND
          DCCLI.ValidTo >= TODAY,
-    FIRST bMsRequest NO-LOCK WHERE
-          bMsRequest.MsSeq      = DCCLI.MsSeq AND
-          bMsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND
-          LOOKUP(STRING(bMsRequest.ReqStat),"2,9") > 0 AND
-          bMsRequest.Reqcparam3 = "RVTERM12":
+    EACH  bMsRequest NO-LOCK USE-INDEX MsActStamp WHERE
+          bMsRequest.MsSeq       = DCCLI.MsSeq AND
+          bMsRequest.ReqType     = {&REQTYPE_CONTRACT_ACTIVATION} AND
+          bMsRequest.ReqStat     = 2 AND
+          bMsRequest.ActStamp   >= fMake2Dt(DCCLI.ValidFrom,0) AND
+          bMsRequest.ActStamp   <= fMake2Dt(DCCLI.ValidFrom,86399) AND
+          bMsRequest.Reqcparam3  = "RVTERM12",
+    FIRST SingleFee NO-LOCK USE-INDEX Custnum WHERE
+          SingleFee.Brand        = gcBrand AND
+          SingleFee.Custnum      = Order.CustNum AND
+          SingleFee.HostTable    = "Mobsub" AND
+          SingleFee.KeyValue     = STRING(Order.MsSeq) AND
+          SingleFee.SourceTable  = "DCCLI" AND
+          SingleFee.SourceKey    = STRING(bMsRequest.ReqIParam3) AND
+          SingleFee.CalcObj      = "RVTERM" AND
+          SingleFee.OrderId      = Order.OrderId:
    lcExtensionContracts = lcExtensionContracts + "," + bMsRequest.ReqCparam4.
 END.
 IF lcExtensionContracts <> "" THEN
