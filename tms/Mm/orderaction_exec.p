@@ -399,9 +399,9 @@ PROCEDURE pDiscountPlan:
       IF Order.CrStamp       >= fCParamDe("AprilPromotionFromDate") AND 
          Order.CrStamp       <= fCParamDe("AprilPromotionToDate")   THEN 
       ASSIGN 
-            ldate              = fLastDayOfMonth(MobSub.ActivationDate)
+            ldate              = ADD-INTERVAL(MobSub.ActivationDate,2,"months")
             DPMember.ValidFrom = MobSub.ActivationDate
-            DPMember.ValidTo   = ADD-INTERVAL(ldate,2,"months"). /* YDR-2160 */
+            DPMember.ValidTo   = fLastDayOfMonth(lDate). /* YDR-2160 */
       ELSE    
          DPMember.ValidTo = 12/31/16. /* YPR-3083 */
    END.
