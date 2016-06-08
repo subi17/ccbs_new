@@ -142,7 +142,7 @@ PROCEDURE pReadFileData:
    DEF VAR lcLogLine AS CHAR NO-UNDO.
    DEF VAR lcMSISDN AS CHAR NO-UNDO.
    DEF VAR lcCorrId AS CHAR NO-UNDO.
-   DEF VAR lcPeriod AS CHAR NO-UNDO.
+   DEF VAR lcTimeInfo AS CHAR NO-UNDO.
    DEF VAR lcAmount AS CHAR NO-UNDO.
    DEF VAR ldeAmount AS DECIMAL NO-UNDO. 
    DEF VAR lcErr AS CHAR NO-UNDO.
@@ -165,7 +165,7 @@ PROCEDURE pReadFileData:
       assign
          lcMSISDN = entry(5,lcline,";")
          lcCorrId = entry(3,lcline,";")
-         lcPeriod = REPLACE(SUBSTRING(entry(1,lcline,";"),1,7),"-","")
+         lcTimeInfo = entry(2,lcline,";")
          lcAmount = entry(8,lcline,";").
          IF entry(6,lcLine,";") EQ "POSTPAID" THEN
             llgPayType = FALSE.
@@ -193,7 +193,7 @@ PROCEDURE pReadFileData:
 
       lcErr = fProcessGBEntry(lcMSISDN,
                               lcCorrId,
-                              lcPeriod,
+                              lcTimeInfo,
                               lcCurrentPeriod,
                               ldeAmount,
                               llgPayType,

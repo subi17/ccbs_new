@@ -43,18 +43,68 @@ FUNCTION fInitGBParameters RETURNS CHAR
 
 END.   
 
+/*function checks that is requeasted refund already billed.*/
+/*This is checked only when we are checking older thatn current period cases.*/
+/*Idea:
+   Find MobCDR.
+   By MobCDR find invseq.
+   By invseq check if billed:
+   NO -> Return FALSE
+   YES -> Find invoice where invseq is same and check if it is not test invoice
+   If test invoice 99 -> Return FALSE.
+   If invoice is not test invoice -> TRUE.
+   */
+FUNCTION fIsBilled RETURNS LOGICAL
+   (icCLI AS CHAR,
+    icTimeInfo AS CHAR):
+   DEF VAR liSeconds AS INT NO-UNDO.
+   DEF VAR ldaDate AS DATE NO-UNDO FORMAT "99-99-9999".
+   DEF BUFFER bMobCdr FOR MobCdr.
+   DEF BUFFER bInvSeq FOR InvSeq.
+   DEF BUFFER bInvoice FOR Invoice.
+
+   liSeconds = 3600 * INT(SUBSTR(icTimeInfo,12,2)) +
+               60 * INT(SUBSTR(icTimeInfo,15,2)) +
+                 INT(SUBSTR(icTimeInfo,18,2)).
+   MESSAGE icTimeInfo VIEW-AS ALERT-BOX.
+   MESSAGE liSeconds VIEW-AS ALERT-BOX.
+   ldaDate = TODAY.
+   message ldaDate.
+
+   FIND FIRST bMobCdr WHERE
+              bMobCdr.CLI EQ icCLI AND
+              bMobCdr.DateSt EQ ldaDate AND
+              bMobCDR.TimeStart EQ liSeconds NO-ERROR.
+   IF AVAIL bMobCDR THEN DO:
+      FIND FIRST bInvSeq NO-LOCK WHERE
+                 bInvSeq.InvSeq EQ bMobCdr.InvSeq AND
+                 bInvSeq.Billed EQ TRUE NO-ERROR.
+      IF AVAIL bInvSeq THEN DO:
+         FIND FIRST bInvoice NO-LOCK WHERE
+                    bInvoice.InvNum EQ bInvSeq.InvNum AND
+                    bInvoice.InvType NE {&INV_TYPE_TEST} NO-ERROR.
+         IF AVAIL bInvoice THEN RETURN TRUE.
+      END.
+   END.
+
+   RETURN FALSE.
+END.
+
+
 FUNCTION fProcessPostpaidEntry RETURNS CHAR
    (icMSISDN AS CHAR, /*MSISDN*/
     icCorrId AS CHAR, /*Correlation ID*/
-    icPeriod AS CHAR, /*period info*/
+    icTimeInfo AS CHAR, /*period info*/
     icCurrentPeriod AS CHAR, /*Period of program starting moment*/
     ideAmount AS DECIMAL,
     BUFFER bMobSub FOR MobSub, /*Amount*/
     OUTPUT ocErrInfo AS CHAR):
 
    DEF VAR lcResponse AS CHAR NO-UNDO.
-   
-   IF icPeriod EQ icCurrentPeriod THEN DO:
+   DEF VAR lcPeriod AS CHAR NO-UNDO.
+
+   lcPeriod = REPLACE(SUBSTRING(icTimeInfo,1,7),"-","").  
+   IF lcPeriod EQ icCurrentPeriod THEN DO:
 
       RUN creafat (bMobSub.CustNum, /* custnum */
                    bMobSub.MsSeq, /* msseq */
@@ -62,7 +112,7 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
                    ideAmount,   /* amount */ 
                    0,   /* percentage  */
                    ?,   /* vat included already */
-                   icPeriod, /*period*/
+                   lcPeriod, /*period*/
                    999999, /*tp period, no limoit now*/
                    OUTPUT lcResponse). /* error */
       lcresponse = TRIM(lcResponse).             
@@ -75,7 +125,10 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
       RETURN lcResponse.
    END.
    ELSE DO:
-      /*different perios, needs special handling*/
+      /*different perios, needs special handling:*/
+      /*If billed -> Credit Note*/
+      /*If not billed -> FAT*/
+      llgBilled = fIsBilled(icMSISDN, icTimeInfo).
    END.
 END.
 
@@ -118,7 +171,7 @@ END.
 FUNCTION fProcessGBEntry RETURNS CHAR
    (icMSISDN AS CHAR, /*MSISDN*/
     icCorrId AS CHAR, /*Correlation ID*/
-    icPeriod AS CHAR, /*Purchase date*/
+    icTimeInfo AS CHAR, /*Purchase date*/
     icCurrentPeriod AS CHAR, /*Period of "NOW"*/
     ideAmount AS DECIMAL, /*Amount*/
     ilgPayType AS LOGICAL, /*p*/
@@ -154,7 +207,7 @@ FUNCTION fProcessGBEntry RETURNS CHAR
    ELSE DO:
       lcResponse = fProcessPostpaidEntry(icMSISDN, 
                                          icCorrId, 
-                                         icPeriod, 
+                                         icTimeInfo, 
                                          icCurrentPeriod,
                                          ideAmount,
                                          BUFFER bMobSub,
@@ -164,3 +217,4 @@ FUNCTION fProcessGBEntry RETURNS CHAR
    IF lcErr NE {&GB_RESP_OK} THEN lcResponse = lcResponse + ";" + lcErr.
    RETURN lcResponse.
 END.
+
