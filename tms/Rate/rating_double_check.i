@@ -38,7 +38,8 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
    DEF VAR llDouble     AS LOG    NO-UNDO.
    DEF VAR lcTableName  AS CHAR   NO-UNDO.
    DEF VAR llCheckOld   AS LOG    NO-UNDO.
-   
+   DEF VAR lcMSCID      AS CHAR   NO-UNDO.
+
    DEF BUFFER bPostDouble FOR MobCDR.
    DEF BUFFER bPreDouble  FOR PrepCDR.
    
@@ -176,7 +177,7 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
                   bPreDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CCGW_CDR} AND
                   bPreDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_DATA_CDR} AND
                   RECID(bPreDouble) NE irChecked:
-            IF bPreDouble.MSCID = "POSTD" THEN DO:
+            IF bPreDouble.MSCID = "PRE" THEN DO:
                IF icCaller = "rerate" AND ttCall.Apn = "" THEN
                   ttCall.Apn = fGetMcdrDtlValue(ttCall.Datest,
                                                 ttCall.Dtlseq,
@@ -197,10 +198,12 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
    THEN DO:
       IF ttCall.PPFlag = 0 THEN ASSIGN
          lcOldDb     = "OldMCDR"
-         lcTableName = "MobCDR".
+         lcTableName = "MobCDR"
+         lcMSCID     = "POSTD".
       ELSE ASSIGN
          lcOldDb     = "OldPrepCDR"
-         lcTableName = "PrepCDR".
+         lcTableName = "PrepCDR"
+         lcMSCID     = "PRE".
 
       IF CONNECTED(lcOldDb) THEN llCheckOld = TRUE.
 
@@ -238,7 +241,7 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
                                                ttCall.Dtlseq,
                                                "Call identification number").
 
-         IF ttCall.MSCID = "POSTD" AND
+         IF ttCall.MSCID = lcMSCID AND
             icCaller = "rerate" AND
             ttCall.Apn = "" THEN
             ttCall.Apn = fGetMcdrDtlValue(ttCall.Datest,
@@ -273,7 +276,7 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
                                     WHEN ttCall.ErrorCode = 0 OR
                                     ttCall.ErrorCode = 9999
             ttCall.InvSeq    = 0.
-         WHEN "POSTD" THEN ASSIGN
+         WHEN "POSTD" OR WHEN "PRE" THEN ASSIGN
             ttCall.ErrorCode = {&CDR_ERROR_DOUBLE_DATA_CDR} 
                                     WHEN ttCall.ErrorCode = 0 OR
                                     ttCall.ErrorCode = 9999
