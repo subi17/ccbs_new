@@ -41,8 +41,9 @@ FUNCTION fGetBDestCount RETURNS INT (INPUT iiMsSeq       AS INT,
 
    liPeriod = YEAR(idActDate) * 100 + MONTH(idActDate).
 
-   IF icBundleId BEGINS "CONTF" OR
-      icBundleId EQ "VOICE100" THEN liDialType = 4.
+   IF icBundleId BEGINS "CONTF"      OR
+      icBundleId EQ "VOICE100"       OR 
+      icBundleId EQ "FREE100MINUTES" THEN liDialType = 4.
    ELSE liDialType = 0.
 
    FOR FIRST bServiceLimit NO-LOCK WHERE
