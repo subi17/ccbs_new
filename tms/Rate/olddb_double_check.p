@@ -89,8 +89,8 @@ REPEAT:
                                            lhOldCDR::Dtlseq,
                                            "Call identification number")
       THEN NEXT.
-   ELSE IF icMSCID EQ "POSTD" AND
-           lhOldCDR::MSCID EQ "POSTD" AND
+   ELSE IF ((icMSCID EQ "POSTD" AND lhOldCDR::MSCID EQ "POSTD") OR
+            (icMSCID EQ "PRE" AND lhOldCDR::MSCID EQ "PRE")) AND
            icApn NE fGetMcdrDtlValue(lhOldCDR::Datest,
                                      lhOldCDR::Dtlseq,
                                      "Access point name NI")
