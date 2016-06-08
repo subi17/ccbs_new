@@ -120,6 +120,12 @@ IF MobSub.CliType EQ "CONT15" AND
       "VOICE100") > "" THEN
    add_string(lcResultArray,"", "VOICE100|" + STRING(Mobsub.MsSeq)).
 
+IF MobSub.CliType EQ "CONT9" AND
+   fGetCurrentSpecificBundle(
+      MobSub.MsSeq,
+      "FREE100MINUTES") > "" THEN
+   add_string(lcResultArray,"", "FREE100MINUTES|" + STRING(Mobsub.MsSeq)).
+
 /* if subscription doesn't have a BONO bundle then return the list of 
    bundles that can be activated */
 FOR EACH DayCampaign NO-LOCK WHERE 
