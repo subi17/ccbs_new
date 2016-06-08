@@ -56,16 +56,23 @@ END.
    */
 FUNCTION fIsBilled RETURNS LOGICAL
    (icCLI AS CHAR,
-    icTimeInfo AS CHAR):
+    icTimeInfo AS CHAR,
+    OUTPUT oiInvoiceNum AS INT):
    DEF VAR liSeconds AS INT NO-UNDO.
-   DEF VAR ldaDate AS DATE NO-UNDO FORMAT "99-99-9999".
+   DEF VAR lcTime AS CHAR NO-UNDO.
+   DEF VAR ldaDate AS DATE NO-UNDO.
    DEF BUFFER bMobCdr FOR MobCdr.
    DEF BUFFER bInvSeq FOR InvSeq.
    DEF BUFFER bInvoice FOR Invoice.
+   ASSIGN
+      ldaDate = DATE(INT(SUBSTR(icTimeInfo,6,2)),
+                     INT(SUBSTR(icTimeInfo,9,2)),
+                     INT(SUBSTR(icTimeInfo,1,4)))
+      lcTime  = SUBSTR(icTimeInfo,12,8)
+      liSeconds  = INT(ENTRY(1,lcTime,":")) * 3600 +
+                INT(ENTRY(2,lcTime,":")) * 60   +
+                INT(ENTRY(3,lcTime,":"))NO-ERROR.
 
-   liSeconds = 3600 * INT(SUBSTR(icTimeInfo,12,2)) +
-               60 * INT(SUBSTR(icTimeInfo,15,2)) +
-                 INT(SUBSTR(icTimeInfo,18,2)).
    MESSAGE icTimeInfo VIEW-AS ALERT-BOX.
    MESSAGE liSeconds VIEW-AS ALERT-BOX.
    ldaDate = TODAY.
@@ -83,7 +90,10 @@ FUNCTION fIsBilled RETURNS LOGICAL
          FIND FIRST bInvoice NO-LOCK WHERE
                     bInvoice.InvNum EQ bInvSeq.InvNum AND
                     bInvoice.InvType NE {&INV_TYPE_TEST} NO-ERROR.
-         IF AVAIL bInvoice THEN RETURN TRUE.
+         IF AVAIL bInvoice THEN DO:
+            oiInvoiceNum = bInvoice.InvNum.
+            RETURN TRUE.
+         END.   
       END.
    END.
 
@@ -102,9 +112,16 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
 
    DEF VAR lcResponse AS CHAR NO-UNDO.
    DEF VAR lcPeriod AS CHAR NO-UNDO.
+   DEF VAR llgBilled AS LOGICAL NO-UNDO.
+   DEF VAR liInvNum AS INT NO-UNDO.
 
    lcPeriod = REPLACE(SUBSTRING(icTimeInfo,1,7),"-","").  
-   IF lcPeriod EQ icCurrentPeriod THEN DO:
+     /*different perios, needs special handling:*/
+     /*If billed -> Credit Note*/
+     /*If not billed -> FAT*/
+  
+   IF lcPeriod EQ icCurrentPeriod OR 
+      fIsBilled(icMSISDN, icTimeInfo, liInvNum) EQ FALSE THEN DO:
 
       RUN creafat (bMobSub.CustNum, /* custnum */
                    bMobSub.MsSeq, /* msseq */
@@ -125,10 +142,9 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
       RETURN lcResponse.
    END.
    ELSE DO:
-      /*different perios, needs special handling:*/
-      /*If billed -> Credit Note*/
-      /*If not billed -> FAT*/
-      llgBilled = fIsBilled(icMSISDN, icTimeInfo).
+      /*If billed -> credit note*/
+      /*FIND FIRST invoice...*/      
+
    END.
 END.
 
