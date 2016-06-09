@@ -13,6 +13,15 @@ DEFINE VARIABLE llWasHPDService AS LOGICAL INITIAL FALSE NO-UNDO.
 IF LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) > 0
 THEN llIsHPDService = TRUE.
 
+IF NEW(SubSer) AND
+   NOT CAN-FIND(FIRST SubSer_new NO-LOCK WHERE
+                      SubSer_new.MsSeq = Subser.MsSeq AND
+                      Subser_new.ServCom = Subser.ServCom AND
+                      Subser_new.SSdate = Subser.SSdate) THEN DO:
+   CREATE SubSer_new.
+   BUFFER-COPY SubSer TO SubSer_new.
+END.
+
 /* If this is a new SubSer and SubSer servcom is not hpd service,
    we won't send the information */ 
 IF NEW(SubSer) AND llIsHPDService = FALSE
@@ -45,6 +54,13 @@ ELSE Mobile.RepLog.RowID    = STRING(ROWID(SubSer)).
 IF NOT NEW(SubSer)
 THEN DO: 
    DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
+
+   FIND SubSer_new EXCLUSIVE-LOCK  WHERE
+        SubSer_new.MsSeq = oldSubser.MsSeq AND
+        Subser_new.ServCom = oldSubser.ServCom AND
+        Subser_new.SSdate = oldSubser.SSdate  NO-ERROR.
+   IF AVAIL Subser_new THEN
+      BUFFER-COPY Subser TO Subser_new NO-ERROR.
 
    BUFFER-COMPARE SubSer USING
       MsSeq ServCom SSDate

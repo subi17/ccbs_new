@@ -12,6 +12,12 @@ THEN RETURN.
 
 IF LOOKUP(SubSer.ServCom,{&HPD_SERVICES}) = 0
 THEN RETURN.
+   
+FIND SubSer_new EXCLUSIVE-LOCK  WHERE
+     SubSer_new.MsSeq = Subser.MsSeq AND
+     Subser_new.ServCom = Subser.ServCom AND
+     Subser_new.SSdate = Subser.SSdate NO-ERROR.
+IF AVAIL Subser_new THEN DELETE Subser_new.
 
 CREATE Mobile.RepLog.
 ASSIGN
