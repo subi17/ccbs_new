@@ -74,11 +74,6 @@ FUNCTION fIsBilled RETURNS LOGICAL
                 INT(ENTRY(2,lcTime,":")) * 60   +
                 INT(ENTRY(3,lcTime,":"))NO-ERROR.
 
-   MESSAGE icTimeInfo VIEW-AS ALERT-BOX.
-   MESSAGE liSeconds VIEW-AS ALERT-BOX.
-   ldaDate = TODAY.
-   message ldaDate.
-
    FIND FIRST bMobCdr WHERE
               bMobCdr.CLI EQ icCLI AND
               bMobCdr.DateSt EQ ldaDate AND
@@ -121,7 +116,7 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
      /*different perios, needs special handling:*/
      /*If billed -> Credit Note*/
      /*If not billed -> FAT*/
-   llgBilled = fIsBilled(icMSISDN, icTimeInfo, liInvNum).
+   llgBilled = fIsBilled(icMSISDN, icTimeInfo, OUTPUT liInvNum).
    IF lcPeriod EQ icCurrentPeriod OR llgBilled EQ FALSE THEN DO:
 
       RUN creafat (bMobSub.CustNum, /* custnum */
