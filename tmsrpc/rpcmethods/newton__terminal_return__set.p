@@ -288,7 +288,7 @@ IF (llDeviceStart AND llDeviceScreen) OR
                 InvRow.InvNum = Invoice.InvNum AND
                 InvRow.SubInvNum = SubInvoice.SubInvNum AND
                (InvRow.BillCode = SingleFee.BillCode OR
-                LOOKUP(InvRow.BillCode,"RVTERMDTRW,RVTERMDTTR,RVTERMDTTD") > 0) AND
+                InvRow.BillCode = "RVTERMDTRW") AND
                 InvRow.CreditInvNum = 0:
          
          IF InvRow.BillCode = SingleFee.BillCode AND
