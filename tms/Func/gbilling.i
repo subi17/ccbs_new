@@ -18,6 +18,7 @@
 {tmsconst.i}
 {ftaxdata.i}
 {ftopup.i}
+{fcreditreq.i}
 
 DEF VAR lcGBOutDir AS CHAR NO-UNDO.
 DEF VAR lcGBInDir AS CHAR NO-UNDO.
@@ -114,14 +115,14 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
    DEF VAR lcPeriod AS CHAR NO-UNDO.
    DEF VAR llgBilled AS LOGICAL NO-UNDO.
    DEF VAR liInvNum AS INT NO-UNDO.
+   DEF VAR liRequest AS INT NO-UNDO.
 
    lcPeriod = REPLACE(SUBSTRING(icTimeInfo,1,7),"-","").  
      /*different perios, needs special handling:*/
      /*If billed -> Credit Note*/
      /*If not billed -> FAT*/
-  
-   IF lcPeriod EQ icCurrentPeriod OR 
-      fIsBilled(icMSISDN, icTimeInfo, liInvNum) EQ FALSE THEN DO:
+   llgBilled = fIsBilled(icMSISDN, icTimeInfo, liInvNum).
+   IF lcPeriod EQ icCurrentPeriod OR llgBilled EQ FALSE THEN DO:
 
       RUN creafat (bMobSub.CustNum, /* custnum */
                    bMobSub.MsSeq, /* msseq */
@@ -131,10 +132,9 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
                    ?,   /* vat included already */
                    lcPeriod, /*period*/
                    999999, /*tp period, no limoit now*/
-                   OUTPUT lcResponse). /* error */
-      lcresponse = TRIM(lcResponse).             
-      IF lcResponse NE "" THEN DO:
-         ocErrInfo = lcResponse.
+                   OUTPUT ocErrInfo). /* error */
+      ocErrInfo = TRIM(ocErrInfo).             
+      IF ocErrInfo NE "" THEN DO:
          lcResponse = {&GB_POSTPAID_FAT_FAILURE}.
       END.
       ELSE
@@ -143,9 +143,49 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
    END.
    ELSE DO:
       /*If billed -> credit note*/
-      /*FIND FIRST invoice...*/      
+      /*FIND FIRST invoice...*/
+      liRequest = 0.
+
+      FOR FIRST Invoice NO-LOCK WHERE
+                Invoice.InvNum EQ liInvNum,                   
+          FIRST SubInvoice NO-LOCK WHERE
+                Subinvoice.InvNum EQ Invoice.InvNum,
+           EACH InvRow NO-LOCK WHERE
+                InvRow.InvNum EQ Invoice.InvNum AND
+                InvRow.SubInvNum EQ SubInvoice.SubInvNum AND
+                InvRow.BillCode EQ "GOOGLEVAS" AND
+                InvRow.CreditInvNum = 0 AND
+                InvRow.Amt >= ideAmount:
+
+
+         liRequest = fFullCreditNote(Invoice.InvNum,
+                                STRING(SubInvoice.SubInvNum),
+                                "InvRow=" + STRING(InvRow.InvRowNum) + "|" +
+                                "InvRowAmt=" + STRING(ideAmount),
+                                "Correct", /*reason group*/
+                                "2013", /*reason*/
+                                "", /*reason note*/
+                                OUTPUT ocErrInfo).
+         LEAVE.
+      END.
+      IF liRequest = 0 THEN DO:
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          "MobSub",
+                          STRING(bMobSub.MsSeq),
+                          bMobSub.Custnum,
+                          "CREDIT NOTE CREATION FAILED",
+                          "ERROR:" + ocErrInfo).
+                   
+      END.
+      IF ocErrInfo NE ""  OR liRequest EQ 0 THEN DO:
+         lcResponse = {&GB_POSTPAID_CN_FAILURE}.
+      END.
+      ELSE
+         lcResponse = {&GB_RESP_OK}.
+      RETURN lcResponse.
 
    END.
+
 END.
 
 FUNCTION fProcessPrepaidEntry RETURNS CHAR
