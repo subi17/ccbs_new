@@ -1,0 +1,469 @@
+ADD TABLE "DCCli_new"
+  AREA "Sta_Data_128_2"
+  DUMP-NAME "dccli"
+
+ADD FIELD "MSSeq" OF "DCCLi_new" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Sub.ID"
+  HELP "Sequence for a subscription"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "ValidFrom" OF "DCCLi_new" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Valid from"
+  ORDER 30
+
+ADD FIELD "ValidTo" OF "DCCLi_new" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Valid to"
+  ORDER 40
+
+ADD FIELD "DCEvent" OF "DCCLi_new" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Periodical Term"
+  POSITION 6
+  MAX-WIDTH 24
+  COLUMN-LABEL "Term"
+  HELP "ID of periodical term"
+  ORDER 50
+
+ADD FIELD "CLI" OF "DCCLi_new" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "MSISDN"
+  POSITION 7
+  MAX-WIDTH 24
+  COLUMN-LABEL "CLI"
+  HELP "MSISDN"
+  ORDER 60
+
+ADD FIELD "ContractDate" OF "DCCLi_new" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Contract Date"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Contract"
+  HELP "Date when contract was originally signed"
+  ORDER 70
+
+ADD FIELD "TermDate" OF "DCCLi_new" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Termination Date"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "Terminate"
+  HELP "Date when contract when will be terminated"
+  ORDER 80
+
+ADD FIELD "Brand" OF "DCCLi_new" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 10
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 90
+
+ADD FIELD "CreateFees" OF "DCCLi_new" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "yes"
+  LABEL "Create Fees"
+  POSITION 11
+  MAX-WIDTH 1
+  COLUMN-LABEL "Fees"
+  HELP "Create fees when contract is changed or terminated"
+  ORDER 100
+
+ADD FIELD "RenewalDate" OF "DCCLi_new" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Renewal Date"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "Renewal"
+  HELP "Date when contract was renewed"
+  ORDER 110
+
+ADD FIELD "ValidToOrig" OF "DCCLi_new" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Valid To Original"
+  POSITION 13
+  MAX-WIDTH 4
+  COLUMN-LABEL "ValidToOrig"
+  HELP "Original Valid To"
+  ORDER 120
+
+ADD FIELD "PerContractID" OF "DCCLi_new" AS integer 
+  DESCRIPTION "unique sequence ID"
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Periodical Contract ID"
+  POSITION 14
+  MAX-WIDTH 4
+  COLUMN-LABEL "Per.Contr."
+  HELP "Periodical contract ID"
+  ORDER 130
+
+ADD FIELD "Amount" OF "DCCLi_new" AS decimal 
+  FORMAT "->>>>>>9.99999"
+  INITIAL ?
+  LABEL "Amount"
+  POSITION 15
+  MAX-WIDTH 20
+  COLUMN-LABEL "Amount"
+  HELP "Penalty amount"
+  DECIMALS 5
+  ORDER 140
+
+ADD INDEX "Contract" ON "DCCLi_new" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "MSSeq" ASCENDING 
+  INDEX-FIELD "DCEvent" ASCENDING 
+
+ADD INDEX "DCEvent" ON "DCCLi_new" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "DCEvent" ASCENDING 
+  INDEX-FIELD "MSSeq" ASCENDING 
+  INDEX-FIELD "ValidTo" DESCENDING 
+
+ADD INDEX "MSSeq" ON "DCCLi_new" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "MSSeq" ASCENDING 
+  INDEX-FIELD "ValidTo" DESCENDING 
+
+ADD INDEX "PerContractID" ON "DCCLi_new" 
+  AREA "Sta_Index_3"
+  UNIQUE
+  INDEX-FIELD "PerContractID" DESCENDING 
+
+ADD TABLE "SubSer_new"
+  AREA "Sta_Data_128_2"
+  DESCRIPTION "Services of mobile subscribers"
+  DUMP-NAME "subser"
+
+ADD FIELD "MsSeq" OF "SubSer_new" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "SubSeq"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "SubSeq"
+  HELP "Sequence for a Subscription"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "ServPac" OF "SubSer_new" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "ServPackage"
+  POSITION 3
+  MAX-WIDTH 16
+  COLUMN-LABEL "ServPack"
+  HELP "Code of ServPack"
+  ORDER 20
+
+ADD FIELD "ServCom" OF "SubSer_new" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Service Component"
+  POSITION 5
+  MAX-WIDTH 24
+  COLUMN-LABEL "Service Component"
+  HELP "Code of Service Component"
+  ORDER 40
+
+ADD FIELD "SSAData" OF "SubSer_new" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Add'l Data"
+  POSITION 6
+  MAX-WIDTH 410
+  COLUMN-LABEL "Additional Data"
+  HELP "Additional Data"
+  EXTENT 5
+  ORDER 50
+
+ADD FIELD "SSDate" OF "SubSer_new" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Date"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "Date"
+  HELP "Date When Activated"
+  ORDER 60
+
+ADD FIELD "SSStat" OF "SubSer_new" AS integer 
+
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "Status"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Status"
+  HELP "Service Status"
+  ORDER 90
+
+ADD FIELD "SSParam" OF "SubSer_new" AS character 
+  FORMAT "x(24)"
+  INITIAL ""
+  LABEL "Parameter"
+  POSITION 9
+  MAX-WIDTH 48
+  COLUMN-LABEL "Parameter"
+  HELP "Service-oriented, subscriber-specific parameter"
+  ORDER 80
+
+ADD FIELD "SologStat" OF "SubSer_new" AS integer 
+  DESCRIPTION "0=no need to send, 1=should be sent, 2=sent (solog created)"
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Solog Status"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "HLR"
+  HELP "Solog status of service (sent to HLR)"
+  ORDER 100
+
+ADD INDEX "ServCom" ON "SubSer_new" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "ServCom" ASCENDING 
+  INDEX-FIELD "SSDate" DESCENDING 
+
+ADD INDEX "ServPac" ON "SubSer_new" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "ServPac" ASCENDING 
+  INDEX-FIELD "ServCom" ASCENDING 
+  INDEX-FIELD "SSDate" DESCENDING 
+
+ADD TABLE "MinConsumption_new"
+  AREA "Sta_Data_128_2"
+  LABEL "Minimum Consumption"
+  DESCRIPTION "Minimum consumption for a period"
+  DUMP-NAME "minconsumption"
+
+ADD FIELD "MSSeq" OF "MinConsumption_new" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Subs.ID"
+  HELP "Sequence for a subscription"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "FromDate" OF "MinConsumption_new" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "From"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Period begin"
+  ORDER 20
+
+ADD FIELD "ToDate" OF "MinConsumption_new" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Period end"
+  ORDER 30
+
+ADD FIELD "InvNum" OF "MinConsumption_new" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Invoice"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "Invoice on which minimum consumption was handled"
+  ORDER 40
+
+ADD FIELD "Amount" OF "MinConsumption_new" AS decimal 
+  FORMAT "->>>>>>9.99999"
+  INITIAL "0"
+  LABEL "Amount"
+  POSITION 6
+  MAX-WIDTH 20
+  COLUMN-LABEL "Amt"
+  HELP "Minimum consumption amount"
+  DECIMALS 5
+  ORDER 50
+
+ADD INDEX "MsSeq" ON "MinConsumption_new" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "MSSeq" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "InvNum" ON "MinConsumption_new" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "InvNum" ASCENDING 
+
+ADD TABLE "DCCounter_new"
+  AREA "Sta_Data_128_2"
+  DUMP-NAME "dccounte"
+
+ADD FIELD "DCEvent" OF "DCCounter_new" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Periodical Term"
+  POSITION 2
+  MAX-WIDTH 24
+  COLUMN-LABEL "Term"
+  HELP "ID of periodical term"
+  ORDER 10
+
+ADD FIELD "DCDate" OF "DCCounter_new" AS date 
+  FORMAT "99-99-9999"
+  INITIAL ?
+  LABEL "Date"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Date"
+  HELP "Day of the daily campaign"
+  ORDER 20
+
+ADD FIELD "MSSeq" OF "DCCounter_new" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Sub.ID"
+  HELP "Sequence for a subscription"
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "Amount" OF "DCCounter_new" AS decimal 
+  FORMAT ">>9.99999"
+  INITIAL "0"
+  LABEL "Amount"
+  POSITION 5
+  MAX-WIDTH 20
+  COLUMN-LABEL "Amount"
+  HELP "Used amount"
+  DECIMALS 5
+  ORDER 41
+
+ADD FIELD "MaxCharge" OF "DCCounter_new" AS decimal 
+  FORMAT "->>,>>9.999"
+  INITIAL "0"
+  LABEL "Max. Charge"
+  POSITION 6
+  MAX-WIDTH 18
+  COLUMN-LABEL "MaxCharge"
+  HELP "Max. charge"
+  DECIMALS 3
+  ORDER 50
+
+ADD FIELD "DCTarget" OF "DCCounter_new" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Target"
+  POSITION 7
+  MAX-WIDTH 24
+  COLUMN-LABEL "Target"
+  HELP "Target (allowed billing item)"
+  ORDER 60
+
+ADD FIELD "BillCode" OF "DCCounter_new" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Billing Item"
+  POSITION 8
+  MAX-WIDTH 32
+  COLUMN-LABEL "BillCode"
+  HELP "Billing item code"
+  ORDER 70
+
+ADD FIELD "CCN" OF "DCCounter_new" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "CCN"
+  POSITION 9
+  MAX-WIDTH 4
+  HELP "Report CCN that is marked to CDRs"
+  ORDER 80
+
+ADD FIELD "CalcMethod" OF "DCCounter_new" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Calculation Method"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "Method"
+  HELP "Calculation method"
+  ORDER 200
+
+ADD FIELD "DCType" OF "DCCounter_new" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Campaign Type"
+  POSITION 14
+  MAX-WIDTH 16
+  COLUMN-LABEL "Type"
+  HELP "Campaign type"
+  ORDER 130
+
+ADD FIELD "InclUnit" OF "DCCounter_new" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Included Unit"
+  POSITION 15
+  MAX-WIDTH 4
+  COLUMN-LABEL "Incl.Unit"
+  HELP "Unit of included material"
+  ORDER 40
+
+ADD FIELD "Latest" OF "DCCounter_new" AS decimal 
+  FORMAT "99999999.999999"
+  INITIAL "0"
+  LABEL "Latest"
+  POSITION 16
+  MAX-WIDTH 20
+  COLUMN-LABEL "Latest"
+  HELP "Latest packet EDR"
+  DECIMALS 5
+  ORDER 250
+
+ADD INDEX "MSSeq" ON "DCCounter_new" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "MSSeq" ASCENDING 
+  INDEX-FIELD "DCDate" ASCENDING 
+  INDEX-FIELD "DCTarget" ASCENDING 
+
+ADD INDEX "DCEvent" ON "DCCounter_new" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "DCEvent" ASCENDING 
+  INDEX-FIELD "DCDate" ASCENDING 
+
