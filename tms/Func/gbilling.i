@@ -140,7 +140,7 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
       /*If billed -> credit note*/
       /*FIND FIRST invoice...*/
       liRequest = 0.
-      lcErrInfo = "No InvRow for Credit Note".
+      ocErrInfo = "No InvRow for Credit Note".
 
       FOR FIRST Invoice NO-LOCK WHERE
                 Invoice.InvNum EQ liInvNum,                   
