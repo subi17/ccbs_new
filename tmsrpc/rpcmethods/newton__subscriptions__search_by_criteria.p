@@ -40,6 +40,8 @@ DEF VAR pcBlackBerry   AS CHAR NO-UNDO.
 DEF VAR pcStruct       AS CHAR NO-UNDO.
 DEF VAR pdtInputDate   AS DATE NO-UNDO. 
 DEF VAR pcOrderType    AS CHAR NO-UNDO.  
+DEF VAR pcLanguage     AS CHAR NO-UNDO.
+DEF VAR pcInvGroup     AS CHAR NO-UNDO.
 
 /* Local variables */
 DEF VAR lcDataBundles  AS CHAR NO-UNDO.
@@ -66,7 +68,7 @@ IF validate_request(param_toplevel_id, "struct,int,int") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
 lcstruct = validate_struct(pcStruct,
-   "subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,serv_code,order_date,order_status,order_type,eligible_renewal").
+   "subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,serv_code,order_date,order_status,order_type,eligible_renewal,language,invoice_group").
 
 ASSIGN
    pcCliType      = get_string(pcStruct, "subscription_type")
@@ -96,6 +98,10 @@ ASSIGN
       WHEN LOOKUP("order_status", lcStruct) > 0
    pcOrderType    = get_string(pcStruct, "order_type")
       WHEN LOOKUP("order_type", lcStruct) > 0
+   pcLanguage     = get_string(pcStruct, "language")
+      WHEN LOOKUP("language", lcStruct) > 0
+   pcInvGroup     = get_string(pcStruct, "invoice_group")
+      WHEN LOOKUP("invoice_group", lcStruct) > 0
    plgEligibleRenewal = get_bool(pcStruct,"eligible_renewal")
       WHEN LOOKUP("eligible_renewal", lcStruct) > 0.
 
@@ -215,6 +221,16 @@ FOR EACH MobSub NO-LOCK WHERE
                                DCCLI.DCEvent  BEGINS "RVTERM") AND
                                DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB.
       END.
+      ELSE IF pcPayTerm = "existing" THEN DO:
+         IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
+                               DCCLI.MsSeq    = MobSub.MsSeq AND
+                               DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB. 
+      END.
+      ELSE IF pcPayTerm = "none" THEN DO:
+         IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
+                           DCCLI.MsSeq    = MobSub.MsSeq AND
+                           DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB.
+      END.
       ELSE DO:
          IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
                                DCCLI.MsSeq    = MobSub.MsSeq AND
@@ -222,51 +238,67 @@ FOR EACH MobSub NO-LOCK WHERE
                                DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB.
       END.
    END.
-   ELSE DO:
-      IF NOT CAN-FIND(FIRST DCCLI NO-LOCK WHERE
-                            DCCLI.MsSeq    = MobSub.MsSeq AND
-                            DCCLI.ValidTo >= TODAY) THEN NEXT EACH_MOBSUB.
-   END.
 
-      /* TERMX */
+   /* TERMX */
    IF pcTerm > "" THEN DO:
-      FOR EACH DCCLI NO-LOCK WHERE
-               DCCLI.MsSeq      = MobSub.MsSeq AND
-               DCCLI.ValidFrom <= TODAY        AND
-               DCCLI.ValidTo   >= TODAY        AND
-               DCCLI.CreateFees = TRUE         BY DCCLI.ValidFrom DESC:
-               
-         IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
-                           DayCampaign.Brand        = gcBrand            AND
-                           DayCampaign.DCEvent      = DCCLI.DCEvent      AND
-                           DayCampaign.DCEvent      = pcterm             AND
-                           DayCampaign.DCType       = {&DCTYPE_DISCOUNT} AND
-                           DayCampaign.TermFeeModel NE ""                AND
-                           DayCampaign.TermFeeCalc > 0) THEN  
-         liCount = liCount + 1.
-         
-         IF liCount > 1 THEN LEAVE.
-      END. /* FOR EACH DCCLI NO-LOCK WHERE */
-      IF liCount = 0 THEN NEXT EACH_MOBSUB.
-   END.
-   ELSE DO:
-      FOR EACH DCCLI NO-LOCK WHERE
-               DCCLI.MsSeq      = MobSub.MsSeq AND
-               DCCLI.ValidFrom <= TODAY        AND
-               DCCLI.ValidTo   >= TODAY        AND
-               DCCLI.CreateFees = TRUE         BY DCCLI.ValidFrom DESC:
-               
-         IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
-                           DayCampaign.Brand        = gcBrand            AND
-                           DayCampaign.DCEvent      = DCCLI.DCEvent      AND
-                           DayCampaign.DCType       = {&DCTYPE_DISCOUNT} AND
-                           DayCampaign.TermFeeModel NE ""                AND
-                           DayCampaign.TermFeeCalc > 0) THEN  
-         liCount = liCount + 1.
-         
-         IF liCount > 1 THEN LEAVE.
-      END. /* FOR EACH DCCLI NO-LOCK WHERE */
-      IF liCount = 0 THEN NEXT EACH_MOBSUB.
+      IF pcTerm EQ "none" THEN DO:
+         FOR EACH DCCLI NO-LOCK WHERE
+                  DCCLI.MsSeq      = MobSub.MsSeq AND
+                  DCCLI.DCEvent   BEGINS "TERM"   AND
+                  DCCLI.ValidFrom <= TODAY        AND
+                  DCCLI.ValidTo   >= TODAY        AND
+                  DCCLI.CreateFees = TRUE         BY DCCLI.ValidFrom DESC:
+
+            IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
+                              DayCampaign.Brand        = gcBrand            AND
+                              DayCampaign.DCEvent      = DCCLI.DCEvent      AND
+                              DayCampaign.DCType       = {&DCTYPE_DISCOUNT} AND
+                              DayCampaign.TermFeeModel NE ""                AND
+                              DayCampaign.TermFeeCalc > 0) THEN
+            liCount = liCount + 1.
+
+            IF liCount > 1 THEN NEXT EACH_MOBSUB.
+         END. /* FOR EACH DCCLI NO-LOCK WHERE */
+      END.
+      ELSE IF pcTerm EQ "existing" THEN DO:
+         FOR EACH DCCLI NO-LOCK WHERE
+                  DCCLI.MsSeq      = MobSub.MsSeq AND
+                  DCCLI.DCEvent   BEGINS "TERM"   AND
+                  DCCLI.ValidFrom <= TODAY        AND
+                  DCCLI.ValidTo   >= TODAY        AND
+                  DCCLI.CreateFees = TRUE         BY DCCLI.ValidFrom DESC:
+
+            IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
+                              DayCampaign.Brand        = gcBrand            AND
+                              DayCampaign.DCEvent      = DCCLI.DCEvent      AND
+                              DayCampaign.DCType       = {&DCTYPE_DISCOUNT} AND
+                              DayCampaign.TermFeeModel NE ""                AND
+                              DayCampaign.TermFeeCalc > 0) THEN
+            liCount = liCount + 1.
+            IF liCount > 1 THEN LEAVE.
+         END. /* FOR EACH DCCLI NO-LOCK WHERE */
+         IF liCount = 0 THEN NEXT EACH_MOBSUB.
+      END.
+      ELSE DO:
+         FOR EACH DCCLI NO-LOCK WHERE
+                  DCCLI.MsSeq      = MobSub.MsSeq AND
+                  DCCLI.ValidFrom <= TODAY        AND
+                  DCCLI.ValidTo   >= TODAY        AND
+                  DCCLI.CreateFees = TRUE         BY DCCLI.ValidFrom DESC:
+                  
+            IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
+                              DayCampaign.Brand        = gcBrand            AND
+                              DayCampaign.DCEvent      = DCCLI.DCEvent      AND
+                              DayCampaign.DCEvent      = pcterm             AND
+                              DayCampaign.DCType       = {&DCTYPE_DISCOUNT} AND
+                              DayCampaign.TermFeeModel NE ""                AND
+                              DayCampaign.TermFeeCalc > 0) THEN  
+            liCount = liCount + 1.
+            
+            IF liCount > 1 THEN LEAVE.
+         END. /* FOR EACH DCCLI NO-LOCK WHERE */
+         IF liCount = 0 THEN NEXT EACH_MOBSUB.
+      END.
    END.
  
       /* BlackBerry */
@@ -277,6 +309,21 @@ FOR EACH MobSub NO-LOCK WHERE
 
       IF NOT AVAIL SubSer OR SubSer.SSStat NE 1 THEN NEXT EACH_MOBSUB.
    END.      
+
+   IF pcLanguage > "" THEN DO:
+      FIND FIRST OrderCustomer WHERE
+                 OrderCustomer.custNum EQ Mobsub.custnum AND
+                 OrderCustomer.Language EQ pcLanguage NO-LOCK NO-ERROR.
+      IF NOT AVAIL OrderCustomer THEN NEXT EACH_MOBSUB.
+   END.
+
+   IF pcInvGroup > "" THEN DO:
+      FIND FIRST Customer WHERE 
+                 Customer.brand EQ gcBrand AND
+                 Customer.custnum EQ MobSub.CustNum AND
+                 Customer.invGroup EQ pcInvGroup NO-LOCK NO-ERROR.
+      IF NOT AVAIL Customer THEN NEXT EACH_MOBSUB.
+   END.
 
 /* Other bundles  */
    DO liCount = 1 TO liNumberOfBundles:
