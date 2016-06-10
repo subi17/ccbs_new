@@ -140,6 +140,7 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
       /*If billed -> credit note*/
       /*FIND FIRST invoice...*/
       liRequest = 0.
+      lcErrInfo = "No InvRow for Credit Note".
 
       FOR FIRST Invoice NO-LOCK WHERE
                 Invoice.InvNum EQ liInvNum,                   
@@ -161,16 +162,16 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
                                 "2013", /*reason*/
                                 "", /*reason note*/
                                 OUTPUT ocErrInfo).
+         IF liRequest = 0 THEN DO:
+            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                             "MobSub",
+                             STRING(bMobSub.MsSeq),
+                             bMobSub.Custnum,
+                             "CREDIT NOTE CREATION FAILED",
+                             "ERROR:" + ocErrInfo).
+         END.
+ 
          LEAVE.
-      END.
-      IF liRequest = 0 THEN DO:
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
-                          STRING(bMobSub.MsSeq),
-                          bMobSub.Custnum,
-                          "CREDIT NOTE CREATION FAILED",
-                          "ERROR:" + ocErrInfo).
-                   
       END.
       IF ocErrInfo NE ""  OR liRequest EQ 0 THEN DO:
          lcResponse = {&GB_POSTPAID_CN_FAILURE}.
