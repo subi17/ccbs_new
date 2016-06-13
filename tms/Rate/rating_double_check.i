@@ -241,7 +241,7 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
                                                "Call identification number").
 
          IF ((ttCall.PPFlag EQ 0 AND ttCall.MSCID EQ "POSTD") OR
-             (ttCall NE 0 AND ttCall.MSCID EQ "PRE" AND
+             (ttCall.PPFlag NE 0 AND ttCall.MSCID EQ "PRE" AND
               ttCall.EventType EQ "GPRS")) AND
               icCaller = "rerate" AND
               ttCall.Apn = "" THEN
