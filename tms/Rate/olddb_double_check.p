@@ -90,10 +90,11 @@ REPEAT:
                                            "Call identification number")
       THEN NEXT.
    ELSE IF ((icMSCID EQ "POSTD" AND lhOldCDR::MSCID EQ "POSTD") OR
-            (icMSCID EQ "PRE" AND lhOldCDR::MSCID EQ "PRE")) AND
-           icApn NE fGetMcdrDtlValue(lhOldCDR::Datest,
-                                     lhOldCDR::Dtlseq,
-                                     "Access point name NI")
+            (icMSCID EQ "PRE" AND lhOldCDR::MSCID EQ "PRE" AND
+             icEventType EQ "GPRS" AND lhOldCDR::EventType EQ "GPRS")) AND
+             icApn NE fGetMcdrDtlValue(lhOldCDR::Datest,
+                                       lhOldCDR::Dtlseq,
+                                       "Access point name NI")
       THEN NEXT.
 
    olDouble = TRUE.

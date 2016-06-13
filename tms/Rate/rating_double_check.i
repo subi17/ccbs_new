@@ -38,7 +38,6 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
    DEF VAR llDouble     AS LOG    NO-UNDO.
    DEF VAR lcTableName  AS CHAR   NO-UNDO.
    DEF VAR llCheckOld   AS LOG    NO-UNDO.
-   DEF VAR lcMSCID      AS CHAR   NO-UNDO.
 
    DEF BUFFER bPostDouble FOR MobCDR.
    DEF BUFFER bPreDouble  FOR PrepCDR.
@@ -177,7 +176,8 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
                   bPreDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CCGW_CDR} AND
                   bPreDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_DATA_CDR} AND
                   RECID(bPreDouble) NE irChecked:
-            IF bPreDouble.MSCID = "PRE" THEN DO:
+            IF bPreDouble.MSCID = "PRE" AND
+               bPreDouble.EventType = "GPRS" THEN DO:
                IF icCaller = "rerate" AND ttCall.Apn = "" THEN
                   ttCall.Apn = fGetMcdrDtlValue(ttCall.Datest,
                                                 ttCall.Dtlseq,
@@ -198,12 +198,10 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
    THEN DO:
       IF ttCall.PPFlag = 0 THEN ASSIGN
          lcOldDb     = "OldMCDR"
-         lcTableName = "MobCDR"
-         lcMSCID     = "POSTD".
+         lcTableName = "MobCDR".
       ELSE ASSIGN
          lcOldDb     = "OldPrepCDR"
-         lcTableName = "PrepCDR"
-         lcMSCID     = "PRE".
+         lcTableName = "PrepCDR".
 
       IF CONNECTED(lcOldDb) THEN llCheckOld = TRUE.
 
@@ -241,12 +239,14 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
                                                ttCall.Dtlseq,
                                                "Call identification number").
 
-         IF ttCall.MSCID = lcMSCID AND
-            icCaller = "rerate" AND
-            ttCall.Apn = "" THEN
-            ttCall.Apn = fGetMcdrDtlValue(ttCall.Datest,
-                                          ttCall.Dtlseq,
-                                          "Access point name NI").
+         IF ((ttCall.PPFlag EQ 0 AND ttCall.MSCID EQ "POSTD") OR
+             (ttCall NE 0 AND ttCall.MSCID EQ "PRE" AND
+              ttCall.EventType EQ "GPRS")) AND
+              icCaller = "rerate" AND
+              ttCall.Apn = "" THEN
+              ttCall.Apn = fGetMcdrDtlValue(ttCall.Datest,
+                                            ttCall.Dtlseq,
+                                            "Access point name NI").
 
          RUN olddb_double_check.p(ttCall.CLI,
                                   ttCall.DateSt,
