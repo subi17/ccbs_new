@@ -157,7 +157,8 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
          liRequest = fFullCreditNote(Invoice.InvNum,
                                 STRING(SubInvoice.SubInvNum),
                                 "InvRow=" + STRING(InvRow.InvRowNum) + "|" +
-                                "InvRowAmt=" + STRING(ideAmount),
+                                "InvRowAmt=" + 
+                                   REPLACE(STRING(ideAmount),",","."),
                                 "Correct", /*reason group*/
                                 "2013", /*reason*/
                                 "", /*reason note*/
