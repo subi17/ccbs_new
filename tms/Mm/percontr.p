@@ -330,6 +330,9 @@ PROCEDURE pContractActivation:
    DEF VAR ldeResidualFeeDisc AS DEC NO-UNDO. 
    DEF VAR ldaResidualFee AS DATE NO-UNDO.
    DEF VAR llQ25CreditNote AS LOG NO-UNDO. 
+   DEF VAR lcSubInvNums    AS CHAR NO-UNDO.
+   DEF VAR lcInvRowDetails AS CHAR NO-UNDO.
+   DEF VAR ldeTotalRowAmt  AS DEC NO-UNDO.
                     
    /* DSS related variables */
    DEF VAR lcResult      AS CHAR NO-UNDO.
@@ -1076,33 +1079,53 @@ PROCEDURE pContractActivation:
               EACH InvRow NO-LOCK WHERE
                    InvRow.InvNum = Invoice.InvNum AND
                    InvRow.SubInvNum = SubInvoice.SubInvNum AND
-                   InvRow.BillCode = bQ25SingleFee.BillCode AND
-                   InvRow.CreditInvNum = 0 AND
-                   InvRow.Amt >= bQ25SingleFee.Amt:
+                  (InvRow.BillCode = bQ25SingleFee.BillCode OR
+                   InvRow.BillCode = "RVTERMDTRW") AND
+                   InvRow.CreditInvNum = 0:
+
+            IF InvRow.BillCode = bQ25SingleFee.BillCode AND
+               InvRow.Amt < bQ25SingleFee.Amt THEN NEXT.
             
             IF InvRow.OrderId > 0 AND
                bQ25SingleFee.OrderID > 0 AND
                InvRow.OrderId NE bQ25SingleFee.OrderId THEN NEXT.
-         
-            liRequest = fFullCreditNote(Invoice.InvNum,
-                                    STRING(SubInvoice.SubInvNum),
-                                    "InvRow=" + STRING(InvRow.InvRowNum) + "|" +
-                                    "InvRowAmt=" + STRING(MIN(InvRow.Amt,
-                                                       bQ25SingleFee.Amt)),
-                                    "Correct",
-                                    "2013",
-                                    "",
-                                    OUTPUT lcError).
-            LEAVE.
-         END.
             
-         IF liRequest = 0 THEN
+            ASSIGN lcSubInvNums    = lcSubInvNums + "," + STRING(SubInvoice.SubInvNum) WHEN
+                                     LOOKUP(STRING(SubInvoice.SubInvNum), lcSubInvNums) = 0    
+                   lcInvRowDetails = lcInvRowDetails + "," +
+                                     "InvRow="       + STRING(InvRow.InvRowNum) + "|" +
+                                     "InvRowAmt="    + STRING(InvRow.Amt)
+                   ldeTotalRowAmt  = ldeTotalRowAmt + InvRow.Amt.
+
+         END.
+
+         ASSIGN lcSubInvNums    = TRIM(lcSubInvNums,",")
+                lcInvRowDetails = TRIM(lcInvRowDetails,",").
+
+         IF lcSubInvNums = "" OR ldeTotalRowAmt < 0 THEN
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                              "MobSub",
                              STRING(MsRequest.MsSeq),
                              MsRequest.Custnum,
                              "CREDIT NOTE CREATION FAILED",
-                             "ERROR:" + lcError). 
+                             "ERROR:Invoice is already credited").
+         ELSE DO:
+            liRequest = fFullCreditNote(Invoice.InvNum,
+                                        lcSubInvNums,
+                                        lcInvRowDetails,
+                                        "Correct",
+                                        "2013",
+                                        "",
+                                        OUTPUT lcError).
+               
+            IF liRequest = 0 THEN
+               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                "MobSub",
+                                STRING(MsRequest.MsSeq),
+                                MsRequest.Custnum,
+                                "CREDIT NOTE CREATION FAILED",
+                                "ERROR:" + lcError). 
+         END.
       END. 
       ELSE IF lcDCEvent EQ "RVTERM12" AND
          ldeResidualFeeDisc > 0 THEN DO:

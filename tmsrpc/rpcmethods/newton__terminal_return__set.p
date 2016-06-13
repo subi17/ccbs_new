@@ -73,7 +73,10 @@ DEF VAR lcOrigKatun      AS CHAR   NO-UNDO.
 DEF VAR lcReturnChannel  AS CHAR   NO-UNDO.
 DEF VAR llTermAccepted   AS LOG    NO-UNDO.
 DEF VAR llCreateMemo     AS LOG    NO-UNDO.
-DEF VAR lcError          AS CHAR NO-UNDO.
+DEF VAR lcError          AS CHAR   NO-UNDO.
+DEF VAR lcSubInvNums     AS CHAR   NO-UNDO.
+DEF VAR lcInvRowDetails  AS CHAR   NO-UNDO.
+DEF VAR ldeTotalRowAmt   AS DEC    NO-UNDO.
 
 DEF VAR pcQ25Struct       AS CHARACTER NO-UNDO. /* Quota 25 input struct */
 DEF VAR lcQ25Struct       AS CHARACTER NO-UNDO.
@@ -284,29 +287,48 @@ IF (llDeviceStart AND llDeviceScreen) OR
            EACH InvRow NO-LOCK WHERE
                 InvRow.InvNum = Invoice.InvNum AND
                 InvRow.SubInvNum = SubInvoice.SubInvNum AND
-                InvRow.BillCode = SingleFee.BillCode AND
-                InvRow.CreditInvNum = 0 AND
-                InvRow.Amt >= SingleFee.Amt:
+               (InvRow.BillCode = SingleFee.BillCode OR
+                InvRow.BillCode = "RVTERMDTRW") AND
+                InvRow.CreditInvNum = 0:
          
+         IF InvRow.BillCode = SingleFee.BillCode AND
+            InvRow.Amt < SingleFee.Amt THEN NEXT.
+
          IF InvRow.OrderId > 0 AND
             SingleFee.OrderID > 0 AND
             InvRow.OrderId NE SingleFee.OrderId THEN NEXT.
-      
-         liRequest = fFullCreditNote(Invoice.InvNum,
-                                 STRING(SubInvoice.SubInvNum),
-                                 "InvRow="    + STRING(InvRow.InvRowNum) + "|" +
-                                 "InvRowAmt=" + STRING(MIN(InvRow.Amt,
-                                                   SingleFee.Amt)),
-                                 "Correct",
-                                 "2013",
-                                 "",
-                                 OUTPUT lcError).
-         LEAVE.
+         
+         ASSIGN lcSubInvNums    = lcSubInvNums + "," + STRING(SubInvoice.SubInvNum) WHEN
+                                  LOOKUP(STRING(SubInvoice.SubInvNum), lcSubInvNums) = 0    
+                lcInvRowDetails = lcInvRowDetails + "," +
+                                  "InvRow="       + STRING(InvRow.InvRowNum) + "|" +
+                                  "InvRowAmt="    + STRING(InvRow.Amt)
+                ldeTotalRowAmt  = ldeTotalRowAmt + InvRow.Amt.
+
       END.
 
-      IF liRequest = 0 THEN
-         RETURN appl_err("ERROR:Credit Note Creation Failed; " + lcError).
+      ASSIGN lcSubInvNums    = TRIM(lcSubInvNums,",")
+             lcInvRowDetails = TRIM(lcInvRowDetails,",").
 
+      IF lcSubInvNums = "" OR ldeTotalRowAmt < 0 THEN
+            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                             "MobSub",
+                             STRING(MsRequest.MsSeq),
+                             MsRequest.Custnum,
+                             "CREDIT NOTE CREATION FAILED",
+                             "ERROR:Invoice is already credited").
+      ELSE DO:
+         liRequest = fFullCreditNote(Invoice.InvNum,
+                                     lcSubInvNums,
+                                     lcInvRowDetails,
+                                     "Correct",
+                                     "2013",
+                                     "",
+                                     OUTPUT lcError).
+
+         IF liRequest = 0 THEN
+            RETURN appl_err("ERROR:Credit Note Creation Failed; " + lcError).
+      END.
    END.
    ELSE DO:
       liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
