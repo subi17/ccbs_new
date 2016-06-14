@@ -163,34 +163,32 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
                IF llDouble THEN LEAVE.
             END. /* FOR EACH bPostDouble USE-INDEX CLI WHERE */
       END. /* IF ttCall.PPFlag = 0 THEN DO: */
-      ELSE IF ttCall.MSCID = "PRE" AND
-              ttCall.EventType = "GPRS" THEN
-         FOR EACH bPreDouble USE-INDEX CLI WHERE
-                  bPreDouble.CLI       = ttCall.CLI AND
-                  bPreDouble.DateSt    = ttCall.DateSt AND
-                  bPreDouble.TimeStart = ttCall.TimeStart AND
-                  bPreDouble.BillDur   = ttCall.BillDur AND
-                  bPreDouble.GsmBnr    = ttCall.GsmBnr AND
-                  bPreDouble.SpoCMT    = ttCall.SpoCMT AND
-                  bPreDouble.CCharge   = ttCall.CCharge AND
-                  bPreDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CALL} AND
-                  bPreDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CCGW_CDR} AND
-                  bPreDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_DATA_CDR} AND
-                  RECID(bPreDouble) NE irChecked:
-            IF bPreDouble.MSCID = "PRE" AND
-               bPreDouble.EventType = "GPRS" THEN DO:
-               IF icCaller = "rerate" AND ttCall.Apn = "" THEN
-                  ttCall.Apn = fGetMcdrDtlValue(ttCall.Datest,
-                                                ttCall.Dtlseq,
-                                                "Access point name NI").
-               IF ttCall.Apn = fGetMcdrDtlValue(bPreDouble.Datest,
-                                                bPreDouble.Dtlseq,
-                                                "Access point name NI")
-                  THEN llDouble = TRUE.
-            END.
-            ELSE llDouble = TRUE.
-            IF llDouble THEN LEAVE.
-         END. /* FOR EACH bPreDouble USE-INDEX CLI WHERE */
+      ELSE FOR EACH bPreDouble USE-INDEX CLI WHERE
+                    bPreDouble.CLI       = ttCall.CLI AND
+                    bPreDouble.DateSt    = ttCall.DateSt AND
+                    bPreDouble.TimeStart = ttCall.TimeStart AND
+                    bPreDouble.BillDur   = ttCall.BillDur AND
+                    bPreDouble.GsmBnr    = ttCall.GsmBnr AND
+                    bPreDouble.SpoCMT    = ttCall.SpoCMT AND
+                    bPreDouble.CCharge   = ttCall.CCharge AND
+                    bPreDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CALL} AND
+                    bPreDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CCGW_CDR} AND
+                    bPreDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_DATA_CDR} AND
+                    RECID(bPreDouble) NE irChecked:
+         IF bPreDouble.MSCID = "PRE" AND bPreDouble.EventType = "GPRS" AND
+            ttCall.MSCID = "PRE" AND ttCall.EventType = "GPRS" THEN DO:
+            IF icCaller = "rerate" AND ttCall.Apn = "" THEN
+               ttCall.Apn = fGetMcdrDtlValue(ttCall.Datest,
+                                             ttCall.Dtlseq,
+                                             "Access point name NI").
+            IF ttCall.Apn = fGetMcdrDtlValue(bPreDouble.Datest,
+                                             bPreDouble.Dtlseq,
+                                             "Access point name NI")
+               THEN llDouble = TRUE.
+         END.
+         ELSE llDouble = TRUE.
+         IF llDouble THEN LEAVE.
+      END. /* ELSE FOR EACH bPreDouble USE-INDEX CLI WHERE */
    END. /* ELSE DO: */
 
    /* check from old dbs also */
