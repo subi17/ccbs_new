@@ -251,17 +251,11 @@ PROCEDURE pPeriodicalContract:
       IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 AND
          icSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} THEN DO:
          
-         FOR FIRST bBundleRequest NO-LOCK USE-INDEX OrigRequest WHERE
-                   bBundleRequest.OrigRequest = iiMsRequest AND
-                   bBundleRequest.ReqType = {&REQTYPE_BUNDLE}:
-            lcWaitFor = ":wait" + STRING(bBundleRequest.MsRequest).
-         END.
-         
-         IF lcWaitFor = "" THEN 
          FOR EACH bBundleRequest NO-LOCK USE-INDEX OrigRequest WHERE
                   bBundleRequest.OrigRequest = iiMsRequest AND
-                  bBundleRequest.ReqType =
-                             {&REQTYPE_CONTRACT_ACTIVATION},
+                  bBundleRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} AND
+               LOOKUP(STRING(bBundleRequest.ReqStatus),
+                  {&REQ_INACTIVE_STATUSES}) = 0,
             FIRST bBundleContract NO-LOCK USE-INDEX DCEvent WHERE
                   bBundleContract.Brand = gcBrand AND
                   bBundleContract.DCEvent = bBundleRequest.ReqCParam3 AND

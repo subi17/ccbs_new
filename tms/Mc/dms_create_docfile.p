@@ -649,7 +649,6 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    DEF VAR lcContractID    AS CHAR NO-UNDO.
    DEF VAR lcStatusCode    AS CHAR NO-UNDO.
    DEF VAR lcDocList       AS CHAR NO-UNDO.
-   DEF VAR lcCreateDMS     AS CHAR NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
    DEF VAR lcBank AS CHAR NO-UNDO.
@@ -705,18 +704,8 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
    OUTPUT STREAM sOutFile CLOSE.
-   lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
-                            lcCaseTypeID,
-                            Order.ContractID,
-                            {&DMS_HOST_TABLE_ORDER},
-                            Order.OrderId,
-                            lcInitStatus,/*StatusCode*/
-                            lcDMSStatusDesc,
-                            Order.StatusCode,
-                            0,
-                            lcDocListEntries /*DocList*/,
-                            {&DMS_DOCLIST_SEP}).
-   fLogLine(lcCaseFileRow,lcCreateDMS).                         
+
+   fLogLine(lcCaseFileRow, "").     
    RETURN "".                         
 END.   
 
@@ -1057,7 +1046,6 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
    DEF VAR lcTariff AS CHAR NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCaseTypeId AS CHAR NO-UNDO.
-   DEF VAR lcCreateDMS     AS CHAR NO-UNDO.
    DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
    DEF VAR ldeMonthlyFee  AS DECIMAL NO-UNDO.
    DEF VAR liMonths AS INT NO-UNDO.
@@ -1253,18 +1241,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
       PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
       OUTPUT STREAM sOutFile CLOSE.
 
-      lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
-                               lcCaseTypeID,
-                               MsRequest.ReqCparam6,
-                               {&DMS_HOST_TABLE_MSREQ},
-                               MsRequest.MsRequest,
-                               lcInitStatus,/*StatusCode*/
-                               lcDMSStatusDesc,
-                               "",
-                               0,
-                               lcDocListEntries /*DocList*/,
-                               {&DMS_DOCLIST_SEP}).      
-      fLogLine(lcCaseFileRow,lcCreateDMS).
+      fLogLine(lcCaseFileRow, "").
    END.
    RETURN "".
 
@@ -1274,7 +1251,6 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    (iiOrderId AS INT):
    DEF VAR lcCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcStatusDesc    AS CHAR NO-UNDO.
-   DEF VAR lcCreateDMS     AS CHAR NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
 
@@ -1315,18 +1291,7 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
    OUTPUT STREAM sOutFile CLOSE.
 
-   lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
-                            lcCaseTypeID,
-                            Order.ContractID,
-                            {&DMS_HOST_TABLE_ORDER},
-                            Order.OrderId,
-                            lcInitStatus,/*StatusCode*/
-                            lcDMSStatusDesc,
-                            Order.StatusCode,
-                            0,
-                            lcDocListEntries /*DocList*/,
-                            {&DMS_DOCLIST_SEP}).
-   fLogLine(lcCaseFileRow,lcCreateDMS).
+   fLogLine(lcCaseFileRow, "").
    RETURN "".
 
 END.
@@ -1336,7 +1301,6 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
     iiMsRequest AS INT):
    DEF VAR lcCaseTypeID    AS CHAR NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
-   DEF VAR lcCreateDMS     AS CHAR NO-UNDO.
    DEF VAR ldeCancellationTime AS DECIMAL NO-UNDO.
    DEF VAR lcCancellationType AS CHAR NO-UNDO.
    DEF VAR lcPrevStatus AS CHAR NO-UNDO.
@@ -1389,18 +1353,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
    OUTPUT STREAM sOutFile CLOSE.
 
-   lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
-                            lcCaseTypeID,
-                            Order.ContractID,
-                            {&DMS_HOST_TABLE_ORDER},
-                            Order.OrderId,
-                            lcInitStatus,/*StatusCode*/
-                            lcDMSStatusDesc,
-                            Order.StatusCode,
-                            0,
-                            lcDocListEntries /*DocList*/,
-                            {&DMS_DOCLIST_SEP}).
-   fLogLine(lcCaseFileRow,lcCreateDMS).
+   fLogLine(lcCaseFileRow, "").
    RETURN "".
 
 END.
@@ -1412,7 +1365,6 @@ FUNCTION fCreateDocumentCase9  RETURNS CHAR
    DEF VAR lcCasefileRow  AS CHAR NO-UNDO.   
    DEF VAR lcCaseTypeId   AS CHAR NO-UNDO.
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
-   DEF VAR lcCreateDMS AS CHAR NO-UNDO.
 
    FOR EACH TermReturn NO-LOCK WHERE
            (TermReturn.ReturnTS < idEndTS AND
@@ -1441,18 +1393,7 @@ FUNCTION fCreateDocumentCase9  RETURNS CHAR
       PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
       OUTPUT STREAM sOutFile CLOSE.
 
-      lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
-                               lcCaseTypeID,
-                               TermReturn.ContractID,
-                               {&DMS_HOST_TABLE_ORDER},
-                               TermReturn.OrderId,
-                               lcInitStatus,/*StatusCode*/
-                               lcDMSStatusDesc,
-                               "",
-                               0,
-                               lcDocListEntries /*DocList*/,
-                               {&DMS_DOCLIST_SEP}).
-      fLogLine(lcCaseFileRow,lcCreateDMS).
+      fLogLine(lcCaseFileRow, "").
    END.
    RETURN "".  
 END.
@@ -1462,7 +1403,6 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
     idEndTS AS DECIMAL):
    DEF VAR lcDocListEntries AS CHAR NO-UNDO.
    DEF VAR lcCaseTypeId     AS CHAR NO-UNDO.
-   DEF VAR lcCreateDMS      AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow    AS CHAR NO-UNDO.
    DEF VAR lcStatuses AS CHAR NO-UNDO.
 
@@ -1503,18 +1443,7 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
          PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
          OUTPUT STREAM sOutFile CLOSE.
 
-         lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
-                                  lcCaseTypeID,
-                                  MsRequest.ReqCparam4,
-                                  {&DMS_HOST_TABLE_MSREQ},
-                                  MsRequest.MsRequest,
-                                  lcInitStatus,/*StatusCode*/
-                                  lcDMSStatusDesc,
-                                  "",
-                                  0,
-                                  lcDocListEntries /*DocList*/,
-                                  {&DMS_DOCLIST_SEP}).            
-        fLogLine(lcCaseFileRow,lcCreateDMS).
+        fLogLine(lcCaseFileRow, "").
 
       END.
    END.

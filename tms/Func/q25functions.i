@@ -237,13 +237,6 @@ FUNCTION fgetQ25SMSMessage RETURNS CHARACTER (INPUT iiPhase AS INT,
                                    TODAY, 1, OUTPUT ldReqStamp)
          lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT", lcAmount).
    END.
-   ELSE IF iiPhase = {&Q25_MONTH_24_CHOSEN} THEN DO:
-   /* Q25 Month 24 20th day extension made */  
-      ASSIGN
-         lcSMSMessage = fGetSMSTxt("Q25FinalFeeMsgChosenExt",
-                                   TODAY, 1, OUTPUT ldReqStamp)
-         lcSMSMessage = REPLACE(lcSMSMessage,"#PAYMENT", lcAmount).
-   END.
    IF iiPhase < {&Q25_MONTH_24_FINAL_MSG} THEN DO:
    /* Month 22-24 */
       ASSIGN
@@ -657,32 +650,21 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
       ELSE DO:
          liLogType = {&Q25_LOGGING_DETAILED}.
          /* Some logging about SMSs to be send. */
-         IF iiphase = {&Q25_MONTH_24_CHOSEN} THEN DO:
-            /* Q25 Month 24 20th day extension made, write only internal log */
-            
-            IF (iiExecType NE {&Q25_EXEC_TYPE_CUST_LOG_GENERATION}) THEN DO:
-               lcLogText = "Send SMS Q25 Chosen: " +
-                        STRING(iiphase) + "|" + STRING(MobSub.CLI) + "|" + 
-                        STRING(MobSub.MsSeq).
-            END.
+         lcTemplateName = fgetTemplateName(iiphase).  
+         IF (iiExecType EQ {&Q25_EXEC_TYPE_CUST_LOG_GENERATION}) AND
+            lcTemplateName BEGINS "Q25" THEN DO:
+         ASSIGN   
+            lcLogText = MobSub.CLI + ";" + 
+                        STRING(ldaExecuteDate,"99/99/9999") + ";" +
+                        lcTemplateName
+            liLogType = {&Q25_LOGGING_CUST_LOGS}.
          END.
          ELSE DO:
-            lcTemplateName = fgetTemplateName(iiphase).  
-            IF (iiExecType EQ {&Q25_EXEC_TYPE_CUST_LOG_GENERATION}) AND
-               lcTemplateName BEGINS "Q25" THEN DO:
-            ASSIGN   
-               lcLogText = MobSub.CLI + ";" + 
-                           STRING(ldaExecuteDate,"99/99/9999") + ";" +
-                           lcTemplateName
-               liLogType = {&Q25_LOGGING_CUST_LOGS}.
-            END.
-            ELSE DO:
-               lcLogText = "Send SMS: " +
-                           STRING(iiphase) + "|" + STRING(MobSub.CLI) + "|" +
-                           STRING(MobSub.MsSeq) + "|" +
-                           STRING(SingleFee.Amt) + "|" + lcTemplateName.
-            END.
-         END.   
+            lcLogText = "Send SMS: " +
+                        STRING(iiphase) + "|" + STRING(MobSub.CLI) + "|" +
+                        STRING(MobSub.MsSeq) + "|" +
+                        STRING(SingleFee.Amt) + "|" + lcTemplateName.
+         END.
          fQ25LogWriting(lcLogText, liLogType, iiphase,
                         iiExecType).
       END.

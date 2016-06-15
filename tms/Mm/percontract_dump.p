@@ -529,4 +529,4 @@ PROCEDURE pCountTotSumofRVTERM:
             FFItem.FFNum = FixedFee.FFNum:
       ttContract.Amount = ttContract.Amount + FFItem.Amt.
    END.
-END PROCEDURE
+END PROCEDURE.

@@ -25,7 +25,8 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 resp_array = add_array(response_toplevel_id, "").
 
 FOR EACH MNPOperator WHERE
-         MNPOperator.Brand EQ gcBrand NO-LOCK:
+         MNPOperator.Brand EQ gcBrand AND 
+         MNPOperator.Active NE ? NO-LOCK:
    resp_struct = add_struct(resp_array, "").
    add_string(resp_struct, "name", MNPOperator.OperName).
    add_string(resp_struct, "code", MNPOperator.OperCode).

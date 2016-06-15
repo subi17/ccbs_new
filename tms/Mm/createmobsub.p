@@ -500,7 +500,7 @@ IF Order.Offer > "" THEN
    RUN Mc/offeritem_exec.p (MobSub.MsSeq,
                        Order.OrderID,
                        MsRequest.MsRequest,
-                       "1").
+                       {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}).
 
 /* activate periodical contracts, service packages etc. */
 RUN Mm/requestaction_exec.p (MsRequest.MsRequest,
@@ -509,14 +509,14 @@ RUN Mm/requestaction_exec.p (MsRequest.MsRequest,
                           MobSub.ActivationTS,
                           MobSub.ActivationTS,
                           TRUE,                   /* create fees */
-                          "1",                    /* req.source */
+                          {&REQUEST_SOURCE_SUBSCRIPTION_CREATION},
                           {&REQUEST_ACTIONLIST_ALL}).
 
 /* per.contract and service package created with the order */
-RUN Mm/orderaction_exec (MobSub.MsSeq,
+RUN Mm/orderaction_exec.p (MobSub.MsSeq,
                       Order.OrderID,
                       MsRequest.MsRequest,
-                      "1").
+                      {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}).
 
 /* Add postpaid subs. to DSS group if DSS group is active or ongoing DSS */
 IF NOT MobSub.PayType THEN DO:

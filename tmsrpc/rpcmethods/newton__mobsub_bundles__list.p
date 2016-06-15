@@ -28,6 +28,7 @@ DEF VAR lcAllowedBONOContracts   AS CHAR NO-UNDO.
 DEF VAR lcBONOContracts          AS CHAR NO-UNDO.
 DEF VAR lcIPLContracts           AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType    AS CHAR NO-UNDO.
+DEF VAR lcDayCampBundleUpsells AS CHAR NO-UNDO. 
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
@@ -119,6 +120,12 @@ IF MobSub.CliType EQ "CONT15" AND
       "VOICE100") > "" THEN
    add_string(lcResultArray,"", "VOICE100|" + STRING(Mobsub.MsSeq)).
 
+IF MobSub.CliType EQ "CONT9" AND
+   fGetCurrentSpecificBundle(
+      MobSub.MsSeq,
+      "FREE100MINUTES") > "" THEN
+   add_string(lcResultArray,"", "FREE100MINUTES|" + STRING(Mobsub.MsSeq)).
+
 /* if subscription doesn't have a BONO bundle then return the list of 
    bundles that can be activated */
 FOR EACH DayCampaign NO-LOCK WHERE 
@@ -138,11 +145,14 @@ FOR EACH DayCampaign NO-LOCK WHERE
    
    add_string(lcResultArray,"", DayCampaign.DCEvent + "|" + STRING(Mobsub.MsSeq) ).
    DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
-      add_string(lcResultArray,"",
-                 ENTRY(liUpsellCount,DayCampaign.BundleUpsell)
-                 + "|" + STRING(Mobsub.MsSeq)).
-   END.
+      IF LOOKUP(ENTRY(liUpsellCount,DayCampaign.BundleUpsell),lcDayCampBundleUpsells) = 0 THEN DO:
+      lcDayCampBundleUpsells = TRIM(lcDayCampBundleUpsells + "," + DayCampaign.BundleUpsell,",").
 
+         add_string(lcResultArray,"", 
+                    ENTRY(liUpsellCount,DayCampaign.BundleUpsell) 
+                    + "|" + STRING(Mobsub.MsSeq)).
+      END.
+   END.
 END.
 
 
