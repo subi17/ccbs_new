@@ -622,7 +622,17 @@ PROCEDURE pUseOffer:
                     OrderAction.OrderId  = Order.OrderId AND
                     OrderAction.ItemType = "SIMType" NO-LOCK NO-ERROR.
          IF AVAIL OrderAction THEN DO:
-            lcSIMBillItem = fGetSIMBillItem(OrderAction.ItemKey,Order.PayType).
+            RELEASE Sim.
+            IF Order.icc > "" THEN DO:
+               FIND FIRST Sim WHERE
+                          Sim.icc EQ order.icc NO-LOCK NO-ERROR.
+            END.
+            IF AVAIL Sim THEN
+               lcSIMBillItem = fGetSIMBillItem(Sim.SimArt,
+                                               Order.PayType).
+            ELSE
+               lcSIMBillItem = fGetSIMBillItem(OrderAction.ItemKey,
+                                               Order.PayType).
             IF lcSIMBillItem > "" THEN
                RUN pSingleFee(lcSIMBillItem,
                               0.0,
