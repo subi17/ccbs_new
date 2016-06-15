@@ -2053,6 +2053,9 @@ PROCEDURE pGetPicture:
             lcResult = "images/img-micro-sim.jpg". /* only Micro SIM ordered */
          ELSE IF OrderAction.ItemKey EQ "nano" THEN
             lcResult = "images/img-nano-sim.jpg". /* only Nano SIM ordered */
+         ELSE IF OrderAction.ItemKey EQ "universal" THEN
+            lcResult = "images/img-universal-sim.jpg". /* only universal 
+                                                          SIM ordered */
       END.
 	  ELSE lcResult = "images/img-mini-sim.jpg". /* otherwise return picture of normal SIM card (unknown case) */
    END.
