@@ -151,6 +151,21 @@ FUNCTION fGetFixedFeeOrderId RETURNS CHARACTER
     
 END FUNCTION.
 
+FUNCTION fGetDueDate RETURNS DATE
+    (INPUT ldtBankDate AS DATE):
+
+   DEF VAR ldtDueDate AS DATE NO-UNDO.
+
+   IF DAY(ldtBankDate) < 6 THEN 
+      ldtDueDate = DATE(MONTH(ldtBankDate), 6, YEAR(ldtBankDate)).
+   ELSE IF MONTH(TODAY) = 12 THEN 
+      ldtDueDate = DATE(1,6,YEAR(ldtBankDate) + 1).
+   ELSE ldtDueDate = DATE(MONTH(ldtBankDate) + 1, 6, YEAR(ldtBankDate)).
+
+   RETURN ldtDueDate.
+
+END FUNCTION.    
+
 /******* MAIN start *********/
 
 FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
@@ -225,6 +240,7 @@ DEFINE TEMP-TABLE ttInstallment NO-UNDO
    FIELD Amount  AS DEC
    FIELD Items   AS INT
    FIELD OperDate AS DATE
+   FIELD DueDate  AS DATE
    FIELD Renewal AS CHAR
    FIELD BankCode AS CHAR
    FIELD ResidualAmount AS DEC
@@ -295,7 +311,9 @@ FOR EACH ttInstallment:
       (IF ttInstallment.OperCode EQ "B" THEN ""
        ELSE STRING(ttInstallment.Items)) lcDelimiter    /*  6: number_items */
       fDate2String(ttInstallment.OperDate) lcDelimiter  /*  7: operation_date */
-      fDate2String(ldaDueDate) lcDelimiter              /*  8: due_date */
+      (IF ttInstallment.DueDate NE ? THEN 
+         fDate2String(ttInstallment.DueDate)
+       ELSE fDate2String(ldaDueDate)) lcDelimiter       /*  8: due_date */
       ttInstallment.Renewal lcDelimiter                 /*  9 payterm_type */ /* YDR-426 */
       ttInstallment.BankCode lcDelimiter                /*  10 bank_code for financed by bank */
       ttInstallment.ResidualAmount lcDelimiter          /*  11 residual_amount */
@@ -327,7 +345,9 @@ FOR EACH ttInstallment:
          (IF ttInstallment.OperCode EQ "B" THEN ""
           ELSE STRING(ttInstallment.Items)) lcDelimiter    /*  6: number_items */
          fDate2String(ttInstallment.OperDate) lcDelimiter  /*  7: operation_date */
-         fDate2String(ldaDueDate) lcDelimiter              /*  8: due_date */
+         (IF ttInstallment.DueDate NE ? THEN
+            fDate2String(ttInstallment.DueDate)
+          ELSE fDate2String(ldaDueDate)) lcDelimiter              /*  8: due_date */
          ttInstallment.Renewal lcDelimiter                 /*  9 payterm_type */ /* YDR-426 */
          ttInstallment.BankCode lcDelimiter                /*  10 bank_code for financed by bank */
          ttInstallment.ResidualAmount lcDelimiter          /*  11 residual_amount */
@@ -366,7 +386,7 @@ PROCEDURE pCollectActivations:
    DEF VAR lcChannel AS CHAR NO-UNDO. 
    DEF VAR lgMsRequest AS LOG NO-UNDO.
    DEF VAR ldResidual  AS DEC NO-UNDO. 
-
+ 
    FF_LOOP:
    FOR EACH FixedFee NO-LOCK WHERE
             FixedFee.IFSStatus = {&IFS_STATUS_WAITING_SENDING}:
@@ -412,8 +432,12 @@ PROCEDURE pCollectActivations:
       llFinancedByBank = (LOOKUP(FixedFee.FinancedResult,
                           {&TF_STATUSES_BANK}) > 0).
 
-
       lcChannel = fGetChannel(BUFFER FixedFee, OUTPUT lcOrderType).
+
+      FIND FIRST FixedFeeTF NO-LOCK WHERE
+                 FixedFeeTF.FFNum = FixedFee.FFNum NO-ERROR.
+
+      IF NOT AVAIL FixedFeeTF THEN NEXT.
 
       CREATE ttInstallment.
       ASSIGN
@@ -426,7 +450,8 @@ PROCEDURE pCollectActivations:
          ttInstallment.MsSeq   = INT(FixedFee.KeyValue)
          ttInstallment.Amount  = FixedFee.Amt
          ttInstallment.Items   = liBatches
-         ttInstallment.OperDate = FixedFee.Begdate
+         ttInstallment.OperDate = FixedFeeTF.BankDate
+         ttInstallment.DueDate  = fGetDueDate(FixedFeeTF.BankDate)
          ttInstallment.Renewal = lcOrderType
          ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
          ttInstallment.ResidualAmount = ldResidual
@@ -463,7 +488,6 @@ PROCEDURE pCollectACC:
    DEFINE VARIABLE liBatches AS INTEGER NO-UNDO. 
    DEFINE VARIABLE ldeAmount AS DECIMAL NO-UNDO. 
    DEF BUFFER bmsowner FOR msowner.
-   DEF VAR ldFeeEndDate     AS DATE NO-UNDO.
    DEF VAR llFinancedByBank AS LOG  NO-UNDO. 
    DEF VAR liFFItemQty      AS INT  NO-UNDO.
    DEF VAR ldaFFLastMonth   AS DATE NO-UNDO. 
@@ -612,12 +636,7 @@ PROCEDURE pCollectACC:
                       ldeAmount   = liFFItemQty * FixedFee.Amt.
             END.
 
-           ASSIGN
-              ldFeeEndDate = DATE(FixedFee.EndPeriod MOD 100,
-                             1,
-                             INT(FixedFee.EndPeriod / 100))
-              ldFeeEndDate = fLastDayOfMonth(ldFeeEndDate)
-              llFinancedByBank = (LOOKUP(FixedFee.FinancedResult,
+            llFinancedByBank = (LOOKUP(FixedFee.FinancedResult,
                                   {&TF_STATUSES_BANK}) > 0).
 
            IF FixedFee.BillCode BEGINS "RVTERM" THEN DO:
@@ -626,7 +645,12 @@ PROCEDURE pCollectACC:
            ELSE DO:
               lcOperCode = IF llFinancedByBank THEN "D" ELSE "B".
            END.
+           
+           FIND FIRST FixedFeeTF NO-LOCK WHERE
+                      FixedFeeTF.FFNum = FixedFee.FFNum NO-ERROR.
 
+           IF NOT AVAIL FixedFeeTF THEN NEXT.
+           
            CREATE ttInstallment.
            ASSIGN
               ttInstallment.OperCode = lcOperCode
@@ -634,7 +658,8 @@ PROCEDURE pCollectACC:
               ttInstallment.MsSeq   = msowner.MsSeq
               ttInstallment.Amount  = (IF llFinancedByBank THEN FixedFee.Amt ELSE ldeAmount)
               ttInstallment.Items   = liFFItemQty
-              ttInstallment.OperDate = ldFeeEndDate 
+              ttInstallment.OperDate = FixedFeeTF.BankDate
+              ttInstallment.DueDate  = fGetDueDate(FixedFeeTF.BankDate)
               ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
               ttInstallment.ResidualAmount = ldResidual
               ttInstallment.Channel = ""
@@ -696,7 +721,12 @@ PROCEDURE pCollectACC:
             FOR EACH FFItem OF FixedFee NO-LOCK:
                liBatches = liBatches + 1.
             END.
-           
+
+            FIND FIRST FixedFeeTF NO-LOCK WHERE
+                       FixedFeeTF.FFNum = FixedFee.FFNum NO-ERROR.
+
+            IF NOT AVAIL FixedFeeTF THEN NEXT.
+        
             CREATE ttInstallment.
             ASSIGN
                ttInstallment.OperCode = IF FixedFee.BillCode BEGINS "RVTERM" 
@@ -706,7 +736,8 @@ PROCEDURE pCollectACC:
                ttInstallment.MsSeq   = MsRequest.MsSeq
                ttInstallment.Amount  = FixedFee.Amt
                ttInstallment.Items   = liBatches
-               ttInstallment.OperDate = FixedFee.BegDate
+               ttInstallment.OperDate = FixedFeeTF.BankDate
+               ttInstallment.DueDate  = fGetDueDate(FixedFeeTF.BankDate)
                ttInstallment.BankCode =  ""
                ttInstallment.ResidualAmount = ldResidual
                ttInstallment.Channel = fGetChannel(BUFFER FixedFee, OUTPUT lcOrderType)
@@ -740,7 +771,6 @@ PROCEDURE pCollectInstallmentContractChanges:
    DEF VAR ldFrom        AS DEC  NO-UNDO.
    DEF VAR ldTo          AS DEC  NO-UNDO.
    DEF VAR llFinancedByBank AS LOG NO-UNDO. 
-   DEF VAR ldFeeEndDate  AS DATE NO-UNDO.
    DEF VAR liFFItemQty   AS INT  NO-UNDO.
    DEF VAR lcOrderType AS CHAR NO-UNDO. 
    DEF VAR lcChannel AS CHAR NO-UNDO. 
@@ -897,17 +927,9 @@ PROCEDURE pCollectInstallmentContractChanges:
                    ldeAmount   = liFFItemQty * FixedFee.Amt.
          END.
 
-         ASSIGN
-            ldFeeEndDate = DATE(FixedFee.EndPeriod MOD 100,
-                                1,
-                                INT(FixedFee.EndPeriod / 100))
-            ldFeeEndDate = fLastDayOfMonth(ldFeeEndDate)
-            llFinancedByBank = (LOOKUP(FixedFee.FinancedResult,
+         llFinancedByBank = (LOOKUP(FixedFee.FinancedResult,
                                 {&TF_STATUSES_BANK}) > 0).
 
-        IF FixedFee.BegDate > ldFeeEndDate THEN 
-           fTS2Date(bTermRequest.DoneStamp, OUTPUT ldFeeEndDate).
-         
          IF FixedFee.BillCode EQ "PAYTERM" THEN DO:
 
             FIND FIRST SingleFee NO-LOCK WHERE
@@ -927,6 +949,11 @@ PROCEDURE pCollectInstallmentContractChanges:
          END.
          ELSE ldeResidualFee = 0.
 
+         FIND FIRST FixedFeeTF NO-LOCK WHERE
+                    FixedFeeTF.FFNum = FixedFee.FFNum NO-ERROR.
+
+         IF NOT AVAIL FixedFeeTF THEN NEXT.
+
          CREATE ttInstallment.
          ASSIGN
             ttInstallment.OperCode = (IF FixedFee.BillCode EQ "RVTERM" THEN "F"
@@ -935,7 +962,8 @@ PROCEDURE pCollectInstallmentContractChanges:
             ttInstallment.MsSeq   = MsRequest.MsSeq
             ttInstallment.Amount  = (IF llFinancedByBank THEN FixedFee.Amt ELSE ldeAmount)
             ttInstallment.Items   = (IF llFinancedByBank THEN liFFItemQty ELSE 0)
-            ttInstallment.OperDate = ldFeeEndDate
+            ttInstallment.OperDate = FixedFeeTF.BankDate
+            ttInstallment.DueDate  = fGetDueDate(FixedFeeTF.BankDate) 
             ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
             ttInstallment.ResidualAmount = ldeResidualFee
             ttInstallment.Channel = ""
@@ -989,6 +1017,11 @@ PROCEDURE pCollectInstallmentContractChanges:
          ELSE RELEASE SingleFee.
 
          lcChannel = fGetChannel(BUFFER FixedFee, OUTPUT lcOrderType).
+ 
+         FIND FIRST FixedFeeTF NO-LOCK WHERE
+                    FixedFeeTF.FFNum = FixedFee.FFNum NO-ERROR.
+
+         IF NOT AVAIL FixedFeeTF THEN NEXT.
 
          CREATE ttInstallment.
          ASSIGN
@@ -998,7 +1031,8 @@ PROCEDURE pCollectInstallmentContractChanges:
             ttInstallment.MsSeq   = INT(FixedFee.KeyValue)
             ttInstallment.Amount  = FixedFee.Amt
             ttInstallment.Items   = liBatches
-            ttInstallment.OperDate = FixedFee.Begdate
+            ttInstallment.OperDate = FixedFeeTF.BankDate
+            ttInstallment.DueDate  = fGetDueDate(FixedFeeTF.BankDate)
             ttInstallment.Renewal = lcOrderType
             ttInstallment.BankCode = ""
             ttInstallment.ResidualAmount = (IF AVAIL SingleFee
