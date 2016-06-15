@@ -28,6 +28,7 @@ DEF VAR lcAllowedBONOContracts   AS CHAR NO-UNDO.
 DEF VAR lcBONOContracts          AS CHAR NO-UNDO.
 DEF VAR lcIPLContracts           AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType    AS CHAR NO-UNDO.
+DEF VAR lcDayCampBundleUpsells AS CHAR NO-UNDO. 
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
@@ -144,11 +145,14 @@ FOR EACH DayCampaign NO-LOCK WHERE
    
    add_string(lcResultArray,"", DayCampaign.DCEvent + "|" + STRING(Mobsub.MsSeq) ).
    DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
-      add_string(lcResultArray,"",
-                 ENTRY(liUpsellCount,DayCampaign.BundleUpsell)
-                 + "|" + STRING(Mobsub.MsSeq)).
-   END.
+      IF LOOKUP(ENTRY(liUpsellCount,DayCampaign.BundleUpsell),lcDayCampBundleUpsells) = 0 THEN DO:
+      lcDayCampBundleUpsells = TRIM(lcDayCampBundleUpsells + "," + DayCampaign.BundleUpsell,",").
 
+         add_string(lcResultArray,"", 
+                    ENTRY(liUpsellCount,DayCampaign.BundleUpsell) 
+                    + "|" + STRING(Mobsub.MsSeq)).
+      END.
+   END.
 END.
 
 
