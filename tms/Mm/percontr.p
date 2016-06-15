@@ -330,6 +330,9 @@ PROCEDURE pContractActivation:
    DEF VAR ldeResidualFeeDisc AS DEC NO-UNDO. 
    DEF VAR ldaResidualFee AS DATE NO-UNDO.
    DEF VAR llQ25CreditNote AS LOG NO-UNDO. 
+   DEF VAR lcSubInvNums    AS CHAR NO-UNDO.
+   DEF VAR lcInvRowDetails AS CHAR NO-UNDO.
+   DEF VAR ldeTotalRowAmt  AS DEC NO-UNDO.
                     
    /* DSS related variables */
    DEF VAR lcResult      AS CHAR NO-UNDO.
@@ -1076,33 +1079,53 @@ PROCEDURE pContractActivation:
               EACH InvRow NO-LOCK WHERE
                    InvRow.InvNum = Invoice.InvNum AND
                    InvRow.SubInvNum = SubInvoice.SubInvNum AND
-                   InvRow.BillCode = bQ25SingleFee.BillCode AND
-                   InvRow.CreditInvNum = 0 AND
-                   InvRow.Amt >= bQ25SingleFee.Amt:
+                  (InvRow.BillCode = bQ25SingleFee.BillCode OR
+                   InvRow.BillCode = "RVTERMDTRW") AND
+                   InvRow.CreditInvNum = 0:
+
+            IF InvRow.BillCode = bQ25SingleFee.BillCode AND
+               InvRow.Amt < bQ25SingleFee.Amt THEN NEXT.
             
             IF InvRow.OrderId > 0 AND
                bQ25SingleFee.OrderID > 0 AND
                InvRow.OrderId NE bQ25SingleFee.OrderId THEN NEXT.
-         
-            liRequest = fFullCreditNote(Invoice.InvNum,
-                                    STRING(SubInvoice.SubInvNum),
-                                    "InvRow=" + STRING(InvRow.InvRowNum) + "|" +
-                                    "InvRowAmt=" + STRING(MIN(InvRow.Amt,
-                                                       bQ25SingleFee.Amt)),
-                                    "Correct",
-                                    "2013",
-                                    "",
-                                    OUTPUT lcError).
-            LEAVE.
-         END.
             
-         IF liRequest = 0 THEN
+            ASSIGN lcSubInvNums    = lcSubInvNums + "," + STRING(SubInvoice.SubInvNum) WHEN
+                                     LOOKUP(STRING(SubInvoice.SubInvNum), lcSubInvNums) = 0    
+                   lcInvRowDetails = lcInvRowDetails + "," +
+                                     "InvRow="       + STRING(InvRow.InvRowNum) + "|" +
+                                     "InvRowAmt="    + STRING(InvRow.Amt)
+                   ldeTotalRowAmt  = ldeTotalRowAmt + InvRow.Amt.
+
+         END.
+
+         ASSIGN lcSubInvNums    = TRIM(lcSubInvNums,",")
+                lcInvRowDetails = TRIM(lcInvRowDetails,",").
+
+         IF lcSubInvNums = "" OR ldeTotalRowAmt < 0 THEN
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                              "MobSub",
                              STRING(MsRequest.MsSeq),
                              MsRequest.Custnum,
                              "CREDIT NOTE CREATION FAILED",
-                             "ERROR:" + lcError). 
+                             "ERROR:Invoice is already credited").
+         ELSE DO:
+            liRequest = fFullCreditNote(Invoice.InvNum,
+                                        lcSubInvNums,
+                                        lcInvRowDetails,
+                                        "Correct",
+                                        "2013",
+                                        "",
+                                        OUTPUT lcError).
+               
+            IF liRequest = 0 THEN
+               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                "MobSub",
+                                STRING(MsRequest.MsSeq),
+                                MsRequest.Custnum,
+                                "CREDIT NOTE CREATION FAILED",
+                                "ERROR:" + lcError). 
+         END.
       END. 
       ELSE IF lcDCEvent EQ "RVTERM12" AND
          ldeResidualFeeDisc > 0 THEN DO:
@@ -3177,6 +3200,7 @@ PROCEDURE pContractReactivation:
    DEF VAR liRequest         AS INT NO-UNDO.
    DEF VAR lcResult          AS CHAR NO-UNDO.
    DEF VAR liReacPeriod      AS INT NO-UNDO.
+   DEF VAR ldateDccli        AS DATE  NO-UNDO.
    DEF VAR llUpdateResidualFeeCode AS LOG NO-UNDO. 
 
    DEF BUFFER bMsRequest FOR MsRequest.
@@ -3240,10 +3264,6 @@ PROCEDURE pContractReactivation:
       fReqError("Contract is not allowed for this subscription type").
       RETURN.
    END.
-
-   IF DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE} OR
-      DayCampaign.DCType = {&DCTYPE_BUNDLE} THEN
-      lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS").
 
    /* predetermined length */  
    IF DayCampaign.DurType = 2 OR DayCampaign.DurType = 3 THEN DO:
@@ -3443,8 +3463,10 @@ PROCEDURE pContractReactivation:
             END. /* IF AVAILABLE FFItem AND NOT FFItem.BILLED THEN DO: */
          END. /* IF DAY(FixedFee.BegPeriod) > 1 AND FMItem.FirstMonthBR = 0 */
          
-         IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} AND
-            FixedFee.BillCode EQ "PAYTERM" THEN DO:
+         /* Remove singlefees created in termination */
+         IF (MsRequest.ReqSource EQ {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} OR
+             MsRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION}) AND
+             FixedFee.BillCode EQ "PAYTERM" THEN DO:
 
             FIND FIRST SingleFee USE-INDEX Custnum WHERE
                        SingleFee.Brand = gcBrand AND
@@ -3464,8 +3486,10 @@ PROCEDURE pContractReactivation:
                IF llDoEvent THEN
                   RUN StarEventMakeDeleteEventWithMemo(
                      (BUFFER SingleFee:HANDLE),
-                     MsRequest.UserCode,
-                     "RevertRenewalOrder").
+                      MsRequest.UserCode,
+                     (IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} 
+                      THEN "RevertRenewalOrder"
+                      ELSE "SubscriptionReactivation")).
                DELETE SingleFee.
             END.
           END.
@@ -3628,16 +3652,21 @@ PROCEDURE pContractReactivation:
          RETURN.
       END. /* IF NOT AVAILABLE DCCLI THEN DO: */
 
-      IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} AND
+      /* Remove singlefees created in termination */
+      IF (MsRequest.ReqSource EQ {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} OR
+          MsRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION}) AND
          DCCLI.DCEvent BEGINS "TERM" THEN DO:
 
+         IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION} THEN 
+            ldateDccli = ADD-INTERVAL(DCCLI.ValidTo, 1, "months").
+         ELSE ldateDccli = DCCLI.ValidTo.
             FIND FIRST SingleFee USE-INDEX Custnum WHERE
                        SingleFee.Brand = gcBrand AND
                        SingleFee.Custnum = MsRequest.CustNum AND
                        SingleFee.HostTable = "Mobsub" AND
                        SingleFee.KeyValue = STRING(MsRequest.MsSeq) AND
                        SingleFee.BillCode = "TERMPERIOD" AND
-                       SingleFee.BillPeriod = YEAR(DCCLI.ValidTo) * 100 + MONTH(DCCLI.ValidTo)
+                       SingleFee.BillPeriod = YEAR(ldateDccli) * 100 + MONTH(ldateDccli)
             EXCLUSIVE-LOCK NO-ERROR.
       
          IF AVAIL SingleFee AND
@@ -3649,7 +3678,9 @@ PROCEDURE pContractReactivation:
                RUN StarEventMakeDeleteEventWithMemo(
                   (BUFFER SingleFee:HANDLE),
                   MsRequest.UserCode,
-                  "RevertRenewalOrder").
+                 (IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER} 
+                  THEN "RevertRenewalOrder"
+                  ELSE "SubscriptionReactivation")).
             DELETE SingleFee.
          END.
 
@@ -3685,6 +3716,10 @@ PROCEDURE pContractReactivation:
    MsRequest.ReqDtParam1 = ldtFromDate.
 
    fReqStatus(IF llSubRequest THEN 7 ELSE 8,""). 
+
+   IF DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE} OR
+      DayCampaign.DCType = {&DCTYPE_BUNDLE} THEN
+      lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS").
 
    /* Update DSS Limit if postpaid data bundle is being added to DSS group */ 
    IF LOOKUP(lcDCEvent,lcPostpaidDataBundles) > 0 THEN DO:
