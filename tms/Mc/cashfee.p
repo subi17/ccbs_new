@@ -610,10 +610,12 @@ PROCEDURE pUseOffer:
                             bOfferItem.Brand       = gcBrand      AND
                             bOfferItem.Offer       = Offer.Offer  AND
                             bOfferItem.ItemType    = "BillItem"   AND
-         LOOKUP(bOfferItem.ItemKey,"TS00000R1,TS00000M1,TS00000N1," +
-                                   "TS00000R3,TS00000M3,TS00000N3") > 0 AND
-                            bOfferItem.EndStamp   >= idOfferStamp AND
-                            bOfferItem.BeginStamp <= idOfferStamp NO-LOCK)
+         /* Plug-in, Micro, Nano, Universal SIM billitems */
+         LOOKUP(bOfferItem.ItemKey,
+                "TS00000R1,TS00000M1,TS00000N1,TS00000U1," +
+                "TS00000R3,TS00000M3,TS00000N3,TS00000U3") > 0 AND
+                bOfferItem.EndStamp   >= idOfferStamp AND
+                bOfferItem.BeginStamp <= idOfferStamp NO-LOCK)
       THEN DO:
          FIND FIRST OrderAction WHERE
                     OrderAction.Brand    = gcBrand AND

@@ -10,7 +10,6 @@
             &IF "{&localvar}" NE "YES" &THEN
                 &GLOBAL-DEFINE localvar YES
                 define variable llOrdStChg   as logical   no-undo.
-                define variable lcSIMType    as character no-undo.
                 DEF VAR llReserveSimAndMsisdn AS LOG NO-UNDO. 
                 DEFINE VARIABLE lh99Order AS HANDLE NO-UNDO.
 
@@ -18,8 +17,7 @@
             
 
 
-            ASSIGN llOrdStChg = no
-                   lcSIMType  = "".
+            ASSIGN llOrdStChg = no.
             /* YDR-1825 MNP SIM ONLY Orders
               Additional ordertimestamp is to prevent infinitive loop */
             IF lcSIMonlyMNP EQ "true" AND
@@ -39,16 +37,7 @@
                      lh99Order = BUFFER Order:HANDLE.
                      RUN StarEventInitialize(lh99Order).
                   END.
-
-
-                  FIND FIRST OrderAction WHERE
-                             OrderAction.Brand    = gcBrand AND
-                             OrderAction.OrderId  = Order.OrderId AND
-                             OrderAction.ItemType = "SIMType" NO-LOCK NO-ERROR.
-                  IF AVAIL OrderAction AND OrderAction.ItemKey > "" THEN
-                     lcSIMType = OrderAction.ItemKey.
-                  ELSE 
-                     lcSIMType = "Plug_IN".
+                  
                   FIND FIRST OrderCustomer WHERE
                              OrderCustomer.Brand = gcBrand AND
                              OrderCustomer.OrderId = Order.OrderId AND
@@ -74,7 +63,7 @@
                                  bSIM.Brand   = gcBrand  AND
                                  bSIM.Stock   = lcStock  AND
                                  bSIM.simstat = 1        AND
-                                 bSIM.SimArt  = lcSIMType NO-LOCK:
+                                 bSIM.SimArt  = "universal" NO-LOCK:
 
                            /* one week ICC quarantine time check, YOT-924 */
                            IF bSIM.MsSeq > 0 THEN DO:
@@ -152,14 +141,13 @@
                /* find the SIM Type other than Renewal POS order if required */
                IF Order.ICC = "" AND
                   NOT Order.OrderChannel BEGINS "Renewal_POS" THEN DO:
-                  /* YBP-589 */ 
+                  
                   FIND FIRST OrderAction WHERE
                              OrderAction.Brand    = gcBrand AND
                              OrderAction.OrderId  = Order.OrderId AND
                              OrderAction.ItemType = "SIMType" NO-LOCK NO-ERROR.
                   IF AVAIL OrderAction AND OrderAction.ItemKey > "" THEN DO:
-                     lcSIMType = OrderAction.ItemKey.
-
+                     /* YBP-589 */ 
                      FIND FIRST OrderCustomer WHERE
                                 OrderCustomer.Brand = gcBrand AND
                                 OrderCustomer.OrderId = Order.OrderId AND
@@ -180,7 +168,7 @@
                                  bSIM.Brand   = gcBrand  AND
                                  bSIM.Stock   = lcStock  AND
                                  bSIM.simstat = 1        AND
-                                 bSIM.SimArt  = lcSIMType NO-LOCK:
+                                 bSIM.SimArt  = "universal" NO-LOCK:
 
                            IF bSIM.MsSeq > 0 THEN DO:
                               FIND FIRST bOldOrder WHERE
@@ -374,30 +362,6 @@
                       NEXT {1}.                  
                   END.
              END.
-             ELSE DO:
-                /* YBP-607 */
-                /* find the SIM Type */
-                FIND FIRST OrderAction WHERE
-                           OrderAction.Brand    = gcBrand AND
-                           OrderAction.OrderId  = Order.OrderId AND
-                           OrderAction.ItemType = "SIMType" NO-LOCK NO-ERROR.
-                IF NOT AVAIL OrderAction OR OrderAction.ItemKey = "" THEN DO:
-
-                   /* temp fix. YTS-4068 */
-                   IF Order.OrderId > 9078010 THEN DO:
-                      llOrdStChg = fSetOrderStatus(Order.OrderId,"2"). /* error */
-                      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                       "Order",
-                                       STRING(Order.OrderID),
-                                       0,
-                                       "Order Process Error",
-                                       "SIM Type is missing").
-                      NEXT {1}.
-                  END.
-                  ELSE lcSIMType = "Plug_IN".
-                END. /* IF NOT AVAIL OrderAction THEN DO: */
-                ELSE lcSIMType = OrderAction.ItemKey.
-             END. /* ELSE DO: */
 
              IF LOOKUP(Order.Statuscode,{&ORDER_INACTIVE_STATUSES} + ",4,74") > 0 THEN DO:
                 NEXT {1}.
@@ -520,7 +484,7 @@
                             bSIM.Brand   = gcBrand  AND
                             bSIM.Stock   = lcStock  AND
                             bSIM.simstat = 1        AND
-                            bSIM.SimArt  = lcSIMType NO-LOCK:
+                            bSIM.SimArt  = "universal" NO-LOCK:
 
                       /* one week ICC quarantine time check, YOT-924 */
                       IF bSIM.MsSeq > 0 THEN DO:

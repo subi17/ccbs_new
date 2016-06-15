@@ -243,6 +243,10 @@ FUNCTION fGetSIMBillItem RETURNS CHARACTER
          IF ilPayTpe THEN RETURN "TS00000N1".
          ELSE RETURN "TS00000N3".
       END.
+      WHEN "Universal" THEN DO:
+         IF ilPayTpe THEN RETURN "TS00000U1".
+         ELSE RETURN "TS00000U3".
+      END.
    END CASE.
 
    RETURN "".

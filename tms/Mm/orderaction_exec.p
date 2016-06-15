@@ -137,8 +137,11 @@ PROCEDURE pPeriodicalContract:
 
    DEF VAR ldaPMDUBPromoStartDate AS DATE NO-UNDO.
    DEF VAR ldePMDUBPromoActStamp  AS DEC  NO-UNDO.
+   DEF VAR lcWaitFor AS CHAR NO-UNDO. 
 
    DEF BUFFER MsRequest FOR MsRequest.
+   DEF BUFFER bBundleRequest  FOR MsRequest.
+   DEF BUFFER bBundleContract FOR DayCampaign.
   
    FIND FIRST DayCampaign WHERE
               DayCampaign.Brand   = gcBrand AND
@@ -245,13 +248,32 @@ PROCEDURE pPeriodicalContract:
          END.
       END.
    END. /* IF OrderAction.ItemKey = {&DSS} THEN DO: */
-   ELSE 
+   ELSE DO:
+
+      /* request should wait until another bundle request is completed */
+      lcWaitFor = "".
+      IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 AND
+         icSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} THEN DO:
+         
+         FOR EACH bBundleRequest NO-LOCK USE-INDEX OrigRequest WHERE
+                  bBundleRequest.OrigRequest = iiOrigRequest AND
+                  bBundleRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} AND
+               LOOKUP(STRING(bBundleRequest.ReqStatus),
+                      {&REQ_INACTIVE_STATUSES}) = 0,
+            FIRST bBundleContract NO-LOCK WHERE
+                  bBundleContract.Brand = gcBrand AND
+                  bBundleContract.DCEvent = bBundleRequest.ReqCParam3 AND
+                  LOOKUP(bBundleContract.DCType,
+                         {&PERCONTRACT_RATING_PACKAGE}) > 0:
+            lcWaitFor = ":wait" + STRING(bBundleRequest.MsRequest).
+         END.     
+      END.
       liRequest = fPCActionRequest(MobSub.MsSeq,
                                 OrderAction.ItemKey,
                                 (IF Order.OrderType = 2 AND
                                     DayCampaign.DCType EQ {&DCTYPE_DISCOUNT}
                                  THEN "recreate" 
-                                 ELSE "act"),
+                                 ELSE "act" + lcWaitFor),
                                 ldeContractActStamp,
                                 llCreateFees,
                                 icSource,
@@ -262,6 +284,7 @@ PROCEDURE pPeriodicalContract:
                                 0,
                                 0,
                                 OUTPUT lcResult).
+   END.
  
    IF liRequest = 0 THEN 
       RETURN "ERROR:Periodical contract not created; " + lcResult.
@@ -376,9 +399,9 @@ PROCEDURE pDiscountPlan:
       IF Order.CrStamp       >= fCParamDe("AprilPromotionFromDate") AND 
          Order.CrStamp       <= fCParamDe("AprilPromotionToDate")   THEN 
       ASSIGN 
-            ldate              = fLastDayOfMonth(MobSub.ActivationDate)
+            ldate              = ADD-INTERVAL(MobSub.ActivationDate,2,"months")
             DPMember.ValidFrom = MobSub.ActivationDate
-            DPMember.ValidTo   = ADD-INTERVAL(ldate,2,"months"). /* YDR-2160 */
+            DPMember.ValidTo   = fLastDayOfMonth(lDate). /* YDR-2160 */
       ELSE    
          DPMember.ValidTo = 12/31/16. /* YPR-3083 */
    END.

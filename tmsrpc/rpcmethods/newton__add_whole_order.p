@@ -52,7 +52,7 @@
                discount_plan_id;string;optional
                discount_plan_amount;double;optional
                discount_valid_periods;int;optional
-               sim_type;string;optional;sim types (eg: regular/micro/nano)
+               sim_type;string;optional;sim types (eg: regular/micro/nano/universal)
                multisim_id;int;optional;order group id
                multisim_type;int;optional;group member (1,2,..), mandatory if multisim_id is passed
                exclude_term_penalty;boolean;optional;yes/no
@@ -887,7 +887,7 @@ FUNCTION fCheckSIM RETURNS CHARACTER:
           lcError = SUBST("SIM with ICC &1 not match with SIM Type &2", pcIcc, lcSimType).
    END.
    ELSE DO:
-      IF lcSimType > "" AND LOOKUP(lcSimType,"Plug_IN,Micro,Nano") = 0 THEN
+      IF lcSimType > "" AND LOOKUP(lcSimType,"Plug_IN,Micro,Nano,Universal") = 0 THEN
          RETURN "Invalid SIM Type specified".
 
       IF LOOKUP(pcNumberType,"new,mnp") > 0 AND lcSimType = "" THEN

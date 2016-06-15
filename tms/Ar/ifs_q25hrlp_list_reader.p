@@ -212,7 +212,12 @@ PROCEDURE pReadFileData:
                   lcLine + {&Q25_HRLP_DELIM} +  "Error: extension done." SKIP.
                NEXT.
             END.
-
+            IF fisQ25PendingRequest(liMsSeq) THEN DO:
+               /* log pending/ongoing q25 extension */
+               PUT STREAM sLog UNFORMATTED
+                  lcLine + {&Q25_HRLP_DELIM} +  "Error: pending Q25 request." SKIP.
+               NEXT.
+            END.
             IF fisQ25TerminalReturned(SingleFee.orderId) THEN DO:
                /* log terminal returned */
                PUT STREAM sLog UNFORMATTED

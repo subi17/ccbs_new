@@ -19,6 +19,8 @@
       delivery_type;int;Delivery Type
       delivery_secure;int;Delivery Secure
       reverted_renewal_order;boolean;reverted delivered POS renewal order
+      terminal_return_contracts;string;Array of contract ids associated with Order
+      extension_contracts;string;Array of extension contract ids associated with Order
  *  @subscription msseq;int;subscription id
                  icc;string;subscription icc 
                  cli;string;subscription msisdn
@@ -149,6 +151,11 @@ DEF VAR lcFixedBillingAddress   AS CHAR NO-UNDO.
 DEF VAR lcDMSStatusCode         AS CHARACTER NO-UNDO.
 DEF VAR lcDMSStatusDesc         AS CHARACTER NO-UNDO.
 
+DEF VAR lcTermReturnContracts   AS CHARACTER NO-UNDO.
+DEF VAR lcExtensionContracts    AS CHARACTER NO-UNDO.
+
+DEF BUFFER bMsRequest FOR MsRequest.
+
 IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piOrderId = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -183,6 +190,60 @@ IF AVAILABLE OrderPayment AND
          lcPaymentType = "paypal".      
      
 END.
+
+/* terminal_return_contracts - Array of contract ids associated with Order */
+FOR EACH TermReturn NO-LOCK WHERE
+         TermReturn.OrderId = Order.OrderId AND
+       ((TermReturn.DeviceScreen = TRUE AND TermReturn.DeviceStart  = TRUE) OR
+        (TermReturn.DeviceScreen = ?    AND TermReturn.DeviceStart  = ?)):
+   lcTermReturnContracts = lcTermReturnContracts + "," + TermReturn.ContractId.
+END.
+IF lcTermReturnContracts <> "" THEN
+   lcTermReturnContracts = TRIM(lcTermReturnContracts,",").
+
+/* extension_contracts - Array of extension contract ids associated with Order */
+FOR EACH bMsRequest NO-LOCK WHERE
+         bMsRequest.MsSeq        = Order.MsSeq AND
+         bMsRequest.ReqType      = {&REQTYPE_CONTRACT_ACTIVATION} AND
+         bMsRequest.ReqStatus    = 0 AND
+         bMsRequest.Reqcparam3   = "RVTERM12",
+    FIRST SingleFee NO-LOCK USE-INDEX Custnum WHERE
+          SingleFee.Brand        = gcBrand AND
+          SingleFee.Custnum      = Order.CustNum AND
+          SingleFee.HostTable    = "Mobsub" AND
+          SingleFee.KeyValue     = STRING(Order.MsSeq) AND
+          SingleFee.SourceTable  = "DCCLI" AND
+          SingleFee.SourceKey    = STRING(bMsRequest.ReqIParam3) AND
+          SingleFee.CalcObj      = "RVTERM" AND
+          SingleFee.OrderId      = Order.OrderId:
+   lcExtensionContracts = lcExtensionContracts + "," + bMsRequest.ReqCparam4.
+END.
+FOR EACH DCCLI NO-LOCK WHERE
+         DCCLI.Brand    = gcBrand AND
+         DCCLI.DCEvent  = "RVTERM12" AND
+         DCCLI.MsSeq    = Order.MsSeq AND
+         DCCLI.ValidTo >= TODAY,
+    EACH  bMsRequest NO-LOCK USE-INDEX MsActStamp WHERE
+          bMsRequest.MsSeq       = DCCLI.MsSeq AND
+          bMsRequest.ReqType     = {&REQTYPE_CONTRACT_ACTIVATION} AND
+          bMsRequest.ReqStat     = 2 AND
+          bMsRequest.ActStamp   >= fMake2Dt(DCCLI.ValidFrom,0) AND
+          bMsRequest.ActStamp   <= fMake2Dt(DCCLI.ValidFrom,86399) AND
+          bMsRequest.Reqcparam3  = "RVTERM12",
+    FIRST SingleFee NO-LOCK USE-INDEX Custnum WHERE
+          SingleFee.Brand        = gcBrand AND
+          SingleFee.Custnum      = Order.CustNum AND
+          SingleFee.HostTable    = "Mobsub" AND
+          SingleFee.KeyValue     = STRING(Order.MsSeq) AND
+          SingleFee.SourceTable  = "DCCLI" AND
+          SingleFee.SourceKey    = STRING(bMsRequest.ReqIParam3) AND
+          SingleFee.CalcObj      = "RVTERM" AND
+          SingleFee.OrderId      = Order.OrderId:
+   lcExtensionContracts = lcExtensionContracts + "," + bMsRequest.ReqCparam4.
+END.
+IF lcExtensionContracts <> "" THEN
+   lcExtensionContracts = TRIM(lcExtensionContracts,",").
+
 /* add values to the response if no error */
 top_struct = add_struct(response_toplevel_id, "").
 add_int(   top_struct, "tms_id"         , piOrderId         ).
@@ -218,6 +279,9 @@ IF Order.OrderChannel BEGINS "RENEWAL_POS" AND
                   MsRequest.ReqStatus = {&REQUEST_STATUS_DONE} AND
                   MsRequest.ReqIParam1 = Order.OrderId NO-LOCK) THEN
    add_boolean(top_struct,"reverted_renewal_order",True).
+
+add_string(top_struct, "terminal_return_contracts" , lcTermReturnContracts).
+add_string(top_struct, "extension_contracts" , lcExtensionContracts).
 
 gcSubscription = add_struct(top_struct, "subscription").
 

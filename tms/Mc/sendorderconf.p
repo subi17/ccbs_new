@@ -60,15 +60,25 @@ FIND FIRST OrderCustomer WHERE OrderCustomer.Brand = gcBrand AND
                                OrderCustomer.OrderId = iiOrderId AND
                                OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
-   IF Ordercustomer.CustIdType EQ "CIF" THEN .
+   IF (OrderCustomer.CustIdType EQ "CIF") AND 
+      (Order.Ordertype = {&ORDER_TYPE_NEW}) THEN
+      RUN Func/parse_tags.p (lcRootDir + "conf_email_company_new_es.html",
+                        lcEmailFile, iiOrderId, 2, 
+                        icEmailAddress, OUTPUT ocErrFile). /*2=conf mes*/
+   ELSE IF (OrderCustomer.CustIdType EQ "CIF") AND 
+           (Order.Ordertype = {&ORDER_TYPE_MNP}) THEN
+      RUN Func/parse_tags.p (lcRootDir + 
+                        "conf_email_company_mnp_es.html",
+                        lcEmailFile, iiOrderId, 2, 
+                        icEmailAddress, OUTPUT ocErrFile). /*2=conf mes*/  
    ELSE IF Order.Ordertype = {&ORDER_TYPE_NEW} THEN
        RUN Func/parse_tags.p (lcRootDir + "conf_email_new_es.html",
-                 lcEmailFile, iiOrderId, 2, 
-                 icEmailAddress, OUTPUT ocErrFile). /* 2 = conf mes */
+                        lcEmailFile, iiOrderId, 2, 
+                        icEmailAddress, OUTPUT ocErrFile). /* 2 = conf mes */
    ELSE IF Order.Ordertype = {&ORDER_TYPE_MNP} THEN
        RUN Func/parse_tags.p (lcRootDir + "conf_email_mnp_es.html",
-                 lcEmailFile, iiOrderId, 2, 
-                 icEmailAddress, OUTPUT ocErrFile). /* 2 = conf mes */
+                        lcEmailFile, iiOrderId, 2, 
+                        icEmailAddress, OUTPUT ocErrFile). /* 2 = conf mes */
    /* fusion STC needs propably own template. TODO later
    ELSE IF (Order.Ordertype = {&ORDER_TYPE_STC} AND 
             Order.OrderChannel BEGINS "fusion") THEN  /* new fusion order */
