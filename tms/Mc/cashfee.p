@@ -26,6 +26,8 @@ DEF OUTPUT PARAMETER ocList   AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER odTotAmt AS DEC  NO-UNDO. 
 DEF OUTPUT PARAMETER ocError  AS CHAR NO-UNDO. 
 
+DEF BUFFER bSimTypeCheck FOR SIM.
+
 /* iiAction: 1=create fees and invoice
              2=just make a list of fees, don't create anything 
              3=like 2, but leave out campaign topup rows
@@ -648,11 +650,27 @@ PROCEDURE pUseOffer:
                OfferItem.BeginStamp <= idOfferStamp:
       
          CASE OfferItem.ItemType:
-         WHEN "BillItem" THEN
-            RUN pSingleFee(OfferItem.ItemKey,
+         WHEN "BillItem" THEN DO:
+            /*This ensuers that SIM Type is correct also during USIM migration*/
+            IF Order.icc > "" AND
+            LOOKUP(OfferItem.ItemKey,
+                   "TS00000R1,TS00000M1,TS00000N1,TS00000U1," +
+                   "TS00000R3,TS00000M3,TS00000N3,TS00000U3") > 0
+            THEN DO:
+               FIND FIRST bSimTypeCheck NO-LOCK WHERE
+                          bSimTypeCheck.ICC EQ Order.icc NO-ERROR.
+               IF AVAIL bSimTypeCheck THEN DO:
+                  lcSimBillItem = fGetSIMBillItem(bSimTypeCheck.SimArt,
+                                                  Order.PayType).
+               END.
+            END.
+            ELSE lcSimBillItem = OfferItem.ItemKey.
+
+            RUN pSingleFee(lcSimBillItem,
                            OfferItem.Amount,
                            OfferItem.VatIncl,
                            "O:" + Offer.Offer).
+         END.
          WHEN "Topup" THEN DO:
          
             FOR FIRST TopupScheme NO-LOCK WHERE
