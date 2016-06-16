@@ -268,24 +268,27 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
       END.                            
    END.
 
-   IF llDouble THEN DO: 
-      CASE ttCall.MSCID:
-         WHEN "CCGW" THEN ASSIGN
-            ttCall.ErrorCode = {&CDR_ERROR_DOUBLE_CCGW_CDR} 
-                                    WHEN ttCall.ErrorCode = 0 OR
-                                    ttCall.ErrorCode = 9999
-            ttCall.InvSeq    = 0.
-         WHEN "POSTD" OR WHEN "PRE" THEN ASSIGN
-            ttCall.ErrorCode = {&CDR_ERROR_DOUBLE_DATA_CDR} 
-                                    WHEN ttCall.ErrorCode = 0 OR
-                                    ttCall.ErrorCode = 9999
-            ttCall.InvSeq    = 0.
-         OTHERWISE ASSIGN
-            ttCall.ErrorCode = {&CDR_ERROR_DOUBLE_CALL} 
-                                    WHEN ttCall.ErrorCode = 0 OR
-                                    ttCall.ErrorCode = 9999
-            ttCall.InvSeq    = 0.
-      END CASE.
+   IF llDouble THEN DO:
+
+      IF ttCall.MSCID = "CCGW" THEN ASSIGN
+         ttCall.ErrorCode = {&CDR_ERROR_DOUBLE_CCGW_CDR}
+                             WHEN ttCall.ErrorCode = 0 OR
+                                  ttCall.ErrorCode = 9999
+         ttCall.InvSeq    = 0.
+      ELSE IF ttCall.MSCID       = "POSTD" OR
+             (ttCall.MSCID       = "PRE"   AND
+              ttCall.EventType   = "GPRS"  AND
+              ttCall.PPFlag     <> 0) THEN ASSIGN
+         ttCall.ErrorCode = {&CDR_ERROR_DOUBLE_DATA_CDR}
+                             WHEN ttCall.ErrorCode = 0 OR
+                                  ttCall.ErrorCode = 9999
+         ttCall.InvSeq    = 0.
+      ELSE ASSIGN
+         ttCall.ErrorCode = {&CDR_ERROR_DOUBLE_CALL}
+                             WHEN ttCall.ErrorCode = 0 OR
+                                  ttCall.ErrorCode = 9999
+         ttCall.InvSeq    = 0.
+
    END.
    
    RETURN llDouble.
