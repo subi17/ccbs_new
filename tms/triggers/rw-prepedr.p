@@ -34,7 +34,7 @@ THEN DO:
    DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
 
    BUFFER-COMPARE PrepEDR USING
-      MSCID
+      MsSeq
       DtlSeq
       DateSt
    TO oldPrepEDR SAVE RESULT IN llSameValues.

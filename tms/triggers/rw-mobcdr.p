@@ -34,7 +34,7 @@ THEN DO:
    DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
 
    BUFFER-COMPARE MobCDR USING
-      MSCID
+      MsSeq
       DtlSeq
       DateSt
    TO oldMobCDR SAVE RESULT IN llSameValues.

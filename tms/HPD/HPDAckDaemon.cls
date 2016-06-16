@@ -6,6 +6,7 @@ CLASS HPD.HPDAckDaemon INHERITS gearbox.daemons.Daemon:
    
    DEFINE PRIVATE VARIABLE objHPDAckReader      AS CLASS HPD.HPDAckReader NO-UNDO.   
    DEFINE PRIVATE VARIABLE lcSingleReplogDBList AS CHARACTER              NO-UNDO.
+   DEFINE PRIVATE VARIABLE lcJustLogDBList      AS CHARACTER              NO-UNDO.
    
    CONSTRUCTOR PUBLIC HPDAckDaemon( ):
 
@@ -21,10 +22,13 @@ CLASS HPD.HPDAckDaemon INHERITS gearbox.daemons.Daemon:
       ASSIGN
          lcInstance = REPLACE(lDaemonName, THIS-OBJECT:GetClass():TypeName, "")
          lcSingleReplogDBList = Syst.Parameters:getc("HPD.Ack.SingleReplogDB", "HPD.Interface")
+         lcJustLogDBList      = Syst.Parameters:getc("HPD.Ack.JustLogDB", "HPD.Interface")
          .   
       
       IF LOOKUP(lcInstance,lcSingleReplogDBList) > 0
       THEN objHPDAckReader = NEW HPD.HPDAckReaderSingle(lcInstance).
+      ELSE IF LOOKUP(lcInstance,lcJustLogDBList) > 0
+      THEN objHPDAckReader = NEW HPD.HPDAckReaderJustLog(lcInstance).
       ELSE objHPDAckReader = NEW HPD.HPDAckReaderMulti(lcInstance).
 
    END METHOD.

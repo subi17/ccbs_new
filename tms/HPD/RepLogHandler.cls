@@ -122,7 +122,7 @@ CLASS HPD.RepLogHandler FINAL:
       ELSE lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK USE-INDEX UTCTime MAX-ROWS &2",lcRepLogTable, STRING(liTransactionSize))).
       &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
       &THEN
-      ELSE lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK WHERE SendTime = ? USE-INDEX SendTime MAX-ROWS &2",lcRepLogTable, STRING(liTransactionSize))).
+      ELSE lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK WHERE USE-INDEX EventTime MAX-ROWS &2",lcRepLogTable, STRING(liTransactionSize))).
       &ELSE
       RETURN ERROR NEW Progress.Lang.AppError("Unsupported HPD environment", 1).
       &ENDIF
