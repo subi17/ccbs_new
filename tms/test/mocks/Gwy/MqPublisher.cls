@@ -2,7 +2,6 @@
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Syst.Parameters.
-{javax/jms/Session.i}
 
 CLASS Gwy.MqPublisher:
 

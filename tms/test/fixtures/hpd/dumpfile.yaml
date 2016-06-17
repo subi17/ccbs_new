@@ -18,7 +18,7 @@ DumpFileCustomer: DumpFile
   LogicModule: "HPD/hpd_filedump.p"
   BatchID: 1
   
- DFField781: DFField
+DFField781: DFField
   DumpID: hash(DumpFileCustomer)
   DFTable: "Customer"
   DFField: "CustNum"

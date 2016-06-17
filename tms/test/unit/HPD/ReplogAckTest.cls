@@ -1,39 +1,43 @@
 /* 
    Comma separated list of files that should be copied into the sandbox:
 
-   Depends = HPD/ReplogHandler.cls, HPD/CustomerDump.cls, HPD/GenericDump.cls, HPD/HPDAckReaderSingle.cls
+   Depends = HPD/RepLogHandler.cls, HPD/CustomerDump.cls, HPD/GenericDump.cls, HPD/HPDAckReaderSingle.cls, HPD/DumpHandler.cls, HPD/HPDEnvironment.i, HPD/HPDConst.i, Syst/tmsconst.i, Syst/Parameters.cls, triggers/rw-customer.p, triggers/hpdwrite_generic.i, HPD/DumpHandlerWithQuery.cls, HPD/DumpBase.cls, HPD/DumpFile.cls, HPD/HPDCommon.cls, HPD/HPDTime.cls, HPD/HPDAckHandler.cls
 
    Comma separated list of dependencies of which mock versions should be generated:
    
    Mocks = Gwy/MqPublisher.cls, HPD/HPDAckReader.cls
 */
-CLASS ReplogAckTest INHERITS gearbox.unit.UnitTest:
+CLASS unit.HPD.ReplogAckTest INHERITS gearbox.unit.UnitTest:
 
    DEFINE VARIABLE objRepLogHandler AS CLASS HPD.RepLogHandler       NO-UNDO.
    DEFINE VARIABLE objHPDAckReader  AS CLASS HPD.HPDAckReader        NO-UNDO.
    DEFINE VARIABLE objStompMessage  AS CLASS dotr.Stomp.StompMessage NO-UNDO.
+   DEFINE VARIABLE lcTempDir        AS CHARACTER                     NO-UNDO.
   
    METHOD OVERRIDE PUBLIC CHAR getFixtureFiles():
-      // Called by the constructor
-      // Returns a comma separated list of fixture generator files.
-      // The instance variable `fixtures` is a FixtureReader of them.
-      RETURN "fixtures/basic/customer_mobsub.yaml,fixtures/hpd/reploghandler.yaml,fixtures/hpd/hpdackreader.yaml".
+      RETURN "fixtures/basic/customer_mobsub.yaml,fixtures/hpd/reploghandler.yaml,fixtures/hpd/hpdackreader.yaml,fixtures/hpd/dumpfile.yaml".
    END METHOD.
 
    METHOD OVERRIDE PUBLIC VOID setUp ():
-      // called BEFORE each test method
-      // setup some instance variables and load fixtures.
-      objRepLogHandler = NEW HPD.RepLogHandler("Common").
-      objHPDAckReader = NEW HPD.HPDAckReaderSingle(lcInstance).
+
+      lcTempDir = makeTempdir().
 
       fixtures:allForTable("TMSParam", NO).
+      fixtures:allForTable("DumpFile", NO).
+      fixtures:allForTable("DFField", NO).
+
+      FOR FIRST TMSParam EXCLUSIVE-LOCK WHERE TMSParam.Paramcode = "HPD.Ack.ExportDir":
+
+         TMSParam.CharVal = SUBSTRING(lcTempDir,1,LENGTH(lcTempDir) - 1).
+
+      END.
+
+      objRepLogHandler = NEW HPD.RepLogHandler("Common").
+      objHPDAckReader = NEW HPD.HPDAckReaderSingle("Common").
+
    END METHOD.
 
    METHOD OVERRIDE PUBLIC VOID tearDown ():
-      // is called AFTER each test method, even if it failed (unless the
-      // failure happened during setUp).
-      // You don't need to empty tables, as the tests are run in a transaction
-      // which is always rolled back.
       IF VALID-OBJECT(objRepLogHandler) THEN DELETE OBJECT objRepLogHandler.
       IF VALID-OBJECT(objHPDAckReader) THEN DELETE OBJECT objHPDAckReader.
    END METHOD.
@@ -45,7 +49,7 @@ CLASS ReplogAckTest INHERITS gearbox.unit.UnitTest:
     
       DO TRANSACTION:
          FIND CURRENT common.replog EXCLUSIVE-LOCK.
-         common.replog.sendtime = ADD-INTERVAL(NOW, iiMinutesBehindNow, "minutes").
+         common.replog.sendtime = ADD-INTERVAL(NOW, iiMinutesFromNow, "minutes").
          FIND CURRENT common.replog NO-LOCK.
       END.
 
@@ -54,7 +58,6 @@ CLASS ReplogAckTest INHERITS gearbox.unit.UnitTest:
    METHOD PRIVATE VOID mCheckReplogAfterHandlerProcess
       ( icTableName AS CHARACTER,
         iiSendCount AS INTEGER ):
-       iiMinutesFromNow AS INTEGER):
 
       FIND FIRST common.replog NO-LOCK WHERE replog.tablename = "Customer" NO-ERROR.
       
@@ -143,11 +146,11 @@ CLASS ReplogAckTest INHERITS gearbox.unit.UnitTest:
       testReplogProcessed().
       
       objHPDAckReader:mProcess().
-      mCheckReplogAfterAck(NO).
+      mCheckReplogAfterAck("Customer", NO).
       
       mUpdateReplogSendTime("Customer", -30).
       objHPDAckReader:mProcess().
-      mCheckReplogAfterAck(YES).
+      mCheckReplogAfterAck("Customer", YES).
       
       DO lii = 2 TO 4:
          objRepLogHandler:mProcess().
@@ -155,7 +158,7 @@ CLASS ReplogAckTest INHERITS gearbox.unit.UnitTest:
          
          mUpdateReplogSendTime("Customer", -30).
          objHPDAckReader:mProcess().
-         mCheckReplogAfterAck(YES).
+         mCheckReplogAfterAck("Customer", YES).
       END.
             
       objRepLogHandler:mProcess().
