@@ -140,7 +140,7 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
       /*If billed -> credit note*/
       /*FIND FIRST invoice...*/
       liRequest = 0.
-      ocErrInfo = "No InvRow for Credit Note".
+      ocErrInfo = "Credit Note not allowed".
 
       FOR FIRST Invoice NO-LOCK WHERE
                 Invoice.InvNum EQ liInvNum,                   
@@ -151,7 +151,7 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
                 InvRow.InvNum EQ Invoice.InvNum AND
                 InvRow.SubInvNum EQ SubInvoice.SubInvNum AND
                 InvRow.BillCode EQ "GOOGLEVAS" AND
-                InvRow.CreditInvNum = 0 AND
+                InvRow.CreditInvNum = 0 AND /*No CN already done*/
                 InvRow.Amt >= ideAmount:
 
 
