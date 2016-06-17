@@ -7,6 +7,8 @@
    
    Mocks = Gwy/MqPublisher.cls, HPD/HPDAckReader.cls
 */
+ROUTINE-LEVEL ON ERROR UNDO, THROW.
+
 CLASS unit.HPD.ReplogAckTest INHERITS gearbox.unit.UnitTest:
 
    DEFINE VARIABLE objRepLogHandler AS CLASS HPD.RepLogHandler       NO-UNDO.
