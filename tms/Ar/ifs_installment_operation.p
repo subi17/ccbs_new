@@ -156,9 +156,7 @@ FUNCTION fGetDueDate RETURNS DATE
 
    DEF VAR ldtDueDate AS DATE NO-UNDO.
 
-   IF DAY(ldtBankDate) < 6 THEN 
-      ldtDueDate = DATE(MONTH(ldtBankDate), 6, YEAR(ldtBankDate)).
-   ELSE IF MONTH(TODAY) = 12 THEN 
+   IF MONTH(ldtBankDate) = 12 THEN 
       ldtDueDate = DATE(1,6,YEAR(ldtBankDate) + 1).
    ELSE ldtDueDate = DATE(MONTH(ldtBankDate) + 1, 6, YEAR(ldtBankDate)).
 
