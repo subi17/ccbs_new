@@ -1487,7 +1487,7 @@ PROCEDURE pUpdateDSSNetworkLimit:
    DEF BUFFER bMsRequest   FOR MsRequest.
 
    ASSIGN liLimit      = ideLimit * 1024 * 1024
-          liGraceLimit = (liLimit * 5) / 100.
+          liGraceLimit =        5 * 1024 * 1024.
 
    /* Compare latest DSS limit with limit specified in the "CREATE" request */
    IF ilCheckDSSLimit THEN DO:
