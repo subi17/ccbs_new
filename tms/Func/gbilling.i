@@ -145,7 +145,8 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
       FOR FIRST Invoice NO-LOCK WHERE
                 Invoice.InvNum EQ liInvNum,                   
           FIRST SubInvoice NO-LOCK WHERE
-                Subinvoice.InvNum EQ Invoice.InvNum,
+                Subinvoice.InvNum EQ Invoice.InvNum AND
+                SubInvoice.CLI EQ icMSISDN,
            EACH InvRow NO-LOCK WHERE
                 InvRow.InvNum EQ Invoice.InvNum AND
                 InvRow.SubInvNum EQ SubInvoice.SubInvNum AND
