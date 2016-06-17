@@ -1505,7 +1505,7 @@ PROCEDURE pUpdateDSSNetworkLimit:
       lcParam = "DSS-ACCOUNT" + "=" + STRING(iiCustNum) + "," +
                 "TEMPLATE=DSS"                          + "," +
                 icActionType  + "=" + STRING(liLimit)   + "," +
-                "GRACE"       + "=" + STRING(liGraceLimit).
+                "GRACE"       + "=" + STRING(0).
    ELSE
       lcParam = "DSS-ACCOUNT="    + STRING(iiCustNum)       + "," +
                 "TEMPLATE=DSS_MONTHLY"                      + "," +
