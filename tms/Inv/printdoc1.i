@@ -1143,7 +1143,7 @@ END PROCEDURE.
 PROCEDURE pGetInvoiceVatData:
 
    EMPTY TEMP-TABLE ttVat.
-   DEF VAR ldeInstallmentSum AS DEC NO-UNDO. 
+   DEF VAR ldeExclSum AS DEC NO-UNDO. 
 
    /* vat amount */
    DO liPCnt = 1 TO 10:
@@ -1160,16 +1160,18 @@ PROCEDURE pGetInvoiceVatData:
             ttVat.VatBasis = ttVat.VatBasis + Invoice.VatBasis[liPCnt].
       END.
    END.
-
+   
    /* exclude installment amount from 0% VAT row YDR-185 */
-   ldeInstallmentSum = ttInvoice.InstallmentAmt +
+   /* exclude Google Billing amount from 0% VAT row YPR-3890*/
+   ldeExclSum = ttInvoice.InstallmentAmt +
                        ttInvoice.PenaltyAmt +
-                       ttInvoice.InstallmentDiscAmt.
+                       ttInvoice.InstallmentDiscAmt +
+                       ttInvoice.GBValue.
 
-   IF ldeInstallmentSum NE 0 THEN
+   IF ldeExclSum NE 0 THEN
       FOR FIRST ttVat WHERE ttVat.VatPerc = 0 EXCLUSIVE-LOCK:
-         IF ttVat.VatBasis EQ ldeInstallmentSum THEN DELETE ttVat.
-         ELSE ttVat.VATBasis = ttVAT.VATBasis - ldeInstallmentSum.
+         IF ttVat.VatBasis EQ ldeExclSum THEN DELETE ttVat.
+         ELSE ttVat.VATBasis = ttVAT.VATBasis - ldeExclSum.
       END.
 
    /* taxzone */
