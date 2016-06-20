@@ -1296,7 +1296,7 @@ PROCEDURE pCollectInstallmentCancellations:
    IF icDumpMode = "modified" THEN ASSIGN
       ldFrom  = fMake2Dt(ldaDataFrom,0)
       ldTo    = fMake2Dt(ldaDataTo,86399)
-      ldCheck = fMake2Dt(ldaDataFrom - 33,0).
+      ldCheck = fMake2Dt(ldaDataFrom - 63,0).
    /* take all */
    ELSE ASSIGN
       ldFrom  = fMake2Dt(2/1/10,0)

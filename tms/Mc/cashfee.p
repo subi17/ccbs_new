@@ -651,6 +651,9 @@ PROCEDURE pUseOffer:
       
          CASE OfferItem.ItemType:
          WHEN "BillItem" THEN DO:
+            
+            lcSimBillItem = OfferItem.ItemKey.
+            
             /*This ensuers that SIM Type is correct also during USIM migration*/
             IF Order.icc > "" AND
             LOOKUP(OfferItem.ItemKey,
@@ -664,7 +667,6 @@ PROCEDURE pUseOffer:
                                                   Order.PayType).
                END.
             END.
-            ELSE lcSimBillItem = OfferItem.ItemKey.
 
             RUN pSingleFee(lcSimBillItem,
                            OfferItem.Amount,
