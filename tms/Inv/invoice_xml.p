@@ -9,7 +9,7 @@
 {printdoc1.i}
 {funcrunprocess_update.i}
 {host.i}
-
+{tmsconst.i}
 /* invoices TO be printed */
 DEFINE INPUT-OUTPUT PARAMETER TABLE FOR ttInvoice.
 DEFINE INPUT  PARAMETER idaInvDate    AS DATE NO-UNDO. 
@@ -52,7 +52,9 @@ DEF VAR lcTarBatchFile AS CHAR   NO-UNDO.
 DEF VAR liFRExecID     AS INT    NO-UNDO.
 DEF VAR llReplica      AS LOG    NO-UNDO.
 DEF VAR liInitialOrderID AS INT  NO-UNDO.
-       
+DEF VAR lcGBBillCodes AS CHAR    NO-UNDO.
+
+
 DEF STREAM sRead.
 
 
@@ -289,6 +291,14 @@ PROCEDURE pInitialize:
       lcPremiumBillCodes = lcPremiumBillCodes +  "," + BillItem.Billcode.
    END.
    lcPremiumBillCodes = SUBSTRING(lcPremiumBillCodes,2).
+
+   /*Google billing YPR-3919*/
+   FOR EACH BillItem where
+            BillItem.Brand EQ gcBrand AND
+            BillItem.BIGroup EQ {&BITEM_GRP_GB} NO-LOCK: 
+      lcGBBillCodes = lcGBBillCodes +  "," + BillItem.Billcode.
+   END.
+   lcGBBillCodes = SUBSTRING(lcGBBillCodes,2).
 
    IF iiFrProcessID > 0 THEN
    FOR FIRST FuncRunProcess NO-LOCK WHERE
@@ -554,7 +564,28 @@ PROCEDURE pInvoice2XML:
                                              ttInvoice.InstallmentDiscAmt)).
       lhXML:END-ELEMENT("AdditionalAmount").
       lhXML:END-ELEMENT("AdditionalDetail").
-      
+
+      /*Google Billing*/
+      FIND FIRST ttRow WHERE
+                 ttRow.RowCode BEGINS "44" NO-ERROR.
+      IF AVAIL ttRow THEN DO: 
+         lhXML:START-ELEMENT("AdditionalDetail").
+         lhXML:START-ELEMENT("AdditionalAmount").
+         lhXML:INSERT-ATTRIBUTE("Header", ttRow.RowBillCode).
+         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttRow.RowAmt)).
+         lhXML:END-ELEMENT("AdditionalAmount").
+         lhXML:END-ELEMENT("AdditionalDetail"). 
+      END. 
+      FIND FIRST ttRow WHERE
+                 ttRow.RowCode BEGINS "45" NO-ERROR.
+      IF AVAIL ttRow THEN DO:
+         lhXML:START-ELEMENT("AdditionalDetail").
+         lhXML:START-ELEMENT("AdditionalAmount").
+         lhXML:INSERT-ATTRIBUTE("Header", ttRow.RowBillCode).
+         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttRow.RowAmt)).
+         lhXML:END-ELEMENT("AdditionalAmount").
+         lhXML:END-ELEMENT("AdditionalDetail").
+      END.     
       /* AmountExclTaxAndInstallment, TotalAmountExclInstallment  */
       /* As per requirement, Discount Amt value has to be added to Installment Amt.
          But Discound Amt is negative value, so it is subtracted to InstallmentAmt value */
@@ -565,7 +596,8 @@ PROCEDURE pInvoice2XML:
                              Invoice.AmtExclVat
                              - ttInvoice.InstallmentAmt
                              - ttInvoice.PenaltyAmt
-                             - ttInvoice.InstallmentDiscAmt)).  
+                             - ttInvoice.InstallmentDiscAmt
+                             - ttInvoice.GBValue)).  
       lhXML:END-ELEMENT("AdditionalAmount").
       lhXML:END-ELEMENT("AdditionalDetail").
       
@@ -577,7 +609,8 @@ PROCEDURE pInvoice2XML:
                                 Invoice.InvAmt
                                 - ttInvoice.InstallmentAmt
                                 - ttInvoice.PenaltyAmt
-                                - ttInvoice.InstallmentDiscAmt)).
+                                - ttInvoice.InstallmentDiscAmt
+                                - ttInvoice.GBValue)).
          lhXML:END-ELEMENT("AdditionalAmount").
          lhXML:END-ELEMENT("AdditionalDetail").
       END.
@@ -681,6 +714,9 @@ PROCEDURE pSubInvoice2XML:
    DEF VAR llPremiumNumberText    AS LOG  NO-UNDO.
    DEF VAR lcBIGroupName          AS CHAR NO-UNDO. 
    DEF VAR liTFCount              AS INT  NO-UNDO.
+   DEF VAR llGBText               AS LOG  NO-UNDO.
+   DEF VAR lcFooterNotice         AS CHAR NO-UNDO.
+
     
    lhXML:START-ELEMENT("Contract").
 
@@ -733,6 +769,10 @@ PROCEDURE pSubInvoice2XML:
 
          /* row, billing item level */
          lhXML:START-ELEMENT("RowDetail").
+         IF ttRow.RowCode BEGINS "44" OR
+            ttRow.RowCode BEGINS "45" THEN 
+            lhXML:INSERT-ATTRIBUTE("Type", ttRow.RowBillCode).
+         
          IF ttRow.RowType > "" THEN DO:
             lhXML:INSERT-ATTRIBUTE("Type",ttRow.RowType).
             lhXML:INSERT-ATTRIBUTE("BillingItemGroupID",ttRow.RowGroup).
@@ -813,7 +853,8 @@ PROCEDURE pSubInvoice2XML:
       lhXML:WRITE-CHARACTERS(fDispXMLDecimal(SubInvoice.AmtExclVat - 
                                              ttSub.InstallmentAmt  -
                                              ttSub.PenaltyAmt      -
-                                             ttSub.InstallmentDiscAmt)).
+                                             ttSub.InstallmentDiscAmt -
+                                             ttSub.GBValue)).
 
       lhXML:END-ELEMENT("AdditionalAmount").
      
@@ -823,7 +864,7 @@ PROCEDURE pSubInvoice2XML:
              lhXML:START-ELEMENT("AdditionalAmount").
              lhXML:INSERT-ATTRIBUTE("Header","PendingInstallmentAmountBeforeInvoice").
              lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttSub.TFBankBeforeAmt[liTFCount])).
-             lhXML:END-ELEMENT("AdditionalAmount").
+             lhXML:END-ELEMENT("AdditionalAmountn").
 
              lhXML:START-ELEMENT("AdditionalAmount").
              lhXML:INSERT-ATTRIBUTE("Header","PendingInstallmentAmountAfterInvoice").
@@ -861,6 +902,12 @@ PROCEDURE pSubInvoice2XML:
          IF NOT llPremiumNumberText AND
             LOOKUP(ttCall.BillCode,lcPremiumBillCodes) > 0 THEN
             llPremiumNumberText = TRUE.
+
+         /* Turn ON flag if call is belong to Premium */
+         IF NOT llGBText AND
+            LOOKUP(ttCall.BillCode,lcGBBillCodes) > 0 THEN
+            llGBText = TRUE.
+
 
          FIND FIRST ttCLIType WHERE
                     ttCLIType.CLI    = SubInvoice.CLI AND
@@ -913,7 +960,10 @@ PROCEDURE pSubInvoice2XML:
             lhXML:INSERT-ATTRIBUTE("Time",
                                    RIGHT-TRIM(STRING(ttCall.TimeSt,
                                                      "hh:mm"))).
-            lhXML:INSERT-ATTRIBUTE("Destination",ttCall.GsmBnr).
+            IF ttCall.GsmBnr EQ {&GB_B_NBR} THEN
+               lhXML:INSERT-ATTRIBUTE("Destination","").
+            ELSE
+               lhXML:INSERT-ATTRIBUTE("Destination",ttCall.GsmBnr).
             lhXML:INSERT-ATTRIBUTE("BillingItem",lcBIName).
 
             lcTipoName = fLocalCCName().
@@ -969,15 +1019,19 @@ PROCEDURE pSubInvoice2XML:
 
    END.     
 
-   /* Add Footer Text */
-   /* Note: If Invoice Date is earlier than 1st of Jan then   */
-   /* always return OLD Premium Text otherwise check if there */
-   /* is any Premium call then return NEW Premium Text        */
-   IF Invoice.InvDate < 01/01/2012 THEN
-      lhXML:WRITE-DATA-ELEMENT("FooterNotice",fHeadTxt(527,liLanguage)).
-   ELSE IF llPremiumNumberText THEN
-        lhXML:WRITE-DATA-ELEMENT("FooterNotice",fHeadTxt(528,liLanguage)).
-   ELSE lhXML:WRITE-DATA-ELEMENT("FooterNotice","").
+   /*Google billing footer will be added if there are GB entreis*/
+   lcFooterNotice = "".
+   IF llPremiumNumberText THEN DO:
+      IF lcFooterNotice NE "" THEN
+         lcFooterNotice = lcFooterNotice + CHR(10) + CHR(13).
+      lcFooterNotice = lcFooterNotice +  fHeadTxt(573,liLanguage).
+   END.
+   IF llGBText THEN DO:
+       IF lcFooterNotice NE "" THEN
+          lcFooterNotice = lcFooterNotice + CHR(10) + CHR(13).
+      lcFooterNotice = lcFooterNotice + fHeadTxt(574,liLanguage).
+   END.
+   lhXML:WRITE-DATA-ELEMENT("FooterNotice", lcFooterNotice).
 
    lhXML:END-ELEMENT("Contract").
 
