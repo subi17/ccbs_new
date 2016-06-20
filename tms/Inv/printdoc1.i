@@ -872,17 +872,16 @@ PROCEDURE pGetSubInvoiceHeaderData:
       ttSub.CallSpec = fCallSpecDuring(SubInvoice.MsSeq,Invoice.InvDate).
 
       /*Google billing*/
-      FIND FIRST ttRow WHERE
-                 ttRow.SubInvNum = SubInvoice.SubInvNum AND
-                 ttRow.RowCode BEGINS "44" NO-ERROR.
-      IF AVAIL ttRow THEN
+      FOR EACH ttRow WHERE
+               ttRow.SubInvNum = SubInvoice.SubInvNum AND
+               ttRow.RowCode BEGINS "44" NO-LOCK:
          ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
-                 
-      FIND FIRST ttRow WHERE
-                 ttRow.SubInvNum = SubInvoice.SubInvNum AND
-                 ttRow.RowCode BEGINS "45" NO-ERROR.
-      IF AVAIL ttRow THEN
+      END.
+      FOR EACH ttRow WHERE
+               ttRow.SubInvNum = SubInvoice.SubInvNum AND
+               ttRow.RowCode BEGINS "45" NO-LOCK:
          ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
+      END.
 
       /* ttRows contains combined invrows => no need to check duplicates */
       FOR EACH ttRow WHERE
