@@ -7,6 +7,7 @@
   CHANGED ......: 04/2012 - YDR-420
   CHANGED ......: 02/2013 - YDR-889
   CHANGED ......: 05/2013 - YOT-2468
+  CHANGED ......: 06/2016 - YOT-4490 order status 73 can be closed
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 
@@ -186,7 +187,7 @@ PROCEDURE pUpdateOrderStatus:
    IF Order.CLI NE icMSISDN THEN
       RETURN "ERROR:MSISDN does not match with order".
 
-   IF LOOKUP(icOldStatus,"20,21,22,41,42,43,44,50,51,76,99") = 0 THEN
+   IF LOOKUP(icOldStatus,"20,21,22,41,42,43,44,50,51,73,76,99") = 0 THEN
       RETURN "ERROR:Unsupported current order status value".
 
    IF Order.StatusCode NE icOldStatus THEN
@@ -213,7 +214,7 @@ PROCEDURE pUpdateOrderStatus:
 
    END.
    
-   IF icOldStatus EQ "76" OR icOldStatus EQ "22" THEN DO:
+   IF icOldStatus EQ "76" OR icOldStatus EQ "22" OR icOldStatus EQ "73" THEN DO:
       CASE icNewStatus:
          WHEN "7" THEN RUN closeorder.p(Order.OrderId, TRUE).
          OTHERWISE RETURN "ERROR:Unsupported new order status value".
