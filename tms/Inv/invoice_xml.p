@@ -864,7 +864,7 @@ PROCEDURE pSubInvoice2XML:
              lhXML:START-ELEMENT("AdditionalAmount").
              lhXML:INSERT-ATTRIBUTE("Header","PendingInstallmentAmountBeforeInvoice").
              lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttSub.TFBankBeforeAmt[liTFCount])).
-             lhXML:END-ELEMENT("AdditionalAmountn").
+             lhXML:END-ELEMENT("AdditionalAmount").
 
              lhXML:START-ELEMENT("AdditionalAmount").
              lhXML:INSERT-ATTRIBUTE("Header","PendingInstallmentAmountAfterInvoice").
