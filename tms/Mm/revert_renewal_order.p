@@ -372,7 +372,7 @@ PROCEDURE pRevertRenewalOrder:
                 liTermRequest = fPCActionRequest(bSubMsRequest.MsSeq,
                                                  DayCampaign.DCEvent,
                                                  "reactivate" + (IF liTermRequest > 0 THEN
-                                                   ":" + STRING(liTermRequest) ELSE ""),
+                                                   ":wait" + STRING(liTermRequest) ELSE ""),
                                                  fSecOffSet(fMakeTS(),5),
                                                  TRUE,
                                                  {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER},
