@@ -282,6 +282,7 @@ PROCEDURE pRevertRenewalOrder:
           IF NOT AVAIL DCCLI THEN NEXT.
 
              ASSIGN llReCreate = FALSE
+                    liTermRequest = 0
                     liCount = 0.
 
              /* Find last closed contract to pick validto date */
@@ -370,8 +371,9 @@ PROCEDURE pRevertRenewalOrder:
             
                 liTermRequest = fPCActionRequest(bSubMsRequest.MsSeq,
                                                  DayCampaign.DCEvent,
-                                                 "reactivate",
-                                                 fSecOffSet(fMakeTS(),120), /* 2 mins gap */
+                                                 "reactivate" + (IF liTermRequest > 0 THEN
+                                                   ":" + STRING(liTermRequest) ELSE ""),
+                                                 fSecOffSet(fMakeTS(),5),
                                                  TRUE,
                                                  {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER},
                                                  "",
