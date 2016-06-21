@@ -567,8 +567,7 @@ PROCEDURE pInvoice2XML:
 
       /*Google Billing*/
       FIND FIRST ttRow WHERE
-                 ttRow.RowCode BEGINS "44" AND
-                 ttRow.RowBillCode EQ "GOOGLEVAS" NO-ERROR.
+                 ttRow.RowCode BEGINS "44" NO-ERROR.
       IF AVAIL ttRow THEN DO: 
          lhXML:START-ELEMENT("AdditionalDetail").
          lhXML:START-ELEMENT("AdditionalAmount").
@@ -578,8 +577,7 @@ PROCEDURE pInvoice2XML:
          lhXML:END-ELEMENT("AdditionalDetail"). 
       END. 
       FIND FIRST ttRow WHERE
-                 ttRow.RowCode BEGINS "45" AND
-                 ttRow.RowBillCode EQ "GOOGLEVASFAT" NO-ERROR.
+                 ttRow.RowCode BEGINS "45" NO-ERROR.
       IF AVAIL ttRow THEN DO:
          lhXML:START-ELEMENT("AdditionalDetail").
          lhXML:START-ELEMENT("AdditionalAmount").
@@ -603,7 +601,8 @@ PROCEDURE pInvoice2XML:
       lhXML:END-ELEMENT("AdditionalAmount").
       lhXML:END-ELEMENT("AdditionalDetail").
       
-      IF ttInvoice.InstallmentAmt > 0 THEN DO:
+      IF ttInvoice.InstallmentAmt > 0 OR
+         ttInvoice.GBValue > 0 THEN DO:
          lhXML:START-ELEMENT("AdditionalDetail").
          lhXML:START-ELEMENT("AdditionalAmount").
          lhXML:INSERT-ATTRIBUTE("Header","TotalAmountExclInstallment").
@@ -771,7 +770,8 @@ PROCEDURE pSubInvoice2XML:
 
          /* row, billing item level */
          lhXML:START-ELEMENT("RowDetail").
-         IF ttRow.RowBillCode BEGINS "GOOGLE" THEN 
+         IF ttRow.RowCode BEGINS "44" OR
+            ttRow.RowCode BEGINS "45" THEN 
             lhXML:INSERT-ATTRIBUTE("Type", ttRow.RowBillCode).
          
          IF ttRow.RowType > "" THEN DO:
@@ -865,7 +865,7 @@ PROCEDURE pSubInvoice2XML:
              lhXML:START-ELEMENT("AdditionalAmount").
              lhXML:INSERT-ATTRIBUTE("Header","PendingInstallmentAmountBeforeInvoice").
              lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttSub.TFBankBeforeAmt[liTFCount])).
-             lhXML:END-ELEMENT("AdditionalAmountn").
+             lhXML:END-ELEMENT("AdditionalAmount").
 
              lhXML:START-ELEMENT("AdditionalAmount").
              lhXML:INSERT-ATTRIBUTE("Header","PendingInstallmentAmountAfterInvoice").
