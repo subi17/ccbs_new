@@ -149,6 +149,7 @@ PROCEDURE pReadFileData:
    DEF VAR lcErrInfo AS CHAR NO-UNDO.
    DEF VAR lcOrigNumericFormat AS CHAR NO-UNDO.
    DEF VAR llgPayType AS LOGICAL.
+   DEF VAR lcRefId AS CHAR NO-UNDO.
 
    FILE_LINE:
    REPEAT TRANS:
@@ -171,6 +172,7 @@ PROCEDURE pReadFileData:
             llgPayType = FALSE.
          ELSE
             llgPayType = TRUE.
+         lcRefId = entry(9,lcLine,";").   
       
       /* Check used numeric format at first row amount value and
          store original value for changing it back after handling 
@@ -197,6 +199,7 @@ PROCEDURE pReadFileData:
                               lcCurrentPeriod,
                               ldeAmount,
                               llgPayType,
+                              lcRefId,
                               lcErrInfo).
       lcOutLine = lcLine + ";" + lcErr.
       lcLogLine = lcFilename + ";" + lcOutLine + ";" + lcErrInfo. 
