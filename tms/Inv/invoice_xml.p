@@ -601,7 +601,8 @@ PROCEDURE pInvoice2XML:
       lhXML:END-ELEMENT("AdditionalAmount").
       lhXML:END-ELEMENT("AdditionalDetail").
       
-      IF ttInvoice.InstallmentAmt > 0 THEN DO:
+      IF ttInvoice.InstallmentAmt > 0 OR
+         ttInvoice.GBValue > 0 THEN DO:
          lhXML:START-ELEMENT("AdditionalDetail").
          lhXML:START-ELEMENT("AdditionalAmount").
          lhXML:INSERT-ATTRIBUTE("Header","TotalAmountExclInstallment").
