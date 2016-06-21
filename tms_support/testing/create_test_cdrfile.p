@@ -96,7 +96,7 @@ repeat:
       liCallTimePos = fGetPosition((lcVersion),"Event time").
       liCallDestPos = fGetPosition((lcVersion),"Destination address").
       liCallDurPos = fGetPosition((lcVersion),"Duration").
-      liCallOrigPos = fGetPosition((lcVersion),"Originating address").
+      liCallOrigPos = fGetPosition((lcVersion),"Charged subscriber").
       liCallCasePos = fGetPosition((lcVersion),"Call case number").
       liDataInPos = fGetPosition((lcVersion),"Data amount incoming").
       liDataOutPos = fGetPosition((lcVersion),"Data amount outgoing").
