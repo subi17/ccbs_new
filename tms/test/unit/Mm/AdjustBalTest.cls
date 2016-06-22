@@ -51,9 +51,18 @@ CLASS unit.Mm.AdjustBalTest INHERITS gearbox.unit.ProceduralTest:
       ldeAdjAmount = 11.1.
 
       RUN pAdjustBal IN ihTested ({&PMDUB}, 1, ldeAdjAmount, OUTPUT lcError).
+
       assertEqual(lcError, "").      
 
-      assert(CAN-FIND(FIRST TopUpQueue NO-LOCK WHERE TopUpQueue.TopUpAmt = -1 * ldeAdjAmount), "A valid TopUpQueue is not created").
+      FIND FIRST Memo NO-LOCK NO-ERROR.
+
+      assert(AVAILABLE Memo, "Memo is not created").
+
+      FIND FIRST TopUpQueue NO-LOCK NO-ERROR.
+
+      assert(AVAILABLE TopUpQueue, "TopUpQueue is not created").
+
+      assertEqual(TopUpQueue.TopUpAmt * -1, ldeAdjAmount).
 
    END METHOD.
 

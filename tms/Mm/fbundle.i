@@ -866,6 +866,8 @@ PROCEDURE pAdjustBal:
          TopUpQueue.Date      = TODAY
          TopUpQueue.Source    = PrePaidRequest.Source.
          
+      RELEASE TopUpQueue.
+
       CREATE Memo.
       ASSIGN
          Memo.CreStamp  = fMakeTS()
