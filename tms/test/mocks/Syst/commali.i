@@ -94,6 +94,8 @@ END.
 on f21 HELP.
 status INPUT off.
 
+gcBrand = "1".
+
 &ENDIF
 
 

@@ -37,9 +37,9 @@ CLASS unit.Mm.AdjustBalTest INHERITS gearbox.unit.ProceduralTest:
       llReturnValue = DYNAMIC-FUNCTION("fIsBundle" IN ihTested, "DUB").
       assertEqual(llReturnValue, FALSE).
       llReturnValue = DYNAMIC-FUNCTION("fIsBundle" IN ihTested, "TERMPAYM12DATA").
-      assertEqual(llReturnValue, FALSE).
-      llReturnValue = DYNAMIC-FUNCTION("fIsBundle" IN ihTested, "DATADEVRC24").
       assertEqual(llReturnValue, TRUE).
+      llReturnValue = DYNAMIC-FUNCTION("fIsBundle" IN ihTested, "DATADEVRC24").
+      assertEqual(llReturnValue, FALSE).
    END METHOD.
 
 
