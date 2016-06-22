@@ -45,10 +45,15 @@ CLASS unit.Mm.AdjustBalTest INHERITS gearbox.unit.ProceduralTest:
 
    METHOD PUBLIC VOID testpAdjustBal ( INPUT ihTested AS HANDLE ):
 
-      DEFINE VARIABLE lcError AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE lcError      AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE ldeAdjAmount AS DECIMAL   NO-UNDO.
 
-      RUN pAdjustBal IN ihTested ({&PMDUB}, 1, 11.1, OUTPUT lcError).
+      ldeAdjAmount = 11.1.
+
+      RUN pAdjustBal IN ihTested ({&PMDUB}, 1, ldeAdjAmount, OUTPUT lcError).
       assertEqual(lcError, "").      
+
+      assert(CAN-FIND(FIRST TopUpQueue NO-LOCK WHERE TopUpQueue.TopUpAmt = -1 * ldeAdjAmount), "A valid TopUpQueue is not created").
 
    END METHOD.
 
