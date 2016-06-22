@@ -566,7 +566,7 @@ PROCEDURE pInvoice2XML:
       lhXML:END-ELEMENT("AdditionalDetail").
 
       /*Google Billing*/
-      IF ttInvoice.GBValue GT 0 THEN DO:
+      IF ttInvoice.GBValue GT 0 THEN DO: /* check if google payments */
          FIND FIRST ttRow WHERE
                     ttRow.RowCode BEGINS "44" NO-ERROR.
          IF AVAIL ttRow THEN DO: 
@@ -578,7 +578,7 @@ PROCEDURE pInvoice2XML:
             lhXML:END-ELEMENT("AdditionalDetail"). 
          END.
       END.
-      IF ttInvoice.GBDiscValue GT 0 THEN DO:
+      IF ttInvoice.GBDiscValue LT 0 THEN DO: /* Discount is negative value */
          FIND FIRST ttRow WHERE
                     ttRow.RowCode BEGINS "45" NO-ERROR.
          IF AVAIL ttRow THEN DO:
