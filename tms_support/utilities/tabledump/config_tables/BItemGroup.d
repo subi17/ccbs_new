@@ -36,6 +36,8 @@
 "41" "DSS monthly fee" "" "" "" "" "" "1" 0 ",3" 0
 "42" "Data bundle" "" "" "" "" "" "1" 0 ",3" 64
 "43" "Accessories" "" "" "" "" "" "1" 0 "," 121
+"44" "Google Premium Services" "" "" "" "" "" "1" 0 "," 85
+"45" "Google Discounts & Charges" "" "" "" "" "" "1" 0 "," 86
 "5" "MMS" "" "" "" "" "" "1" 0 "1002,5" 90
 "6" "Premium Services" "" "" "" "" "" "1" 0 "1002,6" 80
 "7" "Terminals" "" "" "" "" "" "1" 0 "," 120
