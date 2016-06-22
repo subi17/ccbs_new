@@ -1,0 +1,28 @@
+TMSParamAdjustBal: TMSParam
+  ParamGroup: ""
+  ParamCode: "TCPModule"
+  ParamType: "C"
+  CharVal: "test/mocks/Gwy/tcpgwy_fake.p"
+  Brand: "1"
+
+DayCampaignAdjustBal_1: DayCampaign
+  DCEvent: "DATADEVRC24"
+  ValidFrom: 2011-12-19
+  ValidTo: 2049-12-31
+  DCTarget: "1"
+  DCName: "Data device RC with 24 months REILU"
+  Brand: "1"
+  DCType: "3"
+  DurMonths: 24
+  DurType: 3
+
+DayCampaignAdjustBal_2: DayCampaign
+  DCEvent: "TERMPAYM12DATA"
+  ValidFrom: 2011-12-19
+  ValidTo: 2049-12-31
+  DCTarget: "2"
+  DCName: "Data device RC with 12 months REILU"
+  Brand: "1"
+  DCType: "8"
+  DurMonths: 12
+  DurType: 3

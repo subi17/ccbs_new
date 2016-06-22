@@ -1,6 +1,7 @@
-// Depends = Mm/fbundle.i,Syst/commali.i,Syst/tmsconst.i,Func/date.i,Func/timestamp.i,Func/cparam2.i,Func/fcreatereq.i,Func/matrix.i,Func/transname.i,Func/ftaxdata.i,Func/xmlfunction.i,Func/fdss.i,Func/fmakemsreq.i,Func/fparse.i,Func/fixedfee.i,Syst/eventval.i,Func/create_eventlog.i,Func/msreqfunc.i,Func/fctserval.i,Func/fcustdata.i,Func/coinv.i,Func/fmakesms.i,Func/fgettxt.i,Func/freplacesms.i
-// Mocks   = .
-
+/*
+  Depends = Mm/fbundle.i,Syst/commali.i,Syst/tmsconst.i,Func/date.i,Func/timestamp.i,Func/cparam2.i,Func/fcreatereq.i,Func/matrix.i,Func/transname.i,Func/ftaxdata.i,Func/xmlfunction.i,Func/fdss.i,Func/fmakemsreq.i,Func/fparse.i,Func/fixedfee.i,Syst/eventval.i,Func/create_eventlog.i,Func/msreqfunc.i,Func/fctserval.i,Func/fcustdata.i,Func/coinv.i,Func/fmakesms.i,Func/fgettxt.i,Func/freplacesms.i
+  Mocks   = .
+*/
 USING Progress.Lang.*.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
@@ -28,7 +29,6 @@ CLASS unit.Mm.AdjustBalTest INHERITS gearbox.unit.ProceduralTest:
 
 
    METHOD OVERRIDE PUBLIC VOID setupHandle ( INPUT lhTested AS HANDLE ):
-      // Do something to lhTested
    END METHOD.
 
 
