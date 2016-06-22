@@ -566,26 +566,30 @@ PROCEDURE pInvoice2XML:
       lhXML:END-ELEMENT("AdditionalDetail").
 
       /*Google Billing*/
-      FIND FIRST ttRow WHERE
-                 ttRow.RowCode BEGINS "44" NO-ERROR.
-      IF AVAIL ttRow THEN DO: 
-         lhXML:START-ELEMENT("AdditionalDetail").
-         lhXML:START-ELEMENT("AdditionalAmount").
-         lhXML:INSERT-ATTRIBUTE("Header", ttRow.RowBillCode).
-         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttRow.RowAmt)).
-         lhXML:END-ELEMENT("AdditionalAmount").
-         lhXML:END-ELEMENT("AdditionalDetail"). 
-      END. 
-      FIND FIRST ttRow WHERE
-                 ttRow.RowCode BEGINS "45" NO-ERROR.
-      IF AVAIL ttRow THEN DO:
-         lhXML:START-ELEMENT("AdditionalDetail").
-         lhXML:START-ELEMENT("AdditionalAmount").
-         lhXML:INSERT-ATTRIBUTE("Header", ttRow.RowBillCode).
-         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttRow.RowAmt)).
-         lhXML:END-ELEMENT("AdditionalAmount").
-         lhXML:END-ELEMENT("AdditionalDetail").
-      END.     
+      IF ttInvoice.GBValue GT 0 THEN DO:
+         FIND FIRST ttRow WHERE
+                    ttRow.RowCode BEGINS "44" NO-ERROR.
+         IF AVAIL ttRow THEN DO: 
+            lhXML:START-ELEMENT("AdditionalDetail").
+            lhXML:START-ELEMENT("AdditionalAmount").
+            lhXML:INSERT-ATTRIBUTE("Header", ttRow.RowBillCode).
+            lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttInvoice.GBValue)).
+            lhXML:END-ELEMENT("AdditionalAmount").
+            lhXML:END-ELEMENT("AdditionalDetail"). 
+         END.
+      END.
+      IF ttInvoice.GBDiscValue GT 0 THEN DO:
+         FIND FIRST ttRow WHERE
+                    ttRow.RowCode BEGINS "45" NO-ERROR.
+         IF AVAIL ttRow THEN DO:
+            lhXML:START-ELEMENT("AdditionalDetail").
+            lhXML:START-ELEMENT("AdditionalAmount").
+            lhXML:INSERT-ATTRIBUTE("Header", ttRow.RowBillCode).
+            lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttInvoice.GBDiscValue)).
+            lhXML:END-ELEMENT("AdditionalAmount").
+            lhXML:END-ELEMENT("AdditionalDetail").
+         END.
+      END.
       /* AmountExclTaxAndInstallment, TotalAmountExclInstallment  */
       /* As per requirement, Discount Amt value has to be added to Installment Amt.
          But Discound Amt is negative value, so it is subtracted to InstallmentAmt value */
@@ -597,7 +601,8 @@ PROCEDURE pInvoice2XML:
                              - ttInvoice.InstallmentAmt
                              - ttInvoice.PenaltyAmt
                              - ttInvoice.InstallmentDiscAmt
-                             - ttInvoice.GBValue)).  
+                             - ttInvoice.GBValue
+                             - ttInvoice.GBDiscValue)).  
       lhXML:END-ELEMENT("AdditionalAmount").
       lhXML:END-ELEMENT("AdditionalDetail").
       
@@ -611,7 +616,8 @@ PROCEDURE pInvoice2XML:
                                 - ttInvoice.InstallmentAmt
                                 - ttInvoice.PenaltyAmt
                                 - ttInvoice.InstallmentDiscAmt
-                                - ttInvoice.GBValue)).
+                                - ttInvoice.GBValue
+                                - ttInvoice.GBDiscValue)).
          lhXML:END-ELEMENT("AdditionalAmount").
          lhXML:END-ELEMENT("AdditionalDetail").
       END.
