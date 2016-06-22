@@ -567,28 +567,20 @@ PROCEDURE pInvoice2XML:
 
       /*Google Billing*/
       IF ttInvoice.GBValue GT 0 THEN DO: /* check if google payments */
-         FIND FIRST ttRow WHERE
-                    ttRow.RowCode BEGINS "44" NO-ERROR.
-         IF AVAIL ttRow THEN DO: 
-            lhXML:START-ELEMENT("AdditionalDetail").
-            lhXML:START-ELEMENT("AdditionalAmount").
-            lhXML:INSERT-ATTRIBUTE("Header", ttRow.RowBillCode).
-            lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttInvoice.GBValue)).
-            lhXML:END-ELEMENT("AdditionalAmount").
-            lhXML:END-ELEMENT("AdditionalDetail"). 
-         END.
+         lhXML:START-ELEMENT("AdditionalDetail").
+         lhXML:START-ELEMENT("AdditionalAmount").
+         lhXML:INSERT-ATTRIBUTE("Header", "GOOGLEVAS").
+         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttInvoice.GBValue)).
+         lhXML:END-ELEMENT("AdditionalAmount").
+         lhXML:END-ELEMENT("AdditionalDetail"). 
       END.
       IF ttInvoice.GBDiscValue LT 0 THEN DO: /* Discount is negative value */
-         FIND FIRST ttRow WHERE
-                    ttRow.RowCode BEGINS "45" NO-ERROR.
-         IF AVAIL ttRow THEN DO:
-            lhXML:START-ELEMENT("AdditionalDetail").
-            lhXML:START-ELEMENT("AdditionalAmount").
-            lhXML:INSERT-ATTRIBUTE("Header", ttRow.RowBillCode).
-            lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttInvoice.GBDiscValue)).
-            lhXML:END-ELEMENT("AdditionalAmount").
-            lhXML:END-ELEMENT("AdditionalDetail").
-         END.
+         lhXML:START-ELEMENT("AdditionalDetail").
+         lhXML:START-ELEMENT("AdditionalAmount").
+         lhXML:INSERT-ATTRIBUTE("Header", "GOOGLEVASFAT").
+         lhXML:WRITE-CHARACTERS(fDispXMLDecimal(ttInvoice.GBDiscValue)).
+         lhXML:END-ELEMENT("AdditionalAmount").
+         lhXML:END-ELEMENT("AdditionalDetail").
       END.
       /* AmountExclTaxAndInstallment, TotalAmountExclInstallment  */
       /* As per requirement, Discount Amt value has to be added to Installment Amt.
