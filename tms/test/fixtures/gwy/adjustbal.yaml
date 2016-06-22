@@ -1,8 +1,40 @@
-TMSParamAdjustBal: TMSParam
+TMSParamAdjustBal_1: TMSParam
   ParamGroup: ""
   ParamCode: "TCPModule"
   ParamType: "C"
-  CharVal: "test/mocks/Gwy/tcpgwy_fake.p"
+  CharVal: "mocks/Gwy/tcpgwy_fake.p"
+  Brand: "1"
+
+TMSParamAdjustBal_2: TMSParam
+  ParamGroup: "ATM"
+  ParamCode: "Nodes"
+  ParamType: "C"
+  CharVal: "a"
+  ParamName: "ATM Nodes as character"
+  Brand: "1"
+
+TMSParamAdjustBal_3: TMSParam
+  ParamGroup: "URL"
+  ParamCode: "urlATMa"
+  ParamType: "C"
+  CharVal: "atm"
+  ParamName: "ATM URL"
+  Brand: "1"
+
+TMSParamAdjustBal_4: TMSParam
+  ParamGroup: "URL"
+  ParamCode: "urlATMb"
+  ParamType: "C"
+  CharVal: "atm"
+  ParamName: "ATM URL b"
+  Brand: "1"
+
+TMSParamAdjustBal_5: TMSParam
+  ParamGroup: "URL"
+  ParamCode: "urlATMc"
+  ParamType: "C"
+  CharVal: "atm"
+  ParamName: "ATM URL c"
   Brand: "1"
 
 DayCampaignAdjustBal_1: DayCampaign
