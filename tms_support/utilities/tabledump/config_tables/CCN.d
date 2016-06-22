@@ -73,6 +73,7 @@
 631 "80x special numbers" 0 "1"
 641 "Cuba - Mobile" 641 "1"
 722 "Korea, PDR (North) - Mobile" 722 "1"
+790 "Google Service" 0 "1"
 801 "Roaming EU-Int" 0 "1"
 802 "Roaming Int-EU" 0 "1"
 888 "e-mail" 0 "1"
