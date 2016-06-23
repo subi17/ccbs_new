@@ -13,6 +13,7 @@ DEF TEMP-TABLE ttInvoice NO-UNDO
    FIELD InstallmentDiscAmt AS DEC
    FIELD Q25Phase AS INT INIT 99
    FIELD GBValue AS DEC
+   FIELD GBDiscValue AS DEC
    INDEX InvNum IS UNIQUE InvNum
    INDEX ZipCode ZipCode InvNum.
 
