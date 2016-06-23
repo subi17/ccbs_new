@@ -170,7 +170,7 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
                                    REPLACE(STRING(ideAmount),",","."),
                                 "Correct", /*reason group*/
                                 "2013", /*reason*/
-                                "", /*reason note*/
+                                icRefId, /*reason note*/
                                 OUTPUT ocErrInfo).
          IF liRequest = 0 THEN DO:
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
