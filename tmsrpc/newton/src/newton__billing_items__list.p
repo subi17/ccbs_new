@@ -5,7 +5,7 @@
  * @output struct;array of BillItem ids
 */
 
-{rpcmethods/flistrpc.i}
+{newton/src/flistrpc.i}
 
 lcStruct = validate_struct(pcStruct, "billing_group").
 

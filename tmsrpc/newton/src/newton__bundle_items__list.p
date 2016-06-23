@@ -5,7 +5,7 @@
  * @output struct;array of bundle items ids
 */
 
-{rpcmethods/flistrpc.i}
+{newton/src/flistrpc.i}
 
 DEF VAR lcCLIType    AS CHAR NO-UNDO.
 

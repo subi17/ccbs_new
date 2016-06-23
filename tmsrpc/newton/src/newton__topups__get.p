@@ -19,7 +19,7 @@
   
  */
 
-{rpcmethods/header_get.i}
+{newton/src/header_get.i}
 {Func/tsformat.i}
 {Func/xmlfunction.i}
 

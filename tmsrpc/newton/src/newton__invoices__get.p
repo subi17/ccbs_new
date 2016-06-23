@@ -58,7 +58,7 @@
 
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-{rpcmethods/json_key.i}
+{newton/src/json_key.i}
 
 /* Output variables */
 DEFINE VARIABLE lcInvType AS CHARACTER NO-UNDO. 

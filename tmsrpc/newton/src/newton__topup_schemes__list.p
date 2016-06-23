@@ -5,7 +5,7 @@
  * @output struct;array of topup scheme ids
 */
 
-{rpcmethods/flistrpc.i}
+{newton/src/flistrpc.i}
 
 lcStruct = validate_struct(pcStruct, "").
 

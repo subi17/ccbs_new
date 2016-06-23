@@ -50,7 +50,7 @@
                 per_contract_id;int;unique contract id 
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-{rpcmethods/get_memos.i}
+{newton/src/get_memos.i}
 {Func/msisdn_prefix.i}
 
 /* Input parameters */

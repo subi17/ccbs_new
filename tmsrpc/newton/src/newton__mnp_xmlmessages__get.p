@@ -7,7 +7,7 @@
           xml_response;array of string;xml is slitted if size > 32000 chars
  */
 
-{rpcmethods/header_get.i}
+{newton/src/header_get.i}
 {Func/log.i}
       
 DEFINE VARIABLE gcStructMnpMessage AS CHARACTER NO-UNDO. 

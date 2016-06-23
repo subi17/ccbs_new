@@ -19,7 +19,7 @@
 */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-{rpcmethods/get_memos.i}
+{newton/src/get_memos.i}
 
 /* Input parameters */
 DEF VAR piKey AS INT NO-UNDO.

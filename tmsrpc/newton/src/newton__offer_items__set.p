@@ -56,7 +56,7 @@ katun = pcUserName.
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Mc/offer.i}
-{rpcmethods/xmlrpc_names.i}
+{newton/src/xmlrpc_names.i}
 
 FUNCTION fCheckInvalidChangeWithOldTs RETURN CHARACTER:
     /* Here list all checks that make the change not allowed *

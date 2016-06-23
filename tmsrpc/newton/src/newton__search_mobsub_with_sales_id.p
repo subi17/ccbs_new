@@ -16,7 +16,7 @@
                  notification;boolean;optional;e.g. pending icc change
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
-{rpcmethods/json_key.i}
+{newton/src/json_key.i}
 {Syst/commpaa.i}
 gcBrand = "1".
 {Syst/tmsconst.i}

@@ -20,7 +20,7 @@
 {Syst/commpaa.i}
 katun = "Newton".
 gcBrand = "1".
-{rpcmethods/json_key.i}
+{newton/src/json_key.i}
 {Func/timestamp.i}
 {Mm/fbundle.i}
 

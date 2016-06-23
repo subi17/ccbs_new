@@ -10,7 +10,7 @@
                name;string;description
  */
 
-{rpcmethods/header_get.i}
+{newton/src/header_get.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    

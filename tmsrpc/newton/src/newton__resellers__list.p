@@ -4,7 +4,7 @@
  * @input struct;mandatory;empty
  * @output array_of_string;reseller ids
 */
-{rpcmethods/flistrpc.i}
+{newton/src/flistrpc.i}
 
 lcStruct = validate_struct(pcStruct, "").
 

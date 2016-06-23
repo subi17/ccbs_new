@@ -5,7 +5,7 @@
  * @output struct;array of offer ids
 */
 
-{rpcmethods/flistrpc.i}
+{newton/src/flistrpc.i}
 
 lcStruct = validate_struct(pcStruct, "active").
 

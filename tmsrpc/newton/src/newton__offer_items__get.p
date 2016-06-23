@@ -16,8 +16,8 @@
       periods;int;(eg: 1-12)
  */
 
-{rpcmethods/xmlrpc_names.i}
-{rpcmethods/header_get.i}
+{newton/src/xmlrpc_names.i}
+{newton/src/header_get.i}
 
 DEF VAR liId AS INT NO-UNDO. 
 

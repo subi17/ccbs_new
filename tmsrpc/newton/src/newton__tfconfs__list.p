@@ -4,7 +4,7 @@
  * @input conditions;struct;mandatory;empty
  * @output struct;array of tfconf ids
 */
-{rpcmethods/flistrpc.i}
+{newton/src/flistrpc.i}
 
 lcStruct = validate_struct(pcStruct, "").
 

@@ -10,7 +10,7 @@
  * @output struct;array of event ids
 */
 
-{rpcmethods/flistrpc.i}
+{newton/src/flistrpc.i}
 {Func/timestamp.i}
 
 DEFINE VARIABLE pcUsername AS CHARACTER NO-UNDO. 

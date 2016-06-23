@@ -17,7 +17,7 @@ katun = "NewtonAd".
 gcBrand = "1".
 {Func/highusage_report.i}
 {Func/timestamp.i}
-{rpcmethods/json_key.i}
+{newton/src/json_key.i}
 {Func/barrfunc.i}
 
 FUNCTION process_highspender_row RETURN LOGICAL
