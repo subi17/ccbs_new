@@ -1816,6 +1816,7 @@ PROCEDURE pContractTermination:
    DEF VAR liCnt AS INT NO-UNDO.
    DEF VAR liEndPeriodPostpone AS INT  NO-UNDO.
    DEF VAR ldtActDatePostpone  AS DATE NO-UNDO.
+   DEF VAR llActiveInstallment AS LOG NO-UNDO.  
 
    DEF VAR llFMFee AS LOG  NO-UNDO. 
    DEF VAR liDSSMsSeq AS INT NO-UNDO. 
@@ -2346,6 +2347,8 @@ PROCEDURE pContractTermination:
          /* YPR-2515 */
          IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_RENEWAL} THEN DO:
 
+            llActiveInstallment = FALSE.
+
             FOR EACH bDCCLI NO-LOCK WHERE
                      bDCCLI.MsSeq = MsRequest.MsSeq AND
                      bDCCLI.DCEvent BEGINS "PAYTERM" AND
@@ -2356,6 +2359,8 @@ PROCEDURE pContractTermination:
                /* filter out expired installments */
                IF bDCCLI.ValidTo < DATE(MONTH(ldtActDate + 1), 1, 
                                         YEAR(ldtActDate + 1)) THEN NEXT.
+
+               llActiveInstallment = TRUE.
                                         
                ldaMonth22 = ADD-INTERVAL(bDCCLI.ValidFrom, 22, "months").
                ldaMonth22 = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
@@ -2364,6 +2369,15 @@ PROCEDURE pContractTermination:
                   llCreatePenaltyFee = FALSE.
                   LEAVE.
                END.
+            END.
+
+            IF llCreatePenaltyFee AND NOT llActiveInstallment THEN DO:
+
+               ldaMonth22  = ADD-INTERVAL(ldtOrigValidFrom, 22, "months").
+               ldaMonth22  = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
+
+               IF ldtActDate >= ldaMonth22 THEN
+                  llCreatePenaltyFee = FALSE.
             END.
 
          END. /* IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_RENEWAL} THEN DO: */
