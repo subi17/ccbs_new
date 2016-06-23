@@ -167,12 +167,13 @@ PROCEDURE pReadFileData:
          lcMSISDN = entry(5,lcline,";")
          lcCorrId = entry(3,lcline,";")
          lcTimeInfo = entry(2,lcline,";")
-         lcAmount = entry(8,lcline,";").
+         lcAmount = entry(8,lcline,";")
+         lcRefId = entry(9,lcLine,";").
+         
          IF entry(6,lcLine,";") EQ "POSTPAID" THEN
             llgPayType = FALSE.
          ELSE
             llgPayType = TRUE.
-         lcRefId = entry(9,lcLine,";").   
       
       /* Check used numeric format at first row amount value and
          store original value for changing it back after handling 

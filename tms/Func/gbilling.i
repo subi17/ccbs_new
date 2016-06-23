@@ -113,7 +113,6 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
    DEF VAR llgBilled AS LOGICAL NO-UNDO.
    DEF VAR liInvNum AS INT NO-UNDO.
    DEF VAR liRequest AS INT NO-UNDO.
-   DEF VAR llgFatOK AS LOGICAL NO-UNDO.
    DEF VAR lcMemoText AS CHAR NO-UNDO.
 
    lcPeriod = REPLACE(SUBSTRING(icTimeInfo,1,7),"-","").  
@@ -122,8 +121,8 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
      /*If not billed -> FAT*/
    llgBilled = fIsBilled(icMSISDN, icTimeInfo, OUTPUT liInvNum).
    IF lcPeriod EQ icCurrentPeriod OR llgBilled EQ FALSE THEN DO:
-
-     llgFatOK =  fCreateFatRow(
+     lcMemoText = "Google refund FAT, id: " + icRefId.
+     ocErrInfo =  fCreateFatRow(
                              "GOOGLEVASFAT",
                              bMobSub.CustNum,
                              bMobSub.MsSeq,
@@ -131,22 +130,12 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
                              "", /*host table*/
                              "", /*key value*/
                              ideAmount,
-                             0  /* percentage  */
+                             0, /* percentage  */
                              ?, /* VAT included */
-                             lcPeriod, /*from period*/
+                             INT(lcPeriod), /*from period*/
                              999999, /*to period*/
                              lcMemoText).
 
-
-      RUN creafat (bMobSub.CustNum, /* custnum */
-                   bMobSub.MsSeq, /* msseq */
-                   "GOOGLEVASFAT", /*fat group*/
-                   ideAmount,   /* amount */ 
-                   0,   /* percentage  */
-                   ?,   /* vat included already */
-                   lcPeriod, /*period*/
-                   999999, /*to period, no limit now*/
-                   OUTPUT ocErrInfo). /* error */
       ocErrInfo = TRIM(ocErrInfo).             
       IF ocErrInfo NE "" THEN DO:
          lcResponse = {&GB_POSTPAID_FAT_FAILURE}.
