@@ -1015,8 +1015,11 @@ PROCEDURE pGetInvoiceRowData:
 
          ASSIGN ldVatAmt = 0.
 
-         IF BillItem.BillCode BEGINS "GOOGLE" THEN
+         IF BillItem.BIGroup EQ "44" THEN /* Google purchase */
             ttInvoice.GBValue = ttInvoice.GBValue + InvRow.Amt.
+         
+         IF BillItem.BIGroup EQ "45" THEN /* Google refund */
+            ttInvoice.GBDiscValue = ttInvoice.GBDiscValue + InvRow.Amt.
          
          IF BillItem.BIGroup = "33" THEN DO:
 
@@ -1165,7 +1168,8 @@ PROCEDURE pGetInvoiceVatData:
    ldeExclSum = ttInvoice.InstallmentAmt +
                        ttInvoice.PenaltyAmt +
                        ttInvoice.InstallmentDiscAmt +
-                       ttInvoice.GBValue.
+                       ttInvoice.GBValue +
+                       ttInvoice.GBDiscValue.
 
    IF ldeExclSum NE 0 THEN
       FOR FIRST ttVat WHERE ttVat.VatPerc = 0 EXCLUSIVE-LOCK:
