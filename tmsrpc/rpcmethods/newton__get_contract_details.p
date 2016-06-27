@@ -51,7 +51,7 @@ DEF VAR gcContractsStruct    AS CHAR NO-UNDO.
 
 DEFINE BUFFER bMsRequest FOR MsRequest.
 
-IF validate_request(param_toplevel_id,"string,string,int,string,date") EQ ? THEN
+IF validate_request(param_toplevel_id,"string,string,int,string,datetime") EQ ? THEN
    RETURN.
 
 ASSIGN 
