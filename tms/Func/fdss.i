@@ -24,6 +24,8 @@
 {Syst/eventval.i}
 {Func/create_eventlog.i}
 
+&GLOBAL-DEFINE PL_LIMIT_SHAPED 5242880
+
 FUNCTION fDSSRequest RETURNS INTEGER
    (INPUT iiMsSeq        AS INT,    /* subscription */
     INPUT iiCustNum      AS INT,    /* customer */
@@ -473,7 +475,6 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
    DEF VAR liPeriod               AS INT   NO-UNDO.
    DEF VAR liMobSubCount          AS INT   NO-UNDO.
    DEF VAR liTotalDSSLimit        AS INT64 NO-UNDO.
-   DEF VAR liDSSGraceLimit        AS INT64 NO-UNDO.
    DEF VAR lcHSDPASubsList        AS CHAR  NO-UNDO.
    DEF VAR lcAllSubsList          AS CHAR  NO-UNDO.
    DEF VAR ldeServiceLCounterAmt  AS DEC   NO-UNDO.
@@ -604,8 +605,7 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
       RETURN FALSE.
    END. /* IF liMobSubCount < 2 THEN DO: */
 
-   ASSIGN liTotalDSSLimit = (odeOtherMonthLimit * 1024 * 1024)
-          liDSSGraceLimit = (liTotalDSSLimit * 5) / 100.
+   ASSIGN liTotalDSSLimit = (odeOtherMonthLimit * 1024 * 1024).
 
    /* If it blanks then return only create param list otherwise specific */
    IF icReturnParamType = "HSDPA_MSISDN" THEN
@@ -616,7 +616,7 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
                  "TARIFF_TYPE=DSS"                           + "," +
                  "TARIFF="         + icBundleId              + "," +
                  "LIMIT_UNSHAPED=" + STRING(liTotalDSSLimit) + "," +
-                 "LIMIT_SHAPED="   + STRING(liDSSGraceLimit) + "," +
+                 "LIMIT_SHAPED="   + STRING({&PL_LIMIT_SHAPED}) + "," +
                  "MSISDNS="        + lcALLSubsList.
   
    RETURN TRUE.
@@ -1226,7 +1226,6 @@ FUNCTION fMakeDSSCommLine RETURNS CHAR
    DEF VAR lcAction            AS CHAR  NO-UNDO.
    DEF VAR liDSSMsSeq          AS INT   NO-UNDO.
    DEF VAR ldeCurrentDSSLimit  AS DEC   NO-UNDO.
-   DEF VAR liDSSGraceLimit     AS INT64 NO-UNDO.
    DEF VAR liDSSLimit          AS INT64 NO-UNDO.
    DEF VAR lcDSSBundleId       AS CHAR  NO-UNDO.
 
@@ -1251,8 +1250,7 @@ FUNCTION fMakeDSSCommLine RETURNS CHAR
                         OUTPUT lcDSSBundleId).
 
    IF ldeCurrentDSSLimit > 0 THEN DO TRANSACTION:
-      ASSIGN liDSSLimit      = (ldeCurrentDSSLimit * 1024 * 1024)
-             liDSSGraceLimit = ((liDSSLimit * 5) / 100).
+      ASSIGN liDSSLimit      = (ldeCurrentDSSLimit * 1024 * 1024).
          
       FIND CURRENT ProvMsRequest EXCLUSIVE-LOCK.
       IF AVAILABLE ProvMsRequest THEN
@@ -1262,7 +1260,7 @@ FUNCTION fMakeDSSCommLine RETURNS CHAR
          "TARIFF_TYPE=DSS"                               + "," +
          "TARIFF="          + ProvMsRequest.ReqCparam3   + "," +
          "LIMIT_UNSHAPED="  + STRING(liDSSLimit)         + "," +
-         "LIMIT_SHAPED="    + STRING(liDSSGraceLimit).
+         "LIMIT_SHAPED="    + STRING({&PL_LIMIT_SHAPED}).
       FIND CURRENT ProvMSRequest NO-LOCK.
    END. /* IF ProvMSRequest.ReqCparam1 = "MODIFY" THEN DO: */
 
@@ -1481,13 +1479,11 @@ PROCEDURE pUpdateDSSNetworkLimit:
    DEF VAR liCreated       AS INT   NO-UNDO.
    DEF VAR lcError         AS CHAR  NO-UNDO.
    DEF VAR lcParam         AS CHAR  NO-UNDO.
-   DEF VAR liGraceLimit    AS INT64 NO-UNDO.
    DEF VAR liLimit         AS INT64 NO-UNDO.
 
    DEF BUFFER bMsRequest   FOR MsRequest.
 
-   ASSIGN liLimit      = ideLimit * 1024 * 1024
-          liGraceLimit = (liLimit * 5) / 100.
+   ASSIGN liLimit      = ideLimit * 1024 * 1024.
 
    /* Compare latest DSS limit with limit specified in the "CREATE" request */
    IF ilCheckDSSLimit THEN DO:
@@ -1505,14 +1501,14 @@ PROCEDURE pUpdateDSSNetworkLimit:
       lcParam = "DSS-ACCOUNT" + "=" + STRING(iiCustNum) + "," +
                 "TEMPLATE=DSS"                          + "," +
                 icActionType  + "=" + STRING(liLimit)   + "," +
-                "GRACE"       + "=" + STRING(liGraceLimit).
+                "GRACE"       + "=" + STRING(0).
    ELSE
       lcParam = "DSS-ACCOUNT="    + STRING(iiCustNum)       + "," +
                 "TEMPLATE=DSS_MONTHLY"                      + "," +
                 "TARIFF_TYPE=DSS"                           + "," +
                 "TARIFF="         + icBundleId              + "," +
                 "LIMIT_UNSHAPED=" + STRING(liLimit)         + "," +
-                "LIMIT_SHAPED="   + STRING(liGraceLimit).
+                "LIMIT_SHAPED="   + STRING({&PL_LIMIT_SHAPED}).
 
    liCreated = fDSSRequest(iiMsSeq,
                            iiCustNum,

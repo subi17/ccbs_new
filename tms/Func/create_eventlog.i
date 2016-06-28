@@ -36,7 +36,8 @@ FUNCTION fGetEventField RETURNS CHARACTER
             lcField = STRING(YEAR(lda))       + '/'
                     + STRING(MONTH(lda),'99') + '/'
                     + STRING(DAY(lda),'99').
-                                    
+        WHEN 'DECIMAL'  /* European format times with dot to event log */
+        THEN lcField = REPLACE(STRING(ihField:BUFFER-VALUE[iiExtent]),",",".").
         OTHERWISE      
         ASSIGN lcField = STRING(ihField:BUFFER-VALUE[iiExtent]).
         

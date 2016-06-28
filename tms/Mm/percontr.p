@@ -1649,12 +1649,19 @@ PROCEDURE pFinalize:
 
    IF MsRequest.ReqType = 8 AND
       LOOKUP(DayCampaign.DCType,"1,4,6") > 0 AND
-      MONTH(ldtActDate) <= MONTH(TODAY) THEN
+      MONTH(ldtActDate) <= MONTH(TODAY) THEN DO:
+      
+      /* YDR-2109 Creating or Updating Fraud Limit Counter for 
+         New Bundles, upsells and roaming upsells */
+      RUN pFraudCounterLimit (MsOwner.MsSeq,
+                             DayCampaign.DCEvent,
+                             MsOwner.CustNum).
       
       RUN pUpdateTMCounterLimit(
          MsOwner.MSSeq,
          (IF DayCampaign.DCEvent EQ "UPGRADE_UPSELL" THEN
             MsRequest.ReqCParam5 ELSE DayCampaign.DcEvent)).
+   END.
 
    IF (LOOKUP(DayCampaign.DCEvent,lcPostpaidDataBundles) > 0 OR
        LOOKUP(DayCampaign.DCEvent,lcALLPostpaidUPSELLBundles) > 0 OR
@@ -1809,6 +1816,7 @@ PROCEDURE pContractTermination:
    DEF VAR liCnt AS INT NO-UNDO.
    DEF VAR liEndPeriodPostpone AS INT  NO-UNDO.
    DEF VAR ldtActDatePostpone  AS DATE NO-UNDO.
+   DEF VAR llActiveInstallment AS LOG NO-UNDO.  
 
    DEF VAR llFMFee AS LOG  NO-UNDO. 
    DEF VAR liDSSMsSeq AS INT NO-UNDO. 
@@ -2339,6 +2347,8 @@ PROCEDURE pContractTermination:
          /* YPR-2515 */
          IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_RENEWAL} THEN DO:
 
+            llActiveInstallment = FALSE.
+
             FOR EACH bDCCLI NO-LOCK WHERE
                      bDCCLI.MsSeq = MsRequest.MsSeq AND
                      bDCCLI.DCEvent BEGINS "PAYTERM" AND
@@ -2349,6 +2359,8 @@ PROCEDURE pContractTermination:
                /* filter out expired installments */
                IF bDCCLI.ValidTo < DATE(MONTH(ldtActDate + 1), 1, 
                                         YEAR(ldtActDate + 1)) THEN NEXT.
+
+               llActiveInstallment = TRUE.
                                         
                ldaMonth22 = ADD-INTERVAL(bDCCLI.ValidFrom, 22, "months").
                ldaMonth22 = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
@@ -2357,6 +2369,15 @@ PROCEDURE pContractTermination:
                   llCreatePenaltyFee = FALSE.
                   LEAVE.
                END.
+            END.
+
+            IF llCreatePenaltyFee AND NOT llActiveInstallment THEN DO:
+
+               ldaMonth22  = ADD-INTERVAL(ldtOrigValidFrom, 22, "months").
+               ldaMonth22  = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
+
+               IF ldtActDate >= ldaMonth22 THEN
+                  llCreatePenaltyFee = FALSE.
             END.
 
          END. /* IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_RENEWAL} THEN DO: */

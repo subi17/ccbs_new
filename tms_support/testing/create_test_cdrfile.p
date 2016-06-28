@@ -89,19 +89,34 @@ repeat:
    
    /*Look for field indexes for different types of CDRs*/
    lcVersion = TRIM(ENTRY(5,lcLine,"|")) + TRIM(ENTRY(4,lcLine,"|")).
-   liCallRecFormatPos = fGetPosition((lcVersion),"Format version").
-   liCallRecTypePos = fGetPosition((lcVersion),"Record type").
-   liCallDatePos = fGetPosition((lcVersion),"Start date").
-   liCallTimePos = fGetPosition((lcVersion),"Start time").
-   liCallDestPos = fGetPosition((lcVersion),"Destination address").
-   liCallDurPos = fGetPosition((lcVersion),"Duration").
-   liCallOrigPos = fGetPosition((lcVersion),"Originating address").
-   liCallCasePos = fGetPosition((lcVersion),"Call case number").
-   liDataInPos = fGetPosition((lcVersion),"Data amount incoming").
-   liDataOutPos = fGetPosition((lcVersion),"Data amount outgoing").
-   liCDRTypePos = fGetPosition((lcVersion),"Event subtype").
-   liOrigImsi = fGetPosition((lcVersion),"Originating IMSI").
-
+   IF lcVersion = "0102YC" THEN DO: /* YPR-3890 Premium/Google CDR's format */
+      liCallRecFormatPos = fGetPosition((lcVersion),"Format version").
+      liCallRecTypePos = fGetPosition((lcVersion),"Event type").
+      liCallDatePos = fGetPosition((lcVersion),"Event date").
+      liCallTimePos = fGetPosition((lcVersion),"Event time").
+      liCallDestPos = fGetPosition((lcVersion),"Destination address").
+      liCallDurPos = fGetPosition((lcVersion),"Duration").
+      liCallOrigPos = fGetPosition((lcVersion),"Charged subscriber").
+      liCallCasePos = fGetPosition((lcVersion),"Call case number").
+      liDataInPos = fGetPosition((lcVersion),"Data amount incoming").
+      liDataOutPos = fGetPosition((lcVersion),"Data amount outgoing").
+      liCDRTypePos = fGetPosition((lcVersion),"Event subtype").
+      liOrigImsi = fGetPosition((lcVersion),"Originating IMSI").
+   END.
+   ELSE DO:
+      liCallRecFormatPos = fGetPosition((lcVersion),"Format version").
+      liCallRecTypePos = fGetPosition((lcVersion),"Record type").
+      liCallDatePos = fGetPosition((lcVersion),"Start date").
+      liCallTimePos = fGetPosition((lcVersion),"Start time").
+      liCallDestPos = fGetPosition((lcVersion),"Destination address").
+      liCallDurPos = fGetPosition((lcVersion),"Duration").
+      liCallOrigPos = fGetPosition((lcVersion),"Originating address").
+      liCallCasePos = fGetPosition((lcVersion),"Call case number").
+      liDataInPos = fGetPosition((lcVersion),"Data amount incoming").
+      liDataOutPos = fGetPosition((lcVersion),"Data amount outgoing").
+      liCDRTypePos = fGetPosition((lcVersion),"Event subtype").
+      liOrigImsi = fGetPosition((lcVersion),"Originating IMSI").
+   END.
    /*Read Call/CDR type for correct data handling*/
    lcCDRType = ENTRY(liCDRTypePos,lcLine,"|").
 

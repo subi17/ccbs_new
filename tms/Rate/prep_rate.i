@@ -1,7 +1,7 @@
 /* prep_rate.i
 */
 {Rate/error_codes.i}
-
+{Syst/tmsconst.i}
   
    /* Is this double call */    
    IF prepcdr.ErrorCode = errorcode OR
@@ -360,7 +360,8 @@
         
          /* PRERATED TICKET */
          IF ttcall.ppflag = 0 and
-          LOOKUP(STRING(ttCall.SpoCMT),"72,73,78") > 0 THEN 
+          LOOKUP(STRING(ttCall.SpoCMT),"72,73,78," +
+                  STRING({&GB_CCN})) > 0 THEN
             bPrice = ttCall.ccharge.
            
          ASSIGN               

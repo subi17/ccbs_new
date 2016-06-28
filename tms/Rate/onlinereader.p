@@ -570,7 +570,10 @@ DO TRANS:
               ttCall.spocmt = 73 THEN DO: 
          
          ttCall.gsmbnr = lcSubsInfo.
-         
+      END.   
+
+      ELSE IF ttCall.spocmt = {&GB_CCN} THEN DO:   
+         ttCall.gsmbnr = {&GB_B_NBR}.
       END.    
       
       ELSE IF ttCall.spocmt = 71 OR
@@ -932,7 +935,8 @@ DO TRANS:
           
          /* PRERATED POSTPAID TICKETS */ 
          IF TTCall.PPFlag = 0 THEN DO:
-            IF LOOKUP(STRING(ttCall.SpoCMT),"72,73,78") > 0 THEN 
+            IF LOOKUP(STRING(ttCall.SpoCMT),"72,73,78," + 
+                       STRING({&GB_CCN})) > 0 THEN 
                bPrice = ttCall.ccharge.
          END.
          
@@ -984,6 +988,9 @@ DO TRANS:
             ttCall.ServiceName = fGetPremiumServiceName(ttCall.GsmBnr,
                                                         ttCall.DateSt).
       END. /* IF ttCall.MSCID <> "CCGW" THEN DO: */
+      ELSE IF ttCall.spocmt EQ {&GB_CCN} THEN DO:
+         ttCall.ServiceName = "Google".  /* YPR-3890 */
+      END.
 
       IF ttCall.mscid EQ "NRTRDE" THEN ttCall.InvSeq = 0.
       ELSE IF ttCall.ErrorCode = 0 THEN 

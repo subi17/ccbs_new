@@ -100,6 +100,28 @@ PROCEDURE pDSSContract:
                  bMsRequest.ReqCParam1 = "DELETE" AND
           LOOKUP(STRING(bMsRequest.ReqStatus),
                  {&REQ_INACTIVE_STATUSES} + ",3") = 0 NO-ERROR.
+
+      /* DSS termination request could be also mapped to different subs. */
+      IF NOT AVAIL bMsRequest THEN
+         FOR FIRST ServiceLimit NO-LOCK WHERE
+                   ServiceLimit.GroupCode = MsRequest.ReqCParam3,
+            FIRST MServiceLimit NO-LOCK WHERE
+                  MServiceLimit.MsSeq    = MsRequest.MsSeq AND
+                  MServiceLimit.DialType = ServiceLimit.DialType AND
+                  MServiceLimit.SlSeq    = ServiceLimit.SlSeq    AND
+                  MServiceLimit.EndTS    = 99999999.99999 AND
+                  MServiceLimit.Custnum NE MsRequest.Custnum:
+
+            FIND FIRST bMsRequest NO-LOCK WHERE
+                       bMsRequest.Brand = gcBrand AND
+                       bMsRequest.ReqType = 83 AND
+                       bMsRequest.Custnum = MServiceLimit.Custnum AND
+                       bMsRequest.ReqCParam3 = MsRequest.ReqCParam3 AND
+                       bMsRequest.ReqCParam1 = "DELETE" AND
+                LOOKUP(STRING(bMsRequest.ReqStatus),
+                       {&REQ_INACTIVE_STATUSES} + ",3") = 0 NO-ERROR.
+         END.
+
       IF AVAIL bMsRequest THEN
          lcActParam = "act:wait" + STRING(bMsRequest.MsRequest).
       ELSE lcActParam = "act".

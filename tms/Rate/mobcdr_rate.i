@@ -146,7 +146,7 @@ FUNCTION fAnalBsub RETURNS LOGICAL
             ttCall.Gsmbnr = "".
       END.
       WHEN 72 THEN Mod_bsub  = "VAS".
-      
+      WHEN {&GB_CCN} THEN Mod_bsub = "GOOGLE".
       WHEN 41 THEN DO:
          IF ttCall.Btype = 1 AND 
             ttCall.Gsmbnr begins ttcall.bpref THEN

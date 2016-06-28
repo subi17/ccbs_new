@@ -124,6 +124,7 @@ DEF TEMP-TABLE ttSub NO-UNDO
    FIELD OldCTName       AS CHAR
    FIELD TariffActDate   AS CHAR
    FIELD MessageType     AS CHAR
+   FIELD GBValue         AS DEC
    INDEX CLI CLI.
    
 DEF TEMP-TABLE ttCLIType NO-UNDO
@@ -270,6 +271,10 @@ FUNCTION fLocalCCName RETURNS CHARACTER:
    /* ServiceName for Premium Number */
    ELSE IF ttCall.BIGroup = "6" THEN
       lcCCName = ttCall.ServiceName.
+   /* ServiceName for Google Billing */
+   ELSE IF ttCall.BIGroup = {&BITEM_GRP_GB} THEN
+      lcCCName = ttCall.ServiceName.
+
 
    /* ccn for others or if roaming country was not found */
    IF lcCCName = "" THEN 
@@ -866,6 +871,18 @@ PROCEDURE pGetSubInvoiceHeaderData:
       /* is call itemization printed */
       ttSub.CallSpec = fCallSpecDuring(SubInvoice.MsSeq,Invoice.InvDate).
 
+      /*Google billing*/
+      FOR EACH ttRow WHERE
+               ttRow.SubInvNum = SubInvoice.SubInvNum AND
+               ttRow.RowCode BEGINS "44" NO-LOCK:
+         ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
+      END.
+      FOR EACH ttRow WHERE
+               ttRow.SubInvNum = SubInvoice.SubInvNum AND
+               ttRow.RowCode BEGINS "45" NO-LOCK:
+         ttSub.GBValue = ttSub.GBValue + ttRow.RowAmt.
+      END.
+
       /* ttRows contains combined invrows => no need to check duplicates */
       FOR EACH ttRow WHERE
                ttRow.SubInvNum = SubInvoice.SubInvNum AND
@@ -997,6 +1014,12 @@ PROCEDURE pGetInvoiceRowData:
             ttInvoice.PenaltyAmt = ttInvoice.PenaltyAmt + InvRow.Amt.
 
          ASSIGN ldVatAmt = 0.
+
+         IF BillItem.BIGroup EQ "44" THEN /* Google purchase */
+            ttInvoice.GBValue = ttInvoice.GBValue + InvRow.Amt.
+         
+         IF BillItem.BIGroup EQ "45" THEN /* Google refund */
+            ttInvoice.GBDiscValue = ttInvoice.GBDiscValue + InvRow.Amt.
          
          IF BillItem.BIGroup = "33" THEN DO:
 
@@ -1122,7 +1145,7 @@ END PROCEDURE.
 PROCEDURE pGetInvoiceVatData:
 
    EMPTY TEMP-TABLE ttVat.
-   DEF VAR ldeInstallmentSum AS DEC NO-UNDO. 
+   DEF VAR ldeExclSum AS DEC NO-UNDO. 
 
    /* vat amount */
    DO liPCnt = 1 TO 10:
@@ -1139,16 +1162,19 @@ PROCEDURE pGetInvoiceVatData:
             ttVat.VatBasis = ttVat.VatBasis + Invoice.VatBasis[liPCnt].
       END.
    END.
-
+   
    /* exclude installment amount from 0% VAT row YDR-185 */
-   ldeInstallmentSum = ttInvoice.InstallmentAmt +
+   /* exclude Google Billing amount from 0% VAT row YPR-3890*/
+   ldeExclSum = ttInvoice.InstallmentAmt +
                        ttInvoice.PenaltyAmt +
-                       ttInvoice.InstallmentDiscAmt.
+                       ttInvoice.InstallmentDiscAmt +
+                       ttInvoice.GBValue +
+                       ttInvoice.GBDiscValue.
 
-   IF ldeInstallmentSum NE 0 THEN
+   IF ldeExclSum NE 0 THEN
       FOR FIRST ttVat WHERE ttVat.VatPerc = 0 EXCLUSIVE-LOCK:
-         IF ttVat.VatBasis EQ ldeInstallmentSum THEN DELETE ttVat.
-         ELSE ttVat.VATBasis = ttVAT.VATBasis - ldeInstallmentSum.
+         IF ttVat.VatBasis EQ ldeExclSum THEN DELETE ttVat.
+         ELSE ttVat.VATBasis = ttVAT.VATBasis - ldeExclSum.
       END.
 
    /* taxzone */
