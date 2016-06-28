@@ -10,7 +10,7 @@
 /*
 @INPUT msisdn;string;optional
        cust_id_type;string;optional
-       cust_id_num;int;optional
+       cust_id;string;optional
        salesman_id;string;mandatory
        date_from;date;optional
 
@@ -34,30 +34,37 @@ gcBrand = "1".
  
 DEF VAR pcMSISDN     AS CHAR NO-UNDO. 
 DEF VAR pcCustIDType AS CHAR NO-UNDO. 
-DEF VAR pcCustIDNum  AS INT  NO-UNDO. 
+DEF VAR pcCustID     AS CHAR NO-UNDO. 
 DEF VAR pcSalesID    AS CHAR NO-UNDO. 
 DEF VAR pcDate       AS DATE NO-UNDO.
 
-DEF VAR top_struct           AS CHAR NO-UNDO.  
+DEF VAR lcTopArray           AS CHAR NO-UNDO.  
 DEF VAR lpcDateStamp         AS DEC  NO-UNDO.
 DEF VAR ldtTodayStamp        AS DEC  NO-UNDO.
-DEF VAR lcContractsDetails   AS CHAR NO-UNDO. 
-DEF VAR lcSubsDetails        AS CHAR NO-UNDO. 
 DEF VAR lcCustName           AS CHAR NO-UNDO. 
-DEF VAR ldtTermReturnDate    AS DATE NO-UNDO.
-DEF VAR llgTermReturnDate    AS LOG  NO-UNDO.
+DEF VAR ldtContractDate      AS DATE NO-UNDO.
+DEF VAR llgContractDate      AS LOG  NO-UNDO.
 DEF VAR gcSubscriptionStruct AS CHAR NO-UNDO. 
 DEF VAR gcContractsStruct    AS CHAR NO-UNDO. 
+DEF VAR lcUserCode           AS CHAR NO-UNDO. 
 
-DEFINE BUFFER bMsRequest FOR MsRequest.
+DEFINE TEMP-TABLE ttContractDetails NO-UNDO
+   FIELD CLI           AS CHAR
+   FIELD ContractType  AS CHAR
+   FIELD ContractId    AS CHAR
+   FIELD ContractDate  AS DATE
+   FIELD CustomerType  AS CHAR
+   INDEX CLI CLI.
 
-IF validate_request(param_toplevel_id,"string,string,int,string,datetime") EQ ? THEN
+DEFINE BUFFER bttContractDetails FOR ttContractDetails.
+
+IF validate_request(param_toplevel_id,"string,string,string,string,datetime") EQ ? THEN
    RETURN.
 
 ASSIGN 
    pcMSISDN     = get_string(param_toplevel_id,"0")
    pcCustIDType = get_string(param_toplevel_id,"1")
-   pcCustIDNum  = get_int(param_toplevel_id,"2")   
+   pcCustID     = get_string(param_toplevel_id,"2")   
    pcSalesID    = get_string(param_toplevel_id,"3")
    pcDate       = get_date(param_toplevel_id,"4").
 
@@ -73,9 +80,9 @@ FIND SalesMan NO-LOCK WHERE
 IF NOT AVAIL SalesMan THEN 
    RETURN appl_err("Salesman is not available"). 
 
-IF pcMSISDN    NE "" AND 
-   pcCustIDNum NE 0  THEN 
-   RETURN appl_err("Both MSISDN AND Customer ID are not allowed").
+IF pcMSISDN NE "" AND 
+   pcCustID NE "" THEN 
+   RETURN appl_err("Both Subscription AND Customer ID are not allowed").
 
 IF pcMSISDN NE "" THEN DO:
    FIND FIRST MobSub NO-LOCK WHERE 
@@ -83,25 +90,23 @@ IF pcMSISDN NE "" THEN DO:
               MobSub.CLI   = pcMSISDN NO-ERROR.
 
    IF NOT AVAIL MobSub THEN 
-      RETURN appl_err("MSISDN not available").
+      RETURN appl_err("Subscription not available").
 END.
 
-IF pcCustIDNum NE 0 THEN DO:
-   FIND FIRST Customer NO-LOCK WHERE 
-              Customer.CustNum = pcCustIDNum NO-ERROR.
+IF (pcCustID     NE ""  AND 
+    pcCustIDType EQ "") OR
+   (pcCustID     EQ ""  AND 
+    pcCustIDType NE "") THEN 
+   RETURN appl_err("Customer ID AND Customer ID type has to be provided together").    
 
-   IF NOT AVAIL Customer THEN 
-      RETURN appl_err("Customer ID is not available").
-
-END.
-
-IF pcCustIDType NE "" THEN DO:
+IF pcCustID NE "" THEN DO:
    FIND FIRST Customer NO-LOCK WHERE 
               Customer.Brand      = gcBrand      AND 
-              Customer.CustIdType = pcCustIDType NO-ERROR.
-    
+              Customer.OrgID      = pcCustID     AND 
+              Customer.CustIDType = pcCustIDType NO-ERROR.
+
    IF NOT AVAIL Customer THEN 
-      RETURN appl_err("Customer ID Type not available").
+      RETURN appl_err("Customer is not available").
 END.
 
 IF pcDate EQ ? THEN pcDate = TODAY - 30.
@@ -110,85 +115,119 @@ ASSIGN
    lpcDateStamp  = fHMS2TS(pcDate,"00:00:00")
    ldtTodayStamp = fHMS2TS(TODAY,"23:59:59").
 
-top_struct = add_struct(response_toplevel_id,"").
+/* Creating temp-table data WITH Terminal return contracts */
+FOR EACH TermReturn NO-LOCK WHERE 
+         TermReturn.ReturnTs >= lpcDateStamp AND 
+         TermReturn.ReturnTs <= ldtTodayStamp:
 
-FOR EACH Order NO-LOCK WHERE 
-         Order.Brand    = gcBrand      AND
-         Order.Salesman = pcSalesID    AND 
-         Order.CrStamp >= lpcDateStamp AND 
-         Order.CrStamp <= ldtTodayStamp:
-  
-   IF pcMSISDN NE "" AND Order.CLI NE pcMSISDN THEN NEXT.
+   ASSIGN 
+      ldtContractDate = ?
+      llgContractDate = fTS2Date(TermReturn.ReturnTS,
+                                 ldtContractDate).
+   CREATE ttContractDetails.
+   ASSIGN 
+      ttContractDetails.CLI          = TermReturn.MSISDN
+      ttContractDetails.ContractType = "terminal_return"
+      ttContractDetails.ContractId   = TermReturn.ContractId
+      ttContractDetails.ContractDate = ldtContractDate.
+END.
 
-   IF pcCustIDNum NE 0 AND Order.CustNum NE pcCustIDNum THEN NEXT.
+/* Creating temp-table data WITH Q25 extension contracts */
+
+lcUserCode = "POS_" + pcSalesID.
+
+RUN pQ25ExtensionContracts(lcUserCode).
+
+lcUserCode = "RENEWAL_POS_" + pcSalesID.
+
+RUN pQ25ExtensionContracts(lcUserCode).
+
+lcTopArray = add_array(response_toplevel_id,"").
+
+FOR EACH ttContractDetails EXCLUSIVE-LOCK 
+    BREAK BY ttContractDetails.CLI:
    
-   FIND FIRST Customer NO-LOCK WHERE 
-              Customer.Brand   = gcBrand       AND 
-              Customer.CustNum = Order.CustNum NO-ERROR.
-
-   IF pcCustIDType NE "" AND 
-      pcCustIDType NE Customer.CustIdType THEN NEXT.           
-
-   lcSubsDetails = add_array(top_struct,"subscription_struct").
-
-   lcCustName = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                  BUFFER Customer).
-
-   gcSubscriptionStruct = add_struct(lcSubsDetails,"").
-   add_string(gcSubscriptionStruct,"cli",Order.CLI).
-   add_string(gcSubscriptionStruct,"ownerid_type",Customer.CustIdType).
-   add_int(gcSubscriptionStruct,"ownerid_num",Order.CustNum).
-   add_string(gcSubscriptionStruct,"ownerid_name",lcCustName).
-
-   lcContractsDetails = add_array(top_struct,"contracts_struct").
-
-   FOR EACH TermReturn NO-LOCK WHERE
-            TermReturn.OrderId = Order.OrderId AND
-          ((TermReturn.DeviceScreen = TRUE AND TermReturn.DeviceStart  = TRUE) OR
-           (TermReturn.DeviceScreen = ?    AND TermReturn.DeviceStart  = ?)):
-     
-      ASSIGN 
-         ldtTermReturnDate = ?
-         llgTermReturnDate = fTS2Date(TermReturn.ReturnTS,
-                                      ldtTermReturnDate).
-
-      gcContractsStruct = add_struct(lcContractsDetails,"").
-      add_string(gcContractsStruct,"contract_type","terminal_return").
-      add_string(gcContractsStruct,"q25_contract_id",TermReturn.ContractId).
-      add_datetime(gcContractsStruct,"contract_date",ldtTermReturnDate).
+   IF LAST-OF(ttContractDetails.CLI) THEN DO:
       
-   END.
-   
-   FOR EACH DCCLI NO-LOCK WHERE
-            DCCLI.Brand    = gcBrand     AND
-            DCCLI.DCEvent  = "RVTERM12"  AND
-            DCCLI.MsSeq    = Order.MsSeq AND
-            DCCLI.ValidTo >= TODAY,
-      EACH bMsRequest NO-LOCK USE-INDEX MsActStamp WHERE
-           bMsRequest.MsSeq      = DCCLI.MsSeq                     AND
-           bMsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION}  AND
-           bMsRequest.ReqStat    = 2                               AND
-           bMsRequest.ActStamp  >= fMake2Dt(DCCLI.ValidFrom,0)     AND
-           bMsRequest.ActStamp  <= fMake2Dt(DCCLI.ValidFrom,86399) AND
-           bMsRequest.Reqcparam3 = "RVTERM12",
-      FIRST SingleFee NO-LOCK USE-INDEX Custnum WHERE
-            SingleFee.Brand       = gcBrand                       AND
-            SingleFee.Custnum     = Order.CustNum                 AND
-            SingleFee.HostTable   = "Mobsub"                      AND
-            SingleFee.KeyValue    = STRING(Order.MsSeq)           AND
-            SingleFee.SourceTable = "DCCLI"                       AND
-            SingleFee.SourceKey   = STRING(bMsRequest.ReqIParam3) AND
-            SingleFee.CalcObj     = "RVTERM"                      AND
-            SingleFee.OrderId     = Order.OrderId:
-  
-      gcContractsStruct = add_struct(lcContractsDetails,"").
-      add_string(gcContractsStruct,"contract_type","extension").
-      add_string(gcContractsStruct,"q25_contract_id",bMsRequest.ReqCparam4).
-      add_datetime(gcContractsStruct,"contract_date",DCCLI.ValidFrom).
-        
+      IF pcMSISDN              NE ""         AND 
+         ttContractDetails.CLI NE MobSub.CLI THEN NEXT.
+      ELSE DO:
+         FIND FIRST MobSub NO-LOCK WHERE 
+                    MobSub.Brand = gcBrand               AND 
+                    MobSub.CLI   = ttContractDetails.CLI NO-ERROR. 
+         
+         IF NOT AVAIL MobSub THEN NEXT.
+      END.
+
+      IF pcCustID       NE ""               AND 
+         MobSub.CustNum NE Customer.CustNum THEN NEXT.
+      ELSE DO:
+         FIND FIRST Customer NO-LOCK WHERE 
+                    Customer.Brand   = gcBrand        AND 
+                    Customer.CustNum = MobSub.CustNum NO-ERROR.
+
+         IF NOT AVAIL Customer THEN NEXT.           
+      END. 
+      
+      ASSIGN 
+         lcCustName = ""  
+         lcCustName = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
+                                    BUFFER Customer).
+
+      gcSubscriptionStruct = add_struct(lcTopArray,"subscription_array").
+      add_string(gcSubscriptionStruct,"cli",ttContractDetails.CLI).
+      add_string(gcSubscriptionStruct,"ownerid_type",Customer.CustIdType).
+      add_int(gcSubscriptionStruct,"ownerid_num",Customer.CustNum).
+      add_string(gcSubscriptionStruct,"ownerid_name",lcCustName).
+
+      lcContractsArray = add_array(gcSubscriptionStruct,"contracts_array").
+
+      FOR EACH bttContractDetails NO-LOCK WHERE 
+               bttContractDetails.CLI = ttContractDetails.CLI:
+         
+         gcContractsStruct = add_struct(lcContractsArray,"").
+         add_string(gcContractsStruct,"contract_type",bttContractDetails.ContractType).
+         add_string(gcContractsStruct,"q25_contract_id",bttContractDetails.ContractID).
+         add_datetime(gcContractsStruct,"contract_date",bttContractDetails.ContractDate).
+
+      END.          
+
    END.
 
-END.        
+END.
+
+PROCEDURE pQ25ExtensionContracts:
+DEFINE INPUT PARAMETER icUserCode AS CHAR NO-UNDO. 
+   
+   FOR EACH MsRequest NO-LOCK USE-INDEX UserCode WHERE 
+            MsRequest.Brand      = gcBrand      AND 
+            MsRequest.UserCode   = icUserCode   AND 
+            MsRequest.ActStamp  >= lpcDateStamp AND 
+            MsRequest.CreStamp  >= lpcDateStamp AND 
+            MsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND 
+            MsRequest.ReqStatus  = 2            AND 
+            MsRequest.ReqCParam3 = "RVTERM12",
+      FIRST SingleFee NO-LOCK USE-INDEX HostTable WHERE 
+            SingleFee.Brand       = gcBrand                      AND 
+            SingleFee.HostTable   = "MobSub"                     AND 
+            SingleFee.KeyValue    = STRING(MsRequest.MsSeq)      AND 
+            SingleFee.SourceTable = "DCCLI"                      AND 
+            SingleFee.SourceKey   = STRING(MsRequest.ReqIParam3) AND 
+            SingleFee.CalcObj     = "RVTERM":
+
+      ASSIGN 
+         ldtContractDate = ?
+         llgContractDate = fTS2Date(MsRequest.ActStamp,
+                                    ldtContractDate).
+      CREATE ttContractDetails.
+      ASSIGN 
+         ttContractDetails.CLI          = MsRequest.CLI
+         ttContractDetails.ContractType = "extension"
+         ttContractDetails.ContractId   = MsRequest.ReqCparam4
+         ttContractDetails.ContractDate = ldtContractDate.
+      
+   END.         
+END.
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 

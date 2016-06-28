@@ -15,7 +15,7 @@ if len(sys.argv) < 6: instruction()
 else:
    var1 = sys.argv[1]
    var2 = sys.argv[2]
-   var3 = int(sys.argv[3])
+   var3 = sys.argv[3]
    var4 = sys.argv[4]
    var5 = date_time_builder(sys.argv[5])
 
