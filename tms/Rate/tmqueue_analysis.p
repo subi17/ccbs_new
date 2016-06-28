@@ -69,6 +69,9 @@ DEF VAR liPremiumFraudPostSeq AS INT NO-UNDO.
 DEF VAR liPremiumFraudPreSeq AS INT NO-UNDO.
 DEF VAR ldeAmount AS DEC NO-UNDO. 
 DEF VAR lcCONTFVoice100 AS CHAR NO-UNDO.
+DEF VAR ldeTotalLimit   AS DEC NO-UNDO.
+DEF VAR ldeMonthBegin   AS DEC NO-UNDO.
+DEF VAR ldeMonthEnd     AS DEC NO-UNDO.
 
 DEF TEMP-TABLE ttRule NO-UNDO
    LIKE TMRule
@@ -688,7 +691,25 @@ PROCEDURE pAnalyseQueueRow:
 
                   END.
                   ELSE ldaFrom = ttPeriod.PeriodBegin.
+                  
+                  ASSIGN 
+                     ldeMonthBegin = 0
+                     ldeMonthEnd   = 0
+                     ldeTotalLimit = 0
+                     ldeMonthBegin = fMake2Dt(ldaFrom,0)
+                     ldeMonthEnd   = fMake2Dt(ttPeriod.PeriodEnd,86399).
 
+                  /* YDR-2109 Get Total fraud Limit Counter value for 
+                     New Bundles, upsells and roaming upsells */
+                  IF ttRule.TMRuleSeq EQ liTotalTrafficFraudSeq AND 
+                     YEAR(TMQueue.DateST)  = YEAR(TODAY)        AND 
+                     MONTH(TMQueue.DateST) = MONTH(TODAY)       THEN 
+                     fGetTotalBundleUsage (TMQueue.MsSeq,
+                                           "",
+                                           TMQueue.CustNum,
+                                           ldeMonthBegin,
+                                           ldeMonthEnd,
+                                           OUTPUT ldeTotalLimit).
                   CREATE TMCounter.
                   ASSIGN
                      TMCounter.MsSeq     = TMQueue.MsSeq WHEN 
@@ -696,48 +717,12 @@ PROCEDURE pAnalyseQueueRow:
                      TMCounter.CustNum   = TMQueue.CustNum
                      TMCounter.TMRuleSeq = ttRule.TMRuleSeq
                      TMCounter.FromDate  = ldaFrom
-                     TMCounter.ToDate    = ttPeriod.PeriodEnd.
+                     TMCounter.ToDate    = ttPeriod.PeriodEnd
+                     TMCounter.Amount    = ldeTotalLimit
+                     TMCounter.DecValue  = ldeTotalLimit.
                END.      
                   
                IF TMCounter.FromDate > TMQueue.DateSt THEN LEAVE ItemLevel.
-
-               /* Include CONTF, CONTFF monthly fee to total traffic fraud */
-               IF TMQueue.CLIType BEGINS "CONTF" AND
-                  ttRule.TMRuleSeq EQ liTotalTrafficFraudSeq AND
-                  TMCounter.DecValue = 0 THEN DO:
-
-                  ldeTimeStamp = fMake2Dt(TMQueue.DateST, 86399).
-                  
-                  FIND FIRST MobSub NO-LOCK WHERE
-                             MobSub.MsSeq = TMQueue.MsSeq NO-ERROR.
-                  IF AVAIL MobSub AND
-                           MobSub.CLIType BEGINS "CONTF" AND
-                     NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE /* YBU-1887 */
-                                        MsRequest.MsSeq = MobSub.MsSeq AND
-                                        MsRequest.ReqType = 0 AND
-                                        MsRequest.Actstamp < ldeTimeStamp AND
-                          LOOKUP(STRING(MsRequest.ReqStatus),
-                                 {&REQ_INACTIVE_STATUSES}) = 0
-                          USE-INDEX MsSeq) AND
-                     NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE 
-                                        MsRequest.MsSeq = MobSub.MsSeq AND
-                                        MsRequest.ReqType = 
-                                          {&REQTYPE_BUNDLE_CHANGE} AND
-                                        MsRequest.ReqCParam1 BEGINS "CONTF" AND
-                                        MsRequest.ReqCParam2 BEGINS "CONTF" AND
-                                        MsRequest.Actstamp < ldeTimeStamp AND
-                          LOOKUP(STRING(MsRequest.ReqStatus),
-                                 {&REQ_INACTIVE_STATUSES}) = 0
-                          USE-INDEX MsSeq) THEN DO:
-                  
-                     ldeAmount = fGetCONTFFraudCounterFee(
-                                    MobSub.MsSeq,
-                                    fMake2Dt(TMQueue.DateST,86399)).
-                     IF ldeAmount > 0 THEN ASSIGN
-                        TMCounter.Amount = TMCounter.Amount + ldeAmount
-                        TMCounter.DecValue = ldeAmount.
-                  END.
-               END.
 
                CASE ttRule.CounterAmount:
                /* minutes */
