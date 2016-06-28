@@ -8,17 +8,17 @@
   CHANGED ......: 
   ------------------------------------------------------------------------*/
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fgettxt.i}
-{date.i}
-{fduedate.i}
-{ftransdir.i}
-{tmsconst.i}
-{ftaxdata.i}
-{ftopup.i}
-{fcreditreq.i}
+{Syst/commali.i}
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fgettxt.i}
+{Func/date.i}
+{Func/fduedate.i}
+{Func/ftransdir.i}
+{Syst/tmsconst.i}
+{Func/ftaxdata.i}
+{Func/ftopup.i}
+{Func/fcreditreq.i}
 
 DEF VAR lcGBOutDir AS CHAR NO-UNDO.
 DEF VAR lcGBInDir AS CHAR NO-UNDO.
@@ -119,7 +119,7 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
    llgBilled = fIsBilled(icMSISDN, icTimeInfo, OUTPUT liInvNum).
    IF lcPeriod EQ icCurrentPeriod OR llgBilled EQ FALSE THEN DO:
 
-      RUN creafat (bMobSub.CustNum, /* custnum */
+      RUN Mc/creafat (bMobSub.CustNum, /* custnum */
                    bMobSub.MsSeq, /* msseq */
                    "GOOGLEVASFAT", /*NOK*/
                    ideAmount,   /* amount */ 
