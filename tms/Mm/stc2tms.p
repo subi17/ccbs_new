@@ -996,7 +996,7 @@ PROCEDURE pFinalize:
             /* update customer data */
             RUN createcustomer.p(Order.OrderId,1,FALSE,TRUE,output liCustnum).
 
-            /* possible bono/bono voip activation */
+            /* possible bono activation */
             RUN orderaction_exec.p (MobSub.MsSeq,
                                     Order.OrderID,
                                     MsRequest.MsRequest,
@@ -1174,7 +1174,6 @@ PROCEDURE pCloseContracts:
    DEF VAR lcAllowedBONOSTCContracts AS CHAR    NO-UNDO.
    DEF VAR lcOnlyVoiceContracts      AS CHAR    NO-UNDO.
    DEF VAR lcBONOContracts           AS CHAR    NO-UNDO.
-   DEF VAR lcAllVoIPNativeBundles    AS CHAR    NO-UNDO.
    DEF VAR llCreateFees       AS LOG  NO-UNDO.
 
    EMPTY TEMP-TABLE ttContract.
@@ -1188,8 +1187,7 @@ PROCEDURE pCloseContracts:
 
    ASSIGN ldeActStamp = fSecOffSet(idEndStamp,1)
           lcAllowedBONOSTCContracts = fCParamC("ALLOWED_BONO_STC_CONTRACTS")
-          lcBONOContracts           = fCParamC("BONO_CONTRACTS")
-          lcAllVoIPNativeBundles    = fCParamC("NATIVE_VOIP_BASE_BUNDLES").
+          lcBONOContracts           = fCParamC("BONO_CONTRACTS").
 
    IF icNewType = "CONTF" THEN
       lcOnlyVoiceContracts = fCParamC("ONLY_VOICE_CONTRACTS").
@@ -1251,15 +1249,11 @@ PROCEDURE pCloseContracts:
                DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN 
          liContractID = INT(ENTRY(liCount,lcContIDList)). 
 
-      IF (lcContract EQ "BONO_VOIP" AND
-         (LOOKUP(icNewType,lcAllVoIPNativeBundles) > 0 OR 
-          LOOKUP(icBaseBundle,lcAllVoIPNativeBundles) > 0))
-         OR
-         (fMatrixAnalyse(gcBrand,
-                        "PERCONTR",
-                        "PerContract;SubsTypeTo",
+      IF (fMatrixAnalyse(gcBrand,
+                         "PERCONTR",
+                         "PerContract;SubsTypeTo",
                          lcContract + ";" + icNewType,
-                        OUTPUT lcReqChar) NE 1 AND
+                         OUTPUT lcReqChar) NE 1 AND
           ENTRY(1,lcReqChar,";") NE "?") OR
          (LOOKUP(lcContract,lcBonoContracts) > 0 AND
           LOOKUP(lcContract,lcAllowedBonoSTCContracts) = 0) THEN DO:
@@ -1342,7 +1336,7 @@ PROCEDURE pCloseContracts:
       ELSE llCreated = TRUE.
    END.
 
-   /* Handle BB, BONO_VOIP - Only for CONT,CONT4,CONT5,CONTF10,CONTF20 */
+   /* Handle BB - Only for CONT,CONT4,CONT5,CONTF10,CONTF20 */
    IF LOOKUP(icNewType,"CONT,CONT4,CONT5") > 0 OR
       (icBaseBundle > "" AND LOOKUP(icBaseBundle,lcOnlyVoiceContracts) > 0)
    THEN DO:
@@ -1358,11 +1352,6 @@ PROCEDURE pCloseContracts:
                               BUFFER MsRequest,
                               BUFFER MobSub).
 
-         /* Deactivate BONO_VOIP */
-         IF LOOKUP("BONO_VOIP",lcContractList) > 0 THEN DO:
-            CREATE ttContract.
-                   ttContract.DCEvent = "BONO_VOIP".
-         END.
       END. /* IF INDEX(lcContractList,"MDUB") = 0 THEN DO: */
 
       /* Modify BB profile */
@@ -1418,37 +1407,6 @@ PROCEDURE pCloseContracts:
    END. /* FOR EACH ttContract: */
 
    EMPTY TEMP-TABLE ttContract NO-ERROR.
-
-   /* Deactivate VoIPVideo if new tariff is not native VoIP */
-   IF LOOKUP("BONO_VOIP",lcContractList) = 0 AND
-      AVAIL bOrigRequest AND
-      (LOOKUP(bOrigRequest.ReqCparam1,lcAllVoIPNativeBundles) > 0 OR
-       LOOKUP(bOldTariff.CLIType,lcAllVoIPNativeBundles) > 0) AND
-      LOOKUP(icNewType,lcAllVoIPNativeBundles) = 0 AND
-      LOOKUP(icBaseBundle,lcAllVoIPNativeBundles) = 0 AND
-      NOT fIsDSSActive(MobSub.CustNum,bOrigRequest.ActStamp) THEN DO:
-      liRequest = fServiceRequest(MobSub.MsSeq,
-                                  "VOIPVIDEO",
-                                  0,
-                                  "",
-                                  bOrigRequest.ActStamp,
-                                  "",
-                                  FALSE, /* fees */
-                                  FALSE, /* sms */
-                                  "",
-                                  icReqSource,
-                                  bOrigRequest.MsRequest, /* father request */
-                                  FALSE,
-                                  OUTPUT lcError).
-      IF liRequest = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
-                          STRING(MobSub.MsSeq),
-                          MobSub.CustNum,
-                          "VOIPVIDEO",
-                          "VOIPVIDEO deactivation request failed; " +
-                          lcError).
-   END.
 
    /* Close Residual Amount Single Fee */
    IF llCloseRVTermFee THEN

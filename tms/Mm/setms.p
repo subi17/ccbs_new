@@ -84,7 +84,6 @@ DEF VAR lcShaperProfile        AS CHAR              NO-UNDO.
 DEF VAR ldaActiveDate          AS DATE              NO-UNDO.
 DEF VAR liActiveTime           AS INT               NO-UNDO.
 DEF VAR llCheckSC AS LOG NO-UNDO INIT TRUE.
-DEF VAR llVoIPActive AS LOG NO-UNDO.
 DEF VAR lcShaperConfId AS CHAR NO-UNDO.
 DEF VAR lcBaseBundle AS CHAR NO-UNDO.
 
@@ -242,55 +241,7 @@ IF ServCom.ActType = 0 THEN DO:
 
      lcShaperProfile = fGetShaperConfCommline(MsRequest.ReqCParam2).
 
-     IF MsRequest.ReqCParam2 = "VOIP_ADD" OR
-        MsRequest.ReqCParam2 = "VOIP_REMOVE" THEN DO:
-
-        fSplitTS(MsRequest.ActStamp,
-                 OUTPUT ldaActiveDate,
-                 OUTPUT liActiveTime).
-
-        IF MobSub.TariffBundle = "" THEN DO:
-           FIND FIRST bCLIType WHERE
-                      bCLIType.Brand = gcBrand AND
-                      bCLIType.CLIType = MobSub.CLIType NO-LOCK NO-ERROR.
-           IF AVAIL bCLIType THEN DO:
-              IF bCLIType.BaseBundle = "" THEN
-                 lcBaseBundle = "".
-              ELSE lcBaseBundle = bCLIType.BaseBundle.
-           END.
-        END.
-        ELSE lcBaseBundle = MobSub.TariffBundle.
-
-        /* Find current Shaper Conf */
-        lcShaperConfId = fGetShaperConfId(MsRequest.MSSeq,
-                                          lcBaseBundle,
-                                          (IF lcBaseBundle = "" THEN
-                                           "#ADDBUNDLE" ELSE ""),
-                                          ldaActiveDate,
-                                          MobSub.CLIType).
-
-        /* Send defualt shaper if there is no actual shaper id returned */
-        IF lcShaperConfId = "" THEN lcShaperConfId = "DEFAULT".
-
-        FIND FIRST ShaperConf NO-LOCK WHERE
-                   ShaperConf.Brand = gcBrand AND
-                   ShaperConf.ShaperConfID = lcShaperConfId NO-ERROR.
-        IF NOT AVAIL ShaperConf THEN DO:
-           ocError = "ERROR:Shaper Configuration not found".
-           RETURN ocError.
-        END.
-
-        IF MsRequest.ReqCParam2 = "VOIP_ADD" THEN
-           lcShaperProfile = fGetShaperConfCommline(lcShaperConfId + "wVOIP").
-        ELSE
-           lcShaperProfile = fGetShaperConfCommline(lcShaperConfId).
-
-        IF INDEX(lcShaperProfile,"HSPA_MONTHLY_ADD") = 0 THEN
-           lcShaperProfile = REPLACE(lcShaperProfile,"HSPA_MONTHLY",
-                                                     "HSPA_MONTHLY_ADD").
-     END. /* IF MsRequest.ReqCParam2 = "VOIP_ADD" OR */
-
-     ELSE IF AVAILABLE bMsRequest THEN DO:
+     IF AVAILABLE bMsRequest THEN DO:
 
         fSplitTS(bMsRequest.ActStamp,
                  OUTPUT ldaActiveDate,
@@ -303,26 +254,12 @@ IF ServCom.ActType = 0 THEN DO:
                              ",RESET_DAY=" + STRING(DAY(ldaActiveDate)).
         ELSE IF MsRequest.ReqCParam2 <> "DEFAULT" THEN DO:
 
-           IF fGetActiveSpecificBundle(bMsRequest.MsSeq,bMsRequest.ActStamp,
-                                          "BONO_VOIP") > "" THEN DO:
-              lcShaperProfile = fGetShaperConfCommline(MsRequest.ReqCParam2 + "wVOIP").
-              llVoIPActive = TRUE.
-           END.
-
            IF (bMsRequest.ReqSource = {&REQUEST_SOURCE_STC} OR
                bMsRequest.ReqSource = {&REQUEST_SOURCE_BTC} OR
                bMsRequest.ReqType   = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR
-               bMsRequest.ReqType   = {&REQTYPE_BUNDLE_CHANGE}) THEN DO:
-
-              IF llVoIPActive THEN DO:
-                 IF INDEX(lcShaperProfile,"HSPA_MONTHLY_ADD") = 0 THEN
-                    lcShaperProfile = REPLACE(lcShaperProfile,"HSPA_MONTHLY",
-                                                              "HSPA_MONTHLY_ADD").
-              END.
-              ELSE
-                 lcShaperProfile = REPLACE(lcShaperProfile,"HSPA_MONTHLY_ADD",
+               bMsRequest.ReqType   = {&REQTYPE_BUNDLE_CHANGE}) THEN
+              lcShaperProfile = REPLACE(lcShaperProfile,"HSPA_MONTHLY_ADD",
                                                            "HSPA_MONTHLY").
-           END.
            ELSE IF
               bMsRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} OR
               bMsRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION}

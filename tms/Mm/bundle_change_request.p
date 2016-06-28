@@ -529,13 +529,9 @@ PROCEDURE pCloseContracts:
    DEF VAR lcAllowedBonoSTCContracts AS CHAR NO-UNDO. 
    DEF VAR lcError                   AS CHAR NO-UNDO. 
    DEF VAR liRequest                 AS INT  NO-UNDO.
-   DEF VAR lcNativeVoipTariffs      AS CHAR NO-UNDO.
-   DEF VAR lcNativeVoipBundles      AS CHAR NO-UNDO.
    
    ASSIGN lcAllowedBonoSTCContracts = fCParamC("ALLOWED_BONO_STC_CONTRACTS")
-          lcBONOContracts = fCParamC("BONO_CONTRACTS")
-          lcNativeVoipTariffs    = fCParamC("NATIVE_VOIP_BASE_BUNDLES")
-          lcNativeVoipBundles    = fCParamC("NATIVE_VOIP_BUNDLES").
+          lcBONOContracts = fCParamC("BONO_CONTRACTS").
 
    IF LOOKUP(MsRequest.ReqCparam2,lcBonoContracts) = 0 THEN DO:
 
@@ -581,13 +577,6 @@ PROCEDURE pCloseContracts:
                                  INPUT {&REQUEST_SOURCE_BTC},
                                  BUFFER MsRequest,
                                  BUFFER MobSub).
-
-            /* Deactivate BONO_VOIP bundle if there is no active data bundle */
-            IF fGetActiveSpecificBundle(Mobsub.MsSeq,MsRequest.ActStamp,
-                                        "BONO_VOIP") > "" THEN DO:
-               CREATE ttContract.
-                      ttContract.DCEvent = "BONO_VOIP".
-            END. /* IF fGetActiveSpecificBundle(Mobsub.MsSeg */
          END. /* IF LOOKUP(lcBonoBundle,lcBONOContracts) = 0 THEN DO: */
          ELSE
             RUN pChangedBBStatus(INPUT 1,
@@ -599,17 +588,6 @@ PROCEDURE pCloseContracts:
    END. /* IF INDEX(MsRequest.ReqCParam2,"CONTF") > 0 THEN DO: */
    END. /* IF LOOKUP(MsRequest.ReqCparam2,lcBonoContracts) = 0 THEN DO: */
    
-   IF (LOOKUP(MsRequest.ReqCParam2,lcNativeVoipTariffs) > 0 OR 
-       LOOKUP(MsRequest.ReqCParam2,lcNativeVoipBundles) > 0) AND
-      NOT CAN-FIND(FIRST ttContract WHERE
-                         ttContract.DCEvent  = "BONO_VOIP") AND
-      fGetActiveSpecificBundle(Mobsub.MsSeq,
-                               MsRequest.ActStamp,
-                               "BONO_VOIP") > "" THEN DO:
-      CREATE ttContract.
-             ttContract.DCEvent = "BONO_VOIP".
-   END.
-
    FOR EACH ttContract:
       FIND FIRST DayCampaign WHERE
                  DayCampaign.Brand   = gcBrand AND

@@ -393,12 +393,6 @@ PROCEDURE pPeriodicalContract:
                          OrderAction.ItemType = "KeepInstallment" NO-LOCK)
       THEN RETURN.
 
-      /* If subscription has ongoing STC or BTC with data bundle
-         then no need to terminate Voip service */
-      IF DayCampaign.DCEvent = "BONO_VOIP" AND 
-         LOOKUP(icSource,"4,6,11,15") > 0 AND
-         fBundleWithSTC(liMsSeq,idActStamp,TRUE) THEN RETURN.
-         
       IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN DO:
 
          llFound = FALSE.
@@ -601,8 +595,6 @@ PROCEDURE pServicePackage:
 
    /* activation */
    WHEN 1 THEN DO:
-         
-      /* used for special BONO_VOIP activation */
       IF NUM-ENTRIES(ttAction.ActionKey,"|") EQ 2 THEN ASSIGN
          lcActionKey = ENTRY(1,ttAction.ActionKey,"|")
          lcDCEvent   = ENTRY(2,ttAction.ActionKey,"|").
@@ -688,7 +680,7 @@ PROCEDURE pServicePackage:
                then no need to suspend BB service */
             IF SubSer.ServCom = "BB" AND
                LOOKUP(icSource,"4,6,11,15") > 0 AND
-               fBundleWithSTC(liMsSeq,idActStamp,FALSE) THEN RETURN.
+               fBundleWithSTC(liMsSeq,idActStamp) THEN RETURN.
 
             liRequest = fServiceRequest(liMsSeq,
                                         SubSer.ServCom,
@@ -807,8 +799,6 @@ PROCEDURE pServiceRequest:
          END.
          ELSE llNotDssActive = FALSE.
       END.
-      ELSE IF liAction = 0 AND fIsVoIPAllowed(liMsSeq,idActStamp) THEN
-         llNotDssActive = FALSE.
    END.
 
    IF llNotDssActive THEN DO:

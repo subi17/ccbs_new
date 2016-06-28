@@ -82,7 +82,6 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
                   DayCampaign.Brand = gcBrand AND
                   DayCampaign.DCEvent = bServiceLimit.GroupCode AND
                   INDEX(DayCampaign.DCEvent,"UPSELL") = 0 AND
-                  DayCampaign.DCEvent <> "BONO_VOIP" AND
                   DayCampaign.DCEvent <> "HSPA_ROAM_EU":
             RETURN bServiceLimit.GroupCode.
          END. /* FOR EACH bMServiceLimit NO-LOCK WHERE */

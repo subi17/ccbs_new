@@ -118,7 +118,6 @@ FUNCTION fGetBundles RETURNS CHAR (icBundleType AS CHAR):
       WHEN "CONTS"        THEN lcContracts = fCParamC("CONTS_CONTRACTS").
       WHEN "CONTSF"       THEN lcContracts = fCParamC("CONTSF_CONTRACTS").
       WHEN "DSS"          THEN lcContracts = {&DSS_BUNDLES}.
-      WHEN "BONO_VOIP"    THEN lcContracts = "BONO_VOIP".
       WHEN "HSPA_ROAM_EU" THEN lcContracts = "HSPA_ROAM_EU".
       WHEN "VOICE100"       THEN lcContracts = "VOICE100". 
       WHEN "FREE100MINUTES" THEN lcContracts = "FREE100MINUTES".
@@ -441,85 +440,6 @@ FUNCTION fGetCurrentSpecificBundle RETURNS CHAR
                                    icContractType).
 END FUNCTION.
 
-FUNCTION fIsBonoVoIPAllowed RETURNS LOGICAL
-   (iiMsSeq AS INT,
-    ideTS AS DEC):
-
-   DEF VAR lcActiveDataBundles    AS CHAR NO-UNDO.
-   DEF VAR lcNativeVOIPTariffs AS CHAR NO-UNDO.
-   DEF VAR lcNativeVoipBundles AS CHAR NO-UNDO. 
-   DEF VAR i AS INT NO-UNDO. 
-
-   DEF BUFFER MobSub  FOR MobSub.
-
-   FIND FIRST MobSub WHERE
-              MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
-   IF NOT AVAIL MobSub THEN RETURN FALSE.
-
-   lcNativeVOIPTariffs = fCParamC("NATIVE_VOIP_BASE_BUNDLES").
-   lcNativeVoipBundles = fCParamC("NATIVE_VOIP_BUNDLES").
-
-   /* All Native VoIP tariffs */
-   IF LOOKUP(MobSub.CLIType,lcNativeVOIPTariffs) > 0 OR
-      LOOKUP(MobSub.TariffBundle,lcNativeVOIPTariffs) > 0 THEN RETURN FALSE.
-
-   /* Native VOIP bundles */
-   lcActiveDataBundles = fGetActiveDataBundle(iiMsSeq,ideTS).
-   DO i = 1 TO NUM-ENTRIES(lcActiveDataBundles):
-      IF LOOKUP(ENTRY(i,lcActiveDataBundles), lcNativeVoipBundles) > 0 THEN RETURN FALSE.
-   END.
-
-   IF LOOKUP("BONO_VOIP",lcActiveDataBundles) > 0 OR
-      fOngoingContractAct(iiMsSeq,"BONO_VOIP") THEN RETURN FALSE.
-
-   /* Additional lines (CONTM,CONTM2) with DSS2 active */
-   IF LOOKUP(MobSub.CLIType,"CONTM,CONTM2") > 0 AND
-      lcActiveDataBundles = "" THEN DO:
-      IF fGetActiveDSSId(MobSub.CustNum,ideTS) = "DSS2" THEN RETURN TRUE.
-      ELSE RETURN FALSE.
-   END.
-
-   /* Tariffs without any data bundle (base tariff or addtional data bundle) */
-   IF lcActiveDataBundles = "" THEN RETURN FALSE.
-
-   RETURN TRUE.
-
-END FUNCTION.
-
-FUNCTION fIsVoIPAllowed RETURNS LOGICAL
-   (iiMsSeq AS INT,
-    ideTS AS DEC):
-
-   DEF VAR lcActiveDataBundles    AS CHAR NO-UNDO.
-   DEF VAR lcNativeVOIPBundles    AS CHAR NO-UNDO. 
-   DEF VAR lcNativeVOIPTariffs    AS CHAR NO-UNDO.
-   DEF VAR i AS INT NO-UNDO. 
-
-   DEF BUFFER MsOwner FOR MsOwner.
-
-   FIND FIRST MsOwner WHERE
-              MsOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
-   IF NOT AVAIL MsOwner THEN RETURN FALSE.
-
-   lcNativeVOIPTariffs = fCParamC("NATIVE_VOIP_BASE_BUNDLES").
-   lcNativeVoipBundles = fCParamC("NATIVE_VOIP_BUNDLES").
-
-   /* All Native VoIP tariffs */
-   IF LOOKUP(MsOwner.CLIType,lcNativeVOIPTariffs) > 0 OR
-      LOOKUP(MsOwner.TariffBundle,lcNativeVOIPTariffs) > 0 THEN RETURN TRUE.
-
-   lcActiveDataBundles = fGetActiveDataBundle(iiMsSeq,ideTS).
-   DO i = 1 TO NUM-ENTRIES(lcActiveDataBundles):
-      IF LOOKUP(ENTRY(i,lcActiveDataBundles), lcNativeVoipBundles) > 0 THEN RETURN TRUE.
-   END.
-
-   IF LOOKUP("BONO_VOIP",lcActiveDataBundles) > 0 THEN RETURN TRUE.
-
-   RETURN FALSE.
-
-END FUNCTION.
-
-
 FUNCTION fGetActOngoingDataBundles RETURNS CHAR
    (iiMsSeq     AS INT,
     idActStamp  AS DEC):
@@ -665,8 +585,7 @@ END FUNCTION.
 
 FUNCTION fBundleWithSTC RETURNS LOG
    (iiMsSeq      AS INT,
-    ideActStamp  AS DEC,
-    ilIsVoIPNative AS LOG):
+    ideActStamp  AS DEC):
 
    DEF BUFFER bMsRequest FOR MsRequest.
 
@@ -675,8 +594,6 @@ FUNCTION fBundleWithSTC RETURNS LOG
 
    DEF VAR lcPostpaidDataBundles  AS CHAR NO-UNDO.
    DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
-   DEF VAR lcNativeVOIPTariffs AS CHAR NO-UNDO.
-   DEF VAR lcNativeVoipBundles AS CHAR NO-UNDO. 
 
    fSplitTS(ideActStamp,OUTPUT ldaReqDate,OUTPUT liReqTime).
 
@@ -686,10 +603,6 @@ FUNCTION fBundleWithSTC RETURNS LOG
    ASSIGN lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS")
           lcDataBundleCLITypes  = fCParamC("DATA_BUNDLE_BASED_CLITYPES").
 
-   IF ilIsVoIPNative THEN ASSIGN
-      lcNativeVOIPTariffs = fCParamC("NATIVE_VOIP_BASE_BUNDLES")
-      lcNativeVoipBundles = fCParamC("NATIVE_VOIP_BUNDLES").
-
    /* Check STC Request with data bundle */
    FIND FIRST bMsRequest NO-LOCK WHERE
               bMsRequest.MsSeq   = iiMsSeq AND
@@ -698,13 +611,8 @@ FUNCTION fBundleWithSTC RETURNS LOG
               bMsRequest.ActStamp = ideActStamp USE-INDEX MsSeq NO-ERROR.
    IF AVAIL bMsRequest AND
       (LOOKUP(bMsRequest.ReqCparam2,lcDataBundleCLITypes) > 0 OR
-       LOOKUP(bMsRequest.ReqCparam5,lcPostpaidDataBundles) > 0) THEN DO:
-      IF lcNativeVOIPTariffs > "" AND
-         (LOOKUP(bMsRequest.ReqCparam2,lcNativeVOIPTariffs) > 0 OR
-          LOOKUP(bMsRequest.ReqCparam5,lcNativeVOIPTariffs) > 0) THEN
-         RETURN FALSE.
-      ELSE RETURN TRUE.
-   END.
+       LOOKUP(bMsRequest.ReqCparam5,lcPostpaidDataBundles) > 0) THEN 
+      RETURN TRUE.
 
    /* Check BTC Request with data bundle */
    FIND FIRST bMsRequest NO-LOCK WHERE
@@ -713,12 +621,8 @@ FUNCTION fBundleWithSTC RETURNS LOG
               LOOKUP(STRING(bMsRequest.ReqStat),"4,9,99,3") = 0 AND
               bMsRequest.ActStamp = ideActStamp USE-INDEX MsSeq NO-ERROR.
    IF AVAIL bMsRequest AND
-      LOOKUP(bMsRequest.ReqCparam2,lcPostpaidDataBundles) > 0 THEN DO:
-      IF LOOKUP(bMsRequest.ReqCparam2,lcNativeVOIPTariffs) > 0 OR
-         LOOKUP(bMsRequest.ReqCparam2,lcNativeVoipBundles) > 0 THEN
-         RETURN FALSE.
-      ELSE RETURN TRUE.
-   END.
+      LOOKUP(bMsRequest.ReqCparam2,lcPostpaidDataBundles) > 0 THEN
+      RETURN TRUE.
 
    RETURN FALSE. 
 

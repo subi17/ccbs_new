@@ -309,7 +309,6 @@ PROCEDURE pServCompUpdate:
       RETURN.
    END. 
 
-   /* Bono VoIP  */
    IF ServCom.Target EQ {&SERVCOM_TARGET_STATELESS} THEN DO:
       fReqStatus(2,"").
       RETURN. 

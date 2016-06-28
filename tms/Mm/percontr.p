@@ -1149,28 +1149,6 @@ PROCEDURE pContractActivation:
       
    END.
    
-   /* Temporary FAT creation for BONO_VOIP. YDA-173 */
-   IF lcDCEvent EQ "BONO_VOIP" THEN DO:
-      RUN creafat.p (MsOwner.CustNum,
-                     MsOwner.MsSeq,
-                     "BONOVOIPCPACT",
-                     ?, /* amount */
-                     0, /* percent */
-                     ?, /* vat incl. */
-                     YEAR(ldtFromDate) * 100 + MONTH(ldtFromdate),
-                     999999,
-                     OUTPUT lcError).
-
-      /* write possible error to an order memo */
-      IF lcError > "" THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
-                          STRING(MsOwner.MsSeq),
-                          MsOwner.CustNum,
-                          "BONOVOIPCPACT FATIME CREATION FAILED",
-                          lcError).
-   END.
-
    IF AVAILABLE DCCLI THEN RELEASE DCCLI.
     
    FIND CURRENT MsRequest EXCLUSIVE-LOCK.
@@ -2600,16 +2578,6 @@ PROCEDURE pContractTermination:
                    MsRequest.MsSeq,
                    (YEAR(ldtActDate) * 100 + MONTH(ldtActDate))).
 
-      /* YDA-171 */
-      WHEN "BONO_VOIP" THEN DO:
-         lcFatGroups = "BONOVOIPCPACT,BONOVOCPIPL,BONOVOCPBONO".
-         DO i = 1 TO NUM-ENTRIES(lcFatGroups):
-            fCloseFat(ENTRY(i,lcFatGroups),
-                      MsRequest.MsSeq,
-                      (YEAR(ldtActDate) * 100 + MONTH(ldtActDate))).
-         END. /* DO i = 1 TO NUM-ENTRIES(lcFatGroups): */
-      END. /* WHEN "BONO_VOIP" THEN DO: */
-
       WHEN "CONTS30" THEN DO:
          fCloseDiscount("CONTS30DISC",
                         MsRequest.MsSeq,
@@ -3129,32 +3097,20 @@ PROCEDURE pTerminateServicePackage:
       lcOldCLIType = bOrigRequest.ReqCParam1.       
    ELSE lcOldCLIType = icCurrentCLIType.
 
-   /* Don't send Shaper command if it is terminated from STC/BTC */
-   IF icDCEvent = "BONO_VOIP" AND
-      AVAIL bOrigRequest AND
-      (bOrigRequest.ReqSource = {&REQUEST_SOURCE_STC} OR
-       bOrigRequest.ReqSource = {&REQUEST_SOURCE_BTC} OR
-       bOrigRequest.ReqType   = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR
-       bOrigRequest.ReqType   = {&REQTYPE_BUNDLE_CHANGE}) THEN RETURN "".
-
-   /* No need to find retain bundle list for VOIP */
-   IF icDCEvent <> "BONO_VOIP" THEN DO:
-      FIND FIRST bPerContract WHERE
-                 bPerContract.Brand = gcBrand AND
-                 bPerContract.DCEvent = icDCEvent NO-LOCK NO-ERROR.
-      IF AVAILABLE bPerContract AND 
-         LOOKUP(bPerContract.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 THEN DO:
-         lcBundles = fGetActiveBundle(iiMsSeq,
-                                      fSecOffSet(MsRequest.ActStamp,1)).
-         lcBundles = REPLACE(lcBundles,"BONO_VOIP","").
-      END.
-
-      /* No need to terminate SHAPER and HSDPA if
-         ongoing STC/BTC with data bundle */
-      IF (lcBundles = "" OR LOOKUP(lcBundles,lcOnlyVoiceContracts) > 0) AND
-         fBundleWithSTC(iiMsSeq,fSecOffSet(MsRequest.ActStamp,1),FALSE)
-      THEN RETURN "".
+   FIND FIRST bPerContract WHERE
+              bPerContract.Brand = gcBrand AND
+              bPerContract.DCEvent = icDCEvent NO-LOCK NO-ERROR.
+   IF AVAILABLE bPerContract AND 
+      LOOKUP(bPerContract.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 THEN DO:
+      lcBundles = fGetActiveBundle(iiMsSeq,
+                                   fSecOffSet(MsRequest.ActStamp,1)).
    END.
+
+   /* No need to terminate SHAPER and HSDPA if
+      ongoing STC/BTC with data bundle */
+   IF (lcBundles = "" OR LOOKUP(lcBundles,lcOnlyVoiceContracts) > 0) AND
+      fBundleWithSTC(iiMsSeq,fSecOffSet(MsRequest.ActStamp,1))
+   THEN RETURN "".
 
    /* service packages that need to be deactivated */
    FOR EACH DCServicePackage NO-LOCK WHERE
