@@ -39,6 +39,7 @@ DEF VAR pcSalesID    AS CHAR NO-UNDO.
 DEF VAR pcDate       AS DATE NO-UNDO.
 
 DEF VAR lcTopArray           AS CHAR NO-UNDO.  
+DEF VAR lcContractsArray     AS CHAR NO-UNDO. 
 DEF VAR lpcDateStamp         AS DEC  NO-UNDO.
 DEF VAR ldtTodayStamp        AS DEC  NO-UNDO.
 DEF VAR lcCustName           AS CHAR NO-UNDO. 
@@ -142,6 +143,39 @@ lcUserCode = "RENEWAL_POS_" + pcSalesID.
 
 RUN pQ25ExtensionContracts(lcUserCode).
 
+FOR EACH Order NO-LOCK USE-INDEX Salesman WHERE 
+         Order.Salesman   = Salesman.Salesman       AND 
+         Order.Statuscode = {&ORDER_STATUS_ONGOING} AND 
+         Order.OrderType  = 2                       AND 
+         Order.CrStamp   >= lpcDateStamp            AND 
+         Order.CrStamp   <= ldtTodayStamp           AND 
+        (IF pcMSISDN NE "" THEN
+         Order.MsSeq      = MobSub.MsSeq       
+         ELSE TRUE)                                 AND 
+        (IF pcCustID NE "" THEN 
+         Order.CustNum    = Customer.CustNum  
+         ELSE TRUE):
+
+   FIND FIRST OrderAction NO-LOCK WHERE 
+              OrderAction.Brand    = gcBrand        AND 
+              OrderAction.OrderID  = Order.OrderID  AND 
+              OrderAction.ItemType = "Q25Extension" NO-ERROR.
+
+   IF NOT AVAIL OrderAction THEN NEXT.           
+
+   ASSIGN 
+      ldtContractDate = ?
+      llgContractDate = fTS2Date(Order.CrStamp,
+                                 ldtContractDate).
+   CREATE ttContractDetails.
+   ASSIGN 
+      ttContractDetails.CLI          = Order.CLI
+      ttContractDetails.ContractType = "extension"
+      ttContractDetails.ContractId   = OrderAction.ItemKey
+      ttContractDetails.ContractDate = ldtContractDate.
+
+END.         
+
 lcTopArray = add_array(response_toplevel_id,"").
 
 FOR EACH ttContractDetails EXCLUSIVE-LOCK 
@@ -174,7 +208,7 @@ FOR EACH ttContractDetails EXCLUSIVE-LOCK
          lcCustName = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
                                     BUFFER Customer).
 
-      gcSubscriptionStruct = add_struct(lcTopArray,"subscription_array").
+      gcSubscriptionStruct = add_struct(lcTopArray,"").
       add_string(gcSubscriptionStruct,"cli",ttContractDetails.CLI).
       add_string(gcSubscriptionStruct,"ownerid_type",Customer.CustIdType).
       add_int(gcSubscriptionStruct,"ownerid_num",Customer.CustNum).
@@ -200,12 +234,19 @@ PROCEDURE pQ25ExtensionContracts:
 DEFINE INPUT PARAMETER icUserCode AS CHAR NO-UNDO. 
    
    FOR EACH MsRequest NO-LOCK USE-INDEX UserCode WHERE 
-            MsRequest.Brand      = gcBrand      AND 
-            MsRequest.UserCode   = icUserCode   AND 
-            MsRequest.ActStamp  >= lpcDateStamp AND 
-            MsRequest.CreStamp  >= lpcDateStamp AND 
+            MsRequest.Brand      = gcBrand          AND 
+            MsRequest.UserCode   = icUserCode       AND 
+            MsRequest.ActStamp  >= lpcDateStamp     AND 
+            MsRequest.CreStamp  >= lpcDateStamp     AND
+           (IF pcMSISDN NE "" THEN 
+            MsRequest.MsSeq      = MobSub.MsSeq 
+            ELSE TRUE)                              AND 
+           (IF pcCustID NE "" THEN 
+            MsRequest.CustNum    = Customer.CustNum 
+            ELSE TRUE)                              AND 
             MsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND 
-            MsRequest.ReqStatus  = 2            AND 
+           (MsRequest.ReqStatus  = 2                OR 
+            MsRequest.ReqStatus  = 0)               AND 
             MsRequest.ReqCParam3 = "RVTERM12",
       FIRST SingleFee NO-LOCK USE-INDEX HostTable WHERE 
             SingleFee.Brand       = gcBrand                      AND 
