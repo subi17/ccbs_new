@@ -136,6 +136,11 @@ IF Customer.DelType NE piDelType THEN DO:
          fCancelPendingEmailActRequest(INPUT Mobsub.Custnum,
                                        INPUT "Invoice Delivery Type is " +
                                        "changed to " + STRING(Customer.DelType)).
+      IF piDelType EQ {&INV_DEL_TYPE_NO_DELIVERY} AND 
+         Customer.smsnumber GT "" THEN
+         fMakeSchedSMS3(Customer.Custnum,Customer.smsnumber,9,
+                        "InvDelivTypeChanged",Customer.Language,0,
+                        "622","").                                    
    END. /* ELSE DO: */
 
    FIND CURRENT Customer NO-LOCK.
