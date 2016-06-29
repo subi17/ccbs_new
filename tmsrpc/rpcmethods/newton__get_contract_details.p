@@ -118,8 +118,12 @@ ASSIGN
 
 /* Creating temp-table data WITH Terminal return contracts */
 FOR EACH TermReturn NO-LOCK WHERE 
-         TermReturn.ReturnTs >= lpcDateStamp AND 
-         TermReturn.ReturnTs <= ldtTodayStamp:
+         TermReturn.ReturnTs >= lpcDateStamp      AND 
+         TermReturn.ReturnTs <= ldtTodayStamp     AND 
+         TermReturn.Salesman  = SalesMan.SalesMan AND
+        (IF pcMSISDN NE "" THEN 
+         TermReturn.MSISDN = MobSub.CLI 
+         ELSE TRUE):
 
    ASSIGN 
       ldtContractDate = ?

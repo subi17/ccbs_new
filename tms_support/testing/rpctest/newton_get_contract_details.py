@@ -19,5 +19,5 @@ else:
    var4 = sys.argv[4]
    var5 = date_time_builder(sys.argv[5])
 
-p=s.newton.get_contract_details(var1,var2,var3,var4,var5).
+p=s.newton.get_contract_details(var1,var2,var3,var4,var5)
 print_results(p)
