@@ -175,7 +175,6 @@ CLASS HPD.InvoiceDump FINAL INHERITS InvoiceCommon:
       DEFINE VARIABLE ldaToDate        AS DATE NO-UNDO.
       DEFINE VARIABLE ldaISTCDate      AS DATE NO-UNDO.
       DEFINE VARIABLE ldaMaxInvRowDate AS DATE NO-UNDO.
-      DEFINE VARIABLE ldeQ25DiscAmt    AS DEC  NO-UNDO.
       DEFINE VARIABLE lcExcludedRows   AS CHAR NO-UNDO.
 
       ASSIGN
@@ -211,6 +210,7 @@ CLASS HPD.InvoiceDump FINAL INHERITS InvoiceCommon:
             lbSubInvoice.InvNum = lbInvoice.InvNum:
             
             ASSIGN
+               lcExcludedRows    = ""
                ldaMaxInvRowDate  = 1/1/2000
                ldeInstallmentFee = 0
                ldaISTCDate       = mGetISTCDate(lbSubInvoice.MsSeq,
@@ -221,25 +221,24 @@ CLASS HPD.InvoiceDump FINAL INHERITS InvoiceCommon:
                         lbInvRow.InvNum EQ lbSubInvoice.InvNum AND
                         lbInvRow.SubInvNum EQ lbSubInvoice.SubInvNum AND
                         lbInvRow.BillCode EQ "RVTERMDTEQ25" AND
-                        lbInvRow.VatPerc EQ 0) THEN DO:
-               lcExcludedRows = mGetQ25ExludeRows(lbSubInvoice.InvNum,
-                                                  lbSubInvoice.SubInvNum).
-            END.
+                        lbInvRow.VatPerc EQ 0)
+            THEN lcExcludedRows = mGetQ25ExludeRows(lbSubInvoice.InvNum,
+                                                    lbSubInvoice.SubInvNum).
 
             FOR EACH lbInvRow NO-LOCK WHERE
                lbInvRow.InvNum    = lbInvoice.InvNum        AND
                lbInvRow.SubInvNum = lbSubInvoice.SubInvNum:
 
-               IF CAN-FIND(ttBillItem NO-LOCK WHERE 
-                           ttBillItem.BillCode = lbInvRow.BillCode) THEN DO:
-                  IF lcExcludedRows > "" AND 
-                     LOOKUP(STRING((ROWID(lbInvRow))),lcExcludedRows) > 0 THEN 
-                     NEXT.
-                  ldeInstallmentFee = ldeInstallmentFee + lbInvRow.Amt.
-               END.
                IF ldaISTCDate NE ? AND
                   ldaMaxInvRowDate < lbInvRow.ToDate
                THEN ldaMaxInvRowDate = lbInvRow.Todate.
+
+               IF lcExcludedRows > "" AND
+                  LOOKUP(STRING((ROWID(lbInvRow))),lcExcludedRows) > 0
+               THEN NEXT.
+
+               IF CAN-FIND(ttBillItem NO-LOCK WHERE ttBillItem.BillCode = lbInvRow.BillCode)
+               THEN ldeInstallmentFee = ldeInstallmentFee + lbInvRow.Amt.
 
               /* Lets write a line for invrow to csv */
                objDumpInvRow:mWriteALine().
