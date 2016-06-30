@@ -246,7 +246,8 @@ DEFINE TEMP-TABLE ttInstallment NO-UNDO
    FIELD FFNum AS INT
    FIELD OrderId AS CHAR
    FIELD RowSource AS CHAR
-INDEX OperDate IS PRIMARY OperDate.
+INDEX OperDate IS PRIMARY OperDate
+INDEX FFNUm FFNum RowSource.
 
 RUN pCollectActivations.
 
@@ -1433,7 +1434,10 @@ PROCEDURE pCollectInstallmentCancellations:
                 DayCampaign.Brand = gcBrand AND
                 DayCampaign.DCEvent = bTermDCCLI.DCEvent:
       
-         IF FixedFee.IFSStatus NE {&IFS_STATUS_SENT} THEN NEXT REQUEST_LOOP. 
+         IF FixedFee.IFSStatus NE {&IFS_STATUS_SENT} AND
+            NOT CAN-FIND(ttInstallment WHERE
+                         ttInstallment.FFNum = FixedFee.FFNum AND
+                         ttInstallment.RowSource = "ACTIVATION") THEN NEXT REQUEST_LOOP. 
          IF FixedFee.TFBank > "" AND FixedFee.TFBank NE lcTFBank THEN NEXT REQUEST_LOOP.
          IF FixedFee.TFBank EQ "" AND lcTFBank NE {&TF_BANK_UNOE} THEN NEXT REQUEST_LOOP.
          
@@ -1478,7 +1482,10 @@ PROCEDURE pCollectInstallmentCancellations:
                        SingleFee.SourceTable = FixedFee.SourceTable AND
                        SingleFee.CalcObj = "RVTERM" NO-ERROR.
             IF AVAIL SingleFee THEN ldeResidualAmt = SingleFee.Amt.
-            ELSE IF bTermDCCLI.Amount > 0 THEN 
+            ELSE IF bTermDCCLI.Amount > 0 AND 
+               NOT CAN-FIND(ttInstallment WHERE
+                            ttInstallment.FFNum = FixedFee.FFNum AND
+                            ttInstallment.RowSource = "ACTIVATION") THEN
                ldeResidualAmt = bTermDCCLI.Amount.
          END.
 
