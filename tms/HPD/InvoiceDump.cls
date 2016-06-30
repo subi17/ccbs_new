@@ -7,6 +7,7 @@
     Created     : Wed Oct 29 15:19:10 EET 2014
     Notes       : 
   ----------------------------------------------------------------------*/
+{tmsconst.i}
 USING Progress.Lang.*.
 USING HPD.InvoiceCommon.
 USING HPD.DumpFile.
@@ -133,6 +134,39 @@ CLASS HPD.InvoiceDump FINAL INHERITS InvoiceCommon:
 
    END METHOD.
 
+   METHOD PRIVATE CHAR mGetQ25ExludeRows (INPUT iiInvNum AS INT,
+                                          INPUT iiSubInvNum AS INT):
+      DEF VAR lcExcludedRows AS CHAR NO-UNDO.
+      DEF VAR ldeQ25DiscAmt  AS DEC  NO-UNDO.
+
+      ldeQ25DiscAmt = 0.
+
+      FOR EACH InvRow NO-LOCK WHERE
+               InvRow.InvNum = iiInvNum AND
+               InvRow.SubInvNum = iiSubInvNum AND
+               InvRow.VatPerc = 0 AND
+               LOOKUP(InvRow.BillCode,
+                      {&Q25_RVTERM_RENEWAL_DISCOUNTS}) > 0:
+         ASSIGN
+            ldeQ25DiscAmt = ldeQ25DiscAmt + InvRow.Amt
+            lcExcludedRows = lcExcludedRows + "," + STRING(ROWID(InvRow)).
+      END.
+
+      lcExcludedRows = LEFT-TRIM(lcExcludedRows,",").
+
+      FOR EACH InvRow NO-LOCK WHERE
+               InvRow.Invnum = iiInvNum AND
+               InvRow.SubInvNum = iiSubInvNum AND
+               InvRow.VatPerc = 0 AND
+               InvRow.Amt EQ (ldeQ25DiscAmt * -1) AND
+               LOOKUP(InvRow.BillCode, {&TF_RVTERM_BILLCODES}) > 0:
+         lcExcludedRows = lcExcludedRows + "," + STRING(ROWID(InvRow)).
+         LEAVE.
+      END.
+      IF NOT AVAIL InvRow THEN lcExcludedRows = "".
+
+      RETURN lcExcludedRows.
+   END METHOD.   
 
    METHOD PRIVATE VOID mProcessTimeBased
       (INPUT objDumpTB AS CLASS DumpTimeBased):
@@ -141,6 +175,8 @@ CLASS HPD.InvoiceDump FINAL INHERITS InvoiceCommon:
       DEFINE VARIABLE ldaToDate        AS DATE NO-UNDO.
       DEFINE VARIABLE ldaISTCDate      AS DATE NO-UNDO.
       DEFINE VARIABLE ldaMaxInvRowDate AS DATE NO-UNDO.
+      DEFINE VARIABLE ldeQ25DiscAmt    AS DEC  NO-UNDO.
+      DEFINE VARIABLE lcExcludedRows   AS CHAR NO-UNDO.
 
       ASSIGN
          ldaFromDate = HPDTime:mMake2Date(objDumpTB:ldeFromTS)
@@ -181,13 +217,26 @@ CLASS HPD.InvoiceDump FINAL INHERITS InvoiceCommon:
                                                 lbInvoice.Custnum,
                                                 lbInvoice.Todate).
 
+            IF CAN-FIND(lbInvRow NO-LOCK WHERE 
+                        lbInvRow.InvNum EQ lbSubInvoice.InvNum AND
+                        lbInvRow.SubInvNum EQ lbSubInvoice.SubInvNum AND
+                        lbInvRow.BillCode EQ "RVTERMDTEQ25" AND
+                        lbInvRow.VatPerc EQ 0) THEN DO:
+               lcExcludedRows = mGetQ25ExludeRows(lbSubInvoice.InvNum,
+                                                  lbSubInvoice.SubInvNum).
+            END.
+
             FOR EACH lbInvRow NO-LOCK WHERE
                lbInvRow.InvNum    = lbInvoice.InvNum        AND
                lbInvRow.SubInvNum = lbSubInvoice.SubInvNum:
 
-               IF CAN-FIND(ttBillItem NO-LOCK WHERE ttBillItem.BillCode = lbInvRow.BillCode)
-               THEN ldeInstallmentFee = ldeInstallmentFee + lbInvRow.Amt.
-
+               IF CAN-FIND(ttBillItem NO-LOCK WHERE 
+                           ttBillItem.BillCode = lbInvRow.BillCode) THEN DO:
+                  IF lcExcludedRows > "" AND 
+                     LOOKUP(STRING((ROWID(lbInvRow))),lcExcludedRows) > 0 THEN 
+                     NEXT.
+                  ldeInstallmentFee = ldeInstallmentFee + lbInvRow.Amt.
+               END.
                IF ldaISTCDate NE ? AND
                   ldaMaxInvRowDate < lbInvRow.ToDate
                THEN ldaMaxInvRowDate = lbInvRow.Todate.
