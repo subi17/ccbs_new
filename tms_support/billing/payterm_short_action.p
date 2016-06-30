@@ -127,16 +127,24 @@ FOR EACH EventLog NO-LOCK USE-INDEX EventDate WHERE
       NEXT.
    END.
 
-   /* Skip if DCCLI contract is terminated or ended */ 
-   IF AVAIL DCCLI AND 
-      (DCCLI.ValidTo < TODAY OR
-       DCCLI.TermDate <> ?) THEN DO:
+   /* Skip if DCCLI contract is ended */ 
+   IF AVAIL DCCLI AND DCCLI.ValidTo < TODAY THEN DO:
       PUT STREAM slog UNFORMATTED
        Mobsub.MsSeq ";" Mobsub.CLI ";" Mobsub.CustNum ";"  
-       FixedFee.SourceKey ";" DCCLI.ValidTo ";" DCCLI.TermDate
-       "; DCCLI contract terminated/ended" SKIP.
+       FixedFee.SourceKey ";" DCCLI.ValidTo
+       "; DCCLI contract has been ended before today" SKIP.
       NEXT.
    END.
+
+   /* Skip if DCCLI contract has been terminated */ 
+   IF AVAIL DCCLI AND DCCLI.TermDate <> ? THEN DO:
+      PUT STREAM slog UNFORMATTED
+       Mobsub.MsSeq ";" Mobsub.CLI ";" Mobsub.CustNum ";"  
+       FixedFee.SourceKey ";" DCCLI.TermDate
+       "; DCCLI contract has been terminated" SKIP.
+      NEXT.
+   END.
+
    /* Check is there difference between FixedFee 
       payment months and length of Payterm contract */
    lifoundFFees = lifoundFFees + 1.
