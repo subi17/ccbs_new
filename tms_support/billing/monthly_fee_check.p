@@ -24,6 +24,7 @@ DEFINE VARIABLE lcFFItemKey        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcEventlogDetails  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE ldeTerminated      AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE lcBundleOutputFile AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcSubBundle        AS CHARACTER NO-UNDO. 
 
 DEFINE TEMP-TABLE ttServicelimit NO-UNDO
    FIELD groupcode AS char
@@ -225,7 +226,6 @@ FOR EACH daycampaign where
 
 end.
 
-
 looppi2:
 FOR EACH servicelimit NO-LOCK,
     FIRST daycampaign NO-LOCK WHERE
@@ -271,7 +271,8 @@ FOR EACH servicelimit NO-LOCK,
       ASSIGN
          lcFFItemKey       = ""
          lcEventlogDetails = ""
-         ldeTerminated     = 0.
+         ldeTerminated     = 0
+         lcSubBundle       = "".
    
       release beventlog.
        
@@ -298,30 +299,36 @@ FOR EACH servicelimit NO-LOCK,
                     msowner.msseq = termmobsub.msseq USE-INDEX msseq.
          ldeTerminated = msowner.tsend.
 
-         CREATE ttSubDetails.
-         assign ttSubDetails.msseq  = termmobsub.MsSeq 
-                ttSubDetails.cli    = termmobsub.CLI
-                ttSubDetails.Bundle = IF termmobsub.TariffBundle <> "" THEN 
-                                         termmobsub.TariffBundle
-                                      ELSE IF CLIType.BaseBundle <> "" THEN 
-                                              CLIType.BaseBundle
-                                      ELSE "".
-      end.     
-      else DO: 
-         assign liCustnum = mobsub.custnum
-                lcCli = mobsub.cli.
+         IF termmobsub.TariffBundle <> "" THEN 
+            lcSubBundle = termmobsub.TariffBundle.
+         ELSE IF CLIType.BaseBundle <> "" THEN 
+            lcSubBundle = CLIType.BaseBundle.
+
+         IF lcSubBundle EQ servicelimit.groupcode THEN DO: 
+            CREATE ttSubDetails.
+            assign ttSubDetails.msseq  = termmobsub.MsSeq 
+                   ttSubDetails.cli    = termmobsub.CLI
+                   ttSubDetails.Bundle = lcSubBundle.
+         END.                               
+      END.     
+      ELSE DO: 
+         ASSIGN liCustnum = mobsub.custnum
+                lcCli     = mobsub.cli.
       
          FIND FIRST CliType WHERE 
                     CliType.CLitype = MobSub.CLIType NO-LOCK no-error.
          
-         CREATE ttSubDetails.
-         assign ttSubDetails.msseq  = MobSub.MsSeq 
-                ttSubDetails.cli    = MobSub.CLI
-                ttSubDetails.Bundle = IF MobSub.TariffBundle <> "" THEN 
-                                         MobSub.TariffBundle
-                                      ELSE IF CLIType.BaseBundle <> "" THEN 
-                                              CLIType.BaseBundle
-                                      ELSE "".
+         IF MobSub.TariffBundle <> "" THEN 
+            lcSubBundle = MobSub.TariffBundle.
+         ELSE IF CLIType.BaseBundle <> "" THEN 
+            lcSubBundle = CLIType.BaseBundle.
+
+         IF lcSubBundle EQ servicelimit.groupcode THEN DO: 
+            CREATE ttSubDetails.
+            assign ttSubDetails.msseq  = MobSub.MsSeq 
+                   ttSubDetails.cli    = MobSub.CLI
+                   ttSubDetails.Bundle = lcSubBundle.
+         END.          
       END.
 
       FIND FIRST fixedfee NO-LOCK WHERE
@@ -421,19 +428,28 @@ FOR EACH MobSub NO-LOCK WHERE
   
   IF NOT AVAIL CLIType THEN NEXT.
 
-  lcBundle = "".
-
   IF MobSub.TariffBundle EQ "" AND
      CLIType.BaseBundle  EQ "" THEN NEXT.
 
   IF LOOKUP(CLIType.CLIType,lcBundleBasedCLITypes) > 0 AND 
-     MobSub.TariffBundle EQ ""                         THEN NEXT. 
+     MobSub.TariffBundle EQ ""                         THEN  
+  DO:
+     PUT STREAM strout unformatted 
+        MobSub.MsSeq                  "|"
+        MobSub.CustNum                "|"
+        MobSub.CLI                    "|"
+        "Tariff Bundle not available" SKIP.
+
+     liBundleCount = liBundleCount + 1.
+     NEXT.
+  END.
 
   IF MobSub.TariffBundle <> "" THEN 
      lcBundle = MobSub.TariffBundle. 
   ELSE IF CLIType.BaseBundle <> "" THEN
      lcBundle = CLIType.BaseBundle.
-  
+  ELSE lcBundle = "".
+
   RUN pBundleCheck(MobSub.MsSeq,
                    MobSub.CustNum,
                    MobSub.CLI,
@@ -449,22 +465,36 @@ FOR EACH MsRequest NO-LOCK WHERE
 
    FIND FIRST TermMobSub NO-LOCK WHERE 
               TermMobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
+   
+   IF NOT AVAIL TermMobSub
+      THEN NEXT.
 
    FIND FIRST CLIType NO-LOCK WHERE 
               CLIType.CLIType = TermMobSub.CLIType NO-ERROR.
      
-   lcBundle = "".
-
-   IF NOT AVAIL TermMobSub OR 
-      NOT AVAIL CLIType    THEN NEXT.
+   IF NOT AVAIL CLIType    THEN NEXT.
 
    IF TermMobSub.TariffBundle EQ "" AND
       CLIType.BaseBundle      EQ "" THEN NEXT.
+  
+   IF LOOKUP(CLIType.CLIType,lcBundleBasedCLITypes) > 0 AND 
+      TermMobSub.TariffBundle EQ ""                         THEN  
+   DO:
+      PUT STREAM strout unformatted 
+         TermMobSub.MsSeq                  "|"
+         TermMobSub.CustNum                "|"
+         TermMobSub.CLI                    "|"
+         "Tariff Bundle not available" SKIP.
+
+      liBundleCount = liBundleCount + 1.
+      NEXT.
+   END.
 
    IF TermMobSub.TariffBundle <> "" THEN 
       lcBundle = TermMobSub.TariffBundle. 
    ELSE IF CLIType.BaseBundle <> "" THEN
       lcBundle = CLIType.BaseBundle.
+   ELSE lcBundle = "".
      
    RUN pBundleCheck(TermMobSub.MsSeq,
                     TermMobSub.CustNum,
@@ -501,7 +531,7 @@ DEF VAR llgAvailable AS LOGICAL NO-UNDO.
      END.         
      
      IF NOT llgAvailable THEN DO:
-        put STREAM strout unformatted 
+        PUT STREAM strout unformatted 
            iiCustNum "|"
            iiMsSeq   "|"
            icCLI     "|"
