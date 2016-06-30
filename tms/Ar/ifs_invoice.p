@@ -30,6 +30,8 @@ DEF VAR lcbillcodes_from_set2 AS CHAR NO-UNDO INIT "RVTERM1EF,RVTERMBSF,RVTERMF"
 DEF VAR lcbillcodes_to_set2   AS CHAR NO-UNDO INIT "CNRV".
 DEF VAR lcbillcodes_from_set3 AS CHAR NO-UNDO INIT "RVTERM,RVTERM1E,RVTERMBS,RVTERMEND,RVTERMEND1E,RVTERMENDBS".
 DEF VAR lcbillcodes_to_set3   AS CHAR NO-UNDO INIT "CNRVTERM".
+DEF VAR lcbillcodes_from_set4 AS CHAR NO-UNDO INIT "RVTERMDTTR,RVTERMDTRW,RVTERMDTEQ25,RVTERMDTTD".
+DEF VAR lcbillcodes_to_set4   AS CHAR NO-UNDO INIT "CRVTERMDT".
 
 DEF VAR liCnt         AS INT    NO-UNDO.
 DEF VAR ldVATTot      AS DEC    NO-UNDO.
@@ -879,19 +881,24 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
 
       /* YOT-4132 billing code conversion for Credit Notes */
       IF lcInvoiceType = "15" THEN DO:
-         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set1) > 0 THEN DO:
+         
+         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set1) > 0 THEN
             ASSIGN ttRow.BillCode = lcbillcodes_to_set1.
-         END.
-         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set2) > 0 THEN DO:
+
+         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set2) > 0 THEN
             ASSIGN ttRow.BillCode = lcbillcodes_to_set2.
-         END.
-         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set3) > 0 THEN DO:
+
+         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set3) > 0 THEN
             ASSIGN ttRow.BillCode = lcbillcodes_to_set3.
-         END.
+
+         IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_from_set4) > 0 THEN
+            ASSIGN ttRow.BillCode = lcbillcodes_to_set4.
+
          /* If change was done then get other values from billing item */
          IF LOOKUP(STRING(ttRow.BillCode),lcbillcodes_to_set1 + "," +
                                           lcbillcodes_to_set2 + "," +
-                                          lcbillcodes_to_set3) > 0 THEN DO:
+                                          lcbillcodes_to_set3 + "," +
+                                          lcbillcodes_to_set4) > 0 THEN DO:
             FIND FIRST BillItem WHERE
                        BillItem.Brand    = gcBrand AND
                        BillItem.BillCode = ttRow.BillCode NO-LOCK NO-ERROR.
