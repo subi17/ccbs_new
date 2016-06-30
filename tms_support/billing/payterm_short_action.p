@@ -4,7 +4,9 @@
                   respective FixedFee end periods. Also possible SingleFees(Q25) 
                   are adjusted to match FixedFee end periods.
 
-                  THIS DOES CHANGES
+  INSTRUCTION ..: Define dates for eventlog
+                  and simulation flag to simulate(default) 
+                  when flag is false, program does changes
   APPLICATION ..: 
   AUTHOR .......: Janne Tourunen
   CREATED ......: 28/06/2016
@@ -34,13 +36,15 @@ DEFINE VARIABLE ldanow AS DATE NO-UNDO.
 DEFINE VARIABLE lcnow AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcfile AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcErrfile AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE llSimulate AS LOG NO-UNDO. 
 
 /* DEFINE DAYS, Last searched period:
  31.5.2016 - 9.6.2016 */
 
 ASSIGN
-   ldaBegin    = 5/31/2016
-   ldaEnd      = 6/9/2016
+   ldaBegin    = 5/31/2016  /* Define this */
+   ldaEnd      = 6/9/2016   /* Define this */
+   llSimulate  = TRUE       /* True=Simulation, False=action */
    ldanow      = TODAY
    lcnow       = STRING(DAY(ldanow),"99") + STRING(MONTH(ldanow),"99")
                + STRING(YEAR(ldanow),"9999")
@@ -56,10 +60,15 @@ PUT STREAM sout UNFORMATTED
    "MSISDN;MsSeq;DCEvent;ValidFrom;ValidTo;FFPeriod;Diff;NewValidTo;NewSinFeePer"
    SKIP.
    
-DISP " -- Payterm shortening EXECUTION program -- " SKIP
+DISP " -- Payterm shortening program -- " SKIP
      "This collect & sync up cases, where " SKIP
-     "payterms and monthlyfees(FF) are not in sync" SKIP
-     "action log to be sent to Yoigo as final report" WITH FRAME a.
+     "payterms and monthlyfees(FF) are not in sync" SKIP(1)
+     "The session:" 
+     IF llSimulate THEN "[SIMULATION MODE]" 
+      ELSE "[ACTION MODE]" FORMAT "X(20)"
+     SKIP "Begin Date.: " ldaBegin NO-LABEL SKIP
+     "End Date...: " ldaEnd NO-LABEL SKIP
+     "Send final report to Yoigo" WITH FRAME a.
 PAUSE 0.
 
 /* First is checked FF shortening events */
@@ -118,6 +127,16 @@ FOR EACH EventLog NO-LOCK USE-INDEX EventDate WHERE
       NEXT.
    END.
 
+   /* Skip if DCCLI contract is terminated or ended */ 
+   IF AVAIL DCCLI AND 
+      (DCCLI.ValidTo < TODAY OR
+       DCCLI.TermDate <> ?) THEN DO:
+      PUT STREAM slog UNFORMATTED
+       Mobsub.MsSeq ";" Mobsub.CLI ";" Mobsub.CustNum ";"  
+       FixedFee.SourceKey ";" DCCLI.ValidTo ";" DCCLI.TermDate
+       "; DCCLI contract terminated/ended" SKIP.
+      NEXT.
+   END.
    /* Check is there difference between FixedFee 
       payment months and length of Payterm contract */
    lifoundFFees = lifoundFFees + 1.
@@ -143,9 +162,11 @@ FOR EACH EventLog NO-LOCK USE-INDEX EventDate WHERE
 
    /* If difference, update DCCLI.ValidTo to match FixedFee, add to report log */
    IF lidif_FFvsDCCLI >= 1 THEN DO:
-	   DCCLI.ValidTo = ldaffee.
-	   lcline = lcline + ";" + STRING(lidif_FFvsDCCLI) + ";" + STRING(ldaffee).
-	END.
+      /* ValidTo population only in action mode */
+      IF NOT llSimulate THEN
+         DCCLI.ValidTo = ldaffee.
+      lcline = lcline + ";" + STRING(lidif_FFvsDCCLI) + ";" + STRING(ldaffee).
+   END.
    ELSE
       NEXT.  /* no changes */
    
@@ -160,15 +181,17 @@ FOR EACH EventLog NO-LOCK USE-INDEX EventDate WHERE
               SingleFee.sourcekey = STRING(DCCLI.PercontractID) AND
               LOOKUP(SingleFee.Billcode, {&TF_RVTERM_BILLCODES}) > 0 NO-ERROR. 
    IF AVAIL SingleFee AND SingleFee.InvNum = 0 THEN DO:
-         ASSIGN /* actual table population and logging */
-         liSFBPeriod = YEAR(ldaffee + 1) * 100 + MONTH(ldaffee + 1)
-         SingleFee.BillPeriod = liSFBPeriod
-         SingleFee.Concerns[1] = YEAR(ldaffee + 1) * 10000 +
-                                 MONTH(ldaffee + 1) * 100  + 
-                                 DAY(ldaffee + 1).
-      
+         liSFBPeriod = YEAR(ldaffee + 1) * 100 + MONTH(ldaffee + 1).
+         /* BillPeriod population only in action mode */
+         IF NOT llSimulate THEN DO:
+            SingleFee.BillPeriod = liSFBPeriod.
+            SingleFee.Concerns[1] = YEAR(ldaffee + 1) * 10000 +
+                                    MONTH(ldaffee + 1) * 100  + 
+                                    DAY(ldaffee + 1).
+         END. 
          PUT STREAM sout UNFORMATTED
             lcline ";" liSFBPeriod /* SingleFee.Billcode */ SKIP.
    END.
    ELSE PUT STREAM sout UNFORMATTED lcline SKIP.
 END.
+
