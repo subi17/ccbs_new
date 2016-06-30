@@ -147,38 +147,48 @@ lcUserCode = "RENEWAL_POS_" + pcSalesID.
 
 RUN pQ25ExtensionContracts(lcUserCode).
 
-FOR EACH Order NO-LOCK USE-INDEX Salesman WHERE 
-         Order.Salesman   = Salesman.Salesman       AND 
-         Order.Statuscode = {&ORDER_STATUS_ONGOING} AND 
-         Order.OrderType  = 2                       AND 
-         Order.CrStamp   >= lpcDateStamp            AND 
-         Order.CrStamp   <= ldtTodayStamp           AND 
-        (IF pcMSISDN NE "" THEN
-         Order.MsSeq      = MobSub.MsSeq       
-         ELSE TRUE)                                 AND 
-        (IF pcCustID NE "" THEN 
-         Order.CustNum    = Customer.CustNum  
-         ELSE TRUE):
+FOR EACH TMSCodes NO-LOCK WHERE 
+         TMSCodes.TableName = "Order"      AND 
+         TMSCodes.FieldNAme = "StatusCode" AND 
+         TMSCodes.CodeGroup = "Orders"     AND    
+         TMSCodes.InUse     = 1:
 
-   FIND FIRST OrderAction NO-LOCK WHERE 
-              OrderAction.Brand    = gcBrand        AND 
-              OrderAction.OrderID  = Order.OrderID  AND 
-              OrderAction.ItemType = "Q25Extension" NO-ERROR.
+   IF LOOKUP(TMSCodes.CodeValue,"6,7,8,9") > 0 THEN NEXT. 
+         
+   FOR EACH Order NO-LOCK USE-INDEX Salesman WHERE 
+            Order.Salesman   = Salesman.Salesman  AND 
+            Order.Statuscode = TMSCodes.CodeValue AND 
+            Order.OrderType  = 2                  AND 
+            Order.CrStamp   >= lpcDateStamp       AND 
+            Order.CrStamp   <= ldtTodayStamp      AND 
+           (IF pcMSISDN NE "" THEN
+            Order.MsSeq      = MobSub.MsSeq       
+            ELSE TRUE)                            AND 
+           (IF pcCustID NE "" THEN 
+            Order.CustNum    = Customer.CustNum  
+            ELSE TRUE):
 
-   IF NOT AVAIL OrderAction THEN NEXT.           
+      FIND FIRST OrderAction NO-LOCK WHERE 
+                 OrderAction.Brand    = gcBrand        AND 
+                 OrderAction.OrderID  = Order.OrderID  AND 
+                 OrderAction.ItemType = "Q25Extension" NO-ERROR.
 
-   ASSIGN 
-      ldtContractDate = ?
-      llgContractDate = fTS2Date(Order.CrStamp,
-                                 ldtContractDate).
-   CREATE ttContractDetails.
-   ASSIGN 
-      ttContractDetails.CLI          = Order.CLI
-      ttContractDetails.ContractType = "extension"
-      ttContractDetails.ContractId   = OrderAction.ItemKey
-      ttContractDetails.ContractDate = ldtContractDate.
+      IF NOT AVAIL OrderAction THEN NEXT.           
 
-END.         
+      ASSIGN 
+         ldtContractDate = ?
+         llgContractDate = fTS2Date(Order.CrStamp,
+                                    ldtContractDate).
+      CREATE ttContractDetails.
+      ASSIGN 
+         ttContractDetails.CLI          = Order.CLI
+         ttContractDetails.ContractType = "extension"
+         ttContractDetails.ContractId   = OrderAction.ItemKey
+         ttContractDetails.ContractDate = ldtContractDate.
+
+   END. /* FOR EACH Order */        
+
+END. /* FOR EACH TMSCodes */
 
 lcTopArray = add_array(response_toplevel_id,"").
 
