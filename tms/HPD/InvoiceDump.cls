@@ -233,13 +233,13 @@ CLASS HPD.InvoiceDump FINAL INHERITS InvoiceCommon:
                   ldaMaxInvRowDate < lbInvRow.ToDate
                THEN ldaMaxInvRowDate = lbInvRow.Todate.
 
-               IF lcExcludedRows > "" AND
-                  LOOKUP(STRING((ROWID(lbInvRow))),lcExcludedRows) > 0
-               THEN NEXT.
-
-               IF CAN-FIND(ttBillItem NO-LOCK WHERE ttBillItem.BillCode = lbInvRow.BillCode)
-               THEN ldeInstallmentFee = ldeInstallmentFee + lbInvRow.Amt.
-
+               IF CAN-FIND(ttBillItem NO-LOCK WHERE 
+                           ttBillItem.BillCode = lbInvRow.BillCode) THEN DO:
+                  IF lcExcludedRows > "" AND
+                     LOOKUP(STRING((ROWID(lbInvRow))),lcExcludedRows) > 0 THEN
+                     NEXT.
+                  ldeInstallmentFee = ldeInstallmentFee + lbInvRow.Amt.
+               END.
               /* Lets write a line for invrow to csv */
                objDumpInvRow:mWriteALine().
             END.
