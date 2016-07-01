@@ -981,9 +981,9 @@ PROCEDURE pContractActivation:
 
    END.  /* dctype ne 1/4 */
 
-   /* Send Shaper if VOIP is added manually or by subs. creation */
+   /* Send Shaper if added manually or by subs. creation */
    IF lcDCEvent NE "HSPA_ROAM_EU" AND
-      (lcDCEvent <> "BONO_VOIP" OR MsRequest.OrigRequest = 0 OR
+      (MsRequest.OrigRequest = 0 OR
        LOOKUP(MsRequest.ReqSource,"1,19") > 0) THEN
    RUN pActivateServicePackage(lcDCEvent,
                                MsOwner.MsSeq,

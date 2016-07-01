@@ -785,45 +785,27 @@ PROCEDURE pServiceRequest:
       lcService = ttAction.ActionKey
       lcParam   = "".
 
-   llNotDssActive = TRUE.
-   IF lcService = "VOIPVIDEO" THEN DO:
-      lcDSSBundleId = fGetActiveDSSId(liCustNum,idActStamp).
-      IF lcDSSBundleId > "" THEN DO:
-         IF lcDSSBundleId = "DSS2" THEn DO:
-            lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
-            FIND FIRST bMsOwner WHERE
-                       bMsOwner.MsSeq = liMsSeq NO-LOCK NO-ERROR.
-            IF AVAIL bMsOwner AND
-               LOOKUP(bMsOwner.CLIType,lcAllowedDSS2SubsType) > 0 THEN
-               llNotDssActive = FALSE.
-         END.
-         ELSE llNotDssActive = FALSE.
-      END.
-   END.
-
-   IF llNotDssActive THEN DO:
-      liRequest = fServiceRequest(liMsSeq,
-                                  lcService,
-                                  liAction,
-                                  lcParam,
-                                  idActStamp,
-                                  "",
-                                  FALSE, /* fees */
-                                  FALSE, /* sms */
-                                  "",
-                                  icSource,
-                                  iiMsRequest, /* father request */
-                                  FALSE,
-                                  OUTPUT lcResult).
-      IF liRequest = 0 THEN
-         /* write possible error to a memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          lcMemoTable,
-                          lcMemoKey,
-                          liCustNum,
-                          "SERVICE REQUEST CREATION FAILED",
-                          ttAction.ActionKey).
-   END. /* IF llNotDssActive THEN DO: */
+   liRequest = fServiceRequest(liMsSeq,
+                               lcService,
+                               liAction,
+                               lcParam,
+                               idActStamp,
+                               "",
+                               FALSE, /* fees */
+                               FALSE, /* sms */
+                               "",
+                               icSource,
+                               iiMsRequest, /* father request */
+                               FALSE,
+                               OUTPUT lcResult).
+   IF liRequest = 0 THEN
+      /* write possible error to a memo */
+      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                       lcMemoTable,
+                       lcMemoKey,
+                       liCustNum,
+                       "SERVICE REQUEST CREATION FAILED",
+                       ttAction.ActionKey).
 
 END.
 

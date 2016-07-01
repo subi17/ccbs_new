@@ -495,11 +495,9 @@ DO TRANSACTION:
 
    FOR EACH ttContract:
 
-      /* Don't reactivate TARJ7 and TARJ9 service periodical contract 
-         Don't reactivate BONO_VOIP YPR-3458 */
+      /* Don't reactivate TARJ7 and TARJ9 service periodical contract */
       IF ttContract.DCEvent = "TARJ7" OR
-         ttContract.DCEvent = "TARJ9" OR
-         ttContract.DCEvent = "BONO_VOIP" THEN NEXT.
+         ttContract.DCEvent = "TARJ9" THEN NEXT.
 
       FIND FIRST DayCampaign WHERE
                  DayCampaign.Brand   = gcBrand AND
