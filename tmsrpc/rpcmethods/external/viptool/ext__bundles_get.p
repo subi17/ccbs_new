@@ -2,7 +2,7 @@
  * Get data bundle status 
  *
  * @input  int;mandatory;subscription id
-           string;mandatory;bundle id (Bono Contracts, Bono VoIP and DSS) 
+           string;mandatory;bundle id (Bono Contracts and DSS) 
  * @output bundle status id;bundle status 
            0;inactive
            1;active
@@ -45,7 +45,7 @@ IF NOT AVAIL MobSub THEN RETURN appl_err("MobSub not found").
 ASSIGN ldEndStamp = fMake2Dt(fLastDayOfMonth(TODAY),86399)
        lcBONOContracts = fCParamC("BONO_CONTRACTS").
 
-IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") = 0 AND
+IF LOOKUP(pcBundleId,lcBONOContracts) = 0 AND
    pcBundleId <> {&DSS} THEN
    RETURN appl_err("Incorrect Bundle Id").
 

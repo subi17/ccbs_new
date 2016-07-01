@@ -329,9 +329,6 @@ FOR EACH MobSub NO-LOCK WHERE
    DO liCount = 1 TO liNumberOfBundles:
       lcOtherBundle = ENTRY(liCount,pcOtherBundles).
       CASE lcOtherBundle:
-         WHEN "BONO_VOIP" THEN
-            IF fGetActiveSpecificBundle(Mobsub.MsSeq,fMakeTS(),lcOtherBundle) = ""
-            THEN NEXT EACH_MOBSUB.
          WHEN "DSS" THEN
             IF NOT fIsDSSActive(MobSub.CustNum,fMakeTS()) THEN NEXT EACH_MOBSUB.
          OTHERWISE NEXT.

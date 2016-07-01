@@ -76,13 +76,6 @@ FUNCTION fSetMDUB RETURNS INT
                          "subscription has ongoing BTC with upgrade upsell".
             ELSE liReturnValue = 2. /* Ongoing Termination */
          END. /* IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO: */
-         ELSE IF pcBundleId = "BONO_VOIP" THEN DO:
-            IF fGetActiveSpecificBundle(Mobsub.MsSeq,
-                                        ldNextMonthActStamp,
-                                        pcBundleId) = "" THEN
-               ocError = pcBundleId + " termination is not allowed".
-            ELSE liReturnValue = 2. /* Ongoing Termination */
-         END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
          ELSE IF pcBundleId = "HSPA_ROAM_EU" OR pcBundleId = {&TARJ_UPSELL} THEN DO:
             ocError = pcBundleId + " termination is not allowed".
          END.
@@ -106,14 +99,6 @@ FUNCTION fSetMDUB RETURNS INT
                ocError = pcBundleId + " activation is not allowed".
             ELSE liReturnValue = 3. /* Ongoing Activation */
          END. /* IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO: */
-         ELSE IF pcBundleId = "BONO_VOIP" THEN DO:
-            IF NOT fIsBonoVoIPAllowed(Mobsub.MsSeq, ldeActStamp) THEN DO:
-               ocError = pcBundleId + " activation is not allowed".
-               RETURN 0.
-            END.
-
-            liReturnValue = 3. /* Ongoing Activation */
-         END. /* ELSE IF pcBundleId = "BONO_VOIP" THEN DO: */
          ELSE IF pcBundleId = "HSPA_ROAM_EU" OR pcBundleId = {&TARJ_UPSELL} THEN .
          /* Customer level - As of now DSS only */
          ELSE DO:
@@ -283,7 +268,7 @@ IF NOT AVAIL DayCampaign THEN
 ASSIGN lcMemoTitle = DayCampaign.DcName
        lcBONOContracts = fCParamC("BONO_CONTRACTS").
 
-IF LOOKUP(pcBundleId,lcBONOContracts + ",HSPA_ROAM_EU,BONO_VOIP") > 0 OR
+IF LOOKUP(pcBundleId,lcBONOContracts + ",HSPA_ROAM_EU") > 0 OR
    pcBundleId = {&DSS} OR pcBundleId = {&TARJ_UPSELL} THEN DO:
 
    liReturnValue = fSetMDUB(piMsSeq,

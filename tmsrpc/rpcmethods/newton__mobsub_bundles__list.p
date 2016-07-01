@@ -66,7 +66,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcActiveBundles):
    IF lcActiveBundle = "TARJ7" OR lcActiveBundle = "TARJ9" THEN
       add_string(lcResultArray,"", "TARJ7_UPSELL|" + STRING(Mobsub.MsSeq)).
    
-   IF LOOKUP(lcActiveBundle, lcBONOContracts + "," + lcIPLContracts + ",BONO_VOIP") = 0 THEN NEXT.
+   IF LOOKUP(lcActiveBundle, lcBONOContracts + "," + lcIPLContracts) = 0 THEN NEXT.
    
    IF LOOKUP(lcActiveBundle, lcBONOContracts) > 0 THEN 
       llActiveBonoContract = TRUE.
@@ -130,7 +130,7 @@ IF MobSub.CliType EQ "CONT9" AND
    bundles that can be activated */
 FOR EACH DayCampaign NO-LOCK WHERE 
          DayCampaign.Brand = gcBrand AND
-  LOOKUP(DayCampaign.DCEvent,lcAllowedBONOContracts + ",BONO_VOIP") > 0:
+  LOOKUP(DayCampaign.DCEvent,lcAllowedBONOContracts) > 0:
    
    IF llActiveBonoContract AND
       LOOKUP(DayCampaign.DCEvent,lcAllowedBONOContracts) > 0 THEN NEXT.
@@ -140,9 +140,6 @@ FOR EACH DayCampaign NO-LOCK WHERE
        DayCampaign.DCEvent,
        OUTPUT lcError) THEN NEXT.
 
-   IF DayCampaign.DCEvent = "BONO_VOIP" AND
-      NOT fIsBonoVoIPAllowed(Mobsub.MsSeq, ldeCurrTS) THEN NEXT.
-   
    add_string(lcResultArray,"", DayCampaign.DCEvent + "|" + STRING(Mobsub.MsSeq) ).
    DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
       IF LOOKUP(ENTRY(liUpsellCount,DayCampaign.BundleUpsell),lcDayCampBundleUpsells) = 0 THEN DO:

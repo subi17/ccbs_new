@@ -14,7 +14,6 @@
                    subscription_type_id;string;subscription type
                    line_type;int;line type (main=1 or additional=2)
                    fixed_line_type;int;fixed line type (ADSL=1 or FIBER=2)
-                   voip_amount;double;bono voip data amount (MB)
                    dss2_compatible;boolean;DSS2 compatible
                    voip_compatible;boolean;Voip Compatible
  */
@@ -48,10 +47,7 @@ DEF VAR ldeFee             AS DEC  NO-UNDO.
 DEF VAR liLineType         AS INT  NO-UNDO.
 DEF VAR llDss2Compatible   AS LOG NO-UNDO. 
 DEF VAR liFixedLineType    AS INT  NO-UNDO.
-DEF VAR lcVoIPBaseContracts AS CHAR NO-UNDO.
 DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
-DEF VAR lcAllVoIPNativeBundles AS CHAR NO-UNDO.
-DEF VAR llVoIPCompatible   AS LOG NO-UNDO.
 DEF VAR lcPromotionBundles AS CHAR NO-UNDO. 
 
 {cparam2.i}
@@ -64,8 +60,6 @@ ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
        lcBONOContracts  = fCParamC("BONO_CONTRACTS")
        lcCONTSContracts = fCParamC("CONTS_CONTRACTS")
        lcCONTSFContracts = fCParamC("CONTSF_CONTRACTS")
-       lcVoIPBaseContracts = fCParamC("BONO_VOIP_BASE_BUNDLES")
-       lcAllVoIPNativeBundles = fCParamC("NATIVE_VOIP_BASE_BUNDLES")
        lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
        lcPromotionBundles    = fCParamC("PROMOTION_BUNDLES").
 
@@ -86,8 +80,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       ldeFee = 0
       liLineType = 0
       liFixedLineType = 0
-      llDss2Compatible = FALSE
-      llVoIPCompatible = FALSE.
+      llDss2Compatible = FALSE.
 
    lcResultStruct = add_struct(resp_array, "").
    add_string(lcResultStruct, "id", DayCampaign.DCEvent).
@@ -156,11 +149,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
                 ldeFee = CLIType.CommercialFee
 
       llDss2Compatible = LOOKUP(lcCLIType, lcAllowedDSS2SubsType) > 0.
-      llVoIPCompatible = LOOKUP(lcCLIType, lcAllVoIPNativeBundles) > 0.
    END. /* IF lcCLIType > "" THEN DO: */
-
-   IF LOOKUP(DayCampaign.DCEvent,lcAllVoIPNativeBundles) > 0 THEN
-      llVoIPCompatible = TRUE.
 
    add_string(lcResultStruct,"bundle_type", lcBundleType).
    add_string(lcResultStruct,"subscription_type_id", lcCLIType).
@@ -169,14 +158,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    add_int(lcResultStruct,"line_type", liLineType).
    add_int(lcResultStruct,"fixed_line_type", liFixedLineType).
    add_boolean(lcResultStruct,"dss2_compatible", llDss2Compatible).
-   add_boolean(lcResultStruct,"voip_compatible", llVoIPCompatible).
+   add_boolean(lcResultStruct,"voip_compatible", FALSE /*llVoIPCompatible*/).
 
-   IF LOOKUP(DayCampaign.DCEvent,lcVoIPBaseContracts) > 0 THEN DO:
-      FIND FIRST ServiceLimit WHERE
-                 ServiceLimit.GroupCode = "BONO_VOIP" NO-LOCK NO-ERROR.
-      IF AVAIL ServiceLimit THEN
-         add_double(lcResultStruct,"voip_amount", ServiceLimit.InclAmt).
-   END.
 END.
 
 FINALLY:

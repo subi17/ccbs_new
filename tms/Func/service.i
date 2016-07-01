@@ -621,6 +621,12 @@ PROCEDURE pCopyPackage:
                lcServPac  = "".
          END.
 
+         lcDefParam = fGetShaperConfId(iiMSSeq,
+                                       icDCEvent,
+                                       lcDefParam,
+                                       idtDate,
+                                       icclitype).
+
          IF INDEX(lcDefParam,"#UPSELL") > 0 THEN DO:
             lcDefParam = REPLACE(lcDefParam,"#UPSELL","").
 

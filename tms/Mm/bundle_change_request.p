@@ -30,9 +30,6 @@ DEF VAR ldEndStamp        AS DEC  NO-UNDO.
 DEF VAR ldaActivationDate AS DATE NO-UNDO.
 DEF VAR liActivationTime  AS INT  NO-UNDO.
 
-DEF TEMP-TABLE ttContract NO-UNDO
-    FIELD DCEvent AS CHAR.
-
 DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
     FIELD MsSeq    AS INT
     FIELD CustNum  AS INT
@@ -205,8 +202,6 @@ PROCEDURE pFinalize:
    DEF VAR lcError                 AS CHAR NO-UNDO.
 
    DEF BUFFER bDPMember  FOR DPMember.
-
-   EMPTY TEMP-TABLE ttContract.
 
    /* check that subrequests really are ok */
    IF fGetSubRequestState(MsRequest.MsRequest) NE 2 THEN DO:
@@ -588,49 +583,6 @@ PROCEDURE pCloseContracts:
    END. /* IF INDEX(MsRequest.ReqCParam2,"CONTF") > 0 THEN DO: */
    END. /* IF LOOKUP(MsRequest.ReqCparam2,lcBonoContracts) = 0 THEN DO: */
    
-   FOR EACH ttContract:
-      FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand   = gcBrand AND
-                 DayCampaign.DCEvent = ttContract.DCEvent AND
-                 DayCampaign.ValidTo >= Today NO-LOCK NO-ERROR.
-      IF NOT AVAIL DayCampaign THEN DO:
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
-                          STRING(Mobsub.MsSeq),
-                          Mobsub.CustNum,
-                          "Periodical Contract",
-                          ttContract.DCEvent +
-                          ": Periodical contract information is missing!").
-         DELETE ttContract.
-         NEXT.
-      END. /* IF NOT AVAIL DayCampaign THEN DO: */
-
-      liRequest = fPCActionRequest(MobSub.MsSeq,
-                       ttContract.DCEvent,
-                       "term",
-                       ldEndStamp,
-                       TRUE,             /* create fees */
-                       {&REQUEST_SOURCE_BTC},
-                       "",
-                       MsRequest.MsRequest, /* Father Request */
-                       FALSE,
-                       "",
-                       0,
-                       0,
-                       OUTPUT lcError).
-      IF liRequest = 0 THEN
-         /* Write memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
-                          STRING(MobSub.MsSeq),
-                          MobSub.CustNum,
-                          "Periodical Contract",
-                          ttContract.DCEvent +
-                          ": Periodical contract is not closed: " + lcError).
-   END. /* FOR EACH ttContract: */
-
-   EMPTY TEMP-TABLE ttContract NO-ERROR.
-
 END PROCEDURE.
 
 PROCEDURE pUpdateSubscription:
