@@ -9,3 +9,5 @@
 21 "Sent to logistics"
 68 "Old LO"
 69 "New LO"
+70 "Universal SIM"
+71 "Direct SIMS"

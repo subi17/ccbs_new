@@ -422,7 +422,8 @@
          END.   
          
          /* PRERATED TICKET */
-         IF LOOKUP(STRING(ttCall.SpoCMT),"72,73,78") > 0 THEN 
+         IF LOOKUP(STRING(ttCall.SpoCMT),"72,73,78," +
+                   STRING({&GB_CCN})) > 0 THEN
             bPrice = ttCall.ccharge.
            
          ASSIGN               
@@ -474,6 +475,11 @@
             ttCall.ServiceName = fGetPremiumServiceName(ttCall.GsmBnr,
                                                         ttCall.DateSt).
       END. /* IF ttCall.MSCID <> "CCGW" THEN DO: */
+      ELSE IF ttCall.spocmt EQ {&GB_CCN} THEN DO:
+         ASSIGN
+            ttCall.ServiceName = {&GB_B_NBR} /*  YPR-3890 */
+            ttCall.gsmbnr = {&GB_B_NBR}.
+      END.
 
       IF ttCall.ErrorCode = 0 THEN 
          ttCall.invseq = fInvSeq(ttCall.AgrCust,

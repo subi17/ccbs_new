@@ -21,6 +21,7 @@
 "account" "AccType" "Accounts" "4" "Payment" "" "" 1
 "Account" "AccType" "Accounts" "43" "Discount Extension over Q25" "" "" 1
 "account" "AccType" "Accounts" "5" "TAX" "" "" 1
+"account" "AccType" "Accounts" "55" "Google Purchase" "" "" 1
 "account" "AccType" "Accounts" "6" "Overpayment" "" "" 1
 "Account" "AccType" "Accounts" "60" "Q25 discount" "" "" 1
 "account" "AccType" "Accounts" "7" "Deposit" "" "" 1
@@ -462,13 +463,17 @@
 "IFiSpx" "SimArt" "SIM" "15" "Standard SIM" "" "Plug_IN" 1
 "IFiSpx" "SimArt" "SIM" "16" "Micro SIM" "" "Micro" 1
 "IFiSpx" "SimArt" "SIM" "17" "Nano SIM" "" "Nano" 1
+"IFiSpx" "SimArt" "SIM" "18" "Universal SIM" "" "Universal" 1
 "IFiSpx" "SimArt" "SIM" "20" "Standard SIM" "" "Plug_IN" 1
 "IFiSpx" "SimArt" "SIM" "21" "Micro SIM" "" "Micro" 1
+"IFiSpx" "SimArt" "SIM" "23" "Universal SIM" "" "Universal" 1
 "IFiSpx" "SimArt" "SIM" "30" "Standard SIM" "" "Plug_IN" 1
 "IFiSpx" "SimArt" "SIM" "31" "Micro SIM" "" "Micro" 1
+"IFiSpx" "SimArt" "SIM" "33" "Universal SIM" "" "Universal" 1
 "IFiSpx" "SimArt" "SIM" "40" "Standard SIM" "" "Plug_IN" 1
 "IFiSpx" "SimArt" "SIM" "41" "Micro SIM" "" "Micro" 1
 "IFiSpx" "SimArt" "SIM" "42" "Nano SIM" "" "Nano" 1
+"IFiSpx" "SimArt" "SIM" "43" "Universal SIM" "" "Universal" 1
 "Invoice" "ChargeType" "AccRec" "0" "N/A" "" "" 0
 "Invoice" "ChargeType" "AccRec" "1" "Cash" "" "" 0
 "Invoice" "ChargeType" "AccRec" "2" "Direct Debit" "" "" 1
