@@ -177,7 +177,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    IF AVAIL DayCampaign THEN add_string(lcResultStruct, "name", DayCampaign.DCName).
 
    /* check BONO contracts and customer level bundle status */
-   IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") > 0 OR
+   IF LOOKUP(pcBundleId,lcBONOContracts) > 0 OR
       LOOKUP(pcBundleId,{&DSS_BUNDLES}) > 0 OR 
       (MobSub.CLIType = "CONT15" AND pcBundleId = "VOICE100") OR
       (MobSub.CLIType = "CONT9" AND pcBundleId = "FREE100MINUTES") THEN DO:
