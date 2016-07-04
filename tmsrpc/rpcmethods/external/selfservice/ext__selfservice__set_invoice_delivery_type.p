@@ -137,9 +137,13 @@ IF Customer.DelType NE piDelType THEN DO:
                                        INPUT "Invoice Delivery Type is " +
                                        "changed to " + STRING(Customer.DelType)).
       IF piDelType EQ {&INV_DEL_TYPE_NO_DELIVERY} THEN
-         fMakeSchedSMS3(Customer.Custnum,MobSub.CLI,9,
-                        "InvDelivTypeChanged",Customer.Language,0,
-                        "622","").                                    
+         FOR EACH MobSub WHERE
+                  MobSub.brand EQ gcbrand AND
+                  Mobsub.custnum EQ Customer.Custnum NO-LOCK:
+            fMakeSchedSMS3(Customer.Custnum,MobSub.CLI,9,
+                           "InvDelivTypeChanged",Customer.Language,0,
+                           "622","").
+         END.         
    END. /* ELSE DO: */
 
    FIND CURRENT Customer NO-LOCK.
