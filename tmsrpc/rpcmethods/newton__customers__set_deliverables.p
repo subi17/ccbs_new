@@ -139,11 +139,15 @@ IF liDelType > 0 AND Customer.DelType <> liDelType THEN DO:
          fCancelPendingEmailActRequest(INPUT Customer.Custnum,
                                        INPUT "Invoice Delivery Type is " +
                                     "changed to " + STRING(Customer.DelType)).
-      IF liDelType EQ {&INV_DEL_TYPE_NO_DELIVERY} AND
-         Customer.smsnumber GT "" THEN
-         fMakeSchedSMS3(Customer.Custnum,Customer.smsnumber,9,
-                        "InvDelivTypeChanged",Customer.Language,0,
-                        "622","").
+      IF liDelType EQ {&INV_DEL_TYPE_NO_DELIVERY} THEN DO:
+         FIND FIRST MobSub WHERE
+                    MobSub.brand EQ gcbrand AND
+                    Mobsub.custnum EQ Customer.Custnum NO-LOCK NO-ERROR.
+         IF AVAIL MobSub THEN
+            fMakeSchedSMS3(Customer.Custnum,MobSub.CLI,9,
+                           "InvDelivTypeChanged",Customer.Language,0,
+                           "622","").
+      END.
    END. /* ELSE DO: */
 
    FIND CURRENT Customer NO-LOCK.
