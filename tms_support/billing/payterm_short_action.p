@@ -6,11 +6,17 @@
 
   INSTRUCTION ..: Define dates for eventlog
                   and simulation flag to simulate(default) 
-                  when flag is false, program does changes
+                  false flag: program does changes
+                  ALL logs will be saved into log folder, file examples
+                     payterm_action_01072016.log
+                     payterm_action_errors_01072016.log
+                     payterm_simulation_01072016.log
+                     payterm_simulation_errors_01072016.log
+
   APPLICATION ..: 
   AUTHOR .......: Janne Tourunen
   CREATED ......: 28/06/2016
-  CHANGED ......: 
+  CHANGED ......: 01/07/2016
   Version ......: 1.00
   ---------------------------------------------------------------------- */
 
@@ -39,17 +45,26 @@ DEFINE VARIABLE lcErrfile AS CHARACTER NO-UNDO.
 DEFINE VARIABLE llSimulate AS LOG NO-UNDO. 
 
 /* DEFINE DAYS, Last searched period:
- 31.5.2016 - 9.6.2016 */
+ 31.5.2016 - 9.6.2016 
+   AND SIMULATION / ACTION Flag */
 
-ASSIGN
+ASSIGN  /* DEFINE FIRST 3 parameters */
    ldaBegin    = 5/31/2016  /* Define this */
    ldaEnd      = 6/9/2016   /* Define this */
-   llSimulate  = TRUE       /* True=Simulation, False=action */
+   llSimulate  = TRUE       /* Define True=Simulation, False=action */   
    ldanow      = TODAY
    lcnow       = STRING(DAY(ldanow),"99") + STRING(MONTH(ldanow),"99")
-               + STRING(YEAR(ldanow),"9999")
-   lcfile      = "payterm_action_" + lcnow + ".log"
-   lcErrfile   = "payterm_action_errors_" + lcnow + ".log".
+               + STRING(YEAR(ldanow),"9999").
+IF llSimulate THEN DO:
+   ASSIGN
+      lcfile      = "log/payterm_simulation_" + lcnow + ".log"
+      lcErrfile   = "log/payterm_simulation_errors_" + lcnow + ".log".
+END.
+ELSE DO:
+   ASSIGN
+      lcfile      = "log/payterm_action_" + lcnow + ".log"
+      lcErrfile   = "log/payterm_action_errors_" + lcnow + ".log".
+END.
 
 DEF STREAM slog.
 OUTPUT STREAM slog TO VALUE(lcErrfile).
@@ -127,21 +142,21 @@ FOR EACH EventLog NO-LOCK USE-INDEX EventDate WHERE
       NEXT.
    END.
 
-   /* Skip if DCCLI contract is ended */ 
-   IF AVAIL DCCLI AND DCCLI.ValidTo < TODAY THEN DO:
-      PUT STREAM slog UNFORMATTED
-       Mobsub.MsSeq ";" Mobsub.CLI ";" Mobsub.CustNum ";"  
-       FixedFee.SourceKey ";" DCCLI.ValidTo
-       "; DCCLI contract has been ended before today" SKIP.
-      NEXT.
-   END.
-
    /* Skip if DCCLI contract has been terminated */ 
    IF AVAIL DCCLI AND DCCLI.TermDate <> ? THEN DO:
       PUT STREAM slog UNFORMATTED
        Mobsub.MsSeq ";" Mobsub.CLI ";" Mobsub.CustNum ";"  
        FixedFee.SourceKey ";" DCCLI.TermDate
        "; DCCLI contract has been terminated" SKIP.
+      NEXT.
+   END.
+
+   /* Skip if DCCLI contract is ended */ 
+   IF AVAIL DCCLI AND DCCLI.ValidTo < TODAY THEN DO:
+      PUT STREAM slog UNFORMATTED
+       Mobsub.MsSeq ";" Mobsub.CLI ";" Mobsub.CustNum ";"  
+       FixedFee.SourceKey ";" DCCLI.ValidTo
+       "; DCCLI contract has been ended before today" SKIP.
       NEXT.
    END.
 
