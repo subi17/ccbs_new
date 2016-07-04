@@ -249,6 +249,8 @@ DEFINE TEMP-TABLE ttInstallment NO-UNDO
 INDEX OperDate IS PRIMARY OperDate
 INDEX FFNUm FFNum RowSource.
 
+DEF BUFFER bttInstallment FOR ttInstallment.
+
 RUN pCollectActivations.
 
 IF olInterrupted THEN DO TRANS:
@@ -1350,6 +1352,7 @@ PROCEDURE pCollectInstallmentCancellations:
 
    DEF BUFFER bTermDCCLI FOR DCCLI.
    DEF BUFFER bMainRequest FOR MSRequest.
+   DEF BUFFER bFixedFee FOR FixedFee.
 
    IF icDumpMode = "modified" THEN ASSIGN
       ldFrom  = fMake2Dt(ldaDataFrom,0)
@@ -1434,10 +1437,6 @@ PROCEDURE pCollectInstallmentCancellations:
                 DayCampaign.Brand = gcBrand AND
                 DayCampaign.DCEvent = bTermDCCLI.DCEvent:
       
-         IF FixedFee.IFSStatus NE {&IFS_STATUS_SENT} AND
-            NOT CAN-FIND(ttInstallment WHERE
-                         ttInstallment.FFNum = FixedFee.FFNum AND
-                         ttInstallment.RowSource = "ACTIVATION") THEN NEXT REQUEST_LOOP. 
          IF FixedFee.TFBank > "" AND FixedFee.TFBank NE lcTFBank THEN NEXT REQUEST_LOOP.
          IF FixedFee.TFBank EQ "" AND lcTFBank NE {&TF_BANK_UNOE} THEN NEXT REQUEST_LOOP.
          
@@ -1469,6 +1468,28 @@ PROCEDURE pCollectInstallmentCancellations:
          
             ASSIGN liFFItemQty = FMItem.FFItemQty - liBatches
                    ldeAmount   = liFFItemQty * FixedFee.Amt.
+         END.
+         
+         IF FixedFee.IFSStatus NE {&IFS_STATUS_SENT} THEN DO:
+
+            FIND FIRST bttInstallment WHERE
+                       bttInstallment.FFNum = FixedFee.FFNum AND
+                       bttInstallment.RowSource = "ACTIVATION" NO-ERROR.
+            IF AVAIL bttInstallment AND
+               (bttInstallment.Amount * bttInstallment.Items) EQ ldeAmount THEN DO:
+               
+               FIND bFixedFee EXCLUSIVE-LOCK WHERE
+                    ROWID(bFixedFee) = ROWID(FixedFee) NO-ERROR.
+               ASSIGN bFixedFee.IFSStatus = {&IFS_STATUS_SENDING_CANCELLED}.
+               RELEASE bFixedFee.
+               DELETE bttInstallment.
+
+               PUT STREAM sFixedFee UNFORMATTED
+                  FixedFee.FFNum ";" MsRequest.MsSeq ";"
+                  "SKIPPED:Installment activated and cancelled in the same month"
+               SKIP.
+            END.
+            ELSE NEXT REQUEST_LOOP. 
          END.
 
          ldeResidualAmt = 0.
