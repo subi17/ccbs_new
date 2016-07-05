@@ -48,6 +48,7 @@ CLASS HPD.MobSubDump FINAL INHERITS DumpHandler:
       
       IF AVAILABLE lbMobSub
       THEN DO:
+         FIND CURRENT lbMobSub NO-LOCK.
 
          mFindMsOwner().
                
