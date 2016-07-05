@@ -159,7 +159,7 @@ ADD INDEX "PerContractID" ON "DCCLi_new"
   INDEX-FIELD "PerContractID" DESCENDING 
 
 ADD TABLE "SubSer_new"
-  AREA "Sta_Data_128_2"
+  AREA "SubSer_Data"
   DESCRIPTION "Services of mobile subscribers"
   DUMP-NAME "subser"
 
@@ -248,7 +248,7 @@ ADD FIELD "SologStat" OF "SubSer_new" AS integer
   ORDER 100
 
 ADD INDEX "ServCom" ON "SubSer_new" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   UNIQUE
   PRIMARY
   INDEX-FIELD "MsSeq" ASCENDING 
@@ -256,7 +256,7 @@ ADD INDEX "ServCom" ON "SubSer_new"
   INDEX-FIELD "SSDate" DESCENDING 
 
 ADD INDEX "ServPac" ON "SubSer_new" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_5"
   INDEX-FIELD "MsSeq" ASCENDING 
   INDEX-FIELD "ServPac" ASCENDING 
   INDEX-FIELD "ServCom" ASCENDING 
@@ -318,19 +318,19 @@ ADD FIELD "Amount" OF "MinConsumption_new" AS decimal
   ORDER 50
 
 ADD INDEX "MsSeq" ON "MinConsumption_new" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_5"
   UNIQUE
   PRIMARY
   INDEX-FIELD "MSSeq" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD INDEX "InvNum" ON "MinConsumption_new" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "InvNum" ASCENDING 
 
 ADD TABLE "DCCounter_new"
-  AREA "Sta_Data_128_2"
-  DUMP-NAME "dccounte"
+  AREA "DCCounter_Data"
+  DUMP-NAME "dccounter"
 
 ADD FIELD "DCEvent" OF "DCCounter_new" AS character 
   FORMAT "x(12)"
@@ -456,14 +456,170 @@ ADD FIELD "Latest" OF "DCCounter_new" AS decimal
   ORDER 250
 
 ADD INDEX "MSSeq" ON "DCCounter_new" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_5"
   PRIMARY
   INDEX-FIELD "MSSeq" ASCENDING 
   INDEX-FIELD "DCDate" ASCENDING 
   INDEX-FIELD "DCTarget" ASCENDING 
 
 ADD INDEX "DCEvent" ON "DCCounter_new" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "DCEvent" ASCENDING 
   INDEX-FIELD "DCDate" ASCENDING 
 
+ADD TABLE "MSBalance_new"
+  AREA "Sta_Data_128_2"
+  LABEL "Mobsub Balance"
+  DESCRIPTION "Subscription balances"
+  DUMP-NAME "msbalance"
+
+ADD FIELD "MSSeq" OF "MSBalance_new" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "SubsID"
+  HELP "Subscription ID"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "BalType" OF "MSBalance_new" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Balance Type"
+  POSITION 3
+  MAX-WIDTH 16
+  COLUMN-LABEL "Balance"
+  HELP "Balance type"
+  ORDER 20
+
+ADD FIELD "Amount" OF "MSBalance_new" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Balance"
+  POSITION 4
+  MAX-WIDTH 20
+  HELP "Current balance"
+  DECIMALS 5
+  ORDER 30
+
+ADD FIELD "BalDate" OF "MSBalance_new" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Balance Date"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "Date"
+  HELP "Latest update to balance"
+  ORDER 40
+
+ADD FIELD "CustNum" OF "MSBalance_new" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Cust"
+  HELP "Customer number"
+  ORDER 50
+
+ADD INDEX "MsSeq" ON "MSBalance_new" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "MSSeq" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "BalType" ASCENDING 
+
+ADD INDEX "CustNum" ON "MSBalance_new" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "MSSeq" ASCENDING 
+  INDEX-FIELD "BalType" ASCENDING 
+
+ADD TABLE "SubSerPara_new"
+  AREA "Sta_Data_128"
+  DUMP-NAME "subserpa"
+
+ADD FIELD "MsSeq" OF "SubSerPara_new" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "SubSeq"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "SubSeq"
+  HELP "Sequence for a Subscription"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "ServCom" OF "SubSerPara_new" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Service Component"
+  POSITION 3
+  MAX-WIDTH 24
+  COLUMN-LABEL "Service Component"
+  HELP "Code of Service Component"
+  ORDER 20
+
+ADD FIELD "ParaValue" OF "SubSerPara_new" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "Value"
+  POSITION 4
+  MAX-WIDTH 50
+  COLUMN-LABEL "Value"
+  HELP "Value of Subscription service parameter"
+  ORDER 30
+
+ADD FIELD "ParaName" OF "SubSerPara_new" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "ParaName"
+  POSITION 5
+  MAX-WIDTH 50
+  COLUMN-LABEL "ParaName"
+  HELP "Name of the Subscription parameter name"
+  ORDER 40
+
+ADD FIELD "SSDate" OF "SubSerPara_new" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Activation Date"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "Date"
+  HELP "Date when activated"
+  ORDER 50
+
+ADD FIELD "SologStat" OF "SubSerPara_new" AS integer 
+  DESCRIPTION "0=no need to send, 1=should be sent, 2=sent (solog created)"
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Solog Status"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "HLR"
+  HELP "Solog status of attribute (sent to HLR)"
+  ORDER 100
+
+ADD FIELD "PDecValue" OF "SubSerPara_new" AS decimal 
+  FORMAT "->>>>>>9.99"
+  INITIAL "0"
+  LABEL "Decimal Value"
+  POSITION 8
+  MAX-WIDTH 17
+  COLUMN-LABEL "DecValue"
+  HELP "Decimal parameter value"
+  DECIMALS 2
+  ORDER 110
+
+ADD INDEX "MSSeq" ON "SubSerPara_new" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "ServCom" ASCENDING 
+  INDEX-FIELD "ParaName" ASCENDING 
+  INDEX-FIELD "SSDate" DESCENDING 
