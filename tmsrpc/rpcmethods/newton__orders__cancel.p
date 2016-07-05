@@ -63,8 +63,7 @@ ELSE IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN DO:
                         MsRequest.MsSeq = Order.MsSeq AND
                         MsRequest.ReqType = {&REQTYPE_REVERT_RENEWAL_ORDER} AND
                         MsRequest.ReqStatus = {&REQUEST_STATUS_DONE} AND
-                        MsRequest.ReqIParam1 = Order.OrderId AND
-                        MsRequest.ReqSource  = {&REQUEST_SOURCE_NEWTON} NO-LOCK) THEN
+                        MsRequest.ReqIParam1 = Order.OrderId NO-LOCK) THEN
          RETURN appl_err("Renewal order was already cancelled").
 
       FIND FIRST MsRequest WHERE
