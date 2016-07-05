@@ -1475,20 +1475,25 @@ PROCEDURE pCollectInstallmentCancellations:
             FIND FIRST bttInstallment WHERE
                        bttInstallment.FFNum = FixedFee.FFNum AND
                        bttInstallment.RowSource = "ACTIVATION" NO-ERROR.
-            IF AVAIL bttInstallment AND
-               (bttInstallment.Amount * bttInstallment.Items) EQ ldeAmount THEN DO:
-               
-               FIND bFixedFee EXCLUSIVE-LOCK WHERE
-                    ROWID(bFixedFee) = ROWID(FixedFee) NO-ERROR.
-               ASSIGN bFixedFee.IFSStatus = {&IFS_STATUS_SENDING_CANCELLED}.
-               RELEASE bFixedFee.
-               DELETE bttInstallment.
+            IF AVAIL bttInstallment THEN DO:
 
-               PUT STREAM sFixedFee UNFORMATTED
-                  FixedFee.FFNum ";" MsRequest.MsSeq ";"
-                  "SKIPPED:Installment activated and cancelled in the same month"
-               SKIP.
+               IF (bttInstallment.Amount * bttInstallment.Items) EQ ldeAmount THEN DO:
+               
+                  FIND bFixedFee EXCLUSIVE-LOCK WHERE
+                       ROWID(bFixedFee) = ROWID(FixedFee) NO-ERROR.
+                  ASSIGN bFixedFee.IFSStatus = {&IFS_STATUS_SENDING_CANCELLED}.
+                  RELEASE bFixedFee.
+                  DELETE bttInstallment.
+
+                  PUT STREAM sFixedFee UNFORMATTED
+                     FixedFee.FFNum ";" MsRequest.MsSeq ";"
+                     "SKIPPED:Installment activated and cancelled in the same month"
+                  SKIP.
+            
+                  NEXT REQUEST_LOOP. 
+               END.
             END.
+            /* TODO: cancellation + reactivation + cancellation support */
             ELSE NEXT REQUEST_LOOP. 
          END.
 
