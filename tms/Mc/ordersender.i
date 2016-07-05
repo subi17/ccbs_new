@@ -211,7 +211,7 @@
                /* YBP-593 */ 
                /* if order status is not ONGOING aftersales request handling
                   will fail */
-               IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 THEN
+               IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT_RENEWAL}) > 0 THEN
                   llOrdStChg = fSetOrderStatus(Order.OrderId,"78").   /* Waiting sending to LO */
                ELSE llOrdStChg = fSetOrderStatus(Order.OrderId,"12"). /* Ongoing */
 

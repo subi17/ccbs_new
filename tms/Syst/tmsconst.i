@@ -223,6 +223,7 @@
 &GLOBAL-DEFINE HPD_SERVICES "VMS,LANG,CF,IRDCUTOFF,BB,NAM,CALLSPEC,LTE,BPSUB,LP"
 
 &GLOBAL-DEFINE ORDER_CHANNEL_DIRECT "cc,telesales,self,emission,fusion_telesales,fusion_emission,fusion_cc,inversa"
+&GLOBAL-DEFINE ORDER_CHANNEL_DIRECT_RENEWAL "renewal,renewal_telesales,retention,renewal_ctc"
 &GLOBAL-DEFINE ORDER_CHANNEL_INDIRECT "pos,fusion_pos"
 
 /* Request Statuses */
