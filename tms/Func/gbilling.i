@@ -19,6 +19,7 @@
 {ftaxdata.i}
 {ftopup.i}
 {fcreditreq.i}
+{fcpfat.i}
 
 DEF VAR lcGBOutDir AS CHAR NO-UNDO.
 DEF VAR lcGBInDir AS CHAR NO-UNDO.
@@ -103,6 +104,7 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
     icTimeInfo AS CHAR, /*period info*/
     icCurrentPeriod AS CHAR, /*Period of program starting moment*/
     ideAmount AS DECIMAL,
+    icRefId AS CHAR,
     BUFFER bMobSub FOR MobSub, /*Amount*/
     OUTPUT ocErrInfo AS CHAR):
 
@@ -111,6 +113,7 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
    DEF VAR llgBilled AS LOGICAL NO-UNDO.
    DEF VAR liInvNum AS INT NO-UNDO.
    DEF VAR liRequest AS INT NO-UNDO.
+   DEF VAR lcMemoText AS CHAR NO-UNDO.
 
    lcPeriod = REPLACE(SUBSTRING(icTimeInfo,1,7),"-","").  
      /*different perios, needs special handling:*/
@@ -118,16 +121,21 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
      /*If not billed -> FAT*/
    llgBilled = fIsBilled(icMSISDN, icTimeInfo, OUTPUT liInvNum).
    IF lcPeriod EQ icCurrentPeriod OR llgBilled EQ FALSE THEN DO:
+     lcMemoText = "Google refund FAT, id: " + icRefId.
+     ocErrInfo =  fCreateFatRow(
+                             "GOOGLEVASFAT",
+                             bMobSub.CustNum,
+                             bMobSub.MsSeq,
+                             icMSISDN,
+                             "", /*host table*/
+                             "", /*key value*/
+                             ideAmount,
+                             0, /* percentage  */
+                             ?, /* VAT included */
+                             INT(lcPeriod), /*from period*/
+                             999999, /*to period*/
+                             lcMemoText).
 
-      RUN creafat (bMobSub.CustNum, /* custnum */
-                   bMobSub.MsSeq, /* msseq */
-                   "GOOGLEVASFAT", /*NOK*/
-                   ideAmount,   /* amount */ 
-                   0,   /* percentage  */
-                   ?,   /* vat included already */
-                   lcPeriod, /*period*/
-                   999999, /*tp period, no limoit now*/
-                   OUTPUT ocErrInfo). /* error */
       ocErrInfo = TRIM(ocErrInfo).             
       IF ocErrInfo NE "" THEN DO:
          lcResponse = {&GB_POSTPAID_FAT_FAILURE}.
@@ -162,7 +170,7 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
                                    REPLACE(STRING(ideAmount),",","."),
                                 "Correct", /*reason group*/
                                 "2013", /*reason*/
-                                "", /*reason note*/
+                                icRefId, /*reason note*/
                                 OUTPUT ocErrInfo).
          IF liRequest = 0 THEN DO:
             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -191,6 +199,7 @@ FUNCTION fProcessPrepaidEntry RETURNS CHAR
     iiMsSeq AS INT, /*MsSeq*/
     icCorrId AS CHAR, /*Correlation ID*/
     ideAmount AS DECIMAL, /*Amount*/
+    icRefId AS CHAR, /*TransactionID*/
     BUFFER bMsOwner FOR MsOwner):
 
    DEF BUFFER bCustomer FOR Customer.
@@ -212,7 +221,7 @@ FUNCTION fProcessPrepaidEntry RETURNS CHAR
                                    "GBRefund",       /* source*/ 
                                    "RefillTRequest", /* request*/
                                    "990",            /* prefix */
-                                   "Cron script",    /* reference */
+                                   icRefId,          /* reference */
                                    lcTaxzone,        /* taxzone */
                                    0,                /* actstamp */
                                    ideAmount * 100,  /* topupamount*/
@@ -228,7 +237,8 @@ FUNCTION fProcessGBEntry RETURNS CHAR
     icTimeInfo AS CHAR, /*Purchase date*/
     icCurrentPeriod AS CHAR, /*Period of "NOW"*/
     ideAmount AS DECIMAL, /*Amount*/
-    ilgPayType AS LOGICAL, /*p*/
+    ilgPayType AS LOGICAL, /*paytype*/
+    icRefId AS CHAR, /*Reference ID (transactionid)*/
     OUTPUT ocErrInfo AS CHAR):
 
    DEF BUFFER bMobsub FOR MobSub.
@@ -256,6 +266,7 @@ FUNCTION fProcessGBEntry RETURNS CHAR
                                         bMobSub.MsSeq,
                                         icCorrId, 
                                         ideAmount,
+                                        icRefId,
                                         BUFFER bMsOwner).
    END.
    ELSE DO:
@@ -264,6 +275,7 @@ FUNCTION fProcessGBEntry RETURNS CHAR
                                          icTimeInfo, 
                                          icCurrentPeriod,
                                          ideAmount,
+                                         icRefId,
                                          BUFFER bMobSub,
                                          OUTPUT ocErrInfo).                                   
       

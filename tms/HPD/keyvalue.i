@@ -7,37 +7,37 @@
 */
 &IF '{4}' NE ''
 &THEN
-STRING({1}{2}{4})
+SUBSTITUTE("&1",{1}{2}{4})
 &ENDIF
 &IF '{5}' NE ''
 &THEN
-+ {3} + STRING({1}{2}{5})
++ {3} + SUBSTITUTE("&1",{1}{2}{5})
 &ENDIF
 &IF '{6}' NE ''
 &THEN
-+ {3} + STRING({1}{2}{6})
++ {3} + SUBSTITUTE("&1",{1}{2}{6})
 &ENDIF
 &IF '{7}' NE ''
 &THEN
-+ {3} + STRING({1}{2}{7})
++ {3} + SUBSTITUTE("&1",{1}{2}{7})
 &ENDIF
 &IF '{8}' NE ''
 &THEN
-+ {3} + STRING({1}{2}{8})
++ {3} + SUBSTITUTE("&1",{1}{2}{8})
 &ENDIF
 &IF '{9}' NE ''
 &THEN
-+ {3} + STRING({1}{2}{9})
++ {3} + SUBSTITUTE("&1",{1}{2}{9})
 &ENDIF
 &IF '{10}' NE ''
 &THEN
-+ {3} + STRING({1}{2}{10})
++ {3} + SUBSTITUTE("&1",{1}{2}{10})
 &ENDIF
 &IF '{11}' NE ''
 &THEN
-+ {3} + STRING({1}{2}{11})
++ {3} + SUBSTITUTE("&1",{1}{2}{11})
 &ENDIF
 &IF '{12}' NE ''
 &THEN
-+ {3} + STRING({1}{2}{12})
++ {3} + SUBSTITUTE("&1",{1}{2}{12})
 &ENDIF
