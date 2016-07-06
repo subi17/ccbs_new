@@ -236,11 +236,11 @@ CLASS HPD.OrderDump FINAL INHERITS DumpHandler:
 
       IF AVAILABLE lbOrder
       THEN DO:
+         FIND CURRENT lbOrder NO-LOCK.
 
          mCollectInformation().
 
          RETURN objDumpBase:mGetData().
-
       END.
 
       RETURN "". 
