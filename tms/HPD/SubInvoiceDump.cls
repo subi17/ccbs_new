@@ -56,6 +56,7 @@ CLASS HPD.SubInvoiceDump FINAL INHERITS InvoiceCommon:
       
       IF AVAILABLE lbSubInvoice
       THEN DO:
+         FIND CURRENT lbSubInvoice NO-LOCK.
 
          FIND lbInvoice NO-LOCK WHERE
             lbInvoice.InvNum = lbSubInvoice.InvNum
