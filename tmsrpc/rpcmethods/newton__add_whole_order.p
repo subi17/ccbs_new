@@ -46,7 +46,6 @@
                additional_bundle;string;optional;optional bundle 
                subscription_bundle;string;optional;mandatory base bundle for bundle based subscription types
                dss;boolean;optional;activate dss
-               bono_voip;boolean;optional;activate bono voip
                delivery_channel;string;optional;paper/email/sms/no delivery
                bypass_rules;boolean;optional;skips subscription/actinvation limit check
                discount_plan_id;string;optional
@@ -1154,7 +1153,6 @@ gcOrderStructFields = "billing_data," +
                       "additional_bundle," +
                       "subscription_bundle," +
                       "dss," +
-                      "bono_voip," +
                       "bypass_rules," +
                       "delivery_channel," +
                       "discount_plan_id," +
