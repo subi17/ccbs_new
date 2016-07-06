@@ -328,6 +328,24 @@ llBankFinance = LOOKUP(bCloseFee.FinancedResult,
       {&TF_STATUS_SENT_TO_BANK},
       {&TF_STATUS_WAITING_SENDING})) > 0.
 
+
+FUNCTION fIsInstallmentBilled RETURNS LOG
+    (INPUT iiFFNum AS INT):
+
+   DEF BUFFER FFItem FOR FFItem.
+               
+   FIND FIRST FFItem NO-LOCK WHERE
+              FFItem.FFNum = iiFFNum NO-ERROR.
+
+   IF NOT AVAIL FFItem THEN RETURN FALSE.
+   
+   RETURN (FFItem.Billed EQ TRUE AND FFItem.InvNum > 0 AND
+      CAN-FIND(FIRST Invoice NO-LOCK WHERE
+                     Invoice.Invnum = FFItem.InvNum AND
+                     Invoice.InvType NE 99)).
+
+END FUNCTION.
+
 IF iiMsRequest > 0 AND
    (llBankFinance OR 
     bCloseFee.IFSStatus EQ {&IFS_STATUS_WAITING_SENDING}) THEN
@@ -359,8 +377,9 @@ IF iiMsRequest > 0 AND
             ELSE lcReason = {&TF_CANCEL_RENEWAL_CANCEL}. 
 
             IF bCloseFee.IFSStatus EQ {&IFS_STATUS_WAITING_SENDING} AND
-               (llUpdateTFStatus OR NOT llBankFinance) THEN
-               bCloseFee.IFSStatus = {&IFS_STATUS_SENDING_CANCELLED}.
+               (llUpdateTFStatus OR NOT llBankFinance) AND
+               NOT fIsInstallmentBilled(bCloseFee.FFNum) THEN
+                  bCloseFee.IFSStatus = {&IFS_STATUS_SENDING_CANCELLED}.
          END.
 
          WHEN {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN DO:
@@ -382,11 +401,15 @@ IF iiMsRequest > 0 AND
                   {&SUBSCRIPTION_TERM_REASON_ORDER_CANCELLATION},
                   {&SUBSCRIPTION_TERM_REASON_POS_ORDER_CANCELATION},
                   {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION})) > 0
-               THEN ASSIGN
-                  lcReason = {&TF_CANCEL_ORDER_CANCEL}
-                  bCloseFee.IFSStatus = {&IFS_STATUS_SENDING_CANCELLED}
-                     WHEN bCloseFee.IFSStatus EQ {&IFS_STATUS_WAITING_SENDING} AND
-                          (llUpdateTFStatus OR NOT llBankFinance).
+               THEN DO: 
+                  ASSIGN
+                  lcReason = {&TF_CANCEL_ORDER_CANCEL}.
+
+                  IF bCloseFee.IFSStatus EQ {&IFS_STATUS_WAITING_SENDING} AND
+                     (llUpdateTFStatus OR NOT llBankFinance) AND
+                     NOT fIsInstallmentBilled(bCloseFee.FFNum) THEN
+                        bCloseFee.IFSStatus = {&IFS_STATUS_SENDING_CANCELLED}.
+              END.
             
             IF llUpdateTFStatus THEN DO:
                bCloseFee.FinancedResult = {&TF_STATUS_YOIGO_SUB_TERMINATED}.
@@ -396,6 +419,12 @@ IF iiMsRequest > 0 AND
                lcReason = {&TF_CANCEL_TERMINATION}.
          END.
          OTHERWISE DO:
+            
+            IF MsRequest.ReqCParam2 EQ "canc" AND
+               bCloseFee.IFSStatus EQ {&IFS_STATUS_WAITING_SENDING} AND
+               (llUpdateTFStatus OR NOT llBankFinance) AND
+               NOT fIsInstallmentBilled(bCloseFee.FFNum) THEN
+                  bCloseFee.IFSStatus = {&IFS_STATUS_SENDING_CANCELLED}.
          
             IF llUpdateTFStatus THEN
                bCloseFee.FinancedResult = {&TF_STATUS_YOIGO_OTHER}.
