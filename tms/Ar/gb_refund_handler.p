@@ -149,6 +149,7 @@ PROCEDURE pReadFileData:
    DEF VAR lcErrInfo AS CHAR NO-UNDO.
    DEF VAR lcOrigNumericFormat AS CHAR NO-UNDO.
    DEF VAR llgPayType AS LOGICAL.
+   DEF VAR lcRefId AS CHAR NO-UNDO.
 
    FILE_LINE:
    REPEAT TRANS:
@@ -166,7 +167,9 @@ PROCEDURE pReadFileData:
          lcMSISDN = entry(5,lcline,";")
          lcCorrId = entry(3,lcline,";")
          lcTimeInfo = entry(2,lcline,";")
-         lcAmount = entry(8,lcline,";").
+         lcAmount = entry(8,lcline,";")
+         lcRefId = entry(9,lcLine,";").
+         
          IF entry(6,lcLine,";") EQ "POSTPAID" THEN
             llgPayType = FALSE.
          ELSE
@@ -197,6 +200,7 @@ PROCEDURE pReadFileData:
                               lcCurrentPeriod,
                               ldeAmount,
                               llgPayType,
+                              lcRefId,
                               lcErrInfo).
       lcOutLine = lcLine + ";" + lcErr.
       lcLogLine = lcFilename + ";" + lcOutLine + ";" + lcErrInfo. 

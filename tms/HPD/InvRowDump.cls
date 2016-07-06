@@ -68,6 +68,7 @@ CLASS HPD.InvRowDump FINAL INHERITS DumpHandler:
 
       IF AVAILABLE lbInvRow
       THEN DO:
+         FIND CURRENT lbInvRow NO-LOCK.
 
          FIND lbInvoice NO-LOCK WHERE
             lbInvoice.InvNum = lbInvRow.InvNum
