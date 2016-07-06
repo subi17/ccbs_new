@@ -61,11 +61,14 @@ CLASS HPD.SubSerDump FINAL INHERITS DumpHandler:
       NO-ERROR.
 
       IF AVAILABLE lbSubSer
-      THEN
-      FOR
-         FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
-            MobSub.MsSeq = lbSubSer.MsSeq:
-         RETURN objDumpBase:mGetData().
+      THEN DO:
+         FIND CURRENT lbSubSer NO-LOCK.
+
+         FOR
+            FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
+               MobSub.MsSeq = lbSubSer.MsSeq:
+            RETURN objDumpBase:mGetData().
+         END.
       END.
 
       RETURN "".
