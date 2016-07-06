@@ -45,6 +45,8 @@ CLASS HPD.FixedFeeDump FINAL INHERITS DumpHandler:
 
       IF AVAILABLE lbFixedFee
       THEN DO:
+          FIND CURRENT lbFixedFee NO-LOCK.
+
           IF lbFixedFee.HostTable NE "MobSub"
           THEN RETURN "".
           FOR
