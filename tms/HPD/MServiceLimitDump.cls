@@ -65,6 +65,8 @@ CLASS HPD.MServiceLimitDump FINAL INHERITS DumpHandler:
       IF NOT AVAILABLE lbMServiceLimit
       THEN RETURN "".
 
+      FIND CURRENT lbMServiceLimit NO-LOCK.
+
       IF lbMServiceLimit.MSID = 0 OR lbMServiceLimit.MSID = ?
       THEN DO:
          mLog(1,"INFO","MServiceLimit was ignored as the field MSID has zero value. ROWID=" + icRowID).
