@@ -44,11 +44,13 @@ CLASS HPD.DCCLIDump FINAL INHERITS DumpHandler:
       NO-ERROR.
 
       IF AVAILABLE lbDCCLI
-      THEN
-      FOR
-         FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
-            MobSub.MsSeq = lbDCCLI.MsSeq:
-         RETURN objDumpBase:mGetData().
+      THEN DO:
+         FIND CURRENT lbDCCLI NO-LOCK.
+         FOR
+            FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
+               MobSub.MsSeq = lbDCCLI.MsSeq:
+            RETURN objDumpBase:mGetData().
+         END.
       END.
 
       RETURN "".

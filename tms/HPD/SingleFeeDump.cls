@@ -45,13 +45,15 @@ CLASS HPD.SingleFeeDump FINAL INHERITS DumpHandler:
 
       IF AVAILABLE lbSingleFee
       THEN DO:
-          IF lbSingleFee.HostTable NE "MobSub"
-          THEN RETURN "".
-          FOR
-             FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
-                MobSub.MsSeq = INTEGER(lbSingleFee.KeyValue):
-             RETURN objDumpBase:mGetData().
-          END.
+         FIND CURRENT lbSingleFee NO-LOCK.
+
+         IF lbSingleFee.HostTable NE "MobSub"
+         THEN RETURN "".
+         FOR
+            FIRST MobSub FIELDS (MsSeq) NO-LOCK WHERE
+               MobSub.MsSeq = INTEGER(lbSingleFee.KeyValue):
+            RETURN objDumpBase:mGetData().
+         END.
       END.
 
       RETURN "".

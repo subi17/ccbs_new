@@ -1,0 +1,4 @@
+RENAME TABLE "DCCLi_new" TO "DCCLi"
+RENAME TABLE "SubSer_new" TO "SubSer"
+RENAME TABLE "MinConsumption_new" TO "MinConsumption"
+RENAME TABLE "DCCounter_new" TO "DCCounter"
