@@ -1,13 +1,10 @@
 from pike import *
 import os
 import shutil
+import json
 from subprocess import call, Popen, PIPE
 from socket import gethostname
-
-relpath = '..'
-exec(open(relpath + '/etc/make_site.py').read())
-
-state_base = os.path.abspath(os.path.join('..', 'var', 'run')) + '/'
+from string import Template
 
 def pikecheck():
     output = Popen(['which', 'pike'], stdout=PIPE, stderr=PIPE).communicate()
@@ -15,9 +12,86 @@ def pikecheck():
     if not pike:
         raise PikeException(output[1])
 	return pike
-	
+
 pike = pikecheck()
 
+if environment == 'development':
+    configfile = 'development_config.json'
+else:
+    configfile = gethostname() + '_config.json'
+
+if not os.path.exists(configfile):
+    raise PikeException('Failed, no lighttpd configuration file ' + configfile + ' found')	
+
+relpath = '..'
+exec(open(relpath + '/etc/make_site.py').read())
+
+state_base = os.path.abspath(os.path.join('..', 'var', 'run')) + '/'
+
+lighttpd_template = Template('''server.document-root = "/var/tmp"
+server.errorlog = "${work_dir}/var/log/lighttpd_${rpc}_${port}_error.log"
+accesslog.filename = "${work_dir}/var/log/lighttpd_${rpc}_${port}_access.log"
+server.pid-file = "${work_dir}/var/run/lighttpd_${rpc}_${port}.pid"
+server.port = $port
+''')
+
+fastcgi_template = Template('''    ("bin-path" => "${pike} -C ${work_dir}/tmsrpc/${fcgi} run_agent ${fcgi}",
+     "socket" => ${work_dir}/var/run/${fcgi}-${port}.socket",
+''')
+
+def do_lighttpd_conf():
+    with open(configfile, 'r') as jsonfile:
+        jsondata = json.load(jsonfile)
+
+        for rpc in jsondata:
+            for port in jsondata[rpc]:
+
+                lighttpdparams = (param for param in jsondata[rpc][port] if not param.startswith('/'))
+                fcgis = (param for param in jsondata[rpc][port] if param.startswith('/'))
+
+                with open(state_base + 'lighttpd_' + rpc + '_' + port + '.conf', 'wt') as fd:
+
+                    fd.write('# Auto-generated lighttpd-conf\n\n')
+
+                    for lighttpdparam in lighttpdparams:
+                        fd.write('{0} = {1}\n'.format(lighttpdparam, jsondata[rpc][port][lighttpdparam]))
+
+                    fd.write(lighttpd_template.substitute(work_dir=work_dir, rpc=rpc, port=port))
+
+                    fd.write("\nfastcgi.server = (\n")
+
+                    fcgi_end = ''
+                    for fcgi in fcgis:
+                        fd.write(fcgi_end + '  "{0}" => (\n'.format(fcgi) )
+                        fd.write(fastcgi_template.substitute(pike=pike, work_dir=work_dir, fcgi=jsondata[rpc][port][fcgi][0], port=port))
+
+                        fcgiparam_end = ''
+                        for fcgiparam, fcgivalue in jsondata[rpc][port][fcgi][1].items():
+                           fd.write(fcgiparam_end + '     "{0}" => {1}'.format(fcgiparam, fcgivalue))
+                           fcgiparam_end = ',\n'
+
+                        if not fcgiparam_end == '':
+                           fd.write('),\n')
+
+                        fcgi_end = '  ),\n'
+
+                    if not fcgi_end == '':
+                        fd.write('  )\n')
+
+                    fd.write(')\n')
+                    
+                    fd.close()
+        
+        jsonfile.close()
+
+def lighttpd_gen():
+    with open(configfile, 'r') as jsonfile:
+        jsondata = json.load(jsonfile)
+        for rpc in jsondata:
+            for port in jsondata[rpc]:
+                yield 'lighttpd_{0}_{1}'.format(rpc, port)
+        jsonfile.close()
+                    
 @target('test>test')
 def test(*a): pass
 
@@ -26,96 +100,43 @@ def compile(*a):
     for rpc in parameters or rpcs.keys():
         require('%s>compile' % rpc)
 
-#idname = 'lighttpd_tmsrpc'
-
-
-@target(['%s_config' % rpc for rpc in rpcs])
+@target('lighttpd_conf')
 def rundaemons(*a):
-    call(['lighttpd', '-f', state_base + idname + '.conf'])
-    pidfile = state_base + idname + '.pid'
-    if not os.path.exists(pidfile):
-        raise PikeException('Failed, no pidfile found')
-    print('Daemon started')
-
-@target
-@applies_to(['%s_config' % rpc for rpc in rpcs])
-def lighttpd_conf(match, *a):
+    for lighttpd in lighttpd_gen():
+        call(['lighttpd', '-f', state_base + lighttpd + '.conf'])
+        pidfile = state_base + lighttpd + '.pid'
+        if not os.path.exists(pidfile):
+            raise PikeException('Failed, no pidfile ' + pidfile + ' found')
+        print('Daemon ' + lighttpd + ' started')
     
-	rpcname = match.split('_')[0]
-	
-	if environment == 'development':
-	    configprefix = 'development'
-    else:
-	    configprefix = gethostname()
-
-	if not os.path.exists(rpcname + '/' + configprefix + '.config.py'):
-        return
-
-    username  = None
-    groupname = None
-	
-	exec(open(rpcname + '/' + configprefix + '.config.py').read())
-		
-    for prt in port:
-        with open(state_base + 'lighttpd_' + rpcname + '_' + port + '.conf', 'wt') as fd:
-  	        fd.write('''#
-# Auto-generated lighttpd-conf
-#
-
-server.modules          = ( "mod_fastcgi", "mod_status", "mod_accesslog" )
-var.approot             = "{0}/tmsrpc"
-var.appstate            = "{0}/var"
-server.document-root    = "/var/tmp"
-server.port             = {1}
-server.errorlog         = var.appstate + "/log/{2}_{1}_error.log"
-accesslog.filename      = var.appstate + "/log/{2}_{1}_access.log"
-server.pid-file         = var.appstate + "/run/{2}_{1}.pid"
-accesslog.format        = "%h %V %u %t \\"%r\\" %>s %b \\"%{{Referer}}i\\"  \\"%{{User- Agent}}i\\" %T"
-'''.format(work_dir, prt, rpcname))
-
-            if username != None:
-		        fd.write('server.username         = "%s"\n' % username)
-
-            if groupname != None:
-		    fd.write('server.username         = "%s"\n' % groupname)
-
-        fd.write('fastcgi.server = (\n')
-        for name, url in rpcs.items():
-            fd.write('''
-  "{1}" => (
-    ("bin-path"     => "{2} -C " + var.approot + "/{0} run_agent",
-     "socket"       => var.appstate + "/run/{0}.socket",
-     "check-local"  => "disable",
-     "min-procs"    => 4,
-     "max-procs"    => 4),
-  )
-)\n
-
-$HTTP["remoteip"] == "127.0.0.1" {{status.status-url = "/server-status"}}
-
-'''.format(name, url, pike))
+ @target
+def lighttpd_conf(*a):		
+	do_lighttpd_conf()	
 
 @target
 def daemonsstatus(*a):
-    pidfile = state_base + idname + '.pid'
-    if not os.path.exists(pidfile):
-        print('Daemon is not running')
-    elif os.path.exists(pidfile):
-        fd = open(pidfile, 'rt')
-        pid = fd.read().strip()
-        fd.close()
-        print('Daemon running with pid %s' % pid)
-
+    for lighttpd in lighttpd_gen():
+        pidfile = state_base + lighttpd + '.pid'
+        if not os.path.exists(pidfile):
+            print('Daemon ' + lighttpd + ' is not running')
+        else:
+            fd = open(pidfile, 'rt')
+            pid = fd.read().strip()
+            fd.close()
+            print('Daemon ' + lighttpd + ' is running with pid %s' % pid)
+            
 @target
 def stopdaemons(*a):
-    pidfile = state_base + idname + '.pid'
-    if not os.path.exists(pidfile):
-        raise PikeException('Pidfile %s not found' % pidfile)
-    fd = open(pidfile, 'rt')
-    pid = fd.read().strip()
-    fd.close()
-    call(['kill', '-2', pid])
-    print('Kill signal sent to pid %s' % pid)
+    for lighttpd in lighttpd_gen():
+        pidfile = state_base + lighttpd + '.pid'
+        if not os.path.exists(pidfile):
+            print('Daemon ' + lighttpd + ' is not having pid file, please stop it manually')
+        else
+            fd = open(pidfile, 'rt')
+            pid = fd.read().strip()
+            fd.close()
+            call(['kill', '-2', pid])
+            print('Kill signal sent to daemon ' + lighttpd + ' pid %s' % pid)
 
 @target
 def build(*a):
@@ -127,4 +148,3 @@ def build(*a):
     shutil.copy('Makefile.py', build_dir)
     for rpc in rpcs.keys():
         require('%s>build' % rpc, [os.path.join(build_dir, rpc)])
-
