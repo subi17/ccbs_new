@@ -11,9 +11,12 @@ def pikecheck():
     pike = output[0].strip()
     if not pike:
         raise PikeException(output[1])
-	return pike
+    return pike
 
 pike = pikecheck()
+
+relpath = '..'
+exec(open(relpath + '/etc/make_site.py').read())
 
 if environment == 'development':
     configfile = 'development_config.json'
@@ -22,9 +25,6 @@ else:
 
 if not os.path.exists(configfile):
     raise PikeException('Failed, no lighttpd configuration file ' + configfile + ' found')	
-
-relpath = '..'
-exec(open(relpath + '/etc/make_site.py').read())
 
 state_base = os.path.abspath(os.path.join('..', 'var', 'run')) + '/'
 
@@ -36,7 +36,7 @@ server.port = $port
 ''')
 
 fastcgi_template = Template('''    ("bin-path" => "${pike} -C ${work_dir}/tmsrpc/${fcgi} run_agent ${fcgi}",
-     "socket" => ${work_dir}/var/run/${fcgi}-${port}.socket",
+     "socket" => "${work_dir}/var/run/${fcgi}-${port}.socket",
 ''')
 
 def do_lighttpd_conf():
@@ -109,7 +109,7 @@ def rundaemons(*a):
             raise PikeException('Failed, no pidfile ' + pidfile + ' found')
         print('Daemon ' + lighttpd + ' started')
     
- @target
+@target
 def lighttpd_conf(*a):		
 	do_lighttpd_conf()	
 
@@ -131,7 +131,7 @@ def stopdaemons(*a):
         pidfile = state_base + lighttpd + '.pid'
         if not os.path.exists(pidfile):
             print('Daemon ' + lighttpd + ' is not having pid file, please stop it manually')
-        else
+        else:
             fd = open(pidfile, 'rt')
             pid = fd.read().strip()
             fd.close()

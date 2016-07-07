@@ -11,7 +11,7 @@
 			"server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
 			"server.max-keep-alive-idle": "2",
 			"server.max-keep-alive-requests": "0",
-			"accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{{Referer}}i\\\"  \\\"%{{User-Agent}}i\\\" %T\""
+			"accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
 		}
 	},
 	"heat": {
@@ -26,7 +26,7 @@
 			"server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
 			"server.max-keep-alive-idle": "2",
 			"server.max-keep-alive-requests": "0",
-                        "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{{Referer}}i\\\"  \\\"%{{User-Agent}}i\\\" %T\""
+                        "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
 		}
 	},
 	"topup": {
@@ -51,7 +51,7 @@
 			"server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
 			"server.max-keep-alive-idle": "2",
 			"server.max-keep-alive-requests": "0",
-                        "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{{Referer}}i\\\"  \\\"%{{User-Agent}}i\\\" %T\""
+                        "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
 		}
 	},
 	"mnp": {
@@ -66,7 +66,7 @@
 			"server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
 			"server.max-keep-alive-idle": "2",
 			"server.max-keep-alive-requests": "0",
-                        "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{{Referer}}i\\\"  \\\"%{{User-Agent}}i\\\" %T\""
+                        "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
 		}
 	},
 	"selfservice": {
@@ -81,7 +81,7 @@
 			"server.modules": "( \"mod_fastcgi\", \"mod_accesslog\", \"mod_setenv\", \"mod_status\" )",
 			"server.max-keep-alive-idle": "2",
 			"server.max-keep-alive-requests": "0",
-                        "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{{Referer}}i\\\"  \\\"%{{User-Agent}}i\\\" %T\""
+                        "accesslog.format": "\"%h %V %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\"  \\\"%{User-Agent}i\\\" %T\""
 		}
 	}
 }
