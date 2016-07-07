@@ -101,7 +101,8 @@ def compile(*a):
         require('%s>compile' % rpc)
 
 @target('lighttpd_conf')
-def rundaemons(*a):
+def start(*a):
+    '''start|run|rundaemons'''
     for lighttpd in lighttpd_gen():
         call(['lighttpd', '-f', state_base + lighttpd + '.conf'])
         pidfile = state_base + lighttpd + '.pid'
@@ -114,7 +115,8 @@ def lighttpd_conf(*a):
 	do_lighttpd_conf()	
 
 @target
-def daemonsstatus(*a):
+def status(*a):
+    '''status|daemonsstatus|daemonstatus'''
     for lighttpd in lighttpd_gen():
         pidfile = state_base + lighttpd + '.pid'
         if not os.path.exists(pidfile):
@@ -126,7 +128,8 @@ def daemonsstatus(*a):
             print('Daemon ' + lighttpd + ' is running with pid %s' % pid)
             
 @target
-def stopdaemons(*a):
+def stop(*a):
+    '''stop|stopdaemons'''
     for lighttpd in lighttpd_gen():
         pidfile = state_base + lighttpd + '.pid'
         if not os.path.exists(pidfile):
