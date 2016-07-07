@@ -3,8 +3,7 @@ def stream strdumpdata.
 
 def stream strFilein.
 def stream strLinein.
-def stream stroutbefore.
-def stream stroutafter.
+def stream strreqaction.
 
 input stream strkeyvalues from "invkeyvalues.txt".
 
@@ -15,6 +14,7 @@ DEF VAR lcKeyValue      AS CHAR NO-UNDO.
 DEF VAR lcChangeLine    AS CHAR NO-UNDO.
 DEF VAR lcFileName      AS CHAR NO-UNDO.
 DEF VAR lcRequestLine   AS CHAR NO-UNDO.
+DEF VAR llgAvailable    AS LOG  NO-UNDO. 
 
 def temp-table ttDumpData no-undo
    field DumpLine as character
@@ -38,7 +38,6 @@ input stream strkeyvalues close.
 
 /* Reading data from dump configdata textfile to temp-table */
 input stream strdumpdata from "ydr_2018_smssender_dump_configdata.txt".
-output stream stroutbefore to "ydr_2018_smssender_dump_configdata_change_before.txt".
 
 repeat:
 
@@ -48,23 +47,14 @@ repeat:
   assign ttDumpData.DumpLine = lcdumpdataLine
          ttDumpData.lastentry = int(entry(10,lcdumpdataLine," ")).
 
- end.
-
-FOR EACH ttDumpData NO-LOCK by
-         ttDumpData.lastentry:
-
-   put stream stroutbefore unformatted
-      ttDumpData.DumpLine SKIP.
-
-END.
+end.
 
 input stream strdumpdata close.
-output stream stroutbefore close.
 
-/* Updating the sms sender values of dump configdata textfile lines */
+/* Creating temp-table WITH Requestaction.d file data AND update smssender data, 
+   so that we can dump AND CREATE a new RequestAction.d file */
+
 lcIncDir = "/apps/yoigo/tms_support/utilities/tabledump/config_tables/".
-
-output stream stroutafter to "ydr_2018_smssender_dump_configdata_change_after.txt".
 
 input stream strFilein through value("ls -1tr " + lcIncDir).
 repeat:
@@ -80,6 +70,8 @@ repeat:
 
          import stream strLinein unformatted lcRequestLine.
 
+         llgAvailable = NO.
+
          FOR EACH ttDumpData NO-LOCK where
                   ttDumpData.DumpLine matches lcRequestLine:
 
@@ -90,25 +82,34 @@ repeat:
             else if index(lcRequestLine,"|622")   > 0 THEN
                lcChangeline = REPLACE(lcRequestLine,"|622","").
 
-            lcRequestLine = lcChangeline.
-
             create ttDataChange.
-            assign ttDataChange.lcLine = lcChangeLine
-                   ttDataChange.lastentry = int(entry(10,lcChangeLine," ")).
+            assign ttDataChange.lcLine = lcChangeLine.
+
+            llgAvailable = YES.
+
          END.
+
+         if llgAvailable THEN NEXT.
+
+         create ttDataChange.
+         assign ttDataChange.lcLine = lcRequestLine.
       END.
 
    END.
 
 end.
 
-FOR EACH ttDataChange NO-LOCK by
-         ttDataChange.lastentry:
+/* Removing old RequestAction.d file AND creating a new file WITH ttDataChange temp-table data */
+DO TRANS:
+   unix silent value ("rm /apps/yoigo/tms_support/utilities/tabledump/config_tables/RequestAction.d").
 
-   put stream stroutafter unformatted
-      ttDataChange.lcLine SKIP.
+   OUTPUT STREAM strreqaction to "/apps/yoigo/tms_support/utilities/tabledump/config_tables/RequestAction.d".
 
-end.
+   FOR EACH ttDataChange NO-LOCK:
+      put STREAM strreqaction unformatted 
+         ttDataChange.lcLine SKIP.
+   end.
+END.
 
 input stream strdumpdata close.
-output stream stroutafter close.
+OUTPUT STREAM strreqaction CLOSE.
