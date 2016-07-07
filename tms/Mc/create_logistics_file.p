@@ -1368,8 +1368,8 @@ FOR EACH Order NO-LOCK WHERE
                 xOrder.SendToROI = 1.
  
              /* Call the fSetOrderStatus function to change the order status to Delivery and make the timestamp */
-             fSetOrderStatus(xOrder.OrderID,"6").
-             fMarkOrderStamp(xOrder.OrderID,"Delivery",0.0).
+             fSetOrderStatus(xOrder.OrderID,"12").
+             /* fMarkOrderStamp(xOrder.OrderID,"Delivery",0.0). */
              fMarkOrderStamp(xOrder.OrderID,"SendToLogistics",0.0). /* Timestamp for Logistics Operator Change Dextra->Netkia */
           END. /* IF fDelivSIM( SIM.ICC ) THEN DO: */  
        END. /* IF AVAILABLE SIM THEN DO: */
