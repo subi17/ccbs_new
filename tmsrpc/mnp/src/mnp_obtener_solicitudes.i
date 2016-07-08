@@ -8,7 +8,7 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{mnp_common.i}
+{mnp/src/mnp_common.i}
 /* lcFields = validate_struct(pcStruct, "codigoRespuesta!,descripcion,campoErroneo,codigoPeticionPaginada!,totalRegistros!,ultimaPaginada,solicitud"). */
 lcFields = validate_struct(pcStruct, "codigoRespuesta!,descripcion,campoErroneo,codigoPeticionPaginada,totalRegistros,ultimaPagina,solicitud"). 
 IF gi_xmlrpc_error NE 0 THEN RETURN.

@@ -7,7 +7,7 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{mnp_common.i}
+{mnp/src/mnp_common.i}
 
 pcStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.

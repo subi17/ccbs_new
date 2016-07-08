@@ -34,13 +34,13 @@
  * @output codigoReferencia;array of string;codigoReferencia codes of handled messages
  */
 
-{mnp_obtener_solicitudes.i}
+{mnp/src/mnp_obtener_solicitudes.i}
 DO liCounter = 0 TO get_paramcount(pcSolicituds) - 1:
    
    pcSolicitud = get_struct(pcSolicituds, STRING(liCounter)).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-   {mnp_solicitud.i}
+   {mnp/src/mnp_solicitud.i}
    
 END.
 

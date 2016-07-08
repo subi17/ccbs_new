@@ -1,4 +1,4 @@
-{mnp_common.i}
+{mnp/src/mnp_common.i}
 
    lcSolicitudFields = validate_struct(pcSolicitud, "fechaCreacion!,fechaEstado!,codigoReferencia!,fechaMarcaLectura,estado!,causaEstado,fechaLimiteCambioEstado,fechaSolicitudPorAbonado!,codigoOperadorDonante!,operadorDonanteAltaExtraordinaria!,codigoOperadorReceptor!,abonado!,codigoContrato!,NRNReceptor!,fechaVentanaCambio!,fechaVentanaCambioPorAbonado!,codigoSolicitudCancelacionPortabilidadMovilIniciadaPorDonante,ICCID,MSISDN,rangoMSISDN,ICCIDRelativoMSISDN").
    IF gi_xmlrpc_error NE 0 THEN RETURN.

@@ -38,7 +38,7 @@
  * @output codigoNotificacion;array of string;codigoNotificacion codes of handled messages
  */
 
-{mnp_obtener.i}
+{mnp/src/mnp_obtener.i}
 {Func/orderfunc.i}
 {Func/ordercancel.i}
 

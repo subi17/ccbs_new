@@ -22,7 +22,7 @@ IF NOT AVAILABLE mobsub THEN
    RETURN appl_err("Subscription not found").
 
 IF ghAuthLog::UserName = "viptool" THEN DO:
-{vip_check.i}
+{viptool/src/vip_check.i}
 END.
 
 add_int(response_toplevel_id,"id",MobSub.MsSeq).

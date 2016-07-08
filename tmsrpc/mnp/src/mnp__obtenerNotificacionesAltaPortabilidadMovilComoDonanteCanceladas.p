@@ -34,7 +34,7 @@
  * @output codigoNotificacion;array of string;codigoNotificacion codes of handled messages
  */
 
-{mnp_obtener.i} 
+{mnp/src/mnp_obtener.i} 
 {Syst/tmsconst.i}
 {Func/orderchk.i}
 {Func/orderfunc.i}

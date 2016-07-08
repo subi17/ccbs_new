@@ -21,8 +21,8 @@
  * @output codigoNotificacion;array of string;codigoNotificacion codes of handled messages
  */
 
-{mnp_common.i}
-{mnp_notification.i}
+{mnp/src/mnp_common.i}
+{mnp/src/mnp_notification.i}
 
 /* input paramers parsing */
 DO liCounter = 0 TO get_paramcount(pcNotificacions) - 1:

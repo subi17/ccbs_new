@@ -38,7 +38,7 @@ gcBrand = "1".
 {Func/flimitreq.i}
 
 IF ghAuthLog::UserName = "viptool" THEN DO:
-{vip_check.i}
+{viptool/src/vip_check.i}
 END.
 
 FIND FIRST Limit WHERE

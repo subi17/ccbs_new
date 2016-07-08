@@ -7,7 +7,7 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{mnp_common.i}
+{mnp/src/mnp_common.i}
 
 pcStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -36,7 +36,7 @@ DO liCounter = 0 TO get_paramcount(pcNotificacions) - 1:
    pcSolicitud = get_struct(pcNotificacion, "solicitud").
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-   {mnp_solicitud.i}
+   {mnp/src/mnp_solicitud.i}
    
    ttInput.NotificationCode = get_string(pcNotificacion,"codigoNotificacion").
 

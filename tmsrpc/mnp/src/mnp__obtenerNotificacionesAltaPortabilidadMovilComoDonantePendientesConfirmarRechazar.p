@@ -38,7 +38,7 @@
  * @output codigoNotificacion;array of string;codigoNotificacion codes of handled messages
  */
 
-{mnp_obtener.i}
+{mnp/src/mnp_obtener.i}
 
 FOR EACH ttInput NO-LOCK:
    IF ttInput.statusCode NE "ASOL" THEN 
