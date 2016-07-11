@@ -156,6 +156,7 @@ FOR EACH TMSCodes NO-LOCK WHERE
    IF LOOKUP(TMSCodes.CodeValue,"6,7,8,9") > 0 THEN NEXT. 
          
    FOR EACH Order NO-LOCK USE-INDEX Salesman WHERE 
+            Order.Brand      = gcBrand            AND
             Order.Salesman   = Salesman.Salesman  AND 
             Order.Statuscode = TMSCodes.CodeValue AND 
             Order.OrderType  = 2                  AND 
