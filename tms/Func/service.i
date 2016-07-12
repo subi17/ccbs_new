@@ -960,8 +960,9 @@ PROCEDURE pTerminatePackage:
       /* the Bundle and retain bundle list is empty then make sure       */
       /* DEFAULT profile should be created from next month.              */
       IF ilSolog THEN DO:
-         
-         IF AVAIL SubSer THEN lcParam = SubSer.SSParam.
+         IF ttServCom.ServCom = "SHAPER" THEN
+            lcParam = ttServCom.DefParam.
+         ELSE IF AVAIL SubSer THEN lcParam = SubSer.SSParam.
          ELSE lcParam = ttServCom.DefParam.
       
          /* YTS-8017 */
