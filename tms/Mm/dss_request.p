@@ -24,11 +24,6 @@ DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
     FIELD CustNum  AS INT
     FIELD CLI      AS CHAR.
 
-DEF TEMP-TABLE ttContract NO-UNDO
-    FIELD MsSeq    AS INT
-    FIELD CustNum  AS INT
-    FIELD DCEvent  AS CHAR.
-
 /******** Main start *********/
 
 FIND FIRST MSRequest WHERE
@@ -364,7 +359,6 @@ PROCEDURE pHandleOtherServices:
    DEF BUFFER MsRequest             FOR MsRequest.
 
    EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
-   EMPTY TEMP-TABLE ttContract      NO-ERROR.
 
    FIND FIRST MsRequest WHERE
               MsRequest.MsRequest = iiMsRequest NO-LOCK NO-ERROR.
@@ -399,49 +393,7 @@ PROCEDURE pHandleOtherServices:
 
    END. /* FOR EACH lbMobSub WHERE */
 
-   FOR EACH ttContract:
-      FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand   = gcBrand AND
-                 DayCampaign.DCEvent = ttContract.DCEvent AND
-                 DayCampaign.ValidTo >= Today NO-LOCK NO-ERROR.
-      IF NOT AVAIL DayCampaign THEN DO:
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
-                          STRING(ttContract.MsSeq),
-                          ttContract.CustNum,
-                          "Periodical Contract",
-                          ttContract.DCEvent +
-                          ": Periodical contract information is missing!").
-         DELETE ttContract.
-         NEXT.
-      END. /* IF NOT AVAIL DayCampaign THEN DO: */
-
-      liRequest = fPCActionRequest(ttContract.MsSeq,
-                       ttContract.DCEvent,
-                       "term",
-                       ldeStamp,
-                       TRUE,             /* create fees */
-                       {&REQUEST_SOURCE_DSS},
-                       "",
-                       MsRequest.MsRequest, /* Father Request */
-                       FALSE,
-                       "",
-                       0,
-                       0,
-                       OUTPUT lcError).
-      IF liRequest = 0 THEN
-         /* Write memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
-                          STRING(ttContract.MsSeq),
-                          ttContract.CustNum,
-                          "Periodical Contract",
-                          ttContract.DCEvent +
-                          ": Periodical contract is not closed: " + lcError).
-   END. /* FOR EACH ttContract: */
-
    EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
-   EMPTY TEMP-TABLE ttContract      NO-ERROR.
 
 END PROCEDURE.
 

@@ -620,12 +620,12 @@ PROCEDURE pCopyPackage:
                liDcPackageID = bDCPackage.DCServicePackageID       
                lcServPac  = "".
          END.
-
-         lcDefParam = fGetShaperConfId(iiMSSeq,
-                                       icDCEvent,
-                                       lcDefParam,
-                                       idtDate,
-                                       icclitype).
+         IF ttServCom.ServPac BEGINS "SHAPER" THEN
+            lcDefParam = fGetShaperConfId(iiMSSeq,
+                                          icDCEvent,
+                                          lcDefParam,
+                                          idtDate,
+                                          icclitype).
 
          IF INDEX(lcDefParam,"#UPSELL") > 0 THEN DO:
             lcDefParam = REPLACE(lcDefParam,"#UPSELL","").

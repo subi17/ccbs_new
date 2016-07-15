@@ -125,15 +125,6 @@ ELSE IF CAN-FIND(FIRST MsRequest WHERE
                        USE-INDEX MsSeq) THEN
       liStatus = 3. /* activation ongoing */
 
-/* if there is no active data bundle the return cancelled ongoing */
-ELSE IF pcBundleId = "BONO_VOIP" AND
-        fGetCurrentSpecificBundle(Mobsub.MsSeq,pcBundleId) > "" AND
-        fGetActiveDataBundle(Mobsub.MsSeq,ldEndStamp) = "" THEN DO:
-   IF (Mobsub.TariffBundle <> "CONTS15" AND Mobsub.CLIType <> "CONTM2") OR
-      fGetActiveDSSId(MobSub.CustNum,fSecOffSet(ldEndStamp,1)) <> "DSS2"
-   THEN liStatus = 2. /* cancelled ongoing */
-END.
-
 add_int(response_toplevel_id, "", liStatus).
 
 FINALLY:
