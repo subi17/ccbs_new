@@ -827,8 +827,9 @@ FUNCTION fGenerateQ25List RETURNS INTEGER:
          IF NOT fisQ25ExtensionAllowed(BUFFER SingleFee, 
                                    lcLogText) THEN DO:
             IF lcLogText > "" THEN
-               fQ25LogWriting(lcLogText, {&Q25_LOGGING_DETAILED}, {&Q25_MONTH_24},
-                               {&Q25_EXEC_TYPE_HRLP_UNIV}).
+               fQ25LogWriting(SingleFee.KeyValue + ";" + lcLogText, 
+                              {&Q25_LOGGING_DETAILED}, {&Q25_MONTH_24},
+                              {&Q25_EXEC_TYPE_HRLP_UNIV}).
             NEXT.
          END.
          
