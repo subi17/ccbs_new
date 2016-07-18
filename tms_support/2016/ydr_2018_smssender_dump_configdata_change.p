@@ -43,6 +43,8 @@ repeat:
 
   import stream strdumpdata unformatted lcdumpdataLine.
 
+  if can-find(FIRST ttDumpData NO-LOCK WHERE
+                    ttDumpData.lastentry eq int(ENTRY(10,lcdumpdataLine," "))) THEN NEXT.
   create ttDumpData.
   assign ttDumpData.DumpLine = lcdumpdataLine
          ttDumpData.lastentry = int(entry(10,lcdumpdataLine," ")).
