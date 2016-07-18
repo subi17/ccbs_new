@@ -2,8 +2,8 @@ def stream strin.
 def stream stroutbefore.
 def stream stroutafter.
 
-output stream stroutbefore to "ydr_2018_smssender_change_before.txt".
-output stream stroutafter  to "ydr_2018_smssender_change_after.txt".
+output stream stroutbefore to "ydr_2018_real_exec_smssender_change_before.txt".
+output stream stroutafter  to "ydr_2018_real_exec_smssender_change_after.txt".
 input stream strin from "invkeyvalues.txt".
 
 DEF VAR lcLine    AS CHAR NO-UNDO.

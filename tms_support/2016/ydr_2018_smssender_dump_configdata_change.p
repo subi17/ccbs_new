@@ -30,14 +30,14 @@ repeat:
 
    lcKeyValue = entry(1,lcKeyValuesLine,";").
 
-   unix silent value("grep -i " + lcKeyValue + " /apps/yoigo/tms_support/utilities/tabledump/config_tables/RequestAction.d >> ydr_2018_smssender_dump_configdata.txt").
+   unix silent value("grep -i " + lcKeyValue + " /apps/yoigo/tms_support/utilities/tabledump/config_tables/RequestAction.d >> ydr_2018_smssender_real_exec_dump_configdata.txt").
 
 end.
 
 input stream strkeyvalues close.
 
 /* Reading data from dump configdata textfile to temp-table */
-input stream strdumpdata from "ydr_2018_smssender_dump_configdata.txt".
+input stream strdumpdata from "ydr_2018_smssender_real_exec_dump_configdata.txt".
 
 repeat:
 
