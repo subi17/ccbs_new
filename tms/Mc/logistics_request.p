@@ -54,7 +54,8 @@ IF NOT AVAIL Order THEN DO:
    RETURN.
 END.
 
-IF CAN-FIND(FIRST bMsRequest WHERE
+IF Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND
+   CAN-FIND(FIRST bMsRequest WHERE
                   bMsRequest.MsSeq = Order.MsSeq AND
                   bMsRequest.ReqType = {&REQTYPE_REVERT_RENEWAL_ORDER} AND
                   bMsRequest.ReqStatus = {&REQUEST_STATUS_DONE} AND
