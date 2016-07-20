@@ -8,6 +8,7 @@
 {commali.i}
 {timestamp.i}
 {tmsconst.i}
+{fgettxt.i}
 
 &IF "{&fmakesms}" NE "YES"
 &THEN
@@ -59,6 +60,36 @@ FUNCTION _fCreateCallAlarm RETURNS INTEGER
 
    RETURN CallAlarm.CASeq. 
    
+END FUNCTION.
+
+/* finding SMS message by key */
+FUNCTION fMakeSchedSMS3 RETURNS INTEGER
+   (iiCustNum  AS INT,
+    icCLI      AS CHAR,
+    iiType     AS INT,
+    icKey      AS CHAR,
+    iiLang     AS INT,
+    idtActTime AS DEC,
+    icOrig     AS CHAR,
+    icActInt   AS CHAR).
+   
+   DEF VAR ldReqStamp AS DEC NO-UNDO.
+   DEF VAR lcSMSText AS CHAR NO-UNDO.
+
+   lcSMSText = fGetSMSTxt(icKey,
+                          TODAY,
+                          iiLang,
+                          OUTPUT ldReqStamp).
+   /* if act time is given override ldReqStamp value */
+   IF idtActTime GT 0 THEN 
+      ldReqStamp = idtActTime.
+   RETURN _fCreateCallAlarm(iiCustNum,
+                            icCLI,
+                            iiType,
+                            lcSMSText,
+                            ldReqStamp,
+                            icOrig,
+                            icActInt).
 END FUNCTION.
 
 /* Sender number and time interval parameter added */
