@@ -440,6 +440,9 @@ FUNCTION fDmsConfig RETURNS CHAR ():
       WHEN "Alpheratz" THEN DO:
          lcConfFile = "Mailconf/dms_messaging_conf.alpheratz".
       END.
+      WHEN "Yanai" THEN DO:
+         lcConfFile = "Mailconf/dms_messaging_conf.yanai".
+      END.
       WHEN "Pallas" THEN DO:
          lcConfFile = "Mailconf/dms_messaging_conf.prod".
       END.
