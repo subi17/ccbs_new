@@ -53,7 +53,8 @@ IMPORT lcHostName.
 INPUT CLOSE.
 
 IF LOOKUP(lcHostName,"hebe,pallas") = 0 AND
-   LOOKUP(lcHostName,{&HOSTNAME_STAGING}) = 0 THEN DO:
+   LOOKUP(lcHostName,{&HOSTNAME_STAGING}) = 0 AND 
+   LOOKUP(lcHostName,"yanai,yanney") = 0 THEN DO:
    MESSAGE "Unknown host" lcHostName VIEW-AS ALERT-BOX.
    RETURN.
 END.

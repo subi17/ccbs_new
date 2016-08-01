@@ -10,6 +10,7 @@
 {Syst/commali.i}
 {Mm/requestaction_exec.i}
 {Func/fsendsms.i}
+{lib/smpp/smpp_defs.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
 DEF INPUT PARAMETER icCLIType    AS CHAR NO-UNDO.
@@ -83,9 +84,12 @@ PROCEDURE pRequestActions:
       CASE ttAction.ActionType:
 
       WHEN "SMS" THEN DO:
-         IF NUM-ENTRIES(ttAction.ActionKey,"|") >= 2 THEN DO:
+         IF NUM-ENTRIES(ttAction.ActionKey,"|") >= 1 THEN DO:
             ASSIGN lcSMSName = ENTRY(1,ttAction.ActionKey,"|")
-                   lcSender  = ENTRY(2,ttAction.ActionKey,"|").
+                   lcSender  = ENTRY(2,ttAction.ActionKey,"|") no-error.
+
+            IF lcSender EQ "" THEN lcSender = {&SMPP_DEFAULT_SOURCE_ADDRESS}.
+                   
             RUN pSendSMS(iiMsSeq,
                          ihRequest::MsRequest,
                          lcSMSName,

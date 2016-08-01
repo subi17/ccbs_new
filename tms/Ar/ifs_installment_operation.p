@@ -246,7 +246,10 @@ DEFINE TEMP-TABLE ttInstallment NO-UNDO
    FIELD FFNum AS INT
    FIELD OrderId AS CHAR
    FIELD RowSource AS CHAR
-INDEX OperDate IS PRIMARY OperDate.
+INDEX OperDate IS PRIMARY OperDate
+INDEX FFNUm FFNum RowSource.
+
+DEF BUFFER bttInstallment FOR ttInstallment.
 
 RUN pCollectActivations.
 
@@ -1349,6 +1352,7 @@ PROCEDURE pCollectInstallmentCancellations:
 
    DEF BUFFER bTermDCCLI FOR DCCLI.
    DEF BUFFER bMainRequest FOR MSRequest.
+   DEF BUFFER bFixedFee FOR FixedFee.
 
    IF icDumpMode = "modified" THEN ASSIGN
       ldFrom  = fMake2Dt(ldaDataFrom,0)
@@ -1433,7 +1437,6 @@ PROCEDURE pCollectInstallmentCancellations:
                 DayCampaign.Brand = gcBrand AND
                 DayCampaign.DCEvent = bTermDCCLI.DCEvent:
       
-         IF FixedFee.IFSStatus NE {&IFS_STATUS_SENT} THEN NEXT REQUEST_LOOP. 
          IF FixedFee.TFBank > "" AND FixedFee.TFBank NE lcTFBank THEN NEXT REQUEST_LOOP.
          IF FixedFee.TFBank EQ "" AND lcTFBank NE {&TF_BANK_UNOE} THEN NEXT REQUEST_LOOP.
          
@@ -1466,6 +1469,33 @@ PROCEDURE pCollectInstallmentCancellations:
             ASSIGN liFFItemQty = FMItem.FFItemQty - liBatches
                    ldeAmount   = liFFItemQty * FixedFee.Amt.
          END.
+         
+         IF FixedFee.IFSStatus NE {&IFS_STATUS_SENT} THEN DO:
+
+            FIND FIRST bttInstallment WHERE
+                       bttInstallment.FFNum = FixedFee.FFNum AND
+                       bttInstallment.RowSource = "ACTIVATION" NO-ERROR.
+            IF AVAIL bttInstallment THEN DO:
+
+               IF (bttInstallment.Amount * bttInstallment.Items) EQ ldeAmount THEN DO:
+               
+                  FIND bFixedFee EXCLUSIVE-LOCK WHERE
+                       ROWID(bFixedFee) = ROWID(FixedFee) NO-ERROR.
+                  ASSIGN bFixedFee.IFSStatus = {&IFS_STATUS_SENDING_CANCELLED}.
+                  RELEASE bFixedFee.
+                  DELETE bttInstallment.
+
+                  PUT STREAM sFixedFee UNFORMATTED
+                     FixedFee.FFNum ";" MsRequest.MsSeq ";"
+                     "SKIPPED:Installment activated and cancelled in the same month"
+                  SKIP.
+            
+                  NEXT REQUEST_LOOP. 
+               END.
+            END.
+            /* TODO: cancellation + reactivation + cancellation support */
+            ELSE NEXT REQUEST_LOOP. 
+         END.
 
          ldeResidualAmt = 0.
          IF NOT FixedFee.BillCode BEGINS "RVTERM" THEN DO: 
@@ -1478,7 +1508,10 @@ PROCEDURE pCollectInstallmentCancellations:
                        SingleFee.SourceTable = FixedFee.SourceTable AND
                        SingleFee.CalcObj = "RVTERM" NO-ERROR.
             IF AVAIL SingleFee THEN ldeResidualAmt = SingleFee.Amt.
-            ELSE IF bTermDCCLI.Amount > 0 THEN 
+            ELSE IF bTermDCCLI.Amount > 0 AND 
+               NOT CAN-FIND(ttInstallment WHERE
+                            ttInstallment.FFNum = FixedFee.FFNum AND
+                            ttInstallment.RowSource = "ACTIVATION") THEN
                ldeResidualAmt = bTermDCCLI.Amount.
          END.
 

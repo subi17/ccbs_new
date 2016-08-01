@@ -24,7 +24,7 @@
 {Syst/eventval.i}
 {Func/create_eventlog.i}
 
-&GLOBAL-DEFINE PL_LIMIT_SHAPED 5242880
+&GLOBAL-DEFINE PL_LIMIT_SHAPED 20971520
 
 FUNCTION fDSSRequest RETURNS INTEGER
    (INPUT iiMsSeq        AS INT,    /* subscription */

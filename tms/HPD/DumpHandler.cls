@@ -41,7 +41,11 @@ CLASS HPD.DumpHandler ABSTRACT:
       llFindOK = lhMainTable:FIND-BY-ROWID(TO-ROWID(icRowID), NO-LOCK) NO-ERROR.
 
       IF llFindOK
-      THEN RETURN objDumpBase:mGetData().
+      THEN DO:
+         llFindOK = lhMainTable:FIND-CURRENT(NO-LOCK) NO-ERROR.
+         IF llFindOK
+         THEN RETURN objDumpBase:mGetData().
+      END.
 
       RETURN "".
 

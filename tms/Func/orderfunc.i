@@ -22,15 +22,15 @@
 {Func/cparam2.i}
 {Func/main_add_lines.i}
 
-DEF BUFFER bfOrder  FOR Order.
-DEF BUFFER bfOrder2 FOR Order.
-DEF BUFFER bfOrderCustomer FOR OrderCustomer.
-DEF BUFFER bfOrderCustomer2 FOR OrderCustomer.
-
 /* set status of order */
 FUNCTION fSetOrderStatus RETURNS LOGICAL
    (iOrderId AS INT,
     icStatus AS CHAR).
+
+   DEF BUFFER bfOrder  FOR Order.
+   DEF BUFFER bfOrder2 FOR Order.
+   DEF BUFFER bfOrderCustomer FOR OrderCustomer.
+   DEF BUFFER bfOrderCustomer2 FOR OrderCustomer.
 
    DEF VAR lcResult   AS CHAR    NO-UNDO. 
    DEF VAR llHardBook AS LOGICAL NO-UNDO INIT FALSE.
@@ -191,7 +191,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
 
          fMarkOrderStamp(bfOrder.OrderID,"Change",0.0).
 
-         FIND CURRENT bfOrder NO-LOCK NO-ERROR.
+         RELEASE bfOrder.
       END. /* IF AVAILABLE bfOrder THEN DO: */
    END. /* DO TRANS: ORDER_TRANS: */
  
@@ -203,6 +203,8 @@ END FUNCTION.
 FUNCTION fSetOrderRiskCode RETURNS LOGICAL
    (iOrderId AS INT,
     icRiskCode AS CHAR).
+
+   DEF BUFFER bfOrder  FOR Order.
    
    ORDER_TRANS:
    DO TRANS:
@@ -218,7 +220,7 @@ FUNCTION fSetOrderRiskCode RETURNS LOGICAL
                 bfOrder.SendToROI  = {&ROI_HISTORY_TO_SEND} WHEN
                         bfOrder.OrderType NE {&ORDER_TYPE_STC}.
 
-      FIND CURRENT bfOrder NO-LOCK NO-ERROR.
+      RELEASE bfOrder.
    END. /* DO TRANS: ORDER_TRANS: */
  
    RETURN TRUE.
