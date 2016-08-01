@@ -391,24 +391,33 @@ FUNCTION fGetTotalBundleUsage RETURN LOGICAL
       liContractPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
  
       IF NOT bFMItem.BillMethod THEN DO: 
-         FIND FIRST bFixedFee NO-LOCK WHERE
-                    bFixedFee.Brand      = gcBrand                      AND 
-                    bFixedFee.HostTable  = "MobSub"                     AND 
-                    bFixedFee.CustNum    = iiCustnum                    AND
-                    bFixedFee.KeyValue   = STRING(bMServicelimit.MsSeq) AND 
-                    bFixedFee.CalcObj    = bServiceLimit.Groupcode      AND
-                    bFixedFee.EndPeriod >= liContractPeriod             NO-ERROR.
 
-         IF AVAIL bFixedFee THEN DO:  
-            FIND FIRST bFFItem NO-LOCK WHERE 
-                       bFFItem.FFNum      = bFixedFee.FFNum  AND 
-                       bFFItem.BillPeriod = liContractPeriod NO-ERROR.
-       
-            IF AVAIL bFFItem THEN 
-               ASSIGN 
-                  ldeTotalLimit = ldeTotalLimit + bFFItem.Amt
-                  llgBundle     = TRUE.
-         END.           
+         /* In case of full months use configuration value for performance
+            reasons  */
+          IF bMServiceLimit.FromTS < ldeMonthBegin AND
+             bMServiceLimit.EndTS > ldeMonthEnd THEN ASSIGN
+             ldeTotalLimit = ldeTotalLimit + bFMItem.Amount
+             llgBundle     = TRUE.
+         ELSE DO:
+            FIND FIRST bFixedFee NO-LOCK WHERE
+                       bFixedFee.Brand      = gcBrand                      AND 
+                       bFixedFee.HostTable  = "MobSub"                     AND 
+                       bFixedFee.CustNum    = iiCustnum                    AND
+                       bFixedFee.KeyValue   = STRING(bMServicelimit.MsSeq) AND 
+                       bFixedFee.CalcObj    = bServiceLimit.Groupcode      AND
+                       bFixedFee.EndPeriod >= liContractPeriod             NO-ERROR.
+
+            IF AVAIL bFixedFee THEN DO:  
+               FIND FIRST bFFItem NO-LOCK WHERE 
+                          bFFItem.FFNum      = bFixedFee.FFNum  AND 
+                          bFFItem.BillPeriod = liContractPeriod NO-ERROR.
+          
+               IF AVAIL bFFItem THEN 
+                  ASSIGN 
+                     ldeTotalLimit = ldeTotalLimit + bFFItem.Amt
+                     llgBundle     = TRUE.
+            END.           
+         END.
       END.
       
       IF bFMItem.BillMethod THEN DO:

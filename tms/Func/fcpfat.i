@@ -490,6 +490,14 @@ FUNCTION fCreateFatRow RETURNS CHARACTER
          DO liMemoCnt = 1 TO 5:
             Fatime.Memo[liMemoCnt] = FatGroup.InvMemo[liMemoCnt].
          END.
+         IF icMemo > "" THEN DO liMemoCnt = 1 TO 5:
+            IF Fatime.Memo[liMemoCnt] = "" THEN DO:
+               Fatime.Memo[liMemoCnt] = icMemo.
+               LEAVE.
+            END.
+         END.
+
+
 
          /* is there a rule for default value that overrides group default */
          IF liPeriodCnt = 1 THEN 

@@ -286,6 +286,8 @@ PROCEDURE pInitialize:
          ELSE     
             lcConfFile = "Mailconf/replog_reader_conf.alpheratz".
       END.
+      WHEN "Yanai" THEN 
+         lcConfFile = "Mailconf/replog_reader_conf.yanai". 
       WHEN "Angetenar" THEN
          lcConfFile = "Mailconf/replog_reader_conf.angetenar".         
       WHEN "Hebe"  OR WHEN "Flora" OR WHEN "Pallas" THEN DO:
