@@ -177,7 +177,7 @@ CASE pcActionValue :
             RETURN appl_err("Bundle activation is not allowed").
       END. /* IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO: */
       /* Customer level - As of now DSS only */
-      ELSE pcBundleId = "BONO_VOIP" THEN DO:
+      ELSE IF pcBundleId = "BONO_VOIP" THEN DO:
          RETURN appl_err("Bundle activation is not allowed").
       END.
       ELSE DO:
