@@ -24,13 +24,13 @@
                                 contract_date;date
 */
 
-{xmlrpc/xmlrpc_access.i}
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-{commpaa.i}
+{Syst/commpaa.i}
 katun = "NewtonRPC".
 gcBrand = "1".
-{timestamp.i}
-{tmsconst.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
  
 DEF VAR pcMSISDN     AS CHAR NO-UNDO. 
 DEF VAR pcCustIDType AS CHAR NO-UNDO. 
