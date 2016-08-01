@@ -34,4 +34,9 @@ die () {
 
 dumpid=$1
 
-mpro -b -q -pf /apps/tms/pf/tms.pf -p hpd_filedump_batch.p -clientlog /apps/yoigo/var/log/hpd_filedump_${1}.log -param ${1}
+if [ "$HOSTNAME" = "pallas" ]
+then
+   mpro -b -q -pf /apps/tms/pf/tms.pf -p hpd_filedump_batch.p -clientlog /apps/yoigo/var/log/hpd_filedump_${1}.log -param ${1}
+else
+   mpro -b -q -pf /apps/xfera/tms.pf -p hpd_filedump_batch.p -clientlog /apps/yoigo/var/log/hpd_filedump_${1}.log -param ${1}
+fi
