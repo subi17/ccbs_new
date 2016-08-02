@@ -2320,6 +2320,7 @@ PROCEDURE pContractTermination:
       
       IF DayCampaign.DCType EQ "5" THEN DO: 
          ldPrice = fAmtUnBilledFFItem(MsRequest.MsSeq,
+                                      MsOwner.CustNum,
                                       ldtActDate,
                                       lcDCEvent,
                                       DCCLI.PerContractID,    
