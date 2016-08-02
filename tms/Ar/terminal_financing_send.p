@@ -101,6 +101,11 @@ CASE lcTFBank:
                  STRING(YEAR(TODAY) * 10000 + 
                          MONTH(TODAY) * 100 + 
                          DAY(TODAY)) + ".txt" .
+   WHEN {&TF_BANK_CETELEM} THEN
+   lcFile     = lcSpoolDir + "ALTASYOIGO_CETELEM_" +
+                 STRING(YEAR(TODAY) * 10000 + 
+                         MONTH(TODAY) * 100 + 
+                         DAY(TODAY)) + ".txt" .
    OTHERWISE DO:
       fReqStatus(3,"ERROR: Unsupported bank code").
       RETURN.
@@ -202,6 +207,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
       CASE SingleFee.BillCode:
          WHEN "RVTERM1EF" THEN IF lcTFBank NE "0049" THEN NEXT ORDER_LOOP.
          WHEN "RVTERMBSF" THEN IF lcTFBank NE "0081" THEN NEXT ORDER_LOOP.
+         WHEN "RVTERMBCF" THEN IF lcTFBank NE "0225" THEN NEXT ORDER_LOOP.
          OTHERWISE DO:
             fErrorLog(Order.OrderID,"ERROR:Q25 fee financed by Yoigo").
             FixedFee.FinancedResult = {&TF_STATUS_YOIGO_ANALYZE_FAILED}.

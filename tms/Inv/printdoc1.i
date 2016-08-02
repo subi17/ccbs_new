@@ -394,6 +394,11 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
                 liFooterConf1         = 558
                 liFooterConf2         = 559
                 lcPenaltyBillCode     = FixedFee.BillCode + "ENDBS".
+      ELSE IF FixedFee.TFBank = {&TF_BANK_CETELEM} THEN
+         ASSIGN lcTFRVTermBillCode    = "RVTERMBCF"
+                liFooterConf1         = 0
+                liFooterConf2         = 0
+                lcPenaltyBillCode     = FixedFee.BillCode + "ENDBS".
       ELSE NEXT.
 
       IF AVAIL bQ25SingleFee AND
@@ -902,13 +907,15 @@ PROCEDURE pGetSubInvoiceHeaderData:
          IF (LOOKUP(ttRow.RowBillCode,{&TF_BANK_RVTERM_BILLCODES})           > 0) OR
             (LOOKUP(ttRow.RowBillCode,{&TF_BANK_UNOE_PAYTERM_BILLCODES})     > 0) OR 
             (LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_PAYTERM_BILLCODES}) > 0) OR
+            (LOOKUP(ttRow.RowBillCode,{&TF_BANK_CETELEM_PAYTERM_BILLCODES}) > 0) OR
             /* included due to Q25 picture check */
             ttRow.RowBillCode EQ "PAYTERM" THEN 
             llPTFinancedByBank = TRUE.
             
          ELSE IF 
             LOOKUP(ttRow.RowBillCode,{&TF_BANK_UNOE_RVTERM_BILLCODES}) > 0 OR
-            LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_RVTERM_BILLCODES}) > 0
+            LOOKUP(ttRow.RowBillCode,{&TF_BANK_SABADELL_RVTERM_BILLCODES}) > 0 OR
+            LOOKUP(ttRow.RowBillCode,{&TF_BANK_CETELEM_RVTERM_BILLCODES}) > 0
          THEN llRVFinancedByBank = TRUE.
       END.
 

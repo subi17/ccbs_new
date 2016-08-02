@@ -177,6 +177,8 @@ FUNCTION fGetFixedFeeInfo RETURNS LOGICAL
             ocFinancedInfo = "UNO-E".
          ELSE IF lcTFBank = {&TF_BANK_SABADELL} THEN
             ocFinancedInfo = "SABADELL".
+         ELSE IF lcTFBank = {&TF_BANK_CETELEM} THEN
+            ocFinancedInfo = "CETELEM".
          ELSE ocFinancedInfo = "BANK".
       END.
       ELSE IF ocFinancedInfo EQ "" OR
