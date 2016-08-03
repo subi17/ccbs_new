@@ -1184,6 +1184,7 @@ gcOrderStructFields = "billing_data," +
                       "send_offer," +
                       "resignation_period," +
                       "tarj7_promo," +
+                      "terminal_financing_bank," +
                       "keep_installment," +
                       "multiorder".
 
