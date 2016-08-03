@@ -68,8 +68,8 @@ DEF VAR liLoopEndTime      AS INT  NO-UNDO.
 DEF VAR liLoopCount        AS INT  NO-UNDO. 
 DEF VAR plgOrderStatus     AS LOG  NO-UNDO.
 DEF VAR plgEligibleRenewal AS LOG  NO-UNDO INIT ?.
-DEF VAR lcActiveBarrings   AS CHAR NO-UNDO.
 DEF VAR llTerminalFee      AS LOG  NO-UNDO.
+DEF VAR llUnpaidInv        AS LOG  NO-UNDO.
 
 IF validate_request(param_toplevel_id, "struct,int,int") EQ ? THEN RETURN.
 
@@ -350,22 +350,19 @@ FOR EACH MobSub NO-LOCK WHERE
    END. /* DO liCount = 1 TO liNumberOfBundles: */
    
    /*Any Barrings Exist*/
-   IF plBarring THEN DO:
-      lcActiveBarrings = "".
-      lcActiveBarrings = fGetActiveBarrings(MobSub.MsSeq).
-      IF lcActiveBarrings = "" THEN NEXT EACH_MOBSUB.
-   END.
+   IF plBarring AND fGetActiveBarrings(MobSub.MsSeq) EQ "" THEN NEXT EACH_MOBSUB.
 
    /*Unpaid Invoices OR Unpaid Terminal Fees*/
    IF plDebt THEN DO:
-      ASSIGN llTerminalFee = NO.
-      FOR EACH FixedFee WHERE
+      ASSIGN llTerminalFee = NO
+             llUnpaidInv   = NO.
+      FOR EACH FixedFee NO-LOCK WHERE
                FixedFee.Brand      = gcBrand              AND
                FixedFee.CustNum    = MobSub.CustNum       AND
                FixedFee.HostTable  = "MobSub"             AND
                FixedFee.KeyValue   = STRING(MobSub.MsSeq) AND
                FixedFee.BillCode   = "PAYTERM",
-         FIRST SingleFee WHERE
+         FIRST SingleFee NO-LOCK WHERE
                SingleFee.Brand       = gcBrand              AND
                SingleFee.Custnum     = FixedFee.Custnum     AND
                SingleFee.HostTable   = FixedFee.HostTable   AND
@@ -376,15 +373,21 @@ FOR EACH MobSub NO-LOCK WHERE
                LOOKUP(SingleFee.BillCode,{&TF_RVTERM_BILLCODES}) > 0 AND
                SingleFee.Billed      = NO:
          llTerminalFee = YES.
-       END.
-       IF NOT CAN-FIND(FIRST Invoice WHERE 
-                             Invoice.Brand      = gcBrand          AND
-                             Invoice.Custnum    = Customer.Custnum AND
-                             Invoice.InvType    = 1                AND
-                             Invoice.InvDate   <= TODAY            AND
-                             Invoice.PaymState  < 2                AND
-                             Invoice.InvAmt     > 0) AND
-          NOT llTerminalFee THEN NEXT EACH_MOBSUB.
+      END.
+      FOR FIRST Invoice NO-LOCK WHERE 
+                Invoice.Brand      = gcBrand        AND
+                Invoice.Custnum    = MobSub.Custnum AND
+                Invoice.InvType    = 1              AND
+                Invoice.InvDate   <= TODAY          AND
+                Invoice.PaymState  < 2,
+          FIRST SubInvoice NO-lOCK WHERE
+                SubInvoice.InvNum = Invoice.InvNum AND
+                SubInvoice.MsSeq  = MobSub.MsSeq   AND
+                SubInvoice.PaymState < 2           AND
+                SubInvoice.InvAmt  > 0:
+         llUnpaidInv = YES.
+      END.
+      IF NOT llUnpaidInv AND  NOT llTerminalFee THEN NEXT EACH_MOBSUB.
    END.
 
       /* Count number of subscriptions */
