@@ -177,12 +177,18 @@ CASE SingleFee.BillCode:
                             TODAY,
                             Customer.Language,
                             OUTPUT ldeSMSStamp).
-   /* YPR-3565 */
-   /* WHEN "RVTERMBSF" THEN
+   /* YPR-3565, returned YPR-4468*/
+    WHEN "RVTERMBSF" THEN
       lcSMSTxt = fGetSMSTxt("Q25ExtensionSabadell",
                             TODAY,
                             Customer.Language,
-                            OUTPUT ldeSMSStamp). */
+                            OUTPUT ldeSMSStamp). 
+    WHEN "RVTERMBCF" THEN
+      lcSMSTxt = fGetSMSTxt("Q25ExtensionCetelem",
+                            TODAY,
+                            Customer.Language,
+                            OUTPUT ldeSMSStamp). 
+
    OTHERWISE 
       lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
                             TODAY,
