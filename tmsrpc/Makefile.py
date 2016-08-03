@@ -2,6 +2,7 @@ from pike import *
 import os
 import shutil
 import json
+import glob
 from subprocess import call, Popen, PIPE
 from socket import gethostname
 from string import Template
@@ -147,8 +148,16 @@ def build(*a):
     if len(parameters) != 1:
         raise PikeException('Expected build_dir as parameter')
     build_dir = parameters[0]
+
+    if build_dir[0] <> "/":
+        build_dir = os.getcwd() + '/' + build_dir
+
     if not os.path.exists(build_dir):
         os.mkdir(build_dir)
     shutil.copy('Makefile.py', build_dir)
+
+    for file in glob.glob('*_config.json'):
+        shutil.copy(file, build_dir)
+
     for rpc in rpcs.keys():
         require('%s>build' % rpc, [os.path.join(build_dir, rpc)])
