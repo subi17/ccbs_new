@@ -14,6 +14,8 @@
           order_status              boolean - optional
           order_type                string  - optional
           eligible_renewal          boolean - optional
+          any_barring               boolean - optional
+          debt                      boolean - optional
  * Integers are described here:
           offset                    integer - mandatory
           limit_of_subscriptions    integer - mandatory
@@ -25,6 +27,7 @@ katun = "Newton".
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
 {Func/fdss.i}
+{Func/barrfunc.i}
 
 /* Input parameters */
 DEF VAR pcCliType      AS CHAR NO-UNDO.
@@ -42,6 +45,8 @@ DEF VAR pdtInputDate   AS DATE NO-UNDO.
 DEF VAR pcOrderType    AS CHAR NO-UNDO.  
 DEF VAR pcLanguage     AS CHAR NO-UNDO.
 DEF VAR pcInvGroup     AS CHAR NO-UNDO.
+DEF VAR plBarring      AS LOG  NO-UNDO.
+DEF VAR plDebt         AS LOG  NO-UNDO.
 
 /* Local variables */
 DEF VAR lcDataBundles  AS CHAR NO-UNDO.
@@ -63,12 +68,14 @@ DEF VAR liLoopEndTime      AS INT  NO-UNDO.
 DEF VAR liLoopCount        AS INT  NO-UNDO. 
 DEF VAR plgOrderStatus     AS LOG  NO-UNDO.
 DEF VAR plgEligibleRenewal AS LOG  NO-UNDO INIT ?.
+DEF VAR lcActiveBarrings   AS CHAR NO-UNDO.
+DEF VAR llTerminalFee      AS LOG  NO-UNDO.
 
 IF validate_request(param_toplevel_id, "struct,int,int") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
 lcstruct = validate_struct(pcStruct,
-   "subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,serv_code,order_date,order_status,order_type,eligible_renewal,language,invoice_group").
+   "subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,serv_code,order_date,order_status,order_type,eligible_renewal,language,invoice_group,any_barring,debt").
 
 ASSIGN
    pcCliType      = get_string(pcStruct, "subscription_type")
@@ -103,7 +110,11 @@ ASSIGN
    pcInvGroup     = get_string(pcStruct, "invoice_group")
       WHEN LOOKUP("invoice_group", lcStruct) > 0
    plgEligibleRenewal = get_bool(pcStruct,"eligible_renewal")
-      WHEN LOOKUP("eligible_renewal", lcStruct) > 0.
+      WHEN LOOKUP("eligible_renewal", lcStruct) > 0
+   plBarring      = get_bool(pcStruct,"any_barring")
+      WHEN LOOKUP("any_barring", lcStruct) > 0
+   plDebt         = get_bool(pcStruct,"debt")
+      WHEN LOOKUP("debt", lcStruct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -337,7 +348,44 @@ FOR EACH MobSub NO-LOCK WHERE
          OTHERWISE NEXT.
       END. /* CASE lcOtherBundle: */
    END. /* DO liCount = 1 TO liNumberOfBundles: */
+   
+   /*Any Barrings Exist*/
+   IF plBarring THEN DO:
+      lcActiveBarrings = "".
+      lcActiveBarrings = fGetActiveBarrings(MobSub.MsSeq).
+      IF lcActiveBarrings = "" THEN NEXT EACH_MOBSUB.
+   END.
 
+   /*Unpaid Invoices OR Unpaid Terminal Fees*/
+   IF plDebt THEN DO:
+      ASSIGN llTerminalFee = NO.
+      FOR EACH FixedFee WHERE
+               FixedFee.Brand      = gcBrand              AND
+               FixedFee.CustNum    = MobSub.CustNum       AND
+               FixedFee.HostTable  = "MobSub"             AND
+               FixedFee.KeyValue   = STRING(MobSub.MsSeq) AND
+               FixedFee.BillCode   = "PAYTERM",
+         FIRST SingleFee WHERE
+               SingleFee.Brand       = gcBrand              AND
+               SingleFee.Custnum     = FixedFee.Custnum     AND
+               SingleFee.HostTable   = FixedFee.HostTable   AND
+               SingleFee.KeyValue    = Fixedfee.KeyValue    AND
+               SingleFee.SourceKey   = FixedFee.SourceKey   AND
+               SingleFee.SourceTable = FixedFee.SourceTable AND
+               SingleFee.CalcObj     = "RVTERM"             AND
+               LOOKUP(SingleFee.BillCode,{&TF_RVTERM_BILLCODES}) > 0 AND
+               SingleFee.Billed      = NO:
+         llTerminalFee = YES.
+       END.
+       IF NOT CAN-FIND(FIRST Invoice WHERE 
+                             Invoice.Brand      = gcBrand          AND
+                             Invoice.Custnum    = Customer.Custnum AND
+                             Invoice.InvType    = 1                AND
+                             Invoice.InvDate   <= TODAY            AND
+                             Invoice.PaymState  < 2                AND
+                             Invoice.InvAmt     > 0) AND
+          NOT llTerminalFee THEN NEXT EACH_MOBSUB.
+   END.
 
       /* Count number of subscriptions */
    IF liNumberOfSubs <= piOffset AND piOffset > 0 THEN DO:
