@@ -2,7 +2,6 @@ from pike import *
 import os
 import shutil
 import json
-import glob
 from subprocess import call, Popen, PIPE
 from socket import gethostname
 from string import Template
@@ -156,7 +155,7 @@ def build(*a):
         os.mkdir(build_dir)
     shutil.copy('Makefile.py', build_dir)
 
-    for file in glob.glob('*_config.json'):
+    for file in glob('*_config.json'):
         shutil.copy(file, build_dir)
 
     for rpc in rpcs.keys():
