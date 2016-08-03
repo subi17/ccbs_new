@@ -149,7 +149,7 @@ def build(*a):
         raise PikeException('Expected build_dir as parameter')
     build_dir = parameters[0]
 
-    if build_dir[0] <> "/":
+    if build_dir[0] != "/":
         build_dir = os.getcwd() + '/' + build_dir
 
     if not os.path.exists(build_dir):
