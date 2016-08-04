@@ -221,7 +221,7 @@ PROCEDURE pCollectCDR:
          ldeAmount = (ldeAmount / ldVatFactor).
       END. /* IF lhWorkCDRdb::VatIncl THEN DO: */
 
-      ASSIGN lcKeyValue = lhWorkCDRdb::CLI            + lcDelim +
+      ASSIGN lcKeyValue = lhWorkCDRdb::MsSeq          + lcDelim +
                           STRING(lhWorkCDRdb::DtlSeq) + lcDelim + 
                           STRING(lhWorkCDRdb::DateSt).
 
