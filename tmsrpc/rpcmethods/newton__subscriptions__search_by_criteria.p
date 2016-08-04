@@ -358,7 +358,7 @@ FOR EACH MobSub NO-LOCK WHERE
                Invoice.Brand      = gcBrand               AND
                Invoice.Custnum    = MobSub.Custnum        AND
                Invoice.InvType    = 1                     AND
-               Invoice.InvDate   <= MobSub.ActivationDate AND
+               Invoice.InvDate   >= MobSub.ActivationDate AND
                Invoice.PaymState  < 2,
          FIRST SubInvoice NO-lOCK WHERE
                SubInvoice.InvNum = Invoice.InvNum AND
