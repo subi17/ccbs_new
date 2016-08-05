@@ -1026,7 +1026,7 @@ PROCEDURE local-UPDATE-record:
       END.
  
       ELSE IF toimi = 4 THEN DO:
-         RUN Syst/dftimetable (DumpFile.DumpID).
+         RUN Syst/dftimetable.p (DumpFile.DumpID).
       END.
       
       ELSE IF toimi = 5 THEN DO:

@@ -16,7 +16,7 @@ katun = "MNP".
 {Func/heartbeat.i}
 {Mnp/mnp.i}
 {Func/cparam2.i}
-{xmlrpc_client.i}
+{xmlrpc/xmlrpc_client.i}
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
 {Func/fsubstermreq.i}
