@@ -193,7 +193,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
              IF FRAME-FIELD = "liAddress" AND keylabel(lastkey) = "F9" 
              THEN DO:
               
-                RUN Help/h-tmscodes(INPUT "InvText",   /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "InvText",   /* TableName*/
                                      "AddrTarget", /* FieldName */
                                      "Printing",   /* GroupCode */
                                OUTPUT lcCode).

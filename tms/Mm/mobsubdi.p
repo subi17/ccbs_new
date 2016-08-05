@@ -210,7 +210,7 @@ DO WHILE TRUE:
                  Order.Msseq = MSSeq AND
                  Order.OrderType < 2 NO-LOCK NO-ERROR.
                 
-      IF AVAIL order THEN RUN Mc/order(2,8,"",Order.OrderID).
+      IF AVAIL order THEN RUN Mc/order.p(2,8,"",Order.OrderID).
       ELSE 
       MESSAGE
       "UNKNOWN ORDER INFORMATION"

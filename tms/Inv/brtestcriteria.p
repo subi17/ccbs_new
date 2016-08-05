@@ -685,7 +685,7 @@ PROCEDURE local-UPDATE-record:
                THEN DO:
 
                   IF FRAME-FIELD = "CriteriaTable" THEN DO:
-                     RUN Help/h-tmscodes(INPUT "BRTestCriteria", 
+                     RUN Help/h-tmscodes.p(INPUT "BRTestCriteria", 
                                           "CriteriaTable", 
                                           "BRTest",  
                                     OUTPUT lcCode).
@@ -695,7 +695,7 @@ PROCEDURE local-UPDATE-record:
                            WITH FRAME lis.   
                   END.
                   ELSE IF FRAME-FIELD = "CriteriaField" THEN DO:
-                     RUN Help/h-tmscodes(INPUT "BRTestCriteria", 
+                     RUN Help/h-tmscodes.p(INPUT "BRTestCriteria", 
                                           "CField" + 
                                            INPUT BRTestCriteria.CriteriaTable, 
                                           "BRTest", 
@@ -706,7 +706,7 @@ PROCEDURE local-UPDATE-record:
                            WITH FRAME lis.   
                   END.
                   ELSE IF FRAME-FIELD = "Setting" THEN DO:
-                     RUN Help/h-tmscodes(INPUT "BRTestCriteria", 
+                     RUN Help/h-tmscodes.p(INPUT "BRTestCriteria", 
                                           "Setting" + 
                                            INPUT BRTestCriteria.CriteriaTable, 
                                           "BRTest", 
@@ -717,7 +717,7 @@ PROCEDURE local-UPDATE-record:
                            WITH FRAME lis.   
                   END.
                   ELSE IF FRAME-FIELD = "ROValueIncluded" THEN DO:
-                     RUN Help/h-tmscodes(INPUT "BRTestCase",
+                     RUN Help/h-tmscodes.p(INPUT "BRTestCase",
                                           "RelationalOperator",
                                           "BRTest",  
                                     OUTPUT lcCode).

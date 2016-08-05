@@ -387,7 +387,7 @@ BROWSE:
 
          RUN local-find-this(FALSE).
 
-         RUN Mm/msisdn(INPUT MSISDNNumber.CLI,0,0).
+         RUN Mm/msisdn.p(INPUT MSISDNNumber.CLI,0,0).
         
          UFKEY = TRUE.
 

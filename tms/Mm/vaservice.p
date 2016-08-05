@@ -617,7 +617,7 @@ PROCEDURE local-update-record:
       EDITING:
              READKEY.
              IF FRAME-FIELD = "InvEvent" AND keylabel(lastkey) = "F9" THEN DO:
-                 RUN Help/h-tmscodes(INPUT "VAservice",  /* TableName*/
+                 RUN Help/h-tmscodes.p(INPUT "VAservice",  /* TableName*/
                                       "InvEvent", /* FieldName */
                                       "InvEvent", /* GroupCode */
                                 OUTPUT siirto).

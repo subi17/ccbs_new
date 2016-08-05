@@ -468,7 +468,7 @@ BROWSE:
      
         RUN local-find-this(FALSE).
 
-        RUN Mm/mservicelimit(INPUT 0 , 
+        RUN Mm/mservicelimit.p(INPUT 0 , 
                                   ServiceLimit.dialtype,
                                   Servicelimit.slseq ).
         ufkey = TRUE.
@@ -669,7 +669,7 @@ PROCEDURE local-update-record:
              IF keylabel(LASTKEY) = "F9" AND 
                 FRAME-FIELD = "InclUnit" 
              THEN DO:
-                RUN Help/h-tmscodes(INPUT "ServiceLimit", /* TableName */
+                RUN Help/h-tmscodes.p(INPUT "ServiceLimit", /* TableName */
                                      "InclUnit", /* FieldName */
                                      "ServiceLimit", /* GroupCode */
                                OUTPUT lcCode).

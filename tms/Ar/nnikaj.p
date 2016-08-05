@@ -312,7 +312,7 @@ END.
 
 message "Printing in process".
 
-RUN Ar/ageanal (INPUT TABLE TCustGroup,
+RUN Ar/ageanal.p (INPUT TABLE TCustGroup,
              INPUT TABLE ttCriter).
 
 IF ttCriter.ToFile = "" THEN DO:

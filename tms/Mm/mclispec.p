@@ -202,7 +202,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
              IF FRAME-FIELD = "lcRepCodes" AND keylabel(lastkey) = "F9" 
              THEN DO:
               
-                RUN Help/h-tmscodes(INPUT "Mobsub",   /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "Mobsub",   /* TableName*/
                                      "RepCodes", /* FieldName */
                                      "Report",   /* GroupCode */
                                OUTPUT lcCode).
@@ -312,7 +312,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       IF llOk THEN 
       CASE lcRepCodes:
       WHEN "3" THEN 
-         RUN Inv/nnpura3 (INPUT liCustNum,
+         RUN Inv/nnpura3.p (INPUT liCustNum,
                       INPUT pvm1,
                       INPUT pvm2,
                       INPUT tilak,
@@ -327,7 +327,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                       OUTPUT liError).
                                   
       WHEN "4" THEN                
-         RUN Inv/nnpura4 (INPUT liCustNum,
+         RUN Inv/nnpura4.p (INPUT liCustNum,
                       INPUT liCustNum,
                       INPUT pvm1,
                       INPUT pvm2,

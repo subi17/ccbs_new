@@ -950,7 +950,7 @@ BY wInvoice.InvNum:
        IF CAN-FIND(FIRST InvRow OF Invoice WHERE
                          /* InvRow.Qty > 1 AND */
                          LOOKUP(STRING(InvRow.RowType),"3,4,7") > 0)
-       THEN RUN Mc/nncore1 (Invoice.InvNum, TRUE). 
+       THEN RUN Mc/nncore1.p (Invoice.InvNum, TRUE). 
    END.
   
    /* call reports are always started from separate report sheet 

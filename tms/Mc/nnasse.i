@@ -30,7 +30,7 @@
               THEN DO:
                   
                   IF FRAME-FIELD = "CustIDType" THEN DO:           
-                     RUN Help/h-tmscodes(INPUT "Customer",    /* TableName */
+                     RUN Help/h-tmscodes.p(INPUT "Customer",    /* TableName */
                                           "CustIDType",  /* FieldName */
                                           "CustCare",  /* GroupCode */
                                     OUTPUT lcCode).
@@ -42,7 +42,7 @@
                   END.
                   
                   ELSE IF FRAME-FIELD = "HonTitle" THEN DO:
-                     RUN Help/h-tmscodes(INPUT "Customer",    /* TableName */
+                     RUN Help/h-tmscodes.p(INPUT "Customer",    /* TableName */
                                           "Title",      /* FieldName */
                                           "CustCare",   /* GroupCode */
                                     OUTPUT lcCode).

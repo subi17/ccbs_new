@@ -971,7 +971,7 @@ print-line:
         liFilter = IF toimi = 7 THEN 0 ELSE toimi.
         
         IF toimi >= 1 AND toimi <= 4 THEN DO:
-           RUN Ar/invfilterkey (INPUT TABLE ttFilter,
+           RUN Ar/invfilterkey.p (INPUT TABLE ttFilter,
                              liFilter,
                              OUTPUT lcFilter).
         END.

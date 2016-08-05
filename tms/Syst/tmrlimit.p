@@ -686,7 +686,7 @@ PROCEDURE local-UPDATE-record:
             THEN DO:
 
                IF FRAME-FIELD = "ValueType" THEN DO:
-                  RUN Help/h-tmscodes("TMRLimit",
+                  RUN Help/h-tmscodes.p("TMRLimit",
                                  "ValueType",
                                  "TMR",
                                  OUTPUT lcCode).
@@ -718,7 +718,7 @@ PROCEDURE local-UPDATE-record:
                      gcHelpParam = "tmrlimit"
                      si-recid    = ?.
                
-                  RUN Mc/invotxt("SMS","").
+                  RUN Mc/invotxt.p("SMS","").
         
                   gcHelpParam = "".
                         

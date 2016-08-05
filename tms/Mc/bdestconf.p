@@ -649,7 +649,7 @@ PROCEDURE local-UPDATE-record:
             LOOKUP(FRAME-FIELD,"GroupType") > 0 
          THEN DO:
             
-            RUN Help/h-tmscodes(INPUT "BDestConf", 
+            RUN Help/h-tmscodes.p(INPUT "BDestConf", 
                                  "GroupType", 
                                  ?, 
                            OUTPUT lcCode).

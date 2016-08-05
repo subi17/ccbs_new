@@ -102,7 +102,7 @@ DO WHILE TRUE:
    IF FRAME-INDEX EQ 1 THEN DO:
       IF CAN-FIND(FIRST Customer WHERE
                         Customer.CustNum = liAgrCust) THEN
-         RUN Mc/nnasse(liAgrCust,"").
+         RUN Mc/nnasse.p(liAgrCust,"").
       ELSE 
          MESSAGE
             "Agreement customer " + STRING(liAgrCust) + " does not exist!"
@@ -118,7 +118,7 @@ DO WHILE TRUE:
       ELSE DO:
          IF CAN-FIND(FIRST Customer WHERE
                            Customer.CustNum = liInvCust) THEN
-            RUN Mc/nnasse(liInvCust,"").
+            RUN Mc/nnasse.p(liInvCust,"").
          ELSE 
             MESSAGE
                "Invoice customer " + STRING(liAgrCust) + " does not exist!"
@@ -129,7 +129,7 @@ DO WHILE TRUE:
    ELSE IF FRAME-INDEX = 3 THEN DO:
       IF CAN-FIND(FIRST Customer WHERE
                         Customer.CustNum = liCustNum) THEN
-         RUN Mc/nnasse(liCustNum,"").
+         RUN Mc/nnasse.p(liCustNum,"").
       ELSE 
          MESSAGE
             "User customer " + STRING(liCustNum) + " does not exist!"

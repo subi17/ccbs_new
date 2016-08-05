@@ -15,4 +15,4 @@ RUN Syst/tmscodesbr.p(INPUT   "ORDER",
                OUTPUT  lcValue).
 
 
-IF lcValue > "" THEN RUN Mc/order(1,8,lcValue,0).
+IF lcValue > "" THEN RUN Mc/order.p(1,8,lcValue,0).

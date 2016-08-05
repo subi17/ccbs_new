@@ -251,7 +251,7 @@ REPEAT WITH FRAME main:
       
       IF FRAME-FIELD = "liOrderer" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
             
-         RUN Help/h-tmscodes(INPUT "MsRequest",  /* TableName */
+         RUN Help/h-tmscodes.p(INPUT "MsRequest",  /* TableName */
                              "TermReason",  /* FieldName */
                              "Request",   /* GroupCode */
                        OUTPUT lcCode).

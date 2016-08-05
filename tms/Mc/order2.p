@@ -4,4 +4,4 @@
     07.10.03 tk
 */
 
-RUN Mc/order(2,2,"",0).
+RUN Mc/order.p(2,2,"",0).

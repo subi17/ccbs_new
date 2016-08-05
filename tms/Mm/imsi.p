@@ -419,7 +419,7 @@ BROWSE:
        FIND IMSI WHERE recid(IMSI) = rtab[FRAME-LINE] NO-LOCK.
        ufkey = TRUE.
        /* show ALL MSISDN no.s associated TO this IMSI no. */
-       RUN Mm/msisdni(IMSI.IMSI).
+       RUN Mm/msisdni.p(IMSI.IMSI).
        NEXT LOOP.
      END.  
 

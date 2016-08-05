@@ -18,7 +18,7 @@ END.
 
 /* if starfop is not running... start it */
 IF NOT VALID-HANDLE(ghFop) THEN DO:
-    RUN Mc/lib/starfop_hard2.p
+    RUN Syst/starfop_hard2.p
     PERSISTENT SET ghFop NO-ERROR.
     IF NOT VALID-HANDLE(ghFop)
     THEN DO:

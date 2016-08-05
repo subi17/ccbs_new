@@ -238,7 +238,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
                 ELSE IF keylabel(lastkey) = "F9" THEN DO:
                    ASSIGN gcHelpParam = "prt"
                           si-recid    = 0.
-                   RUN Mc/invotxt ("",
+                   RUN Mc/invotxt.p ("",
                                 "").
                    gcHelpParam = "".
                    

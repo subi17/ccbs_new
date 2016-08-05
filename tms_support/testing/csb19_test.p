@@ -232,7 +232,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                LOOKUP(FRAME-FIELD,"liInvType,liPrintState") > 0 THEN DO:
 
                IF FRAME-FIELD = "liInvType" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "Invoice",  /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName*/
                                        "InvType",  /* FieldName */
                                        "Report",   /* GroupCode */
                                  OUTPUT lcCode).
@@ -247,7 +247,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
                   liFramePos = FRAME-INDEX.
                   
-                  RUN Help/h-tmscodes(INPUT "Invoice",    /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",    /* TableName*/
                                        "PrintState", /* FieldName */
                                        "Report",     /* GroupCode */
                                  OUTPUT lcCode).

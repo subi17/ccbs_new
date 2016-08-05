@@ -328,7 +328,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
                 ELSE IF keylabel(lastkey) = "F9" THEN DO:
                    ASSIGN gcHelpParam = "prt"
                           si-recid    = 0.
-                   RUN Mc/invotxt ("",
+                   RUN Mc/invotxt.p ("",
                                 "").
                    gcHelpParam = "".
                    
@@ -373,7 +373,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
              ELSE IF FRAME-FIELD = "liAddress" AND KEYLABEL(LASTKEY) = "F9" 
              THEN DO:
               
-                RUN Help/h-tmscodes(INPUT "InvText",   /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "InvText",   /* TableName*/
                                      "AddrTarget", /* FieldName */
                                      "Printing",   /* GroupCode */
                                OUTPUT lcCode).

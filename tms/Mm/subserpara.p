@@ -502,7 +502,7 @@ PROCEDURE local-UPDATE-record:
             IF FRAME-FIELD = "PAraValue" AND 
                keylabel(lastkey) = "F9"
             THEN DO:
-               RUN Help/h-tmscodes(INPUT "ServAttr",        /* TableName*/
+               RUN Help/h-tmscodes.p(INPUT "ServAttr",        /* TableName*/
                                      ttSubSerPara.paraname, /* FieldName */
                                      ttSubserPara.ServCom, /* GroupCode */
                               OUTPUT siirto).

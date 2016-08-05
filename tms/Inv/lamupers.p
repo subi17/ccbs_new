@@ -1465,7 +1465,7 @@ PROCEDURE pCreateInv:
                          SUBSTRING(bCustomer.RepCodes,liCnt,1),
                          1,
                          ?,
-                         "ï¿½" + lcBillRun,
+                         "¤" + lcBillRun,
                          FALSE,
                          katun,
                          "InvoiceCreation",
@@ -1514,7 +1514,7 @@ PROCEDURE pCreateInv:
                                   SUBSTRING(lcMobRep,liCnt,1),
                                   1,
                                   ?,
-                                  "ï¿½" + lcBillRun,
+                                  "¤" + lcBillRun,
                                   FALSE,
                                   katun,
                                   "InvoiceCreation",
@@ -4918,7 +4918,7 @@ PROCEDURE pRatingQueues:
    
       IF lcParamList > "" THEN DO:
          THIS-PROCEDURE:PRIVATE-DATA = "TMQueue_Param:" + lcParamList.
-         RUN Mm/tmqueue_analysis.p.
+         RUN Rate/tmqueue_analysis.p.
       END.   
    END.
 

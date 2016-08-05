@@ -655,7 +655,7 @@ BROWSE:
 
      ELSE IF lookup(nap,"7,f7") > 0 THEN DO:
         FIND InvGroup WHERE recid(InvGroup) = rtab[FRAME-LINE] NO-LOCK.
-        RUN Mc/invotxt("InvGroup",InvGroup.InvGroup).
+        RUN Mc/invotxt.p("InvGroup",InvGroup.InvGroup).
         must-print=true.
         ufkey=true.
         NEXT LOOP.

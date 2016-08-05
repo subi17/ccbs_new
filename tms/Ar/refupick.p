@@ -526,7 +526,7 @@ REPEAT WITH FRAME sel:
         
         IF NOT ok THEN NEXT LOOP.
         
-        RUN Ar/refufile (INPUT-OUTPUT TABLE ttPaym,
+        RUN Ar/refufile.p (INPUT-OUTPUT TABLE ttPaym,
                       lcBankAcc,
                       ldtDate,
                       OUTPUT i,

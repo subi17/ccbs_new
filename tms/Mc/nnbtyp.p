@@ -862,7 +862,7 @@ PROCEDURE local-update-record:
                
             IF nap = "F9" AND FRAME-FIELD = "Class" THEN DO: 
 
-               RUN Help/h-tmscodes(INPUT "BDest",  /* TableName*/
+               RUN Help/h-tmscodes.p(INPUT "BDest",  /* TableName*/
                                     "BDestClass", /* FieldName */
                                     ?, /* GroupCode */
                               OUTPUT lcCode).

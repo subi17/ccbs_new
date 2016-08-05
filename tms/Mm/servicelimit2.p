@@ -696,7 +696,7 @@ PROCEDURE local-update-record:
              IF keylabel(LASTKEY) = "F9" AND 
                 FRAME-FIELD = "InclUnit" 
              THEN DO:
-                RUN Help/h-tmscodes(INPUT "ServiceLimit", /* TableName */
+                RUN Help/h-tmscodes.p(INPUT "ServiceLimit", /* TableName */
                                      "InclUnit", /* FieldName */
                                      "ServiceLimit", /* GroupCode */
                                OUTPUT lcCode).

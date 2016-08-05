@@ -91,7 +91,7 @@ PROCEDURE local-Show-record:
              
              IF FRAME-FIELD = "ReasonC" AND keylabel(lastkey) = "F9" 
              THEN DO:
-                RUN Help/h-tmscodes(INPUT "FixCDR",  /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "FixCDR",  /* TableName*/
                                      "ReasonCode", /* FieldName */
                                      "ReasonCode", /* GroupCode */
                                OUTPUT siirto).

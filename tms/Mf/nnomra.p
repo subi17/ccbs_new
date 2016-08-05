@@ -110,7 +110,7 @@ ASSIGN tila = TRUE.
 
 message "Utskrivning pAgAr, avbryt = ESC".
 
-RUN Mf/nnomra1(
+RUN nnomra1.p(
    INPUT oper1,
    INPUT oper2,
    INPUT btnro1,

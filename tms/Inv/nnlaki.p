@@ -1132,7 +1132,7 @@ repeat:
          /* contracts */
          IF CAN-FIND(FIRST InvRow OF Invoice WHERE
                            LOOKUP(STRING(InvRow.RowType),"3,4,7") > 0)
-         THEN RUN Mc/nncore1 (Invoice.InvNum, FALSE).
+         THEN RUN Mc/nncore1.p (Invoice.InvNum, FALSE).
          
          fPrintSpecRep(Customer.RepCodes,
                        "",

@@ -118,7 +118,7 @@ repeat WITH FRAME frm:
             IF keylabel(lastkey) = "F9" THEN 
             DO:
                ASSIGN lcField = FRAME-FIELD.
-               RUN Help/h-tmscodes(INPUT "Invoice",  /* TableName*/
+               RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName*/
                                     "PrintState", /* FieldName */
                                     "Report", /* GroupCode */
                               OUTPUT lcCode).

@@ -10,5 +10,5 @@
 
 {Syst/commali.i}
 
-RUN Mc/invotxt("",
+RUN Mc/invotxt.p("",
             "").

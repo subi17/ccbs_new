@@ -304,7 +304,7 @@ ASSIGN lcExFile     = lcFileDir + "/" + lcExFile
        
 DISPLAY ldtStartDate lcStartTime WITH FRAME rajat.        
        
-RUN Ar/accdatli  (date1,
+RUN Ar/accdatli.p  (date1,
                date2,
                liCust-nr1,
                liCust-nr2,

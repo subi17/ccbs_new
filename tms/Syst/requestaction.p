@@ -208,7 +208,7 @@ REPEAT WITH FRAME sel:
 
               IF KEYLABEL(LASTKEY) = "F9" AND FRAME-FIELD = "PayType" THEN DO:
 
-                 RUN Help/h-tmscodes(INPUT "CLIType",     /* TableName*/
+                 RUN Help/h-tmscodes.p(INPUT "CLIType",     /* TableName*/
                                       "PayType",       /* FieldName */
                                       "MobSub",     /* GroupCode */
                                 OUTPUT lcCode).
@@ -820,7 +820,7 @@ PROCEDURE local-UPDATE-record:
 
             IF FRAME-FIELD = "Action" THEN DO:
 
-               RUN Help/h-tmscodes(INPUT "RequestAction",     /* TableName*/
+               RUN Help/h-tmscodes.p(INPUT "RequestAction",     /* TableName*/
                                     "Action",       /* FieldName */
                                     "Request",     /* GroupCode */
                               OUTPUT lcCode).
@@ -832,7 +832,7 @@ PROCEDURE local-UPDATE-record:
 
             ELSE IF FRAME-FIELD = "ActionType" THEN DO:
 
-               RUN Help/h-tmscodes(INPUT "RequestAction",     /* TableName*/
+               RUN Help/h-tmscodes.p(INPUT "RequestAction",     /* TableName*/
                                     "ActionType",       /* FieldName */
                                     "Request",     /* GroupCode */
                               OUTPUT lcCode).

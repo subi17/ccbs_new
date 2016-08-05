@@ -85,7 +85,7 @@ DO WHILE TRUE:
       "Select Status code of High usage?"
       VIEW-AS ALERT-BOX TITLE "STATUS".
 
-      RUN Help/h-tmscodes(INPUT "HighUsage",   /* TableName*/
+      RUN Help/h-tmscodes.p(INPUT "HighUsage",   /* TableName*/
                            "HiUsageStatus", /* FieldName */
                            "HighUsage",   /* GroupCode */
                            OUTPUT siirto).

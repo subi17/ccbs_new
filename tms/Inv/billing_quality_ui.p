@@ -176,7 +176,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
                IF FRAME-FIELD = "liInvType" THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Invoice", 
+                  RUN Help/h-tmscodes.p(INPUT "Invoice", 
                                        "InvType",  
                                        "Report",   
                                  OUTPUT lcCode).

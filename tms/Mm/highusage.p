@@ -456,9 +456,9 @@ BROWSE:
         ENd.
         IF toimi = 1 AND avail mobsub  THEN RUN Mm/solog2(mobsub.msseq).
 
-        IF toimi = 2 AND avail mobsub  THEN RUN Mm/subser(mobsub.msseq).
+        IF toimi = 2 AND avail mobsub  THEN RUN Mm/subser.p(mobsub.msseq).
 
-        IF toimi = 4 AND avail mobsub THEN RUN tms_support/protop/mon/lockms(mobsub.msseq).         
+        IF toimi = 4 AND avail mobsub THEN RUN lockms(mobsub.msseq).         
         IF toimi = 5 AND avail mobsub THEN RUN unlockms(mobsub.msseq).
 
         IF toimi = 7 AND avail mobsub then RUN Mm/mobsubsms(mobsub.msseq).
@@ -541,7 +541,7 @@ BROWSE:
              READKEY.
              IF FRAME-FIELD = "newstatus" AND keylabel(lastkey) = "F9"
              THEN DO:
-                RUN Help/h-tmscodes(INPUT "HighUsage",   /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "HighUsage",   /* TableName*/
                                      "HiUsageStatus", /* FieldName */
                                      "HighUsage",   /* GroupCode */
                                OUTPUT siirto).

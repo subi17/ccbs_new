@@ -376,7 +376,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
                IF FRAME-FIELD = "ClaimState"
                THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Invoice",    /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",    /* TableName */
                                        "ClaimState", /* FieldName */
                                        "AccRec",     /* GroupCode */
                                  OUTPUT lcCode).
@@ -393,7 +393,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
                ELSE IF FRAME-FIELD = "ClaimCancel"
                THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Invoice",     /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",     /* TableName */
                                        "ClaimCancel", /* FieldName */
                                        "AccRec",      /* GroupCode */
                                  OUTPUT lcCode).
@@ -409,7 +409,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
 
                ELSE IF FRAME-FIELD = "ChargeType" THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Invoice",     /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",     /* TableName*/
                                        "ChargeType",       /* FieldName */
                                        "AccRec",      /* GroupCode */
                                  OUTPUT lcCode).
@@ -426,7 +426,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
 
                ELSE IF FRAME-FIELD = "DelType" THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Invoice",     /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",     /* TableName*/
                                        "DelType",       /* FieldName */
                                        "Billing",     /* GroupCode */
                                  OUTPUT lcCode).
@@ -443,7 +443,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
 
                ELSE IF FRAME-FIELD = "SpecDel" THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Invoice",     /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",     /* TableName*/
                                        "SpecDel",       /* FieldName */
                                        "Billing",     /* GroupCode */
                                  OUTPUT lcCode).

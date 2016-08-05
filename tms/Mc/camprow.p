@@ -206,7 +206,7 @@ REPEAT WITH FRAME sel:
                     
                 IF FRAME-FIELD = "CRowType" THEN DO:
                                    
-                   RUN Help/h-tmscodes(INPUT "CampRow",     /* TableName */
+                   RUN Help/h-tmscodes.p(INPUT "CampRow",     /* TableName */
                                         "CRowType",    /* FieldName */
                                         "Campaign",    /* GroupCode */
                                  OUTPUT lcCode).

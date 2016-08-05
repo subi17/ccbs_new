@@ -764,7 +764,7 @@ PROCEDURE local-UPDATE-record:
                END.
                   
                ELSE IF FRAME-FIELD = "FileCategory" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "DumpFile",     /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "DumpFile",     /* TableName */
                                        "FileCategory",  /* FieldName */
                                        "DumpFile",     /* GroupCode */
                                 OUTPUT lcCode).
@@ -776,7 +776,7 @@ PROCEDURE local-UPDATE-record:
                END.
  
                ELSE IF FRAME-FIELD = "DumpFormat" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "DumpFile",     /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "DumpFile",     /* TableName */
                                        "DumpFormat",  /* FieldName */
                                        "DumpFile",     /* GroupCode */
                                 OUTPUT lcCode).
@@ -787,7 +787,7 @@ PROCEDURE local-UPDATE-record:
                END.
  
                ELSE IF FRAME-FIELD = "DecimalPoint" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "DumpFile",     /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "DumpFile",     /* TableName */
                                        "DecimalPoint",  /* FieldName */
                                        "DumpFile",     /* GroupCode */
                                 OUTPUT lcCode).

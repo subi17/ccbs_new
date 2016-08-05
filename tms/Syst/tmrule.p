@@ -952,12 +952,12 @@ PROCEDURE pUpdate:
             lcFrameField = FRAME-FIELD.
 
             IF FRAME-FIELD = "PayType" THEN 
-               RUN Help/h-tmscodes(INPUT "CLIType", 
+               RUN Help/h-tmscodes.p(INPUT "CLIType", 
                                     lcFrameField, 
                                     ?, 
                                     OUTPUT lcCode).
             ELSE 
-               RUN Help/h-tmscodes(INPUT "TMRule", 
+               RUN Help/h-tmscodes.p(INPUT "TMRule", 
                                     lcFrameField, 
                                     "TMR", 
                                     OUTPUT lcCode).

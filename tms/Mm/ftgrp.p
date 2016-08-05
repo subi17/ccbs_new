@@ -756,7 +756,7 @@ PROCEDURE local-UPDATE-record:
                 LOOKUP(FRAME-FIELD,"FatType,FatTarget,QtyUnit") > 0 
              THEN DO:
 
-                RUN Help/h-tmscodes(INPUT "FatGroup",  /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "FatGroup",  /* TableName*/
                                      FRAME-FIELD, /* FieldName */
                                      "FATime", /* GroupCode */
                                OUTPUT siirto).

@@ -105,7 +105,7 @@ DEFINE STREAM strout.
               DumpFile.DumpName EQ {&DUMP_IFS_INVOICE} NO-ERROR.
 
    IF AVAIL DumpFile THEN DO:
-      RUN Syst/dumpfile_run(DumpFile.DumpID,
+      RUN Syst/dumpfile_run.p(DumpFile.DumpID,
                        "Modified",
                        "",
                        FALSE,

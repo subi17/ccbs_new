@@ -6,4 +6,4 @@
 
 {Syst/commali.i}
 
-RUN Mc/offer ("",TRUE).
+RUN Mc/offer.p ("",TRUE).

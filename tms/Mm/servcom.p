@@ -791,7 +791,7 @@ PROCEDURE local-UPDATE-record:
                 FRAME-FIELD = "Target" 
              THEN DO:
             
-                RUN Help/h-tmscodes(INPUT "ServCom",     /* TableName */
+                RUN Help/h-tmscodes.p(INPUT "ServCom",     /* TableName */
                                      "Target",  /* FieldName */
                                      "Service", /* GroupCode */
                                OUTPUT lcCode).
@@ -818,7 +818,7 @@ PROCEDURE local-UPDATE-record:
                 ASSIGN gcHelpParam = "prt"
                        si-recid    = 0
                        lcField     = FRAME-FIELD.
-                RUN Mc/invotxt ("",
+                RUN Mc/invotxt.p ("",
                              "").
                 gcHelpParam = "".
                    

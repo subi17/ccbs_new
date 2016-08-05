@@ -871,7 +871,7 @@ PROCEDURE local-update-record:
          READKEY.
              IF FRAME-FIELD = "delitype" AND keylabel(lastkey) = "F9" 
              THEN DO:
-                RUN Help/h-tmscodes(INPUT "CallLimit",  /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "CallLimit",  /* TableName*/
                                      "DeliType", /* FieldName */
                                      "Delitype", /* GroupCode */
                                OUTPUT siirto).
@@ -882,7 +882,7 @@ PROCEDURE local-update-record:
 
              ELSE IF FRAME-FIELD = "credittype" AND keylabel(lastkey) = "F9" 
              THEN DO:
-                RUN Help/h-tmscodes(INPUT "CallAlarm",  /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "CallAlarm",  /* TableName*/
                                      "CreditType", /* FieldName */
                                      "SMS", /* GroupCode */
                                OUTPUT siirto).

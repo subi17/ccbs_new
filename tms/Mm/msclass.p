@@ -471,7 +471,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:                              
         RUN local-find-this (FALSE).
-        RUN Mm/msisdnc.p(msClass.McCode).
+        RUN msisdnc.p(msClass.McCode).
         ufkey = TRUE.
         NEXT loop.
      END.  

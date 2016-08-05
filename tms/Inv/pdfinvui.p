@@ -172,7 +172,7 @@ repeat:
           FRAME-FIELD = "liDelType"
        THEN DO:
 
-         RUN Help/h-tmscodes(INPUT "Invoice",     /* TableName*/
+         RUN Help/h-tmscodes.p(INPUT "Invoice",     /* TableName*/
                               "DelType",       /* FieldName */
                               "Billing",     /* GroupCode */
                         OUTPUT lcCode).

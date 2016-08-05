@@ -1282,7 +1282,7 @@ PROCEDURE pOrderView:
      
      ELSE IF toimi = 7 THEN DO:
         find current order NO-LOCK.
-        RUN Mc/orderfunc(INPUT order.statuscode, Order.OrderID, TRUE).       
+        RUN Mc/orderfunc.p(INPUT order.statuscode, Order.OrderID, TRUE).       
         ASSIGN
         memory = recid(order)
         ufkey  = true
@@ -2090,7 +2090,7 @@ PROCEDURE local-update-customer:
             THEN DO:
 
                IF FRAME-FIELD = "CustIDType" THEN DO:           
-                  RUN Help/h-tmscodes(INPUT "Customer",    /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "Customer",    /* TableName */
                                        "CustIDType",  /* FieldName */
                                        "CustCare",  /* GroupCode */
                                  OUTPUT lcCode).
@@ -2102,7 +2102,7 @@ PROCEDURE local-update-customer:
                END.
                   
                ELSE IF FRAME-FIELD = "CustTitle" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "Customer",    /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "Customer",    /* TableName */
                                        "Title",      /* FieldName */
                                        "CustCare",   /* GroupCode */
                                  OUTPUT lcCode).

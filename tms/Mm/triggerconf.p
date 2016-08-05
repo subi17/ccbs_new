@@ -679,7 +679,7 @@ PROCEDURE local-UPDATE-record:
             READKEY.
 
             IF FRAME-FIELD = "EventRule" AND keylabel(lastkey) = "F9" THEN DO:
-               RUN Help/h-tmscodes(INPUT  "TriggerConf"      ,
+               RUN Help/h-tmscodes.p(INPUT  "TriggerConf"      ,
                                      "EventRule"  ,
                                      "TriggerConfType"  ,
                               OUTPUT Siirto).

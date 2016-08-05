@@ -1073,7 +1073,7 @@ PROCEDURE local-UPDATE-record:
              READKEY.
 
              IF FRAME-FIELD = "Qtyunit" AND keylabel(lastkey) = "F9" THEN DO:
-                RUN Help/h-tmscodes(INPUT "FATime",  /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "FATime",  /* TableName*/
                                      "qtyunit", /* FieldName */
                                      "QtyUnit", /* GroupCode */
                                OUTPUT siirto).
@@ -1087,7 +1087,7 @@ PROCEDURE local-UPDATE-record:
              ELSE IF FRAME-FIELD = "FATType" AND keylabel(lastkey) = "F9" 
              THEN DO:
 
-                RUN Help/h-tmscodes(INPUT "FATime",  /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "FATime",  /* TableName*/
                                      "FATType", /* FieldName */
                                      "Billing", /* GroupCode */
                                OUTPUT siirto).

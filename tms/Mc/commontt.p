@@ -198,7 +198,7 @@ DO WHILE TRUE:
    END.
    
    ELSE IF FRAME-INDEX EQ 16 THEN DO:
-      RUN Mc/nnasse(iiCustNum,"address_chg").
+      RUN Mc/nnasse.p(iiCustNum,"address_chg").
    END.
    
    ELSE IF FRAME-INDEX EQ 19 THEN DO:

@@ -728,7 +728,7 @@ PROCEDURE local-UPDATE-record:
                   FRAME-FIELD = "ServType"
              THEN DO:
 
-                RUN Help/h-tmscodes(INPUT "CTServPac",    /* TableName */
+                RUN Help/h-tmscodes.p(INPUT "CTServPac",    /* TableName */
                                      "ServType",  /* FieldName */
                                      "MobSub",  /* GroupCode */
                                OUTPUT lcCode).

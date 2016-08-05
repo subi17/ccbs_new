@@ -235,7 +235,7 @@ REPEAT WITH FRAME range.
       /* Rank input checking when using F9; description generated */
       IF FRAME-FIELD = "lcMSCode" AND cLastKeyLabel = "F9" THEN 
       DO:
-         RUN Help/h-tmscodes(INPUT "MSISDNNumber",  /* TableName */
+         RUN Help/h-tmscodes.p(INPUT "MSISDNNumber",  /* TableName */
                               "Rank",  /* FieldName */
                               "Rank",   /* GroupCode */
                        OUTPUT lcCode).
@@ -275,7 +275,7 @@ REPEAT WITH FRAME range.
       /* POS code input checking when using F9; description generated */
       IF FRAME-FIELD = "ocPosCode" AND cLastKeyLabel = "F9" THEN 
       DO:
-         RUN Help/h-tmscodes(INPUT "MSISDN",  /* TableName */
+         RUN Help/h-tmscodes.p(INPUT "MSISDN",  /* TableName */
                               "POS",  /* FieldName */
                               "Reservation Position",   /* GroupCode */
                        OUTPUT lcCode).

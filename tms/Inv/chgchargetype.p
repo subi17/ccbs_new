@@ -61,7 +61,7 @@ REPEAT ON ENDKEY UNDO, LEAVE:
          
       IF KEYLABEL(LASTKEY) = "F9" THEN DO:
             
-         RUN Help/h-tmscodes(INPUT "Invoice",      /* TableName */
+         RUN Help/h-tmscodes.p(INPUT "Invoice",      /* TableName */
                               "ChargeType",   /* FieldName */
                               "AccRec",       /* GroupCode */
                         OUTPUT lcCode).
