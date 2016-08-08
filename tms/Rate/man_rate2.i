@@ -29,9 +29,17 @@
    /* Never touch billed calls */
    IF ttCall.invseq ne 0  AND 
       ttCall.ErrorCode = 0 THEN DO:
-      IF CAN-FIND(FIRST invseq where 
-                        invseq.invseq = ttCall.invseq AND
-                        invseq.Billed = TRUE) THEN NEXT.
+      FIND FIRST InvSeq WHERE
+                 InvSeq.InvSeq = ttCall.InvSeq AND
+                 InvSeq.Billed = TRUE NO-LOCK NO-ERROR.
+      IF AVAILABLE InvSeq AND
+         CAN-FIND(FIRST Invoice WHERE
+                        Invoice.InvNum = InvSeq.InvNum AND
+                        Invoice.InvType <> {&INV_TYPE_TEST}) THEN DO:
+         RELEASE InvSeq.
+         NEXT.
+      END.
+      RELEASE InvSeq.
    END.
    
    ASSIGN ttCall.ErrorCode = 0.
