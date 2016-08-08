@@ -218,7 +218,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
             IF nap = "F9" AND FRAME-FIELD = "liInvType" THEN DO:
 
-               RUN Help/h-tmscodes(INPUT "Invoice",  /* TableName*/
+               RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName*/
                                     "InvType", /* FieldName */
                                     "Report", /* GroupCode */
                               OUTPUT lcCode).

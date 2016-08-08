@@ -61,7 +61,7 @@ DO WHILE TRUE:
    END.
 
    ELSE IF FRAME-INDEX EQ 3 THEN DO:
-      RUN Mc/invotxt("Customer",iiCustNum).
+      RUN Mc/invotxt.p("Customer",iiCustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 4 THEN DO:

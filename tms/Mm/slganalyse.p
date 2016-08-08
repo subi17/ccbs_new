@@ -716,7 +716,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       IF keylabel(LASTKEY) = "F9" AND
          FRAME-FIELD = "SLGAType"  THEN DO:
  
-         RUN Help/h-tmscodes(INPUT "SLGAanalyse",    /* TableName */
+         RUN Help/h-tmscodes.p(INPUT "SLGAanalyse",    /* TableName */
                               "SLGAType",       /* FieldName */
                               "ServiceLimit",   /* GroupCode */
                               OUTPUT lcCode).
@@ -949,7 +949,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
       IF keylabel(LASTKEY) = "F9" AND
          FRAME-FIELD = "lcSLGAType"  THEN DO:
  
-         RUN Help/h-tmscodes(INPUT "SLGAanalyse",    /* TableName */
+         RUN Help/h-tmscodes.p(INPUT "SLGAanalyse",    /* TableName */
                               "SLGAType",       /* FieldName */
                               "ServiceLimit",   /* GroupCode */
                               OUTPUT lcCode).
@@ -974,7 +974,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
       ELSE IF keylabel(LASTKEY) = "F9" AND
          FRAME-FIELD = "lidesttype"  THEN DO:
 
-         RUN Help/h-tmscodes(INPUT "SLGAnalyse", /* TableName */
+         RUN Help/h-tmscodes.p(INPUT "SLGAnalyse", /* TableName */
                               "bdest",       /* FieldName */
                               "bdest",       /* GroupCode */
                               OUTPUT lcCode).
@@ -991,7 +991,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
          FRAME-FIELD = "lcbdest"       AND 
          INPUT lidesttype  = 2 THEN DO:
  
-         RUN Help/h-tmscodes(INPUT "Bdest", /* TableName */
+         RUN Help/h-tmscodes.p(INPUT "Bdest", /* TableName */
                               "bDestClass",       /* FieldName */
                               "analysis",       /* GroupCode */
                               OUTPUT lcCode).

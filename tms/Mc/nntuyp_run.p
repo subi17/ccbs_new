@@ -645,7 +645,7 @@ BROWSE:
         PAUSE 0.
         DO TRANS:
            FIND BillItem where recid(BillItem) = rtab[FRAME-LINE] no-lock.
-           RUN Mc/invotxt("BillItem",BillItem.BillCode).
+           RUN Mc/invotxt.p("BillItem",BillItem.BillCode).
         END.
         ufkey = TRUE.
         NEXT LOOP.

@@ -156,7 +156,7 @@ REPEAT WITH FRAME sel:
 
                IF nap = "F9" THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "FATConfig", /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "FATConfig", /* TableName*/
                                        "ConfType",  /* FieldName */
                                        "FATime",    /* GroupCode */
                                  OUTPUT lcCode).
@@ -615,7 +615,7 @@ PROCEDURE local-UPDATE-record:
             THEN DO:
 
                IF FRAME-FIELD = "ConfTarget" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "FATConfig",   /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "FATConfig",   /* TableName*/
                                        "ConfTarget",  /* FieldName */
                                        STRING(FatConfig.ConfType),
                                  OUTPUT lcCode).
@@ -628,7 +628,7 @@ PROCEDURE local-UPDATE-record:
                END.
 
                ELSE IF FRAME-FIELD = "ConfRule1" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "FATConfig",   /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "FATConfig",   /* TableName*/
                                        "ConfRule1",   /* FieldName */
                                        STRING(FatConfig.ConfType),
                                  OUTPUT lcCode).

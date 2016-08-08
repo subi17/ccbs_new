@@ -24,7 +24,7 @@
                                 contract_date;date
 */
 
-{fcgi_agent/xmlrpc/xmlrpc_access.i}
+{xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
 katun = "NewtonRPC".

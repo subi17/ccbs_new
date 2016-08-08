@@ -1394,7 +1394,7 @@ PROCEDURE local-UPDATE-record:
             
                   IF FRAME-FIELD = "PPStatus" THEN DO:
                
-                     RUN Help/h-tmscodes(INPUT "PaymPlan",     /* TableName */
+                     RUN Help/h-tmscodes.p(INPUT "PaymPlan",     /* TableName */
                                           "PPStatus",     /* FieldName */
                                           "AccRec",       /* GroupCode */
                                     OUTPUT lcCode).
@@ -1408,7 +1408,7 @@ PROCEDURE local-UPDATE-record:
                                       
                   ELSE IF FRAME-FIELD = "PPType" THEN DO:
                
-                     RUN Help/h-tmscodes(INPUT "PaymPlan",    /* TableName */
+                     RUN Help/h-tmscodes.p(INPUT "PaymPlan",    /* TableName */
                                           "PPType",      /* FieldName */
                                           "AccRec",      /* GroupCode */
                                     OUTPUT lcCode).

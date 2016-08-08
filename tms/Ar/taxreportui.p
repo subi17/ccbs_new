@@ -167,7 +167,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
                   liExtent = FRAME-INDEX.
                   
-                  RUN Help/h-tmscodes(INPUT "Invoice",  /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName*/
                                        "InvType",  /* FieldName */
                                        "Report",   /* GroupCode */
                                  OUTPUT lcCode).

@@ -168,7 +168,7 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 
                liField = FRAME-INDEX.
                 
-               RUN Help/h-tmscodes(INPUT "Invoice",  /* TableName*/
+               RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName*/
                                     "InvType", /* FieldName */
                                     "Report", /* GroupCode */
                               OUTPUT lcCode).

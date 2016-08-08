@@ -890,7 +890,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          IF nap = "F9" AND
             FRAME-FIELD = "InclUnit"
          THEN DO:
-            RUN Help/h-tmscodes(INPUT "Tariff",    /* TableName */
+            RUN Help/h-tmscodes.p(INPUT "Tariff",    /* TableName */
                                   "DataType", /* FieldName */
                                   "Tariff",     /* GroupCode */
                                   OUTPUT lcCode).

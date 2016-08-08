@@ -1730,7 +1730,7 @@ repeat WITH FRAME sel:
                  NEXT.
               END.
 
-              RUN Mc/nnasse (Customer.AgrCust,
+              RUN Mc/nnasse.p (Customer.AgrCust,
                           "¤ AGR.CUSTOMER").
            END. 
             
@@ -1742,7 +1742,7 @@ repeat WITH FRAME sel:
                  NEXT.
               END.
  
-              RUN Mc/nnasse (Customer.CustNum,
+              RUN Mc/nnasse.p (Customer.CustNum,
                           "InvCust").
            END.
 
@@ -1756,7 +1756,7 @@ repeat WITH FRAME sel:
                  NEXT.
               END.
 
-              RUN Mc/nnasse (Customer.InvCust,
+              RUN Mc/nnasse.p (Customer.InvCust,
                           "¤ INV.CUSTOMER").
            END. 
            
@@ -1774,7 +1774,7 @@ repeat WITH FRAME sel:
               THEN lcTyyppi = "agrusers".
               ELSE lcTyyppi = "invusers".  
         
-              RUN Mc/nnasse (liMainCust,
+              RUN Mc/nnasse.p (liMainCust,
                           lcTyyppi).
                  
               ASSIGN liMainCust = 0
@@ -2215,7 +2215,7 @@ PROCEDURE local-update-fin:
                
                IF FRAME-FIELD = "InvoiceTargetRule" THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Customer",     /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Customer",     /* TableName*/
                                        "InvoiceTargetRule", /* FieldName */
                                        "Billing",      /* GroupCode */
                                  OUTPUT lcCode).
@@ -2229,7 +2229,7 @@ PROCEDURE local-update-fin:
 
                IF FRAME-FIELD = "ChargeType" THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Customer",     /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Customer",     /* TableName*/
                                        "ChargeType",       /* FieldName */
                                        "AccRec",      /* GroupCode */
                                  OUTPUT lcCode).
@@ -2243,7 +2243,7 @@ PROCEDURE local-update-fin:
 
                ELSE IF FRAME-FIELD = "DelType" THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Invoice",     /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",     /* TableName*/
                                        "DelType",       /* FieldName */
                                        "Billing",     /* GroupCode */
                                  OUTPUT lcCode).
@@ -2258,7 +2258,7 @@ PROCEDURE local-update-fin:
                
                ELSE IF FRAME-FIELD = "VATUsage" THEN DO:
               
-                  RUN Help/h-tmscodes(INPUT "Invoice",     /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",     /* TableName*/
                                        "VatUsage",       /* FieldName */
                                        "Billing",     /* GroupCode */
                                  OUTPUT lcCode).

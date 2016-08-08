@@ -254,7 +254,7 @@ REPEAT WITH FRAME sel:
               IF KEYLABEL(LASTKEY) = "F9" THEN DO:
                  IF FRAME-FIELD = "ServType" THEN DO:
 
-                    RUN Help/h-tmscodes(INPUT "ServFee",    /* TableName */
+                    RUN Help/h-tmscodes.p(INPUT "ServFee",    /* TableName */
                                          "ServType",   /* FieldName */
                                          "Service",   /* GroupCode */
                                    OUTPUT lcCode).
@@ -270,7 +270,7 @@ REPEAT WITH FRAME sel:
 
                     fServKeyHelp(INPUT INPUT FRAME lis ServFee.ServType).
                     
-                    RUN Help/h-tmscodes(INPUT lcHelpTable,    /* TableName */
+                    RUN Help/h-tmscodes.p(INPUT lcHelpTable,    /* TableName */
                                          lcHelpField,    /* FieldName */
                                          lcHelpGrp,      /* GroupCode */
                                    OUTPUT lcCode).
@@ -773,7 +773,7 @@ PROCEDURE local-UPDATE-record:
             THEN DO:
 
                IF FRAME-FIELD = "EventType" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "ServFee",    /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "ServFee",    /* TableName */
                                        "EventType",  /* FieldName */
                                        "Service",    /* GroupCode */
                                  OUTPUT lcCode).

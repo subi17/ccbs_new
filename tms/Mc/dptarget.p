@@ -616,7 +616,7 @@ PROCEDURE local-UPDATE-record:
                LOOKUP(FRAME-FIELD,"TargetTable,TargetKey") > 0 THEN DO:
 
                IF FRAME-FIELD = "TargetTable" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "DPTarget",
+                  RUN Help/h-tmscodes.p(INPUT "DPTarget",
                                        "TargetTable",     
                                        ?,     
                                  OUTPUT lcCode).

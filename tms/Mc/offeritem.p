@@ -824,7 +824,7 @@ PROCEDURE local-UPDATE-record:
             THEN DO:
 
                IF FRAME-FIELD = "ItemType" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "OfferItem", 
+                  RUN Help/h-tmscodes.p(INPUT "OfferItem", 
                                        "ItemType", 
                                        "Offer", 
                                  OUTPUT lcCode).

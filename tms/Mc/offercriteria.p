@@ -663,7 +663,7 @@ PROCEDURE local-UPDATE-record:
             THEN DO:
 
                IF FRAME-FIELD = "CriteriaType" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "OfferCriteria", 
+                  RUN Help/h-tmscodes.p(INPUT "OfferCriteria", 
                                        "CriteriaType", 
                                        "Offer", 
                                  OUTPUT lcCode).
@@ -692,7 +692,7 @@ PROCEDURE local-UPDATE-record:
                   END CASE.
                   
                   IF lcCodeTable > "" THEN 
-                     RUN Help/h-tmscodes(INPUT lcCodeTable, 
+                     RUN Help/h-tmscodes.p(INPUT lcCodeTable, 
                                     INPUT INPUT OfferCriteria.CriteriaType, 
                                     INPUT ?, 
                                     OUTPUT lcCode).

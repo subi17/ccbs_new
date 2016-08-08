@@ -142,7 +142,7 @@ REPEAT WITH FRAME sel:
               IF KEYLABEL(LASTKEY) = "F9" AND FRAME-FIELD = "InvType"
               THEN DO:
 
-                 RUN Help/h-tmscodes(INPUT "Invoice",  /* TableName */
+                 RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName */
                                       "InvType",  /* FieldName */
                                       "Report",   /* GroupCode */
                                 OUTPUT lcCode).

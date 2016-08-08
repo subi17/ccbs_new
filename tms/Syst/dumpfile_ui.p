@@ -167,7 +167,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       SET llOk.
       IF NOT llOk THEN NEXT. 
 
-      RUN Syst/dumpfile_run(liDumpID,
+      RUN Syst/dumpfile_run.p(liDumpID,
                        lcDumpMode,
                        lcFileNameTag,
                        fIsThisReplica(),

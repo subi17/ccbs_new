@@ -58,7 +58,7 @@ DEF VAR liCount      AS INT   NO-UNDO.
                          INPUT   "Orders",
                          OUTPUT  lcValue).
 
-          IF lcValue > "" THEN RUN Mc/order(1,8,lcValue,0).
+          IF lcValue > "" THEN RUN Mc/order.p(1,8,lcValue,0).
 
        END.
 

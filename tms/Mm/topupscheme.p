@@ -694,7 +694,7 @@ PROCEDURE local-UPDATE-record:
                                  THEN "Source" 
                                  ELSE FRAME-FIELD.
                                  
-               RUN Help/h-tmscodes(INPUT "PrepaidRequest", /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "PrepaidRequest", /* TableName */
                                     lcHelpField,      /* FieldName */
                                     "Prepaid",        /* GroupCode */
                               OUTPUT lcCode).

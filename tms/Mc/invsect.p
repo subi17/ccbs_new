@@ -496,7 +496,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
         FIND InvSect WHERE recid(InvSect) = rtab[FRAME-line(sel)] NO-LOCK.
-        RUN Mc/invotxt("InvSect", InvSect.InvSect).
+        RUN Mc/invotxt.p("InvSect", InvSect.InvSect).
         ASSIGN Memory = recid(InvSect) must-print = TRUE ufkey = TRUE.
 
      END.

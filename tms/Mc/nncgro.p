@@ -550,7 +550,7 @@ SELAUS:
 
      ELSE IF lookup(nap,"7,f7") > 0 THEN DO:
         FIND CustGroup WHERE recid(CustGroup) = rtab[FRAME-line(sel)] NO-LOCK.
-        RUN Mc/invotxt("CustGroup",CustGroup.CustGroup).
+        RUN Mc/invotxt.p("CustGroup",CustGroup.CustGroup).
         ASSIGN memory = recid(CustGroup) must-print = TRUE ufkey=true.
         NEXT LOOP.
      END.

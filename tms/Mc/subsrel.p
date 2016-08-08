@@ -194,7 +194,7 @@ END.
 
 message "Printing in process".            
 
-RUN Mc/subsrep (ldtDate1, 
+RUN Mc/subsrep.p (ldtDate1, 
              ldtDate2,
              lcInvGroup[1],
              lcInvGroup[2],

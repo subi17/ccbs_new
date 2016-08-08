@@ -478,7 +478,7 @@ BROWSE:
 
      ELSE IF lookup(nap,"7,f7") > 0 THEN DO:
         FIND Product WHERE recid(Product) = rtab[FRAME-line(sel)] NO-LOCK.
-        RUN Mc/invotxt("Product",Product.Product).
+        RUN Mc/invotxt.p("Product",Product.Product).
         ASSIGN memory = recid(Product) must-print = TRUE ufkey=true.
         NEXT LOOP.
      END.

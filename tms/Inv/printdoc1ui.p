@@ -255,7 +255,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
             THEN DO:
 
                IF FRAME-FIELD = "liInvType" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "Invoice",  /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName*/
                                        "InvType", /* FieldName */
                                        "Report", /* GroupCode */
                                  OUTPUT lcCode).
@@ -266,7 +266,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                END.
  
                ELSE IF FRAME-FIELD = "liDelType" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "Invoice",  /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName*/
                                        "DelType", /* FieldName */
                                        "Billing", /* GroupCode */
                                  OUTPUT lcCode).

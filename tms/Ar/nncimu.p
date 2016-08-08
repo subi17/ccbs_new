@@ -493,7 +493,7 @@ repeat WITH FRAME rajat:
       THEN DO:
 
          IF FRAME-FIELD = "lcReasonGrp" THEN DO:           
-            RUN Help/h-tmscodes("CreditNote", /* TableName */
+            RUN Help/h-tmscodes.p("CreditNote", /* TableName */
                            "ReasonGrp",     /* FieldName */
                            "AR",
                            OUTPUT lcCode).
@@ -505,7 +505,7 @@ repeat WITH FRAME rajat:
          END.
 
          ELSE IF FRAME-FIELD = "lcReason" THEN DO:           
-            RUN Help/h-tmscodes("CreditNote", /* TableName */
+            RUN Help/h-tmscodes.p("CreditNote", /* TableName */
                            "Reason",     /* FieldName */
                            INPUT INPUT FRAME rajat lcReasonGrp,
                            OUTPUT lcCode).

@@ -520,7 +520,7 @@ PROCEDURE local-UPDATE-record:
             
             IF nap = "F9" AND FRAME-FIELD = "DumpLogStatus" THEN DO:
 
-               RUN Help/h-tmscodes(INPUT "ActionLog",  /* TableName*/
+               RUN Help/h-tmscodes.p(INPUT "ActionLog",  /* TableName*/
                                     "ActionStatus", /* FieldName */
                                     "Log", /* GroupCode */
                               OUTPUT lcCode).

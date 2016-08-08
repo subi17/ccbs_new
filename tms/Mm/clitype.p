@@ -818,7 +818,7 @@ PROCEDURE local-UPDATE-record:
             THEN DO:
 
                IF FRAME-FIELD = "PayType" THEN DO:
-                  RUN Help/h-tmscodes("CLIType",
+                  RUN Help/h-tmscodes.p("CLIType",
                                  "PayType",
                                  "MobSub",
                                  OUTPUT lcCode).

@@ -336,7 +336,7 @@ REPEAT WITH FRAME sel:
                  LOOKUP(FRAME-FIELD,"RuleType,PayType") > 0 THEN DO:
             
                  IF FRAME-FIELD = "PayType" THEN DO:
-                    RUN Help/h-tmscodes(INPUT "CLIType",     /* TableName */
+                    RUN Help/h-tmscodes.p(INPUT "CLIType",     /* TableName */
                                          "PayType",  /* FieldName */
                                          "MobSub", /* GroupCode */
                                    OUTPUT lcCode).
@@ -348,7 +348,7 @@ REPEAT WITH FRAME sel:
                  END.
                                       
                  ELSE IF FRAME-FIELD = "RuleType" THEN DO:
-                    RUN Help/h-tmscodes(INPUT "CoRule",     /* TableName */
+                    RUN Help/h-tmscodes.p(INPUT "CoRule",     /* TableName */
                                          "RuleType",  /* FieldName */
                                          "Commission", /* GroupCode */
                                    OUTPUT lcCode).
@@ -1037,7 +1037,7 @@ PROCEDURE local-UPDATE-record:
             
                IF FRAME-FIELD = "PPReqPrefix" THEN DO:
                
-                  RUN Help/h-tmscodes(INPUT "PrepaidRequest",     /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "PrepaidRequest",     /* TableName */
                                        "PPReqPrefix",  /* FieldName */
                                        "Prepaid", /* GroupCode */
                                  OUTPUT lcCode).
@@ -1050,7 +1050,7 @@ PROCEDURE local-UPDATE-record:
                                       
                ELSE IF FRAME-FIELD = "PPSource" THEN DO:
                
-                  RUN Help/h-tmscodes(INPUT "PrepaidRequest",     /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "PrepaidRequest",     /* TableName */
                                        "Source",  /* FieldName */
                                        "Prepaid", /* GroupCode */
                                  OUTPUT lcCode).
@@ -1067,7 +1067,7 @@ PROCEDURE local-UPDATE-record:
                      si-recid    = ?
                      lcField     = FRAME-FIELD.
                
-                  RUN Mc/invotxt("SMS","").
+                  RUN Mc/invotxt.p("SMS","").
         
                   gcHelpParam = "".
                         

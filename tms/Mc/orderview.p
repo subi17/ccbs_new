@@ -63,17 +63,17 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    IF FRAME-INDEX EQ 1 THEN DO:
-      RUN Mc/nnasse(Mobsub.AgrCust,
+      RUN Mc/nnasse.p(Mobsub.AgrCust,
                  "").
    END.
 
    ELSE IF FRAME-INDEX = 2 THEN DO:
-     RUN Mc/nnasse(mobsub.InvCust,
+     RUN Mc/nnasse.p(mobsub.InvCust,
                 "").
    END.
 
    ELSE IF FRAME-INDEX = 3 THEN DO:
-      RUN Mc/nnasse(mobsub.Custnum,
+      RUN Mc/nnasse.p(mobsub.Custnum,
                  "").
    END.             
   

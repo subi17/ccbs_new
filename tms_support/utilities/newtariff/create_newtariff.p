@@ -15,8 +15,8 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
-{tariffconfig.i}
-{tariffcons.i}
+{tms_support/utilities/newtariff/tariffconfig.i}
+{tms_support/utilities/newtariff/tariffcons.i}
 
 DEFINE VARIABLE lcLine            AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLogFile         AS CHARACTER NO-UNDO.
@@ -123,15 +123,15 @@ DO TRANSACTION:
          RUN tms_support/utilities/newtariff/billitemcreation.p(lcIncDir,
                                 lcSpoolDir) NO-ERROR.
       ELSE IF INDEX(ttFiles.FName,"shaperconf") > 0 THEN
-         RUN Mc/shaperconfcreation.p(lcIncDir,
+         RUN tms_support/utilities/newtariff/shaperconfcreation.p(lcIncDir,
                                   lcSpoolDir) NO-ERROR.      
       ELSE IF INDEX(ttFiles.FName,"rateplan") > 0 THEN 
-         RUN Mc/rateplan.p(lcIncDir,
+         RUN tms_support/utilities/newtariff/rateplan.p(lcIncDir,
                         lcSpoolDir,
                         OUTPUT lcPayType,
                         OUTPUT lcRatePlan) NO-ERROR.
       ELSE IF INDEX(ttFiles.FName,"tariffcreation") > 0 THEN 
-        RUN Mc/tariffcreation.p(lcIncDir,
+        RUN tms_support/utilities/newtariff/tariffcreation.p(lcIncDir,
                              lcSpoolDir,
                              lcPayType,
                              lcRatePlan) NO-ERROR.

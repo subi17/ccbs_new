@@ -1168,7 +1168,7 @@ PROCEDURE local-update-record:
             THEN DO:
 
                IF FRAME-FIELD = "InfoType" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "InvText",    /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "InvText",    /* TableName */
                                        "InfoType", /* FieldName */
                                        "CustCare",     /* GroupCode */
                                  OUTPUT lcCode).
@@ -1183,7 +1183,7 @@ PROCEDURE local-update-record:
                END.
 
                ELSE IF FRAME-FIELD = "AddrTarget" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "InvText",    /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "InvText",    /* TableName */
                                        "AddrTarget", /* FieldName */
                                        "Printing",     /* GroupCode */
                                  OUTPUT lcCode).

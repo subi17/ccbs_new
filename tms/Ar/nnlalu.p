@@ -225,7 +225,7 @@ repeat with frame rajat on endkey undo toimi, next toimi:
                   IF LOOKUP(FRAME-FIELD,"liInvType1,liInvType2") > 0
                   THEN DO:
 
-                     RUN Help/h-tmscodes(INPUT "Invoice",  /* TableName*/
+                     RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName*/
                                           "InvType", /* FieldName */
                                           "Report", /* GroupCode */
                                     OUTPUT lcCode).
@@ -241,7 +241,7 @@ repeat with frame rajat on endkey undo toimi, next toimi:
                   ELSE IF LOOKUP(FRAME-FIELD,"liPaymState1,liPaymState2") > 0
                   THEN DO:
 
-                     RUN Help/h-tmscodes(INPUT "Invoice",  /* TableName*/
+                     RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName*/
                                           "PaymState", /* FieldName */
                                           "AccRec", /* GroupCode */
                                     OUTPUT lcCode).
@@ -365,7 +365,7 @@ ASSIGN ttCriter.InvGroup    = InvGroup
 assign tila = true.
 {Syst/utuloste.i "return"}
 
-RUN Ar/invjournal (INPUT TABLE TCustGroup,
+RUN Ar/invjournal.p (INPUT TABLE TCustGroup,
                 INPUT TABLE ttCriter,
                 OUTPUT i).
                   

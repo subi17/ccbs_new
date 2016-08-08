@@ -328,7 +328,7 @@ toimi:
 
                   lcFrameField = FRAME-FIELD.
 
-                  RUN Help/h-tmscodes(INPUT "Payment",  /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Payment",  /* TableName*/
                                        "PaymType", /* FieldName */
                                        "AccRec", /* GroupCode */
                                  OUTPUT lcCode).

@@ -754,7 +754,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          IF FRAME-FIELD = "GroupType" AND
             keylabel(lastkey) = "F9" THEN DO:
 
-            RUN Help/h-tmscodes(INPUT "PnpGroup",  /* TableName*/
+            RUN Help/h-tmscodes.p(INPUT "PnpGroup",  /* TableName*/
                                  "GroupType", /* FieldName */
                                  "GroupType", /* GroupCode */
                                  OUTPUT siirto).

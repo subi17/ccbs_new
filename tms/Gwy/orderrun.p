@@ -47,7 +47,7 @@ DO WHILE TRUE :
    WITH FRAME frmLog.
    PAUSE 0.
 
-   RUN Gwy/ordersender(0,
+   RUN Gwy/ordersender.p(0,
                    OUTPUT liAmount).
 
    liOrders = liOrders + liAmount.

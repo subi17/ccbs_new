@@ -25,7 +25,7 @@ FIND FIRST DumpFile NO-LOCK WHERE
 
 IF AVAIL DumpFile THEN DO:
    
-   RUN Syst/dumpfile_run(DumpFile.DumpID,  /* Dump ID */
+   RUN Syst/dumpfile_run.p(DumpFile.DumpID,  /* Dump ID */
                     "Full",
                     "",
                     fIsThisReplica(),

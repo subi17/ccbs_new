@@ -272,7 +272,7 @@ repeat ON ENDKEY UNDO, NEXT:
          THEN DO:
               
                      
-            RUN Help/h-tmscodes(INPUT "Invoice",    /* TableName*/
+            RUN Help/h-tmscodes.p(INPUT "Invoice",    /* TableName*/
                                  "PrintState", /* FieldName */
                                  "Report",     /* GroupCode */
                            OUTPUT lcCode).

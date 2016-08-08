@@ -429,7 +429,7 @@ BROWSE:
        END.
       
        ELSE
-          RUN Mc/beitem(INPUT FeeModel.FeeModel).
+          RUN Mc/beitem.p(INPUT FeeModel.FeeModel).
 
         ufkey = TRUE.
         NEXT loop.

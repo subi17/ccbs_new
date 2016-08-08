@@ -818,7 +818,7 @@ PROCEDURE local-UPDATE-record:
                 FRAME-FIELD = "PBStatus" 
              THEN DO:
                
-               RUN Help/h-tmscodes(INPUT "PPBatch",     /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "PPBatch",     /* TableName */
                                     "PBStatus",  /* FieldName */
                                     "AccRec", /* GroupCode */
                               OUTPUT lcCode).

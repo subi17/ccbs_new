@@ -369,7 +369,7 @@ BROWSE:
        memory = recid(ttmnpprocess).
        
        /* choose different module for old and new mnp processes */
-       IF ttMNPProcess.MNPType EQ 0 THEN RUN Mm/mnpmessages(ttMNPProcess.MNPSeq).
+       IF ttMNPProcess.MNPType EQ 0 THEN RUN Mm/mnpmessages.p(ttMNPProcess.MNPSeq).
        ELSE RUN Mnp/mnpoperations(ttMNPProcess.MNPSeq).
        
        must-print = true.

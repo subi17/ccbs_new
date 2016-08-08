@@ -295,7 +295,7 @@ repeat WITH FRAME sel:
 
                IF FRAME-FIELD = "InclUnit" THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Tariff",    /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "Tariff",    /* TableName */
                                        "DataType", /* FieldName */
                                        "Tariff",     /* GroupCode */
                                  OUTPUT lcCode).
@@ -309,7 +309,7 @@ repeat WITH FRAME sel:
 
                ELSE IF FRAME-FIELD = "HostTable" THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "FixedFee",    /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "FixedFee",    /* TableName */
                                        "HostTable", /* FieldName */
                                        "Contract",     /* GroupCode */
                                  OUTPUT lcCode).
@@ -1254,7 +1254,7 @@ BROWSE:
                FRAME-FIELD = "InclUnit" 
             THEN DO:
 
-               RUN Help/h-tmscodes(INPUT "Tariff",    /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "Tariff",    /* TableName */
                                     "DataType", /* FieldName */
                                     "Tariff",     /* GroupCode */
                               OUTPUT lcCode).

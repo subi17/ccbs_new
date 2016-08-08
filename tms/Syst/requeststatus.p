@@ -154,7 +154,7 @@ REPEAT WITH FRAME sel:
            
               IF KEYLABEL(LASTKEY) = "F9" THEN DO:
             
-                 RUN Help/h-tmscodes(INPUT "MsRequest",  /* TableName */
+                 RUN Help/h-tmscodes.p(INPUT "MsRequest",  /* TableName */
                                       "ReqStatus",     /* FieldName */
                                       "Request",       /* GroupCode */
                                 OUTPUT lcCode).

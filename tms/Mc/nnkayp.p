@@ -223,7 +223,7 @@ add-new:
                   FRAME-FIELD = "CustIDType"
                THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Customer",    /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "Customer",    /* TableName */
                                        "CustIDType",  /* FieldName */
                                        "CustCare",  /* GroupCode */
                                  OUTPUT lcCode).
@@ -643,7 +643,7 @@ BROWSE:
               FRAME-FIELD = "CustIDType"
            THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Customer",    /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "Customer",    /* TableName */
                                        "CustIDType",  /* FieldName */
                                        "CustCare",  /* GroupCode */
                                  OUTPUT lcCode).

@@ -514,7 +514,7 @@ BROWSE:
 
      ELSE IF lookup(nap,"7,f7") > 0 THEN DO:
         FIND ProdPack WHERE recid(ProdPack) = rtab[FRAME-line(sel)] NO-LOCK.
-        RUN Mc/invotxt("ProdPack",ProdPack.ProdPack).
+        RUN Mc/invotxt.p("ProdPack",ProdPack.ProdPack).
         ASSIGN memory = recid(ProdPack) must-print = TRUE ufkey=true.
         NEXT LOOP.
      END.

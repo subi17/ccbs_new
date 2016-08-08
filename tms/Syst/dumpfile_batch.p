@@ -255,7 +255,7 @@ IF NOT llQuery THEN
 FOR EACH ttDump
 BY ttDump.DumpTime:
    
-   RUN Syst/dumpfile_run (ttDump.DumpID,
+   RUN Syst/dumpfile_run.p (ttDump.DumpID,
                      ttDump.DumpMode,
                      ttDump.FileNameTag,
                      ttDump.Replication,

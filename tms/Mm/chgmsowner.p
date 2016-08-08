@@ -1326,7 +1326,7 @@ PROCEDURE pUpdateNewOwner:
          IF KEYLABEL(LASTKEY) = "F9" AND
             FRAME-FIELD = "lcNewTitle" THEN DO:
             
-            RUN Help/h-tmscodes(INPUT "Customer",  /* TableName */                  
+            RUN Help/h-tmscodes.p(INPUT "Customer",  /* TableName */                  
                                  "Title",  /* FieldName */
                                  "CustCare",   /* GroupCode */
                            OUTPUT lcCode).

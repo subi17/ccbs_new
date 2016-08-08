@@ -608,7 +608,7 @@ repeat WITH FRAME sel:
              VIEW-AS ALERT-BOX.
              NEXT.
           END.
-          RUN Mm/mservicelimit(INPUT  0 ,
+          RUN Mm/mservicelimit.p(INPUT  0 ,
                                    ServiceLimit.dialtype,
                                    Servicelimit.slseq ).
 
@@ -889,7 +889,7 @@ PROCEDURE pUpdate:
          THEN DO:
          
             IF FRAME-FIELD = "DCType"  THEN DO:
-               RUN Help/h-tmscodes(INPUT "DayCampaign",    /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "DayCampaign",    /* TableName */
                                     "DCType",       /* FieldName */
                                     "PerContr",   /* GroupCode */
                                OUTPUT lcCode).
@@ -900,7 +900,7 @@ PROCEDURE pUpdate:
             END.
          
             ELSE IF FRAME-FIELD = "CalcMethod"  THEN DO:
-               RUN Help/h-tmscodes(INPUT "Daycampaign",  /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "Daycampaign",  /* TableName */
                                     "CalcMethod",   /* FieldName */
                                     "DCCounter",    /* GroupCode */
                               OUTPUT lcCode).
@@ -912,7 +912,7 @@ PROCEDURE pUpdate:
             END.
 
             ELSE IF FRAME-FIELD = "Effective"  THEN DO:
-               RUN Help/h-tmscodes(INPUT "Daycampaign",  /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "Daycampaign",  /* TableName */
                                     "Effective",      /* FieldName */
                                     "PerContr",    /* GroupCode */
                               OUTPUT lcCode).
@@ -925,7 +925,7 @@ PROCEDURE pUpdate:
             END.
  
             ELSE IF FRAME-FIELD = "DurUnit"  THEN DO:
-               RUN Help/h-tmscodes(INPUT "Daycampaign",  /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "Daycampaign",  /* TableName */
                                     "DurUnit",      /* FieldName */
                                     "PerContr",    /* GroupCode */
                               OUTPUT lcCode).
@@ -938,7 +938,7 @@ PROCEDURE pUpdate:
             END.
 
             ELSE IF FRAME-FIELD = "DurType"  THEN DO:
-               RUN Help/h-tmscodes(INPUT "Daycampaign",  /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "Daycampaign",  /* TableName */
                                     "DurType",      /* FieldName */
                                     "DCCounter",    /* GroupCode */
                               OUTPUT lcCode).
@@ -951,7 +951,7 @@ PROCEDURE pUpdate:
             END.
           
             ELSE IF FRAME-FIELD = "InclUnit" THEN DO:
-               RUN Help/h-tmscodes(INPUT "DayCampaign",    /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "DayCampaign",    /* TableName */
                                     "InclUnit", /* FieldName */
                                     "Unit",     /* GroupCode */
                               OUTPUT lcCode).
@@ -1223,7 +1223,7 @@ PROCEDURE pFeeData:
                LOOKUP(FRAME-FIELD,"TermFeeCalc") > 0 THEN DO:
          
                IF FRAME-FIELD = "TermFeeCalc"  THEN DO:
-                  RUN Help/h-tmscodes(INPUT "Daycampaign",  /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "Daycampaign",  /* TableName */
                                        "TermFeeCalc",  /* FieldName */
                                        "PerContr",    /* GroupCode */
                                  OUTPUT lcCode).

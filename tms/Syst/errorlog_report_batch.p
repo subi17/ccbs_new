@@ -34,7 +34,7 @@ IF NUM-ENTRIES(lcActionID) > 1 THEN ASSIGN
    lcTableName = ENTRY(2,lcActionID)
    lcActionID  = ENTRY(1,lcActionID).
    
-RUN Mc/errorlog_report(ldtEventDate,
+RUN Syst/errorlog_report(ldtEventDate,
                     ldtEventDate,
                     lcActionID,
                     lcTableName,

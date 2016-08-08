@@ -764,7 +764,7 @@ BROWSE:
           END.      
           ELSE IF toimi = 4  AND lcRight = "RW" AND 
             fIsPermittedModule(mobsub.clitype, "subser") THEN 
-               RUN Mm/subser(Mobsub.MsSeq).
+               RUN Mm/subser.p(Mobsub.MsSeq).
           ELSE IF Toimi = 5  THEN RUN Mc/memo(INPUT mobsub.CustNum,
                                            INPUT "Mobsub",
                                            INPUT STRING(MobSub.MsSeq),

@@ -1,9 +1,9 @@
 /* ----------------------------------------------------------------------
-  MODULE .......: prepedr_pupu_dump_start.p
-  TASK .........: Create a dump file for prepaid edrs for PUPU
+  MODULE .......: prepedr_dump_start.p
+  TASK .........: Create a dump file for prepaid edrs
   APPLICATION ..: tms
-  AUTHOR .......: Vikas 
-  CREATED ......: 30.08.13
+  AUTHOR .......: anttis 
+  CREATED ......: 28.02.13
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
@@ -19,12 +19,15 @@ DEF INPUT  PARAMETER icEventFields AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiEvents      AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 
-DEF VAR ldaFromDate                AS DATE NO-UNDO.
-DEF VAR ldaOldDb                   AS DATE NO-UNDO.
+DEF VAR ldaFromDate AS DATE NO-UNDO.
+DEF VAR ldaToDate   AS DATE NO-UNDO.
+DEF VAR ldaOldDb    AS DATE NO-UNDO.
 
-ldaFromDate = TODAY.
+ASSIGN 
+   ldaFromDate = TODAY - 1 
+   ldaToDate   = TODAY - 1.
 
-RUN pStartDump(ldaFromDate,FALSE).
+RUN pStartDump(ldaToDate,FALSE).
 IF RETURN-VALUE BEGINS "ERROR" OR olInterrupted THEN 
    RETURN RETURN-VALUE.
 
@@ -36,7 +39,7 @@ FOR FIRST ttDB WHERE
           ttDb.TableName = "PrepEDR",
     FIRST DBConfig NO-LOCK WHERE
           DBConfig.DBConfigId = ttDb.DbConfigId:
-  IF DBConfig.FromDate = ldaFromDate THEN ldaOldDb = DbConfig.FromDate - 1.
+  IF DBConfig.FromDate = ldaToDate THEN ldaOldDb = DbConfig.FromDate - 1.
 END.
       
 IF ldaOldDb NE ? THEN DO:
@@ -62,14 +65,15 @@ PROCEDURE pStartDump:
    IF RETURN-VALUE BEGINS "ERROR" THEN 
       RETURN RETURN-VALUE.
  
-   RUN Mm/prepedr_pupu_dump.p(INPUT icDumpID,
-                           INPUT icFile,
-                           INPUT icDumpMode,
-                           INPUT idLastDump,
-                           INPUT icEventSource,
-                           INPUT icEventFields,
-                           INPUT ilAppend,
-                           OUTPUT oiEvents,
-                           OUTPUT olInterrupted).
-
+   RUN Mm/prepedr_dump.p (icDumpID,
+                       icFile,
+                       icDumpMode,
+                       idLastDump,
+                       icEventSource,
+                       icEventFields,
+                       ldaFromDate,
+                       ldaToDate,
+                       ilAppend,
+                       OUTPUT oiEvents,
+                       OUTPUT olInterrupted).
 END PROCEDURE.

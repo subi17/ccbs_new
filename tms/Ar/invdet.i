@@ -403,7 +403,7 @@ PROCEDURE pInvoiceUpdate:
 
                IF FRAME-FIELD = "DelType" THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Invoice",     /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",     /* TableName*/
                                        "DelType",       /* FieldName */
                                        "Billing",     /* GroupCode */
                                  OUTPUT lcCode).
@@ -429,7 +429,7 @@ PROCEDURE pInvoiceUpdate:
 
                ELSE IF FRAME-FIELD = "PrintState" THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Invoice",   
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",   
                                        "PrintState", 
                                        "Report",    
                                  OUTPUT lcCode).
@@ -446,7 +446,7 @@ PROCEDURE pInvoiceUpdate:
                END.
                ELSE IF FRAME-FIELD = "DeliveryState" THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Invoice",   
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",   
                                        "DeliveryState", 
                                        "Billing",    
                                  OUTPUT lcCode).

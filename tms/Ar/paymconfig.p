@@ -761,7 +761,7 @@ PROCEDURE local-UPDATE-record:
             THEN DO:
 
                lcField = FRAME-FIELD.
-               RUN Help/h-tmscodes(INPUT "Payment",  /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "Payment",  /* TableName */
                                     lcField,    /* FieldName */
                                     "AccRec",   /* GroupCode */
                               OUTPUT lcCode).

@@ -302,7 +302,7 @@ END.
 IF llCover THEN llCaSivu = -1.
 
 IF llOk THEN 
-RUN Inv/nnpura3 (INPUT CustNum,
+RUN Inv/nnpura3.p (INPUT CustNum,
              INPUT pvm1,
              INPUT pvm2,
              INPUT tilak,

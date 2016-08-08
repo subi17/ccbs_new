@@ -162,7 +162,7 @@ REPEAT with frame valinta:
                IF LOOKUP(FRAME-FIELD,"liInvType1,liInvType2") > 0
                THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Invoice",  /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName*/
                                        "InvType", /* FieldName */
                                        "Report", /* GroupCode */
                                  OUTPUT lcCode).
@@ -178,7 +178,7 @@ REPEAT with frame valinta:
                ELSE IF LOOKUP(FRAME-FIELD,"xState1,xState2") > 0
                THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "Invoice",  /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName*/
                                        "PrintState", /* FieldName */
                                        "Report", /* GroupCode */
                                  OUTPUT lcCode).

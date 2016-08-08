@@ -624,7 +624,7 @@ BROWSE:
                     FRAME-FIELD = "lcDoc1"
                  THEN DO:
 
-                    RUN Help/h-tmscodes(INPUT "Doc1",    /* TableName */
+                    RUN Help/h-tmscodes.p(INPUT "Doc1",    /* TableName */
                                          "SummaryGroup",   /* FieldName */
                                          "Printing",  /* GroupCode */
                                    OUTPUT lcCode).

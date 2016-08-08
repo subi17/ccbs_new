@@ -584,7 +584,7 @@ PROCEDURE local-UPDATE-record:
                   FRAME-FIELD = "ParamType"
                THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "FuncRunParam", /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "FuncRunParam", /* TableName */
                                        "ParamType",   /* FieldName */
                                        "FuncRun",   /* GroupCode */
                                  OUTPUT lcCode).
@@ -602,7 +602,7 @@ PROCEDURE local-UPDATE-record:
                   FRAME-FIELD = "DefaultValue"
                THEN DO:
 
-                  RUN Help/h-tmscodes(INPUT "FuncRunParam", /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "FuncRunParam", /* TableName */
                                        FuncRunParam.ParamName,   /* FieldName */
                                        "FuncRun",   /* GroupCode */
                                  OUTPUT lcCode).

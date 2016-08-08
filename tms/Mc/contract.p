@@ -985,7 +985,7 @@ PROCEDURE local-UPDATE-record:
                FRAME-FIELD = "ContrType"
             THEN DO:
 
-               RUN Help/h-tmscodes(INPUT "Contract",    /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "Contract",    /* TableName */
                                     "ContrType",   /* FieldName */
                                     "Commission",  /* GroupCode */
                               OUTPUT lcCode).

@@ -82,7 +82,7 @@ DO WHILE TRUE:
    END.
 
    ELSE IF FRAME-INDEX EQ 8 THEN DO:
-       RUN Help/custserv(CustNum) /* Customer's services */.
+       RUN Mm/custserv(CustNum) /* Customer's services */.
    END.
 
    ELSE IF FRAME-INDEX EQ 9 THEN DO:

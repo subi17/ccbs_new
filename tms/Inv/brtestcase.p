@@ -761,7 +761,7 @@ PROCEDURE local-UPDATE-record:
                FRAME-FIELD = "RelationalOperator"
             THEN DO:
 
-               RUN Help/h-tmscodes(INPUT "BRTestCase", /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "BRTestCase", /* TableName */
                                     "RelationalOperator",   /* FieldName */
                                     "BRTest",   /* GroupCode */
                               OUTPUT lcCode).

@@ -674,7 +674,7 @@ PROCEDURE local-UPDATE-record:
             THEN DO:
 
                IF FRAME-FIELD = "DBState" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "DBConfig",     /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "DBConfig",     /* TableName */
                                        "DBState",  /* FieldName */
                                        "DBConfig",     /* GroupCode */
                                 OUTPUT lcCode).

@@ -624,7 +624,7 @@ PROCEDURE local-UPDATE-record:
             THEN DO:
 
                IF FRAME-FIELD = "RowType" THEN DO:
-                  RUN Help/h-tmscodes(INPUT "ReportConfRow", 
+                  RUN Help/h-tmscodes.p(INPUT "ReportConfRow", 
                                        "RowType", 
                                        ?, 
                                  OUTPUT lcCode).
