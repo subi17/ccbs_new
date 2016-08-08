@@ -171,7 +171,7 @@ FOR EACH ttInput NO-LOCK:
       NO-LOCK NO-ERROR.
       IF NOT AVAIL MsRequest OR Order.OrderType EQ 3 THEN DO:
   
-         RUN Mc/ordersender.p(MNPProcess.OrderId,
+         RUN Gwy/ordersender.p(MNPProcess.OrderId,
                          OUTPUT liOrderQty).        
          
       END.

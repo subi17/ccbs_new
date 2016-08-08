@@ -41,7 +41,7 @@
 {Syst/testpaa.i} 
 katun = "ari".
 
-{Func/tmsparam.i2}
+{Func/tmsparam2.i}
 {Inv/billrund.i NEW}
 {Func/faccper.i}
 {Mc/lib/tokenlib.i}

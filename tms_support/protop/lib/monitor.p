@@ -205,7 +205,7 @@ procedure mon-load:
    *
    */
 
-  run lib/protop-cfg.p.
+  run tms_support/protop/lib/protop-cfg.p.
 
 
   /* load alert configuration

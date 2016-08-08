@@ -15,8 +15,8 @@ gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
-{tariffconfig.i}
-{tariffcons.i}
+{tms_support/utilities/newtariff/tariffconfig.i}
+{tms_support/utilities/newtariff/tariffcons.i}
 
 DEFINE BUFFER bCTServPac  FOR CTServPac.
 DEFINE BUFFER bCTServEl   FOR CTServEl.
