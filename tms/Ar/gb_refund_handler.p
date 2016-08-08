@@ -112,6 +112,7 @@ REPEAT:
    RUN pReadFileData.
 
    OUTPUT STREAM sLog CLOSE.
+   OUTPUT STREAM sResponse CLOSE.
    fMove2TransDir(lcInputFile, "", lcGBProcessedDir).
    IF SESSION:BATCH AND lcInputFile NE "" THEN
       fBatchLog("FINISH", lcInputFile).
