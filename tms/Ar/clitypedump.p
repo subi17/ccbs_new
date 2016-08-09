@@ -11,7 +11,7 @@
 DEF VAR lcOutFile AS CHAR NO-UNDO.
 
 ASSIGN lcOutFile = "/mnt/qss/subscription_types/ypi31_clitype_" + 
-                   STRING(TODAY,"99999999").
+                   STRING(TODAY,"99999999") + ".csv".
 
 OUTPUT TO VALUE(lcOutFile).
    FOR EACH clitype NO-LOCK:
