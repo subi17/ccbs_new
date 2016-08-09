@@ -4,7 +4,8 @@
 			"/tmsrpc_xfera": [ "dextra", {
 				"check-local": "\"disable\"",
 				"min-procs": "1",
-				"max-procs": "5"
+				"max-procs": "5",
+				"kill-signal": "10"
 			}],			
 			"server.username": "\"tmsrpc\"",
 			"server.groupname": "\"tmsrpc\"",
@@ -19,7 +20,8 @@
 			"/tmsrpc_xfera": [ "heat", {
 				"check-local": "\"disable\"",
 				"min-procs": "1",
-				"max-procs": "2"
+				"max-procs": "2",
+				"kill-signal": "10"
 			}],			
 			"server.username": "\"tmsrpc\"",
 			"server.groupname": "\"tmsrpc\"",
@@ -34,17 +36,20 @@
 			"/topup": [ "topup", {
 				"check-local": "\"disable\"",
 				"min-procs": "1",
-				"max-procs": "2"
+				"max-procs": "2",
+				"kill-signal": "10"
 			}],
 			"/viptool": [ "viptool", {
 				"check-local": "\"disable\"",
 				"min-procs": "1",
-				"max-procs": "2"
+				"max-procs": "2",
+				"kill-signal": "10"
 			}],
 			"/cctool": [ "cctool", {
 				"check-local": "\"disable\"",
 				"min-procs": "1",
-				"max-procs": "2"
+				"max-procs": "2",
+				"kill-signal": "10"
 			}],				
 			"server.username": "\"tmsrpc\"",
 			"server.groupname": "\"tmsrpc\"",
@@ -59,7 +64,8 @@
 			"/mnp": [ "mnp", {
 				"check-local": "\"disable\"",
 				"min-procs": "1",
-				"max-procs": "2"
+				"max-procs": "2",
+				"kill-signal": "10"
 			}],			
 			"server.username": "\"tmsrpc\"",
 			"server.groupname": "\"tmsrpc\"",
@@ -74,7 +80,8 @@
 			"/selfservice": [ "selfservice", {
 				"check-local": "\"disable\"",
 				"min-procs": "1",
-				"max-procs": "6"
+				"max-procs": "6",
+				"kill-signal": "10"
 			}],			
 			"server.username": "\"tmsrpc\"",
 			"server.groupname": "\"tmsrpc\"",
