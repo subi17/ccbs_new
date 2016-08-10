@@ -2298,6 +2298,7 @@ PROCEDURE pContractTermination:
       
       IF DayCampaign.DCType EQ "5" THEN DO: 
          ldPrice = fAmtUnBilledFFItem(MsRequest.MsSeq,
+                                      MsOwner.CustNum,
                                       ldtActDate,
                                       lcDCEvent,
                                       DCCLI.PerContractID,    
@@ -2560,7 +2561,7 @@ PROCEDURE pContractTermination:
                ASSIGN liEndPeriodPostpone = fPer2PerAdd(liEndPeriod,1)
                       ldtActDatePostpone  = ADD-INTERVAL(ldtActDate,1,"months").
             ELSE 
-               ASSIGN liEndPeriodPostpone = liEndPeriod.
+               ASSIGN liEndPeriodPostpone = liEndPeriod
                       ldtActDatePostpone  = ldtActDate.
 
             ASSIGN SingleFee.BillPeriod  = liEndPeriodPostpone
