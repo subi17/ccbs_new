@@ -112,6 +112,7 @@ REPEAT:
    RUN pReadFileData.
 
    OUTPUT STREAM sLog CLOSE.
+   OUTPUT STREAM sResponse CLOSE.
    fMove2TransDir(lcInputFile, "", lcGBProcessedDir).
    IF SESSION:BATCH AND lcInputFile NE "" THEN
       fBatchLog("FINISH", lcInputFile).
@@ -141,6 +142,7 @@ PROCEDURE pReadFileData:
    DEF VAR lcOutLine AS CHAR NO-UNDO.
    DEF VAR lcLogLine AS CHAR NO-UNDO.
    DEF VAR lcMSISDN AS CHAR NO-UNDO.
+   DEF VAR lcInternalMSISDN AS CHAR NO-UNDO.
    DEF VAR lcCorrId AS CHAR NO-UNDO.
    DEF VAR lcTimeInfo AS CHAR NO-UNDO.
    DEF VAR lcAmount AS CHAR NO-UNDO.
@@ -194,7 +196,14 @@ PROCEDURE pReadFileData:
 
       ldeAmount = DECIMAL(lcAmount).
 
-      lcErr = fProcessGBEntry(lcMSISDN,
+       /*Filter 34 out for TMS internal handling. Specification says that
+        the 34 is added in all cases.*/
+       lcInternalMSISDN = lcMSISDN.
+       IF lcInternalMSISDN BEGINS "34" THEN DO:
+          lcInternalMSISDN = SUBSTRING(lcInternalMSISDN, 3).
+       END.
+
+      lcErr = fProcessGBEntry(lcInternalMSISDN,
                               lcCorrId,
                               lcTimeInfo,
                               lcCurrentPeriod,
