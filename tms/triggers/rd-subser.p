@@ -3,12 +3,6 @@ TRIGGER PROCEDURE FOR REPLICATION-DELETE OF SubSer.
 {HPD/HPDConst.i}
 {Syst/tmsconst.i}
 
-FIND SubSer_new EXCLUSIVE-LOCK  WHERE
-     SubSer_new.MsSeq = Subser.MsSeq AND
-     Subser_new.ServCom = Subser.ServCom AND
-     Subser_new.SSdate = Subser.SSdate NO-ERROR.
-IF AVAIL Subser_new THEN DELETE Subser_new.
-
 &IF {&SUBSER_DELETE_TRIGGER_ACTIVE} &THEN
 
 IF NEW SubSer
