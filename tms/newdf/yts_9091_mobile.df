@@ -1,0 +1,7 @@
+ADD FIELD "TariffActTS" OF "TermMobSub" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "TariffActTS"
+  DECIMALS 5
+  COLUMN-LABEL "TariffActTS"
+  ORDER 860

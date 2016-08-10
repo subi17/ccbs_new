@@ -1,0 +1,2 @@
+UPDATE FIELD "TariffActTS" OF "MobSub"
+  DECIMALS 5
