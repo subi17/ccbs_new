@@ -714,6 +714,11 @@ PROCEDURE pFinalize:
 
    FIND FIRST MSOwner WHERE
               MSOwner.MsSeq   = Mobsub.MsSeq AND
+              MSOwner.TsBeg   = Mobsub.TariffActTS NO-LOCK NO-ERROR.
+   
+   IF NOT AVAIL MSOwner THEN
+   FIND FIRST MSOwner WHERE
+              MSOwner.MsSeq   = Mobsub.MsSeq AND
               MSOwner.TsEnd  >= 99999999 NO-LOCK NO-ERROR.
    IF NOT AVAILABLE MsOwner THEN DO:
       fReqError("Timestamp history missing").
