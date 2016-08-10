@@ -322,8 +322,10 @@ PROCEDURE pPrintInvoices:
    IF lcRunMode = "test" AND llgFuncRunPDF THEN DO:
       FIND LAST bFRProcess NO-LOCK WHERE
                 bFRProcess.FRConfigID = liFRConfigID AND
-                bFRProcess.FRExecID   = liFRExecID NO-ERROR.
-      IF AVAILABLE bFRProcess AND bFRProcess.FRProcessID = liFRProcessID THEN
+                bFRProcess.FRExecID   = liFRExecID   AND
+                LOOKUP(bFRProcess.RunState,"Initialized,Running") > 0 AND
+                bFRProcess.FRProcessID <> liFRProcessID NO-ERROR.
+      IF NOT AVAILABLE bFRProcess THEN
          RUN funcrun_invpdf_creation (INPUT liFRExecID) NO-ERROR.
    END.
 
