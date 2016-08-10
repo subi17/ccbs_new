@@ -396,8 +396,8 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
                 lcPenaltyBillCode     = FixedFee.BillCode + "ENDBS".
       ELSE IF FixedFee.TFBank = {&TF_BANK_CETELEM} THEN
          ASSIGN lcTFRVTermBillCode    = "RVTERMBCF"
-                liFooterConf1         = 0
-                liFooterConf2         = 0
+                liFooterConf1         = 575
+                liFooterConf2         = 576
                 lcPenaltyBillCode     = FixedFee.BillCode + "ENDBC".
       ELSE NEXT.
 
