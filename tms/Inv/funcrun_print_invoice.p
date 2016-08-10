@@ -318,6 +318,7 @@ PROCEDURE pPrintInvoices:
          ActionLog.ActionTS     = fMakeTS().
    END.
 
+   /*YTS-9144 changes done to send message to activemq only if it is a last process of the execution*/
    IF lcRunMode = "test" AND llgFuncRunPDF THEN DO:
       FIND LAST bFRProcess NO-LOCK WHERE
                 bFRProcess.FRConfigID = liFRConfigID AND
