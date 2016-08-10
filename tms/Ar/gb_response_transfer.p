@@ -1,5 +1,6 @@
 /*Program moves google billing related logs and output files to target 
 directories.*/
+{commpaa.i}
 {gbilling.i}
 {ftransdir.i}
 {eventlog.i}
@@ -7,6 +8,7 @@ DEF VAR lcInputFile AS CHAR NO-UNDO.
 DEF VAR lcFileName AS CHAR NO-UNDO.
 DEF STREAM sFile.
 
+gcBrand = "1".
 fInitGBParameters().
 
 INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcGBSpoolDir).
@@ -14,7 +16,7 @@ REPEAT:
 
    IMPORT STREAM sFile UNFORMATTED lcFileName.
 
-   lcInputFile = lcGBInDir + lcFileName.
+   lcInputFile = lcGBSpoolDir + lcFileName.
 
    IF SEARCH(lcInputFile) NE ? THEN DO:
 
