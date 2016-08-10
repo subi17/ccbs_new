@@ -104,6 +104,8 @@ FOR EACH Invoice WHERE
          Invoice.InvDate >= ldaDateFrom AND
          Invoice.InvAmt  >= 0 NO-LOCK:
 
+   IF Invoice.InvCfg[1] THEN NEXT INVOICE_LOOP.
+
    IF MONTH(Invoice.InvDate) NE liMonth THEN NEXT INVOICE_LOOP.
 
    liBillPeriod = YEAR(Invoice.ToDate) * 100 + MONTH(Invoice.ToDate).

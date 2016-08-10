@@ -464,8 +464,11 @@ IF llCustomerChanged THEN DO:
          RETURN appl_err("La cuenta bancaria no puede estar en blanco").
     ELSE DO:
       IF LENGTH(lcBankAccount) = 0 OR LENGTH(lcBankAccount) = 24 THEN DO:
+         IF customer.BankAcct = lcBankAccount
+         THEN llBankAcctChange = FALSE.
+         ELSE llBankAcctChange = TRUE.
+
          customer.BankAcct = lcBankAccount.
-         llBankAcctChange = TRUE.
       END.
       ELSE
          RETURN appl_err("Incorrect bank account length").
