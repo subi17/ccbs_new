@@ -2,22 +2,6 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF DCCLI OLD BUFFER oldDCCLI.
 
 {HPD/HPDConst.i}
    
-IF NEW(DCCLI) THEN DO:
-   IF DCCLI.percontractid > 0 AND
-      NOT CAN-FIND(FIRST DCCLI_new NO-LOCK WHERE
-                         DCCLI_new.percontractid = DCCLI.percontractid) THEN DO:
-      CREATE DCCLI_new.
-      BUFFER-COPY DCCLI TO DCCLI_new.
-   END.
-END.
-ELSE IF DCCLI.PerContractID > 0 THEN DO:
-   FIND DCCLI_new EXCLUSIVE-LOCK WHERE
-        DCCLI_new.percontractid = DCCLI.percontractid no-error.
-   IF AVAIL DCCLI_new THEN
-      BUFFER-COPY DCCLI TO DCCLI_new NO-ERROR.
-END.
-
-
 &IF {&DCCLI_WRITE_TRIGGER_ACTIVE} &THEN
 
 {triggers/check_mobsub.i DCCLI MsSeq}
