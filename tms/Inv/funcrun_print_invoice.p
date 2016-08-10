@@ -24,6 +24,7 @@ DEF VAR liInvType        AS INT  NO-UNDO.
 DEF VAR lcFileType       AS CHAR NO-UNDO.
 DEF VAR liFRProcessID    AS INT  NO-UNDO.
 DEF VAR liFRExecID       AS INT  NO-UNDO.
+DEF VAR liFRConfigID     AS INT  NO-UNDO.
 DEF VAR lcRunMode        AS CHAR NO-UNDO.
 DEF VAR liUpdateInterval AS INT  NO-UNDO.
 DEF VAR liOrder          AS INT  NO-UNDO.
@@ -43,6 +44,7 @@ DEF VAR llgFuncRunPDF    AS LOG  NO-UNDO.
 
 DEF STREAM sLog.
 
+DEFINE BUFFER bFRProcess FOR FuncRunProcess.
 
 FUNCTION fErrorLog RETURNS LOGIC
    (iiFRExecID AS INT,
@@ -170,7 +172,8 @@ PROCEDURE pInitialize:
       ASSIGN 
          lcPrintHouse = FuncRunResult.CharParam
          llLast       = (FuncRunResult.DecParam = 1)
-         liOrder      = FuncRunProcess.ProcSeq.
+         liOrder      = FuncRunProcess.ProcSeq
+         liFRConfigID = FuncRunProcess.FRConfigID.
    END.      
              
    /* no paper invoice */
@@ -315,9 +318,14 @@ PROCEDURE pPrintInvoices:
          ActionLog.ActionTS     = fMakeTS().
    END.
 
-   IF lcRunMode = "test" AND llgFuncRunPDF THEN 
-      RUN funcrun_invpdf_creation (INPUT liFRExecID) NO-ERROR.
-   
+   IF lcRunMode = "test" AND llgFuncRunPDF THEN DO:
+      FIND LAST bFRProcess NO-LOCK WHERE
+                bFRProcess.FRConfigID = liFRConfigID AND
+                bFRProcess.FRExecID   = liFRExecID NO-ERROR.
+      IF AVAILABLE bFRProcess AND bFRProcess.FRProcessID = liFRProcessID THEN
+         RUN funcrun_invpdf_creation (INPUT liFRExecID) NO-ERROR.
+   END.
+
    IF RETURN-VALUE BEGINS "ERROR:" THEN DO TRANS:
       /* send also mail if printing was interrupted */
       RUN pSendErrorMail(RETURN-VALUE).
