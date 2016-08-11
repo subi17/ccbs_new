@@ -8,6 +8,7 @@
 
 FUNCTION fAmtUnBilledFFItem RETURNS DECIMAL 
          (INPUT iMsSeq          AS INT,
+          INPUT iCustNum        AS INT,
           INPUT idtEnd          AS DATE,
           INPUT icCalcObj       AS CHAR,
           INPUT iiPerContractID AS INT,
@@ -30,6 +31,7 @@ FUNCTION fAmtUnBilledFFItem RETURNS DECIMAL
             FixedFee.Brand       = gcBrand                 AND 
             FixedFee.HostTable   = "MobSub"                AND
             FixedFee.KeyValue    = STRING(iMsSeq)          AND
+            FixedFee.CustNum     = iCustNum                AND
             FixedFee.CalcObj     = icCalcObj               AND
             FixedFee.SourceTable = "DCCLI"                 AND
             FixedFee.SourceKey   = STRING(iiPerContractID) AND

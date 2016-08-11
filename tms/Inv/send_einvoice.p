@@ -82,6 +82,8 @@ FOR EACH Invoice WHERE
          Invoice.InvAmt  >= 0 AND
          Invoice.DelType  = {&INV_DEL_TYPE_EMAIL} NO-LOCK:
 
+   IF Invoice.InvCfg[1] THEN NEXT INVOICE_LOOP.
+
    IF MONTH(Invoice.InvDate) NE liMonth THEN NEXT INVOICE_LOOP.
 
    liBillPeriod = YEAR(Invoice.ToDate) * 100 + MONTH(Invoice.ToDate).

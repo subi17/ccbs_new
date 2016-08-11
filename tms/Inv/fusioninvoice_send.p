@@ -118,6 +118,8 @@ FOR EACH FusionInvoice EXCLUSIVE-LOCK WHERE
          NEXT.
       END.
 
+      IF Invoice.InvCfg[1] THEN NEXT.
+
       FIND InvoiceTargetGroup NO-LOCK WHERE
            InvoiceTargetGroup.ITGroupID = Invoice.ITGroupID NO-ERROR.
       IF NOT AVAIL InvoiceTargetGroup THEN DO:
