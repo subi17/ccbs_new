@@ -2342,7 +2342,19 @@ PROCEDURE pContractTermination:
                                           DayCampaign.TermFeeCalc).
 
          lcTermFeeCalc = "¤¤¤" + STRING(ldCoefficient).
-         IF ldCoefficient > 0 THEN llCreatePenaltyFee = TRUE.
+         IF ldCoefficient > 0 THEN DO:
+            llCreatePenaltyFee = TRUE.
+            IF DCCLI.PerContractID > 0 THEN
+               ASSIGN
+                  lcFeeSourceTable   = "DCCLI"
+                  lcFeeSourceKey     = STRING(DCCLI.PerContractID).
+
+            FOR FIRST SubsTerminal NO-LOCK WHERE   
+                      SubsTerminal.MsSeq         EQ DCCLI.MSSeq AND
+                      SubsTerminal.PerContractID EQ DCCLI.PerContractID:
+               liOrderId = SubsTerminal.OrderId.
+            END.
+         END.
          ldPrice = DCCLI.Amount.
 
          /* YPR-2515 */
