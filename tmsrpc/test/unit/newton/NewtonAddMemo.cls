@@ -1,32 +1,33 @@
-// Depends = rpcmethods/order__create.p
-
-USING Progress.Lang.*.
+/*
+   Depends = newton/src/newton__add_memo.p,Func/timestamp.i,fcgi_agent/xmlrpc/xmlrpc_access.i
+*/
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
-CLASS unit.tmsrpc.NewtonAddMemo INHERITS gearbox.unit.ProcTmsrpcTest:
+CLASS unit.newton.NewtonAddMemo INHERITS gearbox.unit.ProcTmsrpcTest:
 
    METHOD PUBLIC OVERRIDE CHAR getInstanceName():
       RETURN "newton".
    END METHOD.
 
-   METHOD PUBLIC VOID testForUser ():
-      DEF VAR lcStruct AS CHAR NO-UNDO.
-      lcStruct = addStruct().
-      addString(lcStruct, "Reference", "refnum").
-      addString(lcStruct, "Type", "type").
-      addInt(lcStruct, "Custnum", 1).
-      addString(lcStruct, "Creator", "Bob").
-      addString(lcStruct, "Title", "Title").
-      addString(lcStruct, "Content", "Content").
-      addInt(lcStruct, "Priority", 1).
+   METHOD PUBLIC VOID testMemoCreate ():
 
-      runRpcMethod("newton__add_memo").
+      addString("Reference", "refnum").
+      addString("Type", "type").
+      addInt("Custnum", 1).
+      addString("Creator", "Bob").
+      addString("Title", "Title").
+      addString("Content", "Content").
+      addInt("Priority", 1).
+
+      runRpcMethod("newton.add_memo").
+
+      assertSuccess().
 
       FIND FIRST Memo NO-LOCK NO-ERROR.
 
       assert(AVAILABLE Memo, "Memo is not created").
-      
+
    END METHOD.
 
-END CLASS. 
+END CLASS.
