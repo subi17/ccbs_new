@@ -1235,6 +1235,9 @@ PROCEDURE pCheckFixedFee:
                FFItem.Billed = FALSE:
       
          CASE ttCriteria.Setting:
+            WHEN "TF=FinancedByCetelemBank" THEN IF
+               NOT LOOKUP(FixedFee.FinancedResult,{&TF_STATUSES_BANK}) > 0 OR
+               FixedFee.TFBank <> "0225" THEN NEXT.
             WHEN "TF=FinancedByUNOEBank" THEN IF
                NOT LOOKUP(FixedFee.FinancedResult,{&TF_STATUSES_BANK}) > 0 OR
                FixedFee.TFBank <> "0049" THEN NEXT.
@@ -1266,6 +1269,9 @@ PROCEDURE pCheckFixedFee:
                FFItem.Billed = FALSE:
       
          CASE ttCriteria.Setting:
+             WHEN "TF=FinancedByCetelemBank" THEN IF
+               NOT LOOKUP(FixedFee.FinancedResult,{&TF_STATUSES_BANK}) > 0 OR
+               FixedFee.TFBank <> "0225" THEN NEXT.
             WHEN "TF=FinancedByUNOEBank" THEN IF
                NOT LOOKUP(FixedFee.FinancedResult,{&TF_STATUSES_BANK}) > 0 OR
                FixedFee.TFBank <> "0049" THEN NEXT.
