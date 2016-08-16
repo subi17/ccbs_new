@@ -47,6 +47,7 @@ DEF VAR liTime2Pause  AS INTEGER   NO-UNDO.
 DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lNowSeconds   AS INTEGER   NO-UNDO.
+DEF VAR lcAddrConfDirNotify     AS CHAR NO-UNDO.
 
 DEF STREAM sEmail.
 
