@@ -38,9 +38,12 @@ DEF VAR liLoop                  AS INT  NO-UNDO.
 DEF VAR lcName                  AS CHAR NO-UNDO. 
 DEF VAR lcMonthName             AS CHAR NO-UNDO. 
 DEF VAR lcMiYoigoLink           AS CHAR NO-UNDO.
+DEF VAR lcAddrConfDirNotify     AS CHAR NO-UNDO.
+DEF VAR lcLatestEmailFileNotify AS CHAR NO-UNDO.
 /* DEF VAR lcQ25Note               AS CHAR NO-UNDO. Removed by YOT-4050 */
 
 DEF STREAM sEmail.
+DEF STREAM sNotify.
 
 FUNCTION fPickMonthName RETURN CHARACTER
    (iiMonth AS INT,
@@ -54,6 +57,31 @@ FUNCTION fPickMonthName RETURN CHARACTER
    RETURN lcMonth.
 END FUNCTION.
 
+FUNCTION fNotify RETURN CHARACTER
+   (lcType AS CHAR):
+   DEF VAR lcMailSubj AS CHAR NO-UNDO.
+   ASSIGN lcMailSubj = xMailSubj
+          lcAddrConfDirNotify = lcAddrConfDir + "emailinvoicenotify.email".
+   GetRecipients(lcAddrConfDirNotify).
+   
+   ASSIGN xMailSubj  = lcType + " invoice " + lcMailSubj + " This is your electronic invoice".
+   
+   ASSIGN lcLatestEmailFileNotify = lcEmailFile + "_" + STRING(Customer.CustNum) +
+                                    "_" + "Notify_" + STRING(TODAY,"999999") + "_" +
+                                    STRING(TIME) + ".html"
+          lcLatestEmailFileNotify = fEPLFileName(lcLatestEmailFileNotify).
+   OUTPUT STREAM sNotify TO VALUE(lcLatestEmailFileNotify).
+   PUT STREAM sNotify UNFORMATTED  xMailSubj SKIP(1).
+   PUT STREAM sNotify UNFORMATTED lcEmailReplacedText SKIP.
+   OUTPUT STREAM sNotify CLOSE.
+
+   SendMaileInvoice(lcEmailReplacedText,"","").
+   IF lcTransDir > "" THEN
+      fTransDir(lcLatestEmailFileNotify,
+                ".html",
+                lcTransDir).
+   xMailSubj = lcMailSubj.
+END FUNCTION.
 
 FIND MSRequest WHERE 
      MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
@@ -80,7 +108,8 @@ FOR EACH Invoice WHERE
          Invoice.InvType  = 1 AND
          Invoice.InvDate >= ldaDateFrom AND
          Invoice.InvAmt  >= 0 AND
-         Invoice.DelType  = {&INV_DEL_TYPE_EMAIL} NO-LOCK:
+         Invoice.DelType  = {&INV_DEL_TYPE_EMAIL} NO-LOCK
+   BREAK BY Invoice.InvNum:
 
    IF Invoice.InvCfg[1] THEN NEXT INVOICE_LOOP.
 
@@ -130,14 +159,18 @@ FOR EACH Invoice WHERE
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#MiYoigoLINK",lcMiYoigoLink)
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#EMAIL",xMailFrom)
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#AMOUNT", 
-          REPLACE(TRIM(STRING(Invoice.InvAmt,"->>>>>>9.99")),".",lcSep))
-          xMailAddr = Customer.Email.
-
+          REPLACE(TRIM(STRING(Invoice.InvAmt,"->>>>>>9.99")),".",lcSep)).
+   /*Notification for the First AND Last Invoice will be sent to a specific group as part of YOT-4037*/
+   IF FIRST-OF(Invoice.InvNum) THEN fNotify("First").
+   ELSE IF LAST-OF(Invoice.InvNum) THEN fNotify("Last").
+   
+   xMailAddr = Customer.Email.
+   
    OUTPUT STREAM sEmail TO VALUE(lcLatestEmailFile).
    PUT STREAM sEmail UNFORMATTED xMailSubj SKIP(1).
    PUT STREAM sEmail UNFORMATTED lcEmailReplacedText SKIP.
    OUTPUT STREAM sEmail CLOSE.
-
+   
    /* Send the email */
    SendMaileInvoice(lcEmailReplacedText,"","").
 
