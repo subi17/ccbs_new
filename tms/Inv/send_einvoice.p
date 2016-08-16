@@ -109,7 +109,7 @@ FOR EACH Invoice WHERE
          Invoice.InvDate >= ldaDateFrom AND
          Invoice.InvAmt  >= 0 AND
          Invoice.DelType  = {&INV_DEL_TYPE_EMAIL} NO-LOCK
-   BREAK BY Invoice.InvNum:
+   BREAK BY Invoice.InvType:
 
    IF Invoice.InvCfg[1] THEN NEXT INVOICE_LOOP.
 
@@ -161,8 +161,8 @@ FOR EACH Invoice WHERE
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#AMOUNT", 
           REPLACE(TRIM(STRING(Invoice.InvAmt,"->>>>>>9.99")),".",lcSep)).
    /*Notification for the First AND Last Invoice will be sent to a specific group as part of YOT-4037*/
-   IF FIRST-OF(Invoice.InvNum) THEN fNotify("First").
-   ELSE IF LAST-OF(Invoice.InvNum) THEN fNotify("Last").
+   IF FIRST-OF(Invoice.InvType) THEN fNotify("First").
+   ELSE IF LAST-OF(Invoice.InvType) THEN fNotify("Last").
    
    xMailAddr = Customer.Email.
    
