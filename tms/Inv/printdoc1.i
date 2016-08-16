@@ -13,7 +13,6 @@
 {customer_address.i}
 {fdestcountry.i}
 {tmsconst.i}
-{callquery.i}
 {ftaxdata.i}
 {fbundle.i}
 {q25functions.i}
@@ -29,7 +28,6 @@ DEF VAR lcLastError AS CHAR  NO-UNDO.
 DEF VAR lcTransDir  AS CHAR  NO-UNDO.
 DEF VAR lcFileExt   AS CHAR  NO-UNDO.
 DEF VAR liPCnt      AS INT   NO-UNDO.
-DEF VAR llgPostPay  AS LOG   NO-UNDO.
 DEF VAR lcErrFile   AS CHAR  NO-UNDO. 
 DEF VAR lcConfDir   AS CHAR  NO-UNDO. 
 DEF VAR ldAmt       AS DEC   NO-UNDO.
@@ -46,12 +44,24 @@ DEF VAR lcSesNum      AS CHAR NO-UNDO.
 DEF VAR lcNewLine     AS CHAR NO-UNDO.
 DEF VAR ldMinInvAmt   AS DEC  NO-UNDO.
 DEF VAR lcMinInvAmt   AS CHAR NO-UNDO. 
-DEF VAR lcTaxZone     AS CHAR NO-UNDO.
 DEF VAR lcBIName      AS CHAR NO-UNDO.
 DEF VAR lcTipoName    AS CHAR NO-UNDO.
 DEF VAR lcCTName      AS CHAR NO-UNDO.
-DEF VAR tthCDR         AS HANDLE NO-UNDO.
+DEF VAR ghttCall       AS HANDLE NO-UNDO.
 DEF VAR lcBundleCLITypes  AS CHAR NO-UNDO.
+DEF VAR lcFusionCLITypes   AS CHAR NO-UNDO.
+
+lcFusionCLITypes = fCParamC("FUSION_SUBS_TYPE").
+
+DEFINE VARIABLE objDBConn AS CLASS Syst.CDRConnect NO-UNDO.
+
+DEFINE VARIABLE gcCallQuery AS CHARACTER
+   INITIAL "MobCDR.InvCust = &1 AND MobCDR.InvSeq = &2 AND MobCDR.DateST >= &3 AND MobCDR.DateST <= &4"
+   NO-UNDO.
+
+DEFINE TEMP-TABLE ttExcludedRow NO-UNDO
+   FIELD Rowid AS ROWID
+   INDEX Rowid Rowid.
 
 DEF TEMP-TABLE ttCall NO-UNDO LIKE MobCDR
    FIELD CDRTable      AS CHAR
@@ -142,12 +152,66 @@ DEF TEMP-TABLE ttData NO-UNDO
    FIELD DataSum  AS DEC
    INDEX BIName BIName.
 
+DEFINE TEMP-TABLE ttBillItemAndGroup NO-UNDO
+   FIELD BillCode        AS CHARACTER
+   FIELD BiGroup         AS CHARACTER
+   FIELD GroupOrder      AS INTEGER
+   FIELD PremiumBillCode AS LOGICAL INITIAL FALSE
+   FIELD GBBillCode      AS LOGICAL INITIAL FALSE
+   INDEX BillCode IS PRIMARY UNIQUE BillCode.
+
+DEFINE TEMP-TABLE ttMSOwner NO-UNDO
+   FIELD Type     AS INTEGER    
+   FIELD TSBegin  AS DECIMAL
+   FIELD TSEnd    AS DECIMAL
+   FIELD PayType  AS LOGICAL
+   FIELD CLIEvent AS CHARACTER
+   FIELD InvCust  AS INTEGER
+   FIELD CLIType  AS CHARACTER
+   FIELD FusionCLIType AS LOGICAL INITIAL FALSE
+   INDEX Type Type InvCust TSBegin TSEnd. 
+
 DEF BUFFER bInv FOR Invoice.
 DEF BUFFER bttRow FOR ttRow.
 
-tthCDR = TEMP-TABLE ttCall:HANDLE.
+ghttCall = BUFFER ttCall:HANDLE.
 
 lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
+
+FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
+   
+   DEFINE VARIABLE liGroupOrder AS INTEGER   NO-UNDO.
+   
+   FOR EACH BillItem FIELDS (Brand BillCode BIGroup) NO-LOCK WHERE
+      BillItem.Brand = gcBrand
+      BREAK BY BillItem.BIGroup:
+      
+      IF FIRST-OF(BillItem.BIGroup)
+      THEN DO:
+         liGroupOrder = 0.
+         FOR BItemGroup FIELDS (Brand BIGroup InvoiceOrder) NO-LOCK WHERE
+            BItemGroup.Brand   = gcBrand AND
+            BItemGroup.BIGroup = BillItem.BIGroup:
+
+            liGroupOrder = BItemGroup.InvoiceOrder.
+         END.
+      END.
+
+      CREATE ttBillItemAndGroup.
+      ASSIGN
+         ttBillItemAndGroup.BillCode        = BillItem.BillCode
+         ttBillItemAndGroup.BIGroup         = BillItem.BIGroup
+         ttBillItemAndGroup.PremiumBillCode = TRUE WHEN BillItem.BIGroup = "6"
+         ttBillItemAndGroup.GBBillCode      = TRUE WHEN BillItem.BIGroup = {&BITEM_GRP_GB}
+         ttBillItemAndGroup.GroupOrder      = liGroupOrder
+         
+         .
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.
+
 
 FUNCTION fHeadTxt RETURNS CHARACTER
    (iNbr AS INT,
@@ -599,29 +663,120 @@ PROCEDURE pGetInvoiceHeaderData:
    
 END PROCEDURE.
 
+
+PROCEDURE pttMSOwner:
+
+   DEFINE INPUT  PARAMETER iiMSSeq                  AS INTEGER NO-UNDO.
+   DEFINE INPUT  PARAMETER iiCustNum                AS INTEGER NO-UNDO.
+   DEFINE INPUT  PARAMETER ideFirstCall             AS DECIMAL NO-UNDO.
+   DEFINE INPUT  PARAMETER ideFromInvoice           AS DECIMAL NO-UNDO.
+   DEFINE INPUT  PARAMETER ideToInvoice             AS DECIMAL NO-UNDO.
+   DEFINE OUTPUT PARAMETER olShouldCheckTermination AS LOGICAL NO-UNDO.
+   DEFINE OUTPUT PARAMETER olPostPreDetected        AS LOGICAL NO-UNDO.
+
+
+   DEFINE VARIABLE llHasBeenPre AS LOGICAL INITIAL FALSE NO-UNDO.
+   DEFINE VARIABLE llFirst      AS LOGICAL INITIAL TRUE  NO-UNDO.
+   DEFINE VARIABLE ldeFirst     AS DECIMAL               NO-UNDO.
+
+   ASSIGN
+      olShouldCheckTermination = FALSE
+      olPostPreDetected        = FALSE
+      ldeFirst                 = fSecOffSet(ideFirstCall,-1)
+      .
+
+
+   FOR EACH MSOwner FIELDS (MSSeq TSBegin TSEnd PayType CLIType CLIEvent TariffBundle) NO-LOCK USE-INDEX MSSeq WHERE
+      MSOwner.MSSeq = iiMSSeq:
+         
+      IF MSOwner.TSEnd < MSOwner.TSBegin 
+      THEN NEXT.  
+
+      IF llFirst AND MSOwner.InvCust = iiCustNum
+      THEN DO:
+         CREATE ttMSOwner.
+         ASSIGN
+            llFirst           = FALSE
+            ttMSOwner.Type    = 1
+            ttMSOwner.CLIType = IF MsOwner.TariffBundle > ""
+                                THEN MsOwner.TariffBundle
+                                ELSE MsOwner.CLIType 
+            .
+      END.
+
+      IF MSOwner.TSBegin > ideToInvoice
+      THEN NEXT.
+      
+      IF MSOwner.TSEnd < ldeFirst 
+      THEN LEAVE.
+
+      IF olShouldCheckTermination = FALSE AND
+         MsOwner.TsEnd >= ideFirstCall    AND
+         MsOwner.TsEnd <= ideToInvoice
+      THEN olShouldCheckTermination = TRUE.
+
+      IF olPostPreDetected = FALSE
+      THEN DO:
+         IF llHasBeenPre = FALSE AND MSOwner.PayType
+         THEN llHasBeenPre = TRUE.
+
+         ELSE IF llHasBeenPre AND MSOwner.PayType = FALSE  
+         THEN olPostPreDetected = TRUE.
+      END.
+
+      /* We won't store is TSEnd is equal to ldeFirst as
+         that time is special time used only for making
+         post to pre detection work correctly */ 
+      IF MSOwner.TSEnd > ldeFirst 
+      THEN DO:
+         CREATE ttMSOwner.
+         ASSIGN
+            ttMSOwner.Type          = 2
+            ttMSOwner.TSBegin       = MSOwner.TSBegin
+            ttMSOwner.TSEnd         = MSOwner.TSEnd
+            ttMSOwner.PayType       = MSOwner.PayType
+            ttMSOwner.CLIEvent      = MSOwner.CLIEvent
+            ttMSOwner.InvCust       = MSOwner.InvCust
+            /* Special handling to display the CLIType name        */
+            /* as Bundle name for IPL or FLAT TARIFF subscriptions */
+            ttMSOwner.CLIType       = IF LOOKUP(MSOwner.CLIType,lcBundleCLITypes) > 0
+                                      THEN MSOwner.TariffBundle
+                                      ELSE MsOwner.CLIType
+            .
+            
+            IF ttMSOwner.CLIEvent = "iSS" AND
+               LOOKUP(MsOwner.CLIType,lcFusionCLITypes) > 0
+            THEN ttMSOwner.FusionCLIType = TRUE.
+      END.
+   END.
+
+END PROCEDURE.
+
+
 PROCEDURE pGetSubInvoiceHeaderData:
 
    DEF VAR liCount            AS INT  NO-UNDO.
    DEF VAR ldaOwnerDate       AS DATE NO-UNDO.
    DEF VAR liOwnerTime        AS INT  NO-UNDO.
-   DEF VAR lcFusionCLITypes   AS CHAR NO-UNDO.
    DEF VAR ldPeriodFrom       AS DEC  NO-UNDO.
    DEF VAR ldPeriodTo         AS DEC  NO-UNDO.
    DEF VAR lcGroupCode        AS CHAR NO-UNDO.
    DEF VAR llPTFinancedByBank AS LOG  NO-UNDO.
    DEF VAR llRVFinancedByBank AS LOG  NO-UNDO.
    DEF VAR liQ25Phase         AS INT  NO-UNDO.
+   
+   DEFINE VARIABLE llShouldCheckTermination AS LOGICAL NO-UNDO.
+   DEFINE VARIABLE llPostPreDetected        AS LOGICAL NO-UNDO.
+   DEFINE VARIABLE ldeActStamp              AS DECIMAL NO-UNDO.
+   DEFINE VARIABLE lliSTR                   AS LOGICAL NO-UNDO.
 
    DEF BUFFER UserCustomer    FOR Customer.
    DEF BUFFER bServiceLimit   FOR ServiceLimit.
    DEF BUFFER bMServiceLimit  FOR MServiceLimit.
-   DEF BUFFER bMsOwner        FOR MsOwner.
-
-   DEF BUFFER bType FOR CLIType.
-   DEF BUFFER bReq  FOR MsRequest.
 
    EMPTY TEMP-TABLE ttSub.
    EMPTY TEMP-TABLE ttCLIType.
+   EMPTY TEMP-TABLE ttMSOwner.
           
    FOR EACH SubInvoice OF Invoice NO-LOCK:
 
@@ -640,11 +795,15 @@ PROCEDURE pGetSubInvoiceHeaderData:
                                               BUFFER UserCustomer).
       END.
 
-      IF CAN-FIND(FIRST MsOwner WHERE
-                        Msowner.Brand  = gcBrand        AND
-                        MsOwner.CLI    = SubInvoice.CLI AND
-                        MsOwner.TsEnd >= ldFromPer      AND
-                        MsOwner.TsEnd <= ldToPer)
+      RUN pttMSOwner(INPUT  SubInvoice.MSSeq,
+                     INPUT  Customer.CustNum,
+                     INPUT  ldFromPer,
+                     INPUT  ldInvoiceFromPer,
+                     INPUT  ldToPer,
+                     OUTPUT llShouldCheckTermination,
+                     OUTPUT llPostPreDetected).
+
+      IF llShouldCheckTermination
       THEN DO:
          /* subscription has been terminated during billing period */
          FIND FIRST MsRequest WHERE
@@ -656,114 +815,92 @@ PROCEDURE pGetSubInvoiceHeaderData:
 
          IF AVAILABLE MsRequest THEN DO:
 
+            ldeActStamp = MsRequest.ActStamp.
+
             IF NOT ttInvoice.PostPoned AND
-               NOT CAN-FIND(FIRST bReq WHERE
-                              bReq.MsSeq     = SubInvoice.MsSeq    AND
-                              bReq.ReqType   = 82                  AND
-                              bReq.ReqStat   = 2                   AND
-                              bReq.ActStamp >= ldFromPer           AND
-                              bReq.ActStamp <= ldToPer             AND
-                              bReq.ActStamp >  MsRequest.ActStamp) THEN
+               NOT CAN-FIND(FIRST MsRequest WHERE
+                              MsRequest.MsSeq     = SubInvoice.MsSeq    AND
+                              MsRequest.ReqType   = 82                  AND
+                              MsRequest.ReqStat   = 2                   AND
+                              MsRequest.ActStamp  >  MsRequest.ActStamp AND
+                              MsRequest.ActStamp <= ldToPer) THEN
                FOR FIRST SingleFee WHERE
-                         SingleFee.Brand    = gcBrand                  AND
-                         SingleFee.CustNum  = SubInvoice.CustNum       AND
-                         SingleFee.KeyValue = STRING(SubInvoice.MsSeq) AND
-                     NOT SingleFee.Billed                              NO-LOCK:
+                         SingleFee.Brand     = gcBrand                  AND
+                         SingleFee.CustNum   = SubInvoice.CustNum       AND
+                         SingleFee.HostTable = "MobSub"                 AND
+                         SingleFee.KeyValue  = STRING(SubInvoice.MsSeq) AND
+                         SingleFee.Billed    = FALSE NO-LOCK:
                   ASSIGN ttInvoice.PostPoned = YES.
                END.
 
             ttSub.MessageType   = "13".   
          END. 
          
-         /* stc during billing period, from post to pre  */
-          FOR FIRST MsRequest NO-LOCK WHERE
-                    MsRequest.MsSeq     = SubInvoice.MsSeq AND
-                    MsRequest.ReqType   = 0                AND
-                    MsRequest.ReqStat   = 2                AND
-                    MsRequest.ActStamp >= ldFromPer        AND
-                    MsRequest.ActStamp <= ldToPer,
-              FIRST CLIType NO-LOCK WHERE
-                    CLIType.Brand   = gcBrand AND
-                    CLIType.CLIType = MsRequest.ReqCParam1,
-              FIRST bType NO-LOCK WHERE
-                    bType.Brand = gcBrand AND
-                    bType.CLIType = MsRequest.ReqCParam2:
-    
-             IF CLIType.PayType = 1 AND bType.PayType = 2 THEN ttSub.MessageType = "15".
-          END.
-      
+         IF llPostPreDetected
+         THEN ttSub.MessageType = "15".
       END.
     
       /* if specifications on cli level wanted -> check cli data */
       IF Invoice.InvType NE 3 AND Invoice.InvType NE 4 THEN DO:
 
-         ASSIGN ldPeriodFrom = ldFromPer
-                ldPeriodTo   = ldToPer
-                liCount      = 0
-                lcGroupCode  = "".
+         ASSIGN ldPeriodFrom       = ldFromPer
+                ldPeriodTo         = ldToPer
+                liCount            = 0
+                lcGroupCode        = ""
+                lliSTR             = FALSE
+                .
 
          /* Check immediate STC */
-         FIND FIRST bMsOwner NO-LOCK WHERE
-                    bMsOwner.MsSeq   = SubInvoice.MsSeq AND
-                    bMsOwner.TsBeg  >= ldInvoiceFromPer AND
-                    bMsOwner.TsBeg  <= ldToPer         AND
-                    bMSOwner.InvCust = Customer.CustNum AND
-                    bMsOwner.CLIEvent BEGINS "iS" NO-ERROR.
-         IF AVAIL bMsOwner THEN DO:
-            fSplitTS(bMsOwner.TsBeg,OUTPUT ldaOwnerDate,OUTPUT liOwnerTime).
+         FIND FIRST ttMSOwner WHERE
+            ttMsOwner.Type   = 2                 AND
+            ttMSOwner.InvCust = Customer.CustNum AND
+            ttMsOwner.TsBeg  >= ldInvoiceFromPer AND
+            ttMsOwner.TsBeg  <= ldToPer          AND
+            ttMsOwner.CLIEvent BEGINS "iS" NO-ERROR.
 
-            IF bMsOwner.CLIEvent = "iSS" THEN DO:
-               lcFusionCLITypes = fCParamC("FUSION_SUBS_TYPE").
+         IF AVAIL ttMsOwner THEN DO:
+            
+            IF ttMSOwner.CLIEvent = "iS"
+            THEN lliSTR = TRUE.
+            
+            fSplitTS(ttMsOwner.TsBeg,OUTPUT ldaOwnerDate,OUTPUT liOwnerTime).
+
+            IF ttMsOwner.CLIEvent = "iSS" THEN DO:
                IF Invoice.DelType = {&INV_DEL_TYPE_FUSION_EMAIL} OR
                   Invoice.DelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING}
                THEN DO:
-                  IF LOOKUP(bMsOwner.CLIType,lcFusionCLITypes) > 0 THEN
-                     ASSIGN ldPeriodFrom = bMsOwner.TsBeg
-                            ldPeriodTo   = ldToPer.
-                  ELSE
-                     ASSIGN ldPeriodFrom = ldFromPer
-                            ldPeriodTo   = fOffSet(bMsOwner.TsBeg,-1).
+                  IF ttMSOwner.FusionCLIType
+                  THEN ldPeriodFrom = ttMsOwner.TsBeg.
+                  ELSE ldPeriodTo   = fSecOffSet(ttMsOwner.TsBeg,-1).
                END.
                ELSE DO:
-                  IF LOOKUP(bMsOwner.CLIType,lcFusionCLITypes) > 0 THEN
-                     ASSIGN ldPeriodFrom = ldFromPer
-                            ldPeriodTo   = fOffSet(bMsOwner.TsBeg,-1).
-                  ELSE
-                     ASSIGN ldPeriodFrom = bMsOwner.TsBeg
-                            ldPeriodTo   = ldToPer.
+                  IF ttMSOwner.FusionCLIType
+                  THEN ldPeriodTo   = fSecOffSet(ttMsOwner.TsBeg,-1).
+                  ELSE ldPeriodFrom = ttMsOwner.TsBeg.
                END.
             END.
          END.
 
          /* get clis that are involved in this invoice */
-         FOR EACH MSOwner NO-LOCK USE-INDEX InvCust WHERE
-                  MSOwner.InvCust = Customer.CustNum AND
-                  MsOwner.CLI     = SubInvoice.CLI   AND
-                  MsOwner.MsSeq   = SubInvoice.MsSeq AND
-                  MsOwner.TsBeg  <= ldPeriodTo       AND
-                  MsOwner.TsEnd  >= ldPeriodFrom     AND
-                  MsOwner.PayType = FALSE :
+         FOR EACH ttMSOwner WHERE
+            ttMSOwner.Type  = 2                  AND
+            ttMSOwner.InvCust = Customer.CustNum AND
+            ttMsOwner.TsBeg  <= ldPeriodTo       AND
+            ttMsOwner.TsEnd  >= ldPeriodFrom     AND
+            ttMsOwner.PayType = FALSE:
 
             liCount = liCount + 1.
 
-            CREATE ttCLIType.
-                   ttCLIType.CLIType = MSOwner.CLIType.
-
-            /* Special handling to display the CLIType name        */
-            /* as Bundle name for IPL or FLAT TARIFF subscriptions */
-            IF LOOKUP(ttCLIType.CLIType,lcBundleCLITypes) > 0 THEN
-               ttCLIType.CLIType = MsOwner.TariffBundle.
-
-            IF ttCLIType.CTName = "" OR ttCLIType.CTName = ? THEN
-               ttCLIType.CTName = fLocalItemName("CLIType",
-                                                 ttCLIType.CLIType,
-                                                 liLanguage,
-                                                 Invoice.ToDate).
-
+            CREATE ttCLIType.            
             ASSIGN
-               ttCLIType.CLI    = SubInvoice.CLI
-               ttCLIType.TsBeg  = MsOwner.TsBeg
-               ttCLIType.TsEnd  = MsOwner.TsEnd.
+               ttCLIType.CLIType = ttMSOwner.CLIType
+               ttCLIType.CTName  = fLocalItemName("CLIType",
+                                                  ttCLIType.CLIType,
+                                                  liLanguage,
+                                                  Invoice.ToDate)
+               ttCLIType.CLI     = SubInvoice.CLI
+               ttCLIType.TsBeg   = ttMsOwner.TsBeg
+               ttCLIType.TsEnd   = ttMsOwner.TsEnd.
 
             FIND FIRST CLIType WHERE 
                        CLIType.Brand   = gcBrand AND
@@ -831,8 +968,9 @@ PROCEDURE pGetSubInvoiceHeaderData:
                       ttSub.CTName  = ttCLIType.CTName.
 
             /* Immediate STC logic non-fusion to non-fusion */
-            IF AVAIL bMsOwner AND bMsOwner.CLIEvent = "iS" AND
-               ttSub.OldCLIType = "" AND ttSub.CLIType <> ttCLIType.CLIType
+            IF lliSTR                AND
+               ttSub.OldCLIType = "" AND
+               ttSub.CLIType <> ttCLIType.CLIType
             THEN DO:
                ASSIGN ttSub.OldCLIType = ttCLIType.CLIType
                       ttSub.OldCTName  = ttCLIType.CTName.
@@ -840,24 +978,20 @@ PROCEDURE pGetSubInvoiceHeaderData:
                   ttSub.TariffActDate = "".
                ELSE
                   ttSub.TariffActDate = STRING(ldaOwnerDate).
-            END. /* IF AVAIL bMsOwner AND bMsOwner.CLIEvent = "iS" AND */
+            END.
 
          END.
 
          /* If there is no MsOwner found for billing period
-            then find latest MsOwner */
+            then use latest MsOwner */
          IF liCount = 0 THEN
-            FOR FIRST MSOwner NO-LOCK USE-INDEX MsSeq WHERE
-                      MSOwner.MsSeq = SubInvoice.MsSeq AND
-                      MSOwner.InvCust = Customer.CustNum:
-
-               ttSub.CLIType = (IF MsOwner.TariffBundle > "" THEN
-                                MsOwner.TariffBundle ELSE MsOwner.CLIType).
-
-               ttSub.CTName = fLocalItemName("CLIType",
-                                             ttSub.CLIType,
-                                             liLanguage,
-                                             Invoice.ToDate).
+            FOR FIRST ttMSOwner WHERE ttMSOwner.Type = 1:
+               ASSIGN
+                  ttSub.CLIType = MsOwner.CLIType
+                  ttSub.CTName = fLocalItemName("CLIType",
+                                                ttSub.CLIType,
+                                                liLanguage,
+                                                Invoice.ToDate).
             END.
       END.
 
@@ -931,6 +1065,16 @@ PROCEDURE pGetSubInvoiceHeaderData:
    
 END PROCEDURE.
 
+FUNCTION fAddToExcludedRow RETURNS LOGICAL
+   (irid AS ROWID):
+   
+   CREATE ttExcludedRow.
+   ttExcludedRow.Rowid = irid.
+   
+   RETURN FALSE.   
+      
+END FUNCTION.
+
 PROCEDURE pGetInvoiceRowData:
 
    DEF VAR liRowOrder   AS INT  NO-UNDO.
@@ -942,10 +1086,13 @@ PROCEDURE pGetInvoiceRowData:
    DEF VAR lcRowName    AS CHAR NO-UNDO. 
    DEF VAR lcExcludedRows AS CHAR NO-UNDO.
    DEF VAR ldeQ25DiscAmt  AS DEC  NO-UNDO.
+   DEFINE VARIABLE llTemp AS LOGICAL NO-UNDO.
 
    EMPTY TEMP-TABLE ttRow.
    
    FOR EACH SubInvoice OF Invoice NO-LOCK:
+   
+      EMPTY TEMP-TABLE ttExcludedRow.
    
       ASSIGN
          ldVatTot   = 0
@@ -973,23 +1120,25 @@ PROCEDURE pGetInvoiceRowData:
                   InvRow.VatPerc = 0 AND
                   LOOKUP(InvRow.BillCode, 
                          {&Q25_RVTERM_RENEWAL_DISCOUNTS}) > 0:
+            
+            
             ASSIGN 
                ldeQ25DiscAmt = ldeQ25DiscAmt + InvRow.Amt
-               lcExcludedRows = lcExcludedRows + "," + STRING(ROWID(InvRow)).
+               llTemp        = fAddToExcludedRow(ROWID(InvRow)).
          END.
 
          lcExcludedRows = LEFT-TRIM(lcExcludedRows,",").
 
-         FOR EACH InvRow NO-LOCK WHERE
+         FOR FIRST InvRow NO-LOCK WHERE
                   InvRow.Invnum = SubInvoice.InvNum AND
                   InvRow.SubInvNum = SubInvoice.SubInvNum AND
                   InvRow.VatPerc = 0 AND
                   InvRow.Amt EQ (ldeQ25DiscAmt * -1) AND
                   LOOKUP(InvRow.BillCode, {&TF_RVTERM_BILLCODES}) > 0:
-            lcExcludedRows = lcExcludedRows + "," + STRING(ROWID(InvRow)).
-            LEAVE.
+            fAddToExcludedRow(ROWID(InvRow)).
          END.         
-         IF NOT AVAIL InvRow THEN lcExcludedRows = "".
+         IF NOT AVAIL InvRow
+         THEN EMPTY TEMP-TABLE ttExcludedRow.
       END.
 
       /* handle rows in percentage order so that total tax amounts
@@ -997,13 +1146,9 @@ PROCEDURE pGetInvoiceRowData:
       FOR EACH InvRow OF Invoice NO-LOCK WHERE
                InvRow.SubInvNum = SubInvoice.SubInvNum AND
                NOT (InvRow.RowType = 5 AND InvRow.Amt = 0),
-         FIRST BillItem NO-LOCK WHERE
-               BillItem.Brand    = gcBrand AND
-               BillItem.BillCode = InvRow.BillCode,
-         FIRST BItemGroup NO-LOCK WHERE
-               BItemGroup.Brand = gcBrand AND
-               BItemGroup.BIGroup = BillItem.BIGroup
-      BREAK BY InvRow.VatPerc
+         FIRST ttBillItemAndGroup NO-LOCK WHERE
+               ttBillItemAndGroup.BillCode = InvRow.BillCode
+         BREAK BY InvRow.VatPerc
             BY ABS(InvRow.Amt):
 
          /* Term Penalty amount counted in the same for each loop */
@@ -1015,22 +1160,22 @@ PROCEDURE pGetInvoiceRowData:
 
          ASSIGN ldVatAmt = 0.
 
-         IF BillItem.BIGroup EQ "44" THEN /* Google purchase */
-            ttInvoice.GBValue = ttInvoice.GBValue + InvRow.Amt.
-         
-         IF BillItem.BIGroup EQ "45" THEN /* Google refund */
-            ttInvoice.GBDiscValue = ttInvoice.GBDiscValue + InvRow.Amt.
-         
-         IF BillItem.BIGroup = "33" THEN DO:
+         CASE ttBillItemAndGroup.BIGroup:
+            WHEN "44" /* Google purchase */
+            THEN ttInvoice.GBValue = ttInvoice.GBValue + InvRow.Amt.
+            WHEN "45" /* Google refund */
+            THEN ttInvoice.GBDiscValue = ttInvoice.GBDiscValue + InvRow.Amt.
+            WHEN "33"
+            THEN DO:
+               IF CAN-FIND(FIRST ttExcludedRow WHERE ttExcludedRow.rowid = ROWID(InvRow))
+               THEN NEXT.
+   
+               IF InvRow.BillCode BEGINS "PAYTERM" OR
+                  InvRow.BillCode BEGINS "RVTERM"
+               THEN ttInvoice.InstallmentAmt = ttInvoice.InstallmentAmt + InvRow.Amt.               
+            END.
+         END CASE.
 
-            IF lcExcludedRows > "" AND
-               LOOKUP(STRING((ROWID(InvRow))),lcExcludedRows) > 0 THEN NEXT.
-
-            IF InvRow.BillCode BEGINS "PAYTERM" OR
-               InvRow.BillCode BEGINS "RVTERM" THEN
-               ttInvoice.InstallmentAmt = ttInvoice.InstallmentAmt + InvRow.Amt.
-         END.
-         
          IF InvRow.RowType EQ 9 AND
             LOOKUP(InvRow.BillCode, {&INSTALLMENT_DISCOUNT_BILLCODES}) > 0 THEN
             ttInvoice.InstallmentDiscAmt = ttInvoice.InstallmentDiscAmt + 
@@ -1064,7 +1209,7 @@ PROCEDURE pGetInvoiceRowData:
                                     THEN InvRow.ToDate
                                     ELSE Invoice.ToDate)).
 
-         lcRowCode = STRING(BItemGroup.BiGroup) + lcRowName.
+         lcRowCode = STRING(ttBillItemAndGroup.BiGroup) + lcRowName.
 
          FIND FIRST ttRow WHERE
                     ttRow.SubInvNum = InvRow.SubInvNum AND
@@ -1075,11 +1220,11 @@ PROCEDURE pGetInvoiceRowData:
             CREATE ttRow.
             ASSIGN 
                ttRow.SubInvNum  = InvRow.SubInvNum
-               ttRow.RowGroup   = BItemGroup.BIGroup
+               ttRow.RowGroup   = ttBillItemAndGroup.BIGroup
                ttRow.RowCode    = lcRowCode
                liRowOrder       = liRowOrder + 2
                ttRow.RowOrder   = liRowOrder
-               ttRow.GroupOrder = BItemGroup.InvoiceOrder.
+               ttRow.GroupOrder = ttBillItemAndGroup.GroupOrder.
          END.
 
          ASSIGN 
@@ -1090,7 +1235,7 @@ PROCEDURE pGetInvoiceRowData:
             ttRow.RowData       = ttRow.RowData + InvRow.DataAmt
             ttRow.RowQty        = ttRow.RowQty + InvRow.Qty
             ttRow.RowDur        = ttRow.RowDur + InvRow.Min
-            ttRow.RowBillCode   = BillItem.BillCode
+            ttRow.RowBillCode   = ttBillItemAndGroup.BillCode
             ttRow.RowName       = lcRowName
             ttRow.RowToDate     = InvRow.ToDate.
       END.
@@ -1142,9 +1287,10 @@ PROCEDURE pGetInvoiceRowData:
 END PROCEDURE.
 
 /* note: should be called only after pGetInvoiceRowData */
-PROCEDURE pGetInvoiceVatData:
+PROCEDURE pWriteInvoiceVatData:
 
-   EMPTY TEMP-TABLE ttVat.
+   DEFINE INPUT  PARAMETER ihXML AS HANDLE NO-UNDO.
+
    DEF VAR ldeExclSum AS DEC NO-UNDO. 
 
    /* vat amount */
@@ -1166,22 +1312,36 @@ PROCEDURE pGetInvoiceVatData:
    /* exclude installment amount from 0% VAT row YDR-185 */
    /* exclude Google Billing amount from 0% VAT row YPR-3890*/
    ldeExclSum = ttInvoice.InstallmentAmt +
-                       ttInvoice.PenaltyAmt +
-                       ttInvoice.InstallmentDiscAmt +
-                       ttInvoice.GBValue +
-                       ttInvoice.GBDiscValue.
+                ttInvoice.PenaltyAmt +
+                ttInvoice.InstallmentDiscAmt +
+                ttInvoice.GBValue +
+                ttInvoice.GBDiscValue.
 
    IF ldeExclSum NE 0 THEN
-      FOR FIRST ttVat WHERE ttVat.VatPerc = 0 EXCLUSIVE-LOCK:
+      FOR FIRST ttVat WHERE ttVat.VatPerc = 0:
          IF ttVat.VatBasis EQ ldeExclSum THEN DELETE ttVat.
          ELSE ttVat.VATBasis = ttVAT.VATBasis - ldeExclSum.
       END.
 
-   /* taxzone */
-   lcTaxZone = fLocalItemName("TaxZone",
-                              Invoice.TaxZone,
-                              liLanguage,
-                              Invoice.ToDate).
+   FOR EACH ttVat NO-LOCK:
+      ihXML:START-ELEMENT("TaxDetails").
+      ihXML:WRITE-DATA-ELEMENT("TaxZone",fLocalItemName("TaxZone",
+                                                        Invoice.TaxZone,
+                                                        liLanguage,
+                                                        Invoice.ToDate)).
+      ihXML:WRITE-DATA-ELEMENT("TaxPercent",fDispXMLDecimal(ttVat.VatPerc)).
+      ihXML:WRITE-DATA-ELEMENT("AmountExclTax",
+                               fDispXMLDecimal(ttVat.VatBasis)).
+      ihXML:WRITE-DATA-ELEMENT("TaxAmount",
+                               fDispXMLDecimal(ttVat.VatAmt)).
+      ihXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttVat.VatBasis +
+                                                        ttVat.VatAmt)).
+      ihXML:END-ELEMENT("TaxDetails").
+   END.
+   
+   FINALLY:
+      EMPTY TEMP-TABLE ttVat.
+   END FINALLY.
 
 END PROCEDURE.
 
@@ -1295,48 +1455,88 @@ END PROCEDURE.
 
 PROCEDURE pCollectCDR:
 
-   DEF INPUT PARAMETER iiInvSeq AS INT NO-UNDO.
+   DEFINE INPUT PARAMETER iiInvSeq             AS INTEGER NO-UNDO.
+   DEFINE OUTPUT PARAMETER olPremiumNumberText AS LOGICAL NO-UNDO.
+   DEFINE OUTPUT PARAMETER olGBText            AS LOGICAL NO-UNDO.
 
-   DEF VAR liErrorCodeOut AS INT  NO-UNDO.
+   ASSIGN
+      olPremiumNumberText = FALSE
+      olGBText            = FALSE
+      .
 
-   DEF BUFFER bCallInvSeq FOR InvSeq.
+   DEFINE BUFFER bCallInvSeq FOR InvSeq.
+   
+   DEFINE VARIABLE lcQuery AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liFound AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lii     AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE llOK    AS LOGICAL   NO-UNDO.
    
    EMPTY TEMP-TABLE ttCall.
   
    FIND FIRST bCallInvSeq WHERE bCallInvSeq.InvSeq = iiInvSeq NO-LOCK NO-ERROR.
    IF NOT AVAILABLE bCallInvSeq THEN RETURN. 
    
-   fMobCDRCollect(INPUT "post",
-                  INPUT gcBrand,
-                  INPUT katun,
-                  INPUT bCallInvSeq.FromDate,   
-                  INPUT bCallInvSeq.ToDate,
-                  INPUT 0,
-                  INPUT "",
-                  INPUT "",
-                  INPUT iiInvSeq,
-                  INPUT 0,
-                  INPUT "",
-                  INPUT "",
-                  INPUT "",
-                  INPUT 0,
-                  INPUT-OUTPUT liErrorCodeOut,
-                  INPUT-OUTPUT tthCDR).
+   objDBConn:mSetQueryHandlesConnectIfNeeded(bCallInvSeq.FromDate,
+                                             bCallInvSeq.ToDate).
 
-   FOR EACH ttCall EXCLUSIVE-LOCK:
-      FIND FIRST BillItem WHERE
-                 BillItem.Brand    = gcBrand AND
-                 BillItem.BillCode = ttCall.BillCode NO-LOCK NO-ERROR.
-      IF AVAIL BillItem THEN DO:
-         FIND FIRST BItemGroup WHERE
-                    BItemGroup.Brand   = gcBrand AND
-                    BItemGroup.BIGroup = ttCall.BIGroup NO-LOCK NO-ERROR.
-         ASSIGN
-            ttCall.GroupOrder = BItemGroup.InvoiceOrder WHEN AVAIL BItemGroup
-            ttCall.BIGroup = BillItem.BIGroup.
+   lcQuery = SUBSTITUTE(gcCallQuery,
+                        STRING(bCallInvSeq.CustNum),
+                        STRING(bCallInvSeq.InvSeq),
+                        STRING(bCallInvSeq.FromDate),
+                        STRING(bCallInvSeq.ToDate)).
+   
+   DO lii = 1 TO objDBConn:liCurrentQueryHandleCount:
+
+      llOK = objDBConn:lhCurrentQueryHandle[lii]:QUERY-PREPARE(lcQuery).
+      
+      IF NOT llOK
+      THEN NEXT.
+
+      objDBConn:lhCurrentQueryHandle[lii]:QUERY-OPEN().
+      
+      DO WHILE TRUE:
+
+         llOK = objDBConn:lhCurrentQueryHandle[lii]:GET-NEXT(NO-LOCK).
+
+         /* Query handle is invalid, no more records, or query is not open */
+         IF llOK = ? OR NOT llOK
+         THEN LEAVE.
+         
+         CREATE ttCall.
+         
+         ghttCall:BUFFER-COPY(objDBConn:lhCurrentQueryHandle[lii]:GET-BUFFER-HANDLE(1)) NO-ERROR.
+         
+         IF ERROR-STATUS:ERROR THEN DELETE ttCall.
+         ELSE DO:
+            FIND ttBillItemAndGroup WHERE ttBillItemAndGroup.BillCode = ttCall.BillCode NO-ERROR.
+            IF AVAILABLE ttBillItemAndGroup
+            THEN DO:
+               ASSIGN
+                  ttCall.GroupOrder = ttBillItemAndGroup.GroupOrder
+                  ttCall.BIGroup    = ttBillItemAndGroup.BIGroup
+                  .
+               IF olPremiumNumberText = FALSE AND
+                  ttBillItemAndGroup.PremiumBillCode
+               THEN olPremiumNumberText = TRUE.
+
+               IF olGBText = FALSE AND
+                  ttBillItemAndGroup.GBBillCode
+               THEN olGBText = TRUE.               
+            END.
+            
+            ASSIGN
+               ttCall.CDRTable = "MobCDR"
+               liFound         = liFound + 1
+               .
+         END.
+         
+         IF liFound >= 99999999
+         THEN LEAVE.
+         
       END.
+
+      objDBConn:lhCurrentQueryHandle[lii]:QUERY-CLOSE().
+
    END.
 
 END PROCEDURE.
-
-

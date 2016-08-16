@@ -251,7 +251,7 @@ FUNCTION fStr2Unix RETURNS CHAR
    def var convert as c no-undo.
    def var i       as i no-undo.
 
-   convert = " ,!,*,^,$,%,&,*,?,(,),\{,\},[,],\",',`,\,~,|,;,&,<,>". 
+   convert = " ,!,*,^,$,%,&,*,?,(,),~{,~},[,],~",',`,\,~,|,;,&,<,>". 
 
    DO i = 1 TO LENGTH(istring):
       IF LOOKUP(SUBSTR(istring,i,1),convert) > 0 THEN
