@@ -26,6 +26,8 @@ DEF VAR xMailError    AS CHAR NO-UNDO.
 /* administrator, errors send TO this address */
 DEF VAR xMailAdmin    AS CHAR NO-UNDO INIT "ari@starnet.fi".
 DEF VAR lcMailHost    AS CHAR NO-UNDO. 
+DEF VAR xSMSRecip     AS CHAR NO-UNDO.
+DEF VAR xSMSAddr      AS CHAR NO-UNDO.
 
 /* get hostname, it must be correct in xMailFrom */
 INPUT THROUGH hostname.
@@ -66,6 +68,32 @@ FUNCTION GetRecipients RETURNS LOGIC
                                      THEN ","
                                      ELSE "") +
                                     xMailRecip.
+        END.
+        INPUT CLOSE.
+    END.
+
+END FUNCTION.
+
+/* get the SMS recipients */
+FUNCTION GetSMSRecipients RETURNS LOGIC
+    (iConfigFile AS CHAR):
+    
+    ASSIGN xSMSRecip = ""
+           xSMSAddr  = "".
+    
+    IF SEARCH(iConfigFile) = ?
+        THEN ASSIGN xMailError = "Config File " + iConfigFile +
+                                 " missing. ".
+    ELSE DO:                   
+        INPUT FROM VALUE(SEARCH(iConfigFile)) NO-ECHO.
+        REPEAT:
+            IMPORT UNFORMATTED xSMSRecip.
+            IF xSMSRecip > "" THEN
+            ASSIGN xSMSAddr = xSMSAddr +
+                               (IF xSMSAddr NE ""
+                                THEN ","
+                                ELSE "") +
+                                xSMSRecip.
         END.
         INPUT CLOSE.
     END.
