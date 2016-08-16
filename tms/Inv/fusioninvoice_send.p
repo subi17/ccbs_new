@@ -34,10 +34,13 @@ DEF VAR liRequest               AS INT NO-UNDO.
 DEF VAR lcLogDir                AS CHAR NO-UNDO. 
 DEF VAR lcReminderSMS           AS CHAR NO-UNDO. 
 DEF VAR lcError                 AS CHAR NO-UNDO. 
-DEF VAR ldeSendTime             AS DEC NO-UNDO. 
+DEF VAR ldeSendTime             AS DEC NO-UNDO.
+DEF VAR lcAddrConfDirNotify     AS CHAR NO-UNDO.
+DEF VAR lcLatestEmailFileNotify AS CHAR NO-UNDO.
 
 DEF STREAM sEmail.
 DEF STREAM sLog.
+DEF STREAM sNotify.
 
 FUNCTION fLog RETURNS LOG
    (iiFusionInvNum AS INT,
@@ -47,6 +50,29 @@ FUNCTION fLog RETURNS LOG
       iiFusionInvNum ";"
       icNote SKIP.
 END.
+
+FUNCTION fNotify RETURN CHARACTER
+   (lcType AS CHAR):
+   DEF VAR lcMailSubj AS CHAR NO-UNDO.
+   ASSIGN lcMailSubj = xMailSubj
+          lcAddrConfDirNotify = lcAddrConfDirNotify + "emailinvoicenotify.email".
+   GetRecipients(lcAddrConfDirNotify).
+   ASSIGN xMailSubj  = lcType + " invoice " + lcMailSubj.
+   ASSIGN lcLatestEmailFileNotify = lcEmailFile + "_" + STRING(Customer.CustNum) +
+                                    "_" + "Notify_" + STRING(TODAY,"999999") + "_" +
+                                    STRING(TIME) + ".html".
+   OUTPUT STREAM sNotify TO VALUE(lcLatestEmailFileNotify).
+   PUT STREAM sNotify UNFORMATTED  xMailSubj SKIP(1).
+   PUT STREAM sNotify UNFORMATTED lcEmailReplacedText SKIP.
+   OUTPUT STREAM sNotify CLOSE.
+   
+   SendMaileInvoice(lcEmailReplacedText,"","").
+   IF lcTransDir > "" THEN
+      fTransDir(lcLatestEmailFileNotify,
+                ".html",
+                lcTransDir).
+   xMailSubj = lcMailSubj.
+END FUNCTION.
 
 FIND MSRequest WHERE 
      MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
@@ -59,7 +85,8 @@ lcMonitor = fGetRequestNagiosToken(MsRequest.Reqtype).
 IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
 /* Email Address Conf File */
-ASSIGN ldaDateFrom   = MsRequest.ReqDtParam1
+ASSIGN lcAddrConfDirNotify = fCParamC("RepConfDir")
+       ldaDateFrom   = MsRequest.ReqDtParam1
        ldaInvDateTo  = fLastDayOfMonth(ldaDateFrom)
        xMailFrom     = fCparam("EIF","EmailFromAddress")
        lcEmailFile   = fCparam("EIF","EmailFile")
@@ -99,7 +126,8 @@ INVOICE_LOOP:
 FOR EACH FusionInvoice EXCLUSIVE-LOCK WHERE
          FusionInvoice.InvDate >= ldaDateFrom AND
          FusionInvoice.InvDate <= ldaInvDateTo AND
-         FusionInvoice.DeliveryState = {&FI_DELIVERY_STATE_NEW}:
+         FusionInvoice.DeliveryState = {&FI_DELIVERY_STATE_NEW}
+    BREAK BY FusionInvoice.DeliveryState:
 
    /* Yoigo or Yoigo+Telefonica customer */
    IF FusionInvoice.InvNum > 0 THEN DO:
@@ -209,8 +237,13 @@ FOR EACH FusionInvoice EXCLUSIVE-LOCK WHERE
                               "_" + STRING(TODAY,"999999") + "_" +
                               STRING(TIME) + ".html"
           lcLatestEmailFile = fUniqueFileName(lcLatestEmailFile,"")
-          xMailAddr = lcEmailAddress
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"'","").
+   
+   /*Notification for the First AND Last Invoice will be sent to a specific people as part of YOT-4037 along WITH the own customer*/
+   IF FIRST-OF(FusionInvoice.DeliveryState) THEN fNotify("Primero").
+   ELSE IF LAST-OF(FusionInvoice.DeliveryState) THEN fNotify("Último").
+
+   xMailAddr = lcEmailAddress.
 
    OUTPUT STREAM sEmail TO VALUE(lcLatestEmailFile).
    PUT STREAM sEmail UNFORMATTED xMailSubj SKIP(1).

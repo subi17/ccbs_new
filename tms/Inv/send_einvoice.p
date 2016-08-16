@@ -64,7 +64,7 @@ FUNCTION fNotify RETURN CHARACTER
           lcAddrConfDirNotify = lcAddrConfDir + "emailinvoicenotify.email".
    GetRecipients(lcAddrConfDirNotify).
    
-   ASSIGN xMailSubj  = lcType + " invoice " + lcMailSubj + " This is your electronic invoice".
+   ASSIGN xMailSubj  = lcType + " invoice " + lcMailSubj.
    
    ASSIGN lcLatestEmailFileNotify = lcEmailFile + "_" + STRING(Customer.CustNum) +
                                     "_" + "Notify_" + STRING(TODAY,"999999") + "_" +
@@ -160,9 +160,10 @@ FOR EACH Invoice WHERE
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#EMAIL",xMailFrom)
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#AMOUNT", 
           REPLACE(TRIM(STRING(Invoice.InvAmt,"->>>>>>9.99")),".",lcSep)).
-   /*Notification for the First AND Last Invoice will be sent to a specific group as part of YOT-4037*/
-   IF FIRST-OF(Invoice.InvType) THEN fNotify("First").
-   ELSE IF LAST-OF(Invoice.InvType) THEN fNotify("Last").
+   
+   /*Notification for the First and Last Invoice will be sent to a specific people as part of YOT-4037 along WITH the own customer*/
+   IF FIRST-OF(Invoice.InvType) THEN fNotify("Primero").
+   ELSE IF LAST-OF(Invoice.InvType) THEN fNotify("Último").
    
    xMailAddr = Customer.Email.
    
