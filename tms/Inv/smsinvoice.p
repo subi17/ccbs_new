@@ -48,7 +48,7 @@ DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lNowSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lcAddrConfDirNotify     AS CHAR NO-UNDO.
-DEF VAR llFirst       AS LOGICAL   NO-UNDO.
+DEF VAR llFirstInv    AS LOGICAL   NO-UNDO.
 
 DEF STREAM sEmail.
 
@@ -64,7 +64,7 @@ FUNCTION fSMSNotify RETURN CHARACTER
          fMakeSchedSMS2(0,
                         ENTRY(i,xSMSAddr,","),
                         44,
-                        lcType + "invoice " + lcSMSReplacedText,
+                        lcType + " Invoice " + lcSMSReplacedText,
                         fMakeTS(),
                         "Fact. Yoigo",
                         STRING(lIniSeconds) + "-" + STRING(lEndSeconds)).
@@ -99,7 +99,8 @@ ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        liStartTime   = TIME
        liStopTime    = 0
        liPauseTime   = 0
-       PauseFlag     = FALSE.
+       PauseFlag     = FALSE
+       llFirstInv    = FALSE.
 
 IF liTime2Pause < 0 THEN liTime2Pause = 0.
 IF liTime2Pause > 3599 THEN liTime2Pause = 3599.  /* 1 Hour */
@@ -125,8 +126,7 @@ FOR EACH Invoice WHERE
          Invoice.Brand    = gcBrand AND
          Invoice.InvType  = 1 AND
          Invoice.InvDate >= ldaDateFrom AND
-         Invoice.InvAmt  >= 0 NO-LOCK
-   BREAK BY Invoice.InvType:
+         Invoice.InvAmt  >= 0 NO-LOCK:
 
    IF Invoice.InvCfg[1] THEN NEXT INVOICE_LOOP.
 
@@ -193,10 +193,10 @@ FOR EACH Invoice WHERE
       lcSMSReplacedText = REPLACE(lcSMSReplacedText,"#DATE",
                           STRING(Invoice.DueDate,"99/99/99")).
       
-      /*Notification for the First and Last Invoice will be sent to a specific people as part of YOT-4037 along WITH the own customer*/
-      IF llFirst = FALSE THEN DO:
-         fSMSNotify("Primero").
-         llFirst = TRUE.
+      /*Notification for the First Invoice will be sent to a specific people as part of YOT-4037 along WITH the own customer*/
+      IF llFirstInv = FALSE THEN DO:
+         fSMSNotify("First").
+         llFirstInv = TRUE.
       END.
       DO TRANS:
          fMakeSchedSMS2(MobSub.CustNum,
@@ -215,9 +215,9 @@ FOR EACH Invoice WHERE
             PauseFlag = (liLoop MOD liSMSCntValue) EQ 0.
       END. /* DO TRANS: */
    END. /* FOR EACH SubInvoice OF Invoice NO-LOCK: */
-   IF LAST-OF(Invoice.InvType) THEN fSMSNotify("Último").
 END. /* FOR EACH Invoice WHERE */
-
+/*Notification for the Last Invoice will be sent to a specific people as part of YOT-4037 along WITH the own customer*/
+fSMSNotify("Last").
 /* Send an email to configure list*/
 IF lcAddrConfDir > "" THEN
    lcAddrConfDir = lcAddrConfDir + "smsinvoice.email".

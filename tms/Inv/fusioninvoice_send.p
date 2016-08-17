@@ -37,7 +37,7 @@ DEF VAR lcError                 AS CHAR NO-UNDO.
 DEF VAR ldeSendTime             AS DEC NO-UNDO.
 DEF VAR lcAddrConfDirNotify     AS CHAR NO-UNDO.
 DEF VAR lcLatestEmailFileNotify AS CHAR NO-UNDO.
-
+DEF VAR llFirstInv              AS LOG  NO-UNDO.
 DEF STREAM sEmail.
 DEF STREAM sLog.
 DEF STREAM sNotify.
@@ -91,7 +91,8 @@ ASSIGN lcAddrConfDirNotify = fCParamC("RepConfDir")
        xMailFrom     = fCparam("EIF","EmailFromAddress")
        lcEmailFile   = fCparam("EIF","EmailFile")
        lcTransDir    = fCParam("EIF","MailArcDir")
-       lcLogDir      = fCParam("EIF","MailLogDir").
+       lcLogDir      = fCParam("EIF","MailLogDir")
+       llFirstInv    = FALSE.
 
 IF lcTransDir EQ ? OR lcTransDir EQ "" OR
    lcLogDir EQ ? OR lcLogDir EQ "" THEN DO:
@@ -126,8 +127,7 @@ INVOICE_LOOP:
 FOR EACH FusionInvoice EXCLUSIVE-LOCK WHERE
          FusionInvoice.InvDate >= ldaDateFrom AND
          FusionInvoice.InvDate <= ldaInvDateTo AND
-         FusionInvoice.DeliveryState = {&FI_DELIVERY_STATE_NEW}
-    BREAK BY FusionInvoice.DeliveryState:
+         FusionInvoice.DeliveryState = {&FI_DELIVERY_STATE_NEW}:
 
    /* Yoigo or Yoigo+Telefonica customer */
    IF FusionInvoice.InvNum > 0 THEN DO:
@@ -239,9 +239,11 @@ FOR EACH FusionInvoice EXCLUSIVE-LOCK WHERE
           lcLatestEmailFile = fUniqueFileName(lcLatestEmailFile,"")
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"'","").
    
-   /*Notification for the First AND Last Invoice will be sent to a specific people as part of YOT-4037 along WITH the own customer*/
-   IF FIRST-OF(FusionInvoice.DeliveryState) THEN fNotify("Primero").
-   ELSE IF LAST-OF(FusionInvoice.DeliveryState) THEN fNotify("Último").
+   /*Notification for the First Invoice will be sent to a specific people as part of YOT-4037 along WITH the own customer*/
+   IF llFirstInv = FALSE THEN DO:
+      fNotify("First").
+      llFirstInv = TRUE.
+   END.
 
    xMailAddr = lcEmailAddress.
 
@@ -266,6 +268,8 @@ FOR EACH FusionInvoice EXCLUSIVE-LOCK WHERE
    IF liLoop MOD 1000 EQ 0 AND
       lcMonitor > "" THEN fKeepAlive(lcMonitor).
 END. /* FOR EACH Invoice WHERE */
+/*Notification for the Last Invoice will be sent to a specific people as part of YOT-4037 along WITH the own customer*/
+fNotify("Last").
 
 OUTPUT STREAM slog CLOSE.
 
