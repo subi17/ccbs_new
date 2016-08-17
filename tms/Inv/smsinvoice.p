@@ -48,6 +48,7 @@ DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lNowSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lcAddrConfDirNotify     AS CHAR NO-UNDO.
+DEF VAR llFirst       AS LOGICAL   NO-UNDO.
 
 DEF STREAM sEmail.
 
@@ -124,8 +125,7 @@ FOR EACH Invoice WHERE
          Invoice.Brand    = gcBrand AND
          Invoice.InvType  = 1 AND
          Invoice.InvDate >= ldaDateFrom AND
-         Invoice.InvAmt  >= 0 NO-LOCK
-   BREAK BY Invoice.InvType:
+         Invoice.InvAmt  >= 0 NO-LOCK:
 
    IF Invoice.InvCfg[1] THEN NEXT INVOICE_LOOP.
 
@@ -193,9 +193,10 @@ FOR EACH Invoice WHERE
                           STRING(Invoice.DueDate,"99/99/99")).
       
       /*Notification for the First and Last Invoice will be sent to a specific people as part of YOT-4037 along WITH the own customer*/
-      IF FIRST-OF(Invoice.InvType) THEN fSMSNotify("Primero").
-      ELSE IF LAST-OF(Invoice.InvType) THEN fSMSNotify("Último").
-      
+      IF llFirst = FALSE THEN DO:
+         fSMSNotify("Primero").
+         llFirst = TRUE.
+      END.
       DO TRANS:
          fMakeSchedSMS2(MobSub.CustNum,
                         MobSub.CLI,
