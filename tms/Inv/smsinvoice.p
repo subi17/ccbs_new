@@ -125,7 +125,8 @@ FOR EACH Invoice WHERE
          Invoice.Brand    = gcBrand AND
          Invoice.InvType  = 1 AND
          Invoice.InvDate >= ldaDateFrom AND
-         Invoice.InvAmt  >= 0 NO-LOCK:
+         Invoice.InvAmt  >= 0 NO-LOCK
+   BREAK BY Invoice.InvType:
 
    IF Invoice.InvCfg[1] THEN NEXT INVOICE_LOOP.
 
@@ -214,6 +215,7 @@ FOR EACH Invoice WHERE
             PauseFlag = (liLoop MOD liSMSCntValue) EQ 0.
       END. /* DO TRANS: */
    END. /* FOR EACH SubInvoice OF Invoice NO-LOCK: */
+   IF LAST-OF(Invoice.InvType) THEN fSMSNotify("Último").
 END. /* FOR EACH Invoice WHERE */
 
 /* Send an email to configure list*/
