@@ -1,0 +1,21 @@
+Type;Language Type;Language;Translation Name
+CONTS2GBMF;1;Spanish;La Infinita 2 GB
+CONTS2GBMF;2;Catalan;La Infinita 2 GB
+CONTS2GBMF;3;Basque;La Infinita 2 GB
+CONTS2GBMF;5;English;La Infinita 2 GB
+CONTS8GBMF;1;Spanish;La Infinita 8 GB
+CONTS8GBMF;2;Catalan;La Infinita 8 GB
+CONTS8GBMF;3;Basque;La Infinita 8 GB
+CONTS8GBMF;5;English;La Infinita 8 GB
+CONTFIXEDMF;1;Spanish;Fixed Line
+CONTFIXEDMF;2;Catalan;Fixed Line
+CONTFIXEDMF;3;Basque;Fixed Line
+CONTFIXEDMF;5;English;Fixed Line
+CONTDSLMF;1;Spanish;ADSL
+CONTDSLMF;2;Catalan;ADSL
+CONTDSLMF;3;Basque;ADSL
+CONTDSLMF;5;English;ADSL
+CONTFIBERMF;1;Spanish;FIBER
+CONTFIBERMF;2;Catalan;FIBER
+CONTFIBERMF;3;Basque;FIBER
+CONTFIBERMF;5;English;FIBER

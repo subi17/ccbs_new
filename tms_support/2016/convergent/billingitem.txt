@@ -1,0 +1,6 @@
+Billing item;Billing item name;Billing item group;Posting account;Tax class;IFS product code;Cost Center
+CONTS2GBMF;La Infinita 2 GB;46;70510100;1;022;SL
+CONTS8GBMF;La Infinita 8 GB;46;70510100;1;022;SL
+CONTFIXEDMF;Fixed Line;46;70510100;1;022;SL
+CONTDSLMF;ADSL;46;70510100;1;022;SL
+CONTFIBERMF;FIBER;46;70510100;1;022;SL

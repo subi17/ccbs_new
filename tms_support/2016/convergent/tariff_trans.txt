@@ -1,0 +1,5 @@
+Type;Language Type;Language;Translation Name
+CONTS2GB;1;Spanish;La Infinita 2 GB
+CONTS2GB;2;Catalan;La Infinita 2 GB
+CONTS2GB;3;Basque;La Infinita 2 GB
+CONTS2GB;5;English;La Infinita 2 GB
