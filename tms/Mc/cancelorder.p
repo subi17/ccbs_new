@@ -130,6 +130,7 @@ IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN DO:
 
    fReleaseImei(Order.OrderId).
 END.
+/* Subscription is not changed according to Orders */
 ELSE IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN DO:
 
    FIND MobSub WHERE
@@ -149,23 +150,18 @@ ELSE IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN DO:
                        12/31/2049).
 END.
 ELSE DO:
-
-   FIND MobSub WHERE
-        MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
-
-   IF NOT AVAIL MobSub THEN RETURN "".
       
    IF Order.InvNum > 0 THEN DO:
 
       lcResult = fCashInvoiceCreditnote(Order.Invnum, "1010").
 
       IF lcResult > "" THEN
-          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                            "MobSub",
-                            STRING(MobSub.MsSeq),
-                            MobSub.Custnum,
-                            "CREDIT NOTE CREATION FAILED",
-                            lcResult). 
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                           "Order",
+                           STRING(Order.OrderId),
+                           Order.Custnum,
+                           "CREDIT NOTE CREATION FAILED",
+                           lcResult).
    END.
 
    IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN DO:
@@ -187,18 +183,21 @@ ELSE DO:
                   OUTPUT lcResult).
 
       IF liReq = 0 THEN DO:
-        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
-                          STRING(MobSub.MsSeq),
-                          MobSub.Custnum,
-                          "RENEWAL REVERTION FAILED",
-                          lcResult).
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                           "Order",
+                           STRING(Order.OrderId),
+                           Order.Custnum,
+                           "RENEWAL REVERTION FAILED",
+                           lcResult).
          RETURN "ERROR:Revert renewal failed:" + lcResult.
+
       END.
    END.
-   ELSE IF (Order.OrderType EQ {&ORDER_TYPE_NEW} OR
-            Order.OrderType EQ {&ORDER_TYPE_MNP}) THEN DO:
+   ELSE IF Order.OrderType EQ {&ORDER_TYPE_NEW} THEN DO:
+      FIND MobSub WHERE
+           MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
 
+      IF NOT AVAIL MobSub THEN RETURN "". /* subscription termination already done */
       fDeleteMsValidation(Order.MsSeq, OUTPUT lcResult).
 
       ASSIGN

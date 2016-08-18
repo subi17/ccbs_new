@@ -22,6 +22,9 @@ DEF BUFFER bOrderDelivery2 FOR orderdelivery.
 DEF BUFFER bFixedFee FOR FixedFee.
 
 DEF VAR lcTFStatus AS CHAR NO-UNDO. 
+DEF VAR liLoop     AS INT NO-UNDO.
+DEF VAR lcFResult  AS CHAR NO-UNDO EXTENT 2 INIT
+   [{&TF_STATUS_HOLD_SENDING},{&TF_STATUS_YOIGO_SUB_TERMINATED}].
    
 lcLogDir = fCParam("TermFinance","LogDir").
 IF NOT lcLogDir > "" THEN RETURN.
@@ -79,125 +82,130 @@ FOR EACH Order NO-LOCK WHERE
    END.
 END.
 
-FF_LOOP:
-FOR EACH FixedFee NO-LOCK WHERE
-         FixedFee.FinancedResult = {&TF_STATUS_HOLD_SENDING},
-   FIRST Order NO-LOCK WHERE
-         Order.Brand = gcBrand AND
-         Order.OrderID = FixedFee.OrderID:
+/* Check both cases TF_STATUS_HOLD_SENDING and TF_STATUS_YOIGO_SUB_TERMINATED */
+DO liLoop = 1 TO EXTENT(lcFResult):
+   FF_LOOP:
+   FOR EACH FixedFee NO-LOCK WHERE
+            FixedFee.FinancedResult = lcFResult[liLoop],
+      FIRST Order NO-LOCK WHERE
+            Order.Brand = gcBrand AND
+            Order.OrderID = FixedFee.OrderID:
 
-   lcTFStatus = "".
+      lcTFStatus = "".
 
-   FOR EACH orderdelivery NO-LOCK WHERE
-            orderdelivery.brand = gcBrand AND
-            orderdelivery.OrderId = Order.OrderId
-         BY orderdelivery.LoTimeStamp DESC:
-      
-      IF LOOKUP(STRING(orderdelivery.LoStatusId),
-               {&DEXTRA_CANCELLED_STATUSES}) > 0 THEN NEXT FF_LOOP.
+      FOR EACH orderdelivery NO-LOCK WHERE
+               orderdelivery.brand = gcBrand AND
+               orderdelivery.OrderId = Order.OrderId
+            BY orderdelivery.LoTimeStamp DESC:
+         
+         IF LOOKUP(STRING(orderdelivery.LoStatusId),
+                  {&DEXTRA_CANCELLED_STATUSES}) > 0 THEN NEXT FF_LOOP.
 
-      IF LOOKUP(STRING(orderdelivery.LoStatusId),"8,12,100") = 0 THEN NEXT.
+         IF LOOKUP(STRING(orderdelivery.LoStatusId),"8,12,100") = 0 THEN NEXT.
 
-      IF orderdelivery.LoStatusId = 12 AND
-         orderdelivery.LoTimeStamp < DATETIME(TODAY - 20,0) THEN DO:
+         IF orderdelivery.LoStatusId = 12 AND
+           (orderdelivery.LoTimeStamp < DATETIME(TODAY - 20,0) OR
+             NOT CAN-FIND(FIRST MobSub WHERE
+                                MobSub.MsSeq EQ Order.MsSeq)) THEN DO:
 
-         IF CAN-FIND(FIRST ActionLog NO-LOCK WHERE
-                           ActionLog.Brand = gcBrand AND
-                           ActionLog.TableName = "Order" AND
-                           ActionLog.KeyValue = STRING(Order.OrderId) AND
-                           ActionLog.ActionID = "LOCancel" AND
-                           ActionLog.ActionStatus = 3) THEN DO:
-            fLogToFile("SKIPPED: Cancellation already handled").
+            IF CAN-FIND(FIRST ActionLog NO-LOCK WHERE
+                              ActionLog.Brand = gcBrand AND
+                              ActionLog.TableName = "Order" AND
+                              ActionLog.KeyValue = STRING(Order.OrderId) AND
+                              ActionLog.ActionID = "LOCancel" AND
+                              ActionLog.ActionStatus = 3) THEN DO:
+               fLogToFile("SKIPPED: Cancellation already handled").
+               NEXT FF_LOOP.
+            END.
+
+            RUN cancelorder.p(Order.OrderId,FALSE).
+            fLogToFile("CANCELLED").
+
+            CREATE ActionLog.
+            ASSIGN 
+               ActionLog.Brand        = gcBrand   
+               ActionLog.TableName    = "Order"
+               ActionLog.KeyValue     = STRING(Order.OrderID)
+               ActionLog.ActionID     = "LOCancel"
+               ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
+                                        MONTH(TODAY)
+               ActionLog.ActionStatus = 3
+               ActionLog.ActionTS     = fMakeTS().
+
+            RELEASE ActionLog.
+
             NEXT FF_LOOP.
          END.
+         ELSE IF FixedFee.FinancedResult EQ {&TF_STATUS_YOIGO_SUB_TERMINATED} THEN NEXT.
+         ELSE IF orderdelivery.LOStatusId EQ 8 AND 
+                 orderDelivery.LoTimeStamp < DATETIME(TODAY - 16,0) THEN DO:
+               
+            FIND FIRST borderdelivery NO-LOCK WHERE
+                       borderdelivery.brand = gcBrand AND
+                       borderdelivery.OrderId = OrderDelivery.OrderId AND
+                       borderdelivery.LoTimeStamp >= OrderDelivery.LoTimeStamp AND
+                      (borderdelivery.LoStatusId = 4000 OR
+                       borderdelivery.LoStatusId = 4030) NO-ERROR.
+            
+            IF NOT AVAIL borderdelivery THEN 
+               lcTFStatus = {&TF_STATUS_YOIGO_LOGISTICS}.
+            ELSE CASE borderdelivery.LoStatusId:
+               WHEN 4000 THEN lcTFStatus = {&TF_STATUS_WAITING_SENDING}.
+               WHEN 4030 THEN lcTFStatus = {&TF_STATUS_YOIGO_LOGISTICS}.
+               OTHERWISE NEXT FF_LOOP.
+            END.
+         END.
+         ELSE IF OrderDelivery.LoStatusId EQ 100 THEN DO:
+            
+            FIND FIRST borderdelivery NO-LOCK WHERE
+                       borderdelivery.brand = gcBrand AND
+                       borderdelivery.OrderId = OrderDelivery.OrderId AND
+                       borderdelivery.LoTimeStamp >= OrderDelivery.LoTimeStamp AND
+                      (borderdelivery.LoStatusId = 3000 OR
+                       borderdelivery.LoStatusId = 3100 OR
+                       borderdelivery.LoStatusId = 3350 OR
+                       borderdelivery.LoStatusId = 900) NO-ERROR.
 
-         RUN cancelorder.p(Order.OrderId,FALSE).
-         fLogToFile("CANCELLED").
+            IF NOT AVAIL borderdelivery THEN DO:
 
-         CREATE ActionLog.
-         ASSIGN 
-            ActionLog.Brand        = gcBrand   
-            ActionLog.TableName    = "Order"
-            ActionLog.KeyValue     = STRING(Order.OrderID)
-            ActionLog.ActionID     = "LOCancel"
-            ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
-                                     MONTH(TODAY)
-            ActionLog.ActionStatus = 3
-            ActionLog.ActionTS     = fMakeTS().
+               IF orderdelivery.LoTimeStamp < DATETIME(TODAY - 20,0) THEN
+                  lcTFStatus = {&TF_STATUS_YOIGO_LOGISTICS}.
+               ELSE NEXT FF_LOOP.
+            END.
+            ELSE CASE borderdelivery.LoStatusId:
+               WHEN 3000 THEN lcTFStatus = {&TF_STATUS_YOIGO_LOGISTICS}.
+               WHEN 3100 THEN DO:
+                  RUN cancelorder.p(Order.OrderId, FALSE).
+                  fLogToFile("CANCELLED").
+                  NEXT FF_LOOP.
+               END.
+               WHEN 3350 OR WHEN 900 THEN DO:
+                  IF CAN-FIND(
+                     FIRST borderdelivery2 NO-LOCK WHERE
+                           borderdelivery2.brand = gcBrand AND
+                           borderdelivery2.OrderId = bOrderDelivery.OrderId AND
+                           borderdelivery2.LoTimeStamp <= bOrderDelivery.LoTimeStamp AND
+                           borderdelivery2.LoStatusId = 4000)
+                  THEN lcTFStatus = {&TF_STATUS_WAITING_SENDING}.
+                  ELSE lcTFStatus = {&TF_STATUS_YOIGO_LOGISTICS}.
+               END.
+               OTHERWISE NEXT FF_LOOP.
+            END.
 
-         RELEASE ActionLog.
+         END.
+         ELSE NEXT FF_LOOP.
+
+         IF lcTFStatus EQ "" THEN NEXT.
+         
+         FIND bFixedFee EXCLUSIVE-LOCK WHERE
+              ROWID(bFixedFee) = ROWID(FixedFee) NO-ERROR.
+         bFixedFee.FinancedResult = lcTFStatus.
+         RELEASE bFixedFee.
+         fLogToFile(lcTFStatus).
 
          NEXT FF_LOOP.
       END.
-      ELSE IF orderdelivery.LOStatusId EQ 8 AND 
-              orderDelivery.LoTimeStamp < DATETIME(TODAY - 16,0) THEN DO:
-            
-         FIND FIRST borderdelivery NO-LOCK WHERE
-                    borderdelivery.brand = gcBrand AND
-                    borderdelivery.OrderId = OrderDelivery.OrderId AND
-                    borderdelivery.LoTimeStamp >= OrderDelivery.LoTimeStamp AND
-                   (borderdelivery.LoStatusId = 4000 OR
-                    borderdelivery.LoStatusId = 4030) NO-ERROR.
          
-         IF NOT AVAIL borderdelivery THEN 
-            lcTFStatus = {&TF_STATUS_YOIGO_LOGISTICS}.
-         ELSE CASE borderdelivery.LoStatusId:
-            WHEN 4000 THEN lcTFStatus = {&TF_STATUS_WAITING_SENDING}.
-            WHEN 4030 THEN lcTFStatus = {&TF_STATUS_YOIGO_LOGISTICS}.
-            OTHERWISE NEXT FF_LOOP.
-         END.
-      END.
-      ELSE IF OrderDelivery.LoStatusId EQ 100 THEN DO:
-         
-         FIND FIRST borderdelivery NO-LOCK WHERE
-                    borderdelivery.brand = gcBrand AND
-                    borderdelivery.OrderId = OrderDelivery.OrderId AND
-                    borderdelivery.LoTimeStamp >= OrderDelivery.LoTimeStamp AND
-                   (borderdelivery.LoStatusId = 3000 OR
-                    borderdelivery.LoStatusId = 3100 OR
-                    borderdelivery.LoStatusId = 3350 OR
-                    borderdelivery.LoStatusId = 900) NO-ERROR.
-
-         IF NOT AVAIL borderdelivery THEN DO:
-
-            IF orderdelivery.LoTimeStamp < DATETIME(TODAY - 20,0) THEN
-               lcTFStatus = {&TF_STATUS_YOIGO_LOGISTICS}.
-            ELSE NEXT FF_LOOP.
-         END.
-         ELSE CASE borderdelivery.LoStatusId:
-            WHEN 3000 THEN lcTFStatus = {&TF_STATUS_YOIGO_LOGISTICS}.
-            WHEN 3100 THEN DO:
-               RUN cancelorder.p(Order.OrderId, FALSE).
-               fLogToFile("CANCELLED").
-               NEXT FF_LOOP.
-            END.
-            WHEN 3350 OR WHEN 900 THEN DO:
-               IF CAN-FIND(
-                  FIRST borderdelivery2 NO-LOCK WHERE
-                        borderdelivery2.brand = gcBrand AND
-                        borderdelivery2.OrderId = bOrderDelivery.OrderId AND
-                        borderdelivery2.LoTimeStamp <= bOrderDelivery.LoTimeStamp AND
-                        borderdelivery2.LoStatusId = 4000)
-               THEN lcTFStatus = {&TF_STATUS_WAITING_SENDING}.
-               ELSE lcTFStatus = {&TF_STATUS_YOIGO_LOGISTICS}.
-            END.
-            OTHERWISE NEXT FF_LOOP.
-         END.
-
-      END.
-      ELSE NEXT FF_LOOP.
-
-      IF lcTFStatus EQ "" THEN NEXT.
-      
-      FIND bFixedFee EXCLUSIVE-LOCK WHERE
-           ROWID(bFixedFee) = ROWID(FixedFee) NO-ERROR.
-      bFixedFee.FinancedResult = lcTFStatus.
-      RELEASE bFixedFee.
-      fLogToFile(lcTFStatus).
-
-      NEXT FF_LOOP.
    END.
-      
 END.
-
 OUTPUT STREAM sout CLOSE.
