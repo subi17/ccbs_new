@@ -19,6 +19,7 @@
 {cparam2.i}
 {femailinvoice.i}
 {email.i}
+{smsnotify.i}
 {heartbeat.i}
 
 &SCOPED-DEFINE MIDNIGHT-SECONDS 86400
