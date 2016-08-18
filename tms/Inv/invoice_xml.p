@@ -1071,6 +1071,9 @@ FINALLY:
 
    IF VALID-OBJECT(objDBConn)
    THEN DELETE OBJECT objDBConn.
+   
+   EMPTY TEMP-TABLE ttBillItemName.
+   EMPTY TEMP-TABLE ttBillItemAndGroup.
 
 END FINALLY.
 
