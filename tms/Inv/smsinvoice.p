@@ -47,31 +47,9 @@ DEF VAR liTime2Pause  AS INTEGER   NO-UNDO.
 DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lNowSeconds   AS INTEGER   NO-UNDO.
-DEF VAR lcAddrConfDirNotify     AS CHAR NO-UNDO.
 DEF VAR llFirstInv    AS LOGICAL   NO-UNDO.
 
 DEF STREAM sEmail.
-
-FUNCTION fSMSNotify RETURN CHARACTER
-   (lcType AS CHAR):
-   DEF VAR i AS INT NO-UNDO.
-   
-   ASSIGN lcAddrConfDirNotify = lcAddrConfDir + "smsinvoice.sms".
-   
-   GetSMSRecipients(lcAddrConfDirNotify).
-   
-   DO i = 1 TO NUM-ENTRIES(xSMSAddr,","):
-         fMakeSchedSMS2(0,
-                        ENTRY(i,xSMSAddr,","),
-                        44,
-                        lcType + " Invoice " + lcSMSReplacedText,
-                        fMakeTS(),
-                        "Fact. Yoigo",
-                        STRING(lIniSeconds) + "-" + STRING(lEndSeconds)).
-
-         IF AVAIL CallAlarm THEN RELEASE CallAlarm.
-   END.
-END FUNCTION.
 
 FIND MSRequest WHERE 
      MSRequest.MSRequest = iiMSRequest
@@ -193,9 +171,13 @@ FOR EACH Invoice WHERE
       lcSMSReplacedText = REPLACE(lcSMSReplacedText,"#DATE",
                           STRING(Invoice.DueDate,"99/99/99")).
       
-      /*Notification for the First Invoice will be sent to a specific people as part of YOT-4037 along WITH the own customer*/
+      /*Notification for the First Invoice will be sent to a specific people as part of YOT-4037 along with the own customer*/
       IF llFirstInv = FALSE THEN DO:
-         fSMSNotify("First").
+         fSMSNotify("First",
+                    lcSMSReplacedText,
+                    lcAddrConfDir,
+                    lIniSeconds,
+                    lEndSeconds).
          llFirstInv = TRUE.
       END.
       DO TRANS:
@@ -216,8 +198,14 @@ FOR EACH Invoice WHERE
       END. /* DO TRANS: */
    END. /* FOR EACH SubInvoice OF Invoice NO-LOCK: */
 END. /* FOR EACH Invoice WHERE */
-/*Notification for the Last Invoice will be sent to a specific people as part of YOT-4037 along WITH the own customer*/
-fSMSNotify("Last").
+
+/*Notification for the Last Invoice will be sent to a specific people as part of YOT-4037 along with the own customer*/
+fSMSNotify("Last",
+           lcSMSReplacedText,
+           lcAddrConfDir,
+           lIniSeconds,
+           lEndSeconds).
+
 /* Send an email to configure list*/
 IF lcAddrConfDir > "" THEN
    lcAddrConfDir = lcAddrConfDir + "smsinvoice.email".

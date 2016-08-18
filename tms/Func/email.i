@@ -13,6 +13,8 @@
                            attachments are no longer mandatory with sendatt
 */
 {commali.i}
+{fmakesms.i}
+{ftransdir.i}
 
 DEF VAR xMailRecip    AS CHAR NO-UNDO.
 DEF VAR xMailAddr     AS CHAR NO-UNDO.
@@ -26,8 +28,8 @@ DEF VAR xMailError    AS CHAR NO-UNDO.
 /* administrator, errors send TO this address */
 DEF VAR xMailAdmin    AS CHAR NO-UNDO INIT "ari@starnet.fi".
 DEF VAR lcMailHost    AS CHAR NO-UNDO. 
-DEF VAR xSMSRecip     AS CHAR NO-UNDO.
-DEF VAR xSMSAddr      AS CHAR NO-UNDO.
+
+DEF STREAM sMailNotify.
 
 /* get hostname, it must be correct in xMailFrom */
 INPUT THROUGH hostname.
@@ -75,28 +77,118 @@ FUNCTION GetRecipients RETURNS LOGIC
 END FUNCTION.
 
 /* get the SMS recipients */
-FUNCTION GetSMSRecipients RETURNS LOGIC
+FUNCTION GetSMSRecipients RETURNS CHARACTER
     (iConfigFile AS CHAR):
     
-    ASSIGN xSMSRecip = ""
-           xSMSAddr  = "".
+    DEF VAR lcSMSRecip     AS CHAR NO-UNDO.
+    DEF VAR lcSMSAddr      AS CHAR NO-UNDO.
+    DEF VAR lcSMSError     AS CHAR NO-UNDO.
+
+    ASSIGN lcSMSRecip = ""
+           lcSMSAddr  = "".
     
     IF SEARCH(iConfigFile) = ?
-        THEN ASSIGN xMailError = "Config File " + iConfigFile +
+        THEN ASSIGN lcSMSError = "Config File " + iConfigFile +
                                  " missing. ".
     ELSE DO:                   
-        INPUT FROM VALUE(SEARCH(iConfigFile)) NO-ECHO.
+        INPUT FROM VALUE(iConfigFile) NO-ECHO.
         REPEAT:
-            IMPORT UNFORMATTED xSMSRecip.
-            IF xSMSRecip > "" THEN
-            ASSIGN xSMSAddr = xSMSAddr +
-                               (IF xSMSAddr NE ""
+            IMPORT UNFORMATTED lcSMSRecip.
+            IF lcSMSRecip > "" THEN
+            ASSIGN lcSMSAddr = lcSMSAddr +
+                               (IF lcSMSAddr NE ""
                                 THEN ","
                                 ELSE "") +
-                                xSMSRecip.
+                                lcSMSRecip.
         END.
         INPUT CLOSE.
     END.
+    
+    IF lcSMSError > "" THEN DO:               
+        OUTPUT TO /tmp/tmssms.log.
+        PUT UNFORMATTED 
+            THIS-PROCEDURE:FILE-NAME SKIP
+            lcSMSError SKIP.
+        OUTPUT CLOSE.
+        ASSIGN 
+           /* parameters FOR sending the Error EMail */
+           xMailComm = "/opt/local/bin/sendatt" +
+                       " -s TMS_SMS_error" +      /* subject   */
+                       " -c /tmp/tmssms.log" +    /* content   */
+                       " -f starnet@starnet.fi" + /* sender    */
+                       " -m " +
+                       " "    + xMailAdmin +      
+                       " /tmp/tmssms.log".        /* recipient */
+        UNIX SILENT VALUE(xMailComm + " >>/tmp/sendmail.log").
+        RETURN "".
+    END.
+    ELSE
+        RETURN lcSMSAddr.
+    
+END FUNCTION.
+
+FUNCTION fSMSNotify RETURN CHARACTER
+   (icType            AS CHAR,
+    icSMSReplacedText AS CHAR,
+    icAddrConfDir     AS CHAR,
+    iIniSeconds       AS INT,
+    iEndSeconds       AS INT):
+   
+   DEF VAR i                   AS INT  NO-UNDO.
+   DEF VAR lcSMSAddr           AS CHAR NO-UNDO.
+   DEF VAR lcAddrConfDirNotify AS CHAR NO-UNDO.
+   
+   ASSIGN lcAddrConfDirNotify = icAddrConfDir + "smsinvoice.sms".
+   
+   lcSMSAddr = GetSMSRecipients(lcAddrConfDirNotify).
+   
+   IF lcSMSAddr > "" THEN
+   DO i = 1 TO NUM-ENTRIES(lcSMSAddr,","):
+         fMakeSchedSMS2(0,
+                        ENTRY(i,lcSMSAddr,","),
+                        44,
+                        icType + " Invoice " + icSMSReplacedText,
+                        fMakeTS(),
+                        "Fact. Yoigo",
+                        STRING(iIniSeconds) + "-" + STRING(iEndSeconds)).
+
+         IF AVAIL CallAlarm THEN RELEASE CallAlarm.
+   END.
+END FUNCTION.
+
+FUNCTION fMailNotify RETURN CHARACTER
+   (iiCustNum           AS INT,
+    icType              AS CHAR,
+    icEmailReplacedText AS CHAR,
+    icMailSubj          AS CHAR,
+    icEmailFile         AS CHAR,
+    icTransDir          AS CHAR,
+    icAddrConfDir       AS CHAR):
+   
+   DEF VAR lcAddrConfDirNotify     AS CHAR NO-UNDO.
+   DEF VAR lcLatestEmailFileNotify AS CHAR NO-UNDO.
+
+   ASSIGN lcAddrConfDirNotify = icAddrConfDir + "emailinvoicenotify.email".
+   
+   GetRecipients(lcAddrConfDirNotify).
+   
+   ASSIGN icMailSubj  = icType + " Invoice " + icMailSubj.
+   
+   ASSIGN lcLatestEmailFileNotify = icEmailFile + "_" + STRING(iiCustNum) +
+                                    "_Notify_" + STRING(TODAY,"999999") + "_" +
+                                    STRING(TIME) + ".html".
+   
+   OUTPUT STREAM sMailNotify TO VALUE(lcLatestEmailFileNotify).
+   PUT STREAM sMailNotify UNFORMATTED icMailSubj SKIP(1).
+   PUT STREAM sMailNotify UNFORMATTED icEmailReplacedText SKIP.
+   OUTPUT STREAM sMailNotify CLOSE.
+
+   SendMaileInvoice(icEmailReplacedText,"","").
+   
+   IF icTransDir > "" THEN
+      fTransDir(lcLatestEmailFileNotify,
+                ".html",
+                icTransDir).
 
 END FUNCTION.
 

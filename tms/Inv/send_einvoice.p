@@ -38,13 +38,10 @@ DEF VAR liLoop                  AS INT  NO-UNDO.
 DEF VAR lcName                  AS CHAR NO-UNDO. 
 DEF VAR lcMonthName             AS CHAR NO-UNDO. 
 DEF VAR lcMiYoigoLink           AS CHAR NO-UNDO.
-DEF VAR lcAddrConfDirNotify     AS CHAR NO-UNDO.
-DEF VAR lcLatestEmailFileNotify AS CHAR NO-UNDO.
 DEF VAR llFirstInv              AS LOG  NO-UNDO.
 /* DEF VAR lcQ25Note               AS CHAR NO-UNDO. Removed by YOT-4050 */
 
 DEF STREAM sEmail.
-DEF STREAM sNotify.
 
 FUNCTION fPickMonthName RETURN CHARACTER
    (iiMonth AS INT,
@@ -56,32 +53,6 @@ FUNCTION fPickMonthName RETURN CHARACTER
    IF iiMonth > 0 THEN
       lcMonth = fTeksti(liMonBegin + iiMonth,iiLanguage).
    RETURN lcMonth.
-END FUNCTION.
-
-FUNCTION fNotify RETURN CHARACTER
-   (lcType AS CHAR):
-   DEF VAR lcMailSubj AS CHAR NO-UNDO.
-   ASSIGN lcMailSubj = xMailSubj
-          lcAddrConfDirNotify = lcAddrConfDir + "emailinvoicenotify.email".
-   GetRecipients(lcAddrConfDirNotify).
-   
-   ASSIGN xMailSubj  = lcType + " Invoice " + lcMailSubj.
-   
-   ASSIGN lcLatestEmailFileNotify = lcEmailFile + "_" + STRING(Customer.CustNum) +
-                                    "_Notify_" + STRING(TODAY,"999999") + "_" +
-                                    STRING(TIME) + ".html"
-          lcLatestEmailFileNotify = fEPLFileName(lcLatestEmailFileNotify).
-   OUTPUT STREAM sNotify TO VALUE(lcLatestEmailFileNotify).
-   PUT STREAM sNotify UNFORMATTED  xMailSubj SKIP(1).
-   PUT STREAM sNotify UNFORMATTED lcEmailReplacedText SKIP.
-   OUTPUT STREAM sNotify CLOSE.
-
-   SendMaileInvoice(lcEmailReplacedText,"","").
-   IF lcTransDir > "" THEN
-      fTransDir(lcLatestEmailFileNotify,
-                ".html",
-                lcTransDir).
-   xMailSubj = lcMailSubj.
 END FUNCTION.
 
 FIND MSRequest WHERE 
@@ -162,9 +133,15 @@ FOR EACH Invoice WHERE
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#AMOUNT", 
           REPLACE(TRIM(STRING(Invoice.InvAmt,"->>>>>>9.99")),".",lcSep)).
    
-   /*Notification for the First Invoice will be sent to a specific people as part of YOT-4037 along WITH the own customer*/
+   /*Notification for the First Invoice will be sent to a specific people as part of YOT-4037 along with the own customer*/
    IF llFirstInv = FALSE THEN DO:
-      fNotify("First").
+      fMailNotify(Customer.CustNum,
+                  "First",
+                  lcEmailReplacedText,
+                  xMailSubj,
+                  lcEmailFile,
+                  lcTransDir,
+                  lcAddrConfDir).
       llFirstInv = TRUE.
    END.
    
@@ -188,8 +165,16 @@ FOR EACH Invoice WHERE
    IF liLoop MOD 1000 EQ 0 AND
       lcMonitor > "" THEN fKeepAlive(lcMonitor).
 END. /* FOR EACH Invoice WHERE */
-/*Notification for the Last Invoice will be sent to a specific people as part of YOT-4037 along WITH the own customer*/
-fNotify("Last").
+
+/*Notification for the Last Invoice will be sent to a specific people as part of YOT-4037 along with the own customer*/
+fMailNotify(Customer.CustNum,
+            "Last",
+            lcEmailReplacedText,
+            xMailSubj,
+            lcEmailFile,
+            lcTransDir,
+            lcAddrConfDir).
+
 /* Send an email to configure list*/
 IF lcAddrConfDir > "" THEN
    lcAddrConfDir = lcAddrConfDir + "emailinvoice.email".
