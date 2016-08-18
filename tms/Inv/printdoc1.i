@@ -46,25 +46,12 @@ DEF VAR lcMinInvAmt   AS CHAR NO-UNDO.
 DEF VAR lcBIName      AS CHAR NO-UNDO.
 DEF VAR lcTipoName    AS CHAR NO-UNDO.
 DEF VAR lcCTName      AS CHAR NO-UNDO.
-DEF VAR ghttCall       AS HANDLE NO-UNDO.
-DEF VAR lcBundleCLITypes  AS CHAR NO-UNDO.
-DEF VAR lcFusionCLITypes   AS CHAR NO-UNDO.
-
-lcFusionCLITypes = fCParamC("FUSION_SUBS_TYPE").
+DEF VAR ghttCall      AS HANDLE NO-UNDO.
+DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
+DEF VAR lcFusionCLITypes AS CHAR NO-UNDO.
+DEF VAR gcCallQuery   AS CHAR NO-UNDO.
 
 DEFINE VARIABLE objDBConn AS CLASS Syst.CDRConnect NO-UNDO.
-
-DEFINE VARIABLE gcCallQuery AS CHARACTER NO-UNDO.
-
-gcCallQuery = "MobCDR.InvCust = &1 AND " +
-              "MobCDR.InvSeq  = &2 AND " +
-              "MobCDR.DateST >= &3 AND " +
-              "MobCDR.DateST <= &4 " +
-              "BREAK BY MobCDR.BillCode BY MobCDR.DateSt".
-
-DEFINE TEMP-TABLE ttExcludedRow NO-UNDO
-   FIELD Rowid AS ROWID
-   INDEX Rowid Rowid.
 
 DEF TEMP-TABLE ttCall NO-UNDO LIKE MobCDR
    FIELD CDRTable      AS CHAR
@@ -72,6 +59,20 @@ DEF TEMP-TABLE ttCall NO-UNDO LIKE MobCDR
    FIELD BillItemName  AS CHARACTER
    FIELD BIGroup LIKE BillItem.BIGroup
    INDEX BIGroup GroupOrder BIGroup.
+
+ASSIGN
+   ghttCall         = BUFFER ttCall:HANDLE
+   lcFusionCLITypes = fCParamC("FUSION_SUBS_TYPE")
+   lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES")
+   gcCallQuery      = "MobCDR.InvCust = &1 AND " +
+                      "MobCDR.InvSeq  = &2 AND " +
+                      "MobCDR.DateST >= &3 AND " +
+                      "MobCDR.DateST <= &4 " +
+                      "BREAK BY MobCDR.BillCode BY MobCDR.DateSt".
+
+DEFINE TEMP-TABLE ttExcludedRow NO-UNDO
+   FIELD Rowid AS ROWID
+   INDEX Rowid Rowid.
 
 DEF TEMP-TABLE ttRow NO-UNDO
    FIELD RowGroup      AS CHAR  
@@ -183,12 +184,7 @@ DEFINE TEMP-TABLE ttMSOwner NO-UNDO
    FIELD FusionCLIType AS LOGICAL INITIAL FALSE
    INDEX Type Type InvCust TSBegin TSEnd. 
 
-DEF BUFFER bInv FOR Invoice.
 DEF BUFFER bttRow FOR ttRow.
-
-ghttCall = BUFFER ttCall:HANDLE.
-
-lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 
 FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
    
@@ -656,7 +652,17 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
      
    END.
 
-RETURN TRUE.
+   RETURN TRUE.
+
+END FUNCTION.
+
+FUNCTION fAddToExcludedRow RETURNS LOGICAL
+   (irid AS ROWID):
+
+   CREATE ttExcludedRow.
+   ttExcludedRow.Rowid = irid.
+
+   RETURN FALSE.
 
 END FUNCTION.
 
@@ -1139,15 +1145,6 @@ PROCEDURE pGetSubInvoiceHeaderData:
    
 END PROCEDURE.
 
-FUNCTION fAddToExcludedRow RETURNS LOGICAL
-   (irid AS ROWID):
-   
-   CREATE ttExcludedRow.
-   ttExcludedRow.Rowid = irid.
-   
-   RETURN FALSE.   
-      
-END FUNCTION.
 
 PROCEDURE pGetInvoiceRowData:
 
