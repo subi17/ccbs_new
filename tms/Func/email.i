@@ -156,42 +156,6 @@ FUNCTION fSMSNotify RETURN CHARACTER
    END.
 END FUNCTION.
 
-FUNCTION fMailNotify RETURN CHARACTER
-   (iiCustNum           AS INT,
-    icType              AS CHAR,
-    icEmailReplacedText AS CHAR,
-    icMailSubj          AS CHAR,
-    icEmailFile         AS CHAR,
-    icTransDir          AS CHAR,
-    icAddrConfDir       AS CHAR):
-   
-   DEF VAR lcAddrConfDirNotify     AS CHAR NO-UNDO.
-   DEF VAR lcLatestEmailFileNotify AS CHAR NO-UNDO.
-
-   ASSIGN lcAddrConfDirNotify = icAddrConfDir + "emailinvoicenotify.email".
-   
-   GetRecipients(lcAddrConfDirNotify).
-   
-   ASSIGN icMailSubj  = icType + " Invoice " + icMailSubj.
-   
-   ASSIGN lcLatestEmailFileNotify = icEmailFile + "_" + STRING(iiCustNum) +
-                                    "_Notify_" + STRING(TODAY,"999999") + "_" +
-                                    STRING(TIME) + ".html".
-   
-   OUTPUT STREAM sMailNotify TO VALUE(lcLatestEmailFileNotify).
-   PUT STREAM sMailNotify UNFORMATTED icMailSubj SKIP(1).
-   PUT STREAM sMailNotify UNFORMATTED icEmailReplacedText SKIP.
-   OUTPUT STREAM sMailNotify CLOSE.
-
-   SendMaileInvoice(icEmailReplacedText,"","").
-   
-   IF icTransDir > "" THEN
-      fTransDir(lcLatestEmailFileNotify,
-                ".html",
-                icTransDir).
-
-END FUNCTION.
-
 /* send the mail WITH possible attachments */
 FUNCTION SendMail RETURNS LOGIC
     (iMailTxt  AS CHAR,
@@ -465,5 +429,43 @@ FUNCTION SendMaileInvoice RETURNS LOGIC (iMailTxt AS CHAR,
        UNIX SILENT VALUE(xMailComm + " >> /tmp/sendmail_einvoice.log 2>&1").
 
     RETURN (xMailError = "").
+
+END FUNCTION.
+
+FUNCTION fMailNotify RETURN CHARACTER
+   (iiCustNum           AS INT,
+    icType              AS CHAR,
+    icEmailReplacedText AS CHAR,
+    icMailSubj          AS CHAR,
+    icEmailFile         AS CHAR,
+    icTransDir          AS CHAR,
+    icAddrConfDir       AS CHAR):
+
+   DEF VAR lcAddrConfDirNotify     AS CHAR NO-UNDO.
+   DEF VAR lcLatestEmailFileNotify AS CHAR NO-UNDO.
+
+   ASSIGN lcAddrConfDirNotify = icAddrConfDir + "emailinvoicenotify.email".
+
+   GetRecipients(lcAddrConfDirNotify).
+
+   ASSIGN icMailSubj  = icType + " Invoice " + icMailSubj.
+
+   ASSIGN lcLatestEmailFileNotify = icEmailFile + "_" + STRING(iiCustNum) +
+                                    "_Notify_" + STRING(TODAY,"999999") + "_" +
+                                    STRING(TIME) + ".html".
+
+   OUTPUT STREAM sMailNotify TO VALUE(lcLatestEmailFileNotify).
+   PUT STREAM sMailNotify UNFORMATTED icMailSubj SKIP(1).
+   PUT STREAM sMailNotify UNFORMATTED icEmailReplacedText SKIP.
+   OUTPUT STREAM sMailNotify CLOSE.
+
+   SendMaileInvoice(icEmailReplacedText,
+                    "",
+                    "").
+
+   IF icTransDir > "" THEN
+      fTransDir(lcLatestEmailFileNotify,
+                ".html",
+                icTransDir).
 
 END FUNCTION.
