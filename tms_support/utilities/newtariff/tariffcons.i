@@ -60,3 +60,7 @@
 &GLOBAL-DEFINE MOF     "monthly fee"
 &GLOBAL-DEFINE TN      "TariffName"
 &GLOBAL-DEFINE BS      "BonoSupport"
+/*convergence project*/
+&GLOBAL-DEFINE BUPS     "BundleUpsell"
+
+

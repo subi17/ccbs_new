@@ -370,6 +370,7 @@ DEFINE INPUT PARAMETER icTOC         AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER ilgSLCreated  AS LOGICAL   NO-UNDO.
 DEFINE INPUT PARAMETER icMFBC        AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER icPaymentType AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER icBundleUpsell AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE lcFeeModel  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
@@ -419,7 +420,7 @@ DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
                                                           "DurUnit",
                                                           "PerContr"))
       DayCampaign.WeekDay         = ""
-      DayCampaign.BundleUpsell    = ""
+      DayCampaign.BundleUpsell    = icBundleUpsell
       DayCampaign.FeeModel        = icFeeModel
       DayCampaign.ModifyFeeModel  = ""                          
       DayCampaign.TermFeeModel    = ""                          
