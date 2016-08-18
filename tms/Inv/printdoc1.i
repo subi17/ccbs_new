@@ -399,7 +399,8 @@ FUNCTION fLocalCCName RETURNS CHARACTER:
                                   ttCall.DtlSeq,
                                   ttCall.GsmBnr,
                                   ttCall.BType,
-                                  ttCall.MSCID).
+                                  ttCall.MSCID,
+                                  ttCall.ServiceName).
       /* undefined value, stop handling */
       IF lcCCName = "#UNDEFINED" THEN DO:
          fErrLine("Undefined name for country").
