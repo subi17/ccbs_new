@@ -109,6 +109,8 @@ RUN dms_create_docfile.p(SUBST("&1,&2,&3,&4,&5,&6,&7,&8",
                        ldCollPeriodEndTS, lcCaseFile, lcLogFile1).
 /* Move the file to Transfer directory */
 fMove2TransDir(lcCaseFile, ".txt", lcOutDir).
+/*Move the Log file to Transfer Directory as part of YTS-8184*/
+fMove2TransDir(lcLogFile1, ".log", lcOutDir).
 
 /*Update cunrent collection period end time to actionlog*/
 DO TRANS:
