@@ -1,5 +1,17 @@
 Type;Language Type;Language;Translation Name
-CONTS2GB;1;Spanish;La Infinita 2 GB
-CONTS2GB;2;Catalan;La Infinita 2 GB
-CONTS2GB;3;Basque;La Infinita 2 GB
-CONTS2GB;5;English;La Infinita 2 GB
+CONTDSL10;1;Spanish;La Infinita 2 GB + DSL
+CONTDSL10;2;Catalan;La Infinita 2 GB + DSL
+CONTDSL10;3;Basque;La Infinita 2 GB + DSL
+CONTDSL10;5;English;La Infinita 2 GB + DSL
+CONTFH10;1;Spanish;La Infinita 2 GB + FIBER
+CONTFH10;2;Catalan;La Infinita 2 GB + FIBER
+CONTFH10;3;Basque;La Infinita 2 GB + FIBER
+CONTFH10;5;English;La Infinita 2 GB + FIBER
+CONTDSL15;1;Spanish;La Infinita 8 GB + DSL
+CONTDSL15;2;Catalan;La Infinita 8 GB + DSL
+CONTDSL15;3;Basque;La Infinita 8 GB + DSL
+CONTDSL15;5;English;La Infinita 8 GB + DSL
+CONTFH15;1;Spanish;La Infinita 8 GB + FIBER
+CONTFH15;2;Catalan;La Infinita 8 GB + FIBER
+CONTFH15;3;Basque;La Infinita 8 GB + FIBER
+CONTFH15;5;English;La Infinita 8 GB + FIBER
