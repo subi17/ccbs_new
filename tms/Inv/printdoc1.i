@@ -4,7 +4,6 @@
 {cparam2.i}
 {timestamp.i}
 {printdoc1tt.i}
-{refcode.i}
 {transname.i}
 {ftransdir.i}
 {email.i}
@@ -55,9 +54,13 @@ lcFusionCLITypes = fCParamC("FUSION_SUBS_TYPE").
 
 DEFINE VARIABLE objDBConn AS CLASS Syst.CDRConnect NO-UNDO.
 
-DEFINE VARIABLE gcCallQuery AS CHARACTER
-   INITIAL "MobCDR.InvCust = &1 AND MobCDR.InvSeq = &2 AND MobCDR.DateST >= &3 AND MobCDR.DateST <= &4"
-   NO-UNDO.
+DEFINE VARIABLE gcCallQuery AS CHARACTER NO-UNDO.
+
+gcCallQuery = "MobCDR.InvCust = &1 AND " +
+              "MobCDR.InvSeq  = &2 AND " +
+              "MobCDR.DateST >= &3 AND " +
+              "MobCDR.DateST <= &4 " +
+              "BREAK BY MobCDR.BillCode BY MobCDR.DateSt".
 
 DEFINE TEMP-TABLE ttExcludedRow NO-UNDO
    FIELD Rowid AS ROWID
@@ -65,7 +68,8 @@ DEFINE TEMP-TABLE ttExcludedRow NO-UNDO
 
 DEF TEMP-TABLE ttCall NO-UNDO LIKE MobCDR
    FIELD CDRTable      AS CHAR
-   FIELD GroupOrder    AS INT 
+   FIELD GroupOrder    AS INT
+   FIELD BillItemName  AS CHARACTER
    FIELD BIGroup LIKE BillItem.BIGroup
    INDEX BIGroup GroupOrder BIGroup.
 
@@ -91,7 +95,6 @@ DEF TEMP-TABLE ttRow NO-UNDO
 
 DEF TEMP-TABLE ttGraph NO-UNDO
    FIELD GraphGroup AS CHAR
-   FIELD GraphName  AS CHAR
    FIELD GraphAmt   AS DEC
    FIELD Order      AS INT
    INDEX GraphGroup GraphGroup
@@ -155,10 +158,19 @@ DEF TEMP-TABLE ttData NO-UNDO
 DEFINE TEMP-TABLE ttBillItemAndGroup NO-UNDO
    FIELD BillCode        AS CHARACTER
    FIELD BiGroup         AS CHARACTER
+   FIELD BIName          AS CHARACTER
    FIELD GroupOrder      AS INTEGER
    FIELD PremiumBillCode AS LOGICAL INITIAL FALSE
    FIELD GBBillCode      AS LOGICAL INITIAL FALSE
    INDEX BillCode IS PRIMARY UNIQUE BillCode.
+
+DEFINE TEMP-TABLE ttBillItemName NO-UNDO
+   FIELD BillCode        AS CHARACTER
+   FIELD Name            AS CHARACTER
+   FIELD Language        AS INTEGER
+   FIELD ToDate          AS DATE
+   FIELD FromDate        AS DATE
+   INDEX BillCode IS PRIMARY BillCode Language ToDate FromDate.
 
 DEFINE TEMP-TABLE ttMSOwner NO-UNDO
    FIELD Type     AS INTEGER    
@@ -181,6 +193,9 @@ lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
    
    DEFINE VARIABLE liGroupOrder AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE ldaDate      AS DATE      NO-UNDO.
+   
+   ldaDate = ADD-INTERVAL(TODAY, -6, "months").
    
    FOR EACH BillItem FIELDS (Brand BillCode BIGroup) NO-LOCK WHERE
       BillItem.Brand = gcBrand
@@ -197,10 +212,31 @@ FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
          END.
       END.
 
+      FOR
+         EACH Language NO-LOCK,
+         EACH RepText NO-LOCK WHERE
+            RepText.Brand = gcBrand                AND
+            RepText.TextType  = 1                  AND 
+            RepText.LinkCode  = BillItem.BillCode  AND
+            RepText.Language  = Language.Language  AND
+            RepText.ToDate   >= ldaDate            AND
+            RepText.FromDate <= ldaDate:
+      
+         CREATE ttBillItemName.
+         ASSIGN
+            ttBillItemName.BillCode = BillItem.BillCode
+            ttBillItemName.Name     = RepText.RepText
+            ttBillItemName.Language = Language.Language
+            ttBillItemName.ToDate   = RepText.ToDate
+            ttBillItemName.FromDate = RepText.FromDate
+            .
+      END.
+
       CREATE ttBillItemAndGroup.
       ASSIGN
          ttBillItemAndGroup.BillCode        = BillItem.BillCode
          ttBillItemAndGroup.BIGroup         = BillItem.BIGroup
+         ttBillItemAndGroup.BIName          = BillItem.BIName
          ttBillItemAndGroup.PremiumBillCode = TRUE WHEN BillItem.BIGroup = "6"
          ttBillItemAndGroup.GBBillCode      = TRUE WHEN BillItem.BIGroup = {&BITEM_GRP_GB}
          ttBillItemAndGroup.GroupOrder      = liGroupOrder
@@ -212,6 +248,44 @@ FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
 
 END FUNCTION.
 
+FUNCTION fBillItemName RETURNS CHARACTER
+   (icBillCode AS CHARACTER,
+    idaDate    AS DATE,
+    iiLanguage AS INTEGER):
+
+   DEFINE VARIABLE lcReturnValue AS CHARACTER INITIAL ? NO-UNDO.
+
+   DO WHILE TRUE:
+      FOR FIRST ttBillItemName WHERE
+          ttBillItemName.BillCode = icBillCode  AND
+          ttBillItemName.Language = iiLanguage  AND
+          ttBillItemName.ToDate   >= idaDate    AND
+          ttBillItemName.FromDate <= idaDate:
+   
+         lcReturnValue = ttBillItemName.Name.
+      END.
+
+      /* use basic language if nothing was defined in the desired one */
+      IF lcReturnValue = ? AND iiLanguage NE 1 THEN DO:
+         iiLanguage = 1.
+         NEXT.
+      END.
+
+      LEAVE.
+   END.
+   
+   IF lcReturnValue = ?
+   THEN FOR FIRST ttBillItemAndGroup WHERE
+           ttBillItemAndGroup.BillCode = icBillCode:
+           lcReturnValue = ttBillItemAndGroup.BIName.
+        END.
+   
+   IF lcReturnValue = ?
+   THEN RETURN "".
+   
+   RETURN lcReturnValue.
+
+END FUNCTION.
 
 FUNCTION fHeadTxt RETURNS CHARACTER
    (iNbr AS INT,
@@ -401,7 +475,7 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
             FixedFee.CustNum    = Invoice.CustNum            AND
             FixedFee.HostTable  = "MobSub"                   AND
             FixedFee.KeyValue   = STRING(SubInvoice.MsSeq)   AND
-            FixedFee.BillCode   = icBillCode              AND
+            FixedFee.BillCode   = icBillCode                 AND
             FixedFee.EndPeriod >= liPeriod                   AND
             FixedFee.BegDate   <= Invoice.Todate BY FixedFee.BegDate:
       
@@ -648,7 +722,6 @@ PROCEDURE pGetInvoiceHeaderData:
       IF NOT AVAILABLE ttGraph THEN DO:
          CREATE ttGraph.
          ASSIGN ttGraph.GraphGroup = lcGraphGroup
-                ttGraph.GraphName = lcGraphGroup
                 ttGraph.Order = liOrder
                 liOrder = liOrder + 1.
       END.
@@ -674,6 +747,7 @@ PROCEDURE pttMSOwner:
    DEFINE OUTPUT PARAMETER olShouldCheckTermination AS LOGICAL NO-UNDO.
    DEFINE OUTPUT PARAMETER olPostPreDetected        AS LOGICAL NO-UNDO.
 
+   EMPTY TEMP-TABLE ttMSOwner.
 
    DEFINE VARIABLE llHasBeenPre AS LOGICAL INITIAL FALSE NO-UNDO.
    DEFINE VARIABLE llFirst      AS LOGICAL INITIAL TRUE  NO-UNDO.
@@ -776,7 +850,6 @@ PROCEDURE pGetSubInvoiceHeaderData:
 
    EMPTY TEMP-TABLE ttSub.
    EMPTY TEMP-TABLE ttCLIType.
-   EMPTY TEMP-TABLE ttMSOwner.
           
    FOR EACH SubInvoice OF Invoice NO-LOCK:
 
@@ -1205,12 +1278,11 @@ PROCEDURE pGetInvoiceRowData:
              ldAmtExclVat = InvRow.Amt
              ldAmt        = ldAmtExclVat + ldVatAmt.
 
-         lcRowName = RIGHT-TRIM(fLocalItemName("BillItem",
-                                    InvRow.BillCode,
-                                    liLanguage,
-                                    IF InvRow.ToDate NE ?
-                                    THEN InvRow.ToDate
-                                    ELSE Invoice.ToDate)).
+         lcRowName = RIGHT-TRIM(fBillItemName(InvRow.BillCode,
+                                              IF InvRow.ToDate NE ?
+                                              THEN InvRow.ToDate
+                                              ELSE Invoice.ToDate,
+                                              liLanguage)).
 
          lcRowCode = STRING(ttBillItemAndGroup.BiGroup) + lcRowName.
 
@@ -1469,10 +1541,15 @@ PROCEDURE pCollectCDR:
 
    DEFINE BUFFER bCallInvSeq FOR InvSeq.
    
-   DEFINE VARIABLE lcQuery AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE liFound AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE lii     AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE llOK    AS LOGICAL   NO-UNDO.
+   DEFINE VARIABLE lcQuery        AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liFound        AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lii            AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE llOK           AS LOGICAL   NO-UNDO.
+   DEFINE VARIABLE lhQuery        AS HANDLE    NO-UNDO.
+   DEFINE VARIABLE lcBillCode     AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcBIGroup      AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcBillItemName AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liGroupOrder   AS INTEGER   NO-UNDO.
    
    EMPTY TEMP-TABLE ttCall.
   
@@ -1490,33 +1567,34 @@ PROCEDURE pCollectCDR:
    
    DO lii = 1 TO objDBConn:liCurrentQueryHandleCount:
 
-      llOK = objDBConn:lhCurrentQueryHandle[lii]:QUERY-PREPARE(lcQuery).
+      lhQuery = objDBConn:lhCurrentQueryHandle[lii].
+
+      llOK = lhQuery:QUERY-PREPARE(lcQuery).
       
       IF NOT llOK
       THEN NEXT.
 
-      objDBConn:lhCurrentQueryHandle[lii]:QUERY-OPEN().
+      lhQuery:QUERY-OPEN().
       
       DO WHILE TRUE:
 
-         llOK = objDBConn:lhCurrentQueryHandle[lii]:GET-NEXT(NO-LOCK).
+         llOK = lhQuery:GET-NEXT(NO-LOCK).
 
          /* Query handle is invalid, no more records, or query is not open */
          IF llOK = ? OR NOT llOK
          THEN LEAVE.
-         
-         CREATE ttCall.
-         
-         ghttCall:BUFFER-COPY(objDBConn:lhCurrentQueryHandle[lii]:GET-BUFFER-HANDLE(1)) NO-ERROR.
-         
-         IF ERROR-STATUS:ERROR THEN DELETE ttCall.
-         ELSE DO:
-            FIND ttBillItemAndGroup WHERE ttBillItemAndGroup.BillCode = ttCall.BillCode NO-ERROR.
+
+         /* Billcode changes */
+         IF lhQuery:FIRST-OF(1)
+         THEN DO:
+            lcBillCode = lhQuery:GET-BUFFER-HANDLE(1)::BillCode.
+            
+            FIND ttBillItemAndGroup WHERE ttBillItemAndGroup.BillCode = lcBillCode NO-ERROR.
             IF AVAILABLE ttBillItemAndGroup
             THEN DO:
                ASSIGN
-                  ttCall.GroupOrder = ttBillItemAndGroup.GroupOrder
-                  ttCall.BIGroup    = ttBillItemAndGroup.BIGroup
+                  liGroupOrder = ttBillItemAndGroup.GroupOrder
+                  lcBIGroup    = ttBillItemAndGroup.BIGroup
                   .
                IF olPremiumNumberText = FALSE AND
                   ttBillItemAndGroup.PremiumBillCode
@@ -1524,21 +1602,42 @@ PROCEDURE pCollectCDR:
 
                IF olGBText = FALSE AND
                   ttBillItemAndGroup.GBBillCode
-               THEN olGBText = TRUE.               
+               THEN olGBText = TRUE.
             END.
-            
-            ASSIGN
-               ttCall.CDRTable = "MobCDR"
-               liFound         = liFound + 1
-               .
+            ELSE ASSIGN
+                    liGroupOrder = 0
+                    lcBiGroup    = ""
+                    .
          END.
+
+         /* DateSt changes */
+         IF lhQuery:FIRST-OF(2)
+         THEN lcBillItemName = fBillItemName(lcBillCode,
+                                             lhQuery:GET-BUFFER-HANDLE(1)::DateSt,
+                                             liLanguage).
+
+         CREATE ttCall.
          
-         IF liFound >= 99999999
-         THEN LEAVE.
+         ghttCall:BUFFER-COPY(lhQuery:GET-BUFFER-HANDLE(1)) NO-ERROR.
          
+         IF ERROR-STATUS:ERROR
+         THEN DELETE ttCall.
+         ELSE DO:
+            ASSIGN
+                 ttCall.GroupOrder   = liGroupOrder
+                 ttCall.BIGroup      = lcBIGroup
+                 ttCall.BillItemName = lcBillItemName
+                 ttCall.CDRTable     = "MobCDR"
+                 liFound             = liFound + 1
+                 .
+               
+            IF liFound >= 99999999
+            THEN LEAVE.               
+         END.
+
       END.
 
-      objDBConn:lhCurrentQueryHandle[lii]:QUERY-CLOSE().
+      lhQuery:QUERY-CLOSE().
 
    END.
 
