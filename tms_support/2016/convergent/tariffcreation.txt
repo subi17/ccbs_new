@@ -1,9 +1,6 @@
 CLIType;CONTDSL10
 TariffBundle;
-BaseBundle;
-BundleList;CONTS2GB,CONTFIXED,CONTDSL
-LineType;Entry
-FixedLineType;ASDL
+BaseBundle;CONTS2GBB
 MonthlyFee;39.99
 ComparisonFeeForSTC;39.99
 ServiceClass;
@@ -31,3 +28,4 @@ OnlyVOICE;No
 MonthlyFeeBillCode;CONTS2GBMF
 TariffName;La Infinita 2 GB
 BonoSupport;YES
+BundleUpsell;DATA200_UPSELL
