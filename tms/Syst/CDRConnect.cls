@@ -64,6 +64,7 @@ CLASS Syst.CDRConnect:
             THEN DO:
                CREATE BUFFER lhBuffer FOR TABLE DBConfig.LogicalName + "." + lcCDRTableName.
                CREATE QUERY lhQuery.
+               lhQuery:PRIVATE-DATA = DBConfig.LogicalName.
                lhQuery:SET-BUFFERS(lhBuffer).              
                
                ASSIGN
@@ -144,11 +145,12 @@ CLASS Syst.CDRConnect:
    END METHOD.
 
 
-   METHOD PRIVATE HANDLE mConnectDBAndGiveBuffer
+   METHOD PRIVATE HANDLE mConnectDBAndGiveQueryHandle
       ( icDBPath        AS CHARACTER,
         icDBName        AS CHARACTER ):
 
       DEFINE VARIABLE lhBuffer AS HANDLE NO-UNDO.
+      DEFINE VARIABLE lhQuery  AS HANDLE NO-UNDO.
 
       IF NOT CONNECTED(icDBName)
       THEN DO:
@@ -158,8 +160,11 @@ CLASS Syst.CDRConnect:
       END.
       
       CREATE BUFFER lhBuffer FOR TABLE icDBName + "." + lcCDRTableName.
+      CREATE QUERY lhQuery.
+      lhQuery:PRIVATE-DATA = icDBName.
+      lhQuery:SET-BUFFERS(lhBuffer).              
 
-      RETURN lhBuffer.
+      RETURN lhQuery.
 
    END METHOD.
 
@@ -183,8 +188,8 @@ CLASS Syst.CDRConnect:
          IF NOT ttDBConfig.DBConnected
          THEN DO:
             ASSIGN
-               ttDBConfig.QueryHandle = mConnectDBAndGiveBuffer(ttDBConfig.DBPathName,
-                                                                 ttDBConfig.DBLogicalName)
+               ttDBConfig.QueryHandle = mConnectDBAndGiveQueryHandle(ttDBConfig.DBPathName,
+                                                                     ttDBConfig.DBLogicalName)
                ttDBConfig.DBConnected  = TRUE
                .
             
