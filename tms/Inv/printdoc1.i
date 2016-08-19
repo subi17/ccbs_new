@@ -43,6 +43,7 @@ DEF VAR lcSesNum      AS CHAR NO-UNDO.
 DEF VAR lcNewLine     AS CHAR NO-UNDO.
 DEF VAR ldMinInvAmt   AS DEC  NO-UNDO.
 DEF VAR lcMinInvAmt   AS CHAR NO-UNDO. 
+DEF VAR lcTaxZone     AS CHAR NO-UNDO.
 DEF VAR lcBIName      AS CHAR NO-UNDO.
 DEF VAR lcTipoName    AS CHAR NO-UNDO.
 DEF VAR lcCTName      AS CHAR NO-UNDO.
@@ -189,18 +190,15 @@ DEF BUFFER bttRow FOR ttRow.
 FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
    
    DEFINE VARIABLE liGroupOrder AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE ldaDate      AS DATE      NO-UNDO.
    
-   ldaDate = ADD-INTERVAL(TODAY, -6, "months").
-   
-   FOR EACH BillItem FIELDS (Brand BillCode BIGroup) NO-LOCK WHERE
+   FOR EACH BillItem NO-LOCK WHERE
       BillItem.Brand = gcBrand
       BREAK BY BillItem.BIGroup:
       
       IF FIRST-OF(BillItem.BIGroup)
       THEN DO:
          liGroupOrder = 0.
-         FOR BItemGroup FIELDS (Brand BIGroup InvoiceOrder) NO-LOCK WHERE
+         FOR BItemGroup NO-LOCK WHERE
             BItemGroup.Brand   = gcBrand AND
             BItemGroup.BIGroup = BillItem.BIGroup:
 
@@ -214,9 +212,7 @@ FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
             RepText.Brand = gcBrand                AND
             RepText.TextType  = 1                  AND 
             RepText.LinkCode  = BillItem.BillCode  AND
-            RepText.Language  = Language.Language  AND
-            RepText.ToDate   >= ldaDate            AND
-            RepText.FromDate <= ldaDate:
+            RepText.Language  = Language.Language:
       
          CREATE ttBillItemName.
          ASSIGN
@@ -767,7 +763,7 @@ PROCEDURE pttMSOwner:
       .
 
 
-   FOR EACH MSOwner FIELDS (MSSeq TSBegin TSEnd PayType CLIType CLIEvent TariffBundle) NO-LOCK USE-INDEX MSSeq WHERE
+   FOR EACH MSOwner NO-LOCK USE-INDEX MSSeq WHERE
       MSOwner.MSSeq = iiMSSeq:
          
       IF MSOwner.TSEnd < MSOwner.TSBegin 
@@ -902,7 +898,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
                               MsRequest.MsSeq     = SubInvoice.MsSeq    AND
                               MsRequest.ReqType   = 82                  AND
                               MsRequest.ReqStat   = 2                   AND
-                              MsRequest.ActStamp  >  MsRequest.ActStamp AND
+                              MsRequest.ActStamp  >  ldeActStamp        AND
                               MsRequest.ActStamp <= ldToPer) THEN
                FOR FIRST SingleFee WHERE
                          SingleFee.Brand     = gcBrand                  AND
@@ -1155,7 +1151,6 @@ PROCEDURE pGetInvoiceRowData:
    DEF VAR ldAmtExclVat AS DEC  NO-UNDO.
    DEF VAR lcRowCode    AS CHAR NO-UNDO. 
    DEF VAR lcRowName    AS CHAR NO-UNDO. 
-   DEF VAR lcExcludedRows AS CHAR NO-UNDO.
    DEF VAR ldeQ25DiscAmt  AS DEC  NO-UNDO.
    DEFINE VARIABLE llTemp AS LOGICAL NO-UNDO.
 
@@ -1168,7 +1163,6 @@ PROCEDURE pGetInvoiceRowData:
       ASSIGN
          ldVatTot   = 0
          liRowOrder = 0.
-         lcExcludedRows = "".
 
       DO liVatCnt = 1 TO 5:
          ldVatTot = ldVatTot + SubInvoice.VatAmount[liVatCnt].
@@ -1197,8 +1191,6 @@ PROCEDURE pGetInvoiceRowData:
                ldeQ25DiscAmt = ldeQ25DiscAmt + InvRow.Amt
                llTemp        = fAddToExcludedRow(ROWID(InvRow)).
          END.
-
-         lcExcludedRows = LEFT-TRIM(lcExcludedRows,",").
 
          FOR FIRST InvRow NO-LOCK WHERE
                   InvRow.Invnum = SubInvoice.InvNum AND
@@ -1357,11 +1349,11 @@ PROCEDURE pGetInvoiceRowData:
 END PROCEDURE.
 
 /* note: should be called only after pGetInvoiceRowData */
-PROCEDURE pWriteInvoiceVatData:
+PROCEDURE pGetInvoiceVatData:
 
-   DEFINE INPUT  PARAMETER ihXML AS HANDLE NO-UNDO.
+   EMPTY TEMP-TABLE ttVat.
 
-   DEF VAR ldeExclSum AS DEC NO-UNDO. 
+   DEF VAR ldeExclSum AS DEC NO-UNDO.
 
    /* vat amount */
    DO liPCnt = 1 TO 10:
@@ -1393,25 +1385,11 @@ PROCEDURE pWriteInvoiceVatData:
          ELSE ttVat.VATBasis = ttVAT.VATBasis - ldeExclSum.
       END.
 
-   FOR EACH ttVat NO-LOCK:
-      ihXML:START-ELEMENT("TaxDetails").
-      ihXML:WRITE-DATA-ELEMENT("TaxZone",fLocalItemName("TaxZone",
-                                                        Invoice.TaxZone,
-                                                        liLanguage,
-                                                        Invoice.ToDate)).
-      ihXML:WRITE-DATA-ELEMENT("TaxPercent",fDispXMLDecimal(ttVat.VatPerc)).
-      ihXML:WRITE-DATA-ELEMENT("AmountExclTax",
-                               fDispXMLDecimal(ttVat.VatBasis)).
-      ihXML:WRITE-DATA-ELEMENT("TaxAmount",
-                               fDispXMLDecimal(ttVat.VatAmt)).
-      ihXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttVat.VatBasis +
-                                                        ttVat.VatAmt)).
-      ihXML:END-ELEMENT("TaxDetails").
-   END.
-   
-   FINALLY:
-      EMPTY TEMP-TABLE ttVat.
-   END FINALLY.
+   /* taxzone */
+   lcTaxZone = fLocalItemName("TaxZone",
+                              Invoice.TaxZone,
+                              liLanguage,
+                              Invoice.ToDate).
 
 END PROCEDURE.
 
