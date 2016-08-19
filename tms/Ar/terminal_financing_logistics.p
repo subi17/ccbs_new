@@ -136,7 +136,7 @@ DO liLoop = 1 TO EXTENT(lcFResult):
 
             NEXT FF_LOOP.
          END.
-         ELSE IF FixedFee.FinancedResult EQ {&TF_STATUS_YOIGO_SUB_TERMINATED} THEN NEXT.
+         ELSE IF FixedFee.FinancedResult EQ {&TF_STATUS_YOIGO_SUB_TERMINATED} THEN NEXT FF_LOOP.
          ELSE IF orderdelivery.LOStatusId EQ 8 AND 
                  orderDelivery.LoTimeStamp < DATETIME(TODAY - 16,0) THEN DO:
                

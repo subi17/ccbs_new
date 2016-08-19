@@ -40,13 +40,6 @@ ELSE IF MsRequest.ReqType NE {&REQTYPE_REVERT_RENEWAL_ORDER} THEN DO:
    RETURN.
 END. /* ELSE IF MsRequest.ReqType NE {&REQTYPE_REVERT_RENEWAL_ORDER} */
 
-FIND FIRST MobSub WHERE
-           MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN DO:
-   fReqError("Subscription not found").
-   RETURN.
-END. /* IF NOT AVAIL MobSub THEN DO: */
-
 FIND FIRST bMsRequest WHERE
            bMsRequest.MsSeq      = MsRequest.MSSeq  AND
            bMsRequest.ReqType    = {&REQTYPE_AFTER_SALES_ORDER} AND
@@ -77,6 +70,69 @@ IF llDoEvent THEN DO:
    
    {lib/eventlog.i}
 END.
+
+/* Remove penalty fees from order that was not delivered.
+   Subscription termination created fees. 
+   Returns false if conditions not match. */
+FUNCTION fRemoveOrderFees RETURNS LOGICAL (
+   iiOrderID AS INT):
+
+   FIND Order WHERE 
+        Order.Brand   EQ gcBrand AND 
+        Order.OrderID EQ iiOrderID NO-LOCK NO-ERROR.
+   IF NOT AVAIL Order THEN RETURN FALSE.
+
+   FIND Orderdelivery WHERE 
+        Orderdelivery.brand EQ gcBrand AND
+        Orderdelivery.OrderId EQ Order.OrderId AND
+        Orderdelivery.LoStatusId EQ 12 NO-LOCK NO-ERROR.
+   IF NOT AVAIL Orderdelivery THEN RETURN FALSE.
+
+   /* Remove singlefees created in termination */
+   FOR EACH SingleFee EXCLUSIVE-LOCK WHERE
+            SingleFee.Brand EQ gcBrand AND
+            SingleFee.Custnum EQ MsRequest.CustNum AND
+            SingleFee.HostTable EQ "Mobsub" AND
+            SingleFee.KeyValue EQ STRING(MsRequest.MsSeq) AND
+            SingleFee.OrderId EQ Order.OrderID:
+
+      IF NOT SingleFee.Billed OR
+         CAN-FIND(FIRST Invoice NO-LOCK WHERE
+                        Invoice.InvNum EQ SingleFee.InvNum AND
+                        Invoice.InvType EQ 99) THEN DO:
+         IF llDoEvent THEN
+            RUN StarEventMakeDeleteEventWithMemo(
+               (BUFFER SingleFee:HANDLE),
+               MsRequest.UserCode,
+              "RevertRenewalOrder").
+         DELETE SingleFee.
+      END.
+      ELSE DO:
+         FOR FIRST Invoice NO-LOCK WHERE
+                   Invoice.InvNum = SingleFee.InvNum AND
+                   Invoice.InvType = 1:
+            IF LOOKUP(STRING(SingleFee.FMItemId), lcCreditFees) = 0 THEN
+            lcCreditFees = lcCreditFees + STRING(SingleFee.FMItemId) + ",".
+         END.
+      END.
+   END.
+
+   RUN pCreateRenewalCreditNote(iiOrderID,TRIM(lcCreditFees,",")).
+
+   /* Change status of fixedfees so that it is not handled again in terminal_financing_logistics.p */
+   FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
+            FixedFee.Brand EQ gcBrand AND
+            FixedFee.Custnum EQ MsRequest.CustNum AND
+            FixedFee.HostTable EQ "Mobsub" AND
+            FixedFee.KeyValue EQ STRING(MsRequest.MsSeq) AND
+            FixedFee.OrderId EQ Order.OrderID:
+
+      FixedFee.FinancedResult = {&TF_STATUS_YOIGO_FF_TERMINATED}.
+   END.
+   fReqStatus(2,"").
+   RETURN TRUE.
+
+END FUNCTION.
 
 FUNCTION fCollectActivationFees RETURNS LOGICAL (
    icDCEvent AS CHAR,
@@ -213,6 +269,13 @@ FUNCTION fCollectTerminationFees RETURNS LOGICAL (
    
    RETURN TRUE.
 END FUNCTION.
+
+FIND FIRST MobSub WHERE
+           MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
+IF NOT AVAIL MobSub THEN DO:
+   IF NOT fRemoveOrderFees(MsRequest.ReqIparam1) THEN fReqError("Subscription not found").
+   RETURN.
+END. /* IF NOT AVAIL MobSub THEN DO: */
 
 RUN pRevertRenewalOrder.
 
