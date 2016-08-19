@@ -57,7 +57,7 @@
 &GLOBAL-DEFINE CONTU   "CONTRATO"
 &GLOBAL-DEFINE CONTL   "Contrato"
 &GLOBAL-DEFINE TARJ    "Tarjeta"
-&GLOBAL-DEFINE MOF     "monthly fee"
+&GLOBAL-DEFINE MOF     "MonthlyFee"
 &GLOBAL-DEFINE TN      "TariffName"
 &GLOBAL-DEFINE BS      "BonoSupport"
 /*convergence project*/
