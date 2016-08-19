@@ -1537,7 +1537,7 @@ PROCEDURE pCollectCDR:
    objDBConn:mSetQueryHandlesConnectIfNeeded(bCallInvSeq.FromDate,
                                              bCallInvSeq.ToDate).
 
-   lcQuery = SUBSTITUTE(gcCallQueryBegin,
+   lcQuery = SUBSTITUTE(gcCallQueryEnd,
                         STRING(bCallInvSeq.CustNum),
                         STRING(bCallInvSeq.InvSeq),
                         STRING(bCallInvSeq.FromDate),
@@ -1547,7 +1547,7 @@ PROCEDURE pCollectCDR:
 
       lhQuery = objDBConn:lhCurrentQueryHandle[lii].
       
-      llOK = lhQuery:QUERY-PREPARE(SUBSTITUTE(gcCallQueryEnd, lhQuery:PRIVATE-DATA) + lcQuery).
+      llOK = lhQuery:QUERY-PREPARE(SUBSTITUTE(gcCallQueryBegin, lhQuery:PRIVATE-DATA) + lcQuery).
       
       IF NOT llOK
       THEN NEXT.
