@@ -527,8 +527,21 @@ PROCEDURE pInvoice2XML:
                                 fDispXMLDecimal(Invoice.AmtExclVat)).
       lhXML:WRITE-DATA-ELEMENT("TaxAmount",fDispXMLDecimal(Invoice.VatAmt)).
       
-      RUN pWriteInvoiceVatData(lhXML).  
-      
+      RUN pGetInvoiceVatData.  
+
+      FOR EACH ttVat NO-LOCK:
+         lhXML:START-ELEMENT("TaxDetails").
+         lhXML:WRITE-DATA-ELEMENT("TaxZone",lcTaxZone).
+         lhXML:WRITE-DATA-ELEMENT("TaxPercent",fDispXMLDecimal(ttVat.VatPerc)).
+         lhXML:WRITE-DATA-ELEMENT("AmountExclTax",
+                                  fDispXMLDecimal(ttVat.VatBasis)).
+         lhXML:WRITE-DATA-ELEMENT("TaxAmount",
+                                  fDispXMLDecimal(ttVat.VatAmt)).
+         lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttVat.VatBasis +
+                                                           ttVat.VatAmt)).
+         lhXML:END-ELEMENT("TaxDetails").
+      END.
+
       /* As per requirement, Discount Amt value has to be subtracted from Installment Amt. 
          But Discound Amt is negative value, so it is  added to InstallmentAmt value */
       lhXML:START-ELEMENT("AdditionalDetail").
