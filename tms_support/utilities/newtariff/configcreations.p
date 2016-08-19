@@ -323,7 +323,7 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
    NO-LOCK NO-ERROR.           
                 
    IF NOT AVAILABLE RatePlan THEN 
-      RETURN "ERROR: RatePlan doesn't exists".
+      RETURN lcRateplan + " ERROR: RatePlan doesn't exists " + REPLACE(icTariffCode,"CONT","CONTRATO").
    
    FIND FIRST PListConf WHERE 
               PListConf.Brand    = gcBrand           AND 
