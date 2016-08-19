@@ -50,7 +50,8 @@ DEF VAR lcCTName      AS CHAR NO-UNDO.
 DEF VAR ghttCall      AS HANDLE NO-UNDO.
 DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
 DEF VAR lcFusionCLITypes AS CHAR NO-UNDO.
-DEF VAR gcCallQuery   AS CHAR NO-UNDO.
+DEF VAR gcCallQueryBegin AS CHAR NO-UNDO.
+DEF VAR gcCallQueryEnd AS CHAR NO-UNDO.
 
 DEFINE VARIABLE objDBConn AS CLASS Syst.CDRConnect NO-UNDO.
 
@@ -65,7 +66,8 @@ ASSIGN
    ghttCall         = BUFFER ttCall:HANDLE
    lcFusionCLITypes = fCParamC("FUSION_SUBS_TYPE")
    lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES")
-   gcCallQuery      = "MobCDR.InvCust = &1 AND " +
+   gcCallQueryBegin = "FOR EACH &1.MobCDR NO-LOCK WHERE "
+   gcCallQueryEnd   = "MobCDR.InvCust = &1 AND " +
                       "MobCDR.InvSeq  = &2 AND " +
                       "MobCDR.DateST >= &3 AND " +
                       "MobCDR.DateST <= &4 " +
@@ -1535,7 +1537,7 @@ PROCEDURE pCollectCDR:
    objDBConn:mSetQueryHandlesConnectIfNeeded(bCallInvSeq.FromDate,
                                              bCallInvSeq.ToDate).
 
-   lcQuery = SUBSTITUTE(gcCallQuery,
+   lcQuery = SUBSTITUTE(gcCallQueryBegin,
                         STRING(bCallInvSeq.CustNum),
                         STRING(bCallInvSeq.InvSeq),
                         STRING(bCallInvSeq.FromDate),
@@ -1544,8 +1546,8 @@ PROCEDURE pCollectCDR:
    DO lii = 1 TO objDBConn:liCurrentQueryHandleCount:
 
       lhQuery = objDBConn:lhCurrentQueryHandle[lii].
-
-      llOK = lhQuery:QUERY-PREPARE(lcQuery).
+      
+      llOK = lhQuery:QUERY-PREPARE(SUBSTITUTE(gcCallQueryEnd, lhQuery:PRIVATE-DATA) + lcQuery).
       
       IF NOT llOK
       THEN NEXT.
