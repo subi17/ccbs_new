@@ -73,6 +73,9 @@ DEF VAR lcMandateId AS CHAR NO-UNDO.
 DEF VAR ldaMandateDate AS DATE NO-UNDO. 
 DEF VAR ldLastDate     AS DATE NO-UNDO. 
 DEF VAR lcInitialBarring AS CHAR NO-UNDO. 
+DEF VAR ldReqActDate   AS DATE NO-UNDO.
+DEF VAR liReqActTime   AS INT  NO-UNDO.
+DEF VAR liActivationTS AS INT  NO-UNDO.
 
 DEF BUFFER bInvCust    FOR Customer.
 DEF BUFFER bRefCust    FOR Customer.
@@ -124,6 +127,18 @@ END.
 
 FIND FIRST CustTemp NO-LOCK NO-ERROR.
 
+/*YDR-1824
+AC1: Request activation time is used as a beginning of a subscription timestamps if the request handling time is the same day than activation date. 
+AC2: First second of subscription handling date is used as a beginning of subscription timestamps if the request handling time is not the same day than activation date.*/
+fSplitTS(MsRequest.ActStamp,
+         ldReqActDate,
+         liReqActTime).
+
+IF ldReqActDate = TODAY THEN
+   ASSIGN liActivationTS = MSRequest.ActStamp.
+ELSE
+   ASSIGN liActivationTS = fMake2Dt(TODAY,1).
+
 RUN check-order(output lcErrorTxt).
 
 IF lcErrorTxt > "" THEN DO:
@@ -169,7 +184,7 @@ NO-LOCK NO-ERROR.
 CREATE MobSub. 
 
 ASSIGN
-   Mobsub.ActivationTS  = fMakeTS()
+   Mobsub.ActivationTS  = liActivationTS
    MobSub.MsSeq         = Order.MSSeq .
 
 llCorporate = CAN-FIND(OrderCustomer OF Order WHERE
@@ -261,7 +276,7 @@ ASSIGN
    MobSub.MultiSimID       = Order.MultiSimID
    MobSub.MultiSimType     = Order.MultiSimType
    MobSub.TariffActDate    = TODAY
-   MobSub.TariffActTS      = fMakeTS().
+   MobSub.TariffActTS      = liActivationTS.
 
 fSetOrderStatus(Order.OrderId,"6").  
 fMarkOrderStamp(Order.OrderID,
@@ -309,18 +324,7 @@ ASSIGN
    mSOwner.CLI       = Mobsub.cli
    MSOwner.CustNum   = Mobsub.CustNum
    MSOwner.MsSeq     = MobSub.MsSeq
-   MSOwner.TsBegin   = YEAR (MobSub.ActivationDate) * 10000 +  /* yyyymmdd */
-                       month(MobSub.ActivationDate) * 100   +
-                       DAY  (MobSub.ActivationDate) +
-
-                      (IF MobSub.ActivationDate > TODAY THEN 0 
-                          /* no decimals, i.e we assume that the
-                                usage begun on activation DAY AT 00.00.00 */
-
-                       ELSE 
-                           /* immediate activation */
-                             TIME / 100000)  
-
+   MSOwner.TsBegin   = liActivationTS
    msowner.tsend      = 99999999.99999
    MSOwner.BillTarg   = Mobsub.BillTarg
    MSOwner.Brand      = mobsub.Brand
@@ -903,7 +907,7 @@ PROCEDURE check-order:
             MSISDN.Stat        = 3.
 
          ASSIGN 
-            MSISDN.ValidFrom   = fMakeTS()
+            MSISDN.ValidFrom   = liActivationTS
             MSISDN.ActionDate  = Today.
       END.
 
