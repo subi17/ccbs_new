@@ -1424,7 +1424,9 @@ FUNCTION fRevertRenewalOrderRequest RETURNS INTEGER
      INPUT  idActStamp    AS DEC,    /* when request should be handled */
      INPUT  icReqSource   AS CHAR,
      OUTPUT ocResult      AS CHAR).
-   
+
+   DEF BUFFER bTermMobSub FOR TermMobSub.
+
    ocResult = fChkRequest(iiMsSeq,
                           {&REQTYPE_REVERT_RENEWAL_ORDER},
                           "",
@@ -1446,6 +1448,19 @@ FUNCTION fRevertRenewalOrderRequest RETURNS INTEGER
       liReqCreated         = bCreaReq.MsRequest
       bCreaReq.ReqIparam1  = iiOrderId
       bCreaReq.ReqSource   = icReqSource.
+
+   /* Order revert allowed also for terminated subscription */
+   IF NOT CAN-FIND(FIRST MobSub WHERE
+                         MobSub.MsSeq EQ iiMSSeq) THEN DO:
+      FIND FIRST bTermMobSub NO-LOCK WHERE
+                 bTermMobSub.MsSeq = iiMSSeq NO-ERROR.
+      IF AVAIL bTermMobSub THEN DO:
+         ASSIGN
+            bCreaReq.MsSeq      = bTermMobSub.MsSeq
+            bCreaReq.CLI        = bTermMobSub.CLI
+            bCreaReq.CustNum    = bTermMobSub.CustNum.
+      END.
+   END.
 
    RELEASE bCreaReq.
    
