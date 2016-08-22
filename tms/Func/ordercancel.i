@@ -377,7 +377,7 @@ PROCEDURE pCreateRenewalCreditNote:
       FIND FIRST TermMobSub NO-LOCK WHERE
                  TermMobSub.MsSeq = Order.MsSeq NO-ERROR.
       IF NOT AVAIL TermMobSub THEN RETURN.
-      liCustnum = TermMobSub.Custnum
+      liCustnum = TermMobSub.Custnum.
    END.
    ELSE liCustnum = MobSub.Custnum.
 
