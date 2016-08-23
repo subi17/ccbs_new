@@ -1,6 +1,10 @@
 DEF VAR searchkey AS CHAR INIT "CONTSTEST2GB".
 DEF VAR tariffkey AS CHAR INIT "CONTTESTDSL10".
-DEF VAR execution AS LOGICAL INIT TRUE.
+DEF VAR execution AS LOGICAL INIT FALSE.
+
+IF execution THEN
+   MESSAGE "Warning, going to remove table fields with values: " +
+      searchkey + ", " + tariffkey.
 
 FOR EACH BDest WHERE BDest.bdest BEGINS searchkey:
    IF execution THEN 
@@ -8,14 +12,14 @@ FOR EACH BDest WHERE BDest.bdest BEGINS searchkey:
    ELSE
    DISP BDest.
 END.
-MESSAGE "BDest removed" VIEW-AS ALERT-BOX.
+MESSAGE "BDest" VIEW-AS ALERT-BOX.
 FOR EACH DCServiceComponent WHERE DCServiceComponent.defparam BEGINS searchkey:
    IF execution THEN
       DELETE DCServiceComponent.
    ELSE
    DISP DCServiceComponent.
 END.
-MESSAGE "DC SErvComp removed" VIEW-AS ALERT-BOX.
+MESSAGE "DCSErvComp" VIEW-AS ALERT-BOX.
 /*
 FOR EACH RatePlan WHERE Rateplan.rateplan BEGINS REPLACE(searchkey,"CONT","CONTRATO"):
    IF execution THEN
@@ -23,7 +27,7 @@ FOR EACH RatePlan WHERE Rateplan.rateplan BEGINS REPLACE(searchkey,"CONT","CONTR
    ELSE
    DISP RatePlan.
 END.
-MESSAGE "RatePlan removed" VIEW-AS ALERT-BOX.
+MESSAGE "RatePlan" VIEW-AS ALERT-BOX.
 
 FOR EACH PListConf WHERE PListConf.rateplan BEGINS REPLACE(searchkey,"CONT","CONTRATO"):
    IF execution THEN
@@ -31,7 +35,7 @@ FOR EACH PListConf WHERE PListConf.rateplan BEGINS REPLACE(searchkey,"CONT","CON
    ELSE
    DISP PlistConf.
 END.
-MESSAGE "PlistConf removed" VIEW-AS ALERT-BOX.
+MESSAGE "PlistConf" VIEW-AS ALERT-BOX.
 */
 FOR EACH DCSErvicePackage WHERE DCServicePackage.DCEvent BEGINS searchkey:
    IF execution THEN
@@ -39,7 +43,7 @@ FOR EACH DCSErvicePackage WHERE DCServicePackage.DCEvent BEGINS searchkey:
    ELSE
    DISP DCSErvicePackage.
 END.
-MESSAGE "DCServicePackage removed" VIEW-AS ALERT-BOX.
+MESSAGE "DCServicePackage" VIEW-AS ALERT-BOX.
 
 FOR EACH ServiceLimitTarget WHERE ServiceLimitTarget.outsiderate BEGINS searchkey:
    IF execution THEN
@@ -47,7 +51,7 @@ FOR EACH ServiceLimitTarget WHERE ServiceLimitTarget.outsiderate BEGINS searchke
    ELSE
    DISP ServiceLimitTarget.
 END.
-MESSAGE "ServiceLimitTarget removed" VIEW-AS ALERT-BOX.
+MESSAGE "ServiceLimitTarget" VIEW-AS ALERT-BOX.
 
 FOR EACH ServiceLimit WHERE ServiceLimit.slcode BEGINS searchkey:
    IF execution THEN
@@ -55,7 +59,7 @@ FOR EACH ServiceLimit WHERE ServiceLimit.slcode BEGINS searchkey:
    ELSE
    DISP ServiceLimit.
 END.
-MESSAGE "ServiceLimit removed" VIEW-AS ALERT-BOX.
+MESSAGE "ServiceLimit" VIEW-AS ALERT-BOX.
 
 FOR EACH ServiceLimitGroup WHERE ServiceLimitgroup.groupcode EQ searchkey:
    IF execution THEN
@@ -63,7 +67,7 @@ FOR EACH ServiceLimitGroup WHERE ServiceLimitgroup.groupcode EQ searchkey:
    ELSE
    DISP ServiceLimitgroup.
 END.
-MESSAGE "ServiceLimitgroup removed" VIEW-AS ALERT-BOX.
+MESSAGE "ServiceLimitgroup" VIEW-AS ALERT-BOX.
 
 FOR EACH CLIType WHERE CLIType.Clitype EQ searchkey:
    IF execution THEN
@@ -79,7 +83,7 @@ FOR EACH CLIType WHERE CLIType.Clitype EQ Tariffkey:
    DISP Clitype.clitype.
 END.
 
-MESSAGE "CliType removed" VIEW-AS ALERT-BOX.
+MESSAGE "CliType" VIEW-AS ALERT-BOX.
 
 FOR EACH FeeModel WHERE FeeModel.feemodel BEGINS searchkey:
    IF execution THEN
@@ -87,7 +91,7 @@ FOR EACH FeeModel WHERE FeeModel.feemodel BEGINS searchkey:
    ELSE
    DISP feemodel.feemodel.
 END.
-MESSAGE "feemodel removed" VIEW-AS ALERT-BOX.
+MESSAGE "feemodel" VIEW-AS ALERT-BOX.
 
 FOR EACH CTServPac WHERE CTServPac.clitype EQ tariffkey:
    IF execution THEN
@@ -95,7 +99,7 @@ FOR EACH CTServPac WHERE CTServPac.clitype EQ tariffkey:
    ELSE
    DISP CTSErvPac.clitype.
 END.
-MESSAGE "CTServPAc removed" VIEW-AS ALERT-BOX.
+MESSAGE "CTServPAc" VIEW-AS ALERT-BOX.
 
 FOR EACH CTServPac WHERE CTServPac.clitype EQ searchkey:
    IF execution THEN
@@ -103,7 +107,7 @@ FOR EACH CTServPac WHERE CTServPac.clitype EQ searchkey:
    ELSE
       DISP CTSErvPac.clitype.
 END.
-MESSAGE "CTServPAc removed" VIEW-AS ALERT-BOX.
+MESSAGE "CTServPAc" VIEW-AS ALERT-BOX.
 
 FOR EACH FMItem WHERE FMItem.billcode BEGINS searchkey:
    IF execution THEN
@@ -111,7 +115,7 @@ FOR EACH FMItem WHERE FMItem.billcode BEGINS searchkey:
    ELSE
    DISP FMItem.billcode.
 END.
-MESSAGE "FMItem removed" VIEW-AS ALERT-BOX.
+MESSAGE "FMItem" VIEW-AS ALERT-BOX.
 
 FOR EACH Reptext WHERE RepText.linkcode BEGINS tariffkey:
    IF execution THEN
@@ -119,7 +123,7 @@ FOR EACH Reptext WHERE RepText.linkcode BEGINS tariffkey:
    ELSE
    DISP RepText.
 END.
-MESSAGE "Reptext removed" VIEW-AS ALERT-BOX.
+MESSAGE "Reptext" VIEW-AS ALERT-BOX.
 
 FOR EACH Daycampaign WHERE Daycampaign.billcode BEGINS searchkey:
    IF execution THEN
@@ -127,7 +131,7 @@ FOR EACH Daycampaign WHERE Daycampaign.billcode BEGINS searchkey:
    ELSE
    DISP Daycampaign.billcode.
 END.
-MESSAGE "dayCampaign removed" VIEW-AS ALERT-BOX.
+MESSAGE "dayCampaign" VIEW-AS ALERT-BOX.
 
 FOR EACH CTServEl WHERE CTServEl.clitype BEGINS searchkey:
    IF execution THEN
@@ -135,7 +139,7 @@ FOR EACH CTServEl WHERE CTServEl.clitype BEGINS searchkey:
    ELSE
    DISP CTServEl.
 END.
-MESSAGE "ctservel removed" VIEW-AS ALERT-BOX.
+MESSAGE "ctservel" VIEW-AS ALERT-BOX.
 
 FOR EACH CTServEl WHERE CTServEl.clitype BEGINS tariffkey:
    IF execution THEN
@@ -143,5 +147,5 @@ FOR EACH CTServEl WHERE CTServEl.clitype BEGINS tariffkey:
    ELSE
    DISP CTServEl.
 END.
-MESSAGE "ctservel removed" VIEW-AS ALERT-BOX.
+MESSAGE "ctservel" VIEW-AS ALERT-BOX.
 
