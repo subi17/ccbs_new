@@ -75,7 +75,7 @@ DEF VAR ldLastDate     AS DATE NO-UNDO.
 DEF VAR lcInitialBarring AS CHAR NO-UNDO. 
 DEF VAR ldReqActDate   AS DATE NO-UNDO.
 DEF VAR liReqActTime   AS INT  NO-UNDO.
-DEF VAR liActivationTS AS INT  NO-UNDO.
+DEF VAR ldeActivationTS AS DEC  NO-UNDO.
 
 DEF BUFFER bInvCust    FOR Customer.
 DEF BUFFER bRefCust    FOR Customer.
@@ -135,9 +135,9 @@ fSplitTS(MsRequest.ActStamp,
          liReqActTime).
 
 IF ldReqActDate = TODAY THEN
-   ASSIGN liActivationTS = MSRequest.ActStamp.
+   ASSIGN ldeActivationTS = MSRequest.ActStamp.
 ELSE
-   ASSIGN liActivationTS = fMake2Dt(TODAY,1).
+   ASSIGN ldeActivationTS = fMake2Dt(TODAY,1).
 
 RUN check-order(output lcErrorTxt).
 
@@ -184,7 +184,7 @@ NO-LOCK NO-ERROR.
 CREATE MobSub. 
 
 ASSIGN
-   Mobsub.ActivationTS  = liActivationTS
+   Mobsub.ActivationTS  = ldeActivationTS
    MobSub.MsSeq         = Order.MSSeq .
 
 llCorporate = CAN-FIND(OrderCustomer OF Order WHERE
@@ -276,7 +276,7 @@ ASSIGN
    MobSub.MultiSimID       = Order.MultiSimID
    MobSub.MultiSimType     = Order.MultiSimType
    MobSub.TariffActDate    = TODAY
-   MobSub.TariffActTS      = liActivationTS.
+   MobSub.TariffActTS      = ldeActivationTS.
 
 fSetOrderStatus(Order.OrderId,"6").  
 fMarkOrderStamp(Order.OrderID,
@@ -324,7 +324,7 @@ ASSIGN
    mSOwner.CLI       = Mobsub.cli
    MSOwner.CustNum   = Mobsub.CustNum
    MSOwner.MsSeq     = MobSub.MsSeq
-   MSOwner.TsBegin   = liActivationTS
+   MSOwner.TsBegin   = ldeActivationTS
    msowner.tsend      = 99999999.99999
    MSOwner.BillTarg   = Mobsub.BillTarg
    MSOwner.Brand      = mobsub.Brand
@@ -907,7 +907,7 @@ PROCEDURE check-order:
             MSISDN.Stat        = 3.
 
          ASSIGN 
-            MSISDN.ValidFrom   = liActivationTS
+            MSISDN.ValidFrom   = ldeActivationTS
             MSISDN.ActionDate  = Today.
       END.
 
