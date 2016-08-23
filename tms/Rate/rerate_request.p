@@ -24,14 +24,59 @@ DEF VAR liMsSeq         AS INT  NO-UNDO.
 DEF VAR liCustNum       AS INT  NO-UNDO.
 DEF VAR lcMsSeqList     AS CHAR NO-UNDO.
 DEF VAR ldeDSSActStamp  AS DEC  NO-UNDO.
-DEF VAR liActiveDB      AS INT  NO-UNDO.
+DEFINE VARIABLE llCurrentDB AS LOGICAL NO-UNDO.
 DEF VAR ldaActiveFrom   AS DATE NO-UNDO.
 DEF VAR ldaActiveTo     AS DATE NO-UNDO.
 
 DEF BUFFER bSubRequest FOR MsRequest.
 
+FUNCTION fIsCurrentDB RETURNS LOGICAL
+   (icBrand AS CHAR,
+    icTableName AS CHAR,
+    OUTPUT odaValidFrom AS DATE,
+    OUTPUT odaValidTo AS DATE):
+
+   DEFINE VARIABLE lcDBPhysicalName AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lii              AS INTEGER   NO-UNDO.
+
+   lcDBPhysicalName = PDBNAME("mcdr").
+
+   DO lii = 0 TO 1:
+      FOR FIRST DBConfig NO-LOCK WHERE
+                DBConfig.Brand = icBrand AND
+                DBConfig.TableName = icTableName AND
+                DBConfig.DBState = lii:
+
+         IF lcDBPhysicalName = DBConfig.DirectConnect + "/" + DBConfig.DBConnName
+         THEN DO:
+            ASSIGN
+               odaValidFrom = DBConfig.FromDate
+               odaValidTo   = DBConfig.ToDate.
+            RETURN DBConfig.DBState = 0.
+         END.
+      END.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
 
 /******* Main start ********/
+
+/* Get the cdr database active dates and
+   return information whether of not the
+   session has an active cdr database (DBState = 0) */
+llCurrentDB = fIsCurrentDB(gcBrand,
+                           "MobCDR",
+                           OUTPUT ldaActiveFrom,
+                           OUTPUT ldaActiveTo).
+
+IF llCurrentDB AND ldaActiveFrom = ?
+THEN ASSIGN
+   ldaActiveFrom = 1/1/2010
+   ldaActiveTo   = 12/31/2049.
+ELSE IF llCurrentDB = FALSE AND (ldaActiveFrom = ? OR ldaActiveTo = ?)
+THEN RETURN "ERROR:Invalid DBConfig".
 
 ASSIGN 
    lcReqType  = "Rerate"
@@ -43,11 +88,15 @@ IF iiRequest >= 0 THEN DO:
       RETURN "ERROR:Unknown request".
 END.
 ELSE DO:
-   IF SOURCE-PROCEDURE:PRIVATE-DATA BEGINS "Rerate_Param:" THEN 
+   IF SOURCE-PROCEDURE:PRIVATE-DATA BEGINS "Rerate_Param:"
+   THEN DO:
       liCustNum  = INT(ENTRY(2,SOURCE-PROCEDURE:PRIVATE-DATA,":")) NO-ERROR.
-
-   IF liCustNum = 0 THEN 
+      IF liCustNum = 0 THEN 
       RETURN "ERROR:Invalid parameters".
+   END.
+
+   ELSE IF NOT SOURCE-PROCEDURE:PRIVATE-DATA BEGINS "Rerate_new_db"
+   THEN RETURN "ERROR:Invalid parameters".
 END.
 
 RUN cli_ratep.p PERSISTENT SET lhSubsRerate.
@@ -58,16 +107,8 @@ RUN pInitializeRerate IN lhCustRerate.
 
 llReportStarted = FALSE.
 
-/* period for current active cdr db */ 
-liActiveDB = fGetCurrentDB(gcBrand,
-                           "MobCDR",
-                           OUTPUT ldaActiveFrom,
-                           OUTPUT ldaActiveTo).
-IF ldaActiveFrom = ? THEN ASSIGN
-   ldaActiveFrom = 1/1/2010
-   ldaActiveTo   = 12/31/2049.
-   
-IF iiRequest > 0 THEN RUN pGetAllRequests.
+
+IF iiRequest > 0 OR llCurrentDB = FALSE THEN RUN pGetAllRequests.
 ELSE RUN pGetCustomerRequests(liCustNum).
 
 IF VALID-HANDLE(lhSubsRerate) THEN DO:
@@ -98,6 +139,12 @@ PROCEDURE pGetAllRequests:
    BY MsRequest.ActStamp
    BY MsRequest.MsRequest:
 
+      IF llCurrentDB AND MsRequest.ReqDtParam1 > ldaActiveTo
+      THEN NEXT RERATE_REQUEST.
+
+      ELSE IF llCurrentDB = FALSE AND MsRequest.ReqDtParam1 < ldaActiveFrom
+      THEN NEXT RERATE_REQUEST.
+
       RUN pHandleRequest.
       IF RETURN-VALUE BEGINS "NEXT" THEN DO:
          liSkipped = liSkipped + 1.
@@ -125,6 +172,12 @@ PROCEDURE pGetCustomerRequests:
    BY MsRequest.ActStamp
    BY MsRequest.MsRequest:
 
+      IF llCurrentDB AND MsRequest.ReqDtParam1 > ldaActiveTo
+      THEN NEXT CUSTOMER_REQUEST.
+
+      ELSE IF llCurrentDB = FALSE AND MsRequest.ReqDtParam1 < ldaActiveFrom
+      THEN NEXT CUSTOMER_REQUEST.
+
       RUN pHandleRequest.
       IF RETURN-VALUE BEGINS "NEXT" THEN 
          NEXT CUSTOMER_REQUEST.
@@ -149,18 +202,6 @@ PROCEDURE pHandleRequest:
       RETURN "NEXT".
    END.
 
-   /* if period to be rerated is newer than what the current connected cdr db
-      contains then move the request to be performed later (cdr dbs have been
-      renewed but the new dbs have not been connected yet) 
-   */
-   IF MsRequest.ReqDtParam1 > ldaActiveTo THEN DO TRANS:
-      FIND CURRENT MsRequest EXCLUSIVE-LOCK.
-      IF MsRequest.ReqDParam2 = 0 THEN 
-         MsRequest.ReqDParam2 = MsRequest.ActStamp.
-      MsRequest.ActStamp = fSecOffSet(MsRequest.ActStamp,3600).
-      RETURN "NEXT".
-   END.
-   
    IF llReport AND NOT llReportStarted THEN DO:
       IF VALID-HANDLE(lhSubsRerate) THEN 
          RUN pInitializeRerateReport IN lhSubsRerate(katun,
