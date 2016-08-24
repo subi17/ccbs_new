@@ -50,7 +50,7 @@ DEFINE TEMP-TABLE ttFiles No-UNDO
 
 /* ***************************  Main Block  *************************** */
 
-
+/*
 RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "BillItem" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
 RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "ShaperConf" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
 RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "RatePlan" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
@@ -70,7 +70,7 @@ RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "CLIType" "/apps/
 RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "CTServPac" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
 RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "RepText" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
 RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "CTServEl" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
-
+*/
 NEW-TARIFF:
 DO TRANSACTION:
    ASSIGN

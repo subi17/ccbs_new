@@ -1,6 +1,6 @@
 CLIType;CONTDSL10
 TariffBundle;
-BaseBundle;CONTS2GBB
+BaseBundle;CONTS2GB
 MonthlyFee;9.99
 CommercialFee;9.99
 ComparisonFee;9.99
@@ -9,9 +9,9 @@ WebStatus;Retired
 STCStatus;Active
 PaymentType;Postpaid
 UsageType;Voice
-FirstMonthFeeCalc;Prorate
+FirstMonthFeeCalc;Relative
 LastMonthFeeCalc;Full
-TypeOfContract;PackageWithCounters
+TypeOfContract;PackageWithCounter
 DataLimit;2048
 VoiceLimit;
 BDestinationLimit;300

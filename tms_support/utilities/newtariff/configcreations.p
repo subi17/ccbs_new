@@ -394,7 +394,7 @@ DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
       DayCampaign.DCEvent         = icTariffCode 
       DayCampaign.DCName          = icDCName
       DayCampaign.ValidFrom       = TODAY 
-      DayCampaign.ValidTo         = 12/31/15
+      DayCampaign.ValidTo         = 12/31/49
       DayCampaign.StatusCode      = 1           /* Default value Active */
       DayCampaign.DCType          = lcTOC
       DayCampaign.InstanceLimit   = 1                            
