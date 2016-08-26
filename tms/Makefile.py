@@ -1,5 +1,6 @@
 from pike import *
 from subprocess import call, Popen, PIPE
+from ast import literal_eval
 import tempfile
 import shutil
 import socket
@@ -16,6 +17,14 @@ myself = os.path.basename(os.getcwd())
 nonp_source = ['script/' + x for x in os.listdir('script')]
 skip_timelog = False
 show_file = False
+
+# Leto ei toimi, kun tarvii tcp connectoinnin. Kuinka hoidetaan???
+def active_cdr_db_pf():
+    cdr_fetch = Popen(mpro + ['-pf', '../db/progress/store/common.pf',
+                              '-b', '-p', Syst/list_active_cdr_databases.p], stdout=PIPE)
+    return literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
+
+cdr_databases = active_cdr_db_pf()
 
 @target('test>test')
 def test(*a): pass
@@ -42,6 +51,8 @@ def daemon(*a):
     for pp in parameters[2:]:
         if pp in databases:
             args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
+        elif pp in cdr_databases
+            args.extend(cdr_databases[pp])
         else:
             args.append(pp)
     daemonpf = '../etc/pf/' + daemon + '.pf'
@@ -214,6 +225,8 @@ def terminal(*a):
     for pp in parameters[1:]:
         if pp in databases:
             args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
+        elif pp in cdr_databases
+            args.extend(cdr_databases[pp])
         else:
             args.append(pp)
     cmd = Popen(mpro + args)
@@ -241,6 +254,8 @@ def batch(*a):
     for pp in parameters[1:]:
         if pp in databases:
             args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
+        elif pp in cdr_databases
+            args.extend(cdr_databases[pp])
         else:
             args.append(pp)
     logfile = open('../var/log/%s.log' % module_base, 'a')
@@ -283,6 +298,8 @@ def idbatch(*a):
     for pp in parameters[2:]:
         if pp in databases:
             args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
+        elif pp in cdr_databases
+            args.extend(cdr_databases[pp])
         else:
             args.append(pp)
     try:

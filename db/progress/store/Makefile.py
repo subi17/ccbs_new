@@ -16,12 +16,46 @@ exec(open(relpath + '/etc/make_site.py').read())
 # Configure database location (on different partitions/remote hosts)
 # for production servers. All databases not found in this dictionary
 # will be assumed/created in the current directory
+
 db_locations = {
-#   'myhost': {'db_one': '/data/one/db',
-#              'remote_db': 'otherhost:/data/two/db'},
-#   'otherhost': {'db_one': myhost:/data/one/db',
-#                 'db_two': '/data/two/db'}
+    'alpheratz': {'common': '/db1/common/common',
+                'ordercanal': '/db1/ordercanal/ordercanal',
+                'mobile': '/db1/mobile/mobile',
+                'counter': '/db1/counter/counter',
+                'star': '/db1/star/star',
+                'prepedr': '/db1/prepedr/prepedr',
+                'fraudcdr': '/db1/fraudcdr/fraudcdr',
+                'reratelog': '/db1/reratelog/reratelog'},
+    'arneb': {'common': '/db1/common/common',
+                'ordercanal': '/db1/ordercanal/ordercanal',
+                'mobile': '/db1/mobile/mobile',
+                'counter': '/db1/counter/counter',
+                'star': '/db1/star/star',
+                'prepedr': '/db1/prepedr/prepedr',
+                'fraudcdr': '/db1/fraudcdr10/fraudcdr10',
+                'reratelog': '/db1/reratelog/reratelog'},
+    'pallas': {'common': '/db1/common/common',
+                'ordercanal': '/db1/ordercanal/ordercanal',
+                'mobile': '/db1/mobile/mobile',
+                'counter': '/db1/counter/counter',
+                'star': '/db1/star/star',
+                'prepedr': '/db1/prepedr/prepedr',
+                'fraudcdr': '/db1/fraudcdr10/fraudcdr10',
+                'reratelog': '/db1/reratelog/reratelog'},
+    'leto': {'common': 'pallas.int.asp.qvantel.net:common',
+                'ordercanal': 'pallas.int.asp.qvantel.net:ordercanal',
+                'mobile': 'pallas.int.asp.qvantel.net:mobile',
+                'counter': 'pallas.int.asp.qvantel.net:counter',
+                'star': 'pallas.int.asp.qvantel.net:star',
+                'prepedr': 'pallas.int.asp.qvantel.net:prepedr'},
+    'maja': {'common': 'pallas.int.asp.qvantel.net:common',
+                'ordercanal': 'pallas.int.asp.qvantel.net:ordercanal',
+                'mobile': 'pallas.int.asp.qvantel.net:mobile',
+                'counter': 'pallas.int.asp.qvantel.net:counter',
+                'star': 'pallas.int.asp.qvantel.net:star',
+                'prepedr': 'pallas.int.asp.qvantel.net:prepedr'}
 }
+
 db_processes = {
 #   'db_one': ['sql', 'biw', 'wdog', (4, 'apw')]
 }
@@ -247,6 +281,10 @@ def stop(match, deps):
 
 @target(['stop'])
 def clean(match, deps):
+
+    if environment != 'development':
+        raise PikeException('Not going to delete anything on production. Do it yourself')
+
     for db in parameters or databases:
         path = os.path.dirname(db_full_path(db))
         if path.find(':') > -1:
