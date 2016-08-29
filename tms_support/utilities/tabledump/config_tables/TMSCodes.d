@@ -34,7 +34,7 @@
 "ActionLog" "ActionStatus" "Log" "2" "Ended succesfully" "" "" 1
 "ActionLog" "ActionStatus" "Log" "3" "Logged" "" "" 1
 "ActionLog" "ActionStatus" "Log" "5" "Cancelled" "" "" 1
-"AppIdPrefix" "ApplicationId" "ExternalAPI" "selfService" "Transaction Ids for particular application" "" "601,602,501,502,503,504,505,506,650,507,701,509" 1
+"AppIdPrefix" "ApplicationId" "ExternalAPI" "selfService" "Transaction Ids for particular application" "" "601,602,501,502,503,504,505,506,650,507,701,509,510" 1
 "Barring" "BarringGroup" "" "ATC" "" "" "20" 0
 "Barring" "BarringGroup" "" "Collections" "" "" "30" 0
 "Barring" "BarringGroup" "" "Customer" "" "" "10" 0
