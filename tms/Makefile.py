@@ -18,10 +18,13 @@ nonp_source = ['script/' + x for x in os.listdir('script')]
 skip_timelog = False
 show_file = False
 
-# Leto ei toimi, kun tarvii tcp connectoinnin. Kuinka hoidetaan???
 def active_cdr_db_pf():
+    if '-S' in open('../db/progress/store/common.pf').read():
+        connection_type = "tcp"
+    else
+        connection_type = "local"
     cdr_fetch = Popen(mpro + ['-pf', '../db/progress/store/common.pf',
-                              '-b', '-p', Syst/list_active_cdr_databases.p], stdout=PIPE)
+                              '-b', '-p', Syst/list_active_cdr_databases.p, '-param', connection_type], stdout=PIPE)
     return literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
 
 cdr_databases = active_cdr_db_pf()

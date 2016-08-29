@@ -56,9 +56,16 @@ db_locations = {
                 'prepedr': 'pallas.int.asp.qvantel.net:prepedr'}
 }
 
-db_processes = {
-#   'db_one': ['sql', 'biw', 'wdog', (4, 'apw')]
+db_processes = {'common': ['biw', 'wdog', ('apw', 4)],
+                'ordercanal': ['biw', 'wdog', ('apw', 4)],
+                'mobile': ['biw', 'wdog', ('apw', 4)],
+                'counter': ['biw', 'wdog', ('apw', 4)],
+                'star': ['biw', 'wdog', ('apw', 4)],
+                'prepedr': ['biw', 'wdog', ('apw', 4)],
+                'fraudcdr': ['biw', 'wdog', ('apw', 4)],
+                'reratelog': ['biw', 'wdog', ('apw', 4)]
 }
+
 process_name = {'biw': 'Before-Image writer',
                 'apw': 'Asynchronous page writer',
                 'wdog': 'user watchdog',
