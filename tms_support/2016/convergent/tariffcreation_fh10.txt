@@ -1,9 +1,9 @@
-CLIType;CONTDSL10
+CLIType;CONTFH10
 TariffBundle;
 BaseBundle;CONTS2GB
 MonthlyFee;9.99
-CommercialFee;39.98
-ComparisonFee;39.98
+CommercialFee;49.98
+ComparisonFee;49.98
 ServiceClass;
 WebStatus;Retired
 STCStatus;Active

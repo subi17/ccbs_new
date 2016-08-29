@@ -318,8 +318,7 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
    
    FIND FIRST RatePlan WHERE 
               RatePlan.Brand    = gcBrand AND 
-              RatePlan.RatePlan = IF lcRatePlan NE "" THEN lcRatePlan 
-                                  ELSE REPLACE(icTariffCode,"CONT","CONTRATO")
+              RatePlan.RatePlan = "CONTRATOFUS"
    NO-LOCK NO-ERROR.           
                 
    IF NOT AVAILABLE RatePlan THEN 

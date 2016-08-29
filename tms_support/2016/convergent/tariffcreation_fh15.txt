@@ -1,9 +1,9 @@
-CLIType;CONTDSL10
+CLIType;CONTFH15
 TariffBundle;
-BaseBundle;CONTS2GB
-MonthlyFee;9.99
-CommercialFee;39.98
-ComparisonFee;39.98
+BaseBundle;CONTS8GB
+MonthlyFee;14.99
+CommercialFee;49.98
+ComparisonFee;49.98
 ServiceClass;
 WebStatus;Retired
 STCStatus;Active
@@ -12,7 +12,7 @@ UsageType;Voice
 FirstMonthFeeCalc;Relative
 LastMonthFeeCalc;Full
 TypeOfContract;PackageWithCounter
-DataLimit;2048
+DataLimit;8192
 VoiceLimit;
 BDestinationLimit;300
 FirstMonthDataLimit;Relative
@@ -26,7 +26,7 @@ DSS2Compatible;Yes
 DSS2PrimaryLine;No
 NativeVoIPCompatible;No
 OnlyVOICE;No
-MonthlyFeeBillCode;CONTS2GBMF
-TariffName;La Infinita 2 GB
+MonthlyFeeBillCode;CONTS8GBMF
+TariffName;La Infinita 8 GB
 BonoSupport;YES
 BundleUpsell;DATA200_UPSELL

@@ -415,11 +415,11 @@ PROCEDURE pDataCreValidation:
    IF NOT AVAILABLE CLIType THEN DO:
       IF lcTariffBundle NE ""         AND 
          lcTariffBundle NE lcCliType  THEN 
-         lcSubList = lcCliType + "," + lcTariffBundle.
+         lcSubList = lcCliType /* + "," + lcTariffBundle*/.
       
       IF lcBaseBundle NE ""        AND 
          lcBaseBundle NE lcCliType THEN 
-         lcSubList = lcCliType + "," + lcBaseBundle.
+         lcSubList = lcCliType /* + "," + lcBaseBundle*/.
 
       IF lcBaseBundle NE ""        AND
          lcBaseBundle EQ lcCliType THEN
