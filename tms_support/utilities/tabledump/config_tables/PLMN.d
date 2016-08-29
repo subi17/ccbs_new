@@ -466,6 +466,7 @@
 "QATQT" "Q-Tel" "Qatar" "QA" "" "974"
 "REU02" "Orange Reunion (La)" "REUNION" "RE" "" "262"
 "REUOT" "Outremer Telecom Reunion (La)" "REUNION" "RE" "" "262"
+"ROM05" "S.C.RCS&RDS S.A." "ROMANIA" "RO" "" "40"
 "ROMCS" "COSMOTE Romanian Mobile Telecommunications S.A" "Romania" "RO" "" "40"
 "ROMMF" "MobiFon S.A." "Romania" "RO" "" "40"
 "ROMMR" "Orange Romania" "Romania" "RO" "" "40"
