@@ -190,7 +190,7 @@
 "1" 8 "ReqDtParam1" "" 0 "" yes ""
 "1" 8 "ReqDtParam2" "" 0 "" yes ""
 "1" 8 "ReqIParam1" "" 0 "" yes ""
-"1" 8 "ReqIParam2" "Wait for another request" 0 "" no ""
+"1" 8 "ReqIParam2" "Wait for another request" 0 "" yes ""
 "1" 8 "ReqIParam3" "Payterm contract id" 0 "" yes ""
 "1" 8 "ReqIParam4" "Run rerate" 0 "" yes "1=yes"
 "1" 8 "ReqIParam5" "" 0 "" yes ""
