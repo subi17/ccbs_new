@@ -21,10 +21,10 @@ show_file = False
 def active_cdr_db_pf():
     if '-S' in open('../db/progress/store/common.pf').read():
         connection_type = "tcp"
-    else
+    else:
         connection_type = "local"
     cdr_fetch = Popen(mpro + ['-pf', '../db/progress/store/common.pf',
-                              '-b', '-p', Syst/list_active_cdr_databases.p, '-param', connection_type], stdout=PIPE)
+                              '-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type], stdout=PIPE)
     return literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
 
 cdr_databases = active_cdr_db_pf()
@@ -54,7 +54,7 @@ def daemon(*a):
     for pp in parameters[2:]:
         if pp in databases:
             args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
-        elif pp in cdr_databases
+        elif pp in cdr_databases:
             args.extend(cdr_databases[pp])
         else:
             args.append(pp)
@@ -228,7 +228,7 @@ def terminal(*a):
     for pp in parameters[1:]:
         if pp in databases:
             args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
-        elif pp in cdr_databases
+        elif pp in cdr_databases:
             args.extend(cdr_databases[pp])
         else:
             args.append(pp)
@@ -257,7 +257,7 @@ def batch(*a):
     for pp in parameters[1:]:
         if pp in databases:
             args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
-        elif pp in cdr_databases
+        elif pp in cdr_databases:
             args.extend(cdr_databases[pp])
         else:
             args.append(pp)
@@ -301,7 +301,7 @@ def idbatch(*a):
     for pp in parameters[2:]:
         if pp in databases:
             args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
-        elif pp in cdr_databases
+        elif pp in cdr_databases:
             args.extend(cdr_databases[pp])
         else:
             args.append(pp)
