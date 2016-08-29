@@ -1856,7 +1856,7 @@ PROCEDURE pGetCTNAME:
                  ldeMFWithTax = ldeMFWithTax - DPRate.DiscValue.
           END.
        
-       /* YBU-4965 X-Mas campaign 2015 */
+       /* YDR-2294 */
        FIND FIRST DiscountPlan NO-LOCK WHERE
                   DiscountPlan.DPRuleId = "BONO6WEBDISC" NO-ERROR.
 
@@ -1884,15 +1884,10 @@ PROCEDURE pGetCTNAME:
           END.
 
           IF llgEmailText THEN DO:
-             /* YDR-2160 */
-             /* There would be some orders created during x-mas campaign (YPR-3083)
-                are still exsisting in queue AND released now OR later, so email 
-                text for x-mas campaign orders has not be modified OR removed */
-             IF Order.CrStamp >= fCParamDe("AprilPromotionFromDate") AND
-                Order.CrStamp <= fCParamDe("AprilPromotionToDate")   THEN 
-                lcMFText = lcMFText + "<br/>1 GB/mes extra gratis durante 3 meses". /* YDR-2160 */
-             ELSE 
-                lcMFText = lcMFText + "<br/>1 GB/mes gratis hasta dic. 2016". /* YPR-3083 */
+             IF Order.CrStamp >= fCParamDe("SepPromotionFromDate") AND
+                Order.CrStamp <  fCParamDe("SepPromotionToDate")   THEN 
+                lcMFText = lcMFText + (IF liLang EQ 5 THEN "<br/>1 GB/mes extra free during 4 months"
+                                       ELSE "<br/>1 GB/mes extra gratis durante 4 meses"). 
           END.
        END.
     

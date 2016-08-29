@@ -389,21 +389,14 @@ PROCEDURE pDiscountPlan:
          DPMember.DiscValue = DPRate.DiscValue.
    END.
 
-
-   IF DiscountPlan.dprule EQ "BONO6WEBDISC" THEN DO: /* YPR-3083 */
-      /* YDR-2160 */
-      /* There would be some orders created during x-mas campaign (YPR-3083)
-         are still exsisting in queue AND released now OR later, so validTo
-         for x-mas campaign orders has not be modified OR removed */
-      
-      IF Order.CrStamp       >= fCParamDe("AprilPromotionFromDate") AND 
-         Order.CrStamp       <= fCParamDe("AprilPromotionToDate")   THEN 
+   IF DiscountPlan.dprule EQ "BONO6WEBDISC" THEN DO: 
+      /* YDR-2294 */
+      IF Order.CrStamp >= fCParamDe("SepPromotionFromDate") AND 
+         Order.CrStamp <  fCParamDe("SepPromotionToDate")   THEN 
       ASSIGN 
-            ldate              = ADD-INTERVAL(MobSub.ActivationDate,2,"months")
+            ldate              = ADD-INTERVAL(MobSub.ActivationDate,3,"months")
             DPMember.ValidFrom = MobSub.ActivationDate
-            DPMember.ValidTo   = fLastDayOfMonth(lDate). /* YDR-2160 */
-      ELSE    
-         DPMember.ValidTo = 12/31/16. /* YPR-3083 */
+            DPMember.ValidTo   = fLastDayOfMonth(lDate). 
    END.
    
    RETURN "".
