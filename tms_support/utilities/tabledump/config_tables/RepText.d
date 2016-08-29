@@ -2777,11 +2777,11 @@
 1 "" 3 "ALCATEL ONETOUCH POP 3 (55) 4G" 0 "G0000255" "1" 25/02/16 31/12/49
 1 "" 4 "ALCATEL ONETOUCH POP 3 (55) 4G" 0 "G0000255" "1" 25/02/16 31/12/49
 1 "" 5 "ALCATEL POP 3 (5.5) 4G" 0 "G0000255" "1" 25/02/16 31/12/49
-1 "" 1 "Honor 5x Gris" 0 "G0000256" "1" 25/02/16 31/12/49
+1 "" 1 "Honor 5x" 0 "G0000256" "1" 25/02/16 31/12/49
 1 "" 2 "Honor 5x Gris" 0 "G0000256" "1" 25/02/16 31/12/49
 1 "" 3 "Honor 5x Gris" 0 "G0000256" "1" 25/02/16 31/12/49
 1 "" 4 "Honor 5x Gris" 0 "G0000256" "1" 25/02/16 31/12/49
-1 "" 5 "Honor 5x Gris" 0 "G0000256" "1" 25/02/16 31/12/49
+1 "" 5 "Honor 5x" 0 "G0000256" "1" 25/02/16 31/12/49
 1 "" 1 "Samsung Galaxy J3" 0 "G0000257" "1" 25/02/16 31/12/49
 1 "" 2 "Samsung Galaxy J3" 0 "G0000257" "1" 25/02/16 31/12/49
 1 "" 3 "Samsung Galaxy J3" 0 "G0000257" "1" 25/02/16 31/12/49
@@ -2922,6 +2922,41 @@
 1 "" 3 "HTC 10" 0 "G0000284" "1" 24/05/16 31/12/49
 1 "" 4 "HTC 10" 0 "G0000284" "1" 24/05/16 31/12/49
 1 "" 5 "HTC 10" 0 "G0000284" "1" 24/05/16 31/12/49
+1 "" 1 "LG K10" 0 "G0000285" "1" 28/06/16 31/12/49
+1 "" 2 "LG K10" 0 "G0000285" "1" 28/06/16 31/12/49
+1 "" 3 "LG K10" 0 "G0000285" "1" 28/06/16 31/12/49
+1 "" 4 "LG K10" 0 "G0000285" "1" 28/06/16 31/12/49
+1 "" 5 "LG K10" 0 "G0000285" "1" 28/06/16 31/12/49
+1 "" 1 "Huawei P9 Plus" 0 "G0000286" "1" 28/06/16 31/12/49
+1 "" 2 "Huawei P9 Plus" 0 "G0000286" "1" 28/06/16 31/12/49
+1 "" 3 "Huawei P9 Plus" 0 "G0000286" "1" 28/06/16 31/12/49
+1 "" 4 "Huawei P9 Plus" 0 "G0000286" "1" 28/06/16 31/12/49
+1 "" 5 "Huawei P9 Plus" 0 "G0000286" "1" 28/06/16 31/12/49
+1 "" 1 "Wolder Wiam 23" 0 "G0000287" "1" 28/06/16 31/12/49
+1 "" 2 "Wolder Wiam 23" 0 "G0000287" "1" 28/06/16 31/12/49
+1 "" 3 "Wolder Wiam 23" 0 "G0000287" "1" 28/06/16 31/12/49
+1 "" 4 "Wolder Wiam 23" 0 "G0000287" "1" 28/06/16 31/12/49
+1 "" 5 "Wolder Wiam 23" 0 "G0000287" "1" 28/06/16 31/12/49
+1 "" 1 "Huawei Y5 II" 0 "G0000288" "1" 28/06/16 31/12/49
+1 "" 2 "Huawei Y5 II" 0 "G0000288" "1" 28/06/16 31/12/49
+1 "" 3 "Huawei Y5 II" 0 "G0000288" "1" 28/06/16 31/12/49
+1 "" 4 "Huawei Y5 II" 0 "G0000288" "1" 28/06/16 31/12/49
+1 "" 5 "Huawei Y5 II" 0 "G0000288" "1" 28/06/16 31/12/49
+1 "" 1 "Sony Xperia XA" 0 "G0000289" "1" 28/06/16 31/12/49
+1 "" 2 "Sony Xperia XA" 0 "G0000289" "1" 28/06/16 31/12/49
+1 "" 3 "Sony Xperia XA" 0 "G0000289" "1" 28/06/16 31/12/49
+1 "" 4 "Sony Xperia XA" 0 "G0000289" "1" 28/06/16 31/12/49
+1 "" 5 "Sony Xperia XA" 0 "G0000289" "1" 28/06/16 31/12/49
+1 "" 1 "ZTE Blade V7" 0 "G0000290" "1" 28/06/16 31/12/49
+1 "" 2 "ZTE Blade V7" 0 "G0000290" "1" 28/06/16 31/12/49
+1 "" 3 "ZTE Blade V7" 0 "G0000290" "1" 28/06/16 31/12/49
+1 "" 4 "ZTE Blade V7" 0 "G0000290" "1" 28/06/16 31/12/49
+1 "" 5 "ZTE Blade V7" 0 "G0000290" "1" 28/06/16 31/12/49
+1 "" 1 "Samsung Galaxy Tab A (2016)" 0 "G0000291" "1" 28/06/16 31/12/49
+1 "" 2 "Samsung Galaxy Tab A (2016)" 0 "G0000291" "1" 28/06/16 31/12/49
+1 "" 3 "Samsung Galaxy Tab A (2016)" 0 "G0000291" "1" 28/06/16 31/12/49
+1 "" 4 "Samsung Galaxy Tab A (2016)" 0 "G0000291" "1" 28/06/16 31/12/49
+1 "" 5 "Samsung Galaxy Tab A (2016)" 0 "G0000291" "1" 28/06/16 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -2975,16 +3010,16 @@
 1 "" 3 "Terminal" 0 "HANDSET" "1" 24/06/09 31/12/49
 1 "" 4 "Terminal" 0 "HANDSET" "1" 24/06/09 31/12/49
 1 "" 5 "Terminal" 0 "HANDSET" "1" 24/06/09 31/12/49
-1 "" 1 "prueba iPhone 6S Plus 16GB rojo" 0 "IDDDDDDD1" "1" 20/05/16 31/12/49
+1 "" 1 "Telefono pruebas 3 apple 16GB rojo" 0 "IDDDDDDD1" "1" 20/05/16 31/12/49
 1 "" 2 "prueba iPhone 6S Plus 16GB rojo" 0 "IDDDDDDD1" "1" 20/05/16 31/12/49
 1 "" 3 "prueba iPhone 6S Plus 16GB rojo" 0 "IDDDDDDD1" "1" 20/05/16 31/12/49
 1 "" 4 "prueba iPhone 6S Plus 16GB rojo" 0 "IDDDDDDD1" "1" 20/05/16 31/12/49
-1 "" 5 "prueba iPhone 6S Plus 16GB" 0 "IDDDDDDD1" "1" 20/05/16 31/12/49
-1 "" 1 "prueba iPhone 6S Plus 16GB amarillo" 0 "IDDDDDDD2" "1" 20/05/16 31/12/49
+1 "" 5 "Telefono pruebas 3 apple 16GB rojo" 0 "IDDDDDDD1" "1" 20/05/16 31/12/49
+1 "" 1 "Telefono pruebas 3 apple 16GB amarillo" 0 "IDDDDDDD2" "1" 20/05/16 31/12/49
 1 "" 2 "prueba iPhone 6S Plus 16GB amarillo" 0 "IDDDDDDD2" "1" 20/05/16 31/12/49
 1 "" 3 "prueba iPhone 6S Plus 16GB amarillo" 0 "IDDDDDDD2" "1" 20/05/16 31/12/49
 1 "" 4 "prueba iPhone 6S Plus 16GB amarillo" 0 "IDDDDDDD2" "1" 20/05/16 31/12/49
-1 "" 5 "prueba iPhone 6S Plus 16GB amarillo" 0 "IDDDDDDD2" "1" 20/05/16 31/12/49
+1 "" 5 "Telefono pruebas 3 apple 16GB amarillo" 0 "IDDDDDDD2" "1" 20/05/16 31/12/49
 1 "" 1 "Compensación por problema en red" 0 "INC_DISC" "1" 01/12/14 31/12/49
 1 "" 2 "Compensació per problema a la xarxa" 0 "INC_DISC" "1" 01/12/14 31/12/49
 1 "" 3 "Sareko arazoengatiko ordaina" 0 "INC_DISC" "1" 01/12/14 31/12/49
@@ -4392,6 +4427,11 @@
 1 "" 3 "LG G5 Titán" 0 "P030LG5N2" "1" 21/03/16 31/12/49
 1 "" 4 "LG G5 Titán" 0 "P030LG5N2" "1" 21/03/16 31/12/49
 1 "" 5 "LG G5 Titan" 0 "P030LG5N2" "1" 21/03/16 31/12/49
+1 "" 1 "LG G5 Plata" 0 "P030LG5S2" "1" 22/06/16 31/12/49
+1 "" 2 "LG G5 Plata" 0 "P030LG5S2" "1" 22/06/16 31/12/49
+1 "" 3 "LG G5 Plata" 0 "P030LG5S2" "1" 22/06/16 31/12/49
+1 "" 4 "LG G5 Plata" 0 "P030LG5S2" "1" 22/06/16 31/12/49
+1 "" 5 "LG G5 Silver" 0 "P030LG5S2" "1" 22/06/16 31/12/49
 1 "" 1 "LG K8 4G Azul" 0 "P030LK8A2" "1" 23/05/16 31/12/49
 1 "" 2 "LG K8 Azul" 0 "P030LK8A2" "1" 23/05/16 31/12/49
 1 "" 3 "LG K8 Azul" 0 "P030LK8A2" "1" 23/05/16 31/12/49
@@ -4879,16 +4919,31 @@
 1 "" 3 "Samsung Galaxy J3 Dorado" 0 "P034GJ3D2" "1" 22/02/16 31/12/49
 1 "" 4 "Samsung Galaxy J3 Dorado" 0 "P034GJ3D2" "1" 22/02/16 31/12/49
 1 "" 5 "Samsung Galaxy J3 Gold" 0 "P034GJ3D2" "1" 22/02/16 31/12/49
+1 "" 1 "Samsung Galaxy J3 Dorado con regalo Protector de vidrio transparente" 0 "P034GJ3DP" "1" 30/06/16 31/12/49
+1 "" 2 "Samsung Galaxy J3 Dorado con Protector de vidrio transparente" 0 "P034GJ3DP" "1" 30/06/16 31/12/49
+1 "" 3 "Samsung Galaxy J3 Dorado con Protector de vidrio transparente" 0 "P034GJ3DP" "1" 30/06/16 31/12/49
+1 "" 4 "Samsung Galaxy J3 Dorado con Protector de vidrio transparente" 0 "P034GJ3DP" "1" 30/06/16 31/12/49
+1 "" 5 "Samsung Galaxy J3 Gold with Tempered glass screen protector" 0 "P034GJ3DP" "1" 30/06/16 31/12/49
 1 "" 1 "Samsung Galaxy J3 Negro" 0 "P034GJ3N2" "1" 22/02/16 31/12/49
 1 "" 2 "Samsung Galaxy J3 Negro" 0 "P034GJ3N2" "1" 22/02/16 31/12/49
 1 "" 3 "Samsung Galaxy J3 Negro" 0 "P034GJ3N2" "1" 22/02/16 31/12/49
 1 "" 4 "Samsung Galaxy J3 Negro" 0 "P034GJ3N2" "1" 22/02/16 31/12/49
 1 "" 5 "Samsung Galaxy J3 Black" 0 "P034GJ3N2" "1" 22/02/16 31/12/49
+1 "" 1 "Samsung Galaxy J3 Negro con regalo Protector de vidrio transparente" 0 "P034GJ3NP" "1" 30/06/16 31/12/49
+1 "" 2 "Samsung Galaxy J3 Negro con Protector de vidrio transparente" 0 "P034GJ3NP" "1" 30/06/16 31/12/49
+1 "" 3 "Samsung Galaxy J3 Negro con Protector de vidrio transparente" 0 "P034GJ3NP" "1" 30/06/16 31/12/49
+1 "" 4 "Samsung Galaxy J3 Negro con Protector de vidrio transparente" 0 "P034GJ3NP" "1" 30/06/16 31/12/49
+1 "" 5 "Samsung Galaxy J3 Black with Tempered glass screen protector" 0 "P034GJ3NP" "1" 30/06/16 31/12/49
 1 "" 1 "Samsung Galaxy J3 Blanco" 0 "P034GJ3W2" "1" 22/02/16 31/12/49
 1 "" 2 "Samsung Galaxy J3 Blanco" 0 "P034GJ3W2" "1" 22/02/16 31/12/49
 1 "" 3 "Samsung Galaxy J3 Blanco" 0 "P034GJ3W2" "1" 22/02/16 31/12/49
 1 "" 4 "Samsung Galaxy J3 Blanco" 0 "P034GJ3W2" "1" 22/02/16 31/12/49
 1 "" 5 "Samsung Galaxy J3 White" 0 "P034GJ3W2" "1" 22/02/16 31/12/49
+1 "" 1 "Samsung Galaxy J3 Blanco con regalo Protector de vidrio transparente" 0 "P034GJ3WP" "1" 30/06/16 31/12/49
+1 "" 2 "Samsung Galaxy J3 Blanco con Protector de vidrio transparente" 0 "P034GJ3WP" "1" 30/06/16 31/12/49
+1 "" 3 "Samsung Galaxy J3 Blanco con Protector de vidrio transparente" 0 "P034GJ3WP" "1" 30/06/16 31/12/49
+1 "" 4 "Samsung Galaxy J3 Blanco con Protector de vidrio transparente" 0 "P034GJ3WP" "1" 30/06/16 31/12/49
+1 "" 5 "Samsung Galaxy J3 White with Tempered glass screen protector" 0 "P034GJ3WP" "1" 30/06/16 31/12/49
 1 "" 1 "Samsung Galaxy J5 Dorado" 0 "P034GJ5D2" "1" 24/08/15 31/12/49
 1 "" 2 "Samsung Galaxy J5 Dorado" 0 "P034GJ5D2" "1" 24/08/15 31/12/49
 1 "" 3 "Samsung Galaxy J5 Dorado" 0 "P034GJ5D2" "1" 24/08/15 31/12/49
@@ -5048,16 +5103,31 @@
 1 "" 3 "Samsung Galaxy J5 2016 Dorado" 0 "P034J56D2" "1" 25/05/16 31/12/49
 1 "" 4 "Samsung Galaxy J5 2016 Dorado" 0 "P034J56D2" "1" 25/05/16 31/12/49
 1 "" 5 "Samsung Galaxy J5 2016 Gold" 0 "P034J56D2" "1" 25/05/16 31/12/49
+1 "" 1 "Samsung Galaxy J5 2016 Dorado con Protector de vidrio transparente" 0 "P034J56DP" "1" 30/06/16 31/12/49
+1 "" 2 "Samsung Galaxy J5 2016 Dorado con Protector de vidrio transparente" 0 "P034J56DP" "1" 30/06/16 31/12/49
+1 "" 3 "Samsung Galaxy J5 2016 Dorado con Protector de vidrio transparente" 0 "P034J56DP" "1" 30/06/16 31/12/49
+1 "" 4 "Samsung Galaxy J5 2016 Dorado con Protector de vidrio transparente" 0 "P034J56DP" "1" 30/06/16 31/12/49
+1 "" 5 "Samsung Galaxy J5 2016 Gold with Tempered glass screen protector" 0 "P034J56DP" "1" 30/06/16 31/12/49
 1 "" 1 "Samsung Galaxy J5 2016 Negro" 0 "P034J56N2" "1" 23/05/16 31/12/49
 1 "" 2 "Samsung Galaxy J5 2016 Negro" 0 "P034J56N2" "1" 23/05/16 31/12/49
 1 "" 3 "Samsung Galaxy J5 2016 Negro" 0 "P034J56N2" "1" 23/05/16 31/12/49
 1 "" 4 "Samsung Galaxy J5 2016 Negro" 0 "P034J56N2" "1" 23/05/16 31/12/49
 1 "" 5 "Samsung Galaxy J5 2016 Black" 0 "P034J56N2" "1" 23/05/16 31/12/49
+1 "" 1 "Samsung Galaxy J5 2016 Negro con Protector de vidrio transparente" 0 "P034J56NP" "1" 30/06/16 31/12/49
+1 "" 2 "Samsung Galaxy J5 2016 Negro con Protector de vidrio transparente" 0 "P034J56NP" "1" 30/06/16 31/12/49
+1 "" 3 "Samsung Galaxy J5 2016 Negro con Protector de vidrio transparente" 0 "P034J56NP" "1" 30/06/16 31/12/49
+1 "" 4 "Samsung Galaxy J5 2016 Negro con Protector de vidrio transparente" 0 "P034J56NP" "1" 30/06/16 31/12/49
+1 "" 5 "Samsung Galaxy J5 2016 Black with Tempered glass screen protector" 0 "P034J56NP" "1" 30/06/16 31/12/49
 1 "" 1 "Samsung Galaxy J5 2016 Blanco" 0 "P034J56W2" "1" 23/05/16 31/12/49
 1 "" 2 "Samsung Galaxy J5 2016 Blanco" 0 "P034J56W2" "1" 23/05/16 31/12/49
 1 "" 3 "Samsung Galaxy J5 2016 Blanco" 0 "P034J56W2" "1" 23/05/16 31/12/49
 1 "" 4 "Samsung Galaxy J5 2016 Blanco" 0 "P034J56W2" "1" 23/05/16 31/12/49
 1 "" 5 "Samsung Galaxy J5 2016 White" 0 "P034J56W2" "1" 23/05/16 31/12/49
+1 "" 1 "Samsung Galaxy J5 2016 Blanco con Protector de vidrio transparente" 0 "P034J56WP" "1" 30/06/16 31/12/49
+1 "" 2 "Samsung Galaxy J5 2016 Blanco con Protector de vidrio transparente" 0 "P034J56WP" "1" 30/06/16 31/12/49
+1 "" 3 "Samsung Galaxy J5 2016 Blanco con Protector de vidrio transparente" 0 "P034J56WP" "1" 30/06/16 31/12/49
+1 "" 4 "Samsung Galaxy J5 2016 Blanco con Protector de vidrio transparente" 0 "P034J56WP" "1" 30/06/16 31/12/49
+1 "" 5 "Samsung Galaxy J5 2016 White with Tempered glass screen protector" 0 "P034J56WP" "1" 30/06/16 31/12/49
 1 "" 1 "Samsung Galaxy J7 2016 Dorado" 0 "P034J76D2" "1" 23/05/16 31/12/49
 1 "" 2 "Samsung Galaxy J7 2016 Dorado" 0 "P034J76D2" "1" 23/05/16 31/12/49
 1 "" 3 "Samsung Galaxy J7 2016 Dorado" 0 "P034J76D2" "1" 23/05/16 31/12/49
@@ -5250,6 +5320,16 @@
 1 "" 3 "Samsung Galaxy S7 edge Negro" 0 "P034S7EN2" "1" 19/02/16 31/12/49
 1 "" 4 "Samsung Galaxy S7 edge Negro" 0 "P034S7EN2" "1" 19/02/16 31/12/49
 1 "" 5 "Samsung Galaxy S7 edge Black" 0 "P034S7EN2" "1" 19/02/16 31/12/49
+1 "" 1 "Samsung Galaxy S7 edge Oro rosa" 0 "P034S7ER2" "1" 06/07/16 31/12/49
+1 "" 2 "Samsung Galaxy S7 edge Oro rosa" 0 "P034S7ER2" "1" 06/07/16 31/12/49
+1 "" 3 "Samsung Galaxy S7 edge Oro rosa" 0 "P034S7ER2" "1" 06/07/16 31/12/49
+1 "" 4 "Samsung Galaxy S7 edge Oro rosa" 0 "P034S7ER2" "1" 06/07/16 31/12/49
+1 "" 5 "Samsung Galaxy S7 edge Rose gold" 0 "P034S7ER2" "1" 06/07/16 31/12/49
+1 "" 1 "Samsung Galaxy S7 edge Plata" 0 "P034S7ES2" "1" 24/06/16 31/12/49
+1 "" 2 "Samsung Galaxy S7 edge Plata" 0 "P034S7ES2" "1" 24/06/16 31/12/49
+1 "" 3 "Samsung Galaxy S7 edge Plata" 0 "P034S7ES2" "1" 24/06/16 31/12/49
+1 "" 4 "Samsung Galaxy S7 edge Plata" 0 "P034S7ES2" "1" 24/06/16 31/12/49
+1 "" 5 "Samsung Galaxy S7 edge Silver" 0 "P034S7ES2" "1" 24/06/16 31/12/49
 1 "" 1 "Samsung Galaxy S7 Dorado con regalo Gear VR" 0 "P034S7GDP" "1" 19/02/16 31/12/49
 1 "" 2 "Samsung Galaxy S7 Dorado con regalo gafas Gear" 0 "P034S7GDP" "1" 19/02/16 31/12/49
 1 "" 3 "Samsung Galaxy S7 Dorado con regalo gafas Gear" 0 "P034S7GDP" "1" 19/02/16 31/12/49
@@ -5377,6 +5457,11 @@
 1 "" 3 "Sony Xperia M4 Aqua Negro" 0 "P037M4AN2" "1" 27/05/15 31/12/49
 1 "" 4 "Sony Xperia M4 Aqua Negro" 0 "P037M4AN2" "1" 27/05/15 31/12/49
 1 "" 5 "Sony Xperia M4 Aqua Black" 0 "P037M4AN2" "1" 27/05/15 31/12/49
+1 "" 1 "Sony Xperia M4 Aqua Rojo" 0 "P037M4AR2" "1" 29/07/16 31/12/49
+1 "" 2 "Sony Xperia M4 Aqua Rojo" 0 "P037M4AR2" "1" 29/07/16 31/12/49
+1 "" 3 "Sony Xperia M4 Aqua Rojo" 0 "P037M4AR2" "1" 29/07/16 31/12/49
+1 "" 4 "Sony Xperia M4 Aqua Rojo" 0 "P037M4AR2" "1" 29/07/16 31/12/49
+1 "" 5 "Sony Xperia M4 Aqua Red" 0 "P037M4AR2" "1" 29/07/16 31/12/49
 1 "" 1 "Sony Xperia M4 Aqua Blanco" 0 "P037M4AW2" "1" 27/05/15 31/12/49
 1 "" 2 "Sony Xperia M4 Aqua Blanco" 0 "P037M4AW2" "1" 27/05/15 31/12/49
 1 "" 3 "Sony Xperia M4 Aqua Blanco" 0 "P037M4AW2" "1" 27/05/15 31/12/49
@@ -5602,6 +5687,16 @@
 1 "" 3 "Sony XperiaÖ Tablet Z Negra" 0 "P037XTZN2" "1" 26/06/13 31/12/49
 1 "" 4 "Sony XperiaÖ Tablet Z Negra" 0 "P037XTZN2" "1" 26/06/13 31/12/49
 1 "" 5 "Sony Xperia Tablet Z Black" 0 "P037XTZN2" "1" 26/06/13 31/12/49
+1 "" 1 "Sony Xperia XA Negro" 0 "P037XXAN2" "1" 24/06/16 31/12/49
+1 "" 2 "Sony Xperia XA Negro" 0 "P037XXAN2" "1" 24/06/16 31/12/49
+1 "" 3 "Sony Xperia XA Negro" 0 "P037XXAN2" "1" 24/06/16 31/12/49
+1 "" 4 "Sony Xperia XA Negro" 0 "P037XXAN2" "1" 24/06/16 31/12/49
+1 "" 5 "Sony Xperia XA Black" 0 "P037XXAN2" "1" 24/06/16 31/12/49
+1 "" 1 "Sony Xperia XA Blanco" 0 "P037XXAW2" "1" 30/06/16 31/12/49
+1 "" 2 "Sony Xperia XA Blanco" 0 "P037XXAW2" "1" 30/06/16 31/12/49
+1 "" 3 "Sony Xperia XA Blanco" 0 "P037XXAW2" "1" 30/06/16 31/12/49
+1 "" 4 "Sony Xperia XA Blanco" 0 "P037XXAW2" "1" 30/06/16 31/12/49
+1 "" 5 "Sony Xperia XA White" 0 "P037XXAW2" "1" 30/06/16 31/12/49
 1 "" 1 "Sony Xperia L Negro" 0 "P037XYLN1" "1" 28/03/14 31/12/49
 1 "" 2 "Sony Xperia L Negro" 0 "P037XYLN1" "1" 28/03/14 31/12/49
 1 "" 3 "Sony Xperia L Negro" 0 "P037XYLN1" "1" 28/03/14 31/12/49
@@ -5978,11 +6073,21 @@
 1 "" 3 "Huawei P9 Negro" 0 "P043HP9N2" "1" 19/04/16 31/12/49
 1 "" 4 "Huawei P9 Negro" 0 "P043HP9N2" "1" 19/04/16 31/12/49
 1 "" 5 "Huawei P9 Titanium Grey" 0 "P043HP9N2" "1" 19/04/16 31/12/49
+1 "" 1 "Huawei P9 Gris Titanio con regalo Protector de vidrio transparente" 0 "P043HP9NP" "1" 30/06/16 31/12/49
+1 "" 2 "Huawei P9 Gris Titanio con Protector de vidrio transparente" 0 "P043HP9NP" "1" 30/06/16 31/12/49
+1 "" 3 "Huawei P9 Gris Titanio con Protector de vidrio transparente" 0 "P043HP9NP" "1" 30/06/16 31/12/49
+1 "" 4 "Huawei P9 Gris Titanio con Protector de vidrio transparente" 0 "P043HP9NP" "1" 30/06/16 31/12/49
+1 "" 5 "Huawei P9 Titanium Grey with Tempered glass screen protector" 0 "P043HP9NP" "1" 30/06/16 31/12/49
 1 "" 1 "Huawei P9 Plata" 0 "P043HP9W2" "1" 19/04/16 31/12/49
 1 "" 2 "Huawei P9 Blanco" 0 "P043HP9W2" "1" 19/04/16 31/12/49
 1 "" 3 "Huawei P9 Blanco" 0 "P043HP9W2" "1" 19/04/16 31/12/49
 1 "" 4 "Huawei P9 Blanco" 0 "P043HP9W2" "1" 19/04/16 31/12/49
 1 "" 5 "Huawei P9 Silver" 0 "P043HP9W2" "1" 19/04/16 31/12/49
+1 "" 1 "Huawei P9 Plata con regalo Protector de vidrio transparente" 0 "P043HP9WP" "1" 30/06/16 31/12/49
+1 "" 2 "Huawei P9 Plata con Protector de vidrio transparente" 0 "P043HP9WP" "1" 30/06/16 31/12/49
+1 "" 3 "Huawei P9 Plata con Protector de vidrio transparente" 0 "P043HP9WP" "1" 30/06/16 31/12/49
+1 "" 4 "Huawei P9 Plata con Protector de vidrio transparente" 0 "P043HP9WP" "1" 30/06/16 31/12/49
+1 "" 5 "Huawei P9 Silver with Tempered glass screen protector" 0 "P043HP9WP" "1" 30/06/16 31/12/49
 1 "" 1 "Huawei Y6 Negro" 0 "P043HY6N2" "1" 25/09/15 31/12/49
 1 "" 2 "Huawei Y6 Negro" 0 "P043HY6N2" "1" 25/09/15 31/12/49
 1 "" 3 "Huawei Y6 Negro" 0 "P043HY6N2" "1" 25/09/15 31/12/49
@@ -6043,11 +6148,16 @@
 1 "" 3 "Huawei P9 Lite Blanco" 0 "P043P9LW2" "1" 27/04/16 31/12/49
 1 "" 4 "Huawei P9 Lite Blanco" 0 "P043P9LW2" "1" 27/04/16 31/12/49
 1 "" 5 "Huawei P9 Lite White" 0 "P043P9LW2" "1" 27/04/16 31/12/49
-1 "" 1 "Huawei P9 Plus Negro" 0 "P043P9PN2" "1" 10/06/16 31/12/49
+1 "" 1 "Huawei P9 Plus Gris" 0 "P043P9PG2" "1" 24/06/16 31/12/49
+1 "" 2 "Huawei P9 Plus Gris" 0 "P043P9PG2" "1" 24/06/16 31/12/49
+1 "" 3 "Huawei P9 Plus Gris" 0 "P043P9PG2" "1" 24/06/16 31/12/49
+1 "" 4 "Huawei P9 Plus Gris" 0 "P043P9PG2" "1" 24/06/16 31/12/49
+1 "" 5 "Huawei P9 Plus Quartz Grey" 0 "P043P9PG2" "1" 24/06/16 31/12/49
+1 "" 1 "Huawei P9 Plus Gris" 0 "P043P9PN2" "1" 10/06/16 31/12/49
 1 "" 2 "Huawei P9 Plus Negro" 0 "P043P9PN2" "1" 10/06/16 31/12/49
 1 "" 3 "Huawei P9 Plus Negro" 0 "P043P9PN2" "1" 10/06/16 31/12/49
 1 "" 4 "Huawei P9 Plus Negro" 0 "P043P9PN2" "1" 10/06/16 31/12/49
-1 "" 5 "Huawei P9 Plus Black" 0 "P043P9PN2" "1" 10/06/16 31/12/49
+1 "" 5 "Huawei P9 Plus Quartz Grey" 0 "P043P9PN2" "1" 10/06/16 31/12/49
 1 "" 1 "Huawei Ascend P LTE 2 Negro" 0 "P043PL2N2" "1" 26/06/13 31/12/49
 1 "" 2 "Huawei Ascend P LTE 2 Negro" 0 "P043PL2N2" "1" 26/06/13 31/12/49
 1 "" 3 "Huawei Ascend P LTE 2 Negro" 0 "P043PL2N2" "1" 26/06/13 31/12/49
@@ -6127,6 +6237,11 @@
 1 "" 3 "Huawei Ascend Y330 Blanco" 0 "P043Y33W2" "1" 27/05/14 31/12/49
 1 "" 4 "Huawei Ascend Y330 Blanco" 0 "P043Y33W2" "1" 27/05/14 31/12/49
 1 "" 5 "Huawei Ascend Y330 White" 0 "P043Y33W2" "1" 27/05/14 31/12/49
+1 "" 1 "Huawei Y5 II Dorado" 0 "P043Y52D2" "1" 29/07/16 31/12/49
+1 "" 2 "Huawei Y5 II Dorado" 0 "P043Y52D2" "1" 29/07/16 31/12/49
+1 "" 3 "Huawei Y5 II Dorado" 0 "P043Y52D2" "1" 29/07/16 31/12/49
+1 "" 4 "Huawei Y5 II Dorado" 0 "P043Y52D2" "1" 29/07/16 31/12/49
+1 "" 5 "Huawei Y5 II Gold" 0 "P043Y52D2" "1" 29/07/16 31/12/49
 1 "" 1 "Huawei Y5 II Negro" 0 "P043Y52N2" "1" 10/06/16 31/12/49
 1 "" 2 "Huawei Y5 II Negro" 0 "P043Y52N2" "1" 10/06/16 31/12/49
 1 "" 3 "Huawei Y5 II Negro" 0 "P043Y52N2" "1" 10/06/16 31/12/49
@@ -6628,6 +6743,11 @@
 1 "" 3 "ZTE Blade V7 Plata" 0 "P075BV7S2" "1" 10/06/16 31/12/49
 1 "" 4 "ZTE Blade V7 Plata" 0 "P075BV7S2" "1" 10/06/16 31/12/49
 1 "" 5 "ZTE Blade V7 Silver" 0 "P075BV7S2" "1" 10/06/16 31/12/49
+1 "" 1 "ZTE Blade V7 Plata con Altavoz bluetooth sumergible" 0 "P075BV7SP" "1" 04/07/16 31/12/49
+1 "" 2 "ZTE Blade V7 Plata con Altavoz bluetooth sumergible" 0 "P075BV7SP" "1" 04/07/16 31/12/49
+1 "" 3 "ZTE Blade V7 Plata con Altavoz bluetooth sumergible" 0 "P075BV7SP" "1" 04/07/16 31/12/49
+1 "" 4 "ZTE Blade V7 Plata con Altavoz bluetooth sumergible" 0 "P075BV7SP" "1" 04/07/16 31/12/49
+1 "" 5 "ZTE Blade V7 Silver with waterproof bluetooth Speaker" 0 "P075BV7SP" "1" 04/07/16 31/12/49
 1 "" 1 "ZTE Blade Vec 4G Negro" 0 "P075BVYN1" "1" 14/10/14 31/12/49
 1 "" 2 "ZTE Blade Vec 4G Negro" 0 "P075BVYN1" "1" 14/10/14 31/12/49
 1 "" 3 "ZTE Blade Vec 4G Negro" 0 "P075BVYN1" "1" 14/10/14 31/12/49
@@ -8083,16 +8203,16 @@
 1 "" 2 "De Text Premium" 0 "SMSPNOVAT" "1" 01/04/14 31/12/49
 1 "" 3 "Premium testu-mezuak" 0 "SMSPNOVAT" "1" 01/04/14 31/12/49
 1 "" 5 "Premium Text" 0 "SMSPNOVAT" "1" 01/04/14 31/12/49
-1 "" 1 "Samsung S7 rojo" 0 "SNNNNNNN1" "1" 20/05/16 31/12/49
+1 "" 1 "Telefono pruebas 2 rojo" 0 "SNNNNNNN1" "1" 20/05/16 31/12/49
 1 "" 2 "Samsung S7 rojo" 0 "SNNNNNNN1" "1" 20/05/16 31/12/49
 1 "" 3 "Samsung S7 rojo" 0 "SNNNNNNN1" "1" 20/05/16 31/12/49
 1 "" 4 "Samsung S7 rojo" 0 "SNNNNNNN1" "1" 20/05/16 31/12/49
-1 "" 5 "Samsung S7 rojo" 0 "SNNNNNNN1" "1" 20/05/16 31/12/49
-1 "" 1 "Samsung S7 amarillo" 0 "SNNNNNNN2" "1" 20/05/16 31/12/49
+1 "" 5 "Telefono pruebas 2 rojo" 0 "SNNNNNNN1" "1" 20/05/16 31/12/49
+1 "" 1 "Telefono pruebas 2 amarillo" 0 "SNNNNNNN2" "1" 20/05/16 31/12/49
 1 "" 2 "Samsung S7 amarillo" 0 "SNNNNNNN2" "1" 20/05/16 31/12/49
 1 "" 3 "Samsung S7 amarillo" 0 "SNNNNNNN2" "1" 20/05/16 31/12/49
 1 "" 4 "Samsung S7 amarillo" 0 "SNNNNNNN2" "1" 20/05/16 31/12/49
-1 "" 5 "Samsung S7 amarillo" 0 "SNNNNNNN2" "1" 20/05/16 31/12/49
+1 "" 5 "Telefono pruebas 2 amarillo" 0 "SNNNNNNN2" "1" 20/05/16 31/12/49
 1 "" 1 "Promo" 0 "SPOTIFYCPACT" "1" 01/07/12 31/12/49
 1 "" 2 "Promo" 0 "SPOTIFYCPACT" "1" 01/07/12 31/12/49
 1 "" 3 "Promo" 0 "SPOTIFYCPACT" "1" 01/07/12 31/12/49
@@ -8109,26 +8229,31 @@
 1 "" 3 "Iraupen-konpromisoa ez betetzea" 0 "STERMPERIOD" "1" 01/07/12 30/09/12
 1 "" 5 "Early termination of La Infinita contract period" 0 "STERMPERIOD" "1" 01/10/12 31/12/49
 1 "" 5 "Failure to comply with Minimum Contract Period" 0 "STERMPERIOD" "1" 01/07/12 30/09/12
-1 "" 1 "Pruebas Yoigo iPhone" 0 "SUMIDERO" "1" 31/01/12 31/12/49
+1 "" 1 "Telefono pruebas 4" 0 "SUMI3" "1" 30/06/16 31/12/49
+1 "" 2 "Telefono pruebas 4" 0 "SUMI3" "1" 30/06/16 31/12/49
+1 "" 3 "Telefono pruebas 4" 0 "SUMI3" "1" 30/06/16 31/12/49
+1 "" 4 "Telefono pruebas 4" 0 "SUMI3" "1" 30/06/16 31/12/49
+1 "" 5 "Telefono pruebas 4" 0 "SUMI3" "1" 30/06/16 31/12/49
+1 "" 1 "Telefono pruebas 1" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 2 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 3 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 4 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
-1 "" 5 "Pruebas Yoigo iPhone" 0 "SUMIDERO" "1" 31/01/12 31/12/49
+1 "" 5 "Telefono pruebas 1" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 1 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
 1 "" 2 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
 1 "" 3 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
 1 "" 4 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
 1 "" 5 "sumi" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
-1 "" 1 "PRUEBA iPHONE" 0 "SUMIDEROIPHONE" "1" 23/05/16 31/12/49
+1 "" 1 "Telefono pruebas 3 apple" 0 "SUMIDEROIPHONE" "1" 23/05/16 31/12/49
 1 "" 2 "SUMIDERO IPHONE" 0 "SUMIDEROIPHONE" "1" 23/05/16 31/12/49
 1 "" 3 "SUMIDERO IPHONE" 0 "SUMIDEROIPHONE" "1" 23/05/16 31/12/49
 1 "" 4 "SUMIDERO IPHONE" 0 "SUMIDEROIPHONE" "1" 23/05/16 31/12/49
-1 "" 5 "PRUEBA IPHONE" 0 "SUMIDEROIPHONE" "1" 23/05/16 31/12/49
-1 "" 1 "PRUEBA SAMSUNG S7" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
+1 "" 5 "Telefono pruebas 3 apple" 0 "SUMIDEROIPHONE" "1" 23/05/16 31/12/49
+1 "" 1 "Telefono pruebas 2" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
 1 "" 2 "Huawei P8 Lite" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
 1 "" 3 "Huawei P8 Lite" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
 1 "" 4 "Huawei P8 Lite" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
-1 "" 5 "PRUEBA SAMSUNG S7" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
+1 "" 5 "Telefono pruebas 2" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
 1 "" 1 "Incumplimiento de Permanencia" 0 "TERMPERIOD" "1" 01/04/12 31/12/49
 1 "" 1 "Penalización" 0 "TERMPERIOD" "1" 01/01/06 31/03/12
 1 "" 2 "Incompliment de Permanència" 0 "TERMPERIOD" "1" 01/04/12 31/12/49
@@ -10981,21 +11106,21 @@
 26 "" 5 "Yoigo-Monthly 40 E Premium Suscription" 0 "Y_HURP_P" "1" 08/07/15 31/12/49
 26 "" 1 "Riesgo_Roaming+Internacional" 0 "Y_HURRIC" "1" 08/07/15 31/12/49
 26 "" 5 "Risk_Roaming+International" 0 "Y_HURRIC" "1" 08/07/15 31/12/49
-32 "" 5 "Yoigo info: The Blackberry Service is activated. You can configure in your Blackberry your e-mail accounts and access to BlackBerry services. + info yoigo.com" 0 "10000085" "1" 01/06/11 31/12/49
-32 "" 5 "Yoigo info: The Blackberry Service is activated. You can configure in your Blackberry your e-mail accounts and access to BlackBerry services. + info yoigo.com" 0 "10000088" "1" 01/06/11 31/12/49
-32 "" 5 "Yoigo info: The Blackberry Service is activated. You can configure your e-mail accounts and access to Yoigo BlackBerry services. + info yoigo.com" 0 "10000089" "1" 01/06/11 31/12/49
-32 "" 5 "Yoigo info: The Blackberry Service will not be active next month. If you want to activate it, activate Bono 8 earlier next month. + info yoigo.com" 0 "10000090" "1" 01/06/11 31/12/49
-32 "" 5 "Yoigo info: The Blackberry Service is already not active. If you want to activate it again, activate Bono 8. + info yoigo.com" 0 "10000091" "1" 01/06/11 31/12/49
-32 "" 5 "Yoigo info: The Blackberry Service is deactivated. You can activate it whenever you want in MiYoigo. + info yoigo.com" 0 "10000092" "1" 01/06/11 31/12/49
-32 "" 5 "Yoigo info: The Blackberry Service will not be active next month. If you want to activate it, activate a Bono earlier next month. + info yoigo.com" 0 "10000094" "1" 01/06/11 31/12/49
-32 "" 5 "Yoigo info: The Blackberry Service is already not active. If you want to activate it again, activate now a Bono. + info yoigo.com" 0 "10000096" "1" 01/06/11 31/12/49
-32 "" 5 "Yoigo info: The Blackberry Service will not be active next month. Change your tariff to a Contrato voice tariff or an IPL earlier next month. + info yoigo.com" 0 "10000097" "1" 01/06/11 31/12/49
-32 "" 5 "Yoigo info: The Blackberry Service is already not active. If you want to activate it, change your tariff to a Contrato voice tariff or an IPL. + info yoigo.com" 0 "10000098" "1" 01/06/11 31/12/49
-32 "" 5 "Yoigo info: The Blackberry Service will not be active next month. If you want to activate it, activate Bono 8 de Tarjeta earlier next month. + info yoigo.com" 0 "10000099" "1" 01/06/11 31/12/49
-32 "" 5 "Yoigo info: The Blackberry Service is already not active. If you want to activate it, activate Bono 8 Internet de Tarjeta. + info yoigo.com" 0 "10000100" "1" 01/06/11 31/12/49
-32 "" 5 "Yoigo info: The Blackberry Service will not be active next month. If you want to activate it, activate a Bono earlier next month. + info yoigo.com" 0 "10000101" "1" 01/06/11 31/12/49
-32 "" 5 "Yoigo info: The Blackberry Service is already not active. If you want to activate it again, activate a Bono. + info yoigo.com" 0 "10000102" "1" 01/06/11 31/12/49
-32 "" 2 "Yoigo info: Benvingut. Si et cal parlar amb nosaltres truca gratis des del teu Yoigo al 622622622 o des d'un telèfon nacional (cost segons operador)." 0 "104" "1" 17/06/08 31/12/49
+32 "" 5 "The Blackberry Service is activated. You can configure in your Blackberry your e-mail accounts and access to BlackBerry services. + info yoigo.com" 0 "10000085" "1" 01/06/11 31/12/49
+32 "" 5 "The Blackberry Service is activated. You can configure in your Blackberry your e-mail accounts and access to BlackBerry services. + info yoigo.com" 0 "10000088" "1" 01/06/11 31/12/49
+32 "" 5 "The Blackberry Service is activated. You can configure your e-mail accounts and access to Yoigo BlackBerry services. + info yoigo.com" 0 "10000089" "1" 01/06/11 31/12/49
+32 "" 5 "The Blackberry Service will not be active next month. If you want to activate it, activate Bono 8 earlier next month. + info yoigo.com" 0 "10000090" "1" 01/06/11 31/12/49
+32 "" 5 "The Blackberry Service is already not active. If you want to activate it again, activate Bono 8. + info yoigo.com" 0 "10000091" "1" 01/06/11 31/12/49
+32 "" 5 "The Blackberry Service is deactivated. You can activate it whenever you want in MiYoigo. + info yoigo.com" 0 "10000092" "1" 01/06/11 31/12/49
+32 "" 5 "The Blackberry Service will not be active next month. If you want to activate it, activate a Bono earlier next month. + info yoigo.com" 0 "10000094" "1" 01/06/11 31/12/49
+32 "" 5 "The Blackberry Service is already not active. If you want to activate it again, activate now a Bono. + info yoigo.com" 0 "10000096" "1" 01/06/11 31/12/49
+32 "" 5 "The Blackberry Service will not be active next month. Change your tariff to a Contrato voice tariff or an IPL earlier next month. + info yoigo.com" 0 "10000097" "1" 01/06/11 31/12/49
+32 "" 5 "The Blackberry Service is already not active. If you want to activate it, change your tariff to a Contrato voice tariff or an IPL. + info yoigo.com" 0 "10000098" "1" 01/06/11 31/12/49
+32 "" 5 "The Blackberry Service will not be active next month. If you want to activate it, activate Bono 8 de Tarjeta earlier next month. + info yoigo.com" 0 "10000099" "1" 01/06/11 31/12/49
+32 "" 5 "The Blackberry Service is already not active. If you want to activate it, activate Bono 8 Internet de Tarjeta. + info yoigo.com" 0 "10000100" "1" 01/06/11 31/12/49
+32 "" 5 "The Blackberry Service will not be active next month. If you want to activate it, activate a Bono earlier next month. + info yoigo.com" 0 "10000101" "1" 01/06/11 31/12/49
+32 "" 5 "The Blackberry Service is already not active. If you want to activate it again, activate a Bono. + info yoigo.com" 0 "10000102" "1" 01/06/11 31/12/49
+32 "" 2 "Benvingut. Si et cal parlar amb nosaltres truca gratis des del teu Yoigo al 622622622 o des d'un telèfon nacional (cost segons operador)." 0 "104" "1" 17/06/08 31/12/49
 32 "" 3 "Yoigo info: Ongietorri. Gurekin hitz egin behar baduzu dei doan zure Yoigo-tik edo beste telefono batetik 622622622ra (kostua operadorearen araberakoa)." 0 "104" "1" 17/06/08 20/11/12
 32 "" 5 "Yoigo info: Welcome. If you want to talk with us, call free to 622622622 from your Yoigo phone or from any other phone (cost depends on operator)." 0 "104" "1" 17/06/08 20/11/12
 32 "" 5 "Your subscription change has been done. You now have #CLITYPE. More information in yoigo.com or call 622" 0 "114" "1" 29/09/08 31/12/49
@@ -11003,9 +11128,9 @@
 32 "" 5 "Yoigo info: Your operator has rejected porting your number #MNPID due to an error in your details. To solve it, please call freephone 800 622 622." 0 "134" "1" 01/05/07 31/12/49
 32 "" 5 "Yoigo info: We are ready. On #PORTDATE you will switch to Yoigo. You will see savings in your invoice at the end of the month. We will deliver your order shortly." 0 "135" "1" 01/05/07 31/12/49
 32 "" 5 "Wellcome, you are a Yoigo customer. The portability of #CLI number is completed." 0 "137" "1" 01/05/07 31/12/49
-32 "" 5 "Yoigo Info: We have received your change of owner request for this number." 0 "143" "1" 11/11/09 31/12/49
-32 "" 5 "Yoigo Info: We have cancelled your change of owner request for this number, for additional information, send a sms to 622." 0 "145" "1" 11/11/09 31/12/49
-32 "" 5 "Yoigo Info: Your change of owner request for this number has been completed." 0 "147" "1" 11/11/09 31/12/49
+32 "" 5 "We have received your change of owner request for this number." 0 "143" "1" 11/11/09 31/12/49
+32 "" 5 "We have cancelled your change of owner request for this number, for additional information, send a sms to 622." 0 "145" "1" 11/11/09 31/12/49
+32 "" 5 "Your change of owner request for this number has been completed." 0 "147" "1" 11/11/09 31/12/49
 32 "" 5 "Yoigo: #NAME, Correos will deliver your order to the address provided within the next 72 hrs. Call 1707 and select option 2 with any queries" 0 "152" "1" 28/04/10 20/11/12
 32 "" 5 "Yoigo: #NAME, We've been unable to deliver your order. It will be held at Correos for a maximum of 15 days. Call 1707 and select option 2 with any queries" 0 "154" "1" 28/04/10 20/11/12
 32 "" 5 "Yoigo: Oops! Your order has not been picked up from the address provided or from your Correos office. Call 1707 and select option 2" 0 "156" "1" 28/04/10 20/11/12
@@ -11015,7 +11140,7 @@
 32 "" 5 "Yoigo info: Due to an error in your personal data your portability has been rejected. We are sorry. Please go to a Yoigo store to process your portability" 0 "170" "1" 30/07/10 31/12/49
 32 "" 5 "Yoigo info: If you want another IPL with more capacity or just to increase this month the MB of high speed internet, then click here: http://mas.yoigo.com/megas" 0 "179" "1" 24/11/10 31/12/49
 32 "" 5 "Yoigo info: Your new PIN code has been updated, new one is #PIN. Thank you." 0 "191" "1" 09/12/10 31/12/49
-32 "" 5 "Yoigo info: You have already reached the limit of 10 bundles this month." 0 "193" "1" 09/12/10 31/12/49
+32 "" 5 "You have already reached the limit of 10 bundles this month." 0 "193" "1" 09/12/10 31/12/49
 32 "" 5 "Yoigo info: Done, in 10 minutes aprox., you will have activated your capacity of high speed internet." 0 "196" "1" 23/03/12 31/12/49
 32 "" 5 "Yoigo info: If you want to increase your monthly quota you can buy a monthly data bundle here: http://mas.yoigo.com/megas" 0 "200" "1" 23/02/11 31/12/49
 32 "" 5 "Yoigo info: You are about to reach your Internet monthly data limit for this month." 0 "202" "1" 23/02/11 31/12/49
@@ -11025,19 +11150,19 @@
 32 "" 5 "Yoigo info: You have just deactivated Bono 8 but you can use it until the end of the month. Remember, you can activate it again whenever you want." 0 "224" "1" 04/05/11 31/12/49
 32 "" 5 "Yoigo info: Bono8 Internet prepaid will be canceled at the end of the month due to the subscription change you requested." 0 "226" "1" 04/05/11 31/12/49
 32 "" 5 "Yoigo Info: You don't have enough balance to activate Bono 8 Internet. Please top up and activate it later at http://mas.yoigo.com/megas" 0 "228" "1" 26/09/12 31/12/49
-32 "" 5 "Yoigo info: Your #OLD_BUNDLE Internet de Contrato continues active till the end of this month. The first day of the next month your #NEW_BUNDLE Internet de Contrato will be activated." 0 "236" "1" 10/08/11 31/12/49
-32 "" 5 "Yoigo info: Your #OLD_BUNDLE Internet de Contrato will be deactivated at the end of the month. Your change from #OLD_BUNDLE Internet de Contrato to #NEW_BUNDLE Internet de Contrato has been cancelled." 0 "238" "1" 10/08/11 31/12/49
-32 "" 5 "Yoigo info: Your change from #OLD_BUNDLE Internet de Contrato to #NEW_BUNDLE Internet de Contrato is cancelled. You keep activated your #OLD_BUNDLE Internet de Contrato." 0 "240" "1" 10/08/11 31/12/49
+32 "" 5 "Your #OLD_BUNDLE Internet de Contrato continues active till the end of this month. The first day of the next month your #NEW_BUNDLE Internet de Contrato will be activated." 0 "236" "1" 10/08/11 31/12/49
+32 "" 5 "Your #OLD_BUNDLE Internet de Contrato will be deactivated at the end of the month. Your change from #OLD_BUNDLE Internet de Contrato to #NEW_BUNDLE Internet de Contrato has been cancelled." 0 "238" "1" 10/08/11 31/12/49
+32 "" 5 "Your change from #OLD_BUNDLE Internet de Contrato to #NEW_BUNDLE Internet de Contrato is cancelled. You keep activated your #OLD_BUNDLE Internet de Contrato." 0 "240" "1" 10/08/11 31/12/49
 32 "" 5 "Yoigo info: Just pay for your new phone #TOTALeuro and #AMOUNT E / month for #MONTHS months. If you have questions call free to 622 from your phone Yoigo." 0 "266" "1" 01/11/11 20/11/12
 32 "" 5 "Yoigo info: If you want to increase your Internet monthly quota in 1 GB for only 9 euros just click in http://mas.yoigo.com/megas" 0 "277" "1" 23/11/11 31/12/49
-32 "" 5 "Yoigo info: You now have the data sharing service activated. It will be renewed each month automatically and the charge will be applied to this number" 0 "286" "1" 23/11/11 31/12/49
-32 "" 5 "Yoigo info: You now have the data sharing service activated. It will be renewed each month automatically" 0 "288" "1" 23/11/11 31/12/49
-32 "" 5 "Yoigo info: The data sharing service has been automatically cancelled" 0 "290" "1" 23/11/11 31/12/49
-32 "" 5 "Yoigo info: You have deactivated the data sharing service, but have until end of the month to continue using it. You can activate again whenever you want" 0 "292" "1" 23/11/11 31/12/49
-32 "" 5 "Yoigo info: you have used 80% of the minutes included in your tariff. When you reach 100% the price will be 12 cents/min." 0 "296" "1" 01/12/11 31/12/49
-32 "" 5 "Yoigo info: you have used 100% of the minutes included in your tariff. From now on the price will be 12 cents/min with a call set up price of 15 cents." 0 "298" "1" 01/12/11 31/12/49
-32 "" 5 "Yoigo info: This first month you have #XXX minutes included in your tariff and a monthly quota of #YYYEUR. Next month you will have #ZZZ minutes for #WWW EUR/month." 0 "305" "1" 01/12/11 31/12/49
-32 "" 5 "Yoigo info: You cannot purchase the Internet Data Sharing Service because you do not have more postpaid subscriptions with high speed internet." 0 "307" "1" 01/01/12 31/12/49
+32 "" 5 "You now have the data sharing service activated. It will be renewed each month automatically and the charge will be applied to this number" 0 "286" "1" 23/11/11 31/12/49
+32 "" 5 "You now have the data sharing service activated. It will be renewed each month automatically" 0 "288" "1" 23/11/11 31/12/49
+32 "" 5 "The data sharing service has been automatically cancelled" 0 "290" "1" 23/11/11 31/12/49
+32 "" 5 "You have deactivated the data sharing service, but have until end of the month to continue using it. You can activate again whenever you want" 0 "292" "1" 23/11/11 31/12/49
+32 "" 5 "you have used 80% of the minutes included in your tariff. When you reach 100% the price will be 12 cents/min." 0 "296" "1" 01/12/11 31/12/49
+32 "" 5 "you have used 100% of the minutes included in your tariff. From now on the price will be 12 cents/min with a call set up price of 15 cents." 0 "298" "1" 01/12/11 31/12/49
+32 "" 5 "This first month you have #XXX minutes included in your tariff and a monthly quota of #YYYEUR. Next month you will have #ZZZ minutes for #WWW EUR/month." 0 "305" "1" 01/12/11 31/12/49
+32 "" 5 "You cannot purchase the Internet Data Sharing Service because you do not have more postpaid subscriptions with high speed internet." 0 "307" "1" 01/01/12 31/12/49
 32 "" 5 "Yoigo info: We will send your new telephone very soon. Call us on 622 as soon as possible to confirm your details. This call is free." 0 "309" "1" 22/02/12 31/12/49
 32 "" 5 "Yoigo info: If you want another Bono with more capacity or just to increase this month the MB of high speed internet, then click here http://mas.yoigo.com/megas" 0 "314" "1" 23/03/12 31/12/49
 32 "" 2 "Yoigo info: Pots veure la teva factura electronica a https://miyoigo.yoigo.com/. El #DATE et cobrarem l'import de la teva ultima factura: #AMOUNT euros." 0 "327" "1" 01/04/12 31/12/49
@@ -11048,8 +11173,8 @@
 32 "" 5 "Yoigo adver: Activate now your Bono Spotify Premium, the first three months free. To activate or more info visit https://spotify.yoigo.com. Not+adver 622" 0 "351" "1" 03/07/12 20/11/12
 32 "" 5 "Yoigo adver: Do not let it happen, activate now Spotify Premium with Yoigo, the first three months free. Visit https://spotify.yoigo.com. Not+adver 622" 0 "353" "1" 03/07/12 20/11/12
 32 "" 5 "Yoigo adver: Not to be heavy, it is a very good promo: Activate Spotify Premium with Yoigo, the first three months free. https://spotify.yoigo.com Not+adver 622" 0 "355" "1" 03/07/12 20/11/12
-32 "" 5 "Yoigo info: You have already called to more than 100 destinations. From now on and until the end of the month the call price will be 12 cent/min + 15 cent. connection charge (no taxes included)." 0 "357" "1" 01/08/12 31/12/49
-32 "" 5 "Yoigo info: You have already called to more than 300 destinations. From now on and until the end of the month the call price will be 12 cent/min + 15 cent. connection charge (no taxes included)." 0 "359" "1" 01/08/12 31/12/49
+32 "" 5 "You have already called to more than 100 destinations. From now on and until the end of the month the call price will be 12 cent/min + 15 cent. connection charge (no taxes included)." 0 "357" "1" 01/08/12 31/12/49
+32 "" 5 "You have already called to more than 300 destinations. From now on and until the end of the month the call price will be 12 cent/min + 15 cent. connection charge (no taxes included)." 0 "359" "1" 01/08/12 31/12/49
 32 "" 5 "Yoigo info: Tomorrow from 6.00am you will be Yoigo. Put the new Yoigo SIM in your phone. If you have not received it yet, call free 1707 option 2." 0 "362" "1" 05/09/12 31/12/49
 32 "" 5 "Yoigo info: Tomorrow from 06:00 you will be Yoigo. You can pick your new Yoigo SIM in the store today from 14:00." 0 "364" "1" 05/09/12 31/12/49
 32 "" 5 "Yoigo info: You have activated Bono 8 and you can surf at high speed. Remember to have 8E on the last day of the month in order to renew automatically" 0 "366" "1" 26/09/12 31/12/49
@@ -11061,41 +11186,41 @@
 32 "" 5 "Yoigo Info: We are currently activating Internet for the European Union or associated countries.  You could use it very soon." 0 "379" "1" 10/10/12 31/12/49
 32 "" 5 "Yoigo info: We are not going to charge in the next Bono the Mb you haven't used this month but we recommend you to have 8E the last day of the month to renew it" 0 "381" "1" 24/10/12 31/12/49
 32 "" 5 "Yoigo info:We are not going to charge the next month the Mb that you havent used but we recommend you to have 8E at the end of the day to renew it automatically" 0 "383" "1" 24/10/12 31/12/49
-32 "" 5 "Yoigo info: Hello. We will shortly provide you more information about your delivery." 0 "385" "1" 01/11/12 31/12/49
-32 "" 5 "Yoigo info: Sorry, we have been unable to deliver your order. For indicents call 1707 and press 2 and we will see how to solve it." 0 "387" "1" 01/11/12 31/12/49
-32 "" 5 "Yoigo info: #NAME, we have been unable to deliver your order. For indicents call 1707 and press 2 and we will see how to solve it." 0 "389" "1" 01/11/12 31/12/49
-32 "" 5 "Yoigo info: Sorry, we have been unable to deliver your order. For indicents call 1707 and press 2 and we will see how to solve it." 0 "391" "1" 01/11/12 31/12/49
-32 "" 5 "Yoigo info: Gosh, you didn't collect the order we sent you. Call 902113300 within 15 days for us to send it again." 0 "393" "1" 01/11/12 31/12/49
-32 "" 5 "Yoigo info: Gosh, you didn't collect your order either at the address you gave us or at the post office. Call 1707 and press 2." 0 "395" "1" 01/11/12 31/12/49
-32 "" 5 "Yoigo info: Gosh, you didn't collect your order when we sent it. Call 902101010 within 15 days for us to send it again." 0 "397" "1" 01/11/12 31/12/49
-32 "" 5 "Yoigo Info: Welcome to La del Cinco. Calls 5 cts/min and internet for daily 35 cts. Call set up 15 cts. +info in Yoigo.com" 0 "404" "1" 01/12/12 31/12/49
-32 "" 5 "Yoigo info: When you changed your tariff Infinita 39 to #CLITYPE, your Segunda SIM and free Internet Multilinea service have been disabled." 0 "407" "1" 01/12/12 31/12/49
-32 "" 5 "Yoigo info: Welcome, this is Tu Segunda SIM. Remember that the calls from this SIM are at 2 cents / min + 15 cent of set up call (+ indirect taxes)" 0 "408" "1" 01/12/12 31/12/49
+32 "" 5 "Hello. We will shortly provide you more information about your delivery." 0 "385" "1" 01/11/12 31/12/49
+32 "" 5 "Sorry, we have been unable to deliver your order. For indicents call 1707 and press 2 and we will see how to solve it." 0 "387" "1" 01/11/12 31/12/49
+32 "" 5 "#NAME, we have been unable to deliver your order. For indicents call 1707 and press 2 and we will see how to solve it." 0 "389" "1" 01/11/12 31/12/49
+32 "" 5 "Sorry, we have been unable to deliver your order. For indicents call 1707 and press 2 and we will see how to solve it." 0 "391" "1" 01/11/12 31/12/49
+32 "" 5 "Gosh, you didn't collect the order we sent you. Call 902113300 within 15 days for us to send it again." 0 "393" "1" 01/11/12 31/12/49
+32 "" 5 "Gosh, you didn't collect your order either at the address you gave us or at the post office. Call 1707 and press 2." 0 "395" "1" 01/11/12 31/12/49
+32 "" 5 "Gosh, you didn't collect your order when we sent it. Call 902101010 within 15 days for us to send it again." 0 "397" "1" 01/11/12 31/12/49
+32 "" 5 "Welcome to La del Cinco. Calls 5 cts/min and internet for daily 35 cts. Call set up 15 cts. +info in Yoigo.com" 0 "404" "1" 01/12/12 31/12/49
+32 "" 5 "When you changed your tariff Infinita 39 to #CLITYPE, your Segunda SIM and free Internet Multilinea service have been disabled." 0 "407" "1" 01/12/12 31/12/49
+32 "" 5 "Welcome, this is Tu Segunda SIM. Remember that the calls from this SIM are at 2 cents / min + 15 cent of set up call (+ indirect taxes)" 0 "408" "1" 01/12/12 31/12/49
 32 "" 5 "Yoigo info: Your Segunda SIM has been deactivated. Until the end of the month you have for free Internet Multilinea, then off." 0 "409" "1" 01/12/12 31/12/49
 32 "" 5 "Yoigo Info: We have cancelled the change of rate. If you want more information send a text message to 622." 0 "412" "1" 01/03/13 31/12/49
-32 "" 5 "Yoigo info: Your portability has been cancelled. Your mobile will arrive shortly. Take your ID document when you go to collect it. Yr order no. is #ORDER_NUMBER." 0 "427" "1" 24/04/13 31/12/49
-32 "" 5 "Yoigo info: Your portability has been cancelled. Confirm your details by calling us free on 622, so that we can send you the mobile. Yr order no. is #ORDER_NUMBER." 0 "428" "1" 24/04/13 31/12/49
-32 "" 5 "Yoigo info: Your mobile is now available and this is your order code #ORDER_NUMBER. Call 622 urgently (free from a Yoigo number) to confirm your delivery details." 0 "429" "1" 24/04/13 31/12/49
-32 "" 5 "Yoigo info: Your Renuevo has been processed and the code is #ORDER_NUMBER. You will receive it shortly. Remember you must show your document on delivery." 0 "430" "1" 24/04/13 31/12/49
-32 "" 5 "Yoigo info: Your Renuevo has been processed and the code is #ORDER_NUMBER. You will receive it shortly. Remember you must show your document on delivery." 0 "431" "1" 24/04/13 31/12/49
-32 "" 5 "Yoigo info: This line will be cancelled on #DATE because you ported out last main line you had. If you want to keep it, change its tariff before that date." 0 "432" "1" 05/09/13 31/12/49
-32 "" 5 "Yoigo info: This line will be cancelled on #DATE because you ported out the last main line you had. You can keep it if you change its tariff before that date." 0 "433" "1" 05/09/13 31/12/49
-32 "" 5 "Yoigo info: This line will be cancelled next #DATE. If you want to keep it, change urgently its tariff." 0 "434" "1" 05/09/13 31/12/49
+32 "" 5 "Your portability has been cancelled. Your mobile will arrive shortly. Take your ID document when you go to collect it. Yr order no. is #ORDER_NUMBER." 0 "427" "1" 24/04/13 31/12/49
+32 "" 5 "Your portability has been cancelled. Confirm your details by calling us free on 622, so that we can send you the mobile. Yr order no. is #ORDER_NUMBER." 0 "428" "1" 24/04/13 31/12/49
+32 "" 5 "Your mobile is now available and this is your order code #ORDER_NUMBER. Call 622 urgently (free from a Yoigo number) to confirm your delivery details." 0 "429" "1" 24/04/13 31/12/49
+32 "" 5 "Your Renuevo has been processed and the code is #ORDER_NUMBER. You will receive it shortly. Remember you must show your document on delivery." 0 "430" "1" 24/04/13 31/12/49
+32 "" 5 "Your Renuevo has been processed and the code is #ORDER_NUMBER. You will receive it shortly. Remember you must show your document on delivery." 0 "431" "1" 24/04/13 31/12/49
+32 "" 5 "This line will be cancelled on #DATE because you ported out last main line you had. If you want to keep it, change its tariff before that date." 0 "432" "1" 05/09/13 31/12/49
+32 "" 5 "This line will be cancelled on #DATE because you ported out the last main line you had. You can keep it if you change its tariff before that date." 0 "433" "1" 05/09/13 31/12/49
+32 "" 5 "This line will be cancelled next #DATE. If you want to keep it, change urgently its tariff." 0 "434" "1" 05/09/13 31/12/49
 32 "" 5 "Yoigo info: Done, in 10 minutes aprox. you will have your high speed Internet bundle activated." 0 "435" "1" 05/09/13 31/12/49
-32 "" 5 "Yoigo info: If you need more MB for high-speed browsing, please visit http://masmegas.yoigo.com where we explain how you can purchase a data top-up." 0 "437" "1" 05/09/13 31/12/49
-32 "" 5 "Yoigo info: If you want another Bono with more capacity or to increase your high speed Internet quota only for this month, click here http://mas.yoigo.com/megas" 0 "444" "1" 05/09/13 31/12/49
+32 "" 5 "If you need more MB for high-speed browsing, please visit http://masmegas.yoigo.com where we explain how you can purchase a data top-up." 0 "437" "1" 05/09/13 31/12/49
+32 "" 5 "If you want another Bono with more capacity or to increase your high speed Internet quota only for this month, click here http://mas.yoigo.com/megas" 0 "444" "1" 05/09/13 31/12/49
 32 "" 5 "Yoigo info: If you want to increase 1 GB of high speed during this month for 6 euros, go to http://mas.yoigo.com/megas" 0 "445" "1" 05/09/13 31/12/49
-32 "" 5 "Yoigo info: You are about to reach your high speed Internet monthly data limit for this month." 0 "446" "1" 05/09/13 31/12/49
-32 "" 5 "Yoigo info: If you want more high speed Internet MB for every month or to increase it only for this month, click here: http://mas.yoigo.com/megas" 0 "447" "1" 05/09/13 31/12/49
-32 "" 5 "Yoigo info: Welcome, this is your tariff #CLITYPE with the number #CLI" 0 "448" "1" 05/09/13 31/12/49
-32 "" 5 "Yoigo info: Hello, is already installed the fixed part of your Fusion Plana a lo Yoigo, the day #DATE your mobile tariff will change to this one" 0 "469" "1" 05/02/14 31/12/49
-32 "" 5 "Yoigo info: Hello, is already installed the fixed part of your Fusion Fibra Infinita a lo Yoigo, the day #DATE your mobile tariff will change to this one" 0 "470" "1" 05/02/14 31/12/49
-32 "" 5 "Yoigo info: Hello, is already installed the fixed part of your Fusion Infinita a lo Yoigo, the day #DATE your mobile tariff will change to this one" 0 "471" "1" 05/02/14 31/12/49
-32 "" 5 "Yoigo info: We have cancelled the tariff change as you asked. You have all the information about our rates in www.yoigo.com" 0 "472" "1" 05/02/14 31/12/49
-32 "" 5 "Yoigo info: The change of rate you asked for has been made - you now have #CLITYPE. Find full info about your rate at www.yoigo.com" 0 "473" "1" 05/02/14 31/12/49
-32 "" 5 "Yoigo Info: Your change to #CLITYPE will be executed the #DATE. If you did not request it, call 622. +info www.yoigo.com" 0 "474" "1" 05/02/14 31/12/49
-32 "" 1 "Yoigo info: You have requested the cancellation of Bono 1 GB. From 1st of the next month will not be active." 0 "476" "1" 01/05/14 31/12/49
-32 "" 5 "Yoigo info: You have spent more than 40 euros in Premium serv. To continue using these services replies this message with SI. If you do not want, reply NO." 0 "477" "1" 01/09/14 31/12/49
-32 "" 5 "Yoigo info: We will shortly provide you more information about your delivery." 0 "478" "1" 10/12/14 31/12/49
-32 "" 5 "Yoigo info: You have used 100% of the minutes included in your tariff. From now on the price will be 0 cents/min plus call set up of 20 cents. IVA incl." 0 "479" "1" 01/01/15 31/12/49
-32 "" 5 "Yoigo info: You have called to more than 100 different destinations. From now on and until the end of the month 0 cent/min + 20 cent. call set up. IVA incl." 0 "480" "1" 01/01/15 31/12/49
+32 "" 5 "You are about to reach your high speed Internet monthly data limit for this month." 0 "446" "1" 05/09/13 31/12/49
+32 "" 5 "If you want more high speed Internet MB for every month or to increase it only for this month, click here: http://mas.yoigo.com/megas" 0 "447" "1" 05/09/13 31/12/49
+32 "" 5 "Welcome, this is your tariff #CLITYPE with the number #CLI" 0 "448" "1" 05/09/13 31/12/49
+32 "" 5 "Hello, is already installed the fixed part of your Fusion Plana a lo Yoigo, the day #DATE your mobile tariff will change to this one" 0 "469" "1" 05/02/14 31/12/49
+32 "" 5 "Hello, is already installed the fixed part of your Fusion Fibra Infinita a lo Yoigo, the day #DATE your mobile tariff will change to this one" 0 "470" "1" 05/02/14 31/12/49
+32 "" 5 "Hello, is already installed the fixed part of your Fusion Infinita a lo Yoigo, the day #DATE your mobile tariff will change to this one" 0 "471" "1" 05/02/14 31/12/49
+32 "" 5 "We have cancelled the tariff change as you asked. You have all the information about our rates in www.yoigo.com" 0 "472" "1" 05/02/14 31/12/49
+32 "" 5 "The change of rate you asked for has been made - you now have #CLITYPE. Find full info about your rate at www.yoigo.com" 0 "473" "1" 05/02/14 31/12/49
+32 "" 5 "Your change to #CLITYPE will be executed the #DATE. If you did not request it, call 622. +info www.yoigo.com" 0 "474" "1" 05/02/14 31/12/49
+32 "" 1 "You have requested the cancellation of Bono 1 GB. From 1st of the next month will not be active." 0 "476" "1" 01/05/14 31/12/49
+32 "" 5 "You have spent more than 40 euros in Premium serv. To continue using these services replies this message with SI. If you do not want, reply NO." 0 "477" "1" 01/09/14 31/12/49
+32 "" 5 "We will shortly provide you more information about your delivery." 0 "478" "1" 10/12/14 31/12/49
+32 "" 5 "You have used 100% of the minutes included in your tariff. From now on the price will be 0 cents/min plus call set up of 20 cents. IVA incl." 0 "479" "1" 01/01/15 31/12/49
+32 "" 5 "You have called to more than 100 different destinations. From now on and until the end of the month 0 cent/min + 20 cent. call set up. IVA incl." 0 "480" "1" 01/01/15 31/12/49
