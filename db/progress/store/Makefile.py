@@ -19,41 +19,41 @@ exec(open(relpath + '/etc/make_site.py').read())
 
 db_locations = {
     'alpheratz': {'common': '/db1/common/common',
-                'ordercanal': '/db1/ordercanal/ordercanal',
-                'mobile': '/db1/mobile/mobile',
-                'counter': '/db1/counter/counter',
-                'star': '/db1/star/star',
-                'prepedr': '/db1/prepedr/prepedr',
-                'fraudcdr': '/db1/fraudcdr/fraudcdr',
-                'reratelog': '/db1/reratelog/reratelog'},
+                  'ordercanal': '/db1/ordercanal/ordercanal',
+                  'mobile': '/db1/mobile/mobile',
+                  'counter': '/db1/counter/counter',
+                  'star': '/db1/star/star',
+                  'prepedr': '/db1/prepedr/prepedr',
+                  'fraudcdr': '/db1/fraudcdr/fraudcdr',
+                  'reratelog': '/db1/reratelog/reratelog'},
     'arneb': {'common': '/db1/common/common',
-                'ordercanal': '/db1/ordercanal/ordercanal',
-                'mobile': '/db1/mobile/mobile',
-                'counter': '/db1/counter/counter',
-                'star': '/db1/star/star',
-                'prepedr': '/db1/prepedr/prepedr',
-                'fraudcdr': '/db1/fraudcdr10/fraudcdr10',
-                'reratelog': '/db1/reratelog/reratelog'},
+              'ordercanal': '/db1/ordercanal/ordercanal',
+              'mobile': '/db1/mobile/mobile',
+              'counter': '/db1/counter/counter',
+              'star': '/db1/star/star',
+              'prepedr': '/db1/prepedr/prepedr',
+              'fraudcdr': '/db1/fraudcdr10/fraudcdr10',
+              'reratelog': '/db1/reratelog/reratelog'},
     'pallas': {'common': '/db1/common/common',
-                'ordercanal': '/db1/ordercanal/ordercanal',
-                'mobile': '/db1/mobile/mobile',
-                'counter': '/db1/counter/counter',
-                'star': '/db1/star/star',
-                'prepedr': '/db1/prepedr/prepedr',
-                'fraudcdr': '/db1/fraudcdr10/fraudcdr10',
-                'reratelog': '/db1/reratelog/reratelog'},
+               'ordercanal': '/db1/ordercanal/ordercanal',
+               'mobile': '/db1/mobile/mobile',
+               'counter': '/db1/counter/counter',
+               'star': '/db1/star/star',
+               'prepedr': '/db1/prepedr/prepedr',
+               'fraudcdr': '/db1/fraudcdr10/fraudcdr10',
+               'reratelog': '/db1/reratelog/reratelog'},
     'leto': {'common': 'pallas.int.asp.qvantel.net:common',
-                'ordercanal': 'pallas.int.asp.qvantel.net:ordercanal',
-                'mobile': 'pallas.int.asp.qvantel.net:mobile',
-                'counter': 'pallas.int.asp.qvantel.net:counter',
-                'star': 'pallas.int.asp.qvantel.net:star',
-                'prepedr': 'pallas.int.asp.qvantel.net:prepedr'},
+             'ordercanal': 'pallas.int.asp.qvantel.net:ordercanal',
+             'mobile': 'pallas.int.asp.qvantel.net:mobile',
+             'counter': 'pallas.int.asp.qvantel.net:counter',
+             'star': 'pallas.int.asp.qvantel.net:star',
+             'prepedr': 'pallas.int.asp.qvantel.net:prepedr'},
     'maja': {'common': 'pallas.int.asp.qvantel.net:common',
-                'ordercanal': 'pallas.int.asp.qvantel.net:ordercanal',
-                'mobile': 'pallas.int.asp.qvantel.net:mobile',
-                'counter': 'pallas.int.asp.qvantel.net:counter',
-                'star': 'pallas.int.asp.qvantel.net:star',
-                'prepedr': 'pallas.int.asp.qvantel.net:prepedr'}
+             'ordercanal': 'pallas.int.asp.qvantel.net:ordercanal',
+             'mobile': 'pallas.int.asp.qvantel.net:mobile',
+             'counter': 'pallas.int.asp.qvantel.net:counter',
+             'star': 'pallas.int.asp.qvantel.net:star',
+             'prepedr': 'pallas.int.asp.qvantel.net:prepedr'}
 }
 
 db_processes = {'common': ['biw', 'wdog', ('apw', 4)],
@@ -91,7 +91,7 @@ main_pf_files = ['all.pf']
 ########################## Implementation #############################
 
 try:
-    getservbyname('%s_%s%s' % (appname, databases[0], service_suffix), 'tcp')
+    getservbyname('%s%s' % (databases[0], service_suffix), 'tcp')
     db_by_unix_socket = False
 except:
     db_by_unix_socket = True
@@ -205,7 +205,7 @@ def startup_parameter_file(match, deps, db_name):
         fd.write('-db %s\n' % path)
         if not db_by_unix_socket:
             fd.write('-H %s\n' % gethostname())
-            fd.write('-S %s_%s%s\n' % (appname, db_name, service_suffix))
+            fd.write('-S %s%s\n' % (db_name, service_suffix))
         for option in db_startup_options.get(db_name, []):
             fd.write(option + '\n')
     else:
@@ -216,7 +216,7 @@ def startup_parameter_file(match, deps, db_name):
         fd.write('-pf %s/etc/pf/formats.pf\n' % work_dir)
         fd.write('-db %s\n' % path)
         fd.write('-H %s\n' % gethostname())
-        fd.write('-S %s_%s_sql%s\n' % (appname, db_name, service_suffix))
+        fd.write('-S %s_sql%s\n' % (db_name, service_suffix))
         fd.write('-ServerType SQL\n')
         for option in sql_startup_options.get(db_name, []):
             fd.write(option + '\n')
@@ -228,9 +228,9 @@ def connect_parameter_file(match, deps, db_name):
     path = db_full_path(db_name, '').split(':')
     fd = open(db_name + '.pf', 'wt')
     if len(path) > 1:
-        fd.write('-db %s\n' % path[1])
+        fd.write('-db %s\n' % path[1].split('/')[0])
         fd.write('-H %s\n' % path[0])
-        fd.write('-S %s_%s%s\n' % (appname, db_name, service_suffix))
+        fd.write('-S %s%s\n' % (db_name, service_suffix))
     else:
         fd.write('-db %s\n' % path[0])
     fd.close()

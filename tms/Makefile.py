@@ -27,8 +27,6 @@ def active_cdr_db_pf():
                               '-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type], stdout=PIPE)
     return literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
 
-cdr_databases = active_cdr_db_pf()
-
 @target('test>test')
 def test(*a): pass
 
@@ -38,6 +36,8 @@ def daemon(*a):
         raise PikeException('Expected daemon name and instance as parameter')
     daemon = parameters[0]
     instance = parameters[1]
+    cdr_dict = {}
+
     if instance == "?":
         instance = ""
     pid_file = '../var/run/d-' + daemon + instance + '.pid'
@@ -55,7 +55,9 @@ def daemon(*a):
         if pp in databases:
             args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
         elif pp in cdr_databases:
-            args.extend(cdr_databases[pp])
+            if not cdr_dict:
+                cdr_dict = active_cdr_db_pf()
+            args.extend(cdr_dict[pp])
         else:
             args.append(pp)
     daemonpf = '../etc/pf/' + daemon + '.pf'
@@ -217,6 +219,8 @@ def terminal(*a):
     assert len(parameters) > 0, 'Which module to run?'
     terminal_module = parameters[0]
     module_base = os.path.basename(terminal_module)
+    cdr_dict = {}
+
     if os.path.exists('../var/run/%s.pid' % module_base):
         print('Lockfile %s.pid exists - aborting!' % module_base)
         sys.exit(5)
@@ -229,7 +233,9 @@ def terminal(*a):
         if pp in databases:
             args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
         elif pp in cdr_databases:
-            args.extend(cdr_databases[pp])
+            if not cdr_dict:
+                cdr_dict = active_cdr_db_pf()
+            args.extend(cdr_dict[pp])
         else:
             args.append(pp)
     cmd = Popen(mpro + args)
@@ -246,6 +252,8 @@ def batch(*a):
     assert len(parameters) > 0, 'Which module to run?'
     batch_module = parameters[0] 
     module_base = os.path.basename(batch_module)
+    cdr_dict = {}
+
     if os.path.exists('../var/run/%s.pid' % module_base):
         print('Lockfile %s.pid exists - aborting!' % module_base)
         sys.exit(5)
@@ -258,7 +266,9 @@ def batch(*a):
         if pp in databases:
             args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
         elif pp in cdr_databases:
-            args.extend(cdr_databases[pp])
+            if not cdr_dict:
+                cdr_dict = active_cdr_db_pf()
+            args.extend(cdr_dict[pp])
         else:
             args.append(pp)
     logfile = open('../var/log/%s.log' % module_base, 'a')
@@ -279,6 +289,8 @@ def idbatch(*a):
     assert len(parameters) > 0, 'Which module to run?'
     batch_module = parameters[0]
     module_base = os.path.basename(batch_module)
+    cdr_dict = {}
+
     try:
         batchid = int(parameters[1])
         if batchid in databases:
@@ -302,7 +314,9 @@ def idbatch(*a):
         if pp in databases:
             args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
         elif pp in cdr_databases:
-            args.extend(cdr_databases[pp])
+            if not cdr_dict:
+                cdr_dict = active_cdr_db_pf()
+            args.extend(cdr_dict[pp])
         else:
             args.append(pp)
     try:
