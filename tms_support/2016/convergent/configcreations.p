@@ -128,7 +128,9 @@ DEFINE INPUT PARAMETER icTariffName AS CHARACTER NO-UNDO.
               ServiceLimitGroup.GroupCode = icTariffCode NO-LOCK NO-ERROR.
               
    IF AVAILABLE ServiceLimitGroup THEN
-      RETURN "ServiceLimitGroup already exists".              
+      DISP 1.
+      /*RETURN "ServiceLimitGroup already exists " + icTariffCode.*/
+   ELSE DO:   
 
    CREATE ServiceLimitGroup.
    ASSIGN 
@@ -137,7 +139,7 @@ DEFINE INPUT PARAMETER icTariffName AS CHARACTER NO-UNDO.
       ServiceLimitGroup.GroupName = icTariffName    
       ServiceLimitGroup.ValidFrom = TODAY 
       ServiceLimitGroup.ValidTo   = 12/31/2049 NO-ERROR.    
-   
+   END.
    IF ERROR-STATUS:ERROR THEN 
       RETURN "Creating ServiceLimitGroup".
 
@@ -259,8 +261,8 @@ DEFINE OUTPUT PARAMETER lcFeeModel   AS CHARACTER NO-UNDO.
    FIND FIRST FeeModel WHERE 
               FeeModel.FeeModel = lcFeeModel NO-LOCK NO-ERROR.
     
-   IF AVAILABLE FeeModel THEN
-      RETURN "ERROR: FeeModel already exists". 
+   IF NOT AVAILABLE FeeModel THEN DO:
+      /*RETURN "ERROR: FeeModel already exists". */
                        
    CREATE FeeModel.
    ASSIGN 
@@ -268,7 +270,7 @@ DEFINE OUTPUT PARAMETER lcFeeModel   AS CHARACTER NO-UNDO.
       FeeModel.FeeModel = lcFeeModel
       FeeModel.FeeName  = icFMName               
       FeeModel.FMGroup  = 0 NO-ERROR.
-  
+   END.
    IF ERROR-STATUS:ERROR THEN 
       RETURN "ERROR: Creating Feemodel".
    ELSE 
@@ -318,7 +320,7 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
    
    FIND FIRST RatePlan WHERE 
               RatePlan.Brand    = gcBrand AND 
-              RatePlan.RatePlan = "CONTRATOFUS"
+              RatePlan.RatePlan = "CONTRATOCONV"
    NO-LOCK NO-ERROR.           
                 
    IF NOT AVAILABLE RatePlan THEN 
@@ -331,7 +333,14 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
    
    IF NOT AVAILABLE PListConf THEN 
       RETURN "ERROR: PListConf doesn't exists".
-                             
+   
+   FIND FIRST FMItem WHERE 
+              FMItem.brand EQ "1" AND
+              FMItem.feemodel EQ icFeeModel AND 
+              FMItem.PriceList EQ PListConf.PriceList AND
+              FMItem.BillCode EQ icMFBC AND
+              FMItem.FromDate EQ TODAY NO-LOCK NO-ERROR.
+   IF NOT AVAIL FMItem THEN DO:           
    CREATE FMItem. 
    ASSIGN     
       FMItem.Brand             = gcBrand
@@ -349,7 +358,7 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
       FMItem.FirstMonthBR      = liFMFeeCalc
       FMItem.BrokenRental      = liLMFeeCalc
       FMItem.ServiceLimitGroup = ""  NO-ERROR.
-
+   END.
    IF ERROR-STATUS:ERROR THEN 
       RETURN "ERROR: Creating FFItem".
    ELSE "OK".
@@ -377,8 +386,9 @@ DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
    IF CAN-FIND(FIRST DayCampaign WHERE
                      DayCampaign.Brand   = gcBrand AND
                      DayCampaign.DCEvent = icTariffCode) THEN
-      RETURN "ERROR: DayCampaign already exists".
- 
+      /*RETURN "ERROR: DayCampaign already exists".*/
+      DISP icTariffCode.
+   ELSE DO: 
    IF icPaymentType EQ "Postpaid" AND
       NOT CAN-FIND(FIRST FeeModel WHERE 
                          FeeModel.FeeModel = icFeeModel) THEN 
@@ -430,7 +440,7 @@ DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
       DayCampaign.NativeVoipComp  = LOGICAL(icNVComp) 
       DayCampaign.OnlyVoice       = LOGICAL(icOVoip) */
       NO-ERROR.     
-   
+   END.
    IF ERROR-STATUS:ERROR THEN 
       RETURN "ERROR: Creating DayCampaign".
    ELSE 
@@ -560,8 +570,8 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
          CLIType.CLIType       = icCLIType
          CLIType.CLIName       = icCLIName                            
          CLIType.BaseBundle    = icBaseBundle
-         CLIType.PricePlan     = IF lcRatePlan NE "" THEN lcRatePlan ELSE 
-                                 REPLACE(icCLIType,"CONT","CONTRATO") 
+         CLIType.PricePlan     = "CONTRATOCONV" /*IF lcRatePlan NE "" THEN lcRatePlan ELSE 
+                                 REPLACE(icCLIType,"CONT","CONTRATO") */
          CLIType.ServicePack   = IF icPayType EQ "Postpaid" THEN "11" 
                                  ELSE "12"
          CLIType.LineType      = INTEGER(fTMSCValue("CLIType",

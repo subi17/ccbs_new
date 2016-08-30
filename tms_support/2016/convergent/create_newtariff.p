@@ -131,7 +131,7 @@ DO TRANSACTION:
                         OUTPUT lcPayType,
                         OUTPUT lcRatePlan) NO-ERROR.
       ELSE IF INDEX(ttFiles.FName,"tariffcreation") > 0 THEN 
-        RUN tariffcreation.p(lcIncDir,
+        RUN tariffcreation.p(lcIncDir + ttFiles.FName,
                              lcSpoolDir,
                              lcPayType,
                              lcRatePlan) NO-ERROR.

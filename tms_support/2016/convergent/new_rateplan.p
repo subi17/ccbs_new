@@ -1,0 +1,54 @@
+/*FIND FIRST RatePlan WHERE rateplan.rateplan EQ "CONTRATOFUS".
+DISP RatePlan.
+
+FOR EACH PListConf WHERE Plistconf.rateplan EQ "CONTRATOFUS":
+   DISP PListConf.
+END.
+*/
+CREATE RatePlan.
+Assign
+   Rateplan.Rateplan = "CONTRATOCONV"
+   RatePlan.RpName = "Contrato convergent (Post paid)"
+   RatePlan.Brand = "1".
+
+CREATE PListConf.
+ASSIGN
+   PListConf.dfrom = 08/01/16
+   PlistConf.dto = 12/31/49
+   PListConf.prior = 5
+   PListConf.rateplan = "CONTRATOCONV"
+   PListConf.startcharge = TRUE
+   PListConf.brand = "1"
+   PListConf.pricelist = "COMMON3".
+
+CREATE PListConf.
+ASSIGN
+   PListConf.dfrom = 08/01/16
+   PlistConf.dto = 12/31/49
+   PListConf.prior = 30
+   PListConf.rateplan = "CONTRATOCONV"
+   PListConf.startcharge = TRUE
+   PListConf.brand = "1"
+   PListConf.pricelist = "COMMONF".
+
+CREATE PListConf.
+ASSIGN
+   PListConf.dfrom = 08/01/16
+   PlistConf.dto = 12/31/49
+   PListConf.prior = 50
+   PListConf.rateplan = "CONTRATOCONV"
+   PListConf.startcharge = TRUE
+   PListConf.brand = "1"
+   PListConf.pricelist = "CONTRATO".
+
+CREATE PListConf.
+ASSIGN
+   PListConf.dfrom = 08/01/16
+   PlistConf.dto = 12/31/49
+   PListConf.prior = 60
+   PListConf.rateplan = "CONTRATOCONV"
+   PListConf.startcharge = TRUE
+   PListConf.brand = "1"
+   PListConf.pricelist = "COMMON".
+
+

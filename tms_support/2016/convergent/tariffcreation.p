@@ -121,7 +121,7 @@ END FUNCTION.
 /* ***************************  Main Block  *************************** */
 
 ASSIGN lcLogFile   = icSpoolDir + "tariffcreation.log" 
-       lcInputFile = icIncDir + "tariffcreation.txt".
+       lcInputFile = icIncDir /* + "tariffcreation.txt"*/.
 
 INPUT STREAM TariffIn FROM VALUE(lcInputFile).
 OUTPUT STREAM TariffLog TO VALUE(lcLogFile) APPEND.
@@ -317,7 +317,7 @@ ELSE DO:
 END.
    
 ASSIGN
-   lcInputFile = icIncDir + "tariff_trans.txt"
+   lcInputFile = /*icIncDir +*/ "/store/riftp/tariff/incoming/tariff_trans.txt"
    lcLogFile   = icSpoolDir + "tariff_trans.log".
                      
 INPUT STREAM TTransIn FROM VALUE(lcInputFile).
