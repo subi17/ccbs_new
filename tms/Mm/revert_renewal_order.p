@@ -27,7 +27,7 @@ DEF VAR ldaRenewalDate AS DATE    NO-UNDO.
 DEF VAR liRenewalTime  AS INTEGER NO-UNDO.
 
 DEF BUFFER bSubMsRequest FOR MsRequest.
-DEF BUFFER bMsRequest    FOR MsRequest.
+DEF BUFFER bRenewalMsRequest FOR MsRequest.
 
 DEF VAR ldtactdate1 AS DATE NO-UNDO.
 
@@ -47,19 +47,19 @@ IF NOT AVAIL MobSub THEN DO:
    RETURN.
 END. /* IF NOT AVAIL MobSub THEN DO: */
 
-FIND FIRST bMsRequest WHERE
-           bMsRequest.MsSeq      = MsRequest.MSSeq  AND
-           bMsRequest.ReqType    = {&REQTYPE_AFTER_SALES_ORDER} AND
-           bMsRequest.ReqIParam1 = MsRequest.ReqIParam1 NO-LOCK NO-ERROR.
-IF NOT AVAIL bMsRequest OR
-   LOOKUP(STRING(bMsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0
+FIND FIRST bRenewalMsRequest WHERE
+           bRenewalMsRequest.MsSeq      = MsRequest.MSSeq  AND
+           bRenewalMsRequest.ReqType    = {&REQTYPE_AFTER_SALES_ORDER} AND
+           bRenewalMsRequest.ReqIParam1 = MsRequest.ReqIParam1 NO-LOCK NO-ERROR.
+IF NOT AVAIL bRenewalMsRequest OR
+   LOOKUP(STRING(bRenewalMsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0
 THEN DO:
    fReqError("Renewal order is still ongoing").
    RETURN.
-END. /* IF NOT AVAIL bMsRequest OR */
+END. /* IF NOT AVAIL bRenewalMsRequest OR */
 
 FIND FIRST bSubMsRequest WHERE
-           bSubMsRequest.OrigRequest = bMsRequest.MsRequest AND
+           bSubMsRequest.OrigRequest = bRenewalMsRequest.MsRequest AND
           (bSubMsRequest.ReqType     = {&REQTYPE_CONTRACT_ACTIVATION} OR
            bSubMsRequest.ReqType     = {&REQTYPE_CONTRACT_TERMINATION}) AND
            LOOKUP(STRING(bSubMsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND
@@ -70,7 +70,7 @@ IF AVAIL bSubMsRequest THEN DO:
    RETURN.
 END. /* IF AVAIL bSubMsRequest THEN DO: */
 
-fSplitTS(bMsRequest.ActStamp,OUTPUT ldaRenewalDate,OUTPUT liRenewalTime).
+fSplitTS(bRenewalMsRequest.ActStamp,OUTPUT ldaRenewalDate,OUTPUT liRenewalTime).
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -235,6 +235,7 @@ PROCEDURE pRevertRenewalOrder:
    DEF VAR ldaRequestDate AS DATE NO-UNDO. 
 
    DEFINE BUFFER bDCCLI      FOR DCCLI.
+   DEF BUFFER bmsrequest FOR MsRequest.
 
    /* Request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
@@ -461,6 +462,8 @@ PROCEDURE pCloseQ25Discount:
    DEF VAR ldeDiscount     AS DECIMAL   NO-UNDO. 
    DEF VAR lcResult        AS CHARACTER NO-UNDO.
    DEF VAR liRequest       AS INT NO-UNDO. 
+   DEF VAR ldeFrom         AS DEC NO-UNDO. 
+   DEF VAR ldeTo           AS DEC NO-UNDO. 
 
    DEF BUFFER bMsRequest FOR MSRequest.
 
@@ -494,7 +497,8 @@ PROCEDURE pCloseQ25Discount:
               bmsrequest.reqtype = 8 AND
               bmsrequest.reqstatus = 0 AND
               bmsrequest.reqcparam3 = "RVTERM12" AND
-              bmsrequest.reqiparam3 = liPerContractID NO-ERROR.
+              bmsrequest.reqiparam3 = liPerContractID AND
+              bmsrequest.origrequest = bRenewalMsRequest.MsRequest NO-ERROR.
    IF AVAIL bmsrequest THEN DO:
 
       FIND MsRequest NO-LOCK WHERE
@@ -506,17 +510,26 @@ PROCEDURE pCloseQ25Discount:
                  MsRequest.MsRequest = iiMsRequest  NO-LOCK NO-ERROR.
    END.
    ELSE DO:
+      
+      FOR EACH DCCLI NO-LOCK WHERE
+               DCCLI.Brand   EQ gcBrand AND
+               DCCLI.DCEvent EQ "RVTERM12" AND
+               DCCLI.MsSeq   EQ MobSub.MsSeq AND
+               DCCLI.ValidTo >= TODAY:
 
-      FIND DCCLI NO-LOCK WHERE
-           DCCLI.Brand   EQ gcBrand AND
-           DCCLI.DCEvent EQ "RVTERM12" AND
-           DCCLI.MsSeq   EQ MobSub.MsSeq AND
-           DCCLI.ValidTo >= TODAY NO-ERROR.
-
-      IF AMBIGUOUS(DCCLI) THEN 
-         RETURN "ERROR:More than one active Q25 extension contract".
-
-      IF AVAIL DCCLI THEN DO:
+         ASSIGN
+            ldeFrom = fmake2dt(dccli.contractdate,0)
+            ldeto = fmake2dt(dccli.contractdate,86399).
+      
+         /* extension must originate from the cancelled renewal order. YTS-9378 */
+         IF NOT CAN-FIND(FIRST bmsrequest NO-LOCK where
+              bmsrequest.msseq = dccli.msseq and
+              bmsrequest.actstamp >= ldefrom and
+              bmsrequest.actstamp <= ldeTo and
+              bmsrequest.reqtype = 8 and
+              bmsrequest.reqstatus = 2 and
+              bmsrequest.reqcparam3 = "rvterm12" AND
+              bmsrequest.origrequest = bRenewalMsRequest.MsRequest) THEN NEXT.
 
          liRequest = fPCActionRequest(
             MobSub.MsSeq,
@@ -536,6 +549,7 @@ PROCEDURE pCloseQ25Discount:
          IF liRequest EQ 0 THEN
             RETURN SUBST("ERROR:Q25 extension contract termination failed: &1",
                    lcResult).
+         LEAVE.
       END.
    END.
    
