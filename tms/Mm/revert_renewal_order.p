@@ -528,7 +528,7 @@ PROCEDURE pCloseQ25Discount:
               bmsrequest.actstamp <= ldeTo and
               bmsrequest.reqtype = 8 and
               bmsrequest.reqstatus = 2 and
-              bmsrequest.reqcparam3 = "rvterm12" AND
+              bmsrequest.reqcparam3 = dccli.dcevent AND
               bmsrequest.origrequest = bRenewalMsRequest.MsRequest) THEN NEXT.
 
          liRequest = fPCActionRequest(
