@@ -1,8 +1,9 @@
 from pike import *
 from socket import gethostname, getservbyname
+from ast import literal_eval
+from subprocess import call, Popen, PIPE
 from os import getcwd
 import os, sys
-from subprocess import Popen, PIPE
 import tempfile
 import shutil
 import time
@@ -102,7 +103,14 @@ if environment == 'development':
 else:
     initialize_dependencies += ['relink_migcache']
 
-
+def active_cdr_db_pf():
+    if '-S' in open('common.pf').read():
+        connection_type = "tcp"
+    else:
+        connection_type = "local"
+    cdr_fetch = Popen(mpro + ['-pf', 'common.pf',
+                              '-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type], stdout=PIPE)
+    return literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
 
 def db_full_path(db_name, suffix='.db', host=None):
     locs = {}
@@ -461,3 +469,18 @@ def fixtures(*a):
                  '-param', 'fix_dir=%s/db/progress/fixtures,bulk=yes' % work_dir,
                  '-b', '-p', 'gearbox/fixtures/load_fixtures.r'], [])
 
+@target
+def dumpfixtures(*a):
+    print('Start dumping fixtures...')
+
+    pf_entries = {}
+
+    for pp in databases:
+        pf_entries[pp] = ['-pf', '{0}.pf'.format(pp)]
+
+    if environment != 'development':
+        pf_entries.update(active_cdr_db_pf())
+
+    for key in sorted(pf_entries):
+        dump_fixture = Popen(mpro + pf_entries[key] + ['-b', '-p', 'gearbox/fixtures/dump_fixtures.p', '-param', '%s/db/progress/fixtures' % work_dir], stdout=PIPE)
+        call('/bin/cat', stdin=dump_fixture.stdout)

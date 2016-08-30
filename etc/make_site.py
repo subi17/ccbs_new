@@ -68,6 +68,8 @@ os.environ['PROTERMCAP'] = work_dir + '/etc/protermcap'
 if environment == 'development':
     os.environ['PROPATH'] = ','.join(['%s/%s' % (work_dir, x) \
                       for x in modules + ['tools', 'tools/stompAdapter']]) + ',.'
+    databases.extend(cdr_databases)
+    del cdr_databases[:]
 else:
     def modgen():
         for mod in modules:
