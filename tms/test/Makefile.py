@@ -66,3 +66,11 @@ def functional(*a):
                                   '-b', '-p', 'gearbox/functional/run.r'], [])
     if errors != 0:
         raise TestFailures()
+
+@target
+def deps(*a):
+    if len(parameters) != 1:
+        raise PikeException('Expected source file as parameter')
+    source_file = parameters[0]
+    dependencies = Popen(mpro + ['-b', '-p', 'gearbox/unit/list_dependencies.p', '-param', source_file], stdout=PIPE)
+    call('/bin/cat', stdin=dependencies.stdout)
