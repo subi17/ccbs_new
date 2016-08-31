@@ -465,9 +465,18 @@ def downgrade(match, deps):
 @target
 def fixtures(*a):
     print('Loading fixtures...')
-    callgrep(mpro + ['-pf', 'all.pf',
-                 '-param', 'fix_dir=%s/db/progress/fixtures,bulk=yes' % work_dir,
-                 '-b', '-p', 'gearbox/fixtures/load_fixtures.r'], [])
+
+    cdr_dict = {}
+    args = ['-pf', 'all.pf', '-b', '-p', 'gearbox/fixtures/load_fixtures.r',
+            '-param', 'fix_dir=%s/db/progress/fixtures,bulk=yes' % work_dir]
+
+    for pp in cdr_databases:
+        if not cdr_dict:
+            cdr_dict = active_cdr_db_pf()
+        args.extend(cdr_dict[pp])
+
+    load_fixture = Popen(mpro + args, stdout=PIPE)
+    call('/bin/cat', stdin=load_fixture.stdout)
 
 @target
 def dumpfixtures(*a):
