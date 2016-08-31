@@ -44,6 +44,7 @@ FUNCTION fAddOrderStruct RETURN LOGICAL (INPUT piCountOrder AS INTEGER):
    add_string(lcOrderStruct, "cli"    , Order.CLI              ).
    add_string(lcOrderStruct, "fname"  , OrderCustomer.FirstName).
    add_string(lcOrderStruct, "lname"  , OrderCustomer.SurName1 ).
+   add_string(lcOrderStruct, "fixed_number"  , "912345678" ). /*TODO order.fixednumber */
 END.
 
 
@@ -133,6 +134,7 @@ CASE pcSearchType:
    WHEN "tms_id"  THEN lcError = fAddOrdersBasedOnOrderId().
    WHEN "custid" THEN lcError = fAddOrdersBasedOnCustId().
    WHEN "msisdn"  THEN lcError = fAddOrdersBasedOnCLI(). 
+   WHEN "fixed_number" THEN lcError = fAddOrdersBasedOnCLI().
    OTHERWISE 
       lcError = "Invalid search_type " + pcSearchType.
 END.

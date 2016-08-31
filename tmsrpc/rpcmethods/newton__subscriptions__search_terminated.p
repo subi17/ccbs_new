@@ -98,7 +98,7 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    IF Customer.SalesMan EQ "PRE-ACT" THEN
       add_string(sub_struct, "message",
                              "MSIDSN listing is disabled for this customer"). 
-   
+   add_string(sub_struct, "fixed_number","912345678"). /* TODO termmobsub.fixednumber. */
 END FUNCTION. 
 
 FUNCTION fIsViewableTermMobsub RETURNS LOGICAL
@@ -220,6 +220,40 @@ ELSE IF pcSearchType EQ "person_id" THEN DO:
    CREATE ttOwner.
    ASSIGN
       ttOwner.Custnum = Customer.CustNum.
+END.
+ELSE IF pcSearchType EQ "fixed_number" THEN DO:
+
+   RELEASE ttOwner.
+
+   pcInput = "617599970". /* TODO remove */
+
+   FOR EACH termmobsub NO-LOCK WHERE
+      termmobsub.cli = pcInput AND      /* TODO fixednumber */
+      termmobsub.brand = gcBrand,
+      FIRST Customer NO-LOCK WHERE
+            Customer.Custnum = TermMobSub.Custnum:
+
+      IF NOT fIsViewableTermMobsub(TermMobSub.MsSeq) THEN NEXT.
+
+      IF piOffSet = 0 OR Customer.Salesman EQ "PRE-ACT" THEN DO:
+         fAddSubStruct().
+         liSubCount = liSubCount + 1.
+         NEXT.
+      END.
+
+      FIND FIRST ttOwner NO-LOCK where
+                 ttOwner.Custnum = termmobsub.Custnum NO-ERROR.
+      IF AVAIL ttOwner THEN NEXT.
+
+      CREATE ttOwner.
+      ASSIGN
+         ttOwner.Custnum = TermMobsub.Custnum.
+   END.
+
+   IF liSubCount = 0 AND NOT AVAIL ttOwner THEN
+       RETURN appl_err(SUBST("MobSub entry &1 not found", pcInput)).
+
+   llSearchByMobsub = TRUE.
 END.
 ELSE RETURN appl_err(SUBST("Unknown search type &1", pcSearchType)).
 

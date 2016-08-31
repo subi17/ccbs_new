@@ -72,6 +72,7 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    add_string(sub_struct, "subscription_type_id", mobsub.clitype).
    add_int(sub_struct   , "status"     , mobsub.msstatus).
    add_string(sub_struct, "data_bundle_id", MobSub.TariffBundle).
+   add_string(sub_struct, "fixed_number", "912345678"). /*Mobsub.fixednumber*/
    
    IF CAN-FIND(
       FIRST MsRequest NO-LOCK WHERE
@@ -91,6 +92,23 @@ IF LENGTH(pcInput) EQ 9 AND
 
     FIND mobsub NO-LOCK
     WHERE mobsub.cli = pcInput
+      AND mobsub.brand = gcBrand NO-ERROR.
+    IF NOT AVAILABLE mobsub THEN
+        RETURN appl_err(SUBST("MobSub entry &1 not found", pcInput)).
+    ELSE
+        liOwner = mobsub.agrCust.
+    llSearchByMobsub = TRUE.
+END.
+ELSE IF LENGTH(pcInput) EQ 9 AND
+   (pcInput BEGINS "9") AND
+   NOT (ASC(lcTmp) >= 65 AND
+   ASC(lcTmp) <= 90) AND
+   LOOKUP("fixed_number", pcSearchTypes) > 0 THEN DO:
+    
+    pcInput = "605888489". /* TODO remove hardcoding as fixednumber is added mobsub*/
+    
+   FIND mobsub NO-LOCK
+    WHERE mobsub.cli = pcInput /* TODO change mobsub.fixednumber*/
       AND mobsub.brand = gcBrand NO-ERROR.
     IF NOT AVAILABLE mobsub THEN
         RETURN appl_err(SUBST("MobSub entry &1 not found", pcInput)).
@@ -190,6 +208,7 @@ ELSE DO:
 
    IF llSearchByMobsub AND piOffSet > 0 THEN liSubCount = liSubCount + 1.
 
+   /* TODO fixednumber search option */
    FOR EACH mobsub NO-LOCK
    WHERE mobsub.brand = gcBrand
      AND mobsub.agrCust = liOwner

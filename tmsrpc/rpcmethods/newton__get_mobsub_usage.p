@@ -719,6 +719,11 @@ add_int(first_level_struct,    "bono_count", liBonoCount).
 add_int(first_level_struct,    "data_bundle_upsell", liUpsellCount).
 add_int(first_level_struct,    "data200_upsell_count", liData200Count).
 add_int(first_level_struct,    "dss200_upsell_count", liDSS200Count).
+add_double(first_level_struct, "fixed_bundle_usage",  90.0). /* TODO actual values */
+add_double(first_level_struct, "fixed_bundle_limit",  300.0).
+add_int(first_level_struct,    "fixed_bdest_limit", 120).
+add_int(first_level_struct,    "fixed_bdest_usage", 23).
+
 
 FINALLY:
    EMPTY TEMP-TABLE ttCDR.
