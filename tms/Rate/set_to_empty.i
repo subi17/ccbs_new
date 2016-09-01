@@ -12,6 +12,7 @@ ASSIGN
  liPartialInd          = 0
  lcCdrId               = ""
  lcCallIdNum           = ""
+ lcApn                 = ""
  liAccumulator         = 0
  lcPrefixCode          = ""
  lcPrefix              = ""

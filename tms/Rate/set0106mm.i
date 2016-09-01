@@ -34,6 +34,7 @@ ASSIGN
  lcRoutingnumber       =     TRIM(ENTRY(47,callrec,lcSep))
  
  lcSGSNAddress         =     TRIM(ENTRY(58,callrec,lcSep))
+ lcApn                 =     TRIM(ENTRY(60,callrec,lcSep))
  ldeDataIn             = DEC(TRIM(ENTRY(65,callrec,lcSep)))
  ldeDataOut            = DEC(TRIM(ENTRY(66,callrec,lcSep)))
  liPrePaid             = INT(TRIM(ENTRY(69,callrec,lcSep)))
