@@ -67,11 +67,11 @@ ASSIGN liQ25Logging      = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg
        lcQ22PushSpoolDir = fCParam("Q22Push","Q22PushSpoolDir")
        lcQ22PushOutDir   = fCParam("Q22Push","Q22PushOutDir").
 
-IF lcPassPhrase      = "" OR lcPassPhrase = ?      THEN
+IF lcPassPhrase      = "" OR lcPassPhrase      = ? THEN
    lcPassPhrase      = {&Q25_PASSPHRASE}.
-IF lcQ25LogDir       = "" OR lcQ25LogDir = ?       THEN
+IF lcQ25LogDir       = "" OR lcQ25LogDir       = ? THEN
    lcQ25LogDir       = "/tmp/".
-IF lcQ25SpoolDir     = "" OR lcQ25SpoolDir = ?     THEN
+IF lcQ25SpoolDir     = "" OR lcQ25SpoolDir     = ? THEN
    lcQ25SpoolDir     = "/tmp/".
 IF lcQ22PushSpoolDir = "" OR lcQ22PushSpoolDir = ? THEN
    lcQ22PushSpoolDir = "/tmp/".
@@ -541,6 +541,9 @@ FUNCTION fQ22PushNotification RETURNS LOGICAL
    DEF VAR lcPushRequest AS CHAR NO-UNDO.
 
    lcRequestId = "010" + SUBSTRING(BASE64-ENCODE(GENERATE-UUID), 1, 22).
+
+   IF INDEX(lcRequestId,"|") > 0 THEN 
+      lcRequestId = REPLACE(lcRequestId,"|","0").
 
    lcPushRequest = lcRequestId      + "|" +  /* request_id           */
                    "q25"            + "|" +  /* message_category     */
