@@ -64,7 +64,7 @@ END FUNCTION.
 /******* Main start ********/
 
 /* Get the cdr database active dates and
-   return information whether of not the
+   return information whether or not the
    session has an active cdr database (DBState = 0) */
 llCurrentDB = fIsCurrentDB(gcBrand,
                            "MobCDR",
@@ -139,10 +139,8 @@ PROCEDURE pGetAllRequests:
    BY MsRequest.ActStamp
    BY MsRequest.MsRequest:
 
-      IF llCurrentDB AND MsRequest.ReqDtParam1 > ldaActiveTo
-      THEN NEXT RERATE_REQUEST.
-
-      ELSE IF llCurrentDB = FALSE AND MsRequest.ReqDtParam1 < ldaActiveFrom
+      IF MsRequest.ReqDtParam1 < ldaActiveFrom OR
+         MsRequest.ReqDtParam2 > ldaActiveTo
       THEN NEXT RERATE_REQUEST.
 
       RUN pHandleRequest.
@@ -172,10 +170,8 @@ PROCEDURE pGetCustomerRequests:
    BY MsRequest.ActStamp
    BY MsRequest.MsRequest:
 
-      IF llCurrentDB AND MsRequest.ReqDtParam1 > ldaActiveTo
-      THEN NEXT CUSTOMER_REQUEST.
-
-      ELSE IF llCurrentDB = FALSE AND MsRequest.ReqDtParam1 < ldaActiveFrom
+      IF MsRequest.ReqDtParam1 < ldaActiveFrom OR
+         MsRequest.ReqDtParam2 > ldaActiveTo
       THEN NEXT CUSTOMER_REQUEST.
 
       RUN pHandleRequest.
