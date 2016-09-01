@@ -67,15 +67,15 @@ ASSIGN liQ25Logging      = fCParamI("Q25LoggingLevel") /* 0 = none, 1 = sent msg
        lcQ22PushSpoolDir = fCParam("Q22Push","Q22PushSpoolDir")
        lcQ22PushOutDir   = fCParam("Q22Push","Q22PushOutDir").
 
-IF lcPassPhrase      = "" OR lcPassPhrase = ?  THEN
+IF lcPassPhrase      = "" OR lcPassPhrase = ?      THEN
    lcPassPhrase      = {&Q25_PASSPHRASE}.
-IF lcQ25LogDir       = "" OR lcQ25LogDir = ?   THEN
+IF lcQ25LogDir       = "" OR lcQ25LogDir = ?       THEN
    lcQ25LogDir       = "/tmp/".
-IF lcQ25SpoolDir     = "" OR lcQ25SpoolDir = ? THEN
+IF lcQ25SpoolDir     = "" OR lcQ25SpoolDir = ?     THEN
    lcQ25SpoolDir     = "/tmp/".
-IF lcQ22PushSpoolDir = "" OR lcQ22PushSpoolDir THEN
+IF lcQ22PushSpoolDir = "" OR lcQ22PushSpoolDir = ? THEN
    lcQ22PushSpoolDir = "/tmp/".
-IF lcQ22PushOutDir   = "" OR lcQ22PushOutDir   THEN
+IF lcQ22PushOutDir   = "" OR lcQ22PushOutDir   = ? THEN
    lcQ22PushOutDir   = "/tmp/".
 
 ASSIGN lcQ25DWHLogFile  = lcQ25SpoolDir + "events_" +
@@ -534,6 +534,33 @@ FUNCTION fisQ25ExtensionAllowed RETURNS LOGICAL
    RETURN TRUE.
 END.
 
+FUNCTION fQ22PushNotification RETURNS LOGICAL
+   (INPUT icCLI AS CHAR):
+
+   DEF VAR lcRequestId   AS CHAR NO-UNDO.
+   DEF VAR lcPushRequest AS CHAR NO-UNDO.
+
+   lcRequestId = "010" + SUBSTRING(BASE64-ENCODE(GENERATE-UUID), 1, 22).
+
+   lcPushRequest = lcRequestId      + "|" +  /* request_id           */
+                   "q25"            + "|" +  /* message_category     */
+                   "q22_reminder"   + "|" +  /* message_template_id  */
+                   "3"              + "|" +  /* message_type         */
+                   icCLI            + "|" +  /* recipient_msisdn     */
+                   ""               + "|" +  /* recipient_email      */
+                   ""               + "|" +  /* recipient_group      */
+                   ""               + "|" +  /* product_id           */
+                   ""               + "|" +  /* first_name           */
+                   "".                       /* last_name            */
+
+    OUTPUT STREAM Push TO VALUE(lcQ22PushFile) APPEND.
+    PUT STREAM Push UNFORMATTED lcPushRequest SKIP.
+    OUTPUT STREAM Push CLOSE.
+
+    RETURN TRUE.
+
+END FUNCTION.
+
 /* SMS message generating and sending for Q25. */
 FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER 
    (INPUT idaStartDate AS DATE,
@@ -917,30 +944,4 @@ FUNCTION fMakeProdigyRequest RETURNS LOGICAL
                  "IFS").     /* creator */
    END.
    RETURN TRUE.
-END.    
-
-FUNCTION fQ22PushNotification RETURNS LOGICAL
-   (INPUT icCLI AS INT):
-
-   DEF VAR lcRequestId AS CAHR NO-UNDO.
-
-   lcRequestId = "010" + SUBSTRING(BASE64-ENCODE(GENERATE-UUID), 1, 22).
-
-   lcPushRequest = lcRequestId      + "|" +  /* request_id           */
-                   "q25"            + "|" +  /* message_category     */
-                   "q22_reminder"   + "|" +  /* message_template_id  */
-                   3                + "|" +  /* message_type         */
-                   icCLI            + "|" +  /* recipient_msisdn     */
-                   ""               + "|" +  /* recipient_email      */
-                   ""               + "|" +  /* recipient_group      */
-                   ""               + "|" +  /* product_id           */
-                   ""               + "|" +  /* first_name           */
-                   "".                       /* last_name            */
-
-    OUTPUT STREAM Push TO VALUE(lcQ22PushFile) APPEND.
-    PUT STREAM Push UNFORMATTED lcPushRequest SKIP.
-    OUTPUT STREAM Push CLOSE.
-
-    RETURN TRUE.
-
-END FUNCTION.
+END.
