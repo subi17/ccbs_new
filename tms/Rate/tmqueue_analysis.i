@@ -48,7 +48,9 @@ FUNCTION fGetBDestCount RETURNS INT (INPUT iiMsSeq       AS INT,
 
    FOR FIRST bServiceLimit NO-LOCK WHERE
              bServiceLimit.GroupCode = icBundleId AND
-             bServiceLimit.DialType  = liDialType,
+             bServiceLimit.DialType  = liDialType AND
+             bServiceLimit.ValidFrom <= TODAY     AND
+             bServiceLimit.ValidTo   >= TODAY,
        FIRST bServiceLCounter WHERE
              bServiceLCounter.MsSeq  = iiMsSeq AND
              bServiceLCounter.SLSeq  = bServiceLimit.SlSeq AND

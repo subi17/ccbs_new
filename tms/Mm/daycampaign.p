@@ -599,7 +599,9 @@ repeat WITH FRAME sel:
           Daycampaign.dcType = {&DCTYPE_POOL_RATING} THEN DO:
           
           FIND FIRST ServiceLimit WHERE 
-                     ServiceLimit.GroupCode = daycampaign.dcevent
+                     ServiceLimit.GroupCode = daycampaign.dcevent AND
+                     ServiceLimit.ValidFrom <= TODAY              AND
+                     ServiceLimit.ValidTo   >= TODAY
           NO-LOCK NO-ERROR.
 
           IF NOT AVAIL ServiceLimit THEN DO:

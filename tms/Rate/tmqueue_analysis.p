@@ -1172,7 +1172,9 @@ PROCEDURE pCheckLimits:
 
                FOR FIRST ServiceLimit WHERE
                          ServiceLimit.GroupCode = TMQueue.DCEvent AND
-                         ServiceLimit.DialType = 4 NO-LOCK,
+                         ServiceLimit.DialType = 4                AND
+                         ServiceLimit.ValidFrom <= TODAY          AND
+                         ServiceLimit.ValidTo   >= TODAY NO-LOCK,
                    FIRST MServiceLimit NO-LOCK WHERE
                          MServiceLimit.MsSeq = TMQueue.MsSeq AND
                          MServiceLimit.DialType = ServiceLimit.DialType AND

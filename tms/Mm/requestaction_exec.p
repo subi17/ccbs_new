@@ -222,7 +222,9 @@ PROCEDURE pPeriodicalContract:
          llDo = FALSE.
                
          FOR EACH bServiceLimit NO-LOCK WHERE
-                  bServiceLimit.GroupCode = ttAction.ActionKey,
+                  bServiceLimit.GroupCode = ttAction.ActionKey AND
+                  bServiceLimit.ValidFrom <= TODAY             AND
+                  bServiceLimit.ValidTo   >= TODAY,
             FIRST bMServiceLimit NO-LOCK WHERE
                   bMServiceLimit.MsSeq    = liMsSeq AND
                   bMServiceLimit.DialType = bServiceLimit.DialType AND
@@ -309,7 +311,9 @@ PROCEDURE pPeriodicalContract:
          llDo = FALSE.
                
          FOR EACH bServiceLimit NO-LOCK WHERE
-                  bServiceLimit.GroupCode = ttAction.ActionKey,
+                  bServiceLimit.GroupCode = ttAction.ActionKey AND
+                  bServiceLimit.ValidFrom <= TODAY             AND
+                  bServiceLimit.ValidTo   >= TODAY,
             FIRST bMServiceLimit NO-LOCK WHERE
                   bMServiceLimit.MsSeq    = liMsSeq AND
                   bMServiceLimit.DialType = bServiceLimit.DialType AND

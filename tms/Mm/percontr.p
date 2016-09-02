@@ -427,7 +427,9 @@ PROCEDURE pContractActivation:
       bundles at the same time */
    IF LOOKUP(lcDCEvent,lcBONOContracts) > 0 THEN
       FOR EACH ServiceLimit NO-LOCK WHERE
-               LOOKUP(ServiceLimit.GroupCode,lcBONOContracts) > 0,
+               LOOKUP(ServiceLimit.GroupCode,lcBONOContracts) > 0 AND
+               ServiceLimit.ValidFrom <= TODAY AND
+               ServiceLimit.ValidTo   >= TODAY,
           FIRST MServiceLimit WHERE
                 MServiceLimit.MsSeq = MsOwner.MsSeq      AND
                 MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -1339,7 +1341,9 @@ PROCEDURE pFinalize:
 
       FOR EACH  ServiceLimit NO-LOCK WHERE
                 ServiceLimit.GroupCode = lcDCEvent AND
-                ServiceLimit.DialType  = {&DIAL_TYPE_VOICE},
+                ServiceLimit.DialType  = {&DIAL_TYPE_VOICE} AND
+                ServiceLimit.ValidFrom <= TODAY             AND
+                ServiceLimit.ValidTo   >= TODAY,
           FIRST MServiceLimit NO-LOCK WHERE
                 MServiceLimit.MsSeq = MsRequest.MsSeq AND
                 MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -2003,7 +2007,9 @@ PROCEDURE pContractTermination:
          liSlSeq    = 0.
 
       FOR EACH ServiceLimit NO-LOCK WHERE
-               ServiceLimit.GroupCode = lcDCEvent,
+               ServiceLimit.GroupCode = lcDCEvent AND
+               ServiceLimit.ValidFrom <= TODAY    AND
+               ServiceLimit.ValidTo   >= TODAY,
           EACH MServiceLimit EXCLUSIVE-LOCK WHERE
                MServiceLimit.MsSeq    = liCheckMsSeq AND
                MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -3582,7 +3588,9 @@ PROCEDURE pContractReactivation:
    IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 THEN DO:
 
       FOR EACH ServiceLimit NO-LOCK WHERE
-               ServiceLimit.GroupCode = lcDCEvent,
+               ServiceLimit.GroupCode = lcDCEvent AND
+               ServiceLimit.ValidFrom <= TODAY    AND
+               ServiceLimit.ValidTo   >= TODAY,
          EACH MServiceLimit EXCLUSIVE-LOCK USE-INDEX MsSeq WHERE
               MServiceLimit.MsSeq    = MsRequest.MsSeq       AND
               MServiceLimit.DialType = ServiceLimit.DialType AND

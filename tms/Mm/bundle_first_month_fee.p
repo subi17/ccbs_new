@@ -226,7 +226,9 @@ PROCEDURE pCollectSubscription:
    DEF VAR liTime        AS INT  NO-UNDO.
 
    FOR FIRST ServiceLimit NO-LOCK WHERE 
-             ServiceLimit.GroupCode = icDCEvent,
+             ServiceLimit.GroupCode = icDCEvent AND
+             ServiceLimit.ValidFrom <= TODAY    AND
+             ServiceLimit.ValidTo   >= TODAY,
       /* packages that were activated (and not terminated) on this period */
        FIRST MServiceLimit NO-LOCK WHERE
              MServiceLimit.MsSeq = iiMsSeq AND

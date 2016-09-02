@@ -804,7 +804,9 @@ PROCEDURE pGetSubInvoiceHeaderData:
                   END.
 
                FOR EACH bServiceLimit NO-LOCK WHERE
-                        bServiceLimit.GroupCode = lcGroupCode,
+                        bServiceLimit.GroupCode = lcGroupCode AND
+                        bServiceLimit.ValidFrom <= TODAY      AND
+                        bServiceLimit.ValidTo   >= TODAY,
                    EACH bMServiceLimit NO-LOCK WHERE
                         bMServiceLimit.MsSeq = MSOwner.MsSeq  AND
                         bMServiceLimit.DialType = bServiceLimit.DialType AND

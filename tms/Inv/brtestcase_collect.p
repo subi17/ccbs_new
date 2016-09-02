@@ -326,7 +326,9 @@ PROCEDURE pInitCriteria:
    /* get some periodical contract related data ready */ 
    IF ttCriteria.CriteriaTable = "DayCampaign" THEN DO:
       FOR EACH ServiceLimit NO-LOCK WHERE
-               ServiceLimit.GroupCode MATCHES(ttCriteria.ValueIncluded):
+               ServiceLimit.GroupCode MATCHES(ttCriteria.ValueIncluded) AND
+               ServiceLimit.ValidFrom <= TODAY                          AND
+               ServiceLimit.ValidTo   >= TODAY:
          IF NOT CAN-FIND(FIRST ttServiceLimit WHERE 
             ttServiceLimit.SlSeq = ServiceLimit.SlSeq) THEN DO:
                CREATE ttServiceLimit.

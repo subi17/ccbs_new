@@ -53,7 +53,9 @@ FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
              IF INDEX(icSMSText,"#NEW_BUNDLE_CAPACITY") > 0 THEN DO:
                 FIND FIRST ServiceLimit WHERE
                            ServiceLimit.GroupCode = MsRequest.ReqCParam2 AND
-                           ServiceLimit.DialType  = {&DIAL_TYPE_GPRS}
+                           ServiceLimit.DialType  = {&DIAL_TYPE_GPRS}    AND
+                           ServiceLimit.ValidFrom <= TODAY               AND
+                           ServiceLimit.ValidTo   >= TODAY
                      NO-LOCK NO-ERROR.
                 IF AVAILABLE ServiceLimit THEN DO:
                    IF ServiceLimit.InclAmt < 1024 THEN
