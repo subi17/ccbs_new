@@ -62,8 +62,8 @@ HdrText
 HiUsageKat
 HiUsageLimit
 IFiSpx
-IGInvNum
-IGVoucher
+#IGInvNum
+#IGVoucher
 IMEIRegister
 InvGroup
 InvSect
@@ -132,7 +132,7 @@ ServiceLimitGroup
 ServiceLimitTarget
 ServPac
 ShaperConf
-#SimArt
+SimArt
 #SimBatch
 SimMan
 SIMStat
