@@ -966,6 +966,8 @@
 "Printing" "MailPrintFile" "C" 0 0 "/tmp/mailp" ? "" "" "" "" "" "" "" "" "" "" "File for email print" no "1"
 "Promotion" "AprilPromotionFromDate" "DE" 0 20160404 "" ? "" "" "" "" "" "" "" "" "" "" "April Promotion From Date" no "1"
 "Promotion" "AprilPromotionToDate" "DE" 0 20160601 "" ? "" "" "" "" "" "" "" "" "" "" "April Promotion To Date" no "1"
+"Promotion" "SepPromotionFromDate" "DE" 0 20160901 "" ? "" "" "" "" "" "" "" "" "" "" "September Promotion From Date" no "1"
+"Promotion" "SepPromotionToDate" "DE" 0 20161001 "" ? "" "" "" "" "" "" "" "" "" "" "September Promotion To Date" no "1"
 "Promotions" "CONT15PromoEndDate" "DA" 0 0 "" 31/12/49 "" "" "" "" "" "" "" "" "" "" "CONT15 promotion end date" no "1"
 "Promotions" "CONT15PromoFromDate" "DA" 0 0 "" 02/02/15 "" "" "" "" "" "" "" "" "" "" "CONT15 promotion from date" no "1"
 "Promotions" "CONTS30PromoEndDate" "DA" 0 0 "" 04/09/13 "" "" "" "" "" "" "" "" "" "" "CONTS30 promotion end date" no "1"
