@@ -140,9 +140,9 @@ END.
 MESSAGE "Printing in process".            
 
 ehto = 5.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
-RUN Ar/ddstatrep (ldtAuthDate1,
+RUN Ar/ddstatrep.p (ldtAuthDate1,
                ldtAuthDate2,
                llListUnsent,
                lcFile). 

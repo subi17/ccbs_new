@@ -282,7 +282,7 @@ IF llPaper THEN DO:
 END.
 
 ehto = 5.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
 /* info line for log */
 lcLogLine = STRING(date1,"999999") + "-" +

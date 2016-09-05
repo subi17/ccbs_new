@@ -133,12 +133,12 @@ PROCEDURE pFinalize:
    IF AVAILABLE MsOwner AND MsOwner.PayType THEN liPayType = 2.
    
    IF liPayType = 2 THEN 
-      RUN Rate/cli_prepaidrate (icCLI,     
+      RUN Rate/cli_prepaidrate.p (icCLI,     
                            ldaFromDate,  
                            ldaToDate,    
                            TRUE).      /* silent = true */  
    ELSE 
-      RUN Rate/cli_rate (icCLI,
+      RUN Rate/cli_rate.p (icCLI,
                     ldaFromDate,
                     ldaToDate,
                     TRUE).
@@ -216,7 +216,7 @@ PROCEDURE pOwnerChange:
       ELSE DO:
          IF liOrigStat > 0 AND INDEX(RETURN-VALUE,"SMS") > 0 THEN DO:
             
-            RUN Mm/acc_sendsms(MsRequest.MsRequest,
+            RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "Rejected",
                             IF NUM-ENTRIES(RETURN-VALUE,"/") >= 3 
@@ -309,12 +309,12 @@ PROCEDURE pOwnerChange:
             MsRequest.ReqDParam1 > MsRequest.ActStamp
          THEN DO:
             
-            RUN Mm/acc_sendsms(MsRequest.MsRequest,
+            RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "Accepted",
                             "").
 
-            RUN Mm/acc_sendsms(MsRequest.MsRequest,
+            RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "PreviousDay",
                             "").
@@ -703,7 +703,7 @@ PROCEDURE pOwnerChange:
 
    /* send SMS */
    IF MsRequest.SendSMS = 1 THEN 
-      RUN Mm/acc_sendsms(MsRequest.MsRequest,
+      RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                       liNewOwner,
                       "Done",
                       "").  

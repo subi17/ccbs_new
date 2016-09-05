@@ -52,7 +52,7 @@
                                credpaym) -> ALL is undone when cancelled, 
                                write logs in the END after everything is done 
                   16.05.02/aam partial crediting 
-                  17.05.02/tk  RUN Mc/memo
+                  17.05.02/tk  RUN Mc/memo.p
                   28.05.02/aam userlog removed 
                   03.06.02/aam katun added to Invoice.Memo
                   07.06.02/aam use Invoice.OverPaym for overpayment,
@@ -316,7 +316,7 @@ FUNCTION fDispReasonGrpDesc RETURNS LOGIC
     
 END FUNCTION.
 
-cfc = "sel".  RUN Syst/ufcolor.
+cfc = "sel".  RUN Syst/ufcolor.p.
 
 /* crediting limit from user */
 FIND FIRST TMSUser NO-LOCK WHERE
@@ -370,7 +370,7 @@ repeat WITH FRAME rajat:
              lcExtInvID  = "".
 
       IF liCalled = 0 THEN DO:
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
 
          UPDATE lcExtInvID validate(lcExtInvID = "" OR 
                           can-find(FIRST Invoice where 
@@ -517,7 +517,7 @@ repeat WITH FRAME rajat:
          END.
                    
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          NEXT. 
       END.
 
@@ -600,7 +600,7 @@ repeat WITH FRAME rajat:
       /* yoigo special */
       ufk[4] = 0.
       
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 8 THEN LEAVE rajat.
 
@@ -612,7 +612,7 @@ repeat WITH FRAME rajat:
       ELSE IF toimi = 2 THEN DO TRANS: /* memo */
          FIND Invoice WHERE Invoice.InvNum = liInvNum
          NO-LOCK NO-ERROR.
-         RUN Mc/memo(INPUT Invoice.CustNum,
+         RUN Mc/memo.p(INPUT Invoice.CustNum,
                   INPUT "invoice",
                   INPUT STRING(Invoice.InvNum),
                   INPUT "Invoice number").
@@ -629,7 +629,7 @@ repeat WITH FRAME rajat:
 
       /* partial crediting; mark invoice lines TO be credited */
       ELSE IF toimi = 4 THEN DO:
-         RUN Ar/partcred(liInvNum,
+         RUN Ar/partcred.p(liInvNum,
                       input-output table wMarked).
          fCreditAmt(). 
       END.

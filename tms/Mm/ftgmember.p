@@ -105,7 +105,7 @@ form /* seek  MemberType */
     " Memo: " + FATGMember.FTGrp + "/" + FATGMember.FTGMember WITH NO-LABELS 1 columns
     FRAME f4.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Type  ,  By Member  ,By 3, By 4".
@@ -132,12 +132,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a FATGMember  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -366,8 +366,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        Disp lcBrand With FRAME f1.
        SET lcBrand WHEN gcAllBrand = TRUE
@@ -389,9 +389,9 @@ BROWSE:
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
         {Syst/uright2.i}.
 
-        cfc = "puyr". RUN Syst/ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. 
-        RUN Syst/ufkey. ufkey = TRUE.
+        RUN Syst/ufkey.p. ufkey = TRUE.
         RUN local-find-this(TRUE).
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFATGMember).
         UPDATE FATGMember.Memo WITH FRAME f4.
@@ -457,8 +457,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
       DISPLAY FATGMember.MemberType .  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFATGMember).
        RUN local-UPDATE-record.                                  
@@ -592,8 +592,8 @@ PROCEDURE local-UPDATE-record:
              IF FRAME-FIELD = "ftgmember" AND keylabel(lastkey) = "F9"
              THEN DO:
 
-                IF      fatgmember.membertype = 0 THEN RUN Help/nnmase.
-                ELSE IF fatgmember.membertype = 1 THEN RUN Help/nntuse.
+                IF      fatgmember.membertype = 0 THEN RUN Help/nnmase.p.
+                ELSE IF fatgmember.membertype = 1 THEN RUN Help/nntuse.p.
 
                 IF CAN-FIND (FIRST xxmember WHERE 
                              xxmember.Brand      = gcBrand               AND 

@@ -89,7 +89,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN Mm/readorderfile (icFileType,
+   RUN Mm/readorderfile.p (icFileType,
                       ttFiles.OrderFile,
                       lcLogFile,
                       OUTPUT liRead,

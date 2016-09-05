@@ -93,7 +93,7 @@ FIND FIRST Company no-lock no-error.
 IF AVAILABLE Company THEN ASSIGN yvari = TRUE.
 ELSE ASSIGN yvari = FALSE.
 
- cfc = "mese". RUN Syst/ufcolor. ccc = cfc.
+ cfc = "mese". RUN Syst/ufcolor.p. ccc = cfc.
  view FRAME sel.
 
  IF siirto <> ? THEN DO:
@@ -148,7 +148,7 @@ LOOP:
        END.
 
        IF must-add THEN DO:
-          cfc = "lis". RUN Syst/ufcolor.
+          cfc = "lis". RUN Syst/ufcolor.p.
           fr-header = " ADD MENUTEXT ".
 add-new:
           repeat WITH FRAME lis:
@@ -176,7 +176,7 @@ add-new:
              IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhMenuText).
              ASSIGN
              memory = recid(MenuText)
-             ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+             ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           END.  /* add-new */
 
           HIDE FRAME lis no-pause.
@@ -280,9 +280,9 @@ add-new:
        /* haku */
        if nap = "f1"  or nap = "1" THEN DO:  /* menunron haku */
           PAUSE 0 no-message.
-          cfc = "puyr". RUN Syst/ufcolor.
+          cfc = "puyr". RUN Syst/ufcolor.p.
           ha-menro = 0.
-          ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE ha-menro WITH FRAME puyr.
           HIDE FRAME puYR.
           IF ha-menro <> 0 THEN DO:
@@ -314,9 +314,9 @@ add-new:
 
        else if nap = "f2" or nap = "2" THEN DO: /* menutekstin haku */
           PAUSE 0 no-message.
-          cfc = "puhe". RUN Syst/ufcolor.
+          cfc = "puhe". RUN Syst/ufcolor.p.
           ha-metex = "".
-          ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE ha-metex WITH FRAME puhe.
           HIDE FRAME puhe.
           if ha-metex <> "" THEN DO:
@@ -492,15 +492,15 @@ add-new:
             ens = substring(MenuText,1,8)
             toi = substring(MenuText,9,16).
           assign fr-header = " change fixmenuTEXT " ufkey = TRUE ehto = 9.
-          RUN Syst/ufkey.
-          cfc = "lis". RUN Syst/ufcolor.
+          RUN Syst/ufkey.p.
+          cfc = "lis". RUN Syst/ufcolor.p.
           PAUSE 0 no-message.
           DISPLAY MenuText.MenuNum WITH FRAME lis.
           UPDATE ens toi WITH FRAME lis.
           MenuText = caps(string(ens,"x(8)")) + caps(string(toi,"x(8)")).
           ASSIGN
           ed-metex = MenuText.MenuText.
-          ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           HIDE FRAME lis no-pause.
 
           IF MenuText <> ed-metex THEN DO:

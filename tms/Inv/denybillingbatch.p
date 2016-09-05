@@ -50,7 +50,7 @@ REPEAT:
    liRead = 0.
    liErrors = 0. 
 
-   RUN Inv/denybilling (lcInputFile,
+   RUN Inv/denybilling.p (lcInputFile,
                     lcLogFile,
                     OUTPUT liRead,
                     OUTPUT liErrors).

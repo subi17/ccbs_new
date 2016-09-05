@@ -10,5 +10,5 @@
 
 {Syst/commali.i}
 
-RUN Mm/servpac ("").
+RUN Mm/servpac.p ("").
 

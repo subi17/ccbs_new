@@ -1217,7 +1217,7 @@ END.
 
 /* form pdf-invoices */
 IF CAN-FIND(FIRST ttPDFInv) THEN DO:
-   RUN Inv/pdfinv(INPUT-OUTPUT TABLE ttPDFInv,
+   RUN Inv/pdfinv.p(INPUT-OUTPUT TABLE ttPDFInv,
               INPUT  TRUE,      /* print specifications */
               INPUT  TRUE,      /* form pdf */
               INPUT  FALSE,     /* send pdf via email */

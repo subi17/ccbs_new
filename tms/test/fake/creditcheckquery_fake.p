@@ -31,7 +31,7 @@ ELSE DO:
    fReqError(lcResponse).
 
    IF llACC THEN
-      RUN Mm/acc_sendsms(MsRequest.OrigRequest,
+      RUN Mm/acc_sendsms.p(MsRequest.OrigRequest,
                       MsRequest.CustNum,
                       "Rejected",
                       "HT:309").

@@ -87,7 +87,7 @@ form /*  search with field CLI */
    COLOR VALUE(cfc) NO-LABELS OVERLAY 
 FRAME f1.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 FIND FIRST CLI WHERE 
@@ -291,9 +291,9 @@ BROWSE:
 
       /* Haku 1 */
       ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-         cfc = "puyr". RUN Syst/ufcolor.
+         cfc = "puyr". RUN Syst/ufcolor.p.
          lcCLI = "".
-         ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          UPDATE lcCLI WITH FRAME f1.  
          HIDE FRAME f1 NO-PAUSE.
          IF lcCLI <> "" THEN DO: 
@@ -410,8 +410,8 @@ BROWSE:
             THEN ASSIGN ok = TRUE fr-header = " CHANGE ".
             ELSE ASSIGN ok = FALSE fr-header = " SHOW ".
          ASSIGN ufkey = TRUE ehto = 9.
-         RUN Syst/ufkey.
-         cfc = "lis". RUN Syst/ufcolor.
+         RUN Syst/ufkey.p.
+         cfc = "lis". RUN Syst/ufcolor.p.
 
          fSplitTS(INPUT CLI.CrStamp, OUTPUT begDay, OUTPUT begTimeI).
          begTime = STRING(begtimeI,"hh:mm:ss").

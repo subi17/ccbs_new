@@ -642,7 +642,7 @@ PROCEDURE local-UPDATE-record:
                END.
                
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
  

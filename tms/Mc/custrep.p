@@ -110,7 +110,7 @@ WITH FRAME crit.
 limits:
 REPEAT WITH FRAME crit:
 
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
    REPEAT WITH FRAME crit ON ENDKEY UNDO, LEAVE limits:
       UPDATE 
@@ -188,7 +188,7 @@ REPEAT WITH FRAME crit:
                   END.
                   APPLY 13.
                   ehto = 9.
-                  RUN Syst/ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT.
                END.
                ELSE DISP "ALL" @ lGroups.
@@ -288,7 +288,7 @@ REPEAT WITH FRAME crit:
    REPEAT WITH FRAME crit:
 
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT  limits.
 

@@ -202,7 +202,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
                 DISPLAY INTEGER(lcCode) @ liAddress WITH FRAME rajat.
                 
                 ehto = 9.
-                RUN Syst/ufkey.
+                RUN Syst/ufkey.p.
                 
                 NEXT.
              END.
@@ -243,7 +243,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       END.
       
       ehto = 5. 
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
  
       IF llEPl THEN DO:
          IF NOT fEPLStart(lcTestFlag) THEN NEXT.
@@ -255,7 +255,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      RUN Mc/printxt (Memo.CustNum,
+      RUN Mc/printxt.p (Memo.CustNum,
                    0,                      /* msseq  */
                    "",
                    2,                      /* 2=memo */

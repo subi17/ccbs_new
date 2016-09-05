@@ -89,7 +89,7 @@ form /* seek Mobile Call  BY  DateSt */
 
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Error Code,By A-Customer,BY MSISDN No.,By 4".
@@ -306,8 +306,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DateSt = 12/1/2006.
        UPDATE DateSt WITH FRAME f1.
@@ -333,7 +333,7 @@ BROWSE:
         find first mobsub where
                    mobsub.cli = PrepCDR.CLI
         no-lock no-error.
-        if avail mobsub then RUN Mm/msowner(mobsub.msseq).
+        if avail mobsub then RUN Mm/msowner.p(mobsub.msseq).
         ufkey = TRUE.
         NEXT.
      END.   
@@ -347,7 +347,7 @@ BROWSE:
         RUN local-find-this(FALSE).
         CREATE ttCall.
         BUFFER-COPY PrepCDR TO ttCall.
-        RUN Mm/viewmbd(INPUT TABLE ttcall,
+        RUN Mm/viewmbd.p(INPUT TABLE ttcall,
                           ttcall.datest, 
                           ttcall.timest,
                           ttCall.cli,
@@ -363,8 +363,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PrepCDR.DateSt.
 
        RUN local-UPDATE-record.                                  

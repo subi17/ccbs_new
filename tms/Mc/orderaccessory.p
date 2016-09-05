@@ -25,7 +25,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhOrderAccessory).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhOrderAccessory).
+      RUN Mc/eventview2.p(lhOrderAccessory).
    END.
 
 END.
@@ -153,7 +153,7 @@ ELSE DO:
 
 END.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -177,14 +177,14 @@ REPEAT WITH FRAME sel:
     
    IF must-add THEN DO:  /* Add a ttAccessory  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -289,7 +289,7 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
@@ -427,8 +427,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE lcBillItem WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -528,7 +528,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrderAccessory).
 
        ASSIGN ac-hdr = " TERMINAL " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -653,7 +653,7 @@ PROCEDURE local-UPDATE-record:
       IF lcRight = "RW" AND FALSE
       THEN REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
       
          UPDATE
          ttAccessory.IMEI    
@@ -690,13 +690,13 @@ PROCEDURE local-UPDATE-record:
            ufk = 0.
            ufk[6] = 1752.
            ufk[8] = 8.
-           ehto = 1. RUN Syst/ufkey.
+           ehto = 1. RUN Syst/ufkey.p.
            
            IF toimi = 6 THEN DO:
              
               FIND OrderAccessory WHERE RECID(OrderAccessory) = 
                      ttAccessory.DbRec NO-LOCK.
-              RUN Mc/eventsel ("OrderAccessory",OrderAccessory.Brand +  CHR(255)
+              RUN Mc/eventsel.p ("OrderAccessory",OrderAccessory.Brand +  CHR(255)
                   + STRING(OrderAccessory.OrderID)). 
               NEXT VIEW-LOOP.
 

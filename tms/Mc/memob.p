@@ -112,7 +112,7 @@ form /* seek Status Code  BY UserCode */
     WITH ROW 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -152,12 +152,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a memo  */
       ASSIGN cfc = "lis" ufkey = TRUE ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis1 ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.   
+        ehto = 9. RUN Syst/ufkey.p.   
         ON F4 GO.
         REPEAT TRANSACTION WITH FRAME lis1:
            CLEAR FRAME lis1 NO-PAUSE.
@@ -256,7 +256,7 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
         ufk[7]= 991 ufk[8]= 8   ufk[9]= 1
         ehto = 3    ufkey = FALSE.
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -463,11 +463,11 @@ BROWSE:
      ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:  /* PRINT */
         FIND memo WHERE RECID(memo) = rtab[FRAME-LINE] NO-LOCK NO-ERROR.
         IF Memo.CustNum > 0 
-        THEN RUN Mc/prinmemo (Memo.HostTable,  
+        THEN RUN Mc/prinmemo.p (Memo.HostTable,  
                            Memo.KeyValue,
                            Memo.MemoSeq).
         
-        ELSE RUN Mc/prmem (INPUT Memo.HostTable,
+        ELSE RUN Mc/prmem.p (INPUT Memo.HostTable,
                         INPUT Memo.KeyValue,
                         INPUT Memo.MemoSeq).
 
@@ -492,7 +492,7 @@ BROWSE:
          END. /* IF NOT AVAILABLE memo THEN DO: */
          
          ASSIGN ac-hdr = " Title ".
-         cfc = "lis". RUN Syst/ufcolor. 
+         cfc = "lis". RUN Syst/ufcolor.p. 
          CLEAR FRAME lis1 NO-PAUSE.
          HIDE FRAME sel NO-PAUSE.
          DISPLAY memo.MemoTitle memo.memotype WITH FRAME lis1.
@@ -504,10 +504,10 @@ BROWSE:
           ufk[1] = (IF lcRight = "RW" THEN 7 ELSE 0)
           ufk[8] = 8
           ehto = 0.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          IF toimi = 1 AND lcRight = "RW" THEN
          DO:
-            ufkey = TRUE. ehto = 9. RUN Syst/ufkey.
+            ufkey = TRUE. ehto = 9. RUN Syst/ufkey.p.
             IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMemo).
             RUN local-update-record.                                  
             memo.ChgUser  = katun.

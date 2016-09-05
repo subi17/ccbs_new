@@ -113,7 +113,7 @@ toimi:
 ASSIGN tila = TRUE.
 {Syst/utuloste.i "return"}
 
-RUN Syst/umakro (TRUE).
+RUN Syst/umakro.p (TRUE).
 
 message "Printing, ESC = break".
 

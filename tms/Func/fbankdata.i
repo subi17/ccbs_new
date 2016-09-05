@@ -111,7 +111,7 @@ FUNCTION fCustBankAcc RETURNS CHARACTER.
    DEF VAR lcCustBank AS CHAR NO-UNDO.
    
    /* first check from dd-authorization */
-   RUN Ar/nnsvte (Customer.CustNum,
+   RUN Ar/nnsvte.p (Customer.CustNum,
                TODAY, 
                OUTPUT lcCustBank).
                

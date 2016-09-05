@@ -174,9 +174,9 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
          IF NOT llOk THEN NEXT.
 
          ehto = 5.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
 
-         RUN Ar/cobal (liCoRule,
+         RUN Ar/cobal.p (liCoRule,
                     lcReseller1,
                     lcReseller2,
                     ldtDate1,

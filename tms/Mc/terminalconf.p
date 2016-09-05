@@ -23,7 +23,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhTerminalConf).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhTerminalConf).
+      RUN Mc/eventview2.p(lhTerminalConf).
    END.
 END.
 
@@ -84,7 +84,7 @@ form  /* seek TerminalConf  BY  */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
     
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By ShaperConfID, By Template, By 4".
@@ -118,12 +118,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a TerminalConf  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR TerminalConf.TerminalCode
@@ -352,8 +352,8 @@ BROWSE:
      /*ELSE IF LOOKUP(nap,"1,/1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:*/
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISP TerminalConf WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -385,8 +385,8 @@ BROWSE:
        {Syst/uright2.i} */
        RUN local-find-this(FALSE).
 
-       ASSIGN ac-hdr = " DETAILS " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " DETAILS " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY TerminalConf.TerminalCode.
 
 
@@ -509,13 +509,13 @@ PROCEDURE local-UPDATE-record:
          ufk    = 0
          ufk[7] = 1752
          ufk[8] = 8.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       
       IF toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
          FIND CURRENT TerminalConf EXCLUSIVE-LOCK.
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          
          UPDATE
             TerminalConf.TerminalCode

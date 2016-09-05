@@ -64,7 +64,7 @@ repeat:
 loop:
 repeat with frame rajat:
    PAUSE 0 no-message.
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
    CustomerFrom 
    CustomerTo
@@ -79,7 +79,7 @@ repeat with frame rajat:
       ehto = 0
    ufkey = true.
 
-   RUN Syst/ufkey.
+   RUN Syst/ufkey.p.
    case toimi:
       when 8 then return.
       when 1 then next loop.

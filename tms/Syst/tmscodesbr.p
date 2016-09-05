@@ -10,7 +10,7 @@
                   27.11.06/jt Barr request id's greater than liBarr (9) or                               in list (From CC)
                   21.12.06/jt Changed liBarr usage to barring list (allowed
                               CustomerCare statuses
-                  20.03.07 kl RUN Mm/orderamt with MsRequest
+                  20.03.07 kl RUN Mm/orderamt.p with MsRequest
                   16.04.07/aam icSkipValue,icRunParam
   Version ......: TMS Master
   ------------------------------------------------------ */
@@ -105,7 +105,7 @@ END.
                                 
 IF icTitle = "" THEN icTitle = "Requests".
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 /* column-labels for parameters */
@@ -198,7 +198,7 @@ REPEAT WITH FRAME sel:
             (icTableName EQ "MsRequest" AND icFieldName EQ "ReqStatus")  
          THEN ufk[4] = 1061.
       
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -334,8 +334,8 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN Syst/ufcolor.
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         lcCodeValue = ?.
         UPDATE lcCodeValue WITH FRAME f1.
@@ -363,8 +363,8 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN Syst/ufcolor.
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f2.
         lcCodeName = "".
         UPDATE lcCodeName WITH FRAME f2.
@@ -392,13 +392,13 @@ REPEAT WITH FRAME sel:
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0  THEN DO: 
 
-         RUN Mm/orderamt(INPUT-OUTPUT llQueRights, 
+         RUN Mm/orderamt.p(INPUT-OUTPUT llQueRights, 
                       INPUT icTableName,
                       INPUT icSkipValue,
                       INPUT icRunParam).
 
          ufkey = TRUE.  
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
      END.    
      
      ELSE IF LOOKUP(nap,"5,f5,enter,return") > 0 THEN DO:

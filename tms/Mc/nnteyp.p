@@ -101,7 +101,7 @@ form /* HdrTextn nimi :n nimella hakua varten */
     with row 4 col 2 title color value(ctc) " TEXT "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST HdrText WHERE HdrText.Brand = lcBrand NO-LOCK NO-ERROR.
@@ -135,12 +135,12 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* HdrText -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          DO TRANSACTION:
             PROMPT-FOR HdrText.te-nro HdrText.te-kie EDITING:
                READKEY.
@@ -437,9 +437,9 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku = 0.
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
         UPDATE lcBrand WHEN gcAllBrand
                haku WITH FRAME hayr.
@@ -471,9 +471,9 @@ BROWSE:
 
      /* Haku 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sarakk. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku = 0.
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hakie.
         UPDATE lcBrand WHEN gcAllBrand
                hakukie WITH FRAME hakie.
@@ -494,9 +494,9 @@ BROWSE:
 
      /* Haku sarakk. 3 */
      if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
-        cfc = "puyr". RUN Syst/ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         hakutext = "".
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
         UPDATE lcBrand WHEN gcAllBrand
                hakutext WITH FRAME hayr2.
@@ -610,8 +610,8 @@ BROWSE:
         FIND HdrText where recid(HdrText) = rtab[frame-line(sel)]
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        RUN Syst/ufkey.
-        cfc = "lis". RUN Syst/ufcolor.
+        RUN Syst/ufkey.p.
+        cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY HdrText.te-nro HdrText.te-kie HdrText.te-text.
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhHdrText).

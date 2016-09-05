@@ -24,7 +24,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhPremiumNumber).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhPremiumNumber).
+      RUN Mc/eventview2.p(lhPremiumNumber).
    END.
 
 END.
@@ -92,7 +92,7 @@ IF gcHelpParam > "" THEN ASSIGN
    FrmRow  = 3
    FrmDown = 11.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 RUN local-find-first.
@@ -123,7 +123,7 @@ REPEAT WITH FRAME sel:
 
 IF must-add THEN DO:  /* Add a PremiumNumber */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -131,7 +131,7 @@ IF must-add THEN DO:  /* Add a PremiumNumber */
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -270,7 +270,7 @@ IF must-add THEN DO:  /* Add a PremiumNumber */
            ufk[6] = 0
            ufk[7] = 0.
 
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -403,8 +403,8 @@ IF must-add THEN DO:  /* Add a PremiumNumber */
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
@@ -499,8 +499,8 @@ IF must-add THEN DO:  /* Add a PremiumNumber */
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPremiumNumber).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PremiumNumber.BNumberPreFix.
 
        RUN local-UPDATE-record.                                  
@@ -543,7 +543,7 @@ IF gcHelpParam > "" THEN DO:
 END.
 
 ehto = 4.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -634,7 +634,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
      END.
 
      IF toimi = 1 THEN 
@@ -643,7 +643,7 @@ PROCEDURE local-UPDATE-record:
          FIND CURRENT PremiumNumber EXCLUSIVE-LOCK.
       
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
 
          IF NEW PremiumNumber THEN
          UPDATE

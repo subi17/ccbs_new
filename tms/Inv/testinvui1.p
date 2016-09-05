@@ -7,5 +7,5 @@
   MODIFIED .....: 
   Version ......: XFERA
   -------------------------------------------------------------------------- */
-RUN Inv/testinvui(0).
+RUN Inv/testinvui.p(0).
 

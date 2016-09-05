@@ -26,7 +26,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhRequestType).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhRequestType).
+      RUN Mc/eventview2.p(lhRequestType).
    END.
 
 END.
@@ -112,7 +112,7 @@ IF iiQueue > 0 OR gcHelpParam > "" THEN ASSIGN
    FrmRow  = 2
    FrmDown = 14.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -142,7 +142,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a RequestType  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -150,7 +150,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
         KEYLABEL(lastkey) = "F4" THEN UNDO, LEAVE.
@@ -260,7 +260,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -393,8 +393,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
@@ -418,7 +418,7 @@ REPEAT WITH FRAME sel:
         RUN local-find-this (FALSE).
        
         IF AVAILABLE RequestType THEN 
-           RUN Syst/requestaction(RequestType.ReqType,
+           RUN Syst/requestaction.p(RequestType.ReqType,
                              "",
                              "",
                              "").
@@ -431,7 +431,7 @@ REPEAT WITH FRAME sel:
         RUN local-find-this (FALSE).
        
         IF AVAILABLE RequestType THEN 
-           RUN Syst/requestparam(RequestType.ReqType).
+           RUN Syst/requestparam.p(RequestType.ReqType).
          
         ufkey = TRUE.
         NEXT browse.
@@ -441,7 +441,7 @@ REPEAT WITH FRAME sel:
         RUN local-find-this (FALSE).
        
         IF AVAILABLE RequestType THEN 
-           RUN Syst/requeststatus(RequestType.ReqType).
+           RUN Syst/requeststatus.p(RequestType.ReqType).
          
         ufkey = TRUE.
         NEXT browse.
@@ -535,8 +535,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhRequestType).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY RequestType.ReqType.
 
        RUN local-UPDATE-record.                                  
@@ -574,7 +574,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -709,7 +709,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          
          IF toimi = 8 THEN LEAVE.
       END.

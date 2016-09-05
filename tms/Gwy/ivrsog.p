@@ -27,7 +27,7 @@ DEFINE VARIABLE llTimeOut  AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE lcLogDir   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLogFile  AS CHARACTER NO-UNDO.
 
-RUN Gwy/sogpost(pcCommLine,"LOGIN ivr ivr",OUTPUT lcError).
+RUN Gwy/sogpost.p(pcCommLine,"LOGIN ivr ivr",OUTPUT lcError).
 
 IF lcError BEGINS "ERROR:" THEN RETURN lcError.
 

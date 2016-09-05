@@ -816,7 +816,7 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
 
       IF AVAILABLE MsRequest THEN ufk[2] = 927.  
       
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
    END.
 
    ELSE ASSIGN toimi = 1  
@@ -827,7 +827,7 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
       
    /* memo */
    ELSE IF toimi = 2 THEN DO:
-      RUN Mc/memo(MobSub.CustNum,
+      RUN Mc/memo.p(MobSub.CustNum,
                "MsRequest",
                STRING(MsRequest.MsRequest),
                "Owner Change").
@@ -931,7 +931,7 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
       END.
       
       ehto = 5.   
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       IF ldtChgDate = ? 
       THEN ldChgStamp = fMakeTS().
@@ -1102,7 +1102,7 @@ PROCEDURE pUpdateNewOwner:
    UpdateAgrCust:
    REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO, LEAVE:
          
-      ehto = 9. RUN Syst/ufkey.
+      ehto = 9. RUN Syst/ufkey.p.
          
       /* change time cannot be in the past */   
       IF NOT llPreActivated AND ldtChgDate <= TODAY THEN ASSIGN 
@@ -1123,7 +1123,7 @@ PROCEDURE pUpdateNewOwner:
             
          IF KEYLABEL(LASTKEY) = "F9" AND FRAME-FIELD = "lcSalesman" THEN DO:
                
-            RUN Help/h-salesman.
+            RUN Help/h-salesman.p.
                    
             IF siirto NE ? THEN DO:
                lcSalesman = siirto NO-ERROR.
@@ -1131,7 +1131,7 @@ PROCEDURE pUpdateNewOwner:
             END.
                
             ehto = 9.
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
             NEXT.
 
          END. 
@@ -1141,7 +1141,7 @@ PROCEDURE pUpdateNewOwner:
          THEN DO:
 
             IF FRAME-FIELD = "liNewCust1" THEN DO:
-               RUN Help/h-agrcust(lcNewCustId).
+               RUN Help/h-agrcust.p(lcNewCustId).
                    
                IF siirto NE ? THEN DO:
                   liNewCust1 = INTEGER(siirto) NO-ERROR.
@@ -1151,7 +1151,7 @@ PROCEDURE pUpdateNewOwner:
             END. 
 
             ehto = 9.
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
             NEXT.
          END. 
  
@@ -1201,14 +1201,14 @@ PROCEDURE pUpdateNewOwner:
             
          IF KEYLABEL(LASTKEY) = "F9" AND
             FRAME-FIELD = "lcNewCustIdType" THEN DO:
-            RUN Syst/tmscodesbr(INPUT "Customer",  
+            RUN Syst/tmscodesbr.p(INPUT "Customer",  
                            INPUT "CustIDType",
                            INPUT "N/A",
                            INPUT "ID Type",
                            INPUT "",
                            OUTPUT lcCode). 
             ehto = 9.
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
             lcNewCustIdType = lcCode.
             DISP lcNewCustIdType WITH FRAME fNewCriter.
          END.   
@@ -1331,7 +1331,7 @@ PROCEDURE pUpdateNewOwner:
                                  "CustCare",   /* GroupCode */
                            OUTPUT lcCode).
             ehto = 9.
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
                
             lcNewTitle = lcCode.
             DISP lcNewTitle WITH FRAME fNewCriter.
@@ -1349,20 +1349,20 @@ PROCEDURE pUpdateNewOwner:
          IF KEY-LABEL(LASTKEY) = "F9" AND  
             FRAME-FIELD = "lcNewZipcode" THEN DO:
                
-            RUN Help/h-postcode.
+            RUN Help/h-postcode.p.
                
             IF si-recid NE ? THEN DO:
                fDispPostOffice(si-recid).
             END.   
             ehto = 9.
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
             NEXT.
          END.
             
          IF KEY-LABEL(LASTKEY) = "F9" AND 
             FRAME-FIELD = "liNewLanguage" THEN DO:
                
-            RUN Help/h-language.
+            RUN Help/h-language.p.
                
             IF siirto NE ? THEN DO:
                liNewLanguage = int(siirto) NO-ERROR.
@@ -1370,7 +1370,7 @@ PROCEDURE pUpdateNewOwner:
             END.
                
             ehto = 9.
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
             NEXT.
          END.
 

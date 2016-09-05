@@ -66,7 +66,7 @@ form /* Ask period */
 FRAME add-new.
 
 ufkey = TRUE.
-ehto = 9. RUN Syst/ufkey.
+ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN pvm1 = Today
        pvm2 = TODAY - 1.
@@ -77,7 +77,7 @@ WITH FRAME add-new.
 ASSIGN
 cfc      = "Lis"
 ufkey    = TRUE.
-RUN Syst/ufcolor.
+RUN Syst/ufcolor.p.
 
 ASSIGN
 ok = FALSE.
@@ -86,7 +86,7 @@ HIDE FRAME add-new.
 IF NOT ok THEN RETURN.
 
 ehto = 5.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
 RUN Mm/mobprodrep1.p(INPUT pvm1, INPUT pvm2).
 
@@ -265,9 +265,9 @@ BROWSE:
 
       /* Search column 1 */
       ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-         cfc = "puyr". RUN Syst/ufcolor.
+         cfc = "puyr". RUN Syst/ufcolor.p.
          haku-pt-tuno = "".
-         ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          UPDATE haku-pt-tuno WITH FRAME haku.
          HIDE FRAME haku NO-PAUSE.
          IF haku-pt-tuno <> "" THEN DO:

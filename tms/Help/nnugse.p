@@ -46,7 +46,7 @@ form /* Invoicing Group :n hakua varten */
     with row 4 col 2 title color value(ctc) " FIND CODE "
     color value(cfc) no-labels overlay frame hayr.
 
-cfc = "tlse". RUN Syst/ufcolor. assign ccc = cfc.
+cfc = "tlse". RUN Syst/ufcolor.p. assign ccc = cfc.
 Runko:
 repeat:
 
@@ -66,7 +66,7 @@ LOOP:
       assign
       cfc = "tlli"
       tlli-ots = " ADD ".
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat with frame tlli:
          pause 0 no-message.
@@ -233,9 +233,9 @@ BROWSE:
 
         /* Haku */
         if lookup(nap,"1,f1") > 0 then do:  /* haku */
-           cfc = "puyr". RUN Syst/ufcolor.
+           cfc = "puyr". RUN Syst/ufcolor.p.
            UserGroup = "".
-           ehto = 9. RUN Syst/ufkey. ufkey = true.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update UserGroup with frame hayr.
            hide frame hayr no-pause.
            if UserGroup <> "" then do:

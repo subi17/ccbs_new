@@ -21,7 +21,7 @@ PAUSE 0.
 FIND Customer WHERE Customer.CustNum = CustNum NO-LOCK. 
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
 
       DISPLAY
        " A) Customer's Mobile Subscriptions(browse)"    @ menuc[1] SKIP
@@ -53,20 +53,20 @@ DO WHILE TRUE:
          "Customer no:" custnum " hasn't got any mobile subscriptions!"    SKIP
          VIEW-AS ALERT-BOX.
       END.
-      ELSE RUN Mm/mobsub(CustNum, "").
+      ELSE RUN Mm/mobsub.p(CustNum, "").
    END.
 
 
    ELSE IF FRAME-INDEX EQ 2 THEN DO:
-       RUN Mm/mobcallic(CustNum).
+       RUN Mm/mobcallic.p(CustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 3 THEN DO:
-      RUN Mm/callvalueic(CustNum).
+      RUN Mm/callvalueic.p(CustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 4 THEN DO:
-       RUN Mf/nnmtcu(CustNum).
+       RUN Mf/nnmtcu.p(CustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 5 THEN DO:
@@ -82,15 +82,15 @@ DO WHILE TRUE:
    END.
 
    ELSE IF FRAME-INDEX EQ 8 THEN DO:
-       RUN Mm/custserv(CustNum) /* Customer's services */.
+       RUN Mm/custserv.p(CustNum) /* Customer's services */.
    END.
 
    ELSE IF FRAME-INDEX EQ 9 THEN DO:
-       RUN Mm/custerm(CustNum) /* Customer's services */.
+       RUN Mm/custerm.p(CustNum) /* Customer's services */.
    END.
 
    ELSE IF FRAME-INDEX EQ 10 THEN DO:
-       RUN Mm/simrep(CustNum) /* SIM Card report */.
+       RUN Mm/simrep.p(CustNum) /* SIM Card report */.
    END.
 
    ELSE IF FRAME-INDEX = 11 OR FRAME-INDEX = 0 THEN LEAVE.

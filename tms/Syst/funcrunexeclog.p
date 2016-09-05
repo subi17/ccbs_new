@@ -23,7 +23,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhFuncRunExecLog).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhFuncRunExecLog).
+      RUN Mc/eventview2.p(lhFuncRunExecLog).
    END.
 
 END.
@@ -95,7 +95,7 @@ IF NOT AVAILABLE FuncRunConfig THEN DO:
 END.
 lcConfName = FuncRunConfig.ConfName.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -182,7 +182,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -327,8 +327,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFuncRunExecLog).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -365,7 +365,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -446,7 +446,7 @@ PROCEDURE local-UPDATE-record:
          ufk[8] = 8
          ehto   = 0.
          
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
         
       IF toimi = 8 THEN LEAVE. 
    END.

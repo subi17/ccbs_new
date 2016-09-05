@@ -134,7 +134,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 795  
          ufk[8] = 8 
          ehto   = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
    END.
    ELSE ASSIGN toimi = 1
                ufkey = TRUE.
@@ -142,7 +142,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    IF toimi = 1 THEN DO:
 
       ehto = 9. 
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
@@ -190,7 +190,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          NEXT.
       END.
       
-      RUN Inv/invrun_split(ldtInvDate,
+      RUN Inv/invrun_split.p(ldtInvDate,
                        ldtDueDate,
                        ldtDateFrom,
                        ldtDateTo,
@@ -210,7 +210,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       /* create screens for actual billing runs */
       IF lcFileList > "" THEN DO:
 
-         RUN Inv/invrun_start_screens(ldtInvDate,
+         RUN Inv/invrun_start_screens.p(ldtInvDate,
                                   lcFileList).
 
          IF RETURN-VALUE BEGINS "ERROR:" THEN DO TRANS:

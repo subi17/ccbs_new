@@ -10,4 +10,4 @@
 
 {Syst/commali.i}
 
-RUN Ar/nnsvyp (TRUE). /* true = failed ones */
+RUN Ar/nnsvyp.p (TRUE). /* true = failed ones */

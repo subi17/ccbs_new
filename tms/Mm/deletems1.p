@@ -226,7 +226,7 @@ WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       liOrderer 
       lcOutOper WHEN liOrderer EQ 2
@@ -276,13 +276,13 @@ REPEAT WITH FRAME main:
 
          llHelp = TRUE. 
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          NEXT. 
       END.
       
       IF FRAME-FIELD = "liMsisdnStat" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
          
-         RUN Syst/tmscodesel(INPUT "MSISDN",  
+         RUN Syst/tmscodesel.p(INPUT "MSISDN",  
                               "StatusCode",
                               "MSISDN",
                               "",
@@ -299,14 +299,14 @@ REPEAT WITH FRAME main:
          END.   
          
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          NEXT. 
       
       END.
 
       IF FRAME-FIELD = "liSimStat" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
             
-         RUN Syst/tmscodesel(INPUT "SIM",  
+         RUN Syst/tmscodesel.p(INPUT "SIM",  
                               "SimStat",
                               "SIM",
                               "",
@@ -323,7 +323,7 @@ REPEAT WITH FRAME main:
          END.   
 
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          NEXT. 
          
       END.
@@ -579,7 +579,7 @@ REPEAT WITH FRAME main:
          ufk[5] = 795
          ufk[8] = 8.
 
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       
       IF toimi = 1 THEN NEXT  main.
       

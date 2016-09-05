@@ -346,7 +346,7 @@ WITH FRAME main.
 MAIN:
 REPEAT  WITH FRAME main:
 
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    IF llBarring OR 
       llMnp THEN DO:
       MESSAGE {&MSG_NOT_ALLOWED}. PAUSE NO-MESSAGE.
@@ -363,8 +363,8 @@ REPEAT  WITH FRAME main:
              READKEY.
 
              IF FRAME-FIELD = "new-type" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
-                RUN Help/h-mobtype.
-                Ehto = 9. RUN Syst/ufkey.
+                RUN Help/h-mobtype.p.
+                Ehto = 9. RUN Syst/ufkey.p.
                 IF siirto NE ? THEN DO:
                    DISP siirto @ new-type WITH FRAME main.
                    NEXT.
@@ -374,10 +374,10 @@ REPEAT  WITH FRAME main:
              ELSE IF FRAME-FIELD = "new-ts-date" AND 
                   KEYLABEL(LASTKEY) = "F9" THEN DO:
              
-                RUN Help/h-date(lcchangedate,mobsub.msseq,
+                RUN Help/h-date.p(lcchangedate,mobsub.msseq,
                            INPUT FRAME main new-type).
 
-                Ehto = 9. RUN Syst/ufkey.
+                Ehto = 9. RUN Syst/ufkey.p.
                 
                 IF siirto NE ? THEN DO:
                    DISP siirto @ new-ts-date WITH FRAME main.
@@ -392,7 +392,7 @@ REPEAT  WITH FRAME main:
                 IF FRAME-FIELD ="new-type" THEN DO:
                 
                    IF INPUT FRAME main new-type = "" THEN DO:
-                      Ehto = 9. RUN Syst/ufkey.
+                      Ehto = 9. RUN Syst/ufkey.p.
                       IF siirto NE ? THEN DO:
                          DISP siirto @ new-type WITH FRAME main.
                          NEXT.
@@ -439,9 +439,9 @@ REPEAT  WITH FRAME main:
                 ELSE IF FRAME-FIELD ="new-ts-date" THEN DO:
       
                    IF INPUT new-ts-date = ? THEN DO:
-                      RUN Help/h-date(lcchangedate,mobsub.msseq,
+                      RUN Help/h-date.p(lcchangedate,mobsub.msseq,
                                  INPUT FRAME main new-type).
-                      Ehto = 9. RUN Syst/ufkey.
+                      Ehto = 9. RUN Syst/ufkey.p.
                                                  
                       IF siirto NE ? THEN DO:
                          DISP siirto @ new-ts-date WITH FRAME main.
@@ -456,10 +456,10 @@ REPEAT  WITH FRAME main:
                       NEXT.
                    END.
              
-                   RUN Help/h-date(lcchangedate,mobsub.msseq,
+                   RUN Help/h-date.p(lcchangedate,mobsub.msseq,
                               INPUT FRAME main new-type).
                     
-                   Ehto = 9. RUN Syst/ufkey.
+                   Ehto = 9. RUN Syst/ufkey.p.
                                     
                    IF siirto NE ? THEN DO:
                       DISP siirto @ new-ts-date WITH FRAME main.
@@ -643,7 +643,7 @@ REPEAT  WITH FRAME main:
       ufk[1] = 7 
       ufk[5] = 795
       ufk[8] = 8.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT  main.
       

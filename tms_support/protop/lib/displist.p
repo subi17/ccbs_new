@@ -72,7 +72,7 @@ procedure upd-display:
         if entry( i, sx ) = "Summary" then	/* "Summary" is special... for now	*/
           .
          else
-          run out/detail.p persistent ( entry( i, sx )).
+          RUN out/detail.p persistent ( entry( i, sx )).
       end.
 
   end.

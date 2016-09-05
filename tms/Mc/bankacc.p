@@ -30,7 +30,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhBankAccount).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhBankAccount).
+      RUN Mc/eventview2.p(lhBankAccount).
    END.
 
 END.
@@ -103,7 +103,7 @@ IF gcHelpParam > "" THEN ASSIGN
    FrmRow  = 4 
    FrmDown = 10.
    
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Bank Account ,  By Name    ,By 3, By 4".
@@ -131,14 +131,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a BankAccount  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -380,8 +380,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
@@ -473,7 +473,7 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhBankAccount).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE. 
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY BankAccount.BankAccount.
 
        RUN local-UPDATE-record.                                  
@@ -575,7 +575,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          UPDATE
           BankAccount.BankOffice WHEN NOT NEW BankAccount  
           BankAccount.BankData

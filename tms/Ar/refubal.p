@@ -199,9 +199,9 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
       END.
 
       ehto = 5. 
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
  
-      RUN Ar/refupaym (iiCustNum,
+      RUN Ar/refupaym.p (iiCustNum,
                     "",
                     0,
                     lcBal + "P",

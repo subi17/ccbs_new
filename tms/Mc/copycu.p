@@ -93,7 +93,7 @@ IF ok THEN DO:
     pause.
 
    /* get next free number */
-   RUN Help/custser.
+   RUN Help/custser.p.
 
    i = index(siirto,"-").
    IF i > 0 THEN DO:

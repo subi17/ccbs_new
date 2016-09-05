@@ -305,7 +305,7 @@ lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
 
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 LOOP:
@@ -318,11 +318,11 @@ repeat WITH FRAME sel:
    IF must-add THEN DO TRANS:  /* FixedFee -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          CREATE FixedFee.
 
          ASSIGN
@@ -362,15 +362,15 @@ repeat WITH FRAME sel:
                IF FRAME-FIELD = "keyvalue" THEN DO:
                   ASSIGN INPUT lBelongTo.
                   IF   lBelongTo 
-                  THEN RUN Mc/nnasel.
-                  ELSE RUN Help/h-msisdn.
+                  THEN RUN Mc/nnasel.p.
+                  ELSE RUN Help/h-msisdn.p.
 
                   IF siirto NE ? THEN ASSIGN fixedfee.keyvalue = siirto.
                   DISP fixedfee.keyvalue with frame lis.
                END.
 
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 
@@ -457,13 +457,13 @@ repeat WITH FRAME sel:
 
                else if frame-field  = "Begperiod" THEN DO:
                   ASSIGN FRAME lis BegPeriod.
-                  RUN Syst/uperch(BegPeriod,output rc).
+                  RUN Syst/uperch.p(BegPeriod,output rc).
                   IF rc > 0 THEN NEXT.
                END.  /* BegPeriod */
 
                else if frame-field  = "EndPeriod" THEN DO:
                   ASSIGN FRAME lis EndPeriod.
-                  IF EndPeriod NE 999999 THEN RUN Syst/uperch(BegPeriod,output rc).
+                  IF EndPeriod NE 999999 THEN RUN Syst/uperch.p(BegPeriod,output rc).
                   ELSE rc = 0.
                   IF rc > 0 THEN NEXT.
                END.  /* BegPeriod */
@@ -770,8 +770,8 @@ repeat WITH FRAME sel:
      /* Haku sarakk. 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
        lcKeyValue = "". 
        PAUSE 0.
@@ -817,7 +817,7 @@ repeat WITH FRAME sel:
      DO: /* MEMO */
         FIND FixedFee where recid(FixedFee) = rtab[frame-line(sel)]
         NO-LOCK.
-        RUN Mc/memo(INPUT FixedFee.CustNum,
+        RUN Mc/memo.p(INPUT FixedFee.CustNum,
                  INPUT "FixedFee",
                  INPUT STRING(FixedFee.FFNum),
                  INPUT "FixedFee").
@@ -830,12 +830,12 @@ repeat WITH FRAME sel:
      DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:   /* memo */
 
        assign ehto = 9 cfc = "lis" ufkey = TRUE.
-       RUN Syst/ufkey. RUN Syst/ufcolor.
+       RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND FixedFee where recid(FixedFee) = rtab[frame-line(sel)]
        exclusive-lock.
 
        /* calculate count of billed/nonbilled items */
-       RUN Mc/nnccit(FixedFee.FFNum, OUTPUT amt-billed, OUTPUT amt-nonbilled).
+       RUN Mc/nnccit.p(FixedFee.FFNum, OUTPUT amt-billed, OUTPUT amt-nonbilled).
 
        PAUSE 0.
 
@@ -875,7 +875,7 @@ repeat WITH FRAME sel:
 
      else if lookup(nap,"4,f4") > 0 THEN DO TRANSAction:  /* items */
         FIND FixedFee where recid(FixedFee) = rtab[FRAME-LINE] no-lock.
-        RUN Mc/nncobi(FixedFee.FFNum).
+        RUN Mc/nncobi.p(FixedFee.FFNum).
         ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -974,7 +974,7 @@ repeat WITH FRAME sel:
               DISP FixedFee.EndPeriod WITH FRAME sel.
            END.   
            
-           RUN Syst/ufkey.
+           RUN Syst/ufkey.p.
            
         END.
      END.
@@ -986,7 +986,7 @@ repeat WITH FRAME sel:
        FIND FixedFee where recid(FixedFee) = rtab[FRAME-LINE] no-lock.
 
        /* calculate count of billed/nonbilled items */
-       RUN Mc/nnccit(FixedFee.FFNum, OUTPUT amt-billed, OUTPUT amt-nonbilled).
+       RUN Mc/nnccit.p(FixedFee.FFNum, OUTPUT amt-billed, OUTPUT amt-nonbilled).
 
        /* if something has already been billed -> don't delete */
        IF amt-billed > 0 THEN DO:
@@ -1065,7 +1065,7 @@ repeat WITH FRAME sel:
      DO WITH FRAME lis TRANSACTION ON ENDKEY UNDO, NEXT LOOP:
        /* change */
 
-       assign fr-header = " FIXED FEE DATA " cfc = "lis".  RUN Syst/ufcolor.
+       assign fr-header = " FIXED FEE DATA " cfc = "lis".  RUN Syst/ufcolor.p.
 
        FIND FixedFee where recid(FixedFee) = rtab[frame-line(sel)]
        no-lock.
@@ -1077,7 +1077,7 @@ repeat WITH FRAME sel:
 
        IF amt-nonbilled = 0 THEN DO:
           ehto = 5.
-          RUN Syst/ufkey.
+          RUN Syst/ufkey.p.
           BELL.
           message "There are NONE Unbilled items left" SKIP
           VIEW-aS ALERT-BOX title " NOTE ".         
@@ -1157,7 +1157,7 @@ repeat WITH FRAME sel:
              ufk[8] = 8 
              ehto = 0 
              ufkey = true.
-          RUN Syst/ufkey.
+          RUN Syst/ufkey.p.
 
           if toimi = 8 then do:
              hide frame lis no-pause.
@@ -1192,7 +1192,7 @@ repeat WITH FRAME sel:
           end.
           
           ehto = 9.
-          RUN Syst/ufkey.
+          RUN Syst/ufkey.p.
 
           si-recid2 = FixedFee.CustNum.
 
@@ -1307,7 +1307,7 @@ repeat WITH FRAME sel:
                 message "Non-billed items were changed."
                 VIEW-AS ALERT-BOX. 
                 
-                RUN Mc/nncobi(FixedFee.FFNum).
+                RUN Mc/nncobi.p(FixedFee.FFNum).
              END.
              ELSE not-done = TRUE.
           END.

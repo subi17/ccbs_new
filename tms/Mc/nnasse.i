@@ -56,7 +56,7 @@
                   ELSE IF FRAME-FIELD = "lcCustZipCode" THEN DO:
                      ASSIGN si-recid = ?
                             siirto   = "".
-                     RUN Help/h-postcode.
+                     RUN Help/h-postcode.p.
                      /* several rows with same zipcode */
                      IF si-recid NE ? THEN DO:
                         DISPLAY siirto @ lcCustZipCode WITH FRAME lis.
@@ -82,7 +82,7 @@
                   END.
                   
                   ehto = 9.
-                  RUN Syst/ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT. 
               END.
 

@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------------
   MODULE .......: INVRUN_SCREEN
-  TASK .........: RUN Inv/lamupers from customer split files
+  TASK .........: RUN Inv/lamupers.p from customer split files
   APPLICATION ..: TMS
   AUTHOR .......: kl
   CREATED ......: 21.01.08
@@ -48,7 +48,7 @@ ASSIGN
    ldeBegTime   = fMakeTS()
    ldaDueDate   = ?.
 
-RUN Inv/lamupers PERSISTENT SET lhHandle.
+RUN Inv/lamupers.p PERSISTENT SET lhHandle.
 
 DEFINE STREAM sIn.
 

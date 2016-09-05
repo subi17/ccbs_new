@@ -32,7 +32,7 @@ FOR FIRST FatGroup OF FATime NO-LOCK,
    /* adv.payment is posted to invoicing customer */
    FIND Customer OF FATime NO-LOCK.
    
-   RUN Ar/advpaym (Customer.InvCust,
+   RUN Ar/advpaym.p (Customer.InvCust,
                 Fatime.Amt - Fatime.Used - Fatime.TransQty,
                 TODAY,
                 Account.AccNum,

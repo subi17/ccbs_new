@@ -30,7 +30,7 @@ IF lcFile = ? OR lcFile = "" THEN RETURN.
 
 fELog("REFUNDFILE","Started").
 
-RUN Ar/refundfileco ("",                 /* InvGroup  */
+RUN Ar/refundfileco.p ("",                 /* InvGroup  */
                   0,                  /* customers from */
                   99999999,           /* customers to   */
                   TODAY,              /* payment date */

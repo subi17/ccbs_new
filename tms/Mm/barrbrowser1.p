@@ -76,7 +76,7 @@ form /* Set new commands */
     "Enter Barring Command (Type #REFRESH in case of re-provisioning)"
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -193,7 +193,7 @@ REPEAT WITH FRAME frTop:
            ehto   = 3 
            ufkey  = FALSE.
       
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -235,7 +235,7 @@ REPEAT WITH FRAME frTop:
                   MESSAGE "CMD Validation Error: " + 
                           lcValStatus VIEW-AS ALERT-BOX.
                   ufkey = TRUE.
-                  RUN Syst/ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT BROWSE.                 
                END.   
                
@@ -243,12 +243,12 @@ REPEAT WITH FRAME frTop:
                   MESSAGE "Barring status already active/inactive"
                   VIEW-AS ALERT-BOX.
                   ufkey = TRUE.
-                  RUN Syst/ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT BROWSE.                 
                END.
 
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                 
                PAUSE 0.
                VIEW FRAME frBarrMemo.
@@ -301,7 +301,7 @@ REPEAT WITH FRAME frTop:
                   VIEW-AS ALERT-BOX.
                
                ufkey = TRUE.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                NEXT BROWSE.
             END. /* llOk*/
          END. /*Command entered*/

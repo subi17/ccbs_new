@@ -98,7 +98,7 @@ form /* seek  me-name */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND NAME "
     COLOR VALUE(cfc) NO-labels overlay FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -302,8 +302,8 @@ BROWSE:
 
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET ErrorCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -325,8 +325,8 @@ BROWSE:
      /* Search by col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        SET me-name WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -451,7 +451,7 @@ PROCEDURE pBrowseErrors:
 
     PAUSE 0.
     DISP ttEDRError.MobError WITH FRAME fLimits NO-ERROR. 
-    ehto = 9. RUN Syst/ufkey.
+    ehto = 9. RUN Syst/ufkey.p.
     
     UPDATE 
        ldaFromDate 

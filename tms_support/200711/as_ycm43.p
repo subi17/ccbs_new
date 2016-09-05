@@ -17,16 +17,16 @@ Description
 katun = "anttis".
 {Func/date.i}
 
-run /apps/snet/200711/calldump_ycm43.p(0,date(5,5,2007)).
-run /apps/snet/200711/calldump_ycm43.p(0,date(5,6,2007)).
-run /apps/snet/200711/calldump_ycm43.p(0,date(5,7,2007)).
-run /apps/snet/200711/calldump_ycm43.p(0,date(10,1,2007)).
-run /apps/snet/200711/calldump_ycm43.p(0,date(10,8,2007)).
+RUN /apps/snet/200711/calldump_ycm43.p(0,date(5,5,2007)).
+RUN /apps/snet/200711/calldump_ycm43.p(0,date(5,6,2007)).
+RUN /apps/snet/200711/calldump_ycm43.p(0,date(5,7,2007)).
+RUN /apps/snet/200711/calldump_ycm43.p(0,date(10,1,2007)).
+RUN /apps/snet/200711/calldump_ycm43.p(0,date(10,8,2007)).
 
-run /apps/snet/200711/calldump_ycm43.p(200612,today).
-run /apps/snet/200711/calldump_ycm43.p(200701,today).
-run /apps/snet/200711/calldump_ycm43.p(200702,today).
-run /apps/snet/200711/calldump_ycm43.p(200703,today).
+RUN /apps/snet/200711/calldump_ycm43.p(200612,today).
+RUN /apps/snet/200711/calldump_ycm43.p(200701,today).
+RUN /apps/snet/200711/calldump_ycm43.p(200702,today).
+RUN /apps/snet/200711/calldump_ycm43.p(200703,today).
 
 /* yts-306 */
-run /apps/snet/200711/calldump_ycm43.p(0,date(11,18,2007)).
+RUN /apps/snet/200711/calldump_ycm43.p(0,date(11,18,2007)).

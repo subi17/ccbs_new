@@ -30,7 +30,7 @@ ELSE                    lcUserName = "".
                                      
 
 DO WHILE TRUE:
-   ASSIGN  ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey. 
+   ASSIGN  ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
  DISPLAY
  "A) Change status to subscription            "  @ menuc[1]   SKIP
  "X) QUIT                                     "  @ menuc[2]   SKIP
@@ -45,7 +45,7 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    IF FRAME-INDEX = 1 THEN DO:
-     RUN Mm/msstatch(MobSub.msseq).
+     RUN Mm/msstatch.p(MobSub.msseq).
    END.
 
    ELSE IF FRAME-INDEX = 2 OR FRAME-INDEX = 0 THEN LEAVE.

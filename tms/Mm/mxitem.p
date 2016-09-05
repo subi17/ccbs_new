@@ -23,7 +23,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhMXItem).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhMXItem).
+      RUN Mc/eventview2.p(lhMXItem).
    END.
 
 END.
@@ -91,7 +91,7 @@ WITH  OVERLAY ROW 4 centered
     1 columns
     FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -125,12 +125,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a MXItem  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
 
            CREATE MXItem.
@@ -351,11 +351,11 @@ BROWSE:
      
         RUN local-find-this (FALSE).
              
-        RUN Mm/matrixview(input MXItem.MXSeq).
+        RUN Mm/matrixview.p(input MXItem.MXSeq).
                      
         ASSIGN ufkey = TRUE.
                              
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
  
      END.
 
@@ -423,8 +423,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMXItem).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY MXItem.MXSeq.
 
        RUN local-UPDATE-record.                                  
@@ -564,7 +564,7 @@ PROCEDURE local-UPDATE-record:
             IF FRAME-FIELD = "MXName" AND keylabel(lastkey) = "F9" 
             THEN DO:
                
-               RUN Mm/tmscodebr2(INPUT   "MATRIX",
+               RUN Mm/tmscodebr2.p(INPUT   "MATRIX",
                               INPUT   "MXName",
                               INPUT   "",
                               INPUT   "",

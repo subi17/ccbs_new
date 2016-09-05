@@ -90,7 +90,7 @@ ELSE DO:
 END.
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 LOOP:
@@ -378,8 +378,8 @@ IF THESE ARE TAKEN BACK TO USE THEN ADD EVENTLOG
        FIND MthCall where recid(MthCall) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        ASSIGN
           Month     = MthCall.Month
           Called  = MthCall.Called

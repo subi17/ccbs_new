@@ -180,7 +180,7 @@ form
     OVERLAY ROW 2
     CENTERED FRAME imsi.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel. 
 
 orders = "By ICC,By CustNo,By ArtCode, By 4".
@@ -214,12 +214,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a SIM  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            PROMPT-FOR SIM.ICC
            VALIDATE
@@ -441,9 +441,9 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        ICC = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
       
        DISP lcBrand WITH FRAME F1. pause 0.
        UPDATE ICC WITH FRAME f1. 
@@ -508,7 +508,7 @@ BROWSE:
             ehto = 1.
             ufk = 0.
             ufk[8] = 8.
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
             ufkey = TRUE.
         END.
         ELSE
@@ -527,8 +527,8 @@ BROWSE:
        /* change */
        FIND SIM WHERE recid(SIM) = rtab[FRAME-line(sel)] NO-LOCK.
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        CLEAR FRAME  lis no-pause.
        DISPLAY SIM.ICC WITH FRAME lis.
        ASSIGN 

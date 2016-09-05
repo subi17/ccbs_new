@@ -18,7 +18,7 @@ with overlay title " CHECK PROPATH " NO-LABELS centered ROW 6 FRAME frm.
 
 PAUSE 0.
 repeat WITH FRAME frm: 
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE module.
 
    if module = "" THEN LEAVE.

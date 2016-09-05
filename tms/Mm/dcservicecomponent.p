@@ -23,7 +23,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhDCServiceComponent).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhDCServiceComponent).
+      RUN Mc/eventview2.p(lhDCServiceComponent).
    END.
 
 END.
@@ -102,7 +102,7 @@ IF NOT AVAILABLE DCServicePackage THEN DO:
    RETURN.
 END.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN pInitTempTable.
@@ -134,7 +134,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a DCServiceComponent  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -142,7 +142,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -158,7 +158,7 @@ REPEAT WITH FRAME sel:
                  IF siirto > "" THEN 
                     DISPLAY siirto @ DCServiceComponent.ServCom WITH FRAME lis.
                  ehto = 9.
-                 RUN Syst/ufkey.
+                 RUN Syst/ufkey.p.
                  NEXT. 
               END.
                  
@@ -287,7 +287,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -521,8 +521,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDCServiceComponent).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -560,7 +560,7 @@ FINALLY:
    si-recid = xrecid.
 
    ehto = 4.
-   RUN Syst/ufkey.
+   RUN Syst/ufkey.p.
 
    fCleanEventObjects().
 END.
@@ -707,7 +707,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
 
          IF toimi = 1 THEN LEAVE.
          

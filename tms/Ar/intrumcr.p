@@ -122,7 +122,7 @@ REPEAT:
 
          oiFound = oiFound + 1.
 
-         RUN Ar/invbal(Invoice.InvNum, OUTPUT ldBal).
+         RUN Ar/invbal.p(Invoice.InvNum, OUTPUT ldBal).
 
          IF ldBal <= 0 THEN DO:
             IF Invoice.CrInvNum > 0 
@@ -140,7 +140,7 @@ REPEAT:
            )
          THEN DO:
 
-            RUN Ar/makepaym (BUFFER Invoice,
+            RUN Ar/makepaym.p (BUFFER Invoice,
                           MIN(ldAmount,ldBal),
                           TODAY,
                           liAccNum,

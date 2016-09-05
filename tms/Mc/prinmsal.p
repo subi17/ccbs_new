@@ -38,7 +38,7 @@ IF liITNum = 0 THEN DO:
    RETURN.
 END.
 
-RUN Mc/printxt (MobSub.CustNum,
+RUN Mc/printxt.p (MobSub.CustNum,
              MobSub.MsSeq, 
              "",
              1,  /* 1=invtext */

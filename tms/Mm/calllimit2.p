@@ -1,4 +1,4 @@
 {Syst/commali.i}
 
-RUN Mm/calllimit(2).
+RUN Mm/calllimit.p(2).
 

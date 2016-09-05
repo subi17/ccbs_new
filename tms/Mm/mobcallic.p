@@ -30,7 +30,7 @@ RUN Mm/mobguard2.p(INPUT  TRUE,
 IF olAccept = FALSE THEN LEAVE.
 
 
-RUN Mm/mobcallbr(INPUT "post,pre",
+RUN Mm/mobcallbr.p(INPUT "post,pre",
               INPUT odtDate1,
               INPUT odtDate2,
               INPUT Custnum,

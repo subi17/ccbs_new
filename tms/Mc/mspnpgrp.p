@@ -92,7 +92,7 @@ form /*  search WITH FIELD PNPGroup */
     with row 4 col 2 title color value(ctc) " FIND xxxxxxx "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -120,13 +120,13 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* PNPGroup -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
 
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         
         DO TRANSACTION:
            FIND FIRST mobsub where 
@@ -178,7 +178,7 @@ repeat WITH FRAME sel:
               IF DAY(ldtDate) NE 1 
               THEN ldtDate = DATE(MONTH(ldtDate),1,YEAR(ldtDate)).
               
-              RUN Mc/creasfee (MobSub.CustNum,
+              RUN Mc/creasfee.p (MobSub.CustNum,
                             MobSub.MsSeq,
                             ldtDate,
                             "PNP",
@@ -455,11 +455,11 @@ BROWSE:
        NO-LOCK NO-ERROR.
                         
        IF PNPGroup.GroupType = 0 THEN
-          RUN Mc/pnplist(PNPGroup.pnpSeq).
+          RUN Mc/pnplist.p(PNPGroup.pnpSeq).
         ELSE  RUN Mc/matepnplist.p(PNPGroup.pnpseq,PNPGroup.PNPGroup).
 
        ufkey = true.
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
        PAUSE 0.
      END.
 
@@ -472,9 +472,9 @@ BROWSE:
             recid(PNPGroup) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN Syst/ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPNPGroup).
 

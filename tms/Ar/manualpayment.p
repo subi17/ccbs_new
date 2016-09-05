@@ -158,7 +158,7 @@ PROCEDURE pAdvPaym2Refund:
          ldPosting[1] = MsRequest.ReqDParam1
          ldPosting[2] = -1 * MsRequest.ReqDParam1.
    
-      RUN Ar/createpaym (MsRequest.CustNum,
+      RUN Ar/createpaym.p (MsRequest.CustNum,
                       MsRequest.ReqIParam1,      /* invoice */
                       MsRequest.ReqCParam1,      /* cli */
                       idtAccDate,                /* posting date */

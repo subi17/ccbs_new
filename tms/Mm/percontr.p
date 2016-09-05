@@ -928,7 +928,7 @@ PROCEDURE pContractActivation:
 
          liFatPeriod = YEAR(ldtFatDate) * 100 + MONTH(ldtFatDate).
          
-         RUN Mc/creafat (MsOwner.CustNum,
+         RUN Mc/creafat.p (MsOwner.CustNum,
                       DCCLI.MsSeq,
                       DCCLI.DCEvent,
                       0,   /* amount */
@@ -2983,7 +2983,7 @@ PROCEDURE pPerContractPIN:
    END. 
    
    /* print a letter */
-   RUN Mm/prinpcpin(MsRequest.CustNum,
+   RUN Mm/prinpcpin.p(MsRequest.CustNum,
                  MsRequest.MsRequest,
                  OUTPUT lcReqChar).
 

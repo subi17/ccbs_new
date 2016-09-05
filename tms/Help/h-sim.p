@@ -35,7 +35,7 @@ form /* SEEK code */
     with row 4 col 2 title color value(ctc) " FIND ICC ID "
     color value(cfc) no-labels overlay frame hayr.
 
-cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 
 
 
@@ -191,8 +191,8 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* ICC */
-           cfc = "puyr". RUN Syst/ufcolor.
-           ehto = 9. RUN Syst/ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set ICC with frame hayr.
            hide frame hayr no-pause.
            if ICC ENTERED then do:

@@ -155,7 +155,7 @@ WITH FRAME main.
 MAIN:
 REPEAT TRANSACTION WITH FRAME main:
 
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
       new-CLI-end 
@@ -326,7 +326,7 @@ REPEAT TRANSACTION WITH FRAME main:
          ufk[5] = 261
          ufk[8] = 8.
       
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT  main.
 

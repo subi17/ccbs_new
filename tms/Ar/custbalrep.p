@@ -109,7 +109,7 @@ FOR EACH Invoice NO-LOCK WHERE
          Invoice.Brand   = gcBrand AND
          Invoice.CustNum = Customer.CustNum:
 
-   RUN Ar/invbal(INPUT Invoice.InvNum, OUTPUT lDebt ).
+   RUN Ar/invbal.p(INPUT Invoice.InvNum, OUTPUT lDebt ).
    IF lDebt = 0 AND Invoice.InvDate < idtFrom THEN NEXT. 
 
    lPaid = Invoice.InvAmt - lDebt.

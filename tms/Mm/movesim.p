@@ -92,7 +92,7 @@ PAUSE 0.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
    Stock1 Stock2 SIMStat SimArt icc1 icc2
@@ -203,7 +203,7 @@ ACTION:
       END.   
 
 
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.

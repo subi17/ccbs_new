@@ -574,7 +574,7 @@ ELSE DO:
    IF lcMacros NE ? AND lcMacros > "" THEN DO:
 
       /* copy macros TO printer */
-      RUN Syst/umakro(lcMacroDir + lcMacros).
+      RUN Syst/umakro.p(lcMacroDir + lcMacros).
 
       /* macro nbr is in it's name */
       liCount = INTEGER(SUBSTRING(lcMacros,LENGTH(lcMacros),1)) NO-ERROR.
@@ -1320,7 +1320,7 @@ IF NOT llErrors THEN DO:
          IF Order.CLIType = "CONTS" AND Order.CrStamp < 20120901 THEN
             lcList = CHR(10) + fTeksti(532,liLanguage).
 
-         RUN Mc/offer_penaltyfee(Order.OrderID,
+         RUN Mc/offer_penaltyfee.p(Order.OrderID,
                               Output liTermMonths,
                               OUTPUT ldAmt).
 

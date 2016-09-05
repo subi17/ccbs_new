@@ -243,7 +243,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
                    gcHelpParam = "".
                    
                    ehto = 9.
-                   RUN Syst/ufkey.
+                   RUN Syst/ufkey.p.
        
                    IF si-recid > 0 THEN DO:
                       FIND InvText WHERE RECID(InvText) = si-recid 
@@ -312,7 +312,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       
       IF NOT ilSilent THEN DO:      
          ehto = 5. 
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
       
       IF llEPl THEN DO:
@@ -327,7 +327,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
          
       END.
 
-      RUN Mc/printxt (iiOrderID,
+      RUN Mc/printxt.p (iiOrderID,
                    liMSSeq, 
                    "",
                    1,                      /* 1=invtext */

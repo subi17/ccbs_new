@@ -218,7 +218,7 @@ end.
 /* empty posting file for control purposes 
 IF liFiles = 0 THEN DO:
    
-   RUN Ar/readpaym (INPUT TABLE ttPayment,
+   RUN Ar/readpaym.p (INPUT TABLE ttPayment,
                  "EMPTY",
                  0,
                  FALSE,    /* show messages */

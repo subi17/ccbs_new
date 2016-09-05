@@ -31,11 +31,11 @@ IF ldtTo > ldtFrom THEN DO:
   MESSAGE "Re-rate calls ...".
   
    IF iccli ne "" THEN 
-   RUN Rate/cli_rate (icCLI,
+   RUN Rate/cli_rate.p (icCLI,
                  ldtFrom,
                  ldtTo,
                  TRUE).
-   ELSE RUN Rate/cust_rate(iiCustNum,
+   ELSE RUN Rate/cust_rate.p(iiCustNum,
                       ldtFrom,
                       ldtTo,
                       TRUE).

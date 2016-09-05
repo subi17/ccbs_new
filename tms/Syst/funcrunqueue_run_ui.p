@@ -84,14 +84,14 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 795
          ufk[8] = 8 
          ehto   = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
    END.
    
    IF toimi = 1 THEN 
    REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
       ehto = 9.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
     
       UPDATE liFRQueueID liFRQScheduleID WITH FRAME fCrit 
       EDITING:
@@ -135,7 +135,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
             END.
             
             ehto = 9.
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
 
             NEXT. 
          END.

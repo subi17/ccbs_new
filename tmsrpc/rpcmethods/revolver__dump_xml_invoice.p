@@ -22,7 +22,7 @@ pcDirname = get_string(param_toplevel_id, "1").
 piInvnum   = get_pos_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-RUN Inv/invoice_xml_printone(piInvnum, "/mnt/xmlstore/" + pcDirname, "").
+RUN Inv/invoice_xml_printone.p(piInvnum, "/mnt/xmlstore/" + pcDirname, "").
 IF RETURN-VALUE BEGINS "ERROR" THEN RETURN appl_err(RETURN-VALUE).
 add_boolean(response_toplevel_id, "", TRUE).
 

@@ -97,7 +97,7 @@ ASSIGN tila = TRUE.
 
 message "Writing report, cancel = ESC".
 
-RUN Mc/nnhara1(INPUT cust-nr1,input cust-nr2).
+RUN Mc/nnhara1.p(INPUT cust-nr1,input cust-nr2).
 
 /* Suljetaan striimi */
 ASSIGN tila = FALSE.

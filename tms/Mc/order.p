@@ -49,7 +49,7 @@
                   24.05.04 aam print information texts (prinoinf)
                   03.06.04 tk allow clitype updating
                   14.06.04 aam new parameters to prinoinf,
-                               RUN Mc/prinoinf for sms-orders (liSMSTxt)
+                               RUN Mc/prinoinf.p for sms-orders (liSMSTxt)
                   15.07.04 tk check cli with DEC             
                   10.08.04 jp  show orderchannel
                   17.08.04 aam campaign run (campruno)
@@ -141,7 +141,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhOrderCustomer).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhOrder).
+      RUN Mc/eventview2.p(lhOrder).
    END.   
 
 END.
@@ -608,7 +608,7 @@ IF iiOrderId > 0 THEN DO:
    LEAVE.
 END.          
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Date  ,  By OrgId , By Name  ,By OrderId , By Status , By OrgID , By  Cli ,  By orderid  ".
@@ -701,7 +701,7 @@ BROWSE:
             ufk[7] = 0
             ufk[8] = 8 ufk[9]= 1
             ehto   = 3 ufkey = FALSE.
-          RUN Syst/ufkey.
+          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -853,8 +853,8 @@ BROWSE:
 
         /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         Disp lcBrand With FRAME f1.
         SET lcBrand WHEN gcAllBrand = TRUE
@@ -883,8 +883,8 @@ BROWSE:
         /* Search BY col 3 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F3.
         Disp lcBrand With FRAME f3.
         SET  lcBrand WHEN gcAllBrand = TRUE
@@ -924,8 +924,8 @@ BROWSE:
      /* Search BY col 4 */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F4.
         Disp lcBrand With FRAME f4.
         SET  lcBrand   WHEN gcAllBrand = TRUE 
@@ -959,8 +959,8 @@ BROWSE:
         ASSIGN lcCustomerId = ""
                lcCustIdType = "".
                
-        cfc = "puyr". RUN Syst/ufcolor.
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F5.
         SET  lcBrand   WHEN gcAllBrand = TRUE
              lcCustomerId
@@ -992,7 +992,7 @@ BROWSE:
               NEXT Browse.
            END.
            
-           RUN Mc/orderbr(lcCustomerId,lcCustIdType,icStatus,OUTPUT oOrderID).
+           RUN Mc/orderbr.p(lcCustomerId,lcCustIdType,icStatus,OUTPUT oOrderID).
                  
            FIND FIRST Order WHERE
                       Order.OrderId    = oOrderId AND
@@ -1012,7 +1012,7 @@ BROWSE:
                          ordercustomer.brand      = lcBrand
               NO-LOCK NO-ERROR.
               IF AVAILABLE OrderCustomer THEN DO:
-                 RUN Mc/orderbr(OrderCustomer.CustId,
+                 RUN Mc/orderbr.p(OrderCustomer.CustId,
                              OrderCustomer.CustIdType,icStatus,
                              OUTPUT oOrderID).
                  FIND FIRST Order WHERE
@@ -1034,8 +1034,8 @@ BROWSE:
      
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME F2.
         Disp lcBrand With FRAME f2.
         SET lcBrand WHEN gcAllBrand = TRUE
@@ -1135,7 +1135,7 @@ PROCEDURE pOrderView:
       ehto = 0               
    
       ufkey = true.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
   
      IF toimi = 8 then do:
         hide frame lis.
@@ -1181,7 +1181,7 @@ PROCEDURE pOrderView:
            ufk[8] = 8
            ehto   = 0.
          
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         
         HIDE FRAME frMultiSIM NO-PAUSE.
         
@@ -1226,7 +1226,7 @@ PROCEDURE pOrderView:
            ehto = 0               
    
            ufkey = TRUE.
-           RUN Syst/ufkey.
+           RUN Syst/ufkey.p.
   
            IF toimi = 8 THEN LEAVE SubAction.
 
@@ -1235,15 +1235,15 @@ PROCEDURE pOrderView:
            END.
            
            ELSE IF toimi = 2 THEN DO:
-              RUN Mc/orderaccessory (Order.OrderID,0).
+              RUN Mc/orderaccessory.p (Order.OrderID,0).
            END.
 
            ELSE IF toimi = 3 THEN DO:
-              RUN Mc/ordertopup (Order.OrderID).
+              RUN Mc/ordertopup.p (Order.OrderID).
            END.
                 
            ELSE IF toimi = 4 THEN DO:
-              RUN Mc/memo(INPUT 0,
+              RUN Mc/memo.p(INPUT 0,
                        INPUT "Order",
                        INPUT STRING(Order.OrderId),
                        INPUT "Order").
@@ -1256,13 +1256,13 @@ PROCEDURE pOrderView:
            ELSE IF toimi = 5 THEN DO:
               RUN local-find-this(FALSE).
               IF Order.OrderType = 3 THEN
-                 RUN Mm/msrequest(82,?,Order.MsSeq,0,liMsRequest,"").
+                 RUN Mm/msrequest.p(82,?,Order.MsSeq,0,liMsRequest,"").
               ELSE IF Order.OrderType = 4 THEN
-                 RUN Mm/msrequest(0,?,Order.MsSeq,0,liMsRequest,"").
+                 RUN Mm/msrequest.p(0,?,Order.MsSeq,0,liMsRequest,"").
               ELSE IF Order.OrderType = 2 THEN
-                 RUN Mm/msrequest(46,?,Order.MsSeq,0,liMsRequest,"").
+                 RUN Mm/msrequest.p(46,?,Order.MsSeq,0,liMsRequest,"").
               ELSE
-                 RUN Mm/msrequest(13,?,Order.MsSeq,0,liMsRequest,"").
+                 RUN Mm/msrequest.p(13,?,Order.MsSeq,0,liMsRequest,"").
            END.
            
            ELSE IF toimi = 6 THEN DO:
@@ -1271,7 +1271,7 @@ PROCEDURE pOrderView:
            
            ELSE IF toimi = 7 THEN DO:
               RUN local-find-this(FALSE).
-              RUN Mc/orderdelivery(Order.OrderId).
+              RUN Mc/orderdelivery.p(Order.OrderId).
            END.
         END.
 
@@ -1749,7 +1749,7 @@ PROCEDURE local-UPDATE-record:
    RUN local-find-this(FALSE).
    
    CLEAR FRAME lis NO-PAUSE.
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    
    REPEAT ON ENDKEY UNDO, LEAVE:
    
@@ -1771,13 +1771,13 @@ PROCEDURE local-UPDATE-record:
             IF FRAME-FIELD = "CurrOper" AND LOOKUP( KEYLABEL(LASTKEY),"F9") > 0 THEN
             DO:
                
-               RUN Help/h-mnpoperator.
+               RUN Help/h-mnpoperator.p.
                
                IF siirto NE ? AND siirto NE "" THEN DO:
                   lcCurrOper = siirto NO-ERROR.
                   DISPLAY lcCurrOper @ Order.CurrOper WITH FRAME lis.
                END. /* IF lcCurrOper NE "" ... */
-               ehto = 9. RUN Syst/ufkey.
+               ehto = 9. RUN Syst/ufkey.p.
             END.
       
             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
@@ -2008,7 +2008,7 @@ PROCEDURE local-update-customer:
       ufk[8] = 8
       ehto = 0
       ufkey = true.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
                                                              
       IF toimi = 8 then do:
          hide frame fCustomer NO-PAUSE.
@@ -2028,7 +2028,7 @@ PROCEDURE local-update-customer:
       REPEAT WITH FRAME fCustomer ON ENDKEY UNDO, LEAVE:
          
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          
          lcOldAddressChk = 
             OrderCustomer.Address + 
@@ -2116,7 +2116,7 @@ PROCEDURE local-update-customer:
                ELSE IF FRAME-FIELD = "ZipCode" THEN DO:
                   ASSIGN si-recid = ?
                          siirto   = "".
-                  RUN Help/h-postcode.
+                  RUN Help/h-postcode.p.
 
                   /* several rows with same zipcode */
                   IF si-recid NE ? THEN DO:
@@ -2136,7 +2136,7 @@ PROCEDURE local-update-customer:
                END.
                   
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 

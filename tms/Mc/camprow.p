@@ -24,7 +24,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhCampRow).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhCampRow).
+      RUN Mc/eventview2.p(lhCampRow).
    END.
 
 END.
@@ -160,7 +160,7 @@ FIND Campaign WHERE
 ASSIGN lcTitle = " ROWS FOR CAMPAIGN: " +
                  STRING(Campaign.CaName) + " ".
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Row Type ,    ,   , By 4".
@@ -187,14 +187,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CampRow  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -219,7 +219,7 @@ REPEAT WITH FRAME sel:
                 END.
 
                 ehto = 9.
-                RUN Syst/ufkey.
+                RUN Syst/ufkey.p.
                 NEXT.
                 
              END.   
@@ -525,7 +525,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCampRow).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CampRow.CRowType.
 
        RUN local-UPDATE-record.                                  
@@ -653,7 +653,7 @@ PROCEDURE local-UPDATE-record:
       
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
        
          UPDATE
          CampRow.CRowItem
@@ -678,7 +678,7 @@ PROCEDURE local-UPDATE-record:
                 END.
 
                 ehto = 9.
-                RUN Syst/ufkey.
+                RUN Syst/ufkey.p.
                 NEXT.
                 
              END.   

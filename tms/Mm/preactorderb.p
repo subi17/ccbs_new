@@ -3,6 +3,6 @@
    read preactivated subscription orders from file 
 */
 
-RUN Mm/readorderb ("PREACT"). 
+RUN Mm/readorderb.p ("PREACT"). 
 
 QUIT.

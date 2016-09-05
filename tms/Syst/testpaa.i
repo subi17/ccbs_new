@@ -13,7 +13,7 @@ DEF NEW SHARED VAR gcBrand       like customer.brand NO-UNDO.
 &ENDIF
 
 def new shared var ghFunc1 as handle.
-if not valid-handle(ghFunc1) then run Func/func.p persistent set ghFunc1.
+if not valid-handle(ghFunc1) then RUN Func/func.p persistent set ghFunc1.
 
 /* yleinen järj.nro */
 def new shared var jno as int format "ZZZZZZZ9".

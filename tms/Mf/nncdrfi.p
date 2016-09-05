@@ -51,7 +51,7 @@ with centered overlay row 4 title " READ IN CALL RECORDS "
 ASSIGN ok = TRUE.
 
 IF ok THEN DO:
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       ticfile 
       pvmlog 
@@ -70,7 +70,7 @@ IF ok THEN DO:
    if ticfile = "" OR ticfile = "OnLine" THEN LEAVE.
 
    ufk = 0. ehto = 3. 
-   RUN Syst/ufkey. PAUSE 0.
+   RUN Syst/ufkey.p. PAUSE 0.
 
    message "Are You SURE You want to start reading CDRs into database ?"
    UPDATE ok.

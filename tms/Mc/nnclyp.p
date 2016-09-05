@@ -45,7 +45,7 @@ WITH
 DO TRANS WITH FRAME memo ON ENDKEY UNDO, RETURN:
 
    assign ehto = 9 cfc = "lis" ufkey = TRUE.
-   RUN Syst/ufkey. RUN Syst/ufcolor.
+   RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
    FIND FIRST CustLetter WHERE CustLetter.Brand = gcBrand
       exclusive-lock no-error.
    IF NOT AVAIL CustLetter THEN 

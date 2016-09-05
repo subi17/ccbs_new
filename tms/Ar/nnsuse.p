@@ -67,14 +67,14 @@ DO WITH FRAME suo:
 
    repeat WITH FRAME suo:
       ASSIGN ufk = 0 ehto = 3 ufk[1] = 992 ufk[5] = 11 ufk[8] = 8.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       CHOOSE ROW Payment.Voucher {Syst/uchoose.i} no-error.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
       if lookup(keylabel(lastkey),"1,f1") > 0 THEN DO:
-         RUN Mc/memo(INPUT 0,
+         RUN Mc/memo.p(INPUT 0,
                   INPUT "Payment",
                   INPUT STRING(dtos[FRAME-LINE]),
                   INPUT "Payment").

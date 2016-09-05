@@ -57,7 +57,7 @@ CREATE ttCust.
 ASSIGN ttCust.CustNum = MobSub.CustNum
        ttCust.MSSeq   = MobSub.MSSeq.
        
-RUN Mc/camprun (INPUT TABLE ttCust,
+RUN Mc/camprun.p (INPUT TABLE ttCust,
              Order.Campaign,
              Order.Campaign,
              Order.CrStamp,

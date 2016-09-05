@@ -63,7 +63,7 @@ ASSIGN
    ldPosting[1] = idAmt
    ldPosting[2] = -1 * idAmt.
    
-RUN Ar/createpaym (iiCustNum,
+RUN Ar/createpaym.p (iiCustNum,
                 iiInvNum,
                 icCLI,
                 idtDate,

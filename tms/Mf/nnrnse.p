@@ -52,7 +52,7 @@ form
 
 with row 1 centered overlay title " SEEK AREANUMBER " FRAME alku.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
    FIND FIRST AreaCode USE-INDEX AreaCode no-lock no-error.
    IF NOT AVAIL AreaCode THEN DO:
       BELL.
@@ -73,7 +73,7 @@ repeat WITH FRAME sel:
        ASSIGN haettava = FALSE nrohaku = FALSE.
        PAUSE 0 no-message.
 alku:  repeat WITH FRAME alku:
-          ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE rnhaku WITH FRAME alku EDITING:
              READKEY. nap = keylabel(LASTKEY).
              /* onko painettu home */

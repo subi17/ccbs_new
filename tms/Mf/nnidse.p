@@ -39,7 +39,7 @@ WITH
     row 4 col 2 title color value(ctc) " FIND IDENT  "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "tlse". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 Runko:
 repeat:
 
@@ -203,8 +203,8 @@ BROWSE:
 
         /* get */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* get */
-           cfc = "puyr". RUN Syst/ufcolor.
-           get = "". ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           get = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE get WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            if get <> "" THEN DO:

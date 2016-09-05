@@ -53,7 +53,7 @@ with
    color value(cfc) no-labels overlay
 frame hayr.
 
-cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 
 MAIN:
 repeat:
@@ -211,8 +211,8 @@ BROWSE:
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*se-code*/
-           cfc = "puyr". RUN Syst/ufcolor.
-           ehto = 9. RUN Syst/ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set se-code with frame hayr.
            hide frame hayr no-pause.
            if se-code ENTERED then do:

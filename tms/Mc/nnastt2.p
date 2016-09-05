@@ -8,7 +8,7 @@
                   24.02.1997 pt lisAtty laskujen selailu
                   08.01.1998 pt In English
                   04.06.1998 pt warning prior TO 'RUN nnasal'
-                  26.08.1998 pt FUNCTION 5: RUN Mf/nnlaen2
+                  26.08.1998 pt FUNCTION 5: RUN Mf/nnlaen2.p
                   03.12.1998 pt DOWN payment plan
                   27.12.1998 pt customer groups
                   06.03.2002 jp CREATE invoice
@@ -59,7 +59,7 @@ DO i = 1 TO vlkm WITH FRAME valikko.
 END.
 
 repeat:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p.
    CHOOSE ROW val[i] no-error auto-return WITH FRAME valikko.
    i = frame-line(valikko).
    IF lookup(keylabel(lastkey),"8,f8") > 0 OR i = vlkm THEN DO:
@@ -71,9 +71,9 @@ repeat:
         RUN nnpwd(CustNum).
      END.
 
-     ELSE IF i = 2 THEN RUN Mc/custpp2(CustNum).
+     ELSE IF i = 2 THEN RUN Mc/custpp2.p(CustNum).
 
-     ELSE IF i = 3 THEN RUN Mc/evbrcust(CustNum).
+     ELSE IF i = 3 THEN RUN Mc/evbrcust.p(CustNum).
    END.
 
 END.

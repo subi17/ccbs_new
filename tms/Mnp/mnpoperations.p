@@ -114,7 +114,7 @@ WITH OVERLAY ROW 6 centered 1 columns
    TITLE COLOR value(ctc) " View Message " WITH side-labels
    FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = " By CLI ,  By Name  ,By 3, By 4".
@@ -195,7 +195,7 @@ BROWSE:
         ufk[7] = 2819
         ufk[8] = 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.

@@ -27,7 +27,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhFATConfig).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhFATConfig).
+      RUN Mc/eventview2.p(lhFATConfig).
    END.
 
 END.
@@ -115,7 +115,7 @@ FUNCTION fTargName RETURNS CHARACTER
 END FUNCTION.
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -138,14 +138,14 @@ REPEAT WITH FRAME sel:
     
    IF must-add THEN DO:  /* Add a FATConfig  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -166,7 +166,7 @@ REPEAT WITH FRAME sel:
                   END.
 
                   ehto = 9.
-                  RUN Syst/ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT. 
                END.
 
@@ -270,7 +270,7 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
@@ -468,7 +468,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFATConfig).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -597,7 +597,7 @@ PROCEDURE local-UPDATE-record:
       
       IF lcRight = "RW" THEN REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
       
          UPDATE
          FATConfig.ValidFrom    
@@ -640,7 +640,7 @@ PROCEDURE local-UPDATE-record:
                END.
                
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 
@@ -677,7 +677,7 @@ PROCEDURE local-UPDATE-record:
       
       ELSE DO:
          ehto = 5.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          PAUSE MESSAGE "Press ENTER to continue".
       END. 
       

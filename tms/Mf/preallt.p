@@ -108,7 +108,7 @@ form /* seek PRESELECT  BY CLI */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CLI "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 pstypes = "NATIONAL,INTERNATIONAL,NAT & INT".
@@ -137,12 +137,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a Presel  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            new_presel = TRUE.
            CLEAR FRAME lis NO-PAUSE.
@@ -390,8 +390,8 @@ BROWSE:
 
      /* Search BY column 1 */                          
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET CustNum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -413,8 +413,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET CLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -497,7 +497,7 @@ BROWSE:
        RUN local-find-this(TRUE).
 
        FIND CLI where CLI.CLI = Presel.CLI NO-LOCK NO-ERROR.
-       RUN Mf/viewpres(presel.CLI).
+       RUN Mf/viewpres.p(presel.CLI).
        ufkey = TRUE.
 
        /* IF  User Wanted TO Cancel this Change TRANSACTION */
@@ -635,7 +635,7 @@ PROCEDURE local-update-record:
 
          IF FRAME-FIELD = "CLI" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
 
-            RUN Help/h-psubno(Customer.CustNum).
+            RUN Help/h-psubno.p(Customer.CustNum).
             IF siirto NE ? THEN DO:
                ASSIGN Presel.CLI = siirto.
                DISP Presel.CLI WITH FRAME lis.

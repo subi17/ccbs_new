@@ -71,7 +71,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN Ar/ifs_payment_status (ttFiles.IFSFile,
+   RUN Ar/ifs_payment_status.p (ttFiles.IFSFile,
                            llControl,
                            OUTPUT liRead,
                            OUTPUT liError).

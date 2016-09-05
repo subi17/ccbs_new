@@ -14,5 +14,5 @@
 gcbrand = "1".
 katun = "cron".
              
-RUN Mm/highusagerep(INPUT fMake2Dt(INPUT today - 90, INPUT 0),"",0).
+RUN Mm/highusagerep.p(INPUT fMake2Dt(INPUT today - 90, INPUT 0),"",0).
 

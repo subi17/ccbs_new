@@ -107,7 +107,7 @@ WITH  OVERLAY ROW 4 centered
     NO-LABELS 
     FRAME fWindow.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -133,13 +133,13 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a MNPCal  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
 
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
@@ -225,7 +225,7 @@ BROWSE:
         ufk[6]= 4  WHEN llAdmin 
         ufk[7]= 9020 WHEN llSyst ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -454,7 +454,7 @@ BROWSE:
        THEN DO:
          
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
 
          FIND FIRST TMSParam WHERE
             TMSParam.Brand = gcBrand AND
@@ -519,8 +519,8 @@ BROWSE:
        /* change */
        RUN local-find-this(FALSE).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record(FALSE).
        HIDE FRAME lis NO-PAUSE.
@@ -687,7 +687,7 @@ PROCEDURE local-UPDATE-record:
                RUN Help/h-tmscodes.p
                   ("MNPCal","OrderChannel","MNP", OUTPUT siirto).
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                IF siirto ne "" THEN DO:
                   DISP siirto @ MNPCal.OrderChannel WITH FRAME lis.
                   NEXT.
@@ -698,7 +698,7 @@ PROCEDURE local-UPDATE-record:
             RUN Help/h-tmscodes.p
                   ("MNPCal","MessageType","MNP", OUTPUT siirto).
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                IF siirto ne "" THEN DO:
                   DISP siirto @ MNPCal.MessageType WITH FRAM lis.
                   NEXT.
@@ -709,7 +709,7 @@ PROCEDURE local-UPDATE-record:
             RUN Help/h-tmscodes.p
                   ("MNPCal","MNPProduct","MNP", OUTPUT siirto).
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                IF siirto ne "" AND siirto NE ? THEN DO:
                   DISP siirto @ MNPCal.MNPProduct  WITH FRAME lis.
                   NEXT.

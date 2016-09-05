@@ -39,7 +39,7 @@ form /* SEEK code */
     with row 4 col 2 title color value(ctc) " FIND PaymSrc "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 
 lcPaymSrc = DYNAMIC-FUNCTION("fTMSCodeList" IN ghFunc1,
                              "Payment",
@@ -209,8 +209,8 @@ repeat:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* PaymSrc */
-           cfc = "puyr". RUN Syst/ufcolor.
-           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            lcPaymSrc = "".
            set lcPaymSrc WITH FRAME hayr.
            HIDE FRAME hayr no-pause.

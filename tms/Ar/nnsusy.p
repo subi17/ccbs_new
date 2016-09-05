@@ -407,7 +407,7 @@ ASSIGN muispvm    = pvm.
 
 fCurrLabels(""). 
 
-assign cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+assign cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME INV-NO.
 view FRAME payment.
 view FRAME acct.
@@ -415,7 +415,7 @@ view FRAME acct.
 LASKU:
 repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
 
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0.
    CLEAR FRAME payment.
    CLEAR FRAME acct.
@@ -555,7 +555,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
       READKEY. nap = keylabel(LASTKEY).
       /* HELP tositenumerolle */
       IF lookup(nap,"f9,!") > 0  THEN DO:
-         RUN Ar/nnsuse(INPUT  Invoice.InvNum, OUTPUT i).
+         RUN Ar/nnsuse.p(INPUT  Invoice.InvNum, OUTPUT i).
          IF i > 0 THEN disp i format "zzzzzzz9" @ pVouch WITH FRAME INV-NO.
          NEXT.
       END.
@@ -827,7 +827,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
    repeat WITH FRAME payment:
 
       IF xDontUpd = FALSE THEN DO:
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          PAUSE 0.
 
          /* old values */
@@ -968,7 +968,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             ysuoyht NE 0 AND
             Invoice.InterestPerm = TRUE 
          THEN DO:
-            RUN Ar/calcint(Invoice.DueDate,
+            RUN Ar/calcint.p(Invoice.DueDate,
                         input suopvm,
                         IntCalcMet,
                         ysuoyht,
@@ -1002,7 +1002,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
      END.  /* xdontupd = FALSE */
 
      assign muispvm  = suopvm. cfc = "sel".
-     RUN Syst/ufcolor. ASSIGN ccc = cfc.
+     RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 
      ASSIGN lAPVatAmt = 0. 
 
@@ -1297,7 +1297,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
          IF toimi  = 1 THEN NEXT PaidAmt.              /* change */
 
          ELSE IF toimi = 2 THEN DO:                        /* print memo */
-            RUN Mc/memo(INPUT Invoice.CustNum,
+            RUN Mc/memo.p(INPUT Invoice.CustNum,
                      INPUT "Invoice",
                      INPUT STRING(INPUT Invoice.InvNum),
                      INPUT "Invoice").
@@ -1317,7 +1317,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                Payment.PaymDate = suopvm.
             END.
 
-            RUN Mc/memo(INPUT Invoice.CustNum,
+            RUN Mc/memo.p(INPUT Invoice.CustNum,
                      INPUT "Payment",
                      INPUT STRING(Payment.Voucher),
                      INPUT "Payment").

@@ -7,7 +7,7 @@
   CHANGED ......: 14.01.04 jp servattr
                   01.07.04 tk subser.i moved
                   13.12.04/aam use ttSubserPara
-                  12.12.06/mvi new param to RUN Mm/msrequest (reqstat = ?)
+                  12.12.06/mvi new param to RUN Mm/msrequest.p (reqstat = ?)
                   31.10.07 jp  new parameter for msrequest
                   
   Version ......: M15
@@ -38,7 +38,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhttSubserPara).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhttSubserPara).
+      RUN Mc/eventview2.p(lhttSubserPara).
    END.
 
 END.
@@ -94,7 +94,7 @@ WITH  OVERLAY ROW 4 centered
     FRAME lis.
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -308,7 +308,7 @@ BROWSE:
         VIEW-AS ALERT-BOX ERROR.
 
         ELSE DO:
-           RUN Mm/msrequest (1,
+           RUN Mm/msrequest.p (1,
                           ?, /* reqstat ? for all */
                           iiMsSeq,
                           0,
@@ -323,7 +323,7 @@ BROWSE:
  
      
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0 THEN DO:  /* history */
-        RUN Mm/ssparahist (iiMsSeq,
+        RUN Mm/ssparahist.p (iiMsSeq,
                         icServCom).
         
         ufkey = TRUE.
@@ -339,8 +339,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhttSubserPara).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.

@@ -74,7 +74,7 @@ DISP liTestInvCount WITH FRAME mainFrame.
 mainLoop:
 REPEAT WITH FRAME mainFrame:
    ehto = 9.
-   RUN Syst/ufkey.
+   RUN Syst/ufkey.p.
 
    UPDATE 
      lcFloor
@@ -105,7 +105,7 @@ REPEAT WITH FRAME mainFrame:
       ufk[5] = 795 /* start     */
       ufk[8] = 8   /* return    */
       ehto = 1.
-   RUN Syst/ufkey.
+   RUN Syst/ufkey.p.
    
    IF toimi = 1 THEN NEXT mainLoop.
    IF toimi = 5 THEN DO:

@@ -31,7 +31,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhmnpsub).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhmnpsub).
+      RUN Mc/eventview2.p(lhmnpsub).
    END.
 
 END.
@@ -161,7 +161,7 @@ BROWSE:
         ufk[6]= 0  /* WHEN lcRight = "RW" */
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -314,8 +314,8 @@ BROWSE:
        RUN local-find-this(TRUE).
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhmnpsub). 
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        RUN local-UPDATE-record.
        HIDE FRAME lis NO-PAUSE.
 

@@ -87,7 +87,7 @@ END.
 Limit:
 repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
 
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       dte 
       InvGroup 
@@ -139,10 +139,10 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
                disp "NOT SELECTED" @ extname with frame limit.
             end.
             else do:
-               RUN Mc/gathecg(INPUT-OUTPUT table TCustGroup).
+               RUN Mc/gathecg.p(INPUT-OUTPUT table TCustGroup).
                /* DISPLAY Customer groups */
                EHTO = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                FOR EACH TCustGroup.
                   dExtCustGrp = dExtCustGrp + TCustGroup.CustGroup +
                   ",".
@@ -171,7 +171,7 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
             ufk[1] = 7 
             ufk[5] = 795
             ufk[8] = 8.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
 
          IF toimi = 1 THEN NEXT Limit.
          IF toimi = 8 THEN LEAVE Limit.
@@ -185,13 +185,13 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
    OUTPUT STREAM excel TO value(fname).
    PUT STREAM excel UNFORMATTED
       "List of all payments + invoices which payday <= " dte.
-   RUN Syst/uexskip(1).
+   RUN Syst/uexskip.p(1).
    PUT STREAM excel UNFORMATTED
       "Invoice group = " InvGroup.
-   RUN Syst/uexskip(1).    
+   RUN Syst/uexskip.p(1).    
    PUT STREAM excel UNFORMATTED
       "Unpaid / All  = " unpaid format "Unpaid/All".
-   RUN Syst/uexskip(2).
+   RUN Syst/uexskip.p(2).
    PUT STREAM excel UNFORMATTED
       "Cust.nr"     tab
       "Cust.name"   tab
@@ -204,7 +204,7 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
       "Debt"        tab
       "Paid us"
       .
-   RUN Syst/uexskip(1).
+   RUN Syst/uexskip.p(1).
 
    message "Processing ...".
 
@@ -290,7 +290,7 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
       IF pus NE 1/1/1900 THEN PUT STREAM excel UNFORMATTED
          tab pus.
 
-      RUN Syst/uexskip(1).
+      RUN Syst/uexskip.p(1).
 
    END.  /* FOR EACH */
 

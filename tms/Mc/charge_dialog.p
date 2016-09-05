@@ -141,7 +141,7 @@ END.
 
 /* Change charge only for Admin users*/
 ok = false.
-ehto = 9. RUN Syst/ufkey.
+ehto = 9. RUN Syst/ufkey.p.
 
 LOOP:
 REPEAT:

@@ -169,7 +169,7 @@ END. /* toimi */
 ASSIGN tila = TRUE.
 {Syst/utuloste.i "return"}
 
-RUN Syst/umakro (TRUE,
+RUN Syst/umakro.p (TRUE,
             lcMacros).
 
 message "Printing in progress, ESC = cancel".

@@ -102,7 +102,7 @@ FIND Customer WHERE Customer.CustNum = iiCustNum NO-LOCK.
 
 lcCustName =  DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
                                 BUFFER Customer).
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Invoice  ,   By Date    ,   By 3    , By 4".
@@ -329,8 +329,8 @@ BROWSE:
 
      /* Search BY column 1 */                          
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET InvNum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -354,8 +354,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET EventDate WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -386,8 +386,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY OPLog.InvNum.
 
        RUN local-update-record.                                  
@@ -517,7 +517,7 @@ PROCEDURE local-update-record:
 
       WITH FRAME lis.
 
-      ufk = 0. ehto = 3. RUN Syst/ufkey.
+      ufk = 0. ehto = 3. RUN Syst/ufkey.p.
       message "Press ENTER !".
       PAUSE no-message.
 

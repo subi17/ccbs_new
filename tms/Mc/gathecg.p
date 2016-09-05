@@ -89,7 +89,7 @@ mess[1] = "This customer has:".
 mess[4] = "where starting Amount is allowed.".
 mess[5] = "This overrides all those settings.".
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc. view FRAME sel.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc. view FRAME sel.
 
 
 FIND FIRST CustGroup
@@ -158,7 +158,7 @@ BROWSE:
     ASSIGN
     ufk[1]= 1709 ufk[2]= 717 ufk[3]= 0 ufk[4]= 0
     ufk[5]= 515 ufk[6]= 0   ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-    ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.
+    ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
       END.
       HIDE MESSAGE no-pause. IF order = 1 THEN
     CHOOSE ROW CustGroup.CustGroup {Syst/uchoose.i} no-error WITH FRAME sel.
@@ -314,8 +314,8 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-   cfc = "puyr". RUN Syst/ufcolor.
-   CustGroup = "". ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+   cfc = "puyr". RUN Syst/ufcolor.p.
+   CustGroup = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE CustGroup WITH FRAME hayr.
    HIDE FRAME hayr no-pause.
    IF CustGroup <> "" THEN DO:
@@ -334,8 +334,8 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-   cfc = "puyr". RUN Syst/ufcolor. CustName = "".
-   ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+   cfc = "puyr". RUN Syst/ufcolor.p. CustName = "".
+   ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE CustName WITH FRAME hayr3.
    HIDE FRAME hayr2 no-pause.
    if CustName <> "" THEN DO:

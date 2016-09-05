@@ -132,7 +132,7 @@ ELSE DO:
    IF AVAIL TermMobSub THEN lcCLi = TermMobSub.CLI.
 END.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By OrdSeq,By Status,By 3,By 4".
@@ -357,8 +357,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        SET SoLog2 WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF SoLog2 ENTERED THEN DO:
@@ -381,8 +381,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        SET Stat WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF Stat ENTERED THEN DO:
@@ -458,7 +458,7 @@ BROWSE:
        END.
 
        ASSIGN ufk = 0 ehto = 3. 
-       RUN Syst/ufkey. 
+       RUN Syst/ufkey.p. 
 
        RUN local-find-this (TRUE).
       
@@ -575,7 +575,7 @@ BROWSE:
        /* change */      
        RUN local-find-this(FALSE ).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        FIND FIRST SoLog WHERE
             RECID(SoLog) = ttSoLog.OrigRec

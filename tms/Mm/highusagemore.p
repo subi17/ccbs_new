@@ -36,7 +36,7 @@ PAUSE 0.
 
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
  
  DISPLAY
  "A) Total call amount per day            "  @ menuc[1]    SKIP 
@@ -64,12 +64,12 @@ DO WHILE TRUE:
    END.
 
    ELSE IF FRAME-INDEX = 3 THEN DO:
-      RUN Mm/mobcallis(highusage.cli,highusage.invseq).
+      RUN Mm/mobcallis.p(highusage.cli,highusage.invseq).
    
    END.             
 
    ELSE IF FRAME-INDEX = 4 THEN DO:
-      RUN Mm/highusagehist(highusage.cli).
+      RUN Mm/highusagehist.p(highusage.cli).
    END.
    
    ELSE IF FRAME-INDEX = 5 THEN DO:
@@ -93,7 +93,7 @@ DO WHILE TRUE:
       
       
       
-      RUN Mm/highusagerep(INPUT fMake2Dt(INPUT today - 90, INPUT 0),   
+      RUN Mm/highusagerep.p(INPUT fMake2Dt(INPUT today - 90, INPUT 0),   
                              lcEmail,
                              int(siirto)).
    END.

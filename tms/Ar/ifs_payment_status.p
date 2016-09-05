@@ -376,7 +376,7 @@ PROCEDURE pUpdateStatus:
 
       IF Invoice.PaidAmt NE idPaidAmt THEN DO:
 
-         RUN Ar/makepaym (BUFFER Invoice,
+         RUN Ar/makepaym.p (BUFFER Invoice,
                        idPaidAmt - Invoice.PaidAmt,
                        TODAY,
                        liBankAcc,

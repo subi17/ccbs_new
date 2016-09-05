@@ -37,7 +37,7 @@
                   25.03.02 lp  change FRAME LIS LIKE in the nnasla.p
                   30.04.02 lp  Checking: Dueday cann't be empty
                   02.05.02 tk  eventlogging added
-                  20.05.02 tk  RUN Mc/memo
+                  20.05.02 tk  RUN Mc/memo.p
                   08.07.02 jp  F7 Send Invoice Specification via email
                   23.08.02 tk  Invoice.OverPaym, f2->claimhist
                   09.09.02 jp  Kr, label removed
@@ -59,7 +59,7 @@
                   16.08.04/aam find with amount uses PaymState  
                   18.04.06/aam use payments.p instead of nnlasu.p
                   30.11.06/aam ExtInvID
-                  22.03.07 kl  new param for RUN Ar/payments
+                  22.03.07 kl  new param for RUN Ar/payments.p
                   25.04.07/aam eventlog in detail view, 
                                use pInvoiceUpdate
   Version ......: M15
@@ -195,7 +195,7 @@ WITH
     color value(cfc) title color value(cfc) " Update memo "
     FRAME memo.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST Invoice WHERE Invoice.Brand = lcBrand USE-INDEX ExtInvID
@@ -278,7 +278,7 @@ repeat WITH FRAME sel:
          ufk[1]= 94  ufk[2] = 1492 ufk[3] = 927 ufk[4] = 1883
          ufk[5]= 790 ufk[6] = 829 ufk[7] = 1796 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
@@ -469,7 +469,7 @@ repeat WITH FRAME sel:
         ASSIGN ufk = 0 ehto = 0  ufk[8] = 8
                ufk[1]= 133 ufk[2]= 28  ufk[3]= 702 ufk[4]= 789.
 
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         ufkey = TRUE.
 
         IF toimi = 8 THEN LEAVE etsi.
@@ -477,9 +477,9 @@ repeat WITH FRAME sel:
 
         /* Haku 1 */
         IF toimi = 1 THEN DO:  /* haku sarakk. 1 */
-           cfc = "puyr". RUN Syst/ufcolor.
+           cfc = "puyr". RUN Syst/ufcolor.p.
            lcExtInvID = "".
-           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME hayr.
            UPDATE lcBrand WHEN gcAllBrand
                   lcExtInvID WITH FRAME hayr.
@@ -506,9 +506,9 @@ repeat WITH FRAME sel:
 
         /* Haku sarakk. 2 */
         IF toimi = 2 THEN DO:  /* haku sar. 2 */
-           cfc = "puyr". RUN Syst/ufcolor.
+           cfc = "puyr". RUN Syst/ufcolor.p.
            InvDate = ?.
-           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME hayr3.
            UPDATE lcBrand WHEN gcAllBrand
                   InvDate WITH FRAME hayr3.
@@ -533,9 +533,9 @@ repeat WITH FRAME sel:
 
         /* Haku 3 */
         ELSE IF toimi = 3 THEN DO:  /* haku sarakk. 3 */
-           cfc = "puyr". RUN Syst/ufcolor.
+           cfc = "puyr". RUN Syst/ufcolor.p.
            hakuCustNum = 0.
-           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME hakie.
            UPDATE lcBrand WHEN gcAllBrand
                   hakuCustNum WITH FRAME hakie.
@@ -557,9 +557,9 @@ repeat WITH FRAME sel:
         /* Haku sarakk. 4 */
         IF toimi = 4 THEN DO:  /* haku sar. 4 */
            InvDate = ?.
-           cfc = "puyr". RUN Syst/ufcolor.
+           cfc = "puyr". RUN Syst/ufcolor.p.
            hakunetto = 0.
-           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            liPaymState = 0.
            DISPLAY lcBrand WITH FRAME hayr2.
            UPDATE lcBrand WHEN gcAllBrand
@@ -591,7 +591,7 @@ repeat WITH FRAME sel:
      ELSE IF LOOKUP(nap,"3,F3") > 0 THEN DO TRANS: /* memo */
         FIND Invoice WHERE RECID(Invoice) = rtab[FRAME-LINE(sel)]
         NO-LOCK NO-ERROR.
-        RUN Mc/memo(INPUT Invoice.CustNum,
+        RUN Mc/memo.p(INPUT Invoice.CustNum,
                  INPUT "Invoice",
                  INPUT STRING(Invoice.InvNum),
                  INPUT "Invoice number").
@@ -601,7 +601,7 @@ repeat WITH FRAME sel:
 
      else if lookup(nap,"2,f2") > 0 THEN DO : /* claiming history */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
-        RUN Ar/claimhis(0,
+        RUN Ar/claimhis.p(0,
                      INPUT Invoice.InvNum).
         ufkey = TRUE.
         NEXT LOOP.
@@ -609,7 +609,7 @@ repeat WITH FRAME sel:
 
      else if lookup(nap,"6,f6") > 0 THEN DO : /* payments */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
-        RUN Ar/payments(0,Invoice.InvNum,"").
+        RUN Ar/payments.p(0,Invoice.InvNum,"").
         ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -617,7 +617,7 @@ repeat WITH FRAME sel:
      /* view mail send log */
      else if lookup(nap,"7,f7") > 0 THEN DO : 
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
-        RUN Mc/itsendlo(0,
+        RUN Mc/itsendlo.p(0,
                      Invoice.InvNum,
                      0,
                      0).
@@ -641,10 +641,10 @@ repeat WITH FRAME sel:
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] 
         no-lock no-error.
 
-        cfc = "lis". RUN Syst/ufcolor.
+        cfc = "lis". RUN Syst/ufcolor.p.
 
         /* kysytaan linet */
-        RUN Ar/nnlryp(Invoice.InvNum,0).
+        RUN Ar/nnlryp.p(Invoice.InvNum,0).
         UFKEY = TRUE.
 
         NEXT LOOP.
@@ -724,7 +724,7 @@ repeat WITH FRAME sel:
         
         FIND Invoice where recid(Invoice) = rtab[frame-line(sel)] no-lock.
         
-        RUN Mc/commontt(Invoice.CustNum).
+        RUN Mc/commontt.p(Invoice.CustNum).
         
         ASSIGN  ufk = 0
                 ufk[1]= 94  ufk[2] = 1492 ufk[3] = 927 ufk[4] = 1883

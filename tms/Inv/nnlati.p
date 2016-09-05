@@ -71,10 +71,10 @@ FIND FIRST Invoice no-lock no-error.
 IF AVAIL Invoice THEN ASSIGN date1 = Invoice.InvDate.
 date2 = date1.
 
-cfc = "sel". RUN Syst/ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 LOOP:
 repeat WITH FRAME rajat:
-    ehto = 9. RUN Syst/ufkey.
+    ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE
     date1
@@ -120,7 +120,7 @@ END.
 TOIMI:
    repeat:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT LOOP.
       IF toimi = 8 THEN LEAVE LOOP.
       IF toimi = 5 THEN LEAVE TOIMI.

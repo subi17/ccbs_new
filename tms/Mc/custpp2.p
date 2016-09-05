@@ -5,7 +5,7 @@
   AUTHOR .......: tk
   CREATED ......: 13-05-02
   CHANGED ......: 13-05-02 tk  eventlogging added
-                  20.05.02 tk  RUN Mc/memo
+                  20.05.02 tk  RUN Mc/memo.p
                   21.05.02 aam call PPItem from f3 AND CustPP from f2
                   11.10.02 jr  Fixed validations 
                   26.02.03 tk  tokens
@@ -93,7 +93,7 @@ form /* seek ProdPack  BY  ProdPack */
 
 FIND FIRST Customer WHERE Customer.CustNum = CustNum USE-INDEX CustNum NO-LOCK.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By 2,By 3, By 4".
@@ -130,12 +130,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CustPP  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR CustPP.ProdPack WITH FRAME lis  EDITING:
@@ -381,8 +381,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET ProdPack WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -406,7 +406,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO TRANS:  /* other customers  */
        RUN local-find-this(FALSE).                                        
-       RUN Mc/custpp(CustPP.ProdPack).
+       RUN Mc/custpp.p(CustPP.ProdPack).
 
        ufkey = TRUE.
        NEXT LOOP.
@@ -416,7 +416,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO TRANS:  /* Package Contains */
        RUN local-find-this(FALSE).                                        
 
-       RUN Mc/ppcomp(CustPP.ProdPack). 
+       RUN Mc/ppcomp.p(CustPP.ProdPack). 
 
        ufkey = TRUE.
        NEXT LOOP.
@@ -426,7 +426,7 @@ BROWSE:
      IF LOOKUP(nap,"4,F4") > 0 THEN DO TRANS: /* memo */
        FIND CustPP WHERE RECID(CustPP) = rtab[FRAME-LINE(sel)]
        NO-LOCK NO-ERROR.
-       RUN Mc/memo(INPUT CustPP.CustNum,
+       RUN Mc/memo.p(INPUT CustPP.CustNum,
                 INPUT "CUSTPP",
                 INPUT STRING(CustPP.CustPP),
                 INPUT "Customer Prodpack").
@@ -496,8 +496,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CustPP.ProdPack.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustPP).

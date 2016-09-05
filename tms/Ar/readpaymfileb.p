@@ -89,7 +89,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN Ar/readpaymfile (ttFiles.PaymFile,
+   RUN Ar/readpaymfile.p (ttFiles.PaymFile,
                      lcLogFile,
                      OUTPUT liRead,
                      OUTPUT liError).

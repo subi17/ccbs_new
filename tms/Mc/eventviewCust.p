@@ -141,7 +141,7 @@ form /* seek Eventlog  BY UserCode */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND User "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By TableName,   By User  ,   By Date   ,   By time   ".
@@ -359,7 +359,7 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-update-record.                       
        HIDE FRAME lis. /* NO-PAUSE.*/

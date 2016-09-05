@@ -222,7 +222,7 @@ ACTION:
    REPEAT WITH FRAME info:
 
       IF ask-data THEN DO ON ENDKEY UNDO, RETRY:
-         EHTO = 9. RUN Syst/ufkey. 
+         EHTO = 9. RUN Syst/ufkey.p. 
          UPDATE 
            FeeModel
            codate  
@@ -273,7 +273,7 @@ ACTION:
       ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0)
       ufk[8] = 8 ehto = 0.
       if FeeModel = "" THEN ufk[5] = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
 
       IF toimi = 1 THEN DO:
@@ -283,7 +283,7 @@ ACTION:
 
       IF toimi = 4 THEN DO:
          /* show items (contents) of this Billing Event */
-         RUN Mc/beitempl(FeeModel,lcPriceList).
+         RUN Mc/beitempl.p(FeeModel,lcPriceList).
          NEXT.
       END.
       ELSE IF TOIMI = 5 AND lcRight = "RW" THEN DO:

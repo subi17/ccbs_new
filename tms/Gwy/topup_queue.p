@@ -64,7 +64,7 @@ DO WHILE TRUE:
 
       IF NOT LOCKED(bufQueue) AND NOT ERROR-STATUS:ERROR THEN DO:
 
-         RUN Mm/topuppaym(TopUpQueue.PPRequest,
+         RUN Mm/topuppaym.p(TopUpQueue.PPRequest,
                        TopUpQueue.CLI,
                        TopUpQueue.TopUpAmt,
                        TopUpQueue.VatAmt,

@@ -26,11 +26,11 @@ form /* SIM PaymFile */
    FRAME SIMfile.
 
 DO WITH FRAME SIMfile :
-   RUN Syst/filebrowser(fCParam("SIM","ReadInSimFile")).
+   RUN Syst/filebrowser.p(fCParam("SIM","ReadInSimFile")).
 
    lcSIMfile = RETURN-VALUE.
 
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0.
 
    IF lcSIMfile = "" OR lcSIMfile = ? THEN LEAVE.
@@ -46,7 +46,7 @@ DO WITH FRAME SIMfile :
 
    lcProcessedDir = fCParam("SIM","ProcessedSimFile").
 
-   RUN Mm/simread(INPUT lcSIMfile,
+   RUN Mm/simread.p(INPUT lcSIMfile,
                INPUT lcProcessedDir,
                OUTPUT lcProcessedSIMFile).
 

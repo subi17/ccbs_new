@@ -232,7 +232,7 @@ FOR EACH bCredFee NO-LOCK WHERE
          bCredFee.CustPP    = 0                   AND 
          bCredFee.InUse     = TRUE:
 
-   RUN Mc/closefee (bCredFee.FFNum,
+   RUN Mc/closefee.p (bCredFee.FFNum,
                  idtEnd,
                  FALSE,
                  FALSE,

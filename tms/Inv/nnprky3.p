@@ -230,7 +230,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 END. /* toimi */
 
 ehto = 5.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
 ASSIGN llOk      = TRUE
        lcErrFile = "".
@@ -295,7 +295,7 @@ ELSE IF liPrintTo = 2 THEN DO:
    ASSIGN tila = TRUE.
    {Syst/utuloste.i "return"}
 
-   RUN Syst/umakro (lcMacros).
+   RUN Syst/umakro.p (lcMacros).
 END.
 
 /* cover sheet */
@@ -364,7 +364,7 @@ END.
 
 /* create fee */
 IF llCreFee THEN
-RUN Mc/creasfee (CustNum,
+RUN Mc/creasfee.p (CustNum,
               0,
               TODAY,
               "InvSpec",

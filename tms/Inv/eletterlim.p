@@ -129,7 +129,7 @@ REPEAT:
             LLtila xCredit llPrintService llInvType
             WITH FRAME rajat.
 
-    ehto = 9. RUN Syst/ufkey.
+    ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE 
        lano1
@@ -173,7 +173,7 @@ REPEAT:
     task:
     repeat WITH FRAME rajat:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT  limits.
       IF toimi = 8 THEN LEAVE limits.
 
@@ -210,7 +210,7 @@ REPEAT:
      
     END.
 
-    RUN Inv/eletterinv(INPUT lano1,
+    RUN Inv/eletterinv.p(INPUT lano1,
                    INPUT lano2,
                    INPUT Lpvm,
                    INPUT igroup,

@@ -112,7 +112,7 @@ END.
         RETURN appl_err("Change exceeds the monthly limit ").
 
  /* create FAtime */
- RUN Mc/creafat (MobSub.CustNum,
+ RUN Mc/creafat.p (MobSub.CustNum,
               MobSub.MsSeq,
               lcFatGroup,
               ldAmt,

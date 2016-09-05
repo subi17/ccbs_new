@@ -63,7 +63,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN Inv/dd_bankacc_change (ttFiles.CSBFile,
+   RUN Inv/dd_bankacc_change.p (ttFiles.CSBFile,
                           OUTPUT liRead,
                           OUTPUT liChanged,
                           OUTPUT liError).

@@ -71,7 +71,7 @@ form /*  search WITH FIELD pnpgroup */
     with row 4 col 2 title color value(ctc) " FIND xxxxxxx "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -97,12 +97,12 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* pnpgroup -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            CREATE pnpgroup.
@@ -315,9 +315,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        haku-pnpgroup = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE haku-pnpgroup WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        if haku-pnpgroup <> "" THEN DO:
@@ -399,7 +399,7 @@ BROWSE:
 
        RUN Mc/pnplist.p(INPUT pnpgroup.pnpSeq, INPUT pnpgroup.pnpgroup).
        ufkey = true.
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
        PAUSE 0.
      END.
 
@@ -419,9 +419,9 @@ BROWSE:
             recid(pnpgroup) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN Syst/ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        RUN LOCAL-UPDATE-RECORD(FALSE).
        

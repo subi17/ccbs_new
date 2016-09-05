@@ -211,7 +211,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                 DISPLAY lcCode @ lcRepCodes WITH FRAME rajat.
                 
                 ehto = 9.
-                RUN Syst/ufkey.
+                RUN Syst/ufkey.p.
                 
                 NEXT.
              END.
@@ -281,7 +281,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       END.
          
       ehto = 5. 
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       
       llOk = FALSE.
       

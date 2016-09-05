@@ -152,11 +152,11 @@ IF Order.CLIType EQ "TARJ5" THEN DO:
    END.
 END.
 
-RUN Mm/createcustomer(INPUT Order.OrderId,1,FALSE,TRUE,output oiCustomer).
+RUN Mm/createcustomer.p(INPUT Order.OrderId,1,FALSE,TRUE,output oiCustomer).
 
 ASSIGN Msrequest.CustNum = oiCustomer.
 
-RUN Mm/createcustomer(INPUT Order.OrderId,3,FALSE,TRUE,output oicustomer).
+RUN Mm/createcustomer.p(INPUT Order.OrderId,3,FALSE,TRUE,output oicustomer).
 
 FIND FIRST CLIType WHERE
            CLIType.CliType = Order.CLIType 
@@ -272,7 +272,7 @@ IF Avail imsi THEN Mobsub.imsi = IMSI.IMSI.
 
 /* Initial TopUp */
 IF MobSub.PayType = TRUE AND Order.Offer = "" THEN 
-   RUN Mm/topupcamp(MobSub.MsSeq, OUTPUT liPPRequest).
+   RUN Mm/topupcamp.p(MobSub.MsSeq, OUTPUT liPPRequest).
 
 /* additional topup */
 lcTaxZone = "".
@@ -347,14 +347,14 @@ IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
 fSetOrderStatus(Order.OrderId,"6").
 
 /* default services */
-RUN Mm/copysp(MobSub.MsSeq,
+RUN Mm/copysp.p(MobSub.MsSeq,
            MobSub.ActivationDate,
            TRUE,   /* new subs */
            TRUE).  /* silent */
 
 /* clitype spesific fees */
 IF AVAIL CliType AND CliType.FeeModel1 > "" THEN DO:
-   RUN Mc/creasfee (MobSub.CustNum,
+   RUN Mc/creasfee.p (MobSub.CustNum,
                  MobSub.MsSeq,
                  Today,
                  "MobSub",
@@ -372,7 +372,7 @@ IF AVAIL CliType AND CliType.FeeModel1 > "" THEN DO:
 END.
 
 /* general fees */
-RUN Mc/creasfee (MobSub.CustNum,
+RUN Mc/creasfee.p (MobSub.CustNum,
               MobSub.MsSeq,
               Today,
               "MobSub",
@@ -390,7 +390,7 @@ RUN Mc/creasfee (MobSub.CustNum,
 
 /* add initial fees and additional cost (delivery charge) and cash invoice */
 IF Order.InvNum > 0 THEN
-   RUN Mc/cashfee (Order.OrderID,
+   RUN Mc/cashfee.p (Order.OrderID,
              1,                     /* action 1=create fees */
              OUTPUT lcCharValue,
              OUTPUT ldAmount,
@@ -442,7 +442,7 @@ IF Order.FatAmount NE 0 OR Order.FtGrp > "" THEN DO:
    IF lcFatGroup = ? OR lcFatGroup = "" THEN 
       lcError = "FATime group for campaign not defined".
       
-   ELSE RUN Mc/creafat (MobSub.CustNum,
+   ELSE RUN Mc/creafat.p (MobSub.CustNum,
                      MobSub.MsSeq,
                      lcFatGroup,
                      Order.FatAmount,

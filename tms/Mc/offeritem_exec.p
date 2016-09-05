@@ -225,7 +225,7 @@ PROCEDURE pFatime:
          THEN RETURN "".
    END.
 
-   RUN Mc/creafat (MobSub.CustNum,
+   RUN Mc/creafat.p (MobSub.CustNum,
                 MobSub.MsSeq,
                 OfferItem.ItemKey,      /* FatGroup  */
                 OfferItem.Amount,

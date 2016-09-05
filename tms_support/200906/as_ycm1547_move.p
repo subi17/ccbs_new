@@ -451,7 +451,7 @@ PROCEDURE pReRate:
    DEFINE INPUT PARAMETER idtFrom  AS DATE NO-UNDO.
    DEFINE INPUT PARAMETER icCLI    AS CHAR NO-UNDO.
  
-   RUN Rate/cli_rate (icCLI,
+   RUN Rate/cli_rate.p (icCLI,
                  idtFrom,
                  6/30/9,
                  TRUE).    
@@ -464,7 +464,7 @@ PROCEDURE pPrepaidRate:
    DEFINE INPUT PARAMETER idtFrom  AS DATE NO-UNDO.
    DEFINE INPUT PARAMETER icCLI    AS CHAR NO-UNDO.
 
-   RUN Rate/cli_prepaidrate (icCLI,      
+   RUN Rate/cli_prepaidrate.p (icCLI,      
                         idtFrom, 
                         6/30/9,     
                         TRUE).      /* silent = true */  

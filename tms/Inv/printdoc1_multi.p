@@ -107,7 +107,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 63  
          ufk[8] = 8 
          ehto   = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
    END.
    ELSE ASSIGN toimi = 1
                ufkey = TRUE.
@@ -115,7 +115,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    IF toimi = 1 THEN DO:
 
       ehto = 9. 
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
@@ -146,7 +146,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       liPreQty = 0.
       
       DO liDelType = 1 TO 11 BY 1:
-         RUN Inv/printdoc1co ("",
+         RUN Inv/printdoc1co.p ("",
                           0,
                           99999999,
                           "",
@@ -181,7 +181,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          NEXT.
       END.
       
-      RUN Inv/printdoc1_split (ldtInvDate,
+      RUN Inv/printdoc1_split.p (ldtInvDate,
                            llOnlyNew,
                            llInvType,
                            lcPrintHouse,
@@ -198,7 +198,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       /* create new screens for actual printing */
       IF lcFileList > "" THEN DO:
 
-         RUN Inv/printdoc1_start_screens (ldtInvDate,
+         RUN Inv/printdoc1_start_screens.p (ldtInvDate,
                                       lcFileList,
                                       "Doc1",
                                       TRUE).

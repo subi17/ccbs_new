@@ -74,7 +74,7 @@ repeat:
       next.
    end.
 
-   run /home/ari/work/creafat.p (msowner.invcust,
+   RUN /home/ari/work/creafat.p (msowner.invcust,
                   msowner.msseq,
                   lcfatgrp,
                   ldamt,

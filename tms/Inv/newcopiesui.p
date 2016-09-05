@@ -73,7 +73,7 @@ REPEAT WITH FRAME Main:
           ufk[5] = 9813
           ufk[8] = 8
           ehto = 3.
-   RUN Syst/ufkey.
+   RUN Syst/ufkey.p.
    UPDATE lcMSISDNFile GO-ON(F1 F4 F5)
    WITH FRAME MAIN EDITING:
       READKEY.
@@ -148,7 +148,7 @@ REPEAT WITH FRAME Main:
       APPLY LASTKEY.
    END. /* Action */
 
-   RUN Inv/newcopies2(
+   RUN Inv/newcopies2.p(
        lcMSISDNDir, lcInvoiceStatusDir, lcInvoiceStatisticsDir,
        lcTmpDir, lcInvoiceDir,
        lcMSISDNFile, 
@@ -182,7 +182,7 @@ PROCEDURE pDoAction:
 
       IF iCountFiles > 0 THEN
       DO:
-         RUN Syst/filebrowser(lcMSISDNDir).
+         RUN Syst/filebrowser.p(lcMSISDNDir).
          lcMSISDNFile = RETURN-VALUE.
          DISP lcMSISDNFile WITH FRAME Main.
          plNextMain = TRUE.

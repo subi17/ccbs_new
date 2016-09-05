@@ -66,7 +66,7 @@ for each prepaidrequest no-lock where
                liaccount[1 for 2] format ">>>>>>>9" skip(1).
           */
 
-          RUN Ar/createpaym (payment.CustNum,
+          RUN Ar/createpaym.p (payment.CustNum,
                           payment.InvNum,
                           prepaidrequest.CLI,
                           ldtacc,

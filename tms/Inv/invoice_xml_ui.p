@@ -228,7 +228,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 63  
          ufk[8] = 8 
          ehto   = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
    END.
    ELSE ASSIGN toimi = 1
                ufkey = TRUE.
@@ -236,7 +236,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    IF toimi = 1 THEN DO:
 
       ehto = 9. 
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       
       liPreQty = 0.
       
@@ -284,7 +284,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                END.
                 
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 
@@ -336,7 +336,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    /* quantity of invoices */ 
    ELSE IF toimi = 3 THEN DO:
       
-      RUN Inv/printdoc1co (lcInvGroup,
+      RUN Inv/printdoc1co.p (lcInvGroup,
                        liCustNum[1],
                        liCustNum[2],
                        lcInvID[1],
@@ -369,7 +369,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       IF liInvType = 99 THEN 
          lcFile = lcTransDir + "*" + lcFile.
          
-      RUN Inv/printdoc1co (lcInvGroup,
+      RUN Inv/printdoc1co.p (lcInvGroup,
                        liCustNum[1],
                        liCustNum[2],
                        lcInvID[1],

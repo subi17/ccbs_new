@@ -156,16 +156,16 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
          IF NOT llOk THEN NEXT.
 
          ehto = 5.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
 
          /* collect customers */
-         RUN Mc/camprunco (liCustNum1,
+         RUN Mc/camprunco.p (liCustNum1,
                         liCustNum2,
                         ldtDate1,
                         ldtDate2,
                         OUTPUT TABLE ttCust).
                           
-         RUN Mc/camprun (INPUT TABLE ttCust,
+         RUN Mc/camprun.p (INPUT TABLE ttCust,
                       lcCampaign1,
                       lcCampaign2,
                       0,       /* use cli periods */

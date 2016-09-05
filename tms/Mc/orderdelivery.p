@@ -85,7 +85,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 LOOP:
@@ -145,7 +145,7 @@ BROWSE:
         ufk[1]= 0  ufk[2]= 0 ufk[3]= 0
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -412,7 +412,7 @@ END PROCEDURE.
 PROCEDURE local-view-record:
 
    ufk = 0.
-   RUN Syst/ufkey.
+   RUN Syst/ufkey.p.
 
    RUN local-find-this(FALSE).
   

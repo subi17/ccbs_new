@@ -41,7 +41,7 @@ ASSIGN
    lcFile = REPLACE(lcFile,"#TIME",REPLACE(STRING(TIME,"hh:mm:ss"),":",""))
    lcFile = lcSpoolDir + "/" + lcFile.
 
-RUN Mm/readorderrep (TODAY,
+RUN Mm/readorderrep.p (TODAY,
                   "yoigo",  
                   "gift",
                   lcFile,

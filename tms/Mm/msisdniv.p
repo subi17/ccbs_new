@@ -91,7 +91,7 @@ rajat:
 repeat WITH FRAME rajat:
 
    PAUSE 0.
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE pvm1 pvm2
    validate (input pvm2 >= input pvm1,"Incorrect order !").
@@ -99,7 +99,7 @@ repeat WITH FRAME rajat:
    toimi:
    repeat WITH FRAME toimi:
       ASSIGN ufk = 0 ehto = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT  rajat.
       IF toimi = 8 THEN LEAVE rajat.
       IF toimi = 5 THEN LEAVE toimi.

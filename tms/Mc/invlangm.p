@@ -10,6 +10,6 @@
 
 {Syst/commali.i}
 
-RUN Mc/invlang (0,
+RUN Mc/invlang.p (0,
              "").
              

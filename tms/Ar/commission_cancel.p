@@ -101,7 +101,7 @@ PROCEDURE pCancelCommission:
 
       /*check all barrings, that are they in list*/
       IF fIsInList(lcDebtBarring, lcBarring) EQ TRUE THEN DO:
-         RUN Ar/commission_term(MobSub.MsSeq,
+         RUN Ar/commission_term.p(MobSub.MsSeq,
                              "Debt",
                              OUTPUT liDone).
 

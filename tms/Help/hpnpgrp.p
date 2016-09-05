@@ -42,7 +42,7 @@ form /* SEEK code */
     with row 4 col 2 title color value(ctc) " FIND NAME "
     color value(cfc) no-labels overlay frame f2.
 
-cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 MAIN:
 repeat:
 
@@ -237,8 +237,8 @@ BROWSE:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* PNPGroup */
-           cfc = "puyr". RUN Syst/ufcolor.
-           ehto = 9. RUN Syst/ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set PNPGroup with frame f1.
            hide frame f1 no-pause.
            if PNPGroup ENTERED then do:
@@ -260,8 +260,8 @@ BROWSE:
         /* Seek */
 
         if lookup(nap,"2,f2") > 0 then do:  /* PNPGroup */
-           cfc = "puyr". RUN Syst/ufcolor.
-           ehto = 9. RUN Syst/ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set Name with frame f2.
            hide frame f2 no-pause.
            if PNPGroup ENTERED then do:

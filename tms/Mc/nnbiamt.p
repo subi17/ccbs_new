@@ -95,7 +95,7 @@ repeat WITH FRAME frm:
 
    HIDE MESSAGE no-pause.
 
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    repeat WITH FRAME frm ON ENDKEY UNDO, LEAVE:
       UPDATE 
             date1   
@@ -134,7 +134,7 @@ repeat WITH FRAME frm:
                APPLY LAST-KEY.
                READKEY.
                /* TMSCODE VALIDATE */
-               RUN Syst/v-tmscodes(INPUT "Invoice",    /* TableName */
+               RUN Syst/v-tmscodes.p(INPUT "Invoice",    /* TableName */
                                     "PrintState", /* FieldName */
                                     "Report",     /* GroupCode */
                               INPUT INPUT status1,
@@ -151,7 +151,7 @@ repeat WITH FRAME frm:
                APPLY LAST-KEY.
                READKEY.
                /* TMSCODE VALIDATE */
-               RUN Syst/v-tmscodes(INPUT "Invoice",    /* TableName */
+               RUN Syst/v-tmscodes.p(INPUT "Invoice",    /* TableName */
                                     "PrintState", /* FieldName */
                                     "Report",     /* GroupCode */
                               INPUT INPUT status2,
@@ -179,7 +179,7 @@ repeat WITH FRAME frm:
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT  CRIT.
       IF toimi = 8 THEN LEAVE CRIT.
 

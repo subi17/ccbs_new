@@ -26,7 +26,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhCostCentre).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhCostCentre).
+      RUN Mc/eventview2.p(lhCostCentre).
    END.
 
 END.
@@ -92,7 +92,7 @@ form /* seek  CCName */
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code  ," +
@@ -120,14 +120,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CostCentre  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE ADD-ROW:
 
@@ -370,8 +370,8 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        /* Search BY column 1 */
-          cfc = "puyr". RUN Syst/ufcolor.
-          ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+          cfc = "puyr". RUN Syst/ufcolor.p.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f1.
           DISPLAY lcBrand WITH FRAME F1.
           UPDATE lcBrand WHEN gcAllBrand
@@ -392,8 +392,8 @@ BROWSE:
 
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-          cfc = "puyr". RUN Syst/ufcolor.
-          ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+          cfc = "puyr". RUN Syst/ufcolor.p.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f2.
           DISPLAY lcBrand WITH FRAME F2.
           UPDATE lcBrand WHEN gcAllBrand
@@ -503,7 +503,7 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCostCentre).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CostCentre.CCName.
 
        RUN local-UPDATE-record.                                  
@@ -629,7 +629,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE
          CostCentre.CCName

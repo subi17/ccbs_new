@@ -34,7 +34,7 @@ form /* SEEK Code */
     with row 4 col 2 title color value(ctc) " FIND CODE "
     color value(cfc) no-labels overlay frame hayr.
 
-cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 
 MAIN:
 repeat:
@@ -191,8 +191,8 @@ BROWSE:
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*Service*/
-           cfc = "puyr". RUN Syst/ufcolor.
-           ehto = 9. RUN Syst/ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set Service with frame hayr.
            hide frame hayr no-pause.
            if Service ENTERED then do:

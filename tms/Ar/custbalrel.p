@@ -94,7 +94,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
       pause 0.
 
@@ -151,14 +151,14 @@ END. /* toimi */
 
 {Syst/utuloste.i "return"}
 
-RUN Ar/custbalrep (liCustNum,
+RUN Ar/custbalrep.p (liCustNum,
                 ldtFromDate).
 
 tila = FALSE.
 {Syst/utuloste.i}
 
 IF llCreaFee THEN 
-RUN Mc/creasfee (Customer.CustNum,
+RUN Mc/creasfee.p (Customer.CustNum,
               0,
               TODAY,
               "PRINTS",

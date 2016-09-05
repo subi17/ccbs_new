@@ -48,7 +48,7 @@ IF liITNum = 0 THEN DO:
    RETURN.
 END.
 
-RUN Mc/printxt (iiCustNum,    /* letter to the one who ordered the change */
+RUN Mc/printxt.p (iiCustNum,    /* letter to the one who ordered the change */
              PaymPlan.PPlanID, 
              "PP",
              1,  /* 1=invtext */

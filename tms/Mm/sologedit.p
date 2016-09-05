@@ -98,7 +98,7 @@ REPEAT:
      ufk[8] = 8. /* RETURN */
    IF num = 1 THEN ufk[5] = 0.
    IF num = amt THEN ufk[6] = 0.
-   RUN Syst/ufkey.
+   RUN Syst/ufkey.p.
    ASSIGN nap = keylabel(LASTKEY).
 
    IF lookup(nap,"f1,1") > 0 THEN DO:

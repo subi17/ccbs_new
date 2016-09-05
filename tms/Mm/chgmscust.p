@@ -457,7 +457,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
          ufk[5]= 1027 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
          ehto = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
    END.
 
    ELSE ASSIGN toimi = 1  
@@ -482,7 +482,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
 
                IF FRAME-FIELD = "liNewCust1" THEN DO:
 
-                  RUN Help/h-customer (Customer.AgrCust,
+                  RUN Help/h-customer.p (Customer.AgrCust,
                                   "agrcust",
                                   "all").
                    
@@ -494,7 +494,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                END. 
 
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                NEXT.
             END. 
  
@@ -624,7 +624,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                        
                       IF icChgType = "user" THEN DO:
                       
-                         RUN Help/h-customer (Customer.AgrCust,
+                         RUN Help/h-customer.p (Customer.AgrCust,
                                          "agrcust",
                                          "invcust").
                       END.
@@ -641,7 +641,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                    END. 
     
                    ehto = 9.
-                   RUN Syst/ufkey.
+                   RUN Syst/ufkey.p.
                    NEXT.
                 END. 
                 
@@ -878,7 +878,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
       END.
       
       ehto = 5.   
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       IF ldtChgDate = ? 
       THEN ldChgStamp = fMakeTS().

@@ -20,7 +20,7 @@ do limonth = 200901 to 200907:
    pause 0.
    disp limonth format "999999" with 1 down.
    
-   run /home/ari/work/ifs_invoice_monthly.p(32, 
+   RUN /home/ari/work/ifs_invoice_monthly.p(32, 
                                             lcdir + 
                                             "INVOICES_SERVICE_" + 
                                                STRING(liMonth) + ".DAT",
@@ -46,7 +46,7 @@ do limonth = 200901 to 200909:
    pause 0.
    disp limonth format "999999" with 1 down.
    
-   run /home/ari/work/ifs_invoice_monthly.p(35, 
+   RUN /home/ari/work/ifs_invoice_monthly.p(35, 
                                             lcdir + 
                                             "INVOICES_SALES_" + 
                                                STRING(liMonth) + ".DAT",

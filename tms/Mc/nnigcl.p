@@ -48,18 +48,18 @@ WITH
     OVERLAY  width 80
     FRAME frm.
 
-cfc = "kline".  RUN Syst/ufcolor.
+cfc = "kline".  RUN Syst/ufcolor.p.
 
 LOOP:
 repeat WITH FRAME frm:
 
-  ehto = 9. RUN Syst/ufkey.
+  ehto = 9. RUN Syst/ufkey.p.
   UPDATE InvGroup WITH FRAME frm.
 
    toimi:
       repeat WITH FRAME LOOP:
          ASSIGN ufk = 0 ehto = 0 ufk[1] = 7 ufk[5] = 795 ufk[8] = 8.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          IF toimi = 1 THEN NEXT  toimi.
          IF toimi = 5 THEN LEAVE toimi.
          IF toimi = 8 THEN LEAVE LOOP.

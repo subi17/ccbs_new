@@ -60,7 +60,7 @@ lcTypes = "0,81,9".
 lcStatuses = "0,1,2,3,4,5,6,7,8". 
 lcTypeDesc = "---STC---,---BTC---,---Manual contract terminations---".
 
-ehto = 4. RUN Syst/ufkey.
+ehto = 4. RUN Syst/ufkey.p.
 
 LOOPPI:
 DO liTypeLoop = 1 TO NUM-ENTRIES(lcTypes) WITH FRAME lis:

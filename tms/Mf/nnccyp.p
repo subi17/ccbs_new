@@ -93,7 +93,7 @@ form /* UPDATE whitelist FileName */
     title color value(cfc) " ADD OPENED NUMBERS TO A File "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME wl.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 ASSIGN
@@ -121,7 +121,7 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* ClosedCust -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
    END.
 
 /* ADDING DISABLED
@@ -129,7 +129,7 @@ add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR ClosedCust.CustNum
            VALIDATE
@@ -411,9 +411,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        CustNum = ?.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustNum WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        IF CustNum <> ? THEN DO:
@@ -433,9 +433,9 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        Date = ?.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Date WITH FRAME haku-f2.
        HIDE FRAME haku-f2 no-pause.
        IF Date <> ? THEN DO:
@@ -502,7 +502,7 @@ BROWSE:
 
      /* append numbers TO monthly File where State AND Printed are FALSE */
      if lookup(nap,"5,f5") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         whitelist = whitelist + 
                     "wlo-" + substr(string(Month,"999999"),3) + ".dat".
         PAUSE 0.
@@ -632,8 +632,8 @@ BROWSE:
        FIND ClosedCust where recid(ClosedCust) = rtab[frame-line(sel)] exclusive-lock.
        IF ClosedCust.Printed = FALSE THEN DO:
           assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-          RUN Syst/ufkey.
-          cfc = "lis". RUN Syst/ufcolor.
+          RUN Syst/ufkey.p.
+          cfc = "lis". RUN Syst/ufcolor.p.
           DISPLAY ClosedCust.CustNum ClosedCust.Date ClosedCust.DateOpen.
           UPDATE ClosedCust.State.
           HIDE FRAME lis no-pause.

@@ -78,7 +78,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     FRAME sel.
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = " By CLI ,  By Name  ,By 3, By 4".
@@ -155,7 +155,7 @@ BROWSE:
         ufk[7] = 2808
         ufk[8] = 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.

@@ -58,7 +58,7 @@ DO WITH FRAME summary:
    PAUSE 0 no-message.
    disp "ALL" @ InvGroup.IGName.
 
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
    date1 
    date2 validate(input date2 >= input date1,"Invalid order !")
@@ -75,7 +75,7 @@ ok = FALSE.
 message "Are You SURE that You want to start (Y/N) ? " UPDATE ok.
 
 IF ok THEN DO:
-   ufk = 0. ehto = 4. RUN Syst/ufkey.
+   ufk = 0. ehto = 4. RUN Syst/ufkey.p.
    message "Calculating ...".    
    FOR EACH FixCDR no-lock where 
             FixCDR.Date >= date1 AND 

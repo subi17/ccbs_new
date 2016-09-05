@@ -68,9 +68,9 @@ If NOT llOL THEN DISP
    "Reading CDR file:" @ callrec WITH FRAME err.
 
 ehto = 3.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
    
-RUN Syst/ufxkey(8,3).
+RUN Syst/ufxkey.p(8,3).
 
 IF NOT llOL THEN INPUT STREAM sCDR FROM VALUE(lcFileName).
    

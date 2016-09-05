@@ -94,7 +94,7 @@ form
     " Effect " + PrintCodes.Effect + " INTERPRETED " side-labels centered
     FRAME nakym.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 FIND FIRST TMSPrinter where TMSPrinter.PrinterId = si-kirj no-lock no-error.
 FIND FIRST PrintCodes where PrintCodes.PrinterId = si-kirj no-lock no-error.
@@ -125,12 +125,12 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
       ufkey = TRUE
       fr-header = " ADD A NEW RECORD ".
 
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis:
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          PROMPT-FOR PrintCodes.Effect.
          if input PrintCodes.Effect = "" THEN LEAVE add-new.
 
@@ -382,14 +382,14 @@ BROWSE:
           /* PrintCode.EffOnA2A & PrintCode.EffOffA2A print-line apuframelle. */
           PAUSE 0 no-message.
           FIND PrintCodes where recid(PrintCodes) = rtab[frame-line(sel)] no-lock.
-          cfc = "lis". RUN Syst/ufcolor.
+          cfc = "lis". RUN Syst/ufcolor.p.
           DISPLAY PrintCode.EffOn[2] PrintCode.EffOff[2] WITH FRAME nakym.
           pause message "Press Entrer !".               
           HIDE FRAME nakym.
      END.
 
      else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" THEN DO:  /* removal */
-        cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+        cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
         delline = FRAME-LINE.
         FIND PrintCodes where recid(PrintCodes) = rtab[FRAME-LINE] no-lock.
 
@@ -443,8 +443,8 @@ BROWSE:
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPrintCodes).
         ASSIGN
         fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        RUN Syst/ufkey.
-        cfc = "lis". RUN Syst/ufcolor.
+        RUN Syst/ufkey.p.
+        cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY 
             PrintCodes.Effect
             EffName 

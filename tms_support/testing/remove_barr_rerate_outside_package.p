@@ -65,7 +65,7 @@ for each mobsub no-lock where mobsub.paytype = false:
          FIND FIRST bMsRequest WHERE
                     ROWID(bMsRequest) = llrowid NO-LOCK NO-ERROR.
          IF AVAIL bMsRequest AND bMsRequest.SMSTEXT BEGINS "TOTAL" THEN DO:
-            RUN Mm/barrengine(
+            RUN Mm/barrengine.p(
                 MobSub.MsSeq,
                 "UNY_REST",
                 "5",

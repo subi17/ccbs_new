@@ -90,7 +90,7 @@ form
     TITLE COLOR value(ctc) fr-header WITH side-labels
     FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 PAUSE 0 no-message.
 view FRAME sel.
 FIND FIRST TMSReport no-lock no-error.
@@ -116,12 +116,12 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
       cfc = "lis"
       ufkey = TRUE
       fr-header = " ADD ".
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis:
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          PROMPT-FOR TMSReport.RepName
          VALIDATE
             (RepName = "" OR
@@ -400,7 +400,7 @@ BROWSE:
         FIND TMSReport where recid(TMSReport) = rtab[frame-line(sel)]
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        cfc = "lis". RUN Syst/ufcolor.
+        cfc = "lis". RUN Syst/ufcolor.p.
         moremail = SUBSTRING(TMSReport.EMail,51,50).
         DISPLAY 
             TMSReport.RepName
@@ -412,7 +412,7 @@ BROWSE:
 
         IF lcRight = "RW" THEN DO :
 
-           RUN Syst/ufkey.
+           RUN Syst/ufkey.p.
 
            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTMSReport).
 

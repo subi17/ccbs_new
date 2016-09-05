@@ -28,7 +28,7 @@ ASSIGN
    lcReqType  = "InvReq"
    ldActStamp = MsRequest.ActStamp.
 
-RUN Inv/lamupers PERSISTENT SET hInvRun.
+RUN Inv/lamupers.p PERSISTENT SET hInvRun.
 
 
 /* exceptionally handle all type 20 requests at the same time, 
@@ -165,7 +165,7 @@ PROCEDURE pODInvoice:
    /* fee for creating an invoice */
    IF MsRequest.CreateFees THEN DO:
    
-      RUN Mc/creasfee (MsRequest.CustNum,
+      RUN Mc/creasfee.p (MsRequest.CustNum,
                     0,
                     TODAY,
                     "ODInvoice",

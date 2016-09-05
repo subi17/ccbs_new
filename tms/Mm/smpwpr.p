@@ -50,7 +50,7 @@ if count = 0 then do:
    RETURN.
 end.   
 
-ehto = 9. RUN Syst/ufkey.
+ehto = 9. RUN Syst/ufkey.p.
 UPDATE 
    lcEMail with frame rajat.
 

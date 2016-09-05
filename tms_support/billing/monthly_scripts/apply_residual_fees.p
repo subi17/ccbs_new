@@ -2,7 +2,7 @@
    Customer data must be in this order and delimited with ;
    MSISDN;SubscriptionID;Importe;ContractName;Valid To
    Change input and output filenames according to ticket.
-   Before actual RUN Mm/simulation can be done with 
+   Before actual RUN Mm/simulation.p can be done with 
    llcreatefee false value */
 
 {Func/timestamp.i}

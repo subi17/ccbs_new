@@ -130,7 +130,7 @@ form /* UPDATE whitelist FileName */
     title color value(cfc) " ADD CLOSED NUMBERS TO A File "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME wl.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST MthCall
@@ -169,13 +169,13 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* MthCall -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new:
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         ASSIGN CustNum = 0 Month = 0 Limit = 0 Called = 0 CloseDate = ?.
         UPDATE CustNum Month Limit Called CloseDate WITH FRAME lis EDITING:
            READKEY.
@@ -492,9 +492,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        seek-cust-nr = ?.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE seek-cust-nr WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        IF seek-cust-nr <> ? THEN DO:
@@ -515,9 +515,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        seek-mth = ?.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE seek-mth WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        IF seek-mth <> ? THEN DO:
@@ -563,7 +563,7 @@ BROWSE:
      /* change ALL FOR active MONTH */
      if lookup(nap,"4,f4") > 0 AND lcRight = "RW" THEN DO:
         FIND MthCall where recid(MthCall) = rtab[FRAME-LINE] no-lock.
-        RUN Mf/nnmtyp2(MthCall.Month).
+        RUN Mf/nnmtyp2.p(MthCall.Month).
         ASSIGN must-print = TRUE ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -571,7 +571,7 @@ BROWSE:
      /* append numbers TO monthly File where Printed is FALSE */
      if lookup(nap,"5,f5") > 0 AND lcRight = "RW" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP: 
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         whitelist = whitelist + 
                     "wlc-" + substr(string(Month,"999999"),3) + ".dat".
 
@@ -709,8 +709,8 @@ BROWSE:
        exclusive-lock.
        IF MthCall.Printed = FALSE THEN DO:
           assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-          RUN Syst/ufkey.
-          cfc = "lis". RUN Syst/ufcolor.
+          RUN Syst/ufkey.p.
+          cfc = "lis". RUN Syst/ufcolor.p.
           FIND Customer where
                Customer.CustNum = MthCall.CustNum no-lock no-error.
           IF AVAIL Customer THEN cust-name = CustName.
@@ -735,7 +735,7 @@ BROWSE:
 /*
      /* change ALL FOR active MONTH */
      if lookup(nap,"7,f7") > 0 THEN DO:
-        RUN Mc/nnigcl(Month).
+        RUN Mc/nnigcl.p(Month).
         ASSIGN must-print = TRUE ufkey = TRUE.
         NEXT LOOP.
      END.

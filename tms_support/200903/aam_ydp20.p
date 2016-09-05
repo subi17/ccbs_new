@@ -57,7 +57,7 @@ for each msrequest no-lock where
                output ldtactdate,
                output litime).
                
-      RUN Mc/creasfee (Msrequest.CustNum,
+      RUN Mc/creasfee.p (Msrequest.CustNum,
                     MsRequest.MsSeq,
                     ldtActDate,
                     "FeeModel",

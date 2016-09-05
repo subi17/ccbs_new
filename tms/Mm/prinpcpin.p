@@ -51,7 +51,7 @@ IF liITNum = 0 THEN DO:
    RETURN.
 END.
 
-RUN Mc/printxt (Customer.CustNum,
+RUN Mc/printxt.p (Customer.CustNum,
              iiRequest, 
              "RQ",
              1,  /* 1=invtext */

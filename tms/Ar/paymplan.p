@@ -42,7 +42,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhPPInv).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhPaymPlan).
+      RUN Mc/eventview2.p(lhPaymPlan).
    END.
 
 END.
@@ -346,7 +346,7 @@ ASSIGN lcPassword  = fCParamC("MsAddressChg")
        lcAdminPwd  = fCParamC("PaymPlanCreditControl").
 IF lcPassword = ? THEN lcPassword = "".
  
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 ASSIGN orders    = " By Date     ," + 
@@ -402,14 +402,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a PaymPlan  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -528,7 +528,7 @@ REPEAT WITH FRAME sel:
         
          IF liAutoRun = 0 THEN DO:
             ufkey = FALSE.
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
          END.
       END.
 
@@ -697,8 +697,8 @@ REPEAT WITH FRAME sel:
      
         /* Search BY column 1 */
         IF toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           cfc = "puyr". RUN Syst/ufcolor.
-           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f1.
            DISPLAY lcBrand WITH FRAME F1.
            UPDATE lcBrand WHEN gcAllBrand
@@ -732,8 +732,8 @@ REPEAT WITH FRAME sel:
 
         /* Search BY column 2 */
         ELSE IF toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           cfc = "puyr". RUN Syst/ufcolor.
-           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f2.
            DISPLAY lcBrand WITH FRAME F2.
            UPDATE lcBrand WHEN gcAllBrand
@@ -755,8 +755,8 @@ REPEAT WITH FRAME sel:
 
         /* Search BY column 3 */
         ELSE IF toimi = 3 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           cfc = "puyr". RUN Syst/ufcolor.
-           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f3.
            DISPLAY lcBrand WITH FRAME F3.
            UPDATE lcBrand WHEN gcAllBrand
@@ -815,7 +815,7 @@ REPEAT WITH FRAME sel:
               ldtToDate   = ?
               ehto        = 9
               ufkey       = TRUE.
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
         
        REPEAT ON ENDKEY UNDO, LEAVE:
        
@@ -905,7 +905,7 @@ REPEAT WITH FRAME sel:
           HIDE FRAME fCreate NO-PAUSE.
             
           IF ok THEN DO:
-             RUN Ar/pplancre (liCustNum,
+             RUN Ar/pplancre.p (liCustNum,
                            0,
                            liDue,
                            liBatch,
@@ -951,7 +951,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
        liAutoRun = 0.
        IF AVAILABLE PaymPlan 
-       THEN RUN Ar/ppinv (PaymPlan.PPlanID,
+       THEN RUN Ar/ppinv.p (PaymPlan.PPlanID,
                        FALSE, /* automatic mode */
                        OUTPUT llMoveOn). 
        ASSIGN gcHelpParam = ""
@@ -965,7 +965,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this (FALSE).
        liAutoRun = 0.
        IF AVAILABLE PaymPlan 
-       THEN RUN Ar/ppbatch (PaymPlan.PPlanID,
+       THEN RUN Ar/ppbatch.p (PaymPlan.PPlanID,
                          liBatch,
                          ldtFromDate,
                          ldtToDate,
@@ -1072,7 +1072,7 @@ REPEAT WITH FRAME sel:
         
         ufkey = TRUE.
      
-        RUN Mc/memo(PaymPlan.CustNum,
+        RUN Mc/memo.p(PaymPlan.CustNum,
                  "PaymPlan",
                  STRING(PaymPlan.PPlanID),
                  "Payment Plan").
@@ -1087,7 +1087,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPaymPlan).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PaymPlan.CustNum.
 
        RUN local-UPDATE-record.                                  
@@ -1356,7 +1356,7 @@ PROCEDURE local-UPDATE-record:
             (PaymPlan.PPStatus = 7 AND iiStatus = 7)
          THEN ufk[7] = 1063.
        
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          
          IF toimi = 1 THEN DO:
         
@@ -1378,7 +1378,7 @@ PROCEDURE local-UPDATE-record:
                IF lcAskPassWd NE lcPassword THEN NEXT. 
             END.
 
-            ehto = 9. RUN Syst/ufkey.
+            ehto = 9. RUN Syst/ufkey.p.
       
             FIND CURRENT PaymPlan EXCLUSIVE-LOCK.
             
@@ -1421,7 +1421,7 @@ PROCEDURE local-UPDATE-record:
                   END.
                
                   ehto = 9.
-                  RUN Syst/ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT. 
                END.
 
@@ -1492,7 +1492,7 @@ PROCEDURE local-UPDATE-record:
          ELSE IF toimi = 3 THEN DO:
          
            IF AVAILABLE PaymPlan THEN 
-           RUN Mc/eventsel ("PaymPlan",
+           RUN Mc/eventsel.p ("PaymPlan",
                          STRING(PaymPlan.PPlanID)).
          END.
          
@@ -1531,7 +1531,7 @@ PROCEDURE local-UPDATE-record:
                liTargCust = fLetterCust().
 
                IF liTargCust > 0 THEN DO: 
-                  RUN Ar/prinpplan(PaymPlan.PPlanID,
+                  RUN Ar/prinpplan.p(PaymPlan.PPlanID,
                                 liTargCust,
                                 OUTPUT lcError).
                           
@@ -1616,7 +1616,7 @@ PROCEDURE local-UPDATE-record:
                      liTargCust = fLetterCust().
                        
                      IF liTargCust > 0 THEN DO:
-                        RUN Ar/prinpplan(PaymPlan.PPlanID,
+                        RUN Ar/prinpplan.p(PaymPlan.PPlanID,
                                       liTargCust, 
                                       OUTPUT lcError).
                                       
@@ -1697,7 +1697,7 @@ PROCEDURE local-UPDATE-record:
             IF ok THEN DO:
                REPEAT WITH FRAME fCancel ON ENDKEY UNDO, NEXT HandlePlan:
                   ehto = 9.
-                  RUN Syst/ufkey.
+                  RUN Syst/ufkey.p.
                   
                   PAUSE 0.
                   UPDATE lcCancelTxt 

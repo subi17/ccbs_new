@@ -8,9 +8,9 @@
                   20.03.03/aam one parameter added for tariff.p
                   27.03.03 kl BDest not used anymore
                   31.03.03 tk added order by name
-                  04.04.03 kl RUN Mc/tariff, new parameter
-                  26.06.03 kl RUN Mc/tariff, new parameter
-                  04.07.03 kl RUN Mc/tariff, new parameter
+                  04.04.03 kl RUN Mc/tariff,.p new parameter
+                  26.06.03 kl RUN Mc/tariff,.p new parameter
+                  04.07.03 kl RUN Mc/tariff,.p new parameter
                   16.09.03 jp Brand
                   15.03.04 tk eventlog
                   13.01.05/aam create fees for new group,
@@ -121,7 +121,7 @@ form /*  search WITH FIELD Name */
 with row 4 col 2 title color value(ctc) " FIND NAME "
    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -154,13 +154,13 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* PNPGroup -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            
@@ -188,7 +188,7 @@ repeat WITH FRAME sel:
               IF DAY(ldtDate) NE 1 
               THEN ldtDate = DATE(MONTH(ldtDate),1,YEAR(ldtDate)).
               
-              RUN Mc/creasfee (MobSub.CustNum,
+              RUN Mc/creasfee.p (MobSub.CustNum,
                             MobSub.MsSeq,
                             ldtDate,
                             "PNP",
@@ -422,9 +422,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        haku-PNPGroup = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME haku-f1.
        UPDATE lcBrand 
               haku-PNPGroup WITH FRAME haku-f1.
@@ -444,9 +444,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        haku-Name = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME haku-f2.
 
        UPDATE  lcBrand WHEN gcAllBrand = TRUE  
@@ -548,7 +548,7 @@ BROWSE:
        NO-LOCK NO-ERROR.
 
        IF PnpGroup.GroupType = 0 THEN 
-          RUN Mc/pnplist(PNPGroup.pnpSeq).
+          RUN Mc/pnplist.p(PNPGroup.pnpSeq).
        ELSE  RUN Mc/matepnplist.p(pnpgroup.pnpseq,pnpgroup.pnpgroup). 
        
        ufkey = true.
@@ -563,7 +563,7 @@ BROWSE:
         NO-LOCK NO-ERROR.
 
         ufkey = TRUE.
-        RUN Mc/tariff(2,PNPGroup.CCN,"",0,"",0).
+        RUN Mc/tariff.p(2,PNPGroup.CCN,"",0,"",0).
 
      END.
 
@@ -573,9 +573,9 @@ BROWSE:
             recid(PNPGroup) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN Syst/ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPNPGroup).
 
@@ -823,7 +823,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
             END.
                                                                  
             ELSE IF FRAME-FIELD = "GroupType" THEN DO:
-               RUN Syst/v-tmscodes(INPUT "PnpGroup",    /* TableName */
+               RUN Syst/v-tmscodes.p(INPUT "PnpGroup",    /* TableName */
                                     "GroupType", /* FieldName */
                                     "GroupType",     /* GroupCode */
                               INPUT INPUT PnpGroup.GroupType,

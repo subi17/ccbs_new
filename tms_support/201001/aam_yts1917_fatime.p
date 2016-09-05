@@ -55,7 +55,7 @@ repeat:
         lccli    format "x(10)"
         ldamt    format ">>>9.99".
 
-   run /home/ari/work/creafat.p (msowner.invcust,
+   RUN /home/ari/work/creafat.p (msowner.invcust,
                   msowner.msseq,
                   lcfatgrp,
                   ldamt,

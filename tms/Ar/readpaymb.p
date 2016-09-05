@@ -149,7 +149,7 @@ FOR EACH ttFiles:
    ASSIGN spit1  = 80
           skayt1 = 80.
 
-   RUN Ar/readpaym (INPUT TABLE ttPayment,
+   RUN Ar/readpaym.p (INPUT TABLE ttPayment,
                  ttFiles.PaymFile,
                  liFileType,
                  FALSE,   /* show messages */
@@ -193,7 +193,7 @@ END.
 /* empty posting file for control purposes */
 IF liFiles = 0 THEN DO:
    
-   RUN Ar/readpaym (INPUT TABLE ttPayment,
+   RUN Ar/readpaym.p (INPUT TABLE ttPayment,
                  "EMPTY",
                  0,
                  FALSE,    /* show messages */

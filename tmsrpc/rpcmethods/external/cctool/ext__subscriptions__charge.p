@@ -104,7 +104,7 @@ IF ABSOLUTE(ldAmount + ldeLoaded) > ldChargeLimit THEN DO:
 END.
 /* check balance in prepaid */
 IF Mobsub.PayType AND ldAmount > 0 THEN DO:
-   RUN Gwy/balancequery(Mobsub.CLI).
+   RUN Gwy/balancequery.p(Mobsub.CLI).
    ldeCurrBal = INT(RETURN-VALUE) / 100.
    IF ldeCurrBal < ldAmount THEN DO:
         IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 

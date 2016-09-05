@@ -316,7 +316,7 @@ PROCEDURE pPrintInvoices:
    END.
 
    IF lcRunMode = "test" AND llgFuncRunPDF THEN 
-      RUN Inv/funcrun_invpdf_creation (INPUT liFRExecID) NO-ERROR.
+      RUN Inv/funcrun_invpdf_creation.p (INPUT liFRExecID) NO-ERROR.
    
    IF RETURN-VALUE BEGINS "ERROR:" THEN DO TRANS:
       /* send also mail if printing was interrupted */

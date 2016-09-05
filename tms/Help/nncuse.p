@@ -43,7 +43,7 @@ form
 with row 4 col 2 title color value(ctc) " FIND Code  "
    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "tlse". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 Runko:
 repeat:
 
@@ -64,7 +64,7 @@ LOOP:
       ASSIGN
       cfc = "tlli"
       tlli-ots = " ADD ".
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME tlli:
          PAUSE 0 no-message.
@@ -229,8 +229,8 @@ BROWSE:
 
         /* Currency */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* Currency */
-           cfc = "puyr". RUN Syst/ufcolor.
-           Currency = "". ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           Currency = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE Currency WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            if Currency <> "" THEN DO:

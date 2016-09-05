@@ -30,7 +30,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhContact).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhContact).
+      RUN Mc/eventview2.p(lhContact).
    END.
 
 END.
@@ -154,7 +154,7 @@ END FUNCTION.
 
 IF iiCustNum > 0 THEN FrmDown = 15. 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 ASSIGN orders       = "By Customer ," +
@@ -188,14 +188,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a Contact  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE ADD-ROW:
                         
@@ -518,8 +518,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN Syst/ufcolor.
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         UPDATE liCustNum WITH FRAME f1.
         HIDE FRAME f1 NO-PAUSE.
@@ -550,7 +550,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
         RUN local-find-this (FALSE).
 
-        RUN Mc/mobilett(Contact.CustNum). 
+        RUN Mc/mobilett.p(Contact.CustNum). 
 
         ufkey = TRUE.
         NEXT.
@@ -560,7 +560,7 @@ REPEAT WITH FRAME sel:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
         RUN local-find-this (FALSE).
 
-        RUN Mc/commontt(Contact.CustNum). 
+        RUN Mc/commontt.p(Contact.CustNum). 
 
         ufkey = TRUE.
         NEXT.
@@ -569,7 +569,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
         RUN local-find-this (FALSE).
 
-        RUN Mc/memo(INPUT Contact.CustNum,
+        RUN Mc/memo.p(INPUT Contact.CustNum,
                  INPUT "Contact",
                  INPUT STRING(Contact.ConID),
                  INPUT "Contact").
@@ -675,11 +675,11 @@ REPEAT WITH FRAME sel:
                ufk[8] = 8
                ehto   = 0
                ufkey  = TRUE.
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
 
         IF toimi = 3 THEN DO:
            RUN local-find-this (FALSE).
-           RUN Ar/conrepui (IF AVAILABLE Contact THEN Contact.UserCode ELSE "",
+           RUN Ar/conrepui.p (IF AVAILABLE Contact THEN Contact.UserCode ELSE "",
                          IF AVAILABLE Contact THEN Contact.ConDate ELSE ?).
         END.
         
@@ -759,7 +759,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -932,7 +932,7 @@ PROCEDURE local-UPDATE-record:
 
       CLEAR FRAME lis NO-PAUSE. 
       ehto = 5.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       FIND TMSUser WHERE TMSUser.UserCode = Contact.UserCode NO-LOCK NO-ERROR.
       

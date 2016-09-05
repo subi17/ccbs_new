@@ -10,5 +10,5 @@
 
 {Syst/commali.i}
 
-RUN Mc/contract (0,
+RUN Mc/contract.p (0,
               "").

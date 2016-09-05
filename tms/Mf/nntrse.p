@@ -53,7 +53,7 @@ form
 with row 1 centered overlay title " SEEK Circuit Groups " FRAME alku.
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
    FIND FIRST Trunk USE-INDEX ExCode no-lock no-error.
    IF NOT AVAIL Trunk THEN DO:
       BELL.
@@ -74,7 +74,7 @@ repeat WITH FRAME sel:
        ASSIGN haettava = FALSE nro = FALSE.
        PAUSE 0 no-message.
 alku:  repeat WITH FRAME alku:
-          ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE TrunkCode WITH FRAME alku EDITING:
              READKEY. nap = keylabel(LASTKEY).
              /* onko painettu home */

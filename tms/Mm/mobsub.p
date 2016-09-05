@@ -11,7 +11,7 @@
                   04.04.06/aam check type of dccli
                   27.11.06/aam Reseller
                   05.12.06/mvi find agrcust with sur1,sur2,company(frame f2)
-                  12.12.06/mvi new param to RUN Mm/msrequest (reqstat = ?)
+                  12.12.06/mvi new param to RUN Mm/msrequest.p (reqstat = ?)
                   06.03.07 kl  when avail on displays
                   21.03.07 kl  ppreqbr
                   31.10.07 jp  new parameter for msrequest
@@ -48,7 +48,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhMobsub).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhMobsub).
+      RUN Mc/eventview2.p(lhMobsub).
    END.
 
 END.
@@ -231,7 +231,7 @@ form
    WITH row 4 col 2 TITLE COLOR VALUE(ctc) 
    "FIND ICC"  COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f7.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By MSISDN  ,  By SUBS ID ,  By CUSTNUM  ,  BY STATUS  ".
@@ -469,8 +469,8 @@ BROWSE:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND NOT llMore AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lccli WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -492,8 +492,8 @@ BROWSE:
      /* Search BY column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND NOT llMore AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME fMsSeq.
        SET liMsSeq WITH FRAME fMsSeq.
        HIDE FRAME fMsSeq NO-PAUSE.
@@ -514,8 +514,8 @@ BROWSE:
      
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        SET liCustNum WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
@@ -538,8 +538,8 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND NOT llMore AND 
        icType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        
        ASSIGN
           lcSurname1 = ""
@@ -555,7 +555,7 @@ BROWSE:
           (lcSurname1 EQ "" AND lcSurname2 EQ "" AND lcCompany  > "") 
           THEN DO:
           
-          RUN Mm/mobsubfind("AGRNAME",lcSurName1 + "|" + 
+          RUN Mm/mobsubfind.p("AGRNAME",lcSurName1 + "|" + 
                                    lcSurname2 + "|" + 
                                    lcCompany).
        END.
@@ -570,14 +570,14 @@ BROWSE:
     
      ELSE IF LOOKUP(nap,"5,f5") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f5.
        SET lcPersonid WITH FRAME f5.
        HIDE FRAME f5 NO-PAUSE.
 
        IF lcPersonID > "" THEN DO:
-          RUN Mm/mobsubfind("ID",lcPersonid).
+          RUN Mm/mobsubfind.p("ID",lcPersonid).
        END.
      END. /* Search-5 */
      
@@ -588,8 +588,8 @@ BROWSE:
               lcSurName2  = ""
               lcCompany   = "".
                                                         
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        SET lcSurName1 lcSurName2 lcCompany WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -597,7 +597,7 @@ BROWSE:
        IF lcSurName1  > "" OR 
           lcSurName2  > "" OR 
           lcCompany   > "" THEN DO:
-          RUN Mm/mobsubfind("USERNAME",lcSurName1 + "|" + 
+          RUN Mm/mobsubfind.p("USERNAME",lcSurName1 + "|" + 
                                     lcSurName2 + "|" + 
                                     lcCompany). 
        END.
@@ -614,8 +614,8 @@ BROWSE:
      /********************/
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND llMore AND lcRight = "RW" AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP: 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f6.
        SET liMSStatus WITH FRAME f6.
        IF  liMSStatus  ne 0  THEN DO:
@@ -637,8 +637,8 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND llMore AND 
        iCType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f7.
        SET lcICC WITH FRAME f7.
        HIDE FRAME f7 NO-PAUSE.
@@ -676,7 +676,7 @@ BROWSE:
         RUN local-find-others(TRUE).
        
         
-        RUN Mm/nnfmcu(OUTPUT liCustNum, OUTPUT liMsSeq).
+        RUN Mm/nnfmcu.p(OUTPUT liCustNum, OUTPUT liMsSeq).
 
         IF liCustNum NE ? AND liCustNum > 0 THEN DO:
            FIND  SearchCustomer WHERE 
@@ -733,7 +733,7 @@ BROWSE:
              ufk[6]=  1992
              ufk[7]= 249
              ufk[8]= 8  .
-          RUN Syst/ufkey.   
+          RUN Syst/ufkey.p.   
           IF toimi = 8 THEN DO:
              LEAVE.
           ENd.
@@ -741,9 +741,9 @@ BROWSE:
           IF toimi = 1 AND
              fIsPermittedModule(mobsub.clitype, "mobsub_update") THEN
              run local-update-record(TRUE).
-          ELSE IF toimi = 2  THEN RUN Mm/persondata(mobsub.msseq).
+          ELSE IF toimi = 2  THEN RUN Mm/persondata.p(mobsub.msseq).
           ELSE IF toimi = 3  THEN DO:
-             RUN Mm/msrequest(-1,
+             RUN Mm/msrequest.p(-1,
                            ?, /* reqstat ? for all */
                            MobSub.MsSeq,
                            0,
@@ -765,7 +765,7 @@ BROWSE:
           ELSE IF toimi = 4  AND lcRight = "RW" AND 
             fIsPermittedModule(mobsub.clitype, "subser") THEN 
                RUN Mm/subser.p(Mobsub.MsSeq).
-          ELSE IF Toimi = 5  THEN RUN Mc/memo(INPUT mobsub.CustNum,
+          ELSE IF Toimi = 5  THEN RUN Mc/memo.p(INPUT mobsub.CustNum,
                                            INPUT "Mobsub",
                                            INPUT STRING(MobSub.MsSeq),
                                            INPUT "Mobsub").
@@ -789,33 +789,33 @@ BROWSE:
                    ufk[7] = 1079.
                    ufk[8] = 8.
 
-                RUN Syst/ufkey.   
+                RUN Syst/ufkey.p.   
         
                 IF toimi = 8 THEN DO:
                    LEAVE CALLBROWSE.
                 ENd.
 
-                IF       toimi = 1  THEN RUN Mm/msisdniv(Mobsub.MsSeq).
+                IF       toimi = 1  THEN RUN Mm/msisdniv.p(Mobsub.MsSeq).
 
                 ELSE IF toimi = 2 AND avail mobsub  THEN
-                   RUN Mm/callstat(INPUT 0,Mobsub.cli,"PRODUCT").
+                   RUN Mm/callstat.p(INPUT 0,Mobsub.cli,"PRODUCT").
        
                 ELSE IF toimi = 3 AND avail mobsub  THEN 
-                   RUN Mm/callstat(INPUT 0,Mobsub.cli,"DATE").
+                   RUN Mm/callstat.p(INPUT 0,Mobsub.cli,"DATE").
        
                 ELSE IF toimi = 4 AND avail mobsub  THEN
-                   RUN Mm/callstat(INPUT 0,Mobsub.cli,"CCN").
+                   RUN Mm/callstat.p(INPUT 0,Mobsub.cli,"CCN").
 
                 ELSE IF toimi = 6 THEN 
-                   RUN Mm/persondata(mobsub.msseq).
+                   RUN Mm/persondata.p(mobsub.msseq).
                    
                 ELSE IF toimi = 7 THEN
-                   RUN Gwy/ppreqbr(MobSub.MsSeq).
+                   RUN Gwy/ppreqbr.p(MobSub.MsSeq).
         
              END.
           END.
           ELSE IF toimi = 7 AND avail mobsub  THEN DO:
-             RUN Mm/mobsubdi(INPUT Mobsub.MSSeq, OUTPUT killed).
+             RUN Mm/mobsubdi.p(INPUT Mobsub.MSSeq, OUTPUT killed).
              
              /* refresh mobsub status / barring status */
              lcBarrStat = MobSub.BarrCode.
@@ -1210,7 +1210,7 @@ PROCEDURE local-UPDATE-record.
    REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
       ehto = 9.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
    
       DISP MobSub.Reseller
            MobSub.Salesman.
@@ -1235,20 +1235,20 @@ PROCEDURE local-UPDATE-record.
                END.
                
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
             
             END.
             
             IF FRAME-FIELD = "Salesman" THEN DO:
                
-               RUN Help/h-salesman.
+               RUN Help/h-salesman.p.
 
                IF siirto ne ? THEN DO:
                  DISPLAY siirto @ MobSub.Salesman WITH FRAME lis.
                END.
                
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
             
             END.
           

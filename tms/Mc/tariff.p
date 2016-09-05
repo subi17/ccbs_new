@@ -47,7 +47,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize ( lhTariff ).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhTariff).
+      RUN Mc/eventview2.p(lhTariff).
    END.
 
 END.
@@ -276,7 +276,7 @@ IF icBDest NE "" AND CAN-FIND(FIRST Tariff WHERE
 ELSE
    lBrHdr  = lBrHdr + "(CCN " + STRING(iiCCN) + ") ".
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 ASSIGN
@@ -332,11 +332,11 @@ repeat WITH FRAME sel:
          fr-header = " ADD "
          must-add  = FALSE.
 
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       CLEAR FRAME lis no-pause.
       ehto = 9.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       PAUSE 0.
 
       RUN pUpdate(TRUE,0).
@@ -603,9 +603,9 @@ repeat WITH FRAME sel:
 
      /* Haku sarakk. 1 */
      ELSE if LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN DO:  /* haku sar. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         plseek = "".
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr1.
         UPDATE lcBrand WHEN gcAllBrand AND iiCCN = 0
                plseek WITH FRAME hayr1.
@@ -664,9 +664,9 @@ repeat WITH FRAME sel:
 
      /* Haku sarakk. 2 */
      ELSE if ufk[2] > 0 AND LOOKUP(nap,"2,f2") > 0 THEN DO:  /* haku sar. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         lcCSeek = 0.
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
         UPDATE lcBrand WHEN gcAllBrand AND icPList = "" AND iiCust = 0
                lcCSeek WITH FRAME hayr2.
@@ -700,9 +700,9 @@ repeat WITH FRAME sel:
 
      /* Haku sarakk. 3 */
      ELSE if ufk[3] > 0 AND LOOKUP(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
-        cfc = "puyr". RUN Syst/ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         liCustSeek = 0.
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr3.
         UPDATE lcBrand WHEN gcAllBrand AND iiCCN = 0
                liCustSeek WITH FRAME hayr3.
@@ -827,13 +827,13 @@ repeat WITH FRAME sel:
 
         CLEAR FRAME lis no-pause.
 
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
 
         ASSIGN
            plname = ""
            cfc    = "lis". 
 
-        RUN Syst/ufcolor.
+        RUN Syst/ufcolor.p.
 
         RUN local-find-others.
 
@@ -853,7 +853,7 @@ repeat WITH FRAME sel:
         FIND FIRST Tariff where 
              recid(Tariff) = rtab[FRAME-LINE]
         NO-LOCK NO-ERROR.
-        ASSIGN ufk = 0 ufkey = TRUE ehto = 3. RUN Syst/ufkey.
+        ASSIGN ufk = 0 ufkey = TRUE ehto = 3. RUN Syst/ufkey.p.
         DISPLAY
            round(Tariff.Price[1] * 60 / 100,2) @ Tariff.Price[1]
            round(Tariff.StartCharge[1] * 60 / 100,2) @ Tariff.StartCharge[1].
@@ -2123,7 +2123,7 @@ PROCEDURE pUpdate.
              WHEN "F9" THEN DO:
                 CASE FRAME-FIELD:
                    WHEN "DataType" THEN DO:
-                      RUN Help/h-tmscodes
+                      RUN Help/h-tmscodes.p
                             ("Tariff","DataType","Tariff", OUTPUT siirto).
                       IF INT(siirto) > 0 THEN DO:
                          Tariff.DataType = INT(siirto).
@@ -2141,7 +2141,7 @@ PROCEDURE pUpdate.
                       END.
 
                       ehto = 9.
-                      RUN Syst/ufkey.
+                      RUN Syst/ufkey.p.
                       PAUSE 0.
 
                       NEXT-PROMPT Tariff.DataType.

@@ -87,7 +87,7 @@ ASSIGN tila = TRUE.
 message "Printing in process...".         
 
 
-RUN Ar/opbalrep  (ldtDate,
+RUN Ar/opbalrep.p  (ldtDate,
                OUTPUT oiCount).
 
 ASSIGN tila = FALSE.

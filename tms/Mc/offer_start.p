@@ -1,6 +1,6 @@
 /* offer_start.p   27.03.09/aam
 
-   RUN Mc/offer from menu
+   RUN Mc/offer.p from menu
 
 */
 

@@ -106,7 +106,7 @@ form /* SEEK Code */
 
 
 /* main */
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first. 
@@ -132,13 +132,13 @@ REPEAT WITH FRAME sel:
 
  IF must-add THEN DO:  /* Add / update /delete UserLimit  */
       ASSIGN cfc = "lis" ufkey = true  must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
       
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         
         REPEAT TRANSACTION WITH FRAME lis:
            PAUSE 0.
@@ -312,8 +312,8 @@ REPEAT WITH FRAME sel:
 
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do:  /* ob-code */
-           cfc = "puyr". RUN Syst/ufcolor.
-           ehto = 9. RUN Syst/ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update ob-code with frame hayr.
            hide frame hayr no-pause.
            if ob-code ENTERED then do: 
@@ -512,7 +512,7 @@ PROCEDURE local-update-record:
                 ufk[3] = 4 WHEN lcRight = "RW" AND UserLimit.LimitTarget = icLimitTarget
                 ufk[8] = 8.
              
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
       ELSE toimi = 1.
       
@@ -541,7 +541,7 @@ PROCEDURE local-update-record:
          END.
 
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
 
          IF NOT llIsNew AND llDoEvent THEN RUN StarEventSetOldBuffer(lhUserLimit).
 

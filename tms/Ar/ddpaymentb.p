@@ -26,7 +26,7 @@ DEF STREAM sRead.
 
 fELog("DDPAYM","Started").
 
-RUN Ar/ddpaymentco ("",                   /* InvGroup  */
+RUN Ar/ddpaymentco.p ("",                   /* InvGroup  */
                  0,                    /* customers from */
                  99999999,             /* customers to   */
                  "",                   /* invoices from  */

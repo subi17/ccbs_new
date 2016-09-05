@@ -85,7 +85,7 @@ WITH
    width 170 NO-LABEL no-box FRAME sivuots.
 
 
-cfc = "sel". RUN Syst/ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 paper = TRUE.
 DISPLAY paper stch WITH FRAME rajat.
 PAUSE 0 no-message.

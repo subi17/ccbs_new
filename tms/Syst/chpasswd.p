@@ -107,7 +107,7 @@ REPEAT:
    lcNewPass2 = "".
    lcOldPass = "".
    
-   RUN Syst/ufkey.
+   RUN Syst/ufkey.p.
    
    passLoop:
    REPEAT WITH FRAME passFrame ON ENDKEY UNDO passLoop, NEXT mainLoop:

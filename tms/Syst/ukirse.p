@@ -32,7 +32,7 @@ runko:
 repeat ON ENDKEY UNDO runko, NEXT runko:
    ASSIGN
    siirto = ?
-   cfc = "lis". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+   cfc = "lis". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 
    FIND FIRST TMSPrinter  no-lock no-error.
    IF NOT AVAILABLE TMSPrinter THEN DO:
@@ -70,7 +70,7 @@ LOOP:
         ASSIGN
         ufk[1] = 0 
         ufk[6] = 11 ufk[7] = 0  ufk[8] = 8  ufk[9] = 1 ufkey = FALSE ehto = 3.
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
      END.
 
 BROWSE:

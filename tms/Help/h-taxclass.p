@@ -33,7 +33,7 @@ form /* SEEK Code */
     with row 4 col 2 title color value(ctc) " FIND CLASS"
     color value(cfc) no-labels overlay frame hayr.
 
-cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 
 MAIN:
 repeat:
@@ -80,7 +80,7 @@ print-line:
          ufk[1] = 28 ufk[5] = 11
          ufk[6] = 0  ufk[8] = 8  ufk[9] = 1
          siirto = ? ehto = 3 ufkey = false.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -196,8 +196,8 @@ print-line:
         /* Seek */
         if lookup(nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*lcEvent*/
-           cfc = "puyr". RUN Syst/ufcolor.
-           ehto = 9. RUN Syst/ufkey. ufkey = true.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set lcEvent with frame hayr.
            hide frame hayr no-pause.
            if lcEvent ENTERED then do:

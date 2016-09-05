@@ -118,7 +118,7 @@ form /* seek  CLI */
 
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By CustNo  ,  By Msisdn  ,  By Imsi  , By 4".
@@ -151,12 +151,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a msowner  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR msowner.CustNum
@@ -392,8 +392,8 @@ BROWSE:
 
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET CustNum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -417,8 +417,8 @@ BROWSE:
      /* Search by col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        SET CLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -441,8 +441,8 @@ BROWSE:
     /* Search by col 3 */
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F3.
        SET imno WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
@@ -464,7 +464,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* call value / detail */
        RUN local-find-this(false).
-       RUN Mm/mobcallm(msowner.CLI).
+       RUN Mm/mobcallm.p(msowner.CLI).
        ufkey = TRUE.
        RUN Syst/ufkey.p.
        PAUSE 0.
@@ -473,7 +473,7 @@ BROWSE:
 
      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO:  /* call value / detail */
        RUN local-find-this(false).
-       RUN Mm/msisdniv(msowner.msseq).
+       RUN Mm/msisdniv.p(msowner.msseq).
        ufkey = true.
        RUN Syst/ufkey.p.
        PAUSE 0.
@@ -494,8 +494,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
-       ASSIGN ac-hdr = " VIEW " ufkey = true ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = true ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY msowner.CustNum.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOwner).
@@ -635,7 +635,7 @@ PROCEDURE local-update-record:
       RUN local-find-others.
       
       ehto = 5.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       
       FIND Customer WHERE Customer.CustNum = MsOwner.CustNum NO-LOCK NO-ERROR.
       IF AVAILABLE Customer 

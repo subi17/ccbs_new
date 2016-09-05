@@ -48,11 +48,11 @@ DEF VAR liCount      AS INT   NO-UNDO.
        
        HIDE FRAME fPassword.
        ehto = 5.
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
     
        IF lcTable = "Order" THEN DO:
    
-          RUN Mm/orderamtbr(INPUT   "Order",
+          RUN Mm/orderamtbr.p(INPUT   "Order",
                          INPUT   "StatusCode",
                          INPUT   "",
                          INPUT   "Orders",
@@ -64,7 +64,7 @@ DEF VAR liCount      AS INT   NO-UNDO.
 
        ELSE IF lcTable = "MsRequest" THEN DO:
        
-          RUN Mm/orderamtbr(INPUT   "MsRequest",
+          RUN Mm/orderamtbr.p(INPUT   "MsRequest",
                          INPUT   "ReqStatus",
                          INPUT   icSkipValue,
                          INPUT   icRunParam,
@@ -78,7 +78,7 @@ DEF VAR liCount      AS INT   NO-UNDO.
                    NO-ERROR.
              END.
       
-             RUN Mm/msrequest(liParam[1],
+             RUN Mm/msrequest.p(liParam[1],
                            INTEGER(lcValue),
                            liParam[2],
                            liParam[3],
