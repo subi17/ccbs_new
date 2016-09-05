@@ -1,17 +1,17 @@
 Type;Language Type;Language;Translation Name
-CONTDSL10;1;Spanish;La Infinita 2 GB + DSL
-CONTDSL10;2;Catalan;La Infinita 2 GB + DSL
-CONTDSL10;3;Basque;La Infinita 2 GB + DSL
-CONTDSL10;5;English;La Infinita 2 GB + DSL
-CONTFH10;1;Spanish;La Infinita 2 GB + FIBER
-CONTFH10;2;Catalan;La Infinita 2 GB + FIBER
-CONTFH10;3;Basque;La Infinita 2 GB + FIBER
-CONTFH10;5;English;La Infinita 2 GB + FIBER
-CONTDSL15;1;Spanish;La Infinita 8 GB + DSL
-CONTDSL15;2;Catalan;La Infinita 8 GB + DSL
-CONTDSL15;3;Basque;La Infinita 8 GB + DSL
-CONTDSL15;5;English;La Infinita 8 GB + DSL
-CONTFH15;1;Spanish;La Infinita 8 GB + FIBER
-CONTFH15;2;Catalan;La Infinita 8 GB + FIBER
-CONTFH15;3;Basque;La Infinita 8 GB + FIBER
-CONTFH15;5;English;La Infinita 8 GB + FIBER
+CONTDSL10;1;Spanish;La Mega Plana 2GB + 250 Minutes
+CONTDSL10;2;Catalan;La Mega Plana 2GB + 250 Minutes
+CONTDSL10;3;Basque;La Mega Plana 2GB + 250 Minutes
+CONTDSL10;5;English;La Mega Plana 2GB + 250 Minutes
+CONTFH10;1;Spanish;La Mega Plana 2GB + 250 Minutes
+CONTFH10;2;Catalan;La Mega Plana 2GB + 250 Minutes
+CONTFH10;3;Basque;La Mega Plana 2GB + 250 Minutes
+CONTFH10;5;English;La Mega Plana 2GB + 250 Minutes
+CONTDSL15;1;Spanish;La Infinita 5 GB
+CONTDSL15;2;Catalan;La Infinita 5 GB
+CONTDSL15;3;Basque;La Infinita 5 GB
+CONTDSL15;5;English;La Infinita 5 GB
+CONTFH15;1;Spanish;La Infinita 5 GB
+CONTFH15;2;Catalan;La Infinita 5 GB
+CONTFH15;3;Basque;La Infinita 5 GB
+CONTFH15;5;English;La Infinita 5 GB

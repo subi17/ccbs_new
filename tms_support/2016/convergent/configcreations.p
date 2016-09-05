@@ -317,11 +317,16 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
          ASSIGN lcRatePlan = CLIType.PricePlan.
 
    END.
-   
+   IF LOOKUP(icFeeModel, "10") > 0 THEN 
    FIND FIRST RatePlan WHERE 
               RatePlan.Brand    = gcBrand AND 
-              RatePlan.RatePlan = "CONTRATOCONV"
-   NO-LOCK NO-ERROR.           
+              RatePlan.RatePlan = "CONTRATOCONVF"
+   NO-LOCK NO-ERROR.
+   ELSE 
+   FIND FIRST RatePlan WHERE
+              RatePlan.Brand    = gcBrand AND
+              RatePlan.RatePlan = "CONTRATOCONVS"
+              NO-LOCK NO-ERROR.
                 
    IF NOT AVAILABLE RatePlan THEN 
       RETURN lcRateplan + " ERROR: RatePlan doesn't exists " + REPLACE(icTariffCode,"CONT","CONTRATO").
@@ -392,7 +397,7 @@ DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
    IF icPaymentType EQ "Postpaid" AND
       NOT CAN-FIND(FIRST FeeModel WHERE 
                          FeeModel.FeeModel = icFeeModel) THEN 
-      RETURN "ERROR: FeeModel doesn't exists".                   
+      RETURN "ERROR: FeeModel doesn't existsi " + icFeeModel.                   
                             
    IF icTOC EQ "ServicePackage" THEN lcTOC = "1".
    ELSE IF icTOC EQ "PackageWithCounter" THEN lcTOC = "4".

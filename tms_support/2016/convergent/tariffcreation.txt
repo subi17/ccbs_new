@@ -1,9 +1,9 @@
 CLIType;CONTDSL10
 TariffBundle;
-BaseBundle;CONTS2GB
-MonthlyFee;9.99
-CommercialFee;39.98
-ComparisonFee;39.98
+BaseBundle;CONTF2GB
+MonthlyFee;
+CommercialFee;37.19
+ComparisonFee;37.19
 ServiceClass;
 WebStatus;Retired
 STCStatus;Active
@@ -13,20 +13,20 @@ FirstMonthFeeCalc;Relative
 LastMonthFeeCalc;Full
 TypeOfContract;PackageWithCounter
 DataLimit;2048
-VoiceLimit;
-BDestinationLimit;300
+VoiceLimit;250
+BDestinationLimit;100
 FirstMonthDataLimit;Relative
 LastMonthDataLimit;Full
-FirstMonthVoiceLimit;Full
+FirstMonthVoiceLimit;Relative
 LastMonthVoiceLimit;Full
-FirstMonthBDestLimit;Full
+FirstMonthBDestLimit;Relative
 LastMonthBDestLimit;Full
 BBProfile;1
 DSS2Compatible;Yes
 DSS2PrimaryLine;No
 NativeVoIPCompatible;No
 OnlyVOICE;No
-MonthlyFeeBillCode;CONTS2GBMF
-TariffName;La Infinita 2 GB
+MonthlyFeeBillCode;CONTDSL10MF
+TariffName;La Mega Plana 2 GB + 250 Minutes
 BonoSupport;YES
 BundleUpsell;DATA200_UPSELL
