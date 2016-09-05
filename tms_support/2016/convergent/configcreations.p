@@ -542,6 +542,7 @@ DEFINE OUTPUT PARAMETER ocCLIType        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liFinalBT  AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liFinalCR  AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcpriceplan AS CHARACTER NO-UNDO.
 
    IF NOT CAN-FIND(FIRST CLIType WHERE 
                          CLIType.Brand   = gcBrand    AND 
@@ -570,12 +571,16 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
       END.
        
       CREATE CLIType.
+      IF LOOKUP(icCLIType, "10") > 0 THEN
+         lcpriceplan = "CONTRATOCONVF".
+      ELSE
+         lcpriceplan = "CONTRATOCONVS".
       ASSIGN 
          CLIType.Brand         = gcBrand
          CLIType.CLIType       = icCLIType
          CLIType.CLIName       = icCLIName                            
          CLIType.BaseBundle    = icBaseBundle
-         CLIType.PricePlan     = "CONTRATOCONV" /*IF lcRatePlan NE "" THEN lcRatePlan ELSE 
+         CLIType.PricePlan     = lcpriceplan /*IF lcRatePlan NE "" THEN lcRatePlan ELSE 
                                  REPLACE(icCLIType,"CONT","CONTRATO") */
          CLIType.ServicePack   = IF icPayType EQ "Postpaid" THEN "11" 
                                  ELSE "12"

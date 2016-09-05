@@ -86,9 +86,9 @@ DEF VAR lcFixedLineType  AS CHAR NO-UNDO.
 
 form
     CliType.Brand      FORMAT "X(2)" COLUMN-LABEL "Br"
-    CLIType.CLIType        
-    CLIType.CLIName    format "x(19)"
-    CLIType.PricePlan  COLUMN-LABEL "RatePlan"
+    CLIType.CLIType    FORMAT "X(9)"    
+    CLIType.CLIName    format "x(18)"
+    CLIType.PricePlan  COLUMN-LABEL "RatePlan" FORMAT "X(13)"
     CLIType.DiscPlan   COLUMN-LABEL "Disc.Plan"
     lcPayType          FORMAT "X(10)" COLUMN-LABEL "PayType"
     CliType.BillTarget COLUMN-LABEL "B.Target"
@@ -103,7 +103,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
 {brand.i}
 
 form
-    "CLIType ......:"  CLIType.CLIType SKIP
+    "CLIType ......:"  CLIType.CLIType FORMAT "X(9)" SKIP
     "Name .........:"  CLIType.CLIName              SKIP
     "Base bundle...:"  CLIType.BaseBundle SKIP
     "Payment Type .:"  CLIType.PayType
@@ -112,7 +112,7 @@ form
     "Usage Type....:"  AT 35 CLIType.UsageType
         HELP "1=Voice, 2=Data"
         lcUsageType NO-LABEL FORMAT "X(15)" SKIP
-    "Rate plan ....:"  CLIType.PricePlan   PLName   SKIP
+    "Rate plan ....:"  CLIType.PricePlan FORMAT "X(13)" PLName   SKIP
     "Disc. plan ...:"  CLIType.DiscPlan    DPName   SKIP
     
     "Service pack .:"  CliType.ServicePack FORMAT "x(2)" 
