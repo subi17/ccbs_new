@@ -11,7 +11,7 @@ PaymentType;Postpaid
 UsageType;Voice
 FirstMonthFeeCalc;Relative
 LastMonthFeeCalc;Full
-TypeOfContract;PackageWithCounter
+TypeOfContract;ServicePackage
 DataLimit;2048
 VoiceLimit;250
 BDestinationLimit;100
@@ -22,7 +22,7 @@ LastMonthVoiceLimit;Full
 FirstMonthBDestLimit;Relative
 LastMonthBDestLimit;Full
 BBProfile;1
-DSS2Compatible;Yes
+DSS2Compatible;No
 DSS2PrimaryLine;No
 NativeVoIPCompatible;No
 OnlyVOICE;No

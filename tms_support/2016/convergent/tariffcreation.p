@@ -720,7 +720,7 @@ FOR EACH ttTariffCre NO-LOCK:
 END. /* FOR EACH ttSubTypeCr */      
 
 IF llgServicePackage THEN DO:
-   IF NOT llgDataLimit OR
+   IF NOT llgDataLimit AND /*OR*/
       NOT llgVoiceLimit THEN DO:
       fError("Wrong ServicePackage-contract data with limits provided").
       RETURN "ERROR".
