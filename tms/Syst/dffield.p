@@ -23,7 +23,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhDFField).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhDFField).
+      RUN Mc/eventview2.p(lhDFField).
    END.
 
 END.
@@ -87,7 +87,7 @@ WITH  OVERLAY ROW 3 centered
     FRAME lis.
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
@@ -123,7 +123,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a DFField  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       liFieldOrder = 0.
       FOR EACH DFField NO-LOCK WHERE
@@ -139,7 +139,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANS WITH FRAME lis:
 
@@ -242,7 +242,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -454,8 +454,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDFField).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -492,7 +492,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -585,7 +585,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          
          IF toimi = 8 THEN LEAVE.
       END.
@@ -595,7 +595,7 @@ PROCEDURE local-UPDATE-record:
                 
          FIND CURRENT DFField EXCLUSIVE-LOCK.
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          
          UPDATE
             DFField.DFField   WHEN NEW DFField       
@@ -613,7 +613,7 @@ PROCEDURE local-UPDATE-record:
 
                IF FRAME-FIELD = "DFField" THEN DO:
 
-                  RUN Syst/fieldselection (lcHelpTables,
+                  RUN Syst/fieldselection.p (lcHelpTables,
                                       "SELECT FIELD",
                                       "",
                                       "",
@@ -636,7 +636,7 @@ PROCEDURE local-UPDATE-record:
                END.
              
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 

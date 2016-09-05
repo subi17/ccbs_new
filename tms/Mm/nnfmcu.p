@@ -38,7 +38,7 @@ MsSeq = 0.
 PAUSE 0.
 MAIN:
 repeat WITH FRAME frm:
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE gcbrand WHEN gcallBrand = TRUE arg.
 
 
@@ -54,7 +54,7 @@ ACTION:
       ufk[6] = 94   /* FIND invoice */
       ufk[7] = 93
       ufk[8] = 8
-      ehto   = 0.  RUN Syst/ufkey.
+      ehto   = 0.  RUN Syst/ufkey.p.
 
       IF toimi = 8 THEN LEAVE MAIN.
 

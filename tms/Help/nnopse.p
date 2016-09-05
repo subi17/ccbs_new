@@ -49,7 +49,7 @@ form
 
 with row 1 centered overlay title " SEEK OPERATORS " FRAME alku.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
    FIND FIRST Operator USE-INDEX Operator no-lock no-error.
    IF NOT AVAIL Operator THEN DO:
       BELL.
@@ -74,7 +74,7 @@ repeat WITH FRAME sel:
        ASSIGN seekit = FALSE nro = FALSE.
        PAUSE 0 no-message.
 alku:  repeat WITH FRAME alku:
-          ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE Operator WITH FRAME alku EDITING:
              READKEY. nap = keylabel(LASTKEY).
              /* onko painettu home */

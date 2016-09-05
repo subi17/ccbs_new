@@ -333,7 +333,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
                    gcHelpParam = "".
                    
                    ehto = 9.
-                   RUN Syst/ufkey.
+                   RUN Syst/ufkey.p.
        
                    IF si-recid > 0 THEN DO:
                       FIND InvText WHERE RECID(InvText) = si-recid 
@@ -382,7 +382,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
                 DISPLAY INTEGER(lcCode) @ liAddress WITH FRAME rajat.
                 
                 ehto = 9.
-                RUN Syst/ufkey.
+                RUN Syst/ufkey.p.
                 
                 NEXT.
              END.
@@ -521,7 +521,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       END.
       
       ehto = 5. 
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
  
       IF llEPl THEN DO:
          IF NOT fEPLStart(lcTestFlag) THEN NEXT.
@@ -533,7 +533,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
          
       END.
 
-      RUN Mc/printxt (liCustNum,
+      RUN Mc/printxt.p (liCustNum,
                    liMsSeq, 
                    "",
                    1,                      /* 1=invtext */

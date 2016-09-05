@@ -77,7 +77,7 @@ WITH  OVERLAY ROW 4 centered
    fr-header WITH side-labels 1 columns
    FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST CustPNPGroup
@@ -104,7 +104,7 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* CustPNPGroup -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new:
@@ -407,8 +407,8 @@ BROWSE:
         exclusive-lock.
 
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        RUN Syst/ufkey.
-        cfc = "lis". RUN Syst/ufcolor.
+        RUN Syst/ufkey.p.
+        cfc = "lis". RUN Syst/ufcolor.p.
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustPNPGroup).
         RUN LOCAL-UPDATE.
@@ -456,7 +456,7 @@ BROWSE:
 
        RUN Mc/pnplist.p(pnpgroup.pnpSeq). 
        ufkey = true.
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
        PAUSE 0.
      END.
 
@@ -474,7 +474,7 @@ PROCEDURE local-update:
     repeat WITH FRAME lis ON ENDKEY UNDO l-update, LEAVE l-update:
        PAUSE 0 no-message.
        CLEAR FRAME lis no-pause.
-       ehto = 9. RUN Syst/ufkey.
+       ehto = 9. RUN Syst/ufkey.p.
        DISPLAY
          CustPNPGroup.PnpGroup
          CustPNPGroup.PnPPrior

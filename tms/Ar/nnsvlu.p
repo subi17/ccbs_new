@@ -73,7 +73,7 @@ VIEW FRAME fStart.
 MAIN:
 REPEAT WITH FRAME fStart:
 
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
    REPEAT WITH FRAME fStart ON ENDKEY UNDO, LEAVE:
    
@@ -102,7 +102,7 @@ REPEAT WITH FRAME fStart:
               THEN lcChoose = lcFromDir + "/" + lcChoose + "¤yes".
            END.
            
-           RUN Mc/choosefile (lcChoose,
+           RUN Mc/choosefile.p (lcChoose,
                            OUTPUT lcFile).
 
            IF lcFile NE "" THEN DO:
@@ -113,7 +113,7 @@ REPEAT WITH FRAME fStart:
            END. 
 
            ehto = 9.
-           RUN Syst/ufkey.
+           RUN Syst/ufkey.p.
 
         END. 
 
@@ -165,9 +165,9 @@ ASSIGN tila = TRUE
 {Syst/utuloste.i "return"}
 
 ehto = 5.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
-RUN Ar/ddauthin (lcInFile, 
+RUN Ar/ddauthin.p (lcInFile, 
               TRUE,      /* show messages */
               TRUE,      /* send mail     */
               OUTPUT liCount).

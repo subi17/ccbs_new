@@ -390,7 +390,7 @@ BREAK BY ttCall.VATIncl
                       liPrCust = MsOwner.CustNum.
             END.
             
-            RUN Mc/printxt (liPrCust,
+            RUN Mc/printxt.p (liPrCust,
                          liMsSeq, 
                          "",
                          1,                      /* 1=invtext */

@@ -222,7 +222,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
         rlev2   = PrintCodes.PageWidth.
    END.
 
-   cfc = "uprinter". RUN Syst/ufcolor.
+   cfc = "uprinter". RUN Syst/ufcolor.p.
    ufkey = TRUE.
 
    /* Talletetaan ufk-arvot */
@@ -256,7 +256,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
       toimi:
       REPEAT:
 
-         ehto = 0. RUN Syst/ufkey.
+         ehto = 0. RUN Syst/ufkey.p.
          IF toimi = 1 THEN DO:     /* muutetaan kirjoitinta */
 
             RUN select-printer(INPUT-OUTPUT kirloo1).
@@ -340,7 +340,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
          END.
 
          ELSE IF toimi = 3 THEN DO:
-            ehto = 9. RUN Syst/ufkey.
+            ehto = 9. RUN Syst/ufkey.p.
             UPDATE spit1 skayt1
                       validate(skayt1 <= input spit1, "Value is TOo large !")
             WITH FRAME kirj1.
@@ -397,7 +397,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
          END.
 
          ELSE IF toimi = 7 AND tuni2 NE "" THEN DO:
-            ehto = 9. RUN Syst/ufkey.
+            ehto = 9. RUN Syst/ufkey.p.
             UPDATE spit2 skayt2
                       validate(skayt2 <= input spit2, "Value is TOo large!")
             WITH FRAME kirj2.
@@ -514,7 +514,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
 
 
       IF tuni2 NE "direct" THEN DO:
-         ufk = 0. ehto = 3. RUN Syst/ufkey.
+         ufk = 0. ehto = 3. RUN Syst/ufkey.p.
       END.
       
       /* Avataan streamit ja tulostetaan aloitustehosteet */
@@ -684,7 +684,7 @@ PROCEDURE select-printer:
       lpname[i] = xprinter.PrinterId.
    END.
 
-   ehto = 4. RUN Syst/ufkey.
+   ehto = 4. RUN Syst/ufkey.p.
    CLEAR FRAME psel.
    VIEW  FRAME psel.
    DISP  lpname WITH FRAME psel.

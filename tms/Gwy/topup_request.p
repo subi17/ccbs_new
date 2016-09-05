@@ -148,7 +148,7 @@ PROCEDURE pPPRequests:
       
       IF llNext THEN NEXT.
      
-      RUN Gwy/pp_platform(gcBrand,PrePaidRequest.PPRequest).
+      RUN Gwy/pp_platform.p(gcBrand,PrePaidRequest.PPRequest).
       
       lcXML = RETURN-VALUE.
       

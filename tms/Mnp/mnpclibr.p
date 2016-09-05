@@ -52,7 +52,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhOrderCustomer). 
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhttMNPProcess).
+      RUN Mc/eventview2.p(lhttMNPProcess).
    END.
 
 END.
@@ -111,7 +111,7 @@ WITH  OVERLAY ROW 4 centered
     TITLE COLOR VALUE(ctc) ac-hdr with no-labels side-labels
     FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  , By Status , By 4".
@@ -198,7 +198,7 @@ BROWSE:
            ehto   = 3
            ufkey  = FALSE.
       
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
 
       END.
 
@@ -355,7 +355,7 @@ BROWSE:
        run local-find-this (false).
        memory = recid(ttmnpprocess).
        
-       RUN Mnp/mnpsub(ttMNPProcess.mnpseq).
+       RUN Mnp/mnpsub.p(ttMNPProcess.mnpseq).
        
        must-print = true.
        ufkey = true.
@@ -370,7 +370,7 @@ BROWSE:
        
        /* choose different module for old and new mnp processes */
        IF ttMNPProcess.MNPType EQ 0 THEN RUN Mm/mnpmessages.p(ttMNPProcess.MNPSeq).
-       ELSE RUN Mnp/mnpoperations(ttMNPProcess.MNPSeq).
+       ELSE RUN Mnp/mnpoperations.p(ttMNPProcess.MNPSeq).
        
        must-print = true.
        ufkey = true.
@@ -384,8 +384,8 @@ BROWSE:
        /* change */
        RUN local-find-this(false).
 
-       ASSIGN ac-hdr = " MNP Process " ufkey = TRUE ehto = 5. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " MNP Process " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttMNPProcess.FormRequest.
 
        RUN local-UPDATE-record.                                  

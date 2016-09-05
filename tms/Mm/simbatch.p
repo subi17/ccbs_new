@@ -30,7 +30,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhSIMBatch).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhSIMBatch).
+      RUN Mc/eventview2.p(lhSIMBatch).
    END.
 
 
@@ -122,7 +122,7 @@ form /* memo */
     FRAME f4.
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Vendor, By Type ,By 3, By 4".
@@ -155,12 +155,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a SimBatch  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -422,8 +422,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
         Disp lcBrand With FRAME f1.
        SET   lcBrand WHEN gcAllBrand = TRUE
@@ -443,8 +443,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        Disp lcBrand With FRAME f2.
        SET  lcBrand WHEN gcAllBrand = TRUE
@@ -468,19 +468,19 @@ BROWSE:
        ASSIGN                                 
        rt_param[2] = string(SimBatch.SimBatch)
        rt_param[1] = "". /* ALL Stocks */
-       RUN Mm/sim(SimBatch.simBatch).
+       RUN Mm/sim.p(SimBatch.simBatch).
 
        NEXT LOOP.
      END.
 
      /* UPDATE memo */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         ehto = 9. ufkey = TRUE.
         RUN local-find-this(TRUE).
         DISPLAY SimBatch.Memo WITH FRAME f4.
         IF lcRight = "RW" THEN DO:
-           RUN Syst/ufkey.
+           RUN Syst/ufkey.p.
 
            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSimBatch).
            UPDATE SimBatch.Memo WITH FRAME f4.
@@ -550,8 +550,8 @@ BROWSE:
        {Syst/uright2.i}
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY SimBatch.ManCode.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSimBatch).

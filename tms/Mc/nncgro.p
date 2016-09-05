@@ -9,7 +9,7 @@
                               Event logging added
                   11.03.03/tk tokens
                               invotxt tablename changed
-                  18.03.03/tk RUN Mc/memo            
+                  18.03.03/tk RUN Mc/memo.p            
                   19.03.03 aam EnterTask & LeaveTask,
                                run tasks when changes occur (fecgtask)
                   27.03.03 tk  f4 in update closed program             
@@ -40,7 +40,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhCGMember).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhCustGroup).
+      RUN Mc/eventview2.p(lhCustGroup).
    END.
 END.
 
@@ -118,7 +118,7 @@ form /* Customer Group :n haku kentällä CGName */
     with row 4 col 2 title color value(ctc) " FIND Name "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST CustGroup
@@ -149,13 +149,13 @@ repeat WITH FRAME sel:
 
    IF lisattava THEN DO:  /* cgroupn lisäys  */
       assign cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       lisaa:
       repeat WITH FRAME lis ON ENDKEY UNDO lisaa, LEAVE lisaa.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR CustGroup.CustGroup
            VALIDATE
@@ -402,9 +402,9 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        CustGroup = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
               CustGroup WITH FRAME f1.
@@ -425,9 +425,9 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        CGName = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN gcAllBrand
               CGName WITH FRAME f2.
@@ -450,7 +450,7 @@ SELAUS:
 
        FIND CustGroup where recid(CustGroup) = rtab[frame-line(sel)]
        no-lock.
-       RUN Mc/memo(INPUT 0,
+       RUN Mc/memo.p(INPUT 0,
                 INPUT "CustGroup",
                 INPUT STRING(CustGroup.CustGroup),
                 INPUT "Customer group").
@@ -461,7 +461,7 @@ SELAUS:
 
      else if lookup(nap,"4,f4") > 0 THEN DO TRANSAction:  /* members */
         FIND CustGroup where recid(CustGroup) = rtab[FRAME-LINE] no-lock.
-        RUN Mc/nncgme1(CustGroup.CustGroup).
+        RUN Mc/nncgme1.p(CustGroup.CustGroup).
         ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -563,7 +563,7 @@ SELAUS:
        exclusive-lock.
 
        assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
-       cfc = "lis". RUN Syst/ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY CustGroup.CustGroup
        CustGroup.EnterTask CustGroup.LeaveTask
        CustGroup.CreUser CustGroup.CreDate
@@ -571,7 +571,7 @@ SELAUS:
        CustGroup.CGName .
 
        IF lcRight = "RW" THEN DO:
-          RUN Syst/ufkey.
+          RUN Syst/ufkey.p.
 
           IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustGroup).
 

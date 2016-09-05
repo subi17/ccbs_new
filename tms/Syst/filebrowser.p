@@ -45,7 +45,7 @@ FRAME sel.
 
 cfc = "sel".
 
-RUN Syst/ufcolor.
+RUN Syst/ufcolor.p.
 
 ccc = cfc.
 

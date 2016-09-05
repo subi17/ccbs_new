@@ -85,7 +85,7 @@ form /* samtrafiksomrAde search WITH FIELD AreaName */
     with row 4 col 2 title color value(ctc) " FIND Name "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST AreaPlan
@@ -116,12 +116,12 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* AreaPlan -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            PROMPT-FOR AreaPlan.TrafficArea
            VALIDATE
@@ -396,9 +396,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        haku-st-nr = 0.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE haku-st-nr WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        IF haku-st-nr <> 0 THEN DO:
@@ -419,9 +419,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        haku-AreaName = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE haku-AreaName WITH FRAME haku-f2.
        HIDE FRAME haku-f2 no-pause.
        if haku-AreaName <> "" THEN DO:
@@ -523,8 +523,8 @@ BROWSE:
        FIND AreaPlan where recid(AreaPlan) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
          AreaPlan.TrafficArea
          AreaPlan.AreaName.

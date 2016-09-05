@@ -116,7 +116,7 @@ FOR EACH ttPaym:
    END. 
 
    /* customers must have a bank account; first check from dd-authorization */
-   RUN Ar/nnsvte (Customer.CustNum,
+   RUN Ar/nnsvte.p (Customer.CustNum,
                TODAY, 
                OUTPUT ttPaym.CustBank).
    IF ttPaym.CustBank = "" THEN ttPaym.CustBank = Customer.BankAcc.

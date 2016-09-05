@@ -80,7 +80,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN Inv/denybilling (ttFiles.DenyFile,
+   RUN Inv/denybilling.p (ttFiles.DenyFile,
                     lcLogFile,
                     OUTPUT liRead,
                     OUTPUT liExist,

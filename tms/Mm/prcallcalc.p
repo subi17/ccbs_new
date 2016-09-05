@@ -40,7 +40,7 @@ IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
 ELSE lcUserName = "".
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
  
  DISPLAY
  "A) Calls Browse                "  @ menuc[1]    SKIP
@@ -64,7 +64,7 @@ DO WHILE TRUE:
 
    ELSE IF FRAME-INDEX = 2 THEN DO:
       /* Sum the prepaid calls of this cli and show the current balance. */
-      RUN Mm/msisdni2(lhSub::MsSeq).
+      RUN Mm/msisdni2.p(lhSub::MsSeq).
    END.
          
    ELSE IF FRAME-INDEX = 3 THEN DO:

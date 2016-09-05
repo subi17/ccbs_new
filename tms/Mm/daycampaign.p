@@ -238,7 +238,7 @@ FUNCTION fStatusName RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 
@@ -263,13 +263,13 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* DayCampaign -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
       
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            CREATE DayCampaign.
@@ -482,9 +482,9 @@ repeat WITH FRAME sel:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        lcEvent = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE lcEvent WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        if lcEvent <> "" THEN DO:
@@ -585,7 +585,7 @@ repeat WITH FRAME sel:
      /* translations */
      ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:  
         FIND DayCampaign WHERE RECID(DayCampaign) = rtab[FRAME-LINE] NO-LOCK.
-        RUN Mc/invlang(14,DayCampaign.DCEvent).
+        RUN Mc/invlang.p(14,DayCampaign.DCEvent).
           
         ufkey = TRUE.
         NEXT LOOP.
@@ -614,9 +614,9 @@ repeat WITH FRAME sel:
 
 
        END.
-       ELSE RUN Mm/dccli (input 0, daycampaign.dcevent).
+       ELSE RUN Mm/dccli.p (input 0, daycampaign.dcevent).
        ufkey = true.
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
        PAUSE 0.
      END.
 
@@ -626,9 +626,9 @@ repeat WITH FRAME sel:
             recid(DayCampaign) = rtab[frame-line(sel)]
        no-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN Syst/ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDayCampaign).
 
@@ -818,7 +818,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          ufk[2] = 295
          ufk[4] = 253
          ufk[8] = 8.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       
       IF toimi = 1 THEN DO:
          RUN pUpdate(ilNew).
@@ -855,7 +855,7 @@ PROCEDURE pUpdate:
       FIND CURRENT DayCampaign EXCLUSIVE-LOCK.
             
       ehto = 9.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
     
       UPDATE 
          DayCampaign.DCEvent WHEN ilNew
@@ -964,7 +964,7 @@ PROCEDURE pUpdate:
             END.
          
             ehto = 9.
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
             NEXT.
          END.
        
@@ -1199,7 +1199,7 @@ PROCEDURE pFeeData:
             ufk    = 0
             ufk[1] = 7 WHEN gcHelpParam = ""
             ufk[8] = 8.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
       
       IF toimi = 1 THEN 
@@ -1208,7 +1208,7 @@ PROCEDURE pFeeData:
          FIND CURRENT DayCampaign EXCLUSIVE-LOCK.
             
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
     
          UPDATE 
             DayCampaign.FeeModel
@@ -1236,7 +1236,7 @@ PROCEDURE pFeeData:
                END.
           
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                NEXT.
             END.
 

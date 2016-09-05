@@ -89,7 +89,7 @@ WITH  OVERLAY ROW 4 centered
 
 IF icTitle = "" THEN icTitle = "Requests".
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 /* column-labels for parameters */
@@ -116,11 +116,11 @@ REPEAT WITH FRAME sel:
    
    IF must-add THEN DO:  /* Add a record  */
       ASSIGN cfc = "upd" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.   
+      RUN Syst/ufcolor.p.   
    ADD-ROW:
       REPEAT WITH FRAME upd ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME upd:
            
            CLEAR FRAME upd NO-PAUSE.
@@ -209,7 +209,7 @@ REPEAT WITH FRAME sel:
            ehto   = 3 
            ufkey  = FALSE.
       
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.

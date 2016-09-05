@@ -24,7 +24,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhSubsTerminal).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhSubsTerminal).
+      RUN Mc/eventview2.p(lhSubsTerminal).
    END.
 
 END.
@@ -153,7 +153,7 @@ END FUNCTION.
 /* collect accessories to temp-table */
 RUN pFillTempTable.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -228,7 +228,7 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
@@ -366,8 +366,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE liMsSeq WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -466,7 +466,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSubsTerminal).
 
        ASSIGN ac-hdr = " TERMINAL " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -622,10 +622,10 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          
          IF toimi = 6 THEN DO:
-            RUN Mc/eventsel ("SubsTerminal",STRING(SubsTerminal.TerminalID)). 
+            RUN Mc/eventsel.p ("SubsTerminal",STRING(SubsTerminal.TerminalID)). 
             NEXT. 
          END.
          
@@ -634,7 +634,7 @@ PROCEDURE local-UPDATE-record:
       
       FIND CURRENT SubsTerminal EXCLUSIVE-LOCK.
       
-      ehto = 9. RUN Syst/ufkey.
+      ehto = 9. RUN Syst/ufkey.p.
       
       UPDATE
          SubsTerminal.IMEI

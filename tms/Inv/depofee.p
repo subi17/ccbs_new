@@ -153,7 +153,7 @@ DO FOR SingleFee TRANS:
 END.
 
 /* create invoice */
-RUN Inv/nnlamu5 (liDepoCust,
+RUN Inv/nnlamu5.p (liDepoCust,
              Order.OrderID,
              "",
              liInvType,

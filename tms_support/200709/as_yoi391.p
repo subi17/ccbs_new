@@ -107,7 +107,7 @@ repeat:
 
    if clitype.feemodel1 > "" then do:
    
-      RUN Mc/creasfee (MobSub.CustNum,
+      RUN Mc/creasfee.p (MobSub.CustNum,
                     MobSub.MsSeq,
                     ldtcurr,
                     "MobSub",

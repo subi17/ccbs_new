@@ -42,7 +42,7 @@ FRAME a.
 LOOP:
 DO WHILE TRUE:
 
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    REPEAT ON ENDKEY UNDO, LEAVE:
 
       UPDATE 

@@ -119,7 +119,7 @@ FORM /* seek TMCounter  BY TMCounterId and TMCounterOffice */
    COLOR VALUE(cfc)
    NO-LABELS FRAME f3.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = " By Customer    , By Subscription, By Usage       ".
@@ -195,7 +195,7 @@ BROWSE:
          ufk[6]= 0 
          ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -340,8 +340,8 @@ BROWSE:
       /* Search BY column 1 */
       ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
       THEN DO ON ENDKEY UNDO, NEXT LOOP:
-         cfc = "puyr". RUN Syst/ufcolor.
-         ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+         cfc = "puyr". RUN Syst/ufcolor.p.
+         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          CLEAR FRAME f1.
          ASSIGN
             lcCustnum  = 0.
@@ -373,8 +373,8 @@ BROWSE:
       ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
       THEN DO ON ENDKEY UNDO, NEXT LOOP:
              
-         cfc = "puyr". RUN Syst/ufcolor.
-         ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+         cfc = "puyr". RUN Syst/ufcolor.p.
+         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          CLEAR FRAME f2.
          ASSIGN
                liMsSeq = 0.
@@ -415,8 +415,8 @@ BROWSE:
       ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
       THEN DO ON ENDKEY UNDO, NEXT LOOP:
              
-         cfc = "puyr". RUN Syst/ufcolor.
-         ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+         cfc = "puyr". RUN Syst/ufcolor.p.
+         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          CLEAR FRAME f3.
          ldeAmountPrev = ldeAmount. 
          DISP ldeAmount WITH FRAME f3.

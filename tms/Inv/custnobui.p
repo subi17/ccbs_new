@@ -83,13 +83,13 @@ REPEAT WITH FRAME fDate:
        IF ldtDate[1] = ? OR ldtDate[2] = ? OR lcFile = "" 
        THEN ufk[5] = 0.
               
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
     END.
     
     IF TOIMI = 1 THEN DO:
     
        ehto = 9.
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
        
        REPEAT WITH FRAME fDate ON ENDKEY UNDO, LEAVE:
        
@@ -104,7 +104,7 @@ REPEAT WITH FRAME fDate:
     END.
 
     ELSE IF toimi = 5 THEN DO:
-       RUN Inv/custnobill (ldtDate[1],  
+       RUN Inv/custnobill.p (ldtDate[1],  
                        ldtDate[2],
                        lcUser,
                        llActive,

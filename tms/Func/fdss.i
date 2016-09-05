@@ -1066,7 +1066,7 @@ FUNCTION fTransferDSS RETURNS LOG
            EXCLUSIVE-LOCK NO-ERROR.
       IF AVAIL FixedFee THEN DO:
          /* Close Fee from current subscription */
-         RUN Mc/closefee(FixedFee.FFNum,
+         RUN Mc/closefee.p(FixedFee.FFNum,
                       ldMonthEndDate,
                       FALSE,
                       FALSE,
@@ -1091,7 +1091,7 @@ FUNCTION fTransferDSS RETURNS LOG
          END. /* IF DAY(FixedFee.BegPeriod) > 1 AND FMItem.FirstMonthBR = 0 */
 
          /* Open fee on new DSS subs. from next month */
-         RUN Mc/creasfee(bMobSub.CustNum,
+         RUN Mc/creasfee.p(bMobSub.CustNum,
                       bMobSub.MsSeq,
                       ldNextMonthFromDate,
                       "FeeModel",

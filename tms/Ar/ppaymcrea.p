@@ -132,7 +132,7 @@ IF ldDivide = ? OR ldDivide = 0 THEN DO:
    RETURN.
 END.
 
-RUN Ar/invbal(Invoice.InvNum, OUTPUT ldDebt).
+RUN Ar/invbal.p(Invoice.InvNum, OUTPUT ldDebt).
 
 ASSIGN ldtDueDate[1] = MAX(Invoice.DueDate,TODAY)
        /* add defined days and check that new date is a banking day */
@@ -184,13 +184,13 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lDueDate, NEXT lDueDate:
       ufk[5] = 1027  
       ufk[8] = 8 
       ehto   = 0.
-   RUN Syst/ufkey.
+   RUN Syst/ufkey.p.
 
    IF toimi = 1 THEN DO:
    
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
          
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE ldAmount[1]
                 llCreateFees

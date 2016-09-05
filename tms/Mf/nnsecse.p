@@ -37,7 +37,7 @@ WITH width 55 OVERLAY centered ROW 3 scroll 1 12 DOWN
    + string(pvm,"99-99-99") + " "
    FRAME tlse.
 
-cfc = "tlse". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 Runko:
 repeat:
 
@@ -209,8 +209,8 @@ BROWSE:
 
         /* RepType */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* RepType */
-           cfc = "puyr". RUN Syst/ufcolor.
-           RepType = 0. ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           RepType = 0. ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE RepType WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            IF RepType <> 0 THEN DO:

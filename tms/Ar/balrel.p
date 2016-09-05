@@ -179,7 +179,7 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                END.
 
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 
@@ -204,10 +204,10 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       END.
       ELSE DO:
          ehto = 5.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END. 
       
-      RUN Ar/balrep  (lcInvGroup[1],
+      RUN Ar/balrep.p  (lcInvGroup[1],
                    lcInvGroup[2],
                    liCustNum[1],
                    liCustNum[2],

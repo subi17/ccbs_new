@@ -6,7 +6,7 @@ katun = "cron".
 {Syst/eventlog.i}
 
 fELog("DAILY","ServiceDumpStarted").
-RUN Mm/servicedump.
+RUN Mm/servicedump.p.
 fELog("DAILY","ServiceDumpStopped").
 
 quit.

@@ -31,7 +31,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhCustomer).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhCustomer).
+      RUN Mc/eventview2.p(lhCustomer).
    END.
 
 END.
@@ -78,7 +78,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     FRAME sel.
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -122,12 +122,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a Customer  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR Customer.CustNum
@@ -361,9 +361,9 @@ BROWSE:
         RUN local-find-this (FALSE).
         IF icCriteria      = "ID" OR 
            icCriteria      = "AGRNAME" THEN 
-           RUN Mm/termmobsub(Customer.CustNum, "AGREEMENT").
+           RUN Mm/termmobsub.p(Customer.CustNum, "AGREEMENT").
         ELSE IF icCriteria = "UserName" THEN
-           RUN Mm/termmobsub(Customer.CustNum, "USER").
+           RUN Mm/termmobsub.p(Customer.CustNum, "USER").
         
         ufkey = true.
                               

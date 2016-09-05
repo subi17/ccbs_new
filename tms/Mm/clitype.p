@@ -38,7 +38,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhCLIType).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhCLIType).
+      RUN Mc/eventview2.p(lhCLIType).
    END.
 
 END.
@@ -236,7 +236,7 @@ FUNCTION fUsageType RETURNS LOGIC
                                       STRING(iiUsageType)).
 END FUNCTION.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 FIND FIRST CLIType Where 
@@ -266,12 +266,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CLIType  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR CLIType.CLIType
@@ -363,7 +363,7 @@ BROWSE:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -501,8 +501,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISP CLIType With FRAME f1.
        SET  lcBrand WHEN gcallbrand = TRUE CLIType WITH FRAME f1.
@@ -528,7 +528,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
         RUN local-find-this(FALSE).
 
-        RUN Mm/ctservpac (CLIType.CLIType).
+        RUN Mm/ctservpac.p (CLIType.CLIType).
         
         ufkey = TRUE.
         NEXT LOOP.
@@ -537,7 +537,7 @@ BROWSE:
      /* translations */
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  
         RUN local-find-this(FALSE).
-        RUN Mc/invlang(9,CLIType.CLIType).
+        RUN Mc/invlang.p(9,CLIType.CLIType).
           
         ufkey = TRUE.
         NEXT LOOP.
@@ -546,7 +546,7 @@ BROWSE:
      /* memo */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO:
         RUN local-find-this(FALSE).
-        RUN Mc/memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "CLIType",
                  INPUT STRING(CLIType.CLIType),
                  INPUT "CLI Type").
@@ -615,7 +615,7 @@ BROWSE:
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CLIType.CLIType.
 
        RUN local-UPDATE-record.                                  
@@ -779,14 +779,14 @@ PROCEDURE local-UPDATE-record:
          ufk[1] = 7 WHEN lcRight = "RW"
          ufk[8] = 8
          ehto   = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
          
       IF toimi = 1 THEN 
       ChangeType:
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          
          PROMPT-FOR
             CLIType.CLIName
@@ -839,7 +839,7 @@ PROCEDURE local-UPDATE-record:
                END.
              
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 

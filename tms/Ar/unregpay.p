@@ -325,7 +325,7 @@ FORM /* Seek a Bank AccNum */
    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME hayr5.
 
 cfc = "sel". 
-RUN Syst/ufcolor. 
+RUN Syst/ufcolor.p. 
 ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
@@ -365,7 +365,7 @@ REPEAT WITH FRAME sel:
    IF must-add THEN DO:  /* Add a UnregPaym  */
  
       ASSIGN cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -373,7 +373,7 @@ REPEAT WITH FRAME sel:
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
         UnregPaym.Memo:SCREEN-VALUE = "".
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE ADD-ROW:
 
@@ -480,7 +480,7 @@ REPEAT WITH FRAME sel:
          IF xState = 0  THEN ASSIGN ufk[3] = 597.
          IF xState NE 2 THEN ASSIGN ufk[4] = 1630.
 
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
 
       END.
 
@@ -638,7 +638,7 @@ REPEAT WITH FRAME sel:
          NO-LOCK.
          ASSIGN  fr-header = " SHOW MORE INFORMATION " ufkey = TRUE.
          
-         cfc = "lis". RUN Syst/ufcolor. 
+         cfc = "lis". RUN Syst/ufcolor.p. 
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhUnregPaym).
          
@@ -678,14 +678,14 @@ REPEAT WITH FRAME sel:
          ufkey = TRUE ufk = 0 ehto = 1
          ufk[1] = 28  ufk[2] = 30 ufk[3] = 789 ufk[4] = 763
          ufk[5] = 813 ufk[8] = 8. 
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          IF toimi = 8 THEN NEXT BROWSE.
 
          /* Seek a Date */
          IF toimi = 1 THEN DO:
-            cfc = "puyr". RUN Syst/ufcolor.
+            cfc = "puyr". RUN Syst/ufcolor.p.
             haku1 = ?.
-            ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr1.
             UPDATE lcBrand WHEN gcAllBrand
                    haku1 WITH FRAME hayr1.
@@ -717,9 +717,9 @@ REPEAT WITH FRAME sel:
 
          /* Seek a customer's name */
          IF toimi = 2 THEN DO:
-           cfc = "puyr". RUN Syst/ufcolor.
+           cfc = "puyr". RUN Syst/ufcolor.p.
             haku2 = "".
-            ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr2.
             UPDATE lcBrand WHEN gcAllBrand
                    haku2 WITH FRAME hayr2.
@@ -749,9 +749,9 @@ REPEAT WITH FRAME sel:
 
          /* Seek an amount */
          IF toimi = 3 THEN DO:
-            cfc = "puyr". RUN Syst/ufcolor.
+            cfc = "puyr". RUN Syst/ufcolor.p.
             haku3 = 0.
-            ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr3.
             UPDATE lcBrand WHEN gcAllBrand
                     haku3 WITH FRAME hayr3.
@@ -781,9 +781,9 @@ REPEAT WITH FRAME sel:
 
          /* Seek a reference number */
          IF toimi = 4 THEN DO:
-            cfc = "puyr". RUN Syst/ufcolor.
+            cfc = "puyr". RUN Syst/ufcolor.p.
             haku4 = "".
-            ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr4.
             UPDATE lcBrand WHEN gcAllBrand
                    haku4 WITH FRAME hayr4.
@@ -813,9 +813,9 @@ REPEAT WITH FRAME sel:
 
          /* Seek a Bank AccNum */ 
          IF toimi = 5 THEN DO:
-            cfc = "puyr". RUN Syst/ufcolor.
+            cfc = "puyr". RUN Syst/ufcolor.p.
             haku5 = "".
-            ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+            ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
             DISPLAY lcBrand WITH FRAME hayr5.
             UPDATE lcBrand WHEN gcAllBrand
                    haku5 WITH FRAME hayr5.
@@ -847,7 +847,7 @@ REPEAT WITH FRAME sel:
       ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO:
          FIND UnregPaym WHERE RECID(UnregPaym) = rtab[FRAME-LINE(sel)]
          no-lock.
-         RUN Ar/unreglog(UnregPaym.UrSeq).
+         RUN Ar/unreglog.p(UnregPaym.UrSeq).
          ufkey = true.
          NEXT.
       END.
@@ -983,9 +983,9 @@ REPEAT WITH FRAME sel:
          END.   
          memory = rtab[FRAME-LINE(sel)].
          ASSIGN ufkey = TRUE ufk = 0 ehto = 3.
-         RUN Syst/ufkey.   
+         RUN Syst/ufkey.p.   
          cfc = "lis".
-         RUN Syst/ufcolor. 
+         RUN Syst/ufcolor.p. 
          ON F1 BELL.
          ON F2 BELL.
          ON F4 BELL.
@@ -1014,8 +1014,8 @@ REPEAT WITH FRAME sel:
                         THEN "CREDIT LOSS " 
                         ELSE "INVOICE "
             ufkey = TRUE ehto = 9.
-            RUN Syst/ufkey.
-            cfc = "lis". RUN Syst/ufcolor.  
+            RUN Syst/ufkey.p.
+            cfc = "lis". RUN Syst/ufcolor.p.  
             on f4 endkey. /* se toimi vain jos ei kutsutaan F9 */
 
             ASSIGN   
@@ -1071,7 +1071,7 @@ REPEAT WITH FRAME sel:
 
                IF NOT llCredLoss THEN DO:
                   /* Calculate open Balance -> b-due */
-                  RUN Ar/invbal(Invoice.InvNum, OUTPUT b-due).
+                  RUN Ar/invbal.p(Invoice.InvNum, OUTPUT b-due).
                END.
 
                /* how much has been posted as credit loss */
@@ -1242,7 +1242,7 @@ REPEAT WITH FRAME sel:
             DelInt     = FALSE. 
 
             ASSIGN  ufkey = TRUE ehto = 9.
-            RUN Syst/ufkey.  
+            RUN Syst/ufkey.p.  
             FIND Customer WHERE Customer.CustName = UnregPaym.CustName 
             NO-LOCK NO-ERROR.
             IF AVAIL Customer THEN ASSIGN 
@@ -1366,7 +1366,7 @@ REPEAT WITH FRAME sel:
             DelInt     = FALSE.
 
             ASSIGN  ufkey = TRUE ehto = 9.
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
             FIND Customer WHERE Customer.CustName = UnregPaym.CustName 
             NO-LOCK NO-ERROR.
             IF AVAIL Customer THEN
@@ -1782,12 +1782,12 @@ PROCEDURE local-UPDATE-record:
                    ufk[8] = 8
                    ehto   = 0.
                 
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
          END.
          
          IF toimi = 1 THEN DO:
             
-            ehto = 9. RUN Syst/ufkey.
+            ehto = 9. RUN Syst/ufkey.p.
          
             FIND CURRENT UnregPaym EXCLUSIVE-LOCK.
             
@@ -1840,7 +1840,7 @@ PROCEDURE local-UPDATE-record:
       
       ELSE DO:
          ehto = 5.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          PAUSE MESSAGE "Press ENTER to continue".
       END.
       

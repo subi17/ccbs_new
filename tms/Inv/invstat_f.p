@@ -129,7 +129,7 @@ limits:
 REPEAT with frame valinta:
 
 
-    ehto = 9. RUN Syst/ufkey.
+    ehto = 9. RUN Syst/ufkey.p.
 
     repeat with frame valinta on endkey undo, leave:
         UPDATE 
@@ -193,7 +193,7 @@ REPEAT with frame valinta:
                END.
 
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 
@@ -220,7 +220,7 @@ REPEAT with frame valinta:
     repeat with frame valinta:
 
       assign ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       if toimi = 1 then next  limits.
 
@@ -230,7 +230,7 @@ REPEAT with frame valinta:
     end.
 
 
-    RUN Inv/invstat (xDate1,
+    RUN Inv/invstat.p (xDate1,
                  xDate2,
                  liInvType1,
                  liInvType2,

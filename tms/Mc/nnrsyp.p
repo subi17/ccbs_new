@@ -113,7 +113,7 @@ form /* reseller search with field RsName */
     color value(cfc) no-labels overlay frame f2.
 
 
-cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 view frame sel.
 
 find first Reseller
@@ -138,12 +138,12 @@ repeat with frame sel:
 
    if must-add then do:  /* Reseller -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = false.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat with frame lis on endkey undo add-new, leave add-new.
         pause 0 no-message.
         clear frame lis no-pause.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         do transaction:
            prompt-for Reseller.Reseller
            validate
@@ -402,9 +402,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        Reseller = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = true.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        DISP lcBrand with frame f1.
        UPDATE 
           lcBrand WHEN gcAllBrand
@@ -425,9 +425,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 then do on endkey undo, next LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        RsName = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = true.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
 
        DISP lcBrand with frame f2.
        UPDATE 
@@ -452,7 +452,7 @@ BROWSE:
        delline = frame-line.
        find Reseller where recid(Reseller) = rtab[frame-line] no-lock.
        if available Reseller 
-       then RUN Mm/smpwpr(Reseller.Reseller).
+       then RUN Mm/smpwpr.p(Reseller.Reseller).
        ufkey = true. 
      end.
      
@@ -461,7 +461,7 @@ BROWSE:
        delline = frame-line.
        find Reseller where recid(Reseller) = rtab[frame-line] no-lock.
        if available Reseller 
-       then RUN Mc/nnsmyp(Reseller.Reseller).
+       then RUN Mc/nnsmyp.p(Reseller.Reseller).
        ufkey = true. 
      end.
 
@@ -538,8 +538,8 @@ BROWSE:
        exclusive-lock.
 
        assign fr-header = " CHANGE " ufkey = true ehto = 9.
-       RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        display Reseller.Reseller .
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhresell).

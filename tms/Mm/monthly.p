@@ -17,6 +17,6 @@ katun = "cron".
 {Syst/eventlog.i}
 
 /* delete old counters */
-RUN Syst/tmcdelete (TODAY).
+RUN Syst/tmcdelete.p (TODAY).
 
 quit.

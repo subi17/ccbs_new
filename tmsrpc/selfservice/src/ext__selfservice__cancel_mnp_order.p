@@ -92,7 +92,7 @@ IF pcCancel_code NE "" THEN DO:
       RETURN appl_err("Incorrect cancellation code").
 END.
 
-RUN Mnp/mnp_operation(MNPProcess.MNPSeq,"cancel","CANC_ABONA").
+RUN Mnp/mnp_operation.p(MNPProcess.MNPSeq,"cancel","CANC_ABONA").
 
 IF RETURN-VALUE NE "OK" THEN
    RETURN appl_err("Cancellation rules are not met").

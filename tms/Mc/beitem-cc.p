@@ -36,7 +36,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhFMItem).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhFMItem).
+      RUN Mc/eventview2.p(lhFMItem).
    END.
 
 END.
@@ -306,12 +306,12 @@ PROCEDURE local-add-record:
             BillItem.BillCode = ttable.ValueId NO-LOCK NO-ERROR.
 
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
       
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 

@@ -4,7 +4,7 @@
   APPLICATION ..: TMS
   AUTHOR .......: aam
   CREATED ......: 25-10-02
-  MODIFIED .....: 22.03.07 kl  new param for RUN Ar/payments
+  MODIFIED .....: 22.03.07 kl  new param for RUN Ar/payments.p
 
   VERSION ......: M15
 ----------------------------------------------------------------------------*/

@@ -3,6 +3,6 @@
    read gift orders from file 
 */
 
-RUN Mm/readorderb ("GIFT"). 
+RUN Mm/readorderb.p ("GIFT"). 
 
 QUIT.

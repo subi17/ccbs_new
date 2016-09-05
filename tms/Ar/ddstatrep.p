@@ -153,7 +153,7 @@ END.
 /* active customers */
 FOR EACH ttCust:
 
-   RUN Ar/nnsvte (ttCust.CustNum,
+   RUN Ar/nnsvte.p (ttCust.CustNum,
                idtAuthDate2,
                OUTPUT lcBankAcc).
    

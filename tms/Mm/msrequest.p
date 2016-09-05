@@ -41,7 +41,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhMsRequest).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhMsRequest).
+      RUN Mc/eventview2.p(lhMsRequest).
    END.      
 
 END.
@@ -239,7 +239,7 @@ FUNCTION fFrameTitle RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -308,14 +308,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a MsRequest  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -439,7 +439,7 @@ REPEAT WITH FRAME sel:
            ufk[3] = 0
            ufk[4] = 0.
         
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
@@ -583,8 +583,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
@@ -622,8 +622,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN gcAllBrand
@@ -651,8 +651,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
        UPDATE lcBrand WHEN gcAllBrand
@@ -679,8 +679,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F4.
        DISPLAY lcBrand WITH FRAME F4.
        UPDATE lcBrand WHEN gcAllBrand
@@ -771,7 +771,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsRequest).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY MsRequest.MSSeq.
 
        RUN local-UPDATE-record.                                  
@@ -1358,25 +1358,25 @@ PROCEDURE local-UPDATE-record:
          END.
       END.
                 
-      RUN Syst/ufkey. 
+      RUN Syst/ufkey.p. 
 
       /* parameters */  
       IF toimi = 2 THEN DO:
-         RUN Mm/msreqparam(MSRequest.MSrequest).
+         RUN Mm/msreqparam.p(MSRequest.MSrequest).
       END.
       
       ELSE IF toimi = 3 THEN DO:
 
          /* search main-request*/
          IF   MSRequest.origRequest > 0 
-         THEN RUN Mm/msrequest(?,
+         THEN RUN Mm/msrequest.p(?,
                             ?, 
                             MSRequest.MSrequest, 
                             ?, 
                             Msrequest.OrigRequest,
                             "").
          /* search sub-requests */
-         ELSE RUN Mm/msrequest(?,
+         ELSE RUN Mm/msrequest.p(?,
                             ?,
                             ?,
                             ?,
@@ -1385,7 +1385,7 @@ PROCEDURE local-UPDATE-record:
       END.
       ELSE IF toimi = 4 THEN DO:
 
-        RUN Mc/memo(INPUT MsRequest.CustNum,
+        RUN Mc/memo.p(INPUT MsRequest.CustNum,
                  INPUT "MsRequest",
                  INPUT STRING(MsRequest.MsRequest),
                  INPUT "Request").
@@ -1404,13 +1404,13 @@ PROCEDURE local-UPDATE-record:
       /* show eventlog */
       ELSE IF toimi = 6 THEN DO:
 
-        RUN Mc/eventsel("MsRequest",
+        RUN Mc/eventsel.p("MsRequest",
                      STRING(MsRequest.MsRequest)).
       END.
 
       /* change status */
       ELSE IF toimi = 7 THEN DO:
-         RUN Syst/msreqfuncmenu(MsRequest.MsRequest).
+         RUN Syst/msreqfuncmenu.p(MsRequest.MsRequest).
       END.
 
       ELSE IF toimi = 8 THEN LEAVE. 

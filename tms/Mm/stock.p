@@ -33,7 +33,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhStock).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhStock).
+      RUN Mc/eventview2.p(lhStock).
    END.
 END.
 
@@ -119,7 +119,7 @@ form /* seek Stock  BY StoName */
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND Name "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -152,12 +152,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a Stock  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR Stock.Stock
@@ -379,9 +379,9 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        Stock = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISP lcBrand With Frame f1.
        UPDATE lcBrand WHEN gcAllBrand = TRUE Stock WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -404,9 +404,9 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        StoName = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME f2.
        UPDATE lcBrand WHEN gcAllBrand = TRUE 
               StoName WITH FRAME f2.
@@ -489,8 +489,8 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhStock).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        CLEAR FRAME lis no-pause.
        DISPLAY Stock.Stock.
        RUN local-UPDATE-record.

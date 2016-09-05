@@ -92,7 +92,7 @@ PROCEDURE pUserAccount:
    /* print a letter */
    IF llPrintLetter THEN DO:
 
-      RUN Mc/prinuser(MsRequest.CustNum,
+      RUN Mc/prinuser.p(MsRequest.CustNum,
                    MsRequest.ReqCParam1, 
                    OUTPUT lcReqChar).
 

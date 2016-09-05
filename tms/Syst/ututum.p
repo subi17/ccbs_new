@@ -78,7 +78,7 @@ form
     FRAME lis.
 
 FIND FIRST TMSReport where TMSReport.RepName = si-tul no-lock no-error.
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 FIND FIRST TMSRepCfg where TMSRepCfg.RepName = si-tul no-lock no-error.
 IF AVAILABLE TMSRepCfg THEN DO:
@@ -104,12 +104,12 @@ repeat WITH FRAME sel:
       cfc = "lis"
       ufkey = TRUE
       fr-header = " ADD, (width " + string(TMSReport.PageWidth) + ") ".
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis:
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          assign tnimi = "".
 
          CREATE TMSRepCfg.
@@ -135,7 +135,7 @@ add-new:
             end.  
             if frame-field = "Effect" and keylabel(lastkey) = "F9"
             THEN DO:
-               RUN Syst/utehse(INPUT INPUT TMSRepCfg.PrinterId,
+               RUN Syst/utehse.p(INPUT INPUT TMSRepCfg.PrinterId,
                           OUTPUT xeff).
                IF xeff NE ? THEN DISP xeff @ TMSRepCfg.Effect.
                NEXT.
@@ -464,8 +464,8 @@ BROWSE:
                                     + ")".
 
         ASSIGN ufkey = TRUE ehto = 9.
-        RUN Syst/ufkey.
-        cfc = "lis". RUN Syst/ufcolor.
+        RUN Syst/ufkey.p.
+        cfc = "lis". RUN Syst/ufcolor.p.
 
         FIND FIRST PrintCodes where 
                    PrintCodes.Effect = TMSRepCfg.Effect AND 
@@ -499,7 +499,7 @@ BROWSE:
 
             if frame-field = "Effect" and keylabel(lastkey) = "F9"
             THEN DO:
-               RUN Syst/utehse(INPUT INPUT TMSRepCfg.PrinterId,
+               RUN Syst/utehse.p(INPUT INPUT TMSRepCfg.PrinterId,
                           OUTPUT xeff).
                IF xeff NE ? THEN DISP xeff @ TMSRepCfg.Effect.
                NEXT.

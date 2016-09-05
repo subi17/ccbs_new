@@ -39,7 +39,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhbCoRule).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhCoRule).
+      RUN Mc/eventview2.p(lhCoRule).
    END.
 
 END.
@@ -294,7 +294,7 @@ END FUNCTION.
 
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -317,14 +317,14 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CoRule  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -360,7 +360,7 @@ REPEAT WITH FRAME sel:
                  END.
  
                  ehto = 9.
-                 RUN Syst/ufkey.
+                 RUN Syst/ufkey.p.
                  NEXT. 
               END.
            
@@ -457,7 +457,7 @@ REPEAT WITH FRAME sel:
         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[8]= 8 
         ehto = 3 ufkey = FALSE.
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -601,12 +601,12 @@ REPEAT WITH FRAME sel:
         ufk[8]= 8 
         ehto = 0
         ufkey = TRUE.
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
 
         /* Search BY column 1 */
         IF toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           cfc = "puyr". RUN Syst/ufcolor.
-           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f1.
            DISPLAY lcBrand WITH FRAME F1.
            UPDATE lcBrand WHEN gcAllBrand
@@ -628,8 +628,8 @@ REPEAT WITH FRAME sel:
 
         /* Search BY column 2 */
         ELSE IF toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           cfc = "puyr". RUN Syst/ufcolor.
-           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f2.
            DISPLAY lcBrand WITH FRAME F2.
            UPDATE lcBrand WHEN gcAllBrand
@@ -655,7 +655,7 @@ REPEAT WITH FRAME sel:
        {Syst/uright2.i}
        RUN local-find-this (FALSE).
        IF AVAILABLE CoRule 
-       THEN RUN Mc/cobasis (CoRule.CoRuleID). 
+       THEN RUN Mc/cobasis.p (CoRule.CoRuleID). 
        ufkey = true. 
      END.
 
@@ -663,7 +663,7 @@ REPEAT WITH FRAME sel:
        {Syst/uright2.i}
        RUN local-find-this (FALSE).
        IF AVAILABLE CoRule 
-       THEN RUN Ar/cotarg (CoRule.CoRuleID, "rule"). 
+       THEN RUN Ar/cotarg.p (CoRule.CoRuleID, "rule"). 
        ufkey = true. 
      END.
 
@@ -747,7 +747,7 @@ REPEAT WITH FRAME sel:
         END.
      
         ehto = 9.
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         ufkey = TRUE.
         
         REPEAT WITH FRAME fTemplate ON ENDKEY UNDO, NEXT LOOP:
@@ -820,7 +820,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCoRule).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        must-print = FALSE.
        
@@ -998,7 +998,7 @@ PROCEDURE local-UPDATE-record:
             ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
             ufk[3] = 1550 WHEN lcRight = "RW" AND gcHelpParam = ""
             ufk[8] = 8.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
       
       IF toimi = 1 THEN 
@@ -1007,7 +1007,7 @@ PROCEDURE local-UPDATE-record:
          FIND CURRENT CoRule EXCLUSIVE-LOCK.
             
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       
          UPDATE
             CoRule.RuleDesc WHEN NOT NEW CoRule
@@ -1083,7 +1083,7 @@ PROCEDURE local-UPDATE-record:
                END.
                 
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
             
@@ -1194,7 +1194,7 @@ PROCEDURE local-UPDATE-record:
       ELSE IF toimi = 3 THEN DO:
  
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
         
          REPEAT WITH FRAME fTemplate ON ENDKEY UNDO, LEAVE:
             PAUSE 0.

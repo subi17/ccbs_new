@@ -7,4 +7,4 @@
 {Syst/commali.i}
 
 /* all customers & invoices */
-RUN Ar/paymplan (0,0,0).
+RUN Ar/paymplan.p (0,0,0).

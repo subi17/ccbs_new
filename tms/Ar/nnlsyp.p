@@ -7,12 +7,12 @@
   CREATED ......: 24.02.1997 pt
   changePVM ....: 01.04.1998 pt Invoice.InvAmt : one may NOT UPDATE
                   21.04.1998 kl InvGroup.UpdCustBal ( AccNum receivable )
-                  09.10.1998 pt RUN Mc/memo (nninme.p)
+                  09.10.1998 pt RUN Mc/memo.p (nninme.p)
                   13.04.1999 pt in English
                   24.08.1999 pt set TimeStamp when changed
                   30.04.2002 aam "kr" references removed 
                   02.05.2002 tk  eventlogging added
-                  20.05.2002 tk  RUN Mc/memo
+                  20.05.2002 tk  RUN Mc/memo.p
                   10.06.2002 aam use Invoice.OverPaym AND OPAccNum FOR
                                  overpayment,
                                  don't UPDATE InvDate, InvType, PaymState, 
@@ -195,7 +195,7 @@ FUNCTION fClaimStateName RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "yri". RUN Syst/ufcolor.
+cfc = "yri". RUN Syst/ufcolor.p.
 
 liDueDate = fCParamI("DueDateTrans").
 
@@ -238,7 +238,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
    PAUSE 0 no-message.
    assign lasnimi = ""
           kodnim = "".
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    PROMPT-FOR Invoice.InvNum /*WITH FRAME Invoice */
    VALIDATE(input InvNum = "" OR input InvNum ="0" OR
             CAN-FIND (FIRST Invoice WHERE 
@@ -250,7 +250,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
         exclusive-lock no-error.
 
    IF AVAILABLE Invoice THEN DO:
-      RUN Ar/invbal(Invoice.InvNum,
+      RUN Ar/invbal.p(Invoice.InvNum,
                  OUTPUT suoritettu).
       suoritettu = Invoice.InvAmt - suoritettu.                 
    END.
@@ -331,7 +331,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
 
       ehto = 0. RUN Syst/ufkey.p.
       IF toimi = 1 AND lcRight = "RW" THEN DO:
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhInvoice).
 
@@ -458,7 +458,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
                END.
 
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 
@@ -546,7 +546,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
       END.
 
       ELSE IF toimi = 3 THEN DO : /* memo */
-         RUN Mc/memo(INPUT Invoice.Custnum,
+         RUN Mc/memo.p(INPUT Invoice.Custnum,
                   INPUT "invoice",
                   INPUT STRING(Invoice.InvNum),
                   INPUT "Invoice Number").

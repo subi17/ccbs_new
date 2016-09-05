@@ -370,7 +370,7 @@ PROCEDURE pFullCreditNote:
             WHEN 3 THEN lcReqChar = "Advance p".
             END CASE. 
             
-            RUN Ar/makepaym (BUFFER Invoice,
+            RUN Ar/makepaym.p (BUFFER Invoice,
                           -1 * ldTotRefund,
                           TODAY,
                           liAccNum,

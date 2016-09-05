@@ -56,7 +56,7 @@ WITH ROW FrmRow OVERLAY FrmDown DOWN
     CENTERED NO-LABELS 
     FRAME sel.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -133,7 +133,7 @@ REPEAT WITH FRAME sel:
            ehto   = 3 
            ufkey  = FALSE.
       
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -252,7 +252,7 @@ REPEAT WITH FRAME sel:
         IF AVAILABLE ttMenu THEN DO:
            
            ehto = 5.
-           RUN Syst/ufkey.
+           RUN Syst/ufkey.p.
            
            RUN VALUE(ttMenu.Module)(iiTMRuleSeq,
                                     ttMenu.ModParam,

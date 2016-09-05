@@ -52,7 +52,7 @@ PUT STREAM excel UNFORMATTED
 "Customer's Name" tab
 "Size"            tab
 "Conn".
-RUN Syst/uexskip(1).
+RUN Syst/uexskip.p(1).
 
 FOR
     EACH Customer no-lock            where
@@ -88,7 +88,7 @@ FOR
       Size                    tab
       Customer.ConnType format "0/5".
 
-      RUN Syst/uexskip(1).
+      RUN Syst/uexskip.p(1).
 END.
 
 OUTPUT STREAM excel CLOSE.

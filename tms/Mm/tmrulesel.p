@@ -52,7 +52,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 LOOP:
@@ -118,7 +118,7 @@ BROWSE:
         ufk[6]= 0 
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -254,7 +254,7 @@ BROWSE:
         RUN local-find-this(false).
         HIDE FRAME sel no-pause.
         VIEW FRAME sel.
-        RUN Mm/tmlimit(TMRule.TMRuleSeq,piMsSeq,piCustNum,1).
+        RUN Mm/tmlimit.p(TMRule.TMRuleSeq,piMsSeq,piCustNum,1).
         ufkey = true.
         NEXT LOOP.
      END.
@@ -262,7 +262,7 @@ BROWSE:
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO:
         RUN local-find-this(false).
         HIDE FRAME sel no-pause.
-        RUN Mm/tmcounter(TMRule.TMRuleSeq,piMsSeq,piCustNum).
+        RUN Mm/tmcounter.p(TMRule.TMRuleSeq,piMsSeq,piCustNum).
         VIEW FRAME sel.
         ufkey = true.
         NEXT LOOP.

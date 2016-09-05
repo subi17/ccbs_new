@@ -194,11 +194,11 @@ PROCEDURE pIvrProcess:
 
    DEFINE BUFFER bufPP FOR PrePaidRequest.
 
-   RUN Mm/topupcamp(piMsSeq, OUTPUT liPPRequest).
+   RUN Mm/topupcamp.p(piMsSeq, OUTPUT liPPRequest).
 
    IF liPPRequest NE 0 THEN DO:
 
-      RUN Gwy/pp_platform(gcBrand,liPPRequest).
+      RUN Gwy/pp_platform.p(gcBrand,liPPRequest).
 
       lcResponse = RETURN-VALUE.
       

@@ -297,7 +297,7 @@ FUNCTION fMakeServiceSolog RETURNS INTEGER
    DEF VAR liSologCnt AS INT NO-UNDO.
    
    /* create solog from services */
-   RUN Mm/setms(iiMSRequest,
+   RUN Mm/setms.p(iiMSRequest,
              TRUE,
              OUTPUT liSologCnt,
              OUTPUT ocerror).

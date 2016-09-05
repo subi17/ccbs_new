@@ -55,7 +55,7 @@ form
 
 with row 1 centered overlay title " Account FINDING " FRAME alku.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
    FIND FIRST Account USE-INDEX AccNum WHERE 
       Account.Brand = gcBrand NO-LOCK no-error.
    IF NOT AVAIL Account THEN DO:
@@ -77,7 +77,7 @@ repeat WITH FRAME sel:
        ASSIGN toseek = FALSE nrohaku = FALSE.
        PAUSE 0 no-message.
 alku:  repeat WITH FRAME alku ON ENDKEY UNDO LOOP, LEAVE LOOP:
-          ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE pgseek WITH FRAME alku EDITING:
              READKEY. nap = keylabel(LASTKEY).
              /* onko painettu home */

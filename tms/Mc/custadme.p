@@ -32,7 +32,7 @@ IF liInvType = 0 OR liInvType = ? THEN liInvType = 3.
 PAUSE 0.
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
 
       DISPLAY
 
@@ -52,11 +52,11 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    ELSE IF FRAME-INDEX = 1 THEN DO:
-      RUN Mc/tariff(0,0,"",iiCustNum,"",0). 
+      RUN Mc/tariff.p(0,0,"",iiCustNum,"",0). 
    END.               
 
    ELSE IF FRAME-INDEX EQ 2 THEN DO:
-      RUN Mc/contract(iiCustNum,
+      RUN Mc/contract.p(iiCustNum,
                    "").
    END.
 
@@ -65,11 +65,11 @@ DO WHILE TRUE:
    END.
 
    ELSE IF FRAME-INDEX EQ 4 THEN DO:
-      RUN Mc/nncgme2(iiCustNum).
+      RUN Mc/nncgme2.p(iiCustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 5 THEN DO:
-      RUN Ar/conlist ("",
+      RUN Ar/conlist.p ("",
                    ?,
                    iiCustNum).
    END. 

@@ -92,14 +92,14 @@ define variable hWin as handle no-undo.
 
 if "{&window-system}" = "tty" then message 'Initializing ProTop release {&protop-version}.'.
 
-run tms_support/protop/lib/protoplib.p persistent.
-run tms_support/protop/lib/vstlib.p persistent.
-run tms_support/protop/lib/ui-lib.p persistent.
-run tms_support/protop/lib/monitor.p persistent.
-run tms_support/protop/lib/displist.p persistent.
-run tms_support/protop/lib/command.p persistent.
+RUN tms_support/protop/lib/protoplib.p persistent.
+RUN tms_support/protop/lib/vstlib.p persistent.
+RUN tms_support/protop/lib/ui-lib.p persistent.
+RUN tms_support/protop/lib/monitor.p persistent.
+RUN tms_support/protop/lib/displist.p persistent.
+RUN tms_support/protop/lib/command.p persistent.
 
-run tms_support/protop/out/summary.p persistent.
+RUN tms_support/protop/out/summary.p persistent.
 
 if {&html-on} then
   do:
@@ -110,7 +110,7 @@ if {&html-on} then
      else
       publish "set-html-dir" ( input file-info:full-pathname + "/" ).
 
-    run out/html.p persistent.
+    RUN out/html.p persistent.
 
   end.
 

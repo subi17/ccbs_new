@@ -21,7 +21,7 @@ DEF VAR liDone    AS INT  NO-UNDO.
 
 fELog("COMMISSION","started").
 
-RUN Ar/commission_run (OUTPUT liChecked,
+RUN Ar/commission_run.p (OUTPUT liChecked,
                     OUTPUT liDone).
 
 fELog("COMMISSION","stopped:Activated" + STRING(liDone)).
@@ -29,7 +29,7 @@ fELog("COMMISSION","stopped:Activated" + STRING(liDone)).
 
 fELog("COMMISSION_CANCEL","started").
 
-RUN Ar/commission_cancel (OUTPUT liChecked,
+RUN Ar/commission_cancel.p (OUTPUT liChecked,
                        OUTPUT liDone).
 
 fELog("COMMISSION_CANCEL","stopped:Cancelled" + STRING(liDone)).

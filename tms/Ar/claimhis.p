@@ -36,7 +36,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhClaimHist).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhClaimHist).
+      RUN Mc/eventview2.p(lhClaimHist).
    END.
 
 END.
@@ -143,7 +143,7 @@ ELSE DO:
    RETURN.      
 END.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -212,7 +212,7 @@ REPEAT WITH FRAME sel:
                 ufk[1] = 0
                 ufk[2] = 0.
                 
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -362,8 +362,8 @@ REPEAT WITH FRAME sel:
      /* Search by column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
@@ -391,8 +391,8 @@ REPEAT WITH FRAME sel:
      /* Search by column 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN gcAllBrand
@@ -416,8 +416,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = true.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
        UPDATE lcBrand WHEN gcAllBrand
@@ -472,12 +472,12 @@ REPEAT WITH FRAME sel:
                ehto   = 0
                ufkey = true.
         
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         
         IF toimi = 1 THEN DO:
         
            ehto = 9. 
-           RUN Syst/ufkey. 
+           RUN Syst/ufkey.p. 
            run local-find-this(true).
 
            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhClaimHist).
@@ -497,7 +497,7 @@ REPEAT WITH FRAME sel:
 
         IF AVAILABLE ClaimHist THEN DO:
            ehto = 5.
-           RUN Syst/ufkey.
+           RUN Syst/ufkey.p.
 
            /* show details */
            RUN pInvoiceDetails(ClaimHist.InvNum,

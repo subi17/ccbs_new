@@ -72,7 +72,7 @@ repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
 
    HIDE MESSAGE no-pause.
 
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       Operator
       date1     
@@ -108,7 +108,7 @@ repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
       ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT  CRIT.
       IF toimi = 8 THEN LEAVE CRIT.
 

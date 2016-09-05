@@ -29,7 +29,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhServiceLimit).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhServiceLimit).
+      RUN Mc/eventview2.p(lhServiceLimit).
    END.
 
 END.
@@ -135,7 +135,7 @@ END FUNCTION.
          
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Price List,By SLCode  ,By 3, By 4".
@@ -169,12 +169,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ServiceLimit  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -457,8 +457,8 @@ BROWSE:
 
         IF AVAIL DayCampaign AND            
                  LOOKUP(DayCampaign.dcType,"4,8") > 0 
-        THEN RUN Mm/proglimit(INPUT ServiceLimit.slseq).           
-        ELSE RUN Mm/servicelimittarget(INPUT ServiceLimit.slseq).
+        THEN RUN Mm/proglimit.p(INPUT ServiceLimit.slseq).           
+        ELSE RUN Mm/servicelimittarget.p(INPUT ServiceLimit.slseq).
 
         ufkey = TRUE.
         NEXT loop.
@@ -543,8 +543,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY
           ServiceLimit.SLCode
           ServiceLimit.GroupCode
@@ -680,7 +680,7 @@ PROCEDURE local-update-record:
                    WITH FRAME lis.
                 END.
                 ehto = 9.
-                RUN Syst/ufkey.
+                RUN Syst/ufkey.p.
                 NEXT. 
              END.
 

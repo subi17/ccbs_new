@@ -428,7 +428,7 @@ CASE iiToStatus:
          SET llOk.
 
          IF llOk THEN 
-            RUN Mm/acc_sendsms(MsRequest.MsRequest,
+            RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "Cancelled",
                             lcCancelReason).
@@ -475,7 +475,7 @@ END.
 /* refund */
 IF MsRequest.ReqType = 23 AND LOOKUP(STRING(iiToStatus),"4,9") > 0 THEN DO:
  
-   RUN Ar/refundcancel(MsRequest.MsRequest,
+   RUN Ar/refundcancel.p(MsRequest.MsRequest,
                     "AP",
                     0,
                     MsRequest.CustNum,

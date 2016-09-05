@@ -117,13 +117,13 @@ PROCEDURE local-UPDATE-record:
      nap = keylabel(lastkey).
      
      IF LOOKUP(nap,"1,f1") > 0 THEN DO:
-        ufk = 0. ehto = 3. RUN Syst/ufkey.
+        ufk = 0. ehto = 3. RUN Syst/ufkey.p.
         DISP solog.commline WITH FRAME lfCommline.
         HIDE FRAME lfCommline.
         llRefresh = TRUE.
      END.
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO:
-        ufk = 0. ehto = 3. RUN Syst/ufkey.
+        ufk = 0. ehto = 3. RUN Syst/ufkey.p.
         DISP solog.response WITH FRAME lfResponse.
         HIDE FRAME lfResponse.
         llRefresh = TRUE.

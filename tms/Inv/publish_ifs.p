@@ -67,7 +67,7 @@ DEFINE STREAM strout.
       LEAVE.
    END.
 
-   RUN Inv/invoice_deliverystate(ldaInvDate,
+   RUN Inv/invoice_deliverystate.p(ldaInvDate,
                              1,  /* inv.type */
                              1,  /* state */
                              0,  /* FRProcessID */

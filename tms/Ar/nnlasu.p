@@ -14,7 +14,7 @@
                   06.02.2002/aam longer format for "tosite",
                                  show PaymSrc,
                                  more lines (12) 
-                  20.05.2002/tk  RUN Mc/memo
+                  20.05.2002/tk  RUN Mc/memo.p
                   12.11.2002/jr "suoritus" => "payment" in memo
                   03.03.2003 tk tokens
                   15.09.2003/aam brand, 
@@ -40,7 +40,7 @@ def var int-invno as i  no-undo  format ">>>>>>>>>".
 DEF VAR TotPaid   AS DE NO-UNDO  format "->>>>>9.99".
 
 
-cfc = "lis". RUN Syst/ufcolor.
+cfc = "lis". RUN Syst/ufcolor.p.
 
 FIND Invoice where Invoice.InvNum = InvNum no-lock.
 
@@ -108,7 +108,7 @@ repeat WITH FRAME PaidAmt:
       ufkey = FALSE.
       ASSIGN ufk = 0 ufk[1] = 972 ufk[2] = 0 ufk[3] = 927 
              ufk[7] = 1752 ufk[8] = 8 ehto = 3.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
    END.
 
 
@@ -155,7 +155,7 @@ repeat WITH FRAME PaidAmt:
          WITH centered ROW 16 side-labels OVERLAY FRAME TotPaid.   
 
 
-         ASSIGN ufk = 0 ufk[8] = 8 ufk[9] = 1 ehto = 0. RUN Syst/ufkey.
+         ASSIGN ufk = 0 ufk[8] = 8 ufk[9] = 1 ehto = 0. RUN Syst/ufkey.p.
          ufkey = TRUE.
          HIDE FRAME acct no-pause.
          HIDE FRAME TotPaid no-pause.
@@ -166,7 +166,7 @@ repeat WITH FRAME PaidAmt:
    ELSE IF LOOKUP(KEYLABEL(LASTKEY),"3,F3") > 0 THEN DO TRANS: /* memo */
          FIND Payment WHERE RECID(Payment) = rtab[FRAME-LINE] 
          NO-LOCK NO-ERROR.         
-         RUN Mc/memo(INPUT 0,
+         RUN Mc/memo.p(INPUT 0,
                   INPUT "payment",
                   INPUT STRING(Payment.Voucher),
                   INPUT "Voucher number").
@@ -182,7 +182,7 @@ repeat WITH FRAME PaidAmt:
       FIND Payment WHERE RECID(Payment) = rtab[FRAME-LINE] 
          NO-LOCK NO-ERROR.         
       IF AVAILABLE Payment THEN 
-      RUN Mc/eventsel ("Payment",
+      RUN Mc/eventsel.p ("Payment",
                     Payment.Brand + CHR(255) +
                     STRING(Payment.CustNum) + CHR(255) +
                     STRING(Payment.InvNum)  + CHR(255) +

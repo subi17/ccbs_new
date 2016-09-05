@@ -192,7 +192,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3. 
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
 
          READKEY.
          nap = keylabel(LASTKEY).
@@ -321,7 +321,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 END. /* toimi */
 
 ehto = 5.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
 ASSIGN llOk      = TRUE
        lcErrFile = "".
@@ -406,7 +406,7 @@ END.
 IF llCover THEN llCaSivu = -1.
 
 IF llOk THEN 
-RUN Inv/nnpura2 (INPUT CustNum1,
+RUN Inv/nnpura2.p (INPUT CustNum1,
              INPUT CustNum2,
              INPUT pvm1,
              INPUT pvm2,
@@ -487,7 +487,7 @@ END.
 
 /* create fee */
 IF llCreFee AND liError = 0 AND CustNum1 = CustNum2 THEN 
-RUN Mc/creasfee (CustNum1,
+RUN Mc/creasfee.p (CustNum1,
               0,
               TODAY,
               "InvSpec",

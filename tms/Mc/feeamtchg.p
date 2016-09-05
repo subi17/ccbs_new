@@ -45,7 +45,7 @@ WITH 1 DOWN OVERLAY ROW 15 CENTERED SIDE-LABELS FRAME fFeeQty.
 
  
 ehto = 9.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
 REPEAT ON ENDKEY UNDO, RETURN:                            
    PAUSE 0.
@@ -108,7 +108,7 @@ REPEAT ON ENDKEY UNDO, RETURN:
 END.
 
 ehto = 5.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
 OUTPUT STREAM sLog TO VALUE(lcEventDir + "/feeamtchg_" +
                             STRING(YEAR(TODAY),"9999") + 

@@ -190,7 +190,7 @@ WHEN "Doc1" OR WHEN "" THEN
                   OUTPUT oiInvCount). 
 
 WHEN "XML" THEN 
-   RUN Inv/invoice_xml (INPUT-OUTPUT TABLE ttInvoice,
+   RUN Inv/invoice_xml.p (INPUT-OUTPUT TABLE ttInvoice,
                     ldtNameDate,
                     oiInvCount,
                     llSeparate,

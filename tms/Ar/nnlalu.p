@@ -138,7 +138,7 @@ form
         frame rajat.
 
 
-cfc = "puli". RUN Syst/ufcolor.
+cfc = "puli". RUN Syst/ufcolor.p.
 pause 0 no-message.
 
 assign pvm2         = date(month(today),01,year(today)) - 1
@@ -174,10 +174,10 @@ repeat with frame rajat on endkey undo toimi, next toimi:
       THEN DISPLAY "NOT SELECTED" @ extname WITH FRAME rajat.
 
       assign ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       if toimi = 1 then do:
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
 
          repeat with frame rajat on endkey undo, leave:
          
@@ -255,7 +255,7 @@ repeat with frame rajat on endkey undo toimi, next toimi:
                   END.
 
                   ehto = 9.
-                  RUN Syst/ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT. 
                END.
 
@@ -293,10 +293,10 @@ repeat with frame rajat on endkey undo toimi, next toimi:
                         disp "NOT SELECTED" @ extname with frame rajat.
                      end.
                      else do:
-                        RUN Mc/gathecg(INPUT-OUTPUT table TCustGroup).
+                        RUN Mc/gathecg.p(INPUT-OUTPUT table TCustGroup).
                         /* DISPLAY Customer groups */
                         EHTO = 9.
-                        RUN Syst/ufkey.
+                        RUN Syst/ufkey.p.
                         FOR EACH TCustGroup.
                            dExtCustGrp = dExtCustGrp + TCustGroup.CustGroup +
                            ",".

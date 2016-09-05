@@ -10,6 +10,6 @@
 
 {Syst/commali.i}
 
-RUN Mc/eventsel ("",
+RUN Mc/eventsel.p ("",
               "").
               

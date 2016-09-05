@@ -1483,7 +1483,7 @@ PROCEDURE pGetPENALTYFEE:
    DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).  
    
-   RUN Mc/offer_penaltyfee(Order.OrderID,
+   RUN Mc/offer_penaltyfee.p(Order.OrderID,
                         Output liTermMonths,
                         OUTPUT ldAmt).
 

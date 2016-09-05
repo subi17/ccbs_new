@@ -63,7 +63,7 @@ form
 
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
     color value(cfc) title color value(ctc) " CHOOSE MEMBERS INTO GROUP " FRAME sel.
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc. view FRAME sel.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc. view FRAME sel.
 
 
 FIND FIRST SubserPara WHERE 
@@ -126,7 +126,7 @@ BROWSE:
     ASSIGN
     ufk[1]= 1709 ufk[2]= 717 ufk[3]= 0 ufk[4]= 0
     ufk[5]= 515 ufk[6]= 0   ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-    ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.
+    ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
       END.
       HIDE MESSAGE no-pause. IF order = 1 THEN
     CHOOSE ROW SubserPara.msseq {Syst/uchoose.i} no-error WITH FRAME sel.

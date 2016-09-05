@@ -134,7 +134,7 @@ form /* seek number Range  BY CustNum */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By MSISDN  ,By Customer,By 3, By 4".
@@ -170,12 +170,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a MSRange  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT  WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR 
@@ -516,8 +516,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        Disp lcBrand With FRAME f1.
        SET  lcBrand WHEN gcAllBrand = TRUE
@@ -538,8 +538,8 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        Disp lcBrand With FRAME F2.
        SET  lcBrand WHEN gcAllBrand = TRUE 
@@ -558,7 +558,7 @@ BROWSE:
      END. /* Search-2 */
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:  
-        RUN Mm/msisdnr(rtab[frame-line(sel)]).
+        RUN Mm/msisdnr.p(rtab[frame-line(sel)]).
         ufkey = TRUE.
         NEXT LOOP.
      END.   
@@ -567,15 +567,15 @@ BROWSE:
      THEN DO ON ENDKEY UNDO, NEXT LOOP:  
         /* search & reserve */
          cfc = "lis". 
-         RUN Syst/ufcolor.
+         RUN Syst/ufcolor.p.
          ehto = 9. 
-         RUN Syst/ufkey. 
+         RUN Syst/ufkey.p. 
          ufkey = TRUE.
 
 
 
 
-        RUN Mm/msrange1( INPUT stat-res,
+        RUN Mm/msrange1.p( INPUT stat-res,
                       INPUT Customer.CustNum,
                       OUTPUT ok,
                       OUTPUT MSISDN1,

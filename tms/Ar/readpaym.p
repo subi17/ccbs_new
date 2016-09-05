@@ -585,7 +585,7 @@ BY ttPayment.POrder:
          fError(1,ErrorMsg).
          AddMsg   = "Invoice already credited".
       
-         RUN Ar/refundcancel(0,
+         RUN Ar/refundcancel.p(0,
                           "DD",
                           Invoice.InvNum,
                           Invoice.CustNum,
@@ -1123,7 +1123,7 @@ BY ttPayment.POrder:
          ttPayment.AmtPaid > 0
       then do:
          /* calculate interest */
-         RUN Ar/calcint(Invoice.DueDate,
+         RUN Ar/calcint.p(Invoice.DueDate,
                      ttPayment.PaymDate,
                      IntCalcMet,
                      ttPayment.AmtPaid,

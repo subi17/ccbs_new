@@ -109,7 +109,7 @@ ELSE DO:
       fReqError(lcResp).
 
       IF lcType = "ACC" THEN
-         RUN Mm/acc_sendsms(MsRequest.OrigRequest,
+         RUN Mm/acc_sendsms.p(MsRequest.OrigRequest,
                          MsRequest.CustNum,
                          "Rejected",
                          "HT:309").
@@ -229,7 +229,7 @@ PROCEDURE pCreditScoring:
    SET-SIZE(lmXML) = 0.
 
    RUN VALUE(lcTCPModule) (lcHTTPHeader + lcXML,lcURL,5,2,"<").  
-   /* RUN Gwy/tcpgwy(lcHTTPHeader + lcXML,lcURL,5,2,"<").   */
+   /* RUN Gwy/tcpgwy.p(lcHTTPHeader + lcXML,lcURL,5,2,"<").   */
 
    lcReturn = RETURN-VALUE.
    

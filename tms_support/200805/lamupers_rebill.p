@@ -213,9 +213,9 @@ FUNCTION fVolDiscFixed RETURNS LOG (BUFFER VFixCDR FOR FixCDR) IN fhVDHandle.
 FUNCTION fVolDiscMob   RETURNS LOG (BUFFER VMobCDR FOR MobCDR) IN fhVDHandle. 
 
 /* load volume discount procedures */
-RUN Inv/voldisc    PERSISTENT SET fhVDHandle. 
-RUN Mm/domcopers  PERSISTENT SET fhDCHandle.
-RUN Rate/cust_ratep PERSISTENT SET fhRRHandle.
+RUN Inv/voldisc.p    PERSISTENT SET fhVDHandle. 
+RUN Mm/domcopers.p  PERSISTENT SET fhDCHandle.
+RUN Rate/cust_ratep.p PERSISTENT SET fhRRHandle.
 &ENDIF
 
 DEF VAR lUpdacc       AS LOG  NO-UNDO.
@@ -1118,7 +1118,7 @@ PROCEDURE pCreateInv:
 
          lcRepCode = SUBSTRING(xCustomer.RepCodes,liCnt,1).
          
-         RUN Mc/creasfee (xCustomer.CustNum,
+         RUN Mc/creasfee.p (xCustomer.CustNum,
                        0,
                        pDate2,
                        "InvSpec",
@@ -1163,7 +1163,7 @@ PROCEDURE pCreateInv:
          
                   lcRepCode = SUBSTRING(lcMobRep,liCnt,1).
          
-                  RUN Mc/creasfee (MsOwner.CustNum,
+                  RUN Mc/creasfee.p (MsOwner.CustNum,
                                 MsOwner.MSSeq,
                                 pDate2,
                                 "CLISpec",
@@ -2194,7 +2194,7 @@ PROCEDURE pCancel:
 
    FOR EACH newinv:
 
-      RUN Inv/del_inv (newinv.InvNum). 
+      RUN Inv/del_inv.p (newinv.InvNum). 
 
       /* no need to save eventlog to db */
       FOR EACH EventLog EXCLUSIVE-LOCK WHERE
@@ -3693,7 +3693,7 @@ PROCEDURE pInvoiceHeader:
 
             /* check and mark direct debiting */
             IF Invoice.ChargeType = 2 AND Invoice.InvAmt NE 0 THEN 
-            RUN Ar/nnsvte (Invoice.CustNum,
+            RUN Ar/nnsvte.p (Invoice.CustNum,
                         TODAY,
                         OUTPUT Invoice.DDBankAcc). 
 
@@ -3894,7 +3894,7 @@ PROCEDURE pInvoiceHeader:
             THEN DO:
 
                FIND CURRENT Invoice EXCLUSIVE-LOCK. 
-               RUN Ar/makepaym (BUFFER Invoice,
+               RUN Ar/makepaym.p (BUFFER Invoice,
                              Invoice.InvAmt,
                              Invoice.InvDate,
                              liCLossAcc,
@@ -3919,7 +3919,7 @@ PROCEDURE pInvoiceHeader:
             THEN DO:
                                 
                FIND CURRENT Invoice EXCLUSIVE-LOCK.
-               RUN Ar/makepaym (BUFFER Invoice,
+               RUN Ar/makepaym.p (BUFFER Invoice,
                              Invoice.InvAmt,
                              Invoice.InvDate,
                              IF Customer.Category = lcOwnUse

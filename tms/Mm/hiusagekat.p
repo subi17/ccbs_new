@@ -26,7 +26,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhHiUsageKat).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhHiUsageKat).
+      RUN Mc/eventview2.p(lhHiUsageKat).
    END.
 
 END.
@@ -95,7 +95,7 @@ form /* seek  HiUsageKat */
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -130,12 +130,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a HiUsageKat  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR HiUsageKat.Category
@@ -366,8 +366,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET HiUsageKat WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -400,7 +400,7 @@ BROWSE:
         RUN Mm/hiusagelimit.p(input hiusagekat.category).
         Memory = recid(HiUsageKat).
         ASSIGN ufkey = TRUE.
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         PAUSE 0.
      END.
      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" 
@@ -469,8 +469,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhHiUsageKat).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY
 hiusagekat.Category
 hiusagekat.AgeFrom

@@ -70,7 +70,7 @@ FORM /* seek Bank  BY BankId and BankOffice */
    COLOR VALUE(cfc)
    NO-LABELS FRAME f1.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By BankId".
@@ -146,7 +146,7 @@ BROWSE:
         ufk[6]= 0 
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -281,8 +281,8 @@ BROWSE:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        ASSIGN
              lcBankId      = ""
@@ -326,7 +326,7 @@ BROWSE:
 
        ASSIGN ac-hdr = " BANK INFO ". 
        cfc = "lis". 
-       RUN Syst/ufcolor. 
+       RUN Syst/ufcolor.p. 
        
        CLEAR FRAME lis NO-PAUSE.
 

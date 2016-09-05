@@ -1,3 +1,3 @@
 {Syst/commali.i}
 
-RUN Mm/rzitem("").
+RUN Mm/rzitem.p("").

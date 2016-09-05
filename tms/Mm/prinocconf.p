@@ -58,7 +58,7 @@ DO liConfCnt = 1 TO 2:
       NEXT.
    END.
 
-   RUN Mc/printxt (Customer.CustNum,
+   RUN Mc/printxt.p (Customer.CustNum,
                 iiMsSeq, 
                 icCLI,
                 1,  /* 1=invtext */

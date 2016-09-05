@@ -126,7 +126,7 @@ form /*  search WITH FIELD SLGAnalyse */
     with row 4 col 2 title color value(ctc) " FIND Event "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
                      
@@ -153,13 +153,13 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* SLGAnalyse -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
       
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            CREATE SLGAnalyse.
@@ -376,7 +376,7 @@ repeat WITH FRAME sel:
      END. /* NEXT page */
 
      ELSE IF lookup(nap,"1,f1") > 0 THEN DO:  
-        RUN Mm/slgareport.
+        RUN Mm/slgareport.p.
         NEXT LOOP.
      END.
      
@@ -387,10 +387,10 @@ repeat WITH FRAME sel:
 
      ELSE IF lookup(nap,"3,f3") > 0 THEN DO:  
         ufk = 0.
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         RUN LOCAL-GENERATE-RECORD.
         run local-find-first.
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         must-print = true.
         ufkey = true.
         NEXT LOOP.
@@ -402,7 +402,7 @@ repeat WITH FRAME sel:
          ELSE                          llShowHistory = FALSE.
 
          run local-find-first.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          must-print = true.
          ufkey = true.
          NEXT LOOP.
@@ -482,9 +482,9 @@ repeat WITH FRAME sel:
             recid(SLGAnalyse) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN Syst/ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSlganalyse).
 
@@ -726,13 +726,13 @@ PROCEDURE LOCAL-UPDATE-RECORD.
             WITH FRAME lis.
          END.
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          NEXT.
       END.
       ELSE IF keylabel(LASTKEY) = "F9" AND
           FRAME-FIELD = "ServiceLimitGroup"  THEN DO:
 
-         IF      INPUT SLGAnalyse.SLGAType = 1 THEN RUN Help/h-servlimitgrp.
+         IF      INPUT SLGAnalyse.SLGAType = 1 THEN RUN Help/h-servlimitgrp.p.
          ELSE IF INPUT SLGAnalyse.SLGAType = 2 THEN RUN Help/h-daycamp.p.
 
          ASSIGN SLGAnalyse.ServiceLimitGroup = siirto.
@@ -959,13 +959,13 @@ PROCEDURE LOCAL-GENERATE-RECORD.
             WITH FRAME generate.
          END.
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          NEXT.
       END.
       ELSE IF keylabel(LASTKEY) = "F9" AND
           FRAME-FIELD = "lcServiceL"  THEN DO:
 
-         IF      INPUT lcSLGAType = "1" THEN RUN Help/h-servlimitgrp.
+         IF      INPUT lcSLGAType = "1" THEN RUN Help/h-servlimitgrp.p.
          ELSE IF INPUT lcSLGAType = "2" THEN RUN Help/h-daycamp.p.
 
          ASSIGN lcServiceL = siirto.
@@ -984,7 +984,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
             WITH FRAME generate.
          END.
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          NEXT.
       END.
       ELSE IF keylabel(LASTKEY) = "F9" AND
@@ -1001,7 +1001,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
             WITH FRAME generate.
          END.
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          NEXT.
       END.
       
@@ -1324,7 +1324,7 @@ PROCEDURE LOCAL-GENERATE-RECORD.
     "New records " liQty
    view-as alert-box.
    
-   RUN Mm/ttslganalyse(INPUT-OUTPUT TABLE ttslg).
+   RUN Mm/ttslganalyse.p(INPUT-OUTPUT TABLE ttslg).
 
    liQty = 0.
    

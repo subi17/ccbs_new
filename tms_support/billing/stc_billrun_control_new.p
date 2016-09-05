@@ -345,7 +345,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
                   lookup(DCCLI.dcevent,"term18,term24,term18-50,term24-50") > 0 then . 
                else if (bOrigCLIType.CompareFee > bNewCLiType.CompareFee OR
                        (LOOKUP(bOrigCLIType.CLIType,"CONT7,CONTD9") > 0 AND bNewCLiType.CLIType EQ "CONT8")) AND
-                       msrequest.reqiparam5 ne 1 then 
+                       (msrequest.reqiparam5 ne 1 and msrequest.reqiparam5 ne 2) then 
                   llError = true.
             end. /* ELSE IF liFeecreated = 0 THEN DO: */
 
@@ -358,7 +358,8 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
                       MsRequest.ActStamp >= 20150804 then llError = FALSE.
                else if llRenewal eq true AND 
                      MsRequest.ActStamp < 20150804 then llError = true.
-               else if msrequest.reqiparam5 eq 1 then llError = true. 
+               else if msrequest.reqiparam5 eq 1 or
+                       msrequest.reqiparam5 eq 2 then llError = true. 
                else if msrequest.reqsource eq 
                   {&REQUEST_SOURCE_FUSION_ORDER_FALLBACK} then llError = true.
                else if msrequest.crestamp <= 20130905.18000 and 
@@ -379,7 +380,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
                else if msrequest.crestamp <= 20130905.18000 and 
                        lookup(DCCLI.dcevent,"term18,term24,term18-50,term24-50") > 0 then .
                else if bOrigCLIType.CompareFee > bNewCLiType.CompareFee AND
-                       msrequest.reqiparam5 ne 1 
+                       (msrequest.reqiparam5 ne 1 and msrequest.reqiparam5 ne 2)
                   then llError = true.
             end.
 
@@ -391,7 +392,8 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
                       MsRequest.ActStamp >= 20150804 then llError = FALSE.
                else if llRenewal eq true AND 
                      MsRequest.ActStamp < 20150804 then llError = true.
-               else if msrequest.reqiparam5 eq 1 then llError = true. 
+               else if msrequest.reqiparam5 eq 1 or
+                       msrequest.reqiparam5 eq 2 then llError = true. 
                else if msrequest.crestamp <= 20130905.18000 and 
                     lookup(DCCLI.dcevent,"term18,term24,term18-50,term24-50") > 0 then llError = true.
                else if bOrigCLIType.CompareFee <= bNewCLiType.CompareFee 

@@ -31,7 +31,7 @@ do i = 1 to num-entries(lcCLis, " "):
    end.  
    else if lcBarrStatus = "D_REST" then do:
    /* create barring request */
-     RUN Mm/barrengine (mobsub.MsSeq,
+     RUN Mm/barrengine.p (mobsub.MsSeq,
                      "UN" + lcBarrStatus,
                      "5",           /* source  */
                      "YDR-8",       /* creator */

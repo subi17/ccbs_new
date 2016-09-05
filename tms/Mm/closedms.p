@@ -50,7 +50,7 @@ toimi:
          ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
          ufk[9]= 1
          ehto = 3 ufkey = FALSE.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
 
           READKEY.
@@ -81,7 +81,7 @@ ASSIGN tila = TRUE.
 
 MESSAGE "Printing in progress...".
 
-RUN Ar/unregrep2(INPUT lDate, INPUT lDef). 
+RUN Ar/unregrep2.p(INPUT lDate, INPUT lDef). 
 
 MESSAGE "Printing complete !" VIEW-AS ALERT-BOX.
 

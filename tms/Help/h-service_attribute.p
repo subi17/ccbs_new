@@ -28,7 +28,7 @@ form
     title color value(ctc) " SERVICE COMPONENTS " overlay frame sel.
 
 
-cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 
 ASSIGN
    lcServCom = gcHelpParam
@@ -82,7 +82,7 @@ repeat:
          siirto = ? 
          ehto  = 3 
          ufkey = false.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 

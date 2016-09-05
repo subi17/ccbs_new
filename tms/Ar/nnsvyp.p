@@ -30,7 +30,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhDDAuth).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhDDAuth).
+      RUN Mc/eventview2.p(lhDDAuth).
    END.
 
 END.
@@ -128,7 +128,7 @@ IF ilFailed
 THEN lcHeader = " FAILED DD AUTHORIZATIONS ".
 ELSE lcHeader = " DIRECT DEBIT AUTHORIZATIONS ".
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "Order by customer nbr,Order by archive code,By 3, By 4".
@@ -155,12 +155,12 @@ REPEAT WITH FRAME sel:
 
     IF must-add THEN DO:  /* Add a DDAuth  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -415,8 +415,8 @@ BROWSE:
      /* Search BY column 1 */                          
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE lcBrand WHEN gcAllBrand
@@ -439,8 +439,8 @@ BROWSE:
      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        DISPLAY lcBrand WITH FRAME F2.
        UPDATE lcBrand WHEN gcAllBrand
@@ -463,7 +463,7 @@ BROWSE:
 
         RUN local-find-this (FALSE).
 
-        RUN Mc/memo(INPUT DDAuth.CustNum,
+        RUN Mc/memo.p(INPUT DDAuth.CustNum,
                  INPUT "DDAuth",
                  INPUT STRING(DDAuth.AuthID),
                  INPUT "DD Authorization").
@@ -530,8 +530,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " MUUTA " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " MUUTA " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY DDAuth.CustNum.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDDAuth).

@@ -64,7 +64,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN Ar/ifs_collection_action (ttFiles.IFSFile,
+   RUN Ar/ifs_collection_action.p (ttFiles.IFSFile,
                               OUTPUT liRead,
                               OUTPUT liError).
                         

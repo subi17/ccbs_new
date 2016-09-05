@@ -52,7 +52,7 @@ form
   ASSIGN
   kk=month(si-pvm) vv=year(si-pvm) pp=day(si-pvm)
   chalku=string(pp)
-  cfc = "kal". RUN Syst/ufcolor.
+  cfc = "kal". RUN Syst/ufcolor.p.
 
 
 LOOP:
@@ -86,7 +86,7 @@ repeat:
    END.
    /* lasketaan viikkonumerot */
    DO i = 1 TO 6:
-      RUN Syst/uviik.
+      RUN Syst/uviik.p.
       ASSIGN
       vk[i] = substring(string(uviikko,"999999"),3,2) + "-"
             + substring(string(uviikko,"999999"),5,2)

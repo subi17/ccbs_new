@@ -177,7 +177,7 @@ ELSE IF iiMsSeq > 0 THEN DO:
    END.
 END.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -252,7 +252,7 @@ REPEAT WITH FRAME sel:
         ehto   = 3 
         ufkey  = FALSE.
 
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
@@ -388,8 +388,8 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE liMsSeq WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -672,7 +672,7 @@ PROCEDURE pMinusAdjustment:
          ufk[5] = 1089
          ufk[8] = 8
          ehto   = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
            
       IF toimi = 5 THEN DO:
             

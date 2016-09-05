@@ -173,7 +173,7 @@ PROCEDURE pSendXML:
                     liContentLength).
 
    etime(true).
-   RUN Gwy/tcpgwy_large(lcHttpHead + lcXMLRequest,lcURL,60,1,"", output lcResponseData).
+   RUN Gwy/tcpgwy_large.p(lcHttpHead + lcXMLRequest,lcURL,60,1,"", output lcResponseData).
    fLogBasic("HANDLING " + string(etime) + " " + MNPProcess.formrequest).
 
    lcResponse = ENTRY(1, lcResponseData ,CHR(10)).

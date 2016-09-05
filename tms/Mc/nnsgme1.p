@@ -99,7 +99,7 @@ FIND SMGroup where
      SMGroup.SmGroup = SMGroup no-lock.
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST SMGMember 
@@ -130,7 +130,7 @@ ADD-SMAN:
      repeat TRANS ON ENDKEY UNDO ADD-SMAN, LEAVE ADD-SMAN.
      ASSIGN ufkey = TRUE ufk = 0 ehto = 0
      ufk[1] = 521 ufk[2] = 522 ufk[3] = 516 ufk[8] = 8.
-     RUN Syst/ufkey.
+     RUN Syst/ufkey.p.
 
      IF toimi = 8 THEN LEAVE ADD-SMAN.
      IF toimi = 1 THEN DO:
@@ -140,7 +140,7 @@ ADD-SMAN:
     repeat WITH FRAME lis ON ENDKEY UNDO ADD-SMAN,
                NEXT ADD-SMAN:
       PAUSE 0.
-      ehto = 9. RUN Syst/ufkey.
+      ehto = 9. RUN Syst/ufkey.p.
       CLEAR FRAME lis no-pause.
       PROMPT-FOR SMGMember.Salesman
       validate(input SMGMember.Salesman = "" OR 
@@ -184,7 +184,7 @@ ADD-SMAN:
      END. /* toimi = 1: add a single group */
 
      ELSE IF toimi = 2 THEN DO:
-        RUN Mc/nnsgsb(SMGroup.SmGroup).
+        RUN Mc/nnsgsb.p(SMGroup.SmGroup).
         LEAVE ADD-SMAN.
      END.
 
@@ -453,9 +453,9 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        Salesman = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Salesman WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if Salesman <> "" THEN DO:
@@ -477,9 +477,9 @@ SELAUS:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        SmName = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SmName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if SmName <> "" THEN DO:

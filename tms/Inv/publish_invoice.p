@@ -67,7 +67,7 @@ DEFINE STREAM strout.
    END.
 
    /* Publish invoices to Newton */
-   RUN Inv/invoice_webdisp(ldaDateFrom,
+   RUN Inv/invoice_webdisp.p(ldaDateFrom,
                        1,     /* inv.type */
                        "",
                        0,

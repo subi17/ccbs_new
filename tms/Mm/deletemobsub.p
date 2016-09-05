@@ -635,7 +635,7 @@ PROCEDURE pTerminate:
               MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
 
    /* commission termination */
-   RUN Ar/commission_term(MobSub.MsSeq,
+   RUN Ar/commission_term.p(MobSub.MsSeq,
                        "termination",
                        OUTPUT liReqCnt).
 

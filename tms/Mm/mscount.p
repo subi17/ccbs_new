@@ -73,7 +73,7 @@ END.
       DOWN WITH FRAME Qty.
    END.
 
-   ASSIGN ufk = 0 ehto = 3. RUN Syst/ufkey.
+   ASSIGN ufk = 0 ehto = 3. RUN Syst/ufkey.p.
 
    message "Press ENTER to continue !".
    PAUSE no-message.

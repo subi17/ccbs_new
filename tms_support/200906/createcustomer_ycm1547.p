@@ -71,7 +71,7 @@ ELSE IF iiRole = 1 THEN DO:
 /*
    IF OrderCustomer.CustNum > 0 THEN liOldCustNum = OrderCustomer.CustNum.
    ELSE  */
-   RUN Mc/searchcust (INPUT  "ORGID|" +
+   RUN Mc/searchcust.p (INPUT  "ORGID|" +
                           /* if agrcust=invcust=user then show only those
                              that are invcusts to themselves */
                           (IF Order.InvCustRole = 1 AND
@@ -94,7 +94,7 @@ ELSE IF iiRole = 2 THEN DO:
  
    IF AVAILABLE bOrderCustomer THEN DO:
 
-      RUN Mc/searchcust (INPUT  "INVCUST" + 
+      RUN Mc/searchcust.p (INPUT  "INVCUST" + 
                           /* if user=agrcust then show only that customer's
                              invcust */
                           (IF Order.UserRole = 1
@@ -122,7 +122,7 @@ ELSE IF iiRole = 3 THEN  DO:
    
    IF AVAILABLE bOrderCustomer THEN DO:
 
-      RUN Mc/searchcust (INPUT  "USERCUST",
+      RUN Mc/searchcust.p (INPUT  "USERCUST",
                       INPUT  STRING(bOrderCustomer.CustNum),
                       INPUT  ilDisp,
                       OUTPUT lioldcustnum).
@@ -139,7 +139,7 @@ IF liOldCustnum = 0 THEN DO:
    IF new-Custnum = 0 OR new-custnum = ?
    THEN new-custnum = 300. 
 
-   RUN Mm/copymobcu(INPUT-OUTPUT new-CustNum, INPUT FALSE).
+   RUN Mm/copymobcu.p(INPUT-OUTPUT new-CustNum, INPUT FALSE).
 
    llOk = fmakeCustomer(Order.OrderID,
                         iiRole,    

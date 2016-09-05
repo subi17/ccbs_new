@@ -97,13 +97,13 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       ufk[1]= 7  
       ufk[8]= 8 
       ehto = 0.
-   RUN Syst/ufkey.
+   RUN Syst/ufkey.p.
 
    IF toimi = 1 THEN DO:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
             
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          
          FIND CURRENT Customer EXCLUSIVE-LOCK.
 

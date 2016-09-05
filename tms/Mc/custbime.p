@@ -36,7 +36,7 @@ IF liInvType = 0 OR liInvType = ? THEN liInvType = 3.
 PAUSE 0.
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
 
       DISPLAY
 
@@ -60,11 +60,11 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    ELSE IF FRAME-INDEX EQ 1 THEN DO:
-      RUN Inv/nnlamu3(iiCustNum).
+      RUN Inv/nnlamu3.p(iiCustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 2 THEN DO:
-      RUN Inv/nnlamu5(iiCustNum,
+      RUN Inv/nnlamu5.p(iiCustNum,
                   0,
                   "",
                   liInvType,
@@ -73,11 +73,11 @@ DO WHILE TRUE:
    END.
 
    ELSE IF FRAME-INDEX EQ 3 THEN DO:
-      RUN Mc/invtarg(iiCustNum).
+      RUN Mc/invtarg.p(iiCustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 4 THEN DO:
-      RUN Ar/refubal(iiCustNum).
+      RUN Ar/refubal.p(iiCustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 5 THEN DO:
@@ -86,7 +86,7 @@ DO WHILE TRUE:
       VIEW-AS ALERT-BOX INFORMATION.
       NEXT.
       
-/*      RUN Ar/custbalrel(iiCustNum). */
+/*      RUN Ar/custbalrel.p(iiCustNum). */
    END.
 
    ELSE IF FRAME-INDEX >= 6 AND FRAME-INDEX <= 7 THEN DO:
@@ -97,8 +97,8 @@ DO WHILE TRUE:
          NEXT.
       END. 
 
-      IF FRAME-INDEX = 6 THEN RUN Mm/mobcallic (iiCustNum).
-      ELSE IF FRAME-INDEX = 7 THEN RUN Mm/callvalueic(iiCustNum).
+      IF FRAME-INDEX = 6 THEN RUN Mm/mobcallic.p (iiCustNum).
+      ELSE IF FRAME-INDEX = 7 THEN RUN Mm/callvalueic.p(iiCustNum).
    END.
    
    ELSE IF FRAME-INDEX EQ 8 THEN DO:

@@ -50,7 +50,7 @@ WITH OVERLAY CENTERED  scroll 3 15 DOWN
    FRAME sel.
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 IF idtFrom = ? THEN idtFrom = 12/1/2006.
@@ -282,11 +282,11 @@ BROWSE:
          
          /* dccounter for rating limits */
          IF AVAIL DayCampaign AND DayCampaign.DCType = "2" THEN DO:
-            RUN Mm/dccounter(
+            RUN Mm/dccounter.p(
                PPInvSeq.MSSEQ,icEvent,PPInvSeq.fromdate,PPInvSeq.todate).
          END.
          ELSE DO:
-            RUN Mm/servicelcounter(
+            RUN Mm/servicelcounter.p(
                PPInvSeq.MSSEQ,0,iiSLSeq,icEvent,liPeriod,iimsid).
          END.     
 

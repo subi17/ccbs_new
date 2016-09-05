@@ -216,7 +216,7 @@ PROCEDURE pServAttrSolog:
    END.
  
    /* create solog */
-   RUN Mm/setms(MsRequest.MSRequest,
+   RUN Mm/setms.p(MsRequest.MSRequest,
              TRUE,
              OUTPUT liReqCnt,
              OUTPUT lcError).
@@ -589,7 +589,7 @@ PROCEDURE pServCompUpdate:
    IF SubSer.ServCom = "SALDOAGR" AND
       liOldValue = 0 AND SubSer.SSStat > 0 
    THEN DO:
-      RUN Mc/prinmsal (MobSub.MsSeq,
+      RUN Mc/prinmsal.p (MobSub.MsSeq,
                     OUTPUT lcReqChar).
       IF lcReqChar > "" THEN DO:
          fReqLog("Saldo Agr. confirmation print failed: " + lcReqChar).
@@ -659,7 +659,7 @@ PROCEDURE pServCompUpdate:
          /* barring with lower priority was activated */
          llAlleviate = TRUE 
       THEN DO:
-          RUN Mc/creasfee (MobSub.CustNum,
+          RUN Mc/creasfee.p (MobSub.CustNum,
                         MobSub.MsSeq,
                         SubSer.SSDate,
                         "MobSub",
@@ -694,7 +694,7 @@ PROCEDURE pServCompUpdate:
    /* answering service activated */
    IF SubSer.ServCom = "PP2" AND liOldValue = 0 AND SubSer.SSStat = 1
    THEN DO:
-      RUN Mm/makedcf(MobSub.MsSeq,
+      RUN Mm/makedcf.p(MobSub.MsSeq,
                   SubSer.SSDate,
                   TRUE).
    END.
@@ -718,7 +718,7 @@ PROCEDURE pServCompUpdate:
       THEN fOpenSaldoBarring().
    END.
       
-   /* RUN Rate/rerate (needed especially with saldo-services) */
+   /* RUN Rate/rerate.p (needed especially with saldo-services) */
    IF llReRate AND NOT llDenyReRate THEN DO:
    
       fReRateTriggerEvent(INPUT MsRequest.MSRequest,RECID(MSRequest)).
@@ -1058,7 +1058,7 @@ PROCEDURE pReRate:
                                        ldtFrom,
                                        ldtTo,
                                        TRUE).
-      &ELSE RUN Rate/cli_rate (icCLI,
+      &ELSE RUN Rate/cli_rate.p (icCLI,
                           ldtFrom,
                           ldtTo,
                           TRUE).    

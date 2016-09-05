@@ -204,7 +204,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
          ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
          ehto = 3. 
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
 
          READKEY.
          nap = keylabel(LASTKEY).
@@ -345,7 +345,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
             END.
             
             ehto = 9.
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
             
             REPEAT ON ENDKEY UNDO, NEXT toimi:   
                PAUSE 0.
@@ -387,7 +387,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 END. /* toimi */
 
 ehto = 5.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
 ASSIGN llOk      = TRUE
        lcErrFile = "".

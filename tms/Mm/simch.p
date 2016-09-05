@@ -222,7 +222,7 @@ MAIN:
 REPEAT WITH FRAME main:
 
    ehto = 9. 
-   RUN Syst/ufkey.
+   RUN Syst/ufkey.p.
 
    UPDATE
       liSimdeliv
@@ -278,7 +278,7 @@ ACTION:
 
       IF new-icc = "" THEN ufk[5] = 0.
 
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.

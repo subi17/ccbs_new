@@ -194,7 +194,7 @@ END.
 
 MAIN:
 REPEAT WITH FRAME range.
-   ehto = 9.  RUN Syst/ufkey.
+   ehto = 9.  RUN Syst/ufkey.p.
 
    UPDATE 
       Size 
@@ -294,13 +294,13 @@ REPEAT WITH FRAME range.
 
       APPLY LASTKEY.
       ehto = 9.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
    END. /* EDITING */
 
 ACTION:
    REPEAT WITH FRAME range.
       ASSIGN ehto = 0 ufk = 0 ufk[1] = 7 ufk[5] =  15 ufk[8] = 8.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN NEXT main.
       IF toimi = 8 THEN LEAVE main.
       IF TOIMI = 5 THEN DO:

@@ -109,7 +109,7 @@ Action:
    REPEAT WITH FRAME info:
 
       IF ask-data THEN DO ON ENDKEY UNDO, RETRY:
-         EHTO = 9. RUN Syst/ufkey. 
+         EHTO = 9. RUN Syst/ufkey.p. 
 
          UPDATE 
            liBillTarget 
@@ -123,11 +123,11 @@ Action:
 
             IF KEYLABEL(LASTKEY) = "F9" AND FRAME-FIELD = "liBillTarget" 
             THEN DO:
-                  RUN Help/h-billtarg (INPUT asnro).
+                  RUN Help/h-billtarg.p (INPUT asnro).
                   IF siirto NE "" AND siirto NE ? THEN 
                      DISPLAY INTEGER(siirto) ;& liBillTarget.
                   ehto = 9.
-                  RUN Syst/ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT. 
             END.
 
@@ -191,7 +191,7 @@ Action:
       ASSIGN
       ufk = 0 ufk[1] = 7 ufk[4] = 294 ufk[5] = 15 ufk[8] = 8 ehto = 0.
       if lcFeeModel = "" THEN ufk[5] = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
 
       IF toimi = 1 THEN DO:
@@ -201,7 +201,7 @@ Action:
 
       IF toimi = 4 THEN DO:
          /* show items (contents) of this Billing Event */
-         RUN Mc/beitempl(lcFeeModel,lcPriceList).
+         RUN Mc/beitempl.p(lcFeeModel,lcPriceList).
          NEXT.
       END.
 

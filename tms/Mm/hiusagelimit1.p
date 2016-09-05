@@ -1,3 +1,3 @@
 {Syst/commali.i}
 
-RUN Mm/hiusagelimit(input "").
+RUN Mm/hiusagelimit.p(input "").

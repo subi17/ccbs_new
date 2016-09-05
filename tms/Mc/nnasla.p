@@ -24,7 +24,7 @@
                   11.01.00 jp DISP interests
                   18.01.00 kl skip .00 in sums
                   19.01.00 kl DISPlay formats
-                  29.03.00 pt RUN Ar/invbal
+                  29.03.00 pt RUN Ar/invbal.p
                   19.10.01 kl DISPlay formats
                   06.03.02 lp EPL PaymFile writing
                               must-print loop corrected
@@ -86,7 +86,7 @@
                   29.11.06/aam ExtInvID             
                   12.01.07/aam new input parameter to fGetCustBal
                   06.02.07/aam get all invoices of an order
-                  22.03.07 kl  new param for RUN Ar/payments
+                  22.03.07 kl  new param for RUN Ar/payments.p
                   25.04.07/aam eventlog in detail view, 
                                use pInvoiceUpdate
                   22.11.07/aam filtering             
@@ -116,7 +116,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhInvoice).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhInvoice).
+      RUN Mc/eventview2.p(lhInvoice).
    END.
 
 END.
@@ -420,7 +420,7 @@ FUNCTION fInvoiceCopyFee RETURNS LOGICAL.
    SET ok.
    
    IF ok THEN 
-   RUN Mc/creasfee (iCustNum,
+   RUN Mc/creasfee.p (iCustNum,
                  0,
                  TODAY,
                  "Prints",
@@ -704,7 +704,7 @@ cd-title = " " +
     
 ldNetBal = ldCustOP + ldCustAP - ldCustINT - blan.
 
-cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 
 PAUSE 0.
 view frame sel.
@@ -809,7 +809,7 @@ print-line:
             ufk[1] = 639 
             ufk[3] = 1020
             ufk[4] = 1796 /* 1860 */.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       end.
 
       hide message no-pause.
@@ -929,8 +929,8 @@ print-line:
 
      /* find */
      ELSE IF LOOKUP(nap,"1,F1") > 0 AND ufk[1] > 0 AND keyp THEN DO:  
-        cfc = "puyr". RUN Syst/ufcolor.
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        cfc = "puyr". RUN Syst/ufcolor.p.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         
         lcExtInvId = "".      
         UPDATE lcExtInvId WITH FRAME F1.     
@@ -966,7 +966,7 @@ print-line:
            ufkey    = TRUE
            lcFilter = "".
 
-        RUN Syst/ufkey.   
+        RUN Syst/ufkey.p.   
 
         liFilter = IF toimi = 7 THEN 0 ELSE toimi.
         
@@ -1013,7 +1013,7 @@ print-line:
 
         llCreaFee = (Invoice.PrintState > 0).
         
-        RUN Inv/nnlaki.
+        RUN Inv/nnlaki.p.
         
         IF llCreaFee THEN fInvoiceCopyFee().
 
@@ -1042,7 +1042,7 @@ print-line:
         
         ASSIGN ehto  = 9
                ufkey = TRUE.
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         REPEAT WITH FRAME fEPL ON ENDKEY UNDO, LEAVE:
            UPDATE liUseClass.
            LEAVE.
@@ -1054,13 +1054,13 @@ print-line:
         KEYLABEL(lastkey) = "F4" THEN NEXT.
 
         ehto = 5.
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         
         IF fEPLStart(lcTestFlag) THEN DO:
         
            llCreaFee = (Invoice.PrintState > 0).
         
-           RUN Inv/eletterinv(INPUT Invoice.InvNum,
+           RUN Inv/eletterinv.p(INPUT Invoice.InvNum,
                           INPUT Invoice.InvNum,
                           INPUT Invoice.InvDate,
                           INPUT "",
@@ -1094,7 +1094,7 @@ print-line:
 
      else IF nap = "T" AND keyp THEN DO:
         ASSIGN ufk = 0 ehto = 3.
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         find ttInvoice where recid(ttInvoice) = rtab[frame-line] NO-LOCK.
         find Invoice where Invoice.InvNum = ttInvoice.InvNum no-lock.
         MESSAGE 
@@ -1248,7 +1248,7 @@ PROCEDURE pCancellation.
    /* Cancel form */
    DO WHILE TRUE:
                
-      ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.
+      ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p.
                                
       DISPLAY   SKIP(1)
                 " 1) Cancelled by operator         " @ menuc[1]

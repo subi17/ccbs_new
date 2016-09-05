@@ -100,7 +100,7 @@ FOR EACH Contact NO-LOCK WHERE
    
 END.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Date , By 3, By 4".
@@ -320,7 +320,7 @@ REPEAT WITH FRAME sel:
           ufkey = TRUE.
 
           /* browse list */
-          RUN Ar/conlist (ttContact.UserCode,
+          RUN Ar/conlist.p (ttContact.UserCode,
                        ttContact.ConDate,
                        0).
 

@@ -106,7 +106,7 @@ form
     TITLE COLOR value(ctc) fr-header WITH side-labels
     FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 FIND FIRST TMSPrinter no-lock no-error.
 IF AVAILABLE TMSPrinter THEN DO:
@@ -133,7 +133,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
       cfc = "lis"
       ufkey = TRUE
       fr-header = " ADD ".
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis:
          PAUSE 0 no-message.
@@ -143,7 +143,7 @@ add-new:
 
          memory = recid(TMSPrinter).
          FIND TMSPrinter where recid(TMSPrinter) = memory exclusive-lock no-error.
-         ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+         ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
          UPDATE TMSPrinter.PrinterId
          VALIDATE
@@ -349,7 +349,7 @@ BROWSE:
         {Syst/uright2.i}
         FIND TMSPrinter where recid(TMSPrinter) = rtab[FRAME-LINE] no-lock.
         si-kirj = TMSPrinter.PrinterId.
-        RUN Syst/ututeh.
+        RUN Syst/ututeh.p.
         ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -359,9 +359,9 @@ BROWSE:
           FIND TMSPrinter where recid(TMSPrinter) = rtab[FRAME-LINE]
           no-lock no-error.
           PrinterId = TMSPrinter.PrinterId.
-          cfc = "lis".  RUN Syst/ufcolor.
+          cfc = "lis".  RUN Syst/ufcolor.p.
           DO WITH FRAME kopio:
-             ehto=9. RUN Syst/ufkey. ufkey = TRUE.
+             ehto=9. RUN Syst/ufkey.p. ufkey = TRUE.
              UPDATE 
              ukirloo validate(ukirloo = "" OR 
                               NOT can-find(TMSPrinter where 
@@ -406,7 +406,7 @@ BROWSE:
      END.
 
      else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" THEN DO:  /* removal */
-        cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+        cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
         delline = FRAME-LINE.
         FIND TMSPrinter where recid(TMSPrinter) = rtab[FRAME-LINE] no-lock.
 
@@ -470,7 +470,7 @@ BROWSE:
         FIND TMSPrinter where recid(TMSPrinter) = rtab[frame-line(sel)]
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        cfc = "lis". RUN Syst/ufcolor.
+        cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY 
            TMSPrinter.PrinterId
            TMSPrinter.Device 
@@ -479,7 +479,7 @@ BROWSE:
            TMSPrinter.PageAvail.
 
         IF lcRight = "RW" THEN DO:
-           RUN Syst/ufkey.
+           RUN Syst/ufkey.p.
            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTMSPrinter).
 
            UPDATE 

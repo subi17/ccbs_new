@@ -157,7 +157,7 @@ form /* kategorian nimella hakua varten */
     with row 4 col 2 title color value(ctc) " FIND Name "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 order = 1.
 
@@ -189,12 +189,12 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* CustCat -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          DO TRANSAction:
             PROMPT-FOR CustCat.Category
             VALIDATE
@@ -241,7 +241,7 @@ add-new:
                   END.   
 
                   ehto = 9.
-                  RUN Syst/ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT. 
                END.
 
@@ -513,9 +513,9 @@ BROWSE:
 
      /* Haku 1 */
      if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku = "".
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand with frame hayr.
         UPDATE 
            lcBrand WHEN gcAllBrand
@@ -535,9 +535,9 @@ BROWSE:
 
      /* Haku sarakk. 2 */
      if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand WITH FRAME hayr2.
         UPDATE 
            lcBrand WHEN gcAllBrand
@@ -620,7 +620,7 @@ BROWSE:
         /* change */
         FIND CustCat where recid(CustCat) = rtab[frame-line(sel)]
         exclusive-lock.
-        ASSIGN ufkey = TRUE ehto = 9. RUN Syst/ufkey.
+        ASSIGN ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
 
         PAUSE 0.
         DISPLAY CustCat.Category WITH FRAME lis.
@@ -661,7 +661,7 @@ BROWSE:
                   END.   
 
                   ehto = 9.
-                  RUN Syst/ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT. 
            END.
            

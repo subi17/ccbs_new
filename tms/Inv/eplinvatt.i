@@ -36,7 +36,7 @@ FUNCTION fPrintAttachment RETURNS LOGIC
    THEN RETURN FALSE. 
    
    /* print letter */
-   RUN Mc/printxt (iiCustNum,
+   RUN Mc/printxt.p (iiCustNum,
                 0, 
                 "",
                 1,  /* 1=invtext */

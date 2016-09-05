@@ -168,7 +168,7 @@ BY InvRow.FromDate:
            ttRow.Order  = i.
 END.           
            
-cfc = "kory". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "kory". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST ttRow no-error.
@@ -406,7 +406,7 @@ BROWSE:
         THEN DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
 
         ASSIGN ehto = 9 ufkey = TRUE.
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         FIND ttRow WHERE RECID(ttRow) = rtab[FRAME-LINE(sel)].
         FIND InvRow WHERE RECID(InvRow) = ttRow.InvRow EXCLUSIVE-LOCK.
 
@@ -442,7 +442,7 @@ BROWSE:
            when 2 OR WHEN 6 THEN DO:
               ASSIGN ufkey = TRUE.
 
-           RUN Mm/mobguard2(INPUT  FALSE,
+           RUN Mm/mobguard2.p(INPUT  FALSE,
                             OUTPUT ocReasonCode,
                             OUTPUT odtDate1,
                             OUTPUT odtDate2,
@@ -453,7 +453,7 @@ BROWSE:
             FIND FIRST SubInvoice OF Invoice WHERE 
                SubInvoice.SubInvNum = InvRow.SubInvNum NO-LOCK NO-ERROR.
             IF AVAILABLE SubInvoice THEN    
-              RUN Mm/mobcallbr(INPUT  "post",
+              RUN Mm/mobcallbr.p(INPUT  "post",
                             INPUT  InvRow.FromDate,
                             INPUT  InvRow.ToDate,
                             INPUT  Invoice.CustNum,                        
@@ -471,14 +471,14 @@ BROWSE:
 
            when 3  THEN DO:
               ASSIGN ufkey = TRUE.
-              RUN Ar/irowffee(Invoice.InvNum,
+              RUN Ar/irowffee.p(Invoice.InvNum,
                            InvRow.BillCode,
                            InvRow.CLI).
            END.
 
            when 4  THEN DO:
               ASSIGN ufkey = TRUE.
-              RUN Ar/irowsfee(Invoice.InvNum,
+              RUN Ar/irowsfee.p(Invoice.InvNum,
                            InvRow.BillCode,
                            InvRow.CLI).
 

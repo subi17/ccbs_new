@@ -66,7 +66,7 @@ DO WITH FRAME subs:
 
    ASSIGN
    ufk = 0 ufk[8] = 8 ehto = 0.
-   RUN Syst/ufkey.
+   RUN Syst/ufkey.p.
 
    HIDE FRAME subs NO-PAUSE.
 END.   

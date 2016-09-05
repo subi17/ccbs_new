@@ -59,12 +59,12 @@ DO FOR TMSUser:
    exPaymFile = TMSUser.RepDir + "/" + "nocalls.txt".
 END.
 
-ehto = 9. RUN Syst/ufkey.
+ehto = 9. RUN Syst/ufkey.p.
 
 UPDATE date1 date2 cust-name excel WITH FRAME haku.
 IF excel THEN UPDATE exPaymFile WITH FRAME haku.
 
-ufk = 0. ehto = 3. RUN Syst/ufkey.
+ufk = 0. ehto = 3. RUN Syst/ufkey.p.
 HIDE FRAME haku.
 PAUSE 0 no-message.
 

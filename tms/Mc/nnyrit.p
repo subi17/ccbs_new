@@ -63,7 +63,7 @@ with title color value(ctc) " " + ynimi + " COMPANY INFORMATION "
      COLOR value(cfc) ROW 1 col 1 width 80 side-labels
      FRAME yri.
 
-cfc = "yri". RUN Syst/ufcolor.
+cfc = "yri". RUN Syst/ufcolor.p.
 
 PAUSE 0 no-message.
 
@@ -102,11 +102,11 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
       ufk[8] = 8  
       ehto   = 0. 
       
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 AND lcRight = "RW" THEN DO:
-         cfc = "yri". RUN Syst/ufcolor.
-         ehto = 9. RUN Syst/ufkey.
+         cfc = "yri". RUN Syst/ufcolor.p.
+         ehto = 9. RUN Syst/ufkey.p.
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCompany).
 
@@ -126,14 +126,14 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
 
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCompany).
 
-         cfc = "yri". RUN Syst/ufcolor.
+         cfc = "yri". RUN Syst/ufcolor.p.
          PAUSE 0 no-message.
          NEXT toimi.
       END.
 
       ELSE IF toimi = 3 AND lcRight = "RW" THEN DO:
       
-        RUN Mc/memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "Company",
                  INPUT STRING(Company.UnitCode),
                  INPUT "Company").

@@ -22,7 +22,7 @@ DEF VAR odtDate2                      AS DATE NO-UNDO.
 
 DEF VAR olAccept                      AS LOG  NO-UNDO.
 
-RUN Mm/mobguard2(INPUT  TRUE,
+RUN Mm/mobguard2.p(INPUT  TRUE,
                OUTPUT ocReasonCode,
                OUTPUT odtDate1,
                OUTPUT odtdate2,

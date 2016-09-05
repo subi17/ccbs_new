@@ -63,7 +63,7 @@ REPEAT WITH FRAME lis ON ENDKEY UNDO LOOP, NEXT LOOP:
       ufk[5]= 9850
       ufk[8]= 8 
       ehto  = 0.
-   RUN Syst/ufkey.
+   RUN Syst/ufkey.p.
 
    IF toimi = 5 AND ufk[5] > 0 THEN DO:
       RUN Mc/dmsdoc.p (DMS.DMSID).

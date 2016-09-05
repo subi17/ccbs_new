@@ -6,7 +6,7 @@
 
 
 /* all customers, all inf.texts */
-RUN Mc/itsendlo (0,
+RUN Mc/itsendlo.p (0,
               0,
               0,
               0).

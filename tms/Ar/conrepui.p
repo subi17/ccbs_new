@@ -111,7 +111,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
          ufk[9]= 1
          ehto = 3.
 
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       READKEY.
       nap = KEYLABEL(LASTKEY).
@@ -183,14 +183,14 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
    ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:
 
       ehto = 5.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       IF lcFile = "" THEN DO:
          assign tila = true.
          {Syst/utuloste.i "return"}
       END.
 
-      RUN Ar/conrep (icUserCode,
+      RUN Ar/conrep.p (icUserCode,
                   idtConDate,
                   liCustNum,
                   liState,

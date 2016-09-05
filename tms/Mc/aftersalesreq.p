@@ -159,7 +159,7 @@ IF Order.FatAmount > 0 OR Order.FtGrp > "" THEN DO:
    IF lcFatGroup = ? OR lcFatGroup = "" THEN 
       lcError = "FATime group for campaign not defined".
       
-   ELSE RUN Mc/creafat (MobSub.CustNum,
+   ELSE RUN Mc/creafat.p (MobSub.CustNum,
                      MobSub.MsSeq,
                      lcFatGroup,
                      Order.FatAmount,

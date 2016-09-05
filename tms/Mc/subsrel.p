@@ -185,7 +185,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
 end. /* toimi */
 
 ehto = 5.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
 IF lcFile = "" THEN DO:
    assign tila = true.

@@ -48,7 +48,7 @@ ELSE MESSAGE "Run this request now ?"
      SET ok.
 
 IF ok THEN DO:
-   RUN Mm/runreqim(MsRequest.MsRequest).
+   RUN Mm/runreqim.p(MsRequest.MsRequest).
            
    IF RETURN-VALUE > "" THEN
       MESSAGE RETURN-VALUE

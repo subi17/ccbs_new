@@ -26,7 +26,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhMNPOperator).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhMNPOperator).
+      RUN Mc/eventview2.p(lhMNPOperator).
    END.
 
 END.
@@ -82,7 +82,7 @@ WITH  OVERLAY ROW 4 centered 1 columns
     NO-LABELS 
     FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "  By OperName ,  By OperCode".
@@ -112,13 +112,13 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a MNPOperator  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
 
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
@@ -205,7 +205,7 @@ BROWSE:
         ufk[6]=  (IF lcRight = "RW" THEN 4 ELSE 0)
         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -416,8 +416,8 @@ BROWSE:
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMNPOperator).
 
-         ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-         cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+         ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+         cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
       
          RUN local-UPDATE-record.
          HIDE FRAME lis NO-PAUSE.

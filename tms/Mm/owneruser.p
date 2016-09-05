@@ -245,7 +245,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
          ufk[1] = 0
          ufk[3] = 0.
          
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
    END.
 
    ELSE ASSIGN toimi = 1  
@@ -273,7 +273,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
 
                IF FRAME-FIELD = "liNewCust1" THEN DO:
 
-                  RUN Help/h-customer (liInvCust,
+                  RUN Help/h-customer.p (liInvCust,
                                   "invcust",
                                   "user").
                    
@@ -285,7 +285,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                END. 
 
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
                NEXT.
             END. 
  

@@ -40,7 +40,7 @@ form /* SEEK code */
     with row 4 col 2 title color value(ctc) " FIND Subscription "
     COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 
 FOR EACH MobSub WHERE
          MobSub.Custnum = iiCustnum NO-LOCK:
@@ -205,8 +205,8 @@ repeat:
 /*
         /* Seek */
         if lookup(nap,"1,f1") > 0 THEN DO:  /* RepCode */
-           cfc = "puyr". RUN Syst/ufcolor.
-           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            lcRepCode = "".
            set lcRepCode WITH FRAME hayr.
            HIDE FRAME hayr no-pause.

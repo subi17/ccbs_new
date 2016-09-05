@@ -171,7 +171,7 @@ else do:
    return.
 end.
 
-cfc = "sel". RUN Syst/ufcolor. assign ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
 view frame sel.
 LOOP:
 repeat with frame sel:
@@ -366,9 +366,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        BillPeriod = 0.
-       ehto = 9. RUN Syst/ufkey. ufkey = true.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        update BillPeriod with frame f1.
        hide frame f1 no-pause.
        if BillPeriod <> ? then do:
@@ -390,7 +390,7 @@ BROWSE:
      if lookup(nap,"3,f3") > 0 then     /* memo */
      do trans with frame memo on endkey undo, next LOOP:
        assign ehto = 9 cfc = "lis" ufkey = true.
-       RUN Syst/ufkey. RUN Syst/ufcolor.
+       RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        find ttRow where recid(ttRow) = rtab[frame-line(sel)].
        FIND SingleFee WHERE RECID(SingleFee) = ttRow.SingleFee NO-LOCK.
 
@@ -415,7 +415,7 @@ BROWSE:
      do with frame lis transaction on endkey undo, next LOOP:
        /* change */
 
-       assign fr-header = " VIEW " cfc = "lis".  RUN Syst/ufcolor.
+       assign fr-header = " VIEW " cfc = "lis".  RUN Syst/ufcolor.p.
 
        find ttRow where recid(ttRow) = rtab[frame-line(sel)].
        FIND SingleFee WHERE RECID(SingleFee) = ttRow.SingleFee NO-LOCK.

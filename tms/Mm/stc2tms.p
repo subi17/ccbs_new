@@ -740,7 +740,7 @@ PROCEDURE pFinalize:
    
    /* clitype spesific fees */
    IF AVAIL CliType AND CliType.FeeModel1 > "" THEN DO:
-      RUN Mc/creasfee (MobSub.CustNum,
+      RUN Mc/creasfee.p (MobSub.CustNum,
                     MobSub.MsSeq,
                     ldaNewBeginDate,
                     "MobSub",
@@ -758,7 +758,7 @@ PROCEDURE pFinalize:
    END.
 
    /* general fees */
-   RUN Mc/creasfee (MobSub.CustNum,
+   RUN Mc/creasfee.p (MobSub.CustNum,
                  MobSub.MsSeq,
                  ldaNewBeginDate,
                  "MobSub",
@@ -780,7 +780,7 @@ PROCEDURE pFinalize:
 
    /* commission termination */
    IF llOldPayType NE MobSub.PayType THEN 
-      RUN Ar/commission_term(MobSub.MsSeq,
+      RUN Ar/commission_term.p(MobSub.MsSeq,
                           "STC",
                           OUTPUT liReqCnt).
 
@@ -859,7 +859,7 @@ PROCEDURE pFinalize:
        END.
     END.
 
-   /* RUN Rate/rerate (needed especially with saldo-services) */
+   /* RUN Rate/rerate.p (needed especially with saldo-services) */
    IF llReRate THEN DO:
       
       fReRateTriggerEvent(INPUT MsRequest.MSRequest,RECID(MSRequest)).

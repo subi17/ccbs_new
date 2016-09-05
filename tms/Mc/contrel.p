@@ -213,7 +213,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
                   END.   
 
                   ehto = 9.
-                  RUN Syst/ufkey.
+                  RUN Syst/ufkey.p.
                   NEXT. 
                END.
 
@@ -246,12 +246,12 @@ repeat with frame valinta on endkey undo toimi, next toimi:
 end. /* toimi */
 
 ehto = 5.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
 tila = true.
 {Syst/utuloste.i "return"}
 
-RUN Mc/contrep (lcInvGroup[1],
+RUN Mc/contrep.p (lcInvGroup[1],
              lcInvGroup[2],
              liCustNum[1],
              liCustNum[2],

@@ -37,7 +37,7 @@ ASSIGN
    ldaCDRDate[1] = DATE(12,1,2006)
    ldaCDRDate[2] = TODAY.
 
-RUN Mm/errorcdr_stat (ldaCDRDate[1],
+RUN Mm/errorcdr_stat.p (ldaCDRDate[1],
                    ldaCDRDate[2],
                    icFile,
                    "",     /* trans dir, dumpfile_run takes care of this */

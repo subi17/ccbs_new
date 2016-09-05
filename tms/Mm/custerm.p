@@ -22,7 +22,7 @@ DEF VAR  amt       AS I   NO-UNDO.
 DEF VAR llSecret   AS LOG NO-UNDO FORMAT "Yes/No".
 DEF VAR lcCustName AS CHAR NO-UNDO.
 ASSIGN
-   ufk = 0 ehto = 3. RUN Syst/ufkey.
+   ufk = 0 ehto = 3. RUN Syst/ufkey.p.
 
    FIND Customer WHERE Customer.CustNum = CustNum NO-LOCK.
    lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,

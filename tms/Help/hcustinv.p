@@ -13,7 +13,7 @@
                   20.03.06/aam use proper index for find etc.
                   18.04.06/aam use payments.p instead of nnlasu.p
                   16.06.06/aam ClaimState instead of ClaimQty
-                  22.03.07 kl  new param for RUN Ar/payments
+                  22.03.07 kl  new param for RUN Ar/payments.p
 
   Version ......: M15
   ------------------------------------------------------ */
@@ -60,7 +60,7 @@ FIND Customer WHERE Customer.CustNum = CustNum NO-LOCK.
 lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
                               BUFFER Customer).
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 
@@ -305,14 +305,14 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
         ELSE ASSIGN
              order = ex-order
              must-print = FALSE.
-        cfc = "sel". RUN Syst/ufcolor. ccc = cfc.
+        cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
         NEXT LOOP.
      END.
 
      ELSE IF LOOKUP(nap,"3,f3") >0 THEN DO TRANS: /* memo */
         FIND Invoice WHERE recid(Invoice) = rtab;<frame-line;>
         NO-LOCK NO-ERROR.
-        RUN Mc/memo(INPUT Invoice.CustNum,
+        RUN Mc/memo.p(INPUT Invoice.CustNum,
                  INPUT "invoice",
                  INPUT STRING(Invoice.InvNum),
                  INPUT "Invoice number").
@@ -323,7 +323,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
 
      else if lookup(nap,"f4,4") > 0 THEN DO:
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
-        RUN Ar/payments(0,Invoice.InvNum,"").
+        RUN Ar/payments.p(0,Invoice.InvNum,"").
         ufkey = TRUE.
         NEXT.
      END.
@@ -362,7 +362,7 @@ si-recid = xrecid.
 
 PROCEDURE local-find-others:
 
-   RUN Ar/invbal(Invoice.InvNum, OUTPUT BalDue).
+   RUN Ar/invbal.p(Invoice.InvNum, OUTPUT BalDue).
 
    FIND FIRST memo WHERE
               Memo.Brand = Invoice.Brand AND

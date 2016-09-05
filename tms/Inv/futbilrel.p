@@ -174,9 +174,9 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
 END. /* toimi */
 
 ehto = 5.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
-RUN Inv/futbilrep  (InvGroup[1],
+RUN Inv/futbilrep.p  (InvGroup[1],
                 InvGroup[2],
                 llBanned,
                 llContract,

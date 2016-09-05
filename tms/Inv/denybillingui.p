@@ -63,7 +63,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          ufk[5] = 795
          ufk[8] = 8 
          ehto   = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
    END.
    ELSE ASSIGN toimi = 1
                ufkey = TRUE.
@@ -71,7 +71,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    IF toimi = 1 THEN DO:
 
       ehto = 9. 
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
@@ -89,7 +89,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                THEN ASSIGN liCount = R-INDEX(INPUT lcFile,"/")
                            lcDir   = SUBSTRING(INPUT lcFile,1,liCount - 1).
 
-               RUN Mc/choosefile (IF lcDir NE "" 
+               RUN Mc/choosefile.p (IF lcDir NE "" 
                                THEN lcDir
                                ELSE INPUT lcFile,
                                OUTPUT lcFile).
@@ -101,7 +101,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                END. 
 
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
             END. 
 
             ELSE APPLY LASTKEY. 
@@ -125,7 +125,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          NEXT.
       END.
       
-      RUN Inv/denybilling (lcFile,
+      RUN Inv/denybilling.p (lcFile,
                        lcLogFile,
                        OUTPUT liRead,
                        OUTPUT liErrors).

@@ -300,7 +300,7 @@ PROCEDURE pAdjustBalance:
       PrePaidRequest.VatAmt      = 0
       PrePaidRequest.TaxZone     = lcTaxZone.
    
-   RUN Gwy/pp_platform(gcBrand,PrePaidRequest.PPRequest).
+   RUN Gwy/pp_platform.p(gcBrand,PrePaidRequest.PPRequest).
    
    lcXML = RETURN-VALUE.
    ldeTS = fMakeTS().

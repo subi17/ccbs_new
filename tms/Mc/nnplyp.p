@@ -27,7 +27,7 @@
                   26.02.03/tk  tokens
                   18.03.03/tk  frame title changed
                   20.03.03/aam one parameter added for tariff.p
-                  04.04.03 kl  RUN Mc/tariff, new parameter
+                  04.04.03 kl  RUN Mc/tariff,.p new parameter
                   08.09.03/aam brand
                   22.10.03/jp  f3 - copy rates  added validto replace billcode 
                   04.04.06 jp  f3 - fcopypricelist
@@ -180,7 +180,7 @@ with centered overlay row 3 title " COPY ENTRIES INTO " + PriceList.PriceList +
     " FROM OTHER Price LIST " FRAME plcopy.
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST PriceList
@@ -211,12 +211,12 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* PriceList -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
 
          DO TRANSAction:
             DISPLAY lcBrand @ PriceList.Brand.
@@ -530,9 +530,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         PriceList = "".
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME F1.
         UPDATE lcBrand WHEN gcAllBrand
                PriceList WITH FRAME f1.
@@ -554,9 +554,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN Syst/ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         PLName = "".
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME F1.
         UPDATE lcBrand WHEN gcAllBrand
                PLName WITH FRAME f2.
@@ -584,7 +584,7 @@ BROWSE:
      THEN DO WITH FRAME plcopy:
 
         PAUSE 0.
-        assign ufkey = true ehto = 9 PriceList = "". RUN Syst/ufkey.
+        assign ufkey = true ehto = 9 PriceList = "". RUN Syst/ufkey.p.
 
         FIND PriceList where recid(PriceList) = rtab;<frame-line(sel);> no-lock.
         
@@ -691,7 +691,7 @@ BROWSE:
             no-lock no-error.
 
         IF AVAILABLE PriceList THEN DO:
-           RUN Mc/tariff(0,0,PriceList.PriceList,0,"",0). 
+           RUN Mc/tariff.p(0,0,PriceList.PriceList,0,"",0). 
            UFKEY = TRUE.
         END.
      end. 
@@ -791,8 +791,8 @@ BROWSE:
         FIND PriceList where recid(PriceList) = rtab[frame-line(sel)]
         exclusive-lock.
         assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        RUN Syst/ufkey.
-        cfc = "lis". RUN Syst/ufcolor.
+        RUN Syst/ufkey.p.
+        cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY 
            PriceList.Brand
            PriceList.PriceList FORMAT "X(18)"

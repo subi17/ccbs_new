@@ -16,7 +16,7 @@ DEF VAR lcStatus AS CHAR NO-UNDO.
 
 DO WHILE TRUE:
 
-   RUN Syst/tmscodesbr(INPUT  "MsRequest",
+   RUN Syst/tmscodesbr.p(INPUT  "MsRequest",
                   INPUT  "ReqStatus",
                   INPUT  "",
                   INPUT  "Order requests (type 13)",
@@ -24,7 +24,7 @@ DO WHILE TRUE:
                   OUTPUT lcStatus).
 
    IF lcStatus > "" THEN DO:
-      RUN Mm/msrequest(13,INTEGER(lcStatus),ipMsSeq,0,0,"").
+      RUN Mm/msrequest.p(13,INTEGER(lcStatus),ipMsSeq,0,0,"").
    END.
    ELSE LEAVE.
 

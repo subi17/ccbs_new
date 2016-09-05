@@ -23,7 +23,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhPaymVouch).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhPaymVouch).
+      RUN Mc/eventview2.p(lhPaymVouch).
    END.
 END.
 
@@ -124,7 +124,7 @@ FOR EACH Brand NO-LOCK WHERE
                                     ELSE 0.
 END.             
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code of Section,By Name of Section,By 3, By 4".
@@ -341,8 +341,8 @@ BROWSE:
        /* change */
        RUN local-find-this(TRUE).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttPaymVouch.Brand.
 
        liOldVoucher = ttPaymVouch.Voucher.

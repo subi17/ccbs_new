@@ -211,7 +211,7 @@ REPEAT WITH FRAME frLeft:
            ehto   = 3 
            ufkey  = FALSE.
       
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
@@ -530,7 +530,7 @@ PROCEDURE pActionMenu.
                           ttMaintAction.Action).
             RUN VALUE(ttMaintAction.Module).            
             EMPTY TEMP-TABLE ttMaintAction.
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
             LEAVE.
             
          END.

@@ -68,7 +68,7 @@ repeat:
          
    end.
 
-   run /apps/snet/200801/cashfee_rebill.p 
+   RUN /apps/snet/200801/cashfee_rebill.p 
                  (order.orderid,
                   lcextinvid,
                   1,

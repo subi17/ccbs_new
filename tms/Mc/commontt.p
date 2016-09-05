@@ -17,11 +17,11 @@
                   03.03.03 kl  custpnp
                   21.03.03/aam customer prices (tariff.p)
                   23.03.03 kl quit was in wrong column
-                  04.04.03 kl RUN Mc/tariff, new parameter
+                  04.04.03 kl RUN Mc/tariff,.p new parameter
                   15.04.03/aam deposit invoices (display and create)
                   23.05.03/aam view it-text send log (itsendlo)
                   26.06.03 kl new parameter for tariff
-                  04.07.03 kl RUN Mc/tariff, new parameter
+                  04.07.03 kl RUN Mc/tariff,.p new parameter
                   03.10.03/aam contract added 
                   27.10.03/aam new parameter for bitemcu
                   23.01.04/aam new layout, nnasda&nnasbt&nnpwd removed
@@ -39,7 +39,7 @@
                   16.12.05/aam new layout
                   13.04.06/aam payment plan
                   24.11.06/aam terminals (orderaccessory)
-                  22.03.07 kl  new param for RUN Ar/payments
+                  22.03.07 kl  new param for RUN Ar/payments.p
                   
   Version ......: M15
   SHARED .......: INPUT: CustNum
@@ -70,7 +70,7 @@ IF liInvType = 0 OR liInvType = ? THEN liInvType = 3.
 PAUSE 0.
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
 
       DISPLAY
        " A) Invoices                       "             @ menuc[1]  
@@ -144,34 +144,34 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"8,F8") > 0  THEN LEAVE.
 
    IF FRAME-INDEX EQ 1 THEN DO:
-      RUN Mc/nnasla(iiCustNum,
+      RUN Mc/nnasla.p(iiCustNum,
                  0).
    END.
 
    ELSE IF FRAME-INDEX EQ 2 THEN DO:
-      RUN Ar/payments (iiCustNum,0,"").
+      RUN Ar/payments.p (iiCustNum,0,"").
    END.
 
    ELSE IF FRAME-INDEX EQ 4 THEN DO:
-      RUN Ar/paymplan (iiCustNum,0,0).
+      RUN Ar/paymplan.p (iiCustNum,0,0).
    END.
 
    ELSE IF FRAME-INDEX EQ 5 THEN DO:
-      RUN Ar/claimhis (iiCustNum, 
+      RUN Ar/claimhis.p (iiCustNum, 
                     0).
    END.
 
    ELSE IF FRAME-INDEX EQ 7 THEN DO:
-      RUN Mc/bitemcu(iiCustNum,
+      RUN Mc/bitemcu.p(iiCustNum,
                   "").
    END.
 
    ELSE IF FRAME-INDEX EQ 8 THEN DO:
-      RUN Mc/nncuco(iiCustNum,"").
+      RUN Mc/nncuco.p(iiCustNum,"").
    END.
 
    ELSE IF FRAME-INDEX = 9 THEN DO:
-      RUN Mm/fatime("",    
+      RUN Mm/fatime.p("",    
                  iiCustNum,
                  "",
                  0).
@@ -179,12 +179,12 @@ DO WHILE TRUE:
 
    /* create FAT */ 
    ELSE IF FRAME-INDEX EQ 10 THEN DO:
-      RUN Mc/creafatui(iiCustNum,
+      RUN Mc/creafatui.p(iiCustNum,
                     0).
    END.
 
    ELSE IF FRAME-INDEX EQ 13 THEN DO:
-      RUN Mc/custmarket (iiCustNum).
+      RUN Mc/custmarket.p (iiCustNum).
    END.
    
    ELSE IF FRAME-INDEX EQ 14 THEN DO:
@@ -194,7 +194,7 @@ DO WHILE TRUE:
    END.
   
    ELSE IF FRAME-INDEX EQ 15 THEN DO:
-      RUN Mc/custbime(iiCustNum).
+      RUN Mc/custbime.p(iiCustNum).
    END.
    
    ELSE IF FRAME-INDEX EQ 16 THEN DO:
@@ -208,38 +208,38 @@ DO WHILE TRUE:
    END.
  
    ELSE IF FRAME-INDEX EQ 20 THEN DO:
-      RUN Mc/memotype(iiCustNum).
+      RUN Mc/memotype.p(iiCustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 21 THEN DO:
-      RUN Mc/custrqme(iiCustNum).
+      RUN Mc/custrqme.p(iiCustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 22 THEN DO:
-      RUN Mm/substerminal(0,0,iiCustNum).
+      RUN Mm/substerminal.p(0,0,iiCustNum).
    END.
    
    ELSE IF FRAME-INDEX EQ 24 THEN DO:
-      RUN Mm/tmrulesel(0,iiCustNum).
+      RUN Mm/tmrulesel.p(0,iiCustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 27 THEN DO:
-      RUN Mm/callalarm(iiCustNum,"").
+      RUN Mm/callalarm.p(iiCustNum,"").
    END.
 
    ELSE IF FRAME-INDEX EQ 28 THEN DO:
-      RUN Mc/itsendlo(iiCustNum, 
+      RUN Mc/itsendlo.p(iiCustNum, 
                    0,
                    0,
                    0).
    END.
 
    ELSE IF FRAME-INDEX EQ 29 THEN DO:
-       RUN Mc/evbrcust(iiCustNum).
+       RUN Mc/evbrcust.p(iiCustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 30 THEN DO:
-      RUN Mc/custadme (iiCustNum).
+      RUN Mc/custadme.p (iiCustNum).
    END.
 
 END. /* DO WHILE */

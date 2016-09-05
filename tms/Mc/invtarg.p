@@ -41,7 +41,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhBillTarget).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhBillTarget).
+      RUN Mc/eventview2.p(lhBillTarget).
    END.
 
 END.
@@ -110,7 +110,7 @@ form /* seek Invoicing Target  BY  BillTarget */
 FIND  Customer where Customer.CustNum = CustNum no-lock.
 lcCustName =  DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
                         BUFFER Customer).
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By No. ,By name,By 3, By 4".
@@ -145,12 +145,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a BillTarget  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR BillTarget.BillTarget.
@@ -380,8 +380,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        SET BillTarget WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF BillTarget ENTERED THEN DO:
@@ -410,7 +410,7 @@ BROWSE:
         END.
         ELSE DO:
            ASSIGN ufkey = TRUE.
-           RUN Mc/dpconf (BillTarget.DiscPlan).
+           RUN Mc/dpconf.p (BillTarget.DiscPlan).
            NEXT LOOP.
         END.
      END.
@@ -425,7 +425,7 @@ BROWSE:
             /* set update-mode as prohibited */
             ASSIGN llRight = qupd
                    qupd    = FALSE.
-            RUN Mc/plistconf(BillTarget.RatePlan).
+            RUN Mc/plistconf.p(BillTarget.RatePlan).
             qupd = llRight.
         END.
         ELSE MESSAGE "No rating information is available."
@@ -509,8 +509,8 @@ BROWSE:
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY BillTarget.BillTarget.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhBillTarget).

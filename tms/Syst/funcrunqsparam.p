@@ -23,7 +23,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhFuncRunQSParam).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhFuncRunQSParam).
+      RUN Mc/eventview2.p(lhFuncRunQSParam).
    END.
 
 END.
@@ -151,7 +151,7 @@ lcQueueDesc = FuncRunQueue.QueueDesc.
 
 RUN pInitializeParams(iiFRQScheduleID).
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -238,7 +238,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -383,8 +383,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFuncRunQSParam).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -421,7 +421,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -518,7 +518,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
       ELSE toimi = 1.
       
@@ -529,7 +529,7 @@ PROCEDURE local-UPDATE-record:
                 
             FIND CURRENT FuncRunQSParam EXCLUSIVE-LOCK.
             ehto = 9.
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
          
             PAUSE 0.
             CASE FuncRunQSParam.ParamType:

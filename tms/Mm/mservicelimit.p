@@ -144,7 +144,7 @@ END FUNCTION.
 
 IF getTMSRight("VENDOR,SYST") EQ "RW" THEN llAdmin = TRUE.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -176,12 +176,12 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* mservicelimit -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            LEAVE add-new.
         
@@ -436,7 +436,7 @@ BROWSE:
                    servicelimitgroup.groupcode = servicelimit.GroupCode
         NO-LOCK NO-ERROR.
 
-        RUN Mm/servicelcounter(INPUT (IF servicelimit.GroupCode BEGINS {&DSS}
+        RUN Mm/servicelcounter.p(INPUT (IF servicelimit.GroupCode BEGINS {&DSS}
                                    THEN 0 ELSE MserviceLimit.MsSeq),
                             INPUT MserviceLimit.CustNum,
                             INPUT MserviceLimit.SlSeq,
@@ -444,7 +444,7 @@ BROWSE:
                             INPUT (YEAR(Today) * 100 + MONTH(Today)),
                             INPUT MserviceLimit.MSID).
 
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         must-print = TRUE.
         NEXT LOOP.
      
@@ -589,8 +589,8 @@ no-lock.
        FIND FIRST mservicelimit where 
             recid(mservicelimit) = rtab[frame-line(sel)] no-lock.
        assign fr-header = " VIEW " ufk = 0 ufk[8] = 8 ehto = 3.
-       RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        IF AVAIL mservicelimit THEN DO:
          RUN LOCAL-FIND-OTHER.
@@ -620,9 +620,9 @@ no-lock.
             recid(mservicelimit) = rtab[frame-line(sel)]
        no-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN Syst/ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        RUN LOCAL-UPDATE-RECORD(FALSE).
        

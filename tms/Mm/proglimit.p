@@ -110,7 +110,7 @@ ELSE DO:
    RETURN.
 
 END.
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -134,13 +134,13 @@ repeat WITH FRAME sel:
    IF must-add THEN DO:  /* ProgLimit -ADD  */
       HIDE FRAME lis.
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            CREATE ProgLimit.
@@ -372,7 +372,7 @@ repeat WITH FRAME sel:
          ELSE                          llShowHistory = FALSE.
 
          run local-find-first.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          must-print = true.
          ufkey = true.
          NEXT LOOP.
@@ -445,9 +445,9 @@ repeat WITH FRAME sel:
             recid(ProgLimit) = rtab[frame-line(sel)]
        exclusive-lock.
        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN Syst/ufcolor.
+       cfc = "lis". RUN Syst/ufcolor.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhProgLimit).
 
@@ -462,7 +462,7 @@ repeat WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhProgLimit).
 
        run local-find-first.
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
        must-print = true.
        ufkey = true.
        NEXT LOOP.

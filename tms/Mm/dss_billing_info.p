@@ -122,7 +122,7 @@ WITH  OVERLAY ROW 3 width 50 centered
     SIDE-LABELS 
     FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 RUN local-find-first.
@@ -196,7 +196,7 @@ REPEAT WITH FRAME sel:
            ehto   = 3 
            ufkey  = FALSE.
 
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -335,8 +335,8 @@ REPEAT WITH FRAME sel:
        /* change */
        RUN local-find-this(FALSE).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        /* IF  User Wanted TO Cancel this Change TRANSACTION */
        IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
@@ -465,7 +465,7 @@ PROCEDURE local-UPDATE-record:
          ehto = 0
          ufk  = 0
          ufk[8] = 8.
-     RUN Syst/ufkey.
+     RUN Syst/ufkey.p.
 
      IF toimi = 8 THEN LEAVE.
 

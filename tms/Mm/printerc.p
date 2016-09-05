@@ -46,7 +46,7 @@ IF liITNum = 0 THEN DO:
    RETURN lcError.
 END.
 
-RUN Mc/printxt (MsOwner.CustNum,
+RUN Mc/printxt.p (MsOwner.CustNum,
              MsOwner.MsSeq, 
              "",
              1,  /* 1=invtext */

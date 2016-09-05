@@ -29,7 +29,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhSimArt).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhSimArt).
+      RUN Mc/eventview2.p(lhSimArt).
    END.
 END.
 
@@ -114,7 +114,7 @@ form /* seek SIM Article  BY SAName */
     WITH row 4 col 2 title COLOR VALUE(ctc) " FIND Name "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -146,12 +146,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a SimArt  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR SimArt.SimArt
@@ -373,9 +373,9 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        SimArt = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME f1.
        UPDATE 
            lcBrand WHEN gcAllBrand = TRUE  SimArt WITH FRAME f1.
@@ -393,9 +393,9 @@ BROWSE:
      /* Search BY col 2 */
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        SAName = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME f2.
 
        UPDATE  lcBrand WHEN gcAllBrand = TRUE
@@ -415,12 +415,12 @@ BROWSE:
        ufkey = TRUE. 
        FIND SimArt WHERE recid(SimArt) = rtab[FRAME-LINE] /* NO-LOCK. */.
 
-       RUN Mm/stobal3(Simart.Brand,SimArt.SimArt).
+       RUN Mm/stobal3.p(Simart.Brand,SimArt.SimArt).
        NEXT loop.
      END.  
 
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANSACTION:  /* DET. BAL */
-       ufkey = TRUE. ufk = 0. ehto = 3. RUN Syst/ufkey.
+       ufkey = TRUE. ufk = 0. ehto = 3. RUN Syst/ufkey.p.
        FIND SimArt WHERE recid(SimArt) = rtab[FRAME-LINE] NO-LOCK. 
        PAUSE 0.
        DISP SimArt.DetBal[1 FOR 6] WITH FRAME dbal.
@@ -498,8 +498,8 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSimArt).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor.
+       RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p.
        CLEAR FRAME lis NO-PAUSE.
        DISPLAY SimArt.SimArt.
        RUN local-UPDATE-record.

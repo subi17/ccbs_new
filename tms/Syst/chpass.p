@@ -14,7 +14,7 @@
 DEFINE VARIABLE olPasswordChanged AS LOGICAL NO-UNDO.
 
 
-RUN Syst/chpasswd(OUTPUT olPasswordChanged).
+RUN Syst/chpasswd.p(OUTPUT olPasswordChanged).
 
 IF NOT olPasswordChanged THEN 
    MESSAGE " Password not changed!" VIEW-AS ALERT-BOX INFO.

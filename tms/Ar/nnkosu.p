@@ -65,7 +65,7 @@ with
    " " frame main.
 
 
-cfc = "sel".  RUN Syst/ufcolor.
+cfc = "sel".  RUN Syst/ufcolor.p.
 view frame main.
 
 /* payment configuration file */
@@ -128,7 +128,7 @@ REPEAT:
          /* are wild-cards used */
          IF INDEX(worigin.wFile,"*") GT 0 OR
             INDEX(worigin.wFile,"?") GT 0
-         THEN RUN Mc/choosefile (wOrigin.wFile,
+         THEN RUN Mc/choosefile.p (wOrigin.wFile,
                               OUTPUT xPaymFile).
          ELSE ASSIGN xPaymFile = worigin.wfile.
 
@@ -159,7 +159,7 @@ REPEAT:
       DISPLAY xPaymFile WITH FRAME main. 
 
       ehto = 5.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       
       MESSAGE "Searching for new payments ...".
 
@@ -214,7 +214,7 @@ REPEAT:
      
    {Syst/utuloste.i "return"}
 
-   RUN Ar/readpaym (INPUT TABLE ttPayment,
+   RUN Ar/readpaym.p (INPUT TABLE ttPayment,
                  xPaymFile,
                  liFileType,
                  TRUE,   /* show messages */
@@ -257,7 +257,7 @@ PROCEDURE local-set-origin:
         ELSE DOWN.
     END.
     ASSIGN ufk = 0 ufk[5] = 11 ufk[8] = 8 ehto = 3.
-    RUN Syst/ufkey.
+    RUN Syst/ufkey.p.
     CHOOSE ROW worigin.worname no-error {Syst/uchoose.i}
     WITH FRAME origin.   
 

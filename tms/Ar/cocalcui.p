@@ -304,9 +304,9 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
          IF NOT llOk THEN NEXT.
 
          ehto = 5.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
 
-         RUN Ar/cocalc(lcInvGroup,
+         RUN Ar/cocalc.p(lcInvGroup,
                     liCustNum1,
                     liCustNum2,
                     liCustNum3,

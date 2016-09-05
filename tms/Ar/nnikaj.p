@@ -109,9 +109,9 @@ form
    with title color value(ctc) " CRITERIA FOR PRINTOUT " side-labels
    color value(cfc) row 4 centered overlay frame rajat.
 
-cfc = "sel". RUN Syst/ufcolor.
+cfc = "sel". RUN Syst/ufcolor.p.
 view frame valinta.
-cfc = "puli". RUN Syst/ufcolor.
+cfc = "puli". RUN Syst/ufcolor.p.
 pause 0 no-message.
 
 assign
@@ -138,10 +138,10 @@ with frame rajat.
 toimi:
 repeat with frame valinta on endkey undo toimi, next toimi:
       assign ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       if toimi = 1 then do:
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          update 
             day-to
             InvGroup
@@ -196,10 +196,10 @@ repeat with frame valinta on endkey undo toimi, next toimi:
                      disp "NOT SELECTED" @ extname with frame rajat.
                   end.
                   else do:
-                     RUN Mc/gathecg(INPUT-OUTPUT table TCustGroup).
+                     RUN Mc/gathecg.p(INPUT-OUTPUT table TCustGroup).
                      /* DISPLAY Customer groups */
                      EHTO = 9.
-                     RUN Syst/ufkey.
+                     RUN Syst/ufkey.p.
                      FOR EACH TCustGroup.
                         dExtCustGrp = dExtCustGrp + TCustGroup.CustGroup + ",".
                      END.
@@ -247,7 +247,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
       else if toimi = 5 then do:
          IF NOT llOnlySummary THEN DO:
             assign
-            cfc = "uusi". RUN Syst/ufcolor.   ccc = cfc.
+            cfc = "uusi". RUN Syst/ufcolor.p.   ccc = cfc.
             do i = 1 to 2 with frame rival:
                valik = valikko[i].
                display valik.
@@ -282,7 +282,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
 end. /* toimi */
 
 ehto = 5.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
 CREATE ttCriter.
 ASSIGN ttCriter.InvGroup = InvGroup

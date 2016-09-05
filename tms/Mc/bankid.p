@@ -25,7 +25,7 @@ WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
 title color value(ctc) " Banks (" + gcBrand + ") "
 OVERLAY FRAME kase.
 
-cfc = "kase". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "kase". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 runko:
 repeat:
 

@@ -136,7 +136,7 @@ repeat:
 
    FIND Customer WHERE Customer.CustNum = Invoice.CustNum NO-LOCK.
 
-   RUN Ar/invbal(invoice.invnum,
+   RUN Ar/invbal.p(invoice.invnum,
               output ldbal).
    
    put stream slog unformatted

@@ -46,7 +46,7 @@ WITH
    OVERLAY FRAME LOG ROW 4 12 DOWN width 80 TITLE
    " SUMMARY OF EXPIRING CONTRACT PAYMENTS ". 
 
-ehto = 9. RUN Syst/ufkey.
+ehto = 9. RUN Syst/ufkey.p.
 PAUSE 0.
 view FRAME LOG.
 UPDATE 
@@ -59,7 +59,7 @@ UPDATE
 WITH FRAME Date.
 PAUSE 0.
 
-ufk = 0. ehto = 3. RUN Syst/ufkey.
+ufk = 0. ehto = 3. RUN Syst/ufkey.p.
 
 period = year(idate) * 100 + month(idate).
 

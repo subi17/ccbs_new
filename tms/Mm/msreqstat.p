@@ -31,7 +31,7 @@ END CASE.
 
 DO WHILE TRUE:
 
-   RUN Syst/tmscodesbr("MsRequest",
+   RUN Syst/tmscodesbr.p("MsRequest",
                   "ReqStatus",
                   lcSkip,
                   lcReqName,
@@ -39,7 +39,7 @@ DO WHILE TRUE:
                   OUTPUT lcStatus).
 
    IF lcStatus > "" THEN 
-      RUN Mm/msrequest (iiReqType,
+      RUN Mm/msrequest.p (iiReqType,
                      INTEGER(lcStatus),
                      iiMsSeq,
                      0,

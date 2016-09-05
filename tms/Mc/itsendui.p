@@ -172,10 +172,10 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
                       IF INPUT llExtCustGrp = TRUE THEN DO:
 
-                         RUN Mc/gathecg(INPUT-OUTPUT table ttCustGroup).
+                         RUN Mc/gathecg.p(INPUT-OUTPUT table ttCustGroup).
 
                          ehto = 9.
-                         RUN Syst/ufkey.
+                         RUN Syst/ufkey.p.
 
                          FOR EACH ttCustGroup:
                             lcExtCustGrp = lcExtCustGrp + 
@@ -227,17 +227,17 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
          IF NOT llOk THEN NEXT.
 
          ehto = 5.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
 
          /* collect customers */
-         RUN Mc/itsendco (lcInvGroup,
+         RUN Mc/itsendco.p (lcInvGroup,
                        INPUT TABLE ttCustGroup,
                        liCustNum1,
                        liCustNum2,
                        OUTPUT TABLE ttCust).
 
          /* send texts */
-         RUN Mc/itsend   (INPUT TABLE ttCust,
+         RUN Mc/itsend.p   (INPUT TABLE ttCust,
                        ldtDate1,
                        ldtDate2,
                        OUTPUT liCount,

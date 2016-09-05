@@ -43,7 +43,7 @@ FORM
    
 cfc = "sel".
 
-RUN Syst/ufcolor.
+RUN Syst/ufcolor.p.
 
 ccc = cfc.
 
@@ -239,7 +239,7 @@ REPEAT WITH FRAME sel:
           ufk    = 0
           ufk[8] = 8
           ufkey  = TRUE.
-       RUN Syst/ufkey.   
+       RUN Syst/ufkey.p.   
           
        HIDE FRAME fDetail NO-PAUSE.
        NEXT loop.

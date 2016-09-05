@@ -217,7 +217,7 @@ REPEAT TRANSACTION:
          END.
          
          ehto = 4.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
             
       END.
       
@@ -291,7 +291,7 @@ REPEAT TRANSACTION:
             END.
             
             ehto = 4.
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
             
          END.
       END.

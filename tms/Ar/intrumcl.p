@@ -52,7 +52,7 @@ WITH  OVERLAY ROW 1 WIDTH 80
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
 
     PAUSE 0.
     UPDATE
@@ -70,7 +70,7 @@ REPEAT WITH FRAME main:
            THEN ASSIGN liCount = R-INDEX(INPUT lcInfile,"/")
                        lcDir   = SUBSTRING(INPUT lcInfile,1,liCount - 1).
 
-           RUN Mc/choosefile (IF lcDir NE "" 
+           RUN Mc/choosefile.p (IF lcDir NE "" 
                            THEN lcDir
                            ELSE INPUT lcInfile,
                            OUTPUT lcFile).
@@ -82,7 +82,7 @@ REPEAT WITH FRAME main:
            END. 
 
            ehto = 9.
-           RUN Syst/ufkey.
+           RUN Syst/ufkey.p.
         END. 
 
         ELSE APPLY LASTKEY. 
@@ -95,7 +95,7 @@ REPEAT WITH FRAME main:
       ufk[1] = 7 
       ufk[5] = (IF lcInfile ne "" THEN 795 ELSE 0).
       ufk[8] = 8.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT  main.
       IF toimi = 8 THEN LEAVE main.
@@ -135,7 +135,7 @@ REPEAT WITH FRAME main:
       ASSIGN tila = TRUE.
       {Syst/utuloste.i "return"}
 
-      RUN Ar/intrumcrp (INPUT TABLE ttError,
+      RUN Ar/intrumcrp.p (INPUT TABLE ttError,
                      lcInfile).
 
       ASSIGN tila = FALSE.

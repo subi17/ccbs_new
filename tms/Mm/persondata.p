@@ -79,7 +79,7 @@ IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
 ELSE lcUserName = "".
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey. 
+   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
  
  DISPLAY
  "A) Agreement Customer          "  @ menuc[1]    SKIP
@@ -138,7 +138,7 @@ DO WHILE TRUE:
 
    ELSE IF FRAME-INDEX = 4 THEN DO:
       
-      RUN Mm/chgmsowner(MobSub.MsSeq,
+      RUN Mm/chgmsowner.p(MobSub.MsSeq,
                      0,
                      "new").
    END. 
@@ -153,7 +153,7 @@ DO WHILE TRUE:
    END.
 
    ELSE IF FRAME-INDEX = 7 THEN DO:
-      RUN Mm/ownerreq(MobSub.MsSeq,0,?).
+      RUN Mm/ownerreq.p(MobSub.MsSeq,0,?).
    END. 
     
    ELSE IF FRAME-INDEX = 8 OR FRAME-INDEX = 0 THEN LEAVE.

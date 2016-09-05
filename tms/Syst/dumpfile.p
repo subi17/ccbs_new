@@ -27,7 +27,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhDumpFile).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhDumpFile).
+      RUN Mc/eventview2.p(lhDumpFile).
    END.
 
 END.
@@ -141,7 +141,7 @@ IF gcHelpParam > "" THEN ASSIGN
    FrmRow  = 3
    FrmDown = 11.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -171,7 +171,7 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a DumpFile  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -179,7 +179,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
 
@@ -299,7 +299,7 @@ REPEAT WITH FRAME sel:
            ufk[6] = 0
            ufk[7] = 0.
          
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -433,8 +433,8 @@ REPEAT WITH FRAME sel:
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
@@ -564,8 +564,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDumpFile).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY DumpFile.DumpID.
 
        RUN local-UPDATE-record.                                  
@@ -603,7 +603,7 @@ HIDE FRAME sel NO-PAUSE.
 si-recid = xrecid.
 
 ehto = 4.
-RUN Syst/ufkey.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -719,7 +719,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
                   
       IF toimi = 1 THEN 
@@ -728,7 +728,7 @@ PROCEDURE local-UPDATE-record:
          FIND CURRENT DumpFile EXCLUSIVE-LOCK.
       
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
    
          UPDATE
             DumpFile.BatchID
@@ -758,7 +758,7 @@ PROCEDURE local-UPDATE-record:
 
                IF FRAME-FIELD = "MainTable" THEN DO:
                   siirto = "".
-                  RUN Syst/table_help.
+                  RUN Syst/table_help.p.
                   IF siirto > "" THEN 
                      DISP siirto @ DumpFile.MainTable WITH FRAME lis.
                END.
@@ -798,7 +798,7 @@ PROCEDURE local-UPDATE-record:
                END.
            
                ELSE IF FRAME-FIELD = "ModFromField" THEN DO:
-                  RUN Syst/fieldselection (INPUT INPUT FRAME lis DumpFile.MainTable,
+                  RUN Syst/fieldselection.p (INPUT INPUT FRAME lis DumpFile.MainTable,
                                       "SELECT FIELD",
                                       "",
                                       "",
@@ -816,7 +816,7 @@ PROCEDURE local-UPDATE-record:
                END.
                 
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
 
                NEXT. 
             END.
@@ -893,7 +893,7 @@ PROCEDURE local-UPDATE-record:
             ufk[8] = 8
             ehto   = 0.
          
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       
          IF toimi = 1 THEN 
          REPEAT WITH FRAME fAddit ON ENDKEY UNDO, LEAVE MaintMenu:
@@ -901,7 +901,7 @@ PROCEDURE local-UPDATE-record:
             FIND CURRENT DumpFile EXCLUSIVE-LOCK.
       
             ehto = 9.
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
    
             UPDATE
                DumpFile.UseIndex 
@@ -925,7 +925,7 @@ PROCEDURE local-UPDATE-record:
 
                   IF FRAME-FIELD = "SideTables" THEN DO:
                      siirto = "".
-                     RUN Syst/table_help.
+                     RUN Syst/table_help.p.
                      IF siirto > "" THEN DO:
                         IF INPUT FRAME fAddit DumpFile.SideTables > ""
                         THEN siirto = INPUT FRAME fAddit DumpFile.SideTables +
@@ -935,7 +935,7 @@ PROCEDURE local-UPDATE-record:
                   END.
                   
                   ELSE IF FRAME-FIELD = "LinkKey" THEN DO:
-                     RUN Syst/fieldselection (DumpFile.MainTable,
+                     RUN Syst/fieldselection.p (DumpFile.MainTable,
                                          "SELECT FIELD",
                                          "",
                                          "",
@@ -950,7 +950,7 @@ PROCEDURE local-UPDATE-record:
                   END.
 
                   ELSE IF FRAME-FIELD = "EventLogFields" THEN DO:
-                     RUN Syst/fieldselection (DumpFile.MainTable,
+                     RUN Syst/fieldselection.p (DumpFile.MainTable,
                                          "SELECT FIELD",
                                          "",
                                          "",
@@ -969,7 +969,7 @@ PROCEDURE local-UPDATE-record:
                   END.
                 
                   ehto = 9.
-                  RUN Syst/ufkey.
+                  RUN Syst/ufkey.p.
 
                   NEXT. 
                END.
@@ -999,7 +999,7 @@ PROCEDURE local-UPDATE-record:
                ufk[8] = 8
                ehto   = 0.
          
-            RUN Syst/ufkey.
+            RUN Syst/ufkey.p.
    
             IF toimi = 1 THEN 
             REPEAT WITH FRAME fQuery ON ENDKEY UNDO, LEAVE:
@@ -1007,7 +1007,7 @@ PROCEDURE local-UPDATE-record:
                FIND CURRENT DumpFile EXCLUSIVE-LOCK.
       
                ehto = 9.
-               RUN Syst/ufkey.
+               RUN Syst/ufkey.p.
    
                UPDATE DumpFile.QueryClause WITH FRAME fQuery.
                LEAVE.
@@ -1022,7 +1022,7 @@ PROCEDURE local-UPDATE-record:
       END.
       
       ELSE IF toimi = 3 THEN DO:
-         RUN Syst/dffield (DumpFile.DumpID).
+         RUN Syst/dffield.p (DumpFile.DumpID).
       END.
  
       ELSE IF toimi = 4 THEN DO:
@@ -1030,7 +1030,7 @@ PROCEDURE local-UPDATE-record:
       END.
       
       ELSE IF toimi = 5 THEN DO:
-         RUN Syst/dumplog (DumpFile.DumpID).
+         RUN Syst/dumplog.p (DumpFile.DumpID).
       END.
 
       ELSE IF toimi = 8 THEN LEAVE.  

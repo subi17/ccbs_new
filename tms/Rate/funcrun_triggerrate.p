@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------------
   MODULE .......: funcrun_triggerrate
-  TASK .........: RUN Rate/rerate from FuncRun
+  TASK .........: RUN Rate/rerate.p from FuncRun
   AUTHOR .......: 14.02.12/aam 
   ---------------------------------------------------------------------- */
 

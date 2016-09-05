@@ -468,7 +468,7 @@ FUNCTION fPrintInvoTxt RETURNS LOGICAL
             
       IF ttInvoTxt.ITPos = -1 THEN DO:
       
-         RUN Mc/printxt (Invoice.CustNum,
+         RUN Mc/printxt.p (Invoice.CustNum,
                       0,                      /* msseq */
                       lcTagCLI,
                       1,                      /* 1=invtext */
@@ -551,10 +551,10 @@ ASSIGN
    i-date1  = pvm
    i-date2  = pvm.
 
-cfc = "sel". RUN Syst/ufcolor. ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
 view FRAME taka. PAUSE 0 no-message.
 
-ehto = 9. RUN Syst/ufkey.
+ehto = 9. RUN Syst/ufkey.p.
 ASSIGN lano1 = 000000 lano2 = 99999999
        asno1  = 0 asno2 = 99999999.
 
@@ -594,7 +594,7 @@ PAUSE 0 no-message.
 LOOP:
 repeat:
    /* KysellAAn rajaukset */
-   ehto = 9. RUN Syst/ufkey.
+   ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0 no-message.
    UPDATE
       lano1    lano2
@@ -717,7 +717,7 @@ repeat:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       ASSIGN
       ufk = 0 ufk[1] = 132 ufk[4] = 0 /* 797*/ ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
 
       IF toimi = 1 THEN NEXT LOOP.
 
@@ -769,7 +769,7 @@ las_teh = "".
 IF oso = "" THEN DO: 
 
    /* copy macros TO printer */
-   RUN Syst/umakro(lcMacros).
+   RUN Syst/umakro.p(lcMacros).
 
    /* macro nbr is in it's name */
    IF lcMacros > "" THEN lcMacroEff = SUBSTRING(lcMacros,LENGTH(lcMacros),1).
@@ -913,7 +913,7 @@ repeat:
                     "",
                     "").
           
-      IF oso = "" THEN RUN Syst/ucurpos(30,0).
+      IF oso = "" THEN RUN Syst/ucurpos.p(30,0).
 
       fChgPage(999).
       

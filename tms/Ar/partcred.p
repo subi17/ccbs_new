@@ -138,7 +138,7 @@ form /* seek InvRow  BY  InvRow */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -374,8 +374,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET xBillCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -476,7 +476,7 @@ REPEAT WITH FRAME sel:
            /* mobile ISValue */
            when 2 THEN DO:
               ASSIGN ufkey = TRUE.
-              RUN Ar/irowmcdr(Invoice.InvNum,
+              RUN Ar/irowmcdr.p(Invoice.InvNum,
                            InvRow.FromDate,
                            InvRow.ToDate,
                            InvRow.BillCode,
@@ -485,13 +485,13 @@ REPEAT WITH FRAME sel:
 
            when 3  THEN DO:
               ASSIGN ufkey = TRUE.
-              RUN Ar/irowffee(Invoice.InvNum,
+              RUN Ar/irowffee.p(Invoice.InvNum,
                            InvRow.BillCode,
                            InvRow.CLI).
            END.
            when 4  THEN DO:
               ASSIGN ufkey = TRUE.
-              RUN Ar/irowsfee(Invoice.InvNum,
+              RUN Ar/irowsfee.p(Invoice.InvNum,
                            InvRow.BillCode,
                            InvRow.CLI).
            END.

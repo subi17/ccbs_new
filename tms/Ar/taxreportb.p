@@ -32,7 +32,7 @@ END.
 
 fELog("TAXREPORT","PostPaidStarted").
 
-RUN Ar/taxreport ("",             /* TaxZone */
+RUN Ar/taxreport.p ("",             /* TaxZone */
                "",             /* CustID */
                0,              /* InvType */
                98,             /* InvType, no test invoices */

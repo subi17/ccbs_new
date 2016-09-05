@@ -20,7 +20,7 @@
                   05.02.07 kl  Q) ppreqbr
                   08.03.07/aam lock and unlock removed
                   18.04.07/aam odi request N
-                  29.05.07 kl  .p removed from RUN tms_support/protop/lib/commands
+                  29.05.07 kl  .p removed from RUN tms_support/protop/lib/commands.p
                   27.06.07 vk  for testing purposes only
                   06.02.08 jt  new barring handling (HLR-action menu)
 
@@ -50,7 +50,7 @@ IF llDoEvent THEN DO:
   RUN StarEventInitialize(lhMobsub).
                
   ON F12 ANYWHERE DO:
-     RUN Mc/eventview2(lhMobsub).
+     RUN Mc/eventview2.p(lhMobsub).
    END.
                            
 END.
@@ -121,7 +121,7 @@ ELSE                    lcUserName = "".
 
 
 DO WHILE TRUE:
-   ASSIGN Killed = (not avail mobsub) ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey. 
+   ASSIGN Killed = (not avail mobsub) ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
  DISPLAY
  "A) Subscription active masks            " WHEN NOT Killed @ menuc[1] 
  "P) Counters and Limits          "       @ menuc[16] SKIP
@@ -183,12 +183,12 @@ DO WHILE TRUE:
          VIEW-AS ALERT-BOX.
          LEAVE.
       END.
-      RUN Mm/barrbrowser1(MsSeq).
+      RUN Mm/barrbrowser1.p(MsSeq).
    END.
 
    ELSE IF FRAME-INDEX = 2 AND NOT Killed THEN DO :
       IF NOT fIsPermittedModule(MobSub.CliType, "mobtypech") THEN NEXT.
-      RUN Mm/mobtypech(msseq).
+      RUN Mm/mobtypech.p(msseq).
    END.
            
    ELSE IF FRAME-INDEX = 3 AND NOT Killed THEN DO TRANSACTION:
@@ -202,7 +202,7 @@ DO WHILE TRUE:
    END.
             
    ELSE IF FRAME-INDEX = 5 AND NOT Killed THEN  DO :
-      RUN Mm/persondata(MsSeq).
+      RUN Mm/persondata.p(MsSeq).
    END.
             
    ELSE IF FRAME-INDEX = 6 AND NOT Killed THEN DO:
@@ -250,7 +250,7 @@ DO WHILE TRUE:
           
    ELSE IF  FRAME-INDEX = 10 AND NOT Killed AND Avail mobsub THEN DO :
       IF NOT fIsPermittedModule(MobSub.CliType, "fatime") THEN NEXT.
-      RUN Mm/fatime("", 0, mobsub.cli, MobSub.MsSeq).
+      RUN Mm/fatime.p("", 0, mobsub.cli, MobSub.MsSeq).
    END.
                                     
 
@@ -284,7 +284,7 @@ DO WHILE TRUE:
 
    ELSE IF FRAME-INDEX = 17 AND NOT Killed  AND avail mobsub THEN DO:  
       IF NOT fIsPermittedModule(MobSub.CliType, "ppreqbr") THEN NEXT.
-      RUN Gwy/ppreqbr(MobSub.MsSeq).
+      RUN Gwy/ppreqbr.p(MobSub.MsSeq).
    END.
    
    ELSE IF FRAME-INDEX  = 18 THEN DO :
@@ -330,9 +330,9 @@ DO WHILE TRUE:
       FRAME rerate.
       
       IF llDSSActive THEN
-         RUN Rate/rerate(INPUT "", MobSub.CustNum , INPUT Fromperiod, INPUT Endperiod).
+         RUN Rate/rerate.p(INPUT "", MobSub.CustNum , INPUT Fromperiod, INPUT Endperiod).
       ELSE
-         RUN Rate/rerate(INPUT MobSub.CLI, 0 , INPUT Fromperiod, INPUT Endperiod).
+         RUN Rate/rerate.p(INPUT MobSub.CLI, 0 , INPUT Fromperiod, INPUT Endperiod).
       
       MESSAGE 
       "Calls re-rated"
@@ -343,24 +343,24 @@ DO WHILE TRUE:
       IF NOT fIsPermittedModule(MobSub.CliType, "mobsubsms") THEN NEXT.
       IF lcRight = "R" THEN MESSAGE "Restricted use. Not allowed!" 
                             VIEW-AS ALERT-BOX.
-      ELSE IF lcRight = "RW" THEN RUN Mm/mobsubsms(INPUT msseq).
+      ELSE IF lcRight = "RW" THEN RUN Mm/mobsubsms.p(INPUT msseq).
    END.
    
    /* call specification */
    ELSE IF FRAME-INDEX = 23 AND NOT Killed  THEN DO:
       IF NOT fIsPermittedModule(MobSub.CliType, "mclispec") THEN NEXT.
-      RUN Mm/mclispec(mobsub.cli).
+      RUN Mm/mclispec.p(mobsub.cli).
    END.
    
    ELSE IF FRAME-INDEX = 24 AND NOT Killed THEN DO:
-      RUN Mm/tmrulesel(MobSub.MsSeq,MobSub.CustNum).
+      RUN Mm/tmrulesel.p(MobSub.MsSeq,MobSub.CustNum).
    END.
    ELSE IF FRAME-INDEX = 25 AND NOT Killed THEN DO:
-      RUN Ar/cotarg(MobSub.MsSeq,"mobsub").
+      RUN Ar/cotarg.p(MobSub.MsSeq,"mobsub").
    END.
                   
    ELSE IF FRAME-INDEX = 26 AND NOT Killed THEN
-      RUN Mm/substerminal(MobSub.MsSeq,0,0).
+      RUN Mm/substerminal.p(MobSub.MsSeq,0,0).
 
    /* Reactivate the terminated Subscription */                 
    ELSE IF FRAME-INDEX = 27 AND Killed THEN DO:

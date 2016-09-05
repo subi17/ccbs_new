@@ -26,7 +26,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhCTServEl).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhCTServEl).
+      RUN Mc/eventview2.p(lhCTServEl).
    END.
 
 END.
@@ -107,7 +107,7 @@ form
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 
@@ -130,13 +130,13 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a CTServEl  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
        
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
@@ -444,8 +444,8 @@ REPEAT WITH FRAME sel:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcServCom WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -478,7 +478,7 @@ REPEAT WITH FRAME sel:
              ServCom.Brand   = gcBrand AND
              ServCom.ServCom = CTServEl.ServCom NO-LOCK NO-ERROR.
         IF AVAILABLE ServCom AND ServCom.ServAttr = TRUE THEN 
-        RUN Mm/ctservattr(CTServEl.CTServEl).
+        RUN Mm/ctservattr.p(CTServEl.CTServEl).
 
         ELSE MESSAGE 
              "Service component does not have any attributes"
@@ -554,7 +554,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this((lcRight = "RW")).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CTServEl.ServCom.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCTServEl).
@@ -704,7 +704,7 @@ PROCEDURE local-UPDATE-record:
       
       IF lcRight = "RW" THEN DO:
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          
          UPDATE
          CTServEl.DefValue

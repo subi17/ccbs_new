@@ -346,7 +346,7 @@ repeat WITH FRAME cdr:
    ufk[8] = 8 
    ehto = 0.
 
-   RUN Syst/ufkey.
+   RUN Syst/ufkey.p.
 
    IF toimi = 2 THEN DO:
       RUN Rate/edrhistory_one_edr.p(ttCall.CLI,
@@ -357,7 +357,7 @@ repeat WITH FRAME cdr:
    
    ELSE IF toimi = 4 THEN DO:
        /* View rate record */
-       RUN Mm/nnhitt2(ttCall.TariffNum).
+       RUN Mm/nnhitt2.p(ttCall.TariffNum).
    END.
 
    ELSE if toimi = 7 THEN DO:

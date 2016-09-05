@@ -130,11 +130,11 @@ WITH
    title color value (ctc) " INVOICE GROUP DATA " COLOR value(cfc)
    OVERLAY centered ROW 14 FRAME lCustNum.
 
-   cfc = "sel". RUN Syst/ufcolor. ccc = cfc.
+   cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
    view FRAME taka. PAUSE 0 no-message.
 
-   cfc = "lis". RUN Syst/ufcolor.
-   ehto = 9. RUN Syst/ufkey.
+   cfc = "lis". RUN Syst/ufcolor.p.
+   ehto = 9. RUN Syst/ufkey.p.
    
    liPaymTerm = 9. 
 END.
@@ -257,7 +257,7 @@ IF NOT ilSilent THEN DO:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, RETURN:
       IF kysy_rajat THEN DO:
          /* We ask the limits */
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          UPDATE
             InvGroup
             CustNum1 CustNum2   validate(INPUT CustNum2  >= INPUT CustNum1,
@@ -349,7 +349,7 @@ IF NOT ilSilent THEN DO:
       ASSIGN ufk = 0 ufk[1] = 132 ufk[2] = 0 
                      ufk[4] = 0 ufk[5] = 795
                      ufk[8] = 8 ehto = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
       IF toimi = 1 THEN DO:
          kysy_rajat = TRUE.
          NEXT toimi.

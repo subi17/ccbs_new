@@ -197,7 +197,7 @@ PROCEDURE pPayment:
    /* payment source */
    IF lcPaymSrc = "" THEN lcPaymSrc = "REQ".
    
-   RUN Ar/createpaym (Customer.CustNum,
+   RUN Ar/createpaym.p (Customer.CustNum,
                    MsRequest.ReqIParam1,               /* invoice */
                    lcCLI,
                    ldtAccDate,                         /* posting date */

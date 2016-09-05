@@ -281,7 +281,7 @@ OUTPUT CLOSE.
                          lcCLI + ",PROFILE=2,PAYTYPE=->PREPAID".
 
             PUT SCREEN ROW 3 COL 1 "3: " + STRING(ETIME,"zzzzz9").
-            RUN Gwy/ivrsog(liSoLog,lcCommLine).
+            RUN Gwy/ivrsog.p(liSoLog,lcCommLine).
             PUT SCREEN ROW 4 COL 1 "4: " + STRING(ETIME,"zzzzz9") + " " +
                                            RETURN-VALUE          + 
                                            FILL(" ", 40 - LENGTH(RETURN-VALUE)).
@@ -326,12 +326,12 @@ OUTPUT CLOSE.
 
                PUT SCREEN ROW 5 COL 1 "5: " + STRING(ETIME,"zzzzz9").
 
-               RUN Mm/topupcamp(MobSub.MsSeq, OUTPUT liPPRequest).
+               RUN Mm/topupcamp.p(MobSub.MsSeq, OUTPUT liPPRequest).
 
                IF liPPRequest NE 0 THEN DO:
 
                   PUT SCREEN ROW 6 COL 1 "6: " + STRING(ETIME,"zzzzz9").
-                  RUN Gwy/pp_platform(gcBrand,liPPRequest).
+                  RUN Gwy/pp_platform.p(gcBrand,liPPRequest).
 
                   FIND FIRST bufPP WHERE
                              bufPP.Brand     = gcBrand AND

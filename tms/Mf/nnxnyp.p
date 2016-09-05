@@ -69,7 +69,7 @@ form /* angrAnsande riktnr. search WITH FIELD NeigArea */
     with row 4 col 2 title color value(ctc) " FIND BORDERING AREA "
     COLOR value(cfc) side-labels OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST AreaPair
@@ -100,12 +100,12 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* AreaPair -ADD  */
       assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN Syst/ufkey.
+         ehto = 9. RUN Syst/ufkey.p.
          DO TRANSACTION:
             assign AreaCode = "" NeigArea = "".
             UPDATE
@@ -450,9 +450,9 @@ BROWSE:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         AreaCode = "".
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE AreaCode WITH FRAME f1.
         HIDE FRAME f1 no-pause.
         if AreaCode <> "" THEN DO:
@@ -473,9 +473,9 @@ BROWSE:
      /* Haku sarakk. 2 */
      else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN Syst/ufcolor.
+        cfc = "puyr". RUN Syst/ufcolor.p.
         NeigArea = "".
-        ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE NeigArea WITH FRAME f2.
         HIDE FRAME f2 no-pause.
         if NeigArea <> "" THEN DO:

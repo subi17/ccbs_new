@@ -56,7 +56,7 @@ for each breq no-lock where
       ldreq = ldreq + prepaidrequest.topupamt / 100.      
    end.
 
-   RUN Gwy/balancequery(MobSub.CLI).
+   RUN Gwy/balancequery.p(MobSub.CLI).
    ldBal = INT(RETURN-VALUE) / 100.
    
 

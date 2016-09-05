@@ -7,7 +7,7 @@
   CHANGED ......: 28-06-99 pt added FIELD ScLocalName 
                   05-10-99 jp urights added  
                   31-01-00 jp cp-chgable added
-                  19.03.03 tk RUN Mc/memo
+                  19.03.03 tk RUN Mc/memo.p
                   14.01.03 jp servattr
                   06.02.04 jp custnum for memo
                   07.12.04/aam tokens & eventlog,
@@ -35,7 +35,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhServCom).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhServCom).
+      RUN Mc/eventview2.p(lhServCom).
    END.
 
 END.
@@ -177,7 +177,7 @@ FIND Service WHERE
      Service.Service = Service AND 
      Service.Brand   = gcBrand NO-LOCK.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -204,12 +204,12 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a ServCom  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
       
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
@@ -303,7 +303,7 @@ REPEAT WITH FRAME sel:
         ufk[7]= 814 ufk[8]= 8 ufk[9]= 1
         ehto = 3 ufkey = FALSE.
         {Syst/uright1.i '"3,5,6"'}
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
@@ -446,12 +446,12 @@ REPEAT WITH FRAME sel:
            ufk[8] = 8
            ehto   = 0
            ufkey  = TRUE.
-        RUN Syst/ufkey.
+        RUN Syst/ufkey.p.
         
         /* Search BY column 1 */
         IF toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           cfc = "puyr". RUN Syst/ufcolor.
-           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f1.
            SET ServCom WITH FRAME f1.
            HIDE FRAME f1 NO-PAUSE.
@@ -475,8 +475,8 @@ REPEAT WITH FRAME sel:
         /* Search BY col 2 */
         ELSE IF toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-           cfc = "puyr". RUN Syst/ufcolor.
-           ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+           cfc = "puyr". RUN Syst/ufcolor.p.
+           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f2.
            SET ScName WITH FRAME f2.
            HIDE FRAME f2 NO-PAUSE.
@@ -499,7 +499,7 @@ REPEAT WITH FRAME sel:
           
      ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO TRANS:  /* Within ServPac */
        RUN local-find-this(FALSE).                                        
-       RUN Mm/servel2(ServCom.ServCom).
+       RUN Mm/servel2.p(ServCom.ServCom).
        ufkey = TRUE.
        NEXT LOOP.
      END.
@@ -508,7 +508,7 @@ REPEAT WITH FRAME sel:
      ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
         RUN local-find-this(FALSE).
         IF ServCom.ServAttr = TRUE THEN 
-        RUN Mc/servattr(INPUT ServCom.servcom).
+        RUN Mc/servattr.p(INPUT ServCom.servcom).
         ELSE  
         MESSAGE 
         "There are no defined attributes to service component" 
@@ -524,7 +524,7 @@ REPEAT WITH FRAME sel:
      /* UPDATE memo */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
         RUN local-find-this(FALSE).
-        RUN Mc/memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "ServCom",
                  INPUT STRING(ServCom.ServCom),
                  INPUT "Service component").
@@ -592,7 +592,7 @@ REPEAT WITH FRAME sel:
      /* translations */
      ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:  
         FIND ServCom WHERE RECID(ServCom) = rtab[FRAME-LINE] NO-LOCK.
-        RUN Mc/invlang(13,ServCom.ServCom).
+        RUN Mc/invlang.p(13,ServCom.ServCom).
           
         ufkey = TRUE.
         NEXT LOOP.
@@ -606,7 +606,7 @@ REPEAT WITH FRAME sel:
        /* change */
        RUN local-find-this((lcRight = "RW")).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ServCom.ServCom.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhServCom).
@@ -761,7 +761,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" THEN DO:
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       
          UPDATE
            ServCom.ScName
@@ -807,7 +807,7 @@ PROCEDURE local-UPDATE-record:
                 END.
                
                 ehto = 9.
-                RUN Syst/ufkey.
+                RUN Syst/ufkey.p.
                 NEXT. 
              END.
 
@@ -823,7 +823,7 @@ PROCEDURE local-UPDATE-record:
                 gcHelpParam = "".
                    
                 ehto = 9.
-                RUN Syst/ufkey.
+                RUN Syst/ufkey.p.
        
                 IF si-recid > 0 THEN DO:
                    FIND InvText WHERE RECID(InvText) = si-recid 
@@ -951,7 +951,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "ActType" THEN DO:
                    ASSIGN INPUT servcom.ActType.
 
-                   RUN Syst/v-tmscodes(INPUT "ServCom", 
+                   RUN Syst/v-tmscodes.p(INPUT "ServCom", 
                                         "ActType", 
                                         "Service",
                                     INPUT INPUT ActType,

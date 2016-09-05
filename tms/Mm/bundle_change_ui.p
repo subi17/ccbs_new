@@ -127,7 +127,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          ufk[5] = 1027 
          ufk[8] = 8 
          ehto   = 0.
-      RUN Syst/ufkey.
+      RUN Syst/ufkey.p.
    END.
    
    IF toimi = 1 THEN DO:
@@ -135,7 +135,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
       
          ehto = 9.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
          
          UPDATE 
             lcCurrentBundle    

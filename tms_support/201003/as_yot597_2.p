@@ -2,7 +2,7 @@
 katun = "anttis".
 gcBrand = "1".
 
-run /apps/tms/utilities/fix_subterm_outport.p(
+RUN /apps/tms/utilities/fix_subterm_outport.p(
    "as_yot597_2.input",
    "as_yot597_2.log",
    False).

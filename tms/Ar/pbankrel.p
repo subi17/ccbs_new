@@ -161,7 +161,7 @@ ASSIGN tila = TRUE.
 
 MESSAGE "Printing in process".            
 
-RUN Ar/pbankrep (InvGroup,
+RUN Ar/pbankrep.p (InvGroup,
               ldtPaid1, 
               ldtPaid2).
 

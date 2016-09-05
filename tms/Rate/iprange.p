@@ -28,7 +28,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhiprange).
 
    ON F12 ANYWHERE DO:
-      RUN Mc/eventview2(lhiprange).
+      RUN Mc/eventview2.p(lhiprange).
    END.
 END.
 
@@ -85,7 +85,7 @@ form /* seek iprange  BY  iprange */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND IP "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -118,13 +118,13 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a iprange  */
       ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN Syst/ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT TRANS WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         
-        ehto = 9. RUN Syst/ufkey.
+        ehto = 9. RUN Syst/ufkey.p.
           
         RUN local-UPDATE-record (TRUE).
          
@@ -332,8 +332,8 @@ BROWSE:
 
      /* Search BY column 1 */
      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       cfc = "puyr". RUN Syst/ufcolor.p.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lciprange WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -416,8 +416,8 @@ BROWSE:
        {Syst/uright2.i}
        RUN local-find-this(FALSE).
        
-       ASSIGN ac-hdr = " IPRange " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-       cfc = "lis". RUN Syst/ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " IPRange " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-view-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -527,15 +527,15 @@ PROCEDURE local-VIEW-record:
             ufk[1] = 7 WHEN lcRight = "RW"
             ufk[7]= 1752
             ufk[8] = 8.
-         RUN Syst/ufkey.
+         RUN Syst/ufkey.p.
       END.
       
       IF toimi = 1 THEN DO:
        
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhiprange).
 
-         ASSIGN ac-hdr = " IPRange " ufkey = TRUE ehto = 9. RUN Syst/ufkey.
-         cfc = "lis". RUN Syst/ufcolor.
+         ASSIGN ac-hdr = " IPRange " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
+         cfc = "lis". RUN Syst/ufcolor.p.
 
          RUN local-UPDATE-record(FALSE).
          ufkey = True.

@@ -95,7 +95,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       ufk[5]= 1027  
       ufk[8]= 8 
       ehto = 0.
-   RUN Syst/ufkey.
+   RUN Syst/ufkey.p.
 
    IF toimi = 5 THEN DO:
 

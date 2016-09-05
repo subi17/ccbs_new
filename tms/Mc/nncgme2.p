@@ -109,7 +109,7 @@ WITH
 
 FIND Customer where Customer.CustNum = CustNum no-lock.
 
-cfc = "sel". RUN Syst/ufcolor. ASSIGN ccc = cfc.
+cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
 view FRAME sel.
 
 FIND FIRST CGMember
@@ -144,7 +144,7 @@ add-group:
           ASSIGN ufkey = TRUE ufk = 0 ehto = 0
           ufk[1] = 512 ufk[2] = 514 ufk[3] = 517
           ufk[8] = 8.
-          RUN Syst/ufkey.
+          RUN Syst/ufkey.p.
 
           IF toimi = 8 THEN LEAVE add-group.
           IF toimi = 1 THEN
@@ -152,7 +152,7 @@ add-single:
           repeat WITH FRAME lis ON ENDKEY UNDO add-group,
                             NEXT add-group:
              PAUSE 0.
-             ehto = 9. RUN Syst/ufkey.
+             ehto = 9. RUN Syst/ufkey.p.
              CLEAR FRAME lis no-pause.
              PROMPT-FOR CGMember.CustGroup
              validate(input frame lis CGMember.CustGroup = "" OR
@@ -201,7 +201,7 @@ add-single:
           END. /* toimi = 1: add a single group */
 
           ELSE IF toimi = 2 THEN DO:
-             RUN Mc/nncggb(Customer.CustNum).
+             RUN Mc/nncggb.p(Customer.CustNum).
              LEAVE add-group.
           END.
 
@@ -481,9 +481,9 @@ SELAUS:
 
      /* Haku 1 */
      else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.
+       cfc = "puyr". RUN Syst/ufcolor.p.
        CustGroup = "".
-       ehto = 9. RUN Syst/ufkey. ufkey = TRUE.
+       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustGroup WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if CustGroup <> "" THEN DO:
@@ -505,7 +505,7 @@ SELAUS:
 
      else if lookup(nap,"4,f4") > 0 THEN DO:  /* other members */
         FIND CGMember where recid(CGMember) = rtab[FRAME-LINE] no-lock.
-        RUN Mc/nncgme1(CGMember.CustGroup).
+        RUN Mc/nncgme1.p(CGMember.CustGroup).
         ufkey = TRUE.
         NEXT LOOP.
      END.
@@ -578,7 +578,7 @@ SELAUS:
         FIND CustGroup of CGMember no-lock.
         PAUSE 0.
         DISP CustGroup.Memo WITH FRAME memo.
-        ASSIGN ufk = 0 ufk[8] = 8 ehto = 0 ufkey = TRUE.  RUN Syst/ufkey.
+        ASSIGN ufk = 0 ufk[8] = 8 ehto = 0 ufkey = TRUE.  RUN Syst/ufkey.p.
         HIDE FRAME memo.
         NEXT LOOP.
      END.
@@ -589,7 +589,7 @@ SELAUS:
        FIND CGMember where recid(CGMember) = rtab[frame-line(sel)]
        exclusive-lock.
        assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN Syst/ufkey.
+       RUN Syst/ufkey.p.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCGMember).
        UPDATE CGMember.Memo.
        IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCGMember).

@@ -107,7 +107,7 @@ FOR EACH ttAccDate:
                              "yyyymmdd").
    lcFile = REPLACE(lcFile,"#DATE",lcDate).
 
-   RUN Ar/refundfile (INPUT-OUTPUT TABLE ttRequest,  
+   RUN Ar/refundfile.p (INPUT-OUTPUT TABLE ttRequest,  
                    ttAccDate.AccDate,
                    liPicked,
                    lcFile,

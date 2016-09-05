@@ -443,7 +443,7 @@ PROCEDURE pMakeCashInvoice:
             liInvType = 6.
          END.
    
-         RUN Inv/nnlamu_inc (liCashCust,
+         RUN Inv/nnlamu_inc.p (liCashCust,
                          Order.OrderID,
                          "",
                          liInvType,

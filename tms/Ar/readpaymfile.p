@@ -194,7 +194,7 @@ REPEAT:
 
    liDone = liDone + 1.
 
-   RUN Ar/createpaym (Invoice.CustNum,
+   RUN Ar/createpaym.p (Invoice.CustNum,
                    Invoice.InvNum,
                    "",
                    ldtAccDate,
