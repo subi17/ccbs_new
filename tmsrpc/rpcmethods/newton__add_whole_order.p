@@ -179,7 +179,7 @@
                  fixed_line_number;string;optional;
                  fixed_line_mnp_old_operator;string;optional;
                  fixed_line_mnp_old_operator_name;string;optional;
-                 fixed_line_mnp_old_operator_code;int;optional;
+                 fixed_line_mnp_old_operator_code;string;optional;
                  fixed_line_serial_number;string;optional;
                  fixed_line_mnp_time_of_change;string;optional;
                  fixed_line_product;string;mandatory;fusion order product code
@@ -200,7 +200,7 @@
                     region;string;optional;
                     profession;string;optional;
                     email_address;string;optional;
-                    gescal;int;optional;
+                    gescal;string;optional;
   @billing_address address;string;optional;
                     additional_address;string;optional
                     city;string;mandatory;
@@ -311,7 +311,7 @@ DEF VAR pcUpsHours AS CHAR NO-UNDO.
 DEF VAR plCustDataRetr AS LOGICAL NO-UNDO.
 DEF VAR pcIdentifiedSmsNumber AS CHAR NO-UNDO.
 DEF VAR plMultiOrder AS LOGICAL NO-UNDO.
-DEF VAR piGescal AS INT NO-UNDO. 
+DEF VAR pcGescal AS CHAR NO-UNDO. 
 
 /* Real Order Inspection parameters */
 DEF VAR pcROIresult      AS CHAR NO-UNDO.
@@ -385,7 +385,7 @@ DEF VAR lcFixedLineNumberType AS CHAR NO-UNDO.
 DEF VAR lcFixedLineNumber AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineMNPOldOper AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineMNPOldOperName AS CHAR NO-UNDO.
-DEF VAR liFixedLineMNPOldOperCode AS INT NO-UNDO.
+DEF VAR lcFixedLineMNPOldOperCode AS CHAR NO-UNDO.
 DEF VAR lcFixedLineSerialNbr AS CHAR NO-UNDO.
 DEF VAR lcFixedLineMNPTime AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineProduct AS CHAR NO-UNDO. 
@@ -663,10 +663,6 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          DO:
              pcIdentifiedSmsNumber = get_string(pcStructId, lcField).
       END.
-      ELSE IF lcField EQ "gescal" THEN
-         DO:
-             piGescal = get_int(pcStructId, lcField).
-      END.
       ELSE IF liFieldIndex EQ 0 THEN
          lcFError = SUBST("Unknown data field `&1`", lcField).
       ELSE
@@ -783,6 +779,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             data[LOOKUP("longitude", gcCustomerStructStringFields)] 
          OrderCustomer.KialaCode = 
             data[LOOKUP("kiala_code", gcCustomerStructStringFields)] 
+         OrderCustomer.Gescal = 
+            data[LOOKUP("gescal", gcCustomerStructStringFields)] 
          OrderCustomer.SelfEmployed       = llSelfEmployed 
          OrderCustomer.FoundationDate     = ldFoundationDate
          OrderCustomer.Birthday           = ldBirthday
@@ -800,8 +798,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
  
          OrderCustomer.Address = OrderCustomer.Street 
          OrderCustomer.CustDataRetr = plCustdataRetr
-         OrderCustomer.MSISDNForIdent = pcIdentifiedSmsNumber
-         OrderCustomer.Gescal = piGescal.
+         OrderCustomer.MSISDNForIdent = pcIdentifiedSmsNumber.
 
          IF OrderCustomer.BuildingNum NE "" THEN 
             OrderCustomer.Address = OrderCustomer.Address + " " +
@@ -1123,7 +1120,7 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
       OrderFusion.FixedCurrOper     = lcFixedLineMNPOldOper WHEN lcFixedLineMNPOldOper > ""
       OrderFusion.FixedCurrOper     = lcFixedLineMNPOldOperName WHEN lcFixedLineMNPOldOper = ""
       OrderFusion.UpdateTS          = fMakeTS()
-      OrderFusion.FixedCurrOperCode = liFixedLineMNPOldOperCode
+      OrderFusion.FixedCurrOperCode = lcFixedLineMNPOldOperCode
       OrderFusion.SerialNumber      = lcFixedLineSerialNbr.
 
    RETURN TRUE.
@@ -1270,7 +1267,8 @@ gcCustomerStructStringFields = "city," +
                                "longitude," +
                                "profession," + 
                                "kiala_code," +
-                               "ups_hours".
+                               "ups_hours," +
+                               "gescal".
 
 /* common validation */
 /* YBP-513 */
@@ -1663,7 +1661,7 @@ IF pcFusionStruct > "" THEN DO:
       lcFixedLineMNPOldOperName   = get_string(pcFusionStruct,
                                            "fixed_line_mnp_old_operator_name")
          WHEN LOOKUP("fixed_line_mnp_old_operator_name",lcFusionStructFields) > 0
-      liFixedLineMNPOldOperCode   = get_int(pcFusionStruct,
+      lcFixedLineMNPOldOperCode   = get_string(pcFusionStruct,
                                            "fixed_line_mnp_old_operator_code")
          WHEN LOOKUP("fixed_line_mnp_old_operator_code",lcFusionStructFields) > 0
       lcFixedLineSerialNbr   = get_string(pcFusionStruct,
