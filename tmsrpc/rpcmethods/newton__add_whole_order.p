@@ -183,7 +183,7 @@
                  fixed_line_serial_number;string;optional;
                  fixed_line_mnp_time_of_change;string;optional;
                  fixed_line_product;string;mandatory;fusion order product code
-                 customer_type;string;optional;customer type
+                 customer_type;string;mandatory;customer type
                  phone_book;boolean;optional;
                  contractid;string;optional;
                  install_address;struct;mandatory;
@@ -311,6 +311,7 @@ DEF VAR pcUpsHours AS CHAR NO-UNDO.
 DEF VAR plCustDataRetr AS LOGICAL NO-UNDO.
 DEF VAR pcIdentifiedSmsNumber AS CHAR NO-UNDO.
 DEF VAR plMultiOrder AS LOGICAL NO-UNDO.
+DEF VAR piGescal AS INT NO-UNDO. 
 
 /* Real Order Inspection parameters */
 DEF VAR pcROIresult      AS CHAR NO-UNDO.
@@ -662,6 +663,10 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          DO:
              pcIdentifiedSmsNumber = get_string(pcStructId, lcField).
       END.
+      ELSE IF lcField EQ "gescal" THEN
+         DO:
+             piGescal = get_int(pcStructId, lcField).
+      END.
       ELSE IF liFieldIndex EQ 0 THEN
          lcFError = SUBST("Unknown data field `&1`", lcField).
       ELSE
@@ -795,7 +800,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
  
          OrderCustomer.Address = OrderCustomer.Street 
          OrderCustomer.CustDataRetr = plCustdataRetr
-         OrderCustomer.MSISDNForIdent = pcIdentifiedSmsNumber.
+         OrderCustomer.MSISDNForIdent = pcIdentifiedSmsNumber
+         OrderCustomer.Gescal = piGescal.
 
          IF OrderCustomer.BuildingNum NE "" THEN 
             OrderCustomer.Address = OrderCustomer.Address + " " +
@@ -1116,7 +1122,9 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
       OrderFusion.PhoneBook         = llPhoneBook
       OrderFusion.FixedCurrOper     = lcFixedLineMNPOldOper WHEN lcFixedLineMNPOldOper > ""
       OrderFusion.FixedCurrOper     = lcFixedLineMNPOldOperName WHEN lcFixedLineMNPOldOper = ""
-      OrderFusion.UpdateTS          = fMakeTS().
+      OrderFusion.UpdateTS          = fMakeTS()
+      OrderFusion.FixedCurrOperCode = liFixedLineMNPOldOperCode
+      OrderFusion.SerialNumber      = lcFixedLineSerialNbr.
 
    RETURN TRUE.
 
@@ -1230,7 +1238,8 @@ gcCustomerStructFields = "birthday," +
                          "kiala_code," + 
                          "ups_hours," +
                          "retrieved," +
-                         "identified_cust_sms_number".
+                         "identified_cust_sms_number," +
+                         "gescal".
 
 /* note: check that data variable has correct EXTENT value */
 gcCustomerStructStringFields = "city," +
