@@ -192,14 +192,14 @@
                     lname;string;optional;
                     lname2;string;optional;
                     phone_number;string;optional;
-                    street;string;optional;
+                    street;string;mandatory;
                     additional_address;string;optional
                     city;string;mandatory;
                     zip;string;mandatory;
                     street_number;string;optional;
                     region;string;optional;
                     profession;string;optional;
-                    email_address;string;optional;
+                    email;string;optional;
                     gescal;string;optional;
   @billing_address address;string;optional;
                     additional_address;string;optional
@@ -609,7 +609,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR ldBirthDay   AS DATE NO-UNDO. 
    DEF VAR llSelfEmployed AS LOGICAL NO-UNDO. 
    DEF VAR ldFoundationDate AS DATE NO-UNDO. 
-   DEF VAR data            AS CHAR EXTENT 29 NO-UNDO.
+   DEF VAR data            AS CHAR EXTENT 30 NO-UNDO.
    DEF VAR lcIdOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
    DEF VAR liSubLimit AS INT NO-UNDO. 
@@ -1268,7 +1268,7 @@ gcCustomerStructStringFields = "city," +
                                "profession," + 
                                "kiala_code," +
                                "ups_hours," +
-                               "gescal".
+                               "gescal". /* EXTENT value count 30 */
 
 /* common validation */
 /* YBP-513 */
