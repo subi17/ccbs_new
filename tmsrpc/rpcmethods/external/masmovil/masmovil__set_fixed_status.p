@@ -4,17 +4,26 @@ gcBrand = "1".
 {fexternalapi.i}
 {xmlrpc/xmlrpc_access.i}
 
-DEF VAR pcNotificationID AS CHAR NO-UNDO.
-DEF VAR pcNotificationTime AS DATETIME NO-UNDO.
-DEF VAR pcNotificationType AS CHAR NO-UNDO.
-DEF VAR pcNotificationStatus AS CHAR NO-UNDO. /*struct*/
+DEF VAR top_struct AS CHAR NO-UNDO.
+DEF VAR lcTopStruct AS CHAR NO-UNDO.
 
+DEF VAR lcNotificationID AS CHAR NO-UNDO.
+DEF VAR lcNotificationTime AS DATETIME NO-UNDO.
+DEF VAR lcNotificationType AS CHAR NO-UNDO.
+DEF VAR liOrderId AS INT NO-UNDO.
+DEF VAR lcNotificationStatus AS CHAR NO-UNDO. /*struct*/
 
-IF validate_request(param_toplevel_id, "string,datetime,string,struct") EQ ? THEN RETURN.
-pcNotificationID = get_string(param_toplevel_id,"0").
-pcNotificationTime = get_date(param_toplevel_id,"1").
-pcNotificationType = get_string(param_toplevel_id,"2").
-pcNotificationStatus = get_struct(param_toplevel_id,"3").
+top_struct = get_struct(param_toplevel_id, "0").
+
+lcTopStruct = validate_struct(top_struct,"notificationID!,notificationTime!,notificationType!,orderID!,Status!").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+lcNotificationID = get_string(lcTopStruct,"notificationID").
+lcNotificationTime = get_date(lcTopStruct,"notificationtime").
+lcNotificationType = get_string(lcTopStruct,"notificationType").
+liOrderId = get_int(lcTopStruct,"orderID").
+lcNotificationStatus = get_struct(lcTopStruct,"Status").
 
 add_boolean(response_toplevel_id,?,TRUE).
 
