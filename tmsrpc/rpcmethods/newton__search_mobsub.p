@@ -71,7 +71,7 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    /* YPR-4810 dummy code that returns only fixed number when search number starts with 9 */
    IF mobsub.cli EQ "605888489" THEN DO:
       add_string(sub_struct, "fixed_number", "912345678"). /*Mobsub.fixednumber*/
-      add_int(sub_struct   , "status"     , 1). /* mobsub.msstatus */
+      add_int(sub_struct   , "status"     , 16). /* mobsub.msstatus */
    END.
    ELSE DO:
    add_int(sub_struct   , "status"     , mobsub.msstatus).
