@@ -71,13 +71,12 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    /* YPR-4810 dummy code that returns only fixed number when search number starts with 9 */
    IF mobsub.cli EQ "605888489" THEN DO:
       add_string(sub_struct, "fixed_number", "912345678"). /*Mobsub.fixednumber*/
-      add_string(sub_struct, "description", "").
-      add_int(sub_struct   , "status"     , 1).
+      add_int(sub_struct   , "status"     , 1). /* mobsub.msstatus */
    END.
    ELSE DO:
-   add_string(sub_struct, "description", mobsub.cli).
    add_int(sub_struct   , "status"     , mobsub.msstatus).
    END.
+   add_string(sub_struct, "description", mobsub.cli).
    add_string(sub_struct, "subscription_type_id", mobsub.clitype).
    add_string(sub_struct, "data_bundle_id", MobSub.TariffBundle).
 
