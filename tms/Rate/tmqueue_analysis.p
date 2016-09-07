@@ -609,7 +609,8 @@ PROCEDURE pAnalyseQueueRow:
                                            TMQueue.EventId,
                                            FraudCDR.GSMBnr,
                                            FraudCDR.BType,
-                                           TMQueue.Source).
+                                           TMQueue.Source,
+                                           ?).
 
                   FIND Country WHERE
                        Country.Country = lcCountry NO-LOCK NO-ERROR.

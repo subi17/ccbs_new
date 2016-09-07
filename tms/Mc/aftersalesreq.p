@@ -130,7 +130,7 @@ IF Order.SMSType = 1 THEN DO:
                           OUTPUT ldeTimeStamp).
 
       IF lcRenoveSMSText > "" THEN DO:                    
-         lcRenoveSMSText = REPLACE(lcRenoveSMSText,"#ORDER_NUMBER",STRING(Order.OrderId)).
+         lcRenoveSMSText = REPLACE(lcRenoveSMSText,"#CONTRACT_ID",STRING(Order.ContractId)).
          fMakeSchedSMS(Order.CustNum,
                        Order.CLI,
                        41,
