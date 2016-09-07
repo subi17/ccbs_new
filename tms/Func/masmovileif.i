@@ -19,6 +19,24 @@
 /*Global variables for building masmovile data*/
 
 DEF VAR lcConURL AS CHAR NO-UNDO.
+DEF VAR liTesting AS INT NO-UNDO.
+liTesting = 0.
+DEF STREAM sOut.
+
+FUNCTION fMasXMLGenerate_test RETURNS CHAR
+   (icMethod AS CHAR):
+   IF liTesting NE 0 THEN DO:
+      xmlrpc_initialize(FALSE).
+      OUTPUT STREAM sOut TO VALUE("temp.txt") APPEND.
+      PUT STREAM sOut UNFORMATTED STRING(fMakeTS()) SKIP.
+      PUT STREAM sOut UNFORMATTED 
+         string(serialize_rpc_call("masmovil." + icMethod)) SKIP. 
+      PUT STREAM sOut "" SKIP.   
+      OUTPUT STREAM sOut CLOSE.
+      xmlrpc_initialize(FALSE).
+   END.   
+END.   
+
 
 FUNCTION fInitMMConnection RETURNS CHAR
    ():
@@ -30,7 +48,7 @@ FUNCTION fInitMMConnection RETURNS CHAR
 END.
 
 
-FUNCTION fMasCreate_FixedLine RETURNS CHAR
+FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    (iiOrderId AS INT,
     OUTPUT ocResultCode AS CHAR,
     OUTPUT ocResultDesc AS CHAR):
@@ -82,6 +100,8 @@ FUNCTION fMasCreate_FixedLine RETURNS CHAR
 
    END.
    /*Generate order type*/
+   
+IF liTesting EQ 0 THEN DO:  
    IF bOrder.CliType BEGINS "CONTDSL" OR 
       bOrder.CliType BEGINS "CONTFH" THEN DO: 
       FIND FIRST CLIType NO-LOCK WHERE
@@ -104,11 +124,19 @@ FUNCTION fMasCreate_FixedLine RETURNS CHAR
    END.
    ELSE 
       RETURN "Error Not allowed CLITYPE " + bOrder.CliType.
+END.      
+ELSE DO:
+            lcOrderType = "Alta FTTH + VOIP".
+            lcConnServiceId = "FTTH".
+            lcConnServiceName = "FTTH connection".
+            lcConnServiceType = "FTTH".
+
+END.
 
    IF fTS2Date(bOrder.CrStamp, ldaCreDate) EQ FALSE THEN
       RETURN "Error: Date reading failed".
 
-   IF fTS2Date(bOrder.CrStamp, ldaCreDate) EQ FALSE THEN
+   IF fTS2Date(bOrder.CrStamp, ldaSellDate) EQ FALSE THEN
       RETURN "Error: Date reading failed".
 
    lcOutputStruct = add_struct(param_toplevel_id, "").
@@ -116,12 +144,13 @@ FUNCTION fMasCreate_FixedLine RETURNS CHAR
    lcOrderStruct = add_struct(lcOutputStruct,"Order").
    add_string(lcOrderStruct, "orderID", 
                              "Y" + STRING(bOrder.Orderid)).
-   add_string(lcOrderStruct, "orderType", lcOrderType).  
+   add_string(lcOrderStruct, "orderType", lcOrderType). 
+   add_string(lcOrderStruct, "orderName", "ALTA").
    add_string(lcOrderStruct, "sellchannel", "YOIGO"/*bOrder.orderchannel*/).
-   add_string(lcOrderStruct, "selldate", STRING(bOrder.CrStamp)). 
+   add_string(lcOrderStruct, "selldate", STRING(ldaSellDate)). 
    add_string(lcOrderStruct, "seller", /*bOrder.Salesman*/ "YOIGO"). 
    add_string(lcOrderStruct, "createdBy", "YOIGO").
-   add_string(lcOrderStruct, "creadate", STRING(bOrder.CrStamp)). 
+   add_string(lcOrderStruct, "creadate", STRING(ldaCreDate)). 
 
    /*Installation*/
    lcInstallationStruct = add_struct(lcOrderStruct,"Installation").
@@ -155,16 +184,18 @@ FUNCTION fMasCreate_FixedLine RETURNS CHAR
    lcServiceArray = add_array(lcOrderStruct,"Services").
     /*Services entry - Phone*/
    lcServiceStruct = add_struct(lcServiceArray, ""). 
-   add_string(lcServiceStruct, "serviceID", "PHONE").
+   add_string(lcServiceStruct, "serviceID", "FixedPhone").
+   add_string(lcServiceStruct, "serviceName", "Fixed Phone Number").
    add_string(lcServiceStruct, "action", "Add").
-   add_string(lcServiceStruct, "type", "Fixed line phone").
+   add_string(lcServiceStruct, "type", "PHONE").
 
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics").
    lcCharacteristicStruct = add_struct(lcCharacteristicsArray, 
                                         "Characteristic").
-   add_string(lcCharacteristicStruct, "name", "TEST").
-   add_string(lcCharacteristicStruct, "value", "new value TEST").
+   add_string(lcCharacteristicStruct, "name", "PHONE").
+   add_string(lcCharacteristicStruct, "value", "900900900" 
+                         /*order.fixednumber*/).
 
    /*Services entry - Line*/
    lcServiceStruct = add_struct(lcServiceArray, ""). 
@@ -176,12 +207,12 @@ FUNCTION fMasCreate_FixedLine RETURNS CHAR
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics").
    lcCharacteristicStruct = add_struct(lcCharacteristicsArray, 
                                         "Characteristic").
-   add_string(lcCharacteristicStruct, "name", "TEST").
-   add_string(lcCharacteristicStruct, "value", "new value TEST").
+   add_string(lcCharacteristicStruct, "name", "gescal").
+   add_string(lcCharacteristicStruct, "value", "").
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
-IF 0 > 1 THEN RETURN "TEST RESULT OK".
+   fMasXMLGenerate_test("CreateFixedLine").
    RUN pRPCMethodCall("masmovile.CreateFixedLine", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN
@@ -224,11 +255,11 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
    add_string(lcOutputStruct, "orderID", 
                              "Y" + STRING(iiOrderid)).
    add_string(lcOutputStruct, "cancellationDate", STRING(idaDate)).  
-   add_string(lcOutputStruct, "llationMotive",  icMotive).
+   add_string(lcOutputStruct, "cancellationMotive",  icMotive).
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
-
+   fMasXMLGenerate_test("CancelFixedLine").
    RUN pRPCMethodCall("masmovile.CancelFixedLine", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN
@@ -267,10 +298,11 @@ FUNCTION fMasGet_FixedNbr RETURNS CHAR
    lcOutputStruct = add_struct(param_toplevel_id, "").
    
    add_string(lcOutputStruct, "postalCode", icPostalCOde).
-
+   
    IF gi_xmlrpc_error NE 0 THEN
          RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
-
+   xmlrpc_initialize(FALSE).
+   fMasXMLGenerate_test("getnewResource").
    RUN pRPCMethodCall("masmovile.getnewResource", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN
