@@ -68,12 +68,19 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    IF NOT plFewRecords THEN DO:
       add_int(sub_struct   , "seq"        , mobsub.msseq).
    END.
+   /* YPR-4810 dummy code that returns only fixed number when search number starts with 9 */
+   IF mobsub.cli EQ "605888489" THEN DO:
+      add_string(sub_struct, "fixed_number", "912345678"). /*Mobsub.fixednumber*/
+      add_string(sub_struct, "description", "").
+      add_int(sub_struct   , "status"     , 1).
+   END.
+   ELSE DO:
    add_string(sub_struct, "description", mobsub.cli).
-   add_string(sub_struct, "subscription_type_id", mobsub.clitype).
    add_int(sub_struct   , "status"     , mobsub.msstatus).
+   END.
+   add_string(sub_struct, "subscription_type_id", mobsub.clitype).
    add_string(sub_struct, "data_bundle_id", MobSub.TariffBundle).
-   add_string(sub_struct, "fixed_number", "912345678"). /*Mobsub.fixednumber*/
-   
+
    IF CAN-FIND(
       FIRST MsRequest NO-LOCK WHERE
             MsRequest.MsSeq   = mobsub.msseq AND
@@ -99,6 +106,7 @@ IF LENGTH(pcInput) EQ 9 AND
         liOwner = mobsub.agrCust.
     llSearchByMobsub = TRUE.
 END.
+/* YPR-4810 dummy code that returns 605888489 when ever fixed line number is given */
 ELSE IF LENGTH(pcInput) EQ 9 AND
    (pcInput BEGINS "9") AND
    NOT (ASC(lcTmp) >= 65 AND
@@ -212,7 +220,8 @@ ELSE DO:
    FOR EACH mobsub NO-LOCK
    WHERE mobsub.brand = gcBrand
      AND mobsub.agrCust = liOwner
-     AND Mobsub.CLI <> pcInput:
+     AND Mobsub.CLI <> pcInput
+     AND Mobsub.FixedNumber <> pcInput:
      
        liSubCount = liSubCount + 1.
        IF liSubCount <= piOffSet THEN NEXT.
