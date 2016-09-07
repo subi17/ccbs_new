@@ -83,7 +83,8 @@ FUNCTION fHandleDouble RETURNS CHAR
    DEF VAR llMarkOrig AS LOG NO-UNDO.
    DEF VAR liAgrCust AS INT NO-UNDO.
    DEF VAR lcCdrID AS CHAR NO-UNDO. 
-   DEF VAR lcCallIdNum AS CHAR NO-UNDO. 
+   DEF VAR lcCallIdNum AS CHAR NO-UNDO.
+   DEF VAR lcApn AS CHAR NO-UNDO. 
       
    IF ihDouble::MSCID EQ "CCGW" AND
       mcdr.MobCDR.MSCID EQ "CCGW" THEN DO:
@@ -106,6 +107,16 @@ FUNCTION fHandleDouble RETURNS CHAR
       IF lcCallIdNum NE fGetMcdrDtlValue(ihDouble::Datest,
                                          ihDouble::Dtlseq,
                                          "Call identification number")
+         THEN RETURN "".
+   END.
+   ELSE IF ihDouble::MSCID EQ "POSTD" AND
+           mcdr.MobCDR.MSCID EQ  "POSTD" THEN DO:
+      lcApn = fGetMcdrDtlValue(mcdr.MobCDR.Datest,
+                               mcdr.MobCDR.Dtlseq,
+                               "Access point name NI").
+      IF lcApn NE fGetMcdrDtlValue(ihDouble::Datest,
+                                   ihDouble::Dtlseq,
+                                   "Access point name NI")
          THEN RETURN "".
    END.
 

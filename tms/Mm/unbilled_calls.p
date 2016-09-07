@@ -152,6 +152,10 @@ PROCEDURE pCollectCDR:
    DEF VAR lhFind           AS HANDLE NO-UNDO.
    DEF VAR lcFind           AS CHAR   NO-UNDO.
    DEF VAR lcCDRdb          AS CHAR   NO-UNDO.
+   DEF VAR lcDelim          AS CHAR   NO-UNDO.
+   DEF VAR lcKeyValue       AS CHAR   NO-UNDO. 
+
+   ASSIGN lcDelim = CHR(255).
 
    IF icDB = "mcdr" THEN 
       lcCDRdb = "mcdr.MobCDR".
@@ -217,6 +221,13 @@ PROCEDURE pCollectCDR:
          ldeAmount = (ldeAmount / ldVatFactor).
       END. /* IF lhWorkCDRdb::VatIncl THEN DO: */
 
+      ASSIGN lcKeyValue = STRING(lhWorkCDRdb::MsSeq)  + lcDelim +
+                          STRING(lhWorkCDRdb::DtlSeq) + lcDelim + 
+                          STRING(lhWorkCDRdb::DateSt).
+
+      IF lcKeyValue = ? THEN
+         ASSIGN lcKeyValue = "".
+
       /* Dump the record in output file */
       PUT STREAM sFile UNFORMATTED
          lhWorkCDRdb::DateSt            lcDelimiter
@@ -232,7 +243,10 @@ PROCEDURE pCollectCDR:
          liReadInLate                   lcDelimiter
          lcBillingPerm                  lcDelimiter
          lcMobSubStat                   lcDelimiter
-         llCallOnFirstMonth             SKIP.
+         llCallOnFirstMonth             lcDelimiter
+         lcKeyValue                     lcDelimiter 
+         lhWorkCDRdb::BDest             lcDelimiter  
+         lhWorkCDRdb::DCEvent SKIP.
 
    END.
 
