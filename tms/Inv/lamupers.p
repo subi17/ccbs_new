@@ -4294,6 +4294,10 @@ PROCEDURE pInvoiceHeader:
          Customer.ChargeType = 6
       THEN llNextInvNdd = TRUE.
 
+      /* YDR-1767 */
+      IF Invoice.ChargeType = 5 THEN 
+         Invoice.ClaimStatus = "2". 
+
       FOR EACH ttSubInv WHERE
                ttSubInv.ITGroupID = ttInv.ITGroupID
       BY ttSubInv.SubInvNum:
