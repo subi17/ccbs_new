@@ -10,6 +10,7 @@
 {funcrunprocess_update.i}
 {host.i}
 {tmsconst.i}
+
 /* invoices TO be printed */
 DEFINE INPUT-OUTPUT PARAMETER TABLE FOR ttInvoice.
 DEFINE INPUT  PARAMETER idaInvDate    AS DATE NO-UNDO. 
@@ -28,7 +29,6 @@ DEFINE INPUT  PARAMETER iiUpdInterval AS INT  NO-UNDO.
 /* how many were printed */         
 DEFINE OUTPUT PARAMETER oiInvCount    AS INT  NO-UNDO. 
 
-
 DEF VAR lcCodeVersion AS CHAR   NO-UNDO INIT "3.3".
 DEF VAR lcRowText     AS CHAR   NO-UNDO.
 DEF VAR lcTMSUser     AS CHAR   NO-UNDO.
@@ -39,7 +39,6 @@ DEF VAR lcFinalDir    AS CHAR   NO-UNDO.
 DEF VAR lcBillRun     AS CHAR   NO-UNDO.
 DEF VAR lcXMLVersion  AS CHAR   NO-UNDO.
 DEF VAR llFormatted   AS LOG    NO-UNDO.
-DEF VAR lcPremiumBillCodes AS CHAR NO-UNDO. 
 DEF VAR lcTarFile     AS CHAR   NO-UNDO. 
 DEF VAR lcTarFinalDir AS CHAR   NO-UNDO.
 DEF VAR lcSpoolDir    AS CHAR   NO-UNDO. 
@@ -52,7 +51,6 @@ DEF VAR lcTarBatchFile AS CHAR   NO-UNDO.
 DEF VAR liFRExecID     AS INT    NO-UNDO.
 DEF VAR llReplica      AS LOG    NO-UNDO.
 DEF VAR liInitialOrderID AS INT  NO-UNDO.
-DEF VAR lcGBBillCodes AS CHAR    NO-UNDO.
 
 
 DEF STREAM sRead.
@@ -111,6 +109,10 @@ CREATE WIDGET-POOL "PrintHouse".
 FIND FIRST Company WHERE
            Company.Brand = gcBrand NO-LOCK NO-ERROR.
 IF NOT AVAIL Company THEN RETURN.
+
+objDBConn = NEW Syst.CDRConnect("MobCDR").
+
+fPopulateBillItemAndGroup().
 
 RUN pInitialize.
 
@@ -284,21 +286,6 @@ PROCEDURE pInitialize:
    END.
 
    EMPTY TEMP-TABLE ttError. 
-   
-   FOR EACH BillItem where
-      BillItem.Brand = gcBrand AND
-      BillItem.BIGroup = "6" NO-LOCK:
-      lcPremiumBillCodes = lcPremiumBillCodes +  "," + BillItem.Billcode.
-   END.
-   lcPremiumBillCodes = SUBSTRING(lcPremiumBillCodes,2).
-
-   /*Google billing YPR-3919*/
-   FOR EACH BillItem where
-            BillItem.Brand EQ gcBrand AND
-            BillItem.BIGroup EQ {&BITEM_GRP_GB} NO-LOCK: 
-      lcGBBillCodes = lcGBBillCodes +  "," + BillItem.Billcode.
-   END.
-   lcGBBillCodes = SUBSTRING(lcGBBillCodes,2).
 
    IF iiFrProcessID > 0 THEN
    FOR FIRST FuncRunProcess NO-LOCK WHERE
@@ -540,8 +527,8 @@ PROCEDURE pInvoice2XML:
                                 fDispXMLDecimal(Invoice.AmtExclVat)).
       lhXML:WRITE-DATA-ELEMENT("TaxAmount",fDispXMLDecimal(Invoice.VatAmt)).
       
-      RUN pGetInvoiceVatData.
-      
+      RUN pGetInvoiceVatData.  
+
       FOR EACH ttVat NO-LOCK:
          lhXML:START-ELEMENT("TaxDetails").
          lhXML:WRITE-DATA-ELEMENT("TaxZone",lcTaxZone).
@@ -553,8 +540,8 @@ PROCEDURE pInvoice2XML:
          lhXML:WRITE-DATA-ELEMENT("Amount",fDispXMLDecimal(ttVat.VatBasis +
                                                            ttVat.VatAmt)).
          lhXML:END-ELEMENT("TaxDetails").
-      END.   
-      
+      END.
+
       /* As per requirement, Discount Amt value has to be subtracted from Installment Amt. 
          But Discound Amt is negative value, so it is  added to InstallmentAmt value */
       lhXML:START-ELEMENT("AdditionalDetail").
@@ -662,7 +649,7 @@ PROCEDURE pInvoice2XML:
       
          lhXML:START-ELEMENT("CustomRowData").
          lhXML:WRITE-DATA-ELEMENT("CustomType","DiagramPoint").
-         lhXML:WRITE-DATA-ELEMENT("CustomContent",ttGraph.GraphName).
+         lhXML:WRITE-DATA-ELEMENT("CustomContent",ttGraph.GraphGroup).
          lhXML:WRITE-DATA-ELEMENT("CustomValue",
                                   fDispXMLDecimal(ttGraph.GraphAmt)).
          lhXML:END-ELEMENT("CustomRowData").
@@ -690,9 +677,8 @@ PROCEDURE pInvoice2XML:
       /* subscription level */
       RUN pSubInvoice2XML. 
 
-      IF AVAILABLE ttInvoice AND ttInvoice.Printed NE 2 THEN DO:
-         ttInvoice.Printed = 1.
-      END. 
+      IF ttInvoice.Printed NE 2
+      THEN ttInvoice.Printed = 1.
 
       lhXML:END-ELEMENT("Invoice").
 
@@ -748,13 +734,7 @@ PROCEDURE pSubInvoice2XML:
          lhXML:START-ELEMENT("CustomContract").
          lhXML:WRITE-DATA-ELEMENT("CustomType","Message").
          lhXML:WRITE-DATA-ELEMENT("CustomContent",ttSub.MessageType).
-         lhXML:END-ELEMENT("CustomContract").
-         
-         IF llgPostPay THEN DO:
-            lhXML:START-ELEMENT("Postponed").
-            lhXML:WRITE-DATA-ELEMENT("PostponedPayment", STRING(llgPostPay)).
-            lhXML:END-ELEMENT("Postponed").
-         END.      
+         lhXML:END-ELEMENT("CustomContract").         
       END.
       
       /* invoice rows */
@@ -881,7 +861,9 @@ PROCEDURE pSubInvoice2XML:
       
       lhXML:END-ELEMENT("SubInvoiceAmount").
  
-      RUN pCollectCDR(SubInvoice.InvSeq).  
+      RUN pCollectCDR(SubInvoice.InvSeq,
+                      OUTPUT llPremiumNumberText,
+                      OUTPUT llGBText).  
       
       FOR EACH ttCall NO-LOCK 
       BREAK BY ttCall.GroupOrder
@@ -891,22 +873,7 @@ PROCEDURE pSubInvoice2XML:
 
          ASSIGN 
             lcCTName  = ""  
-            ldEventTS = fMake2DT(ttCall.DateSt,ttCall.TimeSt)
-            lcBIName  = fLocalItemName("BillItem",
-                                       ttCall.BillCode,
-                                       liLanguage,
-                                       ttCall.DateSt).  
-            
-         /* Turn ON flag if call is belong to Premium */
-         IF NOT llPremiumNumberText AND
-            LOOKUP(ttCall.BillCode,lcPremiumBillCodes) > 0 THEN
-            llPremiumNumberText = TRUE.
-
-         /* Turn ON flag if call is belong to Premium */
-         IF NOT llGBText AND
-            LOOKUP(ttCall.BillCode,lcGBBillCodes) > 0 THEN
-            llGBText = TRUE.
-
+            ldEventTS = fMake2DT(ttCall.DateSt,ttCall.TimeSt).
 
          FIND FIRST ttCLIType WHERE
                     ttCLIType.CLI    = SubInvoice.CLI AND
@@ -940,10 +907,10 @@ PROCEDURE pSubInvoice2XML:
          /* some data rows are combined on daily level */
          IF ttCall.BIGroup EQ {&BITEM_GRP_INTERNET} AND
             LOOKUP(ttCall.BillCode,lcNonCombinedData) = 0 THEN DO:
-            FIND FIRST ttData WHERE ttData.BIName = lcBIName NO-ERROR.
+            FIND FIRST ttData WHERE ttData.BIName = ttCall.BillItemName NO-ERROR.
             IF NOT AVAILABLE ttData THEN DO:
                CREATE ttData.
-               ttData.BIName = lcBIName.
+               ttData.BIName = ttCall.BillItemName.
             END.
             ASSIGN 
                ttData.DataAmt = ttData.DataAmt + ttCall.DataIn + ttCall.DataOut
@@ -963,7 +930,7 @@ PROCEDURE pSubInvoice2XML:
                lhXML:INSERT-ATTRIBUTE("Destination","").
             ELSE
                lhXML:INSERT-ATTRIBUTE("Destination",ttCall.GsmBnr).
-            lhXML:INSERT-ATTRIBUTE("BillingItem",lcBIName).
+            lhXML:INSERT-ATTRIBUTE("BillingItem",ttCall.BillItemName).
 
             lcTipoName = fLocalCCName().
             lhXML:INSERT-ATTRIBUTE("CCN",lcTipoName).
@@ -1112,5 +1079,15 @@ PROCEDURE pFinalizeTarFile:
    RETURN "".
    
 END PROCEDURE.
+
+FINALLY:
+
+   IF VALID-OBJECT(objDBConn)
+   THEN DELETE OBJECT objDBConn.
+   
+   EMPTY TEMP-TABLE ttBillItemName.
+   EMPTY TEMP-TABLE ttBillItemAndGroup.
+
+END FINALLY.
 
  
