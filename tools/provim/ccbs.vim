@@ -82,6 +82,25 @@ execute "set makeprg=pike\\ -C\\ " . g:ccbspath . "/tms\\ %:p:s?" . g:ccbspath .
 
 nmap <F2> :make<enter><enter>
 
+function! Run_4gl()
+    let l:pfile = tempname() . ".p"
+
+    execute "redir > " . l:pfile
+    silent echo "DO ON STOP UNDO, LEAVE: "
+    redir END
+    execute "silent write !cat >> " . l:pfile
+    execute "redir >> " . l:pfile
+    silent echo " PAUSE."
+    silent echo "END."
+    silent echo "QUIT."
+    redir END
+    execute "silent ! pike terminal " . l:pfile
+
+endfunction
+
+nmap <F1> :call Run_4gl()<enter>
+imap <F1> <C-O>:call Run_4gl()<enter>
+
 "***********************+
 " Magic number table
 "***********************+

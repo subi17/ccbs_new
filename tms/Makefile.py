@@ -218,17 +218,9 @@ def run(*a):
 def terminal(*a):
     assert len(parameters) > 0, 'Which module to run?'
     terminal_module = parameters[0]
-    module_base = os.path.basename(terminal_module)
     cdr_dict = {}
 
-    if os.path.exists('../var/run/%s.pid' % module_base):
-        print('Lockfile %s.pid exists - aborting!' % module_base)
-        sys.exit(5)
-    fd = open('../var/run/%s.pid' % module_base, 'w')
-    fd.write(str(os.getpid()))
-    fd.close()
-
-    args = ['-T', '../var/tmp', '-p', terminal_module + '.p']
+    args = ['-T', '../var/tmp', '-p', terminal_module, '-pf', '../db/progress/store/all.pf']
     for pp in parameters[1:]:
         if pp in databases:
             args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
@@ -244,7 +236,6 @@ def terminal(*a):
             cmd.wait()
         except KeyboardInterrupt:
             cmd.send_signal(2)
-    os.unlink('../var/run/%s.pid' % module_base)
     sys.exit(cmd.returncode)
 
 @target
