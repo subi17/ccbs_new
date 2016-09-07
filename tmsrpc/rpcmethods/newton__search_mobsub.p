@@ -110,7 +110,7 @@ ELSE IF LENGTH(pcInput) EQ 9 AND
    (pcInput BEGINS "9") AND
    NOT (ASC(lcTmp) >= 65 AND
    ASC(lcTmp) <= 90) AND
-   LOOKUP("fixed_number", pcSearchTypes) > 0 THEN DO:
+   LOOKUP("msisdn", pcSearchTypes) > 0 THEN DO:
     
     pcInput = "605888489". /* TODO remove hardcoding as fixednumber is added mobsub*/
     
