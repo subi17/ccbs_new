@@ -1914,7 +1914,7 @@ ELSE IF Order.statuscode NE "4" THEN DO:
                IF lcRenoveSMSText > "" AND
                   plSendOffer EQ FALSE AND
                   LOOKUP(pcROIresult,"risk,busy,concern,ParamsException,inspectionException") = 0 THEN DO:
-                  lcRenoveSMSText = REPLACE(lcRenoveSMSText,"#ORDER_NUMBER",STRING(Order.OrderId)).
+                  lcRenoveSMSText = REPLACE(lcRenoveSMSText,"#CONTRACT_ID",STRING(Order.ContractID)).
                   fMakeSchedSMS2(Order.CustNum,
                                 Order.CLI,
                                 {&SMSTYPE_AFTER_SALES_ORDER},
