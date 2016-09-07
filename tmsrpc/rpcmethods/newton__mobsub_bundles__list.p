@@ -143,7 +143,7 @@ FOR EACH DayCampaign NO-LOCK WHERE
    add_string(lcResultArray,"", DayCampaign.DCEvent + "|" + STRING(Mobsub.MsSeq) ).
    DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
       IF LOOKUP(ENTRY(liUpsellCount,DayCampaign.BundleUpsell),lcDayCampBundleUpsells) = 0 THEN DO:
-      lcDayCampBundleUpsells = TRIM(lcDayCampBundleUpsells + "," + DayCampaign.BundleUpsell,",").
+      lcDayCampBundleUpsells = TRIM(lcDayCampBundleUpsells + "," + ENTRY(liUpsellCount,DayCampaign.BundleUpsell),",").
 
          add_string(lcResultArray,"", 
                     ENTRY(liUpsellCount,DayCampaign.BundleUpsell) 
