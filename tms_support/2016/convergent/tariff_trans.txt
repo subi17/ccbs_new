@@ -1,17 +1,25 @@
 Type;Language Type;Language;Translation Name
-CONTDSL10;1;Spanish;La Mega Plana 2GB + 250 Minutes
-CONTDSL10;2;Catalan;La Mega Plana 2GB + 250 Minutes
-CONTDSL10;3;Basque;La Mega Plana 2GB + 250 Minutes
-CONTDSL10;5;English;La Mega Plana 2GB + 250 Minutes
-CONTFH10;1;Spanish;La Mega Plana 2GB + 250 Minutes
-CONTFH10;2;Catalan;La Mega Plana 2GB + 250 Minutes
-CONTFH10;3;Basque;La Mega Plana 2GB + 250 Minutes
-CONTFH10;5;English;La Mega Plana 2GB + 250 Minutes
-CONTDSL15;1;Spanish;La Infinita 5 GB
-CONTDSL15;2;Catalan;La Infinita 5 GB
-CONTDSL15;3;Basque;La Infinita 5 GB
-CONTDSL15;5;English;La Infinita 5 GB
-CONTFH15;1;Spanish;La Infinita 5 GB
-CONTFH15;2;Catalan;La Infinita 5 GB
-CONTFH15;3;Basque;La Infinita 5 GB
-CONTFH15;5;English;La Infinita 5 GB
+CONTDSL45;1;Spanish;La Infinita 2 GB
+CONTDSL45;2;Catalan;La Infinita 2 GB
+CONTDSL45;3;Basque;La Infinita 2 GB
+CONTDSL45;5;English;La Infinita 2 GB
+CONTDSL55;1;Spanish;La Infinita 10 GB
+CONTDSL55;2;Catalan;La Infinita 10 GB
+CONTDSL55;3;Basque;La Infinita 10 GB
+CONTDSL55;5;English;La Infinita 10 GB
+CONTFH45_50;1;Spanish;La Infinita 2 GB
+CONTFH45_50;2;Catalan;La Infinita 2 GB
+CONTFH45_50;3;Basque;La Infinita 2 GB
+CONTFH45_50;5;English;La Infinita 2 GB
+CONTFH55_50;1;Spanish;La Infinita 10 GB
+CONTFH55_50;2;Catalan;La Infinita 10 GB
+CONTFH55_50;3;Basque;La Infinita 10 GB
+CONTFH55_50;5;English;La Infinita 10 GB
+CONTFH55_300;1;Spanish;La Infinita 2 GB
+CONTFH55_300;2;Catalan;La Infinita 2 GB
+CONTFH55_300;3;Basque;La Infinita 2 GB
+CONTFH55_300;5;English;La Infinita 2 GB
+CONTFH65_300;1;Spanish;La Infinita 10 GB
+CONTFH65_300;2;Catalan;La Infinita 10 GB
+CONTFH65_300;3;Basque;La Infinita 10 GB
+CONTFH65_300;5;English;La Infinita 10 GB

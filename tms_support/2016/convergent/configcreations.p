@@ -320,7 +320,7 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
    IF LOOKUP(icFeeModel, "10") > 0 THEN 
    FIND FIRST RatePlan WHERE 
               RatePlan.Brand    = gcBrand AND 
-              RatePlan.RatePlan = "CONTRATOCONVF"
+              RatePlan.RatePlan = "CONTRATOCONVS"
    NO-LOCK NO-ERROR.
    ELSE 
    FIND FIRST RatePlan WHERE
@@ -572,7 +572,7 @@ DEFINE VARIABLE lcpriceplan AS CHARACTER NO-UNDO.
        
       CREATE CLIType.
       IF LOOKUP(icCLIType, "10") > 0 THEN
-         lcpriceplan = "CONTRATOCONVF".
+         lcpriceplan = "CONTRATOCONVS".
       ELSE
          lcpriceplan = "CONTRATOCONVS".
       ASSIGN 

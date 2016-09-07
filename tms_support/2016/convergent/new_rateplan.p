@@ -1,3 +1,5 @@
+DEF VAR ldafrom AS DATE INIT 09/01/16.
+
 /*FIND FIRST RatePlan WHERE rateplan.rateplan EQ "CONTRATOFUS".
 DISP RatePlan.
 
@@ -5,12 +7,14 @@ FOR EACH PListConf WHERE Plistconf.rateplan EQ "CONTRATOFUS":
    DISP PListConf.
 END.
 */
+/*
 CREATE RatePlan.
 Assign
    Rateplan.Rateplan = "CONTRATOCONVF"
    RatePlan.RpName = "Contrato convergent (Post paid)"
    RatePlan.Brand = "1".
 
+*/
 CREATE RatePlan.
 Assign
    Rateplan.Rateplan = "CONTRATOCONVS"
@@ -19,7 +23,7 @@ Assign
 
 CREATE PListConf.
 ASSIGN
-   PListConf.dfrom = 08/01/16
+   PListConf.dfrom = ldaFrom
    PlistConf.dto = 12/31/49
    PListConf.prior = 5
    PListConf.rateplan = "CONTRATOCONVS"
@@ -29,7 +33,7 @@ ASSIGN
 
 CREATE PListConf.
 ASSIGN
-   PListConf.dfrom = 08/01/16
+   PListConf.dfrom = ldaFrom
    PlistConf.dto = 12/31/49
    PListConf.prior = 30
    PListConf.rateplan = "CONTRATOCONVS"
@@ -39,7 +43,7 @@ ASSIGN
 
 CREATE PListConf.
 ASSIGN
-   PListConf.dfrom = 08/01/16
+   PListConf.dfrom = ldaFrom
    PlistConf.dto = 12/31/49
    PListConf.prior = 50
    PListConf.rateplan = "CONTRATOCONVS"
@@ -49,7 +53,7 @@ ASSIGN
 
 CREATE PListConf.
 ASSIGN
-   PListConf.dfrom = 08/01/16
+   PListConf.dfrom = ldaFrom
    PlistConf.dto = 12/31/49
    PListConf.prior = 60
    PListConf.rateplan = "CONTRATOCONVS"
@@ -57,6 +61,7 @@ ASSIGN
    PListConf.brand = "1"
    PListConf.pricelist = "COMMON".
 
+/*
 CREATE PListConf.
 ASSIGN
    PListConf.dfrom = 08/01/16
@@ -96,3 +101,4 @@ ASSIGN
    PListConf.startcharge = TRUE
    PListConf.brand = "1"
    PListConf.pricelist = "COMMON".
+*/

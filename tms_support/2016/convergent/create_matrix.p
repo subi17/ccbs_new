@@ -36,12 +36,14 @@ END.
 liSeq = create_matrix("PERCONTR", "Per.contract usage").
 create_mxitem("PerContract","CONTS2GB",liSeq).
 create_mxitem("PerContract","DATA6",liSeq).
-create_mxitem("SubsTypeTo","CONTDSL10",liSeq).
-create_mxitem("SubsTypeTo","CONTFH10",liSeq).
+create_mxitem("SubsTypeTo","CONTDSL45",liSeq).
+create_mxitem("SubsTypeTo","CONTFH45_50",liSeq).
+create_mxitem("SubsTypeTo","CONTFH55_300",liSeq).
 
 liSeq = create_matrix("PERCONTR", "Per.contract usage").
-create_mxitem("PerContract","CONTS5GB",liSeq).
+create_mxitem("PerContract","CONTS10GB",liSeq).
 create_mxitem("PerContract","DATA6",liSeq).
-create_mxitem("SubsTypeTo","CONTDSL15",liSeq).
-create_mxitem("SubsTypeTo","CONTFH15",liSeq).
+create_mxitem("SubsTypeTo","CONTDSL55",liSeq).
+create_mxitem("SubsTypeTo","CONTFH55_50",liSeq).
+create_mxitem("SubsTypeTo","CONTFH65_300",liSeq).
 
