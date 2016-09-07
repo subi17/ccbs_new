@@ -1170,6 +1170,7 @@ PROCEDURE pCheckLimits:
                liPeriod = YEAR(TMQueue.DateST) * 100 + MONTH(TMQueue.DateST).
                ldeActStamp = fHMS2TS(fLastDayOfMonth(TMQueue.DateST),"23:59:59").
 
+               /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
                FOR FIRST ServiceLimit WHERE
                          ServiceLimit.GroupCode = TMQueue.DCEvent AND
                          ServiceLimit.DialType = 4                AND

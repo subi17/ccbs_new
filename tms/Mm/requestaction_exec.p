@@ -220,7 +220,8 @@ PROCEDURE pPeriodicalContract:
       THEN DO:      
                
          llDo = FALSE.
-               
+              
+         /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
          FOR EACH bServiceLimit NO-LOCK WHERE
                   bServiceLimit.GroupCode = ttAction.ActionKey AND
                   bServiceLimit.ValidFrom <= TODAY             AND
@@ -310,6 +311,7 @@ PROCEDURE pPeriodicalContract:
                
          llDo = FALSE.
                
+         /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
          FOR EACH bServiceLimit NO-LOCK WHERE
                   bServiceLimit.GroupCode = ttAction.ActionKey AND
                   bServiceLimit.ValidFrom <= TODAY             AND

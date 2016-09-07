@@ -281,6 +281,7 @@ PROCEDURE pHandleEDR:
             
             /* Benefit is already active, just send the renewal SMS 
                and possible counter reset*/
+            /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
             FOR FIRST ServiceLimit NO-LOCK WHERE
                       ServiceLimit.GroupCode EQ ttEDR.CLIType AND
                       ServiceLimit.ValidFrom <= TODAY         AND
@@ -498,6 +499,7 @@ PROCEDURE pHandleEDR:
 
             IF lcSMSText > "" THEN DO:
 
+               /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
                FOR FIRST ServiceLimit NO-LOCK WHERE
                          ServiceLimit.GroupCode EQ ttEDR.CLIType AND
                          ServiceLimit.ValidFrom <= TODAY         AND

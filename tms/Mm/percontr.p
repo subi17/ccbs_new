@@ -425,6 +425,7 @@ PROCEDURE pContractActivation:
 
    /* Make sure subscription should not have active multiple
       bundles at the same time */
+   /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
    IF LOOKUP(lcDCEvent,lcBONOContracts) > 0 THEN
       FOR EACH ServiceLimit NO-LOCK WHERE
                LOOKUP(ServiceLimit.GroupCode,lcBONOContracts) > 0 AND
@@ -1338,7 +1339,8 @@ PROCEDURE pFinalize:
       MsRequest.ReqSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}
    THEN DO:
       lcSMSText = "WelcomeCONTF".
-
+      
+      /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
       FOR EACH  ServiceLimit NO-LOCK WHERE
                 ServiceLimit.GroupCode = lcDCEvent AND
                 ServiceLimit.DialType  = {&DIAL_TYPE_VOICE} AND
@@ -2005,7 +2007,8 @@ PROCEDURE pContractTermination:
          lcHandled = ""
          ldeInclAmt = 0
          liSlSeq    = 0.
-
+      
+      /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
       FOR EACH ServiceLimit NO-LOCK WHERE
                ServiceLimit.GroupCode = lcDCEvent AND
                ServiceLimit.ValidFrom <= TODAY    AND
@@ -3586,7 +3589,8 @@ PROCEDURE pContractReactivation:
 
    /* create rating package */
    IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 THEN DO:
-
+      
+      /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
       FOR EACH ServiceLimit NO-LOCK WHERE
                ServiceLimit.GroupCode = lcDCEvent AND
                ServiceLimit.ValidFrom <= TODAY    AND

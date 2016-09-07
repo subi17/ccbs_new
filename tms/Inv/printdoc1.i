@@ -803,6 +803,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
                                 ttRow.RowBillCode = FMItem.BillCode NO-ERROR.   
                   END.
 
+               /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
                FOR EACH bServiceLimit NO-LOCK WHERE
                         bServiceLimit.GroupCode = lcGroupCode AND
                         bServiceLimit.ValidFrom <= TODAY      AND
