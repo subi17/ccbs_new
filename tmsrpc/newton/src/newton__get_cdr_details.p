@@ -245,7 +245,8 @@ FUNCTION fResponseRow RETURNS LOGICAL
                                   ihCDR::DtlSeq,
                                   ihCDR::GsmBnr,
                                   ihCDR::BType,
-                                  ihCDR::MSCID).
+                                  ihCDR::MSCID,
+                                  ihCDR::ServiceName).
    /* ServiceName for Premium Number */
    ELSE DO:
       FIND FIRST BillItem WHERE
