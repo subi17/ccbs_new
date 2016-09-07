@@ -1,18 +1,18 @@
-CLIType;CONTDSL15
+CLIType;CONTFH45_50
 TariffBundle;
-BaseBundle;CONTS5GB
+BaseBundle;CONTS2GB
 MonthlyFee;
-CommercialFee;45.45
-ComparisonFee;45.45
+CommercialFee;37.19
+ComparisonFee;37.19
 ServiceClass;
-WebStatus;Retired
+WebStatus;Active
 STCStatus;Active
 PaymentType;Postpaid
 UsageType;Voice
 FirstMonthFeeCalc;Relative
 LastMonthFeeCalc;Full
 TypeOfContract;ServicePackage
-DataLimit;5120
+DataLimit;2048
 VoiceLimit;
 BDestinationLimit;300
 FirstMonthDataLimit;Relative
@@ -26,7 +26,7 @@ DSS2Compatible;No
 DSS2PrimaryLine;No
 NativeVoIPCompatible;No
 OnlyVOICE;No
-MonthlyFeeBillCode;CONTDSL15MF
-TariffName;La Infinita 5 GB
+MonthlyFeeBillCode;CONTFH45_50MF
+TariffName;La Infinita 2 GB
 BonoSupport;YES
 BundleUpsell;DATA200_UPSELL

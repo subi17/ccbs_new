@@ -1,20 +1,20 @@
-CLIType;CONTFH10
+CLIType;CONTFH55_50
 TariffBundle;
-BaseBundle;CONTF2GB
+BaseBundle;CONTS10GB
 MonthlyFee;
 CommercialFee;45.45
 ComparisonFee;45.45
 ServiceClass;
-WebStatus;Retired
+WebStatus;Active
 STCStatus;Active
 PaymentType;Postpaid
 UsageType;Voice
 FirstMonthFeeCalc;Relative
 LastMonthFeeCalc;Full
 TypeOfContract;ServicePackage
-DataLimit;2048
-VoiceLimit;250
-BDestinationLimit;100
+DataLimit;10240
+VoiceLimit;
+BDestinationLimit;300
 FirstMonthDataLimit;Relative
 LastMonthDataLimit;Full
 FirstMonthVoiceLimit;Relative
@@ -26,7 +26,7 @@ DSS2Compatible;No
 DSS2PrimaryLine;No
 NativeVoIPCompatible;No
 OnlyVOICE;No
-MonthlyFeeBillCode;CONTFH10MF
-TariffName;La Mega Plana 2 GB + 250 Minutes
+MonthlyFeeBillCode;CONTFH55_50MF
+TariffName;La Infinita 10 GB
 BonoSupport;YES
 BundleUpsell;DATA200_UPSELL

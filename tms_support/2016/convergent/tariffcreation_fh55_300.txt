@@ -1,9 +1,9 @@
-CLIType;CONTDSL45
+CLIType;CONTFH55_300
 TariffBundle;
 BaseBundle;CONTS2GB
 MonthlyFee;
-CommercialFee;37.19
-ComparisonFee;37.19
+CommercialFee;45.45
+ComparisonFee;45.45
 ServiceClass;
 WebStatus;Active
 STCStatus;Active
@@ -26,7 +26,7 @@ DSS2Compatible;No
 DSS2PrimaryLine;No
 NativeVoIPCompatible;No
 OnlyVOICE;No
-MonthlyFeeBillCode;CONTDSL45MF
+MonthlyFeeBillCode;CONTFH55_300MF
 TariffName;La Infinita 2 GB
 BonoSupport;YES
 BundleUpsell;DATA200_UPSELL
