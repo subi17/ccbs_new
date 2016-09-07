@@ -38,7 +38,7 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
    DEF VAR llDouble     AS LOG    NO-UNDO.
    DEF VAR lcTableName  AS CHAR   NO-UNDO.
    DEF VAR llCheckOld   AS LOG    NO-UNDO.
-   
+
    DEF BUFFER bPostDouble FOR MobCDR.
    DEF BUFFER bPreDouble  FOR PrepCDR.
    
@@ -108,61 +108,87 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
 
          IF ttCall.MSCID = "POST" AND
             ttCall.EventType EQ "SMS" THEN
-            FOR EACH bPostDouble USE-INDEX CLI WHERE
-                     bPostDouble.CLI       = ttCall.CLI AND
-                     bPostDouble.DateSt    = ttCall.DateSt AND
-                     bPostDouble.TimeStart = ttCall.TimeStart AND
-                     bPostDouble.BillDur   = ttCall.BillDur AND
-                     bPostDouble.GsmBnr    = ttCall.GsmBnr AND
-                     bPostDouble.SpoCMT    = ttCall.SpoCMT AND
-                     bPostDouble.CCharge   = ttCall.CCharge AND
-                     bPostDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CALL} AND
-                     bPostDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CCGW_CDR} AND
-                     bPostDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_DATA_CDR} AND
-                     bPostDouble.ErrorCode NE 8040 AND
-                     RECID(bPostDouble) NE irChecked:
-               IF bPostDouble.MSCID = "POST" AND
-                  bPostDouble.EventType EQ "SMS" THEN DO:
-                  IF icCaller = "rerate" AND ttCall.CallIdNum = "" THEN
-                     ttCall.CallIdNum = fGetMcdrDtlValue(ttCall.Datest,
-                                                     ttCall.Dtlseq,
-                                                   "Call identification number").
-                  IF ttCall.CallIdNum = fGetMcdrDtlValue(bPostDouble.Datest,
-                                                     bPostDouble.Dtlseq,
-                                                   "Call identification number")
-                     THEN llDouble = TRUE.
-               END.
-               ELSE llDouble = TRUE.
-               IF llDouble THEN LEAVE.
+         FOR EACH bPostDouble USE-INDEX CLI WHERE
+                  bPostDouble.CLI       = ttCall.CLI AND
+                  bPostDouble.DateSt    = ttCall.DateSt AND
+                  bPostDouble.TimeStart = ttCall.TimeStart AND
+                  bPostDouble.BillDur   = ttCall.BillDur AND
+                  bPostDouble.GsmBnr    = ttCall.GsmBnr AND
+                  bPostDouble.SpoCMT    = ttCall.SpoCMT AND
+                  bPostDouble.CCharge   = ttCall.CCharge AND
+                  bPostDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CALL} AND
+                  bPostDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CCGW_CDR} AND
+                  bPostDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_DATA_CDR} AND
+                  bPostDouble.ErrorCode NE 8040 AND
+                  RECID(bPostDouble) NE irChecked:
+            IF bPostDouble.MSCID = "POST" AND
+               bPostDouble.EventType EQ "SMS" THEN DO:
+               IF icCaller = "rerate" AND ttCall.CallIdNum = "" THEN
+                  ttCall.CallIdNum = fGetMcdrDtlValue(ttCall.Datest,
+                                                  ttCall.Dtlseq,
+                                                "Call identification number").
+               IF ttCall.CallIdNum = fGetMcdrDtlValue(bPostDouble.Datest,
+                                                  bPostDouble.Dtlseq,
+                                                "Call identification number")
+                  THEN llDouble = TRUE.
             END.
-         ELSE
-         llDouble = CAN-FIND(FIRST bPostDouble USE-INDEX CLI WHERE
-            bPostDouble.CLI       = ttCall.CLI AND
-            bPostDouble.DateSt    = ttCall.DateSt AND
-            bPostDouble.TimeStart = ttCall.TimeStart AND
-            bPostDouble.BillDur   = ttCall.BillDur AND
-            bPostDouble.GsmBnr    = ttCall.GsmBnr AND
-            bPostDouble.SpoCMT    = ttCall.SpoCMT AND
-            bPostDouble.CCharge   = ttCall.CCharge AND
-            bPostDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CALL} AND
-            bPostDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CCGW_CDR} AND
-            bPostDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_DATA_CDR} AND
-            bPostDouble.ErrorCode NE 8040 AND
-            RECID(bPostDouble) NE irChecked).
-      END.   
-      ELSE
-      llDouble = CAN-FIND(FIRST bPreDouble USE-INDEX CLI WHERE
-         bPreDouble.CLI       = ttCall.CLI AND
-         bPreDouble.DateSt    = ttCall.DateSt AND
-         bPreDouble.TimeStart = ttCall.TimeStart AND
-         bPreDouble.BillDur   = ttCall.BillDur AND
-         bPreDouble.GsmBnr    = ttCall.GsmBnr AND
-         bPreDouble.SpoCMT    = ttCall.SpoCMT AND
-         bPreDouble.CCharge   = ttCall.CCharge AND
-         bPreDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CALL} AND
-         bPreDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CCGW_CDR} AND
-         bPreDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_DATA_CDR} AND
-         RECID(bPreDouble) NE irChecked).
+            ELSE llDouble = TRUE.
+            IF llDouble THEN LEAVE.
+         END.
+         ELSE FOR EACH bPostDouble NO-LOCK USE-INDEX CLI WHERE
+                       bPostDouble.CLI       = ttCall.CLI AND
+                       bPostDouble.DateSt    = ttCall.DateSt AND
+                       bPostDouble.TimeStart = ttCall.TimeStart AND
+                       bPostDouble.BillDur   = ttCall.BillDur AND
+                       bPostDouble.GsmBnr    = ttCall.GsmBnr AND
+                       bPostDouble.SpoCMT    = ttCall.SpoCMT AND
+                       bPostDouble.CCharge   = ttCall.CCharge AND
+                       bPostDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CALL} AND
+                       bPostDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CCGW_CDR} AND
+                       bPostDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_DATA_CDR} AND
+                       bPostDouble.ErrorCode NE 8040 AND
+                       RECID(bPostDouble) NE irChecked:
+            IF bPostDouble.MSCID = "POSTD" AND
+               ttCall.MSCID = "POSTD" THEN DO:
+               IF icCaller = "rerate" AND ttCall.Apn = "" THEN
+                  ttCall.Apn = fGetMcdrDtlValue(ttCall.Datest,
+                                                ttCall.Dtlseq,
+                                                "Access point name NI").
+               IF ttCall.Apn = fGetMcdrDtlValue(bPostDouble.Datest,
+                                                bPostDouble.Dtlseq,
+                                                "Access point name NI")
+                  THEN llDouble = TRUE.
+            END.
+            ELSE llDouble = TRUE.
+            IF llDouble THEN LEAVE.
+         END. /* ELSE FOR EACH bPostDouble NO-LOCK USE-INDEX CLI WHERE */
+      END. /* IF ttCall.PPFlag = 0 THEN DO: */
+      ELSE FOR EACH bPreDouble USE-INDEX CLI WHERE
+                    bPreDouble.CLI       = ttCall.CLI AND
+                    bPreDouble.DateSt    = ttCall.DateSt AND
+                    bPreDouble.TimeStart = ttCall.TimeStart AND
+                    bPreDouble.BillDur   = ttCall.BillDur AND
+                    bPreDouble.GsmBnr    = ttCall.GsmBnr AND
+                    bPreDouble.SpoCMT    = ttCall.SpoCMT AND
+                    bPreDouble.CCharge   = ttCall.CCharge AND
+                    bPreDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CALL} AND
+                    bPreDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_CCGW_CDR} AND
+                    bPreDouble.ErrorCode NE {&CDR_ERROR_DOUBLE_DATA_CDR} AND
+                    RECID(bPreDouble) NE irChecked:
+         IF bPreDouble.MSCID = "PRE" AND bPreDouble.EventType = "GPRS" AND
+            ttCall.MSCID = "PRE" AND ttCall.EventType = "GPRS" THEN DO:
+            IF icCaller = "rerate" AND ttCall.Apn = "" THEN
+               ttCall.Apn = fGetMcdrDtlValue(ttCall.Datest,
+                                             ttCall.Dtlseq,
+                                             "Access point name NI").
+            IF ttCall.Apn = fGetMcdrDtlValue(bPreDouble.Datest,
+                                             bPreDouble.Dtlseq,
+                                             "Access point name NI")
+               THEN llDouble = TRUE.
+         END.
+         ELSE llDouble = TRUE.
+         IF llDouble THEN LEAVE.
+      END. /* ELSE FOR EACH bPreDouble USE-INDEX CLI WHERE */
    END. /* ELSE DO: */
 
    /* check from old dbs also */
@@ -212,6 +238,15 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
                                                ttCall.Dtlseq,
                                                "Call identification number").
 
+         IF ((ttCall.PPFlag EQ 0 AND ttCall.MSCID EQ "POSTD") OR
+             (ttCall.PPFlag NE 0 AND ttCall.MSCID EQ "PRE" AND
+              ttCall.EventType EQ "GPRS")) AND
+              icCaller = "rerate" AND
+              ttCall.Apn = "" THEN
+              ttCall.Apn = fGetMcdrDtlValue(ttCall.Datest,
+                                            ttCall.Dtlseq,
+                                            "Access point name NI").
+
          RUN Rate/olddb_double_check.p(ttCall.CLI,
                                   ttCall.DateSt,
                                   ttCall.TimeStart,
@@ -223,6 +258,7 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
                                   ttCall.EventType,
                                   ttCall.CDRId,
                                   ttCall.CallIdNum,
+                                  ttCall.Apn,
                                   lcOldDB,
                                   lcTableName,
                                   OUTPUT llDouble).
@@ -232,24 +268,27 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
       END.                            
    END.
 
-   IF llDouble THEN DO: 
-      CASE ttCall.MSCID:
-         WHEN "CCGW" THEN ASSIGN
-            ttCall.ErrorCode = {&CDR_ERROR_DOUBLE_CCGW_CDR} 
-                                    WHEN ttCall.ErrorCode = 0 OR
-                                    ttCall.ErrorCode = 9999
-            ttCall.InvSeq    = 0.
-         WHEN "POSTD" THEN ASSIGN
-            ttCall.ErrorCode = {&CDR_ERROR_DOUBLE_DATA_CDR} 
-                                    WHEN ttCall.ErrorCode = 0 OR
-                                    ttCall.ErrorCode = 9999
-            ttCall.InvSeq    = 0.
-         OTHERWISE ASSIGN
-            ttCall.ErrorCode = {&CDR_ERROR_DOUBLE_CALL} 
-                                    WHEN ttCall.ErrorCode = 0 OR
-                                    ttCall.ErrorCode = 9999
-            ttCall.InvSeq    = 0.
-      END CASE.
+   IF llDouble THEN DO:
+
+      IF ttCall.MSCID = "CCGW" THEN ASSIGN
+         ttCall.ErrorCode = {&CDR_ERROR_DOUBLE_CCGW_CDR}
+                             WHEN ttCall.ErrorCode = 0 OR
+                                  ttCall.ErrorCode = 9999
+         ttCall.InvSeq    = 0.
+      ELSE IF ttCall.MSCID       = "POSTD" OR
+             (ttCall.MSCID       = "PRE"   AND
+              ttCall.EventType   = "GPRS"  AND
+              ttCall.PPFlag     <> 0) THEN ASSIGN
+         ttCall.ErrorCode = {&CDR_ERROR_DOUBLE_DATA_CDR}
+                             WHEN ttCall.ErrorCode = 0 OR
+                                  ttCall.ErrorCode = 9999
+         ttCall.InvSeq    = 0.
+      ELSE ASSIGN
+         ttCall.ErrorCode = {&CDR_ERROR_DOUBLE_CALL}
+                             WHEN ttCall.ErrorCode = 0 OR
+                                  ttCall.ErrorCode = 9999
+         ttCall.InvSeq    = 0.
+
    END.
    
    RETURN llDouble.

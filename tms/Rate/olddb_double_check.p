@@ -6,20 +6,21 @@
 {Rate/error_codes.i}
 {Rate/rate_roamzone.i}
 
-DEF INPUT PARAMETER  icCLI     AS CHAR NO-UNDO.
-DEF INPUT PARAMETER  idaDateSt AS DATE NO-UNDO.
-DEF INPUT PARAMETER  iiTimeSt  AS INT  NO-UNDO.
-DEF INPUT PARAMETER  iiBillDur AS INT  NO-UNDO.
-DEF INPUT PARAMETER  icGSMBNr  AS CHAR NO-UNDO.
-DEF INPUT PARAMETER  iiSpoCMT  AS INT  NO-UNDO.
-DEF INPUT PARAMETER  idCCharge AS DEC  NO-UNDO.
-DEF INPUT PARAMETER  icMSCID   AS CHAR  NO-UNDO.
+DEF INPUT PARAMETER  icCLI       AS CHAR NO-UNDO.
+DEF INPUT PARAMETER  idaDateSt   AS DATE NO-UNDO.
+DEF INPUT PARAMETER  iiTimeSt    AS INT  NO-UNDO.
+DEF INPUT PARAMETER  iiBillDur   AS INT  NO-UNDO.
+DEF INPUT PARAMETER  icGSMBNr    AS CHAR NO-UNDO.
+DEF INPUT PARAMETER  iiSpoCMT    AS INT  NO-UNDO.
+DEF INPUT PARAMETER  idCCharge   AS DEC  NO-UNDO.
+DEF INPUT PARAMETER  icMSCID     AS CHAR  NO-UNDO.
 DEF INPUT PARAMETER  icEventType AS CHAR  NO-UNDO.
-DEF INPUT PARAMETER  icCDRId   AS CHAR  NO-UNDO.
+DEF INPUT PARAMETER  icCDRId     AS CHAR  NO-UNDO.
 DEF INPUT PARAMETER  icCallIdNum AS CHAR  NO-UNDO.
-DEF INPUT PARAMETER  icOldDB   AS CHAR NO-UNDO.
-DEF INPUT PARAMETER  icOldCDR  AS CHAR NO-UNDO.
-DEF OUTPUT PARAMETER olDouble  AS LOG  NO-UNDO.
+DEF INPUT PARAMETER  icApn       AS CHAR  NO-UNDO.
+DEF INPUT PARAMETER  icOldDB     AS CHAR NO-UNDO.
+DEF INPUT PARAMETER  icOldCDR    AS CHAR NO-UNDO.
+DEF OUTPUT PARAMETER olDouble    AS LOG  NO-UNDO.
 
 DEF VAR ldaOldDb           AS DATE NO-UNDO.
 DEF VAR liCurrent          AS INT  NO-UNDO.
@@ -85,8 +86,15 @@ REPEAT:
            icEventType EQ "SMS" AND
            lhOldCDR::EventType EQ "SMS" AND
            icCallIdNum NE fGetMcdrDtlValue(lhOldCDR::Datest,
-                                          lhOldCDR::Dtlseq,
-                                          "Call identification number")
+                                           lhOldCDR::Dtlseq,
+                                           "Call identification number")
+      THEN NEXT.
+   ELSE IF ((icMSCID EQ "POSTD" AND lhOldCDR::MSCID EQ "POSTD") OR
+            (icMSCID EQ "PRE" AND lhOldCDR::MSCID EQ "PRE" AND
+             icEventType EQ "GPRS" AND lhOldCDR::EventType EQ "GPRS")) AND
+             icApn NE fGetMcdrDtlValue(lhOldCDR::Datest,
+                                       lhOldCDR::Dtlseq,
+                                       "Access point name NI")
       THEN NEXT.
 
    olDouble = TRUE.

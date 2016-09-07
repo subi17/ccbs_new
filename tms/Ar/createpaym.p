@@ -61,7 +61,8 @@ ELSE IF iiPaymType = 1 THEN DO:
    RETURN "ERROR:Invoice not available for credit loss posting".
 END.    
 
-IF llDoEvent THEN DO:
+IF llDoEvent AND 
+   icSource  NE "DD" THEN DO:
    DEFINE VARIABLE lhPayment AS HANDLE NO-UNDO.
    lhPayment = BUFFER Payment:HANDLE.
    RUN StarEventInitialize(lhPayment).
@@ -281,7 +282,9 @@ END.
  
 IF liCount > 10000 THEN UNDO, RETURN "ERROR:ExtVoucher unavailable".
 
-IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhPayment).    
+IF llDoEvent AND 
+   icSource  NE "DD" THEN 
+   RUN StarEventMakeCreateEvent(lhPayment).    
 
 oiVoucher = Payment.Voucher.
 

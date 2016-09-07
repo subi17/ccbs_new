@@ -189,6 +189,7 @@ FUNCTION fAnalBsub RETURNS LOGICAL
             lcMSRN = fGetMcdrDtlValue(ttCall.Datest,
                                       ttCall.Dtlseq,
                                       "MSRN").
+         lcServiceName = lcMSRN.
                                       
          fGetRoamZones_MSRN(INPUT  ttCall.Gsmbnr,
                             INPUT  lcMSRN,
@@ -197,22 +198,20 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       END.
                    
       ELSE DO:
-         IF lcNetworkowner = "" THEN 
-            fGetRoamZones
-           (INPUT  ttCall.Gsmbnr,
-            INPUT  fGetMcdrDtlValue(ttCall.Datest,
-                                    ttCall.Dtlseq,
-                                   "Network Owner"),
-            OUTPUT lcARoamZone,
-            OUTPUT lcBRoamZone).
-      
-         ELSE fGetRoamZones
+         IF lcNetworkowner = ""
+         THEN lcNetworkowner = fGetMcdrDtlValue(ttCall.Datest,
+                                                ttCall.Dtlseq,
+                                                "Network Owner").
+         IF ttCall.SpoCMT = 7
+         THEN lcServiceName = lcNetworkowner.
+
+         fGetRoamZones
            (INPUT  ttCall.Gsmbnr,
             INPUT  lcNetworkowner,
             OUTPUT lcARoamZone,
             OUTPUT lcBRoamZone).
       END.
-      
+
       IF lcaRoamZone = "ROAM_EU" THEN DO:
          /* CC=4 are always local calls even if b-type = 1 */
          IF ttCall.Spocmt EQ 4 OR

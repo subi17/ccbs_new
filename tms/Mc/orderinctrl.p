@@ -291,7 +291,7 @@ ELSE IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN DO:
                                 OUTPUT ldeSMSStamp).
          
             IF lcRenoveSMSText > "" THEN DO:
-               lcRenoveSMSText = REPLACE(lcRenoveSMSText,"#ORDER_NUMBER",STRING(Order.OrderId)).
+               lcRenoveSMSText = REPLACE(lcRenoveSMSText,"#CONTRACT_ID",STRING(Order.ContractID)).
                fMakeSchedSMS2(Order.CustNum,
                              Order.CLI,
                              {&SMSTYPE_AFTER_SALES_ORDER},
