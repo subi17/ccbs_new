@@ -2957,6 +2957,26 @@
 1 "" 3 "Samsung Galaxy Tab A (2016)" 0 "G0000291" "1" 28/06/16 31/12/49
 1 "" 4 "Samsung Galaxy Tab A (2016)" 0 "G0000291" "1" 28/06/16 31/12/49
 1 "" 5 "Samsung Galaxy Tab A (2016)" 0 "G0000291" "1" 28/06/16 31/12/49
+1 "" 1 "Huawei Y6 II Compact Blanco" 0 "G0000292" "1" 29/08/16 31/12/49
+1 "" 2 "Huawei Y6 II Compact Blanco" 0 "G0000292" "1" 29/08/16 31/12/49
+1 "" 3 "Huawei Y6 II Compact Blanco" 0 "G0000292" "1" 29/08/16 31/12/49
+1 "" 4 "Huawei Y6 II Compact Blanco" 0 "G0000292" "1" 29/08/16 31/12/49
+1 "" 5 "Huawei Y6 II Compact White" 0 "G0000292" "1" 29/08/16 31/12/49
+1 "" 1 "Huawei Y6 II Compact" 0 "G0000293" "1" 29/08/16 31/12/49
+1 "" 2 "Huawei Y6 II Compact Blanco" 0 "G0000293" "1" 29/08/16 31/12/49
+1 "" 3 "Huawei Y6 II Compact Blanco" 0 "G0000293" "1" 29/08/16 31/12/49
+1 "" 4 "Huawei Y6 II Compact Blanco" 0 "G0000293" "1" 29/08/16 31/12/49
+1 "" 5 "Huawei Y6 II Compact" 0 "G0000293" "1" 29/08/16 31/12/49
+1 "" 1 "Bq Aquaris X5 Plus" 0 "G0000294" "1" 29/08/16 31/12/49
+1 "" 2 "Bq Aquaris X5 Plus" 0 "G0000294" "1" 29/08/16 31/12/49
+1 "" 3 "Bq Aquaris X5 Plus" 0 "G0000294" "1" 29/08/16 31/12/49
+1 "" 4 "Bq Aquaris X5 Plus" 0 "G0000294" "1" 29/08/16 31/12/49
+1 "" 5 "Bq Aquaris X5 Plus" 0 "G0000294" "1" 29/08/16 31/12/49
+1 "" 1 "Samsung Galaxy Note 7" 0 "G0000295" "1" 29/08/16 31/12/49
+1 "" 2 "Samsung Galaxy Note 7" 0 "G0000295" "1" 29/08/16 31/12/49
+1 "" 3 "Samsung Galaxy Note 7" 0 "G0000295" "1" 29/08/16 31/12/49
+1 "" 4 "Samsung Galaxy Note 7" 0 "G0000295" "1" 29/08/16 31/12/49
+1 "" 5 "Samsung Galaxy Note 7" 0 "G0000295" "1" 29/08/16 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -4427,6 +4447,11 @@
 1 "" 3 "LG G5 Titán" 0 "P030LG5N2" "1" 21/03/16 31/12/49
 1 "" 4 "LG G5 Titán" 0 "P030LG5N2" "1" 21/03/16 31/12/49
 1 "" 5 "LG G5 Titan" 0 "P030LG5N2" "1" 21/03/16 31/12/49
+1 "" 1 "LG G5 Titán con LG Cam Plus de regalo" 0 "P030LG5NP" "1" 30/08/16 31/12/49
+1 "" 2 "LG G5 Titán con LG Cam Plus de regalo" 0 "P030LG5NP" "1" 30/08/16 31/12/49
+1 "" 3 "LG G5 Titán con LG Cam Plus de regalo" 0 "P030LG5NP" "1" 30/08/16 31/12/49
+1 "" 4 "LG G5 Titán con LG Cam Plus de regalo" 0 "P030LG5NP" "1" 30/08/16 31/12/49
+1 "" 5 "LG G5 Titan with LG Cam Plus gift" 0 "P030LG5NP" "1" 30/08/16 31/12/49
 1 "" 1 "LG G5 Plata" 0 "P030LG5S2" "1" 22/06/16 31/12/49
 1 "" 2 "LG G5 Plata" 0 "P030LG5S2" "1" 22/06/16 31/12/49
 1 "" 3 "LG G5 Plata" 0 "P030LG5S2" "1" 22/06/16 31/12/49
@@ -5218,6 +5243,16 @@
 1 "" 3 "Samsung Galaxy Note 4 Blanco" 0 "P034NT4W2" "1" 24/09/14 31/12/49
 1 "" 4 "Samsung Galaxy Note 4 Blanco" 0 "P034NT4W2" "1" 24/09/14 31/12/49
 1 "" 5 "Samsung Galaxy Note 4 White" 0 "P034NT4W2" "1" 24/09/14 31/12/49
+1 "" 1 "Samsung Galaxy Note 7 Azul" 0 "P034NT7A2" "1" 11/08/16 31/12/49
+1 "" 2 "Samsung Galaxy Note 7 Azul" 0 "P034NT7A2" "1" 11/08/16 31/12/49
+1 "" 3 "Samsung Galaxy Note 7 Azul" 0 "P034NT7A2" "1" 11/08/16 31/12/49
+1 "" 4 "Samsung Galaxy Note 7 Azul" 0 "P034NT7A2" "1" 11/08/16 31/12/49
+1 "" 5 "Samsung Galaxy Note 7 Blue" 0 "P034NT7A2" "1" 11/08/16 31/12/49
+1 "" 1 "Samsung Galaxy Note 7 Negro" 0 "P034NT7N2" "1" 11/08/16 31/12/49
+1 "" 2 "Samsung Galaxy Note 7 Negro" 0 "P034NT7N2" "1" 11/08/16 31/12/49
+1 "" 3 "Samsung Galaxy Note 7 Negro" 0 "P034NT7N2" "1" 11/08/16 31/12/49
+1 "" 4 "Samsung Galaxy Note 7 Negro" 0 "P034NT7N2" "1" 11/08/16 31/12/49
+1 "" 5 "Samsung Galaxy Note 7 Black" 0 "P034NT7N2" "1" 11/08/16 31/12/49
 1 "" 1 "Samsung Galaxy Tab" 0 "P034P01B2" "1" 29/11/10 31/12/49
 1 "" 2 "Samsung Galaxy Tab" 0 "P034P01B2" "1" 29/11/10 31/12/49
 1 "" 3 "Samsung Galaxy Tab" 0 "P034P01B2" "1" 29/11/10 31/12/49
@@ -7083,6 +7118,16 @@
 1 "" 3 "BQ Aquaris X5 Blanco" 0 "P088AX5W2" "1" 19/11/15 31/12/49
 1 "" 4 "BQ Aquaris X5 Blanco" 0 "P088AX5W2" "1" 19/11/15 31/12/49
 1 "" 5 "BQ Aquaris X5 White" 0 "P088AX5W2" "1" 19/11/15 31/12/49
+1 "" 1 "BQ Aquaris X5 Plus Negro - gris" 0 "P088X5PN2" "1" 11/08/16 31/12/49
+1 "" 2 "Bq Aquaris X5 Plus Negro - gris" 0 "P088X5PN2" "1" 11/08/16 31/12/49
+1 "" 3 "Bq Aquaris X5 Plus Negro - gris" 0 "P088X5PN2" "1" 11/08/16 31/12/49
+1 "" 4 "Bq Aquaris X5 Plus Negro - gris" 0 "P088X5PN2" "1" 11/08/16 31/12/49
+1 "" 5 "BQ Aquaris X5 Plus Black - grey" 0 "P088X5PN2" "1" 11/08/16 31/12/49
+1 "" 1 "BQ Aquaris X5 Plus Blanco - oro rosa" 0 "P088X5PW2" "1" 11/08/16 31/12/49
+1 "" 2 "Bq Aquaris X5 Plus Blanco - oro rosa" 0 "P088X5PW2" "1" 11/08/16 31/12/49
+1 "" 3 "Bq Aquaris X5 Plus Blanco - oro rosa" 0 "P088X5PW2" "1" 11/08/16 31/12/49
+1 "" 4 "Bq Aquaris X5 Plus Blanco - oro rosa" 0 "P088X5PW2" "1" 11/08/16 31/12/49
+1 "" 5 "BQ Aquaris X5 Plus White - rose gold" 0 "P088X5PW2" "1" 11/08/16 31/12/49
 1 "" 1 "Hansel PT100 Negro" 0 "P092HPTN1" "1" 27/11/13 31/12/49
 1 "" 2 "Hansel PT100 Negro" 0 "P092HPTN1" "1" 27/11/13 31/12/49
 1 "" 3 "Hansel PT100 Negro" 0 "P092HPTN1" "1" 27/11/13 31/12/49
@@ -8234,11 +8279,11 @@
 1 "" 3 "Telefono pruebas 4" 0 "SUMI3" "1" 30/06/16 31/12/49
 1 "" 4 "Telefono pruebas 4" 0 "SUMI3" "1" 30/06/16 31/12/49
 1 "" 5 "Telefono pruebas 4" 0 "SUMI3" "1" 30/06/16 31/12/49
-1 "" 1 "Telefono pruebas 1" 0 "SUMIDERO" "1" 31/01/12 31/12/49
+1 "" 1 "Telefono pruebas" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 2 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 3 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 4 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
-1 "" 5 "Telefono pruebas 1" 0 "SUMIDERO" "1" 31/01/12 31/12/49
+1 "" 5 "Telefono pruebas" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 1 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
 1 "" 2 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
 1 "" 3 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
