@@ -4,12 +4,12 @@ TRIGGER PROCEDURE FOR REPLICATION-WRITE OF CliType OLD BUFFER oldCliType.
 {tmsconst.i}
 
 DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
+DEFINE VARIABLE iDumpTotMin  AS INTEGER NO-UNDO.
 
 BUFFER-COMPARE CliType TO oldCliType SAVE RESULT IN llSameValues.
 
 IF NOT llSameValues OR NEW(CliType) THEN
 DO:
-
    FIND FIRST DumpFile NO-LOCK WHERE
               DumpFile.Brand    EQ gcBrand AND
               DumpFile.DumpName EQ {&DUMP_CLITYPE_TRACK} NO-ERROR.
@@ -19,7 +19,14 @@ DO:
                  DFTimeTable.DumpId = DumpFile.DumpId NO-WAIT NO-ERROR.
 
       IF AVAIL DFTimeTable THEN
-         ASSIGN DFTimeTable.DumpTime = STRING(TIME + 7200, "HH:MM").
+      DO:
+          ASSIGN iDumpTotMin = INT(ENTRY(1,DFTimeTable.DumpTime,":")) * 60
+                             + INT(ENTRY(2,DFTimeTable.DumpTime,":")).
+
+          IF INT(TIME / 60) > iDumpTotMin THEN
+             ASSIGN DFTimeTable.DumpTime = STRING(TIME + 7200, "HH:MM").
+            
+      END.
 END.         
 
 
