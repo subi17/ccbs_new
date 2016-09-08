@@ -13,6 +13,7 @@
  
  * @subscription seq;int;mandatory;subscription ID
                  description;string;mandatory;MSISDN Number
+                 fixed_number;string;optional;Fixed Line Number
                  status;int;mandatory;subscription status
                  subscription_type_id;string;mandatory;subscription type (e.g. CONT2)
                  data_bundle_id;string;mandatory;data bundle id
@@ -70,7 +71,7 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    END.
    /* YPR-4810 dummy code that returns only fixed number when search number starts with 9 */
    IF mobsub.cli EQ "605888489" THEN DO:
-      add_string(sub_struct, "fixed_number", "912345678"). /*Mobsub.fixednumber*/
+      add_string(sub_struct, "fixed_number", "912345678"). /*Mobsub.fixednumber WHEN Mobsub.fixednumber <> "?" */
       add_int(sub_struct   , "status"     , 16). /* mobsub.msstatus */
    END.
    ELSE DO:

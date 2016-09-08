@@ -123,7 +123,7 @@ IF AVAILABLE Segmentation THEN ASSIGN
 resp_struct = add_struct(response_toplevel_id, "").
 
 add_string(resp_struct, "cli", mobsub.cli).
-add_string(resp_struct, "fixed_number", "9" + SUBSTRING(mobsub.cli,1,8)). /*TODO mobsub.fixednumber*/
+add_string(resp_struct, "fixed_number", "9" + SUBSTRING(mobsub.cli,1,8)). /*TODO Mobsub.fixednumber WHEN Mobsub.fixednumber <> "?" */
 add_int(resp_struct, "msstatus", mobsub.MsStatus).
 add_string(resp_struct, "barring_code", (IF mobsub.MsStatus EQ 8 
                                          THEN mobsub.barrcode
