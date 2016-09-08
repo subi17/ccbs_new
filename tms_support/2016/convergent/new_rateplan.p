@@ -1,4 +1,4 @@
-DEF VAR ldafrom AS DATE INIT 09/01/16.
+DEF VAR ldafrom AS DATE INIT 09/07/16.
 
 /*FIND FIRST RatePlan WHERE rateplan.rateplan EQ "CONTRATOFUS".
 DISP RatePlan.

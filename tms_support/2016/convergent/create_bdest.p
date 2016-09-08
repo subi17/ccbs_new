@@ -97,9 +97,12 @@ create_tmritem("CONTFH45_50_VOICE_IN,CONTFH45_50",34).
 create_tmritem("CONTFH55_50_VOICE_IN,CONTFH55_50",34).
 create_tmritem("CONTFH55_300_VOICE_IN,CONTFH55_300",34).
 create_tmritem("CONTFH65_300_VOICE_IN,CONTFH65_300",34).
-create_tmritem("CONTS2GB_VOICE_IN,CONTDSL10",34).
-create_tmritem("CONTS10GB_VOICE_IN,CONTDSL15",34).
-
+create_tmritem("CONTS2GB_VOICE_IN,CONTDSL45",34).
+create_tmritem("CONTS2GB_VOICE_IN,CONTFH45_50",34).
+create_tmritem("CONTS2GB_VOICE_IN,CONTFH55_300",34).
+create_tmritem("CONTS10GB_VOICE_IN,CONTDSL55",34).
+create_tmritem("CONTS10GB_VOICE_IN,CONTFH55_50",34).
+create_tmritem("CONTS10GB_VOICE_IN,CONTFH65_300",34).
 
 CREATE bitemgroup.
 ASSIGN bitemgroup.bigname = "Convergent Monthly fee"
