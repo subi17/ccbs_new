@@ -49,7 +49,7 @@ FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
                     lcCONTSContracts = fCParamC("CONTS_CONTRACTS")
                     lcCONTSFContracts = fCParamC("CONTSF_CONTRACTS").
 
-             /* Special conversion for BTC with upgrade upsell */ 
+             /* Special conversion for BTC with upgrade upsell */
              IF INDEX(icSMSText,"#NEW_BUNDLE_CAPACITY") > 0 THEN DO:
                 FIND FIRST ServiceLimit WHERE
                            ServiceLimit.GroupCode = MsRequest.ReqCParam2 AND
