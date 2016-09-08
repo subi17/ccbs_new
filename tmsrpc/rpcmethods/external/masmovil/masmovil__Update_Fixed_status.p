@@ -10,7 +10,7 @@ DEF VAR lcTopStruct AS CHAR NO-UNDO.
 DEF VAR lcNotificationID AS CHAR NO-UNDO.
 DEF VAR lcNotificationTime AS DATETIME NO-UNDO.
 DEF VAR lcNotificationType AS CHAR NO-UNDO.
-DEF VAR liOrderId AS INT NO-UNDO.
+DEF VAR lcOrderId AS CHAR NO-UNDO.
 DEF VAR lcNotificationStatus AS CHAR NO-UNDO. /*struct*/
 
 top_struct = get_struct(param_toplevel_id, "0").
@@ -22,7 +22,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 lcNotificationID = get_string(lcTopStruct,"notificationID").
 lcNotificationTime = get_date(lcTopStruct,"notificationtime").
 lcNotificationType = get_string(lcTopStruct,"notificationType").
-liOrderId = get_int(lcTopStruct,"orderID").
+lcOrderId = get_string(lcTopStruct,"orderID").
 lcNotificationStatus = get_struct(lcTopStruct,"Status").
 
 add_boolean(response_toplevel_id,?,TRUE).
