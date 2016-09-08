@@ -46,12 +46,12 @@ FUNCTION fGetBDestCount RETURNS INT (INPUT iiMsSeq       AS INT,
       icBundleId EQ "FREE100MINUTES" THEN liDialType = 4.
    ELSE liDialType = 0.
 
-   /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
+   /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
    FOR FIRST bServiceLimit NO-LOCK WHERE
              bServiceLimit.GroupCode = icBundleId AND
              bServiceLimit.DialType  = liDialType AND
-             bServiceLimit.ValidFrom <= TODAY     AND
-             bServiceLimit.ValidTo   >= TODAY,
+             bServiceLimit.ValidFrom <= idActDate AND
+             bServiceLimit.ValidTo   >= idActDate,
        FIRST bServiceLCounter WHERE
              bServiceLCounter.MsSeq  = iiMsSeq AND
              bServiceLCounter.SLSeq  = bServiceLimit.SlSeq AND

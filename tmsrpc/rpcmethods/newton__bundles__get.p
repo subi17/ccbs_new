@@ -103,7 +103,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    ELSE ldeFee = 0.
 
    IF LOOKUP(DayCampaign.DCType,"1,4,6,8") > 0 THEN DO:
-      /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
+      /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
       FOR EACH ServiceLimit WHERE
                ServiceLimit.GroupCode = DayCampaign.DCEvent AND
                ServiceLimit.ValidFrom <= TODAY              AND

@@ -225,11 +225,11 @@ PROCEDURE pCollectSubscription:
    DEF VAR ldaDate       AS DATE NO-UNDO.
    DEF VAR liTime        AS INT  NO-UNDO.
    
-   /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
+   /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
    FOR FIRST ServiceLimit NO-LOCK WHERE 
              ServiceLimit.GroupCode = icDCEvent AND
-             ServiceLimit.ValidFrom <= TODAY    AND
-             ServiceLimit.ValidTo   >= TODAY,
+             ServiceLimit.ValidFrom <= idaFromDate AND
+             ServiceLimit.ValidTo   >= idaToDate,
       /* packages that were activated (and not terminated) on this period */
        FIRST MServiceLimit NO-LOCK WHERE
              MServiceLimit.MsSeq = iiMsSeq AND

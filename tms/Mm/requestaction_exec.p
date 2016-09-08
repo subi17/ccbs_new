@@ -221,11 +221,11 @@ PROCEDURE pPeriodicalContract:
                
          llDo = FALSE.
               
-         /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
+         /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
          FOR EACH bServiceLimit NO-LOCK WHERE
                   bServiceLimit.GroupCode = ttAction.ActionKey AND
-                  bServiceLimit.ValidFrom <= TODAY             AND
-                  bServiceLimit.ValidTo   >= TODAY,
+                  bServiceLimit.ValidFrom <= ldaReqDate        AND
+                  bServiceLimit.ValidTo   >= ldaReqDate,
             FIRST bMServiceLimit NO-LOCK WHERE
                   bMServiceLimit.MsSeq    = liMsSeq AND
                   bMServiceLimit.DialType = bServiceLimit.DialType AND
@@ -311,11 +311,11 @@ PROCEDURE pPeriodicalContract:
                
          llDo = FALSE.
                
-         /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
+         /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
          FOR EACH bServiceLimit NO-LOCK WHERE
                   bServiceLimit.GroupCode = ttAction.ActionKey AND
-                  bServiceLimit.ValidFrom <= TODAY             AND
-                  bServiceLimit.ValidTo   >= TODAY,
+                  bServiceLimit.ValidFrom <= ldaTermDate       AND
+                  bServiceLimit.ValidTo   >= ldaTermDate,
             FIRST bMServiceLimit NO-LOCK WHERE
                   bMServiceLimit.MsSeq    = liMsSeq AND
                   bMServiceLimit.DialType = bServiceLimit.DialType AND
