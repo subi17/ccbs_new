@@ -4,12 +4,31 @@ FUNCTION faddTMSParam RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
    IF iiUpdateMode NE 0 THEN DO:
       FOR EACH TMSParam WHERE LOOKUP(icBaseDCEvent,
                                        tmsParam.charval) > 0:
+         IF LOOKUP(icDCEvent, tmsParam.charval) > 0 THEN NEXT.
          tmsParam.charval = tmsParam.charval + "," +
                                         icDCEvent.
       END.
    END.
    RETURN TRUE.
 END FUNCTION.
+
+FIND FIRST TMSParam NO-LOCK WHERE
+           TMSParam.Brand EQ "1" AND
+           TMSParam.ParamGroup EQ "Convergent" AND
+           TMSParam.ParamCode EQ "AllConvergentTariffs" NO-ERROR.
+IF AVAIL TMSParam THEN 
+   message TMSParam.ParamCode + " already found" VIEW-AS ALERT-BOX.
+ELSE DO:
+   CREATE TMSParam.
+       
+   ASSIGN TMSParam.Brand = "1" 
+          TMSParam.ParamGroup = "Convergent"
+          TMSParam.ParamCode = "AllConvergentTariffs" 
+          TMSParam.ParamName = "All Convergent Tariffs"
+          TMSParam.CharVal = "CONTDSL45,CONTDSL55,CONTFH45_50,CONTFH55_50,CONTFH55_300,CONTFH65_300"
+          TMSParam.ParamType = "C".
+
+END.
 
 /* add same as CONT24 
 ALL_POSTPAID_CONTRACTS       ,CONTS2GB,CONTS8GB
@@ -20,5 +39,5 @@ POSTPAID_DATA_CONTRACTS     ,CONTS2GB,CONTS8GB
 POSTPAID_VOICE_TARIFFS      ,CONTS2GB,CONTS8GB
 
 */
-faddTMSParam("CONT24", "CONTS2GB", 1).
-faddTMSParam("CONT24", "CONTS10GB", 1).
+faddTMSParam("CONT24", "CONTS2GB", 0).
+faddTMSParam("CONT24", "CONTS10GB", 0).
