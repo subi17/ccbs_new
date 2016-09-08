@@ -50,13 +50,10 @@ FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
                     lcCONTSFContracts = fCParamC("CONTSF_CONTRACTS").
 
              /* Special conversion for BTC with upgrade upsell */ 
-             /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
              IF INDEX(icSMSText,"#NEW_BUNDLE_CAPACITY") > 0 THEN DO:
                 FIND FIRST ServiceLimit WHERE
                            ServiceLimit.GroupCode = MsRequest.ReqCParam2 AND
-                           ServiceLimit.DialType  = {&DIAL_TYPE_GPRS}    AND
-                           ServiceLimit.ValidFrom <= TODAY               AND
-                           ServiceLimit.ValidTo   >= TODAY
+                           ServiceLimit.DialType  = {&DIAL_TYPE_GPRS}
                      NO-LOCK NO-ERROR.
                 IF AVAILABLE ServiceLimit THEN DO:
                    IF ServiceLimit.InclAmt < 1024 THEN
