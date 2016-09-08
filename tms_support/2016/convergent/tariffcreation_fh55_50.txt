@@ -27,6 +27,6 @@ DSS2PrimaryLine;No
 NativeVoIPCompatible;No
 OnlyVOICE;No
 MonthlyFeeBillCode;CONTFH55_50MF
-TariffName;La Infinita 10 GB
+TariffName;La Infinita 10 GB  + FIBER 50M
 BonoSupport;YES
 BundleUpsell;DATA200_UPSELL

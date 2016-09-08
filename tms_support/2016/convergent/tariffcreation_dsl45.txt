@@ -27,6 +27,6 @@ DSS2PrimaryLine;No
 NativeVoIPCompatible;No
 OnlyVOICE;No
 MonthlyFeeBillCode;CONTDSL45MF
-TariffName;La Infinita 2 GB
+TariffName;La Infinita 2 GB + DSL
 BonoSupport;YES
 BundleUpsell;DATA200_UPSELL
