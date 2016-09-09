@@ -315,7 +315,7 @@ add_string(gcSubscription,"data_bundle_id",lcDataBundle).
 
 FIND FIRST MobSub WHERE
            MobSub.MsSeq EQ Order.MsSeq NO-LOCK NO-ERROR.
-IF AVAIL MobSub THEN add_string(gcSubscription,"msstatus",MobSub.MsStatus).
+IF AVAIL MobSub THEN add_int(gcSubscription,"msstatus",MobSub.MsStatus).
 
 /* mnp data */
 
