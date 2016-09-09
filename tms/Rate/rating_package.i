@@ -205,8 +205,16 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
          ELSE IF (lcSLGroup BEGINS "CONTS" OR
                   lcSLGroup EQ "CONT24" OR
                   lcSLGroup EQ "CONT23") AND
-            (liDialtype EQ 4 OR liDialtype EQ 12)
-            THEN liDialtype = 0.
+            (liDialtype EQ 4 OR liDialtype EQ 12) AND
+         THEN DO:
+            IF liDialType EQ 4 AND 
+               NOT CAN-FIND(FIRST ServiceLimit WHERE
+                                  ServiceLimit.GroupCode = lcSLGroup AND
+                                  ServiceLimit.SLCode    = STRING(lcSLGroup + "_MIN") AND
+                                  ServiceLimit.ValidFrom <= TODAY    AND
+                                  ServiceLimit.ValidTo   >= TODAY)
+               THEN liDialtype = 0.
+         END.
 
          llServLimit = fCheckTarget(INPUT  MSOwner.MsSeq,
                                     INPUT  MSOwner.Custnum,
