@@ -118,6 +118,11 @@ IF pcUserLevel EQ "Operator" THEN
    cCheckMsBarringKatun = "NewtonAd". 
 ELSE 
    cCheckMsBarringKatun = "NewtonCC". 
+/*YPR-4773*/
+/*Activation is not allowed if fixed line provisioning is pending*/
+IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN  
+   RETURN appl_err("Fixed line provisioning is not complete").
+
 
 DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    pcStruct = get_struct(pcInputArray, STRING(liInputCounter - 1)).

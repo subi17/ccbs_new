@@ -131,6 +131,12 @@ CASE pcServiceStatus:
    OTHERWISE RETURN appl_err("Invalid service status").
 END.
 
+/*YPR-4773*/
+/*(De)Activation is not allowed if fixed line provisioning is pending*/
+IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
+   RETURN appl_err("Fixed line provisioning is not complete").
+
+
 /* Check ongoing service requests */
 IF CAN-FIND(FIRST MsRequest WHERE
                   MsRequest.MsSeq      = MobSub.MsSeq AND

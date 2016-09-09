@@ -697,6 +697,12 @@ REPEAT WITH FRAME sel:
               UNDO, LEAVE.
            END.
 
+           /*YPR-4773*/
+           IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN DO:
+              MESSAGE "Fixed line provisioning is not complete" 
+                 VIEW-AS ALERT-BOX.
+              UNDO, LEAVE.
+           END.      
            /* IF  User Wanted TO Cancel this Change TRANSACTION */
            IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
            KEYLABEL(lastkey) = "F4" THEN UNDO, LEAVE.

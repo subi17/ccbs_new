@@ -5,6 +5,7 @@
 {barrfunc.i}
 {mnpoutchk.i}
 {orderchk.i}
+{fixedlinefunc.i}
 
 &SCOPED-DEFINE ACC_OLB_BARRINGS_NOT_ALLOWED "Y_HURG"
    
@@ -83,7 +84,14 @@ PROCEDURE pCheckSubscriptionForACC:
       ocMessage = "Current customer is not a preactivated one".
       RETURN "ERROR".
    END.
-   
+
+   /*YPR-4772*/
+   /*acc is not allowed for convergent tariffs.*/
+   IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:       
+       ocMessage = "Not alloved for fixed line tariffs".
+       RETURN "ERROR".
+   END.
+
    IF LOOKUP(STRING(MobSub.MsStat),"4,8") = 0 THEN DO:
       ocMessage = "Subscription status is not valid for owner change".
       RETURN "ERROR".
@@ -170,6 +178,14 @@ PROCEDURE pCheckTargetCustomerForACC:
          ocMessage = "Target customer has subscription with active operator or debt barring".
          RETURN "ERROR".
       END.
+      /*YPR-4772*/
+      /*acc is not allowed for convergent tariffs.*/
+      IF fIsConvergenceTariff(bACCMobSub.CLIType) THEN DO:       
+          ocMessage = "Not alloved for fixed line tariffs".
+          RETURN "ERROR".
+      END.
+
+     
    END.
 
    FIND FIRST bACCNewCust WHERE
