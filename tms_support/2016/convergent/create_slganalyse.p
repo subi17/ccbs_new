@@ -16,6 +16,11 @@ FUNCTION fcreateSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
             bSLGAnalyse.brand EQ "1" AND
             bSLGAnalyse.clitype EQ icBaseDCEvent AND
             bSLGAnalyse.validto > TODAY.
+      
+      IF bSLGAnalyse.servicelimitgroup BEGINS "DSS" THEN NEXT.
+      ELSE IF bSLGAnalyse.servicelimitgroup EQ "DATA7" THEN NEXT.
+
+
       CREATE ttSLGAnalyse.
       BUFFER-COPY bSLGAnalyse TO ttSLGAnalyse.
       ttSLGAnalyse.ValidFrom = ldaFrom. 
@@ -41,14 +46,29 @@ fcreateSLGAnalyse("CONT24","CONTFH65_300",ldaFrom,"CONTFH65_300",liMode).
 FOR EACH CliType WHERE 
          Clitype.brand EQ "1" AND
          Clitype.clitype BEGINS "CONTDSL":
-   Clitype.fixedlinetype = 1.
-
+   ASSIGN
+   Clitype.fixedlinetype = 1
+   Clitype.downloadspeed = "20"
+   Clitype.uploadspeed = "20".
 END.        
 
 FOR EACH CliType WHERE
          Clitype.brand EQ "1" AND
-         Clitype.clitype BEGINS "CONTFH":
-   Clitype.fixedlinetype = 2.
+         Clitype.clitype MATCHES "CONTFH*50":
+   ASSIGN
+   Clitype.fixedlinetype = 2
+   Clitype.downloadspeed = "50"
+   Clitype.uploadspeed = "5".
+
+END.
+
+ EACH CliType WHERE
+         Clitype.brand EQ "1" AND
+         Clitype.clitype MATCHES "CONTFH*300":
+   ASSIGN
+   Clitype.fixedlinetype = 2
+   Clitype.downloadspeed = "300"
+   Clitype.uploadspeed = "300".
 
 END.
 

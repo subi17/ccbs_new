@@ -27,7 +27,7 @@ FUNCTION create_feemodel RETURNS log (INPUT lcmodel AS CHAR,
          fmitem.billmethod = FALSE
          fmitem.billtype = "MF"
          fmitem.brand = "1"
-         fmitem.brokenrental = 0
+         fmitem.brokenrental = 1
          fmitem.feemodel = lcmodel 
          fmitem.todate = 12/31/49
          fmitem.firstmonthbr = 0
