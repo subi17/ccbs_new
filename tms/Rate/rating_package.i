@@ -205,7 +205,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
          ELSE IF (lcSLGroup BEGINS "CONTS" OR
                   lcSLGroup EQ "CONT24" OR
                   lcSLGroup EQ "CONT23") AND
-            (liDialtype EQ 4 OR liDialtype EQ 12) AND
+            (liDialtype EQ 4 OR liDialtype EQ 12)
          THEN DO:
             IF liDialType EQ 4 AND 
                NOT CAN-FIND(FIRST ServiceLimit WHERE
