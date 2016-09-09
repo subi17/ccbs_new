@@ -32,6 +32,7 @@
                  offer_id;string;offer id 
                  logistics_file;string;logistics file name (Dextra file) 
                  data_bundle_id;string;data bundle id for subscription_type
+                 msstatus;int;mobile line status
  * @mnp status;string;mnp status (AENV,ASOL,...)
       tms_request_id;string;TMS request id
       mnp_request_id;string;MNP request id
@@ -76,6 +77,9 @@
                    country;string;
  * @fusion_data  fixed_number_type;string;NEW/MNP
                  fixed_mnp_old_operator;string;
+                 fixed_line_mnp_old_operator_name;string;
+                 fixed_line_mnp_old_operator_code;string;
+                 fixed_line_serial_number;string;
                  fixed_mnp_time_of_change;string;
                  fixed_line_number;string;
                  fusion_order_status;string;
@@ -102,6 +106,8 @@
                     additional_address;string;
                     region;string;
                     profession;string;
+                    email;string;
+                    gescal;string;
   @billing_address address;string;
                     city;string;
                     zip;string;
@@ -307,6 +313,10 @@ IF LOOKUP(Order.CliType,lcBundleCLITypes) > 0 THEN
 
 add_string(gcSubscription,"data_bundle_id",lcDataBundle).
 
+FIND FIRST MobSub WHERE
+           MobSub.MsSeq EQ Order.MsSeq NO-LOCK NO-ERROR.
+IF AVAIL MobSub THEN add_string(gcSubscription,"msstatus",MobSub.MsStatus).
+
 /* mnp data */
 
 gcArrayMnp  = add_array(top_struct, "mnp").
@@ -493,6 +503,9 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
       add_string(lcFusionStruct, "fixed_number_type",OrderFusion.FixedNumberType).
       add_string(lcFusionStruct, "fixed_line_number",OrderFusion.FixedNumber).
       add_string(lcFusionStruct, "fixed_mnp_old_operator",OrderFusion.FixedCurrOper).
+      add_string(lcFusionStruct, "fixed_line_mnp_old_operator_name",OrderFusion.FixedCurrOper).
+      add_string(lcFusionStruct, "fixed_line_mnp_old_operator_code",OrderFusion.FixedCurrOperCode).
+      add_string(lcFusionStruct, "fixed_line_serial_number",OrderFusion.SerialNumber).
       add_string(lcFusionStruct, "fixed_mnp_time_of_change",OrderFusion.FixedMNPTime).
       add_string(lcFusionStruct, "fusion_order_status",OrderFusion.FusionStatus).
       add_string(lcFusionStruct, "fixed_line_order_id",OrderFusion.FixedOrderId).
@@ -527,6 +540,8 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
          add_string(lcFixedInstallAddress, "street_number", OrderCustomer.BuildingNum).
          add_string(lcFixedInstallAddress, "region", OrderCustomer.Region).
          add_string(lcFixedInstallAddress, "profession", OrderCustomer.Profession).
+         add_string(lcFixedInstallAddress, "email", OrderCustomer.Email).
+         add_string(lcFixedInstallAddress, "gescal", OrderCustomer.Gescal).
       END.
       
       FIND FIRST OrderCustomer WHERE 
