@@ -366,18 +366,18 @@ FUNCTION fMailNotify RETURN CHARACTER
    ASSIGN lcAddrConfDirNotify = icAddrConfDir + "emailinvoicenotify.email".
 
    GetRecipients(lcAddrConfDirNotify).
-
-   ASSIGN icMailSubj  = icType + " Invoice " + icMailSubj.
+   
+   ASSIGN xMailSubj  = icType + " Invoice " + icMailSubj.
 
    ASSIGN lcLatestEmailFileNotify = icEmailFile + "_" + STRING(iiCustNum) +
                                     "_Notify_" + STRING(TODAY,"999999") + "_" +
                                     STRING(TIME) + ".html".
 
    OUTPUT STREAM sMailNotify TO VALUE(lcLatestEmailFileNotify).
-   PUT STREAM sMailNotify UNFORMATTED icMailSubj SKIP(1).
+   PUT STREAM sMailNotify UNFORMATTED xMailSubj SKIP(1).
    PUT STREAM sMailNotify UNFORMATTED icEmailReplacedText SKIP.
    OUTPUT STREAM sMailNotify CLOSE.
-
+   
    SendMaileInvoice(icEmailReplacedText,
                     "",
                     "").
@@ -386,5 +386,5 @@ FUNCTION fMailNotify RETURN CHARACTER
       fTransDir(lcLatestEmailFileNotify,
                 ".html",
                 icTransDir).
-
+   ASSIGN xMailSubj = icMailSubj.
 END FUNCTION.
