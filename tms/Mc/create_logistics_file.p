@@ -53,6 +53,7 @@ DEFINE VARIABLE iLargestId         AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTarOption        AS CHARACTER NO-UNDO.
 DEF VAR ldaCont15PromoFrom         AS DATE NO-UNDO. 
 DEF VAR ldaCont15PromoEnd          AS DATE NO-UNDO. 
+DEFINE VARIABLE ocResult           AS CHAR      NO-UNDO. 
 
 DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
@@ -365,7 +366,7 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE llDextraInvoice           AS LOGICAL   NO-UNDO.
    DEFINE VARIABLE ldeCurrAmt                AS DEC NO-UNDO. 
    DEFINE VARIABLE ldtermdiscamt             AS DEC NO-UNDO. 
-   DEFINE VARIABLE lcTermDiscItem            AS CHAR NO-UNDO. 
+   DEFINE VARIABLE lcTermDiscItem            AS CHAR NO-UNDO.
 
    DEFINE BUFFER bufRow   FOR InvRow.
    DEFINE BUFFER bufItem  FOR BillItem.
@@ -1315,22 +1316,38 @@ END.
 RENEWAL_LOOP:
 FOR EACH Order NO-LOCK WHERE  
          Order.Brand = gcBrand AND
-         Order.StatusCode = "12" AND 
+         Order.StatusCode = "78" AND 
          Order.OrderType = 2:
          
     IF Order.OrderChannel BEGINS "renewal_pos" THEN NEXT RENEWAL_LOOP. 
     
+    ocResult = "".
+
     FIND MobSub WHERE 
          MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
     IF AVAIL MobSub THEN DO:
-       /* Do handling only after successful after sales request */ 
-       FIND FIRST MsRequest WHERE
-                  MsRequest.Brand = gcBrand AND
-                  MsRequest.ReqType = 46 AND
-                  MsRequest.CLI = Order.CLI AND
-                  MsRequest.ReqIParam1 = Order.OrderId AND
-                  MsRequest.ReqStatus = 2 NO-LOCK NO-ERROR.
-       IF NOT AVAIL MsRequest THEN NEXT RENEWAL_LOOP.
+
+      fAfterSalesRequest(
+         Order.MsSeq,
+         Order.OrderId,
+         katun,
+         fMakeTS(),
+         "7",
+         OUTPUT ocResult
+         ).
+       
+      IF ocResult > "" THEN DO:
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          "Order",
+                          STRING(Order.OrderID),
+                          0,
+                          "After Sales Request creation failed - LO",
+                          ocResult).
+         fSetOrderStatus(Order.OrderId,"4").
+
+         NEXT RENEWAL_LOOP.
+
+      END.
 
        lcICC = MobSub.ICC.
        IF Order.ICC > "" THEN lcICC = Order.ICC.
@@ -1351,8 +1368,8 @@ FOR EACH Order NO-LOCK WHERE
                 xOrder.SendToROI = 1.
  
              /* Call the fSetOrderStatus function to change the order status to Delivery and make the timestamp */
-             fSetOrderStatus(xOrder.OrderID,"6").
-             fMarkOrderStamp(xOrder.OrderID,"Delivery",0.0).
+             fSetOrderStatus(xOrder.OrderID,"12").
+             /* fMarkOrderStamp(xOrder.OrderID,"Delivery",0.0). */
              fMarkOrderStamp(xOrder.OrderID,"SendToLogistics",0.0). /* Timestamp for Logistics Operator Change Dextra->Netkia */
           END. /* IF fDelivSIM( SIM.ICC ) THEN DO: */  
        END. /* IF AVAILABLE SIM THEN DO: */
