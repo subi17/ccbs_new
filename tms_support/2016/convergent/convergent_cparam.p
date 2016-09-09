@@ -5,8 +5,9 @@ FUNCTION faddTMSParam RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
       FOR EACH TMSParam WHERE LOOKUP(icBaseDCEvent,
                                        tmsParam.charval) > 0:
          IF LOOKUP(icDCEvent, tmsParam.charval) > 0 THEN NEXT.
-         tmsParam.charval = tmsParam.charval + "," +
-                                        icDCEvent.
+         IF tmsParam.paramcode EQ "DATA_BUNDLE_BASED_CLITYPES" THEN NEXT.
+         
+         tmsParam.charval = tmsParam.charval + "," + icDCEvent.
       END.
    END.
    RETURN TRUE.
@@ -39,5 +40,12 @@ POSTPAID_DATA_CONTRACTS     ,CONTS2GB,CONTS10GB
 POSTPAID_VOICE_TARIFFS      ,CONTS2GB,CONTS10GB
 
 */
+
 faddTMSParam("CONT24", "CONTS2GB", 0).
 faddTMSParam("CONT24", "CONTS10GB", 0).
+
+FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ "DATA_BUNDLE_BASED_CLITYPES"
+   NO-ERROR.
+TMSParam.charval = tmsParam.charval + ",CONTDSL45,CONTDSL55,CONTFH45_50," +
+                   "CONTFH55_50,CONTFH55_300,CONTFH65_300".
+

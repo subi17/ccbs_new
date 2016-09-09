@@ -16,6 +16,11 @@ FUNCTION fcreateSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
             bSLGAnalyse.brand EQ "1" AND
             bSLGAnalyse.clitype EQ icBaseDCEvent AND
             bSLGAnalyse.validto > TODAY.
+      
+      IF bSLGAnalyse.servicelimitgroup BEGINS "DSS" THEN NEXT.
+      ELSE IF bSLGAnalyse.servicelimitgroup EQ "DATA7" THEN NEXT.
+
+
       CREATE ttSLGAnalyse.
       BUFFER-COPY bSLGAnalyse TO ttSLGAnalyse.
       ttSLGAnalyse.ValidFrom = ldaFrom. 

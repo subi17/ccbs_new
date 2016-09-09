@@ -47,3 +47,27 @@ create_mxitem("SubsTypeTo","CONTDSL55",liSeq).
 create_mxitem("SubsTypeTo","CONTFH55_50",liSeq).
 create_mxitem("SubsTypeTo","CONTFH65_300",liSeq).
 
+liSeq = create_matrix("PERCONTR", "Per.contract usage").
+create_mxitem("PerContract","CONTDSL45",liSeq).
+create_mxitem("SubsTypeTo","CONTDSL45",liSeq).
+
+liSeq = create_matrix("PERCONTR", "Per.contract usage").
+create_mxitem("PerContract","CONTDSL55",liSeq).
+create_mxitem("SubsTypeTo","CONTDSL55",liSeq).
+
+liSeq = create_matrix("PERCONTR", "Per.contract usage").
+create_mxitem("PerContract","CONTFH45_50",liSeq).
+create_mxitem("SubsTypeTo","CONTFH45_50",liSeq).
+
+liSeq = create_matrix("PERCONTR", "Per.contract usage").
+create_mxitem("PerContract","CONTFH55_50",liSeq).
+create_mxitem("SubsTypeTo","CONTFH55_50",liSeq).
+
+liSeq = create_matrix("PERCONTR", "Per.contract usage").
+create_mxitem("PerContract","CONTFH55_300",liSeq).
+create_mxitem("SubsTypeTo","CONTFH55_300",liSeq).
+
+liSeq = create_matrix("PERCONTR", "Per.contract usage").
+create_mxitem("PerContract","CONTFH65_300",liSeq).
+create_mxitem("SubsTypeTo","CONTFH65_300",liSeq).
+
