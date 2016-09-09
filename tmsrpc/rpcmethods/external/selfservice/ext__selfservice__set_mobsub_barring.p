@@ -81,6 +81,11 @@ FIND MobSub NO-LOCK WHERE
 IF NOT AVAILABLE MobSub THEN
   RETURN appl_err("Subscription not found").
 
+/*YPR-4774*/
+/*(De)Activation is not allowed if fixed line provisioning is pending*/
+IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
+   RETURN appl_err("Fixed line provisioning is not complete").
+
 FIND FIRST BarringConf NO-LOCK WHERE
            BarringConf.BarringCode EQ pcBCode NO-ERROR.
 IF NOT AVAIL BarringConf THEN DO:

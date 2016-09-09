@@ -32,6 +32,15 @@ FIND MobSub NO-LOCK WHERE
 
 IF NOT AVAIL MobSub THEN RETURN. 
 
+
+/*YPR-4774*/
+/*(De)Activation is not allowed if fixed line provisioning is pending*/
+/*This should be checked before coming to barring setting. 
+This is an additional checkpoint*/
+IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN DO:   
+   ocStatus = "Ongoing fixed line provisioning prevents setting".
+   RETURN.
+
 fSplitTS(idActStamp,
          OUTPUT ldtAction,
          OUTPUT liTime).

@@ -11,8 +11,8 @@
 &IF "{&fixedlinefunc}" NE "YES"
 &THEN
 &GLOBAL-DEFINE fixedlinefunc YES
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 /*Function returns Trie if a tariff can be defined as convergent tariff.
 NOTE: if tariff list is missing or reading fails FALSE is returned*/
