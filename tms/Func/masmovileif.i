@@ -8,12 +8,12 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{/apps/yoigo/tms/Syst/commali.i}
-{/apps/yoigo/tms/Func/cparam2.i}
-{/apps/yoigo/tms/Func/msreqfunc.i}
-{/apps/yoigo/tms/Syst/tmsconst.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/msreqfunc.i}
+{Syst/tmsconst.i}
 {xmlrpc/xmlrpc_client.i}
-{/apps/yoigo/tms/Func/forderstamp.i}
+{Func/forderstamp.i}
 
 
 /*Global variables for building masmovile data*/
@@ -27,8 +27,9 @@ FUNCTION fMasXMLGenerate_test RETURNS CHAR
    (icMethod AS CHAR):
    IF liTesting NE 0 THEN DO:
       xmlrpc_initialize(FALSE).
-      OUTPUT STREAM sOut TO VALUE("temp.txt") APPEND.
-      PUT STREAM sOut UNFORMATTED STRING(fMakeTS()) SKIP.
+      OUTPUT STREAM sOut TO VALUE("masmovile_xml_" + 
+      REPLACE(STRING(fmakets()), ".", "_") +
+      ".xml") APPEND.
       PUT STREAM sOut UNFORMATTED 
          string(serialize_rpc_call("masmovil." + icMethod)) SKIP. 
       PUT STREAM sOut "" SKIP.   
@@ -48,6 +49,20 @@ FUNCTION fInitMMConnection RETURNS CHAR
 END.
 
 
+FUNCTION fAddCharacteristic RETURNS CHAR
+   (icBase AS CHAR,
+    icParam AS CHAR,
+    icValue AS CHAR,
+    icOldValue AS CHAR):
+   DEF VAR lcCharacteristicStruct AS CHAR.
+
+   lcCharacteristicStruct = add_struct(icBase,
+                                       "Characteristic").
+   add_string(lcCharacteristicStruct, "name", icParam).
+   add_string(lcCharacteristicStruct, "value", icValue ).
+   add_string(lcCharacteristicStruct, "oldValue", icOldValue).
+   RETURN "".
+END.
 FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    (iiOrderId AS INT,
     OUTPUT ocResultCode AS CHAR,
@@ -59,7 +74,6 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF VAR lcOutputStruct AS CHAR NO-UNDO.
    DEF VAR lcServiceStruct AS CHAR NO-UNDO.
    DEF VAR lcCharacteristicsArray AS CHAR NO-UNDO.
-   DEF VAR lcCharacteristicStruct AS CHAR NO-UNDO.
    DEF VAR liResponseCode AS INT NO-UNDO.
    DEF VAR lcOrderType AS CHAR NO-UNDO.
    DEF VAR lcXMLStruct AS CHAR NO-UNDO. /*Input to TMS*/
@@ -146,9 +160,9 @@ END.
                              "Y" + STRING(bOrder.Orderid)).
    add_string(lcOrderStruct, "orderType", lcOrderType). 
    add_string(lcOrderStruct, "orderName", "ALTA").
-   add_string(lcOrderStruct, "sellchannel", "YOIGO"/*bOrder.orderchannel*/).
+   add_string(lcOrderStruct, "sellchannel", "YOIGO").
    add_string(lcOrderStruct, "selldate", STRING(ldaSellDate)). 
-   add_string(lcOrderStruct, "seller", /*bOrder.Salesman*/ "YOIGO"). 
+   add_string(lcOrderStruct, "seller", "YOIGO"). 
    add_string(lcOrderStruct, "createdBy", "YOIGO").
    add_string(lcOrderStruct, "creadate", STRING(ldaCreDate)). 
 
@@ -156,6 +170,7 @@ END.
    lcInstallationStruct = add_struct(lcOrderStruct,"Installation").
    lcContactStruct = add_struct(lcInstallationStruct,"Contact").
    add_string(lcContactStruct, "firstName", bOC.FirstName).
+   add_string(lcContactStruct, "middleName", "").
    add_string(lcContactStruct, "lastName", bOC.Surname1 + " " + bOC.Surname2).
    add_string(lcContactStruct, "documentNumber",bOC.CustID). 
    add_string(lcContactStruct, "documentType", bOC.CustIdType).
@@ -167,18 +182,16 @@ END.
    add_string(lcAddressStruct, "province",bOC.Region).
    add_string(lcAddressStruct, "town",bOC.PostOffice).
    add_string(lcAddressStruct, "street", bOC.Street).
+   add_string(lcAddressStruct, "streetType","").
    add_string(lcAddressStruct, "number", bOc.BuildingNum).
-/*   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).*/
+   add_string(lcAddressStruct, "bis_duplicate","").
+   add_string(lcAddressStruct, "block","").
+   add_string(lcAddressStruct, "door","").
+   add_string(lcAddressStruct, "letter","").
+   add_string(lcAddressStruct, "stair","").
+   add_string(lcAddressStruct, "floor","").
+   add_string(lcAddressStruct, "hand","").
+   add_string(lcAddressStruct, "Km","").
    add_string(lcAddressStruct, "zipCode",bOc.ZipCode).
 
    lcServiceArray = add_array(lcOrderStruct,"Services").
@@ -191,11 +204,36 @@ END.
 
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics").
-   lcCharacteristicStruct = add_struct(lcCharacteristicsArray, 
-                                        "Characteristic").
-   add_string(lcCharacteristicStruct, "name", "PHONE").
-   add_string(lcCharacteristicStruct, "value", "900900900" 
-                         /*order.fixednumber*/).
+
+   fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                      "phoneNumber",        /*param name*/
+                      "900900900",                /*param value*/
+                      "").                    /*old value*/
+   /*IF portability in THEN */ 
+      fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                         "donoroperator",        /*param name*/
+                         "Saunalahti",                /*param value*/
+                         "").                    /*old value*/
+   fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                      "portabilitytype",        /*param name*/
+                      "I",                /*param value*/
+                      "").                    /*old value*/
+ 
+   /*IF portability  THEN */ 
+      fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                         "phoneNumberTmp",        /*param name*/
+                         "900",                /*param value*/
+                         "").                    /*old value*/
+ 
+    fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                      "reselleroperator",        /*param name*/
+                      "Sonera",                /*param value*/
+                      "").                    /*old value*/
+    fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                      "receptooperator",        /*param name*/
+                      "0031",                /*param value*/
+                      "").                    /*old value*/
+ 
 
    /*Services entry - Line*/
    lcServiceStruct = add_struct(lcServiceArray, ""). 
@@ -205,10 +243,29 @@ END.
    
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics").
-   lcCharacteristicStruct = add_struct(lcCharacteristicsArray, 
-                                        "Characteristic").
-   add_string(lcCharacteristicStruct, "name", "gescal").
-   add_string(lcCharacteristicStruct, "value", "").
+   IF lcConnServiceId EQ "ADSL" THEN
+      fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                         "linkstate",        /*param name*/
+                         "O",      /*param value*/
+                         "").             /*old value*/
+   IF lcConnServiceId EQ "FTTH" THEN DO:
+      fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                         "UploadSpeed",        /*param name*/
+                         "100",      /*param value*/
+                         "").             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                         "DownloadSpeed",        /*param name*/
+                         "100",      /*param value*/
+                         "").             /*old value*/
+ 
+   END.
+
+   fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                      "gescal",        /*param name*/
+                      bOC.Gescal,      /*param value*/
+                      "").             /*old value*/
+
+
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
