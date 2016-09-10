@@ -7,6 +7,7 @@
            username;string;mandatory;user who made the request
            billing_permission;int;optional;billing permission status code
            permanent_contract_valid_to;date;optional;new end date for active periodical contract 
+           permanent_contract_type;string;optional;mobile or fixed line contract 
            sms_bundle;struct;set a new sms bundle
  * @sms_bundle current_amount;int;mandatory
                change;int;mandatory
@@ -24,11 +25,13 @@ DEF VAR lcStruct AS CHAR NO-UNDO.
 DEF VAR liIDCode AS INTEGER NO-UNDO.
 DEF VAR piBillingPermission AS INT NO-UNDO.
 DEF VAR pdaTermContractValidTo AS DATE NO-UNDO.
+DEF VAR pcTermContractType AS CHAR NO-UNDO.
 DEF VAR lcDCEvent AS CHAR NO-UNDO. 
 DEF VAR liReq AS INT NO-UNDO.
 DEF VAR lcInfo AS CHAR NO-UNDO.
 DEF VAR i AS INTEGER NO-UNDO. 
 DEF VAR ldaValidToOrig AS DATE NO-UNDO.
+DEF VAR lcDCType AS CHAR NO-UNDO.  /* TODO need new DayCampaign.DCType constant */
 
 DEF VAR pcSMSBundleStruct AS CHARACTER NO-UNDO. 
 DEF VAR liCurrValue AS INTEGER NO-UNDO. 
@@ -42,6 +45,7 @@ pcStruct = get_struct(param_toplevel_id, "1").
 lcstruct = validate_struct(pcStruct, "id_code,username!," + 
                                      "billing_permission," + 
                                      "permanent_contract_valid_to," +
+                                     "permanent_contract_type," +
                                      "sms_bundle").
 
 IF LOOKUP("id_code", lcStruct) GT 0 THEN 
@@ -54,6 +58,9 @@ IF LOOKUP("billing_permission", lcStruct) GT 0 THEN
 
 IF LOOKUP("permanent_contract_valid_to", lcStruct) GT 0 THEN
    pdaTermContractValidTo = get_date(pcStruct, "permanent_contract_valid_to").
+
+IF LOOKUP("permanent_contract_type", lcStruct) GT 0 THEN
+   pcTermContractType = get_string(pcStruct, "permanent_contract_type").
 
 IF LOOKUP("sms_bundle", lcStruct) GT 0 THEN
    pcSMSBundleStruct = get_struct(pcStruct, "sms_bundle").
@@ -192,6 +199,10 @@ END FUNCTION.
 /* update terminal periodical contract end date */
 IF LOOKUP("permanent_contract_valid_to", lcStruct) GT 0 THEN DO:
 
+/* TODO need new DayCampaign.DCType constant for fixed type */
+IF pcTermContractType EQ "fixed" THEN lcDCType = {&DCTYPE_DISCOUNT}.
+ELSE lcDCType = {&DCTYPE_DISCOUNT}.
+
    /* pick up DCEvent */
    i = 0.
    FOR EACH DCCLI WHERE
@@ -201,7 +212,7 @@ IF LOOKUP("permanent_contract_valid_to", lcStruct) GT 0 THEN DO:
       FIRST DayCampaign WHERE
             DayCampaign.Brand = gcBrand AND
             DayCampaign.DCEvent = DCCLI.DCEvent AND
-            DayCampaign.DCType = {&DCTYPE_DISCOUNT} NO-LOCK:
+            DayCampaign.DCType = lcDCType NO-LOCK:
       
       i = i + 1.
       IF i > 1 THEN RETURN appl_err("System error").
