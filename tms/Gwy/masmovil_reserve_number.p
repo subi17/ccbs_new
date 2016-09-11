@@ -1,9 +1,9 @@
-{commali.i}
 {tmsconst.i}
 {log.i}
 {date.i}
 {masmovileif.i}
 {orderfusion.i}
+{memo.i}
 
 DEF INPUT PARAM piMessageSeq AS INT NO-UNDO.
 
@@ -22,14 +22,14 @@ IF NOT AVAIL FusionMessage THEN
                               "FusionMessage not found").
 
 FIND FIRST Order NO-LOCK WHERE
-           Order.Brand = gcBrand AND
+           Order.Brand = Syst.Parameters:gcBrand AND
            Order.OrderId = FusionMessage.OrderID NO-ERROR.
 IF NOT AVAIL Order THEN
    RETURN fFusionMessageError(BUFFER FusionMessage,
                               "Order not found").
 
 FIND FIRST OrderFusion NO-LOCK WHERE
-           OrderFusion.Brand = gcBrand AND
+           OrderFusion.Brand = Order.Brand AND
            OrderFusion.OrderID = FusionMessage.OrderID NO-ERROR.
 IF NOT AVAIL OrderFusion THEN
    RETURN fFusionMessageError(BUFFER FusionMessage,
@@ -49,7 +49,7 @@ IF OrderFusion.FixedNumber > "" THEN
                              "FixedNumber already assigned").
 
 FIND FIRST OrderCustomer NO-LOCK WHERE
-           OrderCustomer.Brand = gcBrand AND
+           OrderCustomer.Brand = Order.Brand AND
            OrderCustomer.OrderID = OrderFusion.OrderID AND
            OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} 
    NO-ERROR.
@@ -111,12 +111,13 @@ ELSE DO:
             OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR}
             OrderFusion.AdditionalInfo = lcErrorDesc.
 
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "Order",
-                    STRING(Order.OrderId),
-                    0,
-                    "Masmovil fixed number reservation failed",
-                    lcErrorDesc).
+         fCreateMemo("Order",
+                     STRING(Order.OrderId),
+                     0,
+                     "Masmovil fixed number reservation failed",
+                     lcErrorDesc,
+                     "",
+                     "TMS").
 
          RETURN "".
       END.

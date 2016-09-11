@@ -8,9 +8,6 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{Syst/commali.i}
-{Func/cparam2.i}
-{Func/msreqfunc.i}
 {Syst/tmsconst.i}
 {xmlrpc/xmlrpc_client.i}
 {Func/forderstamp.i}
@@ -43,7 +40,7 @@ END.
 
 FUNCTION fInitMMConnection RETURNS CHAR
    ():
-   lcConURL = fCParam("URL","urlMasmovil").
+   lcConURL = Syst.Parameters:getc("urlMasmovil","URL").
    IF lcConURL = ? OR lcConURL = "" THEN 
       RETURN "ERROR in connection settings".
    initialize(lcConURL, 15).
@@ -94,20 +91,20 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF BUFFER bOC FOR OrderCustomer.
 
    FIND FIRST bOrder NO-LOCK where 
-              bOrder.Brand EQ gcBrand AND
+              bOrder.Brand EQ Syst.Parameters:gcBrand AND
               bOrder.OrderId EQ iiOrderid NO-ERROR.
    IF NOT AVAIL bOrder THEN 
       RETURN "Error: Order not found " + STRING(iiOrderID) .
 
   /*Use delivery customer information if it is avbailable*/
    FIND FIRST bOC NO-LOCK where 
-              bOC.Brand EQ gcBrand AND
+              bOC.Brand EQ Syst.Parameters:gcBrand AND
               bOC.OrderId EQ iiOrderid AND 
               bOC.RowType EQ 4
               NO-ERROR.
    IF NOT AVAIL bOC THEN DO:
       FIND FIRST bOC NO-LOCK where 
-                 bOC.Brand EQ gcBrand AND
+                 bOC.Brand EQ Syst.Parameters:gcBrand AND
                  bOC.OrderId EQ iiOrderid AND 
                  bOc.RowType EQ 1 /*This customer should be available*/
                  NO-ERROR.
