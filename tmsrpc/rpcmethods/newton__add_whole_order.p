@@ -235,6 +235,7 @@ katun = "NewtonRPC".
 {edefine.i new}*/
 {order_data.i}
 {smsmessage.i}
+{orderfusion.i}
 
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.
@@ -2256,6 +2257,10 @@ IF plSendOffer AND NOT llROIClose THEN DO:
 
 END.
 
+IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND
+   AVAIL OrderFusion AND
+   OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_NEW} THEN
+   fCreateFusionReserveNumberMessage(Order.OrderID).
       
 /* YTS-2890 */
 fMakeCreateEvent((BUFFER Order:HANDLE),"",katun,"").

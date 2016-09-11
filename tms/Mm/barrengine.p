@@ -40,6 +40,7 @@ This is an additional checkpoint*/
 IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN DO:   
    ocStatus = "Ongoing fixed line provisioning prevents setting".
    RETURN.
+END.
 
 fSplitTS(idActStamp,
          OUTPUT ldtAction,

@@ -1,7 +1,7 @@
    
-CLASS Class.timedate:
+CLASS Class.timedate FINAL:
    
-   METHOD PUBLIC DECIMAL MakeTS():
+   METHOD PUBLIC STATIC DECIMAL MakeTS():
    
       DEFINE VARIABLE yy  AS INTEGER NO-UNDO.
       DEFINE VARIABLE mm  AS INTEGER NO-UNDO.
@@ -20,7 +20,7 @@ CLASS Class.timedate:
    
    END METHOD.
    
-   METHOD PUBLIC LOGICAL SplitTS
+   METHOD PUBLIC STATIC LOGICAL SplitTS
      (input ts as dec, output dte as date, output tme as int).
    
       DEFINE VARIABLE yy  AS INTEGER   NO-UNDO.
@@ -47,7 +47,7 @@ CLASS Class.timedate:
    
    END METHOD.
    
-   METHOD PUBLIC DECIMAL HMS2TS
+   METHOD PUBLIC STATIC DECIMAL HMS2TS
       (INPUT pDate AS DATE, INPUT pTime AS CHARACTER):
    
       DEFINE VARIABLE lRet AS DECIMAL NO-UNDO.
@@ -67,7 +67,7 @@ CLASS Class.timedate:
    
    END METHOD.
    
-   METHOD PUBLIC CHARACTER TS2HMS
+   METHOD PUBLIC STATIC CHARACTER TS2HMS
       (INPUT tstamp AS DECIMAL):
    
       DEFINE VARIABLE outstring  AS CHARACTER NO-UNDO.
@@ -83,7 +83,7 @@ CLASS Class.timedate:
    
    END METHOD.
    
-   METHOD PUBLIC LOGICAL CheckTime
+   METHOD PUBLIC STATIC LOGICAL CheckTime
      (INPUT pTime AS CHARACTER):
    
       DEFINE VARIABLE pRet AS LOGICAL NO-UNDO.
@@ -97,7 +97,7 @@ CLASS Class.timedate:
    
    END METHOD.
    
-   METHOD PUBLIC DECIMAL Make2Dt
+   METHOD PUBLIC STATIC DECIMAL Make2Dt
      (INPUT tsdate AS DATE, INPUT tstime AS INT):
    
       DEFINE VARIABLE yy  AS INTEGER NO-UNDO.
@@ -117,7 +117,7 @@ CLASS Class.timedate:
    
    END METHOD.
    
-   METHOD PUBLIC DATE Hetu2Date
+   METHOD PUBLIC STATIC DATE Hetu2Date
      (INPUT lcOrgid AS CHAR ).
    
       DEFINE VARIABLE lddate as DATE    NO-UNDO.
@@ -142,7 +142,7 @@ CLASS Class.timedate:
    
    END METHOD.
    
-   METHOD PUBLIC LOGICAL DayLight
+   METHOD PUBLIC STATIC LOGICAL DayLight
      (INPUT pdeStamp AS DECIMAL):
    
    /*
@@ -201,7 +201,7 @@ CLASS Class.timedate:
    
    END METHOD.
    
-   METHOD PUBLIC CHARACTER UTCTime
+   METHOD PUBLIC STATIC CHARACTER UTCTime
      (INPUT pdeStamp AS DECIMAL):
    
       DEFINE VARIABLE ldaDate   AS DATE      NO-UNDO.
@@ -243,7 +243,7 @@ CLASS Class.timedate:
    
    END METHOD.
    
-   METHOD PUBLIC CHARACTER ISO860
+   METHOD PUBLIC STATIC CHARACTER ISO860
      (INPUT pdeStamp AS DECIMAL):
    
       DEFINE VARIABLE ldaDate   AS DATE      NO-UNDO.
@@ -290,7 +290,7 @@ CLASS Class.timedate:
    
    END METHOD.
    
-   METHOD PUBLIC DECIMAL UTC2TS
+   METHOD PUBLIC STATIC DECIMAL UTC2TS
       (INPUT pcUTCTime AS CHARACTER):
    
       DEFINE VARIABLE ldaDate AS DATE      NO-UNDO.
@@ -326,7 +326,7 @@ CLASS Class.timedate:
    
    END METHOD.
    
-   METHOD PUBLIC INTEGER TS2Unix
+   METHOD PUBLIC STATIC INTEGER TS2Unix
       (INPUT iStamp AS DECIMAL):
    
       DEFINE VARIABLE lDate AS DATE    NO-UNDO.
@@ -340,7 +340,7 @@ CLASS Class.timedate:
       
    END METHOD.
    
-   METHOD PUBLIC DECIMAL OffSetTS
+   METHOD PUBLIC STATIC DECIMAL OffSetTS
      (INPUT piOffSet  AS INTEGER):
    
       DEFINE VARIABLE liOffSet AS DECIMAL NO-UNDO.
