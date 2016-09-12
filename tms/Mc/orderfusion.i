@@ -2,8 +2,8 @@
 &THEN
 &GLOBAL-DEFINE ORDERFUSION_I YES
 
-{date.i}
-{tmsconst.i}
+{Func/date.i}
+{Syst/tmsconst.i}
 
 FUNCTION fFusionMessageError RETURNS CHAR
  (BUFFER ibFusionMessage FOR FusionMessage,
