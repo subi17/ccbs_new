@@ -406,6 +406,8 @@ DEF VAR pcAccessory AS CHAR NO-UNDO.
 DEF VAR pcAccessoryStruct AS CHAR NO-UNDO.
 DEF VAR lcAccessoryStruct AS CHAR NO-UNDO.
 
+DEF VAR lcErr AS CHAR NO-UNDO.
+
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
 
@@ -2260,7 +2262,8 @@ END.
 IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND
    AVAIL OrderFusion AND
    OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_NEW} THEN
-   fCreateFusionReserveNumberMessage(Order.OrderID).
+   fCreateFusionReserveNumberMessage(Order.OrderID, 
+                                     OUTPUT lcErr).
       
 /* YTS-2890 */
 fMakeCreateEvent((BUFFER Order:HANDLE),"",katun,"").
