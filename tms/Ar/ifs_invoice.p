@@ -787,9 +787,11 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                 "PAYTERM,PAYTERMEND," +
                 {&TF_BANK_UNOE_PAYTERM_BILLCODES} + "," +
                 {&TF_BANK_SABADELL_PAYTERM_BILLCODES} + "," +
+                {&TF_BANK_CETELEM_PAYTERM_BILLCODES} + "," +
                 "RVTERM,RVTERMEND," + 
                 {&TF_BANK_UNOE_RVTERM_BILLCODES} + "," +
-                {&TF_BANK_SABADELL_RVTERM_BILLCODES}) > 0 THEN DO: 
+                {&TF_BANK_SABADELL_RVTERM_BILLCODES} + "," +
+                {&TF_BANK_CETELEM_RVTERM_BILLCODES}) > 0 THEN DO: 
 
          FIND FIRST bttRow WHERE
                     bttRow.MsSeq = ttRow.MsSeq AND
