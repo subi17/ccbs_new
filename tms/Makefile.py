@@ -203,25 +203,29 @@ def clean(*a):
     for file in glob('procore*') + glob(myself + '.pl'):
         os.unlink(file)
 
-
-run_module = 'Syst/tmslogin'
-run_extraargs = ['-e', '100', '-l', '2000', '-TB', '31', '-TM', '32',
-                 '-rand', '2', '-Bt', '2500']
 @target
 def run(*a):
-    args = ['-pf', '../db/progress/store/all.pf']
-    args.extend(['-T', '../var/tmp'])
-    args = mpro + args + run_extraargs + ['-clientlog', '../var/log/tms_ui.log', '-logginglevel', '4'] + ['-p', run_module + '.p']
-    os.execlp(args[0], *args)
+    '''run|terminal|terminalbatch'''
 
-@target
-def terminal(*a):
-    assert len(parameters) > 0, 'Which module to run?'
-    terminal_module = parameters[0]
+    extraargs = []
+
+    if a[0] == 'run':
+        terminal_module = 'Syst/tmslogin.p'
+        extraargs = ['-e', '100', '-l', '2000', '-TB', '31', '-TM', '32', '-rand', '2', '-Bt', '2500', '-clientlog', '../var/log/tms_ui.log', '-logginglevel', '4']
+        paramstart = 0
+    else:
+        if len(parameters) == 0:
+            raise PikeException('Expected a module to run as a parameter')
+        terminal_module = parameters[0]
+        paramstart = 1
+
+    if a[0] == 'terminalbatch':
+        extraargs = ['-b']
+
     cdr_dict = {}
-
     args = ['-T', '../var/tmp', '-p', terminal_module, '-pf', '../db/progress/store/all.pf']
-    for pp in parameters[1:]:
+
+    for pp in parameters[paramstart:]:
         if pp in databases:
             args.extend(['-pf', '../db/progress/store/{0}.pf'.format(pp)])
         elif pp in cdr_databases:
@@ -230,7 +234,7 @@ def terminal(*a):
             args.extend(cdr_dict[pp])
         else:
             args.append(pp)
-    cmd = Popen(mpro + args)
+    cmd = Popen(mpro + args + extraargs)
     while cmd.poll() is None:
         try:
             cmd.wait()

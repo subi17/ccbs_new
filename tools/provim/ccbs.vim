@@ -101,6 +101,53 @@ endfunction
 nmap <F1> :call Run_4gl()<enter>
 imap <F1> <C-O>:call Run_4gl()<enter>
 
+
+function! Check_syntax() range
+
+    let l:saveline = line(".")
+    let l:addlines = 0
+    let l:tempfile = tempname() . ".p"
+    if a:firstline == a:lastline
+        execute "silent write " . l:tempfile
+    else
+        let l:saveic = &ic
+        set ic
+        execute "redir > " . l:tempfile
+        execute "silent 0," . a:firstline . "g /DEF\\(INE\\)\\? /p"
+        silent echo ""
+        redir END
+        let l:deflines = system("wc -l " . l:tempfile)
+        let l:deflines = substitute(l:deflines, " ", "", "g") + 1
+        let l:addlines = a:firstline - l:deflines
+        execute "silent " . a:firstline . "," . a:lastline . ' w >> ' . l:tempfile
+        call histdel("search", -1)
+        let @/ = histget("search", -1)
+        if l:saveic == 0
+            set noic
+        endif
+    endif
+
+    let l:pfile = tempname() . ".p"
+    execute "redir > " . l:pfile
+    silent echo "COMPILE " . l:tempfile . "."
+    redir END
+
+    let l:output = system("pike terminalbatch " . l:pfile)
+    let dummy = delete(l:tempfile)
+    let dummy = delete(l:pfile)
+
+    if l:output == ""
+        redraw | echo "Syntax is OK"
+        execute "normal " . l:saveline . "G"
+    else
+        echohl ErrorMsg
+        echo  Interpret_output(l:output, l:addlines)
+        echohl None
+        exe "normal \<Esc>"
+    endif
+endfunction
+
+
 "***********************+
 " Magic number table
 "***********************+
