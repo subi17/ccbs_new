@@ -90,7 +90,7 @@ PROCEDURE CreateServiceLimitS:
    DEFINE BUFFER bSLT FOR ServiceLimitTarget.
 
    IF icCLIType BEGINS "CONTS" THEN
-      lcSLCode = REPLACE(icCLIType,"CONT","") + "QTY".
+      lcSLCode = REPLACE(icCLIType,"CONT","") + "_QTY".
    ELSE
       lcSLCode = icCLIType + "_QTY".
 
