@@ -79,7 +79,7 @@ ASSIGN
    FusionMessage.OrderID = liOrderID
    FusionMessage.CreatedTS = fMakeTS()
    FusionMessage.MessageID = lcNotificationID
-   FusionMessage.MessageType = "Update_Fixed_status"
+   FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_UPDATE_STATUS}
    FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}
    FusionMessage.Source = {&FUSIONMESSAGE_SOURCE_MASMOVIL}
    FusionMessage.FixedStatus = lcStatus
@@ -95,6 +95,10 @@ CASE FusionMessage.FixedStatus:
 
       IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_INITIALIZED} THEN
          OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ONGOING}.
+   WHEN "INCIDENCIA DATOS" OR
+   WHEN "INCIDENCIA ACTIVACION SERVICIOS" OR
+   WHEN "INCIDENCIA PROV JAZZTEL" THEN DO:
+      OrderFusion.AdditionalInfo = lcAdditionalInfo.
    END.
    /* installation done */
    WHEN "CERRADA" THEN DO:

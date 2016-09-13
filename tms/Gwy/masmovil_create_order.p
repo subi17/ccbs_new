@@ -56,14 +56,15 @@ lcError = fMasCreate_FixedLineOrder(Order.OrderID,
                                     OUTPUT lcResultDesc).
 
 FIND CURRENT FusionMessage EXCLUSIVE-LOCK.
+FIND CURRENT OrderFusion EXCLUSIVE-LOCK.
 
 IF lcError EQ "" THEN DO:
 
-   FIND CURRENT OrderFusion EXCLUSIVE-LOCK.
    
    ASSIGN
-      OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ONGOING}
-      FusionMessage.HandledTS = fMakeTS()
+      OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_INITIALIZED}
+      OrderFusion.UpdateTS = fMakeTS()
+      FusionMessage.HandledTS = OrderFusion.UpdateTS
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}.
 
    RELEASE OrderFusion.
@@ -75,7 +76,8 @@ END.
 ELSE DO:
 
    ASSIGN
-      FusionMessage.HandledTS = fMakeTS()
+      OrderFusion.UpdateTS = fMakeTS()
+      FusionMessage.HandledTS = OrderFusion.UpdateTS
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
       FusionMessage.AdditionalInfo = (IF lcResultDesc > "" THEN 
                                       lcResultDesc ELSE lcError).
