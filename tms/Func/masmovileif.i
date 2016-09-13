@@ -62,6 +62,24 @@ FUNCTION fAddCharacteristic RETURNS CHAR
    add_string(lcCharacteristicStruct, "oldValue", icOldValue).
    RETURN "".
 END.
+
+FUNCTION fAddService RETURNS CHAR
+   (icBase AS CHAR,
+    icSerID AS CHAR,
+    icSerName AS CHAR,
+    icSerAction AS CHAR,
+    icSerType AS CHAR):
+   DEF VAR lcSerStruct AS CHAR.
+
+   lcSerStruct = add_struct(icBase, "Service").
+   add_string(lcSerStruct, "serviceID", icSerID).
+   add_string(lcSerStruct, "serviceName", icSerName).
+   add_string(lcSerStruct, "action", icSerAction).
+   add_string(lcSerStruct, "type", icSerType).
+   RETURN lcSerStruct.
+END.
+
+
 FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    (iiOrderId AS INT,
     OUTPUT ocResultCode AS CHAR,
@@ -71,7 +89,6 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF VAR lcContactStruct AS CHAR NO-UNDO.
    DEF VAR lcAddressStruct AS CHAR NO-UNDO.
    DEF VAR lcOutputStruct AS CHAR NO-UNDO.
-   DEF VAR lcServiceStruct AS CHAR NO-UNDO.
    DEF VAR lcCharacteristicsArray AS CHAR NO-UNDO.
    DEF VAR liResponseCode AS INT NO-UNDO.
    DEF VAR lcOrderType AS CHAR NO-UNDO.
@@ -83,12 +100,14 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF VAR lcConnServiceName AS CHAR NO-UNDO.
    DEF VAR lcConnServiceType AS CHAR NO-UNDO.
    DEF VAR lcInstallationStruct AS CHAR NO-UNDO.
+   DEF VAR lcServiceStruct AS CHAR NO-UNDO.
    DEF VAR ldaSellDate AS DATE.
    DEF VAR ldaCreDate AS DATE.
    DEF VAR lcResult AS CHAR NO-UNDO.
 
    DEF BUFFER bOrder FOR Order.
    DEF BUFFER bOC FOR OrderCustomer.
+   DEF BUFFER bOF FOR OrderFusion.
 
    FIND FIRST bOrder NO-LOCK where 
               bOrder.Brand EQ Syst.Parameters:gcBrand AND
@@ -97,13 +116,13 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
       RETURN "Error: Order not found " + STRING(iiOrderID) .
 
   /*Use delivery customer information if it is avbailable*/
-   FIND FIRST bOC NO-LOCK where 
+   FIND FIRST bOC NO-LOCK WHERE 
               bOC.Brand EQ Syst.Parameters:gcBrand AND
               bOC.OrderId EQ iiOrderid AND 
               bOC.RowType EQ 4
               NO-ERROR.
    IF NOT AVAIL bOC THEN DO:
-      FIND FIRST bOC NO-LOCK where 
+      FIND FIRST bOC NO-LOCK WHERE 
                  bOC.Brand EQ Syst.Parameters:gcBrand AND
                  bOC.OrderId EQ iiOrderid AND 
                  bOc.RowType EQ 1 /*This customer should be available*/
@@ -112,6 +131,13 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
          RETURN "Error: Customer data not found " + STRING(iiOrderID) .
 
    END.
+/*   FIND FIRST bOF NO-LOCK WHERE
+              bOF.Brand EQ Syst.Parameters:gcBrand AND
+              bOF.OrderID EQ iiOrderID NO-ERROR.
+   IF NOT AVAIL bOF THEN
+               RETURN "Error: Fixed Order data not found " + STRING(iiOrderID) .
+*/
+
    /*Generate order type*/
    
 IF liTesting EQ 0 THEN DO:  
@@ -192,14 +218,16 @@ END.
    add_string(lcAddressStruct, "hand","").
    add_string(lcAddressStruct, "Km","").
    add_string(lcAddressStruct, "zipCode",bOc.ZipCode).
+   IF lcConnServiceId EQ "ADSL" THEN
+      add_string(lcInstallationStruct, "modality", /*bOF.ADSLLinkstate*/ "O").
 
    lcServiceArray = add_array(lcOrderStruct,"Services").
     /*Services entry - Phone*/
-   lcServiceStruct = add_struct(lcServiceArray, ""). 
-   add_string(lcServiceStruct, "serviceID", "FixedPhone").
-   add_string(lcServiceStruct, "serviceName", "Fixed Phone Number").
-   add_string(lcServiceStruct, "action", "Add").
-   add_string(lcServiceStruct, "type", "PHONE").
+   lcServiceStruct = fAddService(lcServiceArray, 
+               "FixedPhone", 
+               "Fixed Phone Number", 
+               "add", 
+               "PHONE").
 
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics").
@@ -233,20 +261,16 @@ END.
                       "0031",                /*param value*/
                       "").                    /*old value*/
  
-
+/*
    /*Services entry - Line*/
-   lcServiceStruct = add_struct(lcServiceArray, ""). 
-   add_string(lcServiceStruct, "serviceID", lcConnServiceId).
-   add_string(lcServiceStruct, "action", "Add").
-   add_string(lcServiceStruct, "type", lcConnServiceType).
-   
+   lcServiceStruct = fAddService(lcServiceArray, 
+               lcConnServiceId, 
+               lcConnServiceName, 
+               "add", 
+               lcConnServiceType).
+*/  
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics").
-   IF lcConnServiceId EQ "ADSL" THEN
-      fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                         "linkstate",        /*param name*/
-                         "O",      /*param value*/
-                         "").             /*old value*/
    IF lcConnServiceId EQ "FTTH" THEN DO:
       fAddCharacteristic(lcCharacteristicsArray, /*base*/
                          "UploadSpeed",        /*param name*/
