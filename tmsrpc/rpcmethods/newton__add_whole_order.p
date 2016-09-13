@@ -185,7 +185,6 @@
                  fixed_line_product;string;mandatory;fusion order product code
                  fixed_line_adsl_linkstate;string;optional;ADSL link state
                  customer_type;string;mandatory;customer type
-                 phone_book;boolean;optional;
                  contractid;string;optional;
                  install_address;struct;mandatory;
                  billing_address;struct;optional;
@@ -401,8 +400,6 @@ DEF VAR lcFixedLineAdslLinkState AS CHAR NO-UNDO.
 DEF VAR lcFixedLineMNPTime AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineProduct AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineCustomerType AS CHAR NO-UNDO. 
-DEF VAR llPhoneBook AS LOG NO-UNDO. 
-DEF VAR lcFixedContractId AS CHAR NO-UNDO. 
 DEF VAR plSendOffer AS LOG NO-UNDO. 
 DEF VAR plResignationPeriod AS LOG NO-UNDO. 
 DEF VAR plPromotion AS LOG NO-UNDO.
@@ -793,7 +790,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          OrderCustomer.Gescal = 
             data[LOOKUP("gescal", gcCustomerStructStringFields)] 
          OrderCustomer.AddressCompl = 
-            data[LOOKUP("address_compl", gcCustomerStructStringFields)] 
+            data[LOOKUP("address_compl", gcCustomerStructStringFields)]  /* Pasi, field is missing */
          OrderCustomer.StreetType = 
             data[LOOKUP("street_type", gcCustomerStructStringFields)] 
          OrderCustomer.BisDuplicate = 
@@ -1143,9 +1140,7 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
       OrderFusion.FixedNumber       = lcFixedLineNumber
       OrderFusion.Product           = lcFixedLineProduct
       OrderFusion.CustomerType      = lcFixedLineCustomerType
-      OrderFusion.FixedContractID   = lcFixedContractId
       OrderFusion.FixedMNPTime      = lcFixedLineMNPTime
-      OrderFusion.PhoneBook         = llPhoneBook
       OrderFusion.FixedCurrOper     = lcFixedLineMNPOldOper WHEN lcFixedLineMNPOldOper > ""
       OrderFusion.FixedCurrOper     = lcFixedLineMNPOldOperName WHEN lcFixedLineMNPOldOper = ""
       OrderFusion.UpdateTS          = fMakeTS()
@@ -1688,7 +1683,7 @@ END.
 /* YBP-530 */
 IF pcFusionStruct > "" THEN DO:
    lcFusionStructFields = validate_request(pcFusionStruct, 
-      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,phone_book,fixed_line_mnp_old_operator,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,fixed_line_mnp_time_of_change,fixed_line_product!,fixed_line_adsl_linkstate,install_address!,billing_address").
+      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,fixed_line_mnp_time_of_change,fixed_line_product!,fixed_line_adsl_linkstate,install_address!,billing_address").
    IF gi_xmlrpc_error NE 0 THEN RETURN.
    
    ASSIGN
@@ -1697,10 +1692,6 @@ IF pcFusionStruct > "" THEN DO:
       lcFixedLineProduct      = get_string(pcFusionStruct,"fixed_line_product")
       lcFixedLineCustomerType = get_string(pcFusionStruct,"customer_type")
       pcFixedInstallAddress = get_struct(pcFusionStruct,"install_address")
-      lcFixedContractId = get_string(pcFusionStruct,"contractid") WHEN
-         LOOKUP("contractid", lcFusionStructFields) > 0
-      llPhoneBook = get_bool(pcFusionStruct,"phone_book") WHEN
-         LOOKUP("phone_book", lcFusionStructFields) > 0
       lcFixedLineNumber = get_string(pcFusionStruct,"fixed_line_number")
          WHEN LOOKUP("fixed_line_number",lcFusionStructFields) > 0
       lcFixedLineMNPOldOper = get_string(pcFusionStruct, "fixed_line_mnp_old_operator")

@@ -80,18 +80,14 @@
                  fixed_line_mnp_old_operator_name;string;
                  fixed_line_mnp_old_operator_code;string;
                  fixed_line_serial_number;string;
+                 fixed_line_adsl_linkstate;string;optional;ADSL link state
                  fixed_mnp_time_of_change;string;
                  fixed_line_number;string;
                  fusion_order_status;string;
-                 fixed_line_order_id;string;
                  fixed_line_order_status;string;
-                 fixed_line_order_sub_status;string;
-                 external_ticket;string;
                  fixed_line_product;string;fusion order product code
                  customer_type;string;
                  allow_mobile_order_release;boolean;For Fusion orders
-                 phone_book;boolean;
-                 contractid;string;
                  install_address;struct;
                  billing_address;struct;
                  update_ts;string;optional
@@ -108,6 +104,15 @@
                     profession;string;
                     email;string;
                     gescal;string;
+                    address_compl;string;optional;Address Complement for floor
+                    street_type;string;optional;street type
+                    bis_duplicate;string;optional;bis
+                    block;string;optional;block
+                    door;string;optional;door
+                    letter;string;optional;letter
+                    stair;string;optional;stair
+                    hand;string;optional;hand
+                    km;string;optional;km
   @billing_address address;string;
                     city;string;
                     zip;string;
@@ -506,16 +511,12 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
       add_string(lcFusionStruct, "fixed_line_mnp_old_operator_name",OrderFusion.FixedCurrOper).
       add_string(lcFusionStruct, "fixed_line_mnp_old_operator_code",OrderFusion.FixedCurrOperCode).
       add_string(lcFusionStruct, "fixed_line_serial_number",OrderFusion.SerialNumber).
+      add_string(lcFusionStruct, "fixed_line_adsl_linkstate",OrderFusion.ADSLLinkState).
       add_string(lcFusionStruct, "fixed_mnp_time_of_change",OrderFusion.FixedMNPTime).
       add_string(lcFusionStruct, "fusion_order_status",OrderFusion.FusionStatus).
-      add_string(lcFusionStruct, "fixed_line_order_id",OrderFusion.FixedOrderId).
       add_string(lcFusionStruct, "fixed_line_order_status",OrderFusion.FixedStatus).
-      add_string(lcFusionStruct, "fixed_line_order_sub_status",OrderFusion.FixedSubStatus).
-      add_string(lcFusionStruct, "external_ticket",OrderFusion.ExternalTicket).
       add_string(lcFusionStruct, "customer_type",OrderFusion.Customer).
       add_string(lcFusionStruct, "fixed_line_product",OrderFusion.Product).
-      add_boolean(lcFusionStruct, "phone_book",OrderFusion.PhoneBook).
-      add_string(lcFusionStruct, "contractid", OrderFusion.FixedContractId).
       add_string(lcFusionStruct, "update_ts", STRING(OrderFusion.UpdateTS)).
       add_boolean(lcFusionStruct, "allow_mobile_order_release",
          (OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ONGOING})).
@@ -542,6 +543,15 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
          add_string(lcFixedInstallAddress, "profession", OrderCustomer.Profession).
          add_string(lcFixedInstallAddress, "email", OrderCustomer.Email).
          add_string(lcFixedInstallAddress, "gescal", OrderCustomer.Gescal).
+         add_string(lcFixedInstallAddress, "address_compl", OrderCustomer.AddressCompl). /* Pasi, this is not correct parameter */
+         add_string(lcFixedInstallAddress, "street_type", OrderCustomer.StreetType).
+         add_string(lcFixedInstallAddress, "bis_duplicate", OrderCustomer.BisDuplicate).
+         add_string(lcFixedInstallAddress, "block", OrderCustomer.Block).
+         add_string(lcFixedInstallAddress, "door", OrderCustomer.Door).
+         add_string(lcFixedInstallAddress, "letter", OrderCustomer.Letter).
+         add_string(lcFixedInstallAddress, "stair", OrderCustomer.Stair).
+         add_string(lcFixedInstallAddress, "hand", OrderCustomer.Hand).
+         add_string(lcFixedInstallAddress, "km", OrderCustomer.Km).
       END.
       
       FIND FIRST OrderCustomer WHERE 

@@ -1,14 +1,14 @@
 /**
  * Set subscription values 
  *
- * @input  id;int;subscription id 
-           subscription;struct;
- * @struct id_code;int;optional;identification id
-           username;string;mandatory;user who made the request
-           billing_permission;int;optional;billing permission status code
-           permanent_contract_valid_to;date;optional;new end date for active periodical contract 
-           permanent_contract_type;string;optional;mobile or fixed line contract 
-           sms_bundle;struct;set a new sms bundle
+ * @input  id;int;mandatory;subscription id 
+           subscription;struct;optional;
+ * @subscription id_code;int;optional;identification id
+                 username;string;mandatory;user who made the request
+                 billing_permission;int;optional;billing permission status code
+                 permanent_contract_valid_to;date;optional;new end date for active periodical contract 
+                 permanent_contract_type;string;optional;mobile or fixed line contract 
+                 sms_bundle;struct;optional;set a new sms bundle
  * @sms_bundle current_amount;int;mandatory
                change;int;mandatory
                user_limit;int;mandatory
@@ -31,7 +31,7 @@ DEF VAR liReq AS INT NO-UNDO.
 DEF VAR lcInfo AS CHAR NO-UNDO.
 DEF VAR i AS INTEGER NO-UNDO. 
 DEF VAR ldaValidToOrig AS DATE NO-UNDO.
-DEF VAR lcDCType AS CHAR NO-UNDO.  /* TODO need new DayCampaign.DCType constant */
+DEF VAR lcDCEventType AS CHAR NO-UNDO.
 
 DEF VAR pcSMSBundleStruct AS CHARACTER NO-UNDO. 
 DEF VAR liCurrValue AS INTEGER NO-UNDO. 
@@ -200,19 +200,20 @@ END FUNCTION.
 IF LOOKUP("permanent_contract_valid_to", lcStruct) GT 0 THEN DO:
 
 /* TODO need new DayCampaign.DCType constant for fixed type */
-IF pcTermContractType EQ "fixed" THEN lcDCType = {&DCTYPE_DISCOUNT}.
-ELSE lcDCType = {&DCTYPE_DISCOUNT}.
+IF pcTermContractType EQ "fixed" THEN lcDCEventType = "FTERM".
+ELSE lcDCEventType = "TERM".
 
    /* pick up DCEvent */
    i = 0.
    FOR EACH DCCLI WHERE
-      DCCLI.Brand = gcBrand AND
       DCCLI.MsSeq = Mobsub.Msseq AND
-      DCCLI.ValidTo >= TODAY NO-LOCK,
+      DCCLI.ValidTo >= TODAY AND 
+      DCCLI.Brand = gcBrand AND
+      DCCLI.DCEvent BEGINS lcDCEventType NO-LOCK,
       FIRST DayCampaign WHERE
             DayCampaign.Brand = gcBrand AND
             DayCampaign.DCEvent = DCCLI.DCEvent AND
-            DayCampaign.DCType = lcDCType NO-LOCK:
+            DayCampaign.DCType = {&DCTYPE_DISCOUNT} NO-LOCK:
       
       i = i + 1.
       IF i > 1 THEN RETURN appl_err("System error").
