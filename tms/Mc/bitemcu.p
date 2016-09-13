@@ -1244,13 +1244,6 @@ PROCEDURE local-update-record:
                 ELSE IF FRAME-FIELD = "period" THEN DO:
                    RUN uperch(INPUT FRAME lis SingleFee.BillPeriod,OUTPUT rc).
                    IF rc NE 0 THEN NEXT.
-                   IF INPUT FRAME lis SingleFee.Billcode = "RVTERMF" AND
-                      INPUT FRAME lis SingleFee.BillPeriod NE 
-                      (INPUT FRAME lis SingleFee.Concerns[1] / 100) THEN DO:
-                     MESSAGE "Covers Period[1] must match BillPeriod in RVTERMF"
-                     VIEW-AS ALERT-BOX.
-                     NEXT.
-                   END.
                    IF INPUT FRAME lis SingleFee.Concerns[1] = 0 THEN DISP
                       INPUT FRAME lis SingleFee.BillPeriod @ 
                            SingleFee.Concerns[1]
