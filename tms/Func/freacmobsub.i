@@ -10,10 +10,10 @@
 &IF "{&fcreamobsub}" NE "YES"
 &THEN
 &GLOBAL-DEFINE fcreamobsub YES
-{tmsconst.i}
-{timestamp.i}
-{fcreatereq.i}
-{fixedlinefunc.i}
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/fcreatereq.i}
+{Func/fixedlinefunc.i}
 
 FUNCTION freacprecheck RETURNS CHARACTER
    (INPUT  iiMsSeq        AS INTEGER,    /* Subscription ID    */

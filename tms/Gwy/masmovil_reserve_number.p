@@ -1,9 +1,9 @@
-{tmsconst.i}
-{log.i}
-{date.i}
-{masmovileif.i}
-{orderfusion.i}
-{memo.i}
+{Syst/tmsconst.i}
+{Func/log.i}
+{Func/date.i}
+{Func/masmovileif.i}
+{Mc/orderfusion.i}
+{Func/memo.i}
 
 DEF INPUT PARAM piMessageSeq AS INT NO-UNDO.
 

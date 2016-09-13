@@ -198,7 +198,7 @@ DO WHILE TRUE:
       IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
          MESSAGE "Fixed line provisioning is not complete" VIEW-AS ALERT-BOX.
       ELSE     
-         run simch.p(MsSeq).
+         run Mm/simch.p(MsSeq).
    END.
 
    ELSE IF FRAME-INDEX = 4 AND NOT Killed THEN DO TRANSACTION:
@@ -208,7 +208,7 @@ DO WHILE TRUE:
       IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
          MESSAGE "Fixed line provisioning is not complete" VIEW-AS ALERT-BOX.
       ELSE 
-         run msisdnch.p(MsSeq).
+         run Mm/msisdnch.p(MsSeq).
    END.
             
    ELSE IF FRAME-INDEX = 5 AND NOT Killed THEN  DO :
@@ -239,7 +239,7 @@ DO WHILE TRUE:
       /*Operation is not allowed if fixed line provisioning is pending*/
       IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN 
          MESSAGE "Fixed line provisioning is not complete" VIEW-AS ALERT-BOX.
-      ELSE RUN bundle_change_ui.p (MobSub.MsSeq).
+      ELSE RUN Mm/bundle_change_ui.p (MobSub.MsSeq).
    END.
             
    ELSE IF FRAME-INDEX = 9 AND NOT Killed AND Avail mobsub 

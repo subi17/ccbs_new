@@ -54,6 +54,13 @@ PROCEDURE pCheckSubscriptionForACC:
       ocMessage = "Unknown subscription".
       RETURN "ERROR".
    END.
+   /*YPR-4772*/
+   /*acc is not allowed for convergent tariffs.*/
+   IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:       
+       ocMessage = "Not alloved for fixed line tariffs".
+       RETURN "ERROR".
+   END.
+
 
    IF TODAY - MobSub.ActivationDate < 30 THEN DO:
       ocMessage = "Subscription has not been active long enough".
@@ -83,13 +90,6 @@ PROCEDURE pCheckSubscriptionForACC:
    THEN DO:
       ocMessage = "Current customer is not a preactivated one".
       RETURN "ERROR".
-   END.
-
-   /*YPR-4772*/
-   /*acc is not allowed for convergent tariffs.*/
-   IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:       
-       ocMessage = "Not alloved for fixed line tariffs".
-       RETURN "ERROR".
    END.
 
    IF LOOKUP(STRING(MobSub.MsStat),"4,8") = 0 THEN DO:
