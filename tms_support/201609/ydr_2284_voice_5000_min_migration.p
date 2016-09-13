@@ -38,7 +38,6 @@ END.
 ELSE
 DO:
    FOR EACH MobSub NO-LOCK WHERE
-            MobSub.Brand = "1" AND
             MobSub.MsSeq = liMsSeq:
       RUN pUpd.
    END.
@@ -46,9 +45,12 @@ END.
 OUTPUT STREAM sSL CLOSE.
 
 PROCEDURE pUpd:
+      DEF VAR lcTariffBundle AS CHAR NO-UNDO.
+      IF MobSub.TariffBundle <> "" THEN
+           lcTariffBundle = MobSub.TariffBundle.
+      ELSE lcTariffBundle = MobSub.CliType.
       FOR FIRST ServiceLimit NO-LOCK WHERE
-                (IF MobSub.TariffBundle <> "" THEN ServiceLimit.GroupCode = MobSub.TariffBundle
-                ELSE ServiceLimit.GroupCode = MobSub.CliType) AND
+                ServiceLimit.GroupCode = lcTariffBundle AND
                 ServiceLimit.DialType  = 0,
           FIRST MServiceLimit EXCLUSIVE-LOCK WHERE
                 MServiceLimit.MsSeq    = MobSub.MsSeq AND
@@ -73,10 +75,10 @@ PROCEDURE pUpd:
          .
 
          FIND FIRST bSL NO-LOCK WHERE
-                    bSL.GroupCode = MobSub.TariffBundle AND
+                    bSL.GroupCode = lcTariffBundle AND
                     bSL.DialType  = 4 NO-ERROR.
          IF llConfirm AND AVAILABLE bSL THEN DO:
-            ASSIGN mServiceLimit.EndTS = fMake2Dt(TODAY - 1,86399)
+            ASSIGN mServiceLimit.EndTS = fMake2Dt(09/30/2016,86399)
                    .
             CREATE bMSL.
             ASSIGN bMSL.MSID = NEXT-VALUE(mServiceLimit)
@@ -86,7 +88,7 @@ PROCEDURE pUpd:
                    bMSL.DialType = bSL.DialType
                    bMSL.InclUnit = bSL.InclUnit
                    bMSL.InclAmt  = bSL.InclAmt
-                   bMSL.FromTS   = fMake2Dt(TODAY,0)
+                   bMSL.FromTS   = fMake2Dt(10/01/2016,0)
                    bMSL.EndTS    = 99999999.99999
                    .
             PUT STREAM sSL UNFORMATTED

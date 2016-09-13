@@ -38,7 +38,7 @@ PROCEDURE CreateServiceLimit:
    FIND FIRST ServiceLimit EXCLUSIVE-LOCK WHERE
               ServiceLimit.GroupCode = icCliType AND
               ServiceLimit.SLCode    = lcSLCode NO-ERROR.
-   ASSIGN ServiceLimit.ValidTo = TODAY - 1
+   ASSIGN ServiceLimit.ValidTo = 09/30/2016
           lcOldSlSeq           = ServiceLimit.SLSeq.
    RELEASE ServiceLimit.
    
@@ -55,7 +55,7 @@ PROCEDURE CreateServiceLimit:
           ServiceLimit.InclAmt    = 5000.00
           ServiceLimit.InclUnit   = 1
           ServiceLimit.BDestLimit = 300
-          ServiceLimit.ValidFrom  = TODAY
+          ServiceLimit.ValidFrom  = 10/01/2016
           ServiceLimit.ValidTo    = 12/31/2049
           ServiceLimit.FirstMonthCalc = 0
           ServiceLimit.LastMonthCalc  = 0
@@ -98,7 +98,7 @@ PROCEDURE CreateServiceLimitS:
    FIND FIRST ServiceLimit EXCLUSIVE-LOCK WHERE
               ServiceLimit.GroupCode = icCliType AND
               ServiceLimit.SLCode    = lcSLCode NO-ERROR.
-   ASSIGN ServiceLimit.ValidTo = TODAY - 1
+   ASSIGN ServiceLimit.ValidTo = 09/30/2016
           lcOldSlSeq           = ServiceLimit.SLSeq.
    RELEASE ServiceLimit.
 
@@ -116,7 +116,7 @@ PROCEDURE CreateServiceLimitS:
           ServiceLimit.InclAmt    = 5000.00
           ServiceLimit.InclUnit   = 1
           ServiceLimit.BDestLimit = 300
-          ServiceLimit.ValidFrom  = TODAY
+          ServiceLimit.ValidFrom  = 10/01/2016
           ServiceLimit.ValidTo    = 12/31/2049
           ServiceLimit.FirstMonthCalc = 0
           ServiceLimit.LastMonthCalc  = 0
