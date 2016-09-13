@@ -102,28 +102,93 @@ nmap <F1> :call Run_4gl()<enter>
 imap <F1> <C-O>:call Run_4gl()<enter>
 
 
+function! Interpret_output(output, lineoffs)
+    redraw
+    let l:pos = match(a:output, "\\*\\* [^ ]* Could not understand line ")
+    if l:pos == -1
+        return a:output
+    else
+        let l:lineno = strpart(a:output, matchend(a:output, " Could not understand line "), 4) + 0
+        let l:lineno = l:lineno + a:lineoffs
+        execute "normal " . l:lineno . "G"
+        let l:endpos = matchend(a:output, "Could not understand line [0-9]*\\. ([0-9]*)")
+        return "Line " . l:lineno . ": " . strpart(a:output, 0,  l:pos - 1) . strpart(a:output, l:endpos)
+    endif
+endfunction
+
+
 function! Check_syntax() range
+
+    " Let assume that the file is .p file fisrt
+    let l:extension = ".p"
+
+    " If there is a line which begins with a word class (case-insensitive) then this is a cls file
+    let l:classline = search('\c^class\s', 'nc')
+
+    " If l:classline is something else than zero we have a class file
+    if l:classline
+        " Lets store the class name it is the word after class word (\c is case-insensitive mark)
+        " also there must be whitespace character after the word class
+        " finally we take every characters until whitespace or : character
+        let l:classname = matchstr(getline(l:classline), '\cclass\s*\zs[^ :]*\ze')
+        if empty(l:classname)
+            throw "no class name recognized into ''" . getline(l:classline) . "''"
+        endif
+        let l:extension = ".cls"
+        " Add whitespace in order to get safer substitute later on
+        let l:classname = ' ' . l:classname
+    endif
 
     let l:saveline = line(".")
     let l:addlines = 0
-    let l:tempfile = tempname() . ".p"
-    if a:firstline == a:lastline
-        execute "silent write " . l:tempfile
-    else
-        let l:saveic = &ic
-        set ic
+    let l:tempname = tempname()
+
+    " We need to take temppathname and tempbasename as Progress class needs
+    " character name (we will add 'temp' to the temp file name)
+    " Also we need to replace class name with tempbasename to the temp file
+    let l:temppathname = matchstr(l:tempname,'^\zs.*/\ze[^/]*$')
+    let l:tempbasename = 'temp' . matchstr(l:tempname,'.*/\zs\w*\ze')
+
+    let l:tempfile = l:temppathname . l:tempbasename . l:extension
+
+    " Add whitespace in order to get safer substitute later on
+    let l:tempbasename = ' ' . l:tempbasename
+
+    " If this is class file
+    if l:classline
+        let l:linenr = 0
         execute "redir > " . l:tempfile
-        execute "silent 0," . a:firstline . "g /DEF\\(INE\\)\\? /p"
-        silent echo ""
+        while l:linenr < line("$")
+            let l:linenr += 1
+            silent echo substitute(getline(l:linenr), l:classname , l:tempbasename, "g")
+        endwhile
         redir END
-        let l:deflines = system("wc -l " . l:tempfile)
-        let l:deflines = substitute(l:deflines, " ", "", "g") + 1
-        let l:addlines = a:firstline - l:deflines
-        execute "silent " . a:firstline . "," . a:lastline . ' w >> ' . l:tempfile
-        call histdel("search", -1)
-        let @/ = histget("search", -1)
-        if l:saveic == 0
-            set noic
+    " This is not a class file
+    else
+        " This happens if we don't have lines marked on the editor
+        if a:firstline == a:lastline
+            execute "silent write " . l:tempfile
+        " This happens if we have lines marked on the editor. We will add
+        " DEFINE lines if there are some outside of the marking.
+        " This is not very good solution but might work some cases
+        else
+            let l:saveic = &ic
+            set ic
+            execute "redir > " . l:tempfile
+            execute "silent 0," . a:firstline . "g /DEF\\(INE\\)\\? /p"
+            silent echo ""
+            redir END
+            let l:deflines = system("wc -l " . l:tempfile)
+            let l:deflines = substitute(l:deflines, " ", "", "g") + 1
+            let l:addlines = a:firstline - l:deflines
+
+            execute "silent " . a:firstline . "," . a:lastline . ' w >> ' . l:tempfile
+
+            call histdel("search", -1)
+            let @/ = histget("search", -1)
+            if l:saveic == 0
+                set noic
+            endif
         endif
     endif
 
@@ -147,6 +212,9 @@ function! Check_syntax() range
     endif
 endfunction
 
+nmap <F4> :call Check_syntax()<enter>
+vmap <F4> :call Check_syntax()<enter>
+
 
 "***********************+
 " Magic number table
@@ -157,4 +225,4 @@ function! Print_magic()
 endfunction
 
 " TDC does not have TmsCodes
-" nmap <F4> :call Print_magic()<enter>
+" nmap <F3> :call Print_magic()<enter>
