@@ -51,6 +51,7 @@ IF LOOKUP("CONTDSL45", TMSParam.charval) = 0 THEN
 TMSParam.charval = tmsParam.charval + ",CONTDSL45,CONTDSL55,CONTFH45_50," +
                    "CONTFH55_50,CONTFH55_300,CONTFH65_300".
 
+/* Decided not to use new codevalue, use existing value=3 instead.
 FIND FIRST TMSCodes WHERE 
            TMSCodes.tablename EQ "Daycampaign" AND
            TMSCodes.fieldname EQ "DCType" AND
@@ -67,4 +68,5 @@ IF NOT AVAIL TMSCodes THEN DO:
 
 
 END.
+*/
 
