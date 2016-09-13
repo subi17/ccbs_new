@@ -76,7 +76,7 @@ IF NOT AVAIL TMSCodes THEN DO:
    CREATE TMSCodes.
    ASSIGN
       TMSCodes.tablename = "requem"
-      TMSCodes.fieldname = "94,2"
+      TMSCodes.fieldname = "94,0"
       TMSCodes.codevalue = "1"
       TMSCodes.codegroup = "SubsLMenu"
       TMSCodes.codename = "Waiting for fixed line termination"
