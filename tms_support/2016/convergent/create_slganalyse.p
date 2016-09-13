@@ -48,8 +48,8 @@ FOR EACH CliType WHERE
          Clitype.clitype BEGINS "CONTDSL":
    ASSIGN
    Clitype.fixedlinetype = 1
-   Clitype.downloadspeed = "20"
-   Clitype.uploadspeed = "20".
+   Clitype.FixedLineDownload = "20"
+   Clitype.FixedLineUpload = "20".
 END.        
 
 FOR EACH CliType WHERE
@@ -57,18 +57,18 @@ FOR EACH CliType WHERE
          Clitype.clitype MATCHES "CONTFH*50":
    ASSIGN
    Clitype.fixedlinetype = 2
-   Clitype.downloadspeed = "50"
-   Clitype.uploadspeed = "5".
+   Clitype.FixedLineDownload = "50"
+   Clitype.FixedLineUpload = "5".
 
 END.
 
- EACH CliType WHERE
-         Clitype.brand EQ "1" AND
-         Clitype.clitype MATCHES "CONTFH*300":
+FOR EACH CliType WHERE
+      Clitype.brand EQ "1" AND
+      Clitype.clitype MATCHES "CONTFH*300":
    ASSIGN
    Clitype.fixedlinetype = 2
-   Clitype.downloadspeed = "300"
-   Clitype.uploadspeed = "300".
+   Clitype.FixedLineDownload = "300"
+   Clitype.FixedLineUpload = "300".
 
 END.
 
