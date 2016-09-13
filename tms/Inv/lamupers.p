@@ -2138,8 +2138,8 @@ PROCEDURE pFixedFee:
             IF FixedFee.TFBank EQ {&TF_BANK_SABADELL} THEN /*0081*/
                FFItem.BillCode = FFItem.BillCode + "BS".
             ELSE IF FixedFee.TFBank EQ {&TF_BANK_CETELEM} THEN /*0225*/
-               FFItem.BillCode = FFItem.BillCode + "CB".
-            ELSE 
+               FFItem.BillCode = FFItem.BillCode + "BC".
+            ELSE
                FFItem.BillCode = FFItem.BillCode + "1E".
          END.
           
@@ -2295,7 +2295,7 @@ PROCEDURE pSingleFee:
                IF FixedFee.TFBank EQ {&TF_BANK_SABADELL} THEN /*0081*/
                   SingleFee.BillCode = SingleFee.BillCode + "BS".
                ELSE IF FixedFee.TFBank EQ {&TF_BANK_CETELEM} THEN /*0225*/
-                  Singlefee.BillCode = Singlefee.BillCode + "CB".
+                  Singlefee.BillCode = Singlefee.BillCode + "BC".
                ELSE
                   SingleFee.BillCode = SingleFee.BillCode + "1E".
             END.
