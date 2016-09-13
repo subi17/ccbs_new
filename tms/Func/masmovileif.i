@@ -8,12 +8,9 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{/apps/yoigo/tms/Syst/commali.i}
-{/apps/yoigo/tms/Func/cparam2.i}
-{/apps/yoigo/tms/Func/msreqfunc.i}
-{/apps/yoigo/tms/Syst/tmsconst.i}
+{Syst/tmsconst.i}
 {xmlrpc/xmlrpc_client.i}
-{/apps/yoigo/tms/Func/forderstamp.i}
+{Func/forderstamp.i}
 
 
 /*Global variables for building masmovile data*/
@@ -23,12 +20,15 @@ DEF VAR liTesting AS INT NO-UNDO.
 liTesting = 0.
 DEF STREAM sOut.
 
+&GLOBAL-DEFINE MASMOVIL_RETRY_ERROR_CODES "APIKIT-00404,APIKIT-00405,APIKIT-00406,APIKIT-00415,WO-10000000,ESB-99999999"
+
 FUNCTION fMasXMLGenerate_test RETURNS CHAR
    (icMethod AS CHAR):
    IF liTesting NE 0 THEN DO:
       xmlrpc_initialize(FALSE).
-      OUTPUT STREAM sOut TO VALUE("temp.txt") APPEND.
-      PUT STREAM sOut UNFORMATTED STRING(fMakeTS()) SKIP.
+      OUTPUT STREAM sOut TO VALUE("Xmasmovile_xml_" + 
+      REPLACE(STRING(fmakets()), ".", "_") +
+      ".xml") APPEND.
       PUT STREAM sOut UNFORMATTED 
          string(serialize_rpc_call("masmovil." + icMethod)) SKIP. 
       PUT STREAM sOut "" SKIP.   
@@ -40,11 +40,43 @@ END.
 
 FUNCTION fInitMMConnection RETURNS CHAR
    ():
-   lcConURL = fCParam("URL","urlMasmovil").
+   lcConURL = Syst.Parameters:getc("urlMasmovil","URL").
    IF lcConURL = ? OR lcConURL = "" THEN 
       RETURN "ERROR in connection settings".
    initialize(lcConURL, 15).
    RETURN "".
+END.
+
+
+FUNCTION fAddCharacteristic RETURNS CHAR
+   (icBase AS CHAR,
+    icParam AS CHAR,
+    icValue AS CHAR,
+    icOldValue AS CHAR):
+   DEF VAR lcCharacteristicStruct AS CHAR.
+
+   lcCharacteristicStruct = add_struct(icBase,
+                                       "Characteristic").
+   add_string(lcCharacteristicStruct, "name", icParam).
+   add_string(lcCharacteristicStruct, "value", icValue ).
+   add_string(lcCharacteristicStruct, "oldValue", icOldValue).
+   RETURN "".
+END.
+
+FUNCTION fAddService RETURNS CHAR
+   (icBase AS CHAR,
+    icSerID AS CHAR,
+    icSerName AS CHAR,
+    icSerAction AS CHAR,
+    icSerType AS CHAR):
+   DEF VAR lcSerStruct AS CHAR.
+
+   lcSerStruct = add_struct(icBase, "Service").
+   add_string(lcSerStruct, "serviceID", icSerID).
+   add_string(lcSerStruct, "serviceName", icSerName).
+   add_string(lcSerStruct, "action", icSerAction).
+   add_string(lcSerStruct, "type", icSerType).
+   RETURN lcSerStruct.
 END.
 
 
@@ -57,9 +89,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF VAR lcContactStruct AS CHAR NO-UNDO.
    DEF VAR lcAddressStruct AS CHAR NO-UNDO.
    DEF VAR lcOutputStruct AS CHAR NO-UNDO.
-   DEF VAR lcServiceStruct AS CHAR NO-UNDO.
    DEF VAR lcCharacteristicsArray AS CHAR NO-UNDO.
-   DEF VAR lcCharacteristicStruct AS CHAR NO-UNDO.
    DEF VAR liResponseCode AS INT NO-UNDO.
    DEF VAR lcOrderType AS CHAR NO-UNDO.
    DEF VAR lcXMLStruct AS CHAR NO-UNDO. /*Input to TMS*/
@@ -70,28 +100,30 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF VAR lcConnServiceName AS CHAR NO-UNDO.
    DEF VAR lcConnServiceType AS CHAR NO-UNDO.
    DEF VAR lcInstallationStruct AS CHAR NO-UNDO.
+   DEF VAR lcServiceStruct AS CHAR NO-UNDO.
    DEF VAR ldaSellDate AS DATE.
    DEF VAR ldaCreDate AS DATE.
    DEF VAR lcResult AS CHAR NO-UNDO.
 
    DEF BUFFER bOrder FOR Order.
    DEF BUFFER bOC FOR OrderCustomer.
+   DEF BUFFER bOF FOR OrderFusion.
 
    FIND FIRST bOrder NO-LOCK where 
-              bOrder.Brand EQ gcBrand AND
+              bOrder.Brand EQ Syst.Parameters:gcBrand AND
               bOrder.OrderId EQ iiOrderid NO-ERROR.
    IF NOT AVAIL bOrder THEN 
       RETURN "Error: Order not found " + STRING(iiOrderID) .
 
   /*Use delivery customer information if it is avbailable*/
-   FIND FIRST bOC NO-LOCK where 
-              bOC.Brand EQ gcBrand AND
+   FIND FIRST bOC NO-LOCK WHERE 
+              bOC.Brand EQ Syst.Parameters:gcBrand AND
               bOC.OrderId EQ iiOrderid AND 
               bOC.RowType EQ 4
               NO-ERROR.
    IF NOT AVAIL bOC THEN DO:
-      FIND FIRST bOC NO-LOCK where 
-                 bOC.Brand EQ gcBrand AND
+      FIND FIRST bOC NO-LOCK WHERE 
+                 bOC.Brand EQ Syst.Parameters:gcBrand AND
                  bOC.OrderId EQ iiOrderid AND 
                  bOc.RowType EQ 1 /*This customer should be available*/
                  NO-ERROR.
@@ -99,6 +131,13 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
          RETURN "Error: Customer data not found " + STRING(iiOrderID) .
 
    END.
+/*   FIND FIRST bOF NO-LOCK WHERE
+              bOF.Brand EQ Syst.Parameters:gcBrand AND
+              bOF.OrderID EQ iiOrderID NO-ERROR.
+   IF NOT AVAIL bOF THEN
+               RETURN "Error: Fixed Order data not found " + STRING(iiOrderID) .
+*/
+
    /*Generate order type*/
    
 IF liTesting EQ 0 THEN DO:  
@@ -146,9 +185,9 @@ END.
                              "Y" + STRING(bOrder.Orderid)).
    add_string(lcOrderStruct, "orderType", lcOrderType). 
    add_string(lcOrderStruct, "orderName", "ALTA").
-   add_string(lcOrderStruct, "sellchannel", "YOIGO"/*bOrder.orderchannel*/).
+   add_string(lcOrderStruct, "sellchannel", "YOIGO").
    add_string(lcOrderStruct, "selldate", STRING(ldaSellDate)). 
-   add_string(lcOrderStruct, "seller", /*bOrder.Salesman*/ "YOIGO"). 
+   add_string(lcOrderStruct, "seller", "YOIGO"). 
    add_string(lcOrderStruct, "createdBy", "YOIGO").
    add_string(lcOrderStruct, "creadate", STRING(ldaCreDate)). 
 
@@ -156,6 +195,7 @@ END.
    lcInstallationStruct = add_struct(lcOrderStruct,"Installation").
    lcContactStruct = add_struct(lcInstallationStruct,"Contact").
    add_string(lcContactStruct, "firstName", bOC.FirstName).
+   add_string(lcContactStruct, "middleName", "").
    add_string(lcContactStruct, "lastName", bOC.Surname1 + " " + bOC.Surname2).
    add_string(lcContactStruct, "documentNumber",bOC.CustID). 
    add_string(lcContactStruct, "documentType", bOC.CustIdType).
@@ -167,53 +207,93 @@ END.
    add_string(lcAddressStruct, "province",bOC.Region).
    add_string(lcAddressStruct, "town",bOC.PostOffice).
    add_string(lcAddressStruct, "street", bOC.Street).
+   add_string(lcAddressStruct, "streetType","").
    add_string(lcAddressStruct, "number", bOc.BuildingNum).
-/*   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).
-   add_string(lcAddressStruct, "",).*/
+   add_string(lcAddressStruct, "bis_duplicate","").
+   add_string(lcAddressStruct, "block","").
+   add_string(lcAddressStruct, "door","").
+   add_string(lcAddressStruct, "letter","").
+   add_string(lcAddressStruct, "stair","").
+   add_string(lcAddressStruct, "floor","").
+   add_string(lcAddressStruct, "hand","").
+   add_string(lcAddressStruct, "Km","").
    add_string(lcAddressStruct, "zipCode",bOc.ZipCode).
+   IF lcConnServiceId EQ "ADSL" THEN
+      add_string(lcInstallationStruct, "modality", /*bOF.ADSLLinkstate*/ "O").
 
    lcServiceArray = add_array(lcOrderStruct,"Services").
     /*Services entry - Phone*/
-   lcServiceStruct = add_struct(lcServiceArray, ""). 
-   add_string(lcServiceStruct, "serviceID", "FixedPhone").
-   add_string(lcServiceStruct, "serviceName", "Fixed Phone Number").
-   add_string(lcServiceStruct, "action", "Add").
-   add_string(lcServiceStruct, "type", "PHONE").
+   lcServiceStruct = fAddService(lcServiceArray, 
+               "FixedPhone", 
+               "Fixed Phone Number", 
+               "add", 
+               "PHONE").
 
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics").
-   lcCharacteristicStruct = add_struct(lcCharacteristicsArray, 
-                                        "Characteristic").
-   add_string(lcCharacteristicStruct, "name", "PHONE").
-   add_string(lcCharacteristicStruct, "value", "900900900" 
-                         /*order.fixednumber*/).
 
+   fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                      "phoneNumber",        /*param name*/
+                      "900900900",                /*param value*/
+                      "").                    /*old value*/
+   /*IF portability in THEN */ 
+      fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                         "donoroperator",        /*param name*/
+                         "Saunalahti",                /*param value*/
+                         "").                    /*old value*/
+   fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                      "portabilitytype",        /*param name*/
+                      "I",                /*param value*/
+                      "").                    /*old value*/
+ 
+   /*IF portability  THEN */ 
+      fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                         "phoneNumberTmp",        /*param name*/
+                         "900",                /*param value*/
+                         "").                    /*old value*/
+ 
+    fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                      "reselleroperator",        /*param name*/
+                      "Sonera",                /*param value*/
+                      "").                    /*old value*/
+    fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                      "receptooperator",        /*param name*/
+                      "0031",                /*param value*/
+                      "").                    /*old value*/
+ 
+/*
    /*Services entry - Line*/
-   lcServiceStruct = add_struct(lcServiceArray, ""). 
-   add_string(lcServiceStruct, "serviceID", lcConnServiceId).
-   add_string(lcServiceStruct, "action", "Add").
-   add_string(lcServiceStruct, "type", lcConnServiceType).
-   
+   lcServiceStruct = fAddService(lcServiceArray, 
+               lcConnServiceId, 
+               lcConnServiceName, 
+               "add", 
+               lcConnServiceType).
+*/  
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics").
-   lcCharacteristicStruct = add_struct(lcCharacteristicsArray, 
-                                        "Characteristic").
-   add_string(lcCharacteristicStruct, "name", "gescal").
-   add_string(lcCharacteristicStruct, "value", "").
+   IF lcConnServiceId EQ "FTTH" THEN DO:
+      fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                         "UploadSpeed",        /*param name*/
+                         "100",      /*param value*/
+                         "").             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                         "DownloadSpeed",        /*param name*/
+                         "100",      /*param value*/
+                         "").             /*old value*/
+ 
+   END.
+
+   fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                      "gescal",        /*param name*/
+                      bOC.Gescal,      /*param value*/
+                      "").             /*old value*/
+
+
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
-   fMasXMLGenerate_test("CreateFixedLine").
-   RUN pRPCMethodCall("masmovile.CreateFixedLine", TRUE).
+   fMasXMLGenerate_test("createFixedLine").
+   RUN pRPCMethodCall("masmovile.createFixedLine", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
@@ -260,7 +340,7 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
    fMasXMLGenerate_test("CancelFixedLine").
-   RUN pRPCMethodCall("masmovile.CancelFixedLine", TRUE).
+   RUN pRPCMethodCall("masmovile.cancelFixedLine", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
