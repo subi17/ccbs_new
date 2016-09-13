@@ -51,7 +51,7 @@ FUNCTION freacprecheck RETURNS CHARACTER
    
   /*YPR-4770*/
   /*reactivation is not allowed for convergent tariffs.*/
-  IF fIsConvergenceTariff(bTermMobSub.CLIType) THEN 
+  IF fHasConvergenceTariff(bTermMobSub.MsSeq) THEN 
      RETURN "Not alloved for fixed line tariffs".
 
    /* Check that no other reactivation requests is under work */

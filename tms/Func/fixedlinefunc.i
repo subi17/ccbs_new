@@ -15,24 +15,26 @@
 {Func/cparam2.i}
 
 /*Function returns Trie if a tariff can be defined as convergent tariff.
-NOTE: if tariff list is missing or reading fails FALSE is returned*/
-FUNCTION fIsConvergenceTariff RETURNS LOGICAL
-   (icCLIType AS CHAR):
-   DEF VAR lcTariffList AS CHAR NO-UNDO.
-/* will be activated when DB changes are done.
-   FIND FIRST CLIType NO-LOCK WHERE
-              CliType.CliType EQ icCLIType NO-ERROR.
+NOTE: False is returned in real false cases and also in error cases. */
+FUNCTION fHasConvergenceTariff RETURNS LOGICAL
+   (iiMsSeq AS INT):
+   DEF BUFFER bCLIType FOR CLIType.
+   DEF BUFFER bMobsub FOR MobSub.
+
+   FIND FIRST bMobsub NO-LOCK WHERE
+              bMobSub.MsSeq EQ iiMsSeq NO-ERROR.
+   IF NOT AVAIL bMobSub THEN RETURN FALSE.           
+
+   FIND FIRST bCLIType NO-LOCK WHERE
+              bCLIType.Brand EQ gcBrand AND
+              bCLIType.CliType EQ bMobsub.CLIType NO-ERROR.
    IF AVAIL CliType THEN DO:
-      IF CliType.DownloadSpeed NE ? AND 
-         CliType.Downloadspeed NE "" THEN RETURN TRUE.
+      IF bCliType.FixedLineDownload NE ? AND 
+         bCliType.FixedLineDownload NE "" THEN RETURN TRUE.
    END.
-*/   
-   /*1st version:*/
-   lcTariffList = fCparamC("AllConvergentTariffs").
-   IF lcTariffList EQ ? THEN RETURN FALSE.
-   IF LOOKUP(icCLIType, lcTariffList) > 0 THEN RETURN TRUE.
    
    RETURN FALSE.
 END.   
+
 
 &ENDIF
