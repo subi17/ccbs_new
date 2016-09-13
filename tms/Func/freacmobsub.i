@@ -49,9 +49,9 @@ FUNCTION freacprecheck RETURNS CHARACTER
          RETURN "Invalid Subscription Id".
    END. /* ELSE DO: */
    
-  /*YPR-4770*/
+  /*YPR-4770*/ 
   /*reactivation is not allowed for convergent tariffs.*/
-  IF fHasConvergenceTariff(bTermMobSub.MsSeq) THEN 
+  IF fIsConvergenceTariff(bTermMobSub.CLIType) THEN 
      RETURN "Not alloved for fixed line tariffs".
 
    /* Check that no other reactivation requests is under work */

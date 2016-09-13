@@ -56,7 +56,7 @@ PROCEDURE pCheckSubscriptionForACC:
    END.
    /*YPR-4772*/
    /*acc is not allowed for convergent tariffs.*/
-   IF fHasConvergenceTariff(MobSub.MsSeq) THEN DO:       
+   IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:       
        ocMessage = "Not alloved for fixed line tariffs".
        RETURN "ERROR".
    END.
@@ -180,7 +180,7 @@ PROCEDURE pCheckTargetCustomerForACC:
       END.
       /*YPR-4772*/
       /*acc is not allowed for convergent tariffs.*/
-      IF fHasConvergenceTariff(bACCMobSub.msseq) THEN DO:       
+      IF fIsConvergenceTariff(bACCMobSub.CLIType) THEN DO:       
           ocMessage = "Not alloved for fixed line tariffs".
           RETURN "ERROR".
       END.

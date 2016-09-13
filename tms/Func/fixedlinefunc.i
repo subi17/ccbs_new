@@ -16,18 +16,13 @@
 
 /*Function returns Trie if a tariff can be defined as convergent tariff.
 NOTE: False is returned in real false cases and also in error cases. */
-FUNCTION fHasConvergenceTariff RETURNS LOGICAL
-   (iiMsSeq AS INT):
+FUNCTION fIsConvergenceTariff RETURNS LOGICAL
+   (icCliType AS CHAR):
    DEF BUFFER bCLIType FOR CLIType.
-   DEF BUFFER bMobsub FOR MobSub.
-
-   FIND FIRST bMobsub NO-LOCK WHERE
-              bMobSub.MsSeq EQ iiMsSeq NO-ERROR.
-   IF NOT AVAIL bMobSub THEN RETURN FALSE.           
 
    FIND FIRST bCLIType NO-LOCK WHERE
               bCLIType.Brand EQ gcBrand AND
-              bCLIType.CliType EQ bMobsub.CLIType NO-ERROR.
+              bCLIType.CliType EQ icCLIType NO-ERROR.
    IF AVAIL CliType THEN DO:
       IF bCliType.FixedLineDownload NE ? AND 
          bCliType.FixedLineDownload NE "" THEN RETURN TRUE.
@@ -35,6 +30,32 @@ FUNCTION fHasConvergenceTariff RETURNS LOGICAL
    
    RETURN FALSE.
 END.   
+
+
+/*Used when there is no clitype available directly.*/
+/*Function returns Trie if a tariff can be defined as convergent tariff.
+NOTE: False is returned in real false cases and also in error cases. */
+FUNCTION fHasConvergenceTariff RETURNS LOGICAL
+   (iiMsSeq AS INT):
+   DEF BUFFER bCLIType FOR CLIType.
+   DEF BUFFER bMobsub FOR MobSub.
+   DEF BUFFER bTermMS FOR TermMobSub.
+   DEF VAR lcCliType AS CHAR.
+
+   FIND FIRST bMobsub NO-LOCK WHERE
+              bMobSub.MsSeq EQ iiMsSeq NO-ERROR.
+   IF NOT AVAIL bMobSub THEN DO:
+      FIND FIRST bTermMS NO-LOCK WHERE 
+                 bTermMS.MsSeq EQ iiMsSeq NO-ERROR.
+      IF NOT AVAIL bTermMS THEN RETURN FALSE.
+      ELSE lcCliType = bTermMS.CLIType.
+   END.
+   ELSE lcCLIType = bMobSub.CliType.
+
+   RETURN fIsConvergenceTariff(lcCLIType).
+END.   
+
+
 
 
 &ENDIF
