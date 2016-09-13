@@ -2,7 +2,7 @@
 &THEN
 &GLOBAL-DEFINE MEMO_I YES
 
-{timestamp.i}
+{Func/timestamp.i}
 
 FUNCTION fCreateMemo RETURNS LOGICAL
    (icHostTable AS CHAR,

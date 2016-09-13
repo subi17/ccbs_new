@@ -10,7 +10,7 @@
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Progress.Lang.*.
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:  
 
