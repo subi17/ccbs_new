@@ -46,6 +46,25 @@ faddTMSParam("CONT24", "CONTS10GB", 0).
 
 FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ "DATA_BUNDLE_BASED_CLITYPES"
    NO-ERROR.
+
+IF LOOKUP("CONTDSL45", TMSParam.charval) = 0 THEN
 TMSParam.charval = tmsParam.charval + ",CONTDSL45,CONTDSL55,CONTFH45_50," +
                    "CONTFH55_50,CONTFH55_300,CONTFH65_300".
+
+FIND FIRST TMSCodes WHERE 
+           TMSCodes.tablename EQ "Daycampaign" AND
+           TMSCodes.fieldname EQ "DCType" AND
+           TMSCodes.codevalue EQ "9" NO-ERROR.
+IF NOT AVAIL TMSCodes THEN DO:
+   CREATE TMSCodes.
+   ASSIGN
+      TMSCodes.tablename = "Daycampaign"
+      TMSCodes.fieldname = "DCType"
+      TMSCodes.codevalue = "9"
+      TMSCodes.codegroup = "PerContr"
+      TMSCodes.codename = "Fixed line periodical contract" 
+      TMSCodes.inuse = 1.
+
+
+END.
 
