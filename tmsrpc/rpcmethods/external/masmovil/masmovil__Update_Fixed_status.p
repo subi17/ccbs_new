@@ -1,10 +1,10 @@
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{tmsconst.i}
-{fexternalapi.i}
+{Syst/tmsconst.i}
+{Func/fexternalapi.i}
 {xmlrpc/xmlrpc_access.i}
-{orderfusion.i}
-{orderfunc.i}
+{Mc/orderfusion.i}
+{Func/orderfunc.i}
 
 DEF VAR top_struct AS CHAR NO-UNDO.
 DEF VAR lcTopStruct AS CHAR NO-UNDO.
