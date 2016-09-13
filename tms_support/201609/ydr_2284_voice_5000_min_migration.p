@@ -8,31 +8,48 @@ DEF VAR lcCLITypeList AS CHAR NO-UNDO.
 DEF VAR lcSLGroupList AS CHAR NO-UNDO.
 DEF VAR lcSLCodeList  AS CHAR NO-UNDO.
 DEF VAR lcNewSLCodeList AS CHAR NO-UNDO.
+DEF VAR liMsSeq       AS INT  NO-UNDO.
 
-DEFINE BUFFER bSL FOR ServiceLimit.
+DEFINE BUFFER bSL  FOR ServiceLimit.
+DEFINE BUFFER bMSL FOR mServiceLimit.
+
 DEFINE STREAM sSL.
 
+UPDATE liMsSeq.
 MESSAGE "Migrate the mServiceLimit With New Values ?"
    VIEW-AS ALERT-BOX QUESTION BUTTONS YES-NO-CANCEL
    TITLE "YDR-2284: MServiceLimit Migration" UPDATE llConfirm AS LOGICAL.
 
 ASSIGN ldNOW = fMakeTS()
-       lcCLITypeList = "CONT23,CONT24,CONTS,CONTS,CONTS,CONTS,CONTS,CONTS,CONTS,CONTS,CONTS,CONTS,CONTS,CONTSF,CONTSF"
-       lcSLGroupList = "CONT23,CONT24,CONTS12,CONTS15,CONTS16,CONTS20,CONTS21,CONTS25,CONTS26,CONTS30,CONTS32,CONTS35,CONTS39,CONTSF10,CONTSF14"
-       lcSLCodeList  = "CONT23_QTY,CONT24_QTY,CONTS12_QTY,S15_QTY,S16_QTY,S20_QTY,S21_QTY,S25_QTY,S26_QTY,S30_QTY,S32_QTY,S35_QTY,S39_QTY,SF10_QTY,SF14_QTY"
-       lcNEWSLCodeList = "CONT23_MIN,CONT24_MIN,CONTS12_MIN,S15_MIN,S16_MIN,S20_MIN,S21_MIN,S25_MIN,S26_MIN,S30_MIN,S32_MIN,S35_MIN,S39_MIN,SF10_MIN,SF14_MIN".
+       lcCLITypeList = "CONT23,CONT24,CONTS,CONTSF".
 
 OUTPUT STREAM sSL TO "YDR-2284-Voice-5000-Min-Migration.txt".
 PUT STREAM sSL UNFORMATTED
    "MsSeq,CLI,CustNum,CLIType,ActivationTS,SLGroupCode,SLCode,SlSeq,OldDialType,OldSLSeq,OldInclUnit,OldInclAmt,NewDialType,NewSLSeq,NewInclUnit,NewInclAmt"
    SKIP.
+IF liMsSeq = 0 THEN
 DO i = 1 TO NUM-ENTRIES(lcCLITypeList,","):
    FOR EACH MobSub NO-LOCK WHERE
-            MobSub.Brand = "1" AND
+            MobSub.Brand   = "1" AND
             MobSub.CLIType = ENTRY(i,lcCLITypeList,","):
+      RUN pUpd.
+   END.
+END.
+ELSE
+DO:
+   FOR EACH MobSub NO-LOCK WHERE
+            MobSub.Brand = "1" AND
+            MobSub.MsSeq = liMsSeq:
+      RUN pUpd.
+   END.
+END.
+OUTPUT STREAM sSL CLOSE.
+
+PROCEDURE pUpd:
       FOR FIRST ServiceLimit NO-LOCK WHERE
-                ServiceLimit.GroupCode = ENTRY(i,lcSLGroupList,",") AND
-                ServiceLimit.SLCode    = ENTRY(i,lcSLCodeList,","),
+                (IF MobSub.TariffBundle <> "" THEN ServiceLimit.GroupCode = MobSub.TariffBundle
+                ELSE ServiceLimit.GroupCode = MobSub.CliType) AND
+                ServiceLimit.DialType  = 0,
           FIRST MServiceLimit EXCLUSIVE-LOCK WHERE
                 MServiceLimit.MsSeq    = MobSub.MsSeq AND
                 MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -54,21 +71,31 @@ DO i = 1 TO NUM-ENTRIES(lcCLITypeList,","):
             mServiceLimit.InclUnit ","
             mServiceLimit.InclAmt  ","
          .
+
          FIND FIRST bSL NO-LOCK WHERE
-                    bSL.GroupCode = ENTRY(i,lcSLGroupList,",") AND
-                    bSL.SLCode    = ENTRY(i,lcNewSLCodeList,",") NO-ERROR.
+                    bSL.GroupCode = MobSub.TariffBundle AND
+                    bSL.DialType  = 4 NO-ERROR.
          IF llConfirm AND AVAILABLE bSL THEN DO:
-            ASSIGN mServiceLimit.DialType = bSL.DialType
-                   mServiceLimit.SLSeq    = bSL.SLSeq
-                   mServiceLimit.InclUnit = bSL.InclUnit
-                   mServiceLimit.InclAmt  = bSL.InclAmt
+            ASSIGN mServiceLimit.EndTS = fMake2Dt(TODAY - 1,86399)
+                   .
+            CREATE bMSL.
+            ASSIGN bMSL.MSID = NEXT-VALUE(mServiceLimit)
+                   bMSL.SLSeq = bSL.SLSeq
+                   bMSL.MsSeq = MobSub.MsSeq
+                   bMSL.CustNum = MobSub.CustNum
+                   bMSL.DialType = bSL.DialType
+                   bMSL.InclUnit = bSL.InclUnit
+                   bMSL.InclAmt  = bSL.InclAmt
+                   bMSL.FromTS   = fMake2Dt(TODAY,0)
+                   bMSL.EndTS    = 99999999.99999
                    .
             PUT STREAM sSL UNFORMATTED
-                mServiceLimit.DialType ","
-                mServiceLimit.SLSeq    ","
-                mServiceLimit.InclUnit ","
-                mServiceLimit.InclAmt
+                bMSL.DialType ","
+                bMSL.SLSeq    ","
+                bMSL.InclUnit ","
+                bMSL.InclAmt
             SKIP.
+            RELEASE bMSL.
          END.
          ELSE IF AVAILABLE bSL THEN
             PUT STREAM sSL UNFORMATTED
@@ -77,8 +104,8 @@ DO i = 1 TO NUM-ENTRIES(lcCLITypeList,","):
                 bSL.InclUnit ","
                 bSL.InclAmt
             SKIP.
-         ELSE PUT STREAM sSL UNFORMATTED SKIP.
+         ELSE
+         PUT STREAM sSL UNFORMATTED SKIP.
       END.
-   END.
-END.
-OUTPUT STREAM sSL CLOSE.
+      RELEASE bSL.
+END PROCEDURE.
