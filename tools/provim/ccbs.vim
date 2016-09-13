@@ -130,13 +130,23 @@ function! Check_syntax() range
         " Lets store the class name it is the word after class word (\c is case-insensitive mark)
         " also there must be whitespace character after the word class
         " finally we take every characters until whitespace or : character
-        let l:classname = matchstr(getline(l:classline), '\cclass\s*\zs[^ :]*\ze')
-        if empty(l:classname)
+        let l:classfullname = matchstr(getline(l:classline), '\cclass\s*\zs[^ :]*\ze')
+        if empty(l:classfullname)
             throw "no class name recognized into ''" . getline(l:classline) . "''"
         endif
         let l:extension = ".cls"
+
+        " If there is a path in class name lets get the actual class name
+        let l:classname = matchstr(l:classfullname,'.*\.\zs\w*\ze')
+
         " Add whitespace in order to get safer substitute later on
-        let l:classname = ' ' . l:classname
+        let l:classfullname = ' ' . l:classfullname
+
+        if empty(l:classname)
+            let l:classname = l:classfullname
+        else
+            let l:classname = ' ' . l:classname
+        endif
     endif
 
     let l:saveline = line(".")
@@ -160,7 +170,11 @@ function! Check_syntax() range
         execute "redir > " . l:tempfile
         while l:linenr < line("$")
             let l:linenr += 1
-            silent echo substitute(getline(l:linenr), l:classname , l:tempbasename, "g")
+            if l:linenr == l:classline
+                silent echo substitute(getline(l:linenr), l:classfullname , l:tempbasename, "g")
+            else
+                silent echo substitute(getline(l:linenr), l:classname , l:tempbasename, "g")
+            endif
         endwhile
         redir END
     " This is not a class file
