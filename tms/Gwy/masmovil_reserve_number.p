@@ -77,7 +77,7 @@ IF lcError EQ "" THEN DO:
 
       ASSIGN
          OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR}
-         OrderFusion.AdditionalInfo =
+         OrderFusion.FusionStatusDesc =
             SUBST("Create order message failed: &1", lcError).
 
       RELEASE OrderFusion.
@@ -109,7 +109,7 @@ ELSE DO:
 
          ASSIGN
             OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR}
-            OrderFusion.AdditionalInfo = lcErrorDesc.
+            OrderFusion.FusionStatusDesc = lcErrorDesc.
 
          fCreateMemo("Order",
                      STRING(Order.OrderId),

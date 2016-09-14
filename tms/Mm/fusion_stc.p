@@ -78,11 +78,11 @@ FIND FIRST OrderFusion NO-LOCK WHERE
            OrderFusion.OrderID = Order.OrderId NO-ERROR.
 IF NOT AVAIL OrderFusion THEN RETURN "OrderFusion not found".
 
-IF OrderFusion.FixedActivationTS EQ ? OR
-   OrderFusion.FixedActivationTS EQ 0 THEN
+IF OrderFusion.FixedInstallationTS EQ ? OR
+   OrderFusion.FixedInstallationTS EQ 0 THEN
    RETURN "Missing fixed line installation date".
 
-fSplitTS(OrderFusion.FixedActivationTS,
+fSplitTS(OrderFusion.FixedInstallationTS,
          OUTPUT ldaSTCDate,
          OUTPUT liSTCTime).
 

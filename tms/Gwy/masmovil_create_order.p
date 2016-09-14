@@ -102,12 +102,12 @@ ELSE DO:
 
    ASSIGN
       OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR}
-      OrderFusion.AdditionalInfo = "Masmovil fixed number reservation failed".
+      OrderFusion.FusionStatusDesc = "Masmovil fixed number reservation failed".
 
    fCreateMemo("Order",
                STRING(Order.OrderId),
                0,
-               OrderFusion.AdditionalInfo,
+               OrderFusion.FusionStatusDesc,
                lcError,
                "",
                "TMS").
