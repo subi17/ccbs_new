@@ -211,8 +211,8 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                NOT CAN-FIND(FIRST ServiceLimit WHERE
                                   ServiceLimit.GroupCode = lcSLGroup AND
                                   ServiceLimit.SLCode    = STRING(lcSLGroup + "_MIN") AND
-                                  ServiceLimit.ValidFrom <= TODAY    AND
-                                  ServiceLimit.ValidTo   >= TODAY)
+                                  ServiceLimit.ValidFrom <= ttCall.DateSt             AND
+                                  ServiceLimit.ValidTo   >= ttCall.DateSt)
                THEN liDialtype = 0.
          END.
 
