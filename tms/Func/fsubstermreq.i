@@ -15,7 +15,7 @@
 {mnpoutchk.i}
 {timestamp.i}
 {msisdn_prefix.i}
-
+{Func/fixedlinefunc.i}
 DEF BUFFER bMsTermReq FOR MsRequest.
 
 FUNCTION fTerminationRequest RETURNS INTEGER
@@ -71,7 +71,13 @@ FUNCTION fTerminationRequest RETURNS INTEGER
       bCreaReq.ReqSource   = icSource
       bCreaReq.OrigReq     = iiOrigReq
       liReqCreated         = bCreaReq.MsRequest.
- 
+
+   /*YPR-4769*/
+   /*Fixed line, waiting for manyal termination*/
+   IF fHasConvergenceTariff(iiMsSeq) THEN
+      bCreaReq.ReqStatus = {&REQUEST_STATUS_FIXED_TERMINATION}.
+
+
    RELEASE bCreaReq.
    
    RETURN liReqCreated.

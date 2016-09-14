@@ -69,4 +69,22 @@ IF NOT AVAIL TMSCodes THEN DO:
 
 END.
 */
+/*
+/*ypr-4769*/
+FIND FIRST TMSCodes WHERE
+           TMSCodes.tablename EQ "requem" AND
+           TMSCodes.fieldname BEGINS "94" AND
+           TMSCodes.codevalue EQ "1" NO-ERROR.
+IF NOT AVAIL TMSCodes THEN DO:
+   CREATE TMSCodes.
+   ASSIGN
+      TMSCodes.tablename = "requem"
+      TMSCodes.fieldname = "94,0"
+      TMSCodes.codevalue = "1"
+      TMSCodes.codegroup = "SubsLMenu"
+      TMSCodes.codename = "Waiting for fixed line termination"
+      TMSCodes.inuse = 1.
+
+END.
+*/
 

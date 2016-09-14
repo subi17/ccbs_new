@@ -1098,8 +1098,6 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
       OrderFusion.Brand             = gcBrand
       OrderFusion.OrderId           = liOrderId
       OrderFusion.FusionStatus      = {&FUSION_ORDER_STATUS_NEW}
-         WHEN LOOKUP(Order.StatusCode,{&ORDER_ROI_STATUSES}) = 0 AND
-         NOT llROIClose
       OrderFusion.OrderDate         = ldaOrderDate
       OrderFusion.Salesman          = pcSalesman
       OrderFusion.FixedNumberType   = lcFixedLineNumberType
@@ -1651,6 +1649,10 @@ IF pcFusionStruct > "" THEN DO:
          WHEN LOOKUP("billing_address",lcFusionStructFields) > 0.
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
+   
+   IF lcFixedLineNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} AND
+      lcFixedLineNumber EQ "" THEN
+      RETURN appl_err("empty fixed_line_number value").
      
    /* YBP-542 */ 
    lcError = fCreateOrderCustomer(pcFixedInstallAddress, 
@@ -2259,11 +2261,15 @@ IF plSendOffer AND NOT llROIClose THEN DO:
 
 END.
 
-IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND
-   AVAIL OrderFusion AND
-   OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_NEW} THEN
-   fCreateFusionReserveNumberMessage(Order.OrderID, 
-                                     OUTPUT lcErr).
+IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
+
+   IF OrderFusion.FixedNumber EQ "" THEN
+      fCreateFusionReserveNumberMessage(Order.OrderID,
+                                        OUTPUT lcError).
+   ELSE
+      fCreateFusionCreateOrderMessage(Order.OrderId,
+                                      OUTPUT lcError).
+END.
       
 /* YTS-2890 */
 fMakeCreateEvent((BUFFER Order:HANDLE),"",katun,"").

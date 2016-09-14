@@ -251,6 +251,7 @@
 &GLOBAL-DEFINE REQUEST_STATUS_FILE_DONE 17             /* File created */
 &GLOBAL-DEFINE REQUEST_STATUS_CONFIRMATION_PENDING 19  /* Waiting for confirmation */
 &GLOBAL-DEFINE REQUEST_STATUS_PROCESS_ERROR 99         /* Process error (Qvantel maintenance required) */
+&GLOBAL-DEFINE REQUEST_STATUS_FIXED_TERMINATION 94     /* Pending fixed line termination */
 
 /* Request Sources */
 &GLOBAL-DEFINE REQUEST_SOURCE_SUBSCRIPTION_CREATION "1"

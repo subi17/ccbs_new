@@ -26,7 +26,7 @@ FUNCTION fMasXMLGenerate_test RETURNS CHAR
    (icMethod AS CHAR):
    IF liTesting NE 0 THEN DO:
       xmlrpc_initialize(FALSE).
-      OUTPUT STREAM sOut TO VALUE("masmovile_xml_" + 
+      OUTPUT STREAM sOut TO VALUE("Xmasmovile_xml_" + 
       REPLACE(STRING(fmakets()), ".", "_") +
       ".xml") APPEND.
       PUT STREAM sOut UNFORMATTED 
@@ -292,8 +292,8 @@ END.
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
-   fMasXMLGenerate_test("CreateFixedLine").
-   RUN pRPCMethodCall("masmovile.CreateFixedLine", TRUE).
+   fMasXMLGenerate_test("createFixedLine").
+   RUN pRPCMethodCall("masmovile.createFixedLine", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
@@ -340,7 +340,7 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
    fMasXMLGenerate_test("CancelFixedLine").
-   RUN pRPCMethodCall("masmovile.CancelFixedLine", TRUE).
+   RUN pRPCMethodCall("masmovile.cancelFixedLine", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
