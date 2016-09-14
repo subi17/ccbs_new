@@ -12,9 +12,6 @@
 {xmlrpc/xmlrpc_client.i}
 {Func/forderstamp.i}
 
-
-/*Global variables for building masmovile data*/
-
 DEF VAR lcConURL AS CHAR NO-UNDO.
 DEF VAR liTesting AS INT NO-UNDO.
 liTesting = 0.
@@ -54,12 +51,14 @@ FUNCTION fAddCharacteristic RETURNS CHAR
     icValue AS CHAR,
     icOldValue AS CHAR):
    DEF VAR lcCharacteristicStruct AS CHAR.
+   DEF VAR lcInStruct AS CHAR.
 
-   lcCharacteristicStruct = add_struct(icBase,
-                                       "Characteristic").
-   add_string(lcCharacteristicStruct, "name", icParam).
-   add_string(lcCharacteristicStruct, "value", icValue ).
-   add_string(lcCharacteristicStruct, "oldValue", icOldValue).
+   lcCharacteristicStruct = add_struct(icBase,"").
+   lcInStruct = add_struct(lcCharacteristicStruct,"Characteristic").
+   add_string(lcInStruct, "name", icParam).
+   add_string(lcInStruct, "value", icValue ).
+   add_string(lcInStruct, "oldValue", icOldValue).
+   
    RETURN "".
 END.
 
@@ -70,13 +69,16 @@ FUNCTION fAddService RETURNS CHAR
     icSerAction AS CHAR,
     icSerType AS CHAR):
    DEF VAR lcSerStruct AS CHAR.
+   DEF VAR lcInStruct AS CHAR.
 
-   lcSerStruct = add_struct(icBase, "Service").
-   add_string(lcSerStruct, "serviceID", icSerID).
-   add_string(lcSerStruct, "serviceName", icSerName).
-   add_string(lcSerStruct, "action", icSerAction).
-   add_string(lcSerStruct, "type", icSerType).
-   RETURN lcSerStruct.
+   lcSerStruct = add_struct(icBase, "").
+   lcInStruct = add_struct(lcSerStruct, "Service").
+   add_string(lcInStruct, "serviceID", icSerID).
+   add_string(lcInStruct, "serviceName", icSerName).
+   add_string(lcInStruct, "action", icSerAction).
+   add_string(lcInStruct, "type", icSerType).
+   RETURN lcInStruct.
+   
 END.
 
 
@@ -131,7 +133,8 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
          RETURN "Error: Customer data not found " + STRING(iiOrderID) .
 
    END.
-/*   FIND FIRST bOF NO-LOCK WHERE
+/*   
+   FIND FIRST bOF NO-LOCK WHERE
               bOF.Brand EQ Syst.Parameters:gcBrand AND
               bOF.OrderID EQ iiOrderID NO-ERROR.
    IF NOT AVAIL bOF THEN
@@ -139,7 +142,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
 */
 
    /*Generate order type*/
-   
+  
 IF liTesting EQ 0 THEN DO:  
    IF bOrder.CliType BEGINS "CONTDSL" OR 
       bOrder.CliType BEGINS "CONTFH" THEN DO: 
@@ -170,7 +173,7 @@ ELSE DO:
             lcConnServiceName = "FTTH connection".
             lcConnServiceType = "FTTH".
 
-END.
+END. /*testing related*/
 
    IF fTS2Date(bOrder.CrStamp, ldaCreDate) EQ FALSE THEN
       RETURN "Error: Date reading failed".
@@ -223,6 +226,7 @@ END.
 
    lcServiceArray = add_array(lcOrderStruct,"Services").
     /*Services entry - Phone*/
+    
    lcServiceStruct = fAddService(lcServiceArray, 
                "FixedPhone", 
                "Fixed Phone Number", 
@@ -261,16 +265,16 @@ END.
                       "0031",                /*param value*/
                       "").                    /*old value*/
  
-/*
+
    /*Services entry - Line*/
    lcServiceStruct = fAddService(lcServiceArray, 
                lcConnServiceId, 
                lcConnServiceName, 
                "add", 
                lcConnServiceType).
-*/  
+  
    /*Characteristics for the service*/
-   lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics").
+   lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics" ).
    IF lcConnServiceId EQ "FTTH" THEN DO:
       fAddCharacteristic(lcCharacteristicsArray, /*base*/
                          "UploadSpeed",        /*param name*/
@@ -285,7 +289,7 @@ END.
 
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
                       "gescal",        /*param name*/
-                      bOC.Gescal,      /*param value*/
+                      /*bOC.Gescal,*/"007",      /*param value*/
                       "").             /*old value*/
 
 
@@ -403,6 +407,7 @@ FUNCTION fMasGet_FixedNbr RETURNS CHAR
    RETURN "".
 
 END.
+
 
 
 
