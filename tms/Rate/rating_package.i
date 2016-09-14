@@ -210,7 +210,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
             IF liDialType EQ 4 AND 
                NOT CAN-FIND(FIRST ServiceLimit WHERE
                                   ServiceLimit.GroupCode = lcSLGroup       AND
-                                  ServiceLimit.DialyType = liDialType      AND
+                                  ServiceLimit.DialType  = liDialType      AND
                                   ServiceLimit.ValidFrom <= ttCall.DateSt  AND
                                   ServiceLimit.ValidTo   >= ttCall.DateSt)
                THEN liDialtype = 0.
