@@ -181,7 +181,7 @@ function! Check_syntax() range
     else
         " This happens if we don't have lines marked on the editor
         if a:firstline == a:lastline
-            execute "silent write " . l:tempfile
+            silent! execute 'write' l:tempfile
         " This happens if we have lines marked on the editor. We will add
         " DEFINE lines if there are some outside of the marking.
         " This is not very good solution but might work some cases
