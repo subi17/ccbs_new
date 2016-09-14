@@ -50,6 +50,11 @@ DEF VAR ldeRVPerc AS DEC NO-UNDO.
 DEF VAR ldeRVAmt AS DEC NO-UNDO. 
 DEF VAR lcTFBank AS CHAR NO-UNDO. 
 DEF VAR lcResellers AS CHAR NO-UNDO. 
+DEF VAR lcRootDirCetelem AS CHAR NO-UNDO.
+DEF VAR lcSpoolDirCetelem AS CHAR NO-UNDO.
+DEF VAR lcOutDirCetelem AS CHAR NO-UNDO.
+DEF VAR lcLogDirCetelem AS CHAR NO-UNDO.
+DEF VAR lcErrorFileCetelem AS CHAR NO-UNDO.
 
 FOR EACH Reseller NO-LOCK WHERE
          Reseller.Brand = gcBrand:
@@ -71,22 +76,37 @@ DEF BUFFER bMsRequest FOR MsRequest.
 
 /* previous week from sunday to saturday */
 ASSIGN
-   ldeTsFrom = fMake2Dt(MsRequest.ReqDtParam1,0)
-   ldeTsTo   = fMake2Dt(MsRequest.ReqDtParam2,86399)
-   liCurrentPeriod  = YEAR(TODAY) * 100 + MONTH(TODAY)
-   lcTFBank  = MsRequest.ReqCParam1
-   lcRootDir = fCParam("TermFinance","OutRootDir").
+   ldeTsFrom         = fMake2Dt(MsRequest.ReqDtParam1,0)
+   ldeTsTo           = fMake2Dt(MsRequest.ReqDtParam2,86399)
+   liCurrentPeriod   = YEAR(TODAY) * 100 + MONTH(TODAY)
+   lcTFBank          = MsRequest.ReqCParam1
+   lcRootDir         = fCParam("TermFinance","OutRootDir")
+   lcRootDirCetelem  = fCParam("TermFinance","OutRootDirCetelem").
 
 IF NOT lcRootDir > "" THEN DO:
    fReqStatus(3,"SYSTEM ERROR: Output directory not defined").
    RETURN.
 END.
 
+IF lcTFBank = {&TF_BANK_CETELEM} AND NOT lcRootDirCetelem > "" THEN DO:
+   fReqStatus(3,"SYSTEM ERROR: Output directory for Cetelem files not defined").
+   RETURN.
+END.
+
 ASSIGN
-   lcSpoolDir = lcRootDir + "spool/"
-   lcOutDir   = lcRootDir + "outgoing/"
-   lcLogDir   = lcRootDir + "logs/"
+   lcSpoolDir        = lcRootDir          + "spool/"
+   lcOutDir          = lcRootDir          + "outgoing/"
+   lcLogDir          = lcRootDir          + "logs/"
+   lcSpoolDirCetelem = lcRootDirCetelem   + "spool/"
+   lcOutDirCetelem   = lcRootDirCetelem   + "outgoing/"
+   lcLogDirCetelem   = lcRootDirCetelem   + "logs/"
    lcErrorFile = lcLogDir + "ALTASYOIGO_" + 
+      STRING(MsRequest.MsRequest) + "_" +
+      STRING(YEAR(TODAY) * 10000 + 
+             MONTH(TODAY) * 100 + 
+             DAY(TODAY)) + "_" +
+      STRING(TIME) + ".log"
+   lcErrorFileCetelem = lcLogDirCetelem + "ALTASYOIGO_" + 
       STRING(MsRequest.MsRequest) + "_" +
       STRING(YEAR(TODAY) * 10000 + 
              MONTH(TODAY) * 100 + 
@@ -95,17 +115,17 @@ ASSIGN
 
 CASE lcTFBank:
    WHEN {&TF_BANK_UNOE} THEN
-    lcFile     = lcSpoolDir + "ALTASYOIGO.txt".
+      lcFile     = lcSpoolDir + "ALTASYOIGO.txt".
    WHEN {&TF_BANK_SABADELL} THEN
-   lcFile     = lcSpoolDir + "ALTASYOIGO_SABADELL_" +
-                 STRING(YEAR(TODAY) * 10000 + 
-                         MONTH(TODAY) * 100 + 
-                         DAY(TODAY)) + ".txt" .
+      lcFile     = lcSpoolDir + "ALTASYOIGO_SABADELL_" +
+                    STRING(YEAR(TODAY) * 10000 + 
+                           MONTH(TODAY) * 100 + 
+                           DAY(TODAY)) + ".txt" .
    WHEN {&TF_BANK_CETELEM} THEN
-   lcFile     = lcSpoolDir + "ALTASYOIGO_CETELEM_" +
-                 STRING(YEAR(TODAY) * 10000 + 
-                         MONTH(TODAY) * 100 + 
-                         DAY(TODAY)) + ".txt" .
+      lcFile     = lcSpoolDirCetelem + "ALTASYOIGO_CETELEM_" +
+                    STRING(YEAR(TODAY) * 10000 + 
+                           MONTH(TODAY) * 100 + 
+                           DAY(TODAY)) + ".txt" .
    OTHERWISE DO:
       fReqStatus(3,"ERROR: Unsupported bank code").
       RETURN.
@@ -535,8 +555,10 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
                   lcPayTermType[2]).
 
 END.
-   
-fMove2TransDir(lcFile, "", lcOutDir).
+
+IF lcTFBank = {&TF_BANK_CETELEM} 
+THEN fMove2TransDir(lcFile, "", lcOutDirCetelem).
+ELSE fMove2TransDir(lcFile, "", lcOutDir).
 
 OUTPUT STREAM sout CLOSE.
 
