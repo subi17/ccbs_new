@@ -73,41 +73,42 @@ PROCEDURE pUpd:
             mServiceLimit.InclUnit ","
             mServiceLimit.InclAmt  ","
          .
-
-         FIND FIRST bSL NO-LOCK WHERE
-                    bSL.GroupCode = lcTariffBundle AND
-                    bSL.DialType  = 4 NO-ERROR.
-         IF llConfirm AND AVAILABLE bSL THEN DO:
-            ASSIGN mServiceLimit.EndTS = fMake2Dt(09/30/2016,86399)
-                   .
-            CREATE bMSL.
-            ASSIGN bMSL.MSID = NEXT-VALUE(mServiceLimit)
-                   bMSL.SLSeq = bSL.SLSeq
-                   bMSL.MsSeq = MobSub.MsSeq
-                   bMSL.CustNum = MobSub.CustNum
-                   bMSL.DialType = bSL.DialType
-                   bMSL.InclUnit = bSL.InclUnit
-                   bMSL.InclAmt  = bSL.InclAmt
-                   bMSL.FromTS   = fMake2Dt(10/01/2016,0)
-                   bMSL.EndTS    = 99999999.99999
-                   .
-            PUT STREAM sSL UNFORMATTED
-                bMSL.DialType ","
-                bMSL.SLSeq    ","
-                bMSL.InclUnit ","
-                bMSL.InclAmt
-            SKIP.
-            RELEASE bMSL.
-         END.
-         ELSE IF AVAILABLE bSL THEN
-            PUT STREAM sSL UNFORMATTED
-                bSL.DialType ","
-                bSL.SLSeq    ","
-                bSL.InclUnit ","
-                bSL.InclAmt
-            SKIP.
-         ELSE
-         PUT STREAM sSL UNFORMATTED SKIP.
       END.
+
+      /*Creating New MServiceLimit*/
+      FIND FIRST bSL NO-LOCK WHERE
+                 bSL.GroupCode = lcTariffBundle AND
+                 bSL.DialType  = 4 NO-ERROR.
+      IF llConfirm AND AVAILABLE bSL THEN DO:
+         ASSIGN mServiceLimit.EndTS = fMake2Dt(09/30/2016,86399).
+
+         CREATE bMSL.
+         ASSIGN bMSL.MSID = NEXT-VALUE(mServiceLimit)
+                bMSL.SLSeq = bSL.SLSeq
+                bMSL.MsSeq = MobSub.MsSeq
+                bMSL.CustNum = MobSub.CustNum
+                bMSL.DialType = bSL.DialType
+                bMSL.InclUnit = bSL.InclUnit
+                bMSL.InclAmt  = bSL.InclAmt
+                bMSL.FromTS   = fMake2Dt(10/01/2016,0)
+                bMSL.EndTS    = 99999999.99999
+                .
+         PUT STREAM sSL UNFORMATTED
+             bMSL.DialType ","
+             bMSL.SLSeq    ","
+             bMSL.InclUnit ","
+             bMSL.InclAmt
+         SKIP.
+         RELEASE bMSL.
+      END.
+      ELSE IF AVAILABLE bSL THEN
+         PUT STREAM sSL UNFORMATTED
+             bSL.DialType ","
+             bSL.SLSeq    ","
+             bSL.InclUnit ","
+             bSL.InclAmt
+         SKIP.
+      ELSE
+         PUT STREAM sSL UNFORMATTED SKIP.
       RELEASE bSL.
 END PROCEDURE.
