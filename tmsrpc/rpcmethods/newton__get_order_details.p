@@ -86,6 +86,7 @@
                  fusion_order_status;string;
                  fixed_line_order_status;string;
                  fixed_line_product;string;fusion order product code
+                 fixed_line_appointment_date;string;installation appointment date
                  customer_type;string;
                  allow_mobile_order_release;boolean;For Fusion orders
                  install_address;struct;
@@ -518,6 +519,7 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
       add_string(lcFusionStruct, "customer_type",OrderFusion.Customer).
       add_string(lcFusionStruct, "fixed_line_product",OrderFusion.Product).
       add_string(lcFusionStruct, "update_ts", STRING(OrderFusion.UpdateTS)).
+      add_string(lcFusionStruct, "fixed_line_appointment_date",OrderFusion.AppointmentDate).
       add_boolean(lcFusionStruct, "allow_mobile_order_release",
          (OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ONGOING})).
 
