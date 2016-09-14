@@ -293,7 +293,7 @@ END.
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
    fMasXMLGenerate_test("createFixedLine").
-   RUN pRPCMethodCall("masmovile.createFixedLine", TRUE).
+   RUN pRPCMethodCall("masmovil.createFixedLine", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
@@ -340,7 +340,7 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
    fMasXMLGenerate_test("CancelFixedLine").
-   RUN pRPCMethodCall("masmovile.cancelFixedLine", TRUE).
+   RUN pRPCMethodCall("masmovil.cancelFixedLine", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
@@ -383,7 +383,7 @@ FUNCTION fMasGet_FixedNbr RETURNS CHAR
          RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
    xmlrpc_initialize(FALSE).
    fMasXMLGenerate_test("getnewResource").
-   RUN pRPCMethodCall("masmovile.getnewResource", TRUE).
+   RUN pRPCMethodCall("masmovil.getNewResource", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
