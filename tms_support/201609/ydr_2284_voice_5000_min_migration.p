@@ -73,6 +73,8 @@ PROCEDURE pUpd:
             mServiceLimit.InclUnit ","
             mServiceLimit.InclAmt  ","
          .
+         IF llConfirm THEN
+            ASSIGN mServiceLimit.EndTS = fMake2Dt(09/30/2016,86399).
       END.
 
       /*Creating New MServiceLimit*/
@@ -80,7 +82,6 @@ PROCEDURE pUpd:
                  bSL.GroupCode = lcTariffBundle AND
                  bSL.DialType  = 4 NO-ERROR.
       IF llConfirm AND AVAILABLE bSL THEN DO:
-         ASSIGN mServiceLimit.EndTS = fMake2Dt(09/30/2016,86399).
 
          CREATE bMSL.
          ASSIGN bMSL.MSID = NEXT-VALUE(mServiceLimit)
