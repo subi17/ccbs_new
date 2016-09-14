@@ -844,6 +844,14 @@
 1 "" 3 "Eguneratzea: Internet para Llevar 35" 0 "CONTDATATOCONTD2" "1" 01/03/12 31/03/12
 1 "" 4 "Upgrade to Internet para Llevar 35" 0 "CONTDATATOCONTD2" "1" 01/03/12 31/12/49
 1 "" 5 "Upgrade to Internet para Llevar 35" 0 "CONTDATATOCONTD2" "1" 01/04/12 31/12/49
+1 "" 1 "Fixed Line" 0 "CONTDSL45MF" "1" 08/09/16 31/12/49
+1 "" 2 "Fixed Line" 0 "CONTDSL45MF" "1" 08/09/16 31/12/49
+1 "" 3 "Fixed Line" 0 "CONTDSL45MF" "1" 08/09/16 31/12/49
+1 "" 5 "Fixed Line" 0 "CONTDSL45MF" "1" 08/09/16 31/12/49
+1 "" 1 "Fixed Line" 0 "CONTDSL55MF" "1" 08/09/16 31/12/49
+1 "" 2 "Fixed Line" 0 "CONTDSL55MF" "1" 08/09/16 31/12/49
+1 "" 3 "Fixed Line" 0 "CONTDSL55MF" "1" 08/09/16 31/12/49
+1 "" 5 "Fixed Line" 0 "CONTDSL55MF" "1" 08/09/16 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONTF8RETDISC" "1" 01/10/15 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONTF8RETDISC" "1" 01/10/15 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONTF8RETDISC" "1" 01/10/15 31/12/49
@@ -864,6 +872,22 @@
 1 "" 2 "Nacionals" 0 "CONTFF2VOICE" "1" 01/10/13 31/12/49
 1 "" 3 "Nazionalak" 0 "CONTFF2VOICE" "1" 01/10/13 31/12/49
 1 "" 5 "National" 0 "CONTFF2VOICE" "1" 01/10/13 31/12/49
+1 "" 1 "Fixed Line" 0 "CONTFH45_50MF" "1" 08/09/16 31/12/49
+1 "" 2 "Fixed Line" 0 "CONTFH45_50MF" "1" 08/09/16 31/12/49
+1 "" 3 "Fixed Line" 0 "CONTFH45_50MF" "1" 08/09/16 31/12/49
+1 "" 5 "Fixed Line" 0 "CONTFH45_50MF" "1" 08/09/16 31/12/49
+1 "" 1 "Fixed Line" 0 "CONTFH55_300MF" "1" 08/09/16 31/12/49
+1 "" 2 "Fixed Line" 0 "CONTFH55_300MF" "1" 08/09/16 31/12/49
+1 "" 3 "Fixed Line" 0 "CONTFH55_300MF" "1" 08/09/16 31/12/49
+1 "" 5 "Fixed Line" 0 "CONTFH55_300MF" "1" 08/09/16 31/12/49
+1 "" 1 "Fixed Line" 0 "CONTFH55_50MF" "1" 08/09/16 31/12/49
+1 "" 2 "Fixed Line" 0 "CONTFH55_50MF" "1" 08/09/16 31/12/49
+1 "" 3 "Fixed Line" 0 "CONTFH55_50MF" "1" 08/09/16 31/12/49
+1 "" 5 "Fixed Line" 0 "CONTFH55_50MF" "1" 08/09/16 31/12/49
+1 "" 1 "Fixed Line" 0 "CONTFH65_300MF" "1" 08/09/16 31/12/49
+1 "" 2 "Fixed Line" 0 "CONTFH65_300MF" "1" 08/09/16 31/12/49
+1 "" 3 "Fixed Line" 0 "CONTFH65_300MF" "1" 08/09/16 31/12/49
+1 "" 5 "Fixed Line" 0 "CONTFH65_300MF" "1" 08/09/16 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
@@ -8279,11 +8303,11 @@
 1 "" 3 "Telefono pruebas 4" 0 "SUMI3" "1" 30/06/16 31/12/49
 1 "" 4 "Telefono pruebas 4" 0 "SUMI3" "1" 30/06/16 31/12/49
 1 "" 5 "Telefono pruebas 4" 0 "SUMI3" "1" 30/06/16 31/12/49
-1 "" 1 "Telefono pruebas" 0 "SUMIDERO" "1" 31/01/12 31/12/49
+1 "" 1 "Telefono pruebas 1" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 2 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 3 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 4 "Sumidero" 0 "SUMIDERO" "1" 31/01/12 31/12/49
-1 "" 5 "Telefono pruebas" 0 "SUMIDERO" "1" 31/01/12 31/12/49
+1 "" 5 "Telefono pruebas 1" 0 "SUMIDERO" "1" 31/01/12 31/12/49
 1 "" 1 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
 1 "" 2 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
 1 "" 3 "sumidero2" 0 "SUMIDERO2" "1" 29/11/12 31/12/49
@@ -10567,6 +10591,14 @@
 9 "" 2 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 3 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 5 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
+9 "" 1 "La Infinita 2 GB + DSL" 0 "CONTDSL45" "1" 08/09/16 31/12/49
+9 "" 2 "La Infinita 2 GB + DSL" 0 "CONTDSL45" "1" 08/09/16 31/12/49
+9 "" 3 "La Infinita 2 GB + DSL" 0 "CONTDSL45" "1" 08/09/16 31/12/49
+9 "" 5 "La Infinita 2 GB + DSL" 0 "CONTDSL45" "1" 08/09/16 31/12/49
+9 "" 1 "La Infinita 10 GB + DSL" 0 "CONTDSL55" "1" 08/09/16 31/12/49
+9 "" 2 "La Infinita 10 GB + DSL" 0 "CONTDSL55" "1" 08/09/16 31/12/49
+9 "" 3 "La Infinita 10 GB + DSL" 0 "CONTDSL55" "1" 08/09/16 31/12/49
+9 "" 5 "La Infinita 10 GB + DSL" 0 "CONTDSL55" "1" 08/09/16 31/12/49
 9 "" 1 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
 9 "" 2 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
 9 "" 3 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
@@ -10622,6 +10654,22 @@
 9 "" 4 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
 9 "" 5 "Fusión Plana a lo Yoigo" 0 "CONTFF" "1" 16/06/15 31/12/54
 9 "" 5 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
+9 "" 1 "La Infinita 2 GB + FIBER 50M" 0 "CONTFH45_50" "1" 08/09/16 31/12/49
+9 "" 2 "La Infinita 2 GB + FIBER 50M" 0 "CONTFH45_50" "1" 08/09/16 31/12/49
+9 "" 3 "La Infinita 2 GB + FIBER 50M" 0 "CONTFH45_50" "1" 08/09/16 31/12/49
+9 "" 5 "La Infinita 2 GB + FIBER 50M" 0 "CONTFH45_50" "1" 08/09/16 31/12/49
+9 "" 1 "La Infinita 2 GB + FIBER 300M" 0 "CONTFH55_300" "1" 08/09/16 31/12/49
+9 "" 2 "La Infinita 2 GB + FIBER 300M" 0 "CONTFH55_300" "1" 08/09/16 31/12/49
+9 "" 3 "La Infinita 2 GB + FIBER 300M" 0 "CONTFH55_300" "1" 08/09/16 31/12/49
+9 "" 5 "La Infinita 2 GB + FIBER 300M" 0 "CONTFH55_300" "1" 08/09/16 31/12/49
+9 "" 1 "La Infinita 10 GB + FIBER 50M" 0 "CONTFH55_50" "1" 08/09/16 31/12/49
+9 "" 2 "La Infinita 10 GB + FIBER 50M" 0 "CONTFH55_50" "1" 08/09/16 31/12/49
+9 "" 3 "La Infinita 10 GB + FIBER 50M" 0 "CONTFH55_50" "1" 08/09/16 31/12/49
+9 "" 5 "La Infinita 10 GB + FIBER 50M" 0 "CONTFH55_50" "1" 08/09/16 31/12/49
+9 "" 1 "La Infinita 10 GB + FIBER 300M" 0 "CONTFH65_300" "1" 08/09/16 31/12/49
+9 "" 2 "La Infinita 10 GB + FIBER 300M" 0 "CONTFH65_300" "1" 08/09/16 31/12/49
+9 "" 3 "La Infinita 10 GB + FIBER 300M" 0 "CONTFH65_300" "1" 08/09/16 31/12/49
+9 "" 5 "La Infinita 10 GB + FIBER 300M" 0 "CONTFH65_300" "1" 08/09/16 31/12/49
 9 "" 1 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
 9 "" 2 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
 9 "" 3 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54

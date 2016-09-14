@@ -249,6 +249,7 @@ katun = "NewtonRPC".
 {edefine.i new}*/
 {order_data.i}
 {smsmessage.i}
+{orderfusion.i}
 
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.
@@ -421,6 +422,8 @@ DEF VAR lcQ25Struct       AS CHAR    NO-UNDO. /* Quota 25 input struct */
 DEF VAR pcAccessory AS CHAR NO-UNDO.
 DEF VAR pcAccessoryStruct AS CHAR NO-UNDO.
 DEF VAR lcAccessoryStruct AS CHAR NO-UNDO.
+
+DEF VAR lcErr AS CHAR NO-UNDO.
 
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
@@ -1132,8 +1135,6 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
       OrderFusion.Brand             = gcBrand
       OrderFusion.OrderId           = liOrderId
       OrderFusion.FusionStatus      = {&FUSION_ORDER_STATUS_NEW}
-         WHEN LOOKUP(Order.StatusCode,{&ORDER_ROI_STATUSES}) = 0 AND
-         NOT llROIClose
       OrderFusion.OrderDate         = ldaOrderDate
       OrderFusion.Salesman          = pcSalesman
       OrderFusion.FixedNumberType   = lcFixedLineNumberType
@@ -1710,6 +1711,10 @@ IF pcFusionStruct > "" THEN DO:
          WHEN LOOKUP("billing_address",lcFusionStructFields) > 0.
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
+   
+   IF lcFixedLineNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} AND
+      lcFixedLineNumber EQ "" THEN
+      RETURN appl_err("empty fixed_line_number value").
      
    /* YBP-542 */ 
    lcError = fCreateOrderCustomer(pcFixedInstallAddress, 
@@ -2318,6 +2323,15 @@ IF plSendOffer AND NOT llROIClose THEN DO:
 
 END.
 
+IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
+
+   IF OrderFusion.FixedNumber EQ "" THEN
+      fCreateFusionReserveNumberMessage(Order.OrderID,
+                                        OUTPUT lcError).
+   ELSE
+      fCreateFusionCreateOrderMessage(Order.OrderId,
+                                      OUTPUT lcError).
+END.
       
 /* YTS-2890 */
 fMakeCreateEvent((BUFFER Order:HANDLE),"",katun,"").

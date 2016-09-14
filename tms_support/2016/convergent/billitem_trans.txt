@@ -1,0 +1,25 @@
+Type;Language Type;Language;Translation Name
+CONTDSL45MF;1;Spanish;Fixed Line
+CONTDSL45MF;2;Catalan;Fixed Line
+CONTDSL45MF;3;Basque;Fixed Line
+CONTDSL45MF;5;English;Fixed Line
+CONTDSL55MF;1;Spanish;Fixed Line
+CONTDSL55MF;2;Catalan;Fixed Line
+CONTDSL55MF;3;Basque;Fixed Line
+CONTDSL55MF;5;English;Fixed Line
+CONTFH45_50MF;1;Spanish;Fixed Line
+CONTFH45_50MF;2;Catalan;Fixed Line
+CONTFH45_50MF;3;Basque;Fixed Line
+CONTFH45_50MF;5;English;Fixed Line
+CONTFH55_50MF;1;Spanish;Fixed Line
+CONTFH55_50MF;2;Catalan;Fixed Line
+CONTFH55_50MF;3;Basque;Fixed Line
+CONTFH55_50MF;5;English;Fixed Line
+CONTFH55_300MF;1;Spanish;Fixed Line
+CONTFH55_300MF;2;Catalan;Fixed Line
+CONTFH55_300MF;3;Basque;Fixed Line
+CONTFH55_300MF;5;English;Fixed Line
+CONTFH65_300MF;1;Spanish;Fixed Line
+CONTFH65_300MF;2;Catalan;Fixed Line
+CONTFH65_300MF;3;Basque;Fixed Line
+CONTFH65_300MF;5;English;Fixed Line

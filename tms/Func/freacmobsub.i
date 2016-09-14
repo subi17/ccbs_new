@@ -7,6 +7,13 @@
   Created ......: 03.10.11
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
+&IF "{&fcreamobsub}" NE "YES"
+&THEN
+&GLOBAL-DEFINE fcreamobsub YES
+{Syst/tmsconst.i}
+{Func/timestamp.i}
+{Func/fcreatereq.i}
+{Func/fixedlinefunc.i}
 
 FUNCTION freacprecheck RETURNS CHARACTER
    (INPUT  iiMsSeq        AS INTEGER,    /* Subscription ID    */
@@ -42,6 +49,11 @@ FUNCTION freacprecheck RETURNS CHARACTER
          RETURN "Invalid Subscription Id".
    END. /* ELSE DO: */
    
+  /*YPR-4770*/ 
+  /*reactivation is not allowed for convergent tariffs.*/
+  IF fIsConvergenceTariff(bTermMobSub.CLIType) THEN 
+     RETURN "Not alloved for fixed line tariffs".
+
    /* Check that no other reactivation requests is under work */
    FIND FIRST bMsReacReq WHERE
               bMsReacReq.MsSeq   = iiMsSeq      AND
@@ -213,3 +225,5 @@ FUNCTION fReactivationRequest RETURNS INTEGER
    RETURN liReqCreated.
 
 END FUNCTION. /* FUNCTION fReactivationRequest RETURNS INTEGER */
+
+&ENDIF

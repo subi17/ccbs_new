@@ -37,5 +37,7 @@
 "1" "Per.contract usage" "PERCONTR" 99 1 30
 "1" "Per.contract usage" "PERCONTR" 101 1 31
 "1" "Per.contract usage" "PERCONTR" 103 1 32
+"1" "Per.contract usage" "PERCONTR" 8011 1 33
+"1" "Per.contract usage" "PERCONTR" 8012 1 34
 "1" "ST CHANGE" "STC-IDType" 1 0 1
 "1" "ST CHANGE" "STC-IDType" 3 0 2
