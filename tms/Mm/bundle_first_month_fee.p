@@ -225,11 +225,8 @@ PROCEDURE pCollectSubscription:
    DEF VAR ldaDate       AS DATE NO-UNDO.
    DEF VAR liTime        AS INT  NO-UNDO.
    
-   /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
-   FOR FIRST ServiceLimit NO-LOCK WHERE 
-             ServiceLimit.GroupCode = icDCEvent AND
-             ServiceLimit.ValidFrom <= idaFromDate AND
-             ServiceLimit.ValidTo   >= idaToDate,
+   FOR EACH ServiceLimit NO-LOCK WHERE 
+             ServiceLimit.GroupCode = icDCEvent,
       /* packages that were activated (and not terminated) on this period */
        FIRST MServiceLimit NO-LOCK WHERE
              MServiceLimit.MsSeq = iiMsSeq AND
@@ -239,7 +236,7 @@ PROCEDURE pCollectSubscription:
              MServiceLimit.EndTS >= ldPeriodTo:
 
       /* only bundles */
-      IF NOT fIsBundle(ServiceLimit.GroupCode) THEN NEXT.    
+      IF NOT fIsBundle(ServiceLimit.GroupCode) THEN LEAVE.    
 
       /* First month always usage based */
       IF LOOKUP(icDCEvent,lcFirstMonthUsageBasedBundles) > 0 THEN .
@@ -263,7 +260,7 @@ PROCEDURE pCollectSubscription:
                         LOOKUP(MsRequest.ReqCParam3,lcIPLContracts)  = 0 AND
                         MsRequest.ReqSource  = {&REQUEST_SOURCE_BTC}
                         USE-INDEX MsSeq)
-      THEN NEXT.
+      THEN LEAVE.
       
       CREATE ttSub.
       ASSIGN
@@ -285,6 +282,8 @@ PROCEDURE pCollectSubscription:
          IF NOT fUpdateFuncRunProgress(iiFRProcessID, -1 * liCollected) THEN
             RETURN "ERROR:Stopped".
       END.   
+      
+      LEAVE.
       
    END.
 

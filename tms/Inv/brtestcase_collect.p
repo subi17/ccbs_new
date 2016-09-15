@@ -324,12 +324,9 @@ PROCEDURE pInitCriteria:
       ttCriteria.PeriodEnd = fMake2DT(ttCriteria.EndDate,86399).
             
    /* get some periodical contract related data ready */ 
-   /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
    IF ttCriteria.CriteriaTable = "DayCampaign" THEN DO:
       FOR EACH ServiceLimit NO-LOCK WHERE
-               ServiceLimit.GroupCode MATCHES(ttCriteria.ValueIncluded) AND
-               ServiceLimit.ValidFrom <= ttCriteria.BegDate             AND
-               ServiceLimit.ValidTo   >= ttCriteria.EndDate:
+               ServiceLimit.GroupCode MATCHES(ttCriteria.ValueIncluded):
          IF NOT CAN-FIND(FIRST ttServiceLimit WHERE 
             ttServiceLimit.SlSeq = ServiceLimit.SlSeq) THEN DO:
                CREATE ttServiceLimit.
@@ -680,7 +677,7 @@ PROCEDURE pCheckDayCampaign:
    /* special case dss; check if dss is active on customer */
    IF ttCriteria.ValueIncluded = {&DSS} THEN 
    CheckDSSLimit:
-   FOR FIRST ttServiceLimit NO-LOCK WHERE
+   FOR EACH ttServiceLimit NO-LOCK WHERE
              ttServiceLimit.GroupCode = {&DSS},
        FIRST MServiceLimit NO-LOCK WHERE
              MServiceLimit.CustNum = MsOwner.InvCust AND

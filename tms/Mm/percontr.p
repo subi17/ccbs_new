@@ -425,12 +425,9 @@ PROCEDURE pContractActivation:
 
    /* Make sure subscription should not have active multiple
       bundles at the same time */
-   /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
    IF LOOKUP(lcDCEvent,lcBONOContracts) > 0 THEN
       FOR EACH ServiceLimit NO-LOCK WHERE
-               LOOKUP(ServiceLimit.GroupCode,lcBONOContracts) > 0 AND
-               ServiceLimit.ValidFrom <= ldtActDate AND
-               ServiceLimit.ValidTo   >= ldtActDate,
+               LOOKUP(ServiceLimit.GroupCode,lcBONOContracts) > 0,
           FIRST MServiceLimit WHERE
                 MServiceLimit.MsSeq = MsOwner.MsSeq      AND
                 MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -2005,11 +2002,8 @@ PROCEDURE pContractTermination:
          ldeInclAmt = 0
          liSlSeq    = 0.
       
-      /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
       FOR EACH ServiceLimit NO-LOCK WHERE
-               ServiceLimit.GroupCode = lcDCEvent   AND
-               ServiceLimit.ValidFrom <= ldtActDate AND
-               ServiceLimit.ValidTo   >= ldtActDate,
+               ServiceLimit.GroupCode = lcDCEvent,
           EACH MServiceLimit EXCLUSIVE-LOCK WHERE
                MServiceLimit.MsSeq    = liCheckMsSeq AND
                MServiceLimit.DialType = ServiceLimit.DialType AND

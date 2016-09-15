@@ -281,11 +281,8 @@ PROCEDURE pHandleEDR:
             
             /* Benefit is already active, just send the renewal SMS 
                and possible counter reset*/
-            /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
-            FOR FIRST ServiceLimit NO-LOCK WHERE
-                      ServiceLimit.GroupCode EQ ttEDR.CLIType AND
-                      ServiceLimit.ValidFrom <= TODAY         AND
-                      ServiceLimit.ValidTo   >= TODAY,
+            FOR EACH ServiceLimit NO-LOCK WHERE
+                      ServiceLimit.GroupCode EQ ttEDR.CLIType,
                 FIRST MServiceLimit NO-LOCK WHERE
                       MServiceLimit.MsSeq = MobSub.MsSeq AND
                       MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -485,6 +482,8 @@ PROCEDURE pHandleEDR:
                      end.
                   end.
                END.
+               
+               LEAVE.
             END.
             
 
@@ -499,11 +498,8 @@ PROCEDURE pHandleEDR:
 
             IF lcSMSText > "" THEN DO:
 
-               /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
-               FOR FIRST ServiceLimit NO-LOCK WHERE
-                         ServiceLimit.GroupCode EQ ttEDR.CLIType AND
-                         ServiceLimit.ValidFrom <= TODAY         AND
-                         ServiceLimit.ValidTo   >= TODAY,
+               FOR EACH ServiceLimit NO-LOCK WHERE
+                         ServiceLimit.GroupCode EQ ttEDR.CLIType,
                    FIRST MServiceLimit NO-LOCK WHERE
                          MServiceLimit.MsSeq = MobSub.MsSeq AND
                          MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -534,6 +530,7 @@ PROCEDURE pHandleEDR:
                                  ldeSMSTime,
                                  "22622",
                                  "").
+                   LEAVE.
                END.
             END.
          END.

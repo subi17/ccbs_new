@@ -598,12 +598,16 @@ repeat WITH FRAME sel:
        IF LOOKUP(STRING(Daycampaign.dcType),{&PERCONTRACT_RATING_PACKAGE}) > 0 OR
           Daycampaign.dcType = {&DCTYPE_POOL_RATING} THEN DO:
           
-          /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
-          FIND FIRST ServiceLimit WHERE 
-                     ServiceLimit.GroupCode = daycampaign.dcevent AND
-                     ServiceLimit.ValidFrom <= TODAY              AND
-                     ServiceLimit.ValidTo   >= TODAY
+          FIND ServiceLimit WHERE 
+               ServiceLimit.GroupCode = daycampaign.dcevent
           NO-LOCK NO-ERROR.
+
+          IF AMBIGUOUS(ServiceLimit)
+          THEN DO:
+             MESSAGE "Multiple ServiceLimit found under same DCEvent. " + CHR(10) +
+                     "Please use ServiceLimitGroup view." VIEW-AS ALERT-BOX.
+             NEXT LOOP.
+          END.
 
           IF NOT AVAIL ServiceLimit THEN DO:
              MESSAGE 
