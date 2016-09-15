@@ -598,7 +598,7 @@ repeat WITH FRAME sel:
        IF LOOKUP(STRING(Daycampaign.dcType),{&PERCONTRACT_RATING_PACKAGE}) > 0 OR
           Daycampaign.dcType = {&DCTYPE_POOL_RATING} THEN DO:
           
-          /*YDR-8824 added validfrom AND validto conditions for getting valid record*/
+          /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
           FIND FIRST ServiceLimit WHERE 
                      ServiceLimit.GroupCode = daycampaign.dcevent AND
                      ServiceLimit.ValidFrom <= TODAY              AND

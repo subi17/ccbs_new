@@ -156,7 +156,7 @@ PROCEDURE CreateTM:
    ASSIGN TMRule.Brand = "1"
           TMRule.TMRuleSeq = liTMRuleSeq
           TMRule.Name      = "VOICE 5000 Minutes"
-          TMRule.FromDate  = TODAY
+          TMRule.FromDate  = 10/01/2016
           TMRule.ToDate    = 12/31/2049
           TMRule.NewCustomer = FALSE
           TMRule.TicketType = 1
@@ -190,7 +190,7 @@ PROCEDURE CreateTM:
    DO i = 1 TO NUM-ENTRIES(lcCounterItemList, "|"):
       CREATE TMRItemValue.
       ASSIGN TMRItemValue.TMRuleSeq = liTMRuleSeq
-             TMRItemValue.FromDate  = TODAY
+             TMRItemValue.FromDate  = 10/01/2016
              TMRItemValue.ToDate    = 12/31/2049
              TMRItemValue.CounterItemValues = ENTRY(i,lcCounterItemList,"|")
              .
@@ -201,8 +201,26 @@ PROCEDURE CreateTM:
    ASSIGN InvText.Brand = "1"
           InvText.ITNum = NEXT-VALUE(it-seq)
           InvText.Target = "SMS"
+          InvText.KeyValue = "VOICE4800Limit"
+          InvText.FromDate = 10/01/2016
+          InvText.ToDate   = 12/31/2049
+          InvText.Position = 1
+          InvText.Report   = 5
+          InvText.Language = 1
+          InvText.SendRule = "R1"
+          InvText.LetterClass = 0
+          InvText.TxtTitle = "The VOICE4800 contract limit is reached"
+          InvText.InvText  = "Recuerda, para hacer un uso razonable de tu tarifa hay un limite de 5000 min/mes. Te quedan 200 min. "
+                           + "Despues: llam. nac. 14,52 cent/min y estb. llam. 18,15 cent."
+          .
+   RELEASE InvText.
+   
+   CREATE InvText.
+   ASSIGN InvText.Brand = "1"
+          InvText.ITNum = NEXT-VALUE(it-seq)
+          InvText.Target = "SMS"
           InvText.KeyValue = "VOICE5000Limit"
-          InvText.FromDate = TODAY
+          InvText.FromDate = 10/01/2016
           InvText.ToDate   = 12/31/2049
           InvText.Position = 1
           InvText.Report   = 5
@@ -210,21 +228,34 @@ PROCEDURE CreateTM:
           InvText.SendRule = "R1"
           InvText.LetterClass = 0
           InvText.TxtTitle = "The VOICE5000 contract limit is reached"
-          InvText.InvText  = "Has llegado AS LOG NO-UNDO. limite de 4800 minutos de tu promocion. A partir de ahora"
-                           + "tus llamadas a fijos y moviles macionales son 1 cent/min (imp no incl.)"
+          InvText.InvText  = "Para hacer un uso razonable de tu tarifa hay un limite de 5000 min/mes. Los has superado. "
+                           + "A partir de ahora: llam. nac. 14,52 cent/min y estb. llam. 18,15 cent."
           .
    RELEASE InvText.
 
    CREATE TMRLimit.
    ASSIGN TMRLimit.TMRuleSeq = liTMRuleSeq
           TMRLimit.LimitID   = 1
-          TMRLimit.FromDate  = TODAY
+          TMRLimit.FromDate  = 10/01/2016
           TMRLimit.TODate    = 12/31/2049
           TMRLimit.ValueType = 1
           TMRLimit.LimitAmt  = 4800.00
           TMRLimit.Action    = 30
+          TMRLimit.SMSText   = "VOICE4800Limit"
+          .
+   RELEASE TMRLimit.
+   
+   CREATE TMRLimit.
+   ASSIGN TMRLimit.TMRuleSeq = liTMRuleSeq
+          TMRLimit.LimitID   = 2
+          TMRLimit.FromDate  = 10/01/2016
+          TMRLimit.TODate    = 12/31/2049
+          TMRLimit.ValueType = 1
+          TMRLimit.LimitAmt  = 5000.00
+          TMRLimit.Action    = 30
           TMRLimit.SMSText   = "VOICE5000Limit"
           .
    RELEASE TMRLimit.
+
 
 END PROCEDURE.
