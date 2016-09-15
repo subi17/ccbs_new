@@ -11,9 +11,7 @@
 {Syst/tmsconst.i}
 {xmlrpc/xmlrpc_client.i}
 {Func/forderstamp.i}
-
-
-/*Global variables for building masmovile data*/
+{Func/fixedlinefunc.i}
 
 DEF VAR lcConURL AS CHAR NO-UNDO.
 DEF VAR liTesting AS INT NO-UNDO.
@@ -145,10 +143,15 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
 */
 
    /*Generate order type*/
-  
-IF liTesting EQ 0 THEN DO:  
-   IF bOrder.CliType BEGINS "CONTDSL" OR 
-      bOrder.CliType BEGINS "CONTFH" THEN DO: 
+IF liTesting NE 0 THEN DO:
+            lcOrderType = "Alta FTTH + VOIP".
+            lcConnServiceId = "FTTH".
+            lcConnServiceName = "FTTH connection".
+            lcConnServiceType = "FTTH".
+
+END. /*testing related*/
+ELSE DO:
+   IF fIsConvergenceTariff(bOrder.CliType) THEN DO:
       FIND FIRST CLIType NO-LOCK WHERE
                  CLIType.CLIType EQ bOrder.CliType NO-ERROR.
       IF AVAIL CLIType THEN DO:
@@ -162,21 +165,16 @@ IF liTesting EQ 0 THEN DO:
             lcOrderType = "Alta FTTH + VOIP".
             lcConnServiceId = "FTTH".
             lcConnServiceName = "FTTH connection".
-            lcConnServiceType = "FTTH".           
-         END.   
+            lcConnServiceType = "FTTH".
+         END.
          ELSE RETURN "Not allowed Fixed line type".
       END.
    END.
-   ELSE 
+   ELSE
       RETURN "Error Not allowed CLITYPE " + bOrder.CliType.
-END.      
-ELSE DO:
-            lcOrderType = "Alta FTTH + VOIP".
-            lcConnServiceId = "FTTH".
-            lcConnServiceName = "FTTH connection".
-            lcConnServiceType = "FTTH".
+END.
 
-END. /*testing related*/
+ 
 
    IF fTS2Date(bOrder.CrStamp, ldaCreDate) EQ FALSE THEN
       RETURN "Error: Date reading failed".
