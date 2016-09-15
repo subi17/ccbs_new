@@ -134,13 +134,13 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
          RETURN "Error: Customer data not found " + STRING(iiOrderID) .
 
    END.
-/*   
+   
    FIND FIRST bOF NO-LOCK WHERE
               bOF.Brand EQ Syst.Parameters:gcBrand AND
               bOF.OrderID EQ iiOrderID NO-ERROR.
    IF NOT AVAIL bOF THEN
                RETURN "Error: Fixed Order data not found " + STRING(iiOrderID) .
-*/
+
 
    /*Generate order type*/
 IF liTesting NE 0 THEN DO:
@@ -174,8 +174,6 @@ ELSE DO:
       RETURN "Error Not allowed CLITYPE " + bOrder.CliType.
 END.
 
- 
-
    IF fTS2Date(bOrder.CrStamp, ldaCreDate) EQ FALSE THEN
       RETURN "Error: Date reading failed".
 
@@ -196,8 +194,8 @@ END.
    add_string(lcOrderStruct, "creadate", STRING(ldaCreDate)). 
 
    /*Installation*/
-   lcInstallationStruct = add_struct(lcOrderStruct,"Installation").
-   lcContactStruct = add_struct(lcInstallationStruct,"Contact").
+   lcInstallationStruct = add_struct(lcOrderStruct, "Installation").
+   lcContactStruct = add_struct(lcInstallationStruct, "Contact").
    add_string(lcContactStruct, "firstName", bOC.FirstName).
    add_string(lcContactStruct, "middleName", "").
    add_string(lcContactStruct, "lastName", bOC.Surname1 + " " + bOC.Surname2).
@@ -206,28 +204,28 @@ END.
    add_string(lcContactStruct, "Email", bOC.Email).
    add_string(lcContactStruct, "phoneNumber", bOC.ContactNum).
 
-   lcAddressStruct = add_struct(lcInstallationStruct,"Address").
+   lcAddressStruct = add_struct(lcInstallationStruct, "Address").
    add_string(lcAddressStruct, "country", bOC.Country).
-   add_string(lcAddressStruct, "province",bOC.Region).
-   add_string(lcAddressStruct, "town",bOC.PostOffice).
+   add_string(lcAddressStruct, "province", bOC.Region).
+   add_string(lcAddressStruct, "town", bOC.PostOffice).
    add_string(lcAddressStruct, "street", bOC.Street).
-   add_string(lcAddressStruct, "streetType","").
-   add_string(lcAddressStruct, "number", bOc.BuildingNum).
-   add_string(lcAddressStruct, "bis_duplicate","").
-   add_string(lcAddressStruct, "block","").
-   add_string(lcAddressStruct, "door","").
-   add_string(lcAddressStruct, "letter","").
-   add_string(lcAddressStruct, "stair","").
-   add_string(lcAddressStruct, "floor","").
-   add_string(lcAddressStruct, "hand","").
-   add_string(lcAddressStruct, "Km","").
-   add_string(lcAddressStruct, "zipCode",bOc.ZipCode).
+   add_string(lcAddressStruct, "streetType", bOC.StreetType). 
+   add_string(lcAddressStruct, "number", bOC.BuildingNum).
+   add_string(lcAddressStruct, "bis_duplicate", bOC.BisDuplicate).
+   add_string(lcAddressStruct, "block", bOC.Block).
+   add_string(lcAddressStruct, "door", bOC.Door).
+   add_string(lcAddressStruct, "letter", bOC.Letter).
+   add_string(lcAddressStruct, "stair", bOC.Stair).
+   add_string(lcAddressStruct, "floor", bOC.Floor).
+   add_string(lcAddressStruct, "hand", bOC.Hand).
+   add_string(lcAddressStruct, "Km", bOC.Km).
+   add_string(lcAddressStruct, "zipCode", bOc.ZipCode).
    IF lcConnServiceId EQ "ADSL" THEN
-      add_string(lcInstallationStruct, "modality", /*bOF.ADSLLinkstate*/ "O").
+      add_string(lcInstallationStruct, "modality", bOF.ADSLLinkstate).
 
    lcServiceArray = add_array(lcOrderStruct,"Services").
+
     /*Services entry - Phone*/
-    
    lcServiceStruct = fAddService(lcServiceArray, 
                "FixedPhone", 
                "Fixed Phone Number", 
@@ -238,8 +236,8 @@ END.
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics").
 
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                      "phoneNumber",        /*param name*/
-                      "900900900",                /*param value*/
+                      "phoneNumber",          /*param name*/
+                      bOF.FixedNumber,        /*param value*/
                       "").                    /*old value*/
    /*IF portability in THEN */ 
       fAddCharacteristic(lcCharacteristicsArray, /*base*/
@@ -247,7 +245,7 @@ END.
                          "Saunalahti",                /*param value*/
                          "").                    /*old value*/
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                      "portabilitytype",        /*param name*/
+                      "portabilitytype",      /*param name*/
                       "I",                /*param value*/
                       "").                    /*old value*/
  
