@@ -239,21 +239,8 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    /* direct channels */
    IF INDEX(Order.OrderChannel, "POS") = 0 THEN DO:
 
-      /*YPR-4468*/
-      FIND FIRST Orderaction NO-LOCK WHERE
-                 Orderaction.Brand EQ gcBrand AND
-                 Orderaction.OrderId EQ Order.OrderID AND
-                 Orderaction.ItemKey EQ "TerminalFinancing" NO-ERROR.
-      IF NOT AVAIL Orderaction THEN DO:
-         /*Functionality before YPR-4468, can be removed later*/
-         /*Before implementation the default bank was UNOE*/
-          IF lcTFBank NE {&TF_BANK_UNOE} AND
-            FixedFee.BillCode NE "RVTERM" THEN NEXT ORDER_LOOP.
-      END.
-      ELSE DO:
-         /*YPR-4468*/
-         IF FixedFee.BillCode NE "RVTERM" THEN NEXT ORDER_LOOP.
-      END.
+      IF lcTFBank NE {&TF_BANK_CETELEM} AND
+         FixedFee.BillCode NE "RVTERM" THEN NEXT ORDER_LOOP.
 
       IF LOOKUP(Order.OrderChannel,"self,renewal") > 0 THEN ASSIGN
          lcFUC[1] = "332577543" 
