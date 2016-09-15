@@ -32,15 +32,17 @@ PUT STREAM sSL UNFORMATTED
    SKIP.
 
 IF liMsSeq = 0 THEN
-DO TRANSACTION i = 1 TO NUM-ENTRIES(lcCLITypeList,","):
-   FOR EACH MobSub NO-LOCK WHERE
-            MobSub.Brand   = "1" AND
-            MobSub.CLIType = ENTRY(i,lcCLITypeList,","):
-      RUN pUpd.
+DO TRANSACTION ON ERROR UNDO, LEAVE:
+   DO i = 1 TO NUM-ENTRIES(lcCLITypeList,","):
+      FOR EACH MobSub NO-LOCK WHERE
+               MobSub.Brand   = "1" AND
+               MobSub.CLIType = ENTRY(i,lcCLITypeList,","):
+         RUN pUpd.
+      END.
    END.
 END.
 ELSE
-DO TRANSACTION:
+DO TRANSACTION ON ERROR UNDO, LEAVE:
    FOR EACH MobSub NO-LOCK WHERE
             MobSub.MsSeq = liMsSeq:
       RUN pUpd.
