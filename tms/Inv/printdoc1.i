@@ -1026,7 +1026,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
                FOR EACH bServiceLimit NO-LOCK WHERE
                         bServiceLimit.GroupCode = lcGroupCode,
                    EACH bMServiceLimit NO-LOCK WHERE
-                        bMServiceLimit.MsSeq = MSOwner.MsSeq  AND
+                        bMServiceLimit.MsSeq = SubInvoice.MsSeq  AND
                         bMServiceLimit.DialType = bServiceLimit.DialType AND
                         bMServiceLimit.SlSeq   = bServiceLimit.SlSeq AND
                         bMServiceLimit.FromTS <= ldPeriodTo          AND
@@ -1070,7 +1070,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
          IF liCount = 0 THEN
             FOR FIRST ttMSOwner WHERE ttMSOwner.Type = 1:
                ASSIGN
-                  ttSub.CLIType = MsOwner.CLIType
+                  ttSub.CLIType = ttMsOwner.CLIType
                   ttSub.CTName = fLocalItemName("CLIType",
                                                 ttSub.CLIType,
                                                 liLanguage,

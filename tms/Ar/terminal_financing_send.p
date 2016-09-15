@@ -394,11 +394,11 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    
    CASE FMItem.FFItemQty:
       WHEN 12 THEN DO:
-/* YOT-4593 Temporarily commented out. Might be needed again.
-   Also changed terminal_financing_read.p TF_Q25_EXTENSION_CODES 
+         /* YOT-4645 Temporarily for UNOE. Might be needed again.
+            Older change: terminal_financing_read.p TF_Q25_EXTENSION_CODES */
          IF lcTFBank EQ {&TF_BANK_UNOE} THEN 
-            lcPayTermType[1] = "6666".  * Temporary change with YOT-4474 from 0212 to 6666 *
-         ELSE */
+            lcPayTermType[1] = "6666".  /* Temporary change with YOT-4474 from 0212 to 6666 */
+         ELSE 
             lcPayTermType[1] = "0212".
       END.
       WHEN 18 THEN lcPayTermType[1] = "0018".
