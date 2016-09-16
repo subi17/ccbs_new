@@ -86,8 +86,8 @@ fSplitTS(OrderFusion.FixedInstallationTS,
          OUTPUT ldaSTCDate,
          OUTPUT liSTCTime).
 
-IF ldaSTCDate < DATE(MONTH(TODAY), 1, YEAR(TODAY)) THEN ASSIGN
-   ldaSTCDate = DATE(MONTH(TODAY), 1, YEAR(TODAY))
+IF ldaSTCDate < TODAY THEN ASSIGN
+   ldaSTCDate = TODAY
    liSTCTime = 0.
 
 IF fIsiSTCAllowed(MobSub.MsSeq) THEN DO:
@@ -95,6 +95,7 @@ IF fIsiSTCAllowed(MobSub.MsSeq) THEN DO:
       ldeSTCTS = fMake2Dt(ldaSTCDate, 0).
    ELSE ldeSTCTS = fMake2Dt(ldaSTCDate, liSTCTime).
 END.
+/* TODO: how to handle properly */
 ELSE ldeSTCTS = fDate2TS(fLastDayOfMonth(TODAY) + 1).
 
 /* Various validations */
