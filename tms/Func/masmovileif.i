@@ -235,34 +235,39 @@ END.
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics").
 
+
+   /*Mandatory in portability*/
+   IF bOF.FixedNumberType NE "new" THEN DO:
+      fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                         "donoroperator",        /*param name*/
+                         bOF.FixedCurrOperCode,  /*param value*/
+                         "").                    /*old value*/
+
+      fAddCharacteristic(lcCharacteristicsArray,  /*base*/
+                         "phoneNumberTmp",        /*param name*/
+                         "",                      /*param value*/
+                         "").                     /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                         "portabilitytype",      /*param name*/
+                         "I", /*port in = I*/    /*param value*/
+                         "").                    /*old value*/
+ 
+   END.
+
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
                       "phoneNumber",          /*param name*/
                       bOF.FixedNumber,        /*param value*/
                       "").                    /*old value*/
-   /*IF portability in THEN */ 
-      fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                         "donoroperator",        /*param name*/
-                         "Saunalahti",                /*param value*/
-                         "").                    /*old value*/
+
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                      "portabilitytype",      /*param name*/
-                      "I",                /*param value*/
-                      "").                    /*old value*/
- 
-   /*IF portability  THEN */ 
-      fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                         "phoneNumberTmp",        /*param name*/
-                         "900",                /*param value*/
-                         "").                    /*old value*/
- 
-    fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                      "reselleroperator",        /*param name*/
+                      "reselleroperator",      /*param name*/
                       "Sonera",                /*param value*/
-                      "").                    /*old value*/
-    fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                      "").                     /*old value*/
+
+   fAddCharacteristic(lcCharacteristicsArray,  /*base*/
                       "receptooperator",        /*param name*/
-                      "0031",                /*param value*/
-                      "").                    /*old value*/
+                      "0031",/*must be 0031*/   /*param value*/
+                      "").                      /*old value*/
  
 
    /*Services entry - Line*/
@@ -276,22 +281,20 @@ END.
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics" ).
    IF lcConnServiceId EQ "FTTH" THEN DO:
       fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                         "UploadSpeed",        /*param name*/
-                         "100",      /*param value*/
-                         "").             /*old value*/
+                         "UploadSpeed",          /*param name*/
+                         "100",                  /*param value*/
+                         "").                    /*old value*/
       fAddCharacteristic(lcCharacteristicsArray, /*base*/
                          "DownloadSpeed",        /*param name*/
-                         "100",      /*param value*/
-                         "").             /*old value*/
+                         "100",                  /*param value*/
+                         "").                    /*old value*/
  
    END.
 
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                      "gescal",        /*param name*/
-                      /*bOC.Gescal,*/"007",      /*param value*/
-                      "").             /*old value*/
-
-
+                      "gescal",               /*param name*/
+                      bOC.Gescal,             /*param value*/
+                      "").                    /*old value*/
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
