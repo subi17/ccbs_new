@@ -159,7 +159,7 @@ PROCEDURE pPeriodicalContract:
                  (IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN fMakeTS()
                   ELSE IF Order.OrderType NE 2 THEN MobSub.ActivationTS
                   ELSE IF Order.OrderChannel BEGINS "Retention" THEN fMakeTS()
-                  ELSE IF DayCampaign.DCType = "3" THEN Order.CrStamp
+                  ELSE IF DayCampaign.DCType = {&DCTYPE_DISCOUNT} THEN Order.CrStamp
                   ELSE ldeActStamp).
 
    /* YDR-835 - Charge half price from Initial topup so have 5 min diff */

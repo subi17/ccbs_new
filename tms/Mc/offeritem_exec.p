@@ -261,19 +261,19 @@ PROCEDURE pPeriodicalContract:
    IF NOT AVAILABLE DayCampaign THEN 
       RETURN "ERROR: Unknown periodical contract " + OfferItem.ItemKey.
 
-   IF Order.OrderType = 2 AND
+   IF Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
      LOOKUP(DayCampaign.DCType,"3,5") > 0 THEN llCreateFees = TRUE.
    ELSE llCreateFees = (DayCampaign.FeeModel > "").
 
    ldContrStamp = (IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN fMakeTS()
-                   ELSE IF Order.OrderType NE 2 THEN MobSub.ActivationTS
+                   ELSE IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN MobSub.ActivationTS
                    ELSE IF Order.OrderChannel BEGINS "Retention"
                    THEN fMakeTS()
-                   ELSE IF DayCampaign.DCType = "3"
+                   ELSE IF DayCampaign.DCType = {&DCTYPE_DISCOUNT}
                    THEN Order.CrStamp ELSE ldActStamp).
 
    /* YOT-2233 - Exclude Term Penalty if possible */
-   IF DayCampaign.DCType = "3" AND
+   IF DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
       Order.OrderType = 2 AND
       CAN-FIND (FIRST OrderAction WHERE
                       OrderAction.Brand    = gcBrand AND
