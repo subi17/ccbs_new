@@ -244,10 +244,6 @@ END.
                          bOF.FixedCurrOperCode,  /*param value*/
                          "").                    /*old value*/
 
-      fAddCharacteristic(lcCharacteristicsArray,  /*base*/
-                         "phoneNumberTmp",        /*param name*/
-                         "",                      /*param value*/
-                         "").                     /*old value*/
       fAddCharacteristic(lcCharacteristicsArray, /*base*/
                          "portabilitytype",      /*param name*/
                          "I", /*port in = I*/    /*param value*/
@@ -259,11 +255,6 @@ END.
                       "phoneNumber",          /*param name*/
                       bOF.FixedNumber,        /*param value*/
                       "").                    /*old value*/
-
-   fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                      "reselleroperator",      /*param name*/
-                      "Sonera",                /*param value*/
-                      "").                     /*old value*/
 
    fAddCharacteristic(lcCharacteristicsArray,  /*base*/
                       "receptooperator",        /*param name*/
