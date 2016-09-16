@@ -54,7 +54,9 @@ OUTPUT STREAM sSL CLOSE.
 PROCEDURE pUpd:
 
    DEF VAR lcTariffBundle AS CHAR NO-UNDO.
-   
+   DEF VAR liOldSLSeq     AS INT  NO-UNDO.
+   DEF VAR ldSLCLimit      AS DEC  NO-UNDO.
+
    liMobSubCount = liMobSubCount + 1.
 
    IF MobSub.TariffBundle <> "" THEN
@@ -85,6 +87,7 @@ PROCEDURE pUpd:
           mServiceLimit.InclUnit ","
           mServiceLimit.InclAmt  ","
       .
+      ASSIGN liOldSLSeq = ServiceLimit.SLSeq.
       IF llConfirm THEN
          ASSIGN mServiceLimit.EndTS = fMake2Dt(09/30/2016,86399).
    END.
@@ -105,6 +108,15 @@ PROCEDURE pUpd:
              bMSL.FromTS   = fMake2Dt(10/01/2016,0)
              bMSL.EndTS    = 99999999.99999
                 .
+      FOR EACH ServiceLCounter EXCLUSIVE-LOCK WHERE
+               ServiceLCounter.MsSeq  = MobSub.MsSeq AND
+               ServiceLCounter.Period = 201610       AND
+               ServiceLCounter.SLSeq  = liOldSLSeq:
+         ASSIGN ServiceLCounter.SLSeq = bSL.SLSeq
+                ldSLCLimit            = ServiceLCounter.Limit
+                ServiceLCounter.Limit = ServiceLCounter.Amt
+                ServiceLCounter.Amt   = ldSLCLimit.
+      END.
       PUT STREAM sSL UNFORMATTED
           bMSL.DialType ","
           bMSL.SLSeq    ","
