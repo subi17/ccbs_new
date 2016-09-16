@@ -28,7 +28,7 @@ ASSIGN
    lcIPLData       = fCParamC("TMQueueIPLData")
    lcBonoData      = fCParamC("TMQueueBonoData").
 
-FUNCTION fGetBDestCount RETURNS INT (INPUT iiMsSeq       AS INT,
+FUNCTION fGetBDestCount RETURNS DECIMAL (INPUT iiMsSeq       AS INT,
                                      INPUT icBundleId    AS CHAR,
                                      INPUT idActDate     AS DATE):
 
@@ -42,7 +42,7 @@ FUNCTION fGetBDestCount RETURNS INT (INPUT iiMsSeq       AS INT,
    /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
    FOR EACH bServiceLimit NO-LOCK WHERE
              bServiceLimit.GroupCode = icBundleId AND
-             (bServiceLimit.DialType = 0 OR bServiceLimit.DialType = 4)
+             (bServiceLimit.DialType = 0 OR bServiceLimit.DialType = 4),
        FIRST bServiceLCounter WHERE
              bServiceLCounter.MsSeq  = iiMsSeq AND
              bServiceLCounter.SLSeq  = bServiceLimit.SlSeq AND
