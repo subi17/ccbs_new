@@ -111,6 +111,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF BUFFER bOrder FOR Order.
    DEF BUFFER bOC FOR OrderCustomer.
    DEF BUFFER bOF FOR OrderFusion.
+   DEF BUFFER bCLIType FOR CliType.
 
    FIND FIRST bOrder NO-LOCK where 
               bOrder.Brand EQ Syst.Parameters:gcBrand AND
@@ -152,16 +153,16 @@ IF liTesting NE 0 THEN DO:
 END. /*testing related*/
 ELSE DO:
    IF fIsConvergenceTariff(bOrder.CliType) THEN DO:
-      FIND FIRST CLIType NO-LOCK WHERE
-                 CLIType.CLIType EQ bOrder.CliType NO-ERROR.
-      IF AVAIL CLIType THEN DO:
-         IF CLIType.FixedLineType EQ 1 THEN DO:
+      FIND FIRST bCLIType NO-LOCK WHERE
+                 bCLIType.CLIType EQ bOrder.CliType NO-ERROR.
+      IF AVAIL bCLIType THEN DO:
+         IF bCLIType.FixedLineType EQ 1 THEN DO:
             lcOrderType = "Alta xDSL + VOIP".
             lcConnServiceId = "ADSL".
             lcConnServiceName = "ADSL connection".
             lcConnServiceType = "ADSL".
          END.
-         ELSE IF CLIType.FixedLineType EQ 2 THEN DO:
+         ELSE IF bCLIType.FixedLineType EQ 2 THEN DO:
             lcOrderType = "Alta FTTH + VOIP".
             lcConnServiceId = "FTTH".
             lcConnServiceName = "FTTH connection".
@@ -280,14 +281,14 @@ END.
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics" ).
    IF lcConnServiceId EQ "FTTH" THEN DO:
-      fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                         "UploadSpeed",          /*param name*/
-                         "100",                  /*param value*/
-                         "").                    /*old value*/
-      fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                         "DownloadSpeed",        /*param name*/
-                         "100",                  /*param value*/
-                         "").                    /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,      /*base*/
+                         "UploadSpeed",               /*param name*/
+                         bCLIType.FixedLineUpload,    /*param value*/
+                         "").                         /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,      /*base*/
+                         "DownloadSpeed",             /*param name*/
+                         bCLIType.FixedLineDownload,  /*param value*/
+                         "").                         /*old value*/
  
    END.
 
