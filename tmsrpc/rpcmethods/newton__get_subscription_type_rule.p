@@ -9,7 +9,9 @@
                 stc_date;datetime;mandatory;
                 penalty_contract;string;optional;(TERM or PAYTERM+TERM)
                 penalty_amount;double;optional;penalty amount
-                extension;boolean;optional;TRUE if extension is allowed */
+                extension;boolean;optional;TRUE if extension is allowed 
+                warnings;array;optional;Contract related warnings
+ */
 
  /*
    17.09.2015 hugo.lujan YPR-2524 [Q25] - TMS - STC from Postpaid to Prepaid
@@ -34,6 +36,7 @@ gcBrand = "1".
 {fctchange.i}
 {main_add_lines.i}
 {fdss.i}
+{fixedlinefunc.i}
 
 /* Input parameters */
 DEF VAR piMsSeq            AS INT     NO-UNDO.
@@ -105,7 +108,7 @@ DEF BUFFER lbMobSub        FOR MobSub.
 IF validate_request(param_toplevel_id, "int,string,string") EQ ? THEN RETURN.
 piMsSeq         = get_pos_int(param_toplevel_id,"0").
 pcNewCLIType    = get_string(param_toplevel_id,"1").
-pcTariffBundle  = get_string(param_toplevel_id,"2").
+pcTariffBundle  = get_string(param_toplevel_id,"2").  /* tariff_bundle */
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -232,7 +235,8 @@ FUNCTION fAddCLITypeStruct RETURNS LOGICAL:
          /* special handling for Fusion tariffs, YDR-1137 */
          add_string(penalty_struct, "penalty_contract",
            (IF LOOKUP(CLIType.CLIType,lcFusionTariffs) > 0 OR
-               LOOKUP(CLIType.CLIType,lcCONTSFContracts) > 0
+               LOOKUP(CLIType.CLIType,lcCONTSFContracts) > 0 OR
+               fIsConvergenceTariff(CLIType.CLIType)
             THEN lcPenaltyCode ELSE "TERM")).
          add_double(penalty_struct,"penalty_amount",
             ldeTermPendingFee[liLoop]).
