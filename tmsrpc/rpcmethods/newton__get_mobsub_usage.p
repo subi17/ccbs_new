@@ -21,6 +21,13 @@
               voice_bundle_usage;double;mandatory;monthly voice bundle usage in minutes
               voice_bdest_limit;int;mandatory;monthly voice bundle bdest limit
               voice_bdest_usage;int;mandatory;count of monthly used bdests
+              data200_upsell_count;int;mandatory;Data 200 upsell count
+              dss200_upsell_count;int;mandatory;DSS 200 upsell count
+              fixed_bundle_limit;double;mandatory;fixed line bundle limit
+              fixed_bundle_usage;double;mandatory;fixed line bundle usage
+              fixed_bdest_limit;int;mandatory;fixed line bundle destination limit
+              fixed_bdest_usage;int;mandatory;fixed line bundle destination usage
+
  */
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {commpaa.i}
@@ -719,6 +726,11 @@ add_int(first_level_struct,    "bono_count", liBonoCount).
 add_int(first_level_struct,    "data_bundle_upsell", liUpsellCount).
 add_int(first_level_struct,    "data200_upsell_count", liData200Count).
 add_int(first_level_struct,    "dss200_upsell_count", liDSS200Count).
+add_double(first_level_struct, "fixed_bundle_limit",  (ldeTotalDataBundleLimit + 10.0)). /* TODO actual values for convergence project */
+add_double(first_level_struct, "fixed_bundle_usage",  (ldeTotalDataBundleUsage + 20.0)). /* TODO actual values for convergence project */
+add_int(first_level_struct,    "fixed_bdest_limit", (liVoiceBDestLimit + 30)).           /* TODO actual values for convergence project */
+add_int(first_level_struct,    "fixed_bdest_usage", (liVoiceBDestUsage + 40)).           /* TODO actual values for convergence project */
+
 
 FINALLY:
    EMPTY TEMP-TABLE ttCDR.

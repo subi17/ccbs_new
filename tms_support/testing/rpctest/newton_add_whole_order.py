@@ -40,6 +40,6 @@ p=s.newton.add_whole_order(
                  'street':'100011',
                  'zip':'28600',
                  'person_id':'old',
-                 'retrieved':bool(1)}})
+                 'retrieved':bool(0)}})
 
 print_results(p)

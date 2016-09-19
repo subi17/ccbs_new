@@ -5,32 +5,22 @@
           username;string;mandatory
           fixed_line_number;string;optional;
           fusion_order_status;string;optional;
-          fixed_line_order_id;string;optional;
-          fixed_line_order_status;string;optional;
-          fixed_line_order_sub_status;string;optional;
-          external_ticket;string;optional;
           update_ts;string;optional;used to check if record has been modified (the value should be same as what is received from orders.get method)
  * @output string;empty=ok,any other text means that order fusion status change has bee failed
  */
 
 {xmlrpc/xmlrpc_access.i}
 
-DEF VAR lhBuff AS HANDLE NO-UNDO.
-DEF VAR pcOrderStruct AS CHARACTER NO-UNDO.
-DEF VAR pcCustomerStruct AS CHARACTER NO-UNDO.  
-DEF VAR pcMemoStruct AS CHARACTER NO-UNDO. 
-DEF VAR lcError AS CHARACTER NO-UNDO.
-DEF VAR lcTopStruct AS CHAR NO-UNDO. 
-DEF VAR lcTopStructFields AS CHAR NO-UNDO. 
-DEF VAR pcUpdateTS AS CHAR NO-UNDO. 
-
-DEF VAR piOrderId AS INTEGER NO-UNDO. 
-DEF VAR pcUserName AS CHARACTER NO-UNDO. 
-DEF VAR llEqual AS LOG NO-UNDO. 
-DEF VAR lirequest AS INT NO-UNDO. 
-DEF VAR llReleaseMobile AS LOG NO-UNDO. 
-
-DEF VAR lcFusionError AS CHAR NO-UNDO. 
+DEF VAR lhBuff             AS HANDLE NO-UNDO.
+DEF VAR lcTopStruct        AS CHAR NO-UNDO. 
+DEF VAR lcTopStructFields  AS CHAR NO-UNDO. 
+DEF VAR pcUpdateTS         AS CHAR NO-UNDO. 
+DEF VAR piOrderId          AS INTEGER NO-UNDO. 
+DEF VAR pcUserName         AS CHARACTER NO-UNDO. 
+DEF VAR llEqual            AS LOG NO-UNDO. 
+DEF VAR lirequest          AS INT NO-UNDO. 
+DEF VAR llReleaseMobile    AS LOG NO-UNDO. 
+DEF VAR lcFusionError      AS CHAR NO-UNDO. 
 
 DEFINE TEMP-TABLE ttOrderFusion LIKE OrderFusion.
 
@@ -38,7 +28,7 @@ IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 lcTopStruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcTopStructFields = validate_struct(lcTopStruct, "username!,order_id!,fixed_line_number,fusion_order_status,fixed_line_order_id,fixed_line_order_status,fixed_line_order_sub_status,external_ticket,update_ts").
+lcTopStructFields = validate_struct(lcTopStruct, "username!,order_id!,fixed_line_number,fusion_order_status,update_ts").
 
 ASSIGN
    piOrderId = get_int(lcTopStruct, "order_id")
@@ -50,12 +40,10 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {commpaa.i}
 katun = pcUserName.
 gcbrand = "1".
-{orderfunc.i} 
+
 {eventval.i}
 {tmsconst.i}
-{fbundle.i}
-{fctchange.i}
-{fmakemsreq.i}
+{timestamp.i}
 &GLOBAL-DEFINE STAR_EVENT_USER katun 
 
 IF llDoEvent THEN DO:
@@ -84,15 +72,7 @@ ASSIGN
    ttOrderFusion.FixedNumber = get_string(lcTopStruct,"fixed_line_number") WHEN
       LOOKUP("fixed_line_number", lcTopStructFields) > 0
    ttOrderFusion.FusionStatus = get_string(lcTopStruct,"fusion_order_status") WHEN
-      LOOKUP("fusion_order_status", lcTopStructFields) > 0
-   ttOrderFusion.FixedOrderId = get_string(lcTopStruct,"fixed_line_order_id") WHEN
-      LOOKUP("fixed_line_order_id", lcTopStructFields) > 0
-   ttOrderFusion.FixedStatus = get_string(lcTopStruct,"fixed_line_order_status") WHEN
-      LOOKUP("fixed_line_order_status", lcTopStructFields) > 0
-   ttOrderFusion.FixedSubStatus = get_string(lcTopStruct,"fixed_line_order_sub_status") WHEN
-      LOOKUP("fixed_line_order_sub_status", lcTopStructFields) > 0
-   ttOrderFusion.ExternalTicket = get_string(lcTopStruct,"external_ticket") WHEN
-      LOOKUP("external_ticket", lcTopStructFields) > 0.
+      LOOKUP("fusion_order_status", lcTopStructFields) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -112,93 +92,13 @@ IF ttOrderFusion.FusionStatus NE
    OrderFusion.FusionStatus THEN CASE ttOrderFusion.FusionStatus:
 
    WHEN "PCAN" THEN DO:
-      IF LOOKUP(OrderFusion.FusionStatus,"NEW,ONG") = 0 THEN
+      IF Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} THEN
+         RETURN appl_err(SUBST("Incorrect Order status &1", Order.StatusCode)).
+      IF LOOKUP(OrderFusion.FusionStatus, "NEW,INT,ERR,REJ") = 0 THEN      /* TODO Add list to tmscont.i */
          RETURN appl_err("Fusion order status change not allowed").
+/* TODO If FusionStatus (PCAN) then TMS invoke Gwy/masmovil_cancel_order.p integration service to cancel the fixed line order in MasMovil system. */
    END.
    OTHERWISE RETURN appl_err(SUBST("Unsupported new fusion order status: &1",  ttOrderFusion.fusionstatus)).
-END.
-
-IF ttOrderFusion.FixedStatus > "" AND
-   ttOrderFusion.FixedOrderId > "" AND
-   ttOrderFusion.FusionStatus EQ "NEW" THEN ASSIGN
-   ttOrderFusion.FusionStatus = "ONG"
-   llReleaseMobile = TRUE.
-
-IF ttOrderFusion.FixedStatus > "" AND
-   OrderFusion.FixedStatus NE ttOrderFusion.FixedStatus
-   THEN CASE ttOrderFusion.FixedStatus:
-   
-   WHEN "cancelled" THEN DO:
-
-      IF LOOKUP(OrderFusion.fusionstatus,"NEW,ONG,PCAN") = 0 THEN
-         lcFusionError = "Fusion order status change not allowed".
-      ELSE DO:
-
-         IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR
-            Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
-            Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2} OR
-            Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3} OR
-            Order.StatusCode EQ {&ORDER_STATUS_IN_CONTROL} OR
-            Order.StatusCode EQ {&ORDER_STATUS_MNP_REJECTED} OR
-            Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} THEN DO:
-
-            RUN closeorder.p(Order.OrderId,TRUE).
-
-            IF RETURN-VALUE NE "" THEN
-               lcFusionError = "Order closing failed: " + 
-                                     STRING(RETURN-VALUE).
-            ELSE ttOrderFusion.FusionStatus = "CAN".
-         END.
-         ELSE IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 
-            THEN lcFusionError = "Order closing not allowed".
-         ELSE IF LOOKUP(Order.StatusCode,{&ORDER_STATUS_DELIVERED}) > 0 THEN DO:
-
-            RUN fusion_stc_fallback.p(Order.OrderId, OUTPUT liRequest).
-
-            IF liRequest = 0 THEN
-               lcFusionError = "Fallback STC request creation failed: " + 
-                               STRING(RETURN-VALUE).
-            ELSE ttOrderFusion.FusionStatus = "CAN".
-         END.
-         ELSE ttOrderFusion.FusionStatus = "CAN".
-      END.
-   END.
-   WHEN "installed" THEN DO:
-      
-      IF LOOKUP(OrderFusion.FusionStatus,"ONG,PFIN") = 0 THEN
-         lcFusionError = "Fusion order status change not allowed".
-      ELSE DO:
-         IF Order.OrderType EQ {&ORDER_TYPE_STC} OR
-            Order.ICC > "" OR
-            (Order.OrderChannel <> "Fusion_POS" AND Order.ICC = "") THEN DO:
-      
-            IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) = 0 AND
-               Order.StatusCode NE {&ORDER_STATUS_IN_CONTROL} AND 
-               Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} THEN 
-               ttOrderFusion.FusionStatus = "FIN".
-            ELSE IF Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} THEN
-               lcFusionError = "Wrong mobile order status".
-            ELSE DO:
-               RUN orderinctrl.p(Order.OrderId, 0, TRUE).
-               IF RETURN-VALUE > "" THEN
-                  lcFusionError = "Mobile order release failed".
-               ELSE ttOrderFusion.FusionStatus = "FIN".
-            END.
-         END.
-         ELSE ttOrderFusion.FusionStatus = "PFIN".
-      END.
-   END.
-END.
-
-/* YBU-3072 */
-IF llReleaseMobile AND
-   Order.OrderType < 2 AND
-   Order.ICC > "" AND 
-   ttOrderFusion.FixedStatus NE "cancelled" AND
-   Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
-   RUN orderinctrl.p(Order.OrderId, 0, TRUE).
-   IF RETURN-VALUE > "" THEN
-      lcFusionError = "Mobile order release failed".
 END.
 
 IF llDoEvent THEN DO:
@@ -212,10 +112,6 @@ ttOrderFusion.UpdateTS = fMakeTS().
 BUFFER-COPY ttOrderFusion USING
    FixedNumber
    FusionStatus 
-   FixedOrderId
-   FixedStatus
-   FixedSubStatus
-   ExternalTicket
    UpdateTS
 TO OrderFusion. 
 

@@ -13,6 +13,7 @@
  
  * @subscription seq;int;mandatory;subscription ID
                  description;string;mandatory;MSISDN Number
+                 fixed_number;string;optional;Fixed Line Number
                  status;int;mandatory;subscription status
                  subscription_type_id;string;mandatory;subscription type (e.g. CONT2)
                  data_bundle_id;string;mandatory;data bundle id
@@ -68,11 +69,18 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    IF NOT plFewRecords THEN DO:
       add_int(sub_struct   , "seq"        , mobsub.msseq).
    END.
+   /* YPR-4810 dummy code that returns only fixed number when search number starts with 9 */
+   IF mobsub.cli EQ "605888489" THEN DO:
+      add_string(sub_struct, "fixed_number", "912345678"). /*Mobsub.fixednumber WHEN Mobsub.fixednumber <> "?" */
+      add_int(sub_struct   , "status"     , 16). /* mobsub.msstatus */
+   END.
+   ELSE DO:
+   add_int(sub_struct   , "status"     , mobsub.msstatus).
+   END.
    add_string(sub_struct, "description", mobsub.cli).
    add_string(sub_struct, "subscription_type_id", mobsub.clitype).
-   add_int(sub_struct   , "status"     , mobsub.msstatus).
    add_string(sub_struct, "data_bundle_id", MobSub.TariffBundle).
-   
+
    IF CAN-FIND(
       FIRST MsRequest NO-LOCK WHERE
             MsRequest.MsSeq   = mobsub.msseq AND
@@ -91,6 +99,24 @@ IF LENGTH(pcInput) EQ 9 AND
 
     FIND mobsub NO-LOCK
     WHERE mobsub.cli = pcInput
+      AND mobsub.brand = gcBrand NO-ERROR.
+    IF NOT AVAILABLE mobsub THEN
+        RETURN appl_err(SUBST("MobSub entry &1 not found", pcInput)).
+    ELSE
+        liOwner = mobsub.agrCust.
+    llSearchByMobsub = TRUE.
+END.
+/* YPR-4810 dummy code that returns 605888489 when ever fixed line number is given */
+ELSE IF LENGTH(pcInput) EQ 9 AND
+   (pcInput BEGINS "9") AND
+   NOT (ASC(lcTmp) >= 65 AND
+   ASC(lcTmp) <= 90) AND
+   LOOKUP("msisdn", pcSearchTypes) > 0 THEN DO:
+    
+    pcInput = "605888489". /* TODO remove hardcoding as fixednumber is added mobsub*/
+    
+   FIND mobsub NO-LOCK
+    WHERE mobsub.cli = pcInput /* TODO change mobsub.fixednumber*/
       AND mobsub.brand = gcBrand NO-ERROR.
     IF NOT AVAILABLE mobsub THEN
         RETURN appl_err(SUBST("MobSub entry &1 not found", pcInput)).
@@ -190,10 +216,12 @@ ELSE DO:
 
    IF llSearchByMobsub AND piOffSet > 0 THEN liSubCount = liSubCount + 1.
 
+   /* TODO fixednumber search option */
    FOR EACH mobsub NO-LOCK
    WHERE mobsub.brand = gcBrand
      AND mobsub.agrCust = liOwner
-     AND Mobsub.CLI <> pcInput:
+     AND Mobsub.CLI <> pcInput
+     AND Mobsub.FixedNumber <> pcInput:
      
        liSubCount = liSubCount + 1.
        IF liSubCount <= piOffSet THEN NEXT.
