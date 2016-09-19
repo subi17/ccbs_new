@@ -362,6 +362,8 @@ FUNCTION fMailNotify RETURN CHARACTER
 
    DEF VAR lcAddrConfDirNotify     AS CHAR NO-UNDO.
    DEF VAR lcLatestEmailFileNotify AS CHAR NO-UNDO.
+   DEF VAR lcMailAddr              AS CHAR NO-UNDO.
+   DEF VAR i                       AS INT  NO-UNDO.
 
    ASSIGN lcAddrConfDirNotify = icAddrConfDir + "emailinvoicenotify.email".
 
@@ -377,10 +379,12 @@ FUNCTION fMailNotify RETURN CHARACTER
    PUT STREAM sMailNotify UNFORMATTED xMailSubj SKIP(1).
    PUT STREAM sMailNotify UNFORMATTED icEmailReplacedText SKIP.
    OUTPUT STREAM sMailNotify CLOSE.
-   
-   SendMaileInvoice(icEmailReplacedText,
-                    "",
-                    "").
+
+   lcMailAddr = xMailAddr.
+   DO i = 1 TO NUM-ENTRIES(lcMailAddr,","):
+      xMailAddr = ENTRY(i,lcMailAddr,",").
+      SendMaileInvoice(icEmailReplacedText,"","").
+   END.
 
    IF icTransDir > "" THEN
       fTransDir(lcLatestEmailFileNotify,
