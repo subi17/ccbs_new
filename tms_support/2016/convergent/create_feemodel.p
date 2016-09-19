@@ -50,7 +50,7 @@ create_feemodel("CONTFH55_50MF",46,"Contrato FH55_50 Monthly fee",45.45,"MF",1,"
 create_feemodel("CONTFH55_300MF",46,"Contrato FH55_300 Monthly fee",45.45,"MF",1,"CONTRATOFIXED",FALSE,1).
 create_feemodel("CONTFH65_300MF",46,"Contrato FH65_300 Monthly fee",53.72,"MF",1,"CONTRATOFIXED",FALSE,1).
 
-create_feemodel("TERMFIXEDLINE",0,"Fixed line contract termination",0.0,"PF",1,"COMMON",TRUE,0).
+create_feemodel("TERMFIXEDLINE",0,"Fixed line contract termination",100.0,"PF",1,"COMMON",TRUE,0).
 
 
 

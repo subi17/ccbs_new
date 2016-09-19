@@ -95,15 +95,19 @@ CASE FusionMessage.FixedStatus:
 
       IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_INITIALIZED} THEN
          OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ONGOING}.
+   END.
    WHEN "INCIDENCIA DATOS" OR
    WHEN "INCIDENCIA ACTIVACION SERVICIOS" OR
    WHEN "INCIDENCIA PROV JAZZTEL" THEN DO:
-      OrderFusion.AdditionalInfo = lcAdditionalInfo.
+      ASSIGN OrderFusion.CancellationReason = lcAdditionalInfo.
+   END.
+   WHEN "CITADA" THEN DO:
+      ASSIGN OrderFusion.AppointmentDate = lcAdditionalInfo.
    END.
    /* installation done */
    WHEN "CERRADA" THEN DO:
        
-      ASSIGN OrderFusion.FixedActivationTS = ldeLastDate.
+      ASSIGN OrderFusion.FixedInstallationTS = ldeLastDate.
 
       /* MNP/NEW indirect channel */
       IF Order.OrderType NE {&ORDER_TYPE_STC} AND

@@ -11,6 +11,7 @@
 {Syst/tmsconst.i}
 {xmlrpc/xmlrpc_client.i}
 {Func/forderstamp.i}
+{Func/fixedlinefunc.i}
 
 DEF VAR lcConURL AS CHAR NO-UNDO.
 DEF VAR liTesting AS INT NO-UNDO.
@@ -110,6 +111,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF BUFFER bOrder FOR Order.
    DEF BUFFER bOC FOR OrderCustomer.
    DEF BUFFER bOF FOR OrderFusion.
+   DEF BUFFER bCLIType FOR CliType.
 
    FIND FIRST bOrder NO-LOCK where 
               bOrder.Brand EQ Syst.Parameters:gcBrand AND
@@ -133,47 +135,45 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
          RETURN "Error: Customer data not found " + STRING(iiOrderID) .
 
    END.
-/*   
+   
    FIND FIRST bOF NO-LOCK WHERE
               bOF.Brand EQ Syst.Parameters:gcBrand AND
               bOF.OrderID EQ iiOrderID NO-ERROR.
    IF NOT AVAIL bOF THEN
                RETURN "Error: Fixed Order data not found " + STRING(iiOrderID) .
-*/
+
 
    /*Generate order type*/
-  
-IF liTesting EQ 0 THEN DO:  
-   IF bOrder.CliType BEGINS "CONTDSL" OR 
-      bOrder.CliType BEGINS "CONTFH" THEN DO: 
-      FIND FIRST CLIType NO-LOCK WHERE
-                 CLIType.CLIType EQ bOrder.CliType NO-ERROR.
-      IF AVAIL CLIType THEN DO:
-         IF CLIType.FixedLineType EQ 1 THEN DO:
-            lcOrderType = "Alta xDSL + VOIP".
-            lcConnServiceId = "ADSL".
-            lcConnServiceName = "ADSL connection".
-            lcConnServiceType = "ADSL".
-         END.
-         ELSE IF CLIType.FixedLineType EQ 2 THEN DO:
-            lcOrderType = "Alta FTTH + VOIP".
-            lcConnServiceId = "FTTH".
-            lcConnServiceName = "FTTH connection".
-            lcConnServiceType = "FTTH".           
-         END.   
-         ELSE RETURN "Not allowed Fixed line type".
-      END.
-   END.
-   ELSE 
-      RETURN "Error Not allowed CLITYPE " + bOrder.CliType.
-END.      
-ELSE DO:
+IF liTesting NE 0 THEN DO:
             lcOrderType = "Alta FTTH + VOIP".
             lcConnServiceId = "FTTH".
             lcConnServiceName = "FTTH connection".
             lcConnServiceType = "FTTH".
 
 END. /*testing related*/
+ELSE DO:
+   IF fIsConvergenceTariff(bOrder.CliType) THEN DO:
+      FIND FIRST bCLIType NO-LOCK WHERE
+                 bCLIType.CLIType EQ bOrder.CliType NO-ERROR.
+      IF AVAIL bCLIType THEN DO:
+         IF bCLIType.FixedLineType EQ 1 THEN DO:
+            lcOrderType = "Alta xDSL + VOIP".
+            lcConnServiceId = "ADSL".
+            lcConnServiceName = "ADSL connection".
+            lcConnServiceType = "ADSL".
+         END.
+         ELSE IF bCLIType.FixedLineType EQ 2 THEN DO:
+            lcOrderType = "Alta FTTH + VOIP".
+            lcConnServiceId = "FTTH".
+            lcConnServiceName = "FTTH connection".
+            lcConnServiceType = "FTTH".
+         END.
+         ELSE RETURN "Not allowed Fixed line type".
+      END.
+   END.
+   ELSE
+      RETURN "Error Not allowed CLITYPE " + bOrder.CliType.
+END.
 
    IF fTS2Date(bOrder.CrStamp, ldaCreDate) EQ FALSE THEN
       RETURN "Error: Date reading failed".
@@ -195,8 +195,8 @@ END. /*testing related*/
    add_string(lcOrderStruct, "creadate", STRING(ldaCreDate)). 
 
    /*Installation*/
-   lcInstallationStruct = add_struct(lcOrderStruct,"Installation").
-   lcContactStruct = add_struct(lcInstallationStruct,"Contact").
+   lcInstallationStruct = add_struct(lcOrderStruct, "Installation").
+   lcContactStruct = add_struct(lcInstallationStruct, "Contact").
    add_string(lcContactStruct, "firstName", bOC.FirstName).
    add_string(lcContactStruct, "middleName", "").
    add_string(lcContactStruct, "lastName", bOC.Surname1 + " " + bOC.Surname2).
@@ -205,28 +205,28 @@ END. /*testing related*/
    add_string(lcContactStruct, "Email", bOC.Email).
    add_string(lcContactStruct, "phoneNumber", bOC.ContactNum).
 
-   lcAddressStruct = add_struct(lcInstallationStruct,"Address").
+   lcAddressStruct = add_struct(lcInstallationStruct, "Address").
    add_string(lcAddressStruct, "country", bOC.Country).
-   add_string(lcAddressStruct, "province",bOC.Region).
-   add_string(lcAddressStruct, "town",bOC.PostOffice).
+   add_string(lcAddressStruct, "province", bOC.Region).
+   add_string(lcAddressStruct, "town", bOC.PostOffice).
    add_string(lcAddressStruct, "street", bOC.Street).
-   add_string(lcAddressStruct, "streetType","").
-   add_string(lcAddressStruct, "number", bOc.BuildingNum).
-   add_string(lcAddressStruct, "bis_duplicate","").
-   add_string(lcAddressStruct, "block","").
-   add_string(lcAddressStruct, "door","").
-   add_string(lcAddressStruct, "letter","").
-   add_string(lcAddressStruct, "stair","").
-   add_string(lcAddressStruct, "floor","").
-   add_string(lcAddressStruct, "hand","").
-   add_string(lcAddressStruct, "Km","").
-   add_string(lcAddressStruct, "zipCode",bOc.ZipCode).
+   add_string(lcAddressStruct, "streetType", bOC.StreetType). 
+   add_string(lcAddressStruct, "number", bOC.BuildingNum).
+   add_string(lcAddressStruct, "bis_duplicate", bOC.BisDuplicate).
+   add_string(lcAddressStruct, "block", bOC.Block).
+   add_string(lcAddressStruct, "door", bOC.Door).
+   add_string(lcAddressStruct, "letter", bOC.Letter).
+   add_string(lcAddressStruct, "stair", bOC.Stair).
+   add_string(lcAddressStruct, "floor", bOC.Floor).
+   add_string(lcAddressStruct, "hand", bOC.Hand).
+   add_string(lcAddressStruct, "Km", bOC.Km).
+   add_string(lcAddressStruct, "zipCode", bOc.ZipCode).
    IF lcConnServiceId EQ "ADSL" THEN
-      add_string(lcInstallationStruct, "modality", /*bOF.ADSLLinkstate*/ "O").
+      add_string(lcInstallationStruct, "modality", bOF.ADSLLinkstate).
 
    lcServiceArray = add_array(lcOrderStruct,"Services").
+
     /*Services entry - Phone*/
-    
    lcServiceStruct = fAddService(lcServiceArray, 
                "FixedPhone", 
                "Fixed Phone Number", 
@@ -236,34 +236,30 @@ END. /*testing related*/
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics").
 
-   fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                      "phoneNumber",        /*param name*/
-                      "900900900",                /*param value*/
-                      "").                    /*old value*/
-   /*IF portability in THEN */ 
+
+   /*Mandatory in portability*/
+   IF bOF.FixedNumberType NE "new" THEN DO:
       fAddCharacteristic(lcCharacteristicsArray, /*base*/
                          "donoroperator",        /*param name*/
-                         "Saunalahti",                /*param value*/
+                         bOF.FixedCurrOperCode,  /*param value*/
                          "").                    /*old value*/
-   fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                      "portabilitytype",        /*param name*/
-                      "I",                /*param value*/
-                      "").                    /*old value*/
- 
-   /*IF portability  THEN */ 
+
       fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                         "phoneNumberTmp",        /*param name*/
-                         "900",                /*param value*/
+                         "portabilitytype",      /*param name*/
+                         "I", /*port in = I*/    /*param value*/
                          "").                    /*old value*/
  
-    fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                      "reselleroperator",        /*param name*/
-                      "Sonera",                /*param value*/
+   END.
+
+   fAddCharacteristic(lcCharacteristicsArray, /*base*/
+                      "phoneNumber",          /*param name*/
+                      bOF.FixedNumber,        /*param value*/
                       "").                    /*old value*/
-    fAddCharacteristic(lcCharacteristicsArray, /*base*/
+
+   fAddCharacteristic(lcCharacteristicsArray,  /*base*/
                       "receptooperator",        /*param name*/
-                      "0031",                /*param value*/
-                      "").                    /*old value*/
+                      "0031",/*must be 0031*/   /*param value*/
+                      "").                      /*old value*/
  
 
    /*Services entry - Line*/
@@ -276,23 +272,21 @@ END. /*testing related*/
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics" ).
    IF lcConnServiceId EQ "FTTH" THEN DO:
-      fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                         "UploadSpeed",        /*param name*/
-                         "100",      /*param value*/
-                         "").             /*old value*/
-      fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                         "DownloadSpeed",        /*param name*/
-                         "100",      /*param value*/
-                         "").             /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,      /*base*/
+                         "UploadSpeed",               /*param name*/
+                         bCLIType.FixedLineUpload,    /*param value*/
+                         "").                         /*old value*/
+      fAddCharacteristic(lcCharacteristicsArray,      /*base*/
+                         "DownloadSpeed",             /*param name*/
+                         bCLIType.FixedLineDownload,  /*param value*/
+                         "").                         /*old value*/
  
    END.
 
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                      "gescal",        /*param name*/
-                      /*bOC.Gescal,*/"007",      /*param value*/
-                      "").             /*old value*/
-
-
+                      "gescal",               /*param name*/
+                      bOC.Gescal,             /*param value*/
+                      "").                    /*old value*/
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).

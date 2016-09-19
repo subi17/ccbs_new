@@ -220,6 +220,17 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
       ocError = "Function not allowed due to business rules!".
       RETURN FALSE.
    END.
+
+   IF mobsub.msstatus EQ {&MSSTATUS_FIXED_PROV_ONG} AND
+      NOT CAN-FIND(FIRST Order NO-LOCK WHERE
+                         Order.MsSeq = mobsub.msseq AND
+                         Order.CLIType = mobsub.CliType AND
+                         Order.OrderId NE piOrderID AND
+                  LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0)
+      THEN DO:
+      ocError = "Ongoing convergent order".
+      RETURN FALSE.
+   END.
   
    /* 2 */
    IF NOT fIsSTCAllowed(INPUT Mobsub.MsSeq,
