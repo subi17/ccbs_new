@@ -1358,8 +1358,6 @@ FOR EACH Order NO-LOCK WHERE
                                 0,
                                 "After Sales Request creation failed - LO",
                                 ocResult).
-               fSetOrderStatus(xOrder.OrderId,"4").
-               NEXT RENEWAL_LOOP.
             END.
 
             ASSIGN
