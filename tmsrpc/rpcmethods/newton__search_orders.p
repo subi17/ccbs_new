@@ -44,6 +44,8 @@ FUNCTION fAddOrderStruct RETURN LOGICAL (INPUT piCountOrder AS INTEGER):
    add_string(lcOrderStruct, "cli"    , Order.CLI              ).
    add_string(lcOrderStruct, "fname"  , OrderCustomer.FirstName).
    add_string(lcOrderStruct, "lname"  , OrderCustomer.SurName1 ).
+/*   IF AVAIL OrderFusion THEN  TODO remove comments*/ 
+      add_string(lcOrderStruct, "fixed_number"  , "912345678" ). /*TODO OrderFusion.fixednumber */
 END.
 
 
@@ -59,6 +61,16 @@ FUNCTION fIsRecordsAvailable RETURN LOGICAL:
 
 END.
 
+FUNCTION fCheckFixedNumber RETURN LOGICAL:
+   
+   FIND FIRST OrderFusion WHERE 
+              OrderFusion.Brand = "1" AND
+              OrderFusion.OrderId EQ Order.OrderId
+              NO-LOCK NO-ERROR.
+
+   RETURN AVAILABLE OrderFusion.
+
+END.
 
 FUNCTION fAddOrdersBasedOnCLI RETURN CHARACTER:
    DEFINE VARIABLE iCount AS INTEGER NO-UNDO. 
@@ -69,11 +81,33 @@ FUNCTION fAddOrdersBasedOnCLI RETURN CHARACTER:
       Order.CLI = pcSearchString NO-LOCK:
       IF NOT fIsRecordsAvailable() THEN 
          NEXT OrdersBasedOnCLI.
+      fCheckFixedNumber().
 
       fAddOrderStruct(iCount).
       iCount = iCount + 1.
       IF iCount = piMaxCount THEN
          LEAVE OrdersBasedOnCLI.
+   END.
+   RETURN "".
+END.
+
+FUNCTION fAddOrdersBasedOnFixed RETURN CHARACTER:
+   DEFINE VARIABLE iCount AS INTEGER NO-UNDO. 
+   iCount = 0.
+   OrdersBasedOnFixed:
+   FOR EACH OrderFusion WHERE 
+      OrderFusion.FixedNumber = pcSearchString NO-LOCK:
+      FOR EACH Order WHERE
+               Order.Brand = "1" AND
+               Order.OrderId = OrderFusion.OrderId NO-LOCK:
+         IF NOT fIsRecordsAvailable() THEN 
+            NEXT OrdersBasedOnFixed.
+
+         fAddOrderStruct(iCount).
+         iCount = iCount + 1.
+         IF iCount = piMaxCount THEN
+            LEAVE OrdersBasedOnFixed.
+      END.
    END.
    RETURN "".
 END.
@@ -92,6 +126,7 @@ FUNCTION fAddOrdersBasedOnCustId RETURN CHARACTER:
       FOR EACH Order WHERE
                Order.Brand = "1" AND
                Order.OrderId = OrderCustomer.OrderId NO-LOCK:
+      fCheckFixedNumber().
       fAddOrderStruct(iiCount).
       iiCount = iiCount + 1.
       IF iiCount = piMaxCount THEN
@@ -119,6 +154,7 @@ FUNCTION fAddOrdersBasedOnOrderId RETURN CHARACTER:
       IF NOT fIsRecordsAvailable() THEN 
          NEXT OrdersBasedOnOrderId.
 
+      fCheckFixedNumber().
       fAddOrderStruct(iCount).
       iCount = iCount + 1.
       IF iCount = piMaxCount THEN
@@ -133,6 +169,7 @@ CASE pcSearchType:
    WHEN "tms_id"  THEN lcError = fAddOrdersBasedOnOrderId().
    WHEN "custid" THEN lcError = fAddOrdersBasedOnCustId().
    WHEN "msisdn"  THEN lcError = fAddOrdersBasedOnCLI(). 
+   WHEN "fixed_number" THEN lcError = fAddOrdersBasedOnCLI(). /* TODO -> fAddOrdersBasedOnFixed */
    OTHERWISE 
       lcError = "Invalid search_type " + pcSearchType.
 END.

@@ -21,6 +21,13 @@
               voice_bundle_usage;double;mandatory;monthly voice bundle usage in minutes
               voice_bdest_limit;int;mandatory;monthly voice bundle bdest limit
               voice_bdest_usage;int;mandatory;count of monthly used bdests
+              data200_upsell_count;int;mandatory;Data 200 upsell count
+              dss200_upsell_count;int;mandatory;DSS 200 upsell count
+              fixed_bundle_limit;double;mandatory;fixed line bundle limit
+              fixed_bundle_usage;double;mandatory;fixed line bundle usage
+              fixed_bdest_limit;int;mandatory;fixed line bundle destination limit
+              fixed_bdest_usage;int;mandatory;fixed line bundle destination usage
+
  */
 {xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {commpaa.i}
@@ -71,6 +78,10 @@ DEF VAR liRoamUpsellCount AS INT     NO-UNDO.
 DEF VAR liDSSUpsellCount        AS INT  NO-UNDO.
 DEF VAR liVoiceBDestLimit       AS INT  NO-UNDO.
 DEF VAR liVoiceBDestUsage       AS INT  NO-UNDO.
+DEF VAR liFixedBdestLimit       AS INT  NO-UNDO.
+DEF VAR liFixedBdestUsage       AS INT  NO-UNDO.
+DEF VAR ldeFixedBundleLimit     AS DEC  NO-UNDO.
+DEF VAR ldeFixedBundleUsage     AS DEC  NO-UNDO.
 DEF VAR ldeIntRoamUsage AS DEC NO-UNDO. 
 DEF VAR liDialTypes AS INT NO-UNDO EXTENT 3.
 DEF VAR liLoop AS INTEGER NO-UNDO. 
@@ -580,9 +591,11 @@ DO liLoop = 1 TO 3:
          END. /* IF AVAILABLE ServiceLCounter THEN DO: */
       END. /* IF MServiceLimit.DialType = {&DIAL_TYPE_GPRS} THEN DO: */
 
-      ELSE IF MServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN DO:
+      ELSE IF MServiceLimit.DialType = {&DIAL_TYPE_VOICE} OR
+              MServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE}  THEN DO:
          /* All Voice bundle + UPSELL limits */
-         IF DayCampaign.DCType = {&DCTYPE_POOL_RATING} THEN DO:
+         IF MServiceLimit.DialType = {&DIAL_TYPE_VOICE} AND
+            DayCampaign.DCType = {&DCTYPE_POOL_RATING} THEN DO:
             FIND FIRST MServiceLPool WHERE
                        MserviceLPool.MsSeq   = MServiceLimit.MsSeq  AND
                        MserviceLPool.SLSeq   = MServiceLimit.SLSeq  AND
@@ -592,6 +605,9 @@ DO liLoop = 1 TO 3:
                ldeVoiceBundleLimit = ldeVoiceBundleLimit +
                                      MserviceLPool.LimitAmt.
          END. /* IF bDayCampaign.DCType = {&DCTYPE_POOL_RATING} THEN DO: */
+         ELSE IF MServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE} THEN
+            ldeFixedBundleLimit = ldeFixedBundleLimit +
+                                     MServiceLimit.InclAmt.
          ELSE ldeVoiceBundleLimit = ldeVoiceBundleLimit +
                                     MServiceLimit.InclAmt.
 
@@ -599,21 +615,27 @@ DO liLoop = 1 TO 3:
                     ServiceLCounter.MsSeq  = MServiceLimit.MsSeq  AND
                     ServiceLCounter.SlSeq  = MServiceLimit.SlSeq  AND
                     ServiceLCounter.Period = liPeriod NO-LOCK NO-ERROR.
-         IF AVAILABLE ServiceLCounter THEN
-            ldeVoiceBundleUsage = ldeVoiceBundleUsage + 
+         IF AVAILABLE ServiceLCounter THEN DO:
+            IF MServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE} THEN
+               ldeFixedBundleUsage = ldeFixedBundleUsage + 
                                   (ServiceLCounter.Amt / 60).
+            ELSE ldeVoiceBundleUsage = ldeVoiceBundleUsage + 
+                                  (ServiceLCounter.Amt / 60).
+         END.
       END. /* IF MServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN DO: */
 
       /* Return Voice BDestination limit/usage */
-      IF ((ServiceLimit.GroupCode BEGINS "CONTF"       OR
-           ServiceLimit.GroupCode = "VOICE100"         OR 
-           ServiceLimit.GroupCode = "FREE100MINUTES")  AND
-           ServiceLimit.DialType = {&DIAL_TYPE_VOICE}) OR
-           ServiceLimit.DialType = 0 THEN DO:
+      IF (ServiceLimit.BDestLimit > 0 AND
+          ServiceLimit.InclAmt    > 0 AND
+         (ServiceLimit.DialType = {&DIAL_TYPE_VOICE} OR
+          ServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE})) OR
+          ServiceLimit.DialType = 0 THEN DO:
          IF ServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN
             liVoiceBDestLimit = ServiceLimit.BDestLimit.
+         ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE} THEN
+            liFixedBdestLimit = ServiceLimit.BDestLimit.
          ELSE
-            liVoiceBDestLimit = INT(ServiceLimit.InclAmt).
+            liVoiceBDestLimit = INT(ServiceLimit.InclAmt).  
 
          FIND FIRST ServiceLCounter WHERE
                     ServiceLCounter.MsSeq  = MServiceLimit.MsSeq AND
@@ -622,6 +644,8 @@ DO liLoop = 1 TO 3:
          IF AVAIL ServiceLCounter THEN DO:
             IF ServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN
                liVoiceBDestUsage = ServiceLCounter.limit.
+            ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE} THEN
+               liFixedBdestUsage = ServiceLCounter.limit.
             ELSE
                liVoiceBDestUsage = INT(ServiceLCounter.Amt).
          END. /* IF AVAIL ServiceLCounter THEN DO: */
@@ -719,6 +743,10 @@ add_int(first_level_struct,    "bono_count", liBonoCount).
 add_int(first_level_struct,    "data_bundle_upsell", liUpsellCount).
 add_int(first_level_struct,    "data200_upsell_count", liData200Count).
 add_int(first_level_struct,    "dss200_upsell_count", liDSS200Count).
+add_double(first_level_struct, "fixed_bundle_limit", ldeFixedBundleLimit).
+add_double(first_level_struct, "fixed_bundle_usage", ldeFixedBundleUsage).
+add_int(first_level_struct,    "fixed_bdest_limit", liFixedBdestLimit).
+add_int(first_level_struct,    "fixed_bdest_usage", liFixedBdestUsage).
 
 FINALLY:
    EMPTY TEMP-TABLE ttCDR.
