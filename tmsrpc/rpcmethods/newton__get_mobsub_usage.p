@@ -603,13 +603,11 @@ DO liLoop = 1 TO 3:
             ldeVoiceBundleUsage = ldeVoiceBundleUsage + 
                                   (ServiceLCounter.Amt / 60).
       END. /* IF MServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN DO: */
-
+      
+      /*YDR-2284 removed the condition*/
       /* Return Voice BDestination limit/usage */
-      IF ((ServiceLimit.GroupCode BEGINS "CONTF"       OR
-           ServiceLimit.GroupCode = "VOICE100"         OR 
-           ServiceLimit.GroupCode = "FREE100MINUTES")  AND
-           ServiceLimit.DialType = {&DIAL_TYPE_VOICE}) OR
-           ServiceLimit.DialType = 0 THEN DO:
+      IF ServiceLimit.DialType = {&DIAL_TYPE_VOICE} OR
+         ServiceLimit.DialType = 0 THEN DO:
          IF ServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN
             liVoiceBDestLimit = ServiceLimit.BDestLimit.
          ELSE
