@@ -12,6 +12,7 @@ DEFINE VARIABLE ldeEndStamp   AS DECIMAL   NO-UNDO FORMAT "99999999.99999".
 DEFINE VARIABLE lcConfDir     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcDoneDir     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLogFile     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcStatusList  AS CHARACTER NO-UNDO INITIAL "2,3,4,9,99". 
 
 DEFINE BUFFER bfCliType FOR CliType.
 
@@ -42,9 +43,7 @@ REPEAT:
 
       IF ((CliType.PayType = 1 AND bfCliType.PayType = 1) OR
           (CliType.PayType = 1 AND bfCliType.PayType = 2)) AND 
-          MSRequest.ReqStatus <> {&REQUEST_STATUS_DONE} AND
-          MSRequest.ReqStatus <> {&REQUEST_STATUS_REJECTED} AND 
-          MSRequest.ReqStatus <> {&REQUEST_STATUS_CANCELLED} THEN
+          LOOKUP(STRING(MSRequest.ReqStatus),lcStatusList) = 0 THEN
          ASSIGN liCnt = liCnt + 1.
 
       ELSE IF (CliType.PayType = 2 AND bfCliType.PayType = 1) OR
@@ -53,7 +52,7 @@ REPEAT:
          IF (MSRequest.ReqStatus = {&REQUEST_STATUS_REJECTED} OR
              MSRequest.ReqStatus = {&REQUEST_STATUS_CANCELLED} ) THEN
             NEXT req-blk.    
-         ELSE IF (MSRequest.ReqStatus <> {&REQUEST_STATUS_DONE}) THEN
+         ELSE IF LOOKUP(STRING(MSRequest.ReqStatus),lcStatusList) = 0  THEN
          DO: 
             /* If this variable is already false then no need to assign */
             IF llDone THEN
