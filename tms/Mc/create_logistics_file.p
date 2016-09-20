@@ -1319,63 +1319,60 @@ FOR EACH Order NO-LOCK WHERE
          Order.StatusCode = "78" AND 
          Order.OrderType = 2:
          
-    IF Order.OrderChannel BEGINS "renewal_pos" THEN NEXT RENEWAL_LOOP. 
+   IF Order.OrderChannel BEGINS "renewal_pos" THEN NEXT RENEWAL_LOOP. 
     
-    ocResult = "".
+   ocResult = "".
 
-    FIND MobSub WHERE 
-         MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
-    IF AVAIL MobSub THEN DO:
+   FIND MobSub WHERE 
+        MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
+   IF AVAIL MobSub THEN DO:
 
-      fAfterSalesRequest(
-         Order.MsSeq,
-         Order.OrderId,
-         katun,
-         fMakeTS(),
-         "7",
-         OUTPUT ocResult
-         ).
-       
-      IF ocResult > "" THEN DO:
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "Order",
-                          STRING(Order.OrderID),
-                          0,
-                          "After Sales Request creation failed - LO",
-                          ocResult).
-         fSetOrderStatus(Order.OrderId,"4").
-
-         NEXT RENEWAL_LOOP.
-
-      END.
-
-       lcICC = MobSub.ICC.
-       IF Order.ICC > "" THEN lcICC = Order.ICC.
+      lcICC = MobSub.ICC.
+      IF Order.ICC > "" THEN lcICC = Order.ICC.
              
-       FIND xOrder WHERE 
-            xOrder.Brand   = gcBrand AND
-            xOrder.OrderId = Order.OrderId 
-       EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
-       IF ERROR-STATUS:ERROR OR LOCKED(xOrder) THEN NEXT RENEWAL_LOOP.
+      FIND xOrder WHERE 
+           xOrder.Brand   = gcBrand AND
+           xOrder.OrderId = Order.OrderId 
+      EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+      IF ERROR-STATUS:ERROR OR LOCKED(xOrder) THEN NEXT RENEWAL_LOOP.
        
-       FIND SIM WHERE 
-            SIM.Brand = gcBrand AND 
-            SIM.ICC = lcICC NO-LOCK NO-ERROR.
-       IF AVAILABLE SIM THEN DO:
-          IF fDelivSIM( SIM.ICC ) THEN DO:
-             ASSIGN
-                xOrder.Logistics = lcFileName
-                xOrder.SendToROI = 1.
+      FIND SIM WHERE
+           SIM.Brand = gcBrand AND 
+           SIM.ICC = lcICC NO-LOCK NO-ERROR.
+      IF AVAILABLE SIM THEN DO:
+         IF fDelivSIM( SIM.ICC ) THEN DO:
+
+            fAfterSalesRequest(
+               xOrder.MsSeq,
+               xOrder.OrderId,
+               katun,
+               fMakeTS(),
+               "7",
+               OUTPUT ocResult
+               ).
+
+            IF ocResult > "" THEN DO:
+               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                "Order",
+                                STRING(xOrder.OrderID),
+                                0,
+                                "After Sales Request creation failed - LO",
+                                ocResult).
+               fSetOrderStatus(xOrder.OrderId,"4").
+               NEXT RENEWAL_LOOP.
+            END.
+
+            ASSIGN
+               xOrder.Logistics = lcFileName
+               xOrder.SendToROI = 1.
  
-             /* Call the fSetOrderStatus function to change the order status to Delivery and make the timestamp */
-             fSetOrderStatus(xOrder.OrderID,"12").
-             /* fMarkOrderStamp(xOrder.OrderID,"Delivery",0.0). */
-             fMarkOrderStamp(xOrder.OrderID,"SendToLogistics",0.0). /* Timestamp for Logistics Operator Change Dextra->Netkia */
-          END. /* IF fDelivSIM( SIM.ICC ) THEN DO: */  
-       END. /* IF AVAILABLE SIM THEN DO: */
+            fSetOrderStatus(xOrder.OrderID,"12").
+            fMarkOrderStamp(xOrder.OrderID,"SendToLogistics",0.0).
+         END. /* IF fDelivSIM( SIM.ICC ) THEN DO: */
+      END. /* IF AVAILABLE SIM THEN DO: */
        
-       RELEASE xOrder.
-    END.
+      RELEASE xOrder.
+   END.
 END.
 
 iLargestId = 1.
