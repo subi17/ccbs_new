@@ -29,8 +29,8 @@ FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
 END.
 
 fcreateDaycampaign("CONTS2GB","CONTDSL45","La Infinita 2 GB + DSL","7",limode).
-fcreateDaycampaign("CONTS2GB","CONTDSL55","La Infinita 10 GB + DSL","7",limode).
+fcreateDaycampaign("CONTS10GB","CONTDSL55","La Infinita 10 GB + DSL","7",limode).
 fcreateDaycampaign("CONTS2GB","CONTFH45_50","La Infinita 2 GB + FIBER 50M","7",limode).
-fcreateDaycampaign("CONTS2GB","CONTFH55_50","La Infinita 10 GB + FIBER 50M","7",limode).
+fcreateDaycampaign("CONTS10GB","CONTFH55_50","La Infinita 10 GB + FIBER 50M","7",limode).
 fcreateDaycampaign("CONTS2GB","CONTFH55_300","La Infinita 2 GB + FIBER 300M","7",limode).
-fcreateDaycampaign("CONTS2GB","CONTFH65_300","La Infinita 10 GB + FIBER 300M","7",limode).
+fcreateDaycampaign("CONTS10GB","CONTFH65_300","La Infinita 10 GB + FIBER 300M","7",limode).
