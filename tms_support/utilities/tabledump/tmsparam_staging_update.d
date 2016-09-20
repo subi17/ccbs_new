@@ -42,7 +42,7 @@
 "URL" "urlCreditCheck" "C" 0 0 "creditcheck" ? "" "" "" "" "" "" "" "" "" "" "Credit Scoring URL" yes "1"
 "URL" "urlDextra" "C" 0 0 "http://217.168.2.239:8080/order-status/xmlrpc" ? "" "" "" "" "" "" "" "" "" "" "Dextra online interface" no "1"
 "URL" "urlMNP" "C" 0 0 "mnpsend" ? "" "" "" "" "" "" "" "" "" "" "MNP send URL" no "1"                                                    
-"URL" "UrlMnpMock" "C" 0 0 "http://127.0.0.1:8082/mnp" ? "" "" "" "" "" "" "" "" "" "" "Staging MNP Mock Address" no "1"                  
+"URL" "UrlMnpMock" "C" 0 0 "http://127.0.0.1:3050" ? "" "" "" "" "" "" "" "" "" "" "Staging MNP Mock Address" no "1"                  
 "URL" "urlROI" "C" 0 0 "http://217.168.2.239:7001/com-yoigo-roi-webapp/xmlrpc" ? "" "" "" "" "" "" "" "" "" "" "ROI History URL" no "1"   
 "XML" "InvXMLFile" "C" 0 0 "/mnt/xmlstore/spool/#INVNUM.xml" ? "" "" "" "" "" "" "" "" "" "" "File name" no "1"
 "XML" "InvXMLFormatted" "I" 1 0 "" ? "" "" "" "" "" "" "" "" "" "" "1=formatted, 0=not formatted" no "1"
