@@ -134,7 +134,7 @@ END.
 /*YPR-4773*/
 /*(De)Activation is not allowed if fixed line provisioning is pending*/
 IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
-   RETURN appl_err("Fixed line provisioning is not complete").
+   RETURN appl_err("Mobile line provisioning is not complete").
 
 
 /* Check ongoing service requests */

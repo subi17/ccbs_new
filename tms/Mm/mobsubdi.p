@@ -196,7 +196,7 @@ DO WHILE TRUE:
        /*YPR-4777*/
       /*Operation is not allowed if fixed line provisioning is pending*/
       IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
-         MESSAGE "Fixed line provisioning is not complete" VIEW-AS ALERT-BOX.
+         MESSAGE "Mobile line provisioning is not complete" VIEW-AS ALERT-BOX.
       ELSE     
          run simch.p(MsSeq).
    END.
@@ -206,7 +206,7 @@ DO WHILE TRUE:
       /*YPR-4776*/
       /*Operation is not allowed if fixed line provisioning is pending*/
       IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
-         MESSAGE "Fixed line provisioning is not complete" VIEW-AS ALERT-BOX.
+         MESSAGE "Mobile line provisioning is not complete" VIEW-AS ALERT-BOX.
       ELSE 
          run msisdnch.p(MsSeq).
    END.
@@ -238,7 +238,7 @@ DO WHILE TRUE:
       /*YPR-4775*/
       /*Operation is not allowed if fixed line provisioning is pending*/
       IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN 
-         MESSAGE "Fixed line provisioning is not complete" VIEW-AS ALERT-BOX.
+         MESSAGE "Mobile line provisioning is not complete" VIEW-AS ALERT-BOX.
       ELSE RUN bundle_change_ui.p (MobSub.MsSeq).
    END.
             
