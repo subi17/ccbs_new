@@ -27,10 +27,8 @@ FUNCTION fServiceOpenFee RETURNS LOGICAL
                  icMemo,             /* memo     */
                  YEAR(idtBegDate) * 100 + MONTH(idtBegDate),
                  idtBegDate,
-                 FALSE,            /* interact */
                  ?,                /* price from feemodel */
                  icContract,       /* contract */
-                 TRUE,            /* active */
                  icUserCode,
                  icFeeMemo,
                  0,
@@ -56,10 +54,8 @@ FUNCTION fServiceChangeFee RETURNS LOGICAL
                  icMemo,             /* memo     */
                  YEAR(idtDate) * 100 + MONTH(idtDate),
                  idtDate,
-                 FALSE,            /* interact */
                  ?,                /* price from feemodel */
                  icContract,       /* contract */
-                 TRUE,            /* active */
                  icUserCode,
                  icFeeMemo,
                  0,
