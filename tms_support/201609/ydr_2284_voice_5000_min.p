@@ -180,6 +180,7 @@ PROCEDURE CreateTM:
                        "CONTSVOICE21_A,CONTS|" +
                        "CONTSVOICE25_A,CONTS|" +
                        "CONTSVOICE26_A,CONTS|" +
+                       "CONTSVOICE_A,CONTS|"   +
                        "CONTSVOICE32_A,CONTS|" +
                        "CONTSVOICE35_A,CONTS|" +
                        "CONTSVOICE39_A,CONTS|" +
