@@ -5,7 +5,7 @@ class AddTableMSLog(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('MSLog', area="Sta_Data_128", label="MS Log", dump_name="mslog", desc="Log for mobile subscription events")
+        t = self.table('MSLog', area="Sta_Data_128_2", label="MS Log", dump_name="mslog", desc="Log for mobile subscription events")
         t.column('MsSeq', 'integer', mandatory=True, format=">>>>>>>9", initial="0", max_width=4, label="MobSub Sequence", column_label="SubSeq", position=2, order=10, help="Sequence for a subscription")
         t.column('LogType', 'character', format="x(8)", initial="", help="Type of log event", max_width=16, label="Log Type", column_label="Type", position=3, order=20, description='''
 

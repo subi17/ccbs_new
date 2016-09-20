@@ -5,7 +5,7 @@ class AddTableServFee(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('ServFee', area="Sta_Data_128", label="ServFee", dump_name="servfee", desc='''Fees from activating services
+        t = self.table('ServFee', area="Sta_Data_128_2", label="ServFee", dump_name="servfee", desc='''Fees from activating services
 ''')
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", position=2, order=10, help="Code Of Brand")
         t.column('ServType', 'character', format="x(8)", initial="", help="Type of service", max_width=16, label="Service Type", column_label="Type", position=3, order=20, description="e.g. Report")

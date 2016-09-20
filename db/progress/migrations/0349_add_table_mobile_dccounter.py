@@ -5,7 +5,7 @@ class AddTableDCCounter(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('DCCounter', area="Sta_Data_128", dump_name="dccounte")
+        t = self.table('DCCounter', area="DCCounter_Data", dump_name="dccounter")
         t.column('DCEvent', 'character', format="x(12)", initial="", max_width=24, label="Periodical Term", column_label="Term", position=2, order=10, help="ID of periodical term")
         t.column('DCDate', 'date', format="99-99-9999", initial=self.unknown, max_width=4, label="Date", column_label="Date", position=3, order=20, help="Day of the daily campaign")
         t.column('MSSeq', 'integer', mandatory=True, format=">>>>>>>9", initial="0", max_width=4, label="Subscription ID", column_label="Sub.ID", position=4, order=30, help="Sequence for a subscription")
@@ -18,8 +18,8 @@ class AddTableDCCounter(Migration):
         t.column('DCType', 'character', format="x(8)", initial="", max_width=16, label="Campaign Type", column_label="Type", position=14, order=130, help="Campaign type")
         t.column('InclUnit', 'integer', format=">9", initial="0", max_width=4, label="Included Unit", column_label="Incl.Unit", position=15, order=40, help="Unit of included material")
         t.column('Latest', 'decimal', format="99999999.999999", decimals=5, initial="0", max_width=20, label="Latest", column_label="Latest", position=16, order=250, help="Latest packet EDR")
-        t.index('MSSeq', [['MSSeq'], ['DCDate'], ['DCTarget']], area="Sta_Index_2", primary=True)
-        t.index('DCEvent', [['DCEvent'], ['DCDate']], area="Sta_Index_2")
+        t.index('MSSeq', [['MSSeq'], ['DCDate'], ['DCTarget']], area="Sta_Index_5", primary=True)
+        t.index('DCEvent', [['DCEvent'], ['DCDate']], area="Sta_Index_4")
 
     def down(self):
         self.drop_table('DCCounter')

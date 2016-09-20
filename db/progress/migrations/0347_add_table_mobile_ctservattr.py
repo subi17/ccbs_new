@@ -5,7 +5,7 @@ class AddTableCTServAttr(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('CTServAttr', area="Sta_Data_128", label="CLIType Service Attributes", dump_name="ctservat", desc='''Attributes of CLI type's service components
+        t = self.table('CTServAttr', area="Sta_Data_128_2", label="CLIType Service Attributes", dump_name="ctservat", desc='''Attributes of CLI type's service components
 
 ''')
         t.column('CTServEl', 'integer', format=">>>>>>>9", initial="0", max_width=4, label="Element ID", column_label="ID", position=2, order=10, help="Unique ID of CTServEl")

@@ -5,7 +5,7 @@ class AddTableTMRLimit(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('TMRLimit', area="Sta_Data_128", label="TM Rule Limit", dump_name="tmrlimit", desc="TM rule limit")
+        t = self.table('TMRLimit', area="Sta_Data_128_2", label="TM Rule Limit", dump_name="tmrlimit", desc="TM rule limit")
         t.column('FromDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="From", position=2, order=40, help="Date when rule becomes effective")
         t.column('TMRuleSeq', 'integer', format=">>>>>>>>9", initial="0", help="Rule ID", max_width=4, label="Rule Sequence", column_label="Seq", position=3, order=20, description='''
 ''')

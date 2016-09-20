@@ -5,7 +5,7 @@ class AddTableSimArt(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('SimArt', area="Sta_Data_128", dump_name="simart", desc='''SIM Article
+        t = self.table('SimArt', area="Sta_Data_128_2", dump_name="simart", desc='''SIM Article
 ''')
         t.column('SimArt', 'character', format="x(12)", initial="", max_width=24, label="Sim Article", column_label="Sim Article", position=2, order=10, help="Article Code for a SIM type")
         t.column('ManCode', 'character', format="x(8)", initial="", max_width=16, label="Manufacturer", column_label="Manufacturer", position=3, order=20, help="Code Of SIM Manufacturer")

@@ -5,7 +5,7 @@ class AddTableCTServPac(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('CTServPac', area="Sta_Data_128", label="CLIType Service Packages", dump_name="ctservpa", desc="Service Packages of a CLI type")
+        t = self.table('CTServPac', area="Sta_Data_128_2", label="CLIType Service Packages", dump_name="ctservpa", desc="Service Packages of a CLI type")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", column_label="Brand", position=2, order=10, help="Code Of Brand")
         t.column('CLIType', 'character', format="x(8)", initial="", max_width=16, label="CLI Type", column_label="CLIType", position=3, order=20, help="CLI type")
         t.column('ServPac', 'character', format="x(12)", initial="", max_width=24, label="Service Package", column_label="ServPack", position=4, order=30, help="Service package code")

@@ -5,7 +5,7 @@ class AddTableSubSerPara(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('SubSerPara', area="Sta_Data_128", dump_name="subserpa")
+        t = self.table('SubSerPara', area="Sta_Data_128_2", dump_name="subserpa-------1")
         t.column('MsSeq', 'integer', mandatory=True, format=">>>>>>>9", initial="0", max_width=4, label="SubSeq", column_label="SubSeq", position=2, order=10, help="Sequence for a Subscription")
         t.column('ServCom', 'character', format="x(12)", initial="", max_width=24, label="Service Component", column_label="Service Component", position=3, order=20, help="Code of Service Component")
         t.column('ParaValue', 'character', format="x(25)", initial="", max_width=50, label="Value", column_label="Value", position=4, order=30, help="Value of Subscription service parameter")

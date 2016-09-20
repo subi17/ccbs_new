@@ -5,7 +5,7 @@ class AddTableService(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('Service', area="Sta_Data_128", label="Service", dump_name="service", desc='''
+        t = self.table('Service', area="Sta_Data_128_2", label="Service", dump_name="service", desc='''
 ''')
         t.column('Service', 'character', format="x(8)", initial="", max_width=16, label="Service Group", column_label="Service", position=2, order=10, help="Code of Service (group)")
         t.column('SEName', 'character', format="x(40)", initial="", max_width=80, label="ServName", column_label="Name Of Service", position=3, order=20, help="Name of Service(group)")

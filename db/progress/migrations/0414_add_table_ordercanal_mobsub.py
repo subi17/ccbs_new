@@ -27,7 +27,7 @@ class AddTableMobSub(Migration):
         t.column('BarrCode', 'character', format="x(10)", initial="", max_width=20, label="BarrCode", column_label="BarrCode", position=33, order=860)
         t.column('TariffBundle', 'character', format="x(10)", initial="", max_width=20, label="Tariff Bundle", column_label="TariffBundle", position=34, order=870)
         t.column('TariffActDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="Tariff Activation Date", column_label="TariffActDate", position=35, order=880)
-        t.column('TariffActTS', 'decimal', format="99999999.99999", initial="0", max_width=15, label="TariffActTS", column_label="TariffActTS", position=36, order=890)
+        t.column('TariffActTS', 'decimal', format="99999999.99999", decimals=5, initial="0", max_width=15, label="TariffActTS", column_label="TariffActTS", position=36, order=890)
         t.column('CliType', 'character', format="x(8)", initial="", max_width=16, label="MType", column_label="Mtype", position=43, order=440, help="Type Of Mobsub")
         t.column('ActivationTS', 'decimal', format="999999.99999", decimals=5, initial="0", max_width=20, label="Activated", position=48, order=480, help="Time when subscription was activated in TMS (HLR response OK)")
         t.column('SIMDelDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="DeliDate", column_label="DeliDate", position=49, order=490, help="Date When Sim Card delivery request was sent")

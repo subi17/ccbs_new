@@ -5,7 +5,7 @@ class AddTableSCUpdRule(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('SCUpdRule', area="Sta_Data_128", label="Service Update Rule", dump_name="scupdrul", desc='''Service component update rule
+        t = self.table('SCUpdRule', area="Sta_Data_128_2", label="Service Update Rule", dump_name="scupdrul", desc='''Service component update rule
 ''')
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", column_label="Brand", position=2, order=10, help="Code Of Brand")
         t.column('ServCom', 'character', format="x(12)", initial="", max_width=24, label="Service Component", column_label="Service", position=3, order=20, help="Code of service component")

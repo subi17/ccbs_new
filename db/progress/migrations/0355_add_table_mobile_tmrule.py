@@ -5,7 +5,7 @@ class AddTableTMRule(Migration):
     database = "mobile"
 
     def up(self):
-        t = self.table('TMRule', area="Sta_Data_128", label="TM Rule", dump_name="tmrule", desc="Ticket management rule")
+        t = self.table('TMRule', area="Sta_Data_128_2", label="TM Rule", dump_name="tmrule", desc="Ticket management rule")
         t.column('Brand', 'character', format="x(8)", initial="", max_width=16, label="Brand", position=2, order=10, help="Code Of Brand")
         t.column('FromDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="From", position=3, order=40, help="Date when rule becomes effective")
         t.column('ToDate', 'date', format="99-99-99", initial=self.unknown, max_width=4, label="To", position=4, order=50, help="Date when rule expires")
