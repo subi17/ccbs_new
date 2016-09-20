@@ -3,6 +3,11 @@
    mobsub should be in buffer
 */
 
+&IF "{&SERVCOMFEE_I}" NE "YES"
+&THEN
+
+&GLOBAL-DEFINE SERVCOMFEE_I YES
+
 {setfees.i}
 
 /* fee for opening an service */
@@ -63,4 +68,4 @@ FUNCTION fServiceChangeFee RETURNS LOGICAL
 
 END FUNCTION.
 
-
+&ENDIF

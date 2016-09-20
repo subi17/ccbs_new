@@ -24,7 +24,6 @@
 {fctserval.i}
 {fctchange.i}
 {fmakemsreq.i}
-{upsellbundle.i}
 {cparam2.i}
 {Func/sharperconfid.i}
 {Mm/ongoing_bundle.i}
@@ -994,6 +993,4 @@ PROCEDURE pGetGeneralPackage:
 
 END PROCEDURE.
 
-&ENDIF 
-
-
+&ENDIF

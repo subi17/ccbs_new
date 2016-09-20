@@ -33,6 +33,12 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
+&IF "{&SETFEES_I}" NE "YES"
+&THEN
+
+
+&GLOBAL-DEFINE SETFEES_I YES
+
 {commali.i}
 {fmakeservlimit.i}
 {create_eventlog.i}
@@ -367,3 +373,4 @@ RETURN liCreated.
 
 END.
 
+&ENDIF

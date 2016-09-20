@@ -1,4 +1,4 @@
-~/* ----------------------------------------------------------------------
+/* ----------------------------------------------------------------------
  MODULE .......: SOG-ST.P
   TASK .........: SET selected parameters into HLR ( EXCEPT CFNRY ...
                   because CFNRY cannot be set alone, use cfnrych.p instead )
@@ -542,3 +542,8 @@ BY ttSolog.ActStamp:
       VIEW-AS ALERT-BOX TITLE "Service Order Request".  
 
 END.
+
+FINALLY:
+   EMPTY TEMP-TABLE ttSolog.
+   EMPTY TEMP-TABLE ttBarring.
+END FINALLY.
