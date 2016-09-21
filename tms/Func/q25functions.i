@@ -384,7 +384,7 @@ FUNCTION fisQ25PendingRequest RETURNS LOGICAL
 
       IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
                         MsRequest.msSeq EQ iimsseq AND
-                        MsRequest.reqtype EQ 8 AND
+                        MsRequest.reqtype EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
                         MsRequest.ReqStatus = liReqStatus AND
                         MsRequest.ReqCParam3 EQ "RVTERM12") THEN
          RETURN TRUE.
