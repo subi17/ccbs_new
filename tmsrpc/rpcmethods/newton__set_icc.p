@@ -51,7 +51,7 @@ IF NOT AVAILABLE mobsub THEN
 /*YPR-4777*/
 /*Operation is not allowed if fixed line provisioning is pending*/
 IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
-   RETURN appl_err("Fixed line provisioning is not complete").
+   RETURN appl_err("Mobile line provisioning is not complete").
 
 FIND FIRST SIM NO-LOCK WHERE SIM.ICC = pcValue NO-ERROR. 
 IF NOT AVAIL SIM THEN 
