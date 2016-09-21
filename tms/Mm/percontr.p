@@ -1979,7 +1979,7 @@ PROCEDURE pContractTermination:
          lcHandled = ""
          ldeInclAmt = 0
          liSlSeq    = 0.
-
+      
       FOR EACH ServiceLimit NO-LOCK WHERE
                ServiceLimit.GroupCode = lcDCEvent,
           EACH MServiceLimit EXCLUSIVE-LOCK WHERE
@@ -3536,9 +3536,12 @@ PROCEDURE pContractReactivation:
 
    /* create rating package */
    IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 THEN DO:
-
+      
+      /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
       FOR EACH ServiceLimit NO-LOCK WHERE
-               ServiceLimit.GroupCode = lcDCEvent,
+               ServiceLimit.GroupCode = lcDCEvent AND
+               ServiceLimit.ValidFrom <= ldtActDate AND
+               ServiceLimit.ValidTo   >= ldtActDate,
          EACH MServiceLimit EXCLUSIVE-LOCK USE-INDEX MsSeq WHERE
               MServiceLimit.MsSeq    = MsRequest.MsSeq       AND
               MServiceLimit.DialType = ServiceLimit.DialType AND

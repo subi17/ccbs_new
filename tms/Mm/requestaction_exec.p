@@ -220,7 +220,7 @@ PROCEDURE pPeriodicalContract:
       THEN DO:      
                
          llDo = FALSE.
-               
+              
          FOR EACH bServiceLimit NO-LOCK WHERE
                   bServiceLimit.GroupCode = ttAction.ActionKey,
             FIRST bMServiceLimit NO-LOCK WHERE
