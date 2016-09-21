@@ -704,7 +704,6 @@ PROCEDURE pFinalize:
    DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
    DEF VAR lcDataBundleCLITypes  AS CHAR NO-UNDO.
 
-   DEF BUFFER bSubRequest FOR MsRequest.
    DEF BUFFER DataContractReq FOR MsRequest. 
    /* now when billtarget has been updated new fees can be created */
 
@@ -848,8 +847,7 @@ PROCEDURE pFinalize:
 
    /* run rerate (needed especially with saldo-services) */
    IF (bOldType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID} OR
-       CLIType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID}) = AND
-      
+       CLIType.PayType EQ {&CLITYPE_PAYTYPE_POSTPAID}) THEN DO:
       
       RUN pReRate(MobSub.MsSeq,
                   MobSub.InvCust,
