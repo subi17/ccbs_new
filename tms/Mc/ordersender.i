@@ -127,10 +127,11 @@
               
                /* YBP-588 */
                /* prevent duplicate renove request creation */
-               IF CAN-FIND(FIRST MsRequest WHERE
-                                 MsRequest.MsSeq   = Order.MSSeq  AND
-                                 MsRequest.ReqType = 46 AND
-                                 MsRequest.ReqIParam1 = Order.OrderID)
+               IF Order.OrderChannel BEGINS "Renewal_POS" AND
+               CAN-FIND(FIRST MsRequest WHERE
+                              MsRequest.MsSeq   = Order.MSSeq  AND
+                              MsRequest.ReqType = 46 AND
+                              MsRequest.ReqIParam1 = Order.OrderID)
                THEN DO:
                 /* if order status is not ONGOING aftersales request handling
                    will fail */
@@ -210,30 +211,34 @@
                /* YBP-593 */ 
                /* if order status is not ONGOING aftersales request handling
                   will fail */
-               llOrdStChg = fSetOrderStatus(Order.OrderId,"12").
+               IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT_RENEWAL}) > 0 THEN
+                  llOrdStChg = fSetOrderStatus(Order.OrderId,"78").   /* Waiting sending to LO */
+               ELSE llOrdStChg = fSetOrderStatus(Order.OrderId,"12"). /* Ongoing */
 
-               /* YBP-595 */ 
-               fAfterSalesRequest(
-                  Order.MsSeq,
-                  Order.OrderId,
-                  katun,
-                  fMakeTS(),
-                  "7",
-                  OUTPUT ocResult
-                  ).
-                
-                 IF ocResult > "" THEN DO:
-                    DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                     "Order",
-                                     STRING(Order.OrderID),
-                                     0,
-                                     "After Sales Request creation failed",
-                                     ocResult).
-                    llOrdStChg = fSetOrderStatus(Order.OrderId,"4").
-                 END.
+               /* YBP-595 */
+               IF Order.OrderChannel BEGINS "Renewal_POS" THEN DO:
+                  fAfterSalesRequest(
+                     Order.MsSeq,
+                     Order.OrderId,
+                     katun,
+                     fMakeTS(),
+                     "7",
+                     OUTPUT ocResult
+                     ).
+                   
+                  IF ocResult > "" THEN DO:
+                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                      "Order",
+                                      STRING(Order.OrderID),
+                                      0,
+                                      "After Sales Request creation failed",
+                                      ocResult).
+                     llOrdStChg = fSetOrderStatus(Order.OrderId,"4").
+                  END.
+               END.
                  
-                 RELEASE Order.
-                 NEXT {1}.
+               RELEASE Order.
+               NEXT {1}.
             END. /* IF Order.OrderType = 2 THEN DO: */
 
             IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN DO:
