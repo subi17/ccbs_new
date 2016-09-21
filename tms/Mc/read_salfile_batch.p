@@ -20,10 +20,10 @@ gcBrand = "1".
 {smsmessage.i}
 
 DEF VAR lcLine AS CHARACTER NO-UNDO.
+DEF VAR lcSepLine AS CHARACTER NO-UNDO.
 DEF VAR lcSep AS CHARACTER NO-UNDO INIT "|".
 DEF VAR lcOrigSep AS CHARACTER NO-UNDO INIT ";;".
 DEF VAR liNumOK AS INTEGER NO-UNDO.
-DEF VAR liSkipped AS INTEGER NO-UNDO.
 DEF VAR liNumErr AS INTEGER NO-UNDO.
 
 /* files and dirs */
@@ -47,7 +47,7 @@ DEF VAR lcSALOrderId AS CHAR NO-UNDO.
 DEF VAR lcFileType AS CHAR NO-UNDO.
 
 ASSIGN
-   lcRootDir  = fCParam("Order","OfferSMSRootDir")
+   lcRootDir  = fCParam("Order","MasMovilRootDir")
    lcIncDir  = lcRootDir + "incoming/incoming/"
    lcProcDir = lcRootDir + "incoming/processed"
    lcSpoolDir = lcRootDir + "outgoing/spool/"
@@ -61,7 +61,7 @@ FUNCTION fLogLine RETURNS LOGIC
    (icMessage AS CHAR):
 
    PUT STREAM sLog UNFORMATTED
-      lcLine  ";"
+      lcLine  lcOrigSep
       icMessage SKIP.
 
 END FUNCTION.
@@ -113,17 +113,17 @@ REPEAT:
 
    ASSIGN
       liNumOk = 0
-      liSkipped = 0
       liNumErr = 0.
 
    fBatchLog("START", lcInputFile).
    lcLogFile = lcSpoolDir + lcFileName + ".LOG".
    OUTPUT STREAM sLog TO VALUE(lcLogFile) append.
 
-   PUT STREAM sLog UNFORMATTED
+   /*PUT STREAM sLog UNFORMATTED
               lcFilename  " "
               STRING(TODAY,"99.99.99") " "
               STRING(TIME,"hh:mm:ss") SKIP.
+   */
 
    LINE_LOOP:
    REPEAT:
@@ -131,18 +131,18 @@ REPEAT:
       IMPORT STREAM sin UNFORMATTED lcLine.
       IF lcLine EQ "" THEN NEXT.
       /* Separator ;; cannot be handled with entry, changed to | */
-      lcLine = REPLACE(lcLine,lcOrigSep,lcSep).
+      lcSepLine = REPLACE(lcLine,lcOrigSep,lcSep).
 
-      IF NUM-ENTRIES(lcLine,lcSep) NE 44 THEN DO:
+      IF NUM-ENTRIES(lcSepLine,lcSep) NE 44 THEN DO:
          fLogLine("ERROR:Incorrect input data format").
          liNumErr = liNumErr + 1 .
          NEXT.
       END.
 
       ASSIGN
-         lcFileType = TRIM(ENTRY(1,lcLine,lcSep))
-         lcSALOrderId = TRIM(ENTRY(2,lcLine,lcSep))
-         lcYoigoOrderId = TRIM(ENTRY(39,lcLine,lcSep))
+         lcFileType = TRIM(ENTRY(1,lcSepLine,lcSep))
+         lcSALOrderId = TRIM(ENTRY(2,lcSepLine,lcSep))
+         lcYoigoOrderId = TRIM(ENTRY(39,lcSepLine,lcSep))
       NO-ERROR.
 
       IF ERROR-STATUS:ERROR THEN DO:
@@ -168,18 +168,12 @@ REPEAT:
       END.
 
       RUN pHandleSALFile(lcYoigoOrderId, lcSALOrderid, order.msseq).
-
-      IF RETURN-VALUE BEGINS "SKIPPED" THEN
-         liSkipped = liSkipped + 1.
-      ELSE IF RETURN-VALUE BEGINS "ERROR" THEN
-         liNumErr = liNumErr + 1 .
-      ELSE liNumOK = liNumOK + 1 .
-
-      fLogLine(RETURN-VALUE).
+      /*fLogLine(RETURN-VALUE).*/
+      liNumOK = liNumOK + 1.
    END.
 
    PUT STREAM sLog UNFORMATTED
-       "input: " STRING(liNumOK + liNumErr + liSkipped) ", "
+       "input: " STRING(liNumOK + liNumErr) ", "
        "updated: " STRING(liNumOK) ", "
        "skipped: " STRING(liSKipped) ", "
        "errors: " STRING(liNumErr) SKIP.

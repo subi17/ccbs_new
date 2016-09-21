@@ -5,8 +5,10 @@ DEF VAR liMode_ra AS INT INIT 0.
 
 DEF TEMP-TABLE ttSLGAnalyse NO-UNDO LIKE SLGAnalyse.
 DEF TEMP-TABLE ttRequestAction NO-UNDO LIKE RequestAction.
+DEF TEMP-TABLE ttBillItem NO-UNDO LIKE BillItem.
 DEF BUFFER bSLGAnalyse FOR SLGAnalyse.
 DEF BUFFER bRequestAction FOR RequestAction.
+DEF BUFFER bBillItem FOR BillItem.
 DEF VAR liActionId AS INT.
 
 FUNCTION fcreateSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
@@ -208,3 +210,40 @@ ASSIGN
    RequestAction.requestactionid = liActionID
    RequestAction.validfrom = 09/07/16
    RequestAction.validto = 12/31/49.
+
+
+Function createBillItem RETURNS LOG ( INPUT icbase AS CHAR,
+                                      INPUT icBillcode AS CHAR,
+                                      INPUT icBiName AS CHAR,
+                                      INPUT iiUpdatemode AS INT):
+   IF CAN-FIND(FIRST BillItem WHERE
+                     billitem.brand EQ "1" AND
+                     billItem.billcode EQ icBillcode) THEN
+      MESSAGE "Billitem already exist " + icBillCode VIEW-AS ALERT-BOX.   
+
+   FIND FIRST BillItem WHERE
+              billitem.brand EQ "1" AND
+              billItem.billcode EQ icBase NO-ERROR.
+
+   IF NOT AVAIL BillItem THEN
+      MESSAGE "Bill item termperiod find failed " + icbase VIEW-AS ALERT-BOX.
+
+   ELSE DO:
+         CREATE ttBillItem.
+         BUFFER-COPY BillItem TO ttBillItem.
+         ttBillItem.BillCode = icBillCode.
+         ttBillItem.BIName = icBiName.
+         IF iiUpdateMode NE 0 THEN DO:
+            CREATE BillItem.
+            BUFFER-COPY ttBillItem TO BillItem.
+            DELETE ttBillItem. /*ror safety reasons*/
+         END.
+         ELSE DISP ttBillItem.   
+
+   END.
+
+END.
+
+createBillItem("TERMPERIOD", "FTERMPERIOD", "Convergent permanency", 0).
+createBillItem("DISCPAYTERMDIR", "DISCFTERMPERIOD", "Convergent permanency discount", 0).
+createBillItem("DISCPAYTERMDIR", "DISCFHDSL", "Convergent fixed line quota discount", 0).

@@ -53,7 +53,7 @@ create_feemodel("CONTFH65_300MF",46,"Convergent FIBER 300MB monthly fee",53.72,"
 create_feemodel("CONTS2GBMF",46,"Convergent mobile monthly fee",0.00,"MF",1,"CONTRATOFIXED",FALSE,1).
 create_feemodel("CONTS10GBMF",46,"Convergent mobile monthly fee",0.00,"MF",1,"CONTRATOFIXED",FALSE,1).
 
-create_feemodel("TERMFIXEDLINE",0,"Fixed line contract termination",100.0,"PF",1,"COMMON",TRUE,0).
+create_feemodel("FTERMPERIOD",0,"Fixed line contract termination",100.0,"PF",1,"COMMON",TRUE,0).
 
 
 
