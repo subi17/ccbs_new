@@ -291,11 +291,13 @@ IF Order.OrderType = 2 AND Order.ICC > "" AND
 END. /* IF Order.OrderType = 2 AND Order.ICC > "" AND */
 
 /* skip dextra handling */
-IF Order.OrderChannel BEGINS "renewal_pos" THEN DO:
+
+/* temp solution to pass direct channel orders 
+IF Order.OrderChannel BEGINS "renewal_pos" THEN DO: */
    fSetOrderStatus(Order.OrderId,"6").
    /* Mark the timestamp as delivery */
    fMarkOrderStamp(Order.OrderId,"Delivery",0.0).
-END. /* IF Order.OrderChannel BEGINS "renewal_pos" THEN DO: */
+/* END.  */
 
 RELEASE Order.
 
