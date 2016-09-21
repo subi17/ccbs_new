@@ -195,18 +195,19 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
          IF liDialtype = {&DIAL_TYPE_GPRS} AND llActiveDSS THEN NEXT PACKET.
 
          /* call forwarding is handled like normal calls */
-         IF liDialtype = 12 AND
-            (lcSLGroup BEGINS "CONTF" OR
-             lcSLGroup = "VOICE3000"  OR
-             lcSLGroup = "VOICE100"   OR 
-             lcSLGroup = "FREE100MINUTES") 
+         IF liDialtype = 12 
          THEN liDialtype = 4.
          
-         ELSE IF (lcSLGroup BEGINS "CONTS" OR
-                  lcSLGroup EQ "CONT24" OR
-                  lcSLGroup EQ "CONT23") AND
-            (liDialtype EQ 4 OR liDialtype EQ 12)
-            THEN liDialtype = 0.
+         IF liDialtype EQ 4 AND 
+            (lcSLGroup BEGINS "CONTS" OR
+             lcSLGroup EQ "CONT24" OR
+             lcSLGroup EQ "CONT23") AND
+             NOT CAN-FIND(FIRST ServiceLimit WHERE
+                                ServiceLimit.GroupCode = lcSLGroup       AND
+                                ServiceLimit.DialType  = liDialType      AND
+                                ServiceLimit.ValidFrom <= ttCall.DateSt  AND
+                                ServiceLimit.ValidTo   >= ttCall.DateSt)
+         THEN liDialtype = 0.
 
          llServLimit = fCheckTarget(INPUT  MSOwner.MsSeq,
                                     INPUT  MSOwner.Custnum,

@@ -57,10 +57,14 @@ IF Order.OrderType = {&ORDER_TYPE_NEW} THEN DO:
 END. /* IF Order.OrderType = {&ORDER_TYPE_NEW} THEN DO: */
 ELSE IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN DO:
 
-   IF NOT Order.OrderChannel BEGINS "RENEWAL_POS" THEN
-      RETURN appl_err("Order channel is not renewal POS").
-
    IF Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} THEN DO:
+
+      IF CAN-FIND(FIRST MsRequest WHERE
+                        MsRequest.MsSeq = Order.MsSeq AND
+                        MsRequest.ReqType = {&REQTYPE_REVERT_RENEWAL_ORDER} AND
+                        MsRequest.ReqStatus = {&REQUEST_STATUS_DONE} AND
+                        MsRequest.ReqIParam1 = Order.OrderId NO-LOCK) THEN
+         RETURN appl_err("Renewal order was already cancelled").
 
       FIND FIRST MsRequest WHERE
                  MsRequest.MsSeq      = Order.MSSeq  AND
