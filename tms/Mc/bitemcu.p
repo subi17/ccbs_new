@@ -103,6 +103,7 @@ DEF VAR lcFeeModel    AS CHAR                   NO-UNDO.
 DEF VAR lcBillItemCode AS CHAR                 NO-UNDO.
 DEF VAR lcBillItemName AS CHAR                 NO-UNDO.
 
+DEF VAR liConcern    AS INT                    NO-UNDO.
 /* check admin user rights */
 IF getTMSRight("CCSUPER,SYST") = "RW" THEN llIsAdmin = TRUE. ELSE llIsAdmin = FALSE.
 
@@ -1115,7 +1116,6 @@ PROCEDURE local-update-record:
                          NEXT.
                       END.   
                    END.
-
                 END.
 
                 IF FRAME-FIELD = "BillTarget" THEN DO:
@@ -1250,8 +1250,7 @@ PROCEDURE local-update-record:
                            SingleFee.Concerns[2]
                    WITH FRAME lis.
                 END.   
-
-             END.
+             END. /* IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH */ 
              
              ELSE IF FRAME-FIELD = "HostTable" THEN DO WITH FRAME lis:
                 CASE KEYLABEL(LASTKEY):
@@ -1261,6 +1260,24 @@ PROCEDURE local-update-record:
                 NEXT. 
              END.
              
+             /* YTS-9197: added validation -
+                BillPeriod YYYYMM must match CoversPeriod[1] YYYYMM
+                By then, possible Discount will be in the line with RVTERM
+                Singlefee. 
+             */
+             IF LOOKUP(KEYLABEL(LASTKEY),"f1") > 0 THEN DO WITH FRAME lis:
+               IF INPUT FRAME lis SingleFee.Billcode BEGINS "RVTERM" THEN DO:
+                  ASSIGN
+                     liConcern = INPUT FRAME lis SingleFee.Concerns[1]
+                     liConcern = liConcern / 100.
+                  IF INPUT FRAME lis Singlefee.BillPeriod NE liConcern THEN DO:
+                     MESSAGE "Covers Period[1] must match BillPeriod in RVTERMF"
+                        VIEW-AS ALERT-BOX.
+                     NEXT.
+                  END.
+               END.
+             END.
+
              APPLY LASTKEY.
              
           END. /* EDITING */

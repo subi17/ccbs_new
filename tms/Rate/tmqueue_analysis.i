@@ -28,36 +28,30 @@ ASSIGN
    lcIPLData       = fCParamC("TMQueueIPLData")
    lcBonoData      = fCParamC("TMQueueBonoData").
 
-FUNCTION fGetBDestCount RETURNS INT (INPUT iiMsSeq       AS INT,
+FUNCTION fGetBDestCount RETURNS DECIMAL (INPUT iiMsSeq       AS INT,
                                      INPUT icBundleId    AS CHAR,
                                      INPUT idActDate     AS DATE):
 
    DEF VAR liPeriod     AS INT NO-UNDO.
-   DEF VAR liDialType   AS INT NO-UNDO.
-   DEF VAR liBDestCount AS INT NO-UNDO.
 
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
    DEF BUFFER bServiceLCounter FOR ServiceLCounter.
 
    liPeriod = YEAR(idActDate) * 100 + MONTH(idActDate).
-
-   IF icBundleId BEGINS "CONTF"      OR
-      icBundleId EQ "VOICE100"       OR 
-      icBundleId EQ "FREE100MINUTES" THEN liDialType = 4.
-   ELSE liDialType = 0.
-
-   FOR FIRST bServiceLimit NO-LOCK WHERE
+   
+   /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
+   FOR EACH bServiceLimit NO-LOCK WHERE
              bServiceLimit.GroupCode = icBundleId AND
-             bServiceLimit.DialType  = liDialType,
+             (bServiceLimit.DialType = 0 OR bServiceLimit.DialType = 4),
        FIRST bServiceLCounter WHERE
              bServiceLCounter.MsSeq  = iiMsSeq AND
              bServiceLCounter.SLSeq  = bServiceLimit.SlSeq AND
              bServiceLCounter.Period = liPeriod NO-LOCK:
 
-      IF liDialType = 0 THEN liBDestCount = bServiceLCounter.Amt.
-      ELSE liBDestCount = bServiceLCounter.limit.
+      IF bServiceLimit.DialType = 0
+      THEN RETURN bServiceLCounter.Amt.
+      ELSE RETURN bServiceLCounter.limit.
 
-      RETURN liBDestCount.
    END. /* FOR FIRST bServiceLimit NO-LOCK WHERE */
 
    RETURN 0.
