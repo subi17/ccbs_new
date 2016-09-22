@@ -15,7 +15,19 @@
 
 DEF VAR lcConURL AS CHAR NO-UNDO.
 DEF VAR liTesting AS INT NO-UNDO.
-liTesting = 0.
+DEF VAR lcUpload AS CHAR NO-UNDO.
+DEF VAR lcDownload AS CHAR NO-UNDO.
+
+/*For testing*/
+/*litesting
+   sets xml data file writing on
+   makes hard codings to order creation data*/
+liTesting = 0. /*2 = adsl, 1 = fiber*/
+lcdownload = "50M".
+lcupload = "5M".
+
+
+
 DEF STREAM sOut.
 
 &GLOBAL-DEFINE MASMOVIL_RETRY_ERROR_CODES "APIKIT-00404,APIKIT-00405,APIKIT-00406,APIKIT-00415,WO-10000000,ESB-99999999"
@@ -53,13 +65,19 @@ FUNCTION fAddCharacteristic RETURNS CHAR
     icOldValue AS CHAR):
    DEF VAR lcCharacteristicStruct AS CHAR.
    DEF VAR lcInStruct AS CHAR.
-
+/*
    lcCharacteristicStruct = add_struct(icBase,"").
    lcInStruct = add_struct(lcCharacteristicStruct,"Characteristic").
    add_string(lcInStruct, "name", icParam).
    add_string(lcInStruct, "value", icValue ).
    add_string(lcInStruct, "oldValue", icOldValue).
-   
+*/
+
+   lcCharacteristicStruct = add_struct(icBase,"").
+   add_string(lcCharacteristicStruct, "name", icParam).
+   add_string(lcCharacteristicStruct, "value", icValue ).
+   add_string(lcCharacteristicStruct, "oldValue", icOldValue).
+
    RETURN "".
 END.
 
@@ -71,7 +89,7 @@ FUNCTION fAddService RETURNS CHAR
     icSerType AS CHAR):
    DEF VAR lcSerStruct AS CHAR.
    DEF VAR lcInStruct AS CHAR.
-
+/*
    lcSerStruct = add_struct(icBase, "").
    lcInStruct = add_struct(lcSerStruct, "Service").
    add_string(lcInStruct, "serviceID", icSerID).
@@ -79,7 +97,14 @@ FUNCTION fAddService RETURNS CHAR
    add_string(lcInStruct, "action", icSerAction).
    add_string(lcInStruct, "type", icSerType).
    RETURN lcInStruct.
-   
+ */ 
+   lcSerStruct = add_struct(icBase, "").
+   add_string(lcSerStruct, "serviceID", icSerID).
+   add_string(lcSerStruct, "serviceName", icSerName).
+   add_string(lcSerStruct, "action", icSerAction).
+   add_string(lcSerStruct, "type", icSerType).
+   RETURN lcSerStruct.
+  
 END.
 
 
@@ -145,11 +170,18 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
 
    /*Generate order type*/
 IF liTesting NE 0 THEN DO:
+   IF liTesting EQ 1 THEN DO:
             lcOrderType = "Alta FTTH + VOIP".
             lcConnServiceId = "FTTH".
-            lcConnServiceName = "FTTH connection".
+            lcConnServiceName = "FTTH".
             lcConnServiceType = "FTTH".
-
+   END.
+   ELSE DO:
+            lcOrderType = "Alta xDSL + VOIP".
+            lcConnServiceId = "ADSL".
+            lcConnServiceName = "ADSL".
+            lcConnServiceType = "ADSL".
+   END.
 END. /*testing related*/
 ELSE DO:
    IF fIsConvergenceTariff(bOrder.CliType) THEN DO:
@@ -183,22 +215,22 @@ END.
 
    lcOutputStruct = add_struct(param_toplevel_id, "").
    /*Order struct*/
-   lcOrderStruct = add_struct(lcOutputStruct,"Order").
-   add_string(lcOrderStruct, "orderID", 
+/*   lcOrderStruct = add_struct(lcOutputStruct,"Order").*/
+   add_string(lcOutputStruct, "orderID", 
                              "Y" + STRING(bOrder.Orderid)).
-   add_string(lcOrderStruct, "orderType", lcOrderType). 
-   add_string(lcOrderStruct, "orderName", "ALTA").
-   add_string(lcOrderStruct, "sellchannel", "YOIGO").
-   add_string(lcOrderStruct, "selldate", STRING(ldaSellDate)). 
-   add_string(lcOrderStruct, "seller", "YOIGO"). 
-   add_string(lcOrderStruct, "createdBy", "YOIGO").
-   add_string(lcOrderStruct, "creadate", STRING(ldaCreDate)). 
+   add_string(lcOutputStruct, "orderType", lcOrderType). 
+   add_string(lcOutputStruct, "orderName", "ALTA").
+   add_string(lcOutputStruct, "sellchannel", "YOIGO").
+   add_string(lcOutputStruct, "selldate", STRING(ldaSellDate)). 
+   add_string(lcOutputStruct, "seller", "YOIGO"). 
+   add_string(lcOutputStruct, "createdBy", "YOIGO").
+   add_string(lcOutputStruct, "createdDate", STRING(ldaCreDate)). 
 
    /*Installation*/
-   lcInstallationStruct = add_struct(lcOrderStruct, "Installation").
+   lcInstallationStruct = add_struct(lcOutputStruct, "Installation").
    lcContactStruct = add_struct(lcInstallationStruct, "Contact").
    add_string(lcContactStruct, "firstName", bOC.FirstName).
-   add_string(lcContactStruct, "middleName", "").
+   /*add_string(lcContactStruct, "middleName", "").*/
    add_string(lcContactStruct, "lastName", bOC.Surname1 + " " + bOC.Surname2).
    add_string(lcContactStruct, "documentNumber",bOC.CustID). 
    add_string(lcContactStruct, "documentType", bOC.CustIdType).
@@ -224,7 +256,7 @@ END.
    IF lcConnServiceId EQ "ADSL" THEN
       add_string(lcInstallationStruct, "modality", bOF.ADSLLinkstate).
 
-   lcServiceArray = add_array(lcOrderStruct,"Services").
+   lcServiceArray = add_array(lcOutputStruct,"Services").
 
     /*Services entry - Phone*/
    lcServiceStruct = fAddService(lcServiceArray, 
@@ -248,6 +280,10 @@ END.
                          "portabilitytype",      /*param name*/
                          "I", /*port in = I*/    /*param value*/
                          "").                    /*old value*/
+    fAddCharacteristic(lcCharacteristicsArray,  /*base*/
+                      "receptooperator",        /*param name*/
+                      "0031",/*must be 0031*/   /*param value*/
+                      "").                      /*old value*/
  
    END.
 
@@ -255,12 +291,6 @@ END.
                       "phoneNumber",          /*param name*/
                       bOF.FixedNumber,        /*param value*/
                       "").                    /*old value*/
-
-   fAddCharacteristic(lcCharacteristicsArray,  /*base*/
-                      "receptooperator",        /*param name*/
-                      "0031",/*must be 0031*/   /*param value*/
-                      "").                      /*old value*/
- 
 
    /*Services entry - Line*/
    lcServiceStruct = fAddService(lcServiceArray, 
@@ -272,15 +302,27 @@ END.
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics" ).
    IF lcConnServiceId EQ "FTTH" THEN DO:
-      fAddCharacteristic(lcCharacteristicsArray,      /*base*/
+      IF liTesting NE 0 THEN DO:
+         fAddCharacteristic(lcCharacteristicsArray,      /*base*/
+                         "UploadSpeed",               /*param name*/
+                         lcUpload,    /*param value*/
+                         "").                         /*old value*/
+         fAddCharacteristic(lcCharacteristicsArray,      /*base*/
+                            "DownloadSpeed",             /*param name*/
+                            lcDownload,  /*param value*/
+                            "").                         /*old value*/
+ 
+      END.
+      ELSE DO:
+         fAddCharacteristic(lcCharacteristicsArray,      /*base*/
                          "UploadSpeed",               /*param name*/
                          bCLIType.FixedLineUpload,    /*param value*/
                          "").                         /*old value*/
-      fAddCharacteristic(lcCharacteristicsArray,      /*base*/
-                         "DownloadSpeed",             /*param name*/
-                         bCLIType.FixedLineDownload,  /*param value*/
-                         "").                         /*old value*/
- 
+         fAddCharacteristic(lcCharacteristicsArray,      /*base*/
+                            "DownloadSpeed",             /*param name*/
+                            bCLIType.FixedLineDownload,  /*param value*/
+                            "").                         /*old value*/
+      END.
    END.
 
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
@@ -298,18 +340,18 @@ END.
 
    lcXMLStruct = get_struct(response_toplevel_id,"0").
    lcResponse = validate_struct(lcXMLStruct,"resultCode!,resultDescription").
-   lcResultCode = get_string(lcResponse, "resultCode").
-   IF LOOKUP('resultDescription', lcResponse) GT 0 THEN
-      lcResultDesc = get_string(lcResponse, "resultDescription").
+   lcResultCode = get_string(lcXMLSTruct, "resultCode").
+   IF LOOKUP('resultDescription', lcXMLSTruct) GT 0 THEN
+      lcResultDesc = get_string(lcXMLStruct, "resultDescription").
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: Response parsing failed: &1", gc_xmlrpc_error).
 
-   IF lcResultCode NE "" THEN DO:
-      ocResultCode =  lcResultCode.
-      ocResultDesc =  lcResultDesc.
-      RETURN "ERROR".
-   END.   
+   ocResultCode =  lcResultCode.
+   ocResultDesc =  lcResultDesc.
+   message "Debug: " + lcResultCode + ";" + lcResultDesc VIEW-AS ALERT-BOX .
+   IF NOT(lcResultCode EQ "" OR lcResultCode EQ "00") THEN  RETURN "ERROR".
+    
 
    RETURN "".
 END. /*Function fCreate_FixedLine*/
@@ -345,18 +387,18 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
 
    lcXMLStruct = get_struct(response_toplevel_id,"0").
    lcResponse = validate_struct(lcXMLStruct,"resultCode!,resultDescription").
-   lcResultCode = get_string(lcResponse, "resultCode").
-   IF LOOKUP('resultDescription', lcResponse) GT 0 THEN
-      lcResultDesc = get_string(lcResponse, "resultDescription").
+   lcResultCode = get_string(lcXMLStruct, "resultCode").
+   IF LOOKUP('resultDescription', lcXMLSTruct) GT 0 THEN
+      lcResultDesc = get_string(lcXMLStruct, "resultDescription").
 
    IF gi_xmlrpc_error NE 0 THEN 
       RETURN SUBST("ERROR: Response parsing failed: &1", gc_xmlrpc_error).
-   
-   IF lcResultCode NE "" THEN DO:
-      ocResultDesc = lcResultCode + "," + lcResultDesc.
-      ocResultCode = lcResultCode.
-      RETURN "ERROR".
-   END.   
+
+   ocResultCode =  lcResultCode.
+   ocResultDesc =  lcResultDesc.
+   message "CancelDbg: " + lcResultCode + ";" + lcResultDesc VIEW-AS ALERT-BOX.
+   IF NOT(lcResultCode EQ "" OR lcResultCode EQ "00") THEN  RETURN "ERROR".
+
    RETURN "".
 END. /*fMasCancel_FixedLineOrder*/
 
@@ -387,12 +429,12 @@ FUNCTION fMasGet_FixedNbr RETURNS CHAR
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
 
    lcXMLStruct = get_struct(response_toplevel_id,"0").
-   lcResponse = validate_struct(lcXMLStruct,"idNumero,fechaAsignationCmt,fechaUltimoCambio,numero!,links").
+   lcResponse = validate_struct(lcXMLStruct,"idNumero,fechaAsignacionCmt,fechaUltimoCambio,numero!,_links").
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: Response parsing failed: &1", gc_xmlrpc_error).
 
-   ocNum = get_string(lcResponse,"numero").
+   ocNum = get_string(lcXMLStruct,"numero").
 
    IF ocNum EQ "" THEN DO:
        ocResult = "Masmovil Error: Number not returned. Area: " + icPostalCode.
