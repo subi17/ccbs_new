@@ -14,6 +14,8 @@
           order_status              boolean - optional
           order_type                string  - optional
           eligible_renewal          boolean - optional
+          any_barring               boolean - optional
+          debt                      boolean - optional
  * Integers are described here:
           offset                    integer - mandatory
           limit_of_subscriptions    integer - mandatory
@@ -25,6 +27,7 @@ katun = "Newton".
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
 {Func/fdss.i}
+{Func/barrfunc.i}
 
 /* Input parameters */
 DEF VAR pcCliType      AS CHAR NO-UNDO.
@@ -42,6 +45,8 @@ DEF VAR pdtInputDate   AS DATE NO-UNDO.
 DEF VAR pcOrderType    AS CHAR NO-UNDO.  
 DEF VAR pcLanguage     AS CHAR NO-UNDO.
 DEF VAR pcInvGroup     AS CHAR NO-UNDO.
+DEF VAR plBarring      AS LOG  NO-UNDO.
+DEF VAR plDebt         AS LOG  NO-UNDO.
 
 /* Local variables */
 DEF VAR lcDataBundles  AS CHAR NO-UNDO.
@@ -63,12 +68,13 @@ DEF VAR liLoopEndTime      AS INT  NO-UNDO.
 DEF VAR liLoopCount        AS INT  NO-UNDO. 
 DEF VAR plgOrderStatus     AS LOG  NO-UNDO.
 DEF VAR plgEligibleRenewal AS LOG  NO-UNDO INIT ?.
+DEF VAR llUnpaidInv        AS LOG  NO-UNDO.
 
 IF validate_request(param_toplevel_id, "struct,int,int") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
 lcstruct = validate_struct(pcStruct,
-   "subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,serv_code,order_date,order_status,order_type,eligible_renewal,language,invoice_group").
+   "subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,serv_code,order_date,order_status,order_type,eligible_renewal,language,invoice_group,any_barring,debt").
 
 ASSIGN
    pcCliType      = get_string(pcStruct, "subscription_type")
@@ -103,7 +109,11 @@ ASSIGN
    pcInvGroup     = get_string(pcStruct, "invoice_group")
       WHEN LOOKUP("invoice_group", lcStruct) > 0
    plgEligibleRenewal = get_bool(pcStruct,"eligible_renewal")
-      WHEN LOOKUP("eligible_renewal", lcStruct) > 0.
+      WHEN LOOKUP("eligible_renewal", lcStruct) > 0
+   plBarring      = get_bool(pcStruct,"any_barring")
+      WHEN LOOKUP("any_barring", lcStruct) > 0
+   plDebt         = get_bool(pcStruct,"debt")
+      WHEN LOOKUP("debt", lcStruct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -337,7 +347,29 @@ FOR EACH MobSub NO-LOCK WHERE
          OTHERWISE NEXT.
       END. /* CASE lcOtherBundle: */
    END. /* DO liCount = 1 TO liNumberOfBundles: */
+   
+   /*Any Barrings Exist*/
+   IF plBarring AND fGetActiveBarrings(MobSub.MsSeq) EQ "" THEN NEXT EACH_MOBSUB.
 
+   /*Unpaid Invoices OR Unpaid Terminal Fees*/
+   IF plDebt THEN DO:
+      llUnpaidInv   = NO.
+      FOR EACH Invoice NO-LOCK WHERE
+               Invoice.Brand      = gcBrand               AND
+               Invoice.Custnum    = MobSub.Custnum        AND
+               Invoice.InvType    = 1                     AND
+               Invoice.InvDate   >= MobSub.ActivationDate AND
+               Invoice.PaymState  < 2,
+         FIRST SubInvoice NO-lOCK WHERE
+               SubInvoice.InvNum = Invoice.InvNum AND
+               SubInvoice.MsSeq  = MobSub.MsSeq   AND
+               SubInvoice.PaymState < 2           AND
+               SubInvoice.InvAmt  > 0:
+         llUnpaidInv = YES.
+         LEAVE.
+      END.
+      IF NOT llUnpaidInv THEN NEXT EACH_MOBSUB.
+   END.
 
       /* Count number of subscriptions */
    IF liNumberOfSubs <= piOffset AND piOffset > 0 THEN DO:

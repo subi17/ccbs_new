@@ -25,6 +25,8 @@ DEF VAR ldOPChange AS DEC NO-UNDO.
 DEF VAR ldOPStamp  AS DEC NO-UNDO.   /* SendToLogistics date from OrderStamp */
 DEF VAR lcOPName   AS CHAR NO-UNDO.  /* Name value Dextra/Netkia to XML */
 
+DEF BUFFER bMsRequest FOR MsRequest.
+
 ldOPChange = fCParamDe("LOswitchover"). /* Get date when Dextra changed to Netkia */
 lcConURL = fCParam("URL","urlDextra").
 IF lcConURL = ? OR lcConURL = "" THEN RETURN "ERROR".
@@ -51,6 +53,19 @@ IF NOT AVAIL Order THEN DO:
    fReqError("ERROR: Order not found"). 
    RETURN.
 END.
+
+IF Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND
+   CAN-FIND(FIRST bMsRequest WHERE
+                  bMsRequest.MsSeq = Order.MsSeq AND
+                  bMsRequest.ReqType = {&REQTYPE_REVERT_RENEWAL_ORDER} AND
+                  bMsRequest.ReqStatus = {&REQUEST_STATUS_DONE} AND
+                  bMsRequest.ReqIParam1 = Order.OrderId NO-LOCK) THEN
+   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                    "Order",
+                    STRING(Order.OrderID),
+                    0,
+                    "Logistic Request",
+                    "Renewal order was already cancelled").
 
 initialize(lcConURL, 15).
 

@@ -677,7 +677,7 @@ PROCEDURE pCheckDayCampaign:
    /* special case dss; check if dss is active on customer */
    IF ttCriteria.ValueIncluded = {&DSS} THEN 
    CheckDSSLimit:
-   FOR FIRST ttServiceLimit NO-LOCK WHERE
+   FOR EACH ttServiceLimit NO-LOCK WHERE
              ttServiceLimit.GroupCode = {&DSS},
        FIRST MServiceLimit NO-LOCK WHERE
              MServiceLimit.CustNum = MsOwner.InvCust AND

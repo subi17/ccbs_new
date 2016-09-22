@@ -281,7 +281,7 @@ PROCEDURE pHandleEDR:
             
             /* Benefit is already active, just send the renewal SMS 
                and possible counter reset*/
-            FOR FIRST ServiceLimit NO-LOCK WHERE
+            FOR EACH ServiceLimit NO-LOCK WHERE
                       ServiceLimit.GroupCode EQ ttEDR.CLIType,
                 FIRST MServiceLimit NO-LOCK WHERE
                       MServiceLimit.MsSeq = MobSub.MsSeq AND
@@ -482,6 +482,8 @@ PROCEDURE pHandleEDR:
                      end.
                   end.
                END.
+               
+               LEAVE.
             END.
             
 
@@ -496,7 +498,7 @@ PROCEDURE pHandleEDR:
 
             IF lcSMSText > "" THEN DO:
 
-               FOR FIRST ServiceLimit NO-LOCK WHERE
+               FOR EACH ServiceLimit NO-LOCK WHERE
                          ServiceLimit.GroupCode EQ ttEDR.CLIType,
                    FIRST MServiceLimit NO-LOCK WHERE
                          MServiceLimit.MsSeq = MobSub.MsSeq AND
@@ -528,6 +530,7 @@ PROCEDURE pHandleEDR:
                                  ldeSMSTime,
                                  "22622",
                                  "").
+                   LEAVE.
                END.
             END.
          END.
