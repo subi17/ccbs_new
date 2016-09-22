@@ -69,7 +69,7 @@ FIND FIRST OrderFusion EXCLUSIVE-LOCK WHERE
            OrderFusion.Brand = gcBrand AND
            OrderFusion.OrderId = liOrderID NO-ERROR.
 IF NOT AVAIL OrderFusion THEN 
-   RETURN appl_err("Order not found").
+   RETURN appl_err("Order data is missing").
 
 /* HANDLING */
 
