@@ -11,11 +11,12 @@ INPUT THROUGH hostname.
 IMPORT lcHostName.
 INPUT CLOSE.
 
-IF LOOKUP(lcHostName,'angetenar,alpheratz,sadachbia,yanai') = 0 THEN DO:
+IF LOOKUP(lcHostName,'arneb,leto,maja,pallas') > 0 THEN DO:
    MESSAGE 'This script is not allowed to run in'
    lcHostName VIEW-AS ALERT-BOX.
    RETURN.
 END.
+
 
 /*
 FUNCTION fRPCStruct RETURNS LOGICAL
