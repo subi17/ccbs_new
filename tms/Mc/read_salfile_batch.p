@@ -1,9 +1,9 @@
 /* ----------------------------------------------------------------------
-  MODULE .......: offer_sms_resp_batch.p
-  TASK .........: CDL2 - Offer SMS response SMS handling. YPR-2055
+  MODULE .......: read_salfile_batch.p
+  TASK .........: Handles received SAL file from MasMovil
   APPLICATION ..: TMS
-  AUTHOR .......: anttis
-  CREATED ......: 27.03.15
+  AUTHOR .......: kaaikas
+  CREATED ......: 22.09.16
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 
@@ -38,16 +38,12 @@ DEF VAR lcSpoolDir AS CHARACTER NO-UNDO.
 DEF VAR lcOutDir AS CHARACTER NO-UNDO.
 
 /* field variables */
-DEF VAR lcContactNumber AS CHAR NO-UNDO.
-DEF VAR lcSentTS AS CHAR NO-UNDO.
-DEF VAR ldeSentTS AS DEC NO-UNDO. 
-DEF VAR lcCustomerResponse AS CHAR NO-UNDO.
 DEF VAR lcYoigoOrderId AS CHAR NO-UNDO.
 DEF VAR lcSALOrderId AS CHAR NO-UNDO.
 DEF VAR lcFileType AS CHAR NO-UNDO.
 
 ASSIGN
-   lcRootDir  = fCParam("Order","MasMovilRootDir")
+   lcRootDir  = fCParam("MasMovil","RootDir")
    lcIncDir  = lcRootDir + "incoming/incoming/"
    lcProcDir = lcRootDir + "incoming/processed"
    lcSpoolDir = lcRootDir + "outgoing/spool/"
@@ -66,37 +62,6 @@ FUNCTION fLogLine RETURNS LOGIC
 
 END FUNCTION.
 
-/* parses the format YYYYMMDDhhmmss */
-FUNCTION fParseTimeStamp RETURNS LOGIC
-   (icTimeStamp AS CHAR,
-    OUTPUT odeStamp AS DEC):
-
-   DEF VAR ldaDate AS DATE NO-UNDO. 
-   DEF VAR lcTime AS CHAR NO-UNDO. 
-   DEF VAR ldeStamp AS DEC NO-UNDO. 
-
-   IF LENGTH(icTimeStamp) NE 14 THEN RETURN FALSE.
-
-   ldaDate = DATE(int(substring(icTimeStamp,5,2)),
-                  int(substring(icTimeStamp,7,2)),
-                  int(substring(icTimeStamp,1,4))) NO-ERROR.
-   IF ERROR-STATUS:ERROR THEN RETURN FALSE.
-
-   lcTime = SUBST("&1:&2:&3", 
-                  substring(icTimeStamp,9,2),
-                  substring(icTimeStamp,11,2),
-                  substring(icTimeStamp,13,2)) NO-ERROR.
-   IF ERROR-STATUS:ERROR THEN RETURN FALSE.
-
-   IF fCheckTime(REPLACE(lcTime,":","")) EQ FALSE THEN RETURN FALSE.
-
-   odeStamp = fHMS2TS(ldaDate,lcTime).
-   IF odeStamp EQ ? OR odeStamp EQ 0 THEN RETURN FALSE.
-
-   RETURN TRUE.
-
-END FUNCTION.
-
 /* File reading and parsing */
 INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcIncDir).
 REPEAT:
@@ -105,7 +70,7 @@ REPEAT:
 
    lcInputFile = lcIncDir + lcFileName.
 
-   IF SEARCH(lcInputFile) NE ? THEN DO:
+   IF SEARCH(lcInputFile) NE ? AND lcFileName BEGINS "SAL-" THEN DO:
       IF fCheckFileNameChars(lcFileName) EQ FALSE THEN NEXT.
       INPUT STREAM sin FROM VALUE(lcInputFile).
    END.
@@ -175,7 +140,6 @@ REPEAT:
    PUT STREAM sLog UNFORMATTED
        "input: " STRING(liNumOK + liNumErr) ", "
        "updated: " STRING(liNumOK) ", "
-       "skipped: " STRING(liSKipped) ", "
        "errors: " STRING(liNumErr) SKIP.
 
    INPUT STREAM sin CLOSE.

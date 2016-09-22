@@ -15,22 +15,41 @@ END FUNCTION.
 
 FIND FIRST TMSParam NO-LOCK WHERE
            TMSParam.Brand EQ "1" AND
-           TMSParam.ParamGroup EQ "Convergent" AND
-           TMSParam.ParamCode EQ "AllConvergentTariffs" NO-ERROR.
+           TMSParam.ParamGroup EQ "MasMovil" AND
+           TMSParam.ParamCode EQ "RootDir" NO-ERROR.
 IF AVAIL TMSParam THEN 
    message TMSParam.ParamCode + " already found" VIEW-AS ALERT-BOX.
 ELSE DO:
    CREATE TMSParam.
        
    ASSIGN TMSParam.Brand = "1" 
+          TMSParam.ParamGroup = "MasMovil"
+          TMSParam.ParamCode = "RootDir" 
+          TMSParam.ParamName = "Root directory for MasMovil files"
+          TMSParam.CharVal = "/store/riftp/logistics/masmovil/"
+          TMSParam.ParamType = "C".
+
+END.
+
+/*
+FIND FIRST TMSParam NO-LOCK WHERE
+           TMSParam.Brand EQ "1" AND
+           TMSParam.ParamGroup EQ "Convergent" AND
+           TMSParam.ParamCode EQ "AllConvergentTariffs" NO-ERROR.
+IF AVAIL TMSParam THEN
+   message TMSParam.ParamCode + " already found" VIEW-AS ALERT-BOX.
+ELSE DO:
+   CREATE TMSParam.
+
+   ASSIGN TMSParam.Brand = "1"
           TMSParam.ParamGroup = "Convergent"
-          TMSParam.ParamCode = "AllConvergentTariffs" 
+          TMSParam.ParamCode = "AllConvergentTariffs"
           TMSParam.ParamName = "All Convergent Tariffs"
           TMSParam.CharVal = "CONTDSL45,CONTDSL55,CONTFH45_50,CONTFH55_50,CONTFH55_300,CONTFH65_300"
           TMSParam.ParamType = "C".
 
 END.
-
+*/
 /* add same as CONT24 
 ALL_POSTPAID_CONTRACTS       ,CONTS2GB,CONTS10GB
 BB_PROFILE_1                ,CONTS2GB,CONTS10GB
