@@ -10,7 +10,8 @@ DEF VAR top_struct AS CHAR NO-UNDO.
 DEF VAR lcTopStruct AS CHAR NO-UNDO.
 
 DEF VAR lcNotificationID AS CHAR NO-UNDO.
-DEF VAR lcNotificationTime AS DEC NO-UNDO.
+DEF VAR lcNotificationTime AS CHAR NO-UNDO.
+DEF VAR ldeNotificationTime AS DEC NO-UNDO.
 DEF VAR lcNotificationType AS CHAR NO-UNDO.
 DEF VAR lcOrderId AS CHAR NO-UNDO.
 DEF VAR liOrderID AS INT NO-UNDO. 
@@ -22,6 +23,7 @@ DEF VAR lcOrderType AS CHAR NO-UNDO.
 DEF VAR lcStatus AS CHAR NO-UNDO. 
 DEF VAR lcStatusDescription AS CHAR NO-UNDO. 
 DEF VAR lcAdditionalInfo AS CHAR NO-UNDO. 
+DEF VAR lcLastDate AS CHAR NO-UNDO. 
 DEF VAR ldeLastDate AS DEC NO-UNDO. 
 
 top_struct = get_struct(param_toplevel_id, "0").
@@ -32,12 +34,16 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
    lcNotificationID = get_string(top_struct,"notificationID")
-   lcNotificationTime = get_timestamp(top_struct,"notificationtime")
+   lcNotificationTime = get_string(top_struct,"notificationtime")
    lcNotificationType = get_string(top_struct,"notificationType")
    lcOrderId = get_string(top_struct,"orderID")
    lcNotificationStatus = get_struct(top_struct,"Status").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+ldeNotificationTime = _iso8601_to_timestamp(lcNotificationTime).
+IF ldeNotificationTime EQ ? THEN
+   RETURN appl_err("notificationTime is not a dateTime").
 
 lcStatusFields = validate_struct(lcNotificationStatus,"OrderType,ServiceType,Status!,StatusDescription!,additionalInfo,lastDate!").
    
@@ -51,9 +57,13 @@ ASSIGN
       WHEN LOOKUP("StatusDescription", lcStatusFields) > 0 
    lcAdditionalInfo = get_string(lcNotificationStatus, "additionalInfo")
       WHEN LOOKUP("additionalInfo", lcStatusFields) > 0 
-   ldeLastDate = get_timestamp(lcNotificationStatus, "lastDate").
+   lcLastDate = get_string(lcNotificationStatus, "lastDate").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+ldeLastDate = _iso8601_to_timestamp(lcLastDate).
+IF ldeLastDate EQ ? THEN
+   RETURN appl_err("lastDate is not a dateTime").
 
 IF lcOrderId BEGINS "Y" THEN
    lcOrderId = SUBSTRING(lcOrderId,2).
@@ -87,7 +97,7 @@ ASSIGN
    FusionMessage.Source = {&FUSIONMESSAGE_SOURCE_MASMOVIL}
    FusionMessage.FixedStatus = lcStatus
    FusionMessage.FixedStatusDesc = lcStatusDescription
-   FusionMessage.FixedStatusTS = lcNotificationTime
+   FusionMessage.FixedStatusTS = ldeNotificationTime
    FusionMessage.OrderType = lcOrderType
    FusionMessage.AdditionalInfo = lcAdditionalInfo.
 
