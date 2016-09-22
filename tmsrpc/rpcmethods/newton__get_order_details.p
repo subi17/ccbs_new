@@ -76,7 +76,6 @@
                    city;string;
                    country;string;
  * @fusion_data  fixed_number_type;string;NEW/MNP
-                 fixed_mnp_old_operator;string;
                  fixed_line_mnp_old_operator_name;string;
                  fixed_line_mnp_old_operator_code;string;
                  fixed_line_serial_number;string;
@@ -94,7 +93,7 @@
                  update_ts;string;optional
   @install_address fname;string;
                     lname;string;
-                    lname2;string;
+                    surname_2;string;
                     phone_number;string;
                     address;string;
                     city;string;
@@ -105,7 +104,8 @@
                     profession;string;
                     email;string;
                     gescal;string;
-                    address_compl;string;optional;Address Complement for floor
+                    address_compl;string;optional;Address Complement
+                    floor;string;optional;Complement for floor
                     street_type;string;optional;street type
                     bis_duplicate;string;optional;bis
                     block;string;optional;block
@@ -508,7 +508,6 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
       lcFusionStruct = add_struct(top_struct, "fusion_data").
       add_string(lcFusionStruct, "fixed_number_type",OrderFusion.FixedNumberType).
       add_string(lcFusionStruct, "fixed_line_number",OrderFusion.FixedNumber).
-      add_string(lcFusionStruct, "fixed_mnp_old_operator",OrderFusion.FixedCurrOper).
       add_string(lcFusionStruct, "fixed_line_mnp_old_operator_name",OrderFusion.FixedCurrOper).
       add_string(lcFusionStruct, "fixed_line_mnp_old_operator_code",OrderFusion.FixedCurrOperCode).
       add_string(lcFusionStruct, "fixed_line_serial_number",OrderFusion.SerialNumber).
@@ -545,7 +544,8 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
          add_string(lcFixedInstallAddress, "profession", OrderCustomer.Profession).
          add_string(lcFixedInstallAddress, "email", OrderCustomer.Email).
          add_string(lcFixedInstallAddress, "gescal", OrderCustomer.Gescal).
-         add_string(lcFixedInstallAddress, "address_compl", OrderCustomer.AddressCompl). /* Pasi, this is not correct parameter */
+         add_string(lcFixedInstallAddress, "address_compl", OrderCustomer.AddressCompl).
+         add_string(lcFixedInstallAddress, "floor", OrderCustomer.Floor).
          add_string(lcFixedInstallAddress, "street_type", OrderCustomer.StreetType).
          add_string(lcFixedInstallAddress, "bis_duplicate", OrderCustomer.BisDuplicate).
          add_string(lcFixedInstallAddress, "block", OrderCustomer.Block).

@@ -242,7 +242,7 @@ REPEAT WITH FRAME frTop:
                /*(De)Activation is not allowed if fixed line provisioning 
                 is pending*/
                IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN DO:
-                  MESSAGE "Fixed line provisioning is not complete" 
+                  MESSAGE "Mobile line provisioning is not complete" 
                      VIEW-AS ALERT-BOX. 
                   ufkey = TRUE.
                   RUN ufkey.

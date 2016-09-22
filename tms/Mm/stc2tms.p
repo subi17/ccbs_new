@@ -648,7 +648,9 @@ PROCEDURE pUpdateSubscription:
           Mobsub.Paytype    = (CLIType.PayType = 2)
           Mobsub.TariffActDate = ldtActDate
           MobSub.TariffActTS   = ldeNewBeginTs
-          MobSub.FixedNumber = lcFixedNumber.
+          MobSub.FixedNumber = lcFixedNumber
+          MobSub.MsStatus = {&MSSTATUS_ACTIVE} WHEN
+                            MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG}.
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
    

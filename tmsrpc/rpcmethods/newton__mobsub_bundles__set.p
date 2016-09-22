@@ -269,7 +269,7 @@ IF NOT AVAIL MobSub THEN RETURN appl_err("MobSub not found").
 /*YPR-4775*/
 /*(De)Activation is not allowed if fixed line provisioning is pending*/
 IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
-   RETURN appl_err("Fixed line provisioning is not complete").
+   RETURN appl_err("Mobile line provisioning is not complete").
 
 
 IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").

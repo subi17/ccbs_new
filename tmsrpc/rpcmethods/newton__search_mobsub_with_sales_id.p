@@ -50,6 +50,7 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    sub_struct = add_json_key_struct(result_array, "").
    add_int(sub_struct   , "seq"        , mobsub.msseq).
    add_string(sub_struct, "description", mobsub.cli).
+   add_string(sub_struct, "fixed_number", mobsub.fixednumber).
    add_string(sub_struct, "subscription_type_id", mobsub.clitype).
    add_int(sub_struct   , "status"     , mobsub.msstatus).
    add_string(sub_struct, "data_bundle_id", MobSub.TariffBundle).
@@ -63,9 +64,14 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
 
 END FUNCTION. 
 
-FIND mobsub NO-LOCK WHERE
-     mobsub.brand = gcBrand AND
-     mobsub.cli = pcMSISDN NO-ERROR.
+IF pcMSISDN BEGINS "9" THEN   /* Fixed line number */
+   FIND mobsub NO-LOCK WHERE
+        mobsub.brand = gcBrand AND
+        mobsub.fixednumber = pcMSISDN NO-ERROR.
+ELSE 
+   FIND mobsub NO-LOCK WHERE
+        mobsub.brand = gcBrand AND
+        mobsub.cli = pcMSISDN NO-ERROR.
 
 IF NOT AVAILABLE mobsub THEN
    RETURN appl_err("Subscription not found").

@@ -228,7 +228,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
                          Order.OrderId NE piOrderID AND
                   LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0)
       THEN DO:
-      ocError = "Ongoing convergent order".
+      ocError = "STC is not allowed due to convergent order is still ongoing.".
       RETURN FALSE.
    END.
   
