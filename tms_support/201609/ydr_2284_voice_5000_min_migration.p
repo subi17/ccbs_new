@@ -1,6 +1,6 @@
 /*Migration of mServiceLimit*/
 
-{timestamp.i}
+{Func/timestamp.i}
 
 DEF VAR i               AS INT  NO-UNDO.
 DEF VAR ldNOW           AS DEC  NO-UNDO.
