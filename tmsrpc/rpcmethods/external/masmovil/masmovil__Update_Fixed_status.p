@@ -31,11 +31,11 @@ lcTopStruct = validate_struct(top_struct,"notificationID!,notificationTime!,noti
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
-   lcNotificationID = get_string(lcTopStruct,"notificationID")
-   lcNotificationTime = get_timestamp(lcTopStruct,"notificationtime")
-   lcNotificationType = get_string(lcTopStruct,"notificationType")
-   lcOrderId = get_string(lcTopStruct,"orderID")
-   lcNotificationStatus = get_struct(lcTopStruct,"Status").
+   lcNotificationID = get_string(top_struct,"notificationID")
+   lcNotificationTime = get_timestamp(top_struct,"notificationtime")
+   lcNotificationType = get_string(top_struct,"notificationType")
+   lcOrderId = get_string(top_struct,"orderID")
+   lcNotificationStatus = get_struct(top_struct,"Status").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -54,6 +54,9 @@ ASSIGN
    ldeLastDate = get_timestamp(lcNotificationStatus, "lastDate").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+IF lcOrderId BEGINS "Y" THEN
+   lcOrderId = SUBSTRING(lcOrderId,2).
 
 liOrderID = INT(lcOrderId) NO-ERROR.
 IF ERROR-STATUS:ERROR THEN
