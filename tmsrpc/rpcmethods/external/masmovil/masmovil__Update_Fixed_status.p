@@ -6,6 +6,10 @@ gcBrand = "1".
 {Mc/orderfusion.i}
 {Func/orderfunc.i}
 
+&GLOBAL-DEFINE RESULT_SUCCESS "00"
+&GLOBAL-DEFINE RESULT_INVALID_FORMAT "01"
+&GLOBAL-DEFINE RESULT_INVALID_ORDERID "02"
+
 DEF VAR top_struct AS CHAR NO-UNDO.
 DEF VAR lcTopStruct AS CHAR NO-UNDO.
 
@@ -25,6 +29,7 @@ DEF VAR lcStatusDescription AS CHAR NO-UNDO.
 DEF VAR lcAdditionalInfo AS CHAR NO-UNDO. 
 DEF VAR lcLastDate AS CHAR NO-UNDO. 
 DEF VAR ldeLastDate AS DEC NO-UNDO. 
+DEF VAR lcresultStruct AS CHAR NO-UNDO. 
 
 top_struct = get_struct(param_toplevel_id, "0").
 
@@ -40,10 +45,6 @@ ASSIGN
    lcNotificationStatus = get_struct(top_struct,"Status").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-ldeNotificationTime = _iso8601_to_timestamp(lcNotificationTime).
-IF ldeNotificationTime EQ ? THEN
-   RETURN appl_err("notificationTime is not a dateTime").
 
 lcStatusFields = validate_struct(lcNotificationStatus,"OrderType,ServiceType,Status!,StatusDescription!,additionalInfo,lastDate!").
    
@@ -61,28 +62,54 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+
+lcresultStruct = add_struct(response_toplevel_id,"").
+
+ldeNotificationTime = _iso8601_to_timestamp(lcNotificationTime).
+IF ldeNotificationTime EQ ? THEN DO:
+   add_string(lcresultStruct, "resultCode", {&RESULT_INVALID_FORMAT}).
+   add_string(lcresultStruct, "resultDescription", 
+              "notificationTime is not a dateTime").
+END.
+
 ldeLastDate = _iso8601_to_timestamp(lcLastDate).
-IF ldeLastDate EQ ? THEN
-   RETURN appl_err("lastDate is not a dateTime").
+IF ldeLastDate EQ ? THEN DO:
+   add_string(lcresultStruct, "resultCode", {&RESULT_INVALID_FORMAT}).
+   add_string(lcresultStruct, "resultDescription", 
+              "lastDate is not a dateTime").
+   RETURN.
+END.
 
 IF lcOrderId BEGINS "Y" THEN
    lcOrderId = SUBSTRING(lcOrderId,2).
 
 liOrderID = INT(lcOrderId) NO-ERROR.
-IF ERROR-STATUS:ERROR THEN
-   RETURN appl_err("Incorrect orderID syntax").
+IF ERROR-STATUS:ERROR THEN DO:
+   add_string(lcresultStruct, "resultCode", {&RESULT_INVALID_FORMAT}).
+   add_string(lcresultStruct, "resultDescription", 
+              "Incorrect orderID syntax").
+   RETURN.
+END.
 
 FIND FIRST Order NO-LOCK WHERE
            Order.Brand = gcBrand AND
            Order.OrderID = liOrderID NO-ERROR.
-IF NOT AVAIL Order THEN 
-   RETURN appl_err("Order not found").
+IF NOT AVAIL Order THEN DO:
+   add_string(lcresultStruct, "resultCode", {&RESULT_INVALID_ORDERID}).
+   add_string(lcresultStruct, "resultDescription", 
+              "Order not found").
+   RETURN.
+END.
 
 FIND FIRST OrderFusion EXCLUSIVE-LOCK WHERE
            OrderFusion.Brand = gcBrand AND
            OrderFusion.OrderId = liOrderID NO-ERROR.
-IF NOT AVAIL OrderFusion THEN 
-   RETURN appl_err("Order data is missing").
+IF NOT AVAIL OrderFusion THEN DO:
+   add_string(lcresultStruct, "resultCode", {&RESULT_INVALID_ORDERID}).
+   add_string(lcresultStruct, "resultDescription", 
+              "Order type is incorrect").
+   RETURN.
+END.
 
 /* HANDLING */
 
@@ -171,7 +198,8 @@ END CASE.
 RELEASE OrderFusion.
 RELEASE FusionMessage.
 
-add_boolean(response_toplevel_id,?,TRUE).
+add_string(lcresultStruct, "resultCode", {&RESULT_SUCCESS}).
+add_string(lcresultStruct, "resultDescription", "success").
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
