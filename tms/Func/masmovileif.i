@@ -402,23 +402,19 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
    RETURN "".
 END. /*fMasCancel_FixedLineOrder*/
 
-
 FUNCTION fMasGet_FixedNbr RETURNS CHAR
    (icPostalCode AS CHAR ,
     OUTPUT ocNum AS CHAR,
     OUTPUT ocResult AS CHAR): /*Error message*/
-   DEF VAR lcOutputStruct AS CHAR NO-UNDO.
    DEF VAR lcXMLStruct AS CHAR NO-UNDO. /*Input to TMS*/
    DEF VAR lcResponse AS CHAR NO-UNDO.
    DEF VAR lcResult AS CHAR NO-UNDO.
 
    DEF VAR ldtLastChange AS DATETIME.
    DEF VAR ldtAssigned AS DATETIME.
-   
-   lcOutputStruct = add_struct(param_toplevel_id, "").
-   
-   add_string(lcOutputStruct, "postalCode", icPostalCOde).
-   
+
+   add_string(param_toplevel_id, "", icPostalCOde).
+
    IF gi_xmlrpc_error NE 0 THEN
          RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
    xmlrpc_initialize(FALSE).
