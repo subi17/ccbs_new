@@ -2957,11 +2957,11 @@
 1 "" 3 "Samsung Galaxy Tab A (2016)" 0 "G0000291" "1" 28/06/16 31/12/49
 1 "" 4 "Samsung Galaxy Tab A (2016)" 0 "G0000291" "1" 28/06/16 31/12/49
 1 "" 5 "Samsung Galaxy Tab A (2016)" 0 "G0000291" "1" 28/06/16 31/12/49
-1 "" 1 "Huawei Y6 II Compact Blanco" 0 "G0000292" "1" 29/08/16 31/12/49
+1 "" 1 "ALCATEL PIXI 4 5" 0 "G0000292" "1" 29/08/16 31/12/49
 1 "" 2 "Huawei Y6 II Compact Blanco" 0 "G0000292" "1" 29/08/16 31/12/49
 1 "" 3 "Huawei Y6 II Compact Blanco" 0 "G0000292" "1" 29/08/16 31/12/49
 1 "" 4 "Huawei Y6 II Compact Blanco" 0 "G0000292" "1" 29/08/16 31/12/49
-1 "" 5 "Huawei Y6 II Compact White" 0 "G0000292" "1" 29/08/16 31/12/49
+1 "" 5 "ALCATEL PIXI 4 5" 0 "G0000292" "1" 29/08/16 31/12/49
 1 "" 1 "Huawei Y6 II Compact" 0 "G0000293" "1" 29/08/16 31/12/49
 1 "" 2 "Huawei Y6 II Compact Blanco" 0 "G0000293" "1" 29/08/16 31/12/49
 1 "" 3 "Huawei Y6 II Compact Blanco" 0 "G0000293" "1" 29/08/16 31/12/49
@@ -2977,6 +2977,71 @@
 1 "" 3 "Samsung Galaxy Note 7" 0 "G0000295" "1" 29/08/16 31/12/49
 1 "" 4 "Samsung Galaxy Note 7" 0 "G0000295" "1" 29/08/16 31/12/49
 1 "" 5 "Samsung Galaxy Note 7" 0 "G0000295" "1" 29/08/16 31/12/49
+1 "" 1 "iPhone 6s 32 GB" 0 "G0000296" "1" 14/09/16 31/12/49
+1 "" 2 "iPhone 6s 32 GB" 0 "G0000296" "1" 14/09/16 31/12/49
+1 "" 3 "iPhone 6s 32 GB" 0 "G0000296" "1" 14/09/16 31/12/49
+1 "" 4 "iPhone 6s 32 GB" 0 "G0000296" "1" 14/09/16 31/12/49
+1 "" 5 "iPhone 6s 32 GB" 0 "G0000296" "1" 14/09/16 31/12/49
+1 "" 1 "BQ Aquaris U" 0 "G0000297" "1" 14/09/16 31/12/49
+1 "" 2 "iPhone 6s Plus 32 GB" 0 "G0000297" "1" 14/09/16 31/12/49
+1 "" 3 "iPhone 6s Plus 32 GB" 0 "G0000297" "1" 14/09/16 31/12/49
+1 "" 4 "iPhone 6s Plus 32 GB" 0 "G0000297" "1" 14/09/16 31/12/49
+1 "" 5 "BQ Aquaris U" 0 "G0000297" "1" 14/09/16 31/12/49
+1 "" 1 "Huawei Nova Plus" 0 "G0000298" "1" 14/09/16 31/12/49
+1 "" 2 "iPhone 6s Plus 32 GB" 0 "G0000298" "1" 14/09/16 31/12/49
+1 "" 3 "iPhone 6s Plus 32 GB" 0 "G0000298" "1" 14/09/16 31/12/49
+1 "" 4 "iPhone 6s Plus 32 GB" 0 "G0000298" "1" 14/09/16 31/12/49
+1 "" 5 "Huawei Nova Plus" 0 "G0000298" "1" 14/09/16 31/12/49
+1 "" 1 "iPhone 6s Plus 32 GB" 0 "G0000299" "1" 14/09/16 31/12/49
+1 "" 2 "iPhone 6s Plus 32 GB" 0 "G0000299" "1" 14/09/16 31/12/49
+1 "" 3 "iPhone 6s Plus 32 GB" 0 "G0000299" "1" 14/09/16 31/12/49
+1 "" 4 "iPhone 6s Plus 32 GB" 0 "G0000299" "1" 14/09/16 31/12/49
+1 "" 5 "iPhone 6s Plus 32 GB" 0 "G0000299" "1" 14/09/16 31/12/49
+1 "" 1 "iPhone 7" 0 "G0000300" "1" 14/09/16 31/12/49
+1 "" 2 "iPhone 7" 0 "G0000300" "1" 14/09/16 31/12/49
+1 "" 3 "iPhone 7" 0 "G0000300" "1" 14/09/16 31/12/49
+1 "" 4 "iPhone 7" 0 "G0000300" "1" 14/09/16 31/12/49
+1 "" 5 "iPhone 7" 0 "G0000300" "1" 14/09/16 31/12/49
+1 "" 1 "iPhone 7 32 GB" 0 "G0000301" "1" 14/09/16 31/12/49
+1 "" 2 "iPhone 7 32 GB" 0 "G0000301" "1" 14/09/16 31/12/49
+1 "" 3 "iPhone 7 32 GB" 0 "G0000301" "1" 14/09/16 31/12/49
+1 "" 4 "iPhone 7 32 GB" 0 "G0000301" "1" 14/09/16 31/12/49
+1 "" 5 "iPhone 7 32 GB" 0 "G0000301" "1" 14/09/16 31/12/49
+1 "" 1 "iPhone 7 128 GB" 0 "G0000302" "1" 14/09/16 31/12/49
+1 "" 2 "iPhone 7 128 GB" 0 "G0000302" "1" 14/09/16 31/12/49
+1 "" 3 "iPhone 7 128 GB" 0 "G0000302" "1" 14/09/16 31/12/49
+1 "" 4 "iPhone 7 128 GB" 0 "G0000302" "1" 14/09/16 31/12/49
+1 "" 5 "iPhone 7 128 GB" 0 "G0000302" "1" 14/09/16 31/12/49
+1 "" 1 "iPhone 7 256 GB" 0 "G0000303" "1" 14/09/16 31/12/49
+1 "" 2 "iPhone 7 256 GB" 0 "G0000303" "1" 14/09/16 31/12/49
+1 "" 3 "iPhone 7 256 GB" 0 "G0000303" "1" 14/09/16 31/12/49
+1 "" 4 "iPhone 7 256 GB" 0 "G0000303" "1" 14/09/16 31/12/49
+1 "" 5 "iPhone 7 256 GB" 0 "G0000303" "1" 14/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus" 0 "G0000304" "1" 14/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus" 0 "G0000304" "1" 14/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus" 0 "G0000304" "1" 14/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus" 0 "G0000304" "1" 14/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus" 0 "G0000304" "1" 14/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 32 GB" 0 "G0000305" "1" 14/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 32 GB" 0 "G0000305" "1" 14/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 32 GB" 0 "G0000305" "1" 14/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 32 GB" 0 "G0000305" "1" 14/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 32 GB" 0 "G0000305" "1" 14/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 128 GB" 0 "G0000306" "1" 14/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 128 GB" 0 "G0000306" "1" 14/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 128 GB" 0 "G0000306" "1" 14/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 128 GB" 0 "G0000306" "1" 14/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 128 GB" 0 "G0000306" "1" 14/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 256 GB" 0 "G0000307" "1" 14/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 256 GB" 0 "G0000307" "1" 14/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 256 GB" 0 "G0000307" "1" 14/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 256 GB" 0 "G0000307" "1" 14/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 256 GB" 0 "G0000307" "1" 14/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 256 GB" 0 "G0000308" "1" 14/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 256 GB" 0 "G0000308" "1" 14/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 256 GB" 0 "G0000308" "1" 14/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 256 GB" 0 "G0000308" "1" 14/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 256 GB" 0 "G0000308" "1" 14/09/16 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -6098,6 +6163,16 @@
 1 "" 3 "Huawei G8 Gris" 0 "P043HG8G2" "1" 25/09/15 31/12/49
 1 "" 4 "Huawei G8 Gris" 0 "P043HG8G2" "1" 25/09/15 31/12/49
 1 "" 5 "Huawei GX8 Grey" 0 "P043HG8G2" "1" 25/09/15 31/12/49
+1 "" 1 "Huawei Nova Plus Gris" 0 "P043HNPG2" "1" 21/09/16 31/12/49
+1 "" 2 "Huawei Nova Plus Gris" 0 "P043HNPG2" "1" 21/09/16 31/12/49
+1 "" 3 "Huawei Nova Plus Gris" 0 "P043HNPG2" "1" 21/09/16 31/12/49
+1 "" 4 "Huawei Nova Plus Gris" 0 "P043HNPG2" "1" 21/09/16 31/12/49
+1 "" 5 "Huawei Nova Plus Grey" 0 "P043HNPG2" "1" 21/09/16 31/12/49
+1 "" 1 "Huawei Nova Plus Plata" 0 "P043HNPS2" "1" 21/09/16 31/12/49
+1 "" 2 "Huawei Nova Plus Plata" 0 "P043HNPS2" "1" 21/09/16 31/12/49
+1 "" 3 "Huawei Nova Plus Plata" 0 "P043HNPS2" "1" 21/09/16 31/12/49
+1 "" 4 "Huawei Nova Plus Plata" 0 "P043HNPS2" "1" 21/09/16 31/12/49
+1 "" 5 "Huawei Nova Plus Silver" 0 "P043HNPS2" "1" 21/09/16 31/12/49
 1 "" 1 "Huawei P8 Gris" 0 "P043HP8S2" "1" 22/04/15 31/12/49
 1 "" 2 "Huawei P8 Gris" 0 "P043HP8S2" "1" 22/04/15 31/12/49
 1 "" 3 "Huawei P8 Gris" 0 "P043HP8S2" "1" 22/04/15 31/12/49
@@ -6597,6 +6672,16 @@
 1 "" 3 "Alcatel ONETOUCH POP 3 Plata" 0 "P045P3SP2" "1" 25/08/15 31/12/49
 1 "" 4 "Alcatel ONETOUCH POP 3 Plata" 0 "P045P3SP2" "1" 25/08/15 31/12/49
 1 "" 5 "Alcatel POP 3 (5) Soft Silver" 0 "P045P3SP2" "1" 25/08/15 31/12/49
+1 "" 1 "ALCATEL PIXI 4 5 Plata metal" 0 "P045P44S2" "1" 21/09/16 31/12/49
+1 "" 2 "ALCATEL PIXI 4 5 Plata metal" 0 "P045P44S2" "1" 21/09/16 31/12/49
+1 "" 3 "ALCATEL PIXI 4 5 Plata metal" 0 "P045P44S2" "1" 21/09/16 31/12/49
+1 "" 4 "ALCATEL PIXI 4 5 Plata metal" 0 "P045P44S2" "1" 21/09/16 31/12/49
+1 "" 5 "ALCATEL PIXI 4 5 Metal silver" 0 "P045P44S2" "1" 21/09/16 31/12/49
+1 "" 1 "ALCATEL PIXI 4 5 Blanco" 0 "P045P44W2" "1" 21/09/16 31/12/49
+1 "" 2 "ALCATEL PIXI 4 5 Blanco" 0 "P045P44W2" "1" 21/09/16 31/12/49
+1 "" 3 "ALCATEL PIXI 4 5 Blanco" 0 "P045P44W2" "1" 21/09/16 31/12/49
+1 "" 4 "ALCATEL PIXI 4 5 Blanco" 0 "P045P44W2" "1" 21/09/16 31/12/49
+1 "" 5 "ALCATEL PIXI 4 5 White" 0 "P045P44W2" "1" 21/09/16 31/12/49
 1 "" 1 "Alcatel POP 4 Gris" 0 "P045P45G2" "1" 23/05/16 31/12/49
 1 "" 2 "Alcatel POP 4 (5) Gris" 0 "P045P45G2" "1" 23/05/16 31/12/49
 1 "" 3 "Alcatel POP 4 (5) Gris" 0 "P045P45G2" "1" 23/05/16 31/12/49
@@ -7103,6 +7188,11 @@
 1 "" 3 "BQ Aquaris M5 Blanco" 0 "P088AM5W2" "1" 22/06/15 31/12/49
 1 "" 4 "BQ Aquaris M5 Blanco" 0 "P088AM5W2" "1" 22/06/15 31/12/49
 1 "" 5 "BQ Aquaris M5 White" 0 "P088AM5W2" "1" 22/06/15 31/12/49
+1 "" 1 "BQ Aquaris U Gris" 0 "P088AQUG2" "1" 21/09/16 31/12/49
+1 "" 2 "BQ Aquaris U Gris" 0 "P088AQUG2" "1" 21/09/16 31/12/49
+1 "" 3 "BQ Aquaris U Gris" 0 "P088AQUG2" "1" 21/09/16 31/12/49
+1 "" 4 "BQ Aquaris U Gris" 0 "P088AQUG2" "1" 21/09/16 31/12/49
+1 "" 5 "BQ Aquaris U Dark grey" 0 "P088AQUG2" "1" 21/09/16 31/12/49
 1 "" 1 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
 1 "" 2 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
 1 "" 3 "BQ Aquaris X5 Negro" 0 "P088AX5N2" "1" 19/11/15 31/12/49
@@ -7448,6 +7538,26 @@
 1 "" 3 "iPhone 6s 128 GB Plata" 0 "P0976S1S2" "1" 26/11/15 31/12/49
 1 "" 4 "iPhone 6s 128 GB Plata" 0 "P0976S1S2" "1" 26/11/15 31/12/49
 1 "" 5 "iPhone 6s 128 GB Silver" 0 "P0976S1S2" "1" 26/11/15 31/12/49
+1 "" 1 "iPhone 6s 32 GB Oro" 0 "P0976S3D2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 6s 32 GB Oro" 0 "P0976S3D2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 6s 32 GB Oro" 0 "P0976S3D2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 6s 32 GB Oro" 0 "P0976S3D2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 6s 32 GB Gold" 0 "P0976S3D2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 6s 32 GB Gris" 0 "P0976S3G2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 6s 32 GB Gris" 0 "P0976S3G2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 6s 32 GB Gris" 0 "P0976S3G2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 6s 32 GB Gris" 0 "P0976S3G2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 6s 32 GB Space Grey" 0 "P0976S3G2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 6s 32 GB Oro rosa" 0 "P0976S3R2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 6s 32 GB Oro rosa" 0 "P0976S3R2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 6s 32 GB Oro rosa" 0 "P0976S3R2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 6s 32 GB Oro rosa" 0 "P0976S3R2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 6s 32 GB Rose Gold" 0 "P0976S3R2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 6s 32 GB Plata" 0 "P0976S3S2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 6s 32 GB Plata" 0 "P0976S3S2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 6s 32 GB Plata" 0 "P0976S3S2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 6s 32 GB Plata" 0 "P0976S3S2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 6s 32 GB Silver" 0 "P0976S3S2" "1" 13/09/16 31/12/49
 1 "" 1 "iPhone 6s 64 GB Oro" 0 "P0976S6D2" "1" 29/09/15 31/12/49
 1 "" 2 "iPhone 6s Oro rosa" 0 "P0976S6D2" "1" 29/09/15 31/12/49
 1 "" 3 "iPhone 6s Oro rosa" 0 "P0976S6D2" "1" 29/09/15 31/12/49
@@ -7488,6 +7598,146 @@
 1 "" 3 "iPhone 6s Plus Plata" 0 "P0976SPS2" "1" 29/09/15 31/12/49
 1 "" 4 "iPhone 6s Plus Plata" 0 "P0976SPS2" "1" 29/09/15 31/12/49
 1 "" 5 "iPhone 6s Plus 16 GB Silver" 0 "P0976SPS2" "1" 29/09/15 31/12/49
+1 "" 1 "iPhone 7 128 GB Negro brillante" 0 "P097712B2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 128 GB Negro brillante" 0 "P097712B2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 128 GB Negro brillante" 0 "P097712B2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 128 GB Negro brillante" 0 "P097712B2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 128 GB Jet Black" 0 "P097712B2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 128 GB Oro" 0 "P097712D2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 128 GB Oro" 0 "P097712D2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 128 GB Oro" 0 "P097712D2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 128 GB Oro" 0 "P097712D2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 128 GB Gold" 0 "P097712D2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 128 GB Negro" 0 "P097712N2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 128 GB Negro" 0 "P097712N2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 128 GB Negro" 0 "P097712N2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 128 GB Negro" 0 "P097712N2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 128 GB Black" 0 "P097712N2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 128 GB Oro rosa" 0 "P097712R2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 128 GB Oro rosa" 0 "P097712R2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 128 GB Oro rosa" 0 "P097712R2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 128 GB Oro rosa" 0 "P097712R2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 128 GB Rose Gold" 0 "P097712R2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 128 GB Plata" 0 "P097712S2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 128 GB Plata" 0 "P097712S2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 128 GB Plata" 0 "P097712S2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 128 GB Plata" 0 "P097712S2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 128 GB Silver" 0 "P097712S2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 256 GB Negro brillante" 0 "P097725B2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 256 GB Negro brillante" 0 "P097725B2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 256 GB Negro brillante" 0 "P097725B2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 256 GB Negro brillante" 0 "P097725B2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 256 GB Jet Black" 0 "P097725B2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 256 GB Oro" 0 "P097725D2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 256 GB Oro" 0 "P097725D2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 256 GB Oro" 0 "P097725D2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 256 GB Oro" 0 "P097725D2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 256 GB Gold" 0 "P097725D2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 256 GB Negro" 0 "P097725N2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 256 GB Negro" 0 "P097725N2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 256 GB Negro" 0 "P097725N2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 256 GB Negro" 0 "P097725N2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 256 GB Black" 0 "P097725N2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 256 GB Oro rosa" 0 "P097725R2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 256 GB Oro rosa" 0 "P097725R2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 256 GB Oro rosa" 0 "P097725R2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 256 GB Oro rosa" 0 "P097725R2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 256 GB Rose Gold" 0 "P097725R2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 256 GB Plata" 0 "P097725S2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 256 GB Plata" 0 "P097725S2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 256 GB Plata" 0 "P097725S2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 256 GB Plata" 0 "P097725S2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 256 GB Silver" 0 "P097725S2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 32 GB Oro" 0 "P097732D2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 32 GB Oro" 0 "P097732D2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 32 GB Oro" 0 "P097732D2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 32 GB Oro" 0 "P097732D2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 32 GB Gold" 0 "P097732D2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 32 GB Negro" 0 "P097732N2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 32 GB Negro" 0 "P097732N2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 32 GB Negro" 0 "P097732N2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 32 GB Negro" 0 "P097732N2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 32 GB Black" 0 "P097732N2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 32 GB Oro rosa" 0 "P097732R2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 32 GB Oro rosa" 0 "P097732R2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 32 GB Oro rosa" 0 "P097732R2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 32 GB Oro rosa" 0 "P097732R2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 32 GB Rose Gold" 0 "P097732R2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 32 GB Plata" 0 "P097732S2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 32 GB Plata" 0 "P097732S2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 32 GB Plata" 0 "P097732S2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 32 GB Plata" 0 "P097732S2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 32 GB Silver" 0 "P097732S2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 128 GB Negro brillante" 0 "P0977P1B2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 128 GB Negro brillante" 0 "P0977P1B2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 128 GB Negro brillante" 0 "P0977P1B2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 128 GB Negro brillante" 0 "P0977P1B2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 128 GB Jet Black" 0 "P0977P1B2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 128 GB Oro" 0 "P0977P1D2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 128 GB Oro" 0 "P0977P1D2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 128 GB Oro" 0 "P0977P1D2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 128 GB Oro" 0 "P0977P1D2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 128 GB Gold" 0 "P0977P1D2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 128 GB Negro" 0 "P0977P1N2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 128 GB Negro" 0 "P0977P1N2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 128 GB Negro" 0 "P0977P1N2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 128 GB Negro" 0 "P0977P1N2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 128 GB Black" 0 "P0977P1N2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 128 GB Oro rosa" 0 "P0977P1R2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 128 GB Oro rosa" 0 "P0977P1R2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 128 GB Oro rosa" 0 "P0977P1R2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 128 GB Oro rosa" 0 "P0977P1R2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 128 GB Rose Gold" 0 "P0977P1R2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 128 GB Plata" 0 "P0977P1S2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 128 GB Plata" 0 "P0977P1S2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 128 GB Plata" 0 "P0977P1S2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 128 GB Plata" 0 "P0977P1S2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 128 GB Silver" 0 "P0977P1S2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 256 GB Negro brillante" 0 "P0977P2B2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 256 GB Negro brillante" 0 "P0977P2B2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 256 GB Negro brillante" 0 "P0977P2B2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 256 GB Negro brillante" 0 "P0977P2B2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 256 GB Jet Black" 0 "P0977P2B2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 256 GB Oro" 0 "P0977P2D2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 256 GB Oro" 0 "P0977P2D2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 256 GB Oro" 0 "P0977P2D2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 256 GB Oro" 0 "P0977P2D2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 256 GB Gold" 0 "P0977P2D2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 256 GB Negro" 0 "P0977P2N2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 256 GB Negro" 0 "P0977P2N2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 256 GB Negro" 0 "P0977P2N2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 256 GB Negro" 0 "P0977P2N2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 256 GB Black" 0 "P0977P2N2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 256 GB Oro rosa" 0 "P0977P2R2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 256 GB Oro rosa" 0 "P0977P2R2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 256 GB Oro rosa" 0 "P0977P2R2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 256 GB Oro rosa" 0 "P0977P2R2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 256 GB Rose Gold" 0 "P0977P2R2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 256 GB Plata" 0 "P0977P2S2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 256 GB Plata" 0 "P0977P2S2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 256 GB Plata" 0 "P0977P2S2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 256 GB Plata" 0 "P0977P2S2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 256 GB Silver" 0 "P0977P2S2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 32 GB Oro" 0 "P0977P3D2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 32 GB Oro" 0 "P0977P3D2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 32 GB Oro" 0 "P0977P3D2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 32 GB Oro" 0 "P0977P3D2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 32 GB Gold" 0 "P0977P3D2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 32 GB Negro" 0 "P0977P3N2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 32 GB Negro" 0 "P0977P3N2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 32 GB Negro" 0 "P0977P3N2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 32 GB Negro" 0 "P0977P3N2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 32 GB Black" 0 "P0977P3N2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 32 GB Oro rosa" 0 "P0977P3R2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 32 GB Oro rosa" 0 "P0977P3R2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 32 GB Oro rosa" 0 "P0977P3R2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 32 GB Oro rosa" 0 "P0977P3R2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 32 GB Rose Gold" 0 "P0977P3R2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 7 Plus 32 GB Plata" 0 "P0977P3S2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 7 Plus 32 GB Plata" 0 "P0977P3S2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 7 Plus 32 GB Plata" 0 "P0977P3S2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 7 Plus 32 GB Plata" 0 "P0977P3S2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 7 Plus 32 GB Silver" 0 "P0977P3S2" "1" 13/09/16 31/12/49
 1 "" 1 "iPhone 5s 16 GB Gris" 0 "P097S56S2" "1" 23/10/13 31/12/49
 1 "" 2 "iPhone 5s 16 GB Gris" 0 "P097S56S2" "1" 23/10/13 31/12/49
 1 "" 3 "iPhone 5s 16 GB Gris" 0 "P097S56S2" "1" 23/10/13 31/12/49
@@ -7553,6 +7803,26 @@
 1 "" 3 "iPhone 6s Plus 128 GB Plata" 0 "P097SP1S2" "1" 26/11/15 31/12/49
 1 "" 4 "iPhone 6s Plus 128 GB Plata" 0 "P097SP1S2" "1" 26/11/15 31/12/49
 1 "" 5 "iPhone 6s Plus 128 GB Silver" 0 "P097SP1S2" "1" 26/11/15 31/12/49
+1 "" 1 "iPhone 6s Plus 32 GB Oro" 0 "P097SP3D2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 6s Plus 32 GB Oro" 0 "P097SP3D2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 6s Plus 32 GB Oro" 0 "P097SP3D2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 6s Plus 32 GB Oro" 0 "P097SP3D2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 6s Plus 32 GB Gold" 0 "P097SP3D2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 6s Plus 32 GB Gris" 0 "P097SP3G2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 6s Plus 32 GB Gris" 0 "P097SP3G2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 6s Plus 32 GB Gris" 0 "P097SP3G2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 6s Plus 32 GB Gris" 0 "P097SP3G2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 6s Plus 32 GB Space Grey" 0 "P097SP3G2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 6s Plus 32 GB Oro rosa" 0 "P097SP3R2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 6s Plus 32 GB Oro rosa" 0 "P097SP3R2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 6s Plus 32 GB Oro rosa" 0 "P097SP3R2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 6s Plus 32 GB Oro rosa" 0 "P097SP3R2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 6s Plus 32 GB Rose Gold" 0 "P097SP3R2" "1" 13/09/16 31/12/49
+1 "" 1 "iPhone 6s Plus 32 GB Plata" 0 "P097SP3S2" "1" 13/09/16 31/12/49
+1 "" 2 "iPhone 6s Plus 32 GB Plata" 0 "P097SP3S2" "1" 13/09/16 31/12/49
+1 "" 3 "iPhone 6s Plus 32 GB Plata" 0 "P097SP3S2" "1" 13/09/16 31/12/49
+1 "" 4 "iPhone 6s Plus 32 GB Plata" 0 "P097SP3S2" "1" 13/09/16 31/12/49
+1 "" 5 "iPhone 6s Plus 32 GB Silver" 0 "P097SP3S2" "1" 13/09/16 31/12/49
 1 "" 1 "iPhone 6s Plus 64 GB Oro" 0 "P097SP6D2" "1" 29/09/15 31/12/49
 1 "" 2 "iPhone 6s Plus 64 GB Oro" 0 "P097SP6D2" "1" 29/09/15 31/12/49
 1 "" 3 "iPhone 6s Plus 64 GB Oro" 0 "P097SP6D2" "1" 29/09/15 31/12/49
@@ -8114,6 +8384,11 @@
 1 "" 3 "Roaminga" 0 "PREVMCROAM" "1" 01/01/06 31/03/12
 1 "" 5 "Answering service abroad" 0 "PREVMCROAM" "1" 01/04/12 31/12/49
 1 "" 5 "Roaming" 0 "PREVMCROAM" "1" 01/01/06 31/03/12
+1 "" 1 "Test Imagenes" 0 "PRUEBA2" "1" 16/09/16 31/12/49
+1 "" 2 "Test Imagenes" 0 "PRUEBA2" "1" 16/09/16 31/12/49
+1 "" 3 "Test Imagenes" 0 "PRUEBA2" "1" 16/09/16 31/12/49
+1 "" 4 "Test Imagenes" 0 "PRUEBA2" "1" 16/09/16 31/12/49
+1 "" 5 "Test Imagenes" 0 "PRUEBA2" "1" 16/09/16 31/12/49
 1 "" 1 "Restablecimiento del Servicio" 0 "RECONNECTION" "1" 28/11/12 31/12/49
 1 "" 2 "Restablecimiento del Servicio" 0 "RECONNECTION" "1" 28/11/12 31/12/49
 1 "" 3 "Restablecimiento del Servicio" 0 "RECONNECTION" "1" 28/11/12 31/12/49
@@ -8274,6 +8549,11 @@
 1 "" 3 "Iraupen-konpromisoa ez betetzea" 0 "STERMPERIOD" "1" 01/07/12 30/09/12
 1 "" 5 "Early termination of La Infinita contract period" 0 "STERMPERIOD" "1" 01/10/12 31/12/49
 1 "" 5 "Failure to comply with Minimum Contract Period" 0 "STERMPERIOD" "1" 01/07/12 30/09/12
+1 "" 1 "Prueba Terminales Fotos" 0 "SUMA221" "1" 16/09/16 31/12/49
+1 "" 2 "Prueba Terminales Fotos" 0 "SUMA221" "1" 16/09/16 31/12/49
+1 "" 3 "Prueba Terminales Fotos" 0 "SUMA221" "1" 16/09/16 31/12/49
+1 "" 4 "Prueba Terminales Fotos" 0 "SUMA221" "1" 16/09/16 31/12/49
+1 "" 5 "Prueba Terminales Fotos" 0 "SUMA221" "1" 16/09/16 31/12/49
 1 "" 1 "Telefono pruebas 4" 0 "SUMI3" "1" 30/06/16 31/12/49
 1 "" 2 "Telefono pruebas 4" 0 "SUMI3" "1" 30/06/16 31/12/49
 1 "" 3 "Telefono pruebas 4" 0 "SUMI3" "1" 30/06/16 31/12/49
@@ -8308,6 +8588,11 @@
 1 "" 5 "Failure to comply with Minimum Contract Period" 0 "TERMPERIOD" "1" 01/04/12 31/12/49
 1 "" 5 "Penalty charge" 0 "TERMPERIOD" "1" 01/06/10 31/03/12
 1 "" 5 "Discount Penalty" 0 "TERMPERIOD" "1" 01/01/06 31/05/10
+1 "" 1 "TESTIMAGENES" 0 "TESTIMAGENES" "1" 16/09/16 31/12/49
+1 "" 2 "TESTIMAGENES" 0 "TESTIMAGENES" "1" 16/09/16 31/12/49
+1 "" 3 "TESTIMAGENES" 0 "TESTIMAGENES" "1" 16/09/16 31/12/49
+1 "" 4 "TESTIMAGENES" 0 "TESTIMAGENES" "1" 16/09/16 31/12/49
+1 "" 5 "TESTIMAGENES" 0 "TESTIMAGENES" "1" 16/09/16 31/12/49
 1 "" 1 "Yoigo Tarjeta" 0 "TS0000001" "1" 01/01/06 31/12/49
 1 "" 5 "Yoigo Pay as you go" 0 "TS0000001" "1" 01/01/06 31/12/49
 1 "" 1 "Yoigo Tarjeta" 0 "TS0000002" "1" 01/01/06 31/12/49
@@ -10392,10 +10677,10 @@
 6 "" 2 "BONO 12 INTERNET" 0 "42" "1" 01/03/12 31/12/49
 6 "" 3 "BONO 12 INTERNET" 0 "42" "1" 01/03/12 31/12/49
 6 "" 5 "BONO 12 INTERNET" 0 "42" "1" 01/03/12 31/12/49
-6 "" 1 "Servicios Premium no sujetos a impuestos" 0 "44" "1" 01/06/16 31/12/49
-6 "" 2 "Serveis Prèmium no subjectes a impostos" 0 "44" "1" 01/06/16 31/12/49
-6 "" 3 "Zergen menpe ez dauden Premium zerbitzuak" 0 "44" "1" 01/06/16 31/12/49
-6 "" 5 "Premium services not subject to tax" 0 "44" "1" 01/06/16 31/12/49
+6 "" 1 "SERVICIOS PREMIUM no sujetos a impuestos" 0 "44" "1" 01/06/16 31/12/49
+6 "" 2 "SERVEIS PRÈMIUM no subjectes a impostos" 0 "44" "1" 01/06/16 31/12/49
+6 "" 3 "Zergen menpe ez dauden PREMIUM ZERBITZUAK" 0 "44" "1" 01/06/16 31/12/49
+6 "" 5 "PREMIUM SERVICES not subject to tax" 0 "44" "1" 01/06/16 31/12/49
 6 "" 1 "DESCUENTOS Y CARGOS no sujetos a impuestos" 0 "45" "1" 01/06/16 31/12/49
 6 "" 2 "DESCOMPTES i CÀRRECS no subjectes a impostos" 0 "45" "1" 01/06/16 31/12/49
 6 "" 3 "Zergen menpe ez dauden DESKONTUAK eta KARGUAK" 0 "45" "1" 01/06/16 31/12/49
