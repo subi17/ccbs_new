@@ -36,14 +36,20 @@ DEF VAR lcLogDir AS CHAR NO-UNDO.
 DEF VAR lcProcessedFile AS CHAR NO-UNDO. 
 DEF VAR liErrors AS INT NO-UNDO. 
 DEF VAR liOk AS INT NO-UNDO. 
-
+DEF VAR lcRootDirCetelem AS CHAR NO-UNDO.
 ASSIGN
    lcRootDir = fCParam("TermFinance","CanOutRoot")
-   lcLogDir = fCParam("TermFinance","LogDir").
+   lcLogDir = fCParam("TermFinance","LogDir")
+   lcRootDirCetelem  = fCParam("TermFinance","OutRootDirCetelem").
 
 IF lcRootDir EQ ? OR
    NOT lcRootDir > "" THEN DO:
    fReqStatus(3,"ERROR:Root directory not defined").
+   RETURN.
+END.
+
+IF MsRequest.ReqCParam1 = {&TF_BANK_CETELEM} AND NOT lcRootDirCetelem > "" THEN DO:
+   fReqStatus(3,"SYSTEM ERROR: Output directory for Cetelem files not defined").
    RETURN.
 END.
 
@@ -234,8 +240,11 @@ PROCEDURE pCreateFile:
       
    OUTPUT STREAM sout close.
 
-   fMove2TransDir(lcLogFile, "", lcLogDir + "outgoing/"). 
-   lcProcessedFile = fMove2TransDir(lcFile, "", lcRootDir + "outgoing/"). 
+   fMove2TransDir(lcLogFile, "", lcLogDir + "outgoing/").
+   IF icBank = "0225" 
+      THEN lcProcessedFile = fMove2TransDir(lcFile, "", lcRootDirCetelem + "outgoing/").
+      ELSE lcProcessedFile = fMove2TransDir(lcFile, "", lcRootDir + "outgoing/").
+   
    IF SESSION:BATCH AND 
       lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
 
