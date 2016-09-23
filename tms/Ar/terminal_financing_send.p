@@ -54,7 +54,6 @@ DEF VAR lcRootDirCetelem AS CHAR NO-UNDO.
 DEF VAR lcSpoolDirCetelem AS CHAR NO-UNDO.
 DEF VAR lcOutDirCetelem AS CHAR NO-UNDO.
 DEF VAR lcLogDirCetelem AS CHAR NO-UNDO.
-DEF VAR lcErrorFileCetelem AS CHAR NO-UNDO.
 
 FOR EACH Reseller NO-LOCK WHERE
          Reseller.Brand = gcBrand:
@@ -101,12 +100,6 @@ ASSIGN
    lcOutDirCetelem   = lcRootDirCetelem   + "outgoing/"
    lcLogDirCetelem   = lcRootDirCetelem   + "logs/"
    lcErrorFile = lcLogDir + "ALTASYOIGO_" + 
-      STRING(MsRequest.MsRequest) + "_" +
-      STRING(YEAR(TODAY) * 10000 + 
-             MONTH(TODAY) * 100 + 
-             DAY(TODAY)) + "_" +
-      STRING(TIME) + ".log"
-   lcErrorFileCetelem = lcLogDirCetelem + "ALTASYOIGO_" + 
       STRING(MsRequest.MsRequest) + "_" +
       STRING(YEAR(TODAY) * 10000 + 
              MONTH(TODAY) * 100 + 

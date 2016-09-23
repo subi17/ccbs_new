@@ -90,12 +90,15 @@ PROCEDURE pCreateFile:
    DEF VAR ldaBankDate AS DATE NO-UNDO. 
    DEF VAR liErrors AS INT NO-UNDO. 
    DEF VAR liOk AS INT NO-UNDO. 
-   
-   ASSIGN
-      lcFile = lcRootDir + "spool/" + icFileName + "_" +
-               STRING(YEAR(TODAY),"9999") +
-               STRING(MONTH(TODAY),"99") + ".txt".
-      lcLogFile = lcLogDir + "internal/" + icFileName + "_" +
+
+   lcFile = lcRootDir + "spool/" + icFileName + "_" +
+            STRING(YEAR(TODAY),"9999") +
+            STRING(MONTH(TODAY),"99").
+   IF icBank = "0225" THEN
+      lcFile = lcFile + STRING(DAY(TODAY),"99").
+   lcFile = lcFile + ".txt".
+
+   lcLogFile = lcLogDir + "internal/" + icFileName + "_" +
                STRING(DAY(TODAY),"99") +
                STRING(MONTH(TODAY),"99") +
                STRING(YEAR(TODAY)) + ".LOG".
