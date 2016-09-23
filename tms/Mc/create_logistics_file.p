@@ -1361,6 +1361,58 @@ FOR EACH Order NO-LOCK WHERE
     END.
 END.
 
+/* YPR-4983 COFF logistic file for router */
+
+FOR EACH FusionMessage WHERE 
+         FusionMessage.source EQ "MasMovil" AND
+         FusionMessage.messagestatus EQ {&FUSIONMESSAGE_STATUS_NEW} AND
+         FusionMessage.messagetype EQ "Logistics":
+   DEFINE VARIABLE lcDeliRegi      AS CHARACTER NO-UNDO.
+   FIND FIRST DelivCustomer WHERE
+              DelivCustomer.Brand   = gcBrand   AND
+              DelivCustomer.OrderId = FusionMessage.OrderId AND
+              DelivCustomer.RowType = 4
+   NO-LOCK NO-ERROR.
+
+   IF NOT AVAIL DelivCustomer THEN DO:
+
+      FIND FIRST DelivCustomer WHERE
+                 DelivCustomer.Brand   = Order.Brand   AND
+                 DelivCustomer.OrderId = Order.OrderId AND
+                 DelivCustomer.RowType = 1
+      NO-LOCK NO-ERROR.
+
+   END.
+
+   FIND FIRST Region WHERE
+              Region.Region = DelivCustomer.Region
+   NO-LOCK NO-ERROR.
+   lcDeliRegi = Region.RgName.
+
+   liRowNum = liRowNum + 1.
+   CREATE ttOneDelivery.
+   ASSIGN
+      ttOneDelivery.RowNum        = liRowNum
+      ttOneDelivery.OrderId       = Order.OrderId
+      ttOneDelivery.ActionID      = "1" /* Router */
+      ttOneDelivery.ProductID     = "Router001"
+      ttOneDelivery.DelivAddr     = DelivCustomer.Address
+      ttOneDelivery.DelivCity     = DelivCustomer.PostOffice
+      ttOneDelivery.DelivZip      = DelivCustomer.ZIP
+      ttOneDelivery.DelivRegi     = lcDeliRegi
+      ttOneDelivery.DelivCoun     = DelivCustomer.Country.
+
+   CREATE ttInvRow.
+   ASSIGN
+      ttInvRow.RowNum      = ttOneDelivery.RowNum
+      ttInvRow.ProductId   = "Router001".
+
+   CREATE ttExtra.
+   ASSIGN ttExtra.RowNum   = ttOneDelivery.RowNum
+   ttExtra.DeliveryType    = STRING({&ORDER_DELTYPE_COURIER}).   
+
+END.
+
 iLargestId = 1.
 
 lcLogFile = fCParamC("DextraLogFile").
