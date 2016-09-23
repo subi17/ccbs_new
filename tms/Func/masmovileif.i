@@ -332,6 +332,7 @@ END.
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
+   xmlrpc_initialize(FALSE).
    fMasXMLGenerate_test("createFixedLine").
    RUN pRPCMethodCall("masmovil.createFixedLine", TRUE).
 
@@ -356,6 +357,49 @@ END.
    RETURN "".
 END. /*Function fCreate_FixedLine*/
 
+FUNCTION fMasCheckFixedLineStatus RETURNS CHAR
+   (iiOrderId AS INT,
+    OUTPUT ocStatus AS CHAR,
+    OUTPUT ocStatusDesc AS CHAR):
+
+   DEF VAR lcOutputStruct AS CHAR NO-UNDO.
+   DEF VAR lcArray AS CHAR NO-UNDO.
+   DEF VAR lcXMLStruct AS CHAR NO-UNDO. /*Input to TMS*/
+   DEF VAR lcResponse AS CHAR NO-UNDO.
+   DEF VAR lcStatusArray AS CHAR NO-UNDO.
+   DEF VAR lcStatus AS CHAR NO-UNDO.
+   DEF VAR lcStatusDesc AS CHAR NO-UNDO.
+   DEF VAR ldtLastDate AS DATETIME NO-UNDO.
+
+   add_string(param_toplevel_id, "", "Y" + STRING(iiOrderid)).
+   add_string(param_toplevel_id, "", "NO").
+
+   IF gi_xmlrpc_error NE 0 THEN
+      RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
+   fMasXMLGenerate_test("masmovil.checkOrderStatus").   
+   RUN pRPCMethodCall("masmovil.checkOrderStatus", TRUE).
+
+   IF gi_xmlrpc_error NE 0 THEN
+      RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
+ 
+   lcArray = get_array(param_toplevel_id, "0").
+   lcXMLStruct = get_struct(lcArray, "0").
+
+   lcResponse = validate_struct(lcXMLStruct,"OrderType,ServiceType,Status!,StatusDescription!,process,additionalInfo,lastDate!").
+   lcStatus = get_string(lcXMLStruct, "Status").
+   lcStatusDesc = get_string(lcXMLStruct, "StatusDescription").
+   ldtLastDate = get_datetime(lcXMLStruct, "lastDate").
+
+   IF gi_xmlrpc_error NE 0 THEN 
+      RETURN SUBST("ERROR: Response parsing failed: &1", gc_xmlrpc_error).
+
+   ocStatus =  lcStatus.
+   ocStatusDesc =  lcStatusDesc.
+
+   IF NOT(lcStatus EQ "" OR lcStatus EQ "00") THEN  RETURN "ERROR".
+
+   RETURN "".
+END. /*fMasCancel_FixedLineOrder*/
 
 FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
    (iiOrderId AS INT,
@@ -379,6 +423,7 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
+   xmlrpc_initialize(FALSE).
    fMasXMLGenerate_test("CancelFixedLine").
    RUN pRPCMethodCall("masmovil.cancelFixedLine", TRUE).
 
@@ -409,9 +454,6 @@ FUNCTION fMasGet_FixedNbr RETURNS CHAR
    DEF VAR lcXMLStruct AS CHAR NO-UNDO. /*Input to TMS*/
    DEF VAR lcResponse AS CHAR NO-UNDO.
    DEF VAR lcResult AS CHAR NO-UNDO.
-
-   DEF VAR ldtLastChange AS DATETIME.
-   DEF VAR ldtAssigned AS DATETIME.
 
    add_string(param_toplevel_id, "", icPostalCOde).
 
