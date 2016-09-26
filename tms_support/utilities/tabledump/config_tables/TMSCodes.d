@@ -1019,6 +1019,7 @@
 "Order" "StatusCode" "Orders" "75" "MNP Retention" "" "" 1
 "Order" "StatusCode" "Orders" "76" "Pending main line order" "" "" 1
 "Order" "StatusCode" "Orders" "77" "Pending fixed line order" "" "" 1
+"Order" "StatusCode" "Orders" "78" "Waiting sending to LO" "" "" 1
 "Order" "StatusCode" "Orders" "8" "CLOSED BY YOIGO" "" "" 1
 "Order" "StatusCode" "Orders" "9" "CLOSED AFTER DEADLINE" "" "" 1
 "Order" "StatusCode" "Orders" "99" "MNP SIM Only" "" "" 1
@@ -1394,6 +1395,7 @@
 "Salesman" "SmPrefix" "IFS" "TA" "Tal Digital" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "TC" "Telecor" "" "25" 0
 "Salesman" "SmPrefix" "IFS" "TL" "TelAndCom" "" "26" 0
+"Salesman" "SmPrefix" "IFS" "TM" "TELESTANT TM" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "TO" "Telestant Online" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "TP" "The Phone House exlusivo Yoigo" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "TU" "Tu Y Tu" "" "27" 0
