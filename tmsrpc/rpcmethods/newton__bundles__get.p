@@ -103,8 +103,11 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    ELSE ldeFee = 0.
 
    IF LOOKUP(DayCampaign.DCType,"1,4,6,8") > 0 THEN DO:
+      /*YDR-2284 added validfrom AND validto conditions for getting valid record*/
       FOR EACH ServiceLimit WHERE
-               ServiceLimit.GroupCode = DayCampaign.DCEvent NO-LOCK:
+               ServiceLimit.GroupCode = DayCampaign.DCEvent AND
+               ServiceLimit.ValidFrom <= TODAY              AND
+               ServiceLimit.ValidTo   >= TODAY NO-LOCK:
 
           IF ServiceLimit.DialType = {&DIAL_TYPE_GPRS} THEN DO:
              IF ServiceLimit.GroupCode = "HSPA_ROAM_EU" THEN
