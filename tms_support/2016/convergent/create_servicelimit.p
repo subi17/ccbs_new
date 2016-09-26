@@ -51,19 +51,19 @@ create_group("CONTFH55_50", "Contrato FH55_50").
 create_group("CONTFH55_300", "Contrato FH55_300").
 create_group("CONTFH65_300", "Contrato FH65_300").
 
-create_limit("CONTDSL45", "BDest", "_QTY",120.0).
-create_limit("CONTDSL55", "BDest", "_QTY",120.0).
-create_limit("CONTFH45_50", "BDest", "_QTY",120.0).
-create_limit("CONTFH55_50", "BDest", "_QTY",120.0).
-create_limit("CONTFH55_300", "BDest", "_QTY",120.0).
-create_limit("CONTFH65_300", "BDest", "_QTY",120.0).
+create_limit("CONTDSL45", "BDest", "_QTY",300.0).
+create_limit("CONTDSL55", "BDest", "_QTY",300.0).
+create_limit("CONTFH45_50", "BDest", "_QTY",300.0).
+create_limit("CONTFH55_50", "BDest", "_QTY",300.0).
+create_limit("CONTFH55_300", "BDest", "_QTY",300.0).
+create_limit("CONTFH65_300", "BDest", "_QTY",300.0).
 
-create_limit("CONTDSL45", "National calls", "_MIN",60.0).
-create_limit("CONTDSL55", "National calls", "_MIN",60.0).
-create_limit("CONTFH45_50", "National calls", "_MIN",60.0).
-create_limit("CONTFH55_50", "National calls", "_MIN",60.0).
-create_limit("CONTFH55_300", "National calls", "_MIN",60.0).
-create_limit("CONTFH65_300", "National calls", "_MIN",60.0).
+create_limit("CONTDSL45", "National calls", "_MIN",5000.0).
+create_limit("CONTDSL55", "National calls", "_MIN",5000.0).
+create_limit("CONTFH45_50", "National calls", "_MIN",5000.0).
+create_limit("CONTFH55_50", "National calls", "_MIN",5000.0).
+create_limit("CONTFH55_300", "National calls", "_MIN",5000.0).
+create_limit("CONTFH65_300", "National calls", "_MIN",5000.0).
 
 
 

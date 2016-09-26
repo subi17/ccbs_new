@@ -6,7 +6,7 @@ FUNCTION create_matrix returns int(
 
    DEF VAR liPriority AS INT.
    FIND LAST Matrix WHERE
-             Matrix.mxkey EQ "PERCONTR".
+             Matrix.mxkey EQ icKey.
 
    liPriority = Matrix.prior + 1.
    
@@ -75,3 +75,7 @@ liSeq = create_matrix("PERCONTR", "Convergent permanency").
 create_mxitem("PerContract","FTERM*",liSeq).
 create_mxitem("SubsTypeFrom","CONTDSL*",liSeq).
 create_mxitem("SubsTypeFrom","CONTFH*",liSeq).
+
+liSeq = create_matrix("Bundle", "Convergent Bundle list").
+create_mxitem("PerContract","DATA6",liSeq).
+create_mxitem("SubsTypeTo","CONTDSL45,CONTDSL55,CONTFH45_50,CONTFH55_50,CONTFH55_300,CONTFH65_300",liSeq).

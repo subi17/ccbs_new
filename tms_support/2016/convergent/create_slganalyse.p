@@ -1,7 +1,7 @@
 {commpaa.i}
 DEF VAR ldaFrom AS DATE INIT 09/07/16.
 DEF VAR liMode AS INT INIT 0.
-DEF VAR liMode_ra AS INT INIT 0.
+DEF VAR liMode_ra AS INT INIT 1.
 
 DEF TEMP-TABLE ttSLGAnalyse NO-UNDO LIKE SLGAnalyse.
 DEF TEMP-TABLE ttRequestAction NO-UNDO LIKE RequestAction.
@@ -43,12 +43,13 @@ END.
 FUNCTION create_ra returns log(INPUT icBasetype AS CHAR,
                     INPUT icClitype AS CHAR,
                     INPUT iiUpdateMode AS INT):
+   
+   FIND LAST RequestAction USE-INDEX RequestActionID NO-LOCK NO-ERROR.
+      IF AVAILABLE RequestAction THEN
+         liActionID = RequestAction.RequestActionID + 1.
+      ELSE liActionID = 1.   
    FOR EACH bRequestAction WHERE
             bRequestAction.clitype EQ icBaseType:
-      FIND LAST RequestAction USE-INDEX RequestActionID NO-LOCK NO-ERROR.
-           IF AVAILABLE RequestAction THEN
-              liActionID = RequestAction.RequestActionID + 1.
-           ELSE liActionID = 1.
       CREATE ttRequestAction.
       BUFFER-COPY bRequestAction TO ttRequestAction.
       ASSIGN
@@ -57,18 +58,60 @@ FUNCTION create_ra returns log(INPUT icBasetype AS CHAR,
       ttRequestAction.RequestActionID = liActionID.
       IF  ttRequestaction.actionkey EQ icBasetype THEN
          ttRequestaction.actionkey = icclitype.
+      IF (icClitype BEGINS "CONTDSL" OR icClitype BEGINS "CONTFH") AND
+          bRequestAction.reqtype EQ 13 THEN DO:
+         ttRequestAction.Reqtype = 14.
+         IF ttRequestaction.actionkey BEGINS "CONTDSL" THEN
+            ttRequestaction.actionkey = "CONTDSL".
+         ELSE IF ttRequestaction.actionkey BEGINS "CONTFH" THEN DO:
+            IF INDEX(ttRequestaction.actionkey, "50") > 0 THEN
+               ttRequestaction.actionkey = "CONTFH50".
+            ELSE IF INDEX(ttRequestaction.actionkey,"300") > 0 THEN
+               ttRequestaction.actionkey = "CONTFH300".
+         END.
+      END.
       IF iiUpdateMode NE 0 THEN DO:
          CREATE RequestAction.
          BUFFER-COPY ttRequestAction TO RequestAction.
-         DELETE ttRequestAction. /*ror safety reasons*/
       END.
       ELSE DISP ttRequestAction.
-
+      DELETE ttRequestAction. /*ror safety reasons*/
+      liActionID = liActionID + 1.
    END.
 
 END.
 
+FUNCTION create_ra_mob returns log(INPUT icBasetype AS CHAR,
+                                   INPUT icClitype AS CHAR,
+                                   INPUT ickey AS CHAR,
+                                   INPUT iiUpdateMode AS INT):
 
+   FIND LAST RequestAction USE-INDEX RequestActionID NO-LOCK NO-ERROR.
+      IF AVAILABLE RequestAction THEN
+         liActionID = RequestAction.RequestActionID + 1.
+      ELSE liActionID = 1.
+   FIND FIRST bRequestAction WHERE
+              bRequestAction.clitype EQ icBaseType AND
+              bRequestAction.reqtype = 13 NO-ERROR.
+      CREATE ttRequestAction.
+      BUFFER-COPY bRequestAction TO ttRequestAction.
+      ASSIGN
+      ttRequestAction.ValidFrom = ldaFrom
+      ttRequestAction.clitype = icCliType
+      ttRequestAction.RequestActionID = liActionID.
+      ttRequestaction.actionkey = ickey.
+      IF iiUpdateMode NE 0 THEN DO:
+         CREATE RequestAction.
+         BUFFER-COPY ttRequestAction TO RequestAction.
+      END.
+      ELSE DISP ttRequestAction.
+      DELETE ttRequestAction. /*ror safety reasons*/
+      liActionID = liActionID + 1.
+
+
+END.
+
+/*
 fcreateSLGAnalyse("CONT24","CONTDSL45",ldaFrom,"CONTDSL45",liMode).
 fcreateSLGAnalyse("CONT24","CONTDSL55",ldaFrom,"CONTDSL55",liMode).
 fcreateSLGAnalyse("CONT24","CONTFH45_50",ldaFrom,"CONTFH45_50",liMode).
@@ -104,7 +147,7 @@ FOR EACH CliType WHERE
    Clitype.FixedLineUpload = "300M".
 
 END.
-
+*/
    
 create_ra("CONT24","CONTDSL45",liMode_ra).
 create_ra("CONT24","CONTDSL55",liMode_ra).
@@ -113,7 +156,13 @@ create_ra("CONT24","CONTFH55_50",liMode_ra).
 create_ra("CONT24","CONTFH55_300",liMode_ra).
 create_ra("CONT24","CONTFH65_300",liMode_ra).
 
-
+create_ra_mob("CONT24","CONTDSL45","CONTS2GB",liMode_ra).
+create_ra_mob("CONT24","CONTDSL55","CONTS10GB",liMode_ra).
+create_ra_mob("CONT24","CONTFH45_50","CONTS2GB",liMode_ra).
+create_ra_mob("CONT24","CONTFH55_50","CONTS10GB",liMode_ra).
+create_ra_mob("CONT24","CONTFH55_300","CONTS2GB",liMode_ra).
+create_ra_mob("CONT24","CONTFH65_300","CONTS10GB",liMode_ra).
+/*
 FIND LAST RequestAction USE-INDEX RequestActionID NO-LOCK NO-ERROR.
            IF AVAILABLE RequestAction THEN
               liActionID = RequestAction.RequestActionID + 1.
@@ -247,3 +296,5 @@ END.
 createBillItem("TERMPERIOD", "FTERMPERIOD", "Convergent permanency", 0).
 createBillItem("DISCPAYTERMDIR", "DISCFTERMPERIOD", "Convergent permanency discount", 0).
 createBillItem("DISCPAYTERMDIR", "DISCFHDSL", "Convergent fixed line quota discount", 0).
+
+*/

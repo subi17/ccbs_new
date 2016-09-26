@@ -1,25 +1,25 @@
 Type;Language Type;Language;Translation Name
-CONTDSL45;1;Spanish;La Infinita 2 GB + DSL
-CONTDSL45;2;Catalan;La Infinita 2 GB + DSL
-CONTDSL45;3;Basque;La Infinita 2 GB + DSL
-CONTDSL45;5;English;La Infinita 2 GB + DSL
-CONTDSL55;1;Spanish;La Infinita 10 GB + DSL
-CONTDSL55;2;Catalan;La Infinita 10 GB + DSL
-CONTDSL55;3;Basque;La Infinita 10 GB + DSL
-CONTDSL55;5;English;La Infinita 10 GB + DSL
-CONTFH45_50;1;Spanish;La Infinita 2 GB + FIBER 50M
-CONTFH45_50;2;Catalan;La Infinita 2 GB + FIBER 50M
-CONTFH45_50;3;Basque;La Infinita 2 GB + FIBER 50M
-CONTFH45_50;5;English;La Infinita 2 GB + FIBER 50M
-CONTFH55_50;1;Spanish;La Infinita 10 GB + FIBER 50M
-CONTFH55_50;2;Catalan;La Infinita 10 GB + FIBER 50M
-CONTFH55_50;3;Basque;La Infinita 10 GB + FIBER 50M
-CONTFH55_50;5;English;La Infinita 10 GB + FIBER 50M
-CONTFH55_300;1;Spanish;La Infinita 2 GB + FIBER 300M
-CONTFH55_300;2;Catalan;La Infinita 2 GB + FIBER 300M
-CONTFH55_300;3;Basque;La Infinita 2 GB + FIBER 300M
-CONTFH55_300;5;English;La Infinita 2 GB + FIBER 300M
-CONTFH65_300;1;Spanish;La Infinita 10 GB + FIBER 300M
-CONTFH65_300;2;Catalan;La Infinita 10 GB + FIBER 300M
-CONTFH65_300;3;Basque;La Infinita 10 GB + FIBER 300M
-CONTFH65_300;5;English;La Infinita 10 GB + FIBER 300M
+CONTDSL45;1;Spanish;La Combinada 20
+CONTDSL45;2;Catalan;La Combinada 20
+CONTDSL45;3;Basque;La Combinada 20
+CONTDSL45;5;English;La Combinada 20
+CONTDSL55;1;Spanish;La Combinada 20
+CONTDSL55;2;Catalan;La Combinada 20
+CONTDSL55;3;Basque;La Combinada 20
+CONTDSL55;5;English;La Combinada 20
+CONTFH45_50;1;Spanish;La Combinada 50
+CONTFH45_50;2;Catalan;La Combinada 50
+CONTFH45_50;3;Basque;La Combinada 50
+CONTFH45_50;5;English;La Combinada 50
+CONTFH55_50;1;Spanish;La Combinada 50
+CONTFH55_50;2;Catalan;La Combinada 50
+CONTFH55_50;3;Basque;La Combinada 50
+CONTFH55_50;5;English;La Combinada 50
+CONTFH55_300;1;Spanish;La Combinada 300
+CONTFH55_300;2;Catalan;La Combinada 300
+CONTFH55_300;3;Basque;La Combinada 300
+CONTFH55_300;5;English;La Combinada 300
+CONTFH65_300;1;Spanish;La Combinada 300
+CONTFH65_300;2;Catalan;La Combinada 300
+CONTFH65_300;3;Basque;La Combinada 300
+CONTFH65_300;5;English;La Combinada 300

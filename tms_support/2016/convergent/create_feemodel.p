@@ -42,16 +42,21 @@ FUNCTION create_feemodel RETURNS log (INPUT lcmodel AS CHAR,
 
    END.
 END.
-
+/*
 create_feemodel("CONTDSL45MF",46,"Convergent ADSL monthly fee",37.19,"MF",1,"CONTRATOFIXED",FALSE,1).
 create_feemodel("CONTDSL55MF",46,"Convergent ADSL monthly fee",45.45,"MF",1,"CONTRATOFIXED",FALSE,1).
 create_feemodel("CONTFH45_50MF",46,"Convergent FIBER 50MB monthly fee",37.19,"MF",1,"CONTRATOFIXED",FALSE,1).
 create_feemodel("CONTFH55_50MF",46,"Convergent FIBER 50MB monthly fee",45.45,"MF",1,"CONTRATOFIXED",FALSE,1).
 create_feemodel("CONTFH55_300MF",46,"Convergent FIBER 300MB monthly fee",45.45,"MF",1,"CONTRATOFIXED",FALSE,1).
 create_feemodel("CONTFH65_300MF",46,"Convergent FIBER 300MB monthly fee",53.72,"MF",1,"CONTRATOFIXED",FALSE,1).
+*/
 
-create_feemodel("CONTS2GBMF",46,"Convergent mobile monthly fee",0.00,"MF",1,"CONTRATOFIXED",FALSE,1).
-create_feemodel("CONTS10GBMF",46,"Convergent mobile monthly fee",0.00,"MF",1,"CONTRATOFIXED",FALSE,1).
+create_feemodel("CONTDSLMF",46,"Convergent ADSL monthly fee",28.93,"MF",1,"CONTRATOFIXED",FALSE,1).
+create_feemodel("CONTFH50MF",46,"Convergent FIBER 50MB monthly fee",28.93,"MF",1,"CONTRATOFIXED",FALSE,1).
+create_feemodel("CONTFH300MF",46,"Convergent FIBER 300MB monthly fee",37.19,"MF",1,"CONTRATOFIXED",FALSE,1).
+
+create_feemodel("CONTS2GBMF",46,"Convergent mobile monthly fee",8.26,"MF",1,"CONTRATOFIXED",FALSE,1).
+create_feemodel("CONTS10GBMF",46,"Convergent mobile monthly fee",16.53,"MF",1,"CONTRATOFIXED",FALSE,1).
 
 create_feemodel("FTERMPERIOD",0,"Fixed line contract termination",100.0,"PF",1,"COMMON",TRUE,0).
 

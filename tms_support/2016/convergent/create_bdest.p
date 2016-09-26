@@ -64,15 +64,34 @@ FUNCTION create_tmritem RETURNS CHAR (INPUT lcitem as CHAR,
    END.
 END.
 
+/*
 create_bdest("CONTDSL45").
 create_bdest("CONTDSL55").
 create_bdest("CONTFH45_50").
 create_bdest("CONTFH55_50").
 create_bdest("CONTFH55_300").
 create_bdest("CONTFH65_300").
+*/
+create_bdest("CONTDSL").
+create_bdest("CONTFH50").
+create_bdest("CONTFH300").
 
+/*
 create_tmritem("CONTDSL45_DATA_IN,CONTDSL45",14).
 create_tmritem("CONTDSL55_DATA_IN,CONTDSL55",14).
+create_tmritem("CONTFH45_50_DATA_IN,CONTFH45_50",14).
+create_tmritem("CONTFH55_50_DATA_IN,CONTFH55_50",14).
+create_tmritem("CONTFH55_300_DATA_IN,CONTFH55_300",14).
+create_tmritem("CONTFH65_300_DATA_IN,CONTFH65_300",14).
+create_tmritem("CONTS2GB_DATA_IN,CONTDSL45",14).
+create_tmritem("CONTS2GB_DATA_IN,CONTFH45_50",14).
+create_tmritem("CONTS2GB_DATA_IN,CONTFH55_300",14).
+create_tmritem("CONTS10GB_DATA_IN,CONTDSL55",14).
+create_tmritem("CONTS10GB_DATA_IN,CONTFH55_50",14).
+create_tmritem("CONTS10GB_DATA_IN,CONTFH65_300",14).
+*/
+create_tmritem("CONTDSL_DATA_IN,CONTDSL",14).
+create_tmritem("CONTDSL_DATA_IN,CONTDSL55",14).
 create_tmritem("CONTFH45_50_DATA_IN,CONTFH45_50",14).
 create_tmritem("CONTFH55_50_DATA_IN,CONTFH55_50",14).
 create_tmritem("CONTFH55_300_DATA_IN,CONTFH55_300",14).
