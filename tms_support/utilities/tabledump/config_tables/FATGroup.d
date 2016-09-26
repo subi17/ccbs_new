@@ -16,7 +16,7 @@
 "CPFAT" "Campaign FAT for postpaid" "" "" "" "" "" "CPFAT10" "1" 0 2 yes 0 0 "" 20 1 "Amt" 1 0 0
 "CPSMSFAT" "Porting in with bundle of free SMS" "" "" "" "" "" "CPSMS200" "1" 1000 0 yes 200 0 "" 10 1 "Qty" 1 0 12
 "DSSCPFREE" "Campaign FAT for DSS" "" "" "" "" "" "DSSCPFREE" "1" 0 2 yes 1500 0 "0" 4 1 "Amt" 1 0 500
-"GOOGLEVASFAT" "VAS Premium Google Service No VAT FAT" "" "" "" "" "" "GOOGLEVASFAT" "1" 0 2 yes 0 0 "0" 3 1 "" 1 0 0
+"GOOGLEVASFAT" "VAS Premium Google Service No VAT FAT" "" "" "" "" "" "GOOGLEVASFAT" "1" 0 2 yes 0 0 "0" 3 1 "Amt" 1 0 0
 "IPL15CPACT" "Campaign FAT for IPL15" "" "" "" "" "" "IPLCPACT" "1" 0 2 no 15 0 "0" 5 2 "Amt" 1 0 0
 "IPL8CPACT" "Campaign FAT for IPL8" "" "" "" "" "" "IPL8CPACT" "1" 0 2 no 8 0 "0" 5 3 "Amt" 1 0 0
 "IPL8CPACT2" "Campaign FAT for IPL8" "" "" "" "" "" "IPL8CPACT" "1" 0 2 no 8 0 "0" 5 2 "Amt" 1 0 0
