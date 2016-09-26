@@ -248,6 +248,7 @@ FUNCTION fBillItemName RETURNS CHARACTER
     iiLanguage AS INTEGER):
 
    DEFINE VARIABLE lcReturnValue AS CHARACTER INITIAL ? NO-UNDO.
+   DEFINE BUFFER lbttBillItemAndGroup FOR ttBillItemAndGroup.
 
    DO WHILE TRUE:
       FOR FIRST ttBillItemName WHERE
@@ -269,9 +270,9 @@ FUNCTION fBillItemName RETURNS CHARACTER
    END.
    
    IF lcReturnValue = ?
-   THEN FOR FIRST ttBillItemAndGroup WHERE
-           ttBillItemAndGroup.BillCode = icBillCode:
-           lcReturnValue = ttBillItemAndGroup.BIName.
+   THEN FOR FIRST lbttBillItemAndGroup WHERE
+           lbttBillItemAndGroup.BillCode = icBillCode:
+           lcReturnValue = lbttBillItemAndGroup.BIName.
         END.
    
    IF lcReturnValue = ?
@@ -602,17 +603,21 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
       ldTAE = ?.
          
       IF FixedFee.BillCode EQ "RVTERM" THEN ldTAE = 0.
-      ELSE IF AVAIL bQ25SingleFee THEN DO: 
-
+      ELSE DO:
+      
          ldeRVPerc = 0.
-         FOR FIRST FMItem NO-LOCK WHERE
-                   FMItem.Brand     = gcBrand            AND
-                   FMItem.FeeModel  = FixedFee.FeeModel  AND
-                   FMItem.ToDate   >= FixedFee.BegDate   AND
-                   FMItem.FromDate <= FixedFee.BegDate:
-            ldeTotalAmount = ROUND(fmitem.FFItemQty * fmitem.Amount,2).
-            ldeRVPerc = TRUNC(bQ25SingleFee.Amt /
-                       (ldeTotalAmount + bQ25SingleFee.Amt) * 100 + 0.05,1).
+      
+         IF AVAIL bQ25SingleFee THEN DO: 
+
+            FOR FIRST FMItem NO-LOCK WHERE
+                      FMItem.Brand     = gcBrand            AND
+                      FMItem.FeeModel  = FixedFee.FeeModel  AND
+                      FMItem.ToDate   >= FixedFee.BegDate   AND
+                      FMItem.FromDate <= FixedFee.BegDate:
+               ldeTotalAmount = ROUND(fmitem.FFItemQty * fmitem.Amount,2).
+               ldeRVPerc = TRUNC(bQ25SingleFee.Amt /
+                          (ldeTotalAmount + bQ25SingleFee.Amt) * 100 + 0.05,1).
+            END.
          END.
       
          ldaOrderDate = FixedFee.BegDate.
