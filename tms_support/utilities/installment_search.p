@@ -163,10 +163,6 @@ END PROCEDURE.
 
 PROCEDURE out_data_one_inst:   
    DO WITH FRAME ffind:
-       MESSAGE "lcContrList:SCREEN-VALUE - " lcContrList:SCREEN-VALUE SKIP
-               "ldafromdate1:SCREEN-VALUE - " ldafromdate1:SCREEN-VALUE SKIP
-               "ldatodate1:SCREEN-VALUE - " ldatodate1:SCREEN-VALUE SKIP 
-           VIEW-AS ALERT-BOX INFO BUTTONS OK.
       FOR EACH DCCli WHERE
                DCCli.Brand      = "1" AND
                (IF lcContrList:SCREEN-VALUE <> ? THEN
