@@ -358,6 +358,15 @@ DO FOR DumpLog TRANS:
       oiEventCount = 0.
 END.
 
+/* YPI-31 */
+IF DumpFile.DumpName = "CliTypeDump" AND DumpFile.MainTable = "CliType" THEN
+DO TRANSACTION:
+   FIND FIRST DFTimeTable WHERE
+              DFTimeTable.DumpId = DumpFile.DumpId EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+   IF AVAIL DFTimeTable THEN
+      ASSIGN DFTimeTable.DumpWeekday = "0".
+END.      
+
 /* notify monitoring */
 IF llInterrupted OR lcFinalFile = "" 
 THEN fWriteLog("INTERRUPT",lcFile).

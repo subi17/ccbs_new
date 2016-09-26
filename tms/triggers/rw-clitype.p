@@ -22,7 +22,8 @@ DO:
       IF AVAIL DFTimeTable THEN
       DO:
           ASSIGN iDumpTotMin = INT(ENTRY(1,DFTimeTable.DumpTime,":")) * 60
-                             + INT(ENTRY(2,DFTimeTable.DumpTime,":")).
+                             + INT(ENTRY(2,DFTimeTable.DumpTime,":"))
+                 DFTimeTable.DumpWeekDay = STRING(WEEKDAY(TODAY)).
 
           IF INT(TIME / 60) > iDumpTotMin THEN
              ASSIGN DFTimeTable.DumpTime = STRING(TIME + 7200, "HH:MM").
