@@ -12,8 +12,9 @@ IF NOT NEW(CliType) THEN
 IF NOT llSameValues OR NEW(CliType) THEN
 DO:
    FIND FIRST DumpFile NO-LOCK WHERE
-              DumpFile.Brand    EQ gcBrand AND
-              DumpFile.DumpName EQ {&DUMP_CLITYPE_TRACK} NO-ERROR.
+              DumpFile.Brand     EQ gcBrand               AND
+              DumpFile.DumpName  EQ {&DUMP_CLITYPE_TRACK} AND
+              DumpFile.MainTable EQ "CliType"             NO-ERROR.
 
    IF AVAIL DumpFile THEN
       FIND FIRST DFTimeTable EXCLUSIVE-LOCK WHERE
