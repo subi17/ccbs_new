@@ -248,6 +248,7 @@ FUNCTION fBillItemName RETURNS CHARACTER
     iiLanguage AS INTEGER):
 
    DEFINE VARIABLE lcReturnValue AS CHARACTER INITIAL ? NO-UNDO.
+   DEFINE BUFFER lbttBillItemAndGroup FOR ttBillItemAndGroup.
 
    DO WHILE TRUE:
       FOR FIRST ttBillItemName WHERE
@@ -269,9 +270,9 @@ FUNCTION fBillItemName RETURNS CHARACTER
    END.
    
    IF lcReturnValue = ?
-   THEN FOR FIRST ttBillItemAndGroup WHERE
-           ttBillItemAndGroup.BillCode = icBillCode:
-           lcReturnValue = ttBillItemAndGroup.BIName.
+   THEN FOR FIRST lbttBillItemAndGroup WHERE
+           lbttBillItemAndGroup.BillCode = icBillCode:
+           lcReturnValue = lbttBillItemAndGroup.BIName.
         END.
    
    IF lcReturnValue = ?
