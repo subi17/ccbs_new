@@ -52,7 +52,7 @@ END.
 FUNCTION create_tmritem RETURNS CHAR (INPUT lcitem as CHAR,
                                       INPUT liruleseq as INT):
    FIND FIRST TMRItemValue WHERE 
-              TMRItemValue.tmruleseq = 14 AND
+              TMRItemValue.tmruleseq =  liruleseq AND
               LOOKUP(lcitem, TMRItemValue.CounterItemValues) > 0
               NO-ERROR.
    IF NOT AVAIL TMRItemValue THEN DO:
@@ -110,12 +110,12 @@ create_tmritem("GPRSDATA_DATA*,CONTFH55_50",33).
 create_tmritem("GPRSDATA_DATA*,CONTFH55_300",33).
 create_tmritem("GPRSDATA_DATA*,CONTFH65_300",33).
 
-create_tmritem("CONTDSL45_VOICE_IN,CONTDSL45",34).
-create_tmritem("CONTDSL55_VOICE_IN,CONTDSL55",34).
-create_tmritem("CONTFH45_50_VOICE_IN,CONTFH45_50",34).
-create_tmritem("CONTFH55_50_VOICE_IN,CONTFH55_50",34).
-create_tmritem("CONTFH55_300_VOICE_IN,CONTFH55_300",34).
-create_tmritem("CONTFH65_300_VOICE_IN,CONTFH65_300",34).
+create_tmritem("CONTDSL_VOICE_IN,CONTDSL45",34).
+create_tmritem("CONTDSL_VOICE_IN,CONTDSL55",34).
+create_tmritem("CONTFH50_VOICE_IN,CONTFH45_50",34).
+create_tmritem("CONTFH50_VOICE_IN,CONTFH55_50",34).
+create_tmritem("CONTFH300_VOICE_IN,CONTFH55_300",34).
+create_tmritem("CONTFH300_VOICE_IN,CONTFH65_300",34).
 create_tmritem("CONTS2GB_VOICE_IN,CONTDSL45",34).
 create_tmritem("CONTS2GB_VOICE_IN,CONTFH45_50",34).
 create_tmritem("CONTS2GB_VOICE_IN,CONTFH55_300",34).

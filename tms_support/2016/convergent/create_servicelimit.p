@@ -29,7 +29,7 @@ FUNCTION create_limit returns log (INPUT lcCode as CHAR,
            else laskuri = servicelimit.slseq + 1.   
 
    CREATE servicelimit.
-   ASSIGN /*servicelimit.brand = "1"*/
+   ASSIGN servicelimit.dialtype = 1
           servicelimit.groupcode = lcCode
           servicelimit.slcode = lcCode + lcLimit
           servicelimit.slname = lcName

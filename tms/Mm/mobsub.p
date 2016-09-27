@@ -248,6 +248,15 @@ ELSE DO:
     RETURN.
 END.
 
+IF Mobsub.tariffbundle EQ "" THEN
+   lcClitext = mobsub.clitype.
+ELSE DO:
+   lcCliText = SUBSTRING(mobsub.clitype,1,8).
+   IF LENGTH(lcCliText) < 8 THEN
+      lcCliText = lcCliText + FILL(" ", 8 - LENGTH(lcCliText)).
+   lcCliText = lcCliText + SUBSTRING(mobsub.tariffbundle,1,8).
+END.
+
 LOOP:
 REPEAT WITH FRAME sel:
 

@@ -86,10 +86,10 @@ DEF VAR lcFixedLineType  AS CHAR NO-UNDO.
 
 form
     CliType.Brand      FORMAT "X(2)" COLUMN-LABEL "Br"
-    CLIType.CLIType    FORMAT "X(9)"    
+    CLIType.CLIType    FORMAT "X(12)"    
     CLIType.CLIName    format "x(18)"
     CLIType.PricePlan  COLUMN-LABEL "RatePlan" FORMAT "X(13)"
-    CLIType.DiscPlan   COLUMN-LABEL "Disc.Plan"
+    CLIType.DiscPlan   COLUMN-LABEL "Disc.Plan" FORMAT "X(9)"
     lcPayType          FORMAT "X(10)" COLUMN-LABEL "PayType"
     CliType.BillTarget COLUMN-LABEL "B.Target"
 
@@ -103,7 +103,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
 {brand.i}
 
 form
-    "CLIType ......:"  CLIType.CLIType FORMAT "X(9)" SKIP
+    "CLIType ......:"  CLIType.CLIType FORMAT "X(12)" SKIP
     "Name .........:"  CLIType.CLIName              SKIP
     "Base bundle...:"  CLIType.BaseBundle SKIP
     "Payment Type .:"  CLIType.PayType
@@ -163,7 +163,7 @@ FRAME lis.
 form /* seek  CLIType */
    "Brand Code:" lcBrand  HELP "Enter Brand"
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
-    "CliType ..:"  CLIType                
+    "CliType ..:"  CLIType FORMAT "X(12)"               
     HELP "Enter Code of Cli Type"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.

@@ -22,6 +22,8 @@ FUNCTION fcreateSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
             bSLGAnalyse.validto > TODAY.
       
       IF bSLGAnalyse.servicelimitgroup BEGINS "DSS" THEN NEXT.
+      ELSE IF bSLGAnalyse.servicelimitgroup EQ "MDUB3" THEN NEXT.
+      ELSE IF bSLGAnalyse.servicelimitgroup EQ "MDUB4" THEN NEXT.
       ELSE IF bSLGAnalyse.servicelimitgroup EQ "DATA7" THEN NEXT.
 
 
@@ -174,7 +176,7 @@ ASSIGN
    RequestAction.reqtype = 0
    RequestAction.clitype = ""
    RequestAction.action = 11
-   RequestAction.actionkey = "FTERM12-100"
+   RequestAction.actionkey = "FTERM6-100"
    RequestAction.actiontype = "DayCampaign"
    RequestAction.paytype = 1
    RequestAction.requestactionid = liActionID 
@@ -221,7 +223,7 @@ ASSIGN
    RequestAction.reqtype = 0
    RequestAction.clitype = ""
    RequestAction.action = 1
-   RequestAction.actionkey = "FTERM12-100"
+   RequestAction.actionkey = "FTERM6-100"
    RequestAction.actiontype = "DayCampaign"
    RequestAction.paytype = 1
    RequestAction.requestactionid = liActionID
@@ -253,7 +255,7 @@ ASSIGN
    RequestAction.reqtype = 46
    RequestAction.clitype = ""
    RequestAction.action = 5
-   RequestAction.actionkey = "FTERM12-100"
+   RequestAction.actionkey = "FTERM6-100"
    RequestAction.actiontype = "DayCampaign"
    RequestAction.paytype = 1
    RequestAction.requestactionid = liActionID
