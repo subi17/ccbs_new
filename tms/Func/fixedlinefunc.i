@@ -23,7 +23,7 @@ FUNCTION fIsConvergenceTariff RETURNS LOGICAL
    FIND FIRST bCLIType NO-LOCK WHERE
               bCLIType.Brand EQ gcBrand AND
               bCLIType.CliType EQ icCLIType NO-ERROR.
-   IF AVAIL CliType THEN DO:
+   IF AVAIL bCliType THEN DO:
       IF bCliType.FixedLineDownload NE ? AND 
          bCliType.FixedLineDownload NE "" THEN RETURN TRUE.
    END.
