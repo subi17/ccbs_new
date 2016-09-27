@@ -336,7 +336,8 @@ PROCEDURE pPrintLine:
    /*ANO-OPERAC*/    STRING(YEAR(idaBankDate),"9999") FORMAT "X(4)"
    /*NUM-PEDIDO*/    STRING(FixedFee.OrderId) FORMAT "X(8)".
    
-   IF FixedFeeTF.TFBank EQ {&TF_BANK_UNOE} THEN /* YTS-8764 */
+   IF FixedFeeTF.TFBank EQ {&TF_BANK_UNOE} OR /* YTS-8764 */
+      FixedFeeTF.TFBank EQ {&TF_BANK_CETELEM} THEN
       PUT STREAM sout
       /*COD-FPAGO*/  lcCodFpago FORMAT "X(4)".
 
