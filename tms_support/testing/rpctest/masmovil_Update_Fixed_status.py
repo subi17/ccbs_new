@@ -4,6 +4,7 @@ from masmovil_init import *
 from show_results import *
 
 # Definition
+#s = xmlrpclib.ServerProxy(address)
 s = xmlrpclib.ServerProxy(address, transport=p)
 def instruction():
    print "Missing parameters"
@@ -16,13 +17,13 @@ else:
 
 q = s.masmovil.Update_Fixed_status({
    "notificationID": "1",
-   "notificationTime": date_time_builder('20160922'),
+   "notificationTime": datetime.datetime.now().isoformat(),
    "notificationType": "1",
    "orderID":var1,
    "Status": {
          "Status":var2,
          "StatusDescription": "hello",
-         "lastDate": date_time_builder('20160922')
+         "lastDate": datetime.datetime.now().isoformat() 
    }
 
 })
