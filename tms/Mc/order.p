@@ -385,7 +385,7 @@ form
     "O. IDType:" AT 48 Order.OrdererIDType
     SKIP
 
-    "MSISDN .......:" Order.CLI        
+    "MSISDN .......:" Order.CLI FORMAT "X(30)"
     "OrdererID:" AT 48 Order.OrdererID
     SKIP
     
@@ -1556,6 +1556,12 @@ END.
 PROCEDURE local-find-others.
    
    RUN local-find-others-common.
+
+   IF fIsConvergenceTariff(Order.CLIType) or true THEN
+      FIND FIRST OrderFusion NO-LOCK WHERE
+                 OrderFusion.Brand = gcBrand AND
+                 OrderFusion.OrderID = Order.OrderID NO-ERROR.
+   ELSE RELEASE OrderFusion.
    
    FIND FIRST OrderDelivery WHERE
       OrderDelivery.Brand   = gcBrand AND
@@ -1696,6 +1702,8 @@ PROCEDURE local-disp-lis:
          Order.OrdererIP
          Order.CLIType
          Order.CLI 
+         Order.CLI + " / " + OrderFusion.FixedNumber WHEN 
+            AVAIL OrderFusion AND OrderFusion.FixedNumber > "" @ Order.CLI
          Order.MsSeq
          Order.OrderChannel 
          ENTRY(1,Order.Campaign,";") @ Order.Campaign

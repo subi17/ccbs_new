@@ -1,3 +1,4 @@
+DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 FUNCTION faddTMSParam RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
                                                  INPUT icDCEvent AS CHAR,
                                                  INPUT iiUpdateMode AS INT):
@@ -30,6 +31,25 @@ ELSE DO:
           TMSParam.ParamType = "C".
 
 END.
+
+/* This function add new values in the end of existing char cparam value */
+FUNCTION faddToExistingCparamChar RETURNS LOGICAL (INPUT icCparamCode AS CHAR,
+                                                   INPUT icAddChar AS CHAR):
+
+   FIND FIRST TMSParam EXCLUSIVE-LOCK WHERE
+              TMSParam.Brand      EQ gcBrand AND
+              TMSParam.ParamCode  EQ icCparamCode NO-ERROR.
+   IF NOT AVAIL TMSParam THEN DO:
+      MESSAGE icCparamCode + " not found" VIEW-AS ALERT-BOX.
+      RETURN FALSE.
+   END.
+   ASSIGN TMSParam.CharVal = TMSParam.CharVal + "," + icAddChar.
+   RELEASE TMSParam.
+   RETURN TRUE.
+END FUNCTION.
+
+faddToExistingCparamChar("NoPostMinCons", "FTERMPERIOD").
+faddToExistingCparamChar("NoPostMinCons", "DISCFTERMPERIOD").
 
 /*
 FIND FIRST TMSParam NO-LOCK WHERE

@@ -157,7 +157,6 @@ CASE FusionMessage.FixedStatus:
             OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_PENDING_FINALIZED}.
             
          IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
-            /* TODO: create fixed line subs. creation request */
             fSetOrderStatus(Order.OrderId, 
                             {&ORDER_STATUS_PENDING_MOBILE_LINE}).
          END.
@@ -171,10 +170,10 @@ CASE FusionMessage.FixedStatus:
          
          IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
 
-            IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN DO:
-               /* TODO: create fixed line subs. creation request */
+            /* order handler will create fixed line request
+               and mark status back to 79 if needed (pos orders without ICC) */
+            IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN
                fSetOrderStatus(OrderFusion.OrderId,{&ORDER_STATUS_MNP}).
-            END.
             ELSE fSetOrderStatus(OrderFusion.OrderId,{&ORDER_STATUS_NEW}).
          END.
          ELSE . /* TODO: error handling */
