@@ -1,6 +1,6 @@
-DEF VAR searchkey AS CHAR INIT "CONTFH65_300".
+DEF VAR searchkey AS CHAR INIT "CONTDSL55".
 DEF VAR tariffkey AS CHAR INIT "CONTDSL10".
-DEF VAR execution AS LOGICAL INIT TRUE.
+DEF VAR execution AS LOGICAL INIT TruE.
 
 IF execution THEN
    MESSAGE "Warning, going to remove table fields with values: " +
@@ -47,7 +47,7 @@ FOR EACH DCSErvicePackage WHERE DCServicePackage.DCEvent BEGINS searchkey:
    DISP DCSErvicePackage.
 END.
 MESSAGE "DCServicePackage" VIEW-AS ALERT-BOX.
-
+*/
 FOR EACH ServiceLimitTarget WHERE ServiceLimitTarget.outsiderate BEGINS searchkey:
    IF execution THEN
       DELETE ServiceLimitTarget.
@@ -71,7 +71,7 @@ FOR EACH ServiceLimitGroup WHERE ServiceLimitgroup.groupcode EQ searchkey:
    DISP ServiceLimitgroup.
 END.
 MESSAGE "ServiceLimitgroup" VIEW-AS ALERT-BOX.
-*/
+
 /*
 FOR EACH CLIType WHERE CLIType.Clitype EQ searchkey:
    IF execution THEN
@@ -90,6 +90,7 @@ END.
 
 MESSAGE "CliType" VIEW-AS ALERT-BOX.
 */
+/*
 FOR EACH FeeModel WHERE FeeModel.feemodel BEGINS searchkey:
    IF execution THEN
       DELETE FeeModel.
@@ -97,6 +98,7 @@ FOR EACH FeeModel WHERE FeeModel.feemodel BEGINS searchkey:
    DISP feemodel.feemodel.
 END.
 MESSAGE "feemodel" VIEW-AS ALERT-BOX.
+*/
 /*
 FOR EACH CTServPac WHERE CTServPac.clitype EQ tariffkey:
    IF execution THEN
@@ -115,7 +117,7 @@ FOR EACH CTServPac WHERE CTServPac.clitype EQ searchkey:
 END.
 MESSAGE "CTServPAc" VIEW-AS ALERT-BOX.
 */
-
+/*
 FOR EACH FMItem WHERE FMItem.billcode BEGINS searchkey:
    IF execution THEN
       DELETE FMItem.
@@ -123,6 +125,7 @@ FOR EACH FMItem WHERE FMItem.billcode BEGINS searchkey:
    DISP FMItem.billcode.
 END.
 MESSAGE "FMItem" VIEW-AS ALERT-BOX.
+*/
 /*
 FOR EACH Reptext WHERE RepText.linkcode BEGINS tariffkey:
    IF execution THEN
@@ -132,6 +135,7 @@ FOR EACH Reptext WHERE RepText.linkcode BEGINS tariffkey:
 END.
 MESSAGE "Reptext" VIEW-AS ALERT-BOX.
 */
+/*
 FOR EACH Daycampaign WHERE Daycampaign.billcode BEGINS searchkey:
    IF execution THEN
       DELETE Daycampaign.
@@ -139,7 +143,7 @@ FOR EACH Daycampaign WHERE Daycampaign.billcode BEGINS searchkey:
    DISP Daycampaign.billcode.
 END.
 MESSAGE "dayCampaign" VIEW-AS ALERT-BOX.
-
+*/
 /*
 FOR EACH CTServEl WHERE CTServEl.clitype BEGINS searchkey:
    IF execution THEN

@@ -18,6 +18,7 @@ FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
       ttDaycampaign.billcode = icevent + "MF".
       ttDaycampaign.feemodel = icevent + "MF".
       ttDaycampaign.dcname = icName.
+      ttDaycampaign.bundleupsell = "".
       
       IF iiUpdateMode NE 0 THEN DO:
          CREATE Daycampaign.
@@ -28,7 +29,7 @@ FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
    
 END.
 
-/*
+/*  old ones, can be removec
 fcreateDaycampaign("CONTS2GB","CONTDSL45","La Infinita 2 GB + DSL","7",limode).
 fcreateDaycampaign("CONTS10GB","CONTDSL55","La Infinita 10 GB + DSL","7",limode).
 fcreateDaycampaign("CONTS2GB","CONTFH45_50","La Infinita 2 GB + FIBER 50M","7",limode).
@@ -37,6 +38,6 @@ fcreateDaycampaign("CONTS2GB","CONTFH55_300","La Infinita 2 GB + FIBER 300M","7"
 fcreateDaycampaign("CONTS10GB","CONTFH65_300","La Infinita 10 GB + FIBER 300M","7",limode).
 */
 
-fcreateDaycampaign("CONTS2GB","CONTDSL","La Combinada 20","7",limode).
-fcreateDaycampaign("CONTS10GB","CONTFH50","La Combinada 50","7",limode).
-fcreateDaycampaign("CONTS2GB","CONTFH300","La Combinada 300","7",limode).
+fcreateDaycampaign("CONTS2GB","CONTDSL","La Combinada 20","1",limode).
+fcreateDaycampaign("CONTS10GB","CONTFH50","La Combinada 50","1",limode).
+fcreateDaycampaign("CONTS2GB","CONTFH300","La Combinada 300","1",limode).

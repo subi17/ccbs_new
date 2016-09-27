@@ -1,7 +1,7 @@
 {commpaa.i}
 DEF VAR ldaFrom AS DATE INIT 09/07/16.
 DEF VAR liMode AS INT INIT 0.
-DEF VAR liMode_ra AS INT INIT 1.
+DEF VAR liMode_ra AS INT INIT 0.
 
 DEF TEMP-TABLE ttSLGAnalyse NO-UNDO LIKE SLGAnalyse.
 DEF TEMP-TABLE ttRequestAction NO-UNDO LIKE RequestAction.
@@ -111,7 +111,7 @@ FUNCTION create_ra_mob returns log(INPUT icBasetype AS CHAR,
 
 END.
 
-/*
+
 fcreateSLGAnalyse("CONT24","CONTDSL45",ldaFrom,"CONTDSL45",liMode).
 fcreateSLGAnalyse("CONT24","CONTDSL55",ldaFrom,"CONTDSL55",liMode).
 fcreateSLGAnalyse("CONT24","CONTFH45_50",ldaFrom,"CONTFH45_50",liMode).
@@ -147,7 +147,7 @@ FOR EACH CliType WHERE
    Clitype.FixedLineUpload = "300M".
 
 END.
-*/
+
    
 create_ra("CONT24","CONTDSL45",liMode_ra).
 create_ra("CONT24","CONTDSL55",liMode_ra).
@@ -162,7 +162,7 @@ create_ra_mob("CONT24","CONTFH45_50","CONTS2GB",liMode_ra).
 create_ra_mob("CONT24","CONTFH55_50","CONTS10GB",liMode_ra).
 create_ra_mob("CONT24","CONTFH55_300","CONTS2GB",liMode_ra).
 create_ra_mob("CONT24","CONTFH65_300","CONTS10GB",liMode_ra).
-/*
+
 FIND LAST RequestAction USE-INDEX RequestActionID NO-LOCK NO-ERROR.
            IF AVAILABLE RequestAction THEN
               liActionID = RequestAction.RequestActionID + 1.
@@ -297,4 +297,4 @@ createBillItem("TERMPERIOD", "FTERMPERIOD", "Convergent permanency", 0).
 createBillItem("DISCPAYTERMDIR", "DISCFTERMPERIOD", "Convergent permanency discount", 0).
 createBillItem("DISCPAYTERMDIR", "DISCFHDSL", "Convergent fixed line quota discount", 0).
 
-*/
+

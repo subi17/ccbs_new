@@ -42,7 +42,7 @@ FUNCTION create_feemodel RETURNS log (INPUT lcmodel AS CHAR,
 
    END.
 END.
-/*
+/* old ones, can be deleted
 create_feemodel("CONTDSL45MF",46,"Convergent ADSL monthly fee",37.19,"MF",1,"CONTRATOFIXED",FALSE,1).
 create_feemodel("CONTDSL55MF",46,"Convergent ADSL monthly fee",45.45,"MF",1,"CONTRATOFIXED",FALSE,1).
 create_feemodel("CONTFH45_50MF",46,"Convergent FIBER 50MB monthly fee",37.19,"MF",1,"CONTRATOFIXED",FALSE,1).
