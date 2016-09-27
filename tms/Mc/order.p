@@ -393,7 +393,7 @@ form
     "OrdererIP:" AT 48 Order.OrdererIP FORMAT "X(20)"
     SKIP
 
-    "CLIType ......:" Order.CLIType                      
+    "CLIType ......:" Order.CLIType FORMAT "X(12)"                     
     "Campaign :" AT 48 Order.Campaign FORMAT "X(15)"
     SKIP                     
     

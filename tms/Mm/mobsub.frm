@@ -28,11 +28,10 @@ DEF VAR lcNumberInquiry     AS CHAR    NO-UNDO FORMAT "X(12)" .
 DEF VAR lcActivated         AS CHAR    NO-UNDO FORMAT "X(32)" .
 DEF VAR lcBillTarget        AS CHAR    NO-UNDO FORMAT "X(12)" .
 DEF VAR lcMultiSIM          AS CHAR    NO-UNDO FORMAT "X(28)". 
+DEF VAR lcClitext           AS CHAR    NO-UNDO FORMAT "X(16)".
 
 FORM
-"SubscriptionID:"   Mobsub.msseq   "CliType...:" AT 50 mobsub.clitype 
-                                   FORMAT "x(8)" Mobsub.tariffbundle 
-                                   FORMAT "x(8)" NO-LABEL  SKIP
+"SubscriptionID:"   Mobsub.msseq   "CliType...:" AT 50 lcCliText NO-LABEL  SKIP
 "MSISDN........:"   Mobsub.cli      "BillTarget:" AT 50 lcBillTarget      SKIP
 "ICC/SIM.......:"   Mobsub.icc      "PUK1......:" AT 50 Imsi.Puk1         SKIP
 "Subscr.Status.:"   lcStatus        "PUK2......:" AT 50 Imsi.Puk2         SKIP
