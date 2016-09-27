@@ -148,37 +148,16 @@ CASE FusionMessage.FixedStatus:
    WHEN "CERRADA" THEN DO:
        
       ASSIGN OrderFusion.FixedInstallationTS = ldeLastDate.
-
-      /* MNP/NEW indirect channel */
-      IF Order.OrderType NE {&ORDER_TYPE_STC} AND
-         LOOKUP(Order.OrderChannel, {&ORDER_CHANNEL_INDIRECT}) > 0 THEN DO:
-
-         ASSIGN 
-            OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_PENDING_FINALIZED}.
-            
-         IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
-            fSetOrderStatus(Order.OrderId, 
-                            {&ORDER_STATUS_PENDING_MOBILE_LINE}).
-         END.
-         ELSE . /* TODO: error handling */
+             OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_FINALIZED}.
          
+      IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
+         /* order handler will create fixed line request
+            and mark status back to 79 if needed (pos orders without ICC) */
+         IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN
+            fSetOrderStatus(OrderFusion.OrderId,{&ORDER_STATUS_MNP}).
+         ELSE fSetOrderStatus(OrderFusion.OrderId,{&ORDER_STATUS_NEW}).
       END.
-      /* STC or MNP/NEW direct channel */
-      ELSE DO:
 
-         ASSIGN OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_FINALIZED}.
-         
-         IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
-
-            /* order handler will create fixed line request
-               and mark status back to 79 if needed (pos orders without ICC) */
-            IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN
-               fSetOrderStatus(OrderFusion.OrderId,{&ORDER_STATUS_MNP}).
-            ELSE fSetOrderStatus(OrderFusion.OrderId,{&ORDER_STATUS_NEW}).
-         END.
-         ELSE . /* TODO: error handling */
-
-      END.
    END.
    /* installation cancelled */ 
    WHEN "CANCELADA" THEN DO:
