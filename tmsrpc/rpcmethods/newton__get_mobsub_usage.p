@@ -626,7 +626,8 @@ DO liLoop = 1 TO 3:
       
       /*YDR-2284 removed the condition*/
       /* Return Voice BDestination limit/usage */
-      IF (ServiceLimit.DialType = {&DIAL_TYPE_VOICE} AND 
+      IF ((ServiceLimit.DialType = {&DIAL_TYPE_VOICE} OR
+          ServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE}) AND
           ServiceLimit.BDestLimit > 0) OR
          ServiceLimit.DialType = 0 THEN DO:
          IF ServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN

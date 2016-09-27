@@ -7,7 +7,9 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
+{commpaa.i}
+katun = "Cron".
+gcBrand = "1".
 {tmsconst.i}
 {ftransdir.i}
 {timestamp.i}
@@ -137,8 +139,11 @@ fLogLine("","Centre file creation start " + fTS2HMS(ldCurrentTime)).
 
 FOR EACH FusionMessage WHERE 
          FusionMessage.source EQ "MasMovil" AND
-         FusionMessage.messagestatus EQ {&FUSIONMESSAGE_STATUS_ONGOING}:
+         FusionMessage.messagestatus EQ {&FUSIONMESSAGE_STATUS_ONGOING} AND
+         FusionMessage.messagetype EQ "Logistics":
    lcStatus = fCreateCentreFileRow().
+   IF lcStatus EQ "" THEN
+      FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_HANDLED}.
 END.
 
 ldCurrentTime = fMakeTS().

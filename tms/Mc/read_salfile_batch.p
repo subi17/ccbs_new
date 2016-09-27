@@ -124,10 +124,23 @@ REPEAT:
       FIND FIRST Order WHERE
                  Order.brand EQ gcBrand AND
                  Order.orderid EQ INT(lcYoigoOrderId) /* AND
-                 Order.statuscode EQ*/ NO-ERROR.
+                 Order.statuscode EQ*/ NO-LOCK NO-ERROR.
       IF NOT AVAIL Order THEN DO:
          fLogLine("ERROR:Order " + lcYoigoOrderId + " not found or " +
                    "is in incorrect status.").         
+         liNumErr = liNumErr + 1 .
+         NEXT.
+      END.
+      FIND FIRST CliType WHERE
+                 Clitype.brand EQ gcBrand AND
+                 Clitype.clitype EQ order.clitype NO-LOCK NO-ERROR.
+     IF NOT AVAIL Clitype THEN DO:
+         fLogLine("ERROR:Incorrect clitype " + order.clitype).
+         liNumErr = liNumErr + 1 .
+         NEXT.
+      END.
+      ELSE IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN DO:
+         fLogLine("ERROR:Not ADSL order " + lcYoigoOrderId).
          liNumErr = liNumErr + 1 .
          NEXT.
       END.
@@ -167,10 +180,12 @@ PROCEDURE pHandleSALfile:
       FusionMessage.CreatedTS = fMakeTS()
       FusionMessage.MessageID = GUID(GENERATE-UUID)
       FusionMessage.MessageType = "Logistics"
-      FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_NEW}
       FusionMessage.Source = "MasMovil"
       FusionMessage.msseq = iiMsSeq.
       
-
+   IF LOOKUP(Order.OrderChannel,"pos") > 0 THEN
+      FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ONGOING}.
+   ELSE
+      FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_NEW}.
    RETURN "OK".
 END.

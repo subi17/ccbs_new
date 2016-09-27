@@ -43,7 +43,7 @@ FUNCTION create_limit returns log (INPUT lcCode as CHAR,
    return true.
 END.                                   
 
-
+/* old ones, can be removed
 create_group("CONTDSL45", "Contrato DSL45").
 create_group("CONTDSL55", "Contrato DSL55").
 create_group("CONTFH45_50", "Contrato FH45_50").
@@ -51,20 +51,32 @@ create_group("CONTFH55_50", "Contrato FH55_50").
 create_group("CONTFH55_300", "Contrato FH55_300").
 create_group("CONTFH65_300", "Contrato FH65_300").
 
-create_limit("CONTDSL45", "BDest", "_QTY",120.0).
-create_limit("CONTDSL55", "BDest", "_QTY",120.0).
-create_limit("CONTFH45_50", "BDest", "_QTY",120.0).
-create_limit("CONTFH55_50", "BDest", "_QTY",120.0).
-create_limit("CONTFH55_300", "BDest", "_QTY",120.0).
-create_limit("CONTFH65_300", "BDest", "_QTY",120.0).
+create_limit("CONTDSL45", "BDest", "_QTY",300.0).
+create_limit("CONTDSL55", "BDest", "_QTY",300.0).
+create_limit("CONTFH45_50", "BDest", "_QTY",300.0).
+create_limit("CONTFH55_50", "BDest", "_QTY",300.0).
+create_limit("CONTFH55_300", "BDest", "_QTY",300.0).
+create_limit("CONTFH65_300", "BDest", "_QTY",300.0).
 
-create_limit("CONTDSL45", "National calls", "_MIN",60.0).
-create_limit("CONTDSL55", "National calls", "_MIN",60.0).
-create_limit("CONTFH45_50", "National calls", "_MIN",60.0).
-create_limit("CONTFH55_50", "National calls", "_MIN",60.0).
-create_limit("CONTFH55_300", "National calls", "_MIN",60.0).
-create_limit("CONTFH65_300", "National calls", "_MIN",60.0).
+create_limit("CONTDSL45", "National calls", "_MIN",5000.0).
+create_limit("CONTDSL55", "National calls", "_MIN",5000.0).
+create_limit("CONTFH45_50", "National calls", "_MIN",5000.0).
+create_limit("CONTFH55_50", "National calls", "_MIN",5000.0).
+create_limit("CONTFH55_300", "National calls", "_MIN",5000.0).
+create_limit("CONTFH65_300", "National calls", "_MIN",5000.0).
+*/
 
+create_group("CONTDSL", "Contrato DSL").
+create_group("CONTFH50", "Contrato FH50").
+create_group("CONTFH300", "Contrato FH300").
+
+create_limit("CONTDSL", "BDest", "_QTY",120.0).
+create_limit("CONTFH50", "BDest", "_QTY",120.0).
+create_limit("CONTFH300", "BDest", "_QTY",120.0).
+
+create_limit("CONTDSL", "National calls", "_MIN",60.0).
+create_limit("CONTFH50", "National calls", "_MIN",60.0).
+create_limit("CONTFH300", "National calls", "_MIN",60.0).
 
 
 

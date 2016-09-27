@@ -13,7 +13,7 @@ FirstMonthFeeCalc;Relative
 LastMonthFeeCalc;Full
 TypeOfContract;ServicePackage
 DataLimit;10240
-VoiceLimit;
+VoiceLimit;5000
 BDestinationLimit;300
 FirstMonthDataLimit;Relative
 LastMonthDataLimit;Full

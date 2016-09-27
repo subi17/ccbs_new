@@ -283,8 +283,7 @@ IF Order.PortingDate NE ? THEN
    add_date_or_time(top_struct, "requested_porting_time", Order.PortingDate, 0).
 ELSE add_string(top_struct, "requested_porting_time", "").
 
-IF Order.OrderChannel BEGINS "RENEWAL_POS" AND
-   Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND
+IF Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND
    CAN-FIND(FIRST MsRequest WHERE
                   MsRequest.MsSeq = Order.MsSeq AND
                   MsRequest.ReqType = {&REQTYPE_REVERT_RENEWAL_ORDER} AND

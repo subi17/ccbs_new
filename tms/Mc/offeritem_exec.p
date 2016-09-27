@@ -18,6 +18,7 @@
 
 DEF INPUT  PARAMETER iiMsSeq       AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiOrderID     AS INT  NO-UNDO.
+DEF INPUT  PARAMETER ideActStamp   AS DEC  NO-UNDO.
 DEF INPUT  PARAMETER iiOrigRequest AS INT  NO-UNDO. /* father request */
 DEF INPUT  PARAMETER icSource      AS CHAR NO-UNDO. /* MsRequest.ReqSource */
 
@@ -27,7 +28,6 @@ DEF VAR liRequest      AS INT  NO-UNDO.
 DEF VAR lcResult       AS CHAR NO-UNDO.
 DEF VAR lcUseOffer     AS CHAR NO-UNDO.
 DEF VAR ldOfferStamp   AS DEC  NO-UNDO.
-DEF VAR ldActStamp     AS DEC  NO-UNDO.
 
 DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
 DEF VAR lcPrePaidDataBundles  AS CHAR NO-UNDO.
@@ -51,14 +51,14 @@ IF Order.Offer = "" THEN RETURN "Nothing to do".
 
 ASSIGN
    ldOfferStamp = Order.CrStamp
-   ldActStamp   = Order.CrStamp.
+   ideActStamp  = Order.Crstamp WHEN ideActStamp EQ ?.
 
 /* YBU-1551 */
 IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
    FIND FIRST msowner where
               msowner.msseq = MobSub.msseq USE-INDEX MsSeq NO-LOCK NO-ERROR.
-   IF AVAIL msowner THEN ldActStamp = msowner.tsbegin.
-   IF ldActStamp <= Order.Crstamp THEN ldActStamp = fMakeTS().
+   IF AVAIL msowner THEN ideActStamp = msowner.tsbegin.
+   IF ideActStamp <= Order.Crstamp THEN ideActStamp = fMakeTS().
 END.
 
 /* YDR-123 */
@@ -266,11 +266,11 @@ PROCEDURE pPeriodicalContract:
    ELSE llCreateFees = (DayCampaign.FeeModel > "").
 
    ldContrStamp = (IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN fMakeTS()
-                   ELSE IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN MobSub.ActivationTS
+                   ELSE IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN ideActStamp 
                    ELSE IF Order.OrderChannel BEGINS "Retention"
                    THEN fMakeTS()
                    ELSE IF DayCampaign.DCType = {&DCTYPE_DISCOUNT}
-                   THEN Order.CrStamp ELSE ldActStamp).
+                   THEN Order.CrStamp ELSE ideActStamp).
 
    /* YOT-2233 - Exclude Term Penalty if possible */
    IF DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND

@@ -53,6 +53,7 @@ DEFINE VARIABLE iLargestId         AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTarOption        AS CHARACTER NO-UNDO.
 DEF VAR ldaCont15PromoFrom         AS DATE NO-UNDO. 
 DEF VAR ldaCont15PromoEnd          AS DATE NO-UNDO. 
+DEFINE VARIABLE ocResult           AS CHAR      NO-UNDO. 
 
 DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
@@ -365,7 +366,7 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE llDextraInvoice           AS LOGICAL   NO-UNDO.
    DEFINE VARIABLE ldeCurrAmt                AS DEC NO-UNDO. 
    DEFINE VARIABLE ldtermdiscamt             AS DEC NO-UNDO. 
-   DEFINE VARIABLE lcTermDiscItem            AS CHAR NO-UNDO. 
+   DEFINE VARIABLE lcTermDiscItem            AS CHAR NO-UNDO.
 
    DEFINE BUFFER bufRow   FOR InvRow.
    DEFINE BUFFER bufItem  FOR BillItem.
@@ -1315,50 +1316,113 @@ END.
 RENEWAL_LOOP:
 FOR EACH Order NO-LOCK WHERE  
          Order.Brand = gcBrand AND
-         Order.StatusCode = "12" AND 
+         Order.StatusCode = "78" AND 
          Order.OrderType = 2:
          
-    IF Order.OrderChannel BEGINS "renewal_pos" THEN NEXT RENEWAL_LOOP. 
+   IF Order.OrderChannel BEGINS "renewal_pos" THEN NEXT RENEWAL_LOOP. 
     
-    FIND MobSub WHERE 
-         MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
-    IF AVAIL MobSub THEN DO:
-       /* Do handling only after successful after sales request */ 
-       FIND FIRST MsRequest WHERE
-                  MsRequest.Brand = gcBrand AND
-                  MsRequest.ReqType = 46 AND
-                  MsRequest.CLI = Order.CLI AND
-                  MsRequest.ReqIParam1 = Order.OrderId AND
-                  MsRequest.ReqStatus = 2 NO-LOCK NO-ERROR.
-       IF NOT AVAIL MsRequest THEN NEXT RENEWAL_LOOP.
+   ocResult = "".
 
-       lcICC = MobSub.ICC.
-       IF Order.ICC > "" THEN lcICC = Order.ICC.
+   FIND MobSub WHERE 
+        MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
+   IF AVAIL MobSub THEN DO:
+
+      lcICC = MobSub.ICC.
+      IF Order.ICC > "" THEN lcICC = Order.ICC.
              
-       FIND xOrder WHERE 
-            xOrder.Brand   = gcBrand AND
-            xOrder.OrderId = Order.OrderId 
-       EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
-       IF ERROR-STATUS:ERROR OR LOCKED(xOrder) THEN NEXT RENEWAL_LOOP.
+      FIND xOrder WHERE 
+           xOrder.Brand   = gcBrand AND
+           xOrder.OrderId = Order.OrderId 
+      EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+      IF ERROR-STATUS:ERROR OR LOCKED(xOrder) THEN NEXT RENEWAL_LOOP.
        
-       FIND SIM WHERE 
-            SIM.Brand = gcBrand AND 
-            SIM.ICC = lcICC NO-LOCK NO-ERROR.
-       IF AVAILABLE SIM THEN DO:
-          IF fDelivSIM( SIM.ICC ) THEN DO:
-             ASSIGN
-                xOrder.Logistics = lcFileName
-                xOrder.SendToROI = 1.
+      FIND SIM WHERE
+           SIM.Brand = gcBrand AND 
+           SIM.ICC = lcICC NO-LOCK NO-ERROR.
+      IF AVAILABLE SIM THEN DO:
+         IF fDelivSIM( SIM.ICC ) THEN DO:
+
+            fAfterSalesRequest(
+               xOrder.MsSeq,
+               xOrder.OrderId,
+               katun,
+               fMakeTS(),
+               "7",
+               OUTPUT ocResult
+               ).
+
+            IF ocResult > "" THEN DO:
+               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                "Order",
+                                STRING(xOrder.OrderID),
+                                0,
+                                "After Sales Request creation failed - LO",
+                                ocResult).
+            END.
+
+            ASSIGN
+               xOrder.Logistics = lcFileName
+               xOrder.SendToROI = 1.
  
-             /* Call the fSetOrderStatus function to change the order status to Delivery and make the timestamp */
-             fSetOrderStatus(xOrder.OrderID,"6").
-             fMarkOrderStamp(xOrder.OrderID,"Delivery",0.0).
-             fMarkOrderStamp(xOrder.OrderID,"SendToLogistics",0.0). /* Timestamp for Logistics Operator Change Dextra->Netkia */
-          END. /* IF fDelivSIM( SIM.ICC ) THEN DO: */  
-       END. /* IF AVAILABLE SIM THEN DO: */
+            fSetOrderStatus(xOrder.OrderID,"12").
+            fMarkOrderStamp(xOrder.OrderID,"SendToLogistics",0.0).
+         END. /* IF fDelivSIM( SIM.ICC ) THEN DO: */
+      END. /* IF AVAILABLE SIM THEN DO: */
        
-       RELEASE xOrder.
-    END.
+      RELEASE xOrder.
+   END.
+END.
+
+/* YPR-4983 COFF logistic file for router */
+
+FOR EACH FusionMessage WHERE 
+         FusionMessage.source EQ "MasMovil" AND
+         FusionMessage.messagestatus EQ {&FUSIONMESSAGE_STATUS_NEW} AND
+         FusionMessage.messagetype EQ "Logistics":
+   DEFINE VARIABLE lcDeliRegi      AS CHARACTER NO-UNDO.
+   FIND FIRST DelivCustomer WHERE
+              DelivCustomer.Brand   = gcBrand   AND
+              DelivCustomer.OrderId = FusionMessage.OrderId AND
+              DelivCustomer.RowType = 4
+   NO-LOCK NO-ERROR.
+
+   IF NOT AVAIL DelivCustomer THEN DO:
+
+      FIND FIRST DelivCustomer WHERE
+                 DelivCustomer.Brand   = Order.Brand   AND
+                 DelivCustomer.OrderId = Order.OrderId AND
+                 DelivCustomer.RowType = 1
+      NO-LOCK NO-ERROR.
+
+   END.
+
+   FIND FIRST Region WHERE
+              Region.Region = DelivCustomer.Region
+   NO-LOCK NO-ERROR.
+   lcDeliRegi = Region.RgName.
+
+   liRowNum = liRowNum + 1.
+   CREATE ttOneDelivery.
+   ASSIGN
+      ttOneDelivery.RowNum        = liRowNum
+      ttOneDelivery.OrderId       = Order.OrderId
+      ttOneDelivery.ActionID      = "1" /* Router */
+      ttOneDelivery.ProductID     = "Router001"
+      ttOneDelivery.DelivAddr     = DelivCustomer.Address
+      ttOneDelivery.DelivCity     = DelivCustomer.PostOffice
+      ttOneDelivery.DelivZip      = DelivCustomer.ZIP
+      ttOneDelivery.DelivRegi     = lcDeliRegi
+      ttOneDelivery.DelivCoun     = DelivCustomer.Country.
+
+   CREATE ttInvRow.
+   ASSIGN
+      ttInvRow.RowNum      = ttOneDelivery.RowNum
+      ttInvRow.ProductId   = "Router001".
+
+   CREATE ttExtra.
+   ASSIGN ttExtra.RowNum   = ttOneDelivery.RowNum
+   ttExtra.DeliveryType    = STRING({&ORDER_DELTYPE_COURIER}).   
+
 END.
 
 iLargestId = 1.
