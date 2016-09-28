@@ -53,7 +53,10 @@ FUNCTION fInitMMConnection RETURNS CHAR
    lcConURL = Syst.Parameters:getc("urlMasmovil","URL").
    IF lcConURL = ? OR lcConURL = "" THEN 
       RETURN "ERROR in connection settings".
-   initialize(lcConURL, 15).
+
+   IF initialize(lcConURL, 15) EQ FALSE THEN
+      RETURN "ERROR in connection initialization".
+
    RETURN "".
 END.
 

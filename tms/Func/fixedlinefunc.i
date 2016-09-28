@@ -11,8 +11,6 @@
 &IF "{&fixedlinefunc}" NE "YES"
 &THEN
 &GLOBAL-DEFINE fixedlinefunc YES
-{Syst/commali.i}
-{Func/cparam2.i}
 
 /*Function returns Trie if a tariff can be defined as convergent tariff.
 NOTE: False is returned in real false cases and also in error cases. */
@@ -21,7 +19,7 @@ FUNCTION fIsConvergenceTariff RETURNS LOGICAL
    DEF BUFFER bCLIType FOR CLIType.
 
    FIND FIRST bCLIType NO-LOCK WHERE
-              bCLIType.Brand EQ gcBrand AND
+              bCLIType.Brand EQ Syst.Parameters:gcBrand AND
               bCLIType.CliType EQ icCLIType NO-ERROR.
    IF AVAIL bCliType THEN DO:
       IF bCliType.FixedLineDownload NE ? AND 
