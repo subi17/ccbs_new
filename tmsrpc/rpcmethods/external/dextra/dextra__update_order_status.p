@@ -312,6 +312,24 @@ IF LOOKUP(STRING(OrderDelivery.LOStatusId),
    ELSE RUN cancelorder.p(Order.OrderId,TRUE).
 END.
 
+/* YPR-4984, Router delivered to customer */
+IF liLOStatusId EQ 99998 AND lcIMEI > "" THEN DO:
+   FIND FIRST OrderFusion WHERE
+              OrderFusion.Brand EQ gcBrand AND
+              OrderFusion.orderid EQ Order.OrderId NO-ERROR.
+   IF AVAIL OrderFusion THEN DO:
+      FIND FIRST FusionMessage WHERE
+                 FusionMessage.orderID EQ Order.OrderId AND
+                 FusionMessage.messageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}
+                 NO-ERROR.
+      IF AVAIL FusionMessage THEN DO:
+         OrderFusion.serialnumber = lcIMEI.
+         FusionMessage.messageStatus = {&FUSIONMESSAGE_STATUS_ONGOING}.
+      END.
+   END.
+
+END.
+
 add_int(response_toplevel_id, "", liResult).
 
 FINALLY:
