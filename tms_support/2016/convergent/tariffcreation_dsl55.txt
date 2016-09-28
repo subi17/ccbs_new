@@ -2,8 +2,8 @@ CLIType;CONTDSL55
 TariffBundle;
 BaseBundle;CONTS10GB
 MonthlyFee;
-CommercialFee;45.45
-ComparisonFee;45.45
+CommercialFee;45.451
+ComparisonFee;45.451
 ServiceClass;
 WebStatus;Active
 STCStatus;Active
