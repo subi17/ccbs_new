@@ -357,48 +357,70 @@ END.
    RETURN "".
 END. /*Function fCreate_FixedLine*/
 
+
+
 FUNCTION fMasCheckFixedLineStatus RETURNS CHAR
    (iiOrderId AS INT,
+    OUTPUT ocOrderType AS CHAR,
     OUTPUT ocStatus AS CHAR,
-    OUTPUT ocStatusDesc AS CHAR):
+    OUTPUT ocStatusDesc AS CHAR,
+    OUTPUT ocAddInfo AS CHAR,
+    OUTPUT odeLastDate AS DECIMAL):
 
-   DEF VAR lcOutputStruct AS CHAR NO-UNDO.
    DEF VAR lcArray AS CHAR NO-UNDO.
    DEF VAR lcXMLStruct AS CHAR NO-UNDO. /*Input to TMS*/
-   DEF VAR lcResponse AS CHAR NO-UNDO.
-   DEF VAR lcStatusArray AS CHAR NO-UNDO.
+   DEF VAR lcStatusFields AS CHAR NO-UNDO.
+   DEF VAR lcOrderType AS CHAR NO-UNDO.
    DEF VAR lcStatus AS CHAR NO-UNDO.
    DEF VAR lcStatusDesc AS CHAR NO-UNDO.
-   DEF VAR ldtLastDate AS DATETIME NO-UNDO.
+   DEF VAR lcAdditionalInfo AS CHAR NO-UNDO.
+   DEF VAR lcLastDate AS CHAR NO-UNDO.
+   DEF VAR ldeLastDate AS DECIMAL NO-UNDO.
+
+   DEF VAR lcInStruct AS CHAR NO-UNDO.
 
    add_string(param_toplevel_id, "", "Y" + STRING(iiOrderid)).
-   add_string(param_toplevel_id, "", "NO").
+   add_string(param_toplevel_id, "", "false").
 
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: XML creation failed: &1", gc_xmlrpc_error).
-   fMasXMLGenerate_test("masmovil.checkOrderStatus").   
+   xmlrpc_initialize(FALSE).
+   fMasXMLGenerate_test("masmovil.checkOrderStatus").
    RUN pRPCMethodCall("masmovil.checkOrderStatus", TRUE).
-
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
- 
-   lcArray = get_array(param_toplevel_id, "0").
+   lcInStruct = get_struct(response_toplevel_id, "").
+   lcArray = get_array(lcInStruct, "Statuses").
    lcXMLStruct = get_struct(lcArray, "0").
 
-   lcResponse = validate_struct(lcXMLStruct,"OrderType,ServiceType,Status!,StatusDescription!,process,additionalInfo,lastDate!").
-   lcStatus = get_string(lcXMLStruct, "Status").
-   lcStatusDesc = get_string(lcXMLStruct, "StatusDescription").
-   ldtLastDate = get_datetime(lcXMLStruct, "lastDate").
 
-   IF gi_xmlrpc_error NE 0 THEN 
+   lcStatusFields = validate_struct(lcXMLStruct,"OrderType,ServiceType,Status!,StatusDescription!,process,additionalInfo,lastDate!").
+   IF gi_xmlrpc_error NE 0 THEN
+      RETURN SUBST("ERROR: Response validation failed: &1", gc_xmlrpc_error).
+   ASSIGN
+      lcOrderType = get_string(lcXMLStruct, "OrderType")
+         WHEN LOOKUP("OrderType", lcStatusFields) > 0
+      lcStatus = get_string(lcXMLStruct, "Status")
+      lcStatusDesc = get_string(lcXMLStruct, "StatusDescription")
+         WHEN LOOKUP("StatusDescription", lcStatusFields) > 0
+      lcAdditionalInfo = get_string(lcXMLStruct, "additionalInfo")
+         WHEN LOOKUP("additionalInfo", lcStatusFields) > 0
+      lcLastDate = get_string(lcXMLStruct, "lastDate").
+
+   IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: Response parsing failed: &1", gc_xmlrpc_error).
 
+   ldeLastDate = _iso8601_to_timestamp(lcLastDate).
+   IF ldeLastDate EQ ? THEN RETURN "Returned date format is incorrect".
+
+   ocOrderType = lcOrderType.
    ocStatus =  lcStatus.
    ocStatusDesc =  lcStatusDesc.
-
-   IF NOT(lcStatus EQ "" OR lcStatus EQ "00") THEN  RETURN "ERROR".
+   ocAddInfo = lcAdditionalInfo.
+   odeLastDate = ldeLastDate.
 
    RETURN "".
+
 END. /*fMasCancel_FixedLineOrder*/
 
 FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
@@ -446,6 +468,7 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
 
    RETURN "".
 END. /*fMasCancel_FixedLineOrder*/
+
 
 FUNCTION fMasGet_FixedNbr RETURNS CHAR
    (icPostalCode AS CHAR ,
