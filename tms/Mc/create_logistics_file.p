@@ -26,6 +26,7 @@ gcBrand = "1".
 {forderstamp.i}
 {orderfunc.i}
 {fbundle.i}
+{Mm/active_bundle.i}
 {mnp.i}
 {email.i}
 
