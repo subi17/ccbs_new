@@ -40,19 +40,19 @@ FUNCTION fSendDextraSMS RETURNS LOGICAL
       iiCourierID NE {&COURIER_ID_ASM} THEN RETURN FALSE.
 
    CASE iiLOStatusId:
-      WHEN 6 OR WHEN 99996 THEN DO: 
+      WHEN 6 THEN DO: 
          IF Order.DeliverySecure EQ 1 THEN
             lcSMSToken = "LogisticDelivery_SECUR".
          ELSE lcSMSToken = "LogisticDelivery_ALL".
       END.   
-      WHEN 9 OR WHEN 99999 THEN DO:
+      WHEN 9 THEN DO:
          IF iiCourierID = {&COURIER_ID_CORREOS} THEN
             lcSMSToken = "LogisticIncident_CORREOS".
          ELSE IF iiCourierID = {&COURIER_ID_SEUR} THEN
             lcSMSToken = "LogisticIncident_SEUR".
          ELSE lcSMSToken = "LogisticIncident_ASM".
       END.
-      WHEN 10 OR WHEN 999910 THEN DO:
+      WHEN 10 THEN DO:
          IF iiCourierID = {&COURIER_ID_CORREOS} THEN
             lcSMSToken = "LogisticNotDeliv_CORREOS".
          ELSE IF iiCourierID = {&COURIER_ID_SEUR} THEN

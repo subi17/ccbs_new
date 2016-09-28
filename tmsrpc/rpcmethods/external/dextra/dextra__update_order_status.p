@@ -300,18 +300,6 @@ IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
       ELSE RUN StarEventMakeModifyEvent(lhOrderCustomer).
    END.
 END.
-
-fSendDextraSMS(Order.OrderID, liLOStatusId, liCourierId).
-
-FIND CURRENT OrderDelivery NO-LOCK.
-
-IF LOOKUP(STRING(OrderDelivery.LOStatusId),
-   {&DEXTRA_CANCELLED_STATUSES}) > 0 THEN DO:
-   IF Order.StatusCode = {&ORDER_STATUS_RESIGNATION} THEN
-      RUN closeorder.p(Order.OrderId,TRUE).
-   ELSE RUN cancelorder.p(Order.OrderId,TRUE).
-END.
-
 /* YPR-4984, Router delivered to customer */
 IF liLOStatusId EQ 99998 AND lcIMEI > "" THEN DO:
    FIND FIRST OrderFusion WHERE
@@ -327,7 +315,21 @@ IF liLOStatusId EQ 99998 AND lcIMEI > "" THEN DO:
          FusionMessage.messageStatus = {&FUSIONMESSAGE_STATUS_ONGOING}.
       END.
    END.
+END.
 
+/* Remove router prefix 9999 for SMS sending */
+IF STRING(liLOStatusId) BEGINS "9999" THEN
+   liLOStatusId = liLOStatusId - 99990.
+
+fSendDextraSMS(Order.OrderID, liLOStatusId, liCourierId).
+
+FIND CURRENT OrderDelivery NO-LOCK.
+
+IF LOOKUP(STRING(OrderDelivery.LOStatusId),
+   {&DEXTRA_CANCELLED_STATUSES}) > 0 THEN DO:
+   IF Order.StatusCode = {&ORDER_STATUS_RESIGNATION} THEN
+      RUN closeorder.p(Order.OrderId,TRUE).
+   ELSE RUN cancelorder.p(Order.OrderId,TRUE).
 END.
 
 add_int(response_toplevel_id, "", liResult).
