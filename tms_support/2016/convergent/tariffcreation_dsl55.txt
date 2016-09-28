@@ -15,11 +15,11 @@ TypeOfContract;ServicePackage
 DataLimit;10240
 VoiceLimit;5000
 BDestinationLimit;300
-FirstMonthDataLimit;Relative
+FirstMonthDataLimit;Full
 LastMonthDataLimit;Full
-FirstMonthVoiceLimit;Relative
+FirstMonthVoiceLimit;Full
 LastMonthVoiceLimit;Full
-FirstMonthBDestLimit;Relative
+FirstMonthBDestLimit;Full
 LastMonthBDestLimit;Full
 BBProfile;1
 DSS2Compatible;No
@@ -27,6 +27,6 @@ DSS2PrimaryLine;No
 NativeVoIPCompatible;No
 OnlyVOICE;No
 MonthlyFeeBillCode;CONTDSL55MF
-TariffName;La Infinita 10 GB + DSL
+TariffName;La Combinada 20 Verde
 BonoSupport;YES
 BundleUpsell;DATA200_UPSELL
