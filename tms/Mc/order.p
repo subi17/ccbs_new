@@ -1254,6 +1254,12 @@ PROCEDURE pOrderView:
                  must-print = true.
            END.            
            ELSE IF toimi = 5 THEN DO:
+
+              IF liMSRequest EQ 0 THEN DO:
+                 MESSAGE "Order request not found" VIEW-AS ALERT-BOX.
+                 NEXT.
+              END.
+
               RUN local-find-this(FALSE).
               IF Order.OrderType = 3 THEN
                  RUN msrequest(82,?,Order.MsSeq,0,liMsRequest,"").
