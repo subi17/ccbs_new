@@ -11,6 +11,7 @@
 {lib/tokenlib.i}
 {timestamp.i}
 {transname.i}
+{tmsconst.i}
 
 DEFINE INPUT PARAMETER iiOrderId AS INTEGER NO-UNDO. 
 
@@ -371,11 +372,11 @@ PROCEDURE local-disp-row:
 END PROCEDURE.
 
 PROCEDURE local-find-others.
-      
    lcLOStatus = fGetItemName( 
       gcBrand, 
       "LOStatusId", 
-      STRING(OrderDelivery.LOStatusId),
+      REPLACE(STRING(OrderDelivery.LOStatusId), 
+              {&LO_STATUS_ROUTER_PREFIX}, ""),
       5,
       TODAY).
    

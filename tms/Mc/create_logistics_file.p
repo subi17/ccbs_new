@@ -1379,6 +1379,16 @@ FOR EACH FusionMessage WHERE
          FusionMessage.source EQ "MasMovil" AND
          FusionMessage.messagestatus EQ {&FUSIONMESSAGE_STATUS_NEW} AND
          FusionMessage.messagetype EQ "Logistics":
+   FIND FIRST Order WHERE
+              Order.brand EQ gcBrand AND
+              Order.orderId EQ FusionMessage.orderId NO-ERROR.
+   IF NOT AVAIL Order OR Order.orderchannel NE "telesales" THEN NEXT.
+
+   FIND FIRST CliType WHERE
+              Clitype.brand EQ gcBrand AND
+              Clitype.clitype EQ order.clitype NO-LOCK NO-ERROR.
+   IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN NEXT.   
+
    DEFINE VARIABLE lcDeliRegi      AS CHARACTER NO-UNDO.
    FIND FIRST DelivCustomer WHERE
               DelivCustomer.Brand   = gcBrand   AND
@@ -1422,7 +1432,8 @@ FOR EACH FusionMessage WHERE
    CREATE ttExtra.
    ASSIGN ttExtra.RowNum   = ttOneDelivery.RowNum
    ttExtra.DeliveryType    = STRING({&ORDER_DELTYPE_COURIER}).   
-
+   
+   FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_SENT}.
 END.
 
 iLargestId = 1.

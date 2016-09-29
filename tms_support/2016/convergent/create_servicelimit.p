@@ -18,7 +18,9 @@ END.
 FUNCTION create_limit returns log (INPUT lcCode as CHAR, 
                                    INPUT lcName AS CHAR,
                                    INPUT lclimit AS CHAR,
-                                   INPUT ldAmt AS DEC):
+                                   INPUT ldAmt AS DEC,
+                                   INPUT liDialType AS INT,
+                                   INPUT liUnit AS INT):
    
    IF CAN-FIND(FIRST ServiceLimit WHERE servicelimit.groupcode EQ lccode AND
                                   servicelimit.slname EQ lcName) THEN
@@ -29,7 +31,8 @@ FUNCTION create_limit returns log (INPUT lcCode as CHAR,
            else laskuri = servicelimit.slseq + 1.   
 
    CREATE servicelimit.
-   ASSIGN servicelimit.dialtype = 1
+   ASSIGN servicelimit.dialtype = lidialtype
+          servicelimit.inclunit = liUnit
           servicelimit.groupcode = lcCode
           servicelimit.slcode = lcCode + lcLimit
           servicelimit.slname = lcName
@@ -37,7 +40,7 @@ FUNCTION create_limit returns log (INPUT lcCode as CHAR,
           servicelimit.validto = 12/31/49
           servicelimit.slseq = laskuri
           servicelimit.inclamt = ldAmt
-          servicelimit.firstmonthcalc = 1
+          servicelimit.firstmonthcalc = 0
           servicelimit.lastmonthcalc = 0
           servicelimit.webdisp = 1.
    return true.
@@ -70,13 +73,13 @@ create_group("CONTDSL", "Contrato DSL").
 create_group("CONTFH50", "Contrato FH50").
 create_group("CONTFH300", "Contrato FH300").
 
-create_limit("CONTDSL", "BDest", "_QTY",120.0).
-create_limit("CONTFH50", "BDest", "_QTY",120.0).
-create_limit("CONTFH300", "BDest", "_QTY",120.0).
+create_limit("CONTDSL", "BDest", "_QTY",120.0, 0, 7).
+create_limit("CONTFH50", "BDest", "_QTY",120.0, 0, 7).
+create_limit("CONTFH300", "BDest", "_QTY",120.0, 0, 7).
 
-create_limit("CONTDSL", "National calls", "_MIN",60.0).
-create_limit("CONTFH50", "National calls", "_MIN",60.0).
-create_limit("CONTFH300", "National calls", "_MIN",60.0).
+create_limit("CONTDSL", "National calls", "_MIN",60.0, 1, 1).
+create_limit("CONTFH50", "National calls", "_MIN",60.0, 1, 1).
+create_limit("CONTFH300", "National calls", "_MIN",60.0, 1, 1).
 
 
 

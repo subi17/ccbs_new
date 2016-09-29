@@ -57,6 +57,9 @@ IF NOT AVAIL OrderCustomer THEN
    RETURN fFusionMessageError(BUFFER FusionMessage,
                               "OrderCustomer not found").
 
+lcError = fInitMMConnection().
+IF lcError NE "" THEN RETURN lcError.
+
 lcError = fMasGet_FixedNbr(OrderCustomer.ZipCode,
                  OUTPUT lcFixedNumber,
                  OUTPUT lcErrorDesc).
@@ -130,3 +133,6 @@ END.
 
 RETURN "".
 
+FINALLY:
+   xmlrpc_finalize().
+END.

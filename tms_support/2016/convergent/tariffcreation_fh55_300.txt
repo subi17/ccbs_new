@@ -2,8 +2,8 @@ CLIType;CONTFH55_300
 TariffBundle;
 BaseBundle;CONTS2GB
 MonthlyFee;
-CommercialFee;45.45
-ComparisonFee;45.45
+CommercialFee;45.451
+ComparisonFee;45.451
 ServiceClass;
 WebStatus;Active
 STCStatus;Active
@@ -15,11 +15,11 @@ TypeOfContract;ServicePackage
 DataLimit;2048
 VoiceLimit;5000
 BDestinationLimit;300
-FirstMonthDataLimit;Relative
+FirstMonthDataLimit;Full
 LastMonthDataLimit;Full
-FirstMonthVoiceLimit;Relative
+FirstMonthVoiceLimit;Full
 LastMonthVoiceLimit;Full
-FirstMonthBDestLimit;Relative
+FirstMonthBDestLimit;Full
 LastMonthBDestLimit;Full
 BBProfile;1
 DSS2Compatible;No
@@ -27,6 +27,6 @@ DSS2PrimaryLine;No
 NativeVoIPCompatible;No
 OnlyVOICE;No
 MonthlyFeeBillCode;CONTFH55_300MF
-TariffName;La Infinita 2 GB  + FIBER 300M
+TariffName;La Combinada 300 Naranja
 BonoSupport;YES
 BundleUpsell;DATA200_UPSELL

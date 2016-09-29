@@ -1,5 +1,5 @@
 /**
- * Get Order Logistic history.
+ * Get Router Logistic history.
  *
  * @input  orderid;int;mandatory;id of order
  * @output orderdelivery;struct;a single order logistic history data
@@ -16,9 +16,10 @@
 {tmsconst.i}
 
 DEFINE VARIABLE piOrderId              AS INTEGER   NO-UNDO. 
-DEFINE VARIABLE top_array            AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE od_struct            AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcError               AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE top_array              AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE od_struct              AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcError                AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE liLOStatus             AS INTEGER   NO-UNDO.
 
 IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piOrderId = get_pos_int(param_toplevel_id, "0").
@@ -37,17 +38,18 @@ IF NOT AVAIL Order THEN
 top_array = add_array(response_toplevel_id, "").
 
 FOR EACH OrderDelivery WHERE
-   OrderDelivery.Brand = "1"         AND 
-   OrderDelivery.OrderId = piOrderId NO-LOCK:
-   
-   IF STRING(OrderDelivery.LOStatusID) BEGINS {&LO_STATUS_ROUTER_PREFIX} THEN
-      NEXT.
+   OrderDelivery.Brand EQ "1"         AND 
+   OrderDelivery.OrderId EQ piOrderId AND
+   STRING(OrderDelivery.LOStatusID) BEGINS {&LO_STATUS_ROUTER_PREFIX} NO-LOCK:
+
    od_struct = add_struct(top_array, "").
 
    add_datetime(od_struct, "timestamp", OrderDelivery.LOTimeStamp ). 
    add_int(od_struct, "courier_id" , OrderDelivery.CourierId ). 
-   add_int(od_struct, "lo_id", OrderDelivery.LOId ). 
-   add_int(od_struct, "lo_status_id", OrderDelivery.LOStatusId ). 
+   add_int(od_struct, "lo_id", OrderDelivery.LOId). 
+   add_int(od_struct, "lo_status_id", 
+           INT(REPLACE(STRING(OrderDelivery.LOStatusId), 
+           {&LO_STATUS_ROUTER_PREFIX}, ""))).
    add_string(od_struct,"courier_shipping_id",OrderDelivery.CourierShippingId). 
    add_int(od_struct, "incident_info_id", OrderDelivery.IncidentInfoId ). 
    add_int(od_struct, "measures_info_id", OrderDelivery.MeasuresInfoId ). 

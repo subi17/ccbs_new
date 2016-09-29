@@ -34,6 +34,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
 
    DEF VAR lcResult   AS CHAR    NO-UNDO. 
    DEF VAR llHardBook AS LOGICAL NO-UNDO INIT FALSE.
+   DEF VAR llCancelFusion AS LOGICAL NO-UNDO INIT FALSE.
 
    DEF BUFFER OrderPayment FOR OrderPayment.
    DEF BUFFER MsRequest FOR MsRequest.
@@ -66,8 +67,19 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                   LOOKUP(STRING(OrderAccessory.HardBook),"1,2") > 0 THEN
                   llHardBook = TRUE.
 
+               FIND FIRST FusionMessage WHERE
+                          FusionMessage.orderID EQ Order.OrderId AND
+                          FusionMessage.messageStatus EQ 
+                             {&FUSIONMESSAGE_STATUS_SENT} NO-ERROR.
+               IF AVAIL FusionMessage THEN DO:
+                  llCancelFusion = TRUE.
+                  FusionMessage.messageStatus = 
+                     {&FUSIONMESSAGE_STATUS_CANCELLED}.
+               END.
+               
                IF katun NE "Dextra" AND
-                 (bfOrder.Logistics > "" OR llHardBook = TRUE) THEN DO:
+                 (bfOrder.Logistics > "" OR llHardBook = TRUE OR
+                 llCancelFusion = TRUE) THEN DO:
                   fLogisticsRequest(
                      bfOrder.MsSeq,
                      bfOrder.OrderId,

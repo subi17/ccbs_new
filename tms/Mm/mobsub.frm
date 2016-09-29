@@ -32,9 +32,9 @@ DEF VAR lcClitext           AS CHAR    NO-UNDO FORMAT "X(16)".
 
 FORM
 "SubscriptionID:"   Mobsub.msseq   "CliType...:" AT 50 lcCliText NO-LABEL  SKIP
-"MSISDN........:"   Mobsub.cli      "BillTarget:" AT 50 lcBillTarget      SKIP
+"MSISDN........:"   Mobsub.cli FORMAT "x(30)" "BillTarget:" AT 50 lcBillTarget      SKIP
 "ICC/SIM.......:"   Mobsub.icc      "PUK1......:" AT 50 Imsi.Puk1         SKIP
-"Subscr.Status.:"   lcStatus        "PUK2......:" AT 50 Imsi.Puk2         SKIP
+"Subscr.Status.:"   lcStatus FORMAT "x(30)" "PUK2......:" AT 50 Imsi.Puk2         SKIP
 "Barring Mask..:"   lcBarrStat FORMAT "x(62)"                             SKIP 
 lcPCLB FORMAT "x(47)" "PIN1......:" AT 50 IMSI.PIN1   SKIP
 "Number Inquiry:"   lcNumberInquiry "PIN2......:" AT 50 IMSI.PIN2         SKIP 
