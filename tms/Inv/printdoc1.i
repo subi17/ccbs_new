@@ -1510,14 +1510,9 @@ END PROCEDURE.
 
 PROCEDURE pCollectCDR:
 
-   DEFINE INPUT PARAMETER iiInvSeq             AS INTEGER NO-UNDO.
-   DEFINE OUTPUT PARAMETER olPremiumNumberText AS LOGICAL NO-UNDO.
-   DEFINE OUTPUT PARAMETER olGBText            AS LOGICAL NO-UNDO.
-
-   ASSIGN
-      olPremiumNumberText = FALSE
-      olGBText            = FALSE
-      .
+   DEFINE INPUT PARAMETER iiInvSeq                    AS INTEGER NO-UNDO.
+   DEFINE INPUT-OUTPUT PARAMETER iolPremiumNumberText AS LOGICAL NO-UNDO.
+   DEFINE INPUT-OUTPUT PARAMETER iolGBText            AS LOGICAL NO-UNDO.
 
    DEFINE BUFFER bCallInvSeq FOR InvSeq.
    
@@ -1576,13 +1571,13 @@ PROCEDURE pCollectCDR:
                   liGroupOrder = ttBillItemAndGroup.GroupOrder
                   lcBIGroup    = ttBillItemAndGroup.BIGroup
                   .
-               IF olPremiumNumberText = FALSE AND
+               IF iolPremiumNumberText = FALSE AND
                   ttBillItemAndGroup.PremiumBillCode
-               THEN olPremiumNumberText = TRUE.
+               THEN iolPremiumNumberText = TRUE.
 
-               IF olGBText = FALSE AND
+               IF iolGBText = FALSE AND
                   ttBillItemAndGroup.GBBillCode
-               THEN olGBText = TRUE.
+               THEN iolGBText = TRUE.
             END.
             ELSE ASSIGN
                     liGroupOrder = 0
