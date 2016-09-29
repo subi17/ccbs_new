@@ -515,9 +515,9 @@ FUNCTION fMasGet_FixedNbr RETURNS CHAR
 
    ocNum = get_string(lcXMLStruct,"numero").
 
-   IF ocNum EQ "" THEN DO:
+   IF ocNum EQ "" THEN
        RETURN "Masmovil Error: Number not returned. Area: " + icPostalCode.
-   END.
+   
 
    RETURN "".
 
