@@ -341,11 +341,6 @@ PROCEDURE pPrintInvoices:
 
    /*YTS-9144 changes done to send message to activemq only if it is a last process of the execution*/
    IF lcRunMode = "test" AND llgFuncRunPDF THEN DO:
-      fCreateActionLog("RunMode: "      + lcRunMode + "(Before)" +
-                       " CreatePDF: "   + STRING(llgFuncRunPDF)  +
-                       " FRConfigID: "  + STRING(liFRConfigID)   +
-                       " FRExecID: "    + STRING(liFRExecID)     +
-                       " FRProcessID: " + STRING(liFRProcessID)).
       FIND LAST bFRProcess NO-LOCK WHERE
                 bFRProcess.FRConfigID = liFRConfigID AND
                 bFRProcess.FRExecID   = liFRExecID   AND
@@ -353,7 +348,7 @@ PROCEDURE pPrintInvoices:
                 bFRProcess.FRProcessID <> liFRProcessID NO-ERROR.
       IF NOT AVAILABLE bFRProcess THEN DO:
          RUN funcrun_invpdf_creation (INPUT liFRExecID) NO-ERROR.
-         fCreateActionLog("RunMode: "      + lcRunMode + "(After)" +
+         fCreateActionLog("RunMode: "      + lcRunMode             +
                           " CreatePDF: "   + STRING(llgFuncRunPDF) +
                           " FRConfigID: "  + STRING(liFRConfigID)  +
                           " FRExecID: "    + STRING(liFRExecID)    +
