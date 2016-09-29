@@ -183,7 +183,6 @@
                  fixed_line_serial_number;string;optional;
                  fixed_line_mnp_time_of_change;string;optional;
                  fixed_line_product;string;mandatory;fusion order product code
-                 fixed_line_adsl_linkstate;string;optional;ADSL link state
                  customer_type;string;mandatory;customer type
                  contractid;string;optional;
                  install_address;struct;mandatory;
@@ -398,7 +397,6 @@ DEF VAR lcFixedLineMNPOldOper AS CHAR NO-UNDO.
 DEF VAR lcFixedLineMNPOldOperName AS CHAR NO-UNDO.
 DEF VAR lcFixedLineMNPOldOperCode AS CHAR NO-UNDO.
 DEF VAR lcFixedLineSerialNbr AS CHAR NO-UNDO.
-DEF VAR lcFixedLineAdslLinkState AS CHAR NO-UNDO.
 DEF VAR lcFixedLineMNPTime AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineProduct AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineCustomerType AS CHAR NO-UNDO. 
@@ -1133,6 +1131,12 @@ END.
 
 FUNCTION fCreateOrderFusion RETURNS LOGICAL:
 
+DEF VAR lcFixedLineAdslLinkState AS CHAR NO-UNDO.
+
+IF lcFixedLineCustomerType = "ADSL" AND lcFixedLineNumberType = "MNP" 
+   THEN lcFixedLineAdslLinkState = "Active".
+ELSE    lcFixedLineAdslLinkState = "Vacant".
+
    CREATE OrderFusion.
    ASSIGN
       OrderFusion.Brand             = gcBrand
@@ -1689,7 +1693,7 @@ END.
 /* YBP-530 */
 IF pcFusionStruct > "" THEN DO:
    lcFusionStructFields = validate_request(pcFusionStruct, 
-      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,fixed_line_mnp_time_of_change,fixed_line_product!,fixed_line_adsl_linkstate,install_address!,billing_address").
+      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,fixed_line_mnp_time_of_change,fixed_line_product!,install_address!,billing_address").
    IF gi_xmlrpc_error NE 0 THEN RETURN.
    
    ASSIGN
@@ -1708,8 +1712,6 @@ IF pcFusionStruct > "" THEN DO:
          WHEN LOOKUP("fixed_line_mnp_old_operator_code",lcFusionStructFields) > 0
       lcFixedLineSerialNbr = get_string(pcFusionStruct, "fixed_line_serial_number")
          WHEN LOOKUP("fixed_line_serial_number",lcFusionStructFields) > 0
-      lcFixedLineAdslLinkState = get_string(pcFusionStruct, "fixed_line_adsl_linkstate")
-         WHEN LOOKUP("fixed_line_adsl_linkstate",lcFusionStructFields) > 0
       lcFixedLineMNPTime = get_string(pcFusionStruct, "fixed_line_mnp_time_of_change")
          WHEN LOOKUP("fixed_line_mnp_time_of_change",lcFusionStructFields) > 0
       pcFixedBillingAddress = get_struct(pcFusionStruct,"billing_address")
