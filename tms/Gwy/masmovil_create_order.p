@@ -50,6 +50,8 @@ IF NOT OrderFusion.FixedNumber > "" THEN
    RETURN fFusionMessageError(BUFFER FusionMessage,
                              "FixedNumber not assigned").
 
+lcError = fInitMMConnection().
+IF lcError NE "" THEN RETURN lcError.
 
 lcError = fMasCreate_FixedLineOrder(Order.OrderID,
                                     OUTPUT lcResultCode,
@@ -115,8 +117,11 @@ ELSE DO:
    RELEASE OrderFusion.
    RELEASE FusionMessage.
 
-   fLogError(lcerror).
+   RETURN lcError.
 END.
 
 RETURN "".
 
+FINALLY:
+   xmlrpc_finalize().
+END.

@@ -1175,7 +1175,9 @@ PROCEDURE local-UPDATE-record.
       lcCliText 
       Mobsub.TAriffBundle
       Mobsub.AgrCust
-      Mobsub.CLI
+      MobSub.CLI
+      MobSub.CLI + " / " + Mobsub.FixedNumber
+         WHEN Mobsub.FixedNumber NE ? @ Mobsub.CLI
       lcBillTarget
       Mobsub.Custnum
       Mobsub.InvCust

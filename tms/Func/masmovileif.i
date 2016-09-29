@@ -53,7 +53,10 @@ FUNCTION fInitMMConnection RETURNS CHAR
    lcConURL = Syst.Parameters:getc("urlMasmovil","URL").
    IF lcConURL = ? OR lcConURL = "" THEN 
       RETURN "ERROR in connection settings".
-   initialize(lcConURL, 15).
+
+   IF initialize(lcConURL, 15) EQ FALSE THEN
+      RETURN "ERROR in connection initialization".
+
    RETURN "".
 END.
 
@@ -234,7 +237,7 @@ END.
    add_string(lcContactStruct, "lastName", bOC.Surname1 + " " + bOC.Surname2).
    add_string(lcContactStruct, "documentNumber",bOC.CustID). 
    add_string(lcContactStruct, "documentType", bOC.CustIdType).
-   add_string(lcContactStruct, "Email", bOC.Email).
+   add_string(lcContactStruct, "email", bOC.Email).
    add_string(lcContactStruct, "phoneNumber", bOC.ContactNum).
 
    lcAddressStruct = add_struct(lcInstallationStruct, "Address").
@@ -251,7 +254,7 @@ END.
    add_string(lcAddressStruct, "stair", bOC.Stair).
    add_string(lcAddressStruct, "floor", bOC.Floor).
    add_string(lcAddressStruct, "hand", bOC.Hand).
-   add_string(lcAddressStruct, "Km", bOC.Km).
+   add_string(lcAddressStruct, "km", bOC.Km).
    add_string(lcAddressStruct, "zipCode", bOc.ZipCode).
    IF lcConnServiceId EQ "ADSL" THEN
       add_string(lcInstallationStruct, "modality", bOF.ADSLLinkstate).

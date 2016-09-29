@@ -103,7 +103,8 @@ IF NOT AVAILABLE MsRequest OR
    
 liReqStatus = MsRequest.ReqStatus.
 
-IF CAN-FIND(FIRST bMsRequest NO-LOCK WHERE
+IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_CREATE} AND
+   CAN-FIND(FIRST bMsRequest NO-LOCK WHERE
                   bMsRequest.MsSeq = MsRequest.MsSeq AND
                   bMsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE} AND
     LOOKUP(STRING(bMsRequest.ReqStatus),
@@ -346,7 +347,10 @@ IF NOT AVAIL mobsub THEN DO:
       MobSub.FixedNumber      = orderfusion.FixedNumber WHEN AVAIL orderfusion
       Mobsub.icc              = Order.ICC
       Mobsub.Brand            = Order.Brand 
-      Mobsub.MsStatus         = 4
+      Mobsub.MsStatus         = (IF MsRequest.ReqType EQ 
+                                    {&REQTYPE_FIXED_LINE_CREATE} 
+                                 THEN {&MSSTATUS_FIXED_PROV_ONG} 
+                                 ELSE {&MSSTATUS_ACTIVE})
       MobSub.Reseller         = Order.Reseller
       Mobsub.Paytype          = (CLIType.PayType = 2)
       Mobsub.salesman         = Order.salesman 
