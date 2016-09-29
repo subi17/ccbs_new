@@ -91,6 +91,27 @@ FUNCTION fMakeTemp RETURNS LOGICAL
     
 END FUNCTION.
 
+/*YTS-9576 Not possible to CREATE PDFs WITH funcrun processes PrintXML, PrintXMLNoPaper*/
+FUNCTION fCreateActionLog RETURNS LOGICAL
+   (INPUT icMsg AS CHAR):
+   DO TRANS:
+      CREATE ActionLog.
+      ASSIGN
+         ActionLog.Brand        = gcBrand
+         ActionLog.TableName    = "FuncRunProcess"
+         ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") +
+                                  STRING(MONTH(TODAY),"99") +
+                                  STRING(DAY(TODAY),"99")
+         ActionLog.UserCode     = katun
+         ActionLog.ActionID     = "FRPROCESS" + STRING(liFRProcessID)
+         ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
+         ActionLog.ActionChar   = icMsg
+         ActionLog.ActionStatus = IF RETURN-VALUE BEGINS "ERROR:"
+                                  THEN 1
+                                  ELSE 2.
+         ActionLog.ActionTS     = fMakeTS().
+   END.   
+END FUNCTION.
 
 /****** Main start ********/
 
@@ -320,13 +341,24 @@ PROCEDURE pPrintInvoices:
 
    /*YTS-9144 changes done to send message to activemq only if it is a last process of the execution*/
    IF lcRunMode = "test" AND llgFuncRunPDF THEN DO:
+      fCreateActionLog("RunMode: "      + lcRunMode + "(Before)" +
+                       " CreatePDF: "   + STRING(llgFuncRunPDF)  +
+                       " FRConfigID: "  + STRING(liFRConfigID)   +
+                       " FRExecID: "    + STRING(liFRExecID)     +
+                       " FRProcessID: " + STRING(liFRProcessID)).
       FIND LAST bFRProcess NO-LOCK WHERE
                 bFRProcess.FRConfigID = liFRConfigID AND
                 bFRProcess.FRExecID   = liFRExecID   AND
                 LOOKUP(bFRProcess.RunState,"Initialized,Running") > 0 AND
                 bFRProcess.FRProcessID <> liFRProcessID NO-ERROR.
-      IF NOT AVAILABLE bFRProcess THEN
+      IF NOT AVAILABLE bFRProcess THEN DO:
          RUN funcrun_invpdf_creation (INPUT liFRExecID) NO-ERROR.
+         fCreateActionLog("RunMode: "      + lcRunMode + "(After)" +
+                          " CreatePDF: "   + STRING(llgFuncRunPDF) +
+                          " FRConfigID: "  + STRING(liFRConfigID)  +
+                          " FRExecID: "    + STRING(liFRExecID)    +
+                          " FRProcessID: " + STRING(liFRProcessID)).
+      END.
    END.
 
    IF RETURN-VALUE BEGINS "ERROR:" THEN DO TRANS:
