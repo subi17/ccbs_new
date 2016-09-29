@@ -339,8 +339,11 @@ END.
    fMasXMLGenerate_test("createFixedLine").
    RUN pRPCMethodCall("masmovil.createFixedLine", TRUE).
 
-   IF gi_xmlrpc_error NE 0 THEN
+   IF gi_xmlrpc_error NE 0 THEN DO:
+      ocResultCode = STRING(gi_xmlrpc_error).
+      ocResultDesc = gc_xmlrpc_error.
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
+   END.
 
    lcXMLStruct = get_struct(response_toplevel_id,"0").
    lcResponse = validate_struct(lcXMLStruct,"resultCode!,resultDescription").
@@ -390,8 +393,13 @@ FUNCTION fMasCheckFixedLineStatus RETURNS CHAR
    xmlrpc_initialize(FALSE).
    fMasXMLGenerate_test("masmovil.checkOrderStatus").
    RUN pRPCMethodCall("masmovil.checkOrderStatus", TRUE).
-   IF gi_xmlrpc_error NE 0 THEN
+
+   IF gi_xmlrpc_error NE 0 THEN DO:
+      ocStatus = STRING(gi_xmlrpc_error).
+      ocStatusDesc = gc_xmlrpc_error.
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
+   END.
+
    lcInStruct = get_struct(response_toplevel_id, "").
    lcArray = get_array(lcInStruct, "Statuses").
    lcXMLStruct = get_struct(lcArray, "0").
@@ -452,8 +460,11 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
    fMasXMLGenerate_test("CancelFixedLine").
    RUN pRPCMethodCall("masmovil.cancelFixedLine", TRUE).
 
-   IF gi_xmlrpc_error NE 0 THEN
+   IF gi_xmlrpc_error NE 0 THEN DO:
+      ocResultCode = STRING(gi_xmlrpc_error).
+      ocResultDesc = gc_xmlrpc_error.
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
+   END.
 
    lcXMLStruct = get_struct(response_toplevel_id,"0").
    lcResponse = validate_struct(lcXMLStruct,"resultCode!,resultDescription").
@@ -476,7 +487,8 @@ END. /*fMasCancel_FixedLineOrder*/
 FUNCTION fMasGet_FixedNbr RETURNS CHAR
    (icPostalCode AS CHAR ,
     OUTPUT ocNum AS CHAR,
-    OUTPUT ocResult AS CHAR): /*Error message*/
+    OUTPUT ocResultCode AS CHAR,
+    OUTPUT ocResultDesc AS CHAR): /*Error message*/
    DEF VAR lcXMLStruct AS CHAR NO-UNDO. /*Input to TMS*/
    DEF VAR lcResponse AS CHAR NO-UNDO.
    DEF VAR lcResult AS CHAR NO-UNDO.
@@ -489,8 +501,11 @@ FUNCTION fMasGet_FixedNbr RETURNS CHAR
    fMasXMLGenerate_test("getnewResource").
    RUN pRPCMethodCall("masmovil.getNewResource", TRUE).
 
-   IF gi_xmlrpc_error NE 0 THEN
+   IF gi_xmlrpc_error NE 0 THEN DO:
+      ocResultCode = STRING(gi_xmlrpc_error).
+      ocResultDesc = gc_xmlrpc_error.
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
+   END.
 
    lcXMLStruct = get_struct(response_toplevel_id,"0").
    lcResponse = validate_struct(lcXMLStruct,"idNumero,fechaAsignacionCmt,fechaUltimoCambio,numero!,_links").
@@ -501,9 +516,9 @@ FUNCTION fMasGet_FixedNbr RETURNS CHAR
    ocNum = get_string(lcXMLStruct,"numero").
 
    IF ocNum EQ "" THEN DO:
-       ocResult = "Masmovil Error: Number not returned. Area: " + icPostalCode.
-       RETURN "ERROR".
+       RETURN "Masmovil Error: Number not returned. Area: " + icPostalCode.
    END.
+
    RETURN "".
 
 END.
