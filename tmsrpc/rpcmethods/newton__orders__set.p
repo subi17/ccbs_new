@@ -128,13 +128,13 @@ IF NUM-ENTRIES(lcOrderFields) > 0 THEN DO:
                  OrderFusion.OrderID = Order.OrderID NO-ERROR.
       IF NOT AVAIL OrderFusion THEN
          RETURN appl_err("ICC set is only allowed for fusion orders").
-
-      IF LOOKUP(OrderFusion.FusionStatus,"ONG,PFIN") = 0 THEN
-         RETURN appl_err("Wrong fusion order status, cannot update ICC").
-
+      
       IF Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} THEN RETURN
          appl_err("Order is in wrong status, cannot update ICC").
-      
+
+      IF OrderFusion.FusionStatus NE {&FUSION_ORDER_STATUS_FINALIZED} THEN
+         RETURN appl_err("Wrong fusion order status, cannot update ICC").
+
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
                  SIM.brand EQ gcBrand AND
                  SIM.ICC EQ pcIcc AND
@@ -163,7 +163,7 @@ IF NUM-ENTRIES(lcOrderFields) > 0 THEN DO:
             RETURN appl_err("IMEI set is only allowed for fusion orders").
       END.
       
-      IF LOOKUP(OrderFusion.FusionStatus,"ONG,PFIN") = 0 THEN
+      IF OrderFusion.FusionStatus NE {&FUSION_ORDER_STATUS_FINALIZED} THEN
          RETURN appl_err("Wrong fusion order status, cannot update IMEI").
       
       FIND OrderAccessory EXCLUSIVE-LOCK WHERE
