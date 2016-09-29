@@ -725,7 +725,6 @@ IF Order.Offer > "" THEN
                        Order.OrderID,
                        ldeActivationTS,
                        MsRequest.MsRequest,
-                       ldeActivationTS,
                        {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}).
 
 /* activate periodical contracts, service packages etc. */
