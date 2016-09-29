@@ -318,8 +318,9 @@ IF liLOStatusId EQ 99998 AND lcIMEI > "" THEN DO:
 END.
 
 /* Remove router prefix 9999 for SMS sending */
-IF STRING(liLOStatusId) BEGINS "9999" THEN
-   liLOStatusId = liLOStatusId - 99990.
+IF STRING(liLOStatusId) BEGINS {&LO_STATUS_ROUTER_PREFIX} THEN
+   liLOStatusId = INT(REPLACE(STRING(liLOStatusId),
+                      {&LO_STATUS_ROUTER_PREFIX}, "")).
 
 fSendDextraSMS(Order.OrderID, liLOStatusId, liCourierId).
 
