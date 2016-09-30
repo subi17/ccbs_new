@@ -75,12 +75,12 @@ FUNCTION fCreateCentreFileRow RETURNS CHAR
               OrderFusion.Brand EQ gcBrand AND
               OrderFusion.OrderId EQ fusionMessage.OrderId NO-ERROR.
    IF NOT AVAIL OrderFusion THEN
-      RETURN "ERROR: OrderFusion not available" + STRING(fusionMessage.OrderId).
+      RETURN "ERROR: OrderFusion not available orderid: " + 
+             STRING(fusionMessage.OrderId).
    IF LOOKUP(Order.OrderChannel,"pos") > 0 THEN
       lcdeliverydate = STRING(OrderFusion.OrderDate).
    ELSE
-       lcdeliverydate = lcDate + 
-                        SUBSTRING(lcTime,1,2) + "24" + substring(lcTime,3).
+       lcdeliverydate = lcDate + lcTime.
    IF OrderFusion.SerialNumber EQ "" THEN 
       RETURN "ERROR: Serial number missing orderId: " + STRING(Order.OrderID).
 
