@@ -15,6 +15,7 @@
 
 DEF VAR lcConURL AS CHAR NO-UNDO.
 DEF VAR liTesting AS INT NO-UNDO.
+DEF VAR liPrintXML AS INT NO-UNDO.
 DEF VAR lcUpload AS CHAR NO-UNDO.
 DEF VAR lcDownload AS CHAR NO-UNDO.
 
@@ -25,8 +26,7 @@ DEF VAR lcDownload AS CHAR NO-UNDO.
 liTesting = 0. /*2 = adsl, 1 = fiber*/
 lcdownload = "50M".
 lcupload = "5M".
-
-
+liPrintXML = 1.
 
 DEF STREAM sOut.
 
@@ -39,7 +39,7 @@ FUNCTION fMasXMLGenerate_test RETURNS CHAR
    (icMethod AS CHAR):
    IF liTesting NE 0 THEN DO:
       xmlrpc_initialize(FALSE).
-      OUTPUT STREAM sOut TO VALUE("Xmasmovile_xml_" + 
+      OUTPUT STREAM sOut TO VALUE("/tmp/Xmasmovile_xml_" + 
       REPLACE(STRING(fmakets()), ".", "_") +
       ".xml") APPEND.
       PUT STREAM sOut UNFORMATTED 
@@ -57,7 +57,7 @@ FUNCTION fInitMMConnection RETURNS CHAR
    IF lcConURL = ? OR lcConURL = "" THEN 
       RETURN "ERROR in connection settings".
 
-   IF initialize(lcConURL, 15) EQ FALSE THEN
+   IF initialize(lcConURL, 30) EQ FALSE THEN
       RETURN "ERROR in connection initialization".
 
    RETURN "".
@@ -233,7 +233,7 @@ END.
    add_string(lcContactStruct, "documentNumber",OrderCustomer.CustID). 
    add_string(lcContactStruct, "documentType", OrderCustomer.CustIdType).
    add_string(lcContactStruct, "email", OrderCustomer.Email).
-   add_string(lcContactStruct, "phoneNumber", OrderCustomer.ContactNum).
+   add_string(lcContactStruct, "phoneNumber", OrderCustomer.FixedNum).
 
    lcAddressStruct = add_struct(lcInstallationStruct, "Address").
    add_string(lcAddressStruct, "country", OrderCustomer.Country).
