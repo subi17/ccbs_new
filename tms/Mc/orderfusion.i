@@ -24,11 +24,18 @@ END.
 FUNCTION _fCreateFusionMessage RETURNS LOGICAL
  (iiOrderID AS INT,
   icMessageType AS CHAR):
-   
+
+   DEF BUFFER Order FOR Order.
+
+   FIND Order NO-LOCK WHERE
+        Order.Brand = Syst.Parameters:gcBrand AND
+        Order.OrderID = iiOrderID NO-ERROR.
+
    CREATE FusionMessage.
    ASSIGN
       FusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)
       FusionMessage.OrderID = iiOrderID
+      FusionMessage.MsSeq = Order.Msseq WHEN AVAIL Order
       FusionMessage.CreatedTS = fMakeTS()
       FusionMessage.MessageID = GUID(GENERATE-UUID)
       FusionMessage.MessageType = icMessageType
