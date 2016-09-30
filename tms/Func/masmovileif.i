@@ -37,7 +37,7 @@ DEF STREAM sOut.
 
 FUNCTION fMasXMLGenerate_test RETURNS CHAR
    (icMethod AS CHAR):
-   IF liTesting NE 0 THEN DO:
+   IF liPrintXML NE 0 THEN DO:
       xmlrpc_initialize(FALSE).
       OUTPUT STREAM sOut TO VALUE("/tmp/Xmasmovile_xml_" + 
       REPLACE(STRING(fmakets()), ".", "_") +
