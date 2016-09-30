@@ -9,12 +9,14 @@ DEF INPUT PARAM piMessageSeq AS INT NO-UNDO.
 
 DEF VAR lcFixedNumber AS CHAR NO-UNDO. 
 DEF VAR lcError AS CHAR NO-UNDO. 
-DEF VAR lcErrorDesc AS CHAR NO-UNDO. 
+DEF VAR lcResultCode AS CHAR NO-UNDO. 
+DEF VAR lcResultDesc AS CHAR NO-UNDO. 
 DEF VAR liCount AS INT NO-UNDO. 
+DEF VAR liMaxRetry AS INT NO-UNDO. 
 
 DEF BUFFER bFusionMessage FOR FusionMessage.
 
-FIND FusionMessage NO-LOCK WHERE
+FIND FusionMessage EXCLUSIVE-LOCK WHERE
      FusionMessage.MessageSeq = piMessageSeq NO-ERROR.
 
 IF NOT AVAIL FusionMessage THEN
@@ -28,9 +30,9 @@ IF NOT AVAIL Order THEN
    RETURN fFusionMessageError(BUFFER FusionMessage,
                               "Order not found").
 
-FIND FIRST OrderFusion NO-LOCK WHERE
-           OrderFusion.Brand = Order.Brand AND
-           OrderFusion.OrderID = FusionMessage.OrderID NO-ERROR.
+FIND OrderFusion EXCLUSIVE-LOCK WHERE
+     OrderFusion.Brand = Syst.Parameters:gcBrand AND
+     OrderFusion.OrderID = FusionMessage.OrderID NO-ERROR.
 IF NOT AVAIL OrderFusion THEN
    RETURN fFusionMessageError(BUFFER FusionMessage,
                               "OrderFusion not found").
@@ -57,22 +59,22 @@ IF NOT AVAIL OrderCustomer THEN
    RETURN fFusionMessageError(BUFFER FusionMessage,
                               "OrderCustomer not found").
 
+liMaxRetry = Syst.Parameters:geti("OnlineRetryMax","Masmovil").
+
 lcError = fInitMMConnection().
 IF lcError NE "" THEN RETURN lcError.
 
 lcError = fMasGet_FixedNbr(OrderCustomer.ZipCode,
                  OUTPUT lcFixedNumber,
-                 OUTPUT lcErrorDesc).
-
-FIND CURRENT FusionMessage EXCLUSIVE-LOCK.
+                 OUTPUT lcResultCode,
+                 OUTPUT lcResultDesc).
 
 IF lcError EQ "" THEN DO:
 
-   FIND CURRENT OrderFusion EXCLUSIVE-LOCK.
-   
    ASSIGN
       OrderFusion.FixedNumber = lcFixedNumber
-      FusionMessage.HandledTS = fMakeTS()
+      OrderFusion.UpdateTS = fMakeTS()
+      FusionMessage.HandledTS = OrderFusion.UpdateTS
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}.
 
    IF NOT fCreateFusionCreateOrderMessage(OrderFusion.OrderId,
@@ -83,7 +85,6 @@ IF lcError EQ "" THEN DO:
          OrderFusion.FusionStatusDesc =
             SUBST("Create order message failed: &1", lcError).
 
-      RELEASE OrderFusion.
    END.
 
    RETURN "".
@@ -92,41 +93,42 @@ END.
 ELSE DO:
 
    ASSIGN
-      FusionMessage.HandledTS = fMakeTS()
+      OrderFusion.UpdateTS = fMakeTS()
+      FusionMessage.HandledTS = OrderFusion.UpdateTS
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
-      FusionMessage.AdditionalInfo = lcErrorDesc. 
-   
-   IF lcError BEGINS "NW_ERROR" THEN DO:
+      FusionMessage.AdditionalInfo = (IF lcResultDesc > "" THEN 
+                                      lcResultDesc ELSE lcError).
+
+   /* automatic resending check */
+   IF (lcError BEGINS "NW_ERROR" AND
+      (lcResultCode EQ {&MASMOVIL_ERROR_ADAPTER_NETWORK} OR
+      (lcResultCode EQ {&MASMOVIL_ERROR_MASMOVIL} AND
+       LOOKUP(lcResultDesc,{&MASMOVIL_RETRY_ERROR_CODES}) > 0)))
+       OR
+      LOOKUP(lcResultCode,{&MASMOVIL_RETRY_ERROR_CODES}) > 0 THEN DO:
 
       FOR EACH bFusionMessage NO-LOCK WHERE
                bFusionMessage.OrderID = FusionMessage.OrderID AND
-               bFusionMessage.MessageType = FusionMessage.MessageType:
+               bFusionMessage.MessageType = FusionMessage.MessageType AND
+               ROWID(bFusionMessage) NE ROWID(FusionMessage):
          liCount = liCount + 1.
       END.
 
-      IF liCount < 5 THEN RETURN "RETRY".
-      ELSE DO:
+      IF liCount < liMaxRetry THEN RETURN "RETRY".
 
-         FIND OrderFusion EXCLUSIVE-LOCK WHERE
-              OrderFusion.OrderID = FusionMessage.OrderID NO-ERROR.
-
-         ASSIGN
-            OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR}
-            OrderFusion.FusionStatusDesc = lcErrorDesc.
-
-         fCreateMemo("Order",
-                     STRING(Order.OrderId),
-                     0,
-                     "Masmovil fixed number reservation failed",
-                     lcErrorDesc,
-                     "",
-                     "TMS").
-
-         RETURN "".
-      END.
    END.
 
-   RELEASE FusionMessage.
+   ASSIGN
+      OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR}
+      OrderFusion.FusionStatusDesc = "Fixed number reservation failed".
+
+   fCreateMemo("Order",
+               STRING(Order.OrderId),
+               0,
+               "Masmovil fixed number reservation failed",
+               "",
+               "",
+               "TMS").
 
    RETURN lcError.
 END.
