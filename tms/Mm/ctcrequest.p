@@ -183,7 +183,8 @@ IF NOT fReqStatus(7,"") THEN DO:
 END.
 
 /* Set new activation ts for clitype change */     
-IF MSREquest.ReqDParam1 > MSRequest.ActStamp THEN
+IF MSREquest.ReqDParam1 > MSRequest.ActStamp OR
+   MSRequest.ReqSource = {&REQUEST_SOURCE_FUSION_ORDER} THEN
      ldeActStamp = MsRequest.ReqDParam1.
 ELSE ldeActStamp = MsRequest.ActStamp.
 
