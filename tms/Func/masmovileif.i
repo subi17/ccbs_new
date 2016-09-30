@@ -14,18 +14,9 @@
 {Func/fixedlinefunc.i}
 
 DEF VAR lcConURL AS CHAR NO-UNDO.
-DEF VAR liTesting AS INT NO-UNDO.
 DEF VAR liPrintXML AS INT NO-UNDO.
-DEF VAR lcUpload AS CHAR NO-UNDO.
-DEF VAR lcDownload AS CHAR NO-UNDO.
 
 /*For testing*/
-/*litesting
-   sets xml data file writing on
-   makes hard codings to order creation data*/
-liTesting = 0. /*2 = adsl, 1 = fiber*/
-lcdownload = "50M".
-lcupload = "5M".
 liPrintXML = 1.
 
 DEF STREAM sOut.
@@ -37,7 +28,7 @@ DEF STREAM sOut.
 
 FUNCTION fMasXMLGenerate_test RETURNS CHAR
    (icMethod AS CHAR):
-   IF liTesting NE 0 THEN DO:
+   IF liPrintXML NE 0 THEN DO:
       xmlrpc_initialize(FALSE).
       OUTPUT STREAM sOut TO VALUE("/tmp/Xmasmovile_xml_" + 
       REPLACE(STRING(fmakets()), ".", "_") +
@@ -165,23 +156,6 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    IF NOT AVAIL OrderFusion THEN
                RETURN "Error: Fixed Order data not found " + STRING(iiOrderID) .
 
-
-   /*Generate order type*/
-IF liTesting NE 0 THEN DO:
-   IF liTesting EQ 1 THEN DO:
-            lcOrderType = "Alta FTTH + VOIP".
-            lcConnServiceId = "FTTH".
-            lcConnServiceName = "FTTH".
-            lcConnServiceType = "FTTH".
-   END.
-   ELSE DO:
-            lcOrderType = "Alta xDSL + VOIP".
-            lcConnServiceId = "ADSL".
-            lcConnServiceName = "ADSL".
-            lcConnServiceType = "ADSL".
-   END.
-END. /*testing related*/
-ELSE DO:
    IF fIsConvergenceTariff(bOrder.CliType) THEN DO:
       FIND FIRST bCLIType NO-LOCK WHERE
                  bCLIType.CLIType EQ bOrder.CliType NO-ERROR.
@@ -203,7 +177,6 @@ ELSE DO:
    END.
    ELSE
       RETURN "Error Not allowed CLITYPE " + bOrder.CliType.
-END.
 
    IF fTS2Date(bOrder.CrStamp, ldaCreDate) EQ FALSE THEN
       RETURN "Error: Date reading failed".
@@ -300,18 +273,7 @@ END.
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics" ).
    IF lcConnServiceId EQ "FTTH" THEN DO:
-      IF liTesting NE 0 THEN DO:
-         fAddCharacteristic(lcCharacteristicsArray,      /*base*/
-                         "UploadSpeed",               /*param name*/
-                         lcUpload,    /*param value*/
-                         "").                         /*old value*/
-         fAddCharacteristic(lcCharacteristicsArray,      /*base*/
-                            "DownloadSpeed",             /*param name*/
-                            lcDownload,  /*param value*/
-                            "").                         /*old value*/
  
-      END.
-      ELSE DO:
          fAddCharacteristic(lcCharacteristicsArray,      /*base*/
                          "UploadSpeed",               /*param name*/
                          bCLIType.FixedLineUpload,    /*param value*/
@@ -320,7 +282,6 @@ END.
                             "DownloadSpeed",             /*param name*/
                             bCLIType.FixedLineDownload,  /*param value*/
                             "").                         /*old value*/
-      END.
    END.
 
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
