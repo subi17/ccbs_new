@@ -117,6 +117,7 @@ CREATE FusionMessage.
 ASSIGN
    FusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)
    FusionMessage.OrderID = liOrderID
+   FusionMessage.MsSeq = Order.MsSeq
    FusionMessage.CreatedTS = fMakeTS()
    FusionMessage.MessageID = lcNotificationID
    FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_UPDATE_STATUS}
