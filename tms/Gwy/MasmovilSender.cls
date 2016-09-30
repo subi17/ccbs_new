@@ -64,7 +64,7 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
                FusionMessage.Source EQ {&FUSIONMESSAGE_SOURCE_TMS} AND
                FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}
             BY FusionMessage.CreatedTS 
-            liLoop = 10 TO 10:
+            liLoop = 1 TO 10:
 
          IF FusionMessage.CreatedTS > ldeNow THEN LEAVE.
 
