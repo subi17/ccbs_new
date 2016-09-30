@@ -129,6 +129,11 @@ ASSIGN
    FusionMessage.OrderType = lcOrderType
    FusionMessage.AdditionalInfo = lcAdditionalInfo.
 
+ASSIGN
+   OrderFusion.FixedStatus = lcStatus
+   OrderFusion.FixedStatusTS = ldeNotificationTime
+   OrderFusion.UpdateTS = FusionMessage.CreatedTS.
+
 CASE FusionMessage.FixedStatus:
 
    WHEN "CERRADA PARCIAL" OR

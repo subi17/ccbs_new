@@ -309,7 +309,8 @@ FIND MsRequest WHERE
      MsRequest.Brand     = gcBrand EXCLUSIVE-LOCK NO-ERROR.
 
 /* Set new activation ts for clitype change */     
-IF MSREquest.ReqDParam1 > MSRequest.ActStamp THEN
+IF MSREquest.ReqDParam1 > MSRequest.ActStamp OR 
+   MSRequest.ReqSource = {&REQUEST_SOURCE_FUSION_ORDER} THEN
    MSRequest.ActStamp =   MSREquest.ReqDParam1 .  
 
 /* Check sub-requests */      
