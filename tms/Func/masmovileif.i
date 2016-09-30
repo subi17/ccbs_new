@@ -132,6 +132,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
 
    DEF BUFFER bOrder FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
+   DEF BUFFER bOrderCustomer FOR OrderCustomer.
    DEF BUFFER OrderFusion FOR OrderFusion.
    DEF BUFFER bCLIType FOR CliType.
 
@@ -148,6 +149,15 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
               OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
               NO-ERROR.
    IF NOT AVAIL OrderCustomer THEN
+      RETURN "Error: Install address data not found " + STRING(iiOrderID) .
+   
+   FIND FIRST bOrderCustomer NO-LOCK WHERE 
+              bOrderCustomer.Brand EQ Syst.Parameters:gcBrand AND
+              bOrderCustomer.OrderId EQ iiOrderid AND 
+              bOrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+              NO-ERROR.
+   
+   IF NOT AVAIL bOrderCustomer THEN
       RETURN "Error: Customer data not found " + STRING(iiOrderID) .
    
    FIND FIRST OrderFusion NO-LOCK WHERE
@@ -203,8 +213,8 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    add_string(lcContactStruct, "firstName", OrderCustomer.FirstName).
    /*add_string(lcContactStruct, "middleName", "").*/
    add_string(lcContactStruct, "lastName", OrderCustomer.Surname1 + " " + OrderCustomer.Surname2).
-   add_string(lcContactStruct, "documentNumber",OrderCustomer.CustID). 
-   add_string(lcContactStruct, "documentType", OrderCustomer.CustIdType).
+   add_string(lcContactStruct, "documentNumber", bOrderCustomer.CustID). 
+   add_string(lcContactStruct, "documentType", bOrderCustomer.CustIdType).
    add_string(lcContactStruct, "email", OrderCustomer.Email).
    add_string(lcContactStruct, "phoneNumber", OrderCustomer.FixedNum).
 
