@@ -322,6 +322,7 @@ DEF VAR plCustDataRetr AS LOGICAL NO-UNDO.
 DEF VAR pcIdentifiedSmsNumber AS CHAR NO-UNDO.
 DEF VAR plMultiOrder AS LOGICAL NO-UNDO.
 DEF VAR pcGescal AS CHAR NO-UNDO. 
+DEF VAR lcCLITypeTrans AS CHAR NO-UNDO. 
 
 /* Real Order Inspection parameters */
 DEF VAR pcROIresult      AS CHAR NO-UNDO.
@@ -359,8 +360,6 @@ DEF VAR lcOrderSMSText         AS CHAR NO-UNDO.
 DEF VAR ldeSMSStamp            AS DEC  NO-UNDO. 
 DEF VAR lcMobileNumber         AS CHAR NO-UNDO. 
    
-DEF VAR lcSMSKey AS CHAR NO-UNDO. 
-
 /* Local variables for order */
 DEF VAR liOrderId       AS INT  NO-UNDO.
 DEF VAR lcSimType       AS CHAR NO-UNDO.
@@ -2257,25 +2256,34 @@ END. /* IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" */
 IF Order.OrderType EQ {&ORDER_TYPE_STC} AND
    NOT llRoiClose THEN DO:
 
-   IF pcMobSubBundleType > "" THEN lcSMSKey = "STCORDER" + pcMobSubBundleType.
-   ELSE lcSMSKey = "STCORDER" + pcSubType.
-               
    lcSTCSMSText = fGetSMSTxt(
-                     lcSMSKey,
+                     "STCORDER_CONVERGENT",
                      TODAY,
                      (IF AVAIL Customer
                       THEN Customer.Language
                       ELSE 1),
                       OUTPUT ldeSMSStamp).
-
-   IF lcSTCSMSText > "" THEN
-   fMakeSchedSMS2(Order.CustNum,
-                  Order.CLI,
-                  {&SMSTYPE_INFO},
-                  lcSTCSMSText,
-                  ldeSMSStamp,
-                  "22622",
-                  "").
+               
+   IF lcSTCSMSText > "" THEN DO:
+      
+      lcCLITypeTrans = fGetItemName(gcBrand,
+                            "CLIType",
+                            Order.CLIType,
+                           (IF AVAIL Customer
+                            THEN Customer.Language
+                            ELSE 1),
+                            TODAY).
+      
+      lcSTCSMSText = REPLACE(lcSTCSMSText,"#CLITYPE",lcCLITypeTrans).
+      
+      fMakeSchedSMS2(Order.CustNum,
+                     Order.CLI,
+                     {&SMSTYPE_INFO},
+                     lcSTCSMSText,
+                     ldeSMSStamp,
+                     "22622",
+                     "").
+   END.
 END.
 
 /* YPR-3317 */
