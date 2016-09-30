@@ -26,10 +26,21 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
   icMessageType AS CHAR):
 
    DEF BUFFER Order FOR Order.
+   DEF BUFFER CLIType FOR CLIType.
+
+   DEF VAR lcOrderType AS CHAR NO-UNDO. 
 
    FIND Order NO-LOCK WHERE
         Order.Brand = Syst.Parameters:gcBrand AND
-        Order.OrderID = iiOrderID NO-ERROR.
+        Order.OrderID = iiOrderID.
+
+   FIND CLIType NO-LOCK WHERE
+        CLIType.CLIType = Order.CLiType.
+      
+   IF CLIType.FixedLineType EQ 1 THEN
+      lcOrderType = "Alta xDSL + VOIP".
+   ELSE IF CLIType.FixedLineType EQ 2 THEN
+      lcOrderType = "Alta FTTH + VOIP".
 
    CREATE FusionMessage.
    ASSIGN
@@ -40,8 +51,8 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
       FusionMessage.MessageID = GUID(GENERATE-UUID)
       FusionMessage.MessageType = icMessageType
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_NEW}
-      FusionMessage.Source = {&FUSIONMESSAGE_SOURCE_TMS}. 
-
+      FusionMessage.Source = {&FUSIONMESSAGE_SOURCE_TMS}
+      FusionMessage.OrderType = lcOrderType. 
 END.
 
 FUNCTION fCreateFusionReserveNumberMessage RETURNS LOGICAL
