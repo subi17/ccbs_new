@@ -47,6 +47,7 @@
 {fctserval.i}
 {fcustdata.i}
 {tmsconst.i}
+{fixedlinefunc.i}
 
 DEF BUFFER bReqOwner FOR MsOwner.
 DEF BUFFER bReqComp  FOR ServCom.
@@ -239,6 +240,10 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
    RUN requestaction_sms.p(INPUT liReqCreated,
                            INPUT icNewType,
                            INPUT icSource).
+
+   IF fIsConvergenceTariff(bReqSub.CLIType) AND
+      NOT fIsConvergenceTariff(icNewType) THEN 
+      bCreaReq.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
   
    RETURN liReqCreated.
              
