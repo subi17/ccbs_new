@@ -552,7 +552,8 @@ PROCEDURE pUpdateSubscription:
       one starting from change time */
    ASSIGN 
       ldBegStamp = MsRequest.ActStamp
-      ldEndStamp = fSecOffSet(ldBegStamp,-1).
+      ldEndStamp = fSecOffSet(ldBegStamp,-1)
+      lcFixedNumber = ?.
    
    IF MsRequest.ReqIParam2 > 0 THEN
       FOR FIRST Order NO-LOCK WHERE
@@ -567,7 +568,7 @@ PROCEDURE pUpdateSubscription:
    /* YOT-1407: if postpaid -> postpaid or postpaid -> prepaid then original 
       activation time can be used even if handling is delayed */
    IF llOldPayType = FALSE OR 
-      lcFixedNumber NE "" OR
+      lcFixedNumber NE ? OR
       ldtActDate > TODAY THEN ASSIGN 
       ldaNewBeginDate = ldtActDate
       liChangeTime    = liActTime.
