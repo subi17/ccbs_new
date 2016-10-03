@@ -2135,8 +2135,10 @@ PROCEDURE pFixedFee:
             by bank */
          IF LOOKUP(FixedFee.BillCode,"PAYTERM,RVTERM") > 0 AND
             LOOKUP(FixedFee.FinancedResult,{&TF_STATUSES_BANK}) > 0 THEN DO:
-            IF FixedFee.TFBank = "0081" THEN
+            IF FixedFee.TFBank EQ {&TF_BANK_SABADELL} THEN /*0081*/
                FFItem.BillCode = FFItem.BillCode + "BS".
+            ELSE IF FixedFee.TFBank EQ {&TF_BANK_CETELEM} THEN /*0225*/
+               FFItem.BillCode = FFItem.BillCode + "BC".
             ELSE
                FFItem.BillCode = FFItem.BillCode + "1E".
          END.
@@ -2290,14 +2292,15 @@ PROCEDURE pSingleFee:
                        FixedFee.FFnum = liFFNum NO-ERROR.
             IF AVAIL FixedFee AND 
                LOOKUP(FixedFee.FinancedResult,{&TF_STATUSES_BANK}) > 0 THEN DO:
-               IF FixedFee.TFBank = "0081" THEN
+               IF FixedFee.TFBank EQ {&TF_BANK_SABADELL} THEN /*0081*/
                   SingleFee.BillCode = SingleFee.BillCode + "BS".
+               ELSE IF FixedFee.TFBank EQ {&TF_BANK_CETELEM} THEN /*0225*/
+                  Singlefee.BillCode = Singlefee.BillCode + "BC".
                ELSE
                   SingleFee.BillCode = SingleFee.BillCode + "1E".
             END.
          END.
       END.
-
       FIND FIRST ttIR WHERE
                  ttIR.BillCode = SingleFee.BillCode AND
                  ttIR.CLI      = lcCLI              AND
