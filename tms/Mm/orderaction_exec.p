@@ -502,7 +502,12 @@ PROCEDURE pQ25Extension:
                                   TODAY,
                                   Customer.Language,
                                   OUTPUT ldeSMSStamp).
-         /* YPR-3565 */
+         WHEN "RVTERMBCF" THEN
+            lcSMSTxt = fGetSMSTxt("Q25ExtensionCetelem",
+                                  TODAY,
+                                  Customer.Language,
+                                  OUTPUT ldeSMSStamp). 
+         /*YPR-3565*/
          /* WHEN "RVTERMBSF" THEN
             lcSMSTxt = fGetSMSTxt("Q25ExtensionSabadell",
                                   TODAY,
