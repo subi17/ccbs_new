@@ -8,23 +8,23 @@
   CREATED ......: 19.11.15
   CHANGED ......:
   ------------------------------------------------------------------------*/
-&IF "{&fixedlinefunc}" NE "YES"
+&IF "{&FIXEDLINEFUNC_I}" NE "YES"
 &THEN
-&GLOBAL-DEFINE fixedlinefunc YES
+&GLOBAL-DEFINE FIXEDLINEFUNC_I YES
 
 /*Function returns Trie if a tariff can be defined as convergent tariff.
 NOTE: False is returned in real false cases and also in error cases. */
 FUNCTION fIsConvergenceTariff RETURNS LOGICAL
    (icCliType AS CHAR):
-   DEF BUFFER bCLIType FOR CLIType.
 
-   FIND FIRST bCLIType NO-LOCK WHERE
-              bCLIType.Brand EQ Syst.Parameters:gcBrand AND
-              bCLIType.CliType EQ icCLIType NO-ERROR.
-   IF AVAIL bCliType THEN DO:
-      IF bCliType.FixedLineDownload NE ? AND 
-         bCliType.FixedLineDownload NE "" THEN RETURN TRUE.
-   END.
+   DEF BUFFER CLIType FOR CLIType.
+
+   FIND FIRST CLIType NO-LOCK WHERE
+              CLIType.Brand EQ Syst.Parameters:gcBrand AND
+              CLIType.CliType EQ icCLIType NO-ERROR.
+   IF AVAIL CliType AND
+      CliType.FixedLineDownload NE ? AND 
+      CliType.FixedLineDownload NE "" THEN RETURN TRUE.
    
    RETURN FALSE.
 END.   

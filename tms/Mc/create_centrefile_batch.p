@@ -69,18 +69,20 @@ FUNCTION fCreateCentreFileRow RETURNS CHAR
               Order.Brand EQ gcBrand AND
               Order.OrderID EQ fusionMessage.OrderId NO-ERROR.
    IF NOT AVAIL Order THEN
-      RETURN "Order not available" + STRING(fusionMessage.OrderId).
+      RETURN "ERROR: Order not available" + STRING(fusionMessage.OrderId).
 
    FIND FIRST OrderFusion NO-LOCK WHERE
               OrderFusion.Brand EQ gcBrand AND
               OrderFusion.OrderId EQ fusionMessage.OrderId NO-ERROR.
    IF NOT AVAIL OrderFusion THEN
-      RETURN "OrderFusion not available" + STRING(fusionMessage.OrderId).
+      RETURN "ERROR: OrderFusion not available orderid: " + 
+             STRING(fusionMessage.OrderId).
    IF LOOKUP(Order.OrderChannel,"pos") > 0 THEN
       lcdeliverydate = STRING(OrderFusion.OrderDate).
    ELSE
-       lcdeliverydate = lcDate + 
-                        SUBSTRING(lcTime,1,2) + "24" + substring(lcTime,3).
+       lcdeliverydate = lcDate + lcTime.
+   IF OrderFusion.SerialNumber EQ "" THEN 
+      RETURN "ERROR: Serial number missing orderId: " + STRING(Order.OrderID).
 
    lcCentreFileRow =
    "CENTRE"                        + lcSep +
@@ -126,7 +128,6 @@ FUNCTION fCreateCentreFileRow RETURNS CHAR
    PUT STREAM sOutFile UNFORMATTED lcCentreFileRow SKIP.
    OUTPUT STREAM sOutFile CLOSE.
 
-   fLogLine(lcCentreFileRow, "").
    RETURN "".
 END.
 
@@ -144,6 +145,10 @@ FOR EACH FusionMessage WHERE
    lcStatus = fCreateCentreFileRow().
    IF lcStatus EQ "" THEN
       FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_HANDLED}.
+   ELSE DO:
+      FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+      fLogLine("",lcStatus).
+   END.
 END.
 
 ldCurrentTime = fMakeTS().

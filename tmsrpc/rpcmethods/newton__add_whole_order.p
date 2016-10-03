@@ -183,7 +183,6 @@
                  fixed_line_serial_number;string;optional;
                  fixed_line_mnp_time_of_change;string;optional;
                  fixed_line_product;string;mandatory;fusion order product code
-                 fixed_line_adsl_linkstate;string;optional;ADSL link state
                  customer_type;string;mandatory;customer type
                  contractid;string;optional;
                  install_address;struct;mandatory;
@@ -323,6 +322,7 @@ DEF VAR plCustDataRetr AS LOGICAL NO-UNDO.
 DEF VAR pcIdentifiedSmsNumber AS CHAR NO-UNDO.
 DEF VAR plMultiOrder AS LOGICAL NO-UNDO.
 DEF VAR pcGescal AS CHAR NO-UNDO. 
+DEF VAR lcCLITypeTrans AS CHAR NO-UNDO. 
 
 /* Real Order Inspection parameters */
 DEF VAR pcROIresult      AS CHAR NO-UNDO.
@@ -360,8 +360,6 @@ DEF VAR lcOrderSMSText         AS CHAR NO-UNDO.
 DEF VAR ldeSMSStamp            AS DEC  NO-UNDO. 
 DEF VAR lcMobileNumber         AS CHAR NO-UNDO. 
    
-DEF VAR lcSMSKey AS CHAR NO-UNDO. 
-
 /* Local variables for order */
 DEF VAR liOrderId       AS INT  NO-UNDO.
 DEF VAR lcSimType       AS CHAR NO-UNDO.
@@ -398,7 +396,6 @@ DEF VAR lcFixedLineMNPOldOper AS CHAR NO-UNDO.
 DEF VAR lcFixedLineMNPOldOperName AS CHAR NO-UNDO.
 DEF VAR lcFixedLineMNPOldOperCode AS CHAR NO-UNDO.
 DEF VAR lcFixedLineSerialNbr AS CHAR NO-UNDO.
-DEF VAR lcFixedLineAdslLinkState AS CHAR NO-UNDO.
 DEF VAR lcFixedLineMNPTime AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineProduct AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineCustomerType AS CHAR NO-UNDO. 
@@ -1133,6 +1130,12 @@ END.
 
 FUNCTION fCreateOrderFusion RETURNS LOGICAL:
 
+   DEF VAR lcFixedLineAdslLinkState AS CHAR NO-UNDO.
+
+   IF lcFixedLineCustomerType = "ADSL" AND lcFixedLineNumberType = "MNP" 
+      THEN lcFixedLineAdslLinkState = "O".
+   ELSE    lcFixedLineAdslLinkState = "V".
+
    CREATE OrderFusion.
    ASSIGN
       OrderFusion.Brand             = gcBrand
@@ -1689,7 +1692,7 @@ END.
 /* YBP-530 */
 IF pcFusionStruct > "" THEN DO:
    lcFusionStructFields = validate_request(pcFusionStruct, 
-      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,fixed_line_mnp_time_of_change,fixed_line_product!,fixed_line_adsl_linkstate,install_address!,billing_address").
+      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,fixed_line_mnp_time_of_change,fixed_line_product!,install_address!,billing_address").
    IF gi_xmlrpc_error NE 0 THEN RETURN.
    
    ASSIGN
@@ -1708,8 +1711,6 @@ IF pcFusionStruct > "" THEN DO:
          WHEN LOOKUP("fixed_line_mnp_old_operator_code",lcFusionStructFields) > 0
       lcFixedLineSerialNbr = get_string(pcFusionStruct, "fixed_line_serial_number")
          WHEN LOOKUP("fixed_line_serial_number",lcFusionStructFields) > 0
-      lcFixedLineAdslLinkState = get_string(pcFusionStruct, "fixed_line_adsl_linkstate")
-         WHEN LOOKUP("fixed_line_adsl_linkstate",lcFusionStructFields) > 0
       lcFixedLineMNPTime = get_string(pcFusionStruct, "fixed_line_mnp_time_of_change")
          WHEN LOOKUP("fixed_line_mnp_time_of_change",lcFusionStructFields) > 0
       pcFixedBillingAddress = get_struct(pcFusionStruct,"billing_address")
@@ -2255,25 +2256,34 @@ END. /* IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" */
 IF Order.OrderType EQ {&ORDER_TYPE_STC} AND
    NOT llRoiClose THEN DO:
 
-   IF pcMobSubBundleType > "" THEN lcSMSKey = "STCORDER" + pcMobSubBundleType.
-   ELSE lcSMSKey = "STCORDER" + pcSubType.
-               
    lcSTCSMSText = fGetSMSTxt(
-                     lcSMSKey,
+                     "STCORDER_CONVERGENT",
                      TODAY,
                      (IF AVAIL Customer
                       THEN Customer.Language
                       ELSE 1),
                       OUTPUT ldeSMSStamp).
-
-   IF lcSTCSMSText > "" THEN
-   fMakeSchedSMS2(Order.CustNum,
-                  Order.CLI,
-                  {&SMSTYPE_INFO},
-                  lcSTCSMSText,
-                  ldeSMSStamp,
-                  "22622",
-                  "").
+               
+   IF lcSTCSMSText > "" THEN DO:
+      
+      lcCLITypeTrans = fGetItemName(gcBrand,
+                            "CLIType",
+                            Order.CLIType,
+                           (IF AVAIL Customer
+                            THEN Customer.Language
+                            ELSE 1),
+                            TODAY).
+      
+      lcSTCSMSText = REPLACE(lcSTCSMSText,"#CLITYPE",lcCLITypeTrans).
+      
+      fMakeSchedSMS2(Order.CustNum,
+                     Order.CLI,
+                     {&SMSTYPE_INFO},
+                     lcSTCSMSText,
+                     ldeSMSStamp,
+                     "22622",
+                     "").
+   END.
 END.
 
 /* YPR-3317 */

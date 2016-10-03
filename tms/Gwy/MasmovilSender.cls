@@ -48,6 +48,14 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
       DEF VAR liLoop AS INT NO-UNDO. 
       DEF VAR ldeNow AS DEC NO-UNDO. 
       DEF VAR lcReturnValue AS CHAR NO-UNDO. 
+      
+      IF Syst.Parameters:geti("OnlineEnabled","Masmovil") EQ 0 THEN DO:
+         IF LOG-MANAGER:LOGFILE-NAME <> ?
+            THEN LOG-MANAGER:WRITE-MESSAGE(
+               "Sending is disabled (TMS parameter Masmovil->OnlineEnabled=0)").
+         pauseUntilHeartbeat(30).
+         RETURN FALSE.
+      END.
 
       ldeNow = Class.timedate:MakeTS().
 
@@ -56,7 +64,7 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
                FusionMessage.Source EQ {&FUSIONMESSAGE_SOURCE_TMS} AND
                FusionMessage.MessageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}
             BY FusionMessage.CreatedTS 
-            liLoop = 10 TO 10:
+            liLoop = 1 TO 10:
 
          IF FusionMessage.CreatedTS > ldeNow THEN LEAVE.
 

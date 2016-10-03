@@ -5,6 +5,7 @@
 #
 
 DAEMON=Gwy.MasmovilSender
+INSTANCE=1
 LOGLEVEL=4
 cd $(dirname $0)/..
 . script/daemon.sh

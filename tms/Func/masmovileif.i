@@ -14,29 +14,23 @@
 {Func/fixedlinefunc.i}
 
 DEF VAR lcConURL AS CHAR NO-UNDO.
-DEF VAR liTesting AS INT NO-UNDO.
-DEF VAR lcUpload AS CHAR NO-UNDO.
-DEF VAR lcDownload AS CHAR NO-UNDO.
+DEF VAR liPrintXML AS INT NO-UNDO.
 
 /*For testing*/
-/*litesting
-   sets xml data file writing on
-   makes hard codings to order creation data*/
-liTesting = 0. /*2 = adsl, 1 = fiber*/
-lcdownload = "50M".
-lcupload = "5M".
-
-
+liPrintXML = 1.
 
 DEF STREAM sOut.
 
+&GLOBAL-DEFINE MASMOVIL_ERROR_ADAPTER_PARSING "1"
+&GLOBAL-DEFINE MASMOVIL_ERROR_ADAPTER_NETWORK "2"
+&GLOBAL-DEFINE MASMOVIL_ERROR_MASMOVIL "3"
 &GLOBAL-DEFINE MASMOVIL_RETRY_ERROR_CODES "APIKIT-00404,APIKIT-00405,APIKIT-00406,APIKIT-00415,WO-10000000,ESB-99999999"
 
 FUNCTION fMasXMLGenerate_test RETURNS CHAR
    (icMethod AS CHAR):
-   IF liTesting NE 0 THEN DO:
+   IF liPrintXML NE 0 THEN DO:
       xmlrpc_initialize(FALSE).
-      OUTPUT STREAM sOut TO VALUE("Xmasmovile_xml_" + 
+      OUTPUT STREAM sOut TO VALUE("/tmp/Xmasmovile_xml_" + 
       REPLACE(STRING(fmakets()), ".", "_") +
       ".xml") APPEND.
       PUT STREAM sOut UNFORMATTED 
@@ -54,7 +48,7 @@ FUNCTION fInitMMConnection RETURNS CHAR
    IF lcConURL = ? OR lcConURL = "" THEN 
       RETURN "ERROR in connection settings".
 
-   IF initialize(lcConURL, 15) EQ FALSE THEN
+   IF initialize(lcConURL, 30) EQ FALSE THEN
       RETURN "ERROR in connection initialization".
 
    RETURN "".
@@ -137,8 +131,9 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF VAR lcResult AS CHAR NO-UNDO.
 
    DEF BUFFER bOrder FOR Order.
-   DEF BUFFER bOC FOR OrderCustomer.
-   DEF BUFFER bOF FOR OrderFusion.
+   DEF BUFFER OrderCustomer FOR OrderCustomer.
+   DEF BUFFER bOrderCustomer FOR OrderCustomer.
+   DEF BUFFER OrderFusion FOR OrderFusion.
    DEF BUFFER bCLIType FOR CliType.
 
    FIND FIRST bOrder NO-LOCK where 
@@ -148,45 +143,29 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
       RETURN "Error: Order not found " + STRING(iiOrderID) .
 
   /*Use delivery customer information if it is avbailable*/
-   FIND FIRST bOC NO-LOCK WHERE 
-              bOC.Brand EQ Syst.Parameters:gcBrand AND
-              bOC.OrderId EQ iiOrderid AND 
-              bOC.RowType EQ 4
+   FIND FIRST OrderCustomer NO-LOCK WHERE 
+              OrderCustomer.Brand EQ Syst.Parameters:gcBrand AND
+              OrderCustomer.OrderId EQ iiOrderid AND 
+              OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
               NO-ERROR.
-   IF NOT AVAIL bOC THEN DO:
-      FIND FIRST bOC NO-LOCK WHERE 
-                 bOC.Brand EQ Syst.Parameters:gcBrand AND
-                 bOC.OrderId EQ iiOrderid AND 
-                 bOc.RowType EQ 1 /*This customer should be available*/
-                 NO-ERROR.
-      IF NOT AVAIL bOC THEN 
-         RETURN "Error: Customer data not found " + STRING(iiOrderID) .
-
-   END.
+   IF NOT AVAIL OrderCustomer THEN
+      RETURN "Error: Install address data not found " + STRING(iiOrderID) .
    
-   FIND FIRST bOF NO-LOCK WHERE
-              bOF.Brand EQ Syst.Parameters:gcBrand AND
-              bOF.OrderID EQ iiOrderID NO-ERROR.
-   IF NOT AVAIL bOF THEN
+   FIND FIRST bOrderCustomer NO-LOCK WHERE 
+              bOrderCustomer.Brand EQ Syst.Parameters:gcBrand AND
+              bOrderCustomer.OrderId EQ iiOrderid AND 
+              bOrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+              NO-ERROR.
+   
+   IF NOT AVAIL bOrderCustomer THEN
+      RETURN "Error: Customer data not found " + STRING(iiOrderID) .
+   
+   FIND FIRST OrderFusion NO-LOCK WHERE
+              OrderFusion.Brand EQ Syst.Parameters:gcBrand AND
+              OrderFusion.OrderID EQ iiOrderID NO-ERROR.
+   IF NOT AVAIL OrderFusion THEN
                RETURN "Error: Fixed Order data not found " + STRING(iiOrderID) .
 
-
-   /*Generate order type*/
-IF liTesting NE 0 THEN DO:
-   IF liTesting EQ 1 THEN DO:
-            lcOrderType = "Alta FTTH + VOIP".
-            lcConnServiceId = "FTTH".
-            lcConnServiceName = "FTTH".
-            lcConnServiceType = "FTTH".
-   END.
-   ELSE DO:
-            lcOrderType = "Alta xDSL + VOIP".
-            lcConnServiceId = "ADSL".
-            lcConnServiceName = "ADSL".
-            lcConnServiceType = "ADSL".
-   END.
-END. /*testing related*/
-ELSE DO:
    IF fIsConvergenceTariff(bOrder.CliType) THEN DO:
       FIND FIRST bCLIType NO-LOCK WHERE
                  bCLIType.CLIType EQ bOrder.CliType NO-ERROR.
@@ -208,7 +187,6 @@ ELSE DO:
    END.
    ELSE
       RETURN "Error Not allowed CLITYPE " + bOrder.CliType.
-END.
 
    IF fTS2Date(bOrder.CrStamp, ldaCreDate) EQ FALSE THEN
       RETURN "Error: Date reading failed".
@@ -232,32 +210,32 @@ END.
    /*Installation*/
    lcInstallationStruct = add_struct(lcOutputStruct, "Installation").
    lcContactStruct = add_struct(lcInstallationStruct, "Contact").
-   add_string(lcContactStruct, "firstName", bOC.FirstName).
+   add_string(lcContactStruct, "firstName", OrderCustomer.FirstName).
    /*add_string(lcContactStruct, "middleName", "").*/
-   add_string(lcContactStruct, "lastName", bOC.Surname1 + " " + bOC.Surname2).
-   add_string(lcContactStruct, "documentNumber",bOC.CustID). 
-   add_string(lcContactStruct, "documentType", bOC.CustIdType).
-   add_string(lcContactStruct, "email", bOC.Email).
-   add_string(lcContactStruct, "phoneNumber", bOC.ContactNum).
+   add_string(lcContactStruct, "lastName", OrderCustomer.Surname1 + " " + OrderCustomer.Surname2).
+   add_string(lcContactStruct, "documentNumber", bOrderCustomer.CustID). 
+   add_string(lcContactStruct, "documentType", bOrderCustomer.CustIdType).
+   add_string(lcContactStruct, "email", OrderCustomer.Email).
+   add_string(lcContactStruct, "phoneNumber", OrderCustomer.FixedNum).
 
    lcAddressStruct = add_struct(lcInstallationStruct, "Address").
-   add_string(lcAddressStruct, "country", bOC.Country).
-   add_string(lcAddressStruct, "province", bOC.Region).
-   add_string(lcAddressStruct, "town", bOC.PostOffice).
-   add_string(lcAddressStruct, "street", bOC.Street).
-   add_string(lcAddressStruct, "streetType", bOC.StreetType). 
-   add_string(lcAddressStruct, "number", bOC.BuildingNum).
-   add_string(lcAddressStruct, "bis_duplicate", bOC.BisDuplicate).
-   add_string(lcAddressStruct, "block", bOC.Block).
-   add_string(lcAddressStruct, "door", bOC.Door).
-   add_string(lcAddressStruct, "letter", bOC.Letter).
-   add_string(lcAddressStruct, "stair", bOC.Stair).
-   add_string(lcAddressStruct, "floor", bOC.Floor).
-   add_string(lcAddressStruct, "hand", bOC.Hand).
-   add_string(lcAddressStruct, "km", bOC.Km).
-   add_string(lcAddressStruct, "zipCode", bOc.ZipCode).
+   add_string(lcAddressStruct, "country", OrderCustomer.Country).
+   add_string(lcAddressStruct, "province", OrderCustomer.Region).
+   add_string(lcAddressStruct, "town", OrderCustomer.PostOffice).
+   add_string(lcAddressStruct, "street", OrderCustomer.Street).
+   add_string(lcAddressStruct, "streetType", OrderCustomer.StreetType). 
+   add_string(lcAddressStruct, "number", OrderCustomer.BuildingNum).
+   add_string(lcAddressStruct, "bis_duplicate", OrderCustomer.BisDuplicate).
+   add_string(lcAddressStruct, "block", OrderCustomer.Block).
+   add_string(lcAddressStruct, "door", OrderCustomer.Door).
+   add_string(lcAddressStruct, "letter", OrderCustomer.Letter).
+   add_string(lcAddressStruct, "stair", OrderCustomer.Stair).
+   add_string(lcAddressStruct, "floor", OrderCustomer.Floor).
+   add_string(lcAddressStruct, "hand", OrderCustomer.Hand).
+   add_string(lcAddressStruct, "km", OrderCustomer.Km).
+   add_string(lcAddressStruct, "zipCode", OrderCustomer.ZipCode).
    IF lcConnServiceId EQ "ADSL" THEN
-      add_string(lcInstallationStruct, "modality", bOF.ADSLLinkstate).
+      add_string(lcInstallationStruct, "modality", OrderFusion.ADSLLinkstate).
 
    lcServiceArray = add_array(lcOutputStruct,"Services").
 
@@ -273,10 +251,10 @@ END.
 
 
    /*Mandatory in portability*/
-   IF bOF.FixedNumberType NE "new" THEN DO:
+   IF OrderFusion.FixedNumberType NE "new" THEN DO:
       fAddCharacteristic(lcCharacteristicsArray, /*base*/
                          "donoroperator",        /*param name*/
-                         bOF.FixedCurrOperCode,  /*param value*/
+                         OrderFusion.FixedCurrOperCode,  /*param value*/
                          "").                    /*old value*/
 
       fAddCharacteristic(lcCharacteristicsArray, /*base*/
@@ -292,7 +270,7 @@ END.
 
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
                       "phoneNumber",          /*param name*/
-                      bOF.FixedNumber,        /*param value*/
+                      OrderFusion.FixedNumber,        /*param value*/
                       "").                    /*old value*/
 
    /*Services entry - Line*/
@@ -305,18 +283,7 @@ END.
    /*Characteristics for the service*/
    lcCharacteristicsArray = add_array(lcServiceStruct,"Characteristics" ).
    IF lcConnServiceId EQ "FTTH" THEN DO:
-      IF liTesting NE 0 THEN DO:
-         fAddCharacteristic(lcCharacteristicsArray,      /*base*/
-                         "UploadSpeed",               /*param name*/
-                         lcUpload,    /*param value*/
-                         "").                         /*old value*/
-         fAddCharacteristic(lcCharacteristicsArray,      /*base*/
-                            "DownloadSpeed",             /*param name*/
-                            lcDownload,  /*param value*/
-                            "").                         /*old value*/
  
-      END.
-      ELSE DO:
          fAddCharacteristic(lcCharacteristicsArray,      /*base*/
                          "UploadSpeed",               /*param name*/
                          bCLIType.FixedLineUpload,    /*param value*/
@@ -325,12 +292,11 @@ END.
                             "DownloadSpeed",             /*param name*/
                             bCLIType.FixedLineDownload,  /*param value*/
                             "").                         /*old value*/
-      END.
    END.
 
    fAddCharacteristic(lcCharacteristicsArray, /*base*/
                       "gescal",               /*param name*/
-                      bOC.Gescal,             /*param value*/
+                      OrderCustomer.Gescal,             /*param value*/
                       "").                    /*old value*/
 
    IF gi_xmlrpc_error NE 0 THEN
@@ -339,8 +305,11 @@ END.
    fMasXMLGenerate_test("createFixedLine").
    RUN pRPCMethodCall("masmovil.createFixedLine", TRUE).
 
-   IF gi_xmlrpc_error NE 0 THEN
+   IF gi_xmlrpc_error NE 0 THEN DO:
+      ocResultCode = STRING(gi_xmlrpc_error).
+      ocResultDesc = gc_xmlrpc_error.
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
+   END.
 
    lcXMLStruct = get_struct(response_toplevel_id,"0").
    lcResponse = validate_struct(lcXMLStruct,"resultCode!,resultDescription").
@@ -390,8 +359,13 @@ FUNCTION fMasCheckFixedLineStatus RETURNS CHAR
    xmlrpc_initialize(FALSE).
    fMasXMLGenerate_test("masmovil.checkOrderStatus").
    RUN pRPCMethodCall("masmovil.checkOrderStatus", TRUE).
-   IF gi_xmlrpc_error NE 0 THEN
+
+   IF gi_xmlrpc_error NE 0 THEN DO:
+      ocStatus = STRING(gi_xmlrpc_error).
+      ocStatusDesc = gc_xmlrpc_error.
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
+   END.
+
    lcInStruct = get_struct(response_toplevel_id, "").
    lcArray = get_array(lcInStruct, "Statuses").
    lcXMLStruct = get_struct(lcArray, "0").
@@ -452,8 +426,11 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
    fMasXMLGenerate_test("CancelFixedLine").
    RUN pRPCMethodCall("masmovil.cancelFixedLine", TRUE).
 
-   IF gi_xmlrpc_error NE 0 THEN
+   IF gi_xmlrpc_error NE 0 THEN DO:
+      ocResultCode = STRING(gi_xmlrpc_error).
+      ocResultDesc = gc_xmlrpc_error.
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
+   END.
 
    lcXMLStruct = get_struct(response_toplevel_id,"0").
    lcResponse = validate_struct(lcXMLStruct,"resultCode!,resultDescription").
@@ -476,7 +453,8 @@ END. /*fMasCancel_FixedLineOrder*/
 FUNCTION fMasGet_FixedNbr RETURNS CHAR
    (icPostalCode AS CHAR ,
     OUTPUT ocNum AS CHAR,
-    OUTPUT ocResult AS CHAR): /*Error message*/
+    OUTPUT ocResultCode AS CHAR,
+    OUTPUT ocResultDesc AS CHAR): /*Error message*/
    DEF VAR lcXMLStruct AS CHAR NO-UNDO. /*Input to TMS*/
    DEF VAR lcResponse AS CHAR NO-UNDO.
    DEF VAR lcResult AS CHAR NO-UNDO.
@@ -489,8 +467,11 @@ FUNCTION fMasGet_FixedNbr RETURNS CHAR
    fMasXMLGenerate_test("getnewResource").
    RUN pRPCMethodCall("masmovil.getNewResource", TRUE).
 
-   IF gi_xmlrpc_error NE 0 THEN
+   IF gi_xmlrpc_error NE 0 THEN DO:
+      ocResultCode = STRING(gi_xmlrpc_error).
+      ocResultDesc = gc_xmlrpc_error.
       RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
+   END.
 
    lcXMLStruct = get_struct(response_toplevel_id,"0").
    lcResponse = validate_struct(lcXMLStruct,"idNumero,fechaAsignacionCmt,fechaUltimoCambio,numero!,_links").
@@ -500,10 +481,10 @@ FUNCTION fMasGet_FixedNbr RETURNS CHAR
 
    ocNum = get_string(lcXMLStruct,"numero").
 
-   IF ocNum EQ "" THEN DO:
-       ocResult = "Masmovil Error: Number not returned. Area: " + icPostalCode.
-       RETURN "ERROR".
-   END.
+   IF ocNum EQ "" THEN
+       RETURN "Masmovil Error: Number not returned. Area: " + icPostalCode.
+   
+
    RETURN "".
 
 END.

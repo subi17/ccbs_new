@@ -23,8 +23,6 @@ DEF VAR lcLine AS CHARACTER NO-UNDO.
 DEF VAR lcSepLine AS CHARACTER NO-UNDO.
 DEF VAR lcSep AS CHARACTER NO-UNDO INIT "|".
 DEF VAR lcOrigSep AS CHARACTER NO-UNDO INIT ";;".
-DEF VAR liNumOK AS INTEGER NO-UNDO.
-DEF VAR liNumErr AS INTEGER NO-UNDO.
 
 /* files and dirs */
 DEF VAR lcRootDir AS CHAR NO-UNDO.
@@ -76,19 +74,9 @@ REPEAT:
    END.
    ELSE NEXT.
 
-   ASSIGN
-      liNumOk = 0
-      liNumErr = 0.
-
    fBatchLog("START", lcInputFile).
-   lcLogFile = lcSpoolDir + lcFileName + ".LOG".
+   lcLogFile = lcSpoolDir + "ERR-" + lcFileName.
    OUTPUT STREAM sLog TO VALUE(lcLogFile) append.
-
-   /*PUT STREAM sLog UNFORMATTED
-              lcFilename  " "
-              STRING(TODAY,"99.99.99") " "
-              STRING(TIME,"hh:mm:ss") SKIP.
-   */
 
    LINE_LOOP:
    REPEAT:
@@ -100,7 +88,6 @@ REPEAT:
 
       IF NUM-ENTRIES(lcSepLine,lcSep) NE 44 THEN DO:
          fLogLine("ERROR:Incorrect input data format").
-         liNumErr = liNumErr + 1 .
          NEXT.
       END.
 
@@ -112,23 +99,21 @@ REPEAT:
 
       IF ERROR-STATUS:ERROR THEN DO:
          fLogLine("ERROR:Incorrect input data format").
-         liNumErr = liNumErr + 1 .
          NEXT.
       END.
 
       IF lcFileType NE "SAL" THEN DO:
          fLogLine("ERROR:SAL file expected. Got " + lcFileType).
-         liNumErr = liNumErr + 1 .
          NEXT.
       END.
       FIND FIRST Order WHERE
                  Order.brand EQ gcBrand AND
-                 Order.orderid EQ INT(lcYoigoOrderId) /* AND
-                 Order.statuscode EQ*/ NO-LOCK NO-ERROR.
+                 Order.orderid EQ INT(lcYoigoOrderId) AND
+                 LOOKUP(order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0 
+                 NO-LOCK NO-ERROR.
       IF NOT AVAIL Order THEN DO:
          fLogLine("ERROR:Order " + lcYoigoOrderId + " not found or " +
                    "is in incorrect status.").         
-         liNumErr = liNumErr + 1 .
          NEXT.
       END.
       FIND FIRST CliType WHERE
@@ -136,24 +121,15 @@ REPEAT:
                  Clitype.clitype EQ order.clitype NO-LOCK NO-ERROR.
      IF NOT AVAIL Clitype THEN DO:
          fLogLine("ERROR:Incorrect clitype " + order.clitype).
-         liNumErr = liNumErr + 1 .
          NEXT.
       END.
       ELSE IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN DO:
          fLogLine("ERROR:Not ADSL order " + lcYoigoOrderId).
-         liNumErr = liNumErr + 1 .
          NEXT.
       END.
 
       RUN pHandleSALFile(lcYoigoOrderId, lcSALOrderid, order.msseq).
-      /*fLogLine(RETURN-VALUE).*/
-      liNumOK = liNumOK + 1.
    END.
-
-   PUT STREAM sLog UNFORMATTED
-       "input: " STRING(liNumOK + liNumErr) ", "
-       "updated: " STRING(liNumOK) ", "
-       "errors: " STRING(liNumErr) SKIP.
 
    INPUT STREAM sin CLOSE.
    OUTPUT STREAM sLog CLOSE.

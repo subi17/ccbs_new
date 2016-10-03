@@ -221,16 +221,22 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
       RETURN FALSE.
    END.
 
-   IF mobsub.msstatus EQ {&MSSTATUS_FIXED_PROV_ONG} AND
-      NOT CAN-FIND(FIRST Order NO-LOCK WHERE
-                         Order.MsSeq = mobsub.msseq AND
-                         Order.CLIType = mobsub.CliType AND
-                         Order.OrderId NE piOrderID AND
-                  LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0)
-      THEN DO:
-      ocError = "STC is not allowed due to convergent order is still ongoing.".
+   /* partial convergent to mobile */
+   IF mobsub.msstatus EQ {&MSSTATUS_FIXED_PROV_ONG} AND 
+      piOrderID EQ 0 THEN DO:
+
+      IF CAN-FIND(FIRST Order NO-LOCK WHERE
+                        Order.MsSeq = mobsub.msseq AND
+                        Order.CLIType = mobsub.CliType AND
+                        Order.OrderType NE {&ORDER_TYPE_RENEWAL} AND
+                 LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) = 0)
+      THEN
+         ocError = "STC is not allowed due to convergent order is still ongoing".
+      ELSE 
+         ocError = "STC is not allowed since subscription is Fixed only".
+
       RETURN FALSE.
-   END.
+   END.      
   
    /* 2 */
    IF NOT fIsSTCAllowed(INPUT Mobsub.MsSeq,
