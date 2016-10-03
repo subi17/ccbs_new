@@ -9,6 +9,7 @@ gcBrand = "1".
 &GLOBAL-DEFINE RESULT_SUCCESS "00"
 &GLOBAL-DEFINE RESULT_INVALID_FORMAT "01"
 &GLOBAL-DEFINE RESULT_INVALID_ORDERID "02"
+&GLOBAL-DEFINE RESULT_INVALID_STATUS "03"
 
 DEF VAR top_struct AS CHAR NO-UNDO.
 DEF VAR lcTopStruct AS CHAR NO-UNDO.
@@ -111,8 +112,15 @@ IF NOT AVAIL OrderFusion THEN DO:
    RETURN.
 END.
 
-/* HANDLING */
+IF lcStatus EQ "CERRADA" AND
+   NOT OrderFusion.FixedNumber > "" THEN DO:
+   add_string(lcresultStruct, "resultCode", {&RESULT_INVALID_STATUS}).
+   add_string(lcresultStruct, "resultDescription", 
+              "Order fixed number is missing").
+   RETURN.
+END.
 
+/* HANDLING */
 CREATE FusionMessage.
 ASSIGN
    FusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)
