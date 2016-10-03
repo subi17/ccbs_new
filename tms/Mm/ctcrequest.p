@@ -104,7 +104,7 @@ IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_FUSION_ORDER} AND
    MsRequest.ReqIParam2 > 0 THEN DO:
    FIND OrderFusion NO-LOCK WHERE
         OrderFusion.Brand = gcBrand AND
-        OrderFusion.OredrID = MsRequest.ReqIParam2 NO-ERROR.
+        OrderFusion.OrderId = MsRequest.ReqIParam2 NO-ERROR.
 
    IF NOT AVAIL OrderFusion THEN DO:
       fReqError(SUBST("Order not found: &1", MsRequest.ReqIParam2)).
