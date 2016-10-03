@@ -1287,6 +1287,8 @@ FUNCTION fDelivRouter RETURNS LOG
    DEFINE VARIABLE lcOrderDate     AS CHARACTER NO-UNDO.
    DEFINE VARIABLE ldaOrderDate    AS DATE      NO-UNDO.
    DEFINE VARIABLE liTime          AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE liLoop1         AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE liLoop2         AS INTEGER   NO-UNDO.
 
    FIND FIRST AgreeCustomer WHERE
               AgreeCustomer.Brand   = Order.Brand   AND
@@ -1386,8 +1388,25 @@ FUNCTION fDelivRouter RETURNS LOG
    ASSIGN
       ttInvRow.RowNum      = ttOneDelivery.RowNum
       ttInvRow.ProductId   = "Router001"
-      ttInvRow.Quantity    = "1".
-   CREATE ttExtra.
+      ttInvRow.Quantity    = "1"
+      liLoop1              = 1.
+
+   DO liLoop2 = liLoop1 TO 8:
+
+      CREATE ttInvRow.
+
+      ASSIGN
+         ttInvRow.RowNum      = ttOneDelivery.RowNum
+         ttInvRow.ProductId   = ""
+         ttInvRow.ProductDesc = ""
+         ttInvRow.UnitPrice   = ""
+         ttInvRow.Quantity    = ""
+         ttInvRow.Discount    = ""
+         ttInvRow.TotalPrice  = "".
+
+   END.
+
+CREATE ttExtra.
    ASSIGN ttExtra.RowNum       = ttOneDelivery.RowNum
           ttExtra.OrderDate    = lcOrderDate
           ttExtra.DeliveryType = STRING({&ORDER_DELTYPE_COURIER}).
