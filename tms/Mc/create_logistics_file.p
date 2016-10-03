@@ -1352,6 +1352,7 @@ FUNCTION fDelivRouter RETURNS LOG
    ASSIGN
       ttOneDelivery.RowNum        = liRowNum
       ttOneDelivery.OrderId       = Order.OrderId
+      ttOneDelivery.RequestID     = STRING(Order.OrderId)
       ttOneDelivery.ActionID      = "1" /* Router */
       ttOneDelivery.ProductID     = "Router001"
       ttOneDelivery.ContractID    = STRING(Order.ContractID)
