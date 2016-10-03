@@ -1279,6 +1279,122 @@ FUNCTION pLog RETURNS LOG (INPUT pcLogContent AS CHARACTER):
       fLog(pcLogContent, "DEXTRA-INFO").
 END.
 
+FUNCTION fDelivRouter RETURNS LOG
+   (INPUT piOrderId AS int):
+   DEFINE VARIABLE lcDeliRegi      AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcCustRegi      AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcOrderChannel  AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcOrderDate     AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE ldaOrderDate    AS DATE      NO-UNDO.
+   DEFINE VARIABLE liTime          AS INTEGER   NO-UNDO.
+
+   FIND FIRST AgreeCustomer WHERE
+              AgreeCustomer.Brand   = Order.Brand   AND
+              AgreeCustomer.OrderId = Order.OrderId AND
+              AgreeCustomer.RowType = 1
+   NO-LOCK NO-ERROR.
+   IF NOT AVAIL AgreeCustomer THEN RETURN FALSE.
+
+   FIND FIRST DelivCustomer WHERE
+              DelivCustomer.Brand   = gcBrand   AND
+              DelivCustomer.OrderId = FusionMessage.OrderId AND
+              DelivCustomer.RowType = 4
+   NO-LOCK NO-ERROR.
+
+   IF NOT AVAIL DelivCustomer THEN DO:
+
+      FIND FIRST DelivCustomer WHERE
+                 DelivCustomer.Brand   = Order.Brand   AND
+                 DelivCustomer.OrderId = Order.OrderId AND
+                 DelivCustomer.RowType = 1
+      NO-LOCK NO-ERROR.
+   END.
+   FIND FIRST ContactCustomer WHERE
+              ContactCustomer.Brand   = Order.Brand AND
+              ContactCustomer.OrderId = Order.OrderId AND
+              ContactCustomer.Rowtype = 5
+   NO-LOCK NO-ERROR.
+
+   IF NOT AVAIL ContactCustomer THEN DO:
+
+      FIND FIRST ContactCustomer WHERE
+                 ContactCustomer.Brand   = Order.Brand AND
+                 ContactCustomer.OrderId = Order.OrderId AND
+                 ContactCustomer.Rowtype = 1
+      NO-LOCK NO-ERROR.
+
+   END.
+
+   FIND FIRST Region WHERE
+              Region.Region = AgreeCustomer.Region
+   NO-LOCK NO-ERROR.
+   lcCustRegi = Region.RgName.
+
+   FIND FIRST Region WHERE
+              Region.Region = DelivCustomer.Region
+   NO-LOCK NO-ERROR.
+   lcDeliRegi = Region.RgName.
+
+   lcOrderChannel = STRING(LOOKUP(Order.OrderChannel,
+                                  "Self,TeleSales,POS,CC,,,Emission"),"99").
+   CASE Order.OrderChannel:
+      WHEN "fusion_self" THEN lcOrderChannel = "01".
+      WHEN "fusion_telesales" THEN lcOrderChannel = "02".
+      WHEN "fusion_pos" THEN lcOrderChannel = "03".
+      WHEN "fusion_cc" THEN lcOrderChannel = "04".
+      WHEN "fusion_emission" THEN lcOrderChannel = "07".
+   END CASE.
+   fSplitTS(Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liTime).
+   lcOrderDate = STRING(ldaOrderDate,"99999999").
+
+   liRowNum = liRowNum + 1.
+   CREATE ttOneDelivery.
+   ASSIGN
+      ttOneDelivery.RowNum        = liRowNum
+      ttOneDelivery.OrderId       = Order.OrderId
+      ttOneDelivery.ActionID      = "1" /* Router */
+      ttOneDelivery.ProductID     = "Router001"
+      ttOneDelivery.ContractID    = STRING(Order.ContractID)
+      ttOneDelivery.NIE           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIE"
+      ttOneDelivery.NIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIF"
+      ttOneDelivery.CIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "CIF"
+      ttOneDelivery.PassPort      = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "PassPort"
+      ttOneDelivery.SubsType      = order.clitype
+      ttOneDelivery.MSISDN        = Order.CLI
+      ttOneDelivery.Company       = AgreeCustomer.Company
+      ttOneDelivery.Name          = ContactCustomer.FirstName
+      ttOneDelivery.SurName1      = ContactCustomer.SurName1
+      ttOneDelivery.SurName2      = ContactCustomer.SurName2
+      ttOneDelivery.DelivCO       = ENTRY(1,Order.Campaign,";")
+      ttOneDelivery.DelivAddr     = DelivCustomer.Address
+      ttOneDelivery.DelivCity     = DelivCustomer.PostOffice
+      ttOneDelivery.DelivZip      = DelivCustomer.ZIP
+      ttOneDelivery.DelivRegi     = lcDeliRegi
+      ttOneDelivery.DelivCoun     = DelivCustomer.Country
+      ttOneDelivery.CustAddr      = AgreeCustomer.Address
+      ttOneDelivery.CustCity      = AgreeCustomer.PostOffice
+      ttOneDelivery.CustZip       = AgreeCustomer.ZIP
+      ttOneDelivery.CustRegi      = lcCustRegi
+      ttOneDelivery.CustCoun      = AgreeCustomer.Country
+      ttOneDelivery.MobConNum     = ContactCustomer.Mobile
+      ttOneDelivery.FixConNum     = ContactCustomer.Fixed
+      ttOneDelivery.EMail         = ContactCustomer.eMail
+      ttOneDelivery.SalesChan     = lcOrderChannel.
+
+   CREATE ttInvRow.
+   ASSIGN
+      ttInvRow.RowNum      = ttOneDelivery.RowNum
+      ttInvRow.ProductId   = "Router001"
+      ttInvRow.Quantity    = "1".
+   CREATE ttExtra.
+   ASSIGN ttExtra.RowNum       = ttOneDelivery.RowNum
+          ttExtra.OrderDate    = lcOrderDate
+          ttExtra.DeliveryType = STRING({&ORDER_DELTYPE_COURIER}).
+   RETURN TRUE.
+END.
+
+
+
 fBatchLog("START",lcSpoolDir + lcFileName).
 
 OUTPUT STREAM sICC TO VALUE(lcSpoolDir + lcFileName).
@@ -1389,51 +1505,8 @@ FOR EACH FusionMessage WHERE
               Clitype.clitype EQ order.clitype NO-LOCK NO-ERROR.
    IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN NEXT.   
 
-   DEFINE VARIABLE lcDeliRegi      AS CHARACTER NO-UNDO.
-   FIND FIRST DelivCustomer WHERE
-              DelivCustomer.Brand   = gcBrand   AND
-              DelivCustomer.OrderId = FusionMessage.OrderId AND
-              DelivCustomer.RowType = 4
-   NO-LOCK NO-ERROR.
-
-   IF NOT AVAIL DelivCustomer THEN DO:
-
-      FIND FIRST DelivCustomer WHERE
-                 DelivCustomer.Brand   = Order.Brand   AND
-                 DelivCustomer.OrderId = Order.OrderId AND
-                 DelivCustomer.RowType = 1
-      NO-LOCK NO-ERROR.
-
-   END.
-
-   FIND FIRST Region WHERE
-              Region.Region = DelivCustomer.Region
-   NO-LOCK NO-ERROR.
-   lcDeliRegi = Region.RgName.
-
-   liRowNum = liRowNum + 1.
-   CREATE ttOneDelivery.
-   ASSIGN
-      ttOneDelivery.RowNum        = liRowNum
-      ttOneDelivery.OrderId       = Order.OrderId
-      ttOneDelivery.ActionID      = "1" /* Router */
-      ttOneDelivery.ProductID     = "Router001"
-      ttOneDelivery.DelivAddr     = DelivCustomer.Address
-      ttOneDelivery.DelivCity     = DelivCustomer.PostOffice
-      ttOneDelivery.DelivZip      = DelivCustomer.ZIP
-      ttOneDelivery.DelivRegi     = lcDeliRegi
-      ttOneDelivery.DelivCoun     = DelivCustomer.Country.
-
-   CREATE ttInvRow.
-   ASSIGN
-      ttInvRow.RowNum      = ttOneDelivery.RowNum
-      ttInvRow.ProductId   = "Router001".
-
-   CREATE ttExtra.
-   ASSIGN ttExtra.RowNum   = ttOneDelivery.RowNum
-   ttExtra.DeliveryType    = STRING({&ORDER_DELTYPE_COURIER}).   
-   
-   FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_SENT}.
+   IF fDelivRouter(FusionMessage.orderId) THEN
+      FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_SENT}.
 END.
 
 iLargestId = 1.
