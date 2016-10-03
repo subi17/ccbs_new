@@ -398,7 +398,7 @@ FUNCTION fisQ25PendingRequest RETURNS LOGICAL
 
       IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
                         MsRequest.msSeq EQ iimsseq AND
-                        MsRequest.reqtype EQ 8 AND
+                        MsRequest.reqtype EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
                         MsRequest.ReqStatus = liReqStatus AND
                         MsRequest.ReqCParam3 EQ "RVTERM12") THEN
          RETURN TRUE.
@@ -745,6 +745,7 @@ FUNCTION fBankByBillCode RETURNS CHAR
       WHEN "RVTERM1EF" THEN RETURN "UNO-E".
       WHEN "RVTERMBSF" THEN RETURN "Yoigo". /* "Sabadell" - YPR-3565 */
       WHEN "RVTERMF" THEN RETURN "Yoigo".
+      WHEN "RVTERMBCF" THEN RETURN "Cetelem".
    END CASE.
    RETURN "".
 END.
