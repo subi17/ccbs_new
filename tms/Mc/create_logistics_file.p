@@ -1368,7 +1368,6 @@ FUNCTION fDelivRouter RETURNS LOG
       ttOneDelivery.Name          = ContactCustomer.FirstName
       ttOneDelivery.SurName1      = ContactCustomer.SurName1
       ttOneDelivery.SurName2      = ContactCustomer.SurName2
-      ttOneDelivery.DelivCO       = ENTRY(1,Order.Campaign,";")
       ttOneDelivery.DelivAddr     = DelivCustomer.Address
       ttOneDelivery.DelivCity     = DelivCustomer.PostOffice
       ttOneDelivery.DelivZip      = DelivCustomer.ZIP
