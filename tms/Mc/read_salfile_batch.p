@@ -128,7 +128,10 @@ REPEAT:
          NEXT.
       END.
       IF CAN-FIND(FIRST FusionMessage WHERE
-                        FusionMessage.orderid EQ INT(lcYoigoOrderId)) THEN DO:
+                        FusionMessage.orderid EQ INT(lcYoigoOrderId) AND
+                        FusionMessage.MessageType EQ 
+                           {&FUSIONMESSAGE_TYPE_LOGISTICS} AND 
+                        FusionMessage.Source EQ "MasMovil") THEN DO:
          fLogLine("ERROR:Already handled " + lcYoigoOrderId).
          NEXT.
       END.                  
