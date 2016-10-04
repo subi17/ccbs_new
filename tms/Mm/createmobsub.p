@@ -160,6 +160,9 @@ IF AVAIL OrderFusion AND
    FIND CURRENT mobsub EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
    IF LOCKED mobsub THEN RETURN.
 
+   FIND Customer NO-LOCK WHERE
+        Customer.Custnum = mobsub.Custnum.
+
 END.
 ELSE DO:
 
@@ -560,6 +563,7 @@ ELSE DO:
    ASSIGN
       MsOwner.imsi = IMSI.IMSI WHEN AVAIL IMSI
       MsOwner.CLIEvent = "C"
+      Mobsub.MsStatus = {&MSSTATUS_ACTIVE}
       Mobsub.Icc = Order.ICC
       Mobsub.imsi = IMSI.IMSI WHEN AVAIL IMSI.
 END.
