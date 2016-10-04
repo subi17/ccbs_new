@@ -464,7 +464,8 @@
                 NEXT {1}.
              END.
 
-             IF CAN-FIND(FIRST MobSub WHERE
+             IF NOT fIsConvergenceTariff(Order.CLIType) AND
+                CAN-FIND(FIRST MobSub WHERE
                                MobSub.CLI = Order.CLI) THEN DO:          
 
                 llOrdStChg = fSetOrderStatus(Order.OrderId,"2"). /* error */

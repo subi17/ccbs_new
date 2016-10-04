@@ -1261,14 +1261,9 @@ PROCEDURE pOrderView:
               END.
 
               RUN local-find-this(FALSE).
-              IF Order.OrderType = 3 THEN
-                 RUN msrequest(82,?,Order.MsSeq,0,liMsRequest,"").
-              ELSE IF Order.OrderType = 4 THEN
-                 RUN msrequest(0,?,Order.MsSeq,0,liMsRequest,"").
-              ELSE IF Order.OrderType = 2 THEN
-                 RUN msrequest(46,?,Order.MsSeq,0,liMsRequest,"").
-              ELSE
-                 RUN msrequest(13,?,Order.MsSeq,0,liMsRequest,"").
+              
+              RUN msrequest(?,?,Order.MsSeq,0,liMsRequest,"").
+
            END.
            
            ELSE IF toimi = 6 THEN DO:
@@ -1674,11 +1669,17 @@ PROCEDURE local-find-others.
                     MSRequest.MSSeq      = Order.MSSeq    AND 
                     MSrequest.ReqType    = 46             AND 
                     MSrequest.ReqIparam1 = Order.OrderId No-LOCK NO-ERROR.
-      ELSE
+      ELSE DO:
          FIND FIRST Msrequest WHERE 
                     MSRequest.MSSeq      = Order.MSSeq    AND 
                     MSrequest.ReqType    = 13             AND 
                     MSrequest.ReqCparam1 = "CREATE" No-LOCK NO-ERROR.
+
+         IF NOT AVAIL MSrequest THEN
+            FIND FIRST Msrequest WHERE 
+                       MSRequest.MSSeq      = Order.MSSeq    AND
+                       MSrequest.ReqType    = 14 NO-ERROR. 
+      END.
 
       IF AVAILABLE MsRequest THEN liMsRequest = MsRequest.MsRequest.
    END. /* IF Order.MSSeq > 0 THEN DO: */
