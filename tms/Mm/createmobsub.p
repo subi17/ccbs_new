@@ -44,6 +44,7 @@
 {fbankdata.i}
 {create_eventlog.i}
 {Func/fixedlinefunc.i}
+{Func/msisdn_prefix.i}
 
 DEF INPUT  PARAMETER iiMSRequest AS INT  NO-UNDO.
 
@@ -78,7 +79,7 @@ DEF VAR ldReqActDate   AS DATE NO-UNDO.
 DEF VAR liReqActTime   AS INT  NO-UNDO.
 DEF VAR ldeActivationTS AS DEC  NO-UNDO.
 DEF VAR ldaActDate AS DATE NO-UNDO. 
-DEF VAR llDefaultShaper AS LOG NO-UNDO.
+DEF VAR lcMobileNumber AS CHAR NO-UNDO. 
 
 DEF BUFFER bInvCust    FOR Customer.
 DEF BUFFER bRefCust    FOR Customer.
@@ -512,21 +513,41 @@ IF NOT AVAIL mobsub THEN DO:
                                          Order.CLIType,
                                          Customer.Language,
                                          TODAY).
-         
+
          ASSIGN lcSMSText = REPLACE(lcSMSText,"#CLITYPE",lcReplacedTxt)
-                lcSMSText = REPLACE(lcSMSText,"#CLI",Order.CLI).
+                lcSMSText = REPLACE(lcSMSText,"#CLI",
+                  (IF MobSub.FixedNumber > "" THEN
+                      MobSub.FixedNumber ELSE MobSub.CLI)).
       END.
 
-      IF lcSMSText > "" THEN
-         fMakeSchedSMS2(MobSub.CustNum,
-                        (IF AVAIL orderfusion 
-                         THEN MobSub.FixedNumber
-                         ELSE MobSub.CLI),
-                        {&SMSTYPE_INFO},
-                        lcSMSText,
-                        ldeSMSStamp,
-                        "22622",
-                        "").
+      IF lcSMSText > "" THEN DO:
+         
+         IF MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE} THEN DO:
+   
+            IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN
+               lcMobileNumber = MobSub.CLI.
+            ELSE DO:
+            
+               FIND OrderCustomer OF Order NO-LOCK WHERE
+                    OrderCustomer.RowType = 1.
+
+               IF fIsMobileNumber(OrderCustomer.MobileNumber) THEN
+                  lcMobileNumber = OrderCustomer.MobileNumber.
+               ELSE IF fIsMobileNumber(OrderCustomer.FixedNumber) THEN
+                  lcMobileNumber = OrderCustomer.FixedNumber.
+            END.
+         END.
+         ELSE lcMobileNumber = MobSub.CLI.
+      
+         IF lcMobileNumber > "" THEN
+            fMakeSchedSMS2(MobSub.CustNum,
+                           lcMobileNumber,
+                           {&SMSTYPE_INFO},
+                           lcSMSText,
+                           ldeSMSStamp,
+                           "22622",
+                           "").
+      END.
    END. /* IF LOOKUP(Customer.category,"20,40,41") = 0 THEN DO: */
 
    IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} THEN DO:
@@ -561,6 +582,7 @@ ELSE DO:
    END.
 
    ASSIGN
+      MsRequest.Custnum = Customer.Custnum
       MsOwner.imsi = IMSI.IMSI WHEN AVAIL IMSI
       MsOwner.CLIEvent = "C"
       Mobsub.MsStatus = {&MSSTATUS_ACTIVE}
@@ -669,7 +691,7 @@ IF Order.FatAmount NE 0 OR Order.FtGrp > "" THEN DO:
                        lcError).
    END.
 END.
-  
+
 /* Create Default shaper, if there is no bundle with subscription */
 /* this must be executed before calling orderaction_exec */
 FIND FIRST OrderAction WHERE
@@ -678,49 +700,30 @@ FIND FIRST OrderAction WHERE
            OrderAction.ItemType = "BundleItem" AND
            OrderAction.ItemKey NE {&DSS} NO-LOCK NO-ERROR.
 
-IF NOT AVAIL OrderAction THEN DO:
+IF NOT AVAIL OrderAction AND
+   LOOKUP(MobSub.CLIType,"CONT6,TARJRD1,CONT7,CONT8,CONTS,CONTFF,CONTSF,CONT9,CONT15,CONT24,CONT23") = 0 AND
+   NOT MobSub.CLIType BEGINS "CONTFH" AND
+   NOT MobSub.CLITYpe BEGINS "CONTDSL" THEN DO:
 
-   llDefaultShaper = TRUE.
-
-   FOR EACH requestaction NO-LOCK where
-         requestaction.brand = gcBrand and
-         requestaction.clitype = clitype.clitype and
-         requestaction.reqtype = {&REQTYPE_SUBSCRIPTION_CREATE} and
-         requestaction.actiontype = "daycampaign" and
-         requestaction.validfrom <= today and
-         requestaction.validto >= today,
-      FIRST DCServicePackage NO-LOCK where
-         DCServicePackage.brand = gcBrand and
-         DCServicePackage.DCEvent = requestaction.actionkey and
-         DCServicePackage.servpac = "SHAPER" and
-         DCServicePackage.fromdate >= today and
-         DCServicePackage.todate <= today:
-      llDefaultShaper = false.
-      LEAVE.
-   END.
-   
-   IF llDefaultShaper THEN DO:
-
-      RUN pCopyPackage(MobSub.CLIType,
-                       "SHAPER",
-                       "",
-                       MobSub.MSSeq,
-                       TODAY,
-                       ?,
-                       FALSE,  /* create fees */
-                       TRUE,   /* solog (provisioning) */
-                       MsRequest.MsRequest,
-                       FALSE,   /* mandatory subrequest */
-                       OUTPUT liRequest).
-      IF liRequest = 0 THEN
-         /* write possible error to a memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
-                          STRING(MobSub.MsSeq),
-                          MobSub.Custnum,
-                          "DEFAULT SHAPER ACTIVATION FAILED",
-                          "DEFAULT SHAPER ACTIVATION FAILED").
-   END.
+   RUN pCopyPackage(MobSub.CLIType,
+                    "SHAPER",
+                    "",
+                    MobSub.MSSeq,
+                    TODAY,
+                    ?,
+                    FALSE,  /* create fees */
+                    TRUE,   /* solog (provisioning) */
+                    MsRequest.MsRequest,
+                    FALSE,   /* mandatory subrequest */
+                    OUTPUT liRequest).
+   IF liRequest = 0 THEN
+      /* write possible error to a memo */
+      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                       "MobSub",
+                       STRING(MobSub.MsSeq),
+                       MobSub.Custnum,
+                       "DEFAULT SHAPER ACTIVATION FAILED",
+                       "DEFAULT SHAPER ACTIVATION FAILED").
 END. /* IF NOT AVAIL OfferItem AND NOT AVAIL OrderAction THEN DO: */
 
 /* initial topup, fatime, per.contracts from offer */
