@@ -515,7 +515,7 @@ ELSE DO:
       MsRequest.ReqType = 10 AND
       CAN-FIND(FIRST MobSub WHERE
                      MobSub.MsSeq = MsRequest.MsSeq AND
-                     LOOKUP(MobSub.CLIType,"CONTFF,CONTSF") > 0)
+              LOOKUP(MobSub.CLIType,{&MOBSUB_CLITYPE_FUSION}) > 0)
       THEN DO:
 
       IF MONTH(TODAY) = 12

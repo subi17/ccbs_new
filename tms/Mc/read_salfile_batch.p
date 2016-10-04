@@ -94,7 +94,7 @@ REPEAT:
       ASSIGN
          lcFileType = TRIM(ENTRY(1,lcSepLine,lcSep))
          lcSALOrderId = TRIM(ENTRY(2,lcSepLine,lcSep))
-         lcYoigoOrderId = TRIM(ENTRY(39,lcSepLine,lcSep))
+         lcYoigoOrderId = SUBSTRING(TRIM(ENTRY(39,lcSepLine,lcSep)),2)
       NO-ERROR.
 
       IF ERROR-STATUS:ERROR THEN DO:
@@ -127,7 +127,14 @@ REPEAT:
          fLogLine("ERROR:Not ADSL order " + lcYoigoOrderId).
          NEXT.
       END.
-
+      IF CAN-FIND(FIRST FusionMessage WHERE
+                        FusionMessage.orderid EQ INT(lcYoigoOrderId) AND
+                        FusionMessage.MessageType EQ 
+                           {&FUSIONMESSAGE_TYPE_LOGISTICS} AND 
+                        FusionMessage.Source EQ "MasMovil") THEN DO:
+         fLogLine("ERROR:Already handled " + lcYoigoOrderId).
+         NEXT.
+      END.                  
       RUN pHandleSALFile(lcYoigoOrderId, lcSALOrderid, order.msseq).
    END.
 
@@ -155,11 +162,11 @@ PROCEDURE pHandleSALfile:
       FusionMessage.OrderID = INT(icYoigoOrderID)
       FusionMessage.CreatedTS = fMakeTS()
       FusionMessage.MessageID = GUID(GENERATE-UUID)
-      FusionMessage.MessageType = "Logistics"
+      FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_LOGISTICS} 
       FusionMessage.Source = "MasMovil"
       FusionMessage.msseq = iiMsSeq.
       
-   IF LOOKUP(Order.OrderChannel,"pos") > 0 THEN
+   IF INDEX(Order.OrderChannel,"pos") > 0 THEN
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ONGOING}.
    ELSE
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_NEW}.

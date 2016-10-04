@@ -2287,7 +2287,10 @@ IF Order.OrderType EQ {&ORDER_TYPE_STC} AND
 END.
 
 /* YPR-3317 */
-IF plCustdataRetr AND NOT plMultiOrder THEN DO:
+IF plCustdataRetr AND 
+   NOT plMultiOrder AND 
+   Order.OrderType NE {&ORDER_TYPE_STC} THEN DO:
+
    IF pcIdentifiedSmsNumber EQ "" THEN
       RETURN appl_err(SUBST("Identified customer SMS number missing.")).
    lcOrderSMSText = fGetSMSTxt(
