@@ -1293,14 +1293,14 @@ FUNCTION fDelivRouter RETURNS LOG
    FIND FIRST AgreeCustomer WHERE
               AgreeCustomer.Brand   = Order.Brand   AND
               AgreeCustomer.OrderId = Order.OrderId AND
-              AgreeCustomer.RowType = 1
+              AgreeCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
    NO-LOCK NO-ERROR.
    IF NOT AVAIL AgreeCustomer THEN RETURN FALSE.
 
    FIND FIRST DelivCustomer WHERE
               DelivCustomer.Brand   = gcBrand   AND
               DelivCustomer.OrderId = FusionMessage.OrderId AND
-              DelivCustomer.RowType = 4
+              DelivCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
    NO-LOCK NO-ERROR.
 
    IF NOT AVAIL DelivCustomer THEN DO:
@@ -1308,13 +1308,13 @@ FUNCTION fDelivRouter RETURNS LOG
       FIND FIRST DelivCustomer WHERE
                  DelivCustomer.Brand   = Order.Brand   AND
                  DelivCustomer.OrderId = Order.OrderId AND
-                 DelivCustomer.RowType = 1
+                 DelivCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
       NO-LOCK NO-ERROR.
    END.
    FIND FIRST ContactCustomer WHERE
               ContactCustomer.Brand   = Order.Brand AND
               ContactCustomer.OrderId = Order.OrderId AND
-              ContactCustomer.Rowtype = 5
+              ContactCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
    NO-LOCK NO-ERROR.
 
    IF NOT AVAIL ContactCustomer THEN DO:
@@ -1322,7 +1322,7 @@ FUNCTION fDelivRouter RETURNS LOG
       FIND FIRST ContactCustomer WHERE
                  ContactCustomer.Brand   = Order.Brand AND
                  ContactCustomer.OrderId = Order.OrderId AND
-                 ContactCustomer.Rowtype = 1
+                 ContactCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
       NO-LOCK NO-ERROR.
 
    END.
@@ -1518,13 +1518,17 @@ FOR EACH FusionMessage WHERE
    FIND FIRST Order WHERE
               Order.brand EQ gcBrand AND
               Order.orderId EQ FusionMessage.orderId NO-ERROR.
-   IF NOT AVAIL Order OR Order.orderchannel NE "telesales" THEN NEXT.
-
+   IF NOT AVAIL Order OR Order.orderchannel NE "telesales" THEN DO:
+      FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+      NEXT.
+   END.
    FIND FIRST CliType WHERE
               Clitype.brand EQ gcBrand AND
               Clitype.clitype EQ order.clitype NO-LOCK NO-ERROR.
-   IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN NEXT.   
-
+   IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN DO:
+      FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+      NEXT.   
+   END.
    IF fDelivRouter(FusionMessage.orderId) THEN
       FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_SENT}.
 END.

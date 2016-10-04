@@ -308,19 +308,20 @@ IF liLOStatusId EQ 99998 AND lcIMEI > "" THEN DO:
    IF AVAIL OrderFusion THEN DO:
       FIND FIRST FusionMessage WHERE
                  FusionMessage.orderID EQ Order.OrderId AND
-                 FusionMessage.messageStatus EQ {&FUSIONMESSAGE_STATUS_NEW}
+                 FusionMessage.messagetype EQ 
+                    {&FUSIONMESSAGE_TYPE_LOGISTICS} AND
+                 FusionMessage.messageStatus EQ {&FUSIONMESSAGE_STATUS_SENT}
                  NO-ERROR.
-      IF AVAIL FusionMessage THEN DO:
-         OrderFusion.serialnumber = lcIMEI.
+      OrderFusion.serialnumber = lcIMEI.           
+      IF AVAIL FusionMessage THEN
          FusionMessage.messageStatus = {&FUSIONMESSAGE_STATUS_ONGOING}.
-      END.
    END.
 END.
 
 /* Remove router prefix 9999 for SMS sending */
 IF STRING(liLOStatusId) BEGINS {&LO_STATUS_ROUTER_PREFIX} THEN
-   liLOStatusId = INT(REPLACE(STRING(liLOStatusId),
-                      {&LO_STATUS_ROUTER_PREFIX}, "")).
+   liLOStatusId = INT(SUBSTRING(STRING(liLOStatusId),
+                      5)).
 
 fSendDextraSMS(Order.OrderID, liLOStatusId, liCourierId).
 

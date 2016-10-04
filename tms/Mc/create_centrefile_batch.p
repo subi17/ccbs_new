@@ -61,10 +61,12 @@ END FUNCTION.
 
 FUNCTION fCreateCentreFileRow RETURNS CHAR
    ():
-
+   
    DEF VAR lcCentreFileRow AS CHAR NO-UNDO.
    DEF VAR lcdeliverydate AS CHAR NO-UNDO.
-
+   DEF VAR ldaDate AS DATE NO-UNDO.
+   DEF VAR liTime AS INT NO-UNDO.
+ 
    FIND FIRST Order NO-LOCK WHERE
               Order.Brand EQ gcBrand AND
               Order.OrderID EQ fusionMessage.OrderId NO-ERROR.
@@ -77,10 +79,25 @@ FUNCTION fCreateCentreFileRow RETURNS CHAR
    IF NOT AVAIL OrderFusion THEN
       RETURN "ERROR: OrderFusion not available orderid: " + 
              STRING(fusionMessage.OrderId).
-   IF LOOKUP(Order.OrderChannel,"pos") > 0 THEN
-      lcdeliverydate = STRING(OrderFusion.OrderDate).
-   ELSE
-       lcdeliverydate = lcDate + lcTime.
+   IF INDEX(Order.OrderChannel,"pos") > 0 THEN DO:
+      fSplitTS(Order.crstamp, ldaDate, liTime).
+      lcdeliverydate = STRING(YEAR(ldaDate)) +
+                       STRING(MONTH(ldaDate)) +
+                       STRING(DAY(ldaDate)) +
+                       REPLACE(STRING(liTime,"HH:MM:SS"), ":", "").
+   END.                    
+   ELSE DO:
+       FIND FIRST OrderDelivery WHERE
+                  OrderDelivery.brand EQ gcBrand AND
+                  OrderDelivery.orderid EQ fusionMessage.OrderId NO-ERROR.
+       IF AVAIL OrderDelivery THEN           
+          lcdeliverydate = STRING(YEAR(OrderDelivery.LOTimeStamp)) +
+                           STRING(MONTH(OrderDelivery.LOTimeStamp)) +
+                           STRING(DAY(OrderDelivery.LOTimeStamp)) +
+                           REPLACE(STRING(INTEGER( truncate( 
+                                   MTIME(OrderDelivery.LOTimeStamp) / 
+                                   1000, 0 )), "HH:MM:SS"), ":", "").
+   END.
    IF OrderFusion.SerialNumber EQ "" THEN 
       RETURN "ERROR: Serial number missing orderId: " + STRING(Order.OrderID).
 
@@ -141,7 +158,7 @@ fLogLine("","Centre file creation start " + fTS2HMS(ldCurrentTime)).
 FOR EACH FusionMessage WHERE 
          FusionMessage.source EQ "MasMovil" AND
          FusionMessage.messagestatus EQ {&FUSIONMESSAGE_STATUS_ONGOING} AND
-         FusionMessage.messagetype EQ "Logistics":
+         FusionMessage.messagetype EQ {&FUSIONMESSAGE_TYPE_LOGISTICS}:
    lcStatus = fCreateCentreFileRow().
    IF lcStatus EQ "" THEN
       FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_HANDLED}.
