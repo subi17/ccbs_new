@@ -25,6 +25,7 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
 
 
    METHOD OVERRIDE PUBLIC VOID setUp ():
+      lHeartbeatRate = 10000.
    END METHOD.
 
 
@@ -53,7 +54,7 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
          IF LOG-MANAGER:LOGFILE-NAME <> ?
             THEN LOG-MANAGER:WRITE-MESSAGE(
                "Sending is disabled (TMS parameter Masmovil->OnlineEnabled=0)").
-         pauseUntilHeartbeat(30).
+         pauseUntilHeartbeat(10).
          RETURN FALSE.
       END.
 
