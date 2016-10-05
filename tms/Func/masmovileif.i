@@ -299,7 +299,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    IF NOT(ocResultCode EQ "" OR ocResultCode EQ "00") THEN 
       RETURN SUBST("ERROR: Result code &1", ocResultCode).
 
-   RETURN "".
+   RETURN "OK".
  
 END. /*Function fCreate_FixedLine*/
 
@@ -370,7 +370,7 @@ FUNCTION fMasCheckFixedLineStatus RETURNS CHAR
    ocAddInfo = lcAdditionalInfo.
    odeLastDate = ldeLastDate.
 
-   RETURN "".
+   RETURN "OK".
 
 END. /*fMasCancel_FixedLineOrder*/
 
@@ -423,7 +423,8 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
    
    IF NOT(lcResultCode EQ "" OR lcResultCode EQ "00") THEN  RETURN "ERROR".
    
-   RETURN "".
+   RETURN "OK".
+
 END. /*fMasCancel_FixedLineOrder*/
 
 
@@ -463,6 +464,6 @@ FUNCTION fMasGet_FixedNbr RETURNS CHAR
    IF NOT ocNum > "" THEN
       RETURN "ERROR: Number not returned. Area: " + icPostalCode.
 
-   RETURN "".
+   RETURN "OK".
 
 END.

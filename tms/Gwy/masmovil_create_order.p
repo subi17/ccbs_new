@@ -94,7 +94,7 @@ ELSE DO:
                "",
                "TMS").
 
-   RETURN lcError.
+   RETURN SUBST("&1,&2,&3", lcError, lcResultCode, lcResultDesc).
 END.
 
 RETURN "OK".

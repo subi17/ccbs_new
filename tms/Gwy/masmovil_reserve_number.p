@@ -95,7 +95,7 @@ ELSE DO:
       FusionMessage.HandledTS = OrderFusion.UpdateTS
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
       FusionMessage.AdditionalInfo = (IF lcResultDesc > "" THEN 
-                                      lcResultDesc ELSE lcError).
+                                         lcResultDesc ELSE lcError).
 
    IF fCanRetryFusionMessage(
       BUFFER FusionMessage,
@@ -115,7 +115,7 @@ ELSE DO:
                "",
                "TMS").
 
-   RETURN lcError.
+   RETURN SUBST("&1,&2,&3", lcError, lcResultCode, lcResultDesc).
 END.
 
 RETURN "OK".
