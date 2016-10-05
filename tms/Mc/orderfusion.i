@@ -5,6 +5,12 @@
 {Func/date.i}
 {Syst/tmsconst.i}
 
+&GLOBAL-DEFINE MASMOVIL_ERROR_ADAPTER_PARSING "1"
+&GLOBAL-DEFINE MASMOVIL_ERROR_ADAPTER_NETWORK "2"
+&GLOBAL-DEFINE MASMOVIL_ERROR_MASMOVIL "3"
+&GLOBAL-DEFINE MASMOVIL_RETRY_ERROR_CODES "APIKIT-00404,APIKIT-00405,APIKIT-00406,APIKIT-00415,WO-10000000,ESB-99999999"
+
+
 FUNCTION fFusionMessageError RETURNS CHAR
  (BUFFER ibFusionMessage FOR FusionMessage,
   icErrorDesc AS CHAR):
@@ -19,6 +25,43 @@ FUNCTION fFusionMessageError RETURNS CHAR
    RELEASE ibFusionMessage.
 
    RETURN icErrorDesc.
+END.
+
+FUNCTION fCanRetryFusionMessage RETURNS LOGICAL
+ (BUFFER ibFusionMessage FOR FusionMessage,
+  icError AS CHAR,
+  icResultCode AS CHAR,
+  icResultDesc AS CHAR):
+
+  DEF BUFFER bFusionMessage FOR FusionMessage.
+  DEF VAR liMaxRetry AS INT NO-UNDO. 
+  DEF VAR liCount AS INT NO-UNDO. 
+
+  liMaxRetry = Syst.Parameters:geti("OnlineRetryMax","Masmovil").
+
+  IF liMaxRetry EQ 0 THEN RETURN FALSE.
+
+   /* automatic resending check */
+   IF (icError BEGINS "NW_ERROR" AND 
+       LOOKUP(icResultCode,"1,2,3") = 0) OR
+      (icResultCode EQ {&MASMOVIL_ERROR_ADAPTER_NETWORK} OR
+      (icResultCode EQ {&MASMOVIL_ERROR_MASMOVIL} AND
+       LOOKUP(icResultDesc,{&MASMOVIL_RETRY_ERROR_CODES}) > 0))
+       OR
+      LOOKUP(icResultCode,{&MASMOVIL_RETRY_ERROR_CODES}) > 0 THEN DO:
+
+      FOR EACH bFusionMessage NO-LOCK WHERE
+               bFusionMessage.OrderID = ibFusionMessage.OrderID AND
+               bFusionMessage.MessageType = ibFusionMessage.MessageType AND
+               ROWID(bFusionMessage) NE ROWID(ibFusionMessage):
+         liCount = liCount + 1.
+      END.
+
+      IF liCount < liMaxRetry THEN RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
 END.
 
 FUNCTION _fCreateFusionMessage RETURNS LOGICAL
