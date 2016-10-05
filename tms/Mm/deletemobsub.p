@@ -838,6 +838,28 @@ PROCEDURE pTerminate:
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhSingleFee).
       END.      
    END. /* IF llCloseRVTermFee THEN DO: */
+   IF CAN-FIND(FIRST Customer WHERE
+                     Customer.CustNum = MobSub.InvCust AND
+                    (Customer.DelType = {&INV_DEL_TYPE_EMAIL} OR
+                     Customer.DelTYpe = {&INV_DEL_TYPE_SMS})
+              ) AND
+       
+      NOT CAN-FIND(FIRST bMobSub WHERE
+                         bMobsub.Brand    = gcBrand AND
+                         bMobSub.InvCust  = MobSub.InvCust AND
+                         bMobSub.MsSeq   <> liMsSeq AND 
+                         bMobSub.MsStatus = {&MSSTATUS_ACTIVE} 
+                  ) THEN   
+
+                  
+   DO:
+      RUN pChangeDelType(MobSub.InvCust, OUTPUT lcResult).
+      IF lcResult <> "" THEN       
+      DO:   
+         fReqError(lcResult).
+         RETURN.
+      END.      
+   END.
 
    CREATE TermMobsub.
    BUFFER-COPY Mobsub TO TermMobsub.
@@ -1103,3 +1125,61 @@ PROCEDURE pMultiSIMTermination:
    END.
    
 END PROCEDURE. 
+
+PROCEDURE pChangeDelType:
+   DEFINE INPUT  PARAMETER liInvCust AS INTEGER   NO-UNDO.
+   DEFINE OUTPUT PARAMETER lcError   AS CHARACTER NO-UNDO.   
+         
+   FIND FIRST Customer WHERE 
+              Customer.CustNum = liInvCust
+              EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+
+   IF AVAILABLE Customer THEN      
+   DO:
+      IF DAY(TODAY) = 1 THEN
+      DO:
+         FIND FIRST Invoice WHERE
+                    Invoice.Brand   = gcBrand AND
+                    Invoice.CustNum = Customer.CustNum AND
+                    Invoice.InvDate = TODAY  
+                    EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+         IF AVAIL Invoice THEN
+            ASSIGN Invoice.DelType       = {&INV_DEL_TYPE_PAPER}
+                   Invoice.DeliveryState = 0.
+         ELSE IF LOCKED(Invoice) THEN                     
+         DO:
+            FIND FIRST Invoice WHERE
+                       Invoice.Brand   = gcBrand AND
+                       Invoice.CustNum = Customer.CustNum AND
+                       Invoice.InvDate = TODAY  
+                       NO-LOCK NO-ERROR.
+            IF AVAIL Invoice THEN
+            DO:
+               ASSIGN lcError = SUBSTITUTE("InvNum &1 locked", 
+                                           STRING(Invoice.InvNum)).
+               RETURN.                            
+            END.                               
+         END.         
+      END.
+      ASSIGN Customer.DelType = {&INV_DEL_TYPE_PAPER}.
+   END.
+   ELSE IF LOCKED(Customer) THEN   
+      ASSIGN lcError = SUBSTITUTE("CustNum &1 locked", 
+                                   STRING(liInvCust)).
+   ELSE
+      ASSIGN lcError = SUBSTITUTE("CustNum &1 does not exists", 
+                                   STRING(liInvCust)).
+
+   IF lcError = "" THEN
+   DO:   
+      FIND FIRST Customer WHERE 
+                 Customer.CustNum = liInvCust
+                 NO-LOCK NO-ERROR.
+      FIND FIRST Invoice WHERE
+                 Invoice.Brand   = gcBrand AND
+                 Invoice.CustNum = Customer.CustNum AND
+                 Invoice.Invdate = TODAY  
+                 NO-LOCK NO-ERROR.
+
+   END.
+END PROCEDURE.
