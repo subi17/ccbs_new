@@ -12,7 +12,6 @@ DEF VAR lcError AS CHAR NO-UNDO.
 DEF VAR lcResultCode AS CHAR NO-UNDO. 
 DEF VAR lcResultDesc AS CHAR NO-UNDO. 
 DEF VAR liCount AS INT NO-UNDO. 
-DEF VAR liMaxRetry AS INT NO-UNDO. 
 
 DEF BUFFER bFusionMessage FOR FusionMessage.
 
@@ -50,8 +49,6 @@ IF NOT OrderFusion.FixedNumber > "" THEN
    RETURN fFusionMessageError(BUFFER FusionMessage,
                              "FixedNumber not assigned").
 
-liMaxRetry = Syst.Parameters:geti("OnlineRetryMax","Masmovil").
-
 lcError = fInitMMConnection().
 IF lcError NE "" THEN RETURN lcError.
 
@@ -59,7 +56,7 @@ lcError = fMasCreate_FixedLineOrder(Order.OrderID,
                                     OUTPUT lcResultCode,
                                     OUTPUT lcResultDesc).
 
-IF lcError EQ "" THEN DO:
+IF lcError EQ "OK" THEN DO:
 
    ASSIGN
       OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_INITIALIZED}
@@ -67,7 +64,7 @@ IF lcError EQ "" THEN DO:
       FusionMessage.HandledTS = OrderFusion.UpdateTS
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}.
 
-   RETURN "".
+   RETURN "OK".
 
 END.
 ELSE DO:
@@ -79,24 +76,11 @@ ELSE DO:
       FusionMessage.AdditionalInfo = (IF lcResultDesc > "" THEN 
                                       lcResultDesc ELSE lcError).
 
-   /* automatic resending check */
-   IF (lcError BEGINS "NW_ERROR" AND
-      (lcResultCode EQ {&MASMOVIL_ERROR_ADAPTER_NETWORK} OR
-      (lcResultCode EQ {&MASMOVIL_ERROR_MASMOVIL} AND
-       LOOKUP(lcResultDesc,{&MASMOVIL_RETRY_ERROR_CODES}) > 0)))
-       OR
-      LOOKUP(lcResultCode,{&MASMOVIL_RETRY_ERROR_CODES}) > 0 THEN DO:
-
-      FOR EACH bFusionMessage NO-LOCK WHERE
-               bFusionMessage.OrderID = FusionMessage.OrderID AND
-               bFusionMessage.MessageType = FusionMessage.MessageType AND
-               ROWID(bFusionMessage) NE ROWID(FusionMessage):
-         liCount = liCount + 1.
-      END.
-
-      IF liCount < liMaxRetry THEN RETURN "RETRY".
-
-   END.
+   IF fCanRetryFusionMessage(
+      BUFFER FusionMessage,
+      lcError,
+      lcResultCode,
+      lcResultDesc) THEN RETURN "RETRY".
 
    ASSIGN
       OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR}
@@ -113,7 +97,7 @@ ELSE DO:
    RETURN lcError.
 END.
 
-RETURN "".
+RETURN "OK".
 
 FINALLY:
    xmlrpc_finalize().
