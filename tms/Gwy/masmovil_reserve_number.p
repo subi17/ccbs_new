@@ -94,14 +94,19 @@ ELSE DO:
       OrderFusion.UpdateTS = fMakeTS()
       FusionMessage.HandledTS = OrderFusion.UpdateTS
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
-      FusionMessage.AdditionalInfo = (IF lcResultDesc > "" THEN 
-                                         lcResultDesc ELSE lcError).
+      FusionMessage.ResponseCode = (IF lcResultCode > ""
+                                  THEN lcResultCode
+                                  ELSE "ERROR")
+      FusionMessage.AdditionalInfo = (IF lcResultDesc > ""
+                                      THEN lcResultDesc
+                                      ELSE lcError).
 
    IF fCanRetryFusionMessage(
       BUFFER FusionMessage,
       lcError,
       lcResultCode,
-      lcResultDesc) THEN RETURN "RETRY".
+      lcResultDesc) THEN RETURN "RETRY:" +
+         SUBST("&1, &2, &3", lcError, lcResultCode, lcResultDesc).
 
    ASSIGN
       OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR}
@@ -111,14 +116,14 @@ ELSE DO:
                STRING(Order.OrderId),
                0,
                "Masmovil fixed number reservation failed",
-               "",
+               lcError + (IF lcREsultCode > "" THEN CHR(10) +
+     	         SUBST("&1: &2", lcREsultCode, lcResultDesc)
+               ELSE ""),
                "",
                "TMS").
 
-   RETURN SUBST("&1,&2,&3", lcError, lcResultCode, lcResultDesc).
+   RETURN SUBST("&1, &2, &3", lcError, lcResultCode, lcResultDesc).
 END.
-
-RETURN "OK".
 
 FINALLY:
    xmlrpc_finalize().

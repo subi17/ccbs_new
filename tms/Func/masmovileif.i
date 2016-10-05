@@ -408,11 +408,12 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
    END.
 
    lcXMLStruct = get_struct(response_toplevel_id,"0").
-   
-   lcResponse = validate_struct(lcXMLStruct,"resultCode!,resultDescription").
-   lcResultCode = get_string(lcXMLStruct, "resultCode").
-   IF LOOKUP('resultDescription', lcXMLSTruct) GT 0 THEN
-      lcResultDesc = get_string(lcXMLStruct, "resultDescription").
+    
+   ASSIGN
+      lcResponse = validate_struct(lcXMLStruct,"resultCode!,resultDescription")
+      lcResultCode = get_string(lcXMLStruct, "resultCode")
+      lcResultDesc = get_string(lcXMLStruct, "resultDescription")
+         WHEN LOOKUP('resultDescription', lcResponse) > 0.
 
    IF gi_xmlrpc_error NE 0 THEN 
       RETURN SUBST("ERROR: Response parsing failed: &1", gc_xmlrpc_error).
@@ -421,7 +422,7 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
       ocResultCode =  lcResultCode
       ocResultDesc =  lcResultDesc.
    
-   IF NOT(lcResultCode EQ "" OR lcResultCode EQ "00") THEN  RETURN "ERROR".
+   IF NOT(lcResultCode EQ "" OR lcResultCode EQ "00") THEN RETURN "ERROR".
    
    RETURN "OK".
 

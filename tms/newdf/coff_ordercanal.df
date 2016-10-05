@@ -260,6 +260,14 @@ ADD FIELD "AdditionalInfo" OF "FusionMessage" AS character
   DESCRIPTION "Additional status info"
   ORDER 140
 
+ADD FIELD "ResponseCode" OF "FusionMessage" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Response Code"
+  COLUMN-LABEL "ResponseCode"
+  DESCRIPTION "Response code from Adapter/Masmovil"
+  ORDER 150
+
 ADD INDEX "OrderId" ON "FusionMessage" 
   AREA "Dyn_Index_1"
   INDEX-FIELD "OrderId" ASCENDING 
