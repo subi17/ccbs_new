@@ -69,7 +69,7 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    IF NOT plFewRecords THEN DO:
       add_int(sub_struct   , "seq"        , mobsub.msseq).
    END.
-   IF Mobsub.fixednumber <> "?" THEN 
+   IF Mobsub.fixednumber <> ? THEN 
       add_string(sub_struct, "fixed_number", Mobsub.fixednumber).
    add_int(sub_struct   , "status"     , mobsub.msstatus).
    add_string(sub_struct, "description", mobsub.cli).
