@@ -1,0 +1,64 @@
+{commpaa.i}
+gcBrand = "1".
+
+DEF STREAM sOL.
+
+DEF VAR liOrderID   AS INT  NO-UNDO.
+DEF VAR liCustomer  AS INT  NO-UNDO.
+DEF VAR llCorporate AS LOG  NO-UNDO.
+DEF VAR lcError     AS CHAR NO-UNDO.
+
+INPUT STREAM sOL FROM "orderlist.txt".
+
+REPEAT:
+   ASSIGN liOrderID   = 0
+          liCustomer  = 0
+          lcError     = ""
+          llCorporate = FALSE.
+
+   IMPORT STREAM sOL UNFORMATTED liOrderID.
+   FIND FIRST Order NO-LOCK WHERE
+              Order.OrderID = liOrderID NO-ERROR.
+   IF AVAILABLE Order AND Order.CustNum = 0 THEN DO:
+      RUN createcustomer(INPUT Order.OrderID,1,FALSE,TRUE,OUTPUT liCustomer).
+
+      llCorporate = CAN-FIND(OrderCustomer WHERE
+                             OrderCustomer.Brand      = gcBrand       AND
+                             OrderCustomer.OrderID    = Order.OrderID AND
+                             OrderCustomer.RowType    = 1             AND
+                             OrderCustomer.CustIdType = "CIF").
+
+      FOR EACH OrderCustomer NO-LOCK WHERE
+               OrderCustomer.Brand   = gcBrand AND
+               OrderCustomer.OrderID = Order.OrderID:
+         IF llCorporate AND (OrderCustomer.RowType = 1 OR OrderCustomer.RowType = 5) THEN DO:
+            RUN createcustcontact.p(OrderCustomer.OrderID,
+                                    liCustomer,
+                                    OrderCustomer.RowType,
+                                    OUTPUT lcError).
+            IF lcError > "" THEN DO:
+               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                "Order",
+                                STRING(OrderCustomer.OrderID),
+                                liCustomer,
+                                "CUSTOMER CONTACT CREATION FAILED",
+                                lcError).
+            END.
+         END.
+         ELSE IF OrderCustomer.RowType = 1 AND NOT Order.PayType THEN
+         DO:
+            FIND FIRST Customer EXCLUSIVE-LOCK WHERE
+                       Customer.CustNum = liCustomer NO-ERROR.
+            IF AVAILABLE Customer THEN DO:
+               ASSIGN Customer.AuthCustID     = Order.OrdererID
+                      Customer.AuthCustIDType = Order.OrdererIDType.
+               RELEASE Customer.
+            END.
+         END.
+      END.
+
+      RUN createcustomer(INPUT Order.OrderId,3,FALSE,TRUE,OUTPUT liCustomer).
+   END.
+END.
+
+INPUT CLOSE.
