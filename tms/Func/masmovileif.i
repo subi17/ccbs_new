@@ -296,10 +296,10 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: Response parsing failed: &1", gc_xmlrpc_error).
 
-   IF NOT(ocResultCode EQ "" OR ocResultCode EQ "00") THEN 
+   IF ocResultCode NE "00" THEN 
       RETURN SUBST("ERROR: Result code &1", ocResultCode).
 
-   RETURN "".
+   RETURN "OK".
  
 END. /*Function fCreate_FixedLine*/
 
@@ -370,7 +370,7 @@ FUNCTION fMasCheckFixedLineStatus RETURNS CHAR
    ocAddInfo = lcAdditionalInfo.
    odeLastDate = ldeLastDate.
 
-   RETURN "".
+   RETURN "OK".
 
 END. /*fMasCancel_FixedLineOrder*/
 
@@ -408,11 +408,12 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
    END.
 
    lcXMLStruct = get_struct(response_toplevel_id,"0").
-   
-   lcResponse = validate_struct(lcXMLStruct,"resultCode!,resultDescription").
-   lcResultCode = get_string(lcXMLStruct, "resultCode").
-   IF LOOKUP('resultDescription', lcXMLSTruct) GT 0 THEN
-      lcResultDesc = get_string(lcXMLStruct, "resultDescription").
+    
+   ASSIGN
+      lcResponse = validate_struct(lcXMLStruct,"resultCode!,resultDescription")
+      lcResultCode = get_string(lcXMLStruct, "resultCode")
+      lcResultDesc = get_string(lcXMLStruct, "resultDescription")
+         WHEN LOOKUP('resultDescription', lcResponse) > 0.
 
    IF gi_xmlrpc_error NE 0 THEN 
       RETURN SUBST("ERROR: Response parsing failed: &1", gc_xmlrpc_error).
@@ -421,9 +422,11 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
       ocResultCode =  lcResultCode
       ocResultDesc =  lcResultDesc.
    
-   IF NOT(lcResultCode EQ "" OR lcResultCode EQ "00") THEN  RETURN "ERROR".
+   IF ocResultCode NE "00" THEN
+      RETURN SUBST("ERROR: Result code &1", ocResultCode).
    
-   RETURN "".
+   RETURN "OK".
+
 END. /*fMasCancel_FixedLineOrder*/
 
 
@@ -463,6 +466,6 @@ FUNCTION fMasGet_FixedNbr RETURNS CHAR
    IF NOT ocNum > "" THEN
       RETURN "ERROR: Number not returned. Area: " + icPostalCode.
 
-   RETURN "".
+   RETURN "OK".
 
 END.

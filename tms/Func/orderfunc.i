@@ -67,8 +67,9 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                   LOOKUP(STRING(OrderAccessory.HardBook),"1,2") > 0 THEN
                   llHardBook = TRUE.
 
-               FIND FIRST FusionMessage WHERE
+               FIND FIRST FusionMessage EXCLUSIVE-LOCK WHERE
                           FusionMessage.orderID EQ Order.OrderId AND
+                          FusionMessage.MessageType EQ {&FUSIONMESSAGE_TYPE_LOGISTICS} AND
                           FusionMessage.messageStatus EQ 
                              {&FUSIONMESSAGE_STATUS_SENT} NO-ERROR.
                IF AVAIL FusionMessage THEN DO:

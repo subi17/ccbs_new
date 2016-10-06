@@ -11,9 +11,6 @@ DEF VAR lcFixedNumber AS CHAR NO-UNDO.
 DEF VAR lcError AS CHAR NO-UNDO. 
 DEF VAR lcResultCode AS CHAR NO-UNDO. 
 DEF VAR lcResultDesc AS CHAR NO-UNDO. 
-DEF VAR liCount AS INT NO-UNDO. 
-
-DEF BUFFER bFusionMessage FOR FusionMessage.
 
 FIND FusionMessage EXCLUSIVE-LOCK WHERE
      FusionMessage.MessageSeq = piMessageSeq NO-ERROR.
@@ -21,6 +18,9 @@ FIND FusionMessage EXCLUSIVE-LOCK WHERE
 IF NOT AVAIL FusionMessage THEN
    RETURN fFusionMessageError(BUFFER FusionMessage,
                               "FusionMessage not found").
+
+IF FusionMessage.MessageType NE {&FUSIONMESSAGE_TYPE_CREATE_ORDER} THEN
+   RETURN SUBST("Incorrect message type: &1", FusionMessage.MessageType).
 
 FIND FIRST Order NO-LOCK WHERE
            Order.Brand = Syst.Parameters:gcBrand AND
@@ -62,7 +62,9 @@ IF lcError EQ "OK" THEN DO:
       OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_INITIALIZED}
       OrderFusion.UpdateTS = fMakeTS()
       FusionMessage.HandledTS = OrderFusion.UpdateTS
-      FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}.
+      FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}
+      FusionMessage.ResponseCode = lcResultCode 
+      FusionMessage.AdditionalInfo = lcResultDesc.
 
    RETURN "OK".
 
@@ -70,19 +72,24 @@ END.
 ELSE DO:
 
    ASSIGN
-      OrderFusion.UpdateTS = fMakeTS()
-      FusionMessage.HandledTS = OrderFusion.UpdateTS
+      FusionMessage.HandledTS = fMakeTS()
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
-      FusionMessage.AdditionalInfo = (IF lcResultDesc > "" THEN 
-                                      lcResultDesc ELSE lcError).
+      FusionMessage.ResponseCode = (IF lcResultCode > ""
+                                  THEN lcResultCode
+                                  ELSE "ERROR")
+      FusionMessage.AdditionalInfo = (IF lcResultDesc > ""
+                                      THEN lcResultDesc
+                                      ELSE lcError).
 
    IF fCanRetryFusionMessage(
       BUFFER FusionMessage,
       lcError,
       lcResultCode,
-      lcResultDesc) THEN RETURN "RETRY".
+      lcResultDesc) THEN RETURN "RETRY:" +
+         SUBST("&1, &2, &3", lcError, lcResultCode, lcResultDesc).
 
    ASSIGN
+      OrderFusion.UpdateTS = FusionMessage.HandledTS
       OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR}
       OrderFusion.FusionStatusDesc = "Create order failed".
 
@@ -90,14 +97,14 @@ ELSE DO:
                STRING(Order.OrderId),
                0,
                "Masmovil order creation failed",
-               "",
+               lcError + (IF lcREsultCode > "" THEN CHR(10) +
+     	         SUBST("&1: &2", lcREsultCode, lcResultDesc)
+               ELSE ""),
                "",
                "TMS").
 
-   RETURN lcError.
+   RETURN SUBST("&1, &2, &3", lcError, lcResultCode, lcResultDesc).
 END.
-
-RETURN "OK".
 
 FINALLY:
    xmlrpc_finalize().

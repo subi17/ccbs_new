@@ -190,7 +190,7 @@ DEF VAR lcUser       AS CHAR                   NO-UNDO.
 DEF VAR lcInvCust    AS CHAR                   NO-UNDO.
 DEF VAR lcAgrCust    AS CHAR                   NO-UNDO. 
 DEF VAR ldeSwitchTS  AS DE                     NO-UNDO.
-
+DEF VAR lcFixedNumber AS CHAR                  NO-UNDO.
 DEF VAR new-custnum  as int                    NO-UNDO.
 
 DEF VAR liChannel    AS INT FORMAT "9"         NO-UNDO INIT "2".
@@ -511,10 +511,8 @@ form /* seek  With CustId */ /*ilkka continue here*/
     "Brand Code:" lcBrand  HELP "Enter Brand"
     VALIDATE(lcbrand = "*"  OR
     CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
-    "Customer ID .......:" lcCustomerId FORMAT "x(11)"
-    HELP "Customers ID" SKIP
-    "Customer ID Type ..:" lcCustIdType
-    HELP "CIF N/A NIE NIF Passport"  SKIP
+    "Fixed number .......:" lcFixedNumber FORMAT "x(11)"
+    HELP "Fixed number" SKIP
         
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer ID "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME fFixed.
@@ -934,86 +932,25 @@ BROWSE:
         END.
      END. /* Search-3 */
 
-     /*ilkka continue here, draft*/
     ELSE IF LOOKUP(nap,"6,f6") > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-        ASSIGN lcCustomerId = ""
-               lcCustIdType = "".
+               lcFixedNumber = "".
                
         cfc = "puyr". run ufcolor.
         ehto = 9. RUN ufkey. ufkey = TRUE.
         CLEAR FRAME fFixrd.
         SET  lcBrand   WHEN gcAllBrand = TRUE
-             lcCustomerId
-             lcCustIdType 
+             lcFixedNumber 
              WITH FRAME fFixed.
         HIDE FRAME fFixed NO-PAUSE.
-        /* Find with given customer id type */
-        IF lcCustIdType ENTERED THEN DO:     
-     
-           FIND FIRST TMSCodes WHERE
-                      TMSCodes.TableName = "Customer" AND
-                      TMSCodes.FieldName = "CustIdType" AND
-                      TMSCodes.CodeValue = lcCustIdType
-           NO-LOCK NO-ERROR.
-           
-           IF NOT AVAILABLE TMSCodes THEN DO:
-              MESSAGE "Unknown customer ID type" VIEW-AS ALERT-BOX.
-              NEXT LOOP.
-           END.
-           
-           FIND FIRST OrderCustomer WHERE
-                      OrderCustomer.CustIdType = TMSCodes.CodeValue AND
-                      OrderCustomer.CustId     = lcCustomerId AND
-                      OrderCustomer.Brand      = lcBrand
-           NO-LOCK NO-ERROR.
-           
-           IF NOT AVAILABLE OrderCustomer THEN DO:
-              MESSAGE "Customer ID not found!" VIEW-AS ALERT-BOX.
-              NEXT Browse.
-           END.
-           
-           RUN orderbr(lcCustomerId,lcCustIdType,icStatus,OUTPUT oOrderID).
-                 
-           FIND FIRST Order WHERE
-                      Order.OrderId    = oOrderId AND
-                      Order.Brand      = lcBrand
-           NO-LOCK NO-ERROR.
+
+        RUN orderbrfixed(lcFixedNumber, OUTPUT oOrderID).
+        FIND FIRST Order WHERE
+                   Order.OrderId    = oOrderId AND
+                   Order.Brand      = lcBrand NO-LOCK NO-ERROR.
            IF NOT fRecFound(4) THEN NEXT Browse.
            NEXT LOOP.
-                     
-        END.
-        ELSE DO:
-           /* Find Customer ID with any type */
-           liCounter = 0.
-           DO liLoop = 1 TO 5:
-              FIND FIRST ordercustomer WHERE
-                         ordercustomer.custidtype = lcCustType[liLoop] AND
-                         ordercustomer.custid     = lcCustomerId    AND
-                         ordercustomer.brand      = lcBrand
-              NO-LOCK NO-ERROR.
-              IF AVAILABLE OrderCustomer THEN DO:
-                 RUN orderbr(OrderCustomer.CustId,
-                             OrderCustomer.CustIdType,icStatus,
-                             OUTPUT oOrderID).
-                 FIND FIRST Order WHERE
-                            Order.OrderId    = oOrderId AND
-                            Order.Brand      = lcBrand
-                 NO-LOCK NO-ERROR.
-                 LEAVE.
-              END.
-           END.
-           IF NOT AVAILABLE OrderCustomer THEN DO: 
-              MESSAGE "Customer ID NOT FOUND!" VIEW-AS ALERT-BOX.
-              LEAVE.
-           END.
-           IF NOT fRecFound(4) THEN NEXT Browse.
-           NEXT LOOP.
-        END.
-        
      END.
-  
-     /*ilkka ends*/
         
      /* Search BY col 4 */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN 
