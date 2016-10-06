@@ -11,9 +11,6 @@ DEF VAR lcFixedNumber AS CHAR NO-UNDO.
 DEF VAR lcError AS CHAR NO-UNDO. 
 DEF VAR lcResultCode AS CHAR NO-UNDO. 
 DEF VAR lcResultDesc AS CHAR NO-UNDO. 
-DEF VAR liCount AS INT NO-UNDO. 
-
-DEF BUFFER bFusionMessage FOR FusionMessage.
 
 FIND FusionMessage EXCLUSIVE-LOCK WHERE
      FusionMessage.MessageSeq = piMessageSeq NO-ERROR.
@@ -21,6 +18,9 @@ FIND FusionMessage EXCLUSIVE-LOCK WHERE
 IF NOT AVAIL FusionMessage THEN
    RETURN fFusionMessageError(BUFFER FusionMessage,
                               "FusionMessage not found").
+
+IF FusionMessage.MessageType NE {&FUSIONMESSAGE_TYPE_CREATE_ORDER} THEN
+   RETURN SUBST("Incorrect message type: &1", FusionMessage.MessageType).
 
 FIND FIRST Order NO-LOCK WHERE
            Order.Brand = Syst.Parameters:gcBrand AND
@@ -72,8 +72,7 @@ END.
 ELSE DO:
 
    ASSIGN
-      OrderFusion.UpdateTS = fMakeTS()
-      FusionMessage.HandledTS = OrderFusion.UpdateTS
+      FusionMessage.HandledTS = fMakeTS()
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
       FusionMessage.ResponseCode = (IF lcResultCode > ""
                                   THEN lcResultCode
@@ -90,6 +89,7 @@ ELSE DO:
          SUBST("&1, &2, &3", lcError, lcResultCode, lcResultDesc).
 
    ASSIGN
+      OrderFusion.UpdateTS = FusionMessage.HandledTS
       OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR}
       OrderFusion.FusionStatusDesc = "Create order failed".
 

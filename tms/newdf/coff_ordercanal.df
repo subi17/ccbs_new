@@ -21,7 +21,7 @@ ADD FIELD "FixedCurrOperCode" OF "OrderFusion" AS character
 ADD FIELD "SerialNumber" OF "OrderFusion" AS character 
   FORMAT "x(15)"
   INITIAL ""
-  LABEL "FixedCurrOperName"
+  LABEL "SerialNumber"
   ORDER 200
 
 ADD FIELD "AppointmentDate" OF "OrderFusion" AS character 

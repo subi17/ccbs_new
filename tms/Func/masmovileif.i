@@ -296,7 +296,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: Response parsing failed: &1", gc_xmlrpc_error).
 
-   IF NOT(ocResultCode EQ "" OR ocResultCode EQ "00") THEN 
+   IF ocResultCode NE "00" THEN 
       RETURN SUBST("ERROR: Result code &1", ocResultCode).
 
    RETURN "OK".
@@ -422,7 +422,8 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
       ocResultCode =  lcResultCode
       ocResultDesc =  lcResultDesc.
    
-   IF NOT(lcResultCode EQ "" OR lcResultCode EQ "00") THEN RETURN "ERROR".
+   IF ocResultCode NE "00" THEN
+      RETURN SUBST("ERROR: Result code &1", ocResultCode).
    
    RETURN "OK".
 

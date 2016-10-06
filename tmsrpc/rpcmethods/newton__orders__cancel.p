@@ -45,6 +45,10 @@ ASSIGN
   
 /* check that order is from today and coming from POS channel */
 IF Order.OrderType = {&ORDER_TYPE_NEW} THEN DO:
+
+   IF fIsConvergenceTariff(Order.CLIType) THEN 
+       RETURN appl_err("Convergent order cancellation is not supported" ).
+
    ldeToday = fHMS2TS(TODAY,"00:00:00").
    IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) = 0 THEN
       RETURN appl_err("Order channel is not POS").
