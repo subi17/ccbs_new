@@ -19,6 +19,7 @@
 {cparam2.i}
 {femailinvoice.i}
 {email.i}
+{smsnotify.i}
 {heartbeat.i}
 
 &SCOPED-DEFINE MIDNIGHT-SECONDS 86400
@@ -47,6 +48,8 @@ DEF VAR liTime2Pause  AS INTEGER   NO-UNDO.
 DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lNowSeconds   AS INTEGER   NO-UNDO.
+DEF VAR llFirstInv    AS LOGICAL   NO-UNDO.
+DEF VAR llMobsub      AS LOGICAL   NO-UNDO.
 
 DEF STREAM sEmail.
 
@@ -76,7 +79,8 @@ ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        liStartTime   = TIME
        liStopTime    = 0
        liPauseTime   = 0
-       PauseFlag     = FALSE.
+       PauseFlag     = FALSE
+       llFirstInv    = FALSE.
 
 IF liTime2Pause < 0 THEN liTime2Pause = 0.
 IF liTime2Pause > 3599 THEN liTime2Pause = 3599.  /* 1 Hour */
@@ -160,8 +164,23 @@ FOR EACH Invoice WHERE
    
       FIND FIRST MobSub WHERE
                  MobSub.MsSeq = SubInvoice.MsSeq NO-LOCK NO-ERROR.
-      IF NOT AVAIL MobSub OR 
-         MobSub.CustNum NE Invoice.CustNum THEN NEXT SUBINVOICE_LOOP.
+      IF AVAIL mobsub THEN
+      DO:      
+         IF MobSub.CustNum NE Invoice.CustNum THEN 
+            NEXT SUBINVOICE_LOOP.
+         ASSIGN llMobSub = TRUE.
+      END.
+      ELSE 
+      DO:
+         FIND FIRST TermMobSub WHERE
+                    TermMobSub.MsSeq = SubInvoice.MsSeq NO-LOCK NO-ERROR.               
+         IF AVAIL TermMobsub THEN
+         DO:      
+            IF TermMobSub.CustNum NE Invoice.CustNum THEN 
+               NEXT SUBINVOICE_LOOP.
+            ASSIGN llMobSub = FALSE.
+         END.
+      END.
 
       lcSMSReplacedText = REPLACE(lcSMSTextOriginal,"#AMOUNT", 
          REPLACE(TRIM(STRING(Invoice.InvAmt, "->>>>>>9.99")),".", lcSep)).
@@ -169,9 +188,26 @@ FOR EACH Invoice WHERE
       lcSMSReplacedText = REPLACE(lcSMSReplacedText,"#DATE",
                           STRING(Invoice.DueDate,"99/99/99")).
       
+      /*Notification for the First Invoice will be sent to a specific people as part of YOT-4037 along with the own customer*/
+      IF llFirstInv = FALSE THEN DO:
+         fSMSNotify("First",
+                    lcSMSReplacedText,
+                    lcAddrConfDir,
+                    lIniSeconds,
+                    lEndSeconds).
+         llFirstInv = TRUE.
+      END.
       DO TRANS:
-         fMakeSchedSMS2(MobSub.CustNum,
-                        MobSub.CLI,
+         fMakeSchedSMS2((IF llMobSub THEN 
+                            MobSub.CustNum 
+                         ELSE 
+                            TermMobSub.CustNum
+                        ),
+                        (IF llMobSub THEN 
+                            MobSub.CLI 
+                         ELSE 
+                            TermMobSub.CLI
+                        ),
                         44,
                         lcSMSReplacedText,
                         fMakeTS(),
@@ -187,6 +223,13 @@ FOR EACH Invoice WHERE
       END. /* DO TRANS: */
    END. /* FOR EACH SubInvoice OF Invoice NO-LOCK: */
 END. /* FOR EACH Invoice WHERE */
+
+/*Notification for the Last Invoice will be sent to a specific people as part of YOT-4037 along with the own customer*/
+fSMSNotify("Last",
+           lcSMSReplacedText,
+           lcAddrConfDir,
+           lIniSeconds,
+           lEndSeconds).
 
 /* Send an email to configure list*/
 IF lcAddrConfDir > "" THEN

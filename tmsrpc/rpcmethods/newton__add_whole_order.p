@@ -66,6 +66,7 @@
                tarj7_promo;boolean;optional;
                keep_installment;boolean;optional;
                multiorder;boolean;optional;
+               terminal_financing_bank;string;optional
  * @customer_data fname;string;optional;
                   lname;string;optional;
                   lname2;string;optional;
@@ -421,6 +422,9 @@ DEF VAR lcAccessoryStruct AS CHAR NO-UNDO.
 
 DEF VAR lcErr AS CHAR NO-UNDO.
 
+/*Financing info*/
+DEF VAR pcTerminalFinancing AS CHAR NO-UNDO.
+
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
 
@@ -577,6 +581,9 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
    IF LOOKUP('multiorder', lcOrderStruct) GT 0 THEN
          plMultiOrder = get_bool(pcOrderStruct,"multiorder").
    llROIClose = (pcROIresult EQ "risk" AND LOOKUP(pcROIlevel,"7,8") > 0).
+
+   IF LOOKUP('terminal_financing_bank', lcOrderStruct) GT 0 THEN
+      pcTerminalFinancing = get_string(pcOrderStruct,"terminal_financing_bank").
 
    RETURN TRUE.
 END.
@@ -1220,6 +1227,7 @@ gcOrderStructFields = "billing_data," +
                       "send_offer," +
                       "resignation_period," +
                       "tarj7_promo," +
+                      "terminal_financing_bank," +
                       "keep_installment," +
                       "multiorder".
 
@@ -2186,6 +2194,12 @@ IF plPromotion THEN
 
 IF pcUpsHours NE "" THEN 
    fCreateOrderAction(Order.Orderid,"UPSHours",pcUpsHours,""). 
+
+/*YPR-4490*/
+/*Bank selection*/
+IF INDEX(pcChannel, "pos") EQ 0 AND pcTerminalFinancing NE "" THEN DO:
+    fCreateOrderAction(Order.Orderid,"TerminalFinancing",pcTerminalFinancing, "").  
+END.
 
 /* Create Quota 25 extension request */
 IF llq25_extension THEN
