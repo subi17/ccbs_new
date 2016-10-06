@@ -6,21 +6,38 @@
 {tmsconst.i}
 
 /* Input parameters */
-DEF VAR pcCli AS CHAR NO-UNDO.
+DEF VAR pcCli       AS CHAR NO-UNDO.
+DEF VAR lcText      AS CHAR NO-UNDO.
+DEF VAR resp_array  AS CHAR NO-UNDO.
+DEF VAR resp_struct AS CHAR NO-UNDO.
+DEF VAR top_struct  AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcCli = get_string(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+ASSIGN top_struct = add_struct(response_toplevel_id, "")
+       resp_array = add_array(top_struct, "order").
+
 IF CAN-FIND(FIRST MobSub
             WHERE MobSub.brand EQ "1"
-              AND MobSub.CLI EQ pcCli) THEN
-    RETURN appl_err("Subscription exists for this number").
+              AND MobSub.CLI   EQ pcCli) THEN
+   lcText = "Subscription exists for this number".
 
-IF CAN-FIND(FIRST Order
-            WHERE Order.brand EQ "1"
-              AND Order.CLI EQ pcCLI
-              AND LOOKUP(STRING(Order.StatusCode),{&ORDER_INACTIVE_STATUSES}) EQ 0) THEN
-    RETURN appl_err("Order exists for this number").
+FIND FIRST Order NO-LOCK WHERE
+           Order.brand EQ "1"   AND
+           Order.CLI   EQ pcCLI NO-ERROR.
+IF AVAILABLE Order THEN DO:
+
+   IF lcText = "" THEN
+      lcText = "Order exists for this number".
+
+   resp_struct = add_struct(resp_array, "").
+   add_string(resp_struct, "orderstatus",Order.StatusCode).
+
+END.
+
+IF lcText <> "" THEN
+   RETURN appl_err(lcText).
 
 add_boolean(response_toplevel_id, "", TRUE).
