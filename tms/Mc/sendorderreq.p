@@ -21,6 +21,7 @@ DEF OUTPUT PARAM lcError AS CHAR NO-UNDO.
 DEF VAR lcRootDir    AS CHAR NO-UNDO.
 DEF VAR lcEmailFile  AS CHAR NO-UNDO.
 DEF VAR liLanguage   AS INT  NO-UNDO.
+
 /*
 lcRootDir = SEARCH("do_not_remove_templatefolder.txt").
 lcRootDir = REPLACE(lcrootDir, "do_not_remove_templatefolder.txt", "").
@@ -33,6 +34,9 @@ lcEmailFile = fCParam("Printing","MailPrintFile") +
 FIND Order WHERE
   Order.Brand   = gcBrand  AND
   Order.OrderID = iiOrderID NO-LOCK NO-ERROR.
+
+IF Order.OrderType NE {&ORDER_TYPE_NEW} AND
+   Order.OrderType NE {&ORDER_TYPE_MNP} THEN RETURN "".
 
 FIND FIRST OrderCustomer WHERE OrderCustomer.Brand = gcBrand AND
                                OrderCustomer.OrderId = iiOrderId AND

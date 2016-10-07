@@ -1120,7 +1120,11 @@ PROCEDURE pGetDELIVERY_DATE:
 
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
-   IF Order.OrderType = 1 THEN DO:
+   IF fIsConvergenceTariff(Order.CLIType) THEN
+      lcResult = (IF liLang EQ 5
+                  THEN "For new number fixed line takes 9-10 days and for portability number it takes 12-17 days"
+                  ELSE "Si es nueva numeración fija, de 9-10 días y de 12-17 días si es portabilidad").
+   ELSE IF Order.OrderType = 1 THEN DO:
       IF Order.PortingDate <> ? THEN
          ldePortingTime = fMake2Dt(Order.PortingDate,0).
       IF AVAIL OrderAccessory THEN
@@ -1154,8 +1158,21 @@ PROCEDURE pGetDELIVERY_DATE:
       END.
       lcResult = fDateFmt(ldaDate,"dd/mm/yy").
    END.
-      
+
 END. /*GetDELIVERY_DATE*/
+
+PROCEDURE pGetLINETYPE:
+   
+   DEF INPUT PARAMETER iiOrderNBR AS INT NO-UNDO.
+   DEF OUTPUT PARAMETER olgErr AS LOGICAL NO-UNDO.
+   DEF OUTPUT PARAMETER lcResult AS CHAR NO-UNDO.
+
+   IF fIsConvergenceTariff(Order.CLIType) THEN
+      lcResult = (IF liLang EQ 5 THEN " for mobile"
+                  ELSE " del móvil").
+   ELSE lcResult = "".
+
+END.
 
 PROCEDURE pGetMNP_DATE:
 
@@ -1519,8 +1536,19 @@ PROCEDURE pGetPENALTYFEE:
                         CLItype.LineType = {&CLITYPE_LINETYPE_ADDITIONAL}) THEN
          lcList = lcList + CHR(10) + fTeksti(539,liLang).
    END.
+         
+   IF fIsConvergenceTariff(Order.CLIType) AND
+     (Order.OrderType EQ {&ORDER_TYPE_NEW} OR
+      Order.OrderType EQ {&ORDER_TYPE_MNP} OR
+     (Order.OrderType EQ {&ORDER_TYPE_STC} AND
+      AVAIL Mobsub AND
+      NOT (fIsConvergenceTariff(Mobsub.CLIType) OR
+       LOOKUP(MobSub.CLIType,{&MOBSUB_CLITYPE_FUSION}) > 0)))
+   THEN lcList = CHR(10) + fTeksti(532,liLang).
+   
    lcList = REPLACE(lcList,"euros","&euro;"). 
    lcResult = lcList.
+
 END.
 
 PROCEDURE pGetAMOUNT:

@@ -55,11 +55,14 @@ FUNCTION fTxtSendLog RETURNS LOGIC
           ITSendLog.SendStamp  = fMakeTS().
 END.
 
-
 FIND Order WHERE
      Order.Brand   = gcBrand  AND
      Order.OrderID = iiOrderID NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Order THEN RETURN "ERROR:Order not available".
+
+IF Order.OrderType NE {&ORDER_TYPE_NEW} AND
+   Order.OrderType NE {&ORDER_TYPE_MNP} AND
+   Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN RETURN "".
 
 IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES} + ",4") > 0 THEN 
    RETURN "INFO:Status of order doesn't allow printing".
