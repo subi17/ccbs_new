@@ -39,7 +39,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
    OR 
    (Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} AND
    (OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ERROR} OR
-    OrderFusion.FusionStatus EQ {&FUSIONMESSAGE_STATUS_CANCELLED} OR
+    OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_CANCELLED} OR
     OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_NEW})) THEN DO:
 
    RUN closeorder.p(Order.OrderId,TRUE).
@@ -54,7 +54,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
    END.
 
    ASSIGN
-      OrderFusion.FusionStatus = {&FUSIONMESSAGE_STATUS_CANCELLED}
+      OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_CANCELLED}
       OrderFusion.UpdateTS = fMakeTS().
    
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhBuff).
