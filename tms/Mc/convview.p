@@ -9,10 +9,8 @@
   ---------------------------------------------------------------------- */
 
 {commali.i}
-
+{tmsconst.i}
 DEF INPUT PARAMETER iiOrderId     AS INT  NO-UNDO.
-
-
 
 FORM
    SKIP(1)
@@ -20,44 +18,59 @@ FORM
    SKIP(1)
 
    WITH ROW 4 OVERLAY SIDE-LABELS CENTERED 
-        TITLE " WRITE HEADER HERE XXX "  
-        FRAME fMessages.
-
-
+        TITLE " Convergent Data View "  
+        FRAME fData.
 
 PAUSE 0 NO-MESSAGE.
-VIEW FRAME fMessages. 
-CLEAR FRAME fMessages NO-PAUSE.
+VIEW FRAME fData. 
+CLEAR FRAME fData NO-PAUSE.
 
 LOOP:
 REPEAT WITH FRAME fMessages ON ENDKEY UNDO LOOP, NEXT LOOP:
 
    PAUSE 0.
-/*   DISPLAY DMS.CaseTypeID
-           DMS.ContractID
-           DMS.DmsExternalID
-           DMS.DMSID
-           DMS.HostID
-           DMS.HostTable
-           DMS.StatusCode
-           DMS.StatusDesc
-           DMS.DMSStatusTS.
-*/
    ASSIGN
       ufk   = 0  
-      ufk[5]= 9850
-      ufk[6]= 9850
+      ufk[5]= 9853
+      ufk[6]= 9854
       ufk[8]= 8 
       ehto  = 0.
    RUN ufkey.
 
    IF toimi EQ 5 THEN DO:
-     /* RUN dmsdoc.p (DMS.DMSID).*/
      MESSAGE "5 pressed" VIEW-AS ALERT-BOX.
+     /*RUN fusionmessasge.p(iiOrderID).*/
    END.
    IF toimi EQ 6 THEN DO:
-     /* RUN dmsdoc.p (DMS.DMSID).*/
-     MESSAGE "6 pressed" VIEW-AS ALERT-BOX.
+      MESSAGE "6 pressed" VIEW-AS ALERT-BOX.
+      FIND FIRST OrderCustomer NO-LOCK where
+                 OrderCustomer.Brand EQ Syst.Parameters:gcBrand AND
+                 OrderCustomer.OrderId EQ iiOrderid AND
+                 OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
+                 NO-ERROR.
+      IF NOT AVAIL OrderCustomer THEN
+         MESSAGE "Installation address data not found" VIEW-AS ALERT-BOX.
+      ELSE DO:
+       PAUSE 0.
+       DISP
+          OrderCustomer.Country  
+          OrderCustomer.Region 
+          OrderCustomer.PostOffice SKIP
+          OrderCustomer.Street SKIP
+          OrderCustomer.StreetType SKIP
+          OrderCustomer.BuildingNum SKIP
+          OrderCustomer.BisDuplicate SKIP
+          OrderCustomer.Block SKIP 
+          OrderCustomer.Door 
+          OrderCustomer.Letter 
+          OrderCustomer.Stair 
+          OrderCustomer.Floor 
+          OrderCustomer.Hand 
+          OrderCustomer.Km SKIP
+          OrderCustomer.ZipCode.
+         
+      END.
+      
    END.
    
    ELSE IF toimi = 8 THEN LEAVE.
