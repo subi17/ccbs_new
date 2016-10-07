@@ -18,7 +18,7 @@ else:
 q = s.masmovil.Update_Fixed_status({
    "notificationID": "1",
    "notificationTime": datetime.datetime.now().isoformat(),
-   "notificationType": "1",
+   "notificationType": "O",
    "orderID":var1,
    "Status": {
          "Status":var2,
