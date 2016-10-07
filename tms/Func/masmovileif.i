@@ -103,8 +103,9 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF VAR lcConnServiceType AS CHAR NO-UNDO.
    DEF VAR lcInstallationStruct AS CHAR NO-UNDO.
    DEF VAR lcServiceStruct AS CHAR NO-UNDO.
-   DEF VAR ldaSellDate AS DATE.
-   DEF VAR ldaCreDate AS DATE.
+   DEF VAR ldaSellDate AS DATE NO-UNDO.
+   DEF VAR ldaCreDate AS DATE NO-UNDO.
+   DEF VAR lcLastName AS CHAR NO-UNDO.
 
    DEF BUFFER Order FOR Order.
    DEF BUFFER OrderCustomer FOR OrderCustomer.
@@ -186,8 +187,12 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    lcInstallationStruct = add_struct(lcOutputStruct, "Installation").
    lcContactStruct = add_struct(lcInstallationStruct, "Contact").
    add_string(lcContactStruct, "firstName", OrderCustomer.FirstName).
-   /*add_string(lcContactStruct, "middleName", "").*/
-   add_string(lcContactStruct, "lastName", OrderCustomer.Surname1 + " " + OrderCustomer.Surname2).
+   add_string(lcContactStruct, "middleName", OrderCustomer.Surname1).
+   IF OrderCustomer.Surname2 NE "" THEN 
+      lcLastName = OrderCustomer.Surname2.
+   ELSE  
+      lcLastName = OrderCustomer.Surname1.
+   add_string(lcContactStruct, "lastName", lcLastName).
    add_string(lcContactStruct, "documentNumber", bOrderCustomer.CustID). 
    add_string(lcContactStruct, "documentType", bOrderCustomer.CustIdType).
    add_string(lcContactStruct, "email", OrderCustomer.Email).
