@@ -78,7 +78,7 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    sub_struct = add_json_key_struct(result_array, "").
    add_int(sub_struct   , "seq" , TermMobSub.msseq).
    add_string(sub_struct, "msisdn", TermMobSub.Cli).
-   add_string(sub_struct, "fixed_number", "900000000"). /* TODO TermMobSub.FixedNumber */
+   add_string(sub_struct, "fixed_number", TermMobSub.FixedNumber).
    add_string(sub_struct, "subscription_type_id", TermMobSub.CliType).
    add_int(sub_struct, "custnum", Customer.CustNum).
    add_string(sub_struct, "name", SUBST("&1 &2 &3", Customer.FirstName,
@@ -165,7 +165,7 @@ ELSE IF pcSearchType EQ "fixed_number" THEN DO:
 
    FOR EACH termmobsub NO-LOCK WHERE
       termmobsub.brand = gcBrand AND
-      termmobsub.cli = pcInput, /* TODO termmobsub.FixedNumber */
+      termmobsub.FixedNumber = pcInput,
       FIRST Customer NO-LOCK WHERE
             Customer.Custnum = TermMobSub.Custnum:
 
@@ -269,7 +269,7 @@ FOR EACH ttOwner NO-LOCK,
           Customer.custnum = TermMobSub.custnum:
      
     IF llSearchByMobsub AND (pcInput EQ TermMobSub.CLI OR
-/* TODO                             pcInput EQ TermMobSub.FixedNumber OR */
+                             pcInput EQ TermMobSub.FixedNumber OR
                              pcInput EQ TermMobSub.IMSI) THEN NEXT.
 
     IF NOT fIsViewableTermMobsub(TermMobSub.MsSeq) THEN NEXT.

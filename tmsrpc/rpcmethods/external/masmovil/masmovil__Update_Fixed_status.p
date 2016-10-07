@@ -137,10 +137,31 @@ ASSIGN
    FusionMessage.OrderType = lcOrderType
    FusionMessage.AdditionalInfo = lcAdditionalInfo.
 
+/* handle only work order statuses */
+IF lcNotificationType NE "O" THEN DO:
+
+   FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_WRONG_TYPE}.
+
+   add_string(lcresultStruct, "resultCode", {&RESULT_SUCCESS}).
+   add_string(lcresultStruct, "resultDescription", "success").
+END.
+   
 ASSIGN
    OrderFusion.FixedStatus = lcStatus
    OrderFusion.FixedStatusTS = ldeNotificationTime
    OrderFusion.UpdateTS = FusionMessage.CreatedTS.
+   
+IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED} AND
+   LOOKUP(FusionMessage.FixedStatus,
+          "CANCELADA,PENDIENTE CANCELAR,CANCELACION EN PROCESO") > 0 THEN DO:
+      
+   FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+   
+   add_string(lcresultStruct, "resultCode", {&RESULT_INVALID_STATUS}).
+   add_string(lcresultStruct, "resultDescription", 
+              "Cancellation is not allowed").
+   RETURN.
+END.
 
 CASE FusionMessage.FixedStatus:
 
@@ -149,6 +170,8 @@ CASE FusionMessage.FixedStatus:
 
       IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_INITIALIZED} THEN
          OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ONGOING}.
+      ELSE FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+
    END.
    WHEN "INCIDENCIA DATOS" OR
    WHEN "INCIDENCIA ACTIVACION SERVICIOS" OR
@@ -163,16 +186,38 @@ CASE FusionMessage.FixedStatus:
        
       ASSIGN OrderFusion.FixedInstallationTS = ldeLastDate.
              OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_FINALIZED}.
+      
+      IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          "Order",
+                          STRING(Order.OrderID),
+                          Order.CustNum,
+                          "Order cancellation failed",
+                          "Fixed Cancellation failed because installation was already in place").
          
-      IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
-         /* order handler will create fixed line request
-            and mark status back to 79 if needed (pos orders without ICC) */
+      IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE}
+         OR 
+        (Order.OrderType EQ {&ORDER_TYPE_STC} AND 
+         Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}) THEN DO:
+
          IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN
             fSetOrderStatus(OrderFusion.OrderId,{&ORDER_STATUS_MNP}).
          ELSE fSetOrderStatus(OrderFusion.OrderId,{&ORDER_STATUS_NEW}).
       END.
-
+      ELSE FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
    END.
+
+   WHEN "PENDIENTE CANCELAR" OR
+   WHEN "CANCELACION EN PROCESO" THEN DO:
+      
+      OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_PENDING_CANCELLED}.
+
+      IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN
+         fSetOrderStatus(Order.OrderId,
+                         {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}).
+      ELSE FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+   END.
+
    /* installation cancelled */ 
    WHEN "CANCELADA" THEN DO:
 
@@ -180,9 +225,20 @@ CASE FusionMessage.FixedStatus:
          
       IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR
          Order.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
+
          RUN closeorder.p(Order.OrderID, TRUE).
+
+         IF RETURN-VALUE NE "" THEN DO:
+            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                             "Order",
+                             STRING(Order.OrderID),
+                             Order.CustNum,
+                             "Order closing failed",
+                             RETURN-VALUE).
+            FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+         END.
       END.
-      ELSE . /* TODO: error handling*/ 
+      ELSE FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
    END.
 
 END CASE.

@@ -50,12 +50,20 @@ IF fOngoingOrders(pcCli, (IF pcChannel BEGINS "retention"
                           THEN "retention"
                           ELSE pcNumberType)) THEN llAllow = FALSE.
 ELSE IF pcNumberType EQ "stc" THEN DO:
-
-   FIND FIRST MobSub NO-LOCK WHERE
-              MobSub.Brand = gcBrand AND
-              MobSub.CLI = pcCLI NO-ERROR.
-   IF NOT AVAIL Mobsub THEN
-      RETURN appl_err("Subscription not found").
+   IF pcCLI BEGINS "9" THEN DO:
+      FIND FIRST MobSub NO-LOCK WHERE
+                 MobSub.Brand = gcBrand AND
+                 MobSub.FixedNumber = pcCLI NO-ERROR.
+      IF NOT AVAIL Mobsub THEN
+         RETURN appl_err("Subscription not found").
+   END.
+   ELSE DO:
+      FIND FIRST MobSub NO-LOCK WHERE
+                 MobSub.Brand = gcBrand AND
+                 MobSub.CLI = pcCLI NO-ERROR.
+      IF NOT AVAIL Mobsub THEN 
+         RETURN appl_err("Subscription not found").
+   END.
 
    /* Check ongoing STC request */
    FIND FIRST MsRequest NO-LOCK WHERE

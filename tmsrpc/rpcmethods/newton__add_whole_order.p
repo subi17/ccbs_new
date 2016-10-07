@@ -910,6 +910,31 @@ FUNCTION fCheckMSISDN RETURNS CHARACTER:
    RETURN lcError.
 END.
 
+FUNCTION fCheckFixedNbr RETURNS CHARACTER:
+   
+   IF lcFixedLineNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} THEN DO:
+      FIND FIRST MobSub WHERE
+                 MobSub.Brand = gcBrand AND
+                 MobSub.FixedNumber = lcFixedLineNumber NO-LOCK NO-ERROR. 
+      IF AVAIL MobSub THEN
+         RETURN "Subscription already exists with Fixed Number " + lcFixedLineNumber.
+   END.
+
+   /* Check if same number in ongoing Fusion order */
+   DEF BUFFER lbOtherOrder  FOR Order.
+   DEF BUFFER lbOrderFusion FOR OrderFusion.
+   FOR EACH lbOrderFusion NO-LOCK WHERE
+            lbOrderFusion.FixedNumber EQ lcFixedLineNumber,
+      EACH  lbOtherOrder NO-LOCK WHERE
+            lbOtherOrder.brand EQ gcBrand AND
+            lbOtherOrder.OrderId EQ lbOrderFusion.OrderId AND
+            LOOKUP(lbOtherOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0:
+
+      RETURN "Ongoing order for Fixed Number " + lcFixedLineNumber.
+   END.
+
+   RETURN "".
+END.
 
 /* YBP-528 */
 FUNCTION fCheckSIM RETURNS CHARACTER:
@@ -1145,7 +1170,7 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
    ASSIGN
       OrderFusion.Brand             = gcBrand
       OrderFusion.OrderId           = liOrderId
-      OrderFusion.FusionStatus      = {&FUSION_ORDER_STATUS_NEW}
+      OrderFusion.FusionStatus      = {&FUSION_FIXED_NUMBER_TYPE_NEW}
       OrderFusion.OrderDate         = ldaOrderDate
       OrderFusion.Salesman          = pcSalesman
       OrderFusion.FixedNumberType   = lcFixedLineNumberType
@@ -1552,6 +1577,12 @@ IF pcROIresult = "risk" AND
 lcError = fCheckMSISDN().
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+IF lcFixedLineNumber NE "" THEN DO:
+   lcError = fCheckFixedNbr().
+   IF lcError <> "" THEN appl_err(lcError).
+   IF gi_xmlrpc_error NE 0 THEN RETURN.
+END.
 
 /* YBP-525 */
 /* Customer, Address and Contact validation */
