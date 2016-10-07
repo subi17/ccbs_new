@@ -403,6 +403,10 @@ REPEAT WITH FRAME sel:
               RUN dms.p(Order.OrderId,Order.ContractID).
            END.
 
+           ELSE IF lcModule = "convview" THEN DO:
+              RUN convview.p(Order.Orderid).
+           END.
+
            ELSE 
            MESSAGE
            "Not use yet!"
