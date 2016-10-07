@@ -190,7 +190,7 @@ DEF VAR lcUser       AS CHAR                   NO-UNDO.
 DEF VAR lcInvCust    AS CHAR                   NO-UNDO.
 DEF VAR lcAgrCust    AS CHAR                   NO-UNDO. 
 DEF VAR ldeSwitchTS  AS DE                     NO-UNDO.
-
+DEF VAR lcFixedNumber AS CHAR                  NO-UNDO.
 DEF VAR new-custnum  as int                    NO-UNDO.
 
 DEF VAR liChannel    AS INT FORMAT "9"         NO-UNDO INIT "2".
@@ -506,6 +506,17 @@ form /* seek  With CustId */
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer ID "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f5.
 
+
+form /* seek  With CustId */ /*ilkka continue here*/
+    "Brand Code:" lcBrand  HELP "Enter Brand"
+    VALIDATE(lcbrand = "*"  OR
+    CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
+    "Fixed number .......:" lcFixedNumber FORMAT "x(11)"
+    HELP "Fixed number" SKIP
+        
+    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer ID "
+    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME fFixed.
+
 form /* seek  PersonId */
     "Brand Code :" lcBrand  HELP "Enter Brand"
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
@@ -697,7 +708,7 @@ BROWSE:
             ufk[3] = 1045 
             ufk[4] = 2211
             ufk[5] = 9796
-            ufk[6] = 0
+            ufk[6] = 9852
             ufk[7] = 0
             ufk[8] = 8 ufk[9]= 1
             ehto   = 3 ufkey = FALSE.
@@ -920,6 +931,26 @@ BROWSE:
            NEXT LOOP.
         END.
      END. /* Search-3 */
+
+    ELSE IF LOOKUP(nap,"6,f6") > 0 THEN 
+     DO ON ENDKEY UNDO, NEXT LOOP:
+               lcFixedNumber = "".
+               
+        cfc = "puyr". run ufcolor.
+        ehto = 9. RUN ufkey. ufkey = TRUE.
+        CLEAR FRAME fFixrd.
+        SET  lcBrand   WHEN gcAllBrand = TRUE
+             lcFixedNumber 
+             WITH FRAME fFixed.
+        HIDE FRAME fFixed NO-PAUSE.
+
+        RUN orderbrfixed(lcFixedNumber, OUTPUT oOrderID).
+        FIND FIRST Order WHERE
+                   Order.OrderId    = oOrderId AND
+                   Order.Brand      = lcBrand NO-LOCK NO-ERROR.
+           IF NOT fRecFound(4) THEN NEXT Browse.
+           NEXT LOOP.
+     END.
         
      /* Search BY col 4 */
      ELSE IF LOOKUP(nap,"4,f4") > 0 THEN 
