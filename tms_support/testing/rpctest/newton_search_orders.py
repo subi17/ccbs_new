@@ -16,4 +16,7 @@ else:
    var1 = sys.argv[1]
 
 p=s.newton.search_orders(var1,'msisdn','NIF',3)
-print_results(p)
+print p
+# print_results(p)
+# If you need more beautiful output of results, comment print p and uncomment above print_results(p). Default is better for reusage of Robot Frmwrk etc.
+
