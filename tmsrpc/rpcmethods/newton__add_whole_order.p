@@ -1570,12 +1570,6 @@ lcError = fCheckMSISDN().
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF lcFixedLineNumber NE "" THEN DO:
-   lcError = fCheckFixedNbr().
-   IF lcError <> "" THEN appl_err(lcError).
-   IF gi_xmlrpc_error NE 0 THEN RETURN.
-END.
-
 /* YBP-525 */
 /* Customer, Address and Contact validation */
 lccTemp = validate_request(pcCustomerStruct, gcCustomerStructFields).
@@ -1751,7 +1745,13 @@ IF pcFusionStruct > "" THEN DO:
    IF lcFixedLineNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} AND
       lcFixedLineMNPOldOperCode EQ "" THEN
       RETURN appl_err("fixed_line_mnp_old_operator_code is mandatory with fixed_line_number_type=MNP").
-     
+
+   IF lcFixedLineNumber NE "" THEN DO:
+      lcError = fCheckFixedNbr().
+      IF lcError <> "" THEN appl_err(lcError).
+      IF gi_xmlrpc_error NE 0 THEN RETURN.
+   END.
+
    /* YBP-542 */ 
    lcError = fCreateOrderCustomer(pcFixedInstallAddress, 
                                   gcCustomerStructFields,
@@ -1801,7 +1801,6 @@ IF pcQ25Struct > "" THEN DO:
       
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
-
 
 /* YBP-532 */
 /*********************************************************************
