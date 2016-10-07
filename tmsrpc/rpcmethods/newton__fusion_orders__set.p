@@ -42,7 +42,7 @@ gcbrand = "1".
 
 IF TRIM(pcUserName) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-IF pcFusionStatus NE {&FUSION_ORDER_STATUS_CANCELLED} THEN
+IF pcFusionStatus NE {&FUSION_ORDER_STATUS_PENDING_CANCELLED} THEN
    RETURN appl_err(SUBST("Unsupported new fusion order status: &1",  pcFusionStatus)).
 
 IF pcUpdateTS > "" AND
