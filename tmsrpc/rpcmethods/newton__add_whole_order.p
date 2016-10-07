@@ -1567,7 +1567,7 @@ IF pcROIresult = "risk" AND
 /* YBP-524 */
 /* validate MSISDN */
 lcError = fCheckMSISDN().
-IF lcError <> "" THEN appl_err(lcError).
+IF lcError <> "" THEN RETURN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-525 */
@@ -1748,8 +1748,7 @@ IF pcFusionStruct > "" THEN DO:
 
    IF lcFixedLineNumber NE "" THEN DO:
       lcError = fCheckFixedNbr().
-      IF lcError <> "" THEN appl_err(lcError).
-      IF gi_xmlrpc_error NE 0 THEN RETURN.
+      IF lcError <> "" THEN RETURN appl_err(lcError).
    END.
 
    /* YBP-542 */ 
