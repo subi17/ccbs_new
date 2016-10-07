@@ -172,6 +172,7 @@ FOR EACH Invoice WHERE
       END.
       ELSE 
       DO:
+         /* To send the sms even to a terminated subscription */
          FIND FIRST TermMobSub WHERE
                     TermMobSub.MsSeq = SubInvoice.MsSeq NO-LOCK NO-ERROR.               
          IF AVAIL TermMobsub THEN

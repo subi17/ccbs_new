@@ -987,38 +987,44 @@ PROCEDURE pChangeDelType:
                  Invoice.CustNum = Customer.CustNum NO-LOCK NO-ERROR.
        
       IF AVAIL Invoice THEN
-      DO:      
-         for-blk:
-         FOR EACH bInvoice WHERE
-                  bInvoice.Brand   = gcBrand AND
-                  bInvoice.CustNum = Invoice.CustNum AND
-                  bInvoice.InvDate < Invoice.InvDate NO-LOCK:              
-         
-         /* Only check last 2 invoices with the latest invoice
-            as it will give the previous deltype that was before
-            subscription termination or MNP OUT if there is any */
+      DO:
+         IF Invoice.DelType <> Customer.DelType THEN
+            ASSIGN Customer.DelType = Invoice.DelType.
+         ELSE
+         DO:
+         /*As per the requirement...if subscription got terminated 
+         on 1st day of the month then we need to change the 
+         delivery type and delivery status of last month invoice 
+         and delivery type of one day invoice that will be genereated 
+         on next bill cycle.
+         The logic for the above is implemented in deletemobsub.p.
+         If above is the scenario then at the time of Reactivation 
+         we can't find the old delivery type by FOR FIRST...that's 
+         why for each loop is used to traverse back upto 2 invoices.*/
+            for-blk:
+            FOR EACH bInvoice WHERE
+                     bInvoice.Brand   = gcBrand AND
+                     bInvoice.CustNum = Invoice.CustNum AND
+                     bInvoice.InvDate < Invoice.InvDate NO-LOCK:              
+                        
+               ASSIGN iCnt = iCnt + 1. 
             
-            ASSIGN iCnt = iCnt + 1. 
-            
-            IF iCnt = 3 THEN
-               LEAVE for-blk.
-            ELSE IF bInvoice.DelType <> Invoice.DelType THEN
-            DO:              
-               ASSIGN Customer.DelType = bInvoice.DelType.
-               LEAVE for-blk.
-            END.                        
-         END.
-      END.            
-   END.
+               IF iCnt = 3 THEN
+                  LEAVE for-blk.
+               ELSE IF bInvoice.DelType <> Customer.DelType THEN
+               DO:              
+                  ASSIGN Customer.DelType = bInvoice.DelType.
+                  LEAVE for-blk.
+               END.                        
+            END.
+         END.            
+      END.
+   END.   
    ELSE IF LOCKED(Customer) THEN   
       ASSIGN lcError = SUBSTITUTE("CustNum &1 locked", 
                                    STRING(liInvCust)).
    ELSE
       ASSIGN lcError = SUBSTITUTE("CustNum &1 does not exists", 
                                    STRING(liInvCust)).
-   
-   IF lcError = "" THEN   
-      FIND FIRST Customer WHERE 
-                 Customer.CustNum = liInvCust NO-LOCK NO-ERROR.   
 
 END PROCEDURE.

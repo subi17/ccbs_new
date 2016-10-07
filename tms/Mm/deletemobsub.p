@@ -838,6 +838,10 @@ PROCEDURE pTerminate:
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhSingleFee).
       END.      
    END. /* IF llCloseRVTermFee THEN DO: */
+
+   /* Change the delivery type to paper only if the 
+      customer don't have any other active subscriptin 
+      with elivery type EMAIL or SMS*/
    IF CAN-FIND(FIRST Customer WHERE
                      Customer.CustNum = MobSub.InvCust AND
                     (Customer.DelType = {&INV_DEL_TYPE_EMAIL} OR
@@ -1136,6 +1140,10 @@ PROCEDURE pChangeDelType:
 
    IF AVAILABLE Customer THEN      
    DO:
+      /* If subscription termination is on 1st day of month
+         then change the delivery type and delivery status 
+         for last month invoice generated and the delivery type 
+         of one day invoice that will be generated in next bill cycle */
       IF DAY(TODAY) = 1 THEN
       DO:
          FIND FIRST Invoice WHERE
@@ -1170,16 +1178,4 @@ PROCEDURE pChangeDelType:
       ASSIGN lcError = SUBSTITUTE("CustNum &1 does not exists", 
                                    STRING(liInvCust)).
 
-   IF lcError = "" THEN
-   DO:   
-      FIND FIRST Customer WHERE 
-                 Customer.CustNum = liInvCust
-                 NO-LOCK NO-ERROR.
-      FIND FIRST Invoice WHERE
-                 Invoice.Brand   = gcBrand AND
-                 Invoice.CustNum = Customer.CustNum AND
-                 Invoice.Invdate = TODAY  
-                 NO-LOCK NO-ERROR.
-
-   END.
 END PROCEDURE.
