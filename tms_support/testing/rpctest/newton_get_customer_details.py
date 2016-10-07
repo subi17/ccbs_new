@@ -17,4 +17,6 @@ else:
    var1 = int(sys.argv[1])
 
 p=s.newton.get_customer_details(var1)
-print_results(p)
+print p
+# print_results(p)
+# If you need more beautiful output of results, comment print p and uncomment above print_results(p). Default is better for reusage of Robot Frmwrk etc.
