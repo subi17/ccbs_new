@@ -41,9 +41,7 @@ IF NOT AVAILABLE MsRequest OR
 
 DEF TEMP-TABLE ttContract NO-UNDO
    FIELD DCEvent   AS CHAR
-   FIELD PerContID AS INT.
-
-define stream strchan.   
+   FIELD PerContID AS INT.   
 
 ldCurrTS = fMakeTS().
 
@@ -190,23 +188,17 @@ DO TRANSACTION:
       that was there before subscription termination
       or MNP OUT */
 
-   output stream strchan to /apps/xfera/chsharma/test2052.txt.   
-
    IF CAN-FIND(FIRST Customer WHERE
                      Customer.CustNum = TermMobsub.InvCust AND
                      Customer.deltype = {&INV_DEL_TYPE_PAPER}) THEN
-   DO:   
-      put stream strchan unformatted "Calling pChangeDelType" skip.
-      put stream strchan unformatted "Cust - " string(TermMobsub.InvCust) skip.
-      RUN pChangeDelType(TermMobsub.InvCust, OUTPUT lcResult).
-      put stream strchan unformatted "Result" + lcResult skip.
+   DO:         
+      RUN pChangeDelType(TermMobsub.InvCust, OUTPUT lcResult).      
       IF lcResult <> "" THEN       
       DO:   
          fReqError(lcResult).
          RETURN.
       END.      
-   END.
-   output stream strchan close.
+   END.   
 
    CREATE Mobsub.
    BUFFER-COPY TermMobsub TO Mobsub.
