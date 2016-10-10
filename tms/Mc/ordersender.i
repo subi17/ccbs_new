@@ -492,7 +492,7 @@
              */  
              IF LOOKUP(Order.OrderChannel,"Yoigo,Pre-act,vip") = 0 AND
                 OrderCustomer.Email NE "" AND
-                Order.OrderType <> 3 AND
+                Order.OrderType <> 3 AND Order.OrderType <> 4 AND
                 (Order.MnpStatus = 0 OR Order.StatusCode = "3") THEN DO:  
                 
                 /* YBP-613 */

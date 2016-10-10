@@ -212,7 +212,8 @@ CASE FusionMessage.FixedStatus:
       
       OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_PENDING_CANCELLED}.
 
-      IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN
+      IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN .
+      ELSE IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN
          fSetOrderStatus(Order.OrderId,
                          {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}).
       ELSE FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.

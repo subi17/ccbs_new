@@ -1544,7 +1544,7 @@ PROCEDURE pGetPENALTYFEE:
       AVAIL Mobsub AND
       NOT (fIsConvergenceTariff(Mobsub.CLIType) OR
        LOOKUP(MobSub.CLIType,{&MOBSUB_CLITYPE_FUSION}) > 0)))
-   THEN lcList = CHR(10) + fTeksti(532,liLang).
+   THEN lcList = lclist + CHR(10) + fTeksti(532,liLang).
    
    lcList = REPLACE(lcList,"euros","&euro;"). 
    lcResult = lcList.

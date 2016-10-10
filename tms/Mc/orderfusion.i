@@ -71,6 +71,7 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
    DEF BUFFER Order FOR Order.
    DEF BUFFER CLIType FOR CLIType.
 
+   DEF VAR lcPrefix AS CHAR NO-UNDO. 
    DEF VAR lcOrderType AS CHAR NO-UNDO. 
 
    FIND Order NO-LOCK WHERE
@@ -79,11 +80,15 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
 
    FIND CLIType NO-LOCK WHERE
         CLIType.CLIType = Order.CLiType.
+
+   IF icMessageType EQ {&FUSIONMESSAGE_TYPE_CANCEL_ORDER} THEN
+      lcPrefix = "Cancelación".
+   ELSE lcPrefix = "Alta".
       
    IF CLIType.FixedLineType EQ 1 THEN
-      lcOrderType = "Alta xDSL + VOIP".
+      lcOrderType = "xDSL + VOIP".
    ELSE IF CLIType.FixedLineType EQ 2 THEN
-      lcOrderType = "Alta FTTH + VOIP".
+      lcOrderType = "FTTH + VOIP".
 
    CREATE FusionMessage.
    ASSIGN
@@ -95,7 +100,7 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
       FusionMessage.MessageType = icMessageType
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_NEW}
       FusionMessage.Source = {&FUSIONMESSAGE_SOURCE_TMS}
-      FusionMessage.OrderType = lcOrderType. 
+      FusionMessage.OrderType = lcPrefix + " " + lcOrderType. 
 END.
 
 FUNCTION fCreateFusionReserveNumberMessage RETURNS LOGICAL

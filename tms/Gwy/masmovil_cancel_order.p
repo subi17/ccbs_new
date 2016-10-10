@@ -9,7 +9,6 @@ DEF INPUT PARAM piMessageSeq AS INT NO-UNDO.
 
 DEF BUFFER bFusionMessage FOR FusionMessage.
 
-DEF VAR lcFixedNumber AS CHAR NO-UNDO. 
 DEF VAR lcError AS CHAR NO-UNDO. 
 DEF VAR lcResultCode AS CHAR NO-UNDO. 
 DEF VAR lcResultDesc AS CHAR NO-UNDO. 

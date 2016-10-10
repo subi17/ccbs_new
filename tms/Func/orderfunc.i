@@ -76,6 +76,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                   llCancelFusion = TRUE.
                   FusionMessage.messageStatus = 
                      {&FUSIONMESSAGE_STATUS_CANCELLED}.
+                  RELEASE FusionMessage.
                END.
                
                IF katun NE "Dextra" AND
