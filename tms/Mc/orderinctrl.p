@@ -247,6 +247,7 @@ IF lcOldStatus NE {&ORDER_STATUS_PENDING_MAIN_LINE} AND
    lcOldStatus NE {&ORDER_STATUS_MNP_ON_HOLD} AND
    lcOldStatus NE {&ORDER_STATUS_SIM_ONLY_MNP_IN} AND
    lcOldStatus NE {&ORDER_STATUS_PENDING_FIXED_LINE} AND
+   lcOldStatus NE {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
    Order.CREventQty = 0 AND 
    Order.CredOk = FALSE AND
    Order.OrderType NE 2 THEN DO: /* Credit scoring is not tried yet */
@@ -350,21 +351,6 @@ END.
 IF iiSecureOption > 0 THEN Order.DeliverySecure = iiSecureOption.
 
 fSetOrderStatus(Order.OrderId,lcNewStatus).
-
-IF Order.OrderChannel BEGINS "fusion" THEN DO:
-   FIND FIRST OrderFusion NO-LOCK WHERE
-              OrderFusion.Brand = Order.Brand AND
-              OrderFusion.OrderId = Order.OrderID NO-ERROR.
-   IF AVAIL OrderFusion AND
-            OrderFusion.FusionStatus EQ "" THEN DO:
-
-      FIND CURRENT OrderFusion EXCLUSIVE-LOCK.
-      ASSIGN
-         OrderFusion.FusionStatus = "NEW"
-         OrderFusion.UpdateTS = fMakeTS().
-      FIND CURRENT OrderFusion NO-LOCK.
-   END.
-END.
 
 fMarkOrderStamp(Order.OrderID,
                "Change",

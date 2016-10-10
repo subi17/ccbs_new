@@ -200,9 +200,7 @@ CASE FusionMessage.FixedStatus:
         (Order.OrderType EQ {&ORDER_TYPE_STC} AND 
          Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}) THEN DO:
 
-         IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN
-            fSetOrderStatus(OrderFusion.OrderId,{&ORDER_STATUS_MNP}).
-         ELSE fSetOrderStatus(OrderFusion.OrderId,{&ORDER_STATUS_NEW}).
+         RUN orderinctrl.p(Order.OrderId, 0, TRUE).
       END.
       ELSE FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
    END.
