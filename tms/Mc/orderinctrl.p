@@ -62,6 +62,21 @@ IF NOT ilSilent AND CURRENT-CHANGED Order THEN DO:
    RETURN "".
 END.
 
+IF NOT ilSilent AND
+   Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN DO:
+
+   FIND FIRST OrderFusion NO-LOCK WHERE
+              OrderFusion.Brand   = Order.Brand AND
+              OrderFusion.OrderId = Order.OrderID NO-ERROR.
+   IF AVAIL OrderFusion AND 
+            OrderFusion.FusionStatus NE {&FUSION_ORDER_STATUS_FINALIZED} THEN DO:
+      MESSAGE "Not allowed: Ongoing fixed line installation"
+      VIEW-AS ALERT-BOX ERROR.
+      
+      RETURN "".
+   END.
+END.
+
 lcOldStatus = Order.StatusCode.
 
 IF llDoEvent THEN DO:
