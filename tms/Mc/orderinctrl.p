@@ -248,6 +248,7 @@ IF lcOldStatus NE {&ORDER_STATUS_PENDING_MAIN_LINE} AND
    lcOldStatus NE {&ORDER_STATUS_SIM_ONLY_MNP_IN} AND
    lcOldStatus NE {&ORDER_STATUS_PENDING_FIXED_LINE} AND
    lcOldStatus NE {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
+   lcOldStatus NE {&ORDER_STATUS_PENDING_MOBILE_LINE} AND
    Order.CREventQty = 0 AND 
    Order.CredOk = FALSE AND
    Order.OrderType NE 2 THEN DO: /* Credit scoring is not tried yet */
