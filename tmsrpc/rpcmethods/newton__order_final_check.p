@@ -39,7 +39,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 ASSIGN
    pcCLI = get_string(pcStruct, "msisdn")
    pcFixedNumber = get_string(pcStruct, "fixed_number") WHEN 
-      LOOKUP("pcFixedNumber",lcStruct) > 0
+      LOOKUP("fixed_number",lcStruct) > 0
    pcNumberType = get_string(pcStruct, "number_type")
    pcChannel = get_string(pcStruct,"channel") WHEN
       LOOKUP("channel",lcStruct) > 0.
