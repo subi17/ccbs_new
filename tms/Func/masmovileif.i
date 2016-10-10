@@ -196,7 +196,9 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    add_string(lcContactStruct, "documentNumber", bOrderCustomer.CustID). 
    add_string(lcContactStruct, "documentType", bOrderCustomer.CustIdType).
    add_string(lcContactStruct, "email", OrderCustomer.Email).
-   add_string(lcContactStruct, "phoneNumber", OrderCustomer.FixedNum).
+   add_string(lcContactStruct, "phoneNumber",(IF OrderCustomer.MobileNumber > ""
+                                              THEN OrderCustomer.MobileNumber 
+                                              ELSE OrderCustomer.FixedNumber)).
 
    lcAddressStruct = add_struct(lcInstallationStruct, "Address").
    add_string(lcAddressStruct, "country", OrderCustomer.Country).

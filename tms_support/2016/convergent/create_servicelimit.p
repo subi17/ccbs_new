@@ -73,9 +73,9 @@ create_group("CONTDSL", "Contrato DSL").
 create_group("CONTFH50", "Contrato FH50").
 create_group("CONTFH300", "Contrato FH300").
 
-create_limit("CONTDSL", "BDest", "_QTY",120.0, 0, 7).
-create_limit("CONTFH50", "BDest", "_QTY",120.0, 0, 7).
-create_limit("CONTFH300", "BDest", "_QTY",120.0, 0, 7).
+create_limit("CONTDSL", "BDest", "_QTY",120.0, 50, 7).
+create_limit("CONTFH50", "BDest", "_QTY",120.0, 50, 7).
+create_limit("CONTFH300", "BDest", "_QTY",120.0, 50, 7).
 
 create_limit("CONTDSL", "National calls", "_MIN",60.0, 1, 1).
 create_limit("CONTFH50", "National calls", "_MIN",60.0, 1, 1).

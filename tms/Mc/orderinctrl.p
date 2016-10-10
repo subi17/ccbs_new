@@ -62,6 +62,21 @@ IF NOT ilSilent AND CURRENT-CHANGED Order THEN DO:
    RETURN "".
 END.
 
+IF NOT ilSilent AND
+   Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN DO:
+
+   FIND FIRST OrderFusion NO-LOCK WHERE
+              OrderFusion.Brand   = Order.Brand AND
+              OrderFusion.OrderId = Order.OrderID NO-ERROR.
+   IF AVAIL OrderFusion AND 
+            OrderFusion.FusionStatus NE {&FUSION_ORDER_STATUS_FINALIZED} THEN DO:
+      MESSAGE "Not allowed: Ongoing fixed line installation"
+      VIEW-AS ALERT-BOX ERROR.
+      
+      RETURN "".
+   END.
+END.
+
 lcOldStatus = Order.StatusCode.
 
 IF llDoEvent THEN DO:
@@ -247,6 +262,8 @@ IF lcOldStatus NE {&ORDER_STATUS_PENDING_MAIN_LINE} AND
    lcOldStatus NE {&ORDER_STATUS_MNP_ON_HOLD} AND
    lcOldStatus NE {&ORDER_STATUS_SIM_ONLY_MNP_IN} AND
    lcOldStatus NE {&ORDER_STATUS_PENDING_FIXED_LINE} AND
+   lcOldStatus NE {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
+   lcOldStatus NE {&ORDER_STATUS_PENDING_MOBILE_LINE} AND
    Order.CREventQty = 0 AND 
    Order.CredOk = FALSE AND
    Order.OrderType NE 2 THEN DO: /* Credit scoring is not tried yet */
@@ -350,21 +367,6 @@ END.
 IF iiSecureOption > 0 THEN Order.DeliverySecure = iiSecureOption.
 
 fSetOrderStatus(Order.OrderId,lcNewStatus).
-
-IF Order.OrderChannel BEGINS "fusion" THEN DO:
-   FIND FIRST OrderFusion NO-LOCK WHERE
-              OrderFusion.Brand = Order.Brand AND
-              OrderFusion.OrderId = Order.OrderID NO-ERROR.
-   IF AVAIL OrderFusion AND
-            OrderFusion.FusionStatus EQ "" THEN DO:
-
-      FIND CURRENT OrderFusion EXCLUSIVE-LOCK.
-      ASSIGN
-         OrderFusion.FusionStatus = "NEW"
-         OrderFusion.UpdateTS = fMakeTS().
-      FIND CURRENT OrderFusion NO-LOCK.
-   END.
-END.
 
 fMarkOrderStamp(Order.OrderID,
                "Change",

@@ -12,6 +12,15 @@
 {tmsconst.i}
 DEF INPUT PARAMETER iiOrderId     AS INT  NO-UNDO.
 
+FIND FIRST OrderFusion NO-LOCK where
+           OrderFusion.Brand eq gcBrand AND
+           OrderFusion.OrderID EQ iiOrderID NO-ERROR.
+
+IF NOT AVAIL OrderFusion THEN DO:
+   MESSAGE "Convergent data not found!" VIEW-AS ALERT-BOX.
+   RETURN.
+END.
+
 FORM
    SKIP(1)
    iiOrderid     COLON 20 LABEL "Select Function"  /*FORMAT "X(8)"*/ SKIP
@@ -20,6 +29,8 @@ FORM
    WITH ROW 4 OVERLAY SIDE-LABELS CENTERED 
         TITLE " Convergent Data View "  
         FRAME fData.
+
+
 
 PAUSE 0 NO-MESSAGE.
 VIEW FRAME fData. 
@@ -39,7 +50,7 @@ REPEAT WITH FRAME fMessages ON ENDKEY UNDO LOOP, NEXT LOOP:
 
    IF toimi EQ 5 THEN DO:
      MESSAGE "5 pressed" VIEW-AS ALERT-BOX.
-     /*RUN fusionmessasge.p(iiOrderID).*/
+     RUN fusionmessage.p(iiOrderID).
    END.
    IF toimi EQ 6 THEN DO:
       MESSAGE "6 pressed" VIEW-AS ALERT-BOX.

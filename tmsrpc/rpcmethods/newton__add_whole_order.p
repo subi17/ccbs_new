@@ -861,6 +861,9 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
 
                OrderCustomer.FixedNum = bOrderCustomer.FixedNum
                   WHEN NOT OrderCustomer.FixedNum > ""
+         
+               OrderCustomer.MobileNumber = bOrderCustomer.MobileNumber
+                  WHEN NOT OrderCustomer.MobileNumber > ""
 
                OrderCustomer.CustID = (IF lcContactId > "" THEN
                   lcContactId ELSE bOrderCustomer.CustID)
