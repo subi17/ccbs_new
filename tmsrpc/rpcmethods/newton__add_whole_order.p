@@ -415,6 +415,7 @@ DEF VAR lcErr AS CHAR NO-UNDO.
 
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
+DEF BUFFER lbMobSub FOR MobSub. 
 
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
@@ -929,32 +930,6 @@ FUNCTION fCheckMSISDN RETURNS CHARACTER:
          lcError = "Subscription already exists with MSISDN " + pcCLI.
    END.
    RETURN lcError.
-END.
-
-FUNCTION fCheckFixedNbr RETURNS CHARACTER:
-   
-   IF lcFixedLineNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} THEN DO:
-      FIND FIRST MobSub WHERE
-                 MobSub.Brand = gcBrand AND
-                 MobSub.FixedNumber = lcFixedLineNumber NO-LOCK NO-ERROR. 
-      IF AVAIL MobSub THEN
-         RETURN "Subscription already exists with Fixed Number " + lcFixedLineNumber.
-   END.
-
-   /* Check if same number in ongoing Fusion order */
-   DEF BUFFER lbOtherOrder  FOR Order.
-   DEF BUFFER lbOrderFusion FOR OrderFusion.
-   FOR EACH lbOrderFusion NO-LOCK WHERE
-            lbOrderFusion.FixedNumber EQ lcFixedLineNumber,
-      EACH  lbOtherOrder NO-LOCK WHERE
-            lbOtherOrder.brand EQ gcBrand AND
-            lbOtherOrder.OrderId EQ lbOrderFusion.OrderId AND
-            LOOKUP(lbOtherOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0:
-
-      RETURN "Ongoing order for Fixed Number " + lcFixedLineNumber.
-   END.
-
-   RETURN "".
 END.
 
 /* YBP-528 */
@@ -1773,7 +1748,14 @@ IF pcFusionStruct > "" THEN DO:
       RETURN appl_err("fixed_line_mnp_old_operator_code is mandatory with fixed_line_number_type=MNP").
 
    IF lcFixedLineNumber NE "" THEN DO:
-      lcError = fCheckFixedNbr().
+      IF lcFixedLineNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} THEN DO:
+         FIND FIRST lbMobSub WHERE
+                    lbMobSub.Brand = gcBrand AND
+                    lbMobSub.FixedNumber = lcFixedLineNumber NO-LOCK NO-ERROR. 
+         IF AVAIL lbMobSub THEN
+            RETURN appl_err("Subscription already exists with Fixed Number " + lcFixedLineNumber).
+      END.
+      lcError = fOngoingFixedOrders(lcFixedLineNumber,lcFixedLineNumberType).
       IF lcError <> "" THEN RETURN appl_err(lcError).
    END.
 
