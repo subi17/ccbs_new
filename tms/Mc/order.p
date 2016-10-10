@@ -944,6 +944,14 @@ BROWSE:
              WITH FRAME fFixed.
         HIDE FRAME fFixed NO-PAUSE.
 
+        FIND FIRST OrderFusion NO-LOCK where
+                   OrderFusion.FixedNumber EQ lcFixedNumber NO-ERROR.
+
+        IF NOT AVAILABLE OrderFusion THEN DO:
+           MESSAGE "Fixed number not found!" VIEW-AS ALERT-BOX.
+           NEXT Browse.
+        END.
+
         RUN orderbrfixed(lcFixedNumber, OUTPUT oOrderID).
         FIND FIRST Order WHERE
                    Order.OrderId    = oOrderId AND
