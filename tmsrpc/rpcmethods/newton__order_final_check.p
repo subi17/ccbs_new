@@ -2,6 +2,7 @@
  * Final order checks
  *
  * @input: msisdn;string;mandatory;Subscription msisdn 
+           fixed_number;string;optional;Fixed line number 
            number_type;string;mandatory;Order type (new,mnp,renewal,stc)
            channel;string;optional;order channel
  * @output: boolean;True=OK/False=NOT OK
@@ -18,9 +19,11 @@ gcBrand = "1".
 /* Input parameters */
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
 DEF VAR pcCLI AS CHAR NO-UNDO.
+DEF VAR pcFixedNumber AS CHAR NO-UNDO INIT "".
 DEF VAR pcNumberType AS CHAR NO-UNDO INIT ?.
 DEF VAR pcChannel AS CHAR NO-UNDO. 
-DEF VAR lcStruct AS CHAR NO-UNDO. 
+DEF VAR lcStruct AS CHAR NO-UNDO.
+DEF VAR lcError AS CHAR NO-UNDO.
 /* Output parameters */
 DEF VAR llAllow AS LOG NO-UNDO INIT TRUE. 
 
@@ -30,11 +33,13 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 pcstruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcStruct = validate_request(pcstruct,"msisdn!,number_type!,channel").
+lcStruct = validate_request(pcstruct,"msisdn!,fixed_number,number_type!,channel").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
    pcCLI = get_string(pcStruct, "msisdn")
+   pcFixedNumber = get_string(pcStruct, "fixed_number") WHEN 
+      LOOKUP("pcFixedNumber",lcStruct) > 0
    pcNumberType = get_string(pcStruct, "number_type")
    pcChannel = get_string(pcStruct,"channel") WHEN
       LOOKUP("channel",lcStruct) > 0.
@@ -49,21 +54,13 @@ IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN RETURN
 IF fOngoingOrders(pcCli, (IF pcChannel BEGINS "retention"
                           THEN "retention"
                           ELSE pcNumberType)) THEN llAllow = FALSE.
+
 ELSE IF pcNumberType EQ "stc" THEN DO:
-   IF pcCLI BEGINS "9" THEN DO:
-      FIND FIRST MobSub NO-LOCK WHERE
-                 MobSub.Brand = gcBrand AND
-                 MobSub.FixedNumber = pcCLI NO-ERROR.
-      IF NOT AVAIL Mobsub THEN
-         RETURN appl_err("Subscription not found").
-   END.
-   ELSE DO:
-      FIND FIRST MobSub NO-LOCK WHERE
-                 MobSub.Brand = gcBrand AND
-                 MobSub.CLI = pcCLI NO-ERROR.
-      IF NOT AVAIL Mobsub THEN 
-         RETURN appl_err("Subscription not found").
-   END.
+   FIND FIRST MobSub NO-LOCK WHERE
+              MobSub.Brand = gcBrand AND
+              MobSub.CLI = pcCLI NO-ERROR.
+   IF NOT AVAIL Mobsub THEN 
+      RETURN appl_err("Subscription not found").
 
    /* Check ongoing STC request */
    FIND FIRST MsRequest NO-LOCK WHERE
@@ -72,6 +69,19 @@ ELSE IF pcNumberType EQ "stc" THEN DO:
               LOOKUP(STRING(MsRequest.ReqStat),
                {&REQ_INACTIVE_STATUSES}) = 0  NO-ERROR.
    IF AVAILABLE MsRequest THEN llAllow = FALSE.
+END.
+
+/* Check Fixed number existence and orders */
+IF pcFixedNumber > "" THEN DO:
+   IF pcNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} THEN DO:
+      FIND FIRST MobSub WHERE
+                 MobSub.Brand = gcBrand AND
+                 MobSub.FixedNumber = pcFixedNumber NO-LOCK NO-ERROR. 
+      IF AVAIL MobSub THEN
+         RETURN appl_err("Subscription already exists with Fixed Number " + pcFixedNumber).
+   END.
+   lcError = fOngoingFixedOrders(pcFixedNumber).
+   IF lcError > "" THEN RETURN appl_err(lcError).
 END.
 
 add_boolean(response_toplevel_id, "", llAllow).
