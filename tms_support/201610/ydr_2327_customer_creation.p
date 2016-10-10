@@ -18,6 +18,7 @@ REPEAT:
 
    IMPORT STREAM sOL UNFORMATTED liOrderID.
    FIND FIRST Order NO-LOCK WHERE
+              Order.Brand   = gcBrand   AND
               Order.OrderID = liOrderID NO-ERROR.
    IF AVAILABLE Order AND Order.CustNum = 0 THEN DO:
       RUN createcustomer(INPUT Order.OrderID,1,FALSE,TRUE,OUTPUT liCustomer).
@@ -56,8 +57,6 @@ REPEAT:
             END.
          END.
       END.
-
-      RUN createcustomer(INPUT Order.OrderId,3,FALSE,TRUE,OUTPUT liCustomer).
    END.
 END.
 
