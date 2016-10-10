@@ -635,7 +635,7 @@ DO liLoop = 1 TO 5:
          IF ServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN
             liVoiceBDestLimit = ServiceLimit.BDestLimit.
          ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE_BDEST} THEN
-            liFixedBdestLimit = ServiceLimit.BDestLimit.
+            liFixedBdestLimit = INT(ServiceLimit.InclAmt).
          ELSE
             liVoiceBDestLimit = INT(ServiceLimit.InclAmt).  
 
