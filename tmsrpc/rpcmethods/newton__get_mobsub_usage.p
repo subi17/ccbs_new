@@ -83,7 +83,7 @@ DEF VAR liFixedBdestUsage       AS INT  NO-UNDO.
 DEF VAR ldeFixedBundleLimit     AS DEC  NO-UNDO.
 DEF VAR ldeFixedBundleUsage     AS DEC  NO-UNDO.
 DEF VAR ldeIntRoamUsage AS DEC NO-UNDO. 
-DEF VAR liDialTypes AS INT NO-UNDO EXTENT 3.
+DEF VAR liDialTypes AS INT NO-UNDO EXTENT 5.
 DEF VAR liLoop AS INTEGER NO-UNDO. 
 DEF VAR ldaDate AS DATE NO-UNDO. 
 DEF VAR liTime AS INT NO-UNDO. 
@@ -513,11 +513,13 @@ END.
 
 /* Return all data/voice bundles limit and usage */
 ASSIGN
-   liDialTypes[1] = 0
-   liDialTypes[2] = 4
-   liDialTypes[3] = 7.
+   liDialTypes[1] = {&DIAL_TYPE_GENERAL}
+   liDialTypes[2] = {&DIAL_TYPE_FIXED_VOICE}
+   liDialTypes[3] = {&DIAL_TYPE_VOICE}
+   liDialTypes[4] = {&DIAL_TYPE_GPRS}
+   liDialTypes[5] = {&DIAL_TYPE_FIXED_VOICE_BDEST}. 
 
-DO liLoop = 1 TO 3:
+DO liLoop = 1 TO 5:
    FOR EACH MServiceLimit WHERE
             MServiceLimit.MsSeq   = MobSub.MsSeq AND
             MServiceLimit.DialType = liDialTypes[liLoop] AND
@@ -626,13 +628,13 @@ DO liLoop = 1 TO 3:
       
       /*YDR-2284 removed the condition*/
       /* Return Voice BDestination limit/usage */
-      IF ((ServiceLimit.DialType = {&DIAL_TYPE_VOICE} OR
-          ServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE})
+      IF (ServiceLimit.DialType = {&DIAL_TYPE_VOICE} AND
           ServiceLimit.BDestLimit > 0) OR
-         ServiceLimit.DialType = 0 THEN DO:
+         ServiceLimit.DialType = {&DIAL_TYPE_GENERAL} OR 
+         ServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE_BDEST} THEN DO:
          IF ServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN
             liVoiceBDestLimit = ServiceLimit.BDestLimit.
-         ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE} THEN
+         ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE_BDEST} THEN
             liFixedBdestLimit = ServiceLimit.BDestLimit.
          ELSE
             liVoiceBDestLimit = INT(ServiceLimit.InclAmt).  
@@ -644,7 +646,7 @@ DO liLoop = 1 TO 3:
          IF AVAIL ServiceLCounter THEN DO:
             IF ServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN
                liVoiceBDestUsage = ServiceLCounter.limit.
-            ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE} THEN
+            ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE_BDEST} THEN
                liFixedBdestUsage = ServiceLCounter.limit.
             ELSE
                liVoiceBDestUsage = INT(ServiceLCounter.Amt).

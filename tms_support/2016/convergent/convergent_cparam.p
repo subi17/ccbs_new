@@ -127,3 +127,10 @@ IF NOT AVAIL TMSCodes THEN DO:
 END.
 */
 
+FIND FIRST DialType WHERE
+           DIALType.dialtype EQ 50 NO-ERROR.
+IF NOT AVAIL DialType THEN DO:
+   CREATE Dialtype.
+   ASSIGN DialType.dialtype = 50
+          DialType.dtname = "Fixed Voice Bdest".
+END.
