@@ -23,11 +23,9 @@ FIND FIRST Order NO-LOCK WHERE
 IF AVAILABLE Order THEN DO:
 
    lcText = "Order exists for this number".
-
    add_string(top_struct, "orderstatus",Order.StatusCode).
-
-END.
-
-IF lcText <> "" THEN DO:
    add_string(top_struct, "Error",lcText).
+   add_boolean(top_struct, "Result", FALSE).
 END.
+
+add_boolean(top_struct, "Result", TRUE).
