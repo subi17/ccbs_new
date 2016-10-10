@@ -80,7 +80,11 @@ IF pcFixedNumber > "" THEN DO:
       IF AVAIL MobSub THEN
          RETURN appl_err("Subscription already exists with Fixed Number " + pcFixedNumber).
    END.
-   lcError = fOngoingFixedOrders(pcFixedNumber).
+   lcError = fOngoingFixedOrders(pcFixedNumber, 
+                     (IF pcChannel BEGINS "retention"
+                          THEN "retention"
+                     ELSE pcNumberType)).
+
    IF lcError > "" THEN RETURN appl_err(lcError).
 END.
 

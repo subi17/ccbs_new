@@ -186,7 +186,6 @@
                  customer_type;string;mandatory;customer type
                  contractid;string;optional;
                  install_address;struct;mandatory;
-                 billing_address;struct;optional;
   @install_address fname;string;optional
                     lname;string;optional;
                     lname2;string;optional;
@@ -210,12 +209,6 @@
                     stair;string;optional;stair
                     hand;string;optional;hand
                     km;string;optional;km
-  @billing_address address;string;optional;
-                    additional_address;string;optional
-                    city;string;mandatory;
-                    zip;string;mandatory;
-                    street_number;string;optional;
-                    region;string;optional;
  * @q25_data   q25_extension;boolean;optional;Extension of the Quota 25
                q25_discount;double;optional;Discount amount over the Quota 25
                per_contract_id;int;mandatory;installment contract id (related to q25)
@@ -389,7 +382,6 @@ DEF VAR lcId AS CHARACTER NO-UNDO.
 DEF VAR llPendingMainLineOrder AS LOG NO-UNDO. 
    
 DEF VAR pcFixedInstallAddress AS CHAR NO-UNDO. 
-DEF VAR pcFixedBillingAddress AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineNumberType AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineNumber AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineMNPOldOperName AS CHAR NO-UNDO.
@@ -427,6 +419,7 @@ DEF VAR pcTerminalFinancing AS CHAR NO-UNDO.
 
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
+DEF BUFFER lbMobSub FOR MobSub. 
 
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
@@ -631,6 +624,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEF VAR liDelType  AS INT NO-UNDO.
    DEF VAR liActLimit AS INT NO-UNDO.
    DEF VAR liActs AS INT NO-UNDO.
+
+   DEF BUFFER bOrderCustomer FOR OrderCustomer.
 
    data[LOOKUP("country", gcCustomerStructStringFields)] = "ES".
    data[LOOKUP("nationality", gcCustomerStructStringFields)] = "ES".
@@ -842,6 +837,40 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
                                     OrderCustomer.AddressCompl. 
 
          IF liDelType > 0 THEN OrderCustomer.DelType = liDelType.
+   
+         /* replicate install person data from billing person data */
+         IF piRowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} THEN DO:
+      
+            FIND bOrderCustomer NO-LOCK WHERE
+                 bOrderCustomer.Brand = gcBrand AND
+                 bOrderCustomer.OrderID = liOrderId AND
+                 bOrderCustomer.RowType = 1 NO-ERROR.
+            
+            IF AVAIL bOrderCustomer THEN ASSIGN
+               OrderCustomer.FirstName = bOrderCustomer.FirstName
+                  WHEN NOT OrderCustomer.FirstName > ""
+
+               OrderCustomer.SurName1 = bOrderCustomer.Surname1
+                  WHEN NOT OrderCustomer.Surname1 > ""
+
+               OrderCustomer.SurName2 = bOrderCustomer.Surname2
+                  WHEN NOT OrderCustomer.Surname2 > ""
+
+               OrderCustomer.Email = bOrderCustomer.Email
+                  WHEN NOT OrderCustomer.Email > ""
+
+               OrderCustomer.FixedNum = bOrderCustomer.FixedNum
+                  WHEN NOT OrderCustomer.FixedNum > ""
+
+               OrderCustomer.CustID = (IF lcContactId > "" THEN
+                  lcContactId ELSE bOrderCustomer.CustID)
+                  WHEN NOT OrderCustomer.CustId > ""
+
+               OrderCustomer.CustIDType = (IF lcContactIdType > "" THEN
+                  lcContactIdType ELSE bOrderCustomer.CustIDType)
+                  WHEN NOT OrderCustomer.CustIDType > "".
+               
+         END.
    END.
 
 
@@ -908,32 +937,6 @@ FUNCTION fCheckMSISDN RETURNS CHARACTER:
          lcError = "Subscription already exists with MSISDN " + pcCLI.
    END.
    RETURN lcError.
-END.
-
-FUNCTION fCheckFixedNbr RETURNS CHARACTER:
-   
-   IF lcFixedLineNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} THEN DO:
-      FIND FIRST MobSub WHERE
-                 MobSub.Brand = gcBrand AND
-                 MobSub.FixedNumber = lcFixedLineNumber NO-LOCK NO-ERROR. 
-      IF AVAIL MobSub THEN
-         RETURN "Subscription already exists with Fixed Number " + lcFixedLineNumber.
-   END.
-
-   /* Check if same number in ongoing Fusion order */
-   DEF BUFFER lbOtherOrder  FOR Order.
-   DEF BUFFER lbOrderFusion FOR OrderFusion.
-   FOR EACH lbOrderFusion NO-LOCK WHERE
-            lbOrderFusion.FixedNumber EQ lcFixedLineNumber,
-      EACH  lbOtherOrder NO-LOCK WHERE
-            lbOtherOrder.brand EQ gcBrand AND
-            lbOtherOrder.OrderId EQ lbOrderFusion.OrderId AND
-            LOOKUP(lbOtherOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0:
-
-      RETURN "Ongoing order for Fixed Number " + lcFixedLineNumber.
-   END.
-
-   RETURN "".
 END.
 
 /* YBP-528 */
@@ -1722,7 +1725,7 @@ END.
 /* YBP-530 */
 IF pcFusionStruct > "" THEN DO:
    lcFusionStructFields = validate_request(pcFusionStruct, 
-      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,fixed_line_mnp_time_of_change,fixed_line_product!,install_address!,billing_address").
+      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,fixed_line_mnp_time_of_change,fixed_line_product!,install_address!").
    IF gi_xmlrpc_error NE 0 THEN RETURN.
    
    ASSIGN
@@ -1740,9 +1743,7 @@ IF pcFusionStruct > "" THEN DO:
       lcFixedLineSerialNbr = get_string(pcFusionStruct, "fixed_line_serial_number")
          WHEN LOOKUP("fixed_line_serial_number",lcFusionStructFields) > 0
       lcFixedLineMNPTime = get_string(pcFusionStruct, "fixed_line_mnp_time_of_change")
-         WHEN LOOKUP("fixed_line_mnp_time_of_change",lcFusionStructFields) > 0
-      pcFixedBillingAddress = get_struct(pcFusionStruct,"billing_address")
-         WHEN LOOKUP("billing_address",lcFusionStructFields) > 0.
+         WHEN LOOKUP("fixed_line_mnp_time_of_change",lcFusionStructFields) > 0.
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
    
@@ -1755,7 +1756,14 @@ IF pcFusionStruct > "" THEN DO:
       RETURN appl_err("fixed_line_mnp_old_operator_code is mandatory with fixed_line_number_type=MNP").
 
    IF lcFixedLineNumber NE "" THEN DO:
-      lcError = fCheckFixedNbr().
+      IF lcFixedLineNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} THEN DO:
+         FIND FIRST lbMobSub WHERE
+                    lbMobSub.Brand = gcBrand AND
+                    lbMobSub.FixedNumber = lcFixedLineNumber NO-LOCK NO-ERROR. 
+         IF AVAIL lbMobSub THEN
+            RETURN appl_err("Subscription already exists with Fixed Number " + lcFixedLineNumber).
+      END.
+      lcError = fOngoingFixedOrders(lcFixedLineNumber,lcFixedLineNumberType).
       IF lcError <> "" THEN RETURN appl_err(lcError).
    END.
 
@@ -1767,16 +1775,6 @@ IF pcFusionStruct > "" THEN DO:
    IF lcError <> "" THEN RETURN appl_err(lcError).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
   
-   /* YBP-543 */ 
-   IF pcFixedBillingAddress > "" THEN DO:
-      fCreateOrderCustomer(pcFixedBillingAddress,
-                           gcCustomerStructFields,
-                           {&ORDERCUSTOMER_ROWTYPE_FIXED_BILLING},
-                           FALSE).
-      IF lcError <> "" THEN RETURN appl_err(lcError).
-      IF gi_xmlrpc_error NE 0 THEN RETURN.
-   END.
-
    IF NOT pcChannel BEGINS "fusion" THEN
       RETURN appl_err(SUBST("Incorrect fusion order channel &1",pcChannel)).
    
@@ -1865,19 +1863,13 @@ IF pcContactStruct > "" THEN
    fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, TRUE).
    
 /* YBP-553 */
+/* should be called only after rowtype=1 creation */
 IF pcFixedInstallAddress > "" THEN 
    fCreateOrderCustomer(pcFixedInstallAddress,
                         gcCustomerStructFields,
                         {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL},
                         TRUE). 
 
-/* YBP-554 */
-IF pcFixedBillingAddress > "" THEN 
-   fCreateOrderCustomer(pcFixedBillingAddress,
-                        gcCustomerStructFields,
-                        {&ORDERCUSTOMER_ROWTYPE_FIXED_BILLING},
-                        TRUE).
-                                               
 /* YBP-555 */
 /* mobsub handling */
 IF LOOKUP(pcNumberType,"renewal,stc") > 0 THEN DO:
