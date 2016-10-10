@@ -26,7 +26,9 @@ IF AVAILABLE MobSub THEN
 
 FIND FIRST Order NO-LOCK WHERE
            Order.brand EQ "1"   AND
-           Order.CLI   EQ pcCLI NO-ERROR.
+           Order.CLI   EQ pcCLI AND
+           (IF liMsSeq NE 0 THEN Order.MsSeq = liMsSeq
+            ELSE TRUE) NO-ERROR.
 IF AVAILABLE Order THEN DO:
    IF lcText = "" THEN
       lcText = "Order exists for this number".
