@@ -50,7 +50,9 @@ IF NOT ilSilent AND
               OrderFusion.Brand   = Order.Brand AND
               OrderFusion.OrderId = Order.OrderID NO-ERROR.
    IF AVAIL OrderFusion AND 
-            OrderFusion.FusionStatus NE {&FUSION_ORDER_STATUS_FINALIZED} THEN DO:
+            OrderFusion.FusionStatus NE {&FUSION_ORDER_STATUS_FINALIZED} AND
+            OrderFusion.FusionStatus NE {&FUSION_ORDER_STATUS_CANCELLED} THEN DO:
+
       MESSAGE "Not allowed: Ongoing fixed line installation"
       VIEW-AS ALERT-BOX ERROR.
       
