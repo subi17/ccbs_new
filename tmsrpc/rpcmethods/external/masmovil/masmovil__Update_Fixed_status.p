@@ -146,11 +146,6 @@ IF lcNotificationType NE "O" THEN DO:
    add_string(lcresultStruct, "resultDescription", "success").
 END.
    
-ASSIGN
-   OrderFusion.FixedStatus = lcStatus
-   OrderFusion.FixedStatusTS = ldeNotificationTime
-   OrderFusion.UpdateTS = FusionMessage.CreatedTS.
-   
 IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED} AND
    LOOKUP(FusionMessage.FixedStatus,
           "CANCELADA,PENDIENTE CANCELAR,CANCELACION EN PROCESO") > 0 THEN DO:
@@ -162,6 +157,21 @@ IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED} AND
               "Cancellation is not allowed").
    RETURN.
 END.
+
+IF ldeNotificationTime < OrderFusion.FixedStatusTS THEN DO:
+      
+   FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+   
+   add_string(lcresultStruct, "resultCode", {&RESULT_INVALID_STATUS}).
+   add_string(lcresultStruct, "resultDescription", 
+              "notificationTime is older than the value in the latest received message").
+   RETURN.
+END.
+
+ASSIGN
+   OrderFusion.FixedStatus = lcStatus
+   OrderFusion.FixedStatusTS = ldeNotificationTime
+   OrderFusion.UpdateTS = FusionMessage.CreatedTS.
 
 CASE FusionMessage.FixedStatus:
 
