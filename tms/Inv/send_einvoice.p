@@ -38,6 +38,7 @@ DEF VAR liLoop                  AS INT  NO-UNDO.
 DEF VAR lcName                  AS CHAR NO-UNDO. 
 DEF VAR lcMonthName             AS CHAR NO-UNDO. 
 DEF VAR lcMiYoigoLink           AS CHAR NO-UNDO.
+DEF VAR llFirstInv              AS LOG  NO-UNDO.
 /* DEF VAR lcQ25Note               AS CHAR NO-UNDO. Removed by YOT-4050 */
 
 DEF STREAM sEmail.
@@ -53,7 +54,6 @@ FUNCTION fPickMonthName RETURN CHARACTER
       lcMonth = fTeksti(liMonBegin + iiMonth,iiLanguage).
    RETURN lcMonth.
 END FUNCTION.
-
 
 FIND MSRequest WHERE 
      MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
@@ -72,7 +72,8 @@ ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        xMailFrom     = fCparam("EI","EmailFromAddress")
        lcEmailFile   = fCparam("EI","EmailPDFFile")
        lcTransDir    = fCParam("EI","PDFMailArcDir")
-       lcMiYoigoLink = fCparam("URL","MiYoigoInvoiceURL").
+       lcMiYoigoLink = fCparam("URL","MiYoigoInvoiceURL")
+       llFirstInv    = FALSE.
 
 INVOICE_LOOP:
 FOR EACH Invoice WHERE
@@ -130,14 +131,27 @@ FOR EACH Invoice WHERE
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#MiYoigoLINK",lcMiYoigoLink)
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#EMAIL",xMailFrom)
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"#AMOUNT", 
-          REPLACE(TRIM(STRING(Invoice.InvAmt,"->>>>>>9.99")),".",lcSep))
-          xMailAddr = Customer.Email.
-
+          REPLACE(TRIM(STRING(Invoice.InvAmt,"->>>>>>9.99")),".",lcSep)).
+   
+   /*Notification for the First Invoice will be sent to a specific people as part of YOT-4037 along with the own customer*/
+   IF llFirstInv = FALSE THEN DO:
+      fMailNotify(Customer.CustNum,
+                  "First",
+                  lcEmailReplacedText,
+                  xMailSubj,
+                  lcEmailFile,
+                  lcTransDir,
+                  lcAddrConfDir).
+      llFirstInv = TRUE.
+   END.
+   
+   xMailAddr = Customer.Email.
+   
    OUTPUT STREAM sEmail TO VALUE(lcLatestEmailFile).
    PUT STREAM sEmail UNFORMATTED xMailSubj SKIP(1).
    PUT STREAM sEmail UNFORMATTED lcEmailReplacedText SKIP.
    OUTPUT STREAM sEmail CLOSE.
-
+   
    /* Send the email */
    SendMaileInvoice(lcEmailReplacedText,"","").
 
@@ -151,6 +165,15 @@ FOR EACH Invoice WHERE
    IF liLoop MOD 1000 EQ 0 AND
       lcMonitor > "" THEN fKeepAlive(lcMonitor).
 END. /* FOR EACH Invoice WHERE */
+
+/*Notification for the Last Invoice will be sent to a specific people as part of YOT-4037 along with the own customer*/
+fMailNotify(Customer.CustNum,
+            "Last",
+            lcEmailReplacedText,
+            xMailSubj,
+            lcEmailFile,
+            lcTransDir,
+            lcAddrConfDir).
 
 /* Send an email to configure list*/
 IF lcAddrConfDir > "" THEN

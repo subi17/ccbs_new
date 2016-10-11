@@ -24,11 +24,11 @@ DEF OUTPUT PARAMETER oiEvents      AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 
 /* YOT-4132 Translate the billing items to dump file in case a credit note is created */
-DEF VAR lcbillcodes_from_set1 AS CHAR NO-UNDO INIT "PAYTERM,PAYTERM18,PAYTERM1E,PAYTERM24,PAYTERMBS,PAYTERMEND,PAYTERMEND1E,PAYTERMENDBS".
+DEF VAR lcbillcodes_from_set1 AS CHAR NO-UNDO INIT "PAYTERM,PAYTERM18,PAYTERM1E,PAYTERM24,PAYTERMBS,PAYTERMEND,PAYTERMEND1E,PAYTERMENDBS,PAYTERMBC,PAYTERMENDBC".
 DEF VAR lcbillcodes_to_set1   AS CHAR NO-UNDO INIT "CNPAYTERM".
-DEF VAR lcbillcodes_from_set2 AS CHAR NO-UNDO INIT "RVTERM1EF,RVTERMBSF,RVTERMF".
+DEF VAR lcbillcodes_from_set2 AS CHAR NO-UNDO INIT "RVTERM1EF,RVTERMBSF,RVTERMF,RVTERMBCF".
 DEF VAR lcbillcodes_to_set2   AS CHAR NO-UNDO INIT "CNRV".
-DEF VAR lcbillcodes_from_set3 AS CHAR NO-UNDO INIT "RVTERM,RVTERM1E,RVTERMBS,RVTERMEND,RVTERMEND1E,RVTERMENDBS".
+DEF VAR lcbillcodes_from_set3 AS CHAR NO-UNDO INIT "RVTERM,RVTERM1E,RVTERMBS,RVTERMEND,RVTERMEND1E,RVTERMENDBS,RVTERMBC,RVTERMENDBC".
 DEF VAR lcbillcodes_to_set3   AS CHAR NO-UNDO INIT "CNRVTERM".
 DEF VAR lcbillcodes_from_set4 AS CHAR NO-UNDO INIT "RVTERMDTTR,RVTERMDTRW,RVTERMDTEQ25,RVTERMDTTD".
 DEF VAR lcbillcodes_to_set4   AS CHAR NO-UNDO INIT "CRVTERMDT".
@@ -787,9 +787,11 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                 "PAYTERM,PAYTERMEND," +
                 {&TF_BANK_UNOE_PAYTERM_BILLCODES} + "," +
                 {&TF_BANK_SABADELL_PAYTERM_BILLCODES} + "," +
+                {&TF_BANK_CETELEM_PAYTERM_BILLCODES} + "," +
                 "RVTERM,RVTERMEND," + 
                 {&TF_BANK_UNOE_RVTERM_BILLCODES} + "," +
-                {&TF_BANK_SABADELL_RVTERM_BILLCODES}) > 0 THEN DO: 
+                {&TF_BANK_SABADELL_RVTERM_BILLCODES} + "," +
+                {&TF_BANK_CETELEM_RVTERM_BILLCODES}) > 0 THEN DO: 
 
          FIND FIRST bttRow WHERE
                     bttRow.MsSeq = ttRow.MsSeq AND
@@ -806,10 +808,14 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
             LOOKUP(ttRow.BillCode,{&TF_BANK_UNOE_PAYTERM_BILLCODES}) > 0 OR
             LOOKUP(ttRow.BillCode,{&TF_BANK_UNOE_RVTERM_BILLCODES}) > 0 
          THEN ttRow.BankCode = {&TF_BANK_UNOE}.
-         ELSE IF 
+          ELSE IF 
             LOOKUP(ttRow.BillCode,{&TF_BANK_SABADELL_PAYTERM_BILLCODES}) > 0 OR
             LOOKUP(ttRow.BillCode,{&TF_BANK_SABADELL_RVTERM_BILLCODES}) > 0 
          THEN ttRow.BankCode = {&TF_BANK_SABADELL}.
+         ELSE IF 
+            LOOKUP(ttRow.BillCode,{&TF_BANK_CETELEM_PAYTERM_BILLCODES}) > 0 OR
+            LOOKUP(ttRow.BillCode,{&TF_BANK_CETELEM_RVTERM_BILLCODES}) > 0 
+         THEN ttRow.BankCode = {&TF_BANK_CETELEM}.
       END.
 
       IF NOT llSalesInv AND AVAIL ttRow THEN DO:
@@ -817,6 +823,8 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
             ttRow.BankCode = {&TF_BANK_UNOE}.
          ELSE IF ttRow.BillCode = "RVTERMBSF" THEN
             ttRow.BankCode = {&TF_BANK_SABADELL}.
+         ELSE IF ttRow.BillCode = "RVTERMBCF" THEN
+            ttRow.BankCode = {&TF_BANK_CETELEM}.
       END.
 
    END.

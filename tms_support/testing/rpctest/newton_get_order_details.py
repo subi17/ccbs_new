@@ -16,4 +16,7 @@ else:
 
 p=s.newton.get_order_details(var1)
                               
-print_results(p)
+print p
+# print_results(p)
+# If you need more beautiful output of results, comment print p and uncomment above print_results(p). Default is better for reusage of Robot Frmwrk etc.
+

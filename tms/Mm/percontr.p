@@ -607,16 +607,15 @@ PROCEDURE pContractActivation:
                RETURN.
             END.
             
-            IF MSRequest.ReqSource EQ
-               {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN DO:
-               
-               ASSIGN
-                  ldeResidualFeeDisc = 0
-                  ldeFeeAmount = TRUNC(MsRequest.ReqDParam2 / FMItem.FFItemQty,
-                                       2).
-            END.
+            IF MSRequest.ReqSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} OR
+               ( MSRequest.ReqSource EQ {&REQUEST_SOURCE_NEWTON} AND
+                 MSRequest.ReqDParam2 > 0 )
+            THEN ASSIGN
+                    ldeResidualFeeDisc = 0
+                    ldeFeeAmount = TRUNC(MsRequest.ReqDParam2 / FMItem.FFItemQty,
+                                         2).
             ELSE DO:
-               
+
                FIND bQ25SingleFee NO-LOCK USE-INDEX Custnum WHERE
                     bQ25SingleFee.Brand       = gcBrand AND
                     bQ25SingleFee.Custnum     = MsOwner.CustNum AND

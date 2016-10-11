@@ -100,9 +100,11 @@ REPEAT:
    IF SESSION:BATCH THEN fBatchLog("START", lcInputFile). 
 
    lcTFBank = (IF INDEX(lcFileName,"SABADELL") > 0
-               THEN {&TF_BANK_SABADELL}
+                  THEN {&TF_BANK_SABADELL}
+               ELSE IF INDEX(lcFileName,"CETELEM") > 0
+                  THEN {&TF_BANK_CETELEM}
                ELSE {&TF_BANK_UNOE}).
-
+   
    OUTPUT STREAM sLog TO VALUE(lcErrorLog) append.
 
    PUT STREAM sLog UNFORMATTED

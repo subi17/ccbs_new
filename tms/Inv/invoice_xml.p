@@ -696,10 +696,10 @@ END PROCEDURE.   /* pinvoice2xml */
       
 PROCEDURE pSubInvoice2XML:
 
-   DEF VAR llPremiumNumberText    AS LOG  NO-UNDO.
+   DEF VAR llPremiumNumberText    AS LOGICAL INITIAL FALSE  NO-UNDO.
    DEF VAR lcBIGroupName          AS CHAR NO-UNDO. 
    DEF VAR liTFCount              AS INT  NO-UNDO.
-   DEF VAR llGBText               AS LOG  NO-UNDO.
+   DEF VAR llGBText               AS LOGICAL INITIAL FALSE  NO-UNDO.
    DEF VAR lcFooterNotice         AS CHAR NO-UNDO.
 
     
@@ -862,8 +862,8 @@ PROCEDURE pSubInvoice2XML:
       lhXML:END-ELEMENT("SubInvoiceAmount").
  
       RUN pCollectCDR(SubInvoice.InvSeq,
-                      OUTPUT llPremiumNumberText,
-                      OUTPUT llGBText).  
+                      INPUT-OUTPUT llPremiumNumberText,
+                      INPUT-OUTPUT llGBText).
       
       FOR EACH ttCall NO-LOCK 
       BREAK BY ttCall.GroupOrder

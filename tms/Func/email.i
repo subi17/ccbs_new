@@ -13,6 +13,7 @@
                            attachments are no longer mandatory with sendatt
 */
 {Syst/commali.i}
+{Func/ftransdir.i}
 
 DEF VAR xMailRecip    AS CHAR NO-UNDO.
 DEF VAR xMailAddr     AS CHAR NO-UNDO.
@@ -26,6 +27,8 @@ DEF VAR xMailError    AS CHAR NO-UNDO.
 /* administrator, errors send TO this address */
 DEF VAR xMailAdmin    AS CHAR NO-UNDO INIT "ari@starnet.fi".
 DEF VAR lcMailHost    AS CHAR NO-UNDO. 
+
+DEF STREAM sMailNotify.
 
 /* get hostname, it must be correct in xMailFrom */
 INPUT THROUGH hostname.
@@ -346,4 +349,46 @@ FUNCTION SendMaileInvoice RETURNS LOGIC (iMailTxt AS CHAR,
 
     RETURN (xMailError = "").
 
+END FUNCTION.
+
+FUNCTION fMailNotify RETURN CHARACTER
+   (iiCustNum           AS INT,
+    icType              AS CHAR,
+    icEmailReplacedText AS CHAR,
+    icMailSubj          AS CHAR,
+    icEmailFile         AS CHAR,
+    icTransDir          AS CHAR,
+    icAddrConfDir       AS CHAR):
+
+   DEF VAR lcAddrConfDirNotify     AS CHAR NO-UNDO.
+   DEF VAR lcLatestEmailFileNotify AS CHAR NO-UNDO.
+   DEF VAR lcMailAddr              AS CHAR NO-UNDO.
+   DEF VAR i                       AS INT  NO-UNDO.
+
+   ASSIGN lcAddrConfDirNotify = icAddrConfDir + "emailinvoicenotify.email".
+
+   GetRecipients(lcAddrConfDirNotify).
+   
+   ASSIGN xMailSubj  = icType + " Invoice " + icMailSubj.
+
+   ASSIGN lcLatestEmailFileNotify = icEmailFile + "_" + STRING(iiCustNum) +
+                                    "_Notify_" + STRING(TODAY,"999999") + "_" +
+                                    STRING(TIME) + ".html".
+
+   OUTPUT STREAM sMailNotify TO VALUE(lcLatestEmailFileNotify).
+   PUT STREAM sMailNotify UNFORMATTED xMailSubj SKIP(1).
+   PUT STREAM sMailNotify UNFORMATTED icEmailReplacedText SKIP.
+   OUTPUT STREAM sMailNotify CLOSE.
+
+   lcMailAddr = xMailAddr.
+   DO i = 1 TO NUM-ENTRIES(lcMailAddr,","):
+      xMailAddr = ENTRY(i,lcMailAddr,",").
+      SendMaileInvoice(icEmailReplacedText,"","").
+   END.
+
+   IF icTransDir > "" THEN
+      fTransDir(lcLatestEmailFileNotify,
+                ".html",
+                icTransDir).
+   ASSIGN xMailSubj = icMailSubj.
 END FUNCTION.
