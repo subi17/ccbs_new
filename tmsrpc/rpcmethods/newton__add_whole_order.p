@@ -66,7 +66,8 @@
                tarj7_promo;boolean;optional;
                keep_installment;boolean;optional;
                multiorder;boolean;optional;
-               terminal_financing_bank;string;optional
+               terminal_financing_bank;string;optional;
+               shipping_cost_amount;double;optional
  * @customer_data fname;string;optional;
                   lname;string;optional;
                   lname2;string;optional;
@@ -307,6 +308,7 @@ DEF VAR pcUpsHours AS CHAR NO-UNDO.
 DEF VAR plCustDataRetr AS LOGICAL NO-UNDO.
 DEF VAR pcIdentifiedSmsNumber AS CHAR NO-UNDO.
 DEF VAR plMultiOrder AS LOGICAL NO-UNDO.
+DEF VAR pdeShippingCostAmount AS DECIMAL INITIAL ? NO-UNDO.
 
 /* Real Order Inspection parameters */
 DEF VAR pcROIresult      AS CHAR NO-UNDO.
@@ -568,6 +570,9 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
 
    IF LOOKUP('terminal_financing_bank', lcOrderStruct) GT 0 THEN
       pcTerminalFinancing = get_string(pcOrderStruct,"terminal_financing_bank").
+
+   IF LOOKUP('shipping_cost_amount', lcOrderStruct) GT 0 THEN
+      pdeShippingCostAmount = get_double(pcOrderStruct,"shipping_cost_amount").
 
    RETURN TRUE.
 END.
@@ -2028,7 +2033,15 @@ DO:
          THEN Order.FeeModel = "PAYDELTER".
       ELSE IF pcNumberType EQ "New" AND order.paytype THEN
          Order.FeeModel = "PAYDELSIM".
-   END.      
+   END.
+   ELSE IF pdeShippingCostAmount NE ? THEN
+   DO:
+      Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}.
+      fCreateOrderAction(Order.Orderid,
+                         "SHIPPING_COST",
+                         {&ORDER_FEEMODEL_SHIPPING_COST},
+                         STRING(pdeShippingCostAmount)).
+   END.
 END.
 
 /* YBP-573 */ 

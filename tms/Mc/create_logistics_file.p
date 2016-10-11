@@ -28,6 +28,7 @@ gcBrand = "1".
 {fbundle.i}
 {mnp.i}
 {email.i}
+{Mc/shipping_cost.i}
 
 DEFINE VARIABLE lcLogFile          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName         AS CHARACTER NO-UNDO.
@@ -367,6 +368,7 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE ldeCurrAmt                AS DEC NO-UNDO. 
    DEFINE VARIABLE ldtermdiscamt             AS DEC NO-UNDO. 
    DEFINE VARIABLE lcTermDiscItem            AS CHAR NO-UNDO.
+   DEFINE VARIABLE ldeShippingCost           AS DECIMAL INITIAL ? NO-UNDO.
 
    DEFINE BUFFER bufRow   FOR InvRow.
    DEFINE BUFFER bufItem  FOR BillItem.
@@ -990,7 +992,9 @@ FUNCTION fDelivSIM RETURNS LOG
       END.
 
       /* payment on delivery */
-      IF lcPaymInfo = "0" AND Order.FeeModel > "" THEN DO:
+      IF (lcPaymInfo = "0" AND Order.FeeModel > "") OR
+          Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}
+      THEN DO:
          FOR FIRST FeeModel WHERE
                    FeeModel.Brand = gcBrand AND
                    FeeModel.FeeModel = Order.FeeModel NO-LOCK,
@@ -1017,9 +1021,17 @@ FUNCTION fDelivSIM RETURNS LOG
                                            INT(AgreeCustomer.Language),
                                            ldaOrderDate).
 
+            IF Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}
+            THEN ldeShippingCost = fGetShippingCost(Order.OrderID).
+            ELSE ldeShippingCost = ?.
+
             ASSIGN
                ldeVatPerc = fTaxPerc(lcTaxZone,BillItem.TaxClass,ldaOrderDate)
-               ldeRowVat  = fRowVat(PriceList.InclVat,FMItem.Amount,ldeVatPerc).
+               ldeRowVat  = fRowVat(PriceList.InclVat,
+                                    IF ldeShippingCost = ?
+                                    THEN FMItem.Amount
+                                    ELSE ldeShippingCost,
+                                    ldeVatPerc).
 
             /* row amount without vat */
             ldeAmtVat0 = FMItem.Amount - ldeRowVat.

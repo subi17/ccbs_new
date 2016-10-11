@@ -19,6 +19,7 @@
 {timestamp.i}
 {offer.i}
 {orderfunc.i}
+{Mc/shipping_cost.i}
 
 DEF INPUT  PARAMETER iiOrder  AS INT  NO-UNDO. 
 DEF INPUT  PARAMETER iiAction AS INT  NO-UNDO.  
@@ -461,6 +462,8 @@ END PROCEDURE.  /* pMakeCashInvoice */
 
 PROCEDURE pUseFeeModel:
 
+   DEFINE VARIABLE ldeShippingCost AS DECIMAL INITIAL ? NO-UNDO.
+
    ASSIGN
       lcFeeModel  = ""
       lcCustPlist = "".
@@ -536,7 +539,7 @@ PROCEDURE pUseFeeModel:
 
       FOR FIRST FMItem NO-LOCK WHERE
                 FMItem.Brand     = gcBrand           AND
-                FMITem.FeeModel  = FeeModel.FeeModel AND
+                FMITem.FeeModel  = lcFeeModel        AND
                 FMItem.FromDate <= ldaOrderDate      AND
                 FMItem.ToDate   >= ldaOrderDate:
          lcCustPList = FMItem.PriceList.
@@ -551,6 +554,10 @@ PROCEDURE pUseFeeModel:
 
 
    DO liCnt = 1 TO NUM-ENTRIES(lcFeeModel):
+
+      IF ENTRY(liCnt,lcFeeModel) = {&ORDER_FEEMODEL_SHIPPING_COST}
+      THEN ldeShippingCost = fGetShippingCost(Order.OrderID).
+      ELSE ldeShippingCost = ?.
 
       FOR EACH FMItem NO-LOCK WHERE
                FMItem.Brand     = gcBrand                 AND
@@ -568,7 +575,7 @@ PROCEDURE pUseFeeModel:
          llVatIncl = PriceList.InclVat.
       
          RUN pSingleFee(FMItem.BillCode,
-                        FMItem.Amount,
+                        IF ldeShippingCost = ? THEN FMItem.Amount ELSE ldeShippingCost,
                         PriceList.InclVat,
                         FMItem.FeeModel).
                         
