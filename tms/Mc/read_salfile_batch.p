@@ -96,9 +96,12 @@ REPEAT:
 
       ASSIGN
          lcFileType = TRIM(ENTRY(1,lcSepLine,lcSep))
-         lcSALOrderId = TRIM(ENTRY(2,lcSepLine,lcSep))
          lcYoigoOrderId = SUBSTRING(TRIM(ENTRY(39,lcSepLine,lcSep)),2)
       NO-ERROR.
+
+      IF ENTRY(2,lcSepLine,lcSep) BEGINS "Y" THEN
+         lcSALOrderId = TRIM(ENTRY(2,lcSepLine,lcSep)).
+      ELSE lcSALOrderId = ENTRY(2,lcSepLine,lcSep).
 
       IF ERROR-STATUS:ERROR THEN DO:
          fLogLine("ERROR:Incorrect input data format").
