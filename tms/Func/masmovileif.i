@@ -7,7 +7,6 @@
   CHANGED ......:
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-
 {Syst/tmsconst.i}
 {xmlrpc/xmlrpc_client.i}
 {Func/forderstamp.i}
@@ -178,10 +177,12 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    add_string(lcOutputStruct, "orderType", lcOrderType). 
    add_string(lcOutputStruct, "orderName", "ALTA").
    add_string(lcOutputStruct, "sellchannel", "YOIGO").
-   add_string(lcOutputStruct, "selldate", STRING(ldaSellDate)). 
+   add_string(lcOutputStruct, "selldate",
+              Class.timedate:ConvertToISO8601(ldaSellDate)). 
    add_string(lcOutputStruct, "seller", "YOIGO"). 
    add_string(lcOutputStruct, "createdBy", "YOIGO").
-   add_string(lcOutputStruct, "createdDate", STRING(ldaCreDate)). 
+   add_string(lcOutputStruct, "createdDate", 
+              Class.timedate:ConvertToISO8601(ldaCreDate)). 
 
    /*Installation*/
    lcInstallationStruct = add_struct(lcOutputStruct, "Installation").
@@ -398,7 +399,8 @@ FUNCTION fMasCancel_FixedLineOrder RETURNS CHAR
 
    add_string(lcOutputStruct, "orderID", 
                              "Y" + STRING(iiOrderid)).
-   add_string(lcOutputStruct, "cancellationDate", STRING(idaDate)).  
+   add_string(lcOutputStruct, "cancellationDate",
+              Class.timedate:ConvertToISO8601(idaDate)).  
    add_string(lcOutputStruct, "cancellationMotive",  icMotive).
 
    IF gi_xmlrpc_error NE 0 THEN

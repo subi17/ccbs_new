@@ -13,7 +13,7 @@
 DEF INPUT PARAMETER iiOrderId     AS INT  NO-UNDO.
 
 FIND FIRST OrderFusion NO-LOCK where
-           OrderFusion.Brand eq gcBrand AND
+           OrderFusion.Brand eq Syst.Parameters:gcBrand AND
            OrderFusion.OrderID EQ iiOrderID NO-ERROR.
 
 IF NOT AVAIL OrderFusion THEN DO:
@@ -22,19 +22,89 @@ IF NOT AVAIL OrderFusion THEN DO:
 END.
 
 FORM
-   SKIP(1)
-   iiOrderid     COLON 20 LABEL "Select Function"  /*FORMAT "X(8)"*/ SKIP
-   SKIP(1)
+    "OrderID ..........:" OrderFusion.OrderID
+    "Fixed OrderId.....:" AT 40 OrderFusion.FixedOrderId FORMAT "X(18)"
+    SKIP
+    "Fixed Number......:" OrderFusion.FixedNumber
+    "Fixed Nbr Typea..." AT 40 OrderFusion.FixedNumberType FORMAT "X(18)"
+    SKIP
+    "Curr Oper Code....:" OrderFusion.FixedCurrOperCode
+    "Current Operator .:" AT 40 OrderFusion.FixedCurrOper FORMAT "X(18)"
+    SKIP
+    "Fixed Status......:" OrderFusion.FixedStatus
+    "Fixed Sub Status .:" AT 40 OrderFusion.FixedSubStatus FORMAT "X(18)"
+    SKIP
+    "Ext Ticket........:" OrderFusion.ExternalTicket
+    "Fixed ContractID .:" AT 40 OrderFusion.FixedContractId FORMAT "X(18)"
+    SKIP
+    "Salesman..........:" OrderFusion.Salesman
+    "Phone Book........:" AT 40 OrderFusion.PhoneBook FORMAT "X(18)"
+    SKIP
+    "Product...........:" OrderFusion.Product
+    "Serial Number.....:" AT 40 OrderFusion.SerialNumber FORMAT "X(18)"
+    SKIP
+    "Customer Type.....:" OrderFusion.CustomerType
+    "Fusion Status.....:" AT 40 OrderFusion.FusionStatus FORMAT "X(18)"
+    SKIP
+    "Order Date........:" OrderFusion.OrderDate
+    "Updated...........:" AT 40 OrderFusion.UpdateTS /*FORMAT "X(20)"*/
+    SKIP
+    "Brand.............:" OrderFusion.Brand
+    "MNP Time..........:" AT 40 OrderFusion.FixedMNPTime /*FORMAT "X(20)"*/
+    SKIP(7)
 
-   WITH ROW 4 OVERLAY SIDE-LABELS CENTERED 
-        TITLE " Convergent Data View "  
-        FRAME fData.
 
+WITH OVERLAY ROW 1 WIDTH 80 centered
+    COLOR VALUE(cfc)
+    TITLE COLOR VALUE(ctc) "Convergent data"
+    NO-LABELS
+    FRAME fData.
 
-
+FORM
+   "Country..........:" OrderCustomer.Country SKIP
+   "Region...........:" OrderCustomer.Region SKIP
+   "Post Office......:" OrderCustomer.PostOffice SKIP
+   "Street...........:" OrderCustomer.Street SKIP
+   "Street Type......:" OrderCustomer.StreetType SKIP
+   "Building Number..:" OrderCustomer.BuildingNum SKIP
+   "Bis Duplicate....:" OrderCustomer.BisDuplicate SKIP
+   "Block............:" OrderCustomer.Block SKIP
+   "Door.............:" OrderCustomer.Door SKIP
+   "Letter...........:" OrderCustomer.Letter SKIP
+   "Stair............:" OrderCustomer.Stair SKIP
+   "Floor............:" OrderCustomer.Floor SKIP
+   "Hand.............:" OrderCustomer.Hand SKIP
+   "Km...............:" OrderCustomer.Km SKIP
+   "Zip..............:" OrderCustomer.ZipCode SKIP(2)
+WITH OVERLAY ROW 1 WIDTH 80 centered
+    COLOR VALUE(cfc)
+    TITLE COLOR VALUE(ctc) "Address"
+    NO-LABELS
+    FRAME fAddr.
 PAUSE 0 NO-MESSAGE.
-VIEW FRAME fData. 
-CLEAR FRAME fData NO-PAUSE.
+/*VIEW FRAME fData. */
+/*CLEAR FRAME fData NO-PAUSE.*/
+
+DISP OrderFusion.OrderID
+     OrderFusion.FixedOrderId
+     OrderFusion.FixedNumber
+     OrderFusion.FixedNumberType
+     OrderFusion.FixedCurrOperCode
+     OrderFusion.FixedCurrOper
+     OrderFusion.FixedStatus
+     OrderFusion.FixedSubStatus
+     OrderFusion.ExternalTicket
+     OrderFusion.FixedContractId
+     OrderFusion.Salesman
+     OrderFusion.PhoneBook
+     OrderFusion.Product
+     OrderFusion.SerialNumber
+     OrderFusion.CustomerType
+     OrderFusion.FusionStatus
+     OrderFusion.OrderDate
+     OrderFusion.UpdateTS
+     OrderFusion.Brand
+     OrderFusion.FixedMNPTime WITH FRAME fData.
 
 LOOP:
 REPEAT WITH FRAME fMessages ON ENDKEY UNDO LOOP, NEXT LOOP:
@@ -49,11 +119,9 @@ REPEAT WITH FRAME fMessages ON ENDKEY UNDO LOOP, NEXT LOOP:
    RUN ufkey.
 
    IF toimi EQ 5 THEN DO:
-     MESSAGE "5 pressed" VIEW-AS ALERT-BOX.
      RUN fusionmessage.p(iiOrderID).
    END.
    IF toimi EQ 6 THEN DO:
-      MESSAGE "6 pressed" VIEW-AS ALERT-BOX.
       FIND FIRST OrderCustomer NO-LOCK where
                  OrderCustomer.Brand EQ Syst.Parameters:gcBrand AND
                  OrderCustomer.OrderId EQ iiOrderid AND
@@ -66,19 +134,19 @@ REPEAT WITH FRAME fMessages ON ENDKEY UNDO LOOP, NEXT LOOP:
        DISP
           OrderCustomer.Country  
           OrderCustomer.Region 
-          OrderCustomer.PostOffice SKIP
-          OrderCustomer.Street SKIP
-          OrderCustomer.StreetType SKIP
-          OrderCustomer.BuildingNum SKIP
-          OrderCustomer.BisDuplicate SKIP
-          OrderCustomer.Block SKIP 
+          OrderCustomer.PostOffice 
+          OrderCustomer.Street 
+          OrderCustomer.StreetType 
+          OrderCustomer.BuildingNum 
+          OrderCustomer.BisDuplicate 
+          OrderCustomer.Block 
           OrderCustomer.Door 
           OrderCustomer.Letter 
           OrderCustomer.Stair 
           OrderCustomer.Floor 
           OrderCustomer.Hand 
-          OrderCustomer.Km SKIP
-          OrderCustomer.ZipCode.
+          OrderCustomer.Km 
+          OrderCustomer.ZipCode WITH FRAME fAddr.
          
       END.
       

@@ -533,7 +533,9 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
          add_string(lcFixedInstallAddress, "fname", OrderCustomer.FirstName). 
          add_string(lcFixedInstallAddress, "lname", OrderCustomer.SurName1).
          add_string(lcFixedInstallAddress, "surname_2", OrderCustomer.SurName2).
-         add_string(lcFixedInstallAddress, "phone_number", OrderCustomer.FixedNumber).
+         add_string(lcFixedInstallAddress, "phone_number", 
+            (IF OrderCustomer.MobileNumber > "" THEN OrderCustomer.MobileNumber 
+             ELSE OrderCustomer.FixedNumber)).
          add_string(lcFixedInstallAddress, "address", OrderCustomer.Address).
          add_string(lcFixedInstallAddress, "additional_address", OrderCustomer.AddressCompl).
          add_string(lcFixedInstallAddress, "city", OrderCustomer.PostOffice).
