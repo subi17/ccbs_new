@@ -88,14 +88,23 @@ FIND FIRST DayCampaign NO-LOCK WHERE
 IF NOT AVAIL DayCampaign THEN
    RETURN appl_err("Installment contract type is not valid").
 
-FOR EACH DCCLI NO-LOCK WHERE
-         DCCLI.MsSeq = MobSub.MsSeq AND
-         DCCLI.DCEvent BEGINS "PAYTERM" AND
-         DCCLI.ValidTo >= TODAY:
-   i = i + 1.
+IF lcNewPayterm BEGINS "PAYTERM"
+THEN DO:
+   FOR EACH DCCLI NO-LOCK WHERE
+            DCCLI.MsSeq = MobSub.MsSeq AND
+            DCCLI.DCEvent BEGINS "PAYTERM" AND
+            DCCLI.ValidTo >= TODAY:
+      i = i + 1.
+   END.
+   
+   IF i >= 2 THEN RETURN appl_err("Cannot add more installments").
 END.
-
-IF i >= 2 THEN RETURN appl_err("Cannot add more installments").
+ELSE IF lcNewPayterm = "RVTERM12" AND
+        CAN-FIND(FIRST DCCLI NO-LOCK WHERE
+                       DCCLI.MsSeq   = MobSub.MsSeq AND
+                       DCCLI.DCEvent = "RVTERM12"   AND
+                       DCCLI.ValidTo >= TODAY)
+THEN RETURN appl_err("Cannot add more installments").
 
 liCreated = fPCActionRequest(MobSub.MsSeq,
                              DayCampaign.DCEvent,

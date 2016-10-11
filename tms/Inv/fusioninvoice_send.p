@@ -34,7 +34,9 @@ DEF VAR liRequest               AS INT NO-UNDO.
 DEF VAR lcLogDir                AS CHAR NO-UNDO. 
 DEF VAR lcReminderSMS           AS CHAR NO-UNDO. 
 DEF VAR lcError                 AS CHAR NO-UNDO. 
-DEF VAR ldeSendTime             AS DEC NO-UNDO. 
+DEF VAR ldeSendTime             AS DEC NO-UNDO.
+DEF VAR lcAddrConfDir           AS CHAR NO-UNDO.
+DEF VAR llFirstInv              AS LOG  NO-UNDO.
 
 DEF STREAM sEmail.
 DEF STREAM sLog.
@@ -59,12 +61,14 @@ lcMonitor = fGetRequestNagiosToken(MsRequest.Reqtype).
 IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
 /* Email Address Conf File */
-ASSIGN ldaDateFrom   = MsRequest.ReqDtParam1
+ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
+       ldaDateFrom   = MsRequest.ReqDtParam1
        ldaInvDateTo  = fLastDayOfMonth(ldaDateFrom)
        xMailFrom     = fCparam("EIF","EmailFromAddress")
        lcEmailFile   = fCparam("EIF","EmailFile")
        lcTransDir    = fCParam("EIF","MailArcDir")
-       lcLogDir      = fCParam("EIF","MailLogDir").
+       lcLogDir      = fCParam("EIF","MailLogDir")
+       llFirstInv    = FALSE.
 
 IF lcTransDir EQ ? OR lcTransDir EQ "" OR
    lcLogDir EQ ? OR lcLogDir EQ "" THEN DO:
@@ -209,8 +213,21 @@ FOR EACH FusionInvoice EXCLUSIVE-LOCK WHERE
                               "_" + STRING(TODAY,"999999") + "_" +
                               STRING(TIME) + ".html"
           lcLatestEmailFile = fUniqueFileName(lcLatestEmailFile,"")
-          xMailAddr = lcEmailAddress
           lcEmailReplacedText = REPLACE(lcEmailReplacedText,"'","").
+   
+   /*Notification for the First Invoice will be sent to a specific people as part of YOT-4037 along with the own customer*/
+   IF llFirstInv = FALSE THEN DO:
+      fMailNotify(Customer.CustNum,
+                  "First",
+                  lcEmailReplacedText,
+                  xMailSubj,
+                  lcEmailFile,
+                  lcTransDir,
+                  lcAddrConfDir).
+      llFirstInv = TRUE.
+   END.
+
+   xMailAddr = lcEmailAddress.
 
    OUTPUT STREAM sEmail TO VALUE(lcLatestEmailFile).
    PUT STREAM sEmail UNFORMATTED xMailSubj SKIP(1).
@@ -233,6 +250,15 @@ FOR EACH FusionInvoice EXCLUSIVE-LOCK WHERE
    IF liLoop MOD 1000 EQ 0 AND
       lcMonitor > "" THEN fKeepAlive(lcMonitor).
 END. /* FOR EACH Invoice WHERE */
+
+/*Notification for the Last Invoice will be sent to a specific people as part of YOT-4037 along with the own customer*/
+fMailNotify(Customer.CustNum,
+            "Last",
+            lcEmailReplacedText,
+            xMailSubj,
+            lcEmailFile,
+            lcTransDir,
+            lcAddrConfDir).
 
 OUTPUT STREAM slog CLOSE.
 

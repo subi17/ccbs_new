@@ -36,14 +36,20 @@ DEF VAR lcLogDir AS CHAR NO-UNDO.
 DEF VAR lcProcessedFile AS CHAR NO-UNDO. 
 DEF VAR liErrors AS INT NO-UNDO. 
 DEF VAR liOk AS INT NO-UNDO. 
-
+DEF VAR lcRootDirCetelem AS CHAR NO-UNDO.
 ASSIGN
    lcRootDir = fCParam("TermFinance","CanOutRoot")
-   lcLogDir = fCParam("TermFinance","LogDir").
+   lcLogDir = fCParam("TermFinance","LogDir")
+   lcRootDirCetelem  = fCParam("TermFinance","OutRootDirCetelem").
 
 IF lcRootDir EQ ? OR
    NOT lcRootDir > "" THEN DO:
    fReqStatus(3,"ERROR:Root directory not defined").
+   RETURN.
+END.
+
+IF MsRequest.ReqCParam1 = {&TF_BANK_CETELEM} AND NOT lcRootDirCetelem > "" THEN DO:
+   fReqStatus(3,"SYSTEM ERROR: Output directory for Cetelem files not defined").
    RETURN.
 END.
 
@@ -69,6 +75,10 @@ END.
 ELSE IF MsRequest.ReqCParam1 = {&TF_BANK_SABADELL} THEN DO:
    RUN pCreateFile({&TF_BANK_SABADELL},"CANCEL","ANULACIONESYOIGOSABADELL").
    RUN pCreateFile({&TF_BANK_SABADELL},"TERMINATION","CANCELACIONESYOIGOSABADELL").
+END.   
+ELSE IF MsRequest.ReqCParam1 = {&TF_BANK_CETELEM} THEN DO:
+   RUN pCreateFile({&TF_BANK_CETELEM},"CANCEL","ANULACIONESYOIGOCETELEM").
+   RUN pCreateFile({&TF_BANK_CETELEM},"TERMINATION","CANCELACIONESYOIGOCETELEM").
 END.
 ELSE DO:
    fReqStatus(3,"ERROR: Unsupported bank code").
@@ -86,12 +96,15 @@ PROCEDURE pCreateFile:
    DEF VAR ldaBankDate AS DATE NO-UNDO. 
    DEF VAR liErrors AS INT NO-UNDO. 
    DEF VAR liOk AS INT NO-UNDO. 
-   
-   ASSIGN
-      lcFile = lcRootDir + "spool/" + icFileName + "_" +
-               STRING(YEAR(TODAY),"9999") +
-               STRING(MONTH(TODAY),"99") + ".txt".
-      lcLogFile = lcLogDir + "internal/" + icFileName + "_" +
+
+   lcFile = lcRootDir + "spool/" + icFileName + "_" +
+            STRING(YEAR(TODAY),"9999") +
+            STRING(MONTH(TODAY),"99").
+   IF icBank = "0225" THEN
+      lcFile = lcFile + STRING(DAY(TODAY),"99").
+   lcFile = lcFile + ".txt".
+
+   lcLogFile = lcLogDir + "internal/" + icFileName + "_" +
                STRING(DAY(TODAY),"99") +
                STRING(MONTH(TODAY),"99") +
                STRING(YEAR(TODAY)) + ".LOG".
@@ -227,8 +240,11 @@ PROCEDURE pCreateFile:
       
    OUTPUT STREAM sout close.
 
-   fMove2TransDir(lcLogFile, "", lcLogDir + "outgoing/"). 
-   lcProcessedFile = fMove2TransDir(lcFile, "", lcRootDir + "outgoing/"). 
+   fMove2TransDir(lcLogFile, "", lcLogDir + "outgoing/").
+   IF icBank = "0225" 
+      THEN lcProcessedFile = fMove2TransDir(lcFile, "", lcRootDirCetelem + "outgoing/").
+      ELSE lcProcessedFile = fMove2TransDir(lcFile, "", lcRootDir + "outgoing/").
+   
    IF SESSION:BATCH AND 
       lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
 
@@ -320,7 +336,8 @@ PROCEDURE pPrintLine:
    /*ANO-OPERAC*/    STRING(YEAR(idaBankDate),"9999") FORMAT "X(4)"
    /*NUM-PEDIDO*/    STRING(FixedFee.OrderId) FORMAT "X(8)".
    
-   IF FixedFeeTF.TFBank EQ {&TF_BANK_UNOE} THEN /* YTS-8764 */
+   IF FixedFeeTF.TFBank EQ {&TF_BANK_UNOE} OR /* YTS-8764 */
+      FixedFeeTF.TFBank EQ {&TF_BANK_CETELEM} THEN
       PUT STREAM sout
       /*COD-FPAGO*/  lcCodFpago FORMAT "X(4)".
 
