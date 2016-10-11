@@ -32,14 +32,10 @@
       FIND FIRST InvSeq WHERE
                  InvSeq.InvSeq = ttCall.InvSeq AND
                  InvSeq.Billed = TRUE NO-LOCK NO-ERROR.
-      IF AVAILABLE InvSeq AND
-         CAN-FIND(FIRST Invoice WHERE
+      IF AVAILABLE InvSeq THEN NEXT.
+      IF CAN-FIND(FIRST Invoice WHERE
                         Invoice.InvNum = InvSeq.InvNum AND
-                        Invoice.InvType <> {&INV_TYPE_TEST}) THEN DO:
-         RELEASE InvSeq.
-         NEXT.
-      END.
-      RELEASE InvSeq.
+                        Invoice.InvType <> {&INV_TYPE_TEST}) THEN NEXT.
    END.
    
    ASSIGN ttCall.ErrorCode = 0.
