@@ -81,9 +81,9 @@ FUNCTION fCreateCentreFileRow RETURNS CHAR
              STRING(fusionMessage.OrderId).
    IF INDEX(Order.OrderChannel,"pos") > 0 THEN DO:
       fSplitTS(Order.crstamp, ldaDate, liTime).
-      lcdeliverydate = STRING(YEAR(ldaDate)) +
-                       STRING(MONTH(ldaDate)) +
-                       STRING(DAY(ldaDate)) +
+      lcdeliverydate = STRING(YEAR(ldaDate),"9999") +
+                       STRING(MONTH(ldaDate),"99") +
+                       STRING(DAY(ldaDate),"99") +
                        REPLACE(STRING(liTime,"HH:MM:SS"), ":", "").
    END.                    
    ELSE DO:
