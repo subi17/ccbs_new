@@ -373,5 +373,27 @@ CLASS Class.timedate FINAL:
       RETURN ldeTemp.
       
    END.
+
+   METHOD PUBLIC STATIC CHARACTER ConvertToISO8601
+     (INPUT idaDate AS DATE):
+
+      DEFINE VARIABLE liTime    AS INTEGER   NO-UNDO.
+      DEFINE VARIABLE lcTmp     AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE lcDateFmt AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE ldeStamp  AS DEC NO-UNDO. 
+
+      lcDateFmt = SESSION:DATE-FORMAT.
+
+      IF idaDate = ? THEN idaDate = TODAY.
+
+      lcTmp = SUBST("&1-&2-&3",
+                    STRING(YEAR(idaDate),"9999"),
+                    STRING(MONTH(idaDate),"99"),
+                    STRING(DAY(idaDate),"99")) + "T" +
+              STRING(liTime,"HH:MM:SS")     + "+0000".
+
+      RETURN lcTmp.
+
+   END METHOD.
    
 END CLASS.
