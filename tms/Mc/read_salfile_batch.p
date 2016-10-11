@@ -40,6 +40,8 @@ DEF VAR lcYoigoOrderId AS CHAR NO-UNDO.
 DEF VAR lcSALOrderId AS CHAR NO-UNDO.
 DEF VAR lcFileType AS CHAR NO-UNDO.
 
+DEF VAR llLogWritten AS LOG NO-UNDO INIT FALSE.
+
 ASSIGN
    lcRootDir  = fCParam("MasMovil","RootDir")
    lcIncDir  = lcRootDir + "incoming/incoming/"
@@ -57,6 +59,7 @@ FUNCTION fLogLine RETURNS LOGIC
    PUT STREAM sLog UNFORMATTED
       lcLine  lcOrigSep
       icMessage SKIP.
+   llLogWritten = TRUE.   
 
 END FUNCTION.
 
@@ -141,7 +144,8 @@ REPEAT:
    INPUT STREAM sin CLOSE.
    OUTPUT STREAM sLog CLOSE.
 
-   fMove2TransDir(lcLogFile, "", lcOutDir).
+   IF llLogWritten THEN fMove2TransDir(lcLogFile, "", lcOutDir).
+   ELSE fMove2TransDir(lcLogFile, "", lcProcDir).
    lcProcessedFile = fMove2TransDir(lcInputFile, "", lcProcDir).
    IF lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
 
