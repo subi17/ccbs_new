@@ -49,11 +49,13 @@ pcChannel = REPLACE(pcChannel,"order","").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN RETURN
-   appl_err(SUBST("Incorrect number type: &1",pcNumberType)).
+   appl_err(SUBST("Incorrect number type|&1",pcNumberType)).
 
 IF fOngoingOrders(pcCli, (IF pcChannel BEGINS "retention"
                           THEN "retention"
-                          ELSE pcNumberType)) THEN llAllow = FALSE.
+                          ELSE pcNumberType)) THEN 
+   RETURN appl_err("Ongoing order for number|" + pcCli).
+
 
 ELSE IF pcNumberType EQ "stc" THEN DO:
    FIND FIRST MobSub NO-LOCK WHERE
@@ -68,17 +70,19 @@ ELSE IF pcNumberType EQ "stc" THEN DO:
               MsRequest.ReqType = 0 AND
               LOOKUP(STRING(MsRequest.ReqStat),
                {&REQ_INACTIVE_STATUSES}) = 0  NO-ERROR.
-   IF AVAILABLE MsRequest THEN llAllow = FALSE.
+   IF AVAILABLE MsRequest THEN 
+      RETURN appl_err("Ongoing STC found").
 END.
 
 /* Check Fixed number existence and orders */
 IF pcFixedNumber > "" THEN DO:
-   IF pcNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} THEN DO:
+   IF pcNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} OR 
+      pcNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_NEW} THEN DO:
       FIND FIRST MobSub WHERE
                  MobSub.Brand = gcBrand AND
                  MobSub.FixedNumber = pcFixedNumber NO-LOCK NO-ERROR. 
       IF AVAIL MobSub THEN
-         RETURN appl_err("Subscription already exists with Fixed Number " + pcFixedNumber).
+         RETURN appl_err("Subscription already exists with number|" + pcFixedNumber).
    END.
    lcError = fOngoingFixedOrders(pcFixedNumber, 
                      (IF pcChannel BEGINS "retention"
@@ -86,6 +90,14 @@ IF pcFixedNumber > "" THEN DO:
                      ELSE pcNumberType)).
 
    IF lcError > "" THEN RETURN appl_err(lcError).
+END.
+ELSE IF pcNumberType EQ "MNP" OR
+        pcNumberType EQ "NEW" THEN DO:
+      FIND FIRST MobSub WHERE
+                 MobSub.Brand = gcBrand AND
+                 MobSub.CLI = pcCLI NO-LOCK NO-ERROR. 
+      IF AVAIL MobSub THEN
+         RETURN appl_err("Subscription already exists with number|" + pcCLI).
 END.
 
 add_boolean(response_toplevel_id, "", llAllow).
