@@ -1318,40 +1318,6 @@ FUNCTION fAfterSalesRequest RETURNS INTEGER
      
 END FUNCTION.
 
-FUNCTION fPLCRequest RETURNS INTEGER
-   (INPUT  idActStamp     AS DEC,    /* when request should be handled */
-    INPUT  icCLI          AS CHAR,   /* Subscription CLI */
-    INPUT  icOrigCDRType  AS CHAR,   /* Original CDR Type */
-    INPUT  icCSV          AS CHAR,   /* Prepaid Lifecycle CDR data */
-    INPUT  icReqSource    AS CHAR,
-    OUTPUT ocResult       AS CHAR):
-
-   DEF VAR liReqCreated AS INT NO-UNDO.
-   
-   /* set activation time */
-   IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
-
-   fCreateRequest(75,
-                  idActStamp,
-                  "",
-                  FALSE,    /* create fees */
-                  FALSE).   /* sms */
-
-   ASSIGN
-      bCreaReq.CLI         = icCLI 
-      bCreaReq.ReqCParam1  = icOrigCDRType 
-      bCreaReq.ReqCParam2  = icCSV
-      bCreaReq.ReqSource   = icReqSource
-      liReqCreated         = bCreaReq.MsRequest.
- 
-   RELEASE bCreaReq.
-   
-   RETURN liReqCreated.
-     
-END FUNCTION.
-
-
 FUNCTION fChargeCompRequest RETURNS INTEGER
    (INPUT idActStamp     AS DEC,    /* when request should be handled */
     INPUT icUserCode     AS CHAR,   /* user code */
