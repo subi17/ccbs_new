@@ -10,7 +10,7 @@ DEF VAR lcError     AS CHAR NO-UNDO.
 
 INPUT STREAM sOL FROM "orderlist.txt".
 
-REPEAT:
+REPEAT TRANSACTION:
    ASSIGN liOrderID   = 0
           liCustomer  = 0
           lcError     = ""
@@ -26,11 +26,17 @@ REPEAT:
                  OrderCustomer.Brand   = gcBrand       AND
                  OrderCustomer.OrderID = Order.OrderID AND
                  OrderCustomer.RowType = 1 NO-ERROR.
-      IF AVAILABLE OrderCustomer AND 
-         NOT CAN-FIND(FIRST Customer WHERE
-                            Customer.Brand  = gcBrand AND
-                            Customer.OrgID = OrderCustomer.CustID) THEN
-         RETURN.
+      IF AVAILABLE OrderCustomer THEN DO:
+         FIND FIRST Customer NO-LOCK WHERE
+                    Customer.Brand = gcBrand AND
+                    Customer.OrgID = OrderCustomer.CustID NO-ERROR.
+         IF AVAILABLE Customer THEN DO:
+            FIND CURRENT Order EXCLUSIVE-LOCK NO-ERROR.
+            ASSIGN Order.CustNum = Customer.CustNum.
+            RELEASE Order.
+            RETURN.
+         END.
+      END.
 
       RUN createcustomer(INPUT Order.OrderID,1,FALSE,TRUE,OUTPUT liCustomer).
 
