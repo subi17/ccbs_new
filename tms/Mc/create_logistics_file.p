@@ -62,6 +62,7 @@ DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
 DEFINE BUFFER DelivCustomer   FOR OrderCustomer.
 DEFINE BUFFER bBillItem       FOR BillItem.
+DEFINE BUFFER lbMobSub        FOR MobSub.
 
 DEFINE TEMP-TABLE ttOutputText 
    FIELD cText AS CHARACTER
@@ -1401,7 +1402,8 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
               Order.Brand   = gcBrand AND
               Order.OrderID = ttOneDelivery.OrderID AND
               Order.CustNum = 0 NO-LOCK NO-ERROR.
-   IF AVAILABLE Order THEN DO:
+   IF AVAILABLE Order THEN
+   DO:
       RUN createcustomer(INPUT ttOneDelivery.OrderId,1,FALSE,TRUE,OUTPUT oiCustomer).
 
       llCorporate = CAN-FIND(OrderCustomer WHERE
@@ -1413,7 +1415,8 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
       FOR EACH OrderCustomer NO-LOCK WHERE
                OrderCustomer.Brand   = gcBrand AND
                OrderCustomer.OrderID = ttOneDelivery.OrderID:
-         IF llCorporate AND (OrderCustomer.RowType = 1 OR OrderCustomer.RowType = 5) THEN DO:
+         IF llCorporate AND (OrderCustomer.RowType = 1 OR OrderCustomer.RowType = 5) THEN
+         DO:
             RUN createcustcontact.p(OrderCustomer.OrderID,
                                     oiCustomer,
                                     OrderCustomer.RowType,
@@ -1427,11 +1430,18 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
                                 lcError).
             END.
          END.
-         ELSE IF OrderCustomer.RowType = 1 AND NOT Order.PayType THEN
+         ELSE IF OrderCustomer.RowType = 1 AND
+                 NOT Order.PayType         AND
+                 NOT CAN-FIND(FIRST lbMobSub WHERE
+                              lbMobSub.Brand    = gcBrand       AND
+                              lbMobSub.MsSeq   <> Order.MsSeq   AND
+                              lbMobSub.CustNum  = Order.CustNum AND
+                              NOT lbMobSub.PayType) THEN
          DO:
             FIND FIRST Customer EXCLUSIVE-LOCK WHERE
                        Customer.CustNum = oiCustomer NO-ERROR.
-            IF AVAILABLE Customer THEN DO:
+            IF AVAILABLE Customer THEN
+            DO:
                ASSIGN Customer.AuthCustID     = Order.OrdererID
                       Customer.AuthCustIDType = Order.OrdererIDType.
                RELEASE Customer.
