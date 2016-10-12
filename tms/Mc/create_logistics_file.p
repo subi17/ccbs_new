@@ -1517,7 +1517,7 @@ FOR EACH FusionMessage WHERE
    FIND FIRST Order WHERE
               Order.brand EQ gcBrand AND
               Order.orderId EQ FusionMessage.orderId NO-ERROR.
-   IF NOT AVAIL Order OR Order.orderchannel NE "telesales" THEN DO:
+   IF NOT AVAIL Order OR INDEX(Order.orderchannel, "telesales") EQ 0 THEN DO:
       FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.
    END.
