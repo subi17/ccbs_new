@@ -182,6 +182,21 @@ CASE FusionMessage.FixedStatus:
          OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ONGOING}.
       ELSE FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
 
+      IF FusionMessage.FixedStatus EQ "EN PROCESO - NO CANCELABLE" AND
+         Order.OrderType EQ {&ORDER_TYPE_STC} AND
+         NOT CAN-FIND(FIRST mobsub NO-LOCK WHERE
+                            mobsub.msseq = Order.MsSeq) THEN DO:
+
+         fSetOrderStatus(Order.Orderid, {&ORDER_STATUS_IN_CONTROL}).
+         
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                 "Order",
+                 STRING(Order.OrderID),
+                 Order.CustNum,
+                 "Order handling stopped",
+                 "Subscription is terminated, Convergent order cannot proceed").
+      END.
+
    END.
    WHEN "INCIDENCIA DATOS" OR
    WHEN "INCIDENCIA ACTIVACION SERVICIOS" OR
