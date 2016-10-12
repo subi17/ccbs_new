@@ -20,7 +20,18 @@ REPEAT:
    FIND FIRST Order NO-LOCK WHERE
               Order.Brand   = gcBrand   AND
               Order.OrderID = liOrderID NO-ERROR.
-   IF AVAILABLE Order AND Order.CustNum = 0 THEN DO:
+   IF AVAILABLE Order AND Order.CustNum = 0 THEN
+   DO:
+      FIND FIRST OrderCustomer NO-LOCK WHERE
+                 OrderCustomer.Brand   = gcBrand       AND
+                 OrderCustomer.OrderID = Order.OrderID AND
+                 OrderCustomer.RowType = 1 NO-ERROR.
+      IF AVAILABLE OrderCustomer AND 
+         NOT CAN-FIND(FIRST Customer WHERE
+                            Customer.Brand  = gcBrand AND
+                            Customer.OrgID = OrderCustomer.CustID) THEN
+         RETURN.
+
       RUN createcustomer(INPUT Order.OrderID,1,FALSE,TRUE,OUTPUT liCustomer).
 
       llCorporate = CAN-FIND(OrderCustomer WHERE
