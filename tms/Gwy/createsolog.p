@@ -35,13 +35,19 @@ IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} THEN DO:
    FIND FIRST MobSub NO-LOCK WHERE
               MobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
 
-   IF AVAIL MobSub AND
-      fIsConvergenceTariff(mobsub.CLIType) AND
-      NOT fCanTerminateConvergenceTariff(MobSub.MsSeq,
-                                         INT(MsRequest.ReqCParam3),
-                                         OUTPUT lcError) THEN DO:
-      fReqError(SUBST("ERROR: &1", lcError)).
-      RETURN.
+   IF AVAIL MobSub THEN DO:
+      IF fIsConvergenceTariff(mobsub.CLIType) AND
+         NOT fCanTerminateConvergenceTariff(MobSub.MsSeq,
+                                            INT(MsRequest.ReqCParam3),
+                                            OUTPUT lcError) THEN DO:
+         fReqError(SUBST("ERROR: &1", lcError)).
+      END.
+   
+      IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} AND
+         MobSub.IMSI EQ "" THEN DO:
+         fReqStatus(6,"").
+         RETURN.
+      END.
    END.
 END.
  

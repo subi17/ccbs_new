@@ -133,7 +133,8 @@ FUNCTION fDeleteMsValidation RETURNS INTEGER
    END.
 
    /* Check that sim is available */ 
-   IF NOT CAN-FIND(IMSI WHERE
+   IF MobSub.MsStatus NE {&MSSTATUS_FIXED_PROV_ONG} AND
+      NOT CAN-FIND(IMSI WHERE
                    IMSI.IMSI = MobSub.IMSI) THEN DO: 
       ocError = "System Error ! Mobile Subscription doesn't have any SIM card.".
       RETURN 4.
