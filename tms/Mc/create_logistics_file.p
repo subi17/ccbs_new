@@ -1299,7 +1299,7 @@ FUNCTION fDelivRouter RETURNS LOG
 
    FIND FIRST DelivCustomer WHERE
               DelivCustomer.Brand   = gcBrand   AND
-              DelivCustomer.OrderId = FusionMessage.OrderId AND
+              DelivCustomer.OrderId = Order.OrderId AND
               DelivCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
    NO-LOCK NO-ERROR.
 
