@@ -78,7 +78,7 @@ FUNCTION fTerminationRequest RETURNS INTEGER
          bCreaReq.Memo = "Fixed line need to be terminated by Yoigo BO".
       ELSE IF NOT 
          CAN-FIND(FIRST Order NO-LOCK WHERE
-                        Order.MsSeq = MobSub.MsSeq AND
+                        Order.MsSeq = iiMsSeq AND
                         Order.OrderType = {&ORDER_TYPE_STC} AND
                         Order.StatusCode = {&ORDER_STATUS_PENDING_FIXED_LINE})
          THEN bCreaReq.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
