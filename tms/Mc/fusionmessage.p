@@ -53,14 +53,29 @@ FORM
    ttDocs.FixedStatusTS FORMAT "99999999.99999"  COLUMN-LABEL "Fixed TS"
    ttDocs.HandledTS     FORMAT "99999999.99999"  COLUMN-LABEL "Handled TS"
 WITH ROW 1 CENTERED OVERLAY 15  DOWN
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "  DOCUMENTS  "  FRAME sel.
+    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "Messages"  FRAME sel.
 
 form
-    ttDocs.ResponseCode
-    WITH OVERLAY ROW 4 centered
+    "Order ID..........:" ttDocs.OrderId SKIP
+    "Order Type........:" ttDocs.OrderType SKIP
+    "Msseq.............:" ttDocs.Msseq SKIP
+    "Message ID........:" ttDocs.MessageId SKIP
+    "Message Seq.......:" ttDocs.MessageSeq SKIP
+    "Message Type......:" ttDocs.MessageType SKIP
+    "Message Status....:" ttDocs.MessageStatus SKIP
+    "Fixed Status......:" ttDocs.FixedStatus SKIP
+    "Fixed Status Desc.:" ttDocs.FixedStatusDesc SKIP
+    "Fixed Status TS...:" ttDocs.FixedStatusTS SKIP
+    "Created...........:" ttDocs.CreatedTS SKIP
+    "Handled...........:" ttDocs.HandledTS SKIP
+    "Response Code.....:" ttDocs.ResponseCode SKIP
+    "Source............:" ttDocs.Source SKIP
+    "Additional Info...:" ttDocs.AdditionalInfo SKIP
+
+    WITH OVERLAY ROW 1 WIDTH 80 centered
     COLOR VALUE(cfc)
     TITLE COLOR VALUE(ctc)
-    " Comment: " WITH NO-LABELS 1 columns
+    " Message Contents " WITH NO-LABELS 1 columns
     FRAME fDetails.
 
 cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
@@ -284,7 +299,24 @@ REPEAT WITH FRAME sel:
  
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
         RUN local-find-this(FALSE).
-        DISPLAY ttDocs.ResponseCode WITH FRAME fDetails.
+        DISPLAY ttDocs.MessageType 
+            ttDocs.OrderId 
+            ttDocs.OrderType 
+            ttDocs.Msseq 
+            ttDocs.MessageId 
+            ttDocs.MessageSeq 
+            ttDocs.MessageType 
+            ttDocs.MessageStatus 
+            ttDocs.FixedStatus 
+            ttDocs.FixedStatusDesc 
+            ttDocs.FixedStatusTS 
+            ttDocs.CreatedTS 
+            ttDocs.HandledTS 
+            ttDocs.ResponseCode 
+            ttDocs.Source 
+            ttDocs.AdditionalInfo 
+
+        WITH FRAME fDetails.
 
         PAUSE.
         HIDE FRAME fComm NO-PAUSE.
