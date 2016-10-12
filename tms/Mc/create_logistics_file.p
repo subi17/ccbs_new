@@ -1289,6 +1289,7 @@ FUNCTION fDelivRouter RETURNS LOG
    DEFINE VARIABLE liTime          AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liLoop1         AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liLoop2         AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE liTempRegion    AS INTEGER   NO-UNDO.
 
    FIND FIRST AgreeCustomer WHERE
               AgreeCustomer.Brand   = Order.Brand   AND
@@ -1332,11 +1333,17 @@ FUNCTION fDelivRouter RETURNS LOG
    NO-LOCK NO-ERROR.
    lcCustRegi = Region.RgName.
 
-   FIND FIRST Region WHERE
-              Region.Region = DelivCustomer.Region
-   NO-LOCK NO-ERROR.
-   lcDeliRegi = Region.RgName.
-
+   /* Done because fixed line install address might include
+      region as normal text */
+   ASSIGN liTempRegion = INT(DelivCustomer.Region) NO-ERROR.
+   IF ERROR-STATUS:ERROR THEN
+      lcDeliRegi = DelivCustomer.Region.
+   ELSE DO:   
+      FIND FIRST Region WHERE
+                 Region.Region = DelivCustomer.Region
+      NO-LOCK NO-ERROR.
+      lcDeliRegi = Region.RgName.
+   END.
    lcOrderChannel = STRING(LOOKUP(Order.OrderChannel,
                                   "Self,TeleSales,POS,CC,,,Emission"),"99").
    CASE Order.OrderChannel:
