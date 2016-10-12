@@ -31,7 +31,7 @@ DEF VAR lcLogFile          AS CHAR NO-UNDO.
 DEF VAR lcTime             AS CHAR NO-UNDO.
 
 ASSIGN
-       lcDate      = STRING(YEAR(TODAY)) +
+       lcDate      = STRING(YEAR(TODAY),"9999") +
                       STRING(MONTH(TODAY),"99") +
                       STRING(DAY(TODAY),"99")
        lcTime      = REPLACE(STRING(TIME,"HH:MM:SS"),":","")
@@ -91,9 +91,9 @@ FUNCTION fCreateCentreFileRow RETURNS CHAR
                   OrderDelivery.brand EQ gcBrand AND
                   OrderDelivery.orderid EQ fusionMessage.OrderId NO-ERROR.
        IF AVAIL OrderDelivery THEN           
-          lcdeliverydate = STRING(YEAR(OrderDelivery.LOTimeStamp)) +
-                           STRING(MONTH(OrderDelivery.LOTimeStamp)) +
-                           STRING(DAY(OrderDelivery.LOTimeStamp)) +
+          lcdeliverydate = STRING(YEAR(OrderDelivery.LOTimeStamp),"9999") +
+                           STRING(MONTH(OrderDelivery.LOTimeStamp),"99") +
+                           STRING(DAY(OrderDelivery.LOTimeStamp),"99") +
                            REPLACE(STRING(INTEGER( truncate( 
                                    MTIME(OrderDelivery.LOTimeStamp) / 
                                    1000, 0 )), "HH:MM:SS"), ":", "").
