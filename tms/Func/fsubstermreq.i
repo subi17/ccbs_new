@@ -74,7 +74,7 @@ FUNCTION fTerminationRequest RETURNS INTEGER
    IF fHasConvergenceTariff(iiMsSeq) THEN DO:
 
       /* Do not change the memo text (used by DWH) */
-      IF MsRequest.ReqCParam3 EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) THEN
+      IF icTermReason EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) THEN
          bCreaReq.Memo = "Fixed line need to be terminated by Yoigo BO".
       ELSE IF NOT 
          CAN-FIND(FIRST Order NO-LOCK WHERE
