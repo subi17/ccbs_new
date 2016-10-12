@@ -671,6 +671,7 @@ REPEAT WITH FRAME main:
             MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
             NEXT ACTION.
          END.
+         ELSE IF lcError > "" THEN MESSAGE lcError VIEW-AS ALERT-BOX.
 
          llBillPer = FALSE.
          liError = fCheckBillingPermission(MobSub.Msseq, OUTPUT lcError).
