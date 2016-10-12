@@ -232,33 +232,87 @@ FUNCTION fFullCreditNote RETURNS INT
 
 END FUNCTION. 
 
+FUNCTION fOrderPickingStarted RETURNS LOGICAL
+   (iiOrderID AS INTEGER):
+
+   DEFINE BUFFER OrderDelivery FOR OrderDelivery.
+
+   FOR
+      FIRST OrderDelivery NO-LOCK WHERE
+         OrderDelivery.Brand   = gcBrand   AND
+         OrderDelivery.OrderID = iiOrderID AND
+         OrderDelivery.LOStatusId = {&DEXTRA_PICKING_STARTED_STATUS}:
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 FUNCTION fCashInvoiceCreditNote RETURNS CHARACTER
-(  iiInvnum AS INT,
+(  BUFFER pbOrder FOR Order,
    icReason AS CHAR):
 
-   DEFINE VARIABLE lcError AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE lcError AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcShippingCostBillCode AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcSubInvNums           AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcInvRowDetails        AS CHARACTER NO-UNDO.
   
-   FIND Invoice WHERE Invoice.InvNum = iiInvNum NO-LOCK NO-ERROR.
+   FIND Invoice WHERE Invoice.InvNum = pbOrder.InvNum NO-LOCK NO-ERROR.
 
    IF AVAILABLE Invoice AND
                 Invoice.CrInvNum = 0 AND
                (Invoice.InvType = 6 OR
-                Invoice.InvType = 7) THEN DO:
+                Invoice.InvType = 7)
+   THEN DO:
    
       lcError = fCheckCreditNoteRequest(Invoice.CustNum,
                                         Invoice.InvNum).
       /* no action, if request is ongoing */
       IF lcError NE "" THEN RETURN "".
 
-      fFullCreditNote(
-         Invoice.InvNum,
-         "",
-         "",
-         "Order", 
-         icReason,
-         "",
-         OUTPUT lcError).
-      
+      IF pbOrder.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST} AND
+         fOrderPickingStarted(pbOrder.OrderId)
+      THEN DO:
+         FOR
+            FIRST FMItem NO-LOCK WHERE
+               FMItem.Brand    = gcBrand AND
+               FMItem.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}:
+            lcShippingCostBillCode = FMItem.BillCode.
+         END.
+
+         IF lcShippingCostBillCode > ""
+         THEN DO:
+            FOR
+               EACH InvRow NO-LOCK WHERE
+                  InvRow.InvNum   =  Invoice.InvNum         AND
+                  InvRow.BillCode NE lcShippingCostBillCode:
+               IF LOOKUP(STRING(InvRow.SubInvNum), lcSubInvNums) = 0
+               THEN lcSubInvNums = lcSubInvNums + "," + STRING(InvRow.SubInvNum).
+
+               lcInvRowDetails = lcInvRowDetails + "," +
+                                 "InvRow=" + STRING(InvRow.InvRowNum) + "|" +
+                                 "InvRowAmt=" + REPLACE(STRING(InvRow.Amt),",",".").
+            END.
+
+            fFullCreditNote(Invoice.InvNum,
+                            LEFT-TRIM(lcSubInvNums,","),
+                            LEFT-TRIM(lcInvRowDetails,","),
+                            "Order",  /*reason group*/
+                            icReason, /*reason*/
+                            "",       /*reason note*/
+                            OUTPUT lcError).
+         END.
+      END.
+
+      IF lcShippingCostBillCode = ""
+      THEN fFullCreditNote(Invoice.InvNum,
+                           "",
+                           "",
+                           "Order",
+                           icReason,
+                           "",
+                           OUTPUT lcError).
    END.
 
    RETURN lcError.

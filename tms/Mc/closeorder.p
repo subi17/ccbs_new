@@ -89,9 +89,7 @@ IF Order.InvNum > 0 THEN DO:
       ELSE lcCreditReason = "1011".
    END.
    
-   lcError = fCashInvoiceCreditNote(
-      Order.Invnum,
-      lcCreditReason).
+   lcError = fCashInvoiceCreditNote(BUFFER Order, lcCreditReason).
 
    IF lcError NE "" THEN DO:
       IF NOT ilSilent THEN MESSAGE lcError VIEW-AS ALERT-BOX.

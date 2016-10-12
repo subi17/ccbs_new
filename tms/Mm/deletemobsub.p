@@ -747,7 +747,7 @@ PROCEDURE pTerminate:
          fReleaseImei(Order.OrderId).
    
          IF Order.InvNum > 0 THEN DO:
-            lcResult = fCashInvoiceCreditnote(Order.Invnum, "1010").
+            lcResult = fCashInvoiceCreditnote(BUFFER Order, "1010").
             IF lcResult > "" THEN
                 DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                                "MobSub",
@@ -906,7 +906,7 @@ PROCEDURE pOrderCancellation:
    
    /* Create a credit note of the initial order */
    IF Order.InvNum > 0 THEN DO:
-      lcResult = fCashInvoiceCreditnote(Order.Invnum, "1010").
+      lcResult = fCashInvoiceCreditnote(BUFFER Order, "1010").
       IF lcResult > "" THEN
           DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                          "MobSub",

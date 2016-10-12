@@ -89,7 +89,7 @@ IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN DO:
          ELSE lcCreditReason = "1011".
       END.
       
-      lcResult = fCashInvoiceCreditnote(Order.Invnum, lcCreditReason).
+      lcResult = fCashInvoiceCreditnote(BUFFER Order, lcCreditReason).
       
       IF lcResult > "" THEN 
          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -157,7 +157,7 @@ ELSE DO:
       
    IF Order.InvNum > 0 THEN DO:
 
-      lcResult = fCashInvoiceCreditnote(Order.Invnum, "1010").
+      lcResult = fCashInvoiceCreditnote(BUFFER Order, "1010").
 
       IF lcResult > "" THEN
           DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
