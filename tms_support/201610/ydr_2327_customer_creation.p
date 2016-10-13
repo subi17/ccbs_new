@@ -2,6 +2,7 @@
 gcBrand = "1".
 
 DEF STREAM sOL.
+DEF STREAM sOO.
 
 DEF VAR liOrderID   AS INT  NO-UNDO.
 DEF VAR liCustomer  AS INT  NO-UNDO.
@@ -9,7 +10,10 @@ DEF VAR llCorporate AS LOG  NO-UNDO.
 DEF VAR lcError     AS CHAR NO-UNDO.
 
 INPUT STREAM sOL FROM "orderlist.txt".
-
+OUTPUT STREAM sOO TO "YDR_2327_Customer_Creation.log".
+PUT STREAM sOO UNFORMATTED
+    "OrderID;CustNum;New/Existing;ErrorText"
+    SKIP.
 REPEAT TRANSACTION:
    ASSIGN liOrderID   = 0
           liCustomer  = 0
@@ -17,6 +21,10 @@ REPEAT TRANSACTION:
           llCorporate = FALSE.
 
    IMPORT STREAM sOL UNFORMATTED liOrderID.
+   
+   IF liOrderID = 0 THEN NEXT.
+
+   PUT STREAM sOO UNFORMATTED liOrderID ";".
    FIND FIRST Order NO-LOCK WHERE
               Order.Brand   = gcBrand   AND
               Order.OrderID = liOrderID NO-ERROR.
@@ -28,18 +36,26 @@ REPEAT TRANSACTION:
                  OrderCustomer.RowType = 1 NO-ERROR.
       IF AVAILABLE OrderCustomer THEN DO:
          FIND FIRST Customer NO-LOCK WHERE
-                    Customer.Brand = gcBrand AND
-                    Customer.OrgID = OrderCustomer.CustID NO-ERROR.
+                    Customer.Brand      = gcBrand                  AND
+                    Customer.OrgID      = OrderCustomer.CustID     AND
+                    Customer.CustIDType = OrderCustomer.CustIDType NO-ERROR.
          IF AVAILABLE Customer THEN DO:
             FIND CURRENT Order EXCLUSIVE-LOCK NO-ERROR.
             ASSIGN Order.CustNum = Customer.CustNum.
+            PUT STREAM sOO UNFORMATTED
+                Order.CustNum ";"
+                "Existing;Customer already exist in TMS so assigning it"
+                SKIP.
             RELEASE Order.
-            RETURN.
+            NEXT.
          END.
       END.
 
       RUN createcustomer(INPUT Order.OrderID,1,FALSE,TRUE,OUTPUT liCustomer).
-
+      
+      PUT STREAM sOO UNFORMATTED
+          liCustomer ";"
+          "New;Customer Created in TMS".
       llCorporate = CAN-FIND(OrderCustomer WHERE
                              OrderCustomer.Brand      = gcBrand       AND
                              OrderCustomer.OrderID    = Order.OrderID AND
@@ -74,7 +90,14 @@ REPEAT TRANSACTION:
             END.
          END.
       END.
+      IF lcError > "" THEN
+         PUT STREAM sOO UNFORMATTED
+             lcError.
    END.
+   ELSE
+      PUT STREAM sOO UNFORMATTED
+          ";;Invalid OrderID".
+   PUT STREAM sOO UNFORMATTED SKIP.
 END.
 
 INPUT CLOSE.
