@@ -516,6 +516,7 @@ DO TRANS:
    WHEN "0101YC" OR
    WHEN "0102GE" THEN lcEvent = TRIM(ENTRY(9,callrec,lcSep)).
    WHEN "0102YC" OR 
+   WHEN "0101YF" OR
    WHEN "0103MM" OR
    WHEN "0104GE" OR 
    WHEN "0104MM" OR
@@ -544,6 +545,7 @@ DO TRANS:
       CASE lcSetVersion:
       WHEN "0101MM" THEN DO:  {set0101mm.i}   END.
       WHEN "0101YC" THEN DO:  {set0101yc.i}   END.
+      WHEN "0101YF" THEN DO:  {set0101yf.i}   END.
       WHEN "0102GE" THEN DO:  {set0102gen.i}  END.
       WHEN "0102YC" THEN DO:  {set0102yc.i}   END.
       WHEN "0103MM" THEN DO:  {set0103mm.i}   END.

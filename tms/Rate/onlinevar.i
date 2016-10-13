@@ -79,3 +79,8 @@ DEF VAR lcCallIdNum           AS CHAR NO-UNDO.
 DEF VAR lcApn                 AS CHAR NO-UNDO.
 DEF VAR liServiceClass        AS INT  NO-UNDO.
 DEF VAR liAccumulator         AS INT  NO-UNDO.
+DEF VAR liRunningIndex        AS INT  NO-UNDO.
+DEF VAR lcExtRunningIndex     AS CHAR NO-UNDO.
+DEF VAR lcHandlingTime        AS CHAR NO-UNDO.
+DEF VAR liOrigAddressType     AS INT  NO-UNDO.
+DEF VAR liDestAddressType     AS INT  NO-UNDO.
