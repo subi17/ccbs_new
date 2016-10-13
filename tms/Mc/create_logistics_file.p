@@ -368,7 +368,7 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE ldeCurrAmt                AS DEC NO-UNDO. 
    DEFINE VARIABLE ldtermdiscamt             AS DEC NO-UNDO. 
    DEFINE VARIABLE lcTermDiscItem            AS CHAR NO-UNDO.
-   DEFINE VARIABLE ldeShippingCost           AS DECIMAL INITIAL ? NO-UNDO.
+   DEFINE VARIABLE ldeAmt                    AS DECIMAL INITIAL ? NO-UNDO.
 
    DEFINE BUFFER bufRow   FOR InvRow.
    DEFINE BUFFER bufItem  FOR BillItem.
@@ -1014,6 +1014,7 @@ FUNCTION fDelivSIM RETURNS LOG
                    PriceList.PriceList = FMItem.PriceList:
 
              ASSIGN
+               ldeAmt   = ?
                liLoop1  = liLoop1 + 1
                lcBIName = fTranslationName(gcBrand,
                                            1,
@@ -1022,19 +1023,19 @@ FUNCTION fDelivSIM RETURNS LOG
                                            ldaOrderDate).
 
             IF Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}
-            THEN ldeShippingCost = fGetShippingCost(Order.OrderID).
-            ELSE ldeShippingCost = ?.
+            THEN ldeAmt = fGetShippingCost(Order.OrderID).
+
+            IF ldeAmt = ?
+            THEN ldeAmt = FMItem.Amount.
 
             ASSIGN
                ldeVatPerc = fTaxPerc(lcTaxZone,BillItem.TaxClass,ldaOrderDate)
                ldeRowVat  = fRowVat(PriceList.InclVat,
-                                    IF ldeShippingCost = ?
-                                    THEN FMItem.Amount
-                                    ELSE ldeShippingCost,
+                                    ldeAmt,
                                     ldeVatPerc).
 
             /* row amount without vat */
-            ldeAmtVat0 = FMItem.Amount - ldeRowVat.
+            ldeAmtVat0 = ldeAmt - ldeRowVat.
             fTaxAmount(ldeVatPerc,ldeRowVat,ldeAmtVat0,BillItem.TaxClass).
 
             IF lcBIName = ? THEN lcBIName = BillItem.BIName.
@@ -1048,7 +1049,7 @@ FUNCTION fDelivSIM RETURNS LOG
                ttInvRow.Quantity    = "1"
                ttInvRow.Discount    = STRING(0.0)
                ttInvRow.TotalPrice  = STRING(ldeAmtVat0)
-               ldeCurrAmt = ldeCurrAmt + FMItem.Amount.
+               ldeCurrAmt = ldeCurrAmt + ldeAmt.
 
          END.
       END.
