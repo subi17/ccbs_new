@@ -10,7 +10,7 @@ DEF VAR pcCli         AS CHAR NO-UNDO.
 DEF VAR lcText        AS CHAR NO-UNDO.
 DEF VAR top_struct    AS CHAR NO-UNDO.
 DEF VAR lcOrderStatus AS CHAR NO-UNDO.
-DEF VAR llResult      AS LOG  NO-UNDO.
+DEF VAR llResult      AS LOG  NO-UNDO INIT TRUE.
 
 IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcCli = get_string(param_toplevel_id, "0").
