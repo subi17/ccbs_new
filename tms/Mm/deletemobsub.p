@@ -26,6 +26,8 @@
 {ordercancel.i}
 {dextra.i}
 {main_add_lines.i}
+{Func/fixedlinefunc.i}
+{Func/orderfunc.i}
 
 DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -863,6 +865,41 @@ PROCEDURE pTerminate:
          fReqError(lcResult).
          RETURN.
       END.      
+   IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:
+
+      FOR EACH Order NO-LOCK WHERE
+               Order.MsSeq = MobSub.MsSeq AND
+               Order.OrderType = {&ORDER_TYPE_STC} AND
+               Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
+         FIRST OrderFusion NO-LOCK WHERE
+               OrderFusion.Brand = gcBrand AND
+               OrderFusion.OrderID = Order.OrderID:
+
+         IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ONGOING} THEN DO:
+
+            fSetOrderStatus(Order.Orderid, {&ORDER_STATUS_IN_CONTROL}).
+            
+            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                 "Order",
+                 STRING(Order.OrderID),
+                 Order.CustNum,
+                 "Order handling stopped",
+                 "Subscription is terminated, Convergent order cannot proceed").
+         
+         END.
+         ELSE DO:
+            RUN fusion_order_cancel.p(Order.OrderID).
+            IF NOT RETURN-VALUE BEGINS "OK" THEN
+               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                    "Order",
+                    STRING(Order.OrderID),
+                    Order.CustNum,
+                    "Convergent order closing failed",
+                    STRING(RETURN-VALUE)).
+         END.
+      END.
+      
+>>>>>>> convergent
    END.
 
    CREATE TermMobsub.

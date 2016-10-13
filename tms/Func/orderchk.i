@@ -237,7 +237,7 @@ FUNCTION fOngoingFixedOrders RETURNS CHARACTER
             LOOKUP(lbOtherOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0 AND
             lbOtherOrder.OrderType NE liExcludeOrderType:
 
-      RETURN "Ongoing order for Fixed Number " + pcFixedNumber.
+      RETURN "Ongoing order for number|" + pcFixedNumber.
    END.
 
    RETURN "".
