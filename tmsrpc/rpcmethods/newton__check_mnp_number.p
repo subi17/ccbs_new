@@ -6,10 +6,11 @@
 {tmsconst.i}
 
 /* Input parameters */
-DEF VAR pcCli      AS CHAR NO-UNDO.
-DEF VAR lcText     AS CHAR NO-UNDO.
-DEF VAR top_struct AS CHAR NO-UNDO.
-DEF VAR liMsSeq    AS INT  NO-UNDO.
+DEF VAR pcCli         AS CHAR NO-UNDO.
+DEF VAR lcText        AS CHAR NO-UNDO.
+DEF VAR top_struct    AS CHAR NO-UNDO.
+DEF VAR lcOrderStatus AS CHAR NO-UNDO.
+DEF VAR llResult      AS LOG  NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcCli = get_string(param_toplevel_id, "0").
@@ -18,26 +19,24 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 ASSIGN top_struct = add_struct(response_toplevel_id, "").
 
 FIND FIRST MobSub NO-LOCK WHERE
-           MobSub.Brand EQ "1"   AND
-           MobSub.CLI   EQ pcCLI NO-ERROR.
+           MobSub.Brand EQ Syst.Parameters:gcBrand AND
+           MobSub.CLI   EQ pcCLI                   NO-ERROR.
 IF AVAILABLE MobSub THEN
-   ASSIGN liMsSeq = MobSub.MsSeq
-          lcText  = "Subscription exists for this number".
+   ASSIGN lcText        = "Subscription exists for this number"
+          lcOrderStatus = "6"
+          llResult      = FALSE.
 
-FIND FIRST Order NO-LOCK WHERE
-           Order.brand EQ "1"   AND
-           Order.CLI   EQ pcCLI AND
-           (IF liMsSeq NE 0 THEN Order.MsSeq = liMsSeq
-            ELSE TRUE) NO-ERROR.
-IF AVAILABLE Order THEN DO:
-   IF lcText = "" THEN
-      lcText = "Order exists for this number".
-
-   add_string(top_struct, "orderstatus",Order.StatusCode).
-   add_string(top_struct, "Error",lcText).
-   add_boolean(top_struct, "Result", FALSE).
-
-   RETURN.
+IF lcText = "" THEN DO:
+   FIND FIRST Order NO-LOCK WHERE
+              Order.brand EQ Syst.Parameters:gcBrand AND
+              Order.CLI   EQ pcCLI                   AND
+              LOOKUP(STRING(Order.StatusCode),{&ORDER_INACTIVE_STATUSES}) EQ 0 NO-ERROR.
+   IF AVAILABLE Order THEN
+      ASSIGN lcText        = "Order exists for this number"
+             lcOrderStatus = Order.StatusCode
+             llResult      = FALSE.
 END.
 
-add_boolean(top_struct, "Result", TRUE).
+add_string(top_struct, "orderstatus",lcOrderStatus).
+add_string(top_struct, "Error",lcText).
+add_boolean(top_struct, "Result", llResult).
