@@ -19,6 +19,7 @@
 {fdss.i}
 {fsubstermreq.i}
 {main_add_lines.i}
+{Func/fixedlinefunc.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER iiFromStatus AS INTEGER NO-UNDO.
@@ -303,6 +304,16 @@ CASE iiToStatus:
             UPDATE llOk.
             
             IF NOT llOk THEN RETURN.
+         END.
+
+         IF iiFromStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
+            fHasConvergenceTariff(MsRequest.MsSeq) AND
+            NOT fCanTerminateConvergenceTariff(
+                  MsRequest.MsSeq,
+                  INT(MsRequest.ReqCParam3),
+                  OUTPUT lcError) THEN DO:
+            MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
+            RETURN.
          END.
       
          fAddLineSTCCancellation(MsRequest.MsRequest, MsRequest.CustNum).

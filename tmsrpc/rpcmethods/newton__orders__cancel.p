@@ -134,7 +134,7 @@ PROCEDURE pTerminateSubscription:
          ldeTS = fMakeTS().
 
   /* some validations*/
-  liError = fDeleteMsValidation(Order.MsSeq,ocResult).
+  liError = fDeleteMsValidation(Order.MsSeq, liTermReason, ocResult).
   IF liError EQ 3 THEN RETURN appl_err("Ongoing termination requests"). 
   IF liError NE 0 THEN RETURN appl_err(ocResult). 
 

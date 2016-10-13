@@ -16,7 +16,6 @@
 {timestamp.i}
 {msisdn_prefix.i}
 {Func/fixedlinefunc.i}
-DEF BUFFER bMsTermReq FOR MsRequest.
 
 FUNCTION fTerminationRequest RETURNS INTEGER
    (INPUT  iiMsSeq        AS INT,    /* subscription         */
@@ -72,11 +71,18 @@ FUNCTION fTerminationRequest RETURNS INTEGER
       bCreaReq.OrigReq     = iiOrigReq
       liReqCreated         = bCreaReq.MsRequest.
 
-   /*YPR-4769*/
-   /*Fixed line, waiting for manyal termination*/
-   IF fHasConvergenceTariff(iiMsSeq) THEN
-      bCreaReq.ReqStatus = {&REQUEST_STATUS_FIXED_TERMINATION}.
+   IF fHasConvergenceTariff(iiMsSeq) THEN DO:
 
+      /* Do not change the memo text (used by DWH) */
+      IF icTermReason EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) THEN
+         bCreaReq.Memo = "Fixed line need to be terminated by Yoigo BO".
+      ELSE IF NOT 
+         CAN-FIND(FIRST Order NO-LOCK WHERE
+                        Order.MsSeq = iiMsSeq AND
+                        Order.OrderType = {&ORDER_TYPE_STC} AND
+                        Order.StatusCode = {&ORDER_STATUS_PENDING_FIXED_LINE})
+         THEN bCreaReq.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
+   END.
 
    RELEASE bCreaReq.
    
@@ -86,7 +92,10 @@ END FUNCTION.
 
 FUNCTION fDeleteMsValidation RETURNS INTEGER 
 (INPUT iiMsSeq AS INTEGER,
+ INPUT iiTerminationReason AS INT,
  OUTPUT ocError AS CHARACTER):
+
+   DEF BUFFER bMsTermReq FOR MsRequest.
 
    /* Check that mobsub is available */
    FIND FIRST MobSub WHERE
@@ -124,7 +133,8 @@ FUNCTION fDeleteMsValidation RETURNS INTEGER
    END.
 
    /* Check that sim is available */ 
-   IF NOT CAN-FIND(IMSI WHERE
+   IF MobSub.MsStatus NE {&MSSTATUS_FIXED_PROV_ONG} AND
+      NOT CAN-FIND(IMSI WHERE
                    IMSI.IMSI = MobSub.IMSI) THEN DO: 
       ocError = "System Error ! Mobile Subscription doesn't have any SIM card.".
       RETURN 4.
@@ -134,9 +144,13 @@ FUNCTION fDeleteMsValidation RETURNS INTEGER
       ocError = "Ongoing MNP OUT Process".
       RETURN 5.
    END.
+   
+   IF fIsConvergenceTariff(mobsub.CLIType) AND
+      NOT fCanTerminateConvergenceTariff(MobSub.MsSeq,
+                                         iiTerminationReason,
+                                         OUTPUT ocError)
+      THEN RETURN 6.
 
-
-   ocError = "".
    RETURN 0. /* ok */
 
 END FUNCTION. 
