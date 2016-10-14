@@ -163,7 +163,7 @@ REPEAT WITH FRAME sel:
       IF ufkey THEN DO:
         ASSIGN
         ufk    = 0
-        ufk[4] = 9851
+        ufk[4] = 0
         ufk[8] = 8 
         ehto   = 3 
         ufkey  = FALSE.
@@ -314,7 +314,7 @@ REPEAT WITH FRAME sel:
  
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
         RUN local-find-this(FALSE).
-        message "jiihaa" VIEW-AS ALERT-BOX.
+        
         DISPLAY  
             ttDocs.OrderId 
             ttDocs.OrderType 

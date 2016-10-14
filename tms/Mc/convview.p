@@ -60,27 +60,6 @@ WITH OVERLAY ROW 1 WIDTH 80 centered
     NO-LABELS
     FRAME fData.
 
-FORM
-   "Country..........:" OrderCustomer.Country SKIP
-   "Region...........:" OrderCustomer.Region SKIP
-   "Post Office......:" OrderCustomer.PostOffice SKIP
-   "Street...........:" OrderCustomer.Street SKIP
-   "Street Type......:" OrderCustomer.StreetType SKIP
-   "Building Number..:" OrderCustomer.BuildingNum SKIP
-   "Bis Duplicate....:" OrderCustomer.BisDuplicate SKIP
-   "Block............:" OrderCustomer.Block SKIP
-   "Door.............:" OrderCustomer.Door SKIP
-   "Letter...........:" OrderCustomer.Letter SKIP
-   "Stair............:" OrderCustomer.Stair SKIP
-   "Floor............:" OrderCustomer.Floor SKIP
-   "Hand.............:" OrderCustomer.Hand SKIP
-   "Km...............:" OrderCustomer.Km SKIP
-   "Zip..............:" OrderCustomer.ZipCode SKIP(2)
-WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) "Address"
-    NO-LABELS
-    FRAME fAddr.
 PAUSE 0 NO-MESSAGE.
 /*VIEW FRAME fData. */
 /*CLEAR FRAME fData NO-PAUSE.*/
