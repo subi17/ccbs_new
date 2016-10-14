@@ -56,21 +56,36 @@ WITH ROW 1 CENTERED OVERLAY 15  DOWN
     COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "Messages"  FRAME sel.
 
 form
-    "Order ID..........:" ttDocs.OrderId SKIP
-    "Order Type........:" ttDocs.OrderType SKIP
-    "Msseq.............:" ttDocs.Msseq SKIP
-    "Message ID........:" ttDocs.MessageId SKIP
-    "Message Seq.......:" ttDocs.MessageSeq SKIP
-    "Message Type......:" ttDocs.MessageType SKIP
-    "Message Status....:" ttDocs.MessageStatus SKIP
-    "Fixed Status......:" ttDocs.FixedStatus SKIP
-    "Fixed Status Desc.:" ttDocs.FixedStatusDesc SKIP
-    "Fixed Status TS...:" ttDocs.FixedStatusTS SKIP
-    "Created...........:" ttDocs.CreatedTS SKIP
-    "Handled...........:" ttDocs.HandledTS SKIP
-    "Response Code.....:" ttDocs.ResponseCode SKIP
-    "Source............:" ttDocs.Source SKIP
-    "Additional Info...:" ttDocs.AdditionalInfo SKIP
+    "Order ID..........:" ttDocs.OrderId 
+    SKIP
+    "Order Type........:" ttDocs.OrderType FORMAT "X(45)"
+    SKIP
+    "Msseq.............:" ttDocs.Msseq 
+    SKIP
+    "Message ID........:" ttDocs.MessageId FORMAT "X(45)" 
+    SKIP
+    "Message Seq.......:" ttDocs.MessageSeq 
+    SKIP
+    "Message Type......:" ttDocs.MessageType FORMAT "X(45)" 
+    SKIP
+    "Message Status....:" ttDocs.MessageStatus FORMAT "X(45)" 
+    SKIP
+    "Fixed Status......:" ttDocs.FixedStatus FORMAT "X(45)" 
+    SKIP
+    "Fixed Status Desc.:" ttDocs.FixedStatusDesc FORMAT "X(45)" 
+    SKIP
+    "Fixed Status TS...:" ttDocs.FixedStatusTS 
+    SKIP
+    "Created...........:" ttDocs.CreatedTS 
+    SKIP
+    "Handled...........:" ttDocs.HandledTS 
+    SKIP
+    "Response Code.....:" ttDocs.ResponseCode FORMAT "X(45)" 
+    SKIP
+    "Source............:" ttDocs.Source FORMAT "X(45)" 
+    SKIP
+    "Additional Info...:" ttDocs.AdditionalInfo FORMAT "X(45)" 
+    SKIP
 
     WITH OVERLAY ROW 1 WIDTH 80 centered
     COLOR VALUE(cfc)
@@ -299,7 +314,8 @@ REPEAT WITH FRAME sel:
  
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
         RUN local-find-this(FALSE).
-        DISPLAY ttDocs.MessageType 
+        message "jiihaa" VIEW-AS ALERT-BOX.
+        DISPLAY  
             ttDocs.OrderId 
             ttDocs.OrderType 
             ttDocs.Msseq 
