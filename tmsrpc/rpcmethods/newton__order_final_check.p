@@ -76,14 +76,13 @@ END.
 
 /* Check Fixed number existence and orders */
 IF pcFixedNumber > "" THEN DO:
-   IF pcNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} OR 
-      pcNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_NEW} THEN DO:
-      FIND FIRST MobSub WHERE
-                 MobSub.Brand = gcBrand AND
-                 MobSub.FixedNumber = pcFixedNumber NO-LOCK NO-ERROR. 
-      IF AVAIL MobSub THEN
-         RETURN appl_err("Subscription already exists with number|" + pcFixedNumber).
-   END.
+   FIND FIRST MobSub WHERE
+              MobSub.Brand = gcBrand AND
+              MobSub.FixedNumber = pcFixedNumber NO-LOCK NO-ERROR. 
+   IF AVAIL MobSub THEN
+      RETURN appl_err("Subscription already exists with number|" + 
+                       pcFixedNumber).
+   
    lcError = fOngoingFixedOrders(pcFixedNumber, 
                      (IF pcChannel BEGINS "retention"
                           THEN "retention"

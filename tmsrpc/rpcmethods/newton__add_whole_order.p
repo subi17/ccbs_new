@@ -1751,13 +1751,11 @@ IF pcFusionStruct > "" THEN DO:
       RETURN appl_err("fixed_line_mnp_old_operator_code is mandatory with fixed_line_number_type=MNP").
 
    IF lcFixedLineNumber NE "" THEN DO:
-      IF lcFixedLineNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} THEN DO:
-         FIND FIRST lbMobSub WHERE
-                    lbMobSub.Brand = gcBrand AND
-                    lbMobSub.FixedNumber = lcFixedLineNumber NO-LOCK NO-ERROR. 
-         IF AVAIL lbMobSub THEN
-            RETURN appl_err("Subscription already exists with Fixed Number " + lcFixedLineNumber).
-      END.
+      FIND FIRST lbMobSub WHERE
+                 lbMobSub.Brand = gcBrand AND
+                 lbMobSub.FixedNumber = lcFixedLineNumber NO-LOCK NO-ERROR. 
+      IF AVAIL lbMobSub THEN
+         RETURN appl_err("Subscription already exists with Fixed Number " + lcFixedLineNumber).
       lcError = fOngoingFixedOrders(lcFixedLineNumber,lcFixedLineNumberType).
       IF lcError <> "" THEN RETURN appl_err(lcError).
    END.
