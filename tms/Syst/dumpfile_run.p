@@ -9,6 +9,7 @@
 ---------------------------------------------------------------------- */
 
 {commali.i}
+{tmsconst.i}
 {timestamp.i}
 {transname.i}
 {cparam2.i}
@@ -357,6 +358,17 @@ DO FOR DumpLog TRANS:
       DumpLog.DumpLogStatus = 1
       oiEventCount = 0.
 END.
+
+/* (YPI-31) Assigning non-existing weekday to skip daily dump */
+IF NOT llInterrupted                           AND 
+   DumpFile.DumpName  EQ {&DUMP_CLITYPE_TRACK} AND 
+   DumpFile.MainTable EQ "CliType"             THEN
+DO TRANSACTION:
+   FIND FIRST DFTimeTable WHERE
+              DFTimeTable.DumpId = DumpFile.DumpId EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+   IF AVAIL DFTimeTable THEN
+      DFTimeTable.DumpWeekday = "0".  
+END.      
 
 /* notify monitoring */
 IF llInterrupted OR lcFinalFile = "" 
