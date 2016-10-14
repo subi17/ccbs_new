@@ -147,14 +147,24 @@ IF lcNotificationType NE "O" THEN DO:
 END.
    
 IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED} AND
-   LOOKUP(FusionMessage.FixedStatus,
-          "CANCELADA,PENDIENTE CANCELAR,CANCELACION EN PROCESO") > 0 THEN DO:
+   FusionMessage.FixedStatus NE "CERRADA" THEN DO:
       
    FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
    
    add_string(lcresultStruct, "resultCode", {&RESULT_INVALID_STATUS}).
    add_string(lcresultStruct, "resultDescription", 
-              "Cancellation is not allowed").
+              "Status is not allowed after CERRADA").
+   RETURN.
+END.
+
+IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_CANCELLED} AND
+   FusionMessage.FixedStatus NE "CANCELADA" THEN DO:
+      
+   FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+   
+   add_string(lcresultStruct, "resultCode", {&RESULT_INVALID_STATUS}).
+   add_string(lcresultStruct, "resultDescription", 
+              "Status is not allowed after CANCELADA").
    RETURN.
 END.
 
@@ -178,8 +188,9 @@ CASE FusionMessage.FixedStatus:
    WHEN "CERRADA PARCIAL" OR
    WHEN "EN PROCESO - NO CANCELABLE" THEN DO:
 
-      IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_INITIALIZED} THEN
-         OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ONGOING}.
+      IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_INITIALIZED} OR
+         OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_PENDING_CANCELLED}
+      THEN OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ONGOING}.
       ELSE FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
 
       IF FusionMessage.FixedStatus EQ "EN PROCESO - NO CANCELABLE" AND
