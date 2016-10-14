@@ -295,16 +295,23 @@ FUNCTION fCashInvoiceCreditNote RETURNS CHARACTER
                                  "InvRowAmt=" + REPLACE(STRING(InvRow.Amt),",",".").
             END.
 
-            fFullCreditNote(Invoice.InvNum,
-                            LEFT-TRIM(lcSubInvNums,","),
-                            LEFT-TRIM(lcInvRowDetails,","),
-                            "Order",  /*reason group*/
-                            icReason, /*reason*/
-                            "",       /*reason note*/
-                            OUTPUT lcError).
+            /* lcInvRowDetail is empty when the order is linked both
+               LO and Yoigo internal invoices. I.e. then Yoigo internal
+               invoice contains only shipping cost fee. If picking is started
+               we must not do a credit note in this case. */
+            IF lcInvRowDetails > ""
+            THEN fFullCreditNote(Invoice.InvNum,
+                                 LEFT-TRIM(lcSubInvNums,","),
+                                 LEFT-TRIM(lcInvRowDetails,","),
+                                 "Order",  /*reason group*/
+                                 icReason, /*reason*/
+                                 "",       /*reason note*/
+                                 OUTPUT lcError).
          END.
       END.
 
+      /* There are no shipping cost available or the picking is not started
+         or there are no active billing item for a shipping cost */
       IF lcShippingCostBillCode = ""
       THEN fFullCreditNote(Invoice.InvNum,
                            "",

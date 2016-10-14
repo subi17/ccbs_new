@@ -427,13 +427,43 @@ FUNCTION fDelivSIM RETURNS LOG
    /* Dextra will generate the Sales Invoice for Postpaid Terminal Orders */
    llDextraInvoice = fIsTerminalOrder(OUTPUT lcTerminalBillCode).
 
-   IF NOT llDextraInvoice THEN DO:
-
+   IF llDextraInvoice = FALSE OR
+      Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}
+   THEN DO:
       /* YDR-1034-Move the Sales invoice creation
          from order process to Dextra */
       IF Order.InvNum = 0 OR Order.InvNum = ? THEN DO:
          RUN cashfee.p(Order.OrderID,
-                       1,                     /* action 1=create fees */
+                       (IF llDextraInvoice THEN 5 ELSE 1),
+                       OUTPUT lcError,
+                       OUTPUT ldeAmount,
+                       OUTPUT lcError).
+   
+         IF lcError BEGINS "Error" THEN DO:
+            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                             "Order",
+                             STRING(Order.OrderID),
+                             0,
+                             "CASH INVOICE FAILED",
+                             lcError).
+            RETURN FALSE.
+         END.
+      END. /* IF Order.InvNum = 0 OR Order.InvNum = ? THEN DO: */
+   
+      FIND FIRST Invoice WHERE
+                 Invoice.InvNum = Order.InvNum
+           NO-LOCK NO-ERROR.
+      IF NOT AVAILABLE Invoice THEN RETURN FALSE.
+
+   END.
+
+   IF llDextraInvoice
+   THEN DO:
+      IF Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST} AND
+         Order.InvNum = 0 OR Order.InvNum = ?
+      THEN DO:
+         RUN cashfee.p(Order.OrderID,
+                       5,               /* action 5=create fees only for Order.FeeModel */
                        OUTPUT lcError,
                        OUTPUT ldeAmount,
                        OUTPUT lcError).
@@ -447,14 +477,13 @@ FUNCTION fDelivSIM RETURNS LOG
                              lcError).
             RETURN FALSE.
          END.
-      END. /* IF Order.InvNum = 0 OR Order.InvNum = ? THEN DO: */
 
-      FIND FIRST Invoice WHERE
-                 Invoice.InvNum = Order.InvNum
-           NO-LOCK NO-ERROR.
-      IF NOT AVAILABLE Invoice THEN RETURN FALSE.
-   END.
-   ELSE DO:
+         FIND FIRST Invoice WHERE
+                    Invoice.InvNum = Order.InvNum
+              NO-LOCK NO-ERROR.
+         IF NOT AVAILABLE Invoice THEN RETURN FALSE.         
+      END.
+
       /* Dextra Terminal Price */
       FIND FIRST TerminalConf WHERE
                  TerminalConf.TerminalCode = lcTerminalBillCode AND

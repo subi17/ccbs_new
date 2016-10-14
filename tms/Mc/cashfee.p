@@ -33,6 +33,7 @@ DEF BUFFER bSimTypeCheck FOR SIM.
              2=just make a list of fees, don't create anything 
              3=like 2, but leave out campaign topup rows
              4=like 3, but for conf emails use always Spanish translation
+             5=like 1, but create fees only for Order.FeeModel
 */             
 
 DEF VAR ldAmount        AS DEC  NO-UNDO. 
@@ -190,7 +191,7 @@ fCleanEventObjects().
 PROCEDURE pMakeCashInvoice:
 
    /* fees may have already been created (e.g. an mnp order) */
-   IF iiAction = 1 THEN DO: 
+   IF iiAction EQ 1 OR iiAction EQ 5 THEN DO: 
 
       IF CAN-FIND(FIRST SingleFee USE-INDEX HostTable WHERE
                         SingleFee.Brand     = gcBrand AND
@@ -291,7 +292,7 @@ PROCEDURE pMakeCashInvoice:
    /* order has not been delivered, create customer for invoicing */
    IF liCashCust = 0 THEN DO:
 
-      IF iiAction EQ 1 THEN DO:
+      IF iiAction EQ 1 OR iiAction EQ 5 THEN DO:
 
          RUN createcustomer.p(Order.OrderId, 
                             1,
@@ -338,47 +339,50 @@ PROCEDURE pMakeCashInvoice:
       ldTermDiscAmt = 0
       ldTopupAmt    = 0.
 
-   /* one terminal per order */
-   FOR FIRST OrderAccessory OF ORDER WHERE
-             OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE}) NO-LOCK:
-      ASSIGN 
-         lcTerminal    = OrderAccessory.ProductCode
-         ldTermDiscAmt = OrderAccessory.Discount.
-   END.
-
-   /* discount billing item for terminal */
-   IF ldTermDiscAmt NE 0 THEN DO:
-      lcTermDiscItem = fCParamC("OrderTermDisc").
-   
-      IF lcTermDiscItem = ? OR lcTermDiscItem = "" THEN DO:
-         ocError = "Error:Terminal discount item missing".
-         IF iiAction = 1 THEN fCleanEventObjects(). 
-         RETURN. 
+   IF iiAction NE 5
+   THEN DO:
+      /* one terminal per order */
+      FOR FIRST OrderAccessory OF ORDER WHERE
+                OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE}) NO-LOCK:
+         ASSIGN 
+            lcTerminal    = OrderAccessory.ProductCode
+            ldTermDiscAmt = OrderAccessory.Discount.
       END.
-   END.
-
-   /* additional topup given */
-   FOR EACH OrderTopup OF Order NO-LOCK WHERE
-            OrderTopup.Amount > 0:
-      ldTopupAmt = ldTopupAmt + OrderTopup.Amount + OrderTopup.VatAmount.       
-   END. 
-
-   IF ldTopupAmt > 0 THEN DO:
-      ASSIGN 
-         lcTopupItem     = fCParamC("OrderTopUp")
-         lcTopupDiscItem = fCParamC("OrderTopUpDisc").
    
-      IF lcTopupItem = ? OR lcTopupItem = "" OR
-         lcTopupDiscItem = ? OR lcTopupDiscItem = ""
-      THEN DO:
-         ocError = "Error:Topup item missing".
-         RETURN. 
+      /* discount billing item for terminal */
+      IF ldTermDiscAmt NE 0 THEN DO:
+         lcTermDiscItem = fCParamC("OrderTermDisc").
+      
+         IF lcTermDiscItem = ? OR lcTermDiscItem = "" THEN DO:
+            ocError = "Error:Terminal discount item missing".
+            IF iiAction = 1 THEN fCleanEventObjects(). 
+            RETURN. 
+         END.
       END.
-   END.
-
-   /* new offer method */
-   IF Order.Offer > "" THEN RUN pUseOffer(Order.Offer,
-                                          Order.CrStamp).
+   
+      /* additional topup given */
+      FOR EACH OrderTopup OF Order NO-LOCK WHERE
+               OrderTopup.Amount > 0:
+         ldTopupAmt = ldTopupAmt + OrderTopup.Amount + OrderTopup.VatAmount.       
+      END. 
+   
+      IF ldTopupAmt > 0 THEN DO:
+         ASSIGN 
+            lcTopupItem     = fCParamC("OrderTopUp")
+            lcTopupDiscItem = fCParamC("OrderTopUpDisc").
+      
+         IF lcTopupItem = ? OR lcTopupItem = "" OR
+            lcTopupDiscItem = ? OR lcTopupDiscItem = ""
+         THEN DO:
+            ocError = "Error:Topup item missing".
+            RETURN. 
+         END.
+      END.
+   
+      /* new offer method */
+      IF Order.Offer > "" THEN RUN pUseOffer(Order.Offer,
+                                             Order.CrStamp).
+   END. /* iiAction NE 5 */
 
    /* current method */
    IF Order.Offer = "" OR Order.FeeModel > "" THEN  
@@ -432,7 +436,7 @@ PROCEDURE pMakeCashInvoice:
 
 
    /* create invoice */
-   IF iiAction = 1 THEN DO:
+   IF iiAction EQ 1 OR iiAction EQ 5 THEN DO:
       IF llCreateInv THEN DO: 
 
          /* cash receipt */ 
