@@ -20,7 +20,7 @@ ASSIGN
  liChargedParty        = INT(TRIM(ENTRY(20,callrec,lcSep)))
  lcSubscriptionType    =     TRIM(ENTRY(21,callrec,lcSep))
  lcOrigAddress         =     TRIM(ENTRY(22,callrec,lcSep))
- liOrigAddressType     = INT(TRIM(ENTRY(23,callrec,lcSep)))
+ liAType               = INT(TRIM(ENTRY(23,callrec,lcSep)))
  lcDestAddress         =     TRIM(ENTRY(24,callrec,lcSep))
- liDestAddressType     = INT(TRIM(ENTRY(25,callrec,lcSep)))
+ liBType               = INT(TRIM(ENTRY(25,callrec,lcSep)))
  lcCallIdNum           =     TRIM(ENTRY(26,callrec,lcSep)).
