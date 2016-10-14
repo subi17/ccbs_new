@@ -1,7 +1,5 @@
 {triggers/hpddelete_generic.i CliType CLITYPE Ordercanal CliType}
 
-TRIGGER PROCEDURE FOR REPLICATION-DELETE OF CliType.
-
 {commali.i}
 {tmsconst.i}
 

@@ -1,7 +1,5 @@
 {triggers/hpdwrite_generic.i CliType CLITYPE Ordercanal CliType}
 
-TRIGGER PROCEDURE FOR REPLICATION-WRITE OF CliType OLD BUFFER oldCliType.
-
 {commali.i}
 {tmsconst.i}
 
