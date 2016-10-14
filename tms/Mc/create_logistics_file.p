@@ -54,7 +54,9 @@ DEFINE VARIABLE iLargestId         AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTarOption        AS CHARACTER NO-UNDO.
 DEF VAR ldaCont15PromoFrom         AS DATE NO-UNDO. 
 DEF VAR ldaCont15PromoEnd          AS DATE NO-UNDO. 
-DEFINE VARIABLE ocResult           AS CHAR      NO-UNDO. 
+DEFINE VARIABLE ocResult           AS CHAR      NO-UNDO.
+DEFINE VARIABLE lcShippingCostBillCode AS CHARACTER NO-UNDO.
+DEFINE VARIABLE ldeShippingCostAmt     AS DECIMAL   NO-UNDO.
 
 DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
@@ -152,6 +154,8 @@ DEFINE TEMP-TABLE ttOneDelivery NO-UNDO
    /* 50 */
    FIELD InvoiceTotal  AS CHARACTER FORMAT "X(7)"
    FIELD DiscountTotal AS CHARACTER FORMAT "X(7)"
+   FIELD ShipCostBC    AS CHARACTER FORMAT "X(10)"
+   FIELD ShipCostAmt   AS CHARACTER FORMAT "X(7)"
    .
 
 DEFINE TEMP-TABLE ttInvRow NO-UNDO
@@ -368,7 +372,6 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE ldeCurrAmt                AS DEC NO-UNDO. 
    DEFINE VARIABLE ldtermdiscamt             AS DEC NO-UNDO. 
    DEFINE VARIABLE lcTermDiscItem            AS CHAR NO-UNDO.
-   DEFINE VARIABLE ldeAmt                    AS DECIMAL INITIAL ? NO-UNDO.
 
    DEFINE BUFFER bufRow   FOR InvRow.
    DEFINE BUFFER bufItem  FOR BillItem.
@@ -450,40 +453,26 @@ FUNCTION fDelivSIM RETURNS LOG
          END.
       END. /* IF Order.InvNum = 0 OR Order.InvNum = ? THEN DO: */
    
-      FIND FIRST Invoice WHERE
+      IF NOT llDextraInvoice
+      THEN DO:
+         FIND FIRST Invoice WHERE
                  Invoice.InvNum = Order.InvNum
-           NO-LOCK NO-ERROR.
-      IF NOT AVAILABLE Invoice THEN RETURN FALSE.
-
+         NO-LOCK NO-ERROR.
+         IF NOT AVAILABLE Invoice THEN RETURN FALSE.
+      END.
+      ELSE DO:
+         FOR
+            FIRST FMItem NO-LOCK WHERE
+               FMItem.Brand    = gcBrand AND
+               FMItem.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}:
+            lcShippingCostBillCode = FMItem.BillCode.
+         END.
+         ldeShippingCostAmt = fGetShippingCost(Order.OrderID).
+      END.
    END.
 
    IF llDextraInvoice
    THEN DO:
-      IF Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST} AND
-         Order.InvNum = 0 OR Order.InvNum = ?
-      THEN DO:
-         RUN cashfee.p(Order.OrderID,
-                       5,               /* action 5=create fees only for Order.FeeModel */
-                       OUTPUT lcError,
-                       OUTPUT ldeAmount,
-                       OUTPUT lcError).
-
-         IF lcError BEGINS "Error" THEN DO:
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "Order",
-                             STRING(Order.OrderID),
-                             0,
-                             "CASH INVOICE FAILED",
-                             lcError).
-            RETURN FALSE.
-         END.
-
-         FIND FIRST Invoice WHERE
-                    Invoice.InvNum = Order.InvNum
-              NO-LOCK NO-ERROR.
-         IF NOT AVAILABLE Invoice THEN RETURN FALSE.         
-      END.
-
       /* Dextra Terminal Price */
       FIND FIRST TerminalConf WHERE
                  TerminalConf.TerminalCode = lcTerminalBillCode AND
@@ -1021,8 +1010,8 @@ FUNCTION fDelivSIM RETURNS LOG
       END.
 
       /* payment on delivery */
-      IF (lcPaymInfo = "0" AND Order.FeeModel > "") OR
-          Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}
+      IF lcPaymInfo = "0" AND Order.FeeModel > "" AND
+          Order.FeeModel NE {&ORDER_FEEMODEL_SHIPPING_COST}
       THEN DO:
          FOR FIRST FeeModel WHERE
                    FeeModel.Brand = gcBrand AND
@@ -1043,7 +1032,6 @@ FUNCTION fDelivSIM RETURNS LOG
                    PriceList.PriceList = FMItem.PriceList:
 
              ASSIGN
-               ldeAmt   = ?
                liLoop1  = liLoop1 + 1
                lcBIName = fTranslationName(gcBrand,
                                            1,
@@ -1051,20 +1039,12 @@ FUNCTION fDelivSIM RETURNS LOG
                                            INT(AgreeCustomer.Language),
                                            ldaOrderDate).
 
-            IF Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}
-            THEN ldeAmt = fGetShippingCost(Order.OrderID).
-
-            IF ldeAmt = ?
-            THEN ldeAmt = FMItem.Amount.
-
             ASSIGN
                ldeVatPerc = fTaxPerc(lcTaxZone,BillItem.TaxClass,ldaOrderDate)
-               ldeRowVat  = fRowVat(PriceList.InclVat,
-                                    ldeAmt,
-                                    ldeVatPerc).
+               ldeRowVat  = fRowVat(PriceList.InclVat,FMItem.Amount,ldeVatPerc).
 
             /* row amount without vat */
-            ldeAmtVat0 = ldeAmt - ldeRowVat.
+            ldeAmtVat0 = FMItem.Amount - ldeRowVat.
             fTaxAmount(ldeVatPerc,ldeRowVat,ldeAmtVat0,BillItem.TaxClass).
 
             IF lcBIName = ? THEN lcBIName = BillItem.BIName.
@@ -1078,7 +1058,7 @@ FUNCTION fDelivSIM RETURNS LOG
                ttInvRow.Quantity    = "1"
                ttInvRow.Discount    = STRING(0.0)
                ttInvRow.TotalPrice  = STRING(ldeAmtVat0)
-               ldeCurrAmt = ldeCurrAmt + ldeAmt.
+               ldeCurrAmt = ldeCurrAmt + FMItem.Amount.
 
          END.
       END.
