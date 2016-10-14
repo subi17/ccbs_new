@@ -259,7 +259,8 @@ CASE FusionMessage.FixedStatus:
       OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_CANCELLED}.
          
       IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR
-         Order.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
+         Order.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} OR
+         Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN DO:
 
          RUN closeorder.p(Order.OrderID, TRUE).
 
