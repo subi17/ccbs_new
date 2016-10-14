@@ -90,13 +90,13 @@ IF pcFixedNumber > "" THEN DO:
 
    IF lcError > "" THEN RETURN appl_err(lcError).
 END.
-ELSE IF pcNumberType EQ "MNP" OR
-        pcNumberType EQ "NEW" THEN DO:
-      FIND FIRST MobSub WHERE
-                 MobSub.Brand = gcBrand AND
-                 MobSub.CLI = pcCLI NO-LOCK NO-ERROR. 
-      IF AVAIL MobSub THEN
-         RETURN appl_err("Subscription already exists with number|" + pcCLI).
+IF pcNumberType EQ "MNP" OR
+   pcNumberType EQ "NEW" THEN DO:
+   FIND FIRST MobSub WHERE
+              MobSub.Brand = gcBrand AND
+              MobSub.CLI = pcCLI NO-LOCK NO-ERROR. 
+   IF AVAIL MobSub THEN
+      RETURN appl_err("Subscription already exists with number|" + pcCLI).
 END.
 
 add_boolean(response_toplevel_id, "", llAllow).
