@@ -62,6 +62,8 @@ IF lcError EQ "OK" THEN DO:
    ASSIGN
       FusionMessage.HandledTS = fMakeTS()
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}
+      OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_PENDING_CANCELLED}
+      OrderFusion.UpdateTS = FusionMessage.HandledTS 
       Order.StatusCode = {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}
       Order.SendToROI  = {&ROI_HISTORY_TO_SEND} WHEN 
          Order.Ordertype NE {&ORDER_TYPE_STC}.
