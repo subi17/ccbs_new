@@ -122,34 +122,7 @@ REPEAT WITH FRAME fMessages ON ENDKEY UNDO LOOP, NEXT LOOP:
      RUN fusionmessage.p(iiOrderID).
    END.
    IF toimi EQ 6 THEN DO:
-      FIND FIRST OrderCustomer NO-LOCK where
-                 OrderCustomer.Brand EQ Syst.Parameters:gcBrand AND
-                 OrderCustomer.OrderId EQ iiOrderid AND
-                 OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
-                 NO-ERROR.
-      IF NOT AVAIL OrderCustomer THEN
-         MESSAGE "Installation address data not found" VIEW-AS ALERT-BOX.
-      ELSE DO:
-       PAUSE 0.
-       DISP
-          OrderCustomer.Country  
-          OrderCustomer.Region 
-          OrderCustomer.PostOffice 
-          OrderCustomer.Street 
-          OrderCustomer.StreetType 
-          OrderCustomer.BuildingNum 
-          OrderCustomer.BisDuplicate 
-          OrderCustomer.Block 
-          OrderCustomer.Door 
-          OrderCustomer.Letter 
-          OrderCustomer.Stair 
-          OrderCustomer.Floor 
-          OrderCustomer.Hand 
-          OrderCustomer.Km 
-          OrderCustomer.ZipCode WITH FRAME fAddr.
-         
-      END.
-      
+     RUN addrview.p(iiOrderId).
    END.
    
    ELSE IF toimi = 8 THEN LEAVE.
