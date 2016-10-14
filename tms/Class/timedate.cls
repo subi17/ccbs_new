@@ -390,7 +390,7 @@ CLASS Class.timedate FINAL:
                     STRING(YEAR(idaDate),"9999"),
                     STRING(MONTH(idaDate),"99"),
                     STRING(DAY(idaDate),"99")) + "T" +
-              STRING(liTime,"HH:MM:SS")     + "+0000".
+              STRING(liTime,"HH:MM:SS.000")     + "+0000".
 
       RETURN lcTmp.
 
