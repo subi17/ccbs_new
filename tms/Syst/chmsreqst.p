@@ -307,7 +307,6 @@ CASE iiToStatus:
          END.
 
          IF iiFromStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
-            fHasConvergenceTariff(MsRequest.MsSeq) AND
             NOT fCanTerminateConvergenceTariff(
                   MsRequest.MsSeq,
                   INT(MsRequest.ReqCParam3),
