@@ -36,8 +36,7 @@ IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} THEN DO:
               MobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
 
    IF AVAIL MobSub THEN DO:
-      IF fIsConvergenceTariff(mobsub.CLIType) AND
-         NOT fCanTerminateConvergenceTariff(MobSub.MsSeq,
+      IF NOT fCanTerminateConvergenceTariff(MobSub.MsSeq,
                                             INT(MsRequest.ReqCParam3),
                                             OUTPUT lcError) THEN DO:
          fReqError(SUBST("ERROR: &1", lcError)).
