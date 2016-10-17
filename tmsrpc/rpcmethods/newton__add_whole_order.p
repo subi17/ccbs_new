@@ -1618,11 +1618,6 @@ IF LOOKUP(pcNumberType,"renewal,stc") > 0 THEN DO:
    IF NOT AVAIL MobSub THEN 
       RETURN appl_err(SUBST("Mobsub with msisdn &1 not found", pcCli)).
 
-   IF lcFixedLineNumber > "" AND
-      MobSub.FixedNumber NE ? AND /* STC convergent to convergent */
-      MobSub.FixedNumber NE  lcFixedLineNumber THEN
-      RETURN appl_err(SUBST("Mobsub with Fixed Number &1 not found", lcFixedLineNumber)).
-
    FIND Customer WHERE
         Customer.Brand = gcBrand AND
         Customer.OrgId = lcID AND
@@ -1756,6 +1751,11 @@ IF pcFusionStruct > "" THEN DO:
       RETURN appl_err("fixed_line_mnp_old_operator_code is mandatory with fixed_line_number_type=MNP").
 
    IF lcFixedLineNumber NE "" THEN DO:
+      IF AVAIL MobSub AND /* STC or renewal */
+         MobSub.FixedNumber NE ? AND /* STC convergent to convergent */
+         MobSub.FixedNumber NE  lcFixedLineNumber THEN
+         RETURN appl_err(SUBST("Mobsub with Fixed Number &1 not found", lcFixedLineNumber)).
+
       FIND FIRST lbMobSub WHERE
                  lbMobSub.Brand = gcBrand AND
                  lbMobSub.FixedNumber = lcFixedLineNumber AND
