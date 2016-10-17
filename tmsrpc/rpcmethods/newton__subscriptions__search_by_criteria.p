@@ -250,6 +250,7 @@ FOR EACH MobSub NO-LOCK WHERE
    END.
 
    /* TERMX */
+   liCount = 0. /* YDA-895 */
    IF pcTerm > "" THEN DO:
       IF pcTerm EQ "none" THEN DO:
          FOR EACH DCCLI NO-LOCK WHERE
