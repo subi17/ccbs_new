@@ -659,9 +659,9 @@ DO TRANS:
             IF lcSourceName NE "FIXED" THEN
                fTicketCheck(INPUT "MSOWNER", 
                             STRING(ttCall.CLI),
-                            OUTPUT oiERrorCode).
+                            OUTPUT oiERrorCode).               
             ELSE
-              fTicketCheck(INPUT "FIXED_MSOWNER",
+             fTicketCheck(INPUT "MSOWNER_FIXED",
                             STRING(ttCall.CLI),
                             OUTPUT oiERrorCode). 
          END.

@@ -104,7 +104,6 @@ FUNCTION fTicketCheck RETURN LOG
             
             FIND FIRST Msowner WHERE 
                        Msowner.Cli = icValue NO-LOCK NO-ERROR.
-
             IF Not Avail msowner THEN oiValue  = {&CDR_ERROR_UNKNOWN_MSISDN}.
 
          END.
@@ -123,7 +122,8 @@ FUNCTION fTicketCheck RETURN LOG
             oiValue = {&CDR_ERROR_MSISDN_NOT_ACTIVE}.
 
             FIND FIRST Msowner WHERE
-                       Msowner.Cli = icValue NO-LOCK NO-ERROR.
+                       Msowner.brand EQ gcBrand AND
+                       Msowner.fixednumber = icValue NO-LOCK NO-ERROR.
 
             IF Not Avail msowner THEN oiValue  = {&CDR_ERROR_UNKNOWN_MSISDN}.
 
