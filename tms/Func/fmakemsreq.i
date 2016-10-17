@@ -231,8 +231,6 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
           bCreaReq.OrigRequest = iiOrigReq
           liReqCreated         = bCreaReq.MsRequest.
 
-   RELEASE bCreaReq.
-
    /* initial actions */
    RUN requestaction_init.p (liReqCreated).
 
@@ -242,8 +240,17 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
                            INPUT icSource).
 
    IF fIsConvergenceTariff(bReqSub.CLIType) AND
-      NOT fIsConvergenceTariff(icNewType) THEN 
+      NOT fIsConvergenceTariff(icNewType) THEN DO:
+   
+      IF NOT AVAIL bCreaReq OR
+         bCreaReq.MsRequest NE liReqCreated THEN
+         FIND bCreaReq EXCLUSIVE-LOCK WHERE
+              bCreaReq.MsRequest = liReqCreated.
+
       bCreaReq.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
+   END.
+      
+   RELEASE bCreaReq.
   
    RETURN liReqCreated.
              

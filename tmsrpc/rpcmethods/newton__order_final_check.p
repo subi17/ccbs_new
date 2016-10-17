@@ -59,15 +59,20 @@ IF fOngoingOrders(pcCli, (IF pcChannel BEGINS "retention"
 
 ELSE IF pcNumberType EQ "stc" THEN DO:
    FIND FIRST MobSub NO-LOCK WHERE
-              MobSub.Brand = gcBrand AND
-              MobSub.CLI = pcCLI NO-ERROR.
+              MobSub.Brand EQ gcBrand AND
+              MobSub.CLI EQ pcCLI NO-ERROR.
    IF NOT AVAIL Mobsub THEN 
+      RETURN appl_err("Subscription not found").
+
+   IF pcFixedNumber > "" AND
+      MobSub.FixedNumber NE ? AND /* STC convergent to convergent */
+      MobSub.FixedNumber NE  pcFixedNumber THEN
       RETURN appl_err("Subscription not found").
 
    /* Check ongoing STC request */
    FIND FIRST MsRequest NO-LOCK WHERE
-              MsRequest.MsSeq = Mobsub.MsSeq AND
-              MsRequest.ReqType = 0 AND
+              MsRequest.MsSeq EQ Mobsub.MsSeq AND
+              MsRequest.ReqType EQ 0 AND
               LOOKUP(STRING(MsRequest.ReqStat),
                {&REQ_INACTIVE_STATUSES}) = 0  NO-ERROR.
    IF AVAILABLE MsRequest THEN 
@@ -76,14 +81,14 @@ END.
 
 /* Check Fixed number existence and orders */
 IF pcFixedNumber > "" THEN DO:
-   IF pcNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} OR 
-      pcNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_NEW} THEN DO:
-      FIND FIRST MobSub WHERE
-                 MobSub.Brand = gcBrand AND
-                 MobSub.FixedNumber = pcFixedNumber NO-LOCK NO-ERROR. 
-      IF AVAIL MobSub THEN
-         RETURN appl_err("Subscription already exists with number|" + pcFixedNumber).
-   END.
+   FIND FIRST MobSub WHERE
+              MobSub.Brand EQ gcBrand AND
+              MobSub.FixedNumber EQ pcFixedNumber AND
+              MobSub.CLI NE pcCLI NO-LOCK NO-ERROR. 
+   IF AVAIL MobSub THEN
+      RETURN appl_err("Subscription already exists with number|" + 
+                       pcFixedNumber).
+
    lcError = fOngoingFixedOrders(pcFixedNumber, 
                      (IF pcChannel BEGINS "retention"
                           THEN "retention"
@@ -91,13 +96,13 @@ IF pcFixedNumber > "" THEN DO:
 
    IF lcError > "" THEN RETURN appl_err(lcError).
 END.
-ELSE IF pcNumberType EQ "MNP" OR
-        pcNumberType EQ "NEW" THEN DO:
-      FIND FIRST MobSub WHERE
-                 MobSub.Brand = gcBrand AND
-                 MobSub.CLI = pcCLI NO-LOCK NO-ERROR. 
-      IF AVAIL MobSub THEN
-         RETURN appl_err("Subscription already exists with number|" + pcCLI).
+IF pcNumberType EQ "MNP" OR
+   pcNumberType EQ "NEW" THEN DO:
+   FIND FIRST MobSub WHERE
+              MobSub.Brand EQ gcBrand AND
+              MobSub.CLI EQ pcCLI NO-LOCK NO-ERROR. 
+   IF AVAIL MobSub THEN
+      RETURN appl_err("Subscription already exists with number|" + pcCLI).
 END.
 
 add_boolean(response_toplevel_id, "", llAllow).

@@ -656,9 +656,14 @@ DO TRANS:
             (LOOKUP(STRING(ttCall.SpoCMT),"3,7") > 0 AND 
              ttCall.MSCID = "PRE" AND ttCall.PPFlag = 1))
          THEN DO:
-            fTicketCheck(INPUT "MSOWNER", 
-                         STRING(ttCall.CLI),
-                         OUTPUT oiERrorCode).
+            IF lcSourceName NE "FIXED" THEN
+               fTicketCheck(INPUT "MSOWNER", 
+                            STRING(ttCall.CLI),
+                            OUTPUT oiERrorCode).
+            ELSE
+              fTicketCheck(INPUT "FIXED_MSOWNER",
+                            STRING(ttCall.CLI),
+                            OUTPUT oiERrorCode). 
          END.
          ELSE DO: 
             IF  LOOKUP(STRING(ttCall.Spocmt),"3,4,32") > 0 THEN 
