@@ -336,7 +336,7 @@ IF fChkSubRequest(MSrequest.MSRequest) THEN  fReqStatus(8,"").
 
 IF fIsConvergenceTariff(MobSub.CLIType) AND
    NOT fIsConvergenceTariff(MSRequest.ReqCParam2) THEN
-   MsRequest.ActStamp = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
+   MsRequest.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
 
 /* YDR-1847 */
 fAdditionalLineSTC(iiReqId,
