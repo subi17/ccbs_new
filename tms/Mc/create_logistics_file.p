@@ -469,7 +469,28 @@ FUNCTION fDelivSIM RETURNS LOG
          THEN DO:
             IF Order.PayType /* PrePaid */
             THEN DO:
-               
+/*
+               liRequest = fCreateTopUpRequest(Order.MSSeq,
+                                               Order.CLI,
+                                               "RefillTRequest",
+                                               "COMP",
+                                               "RefillTRequest",
+                                               lcKey, /* Prefix */
+                                               "Cron script",
+                                               lcTaxZone,
+                                               0,
+                                               ldeShippingCostAmt * 100,
+                                               0.0).
+               IF liRequest = 0 THEN DO:
+                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                   "Order",
+                                   STRING(Order.OrderID),
+                                   0,
+                                   "TOPUP FAILED",
+                                   "Failed to create topup request").
+                  RETURN FALSE.
+               END.
+  */
             END.
             ELSE DO: /* PostPaid */
                /* create FAtime (welcome gift) */
