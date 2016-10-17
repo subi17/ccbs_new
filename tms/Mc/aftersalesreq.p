@@ -162,6 +162,8 @@ IF Order.FatAmount > 0 OR Order.FtGrp > "" THEN DO:
    ELSE RUN creafat (MobSub.CustNum,
                      MobSub.MsSeq,
                      lcFatGroup,
+                     "",
+                     "",
                      Order.FatAmount,
                      0,
                      ?,

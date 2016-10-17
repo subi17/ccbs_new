@@ -122,6 +122,8 @@ for each Order where
          RUN creafat.p (Order.CustNum,
                         Order.MsSeq,
                         lcnewftgrp,
+                        "",
+                        "",
                         ?, /* amount */
                         0, /* percent */
                         ?, /* vat incl. */

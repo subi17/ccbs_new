@@ -365,6 +365,8 @@ PROCEDURE pFinalize:
          RUN creafat.p(MsRequest.CustNum,
                        liDSSMsSeq,
                        "DSSCPFREE",
+                       "",
+                       "",
                        ?, /* amount */
                        0, /* percent */
                        ?, /* vat incl. */

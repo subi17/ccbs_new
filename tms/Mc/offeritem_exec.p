@@ -228,6 +228,8 @@ PROCEDURE pFatime:
    RUN creafat (MobSub.CustNum,
                 MobSub.MsSeq,
                 OfferItem.ItemKey,      /* FatGroup  */
+                "",
+                "",
                 OfferItem.Amount,
                 0,
                 OfferItem.VatIncl,

@@ -11,6 +11,7 @@
 {faccper.i}
 {fcreditvalid.i}
 {fparse.i}
+{Func/date.i}
 
 FUNCTION fFullCreditNoteRequest RETURNS INTEGER
    (INPUT  iiCustNum       AS INT,  
@@ -249,6 +250,42 @@ FUNCTION fOrderPickingStarted RETURNS LOGICAL
 
 END FUNCTION.
 
+FUNCTION fCloseGiftFATime RETURNS LOGICAL
+   (iiOrderID AS INTEGER):
+
+   DEF BUFFER FATime  FOR FATime.
+   DEF BUFFER Invoice FOR Invoice.
+
+   DEFINE VARIABLE lcOrderID AS CHARACTER NO-UNDO.
+   lcOrderID = STRING(iiOrderID).
+
+   FOR
+      EACH FATime NO-LOCK WHERE
+         FATime.Brand     = gcBrand                         AND
+         FATime.HostTable = "Order"                         AND
+         FATime.KeyValue  = lcOrderID                       AND
+         FATime.FTGrp     = {&FATGROUP_SHIPPING_COST_GIFT},
+      FIRST Invoice NO-LOCK WHERE
+         Invoice.InvNum   = FATime.InvNum                   AND
+         Invoice.InvType NE 99 USE-INDEX InvNum_s:
+      RETURN FALSE.
+   END.
+
+   FOR
+      EACH FATime EXCLUSIVE-LOCK WHERE
+         FATime.Brand     = gcBrand                         AND
+         FATime.HostTable = "Order"                         AND
+         FATime.KeyValue  = lcOrderID                       AND
+         FATime.FTGrp     = {&FATGROUP_SHIPPING_COST_GIFT}:
+
+      FATime.LastPeriod = fPrevPeriod(FATime.Period).
+
+   END.
+
+   RETURN TRUE.
+
+END.
+
 FUNCTION fCashInvoiceCreditNote RETURNS CHARACTER
 (  BUFFER pbOrder FOR Order,
    icReason AS CHAR):
@@ -271,42 +308,48 @@ FUNCTION fCashInvoiceCreditNote RETURNS CHARACTER
       /* no action, if request is ongoing */
       IF lcError NE "" THEN RETURN "".
 
-      IF pbOrder.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST} AND
-         fOrderPickingStarted(pbOrder.OrderId)
+      IF pbOrder.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}
       THEN DO:
-         FOR
-            FIRST FMItem NO-LOCK WHERE
-               FMItem.Brand    = gcBrand AND
-               FMItem.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}:
-            lcShippingCostBillCode = FMItem.BillCode.
-         END.
 
-         IF lcShippingCostBillCode > ""
+         IF pbOrder.PayType = FALSE /* PostPaid */
+         THEN fCloseGiftFATime(pbOrder.OrderID).
+
+         IF fOrderPickingStarted(pbOrder.OrderId)
          THEN DO:
             FOR
-               EACH InvRow NO-LOCK WHERE
-                  InvRow.InvNum   =  Invoice.InvNum         AND
-                  InvRow.BillCode NE lcShippingCostBillCode:
-               IF LOOKUP(STRING(InvRow.SubInvNum), lcSubInvNums) = 0
-               THEN lcSubInvNums = lcSubInvNums + "," + STRING(InvRow.SubInvNum).
-
-               lcInvRowDetails = lcInvRowDetails + "," +
-                                 "InvRow=" + STRING(InvRow.InvRowNum) + "|" +
-                                 "InvRowAmt=" + REPLACE(STRING(InvRow.Amt),",",".").
+               FIRST FMItem NO-LOCK WHERE
+                  FMItem.Brand    = gcBrand AND
+                  FMItem.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}:
+               lcShippingCostBillCode = FMItem.BillCode.
             END.
 
-            /* lcInvRowDetail is empty when the order is linked both
-               LO and Yoigo internal invoices. I.e. then Yoigo internal
-               invoice contains only shipping cost fee. If picking is started
-               we must not do a credit note in this case. */
-            IF lcInvRowDetails > ""
-            THEN fFullCreditNote(Invoice.InvNum,
-                                 LEFT-TRIM(lcSubInvNums,","),
-                                 LEFT-TRIM(lcInvRowDetails,","),
-                                 "Order",  /*reason group*/
-                                 icReason, /*reason*/
-                                 "",       /*reason note*/
-                                 OUTPUT lcError).
+            IF lcShippingCostBillCode > ""
+            THEN DO:
+               FOR
+                  EACH InvRow NO-LOCK WHERE
+                     InvRow.InvNum   =  Invoice.InvNum         AND
+                     InvRow.BillCode NE lcShippingCostBillCode:
+                  IF LOOKUP(STRING(InvRow.SubInvNum), lcSubInvNums) = 0
+                  THEN lcSubInvNums = lcSubInvNums + "," + STRING(InvRow.SubInvNum).
+
+                  lcInvRowDetails = lcInvRowDetails + "," +
+                                    "InvRow=" + STRING(InvRow.InvRowNum) + "|" +
+                                    "InvRowAmt=" + REPLACE(STRING(InvRow.Amt),",",".").
+               END.
+
+               /* lcInvRowDetail is empty when the order is linked both
+                  LO and Yoigo internal invoices. I.e. then Yoigo internal
+                  invoice contains only shipping cost fee. If picking is started
+                  we must not do a credit note in this case. */
+               IF lcInvRowDetails > ""
+               THEN fFullCreditNote(Invoice.InvNum,
+                                    LEFT-TRIM(lcSubInvNums,","),
+                                    LEFT-TRIM(lcInvRowDetails,","),
+                                    "Order",  /*reason group*/
+                                    icReason, /*reason*/
+                                    "",       /*reason note*/
+                                    OUTPUT lcError).
+            END.
          END.
       END.
 

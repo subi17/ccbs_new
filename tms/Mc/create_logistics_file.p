@@ -55,8 +55,6 @@ DEFINE VARIABLE lcTarOption        AS CHARACTER NO-UNDO.
 DEF VAR ldaCont15PromoFrom         AS DATE NO-UNDO. 
 DEF VAR ldaCont15PromoEnd          AS DATE NO-UNDO. 
 DEFINE VARIABLE ocResult           AS CHAR      NO-UNDO.
-DEFINE VARIABLE lcShippingCostBillCode AS CHARACTER NO-UNDO.
-DEFINE VARIABLE ldeShippingCostAmt     AS DECIMAL   NO-UNDO.
 
 DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
@@ -372,6 +370,8 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE ldeCurrAmt                AS DEC NO-UNDO. 
    DEFINE VARIABLE ldtermdiscamt             AS DEC NO-UNDO. 
    DEFINE VARIABLE lcTermDiscItem            AS CHAR NO-UNDO.
+   DEFINE VARIABLE lcShippingCostBillCode    AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE ldeShippingCostAmt        AS DECIMAL   NO-UNDO.
 
    DEFINE BUFFER bufRow   FOR InvRow.
    DEFINE BUFFER bufItem  FOR BillItem.
@@ -452,7 +452,7 @@ FUNCTION fDelivSIM RETURNS LOG
             RETURN FALSE.
          END.
       END. /* IF Order.InvNum = 0 OR Order.InvNum = ? THEN DO: */
-   
+
       IF NOT llDextraInvoice
       THEN DO:
          FIND FIRST Invoice WHERE
@@ -460,14 +460,57 @@ FUNCTION fDelivSIM RETURNS LOG
          NO-LOCK NO-ERROR.
          IF NOT AVAILABLE Invoice THEN RETURN FALSE.
       END.
-      ELSE DO:
+
+      IF Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}
+      THEN DO:
+         ldeShippingCostAmt = fGetShippingCost(Order.OrderID).
+
+         IF ldeShippingCostAmt > 0 AND Order.InvNum > 0
+         THEN DO:
+            IF Order.PayType /* PrePaid */
+            THEN DO:
+               
+            END.
+            ELSE DO: /* PostPaid */
+               /* create FAtime (welcome gift) */
+               RUN creafat.p(Order.CustNum,
+                             Order.MsSeq,
+                             {&FATGROUP_SHIPPING_COST_GIFT},
+                             "Order",
+                             STRING(Order.OrderID),
+                             ldeShippingCostAmt,
+                             0,
+                             ?,
+                             fNextPeriod(YEAR(TODAY) * 100 + MONTH(TODAY)),
+                             999999,
+                             OUTPUT lcError).
+
+               IF lcError BEGINS "Error" THEN DO:
+                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                   "Order",
+                                   STRING(Order.OrderID),
+                                   0,
+                                   "FATIME FAILED",
+                                   lcError).
+                  RETURN FALSE.
+               END.
+
+            END.
+         END.
+
+         IF llDextraInvoice
+         THEN
          FOR
             FIRST FMItem NO-LOCK WHERE
                FMItem.Brand    = gcBrand AND
                FMItem.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}:
             lcShippingCostBillCode = FMItem.BillCode.
          END.
-         ldeShippingCostAmt = fGetShippingCost(Order.OrderID).
+
+         ELSE ASSIGN
+                 ldeShippingCostAmt = 0
+                 lcShippingCostBillCode = ""
+                 .
       END.
    END.
 

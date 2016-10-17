@@ -300,6 +300,8 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
          RUN creafat (liCustNum,
                       liSeq,
                       lcFatGroup,
+                      "",
+                      "",
                       ldAmt,
                       0,
                       ?,

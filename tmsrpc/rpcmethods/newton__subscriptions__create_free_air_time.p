@@ -115,6 +115,8 @@ END.
  RUN creafat (MobSub.CustNum,
               MobSub.MsSeq,
               lcFatGroup,
+              "",
+              "",
               ldAmt,
               0,
               ?,

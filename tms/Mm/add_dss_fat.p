@@ -110,6 +110,8 @@ FOR EACH ttDSSFat NO-LOCK:
    RUN creafat.p(ttDSSFat.CustNum,
                  ttDSSFat.DSSMsSeq,
                  "DSSCPFREE",
+                 "",
+                 "",
                  ?, /* amount */
                  0, /* percent */
                  ?, /* vat incl. */

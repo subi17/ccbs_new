@@ -78,6 +78,8 @@ repeat trans:
    RUN creafat.p (mobsub.CustNum,
                mobsub.MsSeq,
                "BONO8CP",
+               "",
+               "",
                ?, /* amount */
                0, /* percent */
                ?, /* vat incl. */

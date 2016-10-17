@@ -17,6 +17,8 @@
 DEF INPUT  PARAMETER iiCustNum     AS INT  NO-UNDO.  
 DEF INPUT  PARAMETER iiMSSeq       AS INT  NO-UNDO. 
 DEF INPUT  PARAMETER icFatGroup    AS CHAR NO-UNDO.
+DEF INPUT  PARAMETER icHostTable   AS CHAR NO-UNDO.
+DEF INPUT  PARAMETER icKeyValue    AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER idAmt         AS DEC  NO-UNDO.
 DEF INPUT  PARAMETER idPerc        AS DEC  NO-UNDO.
 DEF INPUT  PARAMETER ilVatIncl     AS LOG  NO-UNDO.
@@ -63,8 +65,8 @@ ocError = fCreateFatRow(FatGroup.FtGrp,
                         Customer.CustNum,
                         iiMsSeq,
                         lcCli,
-                        "",
-                        "",
+                        icHostTable,
+                        icKeyValue,
                         idAmt,
                         idPerc,
                         ilVatIncl,

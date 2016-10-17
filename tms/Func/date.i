@@ -151,6 +151,46 @@ FUNCTION fISO8601Date RETURNS CHARACTER
 
 END FUNCTION.
 
+FUNCTION fNextPeriod RETURNS INTEGER
+   (iiPeriod AS INTEGER):
+
+   DEFINE VARIABLE liYY AS INTEGER NO-UNDO.
+   DEFINE VARIABLE liMM AS INTEGER NO-UNDO.
+
+   ASSIGN
+      liYY = TRUNCATE(iiPeriod / 100,0)
+      liMM = (iiPeriod MOD 100) + 1
+      .
+
+   IF liMM  = 13
+   THEN ASSIGN
+          liYY = liYY + 1
+          liMM = 1
+          .
+   RETURN (liYY * 100 + liMM).
+
+END FUNCTION.
+
+FUNCTION fPrevPeriod RETURNS INTEGER
+   (iiPeriod AS INTEGER):
+
+   DEFINE VARIABLE liYY AS INTEGER NO-UNDO.
+   DEFINE VARIABLE liMM AS INTEGER NO-UNDO.
+
+   ASSIGN
+      liYY = TRUNCATE(iiPeriod / 100,0)
+      liMM = (iiPeriod MOD 100) - 1
+      .
+
+   IF liMM  = 0
+   THEN ASSIGN
+          liYY = liYY - 1
+          liMM = 12
+          .
+   RETURN (liYY * 100 + liMM).
+
+END FUNCTION.
+
 &IF "{&fdatefmt}" NE "YES"
 &THEN
 

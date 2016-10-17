@@ -543,16 +543,24 @@ FUNCTION fCloseFat RETURNS LOGICAL
     iiLastPeriod AS INT):
 
    DEF BUFFER FATime FOR FATime.
-   
-   FOR EACH FATime EXCLUSIVE-LOCK WHERE
-            FATime.Brand = gcBrand AND
-            FATime.MsSeq = iiMsSeq AND
+   DEF BUFFER lbFATime FOR FATime.
+   DEF BUFFER Invoice FOR Invoice.
+
+   FOR EACH FATime NO-LOCK WHERE
+            FATime.Brand = gcBrand  AND
+            FATime.MsSeq = iiMsSeq  AND
             FATime.FTGrp = icFatGrp AND
-            FATime.InvNum = 0 AND
             (IF FATime.LastPeriod > 0 THEN
              FATime.LastPeriod > iiLastPeriod
              ELSE TRUE) USE-INDEX MobSub:
-      Fatime.LastPeriod = iiLastPeriod.
+
+      IF FATime.InvNum = 0 OR
+         CAN-FIND(Invoice NO-LOCK WHERE Invoice.InvNum = FATime.InvNum AND Invoice.InvType = 99 USE-INDEX InvNum_s)
+      THEN DO TRANSACTION:
+         FIND lbFATime EXCLUSIVE-LOCK WHERE ROWID(lbFATime) = ROWID(FATime).
+         lbFATime.LastPeriod = iiLastPeriod.
+         RELEASE lbFATime.
+      END.
    END.
 
    RETURN TRUE.

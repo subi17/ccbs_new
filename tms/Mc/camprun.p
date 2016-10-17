@@ -161,6 +161,8 @@ FIRST MSOwner NO-LOCK USE-INDEX MSSeq WHERE
                    RUN creafat (Customer.CustNum,
                                 MsOwner.MsSeq,
                                 ttCamp.CRowItem,
+                                "",
+                                "",
                                 0, /* amount */
                                 0, /* % */
                                 ?,

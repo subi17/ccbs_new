@@ -879,6 +879,8 @@ PROCEDURE pFinalize:
       RUN creafat.p (MobSub.CustNum,
                      MobSub.MsSeq,
                      "BTPREPOST1000",
+                     "",
+                     "",
                      (MsRequest.ReqIParam3 / 100),
                      0,
                      ?,

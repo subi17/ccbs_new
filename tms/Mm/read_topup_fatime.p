@@ -209,6 +209,8 @@ PROCEDURE pCreateFatime :
    run creafat (msowner.invcust,
                 msowner.msseq,
                 lcKey, /* FatGroup */
+                "",
+                "",
                 ldAmt,
                 0,
                 ?,

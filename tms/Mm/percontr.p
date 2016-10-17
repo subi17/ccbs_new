@@ -930,6 +930,8 @@ PROCEDURE pContractActivation:
          RUN creafat (MsOwner.CustNum,
                       DCCLI.MsSeq,
                       DCCLI.DCEvent,
+                      "",
+                      "",
                       0,   /* amount */
                       0,   /* %  */
                       ?,  
@@ -1153,6 +1155,8 @@ PROCEDURE pContractActivation:
       RUN creafat.p (MsOwner.CustNum,
                      MsOwner.MsSeq,
                      "BONOVOIPCPACT",
+                     "",
+                     "",
                      ?, /* amount */
                      0, /* percent */
                      ?, /* vat incl. */
