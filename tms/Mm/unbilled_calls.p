@@ -152,6 +152,7 @@ PROCEDURE pCollectCDR:
    DEF VAR lhFind           AS HANDLE NO-UNDO.
    DEF VAR lcFind           AS CHAR   NO-UNDO.
    DEF VAR lcCDRdb          AS CHAR   NO-UNDO.
+   DEF VAR lcDelim          AS CHAR   NO-UNDO INITIAL ";". 
    DEF VAR lcKeyValue       AS CHAR   NO-UNDO. 
 
    IF icDB = "mcdr" THEN 
@@ -218,8 +219,8 @@ PROCEDURE pCollectCDR:
          ldeAmount = (ldeAmount / ldVatFactor).
       END. /* IF lhWorkCDRdb::VatIncl THEN DO: */
 
-      ASSIGN lcKeyValue = STRING(lhWorkCDRdb::MsSeq)  + ";" +
-                          STRING(lhWorkCDRdb::DtlSeq) + ";" + 
+      ASSIGN lcKeyValue = STRING(lhWorkCDRdb::MsSeq)  + lcDelim +
+                          STRING(lhWorkCDRdb::DtlSeq) + lcDelim + 
                           STRING(lhWorkCDRdb::DateSt).
 
       IF lcKeyValue = ? THEN
