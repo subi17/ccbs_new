@@ -1617,7 +1617,12 @@ IF LOOKUP(pcNumberType,"renewal,stc") > 0 THEN DO:
         MobSub.CLI = pcCli NO-LOCK NO-ERROR. 
    IF NOT AVAIL MobSub THEN 
       RETURN appl_err(SUBST("Mobsub with msisdn &1 not found", pcCli)).
-   
+
+   IF lcFixedLineNumber > "" AND
+      MobSub.FixedNumber NE ? AND /* STC convergent to convergent */
+      MobSub.FixedNumber NE  lcFixedLineNumber THEN
+      RETURN appl_err(SUBST("Mobsub with Fixed Number &1 not found", lcFixedLineNumber)).
+
    FIND Customer WHERE
         Customer.Brand = gcBrand AND
         Customer.OrgId = lcID AND
@@ -1753,7 +1758,8 @@ IF pcFusionStruct > "" THEN DO:
    IF lcFixedLineNumber NE "" THEN DO:
       FIND FIRST lbMobSub WHERE
                  lbMobSub.Brand = gcBrand AND
-                 lbMobSub.FixedNumber = lcFixedLineNumber NO-LOCK NO-ERROR. 
+                 lbMobSub.FixedNumber = lcFixedLineNumber AND
+                 lbMobSub.Cli NE pcCLI NO-LOCK NO-ERROR. 
       IF AVAIL lbMobSub THEN
          RETURN appl_err("Subscription already exists with Fixed Number " + lcFixedLineNumber).
       lcError = fOngoingFixedOrders(lcFixedLineNumber,lcFixedLineNumberType).

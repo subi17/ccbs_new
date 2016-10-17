@@ -223,6 +223,7 @@ CASE FusionMessage.FixedStatus:
       ASSIGN OrderFusion.FixedInstallationTS = ldeLastDate.
              OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_FINALIZED}.
       
+      /* NOTE: do not change the memo text (checked in ordersender.i) */
       IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN
          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                           "Order",
@@ -231,11 +232,8 @@ CASE FusionMessage.FixedStatus:
                           "Order cancellation failed",
                           "Fixed Cancellation failed because installation was already in place").
          
-      IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE}
-         OR 
-        (Order.OrderType EQ {&ORDER_TYPE_STC} AND 
-         Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}) THEN DO:
-
+      IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR 
+         Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN DO:
          RUN orderinctrl.p(Order.OrderId, 0, TRUE).
       END.
       ELSE FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.

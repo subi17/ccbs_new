@@ -37,7 +37,7 @@
                                    "Order",
                                    STRING(Order.OrderID),
                                    0,
-                                   "FIXED LINE LED",
+                                   "FIXED LINE ACTIVATION FAILED",
                                    "Missing fixed line installation timestamp").
                   NEXT {1}.
                END.
@@ -68,6 +68,19 @@
                                    0,
                                    "FIXED LINE ACTIVATION FAILED",
                                    ocResult).
+                  NEXT {1}.
+               END.
+
+               IF (Order.OrderType EQ {&ORDER_TYPE_NEW} OR
+                   Order.OrderType EQ {&ORDER_TYPE_MNP}) AND
+                   CAN-FIND(FIRST Memo NO-LOCK WHERE
+                                  Memo.Brand = gcBrand AND
+                                  Memo.HostTable = "Order" AND
+                                  Memo.Keyvalue = STRING(Order.OrderID) AND
+                                  Memo.MemoText = "Fixed Cancellation failed because installation was already in place") THEN DO:
+                  fSetOrderStatus(Order.OrderID,
+                                  {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}).
+                  NEXT {1}.
                END.
 
                IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND
