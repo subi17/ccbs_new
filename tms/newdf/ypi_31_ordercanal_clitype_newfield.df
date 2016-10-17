@@ -1,0 +1,7 @@
+ADD FIELD "DumpAllowed" OF "CLIType" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "DumpAllowed"
+  COLUMN-LABEL "DumpAllowed"
+  HELP "Dump Allowed"
+  ORDER 330
