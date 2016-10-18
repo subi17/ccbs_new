@@ -496,7 +496,7 @@ FUNCTION fDelivSIM RETURNS LOG
                /* create FAtime (welcome gift) */
                RUN creafat.p(Order.CustNum,
                              Order.MsSeq,
-                             {&FATGROUP_SHIPPING_COST_GIFT},
+                             {&FATGROUP_WELCOME_GIFT},
                              "Order",
                              STRING(Order.OrderID),
                              ldeShippingCostAmt,

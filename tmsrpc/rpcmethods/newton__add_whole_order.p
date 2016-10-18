@@ -2038,9 +2038,9 @@ DO:
    DO:
       Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}.
       fCreateOrderAction(Order.Orderid,
-                         "SHIPPING_COST",
-                         {&ORDER_FEEMODEL_SHIPPING_COST},
-                         STRING(pdeShippingCostAmount)).
+                         "ShippingCost",
+                         STRING(pdeShippingCostAmount),
+                         "").
    END.
 END.
 
