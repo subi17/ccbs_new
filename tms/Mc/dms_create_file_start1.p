@@ -55,7 +55,8 @@ ASSIGN
        lcLogFile1    = lcLogDir + "tms_to_dms_1_" +
                       STRING(YEAR(ldaReadDate)) +
                       STRING(MONTH(ldaReadDate),"99") +
-                      STRING(DAY(ldaReadDate),"99") + ".log".
+                      STRING(DAY(ldaReadDate),"99") +
+                      REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log".
 
 DO TRANS:
 
