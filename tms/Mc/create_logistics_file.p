@@ -55,6 +55,7 @@ DEFINE VARIABLE lcTarOption        AS CHARACTER NO-UNDO.
 DEF VAR ldaCont15PromoFrom         AS DATE NO-UNDO. 
 DEF VAR ldaCont15PromoEnd          AS DATE NO-UNDO. 
 DEFINE VARIABLE ocResult           AS CHAR      NO-UNDO.
+DEFINE VARIABLE liTopUpWaitDays    AS INTEGER   NO-UNDO.
 
 DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
@@ -85,7 +86,9 @@ ASSIGN
                         REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log"
    lcBundleCLITypes   = fCParamC("BUNDLE_BASED_CLITYPES")
    ldaCont15PromoFrom = fCParamDa("CONT15PromoFromDate")
-   ldaCont15PromoEnd  = fCParamDa("CONT15PromoEndDate").
+   ldaCont15PromoEnd  = fCParamDa("CONT15PromoEndDate")
+   liTopUpWaitDays    = fCParamI("TopUpGiftWaitDays")
+   .
 
 DEFINE STREAM sICC.
 DEFINE STREAM sLog.
@@ -430,6 +433,8 @@ FUNCTION fDelivSIM RETURNS LOG
    /* Dextra will generate the Sales Invoice for Postpaid Terminal Orders */
    llDextraInvoice = fIsTerminalOrder(OUTPUT lcTerminalBillCode).
 
+   lcTaxZone = fRegionTaxZone(AgreeCustomer.Region).
+
    IF llDextraInvoice = FALSE OR
       Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}
    THEN DO:
@@ -469,16 +474,15 @@ FUNCTION fDelivSIM RETURNS LOG
          THEN DO:
             IF Order.PayType /* PrePaid */
             THEN DO:
-/*
                liRequest = fCreateTopUpRequest(Order.MSSeq,
                                                Order.CLI,
-                                               "RefillTRequest",
-                                               "COMP",
-                                               "RefillTRequest",
-                                               lcKey, /* Prefix */
-                                               "Cron script",
+                                               {&PREPAIDREQUEST_WELCOMEGIFT_REQUEST},
+                                               {&PREPAIDREQUEST_WELCOMEGIFT_SOURCE},
+                                               {&PREPAIDREQUEST_WELCOMEGIFT_REQUEST},
+                                               {&PREPAIDREQUEST_WELCOMEGIFT_PPREQPREFIX},
+                                               STRING(Order.OrderID),
                                                lcTaxZone,
-                                               0,
+                                               fMake2Dt(ldaOrderDate + liTopUpWaitDays, liTime),
                                                ldeShippingCostAmt * 100,
                                                0.0).
                IF liRequest = 0 THEN DO:
@@ -490,7 +494,6 @@ FUNCTION fDelivSIM RETURNS LOG
                                    "Failed to create topup request").
                   RETURN FALSE.
                END.
-  */
             END.
             ELSE DO: /* PostPaid */
                /* create FAtime (welcome gift) */
@@ -1028,7 +1031,6 @@ FUNCTION fDelivSIM RETURNS LOG
 
    /* SIM, payment on delivery, Terminal product row */
    IF llDextraInvoice THEN DO:
-      lcTaxZone = fRegionTaxZone(AgreeCustomer.Region).
       /* SIM only */
       FIND FIRST OrderAction WHERE
                  OrderAction.Brand    = gcBrand AND

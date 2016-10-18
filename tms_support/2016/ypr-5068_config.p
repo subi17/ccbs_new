@@ -1,3 +1,14 @@
+CREATE TMSParam.
+ASSIGN
+   TMSParam.Brand = "1"
+   TMSParam.ParamCode = "TopUpGiftWaitDays"
+   TMSParam.ParamGroup = "Logistics" 
+   TMSParam.ParamType = "I"
+   TMSParam.ParamName = "How many days of wait till the welcome gift topup"
+   TMSParam.Online = FALSE
+   TMSParam.IntVal = 14
+   .
+
 CREATE FeeModel.
 ASSIGN
    FeeModel.FeeModel = "SHIPCOST"

@@ -284,7 +284,31 @@ FUNCTION fCloseGiftFATime RETURNS LOGICAL
 
    RETURN TRUE.
 
-END.
+END FUNCTION.
+
+FUNCTION fCancelGiftTopUp RETURNS LOGICAL
+   (iiOrderID AS INTEGER):
+
+   DEFINE VARIABLE lcOrderID     AS CHARACTER NO-UNDO.
+
+   ASSIGN
+      lcOrderID     = STRING(iiOrderID)
+      .
+
+   DEF BUFFER PrepaidRequest  FOR PrepaidRequest.
+
+   FOR EACH PrepaidRequest EXCLUSIVE-LOCK USE-INDEX Reference WHERE
+            PrepaidRequest.Brand     = gcBrand       AND
+            PrepaidRequest.Reference = lcOrderID     AND
+            PrepaidRequest.Request   = {&PREPAIDREQUEST_WELCOMEGIFT_REQUEST} AND
+            PrePaidRequest.Source    = {&PREPAIDREQUEST_WELCOMEGIFT_SOURCE}  AND
+            PrepaidRequest.PPStatus  = 0:
+      PrePaidRequest.PPStatus = 4. /* cancel */
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.
 
 FUNCTION fCashInvoiceCreditNote RETURNS CHARACTER
 (  BUFFER pbOrder FOR Order,
@@ -311,8 +335,9 @@ FUNCTION fCashInvoiceCreditNote RETURNS CHARACTER
       IF pbOrder.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}
       THEN DO:
 
-         IF pbOrder.PayType = FALSE /* PostPaid */
-         THEN fCloseGiftFATime(pbOrder.OrderID).
+         IF pbOrder.PayType
+         THEN fCancelGiftTopUp(pbOrder.OrderID). /* PrePaid  */
+         ELSE fCloseGiftFATime(pbOrder.OrderID). /* PostPaid */
 
          IF fOrderPickingStarted(pbOrder.OrderId)
          THEN DO:
