@@ -51,12 +51,12 @@ create_feemodel("CONTFH55_300MF",46,"Convergent FIBER 300MB monthly fee",45.45,"
 create_feemodel("CONTFH65_300MF",46,"Convergent FIBER 300MB monthly fee",53.72,"MF",1,"CONTRATOFIXED",FALSE,1).
 */
 
-create_feemodel("CONTDSLMF",46,"Convergent ADSL monthly fee",28.93,"MF",1,"CONTRATOFIXED",FALSE,1).
-create_feemodel("CONTFH50MF",46,"Convergent FIBER 50MB monthly fee",28.93,"MF",1,"CONTRATOFIXED",FALSE,1).
-create_feemodel("CONTFH300MF",46,"Convergent FIBER 300MB monthly fee",37.19,"MF",1,"CONTRATOFIXED",FALSE,1).
+create_feemodel("CONTDSLMF",0,"Convergent ADSL monthly fee",28.93,"MF",1,"CONTRATOFIXED",FALSE,1).
+create_feemodel("CONTFH50MF",0,"Convergent FIBER 50MB monthly fee",28.93,"MF",1,"CONTRATOFIXED",FALSE,1).
+create_feemodel("CONTFH300MF",0,"Convergent FIBER 300MB monthly fee",37.19,"MF",1,"CONTRATOFIXED",FALSE,1).
 
-create_feemodel("CONTS2GBMF",46,"Convergent mobile monthly fee",8.26,"MF",1,"CONTRATOFIXED",FALSE,1).
-create_feemodel("CONTS10GBMF",46,"Convergent mobile monthly fee",16.53,"MF",1,"CONTRATOFIXED",FALSE,1).
+create_feemodel("CONTS2GBMF",0,"Convergent mobile monthly fee",8.26,"MF",1,"CONTRATOFIXED",FALSE,1).
+create_feemodel("CONTS10GBMF",0,"Convergent mobile monthly fee",16.53,"MF",1,"CONTRATOFIXED",FALSE,1).
 
 create_feemodel("FTERMPERIOD",0,"Fixed line contract termination",100.0,"PF",1,"COMMON",TRUE,0).
 
