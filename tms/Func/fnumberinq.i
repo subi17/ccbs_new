@@ -4,6 +4,11 @@
    fctserval.i, fsubser.i, fmakemsreq.i needed
 */
 
+&IF "{&FNUMBERING_I}" NE "YES"
+&THEN
+
+&GLOBAL-DEFINE FNUMBERING_I YES
+
 DEF VAR lcNumberInq AS CHAR NO-UNDO INIT "NUMBERINQ".
 DEF VAR lcSecretPar AS CHAR NO-UNDO INIT "AES".
 DEF VAR lcSerDA     AS CHAR NO-UNDO.
@@ -199,4 +204,4 @@ FUNCTION fNumberInqAttrChanged RETURNS LOGICAL
 
 END FUNCTION.
 
-
+&ENDIF
