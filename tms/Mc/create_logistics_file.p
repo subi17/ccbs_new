@@ -29,6 +29,7 @@ gcBrand = "1".
 {mnp.i}
 {email.i}
 {Mc/shipping_cost.i}
+{Func/ftopup.i}
 
 DEFINE VARIABLE lcLogFile          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName         AS CHARACTER NO-UNDO.
@@ -377,6 +378,7 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE lcShippingCostBillCode    AS CHARACTER NO-UNDO.
    DEFINE VARIABLE ldeShippingCostAmt        AS DECIMAL   NO-UNDO.
    DEFINE VARIABLE lcShippingCostExtInvID    AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liRequest                 AS INTEGER   NO-UNDO.
 
    DEFINE BUFFER bufRow   FOR InvRow.
    DEFINE BUFFER bufItem  FOR BillItem.
@@ -837,7 +839,7 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.DiscountTotal = (IF AVAIL Invoice THEN STRING(Invoice.DirDisc) ELSE "0")
       ttOneDelivery.ShipCostInvID = lcShippingCostExtInvID
       ttOneDelivery.ShipCostBC    = lcShippingCostBillCode
-      ttOneDelivery.ShipCostAmt   = ldeShippingCostAmt
+      ttOneDelivery.ShipCostAmt   = STRING(ldeShippingCostAmt)
       .
       
    /* YDR-896: Add admin id in case of CIF order customer */
