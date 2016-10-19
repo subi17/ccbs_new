@@ -1191,7 +1191,8 @@ gcOrderStructFields = "billing_data," +
                       "tarj7_promo," +
                       "terminal_financing_bank," +
                       "keep_installment," +
-                      "multiorder".
+                      "multiorder," +
+                      "shipping_cost_amount".
 
 gcCustomerStructFields = "birthday," +
                          "city!," +

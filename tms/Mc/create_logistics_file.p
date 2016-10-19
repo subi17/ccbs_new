@@ -155,7 +155,8 @@ DEFINE TEMP-TABLE ttOneDelivery NO-UNDO
    /* 50 */
    FIELD InvoiceTotal  AS CHARACTER FORMAT "X(7)"
    FIELD DiscountTotal AS CHARACTER FORMAT "X(7)"
-   FIELD ShipCostBC    AS CHARACTER FORMAT "X(10)"
+   FIELD ShipCostInvID AS CHARACTER FORMAT "X(12)"
+   FIELD ShipCostBC    AS CHARACTER FORMAT "X(12)"
    FIELD ShipCostAmt   AS CHARACTER FORMAT "X(7)"
    .
 
@@ -375,6 +376,7 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE lcTermDiscItem            AS CHAR NO-UNDO.
    DEFINE VARIABLE lcShippingCostBillCode    AS CHARACTER NO-UNDO.
    DEFINE VARIABLE ldeShippingCostAmt        AS DECIMAL   NO-UNDO.
+   DEFINE VARIABLE lcShippingCostExtInvID    AS CHARACTER NO-UNDO.
 
    DEFINE BUFFER bufRow   FOR InvRow.
    DEFINE BUFFER bufItem  FOR BillItem.
@@ -458,13 +460,10 @@ FUNCTION fDelivSIM RETURNS LOG
          END.
       END. /* IF Order.InvNum = 0 OR Order.InvNum = ? THEN DO: */
 
-      IF NOT llDextraInvoice
-      THEN DO:
-         FIND FIRST Invoice WHERE
-                 Invoice.InvNum = Order.InvNum
-         NO-LOCK NO-ERROR.
-         IF NOT AVAILABLE Invoice THEN RETURN FALSE.
-      END.
+      FIND FIRST Invoice WHERE
+              Invoice.InvNum = Order.InvNum
+      NO-LOCK NO-ERROR.
+      IF NOT AVAILABLE Invoice THEN RETURN FALSE.
 
       IF Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}
       THEN DO:
@@ -523,23 +522,24 @@ FUNCTION fDelivSIM RETURNS LOG
          END.
 
          IF llDextraInvoice
-         THEN
-         FOR
-            FIRST FMItem NO-LOCK WHERE
-               FMItem.Brand    = gcBrand AND
-               FMItem.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}:
-            lcShippingCostBillCode = FMItem.BillCode.
+         THEN DO:
+            FOR
+               FIRST FMItem NO-LOCK WHERE
+                  FMItem.Brand    = gcBrand AND
+                  FMItem.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}:
+               lcShippingCostBillCode = FMItem.BillCode.
+            END.
+            lcShippingCostExtInvID = Invoice.ExtInvId.
          END.
-
-         ELSE ASSIGN
-                 ldeShippingCostAmt = 0
-                 lcShippingCostBillCode = ""
-                 .
+         ELSE ldeShippingCostAmt = 0.
       END.
    END.
 
    IF llDextraInvoice
    THEN DO:
+
+      RELEASE Invoice.
+
       /* Dextra Terminal Price */
       FIND FIRST TerminalConf WHERE
                  TerminalConf.TerminalCode = lcTerminalBillCode AND
@@ -835,6 +835,9 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.TaxTerminal   = "0"
       ttOneDelivery.InvoiceTotal  = (IF AVAIL Invoice THEN STRING(Invoice.CurrAmt) ELSE "0")
       ttOneDelivery.DiscountTotal = (IF AVAIL Invoice THEN STRING(Invoice.DirDisc) ELSE "0")
+      ttOneDelivery.ShipCostInvID = lcShippingCostExtInvID
+      ttOneDelivery.ShipCostBC    = lcShippingCostBillCode
+      ttOneDelivery.ShipCostAmt   = ldeShippingCostAmt
       .
       
    /* YDR-896: Add admin id in case of CIF order customer */
