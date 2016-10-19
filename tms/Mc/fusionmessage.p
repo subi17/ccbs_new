@@ -84,7 +84,7 @@ form
     SKIP
     "Source............:" ttDocs.Source FORMAT "X(45)" 
     SKIP
-    "Additional Info...:" ttDocs.AdditionalInfo FORMAT "X(45)" 
+    "Additional Info...:" ttDocs.AdditionalInfo FORMAT "X(57)" 
     SKIP(2)
 
     WITH OVERLAY ROW 1 WIDTH 80 centered

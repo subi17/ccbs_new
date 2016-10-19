@@ -26,31 +26,25 @@ FORM
     "Fixed OrderId.....:" AT 40 OrderFusion.FixedOrderId FORMAT "X(18)"
     SKIP
     "Fixed Number......:" OrderFusion.FixedNumber
-    "Fixed Nbr Typea..." AT 40 OrderFusion.FixedNumberType FORMAT "X(18)"
+    "Fixed Number Type.:" AT 40 OrderFusion.FixedNumberType FORMAT "X(18)"
     SKIP
-    "Curr Oper Code....:" OrderFusion.FixedCurrOperCode
-    "Current Operator .:" AT 40 OrderFusion.FixedCurrOper FORMAT "X(18)"
+    "Current Operator..:" OrderFusion.FixedCurrOper
+    "Operator Code.....:" AT 40 OrderFusion.FixedCurrOperCode FORMAT "X(18)"
     SKIP
     "Fixed Status......:" OrderFusion.FixedStatus
-    "Fixed Sub Status .:" AT 40 OrderFusion.FixedSubStatus FORMAT "X(18)"
-    SKIP
-    "Ext Ticket........:" OrderFusion.ExternalTicket
-    "Fixed ContractID .:" AT 40 OrderFusion.FixedContractId FORMAT "X(18)"
-    SKIP
-    "Salesman..........:" OrderFusion.Salesman
-    "Phone Book........:" AT 40 OrderFusion.PhoneBook FORMAT "X(18)"
-    SKIP
-    "Product...........:" OrderFusion.Product
-    "Serial Number.....:" AT 40 OrderFusion.SerialNumber FORMAT "X(18)"
-    SKIP
-    "Customer Type.....:" OrderFusion.CustomerType
     "Fusion Status.....:" AT 40 OrderFusion.FusionStatus FORMAT "X(18)"
     SKIP
-    "Order Date........:" OrderFusion.OrderDate
-    "Updated...........:" AT 40 OrderFusion.UpdateTS /*FORMAT "X(20)"*/
+    "Product...........:" OrderFusion.Product
     SKIP
-    "Brand.............:" OrderFusion.Brand
-    "MNP Time..........:" AT 40 OrderFusion.FixedMNPTime /*FORMAT "X(20)"*/
+    "Serial Number.....:" OrderFusion.SerialNumber FORMAT "X(18)"
+    SKIP
+    "Customer Type.....:" OrderFusion.CustomerType
+    SKIP
+    "Order Date........:" OrderFusion.OrderDate
+    SKIP
+    "Updated...........:" OrderFusion.UpdateTS /*FORMAT "X(20)"*/
+    SKIP
+    "MNP Time..........:" OrderFusion.FixedMNPTime /*FORMAT "X(20)"*/
     SKIP(7)
 
 
@@ -71,18 +65,12 @@ DISP OrderFusion.OrderID
      OrderFusion.FixedCurrOperCode
      OrderFusion.FixedCurrOper
      OrderFusion.FixedStatus
-     OrderFusion.FixedSubStatus
-     OrderFusion.ExternalTicket
-     OrderFusion.FixedContractId
-     OrderFusion.Salesman
-     OrderFusion.PhoneBook
+     OrderFusion.FusionStatus
      OrderFusion.Product
      OrderFusion.SerialNumber
      OrderFusion.CustomerType
-     OrderFusion.FusionStatus
      OrderFusion.OrderDate
      OrderFusion.UpdateTS
-     OrderFusion.Brand
      OrderFusion.FixedMNPTime WITH FRAME fData.
 
 LOOP:
