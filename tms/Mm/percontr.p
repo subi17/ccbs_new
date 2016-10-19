@@ -41,6 +41,7 @@
 {Func/ordercancel.i}
 {Func/fprepaidfee.i}
 {Func/fcreditreq.i}
+{Func/fsendsms.i}
 
 FUNCTION fUpdateServicelCounterMSID RETURNS LOGICAL
    ( iiCustNum AS INTEGER,

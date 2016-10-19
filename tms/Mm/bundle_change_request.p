@@ -13,7 +13,7 @@
 {Func/fmakemsreq.i}
 {Func/service.i}
 {Func/msreqfunc.i}
-{Mm/fbundle.i}
+{Mm/active_bundle.i}
 {Rate/rerate_request.i}
 {Func/fsubstermreq.i}
 {Func/fsendsms.i}

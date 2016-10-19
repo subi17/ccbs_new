@@ -3,6 +3,12 @@
    changes:         04.02.05/aam fSubSerValue, fCSSParamValue, fCallSpecDuring
                     24.08.05/aam ilSolog to fUpdateSubser(&Para)
 */
+&IF "{&FSUBSER_I}" NE "YES"
+&THEN
+
+
+&GLOBAL-DEFINE FSUBSER_I YES
+
 {Syst/commali.i}
 
 DEF BUFFER bSubCur     FOR SubSer.
@@ -288,8 +294,4 @@ FUNCTION fCallSpecDuring RETURNS INTEGER
    RETURN fSubSerValue(iiMsSeq,"CALLSPEC",idtDate).
 END.
 
-
-
- 
-
-
+&ENDIF

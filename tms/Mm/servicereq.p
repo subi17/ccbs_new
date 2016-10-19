@@ -12,14 +12,11 @@
 {Func/fmakemsreq.i}
 {Func/ffeecont.i}
 {Func/fsubser.i}
-{Func/service.i}
 {Func/fctserval.i}
-{Func/fctchange.i}
 {Func/servcomfee.i}
 {Mm/barrgrp.i}
 {Func/fnumberinq.i}
 {Func/msopenbatch.i}
-{Func/msisdn.i}
 {Func/remfees.i}
 {Func/barrfunc.i}
 
@@ -1066,3 +1063,7 @@ PROCEDURE pReRate:
    END.
  
 END PROCEDURE.
+
+FINALLY:
+   EMPTY TEMP-TABLE ttBarring.
+END FINALLY.

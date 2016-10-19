@@ -299,10 +299,8 @@ IF AVAIL FMItem THEN DO:
                 " ",  /* BIName */
                 BegPer,
                 CoDate,    /* TO FixedFee.BegDate */
-                FALSE,
                 ?,
                 lcContract,
-                TRUE,
                 katun,
                 "",
                 0,

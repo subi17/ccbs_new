@@ -989,12 +989,12 @@ PROCEDURE pSubInvoice2XML:
    lcFooterNotice = "".
    IF llPremiumNumberText THEN DO:
       IF lcFooterNotice NE "" THEN
-         lcFooterNotice = lcFooterNotice + CHR(10) + CHR(13).
+         lcFooterNotice = lcFooterNotice + CHR(10) + CHR(10).
       lcFooterNotice = lcFooterNotice +  fHeadTxt(573,liLanguage).
    END.
    IF llGBText THEN DO:
        IF lcFooterNotice NE "" THEN
-          lcFooterNotice = lcFooterNotice + CHR(10) + CHR(13).
+          lcFooterNotice = lcFooterNotice + CHR(10) + CHR(10).
       lcFooterNotice = lcFooterNotice + fHeadTxt(574,liLanguage).
    END.
    lhXML:WRITE-DATA-ELEMENT("FooterNotice", lcFooterNotice).

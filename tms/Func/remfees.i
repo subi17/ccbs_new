@@ -8,6 +8,10 @@
                      
 */
 
+&IF "{&REMFEES_I}" NE "YES" 
+&THEN
+&GLOBAL-DEFINE REMFEES_I YES
+
 {Syst/commali.i}
 {Syst/eventval.i}
 {Func/fixedfee.i}
@@ -262,3 +266,4 @@ PROCEDURE pCreditSingleFee:
    
 END PROCEDURE.
 
+&ENDIF

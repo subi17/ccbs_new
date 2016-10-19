@@ -18,7 +18,7 @@
 {Func/ftaxdata.i}
 {Syst/tmsconst.i}
 {Mc/offer.i}
-{Func/terminal_financing.i}
+{Func/financed_terminal.i}
 {Mnp/mnp.i}
 
 FUNCTION fGetOrderDeliveryDateEstimation RETURNS DATE

@@ -1,4 +1,4 @@
-~/* ----------------------------------------------------------------------
+/* ----------------------------------------------------------------------
  MODULE .......: SOG-ST.P
   TASK .........: SET selected parameters into HLR ( EXCEPT CFNRY ...
                   because CFNRY cannot be set alone, use cfnrych.p instead )
@@ -23,13 +23,11 @@
 {Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
-{Func/sog.i}
 {Mm/barrgrp.i}
 {Gwy/provision.i}
-{Func/fmakemsreq.i}
-{Func/service.i}
-{Mm/fbundle.i}
-{Func/barrfunc.i}
+{Func/sharperconfid.i}
+{Mm/active_bundle.i}
+{Mm/ongoing_bundle.i}
 
 DEF INPUT  PARAMETER  iiMsRequest LIKE MSRequest.msrequest NO-UNDO.
 DEF INPUT  PARAMETER  batch       AS LOG             NO-UNDO. 
@@ -544,3 +542,8 @@ BY ttSolog.ActStamp:
       VIEW-AS ALERT-BOX TITLE "Service Order Request".  
 
 END.
+
+FINALLY:
+   EMPTY TEMP-TABLE ttSolog.
+   EMPTY TEMP-TABLE ttBarring.
+END FINALLY.

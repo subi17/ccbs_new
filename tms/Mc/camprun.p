@@ -189,10 +189,8 @@ FIRST MSOwner NO-LOCK USE-INDEX MSSeq WHERE
                                           "",
                                           liPer,
                                           ldtBegDate,
-                                          FALSE,            /* interact */
                                           ?,         /* price from feemodel */
                                           "",               /* contract */
-                                          TRUE,            /* active */
                                           katun,
                                           "",
                                           0,

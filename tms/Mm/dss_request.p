@@ -12,8 +12,9 @@
 {Func/timestamp.i}
 {Func/fsendsms.i}
 {Func/fcpfat.i}
-{Mm/fbundle.i}
+{Mm/active_bundle.i}
 {Func/service.i}
+
 
 DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
 
