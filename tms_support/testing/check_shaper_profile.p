@@ -5,7 +5,7 @@ assign gcbrand = "1"
 {Func/date.i}
 {Func/timestamp.i}
 {Func/fixedfee.i}
-{Mm/fbundle.i}
+{Mm/active_bundle.i}
 
 DEF VAR lcbundle        AS CHAR NO-UNDO.
 DEF VAR lcconfbundle    AS CHAR NO-UNDO.

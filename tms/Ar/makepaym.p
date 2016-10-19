@@ -80,7 +80,8 @@ RUN Ar/createpaym.p (PaidInv.CustNum,
 IF oiVoucher = 0 THEN 
    RETURN "ERROR:Payment creation failed. " + RETURN-VALUE.
 
-IF llDoEvent THEN DO:
+IF llDoEvent AND 
+   icSource  NE "DD" THEN DO:
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
    lhInvoice = BUFFER PaidInv:HANDLE.
    RUN StarEventInitialize(lhInvoice).
@@ -97,7 +98,8 @@ fInvoicePaymentUpdate(BUFFER PaidInv,
                       llCustBal,
                       ilBehav).
 
-IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhInvoice). 
+IF llDoEvent AND icSource  NE "DD" THEN 
+   RUN StarEventMakeModifyEvent(lhInvoice). 
 
 fCleanEventObjects().
 

@@ -363,9 +363,11 @@ FUNCTION fMailNotify RETURN CHARACTER
    DEF VAR lcAddrConfDirNotify     AS CHAR NO-UNDO.
    DEF VAR lcLatestEmailFileNotify AS CHAR NO-UNDO.
    DEF VAR lcMailAddr              AS CHAR NO-UNDO.
+   DEF VAR lcMailFrom              AS CHAR NO-UNDO.
    DEF VAR i                       AS INT  NO-UNDO.
 
-   ASSIGN lcAddrConfDirNotify = icAddrConfDir + "emailinvoicenotify.email".
+   ASSIGN lcAddrConfDirNotify = icAddrConfDir + "emailinvoicenotify.email"
+          lcMailFrom          = xMailFrom.
 
    GetRecipients(lcAddrConfDirNotify).
    
@@ -390,5 +392,6 @@ FUNCTION fMailNotify RETURN CHARACTER
       fTransDir(lcLatestEmailFileNotify,
                 ".html",
                 icTransDir).
-   ASSIGN xMailSubj = icMailSubj.
+   ASSIGN xMailSubj = icMailSubj
+          xMailFrom = lcMailFrom.
 END FUNCTION.

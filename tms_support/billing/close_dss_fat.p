@@ -13,7 +13,7 @@ katun   = "Qvantel".
 {Func/cparam2.i}
 {Func/timestamp.i}
 {Func/fcpfat.i}
-{Mm/fbundle.i}
+{Mm/active_bundle.i}
 
 DEF VAR ldaPromoFromDate         AS DATE NO-UNDO.
 DEF VAR ldaPromoToDate           AS DATE NO-UNDO.

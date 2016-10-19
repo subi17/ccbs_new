@@ -10,6 +10,8 @@
 {Syst/commpaa.i}
 gcBrand = "1".
 {Syst/tmsconst.i}
+{Func/upsellcount.i}
+{Mm/active_bundle.i}
 {Mm/fbundle.i}
 
 DEF VAR lcResultArray       AS CHAR NO-UNDO. 
@@ -51,7 +53,8 @@ ASSIGN ldeCurrTS = fMakeTS()
        lcAllowedBONOContracts = fCParamC("ALLOWED_BONO_CONTRACTS")
        lcBONOContracts        = fCParamC("BONO_CONTRACTS")
        lcIPLContracts         = fCParamC("IPL_CONTRACTS")
-       lcAllowedDSS2SubsType  = fCParamC("DSS2_SUBS_TYPE").
+       lcAllowedDSS2SubsType  = fCParamC("DSS2_SUBS_TYPE").{Syst/commali.i}
+{Syst/tmsconst.i}
 
 IF NOT MobSub.PayType THEN
    lcDSSBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,

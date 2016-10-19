@@ -29,7 +29,7 @@ gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/timestamp.i}
 {Func/cparam2.i}
-{Mm/fbundle.i}
+{Mm/active_bundle.i}
 {Func/upsellbundle.i}
 {Func/tarj6.i}
 {Func/istc.i}

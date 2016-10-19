@@ -152,10 +152,8 @@ PROCEDURE pCollectCDR:
    DEF VAR lhFind           AS HANDLE NO-UNDO.
    DEF VAR lcFind           AS CHAR   NO-UNDO.
    DEF VAR lcCDRdb          AS CHAR   NO-UNDO.
-   DEF VAR lcDelim          AS CHAR   NO-UNDO.
+   DEF VAR lcDelim          AS CHAR   NO-UNDO INITIAL ";". 
    DEF VAR lcKeyValue       AS CHAR   NO-UNDO. 
-
-   ASSIGN lcDelim = CHR(255).
 
    IF icDB = "mcdr" THEN 
       lcCDRdb = "mcdr.MobCDR".

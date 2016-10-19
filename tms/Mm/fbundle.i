@@ -19,6 +19,7 @@
 {Func/xmlfunction.i}
 {Func/date.i}
 {Func/fdss.i}
+{Mm/bundle_type.i}
 
 FUNCTION fOngoingContractAct RETURNS LOG (INPUT iiMsSeq    AS INT,
                                           INPUT icBundleId AS CHAR):
@@ -103,29 +104,6 @@ FUNCTION fIsBundleAllowed RETURNS LOGIC
    END.
    
    RETURN TRUE.
-
-END FUNCTION.
-
-FUNCTION fGetBundles RETURNS CHAR (icBundleType AS CHAR):
-
-   DEF VAR lcContracts      AS CHAR NO-UNDO.
-
-   CASE icBundleType:
-      WHEN "BONO"         THEN lcContracts = fCParamC("BONO_CONTRACTS").
-      WHEN "CONTRD"       THEN lcContracts = fCParamC("IPL_CONTRACTS").
-      WHEN "CONTD"        THEN lcContracts = fCParamC("CONTD_CONTRACTS").
-      WHEN "CONTF"        THEN lcContracts = fCParamC("FLAT_CONTRACTS").
-      WHEN "CONTS"        THEN lcContracts = fCParamC("CONTS_CONTRACTS").
-      WHEN "CONTSF"       THEN lcContracts = fCParamC("CONTSF_CONTRACTS").
-      WHEN "DSS"          THEN lcContracts = {&DSS_BUNDLES}.
-      WHEN "BONO_VOIP"    THEN lcContracts = "BONO_VOIP".
-      WHEN "HSPA_ROAM_EU" THEN lcContracts = "HSPA_ROAM_EU".
-      WHEN "VOICE100"       THEN lcContracts = "VOICE100". 
-      WHEN "FREE100MINUTES" THEN lcContracts = "FREE100MINUTES".
-      OTHERWISE RETURN "".
-   END CASE. /* CASE icBundleType: */
-
-   RETURN lcContracts.
 
 END FUNCTION.
 
@@ -296,44 +274,6 @@ FUNCTION fGetCurrentTariff RETURNS CHAR
    RETURN "".
 END.
 
-FUNCTION fGetActiveSpecificBundle RETURNS CHAR
-   (iiMsSeq      AS INT,
-    idActiveTime AS DEC,
-    icBundleType AS CHAR):
-
-   DEF BUFFER bMServiceLimit FOR MServiceLimit.
-   DEF BUFFER bServiceLimit  FOR ServiceLimit.
-
-   DEF VAR lcContracts       AS CHAR NO-UNDO.
-
-   lcContracts = fGetBundles(icBundleType).
-   IF lcContracts = "" THEN RETURN "".
-
-   FIND_BUNDLES:
-   FOR EACH bMServiceLimit NO-LOCK WHERE
-            bMServiceLimit.MsSeq   = iiMsSeq AND
-            bMServiceLimit.EndTS  >= idActiveTime, 
-      FIRST bServiceLimit NO-LOCK USE-INDEX SLSeq WHERE
-            bServiceLimit.SLSeq = bMServiceLimit.SLSeq AND
-     LOOKUP(bServiceLimit.GroupCode,lcContracts) > 0:
-
-      /* pending termination request */
-      IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                        MsRequest.MsSeq = iiMsSeq AND
-                        MsRequest.ReqType = {&REQTYPE_CONTRACT_TERMINATION} AND
-                        MsRequest.ReqCParam3 = bServiceLimit.GroupCode AND
-                        LOOKUP(STRING(MsRequest.ReqStatus),
-                                {&REQ_INACTIVE_STATUSES}) = 0 AND
-                        MsRequest.ActStamp <= idActiveTime) THEN
-         NEXT FIND_BUNDLES.       
-
-      RETURN bServiceLimit.GroupCode.
-   END.
-
-   RETURN "".
-    
-END FUNCTION.
-
 FUNCTION fGetCONTFFraudCounterFee RETURNS DEC 
    (iiMsSeq      AS INT,
     idActiveTime AS DEC):
@@ -432,15 +372,6 @@ FUNCTION fGetCurrentBundle RETURNS CHAR
                            fMakeTS()).
 END FUNCTION.
 
-FUNCTION fGetCurrentSpecificBundle RETURNS CHAR
-   (iiMsSeq AS INT,
-    icContractType AS CHAR):
-
-   RETURN fGetActiveSpecificBundle(iiMsSeq,
-                                   fMakeTS(),
-                                   icContractType).
-END FUNCTION.
-
 FUNCTION fIsBonoVoIPAllowed RETURNS LOGICAL
    (iiMsSeq AS INT,
     ideTS AS DEC):
@@ -518,63 +449,6 @@ FUNCTION fIsVoIPAllowed RETURNS LOGICAL
    RETURN FALSE.
 
 END FUNCTION.
-
-
-FUNCTION fGetActOngoingDataBundles RETURNS CHAR
-   (iiMsSeq     AS INT,
-    idActStamp  AS DEC):
-
-   DEF VAR lcActiveBundles   AS CHAR NO-UNDO.
-
-   DEF VAR lcPostpaidDataBundles  AS CHAR NO-UNDO.
-   DEF VAR lcPrePaidDataBundles   AS CHAR NO-UNDO.
-
-   DEF BUFFER bMsRequest     FOR MsRequest.
-
-   IF idActStamp = 0 OR idActStamp = ? THEN
-      idActStamp = fMakeTS().
-
-   ASSIGN lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS")
-          lcPrePaidDataBundles  = fCParamC("PREPAID_DATA_CONTRACTS").
-
-   /* Check active bundle */
-   FOR EACH MServiceLimit NO-LOCK WHERE
-            MServiceLimit.MSSeq = iiMsSeq AND
-            MServiceLimit.EndTS >= idActStamp,
-      FIRST ServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
-            ServiceLimit.SlSeq = MServiceLimit.SlSeq AND
-            LOOKUP(ServiceLimit.GroupCode,
-                   lcPostpaidDataBundles + "," + lcPrePaidDataBundles) > 0 AND
-            ServiceLimit.GroupCode <> "TARJD1":
-      lcActiveBundles = lcActiveBundles +
-                        (IF lcActiveBundles > "" THEN "," ELSE "") +
-                         ServiceLimit.GroupCode.
-   END. /* FOR EACH MServiceLimit NO-LOCK WHERE */
-
-   lcActiveBundles = TRIM(lcActiveBundles,",").
-
-   IF lcActiveBundles > "" THEN RETURN lcActiveBundles.
-
-   /* Check any ongoing active bundle request */
-   FOR EACH bMsRequest NO-LOCK WHERE
-            bMsRequest.MsSeq = iiMsSeq AND
-            bMsRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} AND
-            LOOKUP(STRING(bMsRequest.ReqStatus),
-                   {&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
-            LOOKUP(bMsRequest.ReqCParam3,
-                   lcPostpaidDataBundles + "," + lcPrePaidDataBundles) > 0 AND
-                   bMsRequest.ReqCParam3 <> "TARJD1":
-      lcActiveBundles = lcActiveBundles +
-                        (IF lcActiveBundles > "" THEN "," ELSE "") +
-                         bMsRequest.ReqCParam3.
-   END. /* FOR EACH bMsRequest WHERE */
-
-   lcActiveBundles = TRIM(lcActiveBundles,",").
-
-   RETURN lcActiveBundles.
-
-END FUNCTION.
-
 
 FUNCTION fGetDataBundleInOrderAction RETURNS CHAR
    (iiOrderId    AS INT,

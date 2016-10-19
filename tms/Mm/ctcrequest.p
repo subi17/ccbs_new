@@ -15,6 +15,7 @@
 {Syst/tmsconst.i}
 {Func/fmakesms.i}
 {Mm/fbundle.i}
+{Mm/active_bundle.i}
 {Func/main_add_lines.i}
 
 DEFINE INPUT PARAMETER iiReqId AS INTEGER   NO-UNDO.

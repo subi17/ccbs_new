@@ -9,6 +9,7 @@
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Mm/fbundle.i}
+{Mm/active_bundle.i}
 
 DEF TEMP-TABLE ttAction NO-UNDO
    FIELD ActionType AS CHAR
