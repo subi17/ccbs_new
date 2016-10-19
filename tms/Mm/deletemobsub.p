@@ -1222,5 +1222,6 @@ PROCEDURE pChangeDelType:
                    Invoice.DeliveryState = 0.                   
       END.
       ASSIGN Customer.DelType = {&INV_DEL_TYPE_PAPER}.
-   END.   
+   END.
+
 END PROCEDURE.
