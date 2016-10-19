@@ -246,9 +246,22 @@ ELSE IF Order.Ordertype < 2 AND
       OrderCustomer.CustId) THEN 
       lcNewStatus = {&ORDER_STATUS_PENDING_MAIN_LINE}.
 END.
-ELSE IF Order.Ordertype = {&ORDER_TYPE_MNP} AND
+/* special flow: 80 => 1/3 (fixed line creation) => 80 => 79 */
+ELSE IF lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
+   LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND
+   Order.ICC EQ "" AND
+   NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                      MsRequest.MsSeq = Order.MsSeq AND
+                      MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE}) THEN DO:
+   lcNewStatus = {&ORDER_STATUS_PENDING_MOBILE_LINE}.
+END.
+ELSE IF Order.OrderType = {&ORDER_TYPE_MNP} AND
    lcOldStatus NE {&ORDER_STATUS_PENDING_FIXED_LINE} AND
-   lcOldStatus NE {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
+   /* special flow: 80 => 1/3 (fixed line creation) => 80 => 22 */
+   NOT (lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
+      NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                         MsRequest.MsSeq = Order.MsSeq AND
+                         MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE})) AND
    lcOldStatus NE {&ORDER_STATUS_MNP_ON_HOLD} AND
    lcOldStatus NE {&ORDER_STATUS_SIM_ONLY_MNP_IN} AND  /* Prevents state change from 99 to 22 again */
    Order.PortingDate <> ? THEN
