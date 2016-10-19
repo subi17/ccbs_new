@@ -16,7 +16,7 @@ gcBrand = "1".
 {timestamp.i}
 {eventlog.i}
 {fmakemsreq.i}
-{fbundle.i}
+{upsellbundle.i}
 {mdub.i}
 {service.i}
 {fdss.i}

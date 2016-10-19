@@ -3,6 +3,11 @@
    mobsub should be in buffer
 */
 
+&IF "{&SERVCOMFEE_I}" NE "YES"
+&THEN
+
+&GLOBAL-DEFINE SERVCOMFEE_I YES
+
 {setfees.i}
 
 /* fee for opening an service */
@@ -22,10 +27,8 @@ FUNCTION fServiceOpenFee RETURNS LOGICAL
                  icMemo,             /* memo     */
                  YEAR(idtBegDate) * 100 + MONTH(idtBegDate),
                  idtBegDate,
-                 FALSE,            /* interact */
                  ?,                /* price from feemodel */
                  icContract,       /* contract */
-                 TRUE,            /* active */
                  icUserCode,
                  icFeeMemo,
                  0,
@@ -51,10 +54,8 @@ FUNCTION fServiceChangeFee RETURNS LOGICAL
                  icMemo,             /* memo     */
                  YEAR(idtDate) * 100 + MONTH(idtDate),
                  idtDate,
-                 FALSE,            /* interact */
                  ?,                /* price from feemodel */
                  icContract,       /* contract */
-                 TRUE,            /* active */
                  icUserCode,
                  icFeeMemo,
                  0,
@@ -63,4 +64,4 @@ FUNCTION fServiceChangeFee RETURNS LOGICAL
 
 END FUNCTION.
 
-
+&ENDIF
