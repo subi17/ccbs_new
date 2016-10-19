@@ -47,8 +47,8 @@ DEF VAR i            AS INT                    NO-UNDO.
 DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
 
 FORM
-   ttDocs.MessageType   FORMAT "X(16)"  COLUMN-LABEL "MSG Type"
-   ttDocs.MessageStatus FORMAT "X(8)"   COLUMN-LABEL "Status"
+   ttDocs.MessageType   FORMAT "X(22)"  COLUMN-LABEL "MSG Type"
+   ttDocs.MessageStatus FORMAT "X(10)"   COLUMN-LABEL "Status"
    ttDocs.CreatedTS     FORMAT "99999999.99999"  COLUMN-LABEL "Created TS"
    ttDocs.FixedStatusTS FORMAT "99999999.99999"  COLUMN-LABEL "Fixed TS"
    ttDocs.HandledTS     FORMAT "99999999.99999"  COLUMN-LABEL "Handled TS"
@@ -58,7 +58,7 @@ WITH ROW 1 CENTERED OVERLAY 15  DOWN
 form
     "Order ID..........:" ttDocs.OrderId 
     SKIP
-    "Order Type........:" ttDocs.OrderType FORMAT "X(45)"
+    "Order Type........:" ttDocs.OrderType FORMAT "X(18)"
     SKIP
     "Msseq.............:" ttDocs.Msseq 
     SKIP
@@ -84,13 +84,13 @@ form
     SKIP
     "Source............:" ttDocs.Source FORMAT "X(45)" 
     SKIP
-    "Additional Info...:" ttDocs.AdditionalInfo FORMAT "X(45)" 
-    SKIP
+    "Additional Info...:" ttDocs.AdditionalInfo FORMAT "X(57)" 
+    SKIP(2)
 
     WITH OVERLAY ROW 1 WIDTH 80 centered
     COLOR VALUE(cfc)
     TITLE COLOR VALUE(ctc)
-    " Message Contents " WITH NO-LABELS 1 columns
+    " Message Contents " NO-LABELS 
     FRAME fDetails.
 
 cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
@@ -181,7 +181,7 @@ REPEAT WITH FRAME sel:
       nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -314,7 +314,7 @@ REPEAT WITH FRAME sel:
  
      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
         RUN local-find-this(FALSE).
-        
+        PAUSE 0. 
         DISPLAY  
             ttDocs.OrderId 
             ttDocs.OrderType 
@@ -333,9 +333,9 @@ REPEAT WITH FRAME sel:
             ttDocs.AdditionalInfo 
 
         WITH FRAME fDetails.
+        /*NEXT LOOP.*/
 
-        PAUSE.
-        HIDE FRAME fComm NO-PAUSE.
+        /*PAUSE.*/
      END.
 
      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
