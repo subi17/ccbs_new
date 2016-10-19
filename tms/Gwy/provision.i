@@ -1,3 +1,9 @@
+&IF "{&PROVISION_I}" NE "YES"
+&THEN
+
+
+&GLOBAL-DEFINE PROVISION_I YES
+
 {commali.i}
 {tmsconst.i}
 
@@ -343,4 +349,4 @@ FUNCTION fGetShaperConfCommLine RETURN CHAR
    RETURN lcCommLine.
 END.
 
-
+&ENDIF
