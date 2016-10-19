@@ -83,6 +83,7 @@
                   NEXT {1}.
                END.
 
+               /* NOTE: this check is also in orderinctrl.p */
                IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND
                   Order.ICC EQ "" THEN DO:
                   fSetOrderStatus(Order.OrderID,
@@ -90,6 +91,7 @@
                   NEXT {1}.
                END.
                
+               /* NOTE: this check is also in orderinctrl.p */
                IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
                   Order.PortingDate <> ? THEN DO:
                   fSetOrderStatus(Order.OrderID,
