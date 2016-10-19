@@ -860,12 +860,6 @@ PROCEDURE pTerminate:
                      Customer.DelTYpe = {&INV_DEL_TYPE_SMS})
               ) THEN
    DO:
-      RUN pChangeDelType(MobSub.InvCust, OUTPUT lcResult).
-      IF lcResult <> "" THEN       
-      DO:   
-         fReqError(lcResult).
-         RETURN.
-      END.      
       llCallProc = TRUE.
       for-bmobsub:
       FOR EACH bMobSub WHERE
@@ -877,7 +871,7 @@ PROCEDURE pTerminate:
          IF NOT CAN-FIND(FIRST MsRequest WHERE 
                                MsRequest.MsSeq     = bMobSub.MsSeq AND
                                MsRequest.ReqType   = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-                         LOOKUP(STRING(MSRequest.ReqStatus),lcStatusList) = 0) AND
+                               LOOKUP(STRING(MSRequest.ReqStatus),lcStatusList) = 0) AND
                                MSRequest.ActStamp  >= ldeStartStamp AND
                                MSRequest.ActStamp  <  ldeEndStamp THEN         
          DO:         
@@ -1192,7 +1186,7 @@ END PROCEDURE.
 
 PROCEDURE pChangeDelType:
    DEFINE INPUT  PARAMETER liInvCust AS INTEGER   NO-UNDO.   
-            
+               
    FIND FIRST Customer WHERE 
               Customer.CustNum = liInvCust
               EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
@@ -1213,6 +1207,7 @@ PROCEDURE pChangeDelType:
                     Invoice.InvType <> {&INV_TYPE_TEST} AND
                     Invoice.DeliveryState <> 2 
                     EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+         
          IF AVAIL Invoice THEN
             ASSIGN Invoice.DelType       = {&INV_DEL_TYPE_PAPER}
                    Invoice.DeliveryState = 0.                   

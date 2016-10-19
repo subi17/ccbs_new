@@ -192,7 +192,7 @@ DO TRANSACTION:
                      Customer.CustNum = TermMobsub.InvCust AND
                      Customer.deltype = {&INV_DEL_TYPE_PAPER}) THEN
       RUN pChangeDelType(TermMobsub.InvCust).      
-   
+
    CREATE Mobsub.
    BUFFER-COPY TermMobsub TO Mobsub.
    DELETE TermMobsub.
@@ -979,30 +979,28 @@ PROCEDURE pChangeDelType:
                  Invoice.CustNum = Customer.CustNum AND
                  Invoice.InvType <> {&INV_TYPE_TEST}  
                  EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-       
+                                                                                                   
       IF AVAIL Invoice THEN
       DO:
          IF Invoice.DelType <> Customer.DelType THEN
             ASSIGN Customer.DelType = Invoice.DelType.
          ELSE
          DO:
-         /*As per the requirement...if subscription got terminated 
-         on 1st day of the month then we need to change the 
-         delivery type and delivery status of last month invoice 
-         and delivery type of one day invoice that will be genereated 
-         on next bill cycle.
-         The logic for the above is implemented in deletemobsub.p.
-         If above is the scenario then at the time of Reactivation 
-         we can't find the old delivery type by FOR FIRST...that's 
-         why for each loop is used to traverse back upto 2 invoices.*/
-            for-blk:
-            FOR EACH bInvoice WHERE
+            /*As per the requirement...if subscription got terminated 
+            on 1st day of the month then we need to change the 
+            delivery type and delivery status of last month invoice 
+            and delivery type of one day invoice that will be genereated 
+            on next bill cycle.
+            The logic for the above is implemented in deletemobsub.p.
+            If above is the scenario then at the time of Reactivation 
+            we can't find the old delivery type by FOR FIRST...that's 
+            why for each loop is used to traverse back upto 2 invoices.*/
+
+            for-blk:                                                                                                                                                                                                                                     FOR EACH bInvoice WHERE
                      bInvoice.Brand   = gcBrand AND
                      bInvoice.CustNum = Invoice.CustNum AND
                      bInvoice.InvDate < Invoice.InvDate NO-LOCK:              
-                        
                ASSIGN iCnt = iCnt + 1. 
-            
                IF iCnt = 3 THEN
                   LEAVE for-blk.
                ELSE IF bInvoice.DelType <> Customer.DelType THEN
