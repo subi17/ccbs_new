@@ -49,7 +49,6 @@ DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lNowSeconds   AS INTEGER   NO-UNDO.
 DEF VAR llFirstInv    AS LOGICAL   NO-UNDO.
-DEF VAR llMobsub      AS LOGICAL   NO-UNDO.
 
 DEF STREAM sEmail.
 
@@ -164,24 +163,8 @@ FOR EACH Invoice WHERE
    
       FIND FIRST MobSub WHERE
                  MobSub.MsSeq = SubInvoice.MsSeq NO-LOCK NO-ERROR.
-      IF AVAIL mobsub THEN
-      DO:      
-         IF MobSub.CustNum NE Invoice.CustNum THEN 
-            NEXT SUBINVOICE_LOOP.
-         ASSIGN llMobSub = TRUE.
-      END.
-      ELSE 
-      DO:
-         /* To send the sms even to a terminated subscription */
-         FIND FIRST TermMobSub WHERE
-                    TermMobSub.MsSeq = SubInvoice.MsSeq NO-LOCK NO-ERROR.               
-         IF AVAIL TermMobsub THEN
-         DO:      
-            IF TermMobSub.CustNum NE Invoice.CustNum THEN 
-               NEXT SUBINVOICE_LOOP.
-            ASSIGN llMobSub = FALSE.
-         END.
-      END.
+      IF NOT AVAIL MobSub OR 
+         MobSub.CustNum NE Invoice.CustNum THEN NEXT SUBINVOICE_LOOP.
 
       lcSMSReplacedText = REPLACE(lcSMSTextOriginal,"#AMOUNT", 
          REPLACE(TRIM(STRING(Invoice.InvAmt, "->>>>>>9.99")),".", lcSep)).
@@ -199,16 +182,8 @@ FOR EACH Invoice WHERE
          llFirstInv = TRUE.
       END.
       DO TRANS:
-         fMakeSchedSMS2((IF llMobSub THEN 
-                            MobSub.CustNum 
-                         ELSE 
-                            TermMobSub.CustNum
-                        ),
-                        (IF llMobSub THEN 
-                            MobSub.CLI 
-                         ELSE 
-                            TermMobSub.CLI
-                        ),
+         fMakeSchedSMS2(MobSub.CustNum,
+                        MobSub.CLI,
                         44,
                         lcSMSReplacedText,
                         fMakeTS(),
