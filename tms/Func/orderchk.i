@@ -233,7 +233,7 @@ FUNCTION fDuplicateOrderChk RETURNS LOGICAL
    fTS2Date(pdePriceSelTime, OUTPUT ldaOrderDate).
    
    ASSIGN ldeStartTime = fMake2Dt(ldaOrderDate, 0)
-          ldeEndTime   = fMake2Dt(ldaOrderDate, 85399).
+          ldeEndTime   = fMake2Dt(ldaOrderDate, 86399).
    
    IF CAN-FIND(FIRST OrderChk WHERE
                      OrderChk.Brand      = gcBrand      AND
