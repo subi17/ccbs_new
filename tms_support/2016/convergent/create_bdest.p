@@ -123,30 +123,74 @@ create_tmritem("CONTS10GB_VOICE_IN,CONTDSL55",34).
 create_tmritem("CONTS10GB_VOICE_IN,CONTFH55_50",34).
 create_tmritem("CONTS10GB_VOICE_IN,CONTFH65_300",34).
 
-CREATE bitemgroup.
-ASSIGN bitemgroup.bigname = "Convergent Monthly fee"
-       bitemgroup.brand = "1"
-       bitemgroup.bigroup = "46"
-       bitemgroup.grouptype = 0
-       bitemgroup.invoiceorder = 31.
+IF CAN-FIND(FIRST bitemgroup WHERE
+                  bitemgroup.brand = "1" AND
+                  bitemgroup.bigroup = "46") THEN
+   MESSAGE "bigroup already found: 46" VIEW-AS ALERT-BOX. 
+ELSE DO: 
+   CREATE bitemgroup.
+   ASSIGN bitemgroup.bigname = "Convergent Monthly fee"
+          bitemgroup.brand = "1"
+          bitemgroup.bigroup = "46"
+          bitemgroup.grouptype = 0
+          bitemgroup.invoiceorder = 31.
+END.
+IF CAN-FIND(FIRST bitemgroup WHERE
+                  bitemgroup.brand = "1" AND
+                  bitemgroup.bigroup = "47") THEN
+   MESSAGE "bigroup already found: 47" VIEW-AS ALERT-BOX.
+ELSE DO:
+   CREATE bitemgroup.
+   ASSIGN bitemgroup.bigname = "Fixed voice"
+          bitemgroup.brand = "1"
+          bitemgroup.bigroup = "47"
+          bitemgroup.grouptype = 0
+          bitemgroup.invoiceorder = 32.
+END.
 
-CREATE bitemgroup.
-ASSIGN bitemgroup.bigname = "Fixed voice"
-       bitemgroup.brand = "1"
-       bitemgroup.bigroup = "47"
-       bitemgroup.grouptype = 0
-       bitemgroup.invoiceorder = 32.
+IF CAN-FIND(FIRST bitemgroup WHERE
+                  bitemgroup.brand = "1" AND
+                  bitemgroup.bigroup = "51") THEN
+   MESSAGE "bigroup already found: 51" VIEW-AS ALERT-BOX.
+ELSE DO:
+   CREATE bitemgroup.
+   ASSIGN bitemgroup.bigname = "Fixed voice"
+          bitemgroup.brand = "1"
+          bitemgroup.bigroup = "51"
+          bitemgroup.grouptype = 0
+          bitemgroup.invoiceorder = 20.
+END.
 
-CREATE pricelist.
-ASSIGN pricelist.brand = "1"
-       pricelist.currency = "EUR"
-       pricelist.currunit = TRUE
-       pricelist.dediclist = FALSE
-       pricelist.inclvat = FALSE
-       pricelist.plname = "Contrato fixed"
-       pricelist.pricelist = "CONTRATOFIXED"
-       pricelist.memo = "Contrato fixed pricelist"
-       pricelist.rounding = 4.
+IF CAN-FIND(FIRST bitemgroup WHERE
+                  bitemgroup.brand = "1" AND
+                  bitemgroup.bigroup = "53") THEN
+   MESSAGE "bigroup already found: 53" VIEW-AS ALERT-BOX.
+ELSE DO:
+   CREATE bitemgroup.
+   ASSIGN bitemgroup.bigname = "Premium Services Fixed"
+          bitemgroup.brand = "1"
+          bitemgroup.bigroup = "53"
+          bitemgroup.grouptype = 0
+          bitemgroup.invoiceorder = 30.
+END.
 
+IF CAN-FIND(FIRST pricelist WHERE
+                  pricelist.brand EQ "1" AND
+                  pricelist.plname = "Contrato fixed" AND
+                  pricelist.pricelist = "CONTRATOFIXED") THEN
+   MESSAGE "pricelist already exist" VIEW-AS ALERT-BOX.
+ELSE DO:
+
+   CREATE pricelist.
+   ASSIGN pricelist.brand = "1"
+          pricelist.currency = "EUR"
+          pricelist.currunit = TRUE
+          pricelist.dediclist = FALSE
+          pricelist.inclvat = FALSE
+          pricelist.plname = "Contrato fixed"
+          pricelist.pricelist = "CONTRATOFIXED"
+          pricelist.memo = "Contrato fixed pricelist"
+          pricelist.rounding = 4.
+END.
 
 
