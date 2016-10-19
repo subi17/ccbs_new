@@ -191,15 +191,8 @@ DO TRANSACTION:
    IF CAN-FIND(FIRST Customer WHERE
                      Customer.CustNum = TermMobsub.InvCust AND
                      Customer.deltype = {&INV_DEL_TYPE_PAPER}) THEN
-   DO:         
-      RUN pChangeDelType(TermMobsub.InvCust, OUTPUT lcResult).      
-      IF lcResult <> "" THEN       
-      DO:   
-         fReqError(lcResult).
-         RETURN.
-      END.      
-   END.   
-
+      RUN pChangeDelType(TermMobsub.InvCust).      
+   
    CREATE Mobsub.
    BUFFER-COPY TermMobsub TO Mobsub.
    DELETE TermMobsub.
@@ -971,7 +964,6 @@ END PROCEDURE. /* pRecoverSTC */
 
 PROCEDURE pChangeDelType:
    DEFINE INPUT PARAMETER  liInvCust AS INTEGER   NO-UNDO.
-   DEFINE OUTPUT PARAMETER lcError   AS CHARACTER NO-UNDO.   
 
    DEFINE VARIABLE iCnt AS INTEGER     NO-UNDO.  
    DEFINE BUFFER bInvoice FOR Invoice.
@@ -984,7 +976,9 @@ PROCEDURE pChangeDelType:
    DO:
       FIND FIRST Invoice WHERE
                  Invoice.Brand   = gcBrand AND
-                 Invoice.CustNum = Customer.CustNum NO-LOCK NO-ERROR.
+                 Invoice.CustNum = Customer.CustNum AND
+                 Invoice.InvType <> {&INV_TYPE_TEST}  
+                 EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
        
       IF AVAIL Invoice THEN
       DO:
@@ -1013,6 +1007,11 @@ PROCEDURE pChangeDelType:
                   LEAVE for-blk.
                ELSE IF bInvoice.DelType <> Customer.DelType THEN
                DO:              
+                  /* if invoice not delivered yet then
+                   change the delivery type to previous one */
+                  IF Invoice.DeliveryState <> 2 THEN
+                     ASSIGN Invoice.DelType       = bInvoice.DelType
+                            Invoice.DeliveryState = 0.
                   ASSIGN Customer.DelType = bInvoice.DelType.
                   LEAVE for-blk.
                END.                        
@@ -1020,11 +1019,4 @@ PROCEDURE pChangeDelType:
          END.            
       END.
    END.   
-   ELSE IF LOCKED(Customer) THEN   
-      ASSIGN lcError = SUBSTITUTE("CustNum &1 locked", 
-                                   STRING(liInvCust)).
-   ELSE
-      ASSIGN lcError = SUBSTITUTE("CustNum &1 does not exists", 
-                                   STRING(liInvCust)).
-
 END PROCEDURE.
