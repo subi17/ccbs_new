@@ -89,6 +89,13 @@
                                   {&ORDER_STATUS_PENDING_MOBILE_LINE}).
                   NEXT {1}.
                END.
+               
+               IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
+                  Order.PortingDate <> ? THEN DO:
+                  fSetOrderStatus(Order.OrderID,
+                                  {&ORDER_STATUS_MNP_ON_HOLD}).
+                  NEXT {1}.
+               END.
             END.
 
             ASSIGN llOrdStChg = no.

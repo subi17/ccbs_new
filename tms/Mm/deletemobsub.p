@@ -860,15 +860,38 @@ PROCEDURE pTerminate:
                      Customer.DelTYpe = {&INV_DEL_TYPE_SMS})
               ) THEN
    DO:
-<<<<<<< HEAD
       RUN pChangeDelType(MobSub.InvCust, OUTPUT lcResult).
       IF lcResult <> "" THEN       
       DO:   
          fReqError(lcResult).
          RETURN.
       END.      
-   IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:
+      llCallProc = TRUE.
+      for-bmobsub:
+      FOR EACH bMobSub WHERE
+               bMobsub.Brand    = gcBrand AND
+               bMobSub.InvCust  = MobSub.InvCust AND
+               bMobSub.MsSeq   <> liMsSeq AND 
+               bMobSub.MsStatus = {&MSSTATUS_ACTIVE} NO-LOCK:
+      
+         IF NOT CAN-FIND(FIRST MsRequest WHERE 
+                               MsRequest.MsSeq     = bMobSub.MsSeq AND
+                               MsRequest.ReqType   = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+                         LOOKUP(STRING(MSRequest.ReqStatus),lcStatusList) = 0) AND
+                               MSRequest.ActStamp  >= ldeStartStamp AND
+                               MSRequest.ActStamp  <  ldeEndStamp THEN         
+         DO:         
+            ASSIGN llCallProc = NO.
+            LEAVE for-bmobsub.
+         END.
+      END.
+   END. 
 
+   IF llCallProc THEN   
+      RUN pChangeDelType(MobSub.InvCust).
+   
+   IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:
+   
       FOR EACH Order NO-LOCK WHERE
                Order.MsSeq = MobSub.MsSeq AND
                Order.OrderType = {&ORDER_TYPE_STC} AND
@@ -900,34 +923,7 @@ PROCEDURE pTerminate:
                     STRING(RETURN-VALUE)).
          END.
       END.
-      
->>>>>>> convergent
    END.
-=======
-      llCallProc = TRUE.
-      for-bmobsub:
-      FOR EACH bMobSub WHERE
-               bMobsub.Brand    = gcBrand AND
-               bMobSub.InvCust  = MobSub.InvCust AND
-               bMobSub.MsSeq   <> liMsSeq AND 
-               bMobSub.MsStatus = {&MSSTATUS_ACTIVE} NO-LOCK:
-      
-         IF NOT CAN-FIND(FIRST MsRequest WHERE 
-                               MsRequest.MsSeq     = bMobSub.MsSeq AND
-                               MsRequest.ReqType   = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-                         LOOKUP(STRING(MSRequest.ReqStatus),lcStatusList) = 0) AND
-                               MSRequest.ActStamp  >= ldeStartStamp AND
-                               MSRequest.ActStamp  <  ldeEndStamp THEN         
-         DO:         
-            ASSIGN llCallProc = NO.
-            LEAVE for-bmobsub.
-         END.
-      END.
-   END. 
->>>>>>> origin/YDR-2052-grooming-tms-last-invoices-for-electronic-sms
-
-   IF llCallProc THEN   
-      RUN pChangeDelType(MobSub.InvCust).
    
    CREATE TermMobsub.
    BUFFER-COPY Mobsub TO TermMobsub.

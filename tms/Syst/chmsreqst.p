@@ -45,6 +45,7 @@ DEF VAR ldeSecSIMTermStamp AS DEC          NO-UNDO.
 DEF VAR llgAddSIMTerm      AS LOG          NO-UNDO.
 DEF VAR ldActStamp         AS DECIMAL      NO-UNDO.
 DEF VAR ldtTdDate          AS DATE         NO-UNDO.
+DEF VAR ldeActStamp        AS DEC NO-UNDO. 
 
 DEF BUFFER lbMobSub        FOR Mobsub.
 DEF BUFFER bMsRequest      FOR MsRequest.
@@ -307,7 +308,6 @@ CASE iiToStatus:
          END.
 
          IF iiFromStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
-            fHasConvergenceTariff(MsRequest.MsSeq) AND
             NOT fCanTerminateConvergenceTariff(
                   MsRequest.MsSeq,
                   INT(MsRequest.ReqCParam3),
@@ -537,6 +537,21 @@ ELSE DO:
 
       FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
          IF AVAILABLE MsRequest THEN MsRequest.ActStamp = ldActStamp.
+      FIND CURRENT MsRequest NO-LOCK NO-ERROR.
+   END.
+   
+   IF iiToStatus EQ 8 AND
+      iiFromStatus EQ 19 AND
+      MsRequest.ReqType = 0 THEN DO:
+   
+      IF MsRequest.ReqDParam1 < fMakeTS() THEN
+         ldeActStamp = fMake2DT(TODAY + 1, 0).
+      ELSE ldeActStamp = MSrequest.ReqDParam1.
+
+      FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
+      ASSIGN
+         MsRequest.ReqDParam1 = ldeActStamp
+         MsRequest.ActStamp = ldeActStamp.
       FIND CURRENT MsRequest NO-LOCK NO-ERROR.
    END.
    

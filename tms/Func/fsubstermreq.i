@@ -145,10 +145,10 @@ FUNCTION fDeleteMsValidation RETURNS INTEGER
       RETURN 5.
    END.
    
-   IF fIsConvergenceTariff(mobsub.CLIType) AND
-      NOT fCanTerminateConvergenceTariff(MobSub.MsSeq,
-                                         iiTerminationReason,
-                                         OUTPUT ocError)
+   /* check ongoing convergent orders */
+   IF NOT fCanTerminateConvergenceTariff(MobSub.MsSeq,
+                                        iiTerminationReason,
+                                        OUTPUT ocError)
       THEN RETURN 6.
 
    RETURN 0. /* ok */

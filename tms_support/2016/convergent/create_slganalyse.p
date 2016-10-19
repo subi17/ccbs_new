@@ -2,6 +2,8 @@
 DEF VAR ldaFrom AS DATE INIT 09/07/16.
 DEF VAR liMode AS INT INIT 0.
 DEF VAR liMode_ra AS INT INIT 0.
+DEF VAR liModeBI AS INT INIT 1.
+DEF VAR liModeCliType AS INT INIT 0.
 
 DEF TEMP-TABLE ttSLGAnalyse NO-UNDO LIKE SLGAnalyse.
 DEF TEMP-TABLE ttRequestAction NO-UNDO LIKE RequestAction.
@@ -121,35 +123,36 @@ fcreateSLGAnalyse("CONT24","CONTFH55_50",ldaFrom,"CONTFH55_50",liMode).
 fcreateSLGAnalyse("CONT24","CONTFH55_300",ldaFrom,"CONTFH55_300",liMode).
 fcreateSLGAnalyse("CONT24","CONTFH65_300",ldaFrom,"CONTFH65_300",liMode).
 
-FOR EACH CliType WHERE 
+IF liModeCliType > 0 THEN DO:
+   FOR EACH CliType WHERE 
+            Clitype.brand EQ "1" AND
+            Clitype.clitype BEGINS "CONTDSL":
+      ASSIGN
+      Clitype.fixedlinetype = 1
+      Clitype.FixedLineDownload = "20M"
+      Clitype.FixedLineUpload = "20M".
+   END.        
+
+   FOR EACH CliType WHERE
+            Clitype.brand EQ "1" AND
+            Clitype.clitype MATCHES "CONTFH*50":
+      ASSIGN
+      Clitype.fixedlinetype = 2
+      Clitype.FixedLineDownload = "50M"
+      Clitype.FixedLineUpload = "5M".
+
+   END.
+
+   FOR EACH CliType WHERE
          Clitype.brand EQ "1" AND
-         Clitype.clitype BEGINS "CONTDSL":
-   ASSIGN
-   Clitype.fixedlinetype = 1
-   Clitype.FixedLineDownload = "20M"
-   Clitype.FixedLineUpload = "20M".
-END.        
+         Clitype.clitype MATCHES "CONTFH*300":
+      ASSIGN
+      Clitype.fixedlinetype = 2
+      Clitype.FixedLineDownload = "300M"
+      Clitype.FixedLineUpload = "300M".
 
-FOR EACH CliType WHERE
-         Clitype.brand EQ "1" AND
-         Clitype.clitype MATCHES "CONTFH*50":
-   ASSIGN
-   Clitype.fixedlinetype = 2
-   Clitype.FixedLineDownload = "50M"
-   Clitype.FixedLineUpload = "5M".
-
+   END.
 END.
-
-FOR EACH CliType WHERE
-      Clitype.brand EQ "1" AND
-      Clitype.clitype MATCHES "CONTFH*300":
-   ASSIGN
-   Clitype.fixedlinetype = 2
-   Clitype.FixedLineDownload = "300M"
-   Clitype.FixedLineUpload = "300M".
-
-END.
-
    
 create_ra("CONT24","CONTDSL45",liMode_ra).
 create_ra("CONT24","CONTDSL55",liMode_ra).
@@ -165,112 +168,122 @@ create_ra_mob("CONT24","CONTFH55_50","CONTS10GB",liMode_ra).
 create_ra_mob("CONT24","CONTFH55_300","CONTS2GB",liMode_ra).
 create_ra_mob("CONT24","CONTFH65_300","CONTS10GB",liMode_ra).
 
-FIND LAST RequestAction USE-INDEX RequestActionID NO-LOCK NO-ERROR.
-           IF AVAILABLE RequestAction THEN
-              liActionID = RequestAction.RequestActionID + 1.
-           ELSE liActionID = 1.
+IF liMode_ra > 0 THEN DO:
+   FIND LAST RequestAction USE-INDEX RequestActionID NO-LOCK NO-ERROR.
+              IF AVAILABLE RequestAction THEN
+                 liActionID = RequestAction.RequestActionID + 1.
+              ELSE liActionID = 1.
 
-CREATE RequestAction.
-ASSIGN
-   RequestAction.brand = "1"
-   RequestAction.reqtype = 0
-   RequestAction.clitype = ""
-   RequestAction.action = 11
-   RequestAction.actionkey = "FTERM6-100"
-   RequestAction.actiontype = "DayCampaign"
-   RequestAction.paytype = 1
-   RequestAction.requestactionid = liActionID 
-   RequestAction.validfrom = 09/07/16
-   RequestAction.validto = 12/31/49.
+   CREATE RequestAction.
+   ASSIGN
+      RequestAction.brand = "1"
+      RequestAction.reqtype = 0
+      RequestAction.clitype = ""
+      RequestAction.action = 11
+      RequestAction.actionkey = "FTERM6-100"
+      RequestAction.actiontype = "DayCampaign"
+      RequestAction.paytype = 1
+      RequestAction.requestactionid = liActionID 
+      RequestAction.validfrom = 09/07/16
+      RequestAction.validto = 12/31/49.
 
-CREATE RequestActionRule.
-ASSIGN
-   RequestActionRule.RequestActionid = liActionID
-   RequestActionRule.paramfield = "#FEECOMPARE"
-   RequestActionRule.paramvalue = "+,ORIGINAL>NEW"
-   RequestActionRule.fromdate = 09/07/16
-   RequestActionRule.todate = 12/31/49.
+   CREATE RequestActionRule.
+   ASSIGN
+      RequestActionRule.RequestActionid = liActionID
+      RequestActionRule.paramfield = "#FEECOMPARE"
+      RequestActionRule.paramvalue = "+,ORIGINAL>NEW"
+      RequestActionRule.fromdate = 09/07/16
+      RequestActionRule.todate = 12/31/49.
 
-CREATE RequestActionRule.
-ASSIGN
-   RequestActionRule.RequestActionid = liActionID
-   RequestActionRule.paramfield = "ReqCParam1"
-   RequestActionRule.paramvalue = "+,CONTDSL*,CONTFH*"
-   RequestActionRule.fromdate = 09/07/16
-   RequestActionRule.todate = 12/31/49.
+   CREATE RequestActionRule.
+   ASSIGN
+      RequestActionRule.RequestActionid = liActionID
+      RequestActionRule.paramfield = "ReqCParam1"
+      RequestActionRule.paramvalue = "+,CONTDSL*,CONTFH*"
+      RequestActionRule.fromdate = 09/07/16
+      RequestActionRule.todate = 12/31/49.
 
-CREATE RequestActionRule.
-ASSIGN
-   RequestActionRule.RequestActionid = liActionID
-   RequestActionRule.paramfield = "ReqCParam2"
-   RequestActionRule.paramvalue = "+,CONTDSL*,CONTFH*"
-   RequestActionRule.fromdate = 09/07/16
-   RequestActionRule.todate = 12/31/49.
+   CREATE RequestActionRule.
+   ASSIGN
+      RequestActionRule.RequestActionid = liActionID
+      RequestActionRule.paramfield = "ReqCParam2"
+      RequestActionRule.paramvalue = "+,CONTDSL*,CONTFH*"
+      RequestActionRule.fromdate = 09/07/16
+      RequestActionRule.todate = 12/31/49.
 
-CREATE RequestActionRule.
-ASSIGN
-   RequestActionRule.RequestActionid = liActionID
-   RequestActionRule.paramfield = "ReqIParam5"
-   RequestActionRule.paramvalue = "+,0"
-   RequestActionRule.fromdate = 09/07/16
-   RequestActionRule.todate = 12/31/49.
+   CREATE RequestActionRule.
+   ASSIGN
+      RequestActionRule.RequestActionid = liActionID
+      RequestActionRule.paramfield = "ReqIParam5"
+      RequestActionRule.paramvalue = "+,0"
+      RequestActionRule.fromdate = 09/07/16
+      RequestActionRule.todate = 12/31/49.
 
-liActionID = liActionID + 1.
+   liActionID = liActionID + 1.
 
-CREATE RequestAction.
-ASSIGN
-   RequestAction.brand = "1"
-   RequestAction.reqtype = 0
-   RequestAction.clitype = ""
-   RequestAction.action = 1
-   RequestAction.actionkey = "FTERM6-100"
-   RequestAction.actiontype = "DayCampaign"
-   RequestAction.paytype = 1
-   RequestAction.requestactionid = liActionID
-   RequestAction.validfrom = 09/07/16
-   RequestAction.validto = 12/31/49.
+   CREATE RequestAction.
+   ASSIGN
+      RequestAction.brand = "1"
+      RequestAction.reqtype = 0
+      RequestAction.clitype = ""
+      RequestAction.action = 1
+      RequestAction.actionkey = "FTERM6-100"
+      RequestAction.actiontype = "DayCampaign"
+      RequestAction.paytype = 1
+      RequestAction.requestactionid = liActionID
+      RequestAction.validfrom = 09/07/16
+      RequestAction.validto = 12/31/49.
 
-CREATE RequestActionRule.
-ASSIGN
-   RequestActionRule.RequestActionid = liActionID
-   RequestActionRule.paramfield = "ReqCParam1"
-   RequestActionRule.exclparamvalue = "CONTDSL*,CONTFH*,CONTSF*,CONTFF"
-   RequestActionRule.fromdate = 09/07/16
-   RequestActionRule.todate = 12/31/49.
+   CREATE RequestActionRule.
+   ASSIGN
+      RequestActionRule.RequestActionid = liActionID
+      RequestActionRule.paramfield = "ReqCParam1"
+      RequestActionRule.exclparamvalue = "CONTDSL*,CONTFH*,CONTSF*,CONTFF"
+      RequestActionRule.fromdate = 09/07/16
+      RequestActionRule.todate = 12/31/49.
 
-CREATE RequestActionRule.
-ASSIGN
-   RequestActionRule.RequestActionid = liActionID
-   RequestActionRule.paramfield = "ReqCParam2"
-   RequestActionRule.paramvalue = "+,CONTDSL*,CONTFH*"
-   RequestActionRule.fromdate = 09/07/16
-   RequestActionRule.todate = 12/31/49.
+   CREATE RequestActionRule.
+   ASSIGN
+      RequestActionRule.RequestActionid = liActionID
+      RequestActionRule.paramfield = "ReqCParam2"
+      RequestActionRule.paramvalue = "+,CONTDSL*,CONTFH*"
+      RequestActionRule.fromdate = 09/07/16
+      RequestActionRule.todate = 12/31/49.
 
-/* prevent removal */
-liActionID = liActionID + 1.
+   /* prevent removal */
+   liActionID = liActionID + 1.
 
-CREATE RequestAction.
-ASSIGN
-   RequestAction.brand = "1"
-   RequestAction.reqtype = 46
-   RequestAction.clitype = ""
-   RequestAction.action = 5
-   RequestAction.actionkey = "FTERM6-100"
-   RequestAction.actiontype = "DayCampaign"
-   RequestAction.paytype = 1
-   RequestAction.requestactionid = liActionID
-   RequestAction.validfrom = 09/07/16
-   RequestAction.validto = 12/31/49.
-
+   CREATE RequestAction.
+   ASSIGN
+      RequestAction.brand = "1"
+      RequestAction.reqtype = 46
+      RequestAction.clitype = ""
+      RequestAction.action = 5
+      RequestAction.actionkey = "FTERM6-100"
+      RequestAction.actiontype = "DayCampaign"
+      RequestAction.paytype = 1
+      RequestAction.requestactionid = liActionID
+      RequestAction.validfrom = 09/07/16
+      RequestAction.validto = 12/31/49.
+END.
 
 Function createBillItem RETURNS LOG ( INPUT icbase AS CHAR,
                                       INPUT icBillcode AS CHAR,
                                       INPUT icBiName AS CHAR,
+                                      INPUT iiAccount AS INT,
+                                      INPUT icGroup AS CHAR,
+                                      INPUT icSection AS CHAR,
+                                      INPUT icTaxClass AS CHAR,
+                                      INPUT icSAPRid AS CHAR,
+                                      INPUT ilDispMPM AS LOG,
+                                      INPUT icCostCentre AS CHAR,
                                       INPUT iiUpdatemode AS INT):
    IF CAN-FIND(FIRST BillItem WHERE
                      billitem.brand EQ "1" AND
-                     billItem.billcode EQ icBillcode) THEN
-      MESSAGE "Billitem already exist " + icBillCode VIEW-AS ALERT-BOX.   
+                     billItem.billcode EQ icBillcode) THEN DO:
+      MESSAGE "Billitem already exist " + icBillCode VIEW-AS ALERT-BOX.
+      RETURN FALSE.
+   END.
 
    FIND FIRST BillItem WHERE
               billitem.brand EQ "1" AND
@@ -282,8 +295,22 @@ Function createBillItem RETURNS LOG ( INPUT icbase AS CHAR,
    ELSE DO:
          CREATE ttBillItem.
          BUFFER-COPY BillItem TO ttBillItem.
-         ttBillItem.BillCode = icBillCode.
-         ttBillItem.BIName = icBiName.
+         ASSIGN
+            ttBillItem.BillCode = icBillCode
+            ttBillItem.BIName = icBiName
+            ttBillItem.accnum = iiAccount
+            ttBillItem.altaccnum = iiAccount
+            ttBillItem.euaccnum = iiAccount
+            ttBillItem.euconaccnum = iiAccount
+            ttBillItem.FSaccnum = iiAccount
+            ttBillItem.vipaccnum = iiAccount
+            ttBillItem.InvSect = icSection
+            ttBillItem.taxclass = ictaxclass
+            ttBillItem.saprid = icsaprid
+            ttBillItem.dispMPM = ildispmpm
+            ttBillItem.bigroup = icgroup
+            ttBillItem.costcentre = icCostCentre.
+
          IF iiUpdateMode NE 0 THEN DO:
             CREATE BillItem.
             BUFFER-COPY ttBillItem TO BillItem.
@@ -295,8 +322,72 @@ Function createBillItem RETURNS LOG ( INPUT icbase AS CHAR,
 
 END.
 
-createBillItem("TERMPERIOD", "FTERMPERIOD", "Convergent permanency", 0).
-createBillItem("DISCPAYTERMDIR", "DISCFTERMPERIOD", "Convergent permanency discount", 0).
-createBillItem("DISCPAYTERMDIR", "DISCFHDSL", "Convergent fixed line quota discount", 0).
+createBillItem("TERMPERIOD", "FTERMPERIOD", "Convergent permanency", 
+               70518111,"33","","0","046",FALSE,"SL",liModeBI).
+createBillItem("DISCPAYTERMDIR", "DISCFTERMPERIOD", "Convergent permanency discount", 70020105,"13","","0","046",FALSE,"SL",liModeBI).
+createBillItem("DISCPAYTERMDIR", "DISCFHDSL", "Convergent fixed line quota discount", 70020105,"13","","0","046",FALSE,"SL",liModeBI).
 
+createBillItem("FLATVOICE", "F10100003", "Fixed to Spanish mobile", 
+               70510100,"51","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("FLATVOICE", "F10100004", "Fixed to international mobile",
+               70510100,"51","3","1","004",FALSE,"SL",liModeBI).
+createBillItem("FLATVOICE", "F10100005", "Fixed to Spanish fixed",
+               70510100,"51","1","1","005",FALSE,"SL",liModeBI).
+createBillItem("FLATVOICE", "F10100006", "Fixed to international fixed",
+               70510100,"51","3","1","006",FALSE,"SL",liModeBI).
+createBillItem("FLATVOICE", "F15100023", "Fixed to VAS Premium Voice Service",
+               70515100,"53","","1","",FALSE,"",liModeBI).
+createBillItem("FLATVOICE", "F15100027", "Fixed to VAS Freephone Service",
+               70515100,"51","","1","",FALSE,"",liModeBI).
+createBillItem("FLATVOICE", "FINFSERVICE", "Fixed to Information Services",
+               70510100,"51","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("FLATVOICE", "FSHORTNU", "Fixed to Voice Own Network to Short Numbers",
+               70510100,"51","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("FLATVOICE", "FCCYOIGO", "Fixed to Customer Care",
+               70510100,"51","1","1","003",FALSE,"SL",liModeBI).
 
+/* Fixed line inside package billing items */
+createBillItem("CONT24VOICE_A", "CONTDSL_QTY_VOICE", 
+               "Convergent flat rate national fixed to fixed",
+               70510100,"51","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("CONT24VOICE_A", "CONTDSL_MIN_VOICE",
+               "Convergent flat rate national fixed to mobil",
+               70510100,"51","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("CONT24VOICE_A", "CONTFH50_QTY_VOICE",
+               "Convergent flat rate national fixed to fixed",
+               70510100,"51","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("CONT24VOICE_A", "CONTFH50_MIN_VOICE",
+               "Convergent flat rate national fixed to mobile",
+               70510100,"51","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("CONT24VOICE_A", "CONTFH300_QTY_VOICE",
+               "Convergent flat rate national fixed to fixed",
+               70510100,"51","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("CONT24VOICE_A", "CONTFH300_MIN_VOICE",
+               "Convergent flat rate national fixed to mobile",
+               70510100,"51","1","1","003",FALSE,"SL",liModeBI).
+
+/* Mobile line inside package billing items (La Infinita) */
+createBillItem("CONT24VOICE_A", "CONTS2GB_VOICE",
+               "Flat rate national Voice",
+               70510100,"1","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("CONT24VOICE_A", "CONTS10GB_VOICE",
+               "Flat rate national Voice",
+               70510100,"1","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("CONT24VOICE_A", "CONTS2GB_CF",
+               "Flat rate call forwarding",
+               70510100,"1","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("CONT24VOICE_A", "CONTS10GB_CF",
+               "Flat rate call forwarding",
+               70510100,"1","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("CONT24VOICE_A", "CONTS2GB_DATA_A",
+               "Cont S national GPRS",
+               70510100,"3","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("CONT24VOICE_A", "CONTS2GB_DATA_B",
+               "Cont S national GPRS",
+               70510100,"3","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("CONT24VOICE_A", "CONTS10GB_DATA_A",
+               "Cont S national GPRS",
+               70510100,"3","1","1","003",FALSE,"SL",liModeBI).
+createBillItem("CONT24VOICE_A", "CONTS10GB_DATA_B",
+               "Cont S national GPRS",
+               70510100,"3","1","1","003",FALSE,"SL",liModeBI).

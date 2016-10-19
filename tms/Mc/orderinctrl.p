@@ -247,6 +247,8 @@ ELSE IF Order.Ordertype < 2 AND
       lcNewStatus = {&ORDER_STATUS_PENDING_MAIN_LINE}.
 END.
 ELSE IF Order.Ordertype = {&ORDER_TYPE_MNP} AND
+   lcOldStatus NE {&ORDER_STATUS_PENDING_FIXED_LINE} AND
+   lcOldStatus NE {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
    lcOldStatus NE {&ORDER_STATUS_MNP_ON_HOLD} AND
    lcOldStatus NE {&ORDER_STATUS_SIM_ONLY_MNP_IN} AND  /* Prevents state change from 99 to 22 again */
    Order.PortingDate <> ? THEN
