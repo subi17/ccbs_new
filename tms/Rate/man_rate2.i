@@ -36,10 +36,8 @@
          CAN-FIND(FIRST Invoice WHERE
                         Invoice.InvNum = InvSeq.InvNum AND
                         Invoice.InvType <> {&INV_TYPE_TEST}) THEN DO:
-         RELEASE InvSeq.
          NEXT.
       END.
-      RELEASE InvSeq.
    END.
    
    ASSIGN ttCall.ErrorCode = 0.
