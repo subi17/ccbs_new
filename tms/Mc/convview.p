@@ -35,18 +35,15 @@ FORM
     "Fusion Status.....:" AT 40 OrderFusion.FusionStatus FORMAT "X(18)"
     SKIP
     "Product...........:" OrderFusion.Product
+    "Serial Number.....:" AT 40 OrderFusion.SerialNumber FORMAT "X(18)"
     SKIP
-    "Serial Number.....:" OrderFusion.SerialNumber FORMAT "X(18)"
+    "Order Date........:" OrderFusion.OrderDate    
+    "Updated...........:" AT 40 OrderFusion.UpdateTS /*FORMAT "X(20)"*/
     SKIP
     "Customer Type.....:" OrderFusion.CustomerType
-    SKIP
-    "Order Date........:" OrderFusion.OrderDate
-    SKIP
-    "Updated...........:" OrderFusion.UpdateTS /*FORMAT "X(20)"*/
-    SKIP
-    "MNP Time..........:" OrderFusion.FixedMNPTime /*FORMAT "X(20)"*/
-    SKIP(7)
-
+    "MNP Time..........:" AT 40 OrderFusion.FixedMNPTime 
+    SKIP(10)
+ 
 
 WITH OVERLAY ROW 1 WIDTH 80 centered
     COLOR VALUE(cfc)
@@ -62,16 +59,17 @@ DISP OrderFusion.OrderID
      OrderFusion.FixedOrderId
      OrderFusion.FixedNumber
      OrderFusion.FixedNumberType
-     OrderFusion.FixedCurrOperCode
      OrderFusion.FixedCurrOper
+     OrderFusion.FixedCurrOperCode
      OrderFusion.FixedStatus
      OrderFusion.FusionStatus
      OrderFusion.Product
      OrderFusion.SerialNumber
-     OrderFusion.CustomerType
      OrderFusion.OrderDate
      OrderFusion.UpdateTS
-     OrderFusion.FixedMNPTime WITH FRAME fData.
+     OrderFusion.CustomerType
+     OrderFusion.FixedMNPTime 
+     WITH FRAME fData.
 
 LOOP:
 REPEAT WITH FRAME fData ON ENDKEY UNDO LOOP, NEXT LOOP:
