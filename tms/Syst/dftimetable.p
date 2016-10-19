@@ -76,6 +76,7 @@ FORM
     DFTimeTable.DumpDay      COLON 15 LABEL "Days"
         HELP "Days of the month"
     DFTimeTable.DumpWeekDay  COLON 15 
+    DFTimeTable.DumpTrigger  COLON 60
     DFTimeTable.DumpTime FORMAT "X(25)" COLON 15
     llDumpMode               COLON 15 
         FORMAT "Full/Modified"
@@ -166,10 +167,12 @@ REPEAT WITH FRAME sel:
 
            PROMPT-FOR 
               DFTimeTable.DumpDay
-              DFTimeTable.DumpWeekDay WITH FRAME lis.
+              DFTimeTable.DumpWeekDay 
+              DFTimeTable.DumpTrigger WITH FRAME lis.
 
-           IF INPUT DFTimeTable.DumpDay = "" AND
-              INPUT DFTimeTable.DumpWeekDay = "" THEN UNDO, LEAVE add-row.
+           IF INPUT DFTimeTable.DumpDay     = ""  AND
+              INPUT DFTimeTable.DumpWeekDay = ""  AND 
+              INPUT DFTimeTable.DumpTrigger EQ NO THEN UNDO, LEAVE add-row.
            
            IF INPUT DFTimeTable.DumpDay > "" AND
               INPUT DFTimeTable.DumpWeekDay > "" THEN DO:
@@ -177,13 +180,21 @@ REPEAT WITH FRAME sel:
               VIEW-AS ALERT-BOX INFORMATION.
               NEXT.
            END.
-           
+           ELSE IF (INPUT DFTimeTable.DumpDay     > ""   OR
+                    INPUT DFTimeTable.DumpWeekDay > "")  AND  
+                    INPUT DFTimeTable.DumpTrigger EQ YES THEN DO:
+              MESSAGE "You cannont use DumpTrigger WITH weekday or month level"
+              VIEW-AS ALERT-BOX INFORMATION.
+              NEXT.
+           END.
+
            CREATE DFTimeTable.
            ASSIGN 
               DFTimeTable.Brand    = gcBrand 
               DFTimeTable.DumpID   = iiDumpID
               DFTimeTable.DumpDay  = INPUT FRAME lis DFTimeTable.DumpDay
               DFTimeTable.DumpWeekDay = INPUT FRAME lis DFTimeTable.DumpWeekDay
+              DFTimeTable.DumpTrigger = INPUT FRAME lis DFTimeTable.DumpTrigger 
               DFTimeTable.FromDate = TODAY
               DFTimeTable.ToDate   = 12/31/2049
               DFTimeTable.UseReplica = NO.
@@ -572,6 +583,7 @@ PROCEDURE local-disp-row:
        DISPLAY 
        DFTimeTable.DumpDay
        DFTimeTable.DumpWeekDay
+       DFTimeTable.DumpTrigger
        DFTimeTable.DumpTime
        DFTimeTable.DumpMode
        lcLastRun
@@ -606,6 +618,7 @@ PROCEDURE local-UPDATE-record:
          DumpFile.Description
          DFTimeTable.DumpDay
          DFTimeTable.DumpWeekDay
+         DFTimeTable.DumpTrigger
          DFTimeTable.DumpTime        
          llDumpMode
          DFTimeTable.LastRun
@@ -648,6 +661,7 @@ PROCEDURE local-UPDATE-record:
             PROMPT-FOR
                DFTimeTable.DumpDay     WHEN NOT NEW DFTimeTable 
                DFTimeTable.DumpWeekDay WHEN NOT NEW DFTimeTable
+               DFTimeTable.DumpTrigger WHEN NOT NEW DFTimeTable
                DFTimeTable.DumpTime
                llDumpMode  
                DFTimeTable.LastRun
@@ -683,7 +697,14 @@ PROCEDURE local-UPDATE-record:
                VIEW-AS ALERT-BOX INFORMATION.
                NEXT.
             END.
-               
+            ELSE IF (INPUT DFTimeTable.DumpDay     > ""   OR
+                     INPUT DFTimeTable.DumpWeekDay > "")  AND
+                     INPUT DFTimeTable.DumpTrigger EQ YES THEN DO:
+               MESSAGE "You cannont use DumpTrigger WITH weekday or month level"
+               VIEW-AS ALERT-BOX INFORMATION.
+               NEXT.
+            END.   
+
             FIND CURRENT DFTimeTable NO-LOCK.
          
             IF CURRENT-CHANGED DFTimeTable THEN DO:
@@ -705,6 +726,7 @@ PROCEDURE local-UPDATE-record:
                ASSIGN
                   DFTimeTable.DumpDay     WHEN NOT NEW DFTimeTable 
                   DFTimeTable.DumpWeekDay WHEN NOT NEW DFTimeTable
+                  DFTimeTable.DumpTrigger WHEN NOT NEW DFTimeTable 
                   DFTimeTable.DumpTime
                   DFTimeTable.LastRun
                   DFTimeTable.Ongoing
