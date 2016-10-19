@@ -14,6 +14,11 @@
             msrequest.i
 */
 
+&IF "{&MSOPENBATCH_I}" NE "YES"
+&THEN
+
+&GLOBAL-DEFINE MSOPENBATCH_I YES
+
 DEF BUFFER bSaldoMobSub FOR MobSub.
 
 DEF VAR lcOpenServCom AS CHAR NO-UNDO INIT "KLLSALDO".
@@ -101,4 +106,4 @@ FUNCTION fOpenSaldoBarring RETURNS LOGIC:
    
 END FUNCTION.
 
-
+&ENDIF

@@ -22,9 +22,6 @@ CLASS HPD.DumpBase:
 	 Notes:
 	------------------------------------------------------------------------------*/
    
-   DEFINE PRIVATE VARIABLE lcNumericFormat         AS CHARACTER     NO-UNDO.
-   DEFINE PRIVATE VARIABLE lcOriginalNumericFormat AS CHARACTER     NO-UNDO.
-
    DEFINE PUBLIC  VARIABLE lcDelimiter             AS CHARACTER     NO-UNDO.
    DEFINE PUBLIC  VARIABLE lcKeyDelimiter          AS CHARACTER     NO-UNDO.
    
@@ -55,14 +52,10 @@ CLASS HPD.DumpBase:
       
       IF NOT AVAILABLE lbDumpFile
       THEN RETURN ERROR NEW Progress.Lang.AppError("Dump ID " + STRING(iiDumpID) + " doesn't exist.", 1).
-      
-      lcOriginalNumericFormat = SESSION:NUMERIC-FORMAT.
-      IF lbDumpFile.DecimalPoint = "." 
-      THEN lcNumericFormat = "AMERICAN".
-      ELSE lcNumericFormat = "EUROPEAN".
 
-      SESSION:NUMERIC-FORMAT = lcNumericFormat.
-      
+      /* Please note that the numeric format will be the one
+         which is initially set for this session */
+
       IF lbDumpFile.DumpDelimiter <> ""
       THEN lcDelimiter = ENTRY(1,lbDumpFile.DumpDelimiter).
       ELSE lcDelimiter = {&HPDDumpDelimiter}.
@@ -76,9 +69,6 @@ CLASS HPD.DumpBase:
    
 
    DESTRUCTOR PUBLIC DumpBase( ):
-
-      IF lcOriginalNumericFormat <> ""
-      THEN SESSION:NUMERIC-FORMAT = lcOriginalNumericFormat.
 
       EMPTY TEMP-TABLE ttDumpElement.
       

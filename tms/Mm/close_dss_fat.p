@@ -13,7 +13,8 @@ katun   = "CRON".
 {cparam2.i}
 {timestamp.i}
 {fcpfat.i}
-{fbundle.i}
+{Func/date.i}
+{Mm/active_bundle.i}
 
 DEF VAR lcPromotionPath          AS CHAR NO-UNDO.
 DEF VAR ldaPromoFromDate         AS DATE NO-UNDO.
