@@ -249,7 +249,7 @@ IF lcSalesman > "" THEN
 /* legacy status PFIN is converted to FIN and order status 79 */
 IF lcFusionOrderStatus > "" THEN DO:
    fAddQueryCondition("OrderFusion.FusionStatus = " +
-       (IF lcFusionOrderStatus EQ {&FUSION_ORDER_STATUS_PENDING_FINALIZED}
+       (IF lcFusionOrderStatus EQ "PFIN"
         THEN QUOTER({&FUSION_ORDER_STATUS_FINALIZED})
         ELSE QUOTER(lcFusionOrderStatus))).
 END.
@@ -265,7 +265,7 @@ IF NOT lcMsisdn > "" THEN
                       ' Order.Brand = OrderFusion.Brand' + 
                        ' AND Order.OrderId = OrderFusion.OrderId'.
 
-IF lcFusionOrderStatus EQ {&FUSION_ORDER_STATUS_PENDING_FINALIZED} THEN
+IF lcFusionOrderStatus EQ "PFIN" THEN
    lcQuery = lcQuery + " AND Order.StatusCode = " +
                       QUOTER({&ORDER_STATUS_PENDING_MOBILE_LINE}).
 
