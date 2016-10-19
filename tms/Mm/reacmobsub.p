@@ -184,6 +184,11 @@ DO TRANSACTION:
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSOWNER).
    END. /* ELSE DO: */
 
+   IF CAN-FIND(FIRST Customer WHERE
+                     Customer.CustNum = TermMobsub.InvCust AND
+                     Customer.deltype = {&INV_DEL_TYPE_PAPER}) THEN
+      RUN pChangeDelType(TermMobsub.InvCust).      
+
    CREATE Mobsub.
    BUFFER-COPY TermMobsub TO Mobsub.
    DELETE TermMobsub.
@@ -952,3 +957,61 @@ PROCEDURE pRecoverSTC PRIVATE:
                        "Subscription reactivation: STC/BTC recovery failed",
                        lcInfo).
 END PROCEDURE. /* pRecoverSTC */
+
+PROCEDURE pChangeDelType:
+   DEFINE INPUT PARAMETER  liInvCust AS INTEGER   NO-UNDO.
+
+   DEFINE VARIABLE iCnt AS INTEGER     NO-UNDO.  
+   DEFINE BUFFER bInvoice FOR Invoice.
+
+   FIND FIRST Customer WHERE 
+              Customer.CustNum = liInvCust
+              EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+
+   IF AVAILABLE Customer THEN      
+   DO:
+      FIND FIRST Invoice WHERE
+                 Invoice.Brand   = gcBrand AND
+                 Invoice.CustNum = Customer.CustNum AND
+                 Invoice.InvType <> {&INV_TYPE_TEST}  
+                 EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+                                                                                                   
+      IF AVAIL Invoice THEN
+      DO:
+         IF Invoice.DelType <> Customer.DelType THEN
+            ASSIGN Customer.DelType = Invoice.DelType.
+         ELSE
+         DO:
+            /*As per the requirement...if subscription got terminated 
+            on 1st day of the month then we need to change the 
+            delivery type and delivery status of last month invoice 
+            and delivery type of one day invoice that will be genereated 
+            on next bill cycle.
+            The logic for the above is implemented in deletemobsub.p.
+            If above is the scenario then at the time of Reactivation 
+            we can't find the old delivery type by FOR FIRST...that's 
+            why for each loop is used to traverse back upto 2 invoices.*/
+
+            for-blk:                                                                                                                                                                                                                                     FOR EACH bInvoice WHERE
+                     bInvoice.Brand   = gcBrand AND
+                     bInvoice.CustNum = Invoice.CustNum AND
+                     bInvoice.InvDate < Invoice.InvDate NO-LOCK:              
+               ASSIGN iCnt = iCnt + 1. 
+               IF iCnt = 3 THEN
+                  LEAVE for-blk.
+               ELSE IF bInvoice.DelType <> Customer.DelType THEN
+               DO:              
+                  /* if invoice not delivered yet then
+                   change the delivery type to previous one */
+                  
+                  IF Invoice.DeliveryState <> 2 THEN
+                     ASSIGN Invoice.DelType       = bInvoice.DelType
+                            Invoice.DeliveryState = 0.
+                  ASSIGN Customer.DelType = bInvoice.DelType.
+                  LEAVE for-blk.
+               END.                        
+            END.
+         END.            
+      END.
+   END.   
+END PROCEDURE.

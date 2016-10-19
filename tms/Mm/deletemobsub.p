@@ -146,6 +146,10 @@ PROCEDURE pTerminate:
    DEF VAR ldaKillDatePostpone AS DATE NO-UNDO.
 
    DEF VAR llHardBook          AS LOG  NO-UNDO INIT FALSE.
+   DEF VAR lcStatusList        AS CHAR NO-UNDO INITIAL "2,3,4,9,99".
+   DEF VAR ldeStartStamp       AS DEC  NO-UNDO FORMAT "99999999.99999".
+   DEF VAR ldeEndStamp         AS DEC  NO-UNDO FORMAT "99999999.99999".
+   DEF VAR llCallProc          AS LOG  NO-UNDO.   
    
    ASSIGN liArrivalStatus = MsRequest.ReqStatus
           liMsSeq = MsRequest.MsSeq.
@@ -166,7 +170,13 @@ PROCEDURE pTerminate:
       liSimStat      = MsRequest.ReqIParam2
       liQuarTime     = MsRequest.ReqIParam3
       lcTermReason   = MsRequest.ReqCParam3
-      lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS").
+      lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS")
+      ldeStartStamp  = YEAR(TODAY) * 10000 +
+                       MONTH(TODAY) * 100 +
+                       DAY(TODAY)
+      ldeEndStamp    = YEAR(TODAY) * 10000 +
+                       MONTH(TODAY) * 100 +
+                       DAY(TODAY + 1).
 
    ASSIGN ldMonthEndDate = fLastDayOfMonth(ldaKillDate)
           ldeMonthEndTS  = fMake2DT(ldMonthEndDate,86399)
@@ -839,6 +849,38 @@ PROCEDURE pTerminate:
       END.      
    END. /* IF llCloseRVTermFee THEN DO: */
 
+   /* Change the delivery type to paper only if the 
+     customer don't have any other active subscriptin 
+      with elivery type EMAIL or SMS*/
+   IF CAN-FIND(FIRST Customer WHERE
+                     Customer.CustNum = MobSub.InvCust AND
+                    (Customer.DelType = {&INV_DEL_TYPE_EMAIL} OR
+                     Customer.DelTYpe = {&INV_DEL_TYPE_SMS})
+              ) THEN
+   DO:
+      llCallProc = TRUE.
+      for-bmobsub:
+      FOR EACH bMobSub WHERE
+               bMobsub.Brand    = gcBrand AND
+               bMobSub.InvCust  = MobSub.InvCust AND
+               bMobSub.MsSeq   <> liMsSeq AND 
+               bMobSub.MsStatus = {&MSSTATUS_ACTIVE} NO-LOCK:
+         IF NOT CAN-FIND(FIRST MsRequest WHERE 
+                               MsRequest.MsSeq     = bMobSub.MsSeq AND
+                               MsRequest.ReqType   = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+                               LOOKUP(STRING(MSRequest.ReqStatus),lcStatusList) = 0) AND
+                               MSRequest.ActStamp  >= ldeStartStamp AND
+                               MSRequest.ActStamp  <  ldeEndStamp THEN         
+         DO:         
+            ASSIGN llCallProc = NO.
+            LEAVE for-bmobsub.
+         END.
+      END.
+   END. 
+
+   IF llCallProc THEN   
+      RUN pChangeDelType(MobSub.InvCust).
+
    CREATE TermMobsub.
    BUFFER-COPY Mobsub TO TermMobsub.
    DELETE MobSub.
@@ -1102,4 +1144,36 @@ PROCEDURE pMultiSIMTermination:
                        "").
    END.
    
-END PROCEDURE. 
+END PROCEDURE.
+
+PROCEDURE pChangeDelType:
+   DEFINE INPUT  PARAMETER liInvCust AS INTEGER   NO-UNDO.   
+               
+   FIND FIRST Customer WHERE 
+              Customer.CustNum = liInvCust
+              EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+
+   IF AVAILABLE Customer THEN      
+   DO:
+      /* If subscription termination is on 1st day of month
+      then change the delivery type and delivery status 
+      for last month invoice generated but not delivered
+      and the delivery type of one day invoice that will 
+      be generated in next bill cycle */
+      IF DAY(TODAY) = 1 THEN
+      DO:
+         FIND FIRST Invoice WHERE
+                    Invoice.Brand   = gcBrand AND
+                    Invoice.CustNum = Customer.CustNum AND
+                    Invoice.InvDate = TODAY AND
+                    Invoice.InvType <> {&INV_TYPE_TEST} AND
+                    Invoice.DeliveryState <> 2 
+                    EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+         
+         IF AVAIL Invoice THEN
+            ASSIGN Invoice.DelType       = {&INV_DEL_TYPE_PAPER}
+                   Invoice.DeliveryState = 0.                   
+      END.
+      ASSIGN Customer.DelType = {&INV_DEL_TYPE_PAPER}.
+   END.
+END PROCEDURE.
