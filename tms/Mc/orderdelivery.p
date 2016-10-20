@@ -62,7 +62,7 @@ FORM
     "Order ID ..........:" OrderDelivery.OrderId SKIP 
     "TimeStamp .........:" OrderDelivery.LOTimeStamp FORMAT "99-99-9999 hh:mm:ss"
     SKIP
-    "LO Status .........:" lcLOStatusId FORMAT ">>>9" lcLOStatus FORMAT "x(30)" SKIP
+    "LO Status .........:" lcLOStatusId lcLOStatus FORMAT "x(30)" SKIP
     "Logistic Operator..:" OrderDelivery.LOId lcLO FORMAT "x(30)" SKIP
     "Courier  ..........:" OrderDelivery.CourierId lcCourier FORMAT "x(30)" SKIP
     "Courier Shipping Id:" OrderDelivery.CourierShippingId FORMAT "x(30)" SKIP
