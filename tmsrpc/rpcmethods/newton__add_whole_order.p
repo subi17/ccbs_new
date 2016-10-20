@@ -2327,7 +2327,6 @@ END.
 
 /* YPR-3317 */
 IF plCustdataRetr AND 
-   NOT llRoiClose AND
    NOT plMultiOrder AND 
    Order.OrderType NE {&ORDER_TYPE_STC} THEN DO:
 
