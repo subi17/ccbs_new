@@ -41,7 +41,7 @@ ASSIGN
        lcProcDir   = lcRootDir + "/outgoing/processed/"
        lcFile      = lcSpoolDir + "CENTRE-" +
                      lcDate + "-" +
-                     lcTime.
+                     lcTime + ".txt".
        lcLogFile   = lcSpoolDir + "Log-CENTRE-" +
                      lcDate + "-" +
                      lcTime + ".txt".
