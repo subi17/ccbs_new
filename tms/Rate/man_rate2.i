@@ -35,7 +35,9 @@
       IF AVAILABLE InvSeq THEN NEXT.
       IF CAN-FIND(FIRST Invoice WHERE
                         Invoice.InvNum = InvSeq.InvNum AND
-                        Invoice.InvType <> {&INV_TYPE_TEST}) THEN NEXT.
+                        Invoice.InvType <> {&INV_TYPE_TEST}) THEN DO:
+         NEXT.
+      END.
    END.
    
    ASSIGN ttCall.ErrorCode = 0.
