@@ -16,10 +16,10 @@ gcBrand = "1".
 {timestamp.i}
 {eventlog.i}
 {fmakemsreq.i}
-{fbundle.i}
 {mdub.i}
 {service.i}
 {fprepaidfee.i}
+{Mm/active_bundle.i}
 
 /* files and dirs */
 DEF VAR lcLine           AS CHAR NO-UNDO.

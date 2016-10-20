@@ -36,7 +36,7 @@ gcBrand = "1".
 {tmsconst.i}
 {timestamp.i}
 {cparam2.i}
-{fbundle.i}
+{Mm/active_bundle.i}
 {upsellbundle.i}
 {tarj6.i}
 {istc.i}

@@ -18,7 +18,7 @@
 {ftaxdata.i}
 {tmsconst.i}
 {offer.i}
-{terminal_financing.i}
+{Func/financed_terminal.i}
 {mnp.i}
 
 FUNCTION fGetOrderDeliveryDateEstimation RETURNS DATE
@@ -179,7 +179,7 @@ FUNCTION fGetOrderInstallmentData RETURNS LOGICAL
       {&TF_STATUS_YOIGO} THEN DO:
 
    IF INDEX(Order.OrderChannel, "POS") = 0 THEN
-      lcBankCode = {&TF_BANK_UNOE}.
+      lcBankCode = {&TF_BANK_CETELEM}.
    ELSE
       FOR FIRST Reseller NO-LOCK WHERE
                 Reseller.Brand = gcBrand AND
