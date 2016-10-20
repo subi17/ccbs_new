@@ -48,8 +48,8 @@ FOR EACH OrderDelivery WHERE
    add_int(od_struct, "courier_id" , OrderDelivery.CourierId ). 
    add_int(od_struct, "lo_id", OrderDelivery.LOId). 
    add_int(od_struct, "lo_status_id", 
-           INT(REPLACE(STRING(OrderDelivery.LOStatusId), 
-           {&LO_STATUS_ROUTER_PREFIX}, ""))).
+           INT(SUBSTRING(STRING(OrderDelivery.LOStatusId),
+           LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1))).
    add_string(od_struct,"courier_shipping_id",OrderDelivery.CourierShippingId). 
    add_int(od_struct, "incident_info_id", OrderDelivery.IncidentInfoId ). 
    add_int(od_struct, "measures_info_id", OrderDelivery.MeasuresInfoId ). 

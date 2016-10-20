@@ -321,7 +321,7 @@ END.
 /* Remove router prefix 9999 for SMS sending */
 IF STRING(liLOStatusId) BEGINS {&LO_STATUS_ROUTER_PREFIX} THEN
    liLOStatusId = INT(SUBSTRING(STRING(liLOStatusId),
-                      5)).
+                      LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1)).
 
 fSendDextraSMS(Order.OrderID, liLOStatusId, liCourierId).
 

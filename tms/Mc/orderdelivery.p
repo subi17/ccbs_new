@@ -36,6 +36,7 @@ DEFINE VARIABLE i            AS INTEGER                 NO-UNDO.
 DEFINE VARIABLE ok           AS LOGICAL format "Yes/No" NO-UNDO.
 
 DEFINE VARIABLE llAdmin      AS LOGICAL NO-UNDO. 
+DEFINE VARIABLE lcLOStatusId AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLOStatus   AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcLO         AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcCourier    AS CHARACTER NO-UNDO. 
@@ -61,7 +62,7 @@ FORM
     "Order ID ..........:" OrderDelivery.OrderId SKIP 
     "TimeStamp .........:" OrderDelivery.LOTimeStamp FORMAT "99-99-9999 hh:mm:ss"
     SKIP
-    "LO Status .........:" OrderDelivery.LOStatusId lcLOStatus FORMAT "x(30)" SKIP
+    "LO Status .........:" lcLOStatusId FORMAT ">>>9" lcLOStatus FORMAT "x(30)" SKIP
     "Logistic Operator..:" OrderDelivery.LOId lcLO FORMAT "x(30)" SKIP
     "Courier  ..........:" OrderDelivery.CourierId lcCourier FORMAT "x(30)" SKIP
     "Courier Shipping Id:" OrderDelivery.CourierShippingId FORMAT "x(30)" SKIP
@@ -372,11 +373,14 @@ PROCEDURE local-disp-row:
 END PROCEDURE.
 
 PROCEDURE local-find-others.
+   IF STRING(OrderDelivery.LOStatusId) BEGINS {&LO_STATUS_ROUTER_PREFIX} THEN
+      lcLOStatusId = SUBSTRING(STRING(OrderDelivery.LOStatusId),
+                             LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1).
+   ELSE lcLOStatusId = STRING(OrderDelivery.LOStatusId).                          
    lcLOStatus = fGetItemName( 
       gcBrand, 
       "LOStatusId", 
-      REPLACE(STRING(OrderDelivery.LOStatusId), 
-              {&LO_STATUS_ROUTER_PREFIX}, ""),
+      lcLOStatusId,
       5,
       TODAY).
    
