@@ -36,7 +36,7 @@ DEFINE VARIABLE i            AS INTEGER                 NO-UNDO.
 DEFINE VARIABLE ok           AS LOGICAL format "Yes/No" NO-UNDO.
 
 DEFINE VARIABLE llAdmin      AS LOGICAL NO-UNDO. 
-DEFINE VARIABLE lcLOStatusId AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liLOStatusId AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcLOStatus   AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcLO         AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcCourier    AS CHARACTER NO-UNDO. 
@@ -62,7 +62,7 @@ FORM
     "Order ID ..........:" OrderDelivery.OrderId SKIP 
     "TimeStamp .........:" OrderDelivery.LOTimeStamp FORMAT "99-99-9999 hh:mm:ss"
     SKIP
-    "LO Status .........:" lcLOStatusId lcLOStatus FORMAT "x(30)" SKIP
+    "LO Status .........:" liLOStatusId FORMAT ">>>9" lcLOStatus FORMAT "x(30)" SKIP
     "Logistic Operator..:" OrderDelivery.LOId lcLO FORMAT "x(30)" SKIP
     "Courier  ..........:" OrderDelivery.CourierId lcCourier FORMAT "x(30)" SKIP
     "Courier Shipping Id:" OrderDelivery.CourierShippingId FORMAT "x(30)" SKIP
@@ -374,13 +374,13 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
    IF STRING(OrderDelivery.LOStatusId) BEGINS {&LO_STATUS_ROUTER_PREFIX} THEN
-      lcLOStatusId = SUBSTRING(STRING(OrderDelivery.LOStatusId),
-                             LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1).
-   ELSE lcLOStatusId = STRING(OrderDelivery.LOStatusId).                          
+      liLOStatusId = INT(SUBSTRING(STRING(OrderDelivery.LOStatusId),
+                             LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1)).
+   ELSE liLOStatusId = OrderDelivery.LOStatusId.                          
    lcLOStatus = fGetItemName( 
       gcBrand, 
       "LOStatusId", 
-      lcLOStatusId,
+      STRING(liLOStatusId),
       5,
       TODAY).
    
@@ -432,7 +432,7 @@ PROCEDURE local-view-record:
       OrderDelivery.LOTimeStamp
       OrderDelivery.LOId lcLO
       OrderDelivery.CourierId lcCourier
-      OrderDelivery.LOStatusId lcLoStatus
+      liLOStatusId lcLoStatus
       OrderDelivery.CourierShippingId
       /* 9 = 'Courier Incident' */
       OrderDelivery.IncidentInfoId WHEN OrderDelivery.LoStatusId EQ 9
