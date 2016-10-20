@@ -66,7 +66,7 @@ DEF TEMP-TABLE ttSLG LIKE slganalyse.
 form
    SLGAnalyse.BelongTo   COLUMN-LABEL "B" 
    SLGAnalyse.CliType      
-   SLGAnalyse.BillCode     
+   SLGAnalyse.BillCode  FORMAT "X(15)"   
    SLGANAlyse.CCN       FORMAT ">>>9"
    SLGANalyse.Bdest     FORMAT "X(8)" 
    SLGAnalyse.ValidTo   
