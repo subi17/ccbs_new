@@ -1169,7 +1169,7 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
    ASSIGN
       OrderFusion.Brand             = gcBrand
       OrderFusion.OrderId           = liOrderId
-      OrderFusion.FusionStatus      = {&FUSION_FIXED_NUMBER_TYPE_NEW}
+      OrderFusion.FusionStatus      = {&FUSION_FIXED_NUMBER_TYPE_NEW} WHEN NOT llROIClose
       OrderFusion.OrderDate         = ldaOrderDate
       OrderFusion.Salesman          = pcSalesman
       OrderFusion.FixedNumberType   = lcFixedLineNumberType
@@ -2315,6 +2315,7 @@ END.
 
 /* YPR-3317 */
 IF plCustdataRetr AND 
+   NOT llRoiClose AND
    NOT plMultiOrder AND 
    Order.OrderType NE {&ORDER_TYPE_STC} THEN DO:
 
