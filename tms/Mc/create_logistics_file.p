@@ -1327,22 +1327,25 @@ FUNCTION fDelivRouter RETURNS LOG
       NO-LOCK NO-ERROR.
 
    END.
-
-   FIND FIRST Region WHERE
-              Region.Region = AgreeCustomer.Region
-   NO-LOCK NO-ERROR.
-   lcCustRegi = Region.RgName.
-
-   /* Done because fixed line install address might include
-      region as normal text */
-   ASSIGN liTempRegion = INT(DelivCustomer.Region) NO-ERROR.
-   IF ERROR-STATUS:ERROR THEN
-      lcDeliRegi = DelivCustomer.Region.
-   ELSE DO:   
+   IF AgreeCustomer.Region > "" THEN DO: 
       FIND FIRST Region WHERE
-                 Region.Region = DelivCustomer.Region
+                 Region.Region = AgreeCustomer.Region
       NO-LOCK NO-ERROR.
-      lcDeliRegi = Region.RgName.
+      lcCustRegi = Region.RgName.
+   END.
+
+   IF DelivCustomer.Region > "" THEN DO:
+      /* Done because fixed line install address might include
+         region as normal text */
+      ASSIGN liTempRegion = INT(DelivCustomer.Region) NO-ERROR.
+      IF ERROR-STATUS:ERROR THEN
+         lcDeliRegi = DelivCustomer.Region.
+      ELSE DO:   
+         FIND FIRST Region WHERE
+                    Region.Region = DelivCustomer.Region
+         NO-LOCK NO-ERROR.
+         lcDeliRegi = Region.RgName.
+      END.
    END.
    lcOrderChannel = STRING(LOOKUP(Order.OrderChannel,
                                   "Self,TeleSales,POS,CC,,,Emission"),"99").
