@@ -2,15 +2,19 @@
 DEF VAR ldaFrom AS DATE INIT 09/07/16.
 DEF VAR liMode AS INT INIT 0.
 DEF VAR liMode_ra AS INT INIT 0.
-DEF VAR liModeBI AS INT INIT 1.
+DEF VAR liModeBI AS INT INIT 0.
 DEF VAR liModeCliType AS INT INIT 0.
+DEF VAR liModeCCN AS INT INIT 0.
+DEF VAR liModeTariff AS INT INIT 1.
 
 DEF TEMP-TABLE ttSLGAnalyse NO-UNDO LIKE SLGAnalyse.
 DEF TEMP-TABLE ttRequestAction NO-UNDO LIKE RequestAction.
 DEF TEMP-TABLE ttBillItem NO-UNDO LIKE BillItem.
+DEF TEMP-TABLE ttTariff NO-UNDO LIKE Tariff.
 DEF BUFFER bSLGAnalyse FOR SLGAnalyse.
 DEF BUFFER bRequestAction FOR RequestAction.
 DEF BUFFER bBillItem FOR BillItem.
+DEF BUFFER bTariff FOR Tariff.
 DEF VAR liActionId AS INT.
 
 FUNCTION fcreateSLGAnalyse RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
@@ -391,3 +395,120 @@ createBillItem("CONT24VOICE_A", "CONTS10GB_DATA_A",
 createBillItem("CONT24VOICE_A", "CONTS10GB_DATA_B",
                "Cont S national GPRS",
                70510100,"3","1","1","003",FALSE,"SL",liModeBI).
+
+/* CCN changes */
+
+FUNCTION createCCN RETURNS LOG (INPUT liCCN AS INT,
+                                INPUT lcName AS CHAR,
+                                INPUT liMode AS INT).
+   IF CAN-FIND(FIRST CCN WHERE
+                    CCN.brand EQ "1" AND
+                    CCN.ccn EQ liCCN) THEN
+   MESSAGE "CCN exist" + STRING(liCCN) VIEW-AS ALERT-BOX.
+   ELSE IF liMode > 0 THEN DO:
+      CREATE CCN.
+      ASSIGN
+         CCN.Brand = "1"
+         CCN.CCN = liCCN
+         CCN.CCNName = lcName. 
+   END.
+   RETURN TRUE.
+END.                                
+
+FUNCTION createTariff RETURNS LOG (INPUT lcBase AS CHAR,
+                                   INPUT liCCN AS INT,
+                                   INPUT lcpricelist AS CHAR,
+                                   INPUT lcBdest AS CHAR,
+                                   INPUT liMode AS INT).
+   DEF VAR lcTempCCN AS CHAR NO-UNDO.
+   IF lcBdest EQ "" AND CAN-FIND(FIRST Tariff WHERE
+                                       Tariff.brand EQ "1" AND
+                                       Tariff.CCN EQ liCCN AND
+                                       Tariff.pricelist EQ lcpricelist) THEN
+      MESSAGE "tariff exists " + STRING(liCCN) VIEW-AS ALERT-BOX.
+   ELSE IF CAN-FIND(FIRST Tariff WHERE
+                          Tariff.brand EQ "1" AND
+                          Tariff.CCN EQ liCCN AND
+                          Tariff.bdest EQ lcBdest AND
+                          Tariff.pricelist EQ lcpricelist) THEN
+      MESSAGE "tariff exists " + STRING(liCCN) VIEW-AS ALERT-BOX.
+   ELSE IF liMode > 0 THEN DO:
+      IF lcBase > "" THEN DO:
+         IF STRING(liCCN) BEGINS "10" THEN
+            lcTempCCN = SUBSTRING(STRING(liCCN),3).
+         ELSE IF STRING(liCCN) BEGINS "16" THEN
+           lcTempCCN = SUBSTRING(STRING(liCCN),2).
+         ELSE
+            lcTempCCN = STRING(liCCN).
+         FOR EACH bTariff WHERE 
+                  bTariff.brand EQ "1" AND
+                  bTariff.ccn EQ INT(lcTempCCN) AND
+                  bTariff.pricelist EQ lcBase AND
+                  bTariff.validto > TODAY:
+             CREATE ttTariff.
+             BUFFER-COPY bTariff TO ttTariff.
+             ASSIGN
+                ttTariff.CCN = liCCN
+                ttTariff.pricelist = lcPriceList
+                ttTariff.validFrom = 10/15/16. 
+             CREATE Tariff.
+             ttTariff.tariffnum = next-value(Tariff).
+             BUFFER-COPY ttTariff TO Tariff.
+             DELETE ttTariff.
+         END.
+      END.
+      ELSE DO:
+         FIND FIRST bTariff WHERE 
+                    bTariff.brand EQ "1" AND
+                    bTariff.ccn EQ liCCN AND
+                    bTariff.pricelist EQ lcBase AND
+                    bTariff.validto > TODAY NO-ERROR.
+         IF AVAIL bTariff THEN DO:           
+            BUFFER-COPY bTariff TO ttTariff.
+            CREATE Tariff.            
+            ASSIGN
+               ttTariff.Brand = "1"
+               ttTariff.CCN = liCCN
+               ttTariff.pricelist = lcpricelist
+               ttTariff.bdest = lcBDest
+               ttTariff.tariffnum = next-value(Tariff).
+            BUFFER-COPY ttTariff TO Tariff.
+            DELETE ttTariff.
+         END.
+      END.
+   END.
+   RETURN TRUE.
+
+END.
+
+createCCN(1002, "Fixed to International Call", limodeCCN).
+createCCN(1081, "Fixed to National", limodeCCN).
+createCCN(1008, "Fixed to Freephone Voice", limodeCCN).
+createCCN(1061, "Service numbers 60-30-30", limodeCCN).
+createCCN(1069, "Service numbers 60-30-30", limodeCCN).
+createCCN(1063, "micropagos numbers -SPECSERV", limodeCCN).
+createCCN(1631, "micropagos numbers -SPECSERV", limodeCCN).
+createCCN(1064, "Service numbers 20-30", limodeCCN).
+createCCN(1066, "Fixed to special short numbers", limodeCCN).
+createCCN(1067, "Fixed to special short numbers", limodeCCN).   
+
+
+createTariff("COMMON",1002,"CONTRATOFIXED","",liModeTariff).
+createTariff("COMMON",1008,"CONTRATOFIXED","",liModeTariff).
+createTariff("COMMON",1061,"CONTRATOFIXED","",liModeTariff).
+createTariff("COMMON",1063,"CONTRATOFIXED","",liModeTariff).
+createTariff("COMMON",1064,"CONTRATOFIXED","",liModeTariff).
+createTariff("COMMON",1066,"CONTRATOFIXED","",liModeTariff).
+createTariff("COMMON",1067,"CONTRATOFIXED","",liModeTariff).
+createTariff("COMMON",1069,"CONTRATOFIXED","",liModeTariff).
+createTariff("COMMON",1081,"CONTRATOFIXED","",liModeTariff).
+createTariff("COMMON",1631,"CONTRATOFIXED","",liModeTariff).
+
+createTariff("COMMON",1008,"CONTRATOFIXED","70",liModeTariff).
+createTariff("COMMON",1008,"CONTRATOFIXED","082",liModeTariff).
+createTariff("COMMON",1008,"CONTRATOFIXED","083",liModeTariff).
+createTariff("COMMON",1008,"CONTRATOFIXED","085",liModeTariff).
+createTariff("COMMON",1008,"CONTRATOFIXED","088",liModeTariff).
+
+
+
