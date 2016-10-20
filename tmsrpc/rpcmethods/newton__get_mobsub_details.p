@@ -124,7 +124,9 @@ resp_struct = add_struct(response_toplevel_id, "").
 
 add_string(resp_struct, "cli", mobsub.cli).
 IF Mobsub.fixednumber NE ? THEN
-   add_string(resp_struct, "fixed_number", Mobsub.fixednumber). 
+   add_string(resp_struct, "fixed_number", Mobsub.fixednumber).
+ELSE
+   add_string(resp_struct, "fixed_number", "").
 add_int(resp_struct, "msstatus", mobsub.MsStatus).
 add_string(resp_struct, "barring_code", (IF mobsub.MsStatus EQ 8 
                                          THEN mobsub.barrcode
