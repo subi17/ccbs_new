@@ -199,15 +199,6 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
          OrderCustomer.OrderId = Order.OrderId AND
          OrderCustomer.RowType = 1 BY OrderTimeStamp.TimeStamp:
 
-   llCetelemOrder = CAN-FIND(FIRST OrderAction WHERE
-                         OrderAction.Brand    = gcBrand AND
-                         OrderAction.OrderId  = Order.OrderId AND
-                         OrderAction.ItemType = "TerminalFinancing" AND
-                         OrderAction.ItemKey  = "0225").
-
-   IF lcTFBank = {&TF_BANK_CETELEM} AND
-      NOT llCetelemOrder THEN NEXT ORDER_LOOP.
-
    EMPTY TEMP-TABLE ttOrderCustomer NO-ERROR.
 
    fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
@@ -241,6 +232,12 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
 
    /* direct channels */
    IF INDEX(Order.OrderChannel, "POS") = 0 THEN DO:
+
+      llCetelemOrder = CAN-FIND(FIRST OrderAction WHERE
+                           OrderAction.Brand    = gcBrand AND
+                           OrderAction.OrderId  = Order.OrderId AND
+                           OrderAction.ItemType = "TerminalFinancing" AND
+                           OrderAction.ItemKey  = "0225").
 
       IF llCetelemOrder AND
          lcTFBank NE {&TF_BANK_CETELEM} AND
