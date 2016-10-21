@@ -174,10 +174,6 @@ FUNCTION pCheckTextSection RETURNS LOG (INPUT-OUTPUT pcText AS CHARACTER,
             ttOutputText.id = iLargestId.
      iLargestId = iLargestId + 1.
      pcText = "".
-     IF iLargestID MOD 1 EQ 0 THEN DO:
-        DISP iLargestID.
-        PAUSE 0.
-     END.
      RETURN TRUE.
   END.
   RETURN FALSE.
@@ -332,7 +328,10 @@ REPEAT TRANSACTION:
    END.
    
    RUN pCreateReq.
-   RUN pLO.
+
+   PUT STREAM sOut UNFORMATTED
+      ";Success"
+      SKIP.
 
    liCount = liCount + 1.
    IF liCount MOD 1 EQ 0 THEN DO:
@@ -359,7 +358,15 @@ PROCEDURE pCreateReq:
    FIND FIRST Customer NO-LOCK WHERE
               Customer.CustNum = liCustNum NO-ERROR.
    IF AVAIL Customer THEN DO:
-      lcStock = fSearchStock("NEW",Customer.ZipCode).
+      
+      IF Customer.ZipCode BEGINS "35" OR
+         Customer.ZipCode BEGINS "38" THEN
+         lcStock = "NEW_CAN_ISL".
+      ELSE
+         lcStock = "NEW".
+
+      lcStock = fSearchStock(lcStock,Customer.ZipCode).
+
       SearchSIM:
       FOR EACH SIM NO-LOCK USE-INDEX simstat WHERE
                SIM.Brand = gcBrand AND
