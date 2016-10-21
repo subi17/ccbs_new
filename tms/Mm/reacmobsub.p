@@ -977,7 +977,7 @@ PROCEDURE pChangeDelType:
       FIND FIRST Invoice WHERE
                  Invoice.Brand   = gcBrand AND
                  Invoice.CustNum = Customer.CustNum AND
-                 Invoice.InvType <> {&INV_TYPE_TEST}  
+                 Invoice.InvType = {&INV_TYPE_NORMAL}  
                  EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
                                                                                                    
       IF AVAIL Invoice THEN
