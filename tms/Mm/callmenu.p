@@ -12,7 +12,7 @@
 
 DEF INPUT  PARAMETER msseq  AS INT .
 
-DEF VAR menuc      AS CHAR EXTENT 9 NO-UNDO.
+DEF VAR menuc      AS CHAR EXTENT 10 NO-UNDO.
 DEF VAR lcUserName AS CHAR NO-UNDO FORMAT "X(30)".
 DEF VAR lhSub AS HANDLE NO-UNDO. 
 
@@ -50,6 +50,9 @@ DO WHILE TRUE:
  "H) NRTRDE Browse               "                    @ menuc[8] SKIP
  "I) Fixed Calls Browse          "  WHEN MobSub.FixedNumber > "" 
                                                       @ menuc[9] SKIP
+ "J) Fixed Calls Value           "  WHEN MobSub.FixedNumber > "" 
+                                                      @ menuc[10] SKIP
+
 
  
    WITH OVERLAY WIDTH 40 FRAME choices NO-LABELS.
@@ -65,7 +68,7 @@ DO WHILE TRUE:
    END.   
 
    ELSE IF FRAME-INDEX = 2 THEN DO:
-      RUN msisdniv.p(Mobsub.MsSeq).
+      RUN msisdniv.p(Mobsub.MsSeq, FALSE).
    END.
 
    ELSE IF FRAME-INDEX = 3 THEN DO:
@@ -96,8 +99,12 @@ DO WHILE TRUE:
       IF MobSub.FixedNumber > "" THEN RUN mobcallm.p(MobSub.fixednumber).
    END.
 
-             
-   ELSE IF FRAME-INDEX > 9 OR FRAME-INDEX = 0 THEN LEAVE.
+   ELSE IF FRAME-INDEX = 10 THEN DO:   
+      IF MobSub.FixedNumber > "" THEN RUN msisdniv.p(Mobsub.MsSeq, TRUE).
+   END.
+
+            
+   ELSE IF FRAME-INDEX > 10 OR FRAME-INDEX = 0 THEN LEAVE.
 
 END. /* DO WHILE */
 

@@ -19,6 +19,7 @@
 {fvatfact.i}
 
 DEF INPUT PARAMETER    MsSeq LIKE MobSub.MsSeq  NO-UNDO.
+DEF INPUT PARAMETER    ilgFixedValues AS LOGICAL  NO-UNDO.
 
 DEF TEMP-TABLE ttCAll NO-UNDO LIKE Mobcdr
    FIELD CDRTable AS CHAR 
@@ -41,19 +42,38 @@ DEF VAR lcTaxZone  AS CHAR NO-UNDO.
 DEF VAR ldVatPerc  AS DEC  NO-UNDO.
 DEF VAR ldaTaxDate AS DATE NO-UNDO. 
 
-FIND MobSub where MobSub.MsSeq = MsSeq no-lock no-error.
 
 
-if avail mobsub then ASSIGN
-   lccli = mobsub.cli
-   liCustNum = MobSub.InvCust.
-ELSE  DO:
-   find first msowner where 
-              msowner.msseq = msseq NO-LOCK NO-ERROR.
-   IF avail msowner then ASSIGN
-      lccli = msowner.cli
-      liCustNum = MsOwner.InvCust.
-END.   
+IF ilgFixedValues EQ TRUE THEN DO:
+   /*Search for fixed line calls*/
+   FIND MobSub where MobSub.MsSeq = MsSeq no-lock no-error.
+
+    IF AVAIL mobsub THEN ASSIGN
+      lccli = MobSub.FixedNumber
+      liCustNum = MobSub.InvCust.
+   ELSE  DO:
+      FIND FIRST MsOwner WHERE
+                 MsOwner.MsSeq EQ msseq NO-LOCK NO-ERROR.
+      IF avail MsOwner then ASSIGN
+         lccli = MsOwner.FixedNumber
+         liCustNum = MsOwner.InvCust.
+   END.   
+END.
+ELSE DO:
+   /*Mobile calls*/
+   FIND MobSub where MobSub.MsSeq = MsSeq no-lock no-error.
+
+   if avail mobsub then ASSIGN
+      lccli = mobsub.cli
+      liCustNum = MobSub.InvCust.
+   ELSE  DO:
+      find first msowner where 
+                 msowner.msseq = msseq NO-LOCK NO-ERROR.
+      IF avail msowner then ASSIGN
+         lccli = msowner.cli
+         liCustNum = MsOwner.InvCust.
+   END.   
+END.
 
 
 form
