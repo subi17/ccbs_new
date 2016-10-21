@@ -184,7 +184,7 @@ IF liMode_ra > 0 THEN DO:
       RequestAction.reqtype = 0
       RequestAction.clitype = ""
       RequestAction.action = 11
-      RequestAction.actionkey = "FTERM6-100"
+      RequestAction.actionkey = "FTERM12-100"
       RequestAction.actiontype = "DayCampaign"
       RequestAction.paytype = 1
       RequestAction.requestactionid = liActionID 
@@ -231,7 +231,7 @@ IF liMode_ra > 0 THEN DO:
       RequestAction.reqtype = 0
       RequestAction.clitype = ""
       RequestAction.action = 1
-      RequestAction.actionkey = "FTERM6-100"
+      RequestAction.actionkey = "FTERM12-100"
       RequestAction.actiontype = "DayCampaign"
       RequestAction.paytype = 1
       RequestAction.requestactionid = liActionID
@@ -263,7 +263,7 @@ IF liMode_ra > 0 THEN DO:
       RequestAction.reqtype = 46
       RequestAction.clitype = ""
       RequestAction.action = 5
-      RequestAction.actionkey = "FTERM6-100"
+      RequestAction.actionkey = "FTERM12-100"
       RequestAction.actiontype = "DayCampaign"
       RequestAction.paytype = 1
       RequestAction.requestactionid = liActionID
@@ -351,22 +351,22 @@ createBillItem("FLATVOICE", "FCCYOIGO", "Fixed to Customer Care",
                70510100,"51","1","1","003",FALSE,"SL",liModeBI).
 
 /* Fixed line inside package billing items */
-createBillItem("CONT24VOICE_A", "CONTDSL_QTY_VOICE", 
+createBillItem("CONT24VOICE_A", "CONTDSL_QTY_IN", 
                "Convergent flat rate national fixed to fixed",
                70510100,"51","1","1","003",FALSE,"SL",liModeBI).
-createBillItem("CONT24VOICE_A", "CONTDSL_MIN_VOICE",
+createBillItem("CONT24VOICE_A", "CONTDSL_MIN_IN",
                "Convergent flat rate national fixed to mobil",
                70510100,"51","1","1","003",FALSE,"SL",liModeBI).
-createBillItem("CONT24VOICE_A", "CONTFH50_QTY_VOICE",
+createBillItem("CONT24VOICE_A", "CONTFH50_QTY_IN",
                "Convergent flat rate national fixed to fixed",
                70510100,"51","1","1","003",FALSE,"SL",liModeBI).
-createBillItem("CONT24VOICE_A", "CONTFH50_MIN_VOICE",
+createBillItem("CONT24VOICE_A", "CONTFH50_MIN_IN",
                "Convergent flat rate national fixed to mobile",
                70510100,"51","1","1","003",FALSE,"SL",liModeBI).
-createBillItem("CONT24VOICE_A", "CONTFH300_QTY_VOICE",
+createBillItem("CONT24VOICE_A", "CONTFH300_QTY_IN",
                "Convergent flat rate national fixed to fixed",
                70510100,"51","1","1","003",FALSE,"SL",liModeBI).
-createBillItem("CONT24VOICE_A", "CONTFH300_MIN_VOICE",
+createBillItem("CONT24VOICE_A", "CONTFH300_MIN_IN",
                "Convergent flat rate national fixed to mobile",
                70510100,"51","1","1","003",FALSE,"SL",liModeBI).
 
@@ -453,6 +453,7 @@ FUNCTION createTariff RETURNS LOG (INPUT lcBase AS CHAR,
                 ttTariff.validFrom = 10/15/16. 
              CREATE Tariff.
              ttTariff.tariffnum = next-value(Tariff).
+             ttTariff.billcode = "F" + ttTariff.billcode.
              BUFFER-COPY ttTariff TO Tariff.
              DELETE ttTariff.
          END.
@@ -461,7 +462,6 @@ FUNCTION createTariff RETURNS LOG (INPUT lcBase AS CHAR,
          FIND FIRST bTariff WHERE 
                     bTariff.brand EQ "1" AND
                     bTariff.ccn EQ liCCN AND
-                    bTariff.pricelist EQ lcBase AND
                     bTariff.validto > TODAY NO-ERROR.
          IF AVAIL bTariff THEN DO:           
             BUFFER-COPY bTariff TO ttTariff.
@@ -471,6 +471,7 @@ FUNCTION createTariff RETURNS LOG (INPUT lcBase AS CHAR,
                ttTariff.CCN = liCCN
                ttTariff.pricelist = lcpricelist
                ttTariff.bdest = lcBDest
+               ttTariff.billcode = "F" + ttTariff.billcode
                ttTariff.tariffnum = next-value(Tariff).
             BUFFER-COPY ttTariff TO Tariff.
             DELETE ttTariff.
@@ -504,11 +505,44 @@ createTariff("COMMON",1069,"CONTRATOFIXED","",liModeTariff).
 createTariff("COMMON",1081,"CONTRATOFIXED","",liModeTariff).
 createTariff("COMMON",1631,"CONTRATOFIXED","",liModeTariff).
 
-createTariff("COMMON",1008,"CONTRATOFIXED","70",liModeTariff).
-createTariff("COMMON",1008,"CONTRATOFIXED","082",liModeTariff).
-createTariff("COMMON",1008,"CONTRATOFIXED","083",liModeTariff).
-createTariff("COMMON",1008,"CONTRATOFIXED","085",liModeTariff).
-createTariff("COMMON",1008,"CONTRATOFIXED","088",liModeTariff).
+createTariff("",1008,"CONTRATOFIXED","70",liModeTariff).
+createTariff("",1008,"CONTRATOFIXED","082",liModeTariff).
+createTariff("",1008,"CONTRATOFIXED","083",liModeTariff).
+createTariff("",1008,"CONTRATOFIXED","085",liModeTariff).
+createTariff("",1008,"CONTRATOFIXED","088",liModeTariff).
+createTariff("",1081,"CONTRATOFIXED","CONTDSL_QTY_IN",liModeTariff).
+createTariff("",1081,"CONTRATOFIXED","CONTDSL_MIN_IN",liModeTariff).
+createTariff("",1081,"CONTRATOFIXED","CONTFH50_QTY_IN",liModeTariff).
+createTariff("",1081,"CONTRATOFIXED","CONTFH50_MIN_IN",liModeTariff).
+createTariff("",1081,"CONTRATOFIXED","CONTFH300_QTY_IN",liModeTariff).
+createTariff("",1081,"CONTRATOFIXED","CONTFH300_MIN_IN",liModeTariff).
 
 
+/* permanency for 12 months again */
+FIND FIRST Daycampaign WHERE
+           DayCampaign.dcevent EQ "FTERM6-100" NO-ERROR.
+IF AVAIL Daycampaign THEN
+   DAycampaign.validto = 10/20/16.
+   /* in staging there are already subscriptions with old one 
+      ended here */
 
+FIND FIRST Daycampaign WHERE
+           DayCampaign.dcevent EQ "FTERM12-100" NO-ERROR.
+IF NOT AVAIL Daycampaign THEN DO:
+   CREATE Daycampaign.
+   ASSIGN
+      Daycampaign.brand = "1"
+      DayCampaign.dcevent = "FTERM12-100"
+      DayCampaign.DCName = "FTERM12 periodical contract"
+      DayCampaign.statuscode = 1
+      DayCampaign.dctype = "3"
+      DayCampaign.instancelimit = 1
+      DayCampaign.calcmethod = 1
+      DayCampaign.effective = 1
+      DayCampaign.durtype = 3
+      DayCampaign.durmonths = 6
+      DayCampaign.durunit = 2
+      DayCampaign.validfrom = 10/21/16
+      DayCampaign.validto = 12/31/49.
+
+END.

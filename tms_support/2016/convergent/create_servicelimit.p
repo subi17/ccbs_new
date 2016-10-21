@@ -21,7 +21,8 @@ FUNCTION create_limit returns log (INPUT lcCode as CHAR,
                                    INPUT ldAmt AS DEC,
                                    INPUT liDialType AS INT,
                                    INPUT liUnit AS INT):
-   
+   DEF VAR lcTempBI AS CHAR.
+
    IF CAN-FIND(FIRST ServiceLimit WHERE servicelimit.groupcode EQ lccode AND
                                   servicelimit.slname EQ lcName) THEN
       RETURN false.
@@ -43,6 +44,14 @@ FUNCTION create_limit returns log (INPUT lcCode as CHAR,
           servicelimit.firstmonthcalc = 0
           servicelimit.lastmonthcalc = 0
           servicelimit.webdisp = 1.
+   
+   CREATE servicelimittarget.
+   IF lcLimit EQ "_MIN" THEN lcTempBI = "F10100003".
+   ELSE lcTempBI = "F10100005".
+   ASSIGN servicelimittarget.ServiceLMember = lcTempBI 
+          servicelimittarget.insiderate = lcCode + lcLimit + "_IN"
+          servicelimittarget.outsiderate = lcCode + lcLimit + "_OUT"
+          servicelimittarget.slseq = laskuri.
    return true.
 END.                                   
 
