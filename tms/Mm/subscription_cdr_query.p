@@ -42,7 +42,7 @@ REPEAT WITH FRAME fCLI ON ENDKEY UNDO, LEAVE:
    UPDATE lcCLI llErrorCodes WITH FRAME fCLI.
 
    IF lcCLI > "" AND lcCLI BEGINS "9" AND
-      NOT CAN-FIND(FIRST MobSub WHERE MobSub.FixedNumber EQ lcCLI) THEN DO:
+      NOT CAN-FIND(FIRST MsOwner WHERE MsOwner.FixedNumber EQ lcCLI) THEN DO:
       MESSAGE "Unknown Fixed Number"
       VIEW-AS ALERT-BOX ERROR.
       NEXT.

@@ -124,7 +124,10 @@ REPEAT:
    IF SESSION:BATCH THEN fBatchLog("START", lcInputFile). 
 
    lcBankName = (IF INDEX(lcFileName,"SABADELL") > 0
-                 THEN "SABADELL" ELSE "UNOE").
+                    THEN "SABADELL" 
+                 ELSE IF INDEX(lcFileName,"CETELEM") > 0
+                    THEN "CETELEM"  
+                 ELSE "UNOE").
 
    ASSIGN
       lcLogFileName = lcFileName + "_" + 
@@ -474,6 +477,7 @@ PROCEDURE pProcessData:
 
          lcCommissionBillCode = 
               (IF FixedFee.TFBank EQ {&TF_BANK_UNOE} THEN "PAYTERMCG1E"
+               ELSE IF FixedFee.TFBank EQ {&TF_BANK_CETELEM} THEN "PAYTERMCGBC"
                ELSE "PAYTERMCGBS").
             
          /* should not be possible but better to check */
@@ -531,6 +535,8 @@ PROCEDURE pProcessData:
                      bResidualFee.BillCode = "RVTERM1EF".
                   ELSE IF FixedFee.TFBank EQ {&TF_BANK_SABADELL} THEN
                      bResidualFee.BillCode = "RVTERMBSF".
+                  ELSE IF FixedFee.TFBank EQ {&TF_BANK_CETELEM} THEN
+                     bResidualFee.BillCode = "RVTERMBCF".
                   RELEASE bResidualFee.
                END.
             END.

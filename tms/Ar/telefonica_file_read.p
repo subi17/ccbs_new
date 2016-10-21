@@ -113,6 +113,8 @@ REPEAT:
       liLineNum = 0
       ldThisRun = fMakeTS().
    
+   lcLogFile = lcLogDir + lcFileName + ".LOG". 
+   
    RUN pMarkStarted. 
    IF RETURN-VALUE NE "OK" THEN LEAVE FILE_LOOP. 
 
@@ -125,7 +127,6 @@ REPEAT:
        STRING(YEAR(ldaToday) * 10000 + MONTH(ldaToday) * 100 + DAY(ldaToday)) + 
             "_" + REPLACE(STRING(liTime,"HH:MM:SS"),":","") + ".txt"
       lcTFLog = lcOutSpoolDir + lcFileName + ".RESP".
-      lcLogFile = lcLogDir + lcFileName + ".LOG". 
 
    /* First just read all the data to temp table */
    LINE_LOOP:

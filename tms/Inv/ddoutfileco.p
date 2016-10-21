@@ -46,6 +46,7 @@ DEF VAR liFileSeq   AS INT  NO-UNDO.
 DEF VAR lcTestDir   AS CHAR NO-UNDO.
 DEF VAR lcFileXml   AS CHAR NO-UNDO. 
 DEF VAR liNBCCount  AS INT  NO-UNDO. 
+DEF VAR liCEBCount  AS INT  NO-UNDO INITIAL 0.
 DEF VAR liSBICount  AS INT  NO-UNDO INITIAL 0.
 DEF VAR liSAICount  AS INT  NO-UNDO INITIAL 0.
 DEF VAR liBBICount  AS INT  NO-UNDO INITIAL 0.
@@ -57,14 +58,17 @@ DEF VAR ldaDueDate  AS DATE NO-UNDO.
 DEF VAR lcBankCode  AS CHAR NO-UNDO. 
 DEF VAR liFiles     AS INT  NO-UNDO. 
 
+DEFINE VARIABLE liCEBPerc  AS DECIMAL NO-UNDO INITIAL 0.
 DEFINE VARIABLE liSBIPerc  AS DECIMAL NO-UNDO INITIAL 0.
 DEFINE VARIABLE liSAIPerc  AS DECIMAL NO-UNDO INITIAL 0.
 DEFINE VARIABLE liBBIPerc  AS DECIMAL NO-UNDO INITIAL 0.
 DEFINE VARIABLE liLAIPerc  AS DECIMAL NO-UNDO INITIAL 0.
+DEFINE VARIABLE liCEBValue AS INTEGER NO-UNDO INITIAL 0.
 DEFINE VARIABLE liSBIValue AS INTEGER NO-UNDO INITIAL 0.
 DEFINE VARIABLE liSAIValue AS INTEGER NO-UNDO INITIAL 0.
 DEFINE VARIABLE liBBIValue AS INTEGER NO-UNDO INITIAL 0.
 DEFINE VARIABLE liLAIValue AS INTEGER NO-UNDO INITIAL 0.
+DEFINE VARIABLE liCEBolval AS INTEGER NO-UNDO INITIAL 0.
 DEFINE VARIABLE liSBIolval AS INTEGER NO-UNDO INITIAL 0.
 DEFINE VARIABLE liSAIolval AS INTEGER NO-UNDO INITIAL 0.
 DEFINE VARIABLE liBBIolval AS INTEGER NO-UNDO INITIAL 0.
@@ -154,6 +158,7 @@ FUNCTION fMakeTemp RETURNS LOGICAL (
              WHEN {&TF_BANK_UNOE}     THEN liSAICount = liSAICount + 1.
              WHEN {&TF_BANK_BBVA}     THEN liBBICount = liBBICount + 1.
              WHEN {&TF_BANK_SABADELL} THEN liSBICount = liSBICount + 1.
+             WHEN {&TF_BANK_CETELEM}  THEN liCEBCount = liCEBCount + 1.
              WHEN {&TF_BANK_LACAXIA}  THEN liLAICount = liLAICount + 1.
           END CASE.
        END.
@@ -333,6 +338,7 @@ IF icInputFileDir EQ "" THEN DO:
              WHEN {&TF_BANK_UNOE}     THEN liSAIPerc = BankAccount.DDAllocation.
              WHEN {&TF_BANK_BBVA}     THEN liBBIPerc = BankAccount.DDAllocation.
              WHEN {&TF_BANK_SABADELL} THEN liSBIPerc = BankAccount.DDAllocation.
+             WHEN {&TF_BANK_CETELEM}  THEN liCEBPerc = BankAccount.DDAllocation.
              WHEN {&TF_BANK_LACAXIA}  THEN liLAIPerc = BankAccount.DDAllocation.
       END CASE.
    END.
@@ -371,6 +377,12 @@ IF icInputFileDir EQ "" THEN DO:
    IF liSBICount > liSBIValue THEN DO:
       liSBIolval = liSBICount - liSBIValue.
       RUN pSplitBankInvoices(liSBIolval,{&TF_BANK_SABADELL}). 
+   END.    
+   
+   /*CETELEM*/
+   IF liCEBCount > liCEBValue THEN DO:
+      liCEBolval = liCEBCount - liCEBValue.
+      RUN pSplitBankInvoices(liCEBolval,{&TF_BANK_CETELEM}). 
    END.    
    
    IF liSAICount > liSAIValue THEN DO:
@@ -531,6 +543,11 @@ PROCEDURE pSplitInvoice:
       ASSIGN 
          ttInvoice.BankCode = {&TF_BANK_BBVA}
          liBBICount         = liBBICount + 1.
+   ELSE IF liCEBCount <= liCEBValue THEN
+      ASSIGN 
+         ttInvoice.BankCode = {&TF_BANK_CETELEM}
+         liCEBCount         = liCEBCount + 1.
+
 
 /* This has to be uncommented after nov bill run */
 /*  ELSE IF liLAICount <= liLAIValue THEN

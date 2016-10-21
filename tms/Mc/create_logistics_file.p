@@ -26,6 +26,7 @@ gcBrand = "1".
 {forderstamp.i}
 {orderfunc.i}
 {fbundle.i}
+{Mm/active_bundle.i}
 {mnp.i}
 {email.i}
 
@@ -54,11 +55,15 @@ DEFINE VARIABLE lcTarOption        AS CHARACTER NO-UNDO.
 DEF VAR ldaCont15PromoFrom         AS DATE NO-UNDO. 
 DEF VAR ldaCont15PromoEnd          AS DATE NO-UNDO. 
 DEFINE VARIABLE ocResult           AS CHAR      NO-UNDO. 
+DEFINE VARIABLE oiCustomer         AS INTEGER   NO-UNDO.
+DEFINE VARIABLE llCorporate        AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE lcError            AS CHARACTER NO-UNDO.
 
 DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
 DEFINE BUFFER DelivCustomer   FOR OrderCustomer.
 DEFINE BUFFER bBillItem       FOR BillItem.
+DEFINE BUFFER lbMobSub        FOR MobSub.
 
 DEFINE TEMP-TABLE ttOutputText 
    FIELD cText AS CHARACTER
@@ -1559,6 +1564,63 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
 
    lhTable = BUFFER ttOneDelivery:HANDLE.
    lcLine = "".
+
+   /*YDR-2313 Create Cust. Nbr just when the order is placed*/
+   oiCustomer = 0.
+
+   FIND FIRST Order WHERE
+              Order.Brand   = gcBrand AND
+              Order.OrderID = ttOneDelivery.OrderID AND
+              Order.CustNum = 0 NO-LOCK NO-ERROR.
+   IF AVAILABLE Order THEN
+   DO:
+      RUN createcustomer(INPUT ttOneDelivery.OrderId,1,FALSE,TRUE,OUTPUT oiCustomer).
+
+      llCorporate = CAN-FIND(OrderCustomer WHERE
+                             OrderCustomer.Brand      = gcBrand               AND
+                             OrderCustomer.OrderID    = ttOneDelivery.OrderID AND
+                             OrderCustomer.RowType    = 1                     AND
+                             OrderCustomer.CustIdType = "CIF").
+
+      FOR EACH OrderCustomer NO-LOCK WHERE
+               OrderCustomer.Brand   = gcBrand AND
+               OrderCustomer.OrderID = ttOneDelivery.OrderID:
+         IF llCorporate AND (OrderCustomer.RowType = 1 OR OrderCustomer.RowType = 5) THEN
+         DO:
+            RUN createcustcontact.p(OrderCustomer.OrderID,
+                                    oiCustomer,
+                                    OrderCustomer.RowType,
+                                    OUTPUT lcError).
+            IF lcError > "" THEN DO:
+               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                "Order",
+                                STRING(OrderCustomer.OrderID),
+                                oiCustomer,
+                                "CUSTOMER CONTACT CREATION FAILED",
+                                lcError).
+            END.
+         END.
+         ELSE IF OrderCustomer.RowType = 1 AND
+                 NOT Order.PayType         AND
+                 NOT CAN-FIND(FIRST lbMobSub WHERE
+                              lbMobSub.Brand    = gcBrand       AND
+                              lbMobSub.MsSeq   <> Order.MsSeq   AND
+                              lbMobSub.CustNum  = Order.CustNum AND
+                              NOT lbMobSub.PayType) THEN
+         DO:
+            FIND FIRST Customer EXCLUSIVE-LOCK WHERE
+                       Customer.CustNum = oiCustomer NO-ERROR.
+            IF AVAILABLE Customer THEN
+            DO:
+               ASSIGN Customer.AuthCustID     = Order.OrdererID
+                      Customer.AuthCustIDType = Order.OrdererIDType.
+               RELEASE Customer.
+            END.
+         END.
+      END.
+
+      RUN createcustomer(INPUT ttOneDelivery.OrderId,3,FALSE,TRUE,OUTPUT oiCustomer).
+   END.
 
    DO liLoop1 = 1 TO lhTable:NUM-FIELDS:
 
