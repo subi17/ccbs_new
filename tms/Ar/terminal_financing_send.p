@@ -239,12 +239,14 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
                            OrderAction.ItemType = "TerminalFinancing" AND
                            OrderAction.ItemKey  = "0225").
 
-      IF llCetelemOrder AND
-         lcTFBank NE {&TF_BANK_CETELEM} AND
-         FixedFee.BillCode NE "RVTERM" THEN NEXT ORDER_LOOP.
-      ELSE IF NOT llCetelemOrder AND
-         lcTFBank NE {&TF_BANK_UNOE} AND
-         FixedFee.BillCode NE "RVTERM" THEN NEXT ORDER_LOOP.
+      IF llCetelemOrder THEN DO:
+         IF lcTFBank NE {&TF_BANK_CETELEM} AND
+            FixedFee.BillCode NE "RVTERM" THEN NEXT ORDER_LOOP.
+      END.
+      ELSE DO:
+         IF lcTFBank NE {&TF_BANK_UNOE} AND
+            FixedFee.BillCode NE "RVTERM" THEN NEXT ORDER_LOOP.
+      END.
 
       IF LOOKUP(Order.OrderChannel,"self,renewal") > 0 THEN ASSIGN
          lcFUC[1] = "332577543" 
