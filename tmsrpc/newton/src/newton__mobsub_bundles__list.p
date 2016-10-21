@@ -53,8 +53,7 @@ ASSIGN ldeCurrTS = fMakeTS()
        lcAllowedBONOContracts = fCParamC("ALLOWED_BONO_CONTRACTS")
        lcBONOContracts        = fCParamC("BONO_CONTRACTS")
        lcIPLContracts         = fCParamC("IPL_CONTRACTS")
-       lcAllowedDSS2SubsType  = fCParamC("DSS2_SUBS_TYPE").{Syst/commali.i}
-{Syst/tmsconst.i}
+       lcAllowedDSS2SubsType  = fCParamC("DSS2_SUBS_TYPE").
 
 IF NOT MobSub.PayType THEN
    lcDSSBundleId = fGetActiveDSSId(INPUT MobSub.CustNum,
