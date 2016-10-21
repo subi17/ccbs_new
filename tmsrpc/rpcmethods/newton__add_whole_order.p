@@ -2039,11 +2039,11 @@ DO:
    DO:
       Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}.
       fCreateOrderAction(Order.Orderid,
-                         "ShippingCost",
+                         {&ORDERACTION_ITEMTYPE_SHIPPING_COST},
                          STRING(pdeShippingCostAmount),
                          "").
       fCreateOrderAction(Order.Orderid,
-                         "WelcomeGift",
+                         {&ORDERACTION_ITEMTYPE_WELCOME_GIFT},
                          STRING(pdeShippingCostAmount),
                          "").
    END.

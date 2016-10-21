@@ -560,7 +560,7 @@ PROCEDURE pUseFeeModel:
    DO liCnt = 1 TO NUM-ENTRIES(lcFeeModel):
 
       IF ENTRY(liCnt,lcFeeModel) = {&ORDER_FEEMODEL_SHIPPING_COST}
-      THEN ldeShippingCost = fGetShippingCost(Order.OrderID).
+      THEN ldeShippingCost = fGetOrderAction(Order.OrderID, {&ORDERACTION_ITEMTYPE_SHIPPING_COST}).
       ELSE ldeShippingCost = ?.
 
       FOR EACH FMItem NO-LOCK WHERE

@@ -6,17 +6,18 @@
 {Syst/commali.i}
 {Syst/tmsconst.i}
 
-FUNCTION fGetShippingCost RETURNS DECIMAL
-   (iiOrderID AS INTEGER):
+FUNCTION fGetOrderAction RETURNS DECIMAL
+   (iiOrderID  AS INTEGER,
+    icItemType AS CHARACTER):
 
    DEFINE VARIABLE ldeReturnValue AS DECIMAL INITIAL ? NO-UNDO.
 
    FOR FIRST OrderAction NO-LOCK WHERE
       OrderAction.Brand   = gcBrand   AND
       OrderAction.OrderId = iiOrderID AND
-      OrderAction.ItemKey = {&ORDER_FEEMODEL_SHIPPING_COST}:
+      OrderAction.ItemType = icItemType:
 
-      ldeReturnValue = DECIMAL(OrderAction.ItemParam) NO-ERROR.
+      ldeReturnValue = DECIMAL(OrderAction.ItemKey) NO-ERROR.
 
       IF ERROR-STATUS:ERROR
       THEN RETURN ?.

@@ -377,6 +377,7 @@ FUNCTION fDelivSIM RETURNS LOG
    DEFINE VARIABLE lcTermDiscItem            AS CHAR NO-UNDO.
    DEFINE VARIABLE lcShippingCostBillCode    AS CHARACTER NO-UNDO.
    DEFINE VARIABLE ldeShippingCostAmt        AS DECIMAL   NO-UNDO.
+   DEFINE VARIABLE ldeWelcomeGiftAmt         AS DECIMAL   NO-UNDO.
    DEFINE VARIABLE lcShippingCostExtInvID    AS CHARACTER NO-UNDO.
    DEFINE VARIABLE liRequest                 AS INTEGER   NO-UNDO.
 
@@ -469,9 +470,9 @@ FUNCTION fDelivSIM RETURNS LOG
 
       IF Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}
       THEN DO:
-         ldeShippingCostAmt = fGetShippingCost(Order.OrderID).
+         ldeWelcomeGiftAmt  = fGetOrderAction(Order.OrderID, {&ORDERACTION_ITEMTYPE_WELCOME_GIFT}).
 
-         IF ldeShippingCostAmt > 0 AND Order.InvNum > 0
+         IF ldeWelcomeGiftAmt > 0 AND Order.InvNum > 0
          THEN DO:
             IF Order.PayType /* PrePaid */
             THEN DO:
@@ -484,7 +485,7 @@ FUNCTION fDelivSIM RETURNS LOG
                                                STRING(Order.OrderID),
                                                lcTaxZone,
                                                fMake2Dt(ldaOrderDate + liTopUpWaitDays, liTime),
-                                               ldeShippingCostAmt * 100,
+                                               ldeWelcomeGiftAmt * 100,
                                                0.0).
                IF liRequest = 0 THEN DO:
                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
@@ -500,10 +501,10 @@ FUNCTION fDelivSIM RETURNS LOG
                /* create FAtime (welcome gift) */
                RUN creafat.p(Order.CustNum,
                              Order.MsSeq,
-                             {&FATGROUP_WELCOME_GIFT},
+                             {&FATGROUP_FTGRP_WELCOME_GIFT},
                              "Order",
                              STRING(Order.OrderID),
-                             ldeShippingCostAmt,
+                             ldeWelcomeGiftAmt,
                              0,
                              ?,
                              fNextPeriod(YEAR(TODAY) * 100 + MONTH(TODAY)),
@@ -529,11 +530,14 @@ FUNCTION fDelivSIM RETURNS LOG
                FIRST FMItem NO-LOCK WHERE
                   FMItem.Brand    = gcBrand AND
                   FMItem.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}:
-               lcShippingCostBillCode = FMItem.BillCode.
+
+               ASSIGN
+                  ldeShippingCostAmt = fGetOrderAction(Order.OrderID, {&ORDERACTION_ITEMTYPE_SHIPPING_COST})
+                  lcShippingCostExtInvID = Invoice.ExtInvId
+                  lcShippingCostBillCode = FMItem.BillCode
+                  .
             END.
-            lcShippingCostExtInvID = Invoice.ExtInvId.
          END.
-         ELSE ldeShippingCostAmt = 0.
       END.
    END.
 

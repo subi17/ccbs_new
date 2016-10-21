@@ -264,7 +264,7 @@ FUNCTION fCloseGiftFATime RETURNS LOGICAL
          FATime.Brand     = gcBrand                         AND
          FATime.HostTable = "Order"                         AND
          FATime.KeyValue  = lcOrderID                       AND
-         FATime.FTGrp     = {&FATGROUP_WELCOME_GIFT},
+         FATime.FTGrp     = {&FATGROUP_FTGRP_WELCOME_GIFT},
       FIRST Invoice NO-LOCK WHERE
          Invoice.InvNum   = FATime.InvNum                   AND
          Invoice.InvType NE 99 USE-INDEX InvNum_s:
@@ -276,7 +276,7 @@ FUNCTION fCloseGiftFATime RETURNS LOGICAL
          FATime.Brand     = gcBrand                         AND
          FATime.HostTable = "Order"                         AND
          FATime.KeyValue  = lcOrderID                       AND
-         FATime.FTGrp     = {&FATGROUP_WELCOME_GIFT}:
+         FATime.FTGrp     = {&FATGROUP_FTGRP_WELCOME_GIFT}:
 
       FATime.LastPeriod = fPrevPeriod(FATime.Period).
 
