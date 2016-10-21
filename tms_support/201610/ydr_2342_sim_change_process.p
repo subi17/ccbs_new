@@ -403,7 +403,7 @@ PROCEDURE pCreateReq:
           MsRequest.ReqCParam2 = lcICC
           MsRequest.ReqSource  = {&REQUEST_SOURCE_MANUAL_TMS}
           .
-   fReqStatus(20,"").
+   fChangeReqStatus(MsRequest.MsRequest,20,"").
    
    FIND FIRST MobSub NO-LOCK WHERE
               MobSub.MsSeq = liMsSeq NO-ERROR.
