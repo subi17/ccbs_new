@@ -116,9 +116,9 @@ ELSE DO:
                STRING(Order.OrderId),
                0,
                "Masmovil fixed number reservation failed",
-               lcError + (IF lcREsultCode > "" THEN CHR(10) +
-     	         SUBST("&1: &2", lcREsultCode, lcResultDesc)
-               ELSE ""),
+     	         SUBST("ErrorCode: &1", (IF lcResultDesc > ""
+                                       THEN lcResultDesc 
+                                       ELSE lcError)),
                "",
                "TMS").
 
