@@ -2042,6 +2042,10 @@ DO:
                          "ShippingCost",
                          STRING(pdeShippingCostAmount),
                          "").
+      fCreateOrderAction(Order.Orderid,
+                         "WelcomeGift",
+                         STRING(pdeShippingCostAmount),
+                         "").
    END.
 END.
 
