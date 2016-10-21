@@ -177,7 +177,7 @@ END FUNCTION.
 
 /******* Main start *********/
 
-IF iiAction = 1 AND llDoEvent THEN DO:
+IF iiAction = 1 OR iiAction = 5 AND llDoEvent THEN DO:
    RUN StarEventInitialize(lhSingleFee).
 END.
  
@@ -750,7 +750,7 @@ PROCEDURE pSingleFee:
       lcTerminal = BillItem.BillCode.
       
    /* create fees */
-   IF iiAction = 1 THEN DO: 
+   IF iiAction = 1 OR iiAction = 5 THEN DO:
       
       /* already done 
          (should invoice creation be tried if billed = false ?) */
@@ -763,7 +763,7 @@ PROCEDURE pSingleFee:
                 SingleFee.Amt       = idAmount:
          ocError = "Fee already exists".
             
-         IF iiAction = 1 THEN RETURN "ERROR:" + ocError.
+         IF iiAction = 1 OR iiAction = 5 THEN RETURN "ERROR:" + ocError.
       END.
 
       /* make single fee */
