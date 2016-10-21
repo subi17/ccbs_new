@@ -1166,7 +1166,7 @@ PROCEDURE pChangeDelType:
                     Invoice.Brand   = gcBrand AND
                     Invoice.CustNum = Customer.CustNum AND
                     Invoice.InvDate = TODAY AND
-                    Invoice.InvType <> {&INV_TYPE_TEST} AND
+                    Invoice.InvType = {&INV_TYPE_NORMAL} AND
                     Invoice.DeliveryState <> 2 
                     EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
          
