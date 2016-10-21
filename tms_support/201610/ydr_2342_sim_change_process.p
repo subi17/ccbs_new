@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
 gcBrand = "1".
-katun   = "Qvantel".
+katun   = "OTANOK".
 
 {tmsconst.i}
 {timestamp.i}
@@ -21,6 +21,7 @@ DEF VAR liLoop1    AS INT    NO-UNDO.
 DEF VAR lhTable    AS HANDLE NO-UNDO.
 DEF VAR lhField    AS HANDLE NO-UNDO.
 DEF VAR iLargestID AS INT    NO-UNDO.
+DEF VAR lcOldICC   AS CHAR   NO-UNDO.
 
 DEFINE TEMP-TABLE ttOneDelivery NO-UNDO
    FIELD RowNum        AS INTEGER             
@@ -285,6 +286,7 @@ PUT STREAM sOut UNFORMATTED
    "MSISDN;Reason"
    SKIP.
 
+msisdn:
 REPEAT TRANSACTION:
    ASSIGN lcCLI     = ""
           liMsSeq   = 0
@@ -302,7 +304,7 @@ REPEAT TRANSACTION:
       PUT STREAM sOut UNFORMATTED
          ";MSISDN not found"
          SKIP.
-      NEXT.
+      NEXT msisdn.
    END.
 
    FIND FIRST MobSub NO-LOCK WHERE
@@ -312,21 +314,42 @@ REPEAT TRANSACTION:
       PUT STREAM sOut UNFORMATTED
          ";Subscription Already Terminated"
          SKIP.
-      NEXT.
+      NEXT msisdn.
    END.
    ELSE 
       ASSIGN liMsSeq   = MobSub.MsSeq
-             liCustNum = MobSub.CustNum.
-   
+             liCustNum = MobSub.CustNum
+             lcOldICC  = MobSub.ICC.
+ 
    RELEASE MobSub.
 
    IF fIsMNPOutOngoing(lcCLI) THEN DO:
       PUT STREAM sOut UNFORMATTED
          ";Ongoing MNP OUT in ACON Status"
          SKIP.
-      NEXT.
+      NEXT msisdn.
    END.
    
+   IF CAN-FIND(FIRST Order WHERE
+                     Order.Brand     = gcBrand              AND
+                     Order.CLI       = lcCLI                AND
+                     Order.OrderType = 2                    AND
+                     Order.ICC       > ""                   AND
+                     LOOKUP(Order.StatusCode,"6,7,8,9") > 0 AND
+                     NOT Order.OrderChannel BEGINS "Renewal_POS") AND
+      CAN-FIND(FIRST MsRequest WHERE
+                     MsRequest.Brand     = gcBrand                                AND
+                     MsRequest.ReqType   = {&REQTYPE_ICC_CHANGE}                  AND
+                     MsRequest.CLI       = lcCLI                                  AND
+                     MsRequest.ActStamp <= 99999999.99999                         AND
+                     MsRequest.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
+                     MsRequest.ReqSource = {&REQUEST_SOURCE_RENEWAL}) THEN DO:
+      PUT STREAM sOut UNFORMATTED
+         ";Ongoing renuevo order WITH SIM type change"
+         SKIP.
+      NEXT msisdn.
+   END.
+
    RUN pCreateReq.
 
    PUT STREAM sOut UNFORMATTED
@@ -336,7 +359,7 @@ REPEAT TRANSACTION:
    liCount = liCount + 1.
    IF liCount MOD 1 EQ 0 THEN DO:
       DISP liCount.
-      PAUSE.
+      PAUSE 0.
    END.
 END.
 
@@ -405,6 +428,15 @@ PROCEDURE pCreateReq:
           .
    fChangeReqStatus(MsRequest.MsRequest,20,"").
    
+   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                    "MsRequest",
+                    STRING(MsRequest.MsRequest),
+                    liCustNum,
+                    "Cambio de número ICC",
+                    STRING("Solicitado por el cliente 20") +
+                    STRING("Old ICC:" + lcOldICC +
+                           "New ICC:" + lcICC)).
+
    FIND FIRST MobSub NO-LOCK WHERE
               MobSub.MsSeq = liMsSeq NO-ERROR.
    IF AVAIL MobSub THEN DO:
