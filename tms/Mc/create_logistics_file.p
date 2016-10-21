@@ -1405,7 +1405,7 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
               Order.CustNum = 0 NO-LOCK NO-ERROR.
    IF AVAILABLE Order THEN
    DO:
-      RUN createcustomer(INPUT ttOneDelivery.OrderId,1,FALSE,TRUE,OUTPUT oiCustomer).
+      RUN Mm/createcustomer.p(INPUT ttOneDelivery.OrderId,1,FALSE,TRUE,OUTPUT oiCustomer).
 
       llCorporate = CAN-FIND(OrderCustomer WHERE
                              OrderCustomer.Brand      = gcBrand               AND
@@ -1418,7 +1418,7 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
                OrderCustomer.OrderID = ttOneDelivery.OrderID:
          IF llCorporate AND (OrderCustomer.RowType = 1 OR OrderCustomer.RowType = 5) THEN
          DO:
-            RUN createcustcontact.p(OrderCustomer.OrderID,
+            RUN Mm/createcustcontact.p(OrderCustomer.OrderID,
                                     oiCustomer,
                                     OrderCustomer.RowType,
                                     OUTPUT lcError).
@@ -1450,7 +1450,7 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
          END.
       END.
 
-      RUN createcustomer(INPUT ttOneDelivery.OrderId,3,FALSE,TRUE,OUTPUT oiCustomer).
+      RUN Mm/createcustomer.p(INPUT ttOneDelivery.OrderId,3,FALSE,TRUE,OUTPUT oiCustomer).
    END.
 
    DO liLoop1 = 1 TO lhTable:NUM-FIELDS:
