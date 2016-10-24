@@ -542,6 +542,8 @@ IF NOT AVAIL Daycampaign THEN DO:
       DayCampaign.durtype = 3
       DayCampaign.durmonths = 6
       DayCampaign.durunit = 2
+      Daycampaign.termfeemodel = "FTERMPERIOD"
+      Daycampaign.TermFeeCalc = 2
       DayCampaign.validfrom = 10/21/16
       DayCampaign.validto = 12/31/49.
 
