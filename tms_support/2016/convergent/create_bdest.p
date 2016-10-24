@@ -91,24 +91,24 @@ create_tmritem("CONTS10GB_DATA_IN,CONTFH55_50",14).
 create_tmritem("CONTS10GB_DATA_IN,CONTFH65_300",14).
 */
 create_tmritem("CONTDSL_DATA_IN,CONTDSL45",14).
-create_tmritem("CONTDSL_DATA_IN,CONTDSL55",14).
+/*create_tmritem("CONTDSL_DATA_IN,CONTDSL55",14).*/
 create_tmritem("CONTFH50_DATA_IN,CONTFH45_50",14).
-create_tmritem("CONTFH50_DATA_IN,CONTFH55_50",14).
+/*create_tmritem("CONTFH50_DATA_IN,CONTFH55_50",14).*/
 create_tmritem("CONTFH300_DATA_IN,CONTFH55_300",14).
-create_tmritem("CONTFH300_DATA_IN,CONTFH65_300",14).
+/*create_tmritem("CONTFH300_DATA_IN,CONTFH65_300",14).*/
 create_tmritem("CONTS2GB_DATA_IN,CONTDSL45",14).
 create_tmritem("CONTS2GB_DATA_IN,CONTFH45_50",14).
 create_tmritem("CONTS2GB_DATA_IN,CONTFH55_300",14).
-create_tmritem("CONTS10GB_DATA_IN,CONTDSL55",14).
-create_tmritem("CONTS10GB_DATA_IN,CONTFH55_50",14).
-create_tmritem("CONTS10GB_DATA_IN,CONTFH65_300",14).
+/*create_tmritem("CONTS10GB_DATA_IN,CONTDSL55",14).*/
+/*create_tmritem("CONTS10GB_DATA_IN,CONTFH55_50",14).*/
+/*create_tmritem("CONTS10GB_DATA_IN,CONTFH65_300",14).*/
 
 create_tmritem("GPRSDATA_DATA*,CONTDSL45",33).
-create_tmritem("GPRSDATA_DATA*,CONTDSL55",33).
+/*create_tmritem("GPRSDATA_DATA*,CONTDSL55",33).*/
 create_tmritem("GPRSDATA_DATA*,CONTFH45_50",33).
-create_tmritem("GPRSDATA_DATA*,CONTFH55_50",33).
+/*create_tmritem("GPRSDATA_DATA*,CONTFH55_50",33).*/
 create_tmritem("GPRSDATA_DATA*,CONTFH55_300",33).
-create_tmritem("GPRSDATA_DATA*,CONTFH65_300",33).
+/*create_tmritem("GPRSDATA_DATA*,CONTFH65_300",33).*/
 
 /*
 create_tmritem("CONTDSL_VOICE_IN,CONTDSL45",34).
@@ -126,26 +126,26 @@ create_tmritem("CONTS10GB_VOICE_IN,CONTFH65_300",34).
 */
 
 create_tmritem("CONTDSL_QTY_IN,CONTDSL45",34).
-create_tmritem("CONTDSL_QTY_IN,CONTDSL55",34).
+/*create_tmritem("CONTDSL_QTY_IN,CONTDSL55",34).*/
 create_tmritem("CONTFH50_QTY_IN,CONTFH45_50",34).
-create_tmritem("CONTFH50_QTY_IN,CONTFH55_50",34).
+/*create_tmritem("CONTFH50_QTY_IN,CONTFH55_50",34).*/
 create_tmritem("CONTFH300_QTY_IN,CONTFH55_300",34).
-create_tmritem("CONTFH300_QTY_IN,CONTFH65_300",34).
+/*create_tmritem("CONTFH300_QTY_IN,CONTFH65_300",34).*/
 
 create_tmritem("CONTDSL_MIN_IN,CONTDSL45",34).
-create_tmritem("CONTDSL_MIN_IN,CONTDSL55",34).
+/*create_tmritem("CONTDSL_MIN_IN,CONTDSL55",34).*/
 create_tmritem("CONTFH50_MIN_IN,CONTFH45_50",34).
-create_tmritem("CONTFH50_MIN_IN,CONTFH55_50",34).
+/*create_tmritem("CONTFH50_MIN_IN,CONTFH55_50",34).*/
 create_tmritem("CONTFH300_MIN_IN,CONTFH55_300",34).
-create_tmritem("CONTFH300_MIN_IN,CONTFH65_300",34).
+/*create_tmritem("CONTFH300_MIN_IN,CONTFH65_300",34).*/
 
 
 create_tmritem("CONTS2GB_VOICE_IN,CONTDSL45",34).
 create_tmritem("CONTS2GB_VOICE_IN,CONTFH45_50",34).
 create_tmritem("CONTS2GB_VOICE_IN,CONTFH55_300",34).
-create_tmritem("CONTS10GB_VOICE_IN,CONTDSL55",34).
-create_tmritem("CONTS10GB_VOICE_IN,CONTFH55_50",34).
-create_tmritem("CONTS10GB_VOICE_IN,CONTFH65_300",34).
+/*create_tmritem("CONTS10GB_VOICE_IN,CONTDSL55",34).*/
+/*create_tmritem("CONTS10GB_VOICE_IN,CONTFH55_50",34).*/
+/*create_tmritem("CONTS10GB_VOICE_IN,CONTFH65_300",34).*/
 
 IF CAN-FIND(FIRST bitemgroup WHERE
                   bitemgroup.brand = "1" AND

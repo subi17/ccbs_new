@@ -121,11 +121,11 @@ END.
 
 
 fcreateSLGAnalyse("CONT24","CONTDSL45",ldaFrom,"CONTDSL45",liMode).
-fcreateSLGAnalyse("CONT24","CONTDSL55",ldaFrom,"CONTDSL55",liMode).
+/*fcreateSLGAnalyse("CONT24","CONTDSL55",ldaFrom,"CONTDSL55",liMode).*/
 fcreateSLGAnalyse("CONT24","CONTFH45_50",ldaFrom,"CONTFH45_50",liMode).
-fcreateSLGAnalyse("CONT24","CONTFH55_50",ldaFrom,"CONTFH55_50",liMode).
+/*fcreateSLGAnalyse("CONT24","CONTFH55_50",ldaFrom,"CONTFH55_50",liMode).*/
 fcreateSLGAnalyse("CONT24","CONTFH55_300",ldaFrom,"CONTFH55_300",liMode).
-fcreateSLGAnalyse("CONT24","CONTFH65_300",ldaFrom,"CONTFH65_300",liMode).
+/*fcreateSLGAnalyse("CONT24","CONTFH65_300",ldaFrom,"CONTFH65_300",liMode).*/
 
 IF liModeCliType > 0 THEN DO:
    FOR EACH CliType WHERE 
@@ -159,18 +159,18 @@ IF liModeCliType > 0 THEN DO:
 END.
    
 create_ra("CONT24","CONTDSL45",liMode_ra).
-create_ra("CONT24","CONTDSL55",liMode_ra).
+/*create_ra("CONT24","CONTDSL55",liMode_ra).*/
 create_ra("CONT24","CONTFH45_50",liMode_ra).
-create_ra("CONT24","CONTFH55_50",liMode_ra).
+/*create_ra("CONT24","CONTFH55_50",liMode_ra).*/
 create_ra("CONT24","CONTFH55_300",liMode_ra).
-create_ra("CONT24","CONTFH65_300",liMode_ra).
+/*create_ra("CONT24","CONTFH65_300",liMode_ra).*/
 
 create_ra_mob("CONT24","CONTDSL45","CONTS2GB",liMode_ra).
-create_ra_mob("CONT24","CONTDSL55","CONTS10GB",liMode_ra).
+/*create_ra_mob("CONT24","CONTDSL55","CONTS10GB",liMode_ra).*/
 create_ra_mob("CONT24","CONTFH45_50","CONTS2GB",liMode_ra).
-create_ra_mob("CONT24","CONTFH55_50","CONTS10GB",liMode_ra).
+/*create_ra_mob("CONT24","CONTFH55_50","CONTS10GB",liMode_ra).*/
 create_ra_mob("CONT24","CONTFH55_300","CONTS2GB",liMode_ra).
-create_ra_mob("CONT24","CONTFH65_300","CONTS10GB",liMode_ra).
+/*create_ra_mob("CONT24","CONTFH65_300","CONTS10GB",liMode_ra).*/
 
 IF liMode_ra > 0 THEN DO:
    FIND LAST RequestAction USE-INDEX RequestActionID NO-LOCK NO-ERROR.
