@@ -37,6 +37,7 @@ DEF VAR lcOutDir AS CHARACTER NO-UNDO.
 
 /* field variables */
 DEF VAR lcYoigoOrderId AS CHAR NO-UNDO.
+DEF VAR lcTempOrderId AS CHAR NO-UNDO.
 DEF VAR lcSALOrderId AS CHAR NO-UNDO.
 DEF VAR lcFileType AS CHAR NO-UNDO.
 
@@ -96,9 +97,11 @@ REPEAT:
 
       ASSIGN
          lcFileType = TRIM(ENTRY(1,lcSepLine,lcSep))
-         lcYoigoOrderId = SUBSTRING(TRIM(ENTRY(39,lcSepLine,lcSep)),2)
+         lcTempOrderId = TRIM(ENTRY(39,lcSepLine,lcSep))
       NO-ERROR.
-
+      IF lcTempOrderId BEGINS "Y" THEN
+         lcYoigoOrderId = SUBSTRING(lcTempOrderId,2).
+      ELSE lcYoigoOrderId = lcTempOrderId.
       IF ENTRY(2,lcSepLine,lcSep) BEGINS "Y" THEN
          lcSALOrderId = TRIM(ENTRY(2,lcSepLine,lcSep)).
       ELSE lcSALOrderId = ENTRY(2,lcSepLine,lcSep).
@@ -118,19 +121,20 @@ REPEAT:
                  LOOKUP(order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0 
                  NO-LOCK NO-ERROR.
       IF NOT AVAIL Order THEN DO:
-         fLogLine("ERROR:Order " + lcYoigoOrderId + " not found or " +
-                   "is in incorrect status.").         
+         fLogLine("ERROR:Order " + lcTempOrderId + " not found or " +
+                   "is in incorrect status.").
          NEXT.
       END.
       FIND FIRST CliType WHERE
                  Clitype.brand EQ gcBrand AND
                  Clitype.clitype EQ order.clitype NO-LOCK NO-ERROR.
      IF NOT AVAIL Clitype THEN DO:
-         fLogLine("ERROR:Incorrect clitype " + order.clitype).
+         fLogLine("ERROR:Order " + lcTempOrderId + " with incorrect clitype " + 
+                  order.clitype).
          NEXT.
       END.
       ELSE IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN DO:
-         fLogLine("ERROR:Not ADSL order " + lcYoigoOrderId).
+         fLogLine("ERROR:Not ADSL order " + lcTempOrderId).
          NEXT.
       END.
       IF CAN-FIND(FIRST FusionMessage WHERE
@@ -138,7 +142,7 @@ REPEAT:
                         FusionMessage.MessageType EQ 
                            {&FUSIONMESSAGE_TYPE_LOGISTICS} AND 
                         FusionMessage.Source EQ "MasMovil") THEN DO:
-         fLogLine("ERROR:Already handled " + lcYoigoOrderId).
+         fLogLine("ERROR:Already handled " + lcTempOrderId).
          NEXT.
       END.                  
       RUN pHandleSALFile(lcYoigoOrderId, lcSALOrderid, order.msseq).
@@ -168,14 +172,13 @@ PROCEDURE pHandleSALfile:
       FusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)
       FusionMessage.OrderID = INT(icYoigoOrderID)
       FusionMessage.CreatedTS = fMakeTS()
+      FusionMessage.UpdateTS = FusionMessage.CreatedTS
       FusionMessage.MessageID = GUID(GENERATE-UUID)
       FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_LOGISTICS} 
       FusionMessage.Source = "MasMovil"
-      FusionMessage.msseq = iiMsSeq.
-      
-   IF INDEX(Order.OrderChannel,"pos") > 0 THEN
-      FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ONGOING}.
-   ELSE
-      FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_NEW}.
+      FusionMessage.msseq = iiMsSeq
+      FusionMessage.MessageStatus = (IF INDEX(Order.OrderChannel,"pos") > 0
+                                     THEN {&FUSIONMESSAGE_STATUS_ONGOING}
+                                     ELSE {&FUSIONMESSAGE_STATUS_NEW}).
    RETURN "OK".
 END.

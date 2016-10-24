@@ -412,8 +412,6 @@ DEF VAR pcAccessory AS CHAR NO-UNDO.
 DEF VAR pcAccessoryStruct AS CHAR NO-UNDO.
 DEF VAR lcAccessoryStruct AS CHAR NO-UNDO.
 
-DEF VAR lcErr AS CHAR NO-UNDO.
-
 /*Financing info*/
 DEF VAR pcTerminalFinancing AS CHAR NO-UNDO.
 
@@ -1176,7 +1174,7 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
    ASSIGN
       OrderFusion.Brand             = gcBrand
       OrderFusion.OrderId           = liOrderId
-      OrderFusion.FusionStatus      = {&FUSION_FIXED_NUMBER_TYPE_NEW}
+      OrderFusion.FusionStatus      = {&FUSION_FIXED_NUMBER_TYPE_NEW} WHEN NOT llROIClose
       OrderFusion.OrderDate         = ldaOrderDate
       OrderFusion.Salesman          = pcSalesman
       OrderFusion.FixedNumberType   = lcFixedLineNumberType

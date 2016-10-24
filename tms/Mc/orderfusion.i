@@ -8,7 +8,7 @@
 &GLOBAL-DEFINE MASMOVIL_ERROR_ADAPTER_PARSING "1"
 &GLOBAL-DEFINE MASMOVIL_ERROR_ADAPTER_NETWORK "2"
 &GLOBAL-DEFINE MASMOVIL_ERROR_MASMOVIL "3"
-&GLOBAL-DEFINE MASMOVIL_RETRY_ERROR_CODES "APIKIT-00404,APIKIT-00405,APIKIT-00406,APIKIT-00415,WO-10000000,ESB-99999999"
+&GLOBAL-DEFINE MASMOVIL_RETRY_ERROR_CODES "APIKIT-00404,APIKIT-00405,APIKIT-00406,APIKIT-00415,WO-10000000,ESB-99999999,NU-00000001"
 
 
 FUNCTION fFusionMessageError RETURNS CHAR
@@ -20,7 +20,7 @@ FUNCTION fFusionMessageError RETURNS CHAR
    ASSIGN
       ibFusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
       ibFusionMessage.AdditionalInfo = icErrorDesc
-      ibFusionMessage.HandledTS = fMakeTS().
+      ibFusionMessage.UpdateTS = fMakeTS().
 
    RELEASE ibFusionMessage.
 
@@ -100,7 +100,8 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
       FusionMessage.MessageType = icMessageType
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_NEW}
       FusionMessage.Source = {&FUSIONMESSAGE_SOURCE_TMS}
-      FusionMessage.OrderType = lcPrefix + " " + lcOrderType. 
+      FusionMessage.OrderType = lcPrefix + " " + lcOrderType
+      FusionMessage.UpdateTS = FusionMessage.CreatedTS.
 END.
 
 FUNCTION fCreateFusionReserveNumberMessage RETURNS LOGICAL

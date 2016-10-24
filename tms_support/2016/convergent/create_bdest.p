@@ -3,7 +3,7 @@ DEF VAR ldafrom AS DATE INIT 09/07/16.
 
 FUNCTION create_bdest RETURNS CHAR (INPUT ictariffcode AS CHAR):
    DEF VAR liBDCount AS INT.
-   DEF VAR lcBDestList AS CHAR INIT "VOICE_IN,VOICE_OUT".
+   DEF VAR lcBDestList AS CHAR INIT "QTY_IN,MIN_IN".
    DEF VAR lcBDestination AS CHAR.
    DEF VAR liCCN AS INT.
    DEF VAR gcBrand AS CHAR INIT "1".
@@ -91,25 +91,26 @@ create_tmritem("CONTS10GB_DATA_IN,CONTFH55_50",14).
 create_tmritem("CONTS10GB_DATA_IN,CONTFH65_300",14).
 */
 create_tmritem("CONTDSL_DATA_IN,CONTDSL45",14).
-create_tmritem("CONTDSL_DATA_IN,CONTDSL55",14).
+/*create_tmritem("CONTDSL_DATA_IN,CONTDSL55",14).*/
 create_tmritem("CONTFH50_DATA_IN,CONTFH45_50",14).
-create_tmritem("CONTFH50_DATA_IN,CONTFH55_50",14).
+/*create_tmritem("CONTFH50_DATA_IN,CONTFH55_50",14).*/
 create_tmritem("CONTFH300_DATA_IN,CONTFH55_300",14).
-create_tmritem("CONTFH300_DATA_IN,CONTFH65_300",14).
+/*create_tmritem("CONTFH300_DATA_IN,CONTFH65_300",14).*/
 create_tmritem("CONTS2GB_DATA_IN,CONTDSL45",14).
 create_tmritem("CONTS2GB_DATA_IN,CONTFH45_50",14).
 create_tmritem("CONTS2GB_DATA_IN,CONTFH55_300",14).
-create_tmritem("CONTS10GB_DATA_IN,CONTDSL55",14).
-create_tmritem("CONTS10GB_DATA_IN,CONTFH55_50",14).
-create_tmritem("CONTS10GB_DATA_IN,CONTFH65_300",14).
+/*create_tmritem("CONTS10GB_DATA_IN,CONTDSL55",14).*/
+/*create_tmritem("CONTS10GB_DATA_IN,CONTFH55_50",14).*/
+/*create_tmritem("CONTS10GB_DATA_IN,CONTFH65_300",14).*/
 
 create_tmritem("GPRSDATA_DATA*,CONTDSL45",33).
-create_tmritem("GPRSDATA_DATA*,CONTDSL55",33).
+/*create_tmritem("GPRSDATA_DATA*,CONTDSL55",33).*/
 create_tmritem("GPRSDATA_DATA*,CONTFH45_50",33).
-create_tmritem("GPRSDATA_DATA*,CONTFH55_50",33).
+/*create_tmritem("GPRSDATA_DATA*,CONTFH55_50",33).*/
 create_tmritem("GPRSDATA_DATA*,CONTFH55_300",33).
-create_tmritem("GPRSDATA_DATA*,CONTFH65_300",33).
+/*create_tmritem("GPRSDATA_DATA*,CONTFH65_300",33).*/
 
+/*
 create_tmritem("CONTDSL_VOICE_IN,CONTDSL45",34).
 create_tmritem("CONTDSL_VOICE_IN,CONTDSL55",34).
 create_tmritem("CONTFH50_VOICE_IN,CONTFH45_50",34).
@@ -122,6 +123,29 @@ create_tmritem("CONTS2GB_VOICE_IN,CONTFH55_300",34).
 create_tmritem("CONTS10GB_VOICE_IN,CONTDSL55",34).
 create_tmritem("CONTS10GB_VOICE_IN,CONTFH55_50",34).
 create_tmritem("CONTS10GB_VOICE_IN,CONTFH65_300",34).
+*/
+
+create_tmritem("CONTDSL_QTY_IN,CONTDSL45",34).
+/*create_tmritem("CONTDSL_QTY_IN,CONTDSL55",34).*/
+create_tmritem("CONTFH50_QTY_IN,CONTFH45_50",34).
+/*create_tmritem("CONTFH50_QTY_IN,CONTFH55_50",34).*/
+create_tmritem("CONTFH300_QTY_IN,CONTFH55_300",34).
+/*create_tmritem("CONTFH300_QTY_IN,CONTFH65_300",34).*/
+
+create_tmritem("CONTDSL_MIN_IN,CONTDSL45",34).
+/*create_tmritem("CONTDSL_MIN_IN,CONTDSL55",34).*/
+create_tmritem("CONTFH50_MIN_IN,CONTFH45_50",34).
+/*create_tmritem("CONTFH50_MIN_IN,CONTFH55_50",34).*/
+create_tmritem("CONTFH300_MIN_IN,CONTFH55_300",34).
+/*create_tmritem("CONTFH300_MIN_IN,CONTFH65_300",34).*/
+
+
+create_tmritem("CONTS2GB_VOICE_IN,CONTDSL45",34).
+create_tmritem("CONTS2GB_VOICE_IN,CONTFH45_50",34).
+create_tmritem("CONTS2GB_VOICE_IN,CONTFH55_300",34).
+/*create_tmritem("CONTS10GB_VOICE_IN,CONTDSL55",34).*/
+/*create_tmritem("CONTS10GB_VOICE_IN,CONTFH55_50",34).*/
+/*create_tmritem("CONTS10GB_VOICE_IN,CONTFH65_300",34).*/
 
 IF CAN-FIND(FIRST bitemgroup WHERE
                   bitemgroup.brand = "1" AND
@@ -193,4 +217,51 @@ ELSE DO:
           pricelist.rounding = 4.
 END.
 
+DEFINE BUFFER bBdestConf  FOR BDestConf.
+DEF TEMP-TABLE ttBDestConf NO-UNDO LIKE BDestConf.
+DEFINE BUFFER bBdestConfItem  FOR BDestConfItem.
+DEF TEMP-TABLE ttBDestConfitem NO-UNDO LIKE BDestConfItem.
+DEF VAR i AS INT NO-UNDO.
 
+FIND LAST BDestConfItem USE-INDEX BDCItemID NO-LOCK NO-ERROR.
+IF AVAILABLE BDestConfItem THEN i = BDestConfItem.BDCItemID.
+ELSE i = 0.
+
+
+FOR EACH bBdestConf:
+   BUFFER-COPY bBDestConf TO ttBDestConf.
+   IF SUBSTRING(ttBDestConf.BDCGroup,9) BEGINS "10" THEN NEXT.
+   ASSIGN
+      ttBDestConf.fromdate = 10/24/16
+      ttBDestConf.BDCGroup = SUBSTRING(bBDestConf.BDCGroup,1,8) + "10" +
+                             SUBSTRING(bBDestConf.BDCGroup,9).
+   FIND FIRST BDestConf WHERE
+              Bdestconf.brand EQ "1" AND
+              Bdestconf.BDCGroup EQ ttBDestConf.BDCGroup NO-ERROR.
+   IF NOT AVAIL BDestConf THEN DO:
+      CREATE BDestConf.
+      BUFFER-COPY ttBDestConf TO BDestConf.
+   END.
+
+   FOR EACH bBDestConfItem WHERE
+            bBDestConfItem.brand EQ "1" AND
+            bBDestConfItem.BDCGroup EQ bBdestconf.BDCGroup:
+      BUFFER-COPY bBDestConfItem TO ttBDestConfItem.
+      i = i + 1.
+      ASSIGN ttBDestConfItem.fromdate = 10/24/16
+             ttBDestConfItem.BDCItemID = i
+             ttBDestConfItem.BDCGroup = SUBSTRING(bBDestConf.BDCGroup,1,8) +
+             "10" + SUBSTRING(bBDestConf.BDCGroup,9)
+             ttBDestConfItem.rateccn = 1000 + ttBDestConfItem.rateccn.
+      FIND FIRST BDestConfitem WHERE
+                 Bdestconfitem.brand EQ "1" AND
+                 Bdestconfitem.BDCGroup EQ ttBDestConf.BDCGroup AND
+                 Bdestconfitem.rateCCN EQ ttBDestConfItem.rateccn AND
+                 Bdestconfitem.bdest = ttBDestConfItem.bdest NO-ERROR.
+      IF NOT AVAIL BDestConfitem THEN DO:
+         CREATE BDestConfitem.
+         BUFFER-COPY ttBDestConfitem TO BDestConfitem.
+         DELETE ttBDestConfitem.
+      END.
+   END.
+END.

@@ -1332,22 +1332,25 @@ FUNCTION fDelivRouter RETURNS LOG
       NO-LOCK NO-ERROR.
 
    END.
-
-   FIND FIRST Region WHERE
-              Region.Region = AgreeCustomer.Region
-   NO-LOCK NO-ERROR.
-   lcCustRegi = Region.RgName.
-
-   /* Done because fixed line install address might include
-      region as normal text */
-   ASSIGN liTempRegion = INT(DelivCustomer.Region) NO-ERROR.
-   IF ERROR-STATUS:ERROR THEN
-      lcDeliRegi = DelivCustomer.Region.
-   ELSE DO:   
+   IF AgreeCustomer.Region > "" THEN DO: 
       FIND FIRST Region WHERE
-                 Region.Region = DelivCustomer.Region
+                 Region.Region = AgreeCustomer.Region
       NO-LOCK NO-ERROR.
-      lcDeliRegi = Region.RgName.
+      lcCustRegi = Region.RgName.
+   END.
+
+   IF DelivCustomer.Region > "" THEN DO:
+      /* Done because fixed line install address might include
+         region as normal text */
+      ASSIGN liTempRegion = INT(DelivCustomer.Region) NO-ERROR.
+      IF ERROR-STATUS:ERROR THEN
+         lcDeliRegi = DelivCustomer.Region.
+      ELSE DO:   
+         FIND FIRST Region WHERE
+                    Region.Region = DelivCustomer.Region
+         NO-LOCK NO-ERROR.
+         lcDeliRegi = Region.RgName.
+      END.
    END.
    lcOrderChannel = STRING(LOOKUP(Order.OrderChannel,
                                   "Self,TeleSales,POS,CC,,,Emission"),"99").
@@ -1522,7 +1525,7 @@ END.
 
 /* YPR-4983 COFF logistic file for router */
 
-FOR EACH FusionMessage WHERE 
+FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE 
          FusionMessage.source EQ "MasMovil" AND
          FusionMessage.messagestatus EQ {&FUSIONMESSAGE_STATUS_NEW} AND
          FusionMessage.messagetype EQ "Logistics":
@@ -1530,17 +1533,22 @@ FOR EACH FusionMessage WHERE
               Order.brand EQ gcBrand AND
               Order.orderId EQ FusionMessage.orderId NO-ERROR.
    IF NOT AVAIL Order OR INDEX(Order.orderchannel, "telesales") EQ 0 THEN DO:
-      FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+      ASSIGN
+         FusionMessage.UpdateTS = fMakeTS()
+         FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.
    END.
    FIND FIRST CliType WHERE
               Clitype.brand EQ gcBrand AND
               Clitype.clitype EQ order.clitype NO-LOCK NO-ERROR.
    IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN DO:
-      FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+      ASSIGN
+         FusionMessage.UpdateTS = fMakeTS()
+         FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.   
    END.
-   IF fDelivRouter(FusionMessage.orderId) THEN
+   IF fDelivRouter(FusionMessage.orderId) THEN ASSIGN
+      FusionMessage.UpdateTS = fMakeTS()
       FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_SENT}.
 END.
 

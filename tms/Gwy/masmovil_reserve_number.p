@@ -72,7 +72,7 @@ IF lcError EQ "OK" THEN DO:
    ASSIGN
       OrderFusion.FixedNumber = lcFixedNumber
       OrderFusion.UpdateTS = fMakeTS()
-      FusionMessage.HandledTS = OrderFusion.UpdateTS
+      FusionMessage.UpdateTS = OrderFusion.UpdateTS
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}.
 
    IF NOT fCreateFusionCreateOrderMessage(OrderFusion.OrderId,
@@ -91,7 +91,7 @@ END.
 ELSE DO:
 
    ASSIGN
-      FusionMessage.HandledTS = fMakeTS()
+      FusionMessage.UpdateTS = fMakeTS()
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
       FusionMessage.ResponseCode = (IF lcResultCode > ""
                                   THEN lcResultCode
@@ -108,7 +108,7 @@ ELSE DO:
          SUBST("&1, &2, &3", lcError, lcResultCode, lcResultDesc).
 
    ASSIGN
-      OrderFusion.UpdateTS = FusionMessage.HandledTS
+      OrderFusion.UpdateTS = FusionMessage.UpdateTS
       OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR}
       OrderFusion.FusionStatusDesc = "Fixed number reservation failed".
 
@@ -116,9 +116,9 @@ ELSE DO:
                STRING(Order.OrderId),
                0,
                "Masmovil fixed number reservation failed",
-               lcError + (IF lcREsultCode > "" THEN CHR(10) +
-     	         SUBST("&1: &2", lcREsultCode, lcResultDesc)
-               ELSE ""),
+     	         SUBST("ErrorCode: &1", (IF lcResultDesc > ""
+                                       THEN lcResultDesc 
+                                       ELSE lcError)),
                "",
                "TMS").
 

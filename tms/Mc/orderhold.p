@@ -80,12 +80,7 @@ END.
 /* release fusion company order */
 IF (Order.StatusCode EQ "20" OR
     Order.StatusCode EQ "21") AND
-    Order.OrderChannel BEGINS "fusion" AND 
-    CAN-FIND(FIRST OrderCustomer NO-LOCK WHERE
-                   OrderCustomer.Brand = gcBrand AND
-                   OrderCustomer.OrderId = Order.OrderId AND
-                   OrderCustomer.RowType = 1 AND
-                   OrderCustomer.CustidType = "CIF") THEN DO:
+    Order.OrderChannel BEGINS "fusion" THEN DO:
 
    lcNewOrderStatus = {&ORDER_STATUS_PENDING_FIXED_LINE}.
 

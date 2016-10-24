@@ -29,13 +29,9 @@ DEF INPUT PARAMETER iiOrderID  AS INT NO-UNDO.
 
 DEF VAR xrecid       AS RECID                           init ?.
 DEF VAR FIRSTrow     AS INT                    NO-UNDO  init 0.
-DEF VAR FrmRow       AS INT                    NO-UNDO  init 2.
-DEF VAR FrmDown      AS INT                    NO-UNDO  init 13.
 DEF VAR order        AS INT                    NO-UNDO  init 1.
-DEF VAR orders       AS CHAR                   NO-UNDO.
 DEF VAR maxOrder     AS INT                    NO-UNDO  init 1.
 DEF VAR ufkey        AS LOG                    NO-UNDO  init TRUE.
-DEF VAR delrow       AS INT                    NO-UNDO  init 0.
 DEF VAR pr-order     AS INT                    NO-UNDO.
 DEF VAR Memory       AS RECID                  NO-UNDO.
 DEF VAR RowNo        AS INT                    NO-UNDO.
@@ -44,14 +40,13 @@ DEF VAR must-add     AS LOG                    NO-UNDO.
 DEF VAR ac-hdr       AS CHAR                   NO-UNDO.
 DEF VAR rtab         AS RECID EXTENT 24        NO-UNDO.
 DEF VAR i            AS INT                    NO-UNDO.
-DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
 
 FORM
    ttDocs.MessageType   FORMAT "X(22)"  COLUMN-LABEL "MSG Type"
    ttDocs.MessageStatus FORMAT "X(10)"   COLUMN-LABEL "Status"
    ttDocs.CreatedTS     FORMAT "99999999.99999"  COLUMN-LABEL "Created TS"
    ttDocs.FixedStatusTS FORMAT "99999999.99999"  COLUMN-LABEL "Fixed TS"
-   ttDocs.HandledTS     FORMAT "99999999.99999"  COLUMN-LABEL "Handled TS"
+   ttDocs.UpdateTS      FORMAT "99999999.99999"  COLUMN-LABEL "Update TS"
 WITH ROW 1 CENTERED OVERLAY 15  DOWN
     COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "Messages"  FRAME sel.
 
@@ -78,7 +73,7 @@ form
     SKIP
     "Created...........:" ttDocs.CreatedTS 
     SKIP
-    "Handled...........:" ttDocs.HandledTS 
+    "Handled...........:" ttDocs.UpdateTS 
     SKIP
     "Response Code.....:" ttDocs.ResponseCode FORMAT "X(45)" 
     SKIP
@@ -122,12 +117,6 @@ REPEAT WITH FRAME sel:
         UP FRAME-LINE - 1.
         FIND ttDocs WHERE recid(ttDocs) = Memory NO-LOCK NO-ERROR.
 
-        /* DISPLAY one page beginning the record 
-        whose RECID is saved into 'Memory'.
-        starting from ROW 'delrow' */
-
-        /* IF a ROW was recently DELETEd ... */
-        IF delrow > 0 THEN DOWN delrow - 1.
 
         REPEAT WITH FRAME sel:
            IF AVAILABLE ttDocs THEN DO:
@@ -152,10 +141,6 @@ REPEAT WITH FRAME sel:
         upermost ROW, waiting FOR a 'choose' */
       END. /* must-print = TRUE */
    END. /* PrintPage */
-
-   /* IF a ROW was recently DELETEd: */
-   IF delrow > 0 THEN DOWN delrow - 1.
-   ASSIGN delrow = 0.
 
    BROWSE:
    REPEAT WITH FRAME sel ON ENDKEY UNDO, RETURN:
@@ -327,7 +312,7 @@ REPEAT WITH FRAME sel:
             ttDocs.FixedStatusDesc 
             ttDocs.FixedStatusTS 
             ttDocs.CreatedTS 
-            ttDocs.HandledTS 
+            ttDocs.UpdateTS 
             ttDocs.ResponseCode 
             ttDocs.Source 
             ttDocs.AdditionalInfo 
@@ -391,6 +376,6 @@ PROCEDURE local-disp-row:
        ttDocs.MessageStatus
        ttDocs.CreatedTS
        ttDocs.FixedStatusTS
-       ttDocs.HandledTS
+       ttDocs.UpdateTS
        WITH FRAME sel.
 END PROCEDURE.

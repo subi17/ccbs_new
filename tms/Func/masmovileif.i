@@ -292,7 +292,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    IF gi_xmlrpc_error NE 0 THEN DO:
       ocResultCode = STRING(gi_xmlrpc_error).
       ocResultDesc = gc_xmlrpc_error.
-      RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
+      RETURN "NW_ERROR".
    END.
 
    lcXMLStruct = get_struct(response_toplevel_id,"0").
@@ -345,7 +345,7 @@ FUNCTION fMasCheckFixedLineStatus RETURNS CHAR
    IF gi_xmlrpc_error NE 0 THEN DO:
       ocStatus = STRING(gi_xmlrpc_error).
       ocStatusDesc = gc_xmlrpc_error.
-      RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
+      RETURN "NW_ERROR".
    END.
 
    lcInStruct = get_struct(response_toplevel_id, "").
@@ -459,7 +459,7 @@ FUNCTION fMasGet_FixedNbr RETURNS CHAR
    IF gi_xmlrpc_error NE 0 THEN DO:
       ocResultCode = STRING(gi_xmlrpc_error).
       ocResultDesc = gc_xmlrpc_error.
-      RETURN SUBST("NW_ERROR: &1", gc_xmlrpc_error).
+      RETURN "NW_ERROR".
    END.
 
    lcXMLStruct = get_struct(response_toplevel_id,"0").

@@ -3,17 +3,13 @@
    You can make test run with simulation mode liSimulate.
    Results can be check from CUI F7 - F1 - F1 */
 
-/* Case 1 = Modify OrderFusion dump 
-   Case 2 = Modify OrderCustomer dump 
-   Case 3 = Modify MsOwner dump  
-   Case 4 = Modify MsOwner Track dump  
-   Case 5 = Modify mobsub dump
-   Case 6 = Fusion Message table Configuration NEW DUMP 
-   Case 7 = Fusion Message dump 
-   Case 8 = Billing Item dump
+/* Case 1 = Modify HPD_OrderCustomer 
+   Case 2 = Modify HPD_MobSub 
+   Case 3 = Modify HPD_OrderFusion  
+   Case 4 = Modify HPD_SubInvoice  
 */
 
-DEF VAR iiRunID     AS INT NO-UNDO INIT 8.      /* <--- Change the correct case number */
+DEF VAR iiRunID     AS INT NO-UNDO INIT 1.      /* <--- Change the correct case number */
 DEF VAR liSimulate  AS LOG NO-UNDO INIT TRUE.  /* <--- SIMULATE */
 /***************************************************/
 
@@ -203,86 +199,43 @@ END FUNCTION.
 
 CASE iiRunID:
    WHEN 1 THEN DO: /* Modify OrderFusion dump */
-      lcDumpName   = "OrderFusion".
-      lcDFTable    = "OrderFusion".
+      lcDumpName   = "HPD_OrderCustomer".
+      lcDFTable    = "HPD_OrderCustomer".
       ldaFromDate  = TODAY.
       ldaToDate    = 12/31/49.
-      lcField      = "FixedCurrOperCode,SerialNumber,AppointmentDate,CancellationReason,FixedInstallationTS,ADSLLinkState,FixedStatusTS,FixedStatusDesc". /* Put list here */
+      lcField      = "Gescal,StreetType,BisDuplicate,Block,Door,Letter,Stair,Hand,Km". /* Put list here */
 
       fAddFiels( lcDumpName,lcDFTable,ldaFromDate,ldaToDate,lcField).
    END.
-   WHEN 2 THEN DO: /* Modify OrderCustomer dump */
-      lcDumpName   = "OrderCustDumpTXT".
-      lcDFTable    = "OrderCustomer".
-      ldaFromDate  = TODAY.
-      ldaToDate    = 12/31/49.
-      lcField      = "Gescal,StreetType,BisDuplicate,Block,Door,Letter,Stair,Hand,Km,Floor". /* Put list here */
-
-      fAddFiels( lcDumpName,lcDFTable,ldaFromDate,ldaToDate,lcField).
-   END.
-   WHEN 3 THEN DO: /* Modify MSOwner dump */
-      lcDumpName   = "MSOwner".
-      lcDFTable    = "MSOwner".
+   WHEN 2 THEN DO: /* Modify OrderFusion dump */
+      lcDumpName   = "HPD_MobSub".
+      lcDFTable    = "HPD_MobSub".
       ldaFromDate  = TODAY.
       ldaToDate    = 12/31/49.
       lcField      = "FixedNumber". /* Put list here */
 
       fAddFiels( lcDumpName,lcDFTable,ldaFromDate,ldaToDate,lcField).
    END.
-   WHEN 4 THEN DO: /* Modify MSOwner Track dump */
-      lcDumpName   = "MsOwnerTrack".
-      lcDFTable    = "MSOwner".
+    WHEN 3 THEN DO: /* Modify OrderFusion dump */
+      lcDumpName   = "HPD_OrderFusion".
+      lcDFTable    = "HPD_OrderFusion".
+      ldaFromDate  = TODAY.
+      ldaToDate    = 12/31/49.
+      lcField      = "SerialNumber,FixedCurrOper,FixedCurrOperCode,UpdateTS,Product,AppointmentDate,CancellationReason,ADSLLinkState". /* Put list here */
+
+      fAddFiels( lcDumpName,lcDFTable,ldaFromDate,ldaToDate,lcField).
+   END.
+    WHEN 4 THEN DO: /* Modify OrderFusion dump */
+      lcDumpName   = "HPD_SubInvoice".
+      lcDFTable    = "HPD_SubInvoice".
       ldaFromDate  = TODAY.
       ldaToDate    = 12/31/49.
       lcField      = "FixedNumber". /* Put list here */
 
       fAddFiels( lcDumpName,lcDFTable,ldaFromDate,ldaToDate,lcField).
    END.
-   WHEN 5 THEN DO: /* Modify mobsub dump */
-      lcDumpName   = "SubscriptionDumpTXT".
-      lcDFTable    = "MobSub".
-      ldaFromDate  = TODAY.
-      ldaToDate    = 12/31/49.
-      lcField      = "FixedNumber". /* Put list here */
+ 
+   /**/
 
-      fAddFiels( lcDumpName,lcDFTable,ldaFromDate,ldaToDate,lcField).
-   END.
-   WHEN 6 THEN DO: /* Fusion Message table NEW DUMP */
-      lcDumpName        = "FusionMessage".
-      lcDFTable         = "FusionMessage".
-      lcFileName        = "#CAT#RUN_FusionMessage_#MODE_#DATE.txt".
-      lcSpoolDir        = "/store/riftp/dumpfiles/dwh/spool".
-      lcTransDir        = "/store/riftp/dumpfiles/dwh/outgoing".
-      llEmptyFile       = No.
-      llCheckEventLog   = No.
-      lcEventLogFields  = "".
-      lcDescription     = "Fusion Message table dump".
-      lcLogicModule     = "fusion_message_dump".
-      lcModCollModule   = "".
-
-      fAddNewDumpRecord( FALSE,lcDumpName,lcDFTable,lcFileName,lcSpoolDir,
-                         lcTransDir,llEmptyFile,llCheckEventLog,
-                         lcEventLogFields,lcDescription,lcLogicModule,
-                         lcModCollModule).
-
-   END.
-   WHEN 7 THEN DO: /* Fusion Message dump */
-      lcDumpName   = "FusionMessage".
-      lcDFTable    = "FusionMessage".
-      ldaFromDate  = TODAY.
-      ldaToDate    = 12/31/49.
-      lcField      = "MessageSeq,OrderId,MSSeq,MessageType,Source,CreatedTS,UpdateTS,MessageStatus,OrderType,FixedStatus,FixedStatusTS,FixedStatusDesc,AdditionalInfo,ResponseCode". /* Put list here */
-
-      fAddFiels( lcDumpName,lcDFTable,ldaFromDate,ldaToDate,lcField).
-   END.
-   WHEN 8 THEN DO: /* Modify mobsub dump */
-      lcDumpName   = "BillingItems".
-      lcDFTable    = "BItemGroup".
-      ldaFromDate  = TODAY.
-      ldaToDate    = 12/31/49.
-      lcField      = "GroupType". /* Put list here */
-
-      fAddFiels( lcDumpName,lcDFTable,ldaFromDate,ldaToDate,lcField).
-   END.
    OTHERWISE DISPLAY "Incorrect CASE ID " iiRunID.
 END CASE.
