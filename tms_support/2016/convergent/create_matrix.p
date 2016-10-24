@@ -43,9 +43,9 @@ create_mxitem("SubsTypeTo","CONTFH55_300",liSeq).
 liSeq = create_matrix("PERCONTR", "Convergent 10GB mobile").
 create_mxitem("PerContract","CONTS10GB",liSeq).
 create_mxitem("PerContract","DATA6",liSeq).
-create_mxitem("SubsTypeTo","CONTDSL55",liSeq).
-create_mxitem("SubsTypeTo","CONTFH55_50",liSeq).
-create_mxitem("SubsTypeTo","CONTFH65_300",liSeq).
+/*create_mxitem("SubsTypeTo","CONTDSL55",liSeq).*/
+/*create_mxitem("SubsTypeTo","CONTFH55_50",liSeq).*/
+/*create_mxitem("SubsTypeTo","CONTFH65_300",liSeq).*/
 
 liSeq = create_matrix("PERCONTR", "Convergent CONTDSL").
 create_mxitem("PerContract","CONTDSL",liSeq).
@@ -54,12 +54,12 @@ create_mxitem("SubsTypeTo","CONTDSL*",liSeq).
 liSeq = create_matrix("PERCONTR", "Convergent CONTFH50").
 create_mxitem("PerContract","CONTFH50",liSeq).
 create_mxitem("SubsTypeTo","CONTFH45_50",liSeq).
-create_mxitem("SubsTypeTo","CONTFH55_50",liSeq).
+/*create_mxitem("SubsTypeTo","CONTFH55_50",liSeq).*/
 
 liSeq = create_matrix("PERCONTR", "Convergent CONTFH300").
 create_mxitem("PerContract","CONTFH300",liSeq).
 create_mxitem("SubsTypeTo","CONTFH55_300",liSeq).
-create_mxitem("SubsTypeTo","CONTFH65_300",liSeq).
+/*create_mxitem("SubsTypeTo","CONTFH65_300",liSeq).*/
 
 liSeq = create_matrix("PERCONTR", "Convergent permanency").
 create_mxitem("PerContract","FTERM*",liSeq).
@@ -68,4 +68,4 @@ create_mxitem("SubsTypeFrom","CONTFH*",liSeq).
 
 liSeq = create_matrix("Bundle", "Convergent Bundle list").
 create_mxitem("PerContract","DATA6",liSeq).
-create_mxitem("SubsTypeTo","CONTDSL45,CONTDSL55,CONTFH45_50,CONTFH55_50,CONTFH55_300,CONTFH65_300",liSeq).
+create_mxitem("SubsTypeTo","CONTDSL45,CONTFH45_50,CONTFH55_300",liSeq).
