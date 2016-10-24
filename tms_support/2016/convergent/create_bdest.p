@@ -217,4 +217,51 @@ ELSE DO:
           pricelist.rounding = 4.
 END.
 
+DEFINE BUFFER bBdestConf  FOR BDestConf.
+DEF TEMP-TABLE ttBDestConf NO-UNDO LIKE BDestConf.
+DEFINE BUFFER bBdestConfItem  FOR BDestConfItem.
+DEF TEMP-TABLE ttBDestConfitem NO-UNDO LIKE BDestConfItem.
+DEF VAR i AS INT NO-UNDO.
 
+FIND LAST BDestConfItem USE-INDEX BDCItemID NO-LOCK NO-ERROR.
+IF AVAILABLE BDestConfItem THEN i = BDestConfItem.BDCItemID.
+ELSE i = 0.
+
+
+FOR EACH bBdestConf:
+   BUFFER-COPY bBDestConf TO ttBDestConf.
+   IF SUBSTRING(ttBDestConf.BDCGroup,9) BEGINS "10" THEN NEXT.
+   ASSIGN
+      ttBDestConf.fromdate = 10/24/16
+      ttBDestConf.BDCGroup = SUBSTRING(bBDestConf.BDCGroup,1,8) + "10" +
+                             SUBSTRING(bBDestConf.BDCGroup,9).
+   FIND FIRST BDestConf WHERE
+              Bdestconf.brand EQ "1" AND
+              Bdestconf.BDCGroup EQ ttBDestConf.BDCGroup NO-ERROR.
+   IF NOT AVAIL BDestConf THEN DO:
+      CREATE BDestConf.
+      BUFFER-COPY ttBDestConf TO BDestConf.
+   END.
+
+   FOR EACH bBDestConfItem WHERE
+            bBDestConfItem.brand EQ "1" AND
+            bBDestConfItem.BDCGroup EQ bBdestconf.BDCGroup:
+      BUFFER-COPY bBDestConfItem TO ttBDestConfItem.
+      i = i + 1.
+      ASSIGN ttBDestConfItem.fromdate = 10/24/16
+             ttBDestConfItem.BDCItemID = i
+             ttBDestConfItem.BDCGroup = SUBSTRING(bBDestConf.BDCGroup,1,8) +
+             "10" + SUBSTRING(bBDestConf.BDCGroup,9)
+             ttBDestConfItem.rateccn = 1000 + ttBDestConfItem.rateccn.
+      FIND FIRST BDestConfitem WHERE
+                 Bdestconfitem.brand EQ "1" AND
+                 Bdestconfitem.BDCGroup EQ ttBDestConf.BDCGroup AND
+                 Bdestconfitem.rateCCN EQ ttBDestConfItem.rateccn AND
+                 Bdestconfitem.bdest = ttBDestConfItem.bdest NO-ERROR.
+      IF NOT AVAIL BDestConfitem THEN DO:
+         CREATE BDestConfitem.
+         BUFFER-COPY ttBDestConfitem TO BDestConfitem.
+         DELETE ttBDestConfitem.
+      END.
+   END.
+END.
