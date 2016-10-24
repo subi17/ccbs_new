@@ -102,10 +102,12 @@ DEFINE VARIABLE liDSSMsSeq             AS INT     NO-UNDO.
 DEFINE VARIABLE lcAllowedDSS2SubsType  AS CHAR    NO-UNDO.
 DEFINE VARIABLE lcBundleId             AS CHAR    NO-UNDO.
 DEFINE VARIABLE lcBankAccount          AS CHAR    NO-UNDO.
+DEFINE VARIABLE llCallProc             AS LOGICAL NO-UNDO.
 
 DEFINE BUFFER bSubMsRequest  FOR MsRequest.
 DEFINE BUFFER bOrder         FOR Order.
 DEFINE BUFFER lbMobSub       FOR MobSub.
+DEFINE BUFFER bMobSub        FOR MobSub.
 
 IF MsRequest.ReqStatus <> 6 THEN RETURN.
 
@@ -184,10 +186,27 @@ DO TRANSACTION:
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSOWNER).
    END. /* ELSE DO: */
 
-   IF CAN-FIND(FIRST Customer WHERE
-                     Customer.CustNum = TermMobsub.InvCust AND
+   /* YDR-2052 */
+   IF NOT TermMobSub.PayType AND 
+      CAN-FIND(FIRST Customer NO-LOCK WHERE
+                     Customer.CustNum = TermMobsub.CustNum     AND
                      Customer.deltype = {&INV_DEL_TYPE_PAPER}) THEN
-      RUN pChangeDelType(TermMobsub.InvCust).      
+   DO:
+      llCallProc = TRUE.
+
+      FOR EACH bMobSub NO-LOCK WHERE
+               bMobsub.Brand    = gcBrand          AND
+               bMobSub.CustNum  = MobSub.CustNum   AND
+               bMobSub.MsSeq   <> TermMobSub.MsSeq AND
+               bMobSub.PayType  = NO:
+         llCallProc = NO.
+         LEAVE.
+      END.
+
+      IF llCallProc THEN
+         RUN pChangeDelType(TermMobSub.CustNum).
+
+   END. 
 
    CREATE Mobsub.
    BUFFER-COPY TermMobsub TO Mobsub.
@@ -959,59 +978,45 @@ PROCEDURE pRecoverSTC PRIVATE:
 END PROCEDURE. /* pRecoverSTC */
 
 PROCEDURE pChangeDelType:
-   DEFINE INPUT PARAMETER  liInvCust AS INTEGER   NO-UNDO.
+   DEFINE INPUT PARAMETER liCustNum AS INTEGER NO-UNDO.
 
-   DEFINE VARIABLE iCnt AS INTEGER     NO-UNDO.  
    DEFINE BUFFER bInvoice FOR Invoice.
 
-   FIND FIRST Customer WHERE 
-              Customer.CustNum = liInvCust
-              EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+   DEF VAR ldtStartDate AS DATE NO-UNDO.
+   DEF VAR ldtEndDate   AS DATE NO-UNDO.
+
+   FIND FIRST Customer EXCLUSIVE-LOCK WHERE 
+              Customer.CustNum = liCustNum NO-WAIT NO-ERROR.
 
    IF AVAILABLE Customer THEN      
    DO:
-      FIND FIRST Invoice WHERE
-                 Invoice.Brand   = gcBrand AND
-                 Invoice.CustNum = Customer.CustNum AND
-                 Invoice.InvType = {&INV_TYPE_NORMAL}  
-                 EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-                                                                                                   
-      IF AVAIL Invoice THEN
-      DO:
-         IF Invoice.DelType <> Customer.DelType THEN
-            ASSIGN Customer.DelType = Invoice.DelType.
-         ELSE
-         DO:
-            /*As per the requirement...if subscription got terminated 
-            on 1st day of the month then we need to change the 
-            delivery type and delivery status of last month invoice 
-            and delivery type of one day invoice that will be genereated 
-            on next bill cycle.
-            The logic for the above is implemented in deletemobsub.p.
-            If above is the scenario then at the time of Reactivation 
-            we can't find the old delivery type by FOR FIRST...that's 
-            why for each loop is used to traverse back upto 2 invoices.*/
+      /* If customer deliverytype is paper & subscription is reactivated, 
+         THEN check eventlog and revert back last two invoices to 
+         old delivery type option (email OR sms). */
 
-            for-blk:                                                                                                                                                                                                                                     FOR EACH bInvoice WHERE
-                     bInvoice.Brand   = gcBrand AND
-                     bInvoice.CustNum = Invoice.CustNum AND
-                     bInvoice.InvDate < Invoice.InvDate NO-LOCK:              
-               ASSIGN iCnt = iCnt + 1. 
-               IF iCnt = 3 THEN
-                  LEAVE for-blk.
-               ELSE IF bInvoice.DelType <> Customer.DelType THEN
-               DO:              
-                  /* if invoice not delivered yet then
-                   change the delivery type to previous one */
-                  
-                  IF Invoice.DeliveryState <> 2 THEN
-                     ASSIGN Invoice.DelType       = bInvoice.DelType
-                            Invoice.DeliveryState = 0.
-                  ASSIGN Customer.DelType = bInvoice.DelType.
-                  LEAVE for-blk.
-               END.                        
-            END.
-         END.            
+      ASSIGN ldtStartDate = DATE(MONTH(TODAY),1,YEAR(TODAY))
+             ldtEndDate   = TODAY.
+
+      FIND FIRST EventLog NO-LOCK WHERE 
+                 EventLog.TableName            = "Customer"               AND 
+                 EventLog.Key                  = STRING(Customer.CustNum) AND 
+                 EventLog.UserCode             = "TermSub"                AND 
+                 EventLog.Action               = "Modify"                 AND   
+         ENTRY(1,EventLog.Datavalues,CHR(255)) = "DelType"                NO-ERROR.
+      
+      IF AVAIL EventLog THEN 
+      DO:            
+         FOR EACH Invoice EXCLUSIVE-LOCK WHERE
+                  Invoice.Brand    = gcBrand            AND
+                  Invoice.CustNum  = Customer.CustNum   AND
+                  Invoice.InvDate >= ldtStartDate       AND
+                  Invoice.InvDate <= ldtEndDate         AND 
+                  Invoice.InvType  = {&INV_TYPE_NORMAL}:
+            Invoice.DelType = INT(ENTRY(3,EventLog.Datavalues,CHR(255))).  
+         END. 
+
+         Customer.DelType = INT(ENTRY(3,EventLog.Datavalues,CHR(255))).
       END.
+
    END.   
 END PROCEDURE.

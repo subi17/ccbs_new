@@ -1130,12 +1130,21 @@ END PROCEDURE.
 
 PROCEDURE pChangeDelType:
    DEFINE INPUT  PARAMETER liCustNum AS INTEGER NO-UNDO.   
-               
+
+   DEF VAR lhCustomer AS HANDLE NO-UNDO. 
+
+   lhCustomer = BUFFER Customer:HANDLE.
+
+   RUN StarEventInitialize(lhCustomer).
+
    FIND FIRST Customer EXCLUSIVE-LOCK WHERE 
               Customer.CustNum = liCustNum NO-WAIT NO-ERROR.
 
    IF AVAILABLE Customer THEN      
    DO:
+
+      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).       
+
       /* If subscription termination is on 1st day of month then change the 
          delivery type and delivery status for invoices generated AND but not delivered */
       IF DAY(TODAY) = 1 THEN
@@ -1152,6 +1161,9 @@ PROCEDURE pChangeDelType:
       END.
 
       Customer.DelType = {&INV_DEL_TYPE_PAPER}.
+
+      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+
    END.
 
 END PROCEDURE.
