@@ -10,9 +10,10 @@
    Case 5 = Modify mobsub dump
    Case 6 = Fusion Message table Configuration NEW DUMP 
    Case 7 = Fusion Message dump 
+   Case 8 = Billing Item dump
 */
 
-DEF VAR iiRunID     AS INT NO-UNDO INIT 7.      /* <--- Change the correct case number */
+DEF VAR iiRunID     AS INT NO-UNDO INIT 8.      /* <--- Change the correct case number */
 DEF VAR liSimulate  AS LOG NO-UNDO INIT TRUE.  /* <--- SIMULATE */
 /***************************************************/
 
@@ -271,6 +272,15 @@ CASE iiRunID:
       ldaFromDate  = TODAY.
       ldaToDate    = 12/31/49.
       lcField      = "MessageSeq,OrderId,MSSeq,MessageType,Source,CreatedTS,UpdateTS,MessageStatus,OrderType,FixedStatus,FixedStatusTS,FixedStatusDesc,AdditionalInfo,ResponseCode". /* Put list here */
+
+      fAddFiels( lcDumpName,lcDFTable,ldaFromDate,ldaToDate,lcField).
+   END.
+   WHEN 8 THEN DO: /* Modify mobsub dump */
+      lcDumpName   = "BillingItems".
+      lcDFTable    = "BItemGroup".
+      ldaFromDate  = TODAY.
+      ldaToDate    = 12/31/49.
+      lcField      = "GroupType". /* Put list here */
 
       fAddFiels( lcDumpName,lcDFTable,ldaFromDate,ldaToDate,lcField).
    END.
