@@ -208,11 +208,11 @@ ADD FIELD "CreatedTS" OF "FusionMessage" AS decimal
   DECIMALS 5
   ORDER 70
 
-ADD FIELD "HandledTS" OF "FusionMessage" AS decimal 
+ADD FIELD "UpdateTS" OF "FusionMessage" AS decimal 
   FORMAT "99999999.99999"
   INITIAL "0"
-  LABEL "HandledTS"
-  COLUMN-LABEL "HandledTS"
+  LABEL "UpdateTS"
+  COLUMN-LABEL "UpdateTS"
   DECIMALS 5
   ORDER 80
 
@@ -283,6 +283,10 @@ ADD INDEX "MessageSeq" ON "FusionMessage"
   PRIMARY
   UNIQUE
   INDEX-FIELD "MessageSeq" ASCENDING 
+
+ADD INDEX "UpdateTS" ON "FusionMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "UpdateTS" DESCENDING 
 
 ADD SEQUENCE "FusionMessageSeq"
   INITIAL 0
