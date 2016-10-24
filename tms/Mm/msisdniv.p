@@ -78,7 +78,7 @@ END.
 
 form
    skip(1)
-"  Note: This program shows the total value of mobile calls"    skip
+"  Note: This program shows the total value of calls       "    skip
 "        made by this Mobile Subscriber.                   "    skip(1)
 "        calls within .......:" pvm1
 help "Earliest Date of call" "-" pvm2 
