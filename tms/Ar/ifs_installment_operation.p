@@ -409,7 +409,7 @@ PROCEDURE pCollectActivations:
          FixedFee.FinancedResult EQ {&TF_STATUS_SENT_TO_BANK} THEN NEXT.
          
       IF FixedFee.TFBank > "" AND FixedFee.TFBank NE lcTFBank THEN NEXT.
-      IF FixedFee.TFBank EQ "" AND lcTFBank NE {&TF_BANK_CETELEM} THEN NEXT.
+      IF FixedFee.TFBank EQ "" AND lcTFBank NE {&TF_BANK_UNOE} THEN NEXT.
 
       ldResidual = 0.
       IF NOT FixedFee.BillCode BEGINS "RVTERM" THEN DO:
@@ -593,7 +593,7 @@ PROCEDURE pCollectACC:
                   FixedFee.SourceKey = STRING(DCCLI.PerContractID):
             
             IF FixedFee.TFBank > "" AND FixedFee.TFBank NE lcTFBank THEN NEXT REQUEST_LOOP.
-            IF FixedFee.TFBank EQ "" AND lcTFBank NE {&TF_BANK_CETELEM} THEN NEXT REQUEST_LOOP.
+            IF FixedFee.TFBank EQ "" AND lcTFBank NE {&TF_BANK_UNOE} THEN NEXT REQUEST_LOOP.
          
             IF FixedFee.FinancedResult EQ {&TF_STATUS_HOLD_SENDING} OR
                FixedFee.FinancedResult EQ {&TF_STATUS_WAITING_SENDING} OR
@@ -903,7 +903,7 @@ PROCEDURE pCollectInstallmentContractChanges:
                 DayCampaign.DCEvent = bTermDCCLI.DCEvent:
             
          IF FixedFee.TFBank > "" AND FixedFee.TFBank NE lcTFBank THEN NEXT REQUEST_LOOP.
-         IF FixedFee.TFBank EQ "" AND lcTFBank NE {&TF_BANK_CETELEM} THEN NEXT REQUEST_LOOP.
+         IF FixedFee.TFBank EQ "" AND lcTFBank NE {&TF_BANK_UNOE} THEN NEXT REQUEST_LOOP.
          
          /* wait bank response for the old contract before sending B/D + A row 
             A/C row for the old contract should go in the same or earlier HIRE file */
@@ -1166,7 +1166,7 @@ PROCEDURE pCollectReactivations:
                 FixedFee.SourceKey = STRING(DCCLI.PerContractID):
             
          IF FixedFee.TFBank > "" AND FixedFee.TFBank NE lcTFBank THEN NEXT.
-         IF FixedFee.TFBank EQ "" AND lcTFBank NE {&TF_BANK_CETELEM} THEN NEXT.
+         IF FixedFee.TFBank EQ "" AND lcTFBank NE {&TF_BANK_UNOE} THEN NEXT.
       
          /* wait bank response for the old contract before sending B/D + A row 
             A/C row for the old contract should go in the same or earlier HIRE file */
@@ -1438,7 +1438,7 @@ PROCEDURE pCollectInstallmentCancellations:
                 DayCampaign.DCEvent = bTermDCCLI.DCEvent:
       
          IF FixedFee.TFBank > "" AND FixedFee.TFBank NE lcTFBank THEN NEXT REQUEST_LOOP.
-         IF FixedFee.TFBank EQ "" AND lcTFBank NE {&TF_BANK_CETELEM} THEN NEXT REQUEST_LOOP.
+         IF FixedFee.TFBank EQ "" AND lcTFBank NE {&TF_BANK_UNOE} THEN NEXT REQUEST_LOOP.
          
          /* wait bank response for the old contract before sending B/D + A row 
             A/C row for the old contract should go in the same or earlier HIRE file */
