@@ -421,6 +421,8 @@ FUNCTION createTariff RETURNS LOG (INPUT lcBase AS CHAR,
                                    INPUT lcBdest AS CHAR,
                                    INPUT liMode AS INT).
    DEF VAR lcTempCCN AS CHAR NO-UNDO.
+   DEF VAR lcNotNeeded AS CHAR NO-UNDO.
+   lcNotNeeded = "010,012,011,061,062,065,080,085,088,091,092,112,1006,116000,116111,016,025,900116016,900840111".
    IF lcBdest EQ "" AND CAN-FIND(FIRST Tariff WHERE
                                        Tariff.brand EQ "1" AND
                                        Tariff.CCN EQ liCCN AND
@@ -445,6 +447,7 @@ FUNCTION createTariff RETURNS LOG (INPUT lcBase AS CHAR,
                   bTariff.ccn EQ INT(lcTempCCN) AND
                   bTariff.pricelist EQ lcBase AND
                   bTariff.validto > TODAY:
+             IF LOOKUP(bTariff.bdest,lcNotNeeded) > 1 THEN NEXT.
              CREATE ttTariff.
              BUFFER-COPY bTariff TO ttTariff.
              ASSIGN
@@ -540,7 +543,7 @@ IF NOT AVAIL Daycampaign THEN DO:
       DayCampaign.calcmethod = 1
       DayCampaign.effective = 1
       DayCampaign.durtype = 3
-      DayCampaign.durmonths = 6
+      DayCampaign.durmonths = 12
       DayCampaign.durunit = 2
       Daycampaign.termfeemodel = "FTERMPERIOD"
       Daycampaign.TermFeeCalc = 2
