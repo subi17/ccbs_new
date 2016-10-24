@@ -250,7 +250,7 @@ CASE iiRunID:
    WHEN 6 THEN DO: /* Fusion Message table NEW DUMP */
       lcDumpName        = "FusionMessage".
       lcDFTable         = "FusionMessage".
-      lcFileName        = "#CAT#RUN_FUSIONMESSAGE_#MODE_#DATE.txt".
+      lcFileName        = "#CAT#RUN_FusionMessage_#MODE_#DATE.txt".
       lcSpoolDir        = "/store/riftp/dumpfiles/dwh/spool".
       lcTransDir        = "/store/riftp/dumpfiles/dwh/outgoing".
       llEmptyFile       = No.
