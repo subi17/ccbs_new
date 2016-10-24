@@ -1525,7 +1525,7 @@ END.
 
 /* YPR-4983 COFF logistic file for router */
 
-FOR EACH FusionMessage WHERE 
+FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE 
          FusionMessage.source EQ "MasMovil" AND
          FusionMessage.messagestatus EQ {&FUSIONMESSAGE_STATUS_NEW} AND
          FusionMessage.messagetype EQ "Logistics":
@@ -1533,17 +1533,22 @@ FOR EACH FusionMessage WHERE
               Order.brand EQ gcBrand AND
               Order.orderId EQ FusionMessage.orderId NO-ERROR.
    IF NOT AVAIL Order OR INDEX(Order.orderchannel, "telesales") EQ 0 THEN DO:
-      FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+      ASSIGN
+         FusionMessage.UpdateTS = fMakeTS()
+         FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.
    END.
    FIND FIRST CliType WHERE
               Clitype.brand EQ gcBrand AND
               Clitype.clitype EQ order.clitype NO-LOCK NO-ERROR.
    IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN DO:
-      FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+      ASSIGN
+         FusionMessage.UpdateTS = fMakeTS()
+         FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.   
    END.
-   IF fDelivRouter(FusionMessage.orderId) THEN
+   IF fDelivRouter(FusionMessage.orderId) THEN ASSIGN
+      FusionMessage.UpdateTS = fMakeTS()
       FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_SENT}.
 END.
 

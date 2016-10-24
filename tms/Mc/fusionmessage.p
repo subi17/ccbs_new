@@ -46,7 +46,7 @@ FORM
    ttDocs.MessageStatus FORMAT "X(10)"   COLUMN-LABEL "Status"
    ttDocs.CreatedTS     FORMAT "99999999.99999"  COLUMN-LABEL "Created TS"
    ttDocs.FixedStatusTS FORMAT "99999999.99999"  COLUMN-LABEL "Fixed TS"
-   ttDocs.HandledTS     FORMAT "99999999.99999"  COLUMN-LABEL "Handled TS"
+   ttDocs.UpdateTS      FORMAT "99999999.99999"  COLUMN-LABEL "Update TS"
 WITH ROW 1 CENTERED OVERLAY 15  DOWN
     COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "Messages"  FRAME sel.
 
@@ -73,7 +73,7 @@ form
     SKIP
     "Created...........:" ttDocs.CreatedTS 
     SKIP
-    "Handled...........:" ttDocs.HandledTS 
+    "Handled...........:" ttDocs.UpdateTS 
     SKIP
     "Response Code.....:" ttDocs.ResponseCode FORMAT "X(45)" 
     SKIP
@@ -312,7 +312,7 @@ REPEAT WITH FRAME sel:
             ttDocs.FixedStatusDesc 
             ttDocs.FixedStatusTS 
             ttDocs.CreatedTS 
-            ttDocs.HandledTS 
+            ttDocs.UpdateTS 
             ttDocs.ResponseCode 
             ttDocs.Source 
             ttDocs.AdditionalInfo 
@@ -376,6 +376,6 @@ PROCEDURE local-disp-row:
        ttDocs.MessageStatus
        ttDocs.CreatedTS
        ttDocs.FixedStatusTS
-       ttDocs.HandledTS
+       ttDocs.UpdateTS
        WITH FRAME sel.
 END PROCEDURE.

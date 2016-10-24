@@ -155,15 +155,18 @@ ldCurrentTime = fMakeTS().
 
 fLogLine("","Centre file creation start " + fTS2HMS(ldCurrentTime)).
 
-FOR EACH FusionMessage WHERE 
+FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE 
          FusionMessage.source EQ "MasMovil" AND
          FusionMessage.messagestatus EQ {&FUSIONMESSAGE_STATUS_ONGOING} AND
          FusionMessage.messagetype EQ {&FUSIONMESSAGE_TYPE_LOGISTICS}:
    lcStatus = fCreateCentreFileRow().
-   IF lcStatus EQ "" THEN
+   IF lcStatus EQ "" THEN ASSIGN
+      FusionMessage.UpdateTS     = fMakeTS()
       FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_HANDLED}.
    ELSE DO:
-      FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+      ASSIGN
+         FusionMessage.UpdateTS     = fMakeTS()
+         FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       fLogLine("",lcStatus).
    END.
 END.
