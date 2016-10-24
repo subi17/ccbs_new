@@ -1012,10 +1012,10 @@ PROCEDURE pChangeDelType:
                   Invoice.InvDate >= ldtStartDate       AND
                   Invoice.InvDate <= ldtEndDate         AND 
                   Invoice.InvType  = {&INV_TYPE_NORMAL}:
-            Invoice.DelType = INT(ENTRY(3,EventLog.Datavalues,CHR(255))).  
+            Invoice.DelType = INT(ENTRY(2,EventLog.Datavalues,CHR(255))).  
          END. 
 
-         Customer.DelType = INT(ENTRY(3,EventLog.Datavalues,CHR(255))).
+         Customer.DelType = INT(ENTRY(2,EventLog.Datavalues,CHR(255))).
       END.
 
    END.   
