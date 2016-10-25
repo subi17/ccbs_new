@@ -262,10 +262,8 @@
                     ELSE 
                     DO:
                        IF Customer.Category <> INPUT FRAME lis Customer.Category THEN 
-                       DO:
                            DISPLAY CustCat.CustIDType @ Customer.CustIDType WITH FRAME lis.
-                           LEAVE.
-                       END.
+
                        ASSIGN dkatnimi = CustCat.CatName.
                        DISPLAY dkatnimi.
                     END.
