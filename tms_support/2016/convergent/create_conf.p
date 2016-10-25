@@ -16,7 +16,6 @@ DEF BUFFER bBillItem FOR BillItem.
 DEF BUFFER bTariff FOR Tariff.
 DEF VAR liActionId AS INT.
 
-
 FUNCTION create_bdest RETURNS CHAR (INPUT ictariffcode AS CHAR):
    DEF VAR liBDCount AS INT.
    DEF VAR lcBDestList AS CHAR INIT "QTY_IN,MIN_IN".
@@ -65,46 +64,10 @@ FUNCTION create_bdest RETURNS CHAR (INPUT ictariffcode AS CHAR):
    END.
 END.
 
-FUNCTION create_tmritem RETURNS CHAR (INPUT lcitem as CHAR,
-                                      INPUT liruleseq as INT):
-   FIND FIRST TMRItemValue WHERE
-              TMRItemValue.tmruleseq =  liruleseq AND
-              LOOKUP(lcitem, TMRItemValue.CounterItemValues) > 0
-              NO-ERROR.
-   IF NOT AVAIL TMRItemValue THEN DO:
-      CREATE TMRItemValue.
-      ASSIGN TMRItemValue.CounterItemValues = lcitem
-             TMRItemValue.fromdate = ldaFrom
-             TMRItemValue.todate = 12/31/49
-             TMRItemValue.tmruleseq = liruleseq.
-   END.
-END.
 
 create_bdest("CONTDSL").
 create_bdest("CONTFH50").
 create_bdest("CONTFH300").
-
-create_tmritem("CONTDSL_DATA_IN,CONTDSL45",14).
-create_tmritem("CONTFH50_DATA_IN,CONTFH45_50",14).
-create_tmritem("CONTFH300_DATA_IN,CONTFH55_300",14).
-create_tmritem("CONTS2GB_DATA_IN,CONTDSL45",14).
-create_tmritem("CONTS2GB_DATA_IN,CONTFH45_50",14).
-create_tmritem("CONTS2GB_DATA_IN,CONTFH55_300",14).
-
-create_tmritem("GPRSDATA_DATA*,CONTDSL45",33).
-create_tmritem("GPRSDATA_DATA*,CONTFH45_50",33).
-create_tmritem("GPRSDATA_DATA*,CONTFH55_300",33).
-create_tmritem("CONTDSL_QTY_IN,CONTDSL45",34).
-create_tmritem("CONTFH50_QTY_IN,CONTFH45_50",34).
-create_tmritem("CONTFH300_QTY_IN,CONTFH55_300",34).
-
-create_tmritem("CONTDSL_MIN_IN,CONTDSL45",34).
-create_tmritem("CONTFH50_MIN_IN,CONTFH45_50",34).
-create_tmritem("CONTFH300_MIN_IN,CONTFH55_300",34).
-
-create_tmritem("CONTS2GB_VOICE_IN,CONTDSL45",34).
-create_tmritem("CONTS2GB_VOICE_IN,CONTFH45_50",34).
-create_tmritem("CONTS2GB_VOICE_IN,CONTFH55_300",34).
 
 IF CAN-FIND(FIRST bitemgroup WHERE
                   bitemgroup.brand = "1" AND
@@ -118,64 +81,6 @@ ELSE DO:
           bitemgroup.grouptype = 0
           bitemgroup.invoiceorder = 31.
 END.
-IF CAN-FIND(FIRST bitemgroup WHERE
-                  bitemgroup.brand = "1" AND
-                  bitemgroup.bigroup = "47") THEN
-   MESSAGE "bigroup already found: 47" VIEW-AS ALERT-BOX.
-ELSE DO:
-   CREATE bitemgroup.
-   ASSIGN bitemgroup.bigname = "Fixed voice"
-          bitemgroup.brand = "1"
-          bitemgroup.bigroup = "47"
-          bitemgroup.grouptype = 0
-          bitemgroup.invoiceorder = 32.
-END.
-
-IF CAN-FIND(FIRST bitemgroup WHERE
-                  bitemgroup.brand = "1" AND
-                  bitemgroup.bigroup = "51") THEN
-   MESSAGE "bigroup already found: 51" VIEW-AS ALERT-BOX.
-ELSE DO:
-   CREATE bitemgroup.
-   ASSIGN bitemgroup.bigname = "Fixed voice"
-          bitemgroup.brand = "1"
-          bitemgroup.bigroup = "51"
-          bitemgroup.grouptype = 0
-          bitemgroup.invoiceorder = 20.
-END.
-
-IF CAN-FIND(FIRST bitemgroup WHERE
-                  bitemgroup.brand = "1" AND
-                  bitemgroup.bigroup = "53") THEN
-   MESSAGE "bigroup already found: 53" VIEW-AS ALERT-BOX.
-ELSE DO:
-   CREATE bitemgroup.
-   ASSIGN bitemgroup.bigname = "Premium Services Fixed"
-          bitemgroup.brand = "1"
-          bitemgroup.bigroup = "53"
-          bitemgroup.grouptype = 0
-          bitemgroup.invoiceorder = 30.
-END.
-
-IF CAN-FIND(FIRST pricelist WHERE
-                  pricelist.brand EQ "1" AND
-                  pricelist.plname = "Contrato fixed" AND
-                  pricelist.pricelist = "CONTRATOFIXED") THEN
-   MESSAGE "pricelist already exist" VIEW-AS ALERT-BOX.
-ELSE DO:
-
-   CREATE pricelist.
-   ASSIGN pricelist.brand = "1"
-          pricelist.currency = "EUR"
-          pricelist.currunit = TRUE
-          pricelist.dediclist = FALSE
-          pricelist.inclvat = FALSE
-          pricelist.plname = "Contrato fixed"
-          pricelist.pricelist = "CONTRATOFIXED"
-          pricelist.memo = "Contrato fixed pricelist"
-          pricelist.rounding = 4.
-END.
-
 
 /* FEEMODEL */
 
@@ -516,6 +421,7 @@ IF liModeCliType > 0 THEN DO:
             Clitype.clitype BEGINS "CONTDSL":
       ASSIGN
       Clitype.fixedlinetype = 1
+      Clitype.webstatuscode = 0
       Clitype.FixedLineDownload = "20M"
       Clitype.FixedLineUpload = "20M".
    END.
@@ -525,6 +431,7 @@ IF liModeCliType > 0 THEN DO:
             Clitype.clitype MATCHES "CONTFH*50":
       ASSIGN
       Clitype.fixedlinetype = 2
+      Clitype.webstatuscode = 0
       Clitype.FixedLineDownload = "50M"
       Clitype.FixedLineUpload = "5M".
 
@@ -535,6 +442,7 @@ IF liModeCliType > 0 THEN DO:
          Clitype.clitype MATCHES "CONTFH*300":
       ASSIGN
       Clitype.fixedlinetype = 2
+      Clitype.webstatuscode = 0
       Clitype.FixedLineDownload = "300M"
       Clitype.FixedLineUpload = "300M".
 
