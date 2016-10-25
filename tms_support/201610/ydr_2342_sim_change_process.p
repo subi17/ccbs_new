@@ -183,16 +183,43 @@ END.
 FUNCTION fDelivSIM RETURNS LOG
    (INPUT pcICC AS CHARACTER):
    
-   DEF VAR lcUID      AS CHAR NO-UNDO.
-   DEF VAR lcPWD      AS CHAR NO-UNDO.
-   DEF VAR lcDeliRegi AS CHAR NO-UNDO.
-   DEF VAR i          AS INT  NO-UNDO.
+   DEF VAR lcUID       AS CHAR NO-UNDO.
+   DEF VAR lcPWD       AS CHAR NO-UNDO.
+   DEF VAR lcDeliRegi  AS CHAR NO-UNDO.
+   DEF VAR i           AS INT  NO-UNDO.
+   DEF VAR lcFirstName AS CHAR NO-UNDO.
+   DEF VAR lcSurName1  AS CHAR NO-UNDO.
+   DEF VAR lcSurName2  AS CHAR NO-UNDO.
+   DEF VAR lcMobile    AS CHAR NO-UNDO.
+   DEF VAR lcFixed     AS CHAR NO-UNDO.
+   DEF VAR lcEmail     AS CHAR NO-UNDO.
 
    DEF BUFFER AgreeCustomer FOR Customer.
 
    FIND FIRST AgreeCustomer NO-LOCK WHERE
               AgreeCustomer.CustNum = liCustNum NO-ERROR.
    
+   IF AgreeCustomer.CustIDType = "CIF" THEN DO:
+      FIND FIRST CustContact NO-LOCK WHERE
+                 CustContact.Brand    = gcBrand                              AND
+                 CustContact.CustNum  = AgreeCustomer.CustNum                AND
+                 CustContact.CustType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT} NO-ERROR.
+      IF AVAIL CustContact THEN
+         ASSIGN lcFirstName = CustContact.FirstName
+                lcSurName1  = CustContact.CustName
+                lcSurName2  = CustContact.SurName2
+                lcMobile    = CustContact.SMSNumber
+                lcFixed     = CustContact.Phone
+                lcEmail     = CustContact.Email.
+   END.
+   ELSE
+      ASSIGN lcFirstName = AgreeCustomer.FirstName
+             lcSurName1  = AgreeCustomer.CustName
+             lcSurName2  = AgreeCustomer.SurName2
+             lcMobile    = AgreeCustomer.MobileNumber
+             lcFixed     = AgreeCustomer.Phone
+             lcEmail     = AgreeCustomer.Email.
+
    get_account_data(AgreeCustomer.CustNum, OUTPUT lcUID, OUTPUT lcPWD).
  
    FIND FIRST Region NO-LOCK WHERE
@@ -221,8 +248,9 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.XFUserID      = lcUID
       ttOneDelivery.XFPWD         = lcPWD
       ttOneDelivery.Company       = AgreeCustomer.Company
-      ttOneDelivery.Name          = AgreeCustomer.CustName
-      ttOneDelivery.SurName2      = AgreeCustomer.SurName2
+      ttOneDelivery.Name          = lcFirstName
+      ttOneDelivery.SurName1      = lcSurName1
+      ttOneDelivery.SurName2      = lcSurName2
       ttOneDelivery.DelivCO       = AgreeCustomer.COName
       ttOneDelivery.DelivAddr     = AgreeCustomer.Address
       ttOneDelivery.DelivCity     = AgreeCustomer.PostOffice
@@ -234,9 +262,9 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.CustZip       = AgreeCustomer.ZIP
       ttOneDelivery.CustRegi      = lcDeliRegi
       ttOneDelivery.CustCoun      = AgreeCustomer.Country
-      ttOneDelivery.MobConNum     = MobSub.CLI
-      ttOneDelivery.FixConNum     = AgreeCustomer.MobileNumber
-      ttOneDelivery.EMail         = AgreeCustomer.eMail
+      ttOneDelivery.MobConNum     = lcMobile
+      ttOneDelivery.FixConNum     = lcFixed
+      ttOneDelivery.EMail         = lcEmail
       ttOneDelivery.TopUp         = STRING(0.0,"zzz9.99")
       ttOneDelivery.ServTotal     = "0"
       ttOneDelivery.TermTotal     = "0"
@@ -335,13 +363,11 @@ REPEAT TRANSACTION:
                      Order.CLI       = lcCLI                AND
                      Order.OrderType = 2                    AND
                      Order.ICC       > ""                   AND
-                     LOOKUP(Order.StatusCode,"6,7,8,9") > 0 AND
+                     LOOKUP(Order.StatusCode,"6,7,8,9") = 0 AND
                      NOT Order.OrderChannel BEGINS "Renewal_POS") AND
       CAN-FIND(FIRST MsRequest WHERE
-                     MsRequest.Brand     = gcBrand                                AND
+                     MsRequest.MsSeq     = liMsSeq                                AND
                      MsRequest.ReqType   = {&REQTYPE_ICC_CHANGE}                  AND
-                     MsRequest.CLI       = lcCLI                                  AND
-                     MsRequest.ActStamp <= 99999999.99999                         AND
                      MsRequest.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
                      MsRequest.ReqSource = {&REQUEST_SOURCE_RENEWAL}) THEN DO:
       PUT STREAM sOut UNFORMATTED
