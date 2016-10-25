@@ -998,7 +998,7 @@ PROCEDURE pChangeDelType:
                  EventLog.TableName            = "Customer"               AND 
                  EventLog.Key                  = STRING(Customer.CustNum) AND 
                  EventLog.Action               = "Modify"                 AND   
-          LOOKUP(EventLog.Datavalues,"DelType") > 0                       NO-ERROR.
+          LOOKUP("DelType",EventLog.Datavalues,CHR(255)) > 0              NO-ERROR.
       
       IF AVAIL EventLog AND 
                EventLog.UserCode = "TermSub" THEN DO:
