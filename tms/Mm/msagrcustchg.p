@@ -77,7 +77,7 @@ FUNCTION getCustIdType RETURNS CHARACTER
     
     DEFINE BUFFER bf_Customer FOR Customer.
     
-    FIND FIRST bf_Customer WHERE bf_Customer.CustNum = iiOldCustomer NO-LOCK NO-ERROR.
+    FIND FIRST bf_Customer WHERE bf_Customer.CustNum = iiCustNum NO-LOCK NO-ERROR.
     IF AVAILABLE bf_Customer THEN 
         RETURN bf_Customer.CustIdType.
     

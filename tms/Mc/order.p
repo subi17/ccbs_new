@@ -214,7 +214,7 @@ DEF VAR lcNationality AS CHAR                  NO-UNDO.
 DEF VAR lcContid      AS CHAR                  NO-UNDO.
 DEF VAR ldAmount      AS DEC                   NO-UNDO. 
 DEF VAR lcCustIdType  AS CHAR                  NO-UNDO.
-DEF VAR lcCustType    AS CHAR                  NO-UNDO.
+DEF VAR lcCustType    AS CHAR EXTENT           NO-UNDO.
 DEF VAR liCounter     AS INT                   NO-UNDO.
 DEF VAR liLoop        AS INT                   NO-UNDO.
 DEF VAR lcCustomerId  AS CHAR                  NO-UNDO.
@@ -518,18 +518,18 @@ form /* seek  PersonId */
 
 /* Init values for Customer ID type */
 
-liCounter = 0.
+FUNCTION fGetCustIdTypeCount RETURNS INTEGER 
+    ():
+    DEFINE VARIABLE liCnt AS INTEGER NO-UNDO.     
 
-FOR EACH TMSCodes WHERE
-         TMSCodes.TableName = "Customer"   AND
-         TMSCodes.FieldName = "CustIDType" NO-LOCK:
-   ASSIGN liCounter = liCounter + 1
-          lcCustType[liCounter] = TMSCodes.CodeValue.
-END.
-
-
-
-
+    FOR EACH TMSCodes WHERE TMSCodes.TableName = "Customer" AND TMSCodes.FieldName = "CustIDType" NO-LOCK:
+       ASSIGN liCnt = liCnt + 1.
+    END.
+    
+    RETURN liCnt.    
+        
+END FUNCTION.
+        
 FUNCTION fCheckCustomerData RETURNS LOGICAL
    (BUFFER bChkCustomer FOR OrderCustomer):
    
@@ -566,6 +566,16 @@ FUNCTION fCheckCustomerData RETURNS LOGICAL
    RETURN TRUE. 
    
 END FUNCTION.
+
+EXTENT(lcCustType) = fGetCustIdTypeCount().
+    
+liCounter = 0.
+
+FOR EACH TMSCodes WHERE TMSCodes.TableName = "Customer" AND TMSCodes.FieldName = "CustIDType" NO-LOCK:
+   ASSIGN 
+       liCounter             = liCounter + 1
+       lcCustType[liCounter] = TMSCodes.CodeValue.
+END.
 
 IF iiOrderId > 0 THEN DO:
    FIND FIRST Order WHERE 

@@ -176,35 +176,35 @@ FUNCTION fChkCustID RETURNS LOGICAL
 END FUNCTION.
 
 FUNCTION fValidateCustomer RETURNS CHARACTER 
-   (BUFFER bf_Customer FOR Customer,
+   (BUFFER bf_OrderCustomer FOR OrderCustomer,
     icDefCountry AS CHARACTER): 
    
-   IF NOT AVAILABLE bf_Customer THEN 
+   IF NOT AVAILABLE bf_OrderCustomer THEN 
        RETURN "Record not available".
    
-   CASE bf_Customer.CustIdType:
+   CASE bf_OrderCustomer.CustIdType:
        WHEN "CIF" OR WHEN "CFraud" OR WHEN "CInternal" THEN
        DO:
-           IF bf_Customer.Company = "" THEN
+           IF bf_OrderCustomer.Company = "" THEN
                RETURN "There is a conflict between ID type and given names". 
-           ELSE IF bf_Customer.Company = "" AND bf_Customer.FirstName + bf_Customer.CustName + bf_Customer.SurName2 = "" THEN 
+           ELSE IF bf_OrderCustomer.Company = "" AND bf_OrderCustomer.FirstName + bf_OrderCustomer.SurName1 + bf_OrderCustomer.SurName2 = "" THEN 
                RETURN "Company name and consumer name can't be blank".
-           ELSE IF LOOKUP(bf_Customer.CustIdType,"CIF,CFraud,CInternal") > 0 AND bf_Customer.Country NE icDefCountry THEN
+           ELSE IF LOOKUP(bf_OrderCustomer.CustIdType,"CIF,CFraud,CInternal") > 0 AND bf_OrderCustomer.Country NE icDefCountry THEN
                RETURN "There is a conflict between ID type and country".
-           ELSE IF bf_Customer.Country NE icDefCountry THEN 
+           ELSE IF bf_OrderCustomer.Country NE icDefCountry THEN 
                RETURN "There is a conflict between ID type and country".
        END.
        OTHERWISE
        DO:
-           IF (bf_Customer.HonTitle = "" OR bf_Customer.FirstName = "" OR bf_Customer.CustName = "") THEN 
+           IF (bf_OrderCustomer.CustTitle = "" OR bf_OrderCustomer.FirstName = "" OR bf_OrderCustomer.SurName1 = "") THEN 
               RETURN "Name data is missing". 
-           ELSE IF bf_Customer.FirstName + bf_Customer.CustName + bf_Customer.SurName2 > "" AND bf_Customer.Company > ""  THEN 
+           ELSE IF bf_OrderCustomer.FirstName + bf_OrderCustomer.SurName1 + bf_OrderCustomer.SurName2 > "" AND bf_OrderCustomer.Company > ""  THEN 
                RETURN "You can't give both company name and consumer name".
-           ELSE IF LOOKUP(bf_Customer.CustIdType,"N/A") = 0 AND bf_Customer.Company > "" THEN 
+           ELSE IF LOOKUP(bf_OrderCustomer.CustIdType,"N/A") = 0 AND bf_OrderCustomer.Company > "" THEN 
                RETURN "Company name is expected to be blank for ID type choosen".
-           ELSE IF LOOKUP(bf_Customer.CustIdType,"NIE,NIF") > 0 AND bf_Customer.Country NE icDefCountry THEN
+           ELSE IF LOOKUP(bf_OrderCustomer.CustIdType,"NIE,NIF") > 0 AND bf_OrderCustomer.Country NE icDefCountry THEN
                RETURN "There is a conflict between ID type and country".
-           ELSE IF LOOKUP(bf_Customer.CustIdType,"NIF,N/A") = 0 AND bf_Customer.Country = icDefCountry THEN 
+           ELSE IF LOOKUP(bf_OrderCustomer.CustIdType,"NIF,N/A") = 0 AND bf_OrderCustomer.Country = icDefCountry THEN 
                RETURN "There is a conflict between ID type and country".
        END. 
    END CASE.
