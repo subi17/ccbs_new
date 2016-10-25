@@ -863,7 +863,6 @@ PROCEDURE pTerminate:
          RUN pChangeDelType(MobSub.CustNum).
    END. 
 
-
    CREATE TermMobsub.
    BUFFER-COPY Mobsub TO TermMobsub.
    DELETE MobSub.
@@ -1139,7 +1138,7 @@ PROCEDURE pChangeDelType:
    RUN StarEventInitialize(lhCustomer).
 
    FIND FIRST Customer EXCLUSIVE-LOCK WHERE 
-              Customer.CustNum = liCustNum NO-WAIT NO-ERROR.
+              Customer.CustNum = liCustNum NO-ERROR.
 
    IF AVAILABLE Customer THEN      
    DO:
@@ -1151,11 +1150,10 @@ PROCEDURE pChangeDelType:
       IF DAY(TODAY) = 1 THEN
       DO:
          FOR EACH Invoice EXCLUSIVE-LOCK WHERE
-                  Invoice.Brand   = gcBrand            AND
-                  Invoice.CustNum = Customer.CustNum   AND
-                  Invoice.InvDate = TODAY              AND
-                  Invoice.InvType = {&INV_TYPE_NORMAL} AND
-                  Invoice.DeliveryState <> 2:
+                  Invoice.Brand   = gcBrand          AND
+                  Invoice.CustNum = Customer.CustNum AND
+                  Invoice.InvDate = TODAY            AND
+                  Invoice.InvType = {&INV_TYPE_NORMAL}:
             Invoice.DelType = {&INV_DEL_TYPE_PAPER}.
          END.          
       END.

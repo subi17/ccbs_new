@@ -980,21 +980,19 @@ END PROCEDURE. /* pRecoverSTC */
 PROCEDURE pChangeDelType:
    DEFINE INPUT PARAMETER liCustNum AS INTEGER NO-UNDO.
 
-   DEFINE BUFFER bInvoice FOR Invoice.
+   DEF VAR lhCustomer AS HANDLE NO-UNDO. 
 
-   DEF VAR ldtStartDate AS DATE NO-UNDO.
-   DEF VAR ldtEndDate   AS DATE NO-UNDO.
+   lhCustomer = BUFFER Customer:HANDLE.
 
+   RUN StarEventInitialize(lhCustomer). 
+   
    FIND FIRST Customer EXCLUSIVE-LOCK WHERE 
-              Customer.CustNum = liCustNum NO-WAIT NO-ERROR.
+              Customer.CustNum = liCustNum NO-ERROR.
 
    IF AVAILABLE Customer THEN      
    DO:
       /* If customer deliverytype is paper & subscription is reactivated, 
          THEN check eventlog and revert back old delivery type option (email OR sms). */
-
-      ASSIGN ldtStartDate = DATE(MONTH(TODAY),1,YEAR(TODAY))
-             ldtEndDate   = TODAY.
 
       FIND FIRST EventLog NO-LOCK WHERE 
                  EventLog.TableName            = "Customer"               AND 
@@ -1003,8 +1001,15 @@ PROCEDURE pChangeDelType:
           LOOKUP(EventLog.Datavalues,"DelType") > 0                       NO-ERROR.
       
       IF AVAIL EventLog AND 
-               EventLog.UserCode = "TermSub" THEN 
+               EventLog.UserCode = "TermSub" THEN DO:
+
+         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).
+
          Customer.DelType = INT(ENTRY(2,EventLog.Datavalues,CHR(255))).
+
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+
+      END.   
 
    END.  
 
