@@ -70,6 +70,7 @@ END.
 DEFINE TEMP-TABLE ttTFPayment
    FIELD lineNum AS INT
    FIELD content AS char
+   FIELD ResidualContent AS char
    FIELD LineId AS INT 
    FIELD OrderId AS INT 
    FIELD PaytermAmt AS DEC
@@ -272,47 +273,58 @@ PROCEDURE pReadFileData:
       END.
       
       /* normal row */
-      IF LOOKUP(lcPaymentCode,{&TF_PAYTERM_CODES}) > 0 OR
-         LOOKUP(lcPaymentCode,{&TF_Q25_EXTENSION_CODES}) > 0 THEN DO:
-
-         CREATE ttTFPayment.
-         ASSIGN
-            ttTFPayment.LineNum = liLineNum
-            ttTFPayment.Content = lcLine
-            ttTFPayment.LineId = liLineId
-            ttTFPayment.OrderId = liOrderId
-            ttTFPayment.PaytermAmt = ldeTotalAmount
-            ttTFPayment.PaymentCode = lcPaymentCode
-            ttTFPayment.FinancedResult = lcFinancedResult.
-         
-         IF LOOKUP(lcPaymentCode,{&TF_Q25_EXTENSION_CODES}) > 0 THEN
-            ttTFPayment.FFBillCode = "RVTERM".
-         ELSE 
-            ttTFPayment.FFBillCode = "PAYTERM".
-      END.
-      /* residual fee row */
-      ELSE IF LOOKUP(lcPaymentCode,{&TF_RESIDUAL_CODES}) > 0 THEN DO:
-
-         FIND ttTFPayment WHERE
-              ttTFPayment.LineId = liLineId AND
-              ttTFPayment.OrderId = liOrderId NO-ERROR.
-
-         IF NOT AVAIL ttTFPayment THEN DO:
-            fWriteLog(lcLine,"ERROR:Residual fee row without PAYTERM fee row").
-            NEXT FILE_LINE.
-         END.
-
-         ASSIGN
-            ttTFPayment.ResidualAmt    = ldeTotalAmount
-            ttTFPayment.ResidualCode   = lcPaymentCode
-            ttTFPayment.ResidualResult = lcFinancedResult
-            ttTFPayment.FFBillCode     = "PAYTERM".
-      END. 
-      ELSE DO:
+      IF LOOKUP(lcPaymentCode,{&TF_PAYTERM_CODES}) = 0 AND
+         LOOKUP(lcPaymentCode,{&TF_Q25_EXTENSION_CODES}) = 0 AND
+         LOOKUP(lcPaymentCode,{&TF_RESIDUAL_CODES}) = 0 THEN DO:
          fWriteLog(lcLine,SUBST("ERROR:Unsupported payment method &1", 
                                 lcPaymentCode)).
          NEXT FILE_LINE.
       END.
+         
+      FIND ttTFPayment WHERE
+           ttTFPayment.LineId = liLineId AND
+           ttTFPayment.OrderId = liOrderId NO-ERROR.
+
+      IF NOT AVAIL ttTFPayment THEN DO:
+         CREATE ttTFPayment.
+         ASSIGN
+            ttTFPayment.LineNum = liLineNum
+            ttTFPayment.LineId = liLineId
+            ttTFPayment.OrderId = liOrderId.
+      END.
+       
+      IF LOOKUP(lcPaymentCode,{&TF_PAYTERM_CODES}) > 0 OR
+         LOOKUP(lcPaymentCode,{&TF_Q25_EXTENSION_CODES}) > 0 THEN DO:
+         
+         IF ttTFPayment.PaymentCode > "" THEN DO:
+            fWriteLog(lcLine,SUBST("ERROR:Non-unique line id: &1", liLineId)).
+            NEXT FILE_LINE.
+         END.
+         
+         ASSIGN
+            ttTFPayment.Content = lcLine
+            ttTFPayment.PaytermAmt = ldeTotalAmount
+            ttTFPayment.PaymentCode = lcPaymentCode
+            ttTFPayment.FinancedResult = lcFinancedResult.
+      END.
+      ELSE IF LOOKUP(lcPaymentCode,{&TF_RESIDUAL_CODES}) > 0 THEN DO:
+         
+         IF ttTFPayment.ResidualCode > "" THEN DO:
+            fWriteLog(lcLine,SUBST("ERROR:Non-unique line id: &1", liLineId)).
+            NEXT FILE_LINE.
+         END.
+         
+         ASSIGN
+            ttTFPayment.ResidualContent = lcLine
+            ttTFPayment.ResidualAmt    = ldeTotalAmount
+            ttTFPayment.ResidualCode   = lcPaymentCode
+            ttTFPayment.ResidualResult = lcFinancedResult.
+      END.
+      
+      IF LOOKUP(lcPaymentCode,{&TF_Q25_EXTENSION_CODES}) > 0 THEN
+         ttTFPayment.FFBillCode = "RVTERM".
+      ELSE ttTFPayment.FFBillCode = "PAYTERM".
+   
    END.
   
 END PROCEDURE. 
@@ -334,6 +346,13 @@ PROCEDURE pProcessData:
       IF NOT SESSION:BATCH AND ttTFPayment.LineNum MOD 10 = 0 THEN DO:
          disp "Processing data.. " lcFilename ttTFPayment.LineNum with frame a.
          pause 0.
+      END.
+         
+      IF ttTFPayment.ResidualContent > "" AND 
+         ttTFPayment.Content EQ "" THEN DO:
+         fWriteLog(ttTFPayment.ResidualContent,
+                   "ERROR:Residual fee row without PAYTERM fee row").
+         NEXT LINE_LOOP.
       END.
 
       FIND Order NO-LOCK WHERE
