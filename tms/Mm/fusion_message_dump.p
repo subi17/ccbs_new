@@ -87,7 +87,7 @@ END.
 
 /* full dumps */
 ELSE DO:
-   RUN pAllFusionMessages.
+   RUN pSearchFusionMessages.
 END.
 
 IF NOT SESSION:BATCH THEN 
@@ -115,27 +115,6 @@ PROCEDURE pSearchFusionMessages:
       IF NOT fPick(FusionMessage.MessageSeq) THEN NEXT.
       RUN pDumpFusionTable.
    END.
-
-END PROCEDURE.
-
-
-PROCEDURE pAllFusionMessages:
-
-   DEF VAR ldLastDump    AS DEC    NO-UNDO.
-   ldLastDump = fMake2Dt(TODAY - 30,0).   /* Default time */
-
-   /* When was last full dump done */   
-   FIND FIRST DumpLog NO-LOCK WHERE
-              DumpLog.DumpId = icDumpID AND
-              DumpLog.DumpType = icDumpMode AND
-              DumpLog.DumpLogStatus NE 5 USE-INDEX DumpId NO-ERROR.
-   IF AVAIL DumpLog THEN DO:
-      IF DumpLog.CreateStart > fHMS2TS(TODAY - 65,'') THEN /* Max time */
-         ldLastDump = DumpLog.CreateStart.
-   END.
-
-   idLastDump = ldLastDump.
-   RUN pSearchFusionMessages. 
 
 END PROCEDURE.
 
