@@ -405,7 +405,7 @@ FUNCTION fHandleCorporateCustomer RETURNS LOGICAL:
    CASE 2: If the customer has not any active subs. then order should go to 20
    */
 
-   IF lcIdType = "CIF" THEN DO:
+   IF LOOKUP(lcIdType,"CIF,CFraud,CInternal") > 0 THEN DO:
       FIND FIRST Customer WHERE
                  Customer.Brand      = gcBrand  AND
                  Customer.OrgId      = lcId     AND

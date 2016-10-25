@@ -231,7 +231,7 @@ IF pcChannel BEGINS "renewal_pos" THEN DO:
    END.
    ELSE DO:
       
-      IF Customer.CustIdType NE "CIF" OR
+      IF LOOKUP(Customer.CustIdType,"CIF,CFraud,CInternal") = 0 OR
          Customer.OrgId NE pcCIF THEN DO:
          RETURN appl_err({&ERR_RENOVE}).
       END.
@@ -461,7 +461,7 @@ ELSE DO:
    END. /* IF (TODAY - MobSub.ActivationDate) < liConfigDays AND */
 END. /* ELSE DO: */
 
-IF Customer.CustIdType EQ "CIF" THEN DO:
+IF LOOKUP(Customer.CustIdType,"CIF,CFraud,CInternal") > 0 THEN DO:
    add_string(top_struct, "person_id", Customer.AuthCustId).
    add_string(top_struct, "id_type",   Customer.AuthCustIdType).
 END.
@@ -471,7 +471,7 @@ ELSE DO:
 END.
 
 add_string(top_struct, "subscription_type", Mobsub.CliType).
-add_boolean(top_struct, "corporate_customer", (Customer.CustIdType EQ "CIF")).
+add_boolean(top_struct, "corporate_customer", (LOOKUP(Customer.CustIdType,"CIF,CFraud,CInternal") > 0)).
 IF liRemperiod > 0 THEN DO:
    add_int(top_struct, "contract_days_remain", liRemPeriod).
    add_double(top_struct, "contract_penalty", ldeCurrPen).

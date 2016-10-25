@@ -1085,7 +1085,7 @@ PROCEDURE pHandleFromASOL2AREC:
             IF AVAIL OrderCustomer THEN DO:
                IF Order.OrderChannel = "retention_stc" THEN DO:
                   lcMNPSMSText = "MNPCancelRetention".
-                  IF OrderCustomer.CustIdType EQ "CIF" THEN
+                  IF LOOKUP(OrderCustomer.CustIdType,"CIF,CFraud,CInternal") > 0 THEN
                      fSetOrderStatus(Order.OrderId,
                                      {&ORDER_STATUS_RENEWAL_STC_COMPANY}).
                   ELSE

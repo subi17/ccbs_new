@@ -336,7 +336,7 @@ FUNCTION fGetSegment RETURNS CHAR
               bOC.RowType EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
               NO-ERROR.
    IF AVAIL bOC THEN DO:
-      IF bOC.CustIdType EQ "CIF" THEN RETURN "Company".
+      IF LOOKUP(bOC.CustIdType,"CIF,CFraud,CInternal") > 0 THEN RETURN "Company".
       ELSE IF bOC.SelfEmployed EQ TRUE THEN RETURN "Self-employed".
       ELSE RETURN "Consumer".
    END.

@@ -26,7 +26,7 @@
      help "Customer ID"     
   Customer.Category AT 46
      LABEL "Category ..." 
-     dkatnimi FORMAT "X(14)" NO-LABEL 
+     dkatnimi FORMAT "X(16)" NO-LABEL 
      SKIP
 
   Customer.BirthDay 

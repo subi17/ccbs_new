@@ -259,8 +259,13 @@
                        MESSAGE "Unknown category" VIEW-AS ALERT-BOX ERROR.
                        NEXT.
                     END. 
-                    ELSE DO:
-                       
+                    ELSE 
+                    DO:
+                       IF Customer.Category <> INPUT FRAME lis Customer.Category THEN 
+                       DO:
+                           DISPLAY CustCat.CustIDType @ Customer.CustIDType WITH FRAME lis.
+                           LEAVE.
+                       END.
                        ASSIGN dkatnimi = CustCat.CatName.
                        DISPLAY dkatnimi.
                     END.
@@ -270,7 +275,7 @@
                  else if frame-field = "CustName" THEN DO:
 
                     if input Customer.CustName = "" AND
-                       LOOKUP(INPUT FRAME lis Customer.CustIDType,"CIF,N/A") 
+                       LOOKUP(INPUT FRAME lis Customer.CustIDType,"CIF,N/A,CFraud,CInternal") 
                             = 0 
                     THEN DO:
                        MESSAGE "Surname is mandatory"
@@ -283,7 +288,7 @@
                  ELSE IF FRAME-FIELD = "FirstName" AND Customer.CustNum > 1000
                  THEN DO:
                     IF INPUT FRAME lis Customer.FirstName = "" AND
-                       LOOKUP(INPUT FRAME lis Customer.CustIDType,"CIF,N/A") 
+                       LOOKUP(INPUT FRAME lis Customer.CustIDType,"CIF,N/A,CFraud,CInternal") 
                             = 0 
                     THEN DO:
                        MESSAGE "First name is mandatory"
@@ -293,7 +298,7 @@
                  END.
 
                  ELSE IF FRAME-FIELD = "SurName2" THEN DO:
-                    IF INPUT FRAME lis Customer.CustIDType NE "N/A" THEN DO:
+                    IF LOOKUP(INPUT FRAME lis Customer.CustIDType, "N/A") = 0 THEN DO:
                        NEXT-PROMPT Customer.Language.
                        NEXT.
                     END.
@@ -328,7 +333,7 @@
                     END.
 
                     /* passport cannot always be used */
-                    IF LOOKUP(Customer.CustIDType,"NIE,NIF,CIF") > 0 AND
+                    IF LOOKUP(Customer.CustIDType,"NIE,NIF,Fraud,Internal,CIF,CFraud,CInternal") > 0 AND
                        INPUT FRAME lis Customer.CustIDType = "Passport" 
                     THEN DO:
                        MESSAGE "Normal ID type cannot be changed into passport"

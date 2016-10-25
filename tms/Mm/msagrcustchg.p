@@ -31,6 +31,7 @@
 {main_add_lines.i}
 {fbankdata.i}
 {fbundle.i}
+{flimitreq.i}
 
 SESSION:SYSTEM-ALERT-BOXES = TRUE.
 
@@ -71,6 +72,18 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhCustContact).
 END.
 
+FUNCTION getCustIdType RETURNS CHARACTER
+    (iiCustNum AS INTEGER):
+    
+    DEFINE BUFFER bf_Customer FOR Customer.
+    
+    FIND FIRST bf_Customer WHERE bf_Customer.CustNum = iiOldCustomer NO-LOCK NO-ERROR.
+    IF AVAILABLE bf_Customer THEN 
+        RETURN bf_Customer.CustIdType.
+    
+    RETURN "".    
+                
+END FUNCTION.
 
 CASE MsRequest.ReqStatus:
 
@@ -263,7 +276,7 @@ PROCEDURE pOwnerChange:
       /* credit check for postpaid (not for companies) */
       IF MobSub.PayType = FALSE THEN DO:
       
-         IF lcCustIDType = "CIF" THEN DO:
+         IF LOOKUP(lcCustIDType,"CIF,CFraud,CInternal") > 0 THEN DO:
             fReqStatus(8,"").
          END.
             
@@ -548,7 +561,7 @@ PROCEDURE pOwnerChange:
                while making ACC so in this case we consider customer has chosen 
                Contact person information same as Authorized customer information
                and delete contact person if exist */
-            IF bNewCust.CustIdType = "CIF" AND
+            IF LOOKUP(bNewCust.CustIdType, "CIF,CFraud,CInternal") > 0 AND
                NOT llNewCust THEN DO:
                FIND FIRST CustContact WHERE
                           CustContact.Brand = gcBrand AND
@@ -880,7 +893,8 @@ PROCEDURE pMsCustMove:
    DEF VAR ldaDate      AS DATE NO-UNDO. 
    DEF VAR liManTime    AS INT  NO-UNDO. 
    DEF VAR lcDate       AS CHAR NO-UNDO. 
-
+   DEF VAR lcOldCustIdType AS CHAR NO-UNDO.
+    
    DEF BUFFER bBillTarget FOR BillTarget.
    DEF BUFFER bOwner      FOR MSOwner.
    DEF BUFFER bOMobSub    FOR MobSub.
@@ -1192,31 +1206,45 @@ PROCEDURE pMsCustMove:
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhSingleFee).
       END.
       
-      /* billing denials */
-      FOR EACH Limit EXCLUSIVE-LOCK USE-INDEX MsSeq WHERE
-               Limit.MsSeq     = MsOwner.MsSeq   AND
-               Limit.LimitType = 3               AND
-               Limit.TMRuleSeq = 0               AND
-               Limit.ToDate   >= ldtActDate      AND
-               Limit.LimitID   = 0               AND
-               Limit.CustNum   = MobSub.InvCust:
-               
-         IF Limit.FromDate >= ldtActDate THEN       
-            Limit.CustNum = iiNewInvCust.       
-
-         ELSE DO:
-            CREATE bLimit.
-            BUFFER-COPY Limit EXCEPT FromDate TO bLimit.
-            ASSIGN
-               bLimit.FromDate = ldtActDate
-               bLimit.CustNum  = iiNewInvCust
-               Limit.ToDate    = ldtActDate - 1.
-            RELEASE bLimit.   
-         END.
-         
-         RELEASE Limit.
-   END.
-
+      ASSIGN lcOldCustIdType = getCustIdType(MobSub.InvCust).
+      
+      IF LOOKUP(lcOldCustIdType,"CFraud,CInternal,Fraud,Internal") = 0 AND  
+         CAN-FIND(FIRST Limit WHERE Limit.MsSeq     = MsOwner.MsSeq   AND
+                                    Limit.LimitType = 3               AND
+                                    Limit.TMRuleSeq = 0               AND
+                                    Limit.ToDate   >= ldtActDate      AND
+                                    Limit.LimitID   = 0               AND
+                                    Limit.CustNum   = MobSub.InvCust  NO-LOCK USE-INDEX MsSeq) THEN 
+      DO:
+          /* billing denials */
+          FOR EACH Limit EXCLUSIVE-LOCK USE-INDEX MsSeq WHERE
+                   Limit.MsSeq     = MsOwner.MsSeq   AND
+                   Limit.LimitType = 3               AND
+                   Limit.TMRuleSeq = 0               AND
+                   Limit.ToDate   >= ldtActDate      AND
+                   Limit.LimitID   = 0               AND
+                   Limit.CustNum   = MobSub.InvCust:
+                   
+             IF Limit.FromDate >= ldtActDate THEN       
+                Limit.CustNum = iiNewInvCust.       
+    
+             ELSE DO:
+                CREATE bLimit.
+                BUFFER-COPY Limit EXCEPT FromDate TO bLimit.
+                ASSIGN
+                   bLimit.FromDate = ldtActDate
+                   bLimit.CustNum  = iiNewInvCust
+                   Limit.ToDate    = ldtActDate - 1.
+                RELEASE bLimit.   
+             END.
+             
+             RELEASE Limit.
+          END.
+      END.
+      ELSE 
+      DO:
+          RUN pSetSubscription_Prohited_FromInvoicing(MobSub.InvCust, iiNewInvCust, MsOwner.MsSeq).
+      END.  
    END.
    
    /* end current msowner and create a new one */
@@ -1304,6 +1332,26 @@ PROCEDURE pMsCustMove:
    
 END PROCEDURE.
 
+        
+
+PROCEDURE pSetSubscription_Prohited_FromInvoicing:
+    DEFINE INPUT PARAMETER iiOldCustomer AS INTEGER NO-UNDO.
+    DEFINE INPUT PARAMETER iiNewCustomer AS INTEGER NO-UNDO.
+    DEFINE INPUT PARAMETER iiMsSeq       AS INTEGER NO-UNDO.
+    
+    DEFINE VARIABLE lcOldIdType AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE lcNewIdType AS CHARACTER NO-UNDO.
+    
+    ASSIGN 
+        lcOldIdType = getCustIdType(iiOldCustomer)
+        lcNewIdType = getCustIdType(iiNewCustomer).
+    
+    fSetSubscriptionProhibitedFromInvoicing(lcOldIdType,lcNewIdType,iiMsSeq,iiNewCustomer).
+    
+    RETURN "".    
+    
+END PROCEDURE.
+    
 PROCEDURE pCreditCheck:
 
    DEF VAR liCheck  AS INT  NO-UNDO.

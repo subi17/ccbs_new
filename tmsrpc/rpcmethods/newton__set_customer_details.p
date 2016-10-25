@@ -255,7 +255,7 @@ DO lii = 1 TO NUM-ENTRIES(lcDataFields):
             /* Store id_type and person_id to CustContact table if
                corporate customer is used */
             IF LOOKUP(ENTRY(lii, lcDataFields),"id_type,person_id") > 0 AND
-            Customer.CustIdType = "CIF" THEN NEXT.
+            LOOKUP(Customer.CustIdType, "CIF,CFraud,CInternal") > 0 THEN NEXT.
             lcCustomerData[lii] = lcc.
             llCustomerChanged = TRUE.
         END.
@@ -295,7 +295,7 @@ DEF VAR ldePrepStcTs AS DEC NO-UNDO.
 DEF VAR llBankAcctChange AS LOG NO-UNDO. 
 DEF VAR lcBankAccount AS CHAR NO-UNDO. 
 
-IF Customer.CustIdType = "CIF" THEN 
+IF LOOKUP(Customer.CustIdType,"CIF,CFraud,CInternal") > 0 THEN 
    lcOrgId = lcCustomerData[LOOKUP("company_id", lcDataFields)].
 ELSE lcOrgId = lcCustomerData[LOOKUP("person_id", lcDataFields)].
 
@@ -311,7 +311,7 @@ IF Customer.orgid NE lcOrgId THEN DO:
    END.
 END.
    
-IF Customer.CustIdType NE "CIF" THEN DO:
+IF LOOKUP(Customer.CustIdType,"CIF,CFraud,CInternal") = 0 THEN DO:
 
    lcCustIdType = lcCustomerData[LOOKUP("id_type", lcDataFields)].
    
@@ -327,7 +327,7 @@ IF Customer.CustIdType NE "CIF" THEN DO:
    END.
 END.
 
-IF Customer.CustIdType = "CIF" THEN DO:
+IF LOOKUP(Customer.CustIdType,"CIF,CFraud,CInternal") > 0 THEN DO:
    
    lhCustomer = BUFFER Customer:HANDLE.
    RUN StarEventInitialize(lhCustomer).
@@ -446,7 +446,7 @@ IF llCustomerChanged THEN DO:
         customer.OutMarkSMS = llMarketingData[4]
         customer.OutMarkEmail = llMarketingData[5]
         customer.OutMarkPost = llMarketingData[6]
-        customer.orgid = lcCustomerData[LOOKUP("company_id", lcDataFields)] WHEN customer.custidtype = "CIF"
+        customer.orgid = lcCustomerData[LOOKUP("company_id", lcDataFields)] WHEN LOOKUP(customer.custidtype, "CIF,CFraud,CInternal") > 0
         customer.foundationDate = ldFoundationDate 
         customer.BirthDay = ldBirthDay
         customer.InvoiceTargetRule = liInvoiceTargetRule

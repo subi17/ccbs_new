@@ -4,6 +4,7 @@
 &GLOBAL-DEFINE flimitreq YES
 
 {commali.i}
+{tmsconst.i}
 {fcreatereq.i}
 {eventval.i}
 
@@ -256,5 +257,46 @@ FUNCTION fCreateLimitHistory RETURNS LOGICAL
       RELEASE bufLimit.
    END.
 END.
+
+FUNCTION fSetSubscriptionProhibitedFromInvoicing RETURNS LOGICAL 
+    (icOldCustIdType AS CHARACTER,
+     icNewCustIdType AS CHARACTER,
+     iiMsSeq         AS INTEGER  ,
+     iiCustNum       AS INTEGER  ):
+    
+    DEFINE VARIABLE liBillPerm         AS INTEGER NO-UNDO.
+    DEFINE VARIABLE llActivateBillPerm AS LOGICAL NO-UNDO.
+    
+    DEFINE BUFFER bf_MobSub FOR MobSub.
+    
+    /* When IDType of customer is changed from other either NIE,NIF,N/A,Passport,CIF to either of CFraud,CInternal,Fraud,Internal */
+    IF LOOKUP(icOldCustIdType,"CFraud,CInternal,Fraud,Internal") = 0 AND  
+       LOOKUP(icNewCustIdType,"CFraud,CInternal,Fraud,Internal") > 0 THEN 
+        ASSIGN 
+            liBillPerm = {&LIMIT_BILLPERM_PROHIBITED}
+            llActivateBillPerm = TRUE.
+    /* When IDType of customer is changed from other either CFraud,CInternal,Fraud,Internal to either of NIE,NIF,N/A,Passport,CIF */
+    ELSE IF LOOKUP(icOldCustIdType,"CFraud,CInternal,Fraud,Internal") > 0 AND
+            LOOKUP(icNewCustIdType,"CFraud,CInternal,Fraud,Internal") = 0 THEN
+        ASSIGN 
+            liBillPerm = {&LIMIT_BILLPERM_ALLOWED}
+            llActivateBillPerm = TRUE.
+    
+    IF llActivateBillPerm THEN 
+    DO:
+        fCreateLimitHistory(iiCustNum,
+                            iiMsSeq,
+                            {&LIMIT_TYPE_BILLPERM},
+                            liBillPerm,
+                            0, /* limit id */
+                            0, /* tmruleseq */
+                            FALSE, /* default value */
+                            TODAY,
+                            DATE(12,31,2049)).
+    END.
+         
+    RETURN TRUE.
+            
+END FUNCTION.
 
 &ENDIF

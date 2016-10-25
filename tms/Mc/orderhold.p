@@ -82,7 +82,7 @@ IF (Order.StatusCode EQ "20" OR
                    OrderCustomer.Brand = gcBrand AND
                    OrderCustomer.OrderId = Order.OrderId AND
                    OrderCustomer.RowType = 1 AND
-                   OrderCustomer.CustidType = "CIF") THEN DO:
+                   LOOKUP(OrderCustomer.CustidType, "CIF,CFraud,CInternal") > 0) THEN DO:
 
    lcNewOrderStatus = {&ORDER_STATUS_PENDING_FIXED_LINE}.
 

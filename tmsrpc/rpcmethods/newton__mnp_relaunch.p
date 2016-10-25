@@ -59,7 +59,7 @@ pcCreator     = "VISTA_" + get_string(pcStruct,"username").
 
 IF TRIM(pcCreator) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-IF pcIDType = "CIF" THEN
+IF LOOKUP(pcIDType,"CIF,CFraud,CInternal") > 0 THEN
    pcCompany     = get_string(pcStruct,"company").
 ELSE ASSIGN
    pcFirstName   = get_string(pcStruct,"first_name")
@@ -144,7 +144,7 @@ IF OrderCustomer.Custid NE pcCustomerID OR
    END.
    
    IF (OrderCustomer.CustidType NE pcIDType) AND
-      (OrderCustomer.CustidType EQ "CIF" OR pcIDType EQ "CIF")
+      (LOOKUP(OrderCustomer.CustidType, "CIF,CFraud,CInternal") > 0 OR LOOKUP(pcIDType, "CIF,CFraud,CInternal") > 0)
       THEN RETURN appl_err("ID type change is not allowed").
 
    IF NOT fChkCustID(pcIDType,pcCustomerId) THEN DO: 
@@ -171,7 +171,7 @@ IF OrderCustomer.Custid NE pcCustomerID OR
       OrderCustomer.CustId = pcCustomerID
       OrderCustomer.CustIdType = pcIDType.
       
-    IF pcIDType = "CIF" THEN
+    IF LOOKUP(pcIDType,"CIF,CFraud,CInternal") > 0 THEN
       OrderCustomer.Company = pcCompany.
     ELSE ASSIGN
       OrderCustomer.FirstName = pcFirstName

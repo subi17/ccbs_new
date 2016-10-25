@@ -189,7 +189,7 @@ ASSIGN
 
 llCorporate = CAN-FIND(OrderCustomer OF Order WHERE
                        OrderCustomer.RowType = 1 AND
-                       OrderCustomer.CustIdType = "CIF").
+                       LOOKUP(OrderCustomer.CustIdType, "CIF,CFraud,CInternal") > 0).
 
 FOR EACH OrderCustomer NO-LOCK WHERE
          OrderCustomer.Brand   = gcBrand   AND

@@ -214,7 +214,7 @@ DEF VAR lcNationality AS CHAR                  NO-UNDO.
 DEF VAR lcContid      AS CHAR                  NO-UNDO.
 DEF VAR ldAmount      AS DEC                   NO-UNDO. 
 DEF VAR lcCustIdType  AS CHAR                  NO-UNDO.
-DEF VAR lcCustType    AS CHAR EXTENT 5         NO-UNDO.
+DEF VAR lcCustType    AS CHAR                  NO-UNDO.
 DEF VAR liCounter     AS INT                   NO-UNDO.
 DEF VAR liLoop        AS INT                   NO-UNDO.
 DEF VAR lcCustomerId  AS CHAR                  NO-UNDO.
@@ -501,7 +501,7 @@ form /* seek  With CustId */
     "Customer ID .......:" lcCustomerId FORMAT "x(11)"
     HELP "Customers ID" SKIP
     "Customer ID Type ..:" lcCustIdType
-    HELP "CIF N/A NIE NIF Passport"  SKIP
+    HELP "CIF N/A NIE NIF Passport CFraud Fraud CInternal Internal"  SKIP
         
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer ID "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f5.
@@ -533,6 +533,8 @@ END.
 FUNCTION fCheckCustomerData RETURNS LOGICAL
    (BUFFER bChkCustomer FOR OrderCustomer):
    
+   DEFINE VARIABLE lcError    AS CHARACTER NO-UNDO.
+   
    /* cross reference checks */  
    IF bChkCustomer.ZipCode > "" AND SUBSTRING(bChkCustomer.ZipCode,1,2) NE 
       bChkCustomer.Region THEN DO:
@@ -542,15 +544,6 @@ FUNCTION fCheckCustomerData RETURNS LOGICAL
    END. 
       
    FIND Region WHERE Region.Region = bChkCustomer.Region NO-LOCK NO-ERROR.
-      
-   IF bChkCustomer.FirstName + bChkCustomer.SurName1 + 
-      bChkCustomer.SurName2 > "" AND
-      bChkCustomer.Company > "" AND bChkCustomer.CustIdType NE "CIF"
-   THEN DO:
-      MESSAGE "You can't give both company name and consumer name"
-      VIEW-AS ALERT-BOX ERROR.
-      RETURN FALSE.
-   END.
       
    IF bChkCustomer.CustTitle > "" AND 
       NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
@@ -562,39 +555,14 @@ FUNCTION fCheckCustomerData RETURNS LOGICAL
       VIEW-AS ALERT-BOX ERROR.
       RETURN FALSE.
    END.
-
-   /* company vrs. consumer */  
-   IF (bChkCustomer.CustIDType = "CIF"   AND 
-       (bChkCustomer.Company = "" ))       OR
-      (LOOKUP(bChkCustomer.CustIDType,"CIF,N/A") = 0 AND 
-       bChkCustomer.Company > "")
-   THEN DO:
-      MESSAGE "There is a conflict between ID type and given names"
-      VIEW-AS ALERT-BOX ERROR.
-      RETURN FALSE.
-   END. 
-
-   IF LOOKUP(bChkCustomer.CustIDType,"N/A,CIF") = 0 AND 
-      (bChkCustomer.CustTitle  = ""  OR
-       bChkCustomer.FirstName = ""  OR
-       bChkCustomer.SurName1  = "")
-   THEN DO:
-      MESSAGE "Name data is missing"
-      VIEW-AS ALERT-BOX ERROR.
-      RETURN FALSE.
+   
+   ASSIGN lcError = fValidateCustomer(BUFFER bChkCustomer, lcDefCountry).
+   IF lcError <> "" THEN 
+   DO:
+       MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
+       RETURN FALSE.
    END.
-
-   /* country vrs. id type */
-   IF (LOOKUP(bChkCustomer.CustIDType,"NIF,CIF") > 0 AND 
-       bChkCustomer.Country NE lcDefCountry)                      OR
-      (LOOKUP(bChkCustomer.CustIDType,"NIF,CIF,N/A") = 0 AND 
-       bChkCustomer.Country = lcDefCountry) 
-   THEN DO:
-      MESSAGE "There is a conflict between ID type and country"
-      VIEW-AS ALERT-BOX ERROR.
-      RETURN FALSE.
-   END.
-
+   
    RETURN TRUE. 
    
 END FUNCTION.
@@ -1005,7 +973,7 @@ BROWSE:
         ELSE DO:
            /* Find Customer ID with any type */
            liCounter = 0.
-           DO liLoop = 1 TO 5:
+           DO liLoop = 1 TO EXTENT(lcCustType):
               FIND FIRST ordercustomer WHERE
                          ordercustomer.custidtype = lcCustType[liLoop] AND
                          ordercustomer.custid     = lcCustomerId    AND
@@ -2042,14 +2010,8 @@ PROCEDURE local-update-customer:
          OrderCustomer.FirstName WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0
          OrderCustomer.SurName1 WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0 
          OrderCustomer.SurName2 WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0
-         OrderCustomer.Company WHEN 
-            OrderCustomer.Custidtype = "cif" and
-            LOOKUP(Order.StatusCode,"20,21,31") > 0 and
-            OrderCustomer.RowType = 1
-         OrderCustomer.FoundationDate WHEN 
-            OrderCustomer.Custidtype = "cif" and
-            LOOKUP(Order.StatusCode,"20,21,31") > 0 AND
-            OrderCustomer.RowType = 1
+         OrderCustomer.Company WHEN LOOKUP(OrderCustomer.Custidtype,"CIF,CFraud,CInternal") > 0 AND LOOKUP(Order.StatusCode,"20,21,31") > 0 AND OrderCustomer.RowType = 1
+         OrderCustomer.FoundationDate WHEN LOOKUP(OrderCustomer.Custidtype,"CIF,CFraud,CInternal") > 0 AND LOOKUP(Order.StatusCode,"20,21,31") > 0 AND OrderCustomer.RowType = 1
          OrderCustomer.Street WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0
          OrderCustomer.BuildingNum WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0
          OrderCustomer.AddressCompl WHEN LOOKUP(Order.StatusCode,"20,21,31") > 0
@@ -2169,7 +2131,7 @@ PROCEDURE local-update-customer:
                   END.
 
                   /* passport cannot always be used */
-                  IF LOOKUP(OrderCustomer.CustIDType,"NIE,NIF,CIF") > 0 AND
+                  IF LOOKUP(OrderCustomer.CustIDType,"NIE,NIF,Fraud,Internal,CIF,CFraud,CInternal") > 0 AND
                     INPUT FRAME fCustomer OrderCustomer.CustIDType = "Passport"                   THEN DO:
                      MESSAGE "Normal ID type cannot be changed into passport"
                      VIEW-AS ALERT-BOX ERROR.

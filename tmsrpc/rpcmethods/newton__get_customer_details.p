@@ -149,7 +149,7 @@ add_string(top_struct, "sms_number", Customer.smsnumber).
 add_string(top_struct, "phone_number", Customer.Phone).
 add_int(top_struct, "new_subscription_grouping", Customer.InvoiceTargetRule).
 /* orgId can also hold the birthday of a user or payer */
-IF Customer.CustIdType = "CIF" THEN DO:
+IF LOOKUP(Customer.CustIdType, "CIF,CFraud,CInternal") > 0 THEN DO:
    add_string(top_struct, "id_type", Customer.AuthCustIdType).
    add_string(top_struct, "person_id", Customer.AuthCustId).
    add_string(top_struct, "company_id", Customer.orgId).
@@ -163,7 +163,7 @@ add_int(top_struct, 'debit_type', Customer.DelType).
 
 add_string(top_struct, "birthday", STRING(Customer.BirthDay,"99-99-9999")).
 
-IF Customer.CustIdType = "CIF" THEN DO:
+IF LOOKUP(Customer.CustIdType, "CIF,CFraud,CInternal") > 0 THEN DO:
    
    add_string(top_struct, 'company_name', Customer.CompanyName).
    add_date_or_time(top_struct, 'company_foundationdate', Customer.FoundationDate, 0).

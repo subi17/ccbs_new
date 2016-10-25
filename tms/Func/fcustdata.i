@@ -42,114 +42,175 @@ FUNCTION fChkZipCode RETURNS LOGICAL
 
 END FUNCTION.
 
+FUNCTION fValidateNIECustID RETURNS LOGICAL
+    (icCustID AS CHAR):
+        
+    DEF VAR lcBegin  AS CHAR NO-UNDO.
+    DEF VAR liIDCnt  AS INTE NO-UNDO.
+    
+    lcBegin = SUBSTRING(icCustID,1,1).
+          
+    IF LOOKUP(lcBegin,"X,Y") = 0 THEN 
+        RETURN FALSE.
+         
+    icCustID = SUBSTRING(icCustID,2).
+    IF lcBegin = "Y" THEN 
+        icCustID = "1" + icCustID.
+
+    DO liIDCnt = 1 TO LENGTH(icCustID) - 1:
+       IF INDEX("0123456789",SUBSTRING(icCustID,liIDCnt,1)) = 0 THEN
+          RETURN FALSE.
+    END.
+
+    liIDCnt = INTEGER(SUBSTRING(icCustID,1,LENGTH(icCustID) - 1)) MOD 23 + 1.
+       
+    IF SUBSTRING("TRWAGMYFPDXBNJZSQVHLCKET",liIDCnt,1) NE SUBSTRING(icCustID,LENGTH(icCustID),1) THEN 
+        RETURN FALSE.
+                  
+    RETURN TRUE.        
+END FUNCTION.        
+
+FUNCTION fValidateNIFCustID RETURNS LOGICAL
+    (icCustID AS CHAR):
+    DEFINE VARIABLE liIDCnt AS INTEGER NO-UNDO.
+        
+    DO liIDCnt = 1 TO 8:
+        IF INDEX("0123456789",SUBSTRING(icCustID,liIDCnt,1)) = 0 THEN
+            RETURN FALSE.
+    END.
+      
+    liIDCnt = INTEGER(SUBSTRING(icCustID,1,8)) MOD 23 + 1.
+        
+    IF SUBSTRING("TRWAGMYFPDXBNJZSQVHLCKET",liIDCnt,1) NE SUBSTRING(icCustID,9,1) THEN 
+        RETURN FALSE.
+                  
+    RETURN TRUE.        
+END FUNCTION.
+
 FUNCTION fChkCustID RETURNS LOGICAL
    (icCustIDType AS CHAR,
     icCustID     AS CHAR):
     
-   DEF VAR liIDCnt AS INT  NO-UNDO.
-   DEF VAR liIDRes AS INT  NO-UNDO.
-   DEF VAR liIDSum AS INT  NO-UNDO.
-   DEF VAR lcIDRes AS CHAR NO-UNDO.
-   DEF VAR lcBegin AS CHAR NO-UNDO.
-
-   CASE icCustIDType:
-   /* no checks for unknown customers */
-   WHEN "N/A" THEN RETURN TRUE.
-
-   WHEN "CIF" THEN DO:
-      IF LENGTH(icCustID) NE 9 THEN RETURN FALSE.
-
-      IF INDEX("ABCDEFGHJKLMNPQRSUVW",SUBSTRING(icCustID,1,1)) = 0 THEN 
-         RETURN FALSE.
-
-      DO liIDCnt = 2 TO 8:
-         IF INDEX("0123456789",SUBSTRING(icCustID,liIDCnt,1)) = 0 THEN
-            RETURN FALSE.
-      END.
-
-      liIDSum = 0.
-      
-      DO liIDCnt = 2 TO 8 BY 2:
-         liIDRes = INTEGER(SUBSTRING(icCustID,liIDCnt,1)) * 2.
-
-         liIDSum = liIDSum + INTEGER(SUBSTRING(STRING(liIDres),1,1)).
-         IF liIDres >= 11 THEN 
-            liIDSum = liIDSum + INTEGER(SUBSTRING(STRING(liIDres),2,1)).
-      END.
-
-      DO liIDCnt = 3 TO 7 BY 2:
-          liIDSum = liIDSum + INTEGER(SUBSTRING(icCustID,liIDCnt,1)).
-      END.
-
-      ASSIGN liIDRes = IF liIDSum >= 10 THEN 2 ELSE 1
-             liIDSum = INTEGER(SUBSTRING(STRING(liIDSum),liIDRes,1))
-             liIDCnt = 10 - INTEGER(liIDSum).
-              
-      IF liIDCnt = 10 THEN liIDCnt = 0.
-
-      IF liIDCnt = 0 
-      THEN lcIDRes = "J".
-      ELSE lcIDRes = SUBSTRING("ABCDEFGHI",liIDCnt,1).
-      
-      /* YCM-1312: 
-        New: if CIF first character is one of 
-        A,B,C,D,E,F,G,H,U or V last digit must be between 0..9 
-        and if CIF first character is one of
-        K,L,M,P,Q,R,S,W last digit must be between A..J */
-      /* Old: may be either letter or digit */
-      IF INDEX("ABCDEFGHJUV", SUBSTRING(icCustId,1,1)) > 0 THEN
-      DO:
-         IF STRING(liIDCnt) NE SUBSTRING(icCustId,9,1) THEN RETURN FALSE.
-      END.
-
-      IF INDEX("KMLNPQRSW", SUBSTRING(icCustId,1,1)) > 0 THEN
-      DO:
-         IF lcIDRes NE SUBSTRING(icCustId,9,1) THEN RETURN FALSE.
-      END.
-   END.
+   DEF VAR liIDCnt  AS INT  NO-UNDO.
+   DEF VAR liIDRes  AS INT  NO-UNDO.
+   DEF VAR liIDSum  AS INT  NO-UNDO.
+   DEF VAR lcIDRes  AS CHAR NO-UNDO.
    
-   WHEN "NIF" THEN DO:
-
-      IF LENGTH(icCustID) NE 9 THEN RETURN FALSE.
-      
-      DO liIDCnt = 1 TO 8:
-         IF INDEX("0123456789",SUBSTRING(icCustID,liIDCnt,1)) = 0 THEN
-            RETURN FALSE.
-      END.
-
-      liIDCnt = INTEGER(SUBSTRING(icCustID,1,8)) MOD 23 + 1.
-        
-      IF SUBSTRING("TRWAGMYFPDXBNJZSQVHLCKET",liIDCnt,1) NE 
-         SUBSTRING(icCustID,9,1)
-      THEN RETURN FALSE. 
-   END. 
-
-   WHEN "NIE" THEN DO:
-
-      IF LENGTH(icCustID) < 9 OR LENGTH(icCustID) > 10 THEN RETURN FALSE.
-      
-      lcBegin = SUBSTRING(icCustID,1,1).
-      
-      IF LOOKUP(lcBegin,"X,Y") = 0 THEN RETURN FALSE. 
-      icCustID = SUBSTRING(icCustID,2).
-      IF lcBegin = "Y" THEN icCustID = "1" + icCustID.
-
-      DO liIDCnt = 1 TO LENGTH(icCustID) - 1:
-         IF INDEX("0123456789",SUBSTRING(icCustID,liIDCnt,1)) = 0 THEN
-            RETURN FALSE.
-      END.
-
-      liIDCnt = INTEGER(SUBSTRING(icCustID,1,LENGTH(icCustID) - 1)) MOD 23 + 1.
-        
-      IF SUBSTRING("TRWAGMYFPDXBNJZSQVHLCKET",liIDCnt,1) NE 
-         SUBSTRING(icCustID,LENGTH(icCustID),1)
-      THEN RETURN FALSE. 
-   END. 
+   ASSIGN icCustID = SUBSTRING(icCustID,1,9) NO-ERROR.
     
+   CASE icCustIDType:
+       /* no checks for unknown customers */
+       WHEN "N/A" THEN RETURN TRUE.
+    
+       WHEN "CIF" OR WHEN "CFraud" OR WHEN "CInternal" THEN DO:
+          
+          IF LENGTH(icCustID) NE 9 THEN RETURN FALSE.
+    
+          IF INDEX("ABCDEFGHJKLMNPQRSUVW",SUBSTRING(icCustID,1,1)) = 0 THEN 
+             RETURN FALSE.
+    
+          DO liIDCnt = 2 TO 8:
+             IF INDEX("0123456789",SUBSTRING(icCustID,liIDCnt,1)) = 0 THEN
+                RETURN FALSE.
+          END.
+    
+          liIDSum = 0.
+          
+          DO liIDCnt = 2 TO 8 BY 2:
+             liIDRes = INTEGER(SUBSTRING(icCustID,liIDCnt,1)) * 2.
+    
+             liIDSum = liIDSum + INTEGER(SUBSTRING(STRING(liIDres),1,1)).
+             IF liIDres >= 11 THEN 
+                liIDSum = liIDSum + INTEGER(SUBSTRING(STRING(liIDres),2,1)).
+          END.
+    
+          DO liIDCnt = 3 TO 7 BY 2:
+              liIDSum = liIDSum + INTEGER(SUBSTRING(icCustID,liIDCnt,1)).
+          END.
+    
+          ASSIGN liIDRes = IF liIDSum >= 10 THEN 2 ELSE 1
+                 liIDSum = INTEGER(SUBSTRING(STRING(liIDSum),liIDRes,1))
+                 liIDCnt = 10 - INTEGER(liIDSum).
+                  
+          IF liIDCnt = 10 THEN liIDCnt = 0.
+    
+          IF liIDCnt = 0 
+          THEN lcIDRes = "J".
+          ELSE lcIDRes = SUBSTRING("ABCDEFGHI",liIDCnt,1).
+          
+          /* YCM-1312: 
+            New: if CIF first character is one of 
+            A,B,C,D,E,F,G,H,U or V last digit must be between 0..9 
+            and if CIF first character is one of
+            K,L,M,P,Q,R,S,W last digit must be between A..J */
+          /* Old: may be either letter or digit */
+          IF INDEX("ABCDEFGHJUV", SUBSTRING(icCustId,1,1)) > 0 THEN
+          DO:
+             IF STRING(liIDCnt) NE SUBSTRING(icCustId,9,1) THEN RETURN FALSE.
+          END.
+    
+          IF INDEX("KMLNPQRSW", SUBSTRING(icCustId,1,1)) > 0 THEN
+          DO:
+             IF lcIDRes NE SUBSTRING(icCustId,9,1) THEN RETURN FALSE.
+          END.
+       END.
+       
+       WHEN "NIF" OR WHEN "NIE" OR WHEN "Fraud" OR WHEN "Internal" THEN DO:
+          
+          IF LENGTH(icCustID) NE 9 THEN RETURN FALSE.
+          
+          IF icCustIDType = "NIF" THEN 
+              RETURN fValidateNIFCustID(icCustID).
+          ELSE IF icCustIDType = "NIE" THEN
+             RETURN fValidateNIECustID(icCustID).
+          ELSE IF LOOKUP(icCustIDType,"Fraud,Internal") > 0 THEN 
+          DO:
+              IF fValidateNIECustID(icCustID) = FALSE AND fValidateNIFCustID(icCustID) = FALSE THEN 
+                  RETURN FALSE.
+          END. 
+       END.
    END CASE.
    
    RETURN TRUE.
        
+END FUNCTION.
+
+FUNCTION fValidateCustomer RETURNS CHARACTER 
+   (BUFFER bf_Customer FOR Customer,
+    icDefCountry AS CHARACTER): 
+   
+   IF NOT AVAILABLE bf_Customer THEN 
+       RETURN "Record not available".
+   
+   CASE bf_Customer.CustIdType:
+       WHEN "CIF" OR WHEN "CFraud" OR WHEN "CInternal" THEN
+       DO:
+           IF bf_Customer.Company = "" THEN
+               RETURN "There is a conflict between ID type and given names". 
+           ELSE IF bf_Customer.Company = "" AND bf_Customer.FirstName + bf_Customer.CustName + bf_Customer.SurName2 = "" THEN 
+               RETURN "Company name and consumer name can't be blank".
+           ELSE IF LOOKUP(bf_Customer.CustIdType,"CIF,CFraud,CInternal") > 0 AND bf_Customer.Country NE icDefCountry THEN
+               RETURN "There is a conflict between ID type and country".
+           ELSE IF bf_Customer.Country NE icDefCountry THEN 
+               RETURN "There is a conflict between ID type and country".
+       END.
+       OTHERWISE
+       DO:
+           IF (bf_Customer.HonTitle = "" OR bf_Customer.FirstName = "" OR bf_Customer.CustName = "") THEN 
+              RETURN "Name data is missing". 
+           ELSE IF bf_Customer.FirstName + bf_Customer.CustName + bf_Customer.SurName2 > "" AND bf_Customer.Company > ""  THEN 
+               RETURN "You can't give both company name and consumer name".
+           ELSE IF LOOKUP(bf_Customer.CustIdType,"N/A") = 0 AND bf_Customer.Company > "" THEN 
+               RETURN "Company name is expected to be blank for ID type choosen".
+           ELSE IF LOOKUP(bf_Customer.CustIdType,"NIE,NIF") > 0 AND bf_Customer.Country NE icDefCountry THEN
+               RETURN "There is a conflict between ID type and country".
+           ELSE IF LOOKUP(bf_Customer.CustIdType,"NIF,N/A") = 0 AND bf_Customer.Country = icDefCountry THEN 
+               RETURN "There is a conflict between ID type and country".
+       END. 
+   END CASE.
+   
+   RETURN "".
+   
 END FUNCTION.
 
 FUNCTION fDefInvGroup RETURNS CHARACTER

@@ -507,7 +507,7 @@ PROCEDURE pGetCompany:
    DEF OUTPUT PARAMETER lcResult AS CHAR NO-UNDO.
    DEF VAR lcErr AS CHAR NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).
-   IF AVAIL OrderCustomer AND OrderCustomer.CustIdType = "CIF" THEN
+   IF AVAIL OrderCustomer AND LOOKUP(OrderCustomer.CustIDType,"CIF,CFraud,CInternal") > 0 THEN
       lcResult = OrderCustomer.company.
 END.
 
@@ -520,7 +520,7 @@ PROCEDURE pGetCompanyAddr:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
    IF AVAIL companycustomer THEN
       lcResult = companycustomer.Address.
-   ELSE IF AVAIL OrderCustomer AND OrderCustomer.CustIdType = "CIF" THEN
+   ELSE IF AVAIL OrderCustomer AND LOOKUP(OrderCustomer.CustIDType,"CIF,CFraud,CInternal") > 0 THEN
       lcResult = OrderCustomer.Address.
 END.
 
@@ -544,7 +544,7 @@ PROCEDURE pGetDelLastName:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
    IF AVAIL DeliveryCustomer THEN
       lcResult = DeliveryCustomer.surname1 + " " + DeliveryCustomer.surname2.
-   ELSE IF AVAIL OrderCustomer AND OrderCustomer.CustIdType = "CIF" THEN
+   ELSE IF AVAIL OrderCustomer AND LOOKUP(OrderCustomer.CustIDType,"CIF,CFraud,CInternal") > 0 THEN
       lcResult = OrderCustomer.surname1 + " " + OrderCustomer.surname2.
 END.
 
@@ -557,7 +557,7 @@ PROCEDURE pGetDelFirstName:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
    IF AVAIL DeliveryCustomer THEN
       lcResult = DeliveryCustomer.firstname.
-   ELSE IF AVAIL OrderCustomer AND OrderCustomer.CustIdType = "CIF" THEN
+   ELSE IF AVAIL OrderCustomer AND LOOKUP(OrderCustomer.CustIDType,"CIF,CFraud,CInternal") > 0 THEN
       lcResult = OrderCustomer.firstname.
 END.
 
@@ -706,7 +706,7 @@ PROCEDURE pGetCFIRSTNAME:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
    IF AVAIL companycustomer THEN
       lcResult = companycustomer.firstname.
-   ELSE IF AVAIL OrderCustomer AND OrderCustomer.CustIdType = "CIF" THEN
+   ELSE IF AVAIL OrderCustomer AND LOOKUP(OrderCustomer.CustIdType,"CIF,CFraud,CInternal") > 0 THEN
       lcResult = ordercustomer.firstname.  
 END.
 
@@ -719,7 +719,7 @@ PROCEDURE pGetCLastName:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
    IF AVAIL companycustomer THEN
       lcResult = companycustomer.surname1 + " " + companycustomer.surname2.
-   ELSE IF AVAIL OrderCustomer AND OrderCustomer.CustIdType = "CIF" THEN
+   ELSE IF AVAIL OrderCustomer AND LOOKUP(OrderCustomer.CustIdType,"CIF,CFraud,CInternal") > 0 THEN
       lcResult = OrderCustomer.surname1 + " " + OrderCustomer.surname2.
 END.
 
@@ -733,7 +733,7 @@ PROCEDURE pGetCMOBILE:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
    IF AVAIL companycustomer THEN
       lcResult = companycustomer.MobileNumber.
-   ELSE IF AVAIL OrderCustomer AND OrderCustomer.CustIdType = "CIF" THEN
+   ELSE IF AVAIL OrderCustomer AND LOOKUP(OrderCustomer.CustIdType,"CIF,CFraud,CInternal") > 0 THEN
       lcResult = OrderCustomer.MobileNumber.   
 END.
 
@@ -752,7 +752,7 @@ PROCEDURE pGetCAddress:
                              CompanyCustomer.AddressComp.*/
       lcResult = CompanyCustomer.address.
    END.
-   ELSE IF AVAIL OrderCustomer AND OrderCustomer.CustIdType = "CIF" THEN
+   ELSE IF AVAIL OrderCustomer AND LOOKUP(OrderCustomer.CustIdType,"CIF,CFraud,CInternal") > 0 THEN
       lcResult = lcCustAddress.  
 END.
 
@@ -769,7 +769,7 @@ PROCEDURE pGetCCustPost:
       lcResult =  companycustomer.zipcode + " " +
              companycustomer.postOffice + " " + lcCRegionName.
    END.
-   ELSE IF AVAIL OrderCustomer AND OrderCustomer.CustIdType = "CIF" THEN DO:
+   ELSE IF AVAIL OrderCustomer AND LOOKUP(OrderCustomer.CustIdType,"CIF,CFraud,CInternal") > 0 THEN DO:
       FIND FIRST Region WHERE
          Region.Region = OrderCustomer.Region NO-LOCK NO-ERROR.
 
@@ -791,7 +791,7 @@ PROCEDURE pGetCEmail:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
    IF AVAIL companycustomer THEN
       lcResult =  companycustomer.email.
-   ELSE IF AVAIL OrderCustomer AND OrderCustomer.CustIdType = "CIF" THEN
+   ELSE IF AVAIL OrderCustomer AND LOOKUP(OrderCustomer.CustIdType,"CIF,CFraud,CInternal") > 0 THEN
       lcResult = OrderCustomer.email.  
 END.
 
@@ -874,7 +874,7 @@ PROCEDURE pGetCompCustId:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
    IF AVAIL companycustomer THEN
       lcResult = companycustomer.CustId.
-   ELSE IF AVAIL OrderCustomer AND OrderCustomer.CustIdType = "CIF" THEN
+   ELSE IF AVAIL OrderCustomer AND LOOKUP(OrderCustomer.CustIdType,"CIF,CFraud,CInternal") > 0 THEN
       lcResult = OrderCustomer.CustId.
 END.
 
@@ -887,7 +887,7 @@ PROCEDURE pGetCompCustIdType:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
    IF AVAIL companycustomer THEN
       lcResult = companycustomer.CustIdType.
-   ELSE IF AVAIL OrderCustomer AND OrderCustomer.CustIdType = "CIF" THEN
+   ELSE IF AVAIL OrderCustomer AND LOOKUP(OrderCustomer.CustIdType,"CIF,CFraud,CInternal") > 0 THEN
       lcResult = OrderCustomer.CustIdType.
 END.
 
@@ -923,7 +923,7 @@ PROCEDURE pGetFoundate:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
    IF AVAIL companycustomer THEN
       lcResult = STRING(companycustomer.FoundationDate,"99-99-9999").
-   ELSE IF AVAIL OrderCustomer AND OrderCustomer.CustIdType = "CIF" THEN
+   ELSE IF AVAIL OrderCustomer AND LOOKUP(OrderCustomer.CustIdType,"CIF,CFraud,CInternal") > 0 THEN
       lcResult = STRING(OrderCustomer.FoundationDate,"99-99-9999").
 END.
 
@@ -1040,7 +1040,7 @@ PROCEDURE pGetLEGALFINANCING:
    IF ldeDeferredPayment > 0 THEN DO:
       /*FIND FIRST OrderCustomer OF Order NO-LOCK WHERE
                  OrderCustomer.RowType = 1 NO-ERROR.*/
-      IF AVAIL OrderCustomer AND OrderCustomer.CustIdType = "CIF"
+      IF AVAIL OrderCustomer AND LOOKUP(OrderCustomer.CustIdType,"CIF,CFraud,CInternal") > 0 
       THEN DO:
          IF ldeFinalFee > 0 THEN
             ASSIGN lcList = CHR(10) +  fTeksti(570,liLang)

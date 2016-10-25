@@ -85,6 +85,7 @@ DEF VAR lhTable       AS HANDLE NO-UNDO.
 DEF VAR ldtLastDump   AS DATETIME NO-UNDO.
 DEF VAR lcCustDenied  AS CHAR   NO-UNDO.
 DEF VAR lcModFields   AS CHAR   NO-UNDO.
+DEF VAR lcCustIDTypeDenied  AS CHAR   NO-UNDO.
 
 DEFINE STREAM sLog.
 
@@ -120,7 +121,8 @@ ASSIGN
    ldtLastDump = fTimeStamp2DateTime(idLastDump)
    lhTable     = BUFFER CUSTOMER:HANDLE
    /* customers that are not transferred to sap */
-   lcCustDenied = fCParamC("AgrCustNoTransfer").
+   lcCustDenied = fCParamC("AgrCustNoTransfer")
+   lcCustIDTypeDenied = fCParamC("CustIDTypeNoTransfer").
 
 
 FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
@@ -138,7 +140,9 @@ FOR EACH Customer NO-LOCK WHERE
    END.
 
    IF LOOKUP(STRING(Customer.CustNum),lcCustDenied) > 0 THEN NEXT. 
-
+   
+   IF LOOKUP(Customer.CustIdType,lcCustIDTypeDenied) > 0 THEN NEXT.
+   
    /* dump only modified ones */
    IF icDumpMode = "modified" THEN DO:
 

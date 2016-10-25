@@ -72,7 +72,7 @@ IF NOT AVAILABLE Customer THEN DO:
 END.
 
 /* Use Pymes credit scoring for company customer, YDR-323 */
-IF Customer.CustIdType = "CIF" AND 
+IF LOOKUP(Customer.CustIdType, "CIF,CFraud,CInternal") > 0 AND 
    (NOT AVAIL bOrigRequest OR
               bOrigRequest.ReqType NE 10) THEN DO:
 
@@ -340,7 +340,7 @@ PROCEDURE pHeader:
       IF LOOKUP(Mobsub.CLIType,lcBundleCLITypes) > 0 THEN
          lcSubsType = MobSub.TariffBundle.
           
-      IF lcCustIDType = "CIF" THEN ASSIGN 
+      IF LOOKUP(lcCustIDType, "CIF,CFraud,CInternal") > 0 THEN ASSIGN 
          lcFirstName   = ""
          lcSurName1    = ENTRY(5,bOrigRequest.ReqCParam1,";")
          lcSurName2    = ""
@@ -382,7 +382,7 @@ PROCEDURE pHeader:
          MsRequest.ReqCParam5 > "" THEN
          lcSubsType = MsRequest.ReqCParam5.
          
-      IF lcCustIDType = "CIF" THEN ASSIGN 
+      IF LOOKUP(lcCustIDType, "CIF,CFraud,CInternal") > 0 THEN ASSIGN 
          lcFirstName   = ""
          lcSurName1    = Customer.CompanyName
          lcSurName2    = ""

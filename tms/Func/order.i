@@ -226,11 +226,7 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
                          
    Customer.CustName     = TRIM(OrderCustomer.Surname1)
    Customer.SurName2     = TRIM(OrderCustomer.SurName2)
-   Customer.CompanyName  = TRIM(OrderCustomer.Company) WHEN
-                           OrderCustomer.CustIDType EQ "CIF"
-   Customer.CompanyName  = TRIM(OrderCustomer.Company) WHEN
-                           OrderCustomer.CustIDType NE "CIF" AND
-                           TRIM(OrderCustomer.Company) > ""
+   Customer.CompanyName  = TRIM(OrderCustomer.Company) WHEN TRIM(OrderCustomer.Company) > ""                            
    Customer.Profession   = TRIM(OrderCustomer.Profession) WHEN
                            TRIM(OrderCustomer.Profession) > ""
    Customer.HonTitle     = OrderCustomer.CustTitle
@@ -264,17 +260,16 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    Customer.OutMarkEmail = OrderCustomer.OutEMailMarketing
    Customer.OutMarkPOST  = OrderCustomer.OutPostMarketing
    Customer.OutMarkBank  = OrderCustomer.OutBankMarketing.
-
-   ASSIGN
-   Customer.AuthCustId      = Order.OrdererID WHEN
-                              Customer.CustIdType = "CIF" AND
-                              OrderCustomer.CustIdType = "CIF" AND
-                              OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
-   Customer.AuthCustIdType  = Order.OrdererIDType WHEN
-                              Customer.CustIdType = "CIF" AND
-                              OrderCustomer.CustIdType = "CIF" AND
-                              OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
-
+   
+   IF LOOKUP(Customer.CustIdType     ,"CIF,CFraud,CInternal") > 0  AND 
+      LOOKUP(OrderCustomer.CustIdType,"CIF,CFraud,CInternal") > 0  AND 
+      OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
+   DO:
+       ASSIGN
+           Customer.AuthCustId      = Order.OrdererID 
+           Customer.AuthCustIdType  = Order.OrdererIDType.       
+   END.
+   
    /* Electronic Invoice Project - update email and delivery type */
    fUpdEmailDelType(iiorder).
    

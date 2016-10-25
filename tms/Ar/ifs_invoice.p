@@ -72,6 +72,7 @@ DEF VAR llFusion AS LOG NO-UNDO.
 DEF VAR ldeResidualAmount AS DEC NO-UNDO.
 DEF VAR ldeResidualAmountVAT AS DEC NO-UNDO.
 DEF VAR llPayPal AS LOG NO-UNDO.
+DEF VAR lcCustIDTypeDenied  AS CHAR   NO-UNDO.
 
 DEF TEMP-TABLE ttRow NO-UNDO
    LIKE InvRow
@@ -334,7 +335,8 @@ END FUNCTION.
 OUTPUT STREAM sLog TO VALUE(icFile).
 
 ASSIGN
-   lcSkipSlsCode = fCParamC("SalesInvSkipProdCode").
+   lcSkipSlsCode = fCParamC("SalesInvSkipProdCode")
+   lcCustIDTypeDenied = fCParamC("CustIDTypeNoTransfer")
    lcFusionDelType = SUBST("&1,&2",
                {&INV_DEL_TYPE_FUSION_EMAIL},
                {&INV_DEL_TYPE_FUSION_EMAIL_PENDING}).
@@ -419,7 +421,9 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
              STRING(Invoice.InvNum)).
       NEXT InvoiceLoop.
    END.
-
+   ELSE IF LOOKUP(Customer.CustIdType,lcCustIDTypeDenied) > 0 THEN 
+       NEXT InvoiceLoop. 
+   
    ASSIGN
       llSalesInv  = (Invoice.InvType >= 6 AND Invoice.InvType <= 9)
       lcSalesProd = "037".

@@ -329,13 +329,13 @@ ELSE DO:
                Customer.OutMarkBank     = OrderCustomer.OutBankMarketing
                Customer.CompanyName     = TRIM(OrderCustomer.Company) WHEN
                                           TRIM(OrderCustomer.Company) > ""
-               Customer.FoundationDate  = OrderCustomer.FoundationDate WHEN
-                                          OrderCustomer.CustIdType = "CIF"
+               Customer.FoundationDate  = OrderCustomer.FoundationDate WHEN 
+                                          LOOKUP(OrderCustomer.CustIdType,"CIF,CFraud,CInternal") > 0
                Customer.Profession      = TRIM(OrderCustomer.Profession) WHEN
                                           TRIM(OrderCustomer.Profession) > "".
 
-            IF iiRole = 1 AND OrderCustomer.CustIdType = "CIF" AND
-               Customer.CustIdType = "CIF" THEN DO:
+            IF iiRole = 1 AND LOOKUP(OrderCustomer.CustIdType, "CIF,CFraud,CInternal") > 0 AND
+               LOOKUP(Customer.CustIdType, "CIF,CFraud,CInternal") > 0 THEN DO:
                IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN ASSIGN
                   Customer.AuthCustId      = Order.OrdererID
                   Customer.AuthCustIdType  = Order.OrdererIDType.

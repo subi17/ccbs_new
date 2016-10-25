@@ -63,12 +63,11 @@ END FUNCTION.
 FUNCTION fSetCustData RETURNS LOGICAL:
 
    ASSIGN 
-      lcCustName   = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                           BUFFER Customer)
-      lcFirstName  = IF Customer.CustIDType NE "CIF" AND 
-                        Customer.FirstName > ""
-                     THEN Customer.FirstName 
-                     ELSE lcCustName
+      lcCustName   = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,BUFFER Customer)
+      lcFirstName  = (IF LOOKUP(Customer.CustIDType,"CIF,CFraud,CInternal") = 0 AND Customer.FirstName > "" THEN 
+                          Customer.FirstName 
+                      ELSE 
+                          lcCustName)
       lcAddress    = Customer.Address
       lcZipCode    = Customer.ZipCode 
       lcPost       = Customer.PostOffice

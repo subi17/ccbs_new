@@ -66,7 +66,7 @@ CLASS HPD.CustomerDump FINAL INHERITS GenericDump:
          WHEN "Employer"
          THEN IF ilCheckOnly
               THEN RETURN "OK".
-              ELSE RETURN IF lhMainTable::CustIDType NE "CIF" AND lhMainTable::Profession > ""
+              ELSE RETURN IF LOOKUP(lhMainTable::CustIDType, "CIF,CFraud,CInternal") = 0 AND lhMainTable::Profession > ""
                           THEN lhMainTable::CompanyName
                           ELSE "".
          WHEN "SelfEmployed"

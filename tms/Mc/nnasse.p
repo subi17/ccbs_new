@@ -151,6 +151,8 @@ DEFINE INPUT PARAMETER icType    AS CHAR NO-UNDO.
 {fmakemsreq.i}
 {flimitreq.i}
 {femailinvoice.i}
+&GLOBAL-DEFINE fdatefmt YES
+{func.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
@@ -592,9 +594,9 @@ DISP
    Customer.Profession lcProfession
    Customer.COName @ lcCustCOName 
    Customer.Address @ lcCustAddress 
-   Customer.AuthCustIdType WHEN Customer.CustIDType = "CIF"
+   Customer.AuthCustIdType WHEN LOOKUP(Customer.CustIDType,"CIF,CFraud,CInternal") > 0
    Customer.ZipCode @ lcCustZipCode 
-   Customer.AuthCustId WHEN Customer.CustIDType = "CIF"
+   Customer.AuthCustId WHEN LOOKUP(Customer.CustIDType,"CIF,CFraud,CInternal") > 0
    Customer.PostOffice @ lcCustPostOffice
    Customer.Country @ lcCustCountry lcCountry
    Customer.Region @ lcCustRegion lcRegion
@@ -619,7 +621,7 @@ DISP
    Customer.DataProtected
    WITH FRAME lis.
 
-IF Customer.CustIDType NE "CIF" THEN HIDE 
+IF LOOKUP(Customer.CustIDType,"CIF,CFraud,CInternal") = 0 THEN HIDE 
    Customer.AuthCustIdType 
    Customer.AuthCustId
    IN FRAME lis.
@@ -1687,7 +1689,7 @@ repeat WITH FRAME sel:
            RUN ufkey.
 
            IF toimi = 8 THEN DO:
-              if (Customer.CustName = "" AND Customer.CustIDType NE "CIF") OR
+              if (Customer.CustName = "" AND LOOKUP(Customer.CustIDType,"CIF,CFraud,CInternal") = 0) OR
                  Customer.InvGroup = ""      OR
                  Customer.Language = 0 
               THEN DO:
@@ -1840,7 +1842,8 @@ si-recid = xrecid.
 fCleanEventObjects(). 
 
 PROCEDURE local-update-customer:
-
+   DEFINE VARIABLE lcOldCustIdType AS CHARACTER NO-UNDO.
+    
    CUST_UPDATE:
    REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
@@ -1921,22 +1924,23 @@ PROCEDURE local-update-customer:
             VIEW-AS ALERT-BOX ERROR.
             UNDO CUST_UPDATE, NEXT CUST_UPDATE.
          END.
-      
+         
          IF INPUT Customer.FirstName + 
             INPUT Customer.CustName + 
             INPUT Customer.SurName2 > "" AND
             INPUT Customer.CompanyName > "" AND 
             INPUT Customer.Profession = "" AND
-            INPUT Customer.CustIdType NE "CIF" THEN DO:
+            LOOKUP(INPUT Customer.CustIdType, "CIF,CFraud,CInternal") = 0 THEN 
+         DO:
             MESSAGE "You can't give both company name and consumer name"
             VIEW-AS ALERT-BOX ERROR.
             UNDO CUST_UPDATE, NEXT CUST_UPDATE.
          END.
       
          /* company vrs. consumer */  
-         IF (INPUT Customer.CustIDType = "CIF"   AND 
+         IF (LOOKUP(INPUT Customer.CustIdType, "CIF,CFraud,CInternal") > 0 AND  
               INPUT Customer.CompanyName = "" )       OR
-            (LOOKUP(INPUT Customer.CustIDType,"CIF,N/A") = 0 AND 
+            (LOOKUP(INPUT Customer.CustIDType,"CIF,CFraud,CInternal,N/A") = 0 AND 
              INPUT Customer.CompanyName > "" AND
              INPUT Customer.Profession = "")
          THEN DO:
@@ -1945,7 +1949,7 @@ PROCEDURE local-update-customer:
              UNDO CUST_UPDATE, NEXT CUST_UPDATE.
          END. 
 
-         IF LOOKUP(INPUT Customer.CustIDType,"N/A,CIF") = 0 AND 
+         IF LOOKUP(INPUT Customer.CustIDType,"N/A,CIF,CFraud,CInternal") = 0 AND 
             (INPUT Customer.HonTitle  = ""  OR
              INPUT Customer.FirstName = ""  OR
              INPUT Customer.CustName  = "")
@@ -1956,7 +1960,7 @@ PROCEDURE local-update-customer:
          END.
          
          /* country vrs. id type */
-         IF (LOOKUP(INPUT Customer.CustIDType,"NIE,NIF,CIF,N/A") > 0 AND 
+         IF (LOOKUP(INPUT Customer.CustIDType,"NIE,NIF,CIF,CFraud,CInternal,N/A") > 0 AND 
               Customer.Country NE lcDefCountry) THEN DO:
             
             MESSAGE
@@ -1981,7 +1985,8 @@ PROCEDURE local-update-customer:
 
          END. 
          ELSE DO: 
-            
+            ASSIGN lcOldCustIdType = Customer.CustIDType.
+                        
             IF llDoEvent THEN RUN StarEventSetOldBuffer ( lhCustomer ).
             
             ASSIGN
@@ -2060,12 +2065,40 @@ PROCEDURE local-update-customer:
             llMSActLimitIsDefault = FALSE.
             llCleanFLimitReqEventLog = TRUE. 
          END.
-        
+         
+         ASSIGN llCleanFLimitReqEventLog = FALSE.
+         
+         RUN pSetFraudCustomer_Prohited_FromInvoicing(lcOldCustIdType, Customer.CustIDType).
+         
+         ASSIGN llCleanFLimitReqEventLog = TRUE.
+         
       END.
      
       LEAVE.
    END.   
   
+END PROCEDURE.
+
+PROCEDURE pSetFraudCustomer_Prohited_FromInvoicing:
+    DEFINE INPUT PARAMETER icOldCustIdType AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER icNewCustIdType AS CHARACTER NO-UNDO.
+    
+    IF icOldCustIdType <> icNewCustIdType THEN 
+    DO:
+        FOR EACH MobSub WHERE MobSub.Brand   = gcBrand           AND 
+                              MobSub.InvCust = Customer.CustNum AND
+                              MobSub.Cli     > ""               USE-INDEX InvCust NO-LOCK:
+            fSetSubscriptionProhibitedFromInvoicing(icOldCustIdType,icNewCustIdType,MobSub.MsSeq,MobSub.InvCust).
+        END.    
+        
+        fWriteMemo("Customer", 
+                   STRING(Customer.CustNum), 
+                   Customer.CustNum, 
+                   "Customer ID Type Changed", 
+                   "From " + icOldCustIdType + " to " + icNewCustIdType).
+    END.
+                            
+    RETURN "".
 END PROCEDURE.
 
 PROCEDURE local-update-fin:

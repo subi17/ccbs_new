@@ -84,7 +84,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} THEN DO:
          OrderCustomer.OrderId = Order.OrderId AND
          OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
-      IF OrderCustomer.CustidType = "CIF" THEN DO:
+      IF LOOKUP(OrderCustomer.CustidType,"CIF,CFraud,CInternal") > 0 THEN DO:
          FIND FIRST Customer WHERE
             Customer.Brand      = Order.Brand          AND 
             Customer.OrgId      = OrderCustomer.CustId AND
@@ -235,7 +235,7 @@ IF lcOldStatus NE {&ORDER_STATUS_PENDING_MAIN_LINE} AND
       OrderCustomer.OrderId = Order.OrderId AND
       OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
-   IF OrderCustomer.CustidType = "CIF" THEN DO:
+   IF LOOKUP(OrderCustomer.CustidType,"CIF,CFraud,CInternal") > 0 THEN DO:
       FIND FIRST Customer WHERE
          Customer.Brand      = Order.Brand          AND 
          Customer.OrgId      = OrderCustomer.CustId AND
@@ -325,7 +325,7 @@ ELSE IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN DO:
             END.
          
             /* YDR-323 */
-            lcNewStatus = (IF OrderCustomer.CustIdType EQ "CIF" AND
+            lcNewStatus = (IF LOOKUP(OrderCustomer.CustidType,"CIF,CFraud,CInternal") > 0 AND
                               Order.CredOk = FALSE AND
                               Order.CREventQty = 0
                            THEN {&ORDER_STATUS_RENEWAL_STC_COMPANY}

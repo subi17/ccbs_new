@@ -792,7 +792,7 @@ IF NOT llErrors THEN DO:
       IF OrderCustomer.Language > "" THEN
          liLanguage      = INTEGER(OrderCustomer.Language) NO-ERROR.
       /* Corporate customer */
-      IF OrderCustomer.CustIDType EQ "CIF" THEN DO:
+      IF LOOKUP(OrderCustomer.CustIDType,"CIF,CFraud,CInternal") > 0 THEN DO:
          ASSIGN
             lcTagCustIDType  = Order.OrdererIDType
             lcTagCustID      = Order.OrdererID
@@ -1365,7 +1365,7 @@ IF NOT llErrors THEN DO:
          IF ldeDeferredPayment > 0 THEN DO:
             FIND FIRST OrderCustomer OF Order NO-LOCK WHERE
                        OrderCustomer.RowType = 1 NO-ERROR.
-            IF AVAIL OrderCustomer AND OrderCustomer.CustIdType = "CIF"
+            IF AVAIL OrderCustomer AND LOOKUP(OrderCustomer.CustIDType,"CIF,CFraud,CInternal") > 0 
             THEN DO:
                IF ldeFinalFee > 0 THEN
                   ASSIGN lcList = CHR(10) + fTeksti(555,liLanguage)
@@ -1651,7 +1651,7 @@ IF NOT llErrors THEN DO:
    IF iiAddress = 6 AND AVAILABLE Order THEN DO:
       FIND FIRST OrderCustomer OF Order NO-LOCK WHERE
                  OrderCustomer.RowType = 1 NO-ERROR.
-      IF AVAIL OrderCustomer AND OrderCustomer.CustIdType = "CIF" THEN ASSIGN
+      IF AVAIL OrderCustomer AND LOOKUP(OrderCustomer.CustIDType,"CIF,CFraud,CInternal") > 0 THEN ASSIGN
          lcBTHeader[2] = fTeksti(367,liLanguage)
          lcBTHeader[3] = fTeksti(368,liLanguage).
    END.

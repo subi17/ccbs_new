@@ -77,7 +77,7 @@ FOR FIRST OrderCustomer OF Order NO-LOCK WHERE
           OrderCustomer.RowType = 1:
 
    liLanguage = INTEGER(OrderCustomer.Language) NO-ERROR.
-   lcEmailKey = (IF OrderCustomer.CustIdType EQ "CIF" THEN "EmailConfCIF"
+   lcEmailKey = (IF LOOKUP(OrderCustomer.CustIdType, "CIF,CFraud,CInternal") > 0 THEN "EmailConfCIF"
               ELSE "EmailConf").
 
    IF Order.OrderType EQ 1 THEN 
@@ -85,7 +85,7 @@ FOR FIRST OrderCustomer OF Order NO-LOCK WHERE
 
    IF Order.OrderType EQ 2 THEN
       lcEmailKey = "RenewalConf" + 
-            (IF OrderCustomer.CustIdType EQ "CIF" THEN "CIF" ELSE "").
+            (IF LOOKUP(OrderCustomer.CustIdType, "CIF,CFraud,CInternal") > 0 THEN "CIF" ELSE "").
 END.
 
 IF liLanguage = 0 OR 

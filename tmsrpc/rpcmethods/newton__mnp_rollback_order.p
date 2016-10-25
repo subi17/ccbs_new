@@ -122,7 +122,7 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
       Order.MsSeq           = ttMNPRollback.MsSeq
       Order.CustNum         = Customer.CustNum.
 
-   IF Customer.CustIdType = "CIF" THEN DO:
+   IF LOOKUP(Customer.CustIdType, "CIF,CFraud,CInternal") > 0 THEN DO:
       ASSIGN
          Order.OrdererId       = Customer.AuthCustId
          Order.OrdererIdType   = Customer.AuthCustIdType.

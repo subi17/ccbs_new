@@ -42,14 +42,14 @@
                      - fHdrText
 
 ----------------------------------------------------------------------- */
+&IF "{&FUNC_I}" NE "YES" &THEN
+&GLOBAL-DEFINE FUNC_I YES
 
 &IF "{&BrandVarDefined}" NE "YES"
 &THEN
 DEF SHARED VAR gcBrand   like customer.brand NO-UNDO.
 DEF SHARED VAR katun     AS CHAR.
 &ENDIF
-
-
 
 /* -------------------------
   Time and date functions
@@ -743,12 +743,11 @@ FUNCTION fDispCustName RETURNS CHARACTER
    IF NOT AVAILABLE ibNameCust THEN RETURN "". 
 
   /* company name may be divided into two rows */
-   IF ibNameCust.CustIDType = "CIF" AND ibNameCust.CompanyName > "" THEN
+   IF LOOKUP(ibNameCust.CustIDType, "CIF,CFraud,CInternal") > 0 AND ibNameCust.CompanyName > "" THEN
       RETURN ibNameCust.CompanyName + 
              (IF ibNameCust.CoName > "" 
               THEN " " + ibNameCust.CoName
               ELSE "").
-    
    /* private customers have both lastname and firstname */
    ELSE RETURN ibNameCust.FirstName + " " + ibNameCust.CustName + 
                (IF ibNameCust.SurName2 > "" 
@@ -765,7 +764,7 @@ FUNCTION fPrintCustName RETURNS CHARACTER
 
    /* company name may be divided into two rows, but it is printing routine's
       job to use or not use COName */
-   IF ibNameCust.CustIDType = "CIF" AND ibNameCust.CompanyName > "" THEN
+   IF LOOKUP(ibNameCust.CustIDType, "CIF,CFraud,CInternal") > 0 AND ibNameCust.CompanyName > "" THEN
       RETURN ibNameCust.CompanyName.
     
    /* private customers have both lastname and firstname */
@@ -781,7 +780,7 @@ FUNCTION fDispOrderName RETURNS CHARACTER
    
    IF NOT AVAILABLE ibNameOrder THEN RETURN "".
    
-   IF ibNameOrder.CustIDType = "CIF" AND ibNameOrder.Company > "" THEN
+   IF LOOKUP(ibNameOrder.CustIDType, "CIF,CFraud,CInternal") > 0 AND ibNameOrder.Company > "" THEN
       RETURN ibNameOrder.Company.
 
    /* private customers have both lastname and firstname */
@@ -797,7 +796,7 @@ FUNCTION fPrintOrderName RETURNS CHARACTER
    
    IF NOT AVAILABLE ibNameOrder THEN RETURN "".
    
-   IF ibNameOrder.CustIDType = "CIF" AND ibNameOrder.Company > "" THEN
+   IF LOOKUP(ibNameOrder.CustIDType, "CIF,CFraud,CInternal") > 0 AND ibNameOrder.Company > "" THEN
       RETURN ibNameOrder.Company.
 
    /* private customers have both lastname and firstname */
@@ -845,3 +844,4 @@ FUNCTION fWriteMemo RETURNS LOGICAL
    RETURN fWriteMemoWithType(icHostTable,icKeyValue,iiCustNum,icTitle,icText,"", katun).
 END FUNCTION.
 
+&ENDIF

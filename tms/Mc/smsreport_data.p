@@ -338,12 +338,12 @@ FOR EACH Order WHERE
       WHEN TRUE THEN DO:
          
          IF Order.MNPStatus = 0 THEN DO:
-            IF OrderCustomer.CustidType = "CIF" 
+            IF LOOKUP(OrderCustomer.CustidType, "CIF,CFraud,CInternal") > 0  
                THEN liCorporatePrepaidNew = liCorporatePrepaidNew + 1.
                ELSE liPrivatePrepaidNew  = liPrivatePrePaidNew + 1.
          END.
          ELSE DO:
-            IF OrderCustomer.CustidType = "CIF" 
+            IF LOOKUP(OrderCustomer.CustidType, "CIF,CFraud,CInternal") > 0  
                THEN liCorporatePrepaidMNP = liCorporatePrepaidMNP + 1.
                ELSE liPrivatePrepaidMNP  = liPrivatePrePaidMNP + 1.
          END.
@@ -352,12 +352,12 @@ FOR EACH Order WHERE
       /* postpaid */
       WHEN FALSE THEN DO:
          IF Order.MNPStatus = 0 THEN DO:
-            IF OrderCustomer.CustidType = "CIF" 
+            IF LOOKUP(OrderCustomer.CustidType, "CIF,CFraud,CInternal") > 0  
                THEN liCorporatePostpaidNew = liCorporatePostpaidNew + 1.
                ELSE liPrivatePostpaidNew  = liPrivatePostPaidNew + 1.
          END.
          ELSE DO:
-            IF OrderCustomer.CustidType = "CIF" 
+            IF LOOKUP(OrderCustomer.CustidType, "CIF,CFraud,CInternal") > 0 
                THEN liCorporatePostpaidMNP = liCorporatePostpaidMNP + 1.
                ELSE liPrivatePostpaidMNP  = liPrivatePostPaidMNP + 1.
          END.

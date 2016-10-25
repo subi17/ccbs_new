@@ -56,7 +56,7 @@ IF liLanguage = 5 THEN DO: /*English*/
    /* do we need some other handling here */
 END.
 ELSE DO:*/ /*Spanish*/
-   IF OrderCustomer.CustIDType EQ "CIF" THEN
+   IF LOOKUP(OrderCustomer.CustIDType,"CIF,CFraud,CInternal") > 0 THEN
       RUN parse_tags.p (lcRootDir + "email_company_es.html",
              lcEmailFile, iiOrderId, 1, 
              icEmailAddress, OUTPUT lcError).

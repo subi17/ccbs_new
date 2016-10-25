@@ -35,7 +35,7 @@ FIND FIRST Customer WHERE
    Customer.Custnum = MobSub.Custnum  
 NO-LOCK NO-ERROR.
 
-IF AVAIL Customer AND Customer.CustIdType = "CIF" THEN DO:
+IF AVAIL Customer AND LOOKUP(Customer.CustIdType,"CIF,CFraud,CInternal") > 0 THEN DO:
    RETURN appl_err("Corporate customer not allowed").
 END.
 

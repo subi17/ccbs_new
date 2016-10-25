@@ -261,7 +261,7 @@ FORM
          VALIDATE(lcNewCustIdType NE "", lcError)
       lcNewCustId 
          NO-LABEL
-         FORMAT "X(10)"
+         FORMAT "X(12)"
          HELP "Customer ID"
          VALIDATE(lcNewCustId NE "", lcError)
       SKIP
@@ -438,13 +438,13 @@ FUNCTION fParam1Data RETURNS CHAR:
       lcSalesMan + ";" +
       lcNewCustIdType + ";" +
       lcNewCustId + ";" +
-      (IF lcNewCustIdType NE "CIF" THEN lcNewBirthday ELSE "") + ";" + 
+      (IF LOOKUP(lcNewCustIdType, "CIF,CFraud,CInternal") = 0 THEN lcNewBirthday ELSE "") + ";" + 
       STRING(liNewLanguage) + ";" + 
       lcNewTitle + ";" +
       lcNewRegion + ";" +
       lcNewBankAcc + ";" +
       lcNewNationality + ";" +
-      (IF lcNewCustIdType = "CIF" THEN lcNewBirthday ELSE "") + ";" +
+      (IF LOOKUP(lcNewCustIdType, "CIF,CFraud,CInternal") > 0 THEN lcNewBirthday ELSE "") + ";" +
       lcSmsnumber     + ";" +
       lcPhone         + ";" +
       STRING(llDirMarkSMS)    + ";" +
@@ -517,7 +517,7 @@ FUNCTION fRequestValues RETURNS LOGIC:
       lcAddressCodM  = ENTRY(34,MsRequest.ReqCParam1,";") WHEN
                        NUM-ENTRIES(MsRequest.ReqCParam1,";") >= 34.
    
-   IF lcNewCustIdType = "CIF" THEN 
+   IF LOOKUP(lcNewCustIdType, "CIF,CFraud,CInternal") > 0 THEN 
       ldaNewBirthDay  = DATE(ENTRY(20,MsRequest.ReqCParam1,";")).
    ELSE   
       ldaNewBirthDay  = DATE(ENTRY(14,MsRequest.ReqCParam1,";")).
@@ -605,7 +605,7 @@ FUNCTION fCopyCustData RETURNS LOGICAL
       lcAddressCodP  = CustomerReport.CityCode
       lcAddressCodM  = CustomerReport.TownCode.
 
-   IF ibCopyFrom.CustIDType = "CIF" THEN DO:
+   IF LOOKUP(ibCopyFrom.CustIDType, "CIF,CFraud,CInternal") > 0 THEN DO:
       ASSIGN
       lcNewCompanyname = ibCopyFrom.CompanyName
       ldaNewBirthday   = ibCopyFrom.FoundationDate
@@ -713,7 +713,7 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
 
    PAUSE 0.
 
-   IF bCurrentCust.CustIDType = "CIF" THEN 
+   IF LOOKUP(bCurrentCust.CustIDType, "CIF,CFraud,CInternal") > 0 THEN 
       ldaBirthDay = bCurrentCust.FoundationDate.
    ELSE ldaBirthDay = bCurrentCust.BirthDay.
    
@@ -1267,7 +1267,7 @@ PROCEDURE pUpdateNewOwner:
       IF liNewCust1 = 0 AND lcNewCustId ne "" THEN
          DISPLAY "NEW" @ liNewCust1 WITH FRAME fNewCriter.
         
-      IF lcNewCustIdType = "CIF" THEN ASSIGN
+      IF LOOKUP(lcNewCustIdType, "CIF,CFraud,CInternal") > 0 THEN ASSIGN
          lcNewTitleLabel = ""
          ldaNewBirthday:HELP IN FRAME fNewCriter = "Foundation date"
          lcNewTitle = ""
@@ -1306,11 +1306,11 @@ PROCEDURE pUpdateNewOwner:
          
       UPDATE 
           ldaNewBirthday    WHEN llUpdCustData  
-          lcNewTitle        WHEN llUpdCustData AND lcNewCustIdType NE "CIF"
-          lcNewFirst        WHEN llUpdCustData AND lcNewCustIdType NE "CIF"
-          lcNewLast         WHEN llUpdCustData AND lcNewCustIdType NE "CIF"
-          lcNewSurname2     WHEN llUpdCustData AND lcNewCustIdType NE "CIF"
-          lcNewCompanyname  WHEN llUpdCustData AND lcNewCustIdType EQ "CIF"
+          lcNewTitle        WHEN llUpdCustData AND LOOKUP(lcNewCustIdType, "CIF,CFraud,CInternal") = 0
+          lcNewFirst        WHEN llUpdCustData AND LOOKUP(lcNewCustIdType, "CIF,CFraud,CInternal") = 0
+          lcNewLast         WHEN llUpdCustData AND LOOKUP(lcNewCustIdType, "CIF,CFraud,CInternal") = 0
+          lcNewSurname2     WHEN llUpdCustData AND LOOKUP(lcNewCustIdType, "CIF,CFraud,CInternal") = 0
+          lcNewCompanyname  WHEN llUpdCustData AND LOOKUP(lcNewCustIdType, "CIF,CFraud,CInternal") > 0
           lcNewCOName       WHEN llUpdCustData
           lcNewAddress      WHEN llUpdCustData
           lcNewZipCode      WHEN llUpdCustData
@@ -1378,8 +1378,8 @@ PROCEDURE pUpdateNewOwner:
                   
             IF FRAME-FIELD = "ldaNewBirthday" THEN DO:
                   
-               IF (lcNewCustIdType = "CIF" AND INPUT ldaNewBirthday > TODAY) OR
-                  (lcNewCustIdType NE "CIF" AND
+               IF (LOOKUP(lcNewCustIdType, "CIF,CFraud,CInternal") > 0 AND INPUT ldaNewBirthday > TODAY) OR
+                  (LOOKUP(lcNewCustIdType, "CIF,CFraud,CInternal") = 0 AND
                    INPUT ldaNewBirthday >
                       DATE(MONTH(TODAY),DAY(TODAY),YEAR(TODAY) - 18)) 
                THEN DO:
@@ -1525,15 +1525,15 @@ PROCEDURE pUpdateNewOwner:
 
 
 
-      IF (lcNewCustIdType NE "CIF" AND ldaNewBirthday >
+      IF (LOOKUP(lcNewCustIdType, "CIF,CFraud,CInternal") = 0 AND ldaNewBirthday >
           DATE(MONTH(TODAY), DAY(TODAY), YEAR(TODAY) - 18)) OR
-         (lcNewCustIdType = "CIF" AND ldaNewBirthDay > TODAY) 
+         (LOOKUP(lcNewCustIdType, "CIF,CFraud,CInternal") > 0 AND ldaNewBirthDay > TODAY) 
       THEN DO:
          MESSAGE lcError + " (Birthday)" VIEW-AS ALERT-BOX ERROR.
          NEXT UpdateAgrCust.
       END.
 
-      IF lcNewCustIdType NE "CIF" AND NOT fChkTitle(lcNewTitle) THEN DO:
+      IF LOOKUP(lcNewCustIdType, "CIF,CFraud,CInternal") = 0  AND NOT fChkTitle(lcNewTitle) THEN DO:
          MESSAGE lcError + " (Title)" VIEW-AS ALERT-BOX ERROR.
          NEXT UpdateAgrCust.
       END.

@@ -66,7 +66,7 @@ IF Order.CREventQty = 0 AND
       OrderCustomer.Brand = gcBrand AND
       OrderCustomer.OrderId = Order.OrderId AND
       OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
-   IF OrderCustomer.CustidType = "CIF" THEN DO:
+   IF LOOKUP(OrderCustomer.CustidType, "CIF,CFraud,CInternal") > 0 THEN DO:
       FIND FIRST Customer WHERE
          Customer.Brand = gcBrand AND 
          Customer.OrgId = OrderCustomer.CustId AND
