@@ -130,7 +130,8 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
                bFusionMessage.MsSeq = FusionMessage.MsSeq
                bFusionMessage.MessageType = FusionMessage.MessageType
                bFusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_NEW}
-               bFusionMessage.CreatedTS = Class.timedate:OffSetTS(1).
+               bFusionMessage.CreatedTS = Class.timedate:OffSetTS(1)
+               bFusionMessage.UpdateTS = bFusionMessage.CreatedTS.
                
             RELEASE bFusionMessage.
 

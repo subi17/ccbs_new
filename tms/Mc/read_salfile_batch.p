@@ -172,14 +172,13 @@ PROCEDURE pHandleSALfile:
       FusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)
       FusionMessage.OrderID = INT(icYoigoOrderID)
       FusionMessage.CreatedTS = fMakeTS()
+      FusionMessage.UpdateTS = FusionMessage.CreatedTS
       FusionMessage.MessageID = GUID(GENERATE-UUID)
       FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_LOGISTICS} 
       FusionMessage.Source = "MasMovil"
-      FusionMessage.msseq = iiMsSeq.
-      
-   IF INDEX(Order.OrderChannel,"pos") > 0 THEN
-      FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ONGOING}.
-   ELSE
-      FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_NEW}.
+      FusionMessage.msseq = iiMsSeq
+      FusionMessage.MessageStatus = (IF INDEX(Order.OrderChannel,"pos") > 0
+                                     THEN {&FUSIONMESSAGE_STATUS_ONGOING}
+                                     ELSE {&FUSIONMESSAGE_STATUS_NEW}).
    RETURN "OK".
 END.

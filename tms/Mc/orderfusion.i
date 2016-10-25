@@ -20,7 +20,7 @@ FUNCTION fFusionMessageError RETURNS CHAR
    ASSIGN
       ibFusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
       ibFusionMessage.AdditionalInfo = icErrorDesc
-      ibFusionMessage.HandledTS = fMakeTS().
+      ibFusionMessage.UpdateTS = fMakeTS().
 
    RELEASE ibFusionMessage.
 
@@ -100,7 +100,8 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
       FusionMessage.MessageType = icMessageType
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_NEW}
       FusionMessage.Source = {&FUSIONMESSAGE_SOURCE_TMS}
-      FusionMessage.OrderType = lcPrefix + " " + lcOrderType. 
+      FusionMessage.OrderType = lcPrefix + " " + lcOrderType
+      FusionMessage.UpdateTS = FusionMessage.CreatedTS.
 END.
 
 FUNCTION fCreateFusionReserveNumberMessage RETURNS LOGICAL

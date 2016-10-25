@@ -103,7 +103,7 @@ SESSION:NUMERIC-FORMAT = lcNumeric.
 PROCEDURE pSearchFusionMessages:
 
    FOR EACH FusionMessage NO-LOCK WHERE
-            FusionMessage.HandledTS > idLastDump
+            FusionMessage.UpdateTS > idLastDump
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:
 
