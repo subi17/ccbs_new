@@ -529,12 +529,17 @@ FUNCTION fDelivSIM RETURNS LOG
             FOR
                FIRST FMItem NO-LOCK WHERE
                   FMItem.Brand    = gcBrand AND
-                  FMItem.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST}:
+                  FMItem.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST},
+               FIRST BillItem NO-LOCK WHERE
+                  BillItem.Brand    = gcBrand  AND
+                  BillItem.BillCode = FMItem.BillCode:
 
                ASSIGN
-                  ldeShippingCostAmt = fGetOrderAction(Order.OrderID, {&ORDERACTION_ITEMTYPE_SHIPPING_COST})
                   lcShippingCostExtInvID = Invoice.ExtInvId
-                  lcShippingCostBillCode = FMItem.BillCode
+                  lcShippingCostBillCode = BillItem.BillCode
+                  ldeVatPerc             = fTaxPerc(lcTaxZone,BillItem.TaxClass,ldaOrderDate)
+                  ldeShippingCostAmt     = fGetOrderAction(Order.OrderID, {&ORDERACTION_ITEMTYPE_SHIPPING_COST})
+                  ldeShippingCostAmt     = fRowVat(Invoice.VatIncl,ldeShippingCostAmt,ldeVatPerc)
                   .
             END.
          END.

@@ -30,7 +30,7 @@ ASSIGN
 
 CREATE BillItem.
 ASSIGN
-   BillItem.BillCode = "SHIPPINGCOST"
+   BillItem.BillCode = "SHIPCOST"
    BillItem.BIName = "Shipping cost delivery fee"
    BillItem.AccNum = 75902000
    BillItem.BIGroup = "11"
@@ -46,7 +46,7 @@ ASSIGN
 
 CREATE BillItem.
 ASSIGN
-   BillItem.BillCode = "WELCOMEFAT"
+   BillItem.BillCode = "WCOMEFAT"
    BillItem.BIName = "Welcome gift FAT"
    BillItem.AccNum = 70019000
    BillItem.BIGroup = "21"
@@ -63,7 +63,7 @@ ASSIGN
 
 CREATE FATGroup.
 ASSIGN
-   FATGroup.FtGrp = "WELCOMEGIFT"
+   FATGroup.FtGrp = "WCOMEGIFT"
    FATGroup.FtgName = "Welcome gift"
    FATGroup.BillCode = "WELCOMEFAT"
    FATGroup.Brand = "1"
@@ -71,4 +71,59 @@ ASSIGN
    FATGroup.Transfer = YES
    FATGroup.FatTarget = "0"
    FATGroup.QtyUnit = "Amt"
+   .
+
+CREATE RepText.
+ASSIGN
+   RepText.TextType = 1
+   RepText.Language = 1
+   RepText.RepText = "Gastos de envío"
+   RepText.LinkCode = "SHIPCOST"
+   RepText.Brand = "1"
+   RepText.FromDate = DATE(10,1,2016)
+   RepText.ToDate = DATE(12,31,2049)
+   .
+
+CREATE RepText.
+ASSIGN
+   RepText.TextType = 1
+   RepText.Language = 2
+   RepText.RepText = "Despeses d'enviament"
+   RepText.LinkCode = "SHIPCOST"
+   RepText.Brand = "1"
+   RepText.FromDate = DATE(10,1,2016)
+   RepText.ToDate = DATE(12,31,2049)
+   .
+
+CREATE RepText.
+ASSIGN
+   RepText.TextType = 1
+   RepText.Language = 3
+   RepText.RepText = "Bidalketa kostua"
+   RepText.LinkCode = "SHIPCOST"
+   RepText.Brand = "1"
+   RepText.FromDate = DATE(10,1,2016)
+   RepText.ToDate = DATE(12,31,2049)
+   .
+
+CREATE RepText.
+ASSIGN
+   RepText.TextType = 1
+   RepText.Language = 4
+   RepText.RepText = "Costes de envío"
+   RepText.LinkCode = "SHIPCOST"
+   RepText.Brand = "1"
+   RepText.FromDate = DATE(10,1,2016)
+   RepText.ToDate = DATE(12,31,2049)
+   .
+
+CREATE RepText.
+ASSIGN
+   RepText.TextType = 1
+   RepText.Language = 5
+   RepText.RepText = "Shipping cost delivery fee"
+   RepText.LinkCode = "SHIPCOST"
+   RepText.Brand = "1"
+   RepText.FromDate = DATE(10,1,2016)
+   RepText.ToDate = DATE(12,31,2049)
    .
