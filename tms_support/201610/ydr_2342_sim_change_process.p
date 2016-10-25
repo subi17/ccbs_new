@@ -197,7 +197,7 @@ FUNCTION fDelivSIM RETURNS LOG
    DEF BUFFER AgreeCustomer FOR Customer.
 
    FIND FIRST AgreeCustomer NO-LOCK WHERE
-              AgreeCustomer.CustNum = liCustNum NO-ERROR.
+              AgreeCustomer.CustNum = MobSub.Custnum NO-ERROR.
    
    IF AgreeCustomer.CustIDType = "CIF" THEN DO:
       FIND FIRST CustContact NO-LOCK WHERE
@@ -302,7 +302,7 @@ FUNCTION fDelivSIM RETURNS LOG
           ttExtra.PayTerm          = ""
           ttExtra.OrderDate        = ""
           ttExtra.ResidualAmount   = ""
-          ttExtra.DeliveryType     = STRING(AgreeCustomer.DelType)
+          ttExtra.DeliveryType     = "1"
           ttExtra.ContractFileName = "".
 
 END FUNCTION.
@@ -358,14 +358,26 @@ REPEAT TRANSACTION:
       NEXT msisdn.
    END.
    
-   IF CAN-FIND(FIRST Order WHERE
-                     Order.Brand     = gcBrand              AND
-                     Order.CLI       = lcCLI                AND
-                     Order.OrderType = 2                    AND
-                     Order.ICC       > ""                   AND
-                     LOOKUP(Order.StatusCode,"6,7,8,9") = 0 AND
-                     NOT Order.OrderChannel BEGINS "Renewal_POS") OR
-      CAN-FIND(FIRST MsRequest WHERE
+   FIND FIRST Order NO-LOCK WHERE
+              Order.MsSeq     = liMsSeq              AND
+              Order.OrderType = 2                    AND
+              LOOKUP(Order.StatusCode,"6,7,8,9") = 0 AND
+              NOT Order.OrderChannel BEGINS "Renewal_POS" NO-ERROR.
+
+   IF AVAIL Order AND 
+     (Order.ICC > "" OR 
+      can-find(FIRST OrderAction WHERE
+                 OrderAction.Brand    = gcBrand AND
+                 OrderAction.OrderId  = Order.OrderId AND
+                 OrderAction.ItemType = "SIMType" AND
+                 OrderAction.ItemKey > "")) THEN DO:
+      PUT STREAM sOut UNFORMATTED
+         ";Ongoing renuevo order WITH SIM type change"
+         SKIP.
+      NEXT msisdn.
+   END.
+
+   IF CAN-FIND(FIRST MsRequest WHERE
                      MsRequest.MsSeq     = liMsSeq                                AND
                      MsRequest.ReqType   = {&REQTYPE_ICC_CHANGE}                  AND
                      MsRequest.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
@@ -377,6 +389,12 @@ REPEAT TRANSACTION:
    END.
 
    RUN pCreateReq.
+   IF RETURN-VALUE NE "" THEN DO:
+      PUT STREAM sOut UNFORMATTED
+         ";" RETURN-VALUE
+      SKIP.
+      NEXT msisdn.
+   END.
 
    PUT STREAM sOut UNFORMATTED
       ";Success"
@@ -392,6 +410,23 @@ END.
 INPUT  STREAM sIn  CLOSE.
 OUTPUT STREAM sOut CLOSE.
 
+FOR EACH MSREquest NO-LOCK WHERE
+         MSREquest.Brand = "1" and
+         MSREquest.ReqType = 15 and
+         MSREquest.ReqStatus = 20:
+
+   FIND FIRST MobSub NO-LOCK WHERE
+              MobSub.MsSeq = MSREquest.msseq NO-ERROR.
+   IF AVAIL MobSub THEN DO:
+      FIND FIRST SIM NO-LOCK WHERE
+                 SIM.Brand = gcBrand AND
+                 SIM.ICC   = MSREquest.REqcparam2 aND
+                 SIM.simstat = 13 NO-ERROR.
+      IF AVAIL SIM THEN
+         fDelivSIM(SIM.ICC).
+   END.
+END.
+
 /*Logistics file*/
 RUN pLO.
 
@@ -403,6 +438,7 @@ PROCEDURE pCreateReq:
    DEF BUFFER MsRequest FOR MsRequest.
    DEF BUFFER Customer  FOR Customer.
    DEF BUFFER new-SIM   FOR SIM.
+   DEF BUFFER bOldOrder FOR Order.
 
    FIND FIRST Customer NO-LOCK WHERE
               Customer.CustNum = liCustNum NO-ERROR.
@@ -414,28 +450,36 @@ PROCEDURE pCreateReq:
       ELSE
          lcStock = "NEW".
 
-      lcStock = fSearchStock(lcStock,Customer.ZipCode).
-
       SearchSIM:
       FOR EACH SIM NO-LOCK USE-INDEX simstat WHERE
                SIM.Brand = gcBrand AND
                SIM.Stock = lcStock AND
                SIM.SimStat = {&SIM_SIMSTAT_AVAILABLE} AND
                SIM.SimArt   = "universal_orange":
-         IF SIM.MsSeq = 0 THEN DO:
+         
+            IF SIM.MsSeq > 0 THEN DO:
+               FIND FIRST bOldOrder WHERE
+                          bOldOrder.MsSeq = SIM.MsSeq
+                    NO-LOCK USE-INDEX MsSeq NO-ERROR.
+               IF AVAIL bOldOrder AND
+                  fOffSet(bOldOrder.CrStamp, 24 * 7) > fMakeTS()
+               THEN NEXT.
+            END.
+
             FIND new-SIM EXCLUSIVE-LOCK WHERE
                  ROWID(new-SIM) = ROWID(SIM)
                  NO-ERROR NO-WAIT.
             IF AVAIL new-SIM THEN
                ASSIGN lcICC           = new-SIM.ICC
-                      new-SIM.SimStat = 20
+                      new-SIM.SimStat = 13
                       new-SIM.MsSeq   = liMsSeq
                       .
             LEAVE SearchSIM.
-         END.
       END.
       RELEASE new-SIM.
    END.
+
+   IF lcICC EQ "" THEN RETURN "SIM not available".
 
    CREATE MsRequest.
    ASSIGN MsRequest.MsRequest  = NEXT-VALUE(MsRequest)
@@ -443,16 +487,15 @@ PROCEDURE pCreateReq:
           MsRequest.Brand      = gcBrand
           MsRequest.UserCode   = katun
           MsRequest.ActStamp   = fMakeTS()
-          MsRequest.ReqStatus  = 0
+          MsRequest.ReqStatus  = 20
           MsRequest.CLI        = lcCLI
           MsRequest.MsSeq      = liMsSeq
           MsRequest.CustNum    = liCustNum
           MsRequest.CreStamp   = fMakeTS()
           MsRequest.ReqCParam1 = "CHANGEICC"
           MsRequest.ReqCParam2 = lcICC
-          MsRequest.ReqSource  = {&REQUEST_SOURCE_MANUAL_TMS}
+          MsRequest.ReqSource  = {&REQUEST_SOURCE_SCRIPT}
           .
-   fChangeReqStatus(MsRequest.MsRequest,20,"").
    
    DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
                     "MsRequest",
@@ -463,17 +506,13 @@ PROCEDURE pCreateReq:
                     STRING("Old ICC:" + lcOldICC +
                            "New ICC:" + lcICC)).
 
-   FIND FIRST MobSub NO-LOCK WHERE
-              MobSub.MsSeq = liMsSeq NO-ERROR.
-   IF AVAIL MobSub THEN DO:
-      FIND FIRST SIM NO-LOCK WHERE
-                 SIM.Brand = gcBrand AND
-                 SIM.ICC   = lcICC   NO-ERROR.
-      IF AVAIL SIM THEN fDelivSIM(SIM.ICC).
-   END.
+   RETURN "".
+
 END PROCEDURE.
+   
 
 PROCEDURE pLO:
+
 lcFileName = "/store/riftp/logistics/icc/spool/nrm_" + fDateFMT(TODAY,"ddmmyyyy") + 
              REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".txt".
 OUTPUT STREAM sICC TO VALUE(lcFileName).
