@@ -96,6 +96,10 @@ FUNCTION fChkCustID RETURNS LOGICAL
    DEF VAR liIDSum  AS INT  NO-UNDO.
    DEF VAR lcIDRes  AS CHAR NO-UNDO.
    
+   IF LOOKUP(icCustIDType, "CFraud,CInternal,Fraud,Internal") = 0 AND 
+      LENGTH(icCustID) > 9 THEN
+      RETURN FALSE.
+        
    ASSIGN icCustID = SUBSTRING(icCustID,1,9) NO-ERROR.
     
    CASE icCustIDType:
