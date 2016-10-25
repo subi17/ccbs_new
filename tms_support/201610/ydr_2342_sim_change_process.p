@@ -421,7 +421,7 @@ PROCEDURE pCreateReq:
                SIM.Brand = gcBrand AND
                SIM.Stock = lcStock AND
                SIM.SimStat = {&SIM_SIMSTAT_AVAILABLE} AND
-               SIM.SimArt   = "universal":
+               SIM.SimArt   = "universal_orange":
          IF SIM.MsSeq = 0 THEN DO:
             FIND new-SIM EXCLUSIVE-LOCK WHERE
                  ROWID(new-SIM) = ROWID(SIM)
