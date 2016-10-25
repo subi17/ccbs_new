@@ -842,7 +842,8 @@ PROCEDURE pTerminate:
 
    /* YDR-2052, Change the delivery type to paper only if the customer 
       don't have any other active subscription with delivery type EMAIL or SMS*/
-   IF CAN-FIND(FIRST Customer NO-LOCK WHERE
+   IF NOT MobSub.PayType AND 
+      CAN-FIND(FIRST Customer NO-LOCK WHERE
                      Customer.CustNum = MobSub.CustNum        AND
                     (Customer.DelType = {&INV_DEL_TYPE_EMAIL} OR
                      Customer.DelTYpe = {&INV_DEL_TYPE_SMS})) THEN
@@ -1155,8 +1156,7 @@ PROCEDURE pChangeDelType:
                   Invoice.InvDate = TODAY              AND
                   Invoice.InvType = {&INV_TYPE_NORMAL} AND
                   Invoice.DeliveryState <> 2:
-            ASSIGN Invoice.DelType       = {&INV_DEL_TYPE_PAPER}
-                   Invoice.DeliveryState = 0.                  
+            Invoice.DelType = {&INV_DEL_TYPE_PAPER}.
          END.          
       END.
 

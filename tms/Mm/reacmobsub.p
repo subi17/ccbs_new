@@ -195,9 +195,9 @@ DO TRANSACTION:
       llCallProc = TRUE.
 
       FOR EACH bMobSub NO-LOCK WHERE
-               bMobsub.Brand    = gcBrand          AND
-               bMobSub.CustNum  = MobSub.CustNum   AND
-               bMobSub.MsSeq   <> TermMobSub.MsSeq AND
+               bMobsub.Brand    = gcBrand            AND
+               bMobSub.CustNum  = TermMobSub.CustNum AND
+               bMobSub.MsSeq   <> TermMobSub.MsSeq   AND
                bMobSub.PayType  = NO:
          llCallProc = NO.
          LEAVE.
@@ -991,8 +991,7 @@ PROCEDURE pChangeDelType:
    IF AVAILABLE Customer THEN      
    DO:
       /* If customer deliverytype is paper & subscription is reactivated, 
-         THEN check eventlog and revert back last two invoices to 
-         old delivery type option (email OR sms). */
+         THEN check eventlog and revert back old delivery type option (email OR sms). */
 
       ASSIGN ldtStartDate = DATE(MONTH(TODAY),1,YEAR(TODAY))
              ldtEndDate   = TODAY.
@@ -1000,23 +999,13 @@ PROCEDURE pChangeDelType:
       FIND FIRST EventLog NO-LOCK WHERE 
                  EventLog.TableName            = "Customer"               AND 
                  EventLog.Key                  = STRING(Customer.CustNum) AND 
-                 EventLog.UserCode             = "TermSub"                AND 
                  EventLog.Action               = "Modify"                 AND   
-         ENTRY(1,EventLog.Datavalues,CHR(255)) = "DelType"                NO-ERROR.
+          LOOKUP(EventLog.Datavalues,"DelType") > 0                       NO-ERROR.
       
-      IF AVAIL EventLog THEN 
-      DO:            
-         FOR EACH Invoice EXCLUSIVE-LOCK WHERE
-                  Invoice.Brand    = gcBrand            AND
-                  Invoice.CustNum  = Customer.CustNum   AND
-                  Invoice.InvDate >= ldtStartDate       AND
-                  Invoice.InvDate <= ldtEndDate         AND 
-                  Invoice.InvType  = {&INV_TYPE_NORMAL}:
-            Invoice.DelType = INT(ENTRY(2,EventLog.Datavalues,CHR(255))).  
-         END. 
-
+      IF AVAIL EventLog AND 
+               EventLog.UserCode = "TermSub" THEN 
          Customer.DelType = INT(ENTRY(2,EventLog.Datavalues,CHR(255))).
-      END.
 
-   END.   
+   END.  
+
 END PROCEDURE.
