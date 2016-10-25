@@ -364,7 +364,7 @@ REPEAT TRANSACTION:
                      Order.OrderType = 2                    AND
                      Order.ICC       > ""                   AND
                      LOOKUP(Order.StatusCode,"6,7,8,9") = 0 AND
-                     NOT Order.OrderChannel BEGINS "Renewal_POS") AND
+                     NOT Order.OrderChannel BEGINS "Renewal_POS") OR
       CAN-FIND(FIRST MsRequest WHERE
                      MsRequest.MsSeq     = liMsSeq                                AND
                      MsRequest.ReqType   = {&REQTYPE_ICC_CHANGE}                  AND
