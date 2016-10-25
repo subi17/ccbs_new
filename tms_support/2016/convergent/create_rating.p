@@ -181,7 +181,7 @@ FUNCTION createTariff RETURNS LOG (INPUT lcBase AS CHAR,
                ttTariff.CCN = liCCN
                ttTariff.pricelist = lcpricelist
                ttTariff.bdest = lcBDest
-               ttTariff.billcode = "F" + ttTariff.billcode
+               ttTariff.billcode = ttTariff.billcode
                ttTariff.tariffnum = next-value(Tariff).
             BUFFER-COPY ttTariff TO Tariff.
             DELETE ttTariff.
