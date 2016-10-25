@@ -994,7 +994,7 @@ PROCEDURE pChangeDelType:
       /* If customer deliverytype is paper & subscription is reactivated, 
          THEN check eventlog and revert back old delivery type option (email OR sms). */
 
-      FIND FIRST EventLog NO-LOCK WHERE 
+      FIND FIRST EventLog NO-LOCK USE-INDEX TableName WHERE 
                  EventLog.TableName            = "Customer"               AND 
                  EventLog.Key                  = STRING(Customer.CustNum) AND 
                  EventLog.Action               = "Modify"                 AND   
