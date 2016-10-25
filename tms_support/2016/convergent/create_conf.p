@@ -6,6 +6,7 @@ DEF VAR liModeBI AS INT INIT 1.
 DEF VAR liModeCliType AS INT INIT 1.
 DEF VAR liModeCCN AS INT INIT 1.
 DEF VAR liModeTariff AS INT INIT 1.
+DEF VAR liModeDC AS INT INIT 1.
 
 DEF TEMP-TABLE ttRequestAction NO-UNDO LIKE RequestAction.
 DEF TEMP-TABLE ttBillItem NO-UNDO LIKE BillItem.
@@ -421,7 +422,6 @@ faddToExistingCparamChar("NoPostMinCons", "FTERMPERIOD").
 faddToExistingCparamChar("NoPostMinCons", "DISCFTERMPERIOD").
 
 faddTMSParam("CONT24", "CONTS2GB", 0).
-faddTMSParam("CONT24", "CONTS10GB", 0).
 
 FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ "DATA_BUNDLE_BASED_CLITYPES"
    NO-ERROR.
@@ -704,9 +704,9 @@ Function createBillItem RETURNS LOG ( INPUT icbase AS CHAR,
 END.
 
 createBillItem("TERMPERIOD", "FTERMPERIOD", "Convergent permanency",
-               70518111,"33","","0","046",FALSE,"SL",liModeBI).
-createBillItem("DISCPAYTERMDIR", "DISCFTERMPERIOD", "Convergent permanency discount", 70020105,"13","","0","046",FALSE,"SL",liModeBI).
-createBillItem("DISCPAYTERMDIR", "DISCFHDSL", "Convergent fixed line quota discount", 70020105,"13","","0","046",FALSE,"SL",liModeBI).
+               70518111,"33","","0","076",FALSE,"SL",liModeBI).
+createBillItem("DISCPAYTERMDIR", "DISCFTERMPERIOD", "Convergent permanency discount", 70518111,"13","","0","076",FALSE,"SL",liModeBI).
+createBillItem("DISCPAYTERMDIR", "DISCFHDSL", "Convergent fixed line quota discount", 70514100,"13","","1","070",FALSE,"SL",liModeBI).
 
 createBillItem("FLATVOICE", "F10100003", "Fixed to Spanish mobile",
                70510100,"51","1","1","003",FALSE,"SL",liModeBI).
@@ -791,3 +791,35 @@ IF NOT AVAIL Daycampaign THEN DO:
       DayCampaign.validto = 12/31/49.
 
 END.
+
+DEF TEMP-TABLE ttDaycampaign NO-UNDO LIKE Daycampaign.
+
+FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
+                                             INPUT icEvent AS CHAR,
+                                             INPUT icname AS CHAR,
+                                             INPUT icdctype AS CHAR,
+                                             INPUT iiUpdateMode AS INT):
+   FIND FIRST Daycampaign WHERE
+              Daycampaign.brand EQ "1" AND
+              Daycampaign.dcevent EQ icBaseDCEvent NO-ERROR.
+      CREATE ttDaycampaign.
+      BUFFER-COPY daycampaign TO ttDaycampaign.
+      ttDaycampaign.dctype = icDctype.
+      ttDaycampaign.dcevent = icevent.
+      ttDaycampaign.billcode = icevent + "MF".
+      ttDaycampaign.feemodel = icevent + "MF".
+      ttDaycampaign.dcname = icName.
+      ttDaycampaign.bundleupsell = "".
+
+      IF iiUpdateMode NE 0 THEN DO:
+         CREATE Daycampaign.
+         BUFFER-COPY ttDaycampaign TO Daycampaign.
+         DELETE ttDaycampaign. /*ror safety reasons*/
+      END.
+      ELSE DISP ttDayCampaign.
+
+END.
+
+fcreateDaycampaign("CONTS2GB","CONTDSL","La Combinada 20","1",limodedc).
+fcreateDaycampaign("CONTS10GB","CONTFH50","La Combinada 50","1",limodedc).
+fcreateDaycampaign("CONTS2GB","CONTFH300","La Combinada 300","1",limodedc).
