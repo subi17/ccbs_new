@@ -288,11 +288,13 @@ FUNCTION faddTMSParam RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
    END.
    RETURN TRUE.
 END FUNCTION.
+DEF VAR lcMMParam AS CHAR NO-UNDO.
+lcMMParam = "RootDir".
 
 FIND FIRST TMSParam NO-LOCK WHERE
            TMSParam.Brand EQ "1" AND
            TMSParam.ParamGroup EQ "MasMovil" AND
-           TMSParam.ParamCode EQ "RootDir" NO-ERROR.
+           TMSParam.ParamCode EQ lcMMParam  NO-ERROR.
 IF AVAIL TMSParam THEN
    message TMSParam.ParamCode + " already found" VIEW-AS ALERT-BOX.
 ELSE DO:
@@ -300,12 +302,53 @@ ELSE DO:
 
    ASSIGN TMSParam.Brand = "1"
           TMSParam.ParamGroup = "MasMovil"
-          TMSParam.ParamCode = "RootDir"
+          TMSParam.ParamCode = lcMMParam
           TMSParam.ParamName = "Root directory for MasMovil files"
           TMSParam.CharVal = "/store/riftp/logistics/masmovil/"
           TMSParam.ParamType = "C".
 
 END.
+lcMMParam = "OnlineEnabled".
+
+FIND FIRST TMSParam NO-LOCK WHERE
+           TMSParam.Brand EQ "1" AND
+           TMSParam.ParamGroup EQ "MasMovil" AND
+           TMSParam.ParamCode EQ lcMMParam  NO-ERROR.
+IF AVAIL TMSParam THEN
+   message TMSParam.ParamCode + " already found" VIEW-AS ALERT-BOX.
+ELSE DO:
+   CREATE TMSParam.
+
+   ASSIGN TMSParam.Brand = "1"
+          TMSParam.ParamGroup = "MasMovil"
+          TMSParam.ParamCode = lcMMParam
+          TMSParam.ParamName = "Online sending enabled"
+          TMSParam.IntVal = 1 
+          TMSParam.ParamType = "I".
+
+END.
+lcMMParam = "OnlineRetryMax".
+
+FIND FIRST TMSParam NO-LOCK WHERE
+           TMSParam.Brand EQ "1" AND
+           TMSParam.ParamGroup EQ "MasMovil" AND
+           TMSParam.ParamCode EQ lcMMParam  NO-ERROR.
+IF AVAIL TMSParam THEN
+   message TMSParam.ParamCode + " already found" VIEW-AS ALERT-BOX.
+ELSE DO:
+   CREATE TMSParam.
+
+   ASSIGN TMSParam.Brand = "1"
+          TMSParam.ParamGroup = "MasMovil"
+          TMSParam.ParamCode = lcMMParam
+          TMSParam.ParamName = "Maximum auto-retry count"
+          TMSParam.IntVal = 1 
+          TMSParam.ParamType = "I".
+
+END.
+
+
+
 
 /* This function add new values in the end of existing char cparam value */
 FUNCTION faddToExistingCparamChar RETURNS LOGICAL (INPUT icCparamCode AS CHAR,
