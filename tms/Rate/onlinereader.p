@@ -516,7 +516,6 @@ DO TRANS:
    WHEN "0101YC" OR
    WHEN "0102GE" THEN lcEvent = TRIM(ENTRY(9,callrec,lcSep)).
    WHEN "0102YC" OR 
-   WHEN "0101YF" OR
    WHEN "0103MM" OR
    WHEN "0104GE" OR 
    WHEN "0104MM" OR
@@ -545,7 +544,6 @@ DO TRANS:
       CASE lcSetVersion:
       WHEN "0101MM" THEN DO:  {set0101mm.i}   END.
       WHEN "0101YC" THEN DO:  {set0101yc.i}   END.
-      WHEN "0101YF" THEN DO:  {set0101yf.i}   END.
       WHEN "0102GE" THEN DO:  {set0102gen.i}  END.
       WHEN "0102YC" THEN DO:  {set0102yc.i}   END.
       WHEN "0103MM" THEN DO:  {set0103mm.i}   END.
@@ -656,14 +654,9 @@ DO TRANS:
             (LOOKUP(STRING(ttCall.SpoCMT),"3,7") > 0 AND 
              ttCall.MSCID = "PRE" AND ttCall.PPFlag = 1))
          THEN DO:
-            IF lcSourceName NE "FIXED" THEN
-               fTicketCheck(INPUT "MSOWNER", 
-                            STRING(ttCall.CLI),
-                            OUTPUT oiERrorCode).               
-            ELSE
-             fTicketCheck(INPUT "MSOWNER_FIXED",
-                            STRING(ttCall.CLI),
-                            OUTPUT oiERrorCode). 
+            fTicketCheck(INPUT "MSOWNER", 
+                         STRING(ttCall.CLI),
+                         OUTPUT oiERrorCode).
          END.
          ELSE DO: 
             IF  LOOKUP(STRING(ttCall.Spocmt),"3,4,32") > 0 THEN 
