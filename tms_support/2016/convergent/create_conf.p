@@ -3,7 +3,6 @@ DEF VAR ldaFrom AS DATE INIT 10/27/16.
 DEF VAR liMode AS INT INIT 1.
 DEF VAR liMode_ra AS INT INIT 1.
 DEF VAR liModeBI AS INT INIT 1.
-DEF VAR liModeCliType AS INT INIT 1.
 DEF VAR liModeCCN AS INT INIT 1.
 DEF VAR liModeTariff AS INT INIT 1.
 DEF VAR liModeDC AS INT INIT 1.
@@ -282,7 +281,7 @@ FUNCTION faddTMSParam RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
                                        tmsParam.charval) > 0:
          IF LOOKUP(icDCEvent, tmsParam.charval) > 0 THEN NEXT.
          IF tmsParam.paramcode EQ "DATA_BUNDLE_BASED_CLITYPES" THEN NEXT.
-
+         IF tmsParam.paramcode EQ "POSTPAID_VOICE_TARIFFS" THEN NEXT.
          tmsParam.charval = tmsParam.charval + "," + icDCEvent.
       END.
    END.
@@ -378,6 +377,13 @@ IF LOOKUP("CONTDSL45", TMSParam.charval) = 0 THEN
 TMSParam.charval = tmsParam.charval + ",CONTDSL45,CONTFH45_50," +
                    "CONTFH55_300".
 
+FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ "POSTPAID_VOICE_TARIFFS"
+   NO-ERROR.
+
+IF LOOKUP("CONTDSL45", TMSParam.charval) = 0 THEN
+   TMSParam.charval = tmsParam.charval + ",CONTDSL45,CONTFH45_50," +
+                      "CONTFH55_300".
+
 FIND FIRST DialType WHERE
            DIALType.dialtype EQ 50 NO-ERROR.
 IF NOT AVAIL DialType THEN DO:
@@ -456,40 +462,6 @@ FUNCTION create_ra_mob returns log(INPUT icBasetype AS CHAR,
       liActionID = liActionID + 1.
 
 
-END.
-
-IF liModeCliType > 0 THEN DO:
-   FOR EACH CliType WHERE
-            Clitype.brand EQ "1" AND
-            Clitype.clitype BEGINS "CONTDSL":
-      ASSIGN
-      Clitype.fixedlinetype = 1
-      Clitype.webstatuscode = 0
-      Clitype.FixedLineDownload = "20M"
-      Clitype.FixedLineUpload = "20M".
-   END.
-
-   FOR EACH CliType WHERE
-            Clitype.brand EQ "1" AND
-            Clitype.clitype MATCHES "CONTFH*50":
-      ASSIGN
-      Clitype.fixedlinetype = 2
-      Clitype.webstatuscode = 0
-      Clitype.FixedLineDownload = "50M"
-      Clitype.FixedLineUpload = "5M".
-
-   END.
-
-   FOR EACH CliType WHERE
-         Clitype.brand EQ "1" AND
-         Clitype.clitype MATCHES "CONTFH*300":
-      ASSIGN
-      Clitype.fixedlinetype = 2
-      Clitype.webstatuscode = 0
-      Clitype.FixedLineDownload = "300M"
-      Clitype.FixedLineUpload = "300M".
-
-   END.
 END.
 
 create_ra("CONT24","CONTDSL45",liMode_ra).
