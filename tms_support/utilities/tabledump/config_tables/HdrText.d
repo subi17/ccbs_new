@@ -594,26 +594,26 @@ Final payment: To be paid the month #XX" "1"
 565 5 "Type of monthly invoice: paper" "1"
 566 1 "Pago a plazos:
 
-Pago aplazado: #LOAN_FEE euros. Tipo de Interés Nominal Anual (TIN): 0%. TAE #TAE%. La comisión de gestión por aplazamiento del #CF_PER% (#CF_FEE euros) se incluirá en la factura con el primer pago mensual. Total adeudado: #TOTAL_FEE euros. Operación de Financiación con UNOE BANK S.A.
+Pago aplazado: #LOAN_FEE euros. Tipo de Interés Nominal Anual (TIN): 0%. TAE #TAE%. La comisión de gestión por aplazamiento del #CF_PER% (#CF_FEE euros) se incluirá en la factura con el primer pago mensual. Total adeudado: #TOTAL_FEE euros. Operación de financiación sujeta a la autorización de Banco Cetelem, S.A.U.
 
 Teniendo en cuenta las condiciones que se te han ofrecido y tus compromisos asumidos, la baja en el servicio contratado o la realización de un Renuevo, podrá traer consigo el vencimiento anticipado de los pagos que deberán ser abonados de una sola vez.
 
-En los 15 días siguientes al pago de la cuota 24 podrás acogerte a la opción ofrecida por YOIGO de sustituir el Pago Final por la entrega del móvil, siempre que se encienda y la pantalla no esté dañada, en cuyo caso YOIGO abonará por tu cuenta a Unoe Bank el importe del Pago Final." "1"
+En los 15 días siguientes al pago de la cuota 24 podrás acogerte a la opción ofrecida por YOIGO de sustituir el Pago Final por la entrega del móvil, siempre que se encienda y la pantalla no esté dañada, en cuyo caso YOIGO abonará por tu cuenta a Banco Cetelem el importe del Pago Final." "1"
 566 5 "Financed Payment:
 
-Deferred payment: #LOAN_FEE euros. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE euros) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE euros. Financing Transaction with UNOE BANK SA.
+Deferred payment: #LOAN_FEE euros. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE euros) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE euros. Financing Transaction with Banco Cetelem, S.A.U.
 
 Given the conditions you have provided and your commitments, low in the contracted service or performance of a Renuevo, you can bring the acceleration of payments which must be paid at once. 
 
-In the 15 days following payment of the fee 24 you have the option offered by YOIGO of replacing the Final Payment for the delivery of the mobile, if it turn on and the screen is not damaged, in which case YOIGO will pai for your account Unoe Bank the amount of the Final Payment." "1"
+In the 15 days following payment of the fee 24 you have the option offered by YOIGO of replacing the Final Payment for the delivery of the mobile, if it turn on and the screen is not damaged, in which case YOIGO will pai for your account Banco Cetelem the amount of the Final Payment." "1"
 567 1 "Pago a plazos:
 
-Pago aplazado: #LOAN_FEE euros. Tipo de Interés Nominal Anual (TIN): 0%. TAE #TAE%. La comisión de gestión por aplazamiento del #CF_PER% (#CF_FEE euros) se incluirá en la factura con el primer pago mensual. Total adeudado: #TOTAL_FEE euros. Operación de Financiación con UNOE BANK S.A.
+Pago aplazado: #LOAN_FEE euros. Tipo de Interés Nominal Anual (TIN): 0%. TAE #TAE%. La comisión de gestión por aplazamiento del #CF_PER% (#CF_FEE euros) se incluirá en la factura con el primer pago mensual. Total adeudado: #TOTAL_FEE euros. Operación de financiación sujeta a la autorización de Banco Cetelem, S.A.U.
 
 Teniendo en cuenta las condiciones que se te han ofrecido y tus compromisos asumidos, la baja en el servicio contratado o la realización de un Renuevo, podrá traer consigo el vencimiento anticipado de los pagos que deberán ser abonados de una sola vez." "1"
 567 5 "Financed Payment:
 
-Deferred payment: #LOAN_FEE euros. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE euros) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE euros. Financing Transaction with UNOE BANK SA.
+Deferred payment: #LOAN_FEE euros. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE euros) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE euros. Financing Transaction with Banco Cetelem, S.A.U.
 
 Given the conditions you have provided and your commitments, low in the contracted service or performance of a Renuevo, you can bring the acceleration of payments which must be paid at once." "1"
 568 1 "Doble de MB hasta el 31/01/15" "1"
@@ -652,7 +652,7 @@ You cannot pay the installments in advance. " "1"
 571 1 "<strong>Pago a plazos:</strong><br/><br/>                                              
 Pago aplazado: #LOAN_FEE &euro;. Tipo de Interés Nominal Anual (TIN):
 0%. TAE #TAE%. La comisión de gestión por aplazamiento del #CF_PER%  
-(#CF_FEE &euro;) se incluirá en la factura con el primer pago mensual. Total adeudado: #TOTAL_FEE &euro;. Operación de Financiación con UNOE BANK S.A.<br/>                                                            
+(#CF_FEE &euro;) se incluirá en la factura con el primer pago mensual. Total adeudado: #TOTAL_FEE &euro;. Operación de financiación sujeta a la autorización de Banco Cetelem, S.A.U.<br/>                                                            
 Teniendo en cuenta las condiciones que se te han ofrecido y tus      
 compromisos asumidos, la baja en el servicio contratado o la         
 realización de un Renuevo, podrá traer consigo el vencimiento        
@@ -661,24 +661,23 @@ anticipado de los pagos que deberán ser abonados de una sola vez.<br/>
 En los 15 días siguientes al pago de la cuota 24 podrás acogerte a la
 opción ofrecida por YOIGO de sustituir el Pago Final por la entrega  
 del móvil, siempre que se encienda y la pantalla no esté dañada, en  
-cuyo caso YOIGO abonará por tu cuenta a Unoe Bank el importe del Pago
-Final." "1"
+cuyo caso YOIGO abonará por tu cuenta a Banco Cetelem el importe del Pago Final." "1"
 571 5 "<strong>Financed Payment:</strong><br/><br/>
 
-Deferred payment: #LOAN_FEE &euro;. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE &euro;) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE &euro;. Financing Transaction with UNOE BANK SA.<br/>            
+Deferred payment: #LOAN_FEE &euro;. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE &euro;) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE &euro;. Financing Transaction with Banco Cetelem, S.A.U.<br/>
+            
 Given the conditions you have provided and your commitments, low in  
 the contracted service or performance of a Renuevo, you can bring the
 acceleration of payments which must be paid at once.<br/>       
 
 In the 15 days following payment of the fee 24 you have the option    offered by YOIGO of replacing the Final Payment for the delivery of  
 the mobile, if it turn on and the screen is not damaged, in which case
-YOIGO will pai for your account Unoe Bank the amount of the Final     Payment." "1"
+YOIGO will pai for your account Banco Cetelem the amount of the Final Payment." "1"
 572 1 "<strong>Pago a plazos:</strong><br/><br/>                          
 
 Pago aplazado: #LOAN_FEE &euro;. Tipo de Interés Nominal Anual (TIN): 0%. TAE #TAE%. La comisión de gestión por aplazamiento del #CF_PER%  
 (#CF_FEE &euro;) se incluirá en la factura con el primer pago mensual.
-Total adeudado: #TOTAL_FEE &euro;. Operación de Financiación con UNOE
-BANK S.A.<br/>                                                       
+Total adeudado: #TOTAL_FEE &euro;. Operación de financiación sujeta a la autorización de Banco Cetelem, S.A.U.<br/>                                                        
 
 Teniendo en cuenta las condiciones que se tehan ofrecido y tus       
 compromisos asumidos, la baja en el servicio contratado o la         
@@ -686,7 +685,8 @@ realización de un Renuevo, podrá traer consigo el vencimiento
 anticipado de los pagos que deberán ser abonados de una sola vez." "1"
 572 5 "<strong>Financed Payment:</strong><br/><br/>
 
-Deferred payment: #LOAN_FEE &euro;. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE &euro;) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE &euro;. Financing Transaction with UNOE BANK SA.<br/>    
+Deferred payment: #LOAN_FEE &euro;. Type Nominal Annual Interest (TIN): 0%. TAE #TAE%. The management fee #CF_PER% (#CF_FEE &euro;) will be included in the bill with the first monthly payment. Total due: #TOTAL_FEE &euro;. Financing Transaction with Banco Cetelem, S.A.U.<br/>
+    
 Given the conditions you have provided and your commitments, low in   
 the contracted service or performance of a Renuevo, you can bring the
 acceleration of payments which must be paid at once." "1"
@@ -696,8 +696,16 @@ acceleration of payments which must be paid at once." "1"
 573 5 "When you call a Premium number, we charge you the total for two items: the cost of a call according to your Yoigo rate, as if you were calling a Spanish landline or mobile, plus that of the company you call for the service it provides. The breakdown (Destination/Service Provider) for this call shows the name of the operator to which the number you called belongs.When you send or receive a Premium message, Yoigo charges you 10 cents (indirect taxes not included), and the rest is what the company to which you send it or which receives the message charges you, which is why there may be more than one line on your bill. The breakdown (Destination/Service Provider) shows the company's name and tax number. The name shown may not match, as this may be the company name rather than its trade or band name." "1"
 574 1 "Cuando pagas tu compra de Contenidos de Google Play a través de Yoigo no se aplican impuestos al ser compras que has realizado directamente a Google. Tienes más información sobre las compras realizadas en wallet.google.com y play.google.com/store/account utilizando tu cuenta de Google." "1"
 574 2 "Quan pagues la teva compra de continguts de Google Play a través de Yoigo no s.hi apliquen impostos ja que són compres que has fet directament a Google. Tens més informació sobre les compres fetes a wallet.google.com i play.google.com/store/account fent servir el teu compte de Google." "1"
-574 3 "Google  Play edukiak erostean Yoigo-ren bidez ordaintzen duzunean, ez da zergarik aplikatuko, Google-ri zuzenean egin dizkiozun erosketak baitira. Google kontua erabilita egindako erosketei buruzko informazio gehiago duzu eskuragarri wallet.google.com eta play.google.com/store/account helbideetan." "1"
-574 5 "When you pay for your purchase of Google Play Content through Yoigo no taxes are applied as they are purchases made directly from Google.                      You can find further information about purchases you have made at wallet.google.com and play.google.com/store/account, using your Google account." "1"
+574 3 "Google Play edukiak erostean Yoigo-ren bidez ordaintzen duzunean, ez da zergarik aplikatuko, Google-ri zuzenean egin dizkiozun erosketak baitira. Google kontua erabilita egindako erosketei buruzko informazio gehiago duzu eskuragarri wallet.google.com eta play.google.com/store/account helbideetan." "1"
+574 5 "When you pay for your purchase of Google Play Content through Yoigo no taxes are applied as they are purchases made directly from Google. You can find further information about purchases you have made at wallet.google.com and play.google.com/store/account, using your Google account." "1"
+575 1 "Pago del móvil: Yoigo gestiona el cobro del Crédito otorgado por Banco Cetelem, S.A.U., con CIF nº A-78650348 y domicilio social en Madrid, c/ Retama, 3 (28045). Operación exenta del IVA. TIN: 0% y TAE: #TAE%." "1"
+575 2 "Pagament del mòbil: Yoigo gestiona el cobrament del crèdit atorgat per Banco Cetelem, S.A.U., amb CIF núm. A-78650348 i domicili social al Madrid, c/ Retama, 3 (28045). Operació exempta de l'IVA. TIN: 0% i TAE: #TAE%." "1"
+575 3 "Mugikorraren ordainketa: Yoigo-k kudeatzen du ondoren aipatzen den erakundeak emandako Kreditua: Banco Cetelem, S.A.U., IFZ A-78650348 eta egoitza soziala Madrid, c/ Retama, 3 (28045). Eragiketa BEZatik salbuetsita dago. ITN: % 0 eta UTB: % #TAE." "1"
+575 5 "Mobile payment: Yoigo manages the payment of the credit granted by Banco Cetelem, S.A.U., with tax ID no. A-78650348 and registered office at Madrid, c/ Retama, 3 (28045). VAT exempt transaction. NIR: 0% and APR: #TAE%." "1"
+576 1 "Pago del móvil: Banco Cetelem nos ha cedido los derechos de crédito derivados de la financiación del terminal que compraste al darte de alta o hacer un Renuevo, lo que te comunicamos en cumplimiento de la cláusula 13 del contrato de crédito." "1"
+576 2 "Pagament del mòbil: Banco Cetelem ens ha cedit els drets de crèdit derivats del finançament del terminal que vas comprar en donar-te d'alta o fer un Renuevo, la qual cosa et comuniquem en compliment de la clàusula 13 del contracte de crèdit." "1"
+576 3 "Mugikorraren ordainketa: alta ematean edo Renuevo plana onartzean erosi zenuen terminalaren finantzaketaren ondorio diren kreditu-eskubideak eman dizkigu Banco Cetelem erakundeak. Kreditu-kontratuaren 13. klausulari jarraiki jakinarazten dizugu aipatutakoa." "1"
+576 5 "Handset payment: In accordance with the provisions of Clause 13 of your credit contract, Banco Cetelem has passed us the credit claim related to the financing of the handset you purchased when you signed up to Yoigo or renewed your contract with Renuevo." "1"
 1 1 "Soittaja-asiakas" "2"
 1 2 "Abonnent" "2"
 1 5 "Caller" "2"
