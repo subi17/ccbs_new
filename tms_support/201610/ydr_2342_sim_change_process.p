@@ -498,13 +498,13 @@ PROCEDURE pCreateReq:
           .
    
    DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "MsRequest",
-                    STRING(MsRequest.MsRequest),
+                    "MobSub",
+                    STRING(liMsSeq),
                     liCustNum,
                     "Cambio de número ICC",
                     STRING("Solicitado por el cliente 20") +
-                    STRING("Old ICC:" + lcOldICC +
-                           "New ICC:" + lcICC)).
+                    STRING(" Old ICC:" + lcOldICC +
+                           " New ICC:" + lcICC)).
 
    RETURN "".
 
