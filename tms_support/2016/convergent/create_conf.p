@@ -6,6 +6,7 @@ DEF VAR liMode_ra AS INT INIT 1.
 DEF VAR liModeBI AS INT INIT 1.
 DEF VAR liModeCCN AS INT INIT 1.
 DEF VAR liModeTariff AS INT INIT 1.
+DEF VAR liModeCP AS INT INIT 1.
 
 DEF TEMP-TABLE ttRequestAction NO-UNDO LIKE RequestAction.
 DEF TEMP-TABLE ttBillItem NO-UNDO LIKE BillItem.
@@ -368,7 +369,7 @@ END FUNCTION.
 faddToExistingCparamChar("NoPostMinCons", "FTERMPERIOD").
 faddToExistingCparamChar("NoPostMinCons", "DISCFTERMPERIOD").
 
-faddTMSParam("CONT24", "CONTS2GB", 0).
+faddTMSParam("CONT24", "CONTS2GB", liModeCP).
 
 FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ "DATA_BUNDLE_BASED_CLITYPES"
    NO-ERROR.
