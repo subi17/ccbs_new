@@ -15,7 +15,6 @@
 "CONTRATOD3" "Contrato Datos" "Contrato Datos subcription type specific price list" "EUR" 6 no yes "" "" no "1"
 "CONTRATODATA" "Contrato Datos" "Contrato Datos subcription type specific price list" "EUR" 6 no yes "" "" no "1"
 "CONTRATOF" "Contratof" "Contrato flat subcription type specific price list" "EUR" 4 no yes "" "" no "1"
-"CONTRATOFIXED" "Contrato fixed" "Contrato fixed pricelist" "EUR" 4 no yes "" "" no "1"
 "CONTRATOM" "Contrato M" "" "EUR" 6 no yes "" "" no "1"
 "CONTRATOM2" "Contrato M2" "" "EUR" 6 no yes "" "" no "1"
 "CONTRATOS" "Contratos" "Contrato S subcription type specific price list" "EUR" 4 no yes "" "" no "1"
