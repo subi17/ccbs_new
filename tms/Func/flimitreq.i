@@ -264,37 +264,39 @@ FUNCTION fSetSubscriptionProhibitedFromInvoicing RETURNS LOGICAL
      iiMsSeq         AS INTEGER  ,
      iiCustNum       AS INTEGER  ):
     
-    DEFINE VARIABLE liBillPerm         AS INTEGER NO-UNDO.
-    DEFINE VARIABLE llActivateBillPerm AS LOGICAL NO-UNDO.
-    
-    DEFINE BUFFER bf_MobSub FOR MobSub.
-    
     /* When IDType of customer is changed from other either NIE,NIF,N/A,Passport,CIF to either of CFraud,CInternal,Fraud,Internal */
     IF LOOKUP(icOldCustIdType,"CFraud,CInternal,Fraud,Internal") = 0 AND  
        LOOKUP(icNewCustIdType,"CFraud,CInternal,Fraud,Internal") > 0 THEN 
-        ASSIGN 
-            liBillPerm = {&LIMIT_BILLPERM_PROHIBITED}
-            llActivateBillPerm = TRUE.
-    /* When IDType of customer is changed from other either CFraud,CInternal,Fraud,Internal to either of NIE,NIF,N/A,Passport,CIF */
-    ELSE IF LOOKUP(icOldCustIdType,"CFraud,CInternal,Fraud,Internal") > 0 AND
-            LOOKUP(icNewCustIdType,"CFraud,CInternal,Fraud,Internal") = 0 THEN
-        ASSIGN 
-            liBillPerm = {&LIMIT_BILLPERM_ALLOWED}
-            llActivateBillPerm = TRUE.
-    
-    IF llActivateBillPerm THEN 
     DO:
         fCreateLimitHistory(iiCustNum,
                             iiMsSeq,
                             {&LIMIT_TYPE_BILLPERM},
-                            liBillPerm,
+                            {&LIMIT_BILLPERM_PROHIBITED},
                             0, /* limit id */
                             0, /* tmruleseq */
                             FALSE, /* default value */
                             TODAY,
                             DATE(12,31,2049)).
+    END.                
+    /* When IDType of customer is changed from other either CFraud,CInternal,Fraud,Internal to either of NIE,NIF,N/A,Passport,CIF */
+    ELSE IF LOOKUP(icOldCustIdType,"CFraud,CInternal,Fraud,Internal") > 0 AND
+            LOOKUP(icNewCustIdType,"CFraud,CInternal,Fraud,Internal") = 0 THEN
+    DO: 
+        FIND FIRST Limit WHERE Limit.MsSeq     = iiMsSeq                AND
+                               Limit.LimitType = {&LIMIT_TYPE_BILLPERM} AND
+                               Limit.TMRuleSeq = 0                      AND
+                               Limit.Todate   >= TODAY                  AND
+                               Limit.Custnum   = iiCustNum              NO-LOCK NO-ERROR.
+        IF AVAILABLE Limit THEN 
+        DO: 
+            fSetLimit (ROWID(Limit),
+                       Limit.LimitAmt,
+                       FALSE, /* default value */ 
+                       Limit.FromDate,
+                       TODAY - 1).                                  
+        END.
     END.
-         
+    
     RETURN TRUE.
             
 END FUNCTION.

@@ -20,7 +20,7 @@
         16.05.07/aam normal id types cannot be changed into passport 
 */
 
-           EDITING:
+           EDITING: 
               READKEY. nap = keylabel(LASTKEY).
 
               if lookup(nap,"F4") > 0 THEN UNDO, LEAVE.
