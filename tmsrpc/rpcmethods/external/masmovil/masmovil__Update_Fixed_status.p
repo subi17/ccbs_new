@@ -150,32 +150,37 @@ END.
 IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED} AND
    FusionMessage.FixedStatus NE "CERRADA" THEN DO:
       
-   FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+   ASSIGN
+      FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
+      FusionMessage.AdditionalInfo = "Status update is not allowed after CERRADA".
    
    add_string(lcresultStruct, "resultCode", {&RESULT_INVALID_STATUS}).
    add_string(lcresultStruct, "resultDescription", 
-              "Status is not allowed after CERRADA").
+              FusionMessage.AdditionalInfo).
    RETURN.
 END.
 
 IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_CANCELLED} AND
    FusionMessage.FixedStatus NE "CANCELADA" THEN DO:
-      
-   FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+    
+   ASSIGN
+      FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
+      FusionMessage.AdditionalInfo = "Status update is not allowed after CANCELADA".
    
    add_string(lcresultStruct, "resultCode", {&RESULT_INVALID_STATUS}).
-   add_string(lcresultStruct, "resultDescription", 
-              "Status is not allowed after CANCELADA").
+   add_string(lcresultStruct, "resultDescription", FusionMessage.AdditionalInfo).
    RETURN.
 END.
 
 IF ldeNotificationTime < OrderFusion.FixedStatusTS THEN DO:
       
-   FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
+   ASSIGN
+      FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
+      FusionMessage.AdditionalInfo = "notificationTime is older than the value in the latest received message".
    
    add_string(lcresultStruct, "resultCode", {&RESULT_INVALID_STATUS}).
    add_string(lcresultStruct, "resultDescription", 
-              "notificationTime is older than the value in the latest received message").
+              FusionMessage.AdditionalInfo).
    RETURN.
 END.
 
@@ -192,7 +197,6 @@ CASE FusionMessage.FixedStatus:
       IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_INITIALIZED} OR
          OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_PENDING_CANCELLED}
       THEN OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ONGOING}.
-      ELSE FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
 
       IF FusionMessage.FixedStatus EQ "EN PROCESO - NO CANCELABLE" AND
          Order.OrderType EQ {&ORDER_TYPE_STC} AND

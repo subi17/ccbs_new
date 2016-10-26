@@ -13,7 +13,7 @@
    Case 8 = Billing Item dump
 */
 
-DEF VAR iiRunID     AS INT NO-UNDO INIT 8.      /* <--- Change the correct case number */
+DEF VAR iiRunID     AS INT NO-UNDO INIT 1.      /* <--- Change the correct case number */
 DEF VAR liSimulate  AS LOG NO-UNDO INIT TRUE.  /* <--- SIMULATE */
 /***************************************************/
 
@@ -207,7 +207,7 @@ CASE iiRunID:
       lcDFTable    = "OrderFusion".
       ldaFromDate  = TODAY.
       ldaToDate    = 12/31/49.
-      lcField      = "FixedCurrOperCode,SerialNumber,AppointmentDate,CancellationReason,FixedInstallationTS,ADSLLinkState,FixedStatusTS,FixedStatusDesc". /* Put list here */
+      lcField      = "FixedCurrOperCode,SerialNumber,AppointmentDate,CancellationReason,FixedInstallationTS,ADSLLinkState,FixedStatusTS,FusionStatusDesc". /* Put list here */
 
       fAddFiels( lcDumpName,lcDFTable,ldaFromDate,ldaToDate,lcField).
    END.
