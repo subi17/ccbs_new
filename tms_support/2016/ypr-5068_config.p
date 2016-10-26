@@ -20,7 +20,7 @@ CREATE FMItem.
 ASSIGN
    FMItem.FeeModel = "SHIPCOST"
    FMItem.PriceList = "OrderCh"
-   FMItem.BillCode = "SHIPPINGCOST"
+   FMItem.BillCode = "SHIPCOST"
    FMItem.BillMethod = YES
    FMItem.BillType = "DF"
    FMItem.FromDate = DATE(10,1,2016)
