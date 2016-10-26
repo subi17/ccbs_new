@@ -34,7 +34,7 @@
 "ActionLog" "ActionStatus" "Log" "2" "Ended succesfully" "" "" 1
 "ActionLog" "ActionStatus" "Log" "3" "Logged" "" "" 1
 "ActionLog" "ActionStatus" "Log" "5" "Cancelled" "" "" 1
-"AppIdPrefix" "ApplicationId" "ExternalAPI" "selfService" "Transaction Ids for particular application" "" "601,602,501,502,503,504,505,506,650,507,701,509,510" 1
+"AppIdPrefix" "ApplicationId" "ExternalAPI" "selfService" "Transaction Ids for particular application" "" "601,602,501,502,503,504,505,506,650,507,701,509,510,801" 1
 "Barring" "BarringGroup" "" "ATC" "" "" "20" 0
 "Barring" "BarringGroup" "" "Collections" "" "" "30" 0
 "Barring" "BarringGroup" "" "Customer" "" "" "10" 0
@@ -122,6 +122,7 @@
 "BRTestCriteria" "SettingDayCampaign" "BRTest" "Active" "Active Contract" "" "" 1
 "BRTestCriteria" "SettingDayCampaign" "BRTest" "Terminated" "Contract terminated" "" "" 1
 "BRTestCriteria" "SettingFixedFee" "BRTest" "TF=FinancedByBank" "TF - Financed by Bank" "" "" 1
+"BRTestCriteria" "SettingFixedFee" "BRTest" "TF=FinancedByCetelemBank" "TF - Financed by Cetelem" "" "" 1
 "BRTestCriteria" "SettingFixedFee" "BRTest" "TF=FinancedBySabaDellBank" "TF - Financed by Sabadell Bank" "" "" 1
 "BRTestCriteria" "SettingFixedFee" "BRTest" "TF=FinancedByUNOEBank" "TF - Financed by UNOE Bank" "" "" 1
 "BRTestCriteria" "SettingFixedFee" "BRTest" "TF=FinancedByYoigo" "TF - Financed by Yoigo" "" "" 1
@@ -445,6 +446,7 @@
 "FixedFee" "TFBank" "Contract" "0000" "Yoigo" "" "" 1
 "FixedFee" "TFBank" "Contract" "0049" "UNO-E" "" "" 1
 "FixedFee" "TFBank" "Contract" "0081" "Banco de Sabadell" "" "" 1
+"FixedFee" "TFBank" "Contract" "0225" "Cetelem" "" "" 1
 "FuncRunParam" "CSB19.14" "FuncRun" "BOTH" "BOTH XML and TXT CSB files created" "" "" 1
 "FuncRunParam" "CSB19.14" "FuncRun" "TXT" "Only TXT CSB file created" "" "" 1
 "FuncRunParam" "CSB19.14" "FuncRun" "XML" "Only XML CSB file created" "" "" 1
