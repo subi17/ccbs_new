@@ -33,7 +33,7 @@
 "TA" "TAL DIGITAL" "" 0 "" "" "" "Luis.Leyva.Ruano@yoigo.com" "1" 42 yes "323841619" "332296730"
 "TC" "TELECOR" "" 0 "" "" "" "Luis.Leyva.Ruano@yoigo.com" "1" ? yes "323840132" "332296367"
 "TL" "TEL&COM" "" 0 "" "" "" "ignacio.larragan.silva@yoigo.com" "1" 99 no "" ""
-"TM" "Telestant TM" "" 0 "" "" "" "Sonia.Borrega.Bahon@yoigo.com" "1" 99 yes "" ""
+"TM" "TELESTANT TM" "" 0 "" "" "" "Sonia.Borrega.Bahon@yoigo.com" "1" 99 yes "" ""
 "TO" "TELESTANT ONLINE" "" 0 "" "" "" "maria.barreiro.sanisidro@yoigo.com" "1" 99 yes "" ""
 "TP" "YOIGO PHONE HOUSE" "" 0 "" "" "" "marta.delarosa@yoigo.com" "1" 99 yes "323841551" "332296607"
 "TR" "TRECEDIS" "" 0 "" "" "" "Felix.deIturriaga.Gandini@yoigo.com" "1" ? no "" ""
