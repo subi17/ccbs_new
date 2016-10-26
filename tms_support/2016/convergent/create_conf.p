@@ -1,12 +1,11 @@
 {commpaa.i}
+gcBrand = "1".
 DEF VAR ldaFrom AS DATE INIT 10/27/16.
 DEF VAR liMode AS INT INIT 1.
 DEF VAR liMode_ra AS INT INIT 1.
 DEF VAR liModeBI AS INT INIT 1.
-DEF VAR liModeCliType AS INT INIT 1.
 DEF VAR liModeCCN AS INT INIT 1.
 DEF VAR liModeTariff AS INT INIT 1.
-DEF VAR liModeDC AS INT INIT 1.
 
 DEF TEMP-TABLE ttRequestAction NO-UNDO LIKE RequestAction.
 DEF TEMP-TABLE ttBillItem NO-UNDO LIKE BillItem.
@@ -282,7 +281,7 @@ FUNCTION faddTMSParam RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
                                        tmsParam.charval) > 0:
          IF LOOKUP(icDCEvent, tmsParam.charval) > 0 THEN NEXT.
          IF tmsParam.paramcode EQ "DATA_BUNDLE_BASED_CLITYPES" THEN NEXT.
-
+         IF tmsParam.paramcode EQ "POSTPAID_VOICE_TARIFFS" THEN NEXT.
          tmsParam.charval = tmsParam.charval + "," + icDCEvent.
       END.
    END.
@@ -378,6 +377,13 @@ IF LOOKUP("CONTDSL45", TMSParam.charval) = 0 THEN
 TMSParam.charval = tmsParam.charval + ",CONTDSL45,CONTFH45_50," +
                    "CONTFH55_300".
 
+FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ "POSTPAID_VOICE_TARIFFS"
+   NO-ERROR.
+
+IF LOOKUP("CONTDSL45", TMSParam.charval) = 0 THEN
+   TMSParam.charval = tmsParam.charval + ",CONTDSL45,CONTFH45_50," +
+                      "CONTFH55_300".
+
 FIND FIRST DialType WHERE
            DIALType.dialtype EQ 50 NO-ERROR.
 IF NOT AVAIL DialType THEN DO:
@@ -456,40 +462,6 @@ FUNCTION create_ra_mob returns log(INPUT icBasetype AS CHAR,
       liActionID = liActionID + 1.
 
 
-END.
-
-IF liModeCliType > 0 THEN DO:
-   FOR EACH CliType WHERE
-            Clitype.brand EQ "1" AND
-            Clitype.clitype BEGINS "CONTDSL":
-      ASSIGN
-      Clitype.fixedlinetype = 1
-      Clitype.webstatuscode = 0
-      Clitype.FixedLineDownload = "20M"
-      Clitype.FixedLineUpload = "20M".
-   END.
-
-   FOR EACH CliType WHERE
-            Clitype.brand EQ "1" AND
-            Clitype.clitype MATCHES "CONTFH*50":
-      ASSIGN
-      Clitype.fixedlinetype = 2
-      Clitype.webstatuscode = 0
-      Clitype.FixedLineDownload = "50M"
-      Clitype.FixedLineUpload = "5M".
-
-   END.
-
-   FOR EACH CliType WHERE
-         Clitype.brand EQ "1" AND
-         Clitype.clitype MATCHES "CONTFH*300":
-      ASSIGN
-      Clitype.fixedlinetype = 2
-      Clitype.webstatuscode = 0
-      Clitype.FixedLineDownload = "300M"
-      Clitype.FixedLineUpload = "300M".
-
-   END.
 END.
 
 create_ra("CONT24","CONTDSL45",liMode_ra).
@@ -743,34 +715,4 @@ IF NOT AVAIL Daycampaign THEN DO:
 
 END.
 
-DEF TEMP-TABLE ttDaycampaign NO-UNDO LIKE Daycampaign.
 
-FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
-                                             INPUT icEvent AS CHAR,
-                                             INPUT icname AS CHAR,
-                                             INPUT icdctype AS CHAR,
-                                             INPUT iiUpdateMode AS INT):
-   FIND FIRST Daycampaign WHERE
-              Daycampaign.brand EQ "1" AND
-              Daycampaign.dcevent EQ icBaseDCEvent NO-ERROR.
-      CREATE ttDaycampaign.
-      BUFFER-COPY daycampaign TO ttDaycampaign.
-      ttDaycampaign.dctype = icDctype.
-      ttDaycampaign.dcevent = icevent.
-      ttDaycampaign.billcode = icevent + "MF".
-      ttDaycampaign.feemodel = icevent + "MF".
-      ttDaycampaign.dcname = icName.
-      ttDaycampaign.bundleupsell = "".
-
-      IF iiUpdateMode NE 0 THEN DO:
-         CREATE Daycampaign.
-         BUFFER-COPY ttDaycampaign TO Daycampaign.
-         DELETE ttDaycampaign. /*ror safety reasons*/
-      END.
-      ELSE DISP ttDayCampaign.
-
-END.
-
-fcreateDaycampaign("CONTS2GB","CONTDSL","La Combinada 20","1",limodedc).
-fcreateDaycampaign("CONTS10GB","CONTFH50","La Combinada 50","1",limodedc).
-fcreateDaycampaign("CONTS2GB","CONTFH300","La Combinada 300","1",limodedc).
