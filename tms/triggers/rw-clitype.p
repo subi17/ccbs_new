@@ -1,5 +1,6 @@
 {triggers/hpdwrite_generic.i CliType CLITYPE Ordercanal CliType}
-
+/* TODO: FIX AFTER RELEASE */
+/*
 {commali.i}
 {tmsconst.i}
 
@@ -34,4 +35,5 @@ DO:
       END.
    END.     
 
-END.         
+END.
+*/
