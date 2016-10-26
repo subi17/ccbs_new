@@ -136,6 +136,7 @@
 "PAYTERM24_8" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERM25" "Periodical contract installment" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERMCG1E" "Commission fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"PAYTERMCGBC" "Commission fee CETELEM" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PAYTERMCGBS" "Commission fee Sabadell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "PMDUBFee" "Prepaid BONO8 Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "POSMNP10" "Post paid - K800i BRONZE" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
