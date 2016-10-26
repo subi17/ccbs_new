@@ -282,11 +282,8 @@ FUNCTION fSetSubscriptionProhibitedFromInvoicing RETURNS LOGICAL
     ELSE IF LOOKUP(icOldCustIdType,"CFraud,CInternal,Fraud,Internal") > 0 AND
             LOOKUP(icNewCustIdType,"CFraud,CInternal,Fraud,Internal") = 0 THEN
     DO: 
-        FIND FIRST Limit WHERE Limit.MsSeq     = iiMsSeq                AND
-                               Limit.LimitType = {&LIMIT_TYPE_BILLPERM} AND
-                               Limit.TMRuleSeq = 0                      AND
-                               Limit.Todate   >= TODAY                  AND
-                               Limit.Custnum   = iiCustNum              NO-LOCK NO-ERROR.
+        fGetLimit(iiCustNum,iiMsSeq,{&LIMIT_TYPE_BILLPERM},0,0,TODAY).
+        
         IF AVAILABLE Limit THEN 
         DO: 
             fSetLimit (ROWID(Limit),

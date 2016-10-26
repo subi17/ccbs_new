@@ -144,6 +144,8 @@ DEF VAR liDelType AS INT NO-UNDO.
 DEF VAR lcError AS CHAR NO-UNDO. 
 DEF VAR lcMemoHostTable AS CHAR NO-UNDO INIT "Customer".
 DEF VAR liChargeType AS INT NO-UNDO.
+DEF VAR lcOldCustIdType AS CHAR NO-UNDO.
+DEF VAR lcNewCustIdType AS CHAR NO-UNDO.
 
 ASSIGN
     lcCustomerData[1] = customer.HonTitle
@@ -166,6 +168,7 @@ ASSIGN
     lcCustomerData[18] = customer.addresscodp
     lcCustomerData[19] = customer.addresscodc
     lcCustomerData[20] = customer.custidtype
+    lcOldCustIdType    = customer.custidtype
     lcCustomerData[21] = customer.OrgId
     lcCustomerData[22] = customer.CompanyName
     ldFoundationDate   = customer.FoundationDate
@@ -254,8 +257,8 @@ DO lii = 1 TO NUM-ENTRIES(lcDataFields):
         IF lcc NE lcCustomerData[lii] THEN DO:
             /* Store id_type and person_id to CustContact table if
                corporate customer is used */
-            IF LOOKUP(ENTRY(lii, lcDataFields),"id_type,person_id") > 0 AND
-            LOOKUP(Customer.CustIdType, "CIF,CFraud,CInternal") > 0 THEN NEXT.
+            IF LOOKUP(ENTRY(lii, lcDataFields),"id_type,person_id") > 0 AND LOOKUP(Customer.CustIdType, "CIF,CFraud,CInternal") > 0 THEN 
+                NEXT.
             lcCustomerData[lii] = lcc.
             llCustomerChanged = TRUE.
         END.
@@ -313,7 +316,9 @@ END.
    
 IF LOOKUP(Customer.CustIdType,"CIF,CFraud,CInternal") = 0 THEN DO:
 
-   lcCustIdType = lcCustomerData[LOOKUP("id_type", lcDataFields)].
+   ASSIGN 
+       lcCustIdType = lcCustomerData[LOOKUP("id_type", lcDataFields)]
+       lcNewCustIdType = lcCustIdType.
    
    IF lcCustIdType NE Customer.CustIdType THEN DO:
       
@@ -328,6 +333,9 @@ IF LOOKUP(Customer.CustIdType,"CIF,CFraud,CInternal") = 0 THEN DO:
 END.
 
 IF LOOKUP(Customer.CustIdType,"CIF,CFraud,CInternal") > 0 THEN DO:
+    
+   /* Since, there is no option to change ID Type of a CIF customer on WEB, this will always be 'CIF' at the moment */
+   ASSIGN lcNewCustIdType = lcCustomerData[LOOKUP("id_type", lcDataFields)]. 
    
    lhCustomer = BUFFER Customer:HANDLE.
    RUN StarEventInitialize(lhCustomer).
@@ -657,6 +665,8 @@ IF LOOKUP("subscription_act_limit", lcStruct) > 0 THEN DO:
    END.
 END.
 
+RUN pSetFraudCustomer_Prohited_FromInvoicing(lcOldCustIdType,lcNewCustIdType).
+
 IF gc_xmlrpc_error NE "" THEN
     gi_xmlrpc_error = {&APPLICATION_ERROR}.
 ELSE
@@ -687,6 +697,25 @@ IF pcMemoTitle NE "" OR
        Memo.MemoTitle = pcMemoTitle
        Memo.MemoText  = pcMemoContent.
 END.
+
+PROCEDURE pSetFraudCustomer_Prohited_FromInvoicing:
+    DEFINE INPUT PARAMETER icOldCustIdType AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER icNewCustIdType AS CHARACTER NO-UNDO.
+    
+    IF icOldCustIdType <> icNewCustIdType THEN 
+    DO:
+        FOR EACH MobSub WHERE MobSub.Brand   = gcBrand          AND 
+                              MobSub.InvCust = Customer.CustNum AND
+                              MobSub.Cli     > ""               USE-INDEX InvCust NO-LOCK:
+            fSetSubscriptionProhibitedFromInvoicing(icOldCustIdType,
+                                                    icNewCustIdType,
+                                                    MobSub.MsSeq   ,
+                                                    MobSub.InvCust).
+        END.    
+    END.
+                            
+    RETURN "".
+END PROCEDURE.
 
 FINALLY:
    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
