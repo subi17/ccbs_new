@@ -710,7 +710,7 @@ IF NOT AVAIL Daycampaign THEN DO:
       DayCampaign.durmonths = 12
       DayCampaign.durunit = 2
       Daycampaign.termfeemodel = "FTERMPERIOD"
-      Daycampaign.TermFeeCalc = 2
+      Daycampaign.TermFeeCalc = 1
       DayCampaign.validfrom = ldaFrom
       DayCampaign.validto = 12/31/49.
 
