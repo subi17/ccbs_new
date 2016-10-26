@@ -1,4 +1,5 @@
 DEF VAR liModeCliType AS INT INIT 1.
+DEF VAR liModeDC AS INT INIT 1.
 
 IF liModeCliType > 0 THEN DO:
    FOR EACH CliType WHERE
@@ -66,3 +67,34 @@ fcreateTrans("53",2,"Catalan;SERVICIOS PREMIUM FIJO").
 fcreateTrans("53",3,"SERVICIOS PREMIUM FIJO").
 fcreateTrans("53",5,"SERVICIOS PREMIUM FIJO").
 
+DEF TEMP-TABLE ttDaycampaign NO-UNDO LIKE Daycampaign.
+
+FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
+                                             INPUT icEvent AS CHAR,
+                                             INPUT icname AS CHAR,
+                                             INPUT icdctype AS CHAR,
+                                             INPUT iiUpdateMode AS INT):
+   FIND FIRST Daycampaign WHERE
+              Daycampaign.brand EQ "1" AND
+              Daycampaign.dcevent EQ icBaseDCEvent NO-ERROR.
+      CREATE ttDaycampaign.
+      BUFFER-COPY daycampaign TO ttDaycampaign.
+      ttDaycampaign.dctype = icDctype.
+      ttDaycampaign.dcevent = icevent.
+      ttDaycampaign.billcode = icevent + "MF".
+      ttDaycampaign.feemodel = icevent + "MF".
+      ttDaycampaign.dcname = icName.
+      ttDaycampaign.bundleupsell = "".
+
+      IF iiUpdateMode NE 0 THEN DO:
+         CREATE Daycampaign.
+         BUFFER-COPY ttDaycampaign TO Daycampaign.
+         DELETE ttDaycampaign. /*ror safety reasons*/
+      END.
+      ELSE DISP ttDayCampaign.
+
+END.
+
+fcreateDaycampaign("CONTS2GB","CONTDSL","La Combinada 20","1",limodedc).
+fcreateDaycampaign("CONTS10GB","CONTFH50","La Combinada 50","1",limodedc).
+fcreateDaycampaign("CONTS2GB","CONTFH300","La Combinada 300","1",limodedc).

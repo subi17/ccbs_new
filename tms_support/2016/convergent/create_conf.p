@@ -5,7 +5,6 @@ DEF VAR liMode_ra AS INT INIT 1.
 DEF VAR liModeBI AS INT INIT 1.
 DEF VAR liModeCCN AS INT INIT 1.
 DEF VAR liModeTariff AS INT INIT 1.
-DEF VAR liModeDC AS INT INIT 1.
 
 DEF TEMP-TABLE ttRequestAction NO-UNDO LIKE RequestAction.
 DEF TEMP-TABLE ttBillItem NO-UNDO LIKE BillItem.
@@ -715,34 +714,4 @@ IF NOT AVAIL Daycampaign THEN DO:
 
 END.
 
-DEF TEMP-TABLE ttDaycampaign NO-UNDO LIKE Daycampaign.
 
-FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
-                                             INPUT icEvent AS CHAR,
-                                             INPUT icname AS CHAR,
-                                             INPUT icdctype AS CHAR,
-                                             INPUT iiUpdateMode AS INT):
-   FIND FIRST Daycampaign WHERE
-              Daycampaign.brand EQ "1" AND
-              Daycampaign.dcevent EQ icBaseDCEvent NO-ERROR.
-      CREATE ttDaycampaign.
-      BUFFER-COPY daycampaign TO ttDaycampaign.
-      ttDaycampaign.dctype = icDctype.
-      ttDaycampaign.dcevent = icevent.
-      ttDaycampaign.billcode = icevent + "MF".
-      ttDaycampaign.feemodel = icevent + "MF".
-      ttDaycampaign.dcname = icName.
-      ttDaycampaign.bundleupsell = "".
-
-      IF iiUpdateMode NE 0 THEN DO:
-         CREATE Daycampaign.
-         BUFFER-COPY ttDaycampaign TO Daycampaign.
-         DELETE ttDaycampaign. /*ror safety reasons*/
-      END.
-      ELSE DISP ttDayCampaign.
-
-END.
-
-fcreateDaycampaign("CONTS2GB","CONTDSL","La Combinada 20","1",limodedc).
-fcreateDaycampaign("CONTS10GB","CONTFH50","La Combinada 50","1",limodedc).
-fcreateDaycampaign("CONTS2GB","CONTFH300","La Combinada 300","1",limodedc).
