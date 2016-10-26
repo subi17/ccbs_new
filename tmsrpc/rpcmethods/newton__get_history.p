@@ -116,7 +116,7 @@ FOR EACH MsRequest NO-LOCK USE-INDEX MsSeq WHERE
       WHEN 10 THEN 
          IF LOOKUP(STRING(MsRequest.ReqStatus),"0,2,8") = 0 THEN NEXT.
       WHEN 15 THEN DO:
-         IF LOOKUP(STRING(MsRequest.ReqStatus),"0,2,19") = 0 THEN NEXT.
+         IF LOOKUP(STRING(MsRequest.ReqStatus),"0,2,19,20") = 0 THEN NEXT.
       END.
       WHEN {&REQTYPE_BUNDLE_CHANGE} THEN DO:
          IF LOOKUP(STRING(MsRequest.ReqStatus),"0,2,8") = 0 THEN NEXT.
