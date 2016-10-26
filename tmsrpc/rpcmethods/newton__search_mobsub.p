@@ -77,7 +77,7 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
       FIRST MsRequest NO-LOCK WHERE
             MsRequest.MsSeq   = mobsub.msseq AND
             MsRequest.ReqType = {&REQTYPE_ICC_CHANGE} AND
-            MsRequest.Reqstatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}) THEN
+            LOOKUP(STRING(MsRequest.Reqstatus),"19,20") > 0) THEN
       add_boolean(sub_struct, "notification", TRUE).
 
 END FUNCTION. 

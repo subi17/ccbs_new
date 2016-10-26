@@ -501,7 +501,7 @@ PROCEDURE pCreateReq:
                     "MobSub",
                     STRING(liMsSeq),
                     liCustNum,
-                    "Cambio de nÃºmero ICC",
+                    "Cambio de número ICC",
                     STRING("Solicitado por el cliente") +
                     STRING("~n Old ICC:" + lcOldICC +
                            "~n New ICC:" + lcICC)).
