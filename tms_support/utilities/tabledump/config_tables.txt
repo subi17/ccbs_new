@@ -146,6 +146,7 @@ TaxZone
 TCC
 TerminalConf
 TerminalStock
+TFConf
 TMRItemValue
 TMRLimit
 TMRule
