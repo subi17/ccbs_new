@@ -539,7 +539,7 @@ FUNCTION fDelivSIM RETURNS LOG
                   lcShippingCostBillCode = BillItem.BillCode
                   ldeVatPerc             = fTaxPerc(lcTaxZone,BillItem.TaxClass,ldaOrderDate)
                   ldeShippingCostAmt     = fGetOrderAction(Order.OrderID, {&ORDERACTION_ITEMTYPE_SHIPPING_COST})
-                  ldeShippingCostAmt     = fRowVat(Invoice.VatIncl,ldeShippingCostAmt,ldeVatPerc)
+                  ldeShippingCostAmt     = ldeShippingCostAmt - fRowVat(Invoice.VatIncl,ldeShippingCostAmt,ldeVatPerc)
                   .
             END.
          END.
