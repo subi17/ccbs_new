@@ -12,7 +12,7 @@
 
 DEF INPUT  PARAMETER msseq  AS INT .
 
-DEF VAR menuc      AS CHAR EXTENT 8 NO-UNDO.
+DEF VAR menuc      AS CHAR EXTENT 10 NO-UNDO.
 DEF VAR lcUserName AS CHAR NO-UNDO FORMAT "X(30)".
 DEF VAR lhSub AS HANDLE NO-UNDO. 
 
@@ -48,6 +48,12 @@ DO WHILE TRUE:
  "F) Minimum Consumption         "                    @ menuc[6] SKIP
  "G) EDR Browse                  "                    @ menuc[7] SKIP
  "H) NRTRDE Browse               "                    @ menuc[8] SKIP
+ "I) Fixed Calls Browse          "  WHEN MobSub.FixedNumber > "" 
+                                                      @ menuc[9] SKIP
+ "J) Fixed Calls Value           "  WHEN MobSub.FixedNumber > "" 
+                                                      @ menuc[10] SKIP
+
+
  
    WITH OVERLAY WIDTH 40 FRAME choices NO-LABELS.
    CHOOSE FIELD menuc AUTO-RETURN go-on (F8) WITH FRAME choices
@@ -62,7 +68,7 @@ DO WHILE TRUE:
    END.   
 
    ELSE IF FRAME-INDEX = 2 THEN DO:
-      RUN msisdniv.p(Mobsub.MsSeq).
+      RUN msisdniv.p(Mobsub.MsSeq, FALSE).
    END.
 
    ELSE IF FRAME-INDEX = 3 THEN DO:
@@ -88,8 +94,17 @@ DO WHILE TRUE:
    ELSE IF FRAME-INDEX = 8 THEN DO:
       RUN fraudm.p(lhSub::cli).
    END.
-             
-   ELSE IF FRAME-INDEX > 8 OR FRAME-INDEX = 0 THEN LEAVE.
+
+   ELSE IF FRAME-INDEX = 9 THEN DO:   
+      IF MobSub.FixedNumber > "" THEN RUN mobcallm.p(MobSub.fixednumber).
+   END.
+
+   ELSE IF FRAME-INDEX = 10 THEN DO:   
+      IF MobSub.FixedNumber > "" THEN RUN msisdniv.p(Mobsub.MsSeq, TRUE).
+   END.
+
+            
+   ELSE IF FRAME-INDEX > 10 OR FRAME-INDEX = 0 THEN LEAVE.
 
 END. /* DO WHILE */
 

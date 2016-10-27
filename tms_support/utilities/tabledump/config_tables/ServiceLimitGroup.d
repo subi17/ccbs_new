@@ -16,6 +16,7 @@
 "1" "CONTDATAACT" "Contrato Datos 1st period" 11/06/08 31/12/54
 "1" "CONTDATAEND" "Contr.datos 1. and last period" 01/01/09 31/12/49
 "1" "CONTDATA_UPSELL" "Contrato Datos Upsell Bundle" 01/11/10 31/12/49
+"1" "CONTDSL" "Contrato DSL" 27/10/16 31/12/49
 "1" "CONTF10" "Contrato 10 flat rate" 22/02/12 31/12/49
 "1" "CONTF11" "Contrato Flat 11" 14/04/15 31/12/49
 "1" "CONTF20" "Contrato 20 flat rate" 01/12/11 31/12/49
@@ -25,6 +26,8 @@
 "1" "CONTF55" "Contrato 55 flat rate" 01/12/11 31/12/49
 "1" "CONTF8" "Contrato Flat 8" 14/04/15 31/12/49
 "1" "CONTFF2" "Fusion 2 Flat service package" 01/10/13 31/12/49
+"1" "CONTFH300" "Contrato FH300" 27/10/16 31/12/49
+"1" "CONTFH50" "Contrato FH50" 27/10/16 31/12/49
 "1" "CONTRATO2" "Contrato2 Flat rates" 01/01/07 31/12/50
 "1" "CONTS12" "Contrato S 12" 14/04/15 31/12/49
 "1" "CONTS15" "Contrato S" 01/09/13 31/12/49
@@ -33,6 +36,7 @@
 "1" "CONTS21" "Contrato S" 01/05/14 31/12/49
 "1" "CONTS25" "Contrato S" 01/09/13 31/12/49
 "1" "CONTS26" "Contrato S" 01/05/14 31/12/49
+"1" "CONTS2GB" "La Combinada 20 Naranja" 27/10/16 31/12/49
 "1" "CONTS30" "Contrato S" 01/05/12 31/12/49
 "1" "CONTS32" "Contrato S" 01/05/14 31/12/49
 "1" "CONTS35" "Contrato S" 01/09/13 31/12/49

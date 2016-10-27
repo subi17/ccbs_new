@@ -106,7 +106,14 @@ FUNCTION fAnalyseTimeTable RETURNS LOGIC
          END.
       END.
    END.
-   
+
+   /* Trigger level */ 
+   IF DFTimeTable.DumpTrigger THEN
+   DO ldtCnt = pFromDate TO pToDate:
+      CREATE ttDays.
+      ASSIGN ttDays.MonthDay = ldtCnt.
+   END.
+
    IF DFTimeTable.DumpTime > "" THEN 
    DO liCnt = 1 TO NUM-ENTRIES(DFTimeTable.DumpTime):
               
@@ -136,4 +143,23 @@ FUNCTION fAnalyseTimeTable RETURNS LOGIC
       END.
    END.   
 END FUNCTION.
- 
+
+FUNCTION fResetDumpTrigger RETURNS LOGICAL 
+    (INPUT liDumpID   AS INTEGER,
+     INPUT lcDumpMode AS CHARACTER):
+
+   FIND FIRST DFTimeTable EXCLUSIVE-LOCK WHERE 
+              DFTimeTable.Brand       = gcBrand    AND 
+              DFTimeTable.DumpId      = liDumpID   AND 
+              DFTimeTable.DumpMode    = lcDumpMode AND 
+              DFTimeTable.DumpTrigger = YES        NO-ERROR. 
+
+   IF AVAIL DFTimeTable THEN DO:
+      DFTimeTable.DumpTrigger = NO.
+      RETURN TRUE.
+   END.   
+   ELSE 
+      RETURN FALSE.
+
+END.    
+

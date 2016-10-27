@@ -40,7 +40,6 @@ DEFINE VARIABLE ocResult      AS CHAR      NO-UNDO.
 DEFINE VARIABLE ocError       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcURL         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE clsNagios     AS CLASS Class.nagios    NO-UNDO.
-DEFINE VARIABLE clsTimeDate   AS CLASS Class.timedate  NO-UNDO.
 DEFINE VARIABLE liTime        AS INTEGER   NO-UNDO.
 DEFINE VARIABLE llTime        AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE lhSocket      AS HANDLE NO-UNDO.
@@ -65,7 +64,6 @@ DEFINE STREAM sLog.
 DEFINE STREAM sLogFile.
 
 clsNagios   = NEW Class.nagios().
-clsTimeDate = NEW Class.timedate().
 
 ASSIGN
    lcLogPath   = fCParamC4(gcBrand,"SOG","LogDirectory")
@@ -216,7 +214,7 @@ PROCEDURE pSogRequest:
    FOR EACH Solog NO-LOCK WHERE 
             Solog.Brand        = gcBrand    AND 
             Solog.Stat         = 0          AND 
-            Solog.TimeSlotTMS <= clsTimeDate:MakeTS()
+            Solog.TimeSlotTMS <= Class.timedate:MakeTS()
    BREAK BY Solog.TimeSlotTMS     .
 
       /* Staging TMS (merak) can access production EMA.
@@ -249,7 +247,7 @@ PROCEDURE pSogRequest:
       PAUSE 0.
       
       disp 
-         clsTimeDate:TS2HMS(solog.timeslottms) @ lctime2 "  " 
+         Class.timedate:TS2HMS(solog.timeslottms) @ lctime2 "  " 
          ocError
          lcCommandLine
       WITH  FRAME   frmDetail.

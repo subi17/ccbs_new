@@ -178,7 +178,8 @@ PUT STREAM sFile UNFORMATTED
     "DataAmt(MB)"          lcDelimiter
     "Quantity"             lcDelimiter
     "AmountEUR"            lcDelimiter
-    "TariffBundle"         SKIP.
+    "TariffBundle"         lcDelimiter
+    "FixedNumber"          SKIP.
 
 
 Invoices:
@@ -250,7 +251,8 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
                  ROUND(InvRowCounter.DataAmt / (1024 * 1024),4) lcDelimiter
                  InvRowCounter.Quantity                   lcDelimiter
                  ROUND(InvRowCounter.Amount,4)            lcDelimiter
-                 lcBundle                                 SKIP.
+                 lcBundle                                 lcDelimiter
+                 SubInvoice.FixedNumber                   SKIP.
 
    END. /* FOR EACH InvRowCounter */
 
@@ -296,7 +298,8 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
                     0                                lcDelimiter
                     InvRow.Qty                       lcDelimiter
                     ROUND(InvRow.Amt,4)              lcDelimiter
-                    lcBundle                         SKIP.
+                    lcBundle                         lcDelimiter
+                    SubInvoice.FixedNumber           SKIP.
 
    END. /* FOR EACH InvRow NO-LOCK WHERE */   
 END. /* for EACH Invoice NO-LOCK USE-INDEX InvDate WHERE */

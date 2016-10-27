@@ -16,14 +16,14 @@
   Output .......: success;boolean
 ---------------------------------------------------------------------- */
 {xmlrpc/xmlrpc_access.i}
-{commpaa.i}
+{Syst/commpaa.i}
 gcBrand = "1".
-{cparam2.i}
-{fcreatereq.i}
-{mnp.i}
-{timestamp.i}
-{tmsconst.i}
-{freacmobsub.i}
+{Func/cparam2.i}
+{Func/fcreatereq.i}
+{Mnp/mnp.i}
+{Func/timestamp.i}
+{Syst/tmsconst.i}
+{Func/freacmobsub.i}
 
 DEFINE VARIABLE liMsSeq           AS INTEGER     NO-UNDO.
 DEFINE VARIABLE ldActStamp        AS DECIMAL     NO-UNDO.

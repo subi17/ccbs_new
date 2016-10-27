@@ -86,10 +86,10 @@ DEF VAR lcFixedLineType  AS CHAR NO-UNDO.
 
 form
     CliType.Brand      FORMAT "X(2)" COLUMN-LABEL "Br"
-    CLIType.CLIType        
-    CLIType.CLIName    format "x(19)"
-    CLIType.PricePlan  COLUMN-LABEL "RatePlan"
-    CLIType.DiscPlan   COLUMN-LABEL "Disc.Plan"
+    CLIType.CLIType    FORMAT "X(12)"    
+    CLIType.CLIName    format "x(18)"
+    CLIType.PricePlan  COLUMN-LABEL "RatePlan" FORMAT "X(13)"
+    CLIType.DiscPlan   COLUMN-LABEL "Disc.Plan" FORMAT "X(9)"
     lcPayType          FORMAT "X(10)" COLUMN-LABEL "PayType"
     CliType.BillTarget COLUMN-LABEL "B.Target"
 
@@ -103,7 +103,7 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
 {brand.i}
 
 form
-    "CLIType ......:"  CLIType.CLIType SKIP
+    "CLIType ......:"  CLIType.CLIType FORMAT "X(12)" SKIP
     "Name .........:"  CLIType.CLIName              SKIP
     "Base bundle...:"  CLIType.BaseBundle SKIP
     "Payment Type .:"  CLIType.PayType
@@ -112,7 +112,7 @@ form
     "Usage Type....:"  AT 35 CLIType.UsageType
         HELP "1=Voice, 2=Data"
         lcUsageType NO-LABEL FORMAT "X(15)" SKIP
-    "Rate plan ....:"  CLIType.PricePlan   PLName   SKIP
+    "Rate plan ....:"  CLIType.PricePlan FORMAT "X(13)" PLName   SKIP
     "Disc. plan ...:"  CLIType.DiscPlan    DPName   SKIP
     
     "Service pack .:"  CliType.ServicePack FORMAT "x(2)" 
@@ -163,7 +163,7 @@ FRAME lis.
 form /* seek  CLIType */
    "Brand Code:" lcBrand  HELP "Enter Brand"
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
-    "CliType ..:"  CLIType                
+    "CliType ..:"  CLIType FORMAT "X(12)"               
     HELP "Enter Code of Cli Type"
     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
