@@ -605,16 +605,22 @@ REPEAT WITH FRAME sel:
 
      IF LOOKUP(nap,"f4") > 0 AND ufk[4] > 0 THEN DO:
         RUN local-find-this(false).
-      
-        RUN selectbox(
-           "PERIODICAL CONTRACT FUNCTION",
-           " CREATE NEW CONTRACT      ",
-           OUTPUT lcSelected).
-            
-        CASE lcSelected: 
-           WHEN " CREATE NEW CONTRACT      " THEN RUN dccliadd.p(iiKey).
+        /*YPR-4775*/
+        /*Operation is not allowed if fixed line provisioning is pending*/
+        IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN DO:
+           MESSAGE "Mobile line provisioning is not complete"
+              VIEW-AS ALERT-BOX.
         END.
-         
+        ELSE DO:
+           RUN selectbox(
+              "PERIODICAL CONTRACT FUNCTION",
+              " CREATE NEW CONTRACT      ",
+              OUTPUT lcSelected).
+            
+           CASE lcSelected: 
+              WHEN " CREATE NEW CONTRACT      " THEN RUN dccliadd.p(iiKey).
+           END.
+        END. 
         ufkey = true.
         
      END.

@@ -69,8 +69,8 @@ RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "DCServiceCompone
 RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "CLIType" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
 RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "CTServPac" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
 RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "RepText" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
+RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "CTServEl" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
 */
-
 NEW-TARIFF:
 DO TRANSACTION:
    ASSIGN
@@ -145,3 +145,4 @@ DO TRANSACTION:
    INPUT STREAM sFile CLOSE.
 
 END. /* do */
+

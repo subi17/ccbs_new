@@ -211,16 +211,16 @@ PROCEDURE pCreatePortabilityMessageXML:
    IF OrderCustomer.CustIdType = "CIF" THEN DO:
       IF LENGTH(OrderCustomer.Company) > {&COMPANY_NAME_LIMIT} THEN  /* YOT-4107 Max chars 64 */
       add_string(lcDatosPersonales, "razonSocial", 
-                 fConvertToUTF8(SUBSTRING(OrderCustomer.Company,1,{&COMPANY_NAME_LIMIT}))).
-      ELSE add_string(lcDatosPersonales, "razonSocial", fConvertToUTF8(OrderCustomer.Company)).
+                 SUBSTRING(OrderCustomer.Company,1,{&COMPANY_NAME_LIMIT})).
+      ELSE add_string(lcDatosPersonales, "razonSocial", OrderCustomer.Company).
    END.
    ELSE DO:
       IF OrderCustomer.CustIdType NE "NIF" THEN
          add_string(lcDatosPersonales, "nacionalidad", OrderCustomer.Nationality).
-      add_string(lcDatosPersonales, "nombre", fConvertToUTF8(OrderCustomer.FirstName)).
-      add_string(lcDatosPersonales, "primerApellido", fConvertToUTF8(OrderCustomer.Surname1)).
+      add_string(lcDatosPersonales, "nombre", OrderCustomer.FirstName).
+      add_string(lcDatosPersonales, "primerApellido", OrderCustomer.Surname1).
       IF OrderCustomer.SurName2 NE "" THEN 
-         add_string(lcDatosPersonales, "segundoApellido", fConvertToUTF8(OrderCustomer.Surname2)).
+         add_string(lcDatosPersonales, "segundoApellido", OrderCustomer.Surname2).
    END.
 
    add_string(lcReqStruct, "codigoContrato", MNPProcess.FormRequest).
