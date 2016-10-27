@@ -102,10 +102,12 @@ DEFINE VARIABLE liDSSMsSeq             AS INT     NO-UNDO.
 DEFINE VARIABLE lcAllowedDSS2SubsType  AS CHAR    NO-UNDO.
 DEFINE VARIABLE lcBundleId             AS CHAR    NO-UNDO.
 DEFINE VARIABLE lcBankAccount          AS CHAR    NO-UNDO.
+DEFINE VARIABLE llCallProc             AS LOGICAL NO-UNDO.
 
 DEFINE BUFFER bSubMsRequest  FOR MsRequest.
 DEFINE BUFFER bOrder         FOR Order.
 DEFINE BUFFER lbMobSub       FOR MobSub.
+DEFINE BUFFER bMobSub        FOR MobSub.
 
 IF MsRequest.ReqStatus <> 6 THEN RETURN.
 
@@ -183,6 +185,28 @@ DO TRANSACTION:
       MSOWner.TSEnd = 99999999.99999.
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSOWNER).
    END. /* ELSE DO: */
+
+   /* YDR-2052 */
+   IF NOT TermMobSub.PayType AND 
+      CAN-FIND(FIRST Customer NO-LOCK WHERE
+                     Customer.CustNum = TermMobsub.CustNum     AND
+                     Customer.deltype = {&INV_DEL_TYPE_PAPER}) THEN
+   DO:
+      llCallProc = TRUE.
+
+      FOR EACH bMobSub NO-LOCK WHERE
+               bMobsub.Brand    = gcBrand            AND
+               bMobSub.CustNum  = TermMobSub.CustNum AND
+               bMobSub.MsSeq   <> TermMobSub.MsSeq   AND
+               bMobSub.PayType  = NO:
+         llCallProc = NO.
+         LEAVE.
+      END.
+
+      IF llCallProc THEN
+         RUN pChangeDelType(TermMobSub.CustNum).
+
+   END. 
 
    CREATE Mobsub.
    BUFFER-COPY TermMobsub TO Mobsub.
@@ -952,3 +976,41 @@ PROCEDURE pRecoverSTC PRIVATE:
                        "Subscription reactivation: STC/BTC recovery failed",
                        lcInfo).
 END PROCEDURE. /* pRecoverSTC */
+
+PROCEDURE pChangeDelType:
+   DEFINE INPUT PARAMETER liCustNum AS INTEGER NO-UNDO.
+
+   DEF VAR lhCustomer AS HANDLE NO-UNDO. 
+
+   lhCustomer = BUFFER Customer:HANDLE.
+
+   RUN StarEventInitialize(lhCustomer). 
+   
+   FIND FIRST Customer EXCLUSIVE-LOCK WHERE 
+              Customer.CustNum = liCustNum NO-ERROR.
+
+   IF AVAILABLE Customer THEN      
+   DO:
+      /* If customer deliverytype is paper & subscription is reactivated, 
+         THEN check eventlog and revert back old delivery type option (email OR sms). */
+
+      FIND FIRST EventLog NO-LOCK USE-INDEX TableName WHERE 
+                 EventLog.TableName            = "Customer"               AND 
+                 EventLog.Key                  = STRING(Customer.CustNum) AND 
+                 EventLog.Action               = "Modify"                 AND   
+          LOOKUP("DelType",EventLog.Datavalues,CHR(255)) > 0              NO-ERROR.
+      
+      IF AVAIL EventLog AND 
+               EventLog.UserCode = "TermSub" THEN DO:
+
+         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).
+
+         Customer.DelType = INT(ENTRY(2,EventLog.Datavalues,CHR(255))).
+
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+
+      END.   
+
+   END.  
+
+END PROCEDURE.

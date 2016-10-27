@@ -118,7 +118,7 @@ WITH OVERLAY ROW FrmRow FrmDown DOWN centered
     FRAME sel.
 
 form
-    "MSISDN Number ...:" MSOwner.CLI   NO-LABEL SKIP
+    "MSISDN Number ...:" MSOwner.CLI FORMAT "x(34)" NO-LABEL SKIP
     "Subscription ID .:" MsOwner.MsSeq NO-LABEL SKIP
     "Agr.Customer ....:" MSOwner.AgrCust NO-LABEL
        lcAgrName  AT 35 FORMAT "X(40)" NO-LABEL SKIP
@@ -727,6 +727,8 @@ PROCEDURE local-UPDATE-record:
               
       DISP 
       MSOwner.CLI
+      MSOwner.CLI + " / " + MSOwner.FixedNumber WHEN
+         MSOwner.FixedNumber NE "" AND MSOwner.FixedNumber NE ? @ MSOwner.CLI
       MSOwner.MsSeq
       MsOwner.AgrCust lcAgrName
       MsOwner.InvCust lcInvName

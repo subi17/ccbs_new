@@ -45,7 +45,7 @@ DEF VAR lcTerminated        AS CHAR    NO-UNDO FORMAT "X(48)" .
 
 FORM
 "SubscriptionID:"   TermMobSub.msseq   "CliType...:" AT 50 TermMobSub.clitype     SKIP
-"MSISDN........:"   TermMobSub.cli     "BillTarget:" AT 50 lcBillTarget      SKIP
+"MSISDN........:"   TermMobSub.cli FORMAT "x(30)" "BillTarget:" AT 50 lcBillTarget      SKIP
 "ICC/SIM.......:"   TermMobSub.icc     "PUK1......:" AT 50 Imsi.Puk1         SKIP
 "Subscr.Status.:"   lcStatus           "PUK2......:" AT 50 Imsi.Puk2             SKIP
 "Number Inquiry:"   lcNumberInquiry    "PIN1......:" AT 50 IMSI.PIN1         SKIP
