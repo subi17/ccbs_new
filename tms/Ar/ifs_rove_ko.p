@@ -10,6 +10,7 @@
 {dumpfile_run.i}
 {timestamp.i}
 {tmsconst.i}
+{Mc/shipping_cost.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -52,8 +53,11 @@ PROCEDURE pDump:
       FIRST Order NO-LOCK USE-INDEX OrderId WHERE
             Order.Brand = gcBrand AND
             Order.OrderId = OrderTimeStamp.OrderId AND
+            Order.PayType = FALSE AND
             LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 AND
-            Order.Invnum = 0 AND
+            ( Order.InvNum = 0 OR
+              ( Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST} AND
+                fTerminalOrder(Order.InvNum) ) ) AND
             INDEX(Order.OrderChannel,"pos") = 0 AND
             INDEX(Order.OrderChannel,"retention") = 0,
       FIRST OrderPayment NO-LOCK WHERE
@@ -85,8 +89,11 @@ PROCEDURE pDumpRetention:
       FOR FIRST Order NO-LOCK USE-INDEX OrderId WHERE
                 Order.Brand = gcBrand AND
                 Order.OrderId = liOrderId AND
+                Order.PayType = FALSE AND
                 LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 AND
-                Order.Invnum = 0 AND
+                ( Order.InvNum = 0 OR
+                 ( Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST} AND
+                   fTerminalOrder(Order.InvNum) ) ) AND
                 LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) = 0,
          FIRST OrderPayment NO-LOCK WHERE
                OrderPayment.Brand = gcBrand AND
@@ -140,8 +147,11 @@ PROCEDURE pDumpSubTerm:
       FOR FIRST Order NO-LOCK USE-INDEX OrderId WHERE
                 Order.Brand = gcBrand AND
                 Order.OrderId = liOrderId AND
+                Order.PayType = FALSE AND
                 LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 AND
-                Order.Invnum = 0 AND
+                ( Order.InvNum = 0 OR
+                 ( Order.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST} AND
+                   fTerminalOrder(Order.InvNum) ) ) AND
                 INDEX(Order.OrderChannel,"pos") = 0 AND
                 INDEX(Order.OrderChannel,"retention") = 0,
          FIRST OrderPayment NO-LOCK WHERE

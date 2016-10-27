@@ -21,6 +21,7 @@
 {dextra.i}
 {cparam2.i}
 {main_add_lines.i}
+{Mc/shipping_cost.i}
 
 /* set status of order */
 FUNCTION fSetOrderStatus RETURNS LOGICAL
@@ -86,8 +87,13 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                END.
 
                /* YDR-695 */
-               IF bfOrder.InvNum = 0 AND
-                  bfOrder.OrderChannel BEGINS "retention" THEN
+               IF bfOrder.OrderChannel BEGINS "retention" AND
+                  bfOrder.PayType = FALSE AND
+                  ( bfOrder.InvNum = 0 OR
+                   ( bfOrder.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST} AND
+                     fTerminalOrder(bfOrder.InvNum) )
+                  )
+                  THEN
                   FOR FIRST OrderPayment NO-LOCK WHERE
                             OrderPayment.Brand = gcBrand AND
                             OrderPayment.OrderId = bfOrder.OrderId AND
