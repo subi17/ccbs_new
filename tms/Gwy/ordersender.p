@@ -26,6 +26,7 @@
 {forderstamp.i}
 {orderfunc.i}
 {freacmobsub.i}
+{Func/fixedlinefunc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER katun
