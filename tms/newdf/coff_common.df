@@ -1,6 +1,6 @@
 ADD FIELD "FixedNumber" ON "SubInvoice" AS character 
   FORMAT "x(11)"
-  INITIAL ""
+  INITIAL ?
   LABEL "FixedNumber"
   ORDER 230
 

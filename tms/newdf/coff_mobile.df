@@ -1,6 +1,6 @@
 ADD FIELD "FixedNumber" OF "MSOwner" AS character 
   FORMAT "x(11)"
-  INITIAL ""
+  INITIAL ? 
   LABEL "Fixed Number"
   COLUMN-LABEL "FixedNumber"
   HELP "Fixed line number"
