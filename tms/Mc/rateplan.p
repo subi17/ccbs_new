@@ -62,7 +62,7 @@ DEF BUFFER bRatePlan FOR RatePlan.
 
 form
     RatePlan.Brand  
-    RatePlan.RatePlan      /* column-label format */
+    RatePlan.RatePlan FORMAT "X(13)" /* column-label format */
     RatePlan.RPName     /* column-label format */
 WITH ROW FrmRow width 80 overlay FrmDown  down
     COLOR VALUE(cfc)
@@ -72,7 +72,7 @@ WITH ROW FrmRow width 80 overlay FrmDown  down
     FRAME sel.
 
 form
-    RatePlan.RatePlan     /* label format */
+    RatePlan.RatePlan FORMAT "X(13)"    /* label format */
     RatePlan.RPName       /* label format */
 
 WITH  overlay row 4 centered

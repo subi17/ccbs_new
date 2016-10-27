@@ -78,8 +78,8 @@ DEF TEMP-TABLE ttAction NO-UNDO
    
 FORM
     RequestAction.RequestActionID FORMAT ">>>>9" 
-    lcPayType  FORMAT "X(9)" COLUMN-LABEL "PayType"
-    RequestAction.CLIType  FORMAT "X(9)"
+    lcPayType  FORMAT "X(5)" COLUMN-LABEL "PType"
+    RequestAction.CLIType  FORMAT "X(13)"
     RequestAction.ActionType FORMAT "X(18)" 
     RequestAction.ActionKey
     lcAction FORMAT "X(11)" COLUMN-LABEL "Action"

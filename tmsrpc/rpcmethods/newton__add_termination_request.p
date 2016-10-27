@@ -146,7 +146,7 @@ IF piOrderer EQ 5 THEN DO:
 
 END.
 
-liError = fDeleteMsValidation(piMsSeq,ocResult).
+liError = fDeleteMsValidation(piMsSeq, piOrderer, ocResult).
 IF liError EQ 3 THEN DO:
    RETURN appl_err("Ongoing termination requests"). 
 END.
