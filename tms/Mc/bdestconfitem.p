@@ -58,7 +58,7 @@ DEF VAR lcRateCCN    AS CHAR NO-UNDO.
 
 
 FORM
-    BDestConfItem.RateCCN   
+    BDestConfItem.RateCCN FORMAT ">>>9"  
     BDestConfItem.BDest    
     BDestConfItem.FromDate 
     BDestConfItem.ToDate 
@@ -73,7 +73,7 @@ FORM
     BDestConfItem.BDCGroup   COLON 20 FORMAT "X(20)" SKIP
        BDestConf.BDCName NO-LABEL AT 22 FORMAT "X(40)" SKIP
     BDestConfItem.BDCItemID  COLON 20 SKIP(1)
-    BDestConfItem.RateCCN    COLON 20 
+    BDestConfItem.RateCCN    FORMAT ">>>9" COLON 20 
        lcRateCCN FORMAT "X(30)" NO-LABEL SKIP
     BDestConfItem.BDest  COLON 20 
        lcBDest FORMAT "X(30)" NO-LABEL SKIP

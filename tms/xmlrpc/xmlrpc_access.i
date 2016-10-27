@@ -146,6 +146,7 @@ FUNCTION add_string RETURN LOGICAL
         pname AS CHAR,
         pvalue AS CHAR):
     IF pvalue EQ ? THEN RETURN FALSE.
+    pvalue = CODEPAGE-CONVERT(pvalue, "UTF-8", SESSION:CHARSET) NO-ERROR.
     _add_value(pparent, pname, "string", pvalue).
     RETURN TRUE.
 END.
@@ -694,11 +695,6 @@ IF CAN-FIND(tt_param
     add_boolean(response_toplevel_id, "", true).
     RETURN.
 END.
-
-FUNCTION fConvertToUTF8 RETURNS CHAR 
-   (icParam AS CHAR):
-   RETURN CODEPAGE-CONVERT(icParam,"UTF-8",SESSION:CHARSET).
-END FUNCTION. 
 
 &ENDIF
 &ENDIF
