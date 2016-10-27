@@ -76,6 +76,7 @@ form
     BItemGroup.Brand 
     BItemGroup.BIGroup   /* column-label "Gr. code"   */
     BItemGroup.BIGName   /* column-label "Group name" */
+    BItemGroup.GroupType
     lcDoc1              FORMAT "X(8)" COLUMN-LABEL "Doc1"
     lcGraph             FORMAT "X(8)" COLUMN-LABEL "Graph"
     BItemGroup.InvoiceOrder
@@ -88,6 +89,7 @@ form
     BItemGroup.Brand   COLON 20
     BItemGroup.BIGroup COLON 20  
     BItemGroup.BIGName COLON 20
+    BItemGroup.GroupType COLON 20
     lcDoc1  COLON 20
        FORMAT "X(8)"
        LABEL "Doc1 Group"
@@ -225,6 +227,7 @@ add-new:
             BItemGroup.Brand   = lcBrand
             BItemGroup.BIGroup = INPUT FRAME lis BItemGroup.BIGroup.
             UPDATE BItemGroup.BIGName.
+            UPDATE BItemGroup.GroupType.
             ASSIGN
             memory = recid(BItemGroup)
             xrecid = memory.
@@ -601,6 +604,7 @@ BROWSE:
           BItemGroup.Brand
           BItemGroup.BIGroup
           BItemGroup.BIGName
+          BItemGroup.GroupType
           lcDoc1
           lcGraph
           BItemGroup.InvoiceOrder.
@@ -613,6 +617,7 @@ BROWSE:
            REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
               UPDATE 
                  BItemGroup.BIGName
+                 BItemGroup.GroupType
                  lcDoc1
                  lcGraph
                  BItemGroup.InvoiceOrder
