@@ -261,7 +261,7 @@ FORM
          VALIDATE(lcNewCustIdType NE "", lcError)
       lcNewCustId 
          NO-LABEL
-         FORMAT "X(12)"
+         FORMAT "X(10)"
          HELP "Customer ID"
          VALIDATE(lcNewCustId NE "", lcError)
       SKIP
