@@ -316,6 +316,7 @@ DEF VAR llMSActLimitIsDefault AS LOG NO-UNDO.
 DEF VAR lcInvTargetRule AS CHAR NO-UNDO. 
 DEF VAR llAddressValidated AS LOG NO-UNDO. 
 DEF VAR lcProfession  AS CHAR  NO-UNDO.
+DEF VAR liCustFraudCnt AS INT  NO-UNDO.
 
 DEF VAR lcCustCOname  LIKE Customer.COName  NO-UNDO.
 DEF VAR lcCustAddress LIKE Customer.Address  NO-UNDO.
