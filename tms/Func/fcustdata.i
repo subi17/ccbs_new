@@ -306,17 +306,19 @@ FUNCTION fGetMobsubActLimit RETURNS INT
 END.
 
 FUNCTION fGetFraudSequence RETURNS INTEGER 
-    (INPUT pcOrginalId AS CHARACTER):
+    (INPUT pcCustNum AS INTEGER,
+     INPUT pcOrginalId AS CHARACTER):
         
     DEFINE BUFFER bf_Customer FOR Customer.
     
     DEFINE VARIABLE liCnt AS INTEGER NO-UNDO.
     
-    FOR EACH bf_Customer WHERE bf_Customer.Brand = gcBrand AND bf_Customer.OrgId BEGINS pcOrginalId NO-LOCK:
+    FOR EACH bf_Customer WHERE bf_Customer.Brand = gcBrand AND bf_Customer.OrgId BEGINS pcOrginalId AND bf_Customer.CustNum <> pcCustNum NO-LOCK:
         ASSIGN liCnt = liCnt + 1.
     END.
     
     RETURN (liCnt + 1).
+    
 END FUNCTION.        
 &ENDIF
 

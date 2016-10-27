@@ -342,6 +342,7 @@
                     IF INPUT FRAME lis Customer.CustIDType = "NIF" THEN DO:
                        DISPLAY lcDefCountry @ lcCustCountry.
                     END.
+                    
                     IF Customer.CustIDType <> INPUT FRAME lis Customer.CustIDType THEN DO:
                        FOR EACH CustCat NO-LOCK WHERE
                                 CustCat.Brand = gcBrand:
@@ -354,8 +355,19 @@
                          END.
                        END.
                        
-                       IF INDEX(Customer.OrgID, "-") = 0 AND LOOKUP(INPUT FRAME lis Customer.CustIDType,"Fraud,CFraud") > 0 THEN 
-                           DISPLAY Customer.OrgID + "-" + STRING(piCustFraudCnt,"99") @ Customer.OrgID WITH FRAME lis.
+                       IF LOOKUP(INPUT FRAME lis Customer.CustIDType,"Fraud,CFraud") = 0 THEN
+                       DO:
+                           IF INDEX(INPUT FRAME lis Customer.OrgID, "-") > 0 THEN 
+                               DISPLAY ENTRY(1,Customer.OrgID,"-") @ Customer.OrgID WITH FRAME lis.
+                       END.
+                       ELSE 
+                       DO: 
+                           IF INDEX(INPUT FRAME lis Customer.OrgID, "-") = 0 THEN
+                           DO:
+                               MESSAGE "piCustFraudCnt" piCustFraudCnt VIEW-AS ALERT-BOX.
+                               DISPLAY Customer.OrgID + "-" + STRING(piCustFraudCnt,"99") @ Customer.OrgID WITH FRAME lis.
+                           END.
+                       END.
                     END.
                     /* all other fields are not updateable if type is 
                        unknown */
