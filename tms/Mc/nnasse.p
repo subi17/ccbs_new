@@ -857,7 +857,7 @@ IF icType = "address_chg" AND lcRight = "RW" THEN DO:
                                OUTPUT llMSLimitIsDefault).
       pdMobSubActLimit = fGetMobSubActLimit(Customer.Custnum, 
                                             Customer.Category, 
-                                            OUTPUT llMSActLimitIsDefault)
+                                            OUTPUT llMSActLimitIsDefault).
       piCustFraudCnt = gGetFraudSequence(Customer.OrgID).                                      
        
       DISP 
