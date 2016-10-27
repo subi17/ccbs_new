@@ -312,11 +312,11 @@ DEF VAR ldOrigMSLimit AS DEC   NO-UNDO.
 DEF VAR llMSLimitIsDefault AS LOGICAL NO-UNDO.
 DEF VAR pdMobSubActLimit AS INT   NO-UNDO.
 DEF VAR ldOrigMSActLimit AS DEC   NO-UNDO.
+DEF VAR piCustFraudCnt AS INT  NO-UNDO.
 DEF VAR llMSActLimitIsDefault AS LOG NO-UNDO.
 DEF VAR lcInvTargetRule AS CHAR NO-UNDO. 
 DEF VAR llAddressValidated AS LOG NO-UNDO. 
 DEF VAR lcProfession  AS CHAR  NO-UNDO.
-DEF VAR liCustFraudCnt AS INT  NO-UNDO.
 
 DEF VAR lcCustCOname  LIKE Customer.COName  NO-UNDO.
 DEF VAR lcCustAddress LIKE Customer.Address  NO-UNDO.
@@ -857,7 +857,8 @@ IF icType = "address_chg" AND lcRight = "RW" THEN DO:
                                OUTPUT llMSLimitIsDefault).
       pdMobSubActLimit = fGetMobSubActLimit(Customer.Custnum, 
                                             Customer.Category, 
-                                            OUTPUT llMSActLimitIsDefault).
+                                            OUTPUT llMSActLimitIsDefault)
+      piCustFraudCnt = gGetFraudSequence(Customer.OrgID).                                      
        
       DISP 
           lcCountry  
