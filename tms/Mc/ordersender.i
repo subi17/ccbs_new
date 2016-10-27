@@ -14,8 +14,91 @@
                 DEFINE VARIABLE lh99Order AS HANDLE NO-UNDO.
 
             &ENDIF
-            
+                
+            /* Create separate activation request for NEW/MNP convergent fixed lines */
+            IF fIsConvergenceTariff(Order.CLIType) AND
+               (Order.OrderType EQ {&ORDER_TYPE_MNP} OR
+                Order.OrderType EQ {&ORDER_TYPE_NEW}) AND
+               NOT CAN-FIND(FIRST MsRequest WHERE
+                                  MsRequest.MsSeq   = Order.MSSeq  AND
+                                  MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE})
+               THEN DO:
 
+               FIND OrderFusion NO-LOCK WHERE
+                    OrderFusion.Brand   = Order.Brand AND
+                    OrderFusion.OrderID = Order.OrderID NO-ERROR.
+
+               IF NOT AVAIL OrderFusion OR
+                  NOT OrderFusion.FixedInstallationTS > 0 THEN DO:
+
+                  fSetOrderStatus(Order.OrderID, {&ORDER_STATUS_ERROR}).
+                  
+                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                   "Order",
+                                   STRING(Order.OrderID),
+                                   0,
+                                   "FIXED LINE ACTIVATION FAILED",
+                                   "Missing fixed line installation timestamp").
+                  NEXT {1}.
+               END.
+               
+               fSubscriptionRequest(INPUT  Order.MSSeq,
+                                    INPUT  Order.Cli,
+                                    INPUT  Order.CustNum,
+                                    INPUT  1,
+                                    INPUT  katun,
+                                    INPUT  OrderFusion.FixedInstallationTS,
+                                    INPUT  "CREATE-FIXED",
+                                    INPUT  STRING(Order.OrderId),
+                                    INPUT  "", /*for old SIM*/
+                                    INPUT  "", /*for Reason info*/
+                                    INPUT  "", /*for ContractID*/
+                                    INPUT  FALSE,
+                                    INPUT  0,
+                                    INPUT  {&REQUEST_SOURCE_NEWTON},
+                                    OUTPUT ocResult).
+
+               IF ocResult > "" THEN DO:
+                  llOrdStChg = fSetOrderStatus(Order.OrderId,
+                                               {&ORDER_STATUS_ERROR}).
+
+                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                   "Order",
+                                   STRING(Order.OrderID),
+                                   0,
+                                   "FIXED LINE ACTIVATION FAILED",
+                                   ocResult).
+                  NEXT {1}.
+               END.
+
+               IF (Order.OrderType EQ {&ORDER_TYPE_NEW} OR
+                   Order.OrderType EQ {&ORDER_TYPE_MNP}) AND
+                   CAN-FIND(FIRST Memo NO-LOCK WHERE
+                                  Memo.Brand = gcBrand AND
+                                  Memo.HostTable = "Order" AND
+                                  Memo.Keyvalue = STRING(Order.OrderID) AND
+                                  Memo.MemoText = "Fixed Cancellation failed because installation was already in place") THEN DO:
+                  fSetOrderStatus(Order.OrderID,
+                                  {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}).
+                  NEXT {1}.
+               END.
+
+               /* NOTE: this check is also in orderinctrl.p */
+               IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND
+                  Order.ICC EQ "" THEN DO:
+                  fSetOrderStatus(Order.OrderID,
+                                  {&ORDER_STATUS_PENDING_MOBILE_LINE}).
+                  NEXT {1}.
+               END.
+               
+               /* NOTE: this check is also in orderinctrl.p */
+               IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
+                  Order.PortingDate <> ? THEN DO:
+                  fSetOrderStatus(Order.OrderID,
+                                  {&ORDER_STATUS_MNP_ON_HOLD}).
+                  NEXT {1}.
+               END.
+            END.
 
             ASSIGN llOrdStChg = no.
             /* YDR-1825 MNP SIM ONLY Orders
@@ -403,7 +486,8 @@
                 NEXT {1}.
              END.
 
-             IF CAN-FIND(FIRST MobSub WHERE
+             IF NOT fIsConvergenceTariff(Order.CLIType) AND
+                CAN-FIND(FIRST MobSub WHERE
                                MobSub.CLI = Order.CLI) THEN DO:          
 
                 llOrdStChg = fSetOrderStatus(Order.OrderId,"2"). /* error */
@@ -430,7 +514,7 @@
              */  
              IF LOOKUP(Order.OrderChannel,"Yoigo,Pre-act,vip") = 0 AND
                 OrderCustomer.Email NE "" AND
-                Order.OrderType <> 3 AND
+                Order.OrderType <> 3 AND Order.OrderType <> 4 AND
                 (Order.MnpStatus = 0 OR Order.StatusCode = "3") THEN DO:  
                 
                 /* YBP-613 */

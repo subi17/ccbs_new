@@ -23,7 +23,7 @@ DEF VAR must-print  AS logic                NO-UNDO.
 DEF VAR must-add    AS logic                NO-UNDO.
 
 form
-      CLIType.Clitype
+      CLIType.Clitype format "x(12)"
       CLIType.CliName  format "x(30)"
       CLIType.StatusCode
     WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)

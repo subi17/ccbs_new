@@ -12,6 +12,7 @@
 "1" 11 "Payment Plan" "pplanreq" "" no 0 "" "" 0 no no ""
 "1" 12 "Marketing Values" "marketingreq" "" no 0 "" "" 0 no no ""
 "1" 13 "Subscription creation" "" "CreSub" yes 2 "" "" 0 no no ""
+"1" 14 "Fixed line creation" "createmobsub" "CreFixed" yes 2 "" "" 0 no no ""
 "1" 15 "ICC Change" "" "ChgICC" yes 2 "" "" 0 no no ""
 "1" 18 "Subscription termination" "" "TermSub" yes 2 "" "" 0 no no ""
 "1" 19 "MSISDN Change" "" "ChgCLI" yes 2 "" "" 0 no no ""

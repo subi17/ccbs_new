@@ -63,7 +63,8 @@ DEFINE TEMP-TABLE ttContract NO-UNDO
    FIELD ContractRowId     AS ROWID
    FIELD CLIType      LIKE MobSub.CliType
    FIELD EventTS      AS DECIMAL
-   FIELD Amount       AS DECIMAL.
+   FIELD Amount       AS DECIMAL
+   FIELD DCName       LIKE DayCampaign.DCName.
  
 DEF TEMP-TABLE ttPicked NO-UNDO 
    FIELD ContrType AS INT
@@ -325,7 +326,8 @@ PROCEDURE pReadDayCampaign:
              ttContract.DurType      = ttDayCampaign.DurType   
              ttContract.Renewal      = ttDayCampaign.Renewal
              ttContract.DurUnit      = ttDayCampaign.DurUnit
-             ttContract.DurMonths    = ttDayCampaign.DurMonths.
+             ttContract.DurMonths    = ttDayCampaign.DurMonths
+             ttContract.DCName       = ttDayCampaign.DCName.
 
 END PROCEDURE. 
 
@@ -491,6 +493,7 @@ PROCEDURE pWriteContract:
             WHEN "#Amount"  THEN IF ttContract.Amount NE ? THEN
                                  lcValue = STRING(ttContract.Amount).
                                  ELSE lcValue = "".
+            WHEN "#DCName" THEN lcValue = ttContract.DCName.                     
             OTHERWISE lcValue = "".
             END CASE.
          END.
