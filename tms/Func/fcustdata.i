@@ -96,7 +96,7 @@ FUNCTION fChkCustID RETURNS LOGICAL
    DEF VAR liIDSum  AS INT  NO-UNDO.
    DEF VAR lcIDRes  AS CHAR NO-UNDO.
    
-   IF LOOKUP(icCustIDType, "CFraud,CInternal,Fraud,Internal") = 0 AND 
+   IF LOOKUP(icCustIDType, "CFraud,Fraud") = 0 AND 
       LENGTH(icCustID) > 9 THEN
       RETURN FALSE.
         
@@ -305,5 +305,18 @@ FUNCTION fGetMobsubActLimit RETURNS INT
 
 END.
 
+FUNCTION fGetFraudSequence RETURNS INTEGER 
+    (INPUT pcOrginalId AS CHARACTER):
+        
+    DEFINE BUFFER bf_Customer FOR Customer.
+    
+    DEFINE VARIABLE liCnt AS INTEGER NO-UNDO.
+    
+    FOR EACH bfCustomer WHERE bf_Customer.Brand = gcBrand AND bf_Customer.OrgId BEGINS pcOrginalId NO-LOCK:
+        ASSIGN liCnt = liCnt + 1.
+    END.
+    
+    RETURN (liCnt + 1).
+END FUNCTION.        
 &ENDIF
 

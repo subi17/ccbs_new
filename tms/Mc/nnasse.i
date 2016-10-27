@@ -353,6 +353,12 @@
                           LEAVE.   
                          END.
                        END.
+                       
+                       IF INDEX(Customer.OrgID, "-") = 0 AND LOOKUP(INPUT FRAME lis Customer.CustIDType,"Fraud,CFraud") > 0 THEN 
+                       DO:
+                           ASSIGN liFraudCnt = gGetFraudSequence(Customer.OrgID). 
+                           DISPLAY Customer.OrgID + "-" + STRING(liFraudCnt,"99") @ Customer.OrgID WITH FRAME lis.
+                       END. 
                     END.
                     /* all other fields are not updateable if type is 
                        unknown */
