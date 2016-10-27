@@ -262,8 +262,21 @@
                     ELSE 
                     DO:
                        IF Customer.Category <> INPUT FRAME lis Customer.Category THEN 
+                       DO:
                            DISPLAY CustCat.CustIDType @ Customer.CustIDType WITH FRAME lis.
-
+                       
+                           IF LOOKUP(CustCat.CustIDType,"Fraud,CFraud") = 0 THEN
+                           DO:
+                               IF INDEX(INPUT FRAME lis Customer.OrgID, "-") > 0 THEN 
+                                   DISPLAY ENTRY(1,Customer.OrgID,"-") @ Customer.OrgID WITH FRAME lis.
+                           END.
+                           ELSE 
+                           DO: 
+                               IF INDEX(INPUT FRAME lis Customer.OrgID, "-") = 0 THEN
+                                   DISPLAY Customer.OrgID + "-" + STRING(piCustFraudCnt,"99") @ Customer.OrgID WITH FRAME lis.
+                           END.
+                           
+                       END. 
                        ASSIGN dkatnimi = CustCat.CatName.
                        DISPLAY dkatnimi.
                     END.
@@ -363,10 +376,7 @@
                        ELSE 
                        DO: 
                            IF INDEX(INPUT FRAME lis Customer.OrgID, "-") = 0 THEN
-                           DO:
-                               MESSAGE "piCustFraudCnt" piCustFraudCnt VIEW-AS ALERT-BOX.
                                DISPLAY Customer.OrgID + "-" + STRING(piCustFraudCnt,"99") @ Customer.OrgID WITH FRAME lis.
-                           END.
                        END.
                     END.
                     /* all other fields are not updateable if type is 

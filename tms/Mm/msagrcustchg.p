@@ -893,7 +893,7 @@ PROCEDURE pMsCustMove:
    DEF VAR ldaDate      AS DATE NO-UNDO. 
    DEF VAR liManTime    AS INT  NO-UNDO. 
    DEF VAR lcDate       AS CHAR NO-UNDO. 
-   DEF VAR lcOldCustIdType AS CHAR NO-UNDO.
+   DEF VAR lcNewCustIdType AS CHAR NO-UNDO.
     
    DEF BUFFER bBillTarget FOR BillTarget.
    DEF BUFFER bOwner      FOR MSOwner.
@@ -1206,9 +1206,9 @@ PROCEDURE pMsCustMove:
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhSingleFee).
       END.
       
-      ASSIGN lcOldCustIdType = getCustIdType(MobSub.InvCust).
+      ASSIGN lcNewCustIdType = getCustIdType(iiNewInvCust).
       
-      IF LOOKUP(lcOldCustIdType,"CFraud,CInternal,Fraud,Internal") = 0 AND  
+      IF LOOKUP(lcNewCustIdType,"CFraud,CInternal,Fraud,Internal") = 0 AND  
          CAN-FIND(FIRST Limit WHERE Limit.MsSeq     = MsOwner.MsSeq   AND
                                     Limit.LimitType = 3               AND
                                     Limit.TMRuleSeq = 0               AND
