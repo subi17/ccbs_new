@@ -26,6 +26,8 @@
 {ordercancel.i}
 {dextra.i}
 {main_add_lines.i}
+{Func/fixedlinefunc.i}
+{Func/orderfunc.i}
 
 DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -146,6 +148,7 @@ PROCEDURE pTerminate:
    DEF VAR ldaKillDatePostpone AS DATE NO-UNDO.
 
    DEF VAR llHardBook          AS LOG  NO-UNDO INIT FALSE.
+   DEF VAR llCallProc          AS LOG  NO-UNDO.   
    
    ASSIGN liArrivalStatus = MsRequest.ReqStatus
           liMsSeq = MsRequest.MsSeq.
@@ -839,6 +842,61 @@ PROCEDURE pTerminate:
       END.      
    END. /* IF llCloseRVTermFee THEN DO: */
 
+   FOR EACH Order NO-LOCK WHERE
+            Order.MsSeq = MobSub.MsSeq AND
+            Order.OrderType = {&ORDER_TYPE_STC} AND
+            Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE},
+      FIRST OrderFusion NO-LOCK WHERE
+            OrderFusion.Brand = gcBrand AND
+            OrderFusion.OrderID = Order.OrderID:
+
+      IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ONGOING} THEN DO:
+
+         fSetOrderStatus(Order.Orderid, {&ORDER_STATUS_IN_CONTROL}).
+         
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+              "Order",
+              STRING(Order.OrderID),
+              Order.CustNum,
+              "Order handling stopped",
+              "Subscription is terminated, Convergent order cannot proceed").
+      
+      END.
+      ELSE DO:
+         RUN fusion_order_cancel.p(Order.OrderID).
+         IF NOT RETURN-VALUE BEGINS "OK" THEN
+            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                 "Order",
+                 STRING(Order.OrderID),
+                 Order.CustNum,
+                 "Convergent order closing failed",
+                 STRING(RETURN-VALUE)).
+      END.
+   END.
+
+   /* YDR-2052, Change the delivery type to paper only if the customer 
+      don't have any other active subscription with delivery type EMAIL or SMS*/
+   IF NOT MobSub.PayType AND 
+      CAN-FIND(FIRST Customer NO-LOCK WHERE
+                     Customer.CustNum = MobSub.CustNum        AND
+                    (Customer.DelType = {&INV_DEL_TYPE_EMAIL} OR
+                     Customer.DelTYpe = {&INV_DEL_TYPE_SMS})) THEN
+   DO:
+      llCallProc = TRUE.
+      
+      FOR EACH bMobSub NO-LOCK WHERE
+               bMobsub.Brand    = gcBrand        AND
+               bMobSub.CustNum  = MobSub.CustNum AND
+               bMobSub.MsSeq   <> liMsSeq        AND 
+               bMobSub.PayType  = NO:
+         llCallProc = NO.
+         LEAVE.
+      END.
+      
+      IF llCallProc THEN   
+         RUN pChangeDelType(MobSub.CustNum).
+   END. 
+
    CREATE TermMobsub.
    BUFFER-COPY Mobsub TO TermMobsub.
    DELETE MobSub.
@@ -1102,4 +1160,42 @@ PROCEDURE pMultiSIMTermination:
                        "").
    END.
    
-END PROCEDURE. 
+END PROCEDURE.
+
+PROCEDURE pChangeDelType:
+   DEFINE INPUT  PARAMETER liCustNum AS INTEGER NO-UNDO.   
+
+   DEF VAR lhCustomer AS HANDLE NO-UNDO. 
+
+   lhCustomer = BUFFER Customer:HANDLE.
+
+   RUN StarEventInitialize(lhCustomer).
+
+   FIND FIRST Customer EXCLUSIVE-LOCK WHERE 
+              Customer.CustNum = liCustNum NO-ERROR.
+
+   IF AVAILABLE Customer THEN      
+   DO:
+
+      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).       
+
+      /* If subscription termination is on 1st day of month then change the 
+         delivery type and delivery status for invoices generated AND but not delivered */
+      IF DAY(TODAY) = 1 THEN
+      DO:
+         FOR EACH Invoice EXCLUSIVE-LOCK WHERE
+                  Invoice.Brand   = gcBrand          AND
+                  Invoice.CustNum = Customer.CustNum AND
+                  Invoice.InvDate = TODAY            AND
+                  Invoice.InvType = {&INV_TYPE_NORMAL}:
+            Invoice.DelType = {&INV_DEL_TYPE_PAPER}.
+         END.          
+      END.
+
+      Customer.DelType = {&INV_DEL_TYPE_PAPER}.
+
+      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+
+   END.
+
+END PROCEDURE.

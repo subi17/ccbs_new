@@ -20,3 +20,4 @@
 22 "Voice short number (type3)"
 41 "Roaming MO inside EU"
 47 "Roaming MT inside EU"
+50 "Fixed Voice Bdest"

@@ -6,8 +6,6 @@
    
 {commali.i}
 {eventval.i}
-{timestamp.i}
-{forderstamp.i}
 {orderfunc.i}
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 
@@ -25,13 +23,13 @@ END.
 
 FIND FIRST Order WHERE 
            Order.Brand   = gcBrand AND 
-           Order.OrderID = iiOrder EXCLUSIVE-LOCK NO-ERROR.
+           Order.OrderID = iiOrder NO-LOCK NO-ERROR.
 
 IF not avail order THEN DO:
     MESSAGE
     "Unknown order ID " iiorder
     VIEW-aS ALERT-BOX.
-    RETURN.
+    RETURN "".
 END.
 
 llOk = FALSE.
@@ -41,15 +39,20 @@ BUTTONS YES-NO
 TITLE " ORDER " + STRING(Order.OrderID) + " "
 SET llOk.
 
-IF NOT llOk THEN RETURN.
+IF NOT llOk THEN RETURN "".
+
+FIND CURRENT Order EXCLUSIVE-LOCK.
+
+IF CURRENT-CHANGED Order THEN DO:
+   MESSAGE {&MSG_RECORD_CHANGED}
+   VIEW-AS ALERT-BOX ERROR.
+   RETURN "".
+END.
 
 IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrder).
 
- fSetOrderStatus(Order.OrderId,"4").
-
-fMarkOrderStamp(Order.OrderID,
-                "Change",
-                0.0).
+fSetOrderStatus(Order.OrderId,"4").
 
 IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrder).
 
+RETURN "".
