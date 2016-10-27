@@ -22,7 +22,6 @@ p=s.newton.set_mobsub_services(var1,'operator','ilkkasav',
                                 'param':'FakeParam'
                                }],
                                {'title':'otsikko1',
-                                'reason':'Fake MemoTextByNEwton',
                                  'content':'text under otsikko1'
                                  })
 

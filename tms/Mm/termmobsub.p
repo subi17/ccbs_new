@@ -1020,6 +1020,8 @@ PROCEDURE local-UPDATE-record.
          TermMobsub.CliType 
          TermMobsub.AgrCust
          TermMobsub.CLI
+         TermMobsub.CLI + " / " + TermMobsub.FixedNumber
+            WHEN TermMobsub.FixedNumber NE ? @ TermMobsub.CLI
          lcBillTarget
          TermMobsub.Custnum
          TermMobsub.InvCust
