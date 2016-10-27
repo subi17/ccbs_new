@@ -1,0 +1,7 @@
+ADD FIELD "DumpTrigger" OF "DFTimeTable" AS logical
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Triggered Dump"
+  COLUMN-LABEL "DumpTrigger"
+  HELP "Triggered Dump"
+  ORDER 130 

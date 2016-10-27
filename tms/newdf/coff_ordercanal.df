@@ -1,0 +1,311 @@
+ADD FIELD "FixedNumber" OF "MobSub" AS character 
+  FORMAT "x(11)"
+  INITIAL ?
+  LABEL "Fixed Number"
+  COLUMN-LABEL "FixedNumber"
+  HELP "Fixed line number"
+  ORDER 895
+
+ADD INDEX "FixedNumber" ON "MobSub" 
+  AREA "Dyn_Index_1"
+  UNIQUE
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "FixedNumber" ASCENDING 
+
+ADD FIELD "FixedCurrOperCode" OF "OrderFusion" AS character 
+  FORMAT "x(7)"
+  INITIAL ""
+  LABEL "FixedCurrOperCode"
+  ORDER 190
+
+ADD FIELD "SerialNumber" OF "OrderFusion" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "SerialNumber"
+  ORDER 200
+
+ADD FIELD "AppointmentDate" OF "OrderFusion" AS character 
+  DESCRIPTION "Installation appointment info"
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Appointment Date"
+  COLUMN-LABEL "AppointmentDate"
+  ORDER 210
+
+ADD FIELD "CancellationReason" OF "OrderFusion" AS character 
+  DESCRIPTION "Installation cancellation reason"
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Cancellation Reason"
+  COLUMN-LABEL "CancellationReason"
+  ORDER 220
+
+ADD FIELD "FixedInstallationTS" OF "OrderFusion" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "FixedInstallationTS"
+  DECIMALS 5
+  ORDER 230
+
+ADD FIELD "ADSLLinkState" OF "OrderFusion" AS character 
+  FORMAT "x(5)"
+  INITIAL ""
+  LABEL "ADSL Link State"
+  COLUMN-LABEL "ADSLLinkState"
+  ORDER 250
+
+ADD FIELD "FixedStatusTS" OF "OrderFusion" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "FixedStatusTS"
+  DECIMALS 5
+  ORDER 260
+
+ADD FIELD "FusionStatusDesc" OF "OrderFusion" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Fusion Status Desc"
+  COLUMN-LABEL "FusionStatusDesc"
+  ORDER 270
+
+ADD FIELD "Gescal" OF "OrderCustomer" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  COLUMN-LABEL "Gescal"
+  LABEL "Gescal Number"
+  HELP "Address gescal number (from coverage check)"
+  ORDER 1030
+
+ADD FIELD "StreetType" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  COLUMN-LABEL "StreetType"
+  LABEL "Street Type"
+  HELP "Address street type (from coverage check)"
+  ORDER 1040
+
+ADD FIELD "BisDuplicate" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  COLUMN-LABEL "BisDuplicate"
+  LABEL "Bis"
+  HELP "Address Bis/duplicate"
+  ORDER 1050
+
+ADD FIELD "Block" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  COLUMN-LABEL "Block"
+  LABEL "Block"
+  HELP "Address block (from coverage check)"
+  ORDER 1060
+
+ADD FIELD "Door" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  COLUMN-LABEL "Door"
+  LABEL "Door"
+  HELP "Address door"
+  ORDER 1070
+
+ADD FIELD "Letter" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  COLUMN-LABEL "Letter"
+  LABEL "Letter"
+  HELP "Address letter (from coverage check)"
+  ORDER 1080
+
+ADD FIELD "Stair" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  COLUMN-LABEL "Stair"
+  LABEL "Stair"
+  HELP "Address stair (from coverage check)"
+  ORDER 1090
+
+ADD FIELD "Hand" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  COLUMN-LABEL "Hand"
+  LABEL "Hand"
+  HELP "Address hand (from coverage check)"
+  ORDER 1100
+
+ADD FIELD "Km" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  COLUMN-LABEL "Km"
+  LABEL "Km"
+  HELP "Address km (from coverage check)"
+  ORDER 1110
+
+ADD FIELD "Floor" OF "OrderCustomer" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  COLUMN-LABEL "Floor"
+  LABEL "Floor"
+  HELP "Address floor (from coverage check)"
+  ORDER 1120
+
+ADD TABLE "FusionMessage"
+  AREA "Sta_Data_64"
+  LABEL "Fusion Message"
+  DESCRIPTION "Contains messages between TMS and MasMovil"
+  DUMP-NAME "fusionmessage"
+
+ADD FIELD "MessageSeq" OF "FusionMessage" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MessageSeq"
+  COLUMN-LABEL "MessageSeq"
+  ORDER 10
+
+ADD FIELD "MessageID" OF "FusionMessage" AS character 
+  FORMAT "x(37)"
+  INITIAL ""
+  LABEL "MessageId"
+  COLUMN-LABEL "MessageID"
+  DESCRIPTION "Auto-generated UUID"
+  ORDER 20
+
+ADD FIELD "OrderId" OF "FusionMessage" AS integer 
+  DESCRIPTION "Order sequence number"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  COLUMN-LABEL "OrderId"
+  ORDER 30
+
+ADD FIELD "MSSeq" OF "FusionMessage" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  COLUMN-LABEL "Subs.ID"
+  HELP "Subscription ID"
+  ORDER 40
+
+ADD FIELD "MessageType" OF "FusionMessage" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "Message Type"
+  COLUMN-LABEL "MessageType"
+  ORDER 50
+
+ADD FIELD "Source" OF "FusionMessage" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Message Source"
+  COLUMN-LABEL "Source"
+  DESCRIPTION "Messsage source (TMS/Masmovil)"
+  ORDER 60
+
+ADD FIELD "CreatedTS" OF "FusionMessage" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "CreatedTS"
+  COLUMN-LABEL "CreatedTS"
+  DECIMALS 5
+  ORDER 70
+
+ADD FIELD "UpdateTS" OF "FusionMessage" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "UpdateTS"
+  COLUMN-LABEL "UpdateTS"
+  DECIMALS 5
+  ORDER 80
+
+ADD FIELD "MessageStatus" OF "FusionMessage" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Message Status"
+  COLUMN-LABEL "MessageStatus"
+  ORDER 90
+
+ADD FIELD "OrderType" OF "FusionMessage" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Order Type"
+  COLUMN-LABEL "OrderType"
+  ORDER 100
+
+ADD FIELD "FixedStatus" OF "FusionMessage" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Fixed Status"
+  COLUMN-LABEL "FixedStatus"
+  ORDER 110
+
+ADD FIELD "FixedStatusTS" OF "FusionMessage" AS decimal 
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Fixed Status Timestamp"
+  COLUMN-LABEL "FixedStatusTS"
+  DECIMALS 5
+  ORDER 120
+
+ADD FIELD "FixedStatusDesc" OF "FusionMessage" AS character 
+  FORMAT "x(45)"
+  INITIAL ""
+  LABEL "Fixed Status Desc"
+  COLUMN-LABEL "FixedStatusDesc"
+  ORDER 130
+
+ADD FIELD "AdditionalInfo" OF "FusionMessage" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Additional Info"
+  COLUMN-LABEL "AdditionalInfo"
+  DESCRIPTION "Additional status info"
+  ORDER 140
+
+ADD FIELD "ResponseCode" OF "FusionMessage" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Response Code"
+  COLUMN-LABEL "ResponseCode"
+  DESCRIPTION "Response code from Adapter/Masmovil"
+  ORDER 150
+
+ADD INDEX "OrderId" ON "FusionMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "OrderId" ASCENDING 
+  INDEX-FIELD "CreatedTS" DESCENDING 
+
+ADD INDEX "MessageStatus" ON "FusionMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "Source" ASCENDING 
+  INDEX-FIELD "MessageStatus" ASCENDING 
+
+ADD INDEX "MessageSeq" ON "FusionMessage" 
+  AREA "Dyn_Index_1"
+  PRIMARY
+  UNIQUE
+  INDEX-FIELD "MessageSeq" ASCENDING 
+
+ADD INDEX "UpdateTS" ON "FusionMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "UpdateTS" DESCENDING 
+
+ADD SEQUENCE "FusionMessageSeq"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
+ADD FIELD "FixedLineDownload" OF "CLIType" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Fixed Line Download"
+  COLUMN-LABEL "FixedLineDownload"
+  HELP "Fixed line download speed"
+  ORDER 310
+
+ADD FIELD "FixedLineUpload" OF "CLIType" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Fixed Line Upload"
+  COLUMN-LABEL "FixedLineUpload"
+  HELP "Fixed line upload speed"
+  ORDER 320
