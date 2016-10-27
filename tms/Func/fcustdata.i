@@ -312,7 +312,7 @@ FUNCTION fGetFraudSequence RETURNS INTEGER
     
     DEFINE VARIABLE liCnt AS INTEGER NO-UNDO.
     
-    FOR EACH bfCustomer WHERE bf_Customer.Brand = gcBrand AND bf_Customer.OrgId BEGINS pcOrginalId NO-LOCK:
+    FOR EACH bf_Customer WHERE bf_Customer.Brand = gcBrand AND bf_Customer.OrgId BEGINS pcOrginalId NO-LOCK:
         ASSIGN liCnt = liCnt + 1.
     END.
     

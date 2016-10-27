@@ -318,7 +318,7 @@
                  END.
                  
                  ELSE IF FRAME-FIELD = "CustIDType" THEN DO:
-                 
+                    
                     lcIDType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
                                                 "Customer",
                                                 "CustIDType",
