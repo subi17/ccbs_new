@@ -1,12 +1,12 @@
 {commpaa.i}
+gcBrand = "1".
 DEF VAR ldaFrom AS DATE INIT 10/27/16.
 DEF VAR liMode AS INT INIT 1.
 DEF VAR liMode_ra AS INT INIT 1.
 DEF VAR liModeBI AS INT INIT 1.
-DEF VAR liModeCliType AS INT INIT 1.
 DEF VAR liModeCCN AS INT INIT 1.
 DEF VAR liModeTariff AS INT INIT 1.
-DEF VAR liModeDC AS INT INIT 1.
+DEF VAR liModeCP AS INT INIT 1.
 
 DEF TEMP-TABLE ttRequestAction NO-UNDO LIKE RequestAction.
 DEF TEMP-TABLE ttBillItem NO-UNDO LIKE BillItem.
@@ -15,7 +15,6 @@ DEF BUFFER bRequestAction FOR RequestAction.
 DEF BUFFER bBillItem FOR BillItem.
 DEF BUFFER bTariff FOR Tariff.
 DEF VAR liActionId AS INT.
-
 
 FUNCTION create_bdest RETURNS CHAR (INPUT ictariffcode AS CHAR):
    DEF VAR liBDCount AS INT.
@@ -65,46 +64,10 @@ FUNCTION create_bdest RETURNS CHAR (INPUT ictariffcode AS CHAR):
    END.
 END.
 
-FUNCTION create_tmritem RETURNS CHAR (INPUT lcitem as CHAR,
-                                      INPUT liruleseq as INT):
-   FIND FIRST TMRItemValue WHERE
-              TMRItemValue.tmruleseq =  liruleseq AND
-              LOOKUP(lcitem, TMRItemValue.CounterItemValues) > 0
-              NO-ERROR.
-   IF NOT AVAIL TMRItemValue THEN DO:
-      CREATE TMRItemValue.
-      ASSIGN TMRItemValue.CounterItemValues = lcitem
-             TMRItemValue.fromdate = ldaFrom
-             TMRItemValue.todate = 12/31/49
-             TMRItemValue.tmruleseq = liruleseq.
-   END.
-END.
 
 create_bdest("CONTDSL").
 create_bdest("CONTFH50").
 create_bdest("CONTFH300").
-
-create_tmritem("CONTDSL_DATA_IN,CONTDSL45",14).
-create_tmritem("CONTFH50_DATA_IN,CONTFH45_50",14).
-create_tmritem("CONTFH300_DATA_IN,CONTFH55_300",14).
-create_tmritem("CONTS2GB_DATA_IN,CONTDSL45",14).
-create_tmritem("CONTS2GB_DATA_IN,CONTFH45_50",14).
-create_tmritem("CONTS2GB_DATA_IN,CONTFH55_300",14).
-
-create_tmritem("GPRSDATA_DATA*,CONTDSL45",33).
-create_tmritem("GPRSDATA_DATA*,CONTFH45_50",33).
-create_tmritem("GPRSDATA_DATA*,CONTFH55_300",33).
-create_tmritem("CONTDSL_QTY_IN,CONTDSL45",34).
-create_tmritem("CONTFH50_QTY_IN,CONTFH45_50",34).
-create_tmritem("CONTFH300_QTY_IN,CONTFH55_300",34).
-
-create_tmritem("CONTDSL_MIN_IN,CONTDSL45",34).
-create_tmritem("CONTFH50_MIN_IN,CONTFH45_50",34).
-create_tmritem("CONTFH300_MIN_IN,CONTFH55_300",34).
-
-create_tmritem("CONTS2GB_VOICE_IN,CONTDSL45",34).
-create_tmritem("CONTS2GB_VOICE_IN,CONTFH45_50",34).
-create_tmritem("CONTS2GB_VOICE_IN,CONTFH55_300",34).
 
 IF CAN-FIND(FIRST bitemgroup WHERE
                   bitemgroup.brand = "1" AND
@@ -118,64 +81,6 @@ ELSE DO:
           bitemgroup.grouptype = 0
           bitemgroup.invoiceorder = 31.
 END.
-IF CAN-FIND(FIRST bitemgroup WHERE
-                  bitemgroup.brand = "1" AND
-                  bitemgroup.bigroup = "47") THEN
-   MESSAGE "bigroup already found: 47" VIEW-AS ALERT-BOX.
-ELSE DO:
-   CREATE bitemgroup.
-   ASSIGN bitemgroup.bigname = "Fixed voice"
-          bitemgroup.brand = "1"
-          bitemgroup.bigroup = "47"
-          bitemgroup.grouptype = 0
-          bitemgroup.invoiceorder = 32.
-END.
-
-IF CAN-FIND(FIRST bitemgroup WHERE
-                  bitemgroup.brand = "1" AND
-                  bitemgroup.bigroup = "51") THEN
-   MESSAGE "bigroup already found: 51" VIEW-AS ALERT-BOX.
-ELSE DO:
-   CREATE bitemgroup.
-   ASSIGN bitemgroup.bigname = "Fixed voice"
-          bitemgroup.brand = "1"
-          bitemgroup.bigroup = "51"
-          bitemgroup.grouptype = 0
-          bitemgroup.invoiceorder = 20.
-END.
-
-IF CAN-FIND(FIRST bitemgroup WHERE
-                  bitemgroup.brand = "1" AND
-                  bitemgroup.bigroup = "53") THEN
-   MESSAGE "bigroup already found: 53" VIEW-AS ALERT-BOX.
-ELSE DO:
-   CREATE bitemgroup.
-   ASSIGN bitemgroup.bigname = "Premium Services Fixed"
-          bitemgroup.brand = "1"
-          bitemgroup.bigroup = "53"
-          bitemgroup.grouptype = 0
-          bitemgroup.invoiceorder = 30.
-END.
-
-IF CAN-FIND(FIRST pricelist WHERE
-                  pricelist.brand EQ "1" AND
-                  pricelist.plname = "Contrato fixed" AND
-                  pricelist.pricelist = "CONTRATOFIXED") THEN
-   MESSAGE "pricelist already exist" VIEW-AS ALERT-BOX.
-ELSE DO:
-
-   CREATE pricelist.
-   ASSIGN pricelist.brand = "1"
-          pricelist.currency = "EUR"
-          pricelist.currunit = TRUE
-          pricelist.dediclist = FALSE
-          pricelist.inclvat = FALSE
-          pricelist.plname = "Contrato fixed"
-          pricelist.pricelist = "CONTRATOFIXED"
-          pricelist.memo = "Contrato fixed pricelist"
-          pricelist.rounding = 4.
-END.
-
 
 /* FEEMODEL */
 
@@ -377,17 +282,19 @@ FUNCTION faddTMSParam RETURNS LOGICAL (INPUT icBaseDCEvent AS CHAR,
                                        tmsParam.charval) > 0:
          IF LOOKUP(icDCEvent, tmsParam.charval) > 0 THEN NEXT.
          IF tmsParam.paramcode EQ "DATA_BUNDLE_BASED_CLITYPES" THEN NEXT.
-
+         IF tmsParam.paramcode EQ "POSTPAID_VOICE_TARIFFS" THEN NEXT.
          tmsParam.charval = tmsParam.charval + "," + icDCEvent.
       END.
    END.
    RETURN TRUE.
 END FUNCTION.
+DEF VAR lcMMParam AS CHAR NO-UNDO.
+lcMMParam = "RootDir".
 
 FIND FIRST TMSParam NO-LOCK WHERE
            TMSParam.Brand EQ "1" AND
            TMSParam.ParamGroup EQ "MasMovil" AND
-           TMSParam.ParamCode EQ "RootDir" NO-ERROR.
+           TMSParam.ParamCode EQ lcMMParam  NO-ERROR.
 IF AVAIL TMSParam THEN
    message TMSParam.ParamCode + " already found" VIEW-AS ALERT-BOX.
 ELSE DO:
@@ -395,12 +302,53 @@ ELSE DO:
 
    ASSIGN TMSParam.Brand = "1"
           TMSParam.ParamGroup = "MasMovil"
-          TMSParam.ParamCode = "RootDir"
+          TMSParam.ParamCode = lcMMParam
           TMSParam.ParamName = "Root directory for MasMovil files"
           TMSParam.CharVal = "/store/riftp/logistics/masmovil/"
           TMSParam.ParamType = "C".
 
 END.
+lcMMParam = "OnlineEnabled".
+
+FIND FIRST TMSParam NO-LOCK WHERE
+           TMSParam.Brand EQ "1" AND
+           TMSParam.ParamGroup EQ "MasMovil" AND
+           TMSParam.ParamCode EQ lcMMParam  NO-ERROR.
+IF AVAIL TMSParam THEN
+   message TMSParam.ParamCode + " already found" VIEW-AS ALERT-BOX.
+ELSE DO:
+   CREATE TMSParam.
+
+   ASSIGN TMSParam.Brand = "1"
+          TMSParam.ParamGroup = "MasMovil"
+          TMSParam.ParamCode = lcMMParam
+          TMSParam.ParamName = "Online sending enabled"
+          TMSParam.IntVal = 1 
+          TMSParam.ParamType = "I".
+
+END.
+lcMMParam = "OnlineRetryMax".
+
+FIND FIRST TMSParam NO-LOCK WHERE
+           TMSParam.Brand EQ "1" AND
+           TMSParam.ParamGroup EQ "MasMovil" AND
+           TMSParam.ParamCode EQ lcMMParam  NO-ERROR.
+IF AVAIL TMSParam THEN
+   message TMSParam.ParamCode + " already found" VIEW-AS ALERT-BOX.
+ELSE DO:
+   CREATE TMSParam.
+
+   ASSIGN TMSParam.Brand = "1"
+          TMSParam.ParamGroup = "MasMovil"
+          TMSParam.ParamCode = lcMMParam
+          TMSParam.ParamName = "Maximum auto-retry count"
+          TMSParam.IntVal = 1 
+          TMSParam.ParamType = "I".
+
+END.
+
+
+
 
 /* This function add new values in the end of existing char cparam value */
 FUNCTION faddToExistingCparamChar RETURNS LOGICAL (INPUT icCparamCode AS CHAR,
@@ -421,7 +369,7 @@ END FUNCTION.
 faddToExistingCparamChar("NoPostMinCons", "FTERMPERIOD").
 faddToExistingCparamChar("NoPostMinCons", "DISCFTERMPERIOD").
 
-faddTMSParam("CONT24", "CONTS2GB", 0).
+faddTMSParam("CONT24", "CONTS2GB", liModeCP).
 
 FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ "DATA_BUNDLE_BASED_CLITYPES"
    NO-ERROR.
@@ -429,6 +377,13 @@ FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ "DATA_BUNDLE_BASED_CLITYPES"
 IF LOOKUP("CONTDSL45", TMSParam.charval) = 0 THEN
 TMSParam.charval = tmsParam.charval + ",CONTDSL45,CONTFH45_50," +
                    "CONTFH55_300".
+
+FIND FIRST TMSParam WHERE TMSParam.ParamCode EQ "POSTPAID_VOICE_TARIFFS"
+   NO-ERROR.
+
+IF LOOKUP("CONTDSL45", TMSParam.charval) = 0 THEN
+   TMSParam.charval = tmsParam.charval + ",CONTDSL45,CONTFH45_50," +
+                      "CONTFH55_300".
 
 FIND FIRST DialType WHERE
            DIALType.dialtype EQ 50 NO-ERROR.
@@ -508,37 +463,6 @@ FUNCTION create_ra_mob returns log(INPUT icBasetype AS CHAR,
       liActionID = liActionID + 1.
 
 
-END.
-
-IF liModeCliType > 0 THEN DO:
-   FOR EACH CliType WHERE
-            Clitype.brand EQ "1" AND
-            Clitype.clitype BEGINS "CONTDSL":
-      ASSIGN
-      Clitype.fixedlinetype = 1
-      Clitype.FixedLineDownload = "20M"
-      Clitype.FixedLineUpload = "20M".
-   END.
-
-   FOR EACH CliType WHERE
-            Clitype.brand EQ "1" AND
-            Clitype.clitype MATCHES "CONTFH*50":
-      ASSIGN
-      Clitype.fixedlinetype = 2
-      Clitype.FixedLineDownload = "50M"
-      Clitype.FixedLineUpload = "5M".
-
-   END.
-
-   FOR EACH CliType WHERE
-         Clitype.brand EQ "1" AND
-         Clitype.clitype MATCHES "CONTFH*300":
-      ASSIGN
-      Clitype.fixedlinetype = 2
-      Clitype.FixedLineDownload = "300M"
-      Clitype.FixedLineUpload = "300M".
-
-   END.
 END.
 
 create_ra("CONT24","CONTDSL45",liMode_ra).
@@ -792,34 +716,50 @@ IF NOT AVAIL Daycampaign THEN DO:
 
 END.
 
-DEF TEMP-TABLE ttDaycampaign NO-UNDO LIKE Daycampaign.
+CREATE RatePlan.
+Assign
+   Rateplan.Rateplan = "CONTRATOCONVS"
+   RatePlan.RpName = "Contrato convergent (Post paid)"
+   RatePlan.Brand = "1".
 
-FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
-                                             INPUT icEvent AS CHAR,
-                                             INPUT icname AS CHAR,
-                                             INPUT icdctype AS CHAR,
-                                             INPUT iiUpdateMode AS INT):
-   FIND FIRST Daycampaign WHERE
-              Daycampaign.brand EQ "1" AND
-              Daycampaign.dcevent EQ icBaseDCEvent NO-ERROR.
-      CREATE ttDaycampaign.
-      BUFFER-COPY daycampaign TO ttDaycampaign.
-      ttDaycampaign.dctype = icDctype.
-      ttDaycampaign.dcevent = icevent.
-      ttDaycampaign.billcode = icevent + "MF".
-      ttDaycampaign.feemodel = icevent + "MF".
-      ttDaycampaign.dcname = icName.
-      ttDaycampaign.bundleupsell = "".
+CREATE PListConf.
+ASSIGN
+   PListConf.dfrom = ldaFrom
+   PlistConf.dto = 12/31/49
+   PListConf.prior = 5
+   PListConf.rateplan = "CONTRATOCONVS"
+   PListConf.startcharge = TRUE
+   PListConf.brand = "1"
+   PListConf.pricelist = "COMMON3".
 
-      IF iiUpdateMode NE 0 THEN DO:
-         CREATE Daycampaign.
-         BUFFER-COPY ttDaycampaign TO Daycampaign.
-         DELETE ttDaycampaign. /*ror safety reasons*/
-      END.
-      ELSE DISP ttDayCampaign.
+CREATE PListConf.
+ASSIGN
+   PListConf.dfrom = ldaFrom
+   PlistConf.dto = 12/31/49
+   PListConf.prior = 30
+   PListConf.rateplan = "CONTRATOCONVS"
+   PListConf.startcharge = TRUE
+   PListConf.brand = "1"
+   PListConf.pricelist = "CONTRATOFIXED".
 
-END.
+CREATE PListConf.
+ASSIGN
+   PListConf.dfrom = ldaFrom
+   PlistConf.dto = 12/31/49
+   PListConf.prior = 50
+   PListConf.rateplan = "CONTRATOCONVS"
+   PListConf.startcharge = TRUE
+   PListConf.brand = "1"
+   PListConf.pricelist = "CONTRATO".
 
-fcreateDaycampaign("CONTS2GB","CONTDSL","La Combinada 20","1",limodedc).
-fcreateDaycampaign("CONTS10GB","CONTFH50","La Combinada 50","1",limodedc).
-fcreateDaycampaign("CONTS2GB","CONTFH300","La Combinada 300","1",limodedc).
+CREATE PListConf.
+ASSIGN
+   PListConf.dfrom = ldaFrom
+   PlistConf.dto = 12/31/49
+   PListConf.prior = 60
+   PListConf.rateplan = "CONTRATOCONVS"
+   PListConf.startcharge = TRUE
+   PListConf.brand = "1"
+   PListConf.pricelist = "COMMON".
+
+

@@ -11,27 +11,19 @@ CONTFH300MF;1;Spanish;FIJO + INTERNET
 CONTFH300MF;2;Catalan;Fix + Internet
 CONTFH300MF;3;Basque;Finkoa + Internet
 CONTFH300MF;5;English;Landline + Internet
-51;1;Spanish;LLAMADAS FIJO
-51;2;Catalan;LLAMADAS FIJO
-51;3;Basque;LLAMADAS FIJO
-51;5;English;LLAMADAS FIJO
-53;1;Spanish;SERVICIOS PREMIUM FIJO
-53;2;Catalan;SERVICIOS PREMIUM FIJO
-53;3;Basque;SERVICIOS PREMIUM FIJO
-53;5;English;SERVICIOS PREMIUM FIJO
-CONTS2GBMF;1;Spanish;MÃ“VIL
-CONTS2GBMF;2;Catalan;MÃ²bil
+CONTS2GBMF;1;Spanish;MÓVIL
+CONTS2GBMF;2;Catalan;Mobil
 CONTS2GBMF;3;Basque;Mugikorra
 CONTS2GBMF;5;English;Mobile
 FTERMPERIOD;1;Spanish;Incumplimiento de permanencia La Combinada
-FTERMPERIOD;2;Catalan;Incompliment de permanÃ¨ncia La Combinada
+FTERMPERIOD;2;Catalan;Incompliment de permanencia La Combinada
 FTERMPERIOD;3;Basque;La Combinada tarifaren iraunkortasun-epea urratzea
 FTERMPERIOD;5;English;Non-compliance with term contract on La Combinada tariff
 DISCFTERMPERIOD;1;Spanish;Descuento incumplimiento de permanencia La Combinada
-DISCFTERMPERIOD;2;Catalan;Descompte incompliment de permanÃ¨ncia La Combinada
+DISCFTERMPERIOD;2;Catalan;Descompte incompliment de permanència La Combinada
 DISCFTERMPERIOD;3;Basque;La Combinada tarifaren iraunkortasun-epea urratzeagatiko deskontua
 DISCFTERMPERIOD;5;English;Discount on non-compliance with term contract La Combinada tariff
-DISCFHDSL;1;Spanish;Descuento promociÃ³n Fijo
-DISCFHDSL;2;Catalan;Descompte promociÃ³ Fix
+DISCFHDSL;1;Spanish;Descuento promoción Fijo
+DISCFHDSL;2;Catalan;Descompte promoció Fix
 DISCFHDSL;3;Basque;Finkoaren promozioagatiko deskontua
 DISCFHDSL;5;English;Discount on Landline promotion
