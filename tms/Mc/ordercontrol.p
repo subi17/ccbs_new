@@ -29,7 +29,7 @@ IF not avail order THEN DO:
     MESSAGE
     "Unknown order ID " iiorder
     VIEW-aS ALERT-BOX.
-    RETURN.
+    RETURN "".
 END.
 
 llOk = FALSE.
@@ -39,7 +39,7 @@ BUTTONS YES-NO
 TITLE " ORDER " + STRING(Order.OrderID) + " "
 SET llOk.
 
-IF NOT llOk THEN RETURN.
+IF NOT llOk THEN RETURN "".
 
 FIND CURRENT Order EXCLUSIVE-LOCK.
 
@@ -55,3 +55,4 @@ fSetOrderStatus(Order.OrderId,"4").
 
 IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrder).
 
+RETURN "".
