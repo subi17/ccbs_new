@@ -400,11 +400,6 @@ IF LOOKUP(pcActionType,"ORDER,RENEWAL_STC") > 0 THEN DO:
 
 END. /* IF LOOKUP(pcActionType,"ORDER,RENEWAL_STC") > 0 THEN DO: */
 
-FUNCTION fConvertCharacter RETURN CHARACTER
-   (INPUT pcData AS CHARACTER):
-  RETURN  CODEPAGE-CONVERT(pcData, "UTF-8", SESSION:CHARSET).
-END.
-
 /* Do the call */
 IF plOk THEN initialize(cConnURL, iTimeOut).
 
@@ -413,38 +408,38 @@ EMPTY TEMP-TABLE tt_param.
 
 IF plOK THEN
 DO:
-   pcCif =  fConvertCharacter(pcCif).
-   pcZip =  fConvertCharacter(pcZip). 
-   pcFoundingDate =  fConvertCharacter(pcFoundingDate).  
-   pcAddress  =    fConvertCharacter(pcAddress).
-   pcRepId =      fConvertCharacter(pcRepId).  
-   pcRepName  = fConvertCharacter(pcRepName).
-   pcRepFSurName = fConvertCharacter(pcRepFSurname).
-   pcRepSSurName = fConvertCharacter(pcRepSSurname).
-   pcRepEmail =    fConvertCharacter(pcRepEmail).
-   pcDelName  =   fConvertCharacter(pcDelName).
-   pcDelZip =     fConvertCharacter(pcDelZip).
-   pcDeln =       fConvertCharacter(pcDeln).
-   pcDelFSurName = fConvertCharacter(pcDelFSurname).
-   pcDelSSurName = fConvertCharacter(pcDelSSurname).
-   pcDelTelphone = fConvertCharacter(pcDelTelphone).
-   pcDelMail =     fConvertCharacter(pcDelMail).
-   pcRdEntidad =   fConvertCharacter(pcRdEntidad).
-   pcRdSurcursal = fConvertCharacter(pcRdSurcursal).
-   pcRdDc        =  fConvertCharacter(pcRdDc).
-   pcNCuenta     =  fConvertCharacter(pcNCuenta ).
-   lcSalesman    =  fConvertCharacter(lcSalesMan).
-   lcSimOnly    =  fConvertCharacter(lcSimOnly).
-   lcOfferId    =  fConvertCharacter(lcOfferId).
-   lcSubsType    =  fConvertCharacter(lcSubsType).
-   lcKindOfNumber =  fConvertCharacter(lcKindOfNumber).
-   lcOldOperator =  fConvertCharacter(SUBSTRING(lcOldOperator,1,16)).
-   lcOldPaymType =  fConvertCharacter(lcOldPaymType).
-   lcMNPMSISDN   =  fConvertCharacter(lcMNPMSISDN).
-   lcPayTerm     =  fConvertCharacter(lcPayTerm).
-   lcTerm        =  fConvertCharacter(lcTerm).
-   lcPaymentMethod =  fConvertCharacter(lcPaymentMethod).
-   lcUPSCode     = fConvertCharacter(lcUPSCode).
+   pcCif =  pcCif.
+   pcZip =  pcZip. 
+   pcFoundingDate =  pcFoundingDate.  
+   pcAddress  =    pcAddress.
+   pcRepId =      pcRepId.  
+   pcRepName  = pcRepName.
+   pcRepFSurName = pcRepFSurname.
+   pcRepSSurName = pcRepSSurname.
+   pcRepEmail =    pcRepEmail.
+   pcDelName  =  pcDelName.
+   pcDelZip =     pcDelZip.
+   pcDeln =       pcDeln.
+   pcDelFSurName = pcDelFSurname.
+   pcDelSSurName = pcDelSSurname.
+   pcDelTelphone = pcDelTelphone.
+   pcDelMail =     pcDelMail.
+   pcRdEntidad =   pcRdEntidad.
+   pcRdSurcursal = pcRdSurcursal.
+   pcRdDc        =  pcRdDc.
+   pcNCuenta     =  pcNCuenta .
+   lcSalesman    =  lcSalesMan.
+   lcSimOnly    =  lcSimOnly.
+   lcOfferId    =  lcOfferId.
+   lcSubsType    =  lcSubsType.
+   lcKindOfNumber =  lcKindOfNumber.
+   lcOldOperator =  SUBSTRING(lcOldOperator,1,16).
+   lcOldPaymType =  lcOldPaymType.
+   lcMNPMSISDN   =  lcMNPMSISDN.
+   lcPayTerm     =  lcPayTerm.
+   lcTerm        =  lcTerm.
+   lcPaymentMethod =  lcPaymentMethod.
+   lcUPSCode     = lcUPSCode.
 
    /* Construct the parameter struct from the parameter values */
    gcParamStruct = add_struct("", ""). 
