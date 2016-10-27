@@ -6,6 +6,9 @@
   CREATED ......: 26.03.10
   Version ......: xfera
 ----------------------------------------------------------------------- */
+&IF "{&DEXTRA_I}" NE "YES"
+&THEN
+&GLOBAL-DEFINE DEXTRA_I YES
 {commali.i}
 {fgettxt.i}
 {date.i}
@@ -152,3 +155,4 @@ FUNCTION fLogisticsRequest RETURNS INTEGER
      
 END FUNCTION.
 
+&ENDIF

@@ -4,7 +4,6 @@ CLASS Class.nagios:
    DEFINE VARIABLE lcOperator AS CHARACTER     NO-UNDO.
    DEFINE VARIABLE lcServer   AS CHARACTER     NO-UNDO.
    DEFINE VARIABLE liOffSet   AS INTEGER       NO-UNDO.
-   DEFINE VARIABLE classTD    AS CLASS Class.timedate      NO-UNDO.
    DEFINE VARIABLE lcURL      AS CHARACTER     NO-UNDO.
    /* SER-8026 change */
    DEF VAR lcMonitorMethod AS CHAR NO-UNDO.
@@ -61,13 +60,9 @@ CLASS Class.nagios:
          IF lcMonitorDir = ? THEN lcMonitorDir = "/tmp".
       END.
 
-      classTD = NEW Class.timedate().
-
    END CONSTRUCTOR.
 
    DESTRUCTOR PUBLIC nagios():
-
-      IF VALID-OBJECT(classTD) THEN DELETE OBJECT(classTD).
 
    END.
 
@@ -134,7 +129,8 @@ CLASS Class.nagios:
          lcCommand     = ENTRY(1,pcCommand,":")
          lcDescription = ENTRY(2,pcCommand,":") WHEN
                          NUM-ENTRIES(pcCommand,":") > 1
-         lcTimeStamp   = classTD:TS2HMS(classTD:OffSetTS(liOffSet))
+         lcTimeStamp   = Class.timedate:TS2HMS(
+                           Class.timedate:OffSetTS(liOffSet))
          lcTimeStamp   = SUBSTR(lcTimeStamp,7,4)  +
                          SUBSTR(lcTimeStamp,4,2)  +
                          SUBSTR(lcTimeStamp,1,2)  +
@@ -181,20 +177,20 @@ CLASS Class.nagios:
          CREATE ttNagios.
          ASSIGN
             ttNagios.tcCommand = lcCommand
-            ttNagios.tdeTS1    = classTD:OffSetTS(1).
+            ttNagios.tdeTS1    = Class.timedate:OffSetTS(1).
 
          WriteNagios(pcCommand).
 
       END.
    
-      ttNagios.tdeTS2 = classTD:OffSetTS(liOffSet).
+      ttNagios.tdeTS2 = Class.timedate:OffSetTS(liOffSet).
 
       IF ttNagios.tdeTS2 - ttNagios.tdeTS1 > ldeAlarmLimit THEN DO:
    
          WriteNagios(pcCommand).
 
          ASSIGN
-            ttNagios.tdeTS1 = classTD:OffSetTS(1)
+            ttNagios.tdeTS1 = Class.timedate:OffSetTS(1)
             ttNagios.tdeTS2 = ttNagios.tdeTS1.
        
       END.

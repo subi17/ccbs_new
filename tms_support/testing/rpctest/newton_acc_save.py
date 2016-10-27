@@ -30,6 +30,7 @@ p=s.newton.acc_save(var1,'vikasagr',var2,
                          'id_type':'NIE'},
                          3.0,5.0,
                          {'title':'Experiment',
-                          'content':'Just an example'})
+                          'content':'Just an example'},
+                          '','','')
 print_results(p)
 

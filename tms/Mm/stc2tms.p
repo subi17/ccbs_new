@@ -73,33 +73,6 @@ DEF BUFFER bOldTariff FOR CLIType.
 DEF TEMP-TABLE ttContract NO-UNDO
     FIELD DCEvent AS CHAR.
 
-FUNCTION fMakeValidTS RETURNS DECIMAL:
-
-   DEF VAR ldeCurrentTS AS DE NO-UNDO FORMAT "99999999.99999".
-   DEF VAR ldeSeconds   AS DE NO-UNDO FORMAT "9.999999".
-   DEF VAR liCompare    AS I  NO-UNDO.                  
-   DEF VAR ldeNewStamp  AS DE NO-UNDO FORMAT "99999999.99999".  
-
-   ASSIGN
-      ldeCurrentTS = fmakets()
-      ldeSeconds   = ldeCurrentTS - (INT(SUBSTRING(STRING(ldeCurrentTS),1,8)))
-      liCompare    = ldeSeconds * 100000.
-
-   IF    liCompare < 10  * 3600 THEN DO:
-      ldeNewStamp = fmake2Dt(today, 10 * 3600).
-   END.
-   ELSE  IF liCompare > 19 * 3600 THEN DO:
-      ldeNewStamp = fmake2Dt(today + 1, 10 * 3600).
-   END.   
-   ELSE DO:
-      ldeNewstamp = ldeCurrentTS.
-   END.
-
-   RETURN ldeNewStamp.
-
-END. 
-
-
 /********** Main start *********/
 
 FIND FIRST MSRequest WHERE
@@ -125,7 +98,10 @@ IF liOrigStatus = 8 AND MsRequest.ReqIParam2 > 0 THEN DO:
    FIND FIRST Order NO-LOCK WHERE
               Order.Brand = gcBrand AND
               Order.OrderID = MsRequest.ReqIparam2 NO-ERROR.
-   IF NOT AVAIL Order THEN .
+   IF NOT AVAIL Order THEN DO:
+      fReqError(SUBST("Order not found: &1", MsRequest.ReqIParam2)).
+      RETURN.
+   END.
    ELSE IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
       IF Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION} THEN DO:
          ASSIGN ldaNextMonthActDate  = (fLastDayOfMonth(ldtActDate) + 1)
@@ -490,6 +466,7 @@ PROCEDURE pUpdateSubscription:
    DEF VAR ldeNewBeginTs AS DEC NO-UNDO. 
    DEF VAR ldeOrigTsEnd AS DEC NO-UNDO. 
    DEF VAR liLoop AS INT NO-UNDO. 
+   DEF VAR lcFixedNumber AS CHAR NO-UNDO. 
 
    DEF BUFFER bOwner FOR MsOwner.
 
@@ -575,11 +552,23 @@ PROCEDURE pUpdateSubscription:
       one starting from change time */
    ASSIGN 
       ldBegStamp = MsRequest.ActStamp
-      ldEndStamp = fSecOffSet(ldBegStamp,-1).
-      
+      ldEndStamp = fSecOffSet(ldBegStamp,-1)
+      lcFixedNumber = ?.
+   
+   IF MsRequest.ReqIParam2 > 0 THEN
+      FOR FIRST Order NO-LOCK WHERE
+                Order.Brand = gcBrand AND
+                Order.OrderID = MsRequest.ReqIparam2,
+          FIRST OrderFusion NO-LOCK WHERE
+                OrderFusion.Brand = Order.Brand AND
+                OrderFusion.OrderID = Order.OrderID:
+         lcFixedNumber = OrderFusion.FixedNumber.
+      END.
+
    /* YOT-1407: if postpaid -> postpaid or postpaid -> prepaid then original 
       activation time can be used even if handling is delayed */
    IF llOldPayType = FALSE OR 
+      lcFixedNumber NE ? OR
       ldtActDate > TODAY THEN ASSIGN 
       ldaNewBeginDate = ldtActDate
       liChangeTime    = liActTime.
@@ -588,7 +577,7 @@ PROCEDURE pUpdateSubscription:
       liChangeTime    = TIME.   
 
    ldeNewBeginTs = fMake2Dt(ldaNewBeginDate, liChangeTime).
-
+   
    FOR EACH MSOwner WHERE 
             MSOwner.MsSeq  = Mobsub.MsSeq    AND
             MSOwner.TsEnd >= ldeNewBeginTs
@@ -615,7 +604,8 @@ PROCEDURE pUpdateSubscription:
                 bOwner.MandateDate = ldaMandateDate WHEN llUpdateMandate
                 ldEndStamp        = MsOwner.TSEnd
                 ldBegStamp        = bOwner.TSBeg
-                bOwner.TariffBundle = MsRequest.ReqCParam5.
+                bOwner.TariffBundle = MsRequest.ReqCParam5
+                bOwner.FixedNumber = lcFixedNumber.
       
          IF DAY(ldtActDate) <> 1 THEN DO:
             lcFusionSubsType = fCParamC("FUSION_SUBS_TYPE").
@@ -643,7 +633,8 @@ PROCEDURE pUpdateSubscription:
                   MsOwner.Paytype    = (CLIType.PayType = 2)
                   MsOwner.MandateId   = lcMandateId WHEN llUpdateMandate
                   MsOwner.MandateDate = ldaMandateDate WHEN llUpdateMandate
-                  MsOwner.TariffBundle = MsRequest.ReqCParam5.
+                  MsOwner.TariffBundle = MsRequest.ReqCParam5
+                  MsOwner.FixedNumber = lcFixedNumber.
 
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
    END.
@@ -657,7 +648,10 @@ PROCEDURE pUpdateSubscription:
           Mobsub.BillTarget = liBillTarg
           Mobsub.Paytype    = (CLIType.PayType = 2)
           Mobsub.TariffActDate = ldtActDate
-          MobSub.TariffActTS   = ldeNewBeginTs.
+          MobSub.TariffActTS   = ldeNewBeginTs
+          MobSub.FixedNumber = lcFixedNumber
+          MobSub.MsStatus = {&MSSTATUS_ACTIVE} WHEN
+                            MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG}.
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
    
@@ -989,6 +983,7 @@ PROCEDURE pFinalize:
             /* possible bono/bono voip activation */
             RUN orderaction_exec.p (MobSub.MsSeq,
                                     Order.OrderID,
+                                    ?,
                                     MsRequest.MsRequest,
                                     {&REQUEST_SOURCE_STC}).
             

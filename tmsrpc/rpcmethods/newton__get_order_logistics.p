@@ -13,6 +13,7 @@
  */
 
 {xmlrpc/xmlrpc_access.i}
+{tmsconst.i}
 
 DEFINE VARIABLE piOrderId              AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE top_array            AS CHARACTER NO-UNDO. 
@@ -38,7 +39,9 @@ top_array = add_array(response_toplevel_id, "").
 FOR EACH OrderDelivery WHERE
    OrderDelivery.Brand = "1"         AND 
    OrderDelivery.OrderId = piOrderId NO-LOCK:
-
+   
+   IF STRING(OrderDelivery.LOStatusID) BEGINS {&LO_STATUS_ROUTER_PREFIX} THEN
+      NEXT.
    od_struct = add_struct(top_array, "").
 
    add_datetime(od_struct, "timestamp", OrderDelivery.LOTimeStamp ). 

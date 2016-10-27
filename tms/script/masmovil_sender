@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# This daemon collects fusionmessage records in status new and sends them to
+# message hander procedures that make calls against Mavmovil online API.
+#
+
+DAEMON=Gwy.MasmovilSender
+INSTANCE=1
+LOGLEVEL=4
+cd $(dirname $0)/..
+. script/daemon.sh
