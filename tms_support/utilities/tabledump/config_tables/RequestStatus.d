@@ -15,6 +15,7 @@
 "1" 10 8 "" yes "" "" 0 no no
 "1" 13 0 "createsolog" yes "" "" 0 no no
 "1" 13 6 "createmobsub" yes "4gltrace:4" "/tmp/create.log" 500000 no no
+"1" 14 0 "" yes "" "" 0 no no
 "1" 15 0 "createsolog" yes "" "" 0 no no
 "1" 15 6 "changesim" yes "" "" 0 no no
 "1" 18 0 "createsolog" yes "" "" 0 no no

@@ -61,6 +61,7 @@
 {fbankdata.i}
 {mnp.i}
 {tmsconst.i}
+{Func/fixedlinefunc.i}
 
 DEF TEMP-TABLE wError NO-UNDO
     FIELD Cust   AS INT
@@ -1315,10 +1316,15 @@ IF NOT llErrors THEN DO:
       /* terminal purchased */
       IF INDEX(lcText,"#PENALTYFEE") > 0 THEN DO:
          lcList = "".
-
-         /* New Tariff - CONTS */
-         IF Order.CLIType = "CONTS" AND Order.CrStamp < 20120901 THEN
-            lcList = CHR(10) + fTeksti(532,liLanguage).
+           
+         IF fIsConvergenceTariff(Order.CLIType) AND
+           (Order.OrderType EQ {&ORDER_TYPE_NEW} OR
+            Order.OrderType EQ {&ORDER_TYPE_MNP} OR
+           (Order.OrderType EQ {&ORDER_TYPE_STC} AND
+            AVAIL Mobsub AND
+            NOT (fIsConvergenceTariff(Mobsub.CLIType) OR
+             LOOKUP(MobSub.CLIType,{&MOBSUB_CLITYPE_FUSION}) > 0)))
+         THEN lcList = CHR(10) + fTeksti(532,liLanguage).
 
          RUN offer_penaltyfee(Order.OrderID,
                               Output liTermMonths,
