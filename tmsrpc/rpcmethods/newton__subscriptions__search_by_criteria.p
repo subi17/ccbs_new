@@ -10,12 +10,16 @@
           payterm                   string  - optional
           term                      string  - optional
           serv_code                 string  - optional
-          order_date                date    - optional
+          order_end_date            date    - optional
           order_status              boolean - optional
           order_type                string  - optional
           eligible_renewal          boolean - optional
           any_barring               boolean - optional
           debt                      boolean - optional
+          pay_type                  boolean 
+          usage_type                integer
+          order_start_date          date
+          person_id_type            integer
  * Integers are described here:
           offset                    integer - mandatory
           limit_of_subscriptions    integer - mandatory
@@ -29,6 +33,8 @@ katun = "Newton".
 {Mm/active_bundle.i}
 {Func/fdss.i}
 {Func/barrfunc.i}
+{Func/timestamp.i}
+{Func/orderchk.i}
 
 /* Input parameters */
 DEF VAR pcCliType      AS CHAR NO-UNDO.
@@ -48,6 +54,10 @@ DEF VAR pcLanguage     AS CHAR NO-UNDO.
 DEF VAR pcInvGroup     AS CHAR NO-UNDO.
 DEF VAR plBarring      AS LOG  NO-UNDO.
 DEF VAR plDebt         AS LOG  NO-UNDO.
+DEF VAR plPayType      AS LOG  NO-UNDO. /* YDA-895 */
+DEF VAR piUsageType    AS INT  NO-UNDO. /* YDA-895 */
+DEF VAR pdtStartDate   AS DATE NO-UNDO. /* YDA-895 */ 
+DEF VAR piPersonIdType AS INT  NO-UNDO. /* YDA-895 */
 
 /* Local variables */
 DEF VAR lcDataBundles  AS CHAR NO-UNDO.
@@ -71,11 +81,163 @@ DEF VAR plgOrderStatus     AS LOG  NO-UNDO.
 DEF VAR plgEligibleRenewal AS LOG  NO-UNDO INIT ?.
 DEF VAR llUnpaidInv        AS LOG  NO-UNDO.
 
+FUNCTION fCheckEligibleRenewal RETURNS LOGICAL ():
+   
+   DEF VAR llBarrings           AS LOGICAL   NO-UNDO.
+   DEF VAR lcBarrStatus         AS CHARACTER NO-UNDO.
+   DEF VAR llDefBarring         AS LOGICAL   NO-UNDO. 
+   DEF VAR ldtFirstDay          AS DATE      NO-UNDO.
+   DEF VAR ldaLastTerminal      AS DATE      NO-UNDO INIT ?.
+   DEF VAR llCancelledPrerenove AS LOGICAL   NO-UNDO.
+   DEF VAR llPrerenove          AS LOGICAL NO-UNDO INIT FALSE.
+   DEF VAR liTime               AS INTEGER NO-UNDO.
+   DEF VAR liConfigDays         AS INTEGER NO-UNDO.
+
+   DEF BUFFER bServiceRequest FOR MSRequest.   
+   DEF BUFFER bMobSub FOR MobSub.
+
+   /* ongoing ACC or STC */
+   IF CAN-FIND
+      (FIRST MsRequest WHERE
+             MsRequest.MsSeq = MobSub.MsSeq AND
+            (MsRequest.ReqType = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE} OR 
+             MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}) AND
+       LOOKUP(STRING(MsRequest.ReqStat),{&REQ_INACTIVE_STATUSES}) = 0) THEN      
+      RETURN NO.
+   
+   /* ongoing renove contract request */
+   FOR EACH MsRequest NO-LOCK WHERE
+            MsRequest.MsSeq = MobSub.MsSeq AND
+            MsRequest.ReqType = {&REQTYPE_AFTER_SALES_ORDER},
+      EACH bServiceRequest NO-LOCK WHERE
+           bServiceRequest.OrigRequest = MsRequest.MsRequest AND
+           LOOKUP(STRING(bServiceRequest.ReqStat),{&REQ_INACTIVE_STATUSES}) = 0:
+      
+      RETURN NO.
+   END.
+
+   FIND FIRST Order NO-LOCK WHERE 
+              Order.MsSeq = Mobsub.MsSeq AND
+              Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} AND
+              Order.OrderType < 2 NO-ERROR.
+   IF NOT AVAIL Order THEN   
+      RETURN NO.
+   
+   /* Check barrings */
+   IF Mobsub.PayType EQ FALSE THEN DO:
+      FOR EACH bMobsub NO-LOCK WHERE
+               bMobsub.Brand = gcBrand AND
+               bMobsub.AgrCust = Customer.AgrCust AND
+               bMobsub.PayType = FALSE AND
+               bMobsub.MsStatus = {&MSSTATUS_BARRED}:
+         lcBarrStatus = fCheckStatus(bMobsub.MsSeq).
+         llBarrings = (LOOKUP(lcBarrStatus, {&FRAUD_BARR_CODES}) > 0 ).      
+         IF llBarrings THEN       
+            RETURN NO.
+      END.   
+   END.
+
+   /* Check if customer has any debt invoice  */
+
+   ldtFirstDay = DATE(MONTH(ADD-INTERVAL(TODAY,-12,"months") + 1),
+                        1,
+                 YEAR(ADD-INTERVAL(TODAY,-12,"months") + 1)).      
+   INVSEARCH_LOOP:
+   FOR EACH Invoice NO-LOCK WHERE
+            Invoice.Brand    = gcBrand            AND
+            Invoice.Custnum  = MobSub.Custnum     AND
+            Invoice.InvType  = {&INV_TYPE_NORMAL} AND 
+            Invoice.InvDate <= TODAY              AND 
+            Invoice.InvDate >= ldtFirstDay        AND
+            Invoice.DueDate  < TODAY - 2:
+      IF Invoice.PaymState NE 2            AND
+         Invoice.InvAmt     > 0            THEN 
+      DO:
+         llDefBarring = TRUE. /* unpaid invoice */
+         LEAVE INVSEARCH_LOOP.
+      END.
+      llDefBarring = FALSE. /* invoice(s) found */
+   END.
+
+   IF llDefBarring THEN 
+      RETURN NO.
+
+   IF fOngoingOrders(MobSub.Cli,"renewal") THEN
+      RETURN NO.
+
+   /* get the latest purchased terminal (phone) */
+   FIND FIRST SubsTerminal WHERE
+              SubsTerminal.MsSeq = MobSub.MsSeq AND
+              SubsTerminal.TerminalType = ({&TERMINAL_TYPE_PHONE})
+              NO-LOCK USE-INDEX MsSeq NO-ERROR.
+
+   IF AVAIL SubsTerminal THEN 
+   DO:
+      IF Mobsub.PayType AND
+         SubsTerminal.OrderID > 0 AND
+         CAN-FIND(FIRST Order NO-LOCK WHERE
+                        Order.Brand = gcBrand AND
+                        Order.OrderID = SubsTerminal.OrderId AND
+                        Order.OrderType = 2) THEN 
+      DO:
+         llPrerenove = TRUE.    
+         /* Check cancelled same renewal order */
+         IF CAN-FIND(FIRST MsRequest WHERE
+                           MsRequest.MsSeq = Mobsub.MsSeq AND
+                           MsRequest.ReqType = {&REQTYPE_REVERT_RENEWAL_ORDER} AND
+                           MsRequest.ReqStatus = {&REQUEST_STATUS_DONE} AND
+                           MsRequest.ReqIParam1 = SubsTerminal.OrderID NO-LOCK)
+         THEN llCancelledPrerenove = TRUE.
+      END. /* IF Mobsub.PayType = True AND */   
+   
+      fSplitTS(SubsTerminal.PurchaseTS, OUTPUT ldaLastTerminal, OUTPUT liTime).
+   
+      IF SubsTerminal.PerContractID > 0 THEN 
+      DO:
+         FIND FIRST DCCLI WHERE
+                    DCCLI.MsSeq = Mobsub.MsSeq AND
+                    DCCLI.PerContractID = SubsTerminal.PerContractID
+         NO-LOCK NO-ERROR.
+         IF NOT AVAIL DCCLI OR DCCLI.ValidTo < TODAY THEN ldaLastTerminal = ?.
+      END.
+   END.
+   /* New renewal rules  */   
+   IF ldaLastTerminal NE ? THEN 
+   DO:
+      liConfigDays = 180.
+      IF MobSub.PayType THEN 
+      DO:
+         /* If renewal order is cancelled then it should be allowed */
+         IF llPrerenove AND llCancelledPrerenove THEN .
+         ELSE IF (TODAY - ldaLastTerminal) < liConfigDays THEN 
+            RETURN NO.                              
+      END.
+      ELSE 
+      DO:
+        IF (TODAY - ldaLastTerminal) < liConfigDays THEN
+         RETURN NO.
+      END.   
+   END. /* IF MobSub.PayType THEN DO: */
+   /* SIM Only */
+   ELSE 
+   DO:
+      IF MobSub.PayType THEN liConfigDays = 180.
+      ELSE liConfigDays = 90.
+
+   /* Validate prepaid/postpaid SIM Only config date */
+      IF (TODAY - MobSub.ActivationDate) < liConfigDays THEN 
+         RETURN NO.         
+   END. /* ELSE DO: */
+
+   RETURN YES.
+
+END FUNCTION.
+
 IF validate_request(param_toplevel_id, "struct,int,int") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
 lcstruct = validate_struct(pcStruct,
-   "subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,serv_code,order_date,order_status,order_type,eligible_renewal,language,invoice_group,any_barring,debt").
+   "subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,serv_code,order_end_date,order_status,order_type,eligible_renewal,language,invoice_group,any_barring,debt,pay_type,usage_type,order_start_date,person_id_type").
 
 ASSIGN
    pcCliType      = get_string(pcStruct, "subscription_type")
@@ -99,7 +261,7 @@ ASSIGN
       WHEN LOOKUP("term", lcStruct) > 0
    pcBlackBerry   = get_string(pcStruct, "serv_code")
       WHEN LOOKUP("serv_code", lcStruct) > 0
-   pdtInputDate   = get_date(pcStruct, "order_date")
+   pdtInputDate   = get_date(pcStruct, "order_end_date")
       WHEN LOOKUP("order_date", lcStruct) > 0
    plgOrderStatus = get_bool(pcStruct, "order_status")
       WHEN LOOKUP("order_status", lcStruct) > 0
@@ -114,12 +276,25 @@ ASSIGN
    plBarring      = get_bool(pcStruct,"any_barring")
       WHEN LOOKUP("any_barring", lcStruct) > 0
    plDebt         = get_bool(pcStruct,"debt")
-      WHEN LOOKUP("debt", lcStruct) > 0.
+      WHEN LOOKUP("debt", lcStruct) > 0
+   plPayType      = get_bool(pcStruct,"pay_type") 
+      WHEN LOOKUP("paytype", lcStruct) > 0
+   piUsageType    = get_int(pcStruct,"usage_type") 
+      WHEN LOOKUP("usagetype", lcStruct) > 0
+   pdtStartDate   = get_date(pcStruct, "order_start_date")
+      WHEN LOOKUP("order_first_date", lcStruct) > 0
+   piPersonIdType = get_int(pcStruct, "person_id_type")
+      WHEN LOOKUP("person_id_type", lcStruct) > 0. 
+    /* Paytype, usagetype, startdate and personidtype YDA-895 */
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF pdtInputDate > TODAY THEN 
    pdtInputDate = ?.
+
+/* YDA-895 To narrow down the list */
+IF pdtStartDate > TODAY THEN 
+   pdtStartDate = ?.
 
 liNumberOfBundles = NUM-ENTRIES(pcOtherBundles).
 
@@ -134,6 +309,41 @@ FOR EACH MobSub NO-LOCK WHERE
          MobSub.Brand   = gcBrand:
 
    IF pcCliType NE "" AND MobSub.CLIType NE pcCliType THEN NEXT EACH_MOBSUB.
+
+   /* YDA-895 PostPaid or Prepaid */
+   IF plPayType AND NOT MobSub.PayType THEN NEXT EACH_MOBSUB. 
+   IF NOT plPayType AND MobSub.PayType THEN NEXT EACH_MOBSUB.
+   /* YDA-895 Voice or Data  */
+   IF NOT CAN-FIND(FIRST CliType WHERE 
+                         CliType.Brand     = gcBrand AND
+                         CliType.CliType   = MobSub.CliType AND
+                         CliType.UsageType = piUsageType NO-LOCK) THEN
+      NEXT EACH_MOBSUB.
+   /* YDA-895 ID of the customer */   
+   IF piPersonIdType = 1 AND 
+      NOT CAN-FIND(FIRST Customer WHERE
+                         Customer.Brand   = gcBrand AND
+                         Customer.CustNum = MobSub.CustNum AND
+                         Customer.CustIdType <> "NIF") THEN
+      NEXT EACH_MOBSUB.
+   ELSE IF piPersonIdType = 2 AND
+        NOT CAN-FIND(FIRST Customer WHERE
+                           Customer.Brand   = gcBrand AND
+                           Customer.CustNum = MobSub.CustNum AND
+                           Customer.CustIdType <> "NIE") THEN
+      NEXT EACH_MOBSUB.                        
+   ELSE IF piPersonIdType = 3 AND
+        NOT CAN-FIND(FIRST Customer WHERE
+                           Customer.Brand   = gcBrand AND
+                           Customer.CustNum = MobSub.CustNum AND
+                           Customer.CustIdType <> "CIF") THEN
+      NEXT EACH_MOBSUB.
+   ELSE IF piPersonIdType = 4 AND
+        NOT CAN-FIND(FIRST Customer WHERE
+                           Customer.Brand   = gcBrand AND
+                           Customer.CustNum = MobSub.CustNum AND
+                           Customer.CustIdType <> "PASSPORT") THEN
+      NEXT EACH_MOBSUB.                         
   
    /* If MobSub loop executes more than 30 seconds 
       then it should terminate the execution */
@@ -148,6 +358,10 @@ FOR EACH MobSub NO-LOCK WHERE
 
    IF pdtInputDate <> ? AND 
       MobSub.TariffActDate >= pdtInputDate THEN NEXT EACH_MOBSUB.
+
+   /* YDA-895 To narrow down the list */
+   IF pdtStartDate <> ? AND 
+      MobSub.TariffActDate < pdtStartDate THEN NEXT EACH_MOBSUB.   
  
    IF pdtInputDate <> ? THEN DO: 
       FOR EACH Order NO-LOCK WHERE 
@@ -160,9 +374,12 @@ FOR EACH MobSub NO-LOCK WHERE
                    OUTPUT liOrderTime).
           
           IF ldtOrderDate >= pdtInputDate THEN NEXT EACH_MOBSUB.
-
       END.          
-   END.   
+   END.
+
+   /* YDA-895 To narrow down the list*/
+   IF pdtStartDate <> ? AND ldtOrderDate < pdtStartDate THEN
+      NEXT EACH_MOBSUB.
    
    IF plgOrderStatus THEN DO: 
       FOR EACH Order NO-LOCK WHERE 
@@ -203,10 +420,14 @@ FOR EACH MobSub NO-LOCK WHERE
       lcDataBundles = fGetCurrentSpecificBundle(MobSub.MsSeq,"BONO").
       IF pcDataBundleId <> lcDataBundles THEN NEXT EACH_MOBSUB.
    END. /* IF pcDataBundleId > "" THEN DO: */
-
-   /* Eligible for renewal order */
-   IF plgEligibleRenewal <> ? THEN DO:
-   /* TODO */
+   
+   /* Eligible for renewal order YDA-895 */
+   IF plgEligibleRenewal <> ? THEN 
+   DO:
+      IF plgEligibleRenewal AND NOT fCheckEligibleRenewal() THEN
+         NEXT EACH_MOBSUB.
+      IF NOT plgEligibleRenewal AND fCheckEligibleRenewal() THEN
+         NEXT EACH_MOBSUB.     
    END.
 
       /* Segmentation offer */
@@ -251,7 +472,9 @@ FOR EACH MobSub NO-LOCK WHERE
    END.
 
    /* TERMX */
-   liCount = 0. /* YDA-895 */
+   liCount = 0. 
+   /* YDA-895 licount reset was needed to prevent unwanted numbers 
+      to be added for result of RPC*/
    IF pcTerm > "" THEN DO:
       IF pcTerm EQ "none" THEN DO:
          FOR EACH DCCLI NO-LOCK WHERE
