@@ -350,10 +350,10 @@ ASSIGN liInvType    = fCParamI("InvCreType")
 FORM
     lcStamp         LABEL "Created"
     lcCustId        COLUMN-LABEL "CustID" FORMAT "X(9)"
-    Order.CLI       COLUMN-LABEL "MSISDN"
-    Order.ContractID COLUMN-LABEL "Contract" FORMAT "X(12)" 
+    Order.CLI       COLUMN-LABEL "MSISDN" FORMAT "X(9)"
+    Order.ContractID COLUMN-LABEL "Contract" FORMAT "X(8)" 
     Order.OrderId   FORMAT ">>>>>>>9"
-    lcStatus        LABEL "Status"     FORMAT "x(6)"
+    lcStatus        LABEL "Status"     FORMAT "x(12)"
     Order.CredOk    COLUMN-LABEL "Cred"
     memoch          LABEL "M"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
@@ -377,7 +377,9 @@ FORM
 {order.i}
 
 form
-    "OrderID ......:" Order.OrderID
+    "OrderID/status:" Order.OrderID "/" Order.Statuscode FORMAT "X(2)"
+        lcStatus FORMAT "X(15)"
+
     "Orderer .:" AT 48 Order.Orderer FORMAT "X(20)" 
     SKIP
 
@@ -1566,19 +1568,24 @@ PROCEDURE local-disp-row:
 
 END PROCEDURE.
 
-PROCEDURE local-find-others-common.
-
-   ASSIGN lcStamp = fTS2HMS(Order.CrStamp).
-
-   FIND FIRST TMSCodes WHERE 
+FUNCTION fStatusText RETURNS CHAR
+   (iiStatusCode AS CHAR):
+   FIND FIRST TMSCodes WHERE
               TMSCodes.TableName = "Order" AND
               TMSCodes.FieldName = "StatusCode" AND
               TMSCodes.CodeGroup = "Orders" AND
               TMSCodes.CodeValue = Order.StatusCode
    NO-LOCK NO-ERROR.
-   IF AVAIL TMSCodes THEN lcStatus = TMSCodes.CodeName.
-   ELSE lcStatus = "".
-   
+   IF AVAIL TMSCodes THEN RETURN TMSCodes.CodeName.
+
+   RETURN "".
+END.
+
+PROCEDURE local-find-others-common.
+
+   ASSIGN lcStamp = fTS2HMS(Order.CrStamp).
+
+   lcStatus = fStatusText(Order.StatusCode).
    FIND FIRST OrderCustomer OF Order WHERE
               OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
    IF AVAIL OrderCustomer THEN
@@ -1732,7 +1739,9 @@ PROCEDURE local-disp-lis:
       IF Order.FtGrp > "" THEN 
          lcFatGroup = "(" + Order.FtGrp + ")".
       ELSE lcFatGroup = "".
-         
+
+      lcStatus = fStatusText(Order.Statuscode).
+ 
       DISP
          Order.PayType
          Order.ICC 
@@ -1741,6 +1750,8 @@ PROCEDURE local-disp-lis:
          "" WHEN Order.MNPStatus = 0 @ Order.OldPayType 
          Order.Referee
          Order.OrderId
+         Order.StatusCode
+         lcStatus
          Order.ContractID
          Order.Orderer
          Order.OrdererIDType
