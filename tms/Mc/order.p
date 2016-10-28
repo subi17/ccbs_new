@@ -1583,9 +1583,8 @@ END.
 
 PROCEDURE local-find-others-common.
 
-   ASSIGN lcStamp = fTS2HMS(Order.CrStamp).
-
-   lcStatus = fStatusText(Order.StatusCode).
+   ASSIGN lcStamp = fTS2HMS(Order.CrStamp)
+          lcStatus = fStatusText(Order.StatusCode).
    FIND FIRST OrderCustomer OF Order WHERE
               OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
    IF AVAIL OrderCustomer THEN
