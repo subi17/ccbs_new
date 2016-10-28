@@ -509,7 +509,7 @@ form /* seek  With CustId */
     COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f5.
 
 
-form /* seek  With CustId */ /*ilkka continue here*/
+form /* seek  With Fixed number */ 
     "Brand Code:" lcBrand  HELP "Enter Brand"
     VALIDATE(lcbrand = "*"  OR
     CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
