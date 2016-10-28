@@ -40,6 +40,7 @@ IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} THEN DO:
                                             INT(MsRequest.ReqCParam3),
                                             OUTPUT lcError) THEN DO:
          fReqError(SUBST("ERROR: &1", lcError)).
+         RETURN.
       END.
    
       IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} AND
