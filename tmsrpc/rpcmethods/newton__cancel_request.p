@@ -102,7 +102,9 @@ IF liReqType = {&REQTYPE_ICC_CHANGE} THEN DO:
     WHERE MsRequest.Brand     = gcBrand 
       AND MsRequest.ReqType   = liReqType
       AND MsRequest.msseq     = piReference
-      AND (MsRequest.ReqStatus = 0 OR MsRequest.ReqStatus = 19) USE-INDEX MsSeq:
+      AND (MsRequest.ReqStatus = 0
+        OR MsRequest.ReqStatus = 19
+        OR MsRequest.ReqStatus = 20) USE-INDEX MsSeq:
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsRequest).
          fReqStatus(4, pcMemo).
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsRequest).

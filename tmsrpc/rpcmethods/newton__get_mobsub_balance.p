@@ -46,7 +46,7 @@ DEF VAR liDayPeriod      AS INT NO-UNDO.
 DEF VAR ldeGroupBalance  AS DECIMAL NO-UNDO.
 DEF VAR ldeGroupDailyBalance AS DECIMAL NO-UNDO.
 DEF VAR tthCDR           AS HANDLE  NO-UNDO.
-DEF VAR liErrorCodeOut   AS INTEGER NO-UNDO.
+DEF VAR liErrorCodeOut   AS INTEGER NO-UNDO INIT 0.
 DEF VAR ldPeriodFrom     AS DEC     NO-UNDO.
 DEF VAR ldPeriodTo       AS DEC     NO-UNDO.
 DEF VAR ldaLastDay       AS DATE    NO-UNDO.
@@ -198,6 +198,24 @@ fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
                INPUT 0,
                INPUT "",
                INPUT MobSub.CLI,
+               INPUT 0,
+               INPUT 0,
+               INPUT "",
+               INPUT "",
+               INPUT "",
+               INPUT 0,
+               INPUT-OUTPUT liErrorCodeOut,
+               INPUT-OUTPUT tthCDR).
+
+IF liErrorCodeOut = 0 AND MobSub.FixedNumber > "" THEN 
+fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
+               INPUT gcBrand,
+               INPUT "rpc",
+               INPUT first_of_month,
+               INPUT TODAY,
+               INPUT 0,
+               INPUT "",
+               INPUT MobSub.FixedNumber,
                INPUT 0,
                INPUT 0,
                INPUT "",

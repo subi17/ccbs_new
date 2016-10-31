@@ -167,10 +167,10 @@ FORM
  lcBDName NO-LABEL   FORMAT "x(14)"  
  Time-S          LABEL "Started ...." AT 51                             SKIP
  
- ttCall.ccn  FORMAT ">>9"  label "Reporting CCN ." bCCN.CCNName No-label
+ ttCall.ccn  FORMAT ">>>9"  label "Reporting CCN ." bCCN.CCNName No-label
      format "X(29)"
  cdurat label "Duration ..."  AT 51                                     SKIP
- ttCall.rateCCN  FORMAT ">>9"    label "RateCCN/Type..." CCN.CCNName
+ ttCall.rateCCN  FORMAT ">>>9"    label "RateCCN/Type..." CCN.CCNName
                  format "x(23)" NO-LABEL          
  Time-E    label "Ended ......" AT 51                                SKIP
  

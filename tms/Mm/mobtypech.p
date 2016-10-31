@@ -171,7 +171,7 @@ form /* asks MSISDN number */
    " Customer ID....:" AgrCust.OrgID                                    
        "Active postpaid:" AT 41 liPostPaid                              SKIP
 "------------------------------------------------------------------------------"                                                                       SKIP
-   " New CLIType....:" new-type 
+   " New CLIType....:" new-type FORMAT "X(12)"
         HELP "Enter new mobile CONNECTION Cli Type"
        "(F9)"     
       "Bank Acc..:" AT 41 lcBankAccount FORMAT "X(24)"              SKIP

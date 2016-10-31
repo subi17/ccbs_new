@@ -13,6 +13,8 @@
 {Func/timestamp.i}
 {Func/forderstamp.i}
 {Func/orderfunc.i}
+{Mc/orderfusion.i}
+
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER icAction AS CHAR NO-UNDO.
 
@@ -23,6 +25,7 @@ FIND FIRST Order WHERE
 DEF VAR llOk AS LOG NO-UNDO.
 DEF VAR lcMsg AS CHAR NO-UNDO. 
 DEF VAR lcNewOrderStatus AS CHAR NO-UNDO. 
+DEF VAR lcError AS CHAR NO-UNDO. 
 
 DEF BUFFER lbOrder FOR Order.
 
@@ -77,27 +80,9 @@ END.
 /* release fusion company order */
 IF (Order.StatusCode EQ "20" OR
     Order.StatusCode EQ "21") AND
-    Order.OrderChannel BEGINS "fusion" AND 
-    CAN-FIND(FIRST OrderCustomer NO-LOCK WHERE
-                   OrderCustomer.Brand = gcBrand AND
-                   OrderCustomer.OrderId = Order.OrderId AND
-                   OrderCustomer.RowType = 1 AND
-                   OrderCustomer.CustidType = "CIF") THEN DO:
+    Order.OrderChannel BEGINS "fusion" THEN DO:
 
    lcNewOrderStatus = {&ORDER_STATUS_PENDING_FIXED_LINE}.
-
-   FIND FIRST OrderFusion NO-LOCK WHERE
-              OrderFusion.Brand   = Order.Brand AND
-              OrderFusion.OrderId = Order.OrderID NO-ERROR.
-   IF AVAIL OrderFusion AND
-            OrderFusion.FusionStatus EQ "" THEN DO:
-
-      FIND CURRENT OrderFusion EXCLUSIVE-LOCK.
-      ASSIGN
-         OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_NEW}
-         OrderFusion.UpdateTS = fMakeTS().
-      FIND CURRENT OrderFusion NO-LOCK.
-   END.
 
 END.
 ELSE IF Order.OrderType = 2 THEN DO:
@@ -169,8 +154,35 @@ ELSE IF Order.Ordertype = {&ORDER_TYPE_MNP} AND
    Order.PortingDate <> ? THEN
    lcNewOrderStatus = {&ORDER_STATUS_MNP_ON_HOLD}.
 
-IF lcNewOrderStatus > "" THEN
+IF lcNewOrderStatus > "" THEN DO:
+
    fSetOrderStatus(Order.OrderId,lcNewOrderStatus).
+   
+   IF lcNewOrderStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
+
+      FIND OrderFusion NO-LOCK WHERE
+           OrderFusion.Brand   = Order.Brand AND
+           OrderFusion.OrderId = Order.OrderID NO-ERROR.
+
+      IF OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_NEW} THEN DO:
+
+         IF OrderFusion.FixedNumber EQ "" THEN
+            fCreateFusionReserveNumberMessage(Order.OrderID,
+                                              OUTPUT lcError).
+         ELSE
+            fCreateFusionCreateOrderMessage(Order.OrderId,
+                                            OUTPUT lcError).
+      
+         IF lcError NE "" THEN 
+            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                             "Order",
+                             STRING(Order.OrderID),
+                             0,
+                             "Masmovil message creation failed",
+                             lcError).
+      END.
+   END.
+END.
 ELSE IF order.mnpstatus NE 0 THEN
    /* mnp order */
    fSetOrderStatus(Order.OrderId,"3").
@@ -178,10 +190,6 @@ ELSE
    /* normal order */
    fSetOrderStatus(Order.OrderId,"1").
 
-fMarkOrderStamp(Order.OrderID,
-                "Change",
-                0.0).
-      
 IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrder).
 fCleanEventObjects().
 

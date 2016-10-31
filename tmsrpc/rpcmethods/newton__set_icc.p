@@ -48,6 +48,11 @@ WHERE mobsub.brand = "1" and
 IF NOT AVAILABLE mobsub THEN
    RETURN appl_err(SUBST("MobSub entry &1 not found", pcMSISDN)).
 
+/*YPR-4777*/
+/*Operation is not allowed if fixed line provisioning is pending*/
+IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN
+   RETURN appl_err("Mobile line provisioning is not complete").
+
 FIND FIRST SIM NO-LOCK WHERE SIM.ICC = pcValue NO-ERROR. 
 IF NOT AVAIL SIM THEN 
    RETURN appl_err(SUBST("SIM &1 not found", pcValue)).

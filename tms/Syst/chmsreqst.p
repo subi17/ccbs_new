@@ -19,6 +19,7 @@
 {Func/fdss.i}
 {Func/fsubstermreq.i}
 {Func/main_add_lines.i}
+{Func/fixedlinefunc.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER iiFromStatus AS INTEGER NO-UNDO.
@@ -44,6 +45,7 @@ DEF VAR ldeSecSIMTermStamp AS DEC          NO-UNDO.
 DEF VAR llgAddSIMTerm      AS LOG          NO-UNDO.
 DEF VAR ldActStamp         AS DECIMAL      NO-UNDO.
 DEF VAR ldtTdDate          AS DATE         NO-UNDO.
+DEF VAR ldeActStamp        AS DEC NO-UNDO. 
 
 DEF BUFFER lbMobSub        FOR Mobsub.
 DEF BUFFER bMsRequest      FOR MsRequest.
@@ -304,6 +306,15 @@ CASE iiToStatus:
             
             IF NOT llOk THEN RETURN.
          END.
+
+         IF iiFromStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
+            NOT fCanTerminateConvergenceTariff(
+                  MsRequest.MsSeq,
+                  INT(MsRequest.ReqCParam3),
+                  OUTPUT lcError) THEN DO:
+            MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
+            RETURN.
+         END.
       
          fAddLineSTCCancellation(MsRequest.MsRequest, MsRequest.CustNum).
       END.
@@ -515,7 +526,7 @@ ELSE DO:
       MsRequest.ReqType = 10 AND
       CAN-FIND(FIRST MobSub WHERE
                      MobSub.MsSeq = MsRequest.MsSeq AND
-                     LOOKUP(MobSub.CLIType,"CONTFF,CONTSF") > 0)
+              LOOKUP(MobSub.CLIType,{&MOBSUB_CLITYPE_FUSION}) > 0)
       THEN DO:
 
       IF MONTH(TODAY) = 12
@@ -526,6 +537,21 @@ ELSE DO:
 
       FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
          IF AVAILABLE MsRequest THEN MsRequest.ActStamp = ldActStamp.
+      FIND CURRENT MsRequest NO-LOCK NO-ERROR.
+   END.
+   
+   IF iiToStatus EQ 8 AND
+      iiFromStatus EQ 19 AND
+      MsRequest.ReqType = 0 THEN DO:
+   
+      IF MsRequest.ReqDParam1 < fMakeTS() THEN
+         ldeActStamp = fMake2DT(TODAY + 1, 0).
+      ELSE ldeActStamp = MSrequest.ReqDParam1.
+
+      FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
+      ASSIGN
+         MsRequest.ReqDParam1 = ldeActStamp
+         MsRequest.ActStamp = ldeActStamp.
       FIND CURRENT MsRequest NO-LOCK NO-ERROR.
    END.
    

@@ -1023,6 +1023,7 @@
 "Order" "StatusCode" "Orders" "77" "Pending fixed line order" "" "" 1
 "Order" "StatusCode" "Orders" "78" "Waiting sending to LO" "" "" 1
 "Order" "StatusCode" "Orders" "8" "CLOSED BY YOIGO" "" "" 1
+"Order" "StatusCode" "Orders" "80" "Pending fixed line cancellation" "" "" 1
 "Order" "StatusCode" "Orders" "9" "CLOSED AFTER DEADLINE" "" "" 1
 "Order" "StatusCode" "Orders" "99" "MNP SIM Only" "" "" 1
 "Order" "Tupas" "Orders" "0" "default value" "" "" 1
@@ -1284,6 +1285,7 @@
 "requem" "10,0,2,1,3,4,7,8,9,19" "SubsLMenu" "1" "Agreement customer change" "" "" 1
 "requem" "12,1,2,3,4,9" "SubsLMenu" "0" "Customer´s marketing value update" "" "" 1
 "requem" "13,0,1,2,3,4,5,6,9" "SubsLMenu" "1" "Subscription creation" "" "" 1
+"requem" "14,0,1,2,3,4,9" "SubsLMenu" "1" "Fixed line creation" "" "" 1
 "requem" "15,0,1,2,3,4,5,6,9,15,19" "SubsLMenu" "1" "ICC change" "" "" 1
 "requem" "18,0,1,2,3,4,5,6,8,9,19" "SubsLMenu" "1" "Subscription termination" "" "" 1
 "requem" "19,0,1,2,3,4,5,6,9" "SubsLMenu" "1" "MSISDN change" "" "" 1

@@ -945,6 +945,7 @@ PROCEDURE pContractActivation:
 
       /* link to terminal */
       IF DayCampaign.DCType = "3" AND
+         NOT DayCampaign.DCEvent BEGINS "FTERM" AND
          LOOKUP(MsRequest.ReqSource,"1,7") > 0 THEN DO:
          
          /* new subscription */

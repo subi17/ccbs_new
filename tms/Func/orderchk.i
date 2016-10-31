@@ -52,7 +52,8 @@ FUNCTION fCheckRenewalData RETURNS LOGICAL:
    IF CAN-FIND(FIRST bOrderCustomer NO-LOCK WHERE
                      bOrderCustomer.Brand = gcBrand AND
                      bOrderCustomer.OrderId  = OrderCustomer.OrderID AND
-                     bOrderCustomer.RowType = 4) THEN RETURN FALSE.
+                     bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}) 
+                     THEN RETURN FALSE.
    
    IF 
       OrderCustomer.Firstname NE Customer.Firstname OR
@@ -101,7 +102,7 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
             OrderCustomer.Brand      EQ gcBrand AND 
             OrderCustomer.CustId     EQ pcPersonId AND
             OrderCustomer.CustIdType EQ pcIdType AND
-            OrderCustomer.RowType    EQ 1,
+            OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
       EACH  Order NO-LOCK WHERE
             Order.Brand              EQ gcBrand AND
             Order.orderid            EQ OrderCustomer.Orderid AND
@@ -190,9 +191,9 @@ FUNCTION fOngoingOrders RETURNS LOGICAL
 
    DEF VAR liExcludeOrderType AS INT NO-UNDO. 
 
-   IF pcNumberType EQ "stc" THEN liExcludeOrderType = 2.
+   IF pcNumberType EQ "stc" THEN liExcludeOrderType = {&ORDER_TYPE_RENEWAL}.
    ELSE IF pcNumberType EQ "renewal" OR
-           pcNumberType EQ "retention" THEN liExcludeOrderType = 4.
+           pcNumberType EQ "retention" THEN liExcludeOrderType = {&ORDER_TYPE_STC}.
    ELSE liExcludeOrderType = -1.
 
    DEF BUFFER lbOtherOrder FOR Order.   
@@ -211,6 +212,35 @@ FUNCTION fOngoingOrders RETURNS LOGICAL
    END.
 
    RETURN FALSE.
+
+END FUNCTION. 
+
+FUNCTION fOngoingFixedOrders RETURNS CHARACTER
+(pcFixedNumber AS CHAR,
+ pcNumberType  AS CHAR):
+
+   DEF VAR liExcludeOrderType AS INT NO-UNDO. 
+
+   IF pcNumberType EQ "stc" THEN liExcludeOrderType = {&ORDER_TYPE_RENEWAL}.
+   ELSE IF pcNumberType EQ "renewal" OR
+           pcNumberType EQ "retention" THEN liExcludeOrderType = {&ORDER_TYPE_STC}.
+   ELSE liExcludeOrderType = -1.
+
+   /* Check if same number in ongoing Fusion order */
+   DEF BUFFER lbOtherOrder  FOR Order.
+   DEF BUFFER lbOrderFusion FOR OrderFusion.
+   FOR EACH lbOrderFusion NO-LOCK WHERE
+            lbOrderFusion.FixedNumber EQ pcFixedNumber,
+      EACH  lbOtherOrder NO-LOCK WHERE
+            lbOtherOrder.brand EQ gcBrand AND
+            lbOtherOrder.OrderId EQ lbOrderFusion.OrderId AND
+            LOOKUP(lbOtherOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0 AND
+            lbOtherOrder.OrderType NE liExcludeOrderType:
+
+      RETURN "Ongoing order for number|" + pcFixedNumber.
+   END.
+
+   RETURN "".
 
 END FUNCTION. 
 

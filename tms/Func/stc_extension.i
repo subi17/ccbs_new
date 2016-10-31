@@ -30,8 +30,9 @@ FUNCTION fCanExtendTerminalContract RETURNS LOGICAL
    CONTRACT_LOOP:
    FOR EACH DCCLI NO-LOCK WHERE
             DCCLI.MsSeq = MobSub.MsSeq AND
-            DCCLI.ValidFrom <= idaSTCDate AND
             DCCLI.ValidTo   >= idaSTCDate AND
+            DCCLI.ValidFrom <= idaSTCDate AND
+            DCCLI.DCEvent BEGINS "TERM" AND
             DCCLI.CreateFees = TRUE,
       FIRST DayCampaign WHERE
             DayCampaign.Brand = gcBrand AND

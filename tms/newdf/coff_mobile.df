@@ -1,0 +1,26 @@
+ADD FIELD "FixedNumber" OF "MSOwner" AS character 
+  FORMAT "x(11)"
+  INITIAL ? 
+  LABEL "Fixed Number"
+  COLUMN-LABEL "FixedNumber"
+  HELP "Fixed line number"
+  ORDER 360
+
+ADD INDEX "FixedNumber_s" ON "MSOwner" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "FixedNumber" ASCENDING 
+  INDEX-FIELD "TsEnd" DESCENDING 
+
+ADD FIELD "FixedNumber" OF "TermMobSub" AS character 
+  FORMAT "x(11)"
+  INITIAL ?
+  LABEL "Fixed Number"
+  COLUMN-LABEL "FixedNumber"
+  HELP "Fixed line number"
+  ORDER 910
+
+ADD INDEX "FixedNumber" ON "TermMobsub" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "FixedNumber" ASCENDING 

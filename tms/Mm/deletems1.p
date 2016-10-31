@@ -27,7 +27,7 @@
  Version .......: xfera 
  ============================================================================*/
 
-DEFINE INPUT PARAMETER  MsSeq LIKE MobSub.MsSeq.
+DEFINE INPUT PARAMETER piMsSeq LIKE MobSub.MsSeq.
 
 {Syst/commali.i}
 {Func/timestamp.i}
@@ -143,13 +143,15 @@ FRAME main.
 
 IF getTMSRight("CCSUPER,SYST") EQ "RW" THEN llAdmin = TRUE.
 
-fDeleteMsValidation(MsSeq, OUTPUT lcError).
+liError = fDeleteMsValidation(piMsSeq, 
+                          ?, /* termination reason not yet known */
+                          OUTPUT lcError).
 IF lcError NE "" THEN DO:
    MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
-   RETURN.
+   IF liError NE 0 THEN RETURN.
 END.
 
-FIND MobSub WHERE MobSub.MsSeq = MsSeq NO-LOCK.
+FIND MobSub WHERE MobSub.MsSeq = piMsSeq NO-LOCK.
 
 ASSIGN
    lcUserCode = katun
@@ -661,6 +663,15 @@ REPEAT WITH FRAME main:
                MESSAGE "Termination will trigger STC to CONT9 for additional line(s)"
                VIEW-AS ALERT-BOX.
          END.
+      
+         liError = fDeleteMsValidation(Mobsub.MsSeq, 
+                             liOrderer, /* not yet known */
+                             OUTPUT lcError).
+         IF liError NE 0 THEN DO:
+            MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
+            NEXT ACTION.
+         END.
+         ELSE IF lcError > "" THEN MESSAGE lcError VIEW-AS ALERT-BOX.
 
          llBillPer = FALSE.
          liError = fCheckBillingPermission(MobSub.Msseq, OUTPUT lcError).
@@ -680,7 +691,7 @@ REPEAT WITH FRAME main:
             END.
 
          END.
-
+   
          MESSAGE
             "Do You REALLY want to de-activate subscription with MSISDN: "
             MobSub.CLI 
@@ -688,18 +699,6 @@ REPEAT WITH FRAME main:
          
          IF NOT ok THEN NEXT Action.
                
-         IF llBillPer THEN
-            fCreateLimitHistory(
-               MobSub.InvCust,
-               MobSub.MsSeq,
-               {&LIMIT_TYPE_BILLPERM},
-               0,
-               0,
-               0,
-               FALSE,
-               TODAY,
-               12/31/2049).
-
          LEAVE Action.
    
       END.
@@ -738,6 +737,18 @@ REPEAT WITH FRAME main:
 
       ELSE DO:
          
+         IF llBillPer THEN
+            fCreateLimitHistory(
+               MobSub.InvCust,
+               MobSub.MsSeq,
+               {&LIMIT_TYPE_BILLPERM},
+               0,
+               0,
+               0,
+               FALSE,
+               TODAY,
+               12/31/2049).
+
          fAdditionalLineSTC(liMsReq,
                             fMake2Dt(ldtKillDate + 1, 0),
                             "DELETE").

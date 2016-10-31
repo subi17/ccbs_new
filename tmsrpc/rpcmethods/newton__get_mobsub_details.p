@@ -3,6 +3,7 @@
  *
  * @input       msseq;int;
  * @output      cli;string;
+                fixed_number;string;
                 msstatus;int;(4 = active, 8 = barred)
                 barring_code;string;
                 activation_time;DateTime;
@@ -25,6 +26,9 @@
                 permanent_contract_valid_to;datetime;
                 permanent_contract_original_valid_to;datetime;
                 permanent_contract_valid_from;datetime;
+                fixed_permanent_contract_valid_to;datetime;optional;
+                fixed_permanent_contract_valid_from;datetime;optional;
+                fixed_permanent_contract_original_valid_to;datetime;optional;
                 mnp_available;int;0 = not found, 1 = found inactive, 2 = found active
                 multisim_type;int;optional;multisim subscription type (1=primary, 2=secondary)
                 multisim_msisdn;string;optional;multisim primary/secondary msisdn
@@ -68,7 +72,8 @@ DEF VAR payterm_struct AS CHAR NO-UNDO.
 DEF VAR lcPriceList AS CHARACTER NO-UNDO. 
 DEF VAR liMNPOutExists AS INT NO-UNDO.
 DEF VAR lcOrigCLIType AS CHAR NO-UNDO.
-DEF VAR liCount AS INT NO-UNDO.
+DEF VAR liCountMobile AS INT NO-UNDO.
+DEF VAR liCountFixed  AS INT NO-UNDO.
 DEF VAR liMultiSimType AS INT NO-UNDO. 
 DEF VAR lcSegmentCode AS CHAR NO-UNDO.
 DEF VAR lcSegmentOffer AS CHAR NO-UNDO.
@@ -122,6 +127,10 @@ IF AVAILABLE Segmentation THEN ASSIGN
 resp_struct = add_struct(response_toplevel_id, "").
 
 add_string(resp_struct, "cli", mobsub.cli).
+IF Mobsub.fixednumber NE ? THEN
+   add_string(resp_struct, "fixed_number", Mobsub.fixednumber).
+ELSE
+   add_string(resp_struct, "fixed_number", "").
 add_int(resp_struct, "msstatus", mobsub.MsStatus).
 add_string(resp_struct, "barring_code", (IF mobsub.MsStatus EQ 8 
                                          THEN mobsub.barrcode
@@ -334,7 +343,8 @@ IF NOT MobSub.PayType THEN DO:
 
 
    /* Count possible penalty fee for terminal contract termination */
-   liCount = 0.
+   liCountMobile = 0.
+   liCountFixed  = 0.
 
    CONTRACT_LOOP:
    FOR EACH DCCLI NO-LOCK WHERE
@@ -349,36 +359,42 @@ IF NOT MobSub.PayType THEN DO:
             DayCampaign.TermFeeModel NE "" AND
             DayCampaign.TermFeeCalc > 0 NO-LOCK BY DCCLI.ValidFrom DESC:
    
-      liCount = liCount + 1.
+      IF DCCLI.DCEvent BEGINS "TERM" THEN DO:
+         liCountMobile = liCountMobile + 1.
+         IF liCountMobile > 1 THEN NEXT.
 
-      IF liCount > 1 THEN LEAVE CONTRACT_LOOP.
+         add_datetime(resp_struct,"permanent_contract_valid_to",
+            (IF DCCLI.Termdate NE ? THEN DCCLI.Termdate ELSE DCCLI.ValidTo)).
 
-      lcPriceList = fFeeModelPriceList(MobSub.Custnum,
-                                       MobSub.BillTarget,
-                                       DayCampaign.TermFeeModel,
-                                       TODAY).
+         add_datetime(resp_struct,"permanent_contract_valid_from",
+            (IF DCCLI.RenewalDate NE ? THEN DCCLI.RenewalDate ELSE DCCLI.ValidFrom)).
+      
+         add_datetime(resp_struct,"permanent_contract_original_valid_to",
+            (IF DCCLI.ValidToOrig NE ? THEN DCCLI.ValidToOrig ELSE DCCLI.ValidTo)).
 
-      FIND FIRST FMItem NO-LOCK WHERE
-                 FMItem.Brand     = gcBrand       AND
-                 FMItem.FeeModel  = DayCampaign.TermFeeModel AND
-                 FMItem.PriceList = lcPriceList AND
-                 FMItem.FromDate <= TODAY     AND
-                 FMItem.ToDate   >= TODAY NO-ERROR.
-   
-      add_datetime(resp_struct,"permanent_contract_valid_to",
-         (IF DCCLI.Termdate NE ? THEN DCCLI.Termdate ELSE DCCLI.ValidTo)).
+         /* clitype at the moment of discount periodical contract creation */
+         lcOrigCLIType = fGetCLITypeAtTermDiscount(BUFFER DCCLI). 
+         IF lcOrigCLIType NE "" THEN 
+            add_string(resp_struct,"original_subscription_type_id",lcOrigCLIType).
+      END.
+      ELSE IF DCCLI.DCEvent BEGINS "FTERM" AND 
+         Mobsub.fixednumber NE ? THEN DO:
+         liCountFixed = liCountFixed + 1.
+         IF liCountFixed > 1 THEN NEXT.
 
-      add_datetime(resp_struct,"permanent_contract_valid_from",
-         (IF DCCLI.RenewalDate NE ? THEN DCCLI.RenewalDate ELSE DCCLI.ValidFrom)).
-   
-      add_datetime(resp_struct,"permanent_contract_original_valid_to",
-         (IF DCCLI.ValidToOrig NE ? THEN DCCLI.ValidToOrig ELSE DCCLI.ValidTo)).
+         add_datetime(resp_struct,"fixed_permanent_contract_valid_to",
+            (IF DCCLI.Termdate NE ? THEN DCCLI.Termdate ELSE DCCLI.ValidTo)).
 
-      /* clitype at the moment of discount periodical contract creation */
-      lcOrigCLIType = fGetCLITypeAtTermDiscount(BUFFER DCCLI). 
-      IF lcOrigCLIType NE "" THEN 
-         add_string(resp_struct,"original_subscription_type_id",lcOrigCLIType).
+         add_datetime(resp_struct,"fixed_permanent_contract_valid_from",
+            (IF DCCLI.RenewalDate NE ? THEN DCCLI.RenewalDate ELSE DCCLI.ValidFrom)).
+      
+         add_datetime(resp_struct,"fixed_permanent_contract_original_valid_to",
+            (IF DCCLI.ValidToOrig NE ? THEN DCCLI.ValidToOrig ELSE DCCLI.ValidTo)).
 
+      END.
+
+      IF liCountMobile GE 1 AND 
+         liCountFixed  GE 1 THEN LEAVE CONTRACT_LOOP.
    END. /* CONTRACT_LOOP: */
 END.
 

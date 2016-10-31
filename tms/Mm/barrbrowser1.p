@@ -238,7 +238,17 @@ REPEAT WITH FRAME frTop:
                   RUN Syst/ufkey.p.
                   NEXT BROWSE.                 
                END.   
-               
+               /*YPR-4774*/
+               /*(De)Activation is not allowed if fixed line provisioning 
+                is pending*/
+               IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} /*16*/ THEN DO:
+                  MESSAGE "Mobile line provisioning is not complete" 
+                     VIEW-AS ALERT-BOX. 
+                  ufkey = TRUE.
+                  RUN ufkey.
+                  NEXT BROWSE.
+               END.
+
                IF fIsReasonableSet(lcBCommand, MobSub.MsSeq) EQ FALSE THEN DO:
                   MESSAGE "Barring status already active/inactive"
                   VIEW-AS ALERT-BOX.

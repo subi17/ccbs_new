@@ -90,6 +90,10 @@ DEFINE VARIABLE lcFMName         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcDCName         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcTariffName     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcBonoSupport    AS CHARACTER NO-UNDO.
+/*convergence*/
+DEFINE VARIABLE lcBundleUpsell   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcBundleList     AS CHARACTER NO-UNDO.
+
 
 DEFINE TEMP-TABLE ttTariffCre NO-UNDO 
    FIELD FieldName  AS CHARACTER 
@@ -294,7 +298,8 @@ RUN pDayCampaign IN h_config(lcFinalTariff,
                              lcTOC,
                              llgSLCreated,
                              lcMFBC,
-                             lcPaymentType).
+                             lcPaymentType,
+                             lcBundleUpsell).
 
 IF RETURN-VALUE <> "OK" THEN DO:
    fError(RETURN-VALUE).
@@ -593,6 +598,11 @@ FOR EACH ttTariffCre NO-LOCK:
           IF ttTariffCre.FieldValue NE "" THEN
              ASSIGN llgVoiceLimit = YES
                     lcVoiceLimit  = ttTariffCre.FieldValue.
+      END.
+      /*convergence*/
+      WHEN {&BUPS} THEN DO:
+          IF ttTariffCre.FieldValue NE "" THEN
+             lcBundleUpsell  = ttTariffCre.FieldValue.
       END.
    END CASE. 
         

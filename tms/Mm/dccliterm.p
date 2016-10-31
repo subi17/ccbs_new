@@ -135,9 +135,6 @@ IF DayCampaign.DCType = "1" THEN DO:
       RETURN.
    END.
    
-   llCreateFees = (DayCampaign.DCType = "3" AND
-                   DayCampaign.TermFeeCalc > 0). 
-
 END.
 
 /* others */

@@ -48,6 +48,7 @@ DEF TEMP-TABLE ttDump NO-UNDO
    FIELD TTRecid     AS RECID
    FIELD FileNameTag AS CHAR
    FIELD Replication AS LOG
+   FIELD DumpTrigger AS LOG
    INDEX DumpID DumpID DumpMode.
    
 DEF BUFFER bTimeTable FOR DFTimeTable.
@@ -180,7 +181,8 @@ FOR EACH DumpFile NO-LOCK WHERE
             ttDump.TTRecid     = RECID(DFTimeTable)
             ttDump.DumpTime    = ttTimes.DumpTime
             ttDump.FileNameTag = DFTimeTable.FileNameTag
-            ttDump.Replication = llReplica.
+            ttDump.Replication = llReplica
+            ttDump.DumpTrigger = DFTimeTable.DumpTrigger.
          
          /* mark as picked, in case next cron run starts before this
             is handled */
@@ -250,6 +252,7 @@ IF llQuery THEN DO:
    QUIT.
 END.
 
+DEF VAR llgDumpTrigger AS LOG NO-UNDO. 
 
 IF NOT llQuery THEN 
 FOR EACH ttDump
@@ -271,7 +274,15 @@ BY ttDump.DumpTime:
    ASSIGN
       liFiles  = liFiles + 1
       liDumped = liDumped + liCnt.
-   
+
+   /* Reseting the DumpTrigger event if available */ 
+   IF ttDump.DumpTrigger THEN DO:
+      fResetDumpTrigger(ttDump.DumpID,
+                        ttDump.DumpMode).
+       
+      IF NOT llgDumpTrigger THEN 
+         fELog("DUMPFILE" + (IF liBatchID = 0 THEN "" ELSE "_" + STRING(liBatchID)),"ERROR: Trigger Dump"). 
+   END.
    /* mark as done */
    fMarkTimeTable(ttDump.TTRecid,"done").
 END.

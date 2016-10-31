@@ -373,6 +373,7 @@ PROCEDURE local-Dump-Invoice:
       invoice.FirstName       lcDelim
       invoice.Surname2        lcDelim
       invoice.Surname1        lcDelim
-      invoice.CreditReason    SKIP.
+      invoice.CreditReason    lcDelim
+      SubInvoice.FixedNumber  SKIP.
 
 END PROCEDURE.

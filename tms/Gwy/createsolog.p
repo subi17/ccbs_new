@@ -5,6 +5,7 @@
 {Func/fmakemsreq.i}
 {Syst/tmsconst.i}
 {Func/fdss.i}
+{Func/fixedlinefunc.i}
 
 DEF INPUT PARAMETER iiRequest AS INTEGER NO-UNDO.
 
@@ -28,7 +29,28 @@ DEF BUFFER bPendRequest FOR MsRequest.
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
 IF NOT AVAILABLE MsRequest THEN RETURN "ERROR".
-      
+   
+IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} THEN DO:
+
+   FIND FIRST MobSub NO-LOCK WHERE
+              MobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
+
+   IF AVAIL MobSub THEN DO:
+      IF NOT fCanTerminateConvergenceTariff(MobSub.MsSeq,
+                                            INT(MsRequest.ReqCParam3),
+                                            OUTPUT lcError) THEN DO:
+         fReqError(SUBST("ERROR: &1", lcError)).
+         RETURN.
+      END.
+   
+      IF MobSub.MsStatus EQ {&MSSTATUS_FIXED_PROV_ONG} AND
+         MobSub.IMSI EQ "" THEN DO:
+         fReqStatus(6,"").
+         RETURN.
+      END.
+   END.
+END.
+ 
 IF (MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} OR
     MSRequest.ReqType = {&REQTYPE_ICC_CHANGE}) AND
     MSRequest.ReqIParam5 > 0 THEN DO:

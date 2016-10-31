@@ -68,7 +68,7 @@ form
     ttSLG.CliType   COLUMN-LABEL "CliType"   FORMAT "X(7)" 
     ttSLG.BillCode  COLUMN-LABEL "BillCode"  FORMAT "X(8)" 
     BillItem.BiName  FORMAT "X(12)"
-    ttSLG.CCN       COLUMN-LABEL "CCN"       FORMAT ">>9"
+    ttSLG.CCN       COLUMN-LABEL "CCN"       FORMAT ">>>9"
     CCN.CCNName      FORMAT "X(12)" 
     ttSLG.Bdest     COLUMN-LABEL "Destination"  
     ttSLG.ValidFrom    COLUMN-LABEL "Date" 

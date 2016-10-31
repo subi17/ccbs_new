@@ -49,7 +49,6 @@ DEF VAR top_struct       AS CHAR NO-UNDO.
 
 /* Local variables */
 DEF VAR liCreditCheck    AS INT  NO-UNDO INIT 1.
-DEF VAR lcPerTypeName    AS CHAR NO-UNDO.
 DEF VAR lcInfo           AS CHAR NO-UNDO.
 DEF VAR ok               AS LOG  NO-UNDO.
 DEF VAR lcError          AS CHAR NO-UNDO.
@@ -124,8 +123,6 @@ IF fValidateNewCliType(INPUT pcCliType, INPUT pcDataBundleId,
                        INPUT FALSE, OUTPUT lcError) NE 0 THEN DO:
    RETURN appl_err(lcError).
 END.
-
-IF fChkSTCPerContr() EQ TRUE THEN lcPerTypeName = "Terminaldiscount".
 
 /* Check if credit check is needed */
 IF fServAttrValue(MobSub.CLIType,

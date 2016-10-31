@@ -8,8 +8,20 @@
                 username;string;optional;username of caller
                 reasoncode;int;optional;reason why query is done
                 reason;string;optional;reason why query is done
- * @output      cdr_datastruct;struct;contains needed CDR information as specified above ruby stub implementation
+ * @output      mobile;struct;Mobile line CDRs
+                fixed_line;struct;Fixed line CDRs
+ * @mobile      cdr_datastruct;struct;contains needed CDR information as specified above ruby stub implementation
+ * @fixed_line  cdr_datastruct;struct;contains needed CDR information as specified above ruby stub implementation
  */
+{Syst/commpaa.i}
+katun = "Newton RPC".
+gcBrand = "1".
+
+{Func/timestamp.i}
+{Func/cparam2.i}
+{Func/fdestcountry.i}
+{Func/callquery.i}
+{Func/istc.i}
 {xmlrpc/xmlrpc_access.i}
 {Func/transname.i}
 {Rate/rate_roamzone.i}
@@ -29,9 +41,9 @@ DEFINE VARIABLE pcReason      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE top_array     AS CHARACTER NO-UNDO. 
 
 /* Output parameters */
-DEFINE VARIABLE resp_struct AS CHARACTER NO-UNDO.
-DEFINE VARIABLE resp_rows   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE resp_row    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE resp_struct   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE resp_rows     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE resp_row      AS CHARACTER NO-UNDO.
 
 /* Local variables */
 DEFINE VARIABLE lcBrand     AS CHARACTER NO-UNDO INIT "1".
@@ -52,21 +64,6 @@ DEF TEMP-TABLE ttData NO-UNDO
    FIELD DataAmt  AS DEC
    FIELD DataSum  AS DEC
    INDEX BIName BIName.
-
-FUNCTION fRepText RETURNS CHARACTER
-  (INPUT piType AS INTEGER,
-   INPUT piLang AS INTEGER,
-   INPUT pcKey  AS CHARACTER,
-   INPUT pdtDate AS DATE):
-
-   DEFINE VARIABLE lcReturn AS CHARACTER NO-UNDO.
-   
-   lcReturn = fTranslationName(lcBrand,piType,pcKey,piLang,pdtDate).
-   IF lcReturn = ? OR lcReturn = "" THEN lcReturn = "-".
-   
-   RETURN lcReturn.
-
-END FUNCTION.
 
 /* Check Input parameters */
 top_array = validate_request(param_toplevel_id, "int,dateTime,dateTime,string,string,[int],[string]").
@@ -101,8 +98,6 @@ IF TRIM(pcUsername) EQ "" THEN RETURN appl_err("username is empty").
 IF LOOKUP(pcSearchMode,({&NORMAL} + "," + {&DETAILED})) = 0 
    THEN pcSearchMode = {&NORMAL}.
 
-resp_struct = add_struct(response_toplevel_id, "").
-
 FIND FIRST mobsub WHERE
            mobsub.msseq = piMsSeq
 NO-LOCK NO-ERROR.
@@ -124,77 +119,6 @@ FIND FIRST RatePlan WHERE
 IF NOT AVAILABLE RatePlan THEN
    RETURN appl_err(SUBST("RatePlan &1 not found", CliType.PricePlan)).
 
-{Syst/commpaa.i}
-katun = "Newton RPC".
-gcBrand = "1".
-
-{Func/timestamp.i}
-{Func/cparam2.i}
-{Func/fdestcountry.i}
-{Func/callquery.i}
-{Func/istc.i}
-
-    /* HEADERS FIRST ROW */
-/* "headers" => 
-  #              Date         Time     Number       Type    Destination  Tariff      Minutes/KB/Pcs   Price
-  "headers" => ["Fecha",     "Hora",  "Numero",    "Tipo",  "Destino",   "Tarifa",   "Mins/KB/Cant.", "Importe"],
-  "rows" => [   ["1.1.2001", "12:21", "040123456", "Voice", "Operator2", "Contrato", "1:20",          "1,10"],
-                ["2.1.2001", "15:22", "040123456", "Voice", "Operator2", "Contrato", "3:21",          "2,20"],
-                ["3.1.2001", "22:51", "040123456", "Voice", "Operator2", "Contrato", "5:13",          "1,40"],
-                ["4.1.2001", "12:54", "040123456", "Voice", "Operator1", "Contrato", "7:12",          "4,20"],
-              [  "5.1.2001", "17:21", "040123456", "Voice", "Operator1", "Contrato", "0:32",          "0,80"] ]
-*/
-   
-
-/* PostPaid headers */
-
-ASSIGN ldaFirstDay = DATE(MONTH(pdStartDate),1,YEAR(pdStartDate))
-       ldaLastDay  = fLastDayOfMonth(pdEndDate).
-
-fGetMsOwnerTempTable(MobSub.Custnum,ldaFirstDay,ldaLastDay,
-                     TRUE,MobSub.PayType).
-
-resp_row = add_array(resp_struct, "headers").
-
-IF pcSearchMode = {&NORMAL} THEN DO:
-   
-   add_string(resp_row, "", "Fecha").
-   add_string(resp_row, "", "Hora").
-   add_string(resp_row, "", from_utf8("Número")).   
-   add_string(resp_row, "", "Tipo").
-   add_string(resp_row, "", "Destino").
-   add_string(resp_row, "", "Tarifa").
-   add_string(resp_row, "", "Mins/MB/Cant.").
-   add_string(resp_row, "", "Importe").
-
-   /* PrePaid headers */
-   IF MobSub.PayType EQ TRUE AND pcUserName NE "miyoigo" 
-      THEN add_string(resp_row, "", "Saldo").
-
-END.
-
-ELSE IF pcSearchMode = {&DETAILED} THEN DO:
-   
-   add_string(resp_row, "", from_utf8("Número A")).          /* A number */
-   add_string(resp_row, "", from_utf8("Número B")).          /* B number */
-   add_string(resp_row, "", "Informe CCN").        /* Report CCN */
-   add_string(resp_row, "", from_utf8("Tarificación CCN")).  /* Rate CCN */
-   add_string(resp_row, "", "Plan de tarifas").    /* Rate Plan */
-   add_string(resp_row, "", "Tipo de CDR").        /* CDR Type */
-   add_string(resp_row, "", "Fecha").              /* Date */
-   add_string(resp_row, "", "Inicio").             /* Started */
-   add_string(resp_row, "", "Fin").                /* Ended */
-   add_string(resp_row, "", from_utf8("Duración")).          /* Duration */
-   add_string(resp_row, "", "Datos (MB)").         /* Data (Mb) */ 
-   add_string(resp_row, "", from_utf8("Facturar ítem")).     /* Bill Item */
-   add_string(resp_row, "", "Tarifa inicial").     /* Starting fee */
-   add_string(resp_row, "", "Cobro por unidad").   /* Unit charge */
-   add_string(resp_row, "", "Cobro total").        /* Total charge */
-   add_string(resp_row, "", from_utf8("Nº Factura")).        /* Invoice number */
-   
-END.
-
-resp_rows = add_array(resp_struct, "rows").
 
 IF pcUserName EQ "miyoigo" THEN DO:
    
@@ -205,7 +129,84 @@ END. /* IF pcUserName EQ "miyoigo" THEN DO: */
 
 lcNonCombinedData = fCParamC("NON_COMBINED_DATA_ROWS").
 
-/* Query TMS for CDRs */
+ASSIGN ldaFirstDay = DATE(MONTH(pdStartDate),1,YEAR(pdStartDate))
+       ldaLastDay  = fLastDayOfMonth(pdEndDate).
+
+fGetMsOwnerTempTable(MobSub.Custnum,ldaFirstDay,ldaLastDay,
+                     TRUE,MobSub.PayType).
+
+
+FUNCTION fRepText RETURNS CHARACTER
+  (INPUT piType AS INTEGER,
+   INPUT piLang AS INTEGER,
+   INPUT pcKey  AS CHARACTER,
+   INPUT pdtDate AS DATE):
+
+   DEFINE VARIABLE lcReturn AS CHARACTER NO-UNDO.
+   
+   lcReturn = fTranslationName(lcBrand,piType,pcKey,piLang,pdtDate).
+   IF lcReturn = ? OR lcReturn = "" THEN lcReturn = "-".
+   
+   RETURN lcReturn.
+
+END FUNCTION.
+
+/* This function makes header lines for mobile and fixed numbers */
+FUNCTION fMakeHeader RETURNS LOGICAL
+  (INPUT pcStructId AS CHARACTER):
+
+/* HEADERS FIRST ROW */
+/* "headers" => 
+  #              Date         Time     Number       Type    Destination  Tariff      Minutes/KB/Pcs   Price
+  "headers" => ["Fecha",     "Hora",  "Numero",    "Tipo",  "Destino",   "Tarifa",   "Mins/KB/Cant.", "Importe"],
+  "rows" => [   ["1.1.2001", "12:21", "040123456", "Voice", "Operator2", "Contrato", "1:20",          "1,10"],
+                ["2.1.2001", "15:22", "040123456", "Voice", "Operator2", "Contrato", "3:21",          "2,20"],
+                ["3.1.2001", "22:51", "040123456", "Voice", "Operator2", "Contrato", "5:13",          "1,40"],
+                ["4.1.2001", "12:54", "040123456", "Voice", "Operator1", "Contrato", "7:12",          "4,20"],
+              [  "5.1.2001", "17:21", "040123456", "Voice", "Operator1", "Contrato", "0:32",          "0,80"] ]
+*/
+
+/* PostPaid headers */
+IF pcSearchMode = {&NORMAL} THEN DO:
+   
+   add_string(pcStructId, "", "Fecha").
+   add_string(pcStructId, "", "Hora").
+   add_string(pcStructId, "", from_utf8("Número")).   
+   add_string(pcStructId, "", "Tipo").
+   add_string(pcStructId, "", "Destino").
+   add_string(pcStructId, "", "Tarifa").
+   add_string(pcStructId, "", "Mins/MB/Cant.").
+   add_string(pcStructId, "", "Importe").
+
+   /* PrePaid headers */
+   IF MobSub.PayType EQ TRUE AND pcUserName NE "miyoigo" 
+      THEN add_string(pcStructId, "", "Saldo").
+
+END.
+
+ELSE IF pcSearchMode = {&DETAILED} THEN DO:
+   
+   add_string(pcStructId, "", from_utf8("Número A")).          /* A number */
+   add_string(pcStructId, "", from_utf8("Número B")).          /* B number */
+   add_string(pcStructId, "", "Informe CCN").        /* Report CCN */
+   add_string(pcStructId, "", from_utf8("Tarificación CCN")).  /* Rate CCN */
+   add_string(pcStructId, "", "Plan de tarifas").    /* Rate Plan */
+   add_string(pcStructId, "", "Tipo de CDR").        /* CDR Type */
+   add_string(pcStructId, "", "Fecha").              /* Date */
+   add_string(pcStructId, "", "Inicio").             /* Started */
+   add_string(pcStructId, "", "Fin").                /* Ended */
+   add_string(pcStructId, "", from_utf8("Duración")).          /* Duration */
+   add_string(pcStructId, "", "Datos (MB)").         /* Data (Mb) */ 
+   add_string(pcStructId, "", from_utf8("Facturar ítem")).     /* Bill Item */
+   add_string(pcStructId, "", "Tarifa inicial").     /* Starting fee */
+   add_string(pcStructId, "", "Cobro por unidad").   /* Unit charge */
+   add_string(pcStructId, "", "Cobro total").        /* Total charge */
+   add_string(pcStructId, "", from_utf8("Nº Factura")).        /* Invoice number */
+   
+END.
+RETURN TRUE.
+
+END FUNCTION.
 
 FUNCTION fResponseRow RETURNS LOGICAL
    (ihCDR AS HANDLE,
@@ -431,6 +432,12 @@ FUNCTION fResponseRow RETURNS LOGICAL
 
 END FUNCTION. 
 
+/* Query TMS for CDRs */
+
+/* Collect CDRs from given number and make rows */
+FUNCTION fCollectCdrs RETURNS LOGICAL
+   (INPUT pcCLI    AS CHARACTER):
+
 EMPTY TEMP-TABLE ttCall.
    
 fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
@@ -440,7 +447,7 @@ fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
                INPUT pdEndDate,
                INPUT 0,
                INPUT "",
-               INPUT MobSub.CLI,
+               INPUT pcCLI,
                INPUT 0,
                INPUT 0,
                INPUT "",
@@ -482,7 +489,21 @@ FOR EACH ttCall WHERE
       lcCLIType = ttMsOwner.CLIType + ttMsOwner.TariffBundle.
    END.
    ELSE fResponseRow(BUFFER ttCall:HANDLE,FALSE).   
+END.
+   RETURN TRUE.
+END FUNCTION. 
 
+resp_struct = add_struct(response_toplevel_id, "").
+
+/* Collect CDR data and put them into responce rows */
+resp_row = add_array(resp_struct, "headers").
+fMakeHeader(resp_row).
+resp_rows = add_array(resp_struct, "rows").
+fCollectCdrs(MobSub.Cli).
+
+/* If there is fixed line number also then put that data into fixed_line struct */
+IF MobSub.FixedNumber <> ? THEN DO:
+   fCollectCdrs(MobSub.FixedNumber).
 END.
 
 /* Create CallScanner record from XML-RPC query */

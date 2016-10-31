@@ -323,7 +323,7 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
    NO-LOCK NO-ERROR.           
                 
    IF NOT AVAILABLE RatePlan THEN 
-      RETURN "ERROR: RatePlan doesn't exists".
+      RETURN lcRateplan + " ERROR: RatePlan doesn't exists " + REPLACE(icTariffCode,"CONT","CONTRATO").
    
    FIND FIRST PListConf WHERE 
               PListConf.Brand    = gcBrand           AND 
@@ -370,6 +370,7 @@ DEFINE INPUT PARAMETER icTOC         AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER ilgSLCreated  AS LOGICAL   NO-UNDO.
 DEFINE INPUT PARAMETER icMFBC        AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER icPaymentType AS CHARACTER NO-UNDO.
+DEFINE INPUT PARAMETER icBundleUpsell AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE lcFeeModel  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
@@ -393,7 +394,7 @@ DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
       DayCampaign.DCEvent         = icTariffCode 
       DayCampaign.DCName          = icDCName
       DayCampaign.ValidFrom       = TODAY 
-      DayCampaign.ValidTo         = 12/31/15
+      DayCampaign.ValidTo         = 12/31/49
       DayCampaign.StatusCode      = 1           /* Default value Active */
       DayCampaign.DCType          = lcTOC
       DayCampaign.InstanceLimit   = 1                            
@@ -419,7 +420,7 @@ DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
                                                           "DurUnit",
                                                           "PerContr"))
       DayCampaign.WeekDay         = ""
-      DayCampaign.BundleUpsell    = ""
+      DayCampaign.BundleUpsell    = icBundleUpsell
       DayCampaign.FeeModel        = icFeeModel
       DayCampaign.ModifyFeeModel  = ""                          
       DayCampaign.TermFeeModel    = ""                          

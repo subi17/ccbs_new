@@ -390,16 +390,22 @@ REPEAT WITH FRAME sel:
               RUN VALUE(lcModule) (iiOrderid,FALSE,{&ORDER_STATUS_CLOSED_BY_FRAUD}).
            END.
 
-           ELSE IF Num-ENTRIES(ttbrowser.ofmodule,",") = 2 THEN DO:
-              RUN VALUE(lcModule) (iiOrderid).
-           END.
-
            ELSE IF lcModule = "Mc/dpmember.p" THEN DO:
               RUN VALUE(lcModule) (0,"MobSub",Order.MsSeq).
            END.
 
            ELSE IF lcModule = "dms" OR lcModule = "Mc/dms.p" THEN DO:
               RUN Mc/dms.p(Order.OrderId,Order.ContractID).
+           END.
+           
+           ELSE IF Num-ENTRIES(ttbrowser.ofmodule,",") = 2 THEN DO:
+              RUN VALUE(lcModule) (iiOrderid).
+              IF RETURN-VALUE NE "" THEN
+                MESSAGE RETURN-VALUE VIEW-AS ALERT-BOX.
+           END.
+
+           ELSE IF lcModule = "convview" OR lcModule = "Mc/convview.p" THEN DO:
+              RUN Mc/convview.p(Order.Orderid).
            END.
 
            ELSE 
