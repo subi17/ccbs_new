@@ -1,7 +1,8 @@
 {triggers/hpddelete_generic.i CliType CLITYPE Ordercanal CliType}
-/* TODO: FIX AFTER RELEASE */
-/*
-{commali.i}
+
+{commpaa.i}
+gcBrand = "1".
+
 {tmsconst.i}
 
 IF NEW CliType
@@ -29,4 +30,4 @@ IF AVAIL DumpFile THEN DO:
                 DFTimeTable.DumpTrigger = YES.
    END.   
 END.
-*/
+

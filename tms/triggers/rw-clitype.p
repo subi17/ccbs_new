@@ -1,7 +1,8 @@
 {triggers/hpdwrite_generic.i CliType CLITYPE Ordercanal CliType}
-/* TODO: FIX AFTER RELEASE */
-/*
-{commali.i}
+
+{commpaa.i}
+gcBrand = "1".
+   
 {tmsconst.i}
 
 DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
@@ -36,4 +37,4 @@ DO:
    END.     
 
 END.
-*/
+
