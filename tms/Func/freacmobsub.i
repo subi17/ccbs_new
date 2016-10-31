@@ -74,10 +74,25 @@ FUNCTION freacprecheck RETURNS CHARACTER
       RETURN "MsOwner record not found".
 
    fSplitTS(INPUT bMsowner.tsend, OUTPUT ldTermDate, OUTPUT liTermTime).
-   IF today > (ldTermDate + liReacDays) AND NOT ilSkipCheck THEN
-      RETURN "Subscription reactivation is not allowed after " +
-             STRING(liReacDays) + " days of termination".
-
+   IF today > (ldTermDate + liReacDays) AND NOT ilSkipCheck THEN DO:
+      /* YOT-4715, reactivation over 30 days was not possible */
+      ASSIGN liReactMsseq = fCParamI("ReactMsseq").
+      IF btermmobsub.msseq EQ liReactMsseq THEN DO: 
+         /* Bypass this one MsSeq only once and remove value from Cparam */
+         FIND FIRST TMSParam EXCLUSIVE-LOCK WHERE
+                    TMSParam.Brand     = gcBrand AND
+                    TMSParam.ParamCode = "ReactMsseq" NO-ERROR.
+         IF AVAILABLE TMSParam THEN DO:
+            ASSIGN TMSParam.IntVal = -1.
+            RELEASE TMSParam.
+         END.
+      END.
+      ELSE DO: /* In normal case, return error */
+            RETURN "Subscription reactivation is not allowed after " +
+                   STRING(liReacDays) + " days of termination".
+      END.
+   END.
+   
    IF CAN-FIND (FIRST mobsub where mobsub.cli = bTermMobSub.cli) THEN
       RETURN "Subscription is already active with same MSISDN".
 
@@ -121,8 +136,8 @@ FUNCTION freacprecheck RETURNS CHARACTER
       END. /* FOR EACH bMobSub WHERE */
       IF NOT llPrimaryActive THEN DO:
          ASSIGN liReactMsseq = fCParamI("ReactMsseq").
-         IF btermmobsub.msseq EQ liReactMsseq THEN DO:    /* Bypass this one MsSeq only once */
-            /* Remove value from Cparam */
+         IF btermmobsub.msseq EQ liReactMsseq THEN DO:
+         /* Bypass this one MsSeq only once and remove value from Cparam */
             FIND FIRST TMSParam EXCLUSIVE-LOCK WHERE
                        TMSParam.Brand     = gcBrand AND
                        TMSParam.ParamCode = "ReactMsseq" NO-ERROR.
