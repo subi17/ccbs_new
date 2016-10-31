@@ -10,6 +10,7 @@
 {orderchk.i}
 {orderfunc.i}
 {mnpoutchk.i}
+{orderfusion.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER iiSecureOption AS INT NO-UNDO.
@@ -21,12 +22,13 @@ DEF VAR lcRenoveSMSText AS CHAR NO-UNDO.
 DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
 DEF VAR lcOldStatus AS CHAR NO-UNDO. 
 DEF VAR lcNewStatus AS CHAR NO-UNDO. 
+DEF VAR lcError AS CHAR NO-UNDO. 
 
 DEF BUFFER lbOrder FOR Order.
 
 FIND FIRST Order WHERE 
            Order.Brand   = gcBrand AND 
-           Order.OrderID = iiOrder EXCLUSIVE-LOCK NO-ERROR.
+           Order.OrderID = iiOrder NO-LOCK NO-ERROR.
 
 IF not avail order THEN DO:
     MESSAGE
@@ -51,6 +53,30 @@ IF NOT ilSilent THEN DO:
    END.
 END.
 
+FIND CURRENT Order EXCLUSIVE-LOCK.
+IF NOT ilSilent AND CURRENT-CHANGED Order THEN DO:
+   
+   MESSAGE "Order status was changed by other process. Try again"
+   VIEW-AS ALERT-BOX ERROR.
+   
+   RETURN "".
+END.
+
+IF NOT ilSilent AND
+   Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN DO:
+
+   FIND FIRST OrderFusion NO-LOCK WHERE
+              OrderFusion.Brand   = Order.Brand AND
+              OrderFusion.OrderId = Order.OrderID NO-ERROR.
+   IF AVAIL OrderFusion AND 
+            OrderFusion.FusionStatus NE {&FUSION_ORDER_STATUS_FINALIZED} THEN DO:
+      MESSAGE "Not allowed: Ongoing fixed line installation"
+      VIEW-AS ALERT-BOX ERROR.
+      
+      RETURN "".
+   END.
+END.
+
 lcOldStatus = Order.StatusCode.
 
 IF llDoEvent THEN DO:
@@ -62,12 +88,18 @@ IF llDoEvent THEN DO:
    lhOrder = BUFFER Order:HANDLE.
    RUN StarEventInitialize(lhOrder).
 END.               
+      
+FIND FIRST OrderCustomer WHERE
+   OrderCustomer.Brand = gcBrand AND
+   OrderCustomer.OrderId = Order.OrderId AND
+   OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
 IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrder).
 
 IF Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} THEN DO:
    
    IF Order.RoiResult EQ "risk" THEN DO:
+
       fSetOrderStatus(Order.OrderId, STRING(40 + Order.RoiLevel)). 
       
       IF llDoEvent THEN DO:
@@ -78,6 +110,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} THEN DO:
       RETURN "".
    END.
 
+<<<<<<< HEAD
    IF Order.OrderChannel BEGINS "fusion" THEN DO:
       FIND FIRST OrderCustomer WHERE
          OrderCustomer.Brand = gcBrand AND
@@ -102,6 +135,26 @@ IF Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} THEN DO:
          fSetOrderStatus(Order.OrderId,lcNewStatus).
       END. /* IF OrderCustomer.CustidType = "CIF" THEN */
       ELSE fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_FIXED_LINE}).
+   
+   IF Order.OrderChannel BEGINS "fusion" AND
+      LOOKUP(OrderCustomer.CustidType,"CIF,CFraud,CInternal") > 0 THEN DO:
+
+      FIND FIRST Customer WHERE
+         Customer.Brand      = Order.Brand          AND 
+         Customer.OrgId      = OrderCustomer.CustId AND
+         Customer.CustIdType = OrderCustomer.CustIdType AND
+         Customer.Roles NE "inactive" NO-LOCK NO-ERROR. 
+      IF AVAIL Customer THEN DO:
+         FIND FIRST MobSub WHERE
+                    MobSub.Brand   = gcBrand AND
+                    MobSub.AgrCust = Customer.CustNum
+              NO-LOCK NO-ERROR.
+         IF NOT AVAIL MobSub THEN lcNewStatus = "20".
+         ELSE lcNewStatus = "21".
+      END. /* IF AVAIL Customer THEN DO: */
+      ELSE lcNewStatus = "20".
+
+      fSetOrderStatus(Order.OrderId,lcNewStatus).
       
       IF llDoEvent THEN DO:
          RUN StarEventMakeModifyEvent(lhOrder).
@@ -116,7 +169,8 @@ END.
 IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}  OR
     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_2}  OR
     Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_3}  OR
-    Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED}) AND
+    Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
+    Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT}) AND
     Order.OrderChannel BEGINS "fusion" THEN DO:
 
    fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_FIXED_LINE}).
@@ -125,13 +179,26 @@ IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}  OR
               OrderFusion.Brand   = Order.Brand AND
               OrderFusion.OrderId = Order.OrderID NO-ERROR.
    IF AVAIL OrderFusion AND
-            OrderFusion.FusionStatus EQ "" THEN DO:
+            OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_NEW} THEN DO:
 
-      FIND CURRENT OrderFusion EXCLUSIVE-LOCK.
-      ASSIGN
-         OrderFusion.FusionStatus = "NEW"
-         OrderFusion.UpdateTS = fMakeTS().
-      FIND CURRENT OrderFusion NO-LOCK.
+      IF OrderFusion.FixedNumber EQ "" THEN
+         fCreateFusionReserveNumberMessage(Order.OrderID,
+                                           OUTPUT lcError).
+      ELSE fCreateFusionCreateOrderMessage(Order.OrderID,
+                                           OUTPUT lcError).
+
+      IF lcError NE "" THEN 
+         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                          "Order",
+                          STRING(Order.OrderID),
+                          0,
+                          "Masmovil message creation failed",
+                          lcError).
+   END.
+      
+   IF llDoEvent THEN DO:
+      RUN StarEventMakeModifyEvent(lhOrder).
+      fCleanEventObjects().
    END.
 
    RETURN "".
@@ -200,17 +267,27 @@ ELSE IF Order.Ordertype < 2 AND
                                CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}))
                             THEN DO:
       
-   FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand = gcBrand AND
-              OrderCustomer.OrderId = Order.OrderId AND
-              OrderCustomer.RowType = 1 NO-ERROR.
-
    IF NOT fIsMainLineSubActive(
       OrderCustomer.CustIDType,
       OrderCustomer.CustId) THEN 
       lcNewStatus = {&ORDER_STATUS_PENDING_MAIN_LINE}.
 END.
-ELSE IF Order.Ordertype = {&ORDER_TYPE_MNP} AND
+/* special flow: 80 => 1/3 (fixed line creation) => 80 => 79 */
+ELSE IF lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
+   LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND
+   Order.ICC EQ "" AND
+   NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                      MsRequest.MsSeq = Order.MsSeq AND
+                      MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE}) THEN DO:
+   lcNewStatus = {&ORDER_STATUS_PENDING_MOBILE_LINE}.
+END.
+ELSE IF Order.OrderType = {&ORDER_TYPE_MNP} AND
+   lcOldStatus NE {&ORDER_STATUS_PENDING_FIXED_LINE} AND
+   /* special flow: 80 => 1/3 (fixed line creation) => 80 => 22 */
+   NOT (lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
+      NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                         MsRequest.MsSeq = Order.MsSeq AND
+                         MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE})) AND
    lcOldStatus NE {&ORDER_STATUS_MNP_ON_HOLD} AND
    lcOldStatus NE {&ORDER_STATUS_SIM_ONLY_MNP_IN} AND  /* Prevents state change from 99 to 22 again */
    Order.PortingDate <> ? THEN
@@ -226,15 +303,12 @@ IF lcOldStatus NE {&ORDER_STATUS_PENDING_MAIN_LINE} AND
    lcOldStatus NE {&ORDER_STATUS_MNP_ON_HOLD} AND
    lcOldStatus NE {&ORDER_STATUS_SIM_ONLY_MNP_IN} AND
    lcOldStatus NE {&ORDER_STATUS_PENDING_FIXED_LINE} AND
+   lcOldStatus NE {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
+   lcOldStatus NE {&ORDER_STATUS_PENDING_MOBILE_LINE} AND
    Order.CREventQty = 0 AND 
    Order.CredOk = FALSE AND
    Order.OrderType NE 2 THEN DO: /* Credit scoring is not tried yet */
    
-   FIND FIRST OrderCustomer WHERE
-      OrderCustomer.Brand = gcBrand AND
-      OrderCustomer.OrderId = Order.OrderId AND
-      OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
-
    IF LOOKUP(OrderCustomer.CustidType,"CIF,CFraud,CInternal") > 0 THEN DO:
       FIND FIRST Customer WHERE
          Customer.Brand      = Order.Brand          AND 
@@ -262,11 +336,6 @@ END. /* IF Order.statuscode NE "4" AND */
 /* order status queue must be i.e. 4 -> 22 -> 20 -> 1 */
 ELSE IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN DO:
       
-   FIND FIRST OrderCustomer WHERE 
-      OrderCustomer.Brand = gcBrand AND
-      OrderCustomer.OrderId = Order.OrderId AND
-      OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
-
    FIND Customer NO-LOCK WHERE
         Customer.Custnum = Order.Custnum NO-ERROR.
 
@@ -339,21 +408,6 @@ END.
 IF iiSecureOption > 0 THEN Order.DeliverySecure = iiSecureOption.
 
 fSetOrderStatus(Order.OrderId,lcNewStatus).
-
-IF Order.OrderChannel BEGINS "fusion" THEN DO:
-   FIND FIRST OrderFusion NO-LOCK WHERE
-              OrderFusion.Brand = Order.Brand AND
-              OrderFusion.OrderId = Order.OrderID NO-ERROR.
-   IF AVAIL OrderFusion AND
-            OrderFusion.FusionStatus EQ "" THEN DO:
-
-      FIND CURRENT OrderFusion EXCLUSIVE-LOCK.
-      ASSIGN
-         OrderFusion.FusionStatus = "NEW"
-         OrderFusion.UpdateTS = fMakeTS().
-      FIND CURRENT OrderFusion NO-LOCK.
-   END.
-END.
 
 fMarkOrderStamp(Order.OrderID,
                "Change",

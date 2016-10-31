@@ -844,6 +844,10 @@
 1 "" 3 "Eguneratzea: Internet para Llevar 35" 0 "CONTDATATOCONTD2" "1" 01/03/12 31/03/12
 1 "" 4 "Upgrade to Internet para Llevar 35" 0 "CONTDATATOCONTD2" "1" 01/03/12 31/12/49
 1 "" 5 "Upgrade to Internet para Llevar 35" 0 "CONTDATATOCONTD2" "1" 01/04/12 31/12/49
+1 "" 1 "FIJO + INTERNET" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
+1 "" 2 "Fix + Internet" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
+1 "" 3 "Finkoa + Internet" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
+1 "" 5 "Landline + Internet" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONTF8RETDISC" "1" 01/10/15 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONTF8RETDISC" "1" 01/10/15 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONTF8RETDISC" "1" 01/10/15 31/12/49
@@ -864,6 +868,14 @@
 1 "" 2 "Nacionals" 0 "CONTFF2VOICE" "1" 01/10/13 31/12/49
 1 "" 3 "Nazionalak" 0 "CONTFF2VOICE" "1" 01/10/13 31/12/49
 1 "" 5 "National" 0 "CONTFF2VOICE" "1" 01/10/13 31/12/49
+1 "" 1 "FIJO + INTERNET" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
+1 "" 2 "Fix + Internet" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
+1 "" 3 "Finkoa + Internet" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
+1 "" 5 "Landline + Internet" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
+1 "" 1 "FIJO + INTERNET" 0 "CONTFH50MF" "1" 27/10/16 31/12/49
+1 "" 2 "Fix + Internet" 0 "CONTFH50MF" "1" 27/10/16 31/12/49
+1 "" 3 "Finkoa + Internet" 0 "CONTFH50MF" "1" 27/10/16 31/12/49
+1 "" 5 "Landline + Internet" 0 "CONTFH50MF" "1" 27/10/16 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
@@ -1032,6 +1044,10 @@
 1 "" 2 "Nacionals" 0 "CONTS26VOICE_B" "1" 01/05/14 31/12/49
 1 "" 3 "Nazionalak" 0 "CONTS26VOICE_B" "1" 01/05/14 31/12/49
 1 "" 5 "National" 0 "CONTS26VOICE_B" "1" 01/05/14 31/12/49
+1 "" 1 "MÓVIL" 0 "CONTS2GBMF" "1" 27/10/16 31/12/49
+1 "" 2 "Mòbil" 0 "CONTS2GBMF" "1" 27/10/16 31/12/49
+1 "" 3 "Mugikorra" 0 "CONTS2GBMF" "1" 27/10/16 31/12/49
+1 "" 5 "Mobile" 0 "CONTS2GBMF" "1" 27/10/16 31/12/49
 1 "" 1 "Desvío de Llamadas" 0 "CONTS30CF_A" "1" 01/07/12 31/12/49
 1 "" 2 "Desviament de Trucades" 0 "CONTS30CF_A" "1" 01/07/12 31/12/49
 1 "" 3 "Dei-desbideraketa" 0 "CONTS30CF_A" "1" 01/07/12 31/12/49
@@ -1333,6 +1349,14 @@
 1 "" 3 "Pago de terminal" 0 "DESCONTADO" "1" 27/11/12 31/12/49
 1 "" 4 "Pago de terminal" 0 "DESCONTADO" "1" 27/11/12 31/12/49
 1 "" 5 "Handset payment" 0 "DESCONTADO" "1" 27/11/12 31/12/49
+1 "" 1 "Descuento promoción Fijo" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
+1 "" 2 "Descompte promoció Fix" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
+1 "" 3 "Finkoaren promozioagatiko deskontua" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
+1 "" 5 "Discount on Landline promotion" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
+1 "" 1 "Descuento incumplimiento de permanencia La Combinada" 0 "DISCFTERMPERIOD" "1" 27/10/16 31/12/49
+1 "" 2 "Descompte incompliment de permanència La Combinada" 0 "DISCFTERMPERIOD" "1" 27/10/16 31/12/49
+1 "" 3 "La Combinada tarifaren iraunkortasun-epea urratzeagatiko deskontua" 0 "DISCFTERMPERIOD" "1" 27/10/16 31/12/49
+1 "" 5 "Discount on non-compliance with term contract La Combinada tariff" 0 "DISCFTERMPERIOD" "1" 27/10/16 31/12/49
 1 "" 1 "Descuento 10% trafico" 0 "DISCOUNT10" "1" 01/09/13 31/12/49
 1 "" 2 "Descuento 10% trafico" 0 "DISCOUNT10" "1" 01/09/13 31/12/49
 1 "" 3 "Descuento 10% trafico" 0 "DISCOUNT10" "1" 01/09/13 31/12/49
@@ -1573,6 +1597,10 @@
 1 "" 2 "En 100 min" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
 1 "" 3 "100 minutuan" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
 1 "" 5 "ln 100 min" 0 "FREE100MINUTES" "1" 01/06/16 31/12/49
+1 "" 1 "Incumplimiento de permanencia La Combinada" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
+1 "" 2 "Incompliment de permanència La Combinada" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
+1 "" 3 "La Combinada tarifaren iraunkortasun-epea urratzea" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
+1 "" 5 "Non-compliance with term contract on La Combinada tariff" 0 "FTERMPERIOD" "1" 27/10/16 31/12/49
 1 "" 1 "Pruebas" 0 "G0000" "1" 22/12/11 31/12/49
 1 "" 2 "Pruebas" 0 "G0000" "1" 22/12/11 31/12/49
 1 "" 3 "Pruebas" 0 "G0000" "1" 22/12/11 31/12/49
@@ -10754,10 +10782,22 @@
 6 "" 2 "DESCOMPTES i CÀRRECS no subjectes a impostos" 0 "45" "1" 01/06/16 31/12/49
 6 "" 3 "Zergen menpe ez dauden DESKONTUAK eta KARGUAK" 0 "45" "1" 01/06/16 31/12/49
 6 "" 5 "DISCOUNTS and CHARGES not subject to tax" 0 "45" "1" 01/06/16 31/12/49
+6 "" 1 "LA COMBINADA" 0 "46" "1" 27/10/16 31/12/49
+6 "" 2 "LA COMBINADA" 0 "46" "1" 27/10/16 31/12/49
+6 "" 3 "LA COMBINADA" 0 "46" "1" 27/10/16 31/12/49
+6 "" 5 "LA COMBINADA" 0 "46" "1" 27/10/16 31/12/49
 6 "" 1 "Mensajes multimedia - MMS" 0 "5" "1" 01/01/06 31/12/49
 6 "" 2 "Missatges multimèdia - MMS" 0 "5" "1" 01/01/06 31/12/49
 6 "" 3 "Multimedia Mezuak - MMS" 0 "5" "1" 01/01/06 31/12/49
 6 "" 5 "Multimedia messages - MMS" 0 "5" "1" 01/01/06 31/12/49
+6 "" 1 "LLAMADAS FIJO" 0 "51" "1" 27/10/16 31/12/49
+6 "" 2 "LLAMADAS FIJO" 0 "51" "1" 27/10/16 31/12/49
+6 "" 3 "LLAMADAS FIJO" 0 "51" "1" 27/10/16 31/12/49
+6 "" 5 "LLAMADAS FIJO" 0 "51" "1" 27/10/16 31/12/49
+6 "" 1 "SERVICIOS PREMIUM FIJO" 0 "53" "1" 27/10/16 31/12/49
+6 "" 2 "SERVICIOS PREMIUM FIJO" 0 "53" "1" 27/10/16 31/12/49
+6 "" 3 "SERVICIOS PREMIUM FIJO" 0 "53" "1" 27/10/16 31/12/49
+6 "" 5 "SERVICIOS PREMIUM FIJO" 0 "53" "1" 27/10/16 31/12/49
 6 "" 1 "SERVICIOS PREMIUM" 0 "6" "1" 01/04/12 31/12/49
 6 "" 1 "Contenidos" 0 "6" "1" 01/01/06 31/03/12
 6 "" 2 "SERVEIS PREMIUM" 0 "6" "1" 01/04/12 31/12/49
@@ -10921,6 +10961,10 @@
 9 "" 2 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 3 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 5 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
+9 "" 1 "La Combinada 20 Naranja" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 2 "La Combinada 20 Naranja" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 3 "La Combinada 20 Naranja" 0 "CONTDSL45" "1" 27/10/16 31/12/49
+9 "" 5 "La Combinada 20 Naranja" 0 "CONTDSL45" "1" 27/10/16 31/12/49
 9 "" 1 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
 9 "" 2 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
 9 "" 3 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
@@ -10976,6 +11020,14 @@
 9 "" 4 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
 9 "" 5 "Fusión Plana a lo Yoigo" 0 "CONTFF" "1" 16/06/15 31/12/54
 9 "" 5 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
+9 "" 1 "La Combinada 50 Naranja" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 2 "La Combinada 50 Naranja" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 3 "La Combinada 50 Naranja" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 5 "La Combinada 50 Naranja" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
+9 "" 1 "La Combinada 300 Naranja" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 2 "La Combinada 300 Naranja" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 3 "La Combinada 300 Naranja" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
+9 "" 5 "La Combinada 300 Naranja" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
 9 "" 1 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
 9 "" 2 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
 9 "" 3 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54

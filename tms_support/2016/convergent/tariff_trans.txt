@@ -1,0 +1,13 @@
+Type;Language Type;Language;Translation Name
+CONTDSL45;1;Spanish;La Combinada 20 Naranja
+CONTDSL45;2;Catalan;La Combinada 20 Naranja
+CONTDSL45;3;Basque;La Combinada 20 Naranja
+CONTDSL45;5;English;La Combinada 20 Naranja
+CONTFH45_50;1;Spanish;La Combinada 50 Naranja
+CONTFH45_50;2;Catalan;La Combinada 50 Naranja
+CONTFH45_50;3;Basque;La Combinada 50 Naranja
+CONTFH45_50;5;English;La Combinada 50 Naranja
+CONTFH55_300;1;Spanish;La Combinada 300 Naranja
+CONTFH55_300;2;Catalan;La Combinada 300 Naranja
+CONTFH55_300;3;Basque;La Combinada 300 Naranja
+CONTFH55_300;5;English;La Combinada 300 Naranja

@@ -10,9 +10,7 @@
 
 {commali.i}
 {timestamp.i}
-{orderfunc.i}
 {tmsconst.i}
-{eventval.i}
 {flimitreq.i}
 
 DEF INPUT PARAMETER piOrderId AS INT NO-UNDO.
@@ -24,21 +22,9 @@ DEFINE VARIABLE lcAnswerCodes AS CHARACTER NO-UNDO.
 DEFINE VARIABLE ldeTime AS DECIMAL NO-UNDO.
 DEFINE VARIABLE lcMessage AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcCustId AS CHARACTER NO-UNDO.
-DEF VAR lcNewOrderStatus AS CHAR NO-UNDO. 
 
 DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
 DEFINE BUFFER bOrder FOR Order.
-DEFINE BUFFER lbOrder FOR Order.
-
-IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER "CreditScoring"
-
-   {lib/eventlog.i}
-
-   DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
-   lhOrder = BUFFER bOrder:HANDLE.
-   RUN StarEventInitialize(lhOrder).
-END.
 
 FIND Order WHERE
      Order.Brand = gcBrand AND
@@ -143,62 +129,7 @@ PROCEDURE pHandleOrder:
 
       END CASE.
       
-      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrder).
-
-      lcNewOrderStatus = "".
-
-      IF bOrder.MultiSIMId > 0 AND
-         bOrder.MultiSIMType = {&MULTISIMTYPE_SECONDARY} THEN DO:
-
-         FIND FIRST lbOrder NO-LOCK WHERE
-                    lbOrder.Brand = gcBrand AND
-                    lbOrder.MultiSIMId = bOrder.MultiSIMId AND
-                    lbOrder.MultiSImType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
-         IF AVAIL lbOrder AND
-                  lbOrder.StatusCode NE {&ORDER_STATUS_DELIVERED} THEN
-            lcNewOrderStatus = {&ORDER_STATUS_PENDING_MAIN_LINE}.
-      END.
-      ELSE IF bOrder.Ordertype < 2 AND
-         CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                        CLIType.Brand = gcBrand AND
-                        CLIType.CLIType = bOrder.CLIType AND
-                        CLIType.LineType > 0) AND
-         NOT CAN-FIND(FIRST OrderAction WHERE
-                      OrderAction.Brand = gcBrand AND
-                      OrderAction.OrderId = bOrder.OrderID AND
-                      OrderAction.ItemType = "BundleItem" AND
-                      CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                                     CLIType.Brand = gcBrand AND
-                                     CLIType.CLIType = OrderAction.ItemKey AND
-                                     CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}))
-                      THEN DO:
-            
-         IF NOT fIsMainLineSubActive(
-            OrderCustomer.CustIDType,
-            OrderCustomer.CustId) THEN 
-            lcNewOrderStatus = {&ORDER_STATUS_PENDING_MAIN_LINE}.
-      END.
-      ELSE IF bOrder.Ordertype = {&ORDER_TYPE_MNP} AND
-         bOrder.PortingDate <> ? THEN
-         lcNewOrderStatus = {&ORDER_STATUS_MNP_ON_HOLD}.
-
-      IF bOrder.OrderChannel BEGINS "fusion" THEN
-          fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_PENDING_FIXED_LINE}).
-      ELSE IF lcNewOrderStatus > "" THEN
-         fSetOrderStatus(bOrder.OrderId,lcNewOrderStatus).
-      ELSE IF bOrder.MNPStatus NE 0 THEN
-         fSetOrderStatus(bOrder.OrderId,"3").
-      ELSE DO:
-         IF bOrder.OrderType EQ 2 THEN DO:
-            IF LOOKUP(bOrder.OrderChannel,"renewal_pos_stc,retention_stc") > 0
-            THEN fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_RENEWAL_STC}).
-            ELSE
-               fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_RENEWAL}).
-         END.
-         ELSE fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_NEW}).
-      END.
-
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrder).
+      RUN orderhold.p(bOrder.OrderId, "RELEASE_BATCH").
    
    END.
 
