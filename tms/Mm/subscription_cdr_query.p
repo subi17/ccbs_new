@@ -50,8 +50,6 @@ REPEAT WITH FRAME fCLI ON ENDKEY UNDO, LEAVE:
       NEXT.
    END.
    ELSE IF lcCLI > "" AND
-         ( lcCLI BEGINS "6" OR
-           lcCLI BEGINS "7" ) AND
       NOT CAN-FIND(FIRST MSOwner WHERE MSOwner.CLI = lcCLI) THEN DO:
       MESSAGE "Unknown MSISDN" 
       VIEW-AS ALERT-BOX ERROR.
