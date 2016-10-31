@@ -7,24 +7,39 @@
 {Syst/tmsconst.i}
 
 FUNCTION fTerminalOrder RETURNS LOGICAL
-   (iiInvNum AS INTEGER):
+   (INPUT ilPayType AS LOGICAL,
+    INPUT icOffer AS CHARACTER,
+    INPUT ideStamp  AS DECIMAL):
 
-   DEFINE BUFFER Invoice  FOR Invoice.
-   DEFINE BUFFER InvRow   FOR InvRow.
-   DEFINE VARIABLE lii AS INTEGER NO-UNDO.
+   DEFINE BUFFER OfferItem FOR OfferItem.
+   DEFINE BUFFER BillItem  FOR BillItem.
 
-   FOR
-      FIRST Invoice FIELDS (InvNum) NO-LOCK WHERE
-         Invoice.InvNum = iiInvNum,
-      EACH InvRow FIELDS (InvNum BillCode) NO-LOCK WHERE
-         InvRow.InvNum   =  Invoice.InvNum:
-      lii = lii + 1.
-      IF lii > 1 THEN RETURN TRUE.
+   /* Prepaid Order */
+   IF ilPayType
+   THEN RETURN FALSE.
+
+   /* Terminal Financing in direct channel deployment on 09.07.2014 8:00 CET */
+   IF ideStamp < 20140709.28800
+   THEN RETURN FALSE.
+
+   /* Check Terminal billcode */
+   FOR EACH OfferItem NO-LOCK WHERE
+            OfferItem.Brand     = gcBrand   AND
+            OfferItem.Offer     = icOffer   AND
+            OfferItem.ItemType  = "BillItem" AND
+            OfferItem.EndStamp  >= ideStamp,
+      FIRST BillItem NO-LOCK WHERE
+            BillItem.Brand    = gcBrand           AND
+            BillItem.BillCode = OfferItem.ItemKey AND
+            BillItem.BIGroup  = "7":
+      IF OfferItem.BeginStamp <= ideStamp
+      THEN RETURN TRUE.
    END.
 
    RETURN FALSE.
 
 END FUNCTION.
+
 
 FUNCTION fGetOrderAction RETURNS DECIMAL
    (iiOrderID  AS INTEGER,

@@ -253,11 +253,8 @@ FUNCTION fIsTerminalOrder RETURNS LOG (OUTPUT ocTerminalCode AS CHAR):
             OfferItem.ItemType = "BillItem",
       FIRST BillItem NO-LOCK WHERE
             BillItem.Brand    = gcBrand AND
-            BillItem.BillCode = OfferItem.ItemKey,
-      FIRST BitemGroup NO-LOCK WHERE
-            BitemGroup.Brand   = gcBrand AND
-            BitemGroup.BIGroup = BillItem.BIGroup AND
-            BItemGroup.BIGroup EQ "7":
+            BillItem.BillCode = OfferItem.ItemKey AND
+            BillItem.BIGroup  = "7":
 
       /* Exclude discount billing item on terminal */
       IF BillItem.BillCode BEGINS "CPDISC" THEN NEXT.

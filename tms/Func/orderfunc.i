@@ -88,10 +88,11 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
 
                /* YDR-695 */
                IF bfOrder.OrderChannel BEGINS "retention" AND
-                  bfOrder.PayType = FALSE AND
                   ( bfOrder.InvNum = 0 OR
-                   ( bfOrder.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST} AND
-                     fTerminalOrder(bfOrder.InvNum) )
+                   ( bfOrder.PayType = FALSE AND
+                     bfOrder.FeeModel = {&ORDER_FEEMODEL_SHIPPING_COST} AND
+                     bfOrder.Logistics > "" AND
+                     fTerminalOrder(bfOrder.PayType, bfOrder.Offer, bfOrder.CrStamp) )
                   )
                   THEN
                   FOR FIRST OrderPayment NO-LOCK WHERE
