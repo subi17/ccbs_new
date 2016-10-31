@@ -110,32 +110,6 @@ IF Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} THEN DO:
       RETURN "".
    END.
 
-<<<<<<< HEAD
-   IF Order.OrderChannel BEGINS "fusion" THEN DO:
-      FIND FIRST OrderCustomer WHERE
-         OrderCustomer.Brand = gcBrand AND
-         OrderCustomer.OrderId = Order.OrderId AND
-         OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
-
-      IF LOOKUP(OrderCustomer.CustidType,"CIF,CFraud,CInternal") > 0 THEN DO:
-         FIND FIRST Customer WHERE
-            Customer.Brand      = Order.Brand          AND 
-            Customer.OrgId      = OrderCustomer.CustId AND
-            Customer.CustIdType = OrderCustomer.CustIdType AND
-            Customer.Roles NE "inactive" NO-LOCK NO-ERROR. 
-         IF AVAIL Customer THEN DO:
-            FIND FIRST MobSub WHERE
-                       MobSub.Brand   = gcBrand AND
-                       MobSub.AgrCust = Customer.CustNum
-                 NO-LOCK NO-ERROR.
-            IF NOT AVAIL MobSub THEN lcNewStatus = "20".
-            ELSE lcNewStatus = "21".
-         END. /* IF AVAIL Customer THEN DO: */
-         ELSE lcNewStatus = "20".
-         fSetOrderStatus(Order.OrderId,lcNewStatus).
-      END. /* IF OrderCustomer.CustidType = "CIF" THEN */
-      ELSE fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_FIXED_LINE}).
-   
    IF Order.OrderChannel BEGINS "fusion" AND
       LOOKUP(OrderCustomer.CustidType,"CIF,CFraud,CInternal") > 0 THEN DO:
 
