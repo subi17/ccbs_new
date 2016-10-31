@@ -43,15 +43,14 @@ REPEAT WITH FRAME fCLI ON ENDKEY UNDO, LEAVE:
 
    IF lcCLI > "" AND 
     ( lcCLI BEGINS "8" OR
-      lcCLI BEGINS "9" ) AND
-      NOT CAN-FIND(FIRST MsOwner WHERE MsOwner.FixedNumber EQ lcCLI) THEN DO:
-      MESSAGE "Unknown Fixed Number"
-      VIEW-AS ALERT-BOX ERROR.
-      NEXT.
+      lcCLI BEGINS "9" ) THEN DO:
+      IF NOT CAN-FIND(FIRST MsOwner WHERE MsOwner.FixedNumber EQ lcCLI) THEN DO:
+         MESSAGE "Unknown Fixed Number"
+         VIEW-AS ALERT-BOX ERROR.
+         NEXT.
+      END.
    END.
    ELSE IF lcCLI > "" AND
-         ( lcCLI BEGINS "6" OR
-           lcCLI BEGINS "7" ) AND
       NOT CAN-FIND(FIRST MSOwner WHERE MSOwner.CLI = lcCLI) THEN DO:
       MESSAGE "Unknown MSISDN" 
       VIEW-AS ALERT-BOX ERROR.
