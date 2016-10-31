@@ -69,11 +69,12 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
 
                FIND FIRST FusionMessage EXCLUSIVE-LOCK WHERE
                           FusionMessage.orderID EQ Order.OrderId AND
-                          FusionMessage.MessageType EQ {&FUSIONMESSAGE_TYPE_LOGISTICS} AND
-                          FusionMessage.messageStatus EQ 
-                             {&FUSIONMESSAGE_STATUS_SENT} NO-ERROR.
+                          FusionMessage.MessageType EQ {&FUSIONMESSAGE_TYPE_LOGISTICS} 
+               NO-ERROR.
+
                IF AVAIL FusionMessage THEN DO:
-                  llCancelFusion = TRUE.
+                  IF FusionMessage.MessageStatus NE {&FUSIONMESSAGE_STATUS_NEW} THEN
+                     llCancelFusion = TRUE.
                   ASSIGN
                      FusionMessage.UpdateTS = fMakeTS()
                      FusionMessage.messageStatus = 

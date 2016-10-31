@@ -80,7 +80,7 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
       FIRST MsRequest NO-LOCK WHERE
             MsRequest.MsSeq   = mobsub.msseq AND
             MsRequest.ReqType = {&REQTYPE_ICC_CHANGE} AND
-            MsRequest.Reqstatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}) THEN
+            LOOKUP(STRING(MsRequest.Reqstatus),"19,20") > 0) THEN
       add_boolean(sub_struct, "notification", TRUE).
 
 END FUNCTION. 
@@ -103,7 +103,8 @@ IF LENGTH(pcInput) EQ 9 AND
 END.
 /* fixed line number search */
 ELSE IF LENGTH(pcInput) EQ 9 AND
-   (pcInput BEGINS "9") AND
+  (pcInput BEGINS "8" OR
+   pcInput BEGINS "9" ) AND
    NOT (ASC(lcTmp) >= 65 AND
    ASC(lcTmp) <= 90) AND
    LOOKUP("msisdn", pcSearchTypes) > 0 THEN DO:

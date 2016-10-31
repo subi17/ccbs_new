@@ -200,7 +200,7 @@ END FUNCTION.
 CASE iiRunID:
    WHEN 1 THEN DO: /* Modify OrderFusion dump */
       lcDumpName   = "HPD_OrderCustomer".
-      lcDFTable    = "HPD_OrderCustomer".
+      lcDFTable    = "OrderCustomer".
       ldaFromDate  = TODAY.
       ldaToDate    = 12/31/49.
       lcField      = "Gescal,StreetType,BisDuplicate,Block,Door,Letter,Stair,Hand,Km". /* Put list here */
@@ -209,7 +209,7 @@ CASE iiRunID:
    END.
    WHEN 2 THEN DO: /* Modify OrderFusion dump */
       lcDumpName   = "HPD_MobSub".
-      lcDFTable    = "HPD_MobSub".
+      lcDFTable    = "MobSub".
       ldaFromDate  = TODAY.
       ldaToDate    = 12/31/49.
       lcField      = "FixedNumber". /* Put list here */
@@ -218,7 +218,7 @@ CASE iiRunID:
    END.
     WHEN 3 THEN DO: /* Modify OrderFusion dump */
       lcDumpName   = "HPD_OrderFusion".
-      lcDFTable    = "HPD_OrderFusion".
+      lcDFTable    = "OrderFusion".
       ldaFromDate  = TODAY.
       ldaToDate    = 12/31/49.
       lcField      = "SerialNumber,FixedCurrOper,FixedCurrOperCode,UpdateTS,Product,AppointmentDate,CancellationReason,ADSLLinkState". /* Put list here */
@@ -227,7 +227,7 @@ CASE iiRunID:
    END.
     WHEN 4 THEN DO: /* Modify OrderFusion dump */
       lcDumpName   = "HPD_SubInvoice".
-      lcDFTable    = "HPD_SubInvoice".
+      lcDFTable    = "SubInvoice".
       ldaFromDate  = TODAY.
       ldaToDate    = 12/31/49.
       lcField      = "FixedNumber". /* Put list here */

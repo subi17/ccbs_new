@@ -1,4 +1,5 @@
 Billing item;Billing item name;Billing item group;Posting account;Tax class;IFS product code;Cost Center
-CONTDSLMF;Fixed Line;46;70510100;1;022;SL
-CONTFH50MF;Fixed Line;46;70510100;1;022;SL
-CONTFH300MF;Fixed Line;46;70510100;1;022;SL
+CONTDSLMF;Convergent ADSL monthly fee;46;70514100;1;070;SL
+CONTFH50MF;Convergent FIBER 50MB monthly fee;46;70514100;1;070;SL
+CONTFH300MF;Convergent FIBER 300MB monthly fee;46;70514100;1;070;SL
+CONTS2GBMF;Convergent mobile monthly fee;46;70514100;1;022;SL

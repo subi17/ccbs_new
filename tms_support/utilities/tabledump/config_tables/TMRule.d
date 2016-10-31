@@ -39,3 +39,4 @@
 "1" 39 "Premium Fraud Prepaid" 01/09/14 31/12/49 "RateCCN" "6" 1 2 no 0 3 2 1 1
 "1" 40 "VOICE100 Minutes" 01/01/15 31/12/49 "BDest" "1" 1 2 no 0 3 1 1 1
 "1" 41 "VOICE100 BDestination" 01/01/15 31/12/49 "BDest" "7" 1 2 no 0 3 1 1 1
+"1" 42 "VOICE 5000 Minutes" 01/10/16 31/12/49 "BDest,CLIType" "1" 1 2 no 0 3 1 1 1

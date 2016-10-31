@@ -7,7 +7,7 @@ ADD FIELD "FixedNumber" OF "MobSub" AS character
   ORDER 895
 
 ADD INDEX "FixedNumber" ON "MobSub" 
-  AREA "Sta_Index_1"
+  AREA "Dyn_Index_1"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FixedNumber" ASCENDING 
@@ -149,7 +149,7 @@ ADD FIELD "Floor" OF "OrderCustomer" AS character
   ORDER 1120
 
 ADD TABLE "FusionMessage"
-  AREA "Sta_Data_128"
+  AREA "Sta_Data_64"
   LABEL "Fusion Message"
   DESCRIPTION "Contains messages between TMS and MasMovil"
   DUMP-NAME "fusionmessage"
@@ -208,11 +208,11 @@ ADD FIELD "CreatedTS" OF "FusionMessage" AS decimal
   DECIMALS 5
   ORDER 70
 
-ADD FIELD "HandledTS" OF "FusionMessage" AS decimal 
+ADD FIELD "UpdateTS" OF "FusionMessage" AS decimal 
   FORMAT "99999999.99999"
   INITIAL "0"
-  LABEL "HandledTS"
-  COLUMN-LABEL "HandledTS"
+  LABEL "UpdateTS"
+  COLUMN-LABEL "UpdateTS"
   DECIMALS 5
   ORDER 80
 
@@ -283,6 +283,10 @@ ADD INDEX "MessageSeq" ON "FusionMessage"
   PRIMARY
   UNIQUE
   INDEX-FIELD "MessageSeq" ASCENDING 
+
+ADD INDEX "UpdateTS" ON "FusionMessage" 
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "UpdateTS" DESCENDING 
 
 ADD SEQUENCE "FusionMessageSeq"
   INITIAL 0
