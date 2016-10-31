@@ -877,12 +877,13 @@ DO TRANS:
       IF liCCN = 0 OR liCCN = 999 OR ttCall.BType = 2 THEN 
           liCCN = fRateCCN(ttCall.bdest,ttCall.BType,lidialtype).
 
-      IF liCCN = 69 AND ttCall.BillDur > 11 THEN DO:
+      IF (liCCN = 69  OR liCCN = 1069) AND ttCall.BillDur > 11 THEN DO:
          IF CAN-FIND(FIRST ttDuration WHERE 
-                           ttDuration.CallCase = "61" AND
+                           ttDuration.CallCase = STRING(liCCN) AND
                            ttDuration.BDest    = ttCall.BDest AND
                            ttDuration.FromDate <= ttCall.DateSt) THEN 
-            liCCN = 61.
+            IF liCCN EQ 69 THEN liCCN = 61.
+            ELSE liCCN = 1061.
       END.
 
       /* YDR-1853 */

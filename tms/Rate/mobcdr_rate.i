@@ -88,7 +88,8 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       WHEN 105  THEN b_CallType =  10.
       WHEN 106  THEN b_CallType =  10.
       /* last category 22 is not needed anymore after 21.10.09 */
-      WHEN 66   THEN DO:
+      WHEN 66 OR
+      WHEN 1066 THEN DO:
           IF       ttCall.BillDur <= 11     THEN b_callType = 20.
           ELSE  IF ttCall.BillDur <= 70 OR
                    ttCall.DateSt >= 10/21/9 THEN b_callType = 21.
