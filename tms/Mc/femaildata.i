@@ -21,6 +21,7 @@
 {mnp.i}
 {cparam2.i}
 {tmsconst.i}
+{Mc/shipping_cost.i}
 
 &SCOPED-DEFINE ORDERTYPE_MNP_EN "Portability"
 &SCOPED-DEFINE ORDERTYPE_MNP_SP "Portabilidad"
@@ -2056,3 +2057,50 @@ PROCEDURE pGetPicture:
    END.
 END.
 
+PROCEDURE pGetWELCOMEPROMO:
+
+   DEF INPUT PARAMETER iiOrderNBR AS INT NO-UNDO.
+   DEF OUTPUT PARAMETER olgErr AS LOGICAL NO-UNDO.
+   DEF OUTPUT PARAMETER lcResult AS CHAR NO-UNDO.
+
+   DEF VAR lcErr AS CHAR NO-UNDO.
+
+   lcErr = fGetOrderData (INPUT iiOrderNBR).
+
+   ASSIGN
+      olgErr   = ""
+      lcResult = ""
+      .
+
+   IF Order.FeeModel NE {&ORDER_FEEMODEL_SHIPPING_COST}
+   THEN RETURN.
+
+   DEFINE VARIABLE ldeWelcomeAmt AS DECIMAL NO-UNDO.
+
+   ldeWelcomeAmt = fGetOrderAction(Order.OrderID, {&ORDERACTION_ITEMTYPE_WELCOME_GIFT}).
+
+   IF ldeWelcomeAmt EQ ?
+   THEN RETURN.
+
+   /*
+      Prepaid
+
+      Recuerda que tienes <strong>#WELCOMEAMT #EURO</strong> de saldo extra como <strong>regalo de bienvenida.</strong>
+      Remember you have <strong>#WELCOMEAMT #EURO extra sold</strong> with the <strong>welcome promo.</strong>
+   */
+   IF Order.PayType
+   THEN lcResult = fTeksti(577, liLang).
+   /*
+      PostPaid
+
+      Recuerda que tienes <strong>#WELCOMEAMT #EURO de descuento</strong> en tu primera factura como <strong>regalo de bienvenida.</strong>
+      Remember you have <strong>#WELCOMEAMT #EURO discount</strong> on your first invoice with the <strong>welcome promo.</strong>
+   */
+   ELSE lcResult = fTeksti(578, liLang).
+
+
+   ASSIGN
+      lcResult = REPLACE(lcResult,"#WELCOMEAMT",STRING(ldeWelcomeAmt))
+      lcResult = REPLACE(lcResult,"#EURO","&euro;") + "<br /><br />"
+      .
+END.
