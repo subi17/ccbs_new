@@ -62,6 +62,7 @@ DEF TEMP-TABLE ttCall NO-UNDO LIKE MobCDR
    FIELD BIGroup LIKE BillItem.BIGroup
    INDEX BIGroup GroupOrder BIGroup.
 
+
 ASSIGN
    ghttCall         = BUFFER ttCall:HANDLE
    lcFusionCLITypes = fCParamC("FUSION_SUBS_TYPE")
