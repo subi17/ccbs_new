@@ -124,7 +124,6 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
             CREATE bFusionMessage.
             ASSIGN
                bFusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)
-               bFusionMessage.MessageID = GUID(GENERATE-UUID)
                bFusionMessage.Source = FusionMessage.Source
                bFusionMessage.OrderID = FusionMessage.OrderID
                bFusionMessage.MsSeq = FusionMessage.MsSeq
