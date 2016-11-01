@@ -125,8 +125,10 @@ END FUNCTION.
 top_struct = add_struct(response_toplevel_id, "").
 result_array = add_array(top_struct, "subscriptions").
 
-/* Check if search is for MSISDN (default) or Fixed number (Number begins with 9) */
-IF pcSearchType EQ "msisdn" AND pcInput BEGINS "9" THEN pcSearchType = "fixed_number".
+/* Check if search is for MSISDN (default) or Fixed (Number begins 8 or 9) */
+IF pcSearchType EQ "msisdn" AND 
+  (pcInput BEGINS "8" OR
+   pcInput BEGINS "9") THEN pcSearchType = "fixed_number".
 
 IF pcSearchType EQ "msisdn" THEN DO:
    
