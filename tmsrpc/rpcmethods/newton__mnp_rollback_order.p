@@ -230,8 +230,11 @@ DO liCounter = 0 TO get_paramcount(pcArray) - 1:
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+   IF fHasConvergenceTariff(piMsSeq) THEN
+      RETURN appl_err("Not allowed for fixed line tariffs").
+
    IF pcOldOperatorPayType = "" OR pcOldOperatorPayType = ? THEN
-   RETURN appl_err("Old operator paytype is blank or unknown").
+      RETURN appl_err("Old operator paytype is blank or unknown").
 
    IF pcContractId = "" OR pcContractId = ? THEN
       RETURN appl_err("Contract Id is blank or unknown").
