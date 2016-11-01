@@ -1603,11 +1603,9 @@ PROCEDURE local-find-others.
    
    RUN local-find-others-common.
 
-   IF fIsConvergenceTariff(Order.CLIType) or true THEN
-      FIND FIRST OrderFusion NO-LOCK WHERE
-                 OrderFusion.Brand = gcBrand AND
-                 OrderFusion.OrderID = Order.OrderID NO-ERROR.
-   ELSE RELEASE OrderFusion.
+   FIND FIRST OrderFusion NO-LOCK WHERE
+              OrderFusion.Brand = gcBrand AND
+              OrderFusion.OrderID = Order.OrderID NO-ERROR.
    
    FIND FIRST OrderDelivery WHERE
       OrderDelivery.Brand   = gcBrand AND
